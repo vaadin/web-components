@@ -106,7 +106,7 @@
 
         it('should be able to internationalise via `i18n` property', () => {
           expect(crud.$.new.textContent).to.be.equal('New item');
-          crud.i18n = Object.assign({}, crud.i18n, {new: 'Nueva entidad'});
+          crud.i18n = Object.assign({}, crud.i18n, {newItem: 'Nueva entidad'});
           expect(crud.$.new.textContent).to.be.equal('Nueva entidad');
         });
 

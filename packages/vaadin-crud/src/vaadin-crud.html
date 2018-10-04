@@ -49,7 +49,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
     <div part="toolbar" on-click="__new">
       <div part="footer"><slot name="footer"></slot></div>
       <slot name="new">
-        <vaadin-button id="new">[[i18n.new]]</vaadin-button>
+        <vaadin-button id="new">[[i18n.newItem]]</vaadin-button>
       </slot>
     </div>
 
@@ -68,13 +68,13 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
     </vaadin-dialog-layout>
 
     <vaadin-confirm-dialog theme$="[[theme]]" id="confirmCancel" on-confirm="__confirmCancel"
-      cancel confirm-text="[[i18n.confirm.cancel.button.continue]]"
+      cancel confirm-text="[[i18n.confirm.cancel.button.ok]]"
       cancel-text="[[i18n.confirm.cancel.button.cancel]]"
       header="[[i18n.confirm.cancel.header]]" confirm-theme="primary error">
       [[i18n.confirm.cancel.message]]
     </vaadin-confirm-dialog>
     <vaadin-confirm-dialog theme$="[[theme]]" id="confirmDelete" on-confirm="__confirmDelete"
-      cancel confirm-text="[[i18n.confirm.delete.button.continue]]"
+      cancel confirm-text="[[i18n.confirm.delete.button.ok]]"
       cancel-text="[[i18n.confirm.delete.button.cancel]]"
       header="[[i18n.confirm.delete.header]]" confirm-theme="primary error">
       [[i18n.confirm.delete.message]]
@@ -272,8 +272,8 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
              * The object has the following JSON structure and default values:
 
               {
-                new: 'New item',
-                edit: 'Edit item',
+                newItem: 'New item',
+                editItem: 'Edit item',
                 save: 'Save',
                 cancel: 'Cancel',
                 delete: 'Delete...',
@@ -282,7 +282,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
                     header: 'Confirm delete',
                     message: 'Are you sure you want to delete the selected item? This action cannot be undone.',
                     button: {
-                      continue: 'Delete',
+                      ok: 'Delete',
                       cancel: 'Cancel'
                     }
                   },
@@ -290,7 +290,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
                     header: 'Unsaved changes',
                     message: 'There are unsaved modifications to the item.',
                     button: {
-                      continue: 'Discard changes',
+                      ok: 'Discard',
                       cancel: 'Continue editing'
                     }
                   }
@@ -304,8 +304,8 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
               type: Object,
               value: function() {
                 return {
-                  new: 'New item',
-                  edit: 'Edit item',
+                  newItem: 'New item',
+                  editItem: 'Edit item',
                   save: 'Save',
                   cancel: 'Cancel',
                   delete: 'Delete...',
@@ -314,7 +314,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
                       header: 'Confirm delete',
                       message: 'Are you sure you want to delete the selected item? This action cannot be undone.',
                       button: {
-                        continue: 'Delete',
+                        ok: 'Delete',
                         cancel: 'Cancel'
                       }
                     },
@@ -322,7 +322,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
                       header: 'Unsaved changes',
                       message: 'There are unsaved modifications to the item.',
                       button: {
-                        continue: 'Discard',
+                        ok: 'Discard',
                         cancel: 'Continue editing'
                       }
                     }
@@ -356,7 +356,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           if (!opened && old) {
             this.__closeEditor();
           } else {
-            this.__editorHeader = this.__isNew ? this.i18n.new : this.i18n.edit;
+            this.__editorHeader = this.__isNew ? this.i18n.newItem : this.i18n.editItem;
             this.__onFormChange(this._form);
           }
         }
