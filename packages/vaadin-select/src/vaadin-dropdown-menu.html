@@ -12,13 +12,13 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../iron-resizable-behavior/iron-resizable-behavior.html">
 <link rel="import" href="../../iron-media-query/iron-media-query.html">
 <link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
-<link rel="import" href="vaadin-dropdown-menu-overlay.html">
-<link rel="import" href="vaadin-dropdown-menu-text-field.html">
+<link rel="import" href="vaadin-select-overlay.html">
+<link rel="import" href="vaadin-select-text-field.html">
 
 <custom-style>
   <style>
     @font-face {
-      font-family: "vaadin-dropdown-menu-icons";
+      font-family: "vaadin-select-icons";
       src: url(data:application/font-woff;charset=utf-8;base64,d09GRgABAAAAAASEAAsAAAAABDgAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAABPUy8yAAABCAAAAGAAAABgDxIGKmNtYXAAAAFoAAAAVAAAAFQXVtKHZ2FzcAAAAbwAAAAIAAAACAAAABBnbHlmAAABxAAAAHwAAAB8CohkJ2hlYWQAAAJAAAAANgAAADYOavgEaGhlYQAAAngAAAAkAAAAJAarA8ZobXR4AAACnAAAABQAAAAUCAABP2xvY2EAAAKwAAAADAAAAAwAKABSbWF4cAAAArwAAAAgAAAAIAAHABduYW1lAAAC3AAAAYYAAAGGmUoJ+3Bvc3QAAARkAAAAIAAAACAAAwAAAAMEAAGQAAUAAAKZAswAAACPApkCzAAAAesAMwEJAAAAAAAAAAAAAAAAAAAAARAAAAAAAAAAAAAAAAAAAAAAQAAA6QADwP/AAEADwABAAAAAAQAAAAAAAAAAAAAAIAAAAAAAAwAAAAMAAAAcAAEAAwAAABwAAwABAAAAHAAEADgAAAAKAAgAAgACAAEAIOkA//3//wAAAAAAIOkA//3//wAB/+MXBAADAAEAAAAAAAAAAAAAAAEAAf//AA8AAQAAAAAAAAAAAAIAADc5AQAAAAABAAAAAAAAAAAAAgAANzkBAAAAAAEAAAAAAAAAAAACAAA3OQEAAAAAAQE/AUAC6QIVABQAAAEwFx4BFxYxMDc+ATc2MTAjKgEjIgE/ISJPIiEhIk8iIUNCoEJDAhUhIk8iISEiTyIhAAEAAAABAABvL5bdXw889QALBAAAAAAA1jHaeQAAAADWMdp5AAAAAALpAhUAAAAIAAIAAAAAAAAAAQAAA8D/wAAABAAAAAAAAukAAQAAAAAAAAAAAAAAAAAAAAUEAAAAAAAAAAAAAAAAAAAABAABPwAAAAAACgAUAB4APgABAAAABQAVAAEAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAADgCuAAEAAAAAAAEABwAAAAEAAAAAAAIABwBgAAEAAAAAAAMABwA2AAEAAAAAAAQABwB1AAEAAAAAAAUACwAVAAEAAAAAAAYABwBLAAEAAAAAAAoAGgCKAAMAAQQJAAEADgAHAAMAAQQJAAIADgBnAAMAAQQJAAMADgA9AAMAAQQJAAQADgB8AAMAAQQJAAUAFgAgAAMAAQQJAAYADgBSAAMAAQQJAAoANACkaWNvbW9vbgBpAGMAbwBtAG8AbwBuVmVyc2lvbiAxLjAAVgBlAHIAcwBpAG8AbgAgADEALgAwaWNvbW9vbgBpAGMAbwBtAG8AbwBuaWNvbW9vbgBpAGMAbwBtAG8AbwBuUmVndWxhcgBSAGUAZwB1AGwAYQByaWNvbW9vbgBpAGMAbwBtAG8AbwBuRm9udCBnZW5lcmF0ZWQgYnkgSWNvTW9vbi4ARgBvAG4AdAAgAGcAZQBuAGUAcgBhAHQAZQBkACAAYgB5ACAASQBjAG8ATQBvAG8AbgAuAAAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==) format('woff');
       font-weight: normal;
       font-style: normal;
@@ -26,14 +26,14 @@ This program is available under Apache License Version 2.0, available at https:/
   </style>
 </custom-style>
 
-<dom-module id="vaadin-dropdown-menu">
+<dom-module id="vaadin-select">
   <template>
     <style>
       :host {
         display: inline-block;
       }
 
-      vaadin-dropdown-menu-text-field {
+      vaadin-select-text-field {
         width: 100%;
         min-width: 0;
       }
@@ -43,7 +43,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       [part="toggle-button"] {
-        font-family: "vaadin-dropdown-menu-icons";
+        font-family: "vaadin-select-icons";
       }
 
       [part="toggle-button"]::before {
@@ -51,7 +51,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     </style>
 
-    <vaadin-dropdown-menu-text-field
+    <vaadin-select-text-field
         placeholder="[[placeholder]]"
         label="[[label]]"
         required="[[required]]"
@@ -63,13 +63,13 @@ This program is available under Apache License Version 2.0, available at https:/
       <slot name="prefix" slot="prefix"></slot>
       <div part="value"></div>
       <div part="toggle-button" slot="suffix" role="button" aria-label="Toggle"></div>
-    </vaadin-dropdown-menu-text-field>
-    <vaadin-dropdown-menu-overlay
+    </vaadin-select-text-field>
+    <vaadin-select-overlay
       opened="{{opened}}"
       with-backdrop="[[_phone]]"
       phone$="[[_phone]]"
       theme$="[[theme]]"
-    ></vaadin-dropdown-menu-overlay>
+    ></vaadin-select-overlay>
 
     <iron-media-query
       query="[[_phoneMediaQuery]]"
@@ -81,24 +81,24 @@ This program is available under Apache License Version 2.0, available at https:/
     (function() {
       /**
        *
-       * `<vaadin-dropdown-menu>` is a Web Component for selecting values from a list of items. The content of the
-       * the dropdown menu can be populated in two ways: imperatively by using renderer callback function and
+       * `<vaadin-select>` is a Web Component for selecting values from a list of items. The content of the
+       * the select can be populated in two ways: imperatively by using renderer callback function and
        * declaratively by using Polymer's Templates.
        *
        * ### Rendering
        *
-       * By default, the dropdown menu uses the content provided by using the renderer callback function.
+       * By default, the select uses the content provided by using the renderer callback function.
        *
-       * The renderer function provides `root`, `dropdownMenu` arguments.
+       * The renderer function provides `root`, `select` arguments.
        * Generate DOM content, append it to the `root` element and control the state
-       * of the host element by accessing `dropdownMenu`.
+       * of the host element by accessing `select`.
        *
        * ```html
-       * <vaadin-dropdown-menu id="dropdown-menu"></vaadin-dropdown-menu>
+       * <vaadin-select id="select"></vaadin-select>
        * ```
        * ```js
-       * const dropdownMenu = document.querySelector('#dropdown-menu');
-       * dropdownMenu.renderer = function(root, dropdownMenu) {
+       * const select = document.querySelector('#select');
+       * select.renderer = function(root, select) {
        *   const listBox = document.createElement('vaadin-list-box');
        *   // append 3 <vaadin-item> elements
        *   ['Jose', 'Manolo', 'Pedro'].forEach(function(name) {
@@ -112,7 +112,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * };
        * ```
        *
-       * Renderer is called on initialization of new menu and on the opening of the dropdown menu.
+       * Renderer is called on initialization of new menu and on the opening of the select.
        * DOM generated during the renderer call can be reused
        * in the next renderer call and will be provided with the `root` argument.
        * On first call it will be empty.
@@ -120,11 +120,11 @@ This program is available under Apache License Version 2.0, available at https:/
        * ### Polymer Templates
        *
        * Alternatively, the content can be provided with Polymer's Template.
-       * Dropdown menu finds the first child template and uses that in case renderer callback function
+       * Select finds the first child template and uses that in case renderer callback function
        * is not provided. You can also set a custom template using the `template` property.
        *
        * ```
-       * <vaadin-dropdown-menu>
+       * <vaadin-select>
        *   <template>
        *     <vaadin-list-box>
        *       <vaadin-item label="foo">Foo</vaadin-item>
@@ -132,7 +132,7 @@ This program is available under Apache License Version 2.0, available at https:/
        *       <vaadin-item>Baz</vaadin-item>
        *     </vaadin-list-box>
        *   </template>
-       * </vaadin-dropdown-menu>
+       * </vaadin-select>
        * ```
        *
        * Hint: By setting the `label` property of inner vaadin-items you will
@@ -150,27 +150,27 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * Attribute    | Description | Part name
        * -------------|-------------|------------
-       * `opened` | Set when the dropdown menu is open | :host
+       * `opened` | Set when the select is open | :host
        * `invalid` | Set when the element is invalid | :host
        * `focused` | Set when the element is focused | :host
        * `focus-ring` | Set when the element is keyboard focused | :host
-       * `readonly` | Set when the dropdown menu is read only | :host
+       * `readonly` | Set when the select is read only | :host
        *
-       * `<vaadin-dropdown-menu>` element sets these custom CSS properties:
+       * `<vaadin-select>` element sets these custom CSS properties:
        *
        * Property name | Description | Theme for element
        * --- | --- | ---
-       * `--vaadin-dropdown-menu-text-field-width` | Width of the menu text field | `vaadin-dropdown-menu-overlay`
+       * `--vaadin-select-text-field-width` | Width of the menu text field | `vaadin-select-overlay`
        *
        * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
        *
-       * In addition to `<vaadin-dropdown-menu>` itself, the following internal
+       * In addition to `<vaadin-select>` itself, the following internal
        * components are themable:
        *
-       * - `<vaadin-dropdown-menu-text-field>`
-       * - `<vaadin-dropdown-menu-overlay>`
+       * - `<vaadin-select-text-field>`
+       * - `<vaadin-select-overlay>`
        *
-       * Note: the `theme` attribute value set on `<vaadin-dropdown-menu>` is
+       * Note: the `theme` attribute value set on `<vaadin-select>` is
        * propagated to the internal themable components listed above.
        *
        * @memberof Vaadin
@@ -180,7 +180,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * @mixes Vaadin.ThemePropertyMixin
        * @demo demo/index.html
        */
-      class DropdownMenuElement extends
+      class SelectElement extends
         Vaadin.ElementMixin(
           Vaadin.ControlStateMixin(
             Vaadin.ThemableMixin(
@@ -188,7 +188,7 @@ This program is available under Apache License Version 2.0, available at https:/
                 Polymer.mixinBehaviors(Polymer.IronResizableBehavior, Polymer.Element))))) {
 
         static get is() {
-          return 'vaadin-dropdown-menu';
+          return 'vaadin-select';
         }
 
         static get version() {
@@ -198,7 +198,7 @@ This program is available under Apache License Version 2.0, available at https:/
         static get properties() {
           return {
             /**
-             * Set when the dropdown menu is open
+             * Set when the select is open
              */
             opened: {
               type: Boolean,
@@ -209,17 +209,17 @@ This program is available under Apache License Version 2.0, available at https:/
             },
 
             /**
-             * Custom function for rendering the content of the `<vaadin-dropdown-menu>`.
+             * Custom function for rendering the content of the `<vaadin-select>`.
              * Receives two arguments:
              *
-             * - `root` The `<vaadin-dropdown-menu-overlay>` internal container
+             * - `root` The `<vaadin-select-overlay>` internal container
              *   DOM element. Append your content to it.
-             * - `dropdownMenu` The reference to the `<vaadin-dropdown-menu>` element.
+             * - `select` The reference to the `<vaadin-select>` element.
              */
             renderer: Function,
 
             /**
-             * The error message to display when the dropdown menu value is invalid
+             * The error message to display when the select value is invalid
              */
             errorMessage: {
               type: String,
@@ -243,7 +243,7 @@ This program is available under Apache License Version 2.0, available at https:/
              * If no value is provided to the component, it selects the first item without
              * value or empty value.
              * Hint: If you do not want to select any item by default, you can either set all
-             * the values of inner vaadin-items, or set the vaadin-dropdown-menu value to
+             * the values of inner vaadin-items, or set the vaadin-select value to
              * an inexistent value in the items list.
              */
             value: {
@@ -254,7 +254,7 @@ This program is available under Apache License Version 2.0, available at https:/
             },
 
             /**
-             * The current required state of the dropdown menu. True if required.
+             * The current required state of the select. True if required.
              */
             required: {
               type: Boolean,
@@ -345,7 +345,7 @@ This program is available under Apache License Version 2.0, available at https:/
         ready() {
           super.ready();
 
-          this._overlayElement = this.shadowRoot.querySelector('vaadin-dropdown-menu-overlay');
+          this._overlayElement = this.shadowRoot.querySelector('vaadin-select-overlay');
           this._valueElement = this.shadowRoot.querySelector('[part="value"]');
           this._toggleElement = this.shadowRoot.querySelector('[part="toggle-button"]');
           this._nativeInput = this.focusElement.shadowRoot.querySelector('input');
@@ -405,7 +405,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
           if (template && renderer) {
             this._removeNewRendererOrTemplate(template, this._oldTemplate, renderer, this._oldRenderer);
-            throw new Error('You should only use either a renderer or a template for dropdown-menu content');
+            throw new Error('You should only use either a renderer or a template for select content');
           }
 
           this._oldTemplate = template;
@@ -437,14 +437,14 @@ This program is available under Apache License Version 2.0, available at https:/
         /** @protected */
         get focusElement() {
           return this._inputElement ||
-            (this._inputElement = this.shadowRoot.querySelector('vaadin-dropdown-menu-text-field'));
+            (this._inputElement = this.shadowRoot.querySelector('vaadin-select-text-field'));
         }
 
         /** @private */
         disconnectedCallback() {
           super.disconnectedCallback();
           this.removeEventListener('iron-resize', this._boundSetPosition);
-          // Making sure the dropdown is closed and removed from DOM after detaching the dropdown.
+          // Making sure the select is closed and removed from DOM after detaching the select.
           this.opened = false;
         }
 
@@ -620,7 +620,7 @@ This program is available under Apache License Version 2.0, available at https:/
             this._overlayElement.style.top = inputRect.top + 'px';
           }
 
-          this._overlayElement.updateStyles({'--vaadin-dropdown-menu-text-field-width': inputRect.width + 'px'});
+          this._overlayElement.updateStyles({'--vaadin-select-text-field-width': inputRect.width + 'px'});
         }
 
         /**
@@ -633,12 +633,12 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
-      customElements.define(DropdownMenuElement.is, DropdownMenuElement);
+      customElements.define(SelectElement.is, SelectElement);
 
       /**
        * @namespace Vaadin
        */
-      window.Vaadin.DropdownMenuElement = DropdownMenuElement;
+      window.Vaadin.SelectElement = SelectElement;
     })();
   </script>
 </dom-module>

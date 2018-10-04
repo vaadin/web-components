@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-  <title>vaadin-dropdown-menu Examples</title>
+  <title>vaadin-select Examples</title>
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 
   <link rel="import" href="../../polymer/polymer.html">
@@ -14,9 +14,9 @@
   <link rel="import" href="../../vaadin-item/vaadin-item.html">
   <link rel="import" href="../../vaadin-button/vaadin-button.html">
 
-  <script src="dropdown-menu-demo.js"></script>
+  <script src="select-demo.js"></script>
 
-  <link rel="import" href="../vaadin-dropdown-menu.html">
+  <link rel="import" href="../vaadin-select.html">
   <link rel="import" href="../../iron-icon/iron-icon.html">
   <link rel="import" href="../../vaadin-lumo-styles/icons.html">
   <link rel="import" href="../../iron-form/iron-form.html">
@@ -27,7 +27,7 @@
 </head>
 
 <body>
-  <dom-module id="custom-dropdown-menu" theme-for="vaadin-text-field vaadin-item">
+  <dom-module id="custom-select" theme-for="vaadin-text-field vaadin-item">
     <template>
       <style>
         :host([theme~="custom"]) {
@@ -36,7 +36,7 @@
       </style>
     </template>
   </dom-module>
-  <dom-module id="custom-dropdown-menu-overlay" theme-for="vaadin-text-field vaadin-dropdown-menu-overlay">
+  <dom-module id="custom-select-overlay" theme-for="vaadin-text-field vaadin-select-overlay">
     <template>
       <style>
         :host([theme~="custom"]) [part~="overlay"] {

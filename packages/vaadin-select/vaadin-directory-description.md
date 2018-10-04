@@ -1,17 +1,17 @@
 
-# &lt;vaadin-dropdown-menu&gt;
+# &lt;vaadin-select&gt;
 
-[![Available in Vaadin_Directory](https://img.shields.io/vaadin-directory/v/vaadinvaadin-dropdown-menu.svg)](https://vaadin.com/directory/component/vaadinvaadin-dropdown-menu)
-
-
-[&lt;vaadin-dropdown-menu&gt;](https://vaadin.com/components/vaadin-dropdown-menu) is a Web Component similar to a native browser select element, part of the [Vaadin components](https://vaadin.com/components).
+[![Available in Vaadin_Directory](https://img.shields.io/vaadin-directory/v/vaadinvaadin-select.svg)](https://vaadin.com/directory/component/vaadinvaadin-select)
 
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-dropdown-menu/master/screenshot.gif" width="220" alt="Screenshot of vaadin-dropdown-menu">](https://vaadin.com/components/vaadin-dropdown-menu)
+[&lt;vaadin-select&gt;](https://vaadin.com/components/vaadin-select) is a Web Component similar to a native browser select element, part of the [Vaadin components](https://vaadin.com/components).
+
+
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-select/master/screenshot.gif" width="220" alt="Screenshot of vaadin-select">](https://vaadin.com/components/vaadin-select)
 
 ## Example Usage
 ```html
-<vaadin-dropdown-menu label="Label" placeholder="Placeholder" value="Option one">
+<vaadin-select label="Label" placeholder="Placeholder" value="Option one">
   <template>
     <vaadin-list-box>
       <vaadin-item>Option one</vaadin-item>
@@ -21,5 +21,5 @@
       <vaadin-item disabled>Option four</vaadin-item>
     </vaadin-list-box>
   </template>
-</vaadin-dropdown-menu>
+</vaadin-select>
 ```

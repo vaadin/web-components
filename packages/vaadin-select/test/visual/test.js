@@ -1,4 +1,4 @@
-gemini.suite('vaadin-dropdown-menu', function(rootSuite) {
+gemini.suite('vaadin-select', function(rootSuite) {
   function wait(actions, find) {
     actions.wait(5000);
   }
@@ -17,9 +17,9 @@ gemini.suite('vaadin-dropdown-menu', function(rootSuite) {
   ['lumo', 'material'].forEach(theme => {
     gemini.suite(`default-tests-${theme}`, function(suite) {
       suite
-        .setUrl(`dropdown-menu.html?theme=${theme}`)
-        .setCaptureElements('#dropdown-menu')
-        .capture('dropdown-menu');
+        .setUrl(`select.html?theme=${theme}`)
+        .setCaptureElements('#select')
+        .capture('select');
     });
   });
 

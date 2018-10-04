@@ -7,7 +7,7 @@
 <link rel="import" href="../../../vaadin-material-styles/mixins/menu-overlay.html">
 <link rel="import" href="../../../vaadin-material-styles/mixins/field-button.html">
 
-<dom-module id="material-dropdown-menu" theme-for="vaadin-dropdown-menu">
+<dom-module id="material-select" theme-for="vaadin-select">
   <template>
     <style include="material-field-button">
       :host {
@@ -16,7 +16,7 @@
       }
 
       [part="toggle-button"]::before {
-        content: var(--material-icons-dropdown);
+        content: var(--material-icons-select);
       }
 
       :host([opened]) [part="toggle-button"] {
@@ -32,7 +32,7 @@
   </template>
 </dom-module>
 
-<dom-module id="material-dropdown-menu-text-field" theme-for="vaadin-dropdown-menu-text-field">
+<dom-module id="material-select-text-field" theme-for="vaadin-select-text-field">
   <template>
     <style>
       :host {
@@ -56,7 +56,7 @@
   </template>
 </dom-module>
 
-<dom-module id="material-dropdown-menu-overlay" theme-for="vaadin-dropdown-menu-overlay">
+<dom-module id="material-select-overlay" theme-for="vaadin-select-overlay">
   <template>
     <style include="material-menu-overlay">
       :host([bottom-aligned]) {
@@ -64,7 +64,7 @@
       }
 
       [part="overlay"] {
-        min-width: var(--vaadin-dropdown-menu-text-field-width);
+        min-width: var(--vaadin-select-text-field-width);
       }
     </style>
   </template>

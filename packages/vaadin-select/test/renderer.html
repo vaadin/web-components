@@ -2,33 +2,33 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>vaadin-dropdown-menu tests</title>
+  <title>vaadin-select tests</title>
   <script src="../../web-component-tester/browser.js"></script>
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <link rel="import" href="../../test-fixture/test-fixture.html">
   <link rel="import" href="../../vaadin-list-box/vaadin-list-box.html">
   <link rel="import" href="../../vaadin-item/vaadin-item.html">
   <link rel="import" href="mock-item.html">
-  <link rel="import" href="../vaadin-dropdown-menu.html">
+  <link rel="import" href="../vaadin-select.html">
   <link rel="import" href="not-animated-styles.html">
 </head>
 
 <body>
   <test-fixture id="default">
     <template>
-      <vaadin-dropdown-menu></vaadin-dropdown-menu>
+      <vaadin-select></vaadin-select>
     </template>
   </test-fixture>
 
   <test-fixture id="with-template">
     <template>
-      <vaadin-dropdown-menu>
+      <vaadin-select>
         <template>
           <vaadin-list-box>
             <mock-item>templatizer item</mock-item>
           </vaadin-list-box>
         </template>
-      </vaadin-dropdown-menu>
+      </vaadin-select>
     </template>
   </test-fixture>
 
@@ -40,10 +40,10 @@
 
   <dom-module id="x-renderer">
     <template>
-      <vaadin-dropdown-menu renderer="[[renderer]]"></vaadin-dropdown-menu>
+      <vaadin-select renderer="[[renderer]]"></vaadin-select>
     </template>
     <script>
-      customElements.whenDefined('vaadin-dropdown-menu').then(() => {
+      customElements.whenDefined('vaadin-select').then(() => {
         class XRenderer extends Polymer.Element {
           static get is() {
             return 'x-renderer';
@@ -73,7 +73,7 @@
   </dom-module>
 
   <script>
-    describe('vaadin-dropdown-menu renderer', () => {
+    describe('vaadin-select renderer', () => {
       let rendererContent;
 
       beforeEach(function() {
@@ -84,70 +84,70 @@
       });
 
       describe('without template', () => {
-        let dropdown;
+        let select;
 
-        beforeEach(() => dropdown = fixture('default'));
+        beforeEach(() => select = fixture('default'));
 
         it('should use renderer when it is defined', () => {
-          dropdown.renderer = root => root.appendChild(rendererContent);
-          expect(dropdown.shadowRoot.querySelector('vaadin-list-box mock-item').textContent.trim()).to.equal('renderer item');
+          select.renderer = root => root.appendChild(rendererContent);
+          expect(select.shadowRoot.querySelector('vaadin-list-box mock-item').textContent.trim()).to.equal('renderer item');
         });
 
-        it('should pass vaadin-dropdown-menu as owner to vaadin-overlay', () => {
-          dropdown.renderer = (root, dropdownMenu, model) => {
-            expect(dropdownMenu).to.eql(dropdown);
+        it('should pass vaadin-select as owner to vaadin-overlay', () => {
+          select.renderer = (root, select, model) => {
+            expect(select).to.eql(select);
           };
         });
 
         it('should remove template when added after renderer', () => {
-          dropdown.renderer = () => {};
+          select.renderer = () => {};
           const template = document.createElement('template');
-          expect(() => dropdown._contentTemplate = template).to.throw(Error);
-          expect(dropdown._contentTemplate).to.be.not.ok;
+          expect(() => select._contentTemplate = template).to.throw(Error);
+          expect(select._contentTemplate).to.be.not.ok;
         });
 
         it('should be possible to manually invoke renderer', () => {
-          const spy = dropdown.renderer = sinon.spy();
-          dropdown.opened = true;
+          const spy = select.renderer = sinon.spy();
+          select.opened = true;
           spy.reset();
-          dropdown.render();
+          select.render();
           expect(spy).to.be.calledOnce;
         });
       });
 
       describe('with template', () => {
-        let dropdown;
+        let select;
 
-        beforeEach(() => dropdown = fixture('with-template'));
+        beforeEach(() => select = fixture('with-template'));
 
         it('should fallback to render content with Templatizer when renderer is not defined', () => {
-          expect(dropdown.shadowRoot.querySelector('vaadin-list-box mock-item').textContent.trim()).to.equal('templatizer item');
+          expect(select.shadowRoot.querySelector('vaadin-list-box mock-item').textContent.trim()).to.equal('templatizer item');
         });
 
         it('should throw an error when setting a renderer if there is already a template', () => {
-          expect(() => dropdown.renderer = () => {}).to.throw(Error);
+          expect(() => select.renderer = () => {}).to.throw(Error);
         });
 
         it('should remove renderer when added after template', () => {
-          expect(() => dropdown.renderer = () => {}).to.throw(Error);
-          expect(dropdown.renderer).to.be.not.ok;
+          expect(() => select.renderer = () => {}).to.throw(Error);
+          expect(select.renderer).to.be.not.ok;
         });
       });
 
       describe('assigned through property binding', () => {
-        let wrapper, dropdown;
+        let wrapper, select;
 
         beforeEach(done => {
           customElements.whenDefined('x-renderer').then(() => {
             wrapper = fixture('from-props');
-            dropdown = wrapper.shadowRoot.querySelector('vaadin-dropdown-menu');
+            select = wrapper.shadowRoot.querySelector('vaadin-select');
             done();
           });
         });
 
         it('should render correctly when rendered assigned before shadow DOM is ready', () => {
-          dropdown.opened = true;
-          expect(dropdown._overlayElement.content.querySelector('mock-item').textContent.trim()).to.equal('renderer item');
+          select.opened = true;
+          expect(select._overlayElement.content.querySelector('mock-item').textContent.trim()).to.equal('renderer item');
         });
       });
     });

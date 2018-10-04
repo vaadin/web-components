@@ -10,10 +10,10 @@ https://glitch.com/edit/#!/rhetorical-oil
 <!--
 Example:
 
-1. Create `vaadin-dropdown-menu`
-2. Append `vaadin-dropdown-menu` to document.body
+1. Create `vaadin-select`
+2. Append `vaadin-select` to document.body
 3. Create `div`.
-4. Append `div` to `vaadin-dropdown-menu`
+4. Append `div` to `vaadin-select`
 -->
 
 
@@ -36,5 +36,5 @@ Example:
 <!--
 `bower ls` or `npm ls` will show the version of webcomponents.js or webcomponents-lite.js
 -->
-- vaadin-dropdown-menu: vX.X.X
-- webcomponents: vX.X.X 
+- vaadin-select: vX.X.X
+- webcomponents: vX.X.X

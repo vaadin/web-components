@@ -3,10 +3,10 @@
   "pages": [
     {
       "name": "Basics",
-      "url": "dropdown-menu-basic-demos",
-      "src": "dropdown-menu-basic-demos.html",
+      "url": "select-basic-demos",
+      "src": "select-basic-demos.html",
       "meta": {
-        "title": "vaadin-dropdown-menu Basics",
+        "title": "vaadin-select Basics",
         "description": "",
         "image": ""
       }
@@ -14,10 +14,10 @@
     ,
     {
       "name": "Validation",
-      "url": "dropdown-menu-validation-demos",
-      "src": "dropdown-menu-validation-demos.html",
+      "url": "select-validation-demos",
+      "src": "select-validation-demos.html",
       "meta": {
-        "title": "vaadin-dropdown-menu Validation",
+        "title": "vaadin-select Validation",
         "description": "",
         "image": ""
       }
@@ -25,10 +25,10 @@
     ,
     {
       "name": "Styling",
-      "url": "dropdown-menu-styling-demos",
-      "src": "dropdown-menu-styling-demos.html",
+      "url": "select-styling-demos",
+      "src": "select-styling-demos.html",
       "meta": {
-        "title": "vaadin-dropdown-menu Styling",
+        "title": "vaadin-select Styling",
         "description": "",
         "image": ""
       }

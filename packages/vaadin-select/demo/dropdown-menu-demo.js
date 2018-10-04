@@ -1,5 +1,5 @@
 /* @polymerMixin */
-window.DropdownMenuDemo = superClass => {
+window.SelectDemo = superClass => {
   return class extends superClass {
     static get properties() {
       return {

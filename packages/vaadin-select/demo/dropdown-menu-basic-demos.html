@@ -1,4 +1,4 @@
-<dom-module id="dropdown-menu-basic-demos">
+<dom-module id="select-basic-demos">
   <template>
     <style include="vaadin-component-demo-shared-styles">
       :host {
@@ -7,12 +7,12 @@
     </style>
 
     <h3>Basic Usage</h3>
-    <vaadin-demo-snippet id="dropdown-menu-list-box-basic">
+    <vaadin-demo-snippet id="select-list-box-basic">
       <template preserve-content>
-        <vaadin-dropdown-menu></vaadin-dropdown-menu>
+        <vaadin-select></vaadin-select>
         <script>
-          window.addDemoReadyListener('#dropdown-menu-list-box-basic', function(document) {
-            document.querySelector('vaadin-dropdown-menu').renderer = function(root) {
+          window.addDemoReadyListener('#select-list-box-basic', function(document) {
+            document.querySelector('vaadin-select').renderer = function(root) {
               // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
               if (root.firstChild) {
                 return;
@@ -37,9 +37,9 @@
     <p>
       The content can be provided using the HTML template.
     </p>
-    <vaadin-demo-snippet id="dropdown-menu-list-box-polymer-template">
+    <vaadin-demo-snippet id="select-list-box-polymer-template">
       <template preserve-content>
-        <vaadin-dropdown-menu>
+        <vaadin-select>
           <template>
             <vaadin-list-box>
               <vaadin-item>Jose</vaadin-item>
@@ -47,19 +47,19 @@
               <vaadin-item>Pedro</vaadin-item>
             </vaadin-list-box>
           </template>
-        </vaadin-dropdown-menu>
+        </vaadin-select>
       </template>
     </vaadin-demo-snippet>
 
-    <h3>Configuring the Dropdown</h3>
-    <vaadin-demo-snippet id="dropdown-menu-list-box-configuring">
+    <h3>Configuring the Select</h3>
+    <vaadin-demo-snippet id="select-list-box-configuring">
       <template preserve-content>
-        <vaadin-dropdown-menu label="Label" placeholder="Placeholder"></vaadin-dropdown-menu>
-        <vaadin-dropdown-menu label="Disabled" disabled></vaadin-dropdown-menu>
-        <vaadin-dropdown-menu label="Read-only" readonly value="Option one"></vaadin-dropdown-menu>
-        <vaadin-dropdown-menu label="Required" required></vaadin-dropdown-menu>
+        <vaadin-select label="Label" placeholder="Placeholder"></vaadin-select>
+        <vaadin-select label="Disabled" disabled></vaadin-select>
+        <vaadin-select label="Read-only" readonly value="Option one"></vaadin-select>
+        <vaadin-select label="Required" required></vaadin-select>
         <script>
-          window.addDemoReadyListener('#dropdown-menu-list-box-configuring', function(document) {
+          window.addDemoReadyListener('#select-list-box-configuring', function(document) {
             const appendItems = function(listBox, items) {
               items.forEach(function(row) {
                 const item = window.document.createElement('vaadin-item');
@@ -71,7 +71,7 @@
               });
             };
 
-            document.querySelector('vaadin-dropdown-menu[placeholder]').renderer = function(root) {
+            document.querySelector('vaadin-select[placeholder]').renderer = function(root) {
               if (root.firstChild) {
                 return;
               }
@@ -80,7 +80,7 @@
               root.appendChild(listBox);
             };
 
-            document.querySelector('vaadin-dropdown-menu[disabled]').renderer = function(root) {
+            document.querySelector('vaadin-select[disabled]').renderer = function(root) {
               if (root.firstChild) {
                 return;
               }
@@ -89,7 +89,7 @@
               root.appendChild(listBox);
             };
 
-            document.querySelector('vaadin-dropdown-menu[readonly]').renderer = function(root) {
+            document.querySelector('vaadin-select[readonly]').renderer = function(root) {
               if (root.firstChild) {
                 return;
               }
@@ -98,7 +98,7 @@
               root.appendChild(listBox);
             };
 
-            document.querySelector('vaadin-dropdown-menu[required]').renderer = function(root) {
+            document.querySelector('vaadin-select[required]').renderer = function(root) {
               if (root.firstChild) {
                 return;
               }
@@ -129,12 +129,12 @@
     <p>
         By setting the <code>label</code> attribute of inner vaadin-items you will be able to change the visual representation of the selected value in the input part.
     </p>
-    <vaadin-demo-snippet id="dropdown-menu-list-box-custom-label">
+    <vaadin-demo-snippet id="select-list-box-custom-label">
       <template preserve-content>
-        <vaadin-dropdown-menu placeholder="Language"></vaadin-dropdown-menu>
+        <vaadin-select placeholder="Language"></vaadin-select>
         <script>
-          window.addDemoReadyListener('#dropdown-menu-list-box-custom-label', function(document) {
-            document.querySelector('vaadin-dropdown-menu').renderer = function(root) {
+          window.addDemoReadyListener('#select-list-box-custom-label', function(document) {
+            document.querySelector('vaadin-select').renderer = function(root) {
               if (root.firstChild) {
                 return;
               }
@@ -160,11 +160,11 @@
 
   </template>
   <script>
-    class DropdownMenuBasicDemos extends DemoReadyEventEmitter(DropdownMenuDemo(Polymer.Element)) {
+    class SelectBasicDemos extends DemoReadyEventEmitter(SelectDemo(Polymer.Element)) {
       static get is() {
-        return 'dropdown-menu-basic-demos';
+        return 'select-basic-demos';
       }
     }
-    customElements.define(DropdownMenuBasicDemos.is, DropdownMenuBasicDemos);
+    customElements.define(SelectBasicDemos.is, SelectBasicDemos);
   </script>
 </dom-module>

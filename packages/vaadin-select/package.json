@@ -1,12 +1,12 @@
 {
-  "name": "@vaadin/vaadin-dropdown-menu",
+  "name": "@vaadin/vaadin-select",
   "version": "1.2.0-beta1",
-  "description": "vaadin-dropdown-menu",
-  "main": "vaadin-dropdown-menu.html",
-  "repository": "vaadin/vaadin-dropdown-menu",
+  "description": "vaadin-select",
+  "main": "vaadin-select.html",
+  "repository": "vaadin/vaadin-select",
   "keywords": [
     "Vaadin",
-    "vaadin-dropdown-menu",
+    "vaadin-select",
     "web-components",
     "web-component",
     "polymer"
@@ -14,7 +14,7 @@
   "author": "Vaadin Ltd",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/vaadin/vaadin-dropdown-menu/issues"
+    "url": "https://github.com/vaadin/vaadin-select/issues"
   },
   "homepage": "https://vaadin.com/components",
   "files": [

@@ -7,7 +7,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../polymer/lib/elements/dom-module.html">
 <link rel="import" href="../../vaadin-overlay/src/vaadin-overlay.html">
 
-<dom-module id="vaadin-dropdown-menu-overlay-styles" theme-for="vaadin-dropdown-menu-overlay">
+<dom-module id="vaadin-select-overlay-styles" theme-for="vaadin-select-overlay">
   <template>
     <style>
       :host {
@@ -26,18 +26,18 @@ This program is available under Apache License Version 2.0, available at https:/
       * ### Styling
       *
       * See [`<vaadin-overlay>` documentation](https://github.com/vaadin/vaadin-overlay/blob/master/src/vaadin-overlay.html)
-      * for `<vaadin-dropdown-menu-overlay>` parts.
+      * for `<vaadin-select-overlay>` parts.
       *
       * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
       *
       * @memberof Vaadin
       * @extends Vaadin.OverlayElement
       */
-    class DropdownMenuOverlayElement extends Vaadin.OverlayElement {
+    class SelectOverlayElement extends Vaadin.OverlayElement {
       static get is() {
-        return 'vaadin-dropdown-menu-overlay';
+        return 'vaadin-select-overlay';
       }
     }
-    customElements.define(DropdownMenuOverlayElement.is, DropdownMenuOverlayElement);
+    customElements.define(SelectOverlayElement.is, SelectOverlayElement);
   })();
 </script>

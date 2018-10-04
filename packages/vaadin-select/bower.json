@@ -1,17 +1,17 @@
 {
-  "name": "vaadin-dropdown-menu",
+  "name": "vaadin-select",
   "homepage": "https://vaadin.com/components",
   "authors": [
     "Vaadin Ltd"
   ],
-  "description": "vaadin-dropdown-menu",
+  "description": "vaadin-select",
   "main": [
-    "vaadin-dropdown-menu.html",
-    "theme/material/vaadin-dropdown-menu.html"
+    "vaadin-select.html",
+    "theme/material/vaadin-select.html"
   ],
   "keywords": [
     "Vaadin",
-    "vaadin-dropdown-menu",
+    "vaadin-select",
     "web-components",
     "web-component",
     "polymer"

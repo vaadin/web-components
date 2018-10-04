@@ -7,7 +7,7 @@
   <link rel="import" href="../../../polymer/polymer.html">
   <script>
     const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
-    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-dropdown-menu.html">`);
+    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-select.html">`);
     document.write(`<link rel="import" href="../../../vaadin-list-box/theme/${theme}/vaadin-list-box.html">`);
     document.write(`<link rel="import" href="../../../vaadin-item/theme/${theme}/vaadin-item.html">`);
   </script>
@@ -31,37 +31,37 @@
     }
   </style>
 
-  <div class="capture-block" id="dropdown-menu">
+  <div class="capture-block" id="select">
 
-    <vaadin-dropdown-menu label="Normal" placeholder="Placeholder">
+    <vaadin-select label="Normal" placeholder="Placeholder">
       <div slot="prefix">prefix &nbsp;</div>
-    </vaadin-dropdown-menu>
+    </vaadin-select>
 
     <div class="space"></div>
 
-    <vaadin-dropdown-menu label="Disabled" placeholder="Placeholder" disabled>
-    </vaadin-dropdown-menu>
+    <vaadin-select label="Disabled" placeholder="Placeholder" disabled>
+    </vaadin-select>
 
-    <vaadin-dropdown-menu label="Selected and Focused" placeholder="Placeholder" id="drop2">
+    <vaadin-select label="Selected and Focused" placeholder="Placeholder" id="drop2">
       <template>
         <vaadin-list-box>
           <vaadin-item>default item</vaadin-item>
           <vaadin-item>Selected and Focused</vaadin-item>
         </vaadin-list-box>
       </template>
-    </vaadin-dropdown-menu>
+    </vaadin-select>
 
     <br/>
 
-    <vaadin-dropdown-menu label="Item as value" placeholder="Placeholder" value="Html&nbsp;as&nbsp;Content">
+    <vaadin-select label="Item as value" placeholder="Placeholder" value="Html&nbsp;as&nbsp;Content">
       <template>
         <vaadin-list-box>
           <vaadin-item><strong>Html</strong>&nbsp;as&nbsp;<i>Content</i></vaadin-item>
         </vaadin-list-box>
       </template>
-    </vaadin-dropdown-menu>
+    </vaadin-select>
 
-    <vaadin-dropdown-menu label="Open" placeholder="Placeholder" id="drop1" value="Item one">
+    <vaadin-select label="Open" placeholder="Placeholder" id="drop1" value="Item one">
       <template>
         <vaadin-list-box>
           <strong>Opened menu</strong>
@@ -70,24 +70,24 @@
           <vaadin-item disabled>Disabled item</vaadin-item>
         </vaadin-list-box>
       </template>
-    </vaadin-dropdown-menu>
+    </vaadin-select>
 
-    <vaadin-dropdown-menu label="Text as Content" placeholder="Placeholder" value="v2">
+    <vaadin-select label="Text as Content" placeholder="Placeholder" value="v2">
       <template>
         <vaadin-list-box>
           <vaadin-item>default item</vaadin-item>
           <vaadin-item value="v2">Text as Content Two</vaadin-item>
         </vaadin-list-box>
       </template>
-    </vaadin-dropdown-menu>
+    </vaadin-select>
 
-    <vaadin-dropdown-menu label="Label as Content" placeholder="Placeholder" value="Option one">
+    <vaadin-select label="Label as Content" placeholder="Placeholder" value="Option one">
       <template>
         <vaadin-list-box>
           <vaadin-item label="Label as Content">Option one</vaadin-item>
         </vaadin-list-box>
       </template>
-    </vaadin-dropdown-menu>
+    </vaadin-select>
 
     <script>
       window.addEventListener('WebComponentsReady', () => {

@@ -2,7 +2,7 @@
   "rules": {
   },
   "globals": {
-    "DropdownMenuDemo": false,
+    "SelectDemo": false,
     "DemoReadyEventEmitter": false
   }
 }

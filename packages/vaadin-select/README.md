@@ -1,35 +1,35 @@
-[![npm version](https://badgen.net/npm/v/@vaadin/vaadin-dropdown-menu)](https://www.npmjs.com/package/@vaadin/vaadin-dropdown-menu)
-[![Bower version](https://badgen.net/github/release/vaadin/vaadin-dropdown-menu)](https://github.com/vaadin/vaadin-dropdown-menu/releases)
-[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/vaadin/vaadin-dropdown-menu)
-[![Build Status](https://travis-ci.org/vaadin/vaadin-dropdown-menu.svg?branch=master)](https://travis-ci.org/vaadin/vaadin-dropdown-menu)
-[![Coverage Status](https://coveralls.io/repos/github/vaadin/vaadin-dropdown-menu/badge.svg?branch=master)](https://coveralls.io/github/vaadin/vaadin-dropdown-menu?branch=master)
+[![npm version](https://badgen.net/npm/v/@vaadin/vaadin-select)](https://www.npmjs.com/package/@vaadin/vaadin-select)
+[![Bower version](https://badgen.net/github/release/vaadin/vaadin-select)](https://github.com/vaadin/vaadin-select/releases)
+[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/vaadin/vaadin-select)
+[![Build Status](https://travis-ci.org/vaadin/vaadin-select.svg?branch=master)](https://travis-ci.org/vaadin/vaadin-select)
+[![Coverage Status](https://coveralls.io/repos/github/vaadin/vaadin-select/badge.svg?branch=master)](https://coveralls.io/github/vaadin/vaadin-select?branch=master)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/vaadin/web-components?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
-[![Published on Vaadin  Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-dropdown-menu)
-[![Stars on vaadin.com/directory](https://img.shields.io/vaadin-directory/star/vaadinvaadin-dropdown-menu.svg)](https://vaadin.com/directory/component/vaadinvaadin-dropdown-menu)
+[![Published on Vaadin  Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-select)
+[![Stars on vaadin.com/directory](https://img.shields.io/vaadin-directory/star/vaadinvaadin-select.svg)](https://vaadin.com/directory/component/vaadinvaadin-select)
 
-# &lt;vaadin-dropdown-menu&gt;
+# &lt;vaadin-select&gt;
 
-[Live Demo ↗](https://vaadin.com/components/vaadin-dropdown-menu/html-examples)
+[Live Demo ↗](https://vaadin.com/components/vaadin-select/html-examples)
 |
-[API documentation ↗](https://vaadin.com/components/vaadin-dropdown-menu/html-api)
+[API documentation ↗](https://vaadin.com/components/vaadin-select/html-api)
 
 
-[&lt;vaadin-dropdown-menu&gt;](https://vaadin.com/components/vaadin-dropdown-menu) is a Web Component similar to a native browser select element, part of the [Vaadin components](https://vaadin.com/components).
+[&lt;vaadin-select&gt;](https://vaadin.com/components/vaadin-select) is a Web Component similar to a native browser select element, part of the [Vaadin components](https://vaadin.com/components).
 
 <!--
 ```
 <custom-element-demo height="425">
   <template>
     <script src="../webcomponentsjs/webcomponents-lite.js"></script>
-    <link rel="import" href="vaadin-dropdown-menu.html">
+    <link rel="import" href="vaadin-select.html">
     <next-code-block></next-code-block>
   </template>
 </custom-element-demo>
 ```
 -->
 ```html
-<vaadin-dropdown-menu label="Label" placeholder="Placeholder" value="Option one">
+<vaadin-select label="Label" placeholder="Placeholder" value="Option one">
   <template>
     <vaadin-list-box>
       <vaadin-item>Option one</vaadin-item>
@@ -39,10 +39,10 @@
       <vaadin-item disabled>Option four</vaadin-item>
     </vaadin-list-box>
   </template>
-</vaadin-dropdown-menu>
+</vaadin-select>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-dropdown-menu/master/screenshot.gif" width="220" alt="Screenshot of vaadin-dropdown-menu">](https://vaadin.com/components/vaadin-dropdown-menu)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-select/master/screenshot.gif" width="220" alt="Screenshot of vaadin-select">](https://vaadin.com/components/vaadin-select)
 
 ## Installation
 
@@ -55,29 +55,29 @@ are only published on npm, not pushed to GitHub repositories.
 
 ### Polymer 2 and HTML Imports Compatible Version
 
-Install `vaadin-dropdown-menu`:
+Install `vaadin-select`:
 
 ```sh
-bower i vaadin/vaadin-dropdown-menu --save
+bower i vaadin/vaadin-select --save
 ```
 
 Once installed, import it in your application:
 
 ```html
-<link rel="import" href="bower_components/vaadin-dropdown-menu/vaadin-dropdown-menu.html">
+<link rel="import" href="bower_components/vaadin-select/vaadin-select.html">
 ```
 ### Polymer 3 and ES Modules Compatible Version
 
-Install `vaadin-dropdown-menu`:
+Install `vaadin-select`:
 
 ```sh
-npm i @vaadin/vaadin-dropdown-menu --save
+npm i @vaadin/vaadin-select --save
 ```
 
 Once installed, import it in your application:
 
 ```js
-import '@vaadin/vaadin-dropdown-menu/vaadin-dropdown-menu.js';
+import '@vaadin/vaadin-select/vaadin-select.js';
 ```
 
 ## Getting started
@@ -90,36 +90,36 @@ To use the Material theme, import the correspondent file from the `theme/materia
 
 - The component with the Lumo theme:
 
-  `theme/lumo/vaadin-dropdown-menu.html`
+  `theme/lumo/vaadin-select.html`
 
 - The component with the Material theme:
 
-- `theme/material/vaadin-dropdown-menu.html`
+- `theme/material/vaadin-select.html`
 
-- Alias for `theme/lumo/vaadin-dropdown-menu.html`:
+- Alias for `theme/lumo/vaadin-select.html`:
 
-- `vaadin-dropdown-menu.html`
+- `vaadin-select.html`
 
 
 ## Running demos and tests in browser
 
-1. Fork the `vaadin-dropdown-menu` repository and clone it locally.
+1. Fork the `vaadin-select` repository and clone it locally.
 
 1. Make sure you have [npm](https://www.npmjs.com/) installed.
 
-1. When in the `vaadin-dropdown-menu` directory, run `npm install` and then `bower install` to install dependencies.
+1. When in the `vaadin-select` directory, run `npm install` and then `bower install` to install dependencies.
 
 1. Run `polymer serve --open`, browser will automatically open the component API documentation.
 
 1. You can also open demo or in-browser tests by adding **demo** or **test** to the URL, for example:
 
-  - http://127.0.0.1:8080/components/vaadin-dropdown-menu/demo
-  - http://127.0.0.1:8080/components/vaadin-dropdown-menu/test
+  - http://127.0.0.1:8080/components/vaadin-select/demo
+  - http://127.0.0.1:8080/components/vaadin-select/test
 
 
 ## Running tests from the command line
 
-1. When in the `vaadin-dropdown-menu` directory, run `polymer test`
+1. When in the `vaadin-select` directory, run `polymer test`
 
 
 ## Following the coding style

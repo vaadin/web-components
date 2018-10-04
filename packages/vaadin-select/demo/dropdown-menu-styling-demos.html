@@ -1,4 +1,4 @@
-<dom-module id="dropdown-menu-styling-demos">
+<dom-module id="select-styling-demos">
   <template>
     <style include="vaadin-component-demo-shared-styles">
       :host {
@@ -7,14 +7,14 @@
     </style>
 
     <h3>Styling the Template Content</h3>
-    <vaadin-demo-snippet id="dropdown-menu-list-box-custom-styling">
+    <vaadin-demo-snippet id="select-list-box-custom-styling">
       <template preserve-content>
         <style>
           vaadin-item {
             font-style: italic;
           }
         </style>
-        <vaadin-dropdown-menu label="Name">
+        <vaadin-select label="Name">
           <template>
             <vaadin-list-box>
               <vaadin-item>Jose</vaadin-item>
@@ -22,14 +22,14 @@
               <vaadin-item>Pedro</vaadin-item>
             </vaadin-list-box>
           </template>
-        </vaadin-dropdown-menu>
+        </vaadin-select>
       </template>
     </vaadin-demo-snippet>
 
     <h3>Customizing the Template Content</h3>
-    <vaadin-demo-snippet id="dropdown-menu-list-box-custom-content">
+    <vaadin-demo-snippet id="select-list-box-custom-content">
       <template preserve-content>
-        <vaadin-dropdown-menu label="User">
+        <vaadin-select label="User">
           <div slot="prefix"><iron-icon icon="lumo:user"></iron-icon></div>
           <template>
             <vaadin-list-box>
@@ -51,14 +51,14 @@
               </vaadin-item>
             </vaadin-list-box>
           </template>
-        </vaadin-dropdown-menu>
+        </vaadin-select>
       </template>
     </vaadin-demo-snippet>
 
     <h3>Custom Theme Variant</h3>
-    <vaadin-demo-snippet id="dropdown-menu-custom-theme-variant">
+    <vaadin-demo-snippet id="select-custom-theme-variant">
       <template preserve-content>
-        <dom-module id="custom-dropdown-menu" theme-for="vaadin-text-field vaadin-item">
+        <dom-module id="custom-select" theme-for="vaadin-text-field vaadin-item">
           <template>
             <style>
               :host([theme~="custom"]) {
@@ -67,7 +67,7 @@
             </style>
           </template>
         </dom-module>
-        <dom-module id="custom-dropdown-menu-overlay" theme-for="vaadin-text-field vaadin-dropdown-menu-overlay">
+        <dom-module id="custom-select-overlay" theme-for="vaadin-text-field vaadin-select-overlay">
           <template>
             <style>
               :host([theme~="custom"]) [part~="overlay"] {
@@ -76,7 +76,7 @@
             </style>
           </template>
         </dom-module>
-        <vaadin-dropdown-menu label="Name" theme="custom">
+        <vaadin-select label="Name" theme="custom">
           <template>
             <vaadin-list-box>
               <vaadin-item theme="custom">Jose</vaadin-item>
@@ -84,17 +84,17 @@
               <vaadin-item theme="custom">Pedro</vaadin-item>
             </vaadin-list-box>
           </template>
-        </vaadin-dropdown-menu>
+        </vaadin-select>
       </template>
     </vaadin-demo-snippet>
 
   </template>
   <script>
-    class DropdownMenuStylingDemos extends DemoReadyEventEmitter(DropdownMenuDemo(Polymer.Element)) {
+    class SelectStylingDemos extends DemoReadyEventEmitter(SelectDemo(Polymer.Element)) {
       static get is() {
-        return 'dropdown-menu-styling-demos';
+        return 'select-styling-demos';
       }
     }
-    customElements.define(DropdownMenuStylingDemos.is, DropdownMenuStylingDemos);
+    customElements.define(SelectStylingDemos.is, SelectStylingDemos);
   </script>
 </dom-module>

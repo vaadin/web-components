@@ -10,7 +10,7 @@
 <link rel="import" href="../../../vaadin-item/theme/lumo/vaadin-item.html">
 <link rel="import" href="../../../vaadin-list-box/theme/lumo/vaadin-list-box.html">
 
-<dom-module id="lumo-dropdown-menu" theme-for="vaadin-dropdown-menu">
+<dom-module id="lumo-select" theme-for="vaadin-select">
   <template>
     <style include="lumo-field-button">
       :host {
@@ -35,7 +35,7 @@
   </template>
 </dom-module>
 
-<dom-module id="lumo-dropdown-menu-text-field" theme-for="vaadin-dropdown-menu-text-field">
+<dom-module id="lumo-select-text-field" theme-for="vaadin-select-text-field">
   <template>
     <style>
       [part="input-field"] {
@@ -58,7 +58,7 @@
   </template>
 </dom-module>
 
-<dom-module id="lumo-dropdown-menu-overlay" theme-for="vaadin-dropdown-menu-overlay">
+<dom-module id="lumo-select-overlay" theme-for="vaadin-select-overlay">
   <template>
     <style include="lumo-menu-overlay">
       :host {
@@ -70,7 +70,7 @@
       }
 
       [part~="overlay"] {
-        min-width: var(--vaadin-dropdown-menu-text-field-width);
+        min-width: var(--vaadin-select-text-field-width);
       }
 
       /* Small viewport adjustment */
