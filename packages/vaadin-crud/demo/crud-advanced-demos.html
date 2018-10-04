@@ -67,7 +67,7 @@
       <template preserve-content>
         <vaadin-crud >
           <vaadin-grid slot="grid" multi-sort>
-            <vaadin-grid-column width="150px" flex-grow="0">
+            <vaadin-grid-column path="firstName" width="150px" flex-grow="0">
               <template class="header">
                 <vaadin-grid-filter path="firstName" value="[[_filterFirstName]]">
                   <vaadin-text-field slot="filter" value="{{_filterFirstName}}" placeholder="Name" focus-target theme="small" style="width: 124px">
@@ -76,9 +76,8 @@
                   </vaadin-text-field>
                 </vaadin-grid-filter>
               </template>
-              <template>[[item.firstName]]</template>
             </vaadin-grid-column>
-            <vaadin-grid-column width="150px" flex-grow="0">
+            <vaadin-grid-column path="lastName" width="150px" flex-grow="0">
               <template class="header">
                 <vaadin-grid-filter path="lastName" value="[[_filterLastName]]">
                   <vaadin-text-field slot="filter" value="{{_filterLastName}}" placeholder="Surname" focus-target theme="small" style="width: 124px">
@@ -87,13 +86,10 @@
                   </vaadin-text-field>
                 </vaadin-grid-filter>
               </template>
-              <template>[[item.lastName]]</template>
             </vaadin-grid-column>
-            <vaadin-grid-column>
-              <template>[[item.address.state]]</template>
+            <vaadin-grid-column path="address.state" header=" ">
             </vaadin-grid-column>
-            <vaadin-grid-column>
-              <template>[[item.email]]</template>
+            <vaadin-grid-column path="email" header=" ">
             </vaadin-grid-column>
 
             <vaadin-crud-edit-column></vaadin-crud-edit-column>
