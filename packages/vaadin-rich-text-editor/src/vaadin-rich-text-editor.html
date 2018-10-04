@@ -9,18 +9,73 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
 <link rel="import" href="../../vaadin-license-checker/vaadin-license-checker.html">
 
+<link rel="import" href="./vaadin-quill.html">
+
 <dom-module id="vaadin-rich-text-editor">
   <template>
-    <style>
+    <style include="vaadin-quill-styles">
       :host {
-        display: inline-block;
+        display: block;
       }
 
       :host([hidden]) {
         display: none !important;
       }
+
+      [part="editor"] {
+        min-height: 200px;
+      }
     </style>
-    <slot></slot>
+
+    <!-- Create toolbar container -->
+    <div part="toolbar">
+
+      <!-- Bold -->
+      <button class="ql-bold"></button>
+
+      <!-- Italic -->
+      <button class="ql-italic"></button>
+
+      <!-- Underline -->
+      <button class="ql-underline"></button>
+
+      <!-- Strike -->
+      <button class="ql-strike"></button>
+
+      <!-- Subscript and superscript -->
+      <button class="ql-script" value="sub"></button>
+      <button class="ql-script" value="super"></button>
+
+      <!-- Header buttons -->
+      <button type="button" class="ql-header" value="1"></button>
+      <button type="button" class="ql-header" value="2"></button>
+
+      <!-- List buttons -->
+      <button type="button" class="ql-list" value="bullet"></button>
+      <button type="button" class="ql-list" value="ordered"></button>
+
+      <!-- Indentation buttons -->
+      <button type="button" class="ql-indent" value="-1"></button>
+      <button type="button" class="ql-indent" value="+1"></button>
+
+      <!-- Align buttons -->
+      <button type="button" class="ql-align" value=""></button>
+      <button type="button" class="ql-align" value="center"></button>
+      <button type="button" class="ql-align" value="right"></button>
+      <button type="button" class="ql-align" value="justify"></button>
+
+      <!-- Blockquote -->
+      <button type="button" class="ql-blockquote"></button>
+
+      <!-- Code block -->
+      <button type="button" class="ql-code-block"></button>
+
+      <!-- Clean -->
+      <button type="button" class="ql-clean"></button>
+    </div>
+
+    <div part="editor"></div>
+
   </template>
 
   <script>
@@ -49,6 +104,21 @@ This program is available under Apache License Version 2.0, available at https:/
         static get properties() {
           return {
           };
+        }
+
+        ready() {
+          super.ready();
+
+          const editor = this.shadowRoot.querySelector('[part="editor"]');
+          const toolbar = this.shadowRoot.querySelector('[part="toolbar"]');
+
+          new window.Quill(editor, {
+            modules: {
+              toolbar: toolbar
+            },
+            placeholder: 'Type something...',
+            theme: 'snow'
+          });
         }
       }
 
