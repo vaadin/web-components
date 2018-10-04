@@ -83,7 +83,7 @@
     </p>
     <vaadin-demo-snippet id="combo-box-basic-demos-lazy-loading">
       <template preserve-content>
-        <vaadin-combo-box item-value-path="lastName" item-label-path="lastName" label="Person"></vaadin-combo-box>
+        <vaadin-combo-box label="Country"></vaadin-combo-box>
         <script>
           window.addDemoReadyListener('#combo-box-basic-demos-lazy-loading', function(document) {
             const combo = document.querySelector('vaadin-combo-box');
@@ -95,9 +95,9 @@
                 callback(response.result, response.size);
               };
               var index = params.page * params.pageSize;
-              const url = 'https://demo.vaadin.com/demo-data/1.0/people?index=' + index +
+              const url = 'https://demo.vaadin.com/demo-data/1.0/filtered-countries?index=' + index +
                           '&count=' + params.pageSize +
-                          '&filters[lastName]=' + params.filter;
+                          '&filter=' + params.filter;
               xhr.open('GET', url, true);
               xhr.send();
             };
