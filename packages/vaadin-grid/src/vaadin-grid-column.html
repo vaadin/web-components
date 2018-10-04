@@ -358,7 +358,8 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _pathOrHeaderChanged(path, header, headerCell, footerCell, cells, renderer, headerRenderer, bodyTemplate, headerTemplate) {
-      if (!headerRenderer && !headerTemplate && header !== undefined && headerCell) {
+      const hasHeaderText = header !== undefined && header !== null;
+      if (!headerRenderer && !headerTemplate && hasHeaderText && headerCell) {
         headerCell._content.textContent = header;
         headerCell.parentElement.hidden = false;
       }
@@ -369,7 +370,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this.__setColumnTemplateOrRenderer(undefined, pathRenderer, cells.value);
         }
 
-        if (!headerRenderer && !headerTemplate && !header && headerCell) {
+        if (!headerRenderer && !headerTemplate && !hasHeaderText && headerCell) {
           headerCell._content.textContent = this._generateHeader(path);
           headerCell.parentElement.hidden = false;
         }
