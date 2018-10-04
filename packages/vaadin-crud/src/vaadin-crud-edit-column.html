@@ -6,7 +6,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
 <link rel="import" href="../../polymer/polymer.html">
 <link rel="import" href="../../vaadin-grid/src/vaadin-grid-column.html">
 
-<dom-module id="vaadin-crud-grid-edit">
+<dom-module id="vaadin-crud-edit">
   <template>
     <style>
       :host {
@@ -31,15 +31,15 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
 
   <script>
     /**
-     * `<vaadin-crud-grid-edit>` is a helper element for the `<vaadin-crud-grid-edit-column>` that provides
+     * `<vaadin-crud-edit>` is a helper element for the `<vaadin-crud-edit-column>` that provides
      * a button that can be easily themed, and that fires an `edit` event with the row item as detail when
      * the user clicks on it.
      *
      */
-    class CrudGridEditElement extends Vaadin.ThemableMixin(Polymer.Element) {
+    class CrudEditElement extends Vaadin.ThemableMixin(Polymer.Element) {
       /** @private */
       static get is() {
-        return 'vaadin-crud-grid-edit';
+        return 'vaadin-crud-edit';
       }
 
       ready() {
@@ -61,11 +61,11 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
        * @param {Object} detail.index the index of the item in the data set
        */
     }
-    window.customElements.define(CrudGridEditElement.is, CrudGridEditElement);
+    window.customElements.define(CrudEditElement.is, CrudEditElement);
   </script>
 </dom-module>
 
-<dom-module id="vaadin-crud-grid-edit-column">
+<dom-module id="vaadin-crud-edit-column">
   <template>
     <template class="header" id="defaultHeaderTemplate">
     </template>
@@ -77,7 +77,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
   <script>
   (function() {
     /**
-     * `<vaadin-crud-grid-edit-column>` is a helper element for the `<vaadin-grid>`
+     * `<vaadin-crud-edit-column>` is a helper element for the `<vaadin-grid>`
      * that provides an edit icon which will fire an `edit` event when clicked.
      *
      * Typical usage is when using a customized `<vaadin-grid>` in a `<vaadin-crud>`
@@ -86,7 +86,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
      * #### Example:
      * ```html
      * <vaadin-grid items="[[items]]">
-     *  <vaadin-crud-grid-edit-column frozen></vaadin-crud-grid-edit-column>
+     *  <vaadin-crud-edit-column frozen></vaadin-crud-edit-column>
      *
      *  <vaadin-grid-column>
      *    ...
@@ -94,10 +94,10 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
      *
      * @memberof Vaadin
      */
-    class CrudGridEditColumnElement extends (class extends Vaadin.GridColumnElement {}) {
+    class CrudEditColumnElement extends (class extends Vaadin.GridColumnElement {}) {
 
       static get is() {
-        return 'vaadin-crud-grid-edit-column';
+        return 'vaadin-crud-edit-column';
       }
 
       static get properties() {
@@ -127,7 +127,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         super.ready();
         this.renderer = (root, column, model) => {
           if (!root.firstElementChild) {
-            const elm = document.createElement('vaadin-crud-grid-edit');
+            const elm = document.createElement('vaadin-crud-edit');
             this.hasAttribute('theme') && elm.setAttribute('theme', this.getAttribute('theme'));
             root.appendChild(elm);
           }
@@ -135,13 +135,13 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
       }
     }
 
-    customElements.define(CrudGridEditColumnElement.is, CrudGridEditColumnElement);
+    customElements.define(CrudEditColumnElement.is, CrudEditColumnElement);
 
     /**
      * @namespace Vaadin
      */
     window.Vaadin = window.Vaadin || {};
-    Vaadin.CrudGridEditColumnElement = CrudGridEditColumnElement;
+    Vaadin.CrudEditColumnElement = CrudEditColumnElement;
   })();
   </script>
 </dom-module>

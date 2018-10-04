@@ -53,7 +53,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
       </slot>
     </div>
 
-    <vaadin-dialog-layout theme$="[[theme]]" id="dialog" no-close-on-outside-click=[[__isDirty]] no-close-on-esc=[[__isDirty]] opened="{{opened}}" theme="crud">
+    <vaadin-dialog-layout theme$="[[theme]]" id="dialog" no-close-on-outside-click=[[__isDirty]] no-close-on-esc=[[__isDirty]] opened="{{editorOpened}}" theme="crud">
       <h3 slot="header">[[__editorHeader]]</h3>
       <div id="editor">
         <slot name="form">
@@ -119,14 +119,14 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
        *
        * Alternatively you can fully configure the component by providing your own Grid and Editor and Footer content.
        *
-       * NOTE: that you need to provide a `vaadin-crud-grid-edit-column`.
+       * NOTE: that you need to provide a `vaadin-crud-edit-column`.
        *
        * #### Example:
        * ```html
        * <vaadin-crud items='[{"name": "John", "surname": "Lennon", "role": "singer"},
        *                      {"name": "Ringo", "surname": "Starr", "role": "drums"}]'>
        *  <vaadin-grid slot="grid">
-       *   <vaadin-crud-grid-edit-column></vaadin-crud-grid-edit-column>
+       *   <vaadin-crud-edit-column></vaadin-crud-edit-column>
        *   <vaadin-grid-column>
        *    <template class="header">Name</template><template>[[item.name]]</template>
        *   </vaadin-grid-column>
@@ -206,7 +206,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
             /**
              * The item being edited in the dialog.
              */
-            item: {
+            editedItem: {
               type: Object,
               observer: '__onItemChange'
             },
@@ -251,7 +251,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
             /**
              * Reflects the opened status of the editor.
              */
-            opened: {
+            editorOpened: {
               type: Boolean,
               notify: true,
               observer: '__onOpenedChanged'
@@ -363,11 +363,12 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
 
         __onDomChange(nodes) {
           nodes.forEach(node => {
-            if (node instanceof Vaadin.GridElement) {
-              this._grid = node;
-            }
-            if (node.getAttribute && node.getAttribute('slot') === 'form') {
-              this._form = node;
+            if (node.getAttribute) {
+              if (node.getAttribute('slot') == 'grid') {
+                this._grid = node;
+              } else if (node.getAttribute('slot') == 'form') {
+                this._form = node;
+              }
             }
           });
         }
@@ -390,14 +391,11 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
             old.removeEventListener('edit', this.__editListener);
             old.removeEventListener('size-changed', this.__gridSizeListener);
           }
-          if (grid != this.$.grid) {
-            grid.setAttribute('slot', 'grid');
-          }
           if (this.items) {
             this.__onItemsChange(this.items);
           }
-          if (this.item) {
-            this.__onItemChange(this.item);
+          if (this.editedItem) {
+            this.__onItemChange(this.editedItem);
           }
           grid.addEventListener('edit', this.__editListener);
           grid.addEventListener('size-changed', this.__gridSizeListener);
@@ -416,8 +414,8 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           if (this.items) {
             this.__onItemsChange(this.items);
           }
-          if (this.item) {
-            this.__onItemChange(this.item);
+          if (this.editedItem) {
+            this.__onItemChange(this.editedItem);
           }
           if (this.$.form != form) {
             // move slotted from this to the overlay DOM so as it can target the slot
@@ -455,7 +453,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           }
 
           this.__isNew = this.__isNew || this.items && this.items.indexOf(item) < 0;
-          this.opened = !!item;
+          this.editorOpened = !!item;
         }
 
         /** A reference to all fields inside the [`_form`](#/elements/vaadin-crud#property-_form) element */
@@ -471,7 +469,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         }
 
         __closeEditor() {
-          this.opened = false;
+          this.editorOpened = false;
           // Delay changing the item in order not to modify editor while closing
           setTimeout(() => this.item = undefined);
         }
@@ -492,9 +490,9 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           this.__isNew = !item;
           const evt = this.dispatchEvent(new CustomEvent(this.__isNew ? 'new' : 'edit', {detail: {item: item}, cancelable: true}));
           if (evt) {
-            this.item = item || {};
+            this.editedItem = item || {};
           } else {
-            this.opened = true;
+            this.editorOpened = true;
           }
         }
 
@@ -503,10 +501,10 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
             return;
           }
 
-          const item = this.item || {};
+          const item = this.editedItem || {};
           this._fields.forEach(e => {
             const path = e.path || e.getAttribute('path');
-            path && this.__set(path, e.value, this.item);
+            path && this.__set(path, e.value, this.editedItem);
           });
           const evt = this.dispatchEvent(new CustomEvent('save', {detail: {item: item}, cancelable: true}));
           if (evt) {
@@ -533,7 +531,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         }
 
         __confirmCancel() {
-          const evt = this.dispatchEvent(new CustomEvent('cancel', {detail: {item: this.item}, cancelable: true}));
+          const evt = this.dispatchEvent(new CustomEvent('cancel', {detail: {item: this.editedItem}, cancelable: true}));
           if (evt) {
             this.__closeEditor();
           }
@@ -545,10 +543,10 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         }
 
         __confirmDelete() {
-          const evt = this.dispatchEvent(new CustomEvent('delete', {detail: {item: this.item}, cancelable: true}));
+          const evt = this.dispatchEvent(new CustomEvent('delete', {detail: {item: this.editedItem}, cancelable: true}));
           if (evt) {
-            if (this.items && this.items.indexOf(this.item) >= 0) {
-              this.items.splice(this.items.indexOf(this.item), 1);
+            if (this.items && this.items.indexOf(this.editedItem) >= 0) {
+              this.items.splice(this.items.indexOf(this.editedItem), 1);
             }
             this._grid.clearCache();
             this.__closeEditor();

@@ -20,7 +20,7 @@
   <test-fixture id="no-sort-no-filter">
     <template>
       <vaadin-crud-grid style="width: 500px" no-sort no-filter>
-        <vaadin-crud-grid-edit-column theme="foo"></vaadin-crud-grid-edit-column>
+        <vaadin-crud-edit-column theme="foo"></vaadin-crud-edit-column>
       </vaadin-crud-grid>
     </template>
   </test-fixture>
@@ -35,7 +35,7 @@
   <test-fixture id="grid">
     <template>
       <vaadin-grid style="width: 500px">
-        <vaadin-crud-grid-edit-column theme="foo"></vaadin-crud-grid-edit-column>
+        <vaadin-crud-edit-column theme="foo"></vaadin-crud-edit-column>
       </vaadin-crud-grid>
     </template>
   </test-fixture>
@@ -69,7 +69,7 @@
 
         !shadyDom && it('should theme edit icon element', () => {
           const editElem = getBodyCellContent(grid, 0, 0).firstElementChild;
-          expect(editElem.localName).to.be.equal('vaadin-crud-grid-edit');
+          expect(editElem.localName).to.be.equal('vaadin-crud-edit');
           expect(editElem.getAttribute('theme')).to.be.equal('foo');
         });
       });
@@ -158,7 +158,7 @@
             });
 
             it('should automatically add the edit column', () => {
-              expect(getBodyCellContent(crudGrid, 0, 3).firstElementChild.localName).to.be.equal('vaadin-crud-grid-edit');
+              expect(getBodyCellContent(crudGrid, 0, 3).firstElementChild.localName).to.be.equal('vaadin-crud-edit');
             });
 
             it('should automatically add sorters to columns', () => {
