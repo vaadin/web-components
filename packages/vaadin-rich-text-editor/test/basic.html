@@ -135,6 +135,24 @@
           expect(editor.getFormat(0)).to.be.empty.object;
         });
       });
+
+      describe('value', () => {
+        it('should represent the "delta" of the editor', done => {
+          rte.addEventListener('value-changed', e => {
+            expect(e.detail.value).to.be.object;
+            expect(e.detail.value.ops).to.be.array;
+            expect(e.detail.value.ops).to.have.length(1);
+            expect(e.detail.value.ops[0]).to.deep.equal({insert: 'Foo\n'});
+            done();
+          });
+          editor.insertText(0, 'Foo');
+        });
+
+        it('should be read only and disallow modifications', () => {
+          rte.value = 'Foo';
+          expect(rte.value).to.not.equal('Foo');
+        });
+      });
     });
   </script>
 </body>

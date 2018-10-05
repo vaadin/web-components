@@ -103,6 +103,11 @@ This program is available under Apache License Version 2.0, available at https:/
 
         static get properties() {
           return {
+            value: {
+              type: Object,
+              readOnly: true,
+              notify: true
+            }
           };
         }
 
@@ -118,6 +123,11 @@ This program is available under Apache License Version 2.0, available at https:/
             },
             placeholder: 'Type something...',
             theme: 'snow'
+          });
+
+          this._editor.on('text-change', () => {
+            const contents = this._editor.getContents();
+            this._setValue(contents);
           });
         }
       }
