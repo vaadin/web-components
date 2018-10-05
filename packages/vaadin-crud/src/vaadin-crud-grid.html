@@ -43,15 +43,24 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
              */
             noHead: Boolean,
             /**
-             * A RegExp used to exclude properties in the item that do not need
+             * An expression used to exclude properties in the item that do not need
              * to be mapped to columns.
              *
-             * Default is not to exclude any property.
+             * Default is to exclude any private properties
              */
             exclude: {
               type: RegExp,
+              value: '^_',
               observer: '__onExcludeChange'
             },
+            /**
+             * A list of fields that should be mapped to columns.
+             * When it is defined, `excluded` parameter is ignored.
+             */
+            include: {
+              type: Array,
+              observer: '__onIncludeChange'
+            }
           };
         }
 
@@ -61,20 +70,29 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
 
         __onExcludeChange(exclude) {
           if (typeof exclude == 'string') {
-            this.exclude = RegExp(exclude, 'i');
+            this.exclude = exclude ? RegExp(exclude.replace(/, */g, '|'), 'i') : undefined;
+          }
+        }
+
+        __onIncludeChange(include) {
+          if (typeof include == 'string') {
+            this.include = include ? include.split(/, */) : undefined;
+          } else if (!this._fields && Array.isArray(include)) {
+            const item = {};
+            this.include.forEach(path => this.__set(path, null, item));
+            this.__configure(item);
           }
         }
 
         __onItemsChange(items) {
-          if ((!this.dataProvider || this.dataProvider == this._arrayDataProvider) && items && items[0]) {
-            this.innerHTML = '';
+          if ((!this.dataProvider || this.dataProvider == this._arrayDataProvider) && !this.include && items && items[0]) {
             this.__configure(items[0]);
           }
         }
 
         __dataProviderWrapper(params, callback) {
           this.__dataProvider(params, (items, size) => {
-            if (this.innerHTML == '' && items[0]) {
+            if (this.innerHTML == '' && !this.include && items[0]) {
               this.__configure(items[0]);
             }
             callback(items, size);
@@ -97,6 +115,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         }
 
         __configure(item) {
+          this.innerHTML = '';
           this.__createColumns(this, item);
           this.appendChild(document.createElement('vaadin-crud-edit-column'));
         }
@@ -151,11 +170,11 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         __createColumns(parent, object, path) {
           if (typeof object === 'object') {
             Object.keys(object).forEach(prop => {
-              if (this.exclude && this.exclude.test(prop)) {
+              if (!this.include && this.exclude && this.exclude.test(prop)) {
                 return;
               }
               const newPath = (path ? `${path}.` : '') + prop;
-              if (typeof object[prop] === 'object') {
+              if (object[prop] && typeof object[prop] === 'object') {
                 const group = this.noHead ? parent : this.__createGroup(parent, newPath, object[prop]);
                 this.__createColumns(group, object[prop], newPath);
               } else {
@@ -176,6 +195,13 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
 
         __capitalize(path) {
           return path.toLowerCase().replace(/([^\w]+)/g, ' ').trim().replace(/^./, c => c.toUpperCase());
+        }
+
+        __set(path, val, obj) {
+          if (obj && path) {
+            path.split('.').slice(0, -1).reduce((o, p) => (o[p] = o[p] || {}), obj);
+            this.set(path, val, obj);
+          }
         }
       }
 

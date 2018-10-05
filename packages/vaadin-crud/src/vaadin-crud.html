@@ -43,7 +43,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
     </style>
 
     <slot name="grid">
-      <vaadin-crud-grid theme$="[[theme]]" id="grid" exclude="[[exclude]]" no-sort="[[noSort]]" no-filter="[[noFilter]]" no-head="[[noHead]]"></vaadin-crud-grid>
+      <vaadin-crud-grid theme$="[[theme]]" id="grid" include="[[include]]" exclude="[[exclude]]" no-sort="[[noSort]]" no-filter="[[noFilter]]" no-head="[[noHead]]"></vaadin-crud-grid>
     </slot>
 
     <div part="toolbar" on-click="__new">
@@ -57,7 +57,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
       <h3 slot="header">[[__editorHeader]]</h3>
       <div id="editor">
         <slot name="form">
-          <vaadin-crud-form theme$="[[theme]]" id="form" exclude="[[exclude]]"></vaadin-crud-form>
+          <vaadin-crud-form theme$="[[theme]]" id="form" include="[[include]]"></vaadin-crud-form>
         </slot>
       </div>
 
@@ -201,6 +201,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
              */
             items: {
               type: Array,
+              notify: true,
               observer: '__onItemsChange'
             },
             /**
@@ -239,15 +240,19 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
              */
             noHead: Boolean,
             /**
-             * A regular expression string to applied to fields that will be exclude
-             * when using autoconfigured elements.
+             * A list of fields to include in the generated grid and form.
+             * Use this to explicitly define the field order.
              *
-             * Default is `/^_` meaning that all protected properties are excluded
+             * Default is undefined meaning that all fields should be included.
              */
-            exclude: {
-              type: String,
-              value: '^_'
-            },
+            include: String,
+            /**
+             * A list of fields to be excluded from the generated grid and form.
+             * When `include` is defined, this parameter is ignored.
+             *
+             * Default is to exclude all private fields (properties starting with underscore)
+             */
+            exclude: String,
             /**
              * Reflects the opened status of the editor.
              */
@@ -508,8 +513,12 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           });
           const evt = this.dispatchEvent(new CustomEvent('save', {detail: {item: item}, cancelable: true}));
           if (evt) {
-            if (this.__isNew && this.items) {
-              this.items.push(item);
+            if (this.__isNew && !this.dataProvider) {
+              if (!this.items) {
+                this.items = [item];
+              } else {
+                this.items.push(item);
+              }
             }
             this._grid.clearCache();
             this.__closeEditor();

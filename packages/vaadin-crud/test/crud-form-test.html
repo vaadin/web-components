@@ -13,7 +13,7 @@
 <body>
   <test-fixture id="default">
     <template>
-      <vaadin-crud-form style="width: 500px" exclude="^_"></vaadin-crud-form>
+      <vaadin-crud-form style="width: 500px"></vaadin-crud-form>
     </template>
   </test-fixture>
 
@@ -51,6 +51,38 @@
           crudForm.item = {foo: 'bar'};
           crudForm.item = {foo: 'bar', lorem: 'ipsum'};
           expect(crudForm._fields.length).to.be.equal(1);
+        });
+      });
+
+      describe('include and exclude', () => {
+        it('should not add private fields', () => {
+          crudForm.item = {a: 1, _b: 2, c: 3};
+          expect(crudForm._fields.length).to.be.equal(2);
+        });
+
+        it('should not add excluded fields', () => {
+          crudForm.exclude = 'a, c';
+          crudForm.item = {a: 1, _b: 2, c: 3};
+          expect(crudForm._fields.length).to.be.equal(1);
+        });
+
+        it('should add included fields when item is not provided', () => {
+          crudForm.include = 'a.b, a.c.d, a.c.e, f';
+          expect(crudForm._fields.length).to.be.equal(4);
+        });
+
+        it('should add included fields when item is provided ignoring exclude property', () => {
+          crudForm.include = '_b';
+          crudForm.item = {a: 1, _b: 2, c: 3};
+          expect(crudForm._fields.length).to.be.equal(1);
+        });
+
+        it('should ignore `exclude` parameter when `include` is set', () => {
+          crudForm.exclude = 'a, _b, c';
+          crudForm.include = 'c, a';
+          crudForm.item = {a: 1, _b: 2, c: 3};
+          expect(crudForm.querySelectorAll('vaadin-text-field')[0].label).to.be.equal('C');
+          expect(crudForm.querySelectorAll('vaadin-text-field')[1].label).to.be.equal('A');
         });
       });
 

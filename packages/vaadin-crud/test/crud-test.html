@@ -117,6 +117,25 @@
         });
       });
 
+      describe('empty items', () => {
+        beforeEach(done => {
+          crud.include = 'foo';
+          Polymer.RenderStatus.afterNextRender(crud._grid, done);
+        });
+
+        it('should save a new item when list is empty but `include` is set', done => {
+          listenOnce(crud, 'items-changed', e => {
+            expect(crud.items[0].foo).to.be.equal('baz');
+            done();
+          });
+
+          crud.$.new.click();
+          crud._form._fields[0].value = 'baz';
+          change();
+          btnSave().click();
+        });
+      });
+
       describe('items', () => {
         beforeEach(done => {
           crud.items = [{foo: 'bar'}];

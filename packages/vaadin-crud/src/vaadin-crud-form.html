@@ -28,14 +28,23 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         static get properties() {
           return {
             /**
-             * A RegExp used to exclude properties in the item that do not need
-             * to be mapped to form fields.
+             * An expression used to exclude properties in the item that do not need
+             * to be mapped to columns.
              *
-             * Default is not to exclude any property.
+             * Default is to exclude any private properties
              */
             exclude: {
               type: RegExp,
+              value: '^_',
               observer: '__onExcludeChange'
+            },
+            /**
+             * A list of fields that should be mapped to columns.
+             * When it is defined, `excluded` parameter is ignored.
+             */
+            include: {
+              type: Array,
+              observer: '__onIncludeChange'
             },
             /**
              * The item being edited.
@@ -62,7 +71,17 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
 
         __onExcludeChange(exclude) {
           if (typeof exclude == 'string') {
-            this.exclude = RegExp(exclude, 'i');
+            this.exclude = exclude ? RegExp(exclude.replace(/, */g, '|'), 'i') : undefined;
+          }
+        }
+
+        __onIncludeChange(include) {
+          if (typeof include == 'string') {
+            this.include = include ? include.split(/, */) : undefined;
+          } else if (!this._fields && Array.isArray(include)) {
+            const item = {};
+            this.include.forEach(path => this.__set(path, null, item));
+            this.configure(item);
           }
         }
 
@@ -83,26 +102,31 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         }
 
         __createFields(parent, object, path) {
-          if (typeof object === 'object') {
-            Object.keys(object).forEach(prop => {
-              if (this.exclude && this.exclude.test(prop)) {
-                return;
-              }
-              const newPath = (path ? `${path}.` : '') + prop;
-              if (typeof object[prop] === 'object') {
-                this.__createFields(parent, object[prop], newPath);
-              } else {
-                this.__createField(parent, newPath);
-              }
-            });
-            if (!this._fields.length) {
-              this._fields = undefined;
+          Object.keys(object).forEach(prop => {
+            if (!this.include && this.exclude && this.exclude.test(prop)) {
+              return;
             }
+            const newPath = (path ? `${path}.` : '') + prop;
+            if (object[prop] && typeof object[prop] === 'object') {
+              this.__createFields(parent, object[prop], newPath);
+            } else {
+              this.__createField(parent, newPath);
+            }
+          });
+          if (!this._fields.length) {
+            this._fields = undefined;
           }
         }
 
         __capitalize(path) {
           return path.toLowerCase().replace(/([^\w]+)/g, ' ').trim().replace(/^./, c => c.toUpperCase());
+        }
+
+        __set(path, val, obj) {
+          if (obj && path) {
+            path.split('.').slice(0, -1).reduce((o, p) => (o[p] = o[p] || {}), obj);
+            this.set(path, val, obj);
+          }
         }
       }
 

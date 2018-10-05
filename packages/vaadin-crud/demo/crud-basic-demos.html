@@ -12,15 +12,34 @@
       <template preserve-content>
         <iron-ajax auto url="users.json" last-response="{{items}}"></iron-ajax>
         <vaadin-crud  items=[[items]]></vaadin-crud>
+        <!-- The web-service returns an array of objects with the following structure
+          {
+            "_id": "5953f755ad720c45621bf48e",
+            "name": {"first": "Grant", "last": "Andrews"},
+            "details": {"picture": "https://...", "email": "grantandrews@exosis.com" },
+            "password": "0Abc9154",
+            "role": "operator"
+          }
+        -->
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Include fields</h3>
+    <p>Grid columns and form fields can be defined by providing a list of fields in the <code>include</code> property.</p>
+    <p><i>NOTE: </i>When there is no initial data, use this to configure grid and form, then you can add new items</p>
+    <vaadin-demo-snippet id="crud-basic-demos-basics">
+      <template preserve-content>
+        <vaadin-crud items="{{items}}" include="name.first, name.last, details.email, role"></vaadin-crud>
       </template>
     </vaadin-demo-snippet>
 
     <h3>Exclude fields</h3>
-    <p>Fields can be excluded by providing a regular expression to the <code>exclude</code> property.</p>
+    <p>Otherwise you can exclude a set of fields by using the the <code>exclude</code> property.</p>
+    <p><i>NOTE: </i>When the <code>include</code> property is set <code>exclude</code> is ignored</p>
     <vaadin-demo-snippet id="crud-basic-demos-basics">
       <template preserve-content>
         <iron-ajax auto url="users.json" last-response="{{items}}"></iron-ajax>
-        <vaadin-crud exclude="_id|password|picture"  items=[[items]]></vaadin-crud>
+        <vaadin-crud exclude="_id, password, picture"  items=[[items]]></vaadin-crud>
       </template>
     </vaadin-demo-snippet>
 
@@ -29,7 +48,7 @@
     <vaadin-demo-snippet id="crud-basic-demos-basics">
       <template preserve-content>
         <iron-ajax auto url="users.json" last-response="{{items}}"></iron-ajax>
-        <vaadin-crud no-sort no-filter exclude="_id|password|picture"  items=[[items]]></vaadin-crud>
+        <vaadin-crud no-sort no-filter include="name.first, name.last, details.email, role"  items=[[items]]></vaadin-crud>
       </template>
     </vaadin-demo-snippet>
 
