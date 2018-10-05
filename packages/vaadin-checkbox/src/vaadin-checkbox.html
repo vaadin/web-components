@@ -197,15 +197,19 @@ This program is available under Apache License Version 2.0, available at https:/
         _updateLabelAttribute() {
           const label = this.shadowRoot.querySelector('[part~="label"]');
           const assignedNodes = label.firstElementChild.assignedNodes();
-          // The label is empty if there is no slotted content or only one empty text node
-          if (assignedNodes.length === 0 ||
-              (assignedNodes.length == 1
-                && assignedNodes[0].nodeType == 3
-                && assignedNodes[0].textContent.trim().length === 0)) {
+          if (this._isAssignedNodesEmpty(assignedNodes)) {
             label.setAttribute('empty', '');
           } else {
             label.removeAttribute('empty');
           }
+        }
+
+        _isAssignedNodesEmpty(nodes) {
+          // The assigned nodes considered to be empty if there is no slotted content or only one empty text node
+          return nodes.length === 0 ||
+                (nodes.length == 1
+                && nodes[0].nodeType == Node.TEXT_NODE
+                && nodes[0].textContent.trim() === '');
         }
 
         _checkedChanged(checked) {

@@ -278,6 +278,17 @@
         expect(label.hasAttribute('empty')).to.be.true;
       });
 
+      it('should set empty attribute on part label when there is only one empty text node added', () => {
+        const textNode = document.createTextNode(' ');
+        vaadinCheckbox.appendChild(textNode);
+
+        // Workaround for not using timeouts
+        const evt = new CustomEvent('slotchange');
+        vaadinCheckbox.shadowRoot.querySelector('[part="label"]').querySelector('slot').dispatchEvent(evt);
+
+        expect(label.hasAttribute('empty')).to.be.true;
+      });
+
       it('should remove empty attribute from part label when the label is added', () => {
         const paragraph = document.createElement('p');
         paragraph.textContent = 'Added label';
