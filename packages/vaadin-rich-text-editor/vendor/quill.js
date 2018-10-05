@@ -3046,25 +3046,7 @@ var Selection = function () {
   }, {
     key: 'getNativeRange',
     value: function getNativeRange() {
-      var nativeRange = void 0;
-
-      // in Safari 10+ and iOS we need to use shadow selection polyfill
-      var ua = navigator.userAgent;
-      var isSafari = /^((?!chrome|android).)*safari/i.test(ua) || /iPad|iPhone/.test(ua);
-      var hasPolyfill = window.ShadyDOM && window.ShadyDOM.inUse;
-      var hasShadow = window.ShadowRoot !== undefined && this.rootDocument instanceof ShadowRoot;
-      var hasSelection = this.rootDocument.getSelection;
-
-      if (hasShadow && !hasPolyfill && !hasSelection && isSafari) {
-        nativeRange = (0, _shadowSelectionPolyfill.getRange)(this.rootDocument);
-      } else {
-        // only Chrome has getSelection() API for ShadowRoot, in Firefox 63 document API works
-        var root = hasShadow && hasSelection ? this.rootDocument : document;
-        var selection = root.getSelection();
-        if (selection == null || selection.rangeCount <= 0) return null;
-        nativeRange = selection.getRangeAt(0);
-      }
-
+      var nativeRange = (0, _shadowSelectionPolyfill.getRange)(this.rootDocument);
       if (nativeRange == null) return null;
       var range = this.normalizeNative(nativeRange);
       debug.info('getNativeRange', range);
@@ -6155,6 +6137,12 @@ exports.internalGetShadowSelection = internalGetShadowSelection;
 
 var SHADOW_SELECTIONCHANGE = exports.SHADOW_SELECTIONCHANGE = '-shadow-selectionchange';
 
+var hasShadow = 'attachShadow' in Element.prototype && 'getRootNode' in Element.prototype;
+var hasSelection = !!(hasShadow && document.createElement('div').attachShadow({ mode: 'open' }).getSelection);
+var hasShady = window.ShadyDOM && window.ShadyDOM.inUse;
+var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent) || /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+var useDocument = !hasShadow || hasShady || !hasSelection && !isSafari;
+
 var validNodeTypes = [Node.ELEMENT_NODE, Node.TEXT_NODE, Node.DOCUMENT_FRAGMENT_NODE];
 function isValidNode(node) {
   return validNodeTypes.includes(node.nodeType);
@@ -6187,11 +6175,8 @@ function findNode(s, parentNode, isLeft) {
  * @param {function(!Event)} fn to add to selectionchange internals
  */
 var addInternalListener = function () {
-  var testNode = document.createElement('div');
-
-  // check if Shadow DOM is not supported / polyfilled
-  if (!testNode.attachShadow || testNode.attachShadow({ mode: 'open' }).getSelection) {
-    // getSelection really exists, why are you using us?
+  if (hasSelection || useDocument) {
+    // getSelection exists or document API can be used
     document.addEventListener('selectionchange', function () {
       document.dispatchEvent(new CustomEvent(SHADOW_SELECTIONCHANGE));
     });
@@ -6363,8 +6348,8 @@ function ignoredTrailingSpace(node) {
 
 var cachedRange = new Map();
 function getRange(root) {
-  if (root.getSelection) {
-    var s = root.getSelection();
+  if (hasSelection || useDocument) {
+    var s = (useDocument ? document : root).getSelection();
     return s.rangeCount ? s.getRangeAt(0) : null;
   }
 
