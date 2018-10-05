@@ -3051,10 +3051,11 @@ var Selection = function () {
       // in Safari 10+ and iOS we need to use shadow selection polyfill
       var ua = navigator.userAgent;
       var isSafari = /^((?!chrome|android).)*safari/i.test(ua) || /iPad|iPhone/.test(ua);
-      var hasShadow = !!(ShadowRoot && this.rootDocument instanceof ShadowRoot);
+      var hasPolyfill = window.ShadyDOM && window.ShadyDOM.inUse;
+      var hasShadow = window.ShadowRoot !== undefined && this.rootDocument instanceof ShadowRoot;
       var hasSelection = this.rootDocument.getSelection;
 
-      if (hasShadow && !hasSelection && isSafari) {
+      if (hasShadow && !hasPolyfill && !hasSelection && isSafari) {
         nativeRange = (0, _shadowSelectionPolyfill.getRange)(this.rootDocument);
       } else {
         // only Chrome has getSelection() API for ShadowRoot, in Firefox 63 document API works
