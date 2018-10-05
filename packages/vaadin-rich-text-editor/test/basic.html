@@ -45,28 +45,32 @@
         ['bold', 'italic', 'underline', 'strike', 'blockquote', 'code-block'].forEach(fmt => {
           it(`should apply ${fmt} formatting when clicking the "btn-${fmt}" button`, () => {
             btn = rte.shadowRoot.querySelector(`[part="btn-${fmt}"]`);
-
             btn.click();
             editor.insertText(0, 'Foo');
             expect(editor.getFormat(0, 2)[fmt]).to.be.true;
+          });
 
+          it(`should undo ${fmt} formatting when clicking the "btn-${fmt}" button`, () => {
+            btn = rte.shadowRoot.querySelector(`[part="btn-${fmt}"]`);
+            editor.format(fmt, true);
             btn.click();
-            editor.insertText(3, 'Bar');
-            expect(editor.getFormat(3, 5)[fmt]).to.be.empty;
+            expect(editor.getFormat(0)).to.be.empty.object;
           });
         });
 
         ['sub', 'super'].forEach(scr => {
           it(`should apply ${scr} script when clicking the "btn-${scr}" button`, () => {
             btn = rte.shadowRoot.querySelector(`[part="btn-${scr}"]`);
-
             btn.click();
             editor.insertText(0, 'Foo');
             expect(editor.getFormat(0, 2).script).to.be.equal(scr);
+          });
 
+          it(`should undo ${scr} script when clicking the "btn-${scr}" button`, () => {
+            btn = rte.shadowRoot.querySelector(`[part="btn-${scr}"]`);
+            editor.format('script', scr);
             btn.click();
-            editor.insertText(3, 'Bar');
-            expect(editor.getFormat(3, 5).script).to.be.empty;
+            expect(editor.getFormat(0)).to.be.empty.object;
           });
         });
 
@@ -123,14 +127,12 @@
         });
 
         it('should clear formatting when clicking the "btn-clean" button', () => {
-          btn = rte.shadowRoot.querySelector('[part="btn-bold"]');
-          btn.click();
-          editor.insertText(0, 'Foo');
+          editor.format('bold', true);
+          editor.format('underline', true);
 
-          editor.setSelection(0, 2);
           btn = rte.shadowRoot.querySelector('[part="btn-clean"]');
           btn.click();
-          expect(editor.getFormat(0, 2)).to.be.empty.object;
+          expect(editor.getFormat(0)).to.be.empty.object;
         });
       });
     });
