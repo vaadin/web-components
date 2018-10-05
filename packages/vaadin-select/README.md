@@ -10,9 +10,9 @@
 
 # &lt;vaadin-select&gt;
 
-[Live Demo ↗](https://vaadin.com/components/vaadin-select/html-examples)
+[Live Demo ↗](https://cdn.vaadin.com/vaadin-select/2.0.0-beta1/demo)
 |
-[API documentation ↗](https://vaadin.com/components/vaadin-select/html-api)
+[API documentation ↗](https://cdn.vaadin.com/vaadin-select/2.0.0-beta1/#/elements/vaadin-select)
 
 
 [&lt;vaadin-select&gt;](https://vaadin.com/components/vaadin-select) is a Web Component similar to a native browser select element, part of the [Vaadin components](https://vaadin.com/components).
