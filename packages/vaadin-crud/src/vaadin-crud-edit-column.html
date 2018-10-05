@@ -33,7 +33,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
     /**
      * `<vaadin-crud-edit>` is a helper element for the `<vaadin-crud-edit-column>` that provides
      * a button that can be easily themed, and that fires an `edit` event with the row item as detail when
-     * the user clicks on it.
+     * it is clicked.
      *
      */
     class CrudEditElement extends Vaadin.ThemableMixin(Polymer.Element) {
@@ -78,15 +78,14 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
   (function() {
     /**
      * `<vaadin-crud-edit-column>` is a helper element for the `<vaadin-grid>`
-     * that provides an edit icon which will fire an `edit` event when clicked.
+     * that provides a clickable and themable edit icon.
      *
-     * Typical usage is when using a customized `<vaadin-grid>` in a `<vaadin-crud>`
-     * because you need to provide to the grid a way to fire the `edit` event.
+     * Typical usage is in a custom `<vaadin-grid>` inside a `<vaadin-crud>`.
      *
      * #### Example:
      * ```html
      * <vaadin-grid items="[[items]]">
-     *  <vaadin-crud-edit-column frozen></vaadin-crud-edit-column>
+     *  <vaadin-crud-edit-column></vaadin-crud-edit-column>
      *
      *  <vaadin-grid-column>
      *    ...

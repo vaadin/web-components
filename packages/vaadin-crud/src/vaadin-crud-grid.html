@@ -43,22 +43,27 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
              */
             noHead: Boolean,
             /**
-             * An expression used to exclude properties in the item that do not need
-             * to be mapped to columns.
+             * A list of item fields that should not be mapped to columns.
              *
-             * Default is to exclude any private properties
+             * When [`include`](#/elements/vaadin-crud-grid#property-include) is defined, this property is ignored.
+             *
+             * Default is to exclude any private property.
+             *
+             * @type{String|RegExp}
              */
             exclude: {
-              type: RegExp,
+              type: String,
               value: '^_',
               observer: '__onExcludeChange'
             },
             /**
-             * A list of fields that should be mapped to columns.
-             * When it is defined, `excluded` parameter is ignored.
+             * A list of item properties that should be mapped to columns.
+             *
+             * When it is defined [`exclude`](#/elements/vaadin-crud-grid#property-exclude) is ignored.
+             *
+             * @type{String|Array}
              */
             include: {
-              type: Array,
               observer: '__onIncludeChange'
             }
           };
