@@ -1,0 +1,138 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-rich-text-editor tests</title>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../../test-fixture/test-fixture.html">
+  <link rel="import" href="../vaadin-rich-text-editor.html">
+</head>
+
+<body>
+  <test-fixture id="default">
+    <template>
+      <vaadin-rich-text-editor></vaadin-rich-text-editor>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('rich text editor', () => {
+      let rte, editor;
+
+      beforeEach(() => {
+        rte = fixture('default');
+        editor = rte._editor;
+      });
+
+      describe('custom element definition', () => {
+        it('should have proper tag name', () => {
+          expect(rte.localName).to.be.equal('vaadin-rich-text-editor');
+        });
+
+        it('should not expose class name globally', () => {
+          expect(window.RichTextEditorElement).not.to.be.ok;
+        });
+
+        it('should have a valid version number', () => {
+          expect(customElements.get('vaadin-rich-text-editor').version).to.match(/^(\d+\.)?(\d+\.)?(\*|\d+)$/);
+        });
+      });
+
+      describe('toolbar controls', () => {
+        let btn;
+
+        ['bold', 'italic', 'underline', 'strike', 'blockquote', 'code-block'].forEach(fmt => {
+          it(`should apply ${fmt} formatting when clicking the "btn-${fmt}" button`, () => {
+            btn = rte.shadowRoot.querySelector(`[part="btn-${fmt}"]`);
+
+            btn.click();
+            editor.insertText(0, 'Foo');
+            expect(editor.getFormat(0, 2)[fmt]).to.be.true;
+
+            btn.click();
+            editor.insertText(3, 'Bar');
+            expect(editor.getFormat(3, 5)[fmt]).to.be.empty;
+          });
+        });
+
+        ['sub', 'super'].forEach(scr => {
+          it(`should apply ${scr} script when clicking the "btn-${scr}" button`, () => {
+            btn = rte.shadowRoot.querySelector(`[part="btn-${scr}"]`);
+
+            btn.click();
+            editor.insertText(0, 'Foo');
+            expect(editor.getFormat(0, 2).script).to.be.equal(scr);
+
+            btn.click();
+            editor.insertText(3, 'Bar');
+            expect(editor.getFormat(3, 5).script).to.be.empty;
+          });
+        });
+
+        ['ordered', 'bullet'].forEach(type => {
+          it(`should create ${type} list when clicking the "btn-${type}-list" button`, () => {
+            btn = rte.shadowRoot.querySelector(`[part="btn-${type}-list"]`);
+
+            btn.click();
+            expect(editor.getFormat(0).list).to.be.equal(type);
+
+            btn.click();
+            expect(editor.getFormat(0).list).to.be.empty;
+          });
+        });
+
+        [1, 2].forEach(level => {
+          it(`should create <h${level}> header when clicking the "btn-h${level}" button`, () => {
+            btn = rte.shadowRoot.querySelector(`[part="btn-h${level}"]`);
+
+            btn.click();
+            expect(editor.getFormat(0).header).to.be.equal(level);
+
+            btn.click();
+            expect(editor.getFormat(0).header).to.be.empty;
+          });
+        });
+
+        it('should increase / decrease indentation when clicking "btn-indent-plus" / "btn-indent-minus" buttons', () => {
+          btn = rte.shadowRoot.querySelector('[part="btn-indent-plus"]');
+
+          btn.click();
+          expect(editor.getFormat(0).indent).to.be.equal(1);
+          btn.click();
+          expect(editor.getFormat(0).indent).to.be.equal(2);
+
+          btn = rte.shadowRoot.querySelector('[part="btn-indent-minus"]');
+          btn.click();
+          expect(editor.getFormat(0).indent).to.be.equal(1);
+          btn.click();
+          expect(editor.getFormat(0).indent).to.be.empty;
+        });
+
+        ['center', 'right', 'justify'].forEach(align => {
+          it(`should apply ${align} alignment when clicking the toolbar button`, () => {
+            btn = rte.shadowRoot.querySelector(`[part="btn-align-${align}"]`);
+
+            btn.click();
+            expect(editor.getFormat(0).align).to.be.equal(align);
+
+            btn = rte.shadowRoot.querySelector('[part="btn-align-left"]');
+            btn.click();
+            expect(editor.getFormat(0).align).to.be.empty;
+          });
+        });
+
+        it('should clear formatting when clicking the "btn-clean" button', () => {
+          btn = rte.shadowRoot.querySelector('[part="btn-bold"]');
+          btn.click();
+          editor.insertText(0, 'Foo');
+
+          editor.setSelection(0, 2);
+          btn = rte.shadowRoot.querySelector('[part="btn-clean"]');
+          btn.click();
+          expect(editor.getFormat(0, 2)).to.be.empty.object;
+        });
+      });
+    });
+  </script>
+</body>

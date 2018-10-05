@@ -31,47 +31,47 @@ This program is available under Apache License Version 2.0, available at https:/
     <div part="toolbar">
 
       <!-- Bold -->
-      <button class="ql-bold"></button>
+      <button class="ql-bold" part="btn-bold"></button>
 
       <!-- Italic -->
-      <button class="ql-italic"></button>
+      <button class="ql-italic" part="btn-italic"></button>
 
       <!-- Underline -->
-      <button class="ql-underline"></button>
+      <button class="ql-underline" part="btn-underline"></button>
 
       <!-- Strike -->
-      <button class="ql-strike"></button>
-
-      <!-- Subscript and superscript -->
-      <button class="ql-script" value="sub"></button>
-      <button class="ql-script" value="super"></button>
+      <button class="ql-strike" part="btn-strike"></button>
 
       <!-- Header buttons -->
-      <button type="button" class="ql-header" value="1"></button>
-      <button type="button" class="ql-header" value="2"></button>
+      <button type="button" class="ql-header" value="1" part="btn-h1"></button>
+      <button type="button" class="ql-header" value="2" part="btn-h2"></button>
+
+      <!-- Subscript and superscript -->
+      <button class="ql-script" value="sub" part="btn-sub"></button>
+      <button class="ql-script" value="super" part="btn-super"></button>
 
       <!-- List buttons -->
-      <button type="button" class="ql-list" value="bullet"></button>
-      <button type="button" class="ql-list" value="ordered"></button>
+      <button type="button" class="ql-list" value="bullet" part="btn-bullet-list"></button>
+      <button type="button" class="ql-list" value="ordered" part="btn-ordered-list"></button>
 
       <!-- Indentation buttons -->
-      <button type="button" class="ql-indent" value="-1"></button>
-      <button type="button" class="ql-indent" value="+1"></button>
+      <button type="button" class="ql-indent" value="+1" part="btn-indent-plus"></button>
+      <button type="button" class="ql-indent" value="-1" part="btn-indent-minus"></button>
 
       <!-- Align buttons -->
-      <button type="button" class="ql-align" value=""></button>
-      <button type="button" class="ql-align" value="center"></button>
-      <button type="button" class="ql-align" value="right"></button>
-      <button type="button" class="ql-align" value="justify"></button>
+      <button type="button" class="ql-align" value="" part="btn-align-left"></button>
+      <button type="button" class="ql-align" value="center" part="btn-align-center"></button>
+      <button type="button" class="ql-align" value="right" part="btn-align-right"></button>
+      <button type="button" class="ql-align" value="justify" part="btn-align-justify"></button>
 
       <!-- Blockquote -->
-      <button type="button" class="ql-blockquote"></button>
+      <button type="button" class="ql-blockquote" part="btn-blockquote"></button>
 
       <!-- Code block -->
-      <button type="button" class="ql-code-block"></button>
+      <button type="button" class="ql-code-block" part="btn-code-block"></button>
 
       <!-- Clean -->
-      <button type="button" class="ql-clean"></button>
+      <button type="button" class="ql-clean" part="btn-clean"></button>
     </div>
 
     <div part="editor"></div>
@@ -112,7 +112,7 @@ This program is available under Apache License Version 2.0, available at https:/
           const editor = this.shadowRoot.querySelector('[part="editor"]');
           const toolbar = this.shadowRoot.querySelector('[part="toolbar"]');
 
-          new window.Quill(editor, {
+          this._editor = new window.Quill(editor, {
             modules: {
               toolbar: toolbar
             },

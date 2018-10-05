@@ -1,3 +1,3 @@
 window.RichTextEditorSuites = [
-  'sample-test.html'
+  'basic.html'
 ];
