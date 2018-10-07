@@ -62,8 +62,8 @@
       vaadinCheckboxGroup._observer.flush();
     });
 
-    it('sets role properly', () => {
-      expect(vaadinCheckboxGroup.getAttribute('role')).to.eq('checkboxgroup');
+    it('does not set a role', () => {
+      expect(vaadinCheckboxGroup.getAttribute('role')).to.eq(null);
     });
 
     it('changes aria-disabled on disabled change', () => {

@@ -167,8 +167,6 @@ This program is available under Apache License Version 2.0, available at https:/
         ready() {
           super.ready();
 
-          this.setAttribute('role', 'checkboxgroup');
-
           this.addEventListener('focusout', e => {
             // validate when stepping out of the checkbox group
             if (!this._checkboxes.some(checkbox => e.relatedTarget === checkbox || checkbox.shadowRoot.contains(e.relatedTarget))) {
