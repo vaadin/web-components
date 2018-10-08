@@ -247,12 +247,10 @@
         flushGrid(grid);
       });
 
-      it('should not throw when receiving null filter', done => {
+      it('should not throw when receiving null filter', () => {
+        grid.items = ['foo', 'bar'];
         grid._filters[0].value = null;
-        flushFilters(grid);
-        Polymer.Base.async(() => {
-          done();
-        });
+        expect(flushFilters.bind(this, grid)).to.not.throw(Error);
       });
 
       it('should filter automatically', () => {
