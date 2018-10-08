@@ -247,6 +247,12 @@
         flushGrid(grid);
       });
 
+      it('should not throw when receiving null filter', () => {
+        grid.items = ['foo', 'bar'];
+        grid._filters[0].value = null;
+        expect(flushFilters.bind(this, grid)).to.not.throw(Error);
+      });
+
       it('should filter automatically', () => {
         expect(getBodyCellContent(grid, 0, 0).innerText).to.equal('foo');
         expect(getBodyCellContent(grid, 1, 0).innerText).to.equal('foo');

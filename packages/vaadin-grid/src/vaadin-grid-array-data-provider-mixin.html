@@ -141,7 +141,8 @@ This program is available under Apache License Version 2.0, available at https:/
       return items.filter((item, index) => {
         return this._filters.filter(filter => {
           const value = this._normalizeEmptyValue(Polymer.Base.get(filter.path, item));
-          return value.toString().toLowerCase().indexOf(filter.value.toString().toLowerCase()) === -1;
+          const filterValueLowercase = this._normalizeEmptyValue(filter.value).toString().toLowerCase();
+          return value.toString().toLowerCase().indexOf(filterValueLowercase) === -1;
         }).length === 0;
       });
     }
