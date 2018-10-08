@@ -46,7 +46,7 @@
           it(`should apply ${fmt} formatting when clicking the "btn-${fmt}" button`, () => {
             btn = rte.shadowRoot.querySelector(`[part="btn-${fmt}"]`);
             btn.click();
-            editor.insertText(0, 'Foo');
+            editor.insertText(0, 'Foo', 'user');
             expect(editor.getFormat(0, 2)[fmt]).to.be.true;
           });
 
@@ -62,7 +62,7 @@
           it(`should apply ${scr} script when clicking the "btn-${scr}" button`, () => {
             btn = rte.shadowRoot.querySelector(`[part="btn-${scr}"]`);
             btn.click();
-            editor.insertText(0, 'Foo');
+            editor.insertText(0, 'Foo', 'user');
             expect(editor.getFormat(0, 2).script).to.be.equal(scr);
           });
 
@@ -139,18 +139,44 @@
       describe('value', () => {
         it('should represent the "delta" of the editor', done => {
           rte.addEventListener('value-changed', e => {
-            expect(e.detail.value).to.be.object;
-            expect(e.detail.value.ops).to.be.array;
-            expect(e.detail.value.ops).to.have.length(1);
-            expect(e.detail.value.ops[0]).to.deep.equal({insert: 'Foo\n'});
+            expect(e.detail.value).to.be.array;
+            expect(e.detail.value).to.have.length(1);
+            expect(e.detail.value[0]).to.deep.equal({insert: 'Foo\n'});
             done();
           });
-          editor.insertText(0, 'Foo');
+          editor.insertText(0, 'Foo', 'user');
         });
 
-        it('should be read only and disallow modifications', () => {
+        it('should update the "delta" when set from outside', () => {
+          rte.value = [{insert: 'Foo'}];
+          expect(editor.getText()).to.equal('Foo\n');
+        });
+
+        it('should error when setting value of the incorrect type', () => {
+          const origError = console.error;
+          const spy = console.error = sinon.spy();
           rte.value = 'Foo';
-          expect(rte.value).to.not.equal('Foo');
+          console.error = origError;
+          expect(editor.getText()).to.not.include('Foo');
+          expect(spy.called).to.be.true;
+        });
+
+        it('should clear the editor contents when value is set to null', () => {
+          editor.insertText(0, 'Foo', 'user');
+          rte.value = null;
+          expect(editor.getText()).to.equal('\n');
+        });
+
+        it('should clear the editor contents when value is set to undefined', () => {
+          editor.insertText(0, 'Foo', 'user');
+          rte.value = undefined;
+          expect(editor.getText()).to.equal('\n');
+        });
+
+        it('should clear the editor contents when value is set to empty array', () => {
+          editor.insertText(0, 'Foo', 'user');
+          rte.value = [];
+          expect(editor.getText()).to.equal('\n');
         });
       });
     });
