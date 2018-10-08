@@ -42,18 +42,17 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       >
       <template>
 
-        <div part="scroller">
-          <div part="header">
+        <div part="scroller" role="group" aria-labelledby="header">
+          <div part="header" id="header">
             <slot name="header"></slot>
           </div>
           <slot></slot>
         </div>
 
-        <div part="footer">
+        <div part="footer" role="toolbar">
           <slot name="footer"></slot>
         </div>
       </template>
-      <slot></slot>
     </vaadin-dialog>
   </template>
 
