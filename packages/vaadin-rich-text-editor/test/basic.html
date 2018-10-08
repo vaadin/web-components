@@ -98,21 +98,6 @@
           });
         });
 
-        it('should increase / decrease indentation when clicking "btn-indent-plus" / "btn-indent-minus" buttons', () => {
-          btn = rte.shadowRoot.querySelector('[part="btn-indent-plus"]');
-
-          btn.click();
-          expect(editor.getFormat(0).indent).to.be.equal(1);
-          btn.click();
-          expect(editor.getFormat(0).indent).to.be.equal(2);
-
-          btn = rte.shadowRoot.querySelector('[part="btn-indent-minus"]');
-          btn.click();
-          expect(editor.getFormat(0).indent).to.be.equal(1);
-          btn.click();
-          expect(editor.getFormat(0).indent).to.be.empty;
-        });
-
         ['center', 'right', 'justify'].forEach(align => {
           it(`should apply ${align} alignment when clicking the toolbar button`, () => {
             btn = rte.shadowRoot.querySelector(`[part="btn-align-${align}"]`);
