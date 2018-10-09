@@ -16,6 +16,9 @@
   "bugs": {
     "url": "https://github.com/vaadin/vaadin-icons/issues"
   },
+  "files": [
+    "vaadin-icons.js"
+  ],
   "homepage": "https://vaadin.com/icons",
   "devDependencies": {
     "gulp": "^3.9.1",
