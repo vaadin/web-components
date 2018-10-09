@@ -18,6 +18,8 @@
 
   <script>
     describe('rich text editor', () => {
+      'use strict';
+
       let rte, editor;
 
       beforeEach(() => {
@@ -162,6 +164,112 @@
           editor.insertText(0, 'Foo', 'user');
           rte.value = [];
           expect(editor.getText()).to.equal('\n');
+        });
+      });
+
+      describe('htmlValue', () => {
+        let el;
+
+        const getHtml = htmlValue => {
+          const div = document.createElement('div');
+          div.innerHTML = rte.htmlValue;
+          return div.firstChild;
+        };
+
+        it('should return the quill editor innerHTML', () => {
+          expect(rte.htmlValue).to.equal('<p><br></p>');
+        });
+
+        it('should be read only getter', () => {
+          expect(() => rte.htmlValue = '<h1>Hack</h1>').to.throw(TypeError);
+        });
+
+        it('should use <p> tag to wrap inline text', () => {
+          rte.value = [{insert: 'Foo'}];
+          el = getHtml(rte.htmlValue);
+          expect(el.localName).to.equal('p');
+          expect(el.className).to.equal('');
+        });
+
+        it('should use <strong> tag for bold formatting', () => {
+          editor.format('bold', true);
+          el = getHtml(rte.htmlValue).firstChild;
+          expect(el.localName).to.equal('strong');
+        });
+
+        it('should use <em> tag for italic formatting', () => {
+          editor.format('italic', true);
+          el = getHtml(rte.htmlValue).firstChild;
+          expect(el.localName).to.equal('em');
+        });
+
+        it('should use <u> tag for underline formatting', () => {
+          editor.format('underline', true);
+          el = getHtml(rte.htmlValue).firstChild;
+          expect(el.localName).to.equal('u');
+        });
+
+        it('should use <s> tag for strike formatting', () => {
+          editor.format('strike', true);
+          el = getHtml(rte.htmlValue).firstChild;
+          expect(el.localName).to.equal('s');
+        });
+
+        it('should use <h1> tag for level 1 header', () => {
+          editor.format('header', 1);
+          el = getHtml(rte.htmlValue);
+          expect(el.localName).to.equal('h1');
+        });
+
+        it('should use <h2> tag for level 2 header', () => {
+          editor.format('header', 2);
+          el = getHtml(rte.htmlValue);
+          expect(el.localName).to.equal('h2');
+        });
+
+        it('should use <sub> tag for sub-script', () => {
+          editor.format('script', 'sub');
+          el = getHtml(rte.htmlValue);
+          expect(el.firstChild.localName).to.equal('sub');
+        });
+
+        it('should use <sup> tag for super-script', () => {
+          editor.format('script', 'super');
+          el = getHtml(rte.htmlValue);
+          expect(el.firstChild.localName).to.equal('sup');
+        });
+
+        it('should use <ol> tag for ordered list', () => {
+          editor.format('list', 'ordered');
+          el = getHtml(rte.htmlValue);
+          expect(el.localName).to.equal('ol');
+          expect(el.firstChild.localName).to.equal('li');
+        });
+
+        it('should use <ul> tag for bullet list', () => {
+          editor.format('list', 'bullet');
+          el = getHtml(rte.htmlValue);
+          expect(el.localName).to.equal('ul');
+          expect(el.firstChild.localName).to.equal('li');
+        });
+
+        it('should use <blockquote> tag for quote', () => {
+          editor.format('blockquote', true);
+          el = getHtml(rte.htmlValue);
+          expect(el.localName).to.equal('blockquote');
+        });
+
+        it('should use <pre> tag for code block', () => {
+          editor.format('code-block', true);
+          el = getHtml(rte.htmlValue);
+          expect(el.localName).to.equal('pre');
+          expect(el.className).to.equal('');
+        });
+
+        it('should use inline styles for text alignment', () => {
+          editor.format('align', 'center');
+          el = getHtml(rte.htmlValue);
+          expect(el.style.textAlign).to.equal('center');
         });
       });
     });
