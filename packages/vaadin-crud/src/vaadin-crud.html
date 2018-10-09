@@ -488,7 +488,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         __closeEditor() {
           this.editorOpened = false;
           // Delay changing the item in order not to modify editor while closing
-          setTimeout(() => this.item = undefined);
+          setTimeout(() => this.editedItem = undefined);
         }
 
         __new(event) {
