@@ -87,3 +87,24 @@
     </style>
   </template>
 </dom-module>
+
+<dom-module id="material-crud-vaadin-dialog-overlay" theme-for="vaadin-dialog-overlay">
+  <template>
+    <style include="material-overlay">
+      @keyframes material-overlay-dummy-animation {
+        0% {
+          opacity: 1;
+        }
+
+        100% {
+          opacity: 1;
+        }
+      }
+
+      :host([opening]),
+      :host([closing]) {
+        animation: 0.25s material-overlay-dummy-animation;
+      }
+    </style>
+  </template>
+</dom-module>
