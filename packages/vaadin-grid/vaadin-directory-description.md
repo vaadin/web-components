@@ -20,14 +20,14 @@
 
       <vaadin-grid-column width="9em">
         <template class="header">
-          <vaadin-grid-sorter path="firstName">First Name</vaadin-grid-sorter>
+          <vaadin-grid-sorter path="firstName">First name</vaadin-grid-sorter>
         </template>
         <template>[[item.firstName]]</template>
       </vaadin-grid-column>
 
       <vaadin-grid-column width="9em">
         <template class="header">
-          <vaadin-grid-sorter path="lastName">Last Name</vaadin-grid-sorter>
+          <vaadin-grid-sorter path="lastName">Last name</vaadin-grid-sorter>
         </template>
         <template>[[item.lastName]]</template>
       </vaadin-grid-column>

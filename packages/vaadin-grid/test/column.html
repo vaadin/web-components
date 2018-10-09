@@ -185,12 +185,12 @@
 
           it('should format proper header from the last path token', () => {
             emptyColumn.path = 'foo.barBaz';
-            expect(getHeaderCellContent(grid, 1, 2).textContent.trim()).to.equal('Bar Baz');
+            expect(getHeaderCellContent(grid, 1, 2).textContent.trim()).to.equal('Bar baz');
           });
 
           it('should format three part header text', () => {
             emptyColumn.path = 'fooBarBaz';
-            expect(getHeaderCellContent(grid, 1, 2).textContent.trim()).to.equal('Foo Bar Baz');
+            expect(getHeaderCellContent(grid, 1, 2).textContent.trim()).to.equal('Foo bar baz');
           });
 
           it('should not override header renderer content', () => {
