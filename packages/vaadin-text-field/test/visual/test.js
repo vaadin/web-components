@@ -3,7 +3,7 @@ gemini.suite('vaadin-text-field', function(rootSuite) {
     return actions
       .waitForJSCondition(function(window) {
         return window.webComponentsAreReady;
-      }, 60000);
+      }, 80000);
   }
 
   function goToAboutBlank(actions, find) {
