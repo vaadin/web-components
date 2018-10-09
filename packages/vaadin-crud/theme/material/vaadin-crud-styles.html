@@ -2,6 +2,55 @@
 <link rel="import" href="../../../vaadin-material-styles/color.html">
 <link rel="import" href="../vaadin-dialog-layout-overlay-styles.html">
 
+
+<dom-module id="material-crud-grid-edit" theme-for="vaadin-crud-edit">
+  <template>
+    <style>
+      :host {
+        font-size: var(--material-button-font-size);
+        line-height: 1;
+        color: var(--material-text-color);
+        position: relative;
+        background-color: var(--material-secondary-background-color);
+        border-radius: 4px;
+        width: 2em;
+        height: 2em;
+      }
+
+      :host::before {
+        font-family: serif;
+        font-size: var(--material-button-font-size);
+        color: var(--material-primary-text-color);
+        content: '✎';
+        width: 2em;
+        height: 2em;
+        line-height: 2em;
+        text-align: center;
+        position: absolute;
+      }
+
+      :host::after {
+        content: "";
+        display: block;
+        width: 100%;
+        height: 100%;
+        border-radius: inherit;
+        background-color: currentColor;
+        opacity: 0;
+        transition: opacity 100ms;
+      }
+
+      :host(:hover)::after {
+        opacity: 0.05;
+      }
+
+      :host(:active)::after {
+        opacity: 0.12;
+      }
+    </style>
+  </template>
+</dom-module>
+
 <dom-module id="lumo-crud" theme-for="vaadin-crud">
   <template>
     <style>
