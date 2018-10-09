@@ -22,8 +22,8 @@
     <vaadin-demo-snippet id='grid-basic-demos-simple-columns'>
       <template preserve-content>
         <vaadin-grid>
-          <vaadin-grid-column path="name.first" header="First Name"></vaadin-grid-column>
-          <vaadin-grid-column path="name.last" header="Last Name"></vaadin-grid-column>
+          <vaadin-grid-column path="name.first" header="First name"></vaadin-grid-column>
+          <vaadin-grid-column path="name.last" header="Last name"></vaadin-grid-column>
           <vaadin-grid-column path="location.city"></vaadin-grid-column>
           <vaadin-grid-column path="visitCount" text-align="end" width="100px" flex-grow="0"></vaadin-grid-column>
         </vaadin-grid>
@@ -88,14 +88,14 @@
               root.textContent = rowData.item.name.first;
             };
             columns[1].headerRenderer = columns[1].footerRenderer = function(root, column) {
-              root.textContent = 'First Name';
+              root.textContent = 'First name';
             };
 
             columns[2].renderer = function(root, column, rowData) {
               root.textContent = rowData.item.name.last;
             };
             columns[2].headerRenderer = columns[2].footerRenderer = function(root, column) {
-              root.textContent = 'Last Name';
+              root.textContent = 'Last name';
             };
 
             columns[3].renderer = function(root, column, rowData) {
@@ -146,15 +146,15 @@
               </vaadin-grid-column>
 
               <vaadin-grid-column>
-                <template class="header">First Name</template>
+                <template class="header">First name</template>
                 <template>[[item.name.first]]</template>
-                <template class="footer">First Name</template>
+                <template class="footer">First name</template>
               </vaadin-grid-column>
 
               <vaadin-grid-column>
-                <template class="header">Last Name</template>
+                <template class="header">Last name</template>
                 <template>[[item.name.last]]</template>
-                <template class="footer">Last Name</template>
+                <template class="footer">Last name</template>
               </vaadin-grid-column>
 
               <vaadin-grid-column width="8em">

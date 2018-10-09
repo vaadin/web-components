@@ -34,14 +34,14 @@
         <x-array-data-provider></x-array-data-provider>
 
         <div style="margin-bottom: 20px">
-          <vaadin-text-field id="firstname" header="First Name"></vaadin-text-field>
-          <vaadin-text-field id="lastname" header="Last Name"></vaadin-text-field>
+          <vaadin-text-field id="firstname" header="First name"></vaadin-text-field>
+          <vaadin-text-field id="lastname" header="Last name"></vaadin-text-field>
           <vaadin-button id="add-btn">Add</vaadin-button>
         </div>
 
         <vaadin-grid theme="compact">
-          <vaadin-grid-column name="First Name" resizable></vaadin-grid-column>
-          <vaadin-grid-column name="Last Name" resizable></vaadin-grid-column>
+          <vaadin-grid-column name="First name" resizable></vaadin-grid-column>
+          <vaadin-grid-column name="Last name" resizable></vaadin-grid-column>
           <vaadin-grid-column name="E-Mail" width="12em" resizable></vaadin-grid-column>
           <vaadin-grid-column width="14em"></vaadin-grid-column>
         </vaadin-grid>
@@ -59,7 +59,7 @@
                 grid.clearCache();
                 firstname.value = lastname.value = '';
               } else {
-                alert('First Name and Last Name required');
+                alert('First name and Last name required');
               }
             });
 

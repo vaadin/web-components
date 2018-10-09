@@ -26,8 +26,8 @@
         <x-data-provider></x-data-provider>
 
         <vaadin-grid aria-label="Selection using Active Item Example" id="grid" size="200">
-          <vaadin-grid-column path="name.first" header="First Name"></vaadin-grid-column>
-          <vaadin-grid-column path="name.last" header="Last Name"></vaadin-grid-column>
+          <vaadin-grid-column path="name.first" header="First name"></vaadin-grid-column>
+          <vaadin-grid-column path="name.last" header="Last name"></vaadin-grid-column>
           <vaadin-grid-column path="email"></vaadin-grid-column>
         </vaadin-grid>
         <script>
@@ -63,8 +63,8 @@
 
         <vaadin-grid aria-label="Multi-Selection Example" size="200">
           <vaadin-grid-selection-column auto-select></vaadin-grid-selection-column>
-          <vaadin-grid-column path="name.first" header="First Name"></vaadin-grid-column>
-          <vaadin-grid-column path="name.last" header="Last Name"></vaadin-grid-column>
+          <vaadin-grid-column path="name.first" header="First name"></vaadin-grid-column>
+          <vaadin-grid-column path="name.last" header="Last name"></vaadin-grid-column>
           <vaadin-grid-column path="email"></vaadin-grid-column>
         </vaadin-grid>
 
@@ -90,8 +90,8 @@
       <template preserve-content>
         <vaadin-grid aria-label="Select All with Data Example">
           <vaadin-grid-column width="60px" flex-grow="0"></vaadin-grid-column>
-          <vaadin-grid-column path="firstName" header="First Name"></vaadin-grid-column>
-          <vaadin-grid-column path="lastName" header="Last Name"></vaadin-grid-column>
+          <vaadin-grid-column path="firstName" header="First name"></vaadin-grid-column>
+          <vaadin-grid-column path="lastName" header="Last name"></vaadin-grid-column>
         </vaadin-grid>
         <script>
           window.addDemoReadyListener('#grid-selection-demos-custom-select-all-with-data-provider', function(document) {
@@ -283,12 +283,12 @@
               </vaadin-grid-column>
 
               <vaadin-grid-column>
-                <template class="header">First Name</template>
+                <template class="header">First name</template>
                 <template>[[item.name.first]]</template>
               </vaadin-grid-column>
 
               <vaadin-grid-column>
-                <template class="header">Last Name</template>
+                <template class="header">Last name</template>
                 <template>[[item.name.last]]</template>
               </vaadin-grid-column>
 
@@ -311,8 +311,8 @@
     <vaadin-demo-snippet id='grid-selection-demos-selection-using-renderer'>
       <template preserve-content>
         <vaadin-grid aria-label="Selection using Renderer Example" id="grid">
-          <vaadin-grid-column path="name.first" header="First Name"></vaadin-grid-column>
-          <vaadin-grid-column path="name.last" header="Last Name"></vaadin-grid-column>
+          <vaadin-grid-column path="name.first" header="First name"></vaadin-grid-column>
+          <vaadin-grid-column path="name.last" header="Last name"></vaadin-grid-column>
           <vaadin-grid-column></vaadin-grid-column>
         </vaadin-grid>
         <script>

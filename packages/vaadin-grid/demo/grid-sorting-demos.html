@@ -31,8 +31,8 @@
         <vaadin-checkbox>Enable Multi-Sorting</vaadin-checkbox>
 
         <vaadin-grid aria-label="Sorting Example">
-          <vaadin-grid-sort-column path="name.first" header="First Name"></vaadin-grid-sort-column>
-          <vaadin-grid-sort-column path="name.last" header="Last Name"></vaadin-grid-sort-column>
+          <vaadin-grid-sort-column path="name.first" header="First name"></vaadin-grid-sort-column>
+          <vaadin-grid-sort-column path="name.last" header="Last name"></vaadin-grid-sort-column>
           <vaadin-grid-sort-column path="email"></vaadin-grid-sort-column>
         </vaadin-grid>
 
@@ -81,11 +81,11 @@
             });
 
             grid.querySelector('#firstnamecolumn').headerRenderer = function(root) {
-              root.innerHTML = '<vaadin-grid-sorter path="name.first">First Name</vaadin-grid-sorter>';
+              root.innerHTML = '<vaadin-grid-sorter path="name.first">First name</vaadin-grid-sorter>';
             };
 
             grid.querySelector('#lastnamecolumn').headerRenderer = function(root) {
-              root.innerHTML = '<vaadin-grid-sorter path="name.last" direction="asc">Last Name</vaadin-grid-sorter>';
+              root.innerHTML = '<vaadin-grid-sorter path="name.last" direction="asc">Last name</vaadin-grid-sorter>';
             };
           });
         </script>
@@ -141,11 +141,11 @@
             };
 
             grid.querySelector('#firstnamecolumn').headerRenderer = function(root) {
-              root.innerHTML = '<vaadin-grid-sorter path="firstName">First Name</vaadin-grid-sorter>';
+              root.innerHTML = '<vaadin-grid-sorter path="firstName">First name</vaadin-grid-sorter>';
             };
 
             grid.querySelector('#lastnamecolumn').headerRenderer = function(root) {
-              root.innerHTML = '<vaadin-grid-sorter path="lastName" direction="asc">Last Name</vaadin-grid-sorter>';
+              root.innerHTML = '<vaadin-grid-sorter path="lastName" direction="asc">Last name</vaadin-grid-sorter>';
             };
           });
         </script>
