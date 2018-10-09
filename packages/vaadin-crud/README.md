@@ -8,7 +8,6 @@
  [![Published on Vaadin  Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-crud)
 [![Stars on vaadin.com/directory](https://img.shields.io/vaadin-directory/star/vaadin-crud-directory-urlidentifier.svg)](https://vaadin.com/directory/component/vaadinvaadin-crud)
 
-
 # &lt;vaadin-crud&gt;
 
 [Live Demo ↗](https://vaadin.com/components/vaadin-crud/html-examples)
@@ -20,17 +19,6 @@
 [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) operations.
 It is part of the [Vaadin components](https://vaadin.com/components).
 
-<!--
-```
-<custom-element-demo>
-  <template>
-    <script src="../webcomponentsjs/webcomponents-lite.js"></script>
-    <link rel="import" href="vaadin-crud.html">
-    <next-code-block></next-code-block>
-  </template>
-</custom-element-demo>
-```
--->
 ```html
 <vaadin-crud items='[{"name": "Juan", "surname": "Garcia"}]'>
 </vaadin-crud>
