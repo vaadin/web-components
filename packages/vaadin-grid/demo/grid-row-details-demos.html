@@ -51,6 +51,12 @@
               root.firstElementChild.querySelector('img').src = rowData.item.picture.large;
               root.firstElementChild.querySelector('span').textContent = 'Hi! My name is ' + rowData.item.name.first + '!';
               root.firstElementChild.querySelector('small').textContent = rowData.item.email;
+
+              // If the bounds of the image weren't known/specified beforehand, grid would need to
+              // be notified of an asynchronous size change once the image gets loaded.
+              // root.firstElementChild.querySelector('img').onload = () => {
+              //   grid.notifyResize();
+              // };
             };
 
             const detailsToggleColumn = document.querySelector('#details');
