@@ -7,15 +7,18 @@
   <script>
     const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
     document.write('<link rel="import" href="../../theme/' + theme + '/vaadin-rich-text-editor.html">');
+    window.addEventListener('WebComponentsReady', function() {
+      customElements.whenDefined('vaadin-rich-text-editor').then(function() {
+        window.webComponentsAreReady = true; // Checked in gemini before capture callback
+      });
+    });
   </script>
 </head>
 
 <body>
 
   <span id="default-tests">
-    <vaadin-rich-text-editor>
-      <button>Go Vaadin!</button>
-    </vaadin-rich-text-editor>
+    <vaadin-rich-text-editor></vaadin-rich-text-editor>
   </span>
 
 </body>

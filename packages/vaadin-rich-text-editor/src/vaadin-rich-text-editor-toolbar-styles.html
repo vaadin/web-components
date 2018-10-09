@@ -1,0 +1,120 @@
+<link rel="import" href="vaadin-rich-text-editor-icons.html">
+
+<dom-module id="vaadin-rich-text-editor-toolbar-styles">
+  <template>
+    <style>
+      [part="toolbar"] {
+        display: flex;
+        flex-wrap: wrap;
+        border: 1px solid #ccc;
+        padding: 5px;
+      }
+
+      [part$="button"] {
+        display: block;
+        box-sizing: border-box;
+        margin: 2px 1px 0;
+        width: 28px;
+        height: 28px;
+        padding: 4px;
+        background: none;
+        border: none;
+        text-align: center;
+        color: rgba(0, 0, 0, 0.7);
+        border-radius: 2px;
+        box-shadow: none;
+        cursor: pointer;
+      }
+
+      [part$="button"]:hover {
+        background-color: rgba(0, 0, 0, 0.06);
+        outline: none;
+      }
+
+      [part$="button"]:active,
+      [part$="button"].ql-active {
+        background-color: rgba(0, 0, 0, 0.12);
+      }
+
+      [part$="button"]::before {
+        display: block;
+        font-size: 20px;
+        line-height: 20px;
+        opacity: 0.87;
+        font-family: "vaadin-rich-text-editor-icons";
+      }
+
+      [part="align-center-button"]::before {
+        content: var(--vaadin-rich-text-editor-icons-align-center);
+      }
+
+      [part="align-justify-button"]::before {
+        content: var(--vaadin-rich-text-editor-icons-align-justify);
+      }
+
+      [part="align-left-button"]::before {
+        content: var(--vaadin-rich-text-editor-icons-align-left);
+      }
+
+      [part="align-right-button"]::before {
+        content: var(--vaadin-rich-text-editor-icons-align-right);
+      }
+
+      [part="blockquote-button"]::before {
+        content: var(--vaadin-rich-text-editor-icons-blockquote);
+      }
+
+      [part="bold-button"]::before {
+        content: var(--vaadin-rich-text-editor-icons-bold);
+      }
+
+      [part="clean-button"]::before {
+        content: var(--vaadin-rich-text-editor-icons-clean);
+      }
+
+      [part="code-block-button"]::before {
+        content: var(--vaadin-rich-text-editor-icons-code-block);
+      }
+
+      [part="h1-button"]::before {
+        content: var(--vaadin-rich-text-editor-icons-h1);
+      }
+
+      [part="h2-button"]::before {
+        content: var(--vaadin-rich-text-editor-icons-h2);
+      }
+
+      [part="h3-button"]::before {
+        content: var(--vaadin-rich-text-editor-icons-h3);
+      }
+
+      [part="italic-button"]::before {
+        content: var(--vaadin-rich-text-editor-icons-italic);
+      }
+
+      [part="list-bullet-button"]::before {
+        content: var(--vaadin-rich-text-editor-icons-list-bullet);
+      }
+
+      [part="list-ordered-button"]::before {
+        content: var(--vaadin-rich-text-editor-icons-list-ordered);
+      }
+
+      [part="strike-button"]::before {
+        content: var(--vaadin-rich-text-editor-icons-strike);
+      }
+
+      [part="sub-script-button"]::before {
+        content: var(--vaadin-rich-text-editor-icons-sub-script);
+      }
+
+      [part="super-script-button"]::before {
+        content: var(--vaadin-rich-text-editor-icons-super-script);
+      }
+
+      [part="underline-button"]::before {
+        content: var(--vaadin-rich-text-editor-icons-underline);
+      }
+    </style>
+  </template>
+</dom-module>
