@@ -27,26 +27,22 @@
         });
 
         it('should set aria-checked to "false" when indereminate is first set to false, then checked is set to false', () => {
-          vaadinCheckbox.indeterminate = false;
           vaadinCheckbox.checked = false;
           expect(vaadinCheckbox.getAttribute('aria-checked')).to.be.eql('false');
         });
 
         it('should set aria-checked to "false" when checked is first set to false, then indereminate is set to false', () => {
           vaadinCheckbox.checked = false;
-          vaadinCheckbox.indeterminate = false;
           expect(vaadinCheckbox.getAttribute('aria-checked')).to.be.eql('false');
         });
 
         it('should set aria-checked to "true" when indereminate is first set to false, then checked is set to true', () => {
-          vaadinCheckbox.indeterminate = false;
           vaadinCheckbox.checked = true;
           expect(vaadinCheckbox.getAttribute('aria-checked')).to.be.eql('true');
         });
 
         it('should set aria-checked to "true" when checked is first set to true, then indereminate is set to false', () => {
           vaadinCheckbox.checked = true;
-          vaadinCheckbox.indeterminate = false;
           expect(vaadinCheckbox.getAttribute('aria-checked')).to.be.eql('true');
         });
 
