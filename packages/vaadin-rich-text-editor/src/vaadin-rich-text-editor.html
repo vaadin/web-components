@@ -117,7 +117,7 @@ This program is available under Apache License Version 2.0, available at https:/
              * See also https://github.com/quilljs/delta for detailed documentation.
              */
             value: {
-              type: Array,
+              type: String,
               observer: '_valueChanged',
               notify: true
             }
@@ -165,7 +165,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
           this._editor.on('text-change', (delta, oldDelta, source) => {
             this.__userInput = source === 'user';
-            this.value = this._editor.getContents().ops;
+            this.value = JSON.stringify(this._editor.getContents().ops);
             this.__userInput = false;
           });
         }
@@ -179,13 +179,14 @@ This program is available under Apache License Version 2.0, available at https:/
           if (this.__userInput) {
             return;
           }
-          if (value == null || value.length === 0) {
+          if (value === null || value === '') {
             this._clear();
-          } else if (!Array.isArray(value)) {
-            console.error('Incorrect value type: array expected, got:', value);
+          } else if (typeof value !== 'string') {
+            console.error('Incorrect value type: string expected, got:', value);
             return;
           }
-          const delta = new Quill.imports.delta(value);
+
+          const delta = new Quill.imports.delta(value ? JSON.parse(value) : [{'insert': '\n'}]);
           // suppress text-change event to prevent infinite loop
           this._editor.setContents(delta, 'silent');
         }
