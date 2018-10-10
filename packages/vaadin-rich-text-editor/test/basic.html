@@ -184,6 +184,12 @@
           expect(editor.getText()).to.equal('\n');
         });
 
+        it('should clear the editor contents when value is set to undefined', () => {
+          editor.insertText(0, 'Foo', 'user');
+          rte.value = undefined;
+          expect(editor.getText()).to.equal('\n');
+        });
+
         it('should clear the editor contents when value is set to empty string', () => {
           editor.insertText(0, 'Foo', 'user');
           rte.value = '';
