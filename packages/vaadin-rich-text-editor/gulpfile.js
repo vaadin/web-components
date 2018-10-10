@@ -91,11 +91,12 @@ gulp.task('version:update', ['version:check'], function() {
 
 gulp.task('icons', function() {
   var glyphs;
-  const fontName = 'vaadin-rich-text-editor-icons';
+  const fontName = 'vaadin-rte-icons';
+  const fileName = 'vaadin-rich-text-editor-icons';
 
   gulp.src('icons/*.svg')
     .pipe(iconfont({
-      fontName,
+      fontName: fileName,
       formats: ['woff'],
       fontHeight: 1000,
       ascent: 850,
@@ -110,7 +111,7 @@ gulp.task('icons', function() {
     .pipe(gulp.dest('.'))
     .on('finish', function() {
       // Generate base64 version of the font
-      exec(`base64 ${fontName}.woff`, function(err, stdout) {
+      exec(`base64 ${fileName}.woff`, function(err, stdout) {
         var output = `<!-- NOTE: Auto generated with 'gulp icons', do not edit -->
 <link rel="import" href="../../polymer/lib/elements/custom-style.html">
 
@@ -133,15 +134,35 @@ gulp.task('icons', function() {
         output += `    }
   </style>
 </custom-style>
+
+<dom-module id="${fileName}">
+  <template>
+    <style>
 `;
-        fs.writeFile(`src/${fontName}.html`, output, function(err) {
+        glyphs.forEach((g, index) => {
+          var name = g.name.replace(/\s/g, '-').toLowerCase();
+          output += `      [part="${name}-button"]::before {
+        content: var(--${fontName}-${name});
+      }`;
+          if (index < glyphs.length - 1) {
+            output += `
+
+`;
+          }
+        });
+        output += `
+    </style>
+  </template>
+</dom-module>
+`;
+        fs.writeFile(`src/${fileName}.html`, output, function(err) {
           if (err) {
             return console.error(err);
           }
         });
 
         // Cleanup
-        fs.unlink(`${fontName}.woff`, function(err) {
+        fs.unlink(`${fileName}.woff`, function(err) {
           if (err) {
             return console.error(err);
           }
