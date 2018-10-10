@@ -186,7 +186,13 @@ This program is available under Apache License Version 2.0, available at https:/
             return;
           }
 
-          const delta = new Quill.imports.delta(value ? JSON.parse(value) : [{'insert': '\n'}]);
+          let parsedValue;
+          try {
+            parsedValue = value ? JSON.parse(value) : [{'insert': '\n'}];
+          } catch (err) {
+            console.error('Invalid JSON structure:', err);
+          }
+          const delta = new Quill.imports.delta(parsedValue);
           // suppress text-change event to prevent infinite loop
           this._editor.setContents(delta, 'silent');
         }

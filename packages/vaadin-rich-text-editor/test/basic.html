@@ -149,6 +149,16 @@
           expect(spy.called).to.be.true;
         });
 
+        it('should error when setting invalid value', () => {
+          const origError = console.error;
+          const spy = console.error = sinon.spy();
+          // Missing closing ]
+          rte.value = `[{insert: 'Foo'}`;
+          console.error = origError;
+          expect(editor.getText()).to.not.include('Foo');
+          expect(spy.called).to.be.true;
+        });
+
         it('should clear the editor contents when value is set to null', () => {
           editor.insertText(0, 'Foo', 'user');
           rte.value = null;
