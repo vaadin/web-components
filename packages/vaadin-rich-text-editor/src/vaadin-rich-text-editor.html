@@ -79,6 +79,7 @@ This program is available under Apache License Version 2.0, available at https:/
       'use strict';
 
       const Quill = window.Quill;
+      const DEFAULT_VALUE = '[{"insert":"\\n"}]';
 
       /**
        * `<vaadin-rich-text-editor>` is a Web Component for rich text editing.
@@ -120,7 +121,7 @@ This program is available under Apache License Version 2.0, available at https:/
               type: String,
               observer: '_valueChanged',
               notify: true,
-              value: '[{"insert":"\\n"}]'
+              value: DEFAULT_VALUE
             }
           };
         }
@@ -185,7 +186,9 @@ This program is available under Apache License Version 2.0, available at https:/
             return;
           }
           if (value === null || value === '') {
+            this.value = DEFAULT_VALUE;
             this._clear();
+            return;
           } else if (typeof value !== 'string') {
             console.error('Incorrect value type: string expected, got:', value);
             return;
@@ -193,7 +196,10 @@ This program is available under Apache License Version 2.0, available at https:/
 
           let parsedValue;
           try {
-            parsedValue = value ? JSON.parse(value) : [{'insert': '\n'}];
+            parsedValue = JSON.parse(value);
+            if (!Array.isArray(parsedValue)) {
+              throw new Error('not a valid type');
+            }
           } catch (err) {
             // Use old value in case new one is not suitable
             this.value = oldValue;
