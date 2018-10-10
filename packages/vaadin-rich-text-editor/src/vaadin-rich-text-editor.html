@@ -119,7 +119,8 @@ This program is available under Apache License Version 2.0, available at https:/
             value: {
               type: String,
               observer: '_valueChanged',
-              notify: true
+              notify: true,
+              value: '[{"insert":"\\n"}]'
             }
           };
         }
@@ -174,7 +175,11 @@ This program is available under Apache License Version 2.0, available at https:/
           this._editor.deleteText(0, this._editor.getLength(), 'silent');
         }
 
-        _valueChanged(value) {
+        _valueChanged(value, oldValue) {
+          // Should not do anything on initialization of the default value
+          if (!oldValue) {
+            return;
+          }
           // prevent editor contents from being reset by user input
           if (this.__userInput) {
             return;
@@ -190,7 +195,10 @@ This program is available under Apache License Version 2.0, available at https:/
           try {
             parsedValue = value ? JSON.parse(value) : [{'insert': '\n'}];
           } catch (err) {
+            // Use old value in case new one is not suitable
+            this.value = oldValue;
             console.error('Invalid JSON structure:', err);
+            return;
           }
           const delta = new Quill.imports.delta(parsedValue);
           // suppress text-change event to prevent infinite loop
