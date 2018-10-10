@@ -1,6 +1,9 @@
 gemini.suite('vaadin-rich-text-editor', function(rootSuite) {
   function wait(actions, find) {
-    actions.wait(5000);
+    return actions
+      .waitForJSCondition(function(window) {
+        return window.webComponentsAreReady;
+      }, 60000);
   }
 
   function goToAboutBlank(actions, find) {

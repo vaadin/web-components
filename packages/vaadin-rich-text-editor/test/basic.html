@@ -45,15 +45,15 @@
         let btn;
 
         ['bold', 'italic', 'underline', 'strike', 'blockquote', 'code-block'].forEach(fmt => {
-          it(`should apply ${fmt} formatting when clicking the "btn-${fmt}" button`, () => {
-            btn = rte.shadowRoot.querySelector(`[part="btn-${fmt}"]`);
+          it(`should apply ${fmt} formatting when clicking the "${fmt}-button" part`, () => {
+            btn = rte.shadowRoot.querySelector(`[part="${fmt}-button"]`);
             btn.click();
             editor.insertText(0, 'Foo', 'user');
             expect(editor.getFormat(0, 2)[fmt]).to.be.true;
           });
 
-          it(`should undo ${fmt} formatting when clicking the "btn-${fmt}" button`, () => {
-            btn = rte.shadowRoot.querySelector(`[part="btn-${fmt}"]`);
+          it(`should undo ${fmt} formatting when clicking the "${fmt}-button" part`, () => {
+            btn = rte.shadowRoot.querySelector(`[part="${fmt}-button"]`);
             editor.format(fmt, true);
             btn.click();
             expect(editor.getFormat(0)).to.be.empty.object;
@@ -61,15 +61,15 @@
         });
 
         ['sub', 'super'].forEach(scr => {
-          it(`should apply ${scr} script when clicking the "btn-${scr}" button`, () => {
-            btn = rte.shadowRoot.querySelector(`[part="btn-${scr}"]`);
+          it(`should apply ${scr} script when clicking the "${scr}-script-button" part`, () => {
+            btn = rte.shadowRoot.querySelector(`[part="${scr}-script-button"]`);
             btn.click();
             editor.insertText(0, 'Foo', 'user');
             expect(editor.getFormat(0, 2).script).to.be.equal(scr);
           });
 
-          it(`should undo ${scr} script when clicking the "btn-${scr}" button`, () => {
-            btn = rte.shadowRoot.querySelector(`[part="btn-${scr}"]`);
+          it(`should undo ${scr} script when clicking the "${scr}-script-button" part`, () => {
+            btn = rte.shadowRoot.querySelector(`[part="${scr}-script-button"]`);
             editor.format('script', scr);
             btn.click();
             expect(editor.getFormat(0)).to.be.empty.object;
@@ -77,8 +77,8 @@
         });
 
         ['ordered', 'bullet'].forEach(type => {
-          it(`should create ${type} list when clicking the "btn-${type}-list" button`, () => {
-            btn = rte.shadowRoot.querySelector(`[part="btn-${type}-list"]`);
+          it(`should create ${type} list when clicking the "list-${type}-button" part`, () => {
+            btn = rte.shadowRoot.querySelector(`[part="list-${type}-button"]`);
 
             btn.click();
             expect(editor.getFormat(0).list).to.be.equal(type);
@@ -89,8 +89,8 @@
         });
 
         [1, 2].forEach(level => {
-          it(`should create <h${level}> header when clicking the "btn-h${level}" button`, () => {
-            btn = rte.shadowRoot.querySelector(`[part="btn-h${level}"]`);
+          it(`should create <h${level}> header when clicking the "h${level}-button" part`, () => {
+            btn = rte.shadowRoot.querySelector(`[part="h${level}-button"]`);
 
             btn.click();
             expect(editor.getFormat(0).header).to.be.equal(level);
@@ -101,23 +101,23 @@
         });
 
         ['center', 'right', 'justify'].forEach(align => {
-          it(`should apply ${align} alignment when clicking the toolbar button`, () => {
-            btn = rte.shadowRoot.querySelector(`[part="btn-align-${align}"]`);
+          it(`should apply ${align} alignment when clicking the "align-${align}-button" part`, () => {
+            btn = rte.shadowRoot.querySelector(`[part="align-${align}-button"]`);
 
             btn.click();
             expect(editor.getFormat(0).align).to.be.equal(align);
 
-            btn = rte.shadowRoot.querySelector('[part="btn-align-left"]');
+            btn = rte.shadowRoot.querySelector('[part="align-left-button"]');
             btn.click();
             expect(editor.getFormat(0).align).to.be.empty;
           });
         });
 
-        it('should clear formatting when clicking the "btn-clean" button', () => {
+        it('should clear formatting when clicking the "clean-button" part', () => {
           editor.format('bold', true);
           editor.format('underline', true);
 
-          btn = rte.shadowRoot.querySelector('[part="btn-clean"]');
+          btn = rte.shadowRoot.querySelector('[part="clean-button"]');
           btn.click();
           expect(editor.getFormat(0)).to.be.empty.object;
         });

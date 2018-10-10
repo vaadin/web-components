@@ -1,0 +1,48 @@
+<link rel="import" href="vaadin-rich-text-editor-icons.html">
+
+<dom-module id="vaadin-rich-text-editor-toolbar-styles">
+  <template>
+    <style include="vaadin-rich-text-editor-icons">
+      [part="toolbar"] {
+        display: flex;
+        flex-wrap: wrap;
+        border: 1px solid #ccc;
+        padding: 8px;
+      }
+
+      [part$="button"] {
+        display: block;
+        box-sizing: border-box;
+        margin: 2px 2px 0;
+        width: 28px;
+        height: 28px;
+        padding: 2px;
+        background: none;
+        border: none;
+        text-align: center;
+        color: rgba(0, 0, 0, 0.6);
+        border-radius: 2px;
+        box-shadow: none;
+        cursor: pointer;
+      }
+
+      [part$="button"]:hover {
+        background-color: rgba(0, 0, 0, 0.06);
+        outline: none;
+      }
+
+      [part$="button"]:active,
+      [part$="button"].ql-active {
+        background-color: rgba(0, 0, 0, 0.12);
+      }
+
+      [part$="button"]::before {
+        display: block;
+        font-size: 24px;
+        line-height: 24px;
+        opacity: 0.87;
+        font-family: "vaadin-rte-icons";
+      }
+    </style>
+  </template>
+</dom-module>

@@ -27,6 +27,7 @@
     "preversion": "gulp version:update"
   },
   "devDependencies": {
-    "@vaadin/vaadin-component-dev-dependencies": "^1.0.0"
+    "@vaadin/vaadin-component-dev-dependencies": "^1.0.0",
+    "gulp-iconfont": "^10.0.1"
   }
 }

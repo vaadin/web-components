@@ -9,11 +9,13 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
 <link rel="import" href="../../vaadin-license-checker/vaadin-license-checker.html">
 
-<link rel="import" href="../vendor/quill.html">
+<link rel="import" href="../vendor/vaadin-quill.html">
+<link rel="import" href="vaadin-rich-text-editor-content-styles.html">
+<link rel="import" href="vaadin-rich-text-editor-toolbar-styles.html">
 
 <dom-module id="vaadin-rich-text-editor">
   <template>
-    <style include="quill-snow-styles">
+    <style include="vaadin-rich-text-editor-content-styles vaadin-rich-text-editor-toolbar-styles">
       :host {
         display: block;
       }
@@ -21,56 +23,53 @@ This program is available under Apache License Version 2.0, available at https:/
       :host([hidden]) {
         display: none !important;
       }
-
-      [part="editor"] {
-        min-height: 200px;
-      }
     </style>
 
     <!-- Create toolbar container -->
     <div part="toolbar">
 
       <!-- Bold -->
-      <button class="ql-bold" part="btn-bold"></button>
+      <button class="ql-bold" part="bold-button"></button>
 
       <!-- Italic -->
-      <button class="ql-italic" part="btn-italic"></button>
+      <button class="ql-italic" part="italic-button"></button>
 
       <!-- Underline -->
-      <button class="ql-underline" part="btn-underline"></button>
+      <button class="ql-underline" part="underline-button"></button>
 
       <!-- Strike -->
-      <button class="ql-strike" part="btn-strike"></button>
+      <button class="ql-strike" part="strike-button"></button>
 
       <!-- Header buttons -->
-      <button type="button" class="ql-header" value="1" part="btn-h1"></button>
-      <button type="button" class="ql-header" value="2" part="btn-h2"></button>
+      <button type="button" class="ql-header" value="1" part="h1-button"></button>
+      <button type="button" class="ql-header" value="2" part="h2-button"></button>
+      <button type="button" class="ql-header" value="3" part="h3-button"></button>
 
       <!-- Subscript and superscript -->
-      <button class="ql-script" value="sub" part="btn-sub"></button>
-      <button class="ql-script" value="super" part="btn-super"></button>
+      <button class="ql-script" value="sub" part="sub-script-button"></button>
+      <button class="ql-script" value="super" part="super-script-button"></button>
 
       <!-- List buttons -->
-      <button type="button" class="ql-list" value="bullet" part="btn-bullet-list"></button>
-      <button type="button" class="ql-list" value="ordered" part="btn-ordered-list"></button>
+      <button type="button" class="ql-list" value="ordered" part="list-ordered-button"></button>
+      <button type="button" class="ql-list" value="bullet" part="list-bullet-button"></button>
 
       <!-- Align buttons -->
-      <button type="button" class="ql-align" value="" part="btn-align-left"></button>
-      <button type="button" class="ql-align" value="center" part="btn-align-center"></button>
-      <button type="button" class="ql-align" value="right" part="btn-align-right"></button>
-      <button type="button" class="ql-align" value="justify" part="btn-align-justify"></button>
+      <button type="button" class="ql-align" value="" part="align-left-button"></button>
+      <button type="button" class="ql-align" value="center" part="align-center-button"></button>
+      <button type="button" class="ql-align" value="right" part="align-right-button"></button>
+      <button type="button" class="ql-align" value="justify" part="align-justify-button"></button>
 
       <!-- Blockquote -->
-      <button type="button" class="ql-blockquote" part="btn-blockquote"></button>
+      <button type="button" class="ql-blockquote" part="blockquote-button"></button>
 
       <!-- Code block -->
-      <button type="button" class="ql-code-block" part="btn-code-block"></button>
+      <button type="button" class="ql-code-block" part="code-block-button"></button>
 
       <!-- Clean -->
-      <button type="button" class="ql-clean" part="btn-clean"></button>
+      <button type="button" class="ql-clean" part="clean-button"></button>
     </div>
 
-    <div part="editor"></div>
+    <div part="content"></div>
 
   </template>
 
@@ -87,6 +86,35 @@ This program is available under Apache License Version 2.0, available at https:/
        * <vaadin-rich-text-editor></vaadin-rich-text-editor>
        * ```
        *
+       * ### Styling
+       *
+       * The following shadow DOM parts are available for styling:
+       *
+       * Part name              | Description
+       * -----------------------|----------------
+       * `toolbar`              | The toolbar wrapper
+       * `content`              | The content wrapper
+       * `bold-button`          | The "bold" button
+       * `italic-button`        | The "italic" button
+       * `underline-button`     | The "underline" button
+       * `strike-button`        | The "strike-through" button
+       * `h1-button`            | The "header 1" button
+       * `h2-button`            | The "header 2" button
+       * `h3-button`            | The "header 3" button
+       * `sub-script-button`    | The "sub-script" button
+       * `super-script-button`  | The "super-script" button
+       * `list-ordered-button`  | The "ordered list" button
+       * `list-bullet-button`   | The "bullet list" button
+       * `align-left-button`    | The "left align" button
+       * `align-center-button`  | The "center align" button
+       * `align-right-button`   | The "right align" button
+       * `align-justify-button` | The "justify" button
+       * `blockquote-button`    | The "blockquote" button
+       * `code-block-button`    | The "code block" button
+       * `clean-button`         | The "clean formatting" button
+       *
+       * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+       *
        * @memberof Vaadin
        * @mixes Vaadin.ElementMixin
        * @mixes Vaadin.ThemableMixin
@@ -96,6 +124,7 @@ This program is available under Apache License Version 2.0, available at https:/
         static get is() {
           return 'vaadin-rich-text-editor';
         }
+
         static get version() {
           return '0.1.0';
         }
@@ -152,15 +181,14 @@ This program is available under Apache License Version 2.0, available at https:/
         ready() {
           super.ready();
 
-          const editor = this.shadowRoot.querySelector('[part="editor"]');
+          const editor = this.shadowRoot.querySelector('[part="content"]');
           const toolbar = this.shadowRoot.querySelector('[part="toolbar"]');
 
           this._editor = new Quill(editor, {
             modules: {
               toolbar: toolbar
             },
-            placeholder: 'Type something...',
-            theme: 'snow'
+            placeholder: 'Type something...'
           });
 
           this._editor.on('text-change', (delta, oldDelta, source) => {
