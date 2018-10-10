@@ -614,6 +614,18 @@
               const params = spyDataProvider.firstCall.args[0];
               expect(params.page).to.equal(0);
             });
+
+            it('should clear old pending requests', () => {
+              let slowCallback;
+              comboBox.dataProvider = (params, callback) => {
+                if (!slowCallback) {
+                  slowCallback = callback;
+                }
+              };
+              comboBox.clearCache();
+              slowCallback([{}]);
+              expect(comboBox.filteredItems).to.be.empty;
+            });
           });
 
           describe('after closed', () => {

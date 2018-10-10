@@ -164,6 +164,7 @@ This program is available under Apache License Version 2.0, available at https:/
       if (!this.dataProvider) {
         return;
       }
+      this._pendingRequests = {};
       const filteredItems = [];
       filteredItems.length = this.size || 0;
       this.filteredItems = new Array(...filteredItems).map(item => {
