@@ -697,6 +697,16 @@ This program is available under Apache License Version 2.0, available at https:/
           this._update();
         }
       }
+
+      /**
+       * Updates the computed metrics and positioning of internal grid parts
+       * (row/details cell positioning etc). Needs to be invoked whenever the sizing of grid
+       * content changes asynchronously to ensure consistent appearance (e.g. when a
+       * contained image whose bounds aren't known beforehand finishes loading).
+       */
+      notifyResize() {
+        super.notifyResize();
+      }
     }
 
     customElements.define(GridElement.is, GridElement);
