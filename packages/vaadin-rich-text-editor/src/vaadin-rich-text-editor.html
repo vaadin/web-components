@@ -189,16 +189,13 @@ This program is available under Apache License Version 2.0, available at https:/
             this.value = DEFAULT_VALUE;
             this._clear();
             return;
-          } else if (typeof value !== 'string') {
-            console.error('Incorrect value type: string expected, got:', value);
-            return;
           }
 
           let parsedValue;
           try {
             parsedValue = JSON.parse(value);
             if (!Array.isArray(parsedValue)) {
-              throw new Error('not a valid type');
+              throw new Error('Incorrect value: expected JSON string with array of objects, got:', value);
             }
           } catch (err) {
             // Use old value in case new one is not suitable
