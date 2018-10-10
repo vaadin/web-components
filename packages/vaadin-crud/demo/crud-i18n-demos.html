@@ -21,24 +21,25 @@
             crud.i18n = {
               newItem: 'Nuevo usuario',
               editItem: 'Editar usuario',
-              save: 'Guardar',
+              saveItem: 'Guardar',
               cancel: 'Cancelar',
-              delete: 'Borrar...',
+              deleteItem: 'Borrar...',
+              editLabel: 'Editar usuario',
               confirm: {
                 delete: {
-                  header: 'Confirmar borrado',
-                  message: '¿Estás seguro de querer borrar el usuario seleccionado? La acción no es reversible.',
+                  title: 'Confirmar borrado',
+                  content: '¿Estás seguro de querer borrar el usuario seleccionado? La acción no es reversible.',
                   button: {
-                    ok: 'Borrar',
-                    cancel: 'Cancelar'
+                    confirm: 'Borrar',
+                    dismiss: 'Cancelar'
                   }
                 },
                 cancel: {
-                  header: 'Cancelar la edición',
-                  message: 'Se han hecho cambios en el usuario que no se han guardado.',
+                  title: 'Cancelar la edición',
+                  content: 'Se han hecho cambios en el usuario que no se han guardado.',
                   button: {
-                    ok: 'Descartar cambios',
-                    cancel: 'Continuar editando'
+                    confirm: 'Descartar cambios',
+                    dismiss: 'Continuar editando'
                   }
                 },
               }

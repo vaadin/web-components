@@ -107,6 +107,9 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
             type: Number,
             value: 0
           },
+
+          /** The arial-label for the edit button */
+          ariaLabel: String
         };
       }
 
@@ -117,6 +120,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           if (!root.firstElementChild) {
             const elm = document.createElement('vaadin-crud-edit');
             this.hasAttribute('theme') && elm.setAttribute('theme', this.getAttribute('theme'));
+            this.editLabel && elm.setAttribute('aria-label', this.ariaLabel);
             root.appendChild(elm);
           }
         };
