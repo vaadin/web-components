@@ -46,7 +46,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
       <vaadin-crud-grid theme$="[[theme]]" id="grid" include="[[include]]" exclude="[[exclude]]" no-sort="[[noSort]]" no-filter="[[noFilter]]" no-head="[[noHead]]"></vaadin-crud-grid>
     </slot>
 
-    <div part="toolbar" on-click="__new">
+    <div part="toolbar" role="toolbar" on-click="__new">
       <div part="footer"><slot name="footer"></slot></div>
       <slot name="new">
         <vaadin-button id="new">[[i18n.newItem]]</vaadin-button>
