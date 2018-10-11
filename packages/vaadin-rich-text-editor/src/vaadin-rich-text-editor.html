@@ -35,6 +35,10 @@ This program is available under Apache License Version 2.0, available at https:/
     <!-- Create toolbar container -->
     <div part="toolbar">
 
+      <!-- Undo and Redo -->
+      <button type="button" part="undo-button" on-click="_undo" aria-label$="[[i18n.undo]]"></button>
+      <button type="button" part="redo-button" on-click="_redo" aria-label$="[[i18n.redo]]"></button>
+
       <!-- Bold -->
       <button class="ql-bold" part="bold-button" aria-label$="[[i18n.bold]]"></button>
 
@@ -104,6 +108,8 @@ This program is available under Apache License Version 2.0, available at https:/
        * -----------------------|----------------
        * `toolbar`              | The toolbar wrapper
        * `content`              | The content wrapper
+       * `undo-button`          | The "undo" button
+       * `redo-button`          | The "redo" button
        * `bold-button`          | The "bold" button
        * `italic-button`        | The "italic" button
        * `underline-button`     | The "underline" button
@@ -189,6 +195,8 @@ This program is available under Apache License Version 2.0, available at https:/
               type: Array,
               value: () => {
                 return {
+                  undo: 'undo',
+                  redo: 'redo',
                   bold: 'bold',
                   italic: 'italic',
                   underline: 'underline',
@@ -294,6 +302,18 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _clear() {
           this._editor.deleteText(0, this._editor.getLength(), 'silent');
+        }
+
+        _undo(e) {
+          e.preventDefault();
+          this._editor.history.undo();
+          this._editor.focus();
+        }
+
+        _redo(e) {
+          e.preventDefault();
+          this._editor.history.redo();
+          this._editor.focus();
         }
 
         _toggleToolbarDisabled(disable) {
