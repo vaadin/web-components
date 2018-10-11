@@ -1,7 +1,7 @@
 {
   "name": "vaadin-combo-box",
   "homepage": "https://vaadin.com/components",
-  "description": "Polymer element for displaying a list of items with filtering",
+  "description": "Web Component for displaying a list of items with filtering",
   "authors": [
     "Vaadin Ltd"
   ],
