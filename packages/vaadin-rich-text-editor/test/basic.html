@@ -374,6 +374,26 @@
           expect(getComputedStyle(rte.shadowRoot.querySelector('[part="toolbar"]')).display).to.equal('none');
         });
       });
+
+      describe('undo and redo', () => {
+        let btn;
+
+        it('should undo last change when the "undo" button clicked', () => {
+          editor.insertText(0, 'Foo', 'user');
+          btn = rte.shadowRoot.querySelector(`[part="undo-button"]`);
+          btn.click();
+          expect(editor.getText()).to.not.equal('Foo\n');
+        });
+
+        it('should redo last change when the "redo" button clicked', () => {
+          editor.insertText(0, 'Foo', 'user');
+          btn = rte.shadowRoot.querySelector(`[part="undo-button"]`);
+          btn.click();
+          btn = rte.shadowRoot.querySelector(`[part="redo-button"]`);
+          btn.click();
+          expect(editor.getText()).to.equal('Foo\n');
+        });
+      });
     });
   </script>
 </body>
