@@ -5,6 +5,8 @@ This program is available under Apache License Version 2.0, available at https:/
 -->
 
 <link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../polymer/lib/utils/async.html">
+<link rel="import" href="../../polymer/lib/utils/debounce.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
 <link rel="import" href="../../vaadin-license-checker/vaadin-license-checker.html">
@@ -23,53 +25,60 @@ This program is available under Apache License Version 2.0, available at https:/
       :host([hidden]) {
         display: none !important;
       }
+
+      .announcer {
+        position: fixed;
+        clip: rect(0, 0, 0, 0);
+      }
     </style>
 
     <!-- Create toolbar container -->
     <div part="toolbar">
 
       <!-- Bold -->
-      <button class="ql-bold" part="bold-button"></button>
+      <button class="ql-bold" part="bold-button" aria-label$="[[i18n.bold]]"></button>
 
       <!-- Italic -->
-      <button class="ql-italic" part="italic-button"></button>
+      <button class="ql-italic" part="italic-button" aria-label$="[[i18n.italic]]"></button>
 
       <!-- Underline -->
-      <button class="ql-underline" part="underline-button"></button>
+      <button class="ql-underline" part="underline-button" aria-label$="[[i18n.underline]]"></button>
 
       <!-- Strike -->
-      <button class="ql-strike" part="strike-button"></button>
+      <button class="ql-strike" part="strike-button" aria-label$="[[i18n.strike]]"></button>
 
       <!-- Header buttons -->
-      <button type="button" class="ql-header" value="1" part="h1-button"></button>
-      <button type="button" class="ql-header" value="2" part="h2-button"></button>
-      <button type="button" class="ql-header" value="3" part="h3-button"></button>
+      <button type="button" class="ql-header" value="1" part="h1-button" aria-label$="[[i18n.h1]]"></button>
+      <button type="button" class="ql-header" value="2" part="h2-button" aria-label$="[[i18n.h2]]"></button>
+      <button type="button" class="ql-header" value="3" part="h3-button" aria-label$="[[i18n.h3]]"></button>
 
       <!-- Subscript and superscript -->
-      <button class="ql-script" value="sub" part="sub-script-button"></button>
-      <button class="ql-script" value="super" part="super-script-button"></button>
+      <button class="ql-script" value="sub" part="sub-script-button" aria-label$="[[i18n.subscript]]"></button>
+      <button class="ql-script" value="super" part="super-script-button" aria-label$="[[i18n.superscript]]"></button>
 
       <!-- List buttons -->
-      <button type="button" class="ql-list" value="ordered" part="list-ordered-button"></button>
-      <button type="button" class="ql-list" value="bullet" part="list-bullet-button"></button>
+      <button type="button" class="ql-list" value="ordered" part="list-ordered-button" aria-label$="[[i18n.listOrdered]]"></button>
+      <button type="button" class="ql-list" value="bullet" part="list-bullet-button" aria-label$="[[i18n.listBullet]]"></button>
 
       <!-- Align buttons -->
-      <button type="button" class="ql-align" value="" part="align-left-button"></button>
-      <button type="button" class="ql-align" value="center" part="align-center-button"></button>
-      <button type="button" class="ql-align" value="right" part="align-right-button"></button>
-      <button type="button" class="ql-align" value="justify" part="align-justify-button"></button>
+      <button type="button" class="ql-align" value="" part="align-left-button" aria-label$="[[i18n.alignLeft]]"></button>
+      <button type="button" class="ql-align" value="center" part="align-center-button" aria-label$="[[i18n.alignCenter]]"></button>
+      <button type="button" class="ql-align" value="right" part="align-right-button" aria-label$="[[i18n.alignRight]]"></button>
+      <button type="button" class="ql-align" value="justify" part="align-justify-button" aria-label$="[[i18n.alignJustify]]"></button>
 
       <!-- Blockquote -->
-      <button type="button" class="ql-blockquote" part="blockquote-button"></button>
+      <button type="button" class="ql-blockquote" part="blockquote-button" aria-label$="[[i18n.blockquote]]"></button>
 
       <!-- Code block -->
-      <button type="button" class="ql-code-block" part="code-block-button"></button>
+      <button type="button" class="ql-code-block" part="code-block-button" aria-label$="[[i18n.codeBlock]]"></button>
 
       <!-- Clean -->
-      <button type="button" class="ql-clean" part="clean-button"></button>
+      <button type="button" class="ql-clean" part="clean-button" aria-label$="[[i18n.clean]]"></button>
     </div>
 
     <div part="content"></div>
+
+    <div class="announcer" aria-live="polite"></div>
 
   </template>
 
@@ -170,6 +179,38 @@ This program is available under Apache License Version 2.0, available at https:/
               reflectToAttribute: true
             },
 
+            /**
+             * An object used to localize this component. The properties are used
+             * e.g. as the aria-label values for the editor toolbar buttons.
+             *
+             * @default {English/US}
+             */
+            i18n: {
+              type: Array,
+              value: () => {
+                return {
+                  bold: 'bold',
+                  italic: 'italic',
+                  underline: 'underline',
+                  strike: 'strike',
+                  h1: 'h1',
+                  h2: 'h2',
+                  h3: 'h3',
+                  subscript: 'subscript',
+                  superscript: 'superscript',
+                  listOrdered: 'list ordered',
+                  listBullet: 'list bullet',
+                  alignLeft: 'align left',
+                  alignCenter: 'align center',
+                  alignRight: 'align right',
+                  alignJustify: 'align justify',
+                  blockquote: 'blockquote',
+                  codeBlock: 'code block',
+                  clean: 'clean'
+                };
+              }
+            },
+
             _editor: {
               type: Object
             }
@@ -208,6 +249,24 @@ This program is available under Apache License Version 2.0, available at https:/
           return content;
         }
 
+        __announceFormatting() {
+          const timeout = 200;
+
+          const announcer = this.shadowRoot.querySelector('.announcer');
+          announcer.textContent = '';
+
+          this.__debounceAnnounceFormatting = Polymer.Debouncer.debounce(
+            this.__debounceAnnounceFormatting,
+            Polymer.Async.timeOut.after(timeout),
+            () => {
+              const formatting = Array.from(this.shadowRoot.querySelectorAll('[part="toolbar"] .ql-active'))
+                .map(button => button.getAttribute('aria-label'))
+                .join(', ');
+              announcer.textContent = formatting;
+            }
+          );
+        }
+
         ready() {
           super.ready();
 
@@ -221,11 +280,16 @@ This program is available under Apache License Version 2.0, available at https:/
             placeholder: 'Type something...'
           });
 
+          editor.firstElementChild.setAttribute('role', 'textbox');
+          editor.firstElementChild.setAttribute('aria-multiline', 'true');
+
           this._editor.on('text-change', (delta, oldDelta, source) => {
             this.__userInput = source === 'user';
             this.value = JSON.stringify(this._editor.getContents().ops);
             this.__userInput = false;
           });
+
+          this._editor.on('selection-change', this.__announceFormatting.bind(this));
         }
 
         _clear() {
