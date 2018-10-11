@@ -298,6 +298,39 @@ This program is available under Apache License Version 2.0, available at https:/
           });
 
           this._editor.on('selection-change', this.__announceFormatting.bind(this));
+
+          const buttons = this._toolbarButtons;
+
+          // Disable tabbing to all buttons but the first one
+          buttons.forEach((button, index) => index > 0 && button.setAttribute('tabindex', '-1'));
+
+          toolbar.addEventListener('keydown', e => {
+            // Use roving tab-index for the toolbar buttons
+            let index = buttons.indexOf(e.target);
+            buttons[index].setAttribute('tabindex', '-1');
+            if (e.keyCode === 39 && ++index === buttons.length) {
+              index = 0;
+            } else if (e.keyCode === 37 && --index === -1) {
+              index = buttons.length - 1;
+            }
+            buttons[index].removeAttribute('tabindex');
+            buttons[index].focus();
+
+            // Esc focuses the content
+            e.keyCode === 27 && this._editor.focus();
+          });
+
+          editor.addEventListener('keydown', e => {
+            // alt-f10 focuses a toolbar button
+            if (e.keyCode === 121 && e.altKey) {
+              toolbar.querySelector('button:not([tabindex])').focus();
+            }
+          });
+
+        }
+
+        get _toolbarButtons() {
+          return Array.from(this.shadowRoot.querySelectorAll('[part="toolbar"] button'));
         }
 
         _clear() {
@@ -317,7 +350,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _toggleToolbarDisabled(disable) {
-          const buttons = Array.from(this.shadowRoot.querySelectorAll('[part$="button"]'));
+          const buttons = this._toolbarButtons;
           if (disable) {
             buttons.forEach(btn => btn.setAttribute('disabled', 'true'));
           } else {
