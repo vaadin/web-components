@@ -10,12 +10,12 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../vaadin-license-checker/vaadin-license-checker.html">
 
 <link rel="import" href="../vendor/vaadin-quill.html">
-<link rel="import" href="vaadin-rich-text-editor-content-styles.html">
+<link rel="import" href="vaadin-rich-text-editor-styles.html">
 <link rel="import" href="vaadin-rich-text-editor-toolbar-styles.html">
 
 <dom-module id="vaadin-rich-text-editor">
   <template>
-    <style include="vaadin-rich-text-editor-content-styles vaadin-rich-text-editor-toolbar-styles">
+    <style include="vaadin-rich-text-editor-styles">
       :host {
         display: block;
       }
@@ -148,11 +148,39 @@ This program is available under Apache License Version 2.0, available at https:/
              */
             value: {
               type: String,
-              observer: '_valueChanged',
               notify: true,
               value: DEFAULT_VALUE
+            },
+
+            /**
+             * When true, the user can not modify, nor copy the editor content.
+             */
+            disabled: {
+              type: Boolean,
+              value: false,
+              reflectToAttribute: true
+            },
+
+            /**
+             * When true, the user can not modify the editor content, but can copy it.
+             */
+            readonly: {
+              type: Boolean,
+              value: false,
+              reflectToAttribute: true
+            },
+
+            _editor: {
+              type: Object
             }
           };
+        }
+
+        static get observers() {
+          return [
+            '_valueChanged(value, _editor)',
+            '_disabledChanged(disabled, readonly, _editor)'
+          ];
         }
 
         /**
@@ -204,9 +232,39 @@ This program is available under Apache License Version 2.0, available at https:/
           this._editor.deleteText(0, this._editor.getLength(), 'silent');
         }
 
-        _valueChanged(value, oldValue) {
-          // Should not do anything on initialization of the default value
-          if (!oldValue) {
+        _toggleToolbarDisabled(disable) {
+          const buttons = Array.from(this.shadowRoot.querySelectorAll('[part$="button"]'));
+          if (disable) {
+            buttons.forEach(btn => btn.setAttribute('disabled', 'true'));
+          } else {
+            buttons.forEach(btn => btn.removeAttribute('disabled'));
+          }
+        }
+
+        _disabledChanged(disabled, readonly, editor) {
+          if (disabled === undefined || readonly === undefined || editor === undefined) {
+            return;
+          }
+
+          if (disabled || readonly) {
+            editor.enable(false);
+
+            if (disabled) {
+              this._toggleToolbarDisabled(true);
+            }
+          } else {
+            editor.enable();
+
+            if (this.__oldDisabled) {
+              this._toggleToolbarDisabled(false);
+            }
+          }
+
+          this.__oldDisabled = disabled;
+        }
+
+        _valueChanged(value, editor) {
+          if (value === undefined && ! this.__oldValue || editor === undefined) {
             return;
           }
           // prevent editor contents from being reset by user input
@@ -222,18 +280,20 @@ This program is available under Apache License Version 2.0, available at https:/
           let parsedValue;
           try {
             parsedValue = JSON.parse(value);
-            if (!Array.isArray(parsedValue)) {
-              throw new Error('Incorrect value: expected JSON string with array of objects, got:', value);
+            if (Array.isArray(parsedValue)) {
+              this.__oldValue = value;
+            } else {
+              throw new Error('expected JSON string with array of objects, got: ' + value);
             }
           } catch (err) {
             // Use old value in case new one is not suitable
-            this.value = oldValue;
-            console.error('Invalid JSON structure:', err);
+            this.value = this.__oldValue;
+            console.error('Invalid value set to rich-text-editor:', err);
             return;
           }
           const delta = new Quill.imports.delta(parsedValue);
           // suppress text-change event to prevent infinite loop
-          this._editor.setContents(delta, 'silent');
+          editor.setContents(delta, 'silent');
         }
       }
 
