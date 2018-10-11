@@ -13,6 +13,20 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Disabled</h3>
+    <vaadin-demo-snippet id="rich-text-editor-basic-demos-disabled">
+      <template preserve-content>
+        <vaadin-rich-text-editor disabled></vaadin-rich-text-editor>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Read only</h3>
+    <vaadin-demo-snippet id="rich-text-editor-basic-demos-readonly">
+      <template preserve-content>
+        <vaadin-rich-text-editor readonly value='[{"insert": "Go Vaadin", "attributes": {"bold": true}}]'></vaadin-rich-text-editor>
+      </template>
+    </vaadin-demo-snippet>
+
   </template>
   <script>
     class RichTextEditorBasicDemos extends DemoReadyEventEmitter(RichTextEditorDemo(Polymer.Element)) {

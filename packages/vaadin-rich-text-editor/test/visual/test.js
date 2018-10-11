@@ -18,11 +18,13 @@ gemini.suite('vaadin-rich-text-editor', function(rootSuite) {
     .after(goToAboutBlank);
 
   ['lumo', 'material'].forEach(theme => {
-    gemini.suite(`default-tests-${theme}`, function(suite) {
-      suite
-        .setUrl(`/default.html?theme=${theme}`)
-        .setCaptureElements('#default-tests')
-        .capture(`vaadin-rich-text-editor`);
+    ['default', 'disabled', 'readonly'].forEach(state => {
+      gemini.suite(`${state}-${theme}`, function(suite) {
+        suite
+          .setUrl(`/${state}.html?theme=${theme}`)
+          .setCaptureElements(`#${state}`)
+          .capture(`vaadin-rich-text-editor`);
+      });
     });
   });
 

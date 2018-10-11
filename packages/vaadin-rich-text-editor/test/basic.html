@@ -16,6 +16,12 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="with-value">
+    <template>
+      <vaadin-rich-text-editor value='[{"insert": "Go Vaadin"}]'></vaadin-rich-text-editor>
+    </template>
+  </test-fixture>
+
   <script>
     describe('rich text editor', () => {
       'use strict';
@@ -195,6 +201,12 @@
           rte.value = '';
           expect(editor.getText()).to.equal('\n');
         });
+
+        it('should correctly parse value from attribute', () => {
+          rte = fixture('with-value');
+          editor = rte._editor;
+          expect(editor.getText()).to.equal('Go Vaadin\n');
+        });
       });
 
       describe('htmlValue', () => {
@@ -300,6 +312,66 @@
           editor.format('align', 'center');
           el = getHtml(rte.htmlValue);
           expect(el.style.textAlign).to.equal('center');
+        });
+      });
+
+      describe('disabled', () => {
+        it('should be set to false by default', () => {
+          expect(rte.disabled).to.be.false;
+        });
+
+        it('should reflect to attribute', () => {
+          rte.disabled = true;
+          expect(rte.hasAttribute('disabled')).to.be.true;
+        });
+
+        it('should invoke the editor methods', () => {
+          const spy = sinon.spy(editor, 'enable');
+          rte.disabled = true;
+          expect(spy).to.be.calledOnce;
+          expect(spy.firstCall.args[0]).to.equal(false);
+          rte.disabled = false;
+          expect(spy).to.be.calledTwice;
+          expect(spy.secondCall.args).to.have.length(0);
+        });
+
+        it('should disallow interactions with the editor', () => {
+          rte.disabled = true;
+          expect(getComputedStyle(rte).pointerEvents).to.equal('none');
+        });
+
+        it('should disable the toolbar buttons', () => {
+          const buttons = Array.from(rte.shadowRoot.querySelectorAll('[part$="button"]'));
+          rte.disabled = true;
+          expect(buttons.every(btn => btn.hasAttribute('disabled'))).to.be.true;
+          rte.disabled = false;
+          expect(buttons.every(btn => btn.hasAttribute('disabled'))).to.be.false;
+        });
+      });
+
+      describe('readonly', () => {
+        it('should be set to false by default', () => {
+          expect(rte.readonly).to.be.false;
+        });
+
+        it('should reflect to attribute', () => {
+          rte.readonly = true;
+          expect(rte.hasAttribute('readonly')).to.be.true;
+        });
+
+        it('should invoke the editor methods', () => {
+          const spy = sinon.spy(editor, 'enable');
+          rte.readonly = true;
+          expect(spy).to.be.calledOnce;
+          expect(spy.firstCall.args[0]).to.equal(false);
+          rte.readonly = false;
+          expect(spy).to.be.calledTwice;
+          expect(spy.secondCall.args).to.have.length(0);
+        });
+
+        it('should hide the toolbar', () => {
+          rte.readonly = true;
+          expect(getComputedStyle(rte.shadowRoot.querySelector('[part="toolbar"]')).display).to.equal('none');
         });
       });
     });
