@@ -1,0 +1,87 @@
+<dom-module id="form-layout-form-item-demos">
+  <template>
+    <style include="vaadin-component-demo-shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+
+
+    <h3>Form Item</h3>
+    <p>
+      Any content can be used in the <code>&lt;vaadin-form-item&gt;</code> element. For instance,
+      you can add multiple input elements with surrounding text. The label can be any element.
+    </p>
+    <vaadin-demo-snippet id="form-layout-basic-demos-basic-usage">
+      <template preserve-content>
+        <vaadin-form-layout>
+
+          <vaadin-form-item>
+            <label slot="label">First Name</label>
+            <input class="full-width" value="Jane">
+          </vaadin-form-item>
+
+          <vaadin-form-item>
+            <label slot="label">Last Name</label>
+            <input class="full-width" value="Doe">
+          </vaadin-form-item>
+
+          <vaadin-form-item>
+            <label slot="label">Email</label>
+            <input class="full-width" value="jane.doe@example.com">
+          </vaadin-form-item>
+
+          <vaadin-form-item>
+            <span slot="label">Date of Birth</span>
+            <input placeholder="YYYY" size="4"> -
+            <input placeholder="MM" size="2"> -
+            <input placeholder="DD" size="2"><br>
+          </vaadin-form-item>
+
+        </vaadin-form-layout>
+      </template>
+    </vaadin-demo-snippet>
+
+    <p>
+      <strong>Note:</strong> in order to make <code>&lt;textarea&gt;</code> vertically
+      aligned with the <code>&lt;vaadin-form-item&gt;</code> label, add
+      <code style="white-space: nowrap;">textarea { vertical-align: top; display: inline-flex; }</code> to your CSS.
+    </p>
+
+    <vaadin-demo-snippet id="form-layout-basic-demos-textarea">
+      <template preserve-content>
+        <vaadin-form-layout>
+
+          <vaadin-form-item colspan="2">
+            <label slot="label">Conference Abstract</label>
+            <textarea rows="6" class="full-width" style="display: inline-flex; vertical-align: top;"></textarea>
+          </vaadin-form-item>
+
+        </vaadin-form-layout>
+      </template>
+    </vaadin-demo-snippet>
+
+    <p>The label is optional and can be omitted:</p>
+
+    <vaadin-demo-snippet id="form-layout-basic-demos-no-label">
+      <template preserve-content>
+        <vaadin-form-layout>
+
+          <vaadin-form-item>
+            <input type="checkbox"> Subscribe to our Newsletter
+          </vaadin-form-item>
+
+        </vaadin-form-layout>
+      </template>
+    </vaadin-demo-snippet>
+
+  </template>
+  <script>
+    class FormLayoutFormItemDemos extends DemoReadyEventEmitter(FormLayoutDemo(Polymer.Element)) {
+      static get is() {
+        return 'form-layout-form-item-demos';
+      }
+    }
+    customElements.define(FormLayoutFormItemDemos.is, FormLayoutFormItemDemos);
+  </script>
+</dom-module>
