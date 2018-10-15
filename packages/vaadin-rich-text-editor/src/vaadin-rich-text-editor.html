@@ -255,7 +255,12 @@ This program is available under Apache License Version 2.0, available at https:/
 
             _editor: {
               type: Object
-            }
+            },
+
+            /**
+             * Stores old value
+             */
+            __oldValue: String
           };
         }
 
@@ -264,6 +269,78 @@ This program is available under Apache License Version 2.0, available at https:/
             '_valueChanged(value, _editor)',
             '_disabledChanged(disabled, readonly, _editor)'
           ];
+        }
+
+        ready() {
+          super.ready();
+
+          const editor = this.shadowRoot.querySelector('[part="content"]');
+          const toolbar = this.shadowRoot.querySelector('[part="toolbar"]');
+
+          this._editor = new Quill(editor, {
+            modules: {
+              toolbar: toolbar
+            }
+          });
+
+          editor.firstElementChild.setAttribute('role', 'textbox');
+          editor.firstElementChild.setAttribute('aria-multiline', 'true');
+
+          this._editor.on('text-change', (delta, oldDelta, source) => {
+            const timeout = 200;
+            this.__debounceSetValue = Polymer.Debouncer.debounce(
+              this.__debounceSetValue,
+              Polymer.Async.timeOut.after(timeout),
+              () => {
+                this.__userInput = source === 'user';
+                this.value = JSON.stringify(this._editor.getContents().ops);
+                this.__userInput = false;
+              }
+            );
+          });
+
+          const editorContent = this.shadowRoot.querySelector('.ql-editor');
+          editorContent.addEventListener('blur', this.__emitChangeEvent.bind(this));
+
+          this._editor.on('selection-change', this.__announceFormatting.bind(this));
+
+          const buttons = this._toolbarButtons;
+
+          // Disable tabbing to all buttons but the first one
+          buttons.forEach((button, index) => index > 0 && button.setAttribute('tabindex', '-1'));
+
+          toolbar.addEventListener('keydown', e => {
+            // Use roving tab-index for the toolbar buttons
+            let index = buttons.indexOf(e.target);
+            buttons[index].setAttribute('tabindex', '-1');
+            if (e.keyCode === 39 && ++index === buttons.length) {
+              index = 0;
+            } else if (e.keyCode === 37 && --index === -1) {
+              index = buttons.length - 1;
+            }
+            buttons[index].removeAttribute('tabindex');
+            buttons[index].focus();
+
+            // Esc focuses the content
+            e.keyCode === 27 && this._editor.focus();
+          });
+
+          editor.addEventListener('keydown', e => {
+            // alt-f10 focuses a toolbar button
+            if (e.keyCode === 121 && e.altKey) {
+              toolbar.querySelector('button:not([tabindex])').focus();
+            }
+          });
+
+        }
+
+        __emitChangeEvent() {
+          this.__debounceSetValue && this.__debounceSetValue.flush();
+
+          if (this.__oldValue !== this.value) {
+            this.dispatchEvent(new CustomEvent('change', {bubbles: true, cancelable: false}));
+            this.__oldValue = this.value;
+          }
         }
 
         __updateHtmlValue() {
@@ -303,66 +380,6 @@ This program is available under Apache License Version 2.0, available at https:/
               announcer.textContent = formatting;
             }
           );
-        }
-
-        ready() {
-          super.ready();
-
-          const editor = this.shadowRoot.querySelector('[part="content"]');
-          const toolbar = this.shadowRoot.querySelector('[part="toolbar"]');
-
-          this._editor = new Quill(editor, {
-            modules: {
-              toolbar: toolbar
-            }
-          });
-
-          editor.firstElementChild.setAttribute('role', 'textbox');
-          editor.firstElementChild.setAttribute('aria-multiline', 'true');
-
-          this._editor.on('text-change', (delta, oldDelta, source) => {
-            const timeout = 200;
-            this.__debounceSetValue = Polymer.Debouncer.debounce(
-              this.__debounceSetValue,
-              Polymer.Async.timeOut.after(timeout),
-              () => {
-                this.__userInput = source === 'user';
-                this.value = JSON.stringify(this._editor.getContents().ops);
-                this.__userInput = false;
-              }
-            );
-          });
-
-          this._editor.on('selection-change', this.__announceFormatting.bind(this));
-
-          const buttons = this._toolbarButtons;
-
-          // Disable tabbing to all buttons but the first one
-          buttons.forEach((button, index) => index > 0 && button.setAttribute('tabindex', '-1'));
-
-          toolbar.addEventListener('keydown', e => {
-            // Use roving tab-index for the toolbar buttons
-            let index = buttons.indexOf(e.target);
-            buttons[index].setAttribute('tabindex', '-1');
-            if (e.keyCode === 39 && ++index === buttons.length) {
-              index = 0;
-            } else if (e.keyCode === 37 && --index === -1) {
-              index = buttons.length - 1;
-            }
-            buttons[index].removeAttribute('tabindex');
-            buttons[index].focus();
-
-            // Esc focuses the content
-            e.keyCode === 27 && this._editor.focus();
-          });
-
-          editor.addEventListener('keydown', e => {
-            // alt-f10 focuses a toolbar button
-            if (e.keyCode === 121 && e.altKey) {
-              toolbar.querySelector('button:not([tabindex])').focus();
-            }
-          });
-
         }
 
         get _toolbarButtons() {
@@ -489,6 +506,12 @@ This program is available under Apache License Version 2.0, available at https:/
           editor.setContents(delta, 'silent');
           this.__updateHtmlValue();
         }
+
+        /**
+         * Fired when the user commits a value change.
+         *
+         * @event change
+         */
       }
 
       customElements.define(RichTextEditorElement.is, RichTextEditorElement);

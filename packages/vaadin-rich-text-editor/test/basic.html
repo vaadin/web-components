@@ -194,6 +194,19 @@
         });
       });
 
+      describe('change event', () => {
+        it('should dispatch change event on blur event when content was changed', () => {
+          const spy = sinon.spy();
+          rte.addEventListener('change', spy);
+
+          // Emulate setting the value from keyboard
+          rte._editor.setContents(new window.Quill.imports.delta([{insert: 'Foo'}]), 'user');
+          rte.shadowRoot.querySelector('.ql-editor').dispatchEvent(new CustomEvent('blur'));
+
+          expect(spy.calledOnce).to.be.true;
+        });
+      });
+
       describe('value', () => {
         it('by default should be stringified empty "delta" of the editor', done => {
           expect(rte.value).to.be.string;
