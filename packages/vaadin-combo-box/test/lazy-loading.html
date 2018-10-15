@@ -88,6 +88,10 @@
             expect(spyDataProvider).to.be.calledOnce;
           });
 
+          it('should not throw with large size', () => {
+            expect(() => comboBox.size = 500000).not.to.throw(Error);
+          });
+
           it('should throw if set after items', () => {
             comboBox.items = ['foo'];
             function setDataProvider() {
