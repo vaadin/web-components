@@ -166,10 +166,10 @@ This program is available under Apache License Version 2.0, available at https:/
       }
       this._pendingRequests = {};
       const filteredItems = [];
-      filteredItems.length = this.size || 0;
-      this.filteredItems = new Array(...filteredItems).map(item => {
-        return new Vaadin.ComboBoxPlaceholder();
-      });
+      for (let i = 0; i < (this.size || 0); i++) {
+        filteredItems.push(new Vaadin.ComboBoxPlaceholder());
+      }
+      this.filteredItems = filteredItems;
       if (this.opened) {
         this._loadPage(0);
       }

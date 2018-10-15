@@ -594,6 +594,11 @@
               comboBox.clearCache();
               expect(spyDataProvider).to.be.not.called;
             });
+
+            it('should not throw with large size', () => {
+              comboBox.size = 500000;
+              expect(() => comboBox.clearCache()).not.to.throw(Error);
+            });
           });
 
           describe('when open', () => {
