@@ -192,6 +192,12 @@ This program is available under Apache License Version 2.0, available at https:/
               value: DEFAULT_VALUE
             },
 
+            htmlValue: {
+              type: String,
+              notify: true,
+              readOnly: true
+            },
+
             /**
              * When true, the user can not modify, nor copy the editor content.
              */
@@ -261,7 +267,7 @@ This program is available under Apache License Version 2.0, available at https:/
          * HTML representation of the rich text editor content.
          * @type {string}
          */
-        get htmlValue() {
+        __updateHtmlValue() {
           const className = 'ql-editor';
           const editor = this.shadowRoot.querySelector(`.${className}`);
           let content = editor.innerHTML;
@@ -279,7 +285,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
           content = content.replace(/ class=""/g, '');
 
-          return content;
+          this._setHtmlValue(content);
         }
 
         __announceFormatting() {
@@ -316,9 +322,16 @@ This program is available under Apache License Version 2.0, available at https:/
           editor.firstElementChild.setAttribute('aria-multiline', 'true');
 
           this._editor.on('text-change', (delta, oldDelta, source) => {
-            this.__userInput = source === 'user';
-            this.value = JSON.stringify(this._editor.getContents().ops);
-            this.__userInput = false;
+            const timeout = 200;
+            this.__debounceSetValue = Polymer.Debouncer.debounce(
+              this.__debounceSetValue,
+              Polymer.Async.timeOut.after(timeout),
+              () => {
+                this.__userInput = source === 'user';
+                this.value = JSON.stringify(this._editor.getContents().ops);
+                this.__userInput = false;
+              }
+            );
           });
 
           this._editor.on('selection-change', this.__announceFormatting.bind(this));
@@ -475,6 +488,7 @@ This program is available under Apache License Version 2.0, available at https:/
           const delta = new Quill.imports.delta(parsedValue);
           // suppress text-change event to prevent infinite loop
           editor.setContents(delta, 'silent');
+          this.__updateHtmlValue();
         }
       }
 
