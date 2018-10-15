@@ -4,16 +4,22 @@
 <dom-module id="lumo-dialog" theme-for="vaadin-dialog-overlay">
   <template>
     <style include="lumo-overlay">
-      :host {
-        /* Optical centering */
-        --_lumo-dialog-transform: translateY(calc((-100vh + 100%) / 20));
+      /* Optical centering */
+      :host::before,
+      :host::after {
+        content: "";
+        flex-basis: 0;
+        flex-grow: 1;
+      }
+
+      :host::after {
+        flex-grow: 1.1;
       }
 
       [part="overlay"] {
         box-shadow: 0 0 0 1px var(--lumo-shade-5pct), var(--lumo-box-shadow-xl);
         background-image: none;
         outline: none;
-        transform: var(--_lumo-dialog-transform);
       }
 
       [part="content"] {
@@ -34,7 +40,7 @@
       @keyframes vaadin-dialog-enter {
         0% {
           opacity: 0;
-          transform: scale(0.95) var(--_lumo-dialog-transform);
+          transform: scale(0.95);
         }
       }
 
@@ -49,7 +55,7 @@
       @keyframes vaadin-dialog-exit {
         100% {
           opacity: 0;
-          transform: scale(1.02) var(--_lumo-dialog-transform);
+          transform: scale(1.02);
         }
       }
     </style>
