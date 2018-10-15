@@ -42,50 +42,50 @@ This program is available under Apache License Version 2.0, available at https:/
     <div part="toolbar">
 
       <!-- Undo and Redo -->
-      <button type="button" part="undo-button" on-click="_undo" aria-label$="[[i18n.undo]]"></button>
-      <button type="button" part="redo-button" on-click="_redo" aria-label$="[[i18n.redo]]"></button>
+      <button type="button" part="undo-button" on-click="_undo" title$="[[i18n.undo]]"></button>
+      <button type="button" part="redo-button" on-click="_redo" title$="[[i18n.redo]]"></button>
 
       <!-- Bold -->
-      <button class="ql-bold" part="bold-button" aria-label$="[[i18n.bold]]"></button>
+      <button class="ql-bold" part="bold-button" title$="[[i18n.bold]]"></button>
 
       <!-- Italic -->
-      <button class="ql-italic" part="italic-button" aria-label$="[[i18n.italic]]"></button>
+      <button class="ql-italic" part="italic-button" title$="[[i18n.italic]]"></button>
 
       <!-- Underline -->
-      <button class="ql-underline" part="underline-button" aria-label$="[[i18n.underline]]"></button>
+      <button class="ql-underline" part="underline-button" title$="[[i18n.underline]]"></button>
 
       <!-- Strike -->
-      <button class="ql-strike" part="strike-button" aria-label$="[[i18n.strike]]"></button>
+      <button class="ql-strike" part="strike-button" title$="[[i18n.strike]]"></button>
 
       <!-- Header buttons -->
-      <button type="button" class="ql-header" value="1" part="h1-button" aria-label$="[[i18n.h1]]"></button>
-      <button type="button" class="ql-header" value="2" part="h2-button" aria-label$="[[i18n.h2]]"></button>
-      <button type="button" class="ql-header" value="3" part="h3-button" aria-label$="[[i18n.h3]]"></button>
+      <button type="button" class="ql-header" value="1" part="h1-button" title$="[[i18n.h1]]"></button>
+      <button type="button" class="ql-header" value="2" part="h2-button" title$="[[i18n.h2]]"></button>
+      <button type="button" class="ql-header" value="3" part="h3-button" title$="[[i18n.h3]]"></button>
 
       <!-- Subscript and superscript -->
-      <button class="ql-script" value="sub" part="sub-script-button" aria-label$="[[i18n.subscript]]"></button>
-      <button class="ql-script" value="super" part="super-script-button" aria-label$="[[i18n.superscript]]"></button>
+      <button class="ql-script" value="sub" part="sub-script-button" title$="[[i18n.subscript]]"></button>
+      <button class="ql-script" value="super" part="super-script-button" title$="[[i18n.superscript]]"></button>
 
       <!-- List buttons -->
-      <button type="button" class="ql-list" value="ordered" part="list-ordered-button" aria-label$="[[i18n.listOrdered]]"></button>
-      <button type="button" class="ql-list" value="bullet" part="list-bullet-button" aria-label$="[[i18n.listBullet]]"></button>
+      <button type="button" class="ql-list" value="ordered" part="list-ordered-button" title$="[[i18n.listOrdered]]"></button>
+      <button type="button" class="ql-list" value="bullet" part="list-bullet-button" title$="[[i18n.listBullet]]"></button>
 
       <!-- Align buttons -->
-      <button type="button" class="ql-align" value="" part="align-left-button" aria-label$="[[i18n.alignLeft]]"></button>
-      <button type="button" class="ql-align" value="center" part="align-center-button" aria-label$="[[i18n.alignCenter]]"></button>
-      <button type="button" class="ql-align" value="right" part="align-right-button" aria-label$="[[i18n.alignRight]]"></button>
+      <button type="button" class="ql-align" value="" part="align-left-button" title$="[[i18n.alignLeft]]"></button>
+      <button type="button" class="ql-align" value="center" part="align-center-button" title$="[[i18n.alignCenter]]"></button>
+      <button type="button" class="ql-align" value="right" part="align-right-button" title$="[[i18n.alignRight]]"></button>
 
       <!-- Blockquote -->
-      <button type="button" part="image-button" aria-label$="[[i18n.image]]" on-touchend="_onImageTouchEnd" on-click="_onImageClick"></button>
+      <button type="button" part="image-button" title$="[[i18n.image]]" on-touchend="_onImageTouchEnd" on-click="_onImageClick"></button>
 
       <!-- Blockquote -->
-      <button type="button" class="ql-blockquote" part="blockquote-button" aria-label$="[[i18n.blockquote]]"></button>
+      <button type="button" class="ql-blockquote" part="blockquote-button" title$="[[i18n.blockquote]]"></button>
 
       <!-- Code block -->
-      <button type="button" class="ql-code-block" part="code-block-button" aria-label$="[[i18n.codeBlock]]"></button>
+      <button type="button" class="ql-code-block" part="code-block-button" title$="[[i18n.codeBlock]]"></button>
 
       <!-- Clean -->
-      <button type="button" class="ql-clean" part="clean-button" aria-label$="[[i18n.clean]]"></button>
+      <button type="button" class="ql-clean" part="clean-button" title$="[[i18n.clean]]"></button>
 
       <input id="fileInput" type="file" accept="image/png, image/gif, image/jpeg, image/bmp, image/x-icon" on-change="_uploadImage">
     </div>
@@ -210,7 +210,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * An object used to localize this component. The properties are used
-             * e.g. as the aria-label values for the editor toolbar buttons.
+             * e.g. as the tooltips for the editor toolbar buttons.
              *
              * @default {English/US}
              */
@@ -291,7 +291,7 @@ This program is available under Apache License Version 2.0, available at https:/
             Polymer.Async.timeOut.after(timeout),
             () => {
               const formatting = Array.from(this.shadowRoot.querySelectorAll('[part="toolbar"] .ql-active'))
-                .map(button => button.getAttribute('aria-label'))
+                .map(button => button.getAttribute('title'))
                 .join(', ');
               announcer.textContent = formatting;
             }
