@@ -7,6 +7,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../polymer/polymer-element.html">
 <link rel="import" href="../../polymer/lib/utils/async.html">
 <link rel="import" href="../../polymer/lib/utils/debounce.html">
+<link rel="import" href="../../polymer/lib/utils/gestures.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
 <link rel="import" href="../../vaadin-license-checker/vaadin-license-checker.html">
@@ -29,6 +30,10 @@ This program is available under Apache License Version 2.0, available at https:/
       .announcer {
         position: fixed;
         clip: rect(0, 0, 0, 0);
+      }
+
+      input[type="file"] {
+        display: none;
       }
     </style>
 
@@ -71,6 +76,9 @@ This program is available under Apache License Version 2.0, available at https:/
       <button type="button" class="ql-align" value="justify" part="align-justify-button" aria-label$="[[i18n.alignJustify]]"></button>
 
       <!-- Blockquote -->
+      <button type="button" part="image-button" aria-label$="[[i18n.image]]" on-touchend="_onImageTouchEnd" on-click="_onImageClick"></button>
+
+      <!-- Blockquote -->
       <button type="button" class="ql-blockquote" part="blockquote-button" aria-label$="[[i18n.blockquote]]"></button>
 
       <!-- Code block -->
@@ -78,6 +86,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
       <!-- Clean -->
       <button type="button" class="ql-clean" part="clean-button" aria-label$="[[i18n.clean]]"></button>
+
+      <input id="fileInput" type="file" accept="image/png, image/gif, image/jpeg, image/bmp, image/x-icon" on-change="_uploadImage">
     </div>
 
     <div part="content"></div>
@@ -125,6 +135,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * `align-center-button`  | The "center align" button
        * `align-right-button`   | The "right align" button
        * `align-justify-button` | The "justify" button
+       * `image-button`         | The "image" button
        * `blockquote-button`    | The "blockquote" button
        * `code-block-button`    | The "code block" button
        * `clean-button`         | The "clean formatting" button
@@ -212,6 +223,7 @@ This program is available under Apache License Version 2.0, available at https:/
                   alignCenter: 'align center',
                   alignRight: 'align right',
                   alignJustify: 'align justify',
+                  image: 'image',
                   blockquote: 'blockquote',
                   codeBlock: 'code block',
                   clean: 'clean'
@@ -354,6 +366,46 @@ This program is available under Apache License Version 2.0, available at https:/
             buttons.forEach(btn => btn.setAttribute('disabled', 'true'));
           } else {
             buttons.forEach(btn => btn.removeAttribute('disabled'));
+          }
+        }
+
+        _onImageTouchEnd(e) {
+          // Cancel the event to avoid the following click event
+          e.preventDefault();
+          // FIXME(platosha): workaround for Polymer Gestures mouseCanceller
+          // cancelling the following synthetic click. See also:
+          // https://github.com/Polymer/polymer/issues/5289
+          this.__resetMouseCanceller();
+          this._onImageClick();
+        }
+
+        __resetMouseCanceller() {
+          Polymer.Gestures.resetMouseCanceller();
+        }
+
+        _onImageClick() {
+          this.$.fileInput.value = '';
+          this.$.fileInput.click();
+        }
+
+        _uploadImage(e) {
+          const fileInput = e.target;
+          // NOTE: copied from https://github.com/quilljs/quill/blob/1.3.6/themes/base.js#L128
+          // needs to be updated in case of switching to Quill 2.0.0
+          if (fileInput.files != null && fileInput.files[0] != null) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              const image = e.target.result;
+              const range = this._editor.getSelection(true);
+              this._editor.updateContents(new Quill.imports.delta()
+                .retain(range.index)
+                .delete(range.length)
+                .insert({image})
+              , 'user');
+              this._editor.setSelection(range.index + 1, 'silent');
+              fileInput.value = '';
+            };
+            reader.readAsDataURL(fileInput.files[0]);
           }
         }
 

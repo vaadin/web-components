@@ -5,6 +5,7 @@
   <title>vaadin-rich-text-editor tests</title>
   <script src="../../web-component-tester/browser.js"></script>
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="common.js"></script>
   <link rel="import" href="../../test-fixture/test-fixture.html">
   <link rel="import" href="../vaadin-rich-text-editor.html">
 </head>
@@ -126,6 +127,68 @@
           btn = rte.shadowRoot.querySelector('[part="clean-button"]');
           btn.click();
           expect(editor.getFormat(0)).to.be.empty.object;
+        });
+
+        describe('image', () => {
+          let btn;
+
+          beforeEach(() => {
+            btn = rte.shadowRoot.querySelector('[part="image-button"]');
+          });
+
+          it('should open file dialog when clicking the "image-button" part', () => {
+            // This test checks if the 'click' event is synchronously dispatched
+            // on the hidden file input when user clicks "Image" button. The
+            // file dialog is actually not getting opened during testing.
+            const clickSpy = sinon.spy();
+            sinon.stub(rte.$.fileInput, 'click', clickSpy);
+            btn.dispatchEvent(new MouseEvent('click'));
+            expect(clickSpy).to.be.calledOnce;
+          });
+
+          it('should open file dialog by touchend on the "image-button" part', () => {
+            const clickSpy = sinon.spy();
+            sinon.stub(rte.$.fileInput, 'click', clickSpy);
+            const e = new CustomEvent('touchend', {cancelable: true});
+            btn.dispatchEvent(e);
+            expect(clickSpy).to.be.calledOnce;
+            expect(e.defaultPrevented).to.be.true;
+          });
+
+          it('should invoke Polymer.Gestures.resetMouseCanceller before open file dialog', () => {
+            // NOTE(web-padawan): With ES modules we can’t put a spy on the actual
+            // Polymer.Gestures.resetMouseCanceller. Have to use a separate
+            // wrapper method for testing.
+            const spy = sinon.spy(rte, '__resetMouseCanceller');
+            // prevent IE11 and Edge from opening the file dialog
+            sinon.stub(rte.$.fileInput, 'click', () => {});
+            btn.dispatchEvent(new CustomEvent('touchend', {cancelable: true}));
+            expect(spy).to.be.calledOnce;
+          });
+
+          it('should insert image from the file dialog on file input change event', done => {
+            // We can't simply assign `files` property of input[type="file"].
+            // Tweaking __proto__ to make it assignable below.
+            const fileInput = rte.shadowRoot.querySelector('input[type="file"]');
+            fileInput.__proto__ = HTMLElement.prototype;
+            // Replacing __proto__ is not enough for Android Chrome, deleting the
+            // files property in addition.
+            delete fileInput.files;
+
+            rte._editor.focus();
+
+            const img = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
+            fileInput.files = [createImage(img, 'image/gif')];
+
+            rte.addEventListener('value-changed', () => {
+              const operation = JSON.parse(rte.value)[0];
+              expect(operation.insert.image).to.equal(img);
+              done();
+            });
+
+            // trigger mock image upload
+            fileInput.dispatchEvent(new Event('change'));
+          });
         });
       });
 
