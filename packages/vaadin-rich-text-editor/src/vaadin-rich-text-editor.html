@@ -95,12 +95,25 @@ This program is available under Apache License Version 2.0, available at https:/
 
       /**
        * `<vaadin-rich-text-editor>` is a Web Component for rich text editing.
+       * It provides a set of toolbar controls to apply formatting on the content,
+       * which is stored and can be accessed as HTML5 or JSON string.
        *
        * ```
        * <vaadin-rich-text-editor></vaadin-rich-text-editor>
        * ```
        *
+       * Vaadin Rich Text Editor focuses on the structure, not the styling of content.
+       * Therefore, the semantic HTML5 tags such as <h1>, <strong> and <ul> are used,
+       * and CSS usage is limited to most common cases, like horizontal text alignment.
+       *
        * ### Styling
+       *
+       * The following state attributes are available for styling:
+       *
+       * Attribute    | Description | Part name
+       * -------------|-------------|------------
+       * `disabled`   | Set to a disabled text editor | :host
+       * `readonly`   | Set to a readonly text editor | :host
        *
        * The following shadow DOM parts are available for styling:
        *
