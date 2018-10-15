@@ -107,7 +107,7 @@
           });
         });
 
-        ['center', 'right', 'justify'].forEach(align => {
+        ['center', 'right'].forEach(align => {
           it(`should apply ${align} alignment when clicking the "align-${align}-button" part`, () => {
             btn = rte.shadowRoot.querySelector(`[part="align-${align}-button"]`);
 
