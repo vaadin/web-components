@@ -140,7 +140,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
       _forwardParentProp(prop, value) {
         this._parentPathValues[prop] = value;
-        this._templateInstances.forEach(inst => inst.set(prop, value));
+        this._templateInstances.forEach(inst => inst.notifyPath(prop, value));
       }
 
       _templateInstancesChanged(t, p) {
