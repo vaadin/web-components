@@ -43,7 +43,7 @@ This program is available under Apache License Version 2.0, available at https:/
      * the column header gets an additional checkbox that can be used for toggling
      * selection for all the items at once.
      *
-     * __The default content templates can also be overridden with custom ones.__
+     * __The default content can also be overridden__
      *
      * @memberof Vaadin
      * @extends Vaadin.GridColumnElement
@@ -105,6 +105,27 @@ This program is available under Apache License Version 2.0, available at https:/
         return [
           '_onSelectAllChanged(selectAll)'
         ];
+      }
+
+      _pathOrHeaderChanged(path, header, headerCell, footerCell, cells, renderer, headerRenderer, bodyTemplate, headerTemplate) {
+        // As a special case, allow overriding the default header / body templates
+        if (cells.value && (path !== undefined || renderer !== undefined)) {
+          this._bodyTemplate = bodyTemplate = undefined;
+          this.__cleanCellsOfTemplateProperties(cells.value);
+        }
+        if (headerCell && (header !== undefined || headerRenderer !== undefined)) {
+          this._headerTemplate = headerTemplate = undefined;
+          this.__cleanCellsOfTemplateProperties([headerCell]);
+        }
+        super._pathOrHeaderChanged(path, header, headerCell, footerCell, cells, renderer, headerRenderer, bodyTemplate, headerTemplate);
+      }
+
+      __cleanCellsOfTemplateProperties(cells) {
+        cells.forEach(cell => {
+          cell._content.innerHTML = '';
+          delete cell._instance;
+          delete cell._template;
+        });
       }
 
       _prepareHeaderTemplate() {
