@@ -6,9 +6,11 @@
         border: 1px solid #ccc;
         font-family: Helvetica, Arial, sans-serif;
         font-size: 13px;
-        height: 100%;
-        min-height: 200px;
         position: relative;
+        flex: 1 1 200px;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
       }
 
       /*
@@ -40,6 +42,7 @@
         text-align: left;
         white-space: pre-wrap;
         word-wrap: break-word;
+        flex: 1;
       }
 
       .ql-editor > * {
