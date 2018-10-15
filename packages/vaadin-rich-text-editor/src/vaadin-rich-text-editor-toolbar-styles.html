@@ -6,8 +6,7 @@
       [part="toolbar"] {
         display: flex;
         flex-wrap: wrap;
-        border: 1px solid #ccc;
-        border-bottom: none;
+        border-bottom: 1px solid #ccc;
         padding: 8px;
         flex-shrink: 0;
       }
@@ -15,14 +14,17 @@
       [part$="button"] {
         display: block;
         box-sizing: border-box;
-        margin: 2px 2px 0;
+        position: relative;
+        margin: 2px;
         width: 28px;
         height: 28px;
         padding: 2px;
-        background: none;
+        font-size: 100%;
+        text-transform: none;
+        background: transparent;
         border: none;
         text-align: center;
-        color: rgba(0, 0, 0, 0.6);
+        color: #777;
         border-radius: 2px;
         box-shadow: none;
         cursor: pointer;
@@ -40,9 +42,11 @@
 
       [part$="button"]::before {
         display: block;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translateX(-50%) translateY(-50%);
         font-size: 24px;
-        line-height: 24px;
-        opacity: 0.87;
         font-family: "vaadin-rte-icons";
       }
     </style>
