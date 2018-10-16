@@ -312,6 +312,12 @@
           expect(rte.htmlValue).to.equal('<p><br></p>');
         });
 
+        it('should be updated from user input to Quill', () => {
+          editor.insertText(0, 'Foo', 'user');
+          flushValueDebouncer();
+          expect(rte.htmlValue).to.be.eql('<p>Foo</p>');
+        });
+
         it('should be read only property', () => {
           rte.htmlValue = '<h1>Foo</h1>';
           expect(rte.htmlValue).not.to.be.eql('<h1>Foo</h1>');

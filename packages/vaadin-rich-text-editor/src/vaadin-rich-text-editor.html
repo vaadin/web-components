@@ -477,6 +477,8 @@ This program is available under Apache License Version 2.0, available at https:/
           if (value === undefined && ! this.__oldValue || editor === undefined) {
             return;
           }
+
+          this.__updateHtmlValue();
           // prevent editor contents from being reset by user input
           if (this.__userInput) {
             return;
@@ -504,7 +506,6 @@ This program is available under Apache License Version 2.0, available at https:/
           const delta = new Quill.imports.delta(parsedValue);
           // suppress text-change event to prevent infinite loop
           editor.setContents(delta, 'silent');
-          this.__updateHtmlValue();
         }
 
         /**
