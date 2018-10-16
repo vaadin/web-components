@@ -40,6 +40,44 @@
     </template>
   </test-fixture>
 
+  <dom-module id="x-wrapper">
+    <template>
+      <vaadin-overlay opened="[[opened]]">
+        <template>
+          Overlay content
+        </template>
+      </vaadin-overlay>
+    </template>
+  </dom-module>
+  <script>
+    customElements.whenDefined('vaadin-overlay').then(() => {
+      customElements.define('x-wrapper', class extends Polymer.Element {
+        static get is() {
+          return 'x-wrapper';
+        }
+        static get properties() {
+          return {
+            opened: Boolean
+          };
+        }
+      });
+    });
+  </script>
+
+  <test-fixture id="wrapped">
+    <template>
+      <div>
+        <div id="parent">
+          <vaadin-overlay>
+            <template>
+              <x-wrapper></x-wrapper>
+            </template>
+          </vaadin-overlay>
+        </div>
+      </div>
+    </template>
+  </test-fixture>
+
   <script>
     const fire = (type, el) =>
       el.dispatchEvent(new CustomEvent(type, {bubbles: true, cancelable: true, composed: true}));
@@ -387,7 +425,7 @@
         click(parent);
       });
 
-      it('should have a click lisneter', () => {
+      it('should have a click listener', () => {
         // Having at least one mouse event listener is needed for iOS
         // to enable mouse events dispatching.
 
@@ -507,6 +545,30 @@
           });
         });
       }
+    });
+
+    describe('wrapped overlay', function() {
+      var overlay, parent, content;
+
+      beforeEach(function() {
+        parent = fixture('wrapped').children[0];
+        overlay = parent.children[0];
+        overlay._observer.flush();
+        content = overlay.content;
+        overlay.opened = true;
+      });
+
+      afterEach(() => {
+        overlay.opened = false;
+      });
+
+      it('should not exit modal state when opened changes from undefined to false', () => {
+        const wrapper = content.querySelector('x-wrapper');
+        const inner = wrapper.shadowRoot.querySelector('vaadin-overlay');
+        const spy = sinon.spy(inner, '_exitModalState');
+        wrapper.opened = false;
+        expect(spy).to.not.be.called;
+      });
     });
   </script>
 </body>

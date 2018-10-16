@@ -237,6 +237,7 @@ This program is available under Apache License Version 2.0, available at https:/
           opened: {
             type: Boolean,
             notify: true,
+            observer: '_openedChanged',
             reflectToAttribute: true
           },
 
@@ -345,7 +346,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
       static get observers() {
         return [
-          '_openedChanged(opened)',
           '_templateOrRendererChanged(template, renderer, owner, model, instanceProps, opened)'
         ];
       }
@@ -521,7 +521,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * @event vaadin-overlay-open
        * fired after the `vaadin-overlay` is opened.
        */
-      _openedChanged(opened) {
+      _openedChanged(opened, wasOpened) {
         if (!this._instance) {
           this._ensureTemplatized();
         }
@@ -541,7 +541,7 @@ This program is available under Apache License Version 2.0, available at https:/
           if (!this.modeless) {
             this._enterModalState();
           }
-        } else {
+        } else if (wasOpened) {
           this._animatedClosing();
           this._exitModalState();
         }
