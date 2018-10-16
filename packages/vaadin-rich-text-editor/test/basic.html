@@ -205,6 +205,19 @@
 
           expect(spy.calledOnce).to.be.true;
         });
+
+        it('should dispatch change event after styling the content with toolbar', () => {
+          const spy = sinon.spy();
+          rte.addEventListener('change', spy);
+
+          // Emulate using the toolbar: removing focus from editor and applying styling after that.
+          rte.value = JSON.stringify([{insert: 'Foo'}]);
+          rte.shadowRoot.querySelector('.ql-editor').dispatchEvent(new CustomEvent('blur'));
+          rte._editor.formatText(0, 3, 'bold', true, 'user');
+
+          expect(rte.__wasBlurred).to.be.false;
+          expect(spy.calledOnce).to.be.true;
+        });
       });
 
       describe('value', () => {

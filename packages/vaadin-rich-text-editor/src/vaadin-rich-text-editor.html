@@ -297,10 +297,15 @@ This program is available under Apache License Version 2.0, available at https:/
                 this.__userInput = false;
               }
             );
+            this.__wasBlurred && this.__emitChangeEvent();
+            this.__wasBlurred = false;
           });
 
           const editorContent = this.shadowRoot.querySelector('.ql-editor');
-          editorContent.addEventListener('blur', this.__emitChangeEvent.bind(this));
+          editorContent.addEventListener('blur', () => {
+            this.__wasBlurred = true;
+            this.__emitChangeEvent();
+          });
 
           this._editor.on('selection-change', this.__announceFormatting.bind(this));
 
