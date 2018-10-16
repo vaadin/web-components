@@ -218,6 +218,19 @@
           expect(rte.__wasBlurred).to.be.false;
           expect(spy.calledOnce).to.be.true;
         });
+
+        it('should not be dispatched on first text-change event after blurring the rte', () => {
+          const spy = sinon.spy();
+          rte.addEventListener('change', spy);
+
+          // Emulate typing to the editor, focusing smth outside the editor and then typing again.
+          rte._editor.setContents(new window.Quill.imports.delta([{insert: 'Foo'}]), 'user');
+          rte.shadowRoot.querySelector('.ql-editor').dispatchEvent(new CustomEvent('blur'));
+          rte.dispatchEvent(new CustomEvent('focusout'));
+          rte._editor.setContents(new window.Quill.imports.delta([{insert: 'Foo Bar'}]), 'user');
+
+          expect(spy.calledOnce).to.be.true;
+        });
       });
 
       describe('value', () => {
@@ -328,6 +341,11 @@
         it('should be updated from user input to Quill', () => {
           editor.insertText(0, 'Foo', 'user');
           flushValueDebouncer();
+          expect(rte.htmlValue).to.be.eql('<p>Foo</p>');
+        });
+
+        it('should be updated on value property change', () => {
+          rte.value = JSON.stringify([{insert: 'Foo'}]);
           expect(rte.htmlValue).to.be.eql('<p>Foo</p>');
         });
 

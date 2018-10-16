@@ -292,9 +292,8 @@ This program is available under Apache License Version 2.0, available at https:/
               this.__debounceSetValue,
               Polymer.Async.timeOut.after(timeout),
               () => {
-                this.__userInput = source === 'user';
                 this.value = JSON.stringify(this._editor.getContents().ops);
-                this.__userInput = false;
+                this.__userInput = source === 'user';
               }
             );
             this.__wasBlurred && this.__emitChangeEvent();
@@ -306,6 +305,8 @@ This program is available under Apache License Version 2.0, available at https:/
             this.__wasBlurred = true;
             this.__emitChangeEvent();
           });
+
+          this.addEventListener('focusout', () => this.__wasBlurred = false);
 
           this._editor.on('selection-change', this.__announceFormatting.bind(this));
 
@@ -342,9 +343,9 @@ This program is available under Apache License Version 2.0, available at https:/
         __emitChangeEvent() {
           this.__debounceSetValue && this.__debounceSetValue.flush();
 
-          if (this.__oldValue !== this.value) {
+          if (this.__userInput) {
             this.dispatchEvent(new CustomEvent('change', {bubbles: true, cancelable: false}));
-            this.__oldValue = this.value;
+            this.__userInput = false;
           }
         }
 
@@ -483,11 +484,6 @@ This program is available under Apache License Version 2.0, available at https:/
             return;
           }
 
-          this.__updateHtmlValue();
-          // prevent editor contents from being reset by user input
-          if (this.__userInput) {
-            return;
-          }
           if (value == null || value === '') {
             this.value = DEFAULT_VALUE;
             this._clear();
@@ -510,7 +506,10 @@ This program is available under Apache License Version 2.0, available at https:/
           }
           const delta = new Quill.imports.delta(parsedValue);
           // suppress text-change event to prevent infinite loop
-          editor.setContents(delta, 'silent');
+          if (JSON.stringify(editor.getContents()) !== JSON.stringify(delta)) {
+            editor.setContents(delta, 'silent');
+          }
+          this.__updateHtmlValue();
         }
 
         /**
