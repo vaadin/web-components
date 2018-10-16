@@ -441,6 +441,23 @@
             expect(comboBox.selectedItem).to.eql({id: 0, value: 'value 0', label: 'label 0'});
           });
 
+          it('should not mark placeholders selected when items are loading', () => {
+            comboBox.itemIdPath = 'key';
+            comboBox.dataProvider = (p, c) => {
+              if (!comboBox.dataProvider.__jammed) {
+                c([{key: 0, label: 'foo'}], 1);
+              }
+              comboBox.dataProvider.__jammed = true;
+            };
+            comboBox.opened = true;
+            comboBox.opened = false;
+            comboBox.clearCache();
+            comboBox.opened = true;
+
+            const selected = comboBox.$.overlay._selector.querySelectorAll('[selected]');
+            expect(selected).to.be.empty;
+          });
+
           it('should set matching selectedItem when items are loaded', () => {
             comboBox.opened = true; // loads first page of dataProvider items
             comboBox.$.overlay.updateViewportBoundaries();
