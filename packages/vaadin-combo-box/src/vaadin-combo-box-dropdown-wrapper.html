@@ -249,7 +249,9 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       _isItemSelected(item, selectedItem, itemIdPath) {
-        if (itemIdPath && item !== undefined && selectedItem !== undefined) {
+        if (item instanceof Vaadin.ComboBoxPlaceholder) {
+          return false;
+        } else if (itemIdPath && item !== undefined && selectedItem !== undefined) {
           return this.get(itemIdPath, item) === this.get(itemIdPath, selectedItem);
         } else {
           return item === selectedItem;
