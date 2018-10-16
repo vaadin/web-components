@@ -27,6 +27,8 @@
     describe('rich text editor', () => {
       'use strict';
 
+      const flushValueDebouncer = () => rte.__debounceSetValue && rte.__debounceSetValue.flush();
+
       let rte, editor;
 
       beforeEach(() => {
@@ -192,6 +194,32 @@
         });
       });
 
+      describe('change event', () => {
+        it('should dispatch change event on blur event when content was changed', () => {
+          const spy = sinon.spy();
+          rte.addEventListener('change', spy);
+
+          // Emulate setting the value from keyboard
+          rte._editor.setContents(new window.Quill.imports.delta([{insert: 'Foo'}]), 'user');
+          rte.shadowRoot.querySelector('.ql-editor').dispatchEvent(new CustomEvent('blur'));
+
+          expect(spy.calledOnce).to.be.true;
+        });
+
+        it('should dispatch change event after styling the content with toolbar', () => {
+          const spy = sinon.spy();
+          rte.addEventListener('change', spy);
+
+          // Emulate using the toolbar: removing focus from editor and applying styling after that.
+          rte.value = JSON.stringify([{insert: 'Foo'}]);
+          rte.shadowRoot.querySelector('.ql-editor').dispatchEvent(new CustomEvent('blur'));
+          rte._editor.formatText(0, 3, 'bold', true, 'user');
+
+          expect(rte.__wasBlurred).to.be.false;
+          expect(spy.calledOnce).to.be.true;
+        });
+      });
+
       describe('value', () => {
         it('by default should be stringified empty "delta" of the editor', done => {
           expect(rte.value).to.be.string;
@@ -275,6 +303,18 @@
       describe('htmlValue', () => {
         let el;
 
+        function setValueAndFormatLine(format, value = true) {
+          rte.value = JSON.stringify([{insert: 'Foo'}]);
+          editor.formatLine(0, 1, format, value);
+          flushValueDebouncer();
+        }
+
+        function setValueAndFormatText(format, value = true) {
+          rte.value = JSON.stringify([{insert: 'Foo'}]);
+          editor.formatText(0, 3, format, value);
+          flushValueDebouncer();
+        }
+
         const getHtml = htmlValue => {
           const div = document.createElement('div');
           div.innerHTML = rte.htmlValue;
@@ -285,8 +325,15 @@
           expect(rte.htmlValue).to.equal('<p><br></p>');
         });
 
-        it('should be read only getter', () => {
-          expect(() => rte.htmlValue = '<h1>Hack</h1>').to.throw(TypeError);
+        it('should be updated from user input to Quill', () => {
+          editor.insertText(0, 'Foo', 'user');
+          flushValueDebouncer();
+          expect(rte.htmlValue).to.be.eql('<p>Foo</p>');
+        });
+
+        it('should be read only property', () => {
+          rte.htmlValue = '<h1>Foo</h1>';
+          expect(rte.htmlValue).not.to.be.eql('<h1>Foo</h1>');
         });
 
         it('should use <p> tag to wrap inline text', () => {
@@ -297,82 +344,82 @@
         });
 
         it('should use <strong> tag for bold formatting', () => {
-          editor.format('bold', true);
+          setValueAndFormatText('bold');
           el = getHtml(rte.htmlValue).firstChild;
           expect(el.localName).to.equal('strong');
         });
 
         it('should use <em> tag for italic formatting', () => {
-          editor.format('italic', true);
+          setValueAndFormatText('italic');
           el = getHtml(rte.htmlValue).firstChild;
           expect(el.localName).to.equal('em');
         });
 
         it('should use <u> tag for underline formatting', () => {
-          editor.format('underline', true);
+          setValueAndFormatText('underline');
           el = getHtml(rte.htmlValue).firstChild;
           expect(el.localName).to.equal('u');
         });
 
         it('should use <s> tag for strike formatting', () => {
-          editor.format('strike', true);
+          setValueAndFormatText('strike');
           el = getHtml(rte.htmlValue).firstChild;
           expect(el.localName).to.equal('s');
         });
 
         it('should use <h1> tag for level 1 header', () => {
-          editor.format('header', 1);
+          setValueAndFormatLine('header', 1);
           el = getHtml(rte.htmlValue);
           expect(el.localName).to.equal('h1');
         });
 
         it('should use <h2> tag for level 2 header', () => {
-          editor.format('header', 2);
+          setValueAndFormatLine('header', 2);
           el = getHtml(rte.htmlValue);
           expect(el.localName).to.equal('h2');
         });
 
         it('should use <sub> tag for sub-script', () => {
-          editor.format('script', 'sub');
+          setValueAndFormatText('script', 'sub');
           el = getHtml(rte.htmlValue);
           expect(el.firstChild.localName).to.equal('sub');
         });
 
         it('should use <sup> tag for super-script', () => {
-          editor.format('script', 'super');
+          setValueAndFormatText('script', 'super');
           el = getHtml(rte.htmlValue);
           expect(el.firstChild.localName).to.equal('sup');
         });
 
         it('should use <ol> tag for ordered list', () => {
-          editor.format('list', 'ordered');
+          setValueAndFormatLine('list', 'ordered');
           el = getHtml(rte.htmlValue);
           expect(el.localName).to.equal('ol');
           expect(el.firstChild.localName).to.equal('li');
         });
 
         it('should use <ul> tag for bullet list', () => {
-          editor.format('list', 'bullet');
+          setValueAndFormatLine('list', 'bullet');
           el = getHtml(rte.htmlValue);
           expect(el.localName).to.equal('ul');
           expect(el.firstChild.localName).to.equal('li');
         });
 
         it('should use <blockquote> tag for quote', () => {
-          editor.format('blockquote', true);
+          setValueAndFormatLine('blockquote');
           el = getHtml(rte.htmlValue);
           expect(el.localName).to.equal('blockquote');
         });
 
         it('should use <pre> tag for code block', () => {
-          editor.format('code-block', true);
+          setValueAndFormatLine('code-block');
           el = getHtml(rte.htmlValue);
           expect(el.localName).to.equal('pre');
           expect(el.className).to.equal('');
         });
 
         it('should use inline styles for text alignment', () => {
-          editor.format('align', 'center');
+          setValueAndFormatLine('align', 'center');
           el = getHtml(rte.htmlValue);
           expect(el.style.textAlign).to.equal('center');
         });

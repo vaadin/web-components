@@ -193,6 +193,15 @@ This program is available under Apache License Version 2.0, available at https:/
             },
 
             /**
+             * HTML representation of the rich text editor content.
+             */
+            htmlValue: {
+              type: String,
+              notify: true,
+              readOnly: true
+            },
+
+            /**
              * When true, the user can not modify, nor copy the editor content.
              */
             disabled: {
@@ -246,7 +255,12 @@ This program is available under Apache License Version 2.0, available at https:/
 
             _editor: {
               type: Object
-            }
+            },
+
+            /**
+             * Stores old value
+             */
+            __oldValue: String
           };
         }
 
@@ -255,49 +269,6 @@ This program is available under Apache License Version 2.0, available at https:/
             '_valueChanged(value, _editor)',
             '_disabledChanged(disabled, readonly, _editor)'
           ];
-        }
-
-        /**
-         * HTML representation of the rich text editor content.
-         * @type {string}
-         */
-        get htmlValue() {
-          const className = 'ql-editor';
-          const editor = this.shadowRoot.querySelector(`.${className}`);
-          let content = editor.innerHTML;
-
-          // Remove style-scoped classes that are appended when ShadyDOM is enabled
-          Array.from(editor.classList).forEach(c => content = content.replace(new RegExp('\\s*' + c, 'g'), ''));
-
-          // Remove Quill classes, e.g. ql-syntax, except for align
-          content = content.replace(/\s*ql-(?!align)[\w\-]*\s*/g, '');
-
-          // Replace Quill align classes with inline styles
-          ['right', 'center', 'justify'].forEach(align => {
-            content = content.replace(new RegExp(` class=[\\\\]?"\\s?ql-align-${align}[\\\\]?"`, 'g'), ` style="text-align: ${align}"`);
-          });
-
-          content = content.replace(/ class=""/g, '');
-
-          return content;
-        }
-
-        __announceFormatting() {
-          const timeout = 200;
-
-          const announcer = this.shadowRoot.querySelector('.announcer');
-          announcer.textContent = '';
-
-          this.__debounceAnnounceFormatting = Polymer.Debouncer.debounce(
-            this.__debounceAnnounceFormatting,
-            Polymer.Async.timeOut.after(timeout),
-            () => {
-              const formatting = Array.from(this.shadowRoot.querySelectorAll('[part="toolbar"] .ql-active'))
-                .map(button => button.getAttribute('title'))
-                .join(', ');
-              announcer.textContent = formatting;
-            }
-          );
         }
 
         ready() {
@@ -316,9 +287,24 @@ This program is available under Apache License Version 2.0, available at https:/
           editor.firstElementChild.setAttribute('aria-multiline', 'true');
 
           this._editor.on('text-change', (delta, oldDelta, source) => {
-            this.__userInput = source === 'user';
-            this.value = JSON.stringify(this._editor.getContents().ops);
-            this.__userInput = false;
+            const timeout = 200;
+            this.__debounceSetValue = Polymer.Debouncer.debounce(
+              this.__debounceSetValue,
+              Polymer.Async.timeOut.after(timeout),
+              () => {
+                this.__userInput = source === 'user';
+                this.value = JSON.stringify(this._editor.getContents().ops);
+                this.__userInput = false;
+              }
+            );
+            this.__wasBlurred && this.__emitChangeEvent();
+            this.__wasBlurred = false;
+          });
+
+          const editorContent = this.shadowRoot.querySelector('.ql-editor');
+          editorContent.addEventListener('blur', () => {
+            this.__wasBlurred = true;
+            this.__emitChangeEvent();
           });
 
           this._editor.on('selection-change', this.__announceFormatting.bind(this));
@@ -351,6 +337,54 @@ This program is available under Apache License Version 2.0, available at https:/
             }
           });
 
+        }
+
+        __emitChangeEvent() {
+          this.__debounceSetValue && this.__debounceSetValue.flush();
+
+          if (this.__oldValue !== this.value) {
+            this.dispatchEvent(new CustomEvent('change', {bubbles: true, cancelable: false}));
+            this.__oldValue = this.value;
+          }
+        }
+
+        __updateHtmlValue() {
+          const className = 'ql-editor';
+          const editor = this.shadowRoot.querySelector(`.${className}`);
+          let content = editor.innerHTML;
+
+          // Remove style-scoped classes that are appended when ShadyDOM is enabled
+          Array.from(editor.classList).forEach(c => content = content.replace(new RegExp('\\s*' + c, 'g'), ''));
+
+          // Remove Quill classes, e.g. ql-syntax, except for align
+          content = content.replace(/\s*ql-(?!align)[\w\-]*\s*/g, '');
+
+          // Replace Quill align classes with inline styles
+          ['right', 'center', 'justify'].forEach(align => {
+            content = content.replace(new RegExp(` class=[\\\\]?"\\s?ql-align-${align}[\\\\]?"`, 'g'), ` style="text-align: ${align}"`);
+          });
+
+          content = content.replace(/ class=""/g, '');
+
+          this._setHtmlValue(content);
+        }
+
+        __announceFormatting() {
+          const timeout = 200;
+
+          const announcer = this.shadowRoot.querySelector('.announcer');
+          announcer.textContent = '';
+
+          this.__debounceAnnounceFormatting = Polymer.Debouncer.debounce(
+            this.__debounceAnnounceFormatting,
+            Polymer.Async.timeOut.after(timeout),
+            () => {
+              const formatting = Array.from(this.shadowRoot.querySelectorAll('[part="toolbar"] .ql-active'))
+                .map(button => button.getAttribute('title'))
+                .join(', ');
+              announcer.textContent = formatting;
+            }
+          );
         }
 
         get _toolbarButtons() {
@@ -448,6 +482,8 @@ This program is available under Apache License Version 2.0, available at https:/
           if (value === undefined && ! this.__oldValue || editor === undefined) {
             return;
           }
+
+          this.__updateHtmlValue();
           // prevent editor contents from being reset by user input
           if (this.__userInput) {
             return;
@@ -476,6 +512,12 @@ This program is available under Apache License Version 2.0, available at https:/
           // suppress text-change event to prevent infinite loop
           editor.setContents(delta, 'silent');
         }
+
+        /**
+         * Fired when the user commits a value change.
+         *
+         * @event change
+         */
       }
 
       customElements.define(RichTextEditorElement.is, RichTextEditorElement);
