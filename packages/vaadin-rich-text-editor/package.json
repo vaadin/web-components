@@ -20,6 +20,7 @@
   "files": [
     "vaadin-*.js",
     "src",
+    "vendor",
     "theme"
   ],
   "scripts": {
