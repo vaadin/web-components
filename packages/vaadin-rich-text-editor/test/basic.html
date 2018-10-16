@@ -504,6 +504,15 @@
           expect(editor.getText()).to.equal('Foo\n');
         });
       });
+
+      describe('shadow selection polyfill', () => {
+        it('should return correct selection when `quill.format` is called', () => {
+          rte.value = JSON.stringify([{insert: 'Foo'}]);
+          editor.setSelection(0, 3);
+          editor.format('bold', true);
+          expect(editor.getSelection().length).to.equal(3);
+        });
+      });
     });
   </script>
 </body>
