@@ -331,6 +331,11 @@
           expect(rte.htmlValue).to.be.eql('<p>Foo</p>');
         });
 
+        it('should be updated on value property change', () => {
+          rte.value = JSON.stringify([{insert: 'Foo'}]);
+          expect(rte.htmlValue).to.be.eql('<p>Foo</p>');
+        });
+
         it('should be read only property', () => {
           rte.htmlValue = '<h1>Foo</h1>';
           expect(rte.htmlValue).not.to.be.eql('<h1>Foo</h1>');
