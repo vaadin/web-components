@@ -3,9 +3,6 @@
     <style>
       [part="content"] {
         box-sizing: border-box;
-        border: 1px solid #ccc;
-        font-family: Helvetica, Arial, sans-serif;
-        font-size: 13px;
         position: relative;
         flex: 1 1 200px;
         display: flex;
@@ -36,7 +33,7 @@
         height: 100%;
         outline: none;
         overflow-y: auto;
-        padding: 12px 15px;
+        padding: 0.75em 1em;
         tab-size: 4;
         -moz-tab-size: 4;
         text-align: left;
@@ -47,16 +44,6 @@
 
       .ql-editor > * {
         cursor: text;
-      }
-
-      .ql-editor.ql-blank::before {
-        color: rgba(0, 0, 0, 0.6);
-        content: attr(data-placeholder);
-        font-style: italic;
-        left: 15px;
-        pointer-events: none;
-        position: absolute;
-        right: 15px;
       }
 
       p,
@@ -172,28 +159,28 @@
       }
 
       blockquote {
-        border-left: 4px solid #ccc;
-        margin-bottom: 5px;
-        margin-top: 5px;
-        padding-left: 16px;
+        border-left: 0.25em solid #ccc;
+        margin-bottom: 0.3125em;
+        margin-top: 0.3125em;
+        padding-left: 1em;
       }
 
       code,
       pre {
         background-color: #f0f0f0;
-        border-radius: 3px;
+        border-radius: 0.1875em;
       }
 
       pre {
         white-space: pre-wrap;
-        margin-bottom: 5px;
-        margin-top: 5px;
-        padding: 5px 10px;
+        margin-bottom: 0.3125em;
+        margin-top: 0.3125em;
+        padding: 0.3125em 0.625em;
       }
 
       code {
         font-size: 85%;
-        padding: 2px 4px;
+        padding: 0.125em 0.25em;
       }
 
       img {
