@@ -292,8 +292,8 @@ This program is available under Apache License Version 2.0, available at https:/
               this.__debounceSetValue,
               Polymer.Async.timeOut.after(timeout),
               () => {
-                this.__userInput = source === 'user';
                 this.value = JSON.stringify(this._editor.getContents().ops);
+                this.__userInput = source === 'user';
               }
             );
             this.__wasBlurred && this.__emitChangeEvent();
@@ -305,6 +305,8 @@ This program is available under Apache License Version 2.0, available at https:/
             this.__wasBlurred = true;
             this.__emitChangeEvent();
           });
+
+          this.addEventListener('focusout', () => this.__wasBlurred = false);
 
           this._editor.on('selection-change', this.__announceFormatting.bind(this));
 
