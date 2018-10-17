@@ -683,9 +683,10 @@ This program is available under Apache License Version 2.0, available at https:/
           delete this._previousDocumentPointerEvents;
         }
 
-        // Restore pointer events in the previous overlay(s) in reverse order
-        const instances = OverlayElement.__attachedInstances.reverse();
+        // Restore pointer events in the previous overlay(s)
+        const instances = OverlayElement.__attachedInstances;
         let el;
+        // Use instances.pop() to ensure the reverse order
         while (el = instances.pop()) {
           if (el === this) {
             // Skip the current instance
