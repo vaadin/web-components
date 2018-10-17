@@ -46,7 +46,7 @@
         });
 
         it('should have a valid version number', () => {
-          expect(customElements.get('vaadin-rich-text-editor').version).to.match(/^(\d+\.)?(\d+\.)?(\*|\d+)$/);
+          expect(rte.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\*|\d+)(-(alpha|beta)\d+)?$/);
         });
       });
 
