@@ -14,15 +14,23 @@
         min-width: 20em;
       }
 
-      :host([theme~="layout"]) {
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        padding: 0;
+      :host([theme~="layout"]) [part~="backdrop"] {
+        position: absolute;
+        top: calc(0px - var(--lumo-space-m));
+        left: calc(0px - var(--lumo-space-m));
+        right: calc(0px - var(--lumo-space-m));
+        bottom: calc(0px - var(--lumo-space-m));
       }
 
       @media (max-width: 600px), (max-height: 600px) {
+        :host([theme~="layout"]) {
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          padding: 0;
+        }
+
         :host([theme~="layout"]) [part="overlay"] {
           flex: 1;
           width: 100%;
