@@ -338,7 +338,23 @@
         });
 
         describe('using parent paths inside templates', () => {
-          beforeEach(() => container.set('parentPath.foo', 'bar'));
+          let fooSetter;
+          beforeEach(() => {
+            // Observe the model
+            const observedModel = container.parentPath;
+            let foo = observedModel.foo;
+            fooSetter = sinon.spy();
+            Object.defineProperty(observedModel, 'foo', {
+              set: (newVal) => {
+                fooSetter(newVal);
+                foo = newVal;
+              },
+              get: () => foo
+            });
+
+            // Change the object, notify Polymer
+            container.set('parentPath.foo', 'bar');
+          });
 
           it('should bind inside cell templates', () => {
             expect(getCellContent(getCell(grid, 2)).querySelector('paper-input').value).to.contain('bar');
@@ -365,6 +381,10 @@
             input.value = 'value';
 
             expect(container.parentPath.foo).to.eql('value');
+          });
+          it('should call setter only once', () => {
+            expect(fooSetter).to.be.calledOnce;
+            expect(fooSetter).to.be.calledWith('bar');
           });
         });
 
