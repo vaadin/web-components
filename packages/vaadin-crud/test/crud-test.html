@@ -146,6 +146,28 @@
         });
       });
 
+      describe('empty dataProvider', () => {
+        it('should have an empty form if no item is present', done => {
+          crud.dataProvider = (params, callback) => callback([], 0);
+
+          Polymer.RenderStatus.afterNextRender(crud._grid, () => {
+            crud.$.new.click();
+            expect(crud._form._fields).to.be.empty;
+            done();
+          });
+        });
+
+        it('should have a non-empty form if at least an item is present', done => {
+          crud.dataProvider = (params, callback) => callback([{foo: 'Foo1', baz: 'Baz1'}], 1);
+
+          Polymer.RenderStatus.afterNextRender(crud._grid, () => {
+            crud.$.new.click();
+            expect(crud._form._fields).to.not.be.empty;
+            done();
+          });
+        });
+      });
+
       describe('items', () => {
         beforeEach(done => {
           crud.items = [{foo: 'bar'}];
