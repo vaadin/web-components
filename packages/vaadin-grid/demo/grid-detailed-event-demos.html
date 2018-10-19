@@ -1,0 +1,70 @@
+<dom-module id="grid-detailed-event-demos">
+  <template>
+    <style include="vaadin-component-demo-shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+
+    <style>
+      vaadin-grid {
+        text-transform: none;
+      }
+    </style>
+
+    <h3>Detailed Events</h3>
+    <p>
+      Set <code>detailedEvents</code> array to fire events with useful information about the event target,
+      like the targeted item, column and section (body, header, footer or row details).
+    </p>
+    <p>
+      This feature can be useful to execute item-specific actions, like selection or opening row details
+      on any mouse or key event.
+    </p>
+    <p>
+      The detailed event will be fired with <code>detailed-</code> prefix.
+    </p>
+    <vaadin-demo-snippet id='grid-detailed-event-demos-detailed-event'>
+      <template preserve-content>
+        <vaadin-grid aria-label="Detailed Events Example">
+          <vaadin-grid-column path="name.first" header="First name"></vaadin-grid-column>
+          <vaadin-grid-column path="name.last" header="Last name"></vaadin-grid-column>
+          <vaadin-grid-column path="email"></vaadin-grid-column>
+        </vaadin-grid>
+        <script>
+          window.addDemoReadyListener('#grid-detailed-event-demos-detailed-event', function(document) {
+            const grid = document.querySelector('vaadin-grid');
+            grid.items = Vaadin.GridDemo.users;
+
+            grid.detailedEvents = ['dblclick', 'keypress'];
+
+            grid.addEventListener('detailed-dblclick', e => {
+              if (e.detail.section === 'body') {
+                toggleSelection(e.detail.rowData.item);
+              }
+            });
+
+            grid.addEventListener('detailed-keypress', e => {
+              if (e.detail.section === 'body' && e.detail.originalEvent.key === 'Enter') {
+                toggleSelection(e.detail.rowData.item);
+              }
+            });
+
+            const toggleSelection = item =>
+              grid.selectedItems = grid.selectedItems[0] === item ? [] : [item];
+
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+  </template>
+  <script>
+    class GridDetailedEventDemos extends DemoReadyEventEmitter(GridDemo(Polymer.Element)) {
+      static get is() {
+        return 'grid-detailed-event-demos';
+      }
+    }
+    customElements.define(GridDetailedEventDemos.is, GridDetailedEventDemos);
+  </script>
+</dom-module>
