@@ -70,15 +70,15 @@
         });
 
         ['sub', 'super'].forEach(scr => {
-          it(`should apply ${scr} script when clicking the "${scr}-script-button" part`, () => {
-            btn = rte.shadowRoot.querySelector(`[part="${scr}-script-button"]`);
+          it(`should apply ${scr}script when clicking the "${scr}script-button" part`, () => {
+            btn = rte.shadowRoot.querySelector(`[part="${scr}script-button"]`);
             btn.click();
             editor.insertText(0, 'Foo', 'user');
             expect(editor.getFormat(0, 2).script).to.be.equal(scr);
           });
 
-          it(`should undo ${scr} script when clicking the "${scr}-script-button" part`, () => {
-            btn = rte.shadowRoot.querySelector(`[part="${scr}-script-button"]`);
+          it(`should undo ${scr}script when clicking the "${scr}script-button" part`, () => {
+            btn = rte.shadowRoot.querySelector(`[part="${scr}script-button"]`);
             editor.format('script', scr);
             btn.click();
             expect(editor.getFormat(0)).to.be.empty.object;
@@ -177,7 +177,7 @@
             // files property in addition.
             delete fileInput.files;
 
-            rte._editor.focus();
+            editor.focus();
 
             const img = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
             fileInput.files = [createImage(img, 'image/gif')];
@@ -200,7 +200,7 @@
           rte.addEventListener('change', spy);
 
           // Emulate setting the value from keyboard
-          rte._editor.setContents(new window.Quill.imports.delta([{insert: 'Foo'}]), 'user');
+          editor.setContents(new window.Quill.imports.delta([{insert: 'Foo'}]), 'user');
           rte.shadowRoot.querySelector('.ql-editor').dispatchEvent(new CustomEvent('blur'));
 
           expect(spy.calledOnce).to.be.true;
@@ -213,7 +213,7 @@
           // Emulate using the toolbar: removing focus from editor and applying styling after that.
           rte.value = JSON.stringify([{insert: 'Foo'}]);
           rte.shadowRoot.querySelector('.ql-editor').dispatchEvent(new CustomEvent('blur'));
-          rte._editor.formatText(0, 3, 'bold', true, 'user');
+          editor.formatText(0, 3, 'bold', true, 'user');
 
           expect(rte.__wasBlurred).to.be.false;
           expect(spy.calledOnce).to.be.true;
@@ -224,10 +224,10 @@
           rte.addEventListener('change', spy);
 
           // Emulate typing to the editor, focusing smth outside the editor and then typing again.
-          rte._editor.setContents(new window.Quill.imports.delta([{insert: 'Foo'}]), 'user');
+          editor.setContents(new window.Quill.imports.delta([{insert: 'Foo'}]), 'user');
           rte.shadowRoot.querySelector('.ql-editor').dispatchEvent(new CustomEvent('blur'));
           rte.dispatchEvent(new CustomEvent('focusout'));
-          rte._editor.setContents(new window.Quill.imports.delta([{insert: 'Foo Bar'}]), 'user');
+          editor.setContents(new window.Quill.imports.delta([{insert: 'Foo Bar'}]), 'user');
 
           expect(spy.calledOnce).to.be.true;
         });
@@ -397,13 +397,13 @@
           expect(el.localName).to.equal('h2');
         });
 
-        it('should use <sub> tag for sub-script', () => {
+        it('should use <sub> tag for subscript', () => {
           setValueAndFormatText('script', 'sub');
           el = getHtml(rte.htmlValue);
           expect(el.firstChild.localName).to.equal('sub');
         });
 
-        it('should use <sup> tag for super-script', () => {
+        it('should use <sup> tag for superscript', () => {
           setValueAndFormatText('script', 'super');
           el = getHtml(rte.htmlValue);
           expect(el.firstChild.localName).to.equal('sup');
