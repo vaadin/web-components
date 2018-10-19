@@ -50,7 +50,8 @@ This program is available under Apache License Version 2.0, available at https:/
           .filter(section => cell.getAttribute('part').indexOf(section) > -1)[0];
 
         const detail = {
-          rowData: this.__getRowModel(cell.parentElement),
+          rowData: section === 'body' || section === 'details' ?
+            this.__getRowModel(cell.parentElement) : undefined,
           column: cell._column,
           section: section,
           originalEvent: e
