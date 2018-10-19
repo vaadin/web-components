@@ -37,7 +37,7 @@
     "vaadin-text-field": "^2.1.1",
     "vaadin-button": "^2.1.0",
     "vaadin-confirm-dialog": "1.1.0-alpha1",
-    "vaadin-license-checker": "vaadin/license-checker#^2.1.0-alpha2"
+    "vaadin-license-checker": "vaadin/license-checker#^2.1.0-beta1"
   },
   "devDependencies": {
     "iron-component-page": "^3.0.0",
