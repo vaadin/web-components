@@ -42,6 +42,10 @@ This program is available under Apache License Version 2.0, available at https:/
         const path = e.composedPath();
         const cell = path[path.indexOf(this.$.table) - 3];
 
+        if (!cell) {
+          return;
+        }
+
         const section = ['body', 'header', 'footer', 'details']
           .filter(section => cell.getAttribute('part').indexOf(section) > -1)[0];
 
