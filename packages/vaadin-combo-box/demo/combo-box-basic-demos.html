@@ -92,7 +92,9 @@
               var xhr = new XMLHttpRequest();
               xhr.onload = function() {
                 const response = JSON.parse(xhr.responseText);
-                callback(response.result, response.size);
+                setTimeout(() => {
+                  callback(response.result, response.size);
+                }, 2000);
               };
               var index = params.page * params.pageSize;
               const url = 'https://demo.vaadin.com/demo-data/1.0/filtered-countries?index=' + index +

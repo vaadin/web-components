@@ -156,7 +156,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       static get observers() {
-        return ['_selectorChanged(_selector)', '_loadingChanged(loading)', '_openedChanged(opened, _items)'];
+        return ['_selectorChanged(_selector)', '_loadingChanged(loading)', '_openedChanged(opened, _items, loading)'];
       }
 
       _fireTouchAction(sourceEvent) {
@@ -169,10 +169,10 @@ This program is available under Apache License Version 2.0, available at https:/
         return opened ? items : [];
       }
 
-      _openedChanged(opened, items) {
+      _openedChanged(opened, items, loading) {
         // Do not attach if no items
         // Do not dettach if opened but user types an invalid search
-        this.$.dropdown.opened = !!(opened && (this.$.dropdown.opened || items && items.length));
+        this.$.dropdown.opened = !!(opened && (loading || this.$.dropdown.opened || items && items.length));
       }
 
       ready() {

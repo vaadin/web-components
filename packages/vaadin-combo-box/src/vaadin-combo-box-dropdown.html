@@ -50,6 +50,14 @@ This program is available under Apache License Version 2.0, available at https:/
       static get is() {
         return 'vaadin-combo-box-overlay';
       }
+
+      ready() {
+        super.ready();
+        const loader = document.createElement('div');
+        loader.setAttribute('part', 'loader');
+        const content = this.shadowRoot.querySelector(['[part~="content"]']);
+        content.parentNode.insertBefore(loader, content);
+      }
     }
 
     customElements.define(ComboBoxOverlayElement.is, ComboBoxOverlayElement);

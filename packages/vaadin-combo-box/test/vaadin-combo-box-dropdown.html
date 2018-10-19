@@ -39,6 +39,21 @@
         expect(window.getComputedStyle(overlay).display).not.to.eql('none');
       });
 
+      describe('loader part', () => {
+        let loader;
+        beforeEach(() => loader = overlay.shadowRoot.querySelector('[part~="loader"]'));
+        it('should be present in overlay', () => {
+          expect(loader).to.not.be.null;
+        });
+
+        it('should be in overlay part', () => {
+          expect(loader.parentNode.getAttribute('part')).to.include('overlay');
+        });
+
+        it('should be before content part', () => {
+          expect(loader.nextElementSibling.getAttribute('part')).to.include('content');
+        });
+      });
     });
   </script>
 
