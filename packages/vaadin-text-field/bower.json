@@ -38,7 +38,8 @@
     "webcomponentsjs": "^1.0.0",
     "web-component-tester": "^6.1.5",
     "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^2.1.0",
-    "vaadin-button": "vaadin/vaadin-button#^2.1.0"
+    "vaadin-button": "vaadin/vaadin-button#^2.1.0",
+    "vaadin-ordered-layout": "vaadin/vaadin-ordered-layout#^1.1.0"
   },
   "dependencies": {
     "polymer": "^2.0.0",

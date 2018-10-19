@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+
+<head lang="ar">
+  <meta charset="UTF-8">
+  <title></title>
+  <script src="../../../../webcomponentsjs/webcomponents-loader.js"></script>
+  <script>
+    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+    document.write(`<link rel="import" href="../../../theme/${theme}/vaadin-text-field.html">`);
+    document.write(`<link rel="import" href="../../../../vaadin-ordered-layout/theme/${theme}/vaadin-horizontal-layout.html">`);
+
+    window.addEventListener('WebComponentsReady', function() {
+      setTimeout(function() {
+        window.ShadyDOM && window.ShadyDOM.flush(); // Force DOM composition
+        window.webComponentsAreReady = true; // Checked in gemini before capture callback
+      });
+    });
+  </script>
+  <link href="../common.html" rel="import">
+</head>
+
+<body>
+  <form>
+    <fieldset id="integration">
+      <p>vaadin-horizontal-layout</p>
+      <vaadin-horizontal-layout>
+        <vaadin-text-field  error-message="Please enter a value" required invalid label="Required"></vaadin-text-field>
+        <vaadin-text-field label="Label"></vaadin-text-field>
+      </vaadin-horizontal-layout>
+    </fieldset>
+</body>
