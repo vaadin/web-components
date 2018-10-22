@@ -102,7 +102,8 @@
         letter-spacing: 0.03em;
       }
 
-      p {
+      p,
+      blockquote {
         margin-top: 0.5em;
         margin-bottom: 0.75em;
       }
@@ -123,6 +124,15 @@
         padding: 0;
         margin: var(--lumo-space-s) calc(var(--lumo-border-radius) / 2);
         background-color: var(--lumo-contrast-10pct);
+      }
+
+      blockquote {
+        border-left: 2px solid var(--lumo-contrast-30pct);
+      }
+
+      b,
+      strong {
+        font-weight: 600;
       }
     </style>
   </template>
