@@ -408,7 +408,9 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         get _toolbarButtons() {
-          return Array.from(this.shadowRoot.querySelectorAll('[part="toolbar"] button'));
+          return Array.from(this.shadowRoot.querySelectorAll('[part="toolbar"] button')).filter(btn => {
+            return btn.clientHeight > 0;
+          });
         }
 
         _clear() {
