@@ -26,18 +26,38 @@ This program is available under Apache License Version 2.0, available at https:/
          * to `detailedEvents`, you should listen for `detailed-click` events.
          */
         detailedEvents: {
-          type: Array,
-          observer: '_detailedEventsChanged'
+          type: Array
+        },
+
+        _detailedEventListeners: {
+          type: Object,
+          value: () => {
+            return {};
+          }
         }
       };
     }
 
-    _detailedEventsChanged(newValue, oldValue) {
-      newValue.forEach(this._addDetailedEventListener, this);
+    static get observers() {
+      return ['_detailedEventsChanged(detailedEvents, detailedEvents.splices)'];
+    }
+
+    _detailedEventsChanged(newEvents) {
+      const oldEvents = Object.keys(this._detailedEventListeners);
+
+      if (newEvents) {
+        newEvents.filter(event => !(oldEvents && oldEvents.indexOf(event) > -1))
+          .forEach(this._addDetailedEventListener, this);
+      }
+
+      if (oldEvents) {
+        oldEvents.filter(event => !(newEvents && newEvents.indexOf(event) > -1))
+          .forEach(this._removeDetailedEventListener, this);
+      }
     }
 
     _addDetailedEventListener(eventName) {
-      this.addEventListener(eventName, e => {
+      const listener = e => {
 
         const path = e.composedPath();
         const cell = path[path.indexOf(this.$.table) - 3];
@@ -58,7 +78,15 @@ This program is available under Apache License Version 2.0, available at https:/
         };
 
         this.dispatchEvent(new CustomEvent('detailed-' + eventName, {detail: detail}));
-      });
+      };
+
+      this.addEventListener(eventName, listener);
+      this._detailedEventListeners[eventName] = listener;
+    }
+
+    _removeDetailedEventListener(eventName) {
+      this.removeEventListener(eventName, this._detailedEventListeners[eventName]);
+      delete this._detailedEventListeners[eventName];
     }
 
   };
