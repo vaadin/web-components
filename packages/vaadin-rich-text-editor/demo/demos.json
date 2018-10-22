@@ -10,6 +10,16 @@
         "description": "",
         "image": ""
       }
+    },
+    {
+      "name": "Theme Variants",
+      "url": "rich-text-editor-lumo-demos",
+      "src": "rich-text-editor-lumo-demos.html",
+      "meta": {
+        "title": "Vaadin Rich Text Editor Theme Variants",
+        "description": "",
+        "image": ""
+      }
     }
   ]
 }
