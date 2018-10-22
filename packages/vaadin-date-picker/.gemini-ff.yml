@@ -7,10 +7,10 @@ system:
     polyserve:
       port: 8080
     sauce: true
-
+ 
 browsers:
-  chrome:
+  firefox:
     desiredCapabilities:
-      browserName: "chrome"
-      version: "67.0"
+      browserName: "firefox"
+      version: "47.0"
       platform: "Windows 10"
