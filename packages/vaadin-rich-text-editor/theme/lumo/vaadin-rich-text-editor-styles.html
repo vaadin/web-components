@@ -7,6 +7,7 @@
 <dom-module id="lumo-rich-text-editor" theme-for="vaadin-rich-text-editor">
   <template>
     <style include="lumo-rich-text-editor-theme lumo-rich-text-editor-content">
+      /* empty style block breaks polymer lint. see https://github.com/Polymer/tools/issues/408 */
     </style>
   </template>
 </dom-module>
@@ -216,6 +217,8 @@
 
 <dom-module id="lumo-rich-text-editor-content">
   <template>
-    <style include="lumo-color lumo-typography"></style>
+    <style include="lumo-color lumo-typography">
+      /* empty style block breaks polymer lint. see https://github.com/Polymer/tools/issues/408 */
+    </style>
   </template>
 </dom-module>
