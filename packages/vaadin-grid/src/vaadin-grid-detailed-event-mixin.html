@@ -44,19 +44,18 @@ This program is available under Apache License Version 2.0, available at https:/
 
     _detailedEventsChanged(newEvents) {
       const oldEvents = Object.keys(this._detailedEventListeners);
+      oldEvents.forEach(this._removeDetailedEventListener, this);
 
       if (newEvents) {
-        newEvents.filter(event => !(oldEvents && oldEvents.indexOf(event) > -1))
-          .forEach(this._addDetailedEventListener, this);
-      }
-
-      if (oldEvents) {
-        oldEvents.filter(event => !(newEvents && newEvents.indexOf(event) > -1))
-          .forEach(this._removeDetailedEventListener, this);
+        newEvents.forEach(this._addDetailedEventListener, this);
       }
     }
 
     _addDetailedEventListener(eventName) {
+      if (this._detailedEventListeners.hasOwnProperty(eventName)) {
+        return;
+      }
+
       const listener = e => {
 
         const path = e.composedPath();
