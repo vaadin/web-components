@@ -12,7 +12,7 @@
     "polymer"
   ],
   "author": "Vaadin Ltd",
-  "license": "SEE LICENSE IN LICENSE FILE",
+  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/vaadin/vaadin-app-layout/issues"
   },
