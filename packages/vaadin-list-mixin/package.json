@@ -17,6 +17,9 @@
     "url": "https://github.com/vaadin/vaadin-list-mixin/issues"
   },
   "homepage": "https://vaadin.com/elements",
+  "files": [
+    "vaadin-*.js"
+  ],
   "scripts": {
     "test": "wct"
   },
