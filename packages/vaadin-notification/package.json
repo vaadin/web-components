@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-notification",
-  "version": "1.2.0-beta1",
+  "version": "1.2.0",
   "description": "vaadin-notification",
   "main": "vaadin-notification.html",
   "repository": "vaadin/vaadin-notification",
