@@ -12,7 +12,7 @@
 
       /*
         Quill core styles.
-        CSS selectors removed: check list, indentation, video, colors.
+        CSS selectors removed: margin & padding reset, check list, indentation, video, colors, ordered & unordered list, h1-6, anchor
       */
       .ql-clipboard {
         left: -100000px;
@@ -46,71 +46,6 @@
         cursor: text;
       }
 
-      p,
-      ol,
-      ul,
-      pre,
-      blockquote,
-      h1,
-      h2,
-      h3,
-      h4,
-      h5,
-      h6 {
-        margin: 0;
-        padding: 0;
-      }
-
-      ol,
-      ul {
-        padding-left: 1.5em;
-      }
-
-      ol > li,
-      ul > li {
-        list-style-type: none;
-      }
-
-      ul > li::before {
-        content: '\2022';
-      }
-
-      li::before {
-        display: inline-block;
-        white-space: nowrap;
-        width: 1.2em;
-      }
-
-      li:not(.ql-direction-rtl)::before {
-        margin-left: -1.5em;
-        margin-right: 0.3em;
-        text-align: right;
-      }
-
-      li.ql-direction-rtl::before {
-        margin-left: 0.3em;
-        margin-right: -1.5em;
-      }
-
-      ol li:not(.ql-direction-rtl),
-      ul li:not(.ql-direction-rtl) {
-        padding-left: 1.5em;
-      }
-
-      ol li.ql-direction-rtl,
-      ul li.ql-direction-rtl {
-        padding-right: 1.5em;
-      }
-
-      ol li {
-        counter-reset: list-1 list-2 list-3 list-4 list-5 list-6 list-7 list-8 list-9;
-        counter-increment: list-0;
-      }
-
-      ol li::before {
-        content: counter(list-0, decimal) '. ';
-      }
-
       .ql-direction-rtl {
         direction: rtl;
         text-align: inherit;
@@ -128,35 +63,6 @@
         text-align: right;
       }
       /* quill core end */
-
-      h1 {
-        font-size: 2em;
-      }
-
-      h2 {
-        font-size: 1.5em;
-      }
-
-      h3 {
-        font-size: 1.17em;
-      }
-
-      h4 {
-        font-size: 1em;
-      }
-
-      h5 {
-        font-size: 0.83em;
-      }
-
-      h6 {
-        font-size: 0.67em;
-      }
-
-      a {
-        color: #06c;
-        text-decoration: underline;
-      }
 
       blockquote {
         border-left: 0.25em solid #ccc;
