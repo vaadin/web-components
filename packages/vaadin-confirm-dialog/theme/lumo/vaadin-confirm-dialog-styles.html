@@ -33,11 +33,6 @@
         margin-bottom: var(--lumo-space-s);
       }
 
-      vaadin-button {
-        margin-top: 0;
-        margin-bottom: 0;
-      }
-
       vaadin-button[theme~="tertiary"] {
         padding-left: var(--lumo-space-s);
         padding-right: var(--lumo-space-s);
@@ -69,6 +64,8 @@
         [part="footer"] vaadin-button,
         [part="footer"] ::slotted(*) {
           width: 100%;
+          margin-top: var(--lumo-space-xs);
+          margin-bottom: var(--lumo-space-xs);
         }
 
         [part="footer"] .confirm-button {

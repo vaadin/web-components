@@ -1,0 +1,58 @@
+<dom-module id="material-confirm-dialog" theme-for="vaadin-confirm-dialog">
+  <template>
+    <style>
+      [part="message"] {
+        width: 25em;
+        max-width: 100%;
+        margin-right: 24px;
+      }
+
+      [part="footer"] {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        margin-top: 28px;
+        margin-right: -16px;
+      }
+
+      [part="footer"] div:nth-child(-n + 2) vaadin-button,
+      [part="footer"] div:nth-child(-n + 2) ::slotted(*) {
+        margin-right: 8px;
+      }
+
+      @media (max-width: 360px) {
+        [part="footer"] {
+          flex-direction: column-reverse;
+          align-items: flex-end;
+        }
+
+        [part="footer"] div:nth-child(-n + 2) vaadin-button,
+        [part="footer"] div:nth-child(-n + 2) ::slotted(*) {
+          margin-top: 8px;
+          margin-right: 0;
+        }
+
+        [part="footer"] div:nth-last-child(1) vaadin-button,
+        [part="footer"] div:nth-last-child(1) ::slotted(*) {
+          margin-top: 8px;
+        }
+      }
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="material-confirm-dialog-overlay" theme-for="vaadin-dialog-overlay">
+  <template>
+    <style include="material-vaadin-overlay">
+      [part="overlay"] {
+        max-width: 100%;
+        min-width: 0;
+      }
+
+      [part="content"] {
+        padding: 8px 24px;
+        min-width: 0;
+      }
+    </style>
+  </template>
+</dom-module>
