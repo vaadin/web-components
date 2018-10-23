@@ -36,23 +36,23 @@
             const grid = document.querySelector('vaadin-grid');
             grid.items = Vaadin.GridDemo.users;
 
-            grid.detailedEvents = ['dblclick', 'keypress'];
+            grid.detailedEvents = ['dblclick', 'keydown'];
 
-            grid.addEventListener('detailed-dblclick', e => {
+            grid.addEventListener('detailed-dblclick', function(e) {
               if (e.detail.section === 'body') {
                 toggleSelection(e.detail.rowData.item);
               }
             });
 
-            grid.addEventListener('detailed-keypress', e => {
+            grid.addEventListener('detailed-keydown', function(e) {
               if (e.detail.section === 'body' && e.detail.originalEvent.key === 'Enter') {
                 toggleSelection(e.detail.rowData.item);
               }
             });
 
-            const toggleSelection = item =>
+            const toggleSelection = function(item) {
               grid.selectedItems = grid.selectedItems[0] === item ? [] : [item];
-
+            };
           });
         </script>
       </template>
