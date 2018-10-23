@@ -329,9 +329,9 @@
           expect(list.items[1].focused).to.be.true;
         });
 
-        it('key search should not happen if a modifier key is pressed', () => {
+        it('key search should happen if a modifier key is pressed', () => {
           keyDownChar(list, 'b', 'shift');
-          expect(list.items[0].focused).to.be.true;
+          expect(list.items[1].focused).to.be.true;
         });
 
         it('key search should skip disabled items', () => {
