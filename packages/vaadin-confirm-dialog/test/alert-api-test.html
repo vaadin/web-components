@@ -24,7 +24,7 @@
         confirm = fixture('default');
         dialog = confirm.$.dialog;
         overlay = dialog.$.overlay;
-        content = overlay.$.content;
+        content = overlay.content;
       });
 
       it('should bypass properties to dialog', function() {
@@ -34,19 +34,19 @@
       });
 
       it('should apply the element content as a message', function() {
-        var children = Polymer.dom(content.root.querySelector('div[part="message"]')).getEffectiveChildNodes();
+        var children = Polymer.FlattenedNodesObserver.getFlattenedNodes(content.querySelector('div[part="message"]'));
         var messageNode = Array.from(children).filter(n => n.data && n.data.indexOf('Confirmation message') !== -1);
         expect(messageNode.length).to.be.equal(1);
       });
 
       it('should be possible to set message as property', function() {
         confirm.message = 'New message';
-        var messageText = content.root.querySelector('div[part="message"]').textContent;
+        var messageText = content.querySelector('div[part="message"]').textContent;
         expect(messageText).to.contain('New message');
       });
 
       it('should be possible to set confirm button text', function() {
-        var confirmButton = content.root.querySelector('#confirm');
+        var confirmButton = content.querySelector('#confirm');
         confirm.confirmText = 'Of course';
         var confirmButtonText = confirmButton.textContent;
         expect(confirmButtonText).to.contain('Of course');
