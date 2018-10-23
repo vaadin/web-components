@@ -8,7 +8,7 @@
 <!-- Example: Overlay stays hidden. -->
 
 ### Live Demo
-<!-- The template, click "Remix This" to edit it: https://glitch.com/edit/#!/topaz-guanaco -->
+<!-- The template, click "Remix This" to edit it: https://glitch.com/edit/#!/lavender-bolt -->
 
 ### Steps to reproduce
 <!-- Example
