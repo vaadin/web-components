@@ -183,7 +183,12 @@ This program is available under Apache License Version 2.0, available at https:/
             () => {
               this._updateMetrics();
               const remainingPhysicalSize = this._optPhysicalSize - this._physicalSize;
-              const estimatedMissingRowCount = Math.ceil(remainingPhysicalSize / this._physicalAverage);
+              let estimatedMissingRowCount = Math.ceil(remainingPhysicalSize / this._physicalAverage);
+
+              if (this._physicalCount + estimatedMissingRowCount > this._effectiveSize) {
+                // Do not increase the physical item count above the this._effectiveSize
+                estimatedMissingRowCount = Math.max(0, this._effectiveSize - this._physicalCount);
+              }
 
               if (this._physicalSize && estimatedMissingRowCount > 0) {
                 super._increasePoolIfNeeded(estimatedMissingRowCount);
