@@ -154,8 +154,8 @@
       <template preserve-content>
         <vaadin-button id="open">Open dialog</vaadin-button>
         <vaadin-confirm-dialog cancel header="Unsaved changes">
-          <p>Do you want to <b>save</b> or <b>discard</b> your changes before navigating away?</p>
-          <vaadin-button id="save" slot="confirm-button" theme="primary">
+          <p id="description">Do you want to <b>save</b> or <b>discard</b> your changes before navigating away?</p>
+          <vaadin-button id="save" slot="confirm-button" theme="primary" aria-describedby="description">
             <iron-icon icon="vaadin:envelope-open" slot="prefix"></iron-icon>
             Save
           </vaadin-button>
