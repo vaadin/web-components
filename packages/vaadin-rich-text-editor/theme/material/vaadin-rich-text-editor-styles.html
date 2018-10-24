@@ -1,0 +1,116 @@
+<link rel="import" href="../../../vaadin-material-styles/color.html">
+<link rel="import" href="../../../vaadin-material-styles/typography.html">
+
+<dom-module id="material-rich-text-editor" theme-for="vaadin-rich-text-editor">
+  <template>
+    <style include="material-rich-text-editor-theme material-rich-text-editor-content">
+      /* empty style block breaks polymer lint. see https://github.com/Polymer/tools/issues/408 */
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="material-rich-text-editor-theme">
+  <template>
+    <style>
+      :host {
+        background-color: var(--material-background-color);
+        height: 288px;
+      }
+
+      [part="toolbar"] {
+        background-color: var(--material-secondary-background-color);
+        padding: 0;
+        border: 0;
+        overflow: hidden;
+      }
+
+      [part~="group"] {
+        margin: 8px 0;
+        padding: 0 8px;
+      }
+
+      [part~="group"] + [part~="group"] {
+        box-shadow: -1px 0 0 0 rgba(0, 0, 0, 0.1);
+      }
+
+      [part$="button"] {
+        border-radius: 3px;
+        color: var(--material-secondary-text-color);
+        font-family: "vaadin-rte-icons", var(--material-font-family);
+        font-weight: 600;
+        margin: -4px 2px;
+      }
+
+      [part$="button"]:hover {
+        background-color: transparent;
+        color: inherit;
+      }
+
+      [part$="button"].ql-active {
+        background-color: rgba(0, 0, 0, 0.1);
+        color: inherit;
+      }
+
+      @media (hover: none) {
+        [part$="button"]:hover {
+          color: var(--material-secondary-text-color);
+        }
+      }
+
+      /* SVG icons */
+      [part^="undo"]::before,
+      [part^="redo"]::before,
+      [part^="list-ordered"]::before,
+      [part^="list-bullet"]::before,
+      [part^="align-left"]::before,
+      [part^="align-center"]::before,
+      [part^="align-right"]::before,
+      [part^="image"]::before,
+      [part^="clean"]::before {
+        font-size: 24px;
+        font-weight: 400;
+      }
+
+      /* Text icons */
+      [part^="bold"]::before,
+      [part^="italic"]::before,
+      [part^="underline"]::before,
+      [part^="strike"]::before {
+        font-size: 20px;
+      }
+
+      [part="content"] {
+        flex: auto;
+      }
+
+      /* TODO unsupported selector */
+      [part="content"] > .ql-editor {
+        padding: 0 16px;
+        line-height: inherit;
+      }
+
+      /* Theme variants */
+
+      /* No border */
+
+      :host(:not([theme~="no-border"])) {
+        border: 1px solid rgba(0, 0, 0, 0.12);
+      }
+
+      :host(:not([theme~="no-border"]):not([readonly])) [part="content"] {
+        border-top: 1px solid rgba(0, 0, 0, 0.12);
+      }
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="material-rich-text-editor-content">
+  <template>
+    <style include="material-color material-typography">
+      b,
+      strong {
+        font-weight: 600;
+      }
+    </style>
+  </template>
+</dom-module>

@@ -6,53 +6,122 @@
       [part="toolbar"] {
         display: flex;
         flex-wrap: wrap;
-        border-bottom: 1px solid #ccc;
-        padding: 8px;
         flex-shrink: 0;
       }
 
       [part$="button"] {
-        display: block;
-        box-sizing: border-box;
-        position: relative;
-        margin: 2px;
-        width: 28px;
-        height: 28px;
-        padding: 2px;
-        font-size: 100%;
+        width: 2em;
+        height: 2em;
+        margin: 0;
+        padding: 0;
+        font: inherit;
+        line-height: 1;
         text-transform: none;
         background: transparent;
         border: none;
-        text-align: center;
-        color: #777;
-        border-radius: 2px;
-        box-shadow: none;
-        cursor: pointer;
+        position: relative;
       }
 
       [part$="button"]:hover {
-        background-color: rgba(0, 0, 0, 0.06);
         outline: none;
       }
 
-      [part$="button"]:active,
       [part$="button"].ql-active {
-        background-color: rgba(0, 0, 0, 0.12);
+        background-color: #eee;
       }
 
       [part$="button"]::before {
-        display: block;
         position: absolute;
         top: 50%;
         left: 50%;
-        transform: translateX(-50%) translateY(-50%);
-        font-size: 24px;
-        font-family: "vaadin-rte-icons";
+        transform: translate(-50%, -50%);
+      }
+
+      [part^="undo"]::before,
+      [part^="redo"]::before,
+      [part^="list-ordered"]::before,
+      [part^="list-bullet"]::before,
+      [part^="align-left"]::before,
+      [part^="align-center"]::before,
+      [part^="align-right"]::before,
+      [part^="image"]::before,
+      [part^="clean"]::before {
+        font-family: "vaadin-rte-icons", sans-serif;
       }
 
       [part$="group"] {
         display: flex;
         margin: 0 0.5em;
+      }
+
+      [part^="bold"]::before {
+        content: "B";
+        font-weight: 700;
+      }
+
+      [part^="italic"]::before {
+        content: "I";
+        font-style: italic;
+      }
+
+      [part^="underline"]::before {
+        content: "U";
+        text-decoration: underline;
+      }
+
+      [part^="strike"]::before {
+        content: "T";
+        text-decoration: line-through;
+      }
+
+      [part^="h1"]::before {
+        content: "H1";
+        font-size: 1.25em;
+      }
+
+      [part^="h2"]::before {
+        content: "H2";
+        font-size: 1em;
+      }
+
+      [part^="h3"]::before {
+        content: "H3";
+        font-size: 0.875em;
+      }
+
+      [part^="h1"]::before,
+      [part^="h2"]::before,
+      [part^="h3"]::before {
+        letter-spacing: -0.05em;
+      }
+
+      [part^="subscript"]::before,
+      [part^="superscript"]::before {
+        content: "X";
+      }
+
+      [part^="subscript"]::after,
+      [part^="superscript"]::after {
+        content: "2";
+        position: absolute;
+        top: 50%;
+        left: 70%;
+        font-size: 0.625em;
+      }
+
+      [part^="superscript"]::after {
+        top: 20%;
+      }
+
+      [part^="blockquote"]::before {
+        content: "”";
+        font-size: 2em;
+        height: 0.6em;
+      }
+
+      [part^="code-block"]::before {
+        content: "</>";
+        font-size: 0.875em;
       }
     </style>
   </template>

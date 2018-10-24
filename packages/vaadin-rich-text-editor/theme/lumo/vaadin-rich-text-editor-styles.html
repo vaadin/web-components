@@ -1,0 +1,225 @@
+<link rel="import" href="../../../vaadin-lumo-styles/color.html">
+<link rel="import" href="../../../vaadin-lumo-styles/font-icons.html">
+<link rel="import" href="../../../vaadin-lumo-styles/sizing.html">
+<link rel="import" href="../../../vaadin-lumo-styles/spacing.html">
+<link rel="import" href="../../../vaadin-lumo-styles/style.html">
+<link rel="import" href="../../../vaadin-lumo-styles/typography.html">
+
+<dom-module id="lumo-rich-text-editor" theme-for="vaadin-rich-text-editor">
+  <template>
+    <style include="lumo-rich-text-editor-theme lumo-rich-text-editor-content">
+      /* empty style block breaks polymer lint. see https://github.com/Polymer/tools/issues/408 */
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="lumo-rich-text-editor-theme">
+  <template>
+    <style>
+      :host {
+        height: calc(var(--lumo-size-m) * 8);
+      }
+
+      [part="toolbar"] {
+        background-color: var(--lumo-contrast-5pct);
+        padding: calc(var(--lumo-space-s) - 1px) var(--lumo-space-xs);
+      }
+
+      [part~="group"] {
+        margin: 0 calc(var(--lumo-space-l) / 2 - 1px);
+      }
+
+      [part$="button"] {
+        width: var(--lumo-size-m);
+        height: var(--lumo-size-m);
+        border-radius: var(--lumo-border-radius);
+        color: var(--lumo-contrast-60pct);
+        margin: 2px 1px;
+        cursor: default;
+        transition: background-color 100ms, color 100ms;
+      }
+
+      [part$="button"]:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px var(--lumo-primary-color-50pct);
+      }
+
+      [part$="button"]:hover {
+        background-color: var(--lumo-contrast-5pct);
+        color: var(--lumo-contrast-80pct);
+        box-shadow: none;
+      }
+
+      @media (hover: none) {
+        [part$="button"]:hover {
+          background-color: transparent;
+        }
+      }
+
+      [part$="button"].ql-active {
+        background-color: var(--lumo-primary-color-10pct);
+        color: var(--lumo-primary-text-color);
+      }
+
+      [part$="button"]:active {
+        background-color: var(--lumo-contrast-10pct);
+        color: var(--lumo-contrast-90pct);
+      }
+
+      [part$="button"]::before {
+        font-family: "lumo-icons", var(--lumo-font-family);
+        font-size: var(--lumo-icon-size-m);
+      }
+
+      [part^="undo"]::before {
+        content: var(--lumo-icons-undo);
+      }
+
+      [part^="redo"]::before {
+        content: var(--lumo-icons-redo);
+      }
+
+      [part^="bold"]::before,
+      [part^="italic"]::before,
+      [part^="underline"]::before,
+      [part^="strike"]::before {
+        font-size: var(--lumo-font-size-m);
+        font-weight: 600;
+      }
+
+      [part^="bold"]::before {
+        font-weight: 700;
+      }
+
+      [part^="h1"]::before,
+      [part^="h2"]::before,
+      [part^="h3"]::before {
+        font-weight: 600;
+      }
+
+      [part^="h1"]::before {
+        font-size: var(--lumo-font-size-m);
+      }
+
+      [part^="h2"]::before {
+        font-size: var(--lumo-font-size-s);
+      }
+
+      [part^="h3"]::before {
+        font-size: var(--lumo-font-size-xs);
+      }
+
+      [part^="subscript"]::before,
+      [part^="superscript"]::before {
+        font-weight: 600;
+        font-size: var(--lumo-font-size-s);
+      }
+
+      [part^="subscript"]::after,
+      [part^="superscript"]::after {
+        font-size: 0.625em;
+        font-weight: 700;
+      }
+
+      [part^="list-ordered"]::before {
+        content: var(--lumo-icons-ordered-list);
+      }
+
+      [part^="list-bullet"]::before {
+        content: var(--lumo-icons-unordered-list);
+      }
+
+      [part^="align-left"]::before {
+        content: var(--lumo-icons-align-left);
+      }
+
+      [part^="align-center"]::before {
+        content: var(--lumo-icons-align-center);
+      }
+
+      [part="align-right"]::before {
+        content: var(--lumo-icons-align-right);
+      }
+
+      [part^="blockquote"]::before {
+        font-size: var(--lumo-font-size-xxl);
+      }
+
+      [part^="code-block"]::before {
+        content: var(--lumo-icons-angle-left) var(--lumo-icons-angle-right);
+        font-size: var(--lumo-font-size-l);
+        letter-spacing: -0.5em;
+        margin-left: -0.25em;
+        font-weight: 600;
+      }
+
+      [part^="image"]::before {
+        content: var(--lumo-icons-photo);
+      }
+
+      [part^="clean"]::before {
+        font-family: "vaadin-rte-icons";
+        font-size: var(--lumo-font-size-l);
+      }
+
+      [part="content"] {
+        background-color: var(--lumo-base-color);
+        flex-basis: auto;
+      }
+
+      /* TODO unsupported selector */
+      [part="content"] > .ql-editor {
+        padding: 0 var(--lumo-space-m);
+        line-height: inherit;
+      }
+
+      /* Theme variants */
+
+      /* No border */
+
+      :host(:not([theme~="no-border"])) {
+        border: 1px solid var(--lumo-contrast-20pct);
+      }
+
+      :host(:not([theme~="no-border"]):not([readonly])) [part="content"] {
+        border-top: 1px solid var(--lumo-contrast-20pct);
+      }
+
+      :host([theme~="no-border"]) [part="toolbar"] {
+        padding-top: var(--lumo-space-s);
+        padding-bottom: var(--lumo-space-s);
+      }
+
+      /* Compact */
+
+      :host([theme~="compact"]) {
+        height: calc(var(--lumo-size-m) * 6);
+      }
+
+      :host([theme~="compact"]) [part="toolbar"] {
+        padding: var(--lumo-space-xs) 0;
+      }
+
+      :host([theme~="compact"][theme~="no-border"]) [part="toolbar"] {
+        padding: calc(var(--lumo-space-xs) + 1px) 0;
+      }
+
+      :host([theme~="compact"]) [part$="button"] {
+        width: var(--lumo-size-s);
+        height: var(--lumo-size-s);
+      }
+
+      :host([theme~="compact"]) [part~="group"] {
+        margin: 0 calc(var(--lumo-space-m) / 2 - 1px);
+      }
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="lumo-rich-text-editor-content">
+  <template>
+    <style include="lumo-color lumo-typography">
+      /* empty style block breaks polymer lint. see https://github.com/Polymer/tools/issues/408 */
+    </style>
+  </template>
+</dom-module>
