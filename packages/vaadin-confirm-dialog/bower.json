@@ -31,7 +31,7 @@
     "vaadin-element-mixin": "vaadin/vaadin-element-mixin#^2.0.0",
     "vaadin-lumo-styles": "vaadin/vaadin-lumo-styles#^1.1.0",
     "vaadin-material-styles": "vaadin/vaadin-material-styles#^1.1.0",
-    "vaadin-license-checker": "vaadin/license-checker#^2.1.0-beta1",
+    "vaadin-license-checker": "vaadin/license-checker#^2.1.0",
     "vaadin-dialog": "vaadin/vaadin-dialog#^2.1.0",
     "vaadin-button": "vaadin/vaadin-button#^2.1.0"
   },
