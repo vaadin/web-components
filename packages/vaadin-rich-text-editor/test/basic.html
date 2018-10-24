@@ -191,6 +191,27 @@
             // trigger mock image upload
             fileInput.dispatchEvent(new Event('change'));
           });
+
+          it('should mark image button as clicked for subsequent change event', done => {
+            const markClickedSpy = sinon.spy(rte, '_markToolbarClicked');
+
+            const fileInput = rte.shadowRoot.querySelector('input[type="file"]');
+            fileInput.__proto__ = HTMLElement.prototype;
+            delete fileInput.files;
+
+            editor.focus();
+
+            const img = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
+            fileInput.files = [createImage(img, 'image/gif')];
+
+            rte.addEventListener('value-changed', () => {
+              expect(markClickedSpy).to.be.calledOnce;
+              done();
+            });
+
+            // trigger mock image upload
+            fileInput.dispatchEvent(new Event('change'));
+          });
         });
       });
 
