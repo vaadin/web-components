@@ -121,6 +121,30 @@ This program is available under Apache License Version 2.0, available at https:/
       const Quill = window.Quill;
       const DEFAULT_VALUE = '[{"insert":"\\n"}]';
 
+      const HANDLERS = [
+        'bold',
+        'italic',
+        'underline',
+        'strike',
+        'header',
+        'script',
+        'list',
+        'align',
+        'blockquote',
+        'code-block'
+      ];
+
+      const MODE = {
+        USER: 'user',
+        SILENT: 'silent'
+      };
+
+      const STATE = {
+        DEFAULT: 0,
+        TOOLBAR_FOCUSED: 1,
+        TOOLBAR_CLICKED: 2
+      };
+
       /**
        * `<vaadin-rich-text-editor>` is a Web Component for rich text editing.
        * It provides a set of toolbar controls to apply formatting on the content,
@@ -277,7 +301,12 @@ This program is available under Apache License Version 2.0, available at https:/
             /**
              * Stores old value
              */
-            __oldValue: String
+            __oldValue: String,
+
+            __lastCommittedChange: {
+              type: String,
+              value: DEFAULT_VALUE
+            }
           };
         }
 
@@ -292,16 +321,19 @@ This program is available under Apache License Version 2.0, available at https:/
           super.ready();
 
           const editor = this.shadowRoot.querySelector('[part="content"]');
-          const toolbar = this.shadowRoot.querySelector('[part="toolbar"]');
+          const toolbarConfig = this._prepareToolbar();
+          const toolbar = toolbarConfig.container;
 
           this._editor = new Quill(editor, {
             modules: {
-              toolbar: toolbar
+              toolbar: toolbarConfig
             }
           });
 
-          editor.firstElementChild.setAttribute('role', 'textbox');
-          editor.firstElementChild.setAttribute('aria-multiline', 'true');
+          const editorContent = editor.querySelector('.ql-editor');
+
+          editorContent.setAttribute('role', 'textbox');
+          editorContent.setAttribute('aria-multiline', 'true');
 
           this._editor.on('text-change', (delta, oldDelta, source) => {
             const timeout = 200;
@@ -310,20 +342,31 @@ This program is available under Apache License Version 2.0, available at https:/
               Polymer.Async.timeOut.after(timeout),
               () => {
                 this.value = JSON.stringify(this._editor.getContents().ops);
-                this.__userInput = source === 'user';
               }
             );
-            this.__wasBlurred && this.__emitChangeEvent();
-            this.__wasBlurred = false;
           });
 
-          const editorContent = this.shadowRoot.querySelector('.ql-editor');
-          editorContent.addEventListener('blur', () => {
-            this.__wasBlurred = true;
-            this.__emitChangeEvent();
+          // mousedown happens before editor focusout
+          toolbar.addEventListener('mousedown', e => {
+            if (this._toolbarButtons.indexOf(e.composedPath()[0]) > -1) {
+              this._interactionState = STATE.TOOLBAR_FOCUSED;
+            }
           });
 
-          this.addEventListener('focusout', () => this.__wasBlurred = false);
+          editorContent.addEventListener('focusout', e => {
+            if (this._interactionState === STATE.TOOLBAR_FOCUSED) {
+              this._interactionState = STATE.DEFAULT;
+            } else {
+              this.__emitChangeEvent();
+            }
+          });
+
+          editorContent.addEventListener('focusin', e => {
+            // format changed, but no value changed happened
+            if (this._interactionState === STATE.TOOLBAR_CLICKED) {
+              this._interactionState = STATE.DEFAULT;
+            }
+          });
 
           this._editor.on('selection-change', this.__announceFormatting.bind(this));
 
@@ -350,19 +393,47 @@ This program is available under Apache License Version 2.0, available at https:/
 
           editor.addEventListener('keydown', e => {
             // alt-f10 focuses a toolbar button
-            if (e.keyCode === 121 && e.altKey) {
+            const altF10 = e.keyCode === 121 && e.altKey;
+            const shiftTab = e.keyCode === 9 && e.shiftKey;
+            if (altF10 || shiftTab) {
+              // native Shift + Tab is flaky in Safari because of shadow selection polyfill
+              e.preventDefault();
+              this._interactionState = STATE.TOOLBAR_FOCUSED;
               toolbar.querySelector('button:not([tabindex])').focus();
             }
           });
+        }
 
+        _prepareToolbar() {
+          const clean = Quill.imports['modules/toolbar'].DEFAULTS.handlers.clean;
+          const self = this;
+
+          const toolbar = {
+            container: this.shadowRoot.querySelector('[part="toolbar"]'),
+            handlers: {
+              clean: function() {
+                self._interactionState = STATE.TOOLBAR_CLICKED;
+                clean.call(this);
+              }
+            }
+          };
+
+          HANDLERS.forEach(handler => {
+            toolbar.handlers[handler] = value => {
+              this._interactionState = STATE.TOOLBAR_CLICKED;
+              this._editor.format(handler, value, MODE.user);
+            };
+          });
+
+          return toolbar;
         }
 
         __emitChangeEvent() {
           this.__debounceSetValue && this.__debounceSetValue.flush();
 
-          if (this.__userInput) {
+          if (this.__lastCommittedChange !== this.value) {
             this.dispatchEvent(new CustomEvent('change', {bubbles: true, cancelable: false}));
-            this.__userInput = false;
+            this.__lastCommittedChange = this.value;
           }
         }
 
@@ -468,8 +539,8 @@ This program is available under Apache License Version 2.0, available at https:/
                 .retain(range.index)
                 .delete(range.length)
                 .insert({image})
-              , 'user');
-              this._editor.setSelection(range.index + 1, 'silent');
+              , MODE.user);
+              this._editor.setSelection(range.index + 1, MODE.silent);
               fileInput.value = '';
             };
             reader.readAsDataURL(fileInput.files[0]);
@@ -529,6 +600,11 @@ This program is available under Apache License Version 2.0, available at https:/
             editor.setContents(delta, 'silent');
           }
           this.__updateHtmlValue();
+
+          if (this._interactionState === STATE.TOOLBAR_CLICKED) {
+            this._interactionState = STATE.DEFAULT;
+            this.__emitChangeEvent();
+          }
         }
 
         /**
