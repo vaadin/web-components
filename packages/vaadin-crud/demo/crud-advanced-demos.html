@@ -140,6 +140,35 @@
         </script>
       </template>
     </vaadin-demo-snippet>
+
+    <h3>Active Item</h3>
+    <p>To edit an item by clicking on the entire row, listen to <code>active-item-changed</code> in the grid</p>
+    <vaadin-demo-snippet id="crud-custom-demos-custom-active-item">
+      <template preserve-content>
+        <iron-ajax auto url="users.json" last-response="{{items}}"></iron-ajax>
+        <vaadin-crud items=[[items]]>
+          <vaadin-grid slot="grid">
+            <vaadin-grid-column path="name.first">
+            </vaadin-grid-column>
+            <vaadin-grid-column path="name.last">
+            </vaadin-grid-column>
+            <vaadin-grid-column path="details.email">
+            </vaadin-grid-column>
+          </vaadin-grid>
+        </vaadin-crud>
+        <script>
+          window.addDemoReadyListener('#crud-custom-demos-custom-active-item', function(document) {
+            const grid = document.querySelector('vaadin-grid');
+            grid.addEventListener('active-item-changed', function(e) {
+              if (grid.activeItem) {
+                grid.dispatchEvent(new CustomEvent('edit', {detail: {item: grid.activeItem}}));
+                grid.activeItem = null;
+              }
+            });
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
   </template>
   <script>
     class CrudAdvancedDemos extends DemoReadyEventEmitter(CrudDemo(Polymer.Element)) {
