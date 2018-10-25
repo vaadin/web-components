@@ -134,7 +134,7 @@ This program is available under Apache License Version 2.0, available at https:/
         'code-block'
       ];
 
-      const MODE = {
+      const SOURCE = {
         USER: 'user',
         SILENT: 'silent'
       };
@@ -361,7 +361,7 @@ This program is available under Apache License Version 2.0, available at https:/
             }
           });
 
-          editorContent.addEventListener('focusin', e => {
+          editorContent.addEventListener('focus', e => {
             // format changed, but no value changed happened
             if (this._toolbarState === STATE.CLICKED) {
               this._cleanToolbarState();
@@ -406,13 +406,13 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _prepareToolbar() {
           const clean = Quill.imports['modules/toolbar'].DEFAULTS.handlers.clean;
-          const markToolbarClicked = this._markToolbarClicked.bind(this);
+          const self = this;
 
           const toolbar = {
             container: this.shadowRoot.querySelector('[part="toolbar"]'),
             handlers: {
               clean: function() {
-                markToolbarClicked();
+                self._markToolbarClicked();
                 clean.call(this);
               }
             }
@@ -420,8 +420,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
           HANDLERS.forEach(handler => {
             toolbar.handlers[handler] = value => {
-              markToolbarClicked();
-              this._editor.format(handler, value, MODE.user);
+              this._markToolbarClicked();
+              this._editor.format(handler, value, SOURCE.user);
             };
           });
 
@@ -551,9 +551,9 @@ This program is available under Apache License Version 2.0, available at https:/
                 .retain(range.index)
                 .delete(range.length)
                 .insert({image})
-              , MODE.user);
+              , SOURCE.user);
               this._markToolbarClicked();
-              this._editor.setSelection(range.index + 1, MODE.silent);
+              this._editor.setSelection(range.index + 1, SOURCE.silent);
               fileInput.value = '';
             };
             reader.readAsDataURL(fileInput.files[0]);
@@ -617,6 +617,9 @@ This program is available under Apache License Version 2.0, available at https:/
           if (this._toolbarState === STATE.CLICKED) {
             this._cleanToolbarState();
             this.__emitChangeEvent();
+          } else if (!this._editor.hasFocus()) {
+            // value changed from outside
+            this.__lastCommittedChange = this.value;
           }
         }
 

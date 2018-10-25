@@ -231,10 +231,22 @@
           rte.addEventListener('change', spy);
 
           // Emulate setting the value from keyboard
+          editor.focus();
           setContent('Foo');
           content.dispatchEvent(new CustomEvent('focusout'));
 
           expect(spy).to.be.calledOnce;
+        });
+
+        it('should not dispatch change event on focusout when value set from outside', () => {
+          const spy = sinon.spy();
+          rte.addEventListener('change', spy);
+
+          rte.value = JSON.stringify([{insert: 'Foo\n'}]);
+          editor.focus();
+          content.dispatchEvent(new CustomEvent('focusout'));
+
+          expect(spy).to.not.be.called;
         });
 
         it('should dispatch change event after styling the content with toolbar', done => {
@@ -248,9 +260,33 @@
           // Emulate using the toolbar: selecting text and clicking a bold button.
           editor.focus();
           editor.setSelection(0, 3);
+
           const btn = rte.shadowRoot.querySelector('[part="bold-button"]');
-          btn.dispatchEvent(new MouseEvent('mousedown'));
+          btn.dispatchEvent(new MouseEvent('mousedown', {bubbles: true}));
+          const evt = new CustomEvent('focusout');
+          evt.relatedTarget = btn;
+          content.dispatchEvent(evt);
           btn.click();
+
+          flushValueDebouncer();
+        });
+
+        it('should not dispatch change event if no styling changed after toolbar click', () => {
+          const spy = sinon.spy();
+          rte.addEventListener('change', spy);
+          rte.value = JSON.stringify([{insert: 'Foo'}]);
+
+          // Emulate using the toolbar: clicking a bold button with no text selected
+          editor.focus();
+          editor.setSelection(0, 0);
+
+          const btn = rte.shadowRoot.querySelector('[part="bold-button"]');
+          btn.dispatchEvent(new MouseEvent('mousedown', {bubbles: true}));
+          btn.click();
+          content.dispatchEvent(new CustomEvent('focus'));
+          flushValueDebouncer();
+
+          expect(spy).to.not.be.called;
         });
 
         it('should dispatch change event after clearing the formatting with toolbar', done => {
@@ -266,30 +302,30 @@
           editor.focus();
           editor.setSelection(0, 3);
           const btn = rte.shadowRoot.querySelector('[part="clean-button"]');
-          btn.dispatchEvent(new MouseEvent('mousedown'));
+          btn.dispatchEvent(new MouseEvent('mousedown', {bubbles: true}));
           btn.click();
+          flushValueDebouncer();
         });
 
         it('should not be dispatched when text remains unchanged after leaving rte', () => {
           const spy = sinon.spy();
           rte.addEventListener('change', spy);
 
-          setContent('Foo');
-          content.dispatchEvent(new CustomEvent('focusout'));
+          rte.value = JSON.stringify([{insert: 'Foo\n'}]);
           editor.focus();
 
           // Emulate adding the formatting, removing it back and then moving focus out
           editor.setSelection(0, 3);
           const btn = rte.shadowRoot.querySelector('[part="bold-button"]');
-          btn.dispatchEvent(new MouseEvent('mousedown'));
+          btn.dispatchEvent(new MouseEvent('mousedown', {bubbles: true}));
           btn.click();
 
-          btn.dispatchEvent(new MouseEvent('mousedown'));
+          btn.dispatchEvent(new MouseEvent('mousedown', {bubbles: true}));
           btn.click();
 
           content.dispatchEvent(new CustomEvent('focusout'));
 
-          expect(spy).to.be.calledOnce;
+          expect(spy).to.not.be.called;
         });
       });
 
