@@ -6,8 +6,9 @@
       }
     </style>
 
-    <h3>Custom search</h3>
-    <p>This demo has an input field that filters data based on a custom search algorithm.</p>
+    <h3>Custom search and renderers</h3>
+    <p>This demo has an input field that filters data based on a custom search algorithm.
+       Additionally grid uses custom renderers to highlight search matches.</p>
     <p>Note that search field has been added to the crud toolbar in the footer, but moved up using CSS.</p>
     <vaadin-demo-snippet id="crud-advanced-demos-custom-search">
       <template preserve-content>
@@ -15,6 +16,11 @@
           <vaadin-text-field slot="footer" style="width: calc(100% - 0.5em)" placeholder="Search users by first or last name">
             <iron-icon icon="lumo:search" slot="prefix"></iron-icon>
           </vaadin-text-field>
+          <vaadin-grid slot="grid">
+            <vaadin-grid-column></vaadin-grid-column>
+            <vaadin-grid-column></vaadin-grid-column>
+            <vaadin-crud-edit-column></vaadin-crud-edit-column>
+          </vaadin-grid>
         </vaadin-crud>
         <vaadin-notification>
           <template>Save and Delete operations are no implemented</template>
@@ -39,7 +45,7 @@
             // Configure custom search
             search.addEventListener('input', function(e) {
               const regex = RegExp(search.value, 'i');
-              // reasign to the crud a copy of the data with the filtered items
+              // reassign to the crud a copy of the data with the filtered items
               crud.items = people.slice(0).filter(function(item) {
                 return regex.test(item.first) || regex.test(item.last);
               });
@@ -53,6 +59,14 @@
             crud.addEventListener('save', save);
             crud.addEventListener('delete', save);
 
+            // set grid custom renderers to highlight search matches
+            const cols = document.querySelectorAll('vaadin-grid-column');
+            const renderer = function(root, column, model) {
+              const txt = column == cols[0] ? model.item.first : model.item.last;
+              root.innerHTML = txt.replace(RegExp('(' + search.value + ')', 'gi'), '<b>$1</b>');
+            };
+            cols[0].renderer = renderer;
+            cols[1].renderer = renderer;
           });
         </script>
       </template>
