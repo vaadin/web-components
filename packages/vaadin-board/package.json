@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-board",
-  "version": "2.1.0-alpha1",
+  "version": "2.1.0-beta1",
   "description": "Polymer element to create flexible responsive layouts and build nice looking dashboard.",
   "main": "vaadin-board.html",
   "repository": "vaadin/vaadin-board",
