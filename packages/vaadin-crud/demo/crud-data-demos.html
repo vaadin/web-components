@@ -17,49 +17,15 @@
       <template preserve-content>
         <vaadin-crud ></vaadin-crud>
         <script>
-        window.addDemoReadyListener('#crud-data-demos-dataprovider', function(document) {
-          // Basic data model persisted in an array in memory
-          const FIRSTS = ['James', 'Mary', 'John', 'Patricia', 'Robert', 'Jennifer'];
-          const LASTS = ['Smith', 'Johnson', 'Williams', 'Brown'];
-          const people = [];
-          let id = 0;
-          while (id++ <= 200) {
-            people.push({
-              '_id': id, // It's a good practice to provide data with unique ids
-              'first-name': FIRSTS[id % FIRSTS.length] + id,
-              'last-name': LASTS[id % LASTS.length]});
-          }
-          // Helper to get the index of an item with unique `_id` in an array
-          function getIdx(array, item) {
-            return array.reduce(function(r, obj, idx) {
-              return (r < 0 && obj._id === item._id) ? idx : r;
-            }, -1);
-          }
-          // Helper to filter an array based on the param.filters array
-          function filter(array, filters) {
-            return array.filter(function(item) {
-              return filters.every(function(f) {
-                return RegExp(f.value, 'i').test(Polymer.Base.get(f.path, item));
-              });
-            });
-          }
-          // Helper to sort an array based on the param.filters array
-          function sort(array, sorts) {
-            return array.slice(0).sort(function(item1, item2) {
-              return sorts.reduce(function(r, s) {
-                const a = Polymer.Base.get(s.path, s.direction == 'asc' ? item1 : item2) || '';
-                const b = Polymer.Base.get(s.path, s.direction == 'asc' ? item2 : item1) || '';
-                return r > 0 || a.localeCompare(b);
-              }, 0);
-            });
-          }
 
+        /** CRUD CONFIGURATION **/
+        window.addDemoReadyListener('#crud-data-demos-dataprovider', function(document) {
           const crud = document.querySelector('vaadin-crud');
           // Configure CRUD Read
           crud.dataProvider = function(params, callback) {
             const arr = sort(filter(people, params.filters), params.sortOrders);
             const chunk = arr.slice(params.page * params.pageSize, params.page * params.pageSize + params.pageSize);
-            callback(chunk, people.length);
+            callback(chunk, arr.length);
           };
           // Configure CRUD Create and Update
           crud.addEventListener('save', function(e) {
@@ -77,6 +43,44 @@
             people.splice(getIdx(people, e.detail.item), 1);
           });
         });
+
+        /** DATA MODEL **/
+        // Basic data model persisted in an array in memory
+        // It's an array of generated users with random first and last names.
+        const FIRSTS = ['James', 'Mary', 'John', 'Patricia', 'Robert', 'Jennifer'];
+        const LASTS = ['Smith', 'Johnson', 'Williams', 'Brown'];
+        var people = [];
+        var id = 0;
+        while (id++ <= 200) {
+          people.push({
+            '_id': id, // It's a good practice to provide data with unique ids
+            'first-name': FIRSTS[id % FIRSTS.length] + id,
+            'last-name': LASTS[id % LASTS.length]});
+        }
+        // Helper to get the index of an item with unique `_id` in an array
+        function getIdx(array, item) {
+          return array.reduce(function(r, obj, idx) {
+            return (r < 0 && obj._id === item._id) ? idx : r;
+          }, -1);
+        }
+        // Helper to filter an array based on the param.filters array
+        function filter(array, filters) {
+          return array.filter(function(item) {
+            return filters.every(function(f) {
+              return RegExp(f.value, 'i').test(Polymer.Base.get(f.path, item));
+            });
+          });
+        }
+        // Helper to sort an array based on the param.filters array
+        function sort(array, sorts) {
+          return array.slice(0).sort(function(item1, item2) {
+            return sorts.reduce(function(r, s) {
+              const a = Polymer.Base.get(s.path, s.direction == 'asc' ? item1 : item2) || '';
+              const b = Polymer.Base.get(s.path, s.direction == 'asc' ? item2 : item1) || '';
+              return r > 0 || a.localeCompare(b);
+            }, 0);
+          });
+        }
         </script>
       </template>
     </vaadin-demo-snippet>
