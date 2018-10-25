@@ -92,7 +92,7 @@
               var xhr = new XMLHttpRequest();
               xhr.onload = function() {
                 const response = JSON.parse(xhr.responseText);
-                setTimeout(() => {
+                setTimeout(function() {
                   callback(response.result, response.size);
                 }, 2000);
               };
