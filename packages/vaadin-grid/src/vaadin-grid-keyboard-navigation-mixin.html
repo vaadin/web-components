@@ -69,9 +69,6 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _onKeyDown(e) {
-      // Disable <iron-list> keydown handler
-      e.stopImmediatePropagation();
-
       // Ensure standard key value, unified across browsers
       let key = e.key;
       if (key === 'Up' || key === 'Down' || key === 'Left' || key === 'Right') {

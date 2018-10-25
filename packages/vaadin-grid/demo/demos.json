@@ -101,6 +101,17 @@
   }
   ,
   {
+    "name": "Detailed Events",
+    "url": "grid-detailed-event-demos",
+    "src": "grid-detailed-event-demos.html",
+    "meta": {
+      "title": "vaadin-grid – Detailed Events",
+      "description": "",
+      "image": ""
+    }
+  }
+  ,
+  {
     "name": "Tree Grid",
     "url": "grid-tree-demos",
     "src": "grid-tree-demos.html",
