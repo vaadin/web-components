@@ -191,45 +191,141 @@
             // trigger mock image upload
             fileInput.dispatchEvent(new Event('change'));
           });
+
+          it('should mark image button as clicked for subsequent change event', done => {
+            const markClickedSpy = sinon.spy(rte, '_markToolbarClicked');
+
+            const fileInput = rte.shadowRoot.querySelector('input[type="file"]');
+            fileInput.__proto__ = HTMLElement.prototype;
+            delete fileInput.files;
+
+            editor.focus();
+
+            const img = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
+            fileInput.files = [createImage(img, 'image/gif')];
+
+            rte.addEventListener('value-changed', () => {
+              expect(markClickedSpy).to.be.calledOnce;
+              done();
+            });
+
+            // trigger mock image upload
+            fileInput.dispatchEvent(new Event('change'));
+          });
         });
       });
 
       describe('change event', () => {
-        it('should dispatch change event on blur event when content was changed', () => {
+        var content;
+
+        const setContent = text => {
+          editor.setContents(new window.Quill.imports.delta([{insert: text}]), 'user');
+        };
+
+        beforeEach(() => {
+          content = rte.shadowRoot.querySelector('.ql-editor');
+        });
+
+        it('should dispatch change event on focusout event when content was changed', () => {
           const spy = sinon.spy();
           rte.addEventListener('change', spy);
 
           // Emulate setting the value from keyboard
-          editor.setContents(new window.Quill.imports.delta([{insert: 'Foo'}]), 'user');
-          rte.shadowRoot.querySelector('.ql-editor').dispatchEvent(new CustomEvent('blur'));
+          editor.focus();
+          setContent('Foo');
+          content.dispatchEvent(new CustomEvent('focusout'));
 
-          expect(spy.calledOnce).to.be.true;
+          expect(spy).to.be.calledOnce;
         });
 
-        it('should dispatch change event after styling the content with toolbar', () => {
+        it('should not dispatch change event on focusout when value set from outside', () => {
           const spy = sinon.spy();
           rte.addEventListener('change', spy);
 
-          // Emulate using the toolbar: removing focus from editor and applying styling after that.
+          rte.value = JSON.stringify([{insert: 'Foo\n'}]);
+          editor.focus();
+          content.dispatchEvent(new CustomEvent('focusout'));
+
+          expect(spy).to.not.be.called;
+        });
+
+        it('should dispatch change event after styling the content with toolbar', done => {
           rte.value = JSON.stringify([{insert: 'Foo'}]);
-          rte.shadowRoot.querySelector('.ql-editor').dispatchEvent(new CustomEvent('blur'));
-          editor.formatText(0, 3, 'bold', true, 'user');
 
-          expect(rte.__wasBlurred).to.be.false;
-          expect(spy.calledOnce).to.be.true;
+          rte.addEventListener('change', () => {
+            expect(rte.value).to.equal('[{"attributes":{"bold":true},"insert":"Foo"},{"insert":"\\n"}]');
+            done();
+          });
+
+          // Emulate using the toolbar: selecting text and clicking a bold button.
+          editor.focus();
+          editor.setSelection(0, 3);
+
+          const btn = rte.shadowRoot.querySelector('[part="bold-button"]');
+          btn.dispatchEvent(new MouseEvent('mousedown', {bubbles: true}));
+          const evt = new CustomEvent('focusout');
+          evt.relatedTarget = btn;
+          content.dispatchEvent(evt);
+          btn.click();
+
+          flushValueDebouncer();
         });
 
-        it('should not be dispatched on first text-change event after blurring the rte', () => {
+        it('should not dispatch change event if no styling changed after toolbar click', () => {
+          const spy = sinon.spy();
+          rte.addEventListener('change', spy);
+          rte.value = JSON.stringify([{insert: 'Foo'}]);
+
+          // Emulate using the toolbar: clicking a bold button with no text selected
+          editor.focus();
+          editor.setSelection(0, 0);
+
+          const btn = rte.shadowRoot.querySelector('[part="bold-button"]');
+          btn.dispatchEvent(new MouseEvent('mousedown', {bubbles: true}));
+          btn.click();
+          content.dispatchEvent(new CustomEvent('focus'));
+          flushValueDebouncer();
+
+          expect(spy).to.not.be.called;
+        });
+
+        it('should dispatch change event after clearing the formatting with toolbar', done => {
+          const text = JSON.stringify([{attributes: {bold: true}, insert: 'Foo\n'}]);
+          rte.value = text;
+
+          rte.addEventListener('change', () => {
+            expect(rte.value).to.equal(JSON.stringify([{insert: 'Foo\n'}]));
+            done();
+          });
+
+          // Emulate using the toolbar: selecting text and clicking a clear button.
+          editor.focus();
+          editor.setSelection(0, 3);
+          const btn = rte.shadowRoot.querySelector('[part="clean-button"]');
+          btn.dispatchEvent(new MouseEvent('mousedown', {bubbles: true}));
+          btn.click();
+          flushValueDebouncer();
+        });
+
+        it('should not be dispatched when text remains unchanged after leaving rte', () => {
           const spy = sinon.spy();
           rte.addEventListener('change', spy);
 
-          // Emulate typing to the editor, focusing smth outside the editor and then typing again.
-          editor.setContents(new window.Quill.imports.delta([{insert: 'Foo'}]), 'user');
-          rte.shadowRoot.querySelector('.ql-editor').dispatchEvent(new CustomEvent('blur'));
-          rte.dispatchEvent(new CustomEvent('focusout'));
-          editor.setContents(new window.Quill.imports.delta([{insert: 'Foo Bar'}]), 'user');
+          rte.value = JSON.stringify([{insert: 'Foo\n'}]);
+          editor.focus();
 
-          expect(spy.calledOnce).to.be.true;
+          // Emulate adding the formatting, removing it back and then moving focus out
+          editor.setSelection(0, 3);
+          const btn = rte.shadowRoot.querySelector('[part="bold-button"]');
+          btn.dispatchEvent(new MouseEvent('mousedown', {bubbles: true}));
+          btn.click();
+
+          btn.dispatchEvent(new MouseEvent('mousedown', {bubbles: true}));
+          btn.click();
+
+          content.dispatchEvent(new CustomEvent('focusout'));
+
+          expect(spy).to.not.be.called;
         });
       });
 

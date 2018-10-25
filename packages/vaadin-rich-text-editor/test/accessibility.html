@@ -128,6 +128,14 @@
           rte.shadowRoot.querySelector('[part="content"]').dispatchEvent(e);
         });
 
+        it('should focus a toolbar button on shift-tab combo', done => {
+          sinon.stub(buttons[0], 'focus', done);
+          const e = new CustomEvent('keydown', {bubbles: true});
+          e.keyCode = 9;
+          e.shiftKey = true;
+          rte.shadowRoot.querySelector('[part="content"]').dispatchEvent(e);
+        });
+
         it('should focus the editor on esc', done => {
           sinon.stub(editor, 'focus', done);
           const e = new CustomEvent('keydown', {bubbles: true});
