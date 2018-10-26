@@ -330,19 +330,19 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
                   editLabel: 'Edit',
                   confirm: {
                     delete: {
-                      title: 'Confirm delete',
-                      content: 'Are you sure you want to delete the selected item? This action cannot be undone.',
+                      title: 'Delete item',
+                      content: 'Are you sure you want to delete this item? This action cannot be undone.',
                       button: {
                         confirm: 'Delete',
                         dismiss: 'Cancel'
                       }
                     },
                     cancel: {
-                      title: 'Unsaved changes',
-                      content: 'There are unsaved modifications to the item.',
+                      title: 'Discard changes',
+                      content: 'There are unsaved changes to this item.',
                       button: {
                         confirm: 'Discard',
-                        dismiss: 'Continue editing'
+                        dismiss: 'Cancel'
                       }
                     }
                   }
@@ -577,15 +577,9 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           }
         }
 
-        __focusConfirmButton(confirmDlg, id) {
-          // Remove when https://github.com/vaadin/vaadin-confirm-dialog/issues/57 is done
-          confirmDlg.$.dialog.$.overlay.content.querySelector(`vaadin-button#${id}`).focus();
-        }
-
         __cancel() {
           if (this.__isDirty) {
             this.$.confirmCancel.opened = true;
-            this.__focusConfirmButton(this.$.confirmCancel, 'confirm');
           } else {
             this.__confirmCancel();
           }
@@ -600,7 +594,6 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
 
         __delete() {
           this.$.confirmDelete.opened = true;
-          this.__focusConfirmButton(this.$.confirmDelete, 'confirm');
         }
 
         __confirmDelete() {
