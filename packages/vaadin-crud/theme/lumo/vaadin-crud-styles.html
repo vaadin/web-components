@@ -62,7 +62,7 @@
       }
 
       [part="toolbar"] {
-        padding: var(--lumo-space-xs) var(--lumo-space-s);
+        padding: var(--lumo-space-s) var(--lumo-space-m);
         background-color: var(--lumo-contrast-5pct);
         border: 1px solid var(--lumo-contrast-10pct);
         border-top: none;
@@ -93,7 +93,12 @@
 
       [part="footer"] {
         background-color: var(--lumo-contrast-5pct);
-        padding: var(--lumo-space-xs) var(--lumo-space-m);
+        padding: var(--lumo-space-s) var(--lumo-space-s);
+      }
+
+      [part="footer"] ::slotted(*) {
+        margin-left: var(--lumo-space-s);
+        margin-right: var(--lumo-space-s);
       }
     </style>
   </template>

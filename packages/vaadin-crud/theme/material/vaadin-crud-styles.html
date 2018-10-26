@@ -59,7 +59,7 @@
       }
 
       [part="toolbar"] {
-        padding: 4px 16px;
+        padding: 8px;
         background-color: var(--material-secondary-background-color);
       }
 
@@ -82,7 +82,12 @@
 
       [part="footer"] {
         background-color: var(--material-secondary-background-color);
-        padding: 8px 16px;
+        padding: 8px 4px;
+      }
+
+      [part="footer"] ::slotted(*) {
+        margin-left: 4px;
+        margin-right: 4px;
       }
     </style>
   </template>
