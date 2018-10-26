@@ -98,20 +98,3 @@
     </style>
   </template>
 </dom-module>
-
-<dom-module id="lumo-dialog-layout-overlay-theme" theme-for="vaadin-dialog-overlay">
-  <template>
-    <style>
-      :host([theme~="layout"]) [part~="backdrop"] {
-        position: absolute;
-
-        /* stylelint-disable length-zero-no-unit */
-        top: calc(0px - var(--lumo-space-m));
-        left: calc(0px - var(--lumo-space-m));
-        right: calc(0px - var(--lumo-space-m));
-        bottom: calc(0px - var(--lumo-space-m));
-        /* stylelint-enable length-zero-no-unit */
-      }
-    </style>
-  </template>
-</dom-module>
