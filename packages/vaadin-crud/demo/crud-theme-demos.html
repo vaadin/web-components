@@ -1,0 +1,37 @@
+<dom-module id="crud-theme-demos">
+  <template>
+    <style include="vaadin-component-demo-shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+
+    <h3>No border</h3>
+    <p>Removes the border around the grid and the toolbar.</p>
+    <vaadin-demo-snippet id="crud-theme-demos-no-border">
+      <template preserve-content>
+        <vaadin-crud theme="no-border"></vaadin-crud>
+      </template>
+    </vaadin-demo-snippet>
+
+    <script>
+      window.addEventListener('VaadinDemoReady', e => {
+        var crud = e.detail.host.shadowRoot.querySelector('#crud-theme-demos-no-border').shadowRoot.querySelector('vaadin-demo-shadow-dom-renderer').shadowRoot.querySelector('vaadin-crud');
+        fetch('users.json').then(response => {
+          response.json().then(json => {
+            crud.items = json;
+          });
+        });
+      });
+    </script>
+
+  </template>
+  <script>
+    class CrudThemeDemos extends DemoReadyEventEmitter(CrudDemo(Polymer.Element)) {
+      static get is() {
+        return 'crud-theme-demos';
+      }
+    }
+    customElements.define(CrudThemeDemos.is, CrudThemeDemos);
+  </script>
+</dom-module>

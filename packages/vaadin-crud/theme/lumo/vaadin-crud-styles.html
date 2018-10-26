@@ -64,6 +64,12 @@
       [part="toolbar"] {
         padding: var(--lumo-space-xs) var(--lumo-space-s);
         background-color: var(--lumo-contrast-5pct);
+        border: 1px solid var(--lumo-contrast-10pct);
+        border-top: none;
+      }
+
+      :host([theme~="no-border"]) [part="toolbar"] {
+        border: 0;
       }
 
       vaadin-grid-cell-content {
