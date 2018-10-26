@@ -577,15 +577,9 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           }
         }
 
-        __focusConfirmButton(confirmDlg, id) {
-          // Remove when https://github.com/vaadin/vaadin-confirm-dialog/issues/57 is done
-          confirmDlg.$.dialog.$.overlay.content.querySelector(`vaadin-button#${id}`).focus();
-        }
-
         __cancel() {
           if (this.__isDirty) {
             this.$.confirmCancel.opened = true;
-            this.__focusConfirmButton(this.$.confirmCancel, 'confirm');
           } else {
             this.__confirmCancel();
           }
@@ -600,7 +594,6 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
 
         __delete() {
           this.$.confirmDelete.opened = true;
-          this.__focusConfirmButton(this.$.confirmDelete, 'confirm');
         }
 
         __confirmDelete() {
