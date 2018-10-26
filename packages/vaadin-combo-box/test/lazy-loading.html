@@ -484,6 +484,8 @@
           it('should select value matching selectedItem when items are loading', () => {
             comboBox.selectedItem = 'item 0';
             comboBox.opened = true;
+            comboBox.$.overlay.updateViewportBoundaries();
+            comboBox.$.overlay.ensureItemsRendered();
             expect(comboBox.value).to.equal('item 0');
             const selectedRenderedItemElements = Array.from(
               comboBox.$.overlay._selector.querySelectorAll('vaadin-combo-box-item')
@@ -529,6 +531,8 @@
           it('should select value matching selectedItem when items are loading', () => {
             comboBox.selectedItem = {id: 0, value: 'value 0', label: 'label 0'};
             comboBox.opened = true;
+            comboBox.$.overlay.updateViewportBoundaries();
+            comboBox.$.overlay.ensureItemsRendered();
             expect(comboBox.value).to.equal('value 0');
             const selectedRenderedItemElements = Array.from(
               comboBox.$.overlay._selector.querySelectorAll('vaadin-combo-box-item')
