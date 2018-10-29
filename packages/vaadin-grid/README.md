@@ -22,6 +22,7 @@
     <link rel="import" href="../iron-ajax/iron-ajax.html">
     <link rel="import" href="vaadin-grid.html">
     <link rel="import" href="vaadin-grid-selection-column.html">
+    <link rel="import" href="vaadin-grid-sort-column.html">
     <next-code-block></next-code-block>
   </template>
 </custom-element-demo>
@@ -30,8 +31,8 @@
 ```html
   <vaadin-grid theme="row-dividers" column-reordering-allowed multi-sort>
     <vaadin-grid-selection-column auto-select frozen></vaadin-grid-selection-column>
-    <vaadin-grid-column width="9em" path="firstName"></vaadin-grid-column>
-    <vaadin-grid-column width="9em" path="lastName"></vaadin-grid-column>
+    <vaadin-grid-sort-column width="9em" path="firstName"></vaadin-grid-sort-column>
+    <vaadin-grid-sort-column width="9em" path="lastName"></vaadin-grid-sort-column>
     <vaadin-grid-column id="addresscolumn" width="15em" flex-grow="2" header="Address"></vaadin-grid-column>
   </vaadin-grid>
 
