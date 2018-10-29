@@ -330,6 +330,8 @@ This program is available under Apache License Version 2.0, available at https:/
             }
           });
 
+          this.__patchToolbar();
+
           const editorContent = editor.querySelector('.ql-editor');
 
           editorContent.setAttribute('role', 'textbox');
@@ -438,6 +440,24 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _cleanToolbarState() {
           this._toolbarState = STATE.DEFAULT;
+        }
+
+        __patchToolbar() {
+          const toolbar = this._editor.theme.modules.toolbar;
+          const update = toolbar.update;
+
+          toolbar.update = function(range) {
+            update.call(toolbar, range);
+
+            toolbar.controls.forEach(pair => {
+              const input = pair[1];
+              if (input.classList.contains('ql-active')) {
+                input.setAttribute('on', '');
+              } else {
+                input.removeAttribute('on');
+              }
+            });
+          };
         }
 
         __emitChangeEvent() {

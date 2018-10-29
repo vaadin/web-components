@@ -131,6 +131,33 @@
           expect(editor.getFormat(0)).to.be.empty.object;
         });
 
+        describe('on state attribute', () => {
+          it('should toggle "on" attribute when the format button is clicked', () => {
+            btn = rte.shadowRoot.querySelector('[part="bold-button"]');
+
+            btn.click();
+            expect(btn.hasAttribute('on')).to.be.true;
+            btn.click();
+            expect(btn.hasAttribute('on')).to.be.false;
+          });
+
+          it('should toggle "on" attribute for corresponding buttons when selection is changed', () => {
+            editor.setContents(new window.Quill.imports.delta(
+              [{'attributes': {'bold': true}, 'insert': 'Foo\n'}, {'attributes': {'italic': true}, 'insert': 'Bar\n'}]), 'user');
+
+            const boldBtn = rte.shadowRoot.querySelector('[part="bold-button"]');
+            const italicBtn = rte.shadowRoot.querySelector('[part="italic-button"]');
+
+            editor.setSelection(0, 1);
+            expect(boldBtn.hasAttribute('on')).to.be.true;
+            expect(italicBtn.hasAttribute('on')).to.be.false;
+
+            editor.setSelection(4, 1);
+            expect(boldBtn.hasAttribute('on')).to.be.false;
+            expect(italicBtn.hasAttribute('on')).to.be.true;
+          });
+        });
+
         describe('image', () => {
           let btn;
 
