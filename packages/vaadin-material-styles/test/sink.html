@@ -40,7 +40,7 @@
         </div>
         <vaadin-form-layout responsive-steps='[{"columns": 2, "labelsPosition": "top"}]'>
           <vaadin-text-field label="Text field" placeholder="Placeholder" error-message="Error message" required></vaadin-text-field>
-          <vaadin-dropdown-menu label="Dropdown menu" placeholder="Placeholder" required error-message="Select an option">
+          <vaadin-select label="Select" placeholder="Placeholder" required error-message="Select an option">
             <template>
               <vaadin-list-box>
                 <vaadin-item>Option one</vaadin-item>
@@ -50,9 +50,9 @@
                 <vaadin-item disabled>Option four</vaadin-item>
               </vaadin-list-box>
             </template>
-          </vaadin-dropdown-menu>
+          </vaadin-select>
           <vaadin-date-picker label="Date picker" placeholder="Placeholder"></vaadin-date-picker>
-          <vaadin-dropdown-menu label="Dropdown menu" placeholder="Placeholder">
+          <vaadin-select label="Select" placeholder="Placeholder">
             <template>
               <vaadin-list-box>
                 <vaadin-item><iron-icon icon="icons:account-box"></iron-icon> Option one</vaadin-item>
@@ -62,7 +62,7 @@
                 <vaadin-item disabled><iron-icon icon="icons:file-upload"></iron-icon> Option four</vaadin-item>
               </vaadin-list-box>
             </template>
-          </vaadin-dropdown-menu>
+          </vaadin-select>
           <vaadin-text-area label="Text area" placeholder="Placeholder" colspan="2"></vaadin-text-area>
           <vaadin-password-field label="Password">
           </vaadin-password-field>

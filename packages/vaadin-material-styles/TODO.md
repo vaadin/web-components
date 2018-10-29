@@ -12,7 +12,7 @@
 
 ### `<vaadin-combo-box>`
 
-- The label floating transition happens on first render (apparently [has-value] is applied after first render). Happens with vaadin-date-picker as well, but not with vaadin-dropdown-menu.
+- The label floating transition happens on first render (apparently [has-value] is applied after first render). Happens with vaadin-date-picker as well, but not with vaadin-select.
 
 ### `<vaadin-context-menu>`
 
@@ -30,7 +30,7 @@ Note: see `<vaadin-list-box>`, `<vaadin-item>`.
 
 - There is a `.buttons` class exposed for arbitary users’s template. Should we scope it?
 
-### `<vaadin-dropdown-menu>`
+### `<vaadin-select>`
 
 [Real solution is to implement focus-follows-mouse option for list-box]
 - ~~Expected: mouse hover is not confused with focused item. Actual:~~

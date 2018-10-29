@@ -11,7 +11,7 @@
   <link rel="import" href="common.html">
   <link rel="import" href="person-item.html">
 
-  <link rel="import" href="../../vaadin-dropdown-menu/theme/material/vaadin-dropdown-menu.html">
+  <link rel="import" href="../../vaadin-select/theme/material/vaadin-select.html">
 
 
   <style>
@@ -29,13 +29,13 @@
       <span slot="header">Material</span>
     </demo-navigation>
 
-    <a href="https://github.com/vaadin/vaadin-material-theme/blob/master/vaadin-dropdown-menu.html" class="theme-source-code">Theme source code</a>
-    <h1>Dropdown menu</h1>
+    <a href="https://github.com/vaadin/vaadin-material-theme/blob/master/vaadin-select.html" class="theme-source-code">Theme source code</a>
+    <h1>Select</h1>
 
     <h3>Label and placeholder</h3>
     <nice-demo-snippet>
       <template slot="source">
-        <vaadin-dropdown-menu label="Label" placeholder="Placeholder" value="Option one">
+        <vaadin-select label="Label" placeholder="Placeholder" value="Option one">
           <template>
             <vaadin-list-box>
               <vaadin-item>Option one</vaadin-item>
@@ -45,14 +45,14 @@
               <vaadin-item disabled>Option four</vaadin-item>
             </vaadin-list-box>
           </template>
-        </vaadin-dropdown-menu>
+        </vaadin-select>
       </template>
     </nice-demo-snippet>
 
     <h3>States</h3>
     <nice-demo-snippet>
       <template slot="source">
-        <vaadin-dropdown-menu label="Disabled" disabled value="Option one">
+        <vaadin-select label="Disabled" disabled value="Option one">
           <template>
             <vaadin-list-box>
               <vaadin-item>Option one</vaadin-item>
@@ -62,9 +62,9 @@
               <vaadin-item disabled>Option four</vaadin-item>
             </vaadin-list-box>
           </template>
-        </vaadin-dropdown-menu>
+        </vaadin-select>
 
-        <vaadin-dropdown-menu label="Read-only" readonly value="Option one">
+        <vaadin-select label="Read-only" readonly value="Option one">
           <template>
             <vaadin-list-box>
               <vaadin-item>Option one</vaadin-item>
@@ -74,14 +74,14 @@
               <vaadin-item disabled>Option four</vaadin-item>
             </vaadin-list-box>
           </template>
-        </vaadin-dropdown-menu>
+        </vaadin-select>
       </template>
     </nice-demo-snippet>
 
     <h3>Validation</h3>
     <nice-demo-snippet>
       <template slot="source">
-        <vaadin-dropdown-menu required error-message="Please select an option" label="Required" placeholder="Select an option">
+        <vaadin-select required error-message="Please select an option" label="Required" placeholder="Select an option">
           <template>
             <vaadin-list-box>
               <vaadin-item>Option one</vaadin-item>
@@ -91,14 +91,14 @@
               <vaadin-item disabled>Option four</vaadin-item>
             </vaadin-list-box>
           </template>
-        </vaadin-dropdown-menu>
+        </vaadin-select>
       </template>
     </nice-demo-snippet>
 
     <h3 demo-section>Customized items</h3>
     <nice-demo-snippet>
       <template slot="source">
-        <vaadin-dropdown-menu label="Select a user" style="width: 15em;">
+        <vaadin-select label="Select a user" style="width: 15em;">
           <template>
             <vaadin-list-box>
               <person-item>Maxine Richardson</person-item>
@@ -106,14 +106,14 @@
               <person-item>Sebastian Harris</person-item>
 
               <style>
-                /* Show the email line when inside the list-box, but not inside the dropdown-menu selected item */
+                /* Show the email line when inside the list-box, but not inside the vaadin-select selected item */
                 person-item {
                   --person-item-email-display: block;
                 }
               </style>
             </vaadin-list-box>
           </template>
-        </vaadin-dropdown-menu>
+        </vaadin-select>
       </template>
     </nice-demo-snippet>
 
