@@ -58,14 +58,15 @@
       </template>
     </vaadin-demo-snippet>
 
-    <h3>Footer</h3>
-    <p>You can add content to the footer, bind to the size data, and customize the 'new' button.</p>
+    <h3>Toolbar</h3>
+    <p>You can add content to the toolbar and bind to the size data</p>
+    <p>NOTE: You need to provide a button marked with the attribute 'new-button'.</p>
     <vaadin-demo-snippet id="crud-custom-demos-custom-editor">
       <template preserve-content>
         <iron-ajax auto url="users.json" last-response="{{items}}"></iron-ajax>
         <vaadin-crud items=[[items]]  size="{{size}}" exclude="_id, password, picture">
-          <div slot="footer">There are <b>[[size]]</b> users in the database</div>
-          <a slot="new" href="javascript:">Add a new user</a>
+          <a slot="toolbar" new-button href="javascript:">Add a new user</a>
+          <div slot="toolbar" style="flex: 1">There are <b>[[size]]</b> users in the database</div>
         </vaadin-crud>
       </template>
     </vaadin-demo-snippet>
