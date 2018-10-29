@@ -102,7 +102,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
       // in Firefox and Safari, blur does not fire on the element when it is removed,
       // especially between keydown and keyup events, being active at the same time.
-      // reproducible in `<vaadin-dropdown-menu>` when closing overlay on select.
+      // reproducible in `<vaadin-select>` when closing overlay on select.
       if (this.hasAttribute('active')) {
         this._setFocused(false);
       }
