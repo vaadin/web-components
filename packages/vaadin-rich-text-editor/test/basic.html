@@ -31,6 +31,8 @@
 
       let rte, editor;
 
+      const getButton = fmt => rte.shadowRoot.querySelector(`[part~="toolbar-button-${fmt}"]`);
+
       beforeEach(() => {
         rte = fixture('default');
         editor = rte._editor;
@@ -54,15 +56,15 @@
         let btn;
 
         ['bold', 'italic', 'underline', 'strike', 'blockquote', 'code-block'].forEach(fmt => {
-          it(`should apply ${fmt} formatting when clicking the "${fmt}-button" part`, () => {
-            btn = rte.shadowRoot.querySelector(`[part="${fmt}-button"]`);
+          it(`should apply ${fmt} formatting when clicking the "toolbar-button-${fmt}" part`, () => {
+            btn = getButton(fmt);
             btn.click();
             editor.insertText(0, 'Foo', 'user');
             expect(editor.getFormat(0, 2)[fmt]).to.be.true;
           });
 
-          it(`should undo ${fmt} formatting when clicking the "${fmt}-button" part`, () => {
-            btn = rte.shadowRoot.querySelector(`[part="${fmt}-button"]`);
+          it(`should undo ${fmt} formatting when clicking the "toolbar-button-${fmt}" part`, () => {
+            btn = getButton(fmt);
             editor.format(fmt, true);
             btn.click();
             expect(editor.getFormat(0)).to.be.empty.object;
@@ -70,15 +72,15 @@
         });
 
         ['sub', 'super'].forEach(scr => {
-          it(`should apply ${scr}script when clicking the "${scr}script-button" part`, () => {
-            btn = rte.shadowRoot.querySelector(`[part="${scr}script-button"]`);
+          it(`should apply ${scr}script when clicking the "toolbar-button-${scr}script" part`, () => {
+            btn = getButton(`${scr}script`);
             btn.click();
             editor.insertText(0, 'Foo', 'user');
             expect(editor.getFormat(0, 2).script).to.be.equal(scr);
           });
 
-          it(`should undo ${scr}script when clicking the "${scr}script-button" part`, () => {
-            btn = rte.shadowRoot.querySelector(`[part="${scr}script-button"]`);
+          it(`should undo ${scr}script when clicking the "toolbar-button-${scr}script" part`, () => {
+            btn = getButton(`${scr}script`);
             editor.format('script', scr);
             btn.click();
             expect(editor.getFormat(0)).to.be.empty.object;
@@ -86,8 +88,8 @@
         });
 
         ['ordered', 'bullet'].forEach(type => {
-          it(`should create ${type} list when clicking the "list-${type}-button" part`, () => {
-            btn = rte.shadowRoot.querySelector(`[part="list-${type}-button"]`);
+          it(`should create ${type} list when clicking the "toolbar-button-list-${type}" part`, () => {
+            btn = getButton(`list-${type}`);
 
             btn.click();
             expect(editor.getFormat(0).list).to.be.equal(type);
@@ -98,8 +100,8 @@
         });
 
         [1, 2].forEach(level => {
-          it(`should create <h${level}> header when clicking the "h${level}-button" part`, () => {
-            btn = rte.shadowRoot.querySelector(`[part="h${level}-button"]`);
+          it(`should create <h${level}> header when clicking the "toolbar-button-h${level}" part`, () => {
+            btn = getButton(`h${level}`);
 
             btn.click();
             expect(editor.getFormat(0).header).to.be.equal(level);
@@ -110,13 +112,13 @@
         });
 
         ['center', 'right'].forEach(align => {
-          it(`should apply ${align} alignment when clicking the "align-${align}-button" part`, () => {
-            btn = rte.shadowRoot.querySelector(`[part="align-${align}-button"]`);
+          it(`should apply ${align} alignment when clicking the "toolbar-button-align-${align}" part`, () => {
+            btn = getButton(`align-${align}`);
 
             btn.click();
             expect(editor.getFormat(0).align).to.be.equal(align);
 
-            btn = rte.shadowRoot.querySelector('[part="align-left-button"]');
+            btn = getButton('align-left');
             btn.click();
             expect(editor.getFormat(0).align).to.be.empty;
           });
@@ -126,14 +128,14 @@
           editor.format('bold', true);
           editor.format('underline', true);
 
-          btn = rte.shadowRoot.querySelector('[part="clean-button"]');
+          btn = getButton('clean');
           btn.click();
           expect(editor.getFormat(0)).to.be.empty.object;
         });
 
         describe('on state attribute', () => {
           it('should toggle "on" attribute when the format button is clicked', () => {
-            btn = rte.shadowRoot.querySelector('[part="bold-button"]');
+            btn = getButton('bold');
 
             btn.click();
             expect(btn.hasAttribute('on')).to.be.true;
@@ -145,8 +147,8 @@
             editor.setContents(new window.Quill.imports.delta(
               [{'attributes': {'bold': true}, 'insert': 'Foo\n'}, {'attributes': {'italic': true}, 'insert': 'Bar\n'}]), 'user');
 
-            const boldBtn = rte.shadowRoot.querySelector('[part="bold-button"]');
-            const italicBtn = rte.shadowRoot.querySelector('[part="italic-button"]');
+            const boldBtn = getButton('bold');
+            const italicBtn = getButton('italic');
 
             editor.setSelection(0, 1);
             expect(boldBtn.hasAttribute('on')).to.be.true;
@@ -162,7 +164,7 @@
           let btn;
 
           beforeEach(() => {
-            btn = rte.shadowRoot.querySelector('[part="image-button"]');
+            btn = getButton('image');
           });
 
           it('should open file dialog when clicking the "image-button" part', () => {
@@ -288,7 +290,7 @@
           editor.focus();
           editor.setSelection(0, 3);
 
-          const btn = rte.shadowRoot.querySelector('[part="bold-button"]');
+          const btn = getButton('bold');
           btn.dispatchEvent(new MouseEvent('mousedown', {bubbles: true}));
           const evt = new CustomEvent('focusout');
           evt.relatedTarget = btn;
@@ -307,7 +309,7 @@
           editor.focus();
           editor.setSelection(0, 0);
 
-          const btn = rte.shadowRoot.querySelector('[part="bold-button"]');
+          const btn = getButton('bold');
           btn.dispatchEvent(new MouseEvent('mousedown', {bubbles: true}));
           btn.click();
           content.dispatchEvent(new CustomEvent('focus'));
@@ -328,7 +330,7 @@
           // Emulate using the toolbar: selecting text and clicking a clear button.
           editor.focus();
           editor.setSelection(0, 3);
-          const btn = rte.shadowRoot.querySelector('[part="clean-button"]');
+          const btn = getButton('clean');
           btn.dispatchEvent(new MouseEvent('mousedown', {bubbles: true}));
           btn.click();
           flushValueDebouncer();
@@ -343,7 +345,7 @@
 
           // Emulate adding the formatting, removing it back and then moving focus out
           editor.setSelection(0, 3);
-          const btn = rte.shadowRoot.querySelector('[part="bold-button"]');
+          const btn = getButton('bold');
           btn.dispatchEvent(new MouseEvent('mousedown', {bubbles: true}));
           btn.click();
 
@@ -592,7 +594,7 @@
         });
 
         it('should disable the toolbar buttons', () => {
-          const buttons = Array.from(rte.shadowRoot.querySelectorAll('[part$="button"]'));
+          const buttons = Array.from(rte.shadowRoot.querySelectorAll('[part~="toolbar-button"]'));
           rte.disabled = true;
           expect(buttons.every(btn => btn.hasAttribute('disabled'))).to.be.true;
           rte.disabled = false;
@@ -631,16 +633,16 @@
 
         it('should undo last change when the "undo" button clicked', () => {
           editor.insertText(0, 'Foo', 'user');
-          btn = rte.shadowRoot.querySelector(`[part="undo-button"]`);
+          btn = getButton('undo');
           btn.click();
           expect(editor.getText()).to.not.equal('Foo\n');
         });
 
         it('should redo last change when the "redo" button clicked', () => {
           editor.insertText(0, 'Foo', 'user');
-          btn = rte.shadowRoot.querySelector(`[part="undo-button"]`);
+          btn = getButton('undo');
           btn.click();
-          btn = rte.shadowRoot.querySelector(`[part="redo-button"]`);
+          btn = getButton('redo');
           btn.click();
           expect(editor.getText()).to.equal('Foo\n');
         });

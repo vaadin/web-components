@@ -141,7 +141,7 @@ gulp.task('icons', function() {
 `;
         glyphs.forEach((g, index) => {
           var name = g.name.replace(/\s/g, '-').toLowerCase();
-          output += `      [part^="${name}"]::before {
+          output += `      [part~="toolbar-button-${name}"]::before {
         content: var(--${fontName}-${name});
       }`;
           if (index < glyphs.length - 1) {

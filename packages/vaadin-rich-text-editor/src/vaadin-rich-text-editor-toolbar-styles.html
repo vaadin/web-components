@@ -9,7 +9,7 @@
         flex-shrink: 0;
       }
 
-      [part$="button"] {
+      [part~="toolbar-button"] {
         width: 2em;
         height: 2em;
         margin: 0;
@@ -22,86 +22,86 @@
         position: relative;
       }
 
-      [part$="button"]:hover {
+      [part~="toolbar-button"]:hover {
         outline: none;
       }
 
-      [part$="button"].ql-active {
+      [part~="toolbar-button"].ql-active {
         background-color: #eee;
       }
 
-      [part$="button"]::before {
+      [part~="toolbar-button"]::before {
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
       }
 
-      [part^="undo"]::before,
-      [part^="redo"]::before,
-      [part^="list-ordered"]::before,
-      [part^="list-bullet"]::before,
-      [part^="align-left"]::before,
-      [part^="align-center"]::before,
-      [part^="align-right"]::before,
-      [part^="image"]::before,
-      [part^="clean"]::before {
+      [part~="toolbar-button-undo"]::before,
+      [part~="toolbar-button-redo"]::before,
+      [part~="toolbar-button-list-ordered"]::before,
+      [part~="toolbar-button-list-bullet"]::before,
+      [part~="toolbar-button-align-left"]::before,
+      [part~="toolbar-button-align-center"]::before,
+      [part~="toolbar-button-align-right"]::before,
+      [part~="toolbar-button-image"]::before,
+      [part~="toolbar-button-clean"]::before {
         font-family: "vaadin-rte-icons", sans-serif;
       }
 
-      [part$="group"] {
+      [part~="toolbar-group"] {
         display: flex;
         margin: 0 0.5em;
       }
 
-      [part^="bold"]::before {
+      [part~="toolbar-button-bold"]::before {
         content: "B";
         font-weight: 700;
       }
 
-      [part^="italic"]::before {
+      [part~="toolbar-button-italic"]::before {
         content: "I";
         font-style: italic;
       }
 
-      [part^="underline"]::before {
+      [part~="toolbar-button-underline"]::before {
         content: "U";
         text-decoration: underline;
       }
 
-      [part^="strike"]::before {
+      [part~="toolbar-button-strike"]::before {
         content: "T";
         text-decoration: line-through;
       }
 
-      [part^="h1"]::before {
+      [part~="toolbar-button-h1"]::before {
         content: "H1";
         font-size: 1.25em;
       }
 
-      [part^="h2"]::before {
+      [part~="toolbar-button-h2"]::before {
         content: "H2";
         font-size: 1em;
       }
 
-      [part^="h3"]::before {
+      [part~="toolbar-button-h3"]::before {
         content: "H3";
         font-size: 0.875em;
       }
 
-      [part^="h1"]::before,
-      [part^="h2"]::before,
-      [part^="h3"]::before {
+      [part~="toolbar-button-h1"]::before,
+      [part~="toolbar-button-h2"]::before,
+      [part~="toolbar-button-h3"]::before {
         letter-spacing: -0.05em;
       }
 
-      [part^="subscript"]::before,
-      [part^="superscript"]::before {
+      [part~="toolbar-button-subscript"]::before,
+      [part~="toolbar-button-superscript"]::before {
         content: "X";
       }
 
-      [part^="subscript"]::after,
-      [part^="superscript"]::after {
+      [part~="toolbar-button-subscript"]::after,
+      [part~="toolbar-button-superscript"]::after {
         content: "2";
         position: absolute;
         top: 50%;
@@ -109,17 +109,17 @@
         font-size: 0.625em;
       }
 
-      [part^="superscript"]::after {
+      [part~="toolbar-button-superscript"]::after {
         top: 20%;
       }
 
-      [part^="blockquote"]::before {
+      [part~="toolbar-button-blockquote"]::before {
         content: "”";
         font-size: 2em;
         height: 0.6em;
       }
 
-      [part^="code-block"]::before {
+      [part~="toolbar-button-code-block"]::before {
         content: "</>";
         font-size: 0.875em;
       }
