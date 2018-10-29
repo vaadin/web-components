@@ -5002,7 +5002,7 @@
   },
   {
     "name": "search-minus",
-    "code": "e803",
+    "code": "e804",
     "categories": [
       "Tools",
       "Item"
@@ -5015,7 +5015,7 @@
   },
   {
     "name": "search-plus",
-    "code": "e804",
+    "code": "e803",
     "categories": [
       "Tools",
       "Item"
