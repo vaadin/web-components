@@ -67,7 +67,7 @@
         </div>
         <vaadin-form-layout responsive-steps='[{"minWidth": "0", "columns": 1, "labelsPosition": "top"}, {"minWidth": "400px", "columns": 2, "labelsPosition": "top"}]'>
           <vaadin-text-field label="Text field" placeholder="Placeholder" error-message="Error message" required></vaadin-text-field>
-          <vaadin-dropdown-menu label="Dropdown menu" placeholder="Placeholder" required error-message="Select an option">
+          <vaadin-select label="Select" placeholder="Placeholder" required error-message="Select an option">
             <iron-icon icon="lumo:bar-chart" slot="prefix"></iron-icon>
             <template>
               <vaadin-list-box>
@@ -89,9 +89,9 @@
                 <vaadin-item disabled>Option fourteen</vaadin-item>
               </vaadin-list-box>
             </template>
-          </vaadin-dropdown-menu>
+          </vaadin-select>
           <vaadin-date-picker label="Date picker" placeholder="Placeholder"></vaadin-date-picker>
-          <vaadin-dropdown-menu label="Dropdown menu" placeholder="Placeholder">
+          <vaadin-select label="Select" placeholder="Placeholder">
             <template>
               <vaadin-list-box>
                 <vaadin-item><iron-icon icon="lumo:user"></iron-icon> Option one</vaadin-item>
@@ -101,7 +101,7 @@
                 <vaadin-item disabled><iron-icon icon="lumo:upload"></iron-icon> Option four</vaadin-item>
               </vaadin-list-box>
             </template>
-          </vaadin-dropdown-menu>
+          </vaadin-select>
           <vaadin-text-area label="Text area" placeholder="Placeholder" colspan="2">
             <iron-icon icon="lumo:search" slot="prefix"></iron-icon>
           </vaadin-text-area>
