@@ -55,5 +55,16 @@
         "image": ""
        }
      }
+     ,
+     {
+       "name": "Theme Variants",
+       "url": "crud-theme-demos",
+       "src": "crud-theme-demos.html",
+       "meta": {
+         "title": "vaadin-crud Theme variant examples",
+         "description": "",
+         "image": ""
+        }
+      }
   ]
 }
