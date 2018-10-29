@@ -15,10 +15,10 @@
     </vaadin-demo-snippet>
 
     <script>
-      window.addEventListener('VaadinDemoReady', e => {
-        var crud = e.detail.host.shadowRoot.querySelector('#crud-theme-demos-no-border').shadowRoot.querySelector('vaadin-demo-shadow-dom-renderer').shadowRoot.querySelector('vaadin-crud');
-        fetch('users.json').then(response => {
-          response.json().then(json => {
+      window.addDemoReadyListener('#crud-theme-demos-no-border', function(document) {
+        var crud = document.querySelector('vaadin-crud');
+        fetch('users.json').then(function(response) {
+          response.json().then(function(json) {
             crud.items = json;
           });
         });
