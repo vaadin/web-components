@@ -119,7 +119,6 @@ This program is available under Apache License Version 2.0, available at https:/
       'use strict';
 
       const Quill = window.Quill;
-      const DEFAULT_VALUE = '[{"insert":"\\n"}]';
 
       const HANDLERS = [
         'bold',
@@ -230,7 +229,7 @@ This program is available under Apache License Version 2.0, available at https:/
             value: {
               type: String,
               notify: true,
-              value: DEFAULT_VALUE
+              value: ''
             },
 
             /**
@@ -305,7 +304,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
             __lastCommittedChange: {
               type: String,
-              value: DEFAULT_VALUE
+              value: ''
             }
           };
         }
@@ -516,6 +515,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _clear() {
           this._editor.deleteText(0, this._editor.getLength(), 'silent');
+          this.__updateHtmlValue();
         }
 
         _undo(e) {
@@ -603,12 +603,16 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _valueChanged(value, editor) {
-          if (value === undefined && ! this.__oldValue || editor === undefined) {
+          if (editor === undefined) {
             return;
           }
 
-          if (value == null || value === '') {
-            this.value = DEFAULT_VALUE;
+          if (value == null || value == '[{"insert":"\\n"}]') {
+            this.value = '';
+            return;
+          }
+
+          if (value === '') {
             this._clear();
             return;
           }
