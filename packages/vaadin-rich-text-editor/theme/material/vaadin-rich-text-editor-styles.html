@@ -24,16 +24,16 @@
         overflow: hidden;
       }
 
-      [part~="group"] {
+      [part~="toolbar-group"] {
         margin: 8px 0;
         padding: 0 8px;
       }
 
-      [part~="group"] + [part~="group"] {
+      [part~="toolbar-group"] + [part~="toolbar-group"] {
         box-shadow: -1px 0 0 0 rgba(0, 0, 0, 0.1);
       }
 
-      [part$="button"] {
+      [part~="toolbar-button"] {
         border-radius: 3px;
         color: var(--material-secondary-text-color);
         font-family: "vaadin-rte-icons", var(--material-font-family);
@@ -41,41 +41,41 @@
         margin: -4px 2px;
       }
 
-      [part$="button"]:hover {
+      [part~="toolbar-button"]:hover {
         background-color: transparent;
         color: inherit;
       }
 
-      [part$="button"].ql-active {
+      [part~="toolbar-button"][on] {
         background-color: rgba(0, 0, 0, 0.1);
         color: inherit;
       }
 
       @media (hover: none) {
-        [part$="button"]:hover {
+        [part~="toolbar-button"]:hover {
           color: var(--material-secondary-text-color);
         }
       }
 
       /* SVG icons */
-      [part^="undo"]::before,
-      [part^="redo"]::before,
-      [part^="list-ordered"]::before,
-      [part^="list-bullet"]::before,
-      [part^="align-left"]::before,
-      [part^="align-center"]::before,
-      [part^="align-right"]::before,
-      [part^="image"]::before,
-      [part^="clean"]::before {
+      [part~="toolbar-button-undo"]::before,
+      [part~="toolbar-button-redo"]::before,
+      [part~="toolbar-button-list-ordered"]::before,
+      [part~="toolbar-button-list-bullet"]::before,
+      [part~="toolbar-button-align-left"]::before,
+      [part~="toolbar-button-align-center"]::before,
+      [part~="toolbar-button-align-right"]::before,
+      [part~="toolbar-button-image"]::before,
+      [part~="toolbar-button-clean"]::before {
         font-size: 24px;
         font-weight: 400;
       }
 
       /* Text icons */
-      [part^="bold"]::before,
-      [part^="italic"]::before,
-      [part^="underline"]::before,
-      [part^="strike"]::before {
+      [part~="toolbar-button-bold"]::before,
+      [part~="toolbar-button-italic"]::before,
+      [part~="toolbar-button-underline"]::before,
+      [part~="toolbar-button-strike"]::before {
         font-size: 20px;
       }
 

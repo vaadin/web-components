@@ -25,11 +25,11 @@
         padding: calc(var(--lumo-space-s) - 1px) var(--lumo-space-xs);
       }
 
-      [part~="group"] {
+      [part~="toolbar-group"] {
         margin: 0 calc(var(--lumo-space-l) / 2 - 1px);
       }
 
-      [part$="button"] {
+      [part~="toolbar-button"] {
         width: var(--lumo-size-m);
         height: var(--lumo-size-m);
         border-radius: var(--lumo-border-radius);
@@ -39,113 +39,113 @@
         transition: background-color 100ms, color 100ms;
       }
 
-      [part$="button"]:focus {
+      [part~="toolbar-button"]:focus {
         outline: none;
         box-shadow: 0 0 0 2px var(--lumo-primary-color-50pct);
       }
 
-      [part$="button"]:hover {
+      [part~="toolbar-button"]:hover {
         background-color: var(--lumo-contrast-5pct);
         color: var(--lumo-contrast-80pct);
         box-shadow: none;
       }
 
       @media (hover: none) {
-        [part$="button"]:hover {
+        [part~="toolbar-button"]:hover {
           background-color: transparent;
         }
       }
 
-      [part$="button"].ql-active {
+      [part~="toolbar-button"][on] {
         background-color: var(--lumo-primary-color-10pct);
         color: var(--lumo-primary-text-color);
       }
 
-      [part$="button"]:active {
+      [part~="toolbar-button"]:active {
         background-color: var(--lumo-contrast-10pct);
         color: var(--lumo-contrast-90pct);
       }
 
-      [part$="button"]::before {
+      [part~="toolbar-button"]::before {
         font-family: "lumo-icons", var(--lumo-font-family);
         font-size: var(--lumo-icon-size-m);
       }
 
-      [part^="undo"]::before {
+      [part~="toolbar-button-undo"]::before {
         content: var(--lumo-icons-undo);
       }
 
-      [part^="redo"]::before {
+      [part~="toolbar-button-redo"]::before {
         content: var(--lumo-icons-redo);
       }
 
-      [part^="bold"]::before,
-      [part^="italic"]::before,
-      [part^="underline"]::before,
-      [part^="strike"]::before {
+      [part~="toolbar-button-bold"]::before,
+      [part~="toolbar-button-italic"]::before,
+      [part~="toolbar-button-underline"]::before,
+      [part~="toolbar-button-strike"]::before {
         font-size: var(--lumo-font-size-m);
         font-weight: 600;
       }
 
-      [part^="bold"]::before {
+      [part~="toolbar-button-bold"]::before {
         font-weight: 700;
       }
 
-      [part^="h1"]::before,
-      [part^="h2"]::before,
-      [part^="h3"]::before {
+      [part~="toolbar-button-h1"]::before,
+      [part~="toolbar-button-h2"]::before,
+      [part~="toolbar-button-h3"]::before {
         font-weight: 600;
       }
 
-      [part^="h1"]::before {
+      [part~="toolbar-button-h1"]::before {
         font-size: var(--lumo-font-size-m);
       }
 
-      [part^="h2"]::before {
+      [part~="toolbar-button-h2"]::before {
         font-size: var(--lumo-font-size-s);
       }
 
-      [part^="h3"]::before {
+      [part~="toolbar-button-h3"]::before {
         font-size: var(--lumo-font-size-xs);
       }
 
-      [part^="subscript"]::before,
-      [part^="superscript"]::before {
+      [part~="toolbar-button-subscript"]::before,
+      [part~="toolbar-button-superscript"]::before {
         font-weight: 600;
         font-size: var(--lumo-font-size-s);
       }
 
-      [part^="subscript"]::after,
-      [part^="superscript"]::after {
+      [part~="toolbar-button-subscript"]::after,
+      [part~="toolbar-button-superscript"]::after {
         font-size: 0.625em;
         font-weight: 700;
       }
 
-      [part^="list-ordered"]::before {
+      [part~="toolbar-button-list-ordered"]::before {
         content: var(--lumo-icons-ordered-list);
       }
 
-      [part^="list-bullet"]::before {
+      [part~="toolbar-button-list-bullet"]::before {
         content: var(--lumo-icons-unordered-list);
       }
 
-      [part^="align-left"]::before {
+      [part~="toolbar-button-align-left"]::before {
         content: var(--lumo-icons-align-left);
       }
 
-      [part^="align-center"]::before {
+      [part~="toolbar-button-align-center"]::before {
         content: var(--lumo-icons-align-center);
       }
 
-      [part="align-right"]::before {
+      [part~="toolbar-button-align-right"]::before {
         content: var(--lumo-icons-align-right);
       }
 
-      [part^="blockquote"]::before {
+      [part~="toolbar-button-blockquote"]::before {
         font-size: var(--lumo-font-size-xxl);
       }
 
-      [part^="code-block"]::before {
+      [part~="toolbar-button-code-block"]::before {
         content: var(--lumo-icons-angle-left) var(--lumo-icons-angle-right);
         font-size: var(--lumo-font-size-l);
         letter-spacing: -0.5em;
@@ -153,11 +153,11 @@
         font-weight: 600;
       }
 
-      [part^="image"]::before {
+      [part~="toolbar-button-image"]::before {
         content: var(--lumo-icons-photo);
       }
 
-      [part^="clean"]::before {
+      [part~="toolbar-button-clean"]::before {
         font-family: "vaadin-rte-icons";
         font-size: var(--lumo-font-size-l);
       }
@@ -204,12 +204,12 @@
         padding: calc(var(--lumo-space-xs) + 1px) 0;
       }
 
-      :host([theme~="compact"]) [part$="button"] {
+      :host([theme~="compact"]) [part~="toolbar-button"] {
         width: var(--lumo-size-s);
         height: var(--lumo-size-s);
       }
 
-      :host([theme~="compact"]) [part~="group"] {
+      :host([theme~="compact"]) [part~="toolbar-group"] {
         margin: 0 calc(var(--lumo-space-m) / 2 - 1px);
       }
     </style>

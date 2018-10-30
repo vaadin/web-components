@@ -41,68 +41,68 @@ This program is available under Apache License Version 2.0, available at https:/
     <!-- Create toolbar container -->
     <div part="toolbar">
 
-      <span part="group">
+      <span part="toolbar-group">
         <!-- Undo and Redo -->
-        <button type="button" part="undo-button" on-click="_undo" title$="[[i18n.undo]]"></button>
-        <button type="button" part="redo-button" on-click="_redo" title$="[[i18n.redo]]"></button>
+        <button type="button" part="toolbar-button toolbar-button-undo" on-click="_undo" title$="[[i18n.undo]]"></button>
+        <button type="button" part="toolbar-button toolbar-button-redo" on-click="_redo" title$="[[i18n.redo]]"></button>
       </span>
 
-      <span part="group">
+      <span part="toolbar-group">
         <!-- Bold -->
-        <button class="ql-bold" part="bold-button" title$="[[i18n.bold]]"></button>
+        <button class="ql-bold" part="toolbar-button toolbar-button-bold" title$="[[i18n.bold]]"></button>
 
         <!-- Italic -->
-        <button class="ql-italic" part="italic-button" title$="[[i18n.italic]]"></button>
+        <button class="ql-italic" part="toolbar-button toolbar-button-italic" title$="[[i18n.italic]]"></button>
 
         <!-- Underline -->
-        <button class="ql-underline" part="underline-button" title$="[[i18n.underline]]"></button>
+        <button class="ql-underline" part="toolbar-button toolbar-button-underline" title$="[[i18n.underline]]"></button>
 
         <!-- Strike -->
-        <button class="ql-strike" part="strike-button" title$="[[i18n.strike]]"></button>
+        <button class="ql-strike" part="toolbar-button toolbar-button-strike" title$="[[i18n.strike]]"></button>
       </span>
 
-      <span part="group">
+      <span part="toolbar-group">
         <!-- Header buttons -->
-        <button type="button" class="ql-header" value="1" part="h1-button" title$="[[i18n.h1]]"></button>
-        <button type="button" class="ql-header" value="2" part="h2-button" title$="[[i18n.h2]]"></button>
-        <button type="button" class="ql-header" value="3" part="h3-button" title$="[[i18n.h3]]"></button>
+        <button type="button" class="ql-header" value="1" part="toolbar-button toolbar-button-h1" title$="[[i18n.h1]]"></button>
+        <button type="button" class="ql-header" value="2" part="toolbar-button toolbar-button-h2" title$="[[i18n.h2]]"></button>
+        <button type="button" class="ql-header" value="3" part="toolbar-button toolbar-button-h3" title$="[[i18n.h3]]"></button>
       </span>
 
-      <span part="group">
+      <span part="toolbar-group">
         <!-- Subscript and superscript -->
-        <button class="ql-script" value="sub" part="subscript-button" title$="[[i18n.subscript]]"></button>
-        <button class="ql-script" value="super" part="superscript-button" title$="[[i18n.superscript]]"></button>
+        <button class="ql-script" value="sub" part="toolbar-button toolbar-button-subscript" title$="[[i18n.subscript]]"></button>
+        <button class="ql-script" value="super" part="toolbar-button toolbar-button-superscript" title$="[[i18n.superscript]]"></button>
       </span>
 
-      <span part="group">
+      <span part="toolbar-group">
         <!-- List buttons -->
-        <button type="button" class="ql-list" value="ordered" part="list-ordered-button" title$="[[i18n.listOrdered]]"></button>
-        <button type="button" class="ql-list" value="bullet" part="list-bullet-button" title$="[[i18n.listBullet]]"></button>
+        <button type="button" class="ql-list" value="ordered" part="toolbar-button toolbar-button-list-ordered" title$="[[i18n.listOrdered]]"></button>
+        <button type="button" class="ql-list" value="bullet" part="toolbar-button toolbar-button-list-bullet" title$="[[i18n.listBullet]]"></button>
       </span>
 
-      <span part="group">
+      <span part="toolbar-group">
         <!-- Align buttons -->
-        <button type="button" class="ql-align" value="" part="align-left-button" title$="[[i18n.alignLeft]]"></button>
-        <button type="button" class="ql-align" value="center" part="align-center-button" title$="[[i18n.alignCenter]]"></button>
-        <button type="button" class="ql-align" value="right" part="align-right-button" title$="[[i18n.alignRight]]"></button>
+        <button type="button" class="ql-align" value="" part="toolbar-button toolbar-button-align-left" title$="[[i18n.alignLeft]]"></button>
+        <button type="button" class="ql-align" value="center" part="toolbar-button toolbar-button-align-center" title$="[[i18n.alignCenter]]"></button>
+        <button type="button" class="ql-align" value="right" part="toolbar-button toolbar-button-align-right" title$="[[i18n.alignRight]]"></button>
       </span>
 
-      <span part="group">
+      <span part="toolbar-group">
         <!-- Image -->
-        <button type="button" part="image-button" title$="[[i18n.image]]" on-touchend="_onImageTouchEnd" on-click="_onImageClick"></button>
+        <button type="button" part="toolbar-button toolbar-button-image" title$="[[i18n.image]]" on-touchend="_onImageTouchEnd" on-click="_onImageClick"></button>
       </span>
 
-      <span part="group">
+      <span part="toolbar-group">
         <!-- Blockquote -->
-        <button type="button" class="ql-blockquote" part="blockquote-button" title$="[[i18n.blockquote]]"></button>
+        <button type="button" class="ql-blockquote" part="toolbar-button toolbar-button-blockquote" title$="[[i18n.blockquote]]"></button>
 
         <!-- Code block -->
-        <button type="button" class="ql-code-block" part="code-block-button" title$="[[i18n.codeBlock]]"></button>
+        <button type="button" class="ql-code-block" part="toolbar-button toolbar-button-code-block" title$="[[i18n.codeBlock]]"></button>
       </span>
 
-      <span part="group">
+      <span part="toolbar-group">
         <!-- Clean -->
-        <button type="button" class="ql-clean" part="clean-button" title$="[[i18n.clean]]"></button>
+        <button type="button" class="ql-clean" part="toolbar-button toolbar-button-clean" title$="[[i18n.clean]]"></button>
       </span>
 
       <input id="fileInput" type="file" accept="image/png, image/gif, image/jpeg, image/bmp, image/x-icon" on-change="_uploadImage">
@@ -165,34 +165,36 @@ This program is available under Apache License Version 2.0, available at https:/
        * -------------|-------------|------------
        * `disabled`   | Set to a disabled text editor | :host
        * `readonly`   | Set to a readonly text editor | :host
+       * `on`         | Set to a toolbar button applied to the selected text | toolbar-button
        *
        * The following shadow DOM parts are available for styling:
        *
-       * Part name              | Description
-       * -----------------------|----------------
-       * `toolbar`              | The toolbar wrapper
-       * `content`              | The content wrapper
-       * `group`                | The group for toolbar controls
-       * `undo-button`          | The "undo" button
-       * `redo-button`          | The "redo" button
-       * `bold-button`          | The "bold" button
-       * `italic-button`        | The "italic" button
-       * `underline-button`     | The "underline" button
-       * `strike-button`        | The "strike-through" button
-       * `h1-button`            | The "header 1" button
-       * `h2-button`            | The "header 2" button
-       * `h3-button`            | The "header 3" button
-       * `subscript-button`    | The "subscript" button
-       * `superscript-button`  | The "superscript" button
-       * `list-ordered-button`  | The "ordered list" button
-       * `list-bullet-button`   | The "bullet list" button
-       * `align-left-button`    | The "left align" button
-       * `align-center-button`  | The "center align" button
-       * `align-right-button`   | The "right align" button
-       * `image-button`         | The "image" button
-       * `blockquote-button`    | The "blockquote" button
-       * `code-block-button`    | The "code block" button
-       * `clean-button`         | The "clean formatting" button
+       * Part name                      | Description
+       * -------------------------------|----------------
+       * `content`                      | The content wrapper
+       * `toolbar`                      | The toolbar wrapper
+       * `toolbar-group`                | The group for toolbar controls
+       * `toolbar-button`               | The toolbar button (applies to all buttons)
+       * `toolbar-button-undo`          | The "undo" button
+       * `toolbar-button-redo`          | The "redo" button
+       * `toolbar-button-bold`          | The "bold" button
+       * `toolbar-button-italic`        | The "italic" button
+       * `toolbar-button-underline`     | The "underline" button
+       * `toolbar-button-strike`        | The "strike-through" button
+       * `toolbar-button-h1`            | The "header 1" button
+       * `toolbar-button-h2`            | The "header 2" button
+       * `toolbar-button-h3`            | The "header 3" button
+       * `toolbar-button-subscript`     | The "subscript" button
+       * `toolbar-button-superscript`   | The "superscript" button
+       * `toolbar-button-list-ordered`  | The "ordered list" button
+       * `toolbar-button-list-bullet`   | The "bullet list" button
+       * `toolbar-button-align-left`    | The "left align" button
+       * `toolbar-button-align-center`  | The "center align" button
+       * `toolbar-button-align-right`   | The "right align" button
+       * `toolbar-button-image`         | The "image" button
+       * `toolbar-button-blockquote`    | The "blockquote" button
+       * `toolbar-button-code-block`    | The "code block" button
+       * `toolbar-button-clean`         | The "clean formatting" button
        *
        * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
        *
