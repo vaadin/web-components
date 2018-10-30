@@ -68,6 +68,10 @@
         border-top: none;
       }
 
+      [part="toolbar"] ::slotted(*:not(:first-child)) {
+        margin-right: var(--lumo-space-s);
+      }
+
       :host([theme~="no-border"]) [part="toolbar"] {
         border: 0;
       }
