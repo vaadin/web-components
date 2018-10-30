@@ -357,12 +357,27 @@
       });
 
       describe('value', () => {
-        it('by default should be stringified empty "delta" of the editor', done => {
+        it('by default should be an empty string', () => {
           expect(rte.value).to.be.string;
-          const parsedValue = JSON.parse(rte.value);
-          expect(parsedValue).to.have.length(1);
-          expect(parsedValue).to.deep.equal([{insert: '\n'}]);
-          done();
+          expect(rte.value).to.have.length(0);
+        });
+
+        it('should not be undefined', () => {
+          rte.value = undefined;
+          expect(rte.value).to.equal('');
+        });
+
+        it('should not contain only one empty new line', () => {
+          rte.value = '[{"insert":"\\n"}]';
+          expect(rte.value).to.equal('');
+        });
+
+        it('should set value to empty string after inserting and deleting text', () => {
+          editor.insertText(0, 'Foo', 'user');
+          flushValueDebouncer();
+          editor.deleteText(0, 3, 'user');
+          flushValueDebouncer();
+          expect(rte.value).to.be.equal('');
         });
 
         it('should represent the stringified "delta" of the editor', done => {
@@ -391,40 +406,47 @@
         });
 
         it('should error when setting value with invalid structure and fallback to the previous value', () => {
+          // Set value for falling back
+          rte.value = '[{"insert":"Foo"}]';
           const origError = console.error;
           const spy = console.error = sinon.spy();
           // Missing closing ]
-          rte.value = `[{insert: 'Foo'}`;
+          rte.value = `[{insert: 'Bar'}`;
           console.error = origError;
-          expect(editor.getText()).to.not.include('Foo');
-          expect(rte.value).to.be.equal('[{"insert":"\\n"}]');
+          expect(editor.getText()).to.not.include('Bar');
+          expect(rte.value).to.be.equal('[{"insert":"Foo"}]');
           expect(spy.called).to.be.true;
         });
 
         it('should error when setting value of invalid type and fallback to the previous value', () => {
+          // Set value for falling back
+          rte.value = '[{"insert":"Foo"}]';
           const origError = console.error;
           const spy = console.error = sinon.spy();
           rte.value = `1`;
           console.error = origError;
-          expect(editor.getText()).to.not.include('Foo');
-          expect(rte.value).to.be.equal('[{"insert":"\\n"}]');
+          expect(editor.getText()).to.not.include('1');
+          expect(rte.value).to.be.equal('[{"insert":"Foo"}]');
           expect(spy.called).to.be.true;
         });
 
         it('should clear the editor contents when value is set to null', () => {
           editor.insertText(0, 'Foo', 'user');
+          flushValueDebouncer();
           rte.value = null;
           expect(editor.getText()).to.equal('\n');
         });
 
         it('should clear the editor contents when value is set to undefined', () => {
           editor.insertText(0, 'Foo', 'user');
+          flushValueDebouncer();
           rte.value = undefined;
           expect(editor.getText()).to.equal('\n');
         });
 
         it('should clear the editor contents when value is set to empty string', () => {
           editor.insertText(0, 'Foo', 'user');
+          flushValueDebouncer();
           rte.value = '';
           expect(editor.getText()).to.equal('\n');
         });
