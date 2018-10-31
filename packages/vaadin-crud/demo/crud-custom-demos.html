@@ -65,8 +65,8 @@
       <template preserve-content>
         <iron-ajax auto url="users.json" last-response="{{items}}"></iron-ajax>
         <vaadin-crud items=[[items]]  size="{{size}}" exclude="_id, password, picture">
-          <a slot="toolbar" new-button href="javascript:">Add a new user</a>
           <div slot="toolbar" style="flex: 1">There are <b>[[size]]</b> users in the database</div>
+          <a slot="toolbar" new-button href="javascript:">Add a new user</a>
         </vaadin-crud>
       </template>
     </vaadin-demo-snippet>
