@@ -63,6 +63,10 @@
         background-color: var(--material-secondary-background-color);
       }
 
+      [part="toolbar"] ::slotted(*:not(:first-child)) {
+        margin-right: 0.5em;
+      }
+
       vaadin-text-field[theme~="small"] {
         height: 24px;
         font-size: var(--material-small-font-size);
