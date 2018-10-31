@@ -13,7 +13,7 @@
     <vaadin-demo-snippet id="rich-text-editor-styling-demos-custom-style">
       <template preserve-content>
         <vaadin-rich-text-editor class="custom-style"></vaadin-rich-text-editor>
-      
+
         <!-- Place in index.html or in a separate HTML import -->
         <dom-module id="custom-rte-styles" theme-for="vaadin-rich-text-editor">
           <template>
@@ -22,9 +22,14 @@
                 box-shadow: inset 0 0 15px #ddd;
               }
 
-              :host(.custom-style) [part~="content"] {
-                font-family: 'Courier New', Courier, monospace;
-                color: #696969;
+              :host(.custom-style) [part~="content"] h2 {
+                text-shadow: 1px 1px #ddd;
+                margin: 15px 0;
+              }
+
+              :host(.custom-style) [part~="content"] blockquote {
+                padding: 15px;
+                margin: 0;
               }
             </style>
           </template>
