@@ -20,6 +20,16 @@
         "description": "",
         "image": ""
       }
+    },
+    {
+      "name": "Styling",
+      "url": "rich-text-editor-styling-demos",
+      "src": "rich-text-editor-styling-demos.html",
+      "meta": {
+        "title": "Vaadin Rich Text Editor Styling",
+        "description": "",
+        "image": ""
+      }
     }
   ]
 }
