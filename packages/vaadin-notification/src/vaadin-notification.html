@@ -369,6 +369,9 @@ This program is available under Apache License Version 2.0, available at https:/
             }
 
             if (opened) {
+              if (!this._didAnimateNotificationAppend) {
+                this._animatedAppendNotificationCard();
+              }
               this.render();
             }
           }
@@ -469,13 +472,18 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _animatedAppendNotificationCard() {
-          this._card.setAttribute('opening', '');
-          this._appendNotificationCard();
-          const listener = () => {
-            this._card.removeEventListener('animationend', listener);
-            this._card.removeAttribute('opening');
-          };
-          this._card.addEventListener('animationend', listener);
+          if (this._card) {
+            this._card.setAttribute('opening', '');
+            this._appendNotificationCard();
+            const listener = () => {
+              this._card.removeEventListener('animationend', listener);
+              this._card.removeAttribute('opening');
+            };
+            this._card.addEventListener('animationend', listener);
+            this._didAnimateNotificationAppend = true;
+          } else {
+            this._didAnimateNotificationAppend = false;
+          }
         }
 
         _appendNotificationCard() {

@@ -84,6 +84,22 @@
           notification.render();
           expect(notification.renderer).to.be.calledTwice;
         });
+
+        it('should open notification when renderer is defined after notification opened', done => {
+          notification.opened = true;
+          notification.renderer = root => root.appendChild(rendererContent);
+
+          // Timeout needed for Firefox
+          setTimeout(() => {
+            const clientRect = notification._card.getBoundingClientRect();
+            expect(clientRect.x).to.not.equal(0);
+            expect(clientRect.y).to.not.equal(0);
+            expect(clientRect.width).to.not.equal(0);
+            expect(clientRect.height).to.not.equal(0);
+            expect(clientRect.top).to.not.equal(0);
+            done();
+          });
+        });
       });
 
       describe('with template', () => {
