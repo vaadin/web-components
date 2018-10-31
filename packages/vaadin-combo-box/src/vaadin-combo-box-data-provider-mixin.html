@@ -54,6 +54,10 @@ This program is available under Apache License Version 2.0, available at https:/
           value: () => {
             return {};
           }
+        },
+
+        __placeHolder: {
+          value: new Vaadin.ComboBoxPlaceholder()
         }
 
       };
@@ -167,7 +171,7 @@ This program is available under Apache License Version 2.0, available at https:/
       this._pendingRequests = {};
       const filteredItems = [];
       for (let i = 0; i < (this.size || 0); i++) {
-        filteredItems.push(new Vaadin.ComboBoxPlaceholder());
+        filteredItems.push(this.__placeHolder);
       }
       this.filteredItems = filteredItems;
       if (this.opened) {
@@ -178,7 +182,7 @@ This program is available under Apache License Version 2.0, available at https:/
     _sizeChanged(size = 0) {
       const filteredItems = (this.filteredItems || []).slice(0);
       for (let i = 0; i < size; i++) {
-        filteredItems[i] = filteredItems[i] !== undefined ? filteredItems[i] : new Vaadin.ComboBoxPlaceholder();
+        filteredItems[i] = filteredItems[i] !== undefined ? filteredItems[i] : this.__placeHolder;
       }
       this.filteredItems = filteredItems;
     }
