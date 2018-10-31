@@ -636,6 +636,13 @@
               });
             });
 
+            it('should reuse one placeholder instance', () => {
+              comboBox.dataProvider = spyAsyncDataProvider;
+              comboBox.size = SIZE;
+              comboBox.clearCache();
+              expect(comboBox.filteredItems[0]).to.equal(comboBox.filteredItems[1]);
+            });
+
             it('should request first page', () => {
               comboBox.dataProvider = spyDataProvider;
               spyDataProvider.reset();
