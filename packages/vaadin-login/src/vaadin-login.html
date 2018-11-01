@@ -1,0 +1,309 @@
+<!--
+@license
+Copyright (c) 2018 Vaadin Ltd.
+This program is available under Commercial Vaadin Add-On License 3.0 (CVALv3).
+See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete license.
+-->
+
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
+<link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
+<link rel="import" href="../../vaadin-license-checker/vaadin-license-checker.html">
+
+<link rel="import" href="../../vaadin-lumo-styles/typography.html">
+<link rel="import" href="../../vaadin-lumo-styles/color.html">
+
+<link rel="import" href="../../vaadin-form-layout/vaadin-form-layout.html">
+<link rel="import" href="../../vaadin-text-field/vaadin-text-field.html">
+<link rel="import" href="../../vaadin-text-field/vaadin-password-field.html">
+<link rel="import" href="../../vaadin-button/vaadin-button.html">
+
+<dom-module id="vaadin-login">
+  <template>
+    <style include="lumo-color lumo-typography">
+      :host {
+        top: 0;
+        left: 0;
+        width: 100%;
+        min-height: 100%;
+        background: var(--lumo-base-color) linear-gradient(var(--lumo-shade-5pct), var(--lumo-shade-5pct));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      :host([hidden]) {
+        display: none !important;
+      }
+
+      .card {
+        width: calc(var(--lumo-size-m) * 10);
+        max-width: 100%;
+        background: var(--lumo-base-color) linear-gradient(var(--lumo-tint-5pct), var(--lumo-tint-5pct));
+        border-radius: var(--lumo-border-radius);
+        box-shadow: var(--lumo-box-shadow-s);
+        margin: var(--lumo-space-l);
+        box-sizing: border-box;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .brand {
+        box-sizing: border-box;
+        padding: var(--lumo-space-l) var(--lumo-space-xl) var(--lumo-space-l) var(--lumo-space-l);
+        overflow: hidden;
+        background-color: var(--lumo-primary-color);
+        color: var(--lumo-primary-contrast-color);
+        flex-grow: 1;
+        flex-shrink: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        min-height: calc(var(--lumo-size-m) * 5);
+      }
+
+      .brand h1 {
+        color: inherit;
+        margin: 0;
+      }
+
+      .brand p {
+        line-height: var(--lumo-line-height-s);
+        color: var(--lumo-tint-70pct);
+        margin-bottom: 0;
+      }
+
+      .form {
+        flex: none;
+        display: flex;
+        flex-direction: column;
+        padding: var(--lumo-space-l);
+        box-sizing: border-box;
+      }
+
+      .form h2 {
+        margin: 0;
+      }
+
+      vaadin-text-field,
+      vaadin-password-field {
+        width: 100%;
+      }
+
+      .login-button {
+        margin-top: var(--lumo-space-l);
+        margin-bottom: var(--lumo-space-s);
+      }
+
+      .forgot-password-button {
+        margin: var(--lumo-space-s) auto;
+      }
+
+      .error-message {
+        display: none;
+        position: relative;
+        background-color: var(--lumo-error-color-10pct);
+        padding: var(--lumo-space-m);
+        padding-left: var(--lumo-size-m);
+        border-radius: var(--lumo-border-radius);
+        margin-top: var(--lumo-space-m);
+        margin-bottom: var(--lumo-space-s);
+        color: var(--lumo-error-text-color);
+      }
+
+      .error-message::before {
+        content: var(--lumo-icons-error);
+        font-family: lumo-icons;
+        font-size: var(--lumo-icon-size-m);
+        position: absolute;
+        width: var(--lumo-size-m);
+        height: 1em;
+        line-height: 1;
+        text-align: center;
+        /* Visual centering */
+        margin-left: calc(var(--lumo-size-m) * -0.95);
+      }
+
+      .error-message h5 {
+        margin: 0 0 0.25em;
+        color: inherit;
+      }
+
+      .error-message p {
+        font-size: var(--lumo-font-size-s);
+        line-height: var(--lumo-line-height-s);
+        margin: 0;
+        opacity: 0.9;
+      }
+
+      .footer {
+        font-size: var(--lumo-font-size-xs);
+        line-height: var(--lumo-line-height-s);
+        color: var(--lumo-secondary-text-color);
+      }
+
+      /* Small screen */
+      @media only screen
+      and (max-width: 500px) {
+        :host {
+          min-height: 100%;
+          background: var(--lumo-base-color);
+          align-items: flex-start;
+        }
+
+        .card {
+          width: 100%;
+          border-radius: 0;
+          box-shadow: none;
+          margin: 0;
+        }
+      }
+
+      /* Landscape small screen */
+      @media only screen
+      and (max-height: 600px)
+      and (min-width: 600px)
+      and (orientation: landscape) {
+        .card {
+          flex-direction: row;
+          align-items: stretch;
+          width: auto;
+          max-width: calc(var(--lumo-size-m) * 16);
+        }
+
+        .brand,
+        .form {
+          flex: auto;
+          flex-basis: 0;
+          box-sizing: border-box;
+        }
+
+        .brand {
+          justify-content: flex-start;
+        }
+
+        .form h2 {
+          margin-top: calc(var(--lumo-font-size-xxxl) - var(--lumo-font-size-xxl));
+        }
+      }
+
+      /* Landscape really small screen */
+      @media only screen
+      and (max-height: 500px)
+      and (min-width: 600px)
+      and (orientation: landscape),
+      only screen
+      and (max-width: 600px)
+      and (min-width: 600px)
+      and (orientation: landscape) {
+        :host {
+          height: 100%;
+        }
+
+        .card {
+          margin: 0;
+          width: 100%;
+          max-width: none;
+          height: 100%;
+          flex: auto;
+          border-radius: 0;
+          box-shadow: none;
+        }
+
+        .form {
+          height: 100%;
+          overflow: auto;
+          -webkit-overflow-scrolling: touch;
+        }
+      }
+
+      /* Handle iPhone X notch */
+      @media only screen
+      and (device-width: 375px)
+      and (device-height: 812px)
+      and (-webkit-device-pixel-ratio: 3) {
+        .card {
+          padding: 0 constant(safe-area-inset-bottom);
+          padding: 0 env(safe-area-inset-bottom);
+        }
+
+        .brand {
+          margin-left: calc(constant(safe-area-inset-bottom) * -1);
+          margin-left: calc(env(safe-area-inset-bottom) * -1);
+          padding-left: calc(var(--lumo-space-l) + constant(safe-area-inset-bottom));
+          padding-left: calc(var(--lumo-space-l) + env(safe-area-inset-bottom));
+        }
+      }
+    </style>
+      <section class="card">
+        <div class="brand">
+          <h1>App name</h1>
+          <p>Inspiring application description</p>
+        </div>
+
+        <div class="form">
+          <h2>Log in</h2>
+          <div class="error-message">
+            <h5>Incorrect username or password</h5>
+            <p>Check that you wrote the correct username and password and try again.</p>
+          </div>
+
+          <vaadin-text-field label="Username" autofocus></vaadin-text-field>
+          <vaadin-password-field label="Password"></vaadin-password-field>
+
+          <vaadin-button class="login-button" theme="primary">Log in</vaadin-button>
+
+          <vaadin-button class="forgot-password-button" theme="tertiary small">Forgot password</vaadin-button>
+
+          <div class="footer">
+            <p>In case you need to provide some additional info for the user (like default login credentials), this is the place for that.</p>
+          </div>
+        </div>
+      </section>
+  </template>
+
+  <script>
+    (function() {
+
+      /**
+       * `<vaadin-login>` is a Web Component.
+       *
+       * ```
+       * <vaadin-login></vaadin-login>
+       * ```
+       *
+       * @memberof Vaadin
+       * @mixes Vaadin.ElementMixin
+       * @mixes Vaadin.ThemableMixin
+       * @demo demo/index.html
+       */
+      class VaadinLogin extends Vaadin.ElementMixin(Vaadin.ThemableMixin(Polymer.Element)) {
+        static get is() {
+          return 'vaadin-login';
+        }
+        static get version() {
+          return '0.1.0';
+        }
+
+        static get properties() {
+          return {
+          };
+        }
+      }
+
+      customElements.define(VaadinLogin.is, VaadinLogin);
+
+      /**
+       * @namespace Vaadin
+       */
+      window.Vaadin.VaadinLogin = VaadinLogin;
+
+      const licenseChecker = window.Vaadin.developmentModeCallback
+        && window.Vaadin.developmentModeCallback['vaadin-license-checker'];
+      if (typeof licenseChecker === 'function') {
+        licenseChecker(VaadinLogin);
+      }
+    })();
+  </script>
+</dom-module>

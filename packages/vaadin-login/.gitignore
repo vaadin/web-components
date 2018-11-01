@@ -1,0 +1,9 @@
+bower_components
+node_modules
+package-lock.json
+yarn.lock
+coverage
+analysis.json
+.vscode
+.idea/
+*.iml

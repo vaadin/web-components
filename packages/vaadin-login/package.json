@@ -1,0 +1,34 @@
+{
+  "name": "@vaadin/vaadin-login",
+  "version": "0.1.0",
+  "description": "vaadin-login",
+  "main": "vaadin-login.html",
+  "repository": "vaadin/vaadin-login",
+  "keywords": [
+    "Vaadin",
+    "vaadin-login",
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
+  "author": "Vaadin Ltd",
+  "license": "https://raw.githubusercontent.com/vaadin/vaadin-confirm-dialog/master/LICENSE",
+  "bugs": {
+    "url": "https://github.com/vaadin/vaadin-login/issues"
+  },
+  "homepage": "https://vaadin.com/components",
+  "files": [
+    "vaadin-*.js",
+    "src",
+    "theme"
+  ],
+  "scripts": {
+    "test": "wct",
+    "prestart": "polymer analyze vaadin-* > analysis.json",
+    "start": "polymer serve --open",
+    "preversion": "gulp version:update"
+  },
+  "devDependencies": {
+    "@vaadin/vaadin-component-dev-dependencies": "^1.0.0"
+  }
+}

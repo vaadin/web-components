@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+
+<head lang="en">
+  <meta charset="UTF-8">
+  <title></title>
+  <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <script>
+    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+    document.write('<link rel="import" href="../../theme/' + theme + '/vaadin-login.html">');
+  </script>
+</head>
+
+<body style="height: 100vh; margin: 0; padding: 0;">
+    <vaadin-login></vaadin-login>
+</body>
