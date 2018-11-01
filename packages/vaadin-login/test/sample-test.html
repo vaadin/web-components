@@ -15,6 +15,12 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="hidden-button">
+      <template>
+        <vaadin-login hide-forgot-password-button></vaadin-login>
+      </template>
+  </test-fixture>
+
   <script>
     describe('sample test', function() {
       var element;
@@ -35,6 +41,29 @@
         expect(element.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta)\d+)?$/);
       });
 
+      it('should show forgot password button', function() {
+        expect(element.$.forgotPasswordButton.hidden).to.be.false;
+      });
+
+      it('should emit forgot password event', function() {
+        var eventWasCaught = false;
+        element.addEventListener('forgot-password', function() {
+          eventWasCaught = true;
+        });
+        element.$.forgotPasswordButton.click();
+        expect(eventWasCaught).to.be.true;
+      });
+    });
+    describe('hidden button test', function() {
+      var element;
+
+      beforeEach(function() {
+        element = fixture('hidden-button');
+      });
+
+      it('should hide forgot password button', function() {
+        expect(element.$.forgotPasswordButton.hidden).to.be.true;
+      });
     });
   </script>
 </body>
