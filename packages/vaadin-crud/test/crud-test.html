@@ -45,9 +45,6 @@
 
   <script>
     describe('crud test', () => {
-      // FIXME: the way how template is created in crud grid does not work
-      var shadyDom = window.location.search.match('shadydom');
-
       var crud;
 
       // Buttons in the editor dialog
@@ -112,10 +109,8 @@
 
           Polymer.RenderStatus.afterNextRender(crud._grid, () => {
             expect(crud.$.new.textContent).to.be.equal('Nueva entidad');
-            if (!shadyDom) {
-              expect(crud._grid.querySelector('vaadin-crud-edit-column').ariaLabel).to.be.equal('Editar entidad');
-              expect(crud._grid.querySelector('vaadin-crud-edit').getAttribute('aria-label')).to.be.equal('Editar entidad');
-            }
+            expect(crud._grid.querySelector('vaadin-crud-edit-column').ariaLabel).to.be.equal('Editar entidad');
+            expect(crud._grid.querySelector('vaadin-crud-edit').getAttribute('aria-label')).to.be.equal('Editar entidad');
             done();
           });
         });
@@ -558,7 +553,7 @@
           });
         });
 
-        !shadyDom && it('should be able to provide a custom dataProvider', done => {
+        it('should be able to provide a custom dataProvider', done => {
           crud.dataProvider = (params, callback) => {
             callback([1, 2], 2);
           };

@@ -42,9 +42,6 @@
 
   <script>
     describe('crud grid test', () => {
-      // FIXME: the way how template is created in crud grid does not work
-      var shadyDom = window.location.search.match('shadydom');
-
       var crudGrid;
 
       const items = [{
@@ -67,7 +64,7 @@
           Polymer.RenderStatus.afterNextRender(grid, done);
         });
 
-        !shadyDom && it('should theme edit icon element', () => {
+        it('should theme edit icon element', () => {
           const editElem = getBodyCellContent(grid, 0, 0).firstElementChild;
           expect(editElem.localName).to.be.equal('vaadin-crud-edit');
           expect(editElem.getAttribute('theme')).to.be.equal('foo');
@@ -82,7 +79,7 @@
           Polymer.RenderStatus.afterNextRender(crudGrid, done);
         });
 
-        !shadyDom && it('should not add sorters and filters if disabled', () => {
+        it('should not add sorters and filters if disabled', () => {
           expect(getHeaderCellContent(crudGrid, 1, 0).firstElementChild).not.to.be.ok;
           expect(getHeaderCellContent(crudGrid, 1, 0).textContent).to.be.equal('First');
         });
@@ -96,7 +93,7 @@
           Polymer.RenderStatus.afterNextRender(crudGrid, done);
         });
 
-        !shadyDom && it('should not add headers', () => {
+        it('should not add headers', () => {
           expect(getHeaderCellContent(crudGrid, 0, 0).firstElementChild).not.to.be.ok;
           expect(getHeaderCellContent(crudGrid, 1, 0)).not.to.be.ok;
         });
@@ -126,7 +123,7 @@
           expect(crudGrid.querySelectorAll('vaadin-grid-column').length).to.be.equal(1);
         });
 
-        !shadyDom && describe('include exclude', () => {
+        describe('include exclude', () => {
           it('should ignore excluded fields', () => {
             crudGrid.items = items;
             window.flushGrid(crudGrid);
@@ -156,7 +153,7 @@
 
         ['items', 'dataProvider'].forEach(type => {
 
-          !shadyDom && describe(type, () => {
+          describe(type, () => {
 
             beforeEach(done => {
               if (type == 'items') {
