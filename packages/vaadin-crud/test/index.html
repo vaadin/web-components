@@ -11,12 +11,7 @@
 
 <body>
   <script>
-    WCT.loadSuites(
-      window.VaadinCrudSuites
-        .reduce(function(suites, suite) {
-          return suites.concat([suite, `${suite}?wc-shadydom=true`]);
-        }, [])
-    );
+    WCT.loadSuites(window.VaadinCrudSuites);
   </script>
 </body>
 
