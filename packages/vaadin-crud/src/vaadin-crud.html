@@ -650,6 +650,9 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
 
       customElements.define(CrudElement.is, CrudElement);
 
+      // TODO(manolo): remove once https://github.com/Polymer/polymer-linter/issues/60 is fixed.
+      1 || customElements.define('vaadin-dialog-layout', class extends Vaadin.DialogElement {});
+
       /**
        * @namespace Vaadin
        */

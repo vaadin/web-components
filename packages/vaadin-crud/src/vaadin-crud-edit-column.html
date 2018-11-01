@@ -18,17 +18,19 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
 
   <script>
     /**
-     * `<vaadin-crud-edit>` is a helper element for the `<vaadin-crud-edit-column>` that provides
-     * a button that can be easily themed, and that fires an `edit` event with the row item as detail when
-     * it is clicked.
+     * `<vaadin-crud-edit>` is a helper element for `<vaadin-grid-column>` that provides
+     * an easily themable button that fires an `edit` event with the row item as detail
+     * when clicked.
      *
+     * Typical usage is in a `<vaadin-grid-column>` of a custom `<vaadin-grid>` inside
+     * a `<vaadin-crud>` to enable editing.
      */
     class CrudEditElement extends Vaadin.ThemableMixin(Polymer.Element) {
-      /** @private */
       static get is() {
         return 'vaadin-crud-edit';
       }
 
+      /** @private */
       ready() {
         super.ready();
         this.addEventListener('click', this.__onClick);

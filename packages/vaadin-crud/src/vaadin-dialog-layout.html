@@ -59,89 +59,92 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
   <script>
     (function() {
-      /**
-       * `<vaadin-dialog-layout>` configures a `vaadin-dialog` with a layout
-       * containing a scrollable header, and body and a fixed footer.
-       * In desktop the content is shown in a dialog whereas in mobile it is
-       * displayed in fullscreen.
-       *
-       * ```
-       * <vaadin-dialog-layout>
-       *  <div slot="header">Header</div>
-       *  <div slot="body">Body</div>
-       *  <div slot="footer">Footer</div>
-       * </vaadin-dialog-layout>
-       * ```
-       *
-       * ### Styling
-       *
-       * The following Shadow DOM parts are available for styling the dialog parts:
-       *
-       * Part name  | Description
-       * -----------|---------------------------------------------------------|
-       * `scroller` | Scrollable container, includes the header and the body
-       * `header`   | Container for the header content
-       * `footer`   | Container for the footer content
-       *
-       * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
-       *
-       * ### Custom content
-       *
-       * The following parts are available for providing content.
-       *
-       * Slot name         | Description
-       * ------------------|---------------------------------------------------------|
-       * `header`          | The header content
-       * `(no name)`       | The body content
-       * `footer`          | The footer content
-       *
-       * @memberof Vaadin
-       * @mixes Vaadin.ElementMixin
-       * @mixes Vaadin.ThemableMixin
-       */
-      class DialogLayout extends Vaadin.ElementMixin(Vaadin.ThemableMixin(Polymer.Element)) {
-        static get is() {
-          return 'vaadin-dialog-layout';
-        }
+      // Although the class is annotated as private, we need to indirect define it
+      // in order to skip its API in the component page
+      const DialogLayout = (() =>
+        /**
+         * DISCLAIMER: This is an internal implementation of a web component, hence its
+         * API and implementation details might change without any advise for future releases.
+         *
+         * `<vaadin-dialog-layout>` configures a `vaadin-dialog` with a layout
+         * containing a scrollable header and body, and a fix positioned footer.
+         * In desktop the content is shown in a dialog whereas in mobile it is
+         * displayed in fullscreen.
+         *
+         * ```
+         * <vaadin-dialog-layout>
+         *  <div slot="header">Header</div>
+         *  <div slot="body">Body</div>
+         *  <div slot="footer">Footer</div>
+         * </vaadin-dialog-layout>
+         * ```
+         *
+         * ### Styling
+         *
+         * The following Shadow DOM parts are available for styling the dialog parts:
+         *
+         * Part name  | Description
+         * -----------|---------------------------------------------------------|
+         * `scroller` | Scrollable container, includes the header and the body
+         * `header`   | Container for the header content
+         * `footer`   | Container for the footer content
+         *
+         * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+         *
+         * ### Custom content
+         *
+         * The following parts are available for providing content.
+         *
+         * Slot name         | Description
+         * ------------------|---------------------------------------------------------|
+         * `header`          | The header content
+         * `(no name)`       | The body content
+         * `footer`          | The footer content
+         *
+         *
+         * @private
+         * @mixes Vaadin.ElementMixin
+         * @mixes Vaadin.ThemableMixin
+         */
+        class extends Vaadin.ElementMixin(Vaadin.ThemableMixin(Polymer.Element)) {
+          static get is() {
+            return 'vaadin-dialog-layout';
+          }
 
-        static get properties() {
-          return {
-            /**
-             * True if the overlay is currently displayed.
-             */
-            opened: {
-              type: Boolean,
-              value: false,
-              notify: true,
-              observer: '_openedChanged'
-            },
-            /** Theme to use */
-            theme: String,
-            /** Disable closing when user clicks outside */
-            noCloseOnOutsideClick: Boolean,
-            /** Disable closing when user presses escape */
-            noCloseOnEsc: Boolean,
-            __ariaLabel: String
-          };
-        }
+          static get properties() {
+            return {
+              /**
+               * True if the overlay is currently displayed.
+               */
+              opened: {
+                type: Boolean,
+                value: false,
+                notify: true,
+                observer: '_openedChanged'
+              },
+              /** Theme to use */
+              theme: String,
+              /** Disable closing when user clicks outside */
+              noCloseOnOutsideClick: Boolean,
+              /** Disable closing when user presses escape */
+              noCloseOnEsc: Boolean,
+              __ariaLabel: String
+            };
+          }
 
-        _openedChanged(opened) {
-          if (this.opened) {
-            Array.from(this.childNodes).forEach(c => this.$.dialog.$.overlay.$.content.appendChild(c));
-            // Wait to set label until slotted element have been moved.
-            setTimeout(() =>
-              this.__ariaLabel = Array.from(this.$.dialog.$.overlay.$.content.querySelectorAll('[slot=header]'))
-                .reduce((prev, ele) => prev + ' ' + ele.textContent, '').trim());
+          _openedChanged(opened) {
+            if (this.opened) {
+              Array.from(this.childNodes).forEach(c => this.$.dialog.$.overlay.$.content.appendChild(c));
+              // Wait to set label until slotted element have been moved.
+              setTimeout(() =>
+                this.__ariaLabel = Array.from(this.$.dialog.$.overlay.$.content.querySelectorAll('[slot=header]'))
+                  .reduce((prev, ele) => prev + ' ' + ele.textContent, '').trim());
+            }
           }
         }
-      }
+      )();
 
       customElements.define(DialogLayout.is, DialogLayout);
-
-      /**
-       * @namespace Vaadin
-       */
-      window.Vaadin.DialogLayoutElement = DialogLayout;
     })();
   </script>
 </dom-module>
