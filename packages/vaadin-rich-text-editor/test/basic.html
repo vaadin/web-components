@@ -677,6 +677,27 @@
           editor.format('bold', true);
           expect(editor.getSelection().length).to.equal(3);
         });
+
+        it('should not throw when insertins newline in the list', () => {
+          rte.value = JSON.stringify([
+            {insert: '12'}, {attributes: {list: 'bullet'}, insert: '\n'},
+            {insert: '34'}, {attributes: {list: 'bullet'}, insert: '\n'}
+          ]);
+          editor.focus();
+          editor.setSelection(4, 0);
+          editor.insertText(4, '\n', {list: 'bullet'}, 'user');
+          flushValueDebouncer();
+
+          expect(rte.value).to.equal(
+            JSON.stringify([
+              {insert: '12'},
+              {attributes: {list: 'bullet'}, insert: '\n'},
+              {insert: '3'},
+              {attributes: {list: 'bullet'}, insert: '\n'},
+              {insert: '4'},
+              {attributes: {list: 'bullet'}, insert: '\n'}
+            ]));
+        });
       });
     });
   </script>
