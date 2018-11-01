@@ -8,35 +8,9 @@
 
 
     <h3>Date picker</h3>
-    <vaadin-demo-snippet id="date-picker-basic-demos-plain-date-picker">
-      <template preserve-content>
-        <vaadin-date-picker></vaadin-date-picker>
-      </template>
-    </vaadin-demo-snippet>
-
-
-    <h3>Label attribute</h3>
-    <vaadin-demo-snippet id="date-picker-basic-demos-label-attribute">
-      <template preserve-content>
-        <vaadin-date-picker label="Pick a date">
-        </vaadin-date-picker>
-      </template>
-    </vaadin-demo-snippet>
-
-
-    <h3>Placeholder attribute</h3>
-    <vaadin-demo-snippet id="date-picker-basic-demos-placeholder-attribute">
-      <template preserve-content>
-        <vaadin-date-picker placeholder="Pick a date">
-        </vaadin-date-picker>
-      </template>
-    </vaadin-demo-snippet>
-
-
-    <h3>Label and placeholder attributes together</h3>
     <vaadin-demo-snippet id="date-picker-basic-demos-label-and-placeholder-attributes-together">
       <template preserve-content>
-        <vaadin-date-picker label="Birthday" placeholder="Pick a date">
+        <vaadin-date-picker label="Date" placeholder="Pick a date">
         </vaadin-date-picker>
       </template>
     </vaadin-demo-snippet>
@@ -103,7 +77,7 @@
     <p>Week numbers are only supported for locales that start the week on Monday.</p>
     <vaadin-demo-snippet id="date-picker-basic-demos-date-picker-with-week-numbers">
       <template preserve-content>
-        <vaadin-date-picker id="weeks" show-week-numbers></vaadin-date-picker>
+        <vaadin-date-picker id="weeks" show-week-numbers label="Date"></vaadin-date-picker>
         <script>
           window.addDemoReadyListener('#date-picker-basic-demos-date-picker-with-week-numbers', function(document) {
             // Async call needed here for IE11 compatibility.
@@ -132,7 +106,7 @@
         "next week Thursday"
         -->
 
-        <vaadin-date-picker label="Birthday" id="keyboard-input">
+        <vaadin-date-picker label="Date" id="keyboard-input">
         </vaadin-date-picker>
         <script>
           window.addDemoReadyListener('#date-picker-basic-demos-keyboard-input', function(document) {
