@@ -9,6 +9,9 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../polymer/lib/utils/debounce.html">
 <link rel="import" href="../../polymer/lib/utils/gestures.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
+<link rel="import" href="../../vaadin-button/src/vaadin-button.html">
+<link rel="import" href="../../vaadin-confirm-dialog/src/vaadin-confirm-dialog.html">
+<link rel="import" href="../../vaadin-text-field/src/vaadin-text-field.html">
 <link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
 <link rel="import" href="../../vaadin-license-checker/vaadin-license-checker.html">
 
@@ -90,6 +93,8 @@ This program is available under Apache License Version 2.0, available at https:/
       <span part="toolbar-group">
         <!-- Image -->
         <button type="button" part="toolbar-button toolbar-button-image" title$="[[i18n.image]]" on-touchend="_onImageTouchEnd" on-click="_onImageClick"></button>
+        <!-- Link -->
+        <button type="button" part="toolbar-button toolbar-button-link" title$="[[i18n.link]]" on-click="_onLinkClick"></button>
       </span>
 
       <span part="toolbar-group">
@@ -111,6 +116,44 @@ This program is available under Apache License Version 2.0, available at https:/
     <div part="content"></div>
 
     <div class="announcer" aria-live="polite"></div>
+
+    <vaadin-confirm-dialog
+      id="linkDialog"
+      opened="{{_linkEditing}}"
+      header="[[i18n.enterLinkUrl]]"
+      >
+      <vaadin-text-field
+        id="linkUrl"
+        placeholder="https://"
+        value="{{_linkUrl}}"
+        style="width: 100%;"
+        on-keydown="_onLinkKeydown"
+      ></vaadin-text-field>
+      <vaadin-button
+        id="confirmLink"
+        slot="confirm-button"
+        theme="primary"
+        on-click="_onLinkEditConfirm"
+        >
+        [[i18n.ok]]
+      </vaadin-button>
+      <vaadin-button
+        id="removeLink"
+        slot="reject-button"
+        theme="error"
+        on-click="_onLinkEditRemove"
+        hidden$="[[!_linkRange]]"
+        >
+        [[i18n.remove]]
+      </vaadin-button>
+      <vaadin-button
+        id="cancelLink"
+        slot="cancel-button"
+        on-click="_onLinkEditCancel"
+        >
+        [[i18n.cancel]]
+      </vaadin-button>
+    </vaadin-confirm-dialog>
 
   </template>
 
@@ -192,6 +235,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * `toolbar-button-align-center`  | The "center align" button
        * `toolbar-button-align-right`   | The "right align" button
        * `toolbar-button-image`         | The "image" button
+       * `toolbar-button-link`          | The "link" button
        * `toolbar-button-blockquote`    | The "blockquote" button
        * `toolbar-button-code-block`    | The "code block" button
        * `toolbar-button-clean`         | The "clean formatting" button
@@ -288,9 +332,14 @@ This program is available under Apache License Version 2.0, available at https:/
                   alignCenter: 'align center',
                   alignRight: 'align right',
                   image: 'image',
+                  link: 'link',
                   blockquote: 'blockquote',
                   codeBlock: 'code block',
-                  clean: 'clean'
+                  clean: 'clean',
+                  enterLinkUrl: 'Enter link URL:',
+                  ok: 'OK',
+                  cancel: 'Cancel',
+                  remove: 'Remove'
                 };
               }
             },
@@ -305,6 +354,25 @@ This program is available under Apache License Version 2.0, available at https:/
             __oldValue: String,
 
             __lastCommittedChange: {
+              type: String,
+              value: ''
+            },
+
+            _linkEditing: {
+              type: Boolean
+            },
+
+            _linkRange: {
+              type: Object,
+              value: null
+            },
+
+            _linkIndex: {
+              type: Number,
+              value: null
+            },
+
+            _linkUrl: {
               type: String,
               value: ''
             }
@@ -444,8 +512,11 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         __patchToolbar() {
-          const toolbar = this._editor.theme.modules.toolbar;
+          const toolbar = this._editor.getModule('toolbar');
           const update = toolbar.update;
+
+          // add custom link button to toggle state attribute
+          toolbar.controls.push(['link', this.shadowRoot.querySelector('[part~="toolbar-button-link"]')]);
 
           toolbar.update = function(range) {
             update.call(toolbar, range);
@@ -467,6 +538,88 @@ This program is available under Apache License Version 2.0, available at https:/
           if (this.__lastCommittedChange !== this.value) {
             this.dispatchEvent(new CustomEvent('change', {bubbles: true, cancelable: false}));
             this.__lastCommittedChange = this.value;
+          }
+        }
+
+        _onLinkClick() {
+          const range = this._editor.getSelection();
+          if (range) {
+            const LinkBlot = Quill.imports['formats/link'];
+            const [link, offset] = this._editor.scroll.descendant(LinkBlot, range.index);
+            if (link != null) {
+              // existing link
+              this._linkRange = {index: range.index - offset, length: link.length()};
+              this._linkUrl = LinkBlot.formats(link.domNode);
+            } else if (range.length === 0) {
+              this._linkIndex = range.index;
+            }
+            this._linkEditing = true;
+          }
+        }
+
+        _applyLink(link) {
+          if (link) {
+            this._markToolbarClicked();
+            this._editor.format('link', link, SOURCE.user);
+            this._editor.getModule('toolbar').update(this._editor.selection.savedRange);
+          }
+          this._closeLinkDialog();
+        }
+
+        _insertLink(link, position) {
+          if (link) {
+            this._markToolbarClicked();
+            this._editor.insertText(position, link, {link});
+            this._editor.setSelection(position, link.length);
+          }
+          this._closeLinkDialog();
+        }
+
+        _updateLink(link, range) {
+          this._markToolbarClicked();
+          this._editor.formatText(range, 'link', link, SOURCE.user);
+          this._closeLinkDialog();
+        }
+
+        _removeLink() {
+          this._markToolbarClicked();
+          if (this._linkRange != null) {
+            this._editor.formatText(this._linkRange, 'link', false, SOURCE.user);
+          }
+          this._closeLinkDialog();
+        }
+
+        _closeLinkDialog() {
+          this._linkEditing = false;
+          this._linkUrl = '';
+          this._linkIndex = null;
+          this._linkRange = null;
+        }
+
+        _onLinkEditConfirm() {
+          if (this._linkIndex != null) {
+            this._insertLink(this._linkUrl, this._linkIndex);
+          } else if (this._linkRange) {
+            this._updateLink(this._linkUrl, this._linkRange);
+          } else {
+            this._applyLink(this._linkUrl);
+          }
+        }
+
+        _onLinkEditCancel() {
+          this._closeLinkDialog();
+        }
+
+        _onLinkEditRemove() {
+          this._removeLink();
+          this._closeLinkDialog();
+        }
+
+        _onLinkKeydown(e) {
+          if (e.keyCode === 13) {
+            e.preventDefault();
+            e.stopPropagation();
+            this.$.confirmLink.click();
           }
         }
 

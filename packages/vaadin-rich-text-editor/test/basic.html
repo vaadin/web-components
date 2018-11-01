@@ -144,19 +144,31 @@
           });
 
           it('should toggle "on" attribute for corresponding buttons when selection is changed', () => {
-            editor.setContents(new window.Quill.imports.delta(
-              [{'attributes': {'bold': true}, 'insert': 'Foo\n'}, {'attributes': {'italic': true}, 'insert': 'Bar\n'}]), 'user');
+            const delta = new window.Quill.imports.delta([
+              {'attributes': {'bold': true}, 'insert': 'Foo\n'},
+              {'attributes': {'italic': true}, 'insert': 'Bar\n'},
+              {'attributes': {'link': 'https://vaadin.com'}, 'insert': 'Vaadin\n'}
+            ]);
+            editor.setContents(delta, 'user');
 
             const boldBtn = getButton('bold');
             const italicBtn = getButton('italic');
+            const linkBtn = getButton('link');
 
             editor.setSelection(0, 1);
             expect(boldBtn.hasAttribute('on')).to.be.true;
             expect(italicBtn.hasAttribute('on')).to.be.false;
+            expect(linkBtn.hasAttribute('on')).to.be.false;
 
             editor.setSelection(4, 1);
             expect(boldBtn.hasAttribute('on')).to.be.false;
             expect(italicBtn.hasAttribute('on')).to.be.true;
+            expect(linkBtn.hasAttribute('on')).to.be.false;
+
+            editor.setSelection(8, 1);
+            expect(boldBtn.hasAttribute('on')).to.be.false;
+            expect(italicBtn.hasAttribute('on')).to.be.false;
+            expect(linkBtn.hasAttribute('on')).to.be.true;
           });
         });
 
@@ -240,6 +252,146 @@
 
             // trigger mock image upload
             fileInput.dispatchEvent(new Event('change'));
+          });
+        });
+
+        describe('hyperlink', () => {
+          const url = 'https://vaadin.com';
+          let btn, dialog;
+
+          beforeEach(() => {
+            btn = getButton('link');
+            dialog = rte.$.linkDialog;
+          });
+
+          describe('dialog', () => {
+            it('should not open the confirm dialog when the editor does not have focus', () => {
+              editor.focus();
+              editor.blur();
+              btn.click();
+              expect(dialog.opened).to.be.false;
+            });
+
+            it('should confirm the dialog by pressing enter in the focused text field', () => {
+              const spy = sinon.spy(rte.$.confirmLink, 'click');
+              editor.focus();
+              btn.click();
+              rte.$.linkUrl.focus();
+              const evt = new CustomEvent('keydown');
+              evt.keyCode = 13;
+              rte.$.linkUrl.dispatchEvent(evt);
+              expect(spy).to.be.calledOnce;
+            });
+          });
+
+          describe('selected text', () => {
+            it('should open the confirm dialog when the editor has focus and text is selected', () => {
+              rte.value = JSON.stringify([{insert: 'Vaadin'}]);
+              editor.focus();
+              editor.setSelection(0, 6);
+              btn.click();
+              expect(dialog.opened).to.be.true;
+            });
+
+            it('should add link to the selected text when URL in dialog is set and confirmed', () => {
+              rte.value = JSON.stringify([{insert: 'Vaadin'}]);
+              editor.focus();
+              editor.setSelection(0, 6);
+              flushValueDebouncer();
+              btn.click();
+              rte.$.linkUrl.value = url;
+              rte.$.confirmLink.click();
+              flushValueDebouncer();
+              expect(rte.value).to.equal(`[{"attributes":{"link":"${url}"},"insert":"Vaadin"},{"insert":"\\n"}]`);
+            });
+
+            it('should update link on the selected text when URL in the dialog is changed and confirmed', () => {
+              rte.value = '[{"attributes":{"link":"https://google.com"},"insert":"Vaadin"},{"insert":"\\n"}]';
+              flushValueDebouncer();
+              editor.focus();
+              editor.setSelection(0, 6);
+              btn.click();
+              rte.$.linkUrl.value = url;
+              rte.$.confirmLink.click();
+              flushValueDebouncer();
+              expect(rte.value).to.equal(`[{"attributes":{"link":"${url}"},"insert":"Vaadin"},{"insert":"\\n"}]`);
+            });
+          });
+
+          describe('no text selected', () => {
+            it('should open the confirm dialog when the editor has focus and no text selected', () => {
+              editor.focus();
+              btn.click();
+              expect(dialog.opened).to.be.true;
+            });
+
+            it('should insert link with the text same as the URL set in the dialog, if no text selected', () => {
+              editor.focus();
+              editor.setSelection(0, 0);
+              btn.click();
+              rte.$.linkUrl.value = url;
+              rte.$.confirmLink.click();
+              flushValueDebouncer();
+              expect(rte.value).to.equal(`[{"attributes":{"link":"${url}"},"insert":"${url}"},{"insert":"\\n"}]`);
+            });
+
+            it('should update link if the cursor is in the text containing it, if no text selected', () => {
+              rte.value = '[{"attributes":{"link":"https://google.com"},"insert":"Vaadin"},{"insert":"\\n"}]';
+              flushValueDebouncer();
+              editor.focus();
+              editor.setSelection(1, 0);
+              btn.click();
+              rte.$.linkUrl.value = url;
+              rte.$.confirmLink.click();
+              flushValueDebouncer();
+              expect(rte.value).to.equal(`[{"attributes":{"link":"${url}"},"insert":"Vaadin"},{"insert":"\\n"}]`);
+            });
+
+            it('should remove link if the cursor is in the text containing it, if no text selected', () => {
+              rte.value = `[{"attributes":{"link":"${url}"},"insert":"Vaadin"},{"insert":"\\n"}]`;
+              flushValueDebouncer();
+              editor.focus();
+              editor.setSelection(0, 6);
+              btn.click();
+              rte.$.removeLink.click();
+              flushValueDebouncer();
+              expect(rte.value).to.equal('[{"insert":"Vaadin\\n"}]');
+            });
+          });
+
+          describe('change', () => {
+            it('should dispatch change event if the value has been updated', () => {
+              rte.value = JSON.stringify([{insert: 'Vaadin'}]);
+              editor.focus();
+              editor.setSelection(0, 6);
+              flushValueDebouncer();
+              btn.click();
+              rte.$.linkUrl.value = url;
+
+              const spy = sinon.spy();
+              rte.addEventListener('change', spy);
+
+              rte.$.confirmLink.click();
+              flushValueDebouncer();
+              expect(spy).to.be.calledOnce;
+            });
+
+            it('should not change value and not dispatch change if the dialog was cancelled', () => {
+              const value = `[{"attributes":{"link":"${url}"},"insert":"Vaadin"},{"insert":"\\n"}]`;
+              rte.value = value;
+              flushValueDebouncer();
+              editor.focus();
+              editor.setSelection(0, 6);
+              btn.click();
+
+              const spy = sinon.spy();
+              rte.addEventListener('change', spy);
+
+              rte.$.cancelLink.click();
+              flushValueDebouncer();
+              expect(rte.value).to.equal(value);
+              expect(spy).to.not.be.called;
+            });
           });
         });
       });
