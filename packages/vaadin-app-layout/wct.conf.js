@@ -60,7 +60,7 @@ module.exports = {
         browserName: 'chrome'
       },
       'iOS Simulator/ipad@11.3',
-      'iOS Simulator/iphone@10.3',
+      'iOS Simulator/ipad@10.3',
       'Windows 10/chrome@latest',
       'Windows 10/firefox@latest'
     ];
