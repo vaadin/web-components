@@ -113,7 +113,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           return 'vaadin-confirm-dialog';
         }
         static get version() {
-          return '1.1.0-beta1';
+          return '1.1.0';
         }
 
         static get properties() {
@@ -226,7 +226,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           Polymer.RenderStatus.beforeNextRender(this, () => {
             var confirmButton = this._confirmButton || this.$.dialog.$.overlay.content.querySelector('#confirm');
             confirmButton.focus();
-            confirmButton.setAttribute('focus-ring', '');
           });
         }
 
