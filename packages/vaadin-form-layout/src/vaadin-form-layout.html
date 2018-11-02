@@ -5,6 +5,7 @@ This program is available under Apache License Version 2.0, available at https:/
 -->
 
 <link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../polymer/lib/utils/flattened-nodes-observer.html">
 <link rel="import" href="../../iron-resizable-behavior/iron-resizable-behavior.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
@@ -289,7 +290,10 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         disconnectedCallback() {
+          super.disconnectedCallback();
+
           this.__mutationObserver.disconnect();
+          this.__childObserver.disconnect();
         }
 
         _observeChildrenColspanChange() {
@@ -304,8 +308,18 @@ This program is available under Apache License Version 2.0, available at https:/
             });
           });
 
-          Array.from(this.children).forEach((child) => {
-            this.__mutationObserver.observe(child, mutationObserverConfig);
+          this.__childObserver = new Polymer.FlattenedNodesObserver(this, info => {
+            const ignore = ['template', 'style', 'dom-repeat', 'dom-if'];
+            const nodes = Array.from(info.addedNodes)
+              .filter(node => node.nodeType === Node.ELEMENT_NODE && ignore.indexOf(node.localName.toLowerCase()) === -1);
+
+            nodes.forEach(child => {
+              this.__mutationObserver.observe(child, mutationObserverConfig);
+            });
+
+            if (nodes.some(node => node.hasAttribute('colspan'))) {
+              this._invokeUpdateStyles();
+            }
           });
         }
 
