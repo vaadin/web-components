@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-app-layout",
-  "version": "1.0.0-beta1",
+  "version": "1.0.0",
   "description": "vaadin-app-layout",
   "main": "vaadin-app-layout.html",
   "repository": "vaadin/vaadin-app-layout",
