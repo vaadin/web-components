@@ -209,6 +209,11 @@
         firstBodyCheckbox = firstBodyCellContent.children[0];
       });
 
+      it('should clean up listeners on detach', () => {
+        grid.removeChild(selectionColumn);
+        expect(() => grid.selectItem('foo')).not.to.throw(Error);
+      });
+
       it('should have a checkbox in the body cell', () => {
         expect(firstBodyCheckbox.localName).to.eql('vaadin-checkbox');
       });
