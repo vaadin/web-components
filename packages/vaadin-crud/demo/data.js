@@ -1,3 +1,31 @@
+
+
+// monkey-patch window.fetch so as when requested 'users.json' we return
+// the in-memory array of users window.users
+// This also fixes IE11 that does not have the window.fetch method.
+if (!window._fetch) {
+  window._fetch = window.fetch;
+  window.fetch = function(input, init) {
+    if (input == 'users.json') {
+      return new Promise(function(resolve, reject) {
+        resolve({
+          json: function() {
+            return new Promise(function(resolve, reject) {
+              setTimeout(function() {
+                resolve(window.users);
+              }, 1000);
+            });
+          }
+        });
+      });
+    } else {
+      return window._fetch(input, init);
+    }
+  }
+}
+
+// An array of users in memory
+window.users =
 [
   {
     "_id": "5953f755ad720c45621bf48e",
@@ -1143,4 +1171,4 @@
     "password": "0Abc3554",
     "role": "user"
   }
-]
+];

@@ -11,8 +11,7 @@
     <p><i>NOTE: </i>That you need to add a <code>vaadin-crud-edit-column</code> in order to have a mecanism for editing the item</p>
     <vaadin-demo-snippet id="crud-custom-demos-custom-grid">
       <template preserve-content>
-        <iron-ajax auto url="users.json" last-response="{{items}}"></iron-ajax>
-        <vaadin-crud items=[[items]]>
+        <vaadin-crud>
           <vaadin-grid slot="grid">
             <vaadin-crud-edit-column></vaadin-crud-edit-column>
 
@@ -29,6 +28,11 @@
             </vaadin-grid-column>
           </vaadin-grid>
         </vaadin-crud>
+        <script>
+          window.addDemoReadyListener('#crud-custom-demos-custom-grid', function(document) {
+            document.querySelector('vaadin-crud').items = window.users;
+          });
+        </script>
       </template>
     </vaadin-demo-snippet>
 
@@ -37,8 +41,7 @@
     <p><i>NOTE: </i>You can add any element that provides a <code>value</code> property and a validation mechanism: <code>validate</code> or <code>checkValidity</code></p>
     <vaadin-demo-snippet id="crud-custom-demos-custom-editor">
       <template preserve-content>
-        <iron-ajax auto url="users.json" last-response="{{items}}"></iron-ajax>
-        <vaadin-crud items=[[items]] exclude="_id, password">
+        <vaadin-crud exclude="_id, password">
           <vaadin-form-layout slot="form" style="max-width: 60em">
             <vaadin-text-field path="name.first"label="First name" required></vaadin-text-field>
             <vaadin-text-field path="name.last" label="Last name" required></vaadin-text-field>
@@ -55,19 +58,28 @@
             <vaadin-combo-box path="role" label="Role" items='["admin", "operator", "user"]'></vaadin-combo-box>
           </vaadin-form-layout>
         </vaadin-crud>
+        <script>
+          window.addDemoReadyListener('#crud-custom-demos-custom-editor', function(document) {
+            document.querySelector('vaadin-crud').items = window.users;
+          });
+        </script>
       </template>
     </vaadin-demo-snippet>
 
     <h3>Toolbar</h3>
     <p>You can add content to the toolbar and bind to the size data</p>
     <p>NOTE: You need to provide a button marked with the attribute 'new-button'.</p>
-    <vaadin-demo-snippet id="crud-custom-demos-custom-editor">
+    <vaadin-demo-snippet id="crud-custom-demos-custom-toolbar">
       <template preserve-content>
-        <iron-ajax auto url="users.json" last-response="{{items}}"></iron-ajax>
-        <vaadin-crud items=[[items]]  size="{{size}}" exclude="_id, password, picture">
+        <vaadin-crud size="{{size}}" exclude="_id, password, picture">
           <div slot="toolbar" style="flex: 1">There are <b>[[size]]</b> users in the database</div>
           <a slot="toolbar" new-button href="javascript:">Add a new user</a>
         </vaadin-crud>
+        <script>
+          window.addDemoReadyListener('#crud-custom-demos-custom-toolbar', function(document) {
+            document.querySelector('vaadin-crud').items = window.users;
+          });
+        </script>
       </template>
     </vaadin-demo-snippet>
 
