@@ -59,7 +59,6 @@
             groups[1].headerRenderer = function(root, column, rowData) {
               root.textContent = 'Location';
             };
-
           });
         </script>
       </template>
@@ -126,13 +125,13 @@
         <vaadin-checkbox>Hide First Two Columns</vaadin-checkbox>
 
         <vaadin-grid aria-label="Hiding Columns Example">
-            <vaadin-grid-column width="60px" flex-grow="0" text-align="end" header="#"></vaadin-grid-column>
-            <vaadin-grid-column width="60px" flex-grow="0" text-align="center"></vaadin-grid-column>
-            <vaadin-grid-column path="name.first" width="20%" flex-grow="0"></vaadin-grid-column>
-            <vaadin-grid-column path="name.last" width="20%" flex-grow="0"></vaadin-grid-column>
-            <vaadin-grid-column path="location.city" width="33%"></vaadin-grid-column>
-            <vaadin-grid-column path="location.state" width="33%"></vaadin-grid-column>
-            <vaadin-grid-column path="location.street" width="33%"></vaadin-grid-column>
+          <vaadin-grid-column width="60px" flex-grow="0" text-align="end" header="#"></vaadin-grid-column>
+          <vaadin-grid-column width="60px" flex-grow="0" text-align="center"></vaadin-grid-column>
+          <vaadin-grid-column path="name.first" width="20%" flex-grow="0"></vaadin-grid-column>
+          <vaadin-grid-column path="name.last" width="20%" flex-grow="0"></vaadin-grid-column>
+          <vaadin-grid-column path="location.city" width="33%"></vaadin-grid-column>
+          <vaadin-grid-column path="location.state" width="33%"></vaadin-grid-column>
+          <vaadin-grid-column path="location.street" width="33%"></vaadin-grid-column>
         </vaadin-grid>
 
         <script>
