@@ -236,7 +236,7 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     get focusElement() {
-      return this.root.querySelector('[part=value]');
+      return this.root && this.root.querySelector('[part=value]');
     }
 
     _onInput(e) {
