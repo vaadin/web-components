@@ -4,20 +4,36 @@
 // the in-memory array of users window.users
 // This also fixes IE11 that does not have the window.fetch method.
 if (!window._fetch) {
-  window._fetch = window.fetch;
+  window._fetch = window.fetch || true;
   window.fetch = function(input, init) {
-    if (input == 'users.json') {
+    if (input == 'users.json') { // return mock data from memory `window.users`
       return new Promise(function(resolve, reject) {
         resolve({
           json: function() {
             return new Promise(function(resolve, reject) {
-              setTimeout(function() {
+              setTimeout(function() { // Emulate async
                 resolve(window.users);
-              }, 1000);
+              }, 800);
             });
           }
         });
       });
+    } else if (typeof window._fetch !== 'function') { // IE11
+      var xhr = new XMLHttpRequest();
+      const promise = new Promise(function(resolve, reject) {
+        xhr.onload = function() {
+          resolve({
+            json: function() {
+              return new Promise(function(resolve, reject) {
+                resolve(JSON.parse(xhr.responseText));
+              });
+            }
+          });
+        };
+      })
+      xhr.open('GET', input, true);
+      xhr.send();
+      return promise;
     } else {
       return window._fetch(input, init);
     }

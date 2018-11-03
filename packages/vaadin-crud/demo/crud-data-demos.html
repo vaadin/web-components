@@ -10,7 +10,7 @@
     <p>A function can be assigned to the <code>dataProvider</code> property in order to set a custom data source.</p>
     <p>NOTE: it is responsability of this dataProvider function to execute the <code>callback</code> providing the appropriate
       filtered and sorted chunk of items, as well as the total size of the data set.</p>
-    <p>This example utilises an item array as its data storage. The <code>dataProvider</code> function is able to extract
+    <p>This example utilises an array as its data storage. The <code>dataProvider</code> function is able to extract
       chunks from the array based on the <code>params</code> argument</p>
     <p>Listen to <code>save</code> and <code>delete</code> events to persist changes in the database</p>
     <vaadin-demo-snippet id="crud-data-demos-dataprovider">
@@ -45,17 +45,12 @@
         });
 
         /** DATA MODEL **/
-        // Basic data model persisted in an array in memory
-        // It's an array of generated users with random first and last names.
-        const FIRSTS = ['James', 'Mary', 'John', 'Patricia', 'Robert', 'Jennifer'];
-        const LASTS = ['Smith', 'Johnson', 'Williams', 'Brown'];
-        var people = [];
-        var id = 0;
-        while (id++ <= 200) {
+        // Generates an array of people
+        for (var people = [], id = 0; id <= 200; id++) {
           people.push({
             '_id': id, // It's a good practice to provide data with unique ids
-            'first-name': FIRSTS[id % FIRSTS.length] + id,
-            'last-name': LASTS[id % LASTS.length]});
+            'first': ['James', 'Mary', 'John', 'Patricia', 'Robert', 'Jennifer'][id % 6] + id,
+            'last': ['Smith', 'Johnson', 'Williams', 'Brown'][id % 4]});
         }
         // Helper to get the index of an item with unique `_id` in an array
         function getIdx(array, item) {
@@ -63,7 +58,7 @@
             return (r < 0 && obj._id === item._id) ? idx : r;
           }, -1);
         }
-        // Helper to filter an array based on the param.filters array
+        // Helper to filter an array based on the `param.filters` array
         function filter(array, filters) {
           return array.filter(function(item) {
             return filters.every(function(f) {
@@ -71,7 +66,7 @@
             });
           });
         }
-        // Helper to sort an array based on the param.filters array
+        // Helper to sort an array based on the `param.sortOrders` array
         function sort(array, sorts) {
           return array.slice(0).sort(function(item1, item2) {
             return sorts.reduce(function(r, s) {

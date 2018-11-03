@@ -8,15 +8,15 @@
 
     <h3>Custom search and renderers</h3>
     <p>This demo has an input field that filters data based on a custom search algorithm.
-       Additionally grid uses custom renderers to highlight search matches.</p>
+       Additionally custom grid renderers are defined to highlight search matches.</p>
     <p>Note that search field has been added to the crud toolbar in the footer, but moved up using CSS.</p>
     <vaadin-demo-snippet id="crud-advanced-demos-custom-search">
       <template preserve-content>
         <vaadin-crud  no-head theme="no-border compact" style="flex-direction: column-reverse">
-          <vaadin-button new-button slot="toolbar">New user</vaadin-button>
           <vaadin-text-field slot="toolbar" style="flex: 1" placeholder="Search users by first or last name">
             <iron-icon icon="lumo:search" slot="prefix"></iron-icon>
           </vaadin-text-field>
+          <vaadin-button new-button slot="toolbar">New user</vaadin-button>
           <vaadin-grid slot="grid">
             <vaadin-grid-column></vaadin-grid-column>
             <vaadin-grid-column></vaadin-grid-column>
@@ -119,15 +119,6 @@
             const crud = document.querySelector('vaadin-crud');
             const notification = document.querySelector('vaadin-notification');
 
-            function doGet(url, callback) {
-              var xhr = new XMLHttpRequest();
-              xhr.onload = function() {
-                callback(JSON.parse(xhr.responseText));
-              };
-              xhr.open('GET', url, true);
-              xhr.send();
-            }
-
             crud.dataProvider = function(params, callback) {
               let url = 'https://demo.vaadin.com/demo-data/1.0/people';
               url += '?index=' + (params.page * params.pageSize);
@@ -140,17 +131,19 @@
                 url += '&orders[]=' + sort.path + ' ' + sort.direction;
               });
 
-              doGet(url, function(json) {
-                callback(json.result, json.size);
+              fetch(url).then(function(response) {
+                response.json().then(function(json) {
+                  callback(json.result, json.size);
+                });
               });
             };
 
-            function save(e) {
+            function unimplemented(e) {
               e.preventDefault();
               notification.open();
             }
-            crud.addEventListener('save', save);
-            crud.addEventListener('delete', save);
+            crud.addEventListener('save', unimplemented);
+            crud.addEventListener('delete', unimplemented);
           });
         </script>
       </template>
@@ -160,7 +153,7 @@
     <p>To edit an item by clicking on the entire row, listen to <code>active-item-changed</code> in the grid</p>
     <vaadin-demo-snippet id="crud-custom-demos-custom-active-item">
       <template preserve-content>
-        <vaadin-crud items=[[items]]>
+        <vaadin-crud>
           <vaadin-grid slot="grid">
             <vaadin-grid-column path="name.first">
             </vaadin-grid-column>

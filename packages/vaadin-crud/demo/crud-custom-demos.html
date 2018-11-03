@@ -7,12 +7,13 @@
     </style>
 
     <h3>Grid</h3>
-    <p>Customize the grid by replacing the default one with your own.</p>
+    <p>Customize the grid by replacing the default one with your own</p>
     <p><i>NOTE: </i>That you need to add a <code>vaadin-crud-edit-column</code> in order to have a mecanism for editing the item</p>
     <vaadin-demo-snippet id="crud-custom-demos-custom-grid">
       <template preserve-content>
         <vaadin-crud>
           <vaadin-grid slot="grid">
+
             <vaadin-crud-edit-column></vaadin-crud-edit-column>
 
             <vaadin-grid-column width="60px" flex-grow="0">
@@ -26,6 +27,7 @@
               <template class="header">Email</template>
               <template>[[item.details.email]]</template>
             </vaadin-grid-column>
+
           </vaadin-grid>
         </vaadin-crud>
         <script>
@@ -67,8 +69,8 @@
     </vaadin-demo-snippet>
 
     <h3>Toolbar</h3>
-    <p>You can add content to the toolbar and bind to the size data</p>
-    <p>NOTE: You need to provide a button marked with the attribute 'new-button'.</p>
+    <p>You can add content to the toolbar and bind to the `size` property</p>
+    <p>NOTE: You need to provide an element marked with the attribute 'new-button' in order to have a mechanism for adding new items</p>
     <vaadin-demo-snippet id="crud-custom-demos-custom-toolbar">
       <template preserve-content>
         <vaadin-crud size="{{size}}" exclude="_id, password, picture">
