@@ -489,9 +489,9 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
             return;
           }
           if (item) {
-            if (!this._fields.length && this._form.configure) {
+            if (!this._fields.length && this._form._configure) {
               if (this.__model) {
-                this._form.configure(this.__model);
+                this._form._configure(this.__model);
               } else {
                 console.warn('<vaadin-crud> Unable to autoconfigure form because the data structure is unknown. ' +
                     'Either specify `include` or ensure at least one item is available beforehand.');
