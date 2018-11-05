@@ -30,7 +30,7 @@ if (!window._fetch) {
             }
           });
         };
-      })
+      });
       xhr.open('GET', input, true);
       xhr.send();
       return promise;
