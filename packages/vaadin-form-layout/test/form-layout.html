@@ -78,6 +78,50 @@
     </template>
   </test-fixture>
 
+  <dom-module id="mutable-layout">
+    <template>
+      <vaadin-form-layout>
+        <vaadin-form-item>
+          <label slot="label">Address</label>
+          <input class="full-width">
+        </vaadin-form-item>
+        <vaadin-form-item>
+          <label slot="label">First Name</label>
+          <input class="full-width" value="Jane">
+        </vaadin-form-item>
+        <template is="dom-repeat" items="[[items]]">
+          <vaadin-form-item colspan$="[[item.colspan]]">
+            <label slot="label">[[item.label]]</label>
+            <input class="full-width">
+          </vaadin-form-item>
+        </template>
+      </vaadin-form-layout>
+    </template>
+    <script>
+      customElements.whenDefined('vaadin-form-layout').then(() => {
+        customElements.define('mutable-layout', class extends Polymer.Element {
+          static get is() {
+            return 'mutable-layout';
+          }
+          static get properties() {
+            return {
+              items: {
+                type: Array,
+                value: () => []
+              }
+            };
+          }
+        });
+      });
+    </script>
+  </dom-module>
+
+  <test-fixture id="mutation">
+    <template>
+      <mutable-layout></mutable-layout>
+    </template>
+  </test-fixture>
+
   <script>
     function getParsedWidth(el) {
       const width = el.style.getPropertyValue('width');
@@ -466,6 +510,42 @@
         const ev = new Event('animationend');
         ev.animationName = 'foo';
         layout.dispatchEvent(ev);
+      });
+    });
+
+    describe('mutations', function() {
+      let container, layout;
+
+      const nextRender = () => new Promise(resolve => {
+        Polymer.RenderStatus.afterNextRender(container, resolve);
+      });
+
+      beforeEach(async() => {
+        await customElements.whenDefined('mutable-layout');
+        container = fixture('mutation');
+        layout = container.shadowRoot.querySelector('vaadin-form-layout');
+        await nextRender();
+      });
+
+      function estimateEffectiveColspan(el) {
+        return parseFloat(getParsedWidth(el).percentage) / (100 / 2);
+      }
+
+      it('should update layout after updating a colspan attribute', async() => {
+        expect(estimateEffectiveColspan(layout.children[0])).to.be.closeTo(1, .1);
+        layout.children[0].setAttribute('colspan', 2);
+        await nextRender();
+        expect(estimateEffectiveColspan(layout.children[0])).to.be.closeTo(2, .1);
+      });
+
+      it('should update layout after updating a colspan attribute on the lazily stamped node', async() => {
+        container.push('items', {label: 'Email', colspan: 1});
+        await nextRender();
+        const item = layout.querySelectorAll('vaadin-form-item')[2];
+        expect(estimateEffectiveColspan(item)).to.be.closeTo(1, .1);
+        container.set('items.0.colspan', 2);
+        await nextRender();
+        expect(estimateEffectiveColspan(item)).to.be.closeTo(2, .1);
       });
     });
   </script>
