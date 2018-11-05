@@ -7,6 +7,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
 <link rel="import" href="../../polymer/polymer-element.html">
 <link rel="import" href="../../vaadin-form-layout/src/vaadin-form-layout.html">
 <link rel="import" href="../../vaadin-text-field/src/vaadin-text-field.html">
+<link rel="import" href="vaadin-crud-include-mixin.html">
 
   <script>
     (function() {
@@ -19,37 +20,15 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
        * `<vaadin-form-layout>` [Documentation](https://vaadin.com/components/vaadin-form-layout/html-api/elements/Vaadin.FormLayoutElement)
        *
        * @memberof Vaadin
+       * @mixes Vaadin.Crud.IncludedMixin
        */
-      class CrudFormElement extends (class extends Vaadin.FormLayoutElement {}) {
+      class CrudFormElement extends Vaadin.Crud.IncludedMixin(class extends Vaadin.FormLayoutElement {}) {
         static get is() {
           return 'vaadin-crud-form';
         }
 
         static get properties() {
           return {
-            /**
-             * A list of item fields that should not be mapped to form fields.
-             *
-             * When [`include`](#/elements/vaadin-crud-form#property-include) is defined, this property is ignored.
-             *
-             * Default is to exclude any private property.
-             *
-             * @type{String|RegExp}
-             */
-            exclude: {
-              value: '^_',
-              observer: '__onExcludeChange'
-            },
-            /**
-             * A list of item properties that should be mapped to form fields.
-             *
-             * When it is defined [`exclude`](#/elements/vaadin-crud-form#property-exclude) is ignored.
-             *
-             * @type{String|Array}
-             */
-            include: {
-              observer: '__onIncludeChange'
-            },
             /**
              * The item being edited.
              */
@@ -62,36 +41,20 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         }
 
         /**
-         * Autogenerate fields for edition based on the JSON structure of the object provided.
+         * Autogenerate form fields based on the JSON structure of the object provided.
          *
-         * If not already called, the method will be executed the first time an item is assigned.
+         * If not called, the method will be executed the first time an item is assigned.
          */
-        configure(object) {
+        _configure(object) {
           this.innerHTML = '';
           this._fields = [];
           this.__createFields(this, object);
           this.notifyResize();
         }
 
-        __onExcludeChange(exclude) {
-          if (typeof exclude == 'string') {
-            this.exclude = exclude ? RegExp(exclude.replace(/, */g, '|'), 'i') : undefined;
-          }
-        }
-
-        __onIncludeChange(include) {
-          if (typeof include == 'string') {
-            this.include = include ? include.split(/, */) : undefined;
-          } else if (!this._fields && Array.isArray(include)) {
-            const item = {};
-            this.include.forEach(path => this.__set(path, null, item));
-            this.configure(item);
-          }
-        }
-
         __onItemChange(item) {
           if (!this._fields) {
-            this.configure(item);
+            this._configure(item);
           }
         }
 

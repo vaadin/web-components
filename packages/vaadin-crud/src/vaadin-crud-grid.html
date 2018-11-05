@@ -10,6 +10,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
 <link rel="import" href="../../vaadin-grid/src/vaadin-grid-column-group.html">
 <link rel="import" href="../../vaadin-grid/src/vaadin-grid-sorter.html">
 <link rel="import" href="../../vaadin-grid/src/vaadin-grid-filter.html">
+<link rel="import" href="vaadin-crud-include-mixin.html">
 <link rel="import" href="vaadin-crud-edit-column.html">
   <script>
     (function() {
@@ -22,8 +23,9 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
        * `<vaadin-grid>` [Documentation](https://vaadin.com/components/vaadin-grid/html-api/elements/Vaadin.GridElement)
        *
        * @memberof Vaadin
+       * @mixes Vaadin.Crud.IncludedMixin
        */
-      class CrudGridElement extends (class extends Vaadin.GridElement {}) {
+      class CrudGridElement extends Vaadin.Crud.IncludedMixin(class extends Vaadin.GridElement {}) {
         static get is() {
           return 'vaadin-crud-grid';
         }
@@ -41,31 +43,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
             /**
              * Do not add headers to columns.
              */
-            noHead: Boolean,
-            /**
-             * A list of item fields that should not be mapped to columns.
-             *
-             * When [`include`](#/elements/vaadin-crud-grid#property-include) is defined, this property is ignored.
-             *
-             * Default is to exclude any private property.
-             *
-             * @type{String|RegExp}
-             */
-            exclude: {
-              type: String,
-              value: '^_',
-              observer: '__onExcludeChange'
-            },
-            /**
-             * A list of item properties that should be mapped to columns.
-             *
-             * When it is defined [`exclude`](#/elements/vaadin-crud-grid#property-exclude) is ignored.
-             *
-             * @type{String|Array}
-             */
-            include: {
-              observer: '__onIncludeChange'
-            }
+            noHead: Boolean
           };
         }
 
@@ -73,32 +51,16 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           return ['__onItemsChange(items)'];
         }
 
-        __onExcludeChange(exclude) {
-          if (typeof exclude == 'string') {
-            this.exclude = exclude ? RegExp(exclude.replace(/, */g, '|'), 'i') : undefined;
-          }
-        }
-
-        __onIncludeChange(include) {
-          if (typeof include == 'string') {
-            this.include = include ? include.split(/, */) : undefined;
-          } else if (!this._fields && Array.isArray(include)) {
-            const item = {};
-            this.include.forEach(path => this.__set(path, null, item));
-            this.__configure(item);
-          }
-        }
-
         __onItemsChange(items) {
           if ((!this.dataProvider || this.dataProvider == this._arrayDataProvider) && !this.include && items && items[0]) {
-            this.__configure(items[0]);
+            this._configure(items[0]);
           }
         }
 
         __dataProviderWrapper(params, callback) {
           this.__dataProvider(params, (items, size) => {
             if (this.innerHTML == '' && !this.include && items[0]) {
-              this.__configure(items[0]);
+              this._configure(items[0]);
             }
             callback(items, size);
           });
@@ -119,7 +81,12 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           }
         }
 
-        __configure(item) {
+        /**
+         * Autogenerate grid columns based on the JSON structure of the object provided.
+         *
+         * Method will be executed when items or dataProvider is assigned.
+         */
+        _configure(item) {
           this.innerHTML = '';
           this.__createColumns(this, item);
           this.appendChild(document.createElement('vaadin-crud-edit-column'));
