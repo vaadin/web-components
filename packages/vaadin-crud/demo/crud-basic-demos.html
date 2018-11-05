@@ -10,45 +10,61 @@
     <p>An array of objects can be assigned to the <code>items</code> property.</p>
     <vaadin-demo-snippet id="crud-basic-demos-basics">
       <template preserve-content>
-        <iron-ajax auto url="users.json" last-response="{{items}}"></iron-ajax>
-        <vaadin-crud  items=[[items]]></vaadin-crud>
-        <!-- The web-service returns an array of objects with the following structure
-          {
-            "_id": "5953f755ad720c45621bf48e",
-            "name": {"first": "Grant", "last": "Andrews"},
-            "details": {"picture": "https://...", "email": "grantandrews@exosis.com" },
-            "password": "0Abc9154",
-            "role": "operator"
-          }
-        -->
+        <vaadin-crud></vaadin-crud>
+        <script>
+          window.addDemoReadyListener('#crud-basic-demos-basics', function(document) {
+            /* window.users is an array of objects with the following structure:
+            [{
+              _id: '…',
+              name: {first: '…', last: '…'},
+              details: {picture: '', email: '…'},
+              password: '…',
+              role: '…'
+            }, ... ] */
+            document.querySelector('vaadin-crud').items = window.users;
+          });
+        </script>
       </template>
     </vaadin-demo-snippet>
 
     <h3>Include fields</h3>
     <p>Grid columns and editor fields can be defined by providing a list of fields in the <code>include</code> property.</p>
     <p><i>NOTE: </i>When there is no initial data, use this to configure grid and editor, then you can add new items</p>
-    <vaadin-demo-snippet id="crud-basic-demos-basics">
+    <vaadin-demo-snippet id="crud-basic-demos-include">
       <template preserve-content>
-        <vaadin-crud items="{{items}}" include="name.first, name.last, details.email, role"></vaadin-crud>
+        <vaadin-crud include="name.first, name.last, details.email, role"></vaadin-crud>
+        <script>
+          window.addDemoReadyListener('#crud-basic-demos-include', function(document) {
+            document.querySelector('vaadin-crud').items = window.users;
+          });
+        </script>
       </template>
     </vaadin-demo-snippet>
 
     <h3>Exclude fields</h3>
     <p>Otherwise you can exclude a set of fields by using the the <code>exclude</code> property.</p>
     <p><i>NOTE: </i>When the <code>include</code> property is set <code>exclude</code> is ignored</p>
-    <vaadin-demo-snippet id="crud-basic-demos-basics">
+    <vaadin-demo-snippet id="crud-basic-demos-exclude">
       <template preserve-content>
-        <iron-ajax auto url="users.json" last-response="{{items}}"></iron-ajax>
-        <vaadin-crud exclude="_id, password, picture"  items=[[items]]></vaadin-crud>
+        <vaadin-crud exclude="_id, password, picture"></vaadin-crud>
+        <script>
+          window.addDemoReadyListener('#crud-basic-demos-exclude', function(document) {
+            document.querySelector('vaadin-crud').items = window.users;
+          });
+        </script>
       </template>
     </vaadin-demo-snippet>
 
     <h3>Disable sorting and filtering</h3>
     <p>Built-in sorting and filtering can be disabled by setting the properties <code>no-sort</code> and <code>no-filter</code> respectively</p>
-    <vaadin-demo-snippet id="crud-basic-demos-basics">
+    <vaadin-demo-snippet id="crud-basic-demos-no-filter">
       <template preserve-content>
-        <iron-ajax auto url="users.json" last-response="{{items}}"></iron-ajax>
-        <vaadin-crud no-sort no-filter include="name.first, name.last, details.email, role"  items=[[items]]></vaadin-crud>
+        <vaadin-crud no-sort no-filter include="name.first, name.last, details.email, role"></vaadin-crud>
+        <script>
+          window.addDemoReadyListener('#crud-basic-demos-no-filter', function(document) {
+            document.querySelector('vaadin-crud').items = window.users;
+          });
+        </script>
       </template>
     </vaadin-demo-snippet>
 

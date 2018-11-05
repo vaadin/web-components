@@ -11,19 +11,18 @@
     <vaadin-demo-snippet id="crud-theme-demos-no-border">
       <template preserve-content>
         <vaadin-crud theme="no-border"></vaadin-crud>
+        <script>
+          window.addDemoReadyListener('#crud-theme-demos-no-border', function(document) {
+            var crud = document.querySelector('vaadin-crud');
+            fetch('users.json').then(function(response) {
+              response.json().then(function(json) {
+                crud.items = json;
+              });
+            });
+          });
+        </script>
       </template>
     </vaadin-demo-snippet>
-
-    <script>
-      window.addDemoReadyListener('#crud-theme-demos-no-border', function(document) {
-        var crud = document.querySelector('vaadin-crud');
-        fetch('users.json').then(function(response) {
-          response.json().then(function(json) {
-            crud.items = json;
-          });
-        });
-      });
-    </script>
 
   </template>
   <script>
