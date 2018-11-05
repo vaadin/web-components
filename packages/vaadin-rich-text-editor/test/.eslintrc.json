@@ -8,6 +8,7 @@
     "expect": false,
     "gemini": false,
     "sinon": false,
+    "MockInteractions": false,
     "createImage": false
   }
 }
