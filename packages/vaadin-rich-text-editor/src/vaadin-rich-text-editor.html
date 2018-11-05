@@ -120,11 +120,10 @@ This program is available under Apache License Version 2.0, available at https:/
     <vaadin-confirm-dialog
       id="linkDialog"
       opened="{{_linkEditing}}"
-      header="[[i18n.enterLinkUrl]]"
+      header="[[i18n.linkDialogTitle]]"
       >
       <vaadin-text-field
         id="linkUrl"
-        placeholder="https://"
         value="{{_linkUrl}}"
         style="width: 100%;"
         on-keydown="_onLinkKeydown"
@@ -336,7 +335,7 @@ This program is available under Apache License Version 2.0, available at https:/
                   blockquote: 'blockquote',
                   codeBlock: 'code block',
                   clean: 'clean',
-                  enterLinkUrl: 'Enter link URL:',
+                  linkDialogTitle: 'Link address',
                   ok: 'OK',
                   cancel: 'Cancel',
                   remove: 'Remove'
