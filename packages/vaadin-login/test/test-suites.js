@@ -1,3 +1,3 @@
 window.VaadinLoginSuites = [
-  'sample-test.html'
+  'login-test.html'
 ];

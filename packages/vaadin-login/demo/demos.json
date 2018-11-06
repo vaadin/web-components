@@ -6,7 +6,17 @@
     "url": "element-basic-demos",
     "src": "element-basic-demos.html",
     "meta": {
-      "title": "Vaadin Element Basics",
+      "title": "Vaadin Login Basics",
+      "description": "",
+      "image": ""
+     }
+  },
+  {
+    "name": "I18n",
+    "url": "i18n-demos",
+    "src": "i18n-demos.html",
+    "meta": {
+      "title": "Vaadin Login Internationalization",
       "description": "",
       "image": ""
      }

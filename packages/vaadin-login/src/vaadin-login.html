@@ -78,25 +78,26 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
     </style>
       <section part="card">
         <div part="brand">
-          <h1>App name</h1>
-          <p>Inspiring application description</p>
+          <h1>[[i18n.header.title]]</h1>
+          <p>[[i18n.header.description]]</p>
         </div>
 
         <div part="form">
-          <h2>Log in</h2>
+          <h2>[[i18n.form.title]]</h2>
           <div part="error-message">
-            <h5>Incorrect username or password</h5>
-            <p>Check that you wrote the correct username and password and try again.</p>
+            <h5>[[i18n.errorMessage.title]]</h5>
+            <p>[[i18n.errorMessage.message]]</p>
           </div>
 
-          <vaadin-text-field label="Username" autofocus></vaadin-text-field>
-          <vaadin-password-field label="Password"></vaadin-password-field>
+          <vaadin-text-field label="[[i18n.form.username]]" autofocus></vaadin-text-field>
+          <vaadin-password-field label="[[i18n.form.password]]"></vaadin-password-field>
 
-          <vaadin-button id="submit" theme="primary contained">Log in</vaadin-button>
-          <vaadin-button id="forgotPasswordButton" theme="tertiary small" on-click="_forgotPassword" hidden$="[[hideForgotPasswordButton]]">Forgot password</vaadin-button>
+          <vaadin-button id="submit" theme="primary contained">[[i18n.form.submit]]</vaadin-button>
+
+          <vaadin-button id="forgotPasswordButton" theme="tertiary small" on-click="_forgotPassword" hidden$="[[hideForgotPasswordButton]]">[[i18n.form.forgotPassword]]</vaadin-button>
 
           <div part="footer">
-            <p>In case you need to provide some additional info for the user (like default login credentials), this is the place for that.</p>
+            <p>[[i18n.additionalInformation]]</p>
           </div>
         </div>
       </section>
@@ -133,6 +134,58 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             hideForgotPasswordButton: {
               type: Boolean,
               value: false
+            },
+
+            /**
+             * The object used to localize this component.
+             * For changing the default localization, change the entire
+             * _i18n_ object or just the property you want to modify.
+             *
+             * The object has the following JSON structure and default values:
+
+              {
+                header: {
+                  title: 'App name',
+                  description: 'Inspiring application description'
+                },
+                form: {
+                  title: 'Log in',
+                  username: 'Username',
+                  password: 'Password',
+                  submit: 'Log in',
+                  forgotPassword: 'Forgot password'
+                },
+                errorMessage: {
+                  title: 'Incorrect username or password',
+                  message: 'Check that you have entered the correct username and password and try again.'
+                },
+                additionalInformation: 'In case you need to provide some additional info for the user.'
+              }
+             *
+             * @default {English/US}
+             */
+            i18n: {
+              type: Object,
+              value: function() {
+                return {
+                  header: {
+                    title: 'App name',
+                    description: 'Inspiring application description'
+                  },
+                  form: {
+                    title: 'Log in',
+                    username: 'Username',
+                    password: 'Password',
+                    submit: 'Log in',
+                    forgotPassword: 'Forgot password'
+                  },
+                  errorMessage: {
+                    title: 'Incorrect username or password',
+                    message: 'Check that you have entered the correct username and password and try again.'
+                  },
+                  additionalInformation: 'In case you need to provide some additional info for the user.'
+                };
+              }
             }
           };
         }

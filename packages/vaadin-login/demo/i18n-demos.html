@@ -1,0 +1,51 @@
+<dom-module id="i18n-demos">
+  <template>
+    <style include="vaadin-component-demo-shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+
+
+    <h3>Internationalization</h3>
+    <p>Set the <code>i18n</code> object to localize the component</p>
+    <vaadin-demo-snippet id="login-demo-internationalisation">
+      <template preserve-content>
+        <vaadin-login></vaadin-login>
+        <script>
+          window.addDemoReadyListener('#login-demo-internationalisation', function(document) {
+            const login = document.querySelector('vaadin-login');
+            const i18n = {
+              header: {
+                title: 'Nome do aplicativo',
+                description: 'Descrição do aplicativo'
+              },
+              form: {
+                title: 'Entrar',
+                username: 'Usuário',
+                password: 'Senha',
+                submit: 'Entrar',
+                forgotPassword: 'Esqueci minha senha'
+              },
+              errorMessage: {
+                title: 'Usuário/senha inválidos',
+                message: 'Confira seu usuário e senha e tente novamente.'
+              },
+              additionalInformation: 'Caso necessite apresentar alguma informação extra para o usuário (como credenciais padrão), este é o lugar.'
+            };
+            login.i18n = i18n;
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+  </template>
+  <script>
+    class I18nDemos extends DemoReadyEventEmitter(ElementDemo(Polymer.Element)) {
+      static get is() {
+        return 'i18n-demos';
+      }
+    }
+    customElements.define(I18nDemos.is, I18nDemos);
+  </script>
+</dom-module>
