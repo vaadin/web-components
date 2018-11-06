@@ -282,6 +282,17 @@
               rte.$.linkUrl.dispatchEvent(evt);
               expect(spy).to.be.calledOnce;
             });
+
+            it('should focus whe editor when the dialog is cancelled', () => {
+              editor.focus();
+              btn.click();
+
+              const spy = sinon.spy(editor, 'focus');
+              rte.addEventListener('change', spy);
+
+              rte.$.cancelLink.click();
+              expect(spy).to.be.calledOnce;
+            });
           });
 
           describe('selected text', () => {
@@ -316,6 +327,17 @@
               flushValueDebouncer();
               expect(rte.value).to.equal(`[{"attributes":{"link":"${url}"},"insert":"Vaadin"},{"insert":"\\n"}]`);
             });
+
+            it('should remove link and color on the selected text when remove button is pressed', () => {
+              rte.value = `[{"attributes":{"link":"${url}", "color": "blue"},"insert":"Vaadin"},{"insert":"\\n"}]`;
+              flushValueDebouncer();
+              editor.focus();
+              editor.setSelection(0, 6);
+              btn.click();
+              rte.$.removeLink.click();
+              flushValueDebouncer();
+              expect(rte.value).to.equal('[{"insert":"Vaadin\\n"}]');
+            });
           });
 
           describe('no text selected', () => {
@@ -347,11 +369,11 @@
               expect(rte.value).to.equal(`[{"attributes":{"link":"${url}"},"insert":"Vaadin"},{"insert":"\\n"}]`);
             });
 
-            it('should remove link if the cursor is in the text containing it, if no text selected', () => {
-              rte.value = `[{"attributes":{"link":"${url}"},"insert":"Vaadin"},{"insert":"\\n"}]`;
+            it('should remove link and color if the cursor is in the text containing it, if no text selected', () => {
+              rte.value = `[{"attributes":{"link":"${url}", "color": "blue"},"insert":"Vaadin"},{"insert":"\\n"}]`;
               flushValueDebouncer();
               editor.focus();
-              editor.setSelection(0, 6);
+              editor.setSelection(1, 0);
               btn.click();
               rte.$.removeLink.click();
               flushValueDebouncer();

@@ -583,7 +583,7 @@ This program is available under Apache License Version 2.0, available at https:/
         _removeLink() {
           this._markToolbarClicked();
           if (this._linkRange != null) {
-            this._editor.formatText(this._linkRange, 'link', false, SOURCE.user);
+            this._editor.formatText(this._linkRange, {link: false, color: false}, SOURCE.user);
           }
           this._closeLinkDialog();
         }
@@ -607,6 +607,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _onLinkEditCancel() {
           this._closeLinkDialog();
+          this._editor.focus();
         }
 
         _onLinkEditRemove() {
