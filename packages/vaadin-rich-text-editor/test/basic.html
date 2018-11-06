@@ -272,11 +272,20 @@
               expect(dialog.opened).to.be.false;
             });
 
+            it('should focus whe text field when the dialog is opened', done => {
+              const spy = sinon.spy(rte.$.linkUrl, 'focus');
+              editor.focus();
+              btn.click();
+              Polymer.RenderStatus.afterNextRender(rte, () => {
+                expect(spy).to.be.calledOnce;
+                done();
+              });
+            });
+
             it('should confirm the dialog by pressing enter in the focused text field', () => {
               const spy = sinon.spy(rte.$.confirmLink, 'click');
               editor.focus();
               btn.click();
-              rte.$.linkUrl.focus();
               const evt = new CustomEvent('keydown');
               evt.keyCode = 13;
               rte.$.linkUrl.dispatchEvent(evt);

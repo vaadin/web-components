@@ -400,6 +400,10 @@ This program is available under Apache License Version 2.0, available at https:/
 
           this.__patchToolbar();
 
+          this.$.linkDialog.$.dialog.$.overlay.addEventListener('vaadin-overlay-open', () => {
+            this.$.linkUrl.focus();
+          });
+
           const editorContent = editor.querySelector('.ql-editor');
 
           editorContent.setAttribute('role', 'textbox');
