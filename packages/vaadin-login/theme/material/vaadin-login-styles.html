@@ -1,0 +1,38 @@
+<link rel="import" href="../../src/vaadin-login.html">
+
+<dom-module id="material-login" theme-for="vaadin-login">
+  <template>
+    <style>
+      [part="card"] {
+        width: 23rem;
+        border-radius: 0;
+        margin: 2rem;
+      }
+
+      [part="brand"] {
+        padding: 24px 12px 12px;
+        background-color: var(--material-primary-color);
+        min-height: calc(var(--lumo-size-m) * 5);
+        color: var(--material-primary-contrast-color);
+      }
+
+      [part="form"] {
+        padding: 1rem;
+      }
+
+      /* Small screen */
+      @media only screen
+      and (max-width: 500px) {
+        :host {
+          min-height: 100%;
+          align-items: flex-start;
+        }
+
+        [part="card"] {
+          width: 100%;
+          margin: 0;
+        }
+      }
+    </style>
+  </template>
+</dom-module>

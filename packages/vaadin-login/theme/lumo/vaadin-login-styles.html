@@ -1,0 +1,181 @@
+<link rel="import" href="../../../vaadin-lumo-styles/color.html">
+<link rel="import" href="../../../vaadin-lumo-styles/spacing.html">
+<link rel="import" href="../../../vaadin-lumo-styles/typography.html">
+
+<dom-module id="lumo-login" theme-for="vaadin-login">
+  <template>
+    <style include="lumo-color lumo-typography">
+      :host {
+        background: var(--lumo-base-color) linear-gradient(var(--lumo-shade-5pct), var(--lumo-shade-5pct));
+      }
+
+      [part="card"] {
+        width: calc(var(--lumo-size-m) * 10);
+        background: var(--lumo-base-color) linear-gradient(var(--lumo-tint-5pct), var(--lumo-tint-5pct));
+        border-radius: var(--lumo-border-radius);
+        box-shadow: var(--lumo-box-shadow-s);
+        margin: var(--lumo-space-l);
+      }
+
+      [part="brand"] {
+        padding: var(--lumo-space-l) var(--lumo-space-xl) var(--lumo-space-l) var(--lumo-space-l);
+        background-color: var(--lumo-primary-color);
+        color: var(--lumo-primary-contrast-color);
+        min-height: calc(var(--lumo-size-m) * 5);
+      }
+
+      [part="brand"] p {
+        line-height: var(--lumo-line-height-s);
+        color: var(--lumo-tint-70pct);
+        margin-bottom: 0;
+      }
+
+      [part="form"] {
+        padding: var(--lumo-space-l);
+      }
+
+      [part="form"] h2 {
+        margin-top: calc(var(--lumo-font-size-xxxl) - var(--lumo-font-size-xxl));
+      }
+
+      #submit {
+        margin-top: var(--lumo-space-l);
+        margin-bottom: var(--lumo-space-s);
+      }
+
+      #forgotPasswordButton {
+        margin: var(--lumo-space-s) auto;
+      }
+
+      [part="error-message"] {
+        background-color: var(--lumo-error-color-10pct);
+        padding: var(--lumo-space-m);
+        padding-left: var(--lumo-size-m);
+        border-radius: var(--lumo-border-radius);
+        margin-top: var(--lumo-space-m);
+        margin-bottom: var(--lumo-space-s);
+        color: var(--lumo-error-text-color);
+      }
+
+      [part="error-message"]::before {
+        content: var(--lumo-icons-error);
+        font-family: lumo-icons;
+        font-size: var(--lumo-icon-size-m);
+        position: absolute;
+        width: var(--lumo-size-m);
+        height: 1em;
+        line-height: 1;
+        text-align: center;
+        /* Visual centering */
+        margin-left: calc(var(--lumo-size-m) * -0.95);
+      }
+
+      [part="error-message"] h5 {
+        margin: 0 0 0.25em;
+        color: inherit;
+      }
+
+      [part="error-message"] p {
+        font-size: var(--lumo-font-size-s);
+        line-height: var(--lumo-line-height-s);
+        margin: 0;
+        opacity: 0.9;
+      }
+
+      [part="footer"] {
+        font-size: var(--lumo-font-size-xs);
+        line-height: var(--lumo-line-height-s);
+        color: var(--lumo-secondary-text-color);
+      }
+
+      /* Small screen */
+      @media only screen
+      and (max-width: 500px) {
+        :host {
+          min-height: 100%;
+          background: var(--lumo-base-color);
+          align-items: flex-start;
+        }
+
+        [part="card"] {
+          width: 100%;
+          border-radius: 0;
+          box-shadow: none;
+          margin: 0;
+        }
+      }
+
+      /* Landscape small screen */
+      @media only screen
+      and (max-height: 600px)
+      and (min-width: 600px)
+      and (orientation: landscape) {
+        [part="card"] {
+          flex-direction: row;
+          align-items: stretch;
+          max-width: calc(var(--lumo-size-m) * 16);
+          width: auto;
+        }
+
+        [part="brand"],
+        [part="form"] {
+          flex: auto;
+          flex-basis: 0;
+          box-sizing: border-box;
+        }
+
+        [part="brand"] {
+          justify-content: flex-start;
+        }
+      }
+
+      /* Landscape really small screen */
+      @media only screen
+      and (max-height: 500px)
+      and (min-width: 600px)
+      and (orientation: landscape),
+      only screen
+      and (max-width: 600px)
+      and (min-width: 600px)
+      and (orientation: landscape) {
+        :host {
+          height: 100%;
+        }
+
+        [part="card"] {
+          margin: 0;
+          width: 100%;
+          max-width: none;
+          height: 100%;
+          flex: auto;
+          border-radius: 0;
+          box-shadow: none;
+        }
+
+        [part="form"] {
+          height: 100%;
+          overflow: auto;
+          -webkit-overflow-scrolling: touch;
+        }
+      }
+
+      /* Handle iPhone X notch */
+      @media only screen
+      and (device-width: 375px)
+      and (device-height: 812px)
+      and (-webkit-device-pixel-ratio: 3) {
+        [part="card"] {
+          padding: 0 constant(safe-area-inset-bottom);
+          padding: 0 env(safe-area-inset-bottom);
+        }
+
+        [part="brand"] {
+          margin-left: calc(constant(safe-area-inset-bottom) * -1);
+          margin-left: calc(env(safe-area-inset-bottom) * -1);
+          padding-left: calc(var(--lumo-space-l) + constant(safe-area-inset-bottom));
+          padding-left: calc(var(--lumo-space-l) + env(safe-area-inset-bottom));
+        }
+      }
+    </style>
+  </template>
+</dom-module>
