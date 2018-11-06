@@ -25,7 +25,7 @@
           }
 
           get focusElement() {
-            return this.$.testElement;
+            return this.shadowRoot && this.$.testElement;
           }
         }
 
@@ -293,6 +293,10 @@
             expect(customElement.hasAttribute('focus-ring')).to.be.true;
             done();
           });
+        });
+
+        it('should not throw an error when using focus() to a newly created method', () => {
+          document.createElement('test-wrapper').focus();
         });
 
         it('should remove focused attribute when disconnected from the DOM', () => {
