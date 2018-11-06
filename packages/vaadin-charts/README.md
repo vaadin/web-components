@@ -64,7 +64,7 @@ are only published on npm, not pushed to GitHub repositories.
 Install `vaadin-charts`:
 
 ```sh
-bower i vaadin/vaadin-charts#6.2.0 --save
+bower i vaadin/vaadin-charts --save
 ```
 
 Once installed, import it in your application:
@@ -79,7 +79,7 @@ Once installed, import it in your application:
 Install `vaadin-charts`:
 
 ```sh
-npm i @vaadin/vaadin-charts@6.2.0 --save
+npm i @vaadin/vaadin-charts --save
 ```
 
 Once installed, import it in your application:
