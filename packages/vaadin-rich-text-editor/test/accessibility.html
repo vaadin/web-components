@@ -6,6 +6,7 @@
   <script src="../../web-component-tester/browser.js"></script>
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <link rel="import" href="../../test-fixture/test-fixture.html">
+  <script src="../../iron-test-helpers/mock-interactions.js"></script>
   <link rel="import" href="../vaadin-rich-text-editor.html">
 </head>
 
@@ -23,6 +24,8 @@
       const flushFormatAnnouncer = () => {
         rte.__debounceAnnounceFormatting && rte.__debounceAnnounceFormatting.flush();
       };
+
+      const flushValueDebouncer = () => rte.__debounceSetValue && rte.__debounceSetValue.flush();
 
       let rte, content, buttons, announcer, editor;
 
@@ -98,21 +101,18 @@
 
         it('should focus the next button on right-arrow', done => {
           sinon.stub(buttons[0], 'focus', done);
-          const e = new CustomEvent('keydown', {bubbles: true});
-          e.keyCode = 39;
+          const e = MockInteractions.keyboardEventFor('keydown', 39);
           buttons[buttons.length - 1].dispatchEvent(e);
         });
 
         it('should focus the previous button on left-arrow', done => {
           sinon.stub(buttons[buttons.length - 1], 'focus', done);
-          const e = new CustomEvent('keydown', {bubbles: true});
-          e.keyCode = 37;
+          const e = MockInteractions.keyboardEventFor('keydown', 37);
           buttons[0].dispatchEvent(e);
         });
 
         it('should change the tabbable button on arrow navigation', () => {
-          const e = new CustomEvent('keydown', {bubbles: true});
-          e.keyCode = 39;
+          const e = MockInteractions.keyboardEventFor('keydown', 39);
           buttons[0].dispatchEvent(e);
           expect(buttons[0].getAttribute('tabindex')).to.equal('-1');
           expect(buttons[1].getAttribute('tabindex')).not.to.be.ok;
@@ -122,18 +122,16 @@
         // the combo to work. The toolbar is still accessible with the tab key normally.
         it('should focus a toolbar button on meta-f10 combo', done => {
           sinon.stub(buttons[0], 'focus', done);
-          const e = new CustomEvent('keydown', {bubbles: true});
-          e.keyCode = 121;
-          e.altKey = true;
-          rte.shadowRoot.querySelector('[part="content"]').dispatchEvent(e);
+          editor.focus();
+          const e = MockInteractions.keyboardEventFor('keydown', 121, ['alt']);
+          content.dispatchEvent(e);
         });
 
         it('should focus a toolbar button on shift-tab combo', done => {
           sinon.stub(buttons[0], 'focus', done);
-          const e = new CustomEvent('keydown', {bubbles: true});
-          e.keyCode = 9;
-          e.shiftKey = true;
-          rte.shadowRoot.querySelector('[part="content"]').dispatchEvent(e);
+          editor.focus();
+          const e = MockInteractions.keyboardEventFor('keydown', 9, ['shift']);
+          content.dispatchEvent(e);
         });
 
         it('should focus the editor on esc', done => {
@@ -143,6 +141,26 @@
           buttons[0].dispatchEvent(e);
         });
 
+        it('should blur the content on shift-tab in the list item', () => {
+          const spy = sinon.spy(content, 'blur');
+          rte.value = '[{"attributes":{"list":"bullet"},"insert":"\\n"}]';
+          editor.focus();
+          editor.setSelection(0, 0);
+          const e = MockInteractions.keyboardEventFor('keydown', 9, ['shift']);
+          content.dispatchEvent(e);
+          expect(spy).to.be.calledOnce;
+        });
+
+        it('should change indentation and prevent shift-tab keydown in the code block', () => {
+          rte.value = '[{"insert":"  foo"},{"attributes":{"code-block":true},"insert":"\\n"}]';
+          editor.focus();
+          editor.setSelection(2, 0);
+          const e = MockInteractions.keyboardEventFor('keydown', 9, ['shift']);
+          content.dispatchEvent(e);
+          flushValueDebouncer();
+          expect(rte.value).to.equal('[{"insert":"foo"},{"attributes":{"code-block":true},"insert":"\\n"}]');
+          expect(e.defaultPrevented).to.be.true;
+        });
       });
 
     });
