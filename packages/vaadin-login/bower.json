@@ -33,8 +33,7 @@
     "vaadin-material-styles": "vaadin/vaadin-material-styles#^1.2.0",
     "vaadin-license-checker": "vaadin/license-checker#^2.1.0",
     "vaadin-text-field": "vaadin/vaadin-text-field#^2.1.0",
-    "vaadin-button": "vaadin/vaadin-button#^2.1.0",
-    "vaadin-form-layout": "^2.1.0"
+    "vaadin-button": "vaadin/vaadin-button#^2.1.0"
   },
   "devDependencies": {
     "iron-component-page": "^3.0.0",
