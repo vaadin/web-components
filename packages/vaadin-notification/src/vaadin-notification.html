@@ -366,8 +366,10 @@ This program is available under Apache License Version 2.0, available at https:/
           if (renderer) {
             this._card = this.$['vaadin-notification-card'];
 
-            while (this._card.firstChild && rendererChanged) {
-              this._card.removeChild(this._card.firstChild);
+            if (rendererChanged) {
+              while (this._card.firstChild) {
+                this._card.removeChild(this._card.firstChild);
+              }
             }
 
             if (opened) {
