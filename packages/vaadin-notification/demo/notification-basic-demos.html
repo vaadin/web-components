@@ -20,6 +20,11 @@
             });
 
             notification.renderer = function(root) {
+              // Check if there is a content generated with the previous renderer call not to recreate it.
+              if (root.firstElementChild) {
+                return;
+              }
+
               const container = window.document.createElement('div');
               const boldText = window.document.createElement('b');
               boldText.textContent = 'Notice';
@@ -98,6 +103,10 @@
             });
 
             notification.renderer = function(root, owner) {
+              if (root.firstElementChild) {
+                return;
+              }
+
               const plainText = window.document.createTextNode('Can\'t send message.');
               const retryBtn = window.document.createElement('vaadin-button');
 
