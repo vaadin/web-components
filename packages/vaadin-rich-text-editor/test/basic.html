@@ -266,8 +266,6 @@
 
           describe('dialog', () => {
             it('should not open the confirm dialog when the editor does not have focus', () => {
-              editor.focus();
-              editor.blur();
               btn.click();
               expect(dialog.opened).to.be.false;
             });
