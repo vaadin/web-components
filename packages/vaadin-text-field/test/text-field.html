@@ -226,5 +226,12 @@
         });
       });
     });
+
+    describe('methods', function() {
+      it('should not throw an error when using focus() to a newly created element', () => {
+        // No expect needed as an error is thrown when focusing undefined element
+        document.createElement('vaadin-text-field').focus();
+      });
+    });
   </script>
 </body>
