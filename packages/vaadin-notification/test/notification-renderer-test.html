@@ -85,6 +85,28 @@
           expect(notification.renderer).to.be.calledTwice;
         });
 
+        it('should provide root from the previous renderer call', () => {
+          notification.renderer = root => {
+            const generatedContent = document.createTextNode('rendered');
+            root.appendChild(generatedContent);
+          };
+          notification.opened = true;
+          notification.opened = false;
+          notification.opened = true;
+          expect(notification._card.textContent.trim()).to.equal('renderedrendered');
+        });
+
+        it('should clear the root when renderer changed', () => {
+          for (let i = 0; i < 2; i++) {
+            notification.renderer = root => {
+              const generatedContent = document.createTextNode('rendered-' + i);
+              root.appendChild(generatedContent);
+            };
+            notification.opened = true;
+            expect(notification._card.textContent.trim()).to.equal('rendered-' + i);
+          }
+        });
+
         it('should open notification when renderer is defined after notification opened', done => {
           notification.opened = true;
           notification.renderer = root => root.appendChild(rendererContent);
