@@ -291,5 +291,36 @@
         ));
       });
     });
+
+    describe('resize', () => {
+      let textArea, spy;
+
+      beforeEach(() => {
+        textArea = fixture('default');
+        spy = sinon.spy();
+        textArea.addEventListener('iron-resize', spy);
+      });
+
+      it('should not dispatch `iron-resize` event on init', () => {
+        expect(spy.callCount).to.equal(0);
+      });
+
+      it('should dispatch `iron-resize` event on height change', () => {
+        textArea.value = `
+        there
+        should
+        be
+        a
+        lot
+        of
+        rows`;
+        expect(spy.callCount).to.equal(1);
+      });
+
+      it('should not dispatch `iron-resize` event on value change if height did not change', () => {
+        textArea.value = 'just 1 row';
+        expect(spy.callCount).to.equal(0);
+      });
+    });
   </script>
 </body>
