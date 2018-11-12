@@ -360,21 +360,25 @@ This program is available under Apache License Version 2.0, available at https:/
     _pathOrHeaderChanged(path, header, headerCell, footerCell, cells, renderer, headerRenderer, bodyTemplate, headerTemplate) {
       const hasHeaderText = header !== undefined && header !== null;
       if (!headerRenderer && !headerTemplate && hasHeaderText && headerCell) {
-        headerCell._content.textContent = header;
+        this.__setTextContent(headerCell._content, header);
         headerCell.parentElement.hidden = false;
       }
 
       if (path && cells.value) {
         if (!renderer && !bodyTemplate) {
-          const pathRenderer = (root, owner, {item}) => root.textContent = this.get(path, item);
+          const pathRenderer = (root, owner, {item}) => this.__setTextContent(root, this.get(path, item));
           this.__setColumnTemplateOrRenderer(undefined, pathRenderer, cells.value);
         }
 
         if (!headerRenderer && !headerTemplate && !hasHeaderText && headerCell) {
-          headerCell._content.textContent = this._generateHeader(path);
+          this.__setTextContent(headerCell._content, this._generateHeader(path));
           headerCell.parentElement.hidden = false;
         }
       }
+    }
+
+    __setTextContent(node, textContent) {
+      node.textContent !== textContent && (node.textContent = textContent);
     }
 
     _generateHeader(path) {

@@ -254,6 +254,41 @@
             expect(emptyColumn.renderer).not.to.be.called;
           });
 
+          it('should not reapply the existing text content', done => {
+            emptyColumn.path = '';
+            const content = getBodyCellContent(grid, 0, 2);
+            const spy = sinon.spy();
+            Object.defineProperty(content, 'textContent', {
+              set: spy,
+              get: () => {
+                return spy.called ? spy.getCalls().pop().args[0] : '';
+              }
+            });
+            emptyColumn.path = 'value';
+            flush(() => {
+              expect(spy.callCount).to.equal(1);
+              done();
+            });
+          });
+
+          it('should not reapply the existing header text content', done => {
+            const content = getHeaderCellContent(grid, 1, 2);
+            const spy = sinon.spy();
+            Object.defineProperty(content, 'textContent', {
+              set: spy,
+              get: () => {
+                return spy.called ? spy.getCalls().pop().args[0] : '';
+              }
+            });
+            emptyColumn.path = 'header';
+            const callCount = spy.callCount;
+            emptyColumn.header = null;
+            flush(() => {
+              expect(spy.callCount).to.equal(callCount);
+              done();
+            });
+          });
+
         });
 
         describe('header', () => {
@@ -310,6 +345,25 @@
             grid.removeChild(grid.querySelector('vaadin-grid-column-group'));
             flushGrid(grid);
             expect(getContainerCell(grid.$.header, 0, 0).parentElement.hidden).to.be.true;
+          });
+
+          it('should not reapply the existing header text content', done => {
+            const content = getHeaderCellContent(grid, 1, 2);
+            const spy = sinon.spy();
+            Object.defineProperty(content, 'textContent', {
+              set: spy,
+              get: () => {
+                return spy.called ? spy.getCalls().pop().args[0] : '';
+              }
+            });
+            emptyColumn.header = null;
+            emptyColumn.path = 'foo';
+            const callCount = spy.callCount;
+            emptyColumn.header = 'Foo';
+            flush(() => {
+              expect(spy.callCount).to.equal(callCount);
+              done();
+            });
           });
 
         });
