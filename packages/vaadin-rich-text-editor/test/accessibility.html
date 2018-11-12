@@ -134,6 +134,17 @@
           content.dispatchEvent(e);
         });
 
+        it('should mark toolbar as focused before blurring content on shift-tab', done => {
+          const spy = sinon.spy(rte, '_markToolbarFocused');
+          sinon.stub(editor, 'blur', () => {
+            expect(spy).to.be.calledOnce;
+            done();
+          });
+          editor.focus();
+          const e = MockInteractions.keyboardEventFor('keydown', 9, ['shift']);
+          content.dispatchEvent(e);
+        });
+
         it('should focus the editor on esc', done => {
           sinon.stub(editor, 'focus', done);
           const e = new CustomEvent('keydown', {bubbles: true});

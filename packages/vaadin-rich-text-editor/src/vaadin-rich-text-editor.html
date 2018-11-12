@@ -533,8 +533,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
         __patchKeyboard() {
           const focusToolbar = () => {
-            this._editor.blur();
             this._markToolbarFocused();
+            this._editor.blur();
             this._toolbar.querySelector('button:not([tabindex])').focus();
           };
 
