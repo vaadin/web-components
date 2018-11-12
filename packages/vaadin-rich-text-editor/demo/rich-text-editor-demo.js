@@ -9,7 +9,7 @@ window.RichTextEditorDemo = superClass => {
       Array.from(this.shadowRoot.querySelectorAll('vaadin-demo-snippet')).forEach(demo => {
         setTimeout(() => {
           const rte = demo.shadowRoot.querySelector('vaadin-demo-shadow-dom-renderer').shadowRoot.querySelector('vaadin-rich-text-editor');
-          if (!rte.hasAttribute('theme')) {
+          if (!rte.hasAttribute('theme') && rte.className.indexOf('min-height') === -1) {
             rte.value = `[
               {"insert":"High quality rich text editor for the web"},
               {"attributes":{"header":2},"insert":"\\n"},
@@ -52,7 +52,7 @@ window.RichTextEditorDemo = superClass => {
           } else {
             rte.value = `[{"insert":"Write your content here…"}]`;
           }
-        }, 0);
+        }, 300);
       });
     }
   };

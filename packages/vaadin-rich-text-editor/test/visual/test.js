@@ -18,7 +18,7 @@ gemini.suite('vaadin-rich-text-editor', function(rootSuite) {
     .after(goToAboutBlank);
 
   ['lumo', 'material'].forEach(theme => {
-    ['default', 'disabled', 'readonly'].forEach(state => {
+    ['min-height', 'max-height', 'default', 'disabled', 'readonly'].forEach(state => {
       gemini.suite(`${state}-${theme}`, function(suite) {
         suite
           .setUrl(`/${state}.html?theme=${theme}`)

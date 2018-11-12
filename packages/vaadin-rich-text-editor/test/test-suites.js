@@ -1,4 +1,5 @@
 window.RichTextEditorSuites = [
   'accessibility.html',
-  'basic.html'
+  'basic.html',
+  'auto-grow.html'
 ];

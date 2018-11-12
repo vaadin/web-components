@@ -25,6 +25,8 @@ This program is available under Apache License Version 2.0, available at https:/
       :host {
         display: flex;
         flex-direction: column;
+        box-sizing: border-box;
+        overflow: hidden;
       }
 
       :host([hidden]) {
@@ -39,83 +41,103 @@ This program is available under Apache License Version 2.0, available at https:/
       input[type="file"] {
         display: none;
       }
+
+      .vaadin-rich-text-editor-container {
+        display: flex;
+        flex-direction: column;
+        min-height: inherit;
+        max-height: inherit;
+        overflow: hidden;
+        flex: auto;
+      }
+
+      /* FIXME (Yuriy): workaround for auto-grow feature in flex layout for IE11 */
+      @media all and (-ms-high-contrast: none) {
+        .ql-editor {
+          flex: auto;
+        }
+      }
     </style>
 
-    <!-- Create toolbar container -->
-    <div part="toolbar">
+    <div class="vaadin-rich-text-editor-container">
 
-      <span part="toolbar-group">
-        <!-- Undo and Redo -->
-        <button type="button" part="toolbar-button toolbar-button-undo" on-click="_undo" title$="[[i18n.undo]]"></button>
-        <button type="button" part="toolbar-button toolbar-button-redo" on-click="_redo" title$="[[i18n.redo]]"></button>
-      </span>
+      <!-- Create toolbar container -->
+      <div part="toolbar">
 
-      <span part="toolbar-group">
-        <!-- Bold -->
-        <button class="ql-bold" part="toolbar-button toolbar-button-bold" title$="[[i18n.bold]]"></button>
+        <span part="toolbar-group">
+          <!-- Undo and Redo -->
+          <button type="button" part="toolbar-button toolbar-button-undo" on-click="_undo" title$="[[i18n.undo]]"></button>
+          <button type="button" part="toolbar-button toolbar-button-redo" on-click="_redo" title$="[[i18n.redo]]"></button>
+        </span>
 
-        <!-- Italic -->
-        <button class="ql-italic" part="toolbar-button toolbar-button-italic" title$="[[i18n.italic]]"></button>
+        <span part="toolbar-group">
+          <!-- Bold -->
+          <button class="ql-bold" part="toolbar-button toolbar-button-bold" title$="[[i18n.bold]]"></button>
 
-        <!-- Underline -->
-        <button class="ql-underline" part="toolbar-button toolbar-button-underline" title$="[[i18n.underline]]"></button>
+          <!-- Italic -->
+          <button class="ql-italic" part="toolbar-button toolbar-button-italic" title$="[[i18n.italic]]"></button>
 
-        <!-- Strike -->
-        <button class="ql-strike" part="toolbar-button toolbar-button-strike" title$="[[i18n.strike]]"></button>
-      </span>
+          <!-- Underline -->
+          <button class="ql-underline" part="toolbar-button toolbar-button-underline" title$="[[i18n.underline]]"></button>
 
-      <span part="toolbar-group">
-        <!-- Header buttons -->
-        <button type="button" class="ql-header" value="1" part="toolbar-button toolbar-button-h1" title$="[[i18n.h1]]"></button>
-        <button type="button" class="ql-header" value="2" part="toolbar-button toolbar-button-h2" title$="[[i18n.h2]]"></button>
-        <button type="button" class="ql-header" value="3" part="toolbar-button toolbar-button-h3" title$="[[i18n.h3]]"></button>
-      </span>
+          <!-- Strike -->
+          <button class="ql-strike" part="toolbar-button toolbar-button-strike" title$="[[i18n.strike]]"></button>
+        </span>
 
-      <span part="toolbar-group">
-        <!-- Subscript and superscript -->
-        <button class="ql-script" value="sub" part="toolbar-button toolbar-button-subscript" title$="[[i18n.subscript]]"></button>
-        <button class="ql-script" value="super" part="toolbar-button toolbar-button-superscript" title$="[[i18n.superscript]]"></button>
-      </span>
+        <span part="toolbar-group">
+          <!-- Header buttons -->
+          <button type="button" class="ql-header" value="1" part="toolbar-button toolbar-button-h1" title$="[[i18n.h1]]"></button>
+          <button type="button" class="ql-header" value="2" part="toolbar-button toolbar-button-h2" title$="[[i18n.h2]]"></button>
+          <button type="button" class="ql-header" value="3" part="toolbar-button toolbar-button-h3" title$="[[i18n.h3]]"></button>
+        </span>
 
-      <span part="toolbar-group">
-        <!-- List buttons -->
-        <button type="button" class="ql-list" value="ordered" part="toolbar-button toolbar-button-list-ordered" title$="[[i18n.listOrdered]]"></button>
-        <button type="button" class="ql-list" value="bullet" part="toolbar-button toolbar-button-list-bullet" title$="[[i18n.listBullet]]"></button>
-      </span>
+        <span part="toolbar-group">
+          <!-- Subscript and superscript -->
+          <button class="ql-script" value="sub" part="toolbar-button toolbar-button-subscript" title$="[[i18n.subscript]]"></button>
+          <button class="ql-script" value="super" part="toolbar-button toolbar-button-superscript" title$="[[i18n.superscript]]"></button>
+        </span>
 
-      <span part="toolbar-group">
-        <!-- Align buttons -->
-        <button type="button" class="ql-align" value="" part="toolbar-button toolbar-button-align-left" title$="[[i18n.alignLeft]]"></button>
-        <button type="button" class="ql-align" value="center" part="toolbar-button toolbar-button-align-center" title$="[[i18n.alignCenter]]"></button>
-        <button type="button" class="ql-align" value="right" part="toolbar-button toolbar-button-align-right" title$="[[i18n.alignRight]]"></button>
-      </span>
+        <span part="toolbar-group">
+          <!-- List buttons -->
+          <button type="button" class="ql-list" value="ordered" part="toolbar-button toolbar-button-list-ordered" title$="[[i18n.listOrdered]]"></button>
+          <button type="button" class="ql-list" value="bullet" part="toolbar-button toolbar-button-list-bullet" title$="[[i18n.listBullet]]"></button>
+        </span>
 
-      <span part="toolbar-group">
-        <!-- Image -->
-        <button type="button" part="toolbar-button toolbar-button-image" title$="[[i18n.image]]" on-touchend="_onImageTouchEnd" on-click="_onImageClick"></button>
-        <!-- Link -->
-        <button type="button" part="toolbar-button toolbar-button-link" title$="[[i18n.link]]" on-click="_onLinkClick"></button>
-      </span>
+        <span part="toolbar-group">
+          <!-- Align buttons -->
+          <button type="button" class="ql-align" value="" part="toolbar-button toolbar-button-align-left" title$="[[i18n.alignLeft]]"></button>
+          <button type="button" class="ql-align" value="center" part="toolbar-button toolbar-button-align-center" title$="[[i18n.alignCenter]]"></button>
+          <button type="button" class="ql-align" value="right" part="toolbar-button toolbar-button-align-right" title$="[[i18n.alignRight]]"></button>
+        </span>
 
-      <span part="toolbar-group">
-        <!-- Blockquote -->
-        <button type="button" class="ql-blockquote" part="toolbar-button toolbar-button-blockquote" title$="[[i18n.blockquote]]"></button>
+        <span part="toolbar-group">
+          <!-- Image -->
+          <button type="button" part="toolbar-button toolbar-button-image" title$="[[i18n.image]]" on-touchend="_onImageTouchEnd" on-click="_onImageClick"></button>
+          <!-- Link -->
+          <button type="button" part="toolbar-button toolbar-button-link" title$="[[i18n.link]]" on-click="_onLinkClick"></button>
+        </span>
 
-        <!-- Code block -->
-        <button type="button" class="ql-code-block" part="toolbar-button toolbar-button-code-block" title$="[[i18n.codeBlock]]"></button>
-      </span>
+        <span part="toolbar-group">
+          <!-- Blockquote -->
+          <button type="button" class="ql-blockquote" part="toolbar-button toolbar-button-blockquote" title$="[[i18n.blockquote]]"></button>
 
-      <span part="toolbar-group">
-        <!-- Clean -->
-        <button type="button" class="ql-clean" part="toolbar-button toolbar-button-clean" title$="[[i18n.clean]]"></button>
-      </span>
+          <!-- Code block -->
+          <button type="button" class="ql-code-block" part="toolbar-button toolbar-button-code-block" title$="[[i18n.codeBlock]]"></button>
+        </span>
 
-      <input id="fileInput" type="file" accept="image/png, image/gif, image/jpeg, image/bmp, image/x-icon" on-change="_uploadImage">
+        <span part="toolbar-group">
+          <!-- Clean -->
+          <button type="button" class="ql-clean" part="toolbar-button toolbar-button-clean" title$="[[i18n.clean]]"></button>
+        </span>
+
+        <input id="fileInput" type="file" accept="image/png, image/gif, image/jpeg, image/bmp, image/x-icon" on-change="_uploadImage">
+      </div>
+
+      <div part="content"></div>
+
+      <div class="announcer" aria-live="polite"></div>
+
     </div>
-
-    <div part="content"></div>
-
-    <div class="announcer" aria-live="polite"></div>
 
     <vaadin-confirm-dialog
       id="linkDialog"

@@ -17,7 +17,7 @@
     <style>
       :host {
         background-color: var(--material-background-color);
-        height: 288px;
+        min-height: 288px;
       }
 
       [part="toolbar"] {
@@ -81,10 +81,6 @@
       [part~="toolbar-button-underline"]::before,
       [part~="toolbar-button-strike"]::before {
         font-size: 20px;
-      }
-
-      [part="content"] {
-        flex: auto;
       }
 
       /* TODO unsupported selector */

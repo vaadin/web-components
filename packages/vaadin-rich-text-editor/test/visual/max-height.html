@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+
+<head lang="en">
+  <meta charset="UTF-8">
+  <title></title>
+  <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <script>
+    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+    document.write('<link rel="import" href="../../theme/' + theme + '/vaadin-rich-text-editor.html">');
+    window.addEventListener('WebComponentsReady', function() {
+      customElements.whenDefined('vaadin-rich-text-editor').then(function() {
+        window.webComponentsAreReady = true; // Checked in gemini before capture callback
+
+        const rte = window.document.querySelector('vaadin-rich-text-editor');
+        rte.value = `[
+          {"insert":"High quality rich text editor for the web"},
+          {"attributes":{"header":2},"insert":"\\n"},
+          {"attributes":{"bold":true},"insert":"Bold"},
+          {"attributes":{"list":"bullet"},"insert":"\\n"},
+          {"attributes":{"italic":true},"insert":"Italic"},
+          {"attributes":{"list":"bullet"},"insert":"\\n"},
+          {"attributes":{"underline":true},"insert":"Underline"},
+          {"attributes":{"list":"bullet"},"insert":"\\n"},
+          {"attributes":{"strike":true},"insert":"Strike-through"},
+          {"attributes":{"list":"bullet"},"insert":"\\n"},
+          {"insert":"Headings (H1, H2, H3)"},
+          {"attributes":{"list":"bullet"},"insert":"\\n"},
+          {"insert":"Lists (ordered and unordered)"},
+          {"attributes":{"list":"bullet"},"insert":"\\n"},
+          {"insert":"Text align (left, center, right)"},
+          {"attributes":{"list":"bullet"},"insert":"\\n"},
+          {"attributes":{"script":"sub"},"insert":"Sub"},
+          {"insert":"script and "},{"attributes":{"script":"super"},"insert":"super"},
+          {"insert":"script"},{"attributes":{"list":"bullet"},"insert":"\\n"},
+          {"insert":"In addition to text formatting, additional content blocks can be added.\\nImages"},
+          {"attributes":{"header":3},"insert":"\\n"},
+          {"insert":"\\nBlockquotes"},
+          {"attributes":{"header":3},"insert":"\\n"},
+          {"attributes":{"blockquote":true},"insert":"\\n"},
+          {"insert":"Code blocks"},
+          {"attributes":{"header":3},"insert":"\\n"},{"insert":"<body>"},
+          {"attributes":{"code-block":true},"insert":"\\n"},
+          {"insert":"  <vaadin-rich-text-editor></vaadin-rich-text-editor>"},
+          {"attributes":{"code-block":true},"insert":"\\n"},
+          {"insert":"</body>"},
+          {"attributes":{"code-block":true},"insert":"\\n"},
+          {"insert":"\\n"}
+        ]`;
+      });
+    });
+  </script>
+</head>
+
+<body>
+
+  <span id="max-height">
+    <vaadin-rich-text-editor style="max-height: 500px;"></vaadin-rich-text-editor>
+  </span>
+
+</body>

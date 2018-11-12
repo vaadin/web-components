@@ -20,7 +20,7 @@
   <template>
     <style>
       :host {
-        height: calc(var(--lumo-size-m) * 8);
+        min-height: calc(var(--lumo-size-m) * 8);
       }
 
       [part="toolbar"] {
@@ -172,7 +172,6 @@
 
       [part="content"] {
         background-color: var(--lumo-base-color);
-        flex-basis: auto;
       }
 
       /* TODO unsupported selector */

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+
+<head lang="en">
+  <meta charset="UTF-8">
+  <title></title>
+  <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <script>
+    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+    document.write('<link rel="import" href="../../theme/' + theme + '/vaadin-rich-text-editor.html">');
+    window.addEventListener('WebComponentsReady', function() {
+      customElements.whenDefined('vaadin-rich-text-editor').then(function() {
+        window.webComponentsAreReady = true; // Checked in gemini before capture callback
+      });
+    });
+  </script>
+</head>
+
+<body>
+
+  <span id="min-height">
+    <vaadin-rich-text-editor style="min-height: 300px;"></vaadin-rich-text-editor>
+  </span>
+
+</body>
