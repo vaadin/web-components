@@ -460,7 +460,7 @@ This program is available under Apache License Version 2.0, available at https:/
           HANDLERS.forEach(handler => {
             toolbar.handlers[handler] = value => {
               this._markToolbarClicked();
-              this._editor.format(handler, value, SOURCE.user);
+              this._editor.format(handler, value, SOURCE.USER);
             };
           });
 
@@ -581,7 +581,7 @@ This program is available under Apache License Version 2.0, available at https:/
         _applyLink(link) {
           if (link) {
             this._markToolbarClicked();
-            this._editor.format('link', link, SOURCE.user);
+            this._editor.format('link', link, SOURCE.USER);
             this._editor.getModule('toolbar').update(this._editor.selection.savedRange);
           }
           this._closeLinkDialog();
@@ -598,14 +598,14 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _updateLink(link, range) {
           this._markToolbarClicked();
-          this._editor.formatText(range, 'link', link, SOURCE.user);
+          this._editor.formatText(range, 'link', link, SOURCE.USER);
           this._closeLinkDialog();
         }
 
         _removeLink() {
           this._markToolbarClicked();
           if (this._linkRange != null) {
-            this._editor.formatText(this._linkRange, {link: false, color: false}, SOURCE.user);
+            this._editor.formatText(this._linkRange, {link: false, color: false}, SOURCE.USER);
           }
           this._closeLinkDialog();
         }
@@ -691,7 +691,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _clear() {
-          this._editor.deleteText(0, this._editor.getLength(), 'silent');
+          this._editor.deleteText(0, this._editor.getLength(), SOURCE.SILENT);
           this.__updateHtmlValue();
         }
 
@@ -748,9 +748,9 @@ This program is available under Apache License Version 2.0, available at https:/
                 .retain(range.index)
                 .delete(range.length)
                 .insert({image})
-              , SOURCE.user);
+              , SOURCE.USER);
               this._markToolbarClicked();
-              this._editor.setSelection(range.index + 1, SOURCE.silent);
+              this._editor.setSelection(range.index + 1, SOURCE.SILENT);
               fileInput.value = '';
             };
             reader.readAsDataURL(fileInput.files[0]);
@@ -811,7 +811,7 @@ This program is available under Apache License Version 2.0, available at https:/
           const delta = new Quill.imports.delta(parsedValue);
           // suppress text-change event to prevent infinite loop
           if (JSON.stringify(editor.getContents()) !== JSON.stringify(delta)) {
-            editor.setContents(delta, 'silent');
+            editor.setContents(delta, SOURCE.SILENT);
           }
           this.__updateHtmlValue();
 
