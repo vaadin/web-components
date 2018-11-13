@@ -21,7 +21,7 @@
                     n = parseInt(n || 0);
                     return n < 10 ? '0' + n : n;
                   };
-                  const period = timeObject.hours > 12 ? 'PM' : 'AM';
+                  const period = timeObject.hours > 11 ? 'PM' : 'AM';
                   const hours = timeObject.hours % 12 || 12;
                   return pad(hours) + ':' + pad(timeObject.minutes) + ' ' + period;
                 }
