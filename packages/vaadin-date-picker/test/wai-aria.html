@@ -291,6 +291,15 @@
           });
         });
 
+        it('should have presentation roles on empty date cells', () => {
+          var emptyDateElements = monthCalendar.root.querySelectorAll('[part="date"]:empty');
+
+          Array.prototype.forEach.call(emptyDateElements, emptyElement => {
+            expect(emptyElement.getAttribute('role')).to.equal('presentation');
+            expect(emptyElement.getAttribute('aria-label')).to.be.empty;
+          });
+        });
+
         describe('week numbers', () => {
           beforeEach(done => {
             monthCalendar.showWeekNumbers = true;
