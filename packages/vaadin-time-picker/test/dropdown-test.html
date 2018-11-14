@@ -70,9 +70,15 @@
         expect(timePicker.__dropdownElement.filteredItems[71].value).to.be.equal('23:40');
       });
 
-      it('should not be possible to divide one hour in inexact fragments', () => {
+      it('should be possible to divide one hour in inexact fragments if the day can be divided into those', () => {
         timePicker.step = 60 * 18;
-        expect(timePicker.__dropdownElement.filteredItems.length).to.be.equal(24);
+        expect(timePicker.__dropdownElement.filteredItems.length).to.be.equal(80);
+      });
+
+      it('should be possible to divide one day in exact fragments that are greater than 1 hour', () => {
+        // 1 hour 36 minutes
+        timePicker.step = 3600 + 60 * 36;
+        expect(timePicker.__dropdownElement.filteredItems.length).to.be.equal(15);
       });
 
       it('on step change the resolution should be changed, but selectedItem should remain the same', () => {
