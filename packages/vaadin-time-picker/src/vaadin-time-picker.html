@@ -228,7 +228,7 @@ This program is available under Apache License Version 2.0, available at https:/
             },
 
             /**
-             * Specifies the number of valid intervals in a day or in an hour used for
+             * Specifies the number of valid intervals in a day used for
              * configuring the items displayed in the selection box.
              *
              * It also configures the precision of the value string. By default
@@ -237,7 +237,11 @@ This program is available under Apache License Version 2.0, available at https:/
              * `hh:mm:ss` and `hh:mm:ss.fff` respectively.
              *
              * Unit must be set in seconds, and for correctly configuring intervals
-             * in the dropdown, it need to evenly divide a day or an hour.
+             * in the dropdown, it need to evenly divide a day.
+             *
+             * Note: it is possible to define step that is dividing an hour in inexact
+             * fragments (i.e. 5760 seconds which equals 1 hour 36 minutes), but it is
+             * not recommended to use it for better UX experience.
              */
             step: {
               type: Number,
@@ -349,7 +353,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
 
         __onArrowPressWithStep(step) {
-          const objWithStep = this.__addStep(this.__getMsec(this.__memoValue), step);
+          const objWithStep = this.__addStep(this.__getMsec(this.__memoValue), step, true);
           this.__memoValue = objWithStep;
           this.__inputElement.value = this.i18n.formatTime(this.__validateTime(objWithStep));
         }
@@ -368,9 +372,10 @@ This program is available under Apache License Version 2.0, available at https:/
 
         /**
          * Returning Object in the format `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`
-         * from the result of adding step value in milliseconds to the milliseconds amount
+         * from the result of adding step value in milliseconds to the milliseconds amount.
+         * With `precision` parameter rounding the value to the closest step valid interval.
          */
-        __addStep(msec, step) {
+        __addStep(msec, step, precision) {
           // If the time is `00:00` and step changes value downwards, it should be considered as `24:00`
           if (msec === 0 && step < 0) {
             msec = 24 * 60 * 60 * 1000;
@@ -378,9 +383,9 @@ This program is available under Apache License Version 2.0, available at https:/
 
           const stepMsec = step * 1000;
           const diffToNext = msec % stepMsec;
-          if (stepMsec < 0 && diffToNext) {
+          if (stepMsec < 0 && diffToNext && precision) {
             msec -= diffToNext;
-          } else if (stepMsec > 0 && diffToNext) {
+          } else if (stepMsec > 0 && diffToNext && precision) {
             msec -= diffToNext - stepMsec;
           } else {
             msec += stepMsec;
@@ -410,25 +415,16 @@ This program is available under Apache License Version 2.0, available at https:/
           // Default step in overlay items is 1 hour
           const step = this.step || 3600;
 
-          let hourIncr = step / 3600;
-          // disallow non evenly hour increments
-          hourIncr = hourIncr < 1 || 24 % hourIncr != 0 ? 1 : hourIncr;
-
-          for (let hour = 0; hour < 24; hour += hourIncr) {
-
-            let minIncr = hourIncr == 1 ? step / 60 : 60;
-            // disallow non evenly minute increments, and set smallest increment to 15 min
-            minIncr = minIncr < 15 ? 15 : 60 % minIncr != 0 ? 60 : minIncr;
-
-            for (let min = 0; min < 60; min += minIncr) {
-              const timeObj = this.__validateTime({hours: hour, minutes: (min === 60) ? 0 : min});
-              generatedList.push({
-                // we only pick items with minute resolution
-                label: this.i18n.formatTime(timeObj),
-                // but we set value with step defined resolution
-                value: this.i18n.formatTime(timeObj)
-              });
-            }
+          let time = -step;
+          while (time + step < 24 * 60 * 60) {
+            const timeObj = this.__validateTime(this.__addStep(time * 1000, step));
+            time += step;
+            generatedList.push({
+              // we only pick items with minute resolution
+              label: this.i18n.formatTime(timeObj),
+              // but we set value with step defined resolution
+              value: this.i18n.formatTime(timeObj)
+            });
           }
 
           return generatedList;
