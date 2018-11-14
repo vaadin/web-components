@@ -19,6 +19,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="vaadin-grid-scroll-mixin.html">
 <link rel="import" href="vaadin-grid-selection-mixin.html">
 <link rel="import" href="vaadin-grid-sort-mixin.html">
+<link rel="import" href="vaadin-grid-styling-mixin.html">
 <link rel="import" href="vaadin-grid-keyboard-navigation-mixin.html">
 <link rel="import" href="vaadin-grid-column-reordering-mixin.html">
 <link rel="import" href="vaadin-grid-column.html">
@@ -299,6 +300,8 @@ This program is available under Apache License Version 2.0, available at https:/
      * @mixes Vaadin.Grid.SortMixin
      * @mixes Vaadin.Grid.KeyboardNavigationMixin
      * @mixes Vaadin.Grid.ColumnReorderingMixin
+     * @mixes Vaadin.Grid.DetailedEventMixin
+     * @mixes Vaadin.Grid.StylingMixin
      * @demo demo/index.html
      */
     class GridElement extends
@@ -318,7 +321,8 @@ This program is available under Apache License Version 2.0, available at https:/
                                 Vaadin.Grid.ColumnReorderingMixin(
                                   Vaadin.Grid.ColumnResizingMixin(
                                     Vaadin.Grid.DetailedEventMixin(
-                                      Vaadin.Grid.ScrollerElement)))))))))))))))) {
+                                      Vaadin.Grid.StylingMixin(
+                                        Vaadin.Grid.ScrollerElement))))))))))))))))) {
 
       static get is() {
         return 'vaadin-grid';
@@ -608,6 +612,7 @@ This program is available under Apache License Version 2.0, available at https:/
         if (this._rowDetailsTemplate || this.rowDetailsRenderer) {
           this._toggleDetailsCell(row, item);
         }
+        this._generateClassNames(row, model);
 
         Array.from(row.children).forEach(cell => {
           if (cell._renderer) {

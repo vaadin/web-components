@@ -123,6 +123,17 @@
   }
   ,
   {
+    "name": "Styling",
+    "url": "grid-styling-demos",
+    "src": "grid-styling-demos.html",
+    "meta": {
+      "title": "vaadin-grid – Styling",
+      "description": "",
+      "image": ""
+    }
+  }
+  ,
+  {
     "name": "Theme Variants",
     "url": "grid-theme-demos",
     "src": "grid-theme-demos.html",

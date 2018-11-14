@@ -24,6 +24,30 @@
   <link rel="import" href="../../iron-ajax/iron-ajax.html">
   <link rel="import" href="../../vaadin-lumo-styles/icons.html">
 
+  <!-- Used in the styling examples, keep in sync -->
+  <dom-module id="grid-styling-demo-theme" theme-for="vaadin-grid">
+    <template>
+      <style>
+        /* Background needs a stronger selector to not be overridden */
+        [part~="cell"].female {
+          background: rgb(255, 240, 240);
+        }
+
+        [part~="cell"].male {
+          background: rgb(245, 245, 255);
+        }
+
+        .email {
+          font-style: italic;
+        }
+
+        .checked {
+          font-weight: bold;
+        }
+      </style>
+    </template>
+  </dom-module>
+
   <custom-style>
     <style include="vaadin-component-demo-shared-styles"></style>
   </custom-style>
