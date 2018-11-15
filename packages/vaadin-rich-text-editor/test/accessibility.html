@@ -134,9 +134,9 @@
           content.dispatchEvent(e);
         });
 
-        it('should mark toolbar as focused before blurring content on shift-tab', done => {
+        it('should mark toolbar as focused before focusin it on shift-tab', done => {
           const spy = sinon.spy(rte, '_markToolbarFocused');
-          sinon.stub(editor, 'blur', () => {
+          sinon.stub(buttons[0], 'focus', () => {
             expect(spy).to.be.calledOnce;
             done();
           });
@@ -145,11 +145,21 @@
           content.dispatchEvent(e);
         });
 
-        it('should focus the editor on esc', done => {
+        it('should prevent keydown and focus the editor on esc', done => {
           sinon.stub(editor, 'focus', done);
           const e = new CustomEvent('keydown', {bubbles: true});
           e.keyCode = 27;
-          buttons[0].dispatchEvent(e);
+          const result = buttons[0].dispatchEvent(e);
+          expect(result).to.be.false;
+        });
+
+        it('should prevent keydown and focus the editor on tab', done => {
+          sinon.stub(editor, 'focus', done);
+          const e = new CustomEvent('keydown', {bubbles: true});
+          e.keyCode = 9;
+          e.shiftKey = false;
+          const result = buttons[0].dispatchEvent(e);
+          expect(result).to.be.false;
         });
 
         it('should blur the content on shift-tab in the list item', () => {
@@ -172,6 +182,37 @@
           expect(rte.value).to.equal('[{"insert":"foo"},{"attributes":{"code-block":true},"insert":"\\n"}]');
           expect(e.defaultPrevented).to.be.true;
         });
+
+        if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1 && !window.ShadyDOM) {
+          it('should focus the fake target on content focusin', done => {
+            const spy = sinon.spy(rte, '__createFakeFocusTarget');
+            sinon.stub(editor, 'focus', () => {
+              expect(spy).to.be.calledOnce;
+              const fake = spy.firstCall.returnValue;
+              const style = getComputedStyle(fake);
+              expect(style.position).to.equal('absolute');
+              expect(style.left).to.equal('-9999px');
+              expect(style.top).to.equal(document.documentElement.scrollTop + 'px');
+              done();
+            });
+            const e = new CustomEvent('focusin', {bubbles: true});
+            content.dispatchEvent(e);
+          });
+
+          it('should focus the fake target on mousedown when content is not focused', done => {
+            const spy = sinon.spy(rte, '__createFakeFocusTarget');
+            sinon.stub(editor, 'focus', () => {
+              expect(spy).to.be.calledOnce;
+              const fake = spy.firstCall.returnValue;
+              const style = getComputedStyle(fake);
+              expect(style.position).to.equal('absolute');
+              expect(style.left).to.equal('-9999px');
+              expect(style.top).to.equal(document.documentElement.scrollTop + 'px');
+              done();
+            });
+            MockInteractions.down(content);
+          });
+        }
       });
 
     });

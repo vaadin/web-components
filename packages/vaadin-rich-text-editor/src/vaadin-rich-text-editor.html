@@ -47,7 +47,6 @@ This program is available under Apache License Version 2.0, available at https:/
         flex-direction: column;
         min-height: inherit;
         max-height: inherit;
-        overflow: hidden;
         flex: auto;
       }
 
@@ -427,6 +426,11 @@ This program is available under Apache License Version 2.0, available at https:/
           this.__patchToolbar();
           this.__patchKeyboard();
 
+          /* istanbul ignore if */
+          if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1 && Polymer.Settings.useShadow) {
+            this.__patchFirefoxFocus();
+          }
+
           this.$.linkDialog.$.dialog.$.overlay.addEventListener('vaadin-overlay-open', () => {
             this.$.linkUrl.focus();
           });
@@ -498,18 +502,23 @@ This program is available under Apache License Version 2.0, available at https:/
 
           toolbar.addEventListener('keydown', e => {
             // Use roving tab-index for the toolbar buttons
-            let index = buttons.indexOf(e.target);
-            buttons[index].setAttribute('tabindex', '-1');
-            if (e.keyCode === 39 && ++index === buttons.length) {
-              index = 0;
-            } else if (e.keyCode === 37 && --index === -1) {
-              index = buttons.length - 1;
+            if ([37, 39].indexOf(e.keyCode) > -1) {
+              e.preventDefault();
+              let index = buttons.indexOf(e.target);
+              buttons[index].setAttribute('tabindex', '-1');
+              if (e.keyCode === 39 && ++index === buttons.length) {
+                index = 0;
+              } else if (e.keyCode === 37 && --index === -1) {
+                index = buttons.length - 1;
+              }
+              buttons[index].removeAttribute('tabindex');
+              buttons[index].focus();
             }
-            buttons[index].removeAttribute('tabindex');
-            buttons[index].focus();
-
-            // Esc focuses the content
-            e.keyCode === 27 && this._editor.focus();
+            // Esc and Tab focuses the content
+            if (e.keyCode === 27 || (e.keyCode === TAB_KEY && !e.shiftKey)) {
+              e.preventDefault();
+              this._editor.focus();
+            }
           });
 
           // mousedown happens before editor focusout
@@ -530,6 +539,65 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _cleanToolbarState() {
           this._toolbarState = STATE.DEFAULT;
+        }
+
+        __createFakeFocusTarget() {
+          const isRTL = document.documentElement.getAttribute('dir') == 'rtl';
+          const elem = document.createElement('textarea');
+          // Reset box model
+          elem.style.border = '0';
+          elem.style.padding = '0';
+          elem.style.margin = '0';
+          // Move element out of screen horizontally
+          elem.style.position = 'absolute';
+          elem.style[isRTL ? 'right' : 'left'] = '-9999px';
+          // Move element to the same position vertically
+          const yPosition = window.pageYOffset || document.documentElement.scrollTop;
+          elem.style.top = `${yPosition}px`;
+          return elem;
+        }
+
+        __patchFirefoxFocus() {
+          // in Firefox 63 with native Shadow DOM, when moving focus out of
+          // contenteditable and back again within same shadow root, cursor
+          // disappears. See https://jsfiddle.net/webpadawan/g6vku9L3/
+          const editorContent = this.shadowRoot.querySelector('.ql-editor');
+          let isFake = false;
+
+          const focusFake = () => {
+            isFake = true;
+            this.__fakeTarget = this.__createFakeFocusTarget();
+            document.body.appendChild(this.__fakeTarget);
+            // let the focus step out of shadow root!
+            this.__fakeTarget.focus();
+            return new Promise(resolve => setTimeout(resolve));
+          };
+
+          const focusBack = (offsetNode, offset) => {
+            this._editor.focus();
+            if (offsetNode) {
+              this._editor.selection.setNativeRange(offsetNode, offset);
+            }
+            document.body.removeChild(this.__fakeTarget);
+            delete this.__fakeTarget;
+            isFake = false;
+          };
+
+          editorContent.addEventListener('mousedown', e => {
+            if (!this._editor.hasFocus()) {
+              const {x, y} = e;
+              const {offset, offsetNode} = document.caretPositionFromPoint(x, y);
+              focusFake().then(() => {
+                focusBack(offsetNode, offset);
+              });
+            }
+          });
+
+          editorContent.addEventListener('focusin', e => {
+            if (isFake === false) {
+              focusFake().then(() => focusBack());
+            }
+          });
         }
 
         __patchToolbar() {
