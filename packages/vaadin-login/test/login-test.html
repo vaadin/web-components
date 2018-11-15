@@ -6,6 +6,7 @@
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <script src="../../web-component-tester/browser.js"></script>
   <link rel="import" href="../vaadin-login.html">
+  <link rel="import" href="../../iron-test-helpers/mock-interactions.html">
 </head>
 
 <body>
@@ -65,6 +66,69 @@
         expect(login.$.forgotPasswordButton.textContent).to.be.equal(login.i18n.form.forgotPassword);
       });
 
+      it('should mark only username as invalid if user hits ENTER when field is empty', () => {
+        const {username, password} = login.$;
+
+        expect(username.invalid).to.be.false;
+        expect(password.invalid).to.be.false;
+
+        MockInteractions.pressEnter(username);
+
+        expect(username.invalid).to.be.true;
+        expect(password.invalid).to.be.false;
+      });
+
+      it('should change focus to password if username is filled and user hits ENTER (password is empty)', () => {
+        const {username, password} = login.$;
+
+        username.value = 'username';
+
+        MockInteractions.pressEnter(username);
+
+        expect(password.hasAttribute('focused')).to.be.true;
+      });
+
+      it('should mark password as invalid if user hits ENTER when field is empty', () => {
+        const {username, password} = login.$;
+
+        expect(username.invalid).to.be.false;
+        expect(password.invalid).to.be.false;
+
+        MockInteractions.pressEnter(password);
+
+        expect(username.invalid).to.be.false;
+        expect(password.invalid).to.be.true;
+      });
+
+      it('should change focus to username if password is filled and user hits ENTER (username is empty)', () => {
+        const {username, password} = login.$;
+
+        MockInteractions.focus(password);
+        password.value = 'password';
+        MockInteractions.pressEnter(password);
+
+        expect(username.hasAttribute('focused')).to.be.true;
+      });
+
+      it('should trigger submit if both username and password are filled', () => {
+        const {username, password, loginForm} = login.$;
+        username.value = 'username';
+        password.value = 'password';
+
+        // Remove `allow-redirect` to create an async call from iron-form
+        loginForm.removeAttribute('allow-redirect');
+
+        // FIXME: Workaround for IE11 issue that breaks if it tries to send a request using an empty string
+        // Can be removed once we introduce the `login` event
+        const formElement = login.shadowRoot.querySelector('form');
+        formElement.setAttribute('action', '/');
+
+        const submitSpy = sinon.spy(login, 'submit');
+
+        MockInteractions.pressEnter(password);
+
+        expect(submitSpy.called).to.be.true;
+      });
     });
 
     describe('hidden button test', function() {

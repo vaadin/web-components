@@ -10,6 +10,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 <link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
 <link rel="import" href="../../vaadin-license-checker/vaadin-license-checker.html">
 
+<link rel="import" href="../../iron-form/iron-form.html">
 <link rel="import" href="../../vaadin-text-field/src/vaadin-text-field.html">
 <link rel="import" href="../../vaadin-text-field/src/vaadin-password-field.html">
 <link rel="import" href="../../vaadin-button/src/vaadin-button.html">
@@ -66,7 +67,8 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       }
 
       vaadin-text-field,
-      vaadin-password-field {
+      vaadin-password-field,
+      #submit {
         width: 100%;
       }
 
@@ -87,11 +89,14 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             <h5>[[i18n.errorMessage.title]]</h5>
             <p>[[i18n.errorMessage.message]]</p>
           </div>
+          <iron-form id="loginForm" allow-redirect>
+            <form method="POST">
+              <vaadin-text-field label="[[i18n.form.username]]" name="username" id="username" autofocus required on-keydown="_handleInputKeydown"></vaadin-text-field>
+              <vaadin-password-field label="[[i18n.form.password]]" name="password" id="password" required on-keydown="_handleInputKeydown"></vaadin-password-field>
 
-          <vaadin-text-field label="[[i18n.form.username]]" autofocus></vaadin-text-field>
-          <vaadin-password-field label="[[i18n.form.password]]"></vaadin-password-field>
-
-          <vaadin-button id="submit" theme="primary contained">[[i18n.form.submit]]</vaadin-button>
+              <vaadin-button id="submit" theme="primary contained" on-click="submit">[[i18n.form.submit]]</vaadin-button>
+            </form>
+          </iron-form>
 
           <vaadin-button id="forgotPasswordButton" theme="tertiary small" on-click="_forgotPassword" hidden$="[[hideForgotPasswordButton]]">[[i18n.form.forgotPassword]]</vaadin-button>
 
@@ -189,8 +194,30 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           };
         }
 
+        submit() {
+          this.$.loginForm.submit();
+        }
+
         _forgotPassword() {
           this.dispatchEvent(new CustomEvent('forgot-password'));
+        }
+
+        _handleInputKeydown(e) {
+          if (this._isEnterKey(e)) {
+            const {target: inputActive} = e;
+            const nextInput = inputActive.name === 'username' ? this.$.password : this.$.username;
+            if (inputActive.validate()) {
+              if (nextInput.checkValidity()) {
+                this.submit();
+              } else {
+                nextInput.focus();
+              }
+            }
+          }
+        }
+
+        _isEnterKey(e) {
+          return e.key === 'Enter' || e.keyCode === 13;
         }
       }
 
