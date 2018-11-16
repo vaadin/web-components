@@ -52,6 +52,13 @@ gemini.suite('vaadin-text-field', function(rootSuite) {
         .capture('integration');
     });
 
+    gemini.suite(`text-field-clear-button-${theme}`, function(suite) {
+      suite
+        .setUrl(`vaadin-text-field/text-field-clear-btn.html?theme=${theme}`)
+        .setCaptureElements('#text-field-clear-button')
+        .capture('text-field-clear-button');
+    });
+
     gemini.suite(`password-field-${theme}`, function(suite) {
       suite
         .setUrl(`vaadin-password-field/password-field.html?theme=${theme}`)
@@ -64,6 +71,13 @@ gemini.suite('vaadin-text-field', function(rootSuite) {
         .setUrl(`vaadin-password-field/rtl.html?theme=${theme}`)
         .setCaptureElements('#rtl')
         .capture('rtl');
+    });
+
+    gemini.suite(`password-field-clear-button-${theme}`, function(suite) {
+      suite
+        .setUrl(`vaadin-password-field/password-field-clear-btn.html?theme=${theme}`)
+        .setCaptureElements('#password-field-clear-button')
+        .capture('password-field-clear-button');
     });
 
     gemini.suite(`text-area-1-${theme}`, function(suite) {
@@ -99,6 +113,13 @@ gemini.suite('vaadin-text-field', function(rootSuite) {
         .setUrl(`vaadin-text-area/rtl.html?theme=${theme}`)
         .setCaptureElements('#rtl')
         .capture('rtl');
+    });
+
+    gemini.suite(`text-area-clear-button-${theme}`, function(suite) {
+      suite
+        .setUrl(`vaadin-text-area/text-area-clear-btn.html?theme=${theme}`)
+        .setCaptureElements('#text-area-clear-button')
+        .capture('text-area-clear-button');
     });
   });
 

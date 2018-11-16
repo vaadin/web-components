@@ -4,10 +4,12 @@
 <link rel="import" href="../../../vaadin-lumo-styles/style.html">
 <link rel="import" href="../../../vaadin-lumo-styles/typography.html">
 <link rel="import" href="../../../vaadin-lumo-styles/mixins/required-field.html">
+<link rel="import" href="../../../vaadin-lumo-styles/font-icons.html">
+<link rel="import" href="../../../vaadin-lumo-styles/mixins/field-button.html">
 
 <dom-module id="lumo-text-field" theme-for="vaadin-text-field">
   <template>
-    <style include="lumo-required-field">
+    <style include="lumo-required-field lumo-field-button">
       :host {
         --lumo-text-field-size: var(--lumo-size-m);
         color: var(--lumo-body-text-color);
@@ -261,6 +263,10 @@
       [part="input-field"] ::slotted(iron-icon[icon^="vaadin:"]) {
         padding: 0.25em;
         box-sizing: border-box !important;
+      }
+
+      [part="clear-button"]::before {
+        content: var(--lumo-icons-cross);
       }
     </style>
   </template>

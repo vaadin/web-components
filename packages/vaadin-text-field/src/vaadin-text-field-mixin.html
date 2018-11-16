@@ -83,6 +83,14 @@ This program is available under Apache License Version 2.0, available at https:/
       [part="value"]::-ms-clear {
         display: none;
       }
+
+      [part="clear-button"] {
+        cursor: default;
+      }
+
+      [part="clear-button"]::before {
+        content: "✕";
+      }
     </style>
   </template>
 </dom-module>
@@ -132,6 +140,14 @@ This program is available under Apache License Version 2.0, available at https:/
          */
         autocapitalize: {
           type: String
+        },
+
+        /**
+         * Set to true to display the clear icon which clears the input.
+         */
+        clearButtonVisible: {
+          type: Boolean,
+          value: false
         },
 
         /**
@@ -218,6 +234,14 @@ This program is available under Apache License Version 2.0, available at https:/
         },
 
         /**
+         * Specifies that the text field has value.
+         */
+        hasValue: {
+          type: Boolean,
+          reflectToAttribute: true
+        },
+
+        /**
          * When set to true, user is prevented from typing a value that
          * conflicts with the given `pattern`.
          */
@@ -235,6 +259,10 @@ This program is available under Apache License Version 2.0, available at https:/
       };
     }
 
+    static get observers() {
+      return ['_stateChanged(disabled, readonly, clearButtonVisible, hasValue)'];
+    }
+
     get focusElement() {
       return this.root && this.root.querySelector('[part=value]');
     }
@@ -245,6 +273,20 @@ This program is available under Apache License Version 2.0, available at https:/
         if (input.value.length > 0 && !this.checkValidity()) {
           input.value = this.value || '';
         }
+      }
+    }
+
+    // NOTE(yuriy): Workaround needed for IE11 and Edge for proper displaying
+    // of the clear button instead of setting display property for it depending on state.
+    _stateChanged(disabled, readonly, clearButtonVisible, hasValue) {
+      if (!disabled &&
+          !readonly &&
+          clearButtonVisible &&
+          hasValue
+      ) {
+        this.$.clearButton.removeAttribute('hidden');
+      } else {
+        this.$.clearButton.setAttribute('hidden', true);
       }
     }
 
@@ -270,9 +312,9 @@ This program is available under Apache License Version 2.0, available at https:/
         this.validate();
       }
       if (newVal !== '' && newVal != null) {
-        this.setAttribute('has-value', '');
+        this.hasValue = true;
       } else {
-        this.removeAttribute('has-value');
+        this.hasValue = false;
       }
     }
 
@@ -303,6 +345,9 @@ This program is available under Apache License Version 2.0, available at https:/
         this.updateStyles();
       }
 
+      this.$.clearButton.addEventListener('click', this._onClearButtonClick.bind(this));
+      this.addEventListener('keydown', this._onKeyDown.bind(this));
+
       var uniqueId = Vaadin.TextFieldMixin._uniqueId = 1 + Vaadin.TextFieldMixin._uniqueId || 0;
       this._errorId = `${this.constructor.is}-error-${uniqueId}`;
       this._labelId = `${this.constructor.is}-label-${uniqueId}`;
@@ -321,6 +366,22 @@ This program is available under Apache License Version 2.0, available at https:/
      */
     validate() {
       return !(this.invalid = !this.checkValidity());
+    }
+
+    clear() {
+      this.value = '';
+    }
+
+    _onClearButtonClick(e) {
+      // NOTE(yuriy): This line won't affect focus on the host. Cannot be properly tested.
+      this.focusElement.focus();
+      this.clear();
+    }
+
+    _onKeyDown(e) {
+      if (e.keyCode === 27 && this.clearButtonVisible) {
+        this.clear();
+      }
     }
 
     _addIEListeners() {

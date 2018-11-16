@@ -64,6 +64,35 @@
     </test-fixture>
 
   <script>
+    describe('keyboard', function() {
+      let textField, escKeyDownEvent;
+
+      beforeEach(function() {
+        textField = fixture(`vaadin-text-field-default`);
+
+        escKeyDownEvent = new CustomEvent('keydown', {
+          bubbles: true,
+          cancelable: true
+        });
+        escKeyDownEvent.keyCode = 27;
+        escKeyDownEvent.code = 27;
+      });
+
+      it('should clear the value on ESC if clear button is visible', function() {
+        textField.value = 'Foo';
+        textField.clearButtonVisible = true;
+        textField.dispatchEvent(escKeyDownEvent);
+        expect(textField.value).not.to.be.ok;
+      });
+
+      it('should not clear the value on ESC if clear button is not visible', function() {
+        textField.value = 'Foo';
+        textField.dispatchEvent(escKeyDownEvent);
+        expect(textField.value).to.be.equal('Foo');
+      });
+
+    });
+
     ['vaadin-text-field', 'vaadin-text-area'].forEach(el => {
       describe(`${el}: accessibility`, function() {
 

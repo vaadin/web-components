@@ -87,6 +87,26 @@
         });
       });
 
+      describe('clear button', function() {
+        it('default value of clearButtonVisible should be false', function() {
+          expect(textField.clearButtonVisible).to.be.false;
+        });
+
+        it('clear button should not be visible when field has no value', function() {
+          textField.clearButtonVisible = true;
+          expect(getComputedStyle(textField.$.clearButton).getPropertyValue('display')).to.be.equal('none');
+        });
+
+        ['disabled', 'readonly'].forEach(state => {
+          it(`clear button should not be visible when field is ${state}`, function() {
+            textField.clearButtonVisible = true;
+            textField.setAttribute(state, true);
+            expect(getComputedStyle(textField.$.clearButton).getPropertyValue('display')).to.be.equal('none');
+          });
+        });
+
+      });
+
       describe('binding', function() {
         it('default value should be empty string', function() {
           expect(textField.value).to.be.equal('');
@@ -231,6 +251,13 @@
       it('should not throw an error when using focus() to a newly created element', () => {
         // No expect needed as an error is thrown when focusing undefined element
         document.createElement('vaadin-text-field').focus();
+      });
+
+      it('should clear the value when clear() is called', () => {
+        const textField = fixture('default');
+        textField.value = 'Foo';
+        textField.clear();
+        expect(textField.value).not.to.be.ok;
       });
     });
   </script>

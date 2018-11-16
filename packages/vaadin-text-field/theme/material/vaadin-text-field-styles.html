@@ -1,10 +1,12 @@
 <link rel="import" href="../../../vaadin-material-styles/color.html">
 <link rel="import" href="../../../vaadin-material-styles/typography.html">
 <link rel="import" href="../../../vaadin-material-styles/mixins/required-field.html">
+<link rel="import" href="../../../vaadin-material-styles/font-icons.html">
+<link rel="import" href="../../../vaadin-material-styles/mixins/field-button.html">
 
 <dom-module id="material-text-field" theme-for="vaadin-text-field">
   <template>
-    <style include="material-required-field">
+    <style include="material-required-field material-field-button">
       :host {
         display: inline-flex;
         position: relative;
@@ -211,6 +213,9 @@
         color: var(--material-secondary-text-color);
       }
 
+      [part="clear-button"]::before {
+        content: var(--material-icons-clear);
+      }
     </style>
   </template>
 </dom-module>
