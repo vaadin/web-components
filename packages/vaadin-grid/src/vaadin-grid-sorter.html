@@ -25,11 +25,17 @@ This program is available under Apache License Version 2.0, available at https:/
       :host {
         display: inline-flex;
         cursor: pointer;
+        max-width: 100%;
+      }
+
+      [part="content"] {
+        flex: 1 1 auto;
       }
 
       [part="indicators"] {
         position: relative;
         align-self: center;
+        flex: none;
       }
 
       [part="order"] {
