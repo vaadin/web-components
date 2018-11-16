@@ -305,6 +305,12 @@ This program is available under Apache License Version 2.0, available at https:/
                     const re = new RegExp(`^${MATCH_HOURS}(?::${MATCH_MINUTES}(?::${MATCH_SECONDS}(?:\\.${MATCH_MILLISECONDS})?)?)?$`);
                     const parts = re.exec(text);
                     if (parts) {
+                      // Allows setting the milliseconds with hundreds and tens precision
+                      if (parts[4]) {
+                        while (parts[4].length < 3) {
+                          parts[4] += '0';
+                        }
+                      }
                       return {hours: parts[1], minutes: parts[2], seconds: parts[3], milliseconds: parts[4]};
                     }
                   },

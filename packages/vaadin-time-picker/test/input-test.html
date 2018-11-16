@@ -131,6 +131,18 @@
         expect(timePicker.value).to.be.equal('08:00');
       });
 
+      it('should autocomplete the milliseconds with hundreds precision', () => {
+        timePicker.step = 0.5;
+        timePicker.value = '01:01:01.1';
+        expect(timePicker.value).to.be.equal('01:01:01.100');
+      });
+
+      it('should autocomplete the milliseconds with tens precision', () => {
+        timePicker.step = 0.5;
+        timePicker.value = '01:01:01.01';
+        expect(timePicker.value).to.be.equal('01:01:01.010');
+      });
+
       it('should fire only one value-change event', () => {
         const spy = sinon.spy();
         timePicker.addEventListener('value-changed', spy);
