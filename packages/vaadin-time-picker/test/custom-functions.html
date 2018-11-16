@@ -31,6 +31,18 @@
         expect(timePicker.value).to.be.equal('12:00');
       });
 
+      it('should align values of dropdown and input when i18n was reassigned', function() {
+        timePicker.value = '12';
+        timePicker.set('i18n', {
+          formatTime: sinon.stub().withArgs({hours: 12, minutes: 0}).returns('12:00 AM'),
+          parseTime: sinon.stub().returns({hours: 12, minutes: 0, seconds: 0})
+        });
+        expect(timePicker.__dropdownElement.selectedItem).to.be.deep.equal({label: '12:00 AM', value: '12:00 AM'});
+        expect(timePicker.__dropdownElement.value).to.be.equal('12:00 AM');
+        expect(timePicker.__inputElement.value).to.be.equal('12:00 AM');
+        expect(timePicker.value).to.be.equal('12:00');
+      });
+
       it('should use custom formatter if that exists', function() {
         timePicker.set('i18n.formatTime', sinon.stub().withArgs({hours: 12, minutes: 0}).returns('12:00 AM'));
         timePicker.value = '12';
