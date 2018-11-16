@@ -100,7 +100,7 @@
         assertClassList(firstCell, []);
       });
 
-      ['generateClassNames', 'clearCache', 'render'].forEach(funcName => {
+      ['generateCellClassNames', 'clearCache', 'render'].forEach(funcName => {
         it(`should update classes on ${funcName}`, () => {
           let condition = false;
           grid.cellClassNameGenerator = (rowData, column) => condition && 'foo';

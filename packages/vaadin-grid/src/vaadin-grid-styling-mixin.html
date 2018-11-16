@@ -41,7 +41,7 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     __cellClassNameGeneratorChanged(cellClassGenerator) {
-      this.generateClassNames();
+      this.generateCellClassNames();
     }
 
     /**
@@ -50,12 +50,12 @@ This program is available under Apache License Version 2.0, available at https:/
      * call this function manually in order to update the styles when
      * the conditions change.
      */
-    generateClassNames() {
+    generateCellClassNames() {
       Array.from(this.$.items.children).filter(row => !row.hidden).forEach(
-        row => this._generateClassNames(row, this.__getRowModel(row)));
+        row => this._generateCellClassNames(row, this.__getRowModel(row)));
     }
 
-    _generateClassNames(row, rowData) {
+    _generateCellClassNames(row, rowData) {
       Array.from(row.children).forEach(cell => {
         if (cell.__generatedClasses) {
           cell.__generatedClasses.forEach(className => cell.classList.remove(className));
