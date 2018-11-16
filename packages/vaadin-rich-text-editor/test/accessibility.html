@@ -134,7 +134,7 @@
           content.dispatchEvent(e);
         });
 
-        it('should mark toolbar as focused before focusin it on shift-tab', done => {
+        it('should mark toolbar as focused before focusing it on shift-tab', done => {
           const spy = sinon.spy(rte, '_markToolbarFocused');
           sinon.stub(buttons[0], 'focus', () => {
             expect(spy).to.be.calledOnce;
@@ -150,7 +150,7 @@
           const e = new CustomEvent('keydown', {bubbles: true});
           e.keyCode = 27;
           const result = buttons[0].dispatchEvent(e);
-          expect(result).to.be.false;
+          expect(result).to.be.false; // dispatchEvent returns false when preventDefault is called
         });
 
         it('should prevent keydown and focus the editor on tab', done => {
@@ -159,7 +159,7 @@
           e.keyCode = 9;
           e.shiftKey = false;
           const result = buttons[0].dispatchEvent(e);
-          expect(result).to.be.false;
+          expect(result).to.be.false; // dispatchEvent returns false when preventDefault is called
         });
 
         it('should blur the content on shift-tab in the list item', () => {
