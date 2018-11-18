@@ -24,6 +24,7 @@
             </template>
           </vaadin-overlay>
         </div>
+        <button>Focus test</button>
       </div>
     </template>
   </test-fixture>
@@ -161,6 +162,16 @@
         overlay.opened = false;
 
         expect(overlay.parentElement).to.eql(parent);
+      });
+
+      it('should focus the previously focused element before opening', () => {
+        const button = fixture('default').children[1];
+        overlay.opened = false;
+        button.focus();
+        overlay.opened = true;
+        overlay.opened = false;
+
+        expect(document.activeElement).to.eql(button);
       });
 
       describe('multiple overlays', function() {

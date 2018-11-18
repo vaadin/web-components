@@ -508,6 +508,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         if (opened) {
+          this.__previouslyFocusedElement = document.activeElement;
           this._animatedOpening();
 
           Polymer.RenderStatus.afterNextRender(this, () => {
@@ -587,6 +588,11 @@ This program is available under Apache License Version 2.0, available at https:/
             document.removeEventListener('iron-overlay-canceled', this._boundIronOverlayCanceledListener);
             this._detachOverlay();
             this.removeAttribute('closing');
+
+            if (this.__previouslyFocusedElement) {
+              this.__previouslyFocusedElement.focus();
+              this.__previouslyFocusedElement = undefined;
+            }
           };
 
           if (this._shouldAnimate()) {
