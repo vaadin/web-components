@@ -129,6 +129,67 @@
 
         expect(submitSpy.called).to.be.true;
       });
+
+      it('should disable button after submiting form', () => {
+        const {username, password, loginForm, submit} = login.$;
+        username.value = 'username';
+        password.value = 'password';
+
+        // Remove `allow-redirect` to create an async call from iron-form
+        loginForm.removeAttribute('allow-redirect');
+
+        // FIXME: Workaround for IE11 issue that breaks if it tries to send a request using an empty string
+        // Can be removed once we introduce the `login` event
+        const formElement = login.shadowRoot.querySelector('form');
+        formElement.setAttribute('action', '/');
+
+        MockInteractions.pressEnter(password);
+
+
+        expect(submit.disabled).to.be.true;
+      });
+
+      it('should prevent submit call when login is disabled', () => {
+        const {username, password, loginForm, submit} = login.$;
+        username.value = 'username';
+        password.value = 'password';
+
+        const submitSpy = sinon.spy(loginForm, 'submit');
+
+        login.setAttribute('disabled', 'disabled');
+
+        MockInteractions.pressEnter(password);
+        expect(submitSpy.called).to.be.false;
+
+        MockInteractions.tap(submit);
+        expect(submitSpy.called).to.be.false;
+      });
+
+      it('should not disable button on button click if form is invalid', () => {
+        const {submit} = login.$;
+
+        expect(submit.disabled).to.not.be.true;
+        MockInteractions.tap(submit);
+        expect(submit.disabled).to.not.be.true;
+      });
+
+      it('should disable button on button click if form is valid', () => {
+        const {username, password, loginForm, submit} = login.$;
+        username.value = 'username';
+        password.value = 'password';
+
+        // Remove `allow-redirect` to create an async call from iron-form
+        loginForm.removeAttribute('allow-redirect');
+
+        // FIXME: Workaround for IE11 issue that breaks if it tries to send a request using an empty string
+        // Can be removed once we introduce the `login` event
+        const formElement = login.shadowRoot.querySelector('form');
+        formElement.setAttribute('action', '/');
+
+        MockInteractions.tap(submit);
+
+        expect(submit.disabled).to.be.true;
+      });
     });
 
     describe('hidden button test', function() {

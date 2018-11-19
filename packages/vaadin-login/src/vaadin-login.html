@@ -94,7 +94,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
               <vaadin-text-field label="[[i18n.form.username]]" name="username" id="username" autofocus required on-keydown="_handleInputKeydown"></vaadin-text-field>
               <vaadin-password-field label="[[i18n.form.password]]" name="password" id="password" required on-keydown="_handleInputKeydown"></vaadin-password-field>
 
-              <vaadin-button id="submit" theme="primary contained" on-click="submit">[[i18n.form.submit]]</vaadin-button>
+              <vaadin-button id="submit" theme="primary contained" on-click="submit" disabled$="[[disabled]]">[[i18n.form.submit]]</vaadin-button>
             </form>
           </iron-form>
 
@@ -132,6 +132,14 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
         static get properties() {
           return {
+            /**
+             * If set, disable the "Log in" button and prevent user from submitting login form
+             */
+            disabled: {
+              type: Boolean,
+              value: false,
+              reflectToAttribute: true
+            },
             /**
              * Whether to hide the forgot password button. The button is visible by default.
              */
@@ -195,7 +203,12 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         }
 
         submit() {
+          if (this.disabled || !(this.$.username.validate() && this.$.password.validate())) {
+            return;
+          }
+
           this.$.loginForm.submit();
+          this.disabled = true;
         }
 
         _forgotPassword() {
