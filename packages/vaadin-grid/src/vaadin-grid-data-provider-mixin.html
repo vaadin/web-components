@@ -294,26 +294,38 @@ This program is available under Apache License Version 2.0, available at https:/
             }
           }
 
+          // Populate the cache with new items
           items.forEach((item, itemsIndex) => {
-            cache.items[page * this.pageSize + itemsIndex] = item;
-          });
-          this._cache.updateSize();
-          this._effectiveSize = this._cache.effectiveSize;
-
-          Array.from(this.$.items.children).forEach(row => {
-            const cachedItem = this._cache.getItemForIndex(row.index);
-            if (items.indexOf(cachedItem) > -1) {
-              this._toggleAttribute('loading', false, row);
-              this._updateItem(row, cachedItem);
+            const itemIndex = page * this.pageSize + itemsIndex;
+            cache.items[itemIndex] = item;
+            if (this._isExpanded(item)) {
+              // Force synchronous data request for expanded item sub-cache
+              cache.ensureSubCacheForScaledIndex(itemIndex);
             }
           });
 
           this._hasData = true;
-          this._increasePoolIfNeeded(0);
 
           delete cache.pendingRequests[page];
 
-          this._setLoading(this._cache.isLoading());
+          if (!this._cache.isLoading()) {
+            // All active requests have finished, update the effective size and rows
+            this._setLoading(false);
+            this._cache.updateSize();
+            this._effectiveSize = this._cache.effectiveSize;
+
+            Array.from(this.$.items.children)
+              .filter(row => !row.hidden)
+              .forEach(row => {
+                const cachedItem = this._cache.getItemForIndex(row.index);
+                if (cachedItem) {
+                  this._toggleAttribute('loading', false, row);
+                  this._updateItem(row, cachedItem);
+                }
+              });
+
+            this._increasePoolIfNeeded(0);
+          }
         });
       }
     }

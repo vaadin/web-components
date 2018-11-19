@@ -249,11 +249,16 @@
 
       describe('tree', () => {
 
+        let generateItemIds;
+
         function finiteDataProvider(params, callback) {
           // Provides fixed size data set of 10 items
           infiniteDataProvider(params, (items) => {
             callback(items.map(item => {
               item.level = params.parentItem ? ((params.parentItem.level || 0) + 1) : 0;
+              if (generateItemIds) {
+                item.id = `${item.value}-${item.level}`;
+              }
               return item;
             }), 10);
           });
@@ -283,6 +288,7 @@
         beforeEach(() => {
           grid.pageSize = 5;
           grid.dataProvider = sinon.spy(finiteDataProvider);
+          generateItemIds = false;
         });
 
         describe('first level', () => {
@@ -323,6 +329,32 @@
             expandIndex(grid, 7);
             expect(grid.dataProvider.callCount).to.equal(3);
             expect(grid.dataProvider.getCall(2).args[0].parentItem.value).to.equal('foo7');
+          });
+
+          it('should request expanded items first pages before rendering', () => {
+            generateItemIds = true;
+            // Reset pageSize to 50 so we get 1 data request / cache level
+            grid.pageSize = 50;
+            // Ensure that the expanded item is expanded once new items are received
+            grid.itemIdPath = 'id';
+            // Expand one item so in total 2 requests are expected after clear cache
+            // (main level cache and expanded item subcache)
+            expandIndex(grid, 0);
+
+            grid.dataProvider.reset();
+            const renderSpy = sinon.spy(grid, '_effectiveSizeChanged');
+            const increasePoolSpy = sinon.spy(grid, '_increasePoolIfNeeded');
+            const toggleAttributeSpy = sinon.spy(grid, '_toggleAttribute');
+            const updateItemSpy = sinon.spy(grid, '_updateItem');
+            grid.clearCache();
+
+            expect(grid.dataProvider.callCount).to.equal(2);
+
+            // Effective size should not have changed in between the data requests
+            expect(renderSpy.called).to.be.false;
+            expect(increasePoolSpy.callCount).to.equal(1);
+            expect(toggleAttributeSpy.callCount).to.be.below(90);
+            expect(updateItemSpy.callCount).to.be.below(70);
           });
 
           ['renderer', 'template'].forEach(type => {
