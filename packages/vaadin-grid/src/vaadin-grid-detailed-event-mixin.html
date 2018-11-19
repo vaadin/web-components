@@ -16,7 +16,8 @@ This program is available under Apache License Version 2.0, available at https:/
     static get properties() {
       return {
         /**
-         * Array of events, which will be fired with additional information about the event target:
+         * Array of events, which will be fired with additional information about the event target.
+         * These properties are included inside the `event.detail` object:
          * - `rowData`: contains eg. `item` and `index`
          * - `column`: the column element corresponding to the clicked cell
          * - `section`: whether the event targeted the body, header, footer or details of the grid

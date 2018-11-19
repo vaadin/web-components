@@ -79,28 +79,6 @@
   }
   ,
   {
-    "name": "Crud Demos",
-    "url": "grid-crud-demos",
-    "src": "grid-crud-demos.html",
-    "meta": {
-      "title": "vaadin-grid – CRUD",
-      "description": "",
-      "image": ""
-    }
-  }
-  ,
-  {
-    "name": "Pagination",
-    "url": "grid-pagination-demos",
-    "src": "grid-pagination-demos.html",
-    "meta": {
-      "title": "vaadin-grid – Pagination",
-      "description": "",
-      "image": ""
-    }
-  }
-  ,
-  {
     "name": "Detailed Events",
     "url": "grid-detailed-event-demos",
     "src": "grid-detailed-event-demos.html",
@@ -139,6 +117,28 @@
     "src": "grid-theme-demos.html",
     "meta": {
       "title": "vaadin-grid – Theme Variants",
+      "description": "",
+      "image": ""
+    }
+  }
+  ,
+  {
+    "name": "Crud Demos",
+    "url": "grid-crud-demos",
+    "src": "grid-crud-demos.html",
+    "meta": {
+      "title": "vaadin-grid – CRUD",
+      "description": "",
+      "image": ""
+    }
+  }
+  ,
+  {
+    "name": "Pagination",
+    "url": "grid-pagination-demos",
+    "src": "grid-pagination-demos.html",
+    "meta": {
+      "title": "vaadin-grid – Pagination",
       "description": "",
       "image": ""
     }

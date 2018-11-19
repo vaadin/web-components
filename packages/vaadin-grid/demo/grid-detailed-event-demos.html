@@ -14,15 +14,19 @@
 
     <h3>Detailed Events</h3>
     <p>
-      Set <code>detailedEvents</code> array to fire events with useful information about the event target,
-      like the targeted item, column and section (body, header, footer or row details).
+      Set <code>detailedEvents</code> array to fire events with useful information about the target cell,
+      like the item, column and section (body, header, footer or row details).
     </p>
     <p>
       This feature can be useful to execute item-specific actions, like selection or opening row details
       on any mouse or key event.
     </p>
     <p>
-      The detailed event will be fired with <code>detailed-</code> prefix.
+      The detailed event will be fired with <code>detailed-</code> prefix,
+      and the details are included inside <code>event.detail</code> object.
+    </p>
+    <p>
+      <b>NOTE: You must add the original event type into <code>grid.detailedEvents</code> array or grid won't fire the detailed event.</b>
     </p>
     <vaadin-demo-snippet id='grid-detailed-event-demos-detailed-event'>
       <template preserve-content>
@@ -35,6 +39,10 @@
           window.addDemoReadyListener('#grid-detailed-event-demos-detailed-event', function(document) {
             const grid = document.querySelector('vaadin-grid');
             grid.items = Vaadin.GridDemo.users;
+
+            const toggleSelection = function(item) {
+              grid.selectedItems = grid.selectedItems[0] === item ? [] : [item];
+            };
 
             grid.detailedEvents = ['dblclick', 'keydown'];
 
@@ -49,10 +57,6 @@
                 toggleSelection(e.detail.rowData.item);
               }
             });
-
-            const toggleSelection = function(item) {
-              grid.selectedItems = grid.selectedItems[0] === item ? [] : [item];
-            };
           });
         </script>
       </template>

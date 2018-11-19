@@ -17,6 +17,26 @@
     <vaadin-demo-snippet id='grid-styling-demos-cell-class-generator'>
       <template preserve-content>
 
+        <!-- Place these styles in index.html or in a separate HTML import -->
+        <dom-module id="my-grid-styles" theme-for="vaadin-grid">
+          <template>
+            <style>
+              /* Background needs a stronger selector to not be overridden */
+              [part~="cell"].female {
+                background: rgb(255, 240, 240);
+              }
+
+              [part~="cell"].male {
+                background: rgb(245, 245, 255);
+              }
+
+              .email {
+                font-style: italic;
+              }
+            </style>
+          </template>
+        </dom-module>
+
         <vaadin-grid aria-label="Styling Grid With Cell Class Generator Example" id="grid" size="200">
           <vaadin-grid-column path="name.first" header="First name"></vaadin-grid-column>
           <vaadin-grid-column path="name.last" header="Last name"></vaadin-grid-column>
@@ -38,7 +58,15 @@
           });
         </script>
 
-        <!-- Place in index.html or in a separate HTML import -->
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Updating Styles After Changes in the Data</h3>
+
+    <vaadin-demo-snippet id='grid-styling-demos-regenerate-classes'>
+      <template preserve-content>
+
+        <!-- Place these styles in index.html or in a separate HTML import -->
         <dom-module id="my-grid-styles" theme-for="vaadin-grid">
           <template>
             <style>
@@ -54,16 +82,13 @@
               .email {
                 font-style: italic;
               }
+
+              .checked {
+                font-weight: bold;
+              }
             </style>
           </template>
         </dom-module>
-      </template>
-    </vaadin-demo-snippet>
-
-    <h3>Updating Styles After Changes in the Data</h3>
-
-    <vaadin-demo-snippet id='grid-styling-demos-regenerate-classes'>
-      <template preserve-content>
 
         <vaadin-grid aria-label="Updating Cell Class Generator Example" id="grid" size="200">
           <vaadin-grid-column id="check" flex-grow="0" width="60px"></vaadin-grid-column>
@@ -111,33 +136,8 @@
             };
           });
         </script>
-
-        <!-- Place in index.html or in a separate HTML import -->
-        <dom-module id="my-grid-styles" theme-for="vaadin-grid">
-          <template>
-            <style>
-              /* Background needs a stronger selector to not be overridden */
-              [part~="cell"].female {
-                background: rgb(255, 240, 240);
-              }
-
-              [part~="cell"].male {
-                background: rgb(245, 245, 255);
-              }
-
-              .email {
-                font-style: italic;
-              }
-
-              .checked {
-                font-weight: bold;
-              }
-            </style>
-          </template>
-        </dom-module>
       </template>
     </vaadin-demo-snippet>
-
   </template>
   <script>
     class GridStylingDemos extends DemoReadyEventEmitter(GridDemo(Polymer.Element)) {
