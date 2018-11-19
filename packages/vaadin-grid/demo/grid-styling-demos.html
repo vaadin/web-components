@@ -48,7 +48,7 @@
             const grid = document.querySelector('vaadin-grid');
             grid.items = Vaadin.GridDemo.users;
 
-            grid.cellClassNameGenerator = function(rowData, column) {
+            grid.cellClassNameGenerator = function(column, rowData) {
               let classes = rowData.item.gender;
               if (column.path === 'email') {
                 classes += ' email';
@@ -125,7 +125,7 @@
               root.firstElementChild.checked = checkedItems.indexOf(rowData.item) > -1;
             };
 
-            grid.cellClassNameGenerator = function(rowData, column) {
+            grid.cellClassNameGenerator = function(column, rowData) {
               let classes = rowData.item.gender;
               if (column.path === 'email') {
                 classes += ' email';

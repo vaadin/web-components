@@ -44,37 +44,37 @@
         expect(Array.from(cell.classList)).to.deep.equal(initialCellClasses.concat(expectedClasses));
 
       it('should add classes for cells', () => {
-        grid.cellClassNameGenerator = (rowData, column) => 'foo';
+        grid.cellClassNameGenerator = (column, rowData) => 'foo';
         assertClassList(firstCell, ['foo']);
         assertClassList(getContainerCell(grid.$.items, 1, 1), ['foo']);
       });
 
       it('should add all classes separated by whitespaces', () => {
-        grid.cellClassNameGenerator = (rowData, column) => 'foo bar baz';
+        grid.cellClassNameGenerator = (column, rowData) => 'foo bar baz';
         assertClassList(firstCell, ['foo', 'bar', 'baz']);
       });
 
       it('should not remove existing classes', () => {
         firstCell.classList.add('bar');
-        grid.cellClassNameGenerator = (rowData, column) => 'foo';
+        grid.cellClassNameGenerator = (column, rowData) => 'foo';
         assertClassList(firstCell, ['bar', 'foo']);
       });
 
       it('should remove old generated classes', () => {
-        grid.cellClassNameGenerator = (rowData, column) => 'foo';
-        grid.cellClassNameGenerator = (rowData, column) => 'bar';
+        grid.cellClassNameGenerator = (column, rowData) => 'foo';
+        grid.cellClassNameGenerator = (column, rowData) => 'bar';
         assertClassList(firstCell, ['bar']);
       });
 
-      it('should provide rowData and column as parameters', () => {
-        grid.cellClassNameGenerator = (rowData, column) =>
+      it('should provide column and rowData as parameters', () => {
+        grid.cellClassNameGenerator = (column, rowData) =>
           rowData.index + ' ' + rowData.item.value + ' ' + column.header;
         assertClassList(getContainerCell(grid.$.items, 5, 1), ['5', 'foo5', 'col1']);
         assertClassList(getContainerCell(grid.$.items, 10, 0), ['10', 'foo10', 'col0']);
       });
 
       it('should add classes when loading new items', function(done) {
-        grid.cellClassNameGenerator = (rowData, column) => rowData.item.value;
+        grid.cellClassNameGenerator = (column, rowData) => rowData.item.value;
         scrollToEnd(grid, () => {
           const rows = getRows(grid.$.items);
           const lastRow = rows[rows.length - 1];
@@ -85,17 +85,17 @@
       });
 
       it('should not throw with falsy return value', () => {
-        expect(() => grid.cellClassNameGenerator = (rowData, column) => {}).not.to.throw(Error);
+        expect(() => grid.cellClassNameGenerator = (column, rowData) => {}).not.to.throw(Error);
       });
 
       it('should clear generated classes with falsy return value', () => {
-        grid.cellClassNameGenerator = (rowData, column) => 'foo';
-        grid.cellClassNameGenerator = (rowData, column) => {};
+        grid.cellClassNameGenerator = (column, rowData) => 'foo';
+        grid.cellClassNameGenerator = (column, rowData) => {};
         assertClassList(firstCell, []);
       });
 
       it('should clear generated classes with falsy property value', () => {
-        grid.cellClassNameGenerator = (rowData, column) => 'foo';
+        grid.cellClassNameGenerator = (column, rowData) => 'foo';
         grid.cellClassNameGenerator = undefined;
         assertClassList(firstCell, []);
       });
@@ -103,7 +103,7 @@
       ['generateCellClassNames', 'clearCache', 'render'].forEach(funcName => {
         it(`should update classes on ${funcName}`, () => {
           let condition = false;
-          grid.cellClassNameGenerator = (rowData, column) => condition && 'foo';
+          grid.cellClassNameGenerator = (column, rowData) => condition && 'foo';
           condition = true;
           assertClassList(firstCell, []);
           grid[funcName]();
@@ -121,7 +121,7 @@
       });
 
       it('should not throw with extra whitespace in the result', () => {
-        expect(() => grid.cellClassNameGenerator = (rowData, column) => ' foo  bar ').not.to.throw(Error);
+        expect(() => grid.cellClassNameGenerator = (column, rowData) => ' foo  bar ').not.to.throw(Error);
         assertClassList(firstCell, ['foo', 'bar']);
       });
     });
