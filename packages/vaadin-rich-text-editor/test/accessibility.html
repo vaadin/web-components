@@ -162,14 +162,16 @@
           expect(result).to.be.false; // dispatchEvent returns false when preventDefault is called
         });
 
-        it('should blur the content on shift-tab in the list item', () => {
-          const spy = sinon.spy(content, 'blur');
-          rte.value = '[{"attributes":{"list":"bullet"},"insert":"\\n"}]';
+        it('should preserve the text selection on shift-tab', done => {
+          sinon.stub(buttons[0], 'focus', () => {
+            expect(editor.getSelection()).to.deep.equal({index: 0, length: 2});
+            done();
+          });
+          rte.value = '[{"attributes":{"list":"bullet"},"insert":"Foo\\n"}]';
           editor.focus();
-          editor.setSelection(0, 0);
+          editor.setSelection(0, 2);
           const e = MockInteractions.keyboardEventFor('keydown', 9, ['shift']);
           content.dispatchEvent(e);
-          expect(spy).to.be.calledOnce;
         });
 
         it('should change indentation and prevent shift-tab keydown in the code block', () => {
