@@ -39,7 +39,7 @@ This program is available under Apache License Version 2.0, available at https:/
         this._toggleAttribute('column-resizing', true, this.$.scroller);
 
         // Get the target column to resize
-        if (column.localName === 'vaadin-grid-column-group') {
+        while (column.localName === 'vaadin-grid-column-group') {
           column = Array.prototype.slice.call(column._childColumns, 0)
             .sort(function(a, b) {
               return a._order - b._order;

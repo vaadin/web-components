@@ -56,6 +56,33 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="group-inside-group">
+    <template>
+      <vaadin-grid size="1" style="width: 300px">
+        <vaadin-grid-column-group resizable>
+          <template class="header">0</template>
+          <vaadin-grid-column-group resizable>
+            <template class="header">1</template>
+            <vaadin-grid-column resizable>
+              <template class="header">2</template>
+              <template>2</template>
+            </vaadin-grid-column>
+          </vaadin-grid-column-group>
+        </vaadin-grid-column-group>
+        <vaadin-grid-column-group>
+          <template class="header">3</template>
+          <vaadin-grid-column-group>
+            <template class="header">4</template>
+            <vaadin-grid-column>
+              <template class="header">5</template>
+              <template>5</template>
+            </vaadin-grid-column>
+          </vaadin-grid-column-group>
+        </vaadin-grid-column-group>
+      </vaadin-grid>
+    </template>
+  </test-fixture>
+
   <script>
     describe('column resizing', () => {
       let grid, headerCells, handle;
@@ -269,6 +296,25 @@
         fire('track', {state: 'track', x: rect.right + 100, y: 0}, options);
 
         expect(cell.clientWidth).to.equal(200);
+      });
+
+      it('should resize the child group\'s child column', done => {
+        grid = fixture('group-inside-group');
+        grid.dataProvider = infiniteDataProvider;
+
+        animationFrameFlush(() => {
+          const headerRows = getRows(grid.$.header);
+          const handle = getRowCells(headerRows[0])[0].querySelector('[part~="resize-handle"]');
+
+          const cell = getRowCells(headerRows[1])[1];
+          const rect = cell.getBoundingClientRect();
+          const options = {node: handle};
+          fire('track', {state: 'start'}, options);
+          fire('track', {state: 'track', x: rect.right + 100, y: 0}, options);
+
+          expect(cell.clientWidth).to.equal(100);
+          done();
+        });
       });
 
     });
