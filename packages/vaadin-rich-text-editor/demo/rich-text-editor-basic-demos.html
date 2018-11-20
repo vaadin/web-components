@@ -9,26 +9,27 @@
     <h3>Rich Text Editor</h3>
     <vaadin-demo-snippet id="rich-text-editor-basic-demos-sample-example">
       <template preserve-content>
-        <vaadin-rich-text-editor style="max-height: 300px;"></vaadin-rich-text-editor>
+        <vaadin-rich-text-editor style="height: 300px;"></vaadin-rich-text-editor>
       </template>
     </vaadin-demo-snippet>
 
     <h3>Disabled</h3>
     <vaadin-demo-snippet id="rich-text-editor-basic-demos-disabled">
       <template preserve-content>
-        <vaadin-rich-text-editor style="max-height: 300px;" disabled></vaadin-rich-text-editor>
+        <vaadin-rich-text-editor style="height: 300px;" disabled></vaadin-rich-text-editor>
       </template>
     </vaadin-demo-snippet>
 
-    <h3>Minimum Height</h3>
+    <h3>Minimum/Maximum Height</h3>
     <vaadin-demo-snippet id="rich-text-editor-basic-demos-min-height">
       <template preserve-content>
         <style>
-          vaadin-rich-text-editor.min-height {
+          vaadin-rich-text-editor.height-constraints {
             min-height: 400px;
+            max-height: 600px;
           }
         </style>
-        <vaadin-rich-text-editor class="min-height"></vaadin-rich-text-editor>
+        <vaadin-rich-text-editor class="height-constraints"></vaadin-rich-text-editor>
       </template>
     </vaadin-demo-snippet>
 
