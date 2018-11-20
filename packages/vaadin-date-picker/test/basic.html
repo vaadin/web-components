@@ -659,6 +659,22 @@
           expect(window.getComputedStyle(flexDatePicker).width).to.eql('500px');
         });
       });
+
+      describe('Right-to-left', () => {
+        before(() => {
+          document.querySelector('body').setAttribute('dir', 'rtl');
+        });
+
+        after(() => {
+          document.querySelector('body').removeAttribute('dir');
+        });
+
+        it('overlay should position correctly', () => {
+          datepicker.open();
+          expect((overlayContent.getBoundingClientRect().right >= datepicker.getBoundingClientRect().right))
+            .to.be.true;
+        });
+      });
     });
 
     describe('Basic features theme attribute', () => {

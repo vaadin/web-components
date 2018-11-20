@@ -529,6 +529,9 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
+      this.$.overlay.setAttribute('dir',
+        getComputedStyle(this._inputElement).getPropertyValue('direction')
+      );
       this._overlayContent._repositionYearScroller();
     }
 
