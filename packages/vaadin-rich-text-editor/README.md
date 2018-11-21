@@ -11,9 +11,9 @@
 
 # &lt;vaadin-rich-text-editor&gt;
 
-[Live Demo ↗](https://vaadin.com/components/vaadin-rich-text-editor/html-examples)
+[Live Demo ↗](https://cdn.vaadin.com/vaadin-rich-text-editor/1.0.0-alpha6/demo/)
 |
-[API documentation ↗](https://vaadin.com/components/vaadin-rich-text-editor/html-api)
+[API documentation ↗](https://cdn.vaadin.com/vaadin-rich-text-editor/1.0.0-alpha6)
 
 
 [&lt;vaadin-rich-text-editor&gt;](https://vaadin.com/components/vaadin-rich-text-editor) is a Web Component providing rich text editor functionality, part of the [Vaadin components](https://vaadin.com/components).
