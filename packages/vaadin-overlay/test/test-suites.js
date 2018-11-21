@@ -5,6 +5,8 @@ window.VaadinOverlaySuites = [
   'renderer.html?wc-shadydom=true',
   'focus-trap.html',
   'focus-trap.html?wc-shadydom=true',
+  'restore-focus.html',
+  'restore-focus.html?wc-shadydom=true',
   'styling.html',
   'styling.html?wc-shadydom=true',
   'templating.html',

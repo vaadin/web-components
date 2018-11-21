@@ -310,6 +310,14 @@ This program is available under Apache License Version 2.0, available at https:/
             value: false
           },
 
+          /**
+           * Set to true to enable restoring of focus when overlay is closed.
+           */
+          restoreFocusOnClose: {
+            type: Boolean,
+            value: false,
+          },
+
           _mouseDownInside: {
             type: Boolean
           },
@@ -508,7 +516,8 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         if (opened) {
-          this.__previouslyFocusedElement = document.activeElement;
+          // Store focused node.
+          this.__restoreFocusNode = this._getActiveElement();
           this._animatedOpening();
 
           Polymer.RenderStatus.afterNextRender(this, () => {
@@ -589,9 +598,18 @@ This program is available under Apache License Version 2.0, available at https:/
             this._detachOverlay();
             this.removeAttribute('closing');
 
-            if (this.__previouslyFocusedElement) {
-              this.__previouslyFocusedElement.focus();
-              this.__previouslyFocusedElement = undefined;
+            if (this.restoreFocusOnClose && this.__restoreFocusNode) {
+              // If the activeElement is `<body>` or inside the overlay,
+              // we are allowed to restore the focus. In all the other
+              // cases focus might have been moved elsewhere by another
+              // component or by the user interaction (e.g. click on a
+              // button outside the overlay).
+              const activeElement = this._getActiveElement();
+
+              if (activeElement === document.body || this._deepContains(activeElement)) {
+                this.__restoreFocusNode.focus();
+              }
+              this.__restoreFocusNode = null;
             }
           };
 
@@ -865,6 +883,35 @@ This program is available under Apache License Version 2.0, available at https:/
       _getFocusableElements() {
         // collect all focusable elements
         return Vaadin.FocusablesHelper.getTabbableNodes(this.$.overlay);
+      }
+
+      _getActiveElement() {
+        let active = document._activeElement || document.activeElement;
+        // document.activeElement can be null
+        // https://developer.mozilla.org/en-US/docs/Web/API/Document/activeElement
+        // In IE 11, it can also be an object when operating in iframes
+        // or document.documentElement (when overlay closed on outside click).
+        // In these cases, default it to document.body.
+        if (!active || active === document.documentElement || active instanceof Element === false) {
+          active = document.body;
+        }
+        while (active.shadowRoot && active.shadowRoot.activeElement) {
+          active = active.shadowRoot.activeElement;
+        }
+        return active;
+      }
+
+      _deepContains(node) {
+        if (this.contains(node)) {
+          return true;
+        }
+        let n = node;
+        const doc = node.ownerDocument;
+        // walk from node to `this` or `document`
+        while (n && n !== doc && n !== this) {
+          n = n.parentNode || n.host;
+        }
+        return n === this;
       }
     }
 

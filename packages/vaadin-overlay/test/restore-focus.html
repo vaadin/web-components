@@ -1,0 +1,118 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-overlay restore-focus tests</title>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../../test-fixture/test-fixture.html">
+  <link rel="import" href="../vaadin-overlay.html">
+  <link rel="import" href="../../polymer/polymer-element.html">
+  <link rel="import" href="../../iron-test-helpers/mock-interactions.html">
+  <link rel="import" href="../../vaadin-text-field/vaadin-text-field.html">
+</head>
+
+<body>
+  <dom-module id="x-wrapper">
+    <template>
+      <vaadin-overlay id="overlay">
+        <template>
+          <vaadin-text-field autofocus></vaadin-text-field>
+        </template>
+      </vaadin-overlay>
+      <input id="focusable">
+    </template>
+  </dom-module>
+  <script>
+    document.addEventListener('WebComponentsReady', () => {
+      window.customElements.define('x-wrapper', class extends Polymer.Element {
+        static get is() {
+          return 'x-wrapper';
+        }
+      });
+    });
+  </script>
+
+  <test-fixture id="wrapper">
+    <template>
+      <x-wrapper></x-wrapper>
+    </template>
+  </test-fixture>
+
+  <input id="focusInput">
+
+  <script>
+    describe('restore focus on close', function() {
+      let overlay, parent, focusInput, focusable;
+
+      function runAfterOpen(overlay, callback) {
+        overlay.addEventListener('vaadin-overlay-open', callback);
+        overlay.opened = true;
+      }
+
+      function runAfterClose(overlay, callback) {
+        Polymer.RenderStatus.afterNextRender(overlay, callback);
+        overlay.opened = false;
+      }
+
+      beforeEach(() => {
+        parent = fixture('wrapper');
+        overlay = parent.$.overlay;
+        focusable = parent.$.focusable;
+        focusInput = document.getElementById('focusInput');
+        overlay._observer.flush();
+        window.focus();
+      });
+
+      afterEach(() => {
+        document.body.focus();
+      });
+
+      it('should not restore focus on close by default (restore-focus-on-close=false)', done => {
+        overlay.restoreFocusOnClose = false;
+        focusInput.focus();
+        runAfterOpen(overlay, () => {
+          runAfterClose(overlay, () => {
+            expect(overlay._getActiveElement()).to.not.equal(focusInput);
+            done();
+          });
+        });
+      });
+
+      it('should restore focus on close (restore-focus-on-close=true)', done => {
+        overlay.restoreFocusOnClose = true;
+        focusInput.focus();
+        runAfterOpen(overlay, () => {
+          runAfterClose(overlay, () => {
+            expect(overlay._getActiveElement()).to.equal(focusInput);
+            done();
+          });
+        });
+      });
+
+      it('should restore focus on close in Shadow DOM (restore-focus-on-close=true)', done => {
+        overlay.restoreFocusOnClose = true;
+        focusable.focus();
+        runAfterOpen(overlay, () => {
+          runAfterClose(overlay, () => {
+            expect(overlay._getActiveElement()).to.equal(focusable);
+            done();
+          });
+        });
+      });
+
+      it('should not restore focus on close if focus was changed', done => {
+        overlay.restoreFocusOnClose = true;
+        focusInput.focus();
+        runAfterOpen(overlay, () => {
+          focusable.focus();
+          runAfterClose(overlay, () => {
+            expect(overlay._getActiveElement()).to.equal(focusable);
+            done();
+          });
+        });
+      });
+
+    });
+  </script>
+</body>

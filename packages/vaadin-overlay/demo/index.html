@@ -157,6 +157,27 @@
       </template>
     </demo-snippet>
 
+    <h3>Restore Focus on Close</h3>
+    <demo-snippet>
+      <template>
+        <vaadin-overlay id="overlay-restore-focus" focus-trap restore-focus-on-close></vaadin-overlay>
+        <vaadin-button id="enter-overlay">Click and press Esc</vaadin-button>
+        <script>
+          var overlayRestoreFocus = document.querySelector('#overlay-restore-focus');
+          var enter = document.querySelector('#enter-overlay');
+          var counter = 0;
+
+          enter.addEventListener('click', function(e) {
+            overlayRestoreFocus.opened = true;
+          });
+
+          overlayRestoreFocus.renderer = function(root) {
+            root.textContent = 'Opened ' + ++counter + ' times';
+          };
+        </script>
+      </template>
+    </demo-snippet>
+
     <h3>Content Scrolling</h3>
     <demo-snippet>
       <template>
