@@ -322,10 +322,6 @@ This program is available under Apache License Version 2.0, available at https:/
             type: Object
           },
 
-          _boundIronOverlayCanceledListener: {
-            type: Object
-          },
-
           _originalContentPart: Object,
 
           _contentNodes: Array,
@@ -362,10 +358,7 @@ This program is available under Apache License Version 2.0, available at https:/
         });
 
         // Listener for preventing closing of the paper-dialog and all components extending `iron-overlay-behavior`.
-        this._boundIronOverlayCanceledListener = e => {
-          e.preventDefault();
-          window.removeEventListener('iron-overlay-canceled', this._boundIronOverlayCanceledListener);
-        };
+        this._boundIronOverlayCanceledListener = this._ironOverlayCanceled.bind(this);
 
         if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
           this._boundIosResizeListener = () => this._detectIosNavbar();
@@ -449,6 +442,11 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         this._boundIosResizeListener && window.removeEventListener('resize', this._boundIosResizeListener);
+      }
+
+      _ironOverlayCanceled(event) {
+        event.preventDefault();
+        window.removeEventListener('iron-overlay-canceled', this._boundIronOverlayCanceledListener);
       }
 
       _mouseDownListener(event) {
