@@ -97,6 +97,34 @@
           expect(getComputedStyle(textField.$.clearButton).getPropertyValue('display')).to.be.equal('none');
         });
 
+        it('should dispatch change event when clear button is clicked', function() {
+          const changeSpy = sinon.spy();
+          textField.addEventListener('change', changeSpy);
+          textField.clearButtonVisible = true;
+          textField.value = 'Foo';
+          textField.$.clearButton.click();
+          expect(changeSpy).to.be.calledOnce;
+        });
+
+        it('should set _valueClearing flag not to dipatch change event on mousedown and remove it it on click', function() {
+          // Testing internal implementation as it impossible to test native change event.
+          // For case when the field is focused, value is changed, clear button is pressed.
+          // Should not fire two change events.
+          const changeSpy = sinon.spy();
+          textField.addEventListener('change', changeSpy);
+
+          textField.$.clearButton.dispatchEvent(new CustomEvent('mousedown'));
+          expect(textField._valueClearing).to.be.true;
+
+          // Emulates native change coming from input.
+          textField.focusElement.dispatchEvent(new Event('change', {bubbles: true}));
+
+          textField.$.clearButton.dispatchEvent(new CustomEvent('click'));
+          expect(textField._valueClearing).to.be.false;
+
+          expect(changeSpy).to.be.calledOnce;
+        });
+
         ['disabled', 'readonly'].forEach(state => {
           it(`clear button should not be visible when field is ${state}`, function() {
             textField.clearButtonVisible = true;
