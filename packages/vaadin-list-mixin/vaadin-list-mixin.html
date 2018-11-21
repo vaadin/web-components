@@ -188,7 +188,7 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     focus() {
-      // In initialisation (e.g vaadin-dropdown-menu) observer might not been run yet.
+      // In initialisation (e.g vaadin-select) observer might not been run yet.
       this._observer.flush();
       (this.querySelector('[tabindex="0"]') || this.items[0]).focus();
     }
