@@ -350,6 +350,14 @@
           keyDownChar(list, 'b');
           expect(list.items[1].focused).to.be.true;
         });
+
+        it('should not throw when there are no items', () => {
+          list.innerHTML = '';
+          list._setItems([]);
+          expect(() => {
+            list.focus();
+          }).not.to.throw();
+        });
       });
 
       describe('orientation', () => {
