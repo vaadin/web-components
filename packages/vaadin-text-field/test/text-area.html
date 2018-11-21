@@ -137,6 +137,36 @@
 
     });
 
+    describe('vaadin-text-area-appear', () => {
+      let textArea;
+
+      beforeEach(() => textArea = fixture('default'));
+
+      it('should update height on show after hidden', done => {
+        const savedHeight = textArea.clientHeight;
+        textArea.hidden = true;
+        // Three new lines will expand initial height
+        textArea.value = '\n\n\n';
+        textArea.addEventListener('animationend', e => {
+          expect(textArea.clientHeight).to.be.above(savedHeight);
+          done();
+        });
+        textArea.hidden = false;
+      });
+
+      it('should not update height on custom animation name', done => {
+        const spy = sinon.spy(textArea, '_updateHeight');
+        textArea.addEventListener('animationend', e => {
+          expect(spy.called).to.be.false;
+          done();
+        });
+
+        const ev = new Event('animationend');
+        ev.animationName = 'foo';
+        textArea.dispatchEvent(ev);
+      });
+    });
+
     describe('multi-line', () => {
       let textArea, input, inputField;
 

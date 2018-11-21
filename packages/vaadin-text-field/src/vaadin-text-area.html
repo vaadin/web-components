@@ -36,6 +36,16 @@ This program is available under Apache License Version 2.0, available at https:/
       [part="input-field"] ::slotted(*) {
         align-self: flex-start;
       }
+
+      @keyframes vaadin-text-area-appear {
+        to {
+          opacity: 1;
+        }
+      }
+
+      :host {
+        animation: 1ms vaadin-text-area-appear;
+      }
     </style>
 
     <div class="vaadin-text-area-container">
@@ -154,6 +164,13 @@ This program is available under Apache License Version 2.0, available at https:/
         ready() {
           super.ready();
           this._updateHeight();
+          this.addEventListener('animationend', this._onAnimationEnd);
+        }
+
+        _onAnimationEnd(e) {
+          if (e.animationName.indexOf('vaadin-text-area-appear') === 0) {
+            this._updateHeight();
+          }
         }
 
         _textAreaValueChanged(value) {
