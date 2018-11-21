@@ -79,11 +79,11 @@
   }
   ,
   {
-    "name": "Detailed Events",
-    "url": "grid-detailed-event-demos",
-    "src": "grid-detailed-event-demos.html",
+    "name": "Event Context",
+    "url": "grid-event-context-demos",
+    "src": "grid-event-context-demos.html",
     "meta": {
-      "title": "vaadin-grid – Detailed Events",
+      "title": "vaadin-grid – Event Context",
       "description": "",
       "image": ""
     }

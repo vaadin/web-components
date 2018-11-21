@@ -1,0 +1,148 @@
+<!doctype html>
+
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../iron-test-helpers/mock-interactions.js"></script>
+  <link rel="import" href="../../test-fixture/test-fixture.html">
+
+  <link rel="import" href="helpers.html">
+  <link rel="import" href="../all-imports.html">
+</head>
+
+<body>
+
+  <test-fixture id="grid">
+    <template>
+      <vaadin-grid items='[{"foo": "bar"}]'>
+        <vaadin-grid-column-group header="column group header">
+          <template class="footer">
+            column group footer
+          </template>
+          <vaadin-grid-column path="foo" header="column header">
+            <template class="footer">
+              column footer
+            </template>
+          </vaadin-grid-column>
+        </vaadin-grid-column-group>
+      </vaadin-grid>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('get context info from event', () => {
+      let grid, column, columnGroup;
+
+      beforeEach(() => {
+        grid = fixture('grid');
+        column = grid.querySelector('vaadin-grid-column');
+        columnGroup = grid.querySelector('vaadin-grid-column-group');
+
+        grid.rowDetailsRenderer = function(root, grid, rowData) {
+          root.innerHTML = '<div>details</div>';
+        };
+        grid.openItemDetails(grid.items[0]);
+
+        flushGrid(grid);
+      });
+
+      const testEventContext = (target, expectedContext, done) => {
+        grid.addEventListener('click', e => {
+          const context = grid.getEventContext(e);
+          expect(context).to.deep.equals(expectedContext);
+          done();
+        });
+        click(target);
+      };
+
+      it('should include properties when targeting body', done => {
+        const cell = getContainerCell(grid.$.items, 0, 0);
+        testEventContext(cell,
+          {
+            item: {foo: 'bar'},
+            column: column,
+            section: 'body',
+            index: 0,
+            selected: false,
+            detailsOpened: true,
+            expanded: false,
+            level: 0
+          },
+          done);
+      });
+
+      it('should include properties when targeting header', done => {
+        const headerCell = getContainerCell(grid.$.header, 1, 0);
+        testEventContext(headerCell,
+          {
+            column: column,
+            section: 'header'
+          },
+          done);
+      });
+
+      it('should include properties when targeting footer', done => {
+        const footerCell = getContainerCell(grid.$.footer, 0, 0);
+        testEventContext(footerCell,
+          {
+            column: column,
+            section: 'footer'
+          },
+          done);
+      });
+
+      it('should include properties when targeting column-group header', done => {
+        const columnGroupHeader = getContainerCell(grid.$.header, 0, 0);
+        testEventContext(columnGroupHeader,
+          {
+            column: columnGroup,
+            section: 'header'
+          },
+          done);
+      });
+
+      it('should include properties when targeting column-group footer', done => {
+        const columnGroupFooter = getContainerCell(grid.$.footer, 1, 0);
+        testEventContext(columnGroupFooter,
+          {
+            column: columnGroup,
+            section: 'footer'
+          },
+          done);
+      });
+
+      it('should include properties when targeting row details', done => {
+        const detailsCell = getContainerCell(grid.$.items, 0, 1);
+        testEventContext(detailsCell,
+          {
+            item: {foo: 'bar'},
+            section: 'details',
+            index: 0,
+            selected: false,
+            detailsOpened: true,
+            expanded: false,
+            level: 0
+          },
+          done);
+      });
+
+      it('should return empty object when targeting empty body', done => {
+        testEventContext(grid.$.table, {}, done);
+      });
+
+      it('should return empty object when targeting grid element', done => {
+        testEventContext(grid, {}, done);
+      });
+
+    });
+
+  </script>
+
+</body>
+
+</html>
