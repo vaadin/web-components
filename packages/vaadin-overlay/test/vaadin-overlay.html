@@ -426,6 +426,12 @@
         expect(evtOnClosed.defaultPrevented).to.be.false;
       });
 
+      it('should remove `iron-overlay-canceled` listener when is closed', () => {
+        const spy = sinon.spy(window, 'removeEventListener');
+        click(parent);
+        expect(spy).to.be.called;
+      });
+
       it('should prevent closing the overlay when preventing vaadin-overlay-cancel', done => {
         overlay.addEventListener('vaadin-overlay-close', e => {
           e.preventDefault();
