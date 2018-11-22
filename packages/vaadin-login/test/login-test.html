@@ -30,6 +30,17 @@
         login = fixture('default');
       });
 
+      function fillUsernameAndPassword() {
+        const {username, password} = login.$;
+        const usernameValue = 'username';
+        const passwordValue = 'password';
+
+        username.value = usernameValue;
+        password.value = passwordValue;
+
+        return {username, password};
+      }
+
       it('should pass', () => {
         expect(login.localName).to.be.equal('vaadin-login');
       });
@@ -111,17 +122,7 @@
       });
 
       it('should trigger submit if both username and password are filled', () => {
-        const {username, password, loginForm} = login.$;
-        username.value = 'username';
-        password.value = 'password';
-
-        // Remove `allow-redirect` to create an async call from iron-form
-        loginForm.removeAttribute('allow-redirect');
-
-        // FIXME: Workaround for IE11 issue that breaks if it tries to send a request using an empty string
-        // Can be removed once we introduce the `login` event
-        const formElement = login.shadowRoot.querySelector('form');
-        formElement.setAttribute('action', '/');
+        const {password} = fillUsernameAndPassword();
 
         const submitSpy = sinon.spy(login, 'submit');
 
@@ -131,28 +132,17 @@
       });
 
       it('should disable button after submiting form', () => {
-        const {username, password, loginForm, submit} = login.$;
-        username.value = 'username';
-        password.value = 'password';
-
-        // Remove `allow-redirect` to create an async call from iron-form
-        loginForm.removeAttribute('allow-redirect');
-
-        // FIXME: Workaround for IE11 issue that breaks if it tries to send a request using an empty string
-        // Can be removed once we introduce the `login` event
-        const formElement = login.shadowRoot.querySelector('form');
-        formElement.setAttribute('action', '/');
+        const {submit} = login.$;
+        const {password} = fillUsernameAndPassword();
 
         MockInteractions.pressEnter(password);
-
 
         expect(submit.disabled).to.be.true;
       });
 
       it('should prevent submit call when login is disabled', () => {
-        const {username, password, loginForm, submit} = login.$;
-        username.value = 'username';
-        password.value = 'password';
+        const {loginForm, submit} = login.$;
+        const {password} = fillUsernameAndPassword();
 
         const submitSpy = sinon.spy(loginForm, 'submit');
 
@@ -174,21 +164,43 @@
       });
 
       it('should disable button on button click if form is valid', () => {
-        const {username, password, loginForm, submit} = login.$;
-        username.value = 'username';
-        password.value = 'password';
+        const {submit} = login.$;
 
-        // Remove `allow-redirect` to create an async call from iron-form
-        loginForm.removeAttribute('allow-redirect');
-
-        // FIXME: Workaround for IE11 issue that breaks if it tries to send a request using an empty string
-        // Can be removed once we introduce the `login` event
-        const formElement = login.shadowRoot.querySelector('form');
-        formElement.setAttribute('action', '/');
+        fillUsernameAndPassword();
 
         MockInteractions.tap(submit);
 
         expect(submit.disabled).to.be.true;
+      });
+
+      it('should trigger `login` event if no action is defined', () => {
+        const {username, password} = fillUsernameAndPassword();
+
+        const loginEventSpy = sinon.spy();
+
+        login.addEventListener('login', loginEventSpy);
+        MockInteractions.pressEnter(password);
+
+        expect(loginEventSpy.args[0][0]).to.have.deep.property('detail.username', username.value);
+        expect(loginEventSpy.args[0][0]).to.have.deep.property('detail.password', password.value);
+
+        login.removeEventListener('login', loginEventSpy);
+      });
+
+      it('should submit form if action is defined', () => {
+        const {password} = fillUsernameAndPassword();
+        const {loginForm} = login.$;
+
+        // Remove `allow-redirect` to create an async call from iron-form
+        loginForm.removeAttribute('allow-redirect');
+
+        login.action = '/login';
+
+        const submitSpy = sinon.spy(loginForm, 'submit');
+
+        MockInteractions.pressEnter(password);
+
+        expect(submitSpy.called).to.be.true;
       });
     });
 

@@ -10,6 +10,24 @@
     <vaadin-demo-snippet id="element-basic-demos-sample-example">
       <template preserve-content>
         <vaadin-login></vaadin-login>
+        <vaadin-dialog id="feedbackDialog">
+          <template>Login is being processed...</template>
+        </vaadin-dialog>
+        <script>
+          window.addDemoReadyListener('#element-basic-demos-sample-example', function(document) {
+            var login = document.querySelector('vaadin-login');
+            var feedbackDialog = document.querySelector('#feedbackDialog');
+
+            login.addEventListener('login', function() {
+              feedbackDialog.opened = true;
+
+              setTimeout(function() {
+                login.disabled = false;
+                feedbackDialog.opened = false;
+              }, 2000);
+            });
+          });
+        </script>
       </template>
     </vaadin-demo-snippet>
 
@@ -27,7 +45,7 @@
         <vaadin-dialog>
           <template>Please contact support.</template>
         </vaadin-dialog>
-        <script>          
+        <script>
           window.addDemoReadyListener('#listening-to-forgot-password-example', function(document) {
             var login = document.querySelector('vaadin-login');
             var dialog = document.querySelector('vaadin-dialog');

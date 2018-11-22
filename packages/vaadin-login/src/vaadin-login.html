@@ -90,7 +90,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             <p>[[i18n.errorMessage.message]]</p>
           </div>
           <iron-form id="loginForm" allow-redirect>
-            <form method="POST">
+            <form method="POST" action$="[[action]]">
               <vaadin-text-field label="[[i18n.form.username]]" name="username" id="username" autofocus required on-keydown="_handleInputKeydown"></vaadin-text-field>
               <vaadin-password-field label="[[i18n.form.password]]" name="password" id="password" required on-keydown="_handleInputKeydown"></vaadin-password-field>
 
@@ -132,6 +132,15 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
         static get properties() {
           return {
+            /**
+             * Defines how the login callback will be handled on a submit action:
+             * - If set, a synchronous POST call will be fired to the path defined.
+             * - If left blank, a `login` event will be dispatched containing `username` and `password`
+            */
+            action: {
+              type: String,
+              value: null
+            },
             /**
              * If set, disable the "Log in" button and prevent user from submitting login form
              */
@@ -207,7 +216,20 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             return;
           }
 
-          this.$.loginForm.submit();
+          if (this.action == null) {
+            const eventDetails = {
+              bubbles: true,
+              cancelable: true,
+              detail: {
+                username: this.$.username.value,
+                password: this.$.password.value
+              }
+            };
+            this.dispatchEvent(new CustomEvent('login', eventDetails));
+          } else {
+            this.$.loginForm.submit();
+          }
+
           this.disabled = true;
         }
 
@@ -232,6 +254,20 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         _isEnterKey(e) {
           return e.key === 'Enter' || e.keyCode === 13;
         }
+
+        /**
+         * Fired when user clicks on the "Forgot password" button
+         *
+         * @event forgot-password
+        */
+
+        /**
+         * Fired when an user submits the login.
+         * This event is fired **only** if `action` is `null`
+         *
+         * @event login
+         *
+        */
       }
 
       customElements.define(VaadinLogin.is, VaadinLogin);
