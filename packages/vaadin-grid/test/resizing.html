@@ -62,12 +62,13 @@
     describe('resizing', () => {
 
       describe('notifyResize', () => {
-        let grid, scroller;
+        let component, grid, scroller;
 
         before(done => ensureDefined('test-component', done));
 
         beforeEach(done => {
-          grid = fixture('default').$.grid;
+          component = fixture('default');
+          grid = component.$.grid;
           grid.dataProvider = infiniteDataProvider;
           listenOnce(grid, 'animationend', () => {
             flushGrid(grid);
@@ -130,6 +131,12 @@
             expect(grid.clientHeight).to.equal(headerHeight + bodyHeight + footerHeight);
             done();
           });
+        });
+
+        it('should have the default height inside a column flexbox', () => {
+          component.style.display = 'flex';
+          component.style.flexDirection = 'column';
+          expect(grid.getBoundingClientRect().height).to.equal(400);
         });
 
       });

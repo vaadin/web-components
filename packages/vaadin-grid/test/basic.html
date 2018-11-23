@@ -367,10 +367,10 @@
       describeMissingImportWarning('vaadin-grid-sorter');
       describeMissingImportWarning('vaadin-grid-tree-toggle');
 
-      it('should have flex: 1 1 100% style', () => {
+      it('should have flex: 1 1 auto style', () => {
         expect(parseInt(window.getComputedStyle(grid).getPropertyValue('flex-shrink'))).to.equal(1);
         expect(parseInt(window.getComputedStyle(grid).getPropertyValue('flex-grow'))).to.equal(1);
-        expect(window.getComputedStyle(grid).getPropertyValue('flex-basis')).to.equal('100%');
+        expect(window.getComputedStyle(grid).getPropertyValue('flex-basis')).to.equal('auto');
       });
 
       describe('flex child', () => {
