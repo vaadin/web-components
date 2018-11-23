@@ -10,36 +10,23 @@
 
 ## Example Usage
 ```html
-<dom-bind>
-  <template>
-    <iron-ajax auto url="https://demo.vaadin.com/demo-data/1.0/people?count=20" handle-as="json" last-response="{{users}}"></iron-ajax>
+<vaadin-grid theme="row-dividers" column-reordering-allowed multi-sort>
+  <vaadin-grid-selection-column auto-select frozen></vaadin-grid-selection-column>
+  <vaadin-grid-sort-column width="9em" path="firstName"></vaadin-grid-sort-column>
+  <vaadin-grid-sort-column width="9em" path="lastName"></vaadin-grid-sort-column>
+  <vaadin-grid-column id="addresscolumn" width="15em" flex-grow="2" header="Address"></vaadin-grid-column>
+</vaadin-grid>
 
-    <vaadin-grid theme="row-dividers" items="[[users.result]]" column-reordering-allowed multi-sort>
+<script>
+  // Customize the "Address" column's renderer
+  document.querySelector('#addresscolumn').renderer = (root, grid, rowData) => {
+    root.textContent = `${rowData.item.address.street}, ${rowData.item.address.city}`;
+  };
 
-      <vaadin-grid-selection-column auto-select frozen> </vaadin-grid-selection-column>
-
-      <vaadin-grid-column width="9em">
-        <template class="header">
-          <vaadin-grid-sorter path="firstName">First name</vaadin-grid-sorter>
-        </template>
-        <template>[[item.firstName]]</template>
-      </vaadin-grid-column>
-
-      <vaadin-grid-column width="9em">
-        <template class="header">
-          <vaadin-grid-sorter path="lastName">Last name</vaadin-grid-sorter>
-        </template>
-        <template>[[item.lastName]]</template>
-      </vaadin-grid-column>
-
-      <vaadin-grid-column width="15em" flex-grow="2">
-        <template class="header">
-          <vaadin-grid-sorter path="address.street">Address</vaadin-grid-sorter>
-        </template>
-        <template>[[item.address.street]], [[item.address.city]]</template>
-      </vaadin-grid-column>
-
-    </vaadin-grid>
-  </template>
-</dom-bind>
+  // Populate the grid with data
+  const grid = document.querySelector('vaadin-grid');
+  fetch('https://demo.vaadin.com/demo-data/1.0/people?count=200')
+    .then(res => res.json())
+    .then(json => grid.items = json.result);
+</script>
 ```
