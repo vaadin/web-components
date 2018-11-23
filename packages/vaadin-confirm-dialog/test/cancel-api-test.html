@@ -1,0 +1,70 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-confirm-dialog tests</title>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../../test-fixture/test-fixture.html">
+  <link rel="import" href="../vaadin-confirm-dialog.html">
+  <link rel="import" href="../../iron-test-helpers/mock-interactions.html">
+</head>
+
+<body>
+  <test-fixture id="no-cancel-cancelable-on-esc">
+    <template>
+      <vaadin-confirm-dialog opened>Confirmation message</vaadin-confirm-dialog>
+    </template>
+  </test-fixture>
+  <test-fixture id="no-cancel-not-cancelable-on-esc">
+    <template>
+      <vaadin-confirm-dialog opened no-close-on-esc>Confirmation message</vaadin-confirm-dialog>
+    </template>
+  </test-fixture>
+  <test-fixture id="cancel-cancelable-on-esc">
+    <template>
+      <vaadin-confirm-dialog cancel opened>Confirmation message</vaadin-confirm-dialog>
+    </template>
+  </test-fixture>
+  <test-fixture id="cancel-not-cancelable-on-esc">
+    <template>
+      <vaadin-confirm-dialog cancel opened no-close-on-esc>Confirmation message</vaadin-confirm-dialog>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('Confirm Reject dialog test', function() {
+
+      function testCloseOnEsc(fixtureName, cancelable) {
+        const confirm = fixture(fixtureName);
+
+        expect(confirm.opened, 'Confirm should start out opened').to.be.true;
+        expect(confirm.noCloseOnEsc, 'Close on esc does not have the expected initial value').to.equal(!cancelable);
+
+        let eventWasEmited = false;
+        const listener = () => eventWasEmited = true;
+        confirm.addEventListener('cancel', listener);
+        try {
+          MockInteractions.pressAndReleaseKeyOn(document.body, 27, [], 'Escape');
+          expect(confirm.opened).to.equal(!cancelable);
+          expect(eventWasEmited).to.equal(cancelable);
+        } finally {
+          confirm.removeEventListener('cancel', listener);
+        }
+      }
+
+      it('should allow closing when pressing esc on a dialog without cancel if no-close-on-esc is true',
+        () => testCloseOnEsc('no-cancel-cancelable-on-esc', true));
+
+      it('should not allow closing when pressing esc on a dialog without cancel if no-close-on-esc is false',
+        () => testCloseOnEsc('no-cancel-not-cancelable-on-esc', false));
+
+      it('should allow closing when pressing esc on a dialog with cancel if no-close-on-esc is true',
+        () => testCloseOnEsc('cancel-cancelable-on-esc', true));
+
+      it('should not allow closing when pressing esc on a dialog with cancel if no-close-on-esc is false',
+        () => testCloseOnEsc('cancel-not-cancelable-on-esc', false));
+
+    });
+  </script>
+</body>

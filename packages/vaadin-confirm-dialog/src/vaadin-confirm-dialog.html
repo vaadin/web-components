@@ -25,7 +25,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       opened="{{opened}}"
       aria-label="[[_getAriaLabel(header)]]"
       no-close-on-outside-click
-      no-close-on-esc>
+      no-close-on-esc="[[noCloseOnEsc]]">
       <template>
         <div part="header">
           <slot name="header">
@@ -155,6 +155,13 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
               value: 'primary'
             },
             /**
+             * Set to true to disable closing dialog on Escape press
+             */
+            noCloseOnEsc: {
+              type: Boolean,
+              value: false
+            },
+            /**
              * Whether to show cancel button or not.
              */
             reject: {
@@ -230,10 +237,8 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         }
 
         _escPressed(event) {
-          if (this.cancel) {
+          if (!event.defaultPrevented) {
             this._cancel();
-          } else {
-            this.opened = false;
           }
         }
 
