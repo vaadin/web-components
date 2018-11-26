@@ -796,8 +796,8 @@ This program is available under Apache License Version 2.0, available at https:/
           return value == 1 ? plural.one : plural.many;
         }
 
-        _isMultiple() {
-          return this.maxFiles != 1;
+        _isMultiple(maxFiles) {
+          return maxFiles != 1;
         }
 
         /**
