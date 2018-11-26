@@ -22,6 +22,12 @@
       </template>
   </test-fixture>
 
+  <test-fixture id="displayed-error">
+    <template>
+      <vaadin-login error></vaadin-login>
+    </template>
+  </test-fixture>  
+
   <script>
     describe('Login test', () => {
       var login;
@@ -202,6 +208,20 @@
 
         expect(submitSpy.called).to.be.true;
       });
+
+      it('error should be hidden by default', () => {
+        const errorPart = login.root.querySelectorAll('div[part="error-message"]')[0];
+        expect(errorPart.offsetWidth).to.equal(0);
+        expect(errorPart.offsetHeight).to.equal(0);
+      });
+
+      it('should be possible to set error attribute', () => {
+        expect(login.error).to.be.false;
+        login.error = true;
+        const errorPart = login.root.querySelectorAll('div[part="error-message"]')[0];
+        expect(errorPart.offsetWidth).not.to.equal(0);
+        expect(errorPart.offsetHeight).not.to.equal(0);
+      });
     });
 
     describe('hidden button test', function() {
@@ -213,6 +233,30 @@
 
       it('should hide forgot password button', function() {
         expect(login.$.forgotPasswordButton.hidden).to.be.true;
+      });
+    });
+
+    describe('error message test', function() {
+      var login;
+
+      beforeEach(function() {
+        login = fixture('displayed-error');
+      });
+
+      it('should show error message if the error attribute is set', function() {
+        const errorPart = login.root.querySelectorAll('div[part="error-message"]')[0];
+        expect(errorPart.hidden).to.be.false;
+        expect(errorPart.offsetWidth).not.to.equal(0);
+        expect(errorPart.offsetHeight).not.to.equal(0);
+      });
+
+      it('should be possible to unset the error', function() {
+        expect(login.error).to.be.true;
+        login.error = false;
+        const errorPart = login.root.querySelectorAll('div[part="error-message"]')[0];
+        expect(errorPart.hidden).to.be.true;
+        expect(errorPart.offsetWidth).to.equal(0);
+        expect(errorPart.offsetHeight).to.equal(0);
       });
     });
   </script>

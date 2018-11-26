@@ -73,7 +73,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       }
 
       [part="error-message"] {
-        display: none;
         position: relative;
       }
     </style>
@@ -85,7 +84,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
         <div part="form">
           <h2>[[i18n.form.title]]</h2>
-          <div part="error-message">
+          <div part="error-message" hidden$="[[!error]]">
             <h5>[[i18n.errorMessage.title]]</h5>
             <p>[[i18n.errorMessage.message]]</p>
           </div>
@@ -145,6 +144,14 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
              * If set, disable the "Log in" button and prevent user from submitting login form
              */
             disabled: {
+              type: Boolean,
+              value: false,
+              reflectToAttribute: true
+            },
+            /**
+             * If set, the error message is shown. The message is hidden by default.
+             */
+            error: {
               type: Boolean,
               value: false,
               reflectToAttribute: true
@@ -216,6 +223,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             return;
           }
 
+          this.error = false;
           if (this.action == null) {
             const eventDetails = {
               bubbles: true,
