@@ -1,0 +1,34 @@
+{
+  "name": "@vaadin/vaadin-menu",
+  "version": "0.1.0",
+  "description": "vaadin-menu",
+  "main": "vaadin-menu.html",
+  "repository": "vaadin/vaadin-menu",
+  "keywords": [
+    "Vaadin",
+    "vaadin-menu",
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
+  "author": "Vaadin Ltd",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/vaadin/vaadin-menu/issues"
+  },
+  "homepage": "https://vaadin.com/components",
+  "files": [
+    "vaadin-*.js",
+    "src",
+    "theme"
+  ],
+  "scripts": {
+    "test": "wct",
+    "prestart": "polymer analyze vaadin-* > analysis.json",
+    "start": "polymer serve --open",
+    "preversion": "gulp version:update"
+  },
+  "devDependencies": {
+    "@vaadin/vaadin-component-dev-dependencies": "^1.0.0"
+  }
+}
