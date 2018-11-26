@@ -7,6 +7,7 @@
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <script src="../../iron-test-helpers/mock-interactions.js"></script>
   <link rel="import" href="../../test-fixture/test-fixture.html">
+  <link rel="import" href="../../iron-overlay-behavior/iron-overlay-behavior.html">
   <link rel="import" href="../../iron-test-helpers/iron-test-helpers.html">
   <link rel="import" href="../vaadin-overlay.html">
 </head>
@@ -77,6 +78,41 @@
       </div>
     </template>
   </test-fixture>
+
+  <test-fixture id="iron">
+    <template>
+      <div>
+        <iron-overlay id="parent">
+          <style>
+            :host {
+              display: block;
+            }
+          </style>
+          <vaadin-overlay>
+            <template>
+              overlay-content
+            </template>
+          </vaadin-overlay>
+        </iron-overlay>
+      </div>
+    </template>
+  </test-fixture>
+
+  <dom-module id="iron-overlay">
+    <template>
+      <slot></slot>
+    </template>
+  </dom-module>
+  <script>
+    customElements.whenDefined('vaadin-overlay').then(() => {
+      Polymer({
+        is: 'iron-overlay',
+        behaviors: [
+          Polymer.IronOverlayBehavior
+        ]
+      });
+    });
+  </script>
 
   <script>
     const fire = (type, el) =>
@@ -426,12 +462,6 @@
         expect(evtOnClosed.defaultPrevented).to.be.false;
       });
 
-      it('should remove `iron-overlay-canceled` listener when is closed', () => {
-        const spy = sinon.spy(window, 'removeEventListener');
-        click(parent);
-        expect(spy).to.be.called;
-      });
-
       it('should prevent closing the overlay when preventing vaadin-overlay-cancel', done => {
         overlay.addEventListener('vaadin-overlay-close', e => {
           e.preventDefault();
@@ -587,6 +617,68 @@
         const spy = sinon.spy(inner, '_exitModalState');
         wrapper.opened = false;
         expect(spy).to.not.be.called;
+      });
+    });
+
+    describe('inside the iron-overlay', function() {
+      var overlay, parent, spy;
+
+      function esc() {
+        const evt = MockInteractions.keyboardEventFor('keydown', 27, [], 'Escape');
+        document.dispatchEvent(evt);
+      }
+
+      function nextRender(el) {
+        return new Promise(resolve => {
+          Polymer.RenderStatus.afterNextRender(el, resolve);
+        });
+      }
+
+      beforeEach(async() => {
+        parent = fixture('iron').children[0];
+        overlay = parent.querySelector('vaadin-overlay');
+        overlay._observer.flush();
+        parent.open();
+        await nextRender(parent);
+        overlay.opened = true;
+        await nextRender(overlay);
+        spy = sinon.spy();
+        document.addEventListener('iron-overlay-canceled', spy);
+      });
+
+      afterEach(() => {
+        document.removeEventListener('iron-overlay-canceled', spy);
+      });
+
+      it('should prevent `iron-overlay-canceled` on Esc keydown when opened', async() => {
+        esc();
+        expect(parent.canceled).to.be.false;
+        expect(spy).to.be.calledOnce;
+        expect(spy.firstCall.args[0].defaultPrevented).to.be.true;
+
+        spy.reset();
+        overlay.opened = false;
+        await nextRender(overlay);
+
+        esc();
+        expect(parent.canceled).to.be.true;
+        expect(spy).to.be.calledOnce;
+        expect(spy.firstCall.args[0].defaultPrevented).to.be.false;
+      });
+
+      it('should prevent `iron-overlay-canceled` on subsequent Esc if still opened', () => {
+        overlay.addEventListener('vaadin-overlay-escape-press', e => e.preventDefault());
+
+        esc();
+        expect(parent.canceled).to.be.false;
+        expect(spy).to.be.calledOnce;
+        expect(spy.firstCall.args[0].defaultPrevented).to.be.true;
+
+        spy.reset();
+        esc();
+        expect(parent.canceled).to.be.false;
+        expect(spy).to.be.calledOnce;
+        expect(spy.firstCall.args[0].defaultPrevented).to.be.true;
       });
     });
   </script>

@@ -416,10 +416,6 @@ This program is available under Apache License Version 2.0, available at https:/
       connectedCallback() {
         super.connectedCallback();
 
-        if (this.parentNode === document.body) {
-          window.addEventListener('iron-overlay-canceled', this._boundIronOverlayCanceledListener);
-        }
-
         if (this._boundIosResizeListener) {
           this._detectIosNavbar();
           window.addEventListener('resize', this._boundIosResizeListener);
@@ -429,24 +425,11 @@ This program is available under Apache License Version 2.0, available at https:/
       disconnectedCallback() {
         super.disconnectedCallback();
 
-        // Removing the event listener in case `iron-overlay-canceled` was not fired.
-        // In Shady DOM the overlay can be reattached asynchronously so we need to check that the overlay is not currently attached to body.
-        if (window.ShadyDOM && window.ShadyDOM.inUse) {
-          if (this.parentNode !== document.body) {
-            window.removeEventListener('iron-overlay-canceled', this._boundIronOverlayCanceledListener);
-          }
-        } else {
-          if (!this.parentNode) {
-            window.removeEventListener('iron-overlay-canceled', this._boundIronOverlayCanceledListener);
-          }
-        }
-
         this._boundIosResizeListener && window.removeEventListener('resize', this._boundIosResizeListener);
       }
 
       _ironOverlayCanceled(event) {
         event.preventDefault();
-        window.removeEventListener('iron-overlay-canceled', this._boundIronOverlayCanceledListener);
       }
 
       _mouseDownListener(event) {
@@ -577,6 +560,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         const finishOpening = () => {
           this.removeAttribute('opening');
+          document.addEventListener('iron-overlay-canceled', this._boundIronOverlayCanceledListener);
         };
 
         if (this._shouldAnimate()) {
@@ -600,6 +584,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this.setAttribute('closing', '');
 
           const finishClosing = () => {
+            document.removeEventListener('iron-overlay-canceled', this._boundIronOverlayCanceledListener);
             this._detachOverlay();
             this.removeAttribute('closing');
           };
@@ -674,7 +659,6 @@ This program is available under Apache License Version 2.0, available at https:/
         document.removeEventListener('mouseup', this._boundMouseUpListener);
         document.removeEventListener('click', this._boundOutsideClickListener, true);
         document.removeEventListener('keydown', this._boundKeydownListener);
-        window.removeEventListener('iron-overlay-canceled', this._boundIronOverlayCanceledListener);
 
         if (this._previousDocumentPointerEvents !== undefined) {
           // Restore body pointer-events
