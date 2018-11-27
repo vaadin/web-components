@@ -23,12 +23,12 @@
           <vaadin-grid-column width="60px" flex-grow="0" text-align="end" header="#"></vaadin-grid-column>
           <vaadin-grid-column width="60px" flex-grow="0" text-align="center"></vaadin-grid-column>
 
-          <vaadin-grid-column-group>
+          <vaadin-grid-column-group header="Name">
             <vaadin-grid-column path="name.first" width="calc(25% - 20px)"></vaadin-grid-column>
             <vaadin-grid-column path="name.last" width="calc(25% - 20px)"></vaadin-grid-column>
           </vaadin-grid-column-group>
 
-          <vaadin-grid-column-group>
+          <vaadin-grid-column-group header="Location">
             <vaadin-grid-column path="location.city" width="calc(25% - 20px)"></vaadin-grid-column>
             <vaadin-grid-column path="location.state" width="calc(25% - 20px)"></vaadin-grid-column>
             <vaadin-grid-column path="location.street" width="200px"></vaadin-grid-column>
@@ -50,14 +50,6 @@
               }
               root.firstElementChild.alt = rowData.item.name.first + ' ' + rowData.item.name.last;
               root.firstElementChild.src = rowData.item.picture.thumbnail;
-            };
-
-            const groups = document.querySelectorAll('vaadin-grid-column-group');
-            groups[0].headerRenderer = function(root, column, rowData) {
-              root.textContent = 'Name';
-            };
-            groups[1].headerRenderer = function(root, column, rowData) {
-              root.textContent = 'Location';
             };
           });
         </script>
@@ -180,12 +172,12 @@
           <vaadin-grid-column resizable width="60px" flex-grow="0" text-align="end" header="#"></vaadin-grid-column>
           <vaadin-grid-column resizable width="60px" flex-grow="0" text-align="center"></vaadin-grid-column>
 
-          <vaadin-grid-column-group resizable>
+          <vaadin-grid-column-group header="Name" resizable>
             <vaadin-grid-column path="name.first" width="calc(25% - 20px)"></vaadin-grid-column>
             <vaadin-grid-column path="name.last" width="calc(25% - 20px)"></vaadin-grid-column>
           </vaadin-grid-column-group>
 
-          <vaadin-grid-column-group resizable>
+          <vaadin-grid-column-group header="Location" resizable>
             <vaadin-grid-column path="location.city" width="calc(25% - 20px)"></vaadin-grid-column>
             <vaadin-grid-column path="location.state" width="calc(25% - 20px)"></vaadin-grid-column>
             <vaadin-grid-column path="location.street" width="200px"></vaadin-grid-column>
@@ -207,14 +199,6 @@
               }
               root.firstElementChild.alt = rowData.item.name.first + ' ' + rowData.item.name.last;
               root.firstElementChild.src = rowData.item.picture.thumbnail;
-            };
-
-            const groups = document.querySelectorAll('vaadin-grid-column-group');
-            groups[0].headerRenderer = function(root, column, rowData) {
-              root.textContent = 'Name';
-            };
-            groups[1].headerRenderer = function(root, column, rowData) {
-              root.textContent = 'Location';
             };
           });
         </script>
