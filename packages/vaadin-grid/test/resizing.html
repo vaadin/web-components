@@ -133,10 +133,37 @@
           });
         });
 
-        it('should have the default height inside a column flexbox', () => {
-          component.style.display = 'flex';
-          component.style.flexDirection = 'column';
-          expect(grid.getBoundingClientRect().height).to.equal(400);
+        describe('flexbox parent', () => {
+
+          beforeEach(() => {
+            grid.style.height = grid.style.width = '';
+            grid.size = 1;
+            component.style.display = 'flex';
+            component.style.flexDirection = 'column';
+            grid.heightByRows = true;
+          });
+
+          it('should have the default height inside a column flexbox', () => {
+            grid.heightByRows = false;
+            expect(grid.getBoundingClientRect().height).to.equal(400);
+          });
+
+          it('should auto-grow inside a fixed height column flexbox', () => {
+            component.style.height = '500px';
+            expect(grid.getBoundingClientRect().height).to.equal(129);
+          });
+
+          it('should auto-grow inside a fixed height row flexbox', () => {
+            component.style.flexDirection = 'row';
+            component.style.height = '500px';
+            expect(grid.getBoundingClientRect().height).to.equal(129);
+          });
+
+          it('should not shrink horizontally inside a row flexbox', () => {
+            component.style.flexDirection = 'row';
+            expect(grid.getBoundingClientRect().width).to.be.above(890);
+          });
+
         });
 
       });
