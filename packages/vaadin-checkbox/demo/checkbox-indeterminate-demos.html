@@ -13,34 +13,33 @@
         <vaadin-checkbox class="select-all">Select All</vaadin-checkbox>
         <vaadin-checkbox value="one">Option one</vaadin-checkbox>
         <vaadin-checkbox value="two">Option two</vaadin-checkbox>
-          <script>
-            window.addDemoReadyListener('#checkbox-indeterminate-demo', function(document) {
-              const options = Array.from(document.querySelectorAll('vaadin-checkbox[value]'));
-              const selectAll = document.querySelector('.select-all');
+        <script>
+          window.addDemoReadyListener('#checkbox-indeterminate-demo', function(document) {
+            const options = Array.from(document.querySelectorAll('vaadin-checkbox[value]'));
+            const selectAll = document.querySelector('.select-all');
 
-              selectAll.addEventListener('change', function() {
-                options.forEach(function(option) {
-                  option.checked = selectAll.checked;
-                });
-              });
-
-              const syncState = function() {
-                const isChecked = function(cb) {
-                  return cb.checked;
-                };
-                selectAll.checked = options.every(isChecked);
-                selectAll.indeterminate = options.some(isChecked) && !options.every(isChecked);
-              };
-
+            selectAll.addEventListener('change', function() {
               options.forEach(function(option) {
-                option.addEventListener('change', syncState);
+                option.checked = selectAll.checked;
               });
-
-              options[0].checked = true;
-              syncState();
             });
-          </script>
-        </dom-module>
+
+            const syncState = function() {
+              const isChecked = function(cb) {
+                return cb.checked;
+              };
+              selectAll.checked = options.every(isChecked);
+              selectAll.indeterminate = options.some(isChecked) && !options.every(isChecked);
+            };
+
+            options.forEach(function(option) {
+              option.addEventListener('change', syncState);
+            });
+
+            options[0].checked = true;
+            syncState();
+          });
+        </script>
       </template>
     </vaadin-demo-snippet>
 
