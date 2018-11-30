@@ -45,13 +45,6 @@ gemini.suite('vaadin-text-field', function(rootSuite) {
         .capture('rtl');
     });
 
-    gemini.suite(`text-field-integration-${theme}`, function(suite) {
-      suite
-        .setUrl(`vaadin-text-field/integration.html?theme=${theme}`)
-        .setCaptureElements('#integration')
-        .capture('integration');
-    });
-
     gemini.suite(`text-field-clear-button-${theme}`, function(suite) {
       suite
         .setUrl(`vaadin-text-field/text-field-clear-btn.html?theme=${theme}`)
