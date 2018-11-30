@@ -32,10 +32,10 @@
 
         sinon.stub(overlay, '_shouldAnimate', () => true);
 
-        sinon.stub(overlay, '_enqueueAnimation', type => {
+        sinon.stub(overlay, '_enqueueAnimation', (type, callback) => {
           const handler = `__${type}Handler`;
           overlay[handler] = Polymer.Debouncer.debounce(overlay[handler], Polymer.Async.timeOut, () => {
-            overlay.removeAttribute(type);
+            callback();
           });
         });
 
@@ -43,6 +43,10 @@
           const handler = `__${type}Handler`;
           overlay[handler].flush();
         });
+      });
+
+      afterEach(() => {
+        overlay.opened = false;
       });
 
       it('should flush closing overlay when re-opened while closing animation is in progress', () => {
@@ -60,6 +64,16 @@
         overlay.opened = false;
 
         expect(overlay.hasAttribute('opening')).to.be.false;
+      });
+
+      it('should detach the overlay even if it is scheduled for reopening', () => {
+        overlay.opened = true;
+        overlay.opened = false;
+        overlay.opened = true;
+        overlay.opened = false;
+        overlay._flushAnimation('closing');
+
+        expect(overlay.parentNode).not.to.equal(document.body);
       });
     });
   </script>
