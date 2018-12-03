@@ -319,30 +319,33 @@ This program is available under Apache License Version 2.0, available at https:/
         _changeSelectedButton(button) {
           this._checkedButton = button;
           this.readonly && this._updateDisableButtons();
-          this._setFocusable(this._radioButtons.indexOf(button));
+          button && this._setFocusable(this._radioButtons.indexOf(button));
         }
 
         _checkedButtonChanged(checkedButton) {
           this._radioButtons.forEach(button => button.checked = button === checkedButton);
-          this.value = checkedButton.value;
+          if (checkedButton) {
+            this.value = checkedButton.value;
+          }
           this.validate();
         }
 
         _valueChanged(newV, oldV) {
+          if (oldV && (newV === '' || newV === null || newV === undefined)) {
+            this._changeSelectedButton(null);
+            this.removeAttribute('has-value');
+            return;
+          }
+
           if (!this._checkedButton || newV != this._checkedButton.value) {
             const newCheckedButton = this._radioButtons.filter(button => button.value == newV)[0];
 
             if (newCheckedButton) {
               this._selectButton(newCheckedButton);
+              this.setAttribute('has-value', '');
             } else {
               console.warn(`No <vaadin-radio-button> with value ${newV} found.`);
             }
-          }
-
-          if (newV !== '' && newV != null) {
-            this.setAttribute('has-value', '');
-          } else {
-            this.removeAttribute('has-value');
           }
         }
 

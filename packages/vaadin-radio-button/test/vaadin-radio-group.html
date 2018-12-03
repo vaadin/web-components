@@ -253,6 +253,18 @@
         expect(vaadinRadioButtonList[0].checked).to.be.true;
       });
 
+      ['', null, undefined].forEach(value => {
+        it(`should uncheck proper button when value is set to "${value}"`, () => {
+          vaadinRadioButtonGroup.value = '2';
+
+          expect(vaadinRadioButtonList[1].checked).to.be.true;
+
+          vaadinRadioButtonGroup.value = value;
+
+          expect(vaadinRadioButtonList[1].checked).to.be.false;
+        });
+      });
+
       it('should NOT steal focus from currently focused element', () => {
         const focusInput = document.createElement('input');
         document.body.appendChild(focusInput);
