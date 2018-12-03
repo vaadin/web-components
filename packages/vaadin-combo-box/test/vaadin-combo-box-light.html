@@ -76,6 +76,9 @@
       });
 
       it('should prevent default on overlay down', () => {
+        comboBox.open();
+        comboBox.close();
+
         const e = new CustomEvent('mousedown', {bubbles: true});
         const spy = sinon.spy(e, 'preventDefault');
         comboBox.$.overlay.$.dropdown.$.overlay.dispatchEvent(e);
@@ -163,6 +166,9 @@
       beforeEach(() => comboBox = fixture('combobox-light-theme'));
 
       it('should propagate theme attribute to overlay', () => {
+        comboBox.open();
+        comboBox.close();
+
         expect(comboBox.$.overlay.$.dropdown.$.overlay.getAttribute('theme')).to.equal('foo');
       });
 

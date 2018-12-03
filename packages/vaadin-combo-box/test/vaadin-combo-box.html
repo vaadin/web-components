@@ -245,6 +245,9 @@
         });
 
         it('should not open the overlay after clearing the value', () => {
+          comboBox.open();
+          comboBox.close();
+
           const overlayElement = comboBox.$.overlay.$.dropdown.$.overlay;
           comboBox.value = 'foo';
 
@@ -257,6 +260,10 @@
       describe('focus API', () => {
         it('should not be focused by default', () => {
           expect(comboBox.hasAttribute('focused')).to.be.false;
+        });
+
+        it('should not throw on focusout', () => {
+          expect(() => comboBox.dispatchEvent(new Event('focusout'))).not.to.throw(Error);
         });
 
         describe('methods', () => {
@@ -275,6 +282,12 @@
         });
 
         describe('touch-devices', () => {
+
+          beforeEach(() => {
+            comboBox.open();
+            comboBox.close();
+          });
+
           it('should blur the input on touchend', () => {
             comboBox.focus();
 
@@ -323,6 +336,9 @@
         });
 
         it('should propagate theme attribute to overlay', () => {
+          comboBox.open();
+          comboBox.close();
+
           expect(comboBox.$.overlay.$.dropdown.$.overlay.getAttribute('theme')).to.equal('foo');
         });
 

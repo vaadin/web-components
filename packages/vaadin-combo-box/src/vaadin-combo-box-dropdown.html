@@ -75,7 +75,10 @@ This program is available under Apache License Version 2.0, available at https:/
 
       static get properties() {
         return {
-          opened: Boolean,
+          opened: {
+            type: Boolean,
+            observer: '_openedChanged'
+          },
 
           template: {
             type: Object,
@@ -102,10 +105,6 @@ This program is available under Apache License Version 2.0, available at https:/
            */
           theme: String
         };
-      }
-
-      static get observers() {
-        return ['_openedChanged(opened)'];
       }
 
       constructor() {
@@ -157,7 +156,11 @@ This program is available under Apache License Version 2.0, available at https:/
        * @event vaadin-combo-box-dropdown-closed
        */
 
-      _openedChanged(opened) {
+      _openedChanged(opened, oldValue) {
+        if (!!opened === !!oldValue) {
+          return;
+        }
+
         if (opened) {
           this.$.overlay.style.position = this._isPositionFixed(this.positionTarget) ? 'fixed' : 'absolute';
           this._setPosition();

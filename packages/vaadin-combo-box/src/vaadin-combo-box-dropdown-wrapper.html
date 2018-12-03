@@ -12,48 +12,51 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <dom-module id="vaadin-combo-box-dropdown-wrapper">
   <template>
-    <style>
-      #scroller {
-        overflow: auto;
+    <!-- Stamping the content is postponed until the combo box is opened for the first time -->
+    <template id="dropdown-template" is="dom-if">
+      <vaadin-combo-box-dropdown id="dropdown"
+          hidden="[[_hidden(_items.*, loading)]]"
+          position-target="[[positionTarget]]"
+          on-template-changed="_templateChanged"
+          on-position-changed="_setOverlayHeight"
+          theme="[[theme]]">
+        <template>
+          <style>
+            #scroller {
+              overflow: auto;
 
-        /* Fixes item background from getting on top of scrollbars on Safari */
-        transform: translate3d(0, 0, 0);
+              /* Fixes item background from getting on top of scrollbars on Safari */
+              transform: translate3d(0, 0, 0);
 
-        /* Enable momentum scrolling on iOS (iron-list v1.2+ no longer does it for us) */
-        -webkit-overflow-scrolling: touch;
+              /* Enable momentum scrolling on iOS (iron-list v1.2+ no longer does it for us) */
+              -webkit-overflow-scrolling: touch;
 
-        /* Fixes scrollbar disappearing when "Show scroll bars: Always" enabled in Safari */
-        box-shadow: 0 0 0 white;
-      }
-    </style>
-    <vaadin-combo-box-dropdown id="dropdown"
-        hidden="[[_hidden(_items.*, loading)]]"
-        position-target="[[positionTarget]]"
-        on-template-changed="_templateChanged"
-        on-position-changed="_setOverlayHeight"
-        theme="[[theme]]">
-      <template>
-        <div id="scroller" on-click="_stopPropagation">
-          <iron-list id="selector" role="listbox" items="[[_getItems(opened, _items)]]" scroll-target="[[_scroller]]">
-            <template>
-              <vaadin-combo-box-item
-                on-click="_onItemClick"
-                index="[[__requestItemByIndex(item, index)]]"
-                item="[[item]]"
-                label="[[getItemLabel(item)]]"
-                selected="[[_isItemSelected(item, _selectedItem, _itemIdPath)]]"
-                renderer="[[renderer]]"
-                role$="[[_getAriaRole(index)]]"
-                aria-selected$="[[_getAriaSelected(_focusedIndex,index)]]"
-                focused="[[_isItemFocused(_focusedIndex,index)]]"
-                tabindex="-1"
-                theme$="[[theme]]">
-              </vaadin-combo-box-item>
-            </template>
-          </iron-list>
-        </div>
-      </template>
-    </vaadin-combo-box-dropdown>
+              /* Fixes scrollbar disappearing when 'Show scroll bars: Always' enabled in Safari */
+              box-shadow: 0 0 0 white;
+            }
+          </style>
+          <div id="scroller" on-click="_stopPropagation">
+            <iron-list id="selector" role="listbox" items="[[_getItems(opened, _items)]]" scroll-target="[[_scroller]]">
+              <template>
+                <vaadin-combo-box-item
+                  on-click="_onItemClick"
+                  index="[[__requestItemByIndex(item, index)]]"
+                  item="[[item]]"
+                  label="[[getItemLabel(item)]]"
+                  selected="[[_isItemSelected(item, _selectedItem, _itemIdPath)]]"
+                  renderer="[[renderer]]"
+                  role$="[[_getAriaRole(index)]]"
+                  aria-selected$="[[_getAriaSelected(_focusedIndex,index)]]"
+                  focused="[[_isItemFocused(_focusedIndex,index)]]"
+                  tabindex="-1"
+                  theme$="[[theme]]">
+                </vaadin-combo-box-item>
+              </template>
+            </iron-list>
+          </div>
+        </template>
+      </vaadin-combo-box-dropdown>
+    </template>
   </template>
 </dom-module>
 
@@ -170,33 +173,56 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       _openedChanged(opened, items, loading) {
+        if (!this.$.dropdown) {
+          if (!opened) {
+            return;
+          } else {
+            this._initDropdown();
+          }
+        }
         // Do not attach if no items
         // Do not dettach if opened but user types an invalid search
         this.$.dropdown.opened = !!(opened && (loading || this.$.dropdown.opened || items && items.length));
       }
 
-      ready() {
-        super.ready();
-        // IE11: when scrolling with mouse, the focus goes to the scroller.
-        // This causes the overlay closing due to defocusing the input field.
-        // Prevent focusing the scroller by setting `unselectable="on"`.
-        if (/Trident/.test(navigator.userAgent)) {
-          this._scroller.setAttribute('unselectable', 'on');
-        }
+      _initDropdown() {
+        const template = this.shadowRoot.querySelector('#dropdown-template');
+        template.if = true;
+        template.render();
+
+        this.$.dropdown = this.shadowRoot.querySelector('#dropdown');
+
+        this._templateChanged();
+        this._loadingChanged(this.loading);
 
         this.$.dropdown.$.overlay.addEventListener('touchend', e => this._fireTouchAction(e));
         this.$.dropdown.$.overlay.addEventListener('touchmove', e => this._fireTouchAction(e));
 
         // Prevent blurring the input when clicking inside the overlay.
         this.$.dropdown.$.overlay.addEventListener('mousedown', e => e.preventDefault());
+
+        // IE11: when scrolling with mouse, the focus goes to the scroller.
+        // This causes the overlay closing due to defocusing the input field.
+        // Prevent focusing the scroller by setting `unselectable="on"`.
+        if (/Trident/.test(navigator.userAgent)) {
+          this._scroller.setAttribute('unselectable', 'on');
+        }
       }
 
       _templateChanged(e) {
+        if (!this.$.dropdown) {
+          return;
+        }
+
         this._selector = this.$.dropdown.$.overlay.content.querySelector('#selector');
         this._scroller = this.$.dropdown.$.overlay.content.querySelector('#scroller');
       }
 
       _loadingChanged(loading) {
+        if (!this.$.dropdown) {
+          return;
+        }
+
         if (loading) {
           this.$.dropdown.$.overlay.setAttribute('loading', '');
         } else {

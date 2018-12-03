@@ -83,21 +83,10 @@
     });
 
     describe('with template', () => {
-      let comboBox;
-
-      beforeEach(() => {
-        comboBox = fixture('with-template');
-        comboBox.items = ['foo', 'bar', 'baz'];
-      });
-      afterEach(() => comboBox.opened = false);
-
-      it('renderer should receive empty root when defined after template', () => {
-        comboBox.renderer = root => expect(root.firstChild).to.be.null;
-        comboBox.opened = true;
-      });
-
 
       it('should throw an error and remove renderer when added after template', () => {
+        const comboBox = fixture('with-template');
+        comboBox.items = ['foo', 'bar', 'baz'];
         comboBox._observer.flush();
         expect(() => comboBox.renderer = () => {}).to.throw(Error);
         expect(comboBox.renderer).to.be.not.ok;

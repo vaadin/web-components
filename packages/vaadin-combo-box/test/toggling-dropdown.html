@@ -140,6 +140,9 @@
       // of the combobox when moved during open.
       it('should not leak combobox style scope to the overlay', () => {
         // Test only when style scope classes are used
+        combobox.open();
+        combobox.close();
+
         if (overlay().classList.contains('style-scope') &&
             overlay().classList.contains('vaadin-combo-box')) {
           combobox.open();
@@ -348,6 +351,29 @@
         expect(document.querySelector('vaadin-combo-box-overlay')).not.to.be.ok;
         combobox.close();
         expect(combobox.opened).to.be.false;
+      });
+    });
+
+    describe('lazy attach dropdown', () => {
+
+      const getDropdown = () => combobox.$.overlay.shadowRoot.querySelector('vaadin-combo-box-dropdown');
+
+      it('should not attach dropdown initially', () => {
+        expect(getDropdown()).not.to.exist;
+      });
+
+      it('should attach dropdown on open', () => {
+        combobox.open();
+        expect(getDropdown()).to.exist;
+      });
+
+      it('should not re-create dropdown', () => {
+        combobox.open();
+        const dropdown = getDropdown();
+        combobox.close();
+        expect(getDropdown()).to.equal(dropdown);
+        combobox.open();
+        expect(getDropdown()).to.equal(dropdown);
       });
     });
   });

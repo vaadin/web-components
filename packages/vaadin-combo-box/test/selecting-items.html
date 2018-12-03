@@ -51,6 +51,9 @@
     });
 
     it('should stop click events from bubbling outside the overlay', () => {
+      combobox.open();
+      combobox.close();
+
       const clickSpy = sinon.spy();
       document.addEventListener('click', clickSpy);
       combobox.$.overlay._selector.dispatchEvent(new CustomEvent('click', {
@@ -73,6 +76,9 @@
     });
 
     it('should fire `selection-changed` after the scrolling grace period', done => {
+      combobox.open();
+      combobox.close();
+
       const items = [];
       for (let i = 1; i < 50; i++) {
         items.push(i);

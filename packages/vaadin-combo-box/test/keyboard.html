@@ -447,10 +447,10 @@
           items.push(i.toString());
         }
 
+        comboBox.open();
         selector = comboBox.$.overlay._selector;
         comboBox.items = items;
 
-        comboBox.open();
         setTimeout(done, 1);
       });
 

@@ -37,6 +37,9 @@
 
       describeIf(/Trident/.test(navigator.userAgent), 'IE11', () => {
         it('should have unselectable="on" for the scroller', () => {
+          combobox.open();
+          combobox.close();
+
           const scroller = combobox.$.overlay._scroller;
           expect(scroller.getAttribute('unselectable')).to.equal('on');
         });

@@ -149,6 +149,9 @@
       });
 
       it('should not notify resize when not opened', () => {
+        comboBox.open();
+        comboBox.close();
+
         const spy = sinon.spy();
         comboBox.$.overlay.$.dropdown.notifyResize = spy;
         comboBox.items = [1, 2, 3];
@@ -202,6 +205,8 @@
       beforeEach(() => {
         // These tests randomly fails in Edge when they are run from travis
         // unless we reset borders.
+        comboBox.open();
+        comboBox.close();
         comboBox.$.overlay._selector.$.items.style.border = 'none';
       });
 

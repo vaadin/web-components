@@ -336,6 +336,8 @@
       it('should toggle loading attributes to host and overlay', () => {
         comboBox.loading = true;
         expect(comboBox.hasAttribute('loading')).to.be.true;
+
+        comboBox.open();
         expect(comboBox.$.overlay.$.dropdown.$.overlay.hasAttribute('loading')).to.be.true;
 
         comboBox.loading = false;
@@ -349,6 +351,9 @@
       });
 
       it('should not notify resize the dropdown if not opened', () => {
+        comboBox.open();
+        comboBox.close();
+
         const resizeSpy = sinon.spy(comboBox.$.overlay.$.dropdown, 'notifyResize');
         comboBox.filteredItems = ['foo', 'bar', 'baz'];
 
