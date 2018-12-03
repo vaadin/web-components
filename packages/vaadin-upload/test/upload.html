@@ -166,6 +166,17 @@
           upload._uploadFile(file);
         });
 
+        it('should not override configurable request url if already set', done => {
+          const modifiedUrl = 'http://example.com/modified/url';
+          upload.addEventListener('upload-before', e => {
+            e.preventDefault();
+            expect(e.detail.file.uploadTarget).to.equal(modifiedUrl);
+            done();
+          });
+          file.uploadTarget = modifiedUrl;
+          upload._uploadFile(file);
+        });
+
         it('should fire the upload-before with configurable form data name', done => {
           function MockFormData() {
             this.data = [];
@@ -443,6 +454,22 @@
             done();
           });
           upload.uploadFiles([upload.files[2]]);
+        });
+
+        it('should start uploading a single file passed to uploadFiles call', done => {
+          const tempFileName = 'file-test';
+          files = createFiles(1, 512, 'application/json');
+          upload.files = files;
+          upload.files[0].name = tempFileName;
+
+          upload.addEventListener('upload-start', e => {
+            expect(e.detail.xhr).to.be.ok;
+            expect(e.detail.file).to.be.ok;
+            expect(e.detail.file.name).to.equal(tempFileName);
+            expect(e.detail.file.uploading).to.be.ok;
+            done();
+          });
+          upload.uploadFiles(upload.files[0]);
         });
 
         it('should start a file upload from the file-start event', done => {

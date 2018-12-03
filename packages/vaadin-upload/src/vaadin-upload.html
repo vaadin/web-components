@@ -515,6 +515,9 @@ This program is available under Apache License Version 2.0, available at https:/
          * @param {Array} [files] - Files being uploaded. Defaults to all outstanding files
          */
         uploadFiles(files) {
+          if (files && !Array.isArray(files)) {
+            files = [files];
+          }
           files = files || this.files;
           files = files.filter(file => (!file.complete));
           Array.prototype.forEach.call(files, this._uploadFile.bind(this));
@@ -602,7 +605,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
           const formData = new FormData();
 
-          file.uploadTarget = this.target || '';
+          file.uploadTarget = file.uploadTarget || this.target || '';
           file.formDataName = this.formDataName;
 
           const evt = this.dispatchEvent(
