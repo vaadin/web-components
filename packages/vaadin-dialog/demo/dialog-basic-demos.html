@@ -73,21 +73,12 @@
     <h3>Scrollable Dialog</h3>
     <vaadin-demo-snippet id="dialog-basic-demos-scrollable-dialog">
       <template preserve-content>
-        <iron-ajax auto></iron-ajax>
         <vaadin-dialog no-close-on-outside-click></vaadin-dialog>
         <vaadin-button>Show dialog</vaadin-button>
         <script>
           window.addDemoReadyListener('#dialog-basic-demos-scrollable-dialog', function(document) {
             const dialog = document.querySelector('vaadin-dialog');
-
-            const ajax = document.querySelector('iron-ajax');
             let content = [];
-            ajax.addEventListener('last-response-changed', function(e) {
-              content = e.target.lastResponse;
-              dialog.render();
-            });
-            ajax.url = 'https://baconipsum.com/api/?type=all-meat&paras=20';
-
 
             dialog.renderer = function(root, dialog) {
               if (!root.firstElementChild) {
@@ -125,8 +116,16 @@
                 p.textContent = paragraph;
                 main.appendChild(p);
               });
-
             };
+
+            const xhr = new XMLHttpRequest();
+            xhr.onload = function() {
+              content = JSON.parse(xhr.responseText);
+              dialog.render();
+            };
+            const url = 'https://baconipsum.com/api/?type=all-meat&paras=20';
+            xhr.open('GET', url, true);
+            xhr.send();
 
             document.querySelector('vaadin-button').addEventListener('click', function() {
               dialog.opened = true;
