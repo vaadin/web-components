@@ -34,7 +34,8 @@
     "vaadin-license-checker": "vaadin/license-checker#^2.1.0",
     "vaadin-text-field": "vaadin/vaadin-text-field#^2.1.0",
     "vaadin-button": "vaadin/vaadin-button#^2.1.0",
-    "iron-form": "^2.4.0"
+    "iron-form": "^2.4.0",
+    "vaadin-overlay": "^3.2.1"
   },
   "devDependencies": {
     "iron-component-page": "^3.0.0",

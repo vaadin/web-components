@@ -1,0 +1,149 @@
+<link rel="import" href="../../../vaadin-lumo-styles/color.html">
+<link rel="import" href="../../../vaadin-lumo-styles/spacing.html">
+<link rel="import" href="../../../vaadin-lumo-styles/typography.html">
+<link rel="import" href="../../../vaadin-overlay/vaadin-overlay.html">
+<link rel="import" href="vaadin-login-styles.html">
+
+
+<dom-module id="vaadin-login-overlay-element-lumo-styles" theme-for="vaadin-login-overlay-element">
+  <template>
+    <style>
+      :host {
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+      }
+
+      [part="backdrop"] {
+        background: var(--lumo-base-color) linear-gradient(var(--lumo-shade-5pct), var(--lumo-shade-5pct));
+      }
+
+      [part="content"] {
+        padding: 0;
+      }
+
+      [part="overlay"] {
+        background: none;
+        border-radius: 0;
+        box-shadow: none;
+      }
+
+      @media only screen
+      and (max-width: 500px) {
+        [part="overlay"],
+        [part="content"] {
+          height: 100%;
+        }
+      }
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="lumo-login-overlay" theme-for="vaadin-login">
+  <template>
+    <style include="lumo-color lumo-typography">
+      :host([theme~="with-overlay"]) {
+        min-height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      :host([theme~="with-overlay"]) [part="card"] {
+        border-radius: var(--lumo-border-radius);
+        box-shadow: var(--lumo-box-shadow-s);
+        margin: var(--lumo-space-s);
+      }
+
+      /* Small screen */
+      @media only screen
+      and (max-width: 500px) {
+        :host([theme~="with-overlay"]) {
+          min-height: 100%;
+          background: var(--lumo-base-color);
+          align-items: flex-start;
+        }
+
+        :host([theme~="with-overlay"]) [part="card"] {
+          width: 100%;
+          border-radius: 0;
+          box-shadow: none;
+          margin: 0;
+        }
+      }
+
+      /* Landscape small screen */
+      @media only screen
+      and (max-height: 600px)
+      and (min-width: 600px)
+      and (orientation: landscape) {
+        :host([theme~="with-overlay"]) [part="card"] {
+          flex-direction: row;
+          align-items: stretch;
+          max-width: calc(var(--lumo-size-m) * 16);
+          width: 100%;
+        }
+
+        :host([theme~="with-overlay"]) [part="brand"],
+        :host([theme~="with-overlay"]) [part="form"] {
+          flex: auto;
+          flex-basis: 0;
+          box-sizing: border-box;
+        }
+
+        :host([theme~="with-overlay"]) [part="brand"] {
+          justify-content: flex-start;
+        }
+      }
+
+      /* Landscape really small screen */
+      @media only screen
+      and (max-height: 500px)
+      and (min-width: 600px)
+      and (orientation: landscape),
+      only screen
+      and (max-width: 600px)
+      and (min-width: 600px)
+      and (orientation: landscape) {
+        :host([theme~="with-overlay"]) {
+          height: 100vh;
+        }
+
+        :host([theme~="with-overlay"]) [part="card"] {
+          margin: 0;
+          width: 100%;
+          max-width: none;
+          height: 100%;
+          flex: auto;
+          border-radius: 0;
+          box-shadow: none;
+        }
+
+        :host([theme~="with-overlay"]) [part="form"] {
+          height: 100%;
+          overflow: auto;
+          -webkit-overflow-scrolling: touch;
+        }
+      }
+
+      /* Handle iPhone X notch */
+      @media only screen
+      and (device-width: 375px)
+      and (device-height: 812px)
+      and (-webkit-device-pixel-ratio: 3) {
+        :host([theme~="with-overlay"]) [part="card"] {
+          padding: 0 constant(safe-area-inset-bottom);
+          padding: 0 env(safe-area-inset-bottom);
+        }
+
+        :host([theme~="with-overlay"]) [part="brand"] {
+          margin-left: calc(constant(safe-area-inset-bottom) * -1);
+          margin-left: calc(env(safe-area-inset-bottom) * -1);
+          padding-left: calc(var(--lumo-space-l) + constant(safe-area-inset-bottom));
+          padding-left: calc(var(--lumo-space-l) + env(safe-area-inset-bottom));
+        }
+      }
+    </style>
+  </template>
+</dom-module>

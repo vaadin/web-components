@@ -9,14 +9,32 @@
     <h3>Basics</h3>
     <vaadin-demo-snippet id="element-basic-demos-sample-example">
       <template preserve-content>
-        <vaadin-login></vaadin-login>
+        <custom-style>
+          <style include="lumo-typography lumo-color">
+          </style>
+        </custom-style>
+        <style>
+          main {
+            display: flex;
+            justify-content: center;
+            background: var(--lumo-base-color) linear-gradient(var(--lumo-shade-5pct), var(--lumo-shade-5pct));
+            padding: var(--lumo-space-m);
+          }
+        </style>
+        <main>
+          <vaadin-login></vaadin-login>
+        </main>
         <vaadin-dialog id="feedbackDialog">
           <template>Login is being processed...</template>
         </vaadin-dialog>
+        <vaadin-dialog id="supportDialog">
+            <template>Please contact support.</template>
+          </vaadin-dialog>
         <script>
           window.addDemoReadyListener('#element-basic-demos-sample-example', function(document) {
             var login = document.querySelector('vaadin-login');
             var feedbackDialog = document.querySelector('#feedbackDialog');
+            var supportDialog = document.querySelector('#supportDialog');
 
             login.addEventListener('login', function() {
               feedbackDialog.opened = true;
@@ -26,31 +44,54 @@
                 feedbackDialog.opened = false;
               }, 2000);
             });
+
+            login.addEventListener('forgot-password', function() {
+              supportDialog.opened = true;
+            });
           });
         </script>
       </template>
     </vaadin-demo-snippet>
 
-    <h3>Hide forgot password button</h3>
-    <vaadin-demo-snippet id="hide-forgot-password-button-example">
+    <h3>Login opened in full screen</h3>
+    <vaadin-demo-snippet id="login-overlay">
       <template preserve-content>
-        <vaadin-login hide-forgot-password-button></vaadin-login>
-      </template>
-    </vaadin-demo-snippet>
-
-    <h3>Listening to the forgot password event</h3>
-    <vaadin-demo-snippet id="listening-to-forgot-password-example">
-      <template preserve-content>
-        <vaadin-login></vaadin-login>
-        <vaadin-dialog>
-          <template>Please contact support.</template>
+      <vaadin-login-overlay></vaadin-login-overlay>
+        <vaadin-button>Log in</vaadin-button>
+        <vaadin-dialog id="feedbackDialog">
+            <template>Login is being processed...</template>
         </vaadin-dialog>
         <script>
-          window.addDemoReadyListener('#listening-to-forgot-password-example', function(document) {
-            var login = document.querySelector('vaadin-login');
-            var dialog = document.querySelector('vaadin-dialog');
-            login.addEventListener('forgot-password', function() {
-              dialog.opened = true;
+          window.addDemoReadyListener('#login-overlay', function(document) {
+            const button = document.querySelector('vaadin-button');
+            const vaadinLoginOvelay = document.querySelector('vaadin-login-overlay');
+            const feedbackDialog = document.querySelector('#feedbackDialog');
+
+            const i18n = Object.assign(
+              {},
+              vaadinLoginOvelay.i18n,
+              {additionalInformation: 'For this demo, use admin/admin to a successful login.'}
+            );
+
+            vaadinLoginOvelay.i18n = i18n;
+
+            button.addEventListener('click', function() {
+              vaadinLoginOvelay.opened = true;
+            });
+
+            vaadinLoginOvelay.addEventListener('login', (e) => {
+              feedbackDialog.opened = true;
+              const {username, password} = e.detail;
+
+              setTimeout(function() {
+                feedbackDialog.opened = false;
+                if (username === 'admin' && password === 'admin') {
+                  vaadinLoginOvelay.opened = false;
+                } else {
+                  vaadinLoginOvelay.error = true;
+                  vaadinLoginOvelay.disabled = false;
+                }
+              }, 1000);
             });
           });
         </script>

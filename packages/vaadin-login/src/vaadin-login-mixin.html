@@ -1,0 +1,112 @@
+<!--
+@license
+Copyright (c) 2018 Vaadin Ltd.
+This program is available under Commercial Vaadin Add-On License 3.0 (CVALv3).
+See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete license.
+-->
+
+<script>
+  /**
+   * @namespace Vaadin
+   */
+  window.Vaadin = window.Vaadin || {};
+
+  /**
+   * @polymerMixin
+   * @memberof Vaadin
+  */
+  Vaadin.LoginMixin = subclass => class VaadinLoginMixin extends subclass {
+    static get properties() {
+      return {
+        /**
+         * Defines how the login callback will be handled on a submit action:
+         * - If set, a synchronous POST call will be fired to the path defined.
+         * - If left blank, a `login` event will be dispatched containing `username` and `password`
+        */
+        action: {
+          type: String,
+          value: null,
+          notify: true
+        },
+        /**
+         * If set, disable the "Log in" button and prevent user from submitting login form
+         */
+        disabled: {
+          type: Boolean,
+          value: false,
+          notify: true
+        },
+        /**
+         * If set, the error message is shown. The message is hidden by default.
+         */
+        error: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true,
+          notify: true
+        },
+        /**
+         * Whether to hide the forgot password button. The button is visible by default.
+         */
+        hideForgotPasswordButton: {
+          type: Boolean,
+          value: false,
+          notify: true
+        },
+
+        /**
+         * The object used to localize this component.
+         * For changing the default localization, change the entire
+         * _i18n_ object or just the property you want to modify.
+         *
+         * The object has the following JSON structure and default values:
+
+          {
+            header: {
+              title: 'App name',
+              description: 'Inspiring application description'
+            },
+            form: {
+              title: 'Log in',
+              username: 'Username',
+              password: 'Password',
+              submit: 'Log in',
+              forgotPassword: 'Forgot password'
+            },
+            errorMessage: {
+              title: 'Incorrect username or password',
+              message: 'Check that you have entered the correct username and password and try again.'
+            },
+            additionalInformation: 'In case you need to provide some additional info for the user.'
+          }
+         *
+         * @default {English/US}
+         */
+        i18n: {
+          type: Object,
+          value: function() {
+            return {
+              header: {
+                title: 'App name',
+                description: 'Inspiring application description'
+              },
+              form: {
+                title: 'Log in',
+                username: 'Username',
+                password: 'Password',
+                submit: 'Log in',
+                forgotPassword: 'Forgot password'
+              },
+              errorMessage: {
+                title: 'Incorrect username or password',
+                message: 'Check that you have entered the correct username and password and try again.'
+              },
+              additionalInformation: 'In case you need to provide some additional info for the user.'
+            };
+          },
+          notify: true
+        }
+      };
+    }
+  };
+</script>
