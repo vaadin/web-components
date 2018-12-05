@@ -133,6 +133,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           }
 
           this.error = false;
+          this.disabled = true;
           if (this.action == null) {
             const eventDetails = {
               bubbles: true,
@@ -146,8 +147,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           } else {
             this.$.loginForm.submit();
           }
-
-          this.disabled = true;
         }
 
         _forgotPassword() {
