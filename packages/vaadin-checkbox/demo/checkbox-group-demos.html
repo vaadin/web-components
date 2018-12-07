@@ -7,18 +7,24 @@
     </style>
 
     <h3>Checkbox Group</h3>
-    <vaadin-demo-snippet id="checkbox-group-demos-checkbox-group-value">
+    <vaadin-demo-snippet id="checkbox-group-demos-checkbox-group-value" when-defined="vaadin-checkbox-group">
       <template preserve-content>
-        <dom-bind>
-          <template>
-            <vaadin-checkbox-group value="{{checkboxValue}}" label="Preferred language of contact:">
-              <vaadin-checkbox value="en">English</vaadin-checkbox>
-              <vaadin-checkbox value="fr">Français</vaadin-checkbox>
-              <vaadin-checkbox value="de">Deutsch</vaadin-checkbox>
-            </vaadin-checkbox-group>
-            <p>Selected value: [[checkboxValue]]</p>
-          </template>
-        </dom-bind>
+        <vaadin-checkbox-group label="Preferred language of contact">
+          <vaadin-checkbox value="en">English</vaadin-checkbox>
+          <vaadin-checkbox value="fr">Français</vaadin-checkbox>
+          <vaadin-checkbox value="de">Deutsch</vaadin-checkbox>
+        </vaadin-checkbox-group>
+        <p>Selected value: <span id="value"></span></p>
+        <script>
+          window.addDemoReadyListener('#checkbox-group-demos-checkbox-group-value', function(document) {
+            const checkboxGroup = document.querySelector('vaadin-checkbox-group');
+            const selectedValue = document.getElementById('value');
+
+            checkboxGroup.addEventListener('value-changed', function(event) {
+              selectedValue.textContent = event.detail.value;
+            });
+          });
+        </script>
       </template>
     </vaadin-demo-snippet>
 
@@ -35,7 +41,7 @@
     </vaadin-demo-snippet>
 
     <h3>Checkbox Group with Iron Form with same names</h3>
-    <vaadin-demo-snippet id="checkbox-group-demos-checkbox-group-with-iron-form">
+    <vaadin-demo-snippet id="checkbox-group-demos-checkbox-group-with-iron-form" when-defined="vaadin-checkbox-group">
       <template preserve-content>
         <iron-form>
           <form>
@@ -67,7 +73,7 @@
     </vaadin-demo-snippet>
 
     <h3>Checkbox Group with Iron Form with different names</h3>
-    <vaadin-demo-snippet id="checkbox-group-demos-checkbox-group-with-iron-form-with-custom-value">
+    <vaadin-demo-snippet id="checkbox-group-demos-checkbox-group-with-iron-form-with-custom-value" when-defined="vaadin-checkbox-group">
       <template preserve-content>
         <iron-form>
           <form>

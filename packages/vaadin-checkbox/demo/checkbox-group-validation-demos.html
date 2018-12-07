@@ -7,33 +7,33 @@
     </style>
 
     <h3>Checkbox Group with validation message</h3>
-    <vaadin-demo-snippet id="checkbox-group-demos-checkbox-group-with-validation-message">
-    <template preserve-content>
-      <vaadin-checkbox-group required label="Preferred language of contact:" error-message="Please choose a language.">
-        <vaadin-checkbox name="language" value="en">English</vaadin-checkbox>
-        <vaadin-checkbox name="language" value="fr">Français</vaadin-checkbox>
-        <vaadin-checkbox name="language" value="de">Deutsch</vaadin-checkbox>
-      </vaadin-checkbox-group>
-      <vaadin-button>Validate</vaadin-button>
-      <script>
-        window.addDemoReadyListener('#checkbox-group-demos-checkbox-group-with-validation-message', function(document) {
-          const checkboxGroup = document.querySelector('vaadin-checkbox-group');
-          const submitButton = document.querySelector('vaadin-button');
+    <vaadin-demo-snippet id="checkbox-group-demos-checkbox-group-with-validation-message" when-defined="vaadin-checkbox-group">
+      <template preserve-content>
+        <vaadin-checkbox-group required label="Preferred language of contact" error-message="Please choose a language.">
+          <vaadin-checkbox name="language" value="en">English</vaadin-checkbox>
+          <vaadin-checkbox name="language" value="fr">Français</vaadin-checkbox>
+          <vaadin-checkbox name="language" value="de">Deutsch</vaadin-checkbox>
+        </vaadin-checkbox-group>
+        <vaadin-button>Validate</vaadin-button>
+        <script>
+          window.addDemoReadyListener('#checkbox-group-demos-checkbox-group-with-validation-message', function(document) {
+            const checkboxGroup = document.querySelector('vaadin-checkbox-group');
+            const submitButton = document.querySelector('vaadin-button');
 
-          submitButton.addEventListener('click', function(event) {
-            checkboxGroup.validate();
+            submitButton.addEventListener('click', function(event) {
+              checkboxGroup.validate();
+            });
           });
-        });
-      </script>
-    </template>
+        </script>
+      </template>
     </vaadin-demo-snippet>
 
     <h3>Checkbox Group with Iron Form validation</h3>
-    <vaadin-demo-snippet id="checkbox-group-demos-checkbox-group-with-iron-form-validation">
+    <vaadin-demo-snippet id="checkbox-group-demos-checkbox-group-with-iron-form-validation" when-defined="vaadin-checkbox-group">
       <template preserve-content>
         <iron-form>
           <form>
-            <vaadin-checkbox-group required label="Preferred language of contact:">
+            <vaadin-checkbox-group required label="Preferred language of contact">
               <vaadin-checkbox name="language" value="en">English</vaadin-checkbox>
               <vaadin-checkbox name="language" value="fr">Français</vaadin-checkbox>
               <vaadin-checkbox name="language" value="de">Deutsch</vaadin-checkbox>
