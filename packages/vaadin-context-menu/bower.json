@@ -35,7 +35,6 @@
   },
   "devDependencies": {
     "iron-component-page": "^3.0.0",
-    "iron-demo-helpers": "^2.0.0",
     "iron-test-helpers": "^2.0.0",
     "test-fixture": "^3.0.0",
     "vaadin-button": "vaadin/vaadin-button#^2.1.0",
@@ -44,7 +43,7 @@
     "vaadin-list-box": "vaadin/vaadin-list-box#^1.1.0",
     "webcomponentsjs": "^1.0.0",
     "web-component-tester": "^6.1.5",
-    "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^2.0.1"
+    "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^2.2.0"
   },
   "resolutions": {
     "vaadin-element-mixin": "^2.0.0"
