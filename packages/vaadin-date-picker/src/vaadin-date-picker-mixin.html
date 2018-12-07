@@ -316,19 +316,26 @@ This program is available under Apache License Version 2.0, available at https:/
       Polymer.Gestures.addListener(this, 'tap', this.open);
       this.addEventListener('touchend', this._preventDefault.bind(this));
       this.addEventListener('keydown', this._onKeydown.bind(this));
-      this._overlayContent.addEventListener('close', this._close.bind(this));
-      this._overlayContent.addEventListener('focus-input', this._focusAndSelect.bind(this));
       this.addEventListener('input', this._onUserInput.bind(this));
       this.addEventListener('focus', e => this._noInput && e.target.blur());
     }
 
-    /**
-     * @protected
-     */
-    connectedCallback() {
-      super.connectedCallback();
+    _initOverlay() {
+      const template = this.shadowRoot.querySelector('#overlay-template');
+      template.if = true;
+      template.render();
 
+      this.$.overlay = this.shadowRoot.querySelector('#overlay');
+      this.$.overlay.addEventListener('opened-changed', e => this.opened = e.detail.value);
+
+      this._overlayContent.addEventListener('close', this._close.bind(this));
+      this._overlayContent.addEventListener('focus-input', this._focusAndSelect.bind(this));
       this.$.overlay.addEventListener('vaadin-overlay-escape-press', this._boundFocus);
+
+      // Keep focus attribute in focusElement for styling
+      this._overlayContent.addEventListener('focus', () => this.focusElement._setFocused(true));
+
+      this.$.overlay.addEventListener('vaadin-overlay-close', this._onVaadinOverlayClose.bind(this));
     }
 
     /**
@@ -337,7 +344,9 @@ This program is available under Apache License Version 2.0, available at https:/
     disconnectedCallback() {
       super.disconnectedCallback();
 
-      this.$.overlay.removeEventListener('vaadin-overlay-escape-press', this._boundFocus);
+      if (this.$.overlay) {
+        this.$.overlay.removeEventListener('vaadin-overlay-escape-press', this._boundFocus);
+      }
 
       this.opened = false;
     }
@@ -347,7 +356,7 @@ This program is available under Apache License Version 2.0, available at https:/
      */
     open() {
       if (!this.disabled && !this.readonly) {
-        this.$.overlay.opened = true;
+        this.opened = true;
       }
     }
 
@@ -363,7 +372,9 @@ This program is available under Apache License Version 2.0, available at https:/
      * Closes the dropdown.
      */
     close() {
-      this.$.overlay.close();
+      if (this.$.overlay) {
+        this.$.overlay.close();
+      }
     }
 
     get _inputElement() {
@@ -424,11 +435,15 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _openedChanged(opened) {
-      if (!opened) {
-        return;
+      if (opened && !this.$.overlay) {
+        this._initOverlay();
       }
-
-      this._updateAlignmentAndPosition();
+      if (this.$.overlay) {
+        this.$.overlay.opened = opened;
+      }
+      if (opened) {
+        this._updateAlignmentAndPosition();
+      }
     }
 
     _selectedDateChanged(selectedDate, formatDate) {
@@ -500,6 +515,9 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _updateAlignmentAndPosition() {
+      if (!this.$.overlay) {
+        return;
+      }
       if (!this._fullscreen) {
         const inputRect = this._inputElement.getBoundingClientRect();
 
@@ -536,7 +554,7 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _fullscreenChanged() {
-      if (this.$.overlay.opened) {
+      if (this.$.overlay && this.$.overlay.opened) {
         this._updateAlignmentAndPosition();
       }
     }
@@ -692,7 +710,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     _focus() {
       if (this._noInput) {
-        this._overlayContent.focus();
+        this.$.overlay && this._overlayContent.focus();
       } else {
         this._inputElement.focus();
       }

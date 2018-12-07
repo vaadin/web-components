@@ -53,9 +53,6 @@
 
         beforeEach(() => {
           datepicker = fixture('datepicker');
-          const overlayContent = datepicker.$.overlay.content.querySelector('#overlay-content');
-          overlayContent.$.monthScroller.bufferSize = 0;
-          overlayContent.$.yearScroller.bufferSize = 0;
           clearButton = datepicker.root.querySelector('[part="clear-button"]');
           toggleButton = datepicker.root.querySelector('[part="toggle-button"]');
         });
@@ -334,9 +331,6 @@
 
         beforeEach(() => {
           datepicker = fixture('datepicker');
-          const overlayContent = datepicker.$.overlay.content.querySelector('#overlay-content');
-          overlayContent.$.monthScroller.bufferSize = 0;
-          overlayContent.$.yearScroller.bufferSize = 0;
         });
 
         function waitForAnnounce(callback) {
@@ -349,7 +343,7 @@
 
         it('should request availability from IronA11yAnnouncer', done => {
           var spy = sinon.spy(Polymer.IronA11yAnnouncer, 'requestAvailability');
-          fixture('datepicker');
+          datepicker.open();
           setTimeout(() => {
             expect(spy.called).to.be.true;
             done();

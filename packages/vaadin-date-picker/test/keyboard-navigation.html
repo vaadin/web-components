@@ -33,8 +33,6 @@
       describe('keyboard navigation', () => {
 
         var target;
-        var overlay;
-        var overlayContent;
 
         function arrowDown() {
           MockInteractions.keyDownOn(target, 40);
@@ -80,8 +78,8 @@
           MockInteractions.keyDownOn(target, 27, null, 'Escape');
         }
 
-        function focusedDate() {
-          return overlayContent.focusedDate;
+        function focusedDate(datepicker) {
+          return getOverlayContent(datepicker).focusedDate;
         }
 
         describe('date-picker', () => {
@@ -89,10 +87,6 @@
 
           beforeEach(() => {
             datepicker = fixture('datepicker');
-            overlayContent = datepicker.$.overlay.content.querySelector('#overlay-content');
-            overlayContent.$.monthScroller.bufferSize = 0;
-            overlayContent.$.yearScroller.bufferSize = 0;
-            overlay = datepicker.$.overlay;
           });
 
           it('should open overlay on down', () => {
@@ -123,22 +117,20 @@
             datepicker.value = '2001-01-01';
 
             datepicker.open();
-            target = overlayContent;
+            target = getOverlayContent(datepicker);
             arrowRight();
 
-            expect(focusedDate()).to.eql(new Date(2001, 0, 2));
+            expect(focusedDate(datepicker)).to.eql(new Date(2001, 0, 2));
           });
 
           it('should be focused on initial position when no value is set', done => {
             datepicker.value = null;
             datepicker.initialPosition = '2001-01-01';
 
-            target = overlayContent;
-
             open(datepicker, () => {
-              target = overlayContent;
+              target = getOverlayContent(datepicker);
               arrowRight();
-              expect(focusedDate()).to.eql(new Date(2001, 0, 2));
+              expect(focusedDate(datepicker)).to.eql(new Date(2001, 0, 2));
               done();
             });
           });
@@ -149,24 +141,26 @@
             datepicker.initialPosition = null;
 
             datepicker.open();
-            target = overlayContent;
+            target = getOverlayContent(datepicker);
             arrowRight();
 
-            expect(focusedDate()).to.eql(new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1));
+            expect(focusedDate(datepicker)).to.eql(new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1));
           });
 
           it('should not lose focused date after deselecting', () => {
-            var _focused = focusedDate();
+            var _focused = focusedDate(datepicker);
             datepicker.open();
-            target = overlayContent;
+            target = getOverlayContent(datepicker);
             space();
             space();
 
-            expect(focusedDate().getTime()).to.equal(_focused.getTime());
+            expect(focusedDate(datepicker).getTime()).to.equal(_focused.getTime());
           });
         });
 
         describe('overlay', () => {
+
+          var overlay;
 
           beforeEach(done => {
             overlay = fixture('overlay');
@@ -250,10 +244,10 @@
           });
 
           it('should focus next month with pagedown', () => {
-            target = overlayContent;
+            target = overlay;
             pageDown();
 
-            expect(focusedDate()).to.eql(new Date(2000, 1, 1));
+            expect(overlay.focusedDate).to.eql(new Date(2000, 1, 1));
           });
 
           it('should focus previous month with pageup', () => {

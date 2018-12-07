@@ -42,42 +42,44 @@
   <script>
     describe('Dropdown', () => {
       var datepicker;
-      var overlay;
       var input;
       var toggleButton;
-      var overlayContent;
 
       beforeEach(() => {
         datepicker = fixture('datepicker');
-        overlay = datepicker.$.overlay;
         input = datepicker.$.input;
         toggleButton = datepicker.shadowRoot.querySelector('[part="toggle-button"]');
-        overlayContent = datepicker.$.overlay.content.querySelector('#overlay-content');
-        overlayContent.$.monthScroller.bufferSize = 0;
-        overlayContent.$.yearScroller.bufferSize = 0;
       });
 
       afterEach(done => setTimeout(done, 1));
 
       it('should not close on calendar icon down', done => {
+        datepicker.open();
         datepicker.$.overlay.addEventListener('vaadin-overlay-open', () => {
           MockInteractions.down(toggleButton);
           expect(datepicker.$.overlay.opened).to.be.true;
 
           done();
         });
-        datepicker.open();
       });
 
       it('should update position of the overlay after changing opened property', () => {
         datepicker.opened = true;
 
-        expect(input.getBoundingClientRect().bottom).to.be.closeTo(overlay.getBoundingClientRect().top, 0.01);
+        expect(input.getBoundingClientRect().bottom).to.be.closeTo(datepicker.$.overlay.getBoundingClientRect().top, 0.01);
+      });
+
+      it('should detach overlay on datepicker detach', () => {
+        datepicker.open();
+        datepicker.parentElement.removeChild(datepicker);
+        expect(datepicker.$.overlay.parentElement).to.not.be.ok;
       });
 
       if (document.createElement('div').style.webkitOverflowScrolling === '') {
         it('should handle webkit-overflow-scrolling', done => {
           document.body.style.webkitOverflowScrolling = 'touch';
+
+          datepicker.open();
 
           datepicker.$.overlay.addEventListener('vaadin-overlay-open', () => {
             expect(window.getComputedStyle(document.body).webkitOverflowScrolling).to.equal('auto');
@@ -88,7 +90,6 @@
             expect(window.getComputedStyle(document.body).webkitOverflowScrolling).to.equal('touch');
             done();
           });
-          datepicker.open();
         });
       }
 
@@ -104,15 +105,15 @@
         });
 
         it('should select fullscreen/desktop mode', done => {
-          datepicker.$.overlay.addEventListener('vaadin-overlay-open', () => {
-            var viewportWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-            var fullscreen = viewportWidth < 520;
-
-            expect(isFullscreen(datepicker)).to.equal(fullscreen);
-            done();
-          });
           setTimeout(() => {
             datepicker.open();
+            datepicker.$.overlay.addEventListener('vaadin-overlay-open', () => {
+              var viewportWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+              var fullscreen = viewportWidth < 520;
+
+              expect(isFullscreen(datepicker)).to.equal(fullscreen);
+              done();
+            });
           });
         });
 
@@ -121,15 +122,12 @@
     });
 
     describe('Dropdown-wrapped', () => {
-      var datepicker, overlayContent, clearButton, toggleButton;
+      var datepicker, clearButton, toggleButton;
 
       beforeEach(() => {
         datepicker = fixture('datepicker-wrapped').$.datepicker;
         toggleButton = datepicker.shadowRoot.querySelector('[part="toggle-button"]');
         clearButton = datepicker.shadowRoot.querySelector('[part="clear-button"]');
-        overlayContent = datepicker.$.overlay.content.querySelector('#overlay-content');
-        overlayContent.$.monthScroller.bufferSize = 0;
-        overlayContent.$.yearScroller.bufferSize = 0;
       });
 
       afterEach(done => {
@@ -137,13 +135,13 @@
       });
 
       it('should not close on calendar icon down', done => {
+        datepicker.open();
         datepicker.$.overlay.addEventListener('vaadin-overlay-open', () => {
           MockInteractions.down(toggleButton);
           expect(datepicker.$.overlay.opened).to.be.true;
 
           done();
         });
-        datepicker.open();
       });
 
       it('should restore attribute focus-ring if it was initially set before opening', () => {
@@ -174,7 +172,7 @@
 
         click(clearButton);
 
-        expect(datepicker.$.overlay.opened).not.to.be.true;
+        expect(datepicker.$.overlay).not.to.be.ok;
       });
 
     });

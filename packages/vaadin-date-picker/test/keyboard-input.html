@@ -31,9 +31,7 @@
       describe('keyboard input', () => {
 
         var target;
-        var overlay;
         var datepicker;
-        var overlayContent;
 
         function inputChar(char) {
           target.value += char;
@@ -72,16 +70,12 @@
         }
 
         function focusedDate() {
-          return overlayContent.focusedDate;
+          return getOverlayContent(datepicker).focusedDate;
         }
 
         beforeEach(done => {
           datepicker = fixture('datepicker');
-          overlay = datepicker.$.overlay;
           target = datepicker._inputElement;
-          overlayContent = datepicker.$.overlay.content.querySelector('#overlay-content');
-          overlayContent.$.monthScroller.bufferSize = 0;
-          overlayContent.$.yearScroller.bufferSize = 0;
           setTimeout(done, 1);
         });
 
@@ -105,14 +99,14 @@
 
         it('should change focused date on input when closed', (done) => {
           datepicker.value = '2000-01-01';
-          expect(focusedDate().getDate()).to.equal(1);
+
+          datepicker._inputValue = '1/30/2000';
+          target.dispatchEvent(new CustomEvent('input', {bubbles: true, composed: true}));
 
           datepicker.$.overlay.addEventListener('vaadin-overlay-open', () => {
             expect(focusedDate().getDate()).to.equal(30);
             done();
           });
-          datepicker._inputValue = '1/30/2000';
-          target.dispatchEvent(new CustomEvent('input', {bubbles: true, composed: true}));
         });
 
         it('should update focus on input change', () => {
@@ -124,12 +118,13 @@
         });
 
         it('should select focused date on enter', done => {
+          inputText('1/1/2001');
+
           datepicker.$.overlay.addEventListener('vaadin-overlay-close', () => {
             expect(datepicker.value).to.equal('2001-01-01');
             done();
           });
 
-          inputText('1/1/2001');
           enter();
         });
 
@@ -170,6 +165,7 @@
         });
 
         it('should not forward after user changes input', done => {
+          inputText('1/2/2000');
           datepicker.$.overlay.addEventListener('vaadin-overlay-open', () => {
             arrowDown();
             // Forwarding keys to overlay
@@ -181,7 +177,6 @@
             expect(focusedDate()).to.eql(focused);
             done();
           });
-          inputText('1/2/2000');
         });
 
         it('should not forward after input tap', done => {
@@ -198,34 +193,34 @@
         it('should reflect focused date to input', done => {
           datepicker.value = '2000-01-01';
 
+          arrowDown();
           datepicker.$.overlay.addEventListener('vaadin-overlay-open', () => {
             arrowDown();
             expect(datepicker._inputValue).to.equal('1/8/2000');
             done();
           });
-          arrowDown();
         });
 
         it('should not reflect focused date on open', done => {
 
+          arrowDown();
           datepicker.$.overlay.addEventListener('vaadin-overlay-open', () => {
             expect(datepicker._inputValue).to.equal('');
             done();
           });
-          arrowDown();
         });
 
         it('should stop key event bubbles from overlay', done => {
           datepicker.value = '2000-01-01';
 
+          arrowDown();
           datepicker.$.overlay.addEventListener('vaadin-overlay-open', () => {
             arrowDown();
-            target = overlayContent;
+            target = getOverlayContent(datepicker);
             arrowDown();
             expect(datepicker._inputValue).to.equal('1/15/2000');
             done();
           });
-          arrowDown();
         });
 
         it('should update focused date on select', () => {
@@ -272,13 +267,13 @@
         });
 
         it('should clear selection on close', done => {
-          datepicker.$.overlay.addEventListener('vaadin-overlay-close', () => {
-            expect(target.selectionStart).to.equal(target.selectionEnd);
-            done();
-          });
           open(datepicker, () => {
             arrowDown();
             datepicker.close();
+          });
+          datepicker.$.overlay.addEventListener('vaadin-overlay-close', () => {
+            expect(target.selectionStart).to.equal(target.selectionEnd);
+            done();
           });
         });
 
@@ -301,22 +296,21 @@
           });
 
           it('should select focused date on close', done => {
+            open(datepicker, () => datepicker.close());
             datepicker.$.overlay.addEventListener('vaadin-overlay-close', () => {
               expect(datepicker._selectedDate).to.equal(datepicker._focusedDate);
               done();
             });
-
-            open(datepicker, () => datepicker.close());
           });
 
         });
 
         it('should not forward up/down to overlay when closed', done => {
+          arrowUp();
           datepicker.$.overlay.addEventListener('vaadin-overlay-open', () => {
             expect(datepicker._focusedDate.getDate()).to.eql(new Date().getDate());
             done();
           });
-          arrowUp();
         });
 
         it('should forward up/down to overlay', done => {
@@ -330,8 +324,8 @@
         describe('esc behavior', () => {
 
           it('should close the overlay on esc', done => {
-            datepicker.$.overlay.addEventListener('vaadin-overlay-close', () => done());
             open(datepicker, esc);
+            datepicker.$.overlay.addEventListener('vaadin-overlay-close', () => done());
           });
 
           it('should revert input value on esc', done => {
@@ -375,29 +369,29 @@
 
           it('should not change value on esc', done => {
             datepicker.value = '2000-01-01';
-            datepicker.$.overlay.addEventListener('vaadin-overlay-close', () => {
-              expect(datepicker.value).to.equal('2000-01-01');
-              done();
-            });
             open(datepicker, () => {
               inputText('1/2/2000');
               arrowDown();
               arrowDown();
               esc();
+            });
+            datepicker.$.overlay.addEventListener('vaadin-overlay-close', () => {
+              expect(datepicker.value).to.equal('2000-01-01');
+              done();
             });
           });
 
           it('should not change value on esc (empty)', done => {
             datepicker.value = '';
-            datepicker.$.overlay.addEventListener('vaadin-overlay-close', () => {
-              expect(datepicker.value).to.equal('');
-              done();
-            });
             open(datepicker, () => {
               inputText('1/2/2000');
               arrowDown();
               arrowDown();
               esc();
+            });
+            datepicker.$.overlay.addEventListener('vaadin-overlay-close', () => {
+              expect(datepicker.value).to.equal('');
+              done();
             });
           });
 
@@ -476,8 +470,9 @@
         describe('focus modes', () => {
 
           var today;
+          var overlayContent;
 
-          beforeEach(() => overlayContent = datepicker.$.overlay.content.querySelector('#overlay-content'));
+          beforeEach(() => overlayContent = getOverlayContent(datepicker));
 
           it('should be tabbable', () => {
             expect(parseInt(overlayContent.getAttribute('tabindex'), 10)).to.equal(0);

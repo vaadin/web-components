@@ -36,8 +36,8 @@ function listenForEvent(elem, type, callback) {
 }
 
 function open(datepicker, callback) {
-  listenForEvent(datepicker.$.overlay, 'vaadin-overlay-open', callback);
   datepicker.open();
+  listenForEvent(datepicker.$.overlay, 'vaadin-overlay-open', callback);
 }
 
 function close(datepicker, callback) {
@@ -83,6 +83,18 @@ function describeSkipIf(bool, title, callback) {
   } else {
     describe(title, callback);
   }
+}
+
+// As a side-effect has to toggle the overlay once to initialize it
+function getOverlayContent(datepicker) {
+  if (!datepicker.$.overlay) {
+    datepicker.open();
+    datepicker.close();
+  }
+  const overlayContent = datepicker.$.overlay.content.querySelector('#overlay-content');
+  overlayContent.$.monthScroller.bufferSize = 0;
+  overlayContent.$.yearScroller.bufferSize = 0;
+  return overlayContent;
 }
 
 // IE11 throws errors when the fixture is removed from the DOM and the focus remains in the native control.
