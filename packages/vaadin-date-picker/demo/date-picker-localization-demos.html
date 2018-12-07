@@ -8,18 +8,16 @@
 
 
     <h3>Localizing</h3>
-    <vaadin-demo-snippet id="date-picker-localization-demos-localizing">
+    <vaadin-demo-snippet id="date-picker-localization-demos-localizing" when-defined="vaadin-date-picker">
       <template preserve-content>
-        <vaadin-date-picker label="Syntymäpäivä" id="finnish" value="1980-08-14">
+        <vaadin-date-picker label="Syntymäpäivä" value="1980-08-14">
         </vaadin-date-picker>
         <script>
-        window.addDemoReadyListener('#date-picker-localization-demos-localizing', function(document) {
-          // Async call needed here for IE11 compatibility.
-          Polymer.Base.async(function() {
+          window.addDemoReadyListener('#date-picker-localization-demos-localizing', function(document) {
             // Set up the parser library for Finnish locale
             Sugar.Date.setLocale('fi');
 
-            var datepicker = document.querySelector('vaadin-date-picker#finnish');
+            var datepicker = document.querySelector('vaadin-date-picker');
             datepicker.i18n = {
               week: 'viikko',
               calendar: 'kalenteri',
@@ -28,7 +26,7 @@
               cancel: 'peruuta',
               firstDayOfWeek: 1,
               monthNames:
-               'tammikuu_helmikuu_maaliskuu_huhtikuu_toukokuu_kesäkuu_heinäkuu_elokuu_syyskuu_lokakuu_marraskuu_joulukuu'.split('_'),
+                'tammikuu_helmikuu_maaliskuu_huhtikuu_toukokuu_kesäkuu_heinäkuu_elokuu_syyskuu_lokakuu_marraskuu_joulukuu'.split('_'),
               weekdays: 'sunnuntai_maanantai_tiistai_keskiviikko_torstai_perjantai_lauantai'.split('_'),
               weekdaysShort: 'su_ma_ti_ke_to_pe_la'.split('_'),
               formatDate: function(date) {
@@ -48,7 +46,6 @@
               }
             };
           });
-        });
         </script>
       </template>
     </vaadin-demo-snippet>
