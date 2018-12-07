@@ -75,8 +75,8 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
     </style>
       <section part="card">
         <div part="brand">
-          <h1>[[i18n.header.title]]</h1>
-          <p>[[i18n.header.description]]</p>
+          <h1>[[title]]</h1>
+          <p>[[description]]</p>
         </div>
 
         <div part="form">
@@ -125,6 +125,21 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         }
         static get version() {
           return '1.0.0-alpha3';
+        }
+
+        static get observers() {
+          return [
+            '__i18nChanged(i18n.header.*)'
+          ];
+        }
+
+        __i18nChanged(i18n) {
+          const header = i18n.base;
+          if (!header) {
+            return;
+          }
+          this.title = header.title;
+          this.description = header.description;
         }
 
         submit() {

@@ -59,7 +59,8 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
          * For changing the default localization, change the entire
          * _i18n_ object or just the property you want to modify.
          *
-         * The object has the following JSON structure and default values:
+         * The object has the following JSON structure (by default it doesn't include
+         * `header` section, which can be added to override `title` and `description` properties):
 
           {
             header: {
@@ -86,10 +87,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           type: Object,
           value: function() {
             return {
-              header: {
-                title: 'App name',
-                description: 'Inspiring application description'
-              },
               form: {
                 title: 'Log in',
                 username: 'Username',
@@ -105,8 +102,25 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             };
           },
           notify: true
+        },
+        /**
+         * Defines the application title
+         */
+        title: {
+          type: String,
+          value: 'App name',
+          notify: true
+        },
+        /**
+         * Defines the application description
+         */
+        description: {
+          type: String,
+          value: 'Application description',
+          notify: true
         }
       };
     }
+
   };
 </script>

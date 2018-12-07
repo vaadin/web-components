@@ -17,10 +17,16 @@
   </test-fixture>
 
   <test-fixture id="opened">
-      <template>
-        <vaadin-login-overlay opened></vaadin-login-overlay>
-      </template>
-    </test-fixture>
+    <template>
+      <vaadin-login-overlay opened></vaadin-login-overlay>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="set-title">
+    <template>
+      <vaadin-login-overlay title="New title" description="New description"></vaadin-login-overlay>
+    </template>
+  </test-fixture>
 
   <script>
     describe('Login Overlay test', () => {
@@ -114,6 +120,21 @@
 
         const {type} = loginEventSpy.args[0][0];
         expect(type).to.be.equal('login');
+      });
+
+      it('should set title and description from attributes and pass them to vaadin-login', () => {
+        const loginOverlay = fixture('set-title');
+        loginOverlay.opened = true;
+        const login = document.querySelectorAll('vaadin-login')[0];
+
+        const headerElement = login.shadowRoot.querySelector('[part="brand"] h1');
+        const descriptionElement = login.shadowRoot.querySelector('[part="brand"] p');
+
+        expect(login.title).to.be.equal('New title');
+        expect(login.description).to.be.equal('New description');
+
+        expect(headerElement.textContent).to.be.equal(login.title);
+        expect(descriptionElement.textContent).to.be.equal(login.description);
       });
     });
   </script>
