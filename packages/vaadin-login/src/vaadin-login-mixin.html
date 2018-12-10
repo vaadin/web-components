@@ -16,12 +16,26 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
    * @memberof Vaadin
   */
   Vaadin.LoginMixin = subclass => class VaadinLoginMixin extends subclass {
+
+    /**
+     * Fired when user clicks on the "Forgot password" button.
+     *
+     * @event forgot-password
+    */
+
+    /**
+     * Fired when an user submits the login.
+     * The event contains `username` and `password` values in the `detail` property.
+     *
+     * @event login
+     *
+    */
+
     static get properties() {
       return {
         /**
-         * Defines how the login callback will be handled on a submit action:
-         * - If set, a synchronous POST call will be fired to the path defined.
-         * - If left blank, a `login` event will be dispatched containing `username` and `password`
+         * If set, a synchronous POST call will be fired to the path defined.
+         * The `login` event is also dispatched, so `event.preventDefault()` can be called to prevent the POST call.
         */
         action: {
           type: String,
@@ -29,7 +43,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           notify: true
         },
         /**
-         * If set, disable the "Log in" button and prevent user from submitting login form
+         * If set, disable the "Log in" button and prevent user from submitting login form.
          */
         disabled: {
           type: Boolean,

@@ -149,17 +149,19 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
           this.error = false;
           this.disabled = true;
-          if (this.action == null) {
-            const eventDetails = {
-              bubbles: true,
-              cancelable: true,
-              detail: {
-                username: this.$.username.value,
-                password: this.$.password.value
-              }
-            };
-            this.dispatchEvent(new CustomEvent('login', eventDetails));
-          } else {
+
+          const loginEventDetails = {
+            bubbles: true,
+            cancelable: true,
+            detail: {
+              username: this.$.username.value,
+              password: this.$.password.value
+            }
+          };
+          const loginEvent = new CustomEvent('login', loginEventDetails);
+          this.dispatchEvent(loginEvent);
+
+          if (this.action && !loginEvent.defaultPrevented) {
             this.$.loginForm.submit();
           }
         }
@@ -185,20 +187,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         _isEnterKey(e) {
           return e.key === 'Enter' || e.keyCode === 13;
         }
-
-        /**
-         * Fired when user clicks on the "Forgot password" button
-         *
-         * @event forgot-password
-        */
-
-        /**
-         * Fired when an user submits the login.
-         * This event is fired **only** if `action` is `null`
-         *
-         * @event login
-         *
-        */
       }
 
       customElements.define(VaadinLogin.is, VaadinLogin);
