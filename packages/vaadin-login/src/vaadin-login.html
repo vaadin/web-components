@@ -87,7 +87,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           </div>
           <iron-form id="loginForm" allow-redirect>
             <form method="POST" action$="[[action]]">
-              <vaadin-text-field label="[[i18n.form.username]]" name="username" id="username" autofocus required on-keydown="_handleInputKeydown"></vaadin-text-field>
+              <vaadin-text-field label="[[i18n.form.username]]" name="username" id="username" required on-keydown="_handleInputKeydown"></vaadin-text-field>
               <vaadin-password-field label="[[i18n.form.password]]" name="password" id="password" required on-keydown="_handleInputKeydown"></vaadin-password-field>
 
               <vaadin-button id="submit" theme="primary contained" on-click="submit" disabled$="[[disabled]]">[[i18n.form.submit]]</vaadin-button>
