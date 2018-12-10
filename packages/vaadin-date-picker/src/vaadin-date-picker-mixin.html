@@ -155,16 +155,16 @@ This program is available under Apache License Version 2.0, available at https:/
 
               // A function to format given `Object` as
               // date string. Object is in the format `{ day: ..., month: ..., year: ... }`
+              // Note: The argument month is 0-based. This means that January = 0 and December = 11.
               formatDate: d => {
                 // returns a string representation of the given
                 // object in 'MM/DD/YYYY' -format
               },
 
               // A function to parse the given text to an `Object` in the format `{ day: ..., month: ..., year: ... }`.
-              // Must properly parse (at least) text
-              // formatted by `formatDate`.
-              // Setting the property to null will disable
-              // keyboard input feature.
+              // Must properly parse (at least) text formatted by `formatDate`.
+              // Setting the property to null will disable keyboard input feature.
+              // Note: The argument month is 0-based. This means that January = 0 and December = 11.
               parseDate: text => {
                 // Parses a string in 'MM/DD/YY', 'MM/DD' or 'DD' -format to
                 // an `Object` in the format `{ day: ..., month: ..., year: ... }`.
