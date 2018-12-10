@@ -16,7 +16,7 @@
 [API documentation ↗](https://vaadin.com/components/vaadin-grid-pro/html-api)
 
 
-[&lt;vaadin-grid-pro&gt;](https://vaadin.com/components/vaadin-grid-pro) is a Web Component providing &lt;element-functionality&gt;, part of the [Vaadin components](https://vaadin.com/components).
+[&lt;vaadin-grid-pro&gt;](https://vaadin.com/components/vaadin-grid-pro) is a high quality data grid / data table Web Component with extended functionality, part of the [Vaadin components](https://vaadin.com/components).
 
 <!--
 ```
