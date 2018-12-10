@@ -1,4 +1,4 @@
-gemini.suite('vaadin-element', function(rootSuite) {
+gemini.suite('vaadin-grid-pro', function(rootSuite) {
   function wait(actions, find) {
     actions.wait(5000);
   }
@@ -19,7 +19,7 @@ gemini.suite('vaadin-element', function(rootSuite) {
       suite
         .setUrl(`/default.html?theme=${theme}`)
         .setCaptureElements('#default-tests')
-        .capture(`vaadin-element`);
+        .capture(`vaadin-grid-pro`);
     });
   });
 

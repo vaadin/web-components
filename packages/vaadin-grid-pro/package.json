@@ -1,12 +1,12 @@
 {
-  "name": "@vaadin/vaadin-element",
+  "name": "@vaadin/vaadin-grid-pro",
   "version": "0.1.0",
-  "description": "vaadin-element",
-  "main": "vaadin-element.html",
-  "repository": "vaadin/vaadin-element",
+  "description": "vaadin-grid-pro",
+  "main": "vaadin-grid-pro.html",
+  "repository": "vaadin/vaadin-grid-pro",
   "keywords": [
     "Vaadin",
-    "vaadin-element",
+    "vaadin-grid-pro",
     "web-components",
     "web-component",
     "polymer"
@@ -14,7 +14,7 @@
   "author": "Vaadin Ltd",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/vaadin/vaadin-element/issues"
+    "url": "https://github.com/vaadin/vaadin-grid-pro/issues"
   },
   "homepage": "https://vaadin.com/components",
   "files": [

@@ -1,3 +1,3 @@
-window.VaadinElementSuites = [
+window.GridProElementSuites = [
   'sample-test.html'
 ];
