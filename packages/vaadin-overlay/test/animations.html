@@ -29,8 +29,7 @@
 
       beforeEach(() => {
         overlay = fixture('default');
-
-        sinon.stub(overlay, '_shouldAnimate', () => true);
+        overlay.style.setProperty('animation-name', 'close-anim');
 
         sinon.stub(overlay, '_enqueueAnimation', (type, callback) => {
           const handler = `__${type}Handler`;
@@ -75,6 +74,14 @@
 
         expect(overlay.parentNode).not.to.equal(document.body);
       });
+
+      it('should not animate closing if the overlay is explicilty hidden', () => {
+        overlay.opened = true;
+        overlay.hidden = true;
+        overlay.opened = false;
+        expect(overlay.parentNode).not.to.equal(document.body);
+      });
+
     });
   </script>
 </body>

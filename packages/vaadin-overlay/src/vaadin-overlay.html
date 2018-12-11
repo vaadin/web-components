@@ -540,7 +540,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
       _shouldAnimate() {
         const name = getComputedStyle(this).getPropertyValue('animation-name');
-        return name && name != 'none';
+        const hidden = getComputedStyle(this).getPropertyValue('display') === 'none';
+        return !hidden && name && name != 'none';
       }
 
       _enqueueAnimation(type, callback) {
