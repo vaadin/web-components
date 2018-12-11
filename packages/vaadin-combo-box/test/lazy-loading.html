@@ -111,6 +111,12 @@
             expect(comboBox.items).to.be.undefined;
           });
 
+          it('should close if empty result set is received', () => {
+            comboBox.dataProvider = (params, cb) => cb([], 0);
+            comboBox.opened = true;
+            expect(comboBox.opened).to.be.false;
+          });
+
           describe('when open', () => {
             beforeEach(() => comboBox.opened = true);
 
