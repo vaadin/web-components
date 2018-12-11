@@ -1,4 +1,4 @@
-window.GridProDemo = superClass => {
+window.ProGridDemo = superClass => {
   return class extends superClass {
     static get properties() {
       return {

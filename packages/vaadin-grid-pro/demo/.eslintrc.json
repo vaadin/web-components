@@ -2,7 +2,7 @@
   "rules": {
   },
   "globals": {
-    "GridProDemo": false,
+    "ProGridDemo": false,
     "DemoReadyEventEmitter": false
   }
 }

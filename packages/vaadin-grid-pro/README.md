@@ -1,41 +1,41 @@
-[![npm version](https://badgen.net/npm/v/@vaadin/vaadin-grid-pro)](https://www.npmjs.com/package/@vaadin/vaadin-grid-pro)
-[![Bower version](https://badgen.net/github/release/vaadin/vaadin-grid-pro)](https://github.com/vaadin/vaadin-grid-pro/releases)
-[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/vaadin/vaadin-grid-pro)
-[![Build Status](https://travis-ci.org/vaadin/vaadin-grid-pro.svg?branch=master)](https://travis-ci.org/vaadin/vaadin-grid-pro)
-[![Coverage Status](https://coveralls.io/repos/github/vaadin/vaadin-grid-pro/badge.svg?branch=master)](https://coveralls.io/github/vaadin/vaadin-grid-pro?branch=master)
+[![npm version](https://badgen.net/npm/v/@vaadin/vaadin-pro-grid)](https://www.npmjs.com/package/@vaadin/vaadin-pro-grid)
+[![Bower version](https://badgen.net/github/release/vaadin/vaadin-pro-grid)](https://github.com/vaadin/vaadin-pro-grid/releases)
+[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/vaadin/vaadin-pro-grid)
+[![Build Status](https://travis-ci.org/vaadin/vaadin-pro-grid.svg?branch=master)](https://travis-ci.org/vaadin/vaadin-pro-grid)
+[![Coverage Status](https://coveralls.io/repos/github/vaadin/vaadin-pro-grid/badge.svg?branch=master)](https://coveralls.io/github/vaadin/vaadin-pro-grid?branch=master)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/vaadin/web-components?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
- [![Published on Vaadin  Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-grid-pro)
-[![Stars on vaadin.com/directory](https://img.shields.io/vaadin-directory/star/vaadin-grid-pro-directory-urlidentifier.svg)](https://vaadin.com/directory/component/vaadinvaadin-grid-pro)
+ [![Published on Vaadin  Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-pro-grid)
+[![Stars on vaadin.com/directory](https://img.shields.io/vaadin-directory/star/vaadin-pro-grid-directory-urlidentifier.svg)](https://vaadin.com/directory/component/vaadinvaadin-pro-grid)
 
 
-# &lt;vaadin-grid-pro&gt;
+# &lt;vaadin-pro-grid&gt;
 
-[Live Demo ↗](https://vaadin.com/components/vaadin-grid-pro/html-examples)
+[Live Demo ↗](https://vaadin.com/components/vaadin-pro-grid/html-examples)
 |
-[API documentation ↗](https://vaadin.com/components/vaadin-grid-pro/html-api)
+[API documentation ↗](https://vaadin.com/components/vaadin-pro-grid/html-api)
 
 
-[&lt;vaadin-grid-pro&gt;](https://vaadin.com/components/vaadin-grid-pro) is a high quality data grid / data table Web Component with extended functionality, part of the [Vaadin components](https://vaadin.com/components).
+[&lt;vaadin-pro-grid&gt;](https://vaadin.com/components/vaadin-pro-grid) is a high quality data grid / data table Web Component with extended functionality, part of the [Vaadin components](https://vaadin.com/components).
 
 <!--
 ```
 <custom-element-demo>
   <template>
     <script src="../webcomponentsjs/webcomponents-lite.js"></script>
-    <link rel="import" href="vaadin-grid-pro.html">
+    <link rel="import" href="vaadin-pro-grid.html">
     <next-code-block></next-code-block>
   </template>
 </custom-element-demo>
 ```
 -->
 ```html
-<vaadin-grid-pro>
+<vaadin-pro-grid>
   ...
-</vaadin-grid-pro>
+</vaadin-pro-grid>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-grid-pro/master/screenshot.png" width="200" alt="Screenshot of vaadin-grid-pro">](https://vaadin.com/components/vaadin-grid-pro)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-pro-grid/master/screenshot.png" width="200" alt="Screenshot of vaadin-pro-grid">](https://vaadin.com/components/vaadin-pro-grid)
 
 
 ## Installation
@@ -49,30 +49,30 @@ are only published on npm, not pushed to GitHub repositories.
 
 ### Polymer 2 and HTML Imports compatible version
 
-Install `vaadin-grid-pro`:
+Install `vaadin-pro-grid`:
 
 ```sh
-bower i vaadin/vaadin-grid-pro --save
+bower i vaadin/vaadin-pro-grid --save
 ```
 
 Once installed, import it in your application:
 
 ```html
-<link rel="import" href="bower_components/vaadin-grid-pro/vaadin-grid-pro.html">
+<link rel="import" href="bower_components/vaadin-pro-grid/vaadin-pro-grid.html">
 ```
 ### Polymer 3 and ES Modules compatible version
 
 
-Install `vaadin-grid-pro`:
+Install `vaadin-pro-grid`:
 
 ```sh
-npm i @vaadin/vaadin-grid-pro --save
+npm i @vaadin/vaadin-pro-grid --save
 ```
 
 Once installed, import it in your application:
 
 ```js
-import '@vaadin/vaadin-grid-pro/vaadin-grid-pro.js';
+import '@vaadin/vaadin-pro-grid/vaadin-pro-grid.js';
 ```
 
 ## Getting started
@@ -85,24 +85,24 @@ To use the Material theme, import the correspondent file from the `theme/materia
 
 - The component with the Lumo theme:
 
-  `theme/lumo/vaadin-grid-pro.html`
+  `theme/lumo/vaadin-pro-grid.html`
 
 - The component with the Material theme:
 
-  `theme/material/vaadin-grid-pro.html`
+  `theme/material/vaadin-pro-grid.html`
 
-- Alias for `theme/lumo/vaadin-grid-pro.html`:
+- Alias for `theme/lumo/vaadin-pro-grid.html`:
 
-  `vaadin-grid-pro.html`
+  `vaadin-pro-grid.html`
 
 
 ## Running demos and tests in browser
 
-1. Fork the `vaadin-grid-pro` repository and clone it locally.
+1. Fork the `vaadin-pro-grid` repository and clone it locally.
 
 1. Make sure you have [npm](https://www.npmjs.com/) installed.
 
-1. When in the `vaadin-grid-pro` directory, run `npm install` and then `bower install` to install dependencies.
+1. When in the `vaadin-pro-grid` directory, run `npm install` and then `bower install` to install dependencies.
 
 1. Make sure you have [polymer-cli](https://www.npmjs.com/package/polymer-cli) installed globally: `npm i -g polymer-cli`.
 
@@ -110,13 +110,13 @@ To use the Material theme, import the correspondent file from the `theme/materia
 
 1. You can also open demo or in-browser tests by adding **demo** or **test** to the URL, for example:
 
-  - http://127.0.0.1:8080/components/vaadin-grid-pro/demo
-  - http://127.0.0.1:8080/components/vaadin-grid-pro/test
+  - http://127.0.0.1:8080/components/vaadin-pro-grid/demo
+  - http://127.0.0.1:8080/components/vaadin-pro-grid/test
 
 
 ## Running tests from the command line
 
-1. When in the `vaadin-grid-pro` directory, run `polymer test`
+1. When in the `vaadin-pro-grid` directory, run `polymer test`
 
 
 ## Following the coding style

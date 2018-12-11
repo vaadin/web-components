@@ -8,7 +8,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
 
-<dom-module id="vaadin-grid-pro">
+<dom-module id="vaadin-pro-grid">
   <template>
     <style>
       :host {
@@ -26,10 +26,10 @@ This program is available under Apache License Version 2.0, available at https:/
     (function() {
 
       /**
-       * `<vaadin-grid-pro>` is a Web Component.
+       * `<vaadin-pro-grid>` is a Web Component.
        *
        * ```
-       * <vaadin-grid-pro></vaadin-grid-pro>
+       * <vaadin-pro-grid></vaadin-pro-grid>
        * ```
        *
        * @memberof Vaadin
@@ -37,9 +37,9 @@ This program is available under Apache License Version 2.0, available at https:/
        * @mixes Vaadin.ThemableMixin
        * @demo demo/index.html
        */
-      class GridProElement extends Vaadin.ElementMixin(Vaadin.ThemableMixin(Polymer.Element)) {
+      class ProGridElement extends Vaadin.ElementMixin(Vaadin.ThemableMixin(Polymer.Element)) {
         static get is() {
-          return 'vaadin-grid-pro';
+          return 'vaadin-pro-grid';
         }
         static get version() {
           return '0.1.0';
@@ -51,12 +51,12 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
-      customElements.define(GridProElement.is, GridProElement);
+      customElements.define(ProGridElement.is, ProGridElement);
 
       /**
        * @namespace Vaadin
        */
-      window.Vaadin.GridProElement = GridProElement;
+      window.Vaadin.ProGridElement = ProGridElement;
     })();
   </script>
 </dom-module>

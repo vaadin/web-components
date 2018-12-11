@@ -1,4 +1,4 @@
-rootUrl: http://localhost:8080/components/vaadin-grid-pro/test/visual/
+rootUrl: http://localhost:8080/components/vaadin-pro-grid/test/visual/
 gridUrl: http://localhost:4444/wd/hub
 screenshotsDir: ./test/visual/screens
 

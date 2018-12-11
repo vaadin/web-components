@@ -19,7 +19,7 @@ module.exports = {
       dir: './coverage',
       reporters: ['text-summary', 'lcov'],
       include: [
-        '**/vaadin-grid-pro/src/*.html'
+        '**/vaadin-pro-grid/src/*.html'
       ],
       exclude: [],
       thresholds: {

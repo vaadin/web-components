@@ -1,3 +1,3 @@
-window.GridProElementSuites = [
+window.ProGridElementSuites = [
   'sample-test.html'
 ];

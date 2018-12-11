@@ -1,17 +1,17 @@
 {
-  "name": "vaadin-grid-pro",
+  "name": "vaadin-pro-grid",
   "homepage": "https://vaadin.com/components",
   "authors": [
     "Vaadin Ltd"
   ],
-  "description": "vaadin-grid-pro",
+  "description": "vaadin-pro-grid",
   "main": [
-    "vaadin-grid-pro.html",
-    "theme/material/vaadin-grid-pro.html"
+    "vaadin-pro-grid.html",
+    "theme/material/vaadin-pro-grid.html"
   ],
   "keywords": [
     "Vaadin",
-    "vaadin-grid-pro",
+    "vaadin-pro-grid",
     "web-components",
     "web-component",
     "polymer"

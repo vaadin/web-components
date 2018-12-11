@@ -1,0 +1,32 @@
+<dom-module id="pro-grid-basic-demos">
+  <template>
+    <style include="vaadin-component-demo-shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+
+
+    <h3>Sample example</h3>
+    <vaadin-demo-snippet id="pro-grid-basic-demos-sample-example" when-defined="vaadin-pro-grid">
+      <template preserve-content>
+        <vaadin-pro-grid></vaadin-pro-grid>
+        <script>
+          window.addDemoReadyListener('#pro-grid-basic-demos-sample-example', function(document) {
+            const ProGrid = document.querySelector('vaadin-pro-grid');
+            ProGrid.textContent = 'Foobar';
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+  </template>
+  <script>
+    class ProGridBasicDemos extends DemoReadyEventEmitter(ProGridDemo(Polymer.Element)) {
+      static get is() {
+        return 'pro-grid-basic-demos';
+      }
+    }
+    customElements.define(ProGridBasicDemos.is, ProGridBasicDemos);
+  </script>
+</dom-module>

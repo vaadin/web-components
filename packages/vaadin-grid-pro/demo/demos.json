@@ -3,8 +3,8 @@
   "pages": [
   {
     "name": "Basics",
-    "url": "grid-pro-basic-demos",
-    "src": "grid-pro-basic-demos.html",
+    "url": "pro-grid-basic-demos",
+    "src": "pro-grid-basic-demos.html",
     "meta": {
       "title": "Vaadin Grid Pro Basics",
       "description": "",
@@ -14,8 +14,8 @@
   ,
   {
     "name": "Advanced Usage",
-    "url": "grid-pro-advanced-demos",
-    "src": "grid-pro-advanced-demos.html",
+    "url": "pro-grid-advanced-demos",
+    "src": "pro-grid-advanced-demos.html",
     "meta": {
       "title": "Vaadin Grid Pro Advanced Examples",
       "description": "",
