@@ -58,6 +58,16 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="height-by-rows">
+    <template>
+      <vaadin-grid>
+        <vaadin-grid-column>
+          <template>[[index]]</template>
+        </vaadin-grid-column>
+      </vaadin-grid>
+    </template>
+  </test-fixture>
+
   <script>
     describe('resizing', () => {
 
@@ -131,6 +141,31 @@
             expect(grid.clientHeight).to.equal(headerHeight + bodyHeight + footerHeight);
             done();
           });
+        });
+
+        it('should align height with number of rows after first render', done => {
+          const grid = fixture('height-by-rows');
+          const rows = 100;
+
+          const getItems = () => {
+            const items = [];
+            for (let i = 0; i < rows; i++) {
+              items.push({});
+            }
+            return items;
+          };
+
+          grid.items = getItems();
+
+          setTimeout(() => {
+            grid.heightByRows = true;
+
+            animationFrameFlush(() => {
+              const bodyRows = getRows(grid.$.items);
+              expect(bodyRows.length).to.equal(rows);
+              done();
+            });
+          }, 1000);
         });
 
         describe('flexbox parent', () => {

@@ -389,7 +389,8 @@ This program is available under Apache License Version 2.0, available at https:/
           heightByRows: {
             type: Boolean,
             value: false,
-            reflectToAttribute: true
+            reflectToAttribute: true,
+            observer: '_heightByRowsChanged'
           }
         };
       }
@@ -713,6 +714,12 @@ This program is available under Apache License Version 2.0, available at https:/
        */
       notifyResize() {
         super.notifyResize();
+      }
+
+      _heightByRowsChanged(value, oldValue) {
+        if (value || oldValue) {
+          this.notifyResize();
+        }
       }
     }
 
