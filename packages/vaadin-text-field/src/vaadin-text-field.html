@@ -22,30 +22,9 @@ This program is available under Apache License Version 2.0, available at https:/
 
         <slot name="prefix"></slot>
 
-        <input part="value"
-          autocomplete$="[[autocomplete]]"
-          autocorrect$="[[autocorrect]]"
-          autocapitalize$="[[autocapitalize]]"
-          autofocus$="[[autofocus]]"
-          disabled$="[[disabled]]"
-          list="[[list]]"
-          maxlength$="[[maxlength]]"
-          minlength$="[[minlength]]"
-          pattern="[[pattern]]"
-          placeholder$="[[placeholder]]"
-          readonly$="[[readonly]]"
-          aria-readonly$="[[readonly]]"
-          required$="[[required]]"
-          aria-required$="[[required]]"
-          value="{{value::input}}"
-          title="[[title]]"
-          on-blur="validate"
-          on-input="_onInput"
-          on-change="_onChange"
-          aria-describedby$="[[_getActiveErrorId(invalid, errorMessage, _errorId)]]"
-          aria-labelledby$="[[_getActiveLabelId(label, _labelId)]]"
-          aria-invalid$="[[invalid]]"
-        >
+        <slot name="input">
+          <input part="value">
+        </slot>
 
         <div part="clear-button" id="clearButton" role="button" aria-label="Clear"></div>
         <slot name="suffix"></slot>

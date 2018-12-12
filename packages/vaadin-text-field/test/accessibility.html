@@ -19,15 +19,39 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="vaadin-text-field-default-with-slotted-input">
+    <template>
+      <vaadin-text-field>
+        <input slot="input">
+      </vaadin-text-field>
+    </template>
+  </test-fixture>
+
   <test-fixture id="vaadin-text-field-error-fixture">
     <template>
       <vaadin-text-field required error-message="ERR"></vaadin-text-field>
     </template>
   </test-fixture>
 
+  <test-fixture id="vaadin-text-field-error-fixture-with-slotted-input">
+    <template>
+      <vaadin-text-field required error-message="ERR">
+        <input slot="input"> 
+      </vaadin-text-field>
+    </template>
+  </test-fixture>
+
   <test-fixture id="vaadin-text-field-invalid-fixture">
     <template>
       <vaadin-text-field invalid error-message="ERR"></vaadin-text-field>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="vaadin-text-field-invalid-fixture-with-slotted-input">
+    <template>
+      <vaadin-text-field invalid error-message="ERR">
+        <input slot="input">  
+      </vaadin-text-field>
     </template>
   </test-fixture>
 
@@ -38,191 +62,244 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="vaadin-text-field-multiple-fields-with-slotted-input">
+    <template>
+      <vaadin-text-field>
+        <input slot="input">  
+      </vaadin-text-field>
+      <vaadin-text-field>
+        <input slot="input">  
+      </vaadin-text-field>
+    </template>
+  </test-fixture>
+
   <test-fixture id="vaadin-text-area-default">
-      <template>
-        <vaadin-text-area></vaadin-text-area>
-      </template>
-    </test-fixture>
+    <template>
+      <vaadin-text-area></vaadin-text-area>
+    </template>
+  </test-fixture>
 
-    <test-fixture id="vaadin-text-area-error-fixture">
-      <template>
-        <vaadin-text-area required error-message="ERR"></vaadin-text-area>
-      </template>
-    </test-fixture>
+  <test-fixture id="vaadin-text-area-default-with-slotted-input">
+    <template>
+      <vaadin-text-area>
+        <textarea slot="textarea"></textarea>
+      </vaadin-text-area>
+    </template>
+  </test-fixture>
 
-    <test-fixture id="vaadin-text-area-invalid-fixture">
-      <template>
-        <vaadin-text-area invalid error-message="ERR"></vaadin-text-area>
-      </template>
-    </test-fixture>
+  <test-fixture id="vaadin-text-area-error-fixture">
+    <template>
+      <vaadin-text-area required error-message="ERR"></vaadin-text-area>
+    </template>
+  </test-fixture>
 
-    <test-fixture id="vaadin-text-area-multiple-fields">
-      <template>
-        <vaadin-text-area></vaadin-text-area>
-        <vaadin-text-area></vaadin-text-field>
-      </template>
-    </test-fixture>
+  <test-fixture id="vaadin-text-area-error-fixture-with-slotted-input">
+    <template>
+      <vaadin-text-area required error-message="ERR">
+        <textarea slot="textarea"></textarea> 
+      </vaadin-text-area>
+    </template>
+  </test-fixture>
 
+  <test-fixture id="vaadin-text-area-invalid-fixture">
+    <template>
+      <vaadin-text-area invalid error-message="ERR"></vaadin-text-area>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="vaadin-text-area-invalid-fixture-with-slotted-input">
+    <template>
+      <vaadin-text-area invalid error-message="ERR">
+        <textarea slot="textarea"></textarea> 
+      </vaadin-text-area>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="vaadin-text-area-multiple-fields">
+    <template>
+      <vaadin-text-area></vaadin-text-area>
+      <vaadin-text-area></vaadin-text-field>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="vaadin-text-area-multiple-fields-with-slotted-input">
+    <template>
+      <vaadin-text-area>
+        <textarea slot="textarea"></textarea>
+      </vaadin-text-area>
+      <vaadin-text-area>
+        <textarea slot="textarea"></textarea>
+      </vaadin-text-field>
+    </template>
+  </test-fixture>
+  
   <script>
-    describe('keyboard', function() {
-      let textField, escKeyDownEvent;
+    ['', 'with slotted input'].forEach(condition => {
+      let fixtureName = '';
+      if (condition !== '') {
+        fixtureName = '-with-slotted-input';
+      }
 
-      beforeEach(function() {
-        textField = fixture(`vaadin-text-field-default`);
+      describe(`keyboard ${condition}`, function() {
+        let textField, escKeyDownEvent;
 
-        escKeyDownEvent = new CustomEvent('keydown', {
-          bubbles: true,
-          cancelable: true
+        beforeEach(function() {
+          textField = fixture(`vaadin-text-field-default${fixtureName}`);
+
+          escKeyDownEvent = new CustomEvent('keydown', {
+            bubbles: true,
+            cancelable: true
+          });
+          escKeyDownEvent.keyCode = 27;
+          escKeyDownEvent.code = 27;
         });
-        escKeyDownEvent.keyCode = 27;
-        escKeyDownEvent.code = 27;
+
+        it('should clear the value on ESC if clear button is visible', function() {
+          textField.value = 'Foo';
+          textField.clearButtonVisible = true;
+          textField.dispatchEvent(escKeyDownEvent);
+          expect(textField.value).not.to.be.ok;
+        });
+
+        it('should not clear the value on ESC if clear button is not visible', function() {
+          textField.value = 'Foo';
+          textField.dispatchEvent(escKeyDownEvent);
+          expect(textField.value).to.be.equal('Foo');
+        });
+
       });
 
-      it('should clear the value on ESC if clear button is visible', function() {
-        textField.value = 'Foo';
-        textField.clearButtonVisible = true;
-        textField.dispatchEvent(escKeyDownEvent);
-        expect(textField.value).not.to.be.ok;
-      });
+      ['vaadin-text-field', 'vaadin-text-area'].forEach(el => {
+        describe(`${el}: accessibility ${condition}`, function() {
 
-      it('should not clear the value on ESC if clear button is not visible', function() {
-        textField.value = 'Foo';
-        textField.dispatchEvent(escKeyDownEvent);
-        expect(textField.value).to.be.equal('Foo');
-      });
+          describe(`default ${condition}`, function() {
+            let tf, label, input;
 
-    });
+            beforeEach(function() {
+              tf = fixture(`${el}-default${fixtureName}`);
+              input = tf.focusElement;
+              label = tf.root.querySelector('[part=label]');
+            });
 
-    ['vaadin-text-field', 'vaadin-text-area'].forEach(el => {
-      describe(`${el}: accessibility`, function() {
+            it('should label the input', function() {
+              tf.label = 'foo';
+              expect(input.getAttribute('aria-labelledby')).to.equal(label.id);
+            });
 
-        describe('default', function() {
-          let tf, label, input;
+            it('should not label the input', function() {
+              expect(input.hasAttribute('aria-labelledby')).to.be.false;
+            });
 
-          beforeEach(function() {
-            tf = fixture(`${el}-default`);
-            input = tf.focusElement;
-            label = tf.root.querySelector('[part=label]');
+            it('should not be marked required', function() {
+              expect(input.hasAttribute('aria-required')).to.be.false;
+            });
+
+            it('should be marked required', function() {
+              tf.required = true;
+              expect(input.hasAttribute('aria-required')).to.be.true;
+            });
+
+            it('should not be marked readonly', function() {
+              expect(input.hasAttribute('aria-readonly')).to.be.false;
+            });
+
+            it('should be marked readonly', function() {
+              tf.readonly = true;
+              expect(input.hasAttribute('aria-readonly')).to.be.true;
+            });
+
           });
 
-          it('should label the input', function() {
-            tf.label = 'foo';
-            expect(input.getAttribute('aria-labelledby')).to.equal(label.id);
+          describe(`error ${condition}`, function() {
+            let tf, err, input;
+
+            beforeEach(function() {
+              tf = fixture(`${el}-error-fixture${fixtureName}`);
+              input = tf.focusElement;
+              err = tf.root.querySelector('[part=error-message]');
+            });
+
+            it('should have an error element', function() {
+              expect(err).to.be.ok;
+            });
+
+            it('should not announce the error message initially', function() {
+              expect(err.getAttribute('aria-hidden')).to.equal('true');
+            });
+
+            it('should announce the error message after validation is run', function() {
+              tf.validate();
+              expect(window.getComputedStyle(err).display).not.to.equal('none');
+              expect(err.getAttribute('aria-hidden')).to.equal('false');
+            });
+
+            it('should not announce the error message if error-message is empty', function() {
+              tf.errorMessage = '';
+              tf.validate();
+              expect(err.getAttribute('aria-hidden')).to.equal('true');
+            });
+
+            it('should not have aria-describedby attribute if valid', function() {
+              expect(input.hasAttribute('aria-describedby')).to.be.false;
+            });
+
+            it('should have aria-describedby attribute when invalid', function() {
+              tf.validate();
+              expect(input.getAttribute('aria-describedby')).to.equal(err.id);
+            });
+
+            it('should have appropriate aria-live attribute', function() {
+              expect(err.getAttribute('aria-live')).to.equal('assertive');
+            });
+
           });
 
-          it('should not label the input', function() {
-            expect(input.hasAttribute('aria-labelledby')).to.be.false;
+          describe(`invalid ${condition}`, function() {
+            let tf, err, input;
+
+            beforeEach(function() {
+              tf = fixture(`${el}-invalid-fixture${fixtureName}`);
+              err = tf.root.querySelector('[part=error-message]');
+              input = tf.focusElement;
+            });
+
+            it('should show the error if initially invalid', function() {
+              expect(window.getComputedStyle(err).display).not.to.equal('none');
+            });
+
+            it('should be marked invalid', function() {
+              expect(input.hasAttribute('aria-invalid')).to.be.true;
+            });
+
+            it('should not be marked invalid', function() {
+              tf.invalid = false;
+              expect(input.hasAttribute('aria-invalid')).to.be.false;
+            });
+
           });
 
-          it('should not be marked required', function() {
-            expect(input.hasAttribute('aria-required')).to.be.false;
-          });
+          describe(`multiple fields ${condition}`, function() {
+            let fields;
 
-          it('should be marked required', function() {
-            tf.required = true;
-            expect(input.hasAttribute('aria-required')).to.be.true;
-          });
+            beforeEach(function() {
+              fields = fixture(`${el}-multiple-fields${fixtureName}`);
+            });
 
-          it('should not be marked readonly', function() {
-            expect(input.hasAttribute('aria-readonly')).to.be.false;
-          });
+            it('should have unique error identifiers', function() {
+              var err0 = fields[0].root.querySelector('[part=error-message]');
+              var err1 = fields[1].root.querySelector('[part=error-message]');
+              expect(err0.id).not.to.equal(err1.id);
+            });
 
-          it('should be marked readonly', function() {
-            tf.readonly = true;
-            expect(input.hasAttribute('aria-readonly')).to.be.true;
-          });
+            it('should have unique label identifiers', function() {
+              var label0 = fields[0].root.querySelector('[part=label]');
+              var label1 = fields[1].root.querySelector('[part=label]');
+              expect(label0.id).not.to.equal(label1.id);
+            });
 
-        });
-
-        describe('error', function() {
-          let tf, err, input;
-
-          beforeEach(function() {
-            tf = fixture(`${el}-error-fixture`);
-            input = tf.focusElement;
-            err = tf.root.querySelector('[part=error-message]');
-          });
-
-          it('should have an error element', function() {
-            expect(err).to.be.ok;
-          });
-
-          it('should not announce the error message initially', function() {
-            expect(err.getAttribute('aria-hidden')).to.equal('true');
-          });
-
-          it('should announce the error message after validation is run', function() {
-            tf.validate();
-            expect(window.getComputedStyle(err).display).not.to.equal('none');
-            expect(err.getAttribute('aria-hidden')).to.equal('false');
-          });
-
-          it('should not announce the error message if error-message is empty', function() {
-            tf.errorMessage = '';
-            tf.validate();
-            expect(err.getAttribute('aria-hidden')).to.equal('true');
-          });
-
-          it('should not have aria-describedby attribute if valid', function() {
-            expect(input.hasAttribute('aria-describedby')).to.be.false;
-          });
-
-          it('should have aria-describedby attribute when invalid', function() {
-            tf.validate();
-            expect(input.getAttribute('aria-describedby')).to.equal(err.id);
-          });
-
-          it('should have appropriate aria-live attribute', function() {
-            expect(err.getAttribute('aria-live')).to.equal('assertive');
-          });
-
-        });
-
-        describe('invalid', function() {
-          let tf, err, input;
-
-          beforeEach(function() {
-            tf = fixture(`${el}-invalid-fixture`);
-            err = tf.root.querySelector('[part=error-message]');
-            input = tf.focusElement;
-          });
-
-          it('should show the error if initially invalid', function() {
-            expect(window.getComputedStyle(err).display).not.to.equal('none');
-          });
-
-          it('should be marked invalid', function() {
-            expect(input.hasAttribute('aria-invalid')).to.be.true;
-          });
-
-          it('should not be marked invalid', function() {
-            tf.invalid = false;
-            expect(input.hasAttribute('aria-invalid')).to.be.false;
-          });
-
-        });
-
-        describe('multiple fields', function() {
-          let fields;
-
-          beforeEach(function() {
-            fields = fixture(`${el}-multiple-fields`);
-          });
-
-          it('should have unique error identifiers', function() {
-            var err0 = fields[0].root.querySelector('[part=error-message]');
-            var err1 = fields[1].root.querySelector('[part=error-message]');
-            expect(err0.id).not.to.equal(err1.id);
-          });
-
-          it('should have unique label identifiers', function() {
-            var label0 = fields[0].root.querySelector('[part=label]');
-            var label1 = fields[1].root.querySelector('[part=label]');
-            expect(label0.id).not.to.equal(label1.id);
           });
 
         });
-
       });
     });
 

@@ -26,7 +26,11 @@
           font-weight: bold;
         }
 
-        [part~="value"] {
+        /* NOTE(yuriy): Targeting slotted elements as workaround for
+           gemini firfox 47 to overcome stronger selector */
+        [part="value"],
+        [part="input-field"] ::slotted(input),
+        [part="input-field"] ::slotted(textarea) {
           background-color: red;
           border: none;
           --_lumo-text-field-overflow-mask-image: none;

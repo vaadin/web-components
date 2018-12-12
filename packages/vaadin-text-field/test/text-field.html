@@ -19,239 +19,267 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="default-with-slotted-input">
+    <template>
+      <vaadin-text-field>
+        <input slot="input">
+      </vaadin-text-field>
+    </template>
+  </test-fixture>
+
   <script>
+    ['', 'with slotted input'].forEach(condition => {
+      let fixtureName = '';
+      if (condition !== '') {
+        fixtureName = '-with-slotted-input';
+      }
 
-    describe('properties', function() {
-      var textField, input;
+      describe(`properties ${condition}`, function() {
+        var textField, input;
 
-      beforeEach(function() {
-        textField = fixture('default');
-        input = textField.focusElement;
-      });
+        beforeEach(function() {
+          textField = fixture(`default${fixtureName}`);
+          input = textField.focusElement;
+        });
 
-      describe('native', function() {
+        describe(`native ${condition}`, function() {
 
-        function assertAttrCanBeSet(prop, value) {
-          textField[prop] = value;
-          var attrval = input.getAttribute(prop);
+          function assertAttrCanBeSet(prop, value) {
+            textField[prop] = value;
+            var attrval = input.getAttribute(prop);
 
-          if (value === true) {
-            expect(attrval).not.to.be.null;
-          } else if (value === false) {
-            expect(attrval).to.be.null;
-          } else if (value) {
-            expect(attrval).to.be.equal(String(value));
+            if (value === true) {
+              expect(attrval).not.to.be.null;
+            } else if (value === false) {
+              expect(attrval).to.be.null;
+            } else if (value) {
+              expect(attrval).to.be.equal(String(value));
+            }
           }
-        }
 
-        function assertPropCanBeSet(prop, value) {
-          textField[prop] = value;
-          expect(input[prop]).to.be.equal(value);
-        }
+          function assertPropCanBeSet(prop, value) {
+            textField[prop] = value;
+            expect(input[prop]).to.be.equal(value);
+          }
 
-        ['pattern', 'placeholder', 'value', 'title'].forEach(function(prop) {
-          it('should set string property ' + prop, function() {
-            assertPropCanBeSet(prop, 'foo');
+          ['pattern', 'placeholder', 'value', 'title'].forEach(function(prop) {
+            it('should set string property ' + prop, function() {
+              assertPropCanBeSet(prop, 'foo');
+            });
+          });
+
+          ['autofocus', 'disabled'].forEach(function(prop) {
+            it('should set boolean property ' + prop, function() {
+              assertPropCanBeSet(prop, true);
+            });
+          });
+
+          ['maxlength', 'minlength'].forEach(function(prop) {
+            it('should set numeric attribute ' + prop, function() {
+              assertAttrCanBeSet(prop, 2);
+            });
+          });
+
+          ['autocomplete'].forEach(function(prop) {
+            it('should set boolean attribute ' + prop, function() {
+              assertAttrCanBeSet(prop, 'on');
+            });
+          });
+
+          ['autocapitalize'].forEach(function(prop) {
+            it('should set boolean attribute ' + prop, function() {
+              assertAttrCanBeSet(prop, 'off');
+            });
+          });
+
+          ['autocomplete', 'autocorrect', 'readonly', 'required'].forEach(function(prop) {
+            it('should set boolean attribute ' + prop, function() {
+              assertAttrCanBeSet(prop, true);
+              assertAttrCanBeSet(prop, false);
+            });
           });
         });
 
-        ['autofocus', 'disabled'].forEach(function(prop) {
-          it('should set boolean property ' + prop, function() {
-            assertPropCanBeSet(prop, true);
+        describe(`clear button ${condition}`, function() {
+          it('default value of clearButtonVisible should be false', function() {
+            expect(textField.clearButtonVisible).to.be.false;
           });
-        });
 
-        ['maxlength', 'minlength'].forEach(function(prop) {
-          it('should set numeric attribute ' + prop, function() {
-            assertAttrCanBeSet(prop, 2);
-          });
-        });
-
-        ['autocomplete'].forEach(function(prop) {
-          it('should set boolean attribute ' + prop, function() {
-            assertAttrCanBeSet(prop, 'on');
-          });
-        });
-
-        ['autocapitalize'].forEach(function(prop) {
-          it('should set boolean attribute ' + prop, function() {
-            assertAttrCanBeSet(prop, 'off');
-          });
-        });
-
-        ['autocomplete', 'autocorrect', 'readonly', 'required'].forEach(function(prop) {
-          it('should set boolean attribute ' + prop, function() {
-            assertAttrCanBeSet(prop, true);
-            assertAttrCanBeSet(prop, false);
-          });
-        });
-      });
-
-      describe('clear button', function() {
-        it('default value of clearButtonVisible should be false', function() {
-          expect(textField.clearButtonVisible).to.be.false;
-        });
-
-        it('clear button should not be visible when field has no value', function() {
-          textField.clearButtonVisible = true;
-          expect(getComputedStyle(textField.$.clearButton).getPropertyValue('display')).to.be.equal('none');
-        });
-
-        it('should dispatch change event when clear button is clicked', function() {
-          const changeSpy = sinon.spy();
-          textField.addEventListener('change', changeSpy);
-          textField.clearButtonVisible = true;
-          textField.value = 'Foo';
-          textField.$.clearButton.click();
-          expect(changeSpy).to.be.calledOnce;
-        });
-
-        it('should set _valueClearing flag not to dipatch change event on mousedown and remove it it on click', function() {
-          // Testing internal implementation as it impossible to test native change event.
-          // For case when the field is focused, value is changed, clear button is pressed.
-          // Should not fire two change events.
-          const changeSpy = sinon.spy();
-          textField.addEventListener('change', changeSpy);
-
-          textField.$.clearButton.dispatchEvent(new CustomEvent('mousedown'));
-          expect(textField._valueClearing).to.be.true;
-
-          // Emulates native change coming from input.
-          textField.focusElement.dispatchEvent(new Event('change', {bubbles: true}));
-
-          textField.$.clearButton.dispatchEvent(new CustomEvent('click'));
-          expect(textField._valueClearing).to.be.false;
-
-          expect(changeSpy).to.be.calledOnce;
-        });
-
-        ['disabled', 'readonly'].forEach(state => {
-          it(`clear button should not be visible when field is ${state}`, function() {
+          it('clear button should not be visible when field has no value', function() {
             textField.clearButtonVisible = true;
-            textField.setAttribute(state, true);
             expect(getComputedStyle(textField.$.clearButton).getPropertyValue('display')).to.be.equal('none');
           });
+
+          it('should dispatch change event when clear button is clicked', function() {
+            const changeSpy = sinon.spy();
+            textField.addEventListener('change', changeSpy);
+            textField.clearButtonVisible = true;
+            textField.value = 'Foo';
+            textField.$.clearButton.click();
+            expect(changeSpy).to.be.calledOnce;
+          });
+
+          it('should set _valueClearing flag not to dipatch change event on mousedown and remove it it on click', function() {
+            // Testing internal implementation as it impossible to test native change event.
+            // For case when the field is focused, value is changed, clear button is pressed.
+            // Should not fire two change events.
+            const changeSpy = sinon.spy();
+            textField.addEventListener('change', changeSpy);
+
+            textField.$.clearButton.dispatchEvent(new CustomEvent('mousedown'));
+            expect(textField._valueClearing).to.be.true;
+
+            // Emulates native change coming from input.
+            textField.focusElement.dispatchEvent(new Event('change', {bubbles: !condition}));
+
+            textField.$.clearButton.dispatchEvent(new CustomEvent('click'));
+            expect(textField._valueClearing).to.be.false;
+
+            expect(changeSpy).to.be.calledOnce;
+          });
+
+          ['disabled', 'readonly'].forEach(state => {
+            it(`clear button should not be visible when field is ${state}`, function() {
+              textField.clearButtonVisible = true;
+              textField.setAttribute(state, true);
+              expect(getComputedStyle(textField.$.clearButton).getPropertyValue('display')).to.be.equal('none');
+            });
+          });
+
         });
 
-      });
+        describe(`binding ${condition}`, function() {
+          it('default value should be empty string', function() {
+            expect(textField.value).to.be.equal('');
+          });
 
-      describe('binding', function() {
-        it('default value should be empty string', function() {
-          expect(textField.value).to.be.equal('');
-        });
+          it('setting input value updates value', function() {
+            input.value = 'foo';
+            input.dispatchEvent(new Event('input', {bubbles: true, cancelable: true, composed: true}));
+            expect(textField.value).to.be.equal('foo');
+          });
 
-        it('setting input value updates value', function() {
-          input.value = 'foo';
-          input.dispatchEvent(new Event('input', {bubbles: true, cancelable: true, composed: true}));
-          expect(textField.value).to.be.equal('foo');
-        });
+          it('setting input value updates has-value attribute', function() {
+            textField.value = 'foo';
+            expect(textField.hasAttribute('has-value')).to.be.true;
+          });
 
-        it('setting input value updates has-value attribute', function() {
-          textField.value = 'foo';
-          expect(textField.hasAttribute('has-value')).to.be.true;
-        });
+          it('setting value to undefine should not update has-value attribute', function() {
+            textField.value = undefined;
+            expect(textField.hasAttribute('has-value')).to.be.false;
+          });
 
-        it('setting value to undefine should not update has-value attribute', function() {
-          textField.value = undefined;
-          expect(textField.hasAttribute('has-value')).to.be.false;
-        });
+          it('setting empty value does not update has-value attribute', function() {
+            textField.value = '';
+            expect(textField.hasAttribute('has-value')).to.be.false;
+          });
 
-        it('setting empty value does not update has-value attribute', function() {
-          textField.value = '';
-          expect(textField.hasAttribute('has-value')).to.be.false;
-        });
+          // User could accidently set a 0 or false value
+          it('setting number value updates has-value attribute', function() {
+            textField.value = 0;
+            expect(textField.hasAttribute('has-value')).to.be.true;
+          });
 
-        // User could accidently set a 0 or false value
-        it('setting number value updates has-value attribute', function() {
-          textField.value = 0;
-          expect(textField.hasAttribute('has-value')).to.be.true;
-        });
+          it('setting boolean value updates has-value attribute', function() {
+            textField.value = false;
+            expect(textField.hasAttribute('has-value')).to.be.true;
+          });
 
-        it('setting boolean value updates has-value attribute', function() {
-          textField.value = false;
-          expect(textField.hasAttribute('has-value')).to.be.true;
-        });
+          it('setting label updates has-label attribute', function() {
+            textField.label = 'foo';
+            expect(textField.hasAttribute('has-label')).to.be.true;
+          });
 
-        it('setting label updates has-label attribute', function() {
-          textField.label = 'foo';
-          expect(textField.hasAttribute('has-label')).to.be.true;
-        });
+          it('setting label to empty string does not update has-label attribute', function() {
+            textField.label = '';
+            expect(textField.hasAttribute('has-label')).to.be.false;
+          });
 
-        it('setting label to empty string does not update has-label attribute', function() {
-          textField.label = '';
-          expect(textField.hasAttribute('has-label')).to.be.false;
-        });
+          it('setting label to null does not update has-label attribute', function() {
+            textField.label = null;
+            expect(textField.hasAttribute('has-label')).to.be.false;
+          });
 
-        it('setting label to null does not update has-label attribute', function() {
-          textField.label = null;
-          expect(textField.hasAttribute('has-label')).to.be.false;
-        });
-
-        it('setting number label updates has-label attribute', function() {
-          textField.label = 0;
-          expect(textField.hasAttribute('has-label')).to.be.true;
-        });
-      });
-
-      if (!window.ShadyDOM) {
-        describe('label', function() {
-          it('should not update focused property on click if disabled', function() {
-            textField.disabled = true;
-            const label = textField.root.querySelector('[part="label"]');
-            label.click();
-            expect(textField.getAttribute('focused')).to.be.null;
+          it('setting number label updates has-label attribute', function() {
+            textField.label = 0;
+            expect(textField.hasAttribute('has-label')).to.be.true;
           });
         });
-      }
-    });
 
-    describe('events', function() {
-      let textField, input;
-
-      beforeEach(function() {
-        textField = fixture('default');
-        input = textField.focusElement;
+        if (!window.ShadyDOM) {
+          describe(`label ${condition}`, function() {
+            it('should not update focused property on click if disabled', function() {
+              textField.disabled = true;
+              const label = textField.root.querySelector('[part="label"]');
+              label.click();
+              expect(textField.getAttribute('focused')).to.be.null;
+            });
+          });
+        }
       });
 
-      it('should dispatch change event on native input change', done => {
-        const changeEvent = new Event('change');
+      describe(`events ${condition}`, function() {
+        let textField, input;
 
-        textField.addEventListener('change', e => {
-          expect(e.detail.sourceEvent).to.equal(changeEvent);
-          done();
+        beforeEach(function() {
+          textField = fixture(`default${fixtureName}`);
+          input = textField.focusElement;
         });
 
-        input.dispatchEvent(changeEvent);
-      });
+        it('should dispatch change event on native input change', done => {
+          const changeEvent = new Event('change');
 
-      // IE11 placeholder bug
-      const IE = navigator.userAgent.match(/Trident/);
+          textField.addEventListener('change', e => {
+            expect(e.detail.sourceEvent).to.equal(changeEvent);
+            done();
+          });
 
-      (IE ? it : it.skip)('should not dispatch input event in IE on focus, when placeholder is set', done => {
-        const spy = sinon.spy();
-        textField.placeholder = 'foo';
-
-        textField.addEventListener('input', spy);
-
-        textField.focus();
-
-        setTimeout(() => {
-          expect(spy.called).to.be.false;
-          done();
+          input.dispatchEvent(changeEvent);
         });
-      });
 
-      (IE ? it : it.skip)('should not dispatch input event in IE on blur, when placeholder is set', done => {
-        const spy = sinon.spy();
-        textField.placeholder = 'foo';
+        // IE11 placeholder bug
+        const IE = navigator.userAgent.match(/Trident/);
 
-        textField.addEventListener('input', spy);
+        (IE ? it : it.skip)('should not dispatch input event in IE on focus, when placeholder is set', done => {
+          const spy = sinon.spy();
+          textField.placeholder = 'foo';
 
-        textField.focus();
+          textField.addEventListener('input', spy);
 
-        // needs timeout to reproduce
-        setTimeout(() => {
-          textField.blur();
+          textField.focus();
+
+          setTimeout(() => {
+            expect(spy.called).to.be.false;
+            done();
+          });
+        });
+
+        (IE ? it : it.skip)('should not dispatch input event in IE on blur, when placeholder is set', done => {
+          const spy = sinon.spy();
+          textField.placeholder = 'foo';
+
+          textField.addEventListener('input', spy);
+
+          textField.focus();
+
+          // needs timeout to reproduce
+          setTimeout(() => {
+            textField.blur();
+
+            setTimeout(() => {
+              expect(spy.called).to.be.false;
+              done();
+            });
+          });
+        });
+
+        (IE ? it : it.skip)('should not dispatch input event in IE on placeholder value change', done => {
+          const spy = sinon.spy();
+          textField.placeholder = 'foo';
+
+          textField.addEventListener('input', spy);
+
+          textField.placeholder = 'bar';
 
           setTimeout(() => {
             expect(spy.called).to.be.false;
@@ -260,32 +288,18 @@
         });
       });
 
-      (IE ? it : it.skip)('should not dispatch input event in IE on placeholder value change', done => {
-        const spy = sinon.spy();
-        textField.placeholder = 'foo';
-
-        textField.addEventListener('input', spy);
-
-        textField.placeholder = 'bar';
-
-        setTimeout(() => {
-          expect(spy.called).to.be.false;
-          done();
+      describe(`methods ${condition}`, function() {
+        it('should not throw an error when using focus() to a newly created element', () => {
+          // No expect needed as an error is thrown when focusing undefined element
+          document.createElement('vaadin-text-field').focus();
         });
-      });
-    });
 
-    describe('methods', function() {
-      it('should not throw an error when using focus() to a newly created element', () => {
-        // No expect needed as an error is thrown when focusing undefined element
-        document.createElement('vaadin-text-field').focus();
-      });
-
-      it('should clear the value when clear() is called', () => {
-        const textField = fixture('default');
-        textField.value = 'Foo';
-        textField.clear();
-        expect(textField.value).not.to.be.ok;
+        it('should clear the value when clear() is called', () => {
+          const textField = fixture(`default${fixtureName}`);
+          textField.value = 'Foo';
+          textField.clear();
+          expect(textField.value).not.to.be.ok;
+        });
       });
     });
   </script>

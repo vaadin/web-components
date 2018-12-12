@@ -10,6 +10,7 @@
   <link rel="import" href="../vaadin-text-field.html">
   <link rel="import" href="../vaadin-text-area.html">
   <link rel="import" href="../../iron-form/iron-form.html">
+  <link rel="import" href="../../iron-input/iron-input.html">
 
 </head>
 
@@ -19,6 +20,19 @@
       <iron-form id="iform">
         <form>
           <vaadin-text-field name="foo"></vaadin-text-field>
+        </form>
+      </iron-form>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="vaadin-text-field-default-with-slotted-input">
+    <template>
+      <iron-form id="iform">
+        <form>
+          <vaadin-text-field name="foo">
+            <input slot="input">
+          </vaadin-text-field>
+          <iron-input name="iron-value" value="1"><input name="iron-value" value="1" type="number"></iron-input>
         </form>
       </iron-form>
     </template>
@@ -34,170 +48,193 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="vaadin-text-area-default-with-slotted-input">
+    <template>
+      <iron-form id="iform">
+        <form>
+          <vaadin-text-area name="foo">
+            <textarea slot="textarea"></textarea>
+          </vaadin-text-area>
+        </form>
+      </iron-form>
+    </template>
+  </test-fixture>
+
   <script>
+    ['', 'with slotted input'].forEach(condition => {
+      let fixtureName = '';
+      if (condition !== '') {
+        fixtureName = '-with-slotted-input';
+      }
 
-    ['vaadin-text-field', 'vaadin-text-area'].forEach(el => {
-      const isTextField = el === 'vaadin-text-field';
+      ['vaadin-text-field', 'vaadin-text-area'].forEach(el => {
+        const isTextField = el === 'vaadin-text-field';
 
-      describe(`${el}: validate`, function() {
-        let iform, tf, input;
-
-        beforeEach(function() {
-          iform = fixture(`${el}-default`);
-          tf = iform.querySelector(el);
-          input = tf.focusElement;
-        });
-
-        it('should call validate', function(done) {
-          sinon.stub(tf, 'validate', done);
-          iform.submit();
-        });
-
-        it('should serialize correctly', function() {
-          tf.value = 'bar';
-          expect(iform.serializeForm().foo).to.equal('bar');
-        });
-
-        it('should pass if not required', function() {
-          expect(iform.validate()).to.be.true;
-        });
-
-        it('should fail if required', function() {
-          tf.required = true;
-          expect(iform.validate()).to.be.false;
-        });
-
-        it('should have the invalid attribute', function() {
-          tf.required = true;
-          tf.validate();
-          expect(tf.getAttribute('invalid')).to.be.equal('');
-        });
-
-        it('should not have the invalid attribute', function() {
-          tf.required = true;
-          tf.validate();
-          tf.required = false;
-          tf.validate();
-          expect(tf.getAttribute('invalid')).not.to.be.ok;
-        });
-
-        it('validate() should return correct boolean value', function() {
-          tf.required = true;
-          tf.minlength = 2;
-          expect(tf.validate()).to.be.false;
-          tf.value = 'hi';
-          expect(tf.validate()).to.be.true;
-        });
-
-        it('should check validity on validate', function() {
-          const spy = sinon.spy(tf, 'checkValidity');
-          tf.validate();
-          expect(spy.called).to.be.true;
-        });
-
-        it('should not change invalid property is no constraints are set', function() {
-          tf.validate();
-          expect(tf.invalid).to.be.false;
-          tf.invalid = true;
-          tf.validate();
-          expect(tf.invalid).to.be.true;
-        });
-
-        it('should override explicilty set invalid if constraints are set', function() {
-          tf.invalid = true;
-          tf.value = 'foo';
-          tf.required = true;
-          tf.validate();
-          expect(tf.invalid).to.be.false;
-        });
-
-        describe('prevent invalid input', function() {
+        describe(`${el}: validate ${condition}`, function() {
+          let iform, tf, input;
 
           beforeEach(function() {
-            tf.preventInvalidInput = true;
-            tf.value = '1';
+            iform = fixture(`${el}-default${fixtureName}`);
+            tf = iform.querySelector(el);
+            input = tf.focusElement;
           });
 
-          describe('user action', function() {
+          it('should call validate', function(done) {
+            sinon.stub(tf, 'validate', done);
+            iform.submit();
+          });
 
-            function userSetValue(value) {
-              input.value = value;
-              input.dispatchEvent(new CustomEvent('input'));
+          it('should serialize correctly', function() {
+            // Workaround for iron-form not to send two similar values.
+            if (condition) {
+              tf.name = '';
+              input.name = 'foo';
             }
+            tf.value = 'bar';
+            expect(iform.serializeForm().foo).to.equal('bar');
+          });
 
-            if (isTextField) {
-              it('should prevent invalid pattern', function() {
+          it('should pass if not required', function() {
+            expect(iform.validate()).to.be.true;
+          });
+
+          it('should fail if required', function() {
+            tf.required = true;
+            expect(iform.validate()).to.be.false;
+          });
+
+          it('should have the invalid attribute', function() {
+            tf.required = true;
+            tf.validate();
+            expect(tf.getAttribute('invalid')).to.be.equal('');
+          });
+
+          it('should not have the invalid attribute', function() {
+            tf.required = true;
+            tf.validate();
+            tf.required = false;
+            tf.validate();
+            expect(tf.getAttribute('invalid')).not.to.be.ok;
+          });
+
+          it('validate() should return correct boolean value', function() {
+            tf.required = true;
+            tf.minlength = 2;
+            expect(tf.validate()).to.be.false;
+            tf.value = 'hi';
+            expect(tf.validate()).to.be.true;
+          });
+
+          it('should check validity on validate', function() {
+            const spy = sinon.spy(tf, 'checkValidity');
+            tf.validate();
+            expect(spy.called).to.be.true;
+          });
+
+          it('should not change invalid property is no constraints are set', function() {
+            tf.validate();
+            expect(tf.invalid).to.be.false;
+            tf.invalid = true;
+            tf.validate();
+            expect(tf.invalid).to.be.true;
+          });
+
+          it('should override explicilty set invalid if constraints are set', function() {
+            tf.invalid = true;
+            tf.value = 'foo';
+            tf.required = true;
+            tf.validate();
+            expect(tf.invalid).to.be.false;
+          });
+
+          describe(`prevent invalid input ${condition}`, function() {
+
+            beforeEach(function() {
+              tf.preventInvalidInput = true;
+              tf.value = '1';
+            });
+
+            describe(`user action ${condition}`, function() {
+
+              function userSetValue(value) {
+                input.value = value;
+                input.dispatchEvent(new CustomEvent('input'));
+              }
+
+              if (isTextField) {
+                it('should prevent invalid pattern', function() {
+                  tf.pattern = '[0-9]*';
+                  userSetValue('f');
+                  expect(tf.value).to.equal('1');
+                });
+
+                it('should have empty value', function() {
+                  tf.value = undefined;
+                  tf.pattern = '[0-9]*';
+                  userSetValue('f');
+                  expect(tf.value).to.equal('');
+                });
+
+                it('should not fire value change', function() {
+                  const spy = sinon.spy();
+                  tf.addEventListener('value-changed', spy);
+                  tf.pattern = '[0-9]*';
+                  userSetValue('f');
+                  expect(spy.called).to.be.false;
+                });
+              }
+
+              it('should not prevent valid pattern', function() {
                 tf.pattern = '[0-9]*';
-                userSetValue('f');
-                expect(tf.value).to.equal('1');
+                userSetValue('2');
+                expect(tf.value).to.equal('2');
               });
 
-              it('should have empty value', function() {
-                tf.value = undefined;
-                tf.pattern = '[0-9]*';
-                userSetValue('f');
+              it('should not prevent too short value', function() {
+                tf.minlength = 1;
+                userSetValue('');
                 expect(tf.value).to.equal('');
               });
 
-              it('should not fire value change', function() {
-                const spy = sinon.spy();
-                tf.addEventListener('value-changed', spy);
-                tf.pattern = '[0-9]*';
-                userSetValue('f');
-                expect(spy.called).to.be.false;
+              it('should not prevent empty value for required field', function() {
+                tf.required = true;
+                userSetValue('');
+                expect(tf.value).to.equal('');
               });
-            }
 
-            it('should not prevent valid pattern', function() {
-              tf.pattern = '[0-9]*';
-              userSetValue('2');
-              expect(tf.value).to.equal('2');
             });
 
-            it('should not prevent too short value', function() {
-              tf.minlength = 1;
-              userSetValue('');
-              expect(tf.value).to.equal('');
-            });
+            describe(`programmatic ${condition}`, function() {
 
-            it('should not prevent empty value for required field', function() {
-              tf.required = true;
-              userSetValue('');
-              expect(tf.value).to.equal('');
-            });
+              it('should not prevent invalid pattern', function() {
+                tf.pattern = '[0-9]*';
+                tf.value = 'foo';
+                expect(tf.value).to.equal('foo');
+              });
 
-          });
+              it('should not prevent too short value', function() {
+                tf.minlength = 1;
+                tf.value = '';
+                expect(tf.value).to.equal('');
+              });
 
-          describe('programmatic', function() {
+              it('should not prevent empty value for required field', function() {
+                tf.required = true;
+                tf.value = '';
+                expect(tf.value).to.equal('');
+              });
 
-            it('should not prevent invalid pattern', function() {
-              tf.pattern = '[0-9]*';
-              tf.value = 'foo';
-              expect(tf.value).to.equal('foo');
-            });
+              it('should not prevent null value for required field', function() {
+                tf.required = true;
+                tf.value = null;
+                expect(tf.value).to.equal(null);
+              });
 
-            it('should not prevent too short value', function() {
-              tf.minlength = 1;
-              tf.value = '';
-              expect(tf.value).to.equal('');
-            });
-
-            it('should not prevent empty value for required field', function() {
-              tf.required = true;
-              tf.value = '';
-              expect(tf.value).to.equal('');
-            });
-
-            it('should not prevent null value for required field', function() {
-              tf.required = true;
-              tf.value = null;
-              expect(tf.value).to.equal(null);
             });
 
           });
 
         });
-
       });
     });
   </script>

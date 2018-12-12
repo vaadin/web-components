@@ -47,7 +47,9 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       /* Reset the native input styles */
-      [part="value"] {
+      [part="value"],
+      [part="input-field"] ::slotted(input),
+      [part="input-field"] ::slotted(textarea) {
         -webkit-appearance: none;
         -moz-appearance: none;
         outline: none;
@@ -69,8 +71,10 @@ This program is available under Apache License Version 2.0, available at https:/
         flex: none;
       }
 
-      /* Slotted by vaadin-dropdown-menu-text-field */
       [part="value"],
+      [part="input-field"] ::slotted(input),
+      [part="input-field"] ::slotted(textarea),
+      /* Slotted by vaadin-select-text-field */
       [part="input-field"] ::slotted([part="value"]) {
         flex: auto;
         white-space: nowrap;
@@ -79,7 +83,12 @@ This program is available under Apache License Version 2.0, available at https:/
         height: 100%;
       }
 
-      [part="value"]::-ms-clear {
+      [part="input-field"] ::slotted(textarea) {
+        resize: none;
+      }
+
+      [part="value"]::-ms-clear,
+      [part="input-field"] ::slotted(input)::-ms-clear {
         display: none;
       }
 
@@ -99,6 +108,18 @@ This program is available under Apache License Version 2.0, available at https:/
    * @namespace Vaadin
    */
   window.Vaadin = window.Vaadin || {};
+
+  const HOST_PROPS = {
+    default: ['list', 'autofocus', 'pattern', 'autocapitalize', 'autocorrect', 'maxlength',
+      'minlength', 'name', 'placeholder', 'autocomplete', 'title'],
+    accessible: ['disabled', 'readonly', 'required', 'invalid']
+  };
+
+  const PROP_TYPE = {
+    DEFAULT: 'default',
+    ACCESSIBLE: 'accessible'
+  };
+
 
   /**
    * @polymerMixin
@@ -259,11 +280,26 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     static get observers() {
-      return ['_stateChanged(disabled, readonly, clearButtonVisible, hasValue)'];
+      return ['_stateChanged(disabled, readonly, clearButtonVisible, hasValue)',
+        '_hostPropsChanged(' + HOST_PROPS.default.join(', ') + ')',
+        '_hostAccessiblePropsChanged(' + HOST_PROPS.accessible.join(', ') + ')',
+        '_getActiveErrorId(invalid, errorMessage, _errorId)',
+        '_getActiveLabelId(label, _labelId)'];
     }
 
     get focusElement() {
-      return this.root && this.root.querySelector('[part=value]');
+      if (!this.shadowRoot) {
+        return;
+      }
+      const slotted = this.querySelector(`${this._slottedTagName}[slot="${this._slottedTagName}"]`);
+      if (slotted) {
+        return slotted;
+      }
+      return this.shadowRoot.querySelector('[part="value"]');
+    }
+
+    get _slottedTagName() {
+      return 'input';
     }
 
     _onInput(e) {
@@ -271,8 +307,11 @@ This program is available under Apache License Version 2.0, available at https:/
         const input = this.focusElement;
         if (input.value.length > 0 && !this.checkValidity()) {
           input.value = this.value || '';
+          return;
         }
       }
+      this.__userInput = true;
+      this.value = e.target.value;
     }
 
     // NOTE(yuriy): Workaround needed for IE11 and Edge for proper displaying
@@ -311,13 +350,24 @@ This program is available under Apache License Version 2.0, available at https:/
       if (newVal === '' && oldVal === undefined) {
         return;
       }
-      if (this.invalid) {
-        this.validate();
-      }
+
       if (newVal !== '' && newVal != null) {
         this.hasValue = true;
       } else {
         this.hasValue = false;
+      }
+
+      if (this.__userInput) {
+        this.__userInput = false;
+        return;
+      } else if (newVal !== undefined) {
+        this.focusElement.value = newVal;
+      } else {
+        this.value = '';
+      }
+
+      if (this.invalid) {
+        this.validate();
       }
     }
 
@@ -326,6 +376,74 @@ This program is available under Apache License Version 2.0, available at https:/
         this.setAttribute('has-label', '');
       } else {
         this.removeAttribute('has-label');
+      }
+    }
+
+    _onSlotChange() {
+      const slotted = this.querySelector(`${this._slottedTagName}[slot="${this._slottedTagName}"]`);
+
+      if (this.value) {
+        this.focusElement.value = this.value;
+        this.validate();
+      }
+
+      if (slotted && !this._slottedInput) {
+        this._validateSlottedValue(slotted);
+        this._addInputListeners(slotted);
+        this._addIEListeners(slotted);
+        this._slottedInput = slotted;
+      } else if (!this._slottedInput) {
+        this._removeInputListeners(this._slottedInput);
+        this._removeIEListeners(this._slottedInput);
+        this._slottedInput = undefined;
+      }
+
+      Object.keys(PROP_TYPE).map(key => PROP_TYPE[key]).forEach(type =>
+        this._propagateHostAttributes(HOST_PROPS[type].map(attr => this[attr]), type));
+    }
+
+    _hostPropsChanged(...attributesValues) {
+      this._propagateHostAttributes(attributesValues, PROP_TYPE.DEFAULT);
+    }
+
+    _hostAccessiblePropsChanged(...attributesValues) {
+      this._propagateHostAttributes(attributesValues, PROP_TYPE.ACCESSIBLE);
+    }
+
+    _validateSlottedValue(slotted) {
+      if (slotted.value !== this.value) {
+        console.warn('Please define value on the vaadin-text-field component!');
+        slotted.value = '';
+      }
+    }
+
+    _propagateHostAttributes(attributesValues, type) {
+      const input = this.focusElement;
+      const attributeNames = HOST_PROPS[type];
+
+      if (type === 'accessible') {
+        attributeNames.forEach((attr, index) => {
+          this._setOrToggleAttribute(attr, attributesValues[index], input);
+          this._setOrToggleAttribute(`aria-${attr}`, attributesValues[index], input);
+        });
+      } else {
+        attributeNames.forEach((attr, index) => {
+          this._setOrToggleAttribute(attr, attributesValues[index], input);
+        });
+      }
+    }
+
+    _setOrToggleAttribute(name, value, node) {
+      if (!name || !node) {
+        return;
+      }
+
+      if (node.hasAttribute(name) === !value) {
+        if (value) {
+          node.setAttribute(name, (typeof value === 'boolean') ? '' : value);
+        } else {
+          node.removeAttribute(name);
+        }
       }
     }
 
@@ -341,9 +459,37 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    _addInputListeners(node) {
+      node.addEventListener('input', this._boundOnInput);
+      node.addEventListener('change', this._boundOnChange);
+      node.addEventListener('blur', this._boundOnBlur);
+    }
+
+    _removeInputListeners(node) {
+      node.removeEventListener('input', this._boundOnInput);
+      node.removeEventListener('change', this._boundOnChange);
+      node.removeEventListener('blur', this._boundOnBlur);
+    }
 
     ready() {
       super.ready();
+
+      this._boundOnInput = this._onInput.bind(this);
+      this._boundOnChange = this._onChange.bind(this);
+      this._boundOnBlur = this.validate.bind(this);
+
+      const defaultInput = this.shadowRoot.querySelector('[part="value"]');
+      this._slottedInput = this.querySelector(`${this._slottedTagName}[slot="${this._slottedTagName}"]`);
+      this._addInputListeners(defaultInput);
+      this._addIEListeners(defaultInput);
+      if (this._slottedInput) {
+        this._addIEListeners(this._slottedInput);
+        this._addInputListeners(this._slottedInput);
+      }
+
+      this.shadowRoot.querySelector('[name="input"], [name="textarea"]')
+        .addEventListener('slotchange', this._onSlotChange.bind(this));
+
       if (!(window.ShadyCSS && window.ShadyCSS.nativeCss)) {
         this.updateStyles();
       }
@@ -355,11 +501,6 @@ This program is available under Apache License Version 2.0, available at https:/
       var uniqueId = Vaadin.TextFieldMixin._uniqueId = 1 + Vaadin.TextFieldMixin._uniqueId || 0;
       this._errorId = `${this.constructor.is}-error-${uniqueId}`;
       this._labelId = `${this.constructor.is}-label-${uniqueId}`;
-
-      /* istanbul ignore if */
-      if (navigator.userAgent.match(/Trident/)) {
-        this._addIEListeners();
-      }
     }
 
     /**
@@ -381,7 +522,7 @@ This program is available under Apache License Version 2.0, available at https:/
       this.focusElement.focus();
       this.clear();
       this._valueClearing = false;
-      this.focusElement.dispatchEvent(new Event('change', {bubbles: true}));
+      this.focusElement.dispatchEvent(new Event('change', {bubbles: !this._slottedInput}));
     }
 
     _onKeyDown(e) {
@@ -390,31 +531,46 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
-    _addIEListeners() {
-      // IE11 dispatches `input` event in following cases:
-      // - focus or blur, when placeholder attribute is set
-      // - placeholder attribute value changed
-      // https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/101220/
-      const prevent = e => {
-        e.stopImmediatePropagation();
-        this.focusElement.removeEventListener('input', prevent);
-      };
-      const shouldPreventInput = () => this.placeholder && this.focusElement.addEventListener('input', prevent);
-      this.focusElement.addEventListener('focusin', shouldPreventInput);
-      this.focusElement.addEventListener('focusout', shouldPreventInput);
-      this._createPropertyObserver('placeholder', shouldPreventInput);
+    _addIEListeners(node) {
+      /* istanbul ignore if */
+      if (navigator.userAgent.match(/Trident/)) {
+        // IE11 dispatches `input` event in following cases:
+        // - focus or blur, when placeholder attribute is set
+        // - placeholder attribute value changed
+        // https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/101220/
+        this._prevent = e => {
+          e.stopImmediatePropagation();
+          this.focusElement.removeEventListener('input', this._prevent);
+        };
+        this._shouldPreventInput = () => this.placeholder && node.addEventListener('input', this._prevent);
+        node.addEventListener('focusin', this._shouldPreventInput);
+        node.addEventListener('focusout', this._shouldPreventInput);
+        this._createPropertyObserver('placeholder', this._shouldPreventInput);
+      }
+    }
+
+    _removeIEListeners(node) {
+      /* istanbul ignore if */
+      if (navigator.userAgent.match(/Trident/)) {
+        node.removeEventListener('focusin', this._shouldPreventInput);
+        node.removeEventListener('focusout', this._shouldPreventInput);
+      }
     }
 
     _getActiveErrorId(invalid, errorMessage, errorId) {
-      return errorMessage && invalid ? errorId : undefined;
+      this._setOrToggleAttribute('aria-describedby',
+        (errorMessage && invalid ? errorId : undefined),
+        this.focusElement);
     }
 
     _getActiveLabelId(label, labelId) {
-      return label ? labelId : undefined;
+      this._setOrToggleAttribute('aria-labelledby',
+        (label ? labelId : undefined),
+        this.focusElement);
     }
 
     _getErrorMessageAriaHidden(invalid, errorMessage, errorId) {
-      return (!this._getActiveErrorId(invalid, errorMessage, errorId)).toString();
+      return (!(errorMessage && invalid ? errorId : undefined)).toString();
     }
 
     /**

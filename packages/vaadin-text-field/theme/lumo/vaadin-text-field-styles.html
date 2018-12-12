@@ -33,6 +33,9 @@
       }
 
       [part="value"],
+      [part="input-field"] ::slotted(input),
+      [part="input-field"] ::slotted(textarea),
+      /* Slotted by vaadin-select-text-field */
       [part="input-field"] ::slotted([part="value"]) {
         cursor: inherit;
         min-height: var(--lumo-text-field-size);
@@ -41,7 +44,9 @@
         -webkit-mask-image: var(--_lumo-text-field-overflow-mask-image);
       }
 
-      [part="value"]:focus {
+      [part="value"]:focus,
+      [part="input-field"] ::slotted(input):focus,
+      [part="input-field"] ::slotted(textarea):focus {
         -webkit-mask-image: none;
         mask-image: none;
       }
@@ -52,6 +57,8 @@
       */
       @-moz-document url-prefix() {
         [part="value"],
+        [part="input-field"] ::slotted(input),
+        [part="input-field"] ::slotted(textarea),
         [part="input-field"] ::slotted([part="value"]) {
           mask-image: var(--_lumo-text-field-overflow-mask-image);
         }
@@ -246,7 +253,7 @@
 
       /* Slotted content */
 
-      [part="input-field"] ::slotted(:not([part]):not(iron-icon)) {
+      [part="input-field"] ::slotted(:not([part]):not(iron-icon):not(input):not(textarea)) {
         color: var(--lumo-secondary-text-color);
         font-weight: 400;
       }

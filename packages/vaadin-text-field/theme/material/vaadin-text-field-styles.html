@@ -76,13 +76,17 @@
 
       :host([disabled]) [part="label"],
       :host([disabled]) [part="value"],
+      :host([disabled]) [part="input-field"] ::slotted(input),
+      :host([disabled]) [part="input-field"] ::slotted(textarea),
       :host([disabled]) [part="input-field"] ::slotted([part="value"]) {
         color: var(--material-disabled-text-color);
         -webkit-text-fill-color: var(--material-disabled-text-color);
       }
 
       [part="value"],
-      /* For vaadin-dropdown-menu-text-field */
+      :host([disabled]) [part="input-field"] ::slotted(input),
+      :host([disabled]) [part="input-field"] ::slotted(textarea),
+      /* Slotted by vaadin-select-text-field */
       [part="input-field"] ::slotted([part="value"]) {
         outline: none;
         margin: 0;
@@ -209,7 +213,7 @@
 
       /* Slotted content */
 
-      [part="input-field"] ::slotted(*:not([part="value"])) {
+      [part="input-field"] ::slotted(*:not([part="value"]):not(input):not(textarea)) {
         color: var(--material-secondary-text-color);
       }
 

@@ -3,5 +3,6 @@ window.VaadinTextFieldSuites = [
   'text-area.html',
   'password-field.html',
   'validation.html',
-  'accessibility.html'
+  'accessibility.html',
+  'custom-input.html'
 ];
