@@ -28,6 +28,8 @@
     "vaadin-grid-tree-toggle.html",
     "vaadin-grid-tree-column.html",
     "all-imports.html",
+    "src/vaadin-grid.html",
+    "src/vaadin-grid-column.html",
     "theme/material/vaadin-grid.html",
     "theme/material/vaadin-grid-column.html",
     "theme/material/vaadin-grid-column-group.html",
