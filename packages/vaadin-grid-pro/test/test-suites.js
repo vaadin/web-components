@@ -1,3 +1,3 @@
 window.ProGridElementSuites = [
-  'sample-test.html'
+  'basic.html'
 ];

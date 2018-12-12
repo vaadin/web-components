@@ -5,39 +5,28 @@ This program is available under Apache License Version 2.0, available at https:/
 -->
 
 <link rel="import" href="../../polymer/polymer-element.html">
-<link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
-<link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
+<link rel="import" href="../../vaadin-grid/src/vaadin-grid.html">
 
 <dom-module id="vaadin-pro-grid">
-  <template>
-    <style>
-      :host {
-        display: inline-block;
-      }
-
-      :host([hidden]) {
-        display: none !important;
-      }
-    </style>
-    <slot></slot>
-  </template>
-
   <script>
     (function() {
-
       /**
-       * `<vaadin-pro-grid>` is a Web Component.
+       *
+       * `<vaadin-pro-grid>` is a high quality data grid / data table Web Component with extended functionality. It
+       * extends `<vaadin-grid>` and adds extra features on top of basic.
+       *
+       * See [`<vaadin-grid>` documentation](https://github.com/vaadin/vaadin-grid/blob/master/src/vaadin-grid.html)
+       * for details.
        *
        * ```
        * <vaadin-pro-grid></vaadin-pro-grid>
        * ```
        *
        * @memberof Vaadin
-       * @mixes Vaadin.ElementMixin
-       * @mixes Vaadin.ThemableMixin
+       * @extends Vaadin.GridElement
        * @demo demo/index.html
        */
-      class ProGridElement extends Vaadin.ElementMixin(Vaadin.ThemableMixin(Polymer.Element)) {
+      class ProGridElement extends Vaadin.GridElement {
         static get is() {
           return 'vaadin-pro-grid';
         }
@@ -56,6 +45,7 @@ This program is available under Apache License Version 2.0, available at https:/
       /**
        * @namespace Vaadin
        */
+      window.Vaadin = window.Vaadin || {};
       window.Vaadin.ProGridElement = ProGridElement;
     })();
   </script>

@@ -1,0 +1,51 @@
+<dom-module id="pro-grid-common-modules-demos">
+  <template>
+    <style include="vaadin-component-demo-shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+
+
+    <h3>Helpers</h3>
+    <p>
+      <code>&lt;vaadin-pro-grid&gt;</code> can use all the same helpers as <code>&lt;vaadin-grid&gt;</code>.
+    </p>
+    <p>
+      <b>NOTE: You must explicitly import the helper (i.e. <code>&lt;vaadin-grid-sort-column&gt;</code>) in order to use it.</b>
+    </p>
+
+    <vaadin-demo-snippet id="pro-grid-helpers-demos">
+      <template preserve-content>
+        <vaadin-checkbox>Enable Multi-Sorting</vaadin-checkbox>
+
+        <vaadin-pro-grid aria-label="Sorting Example">
+          <vaadin-grid-sort-column path="name.first" header="First name"></vaadin-grid-sort-column>
+          <vaadin-grid-sort-column path="name.last" header="Last name"></vaadin-grid-sort-column>
+          <vaadin-grid-sort-column path="email"></vaadin-grid-sort-column>
+        </vaadin-pro-grid>
+
+        <script>
+          window.addDemoReadyListener('#pro-grid-helpers-demos', function(document) {
+            const grid = document.querySelector('vaadin-pro-grid');
+            grid.items = Vaadin.GridDemo.users;
+
+            const checkBox = document.querySelector('vaadin-checkbox');
+            checkBox.addEventListener('checked-changed', function(event) {
+              grid.multiSort = event.detail.value;
+            });
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+  </template>
+  <script>
+    class ProGridCommonModulesDemos extends DemoReadyEventEmitter(ProGridDemo(Polymer.Element)) {
+      static get is() {
+        return 'pro-grid-common-modules-demos';
+      }
+    }
+    customElements.define(ProGridCommonModulesDemos.is, ProGridCommonModulesDemos);
+  </script>
+</dom-module>

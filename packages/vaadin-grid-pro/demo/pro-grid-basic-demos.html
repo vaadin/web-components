@@ -7,14 +7,40 @@
     </style>
 
 
-    <h3>Sample example</h3>
-    <vaadin-demo-snippet id="pro-grid-basic-demos-sample-example" when-defined="vaadin-pro-grid">
+    <h3>Defining Content</h3>
+    <p>
+      <code>&lt;vaadin-pro-grid&gt;</code> is an extension of the <code>&lt;vaadin-grid&gt;</code> and provides all the same functionality on top of basic one.
+      Definition of the content can be done with the existing <code>&lt;vaadin-grid&gt;</code> methods, like <code>&lt;vaadin-grid-column&gt;</code> or Renderer Functions.
+    </p>
+    <vaadin-demo-snippet id='pro-grid-basic-demos-defining-content'>
       <template preserve-content>
-        <vaadin-pro-grid></vaadin-pro-grid>
+        <vaadin-pro-grid>
+          <vaadin-grid-column path="name.first" header="First name"></vaadin-grid-column>
+          <vaadin-grid-column path="name.last" header="Last name"></vaadin-grid-column>
+          <vaadin-grid-column path="location.city"></vaadin-grid-column>
+          <vaadin-grid-column path="visitCount" text-align="end" width="120px" flex-grow="0"></vaadin-grid-column>
+        </vaadin-pro-grid>
+
         <script>
-          window.addDemoReadyListener('#pro-grid-basic-demos-sample-example', function(document) {
-            const ProGrid = document.querySelector('vaadin-pro-grid');
-            ProGrid.textContent = 'Foobar';
+          window.addDemoReadyListener('#pro-grid-basic-demos-defining-content', function(document) {
+            // Assign an array of user objects as the pro grid's items
+            document.querySelector('vaadin-pro-grid').items = Vaadin.GridDemo.users;
+
+            /*
+            * Each object in the above "users" array follows the same structure:
+            * {
+            *   "name": {
+            *     "first": "Laura",
+            *     "last": "Arnaud",
+            *     ...
+            *   },
+            *   "location": {
+            *     "city": "Perpignan"
+            *     ...
+            *   }
+            *   ...
+            * }
+            */
           });
         </script>
       </template>

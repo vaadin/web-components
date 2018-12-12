@@ -13,11 +13,11 @@
   }
   ,
   {
-    "name": "Advanced Usage",
-    "url": "pro-grid-advanced-demos",
-    "src": "pro-grid-advanced-demos.html",
+    "name": "Common modules",
+    "url": "pro-grid-common-modules-demos",
+    "src": "pro-grid-common-modules-demos.html",
     "meta": {
-      "title": "Vaadin Grid Pro Advanced Examples",
+      "title": "Vaadin Grid Pro Common Modules",
       "description": "",
       "image": ""
      }
