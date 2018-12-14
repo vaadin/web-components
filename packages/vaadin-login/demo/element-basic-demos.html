@@ -56,7 +56,7 @@
     <h3>Login opened in full screen</h3>
     <vaadin-demo-snippet id="login-overlay">
       <template preserve-content>
-      <vaadin-login-overlay></vaadin-login-overlay>
+        <vaadin-login-overlay></vaadin-login-overlay>
         <vaadin-button>Log in</vaadin-button>
         <vaadin-dialog id="feedbackDialog">
             <template>Login is being processed...</template>
@@ -64,32 +64,32 @@
         <script>
           window.addDemoReadyListener('#login-overlay', function(document) {
             const button = document.querySelector('vaadin-button');
-            const vaadinLoginOvelay = document.querySelector('vaadin-login-overlay');
+            const vaadinLoginOverlay = document.querySelector('vaadin-login-overlay');
             const feedbackDialog = document.querySelector('#feedbackDialog');
 
             const i18n = Object.assign(
               {},
-              vaadinLoginOvelay.i18n,
+              vaadinLoginOverlay.i18n,
               {additionalInformation: 'For this demo, use admin/admin to a successful login.'}
             );
 
-            vaadinLoginOvelay.i18n = i18n;
+            vaadinLoginOverlay.i18n = i18n;
 
             button.addEventListener('click', function() {
-              vaadinLoginOvelay.opened = true;
+              vaadinLoginOverlay.opened = true;
             });
 
-            vaadinLoginOvelay.addEventListener('login', (e) => {
+            vaadinLoginOverlay.addEventListener('login', (e) => {
               feedbackDialog.opened = true;
               const {username, password} = e.detail;
 
               setTimeout(function() {
                 feedbackDialog.opened = false;
                 if (username === 'admin' && password === 'admin') {
-                  vaadinLoginOvelay.opened = false;
+                  vaadinLoginOverlay.opened = false;
                 } else {
-                  vaadinLoginOvelay.error = true;
-                  vaadinLoginOvelay.disabled = false;
+                  vaadinLoginOverlay.error = true;
+                  vaadinLoginOverlay.disabled = false;
                 }
               }, 1000);
             });
