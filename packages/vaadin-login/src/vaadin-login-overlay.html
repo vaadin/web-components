@@ -8,25 +8,16 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../polymer/polymer-element.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
-<link rel="import" href="../../vaadin-overlay/src/vaadin-overlay.html">
 
 <link rel="import" href="vaadin-login.html">
 <link rel="import" href="vaadin-login-mixin.html">
+<link rel="import" href="vaadin-login-overlay-element.html">
 
-<dom-module id="vaadin-login-overlay-styles" theme-for="vaadin-login-overlay-element">
-  <template>
-    <style>
-      [part="overlay"] {
-        outline: none;
-      }
-    </style>
-  </template>
-</dom-module>
 
 <dom-module id="vaadin-login-overlay">
   <template>
-    <vaadin-login-overlay-element id="overlay" opened="{{opened}}" focus-trap with-backdrop>
-      <vaadin-login
+    <vaadin-login-overlay-element id="overlay" opened="{{opened}}" focus-trap with-backdrop title="[[title]]" description="[[description]]">
+    <vaadin-login
         theme="with-overlay"
         id="login"
         action="{{action}}"
@@ -34,8 +25,6 @@ This program is available under Apache License Version 2.0, available at https:/
         error="{{error}}"
         no-forgot-password="{{noForgotPassword}}"
         i18n="{{i18n}}"
-        title="{{title}}"
-        description="{{description}}"
         on-login="_handleEvent"
         on-forgot-password="_handleEvent">
       </vaadin-login>
@@ -43,22 +32,6 @@ This program is available under Apache License Version 2.0, available at https:/
   </template>
   <script>
     (function() {
-
-      /**
-       * The overlay element
-       *
-       * @memberof Vaadin
-       * @private
-      */
-      class LoginOverlayElement extends Vaadin.OverlayElement {
-        static get is() {
-          return 'vaadin-login-overlay-element';
-        }
-      }
-
-      customElements.define(LoginOverlayElement.is, LoginOverlayElement);
-
-
       /**
        * `<vaadin-login-overlay>` is a Web Component.
         *
@@ -79,13 +52,33 @@ This program is available under Apache License Version 2.0, available at https:/
 
         static get properties() {
           return {
+            /**
+             * Defines the application description
+             */
+            description: {
+              type: String,
+              value: 'Application description',
+              notify: true
+            },
             opened: {
               type: Boolean,
               value: false,
-              observer: '_onOpenedChange',
-              notify: true
+              observer: '_onOpenedChange'
+            },
+            /**
+             * Defines the application title
+             */
+            title: {
+              type: String,
+              value: 'App name'
             }
           };
+        }
+
+        static get observers() {
+          return [
+            '__i18nChanged(i18n.header.*)'
+          ];
         }
 
         ready() {
@@ -107,6 +100,16 @@ This program is available under Apache License Version 2.0, available at https:/
           this.$.overlay.removeEventListener('vaadin-overlay-outside-click', this._preventClosingLogin);
           this.$.overlay.removeEventListener('vaadin-overlay-escape-press', this._preventClosingLogin);
           this.$.overlay.opened = false;
+        }
+
+
+        __i18nChanged(i18n) {
+          const header = i18n.base;
+          if (!header) {
+            return;
+          }
+          this.title = header.title;
+          this.description = header.description;
         }
 
         _preventClosingLogin(e) {

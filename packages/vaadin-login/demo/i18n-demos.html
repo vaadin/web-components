@@ -11,7 +11,20 @@
     <p>Set the <code>i18n</code> object to localize the component</p>
     <vaadin-demo-snippet id="login-demo-internationalisation">
       <template preserve-content>
-        <vaadin-login></vaadin-login>
+        <style include="lumo-typography lumo-color">
+          </style>
+        </custom-style>
+        <style>
+          main {
+            display: flex;
+            justify-content: center;
+            background: var(--lumo-base-color) linear-gradient(var(--lumo-shade-5pct), var(--lumo-shade-5pct));
+            padding: var(--lumo-space-m);
+          }
+        </style>
+        <main>
+          <vaadin-login></vaadin-login>
+        </main>
         <script>
           window.addDemoReadyListener('#login-demo-internationalisation', function(document) {
             const login = document.querySelector('vaadin-login');

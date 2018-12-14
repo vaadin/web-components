@@ -28,31 +28,8 @@ This program is available under Apache License Version 2.0, available at https:/
         display: none !important;
       }
 
-      [part="card"] {
-        max-width: 100%;
-        box-sizing: border-box;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-      }
-
-      [part="brand"] {
-        box-sizing: border-box;
-        overflow: hidden;
-        flex-grow: 1;
-        flex-shrink: 0;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-end;
-      }
-
-      [part="brand"] h1 {
-        color: inherit;
-        margin: 0;
-      }
-
       [part="form"] {
-        flex: none;
+        flex: 1;
         display: flex;
         flex-direction: column;
         box-sizing: border-box;
@@ -72,32 +49,25 @@ This program is available under Apache License Version 2.0, available at https:/
         position: relative;
       }
     </style>
-      <section part="card">
-        <div part="brand">
-          <h1>[[title]]</h1>
-          <p>[[description]]</p>
+      <section part="form">
+        <h2>[[i18n.form.title]]</h2>
+        <div part="error-message" hidden$="[[!error]]">
+          <h5>[[i18n.errorMessage.title]]</h5>
+          <p>[[i18n.errorMessage.message]]</p>
         </div>
+        <iron-form id="loginForm" allow-redirect>
+          <form method="POST" action$="[[action]]">
+            <vaadin-text-field label="[[i18n.form.username]]" name="username" id="username" required on-keydown="_handleInputKeydown"></vaadin-text-field>
+            <vaadin-password-field label="[[i18n.form.password]]" name="password" id="password" required on-keydown="_handleInputKeydown"></vaadin-password-field>
 
-        <div part="form">
-          <h2>[[i18n.form.title]]</h2>
-          <div part="error-message" hidden$="[[!error]]">
-            <h5>[[i18n.errorMessage.title]]</h5>
-            <p>[[i18n.errorMessage.message]]</p>
-          </div>
-          <iron-form id="loginForm" allow-redirect>
-            <form method="POST" action$="[[action]]">
-              <vaadin-text-field label="[[i18n.form.username]]" name="username" id="username" required on-keydown="_handleInputKeydown"></vaadin-text-field>
-              <vaadin-password-field label="[[i18n.form.password]]" name="password" id="password" required on-keydown="_handleInputKeydown"></vaadin-password-field>
+            <vaadin-button id="submit" theme="primary contained" on-click="submit" disabled$="[[disabled]]">[[i18n.form.submit]]</vaadin-button>
+          </form>
+        </iron-form>
 
-              <vaadin-button id="submit" theme="primary contained" on-click="submit" disabled$="[[disabled]]">[[i18n.form.submit]]</vaadin-button>
-            </form>
-          </iron-form>
+        <vaadin-button id="forgotPasswordButton" theme="tertiary small" on-click="_forgotPassword" hidden$="[[noForgotPassword]]">[[i18n.form.forgotPassword]]</vaadin-button>
 
-          <vaadin-button id="forgotPasswordButton" theme="tertiary small" on-click="_forgotPassword" hidden$="[[noForgotPassword]]">[[i18n.form.forgotPassword]]</vaadin-button>
-
-          <div part="footer">
-            <p>[[i18n.additionalInformation]]</p>
-          </div>
+        <div part="footer">
+          <p>[[i18n.additionalInformation]]</p>
         </div>
       </section>
   </template>
@@ -124,21 +94,6 @@ This program is available under Apache License Version 2.0, available at https:/
         }
         static get version() {
           return '1.0.0-alpha3';
-        }
-
-        static get observers() {
-          return [
-            '__i18nChanged(i18n.header.*)'
-          ];
-        }
-
-        __i18nChanged(i18n) {
-          const header = i18n.base;
-          if (!header) {
-            return;
-          }
-          this.title = header.title;
-          this.description = header.description;
         }
 
         submit() {

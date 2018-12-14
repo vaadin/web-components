@@ -7,7 +7,7 @@
 
 <dom-module id="vaadin-login-overlay-element-lumo-styles" theme-for="vaadin-login-overlay-element">
   <template>
-    <style>
+    <style include="lumo-color lumo-typography">
       :host {
         top: 0;
         right: 0;
@@ -27,6 +27,8 @@
         background: none;
         border-radius: 0;
         box-shadow: none;
+        width: 100%;
+        height: 100%;
       }
 
       @media only screen
@@ -36,21 +38,33 @@
           height: 100%;
         }
       }
-    </style>
-  </template>
-</dom-module>
 
-<dom-module id="lumo-login-overlay" theme-for="vaadin-login">
-  <template>
-    <style include="lumo-color lumo-typography">
-      :host([theme~="with-overlay"]) {
+      [part="card"] {
+        width: calc(var(--lumo-size-m) * 10);
+        background: var(--lumo-base-color) linear-gradient(var(--lumo-tint-5pct), var(--lumo-tint-5pct));
+      }
+
+      [part="brand"] {
+        padding: var(--lumo-space-l) var(--lumo-space-xl) var(--lumo-space-l) var(--lumo-space-l);
+        background-color: var(--lumo-primary-color);
+        color: var(--lumo-primary-contrast-color);
+        min-height: calc(var(--lumo-size-m) * 5);
+      }
+
+      [part="brand"] p {
+        line-height: var(--lumo-line-height-s);
+        color: var(--lumo-tint-70pct);
+        margin-bottom: 0;
+      }
+
+      [part="content"] {
         min-height: 100%;
         display: flex;
         align-items: center;
         justify-content: center;
       }
 
-      :host([theme~="with-overlay"]) [part="card"] {
+      [part="card"] {
         border-radius: var(--lumo-border-radius);
         box-shadow: var(--lumo-box-shadow-s);
         margin: var(--lumo-space-s);
@@ -59,13 +73,14 @@
       /* Small screen */
       @media only screen
       and (max-width: 500px) {
-        :host([theme~="with-overlay"]) {
+        [part="content"] {
           min-height: 100%;
           background: var(--lumo-base-color);
           align-items: flex-start;
         }
 
-        :host([theme~="with-overlay"]) [part="card"] {
+        [part="card"],
+        [part="overlay"] {
           width: 100%;
           border-radius: 0;
           box-shadow: none;
@@ -78,22 +93,27 @@
       and (max-height: 600px)
       and (min-width: 600px)
       and (orientation: landscape) {
-        :host([theme~="with-overlay"]) [part="card"] {
+        [part="card"] {
           flex-direction: row;
           align-items: stretch;
           max-width: calc(var(--lumo-size-m) * 16);
           width: 100%;
         }
 
-        :host([theme~="with-overlay"]) [part="brand"],
-        :host([theme~="with-overlay"]) [part="form"] {
+        [part="brand"],
+        [part="form"] {
           flex: auto;
           flex-basis: 0;
           box-sizing: border-box;
         }
 
-        :host([theme~="with-overlay"]) [part="brand"] {
+        [part="brand"] {
           justify-content: flex-start;
+        }
+
+        [part="form"] {
+          padding: var(--lumo-space-l);
+          overflow: auto;
         }
       }
 
@@ -106,11 +126,11 @@
       and (max-width: 600px)
       and (min-width: 600px)
       and (orientation: landscape) {
-        :host([theme~="with-overlay"]) {
+        [part="content"] {
           height: 100vh;
         }
 
-        :host([theme~="with-overlay"]) [part="card"] {
+        [part="card"] {
           margin: 0;
           width: 100%;
           max-width: none;
@@ -120,7 +140,7 @@
           box-shadow: none;
         }
 
-        :host([theme~="with-overlay"]) [part="form"] {
+        [part="form"] {
           height: 100%;
           overflow: auto;
           -webkit-overflow-scrolling: touch;
@@ -132,16 +152,42 @@
       and (device-width: 375px)
       and (device-height: 812px)
       and (-webkit-device-pixel-ratio: 3) {
-        :host([theme~="with-overlay"]) [part="card"] {
+        [part="card"] {
           padding: 0 constant(safe-area-inset-bottom);
           padding: 0 env(safe-area-inset-bottom);
         }
 
-        :host([theme~="with-overlay"]) [part="brand"] {
+        [part="brand"] {
           margin-left: calc(constant(safe-area-inset-bottom) * -1);
           margin-left: calc(env(safe-area-inset-bottom) * -1);
           padding-left: calc(var(--lumo-space-l) + constant(safe-area-inset-bottom));
           padding-left: calc(var(--lumo-space-l) + env(safe-area-inset-bottom));
+        }
+      }
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="lumo-login-overlay" theme-for="vaadin-login">
+  <template>
+    <style include="lumo-color lumo-typography">
+      :host([theme~="with-overlay"]) {
+        min-height: 100%;
+        display: flex;
+        justify-content: center;
+        max-width: 100%;
+      }
+
+      /* Landscape small screen */
+      @media only screen
+      and (max-height: 600px)
+      and (min-width: 600px)
+      and (orientation: landscape) {
+        :host([theme~="with-overlay"]) [part="form"] {
+          height: 100%;
+          -webkit-overflow-scrolling: touch;
+          flex: 1;
+          padding: 2px;
         }
       }
     </style>

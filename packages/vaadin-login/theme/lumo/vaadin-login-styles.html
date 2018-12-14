@@ -5,22 +5,9 @@
 <dom-module id="lumo-login" theme-for="vaadin-login">
   <template>
     <style include="lumo-color lumo-typography">
-      [part="card"] {
-        width: calc(var(--lumo-size-m) * 10);
+      :host {
+        max-width: calc(var(--lumo-size-m) * 10);
         background: var(--lumo-base-color) linear-gradient(var(--lumo-tint-5pct), var(--lumo-tint-5pct));
-      }
-
-      [part="brand"] {
-        padding: var(--lumo-space-l) var(--lumo-space-xl) var(--lumo-space-l) var(--lumo-space-l);
-        background-color: var(--lumo-primary-color);
-        color: var(--lumo-primary-contrast-color);
-        min-height: calc(var(--lumo-size-m) * 5);
-      }
-
-      [part="brand"] p {
-        line-height: var(--lumo-line-height-s);
-        color: var(--lumo-tint-70pct);
-        margin-bottom: 0;
       }
 
       [part="form"] {

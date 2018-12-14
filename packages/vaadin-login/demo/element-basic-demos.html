@@ -63,11 +63,11 @@
         </vaadin-dialog>
         <script>
           window.addDemoReadyListener('#login-overlay', function(document) {
-            const button = document.querySelector('vaadin-button');
-            const vaadinLoginOverlay = document.querySelector('vaadin-login-overlay');
-            const feedbackDialog = document.querySelector('#feedbackDialog');
+            var button = document.querySelector('vaadin-button');
+            var vaadinLoginOverlay = document.querySelector('vaadin-login-overlay');
+            var feedbackDialog = document.querySelector('#feedbackDialog');
 
-            const i18n = Object.assign(
+            var i18n = Object.assign(
               {},
               vaadinLoginOverlay.i18n,
               {additionalInformation: 'For this demo, use admin/admin to a successful login.'}
@@ -79,9 +79,11 @@
               vaadinLoginOverlay.opened = true;
             });
 
-            vaadinLoginOverlay.addEventListener('login', (e) => {
+            vaadinLoginOverlay.addEventListener('login', function(e) {
               feedbackDialog.opened = true;
-              const {username, password} = e.detail;
+              var detail = e.detail,
+                username = detail.username,
+                password = detail.password;
 
               setTimeout(function() {
                 feedbackDialog.opened = false;
