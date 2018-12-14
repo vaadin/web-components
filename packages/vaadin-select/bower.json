@@ -28,6 +28,7 @@
   "dependencies": {
     "polymer": "^2.0.0",
     "iron-media-query": "^2.0.0",
+    "iron-resizable-behavior": "^2.0.0",
     "vaadin-control-state-mixin": "vaadin/vaadin-control-state-mixin#^2.1.1",
     "vaadin-themable-mixin": "vaadin/vaadin-themable-mixin#^1.3.2",
     "vaadin-text-field": "vaadin/vaadin-text-field#^2.1.1",
