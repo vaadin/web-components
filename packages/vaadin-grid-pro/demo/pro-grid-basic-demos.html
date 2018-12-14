@@ -6,13 +6,54 @@
       }
     </style>
 
+    <h3>Edit Column</h3>
+    <vaadin-demo-snippet id="pro-grid-basic-demos-edit-column">
+      <template preserve-content>
+        <vaadin-pro-grid>
+          <vaadin-pro-grid-edit-column path="name.first" header="First name">
+            <template>
+              <span style="font-weight: bold;">[[item.name.first]]</span>
+            </template>
+          </vaadin-pro-grid-edit-column>
+          <vaadin-grid-column header="Last name (view)">
+            <template>
+              <span style="color: #999;">[[item.name.last]]</span>
+            </template>
+          </vaadin-grid-column>
+          <vaadin-pro-grid-edit-column path="name.last" header="Edit Last name"></vaadin-pro-grid-edit-column>
+        </vaadin-pro-grid>
+
+        <script>
+          window.addDemoReadyListener('#pro-grid-basic-demos-edit-column', function(document) {
+            // Assign an array of user objects as the pro grid's items
+            document.querySelector('vaadin-pro-grid').items = Vaadin.GridDemo.users;
+
+            /*
+            * Each object in the above "users" array follows the same structure:
+            * {
+            *   "name": {
+            *     "first": "Laura",
+            *     "last": "Arnaud",
+            *     ...
+            *   },
+            *   "location": {
+            *     "city": "Perpignan"
+            *     ...
+            *   }
+            *   ...
+            * }
+            */
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
 
     <h3>Defining Content</h3>
     <p>
       <code>&lt;vaadin-pro-grid&gt;</code> is an extension of the <code>&lt;vaadin-grid&gt;</code> and provides all the same functionality on top of basic one.
       Definition of the content can be done with the existing <code>&lt;vaadin-grid&gt;</code> methods, like <code>&lt;vaadin-grid-column&gt;</code> or Renderer Functions.
     </p>
-    <vaadin-demo-snippet id='pro-grid-basic-demos-defining-content'>
+    <vaadin-demo-snippet id="pro-grid-basic-demos-defining-content">
       <template preserve-content>
         <vaadin-pro-grid>
           <vaadin-grid-column path="name.first" header="First name"></vaadin-grid-column>

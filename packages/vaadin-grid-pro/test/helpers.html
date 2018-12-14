@@ -28,4 +28,26 @@
       Polymer.flush();
     }
   };
+
+  window.getRows = (container) => {
+    return container.querySelectorAll('tr');
+  };
+
+  window.getRowCells = (row) => {
+    return Array.prototype.slice.call(Polymer.dom(row).querySelectorAll('[part~="cell"]'));
+  };
+
+  window.getCellContent = (cell) => {
+    return cell ? cell.querySelector('slot').assignedNodes()[0] : null;
+  };
+
+  window.getContainerCellContent = (container, row, col) => {
+    return getCellContent(getContainerCell(container, row, col));
+  };
+
+  window.getContainerCell = (container, row, col) => {
+    const rows = getRows(container);
+    const cells = getRowCells(rows[row]);
+    return cells[col];
+  };
 </script>

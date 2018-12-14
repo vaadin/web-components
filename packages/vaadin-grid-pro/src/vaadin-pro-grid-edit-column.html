@@ -1,0 +1,176 @@
+<!--
+@license
+Copyright (c) 2018 Vaadin Ltd.
+This program is available under Commercial Vaadin Add-On License 3.0 (CVALv3).
+See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete license.
+-->
+
+<link rel="import" href="../../polymer/lib/elements/dom-if.html">
+<link rel="import" href="../../vaadin-grid/vaadin-grid-column.html">
+<link rel="import" href="../../vaadin-text-field/vaadin-text-field.html">
+
+<dom-module id="vaadin-pro-grid-edit-column">
+  <template>
+    <style>
+      vaadin-text-field {
+        max-width: 100%;
+        padding: 0;
+        --lumo-text-field-size: 27px; /* TODO: move to the theme */
+        will-change: transform;
+      }
+    </style>
+    <template id="editStateTemplate">
+      <vaadin-text-field theme="small"></vaadin-text-field>
+    </template>
+  </template>
+
+  <script>
+  (function() {
+    /**
+     * `<vaadin-pro-grid-edit-column>` is a helper element for the `<vaadin-pro-grid>`
+     * that provides default inline editing for the items.
+     *
+     * #### Example:
+     * ```html
+     * <vaadin-pro-grid items="[[items]]">
+     *  <vaadin-pro-grid-edit-column path="name.first"></vaadin-pro-grid-edit-column>
+     *
+     *  <vaadin-grid-column>
+     *    ...
+     * ```
+     *
+     * @memberof Vaadin
+     * @extends Vaadin.GridColumnElement
+     */
+    class ProGridEditColumnElement extends Vaadin.GridColumnElement {
+
+      static get is() {
+        return 'vaadin-pro-grid-edit-column';
+      }
+
+      static get properties() {
+        return {
+          /**
+           * JS Path of the property in the item used for the editable content.
+           */
+          path: String
+        };
+      }
+
+      ready() {
+        super.ready();
+
+        this.__editStateTemplate = this._prepareTemplatizer(this.$.editStateTemplate);
+        // needed to override the dataHost correctly in case internal template is used.
+        this.__editStateTemplate.templatizer.dataHost = this;
+        this.__editStateRenderer = this.constructor._getEditorRenderer();
+      }
+
+      /**
+       * Defines the editable cell renderer using `vaadin-text-field`
+       *
+       * @protected
+       */
+      static _getEditorRenderer() {
+        const tagName = this._editorTagName;
+        return function(root, column, rowData) {
+          const cell = root.assignedSlot.parentNode;
+          if (!root.firstElementChild || root.firstElementChild.localName.toLowerCase() !== tagName) {
+            root.innerHTML = `
+              <vaadin-text-field
+                theme="small"
+                style="max-width: 100%; padding: 0; will-change: transform; --lumo-text-field-size: 27px"
+              ></vaadin-text-field>
+            `;
+          }
+          // TODO: move to the grid for custom edit state renderer support?
+          column._setCellEditValue(cell, column._grid._getItemValue(column, rowData));
+        };
+      }
+
+      /**
+       * Returns the reference to the `vaadin-text-field` rendered to editable cell
+       *
+       * @protected
+       */
+      static _getEditorComponent(cell) {
+        return cell._content.querySelector(this._editorTagName);
+      }
+
+      /**
+       * Returns the reference to the `vaadin-text-field` rendered to editable cell
+       *
+       * @protected
+       */
+      static get _editorTagName() {
+        return 'vaadin-text-field';
+      }
+
+      _addBlurListener(cell) {
+        const editor = this.constructor._getEditorComponent(cell);
+        if (editor) {
+          editor.addEventListener('blur', e => {
+            this._grid._enqueueStopEdit();
+          });
+        }
+      }
+
+      _getCellEditValue(cell) {
+        return cell._content.firstElementChild.value;
+      }
+
+      _setCellEditValue(cell, value) {
+        const editor = this.constructor._getEditorComponent(cell);
+        editor.value = value;
+        editor.focusElement.select();
+      }
+
+      _startCellEdit(cell, model) {
+        if (this._bodyTemplate) {
+          this.__savedTemplate = this._bodyTemplate;
+          this._stampTemplateToCell(cell, this.__editStateTemplate, model);
+        } else {
+          // fallback to the path renderer stored on the cell
+          this.__savedRenderer = this.renderer || cell._renderer;
+          this._stampRendererToCell(cell, this.__editStateRenderer, model);
+        }
+        this._addBlurListener(cell);
+      }
+
+      _stopCellEdit(cell, model) {
+        if (this.__savedTemplate) {
+          this._stampTemplateToCell(cell, this.__savedTemplate, model);
+          delete this.__savedTemplate;
+        } else if (this.__savedRenderer) {
+          this._stampRendererToCell(cell, this.__savedRenderer, model);
+          delete this.__savedRenderer;
+        }
+      }
+
+      _stampTemplateToCell(cell, template, model) {
+        cell._template = template;
+        cell._content.innerHTML = '';
+        template.templatizer._grid = this._grid;
+
+        const inst = template.templatizer.createInstance();
+        cell._content.appendChild(inst.root);
+        cell._instance = inst;
+        cell._instance.setProperties(model);
+      }
+
+      _stampRendererToCell(cell, renderer, model) {
+        cell._renderer = renderer;
+        this.__runRenderer(renderer, cell, model);
+      }
+    }
+
+    customElements.define(ProGridEditColumnElement.is, ProGridEditColumnElement);
+
+    /**
+     * @namespace Vaadin
+     */
+    window.Vaadin = window.Vaadin || {};
+    Vaadin.ProGridEditColumnElement = ProGridEditColumnElement;
+  })();
+  </script>
+</dom-module>

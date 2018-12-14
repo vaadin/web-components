@@ -1,0 +1,205 @@
+<!--
+@license
+Copyright (c) 2018 Vaadin Ltd.
+This program is available under Commercial Vaadin Add-On License 3.0 (CVALv3).
+See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete license.
+-->
+<link rel="import" href="../../polymer/lib/utils/async.html">
+<link rel="import" href="../../polymer/lib/utils/debounce.html">
+
+<script>
+  window.Vaadin = window.Vaadin || {};
+
+  /** @namespace Vaadin.ProGrid */
+  window.Vaadin.ProGrid = window.Vaadin.ProGrid || {};
+
+  /**
+   * @polymerMixin
+   * @memberof Vaadin.ProGrid
+   */
+  Vaadin.ProGrid.InlineEditingMixin = superClass => class InlineEditingMixin extends superClass {
+
+    // TODO scroll the viewport if the editor is being opened outside of it
+
+    ready() {
+      super.ready();
+
+      this.addEventListener('item-property-changed', e => {
+        const {path, value, index, item} = e.detail;
+        this.set(path, value, item);
+        this.notifyPath('items.' + index + '.' + path, value);
+      });
+
+      this.addEventListener('click', e => {
+        this._enterEditFromEvent(e);
+      });
+
+      this.addEventListener('keydown', e => {
+        switch (e.keyCode) {
+          case 27:
+            this.__edited && this._stopEdit(true);
+            break;
+          case 9:
+            this.__edited && this._switchEditCell(e);
+            break;
+          case 13:
+            this.__edited ? this._switchEditCell(e) : this._enterEditFromEvent(e);
+            break;
+          case 32:
+            !this.__edited && this._enterEditFromEvent(e);
+            break;
+        }
+      });
+    }
+
+    _getRowByIndex(index) {
+      return Array.from(this.$.items.children).filter(el => el.index === index)[0];
+    }
+
+    _getItemValue(column, model) {
+      return this.get(column.path, model.item);
+    }
+
+    _isEditColumn(column) {
+      return column.localName.toLowerCase() === 'vaadin-pro-grid-edit-column';
+    }
+
+    _enqueueStopEdit() {
+      // schedule stop on text-field blur
+      this._debouncerStopEdit = Polymer.Debouncer.debounce(
+        this._debouncerStopEdit,
+        Polymer.Async.timeOut.after(200),
+        this._stopEdit.bind(this, true));
+    }
+
+    _cancelStopEdit() {
+      // stop edit on outside click will always trigger notify resize.
+      // when tabbing within same row it might not be needed, so cancel
+      if (this._debouncerStopEdit) {
+        this._debouncerStopEdit.cancel();
+        delete this._debouncerStopEdit;
+      }
+    }
+
+    _enterEditFromEvent(e) {
+      const context = this.getEventContext(e);
+      const column = context.column;
+
+      if (context.item && this._isEditColumn(column)) {
+        if (e.target.localName === 'vaadin-text-field') {
+          return;
+        }
+
+        const path = e.composedPath();
+        const cell = path[path.indexOf(this.$.table) - 3];
+
+        if (!cell || cell.getAttribute('part').indexOf('details-cell') > -1) {
+          return;
+        }
+
+        if (this.__edited) {
+          this._cancelStopEdit();
+          const oldCell = this.__edited.cell;
+          const shouldResize = oldCell.parentNode !== cell.parentNode;
+          this._stopEdit(shouldResize);
+        }
+
+        this._startEdit(cell, column, true);
+      } else if (this.__edited) {
+        this._stopEdit(true);
+      }
+    }
+
+    _startEdit(cell, column, shouldResize) {
+      // cancel debouncer enqueued on blur
+      this._cancelStopEdit();
+
+      const model = this.__getRowModel(cell.parentElement);
+      this.__edited = {cell, column, model};
+      column._startCellEdit(cell, model);
+
+      if (shouldResize) {
+        this.notifyResize();
+      }
+
+      column._setCellEditValue(cell, this._getItemValue(column, model));
+    }
+
+    _stopEdit(shouldResize) {
+      if (!this.__edited) {
+        return;
+      }
+      const {cell, column, model} = this.__edited;
+
+      const value = column._getCellEditValue(cell);
+      if (value !== this._getItemValue(column, model)) {
+        this.dispatchEvent(new CustomEvent('item-property-changed', {
+          detail: {
+            index: model.index,
+            item: model.item,
+            path: column.path,
+            value: value
+          },
+          bubbles: true,
+          composed: true
+        }));
+      }
+
+      column._stopCellEdit(cell, model);
+
+      this.__edited = null;
+
+      if (shouldResize) {
+        this.notifyResize();
+      }
+    }
+
+    _switchEditCell(e) {
+      this._cancelStopEdit();
+
+      const columnTreeLevel = this._columnTree.length - 1;
+      const cols = this._columnTree[columnTreeLevel].filter(this._isEditColumn);
+      const {cell, column, model} = this.__edited;
+      const colIndex = cols.indexOf(column);
+      const {index} = model;
+      const row = cell.parentNode;
+
+      let nextCell = null;
+      let nextCol = null;
+      let nextRow = row;
+
+      // detect next row and column
+      if (e.shiftKey) {
+        if (cols[colIndex - 1]) {
+          nextCol = cols[colIndex - 1];
+        } else {
+          if (index > 0) {
+            nextRow = this._getRowByIndex(index - 1);
+            nextCol = cols[cols.length - 1];
+          }
+        }
+      } else {
+        if (cols[colIndex + 1]) {
+          nextCol = cols[colIndex + 1];
+        } else {
+          nextRow = this._getRowByIndex(index + 1) || null;
+          nextCol = cols[0];
+        }
+      }
+
+      // Resize when moving to another row, or exiting the edit
+      const shouldResize = nextRow !== row || nextCol === null;
+      this._stopEdit(shouldResize);
+
+      if (nextRow && nextCol) {
+        nextCell = Array.from(nextRow.children).filter(cell => cell._column === nextCol)[0];
+      }
+
+      // Exit edit state (first cell at first row reached)
+      if (nextCell) {
+        e.preventDefault();
+        this._startEdit(nextCell, nextCol, shouldResize);
+      }
+    }
+  };
+</script>

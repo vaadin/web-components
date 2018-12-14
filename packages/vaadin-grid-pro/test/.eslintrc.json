@@ -8,7 +8,12 @@
     "expect": false,
     "gemini": false,
     "sinon": false,
+    "MockInteractions": false,
     "infiniteDataProvider": false,
-    "flushGrid": false
+    "flushGrid": false,
+    "getCellContent": false,
+    "getContainerCell": false,
+    "getRows": false,
+    "getRowCells": false
   }
 }

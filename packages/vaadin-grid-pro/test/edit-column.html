@@ -1,0 +1,288 @@
+<!doctype html>
+
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>edit-column test</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../iron-test-helpers/mock-interactions.js"></script>
+  <link rel="import" href="../../test-fixture/test-fixture.html">
+
+  <link rel="import" href="helpers.html">
+  <link rel="import" href="../vaadin-pro-grid.html">
+  <link rel="import" href="../vaadin-pro-grid-edit-column.html">
+</head>
+
+<body>
+  <test-fixture id="default">
+    <template>
+      <vaadin-pro-grid>
+        <vaadin-pro-grid-edit-column path="name">
+          <template class="header"></template>
+          <template>[[index]] [[item.name]]</template>
+          <template class="footer"></template>
+        </vaadin-pro-grid-edit-column>
+        <vaadin-pro-grid-edit-column path="age"></vaadin-pro-grid-edit-column>
+      </vaadin-pro-grid>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="renderer">
+    <template>
+      <vaadin-pro-grid>
+        <vaadin-pro-grid-edit-column path="name"></vaadin-pro-grid-edit-column>
+        <vaadin-pro-grid-edit-column path="age"></vaadin-pro-grid-edit-column>
+        <vaadin-grid-column>
+          <template>[[item.name]]</template>
+        </vaadin-grid-column>
+      </vaadin-grid>
+    </template>
+  </test-fixture>
+
+  <script>
+    function getItems() {
+      return [{name: 'foo', age: 20}, {name: 'bar', age: 30}, {name: 'baz', age: 40}];
+    }
+
+    function tab(target) {
+      MockInteractions.keyDownOn(target, 9, [], 'Tab');
+    }
+
+    function shiftTab(target) {
+      MockInteractions.keyDownOn(target, 9, 'shift', 'Tab');
+    }
+
+    function space(target) {
+      MockInteractions.keyDownOn(target, 32, [], ' ');
+    }
+
+    function enter(target) {
+      MockInteractions.keyDownOn(target, 13, [], 'Enter');
+    }
+
+    function esc(target) {
+      MockInteractions.keyDownOn(target, 27, [], 'Escape');
+    }
+
+    describe('edit column', () => {
+
+      function getCellEditor(cell) {
+        return cell._column.constructor._getEditorComponent(cell);
+      }
+
+      describe('keyboard navigation', () => {
+        let grid, input;
+
+        beforeEach(() => {
+          grid = fixture('default');
+          grid.items = getItems();
+          flushGrid(grid);
+        });
+
+        it('should focus cell next available for editing within a same row when pressing Tab', () => {
+          const firstCell = getContainerCell(grid.$.items, 1, 0);
+          firstCell._content.click();
+
+          input = getCellEditor(firstCell);
+
+          tab(input);
+          const secondCell = getContainerCell(grid.$.items, 1, 1);
+          input = getCellEditor(secondCell);
+          expect(input).to.be.ok;
+        });
+
+        it('should focus previous cell available for editing within a same row when pressing Shift Tab', () => {
+          const firstCell = getContainerCell(grid.$.items, 1, 1);
+          firstCell._content.click();
+          input = getCellEditor(firstCell);
+
+          shiftTab(input);
+          const secondCell = getContainerCell(grid.$.items, 1, 0);
+          input = getCellEditor(secondCell);
+          expect(input).to.be.ok;
+        });
+
+        it('should focus cell next available for editing on the next row when pressing Tab', () => {
+          const firstCell = getContainerCell(grid.$.items, 1, 1);
+          firstCell._content.click();
+          input = getCellEditor(firstCell);
+
+          tab(input);
+          const secondCell = getContainerCell(grid.$.items, 2, 0);
+          input = getCellEditor(secondCell);
+          expect(input).to.be.ok;
+        });
+
+        it('should focus previous cell available for editing on the previous when pressing Shift Tab', () => {
+          const firstCell = getContainerCell(grid.$.items, 2, 0);
+          firstCell._content.click();
+          input = getCellEditor(firstCell);
+
+          shiftTab(input);
+          const secondCell = getContainerCell(grid.$.items, 1, 1);
+          input = getCellEditor(secondCell);
+          expect(input).to.be.ok;
+        });
+
+        it.skip('should scroll the viewport if the editor is being opened outside of it', () => {
+          // TODO add test
+        });
+
+        it('should exit the edit state for the cell when pressing ESC', () => {
+          const firstCell = getContainerCell(grid.$.items, 1, 0);
+          firstCell._content.click();
+          input = getCellEditor(firstCell);
+
+          esc(input);
+          expect(getCellEditor(firstCell)).to.be.not.ok;
+        });
+      });
+
+      describe('renderer', () => {
+        let grid, column, firstCell, input;
+
+        beforeEach(() => {
+          grid = fixture('renderer');
+          column = grid.firstElementChild;
+          grid.items = getItems();
+
+          column.renderer = function(root, owner, model) {
+            root.innerHTML = '';
+            const wrapper = document.createElement('div');
+            const text = document.createTextNode(model.index + ' ' + model.item.name);
+            wrapper.appendChild(text);
+            root.appendChild(wrapper);
+          };
+
+          flushGrid(grid);
+
+          firstCell = getContainerCell(grid.$.items, 0, 0);
+        });
+
+        it('should replace renderer and render text-field on editable cell click', () => {
+          const evt = new CustomEvent('click', {bubbles: true, composed: true});
+          firstCell._content.dispatchEvent(evt);
+          expect(firstCell._renderer).to.not.equal(column.renderer);
+          expect(getCellEditor(firstCell)).to.be.ok;
+        });
+
+        it('should replace renderer and render text-field on editable cell Enter', () => {
+          enter(firstCell);
+          expect(firstCell._renderer).to.not.equal(column.renderer);
+          expect(getCellEditor(firstCell)).to.be.ok;
+        });
+
+        it('should replace renderer and render text-field on editable cell Space', () => {
+          space(firstCell);
+          expect(firstCell._renderer).to.not.equal(column.renderer);
+          expect(getCellEditor(firstCell)).to.be.ok;
+        });
+
+        it('should restore renderer and render updated content on edited cell Esc', () => {
+          enter(firstCell);
+          input = getCellEditor(firstCell);
+          input.value = 'new';
+          esc(input);
+          expect(firstCell._renderer).to.equal(column.renderer);
+          expect(firstCell._content.textContent).to.equal('0 new');
+        });
+
+        it('should updated content in the cell of another column using template on Esc', () => {
+          enter(firstCell);
+          input = getCellEditor(firstCell);
+          input.value = 'new';
+          esc(input);
+          const secondCell = getContainerCell(grid.$.items, 0, 2);
+          expect(secondCell._content.textContent).to.equal('new');
+        });
+      });
+
+      describe('template', () => {
+        let grid, column, firstCell, input;
+
+        beforeEach(() => {
+          grid = fixture('default');
+          column = grid.firstElementChild;
+          grid.items = getItems();
+
+          flushGrid(grid);
+          firstCell = getContainerCell(grid.$.items, 0, 0);
+        });
+
+        it('should replace template and render text-field on editable cell click', () => {
+          const evt = new CustomEvent('click', {bubbles: true, composed: true});
+          firstCell.dispatchEvent(evt);
+          expect(firstCell._template).to.not.equal(column._bodyTemplate);
+          expect(getCellEditor(firstCell)).to.be.ok;
+        });
+
+        it('should replace template and render text-field on editable cell Enter', () => {
+          enter(firstCell);
+          expect(firstCell._template).to.not.equal(column._bodyTemplate);
+          expect(getCellEditor(firstCell)).to.be.ok;
+        });
+
+        it('should replace template and render text-field on editable cell Space', () => {
+          space(firstCell);
+          expect(firstCell._template).to.not.equal(column._bodyTemplate);
+          expect(getCellEditor(firstCell)).to.be.ok;
+        });
+
+        it('should restore template and render updated content on edited cell Esc', () => {
+          enter(firstCell);
+          input = getCellEditor(firstCell);
+          input.value = 'new';
+          esc(input);
+          expect(firstCell._template).to.equal(column._bodyTemplate);
+          expect(firstCell._content.textContent).to.equal('0 new');
+        });
+      });
+
+      describe('item-property-changed event', () => {
+
+        let grid, column, firstCell, input;
+
+        beforeEach(() => {
+          grid = fixture('default');
+          column = grid.firstElementChild;
+          grid.items = getItems();
+
+          flushGrid(grid);
+          firstCell = getContainerCell(grid.$.items, 0, 0);
+        });
+
+        it('should be fired once cell edit completed and value has changed', done => {
+          grid.addEventListener('item-property-changed', e => {
+            const {value, path} = e.detail;
+            expect(value).to.equal('new');
+            expect(path).to.equal(column.path);
+            done();
+          });
+          enter(firstCell);
+          input = getCellEditor(firstCell);
+          input.value = 'new';
+          esc(input);
+        });
+
+        it('should not be fired once cell edit completed if value has not changed', () => {
+          const spy = sinon.spy();
+          grid.addEventListener('item-property-changed', spy);
+          enter(firstCell);
+          input = getCellEditor(firstCell);
+          const value = input.value;
+          input.value = 'new';
+          input.value = value;
+          esc(input);
+          expect(spy).to.not.be.called;
+        });
+      });
+    });
+  </script>
+
+</body>
+
+</html>

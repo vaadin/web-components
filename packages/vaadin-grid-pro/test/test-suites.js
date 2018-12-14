@@ -1,3 +1,4 @@
 window.ProGridElementSuites = [
-  'basic.html'
+  'basic.html',
+  'edit-column.html'
 ];
