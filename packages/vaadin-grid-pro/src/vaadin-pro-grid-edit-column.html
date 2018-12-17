@@ -11,14 +11,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
 <dom-module id="vaadin-pro-grid-edit-column">
   <template>
-    <style>
-      vaadin-text-field {
-        max-width: 100%;
-        padding: 0;
-        --lumo-text-field-size: 27px; /* TODO: move to the theme */
-        will-change: transform;
-      }
-    </style>
     <template id="editStateTemplate">
       <vaadin-text-field theme="small"></vaadin-text-field>
     </template>
@@ -79,7 +71,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             root.innerHTML = `
               <vaadin-text-field
                 theme="small"
-                style="max-width: 100%; padding: 0; will-change: transform; --lumo-text-field-size: 27px"
               ></vaadin-text-field>
             `;
           }
@@ -106,6 +97,20 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         return 'vaadin-text-field';
       }
 
+      /**
+       * Returns the object of CSS style properties to set on the editor
+       *
+       * @protected
+       */
+      static get _editorStyle() {
+        return {
+          'maxWidth': '100%',
+          'padding': 0,
+          'willChange': 'transform',
+          '--lumo-text-field-size': '27px' /* TODO move to the theme */
+        };
+      }
+
       _addBlurListener(cell) {
         const editor = this.constructor._getEditorComponent(cell);
         if (editor) {
@@ -113,6 +118,14 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             this._grid._enqueueStopEdit();
           });
         }
+      }
+
+      _configureEditor(cell) {
+        const editor = this.constructor._getEditorComponent(cell);
+        const style = this.constructor._editorStyle;
+        Object.keys(style).forEach(key => {
+          editor.style.setProperty(key, style[key]);
+        });
       }
 
       _getCellEditValue(cell) {
@@ -135,6 +148,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           this._stampRendererToCell(cell, this.__editStateRenderer, model);
         }
         this._addBlurListener(cell);
+        this._configureEditor(cell);
       }
 
       _stopCellEdit(cell, model) {
