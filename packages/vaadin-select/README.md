@@ -44,8 +44,6 @@
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-select/master/screenshot.gif" width="220" alt="Screenshot of vaadin-select">](https://vaadin.com/components/vaadin-select)
 
-**Note:** [`<vaadin-list-box>`](https://github.com/vaadin/vaadin-list-box) component used in the above example should be installed and imported separately.
-
 ## Installation
 
 The Vaadin components are distributed as Bower and npm packages.
