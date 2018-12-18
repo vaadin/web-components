@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-checkbox",
-  "version": "2.2.4",
+  "version": "2.2.5",
   "description": "vaadin-checkbox",
   "main": "vaadin-checkbox.html",
   "repository": "vaadin/vaadin-checkbox",
