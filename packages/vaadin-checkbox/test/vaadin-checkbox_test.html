@@ -107,6 +107,11 @@
         expect(vaadinCheckbox.name).to.eq('test-checkbox');
       });
 
+      it('should have display: none when hidden', () => {
+        vaadinCheckbox.setAttribute('hidden', '');
+        expect(getComputedStyle(vaadinCheckbox).display).to.equal('none');
+      });
+
       it('should toggle on host click', () => {
         vaadinCheckbox.click();
 
