@@ -5,14 +5,13 @@ This program is available under Commercial Vaadin Add-On License 3.0 (CVALv3).
 See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete license.
 -->
 
-<link rel="import" href="../../polymer/lib/elements/dom-if.html">
 <link rel="import" href="../../vaadin-grid/vaadin-grid-column.html">
-<link rel="import" href="../../vaadin-text-field/vaadin-text-field.html">
+<link rel="import" href="vaadin-pro-grid-edit-column-text-field.html">
 
 <dom-module id="vaadin-pro-grid-edit-column">
   <template>
     <template id="editStateTemplate">
-      <vaadin-text-field theme="small"></vaadin-text-field>
+      <vaadin-pro-grid-edit-column-text-field></vaadin-pro-grid-edit-column-text-field>
     </template>
   </template>
 
@@ -69,9 +68,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           const cell = root.assignedSlot.parentNode;
           if (!root.firstElementChild || root.firstElementChild.localName.toLowerCase() !== tagName) {
             root.innerHTML = `
-              <vaadin-text-field
-                theme="small"
-              ></vaadin-text-field>
+              <${tagName}></${tagName}>
             `;
           }
           // TODO: move to the grid for custom edit state renderer support?
@@ -94,21 +91,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
        * @protected
        */
       static get _editorTagName() {
-        return 'vaadin-text-field';
-      }
-
-      /**
-       * Returns the object of CSS style properties to set on the editor
-       *
-       * @protected
-       */
-      static get _editorStyle() {
-        return {
-          'maxWidth': '100%',
-          'padding': 0,
-          'willChange': 'transform',
-          '--lumo-text-field-size': '27px' /* TODO move to the theme */
-        };
+        return 'vaadin-pro-grid-edit-column-text-field';
       }
 
       _addBlurListener(cell) {
@@ -118,14 +101,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             this._grid._enqueueStopEdit();
           });
         }
-      }
-
-      _configureEditor(cell) {
-        const editor = this.constructor._getEditorComponent(cell);
-        const style = this.constructor._editorStyle;
-        Object.keys(style).forEach(key => {
-          editor.style.setProperty(key, style[key]);
-        });
       }
 
       _getCellEditValue(cell) {
@@ -148,7 +123,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           this._stampRendererToCell(cell, this.__editStateRenderer, model);
         }
         this._addBlurListener(cell);
-        this._configureEditor(cell);
       }
 
       _stopCellEdit(cell, model) {
