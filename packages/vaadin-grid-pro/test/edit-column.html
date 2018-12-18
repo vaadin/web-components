@@ -128,10 +128,6 @@
           expect(input).to.be.ok;
         });
 
-        it.skip('should scroll the viewport if the editor is being opened outside of it', () => {
-          // TODO add test
-        });
-
         it('should exit the edit state for the cell when pressing ESC', () => {
           const firstCell = getContainerCell(grid.$.items, 1, 0);
           firstCell._content.click();
@@ -139,6 +135,35 @@
 
           esc(input);
           expect(getCellEditor(firstCell)).to.be.not.ok;
+        });
+      });
+
+      describe('horizontal scrolling to cell', () => {
+        let grid, input;
+
+        beforeEach(() => {
+          grid = fixture('default');
+          grid.items = getItems();
+          grid.style.width = '100px'; // column default min width is 100px
+          flushGrid(grid);
+        });
+
+        it('should scroll to the right on tab when editable cell is outside the viewport', () => {
+          const firstCell = getContainerCell(grid.$.items, 1, 0);
+          firstCell._content.click();
+          input = getCellEditor(firstCell);
+          tab(input);
+
+          expect(grid.$.table.scrollLeft).to.be.at.least(100);
+        });
+
+        it('should scroll to the left on tab when editable cell is outside the viewport', () => {
+          const firstCell = getContainerCell(grid.$.items, 1, 1);
+          firstCell._content.click();
+          input = getCellEditor(firstCell);
+          shiftTab(input);
+
+          expect(grid.$.table.scrollLeft).to.equal(0);
         });
       });
 

@@ -114,6 +114,8 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       // cancel debouncer enqueued on blur
       this._cancelStopEdit();
 
+      this._scrollHorizontallyToCell(cell);
+
       const model = this.__getRowModel(cell.parentElement);
       this.__edited = {cell, column, model};
       column._startCellEdit(cell, model);
