@@ -48,6 +48,10 @@
       return [{name: 'foo', age: 20}, {name: 'bar', age: 30}, {name: 'baz', age: 40}];
     }
 
+    function dblclick(target) {
+      target.dispatchEvent(new CustomEvent('dblclick', {bubbles: true, composed: true}));
+    }
+
     function tab(target) {
       MockInteractions.keyDownOn(target, 9, [], 'Tab');
     }
@@ -85,8 +89,7 @@
 
         it('should focus cell next available for editing within a same row when pressing Tab', () => {
           const firstCell = getContainerCell(grid.$.items, 1, 0);
-          firstCell._content.click();
-
+          dblclick(firstCell._content);
           input = getCellEditor(firstCell);
 
           tab(input);
@@ -97,7 +100,7 @@
 
         it('should focus previous cell available for editing within a same row when pressing Shift Tab', () => {
           const firstCell = getContainerCell(grid.$.items, 1, 1);
-          firstCell._content.click();
+          dblclick(firstCell._content);
           input = getCellEditor(firstCell);
 
           shiftTab(input);
@@ -108,7 +111,7 @@
 
         it('should focus cell next available for editing on the next row when pressing Tab', () => {
           const firstCell = getContainerCell(grid.$.items, 1, 1);
-          firstCell._content.click();
+          dblclick(firstCell._content);
           input = getCellEditor(firstCell);
 
           tab(input);
@@ -119,7 +122,7 @@
 
         it('should focus previous cell available for editing on the previous when pressing Shift Tab', () => {
           const firstCell = getContainerCell(grid.$.items, 2, 0);
-          firstCell._content.click();
+          dblclick(firstCell._content);
           input = getCellEditor(firstCell);
 
           shiftTab(input);
@@ -130,7 +133,7 @@
 
         it('should exit the edit state for the cell when pressing ESC', () => {
           const firstCell = getContainerCell(grid.$.items, 1, 0);
-          firstCell._content.click();
+          dblclick(firstCell._content);
           input = getCellEditor(firstCell);
 
           esc(input);
@@ -150,7 +153,7 @@
 
         it('should scroll to the right on tab when editable cell is outside the viewport', () => {
           const firstCell = getContainerCell(grid.$.items, 1, 0);
-          firstCell._content.click();
+          dblclick(firstCell._content);
           input = getCellEditor(firstCell);
           tab(input);
 
@@ -159,7 +162,7 @@
 
         it('should scroll to the left on tab when editable cell is outside the viewport', () => {
           const firstCell = getContainerCell(grid.$.items, 1, 1);
-          firstCell._content.click();
+          dblclick(firstCell._content);
           input = getCellEditor(firstCell);
           shiftTab(input);
 
@@ -188,9 +191,8 @@
           firstCell = getContainerCell(grid.$.items, 0, 0);
         });
 
-        it('should replace renderer and render text-field on editable cell click', () => {
-          const evt = new CustomEvent('click', {bubbles: true, composed: true});
-          firstCell._content.dispatchEvent(evt);
+        it('should replace renderer and render text-field on editable cell dblclick', () => {
+          dblclick(firstCell._content);
           expect(firstCell._renderer).to.not.equal(column.renderer);
           expect(getCellEditor(firstCell)).to.be.ok;
         });
@@ -239,8 +241,7 @@
         });
 
         it('should replace template and render text-field on editable cell click', () => {
-          const evt = new CustomEvent('click', {bubbles: true, composed: true});
-          firstCell.dispatchEvent(evt);
+          dblclick(firstCell._content);
           expect(firstCell._template).to.not.equal(column._bodyTemplate);
           expect(getCellEditor(firstCell)).to.be.ok;
         });
