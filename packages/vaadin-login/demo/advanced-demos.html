@@ -1,0 +1,65 @@
+<dom-module id="advanced-demos">
+  <template>
+    <style include="vaadin-component-demo-shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+
+    <h3>Title with custom HTML</h3>
+    <vaadin-demo-snippet id="login-overlay">
+      <template preserve-content>
+        <vaadin-login-overlay><h1 slot="title"><iron-icon icon="vaadin:vaadin-h"></iron-icon> My App</h1></vaadin-login-overlay>
+        <vaadin-button>Log in</vaadin-button>
+        <vaadin-dialog id="feedbackDialog">
+            <template>Login is being processed...</template>
+        </vaadin-dialog>
+        <script>
+          window.addDemoReadyListener('#login-overlay', function(document) {
+            var button = document.querySelector('vaadin-button');
+            var vaadinLoginOverlay = document.querySelector('vaadin-login-overlay');
+            var feedbackDialog = document.querySelector('#feedbackDialog');
+
+            var i18n = Object.assign(
+              {},
+              vaadinLoginOverlay.i18n,
+              {additionalInformation: 'For this demo, use admin/admin to a successful login.'}
+            );
+
+            vaadinLoginOverlay.i18n = i18n;
+
+            button.addEventListener('click', function() {
+              vaadinLoginOverlay.opened = true;
+            });
+
+            vaadinLoginOverlay.addEventListener('login', function(e) {
+              feedbackDialog.opened = true;
+              var detail = e.detail,
+                username = detail.username,
+                password = detail.password;
+
+              setTimeout(function() {
+                feedbackDialog.opened = false;
+                if (username === 'admin' && password === 'admin') {
+                  vaadinLoginOverlay.opened = false;
+                } else {
+                  vaadinLoginOverlay.error = true;
+                  vaadinLoginOverlay.disabled = false;
+                }
+              }, 1000);
+            });
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+  </template>
+  <script>
+    class AdvancedDemos extends DemoReadyEventEmitter(ElementDemo(Polymer.Element)) {
+      static get is() {
+        return 'advanced-demos';
+      }
+    }
+    customElements.define(AdvancedDemos.is, AdvancedDemos);
+  </script>
+</dom-module>

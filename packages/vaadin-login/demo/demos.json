@@ -20,6 +20,16 @@
       "description": "",
       "image": ""
      }
+  },
+  {
+    "name": "Advanced",
+    "url": "advanced-demos",
+    "src": "advanced-demos.html",
+    "meta": {
+      "title": "Vaadin Login Advanced Examples",
+      "description": "",
+      "image": ""
+     }
   }
   ]
 }

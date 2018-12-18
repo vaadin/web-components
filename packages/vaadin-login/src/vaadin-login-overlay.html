@@ -16,8 +16,15 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <dom-module id="vaadin-login-overlay">
   <template>
-    <vaadin-login-overlay-element id="overlay" opened="{{opened}}" focus-trap with-backdrop title="[[title]]" description="[[description]]">
-    <vaadin-login
+    <vaadin-login-overlay-element 
+      id="overlay"
+      opened="{{opened}}"
+      focus-trap
+      with-backdrop
+      title="[[title]]"
+      description="[[description]]">
+
+      <vaadin-login
         theme="with-overlay"
         id="login"
         action="{{action}}"
@@ -28,6 +35,7 @@ This program is available under Apache License Version 2.0, available at https:/
         on-login="_handleEvent"
         on-forgot-password="_handleEvent">
       </vaadin-login>
+
     </vaadin-login-overlay-element>
   </template>
   <script>
@@ -102,7 +110,6 @@ This program is available under Apache License Version 2.0, available at https:/
           this.$.overlay.opened = false;
         }
 
-
         __i18nChanged(i18n) {
           const header = i18n.base;
           if (!header) {
@@ -133,7 +140,33 @@ This program is available under Apache License Version 2.0, available at https:/
             this.$.login.$.username.value = '';
             this.$.login.$.password.value = '';
             this.disabled = false;
+            if (this._undoTeleport) {
+              this._undoTeleport();
+            }
+          } else {
+            this._undoTeleport = this._teleport(this._getElementsToTeleport());
           }
+        }
+
+        _teleport(elements) {
+          const teleported = [];
+          for (const e of elements) {
+            this.$.overlay.appendChild(e);
+            teleported.push(e);
+          }
+          // Function to undo the teleport
+          return () => {
+            while (teleported.length > 0) {
+              this.appendChild(teleported.shift());
+            }
+          };
+        }
+
+        _getElementsToTeleport() {
+          if (!this._elementsToTeleport) {
+            this._elementsToTeleport = this.querySelectorAll('[slot=title]');
+          }
+          return this._elementsToTeleport;
         }
       }
 

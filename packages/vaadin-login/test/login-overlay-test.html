@@ -28,6 +28,18 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="title-as-component">
+    <template>
+      <vaadin-login-overlay description="New description" opened><div slot="title">Teleported title</div></vaadin-login-overlay>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="cache-query">
+    <template>
+      <vaadin-login-overlay description="New description"><div slot="title">Teleported title</div></vaadin-login-overlay>
+    </template>
+  </test-fixture>
+
   <script>
     describe('Login Overlay test', () => {
       var loginOverlay;
@@ -157,6 +169,30 @@
 
         expect(login.title).to.be.equal(login.i18n.header.title);
         expect(login.description).to.be.equal(login.i18n.header.description);
+      });
+
+      describe('Title as component test', function() {
+
+        it('should teleport title', function() {
+          const overlay = fixture('title-as-component');
+          const overlayElement = overlay.$.overlay;
+          let titleElements = overlayElement.querySelectorAll('[slot=title]');
+          expect(titleElements.length).to.be.equal(1);
+          expect(titleElements[0].textContent).to.be.equal('Teleported title');
+
+          overlay.opened = false;
+          titleElements = overlayElement.querySelectorAll('[slot=title]');
+          expect(titleElements.length).to.be.equal(0);
+        });
+
+        it('should cache queries', function() {
+          const overlay = fixture('cache-query');
+          expect(overlay._elementsToTeleport).to.be.undefined;
+          const elements = overlay._getElementsToTeleport();
+          expect(overlay._elementsToTeleport).to.be.equal(elements);
+          expect(overlay._getElementsToTeleport()).to.be.equal(elements);
+        });
+
       });
     });
   </script>

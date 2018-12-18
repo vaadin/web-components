@@ -40,7 +40,9 @@ This program is available under Apache License Version 2.0, available at https:/
     </style>
     <section part="card">
       <div part="brand">
-        <h1>[[title]]</h1>
+          <slot name="title">
+            <h1>[[title]]</h1>
+          </slot>
         <p>[[description]]</p>
       </div>
       <div part="form">
