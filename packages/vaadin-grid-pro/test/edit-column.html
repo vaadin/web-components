@@ -337,6 +337,35 @@
           expect(spy).to.not.be.called;
         });
       });
+
+      describe('vertical scrolling', () => {
+        let grid, input, firstCell;
+
+        beforeEach(() => {
+          grid = fixture('default');
+          grid.size = 1000;
+          grid.dataProvider = infiniteDataProvider;
+          flushGrid(grid);
+        });
+
+        it('should cancel edit for editable cell using template when scrolled out', () => {
+          firstCell = getContainerCell(grid.$.items, 1, 0);
+          dblclick(firstCell._content);
+
+          grid._scrollToIndex(100);
+          input = getCellEditor(firstCell);
+          expect(input).to.be.not.ok;
+        });
+
+        it('should cancel edit for editable cell using renderer when scrolled out', () => {
+          firstCell = getContainerCell(grid.$.items, 1, 1);
+          dblclick(firstCell._content);
+
+          grid._scrollToIndex(100);
+          input = getCellEditor(firstCell);
+          expect(input).to.be.not.ok;
+        });
+      });
     });
   </script>
 

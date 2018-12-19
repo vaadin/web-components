@@ -1,8 +1,10 @@
 <script>
   window.infiniteDataProvider = (params, callback) => {
     callback(Array.apply(null, Array(params.pageSize)).map((item, index) => {
+      const count = params.page * params.pageSize + index;
       return {
-        value: 'foo' + (params.page * params.pageSize + index)
+        name: 'foo' + count,
+        age: count
       };
     }));
   };

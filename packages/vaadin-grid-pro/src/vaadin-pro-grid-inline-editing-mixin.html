@@ -120,7 +120,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       this.__edited = {cell, column, model};
       column._startCellEdit(cell, model);
 
-
       if (shouldResize) {
         this.notifyResize();
       }
@@ -204,6 +203,17 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       if (nextCell) {
         e.preventDefault();
         this._startEdit(nextCell, nextCol, shouldResize);
+      }
+    }
+
+    _updateItem(row, item) {
+      super._updateItem(row, item);
+
+      if (this.__edited) {
+        const {cell, model} = this.__edited;
+        if (cell.parentNode === row && model.item !== item) {
+          this._stopEdit();
+        }
       }
     }
   };
