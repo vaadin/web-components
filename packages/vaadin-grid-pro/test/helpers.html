@@ -7,6 +7,64 @@
     }));
   };
 
+  window.dragStart = (source) => {
+    let grid = source.parentElement;
+    while (grid) {
+      if (grid.localName === 'vaadin-pro-grid') {
+        grid._touchDevice = false;
+      }
+      grid = grid.parentNode || grid.host;
+    }
+    const sourceRect = source.getBoundingClientRect();
+    fire('track', {
+      x: Math.round(sourceRect.left + sourceRect.width / 2),
+      y: Math.round(sourceRect.top + sourceRect.height / 2),
+      state: 'start'
+    }, {
+      node: source,
+      bubbles: true
+    });
+  };
+
+  window.dragOver = (source, target, clientX) => {
+    dragStart(source);
+    const targetRect = target.getBoundingClientRect();
+    fire('track', {
+      x: Math.round(clientX || targetRect.left + targetRect.width / 2),
+      y: Math.round(targetRect.top + targetRect.height / 2),
+      state: 'track'
+    }, {
+      node: source,
+      bubbles: true
+    });
+  };
+
+  window.dragAndDropOver = (source, target) => {
+    dragOver(source, target);
+    fire('track', {
+      x: 0,
+      y: 0,
+      state: 'end'
+    }, {
+      node: source,
+      bubbles: true
+    });
+  };
+
+  window.fire = (type, detail, options) => {
+    options = options || {};
+    detail = (detail === null || detail === undefined) ? {} : detail;
+    const event = new Event(type, {
+      bubbles: options.bubbles === undefined ? true : options.bubbles,
+      cancelable: Boolean(options.cancelable),
+      composed: options.composed === undefined ? true : options.composed
+    });
+    event.detail = detail;
+    const node = options.node || this;
+    node.dispatchEvent(event);
+    return event;
+  };
+
   window.flushGrid = (grid) => {
     grid._observer.flush();
     if (grid._debounceScrolling) {

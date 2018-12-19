@@ -22,11 +22,12 @@
     <template>
       <vaadin-pro-grid>
         <vaadin-pro-grid-edit-column path="name">
-          <template class="header"></template>
+          <template class="header">Name</template>
           <template>[[index]] [[item.name]]</template>
           <template class="footer"></template>
         </vaadin-pro-grid-edit-column>
         <vaadin-pro-grid-edit-column path="age"></vaadin-pro-grid-edit-column>
+        <vaadin-grid-column path="name"></vaadin-grid-column>
       </vaadin-pro-grid>
     </template>
   </test-fixture>
@@ -138,6 +139,36 @@
 
           esc(input);
           expect(getCellEditor(firstCell)).to.be.not.ok;
+        });
+
+        it('should focus correct editable cell after column reordering', () => {
+          grid.columnReorderingAllowed = true;
+          const headerContent = [
+            getContainerCell(grid.$.header, 0, 0)._content,
+            getContainerCell(grid.$.header, 0, 1)._content
+          ];
+          dragAndDropOver(headerContent[0], headerContent[1]);
+
+          const firstCell = getContainerCell(grid.$.items, 1, 1);
+          dblclick(firstCell._content);
+          input = getCellEditor(firstCell);
+          tab(input);
+          const secondCell = getContainerCell(grid.$.items, 1, 0);
+          input = getCellEditor(secondCell);
+          expect(input).to.be.ok;
+        });
+
+        it('should focus correct editable cell when column is hidden', () => {
+          const column = grid.querySelector('vaadin-pro-grid-edit-column');
+          column.hidden = true;
+
+          const firstCell = getContainerCell(grid.$.items, 1, 1);
+          dblclick(firstCell._content);
+          input = getCellEditor(firstCell);
+          tab(input);
+          const secondCell = getContainerCell(grid.$.items, 2, 1);
+          input = getCellEditor(secondCell);
+          expect(input).to.be.ok;
         });
       });
 

@@ -161,7 +161,9 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       this._cancelStopEdit();
 
       const columnTreeLevel = this._columnTree.length - 1;
-      const cols = this._columnTree[columnTreeLevel].filter(this._isEditColumn);
+      const cols = this._columnTree[columnTreeLevel]
+        .filter(column => this._isEditColumn(column) && !column.hidden)
+        .sort((a, b) => a._order - b._order);
       const {cell, column, model} = this.__edited;
       const colIndex = cols.indexOf(column);
       const {index} = model;
