@@ -37,7 +37,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       this.addEventListener('keydown', e => {
         switch (e.keyCode) {
           case 27:
-            this.__edited && this._stopEdit(true);
+            this.__edited && this._stopEdit();
             break;
           case 9:
             this.__edited && this._switchEditCell(e);
@@ -69,7 +69,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       this._debouncerStopEdit = Polymer.Debouncer.debounce(
         this._debouncerStopEdit,
         Polymer.Async.timeOut.after(200),
-        this._stopEdit.bind(this, true));
+        this._stopEdit.bind(this));
     }
 
     _cancelStopEdit() {
@@ -77,6 +77,13 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       // when tabbing within same row it might not be needed, so cancel
       if (this._debouncerStopEdit) {
         this._debouncerStopEdit.cancel();
+        delete this._debouncerStopEdit;
+      }
+    }
+
+    _flushStopEdit() {
+      if (this._debouncerStopEdit) {
+        this._debouncerStopEdit.flush();
         delete this._debouncerStopEdit;
       }
     }
@@ -97,16 +104,11 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           return;
         }
 
-        if (this.__edited) {
-          this._cancelStopEdit();
-          const oldCell = this.__edited.cell;
-          const shouldResize = oldCell.parentNode !== cell.parentNode;
-          this._stopEdit(shouldResize);
-        }
+        this._flushStopEdit();
 
-        this._startEdit(cell, column, true);
+        this._startEdit(cell, column);
       } else if (this.__edited) {
-        this._stopEdit(true);
+        this._stopEdit();
       }
     }
 
@@ -120,9 +122,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       this.__edited = {cell, column, model};
       column._startCellEdit(cell, model);
 
-      if (shouldResize) {
-        this.notifyResize();
-      }
+      this.notifyResize();
 
       column._setCellEditValue(cell, this._getItemValue(column, model));
     }
@@ -151,9 +151,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
       this.__edited = null;
 
-      if (shouldResize) {
-        this.notifyResize();
-      }
+      this.notifyResize();
     }
 
     _switchEditCell(e) {
@@ -191,9 +189,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         }
       }
 
-      // Resize when moving to another row, or exiting the edit
-      const shouldResize = nextRow !== row || nextCol === null;
-      this._stopEdit(shouldResize);
+      this._stopEdit();
 
       if (nextRow && nextCol) {
         nextCell = Array.from(nextRow.children).filter(cell => cell._column === nextCol)[0];
@@ -202,7 +198,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       // Exit edit state (first cell at first row reached)
       if (nextCell) {
         e.preventDefault();
-        this._startEdit(nextCell, nextCol, shouldResize);
+        this._startEdit(nextCell, nextCol);
       }
     }
 
