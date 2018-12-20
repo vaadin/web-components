@@ -92,71 +92,70 @@
           flushGrid(grid);
         });
 
-        it('should focus cell next available for editing within a same row when pressing Tab', () => {
+        it('should focus cell next available for editing within a same row in unedited mode on Tab', () => {
           const firstCell = getContainerCell(grid.$.items, 1, 0);
           dblclick(firstCell._content);
           input = getCellEditor(firstCell);
 
-          tab(input);
           const secondCell = getContainerCell(grid.$.items, 1, 1);
-          input = getCellEditor(secondCell);
-          expect(input).to.be.ok;
-        });
-
-        it('should focus previous cell available for editing within a same row when pressing Shift Tab', () => {
-          const firstCell = getContainerCell(grid.$.items, 1, 1);
-          dblclick(firstCell._content);
-          input = getCellEditor(firstCell);
-
-          shiftTab(input);
-          const secondCell = getContainerCell(grid.$.items, 1, 0);
-          input = getCellEditor(secondCell);
-          expect(input).to.be.ok;
-        });
-
-        it('should focus cell next available for editing on the next row when pressing Tab', () => {
-          const firstCell = getContainerCell(grid.$.items, 1, 1);
-          dblclick(firstCell._content);
-          input = getCellEditor(firstCell);
-
+          const spy = sinon.spy(secondCell, 'focus');
           tab(input);
-          const secondCell = getContainerCell(grid.$.items, 2, 0);
-          input = getCellEditor(secondCell);
-          expect(input).to.be.ok;
+          expect(spy).to.be.calledOnce;
         });
 
-        it('should focus previous cell available for editing on the previous when pressing Shift Tab', () => {
+        it('should focus previous cell available for editing within a same row in unedited mode on Shift Tab', () => {
+          const firstCell = getContainerCell(grid.$.items, 1, 1);
+          dblclick(firstCell._content);
+          input = getCellEditor(firstCell);
+
+          const secondCell = getContainerCell(grid.$.items, 1, 0);
+          const spy = sinon.spy(secondCell, 'focus');
+          shiftTab(input);
+          expect(spy).to.be.calledOnce;
+        });
+
+        it('should focus cell next available for editing on the next row in unedited mode on Tab', () => {
+          const firstCell = getContainerCell(grid.$.items, 1, 1);
+          dblclick(firstCell._content);
+          input = getCellEditor(firstCell);
+
+          const secondCell = getContainerCell(grid.$.items, 2, 0);
+          const spy = sinon.spy(secondCell, 'focus');
+          tab(input);
+          expect(spy).to.be.calledOnce;
+        });
+
+        it('should focus previous cell available for editing on the previous in unedited mode on Shift Tab', () => {
           const firstCell = getContainerCell(grid.$.items, 2, 0);
           dblclick(firstCell._content);
           input = getCellEditor(firstCell);
 
-          shiftTab(input);
           const secondCell = getContainerCell(grid.$.items, 1, 1);
-          input = getCellEditor(secondCell);
-          expect(input).to.be.ok;
+          const spy = sinon.spy(secondCell, 'focus');
+          shiftTab(input);
+          expect(spy).to.be.calledOnce;
         });
 
-        it('should focus editable cell on the next row for the same column when pressing Enter', () => {
+        it('should focus editable cell on the next row for the same column in unedited mode on Enter', () => {
           const firstCell = getContainerCell(grid.$.items, 1, 0);
           enter(firstCell._content);
           input = getCellEditor(firstCell);
 
-          enter(input);
           const secondCell = getContainerCell(grid.$.items, 2, 0);
-          input = getCellEditor(secondCell);
-          expect(input).to.be.ok;
+          const spy = sinon.spy(secondCell, 'focus');
+          enter(input);
+          expect(spy).to.be.calledOnce;
         });
 
-
-        it('should focus editable cell on the previous row for the same column when pressing Shift Enter', () => {
+        it('should focus editable cell on the previous row for the same column in unedited mode on Shift Enter', () => {
           const firstCell = getContainerCell(grid.$.items, 1, 0);
           enter(firstCell._content);
           input = getCellEditor(firstCell);
 
-          shiftEnter(input);
           const secondCell = getContainerCell(grid.$.items, 0, 0);
-          input = getCellEditor(secondCell);
-          expect(input).to.be.ok;
+          const spy = sinon.spy(secondCell, 'focus');
+          shiftEnter(input);
+          expect(spy).to.be.calledOnce;
         });
 
         it('should exit the edit state for the cell when pressing ESC', () => {
@@ -179,10 +178,11 @@
           const firstCell = getContainerCell(grid.$.items, 1, 1);
           dblclick(firstCell._content);
           input = getCellEditor(firstCell);
-          tab(input);
+
           const secondCell = getContainerCell(grid.$.items, 1, 0);
-          input = getCellEditor(secondCell);
-          expect(input).to.be.ok;
+          const spy = sinon.spy(secondCell, 'focus');
+          tab(input);
+          expect(spy).to.be.calledOnce;
         });
 
         it('should focus correct editable cell when column is hidden', () => {
@@ -192,10 +192,11 @@
           const firstCell = getContainerCell(grid.$.items, 1, 1);
           dblclick(firstCell._content);
           input = getCellEditor(firstCell);
-          tab(input);
+
           const secondCell = getContainerCell(grid.$.items, 2, 1);
-          input = getCellEditor(secondCell);
-          expect(input).to.be.ok;
+          const spy = sinon.spy(secondCell, 'focus');
+          tab(input);
+          expect(spy).to.be.calledOnce;
         });
       });
 
@@ -224,7 +225,7 @@
           input = getCellEditor(firstCell);
           shiftTab(input);
 
-          expect(grid.$.table.scrollLeft).to.equal(0);
+          expect(grid.$.table.scrollLeft).to.closeTo(0, 1);
         });
       });
 

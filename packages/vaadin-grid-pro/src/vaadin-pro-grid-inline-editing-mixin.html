@@ -169,17 +169,14 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       const {cell, column, model} = this.__edited;
       const colIndex = cols.indexOf(column);
       const {index} = model;
-      const row = cell.parentNode;
 
-      let nextCell = null;
       let nextCol = null;
-      let nextRow = row;
+      let nextIdx = index;
 
       // enter: move up / down
       if (e.keyCode === 13) {
         nextCol = column;
-        const nextIdx = e.shiftKey ? index - 1 : index + 1;
-        nextRow = this._getRowByIndex(nextIdx) || null;
+        nextIdx = e.shiftKey ? index - 1 : index + 1;
       }
 
       // tab: move right / left
@@ -189,7 +186,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             nextCol = cols[colIndex - 1];
           } else {
             if (index > 0) {
-              nextRow = this._getRowByIndex(index - 1);
+              nextIdx = index - 1;
               nextCol = cols[cols.length - 1];
             }
           }
@@ -197,22 +194,21 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           if (cols[colIndex + 1]) {
             nextCol = cols[colIndex + 1];
           } else {
-            nextRow = this._getRowByIndex(index + 1) || null;
+            nextIdx = index + 1;
             nextCol = cols[0];
           }
         }
       }
 
+      const nextRow = nextIdx === index ? cell.parentNode : this._getRowByIndex(nextIdx) || null;
+
       this._stopEdit();
 
       if (nextRow && nextCol) {
-        nextCell = Array.from(nextRow.children).filter(cell => cell._column === nextCol)[0];
-      }
-
-      // Exit edit state (first cell at first row reached)
-      if (nextCell) {
+        const nextCell = Array.from(nextRow.children).filter(cell => cell._column === nextCol)[0];
         e.preventDefault();
-        this._startEdit(nextCell, nextCol);
+        this._ensureScrolledToIndex(nextIdx);
+        nextCell.focus();
       }
     }
 
