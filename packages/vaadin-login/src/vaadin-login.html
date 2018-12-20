@@ -92,10 +92,10 @@ This program is available under Apache License Version 2.0, available at https:/
        * @memberof Vaadin
        * @mixes Vaadin.ElementMixin
        * @mixes Vaadin.ThemableMixin
-       * @mixes Vaadin.LoginMixin
+       * @mixes Vaadin.Login.LoginMixin
        * @demo demo/index.html
        */
-      class VaadinLogin extends Vaadin.LoginMixin(Vaadin.ElementMixin(Vaadin.ThemableMixin(Polymer.Element))) {
+      class LoginElement extends Vaadin.Login.LoginMixin(Vaadin.ElementMixin(Vaadin.ThemableMixin(Polymer.Element))) {
         static get is() {
           return 'vaadin-login';
         }
@@ -137,7 +137,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         submit() {
-          if (this.disabled || !(this.__isValid(this.$.username) && this.__isValid(this.$.password))) {
+          if (this.disabled || !(LoginElement.__isValid(this.$.username) && LoginElement.__isValid(this.$.password))) {
             return;
           }
 
@@ -165,12 +165,12 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _handleInputKeydown(e) {
-          if (this._isEnterKey(e)) {
+          if (LoginElement._isEnterKey(e)) {
             const {currentTarget: inputActive} = e;
             const nextInput = inputActive.slot === 'username' || inputActive.name === 'username'
               ? this.$.password : this.$.username;
-            if (this.__isValid(inputActive)) {
-              if (this.__isValid(nextInput)) {
+            if (LoginElement.__isValid(inputActive)) {
+              if (LoginElement.__isValid(nextInput)) {
                 this.submit();
               } else {
                 nextInput.focus();
@@ -179,21 +179,21 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
-        __isValid(input) {
+        static __isValid(input) {
           return (input.validate && input.validate()) || (input.checkValidity && input.checkValidity());
         }
 
-        _isEnterKey(e) {
+        static _isEnterKey(e) {
           return e.key === 'Enter' || e.keyCode === 13;
         }
       }
 
-      customElements.define(VaadinLogin.is, VaadinLogin);
+      customElements.define(LoginElement.is, LoginElement);
 
       /**
        * @namespace Vaadin
        */
-      window.Vaadin.VaadinLogin = VaadinLogin;
+      window.Vaadin.LoginElement = LoginElement;
     })();
   </script>
 </dom-module>

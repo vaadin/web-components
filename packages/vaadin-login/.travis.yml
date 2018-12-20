@@ -52,7 +52,7 @@ script:
       fi;
     fi
   - if [[ "$POLYMER" = "3" ]]; then
-      npm --no-save -q install -g yarn bower magi-cli web-component-tester polymer-modulizer &&
+      npm --no-save -q install -g yarn bower magi-cli web-component-tester polymer-modulizer@0.4.1 &&
       rm -rf node_modules &&
       magi p3-convert --out . --import-style=name &&
       yarn install --flat &&

@@ -101,7 +101,7 @@
       it('should not close on click outside', () => {
         const loginOverlayOpened = fixture('opened');
 
-        MockInteractions.tap(loginOverlay.$.overlay.$.backdrop);
+        MockInteractions.tap(loginOverlay.$.wrapper.$.backdrop);
 
         expect(loginOverlayOpened.opened).to.be.true;
       });
@@ -140,8 +140,8 @@
 
       beforeEach(function() {
         login = fixture('set-title');
-        headerElement = login.$.overlay.shadowRoot.querySelector('[part="brand"] h1');
-        descriptionElement = login.$.overlay.shadowRoot.querySelector('[part="brand"] p');
+        headerElement = login.$.wrapper.shadowRoot.querySelector('[part="brand"] h1');
+        descriptionElement = login.$.wrapper.shadowRoot.querySelector('[part="brand"] p');
       });
 
       it('should display title and description set via attributes or properties', function() {
@@ -175,17 +175,17 @@
 
         it('should teleport title', function() {
           const overlay = fixture('title-as-component');
-          const overlayElement = overlay.$.overlay;
-          let titleElements = overlayElement.querySelectorAll('[slot=title]');
+          const overlayWrapper = overlay.$.wrapper;
+          let titleElements = overlayWrapper.querySelectorAll('[slot=title]');
           expect(titleElements.length).to.be.equal(1);
           expect(titleElements[0].textContent).to.be.equal('Teleported title');
 
           overlay.opened = false;
-          titleElements = overlayElement.querySelectorAll('[slot=title]');
+          titleElements = overlayWrapper.querySelectorAll('[slot=title]');
           expect(titleElements.length).to.be.equal(0);
 
           overlay.opened = true;
-          titleElements = overlayElement.querySelectorAll('[slot=title]');
+          titleElements = overlayWrapper.querySelectorAll('[slot=title]');
           expect(titleElements.length).to.be.equal(1);
           expect(titleElements[0].textContent).to.be.equal('Teleported title');
         });
