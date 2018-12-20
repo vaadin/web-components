@@ -25,6 +25,8 @@
   ],
   "scripts": {
     "test": "wct",
+    "prestart": "polymer analyze vaadin-* > analysis.json",
+    "start": "polymer serve --open",
     "preversion": "gulp version:update"
   },
   "devDependencies": {
