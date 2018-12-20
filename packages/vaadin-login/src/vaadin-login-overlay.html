@@ -34,6 +34,12 @@ This program is available under Apache License Version 2.0, available at https:/
         i18n="{{i18n}}"
         on-login="_handleEvent"
         on-forgot-password="_handleEvent">
+        <vaadin-text-field slot="username" label="[[i18n.form.username]]" name="username" id="username" required>
+          <input type="text" slot="input">
+        </vaadin-text-field>
+        <vaadin-password-field slot="password" label="[[i18n.form.password]]" name="password" id="password" required>
+          <input type="password" slot="input">
+        </vaadin-password-field>
       </vaadin-login>
 
     </vaadin-login-overlay-element>
@@ -137,14 +143,21 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _onOpenedChange() {
           if (!this.opened) {
+
             this.$.login.$.username.value = '';
             this.$.login.$.password.value = '';
             this.disabled = false;
+
             if (this._undoTeleport) {
               this._undoTeleport();
             }
           } else {
             this._undoTeleport = this._teleport(this._getElementsToTeleport());
+
+            // Overlay sets pointerEvents on body to `none`, which breaks LastPass popup
+            // Reverting it back to the previous state
+            // https://github.com/vaadin/vaadin-overlay/blob/041cde4481b6262eac68d3a699f700216d897373/src/vaadin-overlay.html#L660
+            document.body.style.pointerEvents = this.$.overlay._previousDocumentPointerEvents;
           }
         }
 

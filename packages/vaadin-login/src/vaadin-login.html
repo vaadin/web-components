@@ -41,6 +41,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
       vaadin-text-field,
       vaadin-password-field,
+      [part="form"] form ::slotted(*),
       #submit {
         width: 100%;
       }
@@ -57,8 +58,14 @@ This program is available under Apache License Version 2.0, available at https:/
         </div>
         <iron-form id="loginForm" allow-redirect>
           <form method="POST" action$="[[action]]">
-            <vaadin-text-field label="[[i18n.form.username]]" name="username" id="username" required on-keydown="_handleInputKeydown"></vaadin-text-field>
-            <vaadin-password-field label="[[i18n.form.password]]" name="password" id="password" required on-keydown="_handleInputKeydown"></vaadin-password-field>
+            <slot name="username" id="usernameSlot">
+              <vaadin-text-field label="[[i18n.form.username]]" name="username" id="username" required on-keydown="_handleInputKeydown">
+              </vaadin-text-field>
+            </slot>
+            <slot name="password" id="passwordSlot">
+              <vaadin-password-field label="[[i18n.form.password]]" name="password" id="password" required on-keydown="_handleInputKeydown">
+              </vaadin-password-field>
+            </slot>
 
             <vaadin-button id="submit" theme="primary contained" on-click="submit" disabled$="[[disabled]]">[[i18n.form.submit]]</vaadin-button>
           </form>
@@ -96,8 +103,41 @@ This program is available under Apache License Version 2.0, available at https:/
           return '1.0.0-alpha4';
         }
 
+        connectedCallback() {
+          super.connectedCallback();
+          this._handleInputKeydown = this._handleInputKeydown.bind(this);
+
+          this._usernameSlotObserver = this._createSlotObserver(this.$.usernameSlot, 'username');
+          this._passwordSlotObserver = this._createSlotObserver(this.$.passwordSlot, 'password');
+        }
+
+        _createSlotObserver(slot, field) {
+          return new Polymer.FlattenedNodesObserver(slot, (info) => {
+            const removedNodes = info.removedNodes.filter(node => node.nodeType === Node.ELEMENT_NODE);
+
+            // look for slot=${field}
+            const element = this.querySelector(`[slot=${field}]`);
+            const fallbackElement = this.shadowRoot.querySelector(`:not(slot)[name=${field}]`);
+            if (element) {
+              fallbackElement.disabled = true;
+              this.$[field] = element;
+              this.$[field].addEventListener('keydown', this._handleInputKeydown);
+            }
+            if (removedNodes[0] === this.$[field]) {
+              this.$[field] = fallbackElement;
+              this.$[field].disabled = false;
+            }
+          });
+        }
+
+        disconnectedCallback() {
+          super.disconnectedCallback();
+          this._passwordSlotObserver && this._passwordSlotObserver.disconnect();
+          this._usernameSlotObserver && this._usernameSlotObserver.disconnect();
+        }
+
         submit() {
-          if (this.disabled || !(this.$.username.validate() && this.$.password.validate())) {
+          if (this.disabled || !(this.__isValid(this.$.username) && this.__isValid(this.$.password))) {
             return;
           }
 
@@ -126,16 +166,21 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _handleInputKeydown(e) {
           if (this._isEnterKey(e)) {
-            const {target: inputActive} = e;
-            const nextInput = inputActive.name === 'username' ? this.$.password : this.$.username;
-            if (inputActive.validate()) {
-              if (nextInput.checkValidity()) {
+            const {currentTarget: inputActive} = e;
+            const nextInput = inputActive.slot === 'username' || inputActive.name === 'username'
+              ? this.$.password : this.$.username;
+            if (this.__isValid(inputActive)) {
+              if (this.__isValid(nextInput)) {
                 this.submit();
               } else {
                 nextInput.focus();
               }
             }
           }
+        }
+
+        __isValid(input) {
+          return (input.validate && input.validate()) || (input.checkValidity && input.checkValidity());
         }
 
         _isEnterKey(e) {

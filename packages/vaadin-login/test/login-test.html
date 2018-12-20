@@ -29,6 +29,15 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="custom-input-fields">
+    <template>
+      <vaadin-login>
+        <input slot="username" name="username" required>
+        <input slot="password" name="password" required type="password">
+      </vaadin-login>
+    </template>
+  </test-fixture>
+
   <script>
     describe('Login test', () => {
       var login;
@@ -300,6 +309,37 @@
         expect(errorPart.hidden).to.be.true;
         expect(errorPart.offsetWidth).to.equal(0);
         expect(errorPart.offsetHeight).to.equal(0);
+      });
+    });
+
+    describe('custom input fields', function() {
+      let login;
+
+      beforeEach(done => {
+        login = fixture('custom-input-fields');
+        Polymer.RenderStatus.afterNextRender(login, () => done());
+      });
+
+      it('should utilize custom input fields', done => {
+        // Query input fields just like password managers would do
+        // and verify that the login component has taken them into use.
+        expect(login.$.username).to.equal(document.querySelector('[name="username"]'));
+        expect(login.$.password).to.equal(document.querySelector('[name="password"]'));
+
+        // Verify that removing the custom input fields makes the
+        // login component revert to it's built-in input fields.
+        [login.$.username, login.$.password].forEach(e => e.parentNode.removeChild(e));
+
+        Polymer.RenderStatus.afterNextRender(login, () => {
+          // Due to an issue in ShadyDOM the input field node observers are not called
+          // on remove so test the revert only in browsers with native shadow DOM.
+          // https://github.com/webcomponents/shadydom/issues/261
+          if (window.ShadyCSS.nativeShadow) {
+            expect(login.$.username).to.equal(login.shadowRoot.querySelector('vaadin-text-field'));
+            expect(login.$.password).to.equal(login.shadowRoot.querySelector('vaadin-password-field'));
+          }
+          done();
+        });
       });
     });
   </script>
