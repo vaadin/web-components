@@ -95,6 +95,15 @@
         expect(timePicker.__dropdownElement.value).to.be.equal('invalid');
       });
 
+      it('should restore the previous value in input field if input value is empty', () => {
+        timePicker.__dropdownElement.value = '12:00';
+        timePicker.__dropdownElement.value = '';
+        expect(timePicker.value).to.be.equal('');
+        changeInputValue(timePicker.__dropdownElement, '');
+        expect(timePicker.value).to.be.equal('');
+        expect(timePicker.__dropdownElement.value).to.be.equal('');
+      });
+
       it('should dispatch value-changed when value changes', () => {
         const spy = sinon.spy();
         timePicker.addEventListener('value-changed', spy);
