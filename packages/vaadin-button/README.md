@@ -100,7 +100,7 @@ To use the Material theme, import the correspondent file from the `theme/materia
 
 1. When in the `vaadin-button` directory, run `npm install` and then `bower install` to install dependencies.
 
-1. Run `polymer serve --open`, browser will automatically open the component API documentation.
+1. Run `npm start`, browser will automatically open the component API documentation.
 
 1. You can also open demo or in-browser tests by adding **demo** or **test** to the URL, for example:
 
