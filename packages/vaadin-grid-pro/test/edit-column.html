@@ -69,6 +69,10 @@
       MockInteractions.keyDownOn(target, 13, [], 'Enter');
     }
 
+    function shiftEnter(target) {
+      MockInteractions.keyDownOn(target, 13, 'shift', 'Enter');
+    }
+
     function esc(target) {
       MockInteractions.keyDownOn(target, 27, [], 'Escape');
     }
@@ -128,6 +132,29 @@
 
           shiftTab(input);
           const secondCell = getContainerCell(grid.$.items, 1, 1);
+          input = getCellEditor(secondCell);
+          expect(input).to.be.ok;
+        });
+
+        it('should focus editable cell on the next row for the same column when pressing Enter', () => {
+          const firstCell = getContainerCell(grid.$.items, 1, 0);
+          enter(firstCell._content);
+          input = getCellEditor(firstCell);
+
+          enter(input);
+          const secondCell = getContainerCell(grid.$.items, 2, 0);
+          input = getCellEditor(secondCell);
+          expect(input).to.be.ok;
+        });
+
+
+        it('should focus editable cell on the previous row for the same column when pressing Shift Enter', () => {
+          const firstCell = getContainerCell(grid.$.items, 1, 0);
+          enter(firstCell._content);
+          input = getCellEditor(firstCell);
+
+          shiftEnter(input);
+          const secondCell = getContainerCell(grid.$.items, 0, 0);
           input = getCellEditor(secondCell);
           expect(input).to.be.ok;
         });
