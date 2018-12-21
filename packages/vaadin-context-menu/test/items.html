@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <link rel="import" href="../../test-fixture/test-fixture.html">
+  <link rel="import" href="../../iron-test-helpers/iron-test-helpers.html">
+  <link rel="import" href="../vaadin-context-menu.html">
+  <script src="../../iron-test-helpers/mock-interactions.js"></script>
+  <script src="common.js"></script>
+</head>
+<body>
+  <test-fixture id="default">
+    <template>
+      <vaadin-context-menu>
+        <button id="target"></button>
+      </vaadin-context-menu>
+    </template>
+  </test-fixture>
+
+  <script>
+    const MOBILE = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    const OPENEVENT = MOBILE ? 'touchstart' : 'mouseover';
+
+    describe('items', () => {
+      let rootMenu, subMenu, target;
+
+      const menuComponents = (menu = rootMenu) => {
+        return Array.from(menu.$.overlay.content.firstElementChild.children);
+      };
+
+      const open = (openTarget = target) => {
+        const menu = openTarget.parentElement.parentElement.__dataHost;
+        if (menu) {
+          menu.__openListenerActive = true;
+          const overlay = menu.$.overlay;
+          overlay.__openingHandler && overlay.__openingHandler();
+        }
+        fire(openTarget, OPENEVENT, {});
+      };
+
+      const getSubMenu = (menu = rootMenu) => {
+        return menu.$.overlay.content.querySelector('vaadin-context-menu');
+      };
+
+      afterEach(() => rootMenu.close());
+
+      describe('default', () => {
+        beforeEach(done => {
+          rootMenu = fixture('default');
+          rootMenu.openOn = OPENEVENT;
+          target = rootMenu.firstElementChild;
+          rootMenu.items = [
+            {text: 'foo-0', children:
+              [
+                {text: 'foo-0-0', checked: true},
+                {text: 'foo-0-1', disabled: true}
+              ]
+            },
+            {text: 'foo-1'}
+          ];
+          open();
+          flush(() => {
+            open(menuComponents()[0]);
+            subMenu = getSubMenu();
+            flush(done);
+          });
+        });
+
+        it('should render root level items', () => {
+          expect(menuComponents()[0].textContent).to.equal('foo-0');
+        });
+
+        it('should have menu item classname', () => {
+          expect(menuComponents()[0].classList.contains('vaadin-menu-item')).to.be.true;
+        });
+
+        it('should render sub-menu items', () => {
+          expect(menuComponents(subMenu)[0].textContent).to.equal('foo-0-0');
+        });
+
+        it('should close all menus', () => {
+          fire(document, 'click');
+          expect(rootMenu.opened).to.be.false;
+          expect(subMenu.opened).to.be.false;
+        });
+
+        it('should remove close listener', () => {
+          rootMenu.parentNode.removeChild(rootMenu);
+          fire(document, 'click');
+          expect(rootMenu.opened).to.be.true;
+        });
+
+        if (!MOBILE) {
+          it('should open the subMenu on the right side', done => {
+            flush(() => {
+              const rootItemRect = menuComponents()[0].getBoundingClientRect();
+              const subItemRect = menuComponents(subMenu)[0].getBoundingClientRect();
+              expect(subItemRect.left).to.be.above(rootItemRect.right);
+              done();
+            });
+          });
+
+          it('should open the subMenu on the left side', () => {
+            subMenu.close();
+            let rootItemRect = menuComponents()[0].getBoundingClientRect();
+            rootMenu.$.overlay.style.left = window.innerWidth - (rootItemRect.width * 1.5) + 'px';
+            open(menuComponents()[0]);
+            rootItemRect = menuComponents()[0].getBoundingClientRect();
+            const subItemRect = menuComponents(subMenu)[0].getBoundingClientRect();
+            expect(subItemRect.right).to.be.below(rootItemRect.left);
+          });
+        }
+
+        it('should clean up the old content on reopen', () => {
+          rootMenu.close();
+          open();
+          expect(menuComponents().length).to.equal(rootMenu.items.length);
+        });
+
+        it('should clear selections on reopen', done => {
+          menuComponents(subMenu)[0].click();
+          open(menuComponents()[0]);
+          flush(() => {
+            expect(menuComponents(subMenu)[0].selected).to.be.false;
+            done();
+          });
+        });
+
+        it('should have default item type', () => {
+          expect(menuComponents()[0].localName).to.equal('vaadin-item');
+        });
+
+        it('should accept component items', () => {
+          rootMenu.close();
+          const component = document.createElement('button');
+          rootMenu.items = [{component}];
+          open();
+          expect(menuComponents()[0]).to.equal(component);
+        });
+
+        it('should accept custom tags', () => {
+          rootMenu.close();
+          rootMenu.items = [{component: 'button'}];
+          open();
+          expect(menuComponents()[0].localName).to.equal('button');
+        });
+
+        it('should have a checked item', () => {
+          expect(menuComponents(subMenu)[0].hasAttribute('menu-item-checked')).to.be.true;
+        });
+
+        it('should not have a checked item', () => {
+          rootMenu.items[0].children[0].checked = false;
+          subMenu.close();
+          open(menuComponents()[0]);
+          expect(menuComponents(subMenu)[0].hasAttribute('menu-item-checked')).to.be.false;
+        });
+
+        it('should have a disabled item', () => {
+          expect(menuComponents(subMenu)[1].disabled).to.be.true;
+        });
+
+        it('should close the submenu', () => {
+          open(menuComponents()[1]);
+          expect(subMenu.opened).to.be.false;
+        });
+
+        it('should close the menu', () => {
+          menuComponents()[1].click();
+          expect(rootMenu.opened).to.be.false;
+          expect(subMenu.opened).to.be.false;
+        });
+
+        it('should close the submenu on left arrow', () => {
+          const focusSpy = sinon.spy(menuComponents()[0], 'focus');
+          fire(menuComponents(subMenu)[0], 'keydown', {}, {keyCode: 37, key: 'ArrowLeft'});
+          expect(subMenu.opened).to.be.false;
+          expect(focusSpy).to.have.been.called;
+        });
+
+        it('should close the submenu on esc', () => {
+          const focusSpy = sinon.spy(menuComponents()[0], 'focus');
+          fire(menuComponents(subMenu)[0], 'keydown', {}, {keyCode: 27, key: 'Esc'});
+          expect(subMenu.opened).to.be.false;
+          expect(focusSpy).to.have.been.called;
+        });
+
+        it('should not close on disabled item click', () => {
+          menuComponents(subMenu)[1].click();
+          expect(subMenu.opened).to.be.true;
+        });
+
+        it('should have be a parent item', () => {
+          expect(menuComponents()[0].classList.contains('vaadin-context-menu-parent-item')).to.be.true;
+        });
+
+        it('should not have be a parent item', () => {
+          const button = document.createElement('button');
+          rootMenu.close();
+          rootMenu.items[0].component = button;
+          open();
+          rootMenu.close();
+          rootMenu.items[0].children = [];
+          open();
+          expect(menuComponents()[0].classList.contains('vaadin-context-menu-parent-item')).to.be.false;
+        });
+
+        it('should open item on right arrow', () => {
+          subMenu.close();
+          fire(menuComponents()[0], 'keydown', {}, {keyCode: 39, key: 'ArrowRight'});
+          expect(subMenu.opened).to.be.true;
+        });
+
+        it('should have modeless sub menus', () => {
+          const rootItemRect = menuComponents()[0].getBoundingClientRect();
+          const element = document.elementFromPoint(rootItemRect.left, rootItemRect.top);
+          expect(element).not.to.equal(document.documentElement);
+        });
+
+        it('should close submenus', () => {
+          rootMenu.close();
+          expect(subMenu.opened).to.be.false;
+        });
+
+        it('should fire an event for item selection', () => {
+          const eventSpy = sinon.spy();
+          rootMenu.addEventListener('item-selected', eventSpy);
+          menuComponents(subMenu)[0].click();
+          expect(eventSpy.getCall(0).args[0].detail.value).to.equal(rootMenu.items[0].children[0]);
+        });
+
+        it('should not fire an event for parent item selection', () => {
+          const eventSpy = sinon.spy();
+          rootMenu.addEventListener('item-selected', eventSpy);
+          menuComponents(rootMenu)[0].click();
+          expect(eventSpy).to.not.have.been.called;
+        });
+
+        it('should throw with renderer', () => {
+          expect(() => rootMenu.renderer = () => {}).to.throw(Error);
+        });
+
+        it('should throw with template', () => {
+          const addTemplate = () => {
+            rootMenu.appendChild(document.createElement('template'));
+            rootMenu._observer.flush();
+          };
+          expect(addTemplate).to.throw(Error);
+        });
+
+        it('should not remove the component attributes', () => {
+          rootMenu.close();
+          const button = document.createElement('button');
+          button.setAttribute('disabled', '');
+          button.setAttribute('menu-item-checked', '');
+          rootMenu.items[0].component = button;
+          open();
+          expect(button.hasAttribute('disabled')).to.be.true;
+          expect(button.hasAttribute('menu-item-checked')).to.be.true;
+        });
+
+        it('should propagate closeOn', () => {
+          rootMenu.close();
+          rootMenu.closeOn = 'keydown';
+          open();
+          open(menuComponents()[0]);
+          fire(menuComponents(subMenu)[0], 'keydown', {}, {keyCode: 65, key: 'a'});
+          expect(subMenu.opened).to.be.false;
+        });
+
+      });
+    });
+  </script>
+</body>
+</html>

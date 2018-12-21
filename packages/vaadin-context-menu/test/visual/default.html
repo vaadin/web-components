@@ -71,12 +71,52 @@
           </template>
           <p>Bottom menu</p>
         </vaadin-context-menu>
+
+        <vaadin-context-menu id="items" items="[[nestedItems]]">
+          <p>Items</p>
+        </vaadin-context-menu>
       </template>
     </dom-bind>
   </div>
 
   <script>
     document.querySelector('#app').menuItems = new Array(30);
+    document.querySelector('#app').nestedItems = [
+      {text: 'Menu Item 1'},
+      {component: 'hr'},
+      {text: 'Menu Item 2', children:
+        [
+          {text: 'Menu Item 2-1'},
+          {text: 'Menu Item 2-2', children:
+            [
+              {text: 'Menu Item 2-2-1'},
+              {text: 'Menu Item 2-2-2', disabled: true},
+              {component: 'hr'},
+              {text: 'Menu Item 2-2-3'}
+            ]
+          }
+        ]
+      },
+      {text: 'Menu Item 3', disabled: true}
+    ];
+
+    function fire(node, eventType, detail, eventProps) {
+      const evt = new CustomEvent(eventType, {bubbles: true, composed: true, cancelable: true, detail: detail});
+      Object.assign(evt, eventProps);
+      node.dispatchEvent(evt);
+      return evt;
+    }
+
+    function openSubMenus(menu) {
+      menu.$.overlay.addEventListener('vaadin-overlay-open', () => {
+        const itemElement = menu.$.overlay.querySelector('.vaadin-context-menu-parent-item');
+        if (itemElement) {
+          fire(itemElement, 'mouseover', {});
+          const subMenu = menu.$.overlay.querySelector('vaadin-context-menu');
+          openSubMenus(subMenu);
+        }
+      });
+    }
 
     // eslint-disable-next-line no-unused-vars
     function contextmenu(target) {
@@ -108,6 +148,8 @@
       }
 
       target.listenOn.dispatchEvent(e);
+
+      openSubMenus(target);
     }
   </script>
 

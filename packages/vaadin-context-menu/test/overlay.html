@@ -23,6 +23,8 @@
     </test-fixture>
 
     <script>
+      const MOBILE = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
       describe('overlay', () => {
         let menu, overlay, content, viewHeight, viewWidth;
 
@@ -76,6 +78,17 @@
 
         describe('opening', () => {
 
+          it('should be invisible before open', done => {
+            listenOnce(overlay, 'vaadin-overlay-open', () => {
+              expect(window.getComputedStyle(overlay).opacity).to.eql('1');
+              done();
+            });
+
+            menu.openOn = 'foobar';
+            fire(menu.listenOn, 'foobar', {x: 5, y: 5, sourceEvent: {clientX: 10, clientY: 20}});
+            expect(window.getComputedStyle(overlay).opacity).to.eql('0');
+          });
+
           it('should be visible when open', done => {
             expect(window.getComputedStyle(overlay).display).to.eql('none');
             listenOnce(overlay, 'vaadin-overlay-open', () => {
@@ -107,27 +120,29 @@
           });
 
           describe('position', () => {
-            it('should be aligned relative to top-left corner', done => {
-              listenOnce(overlay, 'vaadin-overlay-open', () => {
-                expect(overlay.hasAttribute('right-aligned')).to.be.false;
-                expect(overlay.hasAttribute('bottom-aligned')).to.be.false;
-                expect(overlay.style.left).to.be.equal(menu._phone ? '' : '10px');
-                expect(overlay.style.top).to.be.equal(menu._phone ? '' : '10px');
-                done();
+            if (!MOBILE) {
+              it('should be aligned relative to top-left corner', done => {
+                listenOnce(overlay, 'vaadin-overlay-open', () => {
+                  expect(overlay.hasAttribute('right-aligned')).to.be.false;
+                  expect(overlay.hasAttribute('bottom-aligned')).to.be.false;
+                  expect(overlay.style.left).to.be.equal(menu._phone ? '' : '10px');
+                  expect(overlay.style.top).to.be.equal(menu._phone ? '' : '10px');
+                  done();
+                });
+                contextmenu(10, 10);
               });
-              contextmenu(10, 10);
-            });
 
-            it('should be aligned relative to bottom-right corner', done => {
-              listenOnce(overlay, 'vaadin-overlay-open', () => {
-                expect(menu._phone || overlay.hasAttribute('right-aligned')).to.be.true;
-                expect(menu._phone || overlay.hasAttribute('bottom-aligned')).to.be.true;
-                expect(overlay.style.right).to.be.equal(menu._phone ? '' : '0px');
-                expect(overlay.style.bottom).to.be.equal(menu._phone ? '' : '0px');
-                done();
+              it('should be aligned relative to bottom-right corner', done => {
+                listenOnce(overlay, 'vaadin-overlay-open', () => {
+                  expect(menu._phone || overlay.hasAttribute('right-aligned')).to.be.true;
+                  expect(menu._phone || overlay.hasAttribute('bottom-aligned')).to.be.true;
+                  expect(overlay.style.right).to.be.equal(menu._phone ? '' : '0px');
+                  expect(overlay.style.bottom).to.be.equal(menu._phone ? '' : '0px');
+                  done();
+                });
+                contextmenu(viewWidth, viewHeight);
               });
-              contextmenu(viewWidth, viewHeight);
-            });
+            }
 
             it('css should be correctly configured to set content position', done => {
               listenOnce(overlay, 'vaadin-overlay-open', () => {

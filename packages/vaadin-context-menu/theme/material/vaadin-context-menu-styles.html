@@ -8,3 +8,26 @@
     </style>
   </template>
 </dom-module>
+
+<dom-module id="material-context-menu-item" theme-for="vaadin-item">
+  <template>
+    <style>
+      :host(.vaadin-menu-item.vaadin-context-menu-parent-item)::after {
+        font-family: material-icons;
+        content: var(--material-icons-chevron-right);
+        font-size: var(--material-icon-font-size);
+        padding-left: 9px;
+        margin-right: -9px;
+      }
+
+      :host(.vaadin-menu-item)::before {
+        display: block;
+      }
+
+      :host(.vaadin-menu-item[menu-item-checked])::before {
+        content: var(--material-icons-check);
+      }
+    </style>
+  </template>
+</dom-module>
+

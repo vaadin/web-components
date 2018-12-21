@@ -10,6 +10,7 @@
     "afterEach": false,
     "listenOnce": false,
     "fixture": false,
+    "flush": false,
     "fire": false,
     "MockInteractions": false,
     "MockTouchInteractions": false,

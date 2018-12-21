@@ -9,6 +9,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../polymer/lib/utils/flattened-nodes-observer.html">
 <link rel="import" href="vaadin-contextmenu-event.html">
 <link rel="import" href="vaadin-device-detector.html">
+<link rel="import" href="vaadin-contextmenu-items-mixin.html">
 <link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-theme-property-mixin.html">
 <link rel="import" href="vaadin-context-menu-overlay.html">
@@ -27,7 +28,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     <slot id="slot"></slot>
 
-    <vaadin-device-detector phone="{{_phone}}"></vaadin-device-detector>
+    <vaadin-device-detector phone="{{_phone}}" touch="{{_touch}}"></vaadin-device-detector>
 
     <vaadin-context-menu-overlay id="overlay"
         on-opened-changed="_onOverlayOpened"
@@ -43,17 +44,42 @@ This program is available under Apache License Version 2.0, available at https:/
       /**
        *
        * `<vaadin-context-menu>` is a Web Component for creating context menus. The content of the
-       * menu can be populated in two ways: imperatively by using renderer callback function and
+       * menu can be populated in three ways: imperatively by using the items API or a renderer callback function and
        * declaratively by using Polymer's Templates.
        *
-       * ### Rendering
+       * ### Items
        *
-       * By default, the context menu uses the content provided using the renderer callback function.
+       * Items is a higher level convenience API for defining a (hierarchical) menu structure for the component.
+       * If a menu item has a non-empty `children` set, a sub-menu with the child items is opened
+       * next to the parent menu on mouseover, tap or a right arrow keypress.
+       *
+       * ```javascript
+       * contextMenu.items = [
+       *   {text: 'Menu Item 1', children:
+       *     [
+       *       {text: 'Menu Item 1-1', checked: true},
+       *       {text: 'Menu Item 1-2'}
+       *     ]
+       *   },
+       *   {component: 'hr'},
+       *   {text: 'Menu Item 2', children:
+       *     [
+       *       {text: 'Menu Item 2-1'},
+       *       {text: 'Menu Item 2-2', disabled: true}
+       *     ]
+       *   },
+       *   {text: 'Menu Item 3', disabled: true}
+       * ];
+       * ```
+       *
+       * **NOTE:** when the `items` array is defined, the renderer or a template cannot be used.
+       *
+       * ### Rendering
        *
        * The renderer function provides `root`, `contextMenu`, `model` arguments when applicable.
        * Generate DOM content by using `model` object properties if needed, append it to the `root`
        * element and control the state of the host element by accessing `contextMenu`. Before generating
-       * new content, users are able to check if there is already content in `root` for reusing it.
+       * new content, the renderer function should check if there is already content in `root` for reusing it.
        *
        * ```html
        * <vaadin-context-menu id="contextMenu">
@@ -91,7 +117,7 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * ### Polymer Templates
        *
-       * Alternatively to using the `renderer`, you are able to populate
+       * Alternatively to using the `renderer`, you can populate
        * the menu content using Polymer's Templates:
        *
        * ```html
@@ -107,7 +133,7 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * ### “vaadin-contextmenu” Gesture Event
        *
-       * `vaadin-contextmenu` is a gesture event (a custom event fired by Polymer),
+       * `vaadin-contextmenu` is a gesture event (a custom event),
        * which is dispatched after either `contextmenu` and long touch events.
        * This enables support for both mouse and touch environments in a uniform way.
        *
@@ -219,13 +245,15 @@ This program is available under Apache License Version 2.0, available at https:/
        * @memberof Vaadin
        * @mixes Vaadin.ElementMixin
        * @mixes Vaadin.ThemePropertyMixin
+       * @mixes Vaadin.ContextMenu.ItemsMixin
        * @mixes Polymer.GestureEventListeners
        * @demo demo/index.html
        */
       class ContextMenuElement extends
         Vaadin.ElementMixin(
           Vaadin.ThemePropertyMixin(
-            Polymer.GestureEventListeners(Polymer.Element))) {
+            Vaadin.ContextMenu.ItemsMixin(
+              Polymer.GestureEventListeners(Polymer.Element)))) {
 
         static get is() {
           return 'vaadin-context-menu';
@@ -311,7 +339,9 @@ This program is available under Apache License Version 2.0, available at https:/
 
             _oldTemplate: Object,
 
-            _oldRenderer: Object
+            _oldRenderer: Object,
+
+            _touch: Boolean
           };
         }
 
@@ -320,7 +350,7 @@ This program is available under Apache License Version 2.0, available at https:/
             '_openedChanged(opened)',
             '_contextChanged(_context, _instance)',
             '_targetOrOpenOnChanged(listenOn, openOn)',
-            '_templateOrRendererChanged(_contentTemplate, renderer, _context)'
+            '_templateOrRendererChanged(_contentTemplate, renderer, _context, items)'
           ];
         }
 
@@ -349,10 +379,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
         // Runs after overlay is fully rendered
         _onVaadinOverlayOpen(e) {
-          // Phone alignment is done in CSS
-          if (!this._phone) {
-            this.__alignOverlayPosition();
-          }
+          this.__alignOverlayPosition();
+          this.$.overlay.style.opacity = '';
 
           const child = this.$.overlay.content.querySelector(':not(style):not(slot)');
           if (child) {
@@ -437,7 +465,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
-        _templateOrRendererChanged(template, renderer, context) {
+        _templateOrRendererChanged(template, renderer, context, items) {
           if (template && renderer) {
             this._removeNewRendererOrTemplate(template, this._oldTemplate, renderer, this._oldRenderer);
             throw new Error('You should only use either a renderer or a template for context-menu content');
@@ -446,6 +474,16 @@ This program is available under Apache License Version 2.0, available at https:/
           this._oldTemplate = template;
           this._oldRenderer = renderer;
 
+          if (items) {
+            if (template || renderer) {
+              throw new Error('The items API cannot be used together with a template/renderer');
+            }
+            if (this.closeOn === 'click') {
+              this.closeOn = '';
+            }
+
+            renderer = this.__itemsRenderer;
+          }
           if (renderer && context) {
             this.$.overlay.setProperties({owner: this, renderer: renderer});
           }
@@ -496,6 +534,7 @@ This program is available under Apache License Version 2.0, available at https:/
               // Used in alignment which is delayed until overlay is rendered
               this.__x = this._getEventCoordinate(e, 'x');
               this.__y = this._getEventCoordinate(e, 'y');
+              this.$.overlay.style.opacity = '0';
               this._setOpened(true);
             }
           }
@@ -577,6 +616,14 @@ This program is available under Apache License Version 2.0, available at https:/
             this.close();
           }
         }
+
+        /**
+         * Fired when an item is selected when the context menu is populated using the `items` API.
+         *
+         * @event item-selected
+         * @param {Object} detail
+         * @param {Object} detail.value the selected menu item
+         */
       }
 
       customElements.define(ContextMenuElement.is, ContextMenuElement);

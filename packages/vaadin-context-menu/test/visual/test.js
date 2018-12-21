@@ -33,6 +33,11 @@ gemini.suite('vaadin-context-menu', function(rootSuite) {
           actions.executeJS(function(window) {
             window.contextmenu(window.document.querySelector('#bottom'));
           });
+        })
+        .capture('items', function(actions) {
+          actions.executeJS(function(window) {
+            window.contextmenu(window.document.querySelector('#items'));
+          });
         });
     });
   });
