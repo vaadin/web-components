@@ -364,6 +364,20 @@
           esc(input);
           expect(spy).to.not.be.called;
         });
+
+        it('should be not modify the cell content if prevented by user', done => {
+          grid.addEventListener('item-property-changed', e => {
+            e.preventDefault();
+            flush(() => {
+              expect(firstCell._content.textContent).to.equal('0 foo');
+              done();
+            });
+          });
+          enter(firstCell);
+          input = getCellEditor(firstCell);
+          input.value = 'new';
+          esc(input);
+        });
       });
 
       describe('vertical scrolling', () => {

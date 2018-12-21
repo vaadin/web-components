@@ -15,6 +15,7 @@
     "dragOver": false,
     "dragAndDropOver": false,
     "fire": false,
+    "flush": false,
     "getCellContent": false,
     "getContainerCell": false,
     "getRows": false,

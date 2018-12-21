@@ -19,16 +19,13 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
    */
   Vaadin.ProGrid.InlineEditingMixin = superClass => class InlineEditingMixin extends superClass {
 
-    // TODO scroll the viewport if the editor is being opened outside of it
+    constructor() {
+      super();
+      this.__boundItemPropertyChanged = this._onItemPropertyChanged.bind(this);
+    }
 
     ready() {
       super.ready();
-
-      this.addEventListener('item-property-changed', e => {
-        const {path, value, index, item} = e.detail;
-        this.set(path, value, item);
-        this.notifyPath('items.' + index + '.' + path, value);
-      });
 
       this.addEventListener('dblclick', e => {
         this._enterEditFromEvent(e);
@@ -50,6 +47,17 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             break;
         }
       });
+    }
+
+    _applyEdit({path, value, index, item}) {
+      this.set(path, value, item);
+      this.notifyPath('items.' + index + '.' + path, value);
+    }
+
+    _onItemPropertyChanged(e) {
+      if (!e.defaultPrevented) {
+        this._applyEdit(e.detail);
+      }
     }
 
     _getRowByIndex(index) {
@@ -132,6 +140,8 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       this.notifyResize();
 
       column._setCellEditValue(cell, this._getItemValue(column, model));
+
+      this.addEventListener('item-property-changed', this.__boundItemPropertyChanged);
     }
 
     _stopEdit(shouldResize) {
@@ -150,6 +160,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             value: value
           },
           bubbles: true,
+          cancelable: true,
           composed: true
         }));
       }
@@ -157,6 +168,8 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       column._stopCellEdit(cell, model);
 
       this.__edited = null;
+
+      this.removeEventListener('item-property-changed', this.__boundItemPropertyChanged);
 
       this.notifyResize();
     }
