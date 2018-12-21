@@ -73,9 +73,9 @@ This program is available under Apache License Version 2.0, available at https:/
 
         <vaadin-button id="forgotPasswordButton" theme="tertiary small" on-click="_forgotPassword" hidden$="[[noForgotPassword]]">[[i18n.form.forgotPassword]]</vaadin-button>
 
-        <div part="footer">
-          <p>[[i18n.additionalInformation]]</p>
-        </div>
+        <slot name="footer">
+          <span>[[i18n.additionalInformation]]</span>
+        </slot>
       </section>
   </template>
 

@@ -53,13 +53,14 @@
       </template>
     </vaadin-demo-snippet>
 
-    <h3>Login with custom input fields</h3>
+    <h3>Login with custom input fields and footer</h3>
     <vaadin-demo-snippet id="custom-input-example">
       <template preserve-content>
         <main>
           <vaadin-login no-forgot-password>
             <input slot="username" name="username" required>
             <input slot="password" name="password" required type="password">
+            <div slot="footer" style="color: blue;"><img src="https://cultofthepartyparrot.com/parrots/hd/parrot.gif" width="24" height="24"> Custom footer</div>
           </vaadin-login>
         </main>
         <vaadin-dialog id="feedbackDialog">
