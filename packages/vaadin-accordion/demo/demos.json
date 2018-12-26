@@ -1,0 +1,15 @@
+{
+  "name": "Vaadin Accordion",
+  "pages": [
+  {
+    "name": "Basics",
+    "url": "accordion-basic-demos",
+    "src": "accordion-basic-demos.html",
+    "meta": {
+      "title": "Vaadin Accordion Basics",
+      "description": "",
+      "image": ""
+     }
+  }
+  ]
+}

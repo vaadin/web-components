@@ -1,0 +1,25 @@
+<dom-module id="accordion-basic-demos">
+  <template>
+    <style include="vaadin-component-demo-shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+
+    <h3>Sample example</h3>
+    <vaadin-demo-snippet id="accordion-basic-demos-sample-example">
+      <template preserve-content>
+        <vaadin-accordion>Foobar</vaadin-accordion>
+      </template>
+    </vaadin-demo-snippet>
+
+  </template>
+  <script>
+    class AccordionBasicDemos extends DemoReadyEventEmitter(Polymer.Element) {
+      static get is() {
+        return 'accordion-basic-demos';
+      }
+    }
+    customElements.define(AccordionBasicDemos.is, AccordionBasicDemos);
+  </script>
+</dom-module>

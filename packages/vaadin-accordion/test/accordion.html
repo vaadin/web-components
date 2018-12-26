@@ -1,0 +1,43 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-accordion tests</title>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../../test-fixture/test-fixture.html">
+  <link rel="import" href="../vaadin-accordion.html">
+</head>
+
+<body>
+  <test-fixture id="default">
+    <template>
+      <vaadin-accordion></vaadin-accordion>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('accordion', () => {
+      let accordion;
+
+      beforeEach(() => {
+        accordion = fixture('default');
+      });
+
+      describe('custom element definition', () => {
+        it('should define a custom element with proper tag name', () => {
+          expect(accordion.localName).to.be.equal('vaadin-accordion');
+          expect(customElements.get('vaadin-accordion')).to.be.ok;
+        });
+
+        it('should not expose class name globally', () => {
+          expect(window.AccordionElement).not.to.be.ok;
+        });
+
+        it('should have a valid version number', () => {
+          expect(accordion.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta)\d+)?$/);
+        });
+      });
+    });
+  </script>
+</body>
