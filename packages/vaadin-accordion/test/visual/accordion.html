@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+
+<head lang="en">
+  <meta charset="UTF-8">
+  <title></title>
+  <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <script>
+    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+    document.write('<link rel="import" href="../../theme/' + theme + '/vaadin-accordion.html">');
+
+    window.addEventListener('WebComponentsReady', function() {
+      setTimeout(function() {
+        window.ShadyDOM && window.ShadyDOM.flush(); // Force DOM composition
+        window.webComponentsAreReady = true; // Checked in gemini before capture callback
+      });
+    });
+  </script>
+</head>
+
+<body>
+
+  <span id="accordion-tests">
+    <vaadin-accordion expanded="1">
+      <vaadin-accordion-panel summary="Panel Heading 1">
+        <span>Panel Content 1</span>
+      </vaadin-accordion-panel>
+      <vaadin-accordion-panel summary="Panel Heading 2" expanded>
+        <span>Panel Content 2</span>
+      </vaadin-accordion-panel>
+      <vaadin-accordion-panel summary="Panel Heading 3">
+        <span>Panel Content 3</span>
+      </vaadin-accordion-panel>
+      <vaadin-accordion-panel summary="Panel Heading 4">
+        <span>Panel Content 4</span>
+      </vaadin-accordion-panel>
+      <vaadin-accordion-panel summary="Panel Heading 5" disabled>
+        <span>Panel Content 5</span>
+      </vaadin-accordion-panel>
+    </vaadin-accordion>
+  </span>
+
+</body>

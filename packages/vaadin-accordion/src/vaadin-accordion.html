@@ -5,14 +5,15 @@ This program is available under Apache License Version 2.0, available at https:/
 -->
 
 <link rel="import" href="../../polymer/polymer-element.html">
-<link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
+<link rel="import" href="../../polymer/lib/utils/flattened-nodes-observer.html">
 <link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
+<link rel="import" href="vaadin-details.html">
 
 <dom-module id="vaadin-accordion">
   <template>
     <style>
       :host {
-        display: inline-block;
+        display: block;
       }
 
       :host([hidden]) {
@@ -24,6 +25,20 @@ This program is available under Apache License Version 2.0, available at https:/
 
   <script>
     (function() {
+      'use strict';
+
+      /**
+       * The accordion panel element.
+       *
+       * @memberof Vaadin
+       */
+      class AccordionPanelElement extends Vaadin.DetailsElement {
+        static get is() {
+          return 'vaadin-accordion-panel';
+        }
+      }
+
+      customElements.define(AccordionPanelElement.is, AccordionPanelElement);
 
       /**
        * `<vaadin-accordion>` is a Web Component for expansible accordions.
@@ -34,10 +49,9 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * @memberof Vaadin
        * @mixes Vaadin.ElementMixin
-       * @mixes Vaadin.ThemableMixin
        * @demo demo/index.html
        */
-      class AccordionElement extends Vaadin.ElementMixin(Vaadin.ThemableMixin(Polymer.Element)) {
+      class AccordionElement extends Vaadin.ElementMixin(Polymer.Element) {
         static get is() {
           return 'vaadin-accordion';
         }
@@ -48,7 +62,156 @@ This program is available under Apache License Version 2.0, available at https:/
 
         static get properties() {
           return {
+            expanded: {
+              type: Number,
+              value: 0,
+              notify: true,
+              reflectToAttribute: true
+            },
+
+            /**
+             * The list of `<vaadin-accordion-panel>` child elements.
+             * It is populated from the elements passed to the light DOM,
+             * and updated dynamically when adding or removing items.
+             */
+            items: {
+              type: Array,
+              readOnly: true,
+              notify: true
+            }
           };
+        }
+
+        static get observers() {
+          return [
+            '_updateItems(items, expanded)'
+          ];
+        }
+
+        constructor() {
+          super();
+          this._boundUpdateExpanded = this._updateExpanded.bind(this);
+        }
+
+        get focused() {
+          return this.getRootNode().activeElement;
+        }
+
+        focus() {
+          if (this._observer) {
+            this._observer.flush();
+          }
+          const focusable = Array.isArray(this.items) && this.items[0];
+          if (focusable) {
+            focusable.focus();
+          }
+        }
+
+        ready() {
+          super.ready();
+
+          this.addEventListener('keydown', e => this._onKeydown(e));
+
+          this._observer = new Polymer.FlattenedNodesObserver(this, info => {
+            this._setItems(this._filterItems(Array.from(this.children)));
+
+            this._filterItems(info.addedNodes).forEach(el => {
+              el.addEventListener('expanded-changed', this._boundUpdateExpanded);
+            });
+          });
+        }
+
+        _filterItems(array) {
+          return array.filter(el => el instanceof AccordionPanelElement);
+        }
+
+        _updateItems(items, expanded) {
+          if (items) {
+            const itemToExpand = items[expanded];
+            items.forEach(item => {
+              item.expanded = item === itemToExpand;
+            });
+          }
+        }
+
+        _onKeydown(event) {
+          // only check keyboard events on details toggle buttons
+          const item = event.composedPath()[0];
+          if (!this.items.some(el => el.focusElement === item)) {
+            return;
+          }
+
+          // IE names for arrows do not include the Arrow prefix
+          const key = event.key.replace(/^Arrow/, '');
+
+          const currentIdx = this.items.indexOf(this.focused);
+          let idx;
+          let increment;
+
+          switch (key) {
+            case 'Up':
+              increment = -1;
+              idx = currentIdx - 1;
+              break;
+            case 'Down':
+              increment = 1;
+              idx = currentIdx + 1;
+              break;
+            case 'Home':
+              increment = 1;
+              idx = 0;
+              break;
+            case 'End':
+              increment = -1;
+              idx = this.items.length - 1;
+              break;
+            default:
+              // do nothing.
+          }
+
+          idx = this._getAvailableIndex(idx, increment);
+          if (idx >= 0) {
+            this.items[idx].focus();
+            event.preventDefault();
+          }
+        }
+
+        _getAvailableIndex(index, increment) {
+          const totalItems = this.items.length;
+          let idx = index;
+          for (let i = 0; typeof idx === 'number' && i < totalItems; i++, idx += increment || 1) {
+            if (idx < 0) {
+              idx = totalItems - 1;
+            } else if (idx >= totalItems) {
+              idx = 0;
+            }
+
+            const item = this.items[idx];
+            if (!item.disabled) {
+              return idx;
+            }
+          }
+          return -1;
+        }
+
+        _updateExpanded(e) {
+          const target = this._filterItems(e.composedPath())[0];
+          const idx = this.items.indexOf(target);
+          if (e.detail.value) {
+            if (target.disabled || idx === -1) {
+              return;
+            }
+
+            this.expanded = idx;
+
+            this.items.forEach(item => {
+              if (item !== target && item.expanded) {
+                item.expanded = false;
+              }
+            });
+          } else if (!this.items.some(item => item.expanded)) {
+            this.expanded = null;
+          }
         }
       }
 

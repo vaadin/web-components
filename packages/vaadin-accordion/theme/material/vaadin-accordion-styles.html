@@ -1,0 +1,37 @@
+<link rel="import" href="../../../vaadin-material-styles/color.html">
+<link rel="import" href="vaadin-details-styles.html">
+
+<dom-module id="material-accordion-panel" theme-for="vaadin-accordion-panel">
+  <template>
+    <style include="material-details">
+      :host(:not([expanded])) [part="header"]::after {
+        content: "";
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 1px;
+        opacity: 1;
+        z-index: 1;
+        background-color: var(--material-divider-color);
+      }
+
+      :host([expanded]) [part="header"]::before,
+      :host([next]) [part="header"]::before {
+        opacity: 0;
+      }
+
+      :host([expanded]:not(:first-child)) {
+        margin-top: 16px;
+      }
+
+      :host([expanded]:not(:last-child)) {
+        margin-bottom: 16px;
+      }
+
+      :host([focused]) [part="header"] {
+        background: var(--material-secondary-background-color);
+      }
+    </style>
+  </template>
+</dom-module>

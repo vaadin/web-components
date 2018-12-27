@@ -40,6 +40,8 @@
     "iron-test-helpers": "^2.0.0",
     "webcomponentsjs": "^1.0.0",
     "web-component-tester": "^6.1.5",
+    "vaadin-text-field": "vaadin/vaadin-text-field#^2.1.0",
+    "vaadin-ordered-layout": "vaadin/vaadin-ordered-layout#^1.1.0",
     "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^2.2.0"
   },
   "resolutions": {

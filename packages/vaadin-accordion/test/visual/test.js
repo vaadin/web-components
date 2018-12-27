@@ -24,6 +24,13 @@ gemini.suite('vaadin-accordion', function(rootSuite) {
         .setCaptureElements('#details-tests')
         .capture(`vaadin-details`);
     });
+
+    gemini.suite(`accordion-tests-${theme}`, function(suite) {
+      suite
+        .setUrl(`/accordion.html?theme=${theme}`)
+        .setCaptureElements('#accordion-tests')
+        .capture(`vaadin-accordion`);
+    });
   });
 
 });
