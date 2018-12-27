@@ -261,6 +261,21 @@
           customElement.disabled = false;
           expect(customElement.getAttribute('aria-disabled')).to.not.be.ok;
         });
+
+        it('should fire click event for element', () => {
+          const spy = sinon.spy();
+          customElement.disabled = false;
+          customElement.addEventListener('click', spy);
+          customElement.click();
+          expect(spy.called).to.be.true;
+        });
+
+        it('should not fire click event for disabled element', () => {
+          const spy = sinon.spy();
+          customElement.addEventListener('click', spy);
+          customElement.click();
+          expect(spy.called).to.be.false;
+        });
       });
 
       describe('focus and autofocus', () => {
