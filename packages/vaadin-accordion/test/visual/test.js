@@ -1,6 +1,9 @@
 gemini.suite('vaadin-accordion', function(rootSuite) {
   function wait(actions, find) {
-    actions.wait(5000);
+    return actions
+      .waitForJSCondition(function(window) {
+        return window.webComponentsAreReady;
+      }, 80000);
   }
 
   function goToAboutBlank(actions, find) {
@@ -15,11 +18,11 @@ gemini.suite('vaadin-accordion', function(rootSuite) {
     .after(goToAboutBlank);
 
   ['lumo', 'material'].forEach(theme => {
-    gemini.suite(`default-tests-${theme}`, function(suite) {
+    gemini.suite(`details-tests-${theme}`, function(suite) {
       suite
-        .setUrl(`/default.html?theme=${theme}`)
-        .setCaptureElements('#default-tests')
-        .capture(`vaadin-accordion`);
+        .setUrl(`/details.html?theme=${theme}`)
+        .setCaptureElements('#details-tests')
+        .capture(`vaadin-details`);
     });
   });
 

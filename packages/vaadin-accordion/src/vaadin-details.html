@@ -1,0 +1,142 @@
+<!--
+@license
+Copyright (c) 2018 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
+<link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
+<link rel="import" href="../../vaadin-control-state-mixin/vaadin-control-state-mixin.html">
+
+<dom-module id="vaadin-details">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+
+      :host([hidden]) {
+        display: none !important;
+      }
+
+      button::-moz-focus-inner {
+        border: 0;
+      }
+
+      [part="content"] {
+        display: none;
+        overflow: hidden;
+      }
+
+      :host([expanded]) [part="content"] {
+        display: block;
+        overflow: visible;
+      }
+    </style>
+    <div role="heading">
+      <button
+        type="button"
+        part="header"
+        on-click="_onToggleClick"
+        disabled="[[disabled]]"
+        aria-expanded$="[[_getAriaExpanded(expanded)]]"
+      >
+        <span part="toggle"></span><span part="summary">[[summary]]</span>
+      </button>
+    </div>
+    <div
+      part="content"
+      aria-hidden$="[[_getAriaHidden(expanded)]]"
+    >
+      <slot></slot>
+    </div>
+  </template>
+  <script>
+    (function() {
+
+      /**
+       * `<vaadin-details>` is a Web Component for expansible details.
+       *
+       * ```
+       * <vaadin-details></vaadin-details>
+       * ```
+       *
+       * @memberof Vaadin
+       * @mixes Vaadin.ControlStateMixin
+       * @mixes Vaadin.ElementMixin
+       * @mixes Vaadin.ThemableMixin
+       * @demo demo/index.html
+       */
+      class DetailsElement extends
+        Vaadin.ControlStateMixin(
+          Vaadin.ElementMixin(
+            Vaadin.ThemableMixin(Polymer.Element))) {
+
+        static get is() {
+          return 'vaadin-details';
+        }
+
+        static get version() {
+          return '0.1.0';
+        }
+
+        static get properties() {
+          return {
+            expanded: {
+              type: Boolean,
+              value: false,
+              reflectToAttribute: true,
+              notify: true,
+              observer: '_expandedChanged'
+            },
+            summary: {
+              type: String
+            }
+          };
+        }
+
+        get collapsible() {
+          return this.shadowRoot.querySelector('[part="content"]');
+        }
+
+        get focusElement() {
+          return this.shadowRoot.querySelector('button');
+        }
+
+        ready() {
+          super.ready();
+          // prevent Shift + Tab on content from host blur
+          this.collapsible.addEventListener('keydown', e => {
+            if (e.shiftKey && e.keyCode === 9) {
+              e.stopPropagation();
+            }
+          });
+        }
+
+        _getAriaExpanded(expanded) {
+          return expanded ? 'true' : 'false';
+        }
+
+        _getAriaHidden(expanded) {
+          return expanded ? 'false' : 'true';
+        }
+
+        _expandedChanged(expanded) {
+          this.collapsible.style.maxHeight = expanded ? '' : '0px';
+        }
+
+        _onToggleClick(e) {
+          this.expanded = !this.expanded;
+        }
+      }
+
+      customElements.define(DetailsElement.is, DetailsElement);
+
+      /**
+       * @namespace Vaadin
+       */
+      window.Vaadin.DetailsElement = DetailsElement;
+    })();
+  </script>
+</dom-module>
