@@ -92,73 +92,187 @@
           flushGrid(grid);
         });
 
-        it('should focus cell next available for editing within a same row in unedited mode on Tab', () => {
-          const firstCell = getContainerCell(grid.$.items, 1, 0);
-          dblclick(firstCell._content);
-          input = getCellEditor(firstCell);
+        describe('when `preserveEditMode` is false', () => {
+          it('should focus cell next available for editing within a same row in non-edit mode on Tab', () => {
+            const firstCell = getContainerCell(grid.$.items, 1, 0);
+            dblclick(firstCell._content);
+            input = getCellEditor(firstCell);
 
-          const secondCell = getContainerCell(grid.$.items, 1, 1);
-          const spy = sinon.spy(secondCell, 'focus');
-          tab(input);
-          expect(spy).to.be.calledOnce;
+            const secondCell = getContainerCell(grid.$.items, 1, 1);
+            const spy = sinon.spy(secondCell, 'focus');
+            tab(input);
+            expect(spy).to.be.calledOnce;
+          });
+
+          it('should focus previous cell available for editing within a same row in non-edit mode on Shift Tab', () => {
+            const firstCell = getContainerCell(grid.$.items, 1, 1);
+            dblclick(firstCell._content);
+            input = getCellEditor(firstCell);
+
+            const secondCell = getContainerCell(grid.$.items, 1, 0);
+            const spy = sinon.spy(secondCell, 'focus');
+            shiftTab(input);
+            expect(spy).to.be.calledOnce;
+          });
+
+          it('should focus cell next available for editing on the next row in non-edit mode on Tab', () => {
+            const firstCell = getContainerCell(grid.$.items, 1, 1);
+            dblclick(firstCell._content);
+            input = getCellEditor(firstCell);
+
+            const secondCell = getContainerCell(grid.$.items, 2, 0);
+            const spy = sinon.spy(secondCell, 'focus');
+            tab(input);
+            expect(spy).to.be.calledOnce;
+          });
+
+          it('should focus previous cell available for editing on the previous in non-edit mode on Shift Tab', () => {
+            const firstCell = getContainerCell(grid.$.items, 2, 0);
+            dblclick(firstCell._content);
+            input = getCellEditor(firstCell);
+
+            const secondCell = getContainerCell(grid.$.items, 1, 1);
+            const spy = sinon.spy(secondCell, 'focus');
+            shiftTab(input);
+            expect(spy).to.be.calledOnce;
+          });
+
+          it('should focus editable cell on the next row in non-edit mode on Enter, if `allowEnterRowChange` is true', () => {
+            grid.allowEnterRowChange = true;
+            const firstCell = getContainerCell(grid.$.items, 1, 0);
+            enter(firstCell._content);
+            input = getCellEditor(firstCell);
+
+            const secondCell = getContainerCell(grid.$.items, 2, 0);
+            const spy = sinon.spy(secondCell, 'focus');
+            enter(input);
+            expect(spy).to.be.calledOnce;
+          });
+
+          it('should exit the edit mode for the cell on Enter, if `allowEnterRowChange` is false', () => {
+            const firstCell = getContainerCell(grid.$.items, 1, 0);
+            dblclick(firstCell._content);
+            input = getCellEditor(firstCell);
+
+            enter(input);
+            expect(getCellEditor(firstCell)).to.be.not.ok;
+          });
+
+          it('should focus editable cell on the previous row in non-edit mode on Shift Enter, if `allowEnterRowChange` is true', () => {
+            grid.allowEnterRowChange = true;
+            const firstCell = getContainerCell(grid.$.items, 1, 0);
+            enter(firstCell._content);
+            input = getCellEditor(firstCell);
+
+            const secondCell = getContainerCell(grid.$.items, 0, 0);
+            const spy = sinon.spy(secondCell, 'focus');
+            shiftEnter(input);
+            expect(spy).to.be.calledOnce;
+          });
+
+          it('should exit the edit mode for the cell on Shift Enter, if `allowEnterRowChange` is false', () => {
+            const firstCell = getContainerCell(grid.$.items, 1, 0);
+            dblclick(firstCell._content);
+            input = getCellEditor(firstCell);
+
+            shiftEnter(input);
+            expect(getCellEditor(firstCell)).to.be.not.ok;
+          });
         });
 
-        it('should focus previous cell available for editing within a same row in unedited mode on Shift Tab', () => {
-          const firstCell = getContainerCell(grid.$.items, 1, 1);
-          dblclick(firstCell._content);
-          input = getCellEditor(firstCell);
+        describe('when `preserveEditMode` is true', () => {
+          beforeEach(() => {
+            grid.preserveEditMode = true;
+          });
 
-          const secondCell = getContainerCell(grid.$.items, 1, 0);
-          const spy = sinon.spy(secondCell, 'focus');
-          shiftTab(input);
-          expect(spy).to.be.calledOnce;
+          it('should focus cell next available for editing within a same row in edit mode on Tab', () => {
+            const firstCell = getContainerCell(grid.$.items, 1, 0);
+            dblclick(firstCell._content);
+            input = getCellEditor(firstCell);
+
+            const secondCell = getContainerCell(grid.$.items, 1, 1);
+            tab(input);
+            input = getCellEditor(secondCell);
+            expect(input).to.be.ok;
+          });
+
+          it('should focus previous cell available for editing within a same row in edit mode on Shift Tab', () => {
+            const firstCell = getContainerCell(grid.$.items, 1, 1);
+            dblclick(firstCell._content);
+            input = getCellEditor(firstCell);
+
+            const secondCell = getContainerCell(grid.$.items, 1, 0);
+            shiftTab(input);
+            input = getCellEditor(secondCell);
+            expect(input).to.be.ok;
+          });
+
+          it('should focus cell next available for editing on the next row in edit mode on Tab', () => {
+            const firstCell = getContainerCell(grid.$.items, 1, 1);
+            dblclick(firstCell._content);
+            input = getCellEditor(firstCell);
+
+            const secondCell = getContainerCell(grid.$.items, 2, 0);
+            tab(input);
+            input = getCellEditor(secondCell);
+            expect(input).to.be.ok;
+          });
+
+          it('should focus previous cell available for editing on the previous in edit mode on Shift Tab', () => {
+            const firstCell = getContainerCell(grid.$.items, 2, 0);
+            dblclick(firstCell._content);
+            input = getCellEditor(firstCell);
+
+            const secondCell = getContainerCell(grid.$.items, 1, 1);
+            shiftTab(input);
+            input = getCellEditor(secondCell);
+            expect(input).to.be.ok;
+          });
+
+          it('should focus editable cell on the next row in edit mode on Enter, if `allowEnterRowChange` is true', () => {
+            grid.allowEnterRowChange = true;
+            const firstCell = getContainerCell(grid.$.items, 1, 0);
+            enter(firstCell._content);
+            input = getCellEditor(firstCell);
+
+            const secondCell = getContainerCell(grid.$.items, 2, 0);
+            enter(input);
+            input = getCellEditor(secondCell);
+            expect(input).to.be.ok;
+          });
+
+          it('should exit the edit mode for the cell on Enter, if `allowEnterRowChange` is false', () => {
+            const firstCell = getContainerCell(grid.$.items, 1, 0);
+            dblclick(firstCell._content);
+            input = getCellEditor(firstCell);
+
+            enter(input);
+            expect(getCellEditor(firstCell)).to.be.not.ok;
+          });
+
+          it('should focus editable cell on the previous row in non-edit mode on Shift Enter, if `allowEnterRowChange` is true', () => {
+            grid.allowEnterRowChange = true;
+            const firstCell = getContainerCell(grid.$.items, 1, 0);
+            enter(firstCell._content);
+            input = getCellEditor(firstCell);
+
+            const secondCell = getContainerCell(grid.$.items, 0, 0);
+            shiftEnter(input);
+            input = getCellEditor(secondCell);
+            expect(input).to.be.ok;
+          });
+
+          it('should exit the edit mode for the cell on Shift Enter, if `allowEnterRowChange` is false', () => {
+            const firstCell = getContainerCell(grid.$.items, 1, 0);
+            dblclick(firstCell._content);
+            input = getCellEditor(firstCell);
+
+            shiftEnter(input);
+            expect(getCellEditor(firstCell)).to.be.not.ok;
+          });
         });
 
-        it('should focus cell next available for editing on the next row in unedited mode on Tab', () => {
-          const firstCell = getContainerCell(grid.$.items, 1, 1);
-          dblclick(firstCell._content);
-          input = getCellEditor(firstCell);
-
-          const secondCell = getContainerCell(grid.$.items, 2, 0);
-          const spy = sinon.spy(secondCell, 'focus');
-          tab(input);
-          expect(spy).to.be.calledOnce;
-        });
-
-        it('should focus previous cell available for editing on the previous in unedited mode on Shift Tab', () => {
-          const firstCell = getContainerCell(grid.$.items, 2, 0);
-          dblclick(firstCell._content);
-          input = getCellEditor(firstCell);
-
-          const secondCell = getContainerCell(grid.$.items, 1, 1);
-          const spy = sinon.spy(secondCell, 'focus');
-          shiftTab(input);
-          expect(spy).to.be.calledOnce;
-        });
-
-        it('should focus editable cell on the next row for the same column in unedited mode on Enter', () => {
-          const firstCell = getContainerCell(grid.$.items, 1, 0);
-          enter(firstCell._content);
-          input = getCellEditor(firstCell);
-
-          const secondCell = getContainerCell(grid.$.items, 2, 0);
-          const spy = sinon.spy(secondCell, 'focus');
-          enter(input);
-          expect(spy).to.be.calledOnce;
-        });
-
-        it('should focus editable cell on the previous row for the same column in unedited mode on Shift Enter', () => {
-          const firstCell = getContainerCell(grid.$.items, 1, 0);
-          enter(firstCell._content);
-          input = getCellEditor(firstCell);
-
-          const secondCell = getContainerCell(grid.$.items, 0, 0);
-          const spy = sinon.spy(secondCell, 'focus');
-          shiftEnter(input);
-          expect(spy).to.be.calledOnce;
-        });
-
-        it('should exit the edit state for the cell when pressing ESC', () => {
+        it('should exit the edit mode for the cell when pressing ESC', () => {
           const firstCell = getContainerCell(grid.$.items, 1, 0);
           dblclick(firstCell._content);
           input = getCellEditor(firstCell);

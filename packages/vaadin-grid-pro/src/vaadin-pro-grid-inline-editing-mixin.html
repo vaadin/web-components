@@ -19,6 +19,27 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
    */
   Vaadin.ProGrid.InlineEditingMixin = superClass => class InlineEditingMixin extends superClass {
 
+    static get properties() {
+      return {
+        /**
+         * When true, pressing Enter while in cell edit mode
+         * will move focus to the editable cell in the next row
+         * (Shift + Enter - same, but for previous row).
+         */
+        allowEnterRowChange: {
+          type: Boolean
+        },
+
+        /**
+         * When true, after moving to next editable cell using
+         * Tab / Enter, it will be focused in edit mode
+         */
+        preserveEditMode: {
+          type: Boolean
+        }
+      };
+    }
+
     constructor() {
       super();
       this.__boundItemPropertyChanged = this._onItemPropertyChanged.bind(this);
@@ -186,10 +207,14 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       let nextCol = null;
       let nextIdx = index;
 
-      // enter: move up / down
+      // enter key
       if (e.keyCode === 13) {
         nextCol = column;
-        nextIdx = e.shiftKey ? index - 1 : index + 1;
+
+        // move up / down
+        if (this.allowEnterRowChange) {
+          nextIdx = e.shiftKey ? index - 1 : index + 1;
+        }
       }
 
       // tab: move right / left
@@ -220,8 +245,13 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       if (nextRow && nextCol) {
         const nextCell = Array.from(nextRow.children).filter(cell => cell._column === nextCol)[0];
         e.preventDefault();
-        this._ensureScrolledToIndex(nextIdx);
-        nextCell.focus();
+
+        if (this.preserveEditMode && nextCell !== cell) {
+          this._startEdit(nextCell, nextCol);
+        } else {
+          this._ensureScrolledToIndex(nextIdx);
+          nextCell.focus();
+        }
       }
     }
 

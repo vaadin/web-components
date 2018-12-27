@@ -10,7 +10,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
 <dom-module id="vaadin-pro-grid-edit-column">
   <template>
-    <template id="editStateTemplate">
+    <template id="editModeTemplate">
       <vaadin-pro-grid-edit-column-text-field></vaadin-pro-grid-edit-column-text-field>
     </template>
   </template>
@@ -51,10 +51,10 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       ready() {
         super.ready();
 
-        this.__editStateTemplate = this._prepareTemplatizer(this.$.editStateTemplate);
+        this.__editModeTemplate = this._prepareTemplatizer(this.$.editModeTemplate);
         // needed to override the dataHost correctly in case internal template is used.
-        this.__editStateTemplate.templatizer.dataHost = this;
-        this.__editStateRenderer = this.constructor._getEditorRenderer();
+        this.__editModeTemplate.templatizer.dataHost = this;
+        this.__editModeRenderer = this.constructor._getEditorRenderer();
       }
 
       /**
@@ -78,7 +78,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
               <${tagName}></${tagName}>
             `;
           }
-          // TODO: move to the grid for custom edit state renderer support?
+          // TODO: move to the grid for custom edit mode renderer support?
           column._setCellEditValue(cell, grid._getItemValue(column, rowData));
         };
       }
@@ -123,11 +123,11 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       _startCellEdit(cell, model) {
         if (this._bodyTemplate) {
           this.__savedTemplate = this._bodyTemplate;
-          this._stampTemplateToCell(cell, this.__editStateTemplate, model);
+          this._stampTemplateToCell(cell, this.__editModeTemplate, model);
         } else {
           // fallback to the path renderer stored on the cell
           this.__savedRenderer = this.renderer || cell._renderer;
-          this._stampRendererToCell(cell, this.__editStateRenderer, model);
+          this._stampRendererToCell(cell, this.__editModeRenderer, model);
         }
         this._addBlurListener(cell);
       }
