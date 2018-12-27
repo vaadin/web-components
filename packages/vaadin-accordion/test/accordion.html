@@ -97,7 +97,10 @@
         });
       });
 
-      describe('focus', () => {
+      const ios = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+      const android = /android/i.test(navigator.userAgent);
+
+      !ios && !android && describe('focus', () => {
         beforeEach(() => accordion.focus());
 
         it('should focus the first panel heading by default', () => {
