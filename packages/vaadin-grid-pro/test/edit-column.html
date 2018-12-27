@@ -370,6 +370,14 @@
           expect(getCellEditor(firstCell)).to.be.ok;
         });
 
+        it('should not call start edit on second dblclick if the cell is in edit mode', () => {
+          const spy = sinon.spy(grid, '_startEdit');
+          dblclick(firstCell._content);
+          input = getCellEditor(firstCell);
+          dblclick(input);
+          expect(spy).to.be.calledOnce;
+        });
+
         it('should replace renderer and render text-field on editable cell Enter', () => {
           enter(firstCell);
           expect(firstCell._renderer).to.not.equal(column.renderer);
@@ -417,6 +425,14 @@
           dblclick(firstCell._content);
           expect(firstCell._template).to.not.equal(column._bodyTemplate);
           expect(getCellEditor(firstCell)).to.be.ok;
+        });
+
+        it('should not call start edit on second dblclick if the cell is in edit mode', () => {
+          const spy = sinon.spy(grid, '_startEdit');
+          dblclick(firstCell._content);
+          input = getCellEditor(firstCell);
+          dblclick(input);
+          expect(spy).to.be.calledOnce;
         });
 
         it('should replace template and render text-field on editable cell Enter', () => {

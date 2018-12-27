@@ -129,7 +129,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       const column = context.column;
 
       if (context.item && this._isEditColumn(column)) {
-        if (e.target.localName === 'vaadin-text-field') {
+        if (e.target.localName === column.constructor._editorTagName) {
           return;
         }
 
