@@ -91,6 +91,48 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Prevent Saving Change</h3>
+    <p>
+      Before exiting the cell edit mode, <code>item-property-changed</code> event is fired. You can listen to it
+      and call <code>event.preventDefault()</code> to prevent saving change. The example below demonstrates
+      how to silently rollback change in case of the unexpected value.
+    </p>
+    <vaadin-demo-snippet id="pro-grid-edit-column-demos-item-property-changed">
+      <template preserve-content>
+        <vaadin-pro-grid>
+          <vaadin-grid-column path="name.first" header="First Name" width="60px"></vaadin-grid-column>
+          <vaadin-grid-column path="name.last" header="Last name" width="60px"></vaadin-grid-column>
+          <vaadin-pro-grid-edit-column path="phone" header="Phone (edit)" width="80px"></vaadin-pro-grid-edit-column>
+          <vaadin-pro-grid-edit-column path="email" header="Email (edit)"></vaadin-pro-grid-edit-column>
+        </vaadin-pro-grid>
+        <script>
+          window.addDemoReadyListener('#pro-grid-edit-column-demos-item-property-changed', function(document) {
+            const grid = document.querySelector('vaadin-pro-grid');
+
+            grid.addEventListener('item-property-changed', function(event) {
+              switch (event.detail.path) {
+                case 'phone':
+                  if (!/^[0-9\-]+$/.test(event.detail.value)) {
+                    // phone is not correct
+                    event.preventDefault();
+                  }
+                  break;
+                case 'email':
+                  if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(event.detail.value)) {
+                    // email is not correct
+                    event.preventDefault();
+                  }
+                  break;
+              }
+            });
+
+            // Assign an array of user objects as the pro grid's items
+            grid.items = Vaadin.GridDemo.users;
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
   </template>
   <script>
     class ProGridEditColumnDemos extends DemoReadyEventEmitter(ProGridDemo(Polymer.Element)) {
