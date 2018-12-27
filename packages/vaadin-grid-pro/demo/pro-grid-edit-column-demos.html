@@ -1,0 +1,103 @@
+<dom-module id="pro-grid-edit-column-demos">
+  <template>
+    <style include="vaadin-component-demo-shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+
+    <h3>Edit Column</h3>
+    <p>
+      <code>&lt;vaadin-pro-grid&gt;</code> has the helper for inline cell editing in specific columns</code>.
+    </p>
+    <p>
+      Edit mode can be activated in one of the following ways:
+    </p>
+    <ul>
+      <li>Double click on the editable cell</li>
+      <li>Pressing <kbd>Enter</kbd>, when editable cell is focused using keyboard</li>
+      <li>Pressing <kbd>Space</kbd>, when editable cell is focused using keyboard</li>
+      <!-- TODO: <li>Typing alphanumeric character, when editable cell is focused using keyboard</li>-->
+    </ul>
+    <p>
+      When edit mode is activated for the cell, the following keys <b>change behavior</b>:
+    </p>
+    <ul>
+      <li><kbd>Esc</kbd> - save changes and exit the edit mode</li>
+      <li><kbd>Enter</kbd> and <kbd>Shift</kbd> + <kbd>Enter</kbd> - save changes and exit the edit mode</li>
+      <li><kbd>Tab</kbd> - exit the edit mode and focus the next editable cell</li>
+      <li><kbd>Shift</kbd> + <kbd>Tab</kbd> - exit the edit mode and focus the previous editable cell</li>
+    </ul>
+    <p>
+      <b>NOTE: You must explicitly import <code>&lt;vaadin-grid-edit-column&gt;</code>) in order to use it</b>
+    </p>
+    <vaadin-demo-snippet id="pro-grid-edit-column-demos-edit-column">
+      <template preserve-content>
+        <vaadin-pro-grid>
+          <vaadin-pro-grid-edit-column path="name.first" header="First name (edit)"></vaadin-pro-grid-edit-column>
+          <vaadin-grid-column path="name.last" header="Last name (view)"></vaadin-grid-column>
+          <vaadin-pro-grid-edit-column path="name.last" header="Last name (edit)"></vaadin-pro-grid-edit-column>
+        </vaadin-pro-grid>
+        <script>
+          window.addDemoReadyListener('#pro-grid-edit-column-demos-edit-column', function(document) {
+            // Assign an array of user objects as the pro grid's items
+            document.querySelector('vaadin-pro-grid').items = Vaadin.GridDemo.users;
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Allow Enter Row Change</h3>
+    <p>
+      When <code>allowEnterRowChange</code> is set on the grid element, the following keys <b>change behavior</b>:
+    </p>
+    <ul>
+      <li><kbd>Enter</kbd> - save changes, exit the edit mode <b>and</b> focus the editable cell in the next row</li>
+      <li><kbd>Shift</kbd> + <kbd>Enter</kbd> - save changes, exit the edit mode <b>and</b> focus the editable cell in the previous row</li>
+    </ul>
+    <vaadin-demo-snippet id="pro-grid-edit-column-demos-allow-enter-row-change">
+      <template preserve-content>
+        <vaadin-pro-grid allow-enter-row-change>
+          <vaadin-pro-grid-edit-column path="name.first" header="First name (edit)"></vaadin-pro-grid-edit-column>
+          <vaadin-grid-column path="name.last" header="Last name (view)"></vaadin-grid-column>
+          <vaadin-pro-grid-edit-column path="name.last" header="Last name (edit)"></vaadin-pro-grid-edit-column>
+        </vaadin-pro-grid>
+        <script>
+          window.addDemoReadyListener('#pro-grid-edit-column-demos-allow-enter-row-change', function(document) {
+            // Assign an array of user objects as the pro grid's items
+            document.querySelector('vaadin-pro-grid').items = Vaadin.GridDemo.users;
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Preserve Edit Mode</h3>
+    <p>
+      When <code>preserveEditMode</code> is set on the grid element, focusing the next editable cell from keyboard will activate edit mode for it.
+    </p>
+    <vaadin-demo-snippet id="pro-grid-edit-column-demos-preserve-edit-mode">
+      <template preserve-content>
+        <vaadin-pro-grid preserve-edit-mode allow-enter-row-change>
+          <vaadin-pro-grid-edit-column path="name.first" header="First name (edit)"></vaadin-pro-grid-edit-column>
+          <vaadin-grid-column path="name.last" header="Last name (view)"></vaadin-grid-column>
+          <vaadin-pro-grid-edit-column path="name.last" header="Last name (edit)"></vaadin-pro-grid-edit-column>
+        </vaadin-pro-grid>
+        <script>
+          window.addDemoReadyListener('#pro-grid-edit-column-demos-preserve-edit-mode', function(document) {
+            // Assign an array of user objects as the pro grid's items
+            document.querySelector('vaadin-pro-grid').items = Vaadin.GridDemo.users;
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+  </template>
+  <script>
+    class ProGridEditColumnDemos extends DemoReadyEventEmitter(ProGridDemo(Polymer.Element)) {
+      static get is() {
+        return 'pro-grid-edit-column-demos';
+      }
+    }
+    customElements.define(ProGridEditColumnDemos.is, ProGridEditColumnDemos);
+  </script>
+</dom-module>

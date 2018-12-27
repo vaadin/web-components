@@ -13,6 +13,17 @@
   }
   ,
   {
+    "name": "Edit Column",
+    "url": "pro-grid-edit-column-demos",
+    "src": "pro-grid-edit-column-demos.html",
+    "meta": {
+      "title": "Vaadin Grid Pro Edit Column",
+      "description": "",
+      "image": ""
+     }
+  }
+  ,
+  {
     "name": "Common modules",
     "url": "pro-grid-common-modules-demos",
     "src": "pro-grid-common-modules-demos.html",
