@@ -33,7 +33,6 @@
     "vaadin-material-styles": "vaadin/vaadin-material-styles#^1.2.0",
     "vaadin-text-field": "vaadin/vaadin-text-field#^2.3.0-alpha3",
     "vaadin-button": "vaadin/vaadin-button#^2.1.0",
-    "iron-form": "^2.4.0",
     "vaadin-overlay": "^3.2.1"
   },
   "devDependencies": {

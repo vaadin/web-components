@@ -11,7 +11,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <link rel="import" href="vaadin-login-mixin.html">
 
-<link rel="import" href="../../iron-form/iron-form.html">
 <link rel="import" href="../../vaadin-text-field/src/vaadin-text-field.html">
 <link rel="import" href="../../vaadin-text-field/src/vaadin-password-field.html">
 <link rel="import" href="../../vaadin-button/src/vaadin-button.html">
@@ -39,10 +38,7 @@ This program is available under Apache License Version 2.0, available at https:/
         margin: 0;
       }
 
-      vaadin-text-field,
-      vaadin-password-field,
-      [part="form"] form ::slotted(*),
-      #submit {
+      #loginForm * {
         width: 100%;
       }
 
@@ -56,20 +52,20 @@ This program is available under Apache License Version 2.0, available at https:/
           <h5>[[i18n.errorMessage.title]]</h5>
           <p>[[i18n.errorMessage.message]]</p>
         </div>
-        <iron-form id="loginForm" allow-redirect>
-          <form method="POST" action$="[[action]]">
-            <slot name="username" id="usernameSlot">
-              <vaadin-text-field label="[[i18n.form.username]]" name="username" id="username" required on-keydown="_handleInputKeydown">
-              </vaadin-text-field>
-            </slot>
-            <slot name="password" id="passwordSlot">
-              <vaadin-password-field label="[[i18n.form.password]]" name="password" id="password" required on-keydown="_handleInputKeydown">
-              </vaadin-password-field>
-            </slot>
+
+        <slot name="form">
+          <form id="loginForm" method="POST" action$="[[action]]">
+            <vaadin-text-field label="[[i18n.form.username]]" id="username" required on-keydown="_handleInputKeydown">
+              <input name="username" type="text" slot="input">
+            </vaadin-text-field>
+
+            <vaadin-password-field label="[[i18n.form.password]]" id="password" required on-keydown="_handleInputKeydown">
+              <input name="password" type="password" slot="input">
+            </vaadin-password-field>
 
             <vaadin-button id="submit" theme="primary contained" on-click="submit" disabled$="[[disabled]]">[[i18n.form.submit]]</vaadin-button>
           </form>
-        </iron-form>
+        </slot>
 
         <vaadin-button id="forgotPasswordButton" theme="tertiary small" on-click="_forgotPassword" hidden$="[[noForgotPassword]]">[[i18n.form.forgotPassword]]</vaadin-button>
 
@@ -103,89 +99,10 @@ This program is available under Apache License Version 2.0, available at https:/
           return '1.0.0-alpha5';
         }
 
-        connectedCallback() {
-          super.connectedCallback();
-          this._handleInputKeydown = this._handleInputKeydown.bind(this);
-
-          this._usernameSlotObserver = this._createSlotObserver(this.$.usernameSlot, 'username');
-          this._passwordSlotObserver = this._createSlotObserver(this.$.passwordSlot, 'password');
-        }
-
-        _createSlotObserver(slot, field) {
-          return new Polymer.FlattenedNodesObserver(slot, (info) => {
-            const removedNodes = info.removedNodes.filter(node => node.nodeType === Node.ELEMENT_NODE);
-
-            // look for slot=${field}
-            const element = this.querySelector(`[slot=${field}]`);
-            const fallbackElement = this.shadowRoot.querySelector(`:not(slot)[name=${field}]`);
-            if (element) {
-              fallbackElement.disabled = true;
-              this.$[field] = element;
-              this.$[field].addEventListener('keydown', this._handleInputKeydown);
-            }
-            if (removedNodes[0] === this.$[field]) {
-              this.$[field] = fallbackElement;
-              this.$[field].disabled = false;
-            }
-          });
-        }
-
-        disconnectedCallback() {
-          super.disconnectedCallback();
-          this._passwordSlotObserver && this._passwordSlotObserver.disconnect();
-          this._usernameSlotObserver && this._usernameSlotObserver.disconnect();
-        }
-
-        submit() {
-          if (this.disabled || !(LoginElement.__isValid(this.$.username) && LoginElement.__isValid(this.$.password))) {
-            return;
-          }
-
-          this.error = false;
-          this.disabled = true;
-
-          const loginEventDetails = {
-            bubbles: true,
-            cancelable: true,
-            detail: {
-              username: this.$.username.value,
-              password: this.$.password.value
-            }
-          };
-          const loginEvent = new CustomEvent('login', loginEventDetails);
-          this.dispatchEvent(loginEvent);
-
-          if (this.action && !loginEvent.defaultPrevented) {
-            this.$.loginForm.submit();
-          }
-        }
-
         _forgotPassword() {
           this.dispatchEvent(new CustomEvent('forgot-password'));
         }
 
-        _handleInputKeydown(e) {
-          if (LoginElement._isEnterKey(e)) {
-            const {currentTarget: inputActive} = e;
-            const nextInput = inputActive.slot === 'username' || inputActive.name === 'username'
-              ? this.$.password : this.$.username;
-            if (LoginElement.__isValid(inputActive)) {
-              if (LoginElement.__isValid(nextInput)) {
-                this.submit();
-              } else {
-                nextInput.focus();
-              }
-            }
-          }
-        }
-
-        static __isValid(input) {
-          return (input.validate && input.validate()) || (input.checkValidity && input.checkValidity());
-        }
-
-        static _isEnterKey(e) {
-          return e.key === 'Enter' || e.keyCode === 13;
-        }
       }
 
       customElements.define(LoginElement.is, LoginElement);

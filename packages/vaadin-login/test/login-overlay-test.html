@@ -133,6 +133,19 @@
         const {type} = loginEventSpy.args[0][0];
         expect(type).to.be.equal('login');
       });
+
+      it('should be accessible username and password from document level', () => {
+        const loginOverlayOpened = fixture('opened');
+
+        const loginEventSpy = sinon.spy(loginOverlayOpened, '_handleEvent');
+        const {username} = fillUsernameAndPassword(loginOverlayOpened.$.login);
+
+        MockInteractions.pressEnter(username);
+        expect(loginEventSpy.called).to.be.true;
+
+        const {type} = loginEventSpy.args[0][0];
+        expect(type).to.be.equal('login');
+      });
     });
 
     describe('Title and description test', function() {

@@ -1,0 +1,84 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-login tests</title>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <link rel="import" href="../vaadin-login-overlay.html">
+  <link rel="import" href="../vaadin-login.html">
+</head>
+
+<body>
+  <test-fixture id="default">
+    <template>
+      <vaadin-login action="login-action"></vaadin-login>
+      <iframe name="loginFrame"></iframe>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="overlay">
+    <template>
+      <vaadin-login-overlay action="login-action" opened></vaadin-login-overlay>
+      <iframe name="overlayFrame"></iframe>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('Login Form request test', () => {
+      let login, iframe;
+
+      function fillUsernameAndPassword() {
+        const {username, password} = login.$;
+        const usernameValue = 'myusername';
+        const passwordValue = 'mypassword';
+
+        username.value = usernameValue;
+        password.value = passwordValue;
+
+        return {username, password};
+      }
+
+      function testFormSubmitValues(preventDefault, expectation, done) {
+        fillUsernameAndPassword();
+
+        login.$.loginForm.setAttribute('method', 'GET');
+        login.$.loginForm.setAttribute('target', iframe.getAttribute('name'));
+
+        const submitSpy = sinon.spy(login.$.loginForm, 'submit');
+        preventDefault && login.addEventListener('login', e => e.preventDefault());
+
+        // Skip form submission in IE11 due to permission restrictions
+        const isIE11 = !!window.MSInputMethodContext && !!document.documentMode;
+        if (!isIE11) {
+          iframe.onload = () => {
+            expect(iframe.contentWindow.location.href).to.include('login-action?username=myusername&password=mypassword');
+            done();
+          };
+
+          login.$.submit.click();
+          expect(submitSpy.called).to.equal(expectation);
+        }
+
+        if (isIE11 || preventDefault) {
+          done();
+        }
+      }
+
+      it('should submit form values from login element', done => {
+        [login, iframe] = fixture('default');
+        testFormSubmitValues(false, true, done);
+      });
+
+      it('should submit form values from overlay element', done => {
+        [login, iframe] = fixture('overlay');
+        testFormSubmitValues(false, true, done);
+      });
+
+      it('should not submit form if action is defined and event was default prevented', done => {
+        [login, iframe] = fixture('default');
+        testFormSubmitValues(true, false, done);
+      });
+    });
+  </script>
+</body>

@@ -29,11 +29,14 @@
     </template>
   </test-fixture>
 
-  <test-fixture id="custom-input-fields">
+  <test-fixture id="custom-form">
     <template>
       <vaadin-login>
-        <input slot="username" name="username" required>
-        <input slot="password" name="password" required type="password">
+        <form id="loginForm" method="POST" slot="form">
+          <input id="username" name="username" type="text">
+          <input id="password" name="password" type="password">
+          <button id="submit">submit</button>
+        </form>
       </vaadin-login>
     </template>
   </test-fixture>
@@ -235,40 +238,6 @@
         login.removeEventListener('login', loginEventSpy);
       });
 
-      it('should submit form if action is defined', () => {
-        const {password} = fillUsernameAndPassword();
-        const {loginForm} = login.$;
-
-        // Remove `allow-redirect` to create an async call from iron-form
-        loginForm.removeAttribute('allow-redirect');
-
-        login.action = '/login';
-
-        const submitSpy = sinon.spy(loginForm, 'submit');
-
-        MockInteractions.pressEnter(password);
-
-        expect(submitSpy.called).to.be.true;
-      });
-
-      it('should not submit form if action is defined and event was default prevented', () => {
-        const {password} = fillUsernameAndPassword();
-        const {loginForm} = login.$;
-
-        // Remove `allow-redirect` to create an async call from iron-form
-        loginForm.removeAttribute('allow-redirect');
-
-        login.action = '/login';
-
-        login.addEventListener('login', e => e.preventDefault());
-
-        const submitSpy = sinon.spy(loginForm, 'submit');
-
-        MockInteractions.pressEnter(password);
-
-        expect(submitSpy.called).to.be.false;
-      });
-
       it('error should be hidden by default', () => {
         const errorPart = login.root.querySelectorAll('div[part="error-message"]')[0];
         expect(errorPart.offsetWidth).to.equal(0);
@@ -324,19 +293,20 @@
       let login;
 
       beforeEach(done => {
-        login = fixture('custom-input-fields');
+        login = fixture('custom-form');
         Polymer.RenderStatus.afterNextRender(login, () => done());
       });
 
-      it('should utilize custom input fields', done => {
+      it('should utilize custom form', done => {
         // Query input fields just like password managers would do
         // and verify that the login component has taken them into use.
-        expect(login.$.username).to.equal(document.querySelector('[name="username"]'));
-        expect(login.$.password).to.equal(document.querySelector('[name="password"]'));
+        expect(login.querySelector('#username')).to.equal(document.querySelector('#username'));
+        expect(login.querySelector('#password')).to.equal(document.querySelector('#password'));
 
         // Verify that removing the custom input fields makes the
         // login component revert to it's built-in input fields.
-        [login.$.username, login.$.password].forEach(e => e.parentNode.removeChild(e));
+        [login.querySelector('#username'), login.querySelector('#password')].forEach(e =>
+          e.parentNode.removeChild(e));
 
         Polymer.RenderStatus.afterNextRender(login, () => {
           // Due to an issue in ShadyDOM the input field node observers are not called
