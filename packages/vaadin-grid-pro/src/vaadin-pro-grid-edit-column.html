@@ -42,6 +42,22 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       static get properties() {
         return {
           /**
+           * Custom function for rendering the cell content in edit mode.
+           * Receives three arguments:
+           *
+           * - `root` The cell content DOM element. Append your editor component to it.
+           * - `column` The `<vaadin-pro-grid-edit-column>` element.
+           * - `rowData` The object with the properties related with
+           *   the rendered item, contains:
+           *   - `rowData.index` The index of the item.
+           *   - `rowData.item` The item.
+           *   - `rowData.expanded` Sublevel toggle state.
+           *   - `rowData.level` Level of the tree represented with a horizontal offset of the toggle button.
+           *   - `rowData.selected` Selected state.
+           */
+          editModeRenderer: Function,
+
+          /**
            * JS Path of the property in the item used for the editable content.
            */
           path: String
@@ -54,16 +70,13 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         this.__editModeTemplate = this._prepareTemplatizer(this.$.editModeTemplate);
         // needed to override the dataHost correctly in case internal template is used.
         this.__editModeTemplate.templatizer.dataHost = this;
-        this.__editModeRenderer = this.constructor._getEditorRenderer();
+        this.__editModeRenderer = this._getEditorRenderer();
       }
 
       /**
        * Defines the editable cell renderer using `vaadin-pro-grid-edit-column-text-field`
-       *
-       * @protected
        */
-      static _getEditorRenderer() {
-        const tagName = this._editorTagName;
+      _getEditorRenderer() {
         return function(root, column, rowData) {
           const cell = root.assignedSlot.parentNode;
           const grid = column._grid;
@@ -73,51 +86,41 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             return;
           }
 
+          const tagName = column._getEditorTagName(cell);
           if (!root.firstElementChild || root.firstElementChild.localName.toLowerCase() !== tagName) {
             root.innerHTML = `
               <${tagName}></${tagName}>
             `;
           }
-          // TODO: move to the grid for custom edit mode renderer support?
           column._setCellEditValue(cell, grid._getItemValue(column, rowData));
         };
       }
 
-      /**
-       * Returns the reference to the editor component rendered to editable cell
-       *
-       * @protected
-       */
-      static _getEditorComponent(cell) {
-        return cell._content.querySelector(this._editorTagName);
+      _getEditorTagName(cell) {
+        return this._editModeTemplate || this.editModeRenderer ?
+          this._getEditorComponent(cell).localName :
+          'vaadin-pro-grid-edit-column-text-field';
       }
 
-      /**
-       * Returns the tag name of the editor component rendered to editable cell
-       *
-       * @protected
-       */
-      static get _editorTagName() {
-        return 'vaadin-pro-grid-edit-column-text-field';
-      }
-
-      _addBlurListener(cell) {
-        const editor = this.constructor._getEditorComponent(cell);
-        if (editor) {
-          editor.addEventListener('blur', e => {
-            this._grid._enqueueStopEdit();
-          });
-        }
+      _getEditorComponent(cell) {
+        return this._editModeTemplate || this.editModeRenderer ?
+          cell._content.firstElementChild :
+          cell._content.querySelector(this._getEditorTagName(cell));
       }
 
       _getCellEditValue(cell) {
-        return cell._content.firstElementChild.value;
+        return this._getEditorComponent(cell).value;
       }
 
       _setCellEditValue(cell, value) {
-        const editor = this.constructor._getEditorComponent(cell);
+        const editor = this._getEditorComponent(cell);
         editor.value = value;
-        editor.focusElement.select();
+        editor.focus();
+        if (editor instanceof HTMLInputElement) {
+          editor.select();
+        } else if (editor.focusElement && editor.focusElement instanceof HTMLInputElement) {
+          editor.focusElement.select();
+        }
       }
 
       _startCellEdit(cell, model) {
@@ -127,9 +130,8 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         } else {
           // fallback to the path renderer stored on the cell
           this.__savedRenderer = this.renderer || cell._renderer;
-          this._stampRendererToCell(cell, this.__editModeRenderer, model);
+          this._stampRendererToCell(cell, this.editModeRenderer || this.__editModeRenderer, model);
         }
-        this._addBlurListener(cell);
       }
 
       _stopCellEdit(cell, model) {
@@ -154,6 +156,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       }
 
       _stampRendererToCell(cell, renderer, model) {
+        cell._content.innerHTML = '';
         cell._renderer = renderer;
         this.__runRenderer(renderer, cell, model);
       }

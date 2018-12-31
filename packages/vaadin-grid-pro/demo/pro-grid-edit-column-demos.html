@@ -133,6 +133,56 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Custom Edit Mode Renderer</h3>
+    <p>
+      The custom editor component can be rendered for cell edit mode using <code>editModeRenderer</code>.
+      The component must have a <code>value</code> property and be the first child of the edited cell content.
+      Also, it should be focusable (on blur event, edit mode is exited).
+    </p>
+    <p>
+      The demo below is an example of using native <code>&lt;input&gt;</code> elements with <code>email</code> and
+      <code>number</code> type. Grid edit mode styling does not apply to the custom editor components, but
+      you can change their appearance using CSS, same as for cell content in non-edit mode.
+    </p>
+    <vaadin-demo-snippet id="pro-grid-edit-column-demos-edit-mode-renderer">
+      <template preserve-content>
+        <vaadin-pro-grid>
+          <vaadin-grid-column path="name.first" header="First Name"></vaadin-grid-column>
+          <vaadin-grid-column path="name.last" header="Last name"></vaadin-grid-column>
+          <vaadin-pro-grid-edit-column path="email" header="Email (edit)" width="150px"></vaadin-pro-grid-edit-column>
+          <vaadin-pro-grid-edit-column path="location.zip" header="Zip code (edit)" text-align="end"></vaadin-pro-grid-edit-column>
+        </vaadin-pro-grid>
+        <script>
+          window.addDemoReadyListener('#pro-grid-edit-column-demos-edit-mode-renderer', function(document) {
+            const grid = document.querySelector('vaadin-pro-grid');
+            grid.querySelector('[path="email"]').editModeRenderer = function(root, column, rowData) {
+              root.innerHTML = '';
+              const input = window.document.createElement('input');
+              input.setAttribute('type', 'email');
+              input.value = rowData.item.email;
+              root.appendChild(input);
+            };
+
+            grid.querySelector('[path$="zip"]').editModeRenderer = function(root, column, rowData) {
+              root.innerHTML = '';
+              const input = window.document.createElement('input');
+              input.setAttribute('type', 'number');
+              input.value = rowData.item.location.zip;
+              root.appendChild(input);
+            };
+
+            // Assign an array of user objects as the pro grid's items
+            grid.items = Vaadin.GridDemo.users;
+          });
+        </script>
+        <style>
+          input[type="email"] {
+            width: 100%;
+          }
+        </style>
+      </template>
+    </vaadin-demo-snippet>
+
   </template>
   <script>
     class ProGridEditColumnDemos extends DemoReadyEventEmitter(ProGridDemo(Polymer.Element)) {

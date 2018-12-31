@@ -43,6 +43,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
     constructor() {
       super();
       this.__boundItemPropertyChanged = this._onItemPropertyChanged.bind(this);
+      this.__boundEditorBlur = this._onEditorBlur.bind(this);
     }
 
     ready() {
@@ -100,14 +101,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         .sort((a, b) => a._order - b._order);
     }
 
-    _enqueueStopEdit() {
-      // schedule stop on text-field blur
-      this._debouncerStopEdit = Polymer.Debouncer.debounce(
-        this._debouncerStopEdit,
-        Polymer.Async.timeOut.after(200),
-        this._stopEdit.bind(this));
-    }
-
     _cancelStopEdit() {
       // stop edit on outside click will always trigger notify resize.
       // when tabbing within same row it might not be needed, so cancel
@@ -127,12 +120,9 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
     _enterEditFromEvent(e) {
       const context = this.getEventContext(e);
       const column = context.column;
+      const edited = this.__edited;
 
       if (context.item && this._isEditColumn(column)) {
-        if (e.target.localName === column.constructor._editorTagName) {
-          return;
-        }
-
         const path = e.composedPath();
         const cell = path[path.indexOf(this.$.table) - 3];
 
@@ -140,15 +130,27 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           return;
         }
 
+        if (edited && edited.cell === cell && e.target.localName === column._getEditorTagName(cell)) {
+          return;
+        }
+
         this._flushStopEdit();
 
         this._startEdit(cell, column);
-      } else if (this.__edited) {
+      } else if (edited) {
         this._stopEdit();
       }
     }
 
-    _startEdit(cell, column, shouldResize) {
+    _onEditorBlur() {
+      // schedule stop on editor component blur
+      this._debouncerStopEdit = Polymer.Debouncer.debounce(
+        this._debouncerStopEdit,
+        Polymer.Async.timeOut.after(200),
+        this._stopEdit.bind(this));
+    }
+
+    _startEdit(cell, column) {
       // cancel debouncer enqueued on blur
       this._cancelStopEdit();
 
@@ -163,9 +165,11 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       column._setCellEditValue(cell, this._getItemValue(column, model));
 
       this.addEventListener('item-property-changed', this.__boundItemPropertyChanged);
+      const editor = column._getEditorComponent(cell);
+      editor.addEventListener('blur', this.__boundEditorBlur);
     }
 
-    _stopEdit(shouldResize) {
+    _stopEdit() {
       if (!this.__edited) {
         return;
       }
@@ -185,6 +189,9 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           composed: true
         }));
       }
+
+      const editor = column._getEditorComponent(cell);
+      editor.removeEventListener('blur', this.__boundEditorBlur);
 
       column._stopCellEdit(cell, model);
 

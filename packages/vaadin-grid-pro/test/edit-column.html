@@ -80,7 +80,7 @@
     describe('edit column', () => {
 
       function getCellEditor(cell) {
-        return cell._column.constructor._getEditorComponent(cell);
+        return cell._column._getEditorComponent(cell);
       }
 
       describe('keyboard navigation', () => {
@@ -454,6 +454,78 @@
           esc(input);
           expect(firstCell._template).to.equal(column._bodyTemplate);
           expect(firstCell._content.textContent).to.equal('0 new');
+        });
+      });
+
+      describe('edit mode renderer', () => {
+        let grid, column, cell, input;
+
+        beforeEach(() => {
+          grid = fixture('renderer');
+          column = grid.firstElementChild;
+          grid.items = getItems();
+          flushGrid(grid);
+          cell = getContainerCell(grid.$.items, 0, 0);
+        });
+
+        it('should call the edit mode renderer to cell when entering edit mode', () => {
+          column.editModeRenderer = function(root, owner, model) {
+            root.innerHTML = '';
+            const input = document.createElement('input');
+            input.value = model.item.name;
+            root.appendChild(input);
+          };
+
+          dblclick(cell._content);
+          expect(cell._renderer).to.equal(column.editModeRenderer);
+          expect(cell._content.querySelector('input')).to.be.ok;
+        });
+
+        it('should call `focus()` on the custom editor component after entering the cell edit mode', () => {
+          let spy;
+
+          column.editModeRenderer = function(root, owner, model) {
+            root.innerHTML = '';
+            const input = document.createElement('input');
+            input.value = model.item.name;
+            spy = sinon.spy(input, 'focus');
+            root.appendChild(input);
+          };
+
+          dblclick(cell._content);
+          expect(spy).to.be.calledOnce;
+        });
+
+        it('should call `select()` on the custom editor component, if the <input> was rendered', () => {
+          let spy;
+
+          column.editModeRenderer = function(root, owner, model) {
+            root.innerHTML = '';
+            const input = document.createElement('input');
+            input.value = model.item.name;
+            spy = sinon.spy(input, 'select');
+            root.appendChild(input);
+          };
+
+          dblclick(cell._content);
+          expect(spy).to.be.calledOnce;
+        });
+
+        it('should exit the edit mode on custom editor component blur event', () => {
+          column.editModeRenderer = function(root, owner, model) {
+            root.innerHTML = '';
+            const input = document.createElement('input');
+            input.value = model.item.name;
+            root.appendChild(input);
+          };
+
+          dblclick(cell._content);
+          input = cell._content.querySelector('input');
+          input.value = 'Foo';
+          input.blur();
+          grid._flushStopEdit();
+          expect(cell._content.querySelector('input')).to.not.be.ok;
+          expect(cell._content.textContent).to.equal('Foo');
         });
       });
 
