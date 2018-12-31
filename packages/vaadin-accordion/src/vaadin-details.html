@@ -54,12 +54,16 @@ This program is available under Apache License Version 2.0, available at https:/
   </template>
   <script>
     (function() {
+      'use strict';
 
       /**
-       * `<vaadin-details>` is a Web Component for expansible details.
+       * `<vaadin-details>` is a Web Component which the creates an
+       * expansible panel similar to `<details>` HTML element.
        *
        * ```
-       * <vaadin-details></vaadin-details>
+       * <vaadin-details summary="Visible Summary">
+       *  Details content, collapsed and hidden by default.
+       * </vaadin-details>
        * ```
        *
        * @memberof Vaadin
@@ -83,6 +87,9 @@ This program is available under Apache License Version 2.0, available at https:/
 
         static get properties() {
           return {
+            /**
+             * If true, the details content is visible.
+             */
             expanded: {
               type: Boolean,
               value: false,
@@ -90,16 +97,24 @@ This program is available under Apache License Version 2.0, available at https:/
               notify: true,
               observer: '_expandedChanged'
             },
+
+            /**
+             * String used as a label for the content.
+             */
             summary: {
               type: String
             }
           };
         }
 
-        get collapsible() {
+        get _collapsible() {
           return this.shadowRoot.querySelector('[part="content"]');
         }
 
+        /**
+         * Focusable element used by vaadin-control-state-mixin
+         * @protected
+         */
         get focusElement() {
           return this.shadowRoot.querySelector('button');
         }
@@ -107,7 +122,7 @@ This program is available under Apache License Version 2.0, available at https:/
         ready() {
           super.ready();
           // prevent Shift + Tab on content from host blur
-          this.collapsible.addEventListener('keydown', e => {
+          this._collapsible.addEventListener('keydown', e => {
             if (e.shiftKey && e.keyCode === 9) {
               e.stopPropagation();
             }
@@ -123,7 +138,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _expandedChanged(expanded) {
-          this.collapsible.style.maxHeight = expanded ? '' : '0px';
+          this._collapsible.style.maxHeight = expanded ? '' : '0px';
         }
 
         _onToggleClick(e) {
