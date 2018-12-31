@@ -209,6 +209,7 @@
         });
 
         menu.addEventListener('item-selected', menu.close);
+        menu.$.overlay.$.backdrop.addEventListener('click', () => menu.close());
 
         menu.$.overlay.addEventListener('keydown', e => {
           if (e.keyCode === 37 || e.keyCode === 27) {

@@ -193,6 +193,16 @@
           expect(subMenu.opened).to.be.true;
         });
 
+        it('should not close on parent item click', () => {
+          menuComponents(rootMenu)[0].click();
+          expect(rootMenu.opened).to.be.true;
+        });
+
+        it('shuold close on backdrop click', () => {
+          subMenu.$.overlay.$.backdrop.click();
+          expect(subMenu.opened).to.be.false;
+        });
+
         it('should have be a parent item', () => {
           expect(menuComponents()[0].classList.contains('vaadin-context-menu-parent-item')).to.be.true;
         });
