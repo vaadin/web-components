@@ -72,11 +72,11 @@
         height: 100%;
       }
 
-      :host(:not([expanded])) [part="toggle"]::before {
+      :host(:not([opened])) [part="toggle"]::before {
         content: var(--lumo-icons-angle-right);
       }
 
-      :host([expanded]) [part="toggle"]::before {
+      :host([opened]) [part="toggle"]::before {
         content: var(--lumo-icons-angle-right);
         transform: rotate(90deg);
       }

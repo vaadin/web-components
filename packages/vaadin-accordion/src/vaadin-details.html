@@ -29,7 +29,7 @@ This program is available under Apache License Version 2.0, available at https:/
         overflow: hidden;
       }
 
-      :host([expanded]) [part="content"] {
+      :host([opened]) [part="content"] {
         display: block;
         overflow: visible;
       }
@@ -40,14 +40,14 @@ This program is available under Apache License Version 2.0, available at https:/
         part="header"
         on-click="_onToggleClick"
         disabled="[[disabled]]"
-        aria-expanded$="[[_getAriaExpanded(expanded)]]"
+        aria-expanded$="[[_getAriaExpanded(opened)]]"
       >
         <span part="toggle"></span><span part="summary">[[summary]]</span>
       </button>
     </div>
     <div
       part="content"
-      aria-hidden$="[[_getAriaHidden(expanded)]]"
+      aria-hidden$="[[_getAriaHidden(opened)]]"
     >
       <slot></slot>
     </div>
@@ -90,12 +90,12 @@ This program is available under Apache License Version 2.0, available at https:/
             /**
              * If true, the details content is visible.
              */
-            expanded: {
+            opened: {
               type: Boolean,
               value: false,
               reflectToAttribute: true,
               notify: true,
-              observer: '_expandedChanged'
+              observer: '_openedChanged'
             },
 
             /**
@@ -129,20 +129,20 @@ This program is available under Apache License Version 2.0, available at https:/
           });
         }
 
-        _getAriaExpanded(expanded) {
-          return expanded ? 'true' : 'false';
+        _getAriaExpanded(opened) {
+          return opened ? 'true' : 'false';
         }
 
-        _getAriaHidden(expanded) {
-          return expanded ? 'false' : 'true';
+        _getAriaHidden(opened) {
+          return opened ? 'false' : 'true';
         }
 
-        _expandedChanged(expanded) {
-          this._collapsible.style.maxHeight = expanded ? '' : '0px';
+        _openedChanged(opened) {
+          this._collapsible.style.maxHeight = opened ? '' : '0px';
         }
 
         _onToggleClick(e) {
-          this.expanded = !this.expanded;
+          this.opened = !this.opened;
         }
       }
 

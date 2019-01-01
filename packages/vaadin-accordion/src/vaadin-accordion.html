@@ -62,7 +62,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         static get properties() {
           return {
-            expanded: {
+            opened: {
               type: Number,
               value: 0,
               notify: true,
@@ -84,13 +84,13 @@ This program is available under Apache License Version 2.0, available at https:/
 
         static get observers() {
           return [
-            '_updateItems(items, expanded)'
+            '_updateItems(items, opened)'
           ];
         }
 
         constructor() {
           super();
-          this._boundUpdateExpanded = this._updateExpanded.bind(this);
+          this._boundUpdateOpened = this._updateOpened.bind(this);
         }
 
         get focused() {
@@ -116,7 +116,7 @@ This program is available under Apache License Version 2.0, available at https:/
             this._setItems(this._filterItems(Array.from(this.children)));
 
             this._filterItems(info.addedNodes).forEach(el => {
-              el.addEventListener('expanded-changed', this._boundUpdateExpanded);
+              el.addEventListener('opened-changed', this._boundUpdateOpened);
             });
           });
         }
@@ -125,11 +125,11 @@ This program is available under Apache License Version 2.0, available at https:/
           return array.filter(el => el instanceof AccordionPanelElement);
         }
 
-        _updateItems(items, expanded) {
+        _updateItems(items, opened) {
           if (items) {
-            const itemToExpand = items[expanded];
+            const itemToOpen = items[opened];
             items.forEach(item => {
-              item.expanded = item === itemToExpand;
+              item.opened = item === itemToOpen;
             });
           }
         }
@@ -194,7 +194,7 @@ This program is available under Apache License Version 2.0, available at https:/
           return -1;
         }
 
-        _updateExpanded(e) {
+        _updateOpened(e) {
           const target = this._filterItems(e.composedPath())[0];
           const idx = this.items.indexOf(target);
           if (e.detail.value) {
@@ -202,15 +202,15 @@ This program is available under Apache License Version 2.0, available at https:/
               return;
             }
 
-            this.expanded = idx;
+            this.opened = idx;
 
             this.items.forEach(item => {
-              if (item !== target && item.expanded) {
-                item.expanded = false;
+              if (item !== target && item.opened) {
+                item.opened = false;
               }
             });
-          } else if (!this.items.some(item => item.expanded)) {
-            this.expanded = null;
+          } else if (!this.items.some(item => item.opened)) {
+            this.opened = null;
           }
         }
       }

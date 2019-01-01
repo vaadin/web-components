@@ -180,41 +180,41 @@
         });
       });
 
-      describe('expanded', () => {
-        it('should expand the first panel by default', () => {
-          expect(accordion.expanded).to.equal(0);
-          expect(accordion.items[0].expanded).to.be.true;
+      describe('opened', () => {
+        it('should open the first panel by default', () => {
+          expect(accordion.opened).to.equal(0);
+          expect(accordion.items[0].opened).to.be.true;
         });
 
-        it('should update `expanded` to new index when other panel is expanded', () => {
+        it('should update `opened` to new index when other panel is opened', () => {
           getHeading(1).click();
-          expect(accordion.items[1].expanded).to.be.true;
-          expect(accordion.expanded).to.equal(1);
+          expect(accordion.items[1].opened).to.be.true;
+          expect(accordion.opened).to.equal(1);
         });
 
-        it('should collapse currently expanded panel when other one is expanded', () => {
+        it('should close currently opened panel when another one is opened', () => {
           getHeading(1).click();
-          expect(accordion.items[1].expanded).to.be.true;
-          expect(accordion.items[0].expanded).to.be.false;
+          expect(accordion.items[1].opened).to.be.true;
+          expect(accordion.items[0].opened).to.be.false;
         });
 
-        it('should set `expanded` to null when the expanded panel is collapsed', () => {
+        it('should set `opened` to null when the opened panel is closed', () => {
           getHeading(0).click();
-          expect(accordion.items[0].expanded).to.be.false;
-          expect(accordion.expanded).to.equal(null);
+          expect(accordion.items[0].opened).to.be.false;
+          expect(accordion.opened).to.equal(null);
         });
 
-        it('should collapse currently expanded panel when `expanded` set to null', () => {
-          accordion.expanded = null;
-          expect(accordion.items[0].expanded).to.be.false;
+        it('should close currently opened panel when `opened` set to null', () => {
+          accordion.opened = null;
+          expect(accordion.items[0].opened).to.be.false;
         });
 
-        it('should collapse the panel once other one is expanded', () => {
+        it('should not change opened state if panel has been removed', () => {
           const panel = accordion.items[1];
           accordion.removeChild(panel);
           accordion._observer.flush();
-          panel.expanded = true;
-          expect(accordion.expanded).to.equal(0);
+          panel.opened = true;
+          expect(accordion.opened).to.equal(0);
         });
       });
     });

@@ -62,47 +62,47 @@
         });
       });
 
-      describe('expanded', () => {
-        it('should update `expanded` on toggle button click', () => {
+      describe('opened', () => {
+        it('should update `opened` on toggle button click', () => {
           toggle.click();
-          expect(details.expanded).to.equal(true);
+          expect(details.opened).to.equal(true);
           toggle.click();
-          expect(details.expanded).to.equal(false);
+          expect(details.opened).to.equal(false);
         });
 
-        it('should hide the content when `expanded` is false', () => {
+        it('should hide the content when `opened` is false', () => {
           const style = getComputedStyle(content);
           expect(style.display).to.equal('none');
           expect(style.overflow).to.equal('hidden');
           expect(style.maxHeight).to.equal('0px');
         });
 
-        it('should show the content when `expanded` is true', () => {
-          details.expanded = true;
+        it('should show the content when `opened` is true', () => {
+          details.opened = true;
           const style = getComputedStyle(content);
           expect(style.display).to.equal('block');
           expect(style.overflow).to.equal('visible');
           expect(style.maxHeight).to.equal('none');
         });
 
-        it('should dispatch `expanded-changed` event when `expanded changes', () => {
+        it('should dispatch `opened-changed` event when `opened changes', () => {
           const spy = sinon.spy();
-          details.addEventListener('expanded-changed', spy);
+          details.addEventListener('opened-changed', spy);
           toggle.click();
           expect(spy).to.be.calledOnce;
           expect(spy.firstCall.args[0].detail).to.be.an('object');
           expect(spy.firstCall.args[0].detail.value).to.equal(true);
         });
 
-        it('should update aria-expanded on toggle button when `expanded` changes', () => {
+        it('should update aria-expanded on toggle button when `opened` changes', () => {
           expect(toggle.getAttribute('aria-expanded')).to.equal('false');
-          details.expanded = true;
+          details.opened = true;
           expect(toggle.getAttribute('aria-expanded')).to.equal('true');
         });
 
-        it('should update aria-hidden on the content when `expanded` changes', () => {
+        it('should update aria-hidden on the content when `opened` changes', () => {
           expect(content.getAttribute('aria-hidden')).to.equal('true');
-          details.expanded = true;
+          details.opened = true;
           expect(content.getAttribute('aria-hidden')).to.equal('false');
         });
       });

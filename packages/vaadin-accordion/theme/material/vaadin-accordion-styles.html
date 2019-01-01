@@ -4,7 +4,7 @@
 <dom-module id="material-accordion-panel" theme-for="vaadin-accordion-panel">
   <template>
     <style include="material-details">
-      :host(:not([expanded])) [part="header"]::after {
+      :host(:not([opened])) [part="header"]::after {
         content: "";
         position: absolute;
         bottom: -1px;
@@ -16,16 +16,15 @@
         background-color: var(--material-divider-color);
       }
 
-      :host([expanded]) [part="header"]::before,
-      :host([next]) [part="header"]::before {
+      :host([opened]) [part="header"]::before {
         opacity: 0;
       }
 
-      :host([expanded]:not(:first-child)) {
+      :host([opened]:not(:first-child)) {
         margin-top: 16px;
       }
 
-      :host([expanded]:not(:last-child)) {
+      :host([opened]:not(:last-child)) {
         margin-bottom: 16px;
       }
 
