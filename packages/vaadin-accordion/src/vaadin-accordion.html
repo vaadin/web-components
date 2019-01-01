@@ -41,10 +41,26 @@ This program is available under Apache License Version 2.0, available at https:/
       customElements.define(AccordionPanelElement.is, AccordionPanelElement);
 
       /**
-       * `<vaadin-accordion>` is a Web Component for expansible accordions.
+       * `<vaadin-accordion>` is a Web Component implementing accordion widget —
+       * a vertically stacked set of expansible panels. The component should be
+       * used as a wrapper for two or more `<vaadin-accordion-panel>` components.
+       *
+       * Panel headings function as controls that enable users to open (expand)
+       * or hide (collapse) their associated sections of content. The user can
+       * toggle panels by mouse click, Enter and Space keys.
+       *
+       * Only one panel can be opened at a time, opening a new one forces
+       * previous panel to close and hide its content.
        *
        * ```
-       * <vaadin-accordion></vaadin-accordion>
+       * <vaadin-accordion>
+       *   <vaadin-accordion-panel summary="Panel 1">
+       *     This panel is opened, so the text is visible by default.
+       *   </vaadin-accordion-panel>
+       *   <vaadin-accordion-panel summary="Panel 2">
+       *     After opening this panel, the first one becomes closed.
+       *   </vaadin-accordion-panel>
+       * </vaadin-accordion>
        * ```
        *
        * @memberof Vaadin
@@ -62,6 +78,11 @@ This program is available under Apache License Version 2.0, available at https:/
 
         static get properties() {
           return {
+            /**
+             * The index of currently opened panel. First panel is opened by
+             * default. Only one panel can be opened at the same time.
+             * Setting null or undefined closes all the accordion panels.
+             */
             opened: {
               type: Number,
               value: 0,
@@ -72,7 +93,7 @@ This program is available under Apache License Version 2.0, available at https:/
             /**
              * The list of `<vaadin-accordion-panel>` child elements.
              * It is populated from the elements passed to the light DOM,
-             * and updated dynamically when adding or removing items.
+             * and updated dynamically when adding or removing panels.
              */
             items: {
               type: Array,
@@ -93,10 +114,16 @@ This program is available under Apache License Version 2.0, available at https:/
           this._boundUpdateOpened = this._updateOpened.bind(this);
         }
 
+        /**
+         * @protected
+         */
         get focused() {
           return this.getRootNode().activeElement;
         }
 
+        /**
+         * @protected
+         */
         focus() {
           if (this._observer) {
             this._observer.flush();
