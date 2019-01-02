@@ -1,0 +1,45 @@
+<dom-module id="accordion-theme-variants-demos">
+  <template>
+    <style include="vaadin-component-demo-shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+
+    <h3>Small Size Details</h3>
+    <vaadin-demo-snippet id="accordion-theme-variants-demos-small">
+      <template preserve-content>
+        <vaadin-details summary="Small" theme="small">
+          Panel content
+        </vaadin-details>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Filled Details</h3>
+    <vaadin-demo-snippet id="accordion-theme-variants-demos-filled">
+      <template preserve-content>
+        <vaadin-details summary="Filled" theme="filled">
+          Panel content
+        </vaadin-details>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Small Size Filled Details</h3>
+    <vaadin-demo-snippet id="accordion-theme-variants-demos-small-filled">
+      <template preserve-content>
+        <vaadin-details summary="Small Filled" theme="small filled">
+          Panel content
+        </vaadin-details>
+      </template>
+    </vaadin-demo-snippet>
+
+  </template>
+  <script>
+    class AccordionThemeVariantsDemos extends DemoReadyEventEmitter(Polymer.Element) {
+      static get is() {
+        return 'accordion-theme-variants-demos';
+      }
+    }
+    customElements.define(AccordionThemeVariantsDemos.is, AccordionThemeVariantsDemos);
+  </script>
+</dom-module>

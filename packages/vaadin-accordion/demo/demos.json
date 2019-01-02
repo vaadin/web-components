@@ -11,5 +11,16 @@
       "image": ""
      }
   }
+  ,
+  {
+    "name": "Theme Variants",
+    "url": "accordion-theme-variants-demos",
+    "src": "accordion-theme-variants-demos.html",
+    "meta": {
+      "title": "Vaadin Accordion Theme Variants",
+      "description": "",
+      "image": ""
+    }
+  }
   ]
 }

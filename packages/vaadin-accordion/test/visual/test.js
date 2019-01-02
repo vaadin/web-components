@@ -33,4 +33,10 @@ gemini.suite('vaadin-accordion', function(rootSuite) {
     });
   });
 
+  gemini.suite(`details-tests-lumo-theme`, function(suite) {
+    suite
+      .setUrl(`/details-lumo-theme.html`)
+      .setCaptureElements('#details-tests')
+      .capture(`vaadin-details`);
+  });
 });

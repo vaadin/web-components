@@ -1,6 +1,7 @@
 <link rel="import" href="../../../vaadin-lumo-styles/color.html">
 <link rel="import" href="../../../vaadin-lumo-styles/font-icons.html">
 <link rel="import" href="../../../vaadin-lumo-styles/sizing.html">
+<link rel="import" href="../../../vaadin-lumo-styles/spacing.html">
 <link rel="import" href="../../../vaadin-lumo-styles/style.html">
 <link rel="import" href="../../../vaadin-lumo-styles/typography.html">
 
@@ -8,8 +9,10 @@
   <template>
     <style>
       :host {
+        margin: var(--lumo-space-xs) 0;
         font-family: var(--lumo-font-family);
         outline: none;
+        background-color: transparent;
       }
 
       [part="header"] {
@@ -26,7 +29,7 @@
         font-size: var(--lumo-font-size-m);
         font-weight: 500;
         color: var(--lumo-secondary-text-color);
-        background-color: var(--lumo-contrast-5pct);
+        background-color: inherit;
         border-radius: var(--lumo-border-radius);
         cursor: default;
         -webkit-tap-highlight-color: transparent;
@@ -39,7 +42,7 @@
       }
 
       [part="summary"] {
-        padding-left: var(--lumo-size-m);
+        padding-left: calc(1rem + var(--lumo-space-m));
       }
 
       [part="toggle"] {
@@ -51,7 +54,7 @@
         height: 1em;
         text-align: center;
         color: var(--lumo-contrast-50pct);
-        padding: calc(1em / 4);
+        padding: var(--lumo-space-xs);
         transform: translateY(-50%);
       }
 
@@ -82,7 +85,16 @@
       }
 
       [part="content"] {
-        padding: calc(var(--lumo-size-m) / 3);
+        padding: var(--lumo-space-xs) calc(var(--lumo-size-m) / 3) var(--lumo-space-s);
+      }
+
+      :host([theme~="filled"]) {
+        background-color: var(--lumo-contrast-5pct);
+        border-radius: var(--lumo-border-radius);
+      }
+
+      :host([theme~="small"]) [part="header"] {
+        height: var(--lumo-size-s);
       }
     </style>
   </template>
