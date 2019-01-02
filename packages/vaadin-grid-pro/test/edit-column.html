@@ -44,6 +44,24 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="template">
+    <template>
+      <vaadin-pro-grid>
+        <vaadin-pro-grid-edit-column path="name">
+          <template>[[item.name]]</template>
+          <template class="editor">
+            <input value="{{item.name::input}}">
+          </template>
+        </vaadin-pro-grid-edit-column>
+        <vaadin-pro-grid-edit-column path="age">
+          <template class="editor">
+            <input type="number" value="{{item.age::input}}">
+          </template>
+        </vaadin-pro-grid-edit-column>
+      </vaadin-grid>
+    </template>
+  </test-fixture>
+
   <script>
     function getItems() {
       return [{name: 'foo', age: 20}, {name: 'bar', age: 30}, {name: 'baz', age: 40}];
@@ -410,7 +428,7 @@
       });
 
       describe('template', () => {
-        let grid, column, firstCell, input;
+        let grid, column, cell, input;
 
         beforeEach(() => {
           grid = fixture('default');
@@ -418,42 +436,47 @@
           grid.items = getItems();
 
           flushGrid(grid);
-          firstCell = getContainerCell(grid.$.items, 0, 0);
+          cell = getContainerCell(grid.$.items, 0, 0);
         });
 
         it('should replace template and render text-field on editable cell click', () => {
-          dblclick(firstCell._content);
-          expect(firstCell._template).to.not.equal(column._bodyTemplate);
-          expect(getCellEditor(firstCell)).to.be.ok;
+          dblclick(cell._content);
+          expect(cell._template).to.be.not.ok;
+          expect(cell._renderer).to.be.ok;
+          expect(getCellEditor(cell)).to.be.ok;
         });
 
         it('should not call start edit on second dblclick if the cell is in edit mode', () => {
           const spy = sinon.spy(grid, '_startEdit');
-          dblclick(firstCell._content);
-          input = getCellEditor(firstCell);
+          dblclick(cell._content);
+          input = getCellEditor(cell);
           dblclick(input);
           expect(spy).to.be.calledOnce;
         });
 
         it('should replace template and render text-field on editable cell Enter', () => {
-          enter(firstCell);
-          expect(firstCell._template).to.not.equal(column._bodyTemplate);
-          expect(getCellEditor(firstCell)).to.be.ok;
+          enter(cell);
+          expect(cell._template).to.be.not.ok;
+          expect(cell._renderer).to.be.ok;
+          expect(getCellEditor(cell)).to.be.ok;
         });
 
         it('should replace template and render text-field on editable cell Space', () => {
-          space(firstCell);
-          expect(firstCell._template).to.not.equal(column._bodyTemplate);
-          expect(getCellEditor(firstCell)).to.be.ok;
+          space(cell);
+          expect(cell._template).to.be.not.ok;
+          expect(cell._renderer).to.be.ok;
+          expect(getCellEditor(cell)).to.be.ok;
         });
 
         it('should restore template and render updated content on edited cell Esc', () => {
-          enter(firstCell);
-          input = getCellEditor(firstCell);
+          enter(cell);
+          input = getCellEditor(cell);
           input.value = 'new';
           esc(input);
-          expect(firstCell._template).to.equal(column._bodyTemplate);
-          expect(firstCell._content.textContent).to.equal('0 new');
+          expect(cell._renderer).to.be.not.ok;
+          expect(cell._template).to.equal(column._bodyTemplate);
+          expect(getCellEditor(cell)).to.be.not.ok;
+          expect(cell._content.textContent).to.equal('0 new');
         });
       });
 
@@ -526,6 +549,49 @@
           grid._flushStopEdit();
           expect(cell._content.querySelector('input')).to.not.be.ok;
           expect(cell._content.textContent).to.equal('Foo');
+        });
+      });
+
+      describe('edit mode template', () => {
+        let grid, column, cell, input;
+
+        beforeEach(() => {
+          grid = fixture('template');
+          grid.items = getItems();
+          flushGrid(grid);
+        });
+
+        it('should stamp the edit mode template to cell when entering edit mode', () => {
+          column = grid.querySelector('[path="name"]');
+          cell = getContainerCell(grid.$.items, 0, 0);
+          dblclick(cell._content);
+          expect(cell._template).to.equal(column._editModeTemplate);
+          expect(cell._content.querySelector('input')).to.be.ok;
+        });
+
+        it('should restore the cell body template after edit mode exit', () => {
+          column = grid.querySelector('[path="name"]');
+          cell = getContainerCell(grid.$.items, 0, 0);
+          dblclick(cell._content);
+          input = cell._content.querySelector('input');
+          input.value = 'New';
+          esc(input);
+          expect(cell._template).to.equal(column._bodyTemplate);
+          expect(cell._content.textContent.trim()).to.equal('New');
+          expect(cell._content.querySelector('input')).to.not.be.ok;
+        });
+
+        it('should restore the cell path renderer after edit mode exit', () => {
+          column = grid.querySelector('[path="age"]');
+          cell = getContainerCell(grid.$.items, 0, 1);
+          dblclick(cell._content);
+          input = cell._content.querySelector('input');
+          input.value = '32';
+          esc(input);
+          expect(cell._renderer).to.be.ok;
+          expect(cell._template).to.be.not.ok;
+          expect(cell._content.textContent.trim()).to.equal('32');
+          expect(cell._content.querySelector('input')).to.not.be.ok;
         });
       });
 

@@ -183,6 +183,42 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Custom Edit Mode Template</h3>
+    <p>
+      The custom editor component can be also rendered for cell edit mode using <code>&lt;template&gt;</code>
+      element with the <code>editor</code> class name. The requirements for the custom editor component are
+      the same as when using <code>editModeRenderer</code>.
+    </p>
+    <vaadin-demo-snippet id="pro-grid-edit-column-demos-edit-mode-template">
+      <template preserve-content>
+        <vaadin-pro-grid>
+          <vaadin-grid-column path="name.first" header="First Name"></vaadin-grid-column>
+          <vaadin-grid-column path="name.last" header="Last name"></vaadin-grid-column>
+          <vaadin-pro-grid-edit-column path="email" header="Email (edit)" width="150px">
+            <template>[[item.email]]</template>
+            <template class="editor">
+              <input type="email" value="{{item.email::input}}">
+            </template>
+          </vaadin-pro-grid-edit-column>
+          <vaadin-pro-grid-edit-column path="location.zip" header="Zip code (edit)" text-align="end">
+            <template class="editor">
+              <input type="number" value="{{item.location.zip::input}}">
+            </template>
+          </vaadin-pro-grid-edit-column>
+        </vaadin-pro-grid>
+        <style>
+          input[type="email"] {
+            width: 100%;
+          }
+        </style>
+        <script>
+          window.addDemoReadyListener('#pro-grid-edit-column-demos-edit-mode-template', function(document) {
+            document.querySelector('vaadin-pro-grid').items = Vaadin.GridDemo.users;
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
   </template>
   <script>
     class ProGridEditColumnDemos extends DemoReadyEventEmitter(ProGridDemo(Polymer.Element)) {

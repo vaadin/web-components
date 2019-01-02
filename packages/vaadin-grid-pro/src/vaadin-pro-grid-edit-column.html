@@ -5,16 +5,11 @@ This program is available under Commercial Vaadin Add-On License 3.0 (CVALv3).
 See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete license.
 -->
 
+<link rel="import" href="../../polymer/lib/utils/flattened-nodes-observer.html">
 <link rel="import" href="../../vaadin-grid/src/vaadin-grid-column.html">
 <link rel="import" href="vaadin-pro-grid-edit-column-text-field.html">
 
 <dom-module id="vaadin-pro-grid-edit-column">
-  <template>
-    <template id="editModeTemplate">
-      <vaadin-pro-grid-edit-column-text-field></vaadin-pro-grid-edit-column-text-field>
-    </template>
-  </template>
-
   <script>
   (function() {
     /**
@@ -64,20 +59,14 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         };
       }
 
-      ready() {
-        super.ready();
+      constructor() {
+        super();
 
-        this.__editModeTemplate = this._prepareTemplatizer(this.$.editModeTemplate);
-        // needed to override the dataHost correctly in case internal template is used.
-        this.__editModeTemplate.templatizer.dataHost = this;
-        this.__editModeRenderer = this._getEditorRenderer();
-      }
+        this._editTemplateObserver = new Polymer.FlattenedNodesObserver(this, info => {
+          this._editModeTemplate = this._prepareEditModeTemplate();
+        });
 
-      /**
-       * Defines the editable cell renderer using `vaadin-pro-grid-edit-column-text-field`
-       */
-      _getEditorRenderer() {
-        return function(root, column, rowData) {
+        this.__editModeRenderer = function(root, column, rowData) {
           const cell = root.assignedSlot.parentNode;
           const grid = column._grid;
 
@@ -94,6 +83,51 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           }
           column._setCellEditValue(cell, grid._getItemValue(column, rowData));
         };
+      }
+
+      /** @protected */
+      connectedCallback() {
+        super.connectedCallback();
+
+        this._editTemplateObserver.flush();
+      }
+
+      /**
+       * Override body template preparation to take editor into account.
+       */
+      _prepareBodyTemplate() {
+        return this._prepareTemplatizer(this._findTemplate(false, false, false) || null);
+      }
+
+      /**
+       * Override template filtering to take editor into account.
+       */
+      _selectFirstTemplate(header = false, footer = false, editor = false) {
+        return Polymer.FlattenedNodesObserver.getFlattenedNodes(this)
+          .filter(node =>
+            node.localName === 'template'
+            && node.classList.contains('header') === header
+            && node.classList.contains('footer') === footer
+            && node.classList.contains('editor') === editor
+          )[0];
+      }
+
+      /**
+       * Override template search to take editor into account.
+       */
+      _findTemplate(header, footer, editor) {
+        const template = this._selectFirstTemplate(header, footer, editor);
+        if (template) {
+          if (this.dataHost) {
+            // set dataHost to the context where template has been defined
+            template._rootDataHost = this.dataHost._rootDataHost || this.dataHost;
+          }
+        }
+        return template;
+      }
+
+      _prepareEditModeTemplate() {
+        return this._prepareTemplatizer(this._findTemplate(false, false, true) || null, {});
       }
 
       _getEditorTagName(cell) {
@@ -124,23 +158,31 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       }
 
       _startCellEdit(cell, model) {
-        if (this._bodyTemplate) {
-          this.__savedTemplate = this._bodyTemplate;
-          this._stampTemplateToCell(cell, this.__editModeTemplate, model);
+        if (cell._template) {
+          cell.__savedTemplate = cell._template;
+          cell._template = undefined;
         } else {
           // fallback to the path renderer stored on the cell
-          this.__savedRenderer = this.renderer || cell._renderer;
+          cell.__savedRenderer = this.renderer || cell._renderer;
+          cell._renderer = undefined;
+        }
+
+        if (this._editModeTemplate) {
+          this._stampTemplateToCell(cell, this._editModeTemplate, model);
+        } else {
           this._stampRendererToCell(cell, this.editModeRenderer || this.__editModeRenderer, model);
         }
       }
 
       _stopCellEdit(cell, model) {
-        if (this.__savedTemplate) {
-          this._stampTemplateToCell(cell, this.__savedTemplate, model);
-          delete this.__savedTemplate;
-        } else if (this.__savedRenderer) {
-          this._stampRendererToCell(cell, this.__savedRenderer, model);
-          delete this.__savedRenderer;
+        if (cell.__savedTemplate) {
+          this._stampTemplateToCell(cell, cell.__savedTemplate, model);
+          cell._renderer = undefined;
+          cell.__savedTemplate = undefined;
+        } else if (cell.__savedRenderer) {
+          this._stampRendererToCell(cell, cell.__savedRenderer, model);
+          cell._template = undefined;
+          cell.__savedRenderer = undefined;
         }
       }
 
