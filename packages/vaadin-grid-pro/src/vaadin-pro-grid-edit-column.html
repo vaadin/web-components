@@ -6,6 +6,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 -->
 
 <link rel="import" href="../../polymer/lib/utils/flattened-nodes-observer.html">
+<link rel="import" href="../../polymer/lib/utils/path.html">
 <link rel="import" href="../../vaadin-grid/src/vaadin-grid-column.html">
 <link rel="import" href="vaadin-pro-grid-edit-column-text-field.html">
 
@@ -53,6 +54,14 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           editModeRenderer: Function,
 
           /**
+           * Path of the property used for the value of the editor component.
+           */
+          editorValuePath: {
+            type: String,
+            value: 'value'
+          },
+
+          /**
            * JS Path of the property in the item used for the editable content.
            */
           path: String
@@ -81,7 +90,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
               <${tagName}></${tagName}>
             `;
           }
-          column._setCellEditValue(cell, grid._getItemValue(column, rowData));
         };
       }
 
@@ -142,13 +150,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           cell._content.querySelector(this._getEditorTagName(cell));
       }
 
-      _getCellEditValue(cell) {
-        return this._getEditorComponent(cell).value;
-      }
-
-      _setCellEditValue(cell, value) {
-        const editor = this._getEditorComponent(cell);
-        editor.value = value;
+      _focusEditor(editor) {
         editor.focus();
         if (editor instanceof HTMLInputElement) {
           editor.select();
@@ -157,7 +159,11 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         }
       }
 
-      _startCellEdit(cell, model) {
+      _getEditorValue(editor) {
+        return Polymer.Path.get(editor, this.editorValuePath);
+      }
+
+      _renderEditor(cell, model) {
         if (cell._template) {
           cell.__savedTemplate = cell._template;
           cell._template = undefined;
@@ -174,7 +180,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         }
       }
 
-      _stopCellEdit(cell, model) {
+      _removeEditor(cell, model) {
         if (cell.__savedTemplate) {
           this._stampTemplateToCell(cell, cell.__savedTemplate, model);
           cell._renderer = undefined;
@@ -184,6 +190,20 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           cell._template = undefined;
           cell.__savedRenderer = undefined;
         }
+      }
+
+      _setEditorValue(editor, value) {
+        Polymer.Path.set(editor, this.editorValuePath, value);
+        editor.notifyPath && editor.notifyPath(this.editorValuePath, value);
+      }
+
+      _startCellEdit(cell, model) {
+        this._renderEditor(cell, model);
+        this._grid.notifyResize();
+        const editor = this._getEditorComponent(cell);
+        editor.addEventListener('blur', this._grid.__boundEditorBlur);
+        this._setEditorValue(editor, Polymer.Path.get(model.item, this.path));
+        this._focusEditor(editor);
       }
 
       _stampTemplateToCell(cell, template, model) {
@@ -201,6 +221,19 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         cell._content.innerHTML = '';
         cell._renderer = renderer;
         this.__runRenderer(renderer, cell, model);
+      }
+
+      _stopCellEdit(cell, model) {
+        const editor = this._getEditorComponent(cell);
+        let shouldResize = true;
+        if (editor) {
+          editor.removeEventListener('blur', this._grid.__boundEditorBlur);
+        } else {
+          // avoid notify resize of editor removed due to scroll
+          shouldResize = false;
+        }
+        this._removeEditor(cell, model);
+        shouldResize && this._grid.notifyResize();
       }
     }
 

@@ -62,6 +62,31 @@
     </template>
   </test-fixture>
 
+  <dom-module id="user-editor">
+    <template>
+      <input value="{{user.name::input}}">
+    </template>
+    <script>
+      customElements.whenDefined('vaadin-pro-grid-edit-column').then(() => {
+        customElements.define('user-editor', class extends Polymer.Element {
+          static get is() {
+            return 'user-editor';
+          }
+          static get properties() {
+            return {
+              user: {
+                type: Object,
+                value: () => {
+                  return {name: null};
+                }
+              }
+            };
+          }
+        });
+      });
+    </script>
+  </dom-module>
+
   <script>
     function getItems() {
       return [{name: 'foo', age: 20}, {name: 'bar', age: 30}, {name: 'baz', age: 40}];
@@ -481,7 +506,7 @@
       });
 
       describe('edit mode renderer', () => {
-        let grid, column, cell, input;
+        let grid, column, cell, editor;
 
         beforeEach(() => {
           grid = fixture('renderer');
@@ -493,15 +518,14 @@
 
         it('should call the edit mode renderer to cell when entering edit mode', () => {
           column.editModeRenderer = function(root, owner, model) {
-            root.innerHTML = '';
-            const input = document.createElement('input');
-            input.value = model.item.name;
-            root.appendChild(input);
+            root.innerHTML = '<input>';
           };
 
           dblclick(cell._content);
           expect(cell._renderer).to.equal(column.editModeRenderer);
-          expect(cell._content.querySelector('input')).to.be.ok;
+          editor = getCellEditor(cell);
+          expect(editor).to.be.ok;
+          expect(editor.value).to.be.equal(grid.items[0].name);
         });
 
         it('should call `focus()` on the custom editor component after entering the cell edit mode', () => {
@@ -510,7 +534,6 @@
           column.editModeRenderer = function(root, owner, model) {
             root.innerHTML = '';
             const input = document.createElement('input');
-            input.value = model.item.name;
             spy = sinon.spy(input, 'focus');
             root.appendChild(input);
           };
@@ -525,7 +548,6 @@
           column.editModeRenderer = function(root, owner, model) {
             root.innerHTML = '';
             const input = document.createElement('input');
-            input.value = model.item.name;
             spy = sinon.spy(input, 'select');
             root.appendChild(input);
           };
@@ -543,11 +565,11 @@
           };
 
           dblclick(cell._content);
-          input = cell._content.querySelector('input');
-          input.value = 'Foo';
-          input.dispatchEvent(new CustomEvent('blur', {bubbles: false}));
+          editor = getCellEditor(cell);
+          editor.value = 'Foo';
+          editor.dispatchEvent(new CustomEvent('blur', {bubbles: false}));
           grid._flushStopEdit();
-          expect(cell._content.querySelector('input')).to.not.be.ok;
+          expect(getCellEditor(cell)).to.not.be.ok;
           expect(cell._content.textContent).to.equal('Foo');
         });
       });
@@ -592,6 +614,38 @@
           expect(cell._template).to.be.not.ok;
           expect(cell._content.textContent.trim()).to.equal('32');
           expect(cell._content.querySelector('input')).to.not.be.ok;
+        });
+      });
+
+      describe('editorValuePath property', () => {
+        let grid, column, cell, editor;
+
+        beforeEach(() => {
+          grid = fixture('renderer');
+          column = grid.firstElementChild;
+          column.editorValuePath = 'user.name';
+          column.editModeRenderer = function(root, owner, model) {
+            root.innerHTML = '<user-editor>';
+          };
+          grid.items = getItems();
+          flushGrid(grid);
+          cell = getContainerCell(grid.$.items, 0, 0);
+        });
+
+        it('should map the cell value to valid path passed to `editorValuePath` value', () => {
+          dblclick(cell._content);
+          editor = getCellEditor(cell);
+          expect(editor).to.be.ok;
+          expect(editor.user.name).to.be.equal(grid.items[0].name);
+        });
+
+        it('should read the updated value based on `editorValuePath` after edit mode exit', () => {
+          dblclick(cell._content);
+          editor = getCellEditor(cell);
+          editor.set('user.name', 'New');
+          esc(editor);
+          expect(cell._content.textContent.trim()).to.equal('New');
+          expect(grid.items[0].name).to.equal('New');
         });
       });
 

@@ -6,6 +6,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 -->
 <link rel="import" href="../../polymer/lib/utils/async.html">
 <link rel="import" href="../../polymer/lib/utils/debounce.html">
+<link rel="import" href="../../polymer/lib/utils/path.html">
 
 <script>
   window.Vaadin = window.Vaadin || {};
@@ -86,10 +87,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       return Array.from(this.$.items.children).filter(el => el.index === index)[0];
     }
 
-    _getItemValue(column, model) {
-      return this.get(column.path, model.item);
-    }
-
     _isEditColumn(column) {
       return column.localName.toLowerCase() === 'vaadin-pro-grid-edit-column';
     }
@@ -160,13 +157,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       this.__edited = {cell, column, model};
       column._startCellEdit(cell, model);
 
-      this.notifyResize();
-
-      column._setCellEditValue(cell, this._getItemValue(column, model));
-
       this.addEventListener('item-property-changed', this.__boundItemPropertyChanged);
-      const editor = column._getEditorComponent(cell);
-      editor.addEventListener('blur', this.__boundEditorBlur);
     }
 
     _stopEdit() {
@@ -175,31 +166,29 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       }
       const {cell, column, model} = this.__edited;
 
-      const value = column._getCellEditValue(cell);
-      if (value !== this._getItemValue(column, model)) {
-        this.dispatchEvent(new CustomEvent('item-property-changed', {
-          detail: {
-            index: model.index,
-            item: model.item,
-            path: column.path,
-            value: value
-          },
-          bubbles: true,
-          cancelable: true,
-          composed: true
-        }));
-      }
-
       const editor = column._getEditorComponent(cell);
-      editor.removeEventListener('blur', this.__boundEditorBlur);
+      if (editor) {
+        const value = column._getEditorValue(editor);
+        if (value !== this.get(column.path, model.item)) {
+          this.dispatchEvent(new CustomEvent('item-property-changed', {
+            detail: {
+              index: model.index,
+              item: model.item,
+              path: column.path,
+              value: value
+            },
+            bubbles: true,
+            cancelable: true,
+            composed: true
+          }));
+        }
+      }
 
       column._stopCellEdit(cell, model);
 
       this.__edited = null;
 
       this.removeEventListener('item-property-changed', this.__boundItemPropertyChanged);
-
-      this.notifyResize();
     }
 
     _switchEditCell(e) {

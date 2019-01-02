@@ -135,39 +135,42 @@
 
     <h3>Custom Edit Mode Renderer</h3>
     <p>
-      The custom editor component can be rendered for cell edit mode using <code>editModeRenderer</code>.
-      The component must have a <code>value</code> property and be the first child of the edited cell content.
-      Also, it should be focusable (on blur event, edit mode is exited).
+      The custom editor component can be rendered for cell edit mode using <b><code>editModeRenderer</code></b>.
+      The component must be first child of the edited cell content, and should be focusable (grid will exit
+      cell edit mode on blur). If component is an <code>&lt;input&gt;</code>, it will be selected.
     </p>
     <p>
-      The demo below is an example of using native <code>&lt;input&gt;</code> elements with <code>email</code> and
-      <code>number</code> type. Grid edit mode styling does not apply to the custom editor components, but
-      you can change their appearance using CSS, same as for cell content in non-edit mode.
+      By default, cell value corresponding to the column <code>path</code> is mapped to the <code>value</code>
+      property of the editor component. You can use <b><code>editorValuePath</code></b> property of the column
+      element to map cell value to another property (or a sub-property).
+    </p>
+    <p>
+      The demo below is an example of using <code>&lt;input&gt;</code> element and
+      <code>&lt;vaadin-combo-box&gt;</code> component as cell editors. Grid edit mode styling does not apply
+      to the custom editor components, but you can use CSS, same as for cell content in non-edit mode.
     </p>
     <vaadin-demo-snippet id="pro-grid-edit-column-demos-edit-mode-renderer">
       <template preserve-content>
         <vaadin-pro-grid>
           <vaadin-grid-column path="name.first" header="First Name"></vaadin-grid-column>
           <vaadin-grid-column path="name.last" header="Last name"></vaadin-grid-column>
-          <vaadin-pro-grid-edit-column path="email" header="Email (edit)" width="150px"></vaadin-pro-grid-edit-column>
+          <vaadin-pro-grid-edit-column path="name.title" header="Title (edit)" editor-value-path="selectedItem"></vaadin-pro-grid-edit-column>
           <vaadin-pro-grid-edit-column path="location.zip" header="Zip code (edit)" text-align="end"></vaadin-pro-grid-edit-column>
         </vaadin-pro-grid>
         <script>
           window.addDemoReadyListener('#pro-grid-edit-column-demos-edit-mode-renderer', function(document) {
             const grid = document.querySelector('vaadin-pro-grid');
-            grid.querySelector('[path="email"]').editModeRenderer = function(root, column, rowData) {
+            grid.querySelector('[path="name.title"]').editModeRenderer = function(root, column, rowData) {
               root.innerHTML = '';
-              const input = window.document.createElement('input');
-              input.setAttribute('type', 'email');
-              input.value = rowData.item.email;
-              root.appendChild(input);
+              const combobox = window.document.createElement('vaadin-combo-box');
+              combobox.items = ['mr', 'mrs', 'ms'];
+              root.appendChild(combobox);
             };
 
             grid.querySelector('[path$="zip"]').editModeRenderer = function(root, column, rowData) {
               root.innerHTML = '';
               const input = window.document.createElement('input');
               input.setAttribute('type', 'number');
-              input.value = rowData.item.location.zip;
               root.appendChild(input);
             };
 

@@ -42,6 +42,7 @@
     "iron-test-helpers": "^2.0.0",
     "webcomponentsjs": "^1.0.0",
     "web-component-tester": "^6.1.5",
+    "vaadin-combo-box": "vaadin/vaadin-combo-box#^4.2.1",
     "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^2.2.0"
   },
   "resolutions": {
