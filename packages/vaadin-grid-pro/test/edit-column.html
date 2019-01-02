@@ -545,7 +545,7 @@
           dblclick(cell._content);
           input = cell._content.querySelector('input');
           input.value = 'Foo';
-          input.blur();
+          input.dispatchEvent(new CustomEvent('blur', {bubbles: false}));
           grid._flushStopEdit();
           expect(cell._content.querySelector('input')).to.not.be.ok;
           expect(cell._content.textContent).to.equal('Foo');
