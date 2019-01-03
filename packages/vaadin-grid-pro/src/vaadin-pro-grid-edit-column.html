@@ -8,6 +8,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 <link rel="import" href="../../polymer/lib/utils/flattened-nodes-observer.html">
 <link rel="import" href="../../polymer/lib/utils/path.html">
 <link rel="import" href="../../vaadin-grid/src/vaadin-grid-column.html">
+<link rel="import" href="vaadin-pro-grid-edit-column-checkbox.html">
 <link rel="import" href="vaadin-pro-grid-edit-column-text-field.html">
 
 <dom-module id="vaadin-pro-grid-edit-column">
@@ -52,6 +53,16 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
            *   - `rowData.selected` Selected state.
            */
           editModeRenderer: Function,
+
+          /**
+           * Type of the cell editor component to be rendered. Allowed values:
+           * - `text` (default) - renders a text field
+           * - `boolean` - renders a checkbox
+           */
+          editorType: {
+            type: String,
+            value: 'text'
+          },
 
           /**
            * Path of the property used for the value of the editor component.
@@ -141,13 +152,27 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       _getEditorTagName(cell) {
         return this._editModeTemplate || this.editModeRenderer ?
           this._getEditorComponent(cell).localName :
-          'vaadin-pro-grid-edit-column-text-field';
+          this._getTagNameByType();
       }
 
       _getEditorComponent(cell) {
         return this._editModeTemplate || this.editModeRenderer ?
           cell._content.firstElementChild :
           cell._content.querySelector(this._getEditorTagName(cell));
+      }
+
+      _getTagNameByType() {
+        let type;
+        switch (this.editorType) {
+          case 'boolean':
+            type = 'checkbox';
+            break;
+          case 'text':
+          default:
+            type = 'text-field';
+            break;
+        }
+        return `${this.constructor.is}-${type}`;
       }
 
       _focusEditor(editor) {
@@ -160,7 +185,8 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       }
 
       _getEditorValue(editor) {
-        return Polymer.Path.get(editor, this.editorValuePath);
+        const path = this.editorType === 'boolean' ? 'checked' : this.editorValuePath;
+        return Polymer.Path.get(editor, path);
       }
 
       _renderEditor(cell, model) {
@@ -193,8 +219,9 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       }
 
       _setEditorValue(editor, value) {
-        Polymer.Path.set(editor, this.editorValuePath, value);
-        editor.notifyPath && editor.notifyPath(this.editorValuePath, value);
+        const path = this.editorType === 'boolean' ? 'checked' : this.editorValuePath;
+        Polymer.Path.set(editor, path, value);
+        editor.notifyPath && editor.notifyPath(path, value);
       }
 
       _startCellEdit(cell, model) {

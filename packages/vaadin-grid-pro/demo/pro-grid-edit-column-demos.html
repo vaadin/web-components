@@ -133,6 +133,32 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Editor Type</h3>
+    <p>
+      The <code>editorType</code> property allows to configure column editor type.
+    </p>
+    <vaadin-demo-snippet id="pro-grid-edit-column-demos-editor-type-boolean">
+      <template preserve-content>
+        <vaadin-pro-grid>
+          <vaadin-grid-column path="name.first" header="First Name"></vaadin-grid-column>
+          <vaadin-grid-column path="name.last" header="Last name"></vaadin-grid-column>
+          <vaadin-pro-grid-edit-column path="married" header="Married (edit)" editor-type="boolean"></vaadin-pro-grid-edit-column>
+        </vaadin-pro-grid>
+        <script>
+          window.addDemoReadyListener('#pro-grid-edit-column-demos-editor-type-boolean', function(document) {
+            const grid = document.querySelector('vaadin-pro-grid');
+
+            // Assign an array of user objects as the pro grid's items
+            grid.items = Vaadin.GridDemo.users.map(item => {
+              const user = Object.assign({}, item);
+              user.married = item.name.title === 'mrs';
+              return user;
+            });
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
     <h3>Custom Edit Mode Renderer</h3>
     <p>
       The custom editor component can be rendered for cell edit mode using <b><code>editModeRenderer</code></b>.

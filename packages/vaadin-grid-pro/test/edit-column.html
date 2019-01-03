@@ -62,6 +62,18 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="editor-type">
+    <template>
+      <vaadin-pro-grid>
+        <vaadin-pro-grid-edit-column path="married"></vaadin-pro-grid-edit-column>
+        <vaadin-grid-column path="name"></vaadin-grid-column>
+        <vaadin-grid-column>
+          <template>[[item.married]]</template>
+        </vaadin-grid-column>
+      </vaadin-grid>
+    </template>
+  </test-fixture>
+
   <dom-module id="user-editor">
     <template>
       <input value="{{user.name::input}}">
@@ -89,7 +101,11 @@
 
   <script>
     function getItems() {
-      return [{name: 'foo', age: 20}, {name: 'bar', age: 30}, {name: 'baz', age: 40}];
+      return [
+        {name: 'foo', age: 20, married: true},
+        {name: 'bar', age: 30, married: false},
+        {name: 'baz', age: 40, married: false}
+      ];
     }
 
     function dblclick(target) {
@@ -646,6 +662,35 @@
           esc(editor);
           expect(cell._content.textContent.trim()).to.equal('New');
           expect(grid.items[0].name).to.equal('New');
+        });
+      });
+
+      describe('boolean editor type', () => {
+        let grid, cell, column, editor;
+
+        beforeEach(() => {
+          grid = fixture('editor-type');
+          grid.items = getItems();
+          column = grid.firstElementChild;
+          column.editorType = 'boolean';
+          flushGrid(grid);
+          cell = getContainerCell(grid.$.items, 0, 0);
+        });
+
+        it('should render the checkbox to cell in edit mode', () => {
+          dblclick(cell._content);
+          editor = column._getEditorComponent(cell);
+          expect(editor instanceof Vaadin.CheckboxElement).to.equal(true);
+          expect(editor.checked).to.be.equal(grid.items[0].married);
+        });
+
+        it('should update value from checkbox checked after edit mode exit', () => {
+          dblclick(cell._content);
+          editor = column._getEditorComponent(cell);
+          editor.click();
+          esc(editor);
+          expect(cell._content.textContent.trim()).to.equal('false');
+          expect(grid.items[0].married).to.equal(false);
         });
       });
 

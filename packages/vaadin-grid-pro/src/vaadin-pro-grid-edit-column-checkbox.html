@@ -1,0 +1,33 @@
+<!--
+@license
+Copyright (c) 2018 Vaadin Ltd.
+This program is available under Commercial Vaadin Add-On License 3.0 (CVALv3).
+See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete license.
+-->
+
+<link rel="import" href="../../vaadin-checkbox/src/vaadin-checkbox.html">
+
+<script>
+  (function() {
+    /**
+     * The cell editor checkbox element.
+     *
+     * ### Styling
+     *
+     * See [`<vaadin-checkbox>` documentation](https://github.com/vaadin/vaadin-checkbox/blob/master/src/vaadin-checkbox.html)
+     * for `<vaadin-checkbox>` parts.
+     *
+     * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+     *
+     * @memberof Vaadin
+     * @extends Vaadin.CheckboxElement
+     */
+    class ProGridEditColumnCheckboxElement extends Vaadin.CheckboxElement {
+      static get is() {
+        return 'vaadin-pro-grid-edit-column-checkbox';
+      }
+    }
+
+    customElements.define(ProGridEditColumnCheckboxElement.is, ProGridEditColumnCheckboxElement);
+  })();
+</script>
