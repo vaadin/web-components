@@ -228,7 +228,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         this._renderEditor(cell, model);
         this._grid.notifyResize();
         const editor = this._getEditorComponent(cell);
-        editor.addEventListener('blur', this._grid.__boundEditorBlur);
+        editor.addEventListener('focusout', this._grid.__boundEditorFocusOut);
         this._setEditorValue(editor, Polymer.Path.get(model.item, this.path));
         this._focusEditor(editor);
       }
@@ -254,7 +254,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         const editor = this._getEditorComponent(cell);
         let shouldResize = true;
         if (editor) {
-          editor.removeEventListener('blur', this._grid.__boundEditorBlur);
+          editor.removeEventListener('focusout', this._grid.__boundEditorFocusOut);
         } else {
           // avoid notify resize of editor removed due to scroll
           shouldResize = false;

@@ -572,7 +572,7 @@
           expect(spy).to.be.calledOnce;
         });
 
-        it('should exit the edit mode on custom editor component blur event', () => {
+        it('should exit the edit mode on custom editor component focusout event', () => {
           column.editModeRenderer = function(root, owner, model) {
             root.innerHTML = '';
             const input = document.createElement('input');
@@ -583,7 +583,7 @@
           dblclick(cell._content);
           editor = getCellEditor(cell);
           editor.value = 'Foo';
-          editor.dispatchEvent(new CustomEvent('blur', {bubbles: false}));
+          editor.dispatchEvent(new CustomEvent('focusout', {bubbles: true, composed: true}));
           grid._flushStopEdit();
           expect(getCellEditor(cell)).to.not.be.ok;
           expect(cell._content.textContent).to.equal('Foo');

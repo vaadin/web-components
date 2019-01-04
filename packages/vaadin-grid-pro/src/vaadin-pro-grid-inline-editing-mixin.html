@@ -44,7 +44,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
     constructor() {
       super();
       this.__boundItemPropertyChanged = this._onItemPropertyChanged.bind(this);
-      this.__boundEditorBlur = this._onEditorBlur.bind(this);
+      this.__boundEditorFocusOut = this._onEditorFocusOut.bind(this);
     }
 
     ready() {
@@ -139,8 +139,8 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       }
     }
 
-    _onEditorBlur() {
-      // schedule stop on editor component blur
+    _onEditorFocusOut() {
+      // schedule stop on editor component focusout
       this._debouncerStopEdit = Polymer.Debouncer.debounce(
         this._debouncerStopEdit,
         Polymer.Async.timeOut.after(200),
@@ -148,7 +148,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
     }
 
     _startEdit(cell, column) {
-      // cancel debouncer enqueued on blur
+      // cancel debouncer enqueued on focusout
       this._cancelStopEdit();
 
       this._scrollHorizontallyToCell(cell);
