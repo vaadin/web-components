@@ -1,4 +1,4 @@
-<dom-module id="element-basic-demos">
+<dom-module id="custom-field-basic-demos">
   <template>
     <style include="vaadin-component-demo-shared-styles">
       :host {
@@ -8,11 +8,11 @@
 
 
     <h3>Sample example</h3>
-    <vaadin-demo-snippet id="element-basic-demos-sample-example" when-defined="vaadin-custom-field">
+    <vaadin-demo-snippet id="custom-field-basic-demos-sample-example" when-defined="vaadin-custom-field">
       <template preserve-content>
         <vaadin-custom-field></vaadin-custom-field>
         <script>
-          window.addDemoReadyListener('#element-basic-demos-sample-example', function(document) {
+          window.addDemoReadyListener('#custom-field-basic-demos-sample-example', function(document) {
             const element = document.querySelector('vaadin-custom-field');
             element.textContent = 'Foobar';
           });
@@ -22,11 +22,11 @@
 
   </template>
   <script>
-    class ElementBasicDemos extends DemoReadyEventEmitter(ElementDemo(Polymer.Element)) {
+    class CustomFieldBasicDemos extends DemoReadyEventEmitter(CustomFieldDemo(Polymer.Element)) {
       static get is() {
-        return 'element-basic-demos';
+        return 'custom-field-basic-demos';
       }
     }
-    customElements.define(ElementBasicDemos.is, ElementBasicDemos);
+    customElements.define(CustomFieldBasicDemos.is, CustomFieldBasicDemos);
   </script>
 </dom-module>
