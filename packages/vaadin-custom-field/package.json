@@ -1,0 +1,34 @@
+{
+  "name": "@vaadin/vaadin-element",
+  "version": "0.1.0",
+  "description": "vaadin-element",
+  "main": "vaadin-element.html",
+  "repository": "vaadin/vaadin-element",
+  "keywords": [
+    "Vaadin",
+    "vaadin-element",
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
+  "author": "Vaadin Ltd",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/vaadin/vaadin-element/issues"
+  },
+  "homepage": "https://vaadin.com/components",
+  "files": [
+    "vaadin-*.js",
+    "src",
+    "theme"
+  ],
+  "scripts": {
+    "test": "wct",
+    "prestart": "polymer analyze vaadin-* > analysis.json",
+    "start": "polymer serve --open",
+    "preversion": "gulp version:update"
+  },
+  "devDependencies": {
+    "@vaadin/vaadin-component-dev-dependencies": "^1.0.0"
+  }
+}
