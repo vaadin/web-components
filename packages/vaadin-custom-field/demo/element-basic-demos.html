@@ -8,12 +8,12 @@
 
 
     <h3>Sample example</h3>
-    <vaadin-demo-snippet id="element-basic-demos-sample-example" when-defined="vaadin-element">
+    <vaadin-demo-snippet id="element-basic-demos-sample-example" when-defined="vaadin-custom-field">
       <template preserve-content>
-        <vaadin-element></vaadin-element>
+        <vaadin-custom-field></vaadin-custom-field>
         <script>
           window.addDemoReadyListener('#element-basic-demos-sample-example', function(document) {
-            const element = document.querySelector('vaadin-element');
+            const element = document.querySelector('vaadin-custom-field');
             element.textContent = 'Foobar';
           });
         </script>

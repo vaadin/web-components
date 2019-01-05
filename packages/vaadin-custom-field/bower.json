@@ -1,17 +1,17 @@
 {
-  "name": "vaadin-element",
+  "name": "vaadin-custom-field",
   "homepage": "https://vaadin.com/components",
   "authors": [
     "Vaadin Ltd"
   ],
-  "description": "vaadin-element",
+  "description": "vaadin-custom-field",
   "main": [
-    "vaadin-element.html",
-    "theme/material/vaadin-element.html"
+    "vaadin-custom-field.html",
+    "theme/material/vaadin-custom-field.html"
   ],
   "keywords": [
     "Vaadin",
-    "vaadin-element",
+    "vaadin-custom-field",
     "web-components",
     "web-component",
     "polymer"

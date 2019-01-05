@@ -6,16 +6,16 @@
   <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
   <script>
     const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
-    document.write('<link rel="import" href="../../theme/' + theme + '/vaadin-element.html">');
+    document.write('<link rel="import" href="../../theme/' + theme + '/vaadin-custom-field.html">');
   </script>
 </head>
 
 <body>
 
   <span id="default-tests">
-    <vaadin-element>
+    <vaadin-custom-field>
       <button>Go Vaadin!</button>
-    </vaadin-element>
+    </vaadin-custom-field>
   </span>
 
 </body>
