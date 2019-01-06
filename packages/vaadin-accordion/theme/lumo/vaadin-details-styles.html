@@ -41,21 +41,16 @@
         box-shadow: 0 0 0 2px var(--lumo-primary-color-50pct);
       }
 
-      [part="summary"] {
-        padding-left: calc(1rem + var(--lumo-space-m));
-      }
-
       [part="toggle"] {
-        position: absolute;
-        top: 50%;
-        font-size: 1.5em;
+        display: inline-block;
+        vertical-align: middle;
+        box-sizing: border-box;
+        margin-left: -4px;
+        margin-right: var(--lumo-space-xs);
+        font-size: var(--lumo-icon-size-s);
         line-height: 1;
-        width: 1em;
-        height: 1em;
-        text-align: center;
         color: var(--lumo-contrast-50pct);
-        padding: var(--lumo-space-xs);
-        transform: translateY(-50%);
+        text-align: center;
       }
 
       :host([disabled]) [part="header"],
@@ -64,7 +59,8 @@
       }
 
       @media (hover: hover) {
-        :host(:not([disabled]):hover) [part="toggle"] {
+        :host(:not([disabled])) [part="header"]:hover,
+        :host(:not([disabled])) [part="header"]:hover [part="toggle"] {
           color: var(--lumo-contrast-80pct);
         }
       }
@@ -72,7 +68,9 @@
       [part="toggle"]::before {
         font-family: "lumo-icons";
         display: inline-block;
-        height: 100%;
+        width: var(--lumo-icon-size-s);
+        height: var(--lumo-icon-size-s);
+        line-height: var(--lumo-icon-size-s);
       }
 
       :host(:not([opened])) [part="toggle"]::before {
@@ -84,8 +82,15 @@
         transform: rotate(90deg);
       }
 
+      [part="summary"] {
+        display: inline-block;
+        vertical-align: middle;
+      }
+
       [part="content"] {
-        padding: var(--lumo-space-xs) calc(var(--lumo-size-m) / 3) var(--lumo-space-s);
+        padding: var(--lumo-space-xs) 0 var(--lumo-space-s);
+        font-size: var(--lumo-font-size-m);
+        line-height: var(--lumo-line-height-m);
       }
 
       :host([theme~="filled"]) {
@@ -93,8 +98,27 @@
         border-radius: var(--lumo-border-radius);
       }
 
+      :host([theme~="filled"]) [part="header"] {
+        padding-left: var(--lumo-space-s);
+        padding-right: var(--lumo-space-s);
+      }
+
+      :host([theme~="filled"]) [part="content"] {
+        padding-left: var(--lumo-space-m);
+        padding-right: var(--lumo-space-m);
+      }
+
       :host([theme~="small"]) [part="header"] {
         height: var(--lumo-size-s);
+      }
+
+      :host([theme~="small"]) [part="summary"],
+      :host([theme~="small"]) [part="content"] {
+        font-size: var(--lumo-font-size-s);
+      }
+
+      :host([theme~="small"]) [part="toggle"] {
+        margin-right: calc(var(--lumo-space-xs) / 2);
       }
     </style>
   </template>
