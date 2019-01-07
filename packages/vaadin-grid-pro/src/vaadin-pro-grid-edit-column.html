@@ -9,6 +9,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 <link rel="import" href="../../polymer/lib/utils/path.html">
 <link rel="import" href="../../vaadin-grid/src/vaadin-grid-column.html">
 <link rel="import" href="vaadin-pro-grid-edit-column-checkbox.html">
+<link rel="import" href="vaadin-pro-grid-edit-column-select.html">
 <link rel="import" href="vaadin-pro-grid-edit-column-text-field.html">
 
 <dom-module id="vaadin-pro-grid-edit-column">
@@ -55,9 +56,19 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           editModeRenderer: Function,
 
           /**
+           * The list of options which should be passed to cell editor component.
+           * Used with the `select` editor type, to provide a list of items.
+           */
+          editorOptions: {
+            type: Array,
+            value: () => []
+          },
+
+          /**
            * Type of the cell editor component to be rendered. Allowed values:
            * - `text` (default) - renders a text field
            * - `boolean` - renders a checkbox
+           * - `select` - renders a select with a list of items passed as `editorOptions`
            */
           editorType: {
             type: String,
@@ -167,6 +178,9 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           case 'boolean':
             type = 'checkbox';
             break;
+          case 'select':
+            type = 'select-wrapper';
+            break;
           case 'text':
           default:
             type = 'text-field';
@@ -218,6 +232,12 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         }
       }
 
+      _setEditorOptions(editor) {
+        if (this.editorOptions && this.editorOptions.length) {
+          editor.options = this.editorOptions;
+        }
+      }
+
       _setEditorValue(editor, value) {
         const path = this.editorType === 'boolean' ? 'checked' : this.editorValuePath;
         Polymer.Path.set(editor, path, value);
@@ -229,7 +249,9 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         this._grid.notifyResize();
         const editor = this._getEditorComponent(cell);
         editor.addEventListener('focusout', this._grid.__boundEditorFocusOut);
+        this._setEditorOptions(editor);
         this._setEditorValue(editor, Polymer.Path.get(model.item, this.path));
+        editor._grid = this._grid;
         this._focusEditor(editor);
       }
 

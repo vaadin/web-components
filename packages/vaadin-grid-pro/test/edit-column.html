@@ -66,6 +66,7 @@
     <template>
       <vaadin-pro-grid>
         <vaadin-pro-grid-edit-column path="married"></vaadin-pro-grid-edit-column>
+        <vaadin-pro-grid-edit-column path="title"></vaadin-pro-grid-edit-column>
         <vaadin-grid-column path="name"></vaadin-grid-column>
         <vaadin-grid-column>
           <template>[[item.married]]</template>
@@ -102,14 +103,22 @@
   <script>
     function getItems() {
       return [
-        {name: 'foo', age: 20, married: true},
-        {name: 'bar', age: 30, married: false},
-        {name: 'baz', age: 40, married: false}
+        {name: 'foo', age: 20, married: true, title: 'mrs'},
+        {name: 'bar', age: 30, married: false, title: 'ms'},
+        {name: 'baz', age: 40, married: false, title: 'mr'}
       ];
     }
 
     function dblclick(target) {
       target.dispatchEvent(new CustomEvent('dblclick', {bubbles: true, composed: true}));
+    }
+
+    function up(target) {
+      MockInteractions.keyDownOn(target, 38, [], 'ArrowUp');
+    }
+
+    function down(target) {
+      MockInteractions.keyDownOn(target, 40, [], 'ArrowDown');
     }
 
     function tab(target) {
@@ -691,6 +700,116 @@
           esc(editor);
           expect(cell._content.textContent.trim()).to.equal('false');
           expect(grid.items[0].married).to.equal(false);
+        });
+      });
+
+      describe('select editor type', () => {
+        let grid, cell, column, editor, select;
+
+        beforeEach(() => {
+          grid = fixture('editor-type');
+          grid.items = getItems();
+          column = grid.querySelector('[path="title"]');
+          column.editorType = 'select';
+          column.editorOptions = ['mr', 'mrs', 'ms'];
+          flushGrid(grid);
+          cell = getContainerCell(grid.$.items, 0, 1);
+        });
+
+        it('should render the select to cell in edit mode', () => {
+          dblclick(cell._content);
+          select = getCellEditor(cell)._select;
+          expect(select instanceof Vaadin.SelectElement).to.equal(true);
+          expect(select.value).to.be.equal('mrs');
+        });
+
+        it('should open the select and stop focusout on editor click', done => {
+          enter(cell._content);
+          editor = getCellEditor(cell);
+          select = editor._select;
+
+          Polymer.RenderStatus.afterNextRender(select, () => {
+            select.focusElement.click();
+            const evt = new CustomEvent('focusout', {bubbles: true, composed: true});
+            evt.relatedTarget = editor._overlay.querySelector('vaadin-item');
+            select.dispatchEvent(evt);
+            grid._flushStopEdit();
+            expect(select.opened).to.equal(true);
+            done();
+          });
+        });
+
+        it('should close the select and exit edit mode on outside click', done => {
+          enter(cell._content);
+          editor = getCellEditor(cell);
+          select = editor._select;
+
+          Polymer.RenderStatus.afterNextRender(select, () => {
+            select.focusElement.click();
+            document.body.click();
+            expect(select.opened).to.equal(false);
+            done();
+          });
+        });
+
+        it('should open the select on enter key', done => {
+          enter(cell._content);
+          select = getCellEditor(cell)._select;
+
+          Polymer.RenderStatus.afterNextRender(select, () => {
+            enter(select.focusElement);
+            expect(select.opened).to.equal(true);
+            done();
+          });
+        });
+
+        it('should open the select on space key', done => {
+          enter(cell._content);
+          select = getCellEditor(cell)._select;
+
+          Polymer.RenderStatus.afterNextRender(select, () => {
+            space(select.focusElement);
+            expect(select.opened).to.equal(true);
+            done();
+          });
+        });
+
+        it('should open the select on arrow down key', done => {
+          enter(cell._content);
+          select = getCellEditor(cell)._select;
+
+          Polymer.RenderStatus.afterNextRender(select, () => {
+            down(select.focusElement);
+            expect(select.opened).to.equal(true);
+            done();
+          });
+        });
+
+        it('should open the select on arrow up key', done => {
+          enter(cell._content);
+          select = getCellEditor(cell)._select;
+
+          Polymer.RenderStatus.afterNextRender(select, () => {
+            up(select.focusElement);
+            expect(select.opened).to.equal(true);
+            done();
+          });
+        });
+
+        it('should update value from selected one after edit mode exit', done => {
+          dblclick(cell._content);
+          editor = getCellEditor(cell);
+          select = editor._select;
+
+          Polymer.RenderStatus.afterNextRender(select, () => {
+            const item = editor._overlay.querySelector('vaadin-item');
+            const value = item.textContent;
+            item.click();
+            esc(select);
+            expect(column._getEditorComponent(cell)).to.not.be.ok;
+            expect(cell._content.textContent).to.equal(value);
+            done();
+          });
         });
       });
 

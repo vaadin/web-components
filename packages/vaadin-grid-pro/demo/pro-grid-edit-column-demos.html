@@ -133,23 +133,54 @@
       </template>
     </vaadin-demo-snippet>
 
-    <h3>Editor Type</h3>
+    <h3>Editor Type and Options</h3>
     <p>
-      The <code>editorType</code> property allows to configure column editor type.
+      The <code>editorType</code> property allows to configure column editor type. The following types are supported:
     </p>
-    <vaadin-demo-snippet id="pro-grid-edit-column-demos-editor-type-boolean">
+    <ul>
+      <li><code>text</code> - default type, renders a <code>&lt;vaadin-text-field&gt;</code> component</li>
+      <li><code>boolean</code> - renders a <code>&lt;vaadin-checkbox&gt;</code> component</li>
+      <li><code>select</code> - renders a <code>&lt;vaadin-select&gt;</code> component</li>
+    </ul>
+    <p>
+      The <code>editorOptions</code> property is used to pass additional data to the component, especially the list
+      of options to be rendered as <code>&lt;vaadin-item&gt;</code> components in the select.
+    </p>
+    <vaadin-demo-snippet id="pro-grid-edit-column-demos-editor-type">
       <template preserve-content>
         <vaadin-pro-grid>
           <vaadin-grid-column path="name.first" header="First Name"></vaadin-grid-column>
           <vaadin-grid-column path="name.last" header="Last name"></vaadin-grid-column>
+          <vaadin-pro-grid-edit-column path="name.title" header="Title (edit)" editor-type="select"></vaadin-pro-grid-edit-column>
           <vaadin-pro-grid-edit-column path="married" header="Married (edit)" editor-type="boolean"></vaadin-pro-grid-edit-column>
         </vaadin-pro-grid>
         <script>
-          window.addDemoReadyListener('#pro-grid-edit-column-demos-editor-type-boolean', function(document) {
+          window.addDemoReadyListener('#pro-grid-edit-column-demos-editor-type', function(document) {
             const grid = document.querySelector('vaadin-pro-grid');
 
+            // set the editor options for select column type
+            grid.querySelector('[path="name.title"]').editorOptions = ['mr', 'mrs', 'ms'];
+
+            grid.addEventListener('item-property-changed', function(event) {
+              const item = event.detail.item;
+              const value = event.detail.value;
+
+              switch (event.detail.path) {
+                case 'name.title':
+                  if (['mrs', 'ms'].indexOf(value) > -1) {
+                    grid.set('married', (value === 'mrs'), item);
+                  }
+                  break;
+                case 'married':
+                  if (['mrs', 'ms'].indexOf(item.name.title) > -1) {
+                    grid.set('name.title', (value ? 'mrs' : 'ms'), item);
+                  }
+                  break;
+              }
+            });
+
             // Assign an array of user objects as the pro grid's items
-            grid.items = Vaadin.GridDemo.users.map(item => {
+            grid.items = Vaadin.GridDemo.users.map(function(item) {
               const user = Object.assign({}, item);
               user.married = item.name.title === 'mrs';
               return user;

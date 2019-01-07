@@ -26,6 +26,11 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       static get is() {
         return 'vaadin-pro-grid-edit-column-text-field';
       }
+
+      ready() {
+        super.ready();
+        this.setAttribute('theme', 'pro-grid-editor');
+      }
     }
 
     customElements.define(ProGridEditColumnTextFieldElement.is, ProGridEditColumnTextFieldElement);

@@ -6,7 +6,7 @@
 <dom-module id="lumo-pro-grid-edit-column-text-field" theme-for="vaadin-pro-grid-edit-column-text-field">
   <template>
     <style include="lumo-text-field">
-      :host {
+      :host([theme~="pro-grid-editor"]) {
         position: absolute;
         top: 0;
         left: 0;
@@ -20,13 +20,12 @@
         box-shadow: inset 0 0 0 2px var(--lumo-primary-color-50pct);
       }
 
-      [part="input-field"] {
+      :host([theme~="pro-grid-editor"]) [part="input-field"] {
         padding: 0;
         border-radius: 0;
       }
 
-      /* FIXME(web-padawan): increase specificity for ShadyCSS */
-      :host [part="input-field"] [part="value"] {
+      :host([theme~="pro-grid-editor"]) [part="value"] {
         padding: 0 var(--lumo-space-m);
         font-size: var(--lumo-font-size-m);
       }
