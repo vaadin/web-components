@@ -531,6 +531,10 @@ This program is available under Apache License Version 2.0, available at https:/
     _onFocus() {
       if (this.autoselect) {
         this.focusElement.select();
+        // iOS 9 workaround: https://stackoverflow.com/a/7436574
+        setTimeout(() => {
+          this.focusElement.setSelectionRange(0, 9999);
+        });
       }
     }
 

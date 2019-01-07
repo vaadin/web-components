@@ -222,17 +222,23 @@
             expect(textField.autoselect).to.be.false;
           });
 
-          it('should not select content on focus when autoselect is false', function() {
+          it('should not select content on focus when autoselect is false', function(done) {
             textField.value = '123';
             textField.focusElement.dispatchEvent(new CustomEvent('focus', {bubbles: false}));
-            expect(textField.focusElement.selectionEnd - textField.focusElement.selectionStart).to.equal(0);
+            setTimeout(() => {
+              expect(textField.focusElement.selectionEnd - textField.focusElement.selectionStart).to.equal(0);
+              done();
+            }, 1);
           });
 
-          it('should select content on focus when autoselect is true', function() {
+          it('should select content on focus when autoselect is true', function(done) {
             textField.value = '123';
             textField.autoselect = true;
             textField.focusElement.dispatchEvent(new CustomEvent('focus', {bubbles: false}));
-            expect(textField.focusElement.selectionEnd - textField.focusElement.selectionStart).to.equal(3);
+            setTimeout(() => {
+              expect(textField.focusElement.selectionEnd - textField.focusElement.selectionStart).to.equal(3);
+              done();
+            }, 1);
           });
         });
 
