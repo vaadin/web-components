@@ -163,6 +163,14 @@ This program is available under Apache License Version 2.0, available at https:/
         },
 
         /**
+         * Specify that the value should be automatically selected when the field gains focus.
+         */
+        autoselect: {
+          type: Boolean,
+          value: false
+        },
+
+        /**
          * Set to true to display the clear icon which clears the input.
          */
         clearButtonVisible: {
@@ -463,12 +471,14 @@ This program is available under Apache License Version 2.0, available at https:/
       node.addEventListener('input', this._boundOnInput);
       node.addEventListener('change', this._boundOnChange);
       node.addEventListener('blur', this._boundOnBlur);
+      node.addEventListener('focus', this._boundOnFocus);
     }
 
     _removeInputListeners(node) {
       node.removeEventListener('input', this._boundOnInput);
       node.removeEventListener('change', this._boundOnChange);
       node.removeEventListener('blur', this._boundOnBlur);
+      node.removeEventListener('focus', this._boundOnFocus);
     }
 
     ready() {
@@ -477,6 +487,7 @@ This program is available under Apache License Version 2.0, available at https:/
       this._boundOnInput = this._onInput.bind(this);
       this._boundOnChange = this._onChange.bind(this);
       this._boundOnBlur = this.validate.bind(this);
+      this._boundOnFocus = this._onFocus.bind(this);
 
       const defaultInput = this.shadowRoot.querySelector('[part="value"]');
       this._slottedInput = this.querySelector(`${this._slottedTagName}[slot="${this._slottedTagName}"]`);
@@ -515,6 +526,12 @@ This program is available under Apache License Version 2.0, available at https:/
 
     clear() {
       this.value = '';
+    }
+
+    _onFocus() {
+      if (this.autoselect) {
+        this.focusElement.select();
+      }
     }
 
     _onClearButtonClick(e) {
