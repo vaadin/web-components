@@ -110,11 +110,11 @@ To use the Material theme, import the correspondent file from the `theme/materia
   `vaadin-split-layout.html`
 
 
-## Running demos and tests in browser
+## Running demos and tests in a browser
 
 1. Fork the `vaadin-split-layout` repository and clone it locally.
 
-1. Make sure you have [npm](https://www.npmjs.com/) installed.
+1. Make sure you have [npm](https://www.npmjs.com/) and [Bower](https://bower.io) installed.
 
 1. When in the `vaadin-split-layout` directory, run `npm install` and then `polymer install --variants` to install dependencies.
 
