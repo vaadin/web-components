@@ -6,24 +6,19 @@
 # vaadin-control-state-mixin
 A mixin which adds `focused` and `focus-ring` states to an element.
 
-## Contributing
+## Running tests in browser
 
 1. Fork the `vaadin-control-state-mixin` repository and clone it locally.
 
-1. Make sure you have [npm](https://www.npmjs.com/) installed.
+1. Make sure you have [npm](https://www.npmjs.com/) and [Bower](https://bower.io) installed.
 
-1. When in the `vaadin-control-state-mixin` directory, run `npm install` to install dependencies.
+1. When in the `vaadin-control-state-mixin` directory, run `npm install` and then `bower install` to install dependencies.
 
+1. Make sure you have [polymer-cli](https://www.npmjs.com/package/polymer-cli) installed globally: `npm i -g polymer-cli`.
 
-## Running tests in browser
+1. Run `npm start`.
 
-1. Install [polyserve](https://www.npmjs.com/package/polyserve): `npm install -g polyserve`
-
-1. When in the `vaadin-control-state-mixin` directory, run `polyserve --open`, browser will automatically open the component API documentation.
-
-1. You can also open in-browser tests by adding **test** to the URL, for example:
-
-  - http://127.0.0.1:8080/components/vaadin-control-state-mixin/test/index.html
+1. Navigate to http://127.0.0.1:3000/components/vaadin-control-state-mixin/test/index.html
 
 
 ## Running tests from the command line

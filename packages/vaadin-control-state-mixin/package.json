@@ -18,6 +18,7 @@
   },
   "homepage": "https://vaadin.com/elements",
   "scripts": {
+    "start": "polymer serve --port 3000",
     "test": "wct"
   },
   "devDependencies": {
