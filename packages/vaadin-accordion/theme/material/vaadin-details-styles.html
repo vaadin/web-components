@@ -13,21 +13,19 @@
       }
 
       [part="header"] {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
         width: 100%;
         position: relative;
-        text-align: left;
-        border: none;
         outline: none;
-        box-shadow: none;
         min-height: 48px;
-        margin: 0;
         padding: 0 24px;
         box-sizing: border-box;
         font-weight: 500;
         font-size: var(--material-small-font-size);
         background-color: var(--material-background-color);
         color: var(--material-body-text-color);
-        cursor: default;
         -webkit-tap-highlight-color: transparent;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
@@ -47,10 +45,9 @@
       }
 
       [part="toggle"] {
-        position: absolute;
-        top: 50%;
-        right: 8px;
-        transform: translateY(-50%);
+        position: relative;
+        order: 1;
+        margin-right: -8px;
         width: 24px;
         height: 24px;
         padding: 4px;

@@ -48,8 +48,8 @@
           expect(toggle.hasAttribute('disabled')).to.equal(true);
         });
 
-        it('should set type="button" on the toggle button', () => {
-          expect(toggle.getAttribute('type')).to.equal('button');
+        it('should set role="button" on the toggle button', () => {
+          expect(toggle.getAttribute('role')).to.equal('button');
         });
 
         it('should set role="heading" on the toggle button wrapper', () => {
@@ -67,6 +67,20 @@
           toggle.click();
           expect(details.opened).to.equal(true);
           toggle.click();
+          expect(details.opened).to.equal(false);
+        });
+
+        it('should update `opened` on toggle button enter', () => {
+          MockInteractions.keyDownOn(toggle, 13, [], 'Enter');
+          expect(details.opened).to.equal(true);
+          MockInteractions.keyDownOn(toggle, 13, [], 'Enter');
+          expect(details.opened).to.equal(false);
+        });
+
+        it('should update `opened` on toggle button space', () => {
+          MockInteractions.keyDownOn(toggle, 32, [], ' ');
+          expect(details.opened).to.equal(true);
+          MockInteractions.keyDownOn(toggle, 32, [], ' ');
           expect(details.opened).to.equal(false);
         });
 

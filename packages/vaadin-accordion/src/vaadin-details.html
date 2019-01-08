@@ -20,13 +20,13 @@ This program is available under Apache License Version 2.0, available at https:/
         display: none !important;
       }
 
-      button::-moz-focus-inner {
-        border: 0;
-      }
-
       [part="content"] {
         display: none;
         overflow: hidden;
+      }
+
+      [part="header"][disabled] {
+        pointer-events: none;
       }
 
       :host([opened]) [part="content"] {
@@ -35,15 +35,16 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     </style>
     <div role="heading">
-      <button
-        type="button"
+      <div
+        role="button"
         part="header"
         on-click="_onToggleClick"
-        disabled="[[disabled]]"
+        on-keydown="_onToggleKeyDown"
+        disabled$="[[disabled]]"
         aria-expanded$="[[_getAriaExpanded(opened)]]"
       >
         <span part="toggle"></span><span part="summary">[[summary]]</span>
-      </button>
+      </div>
     </div>
     <div
       part="content"
@@ -116,7 +117,7 @@ This program is available under Apache License Version 2.0, available at https:/
          * @protected
          */
         get focusElement() {
-          return this.shadowRoot.querySelector('button');
+          return this.shadowRoot.querySelector('[part="header"]');
         }
 
         ready() {
@@ -143,6 +144,13 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _onToggleClick(e) {
           this.opened = !this.opened;
+        }
+
+        _onToggleKeyDown(e) {
+          if ([13, 32].indexOf(e.keyCode) > -1) {
+            e.preventDefault();
+            this.opened = !this.opened;
+          }
         }
       }
 

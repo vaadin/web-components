@@ -16,22 +16,17 @@
       }
 
       [part="header"] {
+        display: flex;
+        align-items: center;
         width: 100%;
         outline: none;
-        position: relative;
-        text-align: left;
-        border: none;
-        box-shadow: none;
         height: var(--lumo-size-m);
-        margin: 0;
-        padding: 0;
         box-sizing: border-box;
         font-size: var(--lumo-font-size-m);
         font-weight: 500;
         color: var(--lumo-secondary-text-color);
         background-color: inherit;
         border-radius: var(--lumo-border-radius);
-        cursor: default;
         -webkit-tap-highlight-color: transparent;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
@@ -42,8 +37,6 @@
       }
 
       [part="toggle"] {
-        display: inline-block;
-        vertical-align: middle;
         box-sizing: border-box;
         margin-left: -4px;
         margin-right: var(--lumo-space-xs);
