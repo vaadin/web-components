@@ -38,11 +38,11 @@ Cross-browser Testing Platform and Open Source <3 Provided by [Sauce Labs](https
 Reporting [issues and feature request](https://github.com/vaadin/vaadin-lumo-styles/issues/new) is a great way to help! If you have questions, join the [Vaadin components chat](https://gitter.im/vaadin/vaadin-core-elements) – we’re happy to answer Lumo related questions there.
 
 
-## Running demos and tests in browser
+## Running demos and tests in a browser
 
 1. Fork the `vaadin-lumo-styles` repository and clone it locally.
 
-1. Make sure you have [npm](https://www.npmjs.com/) installed.
+1. Make sure you have [npm](https://www.npmjs.com/) and [Bower](https://bower.io) installed.
 
 1. When in the `vaadin-lumo-styles` directory, run `npm install` and then `bower install` to install dependencies.
 
@@ -50,7 +50,7 @@ Reporting [issues and feature request](https://github.com/vaadin/vaadin-lumo-sty
 
 1. You can also open demo/documentation by adding **demo** to the URL, for example:
 
-  - http://127.0.0.1:8080/components/vaadin-lumo-styles/demo
+  - http://127.0.0.1:3000/components/vaadin-lumo-styles/demo
 
 
 ## Adding or updating icons
