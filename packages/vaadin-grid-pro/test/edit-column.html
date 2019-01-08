@@ -67,7 +67,8 @@
       <vaadin-pro-grid>
         <vaadin-pro-grid-edit-column path="married"></vaadin-pro-grid-edit-column>
         <vaadin-pro-grid-edit-column path="title"></vaadin-pro-grid-edit-column>
-        <vaadin-grid-column path="name"></vaadin-grid-column>
+        <vaadin-pro-grid-edit-column path="name"></vaadin-pro-grid-edit-column>
+        <vaadin-pro-grid-edit-column path="age"></vaadin-pro-grid-edit-column>
         <vaadin-grid-column>
           <template>[[item.married]]</template>
         </vaadin-grid-column>
@@ -143,6 +144,10 @@
 
     function esc(target) {
       MockInteractions.keyDownOn(target, 27, [], 'Escape');
+    }
+
+    function keyDownChar(target, letter, modifier) {
+      MockInteractions.keyDownOn(target, letter.charCodeAt(0), modifier, letter);
     }
 
     describe('edit column', () => {
@@ -818,6 +823,63 @@
           esc(select);
           expect(column._getEditorComponent(cell)).to.not.be.ok;
           expect(cell._content.textContent).to.equal(value);
+        });
+      });
+
+      describe('edit on typing', () => {
+        let grid, cell, columns, column, editor;
+
+        beforeEach(() => {
+          grid = fixture('editor-type');
+          grid.items = getItems();
+          flushGrid(grid);
+          columns = grid._columnTree[0];
+        });
+
+        it('should start edit on typing if numeric key pressed', () => {
+          column = grid.querySelector('[path="age"]');
+          cell = getContainerCell(grid.$.items, 0, columns.indexOf(column));
+          keyDownChar(cell._content, '1');
+          editor = column._getEditorComponent(cell);
+          expect(editor).to.be.ok;
+        });
+
+        it('should start edit on typing if character key pressed', () => {
+          column = grid.querySelector('[path="name"]');
+          cell = getContainerCell(grid.$.items, 0, columns.indexOf(column));
+          keyDownChar(cell._content, 'a');
+          editor = column._getEditorComponent(cell);
+          expect(editor).to.be.ok;
+        });
+
+        it('should not start edit on typing when editor type set to boolean', () => {
+          column = grid.querySelector('[path="married"]');
+          cell = getContainerCell(grid.$.items, 0, columns.indexOf(column));
+          column.editorType = 'boolean';
+          keyDownChar(cell._content, 'a');
+          editor = column._getEditorComponent(cell);
+          expect(editor).to.be.not.ok;
+        });
+
+        it('should not start edit on typing when editor type set to select', () => {
+          column = grid.querySelector('[path="title"]');
+          cell = getContainerCell(grid.$.items, 0, columns.indexOf(column));
+          column.editorType = 'select';
+          column.editorOptions = ['mr', 'mrs', 'ms'];
+          keyDownChar(cell._content, 'a');
+          editor = column._getEditorComponent(cell);
+          expect(editor).to.be.not.ok;
+        });
+
+        it('should not start edit on typing when editor type set to custom', () => {
+          column = grid.querySelector('[path="married"]');
+          cell = getContainerCell(grid.$.items, 0, columns.indexOf(column));
+          column.editModeRenderer = root => {
+            root.innerHTML = '<input type="checkbox">';
+          };
+          keyDownChar(cell._content, 'a');
+          editor = column._getEditorComponent(cell);
+          expect(editor).to.be.not.ok;
         });
       });
 
