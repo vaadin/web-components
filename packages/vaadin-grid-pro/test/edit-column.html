@@ -597,6 +597,28 @@
           expect(getCellEditor(cell)).to.not.be.ok;
           expect(cell._content.textContent).to.equal('Foo');
         });
+
+        it('should set the column `editorType` to custom when renderer is defined', () => {
+          column.editModeRenderer = function(root, owner, model) {
+            root.innerHTML = '<input>';
+          };
+          expect(column.editorType).to.be.equal('custom');
+        });
+
+        it('should reset the column `editorType` to text when renderer is removed', () => {
+          column.editModeRenderer = function(root, owner, model) {
+            root.innerHTML = '<input>';
+          };
+          column.editModeRenderer = null;
+          expect(column.editorType).to.be.equal('text');
+        });
+
+        it('should throw an error when setting a template if there is already a renderer', () => {
+          column.editModeRenderer = function(root, owner, model) {
+            root.innerHTML = '<input>';
+          };
+          expect(() => column._editModeTemplate = {}).to.throw(Error);
+        });
       });
 
       describe('edit mode template', () => {
@@ -639,6 +661,21 @@
           expect(cell._template).to.be.not.ok;
           expect(cell._content.textContent.trim()).to.equal('32');
           expect(cell._content.querySelector('input')).to.not.be.ok;
+        });
+
+        it('should set the column `editorType` to custom when template is added', () => {
+          column = grid.querySelector('[path="name"]');
+          expect(column.editorType).to.be.equal('custom');
+        });
+
+        it('should reset the column `editorType` to text when template is removed', () => {
+          column._editModeTemplate = null;
+          expect(column.editorType).to.be.equal('text');
+        });
+
+        it('should throw an error when setting a renderer if there is already a template', () => {
+          column = grid.querySelector('[path="name"]');
+          expect(() => column.editModeRenderer = {}).to.throw(Error);
         });
       });
 
