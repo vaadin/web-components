@@ -109,11 +109,11 @@ To use the Material theme, import the correspondent file from the `theme/materia
   `vaadin-grid.html`
 
 
-## Running demos and tests in browser
+## Running demos and tests in a browser
 
 1. Fork the `vaadin-grid` repository and clone it locally.
 
-1. Make sure you have [npm](https://www.npmjs.com/) installed.
+1. Make sure you have [npm](https://www.npmjs.com/) and [Bower](https://bower.io) installed.
 
 1. When in the `vaadin-grid` directory, run `npm install` and then `bower install` to install dependencies.
 
@@ -121,8 +121,8 @@ To use the Material theme, import the correspondent file from the `theme/materia
 
 1. You can also open demo or in-browser tests by adding **demo** or **test** to the URL, for example:
 
-  - http://127.0.0.1:8080/components/vaadin-grid/demo
-  - http://127.0.0.1:8080/components/vaadin-grid/test
+  - http://127.0.0.1:3000/components/vaadin-grid/demo
+  - http://127.0.0.1:3000/components/vaadin-grid/test
 
 
 ## Running tests from the command line
