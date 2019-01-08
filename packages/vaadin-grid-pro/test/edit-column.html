@@ -706,7 +706,13 @@
       describe('select editor type', () => {
         let grid, cell, column, editor, select;
 
-        beforeEach(() => {
+        const nextRender = (elem) => {
+          return new Promise(resolve => {
+            Polymer.RenderStatus.afterNextRender(elem, resolve);
+          });
+        };
+
+        beforeEach(async() => {
           grid = fixture('editor-type');
           grid.items = getItems();
           column = grid.querySelector('[path="title"]');
@@ -714,102 +720,67 @@
           column.editorOptions = ['mr', 'mrs', 'ms'];
           flushGrid(grid);
           cell = getContainerCell(grid.$.items, 0, 1);
+          enter(cell._content);
+          editor = getCellEditor(cell);
+          select = editor._select;
+          await nextRender(select);
         });
 
-        it('should render the select to cell in edit mode', () => {
-          dblclick(cell._content);
-          select = getCellEditor(cell)._select;
+        it('should render the select to cell in edit mode', async() => {
           expect(select instanceof Vaadin.SelectElement).to.equal(true);
           expect(select.value).to.be.equal('mrs');
         });
 
-        it('should open the select and stop focusout on editor click', done => {
-          enter(cell._content);
-          editor = getCellEditor(cell);
-          select = editor._select;
-
-          Polymer.RenderStatus.afterNextRender(select, () => {
-            select.focusElement.click();
-            const evt = new CustomEvent('focusout', {bubbles: true, composed: true});
-            evt.relatedTarget = editor._overlay.querySelector('vaadin-item');
-            select.dispatchEvent(evt);
-            grid._flushStopEdit();
-            expect(select.opened).to.equal(true);
-            done();
-          });
+        it('should open the select and stop focusout on editor click', async() => {
+          select.focusElement.click();
+          const evt = new CustomEvent('focusout', {bubbles: true, composed: true});
+          evt.relatedTarget = editor._overlay.querySelector('vaadin-item');
+          select.dispatchEvent(evt);
+          grid._flushStopEdit();
+          await nextRender(select._menuElement);
+          expect(select.opened).to.equal(true);
         });
 
-        it('should close the select and exit edit mode on outside click', done => {
-          enter(cell._content);
-          editor = getCellEditor(cell);
-          select = editor._select;
-
-          Polymer.RenderStatus.afterNextRender(select, () => {
-            select.focusElement.click();
-            document.body.click();
-            expect(select.opened).to.equal(false);
-            done();
-          });
+        it('should close the select and exit edit mode on outside click', async() => {
+          select.focusElement.click();
+          await nextRender(select._menuElement);
+          document.body.click();
+          expect(select.opened).to.equal(false);
         });
 
-        it('should open the select on enter key', done => {
-          enter(cell._content);
-          select = getCellEditor(cell)._select;
-
-          Polymer.RenderStatus.afterNextRender(select, () => {
-            enter(select.focusElement);
-            expect(select.opened).to.equal(true);
-            done();
-          });
+        it('should open the select on enter key', async() => {
+          enter(select.focusElement);
+          await nextRender(select._menuElement);
+          expect(select.opened).to.equal(true);
         });
 
-        it('should open the select on space key', done => {
-          enter(cell._content);
-          select = getCellEditor(cell)._select;
-
-          Polymer.RenderStatus.afterNextRender(select, () => {
-            space(select.focusElement);
-            expect(select.opened).to.equal(true);
-            done();
-          });
+        it('should open the select on space key', async() => {
+          space(select.focusElement);
+          await nextRender(select._menuElement);
+          expect(select.opened).to.equal(true);
         });
 
-        it('should open the select on arrow down key', done => {
-          enter(cell._content);
-          select = getCellEditor(cell)._select;
-
-          Polymer.RenderStatus.afterNextRender(select, () => {
-            down(select.focusElement);
-            expect(select.opened).to.equal(true);
-            done();
-          });
+        it('should open the select on arrow down key', async() => {
+          down(select.focusElement);
+          await nextRender(select._menuElement);
+          expect(select.opened).to.equal(true);
         });
 
-        it('should open the select on arrow up key', done => {
-          enter(cell._content);
-          select = getCellEditor(cell)._select;
-
-          Polymer.RenderStatus.afterNextRender(select, () => {
-            up(select.focusElement);
-            expect(select.opened).to.equal(true);
-            done();
-          });
+        it('should open the select on arrow up key', async() => {
+          up(select.focusElement);
+          await nextRender(select._menuElement);
+          expect(select.opened).to.equal(true);
         });
 
-        it('should update value from selected one after edit mode exit', done => {
-          dblclick(cell._content);
-          editor = getCellEditor(cell);
-          select = editor._select;
-
-          Polymer.RenderStatus.afterNextRender(select, () => {
-            const item = editor._overlay.querySelector('vaadin-item');
-            const value = item.textContent;
-            item.click();
-            esc(select);
-            expect(column._getEditorComponent(cell)).to.not.be.ok;
-            expect(cell._content.textContent).to.equal(value);
-            done();
-          });
+        it('should update value from selected one after edit mode exit', async() => {
+          enter(select.focusElement);
+          await nextRender(select._menuElement);
+          const item = editor._overlay.querySelector('vaadin-item');
+          const value = item.textContent;
+          item.click();
+          esc(select);
+          expect(column._getEditorComponent(cell)).to.not.be.ok;
+          expect(cell._content.textContent).to.equal(value);
         });
       });
 
