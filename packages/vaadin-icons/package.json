@@ -19,6 +19,9 @@
   "files": [
     "vaadin-icons.js"
   ],
+  "scripts": {
+    "start": "polymer serve --port 3000"
+  },
   "homepage": "https://vaadin.com/icons",
   "devDependencies": {
     "cheerio": "^1.0.0-rc.2",
