@@ -8,6 +8,18 @@
   <link rel="import" href="../vaadin-login.html">
   <link rel="import" href="../vaadin-login-overlay.html">
   <link rel="import" href="../../iron-test-helpers/mock-interactions.html">
+  
+  <dom-module id="parts-styles" theme-for="vaadin-login">
+    <template>
+      <style>
+        :host([theme="green"]) [part="form-title"],
+        :host([theme="green"]) [part="error-message-title"],
+        :host([theme="green"]) [part="error-message-description"] {
+          color: rgb(0, 128, 0);
+        }
+      </style>
+    </template>
+  </dom-module>
 </head>
 
 <body>
@@ -46,6 +58,12 @@
       <vaadin-login>
         <div slot="footer">Custom footer</div>
       </vaadin-login>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="themed">
+    <template>
+      <vaadin-login theme="green"></vaadin-login>
     </template>
   </test-fixture>
 
@@ -328,6 +346,19 @@
         expect(footerElements).to.have.lengthOf(1);
         expect(footerElements[0].tagName.toLowerCase()).to.equal('div');
         expect(footerElements[0].textContent).to.equal('Custom footer');
+      });
+    });
+
+    describe('style parts', () => {
+      it('should be possible to style parts', () => {
+        const expectedColor = 'rgb(0, 128, 0)';
+        const login = fixture('themed');
+        const formTitle = login.shadowRoot.querySelector('[part="form-title"]');
+        expect(getComputedStyle(formTitle).color).to.equal(expectedColor);
+        const errorTitle = login.shadowRoot.querySelector('[part="error-message-title"]');
+        expect(getComputedStyle(errorTitle).color).to.equal(expectedColor);
+        const errorMessage = login.shadowRoot.querySelector('[part="error-message-description"]');
+        expect(getComputedStyle(errorMessage).color).to.equal(expectedColor);
       });
     });
   </script>

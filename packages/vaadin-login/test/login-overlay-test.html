@@ -18,7 +18,7 @@
 
   <test-fixture id="opened">
     <template>
-      <vaadin-login-overlay opened></vaadin-login-overlay>
+      <vaadin-login-overlay opened theme="some-theme"></vaadin-login-overlay>
     </template>
   </test-fixture>
 
@@ -76,7 +76,6 @@
 
         const login = document.querySelectorAll('vaadin-login');
         expect(login.length).to.be.equal(1);
-
       });
 
       it('should be able to be closed', () => {
@@ -88,6 +87,14 @@
         loginOverlayOpened.opened = false;
         login = document.querySelectorAll('vaadin-login');
         expect(login.length).to.be.equal(0);
+      });
+
+      it('should propagate theme to a wrapper', () => {
+        const loginOverlayOpened = fixture('opened');
+        expect(loginOverlayOpened.opened).to.be.true;
+
+        const wrapper = document.querySelector('vaadin-login-overlay-wrapper');
+        expect(wrapper.getAttribute('theme')).to.be.equal('some-theme');
       });
 
       it('should not close on ESC', () => {

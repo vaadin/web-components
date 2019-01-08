@@ -29,7 +29,8 @@ This program is available under Apache License Version 2.0, available at https:/
       focus-trap
       with-backdrop
       title="[[title]]"
-      description="[[description]]">
+      description="[[description]]"
+      theme$="[[theme]]">
 
       <vaadin-login
         theme="with-overlay"
@@ -99,6 +100,13 @@ This program is available under Apache License Version 2.0, available at https:/
             title: {
               type: String,
               value: 'App name'
+            },
+            /**
+             * Defines the theme of the element.
+             * The value is propagated to vaadin-login-overlay-wrapper element.
+             */
+            theme: {
+              type: String
             }
           };
         }

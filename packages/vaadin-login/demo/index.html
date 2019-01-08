@@ -19,7 +19,6 @@
   <link rel="import" href="../vaadin-login.html">
   <link rel="import" href="../vaadin-login-overlay.html">
 
-
   <custom-style>
     <style include="vaadin-component-demo-shared-styles"></style>
   </custom-style>
@@ -30,6 +29,18 @@
         width: 29px;
       }
   </style>
+  <!--
+    Have to keep duplicate the <dom-module> from the overlay theme demo here to make it work.
+  -->
+  <dom-module id="custom-index-overlay-styles" theme-for="vaadin-login-overlay-wrapper">
+    <template>
+      <style>
+        :host([theme="custom-background"]) [part="brand"] {
+          background-image: url(./custom-brand.jpg);
+        }
+      </style>
+    </template>
+  </dom-module>
 </head>
 
 <body>
