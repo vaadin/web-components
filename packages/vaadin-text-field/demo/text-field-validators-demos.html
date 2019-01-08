@@ -50,7 +50,7 @@
     <p>Extend <code>Vaadin.TextFieldElement</code> to create your own custom element,
       then override the <code>checkValidity()</code> method to validate the user’s input.</p>
 
-    <vaadin-demo-snippet id="text-field-validators-demos-synchronous-custom-validator" ignore-ie>
+    <vaadin-demo-snippet id="text-field-validators-demos-synchronous-custom-validator" ignore-ie when-defined="vaadin-text-field">
       <template preserve-content>
         <employee-role-text-field label="Position"></employee-role-text-field>
         Valid options: Architect, Developer or Designer
@@ -82,7 +82,7 @@
       then override the <code>checkValidity()</code> to make your asynchronous validation,
       and finally set the <code>invalid</code> flag appropriately in the callback.</p>
 
-    <vaadin-demo-snippet id="text-field-validators-demos-asynchronous-custom-validator" ignore-ie>
+    <vaadin-demo-snippet id="text-field-validators-demos-asynchronous-custom-validator" ignore-ie when-defined="vaadin-text-field">
       <template preserve-content>
         <my-ajax id="ajax1" handle-as="json" url="https://vaadin.com/validate-element"></my-ajax>
         <chemical-element-text-field label="Element Name"></chemical-element-text-field>
