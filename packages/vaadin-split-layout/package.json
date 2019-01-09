@@ -27,6 +27,7 @@
   },
   "scripts": {
     "test": "wct",
+    "start": "polymer serve --port 3000 --open",
     "preversion": "gulp version:update"
   }
 }
