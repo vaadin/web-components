@@ -59,7 +59,6 @@
     "paper-icon-button": "^2.0.0",
     "paper-input": "^2.0.0",
     "paper-styles": "^2.0.0",
-    "test-fixture": "^3.0.0",
     "vaadin-button": "vaadin/vaadin-button#^2.1.0",
     "web-component-tester": "^6.1.5",
     "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^2.0.1"
