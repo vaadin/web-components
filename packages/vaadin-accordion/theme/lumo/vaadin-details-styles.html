@@ -113,6 +113,19 @@
       :host([theme~="small"]) [part="toggle"] {
         margin-right: calc(var(--lumo-space-xs) / 2);
       }
+
+      :host([theme~="reverse"]) [part="header"] {
+        justify-content: space-between;
+      }
+
+      :host([theme~="reverse"]) [part="toggle"] {
+        order: 1;
+        margin-right: 0;
+      }
+
+      :host([theme~="reverse"][theme~="filled"]) [part="header"] {
+        padding-left: var(--lumo-space-m);
+      }
     </style>
   </template>
 </dom-module>
