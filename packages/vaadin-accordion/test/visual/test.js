@@ -39,4 +39,11 @@ gemini.suite('vaadin-accordion', function(rootSuite) {
       .setCaptureElements('#details-tests')
       .capture(`vaadin-details`);
   });
+
+  gemini.suite(`accordion-tests-lumo-theme`, function(suite) {
+    suite
+      .setUrl(`/accordion-lumo-theme.html`)
+      .setCaptureElements('#accordion-tests')
+      .capture(`vaadin-accordion`);
+  });
 });

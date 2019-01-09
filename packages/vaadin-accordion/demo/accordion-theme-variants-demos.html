@@ -51,6 +51,32 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Filled Accordion</h3>
+    <vaadin-demo-snippet id="accordion-theme-variants-demos-accordion-filled">
+      <template preserve-content>
+        <vaadin-accordion>
+          <vaadin-accordion-panel summary="Personal Information" theme="filled">
+            <vaadin-vertical-layout>
+              <vaadin-text-field label="Name" theme="small"></vaadin-text-field>
+              <vaadin-text-field label="Phone" theme="small"></vaadin-text-field>
+              <vaadin-text-field label="Email" theme="small"></vaadin-text-field>
+            </vaadin-vertical-layout>
+          </vaadin-accordion-panel>
+          <vaadin-accordion-panel summary="Billing Address" theme="filled">
+            <vaadin-vertical-layout>
+              <vaadin-text-field label="Address" theme="small"></vaadin-text-field>
+              <vaadin-text-field label="City" theme="small"></vaadin-text-field>
+              <vaadin-text-field label="State" theme="small"></vaadin-text-field>
+              <vaadin-text-field label="Zip Code" theme="small"></vaadin-text-field>
+            </vaadin-vertical-layout>
+          </vaadin-accordion-panel>
+          <vaadin-accordion-panel summary="Payment" theme="filled" disabled>
+            <span>Not yet implemented</span>
+          </vaadin-accordion-panel>
+        </vaadin-accordion>
+      </template>
+    </vaadin-demo-snippet>
+
   </template>
   <script>
     class AccordionThemeVariantsDemos extends DemoReadyEventEmitter(Polymer.Element) {

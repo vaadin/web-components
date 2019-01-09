@@ -6,11 +6,24 @@
   <template>
     <style include="lumo-details">
       :host {
-        margin: var(--lumo-space-s) 0;
+        margin: 0;
+        border-bottom: solid 1px var(--lumo-contrast-10pct);
+      }
+
+      :host(:last-child) {
+        border-bottom: none;
       }
 
       :host([focused]) [part="header"] {
         box-shadow: 0 0 0 2px var(--lumo-primary-color-50pct);
+      }
+
+      :host([theme~="filled"]) {
+        border-bottom: none;
+      }
+
+      :host([theme~="filled"]:not(:last-child)) {
+        margin-bottom: 2px;
       }
     </style>
   </template>
