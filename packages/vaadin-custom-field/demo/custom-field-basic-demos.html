@@ -10,11 +10,34 @@
     <h3>Sample example</h3>
     <vaadin-demo-snippet id="custom-field-basic-demos-sample-example" when-defined="vaadin-custom-field">
       <template preserve-content>
-        <vaadin-custom-field></vaadin-custom-field>
+        <vaadin-custom-field label="Name">
+          <vaadin-text-field></vaadin-text-field>
+        </vaadin-custom-field>
         <script>
           window.addDemoReadyListener('#custom-field-basic-demos-sample-example', function(document) {
-            const element = document.querySelector('vaadin-custom-field');
-            element.textContent = 'Foobar';
+            const customField = document.querySelector('vaadin-custom-field');
+            customField.addEventListener('change', function(e) {
+              console.warn('Change event', e);
+            });
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Custom DateTime Picker</h3>
+    <vaadin-demo-snippet id="custom-field-basic-demos-date-time-example" when-defined="vaadin-custom-field">
+      <template preserve-content>
+        <vaadin-custom-field label="Start datetime" required error-message="Please fill all fields">
+          <vaadin-date-picker></vaadin-date-picker>
+          <vaadin-time-picker></vaadin-time-picker>
+        </vaadin-custom-field>
+        <script>
+          window.addDemoReadyListener('#custom-field-basic-demos-date-time-example', function(document) {
+            const dateTime = document.querySelector('vaadin-custom-field');
+            dateTime.addEventListener('change', function(e) {
+              alert('change event with value: ' + e.detail.value);
+              console.warn('Change event', e);
+            });
           });
         </script>
       </template>

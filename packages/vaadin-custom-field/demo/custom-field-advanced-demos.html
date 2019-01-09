@@ -6,6 +6,31 @@
       }
     </style>
 
+    <h3>Usage with iron-form</h3>
+    <vaadin-demo-snippet id="custom-field-advanced-demos-iron-form-example" when-defined="vaadin-custom-field">
+      <template preserve-content>
+        <iron-form>
+          <vaadin-custom-field name="start" label="Start datetime" required error-message="Please fill all fields">
+            <vaadin-date-picker></vaadin-date-picker>
+            <vaadin-time-picker></vaadin-time-picker>
+          </vaadin-custom-field>
+          <br>
+          <vaadin-button>Get serialized start value</vaadin-button>
+          <div id="msg"></div>
+        </iron-form>
+        <script>
+          window.addDemoReadyListener('#custom-field-advanced-demos-iron-form-example', function(document) {
+            const form = document.querySelector('iron-form');
+            const btn = document.querySelector('vaadin-button');
+            btn.addEventListener('click', function() {
+              const serializedValues = form.serializeForm();
+              document.querySelector('#msg').innerHTML = serializedValues.start;
+            });
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
   </template>
   <script>
     class CustomFieldAdvancedDemos extends DemoReadyEventEmitter(CustomFieldDemo(Polymer.Element)) {

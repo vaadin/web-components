@@ -18,8 +18,30 @@ This program is available under Apache License Version 2.0, available at https:/
       :host([hidden]) {
         display: none !important;
       }
+
+      .container {
+        display: flex;
+        flex-direction: column;
+      }
+      
+      .inputs-wrapper {
+        display: block;
+        flex: 1;
+      }
     </style>
-    <slot></slot>
+
+    <div class="container">
+      <label part="label" on-click="focus" id="[[_labelId]]">[[label]]</label>
+      <div class="inputs-wrapper">
+        <slot id="slot"></slot>
+      </div>
+      <div part="error-message"
+          id="[[_errorId]]"
+          aria-live="assertive"
+          aria-hidden$="[[__getErrorMessageAriaHidden(invalid, errorMessage, _errorId)]]"
+        >[[errorMessage]]</div>
+    </div>
+
   </template>
 
   <script>
@@ -47,7 +69,199 @@ This program is available under Apache License Version 2.0, available at https:/
 
         static get properties() {
           return {
+            /*
+             * Array of available input nodes
+             */
+            __inputs: Array,
+
+            i18n: {
+              type: Object,
+              value: () => {
+                return {
+                  setValue: (value, nodes) => {
+                    const splittedValues = value.split(' ');
+                    return nodes.forEach((el, id) => el.value = splittedValues[id]);
+                  },
+                  parseValue: inputValues => inputValues.join(' ')
+                };
+              }
+            },
+
+            /**
+             * String used for the label element.
+             */
+            label: {
+              type: String,
+              value: '',
+              observer: '_labelChanged'
+            },
+
+            /**
+             * The name of the control, which is submitted with the form data.
+             */
+            name: String,
+
+            /**
+             * Specifies that the user must fill in a value.
+             */
+            required: {
+              type: Boolean,
+              reflectToAttribute: true
+            },
+
+            /**
+             * The initial value of the control.
+             * It can be used for two-way data binding.
+             */
+            value: {
+              type: String,
+              observer: '__valueChanged',
+              notify: true
+            },
+
+            /**
+             * This property is set to true when the control value is invalid.
+             */
+            invalid: {
+              type: Boolean,
+              reflectToAttribute: true,
+              notify: true,
+              value: false
+            },
+
+            /**
+             * Error to show when the input value is invalid.
+             */
+            errorMessage: {
+              type: String,
+              value: ''
+            },
+
+            __errorId: String,
+            __labelId: String
           };
+        }
+
+        static get observers() {
+          return [
+            '__getActiveErrorId(invalid, errorMessage, _errorId)',
+            '__getActiveLabelId(label, _labelId)',
+            '__updateRequired(required, __inputs)'
+          ];
+        }
+
+        ready() {
+          super.ready();
+
+          this.$.slot.addEventListener('slotchange', e =>
+            this.__setInputs(e.target.assignedNodes().filter(node => node.validate || node.checkValidity)));
+
+          // From text-field
+          var uniqueId = Vaadin.TextFieldMixin._uniqueId = 1 + Vaadin.TextFieldMixin._uniqueId || 0;
+          this._errorId = `${this.constructor.is}-error-${uniqueId}`;
+          this._labelId = `${this.constructor.is}-label-${uniqueId}`;
+        }
+
+        __updateValue(e) {
+          // Stop native change events
+          e && e.stopPropagation();
+
+          this.value = this.i18n.parseValue.apply(this, [this.__inputs.map(input => input.value)]);
+          this.dispatchEvent(new CustomEvent('change', {
+            bubbles: true,
+            cancelable: false,
+            detail: {
+              value: this.value
+            }
+          }));
+        }
+
+        __valueChanged(value) {
+          this.i18n.setValue(value, this.__inputs);
+
+          // Timeout workaround for time-picker
+          setTimeout(() => this.validate());
+        }
+
+        __setInputs(nodes) {
+          // Look on change
+
+          this.__inputs = nodes;
+          this.__inputs.forEach(input => input.addEventListener('change', e => this.__updateValue(e)));
+
+          // Temporary workaround for time-picker
+          // this.__inputs.forEach(input => input.addEventListener('value-changed', e => this.__updateValue(e)));
+        }
+
+        __updateRequired(required, inputs) {
+          if (!inputs) {
+            return;
+          }
+
+          if (required) {
+            inputs.forEach(input => input.setAttribute('required', ''));
+          } else {
+            inputs.forEach(input => input.removeAttribute('required'));
+          }
+        }
+
+        _labelChanged(label) {
+          if (label !== '' && label != null) {
+            this.setAttribute('has-label', '');
+          } else {
+            this.removeAttribute('has-label');
+          }
+        }
+
+        /**
+         * Returns true if `value` is valid.
+         * `<iron-form>` uses this to check the validity or all its elements.
+         *
+         * @return {boolean} True if the value is valid.
+         */
+        validate() {
+          return !(this.invalid = !this.checkValidity());
+        }
+
+        /**
+         * Returns true if the current input value satisfies all constraints (if any)
+         * @returns {boolean}
+         */
+        checkValidity() {
+          if (this.required) {
+            return this.__inputs.every(input => (input.validate || input.checkValidity).call(input));
+          } else {
+            return !this.invalid;
+          }
+        }
+
+        __setOrToggleAttribute(name, value, node) {
+          if (!name || !node) {
+            return;
+          }
+          if (node.hasAttribute(name) === !value) {
+            if (value) {
+              node.setAttribute(name, (typeof value === 'boolean') ? '' : value);
+            } else {
+              node.removeAttribute(name);
+            }
+          }
+        }
+
+        __getActiveErrorId(invalid, errorMessage, errorId) {
+          this.__setOrToggleAttribute('aria-describedby',
+            (errorMessage && invalid ? errorId : undefined),
+            this);
+        }
+
+        __getActiveLabelId(label, labelId) {
+          this.__setOrToggleAttribute('aria-labelledby',
+            (label ? labelId : undefined),
+            this);
+        }
+
+        __getErrorMessageAriaHidden(invalid, errorMessage, errorId) {
+          return (!(errorMessage && invalid ? errorId : undefined)).toString();
         }
       }
 
