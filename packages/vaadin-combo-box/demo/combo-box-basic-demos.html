@@ -8,7 +8,7 @@
 
     <h3>Combo Box</h3>
 
-    <vaadin-demo-snippet id="combo-box-basic-combo-box">
+    <vaadin-demo-snippet id="combo-box-basic-combo-box" when-defined="vaadin-combo-box">
       <template preserve-content>
         <vaadin-combo-box label="Element"></vaadin-combo-box>
         <script>
@@ -22,7 +22,7 @@
 
     <h3>Configuring the Combo Box</h3>
 
-    <vaadin-demo-snippet id="combo-box-basic-demos-configuring-the-combo-box">
+    <vaadin-demo-snippet id="combo-box-basic-demos-configuring-the-combo-box" when-defined="vaadin-combo-box">
       <template preserve-content>
         <vaadin-combo-box label="Element"></vaadin-combo-box>
         <vaadin-combo-box label="Disabled" disabled></vaadin-combo-box>
@@ -43,7 +43,7 @@
 
     <h3>Allow Custom Values</h3>
     <p>Allow the user to set any value for the field in addition to selecting a value from the dropdown menu.</p>
-    <vaadin-demo-snippet id="combo-box-basic-demos-allow-custom-values">
+    <vaadin-demo-snippet id="combo-box-basic-demos-allow-custom-values" when-defined="vaadin-combo-box">
       <template preserve-content>
         <vaadin-combo-box label="Element" allow-custom-value></vaadin-combo-box>
         <p>Selected value: <span></span></p>
@@ -75,13 +75,13 @@
 
     <h3>Lazy Loading</h3>
     <p>
-      The <code>dataProvider</code> property can be assigend a function to provide
+      The <code>dataProvider</code> property can be assigned a function to provide
       data from a remote source.
     </p>
     <p>
       <b>Note:</b> the total number of items must be provided as the second argument of the data provider <code>callback</code>.
     </p>
-    <vaadin-demo-snippet id="combo-box-basic-demos-lazy-loading">
+    <vaadin-demo-snippet id="combo-box-basic-demos-lazy-loading" when-defined="vaadin-combo-box">
       <template preserve-content>
         <vaadin-combo-box label="Country"></vaadin-combo-box>
         <script>

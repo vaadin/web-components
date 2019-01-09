@@ -7,7 +7,7 @@
     </style>
 
     <h3>Customizing Item</h3>
-    <vaadin-demo-snippet id="combo-box-styling-demos-renderer">
+    <vaadin-demo-snippet id="combo-box-styling-demos-renderer" when-defined="vaadin-combo-box">
       <template preserve-content>
         <vaadin-combo-box label="Element" item-label-path="name" item-value-path="symbol" style="width: 240px;">
         </vaadin-combo-box>
@@ -35,7 +35,7 @@
     <p>
       The content can be provided declaratively using templates
     </p>
-    <vaadin-demo-snippet id="combo-box-styling-demos-custom-item-template">
+    <vaadin-demo-snippet id="combo-box-styling-demos-custom-item-template" when-defined="vaadin-combo-box">
       <template preserve-content>
         <vaadin-combo-box label="Element" item-label-path="name" item-value-path="symbol" style="width: 240px;">
           <template>
@@ -53,7 +53,7 @@
 
 
     <h3>Configuring Icons</h3>
-    <vaadin-demo-snippet id="combo-box-styling-demos-configuring-icons">
+    <vaadin-demo-snippet id="combo-box-styling-demos-configuring-icons" when-defined="vaadin-combo-box-light">
       <template preserve-content>
         <style>
           paper-icon-button {
@@ -84,7 +84,7 @@
       If you are using other custom input fields like &lt;iron-input>, you
       need to define the name of the bindable property with the `attrForValue` attribute.
     </p>
-    <vaadin-demo-snippet id="combo-box-styling-demos-replacing-the-input-with-an-iron-input">
+    <vaadin-demo-snippet id="combo-box-styling-demos-replacing-the-input-with-an-iron-input" when-defined="vaadin-combo-box-light">
       <template preserve-content>
         <vaadin-combo-box-light attr-for-value="bind-value">
           <iron-input>
@@ -101,7 +101,7 @@
 
 
     <h3>Using Focused and Selected Flags</h3>
-    <vaadin-demo-snippet id="combo-box-styling-demos-focused-and-selected-flags">
+    <vaadin-demo-snippet id="combo-box-styling-demos-focused-and-selected-flags" when-defined="vaadin-combo-box">
       <template preserve-content>
         <vaadin-combo-box label="Element" value="Carbon">
           <template>
@@ -127,7 +127,7 @@
     </vaadin-demo-snippet>
 
     <h3>Small Text Field (Lumo Theme Variant)</h3>
-    <vaadin-demo-snippet id="combo-box-styling-demos-small">
+    <vaadin-demo-snippet id="combo-box-styling-demos-small" when-defined="vaadin-combo-box">
       <template preserve-content>
         <vaadin-combo-box label="Element" value="Carbon" theme="small"></vaadin-combo-box>
         <script>
@@ -139,7 +139,7 @@
     </vaadin-demo-snippet>
 
     <h3>Custom Theme Variant</h3>
-    <vaadin-demo-snippet id="combo-box-styling-demos-custom-theme-variant">
+    <vaadin-demo-snippet id="combo-box-styling-demos-custom-theme-variant" when-defined="vaadin-combo-box">
       <template preserve-content>
         <dom-module id="custom-text-field-and-item" theme-for="vaadin-text-field vaadin-combo-box-item">
           <template>
