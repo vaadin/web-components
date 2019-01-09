@@ -3,13 +3,17 @@
 <dom-module id="material-pro-grid-edit-column-text-field" theme-for="vaadin-pro-grid-edit-column-text-field">
   <template>
     <style include="material-text-field">
-      :host {
+      :host([theme~="pro-grid-editor"]) {
         max-width: 100%;
+        margin: -6px 0 0;
         padding: 0;
+        top: 4px;
         will-change: transform;
       }
 
-      /* TODO: implement proper material theme */
+      :host([theme~="pro-grid-editor"]) [part="value"] {
+        box-sizing: border-box;
+      }
     </style>
   </template>
 </dom-module>
