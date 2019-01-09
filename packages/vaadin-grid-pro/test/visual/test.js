@@ -1,6 +1,9 @@
 gemini.suite('vaadin-pro-grid', function(rootSuite) {
   function wait(actions, find) {
-    actions.wait(5000);
+    return actions
+      .waitForJSCondition(function(window) {
+        return window.webComponentsAreReady;
+      }, 80000);
   }
 
   function goToAboutBlank(actions, find) {
@@ -15,10 +18,24 @@ gemini.suite('vaadin-pro-grid', function(rootSuite) {
     .after(goToAboutBlank);
 
   ['lumo', 'material'].forEach(theme => {
-    gemini.suite(`default-tests-${theme}`, function(suite) {
+    gemini.suite(`edit-column-boolean-tests-${theme}`, function(suite) {
       suite
-        .setUrl(`/default.html?theme=${theme}`)
-        .setCaptureElements('#default-tests')
+        .setUrl(`/edit-column-boolean.html?theme=${theme}`)
+        .setCaptureElements('#edit-column-boolean')
+        .capture(`vaadin-pro-grid`);
+    });
+
+    gemini.suite(`edit-column-select-tests-${theme}`, function(suite) {
+      suite
+        .setUrl(`/edit-column-select.html?theme=${theme}`)
+        .setCaptureElements('#edit-column-select')
+        .capture(`vaadin-pro-grid`);
+    });
+
+    gemini.suite(`edit-column-text-tests-${theme}`, function(suite) {
+      suite
+        .setUrl(`/edit-column-text.html?theme=${theme}`)
+        .setCaptureElements('#edit-column-text')
         .capture(`vaadin-pro-grid`);
     });
   });

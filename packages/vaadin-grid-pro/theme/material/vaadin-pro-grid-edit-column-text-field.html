@@ -4,15 +4,17 @@
   <template>
     <style include="material-text-field">
       :host([theme~="pro-grid-editor"]) {
-        max-width: 100%;
+        width: 100%;
         margin: -6px 0 0;
         padding: 0;
-        top: 4px;
+        top: 6px;
         will-change: transform;
+        font-size: inherit;
       }
 
       :host([theme~="pro-grid-editor"]) [part="value"] {
         box-sizing: border-box;
+        font-size: inherit;
       }
     </style>
   </template>
