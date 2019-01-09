@@ -143,29 +143,16 @@
           });
         });
 
-        it('should align height with number of rows after first render', done => {
+        it('should align height with number of rows after first render', () => {
           const grid = fixture('height-by-rows');
           const rows = 100;
+          grid.items = grid.items = Array(...new Array(rows)).map(() => {});
+          flushGrid(grid);
 
-          const getItems = () => {
-            const items = [];
-            for (let i = 0; i < rows; i++) {
-              items.push({});
-            }
-            return items;
-          };
+          grid.heightByRows = true;
+          flushGrid(grid);
 
-          grid.items = getItems();
-
-          setTimeout(() => {
-            grid.heightByRows = true;
-
-            animationFrameFlush(() => {
-              const bodyRows = getRows(grid.$.items);
-              expect(bodyRows.length).to.equal(rows);
-              done();
-            });
-          }, 1000);
+          expect(grid.$.items.children.length).to.equal(rows);
         });
 
         describe('flexbox parent', () => {
