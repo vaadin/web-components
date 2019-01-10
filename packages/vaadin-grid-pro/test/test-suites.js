@@ -1,4 +1,4 @@
-window.ProGridElementSuites = [
+window.GridProElementSuites = [
   'basic.html',
   'edit-column.html'
 ];

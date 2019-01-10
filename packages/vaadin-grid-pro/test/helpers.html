@@ -12,7 +12,7 @@
   window.dragStart = (source) => {
     let grid = source.parentElement;
     while (grid) {
-      if (grid.localName === 'vaadin-pro-grid') {
+      if (grid.localName === 'vaadin-grid-pro') {
         grid._touchDevice = false;
       }
       grid = grid.parentNode || grid.host;

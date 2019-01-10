@@ -12,15 +12,15 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 <link rel="import" href="../../vaadin-list-box/src/vaadin-list-box.html">
 <link rel="import" href="../../vaadin-item/src/vaadin-item.html">
 
-<dom-module id="vaadin-pro-grid-edit-column-select-wrapper">
+<dom-module id="vaadin-grid-pro-edit-column-select-wrapper">
   <template>
-    <vaadin-pro-grid-edit-column-select
+    <vaadin-grid-pro-edit-column-select
       id="selectEditor"
       value="{{value}}"
-      theme="pro-grid-editor"
+      theme="grid-pro-editor"
       on-keydown="_onSelectKeydown"
       on-focusout="_onSelectFocusout"
-    ></vaadin-pro-grid-edit-column-select>
+    ></vaadin-grid-pro-edit-column-select>
   </template>
 </dom-module>
 
@@ -31,9 +31,9 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
      *
      * @memberof Vaadin
      */
-    class ProGridEditColumnSelectWrapperElement extends Polymer.Element {
+    class GridProEditColumnSelectWrapperElement extends Polymer.Element {
       static get is() {
-        return 'vaadin-pro-grid-edit-column-select-wrapper';
+        return 'vaadin-grid-pro-edit-column-select-wrapper';
       }
 
       static get properties() {
@@ -122,7 +122,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       }
     }
 
-    customElements.define(ProGridEditColumnSelectWrapperElement.is, ProGridEditColumnSelectWrapperElement);
+    customElements.define(GridProEditColumnSelectWrapperElement.is, GridProEditColumnSelectWrapperElement);
 
     /**
      * The cell editor select element.
@@ -130,19 +130,19 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
      * ### Styling
      *
      * See [`<vaadin-select>` documentation](https://github.com/vaadin/vaadin-select/blob/master/src/vaadin-select.html)
-     * for `<vaadin-pro-grid-edit-column-select>` parts.
+     * for `<vaadin-grid-pro-edit-column-select>` parts.
      *
      * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
      *
      * @memberof Vaadin
      * @extends Vaadin.SelectElement
      */
-    class ProGridEditColumnSelectElement extends Vaadin.SelectElement {
+    class GridProEditColumnSelectElement extends Vaadin.SelectElement {
       static get is() {
-        return 'vaadin-pro-grid-edit-column-select';
+        return 'vaadin-grid-pro-edit-column-select';
       }
     }
 
-    customElements.define(ProGridEditColumnSelectElement.is, ProGridEditColumnSelectElement);
+    customElements.define(GridProEditColumnSelectElement.is, GridProEditColumnSelectElement);
   })();
 </script>

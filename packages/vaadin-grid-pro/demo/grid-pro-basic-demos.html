@@ -1,4 +1,4 @@
-<dom-module id="pro-grid-basic-demos">
+<dom-module id="grid-pro-basic-demos">
   <template>
     <style include="vaadin-component-demo-shared-styles">
       :host {
@@ -8,22 +8,22 @@
 
     <h3>Defining Content</h3>
     <p>
-      <code>&lt;vaadin-pro-grid&gt;</code> is an extension of the <code>&lt;vaadin-grid&gt;</code> and provides all the same functionality on top of basic one.
+      <code>&lt;vaadin-grid-pro&gt;</code> is an extension of the <code>&lt;vaadin-grid&gt;</code> and provides all the same functionality on top of basic one.
       Definition of the content can be done with the existing <code>&lt;vaadin-grid&gt;</code> methods, like <code>&lt;vaadin-grid-column&gt;</code> or Renderer Functions.
     </p>
-    <vaadin-demo-snippet id="pro-grid-basic-demos-defining-content">
+    <vaadin-demo-snippet id="grid-pro-basic-demos-defining-content">
       <template preserve-content>
-        <vaadin-pro-grid>
+        <vaadin-grid-pro>
           <vaadin-grid-column path="name.first" header="First name"></vaadin-grid-column>
           <vaadin-grid-column path="name.last" header="Last name"></vaadin-grid-column>
           <vaadin-grid-column path="location.city"></vaadin-grid-column>
           <vaadin-grid-column path="visitCount" text-align="end" width="120px" flex-grow="0"></vaadin-grid-column>
-        </vaadin-pro-grid>
+        </vaadin-grid-pro>
 
         <script>
-          window.addDemoReadyListener('#pro-grid-basic-demos-defining-content', function(document) {
+          window.addDemoReadyListener('#grid-pro-basic-demos-defining-content', function(document) {
             // Assign an array of user objects as the pro grid's items
-            document.querySelector('vaadin-pro-grid').items = Vaadin.GridDemo.users;
+            document.querySelector('vaadin-grid-pro').items = Vaadin.GridDemo.users;
 
             /*
             * Each object in the above "users" array follows the same structure:
@@ -47,11 +47,11 @@
 
   </template>
   <script>
-    class ProGridBasicDemos extends DemoReadyEventEmitter(ProGridDemo(Polymer.Element)) {
+    class GridProBasicDemos extends DemoReadyEventEmitter(GridProDemo(Polymer.Element)) {
       static get is() {
-        return 'pro-grid-basic-demos';
+        return 'grid-pro-basic-demos';
       }
     }
-    customElements.define(ProGridBasicDemos.is, ProGridBasicDemos);
+    customElements.define(GridProBasicDemos.is, GridProBasicDemos);
   </script>
 </dom-module>

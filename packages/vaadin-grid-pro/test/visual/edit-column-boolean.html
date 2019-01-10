@@ -6,8 +6,8 @@
   <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
   <script>
     const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
-    document.write('<link rel="import" href="../../theme/' + theme + '/vaadin-pro-grid.html">');
-    document.write('<link rel="import" href="../../theme/' + theme + '/vaadin-pro-grid-edit-column.html">');
+    document.write('<link rel="import" href="../../theme/' + theme + '/vaadin-grid-pro.html">');
+    document.write('<link rel="import" href="../../theme/' + theme + '/vaadin-grid-pro-edit-column.html">');
   </script>
 
   <script src="../../../vaadin-grid/demo/grid-demo-data.js"></script>
@@ -21,18 +21,18 @@
     width: 200px;
   }
 
-  vaadin-pro-grid {
+  vaadin-grid-pro {
     height: 100px;
   }
 </style>
 
 <div class="capture-block" id="edit-column-boolean">
-  <vaadin-pro-grid>
-    <vaadin-pro-grid-edit-column path="married" editor-type="boolean"></vaadin-pro-grid-edit-column>
-  </vaadin-pro-grid>
+  <vaadin-grid-pro>
+    <vaadin-grid-pro-edit-column path="married" editor-type="boolean"></vaadin-grid-pro-edit-column>
+  </vaadin-grid-pro>
   <script>
     window.addEventListener('WebComponentsReady', function() {
-      const grid = document.querySelector('vaadin-pro-grid');
+      const grid = document.querySelector('vaadin-grid-pro');
       grid.items = Vaadin.GridDemo.users.map(function(item) {
         const user = Object.assign({}, item);
         user.married = item.name.title === 'mrs';

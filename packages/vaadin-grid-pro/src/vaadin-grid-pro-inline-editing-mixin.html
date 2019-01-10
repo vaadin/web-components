@@ -11,14 +11,14 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 <script>
   window.Vaadin = window.Vaadin || {};
 
-  /** @namespace Vaadin.ProGrid */
-  window.Vaadin.ProGrid = window.Vaadin.ProGrid || {};
+  /** @namespace Vaadin.GridPro */
+  window.Vaadin.GridPro = window.Vaadin.GridPro || {};
 
   /**
    * @polymerMixin
-   * @memberof Vaadin.ProGrid
+   * @memberof Vaadin.GridPro
    */
-  Vaadin.ProGrid.InlineEditingMixin = superClass => class InlineEditingMixin extends superClass {
+  Vaadin.GridPro.InlineEditingMixin = superClass => class InlineEditingMixin extends superClass {
 
     static get properties() {
       return {
@@ -91,7 +91,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
     }
 
     _isEditColumn(column) {
-      return column.localName.toLowerCase() === 'vaadin-pro-grid-edit-column';
+      return column.localName.toLowerCase() === 'vaadin-grid-pro-edit-column';
     }
 
     _getEditColumns() {

@@ -9,21 +9,21 @@
   <!-- Demo imports from vaadin-grid in order not to copy-paste data -->
   <script src="../../vaadin-grid/demo/grid-demo-data.js"></script>
 
-  <link rel="import" href="../vaadin-pro-grid.html">
-  <link rel="import" href="../vaadin-pro-grid-edit-column.html">
+  <link rel="import" href="../vaadin-grid-pro.html">
+  <link rel="import" href="../vaadin-grid-pro-edit-column.html">
 
 </head>
 
 <body>
-  <vaadin-pro-grid>
-    <vaadin-pro-grid-edit-column path="name.first" header="First name (edit)"></vaadin-pro-grid-edit-column>
+  <vaadin-grid-pro>
+    <vaadin-grid-pro-edit-column path="name.first" header="First name (edit)"></vaadin-grid-pro-edit-column>
     <vaadin-grid-column path="name.last" header="Last name (view)"></vaadin-grid-column>
-    <vaadin-pro-grid-edit-column path="name.last" header="Last name (edit)"></vaadin-pro-grid-edit-column>
-  </vaadin-pro-grid>
+    <vaadin-grid-pro-edit-column path="name.last" header="Last name (edit)"></vaadin-grid-pro-edit-column>
+  </vaadin-grid-pro>
   <script>
     window.addEventListener('WebComponentsReady', function() {
       // Assign an array of user objects as the pro grid's items
-      document.querySelector('vaadin-pro-grid').items = Vaadin.GridDemo.users;
+      document.querySelector('vaadin-grid-pro').items = Vaadin.GridDemo.users;
     });
   </script>
 </body>

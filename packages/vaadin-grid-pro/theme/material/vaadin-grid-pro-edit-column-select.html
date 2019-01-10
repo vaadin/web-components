@@ -1,19 +1,19 @@
 <link rel="import" href="../../../vaadin-select/theme/material/vaadin-select.html">
 <link rel="import" href="../../../vaadin-list-box/theme/material/vaadin-list-box.html">
 <link rel="import" href="../../../vaadin-item/theme/material/vaadin-item.html">
-<link rel="import" href="vaadin-pro-grid-edit-column-text-field.html">
+<link rel="import" href="vaadin-grid-pro-edit-column-text-field.html">
 
-<dom-module id="material-pro-grid-edit-column-select" theme-for="vaadin-pro-grid-edit-column-select">
+<dom-module id="material-grid-pro-edit-column-select" theme-for="vaadin-grid-pro-edit-column-select">
   <template>
     <style include="material-select">
     </style>
   </template>
 </dom-module>
 
-<dom-module id="material-pro-grid-edit-column-select-text-field" theme-for="vaadin-select-text-field">
+<dom-module id="material-grid-pro-edit-column-select-text-field" theme-for="vaadin-select-text-field">
   <template>
-    <style include="material-select-text-field material-pro-grid-edit-column-text-field">
-      :host([theme~="pro-grid-editor"]) [part="input-field"] ::slotted([part="value"]) {
+    <style include="material-select-text-field material-grid-pro-edit-column-text-field">
+      :host([theme~="grid-pro-editor"]) [part="input-field"] ::slotted([part="value"]) {
         /* prevent selection on editor focus */
         -webkit-user-select: none;
         -moz-user-select: none;
@@ -24,4 +24,4 @@
   </template>
 </dom-module>
 
-<link rel="import" href="../../src/vaadin-pro-grid-edit-column-select.html">
+<link rel="import" href="../../src/vaadin-grid-pro-edit-column-select.html">

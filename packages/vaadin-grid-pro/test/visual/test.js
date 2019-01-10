@@ -1,4 +1,4 @@
-gemini.suite('vaadin-pro-grid', function(rootSuite) {
+gemini.suite('vaadin-grid-pro', function(rootSuite) {
   function wait(actions, find) {
     return actions
       .waitForJSCondition(function(window) {
@@ -22,21 +22,21 @@ gemini.suite('vaadin-pro-grid', function(rootSuite) {
       suite
         .setUrl(`/edit-column-boolean.html?theme=${theme}`)
         .setCaptureElements('#edit-column-boolean')
-        .capture(`vaadin-pro-grid`);
+        .capture(`vaadin-grid-pro`);
     });
 
     gemini.suite(`edit-column-select-tests-${theme}`, function(suite) {
       suite
         .setUrl(`/edit-column-select.html?theme=${theme}`)
         .setCaptureElements('#edit-column-select')
-        .capture(`vaadin-pro-grid`);
+        .capture(`vaadin-grid-pro`);
     });
 
     gemini.suite(`edit-column-text-tests-${theme}`, function(suite) {
       suite
         .setUrl(`/edit-column-text.html?theme=${theme}`)
         .setCaptureElements('#edit-column-text')
-        .capture(`vaadin-pro-grid`);
+        .capture(`vaadin-grid-pro`);
     });
   });
 

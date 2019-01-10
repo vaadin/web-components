@@ -8,21 +8,21 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 <link rel="import" href="../../polymer/lib/utils/flattened-nodes-observer.html">
 <link rel="import" href="../../polymer/lib/utils/path.html">
 <link rel="import" href="../../vaadin-grid/src/vaadin-grid-column.html">
-<link rel="import" href="vaadin-pro-grid-edit-column-checkbox.html">
-<link rel="import" href="vaadin-pro-grid-edit-column-select.html">
-<link rel="import" href="vaadin-pro-grid-edit-column-text-field.html">
+<link rel="import" href="vaadin-grid-pro-edit-column-checkbox.html">
+<link rel="import" href="vaadin-grid-pro-edit-column-select.html">
+<link rel="import" href="vaadin-grid-pro-edit-column-text-field.html">
 
-<dom-module id="vaadin-pro-grid-edit-column">
+<dom-module id="vaadin-grid-pro-edit-column">
   <script>
   (function() {
     /**
-     * `<vaadin-pro-grid-edit-column>` is a helper element for the `<vaadin-pro-grid>`
+     * `<vaadin-grid-pro-edit-column>` is a helper element for the `<vaadin-grid-pro>`
      * that provides default inline editing for the items.
      *
      * #### Example:
      * ```html
-     * <vaadin-pro-grid items="[[items]]">
-     *  <vaadin-pro-grid-edit-column path="name.first"></vaadin-pro-grid-edit-column>
+     * <vaadin-grid-pro items="[[items]]">
+     *  <vaadin-grid-pro-edit-column path="name.first"></vaadin-grid-pro-edit-column>
      *
      *  <vaadin-grid-column>
      *    ...
@@ -31,10 +31,10 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
      * @memberof Vaadin
      * @extends Vaadin.GridColumnElement
      */
-    class ProGridEditColumnElement extends Vaadin.GridColumnElement {
+    class GridProEditColumnElement extends Vaadin.GridColumnElement {
 
       static get is() {
-        return 'vaadin-pro-grid-edit-column';
+        return 'vaadin-grid-pro-edit-column';
       }
 
       static get properties() {
@@ -44,7 +44,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
            * Receives three arguments:
            *
            * - `root` The cell content DOM element. Append your editor component to it.
-           * - `column` The `<vaadin-pro-grid-edit-column>` element.
+           * - `column` The `<vaadin-grid-pro-edit-column>` element.
            * - `rowData` The object with the properties related with
            *   the rendered item, contains:
            *   - `rowData.index` The index of the item.
@@ -302,13 +302,13 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       }
     }
 
-    customElements.define(ProGridEditColumnElement.is, ProGridEditColumnElement);
+    customElements.define(GridProEditColumnElement.is, GridProEditColumnElement);
 
     /**
      * @namespace Vaadin
      */
     window.Vaadin = window.Vaadin || {};
-    Vaadin.ProGridEditColumnElement = ProGridEditColumnElement;
+    Vaadin.GridProEditColumnElement = GridProEditColumnElement;
   })();
   </script>
 </dom-module>

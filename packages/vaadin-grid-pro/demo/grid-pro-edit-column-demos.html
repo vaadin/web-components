@@ -1,4 +1,4 @@
-<dom-module id="pro-grid-edit-column-demos">
+<dom-module id="grid-pro-edit-column-demos">
   <template>
     <style include="vaadin-component-demo-shared-styles">
       :host {
@@ -8,7 +8,7 @@
 
     <h3>Edit Column</h3>
     <p>
-      <code>&lt;vaadin-pro-grid&gt;</code> has the helper for inline cell editing in specific columns</code>.
+      <code>&lt;vaadin-grid-pro&gt;</code> has the helper for inline cell editing in specific columns</code>.
     </p>
     <p>
       Edit mode can be activated in one of the following ways:
@@ -31,17 +31,17 @@
     <p>
       <b>NOTE: You must explicitly import <code>&lt;vaadin-grid-edit-column&gt;</code>) in order to use it</b>
     </p>
-    <vaadin-demo-snippet id="pro-grid-edit-column-demos-edit-column">
+    <vaadin-demo-snippet id="grid-pro-edit-column-demos-edit-column">
       <template preserve-content>
-        <vaadin-pro-grid>
-          <vaadin-pro-grid-edit-column path="name.first" header="First name (edit)"></vaadin-pro-grid-edit-column>
+        <vaadin-grid-pro>
+          <vaadin-grid-pro-edit-column path="name.first" header="First name (edit)"></vaadin-grid-pro-edit-column>
           <vaadin-grid-column path="name.last" header="Last name (view)"></vaadin-grid-column>
-          <vaadin-pro-grid-edit-column path="name.last" header="Last name (edit)"></vaadin-pro-grid-edit-column>
-        </vaadin-pro-grid>
+          <vaadin-grid-pro-edit-column path="name.last" header="Last name (edit)"></vaadin-grid-pro-edit-column>
+        </vaadin-grid-pro>
         <script>
-          window.addDemoReadyListener('#pro-grid-edit-column-demos-edit-column', function(document) {
+          window.addDemoReadyListener('#grid-pro-edit-column-demos-edit-column', function(document) {
             // Assign an array of user objects as the pro grid's items
-            document.querySelector('vaadin-pro-grid').items = Vaadin.GridDemo.users;
+            document.querySelector('vaadin-grid-pro').items = Vaadin.GridDemo.users;
           });
         </script>
       </template>
@@ -55,17 +55,17 @@
       <li><kbd>Enter</kbd> - save changes, exit the edit mode <b>and</b> focus the editable cell in the next row</li>
       <li><kbd>Shift</kbd> + <kbd>Enter</kbd> - save changes, exit the edit mode <b>and</b> focus the editable cell in the previous row</li>
     </ul>
-    <vaadin-demo-snippet id="pro-grid-edit-column-demos-allow-enter-row-change">
+    <vaadin-demo-snippet id="grid-pro-edit-column-demos-allow-enter-row-change">
       <template preserve-content>
-        <vaadin-pro-grid allow-enter-row-change>
-          <vaadin-pro-grid-edit-column path="name.first" header="First name (edit)"></vaadin-pro-grid-edit-column>
+        <vaadin-grid-pro allow-enter-row-change>
+          <vaadin-grid-pro-edit-column path="name.first" header="First name (edit)"></vaadin-grid-pro-edit-column>
           <vaadin-grid-column path="name.last" header="Last name (view)"></vaadin-grid-column>
-          <vaadin-pro-grid-edit-column path="name.last" header="Last name (edit)"></vaadin-pro-grid-edit-column>
-        </vaadin-pro-grid>
+          <vaadin-grid-pro-edit-column path="name.last" header="Last name (edit)"></vaadin-grid-pro-edit-column>
+        </vaadin-grid-pro>
         <script>
-          window.addDemoReadyListener('#pro-grid-edit-column-demos-allow-enter-row-change', function(document) {
+          window.addDemoReadyListener('#grid-pro-edit-column-demos-allow-enter-row-change', function(document) {
             // Assign an array of user objects as the pro grid's items
-            document.querySelector('vaadin-pro-grid').items = Vaadin.GridDemo.users;
+            document.querySelector('vaadin-grid-pro').items = Vaadin.GridDemo.users;
           });
         </script>
       </template>
@@ -75,17 +75,17 @@
     <p>
       When <code>preserveEditMode</code> is set on the grid element, focusing the next editable cell from keyboard will activate edit mode for it.
     </p>
-    <vaadin-demo-snippet id="pro-grid-edit-column-demos-preserve-edit-mode">
+    <vaadin-demo-snippet id="grid-pro-edit-column-demos-preserve-edit-mode">
       <template preserve-content>
-        <vaadin-pro-grid preserve-edit-mode allow-enter-row-change>
-          <vaadin-pro-grid-edit-column path="name.first" header="First name (edit)"></vaadin-pro-grid-edit-column>
+        <vaadin-grid-pro preserve-edit-mode allow-enter-row-change>
+          <vaadin-grid-pro-edit-column path="name.first" header="First name (edit)"></vaadin-grid-pro-edit-column>
           <vaadin-grid-column path="name.last" header="Last name (view)"></vaadin-grid-column>
-          <vaadin-pro-grid-edit-column path="name.last" header="Last name (edit)"></vaadin-pro-grid-edit-column>
-        </vaadin-pro-grid>
+          <vaadin-grid-pro-edit-column path="name.last" header="Last name (edit)"></vaadin-grid-pro-edit-column>
+        </vaadin-grid-pro>
         <script>
-          window.addDemoReadyListener('#pro-grid-edit-column-demos-preserve-edit-mode', function(document) {
+          window.addDemoReadyListener('#grid-pro-edit-column-demos-preserve-edit-mode', function(document) {
             // Assign an array of user objects as the pro grid's items
-            document.querySelector('vaadin-pro-grid').items = Vaadin.GridDemo.users;
+            document.querySelector('vaadin-grid-pro').items = Vaadin.GridDemo.users;
           });
         </script>
       </template>
@@ -97,17 +97,17 @@
       and call <code>event.preventDefault()</code> to prevent saving change. The example below demonstrates
       how to silently rollback change in case of the unexpected value.
     </p>
-    <vaadin-demo-snippet id="pro-grid-edit-column-demos-item-property-changed">
+    <vaadin-demo-snippet id="grid-pro-edit-column-demos-item-property-changed">
       <template preserve-content>
-        <vaadin-pro-grid>
+        <vaadin-grid-pro>
           <vaadin-grid-column path="name.first" header="First Name" width="60px"></vaadin-grid-column>
           <vaadin-grid-column path="name.last" header="Last name" width="60px"></vaadin-grid-column>
-          <vaadin-pro-grid-edit-column path="phone" header="Phone (edit)" width="80px"></vaadin-pro-grid-edit-column>
-          <vaadin-pro-grid-edit-column path="email" header="Email (edit)"></vaadin-pro-grid-edit-column>
-        </vaadin-pro-grid>
+          <vaadin-grid-pro-edit-column path="phone" header="Phone (edit)" width="80px"></vaadin-grid-pro-edit-column>
+          <vaadin-grid-pro-edit-column path="email" header="Email (edit)"></vaadin-grid-pro-edit-column>
+        </vaadin-grid-pro>
         <script>
-          window.addDemoReadyListener('#pro-grid-edit-column-demos-item-property-changed', function(document) {
-            const grid = document.querySelector('vaadin-pro-grid');
+          window.addDemoReadyListener('#grid-pro-edit-column-demos-item-property-changed', function(document) {
+            const grid = document.querySelector('vaadin-grid-pro');
 
             grid.addEventListener('item-property-changed', function(event) {
               switch (event.detail.path) {
@@ -146,17 +146,17 @@
       The <code>editorOptions</code> property is used to pass additional data to the component, especially the list
       of options to be rendered as <code>&lt;vaadin-item&gt;</code> components in the select.
     </p>
-    <vaadin-demo-snippet id="pro-grid-edit-column-demos-editor-type">
+    <vaadin-demo-snippet id="grid-pro-edit-column-demos-editor-type">
       <template preserve-content>
-        <vaadin-pro-grid>
+        <vaadin-grid-pro>
           <vaadin-grid-column path="name.first" header="First Name"></vaadin-grid-column>
           <vaadin-grid-column path="name.last" header="Last name"></vaadin-grid-column>
-          <vaadin-pro-grid-edit-column path="name.title" header="Title (edit)" editor-type="select"></vaadin-pro-grid-edit-column>
-          <vaadin-pro-grid-edit-column path="married" header="Married (edit)" editor-type="boolean"></vaadin-pro-grid-edit-column>
-        </vaadin-pro-grid>
+          <vaadin-grid-pro-edit-column path="name.title" header="Title (edit)" editor-type="select"></vaadin-grid-pro-edit-column>
+          <vaadin-grid-pro-edit-column path="married" header="Married (edit)" editor-type="boolean"></vaadin-grid-pro-edit-column>
+        </vaadin-grid-pro>
         <script>
-          window.addDemoReadyListener('#pro-grid-edit-column-demos-editor-type', function(document) {
-            const grid = document.querySelector('vaadin-pro-grid');
+          window.addDemoReadyListener('#grid-pro-edit-column-demos-editor-type', function(document) {
+            const grid = document.querySelector('vaadin-grid-pro');
 
             // set the editor options for select column type
             grid.querySelector('[path="name.title"]').editorOptions = ['mr', 'mrs', 'ms'];
@@ -206,17 +206,17 @@
       <code>&lt;vaadin-combo-box&gt;</code> component as cell editors. Grid edit mode styling does not apply
       to the custom editor components, but you can use CSS, same as for cell content in non-edit mode.
     </p>
-    <vaadin-demo-snippet id="pro-grid-edit-column-demos-edit-mode-renderer">
+    <vaadin-demo-snippet id="grid-pro-edit-column-demos-edit-mode-renderer">
       <template preserve-content>
-        <vaadin-pro-grid>
+        <vaadin-grid-pro>
           <vaadin-grid-column path="name.first" header="First Name"></vaadin-grid-column>
           <vaadin-grid-column path="name.last" header="Last name"></vaadin-grid-column>
-          <vaadin-pro-grid-edit-column path="name.title" header="Title (edit)" editor-value-path="selectedItem"></vaadin-pro-grid-edit-column>
-          <vaadin-pro-grid-edit-column path="location.zip" header="Zip code (edit)" text-align="end"></vaadin-pro-grid-edit-column>
-        </vaadin-pro-grid>
+          <vaadin-grid-pro-edit-column path="name.title" header="Title (edit)" editor-value-path="selectedItem"></vaadin-grid-pro-edit-column>
+          <vaadin-grid-pro-edit-column path="location.zip" header="Zip code (edit)" text-align="end"></vaadin-grid-pro-edit-column>
+        </vaadin-grid-pro>
         <script>
-          window.addDemoReadyListener('#pro-grid-edit-column-demos-edit-mode-renderer', function(document) {
-            const grid = document.querySelector('vaadin-pro-grid');
+          window.addDemoReadyListener('#grid-pro-edit-column-demos-edit-mode-renderer', function(document) {
+            const grid = document.querySelector('vaadin-grid-pro');
             grid.querySelector('[path="name.title"]').editModeRenderer = function(root, column, rowData) {
               root.innerHTML = '';
               const combobox = window.document.createElement('vaadin-combo-box');
@@ -249,31 +249,31 @@
       element with the <code>editor</code> class name. The requirements for the custom editor component are
       the same as when using <code>editModeRenderer</code>.
     </p>
-    <vaadin-demo-snippet id="pro-grid-edit-column-demos-edit-mode-template">
+    <vaadin-demo-snippet id="grid-pro-edit-column-demos-edit-mode-template">
       <template preserve-content>
-        <vaadin-pro-grid>
+        <vaadin-grid-pro>
           <vaadin-grid-column path="name.first" header="First Name"></vaadin-grid-column>
           <vaadin-grid-column path="name.last" header="Last name"></vaadin-grid-column>
-          <vaadin-pro-grid-edit-column path="email" header="Email (edit)" width="150px">
+          <vaadin-grid-pro-edit-column path="email" header="Email (edit)" width="150px">
             <template>[[item.email]]</template>
             <template class="editor">
               <input type="email" value="{{item.email::input}}">
             </template>
-          </vaadin-pro-grid-edit-column>
-          <vaadin-pro-grid-edit-column path="location.zip" header="Zip code (edit)" text-align="end">
+          </vaadin-grid-pro-edit-column>
+          <vaadin-grid-pro-edit-column path="location.zip" header="Zip code (edit)" text-align="end">
             <template class="editor">
               <input type="number" value="{{item.location.zip::input}}">
             </template>
-          </vaadin-pro-grid-edit-column>
-        </vaadin-pro-grid>
+          </vaadin-grid-pro-edit-column>
+        </vaadin-grid-pro>
         <style>
           input[type="email"] {
             width: 100%;
           }
         </style>
         <script>
-          window.addDemoReadyListener('#pro-grid-edit-column-demos-edit-mode-template', function(document) {
-            document.querySelector('vaadin-pro-grid').items = Vaadin.GridDemo.users;
+          window.addDemoReadyListener('#grid-pro-edit-column-demos-edit-mode-template', function(document) {
+            document.querySelector('vaadin-grid-pro').items = Vaadin.GridDemo.users;
           });
         </script>
       </template>
@@ -281,11 +281,11 @@
 
   </template>
   <script>
-    class ProGridEditColumnDemos extends DemoReadyEventEmitter(ProGridDemo(Polymer.Element)) {
+    class GridProEditColumnDemos extends DemoReadyEventEmitter(GridProDemo(Polymer.Element)) {
       static get is() {
-        return 'pro-grid-edit-column-demos';
+        return 'grid-pro-edit-column-demos';
       }
     }
-    customElements.define(ProGridEditColumnDemos.is, ProGridEditColumnDemos);
+    customElements.define(GridProEditColumnDemos.is, GridProEditColumnDemos);
   </script>
 </dom-module>

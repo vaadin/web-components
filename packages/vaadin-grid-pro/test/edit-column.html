@@ -13,30 +13,30 @@
   <link rel="import" href="../../test-fixture/test-fixture.html">
 
   <link rel="import" href="helpers.html">
-  <link rel="import" href="../vaadin-pro-grid.html">
-  <link rel="import" href="../vaadin-pro-grid-edit-column.html">
+  <link rel="import" href="../vaadin-grid-pro.html">
+  <link rel="import" href="../vaadin-grid-pro-edit-column.html">
 </head>
 
 <body>
   <test-fixture id="default">
     <template>
-      <vaadin-pro-grid>
-        <vaadin-pro-grid-edit-column path="name">
+      <vaadin-grid-pro>
+        <vaadin-grid-pro-edit-column path="name">
           <template class="header">Name</template>
           <template>[[index]] [[item.name]]</template>
           <template class="footer"></template>
-        </vaadin-pro-grid-edit-column>
-        <vaadin-pro-grid-edit-column path="age"></vaadin-pro-grid-edit-column>
+        </vaadin-grid-pro-edit-column>
+        <vaadin-grid-pro-edit-column path="age"></vaadin-grid-pro-edit-column>
         <vaadin-grid-column path="name"></vaadin-grid-column>
-      </vaadin-pro-grid>
+      </vaadin-grid-pro>
     </template>
   </test-fixture>
 
   <test-fixture id="renderer">
     <template>
-      <vaadin-pro-grid>
-        <vaadin-pro-grid-edit-column path="name"></vaadin-pro-grid-edit-column>
-        <vaadin-pro-grid-edit-column path="age"></vaadin-pro-grid-edit-column>
+      <vaadin-grid-pro>
+        <vaadin-grid-pro-edit-column path="name"></vaadin-grid-pro-edit-column>
+        <vaadin-grid-pro-edit-column path="age"></vaadin-grid-pro-edit-column>
         <vaadin-grid-column>
           <template>[[item.name]]</template>
         </vaadin-grid-column>
@@ -46,29 +46,29 @@
 
   <test-fixture id="template">
     <template>
-      <vaadin-pro-grid>
-        <vaadin-pro-grid-edit-column path="name">
+      <vaadin-grid-pro>
+        <vaadin-grid-pro-edit-column path="name">
           <template>[[item.name]]</template>
           <template class="editor">
             <input value="{{item.name::input}}">
           </template>
-        </vaadin-pro-grid-edit-column>
-        <vaadin-pro-grid-edit-column path="age">
+        </vaadin-grid-pro-edit-column>
+        <vaadin-grid-pro-edit-column path="age">
           <template class="editor">
             <input type="number" value="{{item.age::input}}">
           </template>
-        </vaadin-pro-grid-edit-column>
+        </vaadin-grid-pro-edit-column>
       </vaadin-grid>
     </template>
   </test-fixture>
 
   <test-fixture id="editor-type">
     <template>
-      <vaadin-pro-grid>
-        <vaadin-pro-grid-edit-column path="married"></vaadin-pro-grid-edit-column>
-        <vaadin-pro-grid-edit-column path="title"></vaadin-pro-grid-edit-column>
-        <vaadin-pro-grid-edit-column path="name"></vaadin-pro-grid-edit-column>
-        <vaadin-pro-grid-edit-column path="age"></vaadin-pro-grid-edit-column>
+      <vaadin-grid-pro>
+        <vaadin-grid-pro-edit-column path="married"></vaadin-grid-pro-edit-column>
+        <vaadin-grid-pro-edit-column path="title"></vaadin-grid-pro-edit-column>
+        <vaadin-grid-pro-edit-column path="name"></vaadin-grid-pro-edit-column>
+        <vaadin-grid-pro-edit-column path="age"></vaadin-grid-pro-edit-column>
         <vaadin-grid-column>
           <template>[[item.married]]</template>
         </vaadin-grid-column>
@@ -81,7 +81,7 @@
       <input value="{{user.name::input}}">
     </template>
     <script>
-      customElements.whenDefined('vaadin-pro-grid-edit-column').then(() => {
+      customElements.whenDefined('vaadin-grid-pro-edit-column').then(() => {
         customElements.define('user-editor', class extends Polymer.Element {
           static get is() {
             return 'user-editor';
@@ -373,7 +373,7 @@
         });
 
         it('should focus correct editable cell when column is hidden', () => {
-          const column = grid.querySelector('vaadin-pro-grid-edit-column');
+          const column = grid.querySelector('vaadin-grid-pro-edit-column');
           column.hidden = true;
 
           const firstCell = getContainerCell(grid.$.items, 1, 1);

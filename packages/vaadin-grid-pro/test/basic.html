@@ -3,24 +3,24 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>vaadin-pro-grid tests</title>
+  <title>vaadin-grid-pro tests</title>
   <script src="../../web-component-tester/browser.js"></script>
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <link rel="import" href="../../test-fixture/test-fixture.html">
 
   <link rel="import" href="helpers.html">
-  <link rel="import" href="../vaadin-pro-grid.html">
+  <link rel="import" href="../vaadin-grid-pro.html">
 </head>
 
 <body>
 
   <test-fixture id="default">
     <template>
-      <vaadin-pro-grid style="width: 200px; height: 300px;" size="1000">
+      <vaadin-grid-pro style="width: 200px; height: 300px;" size="1000">
         <vaadin-grid-column>
           <template>[[index]]</template>
         </vaadin-grid-column>
-      </vaadin-pro-grid>
+      </vaadin-grid-pro>
     </template>
   </test-fixture>
 
@@ -36,7 +36,7 @@
       });
 
       it('should not expose class name globally', function() {
-        expect(window.ProGridElement).not.to.be.ok;
+        expect(window.GridProElement).not.to.be.ok;
       });
 
       it('should extend GridElement', () => {
@@ -49,7 +49,7 @@
       });
 
       it('should properly define host grid', () => {
-        expect(column._findHostGrid().localName).to.be.equal('vaadin-pro-grid');
+        expect(column._findHostGrid().localName).to.be.equal('vaadin-grid-pro');
       });
 
     });

@@ -7,31 +7,31 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
 <link rel="import" href="../../polymer/polymer-element.html">
 <link rel="import" href="../../vaadin-grid/src/vaadin-grid.html">
-<link rel="import" href="vaadin-pro-grid-inline-editing-mixin.html">
+<link rel="import" href="vaadin-grid-pro-inline-editing-mixin.html">
 
-<dom-module id="vaadin-pro-grid">
+<dom-module id="vaadin-grid-pro">
   <script>
     (function() {
       /**
        *
-       * `<vaadin-pro-grid>` is a high quality data grid / data table Web Component with extended functionality.
+       * `<vaadin-grid-pro>` is a high quality data grid / data table Web Component with extended functionality.
        * It extends `<vaadin-grid>` and adds extra features on top of the basic ones.
        *
        * See [`<vaadin-grid>` documentation](https://github.com/vaadin/vaadin-grid/blob/master/src/vaadin-grid.html)
        * for details.
        *
        * ```
-       * <vaadin-pro-grid></vaadin-pro-grid>
+       * <vaadin-grid-pro></vaadin-grid-pro>
        * ```
        *
        * @memberof Vaadin
        * @extends Vaadin.GridElement
-       * @mixes Vaadin.ProGrid.InlineEditingMixin
+       * @mixes Vaadin.GridPro.InlineEditingMixin
        * @demo demo/index.html
        */
-      class ProGridElement extends Vaadin.ProGrid.InlineEditingMixin(Vaadin.GridElement) {
+      class GridProElement extends Vaadin.GridPro.InlineEditingMixin(Vaadin.GridElement) {
         static get is() {
-          return 'vaadin-pro-grid';
+          return 'vaadin-grid-pro';
         }
 
         static get version() {
@@ -39,13 +39,13 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         }
       }
 
-      customElements.define(ProGridElement.is, ProGridElement);
+      customElements.define(GridProElement.is, GridProElement);
 
       /**
        * @namespace Vaadin
        */
       window.Vaadin = window.Vaadin || {};
-      window.Vaadin.ProGridElement = ProGridElement;
+      window.Vaadin.GridProElement = GridProElement;
     })();
   </script>
 </dom-module>

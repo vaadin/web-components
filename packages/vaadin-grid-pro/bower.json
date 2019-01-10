@@ -1,19 +1,19 @@
 {
-  "name": "vaadin-pro-grid",
+  "name": "vaadin-grid-pro",
   "homepage": "https://vaadin.com/components",
   "authors": [
     "Vaadin Ltd"
   ],
-  "description": "vaadin-pro-grid",
+  "description": "vaadin-grid-pro",
   "main": [
-    "vaadin-pro-grid.html",
-    "vaadin-pro-grid-edit-column.html",
-    "theme/material/vaadin-pro-grid.html",
-    "theme/material/vaadin-pro-grid-edit-column.html"
+    "vaadin-grid-pro.html",
+    "vaadin-grid-pro-edit-column.html",
+    "theme/material/vaadin-grid-pro.html",
+    "theme/material/vaadin-grid-pro-edit-column.html"
   ],
   "keywords": [
     "Vaadin",
-    "vaadin-pro-grid",
+    "vaadin-grid-pro",
     "web-components",
     "web-component",
     "polymer"

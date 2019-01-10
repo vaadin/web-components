@@ -22,17 +22,17 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
      * @memberof Vaadin
      * @extends Vaadin.TextFieldElement
      */
-    class ProGridEditColumnTextFieldElement extends Vaadin.TextFieldElement {
+    class GridProEditColumnTextFieldElement extends Vaadin.TextFieldElement {
       static get is() {
-        return 'vaadin-pro-grid-edit-column-text-field';
+        return 'vaadin-grid-pro-edit-column-text-field';
       }
 
       ready() {
         super.ready();
-        this.setAttribute('theme', 'pro-grid-editor');
+        this.setAttribute('theme', 'grid-pro-editor');
       }
     }
 
-    customElements.define(ProGridEditColumnTextFieldElement.is, ProGridEditColumnTextFieldElement);
+    customElements.define(GridProEditColumnTextFieldElement.is, GridProEditColumnTextFieldElement);
   })();
 </script>
