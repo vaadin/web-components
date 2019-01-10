@@ -9,8 +9,9 @@
     <h3>Details</h3>
     <vaadin-demo-snippet id="accordion-basic-demos-details">
       <template preserve-content>
-        <vaadin-details summary="Panel heading">
-          Panel content
+        <vaadin-details>
+          <div slot="summary">Panel heading</div>
+          <div>Panel content</div>
         </vaadin-details>
       </template>
     </vaadin-demo-snippet>
@@ -19,14 +20,16 @@
     <vaadin-demo-snippet id="accordion-basic-demos-accordion">
       <template preserve-content>
         <vaadin-accordion>
-          <vaadin-accordion-panel summary="Personal Information">
+          <vaadin-accordion-panel>
+            <div slot="summary">Personal Information</div>
             <vaadin-vertical-layout>
               <vaadin-text-field label="Name" theme="small"></vaadin-text-field>
               <vaadin-text-field label="Phone" theme="small"></vaadin-text-field>
               <vaadin-text-field label="Email" theme="small"></vaadin-text-field>
             </vaadin-vertical-layout>
           </vaadin-accordion-panel>
-          <vaadin-accordion-panel summary="Billing Address">
+          <vaadin-accordion-panel>
+            <div slot="summary">Billing Address</div>
             <vaadin-vertical-layout>
               <vaadin-text-field label="Address" theme="small"></vaadin-text-field>
               <vaadin-text-field label="City" theme="small"></vaadin-text-field>
@@ -34,7 +37,8 @@
               <vaadin-text-field label="Zip Code" theme="small"></vaadin-text-field>
             </vaadin-vertical-layout>
           </vaadin-accordion-panel>
-          <vaadin-accordion-panel summary="Payment" disabled>
+          <vaadin-accordion-panel disabled>
+            <div slot="summary">Payment</div>
             <span>Not yet implemented</span>
           </vaadin-accordion-panel>
         </vaadin-accordion>

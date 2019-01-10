@@ -21,19 +21,24 @@
 
   <span id="accordion-tests">
     <vaadin-accordion opened="1">
-      <vaadin-accordion-panel summary="Panel Heading 1">
+      <vaadin-accordion-panel>
+        <div slot="summary">Panel Heading 1</div>
         <span>Panel Content 1</span>
       </vaadin-accordion-panel>
-      <vaadin-accordion-panel summary="Panel Heading 2" opened>
+      <vaadin-accordion-panel>
+        <div slot="summary">Panel Heading 2</div>
         <span>Panel Content 2</span>
       </vaadin-accordion-panel>
-      <vaadin-accordion-panel summary="Panel Heading 3">
+      <vaadin-accordion-panel>
+        <div slot="summary">Panel Heading 3</div>
         <span>Panel Content 3</span>
       </vaadin-accordion-panel>
-      <vaadin-accordion-panel summary="Panel Heading 4">
+      <vaadin-accordion-panel>
+        <div slot="summary">Panel Heading 4</div>
         <span>Panel Content 4</span>
       </vaadin-accordion-panel>
-      <vaadin-accordion-panel summary="Panel Heading 5" disabled>
+      <vaadin-accordion-panel disabled>
+        <div slot="summary">Panel Heading 5</div>
         <span>Panel Content 5</span>
       </vaadin-accordion-panel>
     </vaadin-accordion>

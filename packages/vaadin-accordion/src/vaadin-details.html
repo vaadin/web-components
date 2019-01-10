@@ -43,7 +43,8 @@ This program is available under Apache License Version 2.0, available at https:/
         disabled$="[[disabled]]"
         aria-expanded$="[[_getAriaExpanded(opened)]]"
       >
-        <span part="toggle"></span><span part="summary">[[summary]]</span>
+        <span part="toggle"></span>
+        <span part="summary"><slot name="summary"></slot></span>
       </div>
     </div>
     <div
@@ -97,13 +98,6 @@ This program is available under Apache License Version 2.0, available at https:/
               reflectToAttribute: true,
               notify: true,
               observer: '_openedChanged'
-            },
-
-            /**
-             * String used as a label for the content.
-             */
-            summary: {
-              type: String
             }
           };
         }

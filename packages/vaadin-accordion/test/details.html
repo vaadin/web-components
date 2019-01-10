@@ -13,7 +13,10 @@
 <body>
   <test-fixture id="default">
     <template>
-      <vaadin-details summary="Summary"><input></vaadin-details>
+      <vaadin-details>
+        <div slot="summary">Summary</div>
+        <input>
+      </vaadin-details>
     </template>
   </test-fixture>
 
@@ -56,9 +59,10 @@
           expect(toggle.parentElement.getAttribute('role')).to.equal('heading');
         });
 
-        it('should set `summary` as the toggle button text content', () => {
-          details.summary = 'Cool';
-          expect(toggle.textContent.trim()).to.equal('Cool');
+        it('should have `summary` slot inside toggle button', () => {
+          const slot = toggle.querySelector('slot[name="summary"]');
+          expect(slot).to.be.ok;
+          expect(slot.assignedNodes()[0].textContent).to.equal('Summary');
         });
       });
 

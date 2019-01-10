@@ -14,9 +14,18 @@
   <test-fixture id="default">
     <template>
       <vaadin-accordion>
-        <vaadin-accordion-panel summary="Panel 1"><input /></vaadin-accordion-panel>
-        <vaadin-accordion-panel summary="Panel 2">Content 2</vaadin-accordion-panel>
-        <vaadin-accordion-panel summary="Panel 3">Content 3</vaadin-accordion-panel>
+        <vaadin-accordion-panel>
+          <div slot="summary">Panel 1</div>
+          <input />
+        </vaadin-accordion-panel>
+        <vaadin-accordion-panel>
+          <div slot="summary">Panel 2</div>
+          Content 2
+        </vaadin-accordion-panel>
+        <vaadin-accordion-panel>
+          <div slot="summary">Panel 3</div>
+          Content 3
+        </vaadin-accordion-panel>
       </vaadin-accordion>
     </template>
   </test-fixture>

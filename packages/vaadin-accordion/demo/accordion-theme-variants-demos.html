@@ -9,8 +9,9 @@
     <h3>Small Size Details</h3>
     <vaadin-demo-snippet id="accordion-theme-variants-demos-small">
       <template preserve-content>
-        <vaadin-details summary="Small" theme="small">
-          Panel content
+        <vaadin-details theme="small">
+          <div slot="summary">Small</div>
+          <div>Panel content</div>
         </vaadin-details>
       </template>
     </vaadin-demo-snippet>
@@ -18,8 +19,9 @@
     <h3>Filled Details</h3>
     <vaadin-demo-snippet id="accordion-theme-variants-demos-filled">
       <template preserve-content>
-        <vaadin-details summary="Filled" theme="filled">
-          Panel content
+        <vaadin-details theme="filled">
+          <div slot="summary">Filled</div>
+          <div>Panel content</div>
         </vaadin-details>
       </template>
     </vaadin-demo-snippet>
@@ -27,8 +29,9 @@
     <h3>Reverse Details</h3>
     <vaadin-demo-snippet id="accordion-theme-variants-demos-reverse">
       <template preserve-content>
-        <vaadin-details summary="Reverse" theme="reverse">
-          Panel content
+        <vaadin-details theme="reverse">
+          <div slot="summary">Reverse</div>
+          <div>Panel content</div>
         </vaadin-details>
       </template>
     </vaadin-demo-snippet>
@@ -36,8 +39,9 @@
     <h3>Small Size Filled Details</h3>
     <vaadin-demo-snippet id="accordion-theme-variants-demos-small-filled">
       <template preserve-content>
-        <vaadin-details summary="Small Filled" theme="small filled">
-          Panel content
+        <vaadin-details theme="small filled">
+          <div slot="summary">Small Filled</div>
+          <div>Panel content</div>
         </vaadin-details>
       </template>
     </vaadin-demo-snippet>
@@ -45,8 +49,9 @@
     <h3>Reverse Filled Details</h3>
     <vaadin-demo-snippet id="accordion-theme-variants-demos-reverse-filled">
       <template preserve-content>
-        <vaadin-details summary="Reverse" theme="reverse filled">
-          Panel content
+        <vaadin-details theme="reverse filled">
+          <div slot="summary">Reverse Filled</div>
+          <div>Panel content</div>
         </vaadin-details>
       </template>
     </vaadin-demo-snippet>
@@ -55,22 +60,25 @@
     <vaadin-demo-snippet id="accordion-theme-variants-demos-accordion-filled">
       <template preserve-content>
         <vaadin-accordion>
-          <vaadin-accordion-panel summary="Personal Information" theme="filled">
+          <vaadin-accordion-panel theme="filled">
+            <div slot="summary">Personal Information</div>
             <vaadin-vertical-layout>
               <vaadin-text-field label="Name" theme="small"></vaadin-text-field>
               <vaadin-text-field label="Phone" theme="small"></vaadin-text-field>
               <vaadin-text-field label="Email" theme="small"></vaadin-text-field>
             </vaadin-vertical-layout>
           </vaadin-accordion-panel>
-          <vaadin-accordion-panel summary="Billing Address" theme="filled">
+          <vaadin-accordion-panel theme="filled">
+            <div slot="summary">Billing Address</div>
             <vaadin-vertical-layout>
               <vaadin-text-field label="Address" theme="small"></vaadin-text-field>
               <vaadin-text-field label="City" theme="small"></vaadin-text-field>
               <vaadin-text-field label="State" theme="small"></vaadin-text-field>
               <vaadin-text-field label="Zip Code" theme="small"></vaadin-text-field>
             </vaadin-vertical-layout>
-          </vaadin-accordion-panel>
-          <vaadin-accordion-panel summary="Payment" theme="filled" disabled>
+          </vaadin-accordion-panel theme="filled">
+          <vaadin-accordion-panel theme="filled" disabled>
+            <div slot="summary">Payment</div>
             <span>Not yet implemented</span>
           </vaadin-accordion-panel>
         </vaadin-accordion>

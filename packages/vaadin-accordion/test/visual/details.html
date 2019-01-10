@@ -20,23 +20,28 @@
 <body>
 
   <span id="details-tests">
-    <vaadin-details summary="Closed">
+    <vaadin-details>
+      <div slot="summary">Closed</div>
       <span>Go Vaadin!</span>
     </vaadin-details>
     <br>
-    <vaadin-details summary="Opened" opened>
+    <vaadin-details opened>
+      <div slot="summary">Opened</div>
       <span>Go Vaadin!</span>
     </vaadin-details>
     <br>
-    <vaadin-details summary="Focused" autofocus>
+    <vaadin-details autofocus>
+      <div slot="summary">Focused</div>
       <span>Go Vaadin!</span>
     </vaadin-details>
     <br>
-    <vaadin-details summary="Disabled" disabled>
+    <vaadin-details disabled>
+      <div slot="summary">Disabled</div>
       <span>Go Vaadin!</span>
     </vaadin-details>
     <br>
-    <vaadin-details summary="Disabled Opened" disabled opened>
+    <vaadin-details disabled opened>
+      <div slot="summary">Disabled Opened</div>
       <span>Go Vaadin!</span>
     </vaadin-details>
   </span>
