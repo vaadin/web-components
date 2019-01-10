@@ -51,8 +51,15 @@
     </template>
   </test-fixture>
 
-  <script>
+  <test-fixture id="grid-pro">
+    <template>
+      <vaadin-grid-pro>
+        <vaadin-grid-column></vaadin-grid-column>
+      </vaadin-grid-pro>
+    </template>
+  </test-fixture>
 
+  <script>
     describe('column', () => {
       let container, column, grid, emptyColumn;
 
@@ -529,6 +536,17 @@
           expect(template2.templatizer.template).to.eql(template2);
           expect(column._bodyTemplate).to.eql(template2);
         });
+      });
+    });
+
+    describe('pro host', () => {
+
+      it('should use grid pro as the host', () => {
+        const gridPro = fixture('grid-pro');
+        const column = gridPro.querySelector('vaadin-grid-column');
+        gridPro.notifyResize = sinon.spy();
+        column.hidden = true;
+        expect(gridPro.notifyResize).to.have.been.called;
       });
     });
 

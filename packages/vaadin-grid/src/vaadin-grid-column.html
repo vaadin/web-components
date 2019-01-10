@@ -176,7 +176,7 @@ This program is available under Apache License Version 2.0, available at https:/
     _findHostGrid() {
       let el = this;
       // Custom elements extending grid must have a specific localName
-      while (el && !/^vaadin.*grid$/.test(el.localName)) {
+      while (el && !/^vaadin.*grid(-pro)?$/.test(el.localName)) {
         el = el.assignedSlot ? el.assignedSlot.parentNode : el.parentNode;
       }
       return el || undefined;
