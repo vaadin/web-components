@@ -244,6 +244,22 @@
       </template>
     </nice-demo-snippet>
 
+    <h2 demo-section>Compact preset</h2>
+    <p>The compact preset defines values for the sizing and spacing properties to reduce the visual space required by components to better fit a large amount of content on the screen</p>
+    <p>The preset can be taken into use by importing the file from under the "presets" folder.</p>
+
+    <div class="note warn">
+      <p>Make sure to import the preset before all the other components to make it apply on all browsers.</p>
+    </div>
+
+    <nice-demo-snippet code-only>
+      <template slot="source">
+        <!-- Import the compact preset  -->
+        <link rel="import" href="bower_components/vaadin-lumo-styles/presets/compact.html">
+        <!-- Import the rest of the dependencies  -->
+        <link rel="import" href="all-imports.html">
+      </template>
+    </nice-demo-snippet>
 
     <h2 demo-section>Custom properties</h2>
 

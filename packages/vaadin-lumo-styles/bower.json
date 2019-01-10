@@ -10,6 +10,7 @@
     "mixins/menu-overlay.html",
     "mixins/overlay.html",
     "mixins/required-field.html",
+    "presets/compact.html",
     "badge.html",
     "color.html",
     "font-icons.html",
