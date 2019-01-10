@@ -85,6 +85,10 @@
         expect(children[2].outerHTML).to.be.equal('<i>Checkbox</i>');
       });
 
+      it('should have input as focusElement', () => {
+        expect(vaadinCheckbox.focusElement).to.be.eql(nativeCheckbox);
+      });
+
       it('can be disabled imperatively', () => {
         vaadinCheckbox.disabled = true;
         expect(nativeCheckbox.hasAttribute('disabled')).to.be.eql(true);
