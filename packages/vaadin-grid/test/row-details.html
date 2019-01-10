@@ -190,8 +190,7 @@
           expect(getCellContent(cells[1]).textContent.trim()).to.be.empty;
         });
 
-        it('should have correct bounds', () => {
-          openRowDetails(1);
+        const assertDetailsBounds = () => {
           const cells = getRowCells(bodyRows[1]);
           const bounds = cells[1].getBoundingClientRect();
           expect(bounds.top).to.be.closeTo(cells[0].getBoundingClientRect().bottom, 1);
@@ -199,6 +198,22 @@
           expect(bounds.right).to.equal(grid.$.items.getBoundingClientRect().right);
           expect(bounds.bottom).to.be.closeTo(bodyRows[2].getBoundingClientRect().top, 1);
           expect(bounds.height).to.be.above(10);
+        };
+
+        it('should have correct bounds', () => {
+          openRowDetails(1);
+          assertDetailsBounds();
+        });
+
+        it('should have correct bounds when modified after opening', done => {
+          openRowDetails(1);
+          const cells = getRowCells(bodyRows[1]);
+          cells[1].style.padding = '10px';
+
+          requestAnimationFrame(() => {
+            assertDetailsBounds();
+            done();
+          });
         });
 
         it('should hide the details cell', () => {

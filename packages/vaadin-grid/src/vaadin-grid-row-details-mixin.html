@@ -130,6 +130,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
           Polymer.flush();
           row.style.setProperty('padding-bottom', `${cell.offsetHeight}px`);
+
+          requestAnimationFrame(() => this.notifyResize());
         }
       }
       if (hiddenChanged) {
