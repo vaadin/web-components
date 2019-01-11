@@ -18,7 +18,7 @@
     "web-component",
     "polymer"
   ],
-  "license": "SEE LICENSE IN LICENSE",
+  "license": "https://raw.githubusercontent.com/vaadin/vaadin-grid-pro/master/LICENSE",
   "ignore": [
     "**/.*",
     "node_modules",
