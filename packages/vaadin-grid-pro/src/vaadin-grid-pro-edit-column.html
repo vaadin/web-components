@@ -89,7 +89,11 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           /**
            * JS Path of the property in the item used for the editable content.
            */
-          path: String
+          path: String,
+
+          _oldTemplate: Object,
+
+          _oldRenderer: Function
         };
       }
 
@@ -131,10 +135,24 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         this._editTemplateObserver.flush();
       }
 
+      _removeNewRendererOrTemplate(template, oldTemplate, renderer, oldRenderer) {
+        if (template !== oldTemplate) {
+          this._editModeTemplate = undefined;
+        } else if (renderer !== oldRenderer) {
+          this.editModeRenderer = undefined;
+        }
+      }
+
       _editModeTemplateOrRendererChanged(template, renderer) {
+        if (template === undefined && renderer === undefined && !this._oldTemplate && !this._oldRenderer) {
+          return;
+        }
         if (template && renderer) {
+          this._removeNewRendererOrTemplate(template, this._oldTemplate, renderer, this._oldRenderer);
           throw new Error('You should only use either a renderer or a template');
         }
+        this._oldTemplate = template;
+        this._oldRenderer = renderer;
         this.editorType = (template || renderer) ? 'custom' : 'text';
       }
 

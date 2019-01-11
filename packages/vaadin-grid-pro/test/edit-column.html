@@ -618,11 +618,12 @@
           expect(column.editorType).to.be.equal('text');
         });
 
-        it('should throw an error when setting a template if there is already a renderer', () => {
+        it('should throw an error and remove template when added after renderer', () => {
           column.editModeRenderer = function(root, owner, model) {
             root.innerHTML = '<input>';
           };
           expect(() => column._editModeTemplate = {}).to.throw(Error);
+          expect(column._editModeTemplate).to.be.not.ok;
         });
       });
 
@@ -678,9 +679,10 @@
           expect(column.editorType).to.be.equal('text');
         });
 
-        it('should throw an error when setting a renderer if there is already a template', () => {
+        it('should throw an error and remove renderer when added after template', () => {
           column = grid.querySelector('[path="name"]');
           expect(() => column.editModeRenderer = {}).to.throw(Error);
+          expect(column.editModeRenderer).to.be.not.ok;
         });
       });
 
