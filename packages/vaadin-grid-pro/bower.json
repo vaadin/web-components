@@ -18,7 +18,7 @@
     "web-component",
     "polymer"
   ],
-  "license": "Apache-2.0",
+  "license": "SEE LICENSE IN LICENSE",
   "ignore": [
     "**/.*",
     "node_modules",

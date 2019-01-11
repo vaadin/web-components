@@ -1,190 +1,279 @@
-                                 Apache License
-                           Version 2.0, January 2004
-                        http://www.apache.org/licenses/
+Commercial Vaadin Add-On License version 3
 
-   TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
+NOTICE TO USER: PLEASE READ THIS LICENSE AGREEMENT CAREFULLY. BY
+USING ALL OR ANY PART OF THE LICENSED SOFTWARE YOU ACCEPT ALL THE
+TERMS AND CONDITIONS OF THIS AGREEMENT, INCLUDING, IN PARTICULAR THE
+RESTRICTIONS ON: USE AND TRANSFERABILITY CONTAINED IN CLAUSE 2;
+WARRANTY IN CLAUSE 6; LIABILITY IN CLAUSE 7. YOU ACCEPT THAT THIS
+AGREEMENT IS ENFORCEABLE LIKE ANY WRITTEN NEGOTIATED AGREEMENT DULY
+SIGNED BY YOU. IF YOU DO NOT AGREE ON ALL THE TERMS AND CONDITIONS OF
+THIS AGREEMENT, STOP THE USE OF THE LICENSED SOFTWARE IMMEDIATELY.
 
-   1. Definitions.
 
-      "License" shall mean the terms and conditions for use, reproduction,
-      and distribution as defined by Sections 1 through 9 of this document.
+1. Definitions
+In this Agreement, unless the context requires otherwise, the
+following words and phrases shall have the following meanings:
+	* "Developer" shall mean a software developer, tester, designer
+	  or other person
+	* "Vaadin Framework" shall mean the Vaadin user interface library
+	  and web framework that help Developers in building rich internet
+	  applications and that is available for download at the
+	  vaadin.com website.
+	* "Licensed Software" shall mean an add-on software component,
+	  theme, tool or other software or resource that adds
+	  functionality to Vaadin Framework or helps Developers in
+	  developing Vaadin Framework based applications. Licensed
+	  Software include, but are not limited to, user interface
+	  components, data integration components, graphical themes
+	  and development tools.
+	* "Use Licensed Software" shall mean either directly interacting
+	  with, including without limitations using the user interface
+	  of, running on workstation or installing, the Licensed Software
+	  during Project or editing Project source code file that refers
+	  to or depends on Licensed Software either directly or
+	  indirectly. Developer who edits source code that can not be
+	  compiled and/or run without a copy of Licensed Software is
+	  considered to Use Licensed Software. Interacting with a test
+	  server that runs Licensed Software as a part of automated test
+	  suite is not consider as Use of Licensed Software, but the
+	  maintainers of the mentioned test suite are considered to Use
+	  Licensed Software.
+	* "Agreement" shall mean this Commercial Vaadin Add-On License
+	  version 3 agreement.
+	* "License" shall mean the right to Use Licensed Software
+	  according to Agreement by one Developer and is identified by a
+	  unique License Number.
+	* "License Number" shall mean a number that identifies one unique
+	  License and is created by Vaadin Ltd. and sent to Licensee after
+	  the payment of the license fee or Subscription fee.
+	* "Intellectual Property Rights" shall mean any and all patent,
+	  copyright, trademark, design right, petty patent, service mark,
+	  domain name or any other right or trade secret whether
+	  registered or not.
+	* "Licensee" shall mean the entity that has purchased Licensed
+	  Software or subscribed to a subscription that includes the right
+	  to Use Licensed Software.
+	* "Licensor" shall mean Vaadin Ltd. or a third party licensing
+	  Licensed Software under Agreement.
+	* "Parties/Party" shall mean Licensee and Licensor, or either of
+	  them.
+	* "Project" shall mean Licensee's software development project
+	  during which the participating Developers Use Licensed Software
+	  and which aims to produce Project Result.
+	* "Project Result" shall mean the outcome of the Project.
+	* "Vaadin Directory" shall mean the central on-line repository for
+	  add-on software components and tools at vaadin.com website
+	  operated by Vaadin Ltd.
+	* "Subscription" shall mean a subscription offered by Vaadin Ltd.
+	  in which Licensor grants rights to Use Licensed Software
+	  according to the terms of the subscription.
+	* "Major Version", "Minor Version" and "Maintenance Version" shall
+	  mean parts of a version number X.Y.Z, where X is considered to be
+	  Major Version, Y Minor Version and Z Maintenance version. For
+	  example, in version 7.1.3 the Major Version is 7, Minor Version
+	  1 and Maintenance Version 3.
 
-      "Licensor" shall mean the copyright owner or entity authorized by
-      the copyright owner that is granting the License.
 
-      "Legal Entity" shall mean the union of the acting entity and all
-      other entities that control, are controlled by, or are under common
-      control with that entity. For the purposes of this definition,
-      "control" means (i) the power, direct or indirect, to cause the
-      direction or management of such entity, whether by contract or
-      otherwise, or (ii) ownership of fifty percent (50%) or more of the
-      outstanding shares, or (iii) beneficial ownership of such entity.
+2. Grant of License
 
-      "You" (or "Your") shall mean an individual or Legal Entity
-      exercising permissions granted by this License.
+2.1 Licensor grants to Licensee, against full payment of respected
+license fee or Subscription fee, a worldwide, royalty-free,
+irrevocable, non-exclusive limited License to Use Licensed Software in
+Project(s) by a Developer.
+2.2 Licensee shall not, unless expressly provided in Agreement or in
+the applicable legislation
+2.2.1 rent, lease or loan Licensed Software or any copy of it;
+2.2.2 remove, obliterate, deface or in any way alter the notice of
+Licensor or third parties' proprietary rights related to Licensed
+Software;
+2.2.3 grant sub-licenses to Licensed Software or assign its rights or
+obligations under this Agreement to a third party.
+2.3 Licensee may license, for free or against a payment, Project
+Result including Licensed Software whether regarded as derivative
+works or not. End users using Project Result that does not involve
+changing any source code are not required to have a valid License. If
+Project Result is further developed or modified by changing its source
+code or the Project Results is used as a software component or
+framework in a software development project, all persons who Use
+Licensed Software need to have a valid License. If Project Result is a
+software development tool, component or environment that provides the
+functionality of the Licensed Software for use in software development
+projects, all persons who Use Licensed Software need to have a valid
+License.
+2.4 Licensee may transfer License to another person or an entity for
+free or for a fee. License is transferred by giving the associated
+License Number to the recipient and ceasing Use of Licensed Software
+with that particular License Number by the original Licensee. After
+this, only the Developers of the original Licensee for whom the
+Licensee still has a valid License and License Number may continue to
+Use Licensed Software.
+2.5 If the License is obtained as a part of Subscription, the right to
+Use Licensed Software expires when Subscription ends.
+2.6 If the License has been given for a limited period, the right to
+Use Licensed Software expires when the this period ends.
 
-      "Source" form shall mean the preferred form for making modifications,
-      including but not limited to software source code, documentation
-      source, and configuration files.
 
-      "Object" form shall mean any form resulting from mechanical
-      transformation or translation of a Source form, including but
-      not limited to compiled object code, generated documentation,
-      and conversions to other media types.
+3. Intellectual Property Rights
+3.1 All Intellectual Property Rights in and to Licensed Software are
+and shall at all times remain the sole and exclusive property of
+Licensor and its third party licensors, if any.
+3.2 Licensee will not at any time do or cause to be done any such act
+or thing which in any way impairs, or intends to impair, any right,
+title, interest or any Intellectual Property Right of Licensor or its
+third party licensors. Licensee shall not in any manner represent that
+it has any ownership of any kind in any of the above mentioned
+Intellectual Property Rights.
 
-      "Work" shall mean the work of authorship, whether in Source or
-      Object form, made available under the License, as indicated by a
-      copyright notice that is included in or attached to the work
-      (an example is provided in the Appendix below).
 
-      "Derivative Works" shall mean any work, whether in Source or Object
-      form, that is based on (or derived from) the Work and for which the
-      editorial revisions, annotations, elaborations, or other modifications
-      represent, as a whole, an original work of authorship. For the purposes
-      of this License, Derivative Works shall not include works that remain
-      separable from, or merely link (or bind by name) to the interfaces of,
-      the Work and Derivative Works thereof.
+4. License fee
+4.1 In consideration for the license granted herein, Licensor shall
+charge Licensee a license fee according to price visible at Vaadin
+Directory at the time of purchase or a Subscription fee when the
+License is included as a part of Subscription. Licensee must have a
+valid License for all Developers who Use Licensed Software in Project.
+License may be used in many Projects simultaneously without additional
+payments. Project Result may be copied an unlimited number of times
+and deployed to an unlimited number of computers without additional
+payments.
+4.2 Licensee's License will be valid on the payment of respected
+license or Subscription fee and delivery of corresponding License
+Number by Vaadin Ltd. If License is given by Vaadin Ltd. without a
+fee, License if valid immediately after delivery of corresponding
+License Number by Vaadin Ltd.
 
-      "Contribution" shall mean any work of authorship, including
-      the original version of the Work and any modifications or additions
-      to that Work or Derivative Works thereof, that is intentionally
-      submitted to Licensor for inclusion in the Work by the copyright owner
-      or by an individual or Legal Entity authorized to submit on behalf of
-      the copyright owner. For the purposes of this definition, "submitted"
-      means any form of electronic, verbal, or written communication sent
-      to the Licensor or its representatives, including but not limited to
-      communication on electronic mailing lists, source code control systems,
-      and issue tracking systems that are managed by, or on behalf of, the
-      Licensor for the purpose of discussing and improving the Work, but
-      excluding communication that is conspicuously marked or otherwise
-      designated in writing by the copyright owner as "Not a Contribution."
 
-      "Contributor" shall mean Licensor and any individual or Legal Entity
-      on behalf of whom a Contribution has been received by Licensor and
-      subsequently incorporated within the Work.
+5. Term and termination
+5.1 This Agreement and the Licenses granted herein become effective as
+of the payment of the applicable license fee.
+5.2 In the event Licensee fails to comply with the terms set in this
+Agreement, the License granted herein shall not be valid and Licensee
+must either comply with one of the open source licenses available, if
+any, listed for Licensed Software at Vaadin Directory or at once cease
+the use of Licensed Software and any of its rights under Clause 2, and
+delete all copies of Licensed Software.
+5.3 Licensor has the right, in addition and without prejudice to any
+other rights or remedies, to terminate this Agreement immediately as
+follows:
+5.3.1 for any material breach of Agreement, that is not cured within
+seven (7) days of receipt by Licensee in default of a written notice
+specifying the breach and requiring its cure;
+5.3.2 upon receiving a written notice, if (a) all or a substantial
+portion of the assets of Licensee are transferred to an assignee for
+the benefit of creditors, or to a receiver or a trustee in bankruptcy,
+(b) a proceeding is commenced by or against Licensee for relief under
+bankruptcy or similar laws and such proceeding is not dismissed within
+sixty (60) days, or (c) Licensee is adjudged bankrupt.
+5.4 If and when this Agreement is terminated due to any reason or
+cause whatsoever, the Licensee shall cease to Use Licensed Software
+and any of its rights under Clause 2, and delete all copies of
+Licensed Software.
+5.5 Provisions of the Agreement which, by their nature, are intended
+to survive its termination or expiration, shall survive its
+termination or expiration.
 
-   2. Grant of Copyright License. Subject to the terms and conditions of
-      this License, each Contributor hereby grants to You a perpetual,
-      worldwide, non-exclusive, no-charge, royalty-free, irrevocable
-      copyright license to reproduce, prepare Derivative Works of,
-      publicly display, publicly perform, sublicense, and distribute the
-      Work and such Derivative Works in Source or Object form.
 
-   3. Grant of Patent License. Subject to the terms and conditions of
-      this License, each Contributor hereby grants to You a perpetual,
-      worldwide, non-exclusive, no-charge, royalty-free, irrevocable
-      (except as stated in this section) patent license to make, have made,
-      use, offer to sell, sell, import, and otherwise transfer the Work,
-      where such license applies only to those patent claims licensable
-      by such Contributor that are necessarily infringed by their
-      Contribution(s) alone or by combination of their Contribution(s)
-      with the Work to which such Contribution(s) was submitted. If You
-      institute patent litigation against any entity (including a
-      cross-claim or counterclaim in a lawsuit) alleging that the Work
-      or a Contribution incorporated within the Work constitutes direct
-      or contributory patent infringement, then any patent licenses
-      granted to You under this License for that Work shall terminate
-      as of the date such litigation is filed.
+6. Warranties
+THE LICENSED SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND
+EXPRESS OR IMPLIED, AND TO THE MAXIMUM EXTENT PERMITTED BY THE
+APPLICABLE LAW. EXCEPT AS EXPRESSLY PROVIDED IN THIS CLAUSE, NO
+WARRANTY, CONDITION, UNDERTAKING, LIABILITY OR TERM, EXPRESS OR
+IMPLIED, STATUTORY OR OTHERWISE, AS TO CONDITION, QUALITY,
+PERFORMANCE, FUNCTIONALITY, INFRINGEMENT, MERCHANTABILITY, DURABILITY
+OR FITNESS FOR PURPOSE, IS GIVEN OR ASSUMED BY VAADIN LTD., LICENSOR
+OR ITS LICENSORS AND ALL SUCH WARRANTIES, CONDITIONS, UNDERTAKINGS AND
+TERMS ARE HEREBY EXCLUDED.
 
-   4. Redistribution. You may reproduce and distribute copies of the
-      Work or Derivative Works thereof in any medium, with or without
-      modifications, and in Source or Object form, provided that You
-      meet the following conditions:
 
-      (a) You must give any other recipients of the Work or
-          Derivative Works a copy of this License; and
+7. Limitation of Liability
+VAADIN LTD. AND/OR LICENSOR WILL NOT BE LIABLE FOR ANY INDIRECT,
+INCIDENTAL, PUNITIVE OR CONSEQUENTIAL LOSS, DAMAGE, COST OR EXPENSE OF
+ANY KIND WHATSOEVER AND HOWSOEVER CAUSED (INCLUDING BUSINESS
+INTERRUPTION, OR ANY LOSS OF BUSINESS, ANTICIPATED SAVINGS, REVENUE,
+GOODWILL, MANAGEMENT TIME, LOSS OF PROFITS OR OF CONTRACTS, LOSS OF
+OPERATION TIME, LOSS OF REPUTATION OR OF DATA) INCLUDING NEGLIGENCE,
+WHETHER IN CONTRACT OR TORT, EVEN IF THEY HAVE BEEN ADVISED OF THE
+POSSIBILITY. DEVELOPER WILL USE REASONABLE EFFORTS TO MITIGATE THEIR
+LOSS SUFFERED. VAADIN LTD'S AND/OR LICENSOR'S AGGREGATE LIABILITY AND
+THAT OF ITS AFFILIATES AND SUPPLIERS UNDER OR IN CONNECTION WITH THIS
+LICENSE AGREEMENT WILL BE LIMITED TO THE AMOUNT PAID FOR THE LICENSED
+SOFTWARE.
 
-      (b) You must cause any modified files to carry prominent notices
-          stating that You changed the files; and
 
-      (c) You must retain, in the Source form of any Derivative Works
-          that You distribute, all copyright, patent, trademark, and
-          attribution notices from the Source form of the Work,
-          excluding those notices that do not pertain to any part of
-          the Derivative Works; and
+8. Updates, new versions maintenance and support
+Licensor may, in its sole discretion, provide maintenance releases,
+updates and upgrades as new versions of Licensed Software. All new
+Maintenance Version and Minor Version updates of Licensed Software are
+free and do not require a purchase of new Licenses. Major Version
+upgrades require a new License.
+Licensee is not entitled to receive support for the Licensed Software,
+but Licensor may, in its sole discretion, provide support either for
+free or for a fee.
 
-      (d) If the Work includes a "NOTICE" text file as part of its
-          distribution, then any Derivative Works that You distribute must
-          include a readable copy of the attribution notices contained
-          within such NOTICE file, excluding those notices that do not
-          pertain to any part of the Derivative Works, in at least one
-          of the following places: within a NOTICE text file distributed
-          as part of the Derivative Works; within the Source form or
-          documentation, if provided along with the Derivative Works; or,
-          within a display generated by the Derivative Works, if and
-          wherever such third-party notices normally appear. The contents
-          of the NOTICE file are for informational purposes only and
-          do not modify the License. You may add Your own attribution
-          notices within Derivative Works that You distribute, alongside
-          or as an addendum to the NOTICE text from the Work, provided
-          that such additional attribution notices cannot be construed
-          as modifying the License.
 
-      You may add Your own copyright statement to Your modifications and
-      may provide additional or different license terms and conditions
-      for use, reproduction, or distribution of Your modifications, or
-      for any such Derivative Works as a whole, provided Your use,
-      reproduction, and distribution of the Work otherwise complies with
-      the conditions stated in this License.
+9. Miscellaneous
 
-   5. Submission of Contributions. Unless You explicitly state otherwise,
-      any Contribution intentionally submitted for inclusion in the Work
-      by You to the Licensor shall be under the terms and conditions of
-      this License, without any additional terms or conditions.
-      Notwithstanding the above, nothing herein shall supersede or modify
-      the terms of any separate license agreement you may have executed
-      with Licensor regarding such Contributions.
+9.1 No Waiver
+The failure of Licensor to exercise any of its rights under this
+Agreement or to require the performance of any term or provision of
+this Agreement, or the waiver by either Party of such breach of this
+Agreement, shall not prevent a subsequent exercise or enforcement of
+such right or be deemed a waiver of any subsequent breach of the same
+or any other term or provision of this Agreement. Any waiver of the
+performance of any of the terms or conditions of this Agreement shall
+be effective only if in writing and signed by the Party against which
+such waiver is to be enforced.
 
-   6. Trademarks. This License does not grant permission to use the trade
-      names, trademarks, service marks, or product names of the Licensor,
-      except as required for reasonable and customary use in describing the
-      origin of the Work and reproducing the content of the NOTICE file.
+9.2 Headings
+The headings in this Agreement are for the convenience of the Parties
+only and are not intended to define or limit the scope or
+interpretation of the Agreement or any provision hereof.
 
-   7. Disclaimer of Warranty. Unless required by applicable law or
-      agreed to in writing, Licensor provides the Work (and each
-      Contributor provides its Contributions) on an "AS IS" BASIS,
-      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
-      implied, including, without limitation, any warranties or conditions
-      of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A
-      PARTICULAR PURPOSE. You are solely responsible for determining the
-      appropriateness of using or redistributing the Work and assume any
-      risks associated with Your exercise of permissions under this License.
+9.3 Severability
+If any term of this Agreement is invalid or unenforceable, such terms
+or provisions shall not invalidate the rest of the Agreement which
+shall remain in full force and effect as if such invalidated or
+unenforceable terms or conditions had not been made a part of this
+Agreement. In the event this section (Severability) becomes operative,
+Parties agree to attempt to negotiate settlement that carries out the
+economic intent of the terms or provisions found invalid or
+unenforceable.
 
-   8. Limitation of Liability. In no event and under no legal theory,
-      whether in tort (including negligence), contract, or otherwise,
-      unless required by applicable law (such as deliberate and grossly
-      negligent acts) or agreed to in writing, shall any Contributor be
-      liable to You for damages, including any direct, indirect, special,
-      incidental, or consequential damages of any character arising as a
-      result of this License or out of the use or inability to use the
-      Work (including but not limited to damages for loss of goodwill,
-      work stoppage, computer failure or malfunction, or any and all
-      other commercial damages or losses), even if such Contributor
-      has been advised of the possibility of such damages.
+9.4 Export Control
+The Licensed Software may be subject to import and export controls in
+other countries. Licensee agrees to strictly comply with all
+applicable import and export regulations and acknowledge that Licensee
+has the responsibility to obtain licenses to export, re-export,
+transfer or import Licensed Software.
 
-   9. Accepting Warranty or Additional Liability. While redistributing
-      the Work or Derivative Works thereof, You may choose to offer,
-      and charge a fee for, acceptance of support, warranty, indemnity,
-      or other liability obligations and/or rights consistent with this
-      License. However, in accepting such obligations, You may act only
-      on Your own behalf and on Your sole responsibility, not on behalf
-      of any other Contributor, and only if You agree to indemnify,
-      defend, and hold each Contributor harmless for any liability
-      incurred by, or claims asserted against, such Contributor by reason
-      of your accepting any such warranty or additional liability.
+9.5 Entire Agreement and Assignment
+Agreement sets forth the entire agreement between the Parties with
+respect to the subject matter hereof and supersedes any prior
+proposals and representations, whether written or oral. Neither Party
+shall have the right to assign this Agreement to a third party without
+the prior written consent of the other party. However, Licensor shall
+have the right to assign this Agreement and all of the rights and
+obligations contained therein to a company belonging to the same group
+of companies as Licensor, and to a third party to which the business
+of Licensor is transferred. As an exception, the Licensee shall have
+the right to transfer License as described in 2.4.
 
-   END OF TERMS AND CONDITIONS
-
-   Copyright 2017 Vaadin Ltd.
-
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
+9.6 Governing Law
+This Agreement and its terms and conditions shall be governed by and
+construed in accordance with the substantive laws in force in: (a) the
+State of California, if Licensee's domicile is in the United States;
+or (b) Finland, if Licensee's domicile is outside the United States.
+This Agreement shall be construed and enforced without regard to the
+United Nations Convention on the International Sale of Goods. The
+official text of the Agreement or any notices given or accounts or
+statements required hereby shall be in English. Any dispute or
+controversy or claim arising out of or relating to this Agreement
+involving the Parties, shall be resolved by final and binding
+arbitration in accordance with: (a) the International Chamber of
+Commerce Rules of Arbitration if Licensee's domicile is in the United
+States; or (b) the Arbitration Rules of the Finnish Central Chamber of
+Commerce if Licensee's domicile is outside the United States; by one
+(1) arbitrator appointed according to the aforementioned rules. The
+arbitration shall be conducted in the English language in: (a) San
+Francisco, California, United States if Licensee's domicile is in the
+United States; or (b) Turku, Finland if Licensee's domicile is outside
+the United States.
