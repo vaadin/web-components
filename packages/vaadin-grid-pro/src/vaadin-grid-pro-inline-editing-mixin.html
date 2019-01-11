@@ -58,7 +58,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       this.addEventListener('keydown', e => {
         switch (e.keyCode) {
           case 27:
-            this.__edited && this._stopEdit();
+            this.__edited && this._stopEdit(true);
             break;
           case 9:
             this.__edited && this._switchEditCell(e);
@@ -168,27 +168,29 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       this.addEventListener('item-property-changed', this.__boundItemPropertyChanged);
     }
 
-    _stopEdit() {
+    _stopEdit(shouldCancel) {
       if (!this.__edited) {
         return;
       }
       const {cell, column, model} = this.__edited;
 
-      const editor = column._getEditorComponent(cell);
-      if (editor) {
-        const value = column._getEditorValue(editor);
-        if (value !== this.get(column.path, model.item)) {
-          this.dispatchEvent(new CustomEvent('item-property-changed', {
-            detail: {
-              index: model.index,
-              item: model.item,
-              path: column.path,
-              value: value
-            },
-            bubbles: true,
-            cancelable: true,
-            composed: true
-          }));
+      if (!shouldCancel) {
+        const editor = column._getEditorComponent(cell);
+        if (editor) {
+          const value = column._getEditorValue(editor);
+          if (value !== this.get(column.path, model.item)) {
+            this.dispatchEvent(new CustomEvent('item-property-changed', {
+              detail: {
+                index: model.index,
+                item: model.item,
+                path: column.path,
+                value: value
+              },
+              bubbles: true,
+              cancelable: true,
+              composed: true
+            }));
+          }
         }
       }
 

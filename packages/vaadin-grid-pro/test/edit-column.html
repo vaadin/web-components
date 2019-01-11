@@ -463,20 +463,30 @@
           expect(getCellEditor(firstCell)).to.be.ok;
         });
 
-        it('should restore renderer and render updated content on edited cell Esc', () => {
+        it('should restore renderer and render updated content on edited cell Enter', () => {
+          enter(firstCell);
+          input = getCellEditor(firstCell);
+          input.value = 'new';
+          enter(input);
+          expect(firstCell._renderer).to.equal(column.renderer);
+          expect(firstCell._content.textContent).to.equal('0 new');
+        });
+
+        it('should restore renderer and reset old content on edited cell Esc', () => {
+          const old = firstCell._content.textContent;
           enter(firstCell);
           input = getCellEditor(firstCell);
           input.value = 'new';
           esc(input);
           expect(firstCell._renderer).to.equal(column.renderer);
-          expect(firstCell._content.textContent).to.equal('0 new');
+          expect(firstCell._content.textContent).to.equal(old);
         });
 
-        it('should updated content in the cell of another column using template on Esc', () => {
+        it('should updated content in the cell of another column using template on Enter', () => {
           enter(firstCell);
           input = getCellEditor(firstCell);
           input.value = 'new';
-          esc(input);
+          enter(input);
           const secondCell = getContainerCell(grid.$.items, 0, 2);
           expect(secondCell._content.textContent).to.equal('new');
         });
@@ -523,7 +533,19 @@
           expect(getCellEditor(cell)).to.be.ok;
         });
 
-        it('should restore template and render updated content on edited cell Esc', () => {
+        it('should restore template and render updated content on edited cell Enter', () => {
+          enter(cell);
+          input = getCellEditor(cell);
+          input.value = 'new';
+          enter(input);
+          expect(cell._renderer).to.be.not.ok;
+          expect(cell._template).to.equal(column._bodyTemplate);
+          expect(getCellEditor(cell)).to.be.not.ok;
+          expect(cell._content.textContent).to.equal('0 new');
+        });
+
+        it('should restore template and reset old content on edited cell Esc', () => {
+          const old = cell._content.textContent;
           enter(cell);
           input = getCellEditor(cell);
           input.value = 'new';
@@ -531,7 +553,7 @@
           expect(cell._renderer).to.be.not.ok;
           expect(cell._template).to.equal(column._bodyTemplate);
           expect(getCellEditor(cell)).to.be.not.ok;
-          expect(cell._content.textContent).to.equal('0 new');
+          expect(cell._content.textContent).to.equal(old);
         });
       });
 
@@ -650,9 +672,9 @@
           dblclick(cell._content);
           input = cell._content.querySelector('input');
           input.value = 'New';
-          esc(input);
+          enter(input);
           expect(cell._template).to.equal(column._bodyTemplate);
-          expect(cell._content.textContent.trim()).to.equal('New');
+          expect(cell._content.textContent).to.equal('New');
           expect(cell._content.querySelector('input')).to.not.be.ok;
         });
 
@@ -662,7 +684,7 @@
           dblclick(cell._content);
           input = cell._content.querySelector('input');
           input.value = '32';
-          esc(input);
+          enter(input);
           expect(cell._renderer).to.be.ok;
           expect(cell._template).to.be.not.ok;
           expect(cell._content.textContent.trim()).to.equal('32');
@@ -712,7 +734,7 @@
           dblclick(cell._content);
           editor = getCellEditor(cell);
           editor.set('user.name', 'New');
-          esc(editor);
+          enter(editor);
           expect(cell._content.textContent.trim()).to.equal('New');
           expect(grid.items[0].name).to.equal('New');
         });
@@ -741,7 +763,7 @@
           dblclick(cell._content);
           editor = column._getEditorComponent(cell);
           editor.click();
-          esc(editor);
+          enter(editor);
           expect(cell._content.textContent.trim()).to.equal('false');
           expect(grid.items[0].married).to.equal(false);
         });
@@ -822,7 +844,7 @@
           const item = editor._overlay.querySelector('vaadin-item');
           const value = item.textContent;
           item.click();
-          esc(select);
+          tab(select);
           expect(column._getEditorComponent(cell)).to.not.be.ok;
           expect(cell._content.textContent).to.equal(value);
         });
@@ -908,7 +930,7 @@
           enter(firstCell);
           input = getCellEditor(firstCell);
           input.value = 'new';
-          esc(input);
+          enter(input);
         });
 
         it('should not be fired once cell edit completed if value has not changed', () => {
@@ -919,7 +941,7 @@
           const value = input.value;
           input.value = 'new';
           input.value = value;
-          esc(input);
+          enter(input);
           expect(spy).to.not.be.called;
         });
 
@@ -934,7 +956,7 @@
           enter(firstCell);
           input = getCellEditor(firstCell);
           input.value = 'new';
-          esc(input);
+          enter(input);
         });
       });
 
