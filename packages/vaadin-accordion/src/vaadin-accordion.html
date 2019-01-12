@@ -7,6 +7,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../polymer/polymer-element.html">
 <link rel="import" href="../../polymer/lib/utils/flattened-nodes-observer.html">
 <link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
+<link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="vaadin-details.html">
 
 <dom-module id="vaadin-accordion">
@@ -29,6 +30,16 @@ This program is available under Apache License Version 2.0, available at https:/
 
       /**
        * The accordion panel element.
+       *
+       * ### Styling
+       *
+       * `<vaadin-accordion-panel>` is an extension of `<vaadin-details>` component.
+       * It has the same slots for summary and expansible content, and inherits all
+       * the state attributes and stylable shadow parts.
+       *
+       * See [`<vaadin-details>` documentation](#/elements/vaadin-details).
+       *
+       * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
        *
        * @memberof Vaadin
        */
@@ -63,11 +74,29 @@ This program is available under Apache License Version 2.0, available at https:/
        * </vaadin-accordion>
        * ```
        *
+       * ### Styling
+       *
+       * The styling should be applied to [`<vaadin-accordion-panel>`](#/elements/vaadin-accordion-panel)
+       * component, which extends `<vaadin-details>`. It has the same slots
+       * and inherits all the state attributes and stylable shadow parts.
+       *
+       * You can apply the theme to `<vaadin-accordion>` component itself,
+       * especially by using the following CSS selector:
+       *
+       * ```
+       * :host ::slotted(vaadin-accordion-panel) {
+       *   margin-bottom: 5px;
+       * }
+       * ```
+       *
+       * See also [ThemableMixin styling documentation](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+       *
        * @memberof Vaadin
        * @mixes Vaadin.ElementMixin
+       * @mixes Vaadin.ThemableMixin
        * @demo demo/index.html
        */
-      class AccordionElement extends Vaadin.ElementMixin(Polymer.Element) {
+      class AccordionElement extends Vaadin.ThemableMixin(Vaadin.ElementMixin(Polymer.Element)) {
         static get is() {
           return 'vaadin-accordion';
         }

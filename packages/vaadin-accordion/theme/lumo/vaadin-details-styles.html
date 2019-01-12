@@ -15,7 +15,7 @@
         background-color: transparent;
       }
 
-      [part="header"] {
+      [part="summary"] {
         display: flex;
         align-items: center;
         width: 100%;
@@ -32,7 +32,7 @@
         -moz-osx-font-smoothing: grayscale;
       }
 
-      :host([focus-ring]) [part="header"] {
+      :host([focus-ring]) [part="summary"] {
         box-shadow: 0 0 0 2px var(--lumo-primary-color-50pct);
       }
 
@@ -46,14 +46,14 @@
         text-align: center;
       }
 
-      :host([disabled]) [part="header"],
+      :host([disabled]) [part="summary"],
       :host([disabled]) [part="toggle"] {
         color: var(--lumo-disabled-text-color);
       }
 
       @media (hover: hover) {
-        :host(:not([disabled])) [part="header"]:hover,
-        :host(:not([disabled])) [part="header"]:hover [part="toggle"] {
+        :host(:not([disabled])) [part="summary"]:hover,
+        :host(:not([disabled])) [part="summary"]:hover [part="toggle"] {
           color: var(--lumo-contrast-80pct);
         }
       }
@@ -75,11 +75,6 @@
         transform: rotate(90deg);
       }
 
-      [part="summary"] {
-        display: inline-block;
-        vertical-align: middle;
-      }
-
       [part="content"] {
         padding: var(--lumo-space-xs) 0 var(--lumo-space-s);
         font-size: var(--lumo-font-size-m);
@@ -91,7 +86,7 @@
         border-radius: var(--lumo-border-radius);
       }
 
-      :host([theme~="filled"]) [part="header"] {
+      :host([theme~="filled"]) [part="summary"] {
         padding-left: var(--lumo-space-s);
         padding-right: var(--lumo-space-s);
       }
@@ -101,12 +96,11 @@
         padding-right: var(--lumo-space-m);
       }
 
-      :host([theme~="small"]) [part="header"] {
+      :host([theme~="small"]) [part="summary"] {
         height: var(--lumo-size-s);
       }
 
-      :host([theme~="small"]) [part="summary"],
-      :host([theme~="small"]) [part="content"] {
+      :host([theme~="small"]) [part$="content"] {
         font-size: var(--lumo-font-size-s);
       }
 
@@ -114,7 +108,7 @@
         margin-right: calc(var(--lumo-space-xs) / 2);
       }
 
-      :host([theme~="reverse"]) [part="header"] {
+      :host([theme~="reverse"]) [part="summary"] {
         justify-content: space-between;
       }
 
@@ -123,7 +117,7 @@
         margin-right: 0;
       }
 
-      :host([theme~="reverse"][theme~="filled"]) [part="header"] {
+      :host([theme~="reverse"][theme~="filled"]) [part="summary"] {
         padding-left: var(--lumo-space-m);
       }
     </style>

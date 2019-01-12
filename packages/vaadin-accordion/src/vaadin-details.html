@@ -25,7 +25,7 @@ This program is available under Apache License Version 2.0, available at https:/
         overflow: hidden;
       }
 
-      [part="header"][disabled] {
+      [part="summary"][disabled] {
         pointer-events: none;
       }
 
@@ -37,14 +37,14 @@ This program is available under Apache License Version 2.0, available at https:/
     <div role="heading">
       <div
         role="button"
-        part="header"
+        part="summary"
         on-click="_onToggleClick"
         on-keydown="_onToggleKeyDown"
         disabled$="[[disabled]]"
         aria-expanded$="[[_getAriaExpanded(opened)]]"
       >
         <span part="toggle"></span>
-        <span part="summary"><slot name="summary"></slot></span>
+        <span part="summary-content"><slot name="summary"></slot></span>
       </div>
     </div>
     <div
@@ -67,6 +67,28 @@ This program is available under Apache License Version 2.0, available at https:/
        *  Details content, collapsed and hidden by default.
        * </vaadin-details>
        * ```
+       *
+       * ### Styling
+       *
+       * The following shadow DOM parts are exposed for styling:
+       *
+       * Part name        | Description
+       * -----------------|----------------
+       * `summary`        | The element used to open and close collapsible content.
+       * `toggle`         | The element used as indicator, can represent an icon.
+       * `summary-content`| The wrapper for the slotted summary content.
+       * `content`        | The wrapper for the collapsible details content.
+       *
+       * The following attributes are exposed for styling:
+       *
+       * Attribute    | Description
+       * -------------| -----------
+       * `opened`     | Set when the collapsible content is expanded and visible.
+       * `disabled`   | Set when the element is disabled.
+       * `focus-ring` | Set when the element is focused using the keyboard.
+       * `focused`    | Set when the element is focused.
+       *
+       * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
        *
        * @memberof Vaadin
        * @mixes Vaadin.ControlStateMixin
@@ -111,7 +133,7 @@ This program is available under Apache License Version 2.0, available at https:/
          * @protected
          */
         get focusElement() {
-          return this.shadowRoot.querySelector('[part="header"]');
+          return this.shadowRoot.querySelector('[part="summary"]');
         }
 
         ready() {
