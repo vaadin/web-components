@@ -43,7 +43,7 @@
 </vaadin-accordion>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-accordion/master/screenshot.png" width="200" alt="Screenshot of vaadin-accordion">](https://vaadin.com/components/vaadin-accordion)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-accordion/master/screenshot.png" alt="Screenshot of vaadin-accordion">](https://vaadin.com/components/vaadin-accordion)
 
 
 ## Installation
