@@ -1,6 +1,6 @@
 # &lt;vaadin-accordion&gt;
 
-[&lt;vaadin-accordion&gt;](https://vaadin.com/components/vaadin-accordion) is a Web Component providing accordion functionality, part of the [Vaadin components](https://vaadin.com/components).
+[&lt;vaadin-accordion&gt;](https://vaadin.com/components/vaadin-accordion) is a set of two Web Components providing functionality for expansible details and accordion, part of the [Vaadin components](https://vaadin.com/components).
 
 [Live Demo ↗](https://vaadin.com/components/vaadin-accordion/html-examples)
 |
@@ -20,14 +20,26 @@
   <template>
     <script src="../webcomponentsjs/webcomponents-lite.js"></script>
     <link rel="import" href="vaadin-accordion.html">
+    <link rel="import" href="vaadin-details.html">
     <next-code-block></next-code-block>
   </template>
 </custom-element-demo>
 ```
 -->
 ```html
+<vaadin-details>
+  <div slot="summary">Expansible Details</div>
+  <div>Details is a standalone expansible section.</div>
+</vaadin-details>
 <vaadin-accordion>
-  ...
+  <vaadin-accordion-panel theme="filled">
+    <div slot="summary">Accordion Panel 1</div>
+    <div>Accordion is a set of expansible sections.</div>
+  </vaadin-accordion-panel>
+  <vaadin-accordion-panel theme="filled">
+    <div slot="summary">Accordion Panel 2</div>
+    <div>Only one accordion panel can be opened.</div>
+  </vaadin-accordion-panel>
 </vaadin-accordion>
 ```
 

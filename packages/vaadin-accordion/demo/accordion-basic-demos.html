@@ -7,6 +7,12 @@
     </style>
 
     <h3>Details</h3>
+    <p>
+      The <code>&lt;vaadin-details&gt;</code> component creates the expansible section
+      of the content, visible only when toggled into an <code>opened</code> state.
+      It is similar to the native <code>&lt;summary&gt;</code> and <code>&lt;details&gt;</code>
+      HTML elements, but offers better styling support and accessibility features.
+    </p>
     <vaadin-demo-snippet id="accordion-basic-demos-details">
       <template preserve-content>
         <vaadin-details>
@@ -16,7 +22,24 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Disabled Details</h3>
+    <vaadin-demo-snippet id="accordion-basic-demos-details-disabled">
+      <template preserve-content>
+        <vaadin-details disabled opened>
+          <div slot="summary">Disabled heading</div>
+          <div>Always visible content</div>
+        </vaadin-details>
+      </template>
+    </vaadin-demo-snippet>
+
     <h3>Accordion</h3>
+    <p>
+      The <code>&lt;vaadin-accordion&gt;</code> component implements the
+      vertically stacked set of expansible panels. Only one panel can be
+      opened at a time. The component provides accessibility features,
+      including keyboard navigation, based on the
+      <a href="https://www.w3.org/TR/wai-aria-practices-1.1/#accordion">WAI-ARIA Authoring Practices</a>.
+    </p>
     <vaadin-demo-snippet id="accordion-basic-demos-accordion">
       <template preserve-content>
         <vaadin-accordion>
