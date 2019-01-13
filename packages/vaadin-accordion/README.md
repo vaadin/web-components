@@ -63,10 +63,11 @@ Install `vaadin-accordion`:
 bower i vaadin/vaadin-accordion --save
 ```
 
-Once installed, import it in your application:
+Once installed, import the components in your application:
 
 ```html
 <link rel="import" href="bower_components/vaadin-accordion/vaadin-accordion.html">
+<link rel="import" href="bower_components/vaadin-accordion/vaadin-details.html">
 ```
 
 ### Polymer 3 and ES Modules compatible version
@@ -78,10 +79,11 @@ Install `vaadin-accordion`:
 npm i @vaadin/vaadin-accordion --save
 ```
 
-Once installed, import it in your application:
+Once installed, import the components in your application:
 
 ```js
 import '@vaadin/vaadin-accordion/vaadin-accordion.js';
+import '@vaadin/vaadin-accordion/vaadin-details.js';
 ```
 
 ## Getting started
@@ -92,17 +94,20 @@ To use the Material theme, import the correspondent file from the `theme/materia
 
 ## Entry points
 
-- The component with the Lumo theme:
+- The components with the Lumo theme:
 
   `theme/lumo/vaadin-accordion.html`
+  `theme/lumo/vaadin-details.html`
 
-- The component with the Material theme:
+- The components with the Material theme:
 
   `theme/material/vaadin-accordion.html`
+  `theme/material/vaadin-details.html`
 
-- Alias for `theme/lumo/vaadin-accordion.html`:
+- Aliases for `theme/lumo/vaadin-*.html`:
 
   `vaadin-accordion.html`
+  `vaadin-details.html`
 
 
 ## Running demos and tests in a browser
