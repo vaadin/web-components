@@ -10,3 +10,7 @@ window.GridProDemo = superClass => {
 window.addEventListener('WebComponentsReady', () => {
   document.body.removeAttribute('unresolved');
 });
+
+window.Vaadin.GridDemo = window.Vaadin.GridDemo || {};
+window.Vaadin.GridDemo.users = window.Vaadin.GridDemo.users || [];
+window.Vaadin.GridDemo.getUsers = () => JSON.parse(JSON.stringify(window.Vaadin.GridDemo.users));

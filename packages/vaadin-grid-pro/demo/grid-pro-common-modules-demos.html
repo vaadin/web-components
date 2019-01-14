@@ -28,7 +28,7 @@
         <script>
           window.addDemoReadyListener('#grid-pro-helpers-demos', function(document) {
             const grid = document.querySelector('vaadin-grid-pro');
-            grid.items = Vaadin.GridDemo.users;
+            grid.items = Vaadin.GridDemo.getUsers();
 
             const checkBox = document.querySelector('vaadin-checkbox');
             checkBox.addEventListener('checked-changed', function(event) {

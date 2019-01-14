@@ -23,7 +23,7 @@
         <script>
           window.addDemoReadyListener('#grid-pro-basic-demos-defining-content', function(document) {
             // Assign an array of user objects as the pro grid's items
-            document.querySelector('vaadin-grid-pro').items = Vaadin.GridDemo.users;
+            document.querySelector('vaadin-grid-pro').items = Vaadin.GridDemo.getUsers();
 
             /*
             * Each object in the above "users" array follows the same structure:

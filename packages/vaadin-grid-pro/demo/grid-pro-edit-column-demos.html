@@ -41,7 +41,7 @@
         <script>
           window.addDemoReadyListener('#grid-pro-edit-column-demos-edit-column', function(document) {
             // Assign an array of user objects as the pro grid's items
-            document.querySelector('vaadin-grid-pro').items = Vaadin.GridDemo.users;
+            document.querySelector('vaadin-grid-pro').items = Vaadin.GridDemo.getUsers();
           });
         </script>
       </template>
@@ -65,7 +65,7 @@
         <script>
           window.addDemoReadyListener('#grid-pro-edit-column-demos-allow-enter-row-change', function(document) {
             // Assign an array of user objects as the pro grid's items
-            document.querySelector('vaadin-grid-pro').items = Vaadin.GridDemo.users;
+            document.querySelector('vaadin-grid-pro').items = Vaadin.GridDemo.getUsers();
           });
         </script>
       </template>
@@ -85,7 +85,7 @@
         <script>
           window.addDemoReadyListener('#grid-pro-edit-column-demos-preserve-edit-mode', function(document) {
             // Assign an array of user objects as the pro grid's items
-            document.querySelector('vaadin-grid-pro').items = Vaadin.GridDemo.users;
+            document.querySelector('vaadin-grid-pro').items = Vaadin.GridDemo.getUsers();
           });
         </script>
       </template>
@@ -127,7 +127,7 @@
             });
 
             // Assign an array of user objects as the pro grid's items
-            grid.items = Vaadin.GridDemo.users;
+            grid.items = Vaadin.GridDemo.getUsers();
           });
         </script>
       </template>
@@ -180,7 +180,7 @@
             });
 
             // Assign an array of user objects as the pro grid's items
-            grid.items = Vaadin.GridDemo.users.map(function(item) {
+            grid.items = Vaadin.GridDemo.getUsers().map(function(item) {
               const user = Object.assign({}, item);
               user.married = item.name.title === 'mrs';
               return user;
@@ -232,7 +232,7 @@
             };
 
             // Assign an array of user objects as the pro grid's items
-            grid.items = Vaadin.GridDemo.users;
+            grid.items = Vaadin.GridDemo.getUsers();
           });
         </script>
         <style>
@@ -273,7 +273,7 @@
         </style>
         <script>
           window.addDemoReadyListener('#grid-pro-edit-column-demos-edit-mode-template', function(document) {
-            document.querySelector('vaadin-grid-pro').items = Vaadin.GridDemo.users;
+            document.querySelector('vaadin-grid-pro').items = Vaadin.GridDemo.getUsers();
           });
         </script>
       </template>
