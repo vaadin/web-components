@@ -186,6 +186,10 @@
         background-color: var(--material-error-color);
       }
 
+      :host([input-prevented]) [part="input-field"] {
+        color: var(--material-error-text-color);
+      }
+
       :host([disabled]) {
         pointer-events: none;
       }

@@ -217,6 +217,10 @@
         box-shadow: 0 0 0 2px var(--lumo-error-color-50pct);
       }
 
+      :host([input-prevented]) [part="input-field"] {
+        color: var(--lumo-error-text-color);
+      }
+
       /* Small theme */
 
       :host([theme~="small"]) {

@@ -168,6 +168,18 @@
                   expect(tf.value).to.equal('1');
                 });
 
+                it('should temporarily set input-prevented attribute on invalid input', function() {
+                  tf.pattern = '[0-9]*';
+                  userSetValue('f');
+                  expect(tf.hasAttribute('input-prevented')).to.be.true;
+                });
+
+                it('should not set input-prevented attribute on valid input', function() {
+                  tf.pattern = '[0-9]*';
+                  userSetValue('1');
+                  expect(tf.hasAttribute('input-prevented')).to.be.false;
+                });
+
                 it('should have empty value', function() {
                   tf.value = undefined;
                   tf.pattern = '[0-9]*';

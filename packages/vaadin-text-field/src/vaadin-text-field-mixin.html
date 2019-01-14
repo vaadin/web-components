@@ -6,6 +6,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="../../vaadin-control-state-mixin/vaadin-control-state-mixin.html">
+<link rel="import" href="../../polymer/lib/utils/async.html">
+<link rel="import" href="../../polymer/lib/utils/debounce.html">
 
 <dom-module id="vaadin-text-field-shared-styles">
   <template>
@@ -315,6 +317,13 @@ This program is available under Apache License Version 2.0, available at https:/
         const input = this.focusElement;
         if (input.value.length > 0 && !this.checkValidity()) {
           input.value = this.value || '';
+          // add input-prevented attribute for 200ms
+          this.setAttribute('input-prevented', '');
+          this._inputDebouncer = Polymer.Debouncer.debounce(
+            this._inputDebouncer,
+            Polymer.Async.timeOut.after(200), () => {
+              this.removeAttribute('input-prevented');
+            });
           return;
         }
       }
