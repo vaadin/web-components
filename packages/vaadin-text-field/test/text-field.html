@@ -19,6 +19,14 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="wrapped">
+    <template>
+      <div>
+        <vaadin-text-field></vaadin-text-field>
+      </div>
+    </template>
+  </test-fixture>
+
   <test-fixture id="default-with-slotted-input">
     <template>
       <vaadin-text-field>
@@ -28,6 +36,25 @@
   </test-fixture>
 
   <script>
+
+    describe('Wrapped', () => {
+      var wrapper, textField, inputField;
+
+      beforeEach(() => {
+        wrapper = fixture('wrapped');
+        textField = wrapper.firstElementChild;
+        inputField = textField.shadowRoot.querySelector('[part=input-field]');
+      });
+
+      it('should not grow the input field inside a flex container', () => {
+        const fieldHeight = inputField.clientHeight;
+        wrapper.style.display = 'flex';
+        wrapper.style.height = '100px';
+        expect(inputField.clientHeight).to.equal(fieldHeight);
+      });
+
+    });
+
     ['', 'with slotted input'].forEach(condition => {
       let fixtureName = '';
       if (condition !== '') {

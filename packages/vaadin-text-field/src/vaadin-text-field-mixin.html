@@ -48,6 +48,10 @@ This program is available under Apache License Version 2.0, available at https:/
         flex: auto;
       }
 
+      .vaadin-text-field-container [part="input-field"] {
+        flex-grow: 0;
+      }
+
       /* Reset the native input styles */
       [part="value"],
       [part="input-field"] ::slotted(input),
