@@ -10,10 +10,12 @@
     "vaadin-password-field.html",
     "vaadin-text-area.html",
     "vaadin-email-field.html",
+    "theme/lumo/vaadin-placeholder-styles.html",
+    "theme/material/vaadin-placeholder-styles.html",
     "theme/material/vaadin-password-field.html",
     "theme/material/vaadin-text-area.html",
     "theme/material/vaadin-text-field.html",
-    "theme/material/vaadin-email.field.html"
+    "theme/material/vaadin-email-field.html"
   ],
   "keywords": [
     "Vaadin",
