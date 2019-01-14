@@ -375,6 +375,10 @@ This program is available under Apache License Version 2.0, available at https:/
           headerCell.parentElement.hidden = false;
         }
       }
+
+      if (headerRenderer && headerCell) {
+        headerCell.parentElement.hidden = false;
+      }
     }
 
     __setTextContent(node, textContent) {

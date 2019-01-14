@@ -221,6 +221,28 @@
         it('should throw an error when setting a template if there is already a renderer', () => {
           expect(() => column._headerTemplate = {}).to.throw(Error);
         });
+
+        it('should have a visible header with headerRenderer', () => {
+          column.header = root => root.textContent = 'foo';
+          const newColumn = document.createElement('vaadin-grid-column');
+          newColumn.headerRenderer = root => root.textContent = 'bar';
+          grid.appendChild(newColumn);
+          flushGrid(grid);
+          grid.removeChild(newColumn);
+          flushGrid(grid);
+          expect(grid.$.header.firstElementChild.hidden).to.be.false;
+        });
+
+        it('should have a visible header with header', () => {
+          column.header = 'foo';
+          const newColumn = document.createElement('vaadin-grid-column');
+          newColumn.header = 'bar';
+          grid.appendChild(newColumn);
+          flushGrid(grid);
+          grid.removeChild(newColumn);
+          flushGrid(grid);
+          expect(grid.$.header.firstElementChild.hidden).to.be.false;
+        });
       });
 
       describe('footer cell', () => {
