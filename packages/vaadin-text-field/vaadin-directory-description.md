@@ -13,4 +13,5 @@
 <vaadin-text-field label="Username"></vaadin-text-field>
 <vaadin-password-field label="Password"></vaadin-password-field>
 <vaadin-text-area label="Description"></vaadin-text-area>
+<vaadin-email-field label="Email"></vaadin-email-field>
 ```

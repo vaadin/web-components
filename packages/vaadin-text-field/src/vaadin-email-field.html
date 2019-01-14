@@ -1,0 +1,56 @@
+<!--
+@license
+Copyright (c) 2018 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../polymer/lib/elements/custom-style.html">
+<link rel="import" href="vaadin-text-field.html">
+
+<script>
+  (function() {
+    /**
+     * `<vaadin-email-field>` is a Web Component for email field control in forms.
+     *
+     * ```html
+     * <vaadin-email-field label="Email">
+     * </vaadin-email-field>
+     * ```
+     *
+     * ### Styling
+     *
+     * See vaadin-text-field.html for the styling documentation
+     *
+     * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+     *
+     * @memberof Vaadin
+     * @extends Vaadin.TextFieldElement
+     * @demo demo/index.html
+     */
+    class EmailFieldElement extends Vaadin.TextFieldElement {
+      static get is() {
+        return 'vaadin-email-field';
+      }
+
+      static get version() {
+        return '2.3.0-alpha3';
+      }
+
+      ready() {
+        super.ready();
+        this.focusElement.type = 'email';
+        this.focusElement.autocapitalize = 'off';
+        this.pattern = '^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$';
+      }
+    }
+
+    customElements.define(EmailFieldElement.is, EmailFieldElement);
+
+    /**
+     * @namespace Vaadin
+     */
+    window.Vaadin = window.Vaadin || {};
+    Vaadin.EmailFieldElement = EmailFieldElement;
+  })();
+</script>

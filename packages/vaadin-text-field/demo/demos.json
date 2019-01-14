@@ -52,6 +52,16 @@
       }
     },
     {
+      "name": "Email Field",
+      "url": "email-field-demos",
+      "src": "email-field-demos.html",
+      "meta": {
+        "title": "Vaadin Email Field Examples",
+        "description": "",
+        "image": ""
+      }
+    },
+    {
       "name": "Text Area",
       "url": "text-area-demos",
       "src": "text-area-demos.html",

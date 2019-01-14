@@ -23,6 +23,7 @@
     <link rel="import" href="vaadin-text-field.html">
     <link rel="import" href="vaadin-password-field.html">
     <link rel="import" href="vaadin-text-area.html">
+    <link rel="import" href="vaadin-email-field.html">
     <next-code-block></next-code-block>
   </template>
 </custom-element-demo>
@@ -32,6 +33,7 @@
 <vaadin-text-field label="Username"></vaadin-text-field>
 <vaadin-password-field label="Password"></vaadin-password-field>
 <vaadin-text-area label="Description"></vaadin-text-area>
+<vaadin-email-field label="Email"></vaadin-email-field>
 ```
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-text-field/master/screenshot.png" width="710" alt="Screenshot of vaadin-text-field">](https://vaadin.com/components/vaadin-text-field)
@@ -82,23 +84,27 @@ To use the Material theme, import the correspondent file from the `theme/materia
 
 - The components with the Lumo theme:
 
-  `theme/lumo/vaadin-text-field.html`  
-  `theme/lumo/vaadin-text-area.html`  
+  `theme/lumo/vaadin-text-field.html`
+  `theme/lumo/vaadin-text-area.html`
   `theme/lumo/vaadin-password-field.html`
+  `theme/lumo/vaadin-email-field.html`
 
 - The components with the Material theme:
 
-  `theme/material/vaadin-text-field.html`  
-  `theme/material/vaadin-text-area.html`  
+  `theme/material/vaadin-text-field.html`
+  `theme/material/vaadin-text-area.html`
   `theme/material/vaadin-password-field.html`
+  `theme/material/vaadin-email-field.html`
 
-- Aliases for `theme/lumo/vaadin-text-field.html`  
-  `theme/lumo/vaadin-text-area.html`  
-  `theme/lumo/vaadin-password-field.html`:
+- Aliases for `theme/lumo/vaadin-text-field.html`
+  `theme/lumo/vaadin-text-area.html`
+  `theme/lumo/vaadin-password-field.html`
+  `theme/lumo/vaadin-email-field.html`:
 
-  `vaadin-text-field.html`  
-  `vaadin-text-area.html`  
+  `vaadin-text-field.html`
+  `vaadin-text-area.html`
   `vaadin-password-field.html`
+  `vaadin-email-field.html`
 
 
 ## Running demos and tests in a browser

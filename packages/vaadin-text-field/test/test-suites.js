@@ -4,5 +4,6 @@ window.VaadinTextFieldSuites = [
   'password-field.html',
   'validation.html',
   'accessibility.html',
-  'custom-input.html'
+  'custom-input.html',
+  'email-field.html'
 ];
