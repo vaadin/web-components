@@ -144,7 +144,7 @@ gulp.task('icons', function() {
             // var yTranslate = -1 * fontAscent * (2 - Math.min(1, fontHeight / glyphWidth));
             var newPath = new svgpath(path[1])
               // .translate(xTranslate, yTranslate)
-              .scale(1000/24, 1000/24)
+              .scale(1000 / 24, 1000 / 24)
               .round(0)
               .toString();
             var name = filename.replace('.svg', '').replace(/\s/g, '-').toLowerCase();

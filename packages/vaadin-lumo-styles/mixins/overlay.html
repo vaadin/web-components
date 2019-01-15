@@ -12,6 +12,7 @@
         bottom: var(--lumo-space-m);
         left: var(--lumo-space-m);
         /* Workaround for Edge issue (only on Surface), where an overflowing vaadin-list-box inside vaadin-select-overlay makes the overlay transparent */
+        /* stylelint-disable-next-line */
         outline: 0px solid transparent;
       }
 
@@ -59,12 +60,8 @@
       }
 
       @keyframes lumo-overlay-dummy-animation {
-        0% {
-          opacity: 1;
-        }
-        100% {
-          opacity: 1;
-        }
+        0% { opacity: 1; }
+        100% { opacity: 1; }
       }
     </style>
   </template>
