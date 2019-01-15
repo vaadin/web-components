@@ -1,0 +1,145 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-details tests</title>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../iron-test-helpers/mock-interactions.js"></script>
+  <link rel="import" href="../../test-fixture/test-fixture.html">
+  <link rel="import" href="../vaadin-details.html">
+</head>
+
+<body>
+  <test-fixture id="default">
+    <template>
+      <vaadin-details>
+        <div slot="summary">Summary</div>
+        <input>
+      </vaadin-details>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('details', () => {
+      let details, toggle, content;
+
+      beforeEach(() => {
+        details = fixture('default');
+        toggle = details.focusElement;
+        content = details._collapsible;
+      });
+
+      describe('custom element definition', () => {
+        it('should define a custom element with proper tag name', () => {
+          expect(details.localName).to.be.equal('vaadin-details');
+          expect(customElements.get('vaadin-details')).to.be.ok;
+        });
+
+        it('should not expose class name globally', () => {
+          expect(window.DetailsElement).not.to.be.ok;
+        });
+
+        it('should have a valid version number', () => {
+          expect(details.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta)\d+)?$/);
+        });
+      });
+
+      describe('DOM elements', () => {
+        it('should disable toggle button when `disabled` is true', () => {
+          details.disabled = true;
+          expect(toggle.hasAttribute('disabled')).to.equal(true);
+        });
+
+        it('should set role="button" on the toggle button', () => {
+          expect(toggle.getAttribute('role')).to.equal('button');
+        });
+
+        it('should set role="heading" on the toggle button wrapper', () => {
+          expect(toggle.parentElement.getAttribute('role')).to.equal('heading');
+        });
+
+        it('should have `summary` slot inside toggle button', () => {
+          const slot = toggle.querySelector('slot[name="summary"]');
+          expect(slot).to.be.ok;
+          expect(slot.assignedNodes()[0].textContent).to.equal('Summary');
+        });
+      });
+
+      describe('opened', () => {
+        it('should update `opened` on toggle button click', () => {
+          toggle.click();
+          expect(details.opened).to.equal(true);
+          toggle.click();
+          expect(details.opened).to.equal(false);
+        });
+
+        it('should update `opened` on toggle button enter', () => {
+          MockInteractions.keyDownOn(toggle, 13, [], 'Enter');
+          expect(details.opened).to.equal(true);
+          MockInteractions.keyDownOn(toggle, 13, [], 'Enter');
+          expect(details.opened).to.equal(false);
+        });
+
+        it('should update `opened` on toggle button space', () => {
+          MockInteractions.keyDownOn(toggle, 32, [], ' ');
+          expect(details.opened).to.equal(true);
+          MockInteractions.keyDownOn(toggle, 32, [], ' ');
+          expect(details.opened).to.equal(false);
+        });
+
+        it('should hide the content when `opened` is false', () => {
+          const style = getComputedStyle(content);
+          expect(style.display).to.equal('none');
+          expect(style.overflow).to.equal('hidden');
+          expect(style.maxHeight).to.equal('0px');
+        });
+
+        it('should show the content when `opened` is true', () => {
+          details.opened = true;
+          const style = getComputedStyle(content);
+          expect(style.display).to.equal('block');
+          expect(style.overflow).to.equal('visible');
+          expect(style.maxHeight).to.equal('none');
+        });
+
+        it('should dispatch `opened-changed` event when `opened changes', () => {
+          const spy = sinon.spy();
+          details.addEventListener('opened-changed', spy);
+          toggle.click();
+          expect(spy).to.be.calledOnce;
+          expect(spy.firstCall.args[0].detail).to.be.an('object');
+          expect(spy.firstCall.args[0].detail.value).to.equal(true);
+        });
+
+        it('should update aria-expanded on toggle button when `opened` changes', () => {
+          expect(toggle.getAttribute('aria-expanded')).to.equal('false');
+          details.opened = true;
+          expect(toggle.getAttribute('aria-expanded')).to.equal('true');
+        });
+
+        it('should update aria-hidden on the content when `opened` changes', () => {
+          expect(content.getAttribute('aria-hidden')).to.equal('true');
+          details.opened = true;
+          expect(content.getAttribute('aria-hidden')).to.equal('false');
+        });
+      });
+
+      describe('focus', () => {
+        let input;
+
+        beforeEach(() => {
+          details = fixture('default');
+          input = details.querySelector('input');
+        });
+
+        it('should stop Shift + Tab on the content from propagating to the host', () => {
+          const spy = sinon.spy();
+          details.addEventListener('keydown', spy);
+          MockInteractions.keyDownOn(input, 9, 'shift', 'Tab');
+          expect(spy).to.not.be.called;
+        });
+      });
+    });
+  </script>
+</body>

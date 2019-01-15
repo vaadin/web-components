@@ -1,0 +1,68 @@
+<dom-module id="details-theme-variants-demos">
+  <template>
+    <style include="vaadin-component-demo-shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+
+    <h3>Small Size Details</h3>
+    <vaadin-demo-snippet id="details-theme-variants-demos-small">
+      <template preserve-content>
+        <vaadin-details theme="small">
+          <div slot="summary">Small</div>
+          <div>Panel content</div>
+        </vaadin-details>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Filled Details</h3>
+    <vaadin-demo-snippet id="details-theme-variants-demos-filled">
+      <template preserve-content>
+        <vaadin-details theme="filled">
+          <div slot="summary">Filled</div>
+          <div>Panel content</div>
+        </vaadin-details>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Reverse Details</h3>
+    <vaadin-demo-snippet id="details-theme-variants-demos-reverse">
+      <template preserve-content>
+        <vaadin-details theme="reverse">
+          <div slot="summary">Reverse</div>
+          <div>Panel content</div>
+        </vaadin-details>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Small Size Filled Details</h3>
+    <vaadin-demo-snippet id="details-theme-variants-demos-small-filled">
+      <template preserve-content>
+        <vaadin-details theme="small filled">
+          <div slot="summary">Small Filled</div>
+          <div>Panel content</div>
+        </vaadin-details>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Reverse Filled Details</h3>
+    <vaadin-demo-snippet id="details-theme-variants-demos-reverse-filled">
+      <template preserve-content>
+        <vaadin-details theme="reverse filled">
+          <div slot="summary">Reverse Filled</div>
+          <div>Panel content</div>
+        </vaadin-details>
+      </template>
+    </vaadin-demo-snippet>
+
+  </template>
+  <script>
+    class DetailsThemeVariantsDemos extends DemoReadyEventEmitter(Polymer.Element) {
+      static get is() {
+        return 'details-theme-variants-demos';
+      }
+    }
+    customElements.define(DetailsThemeVariantsDemos.is, DetailsThemeVariantsDemos);
+  </script>
+</dom-module>

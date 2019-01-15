@@ -1,0 +1,126 @@
+<link rel="import" href="../../../vaadin-lumo-styles/color.html">
+<link rel="import" href="../../../vaadin-lumo-styles/font-icons.html">
+<link rel="import" href="../../../vaadin-lumo-styles/sizing.html">
+<link rel="import" href="../../../vaadin-lumo-styles/spacing.html">
+<link rel="import" href="../../../vaadin-lumo-styles/style.html">
+<link rel="import" href="../../../vaadin-lumo-styles/typography.html">
+
+<dom-module id="lumo-details" theme-for="vaadin-details">
+  <template>
+    <style>
+      :host {
+        margin: var(--lumo-space-xs) 0;
+        font-family: var(--lumo-font-family);
+        outline: none;
+        background-color: transparent;
+      }
+
+      [part="summary"] {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        outline: none;
+        height: var(--lumo-size-m);
+        box-sizing: border-box;
+        font-size: var(--lumo-font-size-m);
+        font-weight: 500;
+        color: var(--lumo-secondary-text-color);
+        background-color: inherit;
+        border-radius: var(--lumo-border-radius);
+        cursor: default;
+        -webkit-tap-highlight-color: transparent;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      :host([focus-ring]) [part="summary"] {
+        box-shadow: 0 0 0 2px var(--lumo-primary-color-50pct);
+      }
+
+      [part="toggle"] {
+        box-sizing: border-box;
+        margin-left: -4px;
+        margin-right: var(--lumo-space-xs);
+        font-size: var(--lumo-icon-size-s);
+        line-height: 1;
+        color: var(--lumo-contrast-50pct);
+        text-align: center;
+      }
+
+      :host([disabled]) [part="summary"],
+      :host([disabled]) [part="toggle"] {
+        color: var(--lumo-disabled-text-color);
+      }
+
+      @media (hover: hover) {
+        :host(:not([disabled])) [part="summary"]:hover,
+        :host(:not([disabled])) [part="summary"]:hover [part="toggle"] {
+          color: var(--lumo-contrast-80pct);
+        }
+      }
+
+      [part="toggle"]::before {
+        font-family: "lumo-icons";
+        display: inline-block;
+        width: var(--lumo-icon-size-s);
+        height: var(--lumo-icon-size-s);
+        line-height: var(--lumo-icon-size-s);
+      }
+
+      :host(:not([opened])) [part="toggle"]::before {
+        content: var(--lumo-icons-angle-right);
+      }
+
+      :host([opened]) [part="toggle"]::before {
+        content: var(--lumo-icons-angle-right);
+        transform: rotate(90deg);
+      }
+
+      [part="content"] {
+        padding: var(--lumo-space-xs) 0 var(--lumo-space-s);
+        font-size: var(--lumo-font-size-m);
+        line-height: var(--lumo-line-height-m);
+      }
+
+      :host([theme~="filled"]) {
+        background-color: var(--lumo-contrast-5pct);
+        border-radius: var(--lumo-border-radius);
+      }
+
+      :host([theme~="filled"]) [part="summary"] {
+        padding-left: var(--lumo-space-s);
+        padding-right: var(--lumo-space-s);
+      }
+
+      :host([theme~="filled"]) [part="content"] {
+        padding-left: var(--lumo-space-m);
+        padding-right: var(--lumo-space-m);
+      }
+
+      :host([theme~="small"]) [part="summary"] {
+        height: var(--lumo-size-s);
+      }
+
+      :host([theme~="small"]) [part$="content"] {
+        font-size: var(--lumo-font-size-s);
+      }
+
+      :host([theme~="small"]) [part="toggle"] {
+        margin-right: calc(var(--lumo-space-xs) / 2);
+      }
+
+      :host([theme~="reverse"]) [part="summary"] {
+        justify-content: space-between;
+      }
+
+      :host([theme~="reverse"]) [part="toggle"] {
+        order: 1;
+        margin-right: 0;
+      }
+
+      :host([theme~="reverse"][theme~="filled"]) [part="summary"] {
+        padding-left: var(--lumo-space-m);
+      }
+    </style>
+  </template>
+</dom-module>

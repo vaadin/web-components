@@ -1,0 +1,7 @@
+{
+  "rules": {
+  },
+  "globals": {
+    "DemoReadyEventEmitter": false
+  }
+}

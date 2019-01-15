@@ -1,0 +1,3 @@
+window.VaadinDetailsSuites = [
+  'details.html'
+];

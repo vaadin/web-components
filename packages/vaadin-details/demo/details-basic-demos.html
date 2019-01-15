@@ -1,0 +1,44 @@
+<dom-module id="details-basic-demos">
+  <template>
+    <style include="vaadin-component-demo-shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+
+    <h3>Details</h3>
+    <p>
+      The <code>&lt;vaadin-details&gt;</code> component creates the expansible section
+      of the content, visible only when toggled into an <code>opened</code> state.
+      It is similar to the native <code>&lt;summary&gt;</code> and <code>&lt;details&gt;</code>
+      HTML elements, but offers better styling support and accessibility features.
+    </p>
+    <vaadin-demo-snippet id="details-basic-demos-default">
+      <template preserve-content>
+        <vaadin-details>
+          <div slot="summary">Expansible Details</div>
+          <div>Toggle using mouse, Enter and Space keys.</div>
+        </vaadin-details>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Disabled Details</h3>
+    <vaadin-demo-snippet id="details-basic-demos-disabled">
+      <template preserve-content>
+        <vaadin-details disabled opened>
+          <div slot="summary">Disabled heading</div>
+          <div>Always visible content</div>
+        </vaadin-details>
+      </template>
+    </vaadin-demo-snippet>
+
+  </template>
+  <script>
+    class DetailsBasicDemos extends DemoReadyEventEmitter(Polymer.Element) {
+      static get is() {
+        return 'details-basic-demos';
+      }
+    }
+    customElements.define(DetailsBasicDemos.is, DetailsBasicDemos);
+  </script>
+</dom-module>
