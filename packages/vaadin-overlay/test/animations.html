@@ -82,6 +82,12 @@
         expect(overlay.parentNode).not.to.equal(document.body);
       });
 
+      it('should close the overlay if hidden is set while closing', () => {
+        overlay.opened = true;
+        overlay.opened = false;
+        overlay.hidden = true;
+        expect(overlay.parentNode).not.to.equal(document.body);
+      });
     });
   </script>
 </body>

@@ -302,6 +302,16 @@ This program is available under Apache License Version 2.0, available at https:/
           },
 
           /**
+           * When set to true, the overlay is hidden. This also closes the overlay
+           * immediately in case there is a closing animation in progress.
+           */
+          hidden: {
+            type: Boolean,
+            reflectToAttribute: true,
+            observer: '_hiddenChanged'
+          },
+
+          /**
            * When true move focus to the first focusable element in the overlay,
            * or to the overlay if there are no focusable elements.
            */
@@ -535,6 +545,12 @@ This program is available under Apache License Version 2.0, available at https:/
         } else if (wasOpened) {
           this._animatedClosing();
           this._exitModalState();
+        }
+      }
+
+      _hiddenChanged(hidden) {
+        if (hidden && this.hasAttribute('closing')) {
+          this._flushAnimation('closing');
         }
       }
 
