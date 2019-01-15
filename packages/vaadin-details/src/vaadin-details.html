@@ -63,8 +63,9 @@ This program is available under Apache License Version 2.0, available at https:/
        * expansible panel similar to `<details>` HTML element.
        *
        * ```
-       * <vaadin-details summary="Visible Summary">
-       *  Details content, collapsed and hidden by default.
+       * <vaadin-details>
+       *   <div slot="summary">Expansible Details</div>
+       *   <div>Toggle using mouse, Enter and Space keys.</div>
        * </vaadin-details>
        * ```
        *
