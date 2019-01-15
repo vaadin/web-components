@@ -7,6 +7,7 @@
   "description": "vaadin-details",
   "main": [
     "vaadin-details.html",
+    "src/vaadin-details.html",
     "theme/material/vaadin-details.html"
   ],
   "keywords": [
