@@ -18,14 +18,7 @@ gemini.suite('vaadin-accordion', function(rootSuite) {
     .after(goToAboutBlank);
 
   ['lumo', 'material'].forEach(theme => {
-    gemini.suite(`details-tests-${theme}`, function(suite) {
-      suite
-        .setUrl(`/details.html?theme=${theme}`)
-        .setCaptureElements('#details-tests')
-        .capture(`vaadin-details`);
-    });
-
-    gemini.suite(`accordion-tests-${theme}`, function(suite) {
+    gemini.suite(`accordion-${theme}`, function(suite) {
       suite
         .setUrl(`/accordion.html?theme=${theme}`)
         .setCaptureElements('#accordion-tests')
@@ -33,16 +26,9 @@ gemini.suite('vaadin-accordion', function(rootSuite) {
     });
   });
 
-  gemini.suite(`details-tests-lumo-theme`, function(suite) {
+  gemini.suite(`lumo-theme`, function(suite) {
     suite
-      .setUrl(`/details-lumo-theme.html`)
-      .setCaptureElements('#details-tests')
-      .capture(`vaadin-details`);
-  });
-
-  gemini.suite(`accordion-tests-lumo-theme`, function(suite) {
-    suite
-      .setUrl(`/accordion-lumo-theme.html`)
+      .setUrl(`/lumo-theme.html`)
       .setCaptureElements('#accordion-tests')
       .capture(`vaadin-accordion`);
   });

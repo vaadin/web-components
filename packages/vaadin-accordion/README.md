@@ -1,6 +1,6 @@
 # &lt;vaadin-accordion&gt;
 
-[&lt;vaadin-accordion&gt;](https://vaadin.com/components/vaadin-accordion) is a set of two Web Components providing functionality for expansible details and accordion, part of the [Vaadin components](https://vaadin.com/components).
+[&lt;vaadin-accordion&gt;](https://vaadin.com/components/vaadin-accordion) is a Web Component implementing the vertically stacked set of expansible panels, part of the [Vaadin components](https://vaadin.com/components).
 
 [Live Demo ↗](https://vaadin.com/components/vaadin-accordion/html-examples)
 |
@@ -20,17 +20,12 @@
   <template>
     <script src="../webcomponentsjs/webcomponents-lite.js"></script>
     <link rel="import" href="vaadin-accordion.html">
-    <link rel="import" href="vaadin-details.html">
     <next-code-block></next-code-block>
   </template>
 </custom-element-demo>
 ```
 -->
 ```html
-<vaadin-details>
-  <div slot="summary">Expansible Details</div>
-  <div>Details is a standalone expansible section.</div>
-</vaadin-details>
 <vaadin-accordion>
   <vaadin-accordion-panel theme="filled">
     <div slot="summary">Accordion Panel 1</div>
@@ -43,7 +38,7 @@
 </vaadin-accordion>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-accordion/master/screenshot.png" alt="Screenshot of vaadin-accordion">](https://vaadin.com/components/vaadin-accordion)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-accordion/master/screenshot.png" alt="Screenshot of vaadin-accordion" width="900">](https://vaadin.com/components/vaadin-accordion)
 
 
 ## Installation
@@ -63,11 +58,10 @@ Install `vaadin-accordion`:
 bower i vaadin/vaadin-accordion --save
 ```
 
-Once installed, import the components in your application:
+Once installed, import it in your application:
 
 ```html
 <link rel="import" href="bower_components/vaadin-accordion/vaadin-accordion.html">
-<link rel="import" href="bower_components/vaadin-accordion/vaadin-details.html">
 ```
 
 ### Polymer 3 and ES Modules compatible version
@@ -79,11 +73,10 @@ Install `vaadin-accordion`:
 npm i @vaadin/vaadin-accordion --save
 ```
 
-Once installed, import the components in your application:
+Once installed, import it in your application:
 
 ```js
 import '@vaadin/vaadin-accordion/vaadin-accordion.js';
-import '@vaadin/vaadin-accordion/vaadin-details.js';
 ```
 
 ## Getting started
@@ -94,20 +87,17 @@ To use the Material theme, import the correspondent file from the `theme/materia
 
 ## Entry points
 
-- The components with the Lumo theme:
+- The component with the Lumo theme:
 
   `theme/lumo/vaadin-accordion.html`
-  `theme/lumo/vaadin-details.html`
 
-- The components with the Material theme:
+- The component with the Material theme:
 
   `theme/material/vaadin-accordion.html`
-  `theme/material/vaadin-details.html`
 
-- Aliases for `theme/lumo/vaadin-*.html`:
+- Alias for `theme/lumo/vaadin-accordion.html`:
 
   `vaadin-accordion.html`
-  `vaadin-details.html`
 
 
 ## Running demos and tests in a browser

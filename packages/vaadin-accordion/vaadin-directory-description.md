@@ -18,6 +18,13 @@
 
 ```html
 <vaadin-accordion>
-  ...
+  <vaadin-accordion-panel theme="filled">
+    <div slot="summary">Accordion Panel 1</div>
+    <div>Accordion is a set of expansible sections.</div>
+  </vaadin-accordion-panel>
+  <vaadin-accordion-panel theme="filled">
+    <div slot="summary">Accordion Panel 2</div>
+    <div>Only one accordion panel can be opened.</div>
+  </vaadin-accordion-panel>
 </vaadin-accordion>
 ```

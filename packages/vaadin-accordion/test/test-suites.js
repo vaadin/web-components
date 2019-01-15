@@ -1,4 +1,3 @@
 window.VaadinAccordionSuites = [
-  'accordion.html',
-  'details.html'
+  'accordion.html'
 ];

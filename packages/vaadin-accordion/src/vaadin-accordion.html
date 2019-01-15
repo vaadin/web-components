@@ -8,7 +8,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../polymer/lib/utils/flattened-nodes-observer.html">
 <link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
-<link rel="import" href="vaadin-details.html">
+<link rel="import" href="../../vaadin-details/src/vaadin-details.html">
 
 <dom-module id="vaadin-accordion">
   <template>
@@ -33,11 +33,23 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * ### Styling
        *
-       * `<vaadin-accordion-panel>` is an extension of `<vaadin-details>` component.
-       * It has the same slots for summary and expansible content, and inherits all
-       * the state attributes and stylable shadow parts.
+       * The following shadow DOM parts are exposed for styling:
        *
-       * See [`<vaadin-details>` documentation](#/elements/vaadin-details).
+       * Part name        | Description
+       * -----------------|----------------
+       * `summary`        | The element used to open and close collapsible content.
+       * `toggle`         | The element used as indicator, can represent an icon.
+       * `summary-content`| The wrapper for the slotted summary content.
+       * `content`        | The wrapper for the collapsible panel content.
+       *
+       * The following attributes are exposed for styling:
+       *
+       * Attribute    | Description
+       * -------------| -----------
+       * `opened`     | Set when the collapsible content is expanded and visible.
+       * `disabled`   | Set when the element is disabled.
+       * `focus-ring` | Set when the element is focused using the keyboard.
+       * `focused`    | Set when the element is focused.
        *
        * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
        *
@@ -65,10 +77,12 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * ```
        * <vaadin-accordion>
-       *   <vaadin-accordion-panel summary="Panel 1">
+       *   <vaadin-accordion-panel>
+       *     <div slot="summary">Panel 1</div>
        *     This panel is opened, so the text is visible by default.
        *   </vaadin-accordion-panel>
-       *   <vaadin-accordion-panel summary="Panel 2">
+       *   <vaadin-accordion-panel>
+       *     <div slot="summary">Panel 2</div>
        *     After opening this panel, the first one becomes closed.
        *   </vaadin-accordion-panel>
        * </vaadin-accordion>
@@ -76,11 +90,10 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * ### Styling
        *
-       * The styling should be applied to [`<vaadin-accordion-panel>`](#/elements/vaadin-accordion-panel)
-       * component, which extends `<vaadin-details>`. It has the same slots
-       * and inherits all the state attributes and stylable shadow parts.
+       * See the [`<vaadin-accordion-panel>`](#/elements/vaadin-accordion-panel)
+       * documentation for the available state attributes and stylable shadow parts.
        *
-       * You can apply the theme to `<vaadin-accordion>` component itself,
+       * **Note:** You can apply the theme to `<vaadin-accordion>` component itself,
        * especially by using the following CSS selector:
        *
        * ```
@@ -89,7 +102,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * }
        * ```
        *
-       * See also [ThemableMixin styling documentation](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+       * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
        *
        * @memberof Vaadin
        * @mixes Vaadin.ElementMixin
