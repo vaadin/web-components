@@ -32,7 +32,7 @@
 </vaadin-details>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-details/master/screenshot.png" alt="Screenshot of vaadin-details">](https://vaadin.com/components/vaadin-details)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-details/master/screenshot.png" alt="Screenshot of vaadin-details" width="332">](https://vaadin.com/components/vaadin-details)
 
 
 ## Installation
