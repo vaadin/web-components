@@ -56,7 +56,6 @@ Once installed, import it in your application:
 
 ```html
 <link rel="import" href="bower_components/vaadin-details/vaadin-details.html">
-<link rel="import" href="bower_components/vaadin-details/vaadin-details.html">
 ```
 
 ### Polymer 3 and ES Modules compatible version
