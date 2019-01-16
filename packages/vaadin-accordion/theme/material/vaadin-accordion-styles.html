@@ -27,6 +27,27 @@
       :host([opened]:not(:last-child)) {
         margin-bottom: 16px;
       }
+
+      [part="summary-content"] {
+        display: flex;
+        width: 100%;
+        font-weight: normal;
+      }
+
+      [part="summary-content"] ::slotted(*) {
+        display: flex;
+        margin-right: 16px;
+        color: var(--material-body-text-color);
+      }
+
+      [part="summary-content"] ::slotted([theme="primary"]) {
+        flex-basis: 33.33%;
+        flex-shrink: 0;
+      }
+
+      [part="summary-content"] ::slotted([theme="secondary"]) {
+        color: var(--material-secondary-text-color);
+      }
     </style>
   </template>
 </dom-module>

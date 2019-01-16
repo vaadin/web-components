@@ -24,12 +24,12 @@ gemini.suite('vaadin-accordion', function(rootSuite) {
         .setCaptureElements('#accordion-tests')
         .capture(`vaadin-accordion`);
     });
-  });
 
-  gemini.suite(`lumo-theme`, function(suite) {
-    suite
-      .setUrl(`/lumo-theme.html`)
-      .setCaptureElements('#accordion-tests')
-      .capture(`vaadin-accordion`);
+    gemini.suite(`${theme}-theme`, function(suite) {
+      suite
+        .setUrl(`/${theme}-theme.html`)
+        .setCaptureElements('#accordion-tests')
+        .capture(`vaadin-accordion`);
+    });
   });
 });
