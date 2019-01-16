@@ -55,6 +55,40 @@
 
     });
 
+    describe('slots', () => {
+      let textField;
+
+      function afterFlush() {
+        return new Promise(resolve => {
+          if (window.ShadyDOM) {
+            window.ShadyDOM.flush();
+            resolve();
+          } else {
+            requestAnimationFrame(resolve);
+          }
+        });
+      }
+
+      beforeEach(function() {
+        textField = fixture('default');
+      });
+
+      it('should not break when adding unexpected content to input slot', done => {
+        const div = document.createElement('div');
+        div.setAttribute('slot', 'input');
+        textField.appendChild(div);
+        const errorSpy = sinon.spy();
+        window.onerror = errorSpy;
+        afterFlush().then(() => {
+          window.onerror = null;
+          expect(errorSpy).to.not.be.called;
+          done();
+        }).catch(e => {
+          done(e);
+        });
+      });
+    });
+
     ['', 'with slotted input'].forEach(condition => {
       let fixtureName = '';
       if (condition !== '') {
