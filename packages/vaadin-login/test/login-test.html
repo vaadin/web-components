@@ -111,7 +111,8 @@
         expect(submitElement.textContent).to.be.equal(login.i18n.form.submit);
         expect(forgotElement.textContent).to.be.equal(login.i18n.form.forgotPassword);
 
-        expect(footerElement.textContent).to.be.equal(login.i18n.additionalInformation);
+        expect(footerElement.textContent).to.be.equal('');
+        expect(login.i18n.additionalInformation).to.be.undefined;
       });
 
       it('should show forgot password button', function() {
@@ -129,7 +130,7 @@
 
       it('should be able to internationalize via `i18n` property', () => {
         const additionalInformation = login.shadowRoot.querySelector('[part="footer"] p');
-        expect(additionalInformation.textContent).to.be.equal(login.i18n.additionalInformation);
+        expect(additionalInformation.textContent).to.be.equal('');
         expect(login.$.forgotPasswordButton.textContent).to.be.equal(login.i18n.form.forgotPassword);
 
         const i18n = Object.assign({}, login.i18n, {additionalInformation: 'Mais informações', form: {forgotPassword: 'Esqueci a senha'}});

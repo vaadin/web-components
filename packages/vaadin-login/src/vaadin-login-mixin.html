@@ -74,8 +74,9 @@ This program is available under Apache License Version 2.0, available at https:/
          * For changing the default localization, change the entire
          * _i18n_ object or just the property you want to modify.
          *
-         * The object has the following JSON structure (by default it doesn't include
-         * `header` section, which can be added to override `title` and `description` properties):
+         * The object has the following JSON structure (by default it doesn't include `additionalInformation`
+         * and `header` sections, `header` can be added to override `title` and `description` properties
+         * in `vaadin-login-overlay`):
 
           {
             header: {
@@ -112,8 +113,7 @@ This program is available under Apache License Version 2.0, available at https:/
               errorMessage: {
                 title: 'Incorrect username or password',
                 message: 'Check that you have entered the correct username and password and try again.'
-              },
-              additionalInformation: 'In case you need to provide some additional info for the user.'
+              }
             };
           },
           notify: true
