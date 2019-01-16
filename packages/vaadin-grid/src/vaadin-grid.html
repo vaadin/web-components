@@ -522,20 +522,20 @@ This program is available under Apache License Version 2.0, available at https:/
             const tagName = section === 'header' ? 'th' : 'td';
             if (isColumnRow || column.localName === 'vaadin-grid-column-group') {
               cell = column[`_${section}Cell`] || this._createCell(tagName);
+              cell._column = column;
               row.appendChild(cell);
-              if (cell._instance) {
-                row.hidden = false;
-              }
               column[`_${section}Cell`] = cell;
             } else {
               column._emptyCells = column._emptyCells || [];
               cell = column._emptyCells.filter(cell => cell._vacant)[0] || this._createCell(tagName);
+              cell._column = column;
               row.appendChild(cell);
               if (column._emptyCells.indexOf(cell) === -1) {
                 column._emptyCells.push(cell);
               }
             }
             cell.setAttribute('part', `cell ${section}-cell`);
+            this.__updateHeaderFooterRowVisibility(row);
           }
 
           if (!cell._content.parentElement) {
@@ -550,6 +550,47 @@ This program is available under Apache License Version 2.0, available at https:/
 
         this._frozenCellsChanged();
         this._updateFirstAndLastColumnForRow(row);
+      }
+
+      __updateHeaderFooterRowVisibility(row) {
+        if (!row) {
+          return;
+        }
+
+        const visibleRowCells = Array.from(row.children).filter(cell => {
+          const column = cell._column;
+          if (column._emptyCells && column._emptyCells.indexOf(cell) > -1) {
+            // The cell is an "empty cell"  -> doesn't block hiding the row
+            return false;
+          }
+          if (row.parentElement === this.$.header) {
+            if (column.headerRenderer || column._headerTemplate) {
+              // The cell is the header cell of a column that has a header renderer
+              // or a header template -> row should be visible
+              return true;
+            }
+            if (column.header === null) {
+              // The column header is explicilty set to null -> doesn't block hiding the row
+              return false;
+            }
+            if (column.path || column.header !== undefined) {
+              // The column has an explicit non-null header or a path that generates a header
+              // -> row should be visible
+              return true;
+            }
+          } else {
+            if (column.footerRenderer || column._footerTemplate) {
+              // The cell is the footer cell of a column that has a footer renderer
+              // or a footer template -> row should be visible
+              return true;
+            }
+          }
+        });
+
+        if (row.hidden !== !visibleRowCells.length) {
+          row.hidden = !visibleRowCells.length;
+          this.notifyResize();
+        }
       }
 
       _updateScrollerItem(row, index) {

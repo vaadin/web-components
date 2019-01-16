@@ -288,14 +288,13 @@ This program is available under Apache License Version 2.0, available at https:/
     _setHeaderTemplateOrRenderer(headerTemplate, headerRenderer, headerCell) {
       if ((headerTemplate || headerRenderer) && headerCell) {
         this.__setColumnTemplateOrRenderer(headerTemplate, headerRenderer, [headerCell]);
-        headerCell.parentElement.hidden = false;
       }
     }
 
     _setFooterTemplateOrRenderer(footerTemplate, footerRenderer, footerCell) {
       if ((footerTemplate || footerRenderer) && footerCell) {
         this.__setColumnTemplateOrRenderer(footerTemplate, footerRenderer, [footerCell]);
-        footerCell.parentElement.hidden = false;
+        this._grid.__updateHeaderFooterRowVisibility(footerCell.parentElement);
       }
     }
 
@@ -358,10 +357,9 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _pathOrHeaderChanged(path, header, headerCell, footerCell, cells, renderer, headerRenderer, bodyTemplate, headerTemplate) {
-      const hasHeaderText = header !== undefined && header !== null;
+      const hasHeaderText = header !== undefined;
       if (!headerRenderer && !headerTemplate && hasHeaderText && headerCell) {
         this.__setTextContent(headerCell._content, header);
-        headerCell.parentElement.hidden = false;
       }
 
       if (path && cells.value) {
@@ -370,14 +368,13 @@ This program is available under Apache License Version 2.0, available at https:/
           this.__setColumnTemplateOrRenderer(undefined, pathRenderer, cells.value);
         }
 
-        if (!headerRenderer && !headerTemplate && !hasHeaderText && headerCell) {
+        if (!headerRenderer && !headerTemplate && !hasHeaderText && headerCell && header !== null) {
           this.__setTextContent(headerCell._content, this._generateHeader(path));
-          headerCell.parentElement.hidden = false;
         }
       }
 
-      if (headerRenderer && headerCell) {
-        headerCell.parentElement.hidden = false;
+      if (headerCell) {
+        this._grid.__updateHeaderFooterRowVisibility(headerCell.parentElement);
       }
     }
 

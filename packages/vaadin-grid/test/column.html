@@ -289,7 +289,7 @@
             });
             emptyColumn.path = 'header';
             const callCount = spy.callCount;
-            emptyColumn.header = null;
+            emptyColumn.header = undefined;
             flush(() => {
               expect(spy.callCount).to.equal(callCount);
               done();
@@ -331,7 +331,7 @@
 
           it('should use path generated header if header is removed', () => {
             emptyColumn.path = 'foo';
-            emptyColumn.header = null;
+            emptyColumn.header = undefined;
             expect(getHeaderCellContent(grid, 1, 2).textContent.trim()).to.equal('Foo');
           });
 
@@ -341,6 +341,21 @@
             expect(grid.$.header.children[0].hidden).not.to.be.ok;
           });
 
+          it('should not hide the header row with empty header', () => {
+            emptyColumn.header = '';
+            grid.removeChild(grid.querySelector('vaadin-grid-column-group'));
+            flushGrid(grid);
+            expect(grid.$.header.children[0].hidden).not.to.be.ok;
+          });
+
+          it('should hide the header row with null header', () => {
+            emptyColumn.path = 'foo';
+            emptyColumn.header = null;
+            grid.removeChild(grid.querySelector('vaadin-grid-column-group'));
+            flushGrid(grid);
+            expect(grid.$.header.children[0].hidden).to.be.ok;
+          });
+
           it('should produce an empty header cell', () => {
             emptyColumn.path = 'foo';
             emptyColumn.header = '';
@@ -348,7 +363,7 @@
           });
 
           it('should hide the header', () => {
-            emptyColumn.header = null;
+            emptyColumn.header = undefined;
             grid.removeChild(grid.querySelector('vaadin-grid-column-group'));
             flushGrid(grid);
             expect(getContainerCell(grid.$.header, 0, 0).parentElement.hidden).to.be.true;
@@ -363,7 +378,7 @@
                 return spy.called ? spy.getCalls().pop().args[0] : '';
               }
             });
-            emptyColumn.header = null;
+            emptyColumn.header = undefined;
             emptyColumn.path = 'foo';
             const callCount = spy.callCount;
             emptyColumn.header = 'Foo';
