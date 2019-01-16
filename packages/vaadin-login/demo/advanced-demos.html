@@ -90,44 +90,6 @@
       </template>
     </vaadin-demo-snippet>
 
-    <h3>Login with custom footer</h3>
-    <vaadin-demo-snippet id="custom-input-example">
-      <template preserve-content>
-        <style>
-          main {
-            display: flex;
-            justify-content: center;
-            background: var(--lumo-base-color) linear-gradient(var(--lumo-shade-5pct), var(--lumo-shade-5pct));
-            padding: var(--lumo-space-m);
-          }
-        </style>
-        <main>
-          <vaadin-login no-forgot-password>
-            <div slot="footer" style="color: blue;"><img src="https://cultofthepartyparrot.com/parrots/hd/parrot.gif" width="24" height="24"> Custom footer</div>
-          </vaadin-login>
-        </main>
-        <vaadin-dialog id="feedbackDialog">
-          <template>Login is being processed...</template>
-        </vaadin-dialog>
-        <script>
-          window.addDemoReadyListener('#custom-input-example', function(document) {
-            var login = document.querySelector('vaadin-login');
-            login.set('i18n.additionalInformation', '');
-            var feedbackDialog = document.querySelector('#feedbackDialog');
-
-            login.addEventListener('login', function() {
-              feedbackDialog.opened = true;
-
-              setTimeout(function() {
-                login.disabled = false;
-                feedbackDialog.opened = false;
-              }, 2000);
-            });
-          });
-        </script>
-      </template>
-    </vaadin-demo-snippet>
-
   </template>
   <script>
     class AdvancedDemos extends DemoReadyEventEmitter(ElementDemo(Polymer.Element)) {

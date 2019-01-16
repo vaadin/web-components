@@ -53,14 +53,6 @@
     </template>
   </test-fixture>
 
-  <test-fixture id="custom-footer">
-    <template>
-      <vaadin-login>
-        <div slot="footer">Custom footer</div>
-      </vaadin-login>
-    </template>
-  </test-fixture>
-
   <test-fixture id="themed">
     <template>
       <vaadin-login theme="green"></vaadin-login>
@@ -108,7 +100,7 @@
         const submitElement = login.shadowRoot.querySelector('#submit');
         const forgotElement = login.shadowRoot.querySelector('#forgotPasswordButton');
 
-        const footerElement = login.shadowRoot.querySelector('span');
+        const footerElement = login.shadowRoot.querySelector('[part="footer"] p');
 
         expect(formTitleElement.textContent).to.be.equal(login.i18n.form.title);
         expect(errorTitleElement.textContent).to.be.equal(login.i18n.errorMessage.title);
@@ -136,7 +128,7 @@
       });
 
       it('should be able to internationalize via `i18n` property', () => {
-        const additionalInformation = login.shadowRoot.querySelector('span');
+        const additionalInformation = login.shadowRoot.querySelector('[part="footer"] p');
         expect(additionalInformation.textContent).to.be.equal(login.i18n.additionalInformation);
         expect(login.$.forgotPasswordButton.textContent).to.be.equal(login.i18n.form.forgotPassword);
 
@@ -339,16 +331,6 @@
       });
     });
 
-    describe('custom footer', () => {
-      it('should allow custom footers', () => {
-        const login = fixture('custom-footer');
-        const footerElements = login.shadowRoot.querySelector('[name="footer"]').assignedNodes();
-        expect(footerElements).to.have.lengthOf(1);
-        expect(footerElements[0].tagName.toLowerCase()).to.equal('div');
-        expect(footerElements[0].textContent).to.equal('Custom footer');
-      });
-    });
-
     describe('style parts', () => {
       it('should be possible to style parts', () => {
         const expectedColor = 'rgb(0, 128, 0)';
@@ -361,5 +343,6 @@
         expect(getComputedStyle(errorMessage).color).to.equal(expectedColor);
       });
     });
+
   </script>
 </body>

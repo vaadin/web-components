@@ -69,9 +69,9 @@ This program is available under Apache License Version 2.0, available at https:/
 
         <vaadin-button id="forgotPasswordButton" theme="tertiary small" on-click="_forgotPassword" hidden$="[[noForgotPassword]]">[[i18n.form.forgotPassword]]</vaadin-button>
 
-        <slot name="footer">
-          <span>[[i18n.additionalInformation]]</span>
-        </slot>
+        <div part="footer">
+          <p>[[i18n.additionalInformation]]</p>
+        </div>
       </section>
   </template>
 
@@ -100,6 +100,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * `error-message-title`       | Container for error message title
        * `error-message-description` | Container for error message description
        * `error-message-description` | Container for error message description
+       * `footer`  | Container additional information text from `i18n` object
        *
        * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
        *
@@ -110,7 +111,6 @@ This program is available under Apache License Version 2.0, available at https:/
        * Slot name | Description
        * ----------|---------------------------------------------------|
        * `form`    | Html form placeholder. See the usage in `<vaadin-login-overlay>`.
-       * `footer`  | Placeholder for the component footer. By default contains `additionalInformation` text from `i18n` object.
        *
        * See examples of setting the content into slots in the live demos.
        * @memberof Vaadin
