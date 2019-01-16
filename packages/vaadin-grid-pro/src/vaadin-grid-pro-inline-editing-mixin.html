@@ -29,7 +29,8 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
          * (Shift + Enter - same, but for previous row).
          */
         allowEnterRowChange: {
-          type: Boolean
+          type: Boolean,
+          notify: true // FIXME(yuriy-fix): needed by Flow counterpart
         },
 
         /**
@@ -37,7 +38,8 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
          * Tab / Enter, it will be focused in edit mode
          */
         preserveEditMode: {
-          type: Boolean
+          type: Boolean,
+          notify: true // FIXME(yuriy-fix): needed by Flow counterpart
         }
       };
     }
