@@ -40,9 +40,9 @@ This program is available under Apache License Version 2.0, available at https:/
     </style>
     <section part="card">
       <div part="brand">
-          <slot name="title">
-            <h1 part="title">[[title]]</h1>
-          </slot>
+        <slot name="title">
+          <h1 part="title">[[title]]</h1>
+        </slot>
         <p part="description">[[description]]</p>
       </div>
       <div part="form">
@@ -56,8 +56,31 @@ This program is available under Apache License Version 2.0, available at https:/
       let memoizedTemplate;
 
       /**
-       * The overlay wrapper
+       * `<vaadin-login-overlay-wrapper>` is a helper element for `<vaadin-login-overlay>` that provides
+       * responsible template for the login form.
        *
+       * ### Styling
+       *
+       * The following Shadow DOM parts of the `<vaadin-login-overlay-wrapper>` are available for styling:
+       *
+       * Part name       | Description
+       * ----------------|---------------------------------------------------------|
+       * `card`          | Container for the entire component's content
+       * `brand`         | Container for application title and description
+       * `form`          | Container for the `<vaadin-login>` component
+       *
+       * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+       *
+       * ### Component's slots
+       *
+       * The following slots are available for being set
+       *
+       * Slot name    | Description
+       * -------------|-----------------------------------------------|
+       * no name      | Default placeholder for the `<vaadin-login>`
+       * `title`      | Placeholder for customizing the title
+       *
+       * See the usage example in `<vaadin-login-overlay>`.
        * @memberof Vaadin
        * @private
       */
@@ -68,9 +91,15 @@ This program is available under Apache License Version 2.0, available at https:/
 
         static get properties() {
           return {
+            /**
+             * Title of the application.
+             */
             title: {
               type: String
             },
+            /**
+             * Application description. Displayed under the title.
+             */
             description: {
               type: String
             }

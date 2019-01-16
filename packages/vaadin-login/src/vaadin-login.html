@@ -79,12 +79,40 @@ This program is available under Apache License Version 2.0, available at https:/
     (function() {
 
       /**
-       * `<vaadin-login>` is a Web Component.
+       * `<vaadin-login>` is a Web Component providing an easy way to require users
+       * to log in into an application.
        *
        * ```
        * <vaadin-login></vaadin-login>
        * ```
        *
+       * Use `<vaadin-login-overlay>` Web Component which allows the form to work with password managers.
+       *
+       * ### Styling
+       *
+       * The following Shadow DOM parts of the `<vaadin-login>` are available for styling:
+       *
+       * Part name      | Description
+       * ---------------|---------------------------------------------------------|
+       * `form`         | Container for the entire component's content
+       * `form-title`   | Title of the login form
+       * `error-message`| Container for error message, contains error-message-title and error-message-description parts. Hidden by default.
+       * `error-message-title`       | Container for error message title
+       * `error-message-description` | Container for error message description
+       * `error-message-description` | Container for error message description
+       *
+       * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+       *
+       * ### Component's slots
+       *
+       * The following slots are available for being set
+       *
+       * Slot name | Description
+       * ----------|---------------------------------------------------|
+       * `form`    | Html form placeholder. See the usage in `<vaadin-login-overlay>`.
+       * `footer`  | Placeholder for the component footer. By default contains `additionalInformation` text from `i18n` object.
+       *
+       * See examples of setting the content into slots in the live demos.
        * @memberof Vaadin
        * @mixes Vaadin.ElementMixin
        * @mixes Vaadin.ThemableMixin
