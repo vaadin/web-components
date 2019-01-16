@@ -62,6 +62,16 @@
       }
     },
     {
+      "name": "Number Field",
+      "url": "number-field-demos",
+      "src": "number-field-demos.html",
+      "meta": {
+        "title": "Vaadin Number Field Examples",
+        "description": "",
+        "image": ""
+      }
+    },
+    {
       "name": "Text Area",
       "url": "text-area-demos",
       "src": "text-area-demos.html",

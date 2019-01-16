@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-number-field tests</title>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../../test-fixture/test-fixture.html">
+  <link rel="import" href="../vaadin-number-field.html">
+  <link rel="import" href="../../iron-form/iron-form.html">
+</head>
+
+<body>
+  <test-fixture id="default">
+    <template>
+      <vaadin-number-field></vaadin-number-field>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('number-field', () => {
+      var numberField, input, decreaseButton, increaseButton;
+
+      beforeEach(() => {
+        numberField = fixture('default');
+        input = numberField.focusElement;
+        decreaseButton = numberField.root.querySelector('[part=decrease-button]');
+        increaseButton = numberField.root.querySelector('[part=increase-button]');
+      });
+
+      describe('native', () => {
+
+        it('should have [type=number]', () => {
+          expect(input.type).to.equal('number');
+        });
+
+        it('should have hidden controls', () => {
+          expect(decreaseButton.hidden).to.be.true;
+          expect(increaseButton.hidden).to.be.true;
+        });
+
+        ['min', 'max'].forEach(function(attr) {
+          it('should set numeric attribute ' + attr, () => {
+            var value = 5;
+            numberField[attr] = value;
+            var attrval = input.getAttribute(attr);
+
+            expect(attrval).to.be.equal(String(value));
+          });
+        });
+
+      });
+
+      describe('value control buttons', () => {
+        it('should have value controls when hasControls is set to true', () => {
+          expect(decreaseButton.hidden).to.be.true;
+          expect(increaseButton.hidden).to.be.true;
+
+          numberField.hasControls = true;
+
+          expect(decreaseButton.hidden).to.be.false;
+          expect(increaseButton.hidden).to.be.false;
+        });
+
+        it('should increase value by 1 when increaseButton is clicked', () => {
+          numberField.value = 0;
+
+          increaseButton.click();
+
+          expect(numberField.value).to.be.equal('1');
+        });
+
+        it('should dispatch change event when a button is clicked', () => {
+          const changeSpy = sinon.spy();
+          numberField.addEventListener('change', changeSpy);
+
+          increaseButton.click();
+          expect(changeSpy.callCount).to.equal(1);
+        });
+
+        it('should not focus input when a button is clicked', () => {
+          let hasFocus = false;
+          input.focus = () => {
+            hasFocus = true;
+          };
+
+          increaseButton.click();
+          expect(hasFocus).to.be.false;
+        });
+
+        it('should increase value by 0.2 when step is 0.2 and increaseButton is clicked', () => {
+          numberField.step = 0.2;
+          numberField.value = 0.6;
+
+          increaseButton.click();
+
+          expect(numberField.value).to.be.equal('0.8');
+        });
+
+        it('should adjust value to exact step when increaseButton is clicked', () => {
+          numberField.step = 0.2;
+          numberField.value = 0.5;
+
+          increaseButton.click();
+
+          expect(numberField.value).to.be.equal('0.6');
+        });
+
+        it('should decrease value by 1 when decreaseButton is clicked', () => {
+          numberField.value = 0;
+
+          decreaseButton.click();
+
+          expect(numberField.value).to.be.equal('-1');
+        });
+
+        it('should decrease value by 0.2 when decreaseButton is clicked', () => {
+          numberField.value = 0;
+          numberField.step = 0.2;
+
+          decreaseButton.click();
+
+          expect(numberField.value).to.be.equal('-0.2');
+        });
+
+        it('should adjust value to exact step when decreaseButton is clicked', () => {
+          numberField.value = 7;
+          numberField.step = 2;
+
+          decreaseButton.click();
+
+          expect(numberField.value).to.be.equal('6');
+        });
+
+        it('should adjust decimals based on the step value', () => {
+          numberField.value = 1;
+          numberField.step = 0.001;
+
+          expect(numberField.value).to.be.equal('1.000');
+        });
+
+        it('should not increase value when increaseButton is clicked and max value is reached', () => {
+          numberField.value = 0;
+          numberField.max = 0;
+
+          increaseButton.click();
+
+          expect(numberField.value).to.be.equal(0);
+        });
+
+        it('should not decrease value when decreaseButton is clicked and min value is reached', () => {
+          numberField.value = 0;
+          numberField.min = 0;
+
+          decreaseButton.click();
+
+          expect(numberField.value).to.be.equal(0);
+        });
+
+        it('should not disable buttons if there are no limits set', () => {
+          expect(decreaseButton.hasAttribute('disabled')).to.be.false;
+          expect(increaseButton.hasAttribute('disabled')).to.be.false;
+        });
+
+        it('should disable plus button if max value is reached', () => {
+          numberField.value = 0;
+          numberField.min = 0;
+          expect(decreaseButton.hasAttribute('disabled')).to.be.true;
+          expect(increaseButton.hasAttribute('disabled')).to.be.false;
+        });
+
+        it('should disable minus button if min value is reached', () => {
+          numberField.value = 1;
+          numberField.max = 1;
+          expect(decreaseButton.hasAttribute('disabled')).to.be.false;
+          expect(increaseButton.hasAttribute('disabled')).to.be.true;
+        });
+
+        it('should not change value when number field is disabled and controls are clicked', () => {
+          numberField.disabled = true;
+          numberField.value = 0;
+
+          increaseButton.click();
+          expect(numberField.value).to.be.equal(0);
+
+          decreaseButton.click();
+          expect(numberField.value).to.be.equal(0);
+        });
+
+        it('should prevent touchend event on value control buttons', () => {
+          numberField.value = 0;
+          let e = new CustomEvent('touchend', {cancelable: true});
+          increaseButton.dispatchEvent(e);
+          expect(e.defaultPrevented).to.be.true;
+          expect(numberField.value).to.equal('1');
+
+          e = new CustomEvent('touchend', {cancelable: true});
+          decreaseButton.dispatchEvent(e);
+          expect(e.defaultPrevented).to.be.true;
+          expect(numberField.value).to.equal('0');
+        });
+      });
+
+      describe('input validation', () => {
+        it('should be valid with numeric values', () => {
+          expect(numberField.validate()).to.be.true;
+
+          numberField.value = '1';
+          expect(numberField.focusElement.value).to.be.equal('1');
+          expect(numberField.validate()).to.be.true;
+        });
+
+        it('should prevent setting non-numeric values', () => {
+          numberField.value = 'foo';
+          expect(numberField.value).to.be.empty;
+          expect(numberField.validate()).to.be.true;
+        });
+
+        it('should prevent setting decimals', () => {
+          numberField.value = 7.6;
+          expect(numberField.value).to.be.equal(8);
+        });
+
+        it('should prevent setting too many decimals', () => {
+          numberField.step = 0.1;
+          numberField.value = 7.686;
+          expect(numberField.value).to.be.equal(7.7);
+        });
+
+        it('should validate when setting limits', () => {
+          numberField.min = 2;
+          numberField.max = 4;
+
+          numberField.value = '';
+          expect(numberField.validate(), 'empty value is allowed because not required').to.be.true;
+
+          numberField.value = '3';
+          expect(numberField.validate(), 'valid value should be in the range').to.be.true;
+
+          numberField.value = '1';
+          expect(numberField.validate(), 'value should not be below min').to.be.false;
+
+          numberField.value = '3';
+          expect(numberField.validate(), 'invalid status should be reset when setting valid value').to.be.true;
+
+          numberField.value = '5';
+          expect(numberField.validate(), 'value should not be greater than max').to.be.false;
+        });
+      });
+
+    });
+  </script>
+</body>
+</html>
