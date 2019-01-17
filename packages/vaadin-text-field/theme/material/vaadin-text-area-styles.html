@@ -13,6 +13,12 @@
         padding-top: 0;
         margin-top: 4px;
       }
+
+      [part="input-field"] [part="value"],
+      [part="input-field"] ::slotted(textarea) {
+        white-space: pre-wrap; /* override `nowrap` from <vaadin-text-field> */
+        align-self: stretch; /* override `baseline` from <vaadin-text-field> */
+      }
     </style>
   </template>
 </dom-module>
