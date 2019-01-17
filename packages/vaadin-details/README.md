@@ -28,7 +28,7 @@
 ```html
 <vaadin-details opened>
   <div slot="summary">Expansible Details</div>
-  <div>Toggle using mouse, Enter and Space keys.</div>
+  Toggle using mouse, Enter and Space keys.
 </vaadin-details>
 ```
 
