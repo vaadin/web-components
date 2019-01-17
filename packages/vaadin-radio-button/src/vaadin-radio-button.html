@@ -87,6 +87,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * `focus-ring` | Set when the radio button is focused using the keyboard. | :host
        * `focused`    | Set when the radio button is focused. | :host
        * `checked`    | Set when the radio button is checked. | :host
+       * `empty`      | Set when there is no label provided. | label
        *
        * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
        *
@@ -167,6 +168,29 @@ This program is available under Apache License Version 2.0, available at https:/
           if (attrName) {
             this.name = attrName;
           }
+
+          this.shadowRoot.querySelector('[part~="label"]').querySelector('slot')
+            .addEventListener('slotchange', this._updateLabelAttribute.bind(this));
+
+          this._updateLabelAttribute();
+        }
+
+        _updateLabelAttribute() {
+          const label = this.shadowRoot.querySelector('[part~="label"]');
+          const assignedNodes = label.firstElementChild.assignedNodes();
+          if (this._isAssignedNodesEmpty(assignedNodes)) {
+            label.setAttribute('empty', '');
+          } else {
+            label.removeAttribute('empty');
+          }
+        }
+
+        _isAssignedNodesEmpty(nodes) {
+          // The assigned nodes considered to be empty if there is no slotted content or only one empty text node
+          return nodes.length === 0 ||
+              (nodes.length == 1
+              && nodes[0].nodeType == Node.TEXT_NODE
+              && nodes[0].textContent.trim() === '');
         }
 
         _checkedChanged(checked) {
