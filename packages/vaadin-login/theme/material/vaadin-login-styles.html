@@ -1,36 +1,99 @@
-<link rel="import" href="../../src/vaadin-login.html">
-
 <dom-module id="material-login" theme-for="vaadin-login">
   <template>
-    <style>
-      [part="card"] {
-        width: 23rem;
-        border-radius: 0;
-        margin: 2rem;
-      }
-
-      [part="brand"] {
-        padding: 24px 12px 12px;
-        background-color: var(--material-primary-color);
-        min-height: calc(var(--lumo-size-m) * 5);
-        color: var(--material-primary-contrast-color);
+    <style include="material-color-light material-typography">
+      :host {
+        max-width: calc(2.25rem * 10);
+        background: var(--material-background-color) linear-gradient(hsla(0, 0%, 100%, 0.3), hsla(0, 0%, 100%, 0.3));
+        min-height: 250px;
       }
 
       [part="form"] {
+        padding: 1.5rem;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+        justify-content: center;
+      }
+
+      [part="form-title"] {
+        margin-top: calc(var(--material-h3-font-size) - var(--material-h4-font-size));
+        font-size: var(--material-h5-font-size);
+      }
+
+      #submit {
+        margin-top: 3rem;
+        margin-bottom: 0.5rem;
+      }
+
+      #forgotPasswordButton {
+        margin: 0.5rem auto;
+        padding-bottom: 12px;
+        padding-top: 12px;
+      }
+
+      [part="error-message"] {
+        background-color: hsla(3, 100%, 60%, 0.1);
         padding: 1rem;
+        padding-left: 2.25rem;
+        border-radius: 0.25em;
+        margin-top: 1rem;
+        margin-bottom: 0.5rem;
+        color: var(--material-error-text-color);
+      }
+
+      [part="error-message"]::before {
+        content: "!";
+        font-size: 1.3em;
+        font-weight: 500;
+        position: absolute;
+        width: 2.25rem;
+        height: 1em;
+        line-height: 1;
+        text-align: center;
+        /* Visual centering */
+        margin-left: calc(2.25rem * -0.95);
+      }
+
+      [part="error-message"] h5 {
+        margin: 0 0 0.25em;
+        color: inherit;
+      }
+
+      [part="error-message"] p {
+        font-size: var(--material-small-font-size);
+        line-height: 1.375;
+        margin: 0;
+        opacity: 0.9;
+      }
+
+      [part="footer"] {
+        font-size: var(--material-small-font-size);
+        line-height: 1.375;
+        color: var(--material-secondary-text-color);
+      }
+    </style>
+  </template>
+</dom-module>
+<dom-module id="vaadin-login-forgot-password-button" theme-for="vaadin-button">
+  <template>
+    <style>
+      :host([theme~="forgot-password"]) {
+        text-transform: none;
+      }
+
+      :host([theme~="vaadin-login-submit"]) {
+        margin-top: 3em;
+        margin-bottom: 2em;
+        flex-grow: 0;
       }
 
       /* Small screen */
       @media only screen
-      and (max-width: 500px) {
-        :host {
-          min-height: 100%;
-          align-items: flex-start;
-        }
-
-        [part="card"] {
-          width: 100%;
-          margin: 0;
+        and (max-width: 1023px) {
+          :host([theme~="vaadin-login-submit"]) {
+          margin-top: 2.5em;
+          margin-bottom: 1em;
         }
       }
     </style>

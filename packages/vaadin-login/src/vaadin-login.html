@@ -63,11 +63,11 @@ This program is available under Apache License Version 2.0, available at https:/
               <input type="password" slot="input">
             </vaadin-password-field>
 
-            <vaadin-button id="submit" theme="primary contained" on-click="submit" disabled$="[[disabled]]">[[i18n.form.submit]]</vaadin-button>
+            <vaadin-button id="submit" theme="primary contained vaadin-login-submit" on-click="submit" disabled$="[[disabled]]">[[i18n.form.submit]]</vaadin-button>
           </form>
         </slot>
 
-        <vaadin-button id="forgotPasswordButton" theme="tertiary small" on-click="_forgotPassword" hidden$="[[noForgotPassword]]">[[i18n.form.forgotPassword]]</vaadin-button>
+        <vaadin-button id="forgotPasswordButton" theme="tertiary small forgot-password" on-click="_forgotPassword" hidden$="[[noForgotPassword]]">[[i18n.form.forgotPassword]]</vaadin-button>
 
         <div part="footer">
           <p>[[i18n.additionalInformation]]</p>

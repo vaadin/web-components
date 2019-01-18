@@ -14,10 +14,10 @@
   <script src="../../vaadin-demo-helpers/vaadin-demo-ready-event-emitter.js"></script>
 
   <script src="./element-demo.js"></script>
-  <link rel="import" href="../../vaadin-dialog/vaadin-dialog.html">
-  <link rel="import" href="../../vaadin-button/vaadin-button.html">
-  <link rel="import" href="../vaadin-login.html">
-  <link rel="import" href="../vaadin-login-overlay.html">
+  <link rel="import" href="../../vaadin-dialog/theme/material/vaadin-dialog.html">
+  <link rel="import" href="../../vaadin-button/theme/material/vaadin-button.html">
+  <link rel="import" href="../theme/material/vaadin-login-overlay.html">
+
 
   <custom-style>
     <style include="vaadin-component-demo-shared-styles"></style>
@@ -34,18 +34,6 @@
         --main-padding: var(--lumo-space-m);
       }
   </style>
-  <!--
-    Have to keep duplicate the <dom-module> from the overlay theme demo here to make it work.
-  -->
-  <dom-module id="custom-index-overlay-styles" theme-for="vaadin-login-overlay-wrapper">
-    <template>
-      <style>
-        :host([theme="custom-background"]) [part="brand"] {
-          background-image: url(./custom-brand.jpg);
-        }
-      </style>
-    </template>
-  </dom-module>
 </head>
 
 <body>
