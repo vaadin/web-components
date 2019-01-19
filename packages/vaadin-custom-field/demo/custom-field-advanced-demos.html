@@ -10,12 +10,16 @@
     <vaadin-demo-snippet id="custom-field-advanced-demos-iron-form-example" when-defined="vaadin-custom-field">
       <template preserve-content>
         <iron-form>
-          <vaadin-custom-field name="start" label="Start datetime" required error-message="Please fill all fields">
+          <vaadin-custom-field name="invoice-date" label="Invoice date" required error-message="Please fill all fields">
             <vaadin-date-picker></vaadin-date-picker>
             <vaadin-time-picker></vaadin-time-picker>
           </vaadin-custom-field>
+          <vaadin-custom-field name="price" label="Price of the item" required error-message="Please fill all fields">
+            <vaadin-text-field></vaadin-text-field>
+            <vaadin-select></vaadin-select>
+          </vaadin-custom-field>
           <br>
-          <vaadin-button>Get serialized start value</vaadin-button>
+          <vaadin-button>Get serialized values</vaadin-button>
           <div id="msg"></div>
         </iron-form>
         <script>
@@ -24,8 +28,27 @@
             const btn = document.querySelector('vaadin-button');
             btn.addEventListener('click', function() {
               const serializedValues = form.serializeForm();
-              document.querySelector('#msg').innerHTML = serializedValues.start;
+              document.querySelector('#msg').innerHTML =
+                'date: ' + serializedValues['invoice-date'] + '<br>' +
+                'price: ' + serializedValues['price'];
             });
+
+            document.querySelector('vaadin-select').renderer = function(root) {
+              // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
+              if (root.firstChild) {
+                return;
+              }
+              // create the <vaadin-list-box>
+              const listBox = window.document.createElement('vaadin-list-box');
+              // append 3 <vaadin-item> elements
+              ['Euro', 'Dollar', 'Pound'].forEach(function(name) {
+                const item = window.document.createElement('vaadin-item');
+                item.textContent = name;
+                listBox.appendChild(item);
+              });
+              // update the content
+              root.appendChild(listBox);
+            };
           });
         </script>
       </template>

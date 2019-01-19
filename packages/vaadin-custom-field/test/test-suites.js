@@ -1,3 +1,6 @@
 window.CustomFieldElementSuites = [
-  'sample-test.html'
+  'custom-field-basic-test.html',
+  'custom-field-slot-test.html',
+  'custom-field-validation-test.html',
+  'custom-field-functions-test.html'
 ];

@@ -23,7 +23,7 @@ This program is available under Apache License Version 2.0, available at https:/
         display: flex;
         flex-direction: column;
       }
-      
+
       .inputs-wrapper {
         display: block;
         flex: 1;
@@ -31,14 +31,14 @@ This program is available under Apache License Version 2.0, available at https:/
     </style>
 
     <div class="container">
-      <label part="label" on-click="focus" id="[[_labelId]]">[[label]]</label>
+      <label part="label" on-click="focus" id="[[__labelId]]">[[label]]</label>
       <div class="inputs-wrapper">
         <slot id="slot"></slot>
       </div>
       <div part="error-message"
-          id="[[_errorId]]"
+          id="[[__errorId]]"
           aria-live="assertive"
-          aria-hidden$="[[__getErrorMessageAriaHidden(invalid, errorMessage, _errorId)]]"
+          aria-hidden$="[[__getErrorMessageAriaHidden(invalid, errorMessage, __errorId)]]"
         >[[errorMessage]]</div>
     </div>
 
@@ -82,7 +82,7 @@ This program is available under Apache License Version 2.0, available at https:/
                     const splittedValues = value.split(' ');
                     return nodes.forEach((el, id) => el.value = splittedValues[id]);
                   },
-                  parseValue: inputValues => inputValues.join(' ')
+                  formatValue: inputValues => inputValues.join(' ')
                 };
               }
             },
@@ -126,7 +126,8 @@ This program is available under Apache License Version 2.0, available at https:/
               type: Boolean,
               reflectToAttribute: true,
               notify: true,
-              value: false
+              value: false,
+              observer: '__invalidChanged'
             },
 
             /**
@@ -144,8 +145,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
         static get observers() {
           return [
-            '__getActiveErrorId(invalid, errorMessage, _errorId)',
-            '__getActiveLabelId(label, _labelId)',
+            '__getActiveErrorId(invalid, errorMessage, __errorId)',
+            '__getActiveLabelId(label, __labelId)',
             '__updateRequired(required, __inputs)'
           ];
         }
@@ -156,17 +157,17 @@ This program is available under Apache License Version 2.0, available at https:/
           this.$.slot.addEventListener('slotchange', e =>
             this.__setInputs(e.target.assignedNodes().filter(node => node.validate || node.checkValidity)));
 
-          // From text-field
-          var uniqueId = Vaadin.TextFieldMixin._uniqueId = 1 + Vaadin.TextFieldMixin._uniqueId || 0;
-          this._errorId = `${this.constructor.is}-error-${uniqueId}`;
-          this._labelId = `${this.constructor.is}-label-${uniqueId}`;
+          var uniqueId = Vaadin.CustomFieldElement._uniqueId = 1 + Vaadin.CustomFieldElement._uniqueId || 0;
+          this.__errorId = `${this.constructor.is}-error-${uniqueId}`;
+          this.__labelId = `${this.constructor.is}-label-${uniqueId}`;
         }
 
         __updateValue(e) {
           // Stop native change events
           e && e.stopPropagation();
 
-          this.value = this.i18n.parseValue.apply(this, [this.__inputs.map(input => input.value)]);
+          this.validate();
+          this.value = this.i18n.formatValue.apply(this, [this.__inputs.map(input => input.value)]);
           this.dispatchEvent(new CustomEvent('change', {
             bubbles: true,
             cancelable: false,
@@ -176,21 +177,19 @@ This program is available under Apache License Version 2.0, available at https:/
           }));
         }
 
+        __invalidChanged(invalid) {
+          this.__setOrToggleAttribute('aria-invalid', invalid, this);
+        }
+
         __valueChanged(value) {
           this.i18n.setValue(value, this.__inputs);
-
-          // Timeout workaround for time-picker
-          setTimeout(() => this.validate());
+          this.validate();
         }
 
         __setInputs(nodes) {
-          // Look on change
-
           this.__inputs = nodes;
           this.__inputs.forEach(input => input.addEventListener('change', e => this.__updateValue(e)));
-
-          // Temporary workaround for time-picker
-          // this.__inputs.forEach(input => input.addEventListener('value-changed', e => this.__updateValue(e)));
+          this.validate();
         }
 
         __updateRequired(required, inputs) {
@@ -224,7 +223,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         /**
-         * Returns true if the current input value satisfies all constraints (if any)
+         * Returns true if the current inputs values satisfy all constraints (if any)
          * @returns {boolean}
          */
         checkValidity() {
