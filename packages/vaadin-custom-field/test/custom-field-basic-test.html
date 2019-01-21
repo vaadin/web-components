@@ -44,9 +44,9 @@
       });
 
       it('should properly define internal inputs', function() {
-        expect(customField.__inputs.length).to.equal(2);
+        expect(customField.querySelectorAll('input').length).to.equal(2);
         for (var i = 0; i < 2; i ++) {
-          expect(customField.__inputs[i].localName).to.be.equal('input');
+          expect(customField.querySelectorAll('input')[i].localName).to.be.equal('input');
         }
       });
 
@@ -86,7 +86,7 @@
 
         it('should be displayed when assigned', function() {
           customField.label = 'Foo';
-          expect(labelElement.innerText).to.equal('Foo');
+          expect(labelElement.textContent).to.equal('Foo');
         });
 
         it('should update aria-describedby attribute on host element when displayed', function() {

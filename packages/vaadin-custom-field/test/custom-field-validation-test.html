@@ -36,9 +36,9 @@
       });
 
       it('should propagate required property to internal inputs', function() {
-        expect(customField.__inputs.every(input => input.required)).to.be.false;
+        expect(Array.from(customField.querySelectorAll('input')).every(input => input.required)).to.be.false;
         customField.required = true;
-        expect(customField.__inputs.every(input => input.required)).to.be.true;
+        expect(Array.from(customField.querySelectorAll('input')).every(input => input.required)).to.be.true;
       });
 
       it('should check validity on validate', function() {
@@ -64,7 +64,7 @@
         });
 
         it('should be displayed when the field is invalid', function() {
-          expect(errorMessageElement.innerText).to.equal('Foo');
+          expect(errorMessageElement.textContent).to.equal('Foo');
         });
 
         it('should toggle aria-hidden attribute on invalid change', function() {
