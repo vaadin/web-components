@@ -1,6 +1,9 @@
 gemini.suite('vaadin-custom-field', function(rootSuite) {
   function wait(actions, find) {
-    actions.wait(5000);
+    return actions
+      .waitForJSCondition(function(window) {
+        return window.webComponentsAreReady;
+      }, 6000);
   }
 
   function goToAboutBlank(actions, find) {
@@ -17,9 +20,9 @@ gemini.suite('vaadin-custom-field', function(rootSuite) {
   ['lumo', 'material'].forEach(theme => {
     gemini.suite(`default-tests-${theme}`, function(suite) {
       suite
-        .setUrl(`/default.html?theme=${theme}`)
-        .setCapture('#default-tests')
-        .capture(`vaadin-custom-field`);
+        .setUrl(`default.html?theme=${theme}`)
+        .setCaptureElements('#default-tests')
+        .capture('default');
     });
   });
 
