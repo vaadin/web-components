@@ -38,15 +38,15 @@
       it('should add new input to the input list when adding to the DOM', function() {
         customField.appendChild(inputElement);
         dispatchSlotChange();
-        expect(customField.querySelectorAll('input').length).to.equal(3);
-        expect(customField.querySelectorAll('input')[2]).to.eql(inputElement);
+        expect(customField.inputs.length).to.equal(3);
+        expect(customField.inputs[2]).to.eql(inputElement);
       });
 
       it('should remove input from the input list when removing from the DOM', function() {
         // Remove one of the inputs from the DOM
         customField.removeChild(customField.children[1]);
         dispatchSlotChange();
-        expect(customField.querySelectorAll('input').length).to.equal(1);
+        expect(customField.inputs.length).to.equal(1);
       });
 
       // TODO(yuriy): Invalidate input

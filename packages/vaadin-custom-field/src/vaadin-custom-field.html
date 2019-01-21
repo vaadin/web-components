@@ -167,7 +167,7 @@ This program is available under Apache License Version 2.0, available at https:/
           e && e.stopPropagation();
 
           this.validate();
-          this.value = this.i18n.formatValue.apply(this, [this.__inputs.map(input => input.value)]);
+          this.value = this.i18n.formatValue.apply(this, [this.inputs.map(input => input.value)]);
           this.dispatchEvent(new CustomEvent('change', {
             bubbles: true,
             cancelable: false,
@@ -182,13 +182,13 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         __valueChanged(value) {
-          this.i18n.setValue(value, this.__inputs);
+          this.i18n.setValue(value, this.inputs);
           this.validate();
         }
 
         __setInputs(nodes) {
           this.__inputs = nodes;
-          this.__inputs.forEach(input => input.addEventListener('change', e => this.__updateValue(e)));
+          this.inputs.forEach(input => input.addEventListener('change', e => this.__updateValue(e)));
           this.validate();
         }
 
@@ -228,7 +228,7 @@ This program is available under Apache License Version 2.0, available at https:/
          */
         checkValidity() {
           if (this.required) {
-            return this.__inputs.every(input => (input.validate || input.checkValidity).call(input));
+            return this.inputs.every(input => (input.validate || input.checkValidity).call(input));
           } else {
             return !this.invalid;
           }
@@ -261,6 +261,10 @@ This program is available under Apache License Version 2.0, available at https:/
 
         __getErrorMessageAriaHidden(invalid, errorMessage, errorId) {
           return (!(errorMessage && invalid ? errorId : undefined)).toString();
+        }
+
+        get inputs() {
+          return this.__inputs;
         }
       }
 
