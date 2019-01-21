@@ -55,11 +55,14 @@ This program is available under Apache License Version 2.0, available at https:/
 
         <slot name="form">
           <form id="loginForm" method="POST" action$="[[action]]">
-            <vaadin-text-field name="username" label="[[i18n.form.username]]" id="username" required on-keydown="_handleInputKeydown">
+            <vaadin-text-field name="username" label="[[i18n.form.username]]"
+                id="username" required on-keydown="_handleInputKeydown"
+                autocapitalize="none" autocomplete="off" autocorrect="off" spellcheck="false">
               <input type="text" slot="input">
             </vaadin-text-field>
 
-            <vaadin-password-field name="password" label="[[i18n.form.password]]" id="password" required on-keydown="_handleInputKeydown">
+            <vaadin-password-field name="password" label="[[i18n.form.password]]" id="password" required on-keydown="_handleInputKeydown"
+                spellcheck="false">
               <input type="password" slot="input">
             </vaadin-password-field>
 
