@@ -791,6 +791,18 @@
           });
         };
 
+        const onceOpened = elem => {
+          return new Promise(resolve => {
+            const listener = e => {
+              if (e.detail.value) {
+                elem.removeEventListener('opened-changed', listener);
+                resolve();
+              }
+            };
+            elem.addEventListener('opened-changed', listener);
+          });
+        };
+
         beforeEach(async() => {
           grid = fixture('editor-type');
           grid.items = getItems();
@@ -802,15 +814,17 @@
           enter(cell._content);
           editor = getCellEditor(cell);
           select = editor._select;
-          await nextRender(select);
+          await onceOpened(select);
         });
 
-        it('should render the select to cell in edit mode', async() => {
+        it('should render the opened select to cell in edit mode', () => {
           expect(select instanceof Vaadin.SelectElement).to.equal(true);
           expect(select.value).to.be.equal('mrs');
+          expect(select.opened).to.equal(true);
         });
 
         it('should open the select and stop focusout on editor click', async() => {
+          select.opened = false;
           select.focusElement.click();
           const evt = new CustomEvent('focusout', {bubbles: true, composed: true});
           evt.relatedTarget = editor._overlay.querySelector('vaadin-item');
@@ -820,40 +834,33 @@
           expect(select.opened).to.equal(true);
         });
 
-        it('should close the select and exit edit mode on outside click', async() => {
-          select.focusElement.click();
-          await nextRender(select._menuElement);
+        it('should close the select and exit edit mode on outside click', () => {
           document.body.click();
           expect(select.opened).to.equal(false);
         });
 
-        it('should open the select on enter key', async() => {
-          enter(select.focusElement);
-          await nextRender(select._menuElement);
-          expect(select.opened).to.equal(true);
-        });
-
         it('should open the select on space key', async() => {
+          select.opened = false;
           space(select.focusElement);
           await nextRender(select._menuElement);
           expect(select.opened).to.equal(true);
         });
 
         it('should open the select on arrow down key', async() => {
+          select.opened = false;
           down(select.focusElement);
           await nextRender(select._menuElement);
           expect(select.opened).to.equal(true);
         });
 
         it('should open the select on arrow up key', async() => {
+          select.opened = false;
           up(select.focusElement);
           await nextRender(select._menuElement);
           expect(select.opened).to.equal(true);
         });
 
-        it('should update value from selected one after edit mode exit', async() => {
-          enter(select.focusElement);
-          await nextRender(select._menuElement);
+        it('should update value from selected one after edit mode exit', () => {
           const item = editor._overlay.querySelector('vaadin-item');
           const value = item.textContent;
           item.click();

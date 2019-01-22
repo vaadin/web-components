@@ -118,6 +118,10 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           this._overlay.addEventListener('vaadin-overlay-outside-click', e => {
             this._grid._stopEdit();
           });
+
+          Polymer.RenderStatus.afterNextRender(select, () => {
+            select.opened = true;
+          });
         }
       }
     }
