@@ -740,14 +740,14 @@
         });
       });
 
-      describe('boolean editor type', () => {
+      describe('checkbox editor type', () => {
         let grid, cell, column, editor;
 
         beforeEach(() => {
           grid = fixture('editor-type');
           grid.items = getItems();
           column = grid.firstElementChild;
-          column.editorType = 'boolean';
+          column.editorType = 'checkbox';
           flushGrid(grid);
           cell = getContainerCell(grid.$.items, 0, 0);
         });
@@ -876,10 +876,10 @@
           expect(editor).to.be.ok;
         });
 
-        it('should not start edit on typing when editor type set to boolean', () => {
+        it('should not start edit on typing when editor type set to checkbox', () => {
           column = grid.querySelector('[path="married"]');
           cell = getContainerCell(grid.$.items, 0, columns.indexOf(column));
-          column.editorType = 'boolean';
+          column.editorType = 'checkbox';
           keyDownChar(cell._content, 'a');
           editor = column._getEditorComponent(cell);
           expect(editor).to.be.not.ok;

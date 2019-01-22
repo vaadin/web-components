@@ -18,10 +18,10 @@ gemini.suite('vaadin-grid-pro', function(rootSuite) {
     .after(goToAboutBlank);
 
   ['lumo', 'material'].forEach(theme => {
-    gemini.suite(`edit-column-boolean-tests-${theme}`, function(suite) {
+    gemini.suite(`edit-column-checkbox-tests-${theme}`, function(suite) {
       suite
-        .setUrl(`/edit-column-boolean.html?theme=${theme}`)
-        .setCaptureElements('#edit-column-boolean')
+        .setUrl(`/edit-column-checkbox.html?theme=${theme}`)
+        .setCaptureElements('#edit-column-checkbox')
         .capture(`vaadin-grid-pro`);
     });
 

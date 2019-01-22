@@ -8,9 +8,9 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 <link rel="import" href="../../polymer/lib/utils/flattened-nodes-observer.html">
 <link rel="import" href="../../polymer/lib/utils/path.html">
 <link rel="import" href="../../vaadin-grid/src/vaadin-grid-column.html">
-<link rel="import" href="vaadin-grid-pro-edit-column-checkbox.html">
-<link rel="import" href="vaadin-grid-pro-edit-column-select.html">
-<link rel="import" href="vaadin-grid-pro-edit-column-text-field.html">
+<link rel="import" href="vaadin-grid-pro-edit-checkbox.html">
+<link rel="import" href="vaadin-grid-pro-edit-select.html">
+<link rel="import" href="vaadin-grid-pro-edit-text-field.html">
 
 <dom-module id="vaadin-grid-pro-edit-column">
   <script>
@@ -67,7 +67,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           /**
            * Type of the cell editor component to be rendered. Allowed values:
            * - `text` (default) - renders a text field
-           * - `boolean` - renders a checkbox
+           * - `checkbox` - renders a checkbox
            * - `select` - renders a select with a list of items passed as `editorOptions`
            *
            * Editor type is set to `custom` when either `editModeRenderer` is set,
@@ -210,7 +210,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       _getTagNameByType() {
         let type;
         switch (this.editorType) {
-          case 'boolean':
+          case 'checkbox':
             type = 'checkbox';
             break;
           case 'select':
@@ -221,7 +221,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             type = 'text-field';
             break;
         }
-        return `${this.constructor.is}-${type}`;
+        return this.constructor.is.replace('column', type);
       }
 
       _focusEditor(editor) {
@@ -234,7 +234,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       }
 
       _getEditorValue(editor) {
-        const path = this.editorType === 'boolean' ? 'checked' : this.editorValuePath;
+        const path = this.editorType === 'checkbox' ? 'checked' : this.editorValuePath;
         return Polymer.Path.get(editor, path);
       }
 
@@ -274,7 +274,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       }
 
       _setEditorValue(editor, value) {
-        const path = this.editorType === 'boolean' ? 'checked' : this.editorValuePath;
+        const path = this.editorType === 'checkbox' ? 'checked' : this.editorValuePath;
         Polymer.Path.set(editor, path, value);
         editor.notifyPath && editor.notifyPath(path, value);
       }

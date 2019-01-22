@@ -53,7 +53,7 @@
     </p>
     <ul>
       <li><code>text</code> - default type, renders a <code>&lt;vaadin-text-field&gt;</code> component</li>
-      <li><code>boolean</code> - renders a <code>&lt;vaadin-checkbox&gt;</code> component</li>
+      <li><code>checkbox</code> - renders a <code>&lt;vaadin-checkbox&gt;</code> component</li>
       <li><code>select</code> - renders a <code>&lt;vaadin-select&gt;</code> component</li>
     </ul>
     <p>
@@ -66,7 +66,7 @@
           <vaadin-grid-column path="name.first" header="First Name"></vaadin-grid-column>
           <vaadin-grid-column path="name.last" header="Last name"></vaadin-grid-column>
           <vaadin-grid-pro-edit-column path="name.title" header="Title (edit)" editor-type="select"></vaadin-grid-pro-edit-column>
-          <vaadin-grid-pro-edit-column path="married" header="Married (edit)" editor-type="boolean"></vaadin-grid-pro-edit-column>
+          <vaadin-grid-pro-edit-column path="married" header="Married (edit)" editor-type="checkbox"></vaadin-grid-pro-edit-column>
         </vaadin-grid-pro>
         <script>
           window.addDemoReadyListener('#grid-pro-edit-column-demos-editor-type', function(document) {

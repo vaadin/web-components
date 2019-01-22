@@ -12,15 +12,15 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 <link rel="import" href="../../vaadin-list-box/src/vaadin-list-box.html">
 <link rel="import" href="../../vaadin-item/src/vaadin-item.html">
 
-<dom-module id="vaadin-grid-pro-edit-column-select-wrapper">
+<dom-module id="vaadin-grid-pro-edit-select-wrapper">
   <template>
-    <vaadin-grid-pro-edit-column-select
+    <vaadin-grid-pro-edit-select
       id="selectEditor"
       value="{{value}}"
       theme="grid-pro-editor"
       on-keydown="_onSelectKeydown"
       on-focusout="_onSelectFocusout"
-    ></vaadin-grid-pro-edit-column-select>
+    ></vaadin-grid-pro-edit-select>
   </template>
 </dom-module>
 
@@ -31,9 +31,9 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
      *
      * @memberof Vaadin
      */
-    class GridProEditColumnSelectWrapperElement extends Polymer.Element {
+    class GridProEditSelectWrapperElement extends Polymer.Element {
       static get is() {
-        return 'vaadin-grid-pro-edit-column-select-wrapper';
+        return 'vaadin-grid-pro-edit-select-wrapper';
       }
 
       static get properties() {
@@ -122,7 +122,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       }
     }
 
-    customElements.define(GridProEditColumnSelectWrapperElement.is, GridProEditColumnSelectWrapperElement);
+    customElements.define(GridProEditSelectWrapperElement.is, GridProEditSelectWrapperElement);
 
     /**
      * The cell editor select element.
@@ -130,19 +130,19 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
      * ### Styling
      *
      * See [`<vaadin-select>` documentation](https://github.com/vaadin/vaadin-select/blob/master/src/vaadin-select.html)
-     * for `<vaadin-grid-pro-edit-column-select>` parts.
+     * for `<vaadin-grid-pro-edit-select>` parts.
      *
      * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
      *
      * @memberof Vaadin
      * @extends Vaadin.SelectElement
      */
-    class GridProEditColumnSelectElement extends Vaadin.SelectElement {
+    class GridProEditSelectElement extends Vaadin.SelectElement {
       static get is() {
-        return 'vaadin-grid-pro-edit-column-select';
+        return 'vaadin-grid-pro-edit-select';
       }
     }
 
-    customElements.define(GridProEditColumnSelectElement.is, GridProEditColumnSelectElement);
+    customElements.define(GridProEditSelectElement.is, GridProEditSelectElement);
   })();
 </script>
