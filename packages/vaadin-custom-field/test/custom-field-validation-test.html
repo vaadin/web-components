@@ -7,6 +7,8 @@
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <link rel="import" href="../../test-fixture/test-fixture.html">
   <link rel="import" href="../vaadin-custom-field.html">
+  <link rel="import" href="../../iron-form/iron-form.html">
+  <link rel="import" href="helpers.html">
 </head>
 
 <body>
@@ -19,20 +21,27 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="iron-form">
+    <template>
+      <iron-form id="iform">
+        <form>
+          <vaadin-custom-field>
+            <input type="text">
+            <input type="number">
+          </vaadin-custom-field>
+        </form>
+      </iron-form>
+    </template>
+  </test-fixture>
+
   <script>
     describe('validation', function() {
       var customField, inputElement;
 
-      function dispatchSlotChange() {
-        // NOTE(yuriy): Workaround not to use timeouts
-        const evt = new CustomEvent('slotchange');
-        customField.shadowRoot.querySelector('slot').dispatchEvent(evt);
-      }
-
       beforeEach(function() {
         customField = fixture('default');
         inputElement = document.createElement('input');
-        dispatchSlotChange();
+        dispatchSlotChange(customField);
       });
 
       it('should propagate required property to internal inputs', function() {
@@ -47,10 +56,18 @@
         expect(spy.called).to.be.true;
       });
 
+      it('should run validation on input change', function() {
+        const spy = sinon.spy(customField, 'checkValidity');
+        const input = customField.querySelector('input');
+        input.value = 'foo';
+        dispatchChange(input);
+        expect(spy.called).to.be.true;
+      });
+
       it('should run validation on slotchange', function() {
         const spy = sinon.spy(customField, 'checkValidity');
         customField.appendChild(inputElement);
-        dispatchSlotChange();
+        dispatchSlotChange(customField);
         expect(spy.called).to.be.true;
       });
 
@@ -107,7 +124,36 @@
 
       });
 
-      // TODO(yuriy): Add tests for iron-form
+    });
+
+    describe('iron-form', function() {
+      let iform, customField;
+
+      beforeEach(function() {
+        iform = fixture('iron-form');
+        customField = iform.querySelector('vaadin-custom-field');
+        dispatchSlotChange(customField);
+      });
+
+      it('should call validate', function(done) {
+        sinon.stub(customField, 'validate', done);
+        iform.submit();
+      });
+
+      it('should serialize correctly', function() {
+        customField.value = 'bar';
+        customField.name = 'foo';
+        expect(iform.serializeForm().foo).to.equal('bar');
+      });
+
+      it('should pass if not required', function() {
+        expect(iform.validate()).to.be.true;
+      });
+
+      it('should fail if required', function() {
+        customField.required = true;
+        expect(iform.validate()).to.be.false;
+      });
 
     });
   </script>

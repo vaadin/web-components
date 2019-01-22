@@ -78,11 +78,13 @@ This program is available under Apache License Version 2.0, available at https:/
               type: Object,
               value: () => {
                 return {
-                  setValue: (value, nodes) => {
+                  setValue: function(value, nodes) {
                     const splittedValues = value.split(' ');
                     return nodes.forEach((el, id) => el.value = splittedValues[id]);
                   },
-                  formatValue: inputValues => inputValues.join(' ')
+                  formatValue: function(inputValues) {
+                    return inputValues.join(' ');
+                  }
                 };
               }
             },
@@ -167,7 +169,7 @@ This program is available under Apache License Version 2.0, available at https:/
           e && e.stopPropagation();
 
           this.validate();
-          this.value = this.i18n.formatValue.apply(this, [this.inputs.map(input => input.value)]);
+          this.__setValue();
           this.dispatchEvent(new CustomEvent('change', {
             bubbles: true,
             cancelable: false,
@@ -177,18 +179,31 @@ This program is available under Apache License Version 2.0, available at https:/
           }));
         }
 
+        __setValue() {
+          this.__settingValue = true;
+          this.value = this.i18n.formatValue.apply(this, [this.inputs.map(input => input.value)]);
+          this.__settingValue = false;
+        }
+
         __invalidChanged(invalid) {
           this.__setOrToggleAttribute('aria-invalid', invalid, this);
         }
 
-        __valueChanged(value) {
+        __valueChanged(value, oldValue) {
+          if (this.__settingValue || !this.inputs) {
+            return;
+          }
+
           this.i18n.setValue(value, this.inputs);
-          this.validate();
+          if (oldValue !== undefined) {
+            this.validate();
+          }
         }
 
         __setInputs(nodes) {
           this.__inputs = nodes;
           this.inputs.forEach(input => input.addEventListener('change', e => this.__updateValue(e)));
+          this.__setValue();
           this.validate();
         }
 
@@ -219,6 +234,7 @@ This program is available under Apache License Version 2.0, available at https:/
          * @return {boolean} True if the value is valid.
          */
         validate() {
+          this.invalid = false;
           return !(this.invalid = !this.checkValidity());
         }
 

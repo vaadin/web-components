@@ -7,6 +7,7 @@
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <link rel="import" href="../../test-fixture/test-fixture.html">
   <link rel="import" href="../vaadin-custom-field.html">
+  <link rel="import" href="helpers.html">
 </head>
 
 <body>
@@ -23,21 +24,15 @@
     describe('slot updates', function() {
       var customField, inputElement;
 
-      function dispatchSlotChange() {
-        // NOTE(yuriy): Workaround not to use timeouts
-        const evt = new CustomEvent('slotchange');
-        customField.shadowRoot.querySelector('slot').dispatchEvent(evt);
-      }
-
       beforeEach(function() {
         customField = fixture('default');
-        dispatchSlotChange();
+        dispatchSlotChange(customField);
         inputElement = document.createElement('input');
       });
 
       it('should add new input to the input list when adding to the DOM', function() {
         customField.appendChild(inputElement);
-        dispatchSlotChange();
+        dispatchSlotChange(customField);
         expect(customField.inputs.length).to.equal(3);
         expect(customField.inputs[2]).to.eql(inputElement);
       });
@@ -45,11 +40,31 @@
       it('should remove input from the input list when removing from the DOM', function() {
         // Remove one of the inputs from the DOM
         customField.removeChild(customField.children[1]);
-        dispatchSlotChange();
+        dispatchSlotChange(customField);
         expect(customField.inputs.length).to.equal(1);
       });
 
-      // TODO(yuriy): Invalidate input
+      describe('value property', function() {
+
+        it('should update value when input is added', function() {
+          inputElement.value = 'foo';
+          customField.appendChild(inputElement);
+          dispatchSlotChange(customField);
+          // Two empty spaces are from empty inputs
+          expect(customField.value).to.equal('  foo');
+        });
+
+        it('should update value when input is removed', function() {
+          const secondInput = customField.children[1];
+          secondInput.value = '1';
+          dispatchChange(secondInput);
+          expect(customField.value).to.equal(' 1');
+          customField.removeChild(secondInput);
+          dispatchSlotChange(customField);
+          expect(customField.value).to.equal('');
+        });
+
+      });
 
     });
   </script>

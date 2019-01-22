@@ -7,6 +7,7 @@
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <link rel="import" href="../../test-fixture/test-fixture.html">
   <link rel="import" href="../vaadin-custom-field.html">
+  <link rel="import" href="helpers.html">
 </head>
 
 <body>
@@ -23,20 +24,9 @@
     describe('custom setter and formatter', function() {
       var customField;
 
-      function dispatchSlotChange() {
-        // NOTE(yuriy): Workaround not to use timeouts
-        const evt = new CustomEvent('slotchange');
-        customField.shadowRoot.querySelector('slot').dispatchEvent(evt);
-      }
-
-      function dispatchChange(el) {
-        const evt = new CustomEvent('change');
-        el.dispatchEvent(evt);
-      }
-
       beforeEach(function() {
         customField = fixture('default');
-        dispatchSlotChange();
+        dispatchSlotChange(customField);
       });
 
       it('should use custom setter if that exists', function() {
@@ -60,7 +50,7 @@
           el.value = '1';
           dispatchChange(el);
         });
-        expect(customField.value).to.be.equal('3 2');
+        expect(customField.value).to.be.equal('2 2');
       });
 
     });

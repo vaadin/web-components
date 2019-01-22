@@ -3,7 +3,14 @@
 <dom-module id="material-custom-field" theme-for="vaadin-custom-field">
   <template>
     <style include="material-required-field">
-      /* Empty style block */
+      [part="label"] {
+        position: relative;
+        top: 0;
+      }
+
+      :host([focused]) [part="label"] {
+        color: var(--material-primary-text-color);
+      }
     </style>
   </template>
 </dom-module>

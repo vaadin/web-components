@@ -3,7 +3,9 @@
 <dom-module id="lumo-custom-field" theme-for="vaadin-custom-field">
   <template>
     <style include="lumo-required-field">
-      /* Empty style block */
+      :host([focused]) [part="label"] {
+        color: var(--lumo-primary-text-color);
+      }
     </style>
   </template>
 </dom-module>

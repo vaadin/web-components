@@ -7,6 +7,7 @@
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <link rel="import" href="../../test-fixture/test-fixture.html">
   <link rel="import" href="../vaadin-custom-field.html">
+  <link rel="import" href="helpers.html">
 </head>
 
 <body>
@@ -23,20 +24,9 @@
     describe('basic functionality', function() {
       var customField;
 
-      function dispatchSlotChange() {
-        // NOTE(yuriy): Workaround not to use timeouts
-        const evt = new CustomEvent('slotchange');
-        customField.shadowRoot.querySelector('slot').dispatchEvent(evt);
-      }
-
-      function dispatchChange(el) {
-        const evt = new CustomEvent('change');
-        el.dispatchEvent(evt);
-      }
-
       beforeEach(function() {
         customField = fixture('default');
-        dispatchSlotChange();
+        dispatchSlotChange(customField);
       });
 
       it('should be an instance of custom field', function() {
@@ -52,8 +42,8 @@
 
       describe('value property', function() {
 
-        it('should be undefined by default', function() {
-          expect(customField.value).to.be.undefined;
+        it('should be falsy by default', function() {
+          expect(customField.value).to.be.falsy;
         });
 
         it('should update value on change event', function() {
