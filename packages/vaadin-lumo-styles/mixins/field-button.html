@@ -1,6 +1,7 @@
 <link rel="import" href="../color.html">
 <link rel="import" href="../font-icons.html">
 <link rel="import" href="../sizing.html">
+<link rel="import" href="../style.html">
 
 <dom-module id="lumo-field-button">
   <template>
@@ -14,7 +15,7 @@
         text-align: center;
         color: var(--lumo-contrast-60pct);
         transition: 0.2s color;
-        cursor: default;
+        cursor: var(--lumo-clickable-cursor);
       }
 
       :host(:not([readonly])) [part$="button"]:hover {

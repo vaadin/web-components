@@ -9,6 +9,7 @@
 
   <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
   <link rel="import" href="common.html">
+  <link rel="import" href="../../vaadin-button/vaadin-button.html">
 
   <style>
     [unresolved] {
@@ -128,8 +129,31 @@
 
             .shadow-xl {
               box-shadow: var(--lumo-box-shadow-xl);
-              width: calc(var(--lumo-size-xl) * 1.4);
-              height: calc(var(--lumo-size-xl) * 1.4);
+            }
+          </style>
+        </custom-style>
+      </template>
+    </nice-demo-snippet>
+
+
+    <h2 demo-section>Cursor for clickable elements</h2>
+
+    <p>Use this property for elements that are clickable, such as buttons. That way, an application
+      can easily decide which mouse cursor to use for them. Traditional web address links (anchors)
+      should always use the <code>pointer</code> cursor (pointing hand).</p>
+
+    <p>By default, Lumo uses the <code>default</code> cursor (arrow) for clickable elements.</p>
+
+    <nice-demo-snippet>
+      <template slot="source">
+        <vaadin-button>Default</vaadin-button>
+        <vaadin-button class="pointer">Pointer</vaadin-button>
+
+        <custom-style>
+          <style>
+            .pointer {
+              --lumo-clickable-cursor: pointer;
+              cursor: var(--lumo-clickable-cursor);
             }
           </style>
         </custom-style>
@@ -153,6 +177,11 @@
       <dt>--lumo-box-shadow-m</dt>
       <dt>--lumo-box-shadow-l</dt>
       <dt>--lumo-box-shadow-xl</dt>
+    </dl>
+
+    <h5>Interaction</h5>
+    <dl class="custom-properties">
+      <dt>--lumo-clickable-cursor</dt>
     </dl>
 
   </div>
