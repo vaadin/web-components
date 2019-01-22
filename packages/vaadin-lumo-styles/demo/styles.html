@@ -19,26 +19,55 @@
 
   <custom-style>
     <style>
-      [class^="box"] {
-        display: inline-block;
-        width: var(--lumo-size-xl);
-        height: var(--lumo-size-xl);
-        margin: var(--lumo-space-s);
-        background-color: var(--lumo-contrast-20pct);
-      }
-
-      [class^="shadow"] {
+      .box {
         display: inline-flex;
         align-items: center;
         justify-content: center;
         font-weight: 600;
         color: var(--lumo-secondary-text-color);
-        font-size: var(--lumo-font-size-s);
         width: var(--lumo-size-xl);
         height: var(--lumo-size-xl);
         margin: var(--lumo-space-xl);
-        border-radius: var(--lumo-border-radius);
+        border-radius: var(--lumo-border-radius-m);
         background-color: var(--lumo-tint-5pct);
+      }
+
+      .shadow {
+        background-color: var(--lumo-base-color);
+        background-image: linear-gradient(var(--lumo-tint-5pct), var(--lumo-tint-5pct));
+      }
+
+      .shadows {
+        background-image: linear-gradient(var(--lumo-shade-5pct), var(--lumo-shade-5pct));
+      }
+
+      .radius {
+        background-color: var(--lumo-contrast-20pct);
+      }
+
+      .box::before {
+        content: "";
+        font-size: var(--lumo-font-size-s);
+      }
+
+      .box.xs::before {
+        content: "XS";
+      }
+
+      .box.s::before {
+        content: "S";
+      }
+
+      .box.m::before {
+        content: "M";
+      }
+
+      .box.l::before {
+        content: "L";
+      }
+
+      .box.xl::before {
+        content: "XL";
       }
     </style>
   </custom-style>
@@ -66,30 +95,30 @@
 
     <h2 demo-section>Border radius</h2>
 
-    <p>You can adjust the top level border radius, which affects many element themes directly.</p>
+    <p>The border radius values are defined as <code>em</code> by default, so they scale with the font size.</p>
     <div class="note">
       <h6>Removing border radius</h6>
-      <p>If you want to set the border radius to zero, you need to specify a unit for it as well (i.e. <code>0px</code> or <code>0em</code>), as it can be used in <code>calc</code> functions which will be undefined if <code>--lumo-border-radius</code> is a unitless value.</p>
+      <p>If you want to set a border radius property to zero, you need to specify a unit for it as well (i.e. <code>0px</code> or <code>0em</code>), as it can be used in <code>calc</code> functions which will be undefined if the border radius is a unitless value.</p>
     </div>
 
     <nice-demo-snippet>
       <template slot="source">
-        <div class="box"></div>
-        <div class="box box2"></div>
-        <div class="box box3"></div>
+        <div class="box s radius"></div>
+        <div class="box m radius"></div>
+        <div class="box l radius"></div>
 
         <custom-style>
           <style>
-            .box {
-              border-radius: var(--lumo-border-radius);
+            .radius.s {
+              border-radius: var(--lumo-border-radius-s);
             }
 
-            .box2 {
-              --lumo-border-radius: 0.5em;
+            .radius.m {
+              border-radius: var(--lumo-border-radius-m);
             }
 
-            .box3 {
-              --lumo-border-radius: 1em;
+            .radius.l {
+              border-radius: var(--lumo-border-radius-l);
             }
           </style>
         </custom-style>
@@ -98,37 +127,40 @@
 
 
 
-    <h2 demo-section>Box Shadow</h2>
+    <h2 demo-section>Shadow</h2>
 
-    <nice-demo-snippet>
+    <p>Shadows are used to indicate elements which are stacked on top of other elements in the UI.</p>
+
+    <nice-demo-snippet class="shadows">
       <template slot="source">
-        <div class="shadow-s">S</div>
-        <div class="shadow-m">M</div>
-        <div class="shadow-l">L</div>
-        <div class="shadow-xl">XL</div>
+        <div class="box xs shadow"></div>
+        <div class="box s shadow"></div>
+        <div class="box m shadow"></div>
+        <div class="box l shadow"></div>
+        <div class="box xl shadow"></div>
 
         <custom-style>
           <style>
-            .shadow-s {
+            .shadow.xs {
+              box-shadow: var(--lumo-box-shadow-xs);
+            }
+
+            .shadow.s {
               box-shadow: var(--lumo-box-shadow-s);
-              width: var(--lumo-size-m);
-              height: var(--lumo-size-m);
             }
 
-            .shadow-m {
+            .shadow.m {
               box-shadow: var(--lumo-box-shadow-m);
-              width: var(--lumo-size-l);
-              height: var(--lumo-size-l);
             }
 
-            .shadow-l {
+            .shadow.l {
               box-shadow: var(--lumo-box-shadow-l);
-              width: var(--lumo-size-xl);
-              height: var(--lumo-size-xl);
             }
 
-            .shadow-xl {
+            .shadow.xl {
               box-shadow: var(--lumo-box-shadow-xl);
+              width: calc(var(--lumo-size-xl) * 1.2);
+              height: calc(var(--lumo-size-xl) * 1.2);
             }
           </style>
         </custom-style>
@@ -168,15 +200,29 @@
 
     <h5>Border radius</h5>
     <dl class="custom-properties">
-      <dt>--lumo-border-radius</dt>
+      <dt>--lumo-border-radius-s</dt>
+        <dd>Use for small elements. To ensure they never turn into full circles, keep this value below <code>0.5em</code>.</dd>
+      <dt>--lumo-border-radius-m</dt>
+        <dd>The most commonly used roundness. It’s recommended to keep the value between <code>0em</code> and <code>calc(var(--lumo-size-m) / 2)</code></dd>
+      <dt>--lumo-border-radius-l</dt>
+        <dd>Use for large containers, such as cards and dialogs. It’s recommended to keep the value between <code>0em</code> and <code>0.5em</code></dd>
+      <dt>--lumo-border-radius: <code>var(--lumo-border-radius-m)</code></dt>
+        <dd>Deprecated. Use <code>--lumo-border-radius-m</code> instead.</dd>
     </dl>
 
     <h5>Shadow</h5>
+    <p theme="font-size-s">The shadows use various <code>--lumo-shade</code> colors. Computed values are shown here instead of the declared values.</p>
     <dl class="custom-properties">
+      <dt>--lumo-box-shadow-xs</dt>
+        <dd>Elements closest to the application background, for example cards.</dd>
       <dt>--lumo-box-shadow-s</dt>
+        <dd>Tooltips, etc.</dd>
       <dt>--lumo-box-shadow-m</dt>
+        <dd>Contextual popups, such as select menus.</dd>
       <dt>--lumo-box-shadow-l</dt>
+        <dd>Elements that rise above above most elements in the UI, for example dialogs.</dd>
       <dt>--lumo-box-shadow-xl</dt>
+        <dd>Elements highest in the stacking order, for example notifications, which should be above all other content.</dd>
     </dl>
 
     <h5>Interaction</h5>
