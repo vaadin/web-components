@@ -2,33 +2,11 @@
   "name": "Vaadin Grid Pro",
   "pages": [
   {
-    "name": "Basics",
-    "url": "grid-pro-basic-demos",
-    "src": "grid-pro-basic-demos.html",
-    "meta": {
-      "title": "Vaadin Grid Pro Basics",
-      "description": "",
-      "image": ""
-     }
-  }
-  ,
-  {
     "name": "Edit Column",
     "url": "grid-pro-edit-column-demos",
     "src": "grid-pro-edit-column-demos.html",
     "meta": {
       "title": "Vaadin Grid Pro Edit Column",
-      "description": "",
-      "image": ""
-     }
-  }
-  ,
-  {
-    "name": "Common modules",
-    "url": "grid-pro-common-modules-demos",
-    "src": "grid-pro-common-modules-demos.html",
-    "meta": {
-      "title": "Vaadin Grid Pro Common Modules",
       "description": "",
       "image": ""
      }
