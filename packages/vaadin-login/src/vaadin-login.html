@@ -134,6 +134,17 @@ This program is available under Apache License Version 2.0, available at https:/
           this.dispatchEvent(new CustomEvent('forgot-password'));
         }
 
+        static get observers() {
+          return [
+            '_errorChanged(error)'
+          ];
+        }
+
+        _errorChanged() {
+          if (this.error) {
+            this.disabled = false;
+          }
+        }
       }
 
       customElements.define(LoginElement.is, LoginElement);

@@ -45,6 +45,8 @@ This program is available under Apache License Version 2.0, available at https:/
         },
         /**
          * If set, disable the "Log in" button and prevent user from submitting login form.
+         * It is re-enabled automatically, when error is set to true, allowing form resubmission
+         * after user makes changes.
          */
         disabled: {
           type: Boolean,
@@ -53,6 +55,7 @@ This program is available under Apache License Version 2.0, available at https:/
         },
         /**
          * If set, the error message is shown. The message is hidden by default.
+         * When set, it changes the disabled state of the submit button.
          */
         error: {
           type: Boolean,
