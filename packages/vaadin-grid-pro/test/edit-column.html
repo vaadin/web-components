@@ -803,7 +803,7 @@
           });
         };
 
-        beforeEach(async() => {
+        beforeEach(done => {
           grid = fixture('editor-type');
           grid.items = getItems();
           column = grid.querySelector('[path="title"]');
@@ -814,7 +814,7 @@
           enter(cell._content);
           editor = getCellEditor(cell);
           select = editor._select;
-          await onceOpened(select);
+          onceOpened(select).then(() => done());
         });
 
         it('should render the opened select to cell in edit mode', () => {
@@ -860,11 +860,10 @@
           expect(select.opened).to.equal(true);
         });
 
-        it('should update value from selected one after edit mode exit', () => {
+        it('should update value and exit edit mode when item is selected', () => {
           const item = editor._overlay.querySelector('vaadin-item');
           const value = item.textContent;
           item.click();
-          tab(select);
           expect(column._getEditorComponent(cell)).to.not.be.ok;
           expect(cell._content.textContent).to.equal(value);
         });

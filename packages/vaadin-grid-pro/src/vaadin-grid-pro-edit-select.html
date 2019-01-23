@@ -39,7 +39,8 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       static get properties() {
         return {
           value: {
-            type: String
+            type: String,
+            observer: '_valueChanged'
           },
 
           options: {
@@ -49,6 +50,10 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
           _grid: {
             type: Object
+          },
+
+          _initialized: {
+            type: Boolean
           },
 
           _select: {
@@ -94,6 +99,16 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         }
       }
 
+      _valueChanged(value, oldValue) {
+        // select is first created without a value
+        if (value === '' && oldValue === undefined) {
+          return;
+        }
+        if (this._initialized) {
+          this._grid._stopEdit();
+        }
+      }
+
       _optionsChanged(select, options) {
         if (select && options && options.length) {
           select.renderer = root => {
@@ -121,6 +136,8 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
           Polymer.RenderStatus.afterNextRender(select, () => {
             select.opened = true;
+            // any value change after first open will stop edit
+            this._initialized = true;
           });
         }
       }
