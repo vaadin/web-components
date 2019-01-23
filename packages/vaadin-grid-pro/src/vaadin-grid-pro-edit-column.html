@@ -226,7 +226,9 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
       _focusEditor(editor) {
         editor.focus();
-        if (editor instanceof HTMLInputElement) {
+        if (this.editorType === 'checkbox') {
+          editor.setAttribute('focus-ring', '');
+        } else if (editor instanceof HTMLInputElement) {
           editor.select();
         } else if (editor.focusElement && editor.focusElement instanceof HTMLInputElement) {
           editor.focusElement.select();

@@ -759,6 +759,12 @@
           expect(editor.checked).to.be.equal(grid.items[0].married);
         });
 
+        it('should set focus-ring on the checkbox', () => {
+          dblclick(cell._content);
+          editor = column._getEditorComponent(cell);
+          expect(editor.hasAttribute('focus-ring')).to.be.true;
+        });
+
         it('should update value from checkbox checked after edit mode exit', () => {
           dblclick(cell._content);
           editor = column._getEditorComponent(cell);
