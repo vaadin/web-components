@@ -1,0 +1,12 @@
+<dom-module id="not-animated-select-overlay" theme-for="vaadin-select-overlay">
+  <template>
+    <style include="lumo-select-overlay">
+      :host([opening]),
+      :host([closing]),
+      :host([opening]) [part="overlay"],
+      :host([closing]) [part="overlay"] {
+        animation: none !important;
+      }
+    </style>
+  </template>
+</dom-module>
