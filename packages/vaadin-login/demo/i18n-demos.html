@@ -11,20 +11,16 @@
     <p>Set the <code>i18n</code> object to localize the component</p>
     <vaadin-demo-snippet id="login-demo-internationalisation">
       <template preserve-content>
-        <style>
-          main {
-            display: flex;
-            justify-content: center;
-            background: var(--main-background);
-            padding: var(--main-padding);
-          }
-        </style>
         <main>
-          <vaadin-login></vaadin-login>
+          <vaadin-login-overlay></vaadin-login-overlay>
+          <vaadin-button>Login</vaadin-button>
+          <vaadin-dialog id="feedbackDialog">
+              <template>O login está sendo processado...</template>
+          </vaadin-dialog>
         </main>
         <script>
           window.addDemoReadyListener('#login-demo-internationalisation', function(document) {
-            const login = document.querySelector('vaadin-login');
+            const vaadinLoginOverlay = document.querySelector('vaadin-login-overlay');
             const i18n = {
               header: {
                 title: 'Nome do aplicativo',
@@ -41,9 +37,33 @@
                 title: 'Usuário/senha inválidos',
                 message: 'Confira seu usuário e senha e tente novamente.'
               },
-              additionalInformation: 'Caso necessite apresentar alguma informação extra para o usuário (como credenciais padrão), este é o lugar.'
+              additionalInformation: 'Neste exemplo, use as credenciais admin/admin para um login bem-sucedido.'
             };
-            login.i18n = i18n;
+            vaadinLoginOverlay.i18n = i18n;
+
+            var button = document.querySelector('vaadin-button');
+            var feedbackDialog = document.querySelector('#feedbackDialog');
+            button.addEventListener('click', function() {
+              vaadinLoginOverlay.opened = true;
+            });
+
+            vaadinLoginOverlay.addEventListener('login', function(e) {
+              feedbackDialog.opened = true;
+              var detail = e.detail,
+                username = detail.username,
+                password = detail.password;
+
+              setTimeout(function() {
+                feedbackDialog.opened = false;
+                if (username === 'admin' && password === 'admin') {
+                  vaadinLoginOverlay.opened = false;
+                } else {
+                  vaadinLoginOverlay.error = true;
+                  vaadinLoginOverlay.disabled = false;
+                }
+              }, 1000);
+            });
+
           });
         </script>
       </template>

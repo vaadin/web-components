@@ -6,53 +6,6 @@
       }
     </style>
 
-    <h3>Basics</h3>
-    <vaadin-demo-snippet id="element-basic-demos-sample-example">
-      <template preserve-content>
-        <custom-style>
-          <style>
-          </style>
-        </custom-style>
-        <style>
-          main {
-            display: flex;
-            justify-content: center;
-            background: var(--main-background);
-            padding: var(--main-padding);
-          }
-        </style>
-        <main>
-          <vaadin-login></vaadin-login>
-        </main>
-        <vaadin-dialog id="feedbackDialog">
-          <template>Login is being processed...</template>
-        </vaadin-dialog>
-        <vaadin-dialog id="supportDialog">
-          <template>Please contact support.</template>
-        </vaadin-dialog>
-        <script>
-          window.addDemoReadyListener('#element-basic-demos-sample-example', function(document) {
-            var login = document.querySelector('vaadin-login');
-            var feedbackDialog = document.querySelector('#feedbackDialog');
-            var supportDialog = document.querySelector('#supportDialog');
-
-            login.addEventListener('login', function() {
-              feedbackDialog.opened = true;
-
-              setTimeout(function() {
-                login.disabled = false;
-                feedbackDialog.opened = false;
-              }, 2000);
-            });
-
-            login.addEventListener('forgot-password', function() {
-              supportDialog.opened = true;
-            });
-          });
-        </script>
-      </template>
-    </vaadin-demo-snippet>
-
     <h3>Login opened in full screen</h3>
     <vaadin-demo-snippet id="login-overlay">
       <template preserve-content>
@@ -61,11 +14,15 @@
         <vaadin-dialog id="feedbackDialog">
             <template>Login is being processed...</template>
         </vaadin-dialog>
+        <vaadin-dialog id="supportDialog">
+          <template>Please contact support.</template>
+        </vaadin-dialog>
         <script>
           window.addDemoReadyListener('#login-overlay', function(document) {
             var button = document.querySelector('vaadin-button');
             var vaadinLoginOverlay = document.querySelector('vaadin-login-overlay');
             var feedbackDialog = document.querySelector('#feedbackDialog');
+            var supportDialog = document.querySelector('#supportDialog');
 
             var i18n = Object.assign(
               {},
@@ -94,6 +51,10 @@
                   vaadinLoginOverlay.disabled = false;
                 }
               }, 1000);
+            });
+
+            vaadinLoginOverlay.addEventListener('forgot-password', function() {
+              supportDialog.opened = true;
             });
           });
         </script>
