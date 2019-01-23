@@ -1,0 +1,96 @@
+<link rel="import" href="../../vaadin-control-state-mixin/vaadin-control-state-mixin.html">
+
+<script>
+  /**
+   * @namespace Vaadin
+   */
+  window.Vaadin = window.Vaadin || {};
+
+  /**
+  * @polymerMixin
+  * @memberof Vaadin
+  * @mixes Vaadin.ControlStateMixin
+  */
+  Vaadin.CustomFieldMixin = superClass => class VaadinCustomFieldMixin extends superClass {
+    static get properties() {
+      return {
+        /**
+         * Array of available input nodes
+         */
+        __inputs: Array,
+
+        i18n: {
+          type: Object,
+          value: () => {
+            return {
+              setValue: function(value, nodes) {
+                const splittedValues = value.split(' ');
+                return nodes.forEach((el, id) => el.value = splittedValues[id]);
+              },
+              formatValue: function(inputValues) {
+                return inputValues.join(' ');
+              }
+            };
+          }
+        },
+
+        __errorId: String,
+        __labelId: String
+      };
+    }
+
+    ready() {
+      super.ready();
+
+      this.$.slot.addEventListener('slotchange', e =>
+        this.__setInputs(e.target.assignedNodes().filter(node => node.validate || node.checkValidity)));
+
+      var uniqueId = Vaadin.CustomFieldMixin._uniqueId = 1 + Vaadin.CustomFieldMixin._uniqueId || 1;
+      this.__errorId = `${this.constructor.is}-error-${uniqueId}`;
+      this.__labelId = `${this.constructor.is}-label-${uniqueId}`;
+    }
+
+    __updateValue(e) {
+      // Stop native change events
+      e && e.stopPropagation();
+
+      this.validate();
+      this.__setValue();
+      this.dispatchEvent(new CustomEvent('change', {
+        bubbles: true,
+        cancelable: false,
+        detail: {
+          value: this.value
+        }
+      }));
+    }
+
+    __setValue() {
+      this.__settingValue = true;
+      this.value = this.i18n.formatValue.apply(this, [this.inputs.map(input => input.value)]);
+      this.__settingValue = false;
+    }
+
+    __setInputs(nodes) {
+      this.__inputs = nodes;
+      this.inputs.forEach(input => input.addEventListener('change', e => this.__updateValue(e)));
+      this.__setValue();
+      this.validate();
+    }
+
+    __valueChanged(value, oldValue) {
+      if (this.__settingValue || !this.inputs) {
+        return;
+      }
+
+      this.i18n.setValue(value, this.inputs);
+      if (oldValue !== undefined) {
+        this.validate();
+      }
+    }
+
+    get inputs() {
+      return this.__inputs;
+    }
+  };
+</script>

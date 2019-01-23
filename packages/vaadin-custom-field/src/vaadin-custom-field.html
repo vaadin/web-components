@@ -7,6 +7,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../polymer/polymer-element.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
+<link rel="import" href="vaadin-custom-field-mixin.html">
 
 <dom-module id="vaadin-custom-field">
   <template>
@@ -46,6 +47,10 @@ This program is available under Apache License Version 2.0, available at https:/
 
   <script>
     (function() {
+      /**
+       * @namespace Vaadin
+       */
+      window.Vaadin = window.Vaadin || {};
 
       /**
        * `<vaadin-custom-field>` is a Web Component.
@@ -59,7 +64,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * @mixes Vaadin.ThemableMixin
        * @demo demo/index.html
        */
-      class CustomFieldElement extends Vaadin.ElementMixin(Vaadin.ThemableMixin(Polymer.Element)) {
+      class CustomFieldElement extends Vaadin.ElementMixin(Vaadin.CustomFieldMixin(Vaadin.ThemableMixin(Polymer.Element))) {
         static get is() {
           return 'vaadin-custom-field';
         }
@@ -69,26 +74,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
         static get properties() {
           return {
-            /*
-             * Array of available input nodes
-             */
-            __inputs: Array,
-
-            i18n: {
-              type: Object,
-              value: () => {
-                return {
-                  setValue: function(value, nodes) {
-                    const splittedValues = value.split(' ');
-                    return nodes.forEach((el, id) => el.value = splittedValues[id]);
-                  },
-                  formatValue: function(inputValues) {
-                    return inputValues.join(' ');
-                  }
-                };
-              }
-            },
-
             /**
              * String used for the label element.
              */
@@ -138,10 +123,7 @@ This program is available under Apache License Version 2.0, available at https:/
             errorMessage: {
               type: String,
               value: ''
-            },
-
-            __errorId: String,
-            __labelId: String
+            }
           };
         }
 
@@ -153,59 +135,11 @@ This program is available under Apache License Version 2.0, available at https:/
           ];
         }
 
-        ready() {
-          super.ready();
-
-          this.$.slot.addEventListener('slotchange', e =>
-            this.__setInputs(e.target.assignedNodes().filter(node => node.validate || node.checkValidity)));
-
-          var uniqueId = Vaadin.CustomFieldElement._uniqueId = 1 + Vaadin.CustomFieldElement._uniqueId || 0;
-          this.__errorId = `${this.constructor.is}-error-${uniqueId}`;
-          this.__labelId = `${this.constructor.is}-label-${uniqueId}`;
-        }
-
-        __updateValue(e) {
-          // Stop native change events
-          e && e.stopPropagation();
-
-          this.validate();
-          this.__setValue();
-          this.dispatchEvent(new CustomEvent('change', {
-            bubbles: true,
-            cancelable: false,
-            detail: {
-              value: this.value
-            }
-          }));
-        }
-
-        __setValue() {
-          this.__settingValue = true;
-          this.value = this.i18n.formatValue.apply(this, [this.inputs.map(input => input.value)]);
-          this.__settingValue = false;
-        }
 
         __invalidChanged(invalid) {
           this.__setOrToggleAttribute('aria-invalid', invalid, this);
         }
 
-        __valueChanged(value, oldValue) {
-          if (this.__settingValue || !this.inputs) {
-            return;
-          }
-
-          this.i18n.setValue(value, this.inputs);
-          if (oldValue !== undefined) {
-            this.validate();
-          }
-        }
-
-        __setInputs(nodes) {
-          this.__inputs = nodes;
-          this.inputs.forEach(input => input.addEventListener('change', e => this.__updateValue(e)));
-          this.__setValue();
-          this.validate();
-        }
 
         __updateRequired(required, inputs) {
           if (!inputs) {
@@ -277,10 +211,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
         __getErrorMessageAriaHidden(invalid, errorMessage, errorId) {
           return (!(errorMessage && invalid ? errorId : undefined)).toString();
-        }
-
-        get inputs() {
-          return this.__inputs;
         }
       }
 
