@@ -87,12 +87,15 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
       _onSelectFocusout(e) {
         // Do not exit edit mode when opening overlay
-        if (this._overlay.contains(e.relatedTarget)) {
+        if (this._overlay && this._overlay.contains(e.relatedTarget)) {
           e.stopPropagation();
         }
       }
 
       _onSelectKeydown(e) {
+        if (this.options.length === 0 && /^(ArrowDown|Down|ArrowUp|Up|Enter|SpaceBar| )$/.test(e.key)) {
+          console.warn('Missing "editorOptions" for <vaadin-grid-pro-edit-column> select editor!');
+        }
         // Event handled in select, stop here
         if (e.defaultPrevented) {
           e.stopPropagation();
