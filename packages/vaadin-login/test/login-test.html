@@ -263,19 +263,29 @@
         expect(errorPart.offsetHeight).not.to.equal(0);
       });
 
-      it('should disable button when error is set to true', () => {
+      it('should enable button when error is set to true', () => {
         expect(login.error).to.be.false;
         login.setAttribute('disabled', 'disabled');
         expect(login.disabled).to.be.true;
         login.error = true;
         expect(login.disabled).to.be.false;
-      });
 
-      it('should re-enable button when error is set from true to false', () => {
-        login.error = true;
         login.error = false;
         expect(login.error).to.be.false;
         expect(login.disabled).to.be.false;
+      });
+
+      it('should not enable button when error is set to true and _preventAutoEnable', () => {
+        expect(login.error).to.be.false;
+        login.disabled = true;
+        login._preventAutoEnable = true;
+        expect(login.disabled).to.be.true;
+        login.error = true;
+        expect(login.disabled).to.be.true;
+
+        login.error = false;
+        expect(login.error).to.be.false;
+        expect(login.disabled).to.be.true;
       });
 
     });
