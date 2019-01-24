@@ -1,6 +1,6 @@
 # &lt;vaadin-accordion&gt;
 
-[&lt;vaadin-accordion&gt;](https://vaadin.com/components/vaadin-accordion) is a Web Component implementing the vertically stacked set of expansible panels, part of the [Vaadin components](https://vaadin.com/components).
+[&lt;vaadin-accordion&gt;](https://vaadin.com/components/vaadin-accordion) is a Web Component implementing the vertically stacked set of expandable panels, part of the [Vaadin components](https://vaadin.com/components).
 
 [Live Demo ↗](https://vaadin.com/components/vaadin-accordion/html-examples)
 |
@@ -29,7 +29,7 @@
 <vaadin-accordion>
   <vaadin-accordion-panel theme="filled">
     <div slot="summary">Accordion Panel 1</div>
-    <div>Accordion is a set of expansible sections.</div>
+    <div>Accordion is a set of expandable sections.</div>
   </vaadin-accordion-panel>
   <vaadin-accordion-panel theme="filled">
     <div slot="summary">Accordion Panel 2</div>

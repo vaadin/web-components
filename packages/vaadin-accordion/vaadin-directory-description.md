@@ -20,7 +20,7 @@
 <vaadin-accordion>
   <vaadin-accordion-panel theme="filled">
     <div slot="summary">Accordion Panel 1</div>
-    <div>Accordion is a set of expansible sections.</div>
+    <div>Accordion is a set of expandable sections.</div>
   </vaadin-accordion-panel>
   <vaadin-accordion-panel theme="filled">
     <div slot="summary">Accordion Panel 2</div>
