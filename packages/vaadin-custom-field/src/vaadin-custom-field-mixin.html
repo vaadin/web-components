@@ -23,9 +23,8 @@
           type: Object,
           value: () => {
             return {
-              setValue: function(value, nodes) {
-                const splittedValues = value.split(' ');
-                return nodes.forEach((el, id) => el.value = splittedValues[id]);
+              parseValue: function(value) {
+                return value.split(' ');
               },
               formatValue: function(inputValues) {
                 return inputValues.join(' ');
@@ -75,7 +74,6 @@
       this.__inputs = nodes;
       this.inputs.forEach(input => input.addEventListener('change', e => this.__updateValue(e)));
       this.__setValue();
-      this.validate();
     }
 
     __valueChanged(value, oldValue) {
@@ -83,7 +81,8 @@
         return;
       }
 
-      this.i18n.setValue(value, this.inputs);
+      const valuesArray = this.i18n.parseValue(value, this.inputs);
+      this.inputs.forEach((input, id) => input.value = valuesArray[id]);
       if (oldValue !== undefined) {
         this.validate();
       }

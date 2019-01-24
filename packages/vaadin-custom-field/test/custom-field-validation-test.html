@@ -36,11 +36,10 @@
 
   <script>
     describe('validation', function() {
-      var customField, inputElement;
+      var customField;
 
       beforeEach(function() {
         customField = fixture('default');
-        inputElement = document.createElement('input');
         dispatchSlotChange(customField);
       });
 
@@ -61,13 +60,6 @@
         const input = customField.querySelector('input');
         input.value = 'foo';
         dispatchChange(input);
-        expect(spy.called).to.be.true;
-      });
-
-      it('should run validation on slotchange', function() {
-        const spy = sinon.spy(customField, 'checkValidity');
-        customField.appendChild(inputElement);
-        dispatchSlotChange(customField);
         expect(spy.called).to.be.true;
       });
 

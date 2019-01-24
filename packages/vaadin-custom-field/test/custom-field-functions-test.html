@@ -29,11 +29,11 @@
         dispatchSlotChange(customField);
       });
 
-      it('should use custom setter if that exists', function() {
+      it('should use custom parser if that exists', function() {
         // TODO(yuriy): check args with sinon.stub
-        customField.set('i18n.setValue', function(value, inputs) {
+        customField.set('i18n.parseValue', function(value, inputs) {
           expect(value).to.equal('1 1');
-          value.split(' ').forEach((val, id) => inputs[id].value = parseInt(val) + 1);
+          return value.split(' ').map(value => parseInt(value) + 1);
         });
         customField.value = '1 1';
         Array.from(customField.querySelectorAll('input')).forEach(el => {
