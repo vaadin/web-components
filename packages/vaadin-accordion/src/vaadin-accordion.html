@@ -8,7 +8,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../polymer/lib/utils/flattened-nodes-observer.html">
 <link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
-<link rel="import" href="../../vaadin-details/src/vaadin-details.html">
+<link rel="import" href="vaadin-accordion-panel.html">
 
 <dom-module id="vaadin-accordion">
   <template>
@@ -27,41 +27,6 @@ This program is available under Apache License Version 2.0, available at https:/
   <script>
     (function() {
       'use strict';
-
-      /**
-       * The accordion panel element.
-       *
-       * ### Styling
-       *
-       * The following shadow DOM parts are exposed for styling:
-       *
-       * Part name        | Description
-       * -----------------|----------------
-       * `summary`        | The element used to open and close collapsible content.
-       * `toggle`         | The element used as indicator, can represent an icon.
-       * `summary-content`| The wrapper for the slotted summary content.
-       * `content`        | The wrapper for the collapsible panel content.
-       *
-       * The following attributes are exposed for styling:
-       *
-       * Attribute    | Description
-       * -------------| -----------
-       * `opened`     | Set when the collapsible content is expanded and visible.
-       * `disabled`   | Set when the element is disabled.
-       * `focus-ring` | Set when the element is focused using the keyboard.
-       * `focused`    | Set when the element is focused.
-       *
-       * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
-       *
-       * @memberof Vaadin
-       */
-      class AccordionPanelElement extends Vaadin.DetailsElement {
-        static get is() {
-          return 'vaadin-accordion-panel';
-        }
-      }
-
-      customElements.define(AccordionPanelElement.is, AccordionPanelElement);
 
       /**
        * `<vaadin-accordion>` is a Web Component implementing accordion widget —
@@ -191,7 +156,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _filterItems(array) {
-          return array.filter(el => el instanceof AccordionPanelElement);
+          return array.filter(el => el instanceof Vaadin.AccordionPanelElement);
         }
 
         _updateItems(items, opened) {
