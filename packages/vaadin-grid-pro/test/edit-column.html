@@ -869,6 +869,17 @@
             expect(column._getEditorComponent(cell)).to.not.be.ok;
             expect(cell._content.textContent).to.equal(value);
           });
+
+          it('should work with `preserveEditMode` and `allowEnterRowChange`', async() => {
+            grid.allowEnterRowChange = true;
+            grid.preserveEditMode = true;
+            const item = editor._overlay.querySelector('vaadin-item');
+            enter(item);
+            item.click();
+            expect(column._getEditorComponent(cell)).to.not.be.ok;
+            const secondCell = getContainerCell(grid.$.items, 1, 1);
+            expect(getCellEditor(secondCell)).to.be.ok;
+          });
         });
 
         describe('without options', () => {

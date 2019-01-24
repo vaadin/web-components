@@ -34,8 +34,11 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         },
 
         /**
-         * When true, after moving to next editable cell using
-         * Tab / Enter, it will be focused in edit mode
+         * When true, after moving to next or previous editable cell using
+         * Tab / Shift+Tab, it will be focused in edit mode.
+         *
+         * When `allowEnterRowChange` is true, pressing Enter will also
+         * preserve edit mode, otherwise, it will have no effect.
          */
         preserveEditMode: {
           type: Boolean,

@@ -108,7 +108,12 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           return;
         }
         if (this._initialized) {
-          this._grid._stopEdit();
+          const enter = this._enterKeydown;
+          if (enter && this._grid.allowEnterRowChange) {
+            this._grid._switchEditCell(enter);
+          } else if (!this._grid.preserveEditMode) {
+            this._grid._stopEdit();
+          }
         }
       }
 
@@ -125,6 +130,14 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
               item.textContent = option;
               listBox.appendChild(item);
             });
+
+            // save the "keydown" event for Enter
+            listBox.addEventListener('keydown', e => {
+              if (e.keyCode === 13) {
+                this._enterKeydown = e;
+              }
+            });
+
             root.appendChild(listBox);
 
             // ensure items are picked up by list-box
