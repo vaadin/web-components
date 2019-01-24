@@ -3,9 +3,15 @@
 Copyright (c) 2017 Vaadin Ltd.
 This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
 -->
+<link rel="import" href="../../polymer/lib/elements/dom-module.html">
+<link rel="import" href="../../polymer/lib/utils/html-tag.html">
 
-<dom-module id="vaadin-grid-styles">
-  <template>
+<script>
+  const VaadinGridStyles = document.createElement('dom-module');
+
+  // NOTE(web-padawan): https://github.com/vaadin/vaadin-grid/issues/1514
+  VaadinGridStyles.appendChild(
+    Polymer.html`
     <style>
       @keyframes vaadin-grid-appear {
         to {
@@ -78,7 +84,7 @@ This program is available under Apache License Version 2.0, available at https:/
         text-align: inherit;
       }
 
-      /* Safari doesn't work with `inherit` */
+      /* Safari doesn't work with "inherit" */
       [safari] th {
         text-align: initial;
       }
@@ -320,5 +326,7 @@ This program is available under Apache License Version 2.0, available at https:/
         will-change: transform;
       }
     </style>
-  </template>
-</dom-module>
+  `);
+
+  VaadinGridStyles.register('vaadin-grid-styles');
+</script>
