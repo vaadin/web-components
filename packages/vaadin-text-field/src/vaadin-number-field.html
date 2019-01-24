@@ -166,22 +166,65 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _decreaseValue() {
-          this._allowed(-1) && this.__add(-1);
+          const incrementSign = this._getAllowedIncrementSign(-1);
+
+          if (incrementSign) {
+            this.__add(incrementSign);
+          }
         }
 
         _increaseValue() {
-          this._allowed(1) && this.__add(1);
+          const incrementSign = this._getAllowedIncrementSign(1);
+
+          if (incrementSign) {
+            this.__add(incrementSign);
+          }
         }
 
         __add(sign) {
           const incr = sign * (this.step || 1);
           // Behave like native number input adjusting to the next exact multiple of step.
-          this.value = this.focusElement.value =
-            (incr + (incr * Math.floor((parseFloat(this.value || 0) / incr).toFixed(1)))).toFixed(this.__decimals);
+          this.value = this.focusElement.value = this._getValue(incr);
           this.dispatchEvent(new CustomEvent('change', {bubbles: true}));
         }
 
-        _allowed(sign, value, min, max) {
+        _getValue(incr) {
+          return (incr + (incr * Math.floor((parseFloat(this.value || 0) / incr).toFixed(1)))).toFixed(this.__decimals);
+        }
+
+        _getAllowedIncrementSign(sign) {
+          if (this.disabled) {
+            return false;
+          }
+
+          const initialIncr = sign * (this.step || 1);
+
+          if (initialIncr > 0) {
+            const validMin = this.min == null || this._getValue(initialIncr) > this.min;
+            const validMax = this.max == null || this.value < this.max;
+
+            if (validMin && validMax) {
+              return sign;
+            } else if (!validMax) {
+              return false;
+            } else if (!validMin) {
+              return this.min / initialIncr;
+            }
+          } else {
+            const validMin = this.min == null || this.value > this.min;
+            const validMax = this.max == null || this._getValue(initialIncr) < this.max;
+
+            if (validMin && validMax) {
+              return sign;
+            } else if (!validMin) {
+              return false;
+            } else if (!validMax) {
+              return this.max / (this.step || 1);
+            }
+          }
+        }
+
+        _allowed(sign) {
           const incr = sign * (this.step || 1);
           return !this.disabled && (incr < 0
             ? this.min == null || this.value > this.min

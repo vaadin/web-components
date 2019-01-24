@@ -199,6 +199,40 @@
           expect(e.defaultPrevented).to.be.true;
           expect(numberField.value).to.equal('0');
         });
+
+        it('should increase value to min value when increaseButton is clicked', () => {
+          numberField.min = 2;
+
+          increaseButton.click();
+
+          expect(numberField.value).to.be.equal('2');
+        });
+
+        it('should increase value to min value with step when increaseButton is clicked', () => {
+          numberField.step = 0.1;
+          numberField.min = 0.5;
+
+          increaseButton.click();
+
+          expect(numberField.value).to.be.equal('0.5');
+        });
+
+        it('should decrease value to max value when decreaseButton is clicked', () => {
+          numberField.max = -2;
+
+          decreaseButton.click();
+
+          expect(numberField.value).to.be.equal('-2');
+        });
+
+        it('should decrease value to max value with step when decreaseButton is clicked', () => {
+          numberField.step = 0.1;
+          numberField.max = -0.5;
+
+          decreaseButton.click();
+
+          expect(numberField.value).to.be.equal('-0.5');
+        });
       });
 
       describe('input validation', () => {
