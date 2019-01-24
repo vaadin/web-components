@@ -9,6 +9,7 @@
     "gemini": false,
     "sinon": false,
     "MockInteractions": false,
+    "isV2": false,
     "infiniteDataProvider": false,
     "flushGrid": false,
     "dragStart": false,

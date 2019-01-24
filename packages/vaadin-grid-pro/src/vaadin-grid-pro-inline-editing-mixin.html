@@ -78,6 +78,18 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       });
     }
 
+    _checkImports() {
+      super._checkImports();
+      [
+        'vaadin-grid-pro-edit-column'
+      ].forEach(elementName => {
+        const element = this.querySelector(elementName);
+        if (element && !(element instanceof Polymer.Element)) {
+          console.warn(`Make sure you have imported the required module for <${elementName}> element.`);
+        }
+      });
+    }
+
     _applyEdit({path, value, index, item}) {
       this.set(path, value, item);
       this.notifyPath('items.' + index + '.' + path, value);

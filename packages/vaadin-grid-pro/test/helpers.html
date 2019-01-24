@@ -1,4 +1,6 @@
 <script>
+  window.isV2 = () => window['Polymer'] && window['Polymer']['version'] && window['Polymer']['version'].indexOf('2') === 0;
+
   window.infiniteDataProvider = (params, callback) => {
     callback(Array.apply(null, Array(params.pageSize)).map((item, index) => {
       const count = params.page * params.pageSize + index;
