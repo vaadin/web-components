@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+
+<head lang="en">
+  <meta charset="UTF-8">
+  <title></title>
+  <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../../theme/lumo/vaadin-details.html">
+  <script>
+    window.addEventListener('WebComponentsReady', function() {
+      setTimeout(function() {
+        window.ShadyDOM && window.ShadyDOM.flush(); // Force DOM composition
+        window.webComponentsAreReady = true; // Checked in gemini before capture callback
+      });
+    });
+  </script>
+</head>
+
+<body>
+
+  <span id="details-tests">
+    <vaadin-details theme="filled">
+      <div slot="summary">Filled</div>
+      <span>Go Vaadin!</span>
+    </vaadin-details>
+    <vaadin-details theme="filled" opened>
+      <div slot="summary">Filled Opened</div>
+      <span>Go Vaadin!</span>
+    </vaadin-details>
+    <vaadin-details theme="filled" style="max-width: 200px" opened>
+      <div slot="summary">Long Summary Which Will Wrap In Several Lines</div>
+      <span>Go Vaadin!</span>
+    </vaadin-details>
+  </span>
+
+</body>

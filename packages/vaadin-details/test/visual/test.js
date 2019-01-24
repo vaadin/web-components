@@ -22,14 +22,16 @@ gemini.suite('vaadin-details', function(rootSuite) {
       suite
         .setUrl(`/details.html?theme=${theme}`)
         .setCaptureElements('#details-tests')
-        .capture(`vaadin-details`);
+        .capture(`default`);
     });
   });
 
-  gemini.suite(`lumo-theme`, function(suite) {
-    suite
-      .setUrl(`/lumo-theme.html`)
-      .setCaptureElements('#details-tests')
-      .capture(`vaadin-details`);
+  ['filled', 'reverse', 'small'].forEach(variant => {
+    gemini.suite(`lumo-${variant}`, function(suite) {
+      suite
+        .setUrl(`/lumo-${variant}.html`)
+        .setCaptureElements('#details-tests')
+        .capture(`default`);
+    });
   });
 });
