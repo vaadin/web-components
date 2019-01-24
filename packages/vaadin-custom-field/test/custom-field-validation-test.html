@@ -21,7 +21,7 @@
     </template>
   </test-fixture>
 
-  <test-fixture id="iron-form">
+  <test-fixture id="iform">
     <template>
       <iron-form id="iform">
         <form>
@@ -122,7 +122,7 @@
       let iform, customField;
 
       beforeEach(function() {
-        iform = fixture('iron-form');
+        iform = fixture('iform');
         customField = iform.querySelector('vaadin-custom-field');
         dispatchSlotChange(customField);
       });

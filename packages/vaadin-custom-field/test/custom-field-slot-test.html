@@ -27,7 +27,7 @@
       beforeEach(function() {
         customField = fixture('default');
         dispatchSlotChange(customField);
-        inputElement = document.createElement('input');
+        inputElement = window.document.createElement('input');
       });
 
       it('should add new input to the input list when adding to the DOM', function() {
