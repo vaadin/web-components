@@ -102,6 +102,8 @@
   </dom-module>
 
   <script>
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
     function getItems() {
       return [
         {name: 'foo', age: 20, married: true, title: 'mrs'},
@@ -111,7 +113,12 @@
     }
 
     function dblclick(target) {
-      target.dispatchEvent(new CustomEvent('dblclick', {bubbles: true, composed: true}));
+      if (isIOS) {
+        target.dispatchEvent(new CustomEvent('click', {bubbles: true, composed: true}));
+        target.dispatchEvent(new CustomEvent('click', {bubbles: true, composed: true}));
+      } else {
+        target.dispatchEvent(new CustomEvent('dblclick', {bubbles: true, composed: true}));
+      }
     }
 
     function up(target) {
@@ -156,7 +163,7 @@
         return cell._column._getEditorComponent(cell);
       }
 
-      describe('keyboard navigation', () => {
+      !isIOS && describe('keyboard navigation', () => {
         let grid, input;
 
         beforeEach(() => {
@@ -504,7 +511,7 @@
           cell = getContainerCell(grid.$.items, 0, 0);
         });
 
-        it('should replace template and render text-field on editable cell click', () => {
+        it('should replace template and render text-field on editable cell dblclick', () => {
           dblclick(cell._content);
           expect(cell._template).to.be.not.ok;
           expect(cell._renderer).to.be.ok;

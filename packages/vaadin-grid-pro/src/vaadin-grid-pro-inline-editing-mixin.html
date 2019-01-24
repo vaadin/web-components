@@ -53,9 +53,33 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
     ready() {
       super.ready();
 
-      this.addEventListener('dblclick', e => {
-        this._enterEditFromEvent(e);
-      });
+      // dblclick does not work on iOS Safari
+      if (this._ios) {
+        let firstClickTime;
+        let waitingSecondClick = false;
+
+        this.addEventListener('click', e => {
+          if (!waitingSecondClick) {
+            firstClickTime = (new Date()).getTime();
+            waitingSecondClick = true;
+
+            setTimeout(() => {
+              waitingSecondClick = false;
+            }, 300);
+          } else {
+            waitingSecondClick = false;
+
+            const time = (new Date()).getTime();
+            if (time - firstClickTime < 300) {
+              this._enterEditFromEvent(e);
+            }
+          }
+        });
+      } else {
+        this.addEventListener('dblclick', e => {
+          this._enterEditFromEvent(e);
+        });
+      }
 
       this.addEventListener('keydown', e => {
         switch (e.keyCode) {
