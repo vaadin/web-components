@@ -6,6 +6,7 @@
   ],
   "description": "Lumo is a design system foundation for modern web applications, used by Vaadin components",
   "main": [
+    "all-imports.html",
     "mixins/field-button.html",
     "mixins/menu-overlay.html",
     "mixins/overlay.html",
