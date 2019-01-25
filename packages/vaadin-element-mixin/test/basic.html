@@ -38,6 +38,7 @@
       it('should collect usage statistics only on localhost', function() {
         expect(window.Vaadin.developmentModeCallback).to.exist;
         expect(window.Vaadin.developmentModeCallback['vaadin-usage-statistics']).to.exist;
+        expect(window.Vaadin.usageStatsChecker).to.exist;
       });
 
       it('should be possible to exclude development mode detector', function() {
@@ -55,7 +56,7 @@
       });
 
       it('should collect usage statistics once per class', () => {
-        const spy = sinon.spy(window.Vaadin.developmentModeCallback, 'vaadin-usage-statistics');
+        const spy = sinon.spy(window.Vaadin.usageStatsChecker, 'maybeGatherAndSend');
 
         class TestBaz extends Vaadin.ElementMixin(Polymer.Element) {
           static get is() {
