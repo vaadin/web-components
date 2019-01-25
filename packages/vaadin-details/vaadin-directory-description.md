@@ -10,7 +10,7 @@
 
 # &lt;vaadin-details&gt;
 
-[&lt;vaadin-details&gt;](https://vaadin.com/components/vaadin-details) is a Web Component for expansible details, part of the [Vaadin components](https://vaadin.com/components).
+[&lt;vaadin-details&gt;](https://vaadin.com/components/vaadin-details) is a Web Component for expandable details, part of the [Vaadin components](https://vaadin.com/components).
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-details/master/screenshot.png" width="200" alt="Screenshot of vaadin-details">](https://vaadin.com/components/vaadin-details)
 
@@ -18,7 +18,7 @@
 
 ```html
 <vaadin-details opened>
-  <div slot="summary">Expansible Details</div>
+  <div slot="summary">Expandable Details</div>
   Toggle using mouse, Enter and Space keys.
 </vaadin-details>
 ```
