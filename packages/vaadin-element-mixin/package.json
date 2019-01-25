@@ -15,7 +15,7 @@
   "bugs": {
     "url": "https://github.com/vaadin/vaadin-element-mixin/issues"
   },
-  "homepage": "https://vaadin.com/elements",
+  "homepage": "https://vaadin.com/components",
   "devDependencies": {
     "@vaadin/vaadin-component-dev-dependencies": "^1.0.0"
   }
