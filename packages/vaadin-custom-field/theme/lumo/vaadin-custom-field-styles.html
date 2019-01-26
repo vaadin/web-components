@@ -1,0 +1,11 @@
+<link rel="import" href="../../../vaadin-lumo-styles/mixins/required-field.html">
+
+<dom-module id="lumo-custom-field" theme-for="vaadin-custom-field">
+  <template>
+    <style include="lumo-required-field">
+      :host(:not([has-label])) [part="label"]::after {
+        display: none;
+      }
+    </style>
+  </template>
+</dom-module>

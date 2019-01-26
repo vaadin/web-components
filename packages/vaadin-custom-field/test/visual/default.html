@@ -6,16 +6,31 @@
   <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
   <script>
     const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
-    document.write('<link rel="import" href="../../theme/' + theme + '/vaadin-custom-field.html">');
+    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-custom-field.html">`);
+
+    window.addEventListener('WebComponentsReady', function() {
+      customElements.whenDefined('vaadin-custom-field').then(() => {
+        window.ShadyDOM && window.ShadyDOM.flush(); // Force DOM composition
+        window.webComponentsAreReady = true; // Checked in gemini before capture callback
+      });
+    });
   </script>
 </head>
 
 <body>
 
-  <span id="default-tests">
-    <vaadin-custom-field>
-      <button>Go Vaadin!</button>
+  <div id="default-tests" style="padding: 10px;">
+    Labeled
+    <vaadin-custom-field label="Home address">
+      <input type="text">
+      <input type="number">
     </vaadin-custom-field>
-  </span>
+
+    Invalid
+    <vaadin-custom-field invalid error-message="Foo">
+      <input type="text">
+      <input type="number">
+    </vaadin-custom-field>
+  </div>
 
 </body>

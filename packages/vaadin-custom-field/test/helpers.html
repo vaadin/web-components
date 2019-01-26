@@ -1,0 +1,12 @@
+<script>
+  window.dispatchSlotChange = function(customField) {
+    // NOTE(yuriy): Workaround not to use timeouts
+    const evt = new CustomEvent('slotchange');
+    customField.shadowRoot.querySelector('slot').dispatchEvent(evt);
+  };
+
+  window.dispatchChange = function(el) {
+    const evt = new CustomEvent('change');
+    el.dispatchEvent(evt);
+  };
+</script>
