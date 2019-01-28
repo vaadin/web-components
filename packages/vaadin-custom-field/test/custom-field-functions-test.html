@@ -53,6 +53,15 @@
         expect(customField.value).to.be.equal('2 2');
       });
 
+      it('should warn if custom parser has not returned array of values', function() {
+        customField.set('i18n.parseValue', function(inputValues) {
+          return;
+        });
+        sinon.stub(console, 'warn');
+        customField.value = 'foo';
+        expect(console.warn.callCount).to.equal(1);
+      });
+
     });
   </script>
 </body>
