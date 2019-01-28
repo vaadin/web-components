@@ -173,7 +173,7 @@
           flushGrid(grid);
         });
 
-        describe('when `preserveEditMode` is false', () => {
+        describe('when `keepEditorOpen` is false', () => {
           it('should focus cell next available for editing within a same row in non-edit mode on Tab', () => {
             const firstCell = getContainerCell(grid.$.items, 1, 0);
             dblclick(firstCell._content);
@@ -261,9 +261,9 @@
           });
         });
 
-        describe('when `preserveEditMode` is true', () => {
+        describe('when `keepEditorOpen` is true', () => {
           beforeEach(() => {
-            grid.preserveEditMode = true;
+            grid.keepEditorOpen = true;
           });
 
           it('should focus cell next available for editing within a same row in edit mode on Tab', () => {
@@ -870,9 +870,9 @@
             expect(cell._content.textContent).to.equal(value);
           });
 
-          it('should work with `preserveEditMode` and `enterNextRow`', async() => {
+          it('should work with `keepEditorOpen` and `enterNextRow`', async() => {
             grid.enterNextRow = true;
-            grid.preserveEditMode = true;
+            grid.keepEditorOpen = true;
             const item = editor._overlay.querySelector('vaadin-item');
             enter(item);
             item.click();

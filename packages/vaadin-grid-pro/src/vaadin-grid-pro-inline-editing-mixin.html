@@ -40,7 +40,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
          * When `enterNextRow` is true, pressing Enter will also
          * preserve edit mode, otherwise, it will have no effect.
          */
-        preserveEditMode: {
+        keepEditorOpen: {
           type: Boolean,
           notify: true // FIXME(yuriy-fix): needed by Flow counterpart
         }
@@ -293,7 +293,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         const nextCell = Array.from(nextRow.children).filter(cell => cell._column === nextCol)[0];
         e.preventDefault();
 
-        if (this.preserveEditMode && nextCell !== cell) {
+        if (this.keepEditorOpen && nextCell !== cell) {
           this._startEdit(nextCell, nextCol);
         } else {
           this._ensureScrolledToIndex(nextIdx);

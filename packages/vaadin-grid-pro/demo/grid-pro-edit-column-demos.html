@@ -126,19 +126,19 @@
       </template>
     </vaadin-demo-snippet>
 
-    <h3>Preserve Edit Mode</h3>
+    <h3>Keep Editor Open</h3>
     <p>
-      When <code>preserveEditMode</code> is set on the grid element, focusing the next editable cell from keyboard will activate edit mode for it.
+      When <code>keepEditorOpen</code> is set on the grid element, focusing the next editable cell from keyboard will activate edit mode for it.
     </p>
-    <vaadin-demo-snippet id="grid-pro-edit-column-demos-preserve-edit-mode" when-defined="vaadin-grid-pro">
+    <vaadin-demo-snippet id="grid-pro-edit-column-demos-keep-editor-open" when-defined="vaadin-grid-pro">
       <template preserve-content>
-        <vaadin-grid-pro preserve-edit-mode enter-next-row>
+        <vaadin-grid-pro keep-editor-open enter-next-row>
           <vaadin-grid-pro-edit-column path="name.first" header="First name (edit)"></vaadin-grid-pro-edit-column>
           <vaadin-grid-column path="name.last" header="Last name (view)"></vaadin-grid-column>
           <vaadin-grid-pro-edit-column path="name.last" header="Last name (edit)"></vaadin-grid-pro-edit-column>
         </vaadin-grid-pro>
         <script>
-          window.addDemoReadyListener('#grid-pro-edit-column-demos-preserve-edit-mode', function(document) {
+          window.addDemoReadyListener('#grid-pro-edit-column-demos-keep-editor-open', function(document) {
             document.querySelector('vaadin-grid-pro').items = Vaadin.GridDemo.getUsers();
           });
         </script>

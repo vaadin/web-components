@@ -109,7 +109,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           const enter = this._enterKeydown;
           if (enter && this._grid.enterNextRow) {
             this._grid._switchEditCell(enter);
-          } else if (!this._grid.preserveEditMode) {
+          } else if (!this._grid.keepEditorOpen) {
             this._grid._stopEdit();
           }
         }
