@@ -54,6 +54,31 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Custom Validator</h3>
+    <p>Extend <code>Vaadin.CustomFieldElement</code> to create your own custom element,
+       then override the <code>checkValidity(value)</code> method to validate the input.</p>
+    <vaadin-demo-snippet id="custom-field-advanced-demos-custom-validator" ignore-ie when-defined="vaadin-custom-field">
+      <template preserve-content>
+        <vaadin-custom-field-skip-number error-message="Please fill in the the second input" label="Parking slot">
+          <input type="number">
+          <input type="text">
+        </vaadin-custom-field-skip-number>
+
+        <script>
+          window.addDemoReadyListener('#custom-field-advanced-demos-custom-validator', function(document) {
+            class CustomFieldSkipNumberElement extends Vaadin.CustomFieldElement {
+              checkValidity() {
+                return !!this.inputs.filter(el => el.type === 'text')[0].value;
+              }
+            }
+            if (!customElements.get('vaadin-custom-field-skip-number')) {
+              customElements.define('vaadin-custom-field-skip-number', CustomFieldSkipNumberElement);
+            }
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
   </template>
   <script>
     class CustomFieldAdvancedDemos extends DemoReadyEventEmitter(CustomFieldDemo(Polymer.Element)) {
