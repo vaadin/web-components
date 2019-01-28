@@ -103,23 +103,23 @@
       </template>
     </vaadin-demo-snippet>
 
-    <h3>Allow Enter Row Change</h3>
+    <h3>Use Enter to Focus Next Row</h3>
     <p>
-      When <code>allowEnterRowChange</code> is set on the grid element, the following keys <b>change behavior</b>:
+      When <code>enterNextRow</code> is set on the grid element, the following keys <b>change behavior</b>:
     </p>
     <ul>
       <li><kbd>Enter</kbd> - save changes, exit the edit mode <b>and</b> focus the editable cell in the next row</li>
       <li><kbd>Shift</kbd> + <kbd>Enter</kbd> - save changes, exit the edit mode <b>and</b> focus the editable cell in the previous row</li>
     </ul>
-    <vaadin-demo-snippet id="grid-pro-edit-column-demos-allow-enter-row-change" when-defined="vaadin-grid-pro">
+    <vaadin-demo-snippet id="grid-pro-edit-column-demos-enter-next-row" when-defined="vaadin-grid-pro">
       <template preserve-content>
-        <vaadin-grid-pro allow-enter-row-change>
+        <vaadin-grid-pro enter-next-row>
           <vaadin-grid-pro-edit-column path="name.first" header="First name (edit)"></vaadin-grid-pro-edit-column>
           <vaadin-grid-column path="name.last" header="Last name (view)"></vaadin-grid-column>
           <vaadin-grid-pro-edit-column path="name.last" header="Last name (edit)"></vaadin-grid-pro-edit-column>
         </vaadin-grid-pro>
         <script>
-          window.addDemoReadyListener('#grid-pro-edit-column-demos-allow-enter-row-change', function(document) {
+          window.addDemoReadyListener('#grid-pro-edit-column-demos-enter-next-row', function(document) {
             document.querySelector('vaadin-grid-pro').items = Vaadin.GridDemo.getUsers();
           });
         </script>
@@ -132,7 +132,7 @@
     </p>
     <vaadin-demo-snippet id="grid-pro-edit-column-demos-preserve-edit-mode" when-defined="vaadin-grid-pro">
       <template preserve-content>
-        <vaadin-grid-pro preserve-edit-mode allow-enter-row-change>
+        <vaadin-grid-pro preserve-edit-mode enter-next-row>
           <vaadin-grid-pro-edit-column path="name.first" header="First name (edit)"></vaadin-grid-pro-edit-column>
           <vaadin-grid-column path="name.last" header="Last name (view)"></vaadin-grid-column>
           <vaadin-grid-pro-edit-column path="name.last" header="Last name (edit)"></vaadin-grid-pro-edit-column>

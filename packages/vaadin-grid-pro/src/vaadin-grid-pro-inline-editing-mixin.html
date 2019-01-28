@@ -28,7 +28,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
          * will move focus to the editable cell in the next row
          * (Shift + Enter - same, but for previous row).
          */
-        allowEnterRowChange: {
+        enterNextRow: {
           type: Boolean,
           notify: true // FIXME(yuriy-fix): needed by Flow counterpart
         },
@@ -37,7 +37,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
          * When true, after moving to next or previous editable cell using
          * Tab / Shift+Tab, it will be focused in edit mode.
          *
-         * When `allowEnterRowChange` is true, pressing Enter will also
+         * When `enterNextRow` is true, pressing Enter will also
          * preserve edit mode, otherwise, it will have no effect.
          */
         preserveEditMode: {
@@ -259,7 +259,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         nextCol = column;
 
         // move up / down
-        if (this.allowEnterRowChange) {
+        if (this.enterNextRow) {
           nextIdx = e.shiftKey ? index - 1 : index + 1;
         }
       }
