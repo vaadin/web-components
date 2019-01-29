@@ -49,14 +49,14 @@
       });
 
       function fillUsernameAndPassword(login) {
-        const {username, password} = login.$;
+        const {vaadinLoginUsername, vaadinLoginPassword} = login.$;
         const usernameValue = 'username';
         const passwordValue = 'password';
 
-        username.value = usernameValue;
-        password.value = passwordValue;
+        vaadinLoginUsername.value = usernameValue;
+        vaadinLoginPassword.value = passwordValue;
 
-        return {username, password};
+        return {vaadinLoginUsername, vaadinLoginPassword};
       }
 
       it('should pass', () => {
@@ -65,7 +65,7 @@
 
       it('should be able to be opened', () => {
         loginOverlay.opened = true;
-        const login = document.querySelectorAll('vaadin-login');
+        const login = document.querySelectorAll('vaadin-login-form-wrapper');
 
         expect(login.length).to.be.equal(1);
       });
@@ -74,18 +74,18 @@
         const loginOverlayOpened = fixture('opened');
         expect(loginOverlayOpened.opened).to.be.true;
 
-        const login = document.querySelectorAll('vaadin-login');
+        const login = document.querySelectorAll('vaadin-login-form-wrapper');
         expect(login.length).to.be.equal(1);
       });
 
       it('should be able to be closed', () => {
         const loginOverlayOpened = fixture('opened');
 
-        let login = document.querySelectorAll('vaadin-login');
+        let login = document.querySelectorAll('vaadin-login-form-wrapper');
         expect(login.length).to.be.equal(1);
 
         loginOverlayOpened.opened = false;
-        login = document.querySelectorAll('vaadin-login');
+        login = document.querySelectorAll('vaadin-login-form-wrapper');
         expect(login.length).to.be.equal(0);
       });
 
@@ -108,7 +108,7 @@
       it('should not close on click outside', () => {
         const loginOverlayOpened = fixture('opened');
 
-        MockInteractions.tap(loginOverlay.$.wrapper.$.backdrop);
+        MockInteractions.tap(loginOverlay.$.vaadinLoginOverlayWrapper.$.backdrop);
 
         expect(loginOverlayOpened.opened).to.be.true;
       });
@@ -116,10 +116,10 @@
       it('should fire `login` event', () => {
         const loginOverlayOpened = fixture('opened');
 
-        const loginEventSpy = sinon.spy(loginOverlayOpened, '_handleEvent');
-        const {username} = fillUsernameAndPassword(loginOverlayOpened.$.login);
+        const loginEventSpy = sinon.spy(loginOverlayOpened, '_retargetEvent');
+        const {vaadinLoginUsername} = fillUsernameAndPassword(loginOverlayOpened.$.vaadinLoginForm);
 
-        MockInteractions.pressEnter(username);
+        MockInteractions.pressEnter(vaadinLoginUsername);
         expect(loginEventSpy.called).to.be.true;
 
         const {type} = loginEventSpy.args[0][0];
@@ -132,22 +132,37 @@
 
         loginOverlayOpened.addEventListener('login', loginEventSpy);
 
-        const {username} = fillUsernameAndPassword(loginOverlayOpened.$.login);
+        const {vaadinLoginUsername} = fillUsernameAndPassword(loginOverlayOpened.$.vaadinLoginForm);
 
-        MockInteractions.pressEnter(username);
+        MockInteractions.pressEnter(vaadinLoginUsername);
         expect(loginEventSpy.called).to.be.true;
 
         const {type} = loginEventSpy.args[0][0];
         expect(type).to.be.equal('login');
       });
 
+      it('should be able to prevent default to `login` event', () => {
+        const loginOverlayOpened = fixture('opened');
+
+        const nativeForm = loginOverlayOpened.$['vaadinLoginForm'].querySelector('[part=vaadin-login-native-form]');
+        const submitSpy = sinon.spy(nativeForm, 'submit');
+        loginOverlayOpened.action = 'login';
+
+        loginOverlayOpened.addEventListener('login', e => e.preventDefault());
+
+        const {vaadinLoginUsername} = fillUsernameAndPassword(loginOverlayOpened.$.vaadinLoginForm);
+
+        MockInteractions.pressEnter(vaadinLoginUsername);
+        expect(submitSpy.called).to.be.false;
+      });
+
       it('should be accessible username and password from document level', () => {
         const loginOverlayOpened = fixture('opened');
 
-        const loginEventSpy = sinon.spy(loginOverlayOpened, '_handleEvent');
-        const {username} = fillUsernameAndPassword(loginOverlayOpened.$.login);
+        const loginEventSpy = sinon.spy(loginOverlayOpened, '_retargetEvent');
+        const {vaadinLoginUsername} = fillUsernameAndPassword(loginOverlayOpened.$.vaadinLoginForm);
 
-        MockInteractions.pressEnter(username);
+        MockInteractions.pressEnter(vaadinLoginUsername);
         expect(loginEventSpy.called).to.be.true;
 
         const {type} = loginEventSpy.args[0][0];
@@ -160,8 +175,8 @@
 
       beforeEach(function() {
         login = fixture('set-title');
-        headerElement = login.$.wrapper.shadowRoot.querySelector('[part="brand"] h1');
-        descriptionElement = login.$.wrapper.shadowRoot.querySelector('[part="brand"] p');
+        headerElement = login.$.vaadinLoginOverlayWrapper.shadowRoot.querySelector('[part="brand"] h1');
+        descriptionElement = login.$.vaadinLoginOverlayWrapper.shadowRoot.querySelector('[part="brand"] p');
       });
 
       it('should display title and description set via attributes or properties', function() {
@@ -195,7 +210,7 @@
 
         it('should teleport title', function() {
           const overlay = fixture('title-as-component');
-          const overlayWrapper = overlay.$.wrapper;
+          const overlayWrapper = overlay.$.vaadinLoginOverlayWrapper;
           let titleElements = overlayWrapper.querySelectorAll('[slot=title]');
           expect(titleElements.length).to.be.equal(1);
           expect(titleElements[0].textContent).to.be.equal('Teleported title');

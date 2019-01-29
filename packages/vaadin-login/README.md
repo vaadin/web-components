@@ -15,21 +15,21 @@
 |
 [API documentation ↗](https://vaadin.com/components/vaadin-login/html-api)
 
+[Vaadin Login](https://vaadin.com/components/vaadin-login) consists of two components:
 
-[&lt;vaadin-login&gt;](https://vaadin.com/components/vaadin-login) is a Web Component providing a painless login experience, part of the [Vaadin components](https://vaadin.com/components).
-
-```html
-<vaadin-login></vaadin-login>
-```
-
-`<vaadin-login-overlay>` is a `<vaadin-login>` wrapper which opens the login form in an overlay and allows the form being accessible for password managers.
+&lt;vaadin-login-overlay&gt; is a Web Component providing a painless login experience, part of the [Vaadin components](https://vaadin.com/components). Component shows the &lt;vaadin-login-form&gt; inside of an overlay.
 
 ```html
-<vaadin-login-overlay></vaadin-login-overlay>
+<vaadin-login-overlay opened></vaadin-login-overlay>
 ```
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-login/master/screenshot.png" width="700" alt="Screenshot of vaadin-login-overlay">](https://vaadin.com/components/vaadin-login)
 
+&lt;vaadin-login-form&gt; is a Web Component providing a form to require users to log in into an application.
+
+```html
+<vaadin-login-form></vaadin-login-form>
+```
 
 ## Installation
 
@@ -51,7 +51,7 @@ bower i vaadin/vaadin-login --save
 Once installed, import it in your application:
 
 ```html
-<link rel="import" href="bower_components/vaadin-login/vaadin-login.html">
+<link rel="import" href="bower_components/vaadin-login/vaadin-login-overlay.html">
 ```
 ### Polymer 3 and ES Modules compatible version
 
@@ -65,7 +65,7 @@ npm i @vaadin/vaadin-login --save
 Once installed, import it in your application:
 
 ```js
-import '@vaadin/vaadin-login/vaadin-login.js';
+import '@vaadin/vaadin-login/vaadin-login-overlay.js';
 ```
 
 ## Getting started
@@ -78,18 +78,18 @@ To use the Material theme, import the correspondent file from the `theme/materia
 
 - The component with the Lumo theme:
 
-  `theme/lumo/vaadin-login.html`
   `theme/lumo/vaadin-login-overlay.html`
+  `theme/lumo/vaadin-login-form.html`
 
 - The component with the Material theme:
 
-  `theme/material/vaadin-login.html`
   `theme/material/vaadin-login-overlay.html`
+  `theme/material/vaadin-login-form.html`
 
 - Aliases for lumo themed components:
 
-  `vaadin-login.html`
   `vaadin-login-overlay.html`
+  `vaadin-login-form.html`
 
 
 ## Running demos and tests in browser

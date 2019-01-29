@@ -1,11 +1,11 @@
 <link rel="import" href="../../../vaadin-material-styles/typography.html">
 <link rel="import" href="../../../vaadin-material-styles/color.html">
-<link rel="import" href="../../../vaadin-overlay/vaadin-overlay.html">
-<link rel="import" href="vaadin-login-styles.html">
+<link rel="import" href="../../../vaadin-overlay/theme/material/vaadin-overlay.html">
+<link rel="import" href="vaadin-login-form-styles.html">
 
 <dom-module id="vaadin-login-overlay-wrapper-material-styles" theme-for="vaadin-login-overlay-wrapper">
   <template>
-    <style include="material-color-light material-typography">
+    <style include="material-overlay material-color-light material-typography">
       :host {
         top: 0;
         right: 0;
@@ -84,10 +84,6 @@
       /* Small screen */
       @media only screen
       and (max-width: 1023px) {
-        [part="card"] {
-          min-width: 375px;
-        }
-
         [part="brand"] {
           justify-content: center;
           min-height: 330px;
@@ -103,10 +99,6 @@
         [part="form"] {
           margin-top: -80px;
           margin-bottom: 20px;
-        }
-
-        [part="form"] ::slotted(*) {
-          max-width: 375px;
         }
       }
 
@@ -179,6 +171,7 @@
         }
 
         [part="form"] ::slotted(*) {
+          display: flex;
           bottom: 0;
           min-height: 100%;
           max-height: none;
@@ -278,12 +271,13 @@
   </template>
 </dom-module>
 
-<dom-module id="material-login-overlay" theme-for="vaadin-login">
+<dom-module id="material-login-overlay" theme-for="vaadin-login-form-wrapper">
   <template>
     <style include="material-color-light material-typography">
       :host([theme~="with-overlay"]) {
         display: flex;
         justify-content: center;
+        width: 100%;
       }
 
       :host([theme~="with-overlay"]) [part="form"] {

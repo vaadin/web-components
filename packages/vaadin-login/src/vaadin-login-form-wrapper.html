@@ -11,11 +11,9 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <link rel="import" href="vaadin-login-mixin.html">
 
-<link rel="import" href="../../vaadin-text-field/src/vaadin-text-field.html">
-<link rel="import" href="../../vaadin-text-field/src/vaadin-password-field.html">
 <link rel="import" href="../../vaadin-button/src/vaadin-button.html">
 
-<dom-module id="vaadin-login">
+<dom-module id="vaadin-login-form-wrapper">
   <template>
     <style>
       :host {
@@ -38,10 +36,6 @@ This program is available under Apache License Version 2.0, available at https:/
         margin: 0;
       }
 
-      #loginForm * {
-        width: 100%;
-      }
-
       [part="error-message"] {
         position: relative;
       }
@@ -54,20 +48,6 @@ This program is available under Apache License Version 2.0, available at https:/
         </div>
 
         <slot name="form">
-          <form id="loginForm" method="POST" action$="[[action]]">
-            <vaadin-text-field name="username" label="[[i18n.form.username]]"
-                id="username" required on-keydown="_handleInputKeydown"
-                autocapitalize="none" autocorrect="off" spellcheck="false">
-              <input type="text" slot="input">
-            </vaadin-text-field>
-
-            <vaadin-password-field name="password" label="[[i18n.form.password]]" id="password" required on-keydown="_handleInputKeydown"
-                spellcheck="false">
-              <input type="password" slot="input">
-            </vaadin-password-field>
-
-            <vaadin-button id="submit" theme="primary contained vaadin-login-submit" on-click="submit" disabled$="[[disabled]]">[[i18n.form.submit]]</vaadin-button>
-          </form>
         </slot>
 
         <vaadin-button id="forgotPasswordButton" theme="tertiary small forgot-password" on-click="_forgotPassword" hidden$="[[noForgotPassword]]">[[i18n.form.forgotPassword]]</vaadin-button>
@@ -82,18 +62,13 @@ This program is available under Apache License Version 2.0, available at https:/
     (function() {
 
       /**
-       * `<vaadin-login>` is a Web Component providing an easy way to require users
-       * to log in into an application.
+       * `<vaadin-login-form-wrapper>` is a helper component providing a wrapper for the login form.
        *
-       * ```
-       * <vaadin-login></vaadin-login>
-       * ```
-       *
-       * Use `<vaadin-login-overlay>` Web Component which allows the form to work with password managers.
+       * See the usage in `<vaadin-login-form>`.
        *
        * ### Styling
        *
-       * The following Shadow DOM parts of the `<vaadin-login>` are available for styling:
+       * The following Shadow DOM parts of the `<vaadin-login-form-wrapper>` are available for styling:
        *
        * Part name      | Description
        * ---------------|---------------------------------------------------------|
@@ -113,7 +88,7 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * Slot name | Description
        * ----------|---------------------------------------------------|
-       * `form`    | Html form placeholder. See the usage in `<vaadin-login-overlay>`.
+       * `form`    | Html form placeholder. See the usage in `<vaadin-login-form>`.
        *
        * See examples of setting the content into slots in the live demos.
        * @memberof Vaadin
@@ -122,37 +97,23 @@ This program is available under Apache License Version 2.0, available at https:/
        * @mixes Vaadin.Login.LoginMixin
        * @demo demo/index.html
        */
-      class LoginElement extends Vaadin.Login.LoginMixin(Vaadin.ElementMixin(Vaadin.ThemableMixin(Polymer.Element))) {
+      class LoginFormWrapperElement extends Vaadin.Login.LoginMixin(Vaadin.ElementMixin(Vaadin.ThemableMixin(Polymer.Element))) {
         static get is() {
-          return 'vaadin-login';
-        }
-        static get version() {
-          return '1.0.0-alpha8';
+          return 'vaadin-login-form-wrapper';
         }
 
         _forgotPassword() {
           this.dispatchEvent(new CustomEvent('forgot-password'));
         }
 
-        static get observers() {
-          return [
-            '_errorChanged(error)'
-          ];
-        }
-
-        _errorChanged() {
-          if (this.error && !this._preventAutoEnable) {
-            this.disabled = false;
-          }
-        }
       }
 
-      customElements.define(LoginElement.is, LoginElement);
+      customElements.define(LoginFormWrapperElement.is, LoginFormWrapperElement);
 
       /**
        * @namespace Vaadin
        */
-      window.Vaadin.LoginElement = LoginElement;
+      window.Vaadin.LoginFormWrapperElement = LoginFormWrapperElement;
     })();
   </script>
 </dom-module>

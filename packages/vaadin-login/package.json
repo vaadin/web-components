@@ -2,7 +2,7 @@
   "name": "@vaadin/vaadin-login",
   "version": "1.0.0-alpha8",
   "description": "vaadin-login",
-  "main": "vaadin-login.html",
+  "main": "vaadin-login-overlay.html",
   "repository": "vaadin/vaadin-login",
   "keywords": [
     "Vaadin",

@@ -1,8 +1,7 @@
-<dom-module id="material-login" theme-for="vaadin-login">
+<dom-module id="material-login-form-wrapper" theme-for="vaadin-login-form-wrapper">
   <template>
     <style include="material-color-light material-typography">
       :host {
-        max-width: calc(2.25rem * 10);
         background: var(--material-background-color) linear-gradient(hsla(0, 0%, 100%, 0.3), hsla(0, 0%, 100%, 0.3));
         min-height: 250px;
       }
@@ -21,15 +20,11 @@
         font-size: var(--material-h5-font-size);
       }
 
-      #submit {
-        margin-top: 3rem;
-        margin-bottom: 0.5rem;
-      }
-
       #forgotPasswordButton {
         margin: 0.5rem auto;
         padding-bottom: 12px;
         padding-top: 12px;
+        text-transform: none;
       }
 
       [part="error-message"] {
@@ -71,30 +66,6 @@
         font-size: var(--material-small-font-size);
         line-height: 1.375;
         color: var(--material-secondary-text-color);
-      }
-    </style>
-  </template>
-</dom-module>
-<dom-module id="vaadin-login-forgot-password-button" theme-for="vaadin-button">
-  <template>
-    <style>
-      :host([theme~="forgot-password"]) {
-        text-transform: none;
-      }
-
-      :host([theme~="vaadin-login-submit"]) {
-        margin-top: 3em;
-        margin-bottom: 2em;
-        flex-grow: 0;
-      }
-
-      /* Small screen */
-      @media only screen
-        and (max-width: 1023px) {
-          :host([theme~="vaadin-login-submit"]) {
-          margin-top: 2.5em;
-          margin-bottom: 1em;
-        }
       }
     </style>
   </template>

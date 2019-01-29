@@ -10,13 +10,17 @@
     <vaadin-demo-snippet id="login-overlay">
       <template preserve-content>
         <style>
-          iron-icon {
-            top: -2px;
+          .logo {
+            top: -4px;
             height: 29px;
             width: 29px;
           }
+
+          .customTitle {
+            color: var(--lumo-primary-contrast-color);
+          }
         </style>
-        <vaadin-login-overlay><h1 slot="title"><iron-icon icon="vaadin:vaadin-h"></iron-icon> My App</h1></vaadin-login-overlay>
+        <vaadin-login-overlay><h1 slot="title" class="customTitle"><iron-icon icon="vaadin:vaadin-h" class="logo"></iron-icon> My App</h1></vaadin-login-overlay>
         <vaadin-button>Log in</vaadin-button>
         <vaadin-dialog id="feedbackDialog">
             <template>Login is being processed...</template>
@@ -101,7 +105,7 @@
           }
         </style>
         <main>
-          <vaadin-login></vaadin-login>
+          <vaadin-login-form></vaadin-login-form>
         </main>
         <vaadin-dialog id="feedbackDialog">
           <template>Login is being processed...</template>
@@ -111,7 +115,7 @@
         </vaadin-dialog>
         <script>
           window.addDemoReadyListener('#element-basic-demos-sample-example', function(document) {
-            var login = document.querySelector('vaadin-login');
+            var login = document.querySelector('vaadin-login-form');
             var feedbackDialog = document.querySelector('#feedbackDialog');
             var supportDialog = document.querySelector('#supportDialog');
 

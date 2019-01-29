@@ -2,7 +2,7 @@
 <link rel="import" href="../../../vaadin-lumo-styles/spacing.html">
 <link rel="import" href="../../../vaadin-lumo-styles/typography.html">
 
-<dom-module id="lumo-login" theme-for="vaadin-login">
+<dom-module id="lumo-login-form-wrapper" theme-for="vaadin-login-form-wrapper">
   <template>
     <style include="lumo-color lumo-typography">
       :host {
@@ -16,11 +16,6 @@
 
       [part="form-title"] {
         margin-top: calc(var(--lumo-font-size-xxxl) - var(--lumo-font-size-xxl));
-      }
-
-      #submit {
-        margin-top: var(--lumo-space-l);
-        margin-bottom: var(--lumo-space-s);
       }
 
       #forgotPasswordButton {

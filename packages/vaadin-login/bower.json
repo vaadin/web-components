@@ -6,8 +6,10 @@
   ],
   "description": "vaadin-login",
   "main": [
-    "vaadin-login.html",
-    "theme/material/vaadin-login.html"
+    "vaadin-login-overlay.html",
+    "vaadin-login-form.html",
+    "theme/material/vaadin-login-overlay.html",
+    "theme/material/vaadin-login-form.html"
   ],
   "keywords": [
     "Vaadin",

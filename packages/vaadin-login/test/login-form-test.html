@@ -6,13 +6,13 @@
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <script src="../../web-component-tester/browser.js"></script>
   <link rel="import" href="../vaadin-login-overlay.html">
-  <link rel="import" href="../vaadin-login.html">
+  <link rel="import" href="../src/vaadin-login-form.html">
 </head>
 
 <body>
   <test-fixture id="default">
     <template>
-      <vaadin-login action="login-action"></vaadin-login>
+      <vaadin-login-form action="login-action"></vaadin-login-form>
       <iframe name="loginFrame"></iframe>
     </template>
   </test-fixture>
@@ -29,23 +29,24 @@
       let login, iframe;
 
       function fillUsernameAndPassword() {
-        const {username, password} = login.$;
+        const {vaadinLoginUsername, vaadinLoginPassword} = login.$;
         const usernameValue = 'myusername';
         const passwordValue = 'mypassword';
 
-        username.value = usernameValue;
-        password.value = passwordValue;
+        vaadinLoginUsername.value = usernameValue;
+        vaadinLoginPassword.value = passwordValue;
 
-        return {username, password};
+        return {vaadinLoginUsername, vaadinLoginPassword};
       }
 
       function testFormSubmitValues(preventDefault, expectation, done) {
         fillUsernameAndPassword();
 
-        login.$.loginForm.setAttribute('method', 'GET');
-        login.$.loginForm.setAttribute('target', iframe.getAttribute('name'));
+        const loginForm = login.querySelector('[part="vaadin-login-native-form"]');
+        loginForm.setAttribute('method', 'GET');
+        loginForm.setAttribute('target', iframe.getAttribute('name'));
 
-        const submitSpy = sinon.spy(login.$.loginForm, 'submit');
+        const submitSpy = sinon.spy(loginForm, 'submit');
         preventDefault && login.addEventListener('login', e => e.preventDefault());
 
         // Skip form submission in IE11 due to permission restrictions
@@ -56,7 +57,7 @@
             done();
           };
 
-          login.$.submit.click();
+          login.querySelector('vaadin-button[part="vaadin-login-submit"]').click();
           expect(submitSpy.called).to.equal(expectation);
         }
 
@@ -72,6 +73,7 @@
 
       it('should submit form values from overlay element', done => {
         [login, iframe] = fixture('overlay');
+        login = login.$.vaadinLoginForm;
         testFormSubmitValues(false, true, done);
       });
 

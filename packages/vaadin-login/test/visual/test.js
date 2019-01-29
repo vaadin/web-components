@@ -1,4 +1,4 @@
-gemini.suite('vaadin-login', function(rootSuite) {
+gemini.suite('vaadin-login-overlay', function(rootSuite) {
   function wait(actions, find) {
     actions.wait(5000);
   }
@@ -19,7 +19,7 @@ gemini.suite('vaadin-login', function(rootSuite) {
       suite
         .setUrl(`/default.html?theme=${theme}`)
         .setCaptureElements('body')
-        .capture(`vaadin-login`);
+        .capture(`vaadin-login-overlay`);
     });
   });
 

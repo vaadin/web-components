@@ -9,19 +9,21 @@
 [![Stars in Vaadin_Directory](https://img.shields.io/vaadin-directory/stars/vaadinvaadin-login.svg)](https://vaadin.com/directory/component/vaadinvaadin-login)
 
 # &lt;vaadin-login&gt;
+[Vaadin Login](https://vaadin.com/components/vaadin-login) consists of two components:
 
-[&lt;vaadin-login&gt;](https://vaadin.com/components/vaadin-login) is a Web Component providing a painless login experience, part of the [Vaadin components](https://vaadin.com/components).
-
-`<vaadin-login-overlay>` is a `<vaadin-login>` wrapper which opens the login form in an overlay and allows the form being accessible for password managers.
+&lt;vaadin-login-overlay&gt; is a Web Component providing a painless login experience, part of the [Vaadin components](https://vaadin.com/components). Component shows the &lt;vaadin-login-form&gt; inside of an overlay.
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-login/master/screenshot.png" width="700" alt="Screenshot of vaadin-login-overlay">](https://vaadin.com/components/vaadin-login)
+
+&lt;vaadin-login-form&gt; is a Web Component providing a form to require users to log in into an application.
 
 ## Example Usage
 
 ```html
-<vaadin-login></vaadin-login>
+<vaadin-login-overlay opened></vaadin-login-overlay>
 ```
 
 ```html
-<vaadin-login-overlay></vaadin-login-overlay>
+<vaadin-login-form></vaadin-login-form>
 ```
+
