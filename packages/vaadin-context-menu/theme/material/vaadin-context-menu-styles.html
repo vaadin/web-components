@@ -27,6 +27,10 @@
       :host(.vaadin-menu-item[menu-item-checked])::before {
         content: var(--material-icons-check);
       }
+
+      :host([expanded]) {
+        background-color: var(--material-secondary-background-color);
+      }
     </style>
   </template>
 </dom-module>

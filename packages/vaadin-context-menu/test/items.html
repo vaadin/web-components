@@ -279,6 +279,13 @@
           expect(subMenu.opened).to.be.false;
         });
 
+        it('should have expanded attributes', () => {
+          expect(menuComponents()[0].hasAttribute('expanded')).to.be.true;
+          expect(menuComponents()[0].getAttribute('aria-expanded')).to.equal('true');
+          subMenu.close();
+          expect(menuComponents()[0].hasAttribute('expanded')).to.be.false;
+          expect(menuComponents()[0].getAttribute('aria-expanded')).to.equal('false');
+        });
       });
     });
   </script>

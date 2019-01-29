@@ -55,6 +55,16 @@
          * ```
          *
          * @type {MenuItem[]}
+         *
+         *
+         * ### Styling
+         *
+         * The `<vaadin-item>` sub-menu elements have the following additional state attributes on top of
+         * the built-in `<vaadin-item>` state attributes (see `<vaadin-item>` documentation for full listing).
+         *
+         * Part name | Attribute | Description
+         * ----------------|----------------|----------------
+         * `:host` | expanded | Expanded parent item
          */
         items: Array
       };
@@ -153,6 +163,7 @@
           component.classList.add('vaadin-context-menu-parent-item');
           component.setAttribute('aria-haspopup', 'true');
           component.setAttribute('aria-expanded', 'false');
+          component.removeAttribute('expanded');
         }
 
         listBox.appendChild(component);
@@ -186,9 +197,10 @@
         menu.addEventListener('opened-changed', e => !e.detail.value && subMenu.close());
         subMenu.addEventListener('opened-changed', e => {
           if (!e.detail.value) {
-            const expandedItem = listBox.querySelector('[aria-expanded="true"]');
+            const expandedItem = listBox.querySelector('[expanded]');
             if (expandedItem) {
               expandedItem.setAttribute('aria-expanded', 'false');
+              expandedItem.removeAttribute('expanded');
             }
           }
         });
@@ -244,6 +256,7 @@
 
             if (menu.opened && itemElement._item.children && itemElement._item.children.length) {
               itemElement.setAttribute('aria-expanded', 'true');
+              itemElement.setAttribute('expanded', '');
               this.__openSubMenu(subMenu, itemElement);
             }
           }
