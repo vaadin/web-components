@@ -36,19 +36,6 @@ This program is available under Apache License Version 2.0, available at https:/
         min-width: 0;
       }
 
-      [part="clear-button"],
-      [part="toggle-button"] {
-        font-family: 'vaadin-date-picker-icons';
-      }
-
-      [part="clear-button"]::before {
-        content: "\e901";
-      }
-
-      [part="toggle-button"]::before {
-        content: "\e902";
-      }
-
       :host([disabled]) [part="clear-button"],
       :host([readonly]) [part="clear-button"],
       :host(:not([has-value])) [part="clear-button"] {

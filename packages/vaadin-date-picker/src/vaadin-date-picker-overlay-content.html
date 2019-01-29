@@ -44,22 +44,8 @@ This program is available under Apache License Version 2.0, available at https:/
         flex-grow: 1;
       }
 
-      [part="clear-button"],
-      [part="toggle-button"],
-      [part="years-toggle-button"]::before {
-        font-family: 'vaadin-date-picker-icons';
-      }
-
       [part="clear-button"]:not([showclear]) {
         display: none;
-      }
-
-      [part="clear-button"]::before {
-        content: "\e901";
-      }
-
-      [part="toggle-button"]::before {
-        content: "\e902";
       }
 
       [part="years-toggle-button"] {
@@ -68,10 +54,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
       [part="years-toggle-button"][desktop] {
         display: none;
-      }
-
-      [part="years-toggle-button"]::before {
-        content: "\e900";
       }
 
       :host(:not([years-visible])) [part="years-toggle-button"]::before {
