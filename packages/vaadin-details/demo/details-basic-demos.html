@@ -32,6 +32,29 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Listen for State Change</h3>
+    <vaadin-demo-snippet id="details-basic-demos-opened-changed" when-defined="vaadin-details">
+      <template preserve-content>
+        <vaadin-details>
+          <div slot="summary">Current state: <span id="state"></span></div>
+          Details content.
+        </vaadin-details>
+        <script>
+          window.addDemoReadyListener('#details-basic-demos-opened-changed', function(document) {
+            const details = document.querySelector('vaadin-details');
+
+            // listen for details state change
+            details.addEventListener('opened-changed', function(e) {
+              document.getElementById('state').textContent = e.detail.value ? 'opened' : 'closed';
+            });
+
+            // set the state programmatically
+            details.opened = true;
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
   </template>
   <script>
     class DetailsBasicDemos extends DemoReadyEventEmitter(Polymer.Element) {
