@@ -26,7 +26,6 @@
 
       beforeEach(function() {
         customField = fixture('default');
-        dispatchSlotChange(customField);
         inputElement = window.document.createElement('input');
       });
 
@@ -42,6 +41,15 @@
         customField.removeChild(customField.children[1]);
         dispatchSlotChange(customField);
         expect(customField.inputs.length).to.equal(1);
+      });
+
+      it('should remove listener from input which is removed', function() {
+        const firstInput = customField.children[1];
+        customField.removeChild(firstInput);
+        dispatchSlotChange(customField);
+        const spy = sinon.spy(customField, '__setValue');
+        dispatchChange(firstInput);
+        expect(spy.called).to.be.false;
       });
 
       describe('value property', function() {
