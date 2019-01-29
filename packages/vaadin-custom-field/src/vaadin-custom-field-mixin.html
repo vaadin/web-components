@@ -101,7 +101,12 @@
         return;
       }
 
-      const valuesArray = this.i18n.parseValue(value, this.inputs);
+      const valuesArray = this.i18n.parseValue(value);
+      if (!valuesArray || valuesArray.length == 0) {
+        console.warn('Value parser has not provided values array');
+        return;
+      }
+
       this.inputs.forEach((input, id) => input.value = valuesArray[id]);
       if (oldValue !== undefined) {
         this.validate();

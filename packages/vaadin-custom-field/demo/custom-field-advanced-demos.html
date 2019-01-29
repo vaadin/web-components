@@ -79,6 +79,47 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Custom Parser And Formatter</h3>
+    <p>Custom parser should be used for parsing the value into arrays of values for internal inputs.
+      Custom formatter should be used for formatting the values of internal inputs to set it for the component.</p> 
+    <vaadin-demo-snippet id="custom-field-advanced-demos-format-parse-example">
+      <template preserve-content>
+        <vaadin-custom-field name="social-security-number" label="Personal info">
+          <input type="number" placeholder="Day">
+          <input type="number" placeholder="Month">
+          <input type="number" placeholder="Year (4 digits)">
+        </vaadin-custom-field>
+        <br>
+        <span>Current value:</span>
+        <script>
+          window.addDemoReadyListener('#custom-field-advanced-demos-format-parse-example', function(document) {
+            const customField = document.querySelector('vaadin-custom-field');
+
+            customField.i18n = {
+              formatValue: function(values) {
+                const lastDigitsFromDb = '000A';
+                return values[0] +
+                       ((values[1].length < 2) ? '0' + values[1] : values[1]) +
+                       values[2].substr(2, 4) +
+                       '-' + lastDigitsFromDb;
+
+              },
+              parseValue: function(value) {
+                const segmentedValue = value.match(/.{1,2}/g);
+                return [segmentedValue[0], // Day
+                  segmentedValue[1], // Month
+                  '19' + segmentedValue[2]]; // Year
+              }
+            };
+
+            customField.addEventListener('change', function(e) {
+              document.querySelector('span').textContent = 'Current value: ' + e.detail.value;
+            });
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
   </template>
   <script>
     class CustomFieldAdvancedDemos extends DemoReadyEventEmitter(CustomFieldDemo(Polymer.Element)) {
