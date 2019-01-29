@@ -208,13 +208,19 @@
           menu.dispatchEvent(new CustomEvent('item-selected', {detail: e.detail}));
         });
 
+        subMenu.addEventListener('close-all-menus', () => {
+          menu.dispatchEvent(new CustomEvent('close-all-menus'));
+        });
+        menu.addEventListener('close-all-menus', menu.close);
         menu.addEventListener('item-selected', menu.close);
         menu.$.overlay.$.backdrop.addEventListener('click', () => menu.close());
 
         menu.$.overlay.addEventListener('keydown', e => {
-          if (e.keyCode === 37 || e.keyCode === 27) {
+          if (e.keyCode === 37) {
             menu.close();
             menu.listenOn.focus();
+          } else if (e.keyCode === 27) {
+            menu.dispatchEvent(new CustomEvent('close-all-menus'));
           }
         });
 

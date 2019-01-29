@@ -181,11 +181,9 @@
           expect(focusSpy).to.have.been.called;
         });
 
-        it('should close the submenu on esc', () => {
-          const focusSpy = sinon.spy(menuComponents()[0], 'focus');
+        it('should close all menus on esc', () => {
           fire(menuComponents(subMenu)[0], 'keydown', {}, {keyCode: 27, key: 'Esc'});
-          expect(subMenu.opened).to.be.false;
-          expect(focusSpy).to.have.been.called;
+          expect(rootMenu.opened).to.be.false;
         });
 
         it('should not close on disabled item click', () => {
