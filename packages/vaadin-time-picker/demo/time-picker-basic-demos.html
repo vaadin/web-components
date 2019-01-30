@@ -25,6 +25,17 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Time Range</h3>
+    <p>
+      The <code>min</code> and <code>max</code> properties affect the range of times that will be available
+      in the picker.
+    </p>
+    <vaadin-demo-snippet id="time-picker-basic-demos-time-range-example">
+      <template preserve-content>
+        <vaadin-time-picker min="09:00" max="17:00" label="Lunch hour (hh:mm:ss.fff)"></vaadin-time-picker>
+      </template>
+    </vaadin-demo-snippet>
+
   </template>
   <script>
     class TimePickerBasicDemos extends DemoReadyEventEmitter(ElementDemo(Polymer.Element)) {

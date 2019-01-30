@@ -1,0 +1,98 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-time-picker tests</title>
+  <script src='../../web-component-tester/browser.js'></script>
+  <script src='../../webcomponentsjs/webcomponents-lite.js'></script>
+  <link rel="import" href="../../test-fixture/test-fixture.html">
+  <link rel="import" href="../src/vaadin-time-picker.html">
+</head>
+
+<body>
+  <test-fixture id="default">
+    <template>
+      <vaadin-time-picker></vaadin-time-picker>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('range test', () => {
+      let timePicker;
+
+      beforeEach(() => {
+        timePicker = fixture('default');
+      });
+
+      it('min property should be 00:00:00.000 by default', () => {
+        expect(timePicker.min).to.be.equal('00:00:00.000');
+      });
+
+      it('max property should be 23:59:59.999 by default', () => {
+        expect(timePicker.max).to.be.equal('23:59:59.999');
+      });
+
+      it('should have dropdown items if min nor max is defined', () => {
+        expect(timePicker.__dropdownItems.length).to.be.equal(24);
+      });
+
+      it('should allow setting valid min property value', () => {
+        timePicker.min = '04:00';
+        expect(timePicker.__dropdownItems.length).to.be.equal(20);
+      });
+
+      it('should allow setting valid max property value', () => {
+        timePicker.max = '19:00';
+        expect(timePicker.__dropdownItems.length).to.be.equal(20);
+      });
+
+      it('should allow setting valid min and max property value', () => {
+        timePicker.min = '04:00';
+        timePicker.max = '19:00';
+        expect(timePicker.__dropdownItems.length).to.be.equal(16);
+      });
+
+      it('should allow setting valid min value via attribute', () => {
+        timePicker.setAttribute('min', '04:00');
+        expect(timePicker.min).to.be.equal('04:00');
+      });
+
+      it('should allow setting valid max value via attribute', () => {
+        timePicker.setAttribute('max', '19:00');
+        expect(timePicker.max).to.be.equal('19:00');
+      });
+
+      it('should allow setting valid min and max values via attributes', () => {
+        timePicker.setAttribute('min', '04:00');
+        timePicker.setAttribute('max', '19:00');
+        expect(timePicker.min).to.be.equal('04:00');
+        expect(timePicker.max).to.be.equal('19:00');
+      });
+
+      it('should not allow setting a value lower than min property value', () => {
+        timePicker.value = '02:00';
+        timePicker.min = '10:00';
+        expect(timePicker.value).to.be.equal('10:00');
+      });
+
+      it('should not allow setting a value higher than max property value', () => {
+        timePicker.value = '12:00';
+        timePicker.max = '10:00';
+        expect(timePicker.value).to.be.equal('10:00');
+      });
+
+      it('should not allow setting a value lower than min value via attribute', () => {
+        timePicker.setAttribute('value', '02:00');
+        timePicker.setAttribute('min', '10:00');
+        expect(timePicker.value).to.be.equal('10:00');
+      });
+
+      it('should not allow setting a value higher than max value via attribute', () => {
+        timePicker.setAttribute('value', '19:00');
+        timePicker.setAttribute('max', '16:00');
+        expect(timePicker.value).to.be.equal('16:00');
+      });
+
+    });
+  </script>
+</body>

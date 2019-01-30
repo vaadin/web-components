@@ -57,6 +57,8 @@ This program is available under Apache License Version 2.0, available at https:/
           readonly="[[readonly]]"
           role="application"
           aria-live="assertive"
+          min$="[[min]]"
+          max$="[[max]]"
           aria-label$="[[label]]"
           theme$="[[theme]]">
         <span slot="suffix" part="toggle-button" role="button" aria-label$="[[i18n.selector]]"></span>
@@ -228,6 +230,32 @@ This program is available under Apache License Version 2.0, available at https:/
             },
 
             /**
+             * Minimum time allowed.
+             *
+             * Supported time formats are in ISO 8601:
+             * - `hh:mm`
+             * - `hh:mm:ss`
+             * - `hh:mm:ss.fff`
+             */
+            min: {
+              type: String,
+              value: '00:00:00.000',
+            },
+
+            /**
+             * Maximum time allowed.
+             *
+             * Supported time formats are in ISO 8601:
+             * - `hh:mm`
+             * - `hh:mm:ss`
+             * - `hh:mm:ss.fff`
+             */
+            max: {
+              type: String,
+              value: '23:59:59.999',
+            },
+
+            /**
              * Specifies the number of valid intervals in a day used for
              * configuring the items displayed in the selection box.
              *
@@ -323,7 +351,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         static get observers() {
           return [
-            '__updateDropdownItems(i18n.*)'
+            '__updateDropdownItems(i18n.*, min, max)'
           ];
         }
 
@@ -377,6 +405,18 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         /**
+         * Returning seconds from Object in the format `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`
+         */
+        __getSec(obj) {
+          let result = (obj && obj.hours || 0) * 60 * 60;
+          result += (obj && obj.minutes || 0) * 60;
+          result += (obj && obj.seconds || 0);
+          result += (obj && obj.milliseconds / 1000 || 0);
+
+          return result;
+        }
+
+        /**
          * Returning Object in the format `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`
          * from the result of adding step value in milliseconds to the milliseconds amount.
          * With `precision` parameter rounding the value to the closest step valid interval.
@@ -424,8 +464,16 @@ This program is available under Apache License Version 2.0, available at https:/
           // Default step in overlay items is 1 hour
           const step = this.step || 3600;
 
-          let time = -step;
-          while (time + step < 24 * 60 * 60) {
+          const minTimeObj = this.__validateTime(this.__parseISO(this.min));
+          const minSec = this.__getSec(minTimeObj);
+
+          const maxTimeObj = this.__validateTime(this.__parseISO(this.max));
+          const maxSec = this.__getSec(maxTimeObj);
+
+          this.__adjustValue(minSec, maxSec, minTimeObj, maxTimeObj);
+
+          let time = -step + minSec;
+          while (time + step >= minSec && time + step <= maxSec) {
             const timeObj = this.__validateTime(this.__addStep(time * 1000, step));
             time += step;
             generatedList.push({
@@ -437,6 +485,16 @@ This program is available under Apache License Version 2.0, available at https:/
           }
 
           return generatedList;
+        }
+
+        __adjustValue(minSec, maxSec, minTimeObj, maxTimeObj) {
+          const valSec = this.__getSec(this.__memoValue);
+
+          if (valSec < minSec) {
+            this.__updateValue(minTimeObj);
+          } else if (valSec > maxSec) {
+            this.__updateValue(maxTimeObj);
+          }
         }
 
         __valueChanged(value, oldValue) {
