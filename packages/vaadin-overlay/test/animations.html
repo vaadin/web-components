@@ -23,25 +23,75 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="switching">
+    <template>
+      <two-overlays></two-overlays>
+    </template>
+  </test-fixture>
+
+  <dom-module id="two-overlays">
+    <template>
+      <vaadin-overlay opened="{{showOverlay1}}">
+        <template>
+          <div>Overlay 1</div>
+          <button on-click="_switchOverlays">Go to overlay 2</button>
+        </template>
+      </vaadin-overlay>
+      <vaadin-overlay opened="{{showOverlay2}}">
+        <template>
+          <div>Overlay 2</div>
+        </template>
+      </vaadin-overlay>
+    </template>
+
+    <script>
+      customElements.whenDefined('vaadin-overlay').then(() => {
+        class TwoOverlays extends Polymer.Element {
+          static get is() {
+            return 'two-overlays';
+          }
+
+          static get properties() {
+            return {
+              showOverlay1: Boolean,
+              showOverlay2: Boolean
+            };
+          }
+
+          _switchOverlays() {
+            this.showOverlay1 = false;
+            this.showOverlay2 = true;
+          }
+        }
+
+        customElements.define(TwoOverlays.is, TwoOverlays);
+      });
+    </script>
+  </dom-module>
+
   <script>
+    function mockOverlayAnimations(overlay) {
+      overlay.style.setProperty('animation-name', 'close-anim');
+
+      sinon.stub(overlay, '_enqueueAnimation', (type, callback) => {
+        const handler = `__${type}Handler`;
+        overlay[handler] = Polymer.Debouncer.debounce(overlay[handler], Polymer.Async.timeOut, () => {
+          callback();
+        });
+      });
+
+      sinon.stub(overlay, '_flushAnimation', type => {
+        const handler = `__${type}Handler`;
+        overlay[handler].flush();
+      });
+    }
+
     describe('animated overlay', () => {
       let overlay;
 
       beforeEach(() => {
         overlay = fixture('default');
-        overlay.style.setProperty('animation-name', 'close-anim');
-
-        sinon.stub(overlay, '_enqueueAnimation', (type, callback) => {
-          const handler = `__${type}Handler`;
-          overlay[handler] = Polymer.Debouncer.debounce(overlay[handler], Polymer.Async.timeOut, () => {
-            callback();
-          });
-        });
-
-        sinon.stub(overlay, '_flushAnimation', type => {
-          const handler = `__${type}Handler`;
-          overlay[handler].flush();
-        });
+        mockOverlayAnimations(overlay);
       });
 
       afterEach(() => {
@@ -87,6 +137,26 @@
         overlay.opened = false;
         overlay.hidden = true;
         expect(overlay.parentNode).not.to.equal(document.body);
+      });
+    });
+
+    describe('switching two overlays', () => {
+      let wrapper, overlays;
+
+      beforeEach(done => {
+        wrapper = fixture('switching');
+        overlays = Array.from(wrapper.shadowRoot.querySelectorAll('vaadin-overlay'));
+        overlays.forEach(overlay => mockOverlayAnimations(overlay));
+        overlays[0].opened = true;
+        Polymer.RenderStatus.afterNextRender(overlays[0], done);
+      });
+
+      it('should remove pointer events on previously opened overlay', done => {
+        overlays[0].content.querySelector('button').click();
+        Polymer.RenderStatus.afterNextRender(overlays[1], () => {
+          expect(overlays[0].$.overlay.style.pointerEvents).to.equal('');
+          done();
+        });
       });
     });
   </script>

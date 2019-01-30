@@ -538,13 +538,8 @@ This program is available under Apache License Version 2.0, available at https:/
             const evt = new CustomEvent('vaadin-overlay-open', {bubbles: true});
             this.dispatchEvent(evt);
           });
-
-          if (!this.modeless) {
-            this._enterModalState();
-          }
         } else if (wasOpened) {
           this._animatedClosing();
-          this._exitModalState();
         }
       }
 
@@ -588,6 +583,10 @@ This program is available under Apache License Version 2.0, available at https:/
         const finishOpening = () => {
           this.removeAttribute('opening');
           document.addEventListener('iron-overlay-canceled', this._boundIronOverlayCanceledListener);
+
+          if (!this.modeless) {
+            this._enterModalState();
+          }
         };
 
         if (this._shouldAnimate()) {
@@ -611,6 +610,8 @@ This program is available under Apache License Version 2.0, available at https:/
           this.setAttribute('closing', '');
 
           const finishClosing = () => {
+            this._exitModalState();
+
             document.removeEventListener('iron-overlay-canceled', this._boundIronOverlayCanceledListener);
             this._detachOverlay();
             this.removeAttribute('closing');
