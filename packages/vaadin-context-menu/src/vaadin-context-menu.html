@@ -53,6 +53,9 @@ This program is available under Apache License Version 2.0, available at https:/
        * If a menu item has a non-empty `children` set, a sub-menu with the child items is opened
        * next to the parent menu on mouseover, tap or a right arrow keypress.
        *
+       * When an item is selected, `<vaadin-context-menu>` dispatches an "item-selected" event
+       * with the selected item as `event.detail.value` property.
+       *
        * ```javascript
        * contextMenu.items = [
        *   {text: 'Menu Item 1', children:
@@ -70,6 +73,11 @@ This program is available under Apache License Version 2.0, available at https:/
        *   },
        *   {text: 'Menu Item 3', disabled: true}
        * ];
+       *
+       * contextMenu.addEventListener('item-selected', e => {
+       *   const item = e.detail.value;
+       *   console.log(`${item.text} selected`);
+       * });
        * ```
        *
        * **NOTE:** when the `items` array is defined, the renderer or a template cannot be used.
