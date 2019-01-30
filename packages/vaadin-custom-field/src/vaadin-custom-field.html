@@ -58,9 +58,27 @@ This program is available under Apache License Version 2.0, available at https:/
        * ```
        * <vaadin-custom-field label="Product">
        *   <input type="text">
-       *   <input type="nubmer">
+       *   <input type="number">
        * </vaadin-custom-field>
        * ```
+       *
+       * ### Styling
+       *
+       * The following shadow DOM parts are available for styling:
+       *
+       * Part name | Description
+       * ----------------|----------------
+       * `label` | The label element
+       * `error-message` | The error message element
+       *
+       * The following state attributes are available for styling:
+       *
+       * Attribute    | Description | Part name
+       * -------------|-------------|------------
+       * `has-label`  | Set when the field has a label | :host
+       * `invalid`    | Set when the field is invalid | :host
+       *
+       * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
        *
        * @memberof Vaadin
        * @mixes Vaadin.ElementMixin
