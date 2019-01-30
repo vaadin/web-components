@@ -18,7 +18,7 @@
     <h3>Native inputs</h3>
     <vaadin-demo-snippet id="custom-field-basic-demos-inputs-example" when-defined="vaadin-custom-field">
       <template preserve-content>
-        <vaadin-custom-field label="Price">
+        <vaadin-custom-field label="Price" required error-message="Please fill in all fields">
           <input type="number">
           <select>
             <option>Euro</option>
@@ -32,7 +32,7 @@
     <h3>Custom DateTime Picker</h3>
     <vaadin-demo-snippet id="custom-field-basic-demos-date-time-example" when-defined="vaadin-custom-field">
       <template preserve-content>
-        <vaadin-custom-field label="Start datetime" required error-message="Please fill all fields">
+        <vaadin-custom-field label="Start datetime">
           <vaadin-date-picker></vaadin-date-picker>
           <vaadin-time-picker></vaadin-time-picker>
         </vaadin-custom-field>

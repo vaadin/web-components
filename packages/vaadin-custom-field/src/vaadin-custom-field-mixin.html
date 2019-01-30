@@ -14,7 +14,10 @@
         /**
          * Array of available input nodes
          */
-        __inputs: Array,
+        __inputs: {
+          type: Array,
+          value: []
+        },
 
         /**
          * The object used to localize this component.
@@ -27,7 +30,9 @@
              // A function to format given `Array` as
              // component value. Array is list of all internal values
              // in the order of their presense in the DOM
-             formatValue: (inputValues) => {
+             // This function is called each time the internal input
+             // value is changed.
+             formatValue: inputValues => {
                // returns a value representation of the given
                // array of values
              },
@@ -35,8 +40,10 @@
              // A function to parse the given value to an `Array` in the format
              // of the list of all internal values
              // in the order of their presence in the DOM
+             // This function is called when value of the
+             // custom field is set.
              parseValue: value => {
-               // Parses a string into the array of values.
+               // returns the array of values from parsed value string.
              }
           */
         i18n: {
@@ -61,8 +68,12 @@
     ready() {
       super.ready();
 
+      this.__boundUpdateValue = this.__updateValue.bind(this);
+
       this.$.slot.addEventListener('slotchange', e =>
-        this.__setInputs(e.target.assignedNodes().filter(node => node.validate || node.checkValidity)));
+        this.__setInputsFromNodes(e.target.assignedNodes()));
+
+      this.__setInputsFromNodes(this.childNodes);
 
       var uniqueId = Vaadin.CustomFieldMixin._uniqueId = 1 + Vaadin.CustomFieldMixin._uniqueId || 1;
       this.__errorId = `${this.constructor.is}-error-${uniqueId}`;
@@ -90,9 +101,18 @@
       this.__settingValue = false;
     }
 
-    __setInputs(nodes) {
-      this.__inputs = nodes;
-      this.inputs.forEach(input => input.addEventListener('change', e => this.__updateValue(e)));
+    __setInputsFromNodes(nodes) {
+      const inputs = Array.from(nodes).filter(node => node.validate || node.checkValidity);
+
+      const addedInputs = inputs.filter(node => this.__inputs.indexOf(node) < 0);
+      const removedInputs = this.__inputs.filter(node => inputs.indexOf(node) < 0);
+
+      addedInputs.forEach(input => input.addEventListener('change', this.__boundUpdateValue));
+      this.__inputs = this.__inputs.concat(addedInputs);
+
+      removedInputs.forEach(input => input.removeEventListener('change', this.__boundUpdateValue));
+      this.__inputs = this.__inputs.filter(input => removedInputs.indexOf(input) < 0);
+
       this.__setValue();
     }
 
