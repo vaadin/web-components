@@ -789,11 +789,17 @@ This program is available under Apache License Version 2.0, available at https:/
 
     _selectItemForValue(value) {
       const valueIndex = this._indexOfValue(value, this.filteredItems);
+      const previouslySelectedItem = this.selectedItem;
+
       this.selectedItem = valueIndex >= 0
         ? this.filteredItems[valueIndex]
         : (this.dataProvider && this.selectedItem === undefined)
           ? undefined
           : null;
+
+      if (this.selectedItem === null && previouslySelectedItem === null) {
+        this._selectedItemChanged(this.selectedItem);
+      }
     }
 
     _setOverlayItems(items) {

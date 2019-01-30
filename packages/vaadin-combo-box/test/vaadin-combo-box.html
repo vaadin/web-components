@@ -118,6 +118,25 @@
           expect(comboBox.selectedItem).to.eql(item);
           expect(comboBox.inputElement.value).to.eql('foo');
         });
+
+        it('should be empty string when setting invalid value multiple times', () => {
+          const spy = sinon.spy(comboBox, '_selectedItemChanged');
+          comboBox.items = [];
+          expect(spy.callCount).to.eql(0);
+
+          comboBox.value = 1;
+          expect(comboBox.value).to.eql('');
+          expect(spy.callCount).to.eql(1);
+
+          comboBox.value = 2;
+          expect(comboBox.value).to.eql('');
+          expect(spy.callCount).to.eql(2);
+
+          comboBox.items = ['foo'];
+          comboBox.value = 'foo';
+          expect(comboBox.value).to.eql('foo');
+          expect(spy.callCount).to.eql(3);
+        });
       });
 
       describe('pattern property', () => {
