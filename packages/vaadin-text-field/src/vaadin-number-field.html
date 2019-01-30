@@ -166,25 +166,40 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _decreaseValue() {
-          const incrementSign = this._getAllowedIncrementSign(-1);
+          const currentValueOverMax = this.max != null && this.value != null && this.value != '' && this.value > this.max;
+          if (currentValueOverMax) {
+            this._setValue(this.max);
+          } else {
+            const incrementSign = this._getAllowedIncrementSign(-1);
 
-          if (incrementSign) {
-            this.__add(incrementSign);
+            if (incrementSign) {
+              this.__add(incrementSign);
+            }
           }
         }
 
         _increaseValue() {
-          const incrementSign = this._getAllowedIncrementSign(1);
+          const currentValueUnderMin = this.min != null && this.value != null && this.value != '' && this.value < this.min;
 
-          if (incrementSign) {
-            this.__add(incrementSign);
+          if (currentValueUnderMin) {
+            this._setValue(this.min);
+          } else {
+            const incrementSign = this._getAllowedIncrementSign(1);
+
+            if (incrementSign) {
+              this.__add(incrementSign);
+            }
           }
         }
 
         __add(sign) {
           const incr = sign * (this.step || 1);
           // Behave like native number input adjusting to the next exact multiple of step.
-          this.value = this.focusElement.value = this._getValue(incr);
+          this._setValue(this._getValue(incr));
+        }
+
+        _setValue(value) {
+          this.value = this.focusElement.value = value;
           this.dispatchEvent(new CustomEvent('change', {bubbles: true}));
         }
 

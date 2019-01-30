@@ -233,6 +233,24 @@
 
           expect(numberField.value).to.be.equal('-0.5');
         });
+
+        it('should decrease value to max value when value is over max and decreaseButton is clicked', () => {
+          numberField.value = 50;
+          numberField.max = 10;
+
+          decreaseButton.click();
+
+          expect(numberField.value).to.be.equal(numberField.max);
+        });
+
+        it('should increase value to min value when value is under min and increaseButton is clicked', () => {
+          numberField.value = -40;
+          numberField.min = -10;
+
+          increaseButton.click();
+
+          expect(numberField.value).to.be.equal(numberField.min);
+        });
       });
 
       describe('input validation', () => {
