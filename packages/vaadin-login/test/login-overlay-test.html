@@ -224,15 +224,6 @@
           expect(titleElements.length).to.be.equal(1);
           expect(titleElements[0].textContent).to.be.equal('Teleported title');
         });
-
-        it('should cache queries', function() {
-          const overlay = fixture('cache-query');
-          expect(overlay._elementsToTeleport).to.be.undefined;
-          const elements = overlay._getElementsToTeleport();
-          expect(overlay._elementsToTeleport).to.be.equal(elements);
-          expect(overlay._getElementsToTeleport()).to.be.equal(elements);
-        });
-
       });
     });
   </script>

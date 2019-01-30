@@ -177,10 +177,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _getElementsToTeleport() {
-          if (!this._elementsToTeleport) {
-            this._elementsToTeleport = this.querySelectorAll('[slot=title]');
-          }
-          return this._elementsToTeleport;
+          return this.querySelectorAll('[slot=title]');
         }
       }
 
