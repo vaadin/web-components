@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-login",
-  "version": "1.0.0-alpha9",
+  "version": "1.0.0-beta1",
   "description": "vaadin-login",
   "main": "vaadin-login-overlay.html",
   "repository": "vaadin/vaadin-login",
