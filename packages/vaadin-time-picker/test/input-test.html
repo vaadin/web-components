@@ -161,6 +161,12 @@
         expect(spy.callCount).to.equal(2);
       });
 
+      it('should clear value with null', () => {
+        timePicker.value = '12:00';
+        timePicker.value = null;
+        expect(timePicker.value).to.equal('');
+      });
+
       describe('properties and attributes', () => {
         ['readonly', 'required', 'disabled', 'preventInvalidInput', 'autofocus'].forEach(prop => {
           it(`should propagate boolean property to text-field ${prop}`, () => {

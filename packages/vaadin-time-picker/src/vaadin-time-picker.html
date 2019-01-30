@@ -501,7 +501,7 @@ This program is available under Apache License Version 2.0, available at https:/
           const parsedObj = this.__memoValue = this.__parseISO(value);
           const newValue = this.__formatISO(parsedObj) || '';
 
-          if (this.value !== '' && !parsedObj) {
+          if (this.value !== '' && this.value !== null && !parsedObj) {
             this.value = oldValue;
           } else if (this.value !== newValue) {
             this.value = newValue;
