@@ -136,6 +136,21 @@ This program is available under Apache License Version 2.0, available at https:/
           return '2.1.2';
         }
 
+        static get properties() {
+          return {
+            /**
+             * Set the `aria-label` attribute for assistive technologies like
+             * screen readers. An `undefined` value for this property (the
+             * default) means that the `aria-label` attribute is not present at
+             * all.
+             */
+            ariaLabel: {
+              type: String,
+              observer: '_ariaLabelChanged'
+            }
+          };
+        }
+
         ready() {
           super.ready();
 
@@ -147,6 +162,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this.$.button.setAttribute('role', 'presentation');
 
           this._addActiveListeners();
+          this._ariaLabelChanged(this.ariaLabel);
         }
 
         /**
@@ -168,6 +184,14 @@ This program is available under Apache License Version 2.0, available at https:/
           this.addEventListener('keydown', e => !this.disabled && [13, 32].indexOf(e.keyCode) >= 0 && this.setAttribute('active', ''));
           this.addEventListener('keyup', () => this.removeAttribute('active'));
           this.addEventListener('blur', () => this.removeAttribute('active'));
+        }
+
+        _ariaLabelChanged(ariaLabel) {
+          if (ariaLabel !== undefined && ariaLabel !== null) {
+            this.$.button.setAttribute('aria-label', ariaLabel);
+          } else {
+            this.$.button.setAttribute('aria-label', this.innerText);
+          }
         }
 
         /**
