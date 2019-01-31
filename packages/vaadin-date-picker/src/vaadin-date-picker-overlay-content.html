@@ -456,8 +456,9 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _onTodayTap() {
           var today = new Date();
-          if (this.$.monthScroller.position === this._differenceInMonths(today, this._originDate)) {
-            // Select today only if the month scroller is positioned exactly
+
+          if (Math.abs(this.$.monthScroller.position - this._differenceInMonths(today, this._originDate)) < 0.001) {
+            // Select today only if the month scroller is positioned approximately
             // at the beginning of the current month
             this.selectedDate = today;
             this._close();
