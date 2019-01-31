@@ -59,20 +59,20 @@
        then override the <code>checkValidity(value)</code> method to validate the input.</p>
     <vaadin-demo-snippet id="custom-field-advanced-demos-custom-validator" ignore-ie when-defined="vaadin-custom-field">
       <template preserve-content>
-        <vaadin-custom-field-skip-number error-message="Please fill in the the second input" label="Parking slot">
+        <vaadin-custom-field-specific-number error-message="Please use odd number" label="Parking slot">
           <input type="number">
           <input type="text">
-        </vaadin-custom-field-skip-number>
+        </vaadin-custom-field-specific-number>
 
         <script>
           window.addDemoReadyListener('#custom-field-advanced-demos-custom-validator', function(document) {
             class CustomFieldSkipNumberElement extends Vaadin.CustomFieldElement {
               checkValidity() {
-                return !!this.inputs.filter(el => el.type === 'text')[0].value;
+                return this.inputs[0].value % 2 === 0;
               }
             }
-            if (!customElements.get('vaadin-custom-field-skip-number')) {
-              customElements.define('vaadin-custom-field-skip-number', CustomFieldSkipNumberElement);
+            if (!customElements.get('vaadin-custom-field-specific-number')) {
+              customElements.define('vaadin-custom-field-specific-number', CustomFieldSkipNumberElement);
             }
           });
         </script>
