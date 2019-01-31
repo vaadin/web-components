@@ -277,6 +277,8 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
       _setEditorValue(editor, value) {
         const path = this.editorType === 'checkbox' ? 'checked' : this.editorValuePath;
+        // FIXME(yuriy): Required for the flow counterpart as it is passing the string value to webcomponent
+        value = (this.editorType === 'checkbox' && typeof value === 'string') ? value == 'true' : value;
         Polymer.Path.set(editor, path, value);
         editor.notifyPath && editor.notifyPath(path, value);
       }
