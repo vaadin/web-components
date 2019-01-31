@@ -60,11 +60,11 @@
             el.value = '1';
             dispatchChange(el);
           });
-          expect(customField.value).to.equal('1 1');
+          expect(customField.value).to.equal('1\t1');
         });
 
         it('should update input values when set', function() {
-          customField.value = '1 1';
+          customField.value = '1\t1';
           Array.from(customField.querySelectorAll('input')).forEach(el => {
             expect(el.value).to.equal('1');
           });
