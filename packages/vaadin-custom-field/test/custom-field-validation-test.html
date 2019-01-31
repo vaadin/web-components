@@ -42,12 +42,6 @@
         customField = fixture('default');
       });
 
-      it('should propagate required property to internal inputs', function() {
-        expect(Array.from(customField.querySelectorAll('input')).every(input => input.required)).to.be.false;
-        customField.required = true;
-        expect(Array.from(customField.querySelectorAll('input')).every(input => input.required)).to.be.true;
-      });
-
       it('should check validity on validate', function() {
         const spy = sinon.spy(customField, 'checkValidity');
         customField.validate();

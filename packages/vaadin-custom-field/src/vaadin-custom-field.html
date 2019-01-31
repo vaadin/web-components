@@ -152,8 +152,7 @@ This program is available under Apache License Version 2.0, available at https:/
         static get observers() {
           return [
             '__getActiveErrorId(invalid, errorMessage, __errorId)',
-            '__getActiveLabelId(label, __labelId)',
-            '__updateRequired(required, inputs)'
+            '__getActiveLabelId(label, __labelId)'
           ];
         }
 
@@ -161,17 +160,6 @@ This program is available under Apache License Version 2.0, available at https:/
           this.__setOrToggleAttribute('aria-invalid', invalid, this);
         }
 
-        __updateRequired(required, inputs) {
-          if (!inputs) {
-            return;
-          }
-
-          if (required) {
-            inputs.forEach(input => input.setAttribute('required', ''));
-          } else {
-            inputs.forEach(input => input.removeAttribute('required'));
-          }
-        }
 
         _labelChanged(label) {
           if (label !== '' && label != null) {
@@ -196,11 +184,15 @@ This program is available under Apache License Version 2.0, available at https:/
          * @returns {boolean}
          */
         checkValidity() {
-          if (this.required) {
-            return this.inputs.every(input => (input.validate || input.checkValidity).call(input));
-          } else {
-            return !this.invalid;
+          const invalidFields = this.inputs
+            .filter(input => !(input.validate || input.checkValidity).call(input));
+
+          if (invalidFields.length || (this.required && !this.value.trim())) {
+            // Either 1. one of the input fields is invalid or
+            // 2. the custom field itself is required but doesn't have a value
+            return false;
           }
+          return true;
         }
 
         __setOrToggleAttribute(name, value, node) {
