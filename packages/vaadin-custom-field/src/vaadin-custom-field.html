@@ -119,8 +119,10 @@ This program is available under Apache License Version 2.0, available at https:/
             },
 
             /**
-             * The initial value of the control.
-             * It can be used for two-way data binding.
+             * The value of the field. When wrapping several inputs, it will contain `\t`
+             * (Tab character) as a delimiter indicating parts intended to be used as the
+             * corresponding inputs values. Use the [`i18n`](#/elements/vaadin-custom-field#property-i18n)
+             * property to customize this behavior.
              */
             value: {
               type: String,

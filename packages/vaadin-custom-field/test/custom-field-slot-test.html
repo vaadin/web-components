@@ -54,7 +54,7 @@
           customField.appendChild(inputElement);
           setTimeout(() => {
             // Two empty spaces are from empty inputs
-            expect(customField.value).to.equal('  foo');
+            expect(customField.value).to.equal('\t\tfoo');
             done();
           });
         });
@@ -63,7 +63,7 @@
           const secondInput = customField.children[1];
           secondInput.value = '1';
           dispatchChange(secondInput);
-          expect(customField.value).to.equal(' 1');
+          expect(customField.value).to.equal('\t1');
           customField.removeChild(secondInput);
           setTimeout(() => {
             expect(customField.value).to.equal('');

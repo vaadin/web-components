@@ -29,12 +29,12 @@
            {
              // A function to format given `Array` as
              // component value. Array is list of all internal values
-             // in the order of their presense in the DOM
+             // in the order of their presence in the DOM
              // This function is called each time the internal input
              // value is changed.
              formatValue: inputValues => {
-               // returns a value representation of the given
-               // array of values
+               // returns a representation of the given array of values
+               // in the form of string with delimiter characters
              },
 
              // A function to parse the given value to an `Array` in the format
@@ -51,10 +51,10 @@
           value: () => {
             return {
               parseValue: function(value) {
-                return value.split(' ');
+                return value.split('\t');
               },
               formatValue: function(inputValues) {
-                return inputValues.join(' ');
+                return inputValues.join('\t');
               }
             };
           }
