@@ -39,6 +39,16 @@
         }
       });
 
+      describe('inputs property', function() {
+
+        it('should be readOnly', function() {
+          expect(customField.inputs.length).to.be.above(0);
+          customField.inputs = [];
+          expect(customField.inputs.length).to.be.above(0);
+        });
+
+      });
+
       describe('value property', function() {
 
         it('should be falsy by default', function() {

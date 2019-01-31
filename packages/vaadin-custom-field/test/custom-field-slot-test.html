@@ -29,47 +29,46 @@
         inputElement = window.document.createElement('input');
       });
 
-      it('should add new input to the input list when adding to the DOM', function() {
+      it('should add new input to the input list when adding to the DOM', function(done) {
         customField.appendChild(inputElement);
-        dispatchSlotChange(customField);
-        expect(customField.inputs.length).to.equal(3);
-        expect(customField.inputs[2]).to.eql(inputElement);
+        setTimeout(() => {
+          expect(customField.inputs.length).to.equal(3);
+          expect(customField.inputs[2]).to.eql(inputElement);
+          done();
+        });
       });
 
-      it('should remove input from the input list when removing from the DOM', function() {
+      it('should remove input from the input list when removing from the DOM', function(done) {
         // Remove one of the inputs from the DOM
         customField.removeChild(customField.children[1]);
-        dispatchSlotChange(customField);
-        expect(customField.inputs.length).to.equal(1);
-      });
-
-      it('should remove listener from input which is removed', function() {
-        const firstInput = customField.children[1];
-        customField.removeChild(firstInput);
-        dispatchSlotChange(customField);
-        const spy = sinon.spy(customField, '__setValue');
-        dispatchChange(firstInput);
-        expect(spy.called).to.be.false;
+        setTimeout(() => {
+          expect(customField.inputs.length).to.equal(1);
+          done();
+        });
       });
 
       describe('value property', function() {
 
-        it('should update value when input is added', function() {
+        it('should update value when input is added', function(done) {
           inputElement.value = 'foo';
           customField.appendChild(inputElement);
-          dispatchSlotChange(customField);
-          // Two empty spaces are from empty inputs
-          expect(customField.value).to.equal('  foo');
+          setTimeout(() => {
+            // Two empty spaces are from empty inputs
+            expect(customField.value).to.equal('  foo');
+            done();
+          });
         });
 
-        it('should update value when input is removed', function() {
+        it('should update value when input is removed', function(done) {
           const secondInput = customField.children[1];
           secondInput.value = '1';
           dispatchChange(secondInput);
           expect(customField.value).to.equal(' 1');
           customField.removeChild(secondInput);
-          dispatchSlotChange(customField);
-          expect(customField.value).to.equal('');
+          setTimeout(() => {
+            expect(customField.value).to.equal('');
+            done();
+          });
         });
 
       });

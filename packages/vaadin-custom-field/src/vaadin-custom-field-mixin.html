@@ -14,9 +14,9 @@
         /**
          * Array of available input nodes
          */
-        __inputs: {
+        inputs: {
           type: Array,
-          value: []
+          readOnly: true
         },
 
         /**
@@ -65,19 +65,34 @@
       };
     }
 
+    connectedCallback() {
+      super.connectedCallback();
+      this.__observeChildrenInputsChange();
+    }
+
+    disconnectedCallback() {
+      super.disconnectedCallback();
+      this.__childMutationObserver.disconnect();
+    }
+
     ready() {
       super.ready();
 
-      this.__boundUpdateValue = this.__updateValue.bind(this);
-
-      this.$.slot.addEventListener('slotchange', e =>
-        this.__setInputsFromNodes(e.target.assignedNodes()));
-
-      this.__setInputsFromNodes(this.childNodes);
+      this.__setInputsFromChildNodes();
 
       var uniqueId = Vaadin.CustomFieldMixin._uniqueId = 1 + Vaadin.CustomFieldMixin._uniqueId || 1;
       this.__errorId = `${this.constructor.is}-error-${uniqueId}`;
       this.__labelId = `${this.constructor.is}-label-${uniqueId}`;
+    }
+
+    __observeChildrenInputsChange() {
+      const mutationObserverConfig = {
+        'childList': true,
+        'subtree': true
+      };
+
+      this.__childMutationObserver = new MutationObserver(this.__setInputsFromChildNodes.bind(this));
+      this.__childMutationObserver.observe(this, mutationObserverConfig);
     }
 
     __updateValue(e) {
@@ -101,18 +116,9 @@
       this.__settingValue = false;
     }
 
-    __setInputsFromNodes(nodes) {
-      const inputs = Array.from(nodes).filter(node => node.validate || node.checkValidity);
-
-      const addedInputs = inputs.filter(node => this.__inputs.indexOf(node) < 0);
-      const removedInputs = this.__inputs.filter(node => inputs.indexOf(node) < 0);
-
-      addedInputs.forEach(input => input.addEventListener('change', this.__boundUpdateValue));
-      this.__inputs = this.__inputs.concat(addedInputs);
-
-      removedInputs.forEach(input => input.removeEventListener('change', this.__boundUpdateValue));
-      this.__inputs = this.__inputs.filter(input => removedInputs.indexOf(input) < 0);
-
+    __setInputsFromChildNodes() {
+      const inputs = Array.from(this.querySelectorAll('*')).filter(node => node.validate || node.checkValidity);
+      this._setInputs(inputs);
       this.__setValue();
     }
 
@@ -131,10 +137,6 @@
       if (oldValue !== undefined) {
         this.validate();
       }
-    }
-
-    get inputs() {
-      return this.__inputs;
     }
   };
 </script>
