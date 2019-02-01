@@ -538,8 +538,16 @@ This program is available under Apache License Version 2.0, available at https:/
             const evt = new CustomEvent('vaadin-overlay-open', {bubbles: true});
             this.dispatchEvent(evt);
           });
+
+          if (!this.modeless) {
+            this._addGlobalListeners();
+          }
         } else if (wasOpened) {
           this._animatedClosing();
+
+          if (!this.modeless) {
+            this._removeGlobalListeners();
+          }
         }
       }
 
@@ -661,19 +669,23 @@ This program is available under Apache License Version 2.0, available at https:/
       _modelessChanged(modeless) {
         if (!modeless) {
           if (this.opened) {
+            this._addGlobalListeners();
             this._enterModalState();
           }
         } else {
+          this._removeGlobalListeners();
           this._exitModalState();
         }
       }
 
-      _enterModalState() {
+      _addGlobalListeners() {
         document.addEventListener('mousedown', this._boundMouseDownListener);
         document.addEventListener('mouseup', this._boundMouseUpListener);
         document.addEventListener('click', this._boundOutsideClickListener, true);
         document.addEventListener('keydown', this._boundKeydownListener);
+      }
 
+      _enterModalState() {
         if (document.body.style.pointerEvents !== 'none') {
           // Set body pointer-events to 'none' to disable mouse interactions with
           // other document nodes.
@@ -689,12 +701,14 @@ This program is available under Apache License Version 2.0, available at https:/
         });
       }
 
-      _exitModalState() {
+      _removeGlobalListeners() {
         document.removeEventListener('mousedown', this._boundMouseDownListener);
         document.removeEventListener('mouseup', this._boundMouseUpListener);
         document.removeEventListener('click', this._boundOutsideClickListener, true);
         document.removeEventListener('keydown', this._boundKeydownListener);
+      }
 
+      _exitModalState() {
         if (this._previousDocumentPointerEvents !== undefined) {
           // Restore body pointer-events
           document.body.style.pointerEvents = this._previousDocumentPointerEvents;

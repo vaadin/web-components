@@ -6,6 +6,7 @@
   <script src="../../web-component-tester/browser.js"></script>
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <link rel="import" href="../../test-fixture/test-fixture.html">
+  <link rel="import" href="../../iron-test-helpers/mock-interactions.html">
   <link rel="import" href="../../polymer/lib/utils/async.html">
   <link rel="import" href="../../polymer/lib/utils/debounce.html">
   <link rel="import" href="../vaadin-overlay.html">
@@ -137,6 +138,12 @@
         overlay.opened = false;
         overlay.hidden = true;
         expect(overlay.parentNode).not.to.equal(document.body);
+      });
+
+      it('should close the overlay when ESC pressed while opening', () => {
+        overlay.opened = true;
+        MockInteractions.pressAndReleaseKeyOn(document.body, 27, [], 'Escape');
+        expect(overlay.opened).to.equal(false);
       });
     });
 
