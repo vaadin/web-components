@@ -24,6 +24,7 @@
   <template>
     <script src="../webcomponentsjs/webcomponents-lite.js"></script>
     <link rel="import" href="vaadin-grid-pro.html">
+    <link rel="import" href="vaadin-grid-pro-edit-column.html">
     <next-code-block></next-code-block>
   </template>
 </custom-element-demo>
@@ -31,11 +32,20 @@
 -->
 ```html
 <vaadin-grid-pro>
-  ...
+  <vaadin-grid-pro-edit-column path="firstName" header="First Name"></vaadin-grid-pro-edit-column>
+  <vaadin-grid-pro-edit-column path="lastName" header="Last Name"></vaadin-grid-pro-edit-column>
+  <vaadin-grid-pro-edit-column path="email" header="Email"></vaadin-grid-pro-edit-column>
 </vaadin-grid-pro>
+<script>
+  // Populate the grid with data
+  const grid = document.querySelector('vaadin-grid-pro');
+  fetch('https://demo.vaadin.com/demo-data/1.0/people?count=200')
+    .then(res => res.json())
+    .then(json => grid.items = json.result);
+</script>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-grid-pro/master/screenshot.png" width="200" alt="Screenshot of vaadin-grid-pro">](https://vaadin.com/components/vaadin-grid-pro)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-grid-pro/master/screenshot.png" width="900" alt="Screenshot of vaadin-grid-pro">](https://vaadin.com/components/vaadin-grid-pro)
 
 
 ## Installation
