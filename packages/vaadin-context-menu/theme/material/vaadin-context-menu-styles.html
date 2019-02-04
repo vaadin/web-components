@@ -1,6 +1,7 @@
 <link rel="import" href="../../../vaadin-material-styles/font-icons.html">
 <link rel="import" href="../../../vaadin-material-styles/color.html">
 <link rel="import" href="../../../vaadin-material-styles/mixins/menu-overlay.html">
+<link rel="import" href="../../../vaadin-material-styles/typography.html">
 
 <dom-module id="material-context-menu-overlay" theme-for="vaadin-context-menu-overlay">
   <template>
@@ -9,7 +10,40 @@
   </template>
 </dom-module>
 
-<dom-module id="material-context-menu-item" theme-for="vaadin-item">
+<dom-module id="material-context-menu-list-box" theme-for="vaadin-context-menu-list-box">
+  <template>
+    <style>
+      /* ShadyCSS workaround */
+      [part="items"] ::slotted(.vaadin-menu-item:not(hr))::before {
+        display: block;
+      }
+
+      [part="items"] ::slotted(.vaadin-menu-item:not(hr)) {
+        min-height: 36px;
+        padding: 8px 32px 8px 10px;
+        font-size: var(--material-small-font-size);
+        line-height: 24px;
+      }
+
+      [part="items"] ::slotted(.vaadin-menu-item:hover:not([disabled])) {
+        background-color: var(--material-secondary-background-color);
+      }
+
+      [part="items"] ::slotted(.vaadin-menu-item[focused]:not([disabled])) {
+        background-color: var(--material-divider-color);
+      }
+
+      @media (pointer: coarse) {
+        [part="items"] ::slotted(.vaadin-menu-item:hover:not([disabled])),
+        [part="items"] ::slotted(.vaadin-menu-item[focused]:not([disabled])) {
+          background-color: transparent;
+        }
+      }
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="material-context-menu-item" theme-for="vaadin-context-menu-item">
   <template>
     <style>
       :host(.vaadin-menu-item.vaadin-context-menu-parent-item)::after {

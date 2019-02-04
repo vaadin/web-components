@@ -2,6 +2,35 @@
 <link rel="import" href="../../vaadin-list-box/src/vaadin-list-box.html">
 
 <script>
+  (function() {
+    /**
+     * The vaadin-context-menu-item element.
+     *
+     * @memberof Vaadin
+     * @extends Vaadin.ItemElement
+     */
+    class ContextMenuItemElement extends Vaadin.ItemElement {
+      static get is() {
+        return 'vaadin-context-menu-item';
+      }
+    }
+
+    /**
+     * The vaadin-context-menu-list-box element.
+     *
+     * @memberof Vaadin
+     * @extends Vaadin.ListBoxElement
+     */
+    class ContextMenuListBoxElement extends Vaadin.ListBoxElement {
+      static get is() {
+        return 'vaadin-context-menu-list-box';
+      }
+    }
+
+    customElements.define(ContextMenuItemElement.is, ContextMenuItemElement);
+    customElements.define(ContextMenuListBoxElement.is, ContextMenuListBoxElement);
+  })();
+
   /**
    * @namespace Vaadin.ContextMenu
    */
@@ -20,7 +49,7 @@
          * @type {object}
          * @property {string} text - Text to be set as the menu item component's textContent
          * @property {union: string | object} component - The component to represent the item.
-         * Either a tagName or an element instance. Defaults to "vaadin-item".
+         * Either a tagName or an element instance. Defaults to "vaadin-context-menu-item".
          * @property {boolean} disabled - If true, the item is disabled and cannot be selected
          * @property {boolean} checked - If true, the item shows a checkmark next to it
          * @property {MenuItem[]} children - Array of child menu items
@@ -59,7 +88,7 @@
          *
          * ### Styling
          *
-         * The `<vaadin-item>` sub-menu elements have the following additional state attributes on top of
+         * The `<vaadin-context-menu-item>` sub-menu elements have the following additional state attributes on top of
          * the built-in `<vaadin-item>` state attributes (see `<vaadin-item>` documentation for full listing).
          *
          * Part name | Attribute | Description
@@ -127,7 +156,7 @@
       const subMenu = root.querySelector('vaadin-context-menu');
       subMenu.closeOn = menu.closeOn;
 
-      const listBox = root.querySelector('vaadin-list-box');
+      const listBox = root.querySelector('vaadin-context-menu-list-box');
 
       listBox.innerHTML = '';
 
@@ -138,16 +167,16 @@
         if (item.component instanceof HTMLElement) {
           component = item.component;
         } else {
-          component = document.createElement(item.component || 'vaadin-item');
+          component = document.createElement(item.component || 'vaadin-context-menu-item');
         }
 
-        if (component.localName === 'vaadin-item') {
+        if (component.localName === 'vaadin-context-menu-item') {
           component.setAttribute('role', 'menuitem');
         } else if (component.localName === 'hr') {
           component.setAttribute('role', 'separator');
         }
-
         component.classList.add('vaadin-menu-item');
+
         component._item = item;
 
         if (item.text) {
@@ -183,11 +212,11 @@
     __initMenu(root, menu) {
       if (!root.firstElementChild) {
         root.innerHTML = `
-          <vaadin-list-box></vaadin-list-box>
+          <vaadin-context-menu-list-box></vaadin-context-menu-list-box>
           <vaadin-context-menu hidden></vaadin-context-menu>
         `;
         Polymer.flush();
-        const listBox = root.querySelector('vaadin-list-box');
+        const listBox = root.querySelector('vaadin-context-menu-list-box');
         listBox.classList.add('vaadin-menu-list-box');
         requestAnimationFrame(() => listBox.setAttribute('role', 'menu'));
         const subMenu = root.querySelector('vaadin-context-menu');
@@ -237,7 +266,7 @@
         });
 
         requestAnimationFrame(() => this.__openListenerActive = true);
-        const openSubMenu = (e, itemElement = e.composedPath().filter(e => e.localName === 'vaadin-item')[0]) => {
+        const openSubMenu = (e, itemElement = e.composedPath().filter(e => e.localName === 'vaadin-context-menu-item')[0]) => {
           // Delay enabling the mouseover listener to avoid it from triggering on parent menu open
           if (!this.__openListenerActive) {
             return;
