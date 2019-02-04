@@ -38,7 +38,7 @@
     "vaadin-select": "vaadin/vaadin-select#^2.0.2",
     "vaadin-list-box": "vaadin/vaadin-list-box#^1.1.0",
     "vaadin-item": "vaadin/vaadin-item#^2.1.0",
-    "vaadin-grid": "vaadin/vaadin-grid#^5.3.0-beta1",
+    "vaadin-grid": "vaadin/vaadin-grid#^5.3.0",
     "vaadin-checkbox": "vaadin/vaadin-checkbox#^2.2.1"
   },
   "devDependencies": {
