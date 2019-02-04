@@ -33,7 +33,7 @@
     "vaadin-element-mixin": "vaadin/vaadin-element-mixin#^2.0.0",
     "vaadin-lumo-styles": "vaadin/vaadin-lumo-styles#^1.3.0",
     "vaadin-material-styles": "vaadin/vaadin-material-styles#^1.2.0",
-    "vaadin-text-field": "vaadin/vaadin-text-field#^2.3.0-alpha3",
+    "vaadin-text-field": "vaadin/vaadin-text-field#^2.3.0",
     "vaadin-button": "vaadin/vaadin-button#^2.1.0",
     "vaadin-overlay": "^3.2.1"
   },
