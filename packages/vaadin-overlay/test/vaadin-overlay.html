@@ -276,6 +276,22 @@
           expect(getComputedStyle(overlay2Part).pointerEvents).to.equal('auto');
           expect(getComputedStyle(overlay1Part).pointerEvents).to.equal('none');
         });
+
+        it('should clear pointer events', () => {
+          const overlay1Part = overlay1.shadowRoot.querySelector('[part="overlay"]');
+          // Step 1: Opening overlay 1 so it's physically moved under the body
+          overlay1.opened = true;
+          // Step 2: As overlay2 is modal, it will set overlay 1's pointer events to none
+          overlay2.opened = true;
+          // Step 3: Closing overlay 1 so it's physically moved back from under the body
+          overlay1.opened = false;
+          // Step 4: Closing overlay 2 restores pointer-events of an overlay it
+          // finds under the body node, but overlay 1 is no longer there.
+          overlay2.opened = false;
+          // The fix: Clear pointer-events whenever an overlay is closed
+          // (in this case overlay 1 at step 3)
+          expect(getComputedStyle(overlay1Part).pointerEvents).to.equal('auto');
+        });
       });
 
       it('should close on esc', () => {

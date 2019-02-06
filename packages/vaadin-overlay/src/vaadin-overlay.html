@@ -618,6 +618,8 @@ This program is available under Apache License Version 2.0, available at https:/
           this.setAttribute('closing', '');
 
           const finishClosing = () => {
+            this.shadowRoot.querySelector('[part="overlay"]').style.removeProperty('pointer-events');
+
             this._exitModalState();
 
             document.removeEventListener('iron-overlay-canceled', this._boundIronOverlayCanceledListener);
