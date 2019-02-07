@@ -683,7 +683,9 @@ This program is available under Apache License Version 2.0, available at https:/
       _addGlobalListeners() {
         document.addEventListener('mousedown', this._boundMouseDownListener);
         document.addEventListener('mouseup', this._boundMouseUpListener);
-        document.addEventListener('click', this._boundOutsideClickListener, true);
+        // Firefox leaks click to document on contextmenu even if prevented
+        // https://bugzilla.mozilla.org/show_bug.cgi?id=990614
+        document.documentElement.addEventListener('click', this._boundOutsideClickListener, true);
         document.addEventListener('keydown', this._boundKeydownListener);
       }
 
@@ -706,7 +708,7 @@ This program is available under Apache License Version 2.0, available at https:/
       _removeGlobalListeners() {
         document.removeEventListener('mousedown', this._boundMouseDownListener);
         document.removeEventListener('mouseup', this._boundMouseUpListener);
-        document.removeEventListener('click', this._boundOutsideClickListener, true);
+        document.documentElement.removeEventListener('click', this._boundOutsideClickListener, true);
         document.removeEventListener('keydown', this._boundKeydownListener);
       }
 
