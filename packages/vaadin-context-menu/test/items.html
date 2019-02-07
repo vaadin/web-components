@@ -82,14 +82,14 @@
         });
 
         it('should close all menus', () => {
-          fire(document, 'click');
+          fire(document.documentElement, 'click');
           expect(rootMenu.opened).to.be.false;
           expect(subMenu.opened).to.be.false;
         });
 
         it('should remove close listener', () => {
           rootMenu.parentNode.removeChild(rootMenu);
-          fire(document, 'click');
+          fire(document.documentElement, 'click');
           expect(rootMenu.opened).to.be.true;
         });
 
