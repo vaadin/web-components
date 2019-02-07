@@ -230,6 +230,12 @@
             expect(textField.hasAttribute('has-value')).to.be.false;
           });
 
+          it('setting value to undefine should clear the native input value', function() {
+            textField.value = 'foo';
+            textField.value = undefined;
+            expect(textField.focusElement.value).to.equal('');
+          });
+
           it('setting empty value does not update has-value attribute', function() {
             textField.value = '';
             expect(textField.hasAttribute('has-value')).to.be.false;

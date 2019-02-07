@@ -384,7 +384,7 @@ This program is available under Apache License Version 2.0, available at https:/
       } else if (newVal !== undefined) {
         this.focusElement.value = newVal;
       } else {
-        this.value = '';
+        this.value = this.focusElement.value = '';
       }
 
       if (this.invalid) {
