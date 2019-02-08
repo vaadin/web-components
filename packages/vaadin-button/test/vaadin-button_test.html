@@ -130,7 +130,7 @@
         expect(vaadinButton.hasAttribute('active')).to.be.false;
       });
 
-      it('should set buttom text to native button aria-label', () => {
+      it('should set button text to native button aria-label', () => {
         expect(nativeButton.hasAttribute('aria-label')).to.be.true;
         // Remove extra line breaks
         expect(nativeButton.getAttribute('aria-label').replace(/(\r\n|\n|\r)/gm, ''))
@@ -138,9 +138,18 @@
       });
 
       it('should set button aria-label to native button aria-label', () => {
-        vaadinButton.ariaLabel = 'accessible';
+        vaadinButton.setAttribute('aria-label', 'accessible');
         expect(nativeButton.hasAttribute('aria-label')).to.be.true;
-        expect(nativeButton.getAttribute('aria-label')).to.be.eql(vaadinButton.ariaLabel);
+        expect(nativeButton.getAttribute('aria-label')).to.be.eql('accessible');
+      });
+
+      it('should set button aria-label when adding dynamically', () => {
+        const button = document.createElement('vaadin-button');
+        button.setAttribute('aria-label', '1');
+        button.textContent = '2';
+        document.body.appendChild(button);
+        expect(button.shadowRoot.querySelector('button').getAttribute('aria-label')).to.equal('1');
+        document.body.removeChild(button);
       });
     });
   </script>

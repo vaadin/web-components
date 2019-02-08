@@ -77,7 +77,7 @@ This program is available under Apache License Version 2.0, available at https:/
         <slot name="suffix"></slot>
       </div>
     </div>
-    <button id="button" type="button"></button>
+    <button id="button" type="button" aria-label$="[[_ariaLabel]]"></button>
   </template>
   <script>
     (function() {
@@ -144,11 +144,14 @@ This program is available under Apache License Version 2.0, available at https:/
              * default) means that the `aria-label` attribute is not present at
              * all.
              */
-            ariaLabel: {
-              type: String,
-              observer: '_ariaLabelChanged'
+            _ariaLabel: {
+              type: String
             }
           };
+        }
+
+        static get observedAttributes() {
+          return super.observedAttributes.concat(['aria-label']);
         }
 
         ready() {
@@ -162,7 +165,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this.$.button.setAttribute('role', 'presentation');
 
           this._addActiveListeners();
-          this._ariaLabelChanged(this.ariaLabel);
+          this._updateAriaLabel(this.getAttribute('aria-label'));
         }
 
         /**
@@ -178,6 +181,16 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /**
+         * @protected
+         */
+        attributeChangedCallback(attr, oldVal, newVal) {
+          super.attributeChangedCallback(attr, oldVal, newVal);
+          if (attr === 'aria-label') {
+            this._updateAriaLabel(newVal);
+          }
+        }
+
         _addActiveListeners() {
           Polymer.Gestures.addListener(this, 'down', () => !this.disabled && this.setAttribute('active', ''));
           Polymer.Gestures.addListener(this, 'up', () => this.removeAttribute('active'));
@@ -186,12 +199,8 @@ This program is available under Apache License Version 2.0, available at https:/
           this.addEventListener('blur', () => this.removeAttribute('active'));
         }
 
-        _ariaLabelChanged(ariaLabel) {
-          if (ariaLabel !== undefined && ariaLabel !== null) {
-            this.$.button.setAttribute('aria-label', ariaLabel);
-          } else {
-            this.$.button.setAttribute('aria-label', this.innerText);
-          }
+        _updateAriaLabel(ariaLabel) {
+          this._ariaLabel = ariaLabel !== undefined && ariaLabel !== null ? ariaLabel : this.innerText;
         }
 
         /**
