@@ -26,9 +26,10 @@
 ```
 -->
 ```html
-<vaadin-custom-field>
-  ...
-</vaadin-custom-field>
+<vaadin-custom-field label="Appointment time">
+  <vaadin-date-picker></vaadin-date-picker>
+  <vaadin-time-picker></vaadin-time-picker>
+</vaadin-custom-field>>
 ```
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-custom-field/master/screenshot.png" width="200" alt="Screenshot of vaadin-custom-field">](https://vaadin.com/components/vaadin-custom-field)
