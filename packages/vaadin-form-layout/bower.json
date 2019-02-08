@@ -39,7 +39,6 @@
     "iron-component-page": "^3.0.0",
     "iron-demo-helpers": "^2.0.0",
     "paper-input": "^2.0.0",
-    "test-fixture": "^3.0.0",
     "vaadin-text-field": "vaadin/vaadin-text-field#^2.1.1",
     "vaadin-date-picker": "vaadin/vaadin-date-picker#^3.2.0",
     "webcomponentsjs": "^1.0.1",
