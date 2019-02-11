@@ -48,6 +48,7 @@
         e.deltaY = deltaY;
         e.deltaX = deltaX;
         getBodyCellContent(grid, 0, 0).dispatchEvent(e);
+        grid._debouncerWheelAnimationFrame.flush();
         return e;
       }
 
@@ -116,6 +117,32 @@
         wheel(1, 0);
         wheel(-1, 0);
         expect(wheel(-100, 0).defaultPrevented).to.be.true;
+      });
+
+      it('should skip a wheel event while processing the previous one', () => {
+        wheel(0, 1);
+        grid._wheelAnimationFrame = true;
+        expect(wheel(0, 1).defaultPrevented).to.be.true;
+        expect(grid.$.table.scrollTop).to.equal(1);
+      });
+
+      it('should accumulate delta Y while wheeling during animation frame', () => {
+        wheel(0, 1);
+        grid._wheelAnimationFrame = true;
+        wheel(0, 1);
+        grid._wheelAnimationFrame = false;
+        wheel(0, 1);
+        expect(grid.$.table.scrollTop).to.equal(3);
+      });
+
+      it('should clear accumulated delta', () => {
+        wheel(0, 1);
+        grid._wheelAnimationFrame = true;
+        wheel(0, 1);
+        grid._wheelAnimationFrame = false;
+        wheel(0, 1);
+        wheel(0, 1);
+        expect(grid.$.table.scrollTop).to.equal(4);
       });
 
       it('should not throw on table wheel', () => {

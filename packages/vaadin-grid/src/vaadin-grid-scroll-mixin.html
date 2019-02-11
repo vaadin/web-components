@@ -52,7 +52,12 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         },
 
-        _rowWithFocusedElement: Element
+        _rowWithFocusedElement: Element,
+
+        _deltaYAcc: {
+          type: Number,
+          value: 0
+        }
 
       };
     }
@@ -102,6 +107,23 @@ This program is available under Apache License Version 2.0, available at https:/
         // Mode 1 == scrolling by lines instead of pixels
         deltaY *= this._physicalAverage;
       }
+
+      if (this._wheelAnimationFrame) {
+        // Skip new wheel events while one is being processed
+        this._deltaYAcc += deltaY;
+        e.preventDefault();
+        return;
+      }
+
+      deltaY += this._deltaYAcc;
+      this._deltaYAcc = 0;
+
+      this._wheelAnimationFrame = true;
+      this._debouncerWheelAnimationFrame = Polymer.Debouncer.debounce(
+        this._debouncerWheelAnimationFrame,
+        Polymer.Async.animationFrame,
+        () => this._wheelAnimationFrame = false
+      );
 
       var momentum = Math.abs(e.deltaX) + Math.abs(deltaY);
 
