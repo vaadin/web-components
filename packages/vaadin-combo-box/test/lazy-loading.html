@@ -299,6 +299,24 @@
               expect(comboBox.selectedItem).to.not.be.instanceOf(Vaadin.ComboBoxPlaceholder);
             });
           });
+
+          describe('changing dataProvider', () => {
+            it('should have correct items after changing dataProvider to return less items', () => {
+              comboBox.dataProvider = (params, callback) => callback(['foo', 'bar'], 2);
+              comboBox.open();
+              comboBox.close();
+
+              comboBox.clearCache();
+              comboBox.dataProvider = (params, callback) => callback(['baz'], 1);
+              comboBox.open();
+
+              expect(comboBox.filteredItems).to.eql(['baz']);
+              const visibleItems = Array.from(
+                comboBox.$.overlay._selector.querySelectorAll('vaadin-combo-box-item'))
+                .filter(item => !item.hidden);
+              expect(visibleItems.map(item => item.$.content.innerText)).to.eql(['baz']);
+            });
+          });
         });
 
         describe('pageSize', () => {
@@ -349,6 +367,15 @@
             comboBox.opened = true;
             comboBox.dataProvider = spyDataProvider;
             expect(comboBox.size).to.equal(SIZE);
+          });
+
+          it('should remove extra filteredItems when decreasing size', () => {
+            comboBox.dataProvider = (params, callback) =>
+              callback(['foo', 'bar'], 2);
+            comboBox.open();
+
+            comboBox.size = 1;
+            expect(comboBox.filteredItems).to.eql(['foo']);
           });
         });
 
