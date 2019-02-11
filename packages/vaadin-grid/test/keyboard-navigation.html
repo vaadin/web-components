@@ -496,6 +496,54 @@
           grid.$.scroller.removeEventListener('keydown', listener);
         });
 
+        it('should be possible to tab through the grid when first column is hidden', () => {
+          const firstColumn = grid.querySelectorAll('vaadin-grid-column')[0];
+          firstColumn.hidden = true;
+
+          const tabbableElements = getTabbableElements(grid.shadowRoot);
+
+          let keydownEvent;
+          const listener = (e) => keydownEvent = e;
+          grid.$.scroller.addEventListener('keydown', listener);
+
+          // assuming grid has been tabbed into.
+          tabbableElements[1].focus();
+
+          tab(); // to body cell
+          expect(keydownEvent.defaultPrevented).to.be.true;
+          expect(grid.shadowRoot.activeElement).to.equal(tabbableElements[2]);
+
+          tab(); // to footer cell
+          expect(keydownEvent.defaultPrevented).to.be.true;
+          expect(grid.shadowRoot.activeElement).to.equal(tabbableElements[3]);
+
+          grid.$.scroller.removeEventListener('keydown', listener);
+        });
+
+        it('should be possible to shift-tab through grid when first column is hidden', () => {
+          const firstColumn = grid.querySelectorAll('vaadin-grid-column')[0];
+          firstColumn.hidden = true;
+
+          const tabbableElements = getTabbableElements(grid.shadowRoot);
+
+          let keydownEvent;
+          const listener = (e) => keydownEvent = e;
+          grid.$.scroller.addEventListener('keydown', listener);
+
+          // assuming grid has been shift-tabbed into.
+          tabbableElements[3].focus();
+
+          shiftTab(); // to body cell
+          expect(keydownEvent.defaultPrevented).to.be.true;
+          expect(grid.shadowRoot.activeElement).to.equal(tabbableElements[2]);
+
+          shiftTab(); // to header cell
+          expect(keydownEvent.defaultPrevented).to.be.true;
+          expect(grid.shadowRoot.activeElement).to.equal(tabbableElements[1]);
+
+          grid.$.scroller.removeEventListener('keydown', listener);
+        });
+
         it('should be possible to exit grid with tab', () => {
           const tabbableElements = getTabbableElements(grid.shadowRoot);
           tabbableElements[3].focus(); // focus footer cell

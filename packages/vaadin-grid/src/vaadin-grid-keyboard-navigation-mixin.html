@@ -515,7 +515,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     _resetKeyboardNavigation() {
       if (this.$.header.firstElementChild) {
-        this._headerFocusable = this.$.header.firstElementChild.firstElementChild;
+        this._headerFocusable = Array.from(this.$.header.firstElementChild.children).filter(el => !el.hidden)[0];
       }
 
       if (this.$.items.firstElementChild) {
@@ -525,12 +525,12 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         });
         if (firstVisibleIndexRow) {
-          this._itemsFocusable = firstVisibleIndexRow.firstElementChild;
+          this._itemsFocusable = Array.from(firstVisibleIndexRow.children).filter(el => !el.hidden)[0];
         }
       }
 
       if (this.$.footer.firstElementChild) {
-        this._footerFocusable = this.$.footer.firstElementChild.firstElementChild;
+        this._footerFocusable = Array.from(this.$.footer.firstElementChild.children).filter(el => !el.hidden)[0];
       }
     }
 
