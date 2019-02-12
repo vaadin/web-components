@@ -49,6 +49,22 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="combobox-nested-template">
+    <template>
+      <vaadin-combo-box-light>
+        <vaadin-text-field>
+          <div slot="prefix">
+            <dom-repeat items="[1, 2]">
+              <template>
+                [[item]] foo
+              </template>
+            </dom-repeat>
+          </div>
+        </vaadin-text-field>
+      </vaadin-combo-box-light>
+    </template>
+  </test-fixture>
+
   <script>
     describe('vaadin-combo-box-light', () => {
       let comboBox, ironInput;
@@ -179,6 +195,28 @@
           comboBox.$.overlay._selector.querySelector('vaadin-combo-box-item')
             .getAttribute('theme')
         ).to.equal('foo');
+      });
+    });
+
+    describe('nested template', () => {
+      let comboBox;
+
+      beforeEach(() => {
+        comboBox = fixture('combobox-nested-template');
+        comboBox.items = ['bar', 'baz', 'qux'];
+      });
+
+      it('should not use nested template as the item template', () => {
+        comboBox.open();
+
+        const firstItem = comboBox.$.overlay._selector.querySelector('vaadin-combo-box-item');
+
+        expect(comboBox.querySelector('[slot="prefix"]').innerHTML).to.contain('1 foo');
+        expect(firstItem.shadowRoot.querySelector('#content').innerHTML).to.equal('bar');
+      });
+
+      it('should not throw error on open', () => {
+        expect(() => comboBox.open()).not.to.throw(Error);
       });
     });
   </script>
