@@ -250,6 +250,23 @@
               const params = spyDataProvider.lastCall.args[0];
               expect(params.filter).to.equal('');
             });
+
+            it('should not request loaded page again', () => {
+              comboBox.dataProvider = spyDataProvider;
+              comboBox.open();
+              comboBox.close();
+              comboBox.open();
+              expect(spyDataProvider).to.be.calledOnce;
+            });
+
+            it('should not request empty loaded page again', () => {
+              const dp = sinon.spy((params, callback) => callback([], 0));
+              comboBox.dataProvider = dp;
+              comboBox.open();
+              comboBox.close();
+              comboBox.open();
+              expect(dp).to.be.calledOnce;
+            });
           });
 
           describe('async', () => {

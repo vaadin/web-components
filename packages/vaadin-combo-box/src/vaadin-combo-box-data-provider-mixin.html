@@ -90,7 +90,7 @@ This program is available under Apache License Version 2.0, available at https:/
         const index = e.detail.index;
         if (index !== undefined) {
           const page = this._getPageForIndex(index);
-          if (!this._hasPage(page)) {
+          if (this._shouldLoadPage(page)) {
             this._loadPage(page);
           }
         }
@@ -106,17 +106,22 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _ensureFirstPage(opened) {
-      if (opened && !this._hasPage(0)) {
+      if (opened && this._shouldLoadPage(0)) {
         this._loadPage(0);
       }
     }
 
-    _hasPage(page) {
+    _shouldLoadPage(page) {
       if (!this.filteredItems) {
-        return false;
+        return true;
       }
+
       const loadedItem = this.filteredItems[page * this.pageSize];
-      return loadedItem !== undefined && !(loadedItem instanceof Vaadin.ComboBoxPlaceholder);
+      if (loadedItem !== undefined) {
+        return loadedItem instanceof Vaadin.ComboBoxPlaceholder;
+      } else {
+        return this.size === undefined;
+      }
     }
 
     _loadPage(page) {
