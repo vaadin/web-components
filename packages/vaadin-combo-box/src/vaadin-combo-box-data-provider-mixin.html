@@ -155,9 +155,6 @@ This program is available under Apache License Version 2.0, available at https:/
             if (Object.keys(this._pendingRequests).length === 0) {
               this.loading = false;
             }
-            if (!this.size) {
-              this.opened = false;
-            }
           }
         };
         this._pendingRequests[page] = callback;
