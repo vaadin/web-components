@@ -23,7 +23,7 @@
 
       beforeEach(() => {
         numberField = fixture('default');
-        input = numberField.focusElement;
+        input = numberField.inputElement;
         decreaseButton = numberField.root.querySelector('[part=decrease-button]');
         increaseButton = numberField.root.querySelector('[part=increase-button]');
       });
@@ -258,7 +258,7 @@
           expect(numberField.validate()).to.be.true;
 
           numberField.value = '1';
-          expect(numberField.focusElement.value).to.be.equal('1');
+          expect(numberField.inputElement.value).to.be.equal('1');
           expect(numberField.validate()).to.be.true;
         });
 

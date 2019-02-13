@@ -38,7 +38,7 @@
 
         beforeEach(() => {
           textArea = fixture(`default${fixtureName}`);
-          input = textArea.focusElement;
+          input = textArea.inputElement;
         });
 
         describe(`native ${condition}`, () => {
@@ -185,7 +185,7 @@
 
         beforeEach(() => {
           textArea = fixture(`default${fixtureName}`);
-          input = textArea.focusElement;
+          input = textArea.inputElement;
           inputField = textArea.shadowRoot.querySelector('[part=input-field]');
         });
 

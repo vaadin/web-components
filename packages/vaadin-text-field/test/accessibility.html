@@ -177,7 +177,7 @@
 
             beforeEach(function() {
               tf = fixture(`${el}-default${fixtureName}`);
-              input = tf.focusElement;
+              input = tf.inputElement;
               label = tf.root.querySelector('[part=label]');
             });
 
@@ -215,7 +215,7 @@
 
             beforeEach(function() {
               tf = fixture(`${el}-error-fixture${fixtureName}`);
-              input = tf.focusElement;
+              input = tf.inputElement;
               err = tf.root.querySelector('[part=error-message]');
             });
 
@@ -260,7 +260,7 @@
             beforeEach(function() {
               tf = fixture(`${el}-invalid-fixture${fixtureName}`);
               err = tf.root.querySelector('[part=error-message]');
-              input = tf.focusElement;
+              input = tf.inputElement;
             });
 
             it('should show the error if initially invalid', function() {

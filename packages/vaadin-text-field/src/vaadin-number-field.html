@@ -131,8 +131,8 @@ This program is available under Apache License Version 2.0, available at https:/
         ready() {
           super.ready();
           this.__previousValidInput = this.value || '';
-          this.focusElement.type = 'number';
-          this.focusElement.addEventListener('change', this.__onInputChange.bind(this));
+          this.inputElement.type = 'number';
+          this.inputElement.addEventListener('change', this.__onInputChange.bind(this));
         }
 
         _decreaseButtonTouchend(e) {
@@ -203,7 +203,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _setValue(value) {
-          this.value = this.focusElement.value = value;
+          this.value = this.inputElement.value = value;
           this.dispatchEvent(new CustomEvent('change', {bubbles: true}));
         }
 
@@ -251,11 +251,11 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _minChanged() {
-          this.focusElement.min = this.min;
+          this.inputElement.min = this.min;
         }
 
         _maxChanged() {
-          this.focusElement.max = this.max;
+          this.inputElement.max = this.max;
         }
 
         _valueChanged(newVal, oldVal) {
@@ -277,11 +277,11 @@ This program is available under Apache License Version 2.0, available at https:/
 
         __adjustDecimals() {
           // when step is not an integer, adjust decimals.
-          this.focusElement.value && (this.value = parseFloat(this.focusElement.value).toFixed(this.__decimals));
+          this.inputElement.value && (this.value = parseFloat(this.inputElement.value).toFixed(this.__decimals));
         }
 
         _stepChanged(step) {
-          this.focusElement.step = step;
+          this.inputElement.step = step;
           // Compute number of dedimals to display in input based on provided step
           this.__decimals = String(step).replace(/^\d*\.?(.*)?$/, '$1').length;
           this.__adjustDecimals();
@@ -290,7 +290,7 @@ This program is available under Apache License Version 2.0, available at https:/
         checkValidity() {
           // text-field mixin does not check against `min` and `max`
           if (this.min !== undefined || this.max !== undefined) {
-            this.invalid = !this.focusElement.checkValidity();
+            this.invalid = !this.inputElement.checkValidity();
           }
           return super.checkValidity();
         }

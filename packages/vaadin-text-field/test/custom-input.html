@@ -36,8 +36,8 @@
         input = textField.firstElementChild;
       });
 
-      it('should set focusElement to the slotted input', () => {
-        expect(textField.focusElement).to.equal(input);
+      it('should set inputElement to the slotted input', () => {
+        expect(textField.inputElement).to.equal(input);
       });
 
       it('should update value when slotted input value changes', () => {
@@ -87,9 +87,9 @@
         defaultInput = textField.shadowRoot.querySelector('[part~="value"]');
       });
 
-      it('should set focusElement to the default input', () => {
+      it('should set inputElement to the default input', () => {
         textField.removeChild(input);
-        expect(textField.focusElement).to.equal(defaultInput);
+        expect(textField.inputElement).to.equal(defaultInput);
       });
 
       it('should set value to the default input', () => {
@@ -127,9 +127,9 @@
         input.setAttribute('slot', 'input');
       });
 
-      it('should set focusElement to the slotted input', () => {
+      it('should set inputElement to the slotted input', () => {
         textField.appendChild(input);
-        expect(textField.focusElement).to.equal(input);
+        expect(textField.inputElement).to.equal(input);
       });
 
       it('should set value to the slotted input', () => {

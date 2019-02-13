@@ -312,13 +312,20 @@ This program is available under Apache License Version 2.0, available at https:/
       return this.shadowRoot.querySelector('[part="value"]');
     }
 
+    /**
+     * @private
+     */
+    get inputElement() {
+      return this.focusElement;
+    }
+
     get _slottedTagName() {
       return 'input';
     }
 
     _onInput(e) {
       if (this.preventInvalidInput) {
-        const input = this.focusElement;
+        const input = this.inputElement;
         if (input.value.length > 0 && !this.checkValidity()) {
           input.value = this.value || '';
           // add input-prevented attribute for 200ms
@@ -382,9 +389,9 @@ This program is available under Apache License Version 2.0, available at https:/
         this.__userInput = false;
         return;
       } else if (newVal !== undefined) {
-        this.focusElement.value = newVal;
+        this.inputElement.value = newVal;
       } else {
-        this.value = this.focusElement.value = '';
+        this.value = this.inputElement.value = '';
       }
 
       if (this.invalid) {
@@ -404,7 +411,7 @@ This program is available under Apache License Version 2.0, available at https:/
       const slotted = this.querySelector(`${this._slottedTagName}[slot="${this._slottedTagName}"]`);
 
       if (this.value) {
-        this.focusElement.value = this.value;
+        this.inputElement.value = this.value;
         this.validate();
       }
 
@@ -439,7 +446,7 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _propagateHostAttributes(attributesValues, type) {
-      const input = this.focusElement;
+      const input = this.inputElement;
       const attributeNames = HOST_PROPS[type];
 
       if (type === 'accessible') {
@@ -474,7 +481,7 @@ This program is available under Apache License Version 2.0, available at https:/
      */
     checkValidity() {
       if (this.required || this.pattern || this.maxlength || this.minlength) {
-        return this.focusElement.checkValidity();
+        return this.inputElement.checkValidity();
       } else {
         return !this.invalid;
       }
@@ -543,20 +550,20 @@ This program is available under Apache License Version 2.0, available at https:/
 
     _onFocus() {
       if (this.autoselect) {
-        this.focusElement.select();
+        this.inputElement.select();
         // iOS 9 workaround: https://stackoverflow.com/a/7436574
         setTimeout(() => {
-          this.focusElement.setSelectionRange(0, 9999);
+          this.inputElement.setSelectionRange(0, 9999);
         });
       }
     }
 
     _onClearButtonClick(e) {
       // NOTE(yuriy): This line won't affect focus on the host. Cannot be properly tested.
-      this.focusElement.focus();
+      this.inputElement.focus();
       this.clear();
       this._valueClearing = false;
-      this.focusElement.dispatchEvent(new Event('change', {bubbles: !this._slottedInput}));
+      this.inputElement.dispatchEvent(new Event('change', {bubbles: !this._slottedInput}));
     }
 
     _onKeyDown(e) {
@@ -574,7 +581,7 @@ This program is available under Apache License Version 2.0, available at https:/
         // https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/101220/
         this._prevent = e => {
           e.stopImmediatePropagation();
-          this.focusElement.removeEventListener('input', this._prevent);
+          this.inputElement.removeEventListener('input', this._prevent);
         };
         this._shouldPreventInput = () => this.placeholder && node.addEventListener('input', this._prevent);
         node.addEventListener('focusin', this._shouldPreventInput);
@@ -594,13 +601,13 @@ This program is available under Apache License Version 2.0, available at https:/
     _getActiveErrorId(invalid, errorMessage, errorId) {
       this._setOrToggleAttribute('aria-describedby',
         (errorMessage && invalid ? errorId : undefined),
-        this.focusElement);
+        this.inputElement);
     }
 
     _getActiveLabelId(label, labelId) {
       this._setOrToggleAttribute('aria-labelledby',
         (label ? labelId : undefined),
-        this.focusElement);
+        this.inputElement);
     }
 
     _getErrorMessageAriaHidden(invalid, errorMessage, errorId) {

@@ -39,8 +39,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
       ready() {
         super.ready();
-        this.focusElement.type = 'email';
-        this.focusElement.autocapitalize = 'off';
+        this.inputElement.type = 'email';
+        this.inputElement.autocapitalize = 'off';
         this.pattern = '^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$';
       }
     }

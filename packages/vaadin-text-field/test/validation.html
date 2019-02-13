@@ -76,7 +76,7 @@
           beforeEach(function() {
             iform = fixture(`${el}-default${fixtureName}`);
             tf = iform.querySelector(el);
-            input = tf.focusElement;
+            input = tf.inputElement;
           });
 
           it('should call validate', function(done) {
