@@ -731,6 +731,24 @@
               expect(pages).to.contain(1);
             });
           });
+
+          describe('after empty data set loaded', () => {
+
+            const emptyDataProvider = sinon.spy((params, callback) => callback([], 0));
+
+            beforeEach(() => {
+              comboBox.dataProvider = emptyDataProvider;
+              comboBox.open();
+              comboBox.close();
+              emptyDataProvider.reset();
+            });
+
+            it('should request first page on open', () => {
+              comboBox.clearCache();
+              comboBox.open();
+              expect(emptyDataProvider).to.be.calledOnce;
+            });
+          });
         });
       };
 

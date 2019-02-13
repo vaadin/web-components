@@ -112,7 +112,8 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _shouldLoadPage(page) {
-      if (!this.filteredItems) {
+      if (!this.filteredItems || this._forceNextRequest) {
+        this._forceNextRequest = false;
         return true;
       }
 
@@ -181,6 +182,8 @@ This program is available under Apache License Version 2.0, available at https:/
       this.filteredItems = filteredItems;
       if (this.opened) {
         this._loadPage(0);
+      } else {
+        this._forceNextRequest = true;
       }
     }
 
