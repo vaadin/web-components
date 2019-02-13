@@ -159,7 +159,8 @@ This program is available under Apache License Version 2.0, available at https:/
          */
         itemLabelPath: {
           type: String,
-          value: 'label'
+          value: 'label',
+          observer: '_itemLabelPathChanged'
         },
 
         /**
@@ -220,7 +221,7 @@ This program is available under Apache License Version 2.0, available at https:/
         '_filteredItemsChanged(filteredItems.*, itemValuePath, itemLabelPath)',
         '_templateOrRendererChanged(_itemTemplate, renderer)',
         '_loadingChanged(loading)',
-        '_selectedItemChanged(selectedItem)',
+        '_selectedItemChanged(selectedItem, itemLabelPath)',
         '_toggleElementChanged(_toggleElement)'
       ];
     }
@@ -398,7 +399,7 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _getItemValue(item) {
-      let value = item ? this.get(this.itemValuePath, item) : undefined;
+      let value = item && this.itemValuePath ? this.get(this.itemValuePath, item) : undefined;
       if (value === undefined) {
         value = item ? item.toString() : '';
       }
@@ -623,8 +624,14 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    _itemLabelPathChanged(itemLabelPath, oldItemLabelPath) {
+      if (typeof itemLabelPath !== 'string') {
+        console.error('You should set itemLabelPath to a valid string');
+      }
+    }
+
     _filterChanged(filter, itemValuePath, itemLabelPath) {
-      if (filter === undefined || itemValuePath === undefined || itemLabelPath === undefined) {
+      if (filter === undefined) {
         return;
       }
       if (this.items) {
@@ -672,7 +679,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
-    _selectedItemChanged(selectedItem) {
+    _selectedItemChanged(selectedItem, itemLabelPath) {
       if (selectedItem === null || selectedItem === undefined) {
         if (this.filteredItems) {
           if (!this.allowCustomValue) {
@@ -742,7 +749,7 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _itemsOrPathsChanged(e, itemValuePath, itemLabelPath) {
-      if (e.value === undefined || itemValuePath === undefined || itemLabelPath === undefined) {
+      if (e.value === undefined) {
         return;
       }
       if (e.path === 'items' || e.path === 'items.splices') {
@@ -759,7 +766,7 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _filteredItemsChanged(e, itemValuePath, itemLabelPath) {
-      if (e.value === undefined || itemValuePath === undefined || itemLabelPath === undefined) {
+      if (e.value === undefined) {
         return;
       }
       if (e.path === 'filteredItems' || e.path === 'filteredItems.splices') {

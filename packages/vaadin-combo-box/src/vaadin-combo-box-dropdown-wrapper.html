@@ -42,7 +42,7 @@ This program is available under Apache License Version 2.0, available at https:/
                   on-click="_onItemClick"
                   index="[[__requestItemByIndex(item, index)]]"
                   item="[[item]]"
-                  label="[[getItemLabel(item)]]"
+                  label="[[getItemLabel(item, _itemLabelPath)]]"
                   selected="[[_isItemSelected(item, _selectedItem, _itemIdPath)]]"
                   renderer="[[renderer]]"
                   role$="[[_getAriaRole(index)]]"
@@ -327,8 +327,9 @@ This program is available under Apache License Version 2.0, available at https:/
        * Gets the label string for the item based on the `_itemLabelPath`.
        * @return {String}
        */
-      getItemLabel(item) {
-        let label = item ? this.get(this._itemLabelPath, item) : undefined;
+      getItemLabel(item, itemLabelPath) {
+        itemLabelPath = itemLabelPath || this._itemLabelPath;
+        let label = item && itemLabelPath ? this.get(itemLabelPath, item) : undefined;
         if (label === undefined || label === null) {
           label = item ? item.toString() : '';
         }
