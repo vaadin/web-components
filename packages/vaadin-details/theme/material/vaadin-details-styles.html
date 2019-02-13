@@ -55,14 +55,14 @@
         color: var(--material-secondary-text-color);
         line-height: 24px;
         text-align: center;
+        transform: rotate(90deg);
+        transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 0.1);
       }
 
       [part="toggle"]::before {
         font-family: "material-icons";
         font-size: 24px;
         width: 24px;
-        transform: rotate(90deg);
-        transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 0.1);
         display: inline-block;
         content: var(--material-icons-chevron-right);
       }
@@ -94,8 +94,7 @@
         opacity: 0.15;
       }
 
-      :host([opened]) [part="toggle"]::before {
-        content: var(--material-icons-chevron-right);
+      :host([opened]) [part="toggle"] {
         transform: rotate(270deg);
       }
 
