@@ -153,9 +153,11 @@ This program is available under Apache License Version 2.0, available at https:/
      * cell content that handles the scroll delta
      */
     _hasScrolledAncestor(el, deltaX, deltaY) {
-      if (this._canScroll(el, deltaX, deltaY)) {
+      if (el.localName === 'vaadin-grid-cell-content') {
+        return false;
+      } else if (this._canScroll(el, deltaX, deltaY)) {
         return true;
-      } else if (el.localName !== 'vaadin-grid-cell-content' && el !== this && el.parentElement) {
+      } else if (el !== this && el.parentElement) {
         return this._hasScrolledAncestor(el.parentElement, deltaX, deltaY);
       }
     }

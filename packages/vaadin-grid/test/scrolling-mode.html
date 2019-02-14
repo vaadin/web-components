@@ -186,13 +186,6 @@
         grid.$.table.scrollLeft = 1;
       });
 
-      it('should avoid jumpy headers on Edge while wheel scrolling', () => {
-        grid._edge = true;
-        expect(window.getComputedStyle(grid.$.table).zIndex).not.to.equal('auto');
-        wheel(grid, 0, 0);
-        expect(window.getComputedStyle(grid.$.table).zIndex).to.equal('auto');
-      });
-
       it('should not sync outer scroller on IOS', done => {
         grid._ios = true;
         const spy = sinon.spy(grid.$.outerscroller, 'syncOuterScroller');
