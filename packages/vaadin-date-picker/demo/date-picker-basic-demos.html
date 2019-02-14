@@ -44,16 +44,20 @@
 
 
     <h3>Date range</h3>
-    <p>Use two date pickers to create a date range selector.</p>
+    <p>Wrap two date pickers in <a href="https://vaadin.com/components/vaadin-custom-field"><code>&lt;vaadin-custom-field&gt;</code></a> to create a date range selector.</p>
     <vaadin-demo-snippet id="date-picker-basic-demos-date-range" when-defined="vaadin-date-picker">
       <template preserve-content>
-        <vaadin-date-picker id="start" label="Start"></vaadin-date-picker>
-        <vaadin-date-picker id="end" label="End"></vaadin-date-picker>
-
+        <vaadin-custom-field label="Date range">
+          <vaadin-date-picker id="start"></vaadin-date-picker>
+          <vaadin-date-picker id="end"></vaadin-date-picker>
+        </vaadin-custom-field>
+        <p>Selected range: <span></span></p>
         <script>
           window.addDemoReadyListener('#date-picker-basic-demos-date-range', function(document) {
-            var start = document.querySelector('#start');
-            var end = document.querySelector('#end');
+            const start = document.querySelector('#start');
+            const end = document.querySelector('#end');
+            const span = document.querySelector('span');
+            const dateRange = document.querySelector('vaadin-custom-field');
 
             start.addEventListener('change', function() {
               end.min = start.value;
@@ -66,6 +70,10 @@
 
             end.addEventListener('change', function() {
               start.max = end.value;
+            });
+
+            dateRange.addEventListener('change', function() {
+              span.textContent = dateRange.value.trim().replace(/\t/, ' - ');
             });
           });
         </script>
