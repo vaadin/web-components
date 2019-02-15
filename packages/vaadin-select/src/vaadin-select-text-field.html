@@ -28,6 +28,11 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       static get template() {
+        // Check if text-field is using slotted input
+        if (super.template.content.querySelector('slot[name="input"]')) {
+          return super.template;
+        }
+
         if (!memoizedTemplate) {
           // Clone the superclass template
           memoizedTemplate = super.template.cloneNode(true);
@@ -47,6 +52,10 @@ This program is available under Apache License Version 2.0, available at https:/
 
       get focusElement() {
         return this.shadowRoot.querySelector('[part=input-field]');
+      }
+
+      get inputElement() {
+        return this.shadowRoot.querySelector('input');
       }
     }
 

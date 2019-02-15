@@ -286,17 +286,11 @@
         expect(select.localName).to.be.equal('vaadin-select');
       });
 
-      it('should have a modified template with a slot for value', () => {
-        const modifiedTemplate = select._inputElement.constructor.template;
-        expect(modifiedTemplate.content.querySelector('slot[name="value"]')).to.be.ok;
-      });
-
-      it('should wrap native input in the value slot in a modified template', () => {
-        const modifiedTemplate = select._inputElement.constructor.template;
-        const slot = modifiedTemplate.content.querySelector('slot[name="value"]');
-        const nativeInput = modifiedTemplate.content.querySelector('input');
-        expect(nativeInput.getAttribute('part')).to.equal('value');
-        expect(slot.firstElementChild).to.equal(nativeInput);
+      it('should have a slot for value in a template', () => {
+        const template = select._inputElement.constructor.template;
+        const slotExists = template.content.querySelector('slot[name="input"]') ||
+                           template.content.querySelector('slot[name="value"]');
+        expect(slotExists).to.be.ok;
       });
 
       describe('selection', () => {
@@ -666,7 +660,8 @@
 
         it('Should hide native input when a item is selected, and it has content', () => {
           menu.selected = 2;
-          expect(select._valueElement.slot).to.equal('value');
+          const slotExists = select._valueElement.slot === 'input' || select._valueElement.slot === 'value';
+          expect(slotExists).to.be.true;
         });
 
         it('Should toggle native native input visibility when the content of the selected item is empty', () => {

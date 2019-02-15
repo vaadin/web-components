@@ -566,8 +566,11 @@ This program is available under Apache License Version 2.0, available at https:/
 
           const hasContent = this._hasContent(selected);
 
+          // Check if text-field is using slotted input
+          const slotName = this._inputElement.shadowRoot.querySelector('slot[name="input"]') ? 'input' : 'value';
+
           // Toggle visibility of _valueElement vs fallback input with placeholder
-          this._valueElement.slot = hasContent ? 'value' : '';
+          this._valueElement.slot = hasContent ? slotName : '';
 
           // Ensure the slot distribution to apply correct style scope for cloned item
           if (hasContent && window.ShadyDOM) {
