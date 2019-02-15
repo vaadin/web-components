@@ -39,13 +39,19 @@ gemini.suite('vaadin-checkbox', function(rootSuite) {
         .capture('default');
     });
 
+    gemini.suite(`disabled-group-tests-${theme}`, (suite) => {
+      suite
+        .setUrl(`default.html?theme=${theme}`)
+        .setCaptureElements('#disabled-group-tests')
+        .capture('default');
+    });
+
     gemini.suite(`validation-tests-${theme}`, function(suite) {
       suite
         .setUrl(`default.html?theme=${theme}`)
         .setCaptureElements('#validation-tests')
         .capture('error');
     });
-
   });
 
 });

@@ -28,6 +28,11 @@
       [part="label"] {
         padding-bottom: 0.7em;
       }
+
+      :host([disabled]) [part="label"] {
+        color: var(--lumo-disabled-text-color);
+        -webkit-text-fill-color: var(--lumo-disabled-text-color);
+      }
     </style>
   </template>
 </dom-module>
