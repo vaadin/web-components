@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-select",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "vaadin-select",
   "main": "vaadin-select.html",
   "repository": "vaadin/vaadin-select",
