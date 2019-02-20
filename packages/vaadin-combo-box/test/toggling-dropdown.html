@@ -354,26 +354,21 @@
       });
     });
 
-    describe('lazy attach dropdown', () => {
+    describe('lazy upgrade dropdown', () => {
 
       const getDropdown = () => combobox.$.overlay.shadowRoot.querySelector('vaadin-combo-box-dropdown');
 
-      it('should not attach dropdown initially', () => {
-        expect(getDropdown()).not.to.exist;
+      it('should have disable-upgrade attribute initially', () => {
+        const dropdown = getDropdown();
+        expect(dropdown.hasAttribute('disable-upgrade')).to.be.true;
+        expect(dropdown.$).to.be.not.ok;
       });
 
-      it('should attach dropdown on open', () => {
-        combobox.open();
-        expect(getDropdown()).to.exist;
-      });
-
-      it('should not re-create dropdown', () => {
+      it('should remove disable-upgrade attribute on open', () => {
         combobox.open();
         const dropdown = getDropdown();
-        combobox.close();
-        expect(getDropdown()).to.equal(dropdown);
-        combobox.open();
-        expect(getDropdown()).to.equal(dropdown);
+        expect(dropdown.hasAttribute('disable-upgrade')).to.be.false;
+        expect(dropdown.$).to.be.ok;
       });
     });
   });

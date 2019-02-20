@@ -12,51 +12,50 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <dom-module id="vaadin-combo-box-dropdown-wrapper">
   <template>
-    <!-- Stamping the content is postponed until the combo box is opened for the first time -->
-    <template id="dropdown-template" is="dom-if">
-      <vaadin-combo-box-dropdown id="dropdown"
-          hidden="[[_hidden(_items.*, loading)]]"
-          position-target="[[positionTarget]]"
-          on-template-changed="_templateChanged"
-          on-position-changed="_setOverlayHeight"
-          theme="[[theme]]">
-        <template>
-          <style>
-            #scroller {
-              overflow: auto;
+    <vaadin-combo-box-dropdown id="dropdown"
+        hidden="[[_hidden(_items.*, loading)]]"
+        position-target="[[positionTarget]]"
+        on-template-changed="_templateChanged"
+        on-position-changed="_setOverlayHeight"
+        disable-upgrade
+        theme="[[theme]]">
+      <template>
+        <style>
+          #scroller {
+            overflow: auto;
 
-              /* Fixes item background from getting on top of scrollbars on Safari */
-              transform: translate3d(0, 0, 0);
+            /* Fixes item background from getting on top of scrollbars on Safari */
+            transform: translate3d(0, 0, 0);
 
-              /* Enable momentum scrolling on iOS (iron-list v1.2+ no longer does it for us) */
-              -webkit-overflow-scrolling: touch;
+            /* Enable momentum scrolling on iOS (iron-list v1.2+ no longer does it for us) */
+            -webkit-overflow-scrolling: touch;
 
-              /* Fixes scrollbar disappearing when 'Show scroll bars: Always' enabled in Safari */
-              box-shadow: 0 0 0 white;
-            }
-          </style>
-          <div id="scroller" on-click="_stopPropagation">
-            <iron-list id="selector" role="listbox" items="[[_getItems(opened, _items)]]" scroll-target="[[_scroller]]">
-              <template>
-                <vaadin-combo-box-item
-                  on-click="_onItemClick"
-                  index="[[__requestItemByIndex(item, index)]]"
-                  item="[[item]]"
-                  label="[[getItemLabel(item, _itemLabelPath)]]"
-                  selected="[[_isItemSelected(item, _selectedItem, _itemIdPath)]]"
-                  renderer="[[renderer]]"
-                  role$="[[_getAriaRole(index)]]"
-                  aria-selected$="[[_getAriaSelected(_focusedIndex,index)]]"
-                  focused="[[_isItemFocused(_focusedIndex,index)]]"
-                  tabindex="-1"
-                  theme$="[[theme]]">
-                </vaadin-combo-box-item>
-              </template>
-            </iron-list>
-          </div>
-        </template>
-      </vaadin-combo-box-dropdown>
-    </template>
+            /* Fixes scrollbar disappearing when 'Show scroll bars: Always' enabled in Safari */
+            box-shadow: 0 0 0 white;
+          }
+        </style>
+        <div id="scroller" on-click="_stopPropagation">
+          <iron-list id="selector" role="listbox" items="[[_getItems(opened, _items)]]" scroll-target="[[_scroller]]">
+            <template>
+              <vaadin-combo-box-item
+                on-click="_onItemClick"
+                index="[[__requestItemByIndex(item, index)]]"
+                item="[[item]]"
+                label="[[getItemLabel(item, _itemLabelPath)]]"
+                selected="[[_isItemSelected(item, _selectedItem, _itemIdPath)]]"
+                renderer="[[renderer]]"
+                role$="[[_getAriaRole(index)]]"
+                aria-selected$="[[_getAriaSelected(_focusedIndex,index)]]"
+                focused="[[_isItemFocused(_focusedIndex,index)]]"
+                tabindex="-1"
+                theme$="[[theme]]">
+              </vaadin-combo-box-item>
+            </template>
+          </iron-list>
+        </div>
+      </template>
+    </vaadin-combo-box-dropdown>
+
   </template>
 </dom-module>
 
@@ -173,7 +172,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       _openedChanged(opened, items, loading) {
-        if (!this.$.dropdown) {
+        if (this.$.dropdown.hasAttribute('disable-upgrade')) {
           if (!opened) {
             return;
           } else {
@@ -186,11 +185,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       _initDropdown() {
-        const template = this.shadowRoot.querySelector('#dropdown-template');
-        template.if = true;
-        template.render();
-
-        this.$.dropdown = this.shadowRoot.querySelector('#dropdown');
+        this.$.dropdown.removeAttribute('disable-upgrade');
 
         this._templateChanged();
         this._loadingChanged(this.loading);
@@ -210,7 +205,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       _templateChanged(e) {
-        if (!this.$.dropdown) {
+        if (this.$.dropdown.hasAttribute('disable-upgrade')) {
           return;
         }
 
@@ -219,7 +214,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       _loadingChanged(loading) {
-        if (!this.$.dropdown) {
+        if (this.$.dropdown.hasAttribute('disable-upgrade')) {
           return;
         }
 
