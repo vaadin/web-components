@@ -39,19 +39,30 @@
       let hasThemes = false;
       const defaultModuleName = this.is + '-default-theme';
 
-      Object.keys(modules).forEach(moduleName => {
-        if (moduleName !== defaultModuleName) {
-          const themeFor = modules[moduleName].getAttribute('theme-for');
-          if (themeFor) {
-            themeFor.split(' ').forEach(themeForToken => {
-              if (new RegExp('^' + themeForToken.split('*').join('.*') + '$').test(this.is)) {
-                hasThemes = true;
-                this._includeStyle(moduleName, template);
-              }
-            });
+      Object.keys(modules)
+        .sort((moduleNameA, moduleNameB) => {
+          const vaadinA = moduleNameA.indexOf('vaadin-') === 0;
+          const vaadinB = moduleNameB.indexOf('vaadin-') === 0;
+
+          if (vaadinA !== vaadinB) {
+            return vaadinA ? -1 : 1;
+          } else {
+            return 0;
           }
-        }
-      });
+        })
+        .forEach(moduleName => {
+          if (moduleName !== defaultModuleName) {
+            const themeFor = modules[moduleName].getAttribute('theme-for');
+            if (themeFor) {
+              themeFor.split(' ').forEach(themeForToken => {
+                if (new RegExp('^' + themeForToken.split('*').join('.*') + '$').test(this.is)) {
+                  hasThemes = true;
+                  this._includeStyle(moduleName, template);
+                }
+              });
+            }
+          }
+        });
 
       if (!hasThemes && modules[defaultModuleName]) {
         // No theme modules found, include the default module if it exists

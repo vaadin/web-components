@@ -46,6 +46,12 @@
       </template>
     </dom-module>
 
+    <dom-module id="test-style-override">
+      <template>
+        <div part="text" id="text">text</div>
+      </template>
+    </dom-module>
+
 
   </div>
 
@@ -96,6 +102,13 @@
       }
     }
     customElements.define(TestNoTemplate.is, TestNoTemplate);
+
+    class TestStyleOverride extends Vaadin.ThemableMixin(Polymer.Element) {
+      static get is() {
+        return 'test-style-override';
+      }
+    }
+    customElements.define(TestStyleOverride.is, TestStyleOverride);
   });
   </script>
 
@@ -167,6 +180,54 @@
         </style>
       </template>
     </dom-module>
+
+    <dom-module id="custom-test-style-override-styles-first" theme-for="test-style-override">
+      <template>
+        <style>
+          :host {
+            position: absolute;
+          }
+
+          [part="text"] {
+            color: rgb(0, 0, 0);
+          }
+        </style>
+      </template>
+    </dom-module>
+
+    <dom-module id="custom-test-style-override-styles-second" theme-for="test-style-override">
+      <template>
+        <style>
+          :host {
+            position: relative;
+          }
+        </style>
+      </template>
+    </dom-module>
+
+    <dom-module id="vaadin-test-style-override-styles-first" theme-for="test-style-override">
+      <template>
+        <style>
+          :host {
+            display: flex;
+          }
+        </style>
+      </template>
+    </dom-module>
+
+    <dom-module id="vaadin-test-style-override-styles-second" theme-for="test-style-override">
+      <template>
+        <style>
+          :host {
+            display: block;
+          }
+
+          [part="text"] {
+            color: rgb(255, 255, 255);
+          }
+        </style>
+      </template>
+    </dom-module>
   </div>
 
   <test-fixture id="default">
@@ -177,6 +238,7 @@
       <test-qux></test-qux>
       <test-own-template></test-own-template>
       <test-no-template></test-no-template>
+      <test-style-override></test-style-override>
     </template>
   </test-fixture>
 
@@ -240,6 +302,18 @@
 
       it('should not inherit parent themes to own custom template', function() {
         expect(window.getComputedStyle(components[4].$.text).backgroundColor).not.to.equal('rgb(255, 0, 0)');
+      });
+
+      it('should override vaadin module styles', function() {
+        expect(window.getComputedStyle(components[6].$.text).color).to.equal('rgb(0, 0, 0)');
+      });
+
+      it('should respect vaadin style module order', function() {
+        expect(window.getComputedStyle(components[6]).display).to.equal('block');
+      });
+
+      it('should respect custom style module order', function() {
+        expect(window.getComputedStyle(components[6]).position).to.equal('relative');
       });
 
     });
