@@ -548,8 +548,12 @@ This program is available under Apache License Version 2.0, available at https:/
 
       // Ensure metrics are up-to-date
       this.$.overlay.updateViewportBoundaries();
-      Polymer.Async.microTask.run(() => this.$.overlay.adjustScrollPosition());
+      // Force iron-list to create reusable nodes. Otherwise it will only start
+      // doing that in scroll listener, which is especially slow in Edge.
+      this.$.overlay._selector._increasePoolIfNeeded();
       setTimeout(() => this._resizeDropdown(), 1);
+      // Defer scroll position adjustment to prevent freeze in Edge
+      window.requestAnimationFrame(() => this.$.overlay.adjustScrollPosition());
 
 
       // _detectAndDispatchChange() should not consider value changes done before opening

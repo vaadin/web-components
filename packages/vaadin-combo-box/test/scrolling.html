@@ -85,10 +85,10 @@
           combobox.value = combobox.items[50];
           combobox.open();
 
-          setTimeout(() => {
+          onceScrolled(combobox.$.overlay._scroller).then(() => {
             expectSelectedItemPositionToBeVisible();
             done();
-          }, 1);
+          });
         });
 
         it('should make selected item visible after reopen', done => {

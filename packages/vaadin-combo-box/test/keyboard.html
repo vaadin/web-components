@@ -530,7 +530,7 @@
 
         comboBox.open();
 
-        setTimeout(() => {
+        onceScrolled(comboBox.$.overlay._scroller).then(() => {
           expect(selector.firstVisibleIndex).to.be.within(50 - comboBox.$.overlay._visibleItemsCount(), 50);
           done();
         });

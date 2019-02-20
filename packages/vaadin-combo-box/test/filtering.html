@@ -125,9 +125,11 @@
         setInputValue('b');
 
         // first scroll after open is async
-        setTimeout(() => {
-          expect(spy.callCount).to.eql(1); // scrolls once on open
-          done();
+        window.requestAnimationFrame(() => {
+          setTimeout(() => {
+            expect(spy.callCount).to.eql(1); // scrolls once on open
+            done();
+          }, 1);
         });
       });
 

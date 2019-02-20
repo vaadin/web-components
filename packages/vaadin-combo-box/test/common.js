@@ -34,6 +34,18 @@ var fireMousedownMouseupClick = (node) => {
   fire('click', node);
 };
 
+var onceScrolled = (scroller) => {
+  return new Promise(resolve => {
+    const listener = () => {
+      scroller.removeEventListener('scroll', listener);
+      setTimeout(() => {
+        resolve();
+      });
+    };
+    scroller.addEventListener('scroll', listener);
+  });
+};
+
 var describeSkipIf = (bool, title, callback) => {
   bool = typeof bool == 'function' ? bool() : bool;
   if (bool) {
