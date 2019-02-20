@@ -24,12 +24,12 @@
         <vaadin-text-field name="username" label="[[i18n.form.username]]"
             id="vaadinLoginUsername" required on-keydown="_handleInputKeydown"
             autocapitalize="none" autocorrect="off" spellcheck="false">
-          <input type="text" slot="input">
+          <input type="text" slot="input" on-keyup="_handleInputKeyup">
         </vaadin-text-field>
 
         <vaadin-password-field name="password" label="[[i18n.form.password]]" id="vaadinLoginPassword" required on-keydown="_handleInputKeydown"
             spellcheck="false">
-          <input type="password" slot="input">
+          <input type="password" slot="input" on-keyup="_handleInputKeyup">
         </vaadin-password-field>
 
         <vaadin-button part="vaadin-login-submit" theme="primary contained" on-click="submit" disabled$="[[disabled]]">[[i18n.form.submit]]</vaadin-button>
@@ -146,6 +146,16 @@
                 nextInput.focus();
               }
             }
+          }
+        }
+
+        _handleInputKeyup(e) {
+          const isTab = e.key === 'Tab' || e.keyCode === 9;
+          const input = e.currentTarget;
+          if (isTab && input && input.select) {
+            input.select();
+            // iOS 9 workaround: https://stackoverflow.com/a/7436574
+            setTimeout(() => input.setSelectionRange(0, 9999));
           }
         }
 

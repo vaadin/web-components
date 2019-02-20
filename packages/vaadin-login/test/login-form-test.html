@@ -7,6 +7,7 @@
   <script src="../../web-component-tester/browser.js"></script>
   <link rel="import" href="../vaadin-login-overlay.html">
   <link rel="import" href="../src/vaadin-login-form.html">
+  <link rel="import" href="../../iron-test-helpers/mock-interactions.html">
 </head>
 
 <body>
@@ -66,6 +67,16 @@
         }
       }
 
+      function testTab(done, element) {
+        const input = element.querySelector('input');
+        MockInteractions.keyUpOn(input, 9, [], 'Tab');
+        setTimeout(() => {
+          const selected = input.selectionEnd - input.selectionStart == input.value.length;
+          expect(selected).to.be.true;
+          done();
+        }, 1);
+      }
+
       it('should submit form values from login element', done => {
         [login, iframe] = fixture('default');
         testFormSubmitValues(false, true, done);
@@ -80,6 +91,18 @@
       it('should not submit form if action is defined and event was default prevented', done => {
         [login, iframe] = fixture('default');
         testFormSubmitValues(true, false, done);
+      });
+
+      it('should select username field on tab navigation', done => {
+        [login, iframe] = fixture('default');
+        const {vaadinLoginUsername} = fillUsernameAndPassword();
+        testTab(done, vaadinLoginUsername);
+      });
+
+      it('should select password field on tab navigation', done => {
+        [login, iframe] = fixture('default');
+        const {vaadinLoginPassword} = fillUsernameAndPassword();
+        testTab(done, vaadinLoginPassword);
       });
     });
   </script>
