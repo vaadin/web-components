@@ -234,6 +234,28 @@
           const instance = document.createElement('test-listeners');
           instance.ready();
         });
+
+        it('should use a fake focus element on tab (firefox)', () => {
+          // Test the workaround for FF63-65 bug that causes the focus to get lost when
+          // blurring a slotted component with focusable shadow root content
+          // https://bugzilla.mozilla.org/show_bug.cgi?id=1528686
+          // TODO: Remove when safe
+          customElement.tabIndex = 2;
+          const shouldWorkaround = window.navigator.userAgent.indexOf('Firefox/63') > -1
+          || window.navigator.userAgent.indexOf('Firefox/64') > -1
+          || window.navigator.userAgent.indexOf('Firefox/65') > -1;
+
+          MockInteractions.keyDownOn(customElement, 9);
+          const fakeTarget = customElement.nextSibling;
+
+          expect(fakeTarget.localName === 'input').to.equal(!!shouldWorkaround);
+          if (shouldWorkaround) {
+            expect(fakeTarget.tabIndex).to.equal(2);
+            expect(fakeTarget.parentNode).to.be.ok;
+            fakeTarget.dispatchEvent(new CustomEvent('focusout'));
+            expect(fakeTarget.parentNode).not.to.be.ok;
+          }
+        });
       });
 
       describe('disabled', () => {
