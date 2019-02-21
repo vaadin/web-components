@@ -506,7 +506,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
       this._boundOnInput = this._onInput.bind(this);
       this._boundOnChange = this._onChange.bind(this);
-      this._boundOnBlur = this.validate.bind(this);
+      this._boundOnBlur = this._onBlur.bind(this);
       this._boundOnFocus = this._onFocus.bind(this);
 
       const defaultInput = this.shadowRoot.querySelector('[part="value"]');
@@ -546,6 +546,10 @@ This program is available under Apache License Version 2.0, available at https:/
 
     clear() {
       this.value = '';
+    }
+
+    _onBlur() {
+      this.validate();
     }
 
     _onFocus() {
