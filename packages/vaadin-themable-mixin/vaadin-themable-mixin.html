@@ -44,9 +44,18 @@
           const vaadinA = moduleNameA.indexOf('vaadin-') === 0;
           const vaadinB = moduleNameB.indexOf('vaadin-') === 0;
 
+          const vaadinThemePrefixes = ['lumo-', 'material-'];
+          const vaadinThemeA = vaadinThemePrefixes.filter(prefix => moduleNameA.indexOf(prefix) === 0).length > 0;
+          const vaadinThemeB = vaadinThemePrefixes.filter(prefix => moduleNameB.indexOf(prefix) === 0).length > 0;
+
           if (vaadinA !== vaadinB) {
+            // Include vaadin core styles first
             return vaadinA ? -1 : 1;
+          } else if (vaadinThemeA !== vaadinThemeB) {
+            // Include vaadin theme styles after that
+            return vaadinThemeA ? -1 : 1;
           } else {
+            // Lastly include custom styles so they override all vaadin styles
             return 0;
           }
         })

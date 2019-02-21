@@ -215,6 +215,28 @@
       </template>
     </dom-module>
 
+    <dom-module id="lumo-test-style-override-styles" theme-for="test-style-override">
+      <template>
+        <style>
+          [part="text"] {
+            color: rgb(255, 0, 0);
+            display: inline;
+          }
+        </style>
+      </template>
+    </dom-module>
+
+    <dom-module id="material-test-style-override-styles" theme-for="test-style-override">
+      <template>
+        <style>
+          [part="text"] {
+            color: rgb(0, 255, 0);
+            opacity: 0.5;
+          }
+        </style>
+      </template>
+    </dom-module>
+
     <dom-module id="vaadin-test-style-override-styles-second" theme-for="test-style-override">
       <template>
         <style>
@@ -224,6 +246,8 @@
 
           [part="text"] {
             color: rgb(255, 255, 255);
+            opacity: 1;
+            display: block;
           }
         </style>
       </template>
@@ -305,6 +329,22 @@
       });
 
       it('should override vaadin module styles', function() {
+        expect(window.getComputedStyle(components[6].$.text).color).to.equal('rgb(0, 0, 0)');
+      });
+
+      it('lumo should override vaadin module styles', function() {
+        expect(window.getComputedStyle(components[6].$.text).display).to.equal('inline');
+      });
+
+      it('material should override vaadin module styles', function() {
+        expect(window.getComputedStyle(components[6].$.text).opacity).to.equal('0.5');
+      });
+
+      it('should override lumo module styles', function() {
+        expect(window.getComputedStyle(components[6].$.text).color).to.equal('rgb(0, 0, 0)');
+      });
+
+      it('should override material module styles', function() {
         expect(window.getComputedStyle(components[6].$.text).color).to.equal('rgb(0, 0, 0)');
       });
 
