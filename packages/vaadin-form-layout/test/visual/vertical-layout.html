@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+  <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script>
+    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-form-layout.html">`);
+    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-form-item.html">`);
+  </script>
+  <link rel="import" href="../../../polymer/polymer-element.html">
+  <link rel="import" href="../../../vaadin-ordered-layout/vaadin-vertical-layout.html">
+  <script>
+    window.addEventListener('WebComponentsReady', function() {
+      setTimeout(function() {
+        window.ShadyDOM && window.ShadyDOM.flush(); // Force DOM composition
+        window.webComponentsAreReady = true; // Checked in gemini before capture callback
+      });
+    });
+  </script>
+</head>
+<body>
+
+  <h3>Vertical Layout Usage</h3>
+
+  <div id="capture">
+
+    <vaadin-vertical-layout>
+      
+      <vaadin-form-layout id="capture">
+
+        <vaadin-form-item>
+          <label slot="label">First Name</label>
+          <input class="full-width" value="Jane">
+        </vaadin-form-item>
+
+        <vaadin-form-item>
+          <label slot="label">Last Name</label>
+          <input class="full-width" value="Doe">
+        </vaadin-form-item>
+
+      </vaadin-form-layout>
+    
+    </vaadin-vertical-layout>
+
+    <vaadin-vertical-layout>
+      
+      <vaadin-form-layout id="capture">
+
+        <vaadin-form-item>
+          <label slot="label">First Name</label>
+          <input class="full-width" value="Jane">
+        </vaadin-form-item>
+
+        <vaadin-form-item>
+          <label slot="label">Last Name</label>
+          <input class="full-width" value="Doe">
+        </vaadin-form-item>
+
+        <vaadin-form-item>
+          <label slot="label">Email</label>
+          <input class="full-width" value="jane.doe@example.com">
+        </vaadin-form-item>
+      
+      </vaadin-form-layout>
+    
+    </vaadin-vertical-layout>
+
+  </div>
+</body>
+</html>

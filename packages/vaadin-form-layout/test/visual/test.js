@@ -43,7 +43,8 @@ gemini.suite('vaadin-form-layout', function(rootSuite) {
       'colspan',
       'br',
       'css-properties',
-      'styling'
+      'styling',
+      'vertical-layout'
     ].forEach(testName => {
       gemini.suite(`${testName}-${theme}`, function(suite) {
         suite
