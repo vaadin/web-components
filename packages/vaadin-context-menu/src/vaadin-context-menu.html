@@ -555,17 +555,12 @@ This program is available under Apache License Version 2.0, available at https:/
           ['top', 'right', 'bottom', 'left'].forEach(prop => style.removeProperty(prop));
           ['right-aligned', 'bottom-aligned'].forEach(attr => overlay.removeAttribute(attr));
 
-          // Measure actual overlay and content sizes
-          const overlayRect = overlay.getBoundingClientRect();
-          const contentRect = overlay.$.overlay.getBoundingClientRect();
-
           // Maximum x and y values are imposed by content size and overlay limits.
-          const xMax = overlayRect.right - contentRect.width;
-          const yMax = overlayRect.bottom - contentRect.height;
+          const {xMax, yMax, left, top} = overlay.getBoundaries();
           // Reuse saved x and y event values, in order to this method be used async
           // in the `vaadin-overlay-change` which guarantees that overlay is ready
-          const x = this.__x || overlayRect.left;
-          const y = this.__y || overlayRect.top;
+          const x = this.__x || left;
+          const y = this.__y || top;
 
           // Select one overlay corner and move to the event x/y position.
           // Then set styling attrs for flex-aligning the content appropriatelly.

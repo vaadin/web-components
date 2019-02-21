@@ -112,6 +112,22 @@
             const subItemRect = menuComponents(subMenu)[0].getBoundingClientRect();
             expect(subItemRect.right).to.be.below(rootItemRect.left);
           });
+
+          it('should open the subMenu on the top if root menu is bottom-aligned', done => {
+            subMenu.close();
+            const rootItemRect = menuComponents()[0].getBoundingClientRect();
+            rootMenu.$.overlay.style.removeProperty('top');
+            rootMenu.$.overlay.style.bottom = rootItemRect.height * 2 + 'px';
+            rootMenu.$.overlay.setAttribute('bottom-aligned', '');
+            open(menuComponents()[0]);
+
+            Polymer.RenderStatus.afterNextRender(subMenu, () => {
+              const rootMenuRect = rootMenu.$.overlay.getBoundingClientRect();
+              const subMenuRect = subMenu.$.overlay.getBoundingClientRect();
+              expect(subMenuRect.bottom).to.be.below(rootMenuRect.bottom);
+              done();
+            });
+          });
         }
 
         it('should clean up the old content on reopen', () => {

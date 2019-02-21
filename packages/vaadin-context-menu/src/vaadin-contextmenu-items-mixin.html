@@ -131,8 +131,14 @@
       const itemRect = itemElement.getBoundingClientRect();
 
       const content = subMenu.$.overlay.$.content;
-      const padding = getComputedStyle(content).paddingTop;
-      const y = itemRect.top - parseFloat(padding);
+      const style = getComputedStyle(content);
+      const parent = this.$.overlay;
+      const y = parent.hasAttribute('bottom-aligned') ?
+        itemRect.bottom + parseFloat(style.paddingBottom) :
+        itemRect.top - parseFloat(style.paddingTop);
+
+      // Store the reference to align based on parent overlay coordinates
+      subMenu.$.overlay._setParentOverlay(parent);
 
       let x;
       content.style.minWidth = '';
@@ -143,7 +149,7 @@
         // Open on the left side
         x = itemRect.left - itemRect.width;
         // Make sure there's no gaps between the menus
-        content.style.minWidth = this.$.overlay.$.content.clientWidth + 'px';
+        content.style.minWidth = parent.$.content.clientWidth + 'px';
       }
       x = Math.max(x, 0);
 
