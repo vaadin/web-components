@@ -38,8 +38,6 @@ This program is available under Apache License Version 2.0, available at https:/
       },
 
       touchstart: function(e) {
-        this._cancelTimer();
-
         this.info.sourceEvent = e;
         this.info.touchStartCoords = {
           x: e.changedTouches[0].clientX,

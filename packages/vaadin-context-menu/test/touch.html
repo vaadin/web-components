@@ -68,7 +68,7 @@
         menu.close();
       });
 
-      function makeSoloTouchEvent(type, xy, node) {
+      function makeSoloTouchEvent(type, xy, node, shiftKey = false) {
         xy = xy || middleOfNode(node);
         const touches = makeTouches([xy], node);
         const touchEventInit = {
@@ -86,6 +86,7 @@
           event[property] = touchEventInit[property];
         }
 
+        event.shiftKey = shiftKey;
         node.dispatchEvent(event);
         return event;
       }
@@ -161,6 +162,60 @@
           }, 1000);
         });
 
+        it('should not open when `touchend` was fired too early', done => {
+          const xy = middleOfNode(menu.listenOn);
+          makeSoloTouchEvent('touchstart', xy, target);
+
+          setTimeout(() => {
+            makeSoloTouchEvent('touchend', null, menu.listenOn);
+          }, 499);
+          // Timeout for dispatching `vaadin-contextmenu` is 500
+
+          setTimeout(() => {
+            expect(menu.opened).to.eql(false);
+            done();
+          }, 1000);
+        });
+
+        it('should not open when `touchstart` was dispatch with `shiftKey`', done => {
+          makeSoloTouchEvent('touchstart', null, target, true);
+
+          setTimeout(() => {
+            expect(menu.opened).to.eql(false);
+            done();
+          }, 1000);
+        });
+
+        it('should properly set `sourceEvent` on `contextmenu`', done => {
+          const ev = new CustomEvent('contextmenu', {bubbles: true});
+          menu.listenOn.addEventListener('vaadin-contextmenu', e => {
+            expect(e.detail.sourceEvent).to.eql(ev);
+            done();
+          });
+          target.dispatchEvent(ev);
+        });
+
+        it('should properly set `sourceEvent` on `touchstart`', done => {
+          const ev = makeSoloTouchEvent('touchstart', null, target);
+          menu.listenOn.addEventListener('vaadin-contextmenu', e => {
+            expect(e.detail.sourceEvent).to.eql(ev);
+            done();
+          });
+          target.dispatchEvent(ev);
+        });
+
+        it('should forward `preventDefault` to `sourceEvent`', done => {
+          const ev = makeSoloTouchEvent('touchstart', null, target);
+          menu.listenOn.addEventListener('vaadin-contextmenu', e => {
+            e.preventDefault();
+            setTimeout(() => {
+              expect(ev.defaultPrevented).to.be.true;
+              done();
+            });
+          });
+          target.dispatchEvent(ev);
+        });
+
         it('should not preventDefault on touch-end after normal tap', done => {
           makeSoloTouchEvent('touchstart', null, target);
 
@@ -208,11 +263,11 @@
 
         it('should not open when touch moving', done => {
           const xy = middleOfNode(menu.listenOn);
-          makeSoloTouchEvent('touchstart', xy, menu.listenOn);
+          makeSoloTouchEvent('touchstart', xy, target);
 
           setTimeout(() => {
             xy.x += 16; // threshold is 15px from start
-            makeSoloTouchEvent('touchmove', xy, menu.listenOn);
+            makeSoloTouchEvent('touchmove', xy, target);
           }, 100);
 
           setTimeout(() => {
