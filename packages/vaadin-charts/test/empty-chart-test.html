@@ -5,7 +5,6 @@
   <title>vaadin-chart tests</title>
   <script src="../../web-component-tester/browser.js"></script>
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-  <link rel="import" href="../../test-fixture/test-fixture.html">
   <link rel="import" href="../vaadin-chart.html">
 </head>
 
@@ -20,15 +19,19 @@
     describe('Empty chart', function() {
       var element;
 
-      beforeEach(function() {
+      beforeEach(function(done) {
         element = fixture('default');
+
+        setTimeout(function() {
+          done();
+        }, 50);
       });
 
       it('should be defined', function() {
         expect(element.constructor.is).to.be.equal(element.localName);
       });
 
-      it('should have no title', done => {
+      it('should have no title', (done) => {
         setTimeout(() => {
           const title = element.$.chart.querySelector('.highcharts-title');
           if (title) {

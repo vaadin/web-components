@@ -1,5 +1,6 @@
 window.VaadinChartsSuites = [
   'chart-in-grid-test.html',
+  'chart-in-layout-test.html',
   'custom-property-test.html',
   'empty-chart-test.html',
   'element-api-chart-test.html',

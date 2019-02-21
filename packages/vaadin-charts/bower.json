@@ -54,6 +54,7 @@
     "paper-button": "2.0.0",
     "vaadin-split-layout": "^4.1.0",
     "vaadin-icons": "^4.2.0",
-    "vaadin-button": "^2.1.0"
+    "vaadin-button": "^2.1.0",
+    "vaadin-ordered-layout": "^1.1.0"
   }
 }
