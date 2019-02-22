@@ -1024,10 +1024,10 @@ MAGI ADD END -->
         }
 
         /** @private */
-        disconnectedCalllback() {
-          super.disconnectedCalllback();
-          this.__mutationObserver.disconnect();
-          this._childObserver.disconnect();
+        disconnectedCallback() {
+          super.disconnectedCallback();
+          this.__mutationObserver && this.__mutationObserver.disconnect();
+          this._childObserver && this._childObserver.disconnect();
         }
 
         /**
