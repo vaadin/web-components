@@ -94,8 +94,14 @@ This program is available under Apache License Version 2.0, available at https:/
 <script>
   (function() {
     let overlayContentCounter = 0;
+    const overlayContentCache = {};
 
     const createOverlayContent = (cssText) => {
+      const is = overlayContentCache[cssText] || processOverlayStyles(cssText);
+      return document.createElement(is);
+    };
+
+    const processOverlayStyles = (cssText) => {
       overlayContentCounter++;
       const is = `vaadin-overlay-content-${overlayContentCounter}`;
 
@@ -130,7 +136,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
       customElements.define(klass.is, klass);
 
-      return document.createElement(is);
+      overlayContentCache[cssText] = is;
+      return is;
     };
 
     /**

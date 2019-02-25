@@ -198,6 +198,19 @@
             overlay.shadowRoot.querySelector('[part="overlay"]')
           )).to.not.equal('[part="overlay"]');
         });
+
+        it('should cache created overlay content tag name', done => {
+          const localStyles2 = document.createElement('local-styles');
+          document.body.appendChild(localStyles2);
+          const overlay2 = localStyles2.$.overlay;
+          overlay2.opened = true;
+          flush(() => {
+            expect(overlay2.$.content.tagName).to.equal(overlay.$.content.tagName);
+            overlay2.opened = false;
+            document.body.removeChild(localStyles2);
+            done();
+          });
+        });
       });
 
       if (window.ShadyCSS && !window.ShadyCSS.nativeShadow && !window.ShadyCSS.nativeCss) {
