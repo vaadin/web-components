@@ -324,6 +324,12 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _onInput(e) {
+      if (this.__preventInput) {
+        e.stopImmediatePropagation();
+        this.__preventInput = false;
+        return;
+      }
+
       if (this.preventInvalidInput) {
         const input = this.inputElement;
         if (input.value.length > 0 && !this.checkValidity()) {
@@ -583,11 +589,7 @@ This program is available under Apache License Version 2.0, available at https:/
         // - focus or blur, when placeholder attribute is set
         // - placeholder attribute value changed
         // https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/101220/
-        this._prevent = e => {
-          e.stopImmediatePropagation();
-          this.inputElement.removeEventListener('input', this._prevent);
-        };
-        this._shouldPreventInput = () => this.placeholder && node.addEventListener('input', this._prevent);
+        this._shouldPreventInput = () => this.__preventInput = true;
         node.addEventListener('focusin', this._shouldPreventInput);
         node.addEventListener('focusout', this._shouldPreventInput);
         this._createPropertyObserver('placeholder', this._shouldPreventInput);
