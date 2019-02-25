@@ -787,18 +787,12 @@ This program is available under Apache License Version 2.0, available at https:/
             this.$.content.attachShadow({mode: 'open'});
           }
 
-          let scopeCssText = Array.from(templateRoot.querySelectorAll('style'))
-            .reduce((result, style) => result + style.textContent, '');
-
-          if (window.ShadyCSS && !window.ShadyCSS.nativeShadow) {
-            // NOTE(platosha): ShadyCSS removes <style>’s from templates, so
-            // we have to use these protected APIs to get their contents back
-            const styleInfo = window.ShadyCSS.ScopingShim
-              ._styleInfoForNode(templateRoot.host);
-            if (styleInfo) {
-              scopeCssText += styleInfo._getStyleRules().parsedCssText;
-              scopeCssText += '}';
-            }
+          let scopeCssText = '';
+          const host = templateRoot.host;
+          if (host && host.constructor.template) {
+            scopeCssText = Polymer.StyleGather
+              .stylesFromTemplate(host.constructor.template)
+              .reduce((result, style) => result + style.textContent, '');
           }
 
           // The overlay root’s :host styles should not apply inside the overlay
