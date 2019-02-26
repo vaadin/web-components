@@ -10,6 +10,7 @@
     "mixins/menu-overlay.html",
     "mixins/overlay.html",
     "mixins/required-field.html",
+    "all-imports.html",
     "color.html",
     "font-icons.html",
     "shadow.html",
