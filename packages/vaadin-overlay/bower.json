@@ -38,6 +38,7 @@
     "iron-demo-helpers": "^2.0.0",
     "iron-test-helpers": "^2.0.0",
     "vaadin-button": "vaadin/vaadin-button#^2.1.0",
+    "vaadin-control-state-mixin": "vaadin/vaadin-control-state-mixin#=2.1.2",
     "vaadin-text-field": "vaadin/vaadin-text-field#^2.1.1",
     "vaadin-radio-button": "vaadin/vaadin-radio-button#^1.1.0",
     "iron-overlay-behavior": "^2.0.0",

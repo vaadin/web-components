@@ -6,6 +6,6 @@
     "\"resolutions\": {"
   ],
   "to": [
-    "\"resolutions\": {\n\"@webcomponents/webcomponentsjs\": \"2.0.0\","
+    "\"resolutions\": {\n\"@webcomponents/webcomponentsjs\": \"2.0.0\",\n\"@vaadin/vaadin-control-state-mixin\": \"2.1.2\","
   ]
 }
