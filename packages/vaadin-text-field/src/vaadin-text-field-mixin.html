@@ -589,7 +589,12 @@ This program is available under Apache License Version 2.0, available at https:/
         // - focus or blur, when placeholder attribute is set
         // - placeholder attribute value changed
         // https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/101220/
-        this._shouldPreventInput = () => this.__preventInput = true;
+        this._shouldPreventInput = () => {
+          this.__preventInput = true;
+          requestAnimationFrame(() => {
+            this.__preventInput = false;
+          });
+        };
         node.addEventListener('focusin', this._shouldPreventInput);
         node.addEventListener('focusout', this._shouldPreventInput);
         this._createPropertyObserver('placeholder', this._shouldPreventInput);

@@ -347,6 +347,22 @@
           });
         });
 
+        (IE ? it : it.skip)('should prevent invalid if input event is user originated', done => {
+          textField.preventInvalidInput = true;
+          textField.pattern = '[0-9]*';
+
+          textField.dispatchEvent(new Event('focusin'));
+
+          requestAnimationFrame(() => {
+            input.value = 'a';
+            const inputEvent = new Event('input');
+            input.dispatchEvent(inputEvent);
+            expect(input.value).to.be.empty;
+            expect(textField.value).to.be.empty;
+            done();
+          });
+        });
+
         (IE ? it : it.skip)('should not dispatch input event in IE on blur, when placeholder is set', done => {
           const spy = sinon.spy();
           textField.placeholder = 'foo';
