@@ -31,6 +31,13 @@ gemini.suite('vaadin-text-field', function(rootSuite) {
         .capture('text-field-2');
     });
 
+    gemini.suite(`text-field-3-${theme}`, function(suite) {
+      suite
+        .setUrl(`vaadin-text-field/text-field-3.html?theme=${theme}`)
+        .setCaptureElements('#text-field')
+        .capture('text-field-3');
+    });
+
     gemini.suite(`text-field-styling-${theme}`, function(suite) {
       suite
         .setUrl(`vaadin-text-field/styling.html?theme=${theme}`)
