@@ -353,6 +353,15 @@
         expect(e.defaultPrevented).to.be.true;
       });
 
+      it('should cancel wheel events for non-scrollable content', () => {
+        scrollable.style.overflow = 'visible';
+        let e = wheel(scrollable, 0, 1);
+        expect(e.defaultPrevented).to.be.true;
+        scrollable.style.overflow = 'hidden';
+        e = wheel(scrollable, 0, 1);
+        expect(e.defaultPrevented).to.be.true;
+      });
+
       it('should scroll the grid (scrolled to end)', () => {
         const scrollTop = grid._scrollTop;
         scrollable.scrollTop = scrollable.scrollHeight;

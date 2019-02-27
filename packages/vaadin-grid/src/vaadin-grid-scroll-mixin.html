@@ -155,7 +155,8 @@ This program is available under Apache License Version 2.0, available at https:/
     _hasScrolledAncestor(el, deltaX, deltaY) {
       if (el.localName === 'vaadin-grid-cell-content') {
         return false;
-      } else if (this._canScroll(el, deltaX, deltaY)) {
+      } else if (this._canScroll(el, deltaX, deltaY)
+        && ['auto', 'scroll'].indexOf(getComputedStyle(el).overflow) !== -1) {
         return true;
       } else if (el !== this && el.parentElement) {
         return this._hasScrolledAncestor(el.parentElement, deltaX, deltaY);
