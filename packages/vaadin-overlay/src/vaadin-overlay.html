@@ -796,9 +796,9 @@ This program is available under Apache License Version 2.0, available at https:/
 
           let scopeCssText = '';
           const host = templateRoot.host;
-          if (host && host.constructor.template) {
+          if (host && host._template) {
             scopeCssText = Polymer.StyleGather
-              .stylesFromTemplate(host.constructor.template)
+              .stylesFromTemplate(host._template)
               .reduce((result, style) => result + style.textContent, '');
           }
 

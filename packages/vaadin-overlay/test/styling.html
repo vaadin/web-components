@@ -12,6 +12,16 @@
 
 <body>
 
+  <dom-module id="theme-style-module" theme-for="local-styles">
+    <template>
+      <style>
+        .themed-styles-content {
+          font-family: ".themed-styles-content";
+        }
+      </style>
+    </template>
+  </dom-module>
+
   <dom-module id="local-styles">
     <template>
       <style>
@@ -32,13 +42,14 @@
         <template>
           <div class="local-styles-content"></div>
           <div class="global-styles-content"></div>
+          <div class="themed-styles-content"></div>
         </template>
       </vaadin-overlay>
     </template>
   </dom-module>
   <script>
     addEventListener('WebComponentsReady', () => {
-      customElements.define('local-styles', class extends Polymer.Element {
+      customElements.define('local-styles', class extends Vaadin.ThemableMixin(Polymer.Element) {
         static get is() {
           return 'local-styles';
         }
@@ -181,6 +192,12 @@
           expect(getComputedStyleSource(
             overlay.content.querySelector('.local-styles-content')
           )).to.equal('.local-styles-content');
+        });
+
+        it('should apply styles from themable mixin to overlay content', () => {
+          expect(getComputedStyleSource(
+            overlay.content.querySelector('.themed-styles-content')
+          )).to.equal('.themed-styles-content');
         });
 
         it('should not apply global styles to overlay content', () => {
