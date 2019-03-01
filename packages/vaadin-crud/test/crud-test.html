@@ -388,7 +388,7 @@
           describe('save', () => {
             it('should fire the save event', done => {
               listenOnce(crud, 'save', e => {
-                expect(e.detail.item).to.be.equal(crud.items[0]);
+                expect(e.detail.item).to.be.deep.equal(crud.items[0]);
                 done();
               });
               edit(crud.items[0]);
@@ -408,6 +408,28 @@
               edit(crud.items[0]);
               btnSave().click();
               expect(crud.$.dialog.opened).to.be.true;
+            });
+
+            it('on save should keep item unmodified if default prevented', () => {
+              listenOnce(crud, 'save', e => e.preventDefault());
+
+              const originalItem = Object.assign({}, crud.items[0]);
+              edit(crud.items[0]);
+              crud._fields[0].value = 'Modified';
+              change();
+              btnSave().click();
+
+              expect(crud.items[0]).to.be.deep.equal(originalItem);
+            });
+
+            it('on save should modify item if not default prevented', () => {
+              const originalItem = Object.assign({}, crud.items[0]);
+              edit(crud.items[0]);
+              crud._fields[0].value = 'Modified';
+              change();
+              btnSave().click();
+
+              expect(crud.items[0]).to.not.be.deep.equal(originalItem);
             });
           });
 
