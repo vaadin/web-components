@@ -112,4 +112,8 @@
     const cells = getRowCells(rows[row]);
     return cells[col];
   };
+
+  window.getCellEditor = (cell) => {
+    return cell._column._getEditorComponent(cell);
+  };
 </script>

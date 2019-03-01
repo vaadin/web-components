@@ -18,6 +18,7 @@
     "fire": false,
     "flush": false,
     "getCellContent": false,
+    "getCellEditor": false,
     "getContainerCell": false,
     "getRows": false,
     "getRowCells": false

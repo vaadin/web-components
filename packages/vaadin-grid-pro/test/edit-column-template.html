@@ -1,0 +1,208 @@
+<!doctype html>
+
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>edit-column test</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../iron-test-helpers/mock-interactions.js"></script>
+  <link rel="import" href="../../test-fixture/test-fixture.html">
+
+  <link rel="import" href="helpers.html">
+  <link rel="import" href="not-animated-styles.html">
+  <link rel="import" href="../vaadin-grid-pro.html">
+  <link rel="import" href="../vaadin-grid-pro-edit-column.html">
+</head>
+
+<body>
+
+  <test-fixture id="grid-with-templates">
+    <template>
+      <vaadin-grid-pro>
+        <vaadin-grid-pro-edit-column path="name">
+          <template class="header">Name</template>
+          <template>[[index]] [[item.name]]</template>
+          <template class="footer"></template>
+        </vaadin-grid-pro-edit-column>
+        <vaadin-grid-pro-edit-column id="custom" path="name">
+          <template>[[item.name]]</template>
+          <template class="editor">
+            <input value="{{item.name::input}}">
+          </template>
+        </vaadin-grid-pro-edit-column>
+        <vaadin-grid-pro-edit-column path="age">
+          <template class="editor">
+            <input type="number" value="{{item.age::input}}">
+          </template>
+        </vaadin-grid-pro-edit-column>
+      </vaadin-grid>
+    </template>
+  </test-fixture>
+
+  <script>
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+    function getItems() {
+      return [
+        {name: 'foo', age: 20, married: true, title: 'mrs'},
+        {name: 'bar', age: 30, married: false, title: 'ms'},
+        {name: 'baz', age: 40, married: false, title: 'mr'}
+      ];
+    }
+
+    function dblclick(target) {
+      if (isIOS) {
+        target.dispatchEvent(new CustomEvent('click', {bubbles: true, composed: true}));
+        target.dispatchEvent(new CustomEvent('click', {bubbles: true, composed: true}));
+      } else {
+        target.dispatchEvent(new CustomEvent('dblclick', {bubbles: true, composed: true}));
+      }
+    }
+
+    function space(target) {
+      MockInteractions.keyDownOn(target, 32, [], ' ');
+    }
+
+    function enter(target) {
+      MockInteractions.keyDownOn(target, 13, [], 'Enter');
+    }
+
+    function esc(target) {
+      MockInteractions.keyDownOn(target, 27, [], 'Escape');
+    }
+
+    describe('edit column template', () => {
+
+      describe('default', () => {
+        let grid, column, cell, input;
+
+        beforeEach(() => {
+          grid = fixture('grid-with-templates');
+          column = grid.firstElementChild;
+          grid.items = getItems();
+
+          flushGrid(grid);
+          cell = getContainerCell(grid.$.items, 0, 0);
+        });
+
+        it('should replace template and render text-field on editable cell dblclick', () => {
+          dblclick(cell._content);
+          expect(cell._template).to.be.not.ok;
+          expect(cell._renderer).to.be.ok;
+          expect(getCellEditor(cell)).to.be.ok;
+        });
+
+        it('should not call start edit on second dblclick if the cell is in edit mode', () => {
+          const spy = sinon.spy(grid, '_startEdit');
+          dblclick(cell._content);
+          input = getCellEditor(cell);
+          dblclick(input);
+          expect(spy).to.be.calledOnce;
+        });
+
+        it('should replace template and render text-field on editable cell Enter', () => {
+          enter(cell);
+          expect(cell._template).to.be.not.ok;
+          expect(cell._renderer).to.be.ok;
+          expect(getCellEditor(cell)).to.be.ok;
+        });
+
+        it('should replace template and render text-field on editable cell Space', () => {
+          space(cell);
+          expect(cell._template).to.be.not.ok;
+          expect(cell._renderer).to.be.ok;
+          expect(getCellEditor(cell)).to.be.ok;
+        });
+
+        it('should restore template and render updated content on edited cell Enter', () => {
+          enter(cell);
+          input = getCellEditor(cell);
+          input.value = 'new';
+          enter(input);
+          expect(cell._renderer).to.be.not.ok;
+          expect(cell._template).to.equal(column._bodyTemplate);
+          expect(getCellEditor(cell)).to.be.not.ok;
+          expect(cell._content.textContent).to.equal('0 new');
+        });
+
+        it('should restore template and reset old content on edited cell Esc', () => {
+          const old = cell._content.textContent;
+          enter(cell);
+          input = getCellEditor(cell);
+          input.value = 'new';
+          esc(input);
+          expect(cell._renderer).to.be.not.ok;
+          expect(cell._template).to.equal(column._bodyTemplate);
+          expect(getCellEditor(cell)).to.be.not.ok;
+          expect(cell._content.textContent).to.equal(old);
+        });
+      });
+
+      describe('custom edit mode template', () => {
+        let grid, column, cell, input;
+
+        beforeEach(() => {
+          grid = fixture('grid-with-templates');
+          grid.items = getItems();
+          flushGrid(grid);
+        });
+
+        it('should stamp the edit mode template to cell when entering edit mode', () => {
+          column = grid.querySelector('#custom');
+          cell = getContainerCell(grid.$.items, 0, 1);
+          dblclick(cell._content);
+          expect(cell._template).to.equal(column._editModeTemplate);
+          expect(cell._content.querySelector('input')).to.be.ok;
+        });
+
+        it('should restore the cell body template after edit mode exit', () => {
+          column = grid.querySelector('#custom');
+          cell = getContainerCell(grid.$.items, 0, 1);
+          dblclick(cell._content);
+          input = cell._content.querySelector('input');
+          input.value = 'New';
+          enter(input);
+          expect(cell._template).to.equal(column._bodyTemplate);
+          expect(cell._content.textContent).to.equal('New');
+          expect(cell._content.querySelector('input')).to.not.be.ok;
+        });
+
+        it('should restore the cell path renderer after edit mode exit', () => {
+          column = grid.querySelector('[path="age"]');
+          cell = getContainerCell(grid.$.items, 0, 2);
+          dblclick(cell._content);
+          input = cell._content.querySelector('input');
+          input.value = '32';
+          enter(input);
+          expect(cell._renderer).to.be.ok;
+          expect(cell._template).to.be.not.ok;
+          expect(cell._content.textContent.trim()).to.equal('32');
+          expect(cell._content.querySelector('input')).to.not.be.ok;
+        });
+
+        it('should set the column `editorType` to custom when template is added', () => {
+          column = grid.querySelector('#custom');
+          expect(column.editorType).to.be.equal('custom');
+        });
+
+        it('should reset the column `editorType` to text when template is removed', () => {
+          column._editModeTemplate = null;
+          expect(column.editorType).to.be.equal('text');
+        });
+
+        it('should throw an error and remove renderer when added after template', () => {
+          column = grid.querySelector('#custom');
+          expect(() => column.editModeRenderer = {}).to.throw(Error);
+          expect(column.editModeRenderer).to.be.not.ok;
+        });
+      });
+    });
+  </script>
+
+</body>
+
+</html>
