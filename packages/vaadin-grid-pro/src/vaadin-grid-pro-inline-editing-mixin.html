@@ -209,7 +209,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       this.addEventListener('item-property-changed', this.__boundItemPropertyChanged);
     }
 
-    _stopEdit(shouldCancel) {
+    _stopEdit(shouldCancel, shouldRestoreFocus) {
       if (!this.__edited) {
         return;
       }
@@ -240,6 +240,10 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       this.__edited = null;
 
       this.removeEventListener('item-property-changed', this.__boundItemPropertyChanged);
+
+      if (shouldRestoreFocus) {
+        cell.focus();
+      }
     }
 
     _switchEditCell(e) {
