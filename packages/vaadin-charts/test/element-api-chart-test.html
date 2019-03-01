@@ -264,7 +264,7 @@
             expect(chart.configuration.is3d()).to.be.true;
 
             // Track regression https://github.com/highcharts/highcharts/issues/8555
-            const rendered = chart.$.chart.querySelector('.highcharts-series-0').children.length > 0;
+            const rendered = chart.$.chart.querySelector('.highcharts-series-0').hasChildNodes();
             expect(rendered).to.be.true;
             chart.chart3d = false;
             done();
