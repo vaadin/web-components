@@ -6,6 +6,9 @@
   <template>
     <style include="material-required-field">
       :host {
+        display: inline-flex;
+        position: relative;
+        margin-bottom: 8px;
         outline: none;
         color: var(--material-body-text-color);
         font-size: var(--material-body-font-size);
@@ -14,9 +17,43 @@
         -moz-osx-font-smoothing: grayscale;
       }
 
-      [part="label"] {
-        position: relative;
-        top: 0;
+      :host::before {
+        line-height: 32px;
+        display: inline-flex;
+        align-items: center;
+        box-sizing: border-box;
+      }
+
+      :host([has-label]) {
+        padding-top: 24px;
+      }
+
+      :host([has-label]) [part="label"] {
+        top: 8px;
+      }
+
+      :host([has-label])::before {
+        margin-top: -8px;
+      }
+
+      /* align with text-field error message */
+      :host([invalid]) [part="error-message"]:not(:empty) {
+        margin-top: -8px;
+        margin-bottom: -10px;
+      }
+
+      :host([has-label]) ::slotted(vaadin-text-field),
+      :host([has-label]) ::slotted(vaadin-email-field),
+      :host([has-label]) ::slotted(vaadin-number-field),
+      :host([has-label]) ::slotted(vaadin-password-field) {
+        padding-top: 0;
+      }
+
+      :host([has-label]) ::slotted(vaadin-select),
+      :host([has-label]) ::slotted(vaadin-combo-box),
+      :host([has-label]) ::slotted(vaadin-date-picker),
+      :host([has-label]) ::slotted(vaadin-time-picker) {
+        margin-top: -8px;
       }
     </style>
   </template>

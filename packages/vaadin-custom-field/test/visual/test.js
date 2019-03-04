@@ -24,6 +24,20 @@ gemini.suite('vaadin-custom-field', function(rootSuite) {
         .setCaptureElements('#default-tests')
         .capture('default');
     });
+
+    gemini.suite(`alignment-tests-${theme}`, function(suite) {
+      suite
+        .setUrl(`alignment.html?theme=${theme}`)
+        .setCaptureElements('#alignment-tests')
+        .capture('default');
+    });
+
+    gemini.suite(`form-layout-tests-${theme}`, function(suite) {
+      suite
+        .setUrl(`form-layout.html?theme=${theme}`)
+        .setCaptureElements('#form-layout-tests')
+        .capture('default');
+    });
   });
 
 });

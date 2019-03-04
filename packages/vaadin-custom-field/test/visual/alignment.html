@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+
+<head lang="en">
+  <meta charset="UTF-8">
+  <title></title>
+  <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <script>
+    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+    document.write(`
+      <link rel="import" href="../../theme/${theme}/vaadin-custom-field.html">
+      <link rel="import" href="../../../vaadin-combo-box/theme/${theme}/vaadin-combo-box.html">
+      <link rel="import" href="../../../vaadin-date-picker/theme/${theme}/vaadin-date-picker.html">
+      <link rel="import" href="../../../vaadin-select/theme/${theme}/vaadin-select.html">
+      <link rel="import" href="../../../vaadin-text-field/theme/${theme}/vaadin-email-field.html">
+      <link rel="import" href="../../../vaadin-text-field/theme/${theme}/vaadin-number-field.html">
+      <link rel="import" href="../../../vaadin-text-field/theme/${theme}/vaadin-password-field.html">
+      <link rel="import" href="../../../vaadin-text-field/theme/${theme}/vaadin-text-field.html">
+      <link rel="import" href="../../../vaadin-time-picker/theme/${theme}/vaadin-time-picker.html">
+    `);
+
+    window.addEventListener('WebComponentsReady', function() {
+      customElements.whenDefined('vaadin-custom-field').then(() => {
+        window.ShadyDOM && window.ShadyDOM.flush(); // Force DOM composition
+        window.webComponentsAreReady = true; // Checked in gemini before capture callback
+      });
+    });
+  </script>
+</head>
+
+<body>
+  <div id="alignment-tests" style="padding: 10px;">
+    <vaadin-custom-field invalid error-message="Invalid">
+      <vaadin-number-field value="1"></vaadin-number-field>
+      <vaadin-password-field value="password"></vaadin-password-field>
+    </vaadin-custom-field>
+    <vaadin-text-field invalid error-message="Invalid"></vaadin-text-field>
+    <vaadin-time-picker value="09:00"></vaadin-time-picker>
+    <br>
+    <br>
+    <vaadin-custom-field label="Custom field">
+      <vaadin-select value="+358">
+        <template>
+          <vaadin-list-box>
+            <vaadin-item>+358</vaadin-item>
+            <vaadin-item>+46</vaadin-item>
+            <vaadin-item>+34</vaadin-item>
+          </vaadin-list-box>
+        </template>
+      </vaadin-select>
+      <vaadin-text-field></vaadin-text-field>
+    </vaadin-custom-field>
+    <vaadin-text-field label="Text field" value="Text"></vaadin-text-field>
+    <vaadin-select label="Plain select" value="Option one">
+      <template>
+        <vaadin-list-box>
+          <vaadin-item>Option one</vaadin-item>
+          <vaadin-item>Option two</vaadin-item>
+        </vaadin-list-box>
+      </template>
+    </vaadin-select>
+    <br>
+    <br>
+    <vaadin-custom-field label="Custom field" invalid error-message="Invalid">
+      <vaadin-email-field value="user@example.com"></vaadin-email-field>
+      <vaadin-date-picker value="1980-08-14"></vaadin-date-picker>
+    </vaadin-custom-field>
+    <vaadin-number-field label="Number" value="2" invalid error-message="Invalid"></vaadin-number-field>
+    <vaadin-date-picker label="Date" invalid error-message="Invalid"></vaadin-date-picker>
+    <br>
+    <br>
+    <vaadin-custom-field label="Custom field" invalid error-message="Invalid">
+      <vaadin-combo-box value="Combo item" allow-custom-value></vaadin-combo-box>
+      <vaadin-time-picker value="09:00"></vaadin-time-picker>
+    </vaadin-custom-field>
+    <vaadin-combo-box label="Combo" value="Combo item" allow-custom-value></vaadin-combo-box>
+    <vaadin-password-field value="password"></vaadin-password-field>
+  </div>
+
+</body>
