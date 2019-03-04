@@ -215,7 +215,7 @@
 
       /* Slotted content */
 
-      [part="input-field"] ::slotted(*:not([part="value"]):not(input):not(textarea)) {
+      [part="input-field"] ::slotted(*:not([part="value"]):not([part$="-button"]):not(input):not(textarea)) {
         color: var(--material-secondary-text-color);
       }
 
