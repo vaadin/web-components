@@ -472,12 +472,10 @@ This program is available under Apache License Version 2.0, available at https:/
         return;
       }
 
-      if (node.hasAttribute(name) === !value) {
-        if (value) {
-          node.setAttribute(name, (typeof value === 'boolean') ? '' : value);
-        } else {
-          node.removeAttribute(name);
-        }
+      if (value) {
+        node.setAttribute(name, (typeof value === 'boolean') ? '' : value);
+      } else {
+        node.removeAttribute(name);
       }
     }
 

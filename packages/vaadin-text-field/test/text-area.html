@@ -57,8 +57,12 @@
           }
 
           function assertPropCanBeSet(prop, value) {
-            textArea[prop] = value;
-            expect(input[prop]).to.be.equal(value);
+            for (let i = 0; i < 3; i ++) {
+              // Check different values
+              const newValue = typeof value === 'boolean' ? i % 2 === 0 : value + i;
+              textArea[prop] = newValue;
+              expect(input[prop]).to.be.equal(newValue);
+            }
           }
 
           ['placeholder', 'value'].forEach(prop => {

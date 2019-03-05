@@ -119,8 +119,12 @@
           }
 
           function assertPropCanBeSet(prop, value) {
-            textField[prop] = value;
-            expect(input[prop]).to.be.equal(value);
+            for (let i = 0; i < 3; i ++) {
+              // Check different values (i.e. true false true for boolean or string1 string2 string3)
+              const newValue = typeof value === 'boolean' ? i % 2 === 0 : value + i;
+              textField[prop] = newValue;
+              expect(input[prop]).to.be.equal(newValue);
+            }
           }
 
           ['pattern', 'placeholder', 'value', 'title'].forEach(function(prop) {
