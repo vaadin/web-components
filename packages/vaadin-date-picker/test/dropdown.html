@@ -172,7 +172,7 @@
 
         click(clearButton);
 
-        expect(datepicker.$.overlay).not.to.be.ok;
+        expect(datepicker.$.overlay.hasAttribute('disable-upgrade')).to.be.true;
       });
 
     });

@@ -87,7 +87,7 @@ function describeSkipIf(bool, title, callback) {
 
 // As a side-effect has to toggle the overlay once to initialize it
 function getOverlayContent(datepicker) {
-  if (!datepicker.$.overlay) {
+  if (datepicker.$.overlay.hasAttribute('disable-upgrade')) {
     datepicker.open();
     datepicker.close();
   }

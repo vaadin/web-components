@@ -66,32 +66,31 @@ This program is available under Apache License Version 2.0, available at https:/
       <div part="toggle-button" slot="suffix" on-tap="_toggle" role="button" aria-label$="[[i18n.calendar]]" aria-expanded$="[[_getAriaExpanded(opened)]]"></div>
     </vaadin-text-field>
 
-    <template is="dom-if" id="overlay-template">
-      <vaadin-date-picker-overlay
-          id="overlay"
-          fullscreen$="[[_fullscreen]]"
-          theme$="[[theme]]"
-          on-vaadin-overlay-open="_onOverlayOpened"
-          on-vaadin-overlay-close="_onOverlayClosed">
-        <template>
-          <vaadin-date-picker-overlay-content
-              id="overlay-content" i18n="[[i18n]]"
-              fullscreen$="[[_fullscreen]]"
-              label="[[label]]"
-              selected-date="{{_selectedDate}}"
-              slot="dropdown-content"
-              focused-date="{{_focusedDate}}"
-              show-week-numbers="[[showWeekNumbers]]"
-              min-date="[[_minDate]]"
-              max-date="[[_maxDate]]"
-              role="dialog"
-              on-date-tap="_close"
-              part="overlay-content"
-              theme$="[[theme]]">
-          </vaadin-date-picker-overlay-content>
-        </template>
-      </vaadin-date-picker-overlay>
-    </template>
+    <vaadin-date-picker-overlay
+        id="overlay"
+        fullscreen$="[[_fullscreen]]"
+        theme$="[[theme]]"
+        on-vaadin-overlay-open="_onOverlayOpened"
+        on-vaadin-overlay-close="_onOverlayClosed"
+        disable-upgrade>
+      <template>
+        <vaadin-date-picker-overlay-content
+            id="overlay-content" i18n="[[i18n]]"
+            fullscreen$="[[_fullscreen]]"
+            label="[[label]]"
+            selected-date="{{_selectedDate}}"
+            slot="dropdown-content"
+            focused-date="{{_focusedDate}}"
+            show-week-numbers="[[showWeekNumbers]]"
+            min-date="[[_minDate]]"
+            max-date="[[_maxDate]]"
+            role="dialog"
+            on-date-tap="_close"
+            part="overlay-content"
+            theme$="[[theme]]">
+        </vaadin-date-picker-overlay-content>
+      </template>
+    </vaadin-date-picker-overlay>
 
     <iron-media-query
         query="[[_fullscreenMediaQuery]]"
@@ -283,7 +282,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _toggle(e) {
           e.stopPropagation();
-          this[(this.$.overlay && this.$.overlay.opened) ? 'close' : 'open']();
+          this[(this._overlayInitialized && this.$.overlay.opened) ? 'close' : 'open']();
         }
 
         _input() {

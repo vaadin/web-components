@@ -528,7 +528,7 @@
 
         it('dropdown should not open', () => {
           datepicker.open();
-          expect(datepicker.$.overlay).not.to.be.ok;
+          expect(datepicker.$.overlay.hasAttribute('disable-upgrade')).to.be.true;
         });
 
         it('calendar icon should not be hidden', () => {
@@ -548,7 +548,7 @@
 
         it('dropdown should not open', () => {
           datepicker.open();
-          expect(datepicker.$.overlay).not.to.be.ok;
+          expect(datepicker.$.overlay.hasAttribute('disable-upgrade')).to.be.true;
         });
 
         it('calendar icon should not be hidden', () => {
