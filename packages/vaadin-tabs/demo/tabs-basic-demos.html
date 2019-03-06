@@ -98,6 +98,24 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Anchors</h3>
+    <p>
+      <b>Note:</b> wrapping tab content into <code>&lt;a&gt;</code> introduces a limitation of styling slotted
+      elements, like icons, by the <code>&lt;vaadin-tabs&gt;</code> theme.
+    </p>
+    <vaadin-demo-snippet id='tabs-basic-demos-anchors'>
+      <template preserve-content>
+        <vaadin-tabs>
+          <vaadin-tab>
+            <a href="https://vaadin.com/components/vaadin-tabs/install" tabindex="-1">Installation</a>
+          </vaadin-tab>
+          <vaadin-tab>
+            <a href="https://vaadin.com/components/vaadin-tabs/html-api" tabindex="-1">API docs</a>
+          </vaadin-tab>
+        </vaadin-tabs>
+      </template>
+    </vaadin-demo-snippet>
+
   </template>
   <script>
     class TabsBasicDemos extends DemoReadyEventEmitter(TabsDemo(Polymer.Element)) {

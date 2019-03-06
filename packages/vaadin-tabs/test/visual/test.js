@@ -38,6 +38,13 @@ gemini.suite('vaadin-tabs', function(rootSuite) {
         .setCaptureElements('#scrollable-tabs')
         .capture('scrollable-tabs');
     });
+
+    gemini.suite(`anchor-tabs-${theme}`, (suite) => {
+      suite
+        .setUrl(`anchor-tabs.html?theme=${theme}`)
+        .setCaptureElements('#anchor-tabs')
+        .capture('anchor-tabs');
+    });
   });
 
 });

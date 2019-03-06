@@ -55,6 +55,19 @@ This program is available under Apache License Version 2.0, available at https:/
           super.ready();
           this.setAttribute('role', 'tab');
         }
+
+        _onKeyup(event) {
+          const willClick = this.hasAttribute('active');
+
+          super._onKeyup(event);
+
+          if (willClick) {
+            const anchor = this.querySelector('a');
+            if (anchor) {
+              anchor.click();
+            }
+          }
+        }
       }
 
       customElements.define(TabElement.is, TabElement);

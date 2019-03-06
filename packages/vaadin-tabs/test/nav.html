@@ -5,6 +5,7 @@
   <title>vaadin-tabs tests</title>
   <script src="../../web-component-tester/browser.js"></script>
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../iron-test-helpers/mock-interactions.js"></script>
   <link rel="import" href="../../test-fixture/test-fixture.html">
   <link rel="import" href="../vaadin-tab.html">
   <link rel="import" href="../vaadin-tabs.html">
@@ -43,6 +44,15 @@
           <vaadin-tab>Tab three</vaadin-tab>
         </vaadin-tabs>
       </div>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="anchors">
+    <template>
+      <vaadin-tabs>
+        <vaadin-tab><a href="#">Tab one</a></vaadin-tab>
+        <vaadin-tab><a href="#">Tab two</a></vaadin-tab>
+      </vaadin-tabs>
     </template>
   </test-fixture>
 
@@ -197,5 +207,35 @@
       });
     });
 
+    describe('tabs with slotted anchors', () => {
+      let nav, tabs;
+
+      beforeEach(done => {
+        nav = fixture('anchors');
+        tabs = nav.querySelectorAll('vaadin-tab');
+        Polymer.RenderStatus.afterNextRender(nav, () => {
+          nav._observer.flush();
+          done();
+        });
+      });
+
+      it('should propagate the click to the anchor element when Enter pressed', () => {
+        const anchor = tabs[0].querySelector('a');
+        const spy = sinon.spy();
+        anchor.addEventListener('click', spy);
+        MockInteractions.keyDownOn(tabs[0], 13, [], 'Enter');
+        MockInteractions.keyUpOn(tabs[0], 13, [], 'Enter');
+        expect(spy).to.be.calledOnce;
+      });
+
+      it('should not propagate the click to the anchor when other key pressed', () => {
+        const anchor = tabs[0].querySelector('a');
+        const spy = sinon.spy();
+        anchor.addEventListener('click', spy);
+        MockInteractions.keyDownOn(tabs[0], 39, [], 'ArrowRight');
+        MockInteractions.keyUpOn(tabs[0], 39, [], 'ArrowRight');
+        expect(spy).to.not.be.called;
+      });
+    });
   </script>
 </body>
