@@ -62,6 +62,14 @@ This program is available under Apache License Version 2.0, available at https:/
           type: Array,
           readOnly: true,
           notify: true
+        },
+
+        /**
+         * The search buffer for the keyboard selection feature.
+         */
+        _searchBuf: {
+          type: String,
+          value: ''
         }
       };
     }
@@ -118,6 +126,24 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    searchKey(currentIdx, key) {
+      this._searchBuf += key.toLowerCase();
+      const increment = 1;
+      const condition = item => !item.disabled &&
+        item.textContent.trim().toLowerCase().startsWith(this._searchBuf);
+
+      if (!this.items.some(item => item.textContent.trim().toLowerCase().startsWith(this._searchBuf))) {
+        this._searchBuf = key.toLowerCase();
+      }
+
+      if (currentIdx === undefined) {
+        return this._getAvailableIndex(0, increment, condition);
+      }
+
+      const idx = this._searchBuf.length === 1 ? currentIdx + 1 : currentIdx;
+      return this._getAvailableIndex(idx, increment, condition);
+    }
+
     _onKeydown(event) {
       if (event.metaKey || event.ctrlKey) {
         return;
@@ -127,7 +153,17 @@ This program is available under Apache License Version 2.0, available at https:/
       const key = event.key.replace(/^Arrow/, '');
 
       const currentIdx = this.items.indexOf(this.focused);
-      let condition = item => !item.disabled;
+
+      if (/[a-zA-Z0-9]/.test(key) && key.length === 1) {
+        const idx = this.searchKey(currentIdx, key);
+        if (idx >= 0) {
+          this._focus(idx);
+          event.preventDefault();
+        }
+        return;
+      }
+
+      const condition = item => !item.disabled;
       let idx, increment;
 
       if (this._vertical && key === 'Up' || !this._vertical && key === 'Left') {
@@ -142,11 +178,6 @@ This program is available under Apache License Version 2.0, available at https:/
       } else if (key === 'End') {
         increment = -1;
         idx = this.items.length - 1;
-      } else if (key.length == 1) {
-        increment = 1;
-        idx = currentIdx + 1;
-        condition = item => !item.disabled &&
-          item.textContent.trim().toLowerCase().indexOf(key.toLowerCase()) === 0;
       }
 
       idx = this._getAvailableIndex(idx, increment, condition);
