@@ -130,9 +130,9 @@ This program is available under Apache License Version 2.0, available at https:/
       this._searchBuf += key.toLowerCase();
       const increment = 1;
       const condition = item => !item.disabled &&
-        item.textContent.trim().toLowerCase().startsWith(this._searchBuf);
+        item.textContent.replace(/[^a-zA-Z0-9]/g, '').toLowerCase().indexOf(this._searchBuf) === 0;
 
-      if (!this.items.some(item => item.textContent.trim().toLowerCase().startsWith(this._searchBuf))) {
+      if (!this.items.some(item => item.textContent.replace(/[^a-zA-Z0-9]/g, '').toLowerCase().indexOf(this._searchBuf) === 0)) {
         this._searchBuf = key.toLowerCase();
       }
 

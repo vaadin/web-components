@@ -319,9 +319,19 @@
           expect(list.items[3].focused).to.be.true;
         });
 
-        it('should focus the next item whose first letter matches the key pressed', () => {
+        it('should focus the next item whose first letters match the keys pressed', () => {
           keyDownChar(list, 'b');
-          expect(list.items[1].focused).to.be.true;
+          keyDownChar(list, 'a');
+          keyDownChar(list, 'z');
+          expect(list.items[3].focused).to.be.true;
+        });
+
+        it('key search should cycle through items starting with the same letters', () => {
+          keyDownChar(list, 'b');
+          keyDownChar(list, 'a');
+          keyDownChar(list, 'b');
+          keyDownChar(list, 'a');
+          expect(list.items[3].focused).to.be.true;
         });
 
         it('key search should be case insensitive', () => {
