@@ -1,4 +1,4 @@
-<dom-module id="element-basic-demos">
+<dom-module id="menu-basic-demos">
   <template>
     <style include="vaadin-component-demo-shared-styles">
       :host {
@@ -8,7 +8,7 @@
 
 
     <h3>Sample example</h3>
-    <vaadin-demo-snippet id="element-basic-demos-sample-example">
+    <vaadin-demo-snippet id="menu-basic-demos-sample-example">
       <template preserve-content>
         <vaadin-menu>Foobar</vaadin-menu>
       </template>
@@ -16,11 +16,11 @@
 
   </template>
   <script>
-    class ElementBasicDemos extends DemoReadyEventEmitter(ElementDemo(Polymer.Element)) {
+    class MenuBasicDemos extends DemoReadyEventEmitter(MenuDemo(Polymer.Element)) {
       static get is() {
-        return 'element-basic-demos';
+        return 'menu-basic-demos';
       }
     }
-    customElements.define(ElementBasicDemos.is, ElementBasicDemos);
+    customElements.define(MenuBasicDemos.is, MenuBasicDemos);
   </script>
 </dom-module>

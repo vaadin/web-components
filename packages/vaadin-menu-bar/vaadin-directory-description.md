@@ -10,7 +10,7 @@
 
 # &lt;vaadin-menu&gt;
 
-[&lt;vaadin-menu&gt;](https://vaadin.com/components/vaadin-menu) is a Web Component providing &lt;element-functionality&gt;, part of the [Vaadin components](https://vaadin.com/components).
+[&lt;vaadin-menu&gt;](https://vaadin.com/components/vaadin-menu) is a Web Component providing application menu functionality, part of the [Vaadin components](https://vaadin.com/components).
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-menu/master/screenshot.png" width="200" alt="Screenshot of vaadin-menu">](https://vaadin.com/components/vaadin-menu)
 

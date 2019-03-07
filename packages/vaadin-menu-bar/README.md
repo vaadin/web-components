@@ -16,7 +16,7 @@
 [API documentation ↗](https://vaadin.com/components/vaadin-menu/html-api)
 
 
-[&lt;vaadin-menu&gt;](https://vaadin.com/components/vaadin-menu) is a Web Component providing &lt;element-functionality&gt;, part of the [Vaadin components](https://vaadin.com/components).
+[&lt;vaadin-menu&gt;](https://vaadin.com/components/vaadin-menu) is a Web Component providing application menu functionality, part of the [Vaadin components](https://vaadin.com/components).
 
 <!--
 ```
