@@ -126,7 +126,15 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
-    searchKey(currentIdx, key) {
+    _searchKey(currentIdx, key) {
+      this._searchReset = Polymer.Debouncer.debounce(
+        this._searchReset,
+        Polymer.Async.timeOut.after(500),
+        () => {
+          // console.log("uh")
+          this._searchBuf = ''
+        }
+      );
       this._searchBuf += key.toLowerCase();
       const increment = 1;
       const condition = item => !item.disabled &&
@@ -134,10 +142,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
       if (!this.items.some(item => item.textContent.replace(/[^a-zA-Z0-9]/g, '').toLowerCase().indexOf(this._searchBuf) === 0)) {
         this._searchBuf = key.toLowerCase();
-      }
-
-      if (currentIdx === undefined) {
-        return this._getAvailableIndex(0, increment, condition);
       }
 
       const idx = this._searchBuf.length === 1 ? currentIdx + 1 : currentIdx;
@@ -155,10 +159,9 @@ This program is available under Apache License Version 2.0, available at https:/
       const currentIdx = this.items.indexOf(this.focused);
 
       if (/[a-zA-Z0-9]/.test(key) && key.length === 1) {
-        const idx = this.searchKey(currentIdx, key);
+        const idx = this._searchKey(currentIdx, key);
         if (idx >= 0) {
           this._focus(idx);
-          event.preventDefault();
         }
         return;
       }

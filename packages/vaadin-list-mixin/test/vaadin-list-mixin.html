@@ -99,6 +99,7 @@
           <img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=">
           <span>Xyzzy</span>
         </test-item-element>
+        <test-item-element>Bax</test-item-element>
       </test-list-element>
     </template>
   </test-fixture>
@@ -147,13 +148,13 @@
       it('should have a list of valid items after the DOM `_observer` has been run', () => {
         // DOM _observer runs asynchronously, we need to flush to access items
         list._observer.flush();
-        expect(list.items.length).to.be.equal(6);
+        expect(list.items.length).to.be.equal(7);
       });
 
       it('`focus` should flush the `_observer` if it is called too soon', () => {
         // focus flushes the observer in order to be run in 3rd party elements initialisation
         list.focus();
-        expect(list.items.length).to.be.equal(6);
+        expect(list.items.length).to.be.equal(7);
       });
 
       describe('dom', () => {
@@ -161,17 +162,17 @@
         beforeEach(() => list._observer.flush());
 
         it('should update items list when removing nodes', () => {
-          expect(list.items.length).to.be.equal(6);
+          expect(list.items.length).to.be.equal(7);
 
           list.removeChild(list.items[3]);
           list._observer.flush();
-          expect(list.items.length).to.be.equal(5);
+          expect(list.items.length).to.be.equal(6);
         });
 
         it('should update items list when adding nodes', () => {
           list.appendChild(document.createElement('test-item-element'));
           list._observer.flush();
-          expect(list.items.length).to.be.equal(7);
+          expect(list.items.length).to.be.equal(8);
         });
 
         it('should update items list when moving nodes', () => {
@@ -293,13 +294,13 @@
 
         it('should move focus to last element on "end" keydown', () => {
           end(list);
-          expect(list.items[5].focused).to.be.true;
+          expect(list.items[6].focused).to.be.true;
         });
 
         it('should move focus to the most closed enabled element if last is disabled on "end" keydown', () => {
-          list.items[5].disabled = true;
+          list.items[6].disabled = true;
           end(list);
-          expect(list.items[3].focused).to.be.true;
+          expect(list.items[5].focused).to.be.true;
         });
 
         it('if focus is in last element should move focus to first element on arrow-down', () => {
@@ -319,11 +320,29 @@
           expect(list.items[3].focused).to.be.true;
         });
 
+        it('should not focus anything when no matches are found', () => {
+          keyDownChar(list, 'z');
+          expect(list.items[0].focused).to.be.true;
+          list._focus(1);
+          keyDownChar(list, 'z');
+          expect(list.items[1].focused).to.be.true;
+        });
+
         it('should focus the next item whose first letters match the keys pressed', () => {
           keyDownChar(list, 'b');
           keyDownChar(list, 'a');
-          keyDownChar(list, 'z');
-          expect(list.items[3].focused).to.be.true;
+          keyDownChar(list, 'x');
+          expect(list.items[6].focused).to.be.true;
+        });
+
+        it('should reset search buffer after 500ms without any key presses', done => {
+          keyDownChar(list, 'b');
+          keyDownChar(list, 'a');
+          setTimeout(() => {
+            keyDownChar(list, 'x');
+            expect(list.items[5].focused).to.be.true;
+            done();
+          }, 500);
         });
 
         it('key search should cycle through items starting with the same letters', () => {
