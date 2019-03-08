@@ -1,0 +1,98 @@
+<!--
+@license
+Copyright (c) 2019 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<script>
+  /**
+   * @namespace Vaadin
+   */
+  window.Vaadin = window.Vaadin || {};
+
+  /**
+   * @polymerMixin
+   * @memberof Vaadin
+   */
+  Vaadin.MenuButtonsMixin = superClass => class MenuButtonsMixin extends superClass {
+
+    ready() {
+      super.ready();
+
+      this.addEventListener('keydown', e => this._onKeydown(e));
+      this.addEventListener('focusin', e => this._onFocusin(e));
+    }
+
+    _onFocusin(event) {
+      const target = this.shadowRoot.querySelector('vaadin-menu-root-button[tabindex="0"]');
+      if (target) {
+        Array.from(this.shadowRoot.querySelectorAll('vaadin-menu-root-button')).forEach(btn => {
+          btn.tabIndex = btn === target ? 0 : -1;
+        });
+      }
+    }
+
+    _onKeydown(event) {
+      const path = event.composedPath();
+      const buttons = Array.from(this.shadowRoot.querySelectorAll('vaadin-menu-root-button'));
+
+      // only handle keydown event on root menu buttons
+      if (buttons.some(btn => path.indexOf(btn) > -1)) {
+        // IE names for arrows do not include the Arrow prefix
+        const key = event.key.replace(/^Arrow/, '');
+
+        const currentIdx = buttons.indexOf(this.shadowRoot.activeElement);
+        let idx;
+        let increment;
+
+        switch (key) {
+          case 'Left':
+            increment = -1;
+            idx = currentIdx - 1;
+            break;
+          case 'Right':
+            increment = 1;
+            idx = currentIdx + 1;
+            break;
+          case 'Home':
+            increment = 1;
+            idx = 0;
+            break;
+          case 'End':
+            increment = -1;
+            idx = buttons.length - 1;
+            break;
+          default:
+            // do nothing.
+        }
+
+        idx = this._getAvailableIndex(idx, increment, buttons);
+        if (idx >= 0) {
+          const btn = buttons[idx];
+          btn.focus();
+          btn.setAttribute('focus-ring', '');
+          buttons.forEach(e => e.tabIndex = e === btn ? 0 : -1);
+          event.preventDefault();
+        }
+      }
+    }
+
+    _getAvailableIndex(index, increment, buttons) {
+      const totalItems = buttons.length;
+      let idx = index;
+      for (let i = 0; typeof idx === 'number' && i < totalItems; i++, idx += increment || 1) {
+        if (idx < 0) {
+          idx = totalItems - 1;
+        } else if (idx >= totalItems) {
+          idx = 0;
+        }
+
+        const btn = buttons[idx];
+        if (!btn.disabled) {
+          return idx;
+        }
+      }
+      return -1;
+    }
+  };
+</script>

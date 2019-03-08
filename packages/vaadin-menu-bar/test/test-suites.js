@@ -1,3 +1,3 @@
 window.VaadinMenuElementSuites = [
-  'sample-test.html'
+  'basic.html'
 ];

@@ -7,11 +7,17 @@
     </style>
 
 
-    <h3>Sample example</h3>
-    <vaadin-demo-snippet id="menu-basic-demos-sample-example">
+    <h3>Basic Menu</h3>
+    <vaadin-demo-snippet id="menu-basic-demos-basic" when-defined="vaadin-menu">
       <template preserve-content>
-        <vaadin-menu>Foobar</vaadin-menu>
+        <vaadin-menu></vaadin-menu>
       </template>
+      <script>
+        window.addDemoReadyListener('#menu-basic-demos-basic', function(document) {
+          const menu = document.querySelector('vaadin-menu');
+          menu.items = [{text: 'File'}, {text: 'Edit', disabled: true}, {text: 'Help'}];
+        });
+      </script>
     </vaadin-demo-snippet>
 
   </template>

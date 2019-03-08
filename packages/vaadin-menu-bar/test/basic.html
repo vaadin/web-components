@@ -1,0 +1,176 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-menu tests</title>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../iron-test-helpers/mock-interactions.js"></script>
+  <link rel="import" href="../../test-fixture/test-fixture.html">
+  <link rel="import" href="../../polymer/lib/utils/render-status.html">
+  <link rel="import" href="../vaadin-menu.html">
+</head>
+
+<body>
+  <test-fixture id="default">
+    <template>
+      <vaadin-menu></vaadin-menu>
+    </template>
+  </test-fixture>
+
+  <script>
+    function arrowRight(target) {
+      MockInteractions.keyDownOn(target, 39, [], 'ArrowRight');
+    }
+
+    function arrowLeft(target) {
+      MockInteractions.keyDownOn(target, 37, [], 'ArrowLeft');
+    }
+
+    function home(target) {
+      MockInteractions.keyDownOn(target, 36, [], 'Home');
+    }
+
+    function end(target) {
+      MockInteractions.keyDownOn(target, 35, [], 'End');
+    }
+
+
+    describe('custom element definition', () => {
+      let menu;
+
+      beforeEach(() => {
+        menu = fixture('default');
+      });
+
+      it('should be defined with correct tag name', () => {
+        expect(customElements.get('vaadin-menu')).to.be.ok;
+      });
+
+      it('should not expose class name globally', () => {
+        expect(window.MenuElement).not.to.be.ok;
+      });
+
+      it('should have a valid version number', () => {
+        expect(menu.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta)\d+)?$/);
+      });
+    });
+
+    describe('root menu layout', () => {
+      let menu, buttons;
+
+      const getButtons = menu => Array.from(menu.shadowRoot.querySelectorAll('vaadin-menu-root-button'));
+
+      beforeEach(done => {
+        menu = fixture('default');
+        menu.items = [
+          {text: 'Item 1'},
+          {text: 'Item 2'},
+          {text: 'Item 3', disabled: true},
+          {text: 'Item 4'},
+        ];
+        Polymer.RenderStatus.afterNextRender(menu, done);
+      });
+
+      it('should render the buttons based on the items property', () => {
+        buttons = getButtons(menu);
+        expect(buttons.length).to.equal(4);
+      });
+
+      it('should set buttons text content based on the text property', () => {
+        buttons = getButtons(menu);
+        menu.items.forEach((item, idx) => {
+          expect(buttons[idx].textContent.trim()).to.equal(item.text);
+        });
+      });
+
+      it('should render disabled button if disabled property is true', () => {
+        buttons = getButtons(menu);
+        expect(buttons[2].disabled).to.be.true;
+      });
+
+      it('should set tabindex to -1 to all the buttons except first one', () => {
+        buttons = getButtons(menu);
+        menu.dispatchEvent(new CustomEvent('focusin', {bubbles: true, composed: true}));
+        expect(buttons[0].getAttribute('tabindex')).to.equal('0');
+        buttons.slice(1).forEach(btn => {
+          expect(btn.focusElement.getAttribute('tabindex')).to.equal('-1');
+        });
+      });
+
+      it('should move focus to next button on "arrow-right" keydown', () => {
+        buttons = getButtons(menu);
+        buttons[0].focus();
+        const spy = sinon.spy(buttons[1], 'focus');
+        arrowRight(buttons[0]);
+        expect(spy).to.be.calledOnce;
+        expect(buttons[1].hasAttribute('focused')).to.be.true;
+      });
+
+      it('should move focus to prev button on "arrow-left" keydown', () => {
+        buttons = getButtons(menu);
+        buttons[1].focus();
+        const spy = sinon.spy(buttons[0], 'focus');
+        arrowLeft(buttons[1]);
+        expect(spy).to.be.calledOnce;
+        expect(buttons[0].hasAttribute('focused')).to.be.true;
+      });
+
+      it('should move focus to first button on "home" keydown', () => {
+        buttons = getButtons(menu);
+        buttons[1].focus();
+        const spy = sinon.spy(buttons[0], 'focus');
+        home(buttons[1]);
+        expect(spy).to.be.calledOnce;
+        expect(buttons[0].hasAttribute('focused')).to.be.true;
+      });
+
+      it('should move focus to second button if first is disabled on "home" keydown', () => {
+        menu.set('items.0.disabled', true);
+        buttons = getButtons(menu);
+        buttons[3].focus();
+        const spy = sinon.spy(buttons[1], 'focus');
+        home(buttons[3]);
+        expect(spy).to.be.calledOnce;
+        expect(buttons[1].hasAttribute('focused')).to.be.true;
+      });
+
+      it('should move focus to last button on "end" keydown', () => {
+        buttons = getButtons(menu);
+        buttons[0].focus();
+        const spy = sinon.spy(buttons[3], 'focus');
+        end(buttons[0]);
+        expect(spy).to.be.calledOnce;
+        expect(buttons[3].hasAttribute('focused')).to.be.true;
+      });
+
+      it('should move focus to the closest enabled button if last is disabled on "end" keydown', () => {
+        menu.set('items.3.disabled', true);
+        buttons = getButtons(menu);
+        buttons[0].focus();
+        const spy = sinon.spy(buttons[1], 'focus');
+        end(buttons[0]);
+        expect(spy).to.be.calledOnce;
+        expect(buttons[1].hasAttribute('focused')).to.be.true;
+      });
+
+      it('should move focus to first button on "arrow-right", if last button has focus', () => {
+        buttons = getButtons(menu);
+        buttons[3].focus();
+        const spy = sinon.spy(buttons[0], 'focus');
+        arrowRight(buttons[3]);
+        expect(spy).to.be.calledOnce;
+        expect(buttons[0].hasAttribute('focused')).to.be.true;
+      });
+
+      it('should move focus to last button on "arrow-up", if first button has focus', () => {
+        buttons = getButtons(menu);
+        buttons[0].focus();
+        const spy = sinon.spy(buttons[3], 'focus');
+        arrowLeft(buttons[0]);
+        expect(spy).to.be.calledOnce;
+        expect(buttons[3].hasAttribute('focused')).to.be.true;
+      });
+    });
+  </script>
+</body>
