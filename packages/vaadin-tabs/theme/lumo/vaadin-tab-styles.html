@@ -110,7 +110,7 @@
         opacity: 0;
       }
 
-      :host ::slotted(a) {
+      :host ::slotted(a[href]) {
         display: flex;
         width: 100%;
         justify-content: center;
@@ -121,6 +121,11 @@
         text-decoration: none;
         color: inherit;
         outline: none;
+      }
+
+      :host ::slotted(a[href]:hover),
+      :host ::slotted(a[href]:focus) {
+        color: inherit;
       }
 
       :host ::slotted(iron-icon) {
