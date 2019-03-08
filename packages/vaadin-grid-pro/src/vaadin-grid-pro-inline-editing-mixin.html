@@ -51,6 +51,17 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       super();
       this.__boundItemPropertyChanged = this._onItemPropertyChanged.bind(this);
       this.__boundEditorFocusOut = this._onEditorFocusOut.bind(this);
+
+      this._addEditColumnListener('mousedown', e => {
+        // prevent grid from resetting navigating state
+        e.stopImmediatePropagation();
+        this._toggleAttribute('navigating', true, this);
+      });
+
+      this._addEditColumnListener('focusout', e => {
+        // prevent grid from resetting navigating state
+        e.stopImmediatePropagation();
+      });
     }
 
     ready() {
@@ -120,6 +131,29 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
     _applyEdit({path, value, index, item}) {
       this.set(path, value, item);
       this.notifyPath('items.' + index + '.' + path, value);
+    }
+
+    _addEditColumnListener(type, callback) {
+      this.addEventListener(type, e => {
+        const context = this.getEventContext(e);
+        const column = context.column;
+        const edited = this.__edited;
+
+        if (context.item && this._isEditColumn(column)) {
+          const path = e.composedPath();
+          const cell = path[path.indexOf(this.$.table) - 3];
+
+          if (!cell || cell.getAttribute('part').indexOf('details-cell') > -1) {
+            return;
+          }
+
+          if (edited && edited.cell === cell) {
+            return;
+          }
+
+          callback(e);
+        }
+      });
     }
 
     _onItemPropertyChanged(e) {

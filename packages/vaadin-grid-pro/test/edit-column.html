@@ -416,6 +416,45 @@
           expect(input).to.be.not.ok;
         });
       });
+
+      describe('cell focusing', () => {
+        let grid, cell;
+
+        beforeEach(() => {
+          grid = fixture('default');
+          grid.items = getItems();
+          flushGrid(grid);
+        });
+
+        it('should keep navigating state on the grid while focusing the editable cell', () => {
+          cell = getContainerCell(grid.$.items, 0, 0);
+
+          // mimic the real events sequence to avoid using fake focus shim from grid
+          cell.dispatchEvent(new CustomEvent('mousedown', {bubbles: true, composed: true}));
+          expect(grid.hasAttribute('navigating')).to.be.true;
+
+          cell.focus();
+          cell.dispatchEvent(new CustomEvent('focusout', {bubbles: true, composed: true}));
+          expect(grid.hasAttribute('navigating')).to.be.true;
+
+          cell.dispatchEvent(new CustomEvent('focusin', {bubbles: true, composed: true}));
+          expect(grid.hasAttribute('navigating')).to.be.true;
+        });
+
+        it('should not set navigating state on the grid while focusing the non-editable cell', () => {
+          cell = getContainerCell(grid.$.items, 0, 2);
+
+          cell.dispatchEvent(new CustomEvent('mousedown', {bubbles: true, composed: true}));
+          expect(grid.hasAttribute('navigating')).to.be.false;
+
+          cell.focus();
+          cell.dispatchEvent(new CustomEvent('focusout', {bubbles: true, composed: true}));
+          expect(grid.hasAttribute('navigating')).to.be.false;
+
+          cell.dispatchEvent(new CustomEvent('focusin', {bubbles: true, composed: true}));
+          expect(grid.hasAttribute('navigating')).to.be.false;
+        });
+      });
     });
   </script>
 

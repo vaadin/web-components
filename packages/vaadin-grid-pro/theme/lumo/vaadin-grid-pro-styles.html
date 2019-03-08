@@ -12,6 +12,17 @@
 <dom-module id="lumo-grid-pro-styles" theme-for="vaadin-grid-pro">
   <template>
     <style include="lumo-grid">
+      /* keep the focus-ring on active */
+      :host([navigating]) [part~="cell"]:active::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        pointer-events: none;
+        box-shadow: inset 0 0 0 2px var(--lumo-primary-color-50pct);
+      }
     </style>
   </template>
 </dom-module>
