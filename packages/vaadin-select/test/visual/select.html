@@ -27,7 +27,7 @@
     .capture-block {
       display: inline-block;
       width: 800px;
-      height: 270px;
+      height: 350px;
     }
   </style>
 
@@ -47,6 +47,19 @@
         <vaadin-list-box>
           <vaadin-item>default item</vaadin-item>
           <vaadin-item>Selected and Focused</vaadin-item>
+        </vaadin-list-box>
+      </template>
+    </vaadin-select>
+
+    <br/>
+
+    <vaadin-select label="small" theme="small">
+    </vaadin-select>
+
+    <vaadin-select label="small & selected" theme="small" value="Item one">
+      <template>
+        <vaadin-list-box>
+          <vaadin-item>Item one</vaadin-item>
         </vaadin-list-box>
       </template>
     </vaadin-select>

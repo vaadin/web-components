@@ -32,6 +32,16 @@
         "description": "",
         "image": ""
       }
+    },
+    {
+      "name": "Theme Variants",
+      "url": "select-theme-variants-demos",
+      "src": "select-theme-variants-demos.html",
+      "meta": {
+        "title": "vaadin-select Theme Variants",
+        "description": "",
+        "image": ""
+      }
     }
   ]
 }

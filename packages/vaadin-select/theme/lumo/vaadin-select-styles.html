@@ -23,6 +23,11 @@
         padding-right: 0;
       }
 
+      :host([theme~="small"]) [selected] {
+        padding: 0;
+        min-height: var(--lumo-size-s);
+      }
+
       [part="toggle-button"]::before {
         content: var(--lumo-icons-dropdown);
       }

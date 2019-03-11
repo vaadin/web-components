@@ -55,39 +55,6 @@
       </template>
     </vaadin-demo-snippet>
 
-    <h3>Custom Theme Variant</h3>
-    <vaadin-demo-snippet id="select-custom-theme-variant">
-      <template preserve-content>
-        <dom-module id="custom-select" theme-for="vaadin-text-field vaadin-item">
-          <template>
-            <style>
-              :host([theme~="custom"]) {
-                font-family: monospace;
-              }
-            </style>
-          </template>
-        </dom-module>
-        <dom-module id="custom-select-overlay" theme-for="vaadin-text-field vaadin-select-overlay">
-          <template>
-            <style>
-              :host([theme~="custom"]) [part~="overlay"] {
-                background: linear-gradient(hsla(214, 61%, 25%, 0.05), hsla(214, 61%, 25%, 0.05)) #fff;
-              }
-            </style>
-          </template>
-        </dom-module>
-        <vaadin-select label="Name" theme="custom">
-          <template>
-            <vaadin-list-box>
-              <vaadin-item theme="custom">Jose</vaadin-item>
-              <vaadin-item theme="custom">Manolo</vaadin-item>
-              <vaadin-item theme="custom">Pedro</vaadin-item>
-            </vaadin-list-box>
-          </template>
-        </vaadin-select>
-      </template>
-    </vaadin-demo-snippet>
-
   </template>
   <script>
     class SelectStylingDemos extends DemoReadyEventEmitter(SelectDemo(Polymer.Element)) {
