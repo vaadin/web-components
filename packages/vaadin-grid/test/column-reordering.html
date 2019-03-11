@@ -23,7 +23,7 @@
       <vaadin-grid style="width: 400px; height: 200px;" size="1" column-reordering-allowed>
         <dom-repeat items="[1, 2, 3, 4]" as="col">
           <template is="dom-repeat" items="[1, 2, 3, 4]" as="col">
-            <vaadin-grid-column resizable>
+            <vaadin-grid-column resizable index$="[[col]]">
               <template class="header"><span hidden>0</span><span>[[col]]</span></template>
               <template>[[col]]</template>
               <template class="footer">[[col]]</template>
@@ -428,6 +428,15 @@
           const calls = attributeSpy.getCalls().filter(f => f.args[0] === 'last-column');
           const columnCount = grid.querySelectorAll('vaadin-grid-column').length;
           expect(calls.length).to.equal(columnCount);
+        });
+
+        it('should fire `column-reorder` event with columns', done => {
+          grid.addEventListener('column-reorder', e => {
+            expect(e.detail.columns.map(column => column.getAttribute('index'))).to.eql(['2', '1', '3', '4']);
+            done();
+          });
+
+          dragAndDropOver(headerContent[0], headerContent[1]);
         });
 
       });

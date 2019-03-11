@@ -175,6 +175,16 @@ This program is available under Apache License Version 2.0, available at https:/
       this._draggedColumn = null;
       this._lastDragClientX = null;
       this._reorderGhost.style.visibility = 'hidden';
+
+      this.dispatchEvent(new CustomEvent('column-reorder', {detail: {
+        columns: this._getColumnsInOrder()
+      }}));
+    }
+
+    _getColumnsInOrder() {
+      return this._columnTree.slice(0).pop()
+        .filter(c => !c.hidden)
+        .sort((b, a) => (b._order - a._order));
     }
 
     _cellFromPoint(x, y) {
