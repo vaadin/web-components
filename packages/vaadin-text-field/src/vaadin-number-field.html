@@ -208,7 +208,18 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _getValue(incr) {
-          return (incr + (incr * Math.floor((parseFloat(this.value || 0) / incr).toFixed(1)))).toFixed(this.__decimals);
+          let result = this.min || incr;
+          if (this.value) {
+            const number = parseFloat(this.value);
+            let nextMultiple = parseFloat((Math.ceil(number / incr) * incr).toFixed(this.__decimals));
+            if (this.min) {
+              let minOffset = this.min % this.step;
+              minOffset = incr < 0 ? -minOffset : minOffset;
+              nextMultiple = this.min ? nextMultiple + minOffset : nextMultiple;
+            }
+            result = (nextMultiple === number ? nextMultiple + incr : nextMultiple).toFixed(this.__decimals);
+          }
+          return result;
         }
 
         _getAllowedIncrementSign(sign) {
@@ -262,17 +273,15 @@ This program is available under Apache License Version 2.0, available at https:/
           // Validate value to be numeric
           if (newVal && isNaN(parseFloat(newVal).toFixed(this.__decimals))) {
             this.value = '';
-          } else if (!isNaN(parseFloat(this.value)) &&
-            parseFloat(this.value) !== parseFloat(parseFloat(this.value).toFixed(this.__decimals))) {
-            // Validate correct decimals
-            this.value = parseFloat(parseFloat(this.value).toFixed(this.__decimals));
+          } else if (typeof this.value !== 'string') {
+            this.value = String(this.value);
           }
 
           super._valueChanged(this.value, oldVal);
         }
 
         __onInputChange() {
-          this.checkValidity() && this.__adjustDecimals();
+          this.checkValidity();
         }
 
         __adjustDecimals() {
@@ -289,7 +298,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         checkValidity() {
           // text-field mixin does not check against `min` and `max`
-          if (this.min !== undefined || this.max !== undefined) {
+          if (this.min !== undefined || this.max !== undefined || this.step) {
             this.invalid = !this.inputElement.checkValidity();
           }
           return super.checkValidity();

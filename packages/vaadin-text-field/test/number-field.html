@@ -49,6 +49,22 @@
           });
         });
 
+        it('should set value with correct decimal places regardless of step', () => {
+          numberField.step = 2;
+          numberField.value = 9.99;
+
+          expect(numberField.value).equal('9.99');
+        });
+
+        it('should increment value to next multiple of step offset by the min', () => {
+          numberField.step = 3;
+          numberField.min = 4;
+          numberField.value = 4;
+
+          increaseButton.click();
+
+          expect(numberField.value).equal('7');
+        });
       });
 
       describe('value control buttons', () => {
@@ -145,7 +161,7 @@
 
           increaseButton.click();
 
-          expect(numberField.value).to.be.equal(0);
+          expect(numberField.value).to.be.equal('0');
         });
 
         it('should not decrease value when decreaseButton is clicked and min value is reached', () => {
@@ -154,7 +170,7 @@
 
           decreaseButton.click();
 
-          expect(numberField.value).to.be.equal(0);
+          expect(numberField.value).to.be.equal('0');
         });
 
         it('should not disable buttons if there are no limits set', () => {
@@ -181,10 +197,10 @@
           numberField.value = 0;
 
           increaseButton.click();
-          expect(numberField.value).to.be.equal(0);
+          expect(numberField.value).to.be.equal('0');
 
           decreaseButton.click();
-          expect(numberField.value).to.be.equal(0);
+          expect(numberField.value).to.be.equal('0');
         });
 
         it('should prevent touchend event on value control buttons', () => {
@@ -240,7 +256,7 @@
 
           decreaseButton.click();
 
-          expect(numberField.value).to.be.equal(numberField.max);
+          expect(numberField.value).to.be.equal(String(numberField.max));
         });
 
         it('should increase value to min value when value is under min and increaseButton is clicked', () => {
@@ -249,7 +265,15 @@
 
           increaseButton.click();
 
-          expect(numberField.value).to.be.equal(numberField.min);
+          expect(numberField.value).to.be.equal(String(numberField.min));
+        });
+
+        it('should increase value to min value when value is not set and increaseButton is clicked', () => {
+          numberField.min = -10;
+
+          increaseButton.click();
+
+          expect(numberField.value).to.be.equal(String(numberField.min));
         });
       });
 
@@ -268,15 +292,27 @@
           expect(numberField.validate()).to.be.true;
         });
 
-        it('should prevent setting decimals', () => {
+        it('should allow setting decimals', () => {
           numberField.value = 7.6;
-          expect(numberField.value).to.be.equal(8);
+          expect(numberField.value).to.be.equal('7.6');
         });
 
-        it('should prevent setting too many decimals', () => {
+        it('should not prevent invalid values applied programatically (step)', () => {
           numberField.step = 0.1;
           numberField.value = 7.686;
-          expect(numberField.value).to.be.equal(7.7);
+          expect(numberField.value).to.be.equal('7.686');
+        });
+
+        it('should not prevent invalid values applied programatically (min)', () => {
+          numberField.min = 2;
+          numberField.value = 1;
+          expect(numberField.value).to.be.equal('1');
+        });
+
+        it('should not prevent invalid values applied programatically (max)', () => {
+          numberField.max = 2;
+          numberField.value = 3;
+          expect(numberField.value).to.be.equal('3');
         });
 
         it('should validate when setting limits', () => {
