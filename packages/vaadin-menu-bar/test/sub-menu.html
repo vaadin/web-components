@@ -19,6 +19,8 @@
   </test-fixture>
 
   <script>
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
     function arrowUp(target) {
       MockInteractions.keyDownOn(target, 38, [], 'ArrowUp');
     }
@@ -75,7 +77,7 @@
         expect(subMenu.opened).to.be.true;
       });
 
-      it('should open sub-menu on arrow down', async() => {
+      (isIOS ? it.skip : it)('should open sub-menu on arrow down', async() => {
         buttons = getButtons(menu);
         subMenu = buttons[0].querySelector('vaadin-context-menu');
         arrowDown(buttons[0]);
@@ -83,7 +85,7 @@
         expect(subMenu.opened).to.be.true;
       });
 
-      it('should close sub-menu on first item arrow up', async() => {
+      (isIOS ? it.skip : it)('should close sub-menu on first item arrow up', async() => {
         buttons = getButtons(menu);
         subMenu = buttons[0].querySelector('vaadin-context-menu');
         arrowDown(buttons[0]);
@@ -98,7 +100,7 @@
       it('should close sub-menu on outside click', async() => {
         buttons = getButtons(menu);
         subMenu = buttons[0].querySelector('vaadin-context-menu');
-        arrowDown(buttons[0]);
+        buttons[0].click();
         await nextRender(subMenu);
 
         document.body.click();
@@ -109,19 +111,17 @@
       it('should close and dispatch item-selected event on select', async() => {
         buttons = getButtons(menu);
         subMenu = buttons[0].querySelector('vaadin-context-menu');
-        arrowDown(buttons[0]);
+        buttons[0].click();
         await nextRender(subMenu);
 
         const spy = sinon.spy();
         menu.addEventListener('item-selected', spy);
         item = subMenu.$.overlay.querySelector('vaadin-context-menu-item');
-        arrowDown(item);
-        item = item.nextSibling;
         item.click();
         await nextRender(subMenu);
         expect(subMenu.opened).to.be.false;
         expect(spy).to.be.calledOnce;
-        expect(spy.firstCall.args[0].detail.value).to.deep.equal({text: 'Menu Item 1 2'});
+        expect(spy.firstCall.args[0].detail.value).to.deep.equal({text: 'Menu Item 1 1'});
       });
 
     });
