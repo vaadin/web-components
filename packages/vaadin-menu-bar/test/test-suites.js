@@ -1,3 +1,4 @@
 window.VaadinMenuElementSuites = [
-  'basic.html'
+  'basic.html',
+  'sub-menu.html'
 ];

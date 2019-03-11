@@ -11,10 +11,14 @@ This program is available under Apache License Version 2.0, available at https:/
   window.Vaadin = window.Vaadin || {};
 
   /**
-   * @polymerMixin
-   * @memberof Vaadin
+   * @namespace Vaadin.Menu
    */
-  Vaadin.MenuButtonsMixin = superClass => class MenuButtonsMixin extends superClass {
+  window.Vaadin.Menu = window.Vaadin.Menu || {};
+
+  /**
+   * @polymerMixin
+   */
+  Vaadin.Menu.ButtonsMixin = superClass => class MenuButtonsMixin extends superClass {
 
     ready() {
       super.ready();
@@ -69,8 +73,7 @@ This program is available under Apache License Version 2.0, available at https:/
         idx = this._getAvailableIndex(idx, increment, buttons);
         if (idx >= 0) {
           const btn = buttons[idx];
-          btn.focus();
-          btn.setAttribute('focus-ring', '');
+          btn._focusWithKey();
           buttons.forEach(e => e.tabIndex = e === btn ? 0 : -1);
           event.preventDefault();
         }

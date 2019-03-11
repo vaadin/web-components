@@ -20,6 +20,43 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Nested Sub Menu</h3>
+    <vaadin-demo-snippet id="menu-basic-demos-nested" when-defined="vaadin-menu">
+      <template preserve-content>
+        <vaadin-menu></vaadin-menu>
+        <script>
+          window.addDemoReadyListener('#menu-basic-demos-nested', function(document) {
+            const menu = document.querySelector('vaadin-menu');
+            menu.items = [
+              {
+                text: 'Project',
+                children: [
+                  {text: 'Dashboard'},
+                  {component: 'hr'},
+                  {text: 'Users',
+                    children: [{text: 'List'}, {text: 'Add'}]
+                  },
+                  {text: 'Billing',
+                    children: [{text: 'Invoices'}, {text: 'Balance Events'}]
+                  },
+                ]
+              },
+              {
+                text: 'Account',
+                children: [
+                  {text: 'Edit Profile'},
+                  {component: 'hr'},
+                  {text: 'Privacy Settings'},
+                  {text: 'Terms of Service'}
+                ]
+              },
+              {text: 'Sign Out'}
+            ];
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
   </template>
   <script>
     class MenuBasicDemos extends DemoReadyEventEmitter(MenuDemo(Polymer.Element)) {

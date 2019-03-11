@@ -1,0 +1,95 @@
+<!--
+@license
+Copyright (c) 2019 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<script>
+  /**
+   * @namespace Vaadin
+   */
+  window.Vaadin = window.Vaadin || {};
+
+  /**
+   * @namespace Vaadin.Menu
+   */
+  window.Vaadin.Menu = window.Vaadin.Menu || {};
+
+  /**
+   * @polymerMixin
+   */
+  Vaadin.Menu.SubMenuMixin = superClass => class SubMenuMixin extends superClass {
+
+    constructor() {
+      super();
+
+      // store sub-menu overlays
+      this._overlays = new WeakMap();
+    }
+
+    ready() {
+      super.ready();
+
+      this.__boundOutsideClickListener = this.__outsideClickListener.bind(this);
+      this.__boundOnContextMenuKeydown = this.__onContextMenuKeydown.bind(this);
+
+      this.shadowRoot.addEventListener('before-open', this.__onBeforeOpen.bind(this));
+    }
+
+    connectedCallback() {
+      super.connectedCallback();
+      document.addEventListener('click', this.__boundOutsideClickListener);
+    }
+
+    disconnectedCallback() {
+      super.disconnectedCallback();
+      document.removeEventListener('click', this.__boundOutsideClickListener);
+    }
+
+    __onContextMenuKeydown(e) {
+      const item = e.target;
+      const list = item.parentNode;
+      if (e.keyCode === 38 && item === list.items[0]) {
+        this.__closeSubMenus();
+        const button = this._overlays.get(list.parentNode);
+        button._focusWithKey();
+      }
+    }
+
+    __outsideClickListener(e) {
+      if (e.composedPath().indexOf(this) === -1) {
+        this.__closeSubMenus();
+      }
+    }
+
+    __onBeforeOpen(e) {
+      e.stopPropagation();
+      this.__closeSubMenus();
+      const button = e.composedPath()[0];
+      const {menu, items} = e.detail;
+      menu.items = items;
+
+      const overlay = menu.$.overlay;
+      if (!this._overlays.has(overlay)) {
+        menu.listenOn = button;
+        overlay.modeless = true;
+        overlay.addEventListener('keydown', this.__boundOnContextMenuKeydown);
+        menu.addEventListener('item-selected', this.__onItemSelected.bind(this));
+        this._overlays.set(overlay, button);
+      }
+    }
+
+    __onItemSelected(e) {
+      e.stopPropagation();
+      const {detail} = e;
+      this.__closeSubMenus();
+      this.dispatchEvent(new CustomEvent('item-selected', {detail}));
+    }
+
+    __closeSubMenus() {
+      Array.from(this.shadowRoot.querySelectorAll('vaadin-context-menu')).forEach(menu => menu.close());
+    }
+  };
+</script>
+
+

@@ -1,0 +1,129 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-menu tests</title>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../iron-test-helpers/mock-interactions.js"></script>
+  <link rel="import" href="../../test-fixture/test-fixture.html">
+  <link rel="import" href="../../polymer/lib/utils/render-status.html">
+  <link rel="import" href="../vaadin-menu.html">
+</head>
+
+<body>
+  <test-fixture id="default">
+    <template>
+      <vaadin-menu></vaadin-menu>
+    </template>
+  </test-fixture>
+
+  <script>
+    function arrowUp(target) {
+      MockInteractions.keyDownOn(target, 38, [], 'ArrowUp');
+    }
+
+    function arrowDown(target) {
+      MockInteractions.keyDownOn(target, 40, [], 'ArrowDown');
+    }
+
+    function nextRender(target) {
+      return new Promise(resolve => {
+        Polymer.RenderStatus.afterNextRender(target, () => {
+          resolve();
+        });
+      });
+    }
+
+    describe('sub-menu', () => {
+      let menu, buttons, subMenu, item;
+
+      const getButtons = menu => Array.from(menu.shadowRoot.querySelectorAll('vaadin-menu-root-button'));
+
+      beforeEach(done => {
+        menu = fixture('default');
+        menu.items = [
+          {
+            text: 'Menu Item 1',
+            children: [
+              {text: 'Menu Item 1 1'},
+              {text: 'Menu Item 1 2'}
+            ]
+          },
+          {text: 'Menu Item 2'}
+        ];
+        Polymer.RenderStatus.afterNextRender(menu, done);
+      });
+
+      afterEach(() => {
+        if (subMenu && subMenu.opened) {
+          subMenu.close();
+        }
+      });
+
+      it('should render sub-menu for buttons with items', () => {
+        buttons = getButtons(menu);
+        expect(buttons[0].querySelector('vaadin-context-menu')).to.be.ok;
+        expect(buttons[1].querySelector('vaadin-context-menu')).to.not.be.ok;
+      });
+
+      it('should open sub-menu on button click', async() => {
+        buttons = getButtons(menu);
+        subMenu = buttons[0].querySelector('vaadin-context-menu');
+        buttons[0].click();
+        await nextRender(subMenu);
+        expect(subMenu.opened).to.be.true;
+      });
+
+      it('should open sub-menu on arrow down', async() => {
+        buttons = getButtons(menu);
+        subMenu = buttons[0].querySelector('vaadin-context-menu');
+        arrowDown(buttons[0]);
+        await nextRender(subMenu);
+        expect(subMenu.opened).to.be.true;
+      });
+
+      it('should close sub-menu on first item arrow up', async() => {
+        buttons = getButtons(menu);
+        subMenu = buttons[0].querySelector('vaadin-context-menu');
+        arrowDown(buttons[0]);
+        await nextRender(subMenu);
+
+        item = subMenu.$.overlay.querySelector('vaadin-context-menu-item');
+        arrowUp(item);
+        await nextRender(subMenu);
+        expect(subMenu.opened).to.be.false;
+      });
+
+      it('should close sub-menu on outside click', async() => {
+        buttons = getButtons(menu);
+        subMenu = buttons[0].querySelector('vaadin-context-menu');
+        arrowDown(buttons[0]);
+        await nextRender(subMenu);
+
+        document.body.click();
+        await nextRender(subMenu);
+        expect(subMenu.opened).to.be.false;
+      });
+
+      it('should close and dispatch item-selected event on select', async() => {
+        buttons = getButtons(menu);
+        subMenu = buttons[0].querySelector('vaadin-context-menu');
+        arrowDown(buttons[0]);
+        await nextRender(subMenu);
+
+        const spy = sinon.spy();
+        menu.addEventListener('item-selected', spy);
+        item = subMenu.$.overlay.querySelector('vaadin-context-menu-item');
+        arrowDown(item);
+        item = item.nextSibling;
+        item.click();
+        await nextRender(subMenu);
+        expect(subMenu.opened).to.be.false;
+        expect(spy).to.be.calledOnce;
+        expect(spy.firstCall.args[0].detail.value).to.deep.equal({text: 'Menu Item 1 2'});
+      });
+
+    });
+  </script>
+</body>

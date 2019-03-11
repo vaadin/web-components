@@ -5,11 +5,14 @@ This program is available under Apache License Version 2.0, available at https:/
 -->
 
 <link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../polymer/lib/elements/dom-if.html">
 <link rel="import" href="../../polymer/lib/elements/dom-repeat.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
+<link rel="import" href="../../vaadin-context-menu/src/vaadin-context-menu.html">
 <link rel="import" href="vaadin-menu-root-button.html">
 <link rel="import" href="vaadin-menu-buttons-mixin.html">
+<link rel="import" href="vaadin-sub-menu-mixin.html">
 
 <dom-module id="vaadin-menu">
   <template>
@@ -24,8 +27,13 @@ This program is available under Apache License Version 2.0, available at https:/
     </style>
     <div part="container">
       <template is="dom-repeat" items="[[items]]">
-        <vaadin-menu-root-button disabled="[[item.disabled]]">
+        <vaadin-menu-root-button disabled="[[item.disabled]]" items="[[item.children]]">
           <span>[[item.text]]</span>
+          <template is="dom-if" if="[[item.children.length]]">
+            <vaadin-context-menu
+              open-on="opensubmenu">
+            </vaadin-context-menu>
+          </template>
         </vaadin-menu-root-button>
       </template>
     </div>
@@ -42,15 +50,17 @@ This program is available under Apache License Version 2.0, available at https:/
        * ```
        *
        * @memberof Vaadin
-       * @mixes Vaadin.MenuButtonsMixin
+       * @mixes Vaadin.Menu.ButtonsMixin
+       * @mixes Vaadin.Menu.SubMenuMixin
        * @mixes Vaadin.ElementMixin
        * @mixes Vaadin.ThemableMixin
        * @demo demo/index.html
        */
       class MenuElement extends
-        Vaadin.MenuButtonsMixin(
-          Vaadin.ElementMixin(
-            Vaadin.ThemableMixin(Polymer.Element))) {
+        Vaadin.Menu.ButtonsMixin(
+          Vaadin.Menu.SubMenuMixin(
+            Vaadin.ElementMixin(
+              Vaadin.ThemableMixin(Polymer.Element)))) {
 
         static get is() {
           return 'vaadin-menu';
