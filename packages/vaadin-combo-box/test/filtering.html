@@ -119,18 +119,19 @@
 
       it('should not scroll to selected value when filtering', done => {
         comboBox.value = 'baz';
-        const spy = sinon.spy(comboBox.$.overlay, '_scrollIntoView');
+
+        onceOpened(comboBox)
+          .then(() => {
+            const spy = sinon.spy(comboBox.$.overlay, '_scrollIntoView');
+            setInputValue('b');
+
+            window.requestAnimationFrame(() => {
+              expect(spy.callCount).to.eql(0);
+              done();
+            });
+          });
 
         setInputValue('ba');
-        setInputValue('b');
-
-        // first scroll after open is async
-        window.requestAnimationFrame(() => {
-          setTimeout(() => {
-            expect(spy.callCount).to.eql(1); // scrolls once on open
-            done();
-          }, 1);
-        });
       });
 
       it('should update focus when opening with filling filter', () => {

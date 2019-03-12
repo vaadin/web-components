@@ -22,6 +22,7 @@
     "fire": false,
     "fireMousedownMouseupClick": false,
     "getCustomPropertyValue": false,
+    "onceOpened": false,
     "onceScrolled": false,
     "System": false,
     "HTMLImports": false,

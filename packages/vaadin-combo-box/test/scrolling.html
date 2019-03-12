@@ -96,12 +96,13 @@
 
           combobox.value = combobox.items[50];
           combobox.close();
-          combobox.open();
 
-          setTimeout(() => {
+          onceOpened(combobox).then(() => {
             expectSelectedItemPositionToBeVisible();
             done();
-          }, 1);
+          });
+
+          combobox.open();
         });
 
         it('should not close the items when touching scroll bar', () => {
