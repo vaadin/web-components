@@ -477,9 +477,19 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _onKeyDown(e) {
-          if (!this.readonly && !this.opened && /^(ArrowDown|Down|ArrowUp|Up|Enter|SpaceBar| )$/.test(e.key)) {
-            e.preventDefault();
-            this.opened = true;
+          if (!this.readonly && !this.opened) {
+            if (/^(Enter|SpaceBar|\s|ArrowDown|Down|ArrowUp|Up)$/.test(e.key)) {
+              e.preventDefault();
+              this.opened = true;
+
+            } else if (/[a-zA-Z0-9]/.test(e.key) && e.key.length === 1) {
+              const selected = this._menuElement.selected;
+              const currentIdx = selected !== undefined ? selected : -1;
+              const newIdx = this._menuElement._searchKey(currentIdx, e.key);
+              if (newIdx >= 0) {
+                this._updateSelectedItem(this._items[newIdx].value, this._items);
+              }
+            }
           }
         }
 

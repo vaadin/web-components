@@ -144,6 +144,9 @@
     function arrowDown(target) {
       MockInteractions.keyDownOn(target, 40, [], 'ArrowDown');
     }
+    function keyDownChar(target, letter, modifier) {
+      MockInteractions.keyDownOn(target, letter.charCodeAt(0), modifier, letter);
+    }
     function Space(target) {
       MockInteractions.keyDownOn(target, 32, [], ' ');
     }
@@ -397,6 +400,19 @@
             select.value = '';
             expect(select._inputElement.getAttribute('has-value')).to.be.null;
           });
+        });
+
+        it('should select items when alphanumeric keys are pressed', () => {
+          expect(select._menuElement.selected).to.be.equal(2);
+          keyDownChar(input, 'o');
+          keyDownChar(input, 'p');
+          keyDownChar(input, 't');
+          expect(select._menuElement.selected).to.be.equal(0);
+          keyDownChar(input, 'i');
+          keyDownChar(input, 'o');
+          keyDownChar(input, 'n');
+          keyDownChar(input, '2');
+          expect(select._menuElement.selected).to.be.equal(1);
         });
       });
 

@@ -33,6 +33,7 @@
     "vaadin-themable-mixin": "vaadin/vaadin-themable-mixin#^1.3.2",
     "vaadin-text-field": "vaadin/vaadin-text-field#^2.1.1",
     "vaadin-list-box": "vaadin/vaadin-list-box#^1.1.0",
+    "vaadin-list-mixin": "vaadin/vaadin-list-mixin#^2.2.0",
     "vaadin-item": "vaadin/vaadin-item#^2.1.0",
     "vaadin-overlay": "vaadin/vaadin-overlay#^3.2.0",
     "vaadin-lumo-styles": "vaadin/vaadin-lumo-styles#^1.1.0",
