@@ -69,14 +69,28 @@ This program is available under Apache License Version 2.0, available at https:/
       const {menu, items} = e.detail;
       menu.items = items;
 
+      const rect = button.getBoundingClientRect();
       const overlay = menu.$.overlay;
       if (!this._overlays.has(overlay)) {
         menu.listenOn = button;
         overlay.modeless = true;
         overlay.addEventListener('keydown', this.__boundOnContextMenuKeydown);
+        overlay.addEventListener('vaadin-overlay-open', e => {
+          if (overlay.hasAttribute('bottom-aligned')) {
+            overlay.style.bottom = parseInt(getComputedStyle(overlay).bottom) + rect.height + 'px';
+          }
+        });
         menu.addEventListener('item-selected', this.__onItemSelected.bind(this));
         this._overlays.set(overlay, button);
       }
+
+      requestAnimationFrame(() => {
+        button.dispatchEvent(new CustomEvent('opensubmenu', {detail: {
+          x: rect.left,
+          y: rect.bottom,
+          children: items
+        }}));
+      });
     }
 
     __onItemSelected(e) {

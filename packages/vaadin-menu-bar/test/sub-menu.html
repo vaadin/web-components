@@ -124,6 +124,17 @@
         expect(spy.firstCall.args[0].detail.value).to.deep.equal({text: 'Menu Item 1 1'});
       });
 
+      (isIOS ? it.skip : it)('should position bottom-aligned sub-menu to button top', async() => {
+        menu.style.position = 'absolute';
+        menu.style.bottom = '50px';
+        buttons = getButtons(menu);
+        subMenu = buttons[0].querySelector('vaadin-context-menu');
+        buttons[0].click();
+        await nextRender(subMenu);
+        const overlayRect = subMenu.$.overlay.getBoundingClientRect();
+        const buttonRect = buttons[0].getBoundingClientRect();
+        expect(overlayRect.top + overlayRect.height).to.be.closeTo(buttonRect.top, 1);
+      });
     });
   </script>
 </body>

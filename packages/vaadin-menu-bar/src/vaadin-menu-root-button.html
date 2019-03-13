@@ -48,15 +48,6 @@ This program is available under Apache License Version 2.0, available at https:/
             bubbles: true,
             composed: true
           }));
-
-          const rect = this.getBoundingClientRect();
-          requestAnimationFrame(() => {
-            this.dispatchEvent(new CustomEvent('opensubmenu', {detail: {
-              x: rect.left,
-              y: rect.bottom,
-              children: this.items
-            }}));
-          });
         }
       }
     }
