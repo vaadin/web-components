@@ -3,9 +3,9 @@
 <link rel="import" href="../../../vaadin-lumo-styles/typography.html">
 <link rel="import" href="../../../vaadin-text-field/theme/lumo/vaadin-text-field.html">
 
-<dom-module id="lumo-grid-pro-edit-text-field" theme-for="vaadin-grid-pro-edit-text-field">
+<dom-module id="lumo-grid-pro-editor">
   <template>
-    <style include="lumo-text-field">
+    <style>
       :host([theme~="grid-pro-editor"]) {
         position: absolute;
         top: 0;
@@ -32,6 +32,12 @@
         font-size: inherit;
       }
     </style>
+  </template>
+</dom-module>
+
+<dom-module id="lumo-grid-pro-edit-text-field" theme-for="vaadin-grid-pro-edit-text-field">
+  <template>
+    <style include="lumo-text-field lumo-grid-pro-editor">/* https://github.com/Polymer/tools/issues/408 */</style>
   </template>
 </dom-module>
 
