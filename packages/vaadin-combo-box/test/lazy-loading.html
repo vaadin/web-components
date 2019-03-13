@@ -37,13 +37,15 @@
     describe('lazy loading', () => {
       const DEFAULT_PAGE_SIZE = 50;
       const SIZE = 200;
+      const allItems = Array(...new Array(SIZE)).map((_, i) => `item ${i}`);
       let dataProviderItems;
 
       const dataProvider = (params, callback) => {
+        const filteredItems = allItems.filter(item => item.indexOf(params.filter) > -1);
+        const size = filteredItems.length;
         const offset = params.page * params.pageSize;
-        const n = Math.min(offset + params.pageSize, SIZE) - offset;
-        dataProviderItems = Array(...new Array(n)).map((_, i) => `item ${offset + i}`);
-        callback(dataProviderItems, SIZE);
+        dataProviderItems = filteredItems.slice(offset, offset + params.pageSize);
+        callback(dataProviderItems, size);
       };
 
       const objectDataProvider = (params, callback) => {
@@ -261,6 +263,43 @@
               comboBox.open();
               expect(dp).to.be.calledOnce;
             });
+          });
+
+          describe('when selecting item', () => {
+
+            const clickFirstItem = () => comboBox.$.overlay._selector.querySelector('vaadin-combo-box-item').click();
+
+            beforeEach(() => {
+              comboBox.dataProvider = spyDataProvider;
+              comboBox.open();
+              Polymer.flush();
+            });
+
+            it('should not be invoked', () => {
+              spyDataProvider.reset();
+              clickFirstItem();
+              expect(comboBox.selectedItem).to.eql('item 0');
+              expect(spyDataProvider.callCount).to.eql(0);
+            });
+
+            it('should not be invoked if items are filtered', () => {
+              // workaround for applying filter for combo-box-light
+              if (comboBox.inputElement.tagName === 'IRON-INPUT') {
+                comboBox.inputElement._initSlottedInput();
+                comboBox.inputElement.inputElement.value = '1';
+              } else {
+                comboBox.inputElement.value = '1';
+              }
+
+              comboBox.inputElement.dispatchEvent(new CustomEvent('input'));
+              Polymer.flush();
+              spyDataProvider.reset();
+
+              clickFirstItem();
+              expect(comboBox.selectedItem).to.eql('item 1');
+              expect(spyDataProvider.callCount).to.eql(0);
+            });
+
           });
 
           describe('async', () => {

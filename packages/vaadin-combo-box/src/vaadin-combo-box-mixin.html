@@ -866,12 +866,12 @@ This program is available under Apache License Version 2.0, available at https:/
         return;
       }
 
-      if (this.selectedItem !== e.detail.item) {
-        this.selectedItem = e.detail.item;
-      }
-
       if (this.opened) {
         this.close();
+      }
+
+      if (this.selectedItem !== e.detail.item) {
+        this.selectedItem = e.detail.item;
       }
     }
 
