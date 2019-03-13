@@ -80,6 +80,10 @@
         comboBox.render();
         expect(comboBox.renderer.callCount).to.be.equal(renderedCount * 2);
       });
+
+      it('should not throw if render() called before opening', () => {
+        expect(() => comboBox.render()).not.to.throw(Error);
+      });
     });
 
     describe('with template', () => {
