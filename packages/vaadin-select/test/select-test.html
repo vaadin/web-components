@@ -403,6 +403,7 @@
         });
 
         it('should select items when alphanumeric keys are pressed', () => {
+          select.opened = false;
           expect(select._menuElement.selected).to.be.equal(2);
           keyDownChar(input, 'o');
           keyDownChar(input, 'p');
