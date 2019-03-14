@@ -69,6 +69,13 @@
         expect(buttons[1].querySelector('vaadin-context-menu')).to.not.be.ok;
       });
 
+      it('should remove sub-menu when nested items for button removed', () => {
+        buttons = getButtons(menu);
+        menu.splice('items', 0, 1, {text: 'Menu Item 1'});
+        Polymer.flush();
+        expect(buttons[0].querySelector('vaadin-context-menu')).to.not.be.ok;
+      });
+
       it('should open sub-menu on button click', async() => {
         buttons = getButtons(menu);
         subMenu = buttons[0].querySelector('vaadin-context-menu');
