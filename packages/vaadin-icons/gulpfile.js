@@ -21,15 +21,40 @@ gulp.task('icons', function() {
     .pipe(concat('vaadin-icons.html'))
     .pipe(modify({
       fileModifier: function(file, contents) {
+        /* eslint-disable max-len */
         // Enclose all icons in an iron-iconset-svg
-        return `<link rel="import" href="../iron-icon/iron-icon.html">
+        return /* html */`<!-- NOTICE: Generated with 'gulp icons' -->
+<!--
+@license
+Copyright (c) 2015-2017 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<link rel="import" href="../iron-icon/iron-icon.html">
 <link rel="import" href="../iron-iconset-svg/iron-iconset-svg.html">
-<iron-iconset-svg name="vaadin-icons" size="16">
+
+<!--
+\`vaadin-icons\` is a set of 600+ icons which can be used together with Polymer's [\`iron-icon\`](https://elements.polymer-project.org/elements/iron-icon) component.
+
+To use the \`vaadin-icons\` iconset, import the specific \`vaadin-icons.html\`, and
+specify the icon as \`vaadin:<icon>\`. For example, to use a cart icon, you would
+use:
+\`\`\`html
+<link rel="import" href="/components/vaadin-icons/vaadin-icons.html">
+<iron-icon icon="vaadin:cart"></iron-icon>
+\`\`\`
+
+For the complete list of available icons, see https://vaadin.com/icons
+@pseudoElement vaadin-icons
+@demo demo/
+-->
+<iron-iconset-svg name="vaadin" size="16">
 <svg><defs>
 ` + contents + `
 </defs></svg>
 </iron-iconset-svg>
 `;
+        /* eslint-enable max-len */
       }
     }))
     .pipe(gulp.dest('.'));
