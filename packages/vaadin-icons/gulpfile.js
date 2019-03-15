@@ -6,7 +6,7 @@ const modify = require('gulp-modify');
 const cheerio = require('cheerio');
 const concat = require('gulp-concat');
 
-gulp.task('default', function() {
+gulp.task('icons', function() {
   return gulp.src(['assets/svg/*.svg'], {base: '.'})
     .pipe(modify({
       fileModifier: function(file, contents) {
