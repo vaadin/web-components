@@ -20,7 +20,8 @@
     "vaadin-icons.js"
   ],
   "scripts": {
-    "start": "polymer serve --port 3000"
+    "prestart": "polymer analyze vaadin-* > analysis.json",
+    "start": "polymer serve --port 3000 --open"
   },
   "homepage": "https://vaadin.com/icons",
   "devDependencies": {
