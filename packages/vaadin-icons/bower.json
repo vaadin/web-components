@@ -1,28 +1,28 @@
 {
   "name": "vaadin-icons",
-  "description": "Collection of 600+ unique icons designed for web applications",
   "homepage": "https://vaadin.com/icons",
   "authors": [
     "Vaadin Ltd"
   ],
-  "keywords": [
-    "web-component",
-    "web-components",
-    "polymer",
-    "vaadin",
-    "icons",
-    "svg-icons",
-    "vaadin-icons"
-  ],
+  "description": "Collection of 600+ unique icons designed for web applications",
   "main": [
     "vaadin-icons.html"
   ],
-  "moduleType": [],
+  "keywords": [
+    "Vaadin",
+    "icons",
+    "web-components",
+    "web-component",
+    "polymer",
+    "svg-icons",
+    "vaadin-icons"
+  ],
   "license": "Apache-2.0",
   "ignore": [
     "**/.*",
     "node_modules",
     "bower_components",
+    "gulpfile.js",
     "package-lock.json",
     "test"
   ],
@@ -34,7 +34,7 @@
   "devDependencies": {
     "iron-component-page": "^3.0.0",
     "iron-meta": "^2.0.0",
-    "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^2.0.2",
+    "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^2.2.0",
     "vaadin-text-field": "vaadin/vaadin-text-field#^2.1.1"
   },
   "variants": {

@@ -26,6 +26,7 @@
           width: 800px;
           font-size: 10px;
         }
+
         .icon-container {
           display: inline-flex;
           flex-direction: column;
@@ -33,6 +34,7 @@
           align-items: center;
           margin-top: 6px;
         }
+
         span {
           white-space: nowrap;
           overflow: hidden;
@@ -60,7 +62,7 @@
       const binder = document.getElementById('binder');
       binder.getIconNames = function(iconset) {
         return iconset.getIconNames();
-      }
+      };
       binder.iconsets = new Polymer.IronMeta({type: 'iconset'}).list.filter(i => i.name == 'vaadin');
       window.webComponentsAreReady = true;
     });

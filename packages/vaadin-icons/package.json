@@ -16,6 +16,7 @@
   "bugs": {
     "url": "https://github.com/vaadin/vaadin-icons/issues"
   },
+  "homepage": "https://vaadin.com/icons",
   "files": [
     "vaadin-icons.js"
   ],
@@ -23,10 +24,9 @@
     "prestart": "polymer analyze vaadin-* > analysis.json",
     "start": "polymer serve --port 3000 --open"
   },
-  "homepage": "https://vaadin.com/icons",
   "devDependencies": {
+    "@vaadin/vaadin-component-dev-dependencies": "^1.0.0",
     "cheerio": "^1.0.0-rc.2",
-    "gulp": "^3.9.1",
     "gulp-concat": "^2.6.1",
     "gulp-modify": "^0.1.1"
   }
