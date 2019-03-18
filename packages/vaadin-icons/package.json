@@ -18,6 +18,7 @@
   },
   "homepage": "https://vaadin.com/icons",
   "files": [
+    "iconset.js",
     "vaadin-icons.js"
   ],
   "scripts": {
