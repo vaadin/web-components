@@ -18,7 +18,7 @@ gulp.task('icons', function() {
         return '<g id="' + id + '">' + svg.children() + '</g>';
       }
     }))
-    .pipe(concat('vaadin-icons.html'))
+    .pipe(concat('iconset.html'))
     .pipe(modify({
       fileModifier: function(file, contents) {
         /* eslint-disable max-len */
@@ -26,28 +26,12 @@ gulp.task('icons', function() {
         return /* html */`<!-- NOTICE: Generated with 'gulp icons' -->
 <!--
 @license
-Copyright (c) 2015-2019 Vaadin Ltd.
+Copyright (c) 2019 Vaadin Ltd.
 This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
 -->
 
-<link rel="import" href="../iron-icon/iron-icon.html">
 <link rel="import" href="../iron-iconset-svg/iron-iconset-svg.html">
 
-<!--
-\`vaadin-icons\` is a set of 600+ icons which can be used together with
-Polymer's [\`iron-icon\`](https://www.webcomponents.org/element/@polymer/iron-icon) component.
-
-To use the \`vaadin-icons\` iconset, [install and import](https://github.com/vaadin/vaadin-icons#installation)
-the iconset, and specify the icon as \`vaadin:<icon>\`. For example, to use
-a cart icon, you would use:
-\`\`\`html
-<iron-icon icon="vaadin:cart"></iron-icon>
-\`\`\`
-
-For the complete list of available icons, see https://vaadin.com/components/vaadin-icons/html-examples
-@pseudoElement vaadin-icons
-@demo
--->
 <iron-iconset-svg name="vaadin" size="16">
 <svg><defs>
 ` + contents + `
