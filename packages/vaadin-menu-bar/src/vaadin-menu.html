@@ -29,13 +29,11 @@ This program is available under Apache License Version 2.0, available at https:/
       <template is="dom-repeat" items="[[items]]">
         <vaadin-menu-root-button disabled="[[item.disabled]]" items="[[item.children]]">
           <span>[[item.text]]</span>
-          <template is="dom-if" if="[[item.children.length]]" restamp>
-            <vaadin-context-menu
-              open-on="opensubmenu">
-            </vaadin-context-menu>
-          </template>
         </vaadin-menu-root-button>
       </template>
+      <vaadin-context-menu
+        open-on="opensubmenu">
+      </vaadin-context-menu>
     </div>
   </template>
 

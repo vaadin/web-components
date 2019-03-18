@@ -22,18 +22,27 @@ This program is available under Apache License Version 2.0, available at https:/
 
     constructor() {
       super();
+      this.__boundOutsideClickListener = this.__outsideClickListener.bind(this);
+      this.__boundOnContextMenuKeydown = this.__onContextMenuKeydown.bind(this);
+    }
 
-      // store sub-menu overlays
-      this._overlays = new WeakMap();
+    static get observers() {
+      return [
+        '_itemsChanged(items, items.splices)'
+      ];
     }
 
     ready() {
       super.ready();
 
-      this.__boundOutsideClickListener = this.__outsideClickListener.bind(this);
-      this.__boundOnContextMenuKeydown = this.__onContextMenuKeydown.bind(this);
+      this.shadowRoot.addEventListener('button-click', this.__onButtonClick.bind(this));
 
-      this.shadowRoot.addEventListener('before-open', this.__onBeforeOpen.bind(this));
+      this._subMenu.addEventListener('item-selected', this.__onItemSelected.bind(this));
+
+      const overlay = this._subMenu.$.overlay;
+      overlay.modeless = true;
+      overlay.addEventListener('keydown', this.__boundOnContextMenuKeydown);
+      overlay.addEventListener('vaadin-overlay-open', this.__alignOverlayPosition.bind(this));
     }
 
     connectedCallback() {
@@ -46,43 +55,62 @@ This program is available under Apache License Version 2.0, available at https:/
       document.removeEventListener('click', this.__boundOutsideClickListener);
     }
 
+    get _subMenu() {
+      return this.shadowRoot.querySelector('vaadin-context-menu');
+    }
+
+    __alignOverlayPosition(e) {
+      const overlay = e.target;
+      if (overlay.hasAttribute('bottom-aligned')) {
+        const rect = this._activeButton.getBoundingClientRect();
+        overlay.style.bottom = parseInt(getComputedStyle(overlay).bottom) + rect.height + 'px';
+      }
+    }
+
+    _itemsChanged(items, splices, isAttached) {
+      const subMenu = this._subMenu;
+      if (subMenu && subMenu.opened) {
+        subMenu.close();
+      }
+    }
+
     __onContextMenuKeydown(e) {
       const item = e.target;
       const list = item.parentNode;
       if (e.keyCode === 38 && item === list.items[0]) {
-        this.__closeSubMenus();
-        const button = this._overlays.get(list.parentNode);
-        button._focusWithKey();
+        this._close();
+        this._activeButton._focusWithKey();
       }
     }
 
     __outsideClickListener(e) {
       if (e.composedPath().indexOf(this) === -1) {
-        this.__closeSubMenus();
+        this._close();
       }
     }
 
-    __onBeforeOpen(e) {
+    __onButtonClick(e) {
       e.stopPropagation();
-      this.__closeSubMenus();
       const button = e.composedPath()[0];
-      const {menu, items} = e.detail;
-      menu.items = items;
+      const subMenu = this._subMenu;
+
+      if (subMenu.opened) {
+        this._close();
+        if (subMenu.listenOn === button) {
+          return;
+        }
+      }
+
+      const {items} = e.detail;
+      if (!items || items.length === 0) {
+        return;
+      }
+
+      subMenu.items = items;
+      subMenu.listenOn = button;
+      this._activeButton = button;
 
       const rect = button.getBoundingClientRect();
-      const overlay = menu.$.overlay;
-      if (!this._overlays.has(overlay)) {
-        menu.listenOn = button;
-        overlay.modeless = true;
-        overlay.addEventListener('keydown', this.__boundOnContextMenuKeydown);
-        overlay.addEventListener('vaadin-overlay-open', e => {
-          if (overlay.hasAttribute('bottom-aligned')) {
-            overlay.style.bottom = parseInt(getComputedStyle(overlay).bottom) + rect.height + 'px';
-          }
-        });
-        menu.addEventListener('item-selected', this.__onItemSelected.bind(this));
-        this._overlays.set(overlay, button);
-      }
 
       requestAnimationFrame(() => {
         button.dispatchEvent(new CustomEvent('opensubmenu', {detail: {
@@ -96,12 +124,12 @@ This program is available under Apache License Version 2.0, available at https:/
     __onItemSelected(e) {
       e.stopPropagation();
       const {detail} = e;
-      this.__closeSubMenus();
+      this._close();
       this.dispatchEvent(new CustomEvent('item-selected', {detail}));
     }
 
-    __closeSubMenus() {
-      Array.from(this.shadowRoot.querySelectorAll('vaadin-context-menu')).forEach(menu => menu.close());
+    _close() {
+      this._subMenu.close();
     }
   };
 </script>

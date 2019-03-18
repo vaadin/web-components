@@ -29,8 +29,8 @@ This program is available under Apache License Version 2.0, available at https:/
       ready() {
         super.ready();
 
-        this.addEventListener('click', e => this._openSubMenu());
-        this.addEventListener('keydown', e => e.keyCode === 40 && this._openSubMenu());
+        this.addEventListener('click', e => this._dispatchClick(e));
+        this.addEventListener('keydown', e => e.keyCode === 40 && this._dispatchClick(e));
       }
 
       _focusWithKey() {
@@ -38,17 +38,14 @@ This program is available under Apache License Version 2.0, available at https:/
         this.setAttribute('focus-ring', '');
       }
 
-      _openSubMenu() {
-        const menu = this.querySelector('vaadin-context-menu');
-        if (menu && !menu.opened) {
-          const {items} = this;
-
-          this.dispatchEvent(new CustomEvent('before-open', {
-            detail: {menu, items},
-            bubbles: true,
-            composed: true
-          }));
-        }
+      _dispatchClick(e) {
+        e.stopPropagation();
+        const {items} = this;
+        this.dispatchEvent(new CustomEvent('button-click', {
+          detail: {items},
+          bubbles: true,
+          composed: true
+        }));
       }
     }
 

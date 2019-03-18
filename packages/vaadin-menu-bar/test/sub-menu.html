@@ -52,8 +52,16 @@
               {text: 'Menu Item 1 2'}
             ]
           },
-          {text: 'Menu Item 2'}
+          {text: 'Menu Item 2'},
+          {
+            text: 'Menu Item 3',
+            children: [
+              {text: 'Menu Item 3 1'},
+              {text: 'Menu Item 3 2'}
+            ]
+          },
         ];
+        subMenu = menu._subMenu;
         Polymer.RenderStatus.afterNextRender(menu, done);
       });
 
@@ -63,30 +71,35 @@
         }
       });
 
-      it('should render sub-menu for buttons with items', () => {
+      it('should open sub-menu when button with nested items clicked', async() => {
         buttons = getButtons(menu);
-        expect(buttons[0].querySelector('vaadin-context-menu')).to.be.ok;
-        expect(buttons[1].querySelector('vaadin-context-menu')).to.not.be.ok;
-      });
-
-      it('should remove sub-menu when nested items for button removed', () => {
-        buttons = getButtons(menu);
-        menu.splice('items', 0, 1, {text: 'Menu Item 1'});
-        Polymer.flush();
-        expect(buttons[0].querySelector('vaadin-context-menu')).to.not.be.ok;
-      });
-
-      it('should open sub-menu on button click', async() => {
-        buttons = getButtons(menu);
-        subMenu = buttons[0].querySelector('vaadin-context-menu');
         buttons[0].click();
         await nextRender(subMenu);
         expect(subMenu.opened).to.be.true;
       });
 
+      it('should not open sub-menu when button without nested items clicked', async() => {
+        buttons = getButtons(menu);
+        buttons[1].click();
+        await nextRender(subMenu);
+        expect(subMenu.opened).to.be.false;
+      });
+
+      it('should reopen sub-menu when different button with nested items clicked', async() => {
+        buttons = getButtons(menu);
+        buttons[0].click();
+        await nextRender(subMenu);
+        expect(subMenu.listenOn).to.equal(buttons[0]);
+        const spy = sinon.spy(subMenu, 'close');
+        buttons[2].click();
+        await nextRender(subMenu);
+        expect(subMenu.opened).to.be.true;
+        expect(subMenu.listenOn).to.equal(buttons[2]);
+        expect(spy).to.be.calledOnce;
+      });
+
       (isIOS ? it.skip : it)('should open sub-menu on arrow down', async() => {
         buttons = getButtons(menu);
-        subMenu = buttons[0].querySelector('vaadin-context-menu');
         arrowDown(buttons[0]);
         await nextRender(subMenu);
         expect(subMenu.opened).to.be.true;
@@ -94,7 +107,6 @@
 
       (isIOS ? it.skip : it)('should close sub-menu on first item arrow up', async() => {
         buttons = getButtons(menu);
-        subMenu = buttons[0].querySelector('vaadin-context-menu');
         arrowDown(buttons[0]);
         await nextRender(subMenu);
 
@@ -106,7 +118,6 @@
 
       it('should close sub-menu on outside click', async() => {
         buttons = getButtons(menu);
-        subMenu = buttons[0].querySelector('vaadin-context-menu');
         buttons[0].click();
         await nextRender(subMenu);
 
@@ -117,7 +128,6 @@
 
       it('should close and dispatch item-selected event on select', async() => {
         buttons = getButtons(menu);
-        subMenu = buttons[0].querySelector('vaadin-context-menu');
         buttons[0].click();
         await nextRender(subMenu);
 
@@ -135,12 +145,21 @@
         menu.style.position = 'absolute';
         menu.style.bottom = '50px';
         buttons = getButtons(menu);
-        subMenu = buttons[0].querySelector('vaadin-context-menu');
         buttons[0].click();
         await nextRender(subMenu);
         const overlayRect = subMenu.$.overlay.getBoundingClientRect();
         const buttonRect = buttons[0].getBoundingClientRect();
         expect(overlayRect.top + overlayRect.height).to.be.closeTo(buttonRect.top, 1);
+      });
+
+      it('should close sub-menu on items change', async() => {
+        buttons = getButtons(menu);
+        buttons[0].click();
+        await nextRender(subMenu);
+
+        menu.splice('items', 0, 1, {text: 'Menu Item 1'});
+        await nextRender(subMenu);
+        expect(subMenu.opened).to.be.false;
       });
     });
   </script>
