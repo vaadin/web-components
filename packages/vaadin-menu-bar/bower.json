@@ -1,17 +1,17 @@
 {
-  "name": "vaadin-menu",
+  "name": "vaadin-menu-bar",
   "homepage": "https://vaadin.com/components",
   "authors": [
     "Vaadin Ltd"
   ],
-  "description": "vaadin-menu",
+  "description": "vaadin-menu-bar",
   "main": [
-    "vaadin-menu.html",
-    "theme/material/vaadin-menu.html"
+    "vaadin-menu-bar.html",
+    "theme/material/vaadin-menu-bar.html"
   ],
   "keywords": [
     "Vaadin",
-    "vaadin-menu",
+    "vaadin-menu-bar",
     "web-components",
     "web-component",
     "polymer"

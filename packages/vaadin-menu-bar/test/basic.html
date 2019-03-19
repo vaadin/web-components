@@ -2,19 +2,19 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>vaadin-menu tests</title>
+  <title>vaadin-menu-bar tests</title>
   <script src="../../web-component-tester/browser.js"></script>
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <script src="../../iron-test-helpers/mock-interactions.js"></script>
   <link rel="import" href="../../test-fixture/test-fixture.html">
   <link rel="import" href="../../polymer/lib/utils/render-status.html">
-  <link rel="import" href="../vaadin-menu.html">
+  <link rel="import" href="../vaadin-menu-bar.html">
 </head>
 
 <body>
   <test-fixture id="default">
     <template>
-      <vaadin-menu></vaadin-menu>
+      <vaadin-menu-bar></vaadin-menu-bar>
     </template>
   </test-fixture>
 
@@ -44,11 +44,11 @@
       });
 
       it('should be defined with correct tag name', () => {
-        expect(customElements.get('vaadin-menu')).to.be.ok;
+        expect(customElements.get('vaadin-menu-bar')).to.be.ok;
       });
 
       it('should not expose class name globally', () => {
-        expect(window.MenuElement).not.to.be.ok;
+        expect(window.MenuBarElement).not.to.be.ok;
       });
 
       it('should have a valid version number', () => {
@@ -59,7 +59,7 @@
     describe('root menu layout', () => {
       let menu, buttons;
 
-      const getButtons = menu => Array.from(menu.shadowRoot.querySelectorAll('vaadin-menu-root-button'));
+      const getButtons = menu => Array.from(menu.shadowRoot.querySelectorAll('vaadin-menu-bar-button'));
 
       beforeEach(done => {
         menu = fixture('default');

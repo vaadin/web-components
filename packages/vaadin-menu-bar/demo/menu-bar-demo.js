@@ -1,4 +1,4 @@
-window.MenuDemo = superClass => {
+window.MenuBarDemo = superClass => {
   return class extends superClass {
     static get properties() {
       return {

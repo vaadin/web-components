@@ -11,14 +11,14 @@ This program is available under Apache License Version 2.0, available at https:/
   window.Vaadin = window.Vaadin || {};
 
   /**
-   * @namespace Vaadin.Menu
+   * @namespace Vaadin.MenuBar
    */
-  window.Vaadin.Menu = window.Vaadin.Menu || {};
+  window.Vaadin.MenuBar = window.Vaadin.MenuBar || {};
 
   /**
    * @polymerMixin
    */
-  Vaadin.Menu.ButtonsMixin = superClass => class MenuButtonsMixin extends superClass {
+  Vaadin.MenuBar.ButtonsMixin = superClass => class MenuButtonsMixin extends superClass {
 
     ready() {
       super.ready();
@@ -28,9 +28,9 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _onFocusin(event) {
-      const target = this.shadowRoot.querySelector('vaadin-menu-root-button[tabindex="0"]');
+      const target = this.shadowRoot.querySelector('vaadin-menu-bar-button[tabindex="0"]');
       if (target) {
-        Array.from(this.shadowRoot.querySelectorAll('vaadin-menu-root-button')).forEach(btn => {
+        Array.from(this.shadowRoot.querySelectorAll('vaadin-menu-bar-button')).forEach(btn => {
           btn.tabIndex = btn === target ? 0 : -1;
         });
       }
@@ -38,9 +38,9 @@ This program is available under Apache License Version 2.0, available at https:/
 
     _onKeydown(event) {
       const path = event.composedPath();
-      const buttons = Array.from(this.shadowRoot.querySelectorAll('vaadin-menu-root-button'));
+      const buttons = Array.from(this.shadowRoot.querySelectorAll('vaadin-menu-bar-button'));
 
-      // only handle keydown event on root menu buttons
+      // only handle keydown event on rmenu bar buttons
       if (buttons.some(btn => path.indexOf(btn) > -1)) {
         // IE names for arrows do not include the Arrow prefix
         const key = event.key.replace(/^Arrow/, '');

@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
-  <title>vaadin-menu tests</title>
+  <title>vaadin-menu-bar tests</title>
   <script src="../../web-component-tester/browser.js"></script>
   <script src="test-suites.js"></script>
 </head>
@@ -12,7 +12,7 @@
 <body>
   <script>
     WCT.loadSuites(
-      window.VaadinMenuElementSuites
+      window.VaadinMenuBarElementSuites
         .reduce(function(suites, suite) {
           return suites.concat([suite, `${suite}?wc-shadydom=true`]);
         }, [])

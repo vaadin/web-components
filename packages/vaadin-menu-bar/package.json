@@ -1,12 +1,12 @@
 {
-  "name": "@vaadin/vaadin-menu",
+  "name": "@vaadin/vaadin-menu-bar",
   "version": "0.1.0",
-  "description": "vaadin-menu",
-  "main": "vaadin-menu.html",
-  "repository": "vaadin/vaadin-menu",
+  "description": "vaadin-menu-bar",
+  "main": "vaadin-menu-bar.html",
+  "repository": "vaadin/vaadin-menu-bar",
   "keywords": [
     "Vaadin",
-    "vaadin-menu",
+    "vaadin-menu-bar",
     "web-components",
     "web-component",
     "polymer"
@@ -14,7 +14,7 @@
   "author": "Vaadin Ltd",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/vaadin/vaadin-menu/issues"
+    "url": "https://github.com/vaadin/vaadin-menu-bar/issues"
   },
   "homepage": "https://vaadin.com/components",
   "files": [

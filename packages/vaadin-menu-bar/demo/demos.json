@@ -1,12 +1,12 @@
 {
-  "name": "Vaadin Menu",
+  "name": "Vaadin Menu Bar",
   "pages": [
   {
     "name": "Basics",
-    "url": "menu-basic-demos",
-    "src": "menu-basic-demos.html",
+    "url": "menu-bar-basic-demos",
+    "src": "menu-bar-basic-demos.html",
     "meta": {
-      "title": "Vaadin Menu Basics",
+      "title": "Vaadin Menu Bar Basics",
       "description": "",
       "image": ""
      }

@@ -1,4 +1,4 @@
-<dom-module id="menu-basic-demos">
+<dom-module id="menu-bar-basic-demos">
   <template>
     <style include="vaadin-component-demo-shared-styles">
       :host {
@@ -7,13 +7,13 @@
     </style>
 
 
-    <h3>Basic Menu</h3>
-    <vaadin-demo-snippet id="menu-basic-demos-basic" when-defined="vaadin-menu">
+    <h3>Menu Bar</h3>
+    <vaadin-demo-snippet id="menu-bar-basic-demos-basic" when-defined="vaadin-menu-bar">
       <template preserve-content>
-        <vaadin-menu></vaadin-menu>
+        <vaadin-menu-bar></vaadin-menu-bar>
         <script>
-          window.addDemoReadyListener('#menu-basic-demos-basic', function(document) {
-            const menu = document.querySelector('vaadin-menu');
+          window.addDemoReadyListener('#menu-bar-basic-demos-basic', function(document) {
+            const menu = document.querySelector('vaadin-menu-bar');
             menu.items = [{text: 'File'}, {text: 'Edit', disabled: true}, {text: 'Help'}];
           });
         </script>
@@ -21,12 +21,12 @@
     </vaadin-demo-snippet>
 
     <h3>Nested Sub Menu</h3>
-    <vaadin-demo-snippet id="menu-basic-demos-nested" when-defined="vaadin-menu">
+    <vaadin-demo-snippet id="menu-bar-basic-demos-nested" when-defined="vaadin-menu-bar">
       <template preserve-content>
-        <vaadin-menu></vaadin-menu>
+        <vaadin-menu-bar></vaadin-menu-bar>
         <script>
-          window.addDemoReadyListener('#menu-basic-demos-nested', function(document) {
-            const menu = document.querySelector('vaadin-menu');
+          window.addDemoReadyListener('#menu-bar-basic-demos-nested', function(document) {
+            const menu = document.querySelector('vaadin-menu-bar');
             menu.items = [
               {
                 text: 'Project',
@@ -59,11 +59,11 @@
 
   </template>
   <script>
-    class MenuBasicDemos extends DemoReadyEventEmitter(MenuDemo(Polymer.Element)) {
+    class MenuBarBasicDemos extends DemoReadyEventEmitter(MenuBarDemo(Polymer.Element)) {
       static get is() {
-        return 'menu-basic-demos';
+        return 'menu-bar-basic-demos';
       }
     }
-    customElements.define(MenuBasicDemos.is, MenuBasicDemos);
+    customElements.define(MenuBarBasicDemos.is, MenuBarBasicDemos);
   </script>
 </dom-module>
