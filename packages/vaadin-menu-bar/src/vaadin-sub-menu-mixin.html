@@ -47,12 +47,12 @@ This program is available under Apache License Version 2.0, available at https:/
 
     connectedCallback() {
       super.connectedCallback();
-      document.addEventListener('click', this.__boundOutsideClickListener);
+      document.addEventListener('click', this.__boundOutsideClickListener, true);
     }
 
     disconnectedCallback() {
       super.disconnectedCallback();
-      document.removeEventListener('click', this.__boundOutsideClickListener);
+      document.removeEventListener('click', this.__boundOutsideClickListener, true);
     }
 
     get _subMenu() {
