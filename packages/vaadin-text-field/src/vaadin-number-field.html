@@ -45,7 +45,7 @@ This program is available under Apache License Version 2.0, available at https:/
     </style>
 
     <div
-      disabled$="[[!_allowed(-1, value, min, max)]]"
+      disabled$="[[!_allowed(-1, value, min, max, step)]]"
       part="decrease-button"
       on-click="_decreaseValue"
       on-touchend="_decreaseButtonTouchend"
@@ -53,7 +53,7 @@ This program is available under Apache License Version 2.0, available at https:/
     </div>
 
     <div
-      disabled$="[[!_allowed(1, value, min, max)]]"
+      disabled$="[[!_allowed(1, value, min, max, step)]]"
       part="increase-button"
       on-click="_increaseValue"
       on-touchend="_increaseButtonTouchend"
@@ -102,8 +102,7 @@ This program is available under Apache License Version 2.0, available at https:/
             */
             min: {
               type: Number,
-              reflectToAttribue: true,
-              observer: '_minChanged'
+              reflectToAttribue: true
             },
 
             /**
@@ -121,17 +120,23 @@ This program is available under Apache License Version 2.0, available at https:/
             step: {
               type: Number,
               reflectToAttribue: true,
-              observer: '_stepChanged',
               value: 1
             }
 
           };
         }
 
+        static get observers() {
+          return [
+            '_stepOrMinChanged(step, min)'
+          ];
+        }
+
         ready() {
           super.ready();
           this.__previousValidInput = this.value || '';
           this.inputElement.type = 'number';
+          this.inputElement.addEventListener('keydown', this.__onKeyDown.bind(this));
           this.inputElement.addEventListener('change', this.__onInputChange.bind(this));
         }
 
@@ -170,99 +175,117 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _decreaseValue() {
-          const currentValueOverMax = this.max != null && this.value != null && this.value != '' && this.value > this.max;
-          if (currentValueOverMax) {
-            this._setValue(this.max);
-          } else {
-            const incrementSign = this._getAllowedIncrementSign(-1);
-
-            if (incrementSign) {
-              this.__add(incrementSign);
-            }
-          }
+          this._incrementValue(-1);
         }
 
         _increaseValue() {
-          const currentValueUnderMin = this.min != null && this.value != null && this.value != '' && this.value < this.min;
-
-          if (currentValueUnderMin) {
-            this._setValue(this.min);
-          } else {
-            const incrementSign = this._getAllowedIncrementSign(1);
-
-            if (incrementSign) {
-              this.__add(incrementSign);
-            }
-          }
+          this._incrementValue(1);
         }
 
-        __add(sign) {
-          const incr = sign * (this.step || 1);
-          // Behave like native number input adjusting to the next exact multiple of step.
-          this._setValue(this._getValue(incr));
+        _incrementValue(incr) {
+          if (this.disabled) {
+            return;
+          }
+
+          let value = parseFloat(this.value);
+
+          if (!this.value) {
+            if (this.min == 0 && incr < 0 ||
+                this.max == 0 && incr > 0 ||
+                this.max == 0 && this.min == 0) {
+              incr = 0;
+              value = 0;
+            } else if ((this.max == null || this.max >= 0) &&
+                       (this.min == null || this.min <= 0)) {
+              value = 0;
+            } else if (this.min > 0) {
+              value = this.min;
+              if (this.max < 0 && incr < 0) {
+                value = this.max;
+              }
+              incr = 0;
+            } else if (this.max < 0) {
+              value = this.max;
+              if (incr < 0) {
+                incr = 0;
+              } else {
+                // FIXME(yuriy): find a proper solution to make correct step back
+                if (this._getIncrement(1, value - this.step) > this.max) {
+                  value -= 2 * this.step;
+                } else {
+                  value -= this.step;
+                }
+              }
+            }
+          } else if (value < this.min) {
+            incr = 0;
+            value = this.min;
+          } else if (value > this.max) {
+            incr = 0;
+            value = this.max;
+          }
+
+          const newValue = this._getIncrement(incr, value);
+          if (!this.value || incr == 0 || this._incrementIsInsideTheLimits(incr, value)) {
+            this._setValue(newValue);
+          }
         }
 
         _setValue(value) {
-          this.value = this.inputElement.value = value;
+          this.value = this.inputElement.value = parseFloat(value).toFixed(this.__decimals);
           this.dispatchEvent(new CustomEvent('change', {bubbles: true}));
         }
 
-        _getValue(incr) {
-          let result = this.min || incr;
-          if (this.value) {
-            const number = parseFloat(this.value);
-            let nextMultiple = parseFloat((Math.ceil(number / incr) * incr).toFixed(this.__decimals));
-            if (this.min) {
-              let minOffset = this.min % this.step;
-              minOffset = incr < 0 ? -minOffset : minOffset;
-              nextMultiple = this.min ? nextMultiple + minOffset : nextMultiple;
-            }
-            result = (nextMultiple === number ? nextMultiple + incr : nextMultiple).toFixed(this.__decimals);
+        _getIncrement(incr, currentValue) {
+          let step = this.step || 1,
+            min = this.min || 0;
+
+          // To avoid problems with decimal math, multiplying to operate with integers.
+          const multiplier = Math.max(this._getMultiplier(currentValue),
+            this._getMultiplier(step),
+            this._getMultiplier(min));
+
+          step *= multiplier;
+          currentValue *= multiplier;
+          min *= multiplier;
+
+          const margin = (currentValue - min) % step;
+
+          if (incr > 0) {
+            return (currentValue - margin + step) / multiplier;
+          } else if (incr < 0) {
+            return (currentValue - (margin || step)) / multiplier;
+          } else {
+            return currentValue / multiplier;
           }
-          return result;
         }
 
-        _getAllowedIncrementSign(sign) {
-          if (this.disabled) {
-            return false;
+        _getMultiplier(number) {
+          if (!isNaN(number)) {
+            let multiplier = 1;
+            // Increase the multiplier until the float point will disappear
+            while (Math.floor(number * multiplier) !== number * multiplier) {
+              multiplier = multiplier * 10;
+            }
+
+            return multiplier;
           }
+        }
 
-          const initialIncr = sign * (this.step || 1);
-
-          if (initialIncr > 0) {
-            const validMin = this.min == null || this._getValue(initialIncr) > this.min;
-            const validMax = this.max == null || this.value < this.max;
-
-            if (validMin && validMax) {
-              return sign;
-            } else if (!validMax) {
-              return false;
-            } else if (!validMin) {
-              return this.min / initialIncr;
-            }
+        _incrementIsInsideTheLimits(incr, value) {
+          if (incr < 0) {
+            return this.min == null || this._getIncrement(incr, value) >= this.min;
+          } else if (incr > 0) {
+            return this.max == null || this._getIncrement(incr, value) <= this.max;
           } else {
-            const validMin = this.min == null || this.value > this.min;
-            const validMax = this.max == null || this._getValue(initialIncr) < this.max;
-
-            if (validMin && validMax) {
-              return sign;
-            } else if (!validMin) {
-              return false;
-            } else if (!validMax) {
-              return this.max / (this.step || 1);
-            }
+            return this._getIncrement(incr, value) <= this.max && this._getIncrement(incr, value) >= this.min;
           }
         }
 
         _allowed(sign) {
           const incr = sign * (this.step || 1);
-          return !this.disabled && (incr < 0
-            ? this.min == null || this.value > this.min
-            : this.max == null || this.value < this.max);
-        }
-
-        _minChanged() {
-          this.inputElement.min = this.min;
+          const value = parseFloat(this.value);
+          return !this.value || (!this.disabled && this._incrementIsInsideTheLimits(incr, value));
         }
 
         _maxChanged() {
@@ -280,20 +303,28 @@ This program is available under Apache License Version 2.0, available at https:/
           super._valueChanged(this.value, oldVal);
         }
 
+        __onKeyDown(e) {
+          if (e.keyCode == 38) {
+            e.preventDefault();
+            this._increaseValue();
+          } else if (e.keyCode == 40) {
+            e.preventDefault();
+            this._decreaseValue();
+          }
+        }
+
         __onInputChange() {
           this.checkValidity();
         }
 
-        __adjustDecimals() {
-          // when step is not an integer, adjust decimals.
-          this.inputElement.value && (this.value = parseFloat(this.inputElement.value).toFixed(this.__decimals));
-        }
-
-        _stepChanged(step) {
+        _stepOrMinChanged(step, min) {
           this.inputElement.step = step;
+          this.inputElement.min = this.min;
+          const countDecimalPlaces = number => {
+            return number ? String(Math.abs(number)).replace(/^\d*\.?(.*)?$/, '$1').length : 0;
+          };
           // Compute number of dedimals to display in input based on provided step
-          this.__decimals = String(step).replace(/^\d*\.?(.*)?$/, '$1').length;
-          this.__adjustDecimals();
+          this.__decimals = Math.max(countDecimalPlaces(step), countDecimalPlaces(min));
         }
 
         checkValidity() {
