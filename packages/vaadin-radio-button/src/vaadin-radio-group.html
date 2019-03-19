@@ -146,8 +146,7 @@ This program is available under Apache License Version 2.0, available at https:/
             },
 
             _checkedButton: {
-              type: Object,
-              observer: '_checkedButtonChanged'
+              type: Object
             },
 
             /**
@@ -273,7 +272,7 @@ This program is available under Apache License Version 2.0, available at https:/
               element.setAttribute('focus-ring', '');
             }
           }
-          this._changeSelectedButton(element);
+          this._changeSelectedButton(element, setFocusRing);
         }
 
         _containsFocus() {
@@ -316,18 +315,32 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
-        _changeSelectedButton(button) {
+        _changeSelectedButton(button, fireChangeEvent) {
+          if (this._checkedButton === button) {
+            return;
+          }
+
           this._checkedButton = button;
+
+          this._radioButtons.forEach(button => {
+            if (button === this._checkedButton) {
+              if (fireChangeEvent) {
+                button.click();
+              } else {
+                button.checked = true;
+              }
+            } else {
+              button.checked = false;
+            }
+          });
+
+          if (this._checkedButton) {
+            this.value = this._checkedButton.value;
+          }
+
+          this.validate();
           this.readonly && this._updateDisableButtons();
           button && this._setFocusable(this._radioButtons.indexOf(button));
-        }
-
-        _checkedButtonChanged(checkedButton) {
-          this._radioButtons.forEach(button => button.checked = button === checkedButton);
-          if (checkedButton) {
-            this.value = checkedButton.value;
-          }
-          this.validate();
         }
 
         _valueChanged(newV, oldV) {

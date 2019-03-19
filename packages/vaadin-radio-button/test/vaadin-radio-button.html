@@ -158,6 +158,83 @@
         vaadinRadioButton.shadowRoot.querySelector('[part="label"]').querySelector('slot').dispatchEvent(evt);
         expect(label.hasAttribute('empty')).to.be.true;
       });
+
+      describe('change event', () => {
+        it('should fire on click', () => {
+          const spy = sinon.spy();
+          vaadinRadioButton.addEventListener('change', spy);
+
+          vaadinRadioButton.click();
+
+          expect(spy).to.be.calledOnce;
+        });
+
+        it('should fire on space keyup', () => {
+          const spy = sinon.spy();
+          vaadinRadioButton.addEventListener('change', spy);
+
+          MockInteractions.keyDownOn(vaadinRadioButton, 32);
+
+          expect(spy).to.not.be.called;
+
+          MockInteractions.keyUpOn(vaadinRadioButton, 32);
+
+          expect(spy).to.be.calledOnce;
+        });
+
+        it('should not fire when checked', () => {
+          vaadinRadioButton.checked = true;
+
+          const spy = sinon.spy();
+          vaadinRadioButton.addEventListener('change', spy);
+
+          vaadinRadioButton.click();
+
+          expect(spy).to.not.be.called;
+        });
+
+        it('should not fire on programmatic toggle', () => {
+          const spy = sinon.spy();
+          vaadinRadioButton.addEventListener('change', spy);
+
+          vaadinRadioButton.checked = true;
+
+          expect(spy).to.not.be.called;
+        });
+
+        it('should bubble', () => {
+          const spy = sinon.spy();
+          vaadinRadioButton.addEventListener('change', spy);
+
+          vaadinRadioButton.click();
+
+          const event = spy.getCall(0).args[0];
+          expect(event).to.have.property('bubbles', true);
+        });
+
+        it('should not be composed', () => {
+          const spy = sinon.spy();
+          vaadinRadioButton.addEventListener('change', spy);
+
+          vaadinRadioButton.click();
+
+          const event = spy.getCall(0).args[0];
+          expect(event).to.have.property('composed', false);
+        });
+
+        it('should contain sourceEvent detail', () => {
+          const spy = sinon.spy();
+          vaadinRadioButton.addEventListener('change', spy);
+
+          vaadinRadioButton.click();
+
+          const event = spy.getCall(0).args[0];
+          expect(event).to.have.property('detail')
+            .that.has.property('sourceEvent')
+            .that.is.instanceof(Event)
+            .and.has.property('type').equal('change');
+        });
+      });
     });
 
     describe('empty vaadin-radio-button label', () => {

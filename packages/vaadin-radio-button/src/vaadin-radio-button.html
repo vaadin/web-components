@@ -45,13 +45,14 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     </style>
 
-    <label on-click="_preventDefault">
+    <label>
       <span part="radio">
         <input
           type="radio"
           checked="{{checked::change}}"
           disabled$="[[disabled]]"
           role="presentation"
+          on-change="_onChange"
           tabindex="-1">
       </span>
 
@@ -160,8 +161,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
           this.setAttribute('role', 'radio');
 
-          this.addEventListener('click', this._handleClick.bind(this));
-
           this._addActiveListeners();
 
           const attrName = this.getAttribute('name');
@@ -206,10 +205,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
           this._addEventListenerToNode(this, 'up', (e) => {
             this.removeAttribute('active');
-
-            if (!this.checked && !this.disabled) {
-              this.checked = true;
-            }
           });
 
           this.addEventListener('keydown', e => {
@@ -222,17 +217,19 @@ This program is available under Apache License Version 2.0, available at https:/
           this.addEventListener('keyup', e => {
             if (!this.disabled && e.keyCode === 32) {
               e.preventDefault();
-              this.setAttribute('checked', '');
+              this.click();
               this.removeAttribute('active');
             }
           });
         }
 
-        _handleClick(e) {
-          if (!this.disabled) {
-            e.preventDefault();
-            this.checked = true;
-          }
+        /**
+         * Toggles the radio button, so that the native `change` event
+         * is dispatched. Overrides the standard `HTMLElement.prototype.click`.
+         * @protected
+         */
+        click() {
+          this.shadowRoot.querySelector('input').click();
         }
 
         /** @protected */
@@ -240,10 +237,25 @@ This program is available under Apache License Version 2.0, available at https:/
           return this.shadowRoot.querySelector('input');
         }
 
-        _preventDefault(e) {
-          e.preventDefault();
+        _onChange(e) {
+          // In the Shadow DOM, the `change` event is not leaked into the
+          // ancestor tree, so we must do this manually.
+          const changeEvent = new CustomEvent('change', {
+            detail: {
+              sourceEvent: e
+            },
+            bubbles: e.bubbles,
+            cancelable: e.cancelable,
+          });
+          this.dispatchEvent(changeEvent);
         }
       }
+
+      /**
+       * Fired when the user toggles the radio button.
+       *
+       * @event change
+       */
 
       customElements.define(RadioButtonElement.is, RadioButtonElement);
 

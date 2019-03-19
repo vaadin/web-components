@@ -380,6 +380,60 @@
           done();
         }, 100);
       });
+
+      describe('change event', () => {
+        it('should fire on right/down', () => {
+          vaadinRadioButtonList[1].focus();
+          vaadinRadioButtonList[1].checked = true;
+
+          const spy = sinon.spy();
+          vaadinRadioButtonGroup.addEventListener('change', spy);
+
+          MockInteractions.keyDownOn(vaadinRadioButtonGroup, 39);
+          MockInteractions.keyUpOn(vaadinRadioButtonGroup, 39);
+
+          expect(spy.callCount).to.equal(1);
+          expect(spy.lastCall.args[0].target).to.equal(vaadinRadioButtonList[2]);
+
+          MockInteractions.keyDownOn(vaadinRadioButtonGroup, 40);
+          MockInteractions.keyUpOn(vaadinRadioButtonGroup, 40);
+
+          expect(spy.callCount).to.equal(2);
+          expect(spy.lastCall.args[0].target).to.equal(vaadinRadioButtonList[0]);
+        });
+
+        it('should fire on left/up', () => {
+          vaadinRadioButtonList[1].focus();
+          vaadinRadioButtonList[1].checked = true;
+
+          const spy = sinon.spy();
+          vaadinRadioButtonGroup.addEventListener('change', spy);
+
+          MockInteractions.keyDownOn(vaadinRadioButtonGroup, 37);
+          MockInteractions.keyUpOn(vaadinRadioButtonGroup, 37);
+
+          expect(spy.callCount).to.equal(1);
+          expect(spy.lastCall.args[0].target).to.equal(vaadinRadioButtonList[0]);
+
+          MockInteractions.keyDownOn(vaadinRadioButtonGroup, 38);
+          MockInteractions.keyUpOn(vaadinRadioButtonGroup, 38);
+
+          expect(spy.callCount).to.equal(2);
+          expect(spy.lastCall.args[0].target).to.equal(vaadinRadioButtonList[2]);
+        });
+
+        it('should not fire on programmatic value change', () => {
+          vaadinRadioButtonList[0].focus();
+          vaadinRadioButtonList[0].checked = true;
+
+          const spy = sinon.spy();
+          vaadinRadioButtonGroup.addEventListener('change', spy);
+
+          vaadinRadioButtonGroup.value = '2';
+
+          expect(spy).to.not.be.called;
+        });
+      });
     });
 
     describe('radio-group-with-initial-checked-button', () => {
