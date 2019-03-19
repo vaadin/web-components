@@ -61,7 +61,7 @@ Reporting [issues and feature request](https://github.com/vaadin/vaadin-lumo-sty
 
 1. Run `npm install` to install dependencies
 
-1. Run `gulp icons` to generate new versions of `icons.html` and `font-icons.html`
+1. Run `gulp icons` to generate new versions of `iconset.html` and `font-icons.html`
 
 
 ## Following the coding style

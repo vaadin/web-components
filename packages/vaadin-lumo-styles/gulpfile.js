@@ -122,7 +122,6 @@ gulp.task('icons', function() {
 
         var output = `<!-- NOTICE: Generated with 'gulp icons' -->
 <link rel="import" href="version.html">
-<link rel="import" href="../iron-icon/iron-icon.html">
 <link rel="import" href="../iron-iconset-svg/iron-iconset-svg.html">
 <iron-iconset-svg size="1000" name="lumo">
 <svg xmlns="http://www.w3.org/2000/svg">
@@ -157,7 +156,7 @@ gulp.task('icons', function() {
 </iron-iconset-svg>
 `;
 
-        fs.writeFile('icons.html', output, function(err) {
+        fs.writeFile('iconset.html', output, function(err) {
           if (err) {
             return console.error(err);
           }
