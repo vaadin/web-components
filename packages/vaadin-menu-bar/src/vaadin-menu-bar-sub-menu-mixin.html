@@ -89,6 +89,10 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    __fireItemSelected(value) {
+      this.dispatchEvent(new CustomEvent('item-selected', {detail: {value}}));
+    }
+
     __onButtonClick(e) {
       e.stopPropagation();
       const button = e.composedPath()[0];
@@ -101,8 +105,10 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
-      const {items} = e.detail;
+      const {item} = e.detail;
+      const items = item && item.children;
       if (!items || items.length === 0) {
+        this.__fireItemSelected(item);
         return;
       }
 
@@ -123,9 +129,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
     __onItemSelected(e) {
       e.stopPropagation();
-      const {detail} = e;
       this._close();
-      this.dispatchEvent(new CustomEvent('item-selected', {detail}));
+      this.__fireItemSelected(e.detail.value);
     }
 
     _close() {

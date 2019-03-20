@@ -19,9 +19,9 @@ This program is available under Apache License Version 2.0, available at https:/
 
       static get properties() {
         return {
-          items: {
-            type: Array,
-            value: () => []
+          item: {
+            type: Object,
+            value: () => {}
           }
         };
       }
@@ -40,9 +40,9 @@ This program is available under Apache License Version 2.0, available at https:/
 
       _dispatchClick(e) {
         e.stopPropagation();
-        const {items} = this;
+        const {item} = this;
         this.dispatchEvent(new CustomEvent('button-click', {
-          detail: {items},
+          detail: {item},
           bubbles: true,
           composed: true
         }));

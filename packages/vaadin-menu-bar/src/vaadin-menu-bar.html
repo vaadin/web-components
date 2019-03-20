@@ -27,7 +27,7 @@ This program is available under Apache License Version 2.0, available at https:/
     </style>
     <div part="container">
       <template is="dom-repeat" items="[[items]]">
-        <vaadin-menu-bar-button disabled="[[item.disabled]]" items="[[item.children]]">
+        <vaadin-menu-bar-button disabled="[[item.disabled]]" item="[[item]]">
           <span>[[item.text]]</span>
         </vaadin-menu-bar-button>
       </template>

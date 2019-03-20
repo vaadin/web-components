@@ -141,6 +141,15 @@
         expect(spy.firstCall.args[0].detail.value).to.deep.equal({text: 'Menu Item 1 1'});
       });
 
+      it('should dispatch item-selected event on leaf button click', () => {
+        buttons = getButtons(menu);
+        const spy = sinon.spy();
+        menu.addEventListener('item-selected', spy);
+        buttons[1].click();
+        expect(spy).to.be.calledOnce;
+        expect(spy.firstCall.args[0].detail.value).to.deep.equal({text: 'Menu Item 2'});
+      });
+
       (isIOS ? it.skip : it)('should position bottom-aligned sub-menu to button top', async() => {
         menu.style.position = 'absolute';
         menu.style.bottom = '50px';
