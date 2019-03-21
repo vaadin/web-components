@@ -30,7 +30,7 @@ A mixin which adds `focused` and `focus-ring` states to an element.
 
 ## Following the coding style
 
-We are using [ESLint](http://eslint.org/) for linting JavaScript code. You can check if your code is following our standards by running `gulp lint`, which will automatically lint all `.js` files as well as JavaScript snippets inside `.html` files.
+We are using [ESLint](http://eslint.org/) for linting JavaScript code. You can check if your code is following our standards by running `npm run lint`, which will automatically lint all `.js` files as well as JavaScript snippets inside `.html` files.
 
 
 ## Creating a pull request
