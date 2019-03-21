@@ -22,28 +22,27 @@ env:
 script:
   - if [[ "$POLYMER" = "2" ]]; then
       npm install &&
-      gulp lint &&
-      polymer lint --rules polymer-2 --input *.html &&
+      npm run lint &&
       if [[ "$TRAVIS_EVENT_TYPE" = "pull_request" ]]; then
-        xvfb-run -s '-screen 0 1024x768x24' polymer test;
+        xvfb-run -s '-screen 0 1024x768x24' wct;
       else
-        polymer test --env saucelabs;
+        wct --env saucelabs;
       fi;
     fi
 
   - if [[ "$POLYMER" = "3" ]]; then
-      npm install -g yarn magi-cli polymer-modulizer &&
+      npm install -g yarn magi-cli polymer-modulizer web-component-tester &&
       rm -rf node_modules &&
       magi p3-convert --out . --import-style=name &&
       yarn install --flat &&
       if [[ "$TRAVIS_EVENT_TYPE" = "pull_request" ]]; then
-        xvfb-run -s '-screen 0 1024x768x24' polymer test --module-resolution=node --npm;
+        xvfb-run -s '-screen 0 1024x768x24' wct --npm;
       else
-        polymer test --module-resolution=node --npm --env saucelabs;
+        wct --npm --env saucelabs;
       fi;
     fi
 
   - if [[ "$TRAVIS_EVENT_TYPE" = "cron" ]]; then
       npm install &&
-      polymer test --env saucelabs-cron;
+      wct --env saucelabs-cron;
     fi

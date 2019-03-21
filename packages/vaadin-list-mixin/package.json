@@ -20,11 +20,21 @@
   "files": [
     "vaadin-*.js"
   ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint"
+    }
+  },
   "scripts": {
     "start": "polymer serve --port 3000",
-    "test": "wct"
+    "test": "wct",
+    "lint": "npm-run-all --parallel lint:*",
+    "lint:css": "stylelint *.html demo/*.html test/*html",
+    "lint:html": "eslint *.html demo test --ext .html",
+    "lint:js": "eslint *.js test",
+    "lint:polymer": "polymer lint --rules polymer-2 --input *.html"
   },
   "devDependencies": {
-    "@vaadin/vaadin-component-dev-dependencies": "^1.0.0"
+    "@vaadin/vaadin-component-dev-dependencies": "^3.0.0"
   }
 }
