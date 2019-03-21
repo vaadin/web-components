@@ -40,8 +40,6 @@
     describe('sub-menu', () => {
       let menu, buttons, subMenu, item;
 
-      const getButtons = menu => Array.from(menu.shadowRoot.querySelectorAll('vaadin-menu-bar-button'));
-
       beforeEach(done => {
         menu = fixture('default');
         menu.items = [
@@ -61,8 +59,11 @@
             ]
           },
         ];
-        subMenu = menu._subMenu;
-        Polymer.RenderStatus.afterNextRender(menu, done);
+        Polymer.RenderStatus.afterNextRender(menu, () => {
+          subMenu = menu._subMenu;
+          buttons = menu._buttons;
+          done();
+        });
       });
 
       afterEach(() => {
@@ -72,21 +73,18 @@
       });
 
       it('should open sub-menu when button with nested items clicked', async() => {
-        buttons = getButtons(menu);
         buttons[0].click();
         await nextRender(subMenu);
         expect(subMenu.opened).to.be.true;
       });
 
       it('should not open sub-menu when button without nested items clicked', async() => {
-        buttons = getButtons(menu);
         buttons[1].click();
         await nextRender(subMenu);
         expect(subMenu.opened).to.be.false;
       });
 
       it('should reopen sub-menu when different button with nested items clicked', async() => {
-        buttons = getButtons(menu);
         buttons[0].click();
         await nextRender(subMenu);
         expect(subMenu.listenOn).to.equal(buttons[0]);
@@ -99,14 +97,12 @@
       });
 
       (isIOS ? it.skip : it)('should open sub-menu on arrow down', async() => {
-        buttons = getButtons(menu);
         arrowDown(buttons[0]);
         await nextRender(subMenu);
         expect(subMenu.opened).to.be.true;
       });
 
       (isIOS ? it.skip : it)('should close sub-menu on first item arrow up', async() => {
-        buttons = getButtons(menu);
         arrowDown(buttons[0]);
         await nextRender(subMenu);
 
@@ -117,7 +113,6 @@
       });
 
       it('should close sub-menu on outside click', async() => {
-        buttons = getButtons(menu);
         buttons[0].click();
         await nextRender(subMenu);
 
@@ -127,7 +122,6 @@
       });
 
       it('should close and dispatch item-selected event on select', async() => {
-        buttons = getButtons(menu);
         buttons[0].click();
         await nextRender(subMenu);
 
@@ -142,7 +136,6 @@
       });
 
       it('should dispatch item-selected event on leaf button click', () => {
-        buttons = getButtons(menu);
         const spy = sinon.spy();
         menu.addEventListener('item-selected', spy);
         buttons[1].click();
@@ -153,7 +146,6 @@
       (isIOS ? it.skip : it)('should position bottom-aligned sub-menu to button top', async() => {
         menu.style.position = 'absolute';
         menu.style.bottom = '50px';
-        buttons = getButtons(menu);
         buttons[0].click();
         await nextRender(subMenu);
         const overlayRect = subMenu.$.overlay.getBoundingClientRect();
@@ -162,7 +154,6 @@
       });
 
       it('should close sub-menu on items change', async() => {
-        buttons = getButtons(menu);
         buttons[0].click();
         await nextRender(subMenu);
 

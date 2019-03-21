@@ -59,8 +59,6 @@
     describe('root menu layout', () => {
       let menu, buttons;
 
-      const getButtons = menu => Array.from(menu.shadowRoot.querySelectorAll('vaadin-menu-bar-button'));
-
       beforeEach(done => {
         menu = fixture('default');
         menu.items = [
@@ -69,28 +67,27 @@
           {text: 'Item 3', disabled: true},
           {text: 'Item 4'},
         ];
-        Polymer.RenderStatus.afterNextRender(menu, done);
+        Polymer.RenderStatus.afterNextRender(menu, () => {
+          buttons = menu._buttons;
+          done();
+        });
       });
 
       it('should render the buttons based on the items property', () => {
-        buttons = getButtons(menu);
         expect(buttons.length).to.equal(4);
       });
 
       it('should set buttons text content based on the text property', () => {
-        buttons = getButtons(menu);
         menu.items.forEach((item, idx) => {
           expect(buttons[idx].textContent.trim()).to.equal(item.text);
         });
       });
 
       it('should render disabled button if disabled property is true', () => {
-        buttons = getButtons(menu);
         expect(buttons[2].disabled).to.be.true;
       });
 
       it('should set tabindex to -1 to all the buttons except first one', () => {
-        buttons = getButtons(menu);
         menu.dispatchEvent(new CustomEvent('focusin', {bubbles: true, composed: true}));
         expect(buttons[0].getAttribute('tabindex')).to.equal('0');
         buttons.slice(1).forEach(btn => {
@@ -99,7 +96,6 @@
       });
 
       it('should move focus to next button on "arrow-right" keydown', () => {
-        buttons = getButtons(menu);
         buttons[0].focus();
         const spy = sinon.spy(buttons[1], 'focus');
         arrowRight(buttons[0]);
@@ -108,7 +104,6 @@
       });
 
       it('should move focus to prev button on "arrow-left" keydown', () => {
-        buttons = getButtons(menu);
         buttons[1].focus();
         const spy = sinon.spy(buttons[0], 'focus');
         arrowLeft(buttons[1]);
@@ -117,7 +112,6 @@
       });
 
       it('should move focus to first button on "home" keydown', () => {
-        buttons = getButtons(menu);
         buttons[1].focus();
         const spy = sinon.spy(buttons[0], 'focus');
         home(buttons[1]);
@@ -127,7 +121,6 @@
 
       it('should move focus to second button if first is disabled on "home" keydown', () => {
         menu.set('items.0.disabled', true);
-        buttons = getButtons(menu);
         buttons[3].focus();
         const spy = sinon.spy(buttons[1], 'focus');
         home(buttons[3]);
@@ -136,7 +129,6 @@
       });
 
       it('should move focus to last button on "end" keydown', () => {
-        buttons = getButtons(menu);
         buttons[0].focus();
         const spy = sinon.spy(buttons[3], 'focus');
         end(buttons[0]);
@@ -146,7 +138,6 @@
 
       it('should move focus to the closest enabled button if last is disabled on "end" keydown', () => {
         menu.set('items.3.disabled', true);
-        buttons = getButtons(menu);
         buttons[0].focus();
         const spy = sinon.spy(buttons[1], 'focus');
         end(buttons[0]);
@@ -155,7 +146,6 @@
       });
 
       it('should move focus to first button on "arrow-right", if last button has focus', () => {
-        buttons = getButtons(menu);
         buttons[3].focus();
         const spy = sinon.spy(buttons[0], 'focus');
         arrowRight(buttons[3]);
@@ -164,7 +154,6 @@
       });
 
       it('should move focus to last button on "arrow-up", if first button has focus', () => {
-        buttons = getButtons(menu);
         buttons[0].focus();
         const spy = sinon.spy(buttons[3], 'focus');
         arrowLeft(buttons[0]);
