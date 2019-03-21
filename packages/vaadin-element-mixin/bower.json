@@ -17,7 +17,6 @@
     "**/.*",
     "node_modules",
     "bower_components",
-    "gulpfile.js",
     "package.json",
     "wct.conf.js"
   ],
