@@ -247,6 +247,14 @@
         combobox.value = 'foo';
         combobox.close();
       });
+
+      it('should fire when selecting an item via click', () => {
+        combobox.open();
+        const firstItem = combobox.$.overlay._selector.querySelector('vaadin-combo-box-item');
+        fire('click', firstItem);
+
+        expect(changeSpy.callCount).to.equal(1);
+      });
     });
   });
 
