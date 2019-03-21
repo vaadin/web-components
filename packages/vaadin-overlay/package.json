@@ -23,10 +23,20 @@
     "src",
     "theme"
   ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint"
+    }
+  },
   "scripts": {
-    "test": "wct"
+    "test": "wct",
+    "lint": "npm-run-all --parallel lint:*",
+    "lint:css": "stylelint *.html src/*.html demo/*.html theme/**/*.html test/*html",
+    "lint:html": "eslint *.html src demo test --ext .html",
+    "lint:js": "eslint *.js test",
+    "lint:polymer": "polymer lint --rules polymer-2 --input ./src/*.html ./theme/**/*.html"
   },
   "devDependencies": {
-    "@vaadin/vaadin-component-dev-dependencies": "^1.0.0"
+    "@vaadin/vaadin-component-dev-dependencies": "^3.0.0"
   }
 }
