@@ -1,0 +1,19 @@
+<script>
+  window.Vaadin = window.Vaadin || {};
+  window.Vaadin._detectIosNavbar = function() {
+    if (window.navigator.userAgent.match(/iPhone|iPad/i)) {
+      const innerHeight = window.innerHeight;
+      const innerWidth = window.innerWidth;
+      const landscape = innerWidth > innerHeight;
+      const clientHeight = document.documentElement.clientHeight;
+      if (landscape && clientHeight > innerHeight) {
+        document.documentElement.style.setProperty('--vaadin-viewport-offset-bottom', clientHeight - innerHeight + 'px');
+      } else {
+        document.documentElement.style.setProperty('--vaadin-viewport-offset-bottom', '');
+      }
+    }
+  };
+
+  window.Vaadin._detectIosNavbar();
+  window.addEventListener('resize', window.Vaadin._detectIosNavbar);
+</script>
