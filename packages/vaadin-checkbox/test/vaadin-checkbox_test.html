@@ -334,6 +334,26 @@
         vaadinCheckbox.addEventListener('change', () => done());
         vaadinCheckbox.click();
       });
+
+      it('should bubble', () => {
+        const spy = sinon.spy();
+        vaadinCheckbox.addEventListener('change', spy);
+
+        vaadinCheckbox.click();
+
+        const event = spy.getCall(0).args[0];
+        expect(event).to.have.property('bubbles', true);
+      });
+
+      it('should not be composed', () => {
+        const spy = sinon.spy();
+        vaadinCheckbox.addEventListener('change', spy);
+
+        vaadinCheckbox.click();
+
+        const event = spy.getCall(0).args[0];
+        expect(event).to.have.property('composed', false);
+      });
     });
 
     describe('iron-form-checkbox', () => {

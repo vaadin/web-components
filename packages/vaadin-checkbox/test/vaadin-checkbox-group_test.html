@@ -210,6 +210,14 @@
       expect(vaadinCheckboxList[0].checked).to.be.false;
     });
 
+    it('should not fire change event on programmatic value change', () => {
+      const spy = sinon.spy();
+      vaadinCheckboxGroup.addEventListener('change', spy);
+
+      vaadinCheckboxGroup.value = ['2'];
+
+      expect(spy).to.not.be.called;
+    });
   });
 
   describe('vaadin-checkbox-group validation', () => {
