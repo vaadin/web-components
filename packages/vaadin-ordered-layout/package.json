@@ -23,13 +23,26 @@
     "src",
     "theme"
   ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint"
+    }
+  },
   "scripts": {
     "test": "wct",
+    "check": "npm-run-all --parallel check:*",
+    "check:bower": "magi check-bower",
+    "check:version": "magi check-version",
+    "lint": "npm-run-all --parallel lint:*",
+    "lint:css": "stylelint *.html src/*.html demo/*.html theme/**/*.html test/*html",
+    "lint:html": "eslint *.html src demo test --ext .html",
+    "lint:js": "eslint *.js test",
+    "lint:polymer": "polymer lint --rules polymer-2 --input ./src/*.html ./theme/**/*.html",
     "prestart": "polymer analyze vaadin-* > analysis.json",
     "start": "polymer serve --port 3000 --open",
-    "preversion": "gulp version:update"
+    "preversion": "magi update-version"
   },
   "devDependencies": {
-    "@vaadin/vaadin-component-dev-dependencies": "^1.0.0"
+    "@vaadin/vaadin-component-dev-dependencies": "^3.0.0"
   }
 }
