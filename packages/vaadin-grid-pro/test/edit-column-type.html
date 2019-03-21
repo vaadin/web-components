@@ -34,6 +34,25 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="template-editor-type">
+    <template>
+      <vaadin-grid-pro>
+        <vaadin-grid-pro-edit-column path="name" editor-type="text">
+          <template>[[item.name]]</template>
+        </vaadin-grid-pro-edit-column>
+        <vaadin-grid-pro-edit-column path="title" editor-type="select">
+          <template>[[item.title]]</template>
+        </vaadin-grid-pro-edit-column>
+        <vaadin-grid-pro-edit-column path="married" editor-type="checkbox">
+          <template>[[item.married]]</template>
+        </vaadin-grid-pro-edit-column>
+        <vaadin-grid-column>
+          <template>[[item.age]]</template>
+        </vaadin-grid-column>
+      </vaadin-grid>
+    </template>
+  </test-fixture>
+
   <script>
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
@@ -75,6 +94,40 @@
     }
 
     describe('edit column editor type', () => {
+
+      describe('specified editor type with representation template', () => {
+        let grid, cell, column, editor;
+
+        beforeEach(() => {
+          grid = fixture('template-editor-type');
+          grid.items = getItems();
+          flushGrid(grid);
+        });
+
+        it('should render the textfield to cell with text editor type specified', () => {
+          column = grid.querySelectorAll('vaadin-grid-pro-edit-column')[0];
+          cell = getContainerCell(grid.$.items, 0, 0);
+          dblclick(cell._content);
+          editor = column._getEditorComponent(cell);
+          expect(editor instanceof Vaadin.TextFieldElement).to.equal(true);
+        });
+
+        it('should render the select to cell with select editor type specified', () => {
+          column = grid.querySelectorAll('vaadin-grid-pro-edit-column')[1];
+          cell = getContainerCell(grid.$.items, 0, 1);
+          dblclick(cell._content);
+          editor = column._getEditorComponent(cell);
+          expect(editor._select instanceof Vaadin.SelectElement).to.equal(true);
+        });
+
+        it('should render the checkbox to cell with text checkbox type specified', () => {
+          column = grid.querySelectorAll('vaadin-grid-pro-edit-column')[2];
+          cell = getContainerCell(grid.$.items, 0, 2);
+          dblclick(cell._content);
+          editor = column._getEditorComponent(cell);
+          expect(editor instanceof Vaadin.CheckboxElement).to.equal(true);
+        });
+      });
 
       describe('checkbox', () => {
         let grid, cell, column, editor;
