@@ -33,6 +33,17 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="select">
+    <template>
+      <vaadin-grid-pro>
+        <vaadin-grid-pro-edit-column path="name"></vaadin-grid-pro-edit-column>
+        <vaadin-grid-pro-edit-column path="title" editor-type="select"></vaadin-grid-pro-edit-column>
+        <vaadin-grid-pro-edit-column path="age"></vaadin-grid-pro-edit-column>
+        <vaadin-grid-column path="name"></vaadin-grid-column>
+      </vaadin-grid-pro>
+    </template>
+  </test-fixture>
+
   <script>
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
@@ -210,7 +221,7 @@
             expect(input).to.be.ok;
           });
 
-          it('should focus previous cell available for editing on the previous in edit mode on Shift Tab', () => {
+          it('should focus previous cell available for editing on the previous row in edit mode on Shift Tab', () => {
             const firstCell = getContainerCell(grid.$.items, 2, 0);
             dblclick(firstCell._content);
             input = getCellEditor(firstCell);
@@ -261,6 +272,49 @@
 
             shiftEnter(input);
             expect(getCellEditor(firstCell)).to.be.not.ok;
+          });
+
+          describe('with the select column', () => {
+            let textCell, selectCell, selectOverlay, checkboxCell;
+
+            beforeEach(() => {
+              grid = fixture('select');
+              grid.items = getItems();
+              grid.querySelector('[path="title"]').editorOptions = ['mr', 'mrs', 'ms'];
+              flushGrid(grid);
+              grid.keepEditorOpen = true;
+              textCell = getContainerCell(grid.$.items, 1, 0);
+              selectCell = getContainerCell(grid.$.items, 1, 1);
+              checkboxCell = getContainerCell(grid.$.items, 1, 2);
+            });
+
+            it('should focus cell next available for editing in edit mode on Tab', done => {
+              dblclick(textCell._content);
+              input = getCellEditor(textCell);
+              tab(input);
+
+              selectOverlay = getCellEditor(selectCell)._select._overlayElement;
+              selectOverlay.addEventListener('vaadin-overlay-open', e => {
+                tab(selectOverlay);
+                input = getCellEditor(checkboxCell);
+                expect(input).to.be.ok;
+                done();
+              });
+            });
+
+            it('should focus previous cell available for editing in edit mode on Shift Tab', done => {
+              dblclick(checkboxCell._content);
+              input = getCellEditor(checkboxCell);
+              shiftTab(input);
+
+              selectOverlay = getCellEditor(selectCell)._select._overlayElement;
+              selectOverlay.addEventListener('vaadin-overlay-open', e => {
+                shiftTab(selectOverlay);
+                input = getCellEditor(textCell);
+                expect(input).to.be.ok;
+                done();
+              });
+            });
           });
         });
 

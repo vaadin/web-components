@@ -64,9 +64,26 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         };
       }
 
+      connectedCallback() {
+        super.connectedCallback();
+        this.__boundOnKeydown = this.__onKeydown.bind(this);
+        this._select._overlayElement.addEventListener('keydown', this.__boundOnKeydown);
+      }
+
+      disconnectedCallback() {
+        super.disconnectedCallback();
+        this._select._overlayElement.removeEventListener('keydown', this.__boundOnKeydown);
+      }
+
       ready() {
         super.ready();
         this._select = this.$.selectEditor;
+      }
+
+      __onKeydown(e) {
+        if (e.keyCode === 9) {
+          this._grid.keepEditorOpen && this._grid._switchEditCell(e);
+        }
       }
 
       static get observers() {

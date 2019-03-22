@@ -112,11 +112,14 @@
         <vaadin-grid-pro keep-editor-open>
           <vaadin-grid-pro-edit-column path="name.first" header="First name (edit)"></vaadin-grid-pro-edit-column>
           <vaadin-grid-column path="name.last" header="Last name (view)"></vaadin-grid-column>
+          <vaadin-grid-pro-edit-column path="name.title" header="Title (edit)" editor-type="select"></vaadin-grid-pro-edit-column>
           <vaadin-grid-pro-edit-column path="name.last" header="Last name (edit)"></vaadin-grid-pro-edit-column>
         </vaadin-grid-pro>
         <script>
           window.addDemoReadyListener('#grid-pro-edit-column-demos-keep-editor-open', function(document) {
-            document.querySelector('vaadin-grid-pro').items = Vaadin.GridDemo.getUsers();
+            const grid = document.querySelector('vaadin-grid-pro');
+            grid.items = Vaadin.GridDemo.getUsers();
+            grid.querySelector('[path="name.title"]').editorOptions = ['mr', 'mrs', 'ms'];
           });
         </script>
       </template>
