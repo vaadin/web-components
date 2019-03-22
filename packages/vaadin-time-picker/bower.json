@@ -32,7 +32,7 @@
     "vaadin-lumo-styles": "vaadin/vaadin-lumo-styles#^1.2.0",
     "vaadin-material-styles": "vaadin/vaadin-material-styles#^1.2.0",
     "vaadin-text-field": "vaadin/vaadin-text-field#^2.1.1",
-    "vaadin-combo-box": "vaadin/vaadin-combo-box#^4.2.0-alpha3",
+    "vaadin-combo-box": "vaadin/vaadin-combo-box#^4.2.0",
     "vaadin-control-state-mixin": "vaadin/vaadin-control-state-mixin#^2.1.1"
   },
   "devDependencies": {
