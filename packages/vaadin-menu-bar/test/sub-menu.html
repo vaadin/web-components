@@ -153,6 +153,22 @@
         expect(overlayRect.top + overlayRect.height).to.be.closeTo(buttonRect.top, 1);
       });
 
+      (isIOS ? it.skip : it)('should position right-aligned sub-menu to button right', async() => {
+        document.body.style.position = 'relative';
+        document.body.style.width = '450px';
+        document.body.style.minWidth = '450px';
+        menu.style.position = 'absolute';
+        menu.style.right = '0px';
+        buttons[2].click();
+        await nextRender(subMenu);
+        const overlayRect = subMenu.$.overlay.getBoundingClientRect();
+        const buttonRect = buttons[2].getBoundingClientRect();
+        expect(overlayRect.right).to.be.closeTo(buttonRect.right, 1);
+        document.body.style.position = '';
+        document.body.style.width = '';
+        document.body.style.minWidth = '';
+      });
+
       it('should close sub-menu on items change', async() => {
         buttons[0].click();
         await nextRender(subMenu);

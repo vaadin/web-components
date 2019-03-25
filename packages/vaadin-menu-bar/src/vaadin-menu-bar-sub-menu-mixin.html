@@ -61,9 +61,12 @@ This program is available under Apache License Version 2.0, available at https:/
 
     __alignOverlayPosition(e) {
       const overlay = e.target;
+      const getRect = () => this._activeButton.getBoundingClientRect();
       if (overlay.hasAttribute('bottom-aligned')) {
-        const rect = this._activeButton.getBoundingClientRect();
-        overlay.style.bottom = parseInt(getComputedStyle(overlay).bottom) + rect.height + 'px';
+        overlay.style.bottom = parseInt(getComputedStyle(overlay).bottom) + getRect().height + 'px';
+      }
+      if (overlay.hasAttribute('right-aligned')) {
+        overlay.style.right = parseInt(getComputedStyle(overlay).right) - getRect().width + 'px';
       }
     }
 
