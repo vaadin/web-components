@@ -509,6 +509,35 @@
           expect(grid.hasAttribute('navigating')).to.be.false;
         });
       });
+
+      describe('grid behaviour', () => {
+        let grid, cell;
+
+        beforeEach(() => {
+          grid = fixture('default');
+          grid.items = getItems();
+          flushGrid(grid);
+        });
+
+        it('should not fire active-item-changed on grid edit column', () => {
+          // Propagation of click should be stopped on edit colunm
+          const spy = sinon.spy();
+          grid.addEventListener('active-item-changed', spy);
+
+          cell = getContainerCell(grid.$.items, 0, 1);
+          cell.click();
+          expect(spy.called).to.be.false;
+        });
+
+        it('should fire active-item-changed on grid column', () => {
+          const spy = sinon.spy();
+          grid.addEventListener('active-item-changed', spy);
+
+          cell = getContainerCell(grid.$.items, 0, 2);
+          cell.click();
+          expect(spy.called).to.be.true;
+        });
+      });
     });
   </script>
 

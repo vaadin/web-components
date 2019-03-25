@@ -67,6 +67,14 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
     ready() {
       super.ready();
 
+      // Prevent click/selection on edit column
+      this.$.table.addEventListener('click', e => {
+        const column = this.getEventContext(e).column;
+        if (this._isEditColumn(column)) {
+          e.preventDefault();
+        }
+      });
+
       // dblclick does not work on iOS Safari
       if (this._ios) {
         let firstClickTime;
