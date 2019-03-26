@@ -24,8 +24,7 @@ module.exports = {
       exclude: [],
       thresholds: {
         global: {
-          // TODO (diegocardoso) Increase thresholds back when add tests (previously it was 90)
-          statements: 60
+          statements: 80
         }
       }
     }
@@ -40,7 +39,8 @@ module.exports = {
 
     const saucelabsPlatformsMicrosoft = [
       'Windows 10/microsoftedge@17',
-      'Windows 10/internet explorer@11'
+      // Remove IE11 temporarily
+      // 'Windows 10/internet explorer@11'
     ];
 
     const saucelabsPlatformsDesktop = [

@@ -8,6 +8,7 @@
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <link rel="import" href="../../test-fixture/test-fixture.html">
   <link rel="import" href="../vaadin-app-layout.html">
+  <link rel="import" href="../vaadin-drawer-toggle.html">
   <link rel="import" href="../../vaadin-tabs/vaadin-tabs.html">
 </head>
 
@@ -15,6 +16,13 @@
   <test-fixture id="default">
     <template>
       <vaadin-app-layout>
+        <vaadin-drawer-toggle slot="navbar"></vaadin-drawer-toggle>
+        <h3 slot="navbar">AppName</h3>
+        <vaadin-tabs orientation="vertical" slot="drawer">
+          <vaadin-tab>Tab 1</vaadin-tab>
+          <vaadin-tab>Tab 2</vaadin-tab>
+        </vaadin-tabs>
+        <p>content</p>
       </vaadin-app-layout>
     </template>
   </test-fixture>
@@ -28,10 +36,51 @@
         layout = fixture('default');
       });
 
+      afterEach(function() {
+        window.top.document.querySelector('iframe').style.removeProperty('width');
+        window.top.document.querySelector('iframe').style.removeProperty('minWidth');
+      });
+
+      function resizeIframeTo(pixels) {
+        window.top.document.querySelector('iframe').style.width = pixels + 'px';
+        window.top.document.querySelector('iframe').style.minWidth = pixels + 'px';
+        window.dispatchEvent(new Event('resize'));
+      }
+
       it('should pass', function() {
         expect(layout.localName).to.be.equal('vaadin-app-layout');
       });
 
+      it('should toggle drawer on vaadin-drawer-toggle click', () => {
+        const drawerToggle = layout.querySelector('vaadin-drawer-toggle');
+        const currentDrawerState = layout.drawerOpened;
+
+        drawerToggle.click();
+
+        expect(layout.drawerOpened).to.be.not.equal(currentDrawerState);
+      });
+
+      it('should hide [part=drawer] if no content in slot=drawer is attached', (done) => {
+        const tabs = layout.querySelector('[slot=drawer]');
+
+        setTimeout(() => {
+          layout.removeChild(tabs);
+
+          setTimeout(() => {
+            expect(layout.shadowRoot.querySelector('[part=drawer]').hidden).to.be.true;
+            done();
+          });
+        });
+      });
+
+      it('should hide drawer on resize if window is small', () => {
+        resizeIframeTo(600);
+
+        setTimeout(() => {
+          expect(layout.overlay).to.be.true;
+          layout.style.removeProperty('--vaadin-app-layout-drawer-overlay');
+        });
+      });
     });
   </script>
 </body>

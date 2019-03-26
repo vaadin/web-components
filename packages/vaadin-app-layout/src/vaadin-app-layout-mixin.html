@@ -54,7 +54,6 @@ This program is available under Apache License Version 2.0, available at https:/
     Vaadin.AppLayoutMixin = superClass => class VaadinAppLayoutMixin extends Vaadin.ElementMixin(Vaadin.ThemableMixin(superClass)) {
       constructor() {
         super();
-        this.__VaadinAppLayoutMixin = true;
         // TODO(jouni): might want to debounce
         this.__boundResizeListener = this._resize.bind(this);
       }
@@ -87,11 +86,6 @@ This program is available under Apache License Version 2.0, available at https:/
       _afterFirstRender() {
         this._blockAnimationUntilAfterNextRender();
         this._updateOffsetSize();
-        // On iOS, -webkit-overflow-scrolling: touch; creates a new positioning/clipping context for fixed elements
-        // Only matches the direct parent, as the navbar/drawer layouts should be directly nested
-        if (this.parentNode.__VaadinAppLayoutMixin) {
-          this.parentNode.setAttribute('no-scroll', '');
-        }
       }
 
       _resize() {
