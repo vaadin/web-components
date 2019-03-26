@@ -73,8 +73,14 @@
         });
       });
 
-      it('should render the buttons based on the items property', () => {
-        expect(buttons.length).to.equal(4);
+      it('should render button for each item, plus ellipsis button', () => {
+        expect(buttons.length).to.equal(menu.items.length + 1);
+      });
+
+      it('should make the ellipsis button hidden by default', () => {
+        const ellipsis = buttons[menu.items.length];
+        expect(ellipsis.getAttribute('part')).to.equal('ellipsis-button');
+        expect(ellipsis.hasAttribute('hidden')).to.be.true;
       });
 
       it('should set buttons text content based on the text property', () => {
@@ -159,6 +165,96 @@
         arrowLeft(buttons[0]);
         expect(spy).to.be.calledOnce;
         expect(buttons[3].hasAttribute('focused')).to.be.true;
+      });
+    });
+
+    describe('ellipsis button', () => {
+      let menu, buttons, ellipsis;
+
+      const assertHidden = elem => {
+        const style = getComputedStyle(elem);
+        expect(style.visibility).to.equal('hidden');
+        expect(style.position).to.equal('absolute');
+      };
+
+      const assertVisible = elem => {
+        const style = getComputedStyle(elem);
+        expect(style.visibility).to.equal('visible');
+        expect(style.position).to.not.equal('absolute');
+      };
+
+      beforeEach(done => {
+        menu = fixture('default');
+
+        menu.style.width = '250px';
+
+        menu.items = [
+          {text: 'Item 1'},
+          {text: 'Item 2'},
+          {text: 'Item 3'},
+          {text: 'Item 4'},
+        ];
+        Polymer.RenderStatus.afterNextRender(menu, () => {
+          buttons = menu._buttons;
+          ellipsis = buttons[buttons.length - 1];
+          done();
+        });
+      });
+
+      it('should show ellipsis button and hide the buttons which do not fit', () => {
+        assertHidden(buttons[2]);
+        expect(buttons[2].disabled).to.be.true;
+        assertHidden(buttons[3]);
+        expect(buttons[3].disabled).to.be.true;
+        expect(ellipsis.hasAttribute('hidden')).to.be.false;
+      });
+
+      it('should set items to ellipsis button for buttons which do not fit', () => {
+        expect(ellipsis.item).to.be.an.object;
+        expect(ellipsis.item.children).to.be.an.array;
+        expect(ellipsis.item.children.length).to.equal(2);
+        expect(ellipsis.item.children[0]).to.deep.equal(menu.items[2]);
+        expect(ellipsis.item.children[1]).to.deep.equal(menu.items[3]);
+      });
+
+      it('should show buttons and update ellipsis items when width increased', done => {
+        menu.style.width = '350px';
+        menu.notifyResize();
+        Polymer.RenderStatus.afterNextRender(menu, () => {
+          assertVisible(buttons[1]);
+          expect(buttons[1].disabled).to.not.be.true;
+          expect(ellipsis.item.children.length).to.equal(1);
+          expect(ellipsis.item.children[0]).to.deep.equal(menu.items[3]);
+          done();
+        });
+      });
+
+      it('should hide buttons and update ellipsis items when width decreased', done => {
+        menu.style.width = '200px';
+        menu.notifyResize();
+        Polymer.RenderStatus.afterNextRender(menu, () => {
+          assertHidden(buttons[2]);
+          expect(buttons[2].disabled).to.be.true;
+          expect(ellipsis.item.children.length).to.equal(3);
+          expect(ellipsis.item.children[0]).to.deep.equal(menu.items[1]);
+          expect(ellipsis.item.children[1]).to.deep.equal(menu.items[2]);
+          expect(ellipsis.item.children[2]).to.deep.equal(menu.items[3]);
+          done();
+        });
+      });
+
+      it('should hide ellipsis button and reset its items when all buttons fit', done => {
+        menu.style.width = 'auto';
+        menu.notifyResize();
+        Polymer.RenderStatus.afterNextRender(menu, () => {
+          assertVisible(buttons[2]);
+          expect(buttons[2].disabled).to.not.be.true;
+          assertVisible(buttons[3]);
+          expect(buttons[3].disabled).to.not.be.true;
+          expect(ellipsis.hasAttribute('hidden')).to.be.true;
+          expect(ellipsis.item.children.length).to.equal(0);
+          done();
+        });
       });
     });
   </script>

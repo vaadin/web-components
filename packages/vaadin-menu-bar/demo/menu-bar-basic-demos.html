@@ -57,6 +57,36 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Overflowing Buttons</h3>
+    <vaadin-demo-snippet id="menu-bar-basic-demos-overflowing-buttons" when-defined="vaadin-menu-bar">
+      <template preserve-content>
+        <vaadin-menu-bar></vaadin-menu-bar>
+        <script>
+          window.addDemoReadyListener('#menu-bar-basic-demos-overflowing-buttons', function(document) {
+            const menu = document.querySelector('vaadin-menu-bar');
+            menu.items = [
+              {text: 'Home'},
+              {text: 'Dashboard'},
+              {text: 'Content'},
+              {text: 'Structure'},
+              {text: 'Appearance'},
+              {text: 'Modules'},
+              {text: 'Users'},
+              {text: 'Configuration'},
+              {
+                text: 'Reports',
+                children: [
+                  {text: 'View Reports'},
+                  {text: 'Generate Report'}
+                ]
+              },
+              {text: 'Help'}
+            ];
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
   </template>
   <script>
     class MenuBarBasicDemos extends DemoReadyEventEmitter(MenuBarDemo(Polymer.Element)) {

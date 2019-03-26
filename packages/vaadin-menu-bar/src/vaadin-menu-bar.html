@@ -18,23 +18,42 @@ This program is available under Apache License Version 2.0, available at https:/
   <template>
     <style>
       :host {
-        display: inline-block;
+        display: block;
       }
 
       :host([hidden]) {
         display: none !important;
       }
+
+      [part="container"] {
+        position: relative;
+        display: flex;
+        width: 100%;
+        flex-wrap: nowrap;
+        overflow: hidden;
+      }
+
+      [part$="button"] {
+        margin-right: 5px;
+        flex-shrink: 0;
+      }
+
+      [part="ellipsis-button"] {
+        margin-right: 0;
+      }
     </style>
+
     <div part="container">
       <template is="dom-repeat" items="[[items]]">
-        <vaadin-menu-bar-button disabled="[[item.disabled]]" item="[[item]]">
+        <vaadin-menu-bar-button disabled="[[item.disabled]]" item="[[item]]" part="menu-bar-button">
           <span>[[item.text]]</span>
         </vaadin-menu-bar-button>
       </template>
-      <vaadin-context-menu
-        open-on="opensubmenu">
-      </vaadin-context-menu>
+      <vaadin-menu-bar-button part="ellipsis-button" hidden$="[[!_hasOverflow]]">...</vaadin-menu-bar-button>
     </div>
+    <vaadin-context-menu
+      open-on="opensubmenu">
+    </vaadin-context-menu>
   </template>
 
   <script>

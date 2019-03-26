@@ -4,6 +4,11 @@ Copyright (c) 2019 Vaadin Ltd.
 This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
 -->
 
+<link rel="import" href="../../polymer/lib/utils/async.html">
+<link rel="import" href="../../polymer/lib/utils/debounce.html">
+<link rel="import" href="../../polymer/lib/utils/render-status.html">
+<link rel="import" href="../../iron-resizable-behavior/iron-resizable-behavior.html">
+
 <script>
   /**
    * @namespace Vaadin
@@ -18,17 +23,41 @@ This program is available under Apache License Version 2.0, available at https:/
   /**
    * @polymerMixin
    */
-  Vaadin.MenuBar.ButtonsMixin = superClass => class MenuButtonsMixin extends superClass {
+  Vaadin.MenuBar.ButtonsMixin = superClass => class extends Polymer.mixinBehaviors(Polymer.IronResizableBehavior, superClass) {
+
+    static get properties() {
+      return {
+        _hasOverflow: {
+          type: Boolean,
+          value: false
+        }
+      };
+    }
+
+    static get observers() {
+      return [
+        '_buttonsRendered(items, items.splices)'
+      ];
+    }
 
     ready() {
       super.ready();
 
       this.addEventListener('keydown', e => this._onKeydown(e));
       this.addEventListener('focusin', e => this._onFocusin(e));
+      this.addEventListener('iron-resize', e => this.__onResize());
     }
 
     get _buttons() {
       return Array.from(this.shadowRoot.querySelectorAll('vaadin-menu-bar-button'));
+    }
+
+    _buttonsRendered(items, splices) {
+      if (items.length) {
+        Polymer.RenderStatus.afterNextRender(this, () => {
+          this.__detectOverflow();
+        });
+      }
     }
 
     _onFocusin(event) {
@@ -84,6 +113,70 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    __detectOverflow() {
+      const container = this.shadowRoot.querySelector('[part="container"]');
+      const buttons = this._buttons.slice(0);
+      const ellipsis = buttons.pop();
+      const containerWidth = container.offsetWidth;
+
+      if (container.offsetWidth < container.scrollWidth) {
+        this._hasOverflow = true;
+
+        let i;
+        for (i = buttons.length; i > 0; i--) {
+          const btn = buttons[i - 1];
+          if (getComputedStyle(btn).visibility === 'hidden') {
+            continue;
+          }
+
+          const btnWidth = btn.offsetWidth;
+          if ((btn.offsetLeft + btnWidth) < (containerWidth - ellipsis.offsetWidth)) {
+            break;
+          }
+
+          btn.disabled = true;
+          btn.style.visibility = 'hidden';
+          btn.style.position = 'absolute';
+        }
+
+        ellipsis.item = {children: this.items.slice(i)};
+      } else if (this._hasOverflow) {
+        for (let i = 0; i < buttons.length; i++) {
+          const btn = buttons[i];
+
+          if (getComputedStyle(btn).visibility !== 'hidden') {
+            continue;
+          }
+
+          const ellipsisLeft = ellipsis.offsetLeft;
+          const btnWidth = btn.getBoundingClientRect().width;
+
+          if ((ellipsisLeft + ellipsis.offsetWidth + btnWidth) < containerWidth) {
+            btn.disabled = false;
+            btn.style.visibility = '';
+            btn.style.position = '';
+
+            ellipsis.item = {children: this.items.slice(i + 1)};
+
+            if (btn === buttons[buttons.length - 1]) {
+              this._hasOverflow = false;
+              ellipsis.item = {children: []};
+            }
+          } else {
+            break;
+          }
+        }
+      }
+    }
+
+    __onResize() {
+      this.__debounceOverflow = Polymer.Debouncer.debounce(
+        this.__debounceOverflow,
+        Polymer.Async.animationFrame,
+        this.__detectOverflow.bind(this)
+      );
+    }
+
     _getAvailableIndex(index, increment, buttons) {
       const totalItems = buttons.length;
       let idx = index;
@@ -95,7 +188,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         const btn = buttons[idx];
-        if (!btn.disabled) {
+        if (!btn.disabled && !btn.hasAttribute('hidden')) {
           return idx;
         }
       }
