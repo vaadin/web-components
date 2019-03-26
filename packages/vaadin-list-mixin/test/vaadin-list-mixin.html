@@ -387,6 +387,13 @@
             list.focus();
           }).not.to.throw();
         });
+
+        it('should not throw when items is not defined', () => {
+          const listElement = window.document.createElement('test-list-element');
+          expect(() => {
+            listElement.focus();
+          }).not.to.throw();
+        });
       });
 
       describe('orientation', () => {
