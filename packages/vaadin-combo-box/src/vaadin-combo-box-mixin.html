@@ -605,13 +605,17 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    get _propertyForValue() {
+      return 'value';
+    }
+
     /**
      *  Filtering and items handling
      */
     _inputValueChanged(e) {
       // Handle only input events from our inputElement.
       if (e.composedPath().indexOf(this.inputElement) !== -1) {
-        this._inputElementValue = this.inputElement.value;
+        this._inputElementValue = this.inputElement[this._propertyForValue];
         this._filterFromInput();
       }
     }
@@ -707,7 +711,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         // Could not be defined in 1.x because ready is called after all prop-setters
         if (this.inputElement) {
-          this.inputElement.value = this._inputElementValue;
+          this.inputElement[this._propertyForValue] = this._inputElementValue;
         }
       }
 
