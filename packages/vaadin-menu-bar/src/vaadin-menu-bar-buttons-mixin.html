@@ -36,7 +36,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     static get observers() {
       return [
-        '_buttonsRendered(items, items.splices)'
+        '_menuItemsChanged(items, items.splices)'
       ];
     }
 
@@ -46,22 +46,45 @@ This program is available under Apache License Version 2.0, available at https:/
       this.addEventListener('keydown', e => this._onKeydown(e));
       this.addEventListener('focusin', e => this._onFocusin(e));
       this.addEventListener('iron-resize', e => this.__onResize());
+
+      const container = this._container;
+
+      container.addEventListener('click', e => this._onItemClick(e));
+      container.addEventListener('keydown', e => e.keyCode === 40 && this._onItemClick(e));
     }
 
     get _buttons() {
-      return Array.from(this.shadowRoot.querySelectorAll('vaadin-menu-bar-button'));
+      return Array.from(this.shadowRoot.querySelectorAll('[part$="button"]'));
     }
 
-    _buttonsRendered(items, splices) {
+    get _container() {
+      return this.shadowRoot.querySelector('[part="container"]');
+    }
+
+    _menuItemsChanged(items, splices) {
       if (items.length) {
-        Polymer.RenderStatus.afterNextRender(this, () => {
+        if (items !== this._oldItems) {
+          this._oldItems = items;
+          this.__renderButtons(items);
           this.__detectOverflow();
-        });
+        }
+      }
+    }
+
+    _onItemClick(e) {
+      e.stopPropagation();
+      const button = Array.from(e.composedPath()).filter(el => el.item)[0];
+      if (button) {
+        button.dispatchEvent(new CustomEvent('button-click', {
+          detail: {item: button.item},
+          bubbles: true,
+          composed: true
+        }));
       }
     }
 
     _onFocusin(event) {
-      const target = this.shadowRoot.querySelector('vaadin-menu-bar-button[tabindex="0"]');
+      const target = this.shadowRoot.querySelector('[part$="button"][tabindex="0"]');
       if (target) {
         this._buttons.forEach(btn => {
           btn.tabIndex = btn === target ? 0 : -1;
@@ -106,7 +129,8 @@ This program is available under Apache License Version 2.0, available at https:/
         idx = this._getAvailableIndex(idx, increment, buttons);
         if (idx >= 0) {
           const btn = buttons[idx];
-          btn._focusWithKey();
+          btn.focus();
+          btn.setAttribute('focus-ring', '');
           buttons.forEach(e => e.tabIndex = e === btn ? 0 : -1);
           event.preventDefault();
         }
@@ -114,7 +138,7 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     __detectOverflow() {
-      const container = this.shadowRoot.querySelector('[part="container"]');
+      const container = this._container;
       const buttons = this._buttons.slice(0);
       const ellipsis = buttons.pop();
       const containerWidth = container.offsetWidth;
@@ -167,6 +191,37 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
       }
+    }
+
+    render() {
+      this.__renderButtons(this.items);
+    }
+
+    __renderButtons(items = []) {
+      const container = this._container;
+      const ellipsis = container.querySelector('[part="ellipsis-button"]');
+
+      while (container.children.length > 1) {
+        container.removeChild(container.firstElementChild);
+      }
+
+      items.forEach(item => {
+        let component;
+        if (item.component instanceof HTMLElement) {
+          component = item.component;
+        } else {
+          component = document.createElement(item.component || 'vaadin-menu-bar-button');
+        }
+        if (item.disabled) {
+          component.disabled = true;
+        }
+        component.setAttribute('part', 'menu-bar-button');
+        component.item = item;
+        if (item.text) {
+          component.textContent = item.text;
+        }
+        container.insertBefore(component, ellipsis);
+      });
     }
 
     __onResize() {

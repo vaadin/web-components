@@ -5,8 +5,6 @@ This program is available under Apache License Version 2.0, available at https:/
 -->
 
 <link rel="import" href="../../polymer/polymer-element.html">
-<link rel="import" href="../../polymer/lib/elements/dom-if.html">
-<link rel="import" href="../../polymer/lib/elements/dom-repeat.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
 <link rel="import" href="../../vaadin-context-menu/src/vaadin-context-menu.html">
@@ -44,11 +42,6 @@ This program is available under Apache License Version 2.0, available at https:/
     </style>
 
     <div part="container">
-      <template is="dom-repeat" items="[[items]]">
-        <vaadin-menu-bar-button disabled="[[item.disabled]]" item="[[item]]" part="menu-bar-button">
-          <span>[[item.text]]</span>
-        </vaadin-menu-bar-button>
-      </template>
       <vaadin-menu-bar-button part="ellipsis-button" hidden$="[[!_hasOverflow]]">...</vaadin-menu-bar-button>
     </div>
     <vaadin-context-menu

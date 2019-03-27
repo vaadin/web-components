@@ -87,6 +87,31 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Custom Menu Buttons</h3>
+    <vaadin-demo-snippet id="menu-bar-basic-demos-custom-buttons" when-defined="vaadin-menu-bar">
+      <template preserve-content>
+        <vaadin-menu-bar></vaadin-menu-bar>
+        <script>
+          window.addDemoReadyListener('#menu-bar-basic-demos-custom-buttons', function(document) {
+            const menu = document.querySelector('vaadin-menu-bar');
+            menu.items = [
+              {
+                text: 'Project',
+                component: 'button',
+                children: [
+                  {text: 'Users'},
+                  {text: 'Billing'}
+                ]
+              },
+              {text: 'Account', component: 'button'},
+              {text: 'Sign Out', component: 'button'}
+            ];
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+
   </template>
   <script>
     class MenuBarBasicDemos extends DemoReadyEventEmitter(MenuBarDemo(Polymer.Element)) {

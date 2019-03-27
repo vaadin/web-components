@@ -16,37 +16,6 @@ This program is available under Apache License Version 2.0, available at https:/
       static get is() {
         return 'vaadin-menu-bar-button';
       }
-
-      static get properties() {
-        return {
-          item: {
-            type: Object,
-            value: () => {}
-          }
-        };
-      }
-
-      ready() {
-        super.ready();
-
-        this.addEventListener('click', e => this._dispatchClick(e));
-        this.addEventListener('keydown', e => e.keyCode === 40 && this._dispatchClick(e));
-      }
-
-      _focusWithKey() {
-        this.focus();
-        this.setAttribute('focus-ring', '');
-      }
-
-      _dispatchClick(e) {
-        e.stopPropagation();
-        const {item} = this;
-        this.dispatchEvent(new CustomEvent('button-click', {
-          detail: {item},
-          bubbles: true,
-          composed: true
-        }));
-      }
     }
 
     customElements.define(MenuBarButtonElement.is, MenuBarButtonElement);

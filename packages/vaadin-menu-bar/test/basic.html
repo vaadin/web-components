@@ -127,6 +127,8 @@
 
       it('should move focus to second button if first is disabled on "home" keydown', () => {
         menu.set('items.0.disabled', true);
+        menu.render();
+        buttons = menu._buttons;
         buttons[3].focus();
         const spy = sinon.spy(buttons[1], 'focus');
         home(buttons[3]);
@@ -144,6 +146,8 @@
 
       it('should move focus to the closest enabled button if last is disabled on "end" keydown', () => {
         menu.set('items.3.disabled', true);
+        menu.render();
+        buttons = menu._buttons;
         buttons[0].focus();
         const spy = sinon.spy(buttons[1], 'focus');
         end(buttons[0]);
