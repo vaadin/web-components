@@ -556,21 +556,47 @@ This program is available under Apache License Version 2.0, available at https:/
           ['right-aligned', 'bottom-aligned'].forEach(attr => overlay.removeAttribute(attr));
 
           // Maximum x and y values are imposed by content size and overlay limits.
-          const {xMax, yMax, left, top} = overlay.getBoundaries();
+          const {xMax, yMax, left, top, width} = overlay.getBoundaries();
           // Reuse saved x and y event values, in order to this method be used async
           // in the `vaadin-overlay-change` which guarantees that overlay is ready
           const x = this.__x || left;
           const y = this.__y || top;
 
           // Select one overlay corner and move to the event x/y position.
-          // Then set styling attrs for flex-aligning the content appropriatelly.
+          // Then set styling attrs for flex-aligning the content appropriately.
           const wdthVport = document.documentElement.clientWidth;
           const hghtVport = document.documentElement.clientHeight;
-          if (x < wdthVport / 2 || x < xMax) {
-            style.left = x + 'px';
-          } else {
-            style.right = Math.max(0, (wdthVport - x)) + 'px';
-            overlay.setAttribute('right-aligned', '');
+
+          // Align to the parent menu overlay, if any.
+          const parent = overlay.parentOverlay;
+          let alignedToParent = false;
+          if (parent) {
+            const parentContentRect = parent.$.overlay.getBoundingClientRect();
+            if (parent.hasAttribute('right-aligned')) {
+              const parentStyle = getComputedStyle(parent);
+
+              const getPadding = (el, direction) => {
+                return parseFloat(getComputedStyle(el.$.content)['padding' + direction]);
+              };
+              const right = parseFloat(parentStyle.right) + parentContentRect.width;
+              const padding = getPadding(parent, 'Left') + getPadding(overlay, 'Right');
+
+              // Preserve right-aligned, if possible.
+              if ((wdthVport - (right - padding)) > width) {
+                overlay.setAttribute('right-aligned', '');
+                style.right = right - padding + 'px';
+                alignedToParent = true;
+              }
+            }
+          }
+
+          if (!alignedToParent) {
+            if (x < wdthVport / 2 || x < xMax) {
+              style.left = x + 'px';
+            } else {
+              style.right = Math.max(0, (wdthVport - x)) + 'px';
+              overlay.setAttribute('right-aligned', '');
+            }
           }
           if (y < hghtVport / 2 || y < yMax) {
             style.top = y + 'px';

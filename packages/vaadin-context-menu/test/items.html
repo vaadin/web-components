@@ -45,6 +45,10 @@
         return menu.$.overlay.content.querySelector('vaadin-context-menu');
       };
 
+      const nextRender = el => new Promise(resolve => {
+        Polymer.RenderStatus.afterNextRender(el, () => resolve());
+      });
+
       afterEach(() => rootMenu.close());
 
       describe('default', () => {
@@ -56,7 +60,10 @@
             {text: 'foo-0', children:
               [
                 {text: 'foo-0-0', checked: true},
-                {text: 'foo-0-1', disabled: true}
+                {text: 'foo-0-1', disabled: true},
+                {text: 'foo-0-2', children: [
+                  {text: 'foo-0-2-0'}
+                ]},
               ]
             },
             {text: 'foo-1'}
@@ -127,6 +134,58 @@
               expect(subMenuRect.bottom).to.be.below(rootMenuRect.bottom);
               done();
             });
+          });
+
+          it('should open the subMenu on the left if root menu is right-aligned', async() => {
+            subMenu.close();
+            await nextRender(subMenu);
+            const rootItem = menuComponents()[0];
+            const rootItemRect = rootItem.getBoundingClientRect();
+            const rootOverlay = rootMenu.$.overlay;
+            rootOverlay.style.removeProperty('left');
+            rootOverlay.style.right = rootItemRect.width + 'px';
+            rootOverlay.setAttribute('right-aligned', '');
+            const padding = parseFloat(getComputedStyle(rootOverlay.$.content).paddingLeft) * 2;
+            open(rootItem);
+            await nextRender(subMenu);
+            expect(subMenu.$.overlay.hasAttribute('right-aligned')).to.be.true;
+            const rootMenuRect = rootOverlay.$.content.getBoundingClientRect();
+            const subMenuRect = subMenu.$.overlay.$.content.getBoundingClientRect();
+            expect(subMenuRect.right).to.be.closeTo(rootMenuRect.left + padding, 1);
+          });
+
+          it('should open the second subMenu on the right again if not enough space', async() => {
+            let padding;
+            subMenu.close();
+            await nextRender(subMenu);
+            rootMenu.items[0].children[2].text = 'foo-0-2-longer';
+
+            const rootItem = menuComponents()[0];
+            const rootItemRect = rootItem.getBoundingClientRect();
+            const rootOverlay = rootMenu.$.overlay;
+            rootOverlay.style.removeProperty('left');
+            rootOverlay.style.right = rootItemRect.width + 'px';
+            rootOverlay.setAttribute('right-aligned', '');
+            padding = parseFloat(getComputedStyle(rootOverlay.$.content).paddingLeft) * 2;
+
+            /* first sub-menu right-aligned */
+            open(rootItem);
+            await nextRender(subMenu);
+            expect(subMenu.$.overlay.hasAttribute('right-aligned')).to.be.true;
+            const rootMenuRect = rootOverlay.$.content.getBoundingClientRect();
+            const subMenuRect = subMenu.$.overlay.$.content.getBoundingClientRect();
+            expect(subMenuRect.right).to.be.closeTo(rootMenuRect.left + padding, 1);
+
+            /* second sub-menu left-aligned */
+            const nestedItem = menuComponents(subMenu)[2];
+            const nestedItemRect = nestedItem.getBoundingClientRect();
+            padding = parseFloat(getComputedStyle(subMenu.$.overlay.$.content).paddingLeft) * 2;
+            open(nestedItem);
+            await nextRender(subMenu);
+            const subMenu2 = getSubMenu(subMenu);
+            expect(subMenu2.$.overlay.hasAttribute('right-aligned')).to.be.false;
+            const subMenu2Rect = subMenu2.$.overlay.$.content.getBoundingClientRect();
+            expect(subMenu2Rect.left).to.be.closeTo(nestedItemRect.right, 1);
           });
         }
 
