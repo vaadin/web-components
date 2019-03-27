@@ -94,17 +94,24 @@
         <script>
           window.addDemoReadyListener('#menu-bar-basic-demos-custom-buttons', function(document) {
             const menu = document.querySelector('vaadin-menu-bar');
+            const makeIcon = function(icon) {
+              const element = window.document.createElement('iron-icon');
+              element.icon = icon;
+              return element;
+            };
             menu.items = [
               {
-                text: 'Project',
-                component: 'button',
-                children: [
-                  {text: 'Users'},
-                  {text: 'Billing'}
-                ]
+                component: makeIcon('lumo:plus'),
+                children: [{text: 'Create project'}, {text: 'Create report'}]
               },
-              {text: 'Account', component: 'button'},
-              {text: 'Sign Out', component: 'button'}
+              {
+                component: makeIcon('lumo:user'),
+                children: [{text: 'Users list'}, {text: 'Add user'}]
+              },
+              {
+                component: makeIcon('lumo:bell'),
+                children: [{text: 'Notifications'}, {text: 'Mark as read'}]
+              },
             ];
           });
         </script>

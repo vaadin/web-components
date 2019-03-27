@@ -9,6 +9,12 @@
     "expect": false,
     "gemini": false,
     "MockInteractions": false,
+    "arrowUp": false,
+    "arrowDown": false,
+    "arrowLeft": false,
+    "arrowRight": false,
+    "home": false,
+    "end": false,
     "sinon": false
   }
 }

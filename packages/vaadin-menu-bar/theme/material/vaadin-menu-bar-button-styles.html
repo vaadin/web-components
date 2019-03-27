@@ -3,6 +3,9 @@
 <dom-module id="material-menu-bar-button" theme-for="vaadin-menu-bar-button">
   <template>
     <style include="material-button">
+      :host ::slotted(vaadin-context-menu-item) {
+        padding: 0;
+      }
     </style>
   </template>
 </dom-module>

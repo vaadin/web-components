@@ -151,7 +151,8 @@ This program is available under Apache License Version 2.0, available at https:/
         let i;
         for (i = buttons.length; i > 0; i--) {
           const btn = buttons[i - 1];
-          if (getComputedStyle(btn).visibility === 'hidden') {
+          const btnStyle = getComputedStyle(btn);
+          if (btnStyle.visibility === 'hidden') {
             continue;
           }
 
@@ -163,6 +164,8 @@ This program is available under Apache License Version 2.0, available at https:/
           btn.disabled = true;
           btn.style.visibility = 'hidden';
           btn.style.position = 'absolute';
+          // save width for buttons with component
+          btn.style.width = btnStyle.width;
         }
 
         ellipsis.item = {children: this.items.slice(i)};
@@ -181,6 +184,14 @@ This program is available under Apache License Version 2.0, available at https:/
             btn.disabled = false;
             btn.style.visibility = '';
             btn.style.position = '';
+            btn.style.width = '';
+
+            // teleport item component back from "ellipsis" sub-menu
+            const item = btn.item && btn.item.component;
+            if (item instanceof HTMLElement && item.classList.contains('vaadin-menu-item')) {
+              btn.appendChild(item);
+              item.classList.remove('vaadin-menu-item');
+            }
 
             ellipsis.item = {children: this.items.slice(i + 1)};
 
@@ -208,24 +219,39 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       items.forEach(item => {
-        let component;
-        if (item.component instanceof HTMLElement) {
-          component = item.component;
-        } else {
-          component = document.createElement(item.component || 'vaadin-menu-bar-button');
+        const button = document.createElement('vaadin-menu-bar-button');
+        button.item = item;
+
+        const itemComponent = item.component;
+        if (itemComponent) {
+          let component;
+          const isElement = itemComponent instanceof HTMLElement;
+          // use existing item component, if any
+          if (isElement && itemComponent.localName === 'vaadin-context-menu-item') {
+            component = itemComponent;
+          } else {
+            component = document.createElement('vaadin-context-menu-item');
+            component.appendChild(isElement ? itemComponent : document.createElement(itemComponent));
+          }
+          if (item.text) {
+            const node = component.firstChild || component;
+            node.textContent = item.text;
+          }
+          // save item for ellipsis menu
+          component.item = item;
+          button.item.component = component;
+          button.appendChild(component);
+        } else if (item.text) {
+          button.textContent = item.text;
         }
         if (item.disabled) {
-          component.disabled = true;
-          component.setAttribute('tabindex', '-1');
+          button.disabled = true;
+          button.setAttribute('tabindex', '-1');
         } else {
-          component.setAttribute('tabindex', '0');
+          button.setAttribute('tabindex', '0');
         }
-        component.setAttribute('part', 'menu-bar-button');
-        component.item = item;
-        if (item.text) {
-          component.textContent = item.text;
-        }
-        container.insertBefore(component, ellipsis);
+        button.setAttribute('part', 'menu-bar-button');
+        container.insertBefore(button, ellipsis);
       });
     }
 

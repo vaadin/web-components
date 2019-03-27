@@ -3,6 +3,9 @@
 <dom-module id="lumo-menu-bar-button" theme-for="vaadin-menu-bar-button">
   <template>
     <style include="lumo-button">
+      :host ::slotted(vaadin-context-menu-item) {
+        padding: 0;
+      }
     </style>
   </template>
 </dom-module>

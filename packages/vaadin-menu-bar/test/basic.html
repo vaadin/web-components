@@ -6,6 +6,7 @@
   <script src="../../web-component-tester/browser.js"></script>
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <script src="../../iron-test-helpers/mock-interactions.js"></script>
+  <script src="./helpers.js"></script>
   <link rel="import" href="../../test-fixture/test-fixture.html">
   <link rel="import" href="../../polymer/lib/utils/render-status.html">
   <link rel="import" href="../vaadin-menu-bar.html">
@@ -19,22 +20,13 @@
   </test-fixture>
 
   <script>
-    function arrowRight(target) {
-      MockInteractions.keyDownOn(target, 39, [], 'ArrowRight');
+    function nextRender(target) {
+      return new Promise(resolve => {
+        Polymer.RenderStatus.afterNextRender(target, () => {
+          resolve();
+        });
+      });
     }
-
-    function arrowLeft(target) {
-      MockInteractions.keyDownOn(target, 37, [], 'ArrowLeft');
-    }
-
-    function home(target) {
-      MockInteractions.keyDownOn(target, 36, [], 'Home');
-    }
-
-    function end(target) {
-      MockInteractions.keyDownOn(target, 35, [], 'End');
-    }
-
 
     describe('custom element definition', () => {
       let menu;
@@ -59,18 +51,16 @@
     describe('root menu layout', () => {
       let menu, buttons;
 
-      beforeEach(done => {
+      beforeEach(async() => {
         menu = fixture('default');
         menu.items = [
           {text: 'Item 1'},
           {text: 'Item 2'},
           {text: 'Item 3', disabled: true},
-          {text: 'Item 4'},
+          {text: 'Item 4'}
         ];
-        Polymer.RenderStatus.afterNextRender(menu, () => {
-          buttons = menu._buttons;
-          done();
-        });
+        await nextRender(menu);
+        buttons = menu._buttons;
       });
 
       it('should render button for each item, plus ellipsis button', () => {
@@ -187,7 +177,7 @@
         expect(style.position).to.not.equal('absolute');
       };
 
-      beforeEach(done => {
+      beforeEach(async() => {
         menu = fixture('default');
 
         menu.style.width = '250px';
@@ -196,13 +186,11 @@
           {text: 'Item 1'},
           {text: 'Item 2'},
           {text: 'Item 3'},
-          {text: 'Item 4'},
+          {text: 'Item 4'}
         ];
-        Polymer.RenderStatus.afterNextRender(menu, () => {
-          buttons = menu._buttons;
-          ellipsis = buttons[buttons.length - 1];
-          done();
-        });
+        await nextRender(menu);
+        buttons = menu._buttons;
+        ellipsis = buttons[buttons.length - 1];
       });
 
       it('should show ellipsis button and hide the buttons which do not fit', () => {
@@ -259,6 +247,73 @@
           expect(ellipsis.item.children.length).to.equal(0);
           done();
         });
+      });
+    });
+
+    describe('item components', () => {
+      let menu, buttons, ellipsis;
+
+      function makeComponent(id) {
+        const div = document.createElement('div');
+        div.style.width = '100px';
+        div.textContent = `Item ${id}`;
+        return div;
+      }
+
+      beforeEach(async() => {
+        menu = fixture('default');
+        menu.items = [
+          {text: 'Item 1'},
+          {text: 'Item 2'},
+          {component: makeComponent('3')},
+          {text: 'Item 4 text', component: makeComponent('4')},
+          {text: 'Item 5', component: document.createElement('vaadin-context-menu-item')}
+        ];
+        await nextRender(menu);
+        buttons = menu._buttons;
+        ellipsis = buttons[buttons.length - 1];
+      });
+
+      it('should render the component inside the context-menu item', () => {
+        expect(buttons[2].firstChild.localName).to.equal('vaadin-context-menu-item');
+        const div = buttons[2].firstChild.firstChild;
+        expect(div.parentNode).to.equal(menu.items[2].component);
+        expect(div.localName).to.equal('div');
+        expect(div.textContent).to.equal('Item 3');
+        expect(getComputedStyle(div).width).to.equal('100px');
+      });
+
+      it('should override the component text when defined on the item', () => {
+        expect(buttons[3].firstChild.localName).to.equal('vaadin-context-menu-item');
+        const div = buttons[3].firstChild.firstChild;
+        expect(div.parentNode).to.equal(menu.items[3].component);
+        expect(div.localName).to.equal('div');
+        expect(div.textContent).to.equal('Item 4 text');
+        expect(getComputedStyle(div).width).to.equal('100px');
+      });
+
+      it('should render provided context-menu item as a component', () => {
+        expect(buttons[4].firstChild).to.equal(menu.items[4].component);
+        expect(buttons[4].firstChild.textContent).to.equal('Item 5');
+      });
+
+      it('should teleport the same component to ellipsis sub-menu and back', async() => {
+        menu.style.width = '250px';
+        menu.notifyResize();
+        await nextRender(menu);
+        const subMenu = menu._subMenu;
+        ellipsis.click();
+        await nextRender(subMenu);
+        const listBox = subMenu.$.overlay.querySelector('vaadin-context-menu-list-box');
+        expect(listBox.items[0]).to.equal(menu.items[2].component);
+        expect(listBox.items[0].firstChild.localName).to.equal('div');
+        subMenu.close();
+        menu.style.width = 'auto';
+        menu.notifyResize();
+        await nextRender(menu);
+        const item = buttons[2].firstChild;
+        expect(item).to.equal(menu.items[2].component);
+        expect(item.classList.contains('vaadin-menu-item')).to.be.false;
       });
     });
   </script>
