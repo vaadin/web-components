@@ -266,11 +266,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         /** @private */
         disconnectedCallback() {
           super.disconnectedCallback();
-
-          // IE/Edge has parentNode not null even when node is removed from parent
-          const isIEorEdge = /(Trident|Edge)/.test(navigator.userAgent);
-
-          if (this.__hasSeriesConfig() && (!this.parentNode || isIEorEdge)) {
+          if (this.__hasSeriesConfig()) {
             this._series.remove();
           }
         }
