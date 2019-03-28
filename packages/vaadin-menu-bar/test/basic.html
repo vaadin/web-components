@@ -209,6 +209,11 @@
         expect(ellipsis.item.children[1]).to.deep.equal(menu.items[3]);
       });
 
+      it('should show ellipsis button after calling render() with same items', () => {
+        menu.render();
+        expect(ellipsis.hasAttribute('hidden')).to.be.false;
+      });
+
       it('should show buttons and update ellipsis items when width increased', done => {
         menu.style.width = '350px';
         menu.notifyResize();
