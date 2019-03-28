@@ -614,7 +614,9 @@
           });
 
           it('should fire change clear button click', () => {
-            const clearButton = datepicker.shadowRoot.querySelector('[part="clear-button"]');
+            datepicker.clearButtonVisible = true;
+            const clearButton = datepicker._inputElement
+              .shadowRoot.querySelector('[part="clear-button"]');
             datepicker.value = '2000-01-01';
             click(clearButton);
             expect(spy.calledOnce).to.be.true;

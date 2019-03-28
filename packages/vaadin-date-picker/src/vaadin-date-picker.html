@@ -35,12 +35,6 @@ This program is available under Apache License Version 2.0, available at https:/
         width: 100%;
         min-width: 0;
       }
-
-      :host([disabled]) [part="clear-button"],
-      :host([readonly]) [part="clear-button"],
-      :host(:not([has-value])) [part="clear-button"] {
-        display: none;
-      }
     </style>
 
 
@@ -57,12 +51,12 @@ This program is available under Apache License Version 2.0, available at https:/
         disabled="[[disabled]]"
         readonly="[[readonly]]"
         error-message="[[errorMessage]]"
+        clear-button-visible="[[clearButtonVisible]]"
         aria-label$="[[label]]"
         part="text-field"
         theme$="[[theme]]"
       >
       <slot name="prefix" slot="prefix"></slot>
-      <div part="clear-button" slot="suffix" on-touchend="_clearTouchend" on-click="_clear" role="button" aria-label$="[[i18n.clear]]"></div>
       <div part="toggle-button" slot="suffix" on-tap="_toggle" role="button" aria-label$="[[i18n.calendar]]" aria-expanded$="[[_getAriaExpanded(opened)]]"></div>
     </vaadin-text-field>
 
@@ -200,6 +194,14 @@ This program is available under Apache License Version 2.0, available at https:/
         static get properties() {
           return {
             /**
+             * Set to true to display the clear icon which clears the input.
+             */
+            clearButtonVisible: {
+              type: Boolean,
+              value: false
+            },
+
+            /**
              * Set to true to disable this element.
              */
             disabled: {
@@ -243,7 +245,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
         static get observers() {
           return [
-            '_userInputValueChanged(_userInputValue)'
+            '_userInputValueChanged(_userInputValue)',
+            '_setClearButtonLabel(i18n.clear)'
           ];
         }
 
@@ -252,6 +255,17 @@ This program is available under Apache License Version 2.0, available at https:/
 
           // In order to have synchronized invalid property, we need to use the same validate logic.
           Polymer.RenderStatus.afterNextRender(this, () => this._inputElement.validate = () => {});
+
+          // FIXME(platosha): dispatch `input` event on
+          // <vaadin-text-field> clear button
+          // https://github.com/vaadin/vaadin-text-field/issues/347
+          this._inputElement.addEventListener('change', () => {
+            if (this._inputElement.value === '') {
+              this.__dispatchChange = true;
+              this.value = '';
+              this.__dispatchChange = false;
+            }
+          });
         }
 
         _onVaadinOverlayClose(e) {
@@ -263,21 +277,6 @@ This program is available under Apache License Version 2.0, available at https:/
           if (e.detail.sourceEvent && e.detail.sourceEvent.composedPath().indexOf(this) !== -1) {
             e.preventDefault();
           }
-        }
-
-        _clear() {
-          this.__dispatchChange = true;
-          this.value = '';
-          this.validate();
-          this.focus();
-          Polymer.Gestures.prevent('tap');
-          this.__dispatchChange = false;
-        }
-
-        _clearTouchend(e) {
-          this._clear();
-          e.preventDefault();
-          Polymer.Gestures.prevent('tap');
         }
 
         _toggle(e) {
@@ -306,6 +305,13 @@ This program is available under Apache License Version 2.0, available at https:/
          */
         get focusElement() {
           return this._input() || this;
+        }
+
+        _setClearButtonLabel(i18nClear) {
+          // FIXME(platosha): expose i18n API in <vaadin-text-field>
+          // https://github.com/vaadin/vaadin-text-field/issues/348
+          this._inputElement.shadowRoot.querySelector('[part="clear-button"]')
+            .setAttribute('aria-label', i18nClear);
         }
       }
 

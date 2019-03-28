@@ -50,13 +50,18 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="datepicker-clear-button-visible">
+    <template>
+      <vaadin-date-picker clear-button-visible></vaadin-date-picker>
+    </template>
+  </test-fixture>
+
   <script>
     describe('Basic features', () => {
-      var datepicker, clearButton, toggleButton;
+      var datepicker, toggleButton;
 
       beforeEach(() => {
         datepicker = fixture('datepicker');
-        clearButton = datepicker.root.querySelector('[part="clear-button"]');
         toggleButton = datepicker.root.querySelector('[part="toggle-button"]');
       });
 
@@ -81,25 +86,6 @@
 
       it('should have default value', () => {
         expect(datepicker.value).to.equal('');
-      });
-
-      // Needs to be in this order to pass in IE
-      it('should not show clear icon', done => {
-        getOverlayContent(datepicker).$.monthScroller.bufferSize = 1;
-        datepicker.value = '2000-02-01';
-
-        listenForEvent(datepicker.$.overlay, 'vaadin-overlay-open', () => {
-          expect(clearButton.clientHeight).not.equal(0);
-
-          datepicker.value = '';
-          // IE also needs timeouts
-          setTimeout(() => {
-            expect(clearButton.clientHeight).to.equal(0);
-            done();
-          }, 200);
-        });
-
-        datepicker.open();
       });
 
       it('should notify value change', () => {
@@ -236,12 +222,6 @@
         expect(datepicker.label).to.be.undefined;
       });
 
-      it('should clear the value', () => {
-        datepicker.value = '2000-02-01';
-        click(clearButton);
-        expect(datepicker.value).to.equal('');
-      });
-
       it('should lead zeros correctly', () => {
         datepicker.value = '+000300-02-01';
         expect(datepicker._inputElement.value).to.equal('2/1/0300');
@@ -259,22 +239,6 @@
         expect(datepicker._inputElement.value).to.equal('2/1/0001');
         datepicker.value = '+000099-02-01';
         expect(datepicker._inputElement.value).to.equal('2/1/0099');
-      });
-
-      it('should show clear icon', done => {
-        datepicker.value = '2000-02-01';
-
-        const overlayContent = getOverlayContent(datepicker);
-        overlayContent.dispatchEvent(new CustomEvent('date-tap', {bubbles: true}));
-
-        open(datepicker, () => {
-          if (isFullscreen(datepicker)) {
-            expect(overlayContent.$.clear.clientHeight).not.to.equal(0);
-          } else {
-            expect(clearButton.clientHeight).not.to.equal(0);
-          }
-          done();
-        });
       });
 
       it('should open by tapping the calendar icon', done => {
@@ -326,22 +290,9 @@
         });
       });
 
-      it('should validate on clear button tap', () => {
-        datepicker.required = true;
-        datepicker.value = '1991-20-12';
-        click(clearButton);
-        expect(datepicker.invalid).to.equal(true);
-      });
-
       it('should set has-value attribute when value is set', () => {
         datepicker.value = '2000-02-01';
         expect(datepicker.hasAttribute('has-value')).to.be.true;
-      });
-
-      it('should remove has-value attribute on clear', () => {
-        datepicker.value = '2000-02-01';
-        click(clearButton);
-        expect(datepicker.hasAttribute('has-value')).to.be.false;
       });
 
       describe('window scroll realign', () => {
@@ -468,8 +419,10 @@
 
       });
       describe('i18n', () => {
-        let overlayContent;
+        let overlayContent, clearButton;
         beforeEach(done => {
+          clearButton = datepicker._inputElement
+            .shadowRoot.querySelector('[part="clear-button"]');
           datepicker.set('i18n.weekdays', 'sunnuntai_maanantai_tiistai_keskiviikko_torstai_perjantai_lauantai'.split('_'));
           datepicker.set('i18n.weekdaysShort', 'su_ma_ti_ke_to_pe_la'.split('_'));
           datepicker.set('i18n.firstDayOfWeek', 1);
@@ -534,12 +487,6 @@
         it('calendar icon should not be hidden', () => {
           expect(toggleButton.clientHeight).to.not.equal(0);
         });
-
-        it('clear icon should be hidden', () => {
-          expect(clearButton.clientHeight).to.equal(0);
-          datepicker.open();
-          expect(clearButton.clientHeight).to.equal(0);
-        });
       });
 
       describe('Readonly', () => {
@@ -553,12 +500,6 @@
 
         it('calendar icon should not be hidden', () => {
           expect(toggleButton.clientHeight).not.to.equal(0);
-        });
-
-        it('clear icon should be hidden', () => {
-          expect(clearButton.clientHeight).to.equal(0);
-          datepicker.open();
-          expect(clearButton.clientHeight).to.equal(0);
         });
 
         it('should be focusable', () => {
@@ -689,6 +630,25 @@
             .to.be.true;
         });
       });
+
+      describe('clear-button-visible', () => {
+        let textfield;
+
+        beforeEach(() => {
+          textfield = datepicker._inputElement;
+        });
+
+        it('should not have clear-button-visible by default', () => {
+          expect(datepicker).to.have.property('clearButtonVisible', false);
+          expect(textfield).to.have.property('clearButtonVisible', false);
+        });
+
+        it('should bind clear-button-visible to textfield', () => {
+          datepicker.clearButtonVisible = true;
+          expect(datepicker).to.have.property('clearButtonVisible', true);
+          expect(textfield).to.have.property('clearButtonVisible', true);
+        });
+      });
     });
 
     describe('Basic features theme attribute', () => {
@@ -732,6 +692,39 @@
             .querySelector('vaadin-month-calendar');
           expect(monthCalendar.getAttribute('theme')).to.equal('foo');
         });
+      });
+    });
+
+    describe('with clear-button-visible', () => {
+      let datepicker, clearButton;
+
+      beforeEach(() => {
+        datepicker = fixture('datepicker-clear-button-visible');
+        clearButton = datepicker._inputElement
+          .shadowRoot.querySelector('[part="clear-button"]');
+      });
+
+      it('should have clearButtonVisible property', () => {
+        expect(datepicker).to.have.property('clearButtonVisible', true);
+      });
+
+      it('should clear the value', () => {
+        datepicker.value = '2000-02-01';
+        click(clearButton);
+        expect(datepicker.value).to.equal('');
+      });
+
+      it('should validate on clear', () => {
+        datepicker.required = true;
+        datepicker.value = '1991-20-12';
+        click(clearButton);
+        expect(datepicker.invalid).to.equal(true);
+      });
+
+      it('should remove has-value attribute on clear', () => {
+        datepicker.value = '2000-02-01';
+        click(clearButton);
+        expect(datepicker.hasAttribute('has-value')).to.be.false;
       });
     });
   </script>

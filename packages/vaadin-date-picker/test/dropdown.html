@@ -28,7 +28,8 @@
 
   <dom-module id="vaadin-date-picker-wrapper">
     <template>
-      <vaadin-date-picker id="datepicker" label="foo"></vaadin-date-picker>
+      <vaadin-date-picker id="datepicker" label="foo" clear-button-visible>
+      </vaadin-date-picker>
     </template>
     <script>
       customElements.whenDefined('vaadin-date-picker').then(() => {
@@ -127,7 +128,8 @@
       beforeEach(() => {
         datepicker = fixture('datepicker-wrapped').$.datepicker;
         toggleButton = datepicker.shadowRoot.querySelector('[part="toggle-button"]');
-        clearButton = datepicker.shadowRoot.querySelector('[part="clear-button"]');
+        clearButton = datepicker._inputElement
+          .shadowRoot.querySelector('[part="clear-button"]');
       });
 
       afterEach(done => {

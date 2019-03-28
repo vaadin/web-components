@@ -315,7 +315,22 @@ This program is available under Apache License Version 2.0, available at https:/
       this._boundOnScroll = this._onScroll.bind(this);
       this._boundFocus = this._focus.bind(this);
       this._boundUpdateAlignmentAndPosition = this._updateAlignmentAndPosition.bind(this);
-      Polymer.Gestures.addListener(this, 'tap', this.open);
+
+      Polymer.Gestures.addListener(this, 'tap', e => {
+        // FIXME(platosha): use preventDefault in the text field clear button,
+        // then the following composedPath check could be simplified down
+        // to `if (!e.defaultPrevented)`.
+        // https://github.com/vaadin/vaadin-text-field/issues/352
+        const inputIndex = e.composedPath().indexOf(this._inputElement);
+        if (
+          e.composedPath().slice(0, inputIndex)
+            .filter(el => el.getAttribute && el.getAttribute('part') === 'clear-button')
+            .length === 0
+        ) {
+          this.open();
+        }
+      });
+
       this.addEventListener('touchend', this._preventDefault.bind(this));
       this.addEventListener('keydown', this._onKeydown.bind(this));
       this.addEventListener('input', this._onUserInput.bind(this));

@@ -49,11 +49,10 @@
     describe('WAI-ARIA', () => {
 
       describe('date picker', () => {
-        var datepicker, toggleButton, clearButton;
+        var datepicker, toggleButton;
 
         beforeEach(() => {
           datepicker = fixture('datepicker');
-          clearButton = datepicker.root.querySelector('[part="clear-button"]');
           toggleButton = datepicker.root.querySelector('[part="toggle-button"]');
         });
 
@@ -66,20 +65,16 @@
         it('should have button roles on buttons', () => {
           // Indicate icon buttons as clickable. Especially helpful on touch devices.
           expect(toggleButton.getAttribute('role')).to.equal('button');
-          expect(clearButton.getAttribute('role')).to.equal('button');
         });
 
         it('should have label properties on buttons', () => {
           // Give spoken names for the icon buttons.
           expect(toggleButton.getAttribute('aria-label')).to.equal('Calendar');
-          expect(clearButton.getAttribute('aria-label')).to.equal('Clear');
         });
 
         it('should have label properties on buttons in correct locale', () => {
           datepicker.set('i18n.calendar', 'kalenteri');
-          datepicker.set('i18n.clear', 'tyhjennä');
           expect(toggleButton.getAttribute('aria-label')).to.equal('kalenteri');
-          expect(clearButton.getAttribute('aria-label')).to.equal('tyhjennä');
         });
 
         it('should have expanded state false on calendar button', () => {
