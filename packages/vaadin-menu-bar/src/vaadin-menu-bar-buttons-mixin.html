@@ -170,6 +170,10 @@ This program is available under Apache License Version 2.0, available at https:/
           children: buttons.filter((b, idx) => idx >= i).map(b => b.item)
         };
       } else if (this._hasOverflow) {
+        if (this._subMenu.opened) {
+          this._subMenu.close();
+        }
+
         for (let i = 0; i < buttons.length; i++) {
           const btn = buttons[i];
 

@@ -327,6 +327,19 @@
         expect(item).to.equal(buttons[2].item.component);
         expect(item.classList.contains('vaadin-menu-item')).to.be.false;
       });
+
+      it('should close the ellipsis sub-menu on resize', async() => {
+        menu.style.width = '200px';
+        menu.notifyResize();
+        await nextRender(menu);
+        const subMenu = menu._subMenu;
+        ellipsis.click();
+        await nextRender(subMenu);
+        menu.style.width = '300px';
+        menu.notifyResize();
+        await nextRender(subMenu);
+        expect(subMenu.opened).to.be.false;
+      });
     });
   </script>
 </body>
