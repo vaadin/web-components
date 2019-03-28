@@ -87,12 +87,12 @@
       </template>
     </vaadin-demo-snippet>
 
-    <h3>Custom Menu Buttons</h3>
-    <vaadin-demo-snippet id="menu-bar-basic-demos-custom-buttons" when-defined="vaadin-menu-bar">
+    <h3>Using Components in Menu Buttons</h3>
+    <vaadin-demo-snippet id="menu-bar-basic-demos-components-buttons" when-defined="vaadin-menu-bar">
       <template preserve-content>
         <vaadin-menu-bar></vaadin-menu-bar>
         <script>
-          window.addDemoReadyListener('#menu-bar-basic-demos-custom-buttons', function(document) {
+          window.addDemoReadyListener('#menu-bar-basic-demos-components-buttons', function(document) {
             const menu = document.querySelector('vaadin-menu-bar');
             const makeIcon = function(icon) {
               const element = window.document.createElement('iron-icon');
