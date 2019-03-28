@@ -275,24 +275,29 @@
       });
 
       it('should render the component inside the context-menu item', () => {
-        expect(buttons[2].firstChild.localName).to.equal('vaadin-context-menu-item');
-        const div = buttons[2].firstChild.firstChild;
-        expect(div.parentNode).to.equal(menu.items[2].component);
+        const item = buttons[2].firstChild;
+        expect(item).to.equal(buttons[2].item.component);
+        expect(item.localName).to.equal('vaadin-context-menu-item');
+        const div = item.firstChild;
+        expect(div).to.equal(menu.items[2].component);
         expect(div.localName).to.equal('div');
         expect(div.textContent).to.equal('Item 3');
         expect(getComputedStyle(div).width).to.equal('100px');
       });
 
       it('should override the component text when defined on the item', () => {
-        expect(buttons[3].firstChild.localName).to.equal('vaadin-context-menu-item');
-        const div = buttons[3].firstChild.firstChild;
-        expect(div.parentNode).to.equal(menu.items[3].component);
+        const item = buttons[3].firstChild;
+        expect(item).to.equal(buttons[3].item.component);
+        expect(item.localName).to.equal('vaadin-context-menu-item');
+        const div = item.firstChild;
+        expect(div).to.equal(menu.items[3].component);
         expect(div.localName).to.equal('div');
         expect(div.textContent).to.equal('Item 4 text');
         expect(getComputedStyle(div).width).to.equal('100px');
       });
 
       it('should render provided context-menu item as a component', () => {
+        expect(buttons[4].item.component).to.equal(menu.items[4].component);
         expect(buttons[4].firstChild).to.equal(menu.items[4].component);
         expect(buttons[4].firstChild.textContent).to.equal('Item 5');
       });
@@ -305,14 +310,15 @@
         ellipsis.click();
         await nextRender(subMenu);
         const listBox = subMenu.$.overlay.querySelector('vaadin-context-menu-list-box');
-        expect(listBox.items[0]).to.equal(menu.items[2].component);
+        expect(listBox.items[0]).to.equal(buttons[2].item.component);
+        expect(listBox.items[0].firstChild).to.equal(menu.items[2].component);
         expect(listBox.items[0].firstChild.localName).to.equal('div');
         subMenu.close();
         menu.style.width = 'auto';
         menu.notifyResize();
         await nextRender(menu);
         const item = buttons[2].firstChild;
-        expect(item).to.equal(menu.items[2].component);
+        expect(item).to.equal(buttons[2].item.component);
         expect(item.classList.contains('vaadin-menu-item')).to.be.false;
       });
     });

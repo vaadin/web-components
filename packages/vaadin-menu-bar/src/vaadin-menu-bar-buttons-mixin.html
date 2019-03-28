@@ -167,8 +167,9 @@ This program is available under Apache License Version 2.0, available at https:/
           // save width for buttons with component
           btn.style.width = btnStyle.width;
         }
-
-        ellipsis.item = {children: this.items.slice(i)};
+        ellipsis.item = {
+          children: buttons.filter((b, idx) => idx >= i).map(b => b.item)
+        };
       } else if (this._hasOverflow) {
         for (let i = 0; i < buttons.length; i++) {
           const btn = buttons[i];
@@ -193,7 +194,9 @@ This program is available under Apache License Version 2.0, available at https:/
               item.classList.remove('vaadin-menu-item');
             }
 
-            ellipsis.item = {children: this.items.slice(i + 1)};
+            ellipsis.item = {
+              children: buttons.filter((b, idx) => idx >= i + 1).map(b => b.item)
+            };
 
             if (btn === buttons[buttons.length - 1]) {
               this._hasOverflow = false;
@@ -220,7 +223,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
       items.forEach(item => {
         const button = document.createElement('vaadin-menu-bar-button');
-        button.item = item;
+        const itemCopy = Object.assign({}, item);
+        button.item = itemCopy;
 
         const itemComponent = item.component;
         if (itemComponent) {
@@ -237,9 +241,9 @@ This program is available under Apache License Version 2.0, available at https:/
             const node = component.firstChild || component;
             node.textContent = item.text;
           }
+          itemCopy.component = component;
           // save item for ellipsis menu
-          component.item = item;
-          button.item.component = component;
+          component.item = itemCopy;
           button.appendChild(component);
         } else if (item.text) {
           button.textContent = item.text;
