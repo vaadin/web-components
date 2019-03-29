@@ -115,12 +115,12 @@ Vaadin components use the Lumo theme by default.
 
 ## Following the coding style
 
-We are using [ESLint](http://eslint.org/) for linting JavaScript code. You can check if your code is following our standards by running `gulp lint`, which will automatically lint all `.js` files as well as JavaScript snippets inside `.html` files.
+We are using [ESLint](http://eslint.org/) for linting JavaScript code. You can check if your code is following our standards by running `npm run lint`, which will automatically lint all `.js` files as well as JavaScript snippets inside `.html` files.
 
 
 ## Contributing
 
-  - Make sure your code is compliant with our code linters: `gulp lint`
+  - Make sure your code is compliant with our code linters: `npm run lint`
   - Check that tests are passing: `polymer test`
   - [Submit a pull request](https://www.digitalocean.com/community/tutorials/how-to-create-a-pull-request-on-github) with detailed title and description
   - Wait for response from one of Vaadin components team members
