@@ -59,20 +59,20 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
 
       <vaadin-button slot="footer" on-click="__save" theme="primary" disabled="[[!__isDirty]]">[[i18n.saveItem]]</vaadin-button>
       <vaadin-button slot="footer" on-click="__cancel" theme="tertiary">[[i18n.cancel]]</vaadin-button>
-      <div slot="footer" style="flex: auto"></div>
+      <div slot="footer" style="flex: auto;"></div>
       <vaadin-button slot="footer" on-click="__delete" theme="tertiary error" hidden="[[__isNew]]">[[i18n.deleteItem]]</vaadin-button>
     </vaadin-dialog-layout>
 
     <vaadin-confirm-dialog theme$="[[theme]]" id="confirmCancel" on-confirm="__confirmCancel"
       cancel confirm-text="[[i18n.confirm.cancel.button.confirm]]"
       cancel-text="[[i18n.confirm.cancel.button.dismiss]]"
-      header="[[i18n.confirm.cancel.title]]" 
+      header="[[i18n.confirm.cancel.title]]"
       message="[[i18n.confirm.cancel.content]]" confirm-theme="primary">
     </vaadin-confirm-dialog>
     <vaadin-confirm-dialog theme$="[[theme]]" id="confirmDelete" on-confirm="__confirmDelete"
       cancel confirm-text="[[i18n.confirm.delete.button.confirm]]"
       cancel-text="[[i18n.confirm.delete.button.dismiss]]"
-      header="[[i18n.confirm.delete.title]]" 
+      header="[[i18n.confirm.delete.title]]"
       message="[[i18n.confirm.delete.content]]" confirm-theme="primary error">
     </vaadin-confirm-dialog>
   </template>
@@ -264,7 +264,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
             },
             /**
              * Number of items in the data set which is reported by the grid.
-             * Typically it refects the number of filtered items displayed in the grid.
+             * Typically it reflects the number of filtered items displayed in the grid.
              */
             size: {
               type: Number,
@@ -599,7 +599,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           }
         }
 
-        // Utility method for setting nested values in JSON objects but initialising empty keys unless `Polymer.Base.set`
+        // Utility method for setting nested values in JSON objects but initializing empty keys unless `Polymer.Base.set`
         __set(path, val, obj) {
           if (obj && path) {
             path.split('.').slice(0, -1).reduce((o, p) => (o[p] = o[p] || {}), obj);
@@ -609,7 +609,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
 
         /**
          * Fired when user wants to edit an existing item. If the default is prevented, then
-         * a new item is not assigned to the form, giving that responsability to the app, though
+         * a new item is not assigned to the form, giving that responsibility to the app, though
          * dialog is always opened.
          *
          * @event edit

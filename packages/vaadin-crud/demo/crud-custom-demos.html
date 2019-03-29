@@ -8,7 +8,7 @@
 
     <h3>Grid</h3>
     <p>Customize the grid by replacing the default one with your own</p>
-    <p><i>NOTE: </i>That you need to add a <code>vaadin-crud-edit-column</code> in order to have a mecanism for editing the item</p>
+    <p><i>NOTE: </i>That you need to add a <code>vaadin-crud-edit-column</code> in order to have a mechanism for editing the item</p>
     <vaadin-demo-snippet id="crud-custom-demos-custom-grid">
       <template preserve-content>
         <vaadin-crud>
@@ -44,7 +44,7 @@
     <vaadin-demo-snippet id="crud-custom-demos-custom-editor">
       <template preserve-content>
         <vaadin-crud exclude="_id, password">
-          <vaadin-form-layout slot="form" style="max-width: 60em">
+          <vaadin-form-layout slot="form" style="max-width: 60em;">
             <vaadin-text-field path="name.first"label="First name" required></vaadin-text-field>
             <vaadin-text-field path="name.last" label="Last name" required></vaadin-text-field>
             <br>
@@ -74,7 +74,7 @@
     <vaadin-demo-snippet id="crud-custom-demos-custom-toolbar">
       <template preserve-content>
         <vaadin-crud size="{{size}}" exclude="_id, password, picture">
-          <div slot="toolbar" style="flex: 1">There are <b>[[size]]</b> users in the database</div>
+          <div slot="toolbar" style="flex: 1;">There are <b>[[size]]</b> users in the database</div>
           <a slot="toolbar" new-button href="javascript:">Add a new user</a>
         </vaadin-crud>
         <script>
