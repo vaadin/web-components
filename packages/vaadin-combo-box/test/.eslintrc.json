@@ -32,6 +32,7 @@
     "hackIE11Focus": false,
     "_fixture": false,
     "gemini": false,
-    "flush": false
+    "flush": false,
+    "ShadyDOM": false
   }
 }

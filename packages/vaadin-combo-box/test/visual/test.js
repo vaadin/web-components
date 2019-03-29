@@ -22,6 +22,13 @@ gemini.suite('vaadin-combo-box', function(rootSuite) {
         .capture('default');
     });
 
+    gemini.suite(`clear-button-tests-${theme}`, function(suite) {
+      suite
+        .setUrl(`clear-button.html?theme=${theme}`)
+        .setCaptureElements('#clear-button-tests')
+        .capture('default');
+    });
+
     gemini.suite(`icons-${theme}`, function(suite) {
       suite
         .setUrl(`icons.html?theme=${theme}`)

@@ -42,6 +42,12 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="combobox-clear">
+    <template>
+      <vaadin-combo-box clear-button-visible></vaadin-combo-box>
+    </template>
+  </test-fixture>
+
   <script>
     describe('Properties', () => {
       let comboBox;
@@ -368,6 +374,44 @@
             comboBox.$.overlay._selector.querySelector('vaadin-combo-box-item')
               .getAttribute('theme')
           ).to.equal('foo');
+        });
+      });
+
+      describe('no clear-button-visible attribute', () => {
+        let textfield;
+
+        beforeEach(() => {
+          textfield = comboBox.inputElement;
+        });
+
+        it('should not have clear-button-visible by default', () => {
+          expect(comboBox).to.have.property('clearButtonVisible', false);
+          expect(textfield).to.have.property('clearButtonVisible', false);
+        });
+      });
+
+      describe('clear-button-visible attribute', () => {
+        let comboBox, textfield, clearButton;
+
+        beforeEach(() => {
+          comboBox = fixture('combobox-clear');
+          textfield = comboBox.inputElement;
+          clearButton = textfield.$.clearButton;
+        });
+
+        it('should propagate clear-button-visible attribute to textfield', () => {
+          expect(comboBox).to.have.property('clearButtonVisible', true);
+          expect(textfield).to.have.property('clearButtonVisible', true);
+        });
+
+        it('clear button should be hidden when disabled', () => {
+          comboBox.disabled = true;
+          expect(getComputedStyle(clearButton).display).to.equal('none');
+        });
+
+        it('clear button should be hidden when read-only', () => {
+          comboBox.readonly = true;
+          expect(getComputedStyle(clearButton).display).to.equal('none');
         });
       });
     });

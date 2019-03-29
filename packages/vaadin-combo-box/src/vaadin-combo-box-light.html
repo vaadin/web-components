@@ -13,6 +13,11 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <dom-module id="vaadin-combo-box-light">
   <template>
+    <style>
+      :host([opened]) {
+        pointer-events: auto;
+      }
+    </style>
 
     <slot></slot>
 
@@ -116,6 +121,14 @@ This program is available under Apache License Version 2.0, available at https:/
         super.ready();
         this._toggleElement = this.querySelector('.toggle-button');
         this._clearElement = this.querySelector('.clear-button');
+
+        if (this._clearElement) {
+          this._clearElement.addEventListener('mousedown', e => {
+            e.preventDefault(); // Prevent native focus changes
+            // _focusableElement is needed for paper-input
+            (this.inputElement._focusableElement || this.inputElement).focus();
+          });
+        }
       }
 
       get focused() {

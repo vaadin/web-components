@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+
+<head lang="en">
+  <meta charset="UTF-8">
+
+  <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script>
+    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-combo-box.html">`);
+  </script>
+</head>
+
+<body>
+
+  <div id="clear-button-tests" style="padding: 10px;">
+    No value
+    <vaadin-combo-box clear-button-visible></vaadin-combo-box>
+
+    <br>Basic value
+    <vaadin-combo-box clear-button-visible value="Carbon" items='["Carbon"]'></vaadin-combo-box>
+
+    <br>Disabled
+    <vaadin-combo-box clear-button-visible value="Carbon" items='["Carbon"]' disabled></vaadin-combo-box>
+
+    <br>Read-only
+    <vaadin-combo-box clear-button-visible value="Carbon" items='["Carbon"]' readonly></vaadin-combo-box>
+  </div>
+
+</body>

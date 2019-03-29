@@ -20,6 +20,12 @@
   </template>
 </test-fixture>
 
+<test-fixture id="combobox-clear">
+  <template>
+    <vaadin-combo-box clear-button-visible style="width: 320px;"></vaadin-combo-box>
+  </template>
+</test-fixture>
+
 <script>
   describe('selecting a value', () => {
     let combobox;
@@ -197,7 +203,7 @@
 
       it('should fire on clear', () => {
         combobox.value = 'foo';
-        fire('click', combobox._clearElement);
+        fire('click', combobox.$.input.$.clearButton);
 
         expect(changeSpy.callCount).to.equal(1);
       });
@@ -262,12 +268,12 @@
     let combobox;
     let clearIcon;
     beforeEach(() => {
-      combobox = fixture('combobox');
+      combobox = fixture('combobox-clear');
       combobox.items = ['foo', 'bar'];
 
       combobox.value = 'foo';
 
-      clearIcon = combobox._clearElement;
+      clearIcon = combobox.inputElement.$.clearButton;
 
       // needed for Edge <= 14 in Polymer 2
       combobox.updateStyles();
@@ -307,7 +313,7 @@
       expect(combobox.opened).to.eql(true);
     });
 
-    it('should cancel down event to avoid input blur', () => {
+    it('should cancel click event to avoid input blur', () => {
       combobox.open();
 
       const event = fire('click', clearIcon);
