@@ -32,6 +32,13 @@ This program is available under Apache License Version 2.0, available at https:/
           value: false
         },
 
+        /**
+         * If true, the nested menu will open on hover (mouseover) instead of click.
+         */
+        openOnHover: {
+          type: Boolean
+        },
+
         theme: {
           type: String,
           reflectToAttribute: true,
@@ -54,7 +61,7 @@ This program is available under Apache License Version 2.0, available at https:/
       this.addEventListener('iron-resize', e => this.__onResize());
 
       const container = this._container;
-
+      container.addEventListener('mouseover', e => this._onMouseOver(e));
       container.addEventListener('click', e => this._onItemClick(e));
       container.addEventListener('keydown', e => e.keyCode === 40 && this._onItemClick(e));
     }
@@ -76,15 +83,26 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    _dispatchClick(button) {
+      button.dispatchEvent(new CustomEvent('button-click', {
+        detail: {item: button.item},
+        bubbles: true,
+        composed: true
+      }));
+    }
+
+    _onMouseOver(e) {
+      const button = Array.from(e.composedPath()).filter(el => el.item)[0];
+      if (this.openOnHover && button && button !== this._activeButton) {
+        this._dispatchClick(button);
+      }
+    }
+
     _onItemClick(e) {
       e.stopPropagation();
       const button = Array.from(e.composedPath()).filter(el => el.item)[0];
       if (button) {
-        button.dispatchEvent(new CustomEvent('button-click', {
-          detail: {item: button.item},
-          bubbles: true,
-          composed: true
-        }));
+        this._dispatchClick(button);
       }
     }
 

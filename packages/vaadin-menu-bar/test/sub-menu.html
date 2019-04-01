@@ -191,5 +191,55 @@
         });
       });
     });
+
+    describe('open on hover', () => {
+      let menu, buttons, subMenu;
+
+      beforeEach(async() => {
+        menu = fixture('default');
+        menu.items = [
+          {
+            text: 'Menu Item 1',
+            children: [
+              {text: 'Menu Item 1 1'},
+              {text: 'Menu Item 1 2'}
+            ]
+          },
+          {text: 'Menu Item 2'},
+          {
+            text: 'Menu Item 3',
+            children: [
+              {text: 'Menu Item 3 1'},
+              {text: 'Menu Item 3 2'}
+            ]
+          },
+        ];
+        menu.openOnHover = true;
+        await nextRender(menu);
+        subMenu = menu._subMenu;
+        buttons = menu._buttons;
+      });
+
+      afterEach(() => {
+        if (subMenu && subMenu.opened) {
+          subMenu.close();
+        }
+      });
+
+      it('should open sub-menu on mouseover on button with nested items', async() => {
+        buttons[0].dispatchEvent(new CustomEvent('mouseover', {bubbles: true, composed: true}));
+        await nextRender(subMenu);
+        expect(subMenu.opened).to.be.true;
+        expect(subMenu.listenOn).to.equal(buttons[0]);
+      });
+
+      it('should close open sub-menu on mouseover on button without nested items', async() => {
+        buttons[0].dispatchEvent(new CustomEvent('mouseover', {bubbles: true, composed: true}));
+        await nextRender(subMenu);
+        buttons[1].dispatchEvent(new CustomEvent('mouseover', {bubbles: true, composed: true}));
+        await nextRender(subMenu);
+        expect(subMenu.opened).to.be.false;
+      });
+    });
   </script>
 </body>

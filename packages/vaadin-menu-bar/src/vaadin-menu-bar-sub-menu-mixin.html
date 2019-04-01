@@ -81,9 +81,9 @@ This program is available under Apache License Version 2.0, available at https:/
       const item = e.target;
       const list = item.parentNode;
       if (e.keyCode === 38 && item === list.items[0]) {
-        this._close();
         this._activeButton.focus();
         this._activeButton.setAttribute('focus-ring', '');
+        this._close();
       }
     }
 
@@ -142,6 +142,7 @@ This program is available under Apache License Version 2.0, available at https:/
     _close() {
       if (this._activeButton && this._activeButton.hasAttribute('expanded')) {
         this._activeButton.removeAttribute('expanded');
+        this._activeButton = null;
       }
 
       this._subMenu.opened && this._subMenu.close();

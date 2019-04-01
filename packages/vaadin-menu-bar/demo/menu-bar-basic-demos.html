@@ -118,6 +118,42 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Open on Hover</h3>
+    <vaadin-demo-snippet id="menu-bar-basic-demos-open-on-hover" when-defined="vaadin-menu-bar">
+      <template preserve-content>
+        <vaadin-menu-bar open-on-hover></vaadin-menu-bar>
+        <script>
+          window.addDemoReadyListener('#menu-bar-basic-demos-open-on-hover', function(document) {
+            const menu = document.querySelector('vaadin-menu-bar');
+            menu.items = [
+              {
+                text: 'Project',
+                children: [
+                  {text: 'Dashboard'},
+                  {component: 'hr'},
+                  {text: 'Users',
+                    children: [{text: 'List'}, {text: 'Add'}]
+                  },
+                  {text: 'Billing',
+                    children: [{text: 'Invoices'}, {text: 'Balance Events'}]
+                  },
+                ]
+              },
+              {
+                text: 'Account',
+                children: [
+                  {text: 'Edit Profile'},
+                  {component: 'hr'},
+                  {text: 'Privacy Settings'},
+                  {text: 'Terms of Service'}
+                ]
+              },
+              {text: 'Sign Out'}
+            ];
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
 
   </template>
   <script>
