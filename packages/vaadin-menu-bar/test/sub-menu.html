@@ -240,6 +240,16 @@
         await nextRender(subMenu);
         expect(subMenu.opened).to.be.false;
       });
+
+      it('should switch opened sub-menu on hover also when open-on-hover is false', async() => {
+        menu.openOnHover = false;
+        buttons[0].click();
+        await nextRender(subMenu);
+        buttons[2].dispatchEvent(new CustomEvent('mouseover', {bubbles: true, composed: true}));
+        await nextRender(subMenu);
+        expect(subMenu.opened).to.be.true;
+        expect(subMenu.listenOn).to.equal(buttons[2]);
+      });
     });
   </script>
 </body>
