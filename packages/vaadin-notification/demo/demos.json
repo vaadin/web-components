@@ -33,5 +33,16 @@
         "image": ""
       }
     }
+    ,
+    {
+      "name": "Theme Variants",
+      "url": "notification-theme-variants-demos",
+      "src": "notification-theme-variants-demos.html",
+      "meta": {
+        "title": "Vaadin Notification Theme Variants",
+        "description": "",
+        "image": ""
+      }
+    }
   ]
 }

@@ -1,0 +1,227 @@
+<dom-module id="notification-theme-variants-demos">
+  <template>
+    <style include="vaadin-component-demo-shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+
+    <h3>Default</h3>
+    <vaadin-demo-snippet id="notification-theme-variants-demos-default">
+      <template preserve-content>
+        <vaadin-button>Default notification</vaadin-button>
+        <vaadin-notification></vaadin-notification>
+        <script>
+          window.addDemoReadyListener('#notification-theme-variants-demos-default', function(document) {
+            const btn = document.querySelector('vaadin-button');
+            const notification = document.querySelector('vaadin-notification');
+            btn.addEventListener('click', function() {
+              notification.open();
+            });
+
+            notification.renderer = function(root, owner) {
+              // Check if there is a content generated with the previous renderer call not to recreate it.
+              if (root.firstElementChild) {
+                return;
+              }
+
+              const text = window.document.createTextNode('Please update your password');
+              root.appendChild(text);
+
+              const notNowBtn = window.document.createElement('vaadin-button');
+              notNowBtn.textContent = 'Not now';
+              notNowBtn.addEventListener('click', function() {
+                owner.close();
+              });
+              root.appendChild(notNowBtn);
+
+              const openSettingsBtn = window.document.createElement('vaadin-button');
+              openSettingsBtn.textContent = 'Open settings';
+              openSettingsBtn.setAttribute('theme', 'primary');
+              openSettingsBtn.addEventListener('click', function() {
+                owner.close();
+              });
+              root.appendChild(openSettingsBtn);
+            };
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Primary</h3>
+    <vaadin-demo-snippet id="notification-theme-variants-demos-primary">
+      <template preserve-content>
+        <vaadin-button theme="primary">Primary notification</vaadin-button>
+        <vaadin-notification theme="primary"></vaadin-notification>
+        <script>
+          window.addDemoReadyListener('#notification-theme-variants-demos-primary', function(document) {
+            const btn = document.querySelector('vaadin-button');
+            const notification = document.querySelector('vaadin-notification');
+            btn.addEventListener('click', function() {
+              notification.open();
+            });
+
+            notification.renderer = function(root, owner) {
+              // Check if there is a content generated with the previous renderer call not to recreate it.
+              if (root.firstElementChild) {
+                return;
+              }
+
+              const text = window.document.createTextNode('Get notified with our latest updates');
+              root.appendChild(text);
+
+              const skipBtn = window.document.createElement('vaadin-button');
+              skipBtn.textContent = 'Skip';
+              skipBtn.addEventListener('click', function() {
+                owner.close();
+              });
+              root.appendChild(skipBtn);
+
+              const subscribeBtn = window.document.createElement('vaadin-button');
+              subscribeBtn.textContent = 'Subscribe';
+              subscribeBtn.setAttribute('theme', 'primary');
+              subscribeBtn.addEventListener('click', function() {
+                owner.close();
+              });
+              root.appendChild(subscribeBtn);
+            };
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Contrast</h3>
+    <vaadin-demo-snippet id="notification-theme-variants-demos-contrast">
+      <template preserve-content>
+        <vaadin-button theme="primary contrast">Contrast notification</vaadin-button>
+        <vaadin-notification theme="contrast"></vaadin-notification>
+        <script>
+          window.addDemoReadyListener('#notification-theme-variants-demos-contrast', function(document) {
+            const btn = document.querySelector('vaadin-button');
+            const notification = document.querySelector('vaadin-notification');
+            btn.addEventListener('click', function() {
+              notification.open();
+            });
+
+            notification.renderer = function(root, owner) {
+              // Check if there is a content generated with the previous renderer call not to recreate it.
+              if (root.firstElementChild) {
+                return;
+              }
+
+              const text = window.document.createTextNode('Message deleted');
+              root.appendChild(text);
+
+              const dismissBtn = window.document.createElement('vaadin-button');
+              dismissBtn.textContent = 'Dismiss';
+              dismissBtn.addEventListener('click', function() {
+                owner.close();
+              });
+              root.appendChild(dismissBtn);
+
+              const undoBtn = window.document.createElement('vaadin-button');
+              undoBtn.textContent = 'Undo';
+              undoBtn.setAttribute('theme', 'primary');
+              undoBtn.addEventListener('click', function() {
+                owner.close();
+              });
+              root.appendChild(undoBtn);
+            };
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Success</h3>
+    <vaadin-demo-snippet id="notification-theme-variants-demos-success">
+      <template preserve-content>
+        <vaadin-button theme="primary success">Success notification</vaadin-button>
+        <vaadin-notification theme="success"></vaadin-notification>
+        <script>
+          window.addDemoReadyListener('#notification-theme-variants-demos-success', function(document) {
+            const btn = document.querySelector('vaadin-button');
+            const notification = document.querySelector('vaadin-notification');
+            btn.addEventListener('click', function() {
+              notification.open();
+            });
+
+            notification.renderer = function(root, owner) {
+              // Check if there is a content generated with the previous renderer call not to recreate it.
+              if (root.firstElementChild) {
+                return;
+              }
+
+              const text = window.document.createTextNode('New version deployed sucessfully');
+              root.appendChild(text);
+
+              const viewLogBtn = window.document.createElement('vaadin-button');
+              viewLogBtn.textContent = 'View log';
+              viewLogBtn.addEventListener('click', function() {
+                owner.close();
+              });
+              root.appendChild(viewLogBtn);
+
+              const openSiteBtn = window.document.createElement('vaadin-button');
+              openSiteBtn.textContent = 'Open site';
+              openSiteBtn.setAttribute('theme', 'primary');
+              openSiteBtn.addEventListener('click', function() {
+                owner.close();
+              });
+              root.appendChild(openSiteBtn);
+            };
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Error</h3>
+    <vaadin-demo-snippet id="notification-theme-variants-demos-error">
+      <template preserve-content>
+        <vaadin-button theme="error">Error notification</vaadin-button>
+        <vaadin-notification theme="error"></vaadin-notification>
+        <script>
+          window.addDemoReadyListener('#notification-theme-variants-demos-error', function(document) {
+            const btn = document.querySelector('vaadin-button');
+            const notification = document.querySelector('vaadin-notification');
+            btn.addEventListener('click', function() {
+              notification.open();
+            });
+
+            notification.renderer = function(root, owner) {
+              // Check if there is a content generated with the previous renderer call not to recreate it.
+              if (root.firstElementChild) {
+                return;
+              }
+
+              const text = window.document.createTextNode('System error occured');
+              root.appendChild(text);
+
+              const thisIsFineBtn = window.document.createElement('vaadin-button');
+              thisIsFineBtn.textContent = 'This is fine';
+              thisIsFineBtn.addEventListener('click', function() {
+                owner.close();
+              });
+              root.appendChild(thisIsFineBtn);
+
+              const investigateBtn = window.document.createElement('vaadin-button');
+              investigateBtn.textContent = 'Investigate';
+              investigateBtn.setAttribute('theme', 'primary');
+              investigateBtn.addEventListener('click', function() {
+                owner.close();
+              });
+              root.appendChild(investigateBtn);
+            };
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+  </template>
+  <script>
+    class NotificationThemeVariantsDemos extends DemoReadyEventEmitter(NotificationDemo(Polymer.Element)) {
+      static get is() {
+        return 'notification-theme-variants-demos';
+      }
+    }
+    customElements.define(NotificationThemeVariantsDemos.is, NotificationThemeVariantsDemos);
+  </script>
+</dom-module>
