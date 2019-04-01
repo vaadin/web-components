@@ -63,6 +63,12 @@
         expect(timePicker.__dropdownElement.value).to.be.equal('');
       });
 
+      it('should change value to empty string when setting invalid value', () => {
+        changeInputValue(timePicker.__dropdownElement, '09:00');
+        changeInputValue(timePicker.__dropdownElement, 'invalid');
+        expect(timePicker.value).to.be.equal('');
+      });
+
       it('should not allow setting invalid time value', () => {
         timePicker.value = '90:00';
         expect(timePicker.value).to.be.equal('');
@@ -91,8 +97,8 @@
         timePicker.value = 'invalid';
         expect(timePicker.value).to.be.equal('12:00');
         changeInputValue(timePicker.__dropdownElement, 'invalid');
-        expect(timePicker.value).to.be.equal('12:00');
-        expect(timePicker.__dropdownElement.value).to.be.equal('invalid');
+        expect(timePicker.value).to.be.equal('');
+        expect(timePicker.__dropdownElement.value).to.be.equal('');
       });
 
       it('should restore the previous value in input field if input value is empty', () => {
