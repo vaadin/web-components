@@ -168,6 +168,28 @@
         await nextRender(subMenu);
         expect(subMenu.opened).to.be.false;
       });
+
+      describe('expanded attribute', () => {
+        it('should toggle expanded attribute on button with nested items clicked', async() => {
+          buttons[0].click();
+          await nextRender(subMenu);
+          expect(buttons[0].hasAttribute('expanded')).to.be.true;
+
+          buttons[0].click();
+          expect(buttons[0].hasAttribute('expanded')).to.be.false;
+        });
+
+        it('should toggle expanded attribute on button with nested items toggled with the keyboard', async() => {
+          arrowDown(buttons[0]);
+          await nextRender(subMenu);
+          expect(buttons[0].hasAttribute('expanded')).to.be.true;
+
+          item = subMenu.$.overlay.querySelector('vaadin-context-menu-item');
+          arrowUp(item);
+          await nextRender(subMenu);
+          expect(buttons[0].hasAttribute('expanded')).to.be.false;
+        });
+      });
     });
   </script>
 </body>

@@ -6,6 +6,42 @@
       :host ::slotted(vaadin-context-menu-item) {
         padding: 0;
       }
+
+      :host {
+        border-radius: 0;
+      }
+
+      :host([expanded]) {
+        background-color: var(--lumo-primary-color-10pct);
+      }
+
+      :host(:first-of-type) {
+        border-radius: var(--lumo-border-radius-m) 0 0 var(--lumo-border-radius-m);
+
+        /* Needed to retain the focsu-ring with border-radius */
+        margin-left: calc(var(--lumo-space-xs) / 2);
+      }
+
+      :host(:nth-last-of-type(2)),
+      :host([part="ellipsis-button"]) {
+        border-radius: 0 var(--lumo-border-radius-m) var(--lumo-border-radius-m) 0;
+      }
+
+      :host {
+        margin-right: calc(var(--lumo-space-xs) / 2);
+      }
+
+      :host([part="ellipsis-button"]) {
+        min-width: var(--lumo-button-size);
+        padding-left: calc(var(--lumo-button-size) / 4);
+        padding-right: calc(var(--lumo-button-size) / 4);
+      }
+
+      :host([part="ellipsis-button"]) [part="prefix"],
+      :host([part="ellipsis-button"]) [part="suffix"] {
+        margin-left: 0;
+        margin-right: 0;
+      }
     </style>
   </template>
 </dom-module>

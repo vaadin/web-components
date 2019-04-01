@@ -6,6 +6,52 @@
       :host ::slotted(vaadin-context-menu-item) {
         padding: 0;
       }
+
+      :host([theme="outlined"]),
+      :host([theme="contained"]) {
+        border-radius: 0;
+      }
+
+      :host([expanded])::before {
+        opacity: 0.08;
+        transition: opacity 0.4s;
+      }
+
+      :host([expanded])::after {
+        transform: translate(-50%, -50%) scale(0.0000001); /* animation works weirdly with scale(0) */
+        opacity: 0.1;
+        transition: 0s;
+      }
+
+      :host([theme="contained"][expanded]) {
+        box-shadow: var(--material-shadow-elevation-8dp);
+      }
+
+      :host(:hover:not([expanded]))::after {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0;
+      }
+
+      :host([theme="contained"]) {
+        margin-right: 1px;
+      }
+
+      :host(:first-of-type) {
+        border-radius: 0.25em 0 0 0.25em;
+
+        /* Needed to retain the focsu-ring with border-radius */
+        margin-left: 1px;
+      }
+
+      :host(:nth-last-of-type(2)),
+      :host([part~="ellipsis-button"]) {
+        border-radius: 0 0.25em 0.25em 0;
+      }
+
+      :host([theme="text"]),
+      :host(:not([theme])) {
+        border-radius: 4px;
+      }
     </style>
   </template>
 </dom-module>
