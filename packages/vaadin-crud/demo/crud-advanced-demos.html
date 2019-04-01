@@ -12,8 +12,8 @@
     <p>Note that search field has been added to the crud toolbar in the footer, but moved up using CSS.</p>
     <vaadin-demo-snippet id="crud-advanced-demos-custom-search">
       <template preserve-content>
-        <vaadin-crud  no-head theme="no-border compact" style="flex-direction: column-reverse">
-          <vaadin-text-field slot="toolbar" style="flex: 1" placeholder="Search users by first or last name">
+        <vaadin-crud no-head theme="no-border compact" style="flex-direction: column-reverse;">
+          <vaadin-text-field slot="toolbar" style="flex: 1;" placeholder="Search users by first or last name">
             <iron-icon icon="lumo:search" slot="prefix"></iron-icon>
           </vaadin-text-field>
           <vaadin-button new-button slot="toolbar">New user</vaadin-button>
@@ -77,7 +77,7 @@
     <h3>Remote data</h3>
     <p>In this example remote data is displayed in a personalized grid with custom filter and sort controls.</p>
     <p>For filtering and ordering it uses <code>vaadin-grid-filter</code> and <code>vaadin-grid-sorter</code> helpers
-      that automatically add appropriate paramters to the <code>dataProvicer</code> callback.</p>
+      that automatically add appropriate parameters to the <code>dataProvider</code> callback.</p>
     <vaadin-demo-snippet id="crud-advanced-demos-remote-data">
       <template preserve-content>
         <vaadin-crud >
@@ -85,7 +85,7 @@
             <vaadin-grid-column path="firstName" width="150px" flex-grow="0">
               <template class="header">
                 <vaadin-grid-filter path="firstName" value="[[_filterFirstName]]">
-                  <vaadin-text-field slot="filter" value="{{_filterFirstName}}" placeholder="Name" focus-target theme="small" style="width: 124px">
+                  <vaadin-text-field slot="filter" value="{{_filterFirstName}}" placeholder="Name" focus-target theme="small" style="width: 124px;">
                     <iron-icon icon="lumo:search" slot="prefix"></iron-icon>
                     <vaadin-grid-sorter path="firstName" slot="suffix"></vaadin-grid-sorter>
                   </vaadin-text-field>
@@ -95,7 +95,7 @@
             <vaadin-grid-column path="lastName" width="150px" flex-grow="0">
               <template class="header">
                 <vaadin-grid-filter path="lastName" value="[[_filterLastName]]">
-                  <vaadin-text-field slot="filter" value="{{_filterLastName}}" placeholder="Surname" focus-target theme="small" style="width: 124px">
+                  <vaadin-text-field slot="filter" value="{{_filterLastName}}" placeholder="Surname" focus-target theme="small" style="width: 124px;">
                     <iron-icon icon="lumo:search" slot="prefix"></iron-icon>
                     <vaadin-grid-sorter path="lastName" slot="suffix"></vaadin-grid-sorter>
                   </vaadin-text-field>
@@ -112,7 +112,7 @@
         </vaadin-crud>
 
         <vaadin-notification position="top-end">
-          <template>Save and Delete operations are no implemented</template>
+          <template>Save and Delete operations are not implemented</template>
         </vaadin-notification>
         <script>
           window.addDemoReadyListener('#crud-advanced-demos-remote-data', function(document) {
