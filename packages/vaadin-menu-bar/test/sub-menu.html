@@ -88,9 +88,12 @@
       });
 
       (isIOS ? it.skip : it)('should open sub-menu on arrow down', async() => {
+        const spy = sinon.spy();
+        menu._container.addEventListener('keydown', spy);
         arrowDown(buttons[0]);
         await nextRender(subMenu);
         expect(subMenu.opened).to.be.true;
+        expect(spy.firstCall.args[0].defaultPrevented).to.be.true;
       });
 
       (isIOS ? it.skip : it)('should close sub-menu on first item arrow up', async() => {

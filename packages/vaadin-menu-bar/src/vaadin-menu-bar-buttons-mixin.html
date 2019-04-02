@@ -99,6 +99,7 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _onItemClick(e) {
+      e.preventDefault();
       e.stopPropagation();
       const button = Array.from(e.composedPath()).filter(el => el.item)[0];
       if (button) {
