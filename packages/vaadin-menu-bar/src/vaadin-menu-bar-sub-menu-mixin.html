@@ -38,6 +38,7 @@ This program is available under Apache License Version 2.0, available at https:/
       this.shadowRoot.addEventListener('button-click', this.__onButtonClick.bind(this));
 
       this._subMenu.addEventListener('item-selected', this.__onItemSelected.bind(this));
+      this._subMenu.addEventListener('close-all-menus', this.__onEscapeClose.bind(this));
 
       const overlay = this._subMenu.$.overlay;
       overlay.modeless = true;
@@ -81,9 +82,7 @@ This program is available under Apache License Version 2.0, available at https:/
       const item = e.target;
       const list = item.parentNode;
       if (e.keyCode === 38 && item === list.items[0]) {
-        this._activeButton.focus();
-        this._activeButton.setAttribute('focus-ring', '');
-        this._close();
+        this._close(true);
       }
     }
 
@@ -139,12 +138,24 @@ This program is available under Apache License Version 2.0, available at https:/
       this.__fireItemSelected(e.detail.value);
     }
 
-    _close() {
-      if (this._activeButton && this._activeButton.hasAttribute('expanded')) {
-        this._activeButton.removeAttribute('expanded');
+    __onEscapeClose(e) {
+      this.__deactivateButton(true);
+    }
+
+    __deactivateButton(restoreFocus) {
+      const button = this._activeButton;
+      if (button && button.hasAttribute('expanded')) {
+        button.removeAttribute('expanded');
+        if (restoreFocus) {
+          button.focus();
+          button.setAttribute('focus-ring', '');
+        }
         this._activeButton = null;
       }
+    }
 
+    _close(restoreFocus) {
+      this.__deactivateButton(restoreFocus);
       this._subMenu.opened && this._subMenu.close();
     }
   };

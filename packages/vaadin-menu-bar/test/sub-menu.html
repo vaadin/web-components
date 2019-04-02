@@ -192,6 +192,17 @@
           await nextRender(subMenu);
           expect(buttons[0].hasAttribute('expanded')).to.be.false;
         });
+
+        it('should remove expanded attribute and restore focus when sub-menu closed on Esc', async() => {
+          arrowDown(buttons[0]);
+          await nextRender(subMenu);
+          expect(buttons[0].hasAttribute('expanded')).to.be.true;
+
+          MockInteractions.pressAndReleaseKeyOn(subMenu.$.overlay, 27, [], 'Escape');
+          await nextRender(subMenu);
+          expect(buttons[0].hasAttribute('expanded')).to.be.false;
+          expect(buttons[0].hasAttribute('focus-ring')).to.be.true;
+        });
       });
     });
 
