@@ -571,6 +571,12 @@ This program is available under Apache License Version 2.0, available at https:/
       this.inputElement.focus();
       this.clear();
       this._valueClearing = false;
+      if (navigator.userAgent.match(/Trident/)) {
+        // Disable IE input" event prevention here, we want the input event from
+        // below to propagate normally.
+        this.__preventInput = false;
+      }
+      this.inputElement.dispatchEvent(new Event('input', {bubbles: true, composed: true}));
       this.inputElement.dispatchEvent(new Event('change', {bubbles: !this._slottedInput}));
     }
 
@@ -652,6 +658,13 @@ This program is available under Apache License Version 2.0, available at https:/
      * Fired when the user commits a value change.
      *
      * @event change
+     */
+
+    /**
+     * Fired when the value is changed by the user: on every typing keystroke,
+     * and the value is cleared using the clear button.
+     *
+     * @event input
      */
   };
 </script>

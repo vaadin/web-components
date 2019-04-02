@@ -175,6 +175,15 @@
             expect(getComputedStyle(textField.$.clearButton).getPropertyValue('display')).to.be.equal('none');
           });
 
+          it('should dispatch input event when clear button is clicked', function() {
+            const inputSpy = sinon.spy();
+            textField.addEventListener('input', inputSpy);
+            textField.clearButtonVisible = true;
+            textField.value = 'Foo';
+            textField.$.clearButton.click();
+            expect(inputSpy).to.be.calledOnce;
+          });
+
           it('should dispatch change event when clear button is clicked', function() {
             const changeSpy = sinon.spy();
             textField.addEventListener('change', changeSpy);
@@ -321,6 +330,17 @@
         beforeEach(function() {
           textField = fixture(`default${fixtureName}`);
           input = textField.inputElement;
+        });
+
+        it('should not stop native input events', () => {
+          const inputSpy = sinon.spy();
+          textField.addEventListener('input', inputSpy);
+
+          const inputEvent = new Event('input', {bubbles: true, composed: true});
+          input.dispatchEvent(inputEvent);
+
+          expect(inputSpy).to.be.calledOnce;
+          expect(inputSpy).to.be.calledWith(inputEvent);
         });
 
         it('should dispatch change event on native input change', done => {
