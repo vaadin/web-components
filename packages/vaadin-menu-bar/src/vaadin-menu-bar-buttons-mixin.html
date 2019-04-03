@@ -73,7 +73,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     _onMouseOver(e) {
       const button = Array.from(e.composedPath()).filter(el => el.item)[0];
-      if (button && button !== this._activeButton && (this.openOnHover || (button.item.children && this._subMenu.opened))) {
+      if (button && button !== this._expandedButton && (this.openOnHover || (button.item.children && this._subMenu.opened))) {
         this._dispatchClick(button);
       }
     }

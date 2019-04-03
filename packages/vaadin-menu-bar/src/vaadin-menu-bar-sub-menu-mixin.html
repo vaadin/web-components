@@ -62,7 +62,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     __alignOverlayPosition(e) {
       const overlay = e.target;
-      const getRect = () => this._activeButton.getBoundingClientRect();
+      const getRect = () => this._expandedButton.getBoundingClientRect();
       if (overlay.hasAttribute('bottom-aligned')) {
         overlay.style.bottom = parseInt(getComputedStyle(overlay).bottom) + getRect().height + 'px';
       }
@@ -84,6 +84,16 @@ This program is available under Apache License Version 2.0, available at https:/
       if (e.keyCode === 38 && item === list.items[0]) {
         this._close(true);
       }
+      // ArrowLeft
+      if (e.keyCode === 37) {
+        this._close(true);
+        this._navigateByKey(e);
+        const button = this.shadowRoot.activeElement;
+        const item = button.item;
+        if (button && item && item.children) {
+          this.__openSubMenu(button, item, {keepFocus: true});
+        }
+      }
     }
 
     __outsideClickListener(e) {
@@ -99,6 +109,11 @@ This program is available under Apache License Version 2.0, available at https:/
     __onButtonClick(e) {
       e.stopPropagation();
       const button = e.composedPath()[0];
+      const {item, options} = e.detail;
+      this.__openSubMenu(button, item, options);
+    }
+
+    __openSubMenu(button, item, options) {
       const subMenu = this._subMenu;
 
       if (subMenu.opened) {
@@ -108,7 +123,6 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
-      const {item, options} = e.detail;
       const items = item && item.children;
       if (!items || items.length === 0) {
         this.__fireItemSelected(item);
@@ -117,7 +131,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
       subMenu.items = items;
       subMenu.listenOn = button;
-      this._activeButton = button;
+      this._expandedButton = button;
 
       const rect = button.getBoundingClientRect();
 
@@ -134,6 +148,17 @@ This program is available under Apache License Version 2.0, available at https:/
       if (options.focusLast) {
         this.__onceOpened(() => this._focusLastItem());
       }
+
+      if (options.keepFocus) {
+        this.__onceOpened(() => {
+          this._focusButton(this._expandedButton);
+        });
+      }
+    }
+
+    _focusFirstItem() {
+      const list = this._subMenu.$.overlay.firstElementChild;
+      list.focus();
     }
 
     _focusLastItem() {
@@ -162,14 +187,13 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     __deactivateButton(restoreFocus) {
-      const button = this._activeButton;
+      const button = this._expandedButton;
       if (button && button.hasAttribute('expanded')) {
         button.removeAttribute('expanded');
         if (restoreFocus) {
-          button.focus();
-          button.setAttribute('focus-ring', '');
+          this._focusButton(button);
         }
-        this._activeButton = null;
+        this._expandedButton = null;
       }
     }
 

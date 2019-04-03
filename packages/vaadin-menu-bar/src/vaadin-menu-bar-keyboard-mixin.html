@@ -27,15 +27,36 @@ This program is available under Apache License Version 2.0, available at https:/
       this.addEventListener('focusin', e => this._onFocusin(e));
 
       const container = this._container;
-      container.addEventListener('click', e => this._activateButton(e));
+
+      container.addEventListener('click', e => {
+        e.stopPropagation();
+        const button = this._getButtonFromEvent(e);
+        this._activateButton(button);
+      });
+
       container.addEventListener('keydown', e => {
+        const button = this._getButtonFromEvent(e);
         // ArrowDown
         if (e.keyCode === 40) {
-          this._activateButton(e);
+          e.preventDefault();
+          e.stopPropagation();
+          if (button === this._expandedButton) {
+            // Menu opened previously, focus first item
+            this._focusFirstItem();
+          } else {
+            this._activateButton(button);
+          }
         }
         // ArrowUp
         if (e.keyCode === 38) {
-          this._activateButton(e, {focusLast: true});
+          e.preventDefault();
+          e.stopPropagation();
+          if (button === this._expandedButton) {
+            // Menu opened previously, focus last item
+            this._focusLastItem();
+          } else {
+            this._activateButton(button, {focusLast: true});
+          }
         }
       });
     }
@@ -56,13 +77,22 @@ This program is available under Apache License Version 2.0, available at https:/
       }));
     }
 
-    _activateButton(e, options = {}) {
-      e.preventDefault();
-      e.stopPropagation();
-      const button = Array.from(e.composedPath()).filter(el => el.item)[0];
+    _activateButton(button, options = {}) {
       if (button) {
         this._dispatchClick(button, options);
       }
+    }
+
+    _focusButton(button) {
+      button.focus();
+      button.setAttribute('focus-ring', '');
+      this._buttons.forEach(btn => {
+        btn.setAttribute('tabindex', btn === button ? '0' : '-1');
+      });
+    }
+
+    _getButtonFromEvent(e) {
+      return Array.from(e.composedPath()).filter(el => el.item)[0];
     }
 
     _onFocusin(event) {
@@ -79,7 +109,19 @@ This program is available under Apache License Version 2.0, available at https:/
 
       // only handle keydown event on menu bar buttons
       if (this._buttons.some(btn => path.indexOf(btn) > -1)) {
+        let button = this._getButtonFromEvent(event);
+        const expanded = button === this._expandedButton;
+        if (expanded) {
+          this._close(true);
+        }
         this._navigateByKey(event);
+        if (expanded) {
+          button = this.shadowRoot.activeElement;
+          const item = button.item;
+          if (button && item && item.children) {
+            this._dispatchClick(button, {keepFocus: true});
+          }
+        }
       }
     }
 
@@ -116,11 +158,7 @@ This program is available under Apache License Version 2.0, available at https:/
       idx = this._getAvailableIndex(idx, increment, buttons);
       if (idx >= 0) {
         const btn = buttons[idx];
-        btn.focus();
-        btn.setAttribute('focus-ring', '');
-        buttons.forEach(e => {
-          e.setAttribute('tabindex', e === btn ? '0' : '-1');
-        });
+        this._focusButton(btn);
         event.preventDefault();
       }
     }

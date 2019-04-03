@@ -119,6 +119,64 @@
         expect(subMenu.opened).to.be.false;
       });
 
+      (isIOS ? it.skip : it)('should switch menubar item and open submenu on arrow left', async() => {
+        arrowDown(buttons[0]);
+        await onceOpened(subMenu);
+        expect(subMenu.opened).to.be.true;
+        await nextRender(subMenu);
+        const item = subMenu.$.overlay.querySelector('vaadin-context-menu-item');
+        arrowLeft(item);
+        await nextRender(subMenu);
+        expect(subMenu.opened).to.be.true;
+        expect(subMenu.listenOn).to.equal(buttons[2]);
+      });
+
+      (isIOS ? it.skip : it)('should focus first item on arrow down after opened on arrow left', async() => {
+        arrowDown(buttons[0]);
+        await onceOpened(subMenu);
+        expect(subMenu.opened).to.be.true;
+        let item = subMenu.$.overlay.querySelector('vaadin-context-menu-item');
+        await nextRender(subMenu);
+        arrowLeft(item);
+        await nextRender(subMenu);
+        item = subMenu.$.overlay.querySelector('vaadin-context-menu-item');
+        const spy = sinon.spy(item, 'focus');
+        arrowDown(buttons[2]);
+        expect(spy).to.be.calledOnce;
+      });
+
+      (isIOS ? it.skip : it)('should focus last item on arrow down after opened on arrow left', async() => {
+        arrowDown(buttons[0]);
+        await onceOpened(subMenu);
+        expect(subMenu.opened).to.be.true;
+        const item = subMenu.$.overlay.querySelector('vaadin-context-menu-item');
+        await nextRender(subMenu);
+        arrowLeft(item);
+        await nextRender(subMenu);
+        const items = subMenu.$.overlay.querySelectorAll('vaadin-context-menu-item');
+        const last = items[items.length - 1];
+        const spy = sinon.spy(last, 'focus');
+        arrowUp(buttons[2]);
+        expect(spy).to.be.calledOnce;
+      });
+
+      (isIOS ? it.skip : it)('should switch submenu again on subsequent arrow left', async() => {
+        menu.items[1] = {text: 'Menu Item 2', children: [{text: 'Menu Item 2 1'}]},
+        menu.render();
+        buttons = menu._buttons;
+        await nextRender(menu);
+        arrowDown(buttons[0]);
+        await nextRender(subMenu);
+        const item = subMenu.$.overlay.querySelector('vaadin-context-menu-item');
+        arrowLeft(item);
+        await nextRender(subMenu);
+        arrowLeft(buttons[2]);
+        await nextRender(subMenu);
+        expect(subMenu.opened).to.be.true;
+        expect(subMenu.listenOn).to.equal(buttons[1]);
+        expect(buttons[1].hasAttribute('focused')).to.be.true;
+      });
+
       it('should close sub-menu on outside click', async() => {
         buttons[0].click();
         await nextRender(subMenu);
