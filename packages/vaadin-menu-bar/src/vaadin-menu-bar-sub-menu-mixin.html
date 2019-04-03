@@ -108,7 +108,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
-      const {item} = e.detail;
+      const {item, options} = e.detail;
       const items = item && item.children;
       if (!items || items.length === 0) {
         this.__fireItemSelected(item);
@@ -130,6 +130,16 @@ This program is available under Apache License Version 2.0, available at https:/
 
         button.setAttribute('expanded', '');
       });
+
+      if (options.focusLast) {
+        const focusLast = () => {
+          const listBox = subMenu.$.overlay.firstElementChild;
+          const lastItem = listBox.items[listBox.items.length - 1];
+          lastItem.focus();
+          subMenu.$.overlay.removeEventListener('vaadin-overlay-open', focusLast);
+        };
+        subMenu.$.overlay.addEventListener('vaadin-overlay-open', focusLast);
+      }
     }
 
     __onItemSelected(e) {

@@ -97,6 +97,17 @@
         expect(spy.firstCall.args[0].defaultPrevented).to.be.true;
       });
 
+      (isIOS ? it.skip : it)('should open sub-menu and focus last item on arrow up', async() => {
+        arrowUp(buttons[0]);
+        await onceOpened(subMenu);
+        expect(subMenu.opened).to.be.true;
+        const items = subMenu.$.overlay.querySelectorAll('vaadin-context-menu-item');
+        const last = items[items.length - 1];
+        const spy = sinon.spy(last, 'focus');
+        await nextRender(subMenu);
+        expect(spy).to.be.calledOnce;
+      });
+
       (isIOS ? it.skip : it)('should close sub-menu on first item arrow up', async() => {
         arrowDown(buttons[0]);
         await nextRender(subMenu);

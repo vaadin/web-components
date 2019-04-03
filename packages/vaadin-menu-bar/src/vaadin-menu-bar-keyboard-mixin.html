@@ -27,10 +27,15 @@ This program is available under Apache License Version 2.0, available at https:/
       this.addEventListener('focusin', e => this._onFocusin(e));
 
       const container = this._container;
-      container.addEventListener('click', e => this._onItemClick(e));
+      container.addEventListener('click', e => this._activateButton(e));
       container.addEventListener('keydown', e => {
+        // ArrowDown
         if (e.keyCode === 40) {
-          this._onItemClick(e);
+          this._activateButton(e);
+        }
+        // ArrowUp
+        if (e.keyCode === 38) {
+          this._activateButton(e, {focusLast: true});
         }
       });
     }
@@ -43,20 +48,20 @@ This program is available under Apache License Version 2.0, available at https:/
       return this.shadowRoot.querySelector('[part="container"]');
     }
 
-    _dispatchClick(button) {
+    _dispatchClick(button, options = {}) {
       button.dispatchEvent(new CustomEvent('button-click', {
-        detail: {item: button.item},
+        detail: {item: button.item, options},
         bubbles: true,
         composed: true
       }));
     }
 
-    _onItemClick(e) {
+    _activateButton(e, options = {}) {
       e.preventDefault();
       e.stopPropagation();
       const button = Array.from(e.composedPath()).filter(el => el.item)[0];
       if (button) {
-        this._dispatchClick(button);
+        this._dispatchClick(button, options);
       }
     }
 

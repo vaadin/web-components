@@ -15,6 +15,7 @@
     "arrowRight": false,
     "home": false,
     "end": false,
+    "onceOpened": false,
     "sinon": false
   }
 }
