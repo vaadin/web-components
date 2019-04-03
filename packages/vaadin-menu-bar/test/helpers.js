@@ -27,10 +27,7 @@ window.onceOpened = function(element) {
     const listener = (e) => {
       if (e.detail.value) {
         element.removeEventListener('opened-changed', listener);
-        // wait for scroll position adjustment
-        window.requestAnimationFrame(() => {
-          resolve();
-        });
+        resolve();
       }
     };
     element.addEventListener('opened-changed', listener);
