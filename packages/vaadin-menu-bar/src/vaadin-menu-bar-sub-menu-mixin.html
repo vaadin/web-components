@@ -132,14 +132,23 @@ This program is available under Apache License Version 2.0, available at https:/
       });
 
       if (options.focusLast) {
-        const focusLast = () => {
-          const listBox = subMenu.$.overlay.firstElementChild;
-          const lastItem = listBox.items[listBox.items.length - 1];
-          lastItem.focus();
-          subMenu.$.overlay.removeEventListener('vaadin-overlay-open', focusLast);
-        };
-        subMenu.$.overlay.addEventListener('vaadin-overlay-open', focusLast);
+        this.__onceOpened(() => this._focusLastItem());
       }
+    }
+
+    _focusLastItem() {
+      const list = this._subMenu.$.overlay.firstElementChild;
+      const item = list.items[list.items.length - 1];
+      item.focus();
+    }
+
+    __onceOpened(cb) {
+      const overlay = this._subMenu.$.overlay;
+      const listener = () => {
+        cb();
+        overlay.removeEventListener('vaadin-overlay-open', listener);
+      };
+      overlay.addEventListener('vaadin-overlay-open', listener);
     }
 
     __onItemSelected(e) {
