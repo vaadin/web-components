@@ -110,9 +110,10 @@
 
       (isIOS ? it.skip : it)('should close sub-menu on first item arrow up', async() => {
         arrowDown(buttons[0]);
-        await nextRender(subMenu);
-
+        await onceOpened(subMenu);
         item = subMenu.$.overlay.querySelector('vaadin-context-menu-item');
+        expect(item).to.be.ok;
+        await nextRender(subMenu);
         arrowUp(item);
         await nextRender(subMenu);
         expect(subMenu.opened).to.be.false;
