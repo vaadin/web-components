@@ -10,6 +10,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../vaadin-context-menu/src/vaadin-context-menu.html">
 <link rel="import" href="vaadin-menu-bar-button.html">
 <link rel="import" href="vaadin-menu-bar-buttons-mixin.html">
+<link rel="import" href="vaadin-menu-bar-keyboard-mixin.html">
 <link rel="import" href="vaadin-menu-bar-sub-menu-mixin.html">
 
 <dom-module id="vaadin-menu-bar">
@@ -68,8 +69,9 @@ This program is available under Apache License Version 2.0, available at https:/
       class MenuBarElement extends
         Vaadin.MenuBar.ButtonsMixin(
           Vaadin.MenuBar.SubMenuMixin(
-            Vaadin.ElementMixin(
-              Vaadin.ThemableMixin(Polymer.Element)))) {
+            Vaadin.MenuBar.KeyboardMixin(
+              Vaadin.ElementMixin(
+                Vaadin.ThemableMixin(Polymer.Element))))) {
 
         static get is() {
           return 'vaadin-menu-bar';
