@@ -131,6 +131,18 @@
         expect(subMenu.listenOn).to.equal(buttons[2]);
       });
 
+      (isIOS ? it.skip : it)('should switch menubar item and open submenu on arrow right', async() => {
+        arrowDown(buttons[2]);
+        await onceOpened(subMenu);
+        expect(subMenu.opened).to.be.true;
+        await nextRender(subMenu);
+        const item = subMenu.$.overlay.querySelector('vaadin-context-menu-item');
+        arrowRight(item);
+        await nextRender(subMenu);
+        expect(subMenu.opened).to.be.true;
+        expect(subMenu.listenOn).to.equal(buttons[0]);
+      });
+
       (isIOS ? it.skip : it)('should focus first item on arrow down after opened on arrow left', async() => {
         arrowDown(buttons[0]);
         await onceOpened(subMenu);

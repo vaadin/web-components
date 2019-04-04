@@ -219,8 +219,8 @@ This program is available under Apache License Version 2.0, available at https:/
       if (e.keyCode === 38 && item === list.items[0]) {
         this._close(true);
       }
-      // ArrowLeft
-      if (e.keyCode === 37) {
+      // ArrowLeft, or ArrowRight on non-parent submenu item
+      if (e.keyCode === 37 || (e.keyCode === 39 && !item._item.children)) {
         this._close(true);
         this._navigateByKey(e);
         const button = this.shadowRoot.activeElement;
