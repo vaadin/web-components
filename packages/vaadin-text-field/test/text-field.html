@@ -193,6 +193,12 @@
             expect(changeSpy).to.be.calledOnce;
           });
 
+          it('should prevent default on clear button click', function() {
+            const event = new Event('click', {cancelable: true});
+            textField.$.clearButton.dispatchEvent(event);
+            expect(event.defaultPrevented).to.be.true;
+          });
+
           it('should set _valueClearing flag not to dipatch change event on mousedown and remove it it on click', function() {
             // Testing internal implementation as it impossible to test native change event.
             // For case when the field is focused, value is changed, clear button is pressed.

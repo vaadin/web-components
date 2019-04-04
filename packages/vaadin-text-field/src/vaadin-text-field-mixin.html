@@ -587,6 +587,7 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _onClearButtonClick(e) {
+      e.preventDefault();
       // NOTE(yuriy): This line won't affect focus on the host. Cannot be properly tested.
       this.inputElement.focus();
       this.clear();
