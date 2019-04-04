@@ -83,6 +83,10 @@ This program is available under Apache License Version 2.0, available at https:/
         super.disconnectedCallback();
       }
 
+      _isShadyCSS() {
+        return window.ShadyCSS && !window.ShadyCSS.nativeCSS;
+      }
+
       _afterFirstRender() {
         this._blockAnimationUntilAfterNextRender();
         this._updateOffsetSize();
@@ -97,7 +101,12 @@ This program is available under Apache License Version 2.0, available at https:/
 
       _blockAnimationUntilAfterNextRender() {
         this.setAttribute('no-anim', '');
-        Polymer.RenderStatus.afterNextRender(this, () => this.removeAttribute('no-anim'));
+        Polymer.RenderStatus.afterNextRender(this, () => {
+          this.removeAttribute('no-anim');
+          if (this._isShadyCSS()) {
+            window.ShadyCSS.styleSubtree(this);
+          }
+        });
       }
     };
   </script>

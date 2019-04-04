@@ -29,8 +29,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
       :host([overlay]) {
         --vaadin-app-layout-drawer-offset-left: 0;
-        --vaadin-app-layout-navbar-offset-top: 0;
-        --vaadin-app-layout-navbar-offset-bottom: 0;
         --vaadin-app-layout-navbar-offset-left: 0;
       }
 
@@ -103,6 +101,11 @@ This program is available under Apache License Version 2.0, available at https:/
         pointer-events: none;
         transition: opacity var(--vaadin-app-layout-transition);
         -webkit-tap-highlight-color: transparent;
+      }
+
+      :host([overlay]) [part="drawer"] {
+        top: 0;
+        bottom: 0;
       }
 
       :host([overlay]) [part="drawer"],
@@ -196,6 +199,7 @@ This program is available under Apache License Version 2.0, available at https:/
             this._updateDrawerSize();
           });
           this._updateDrawerSize();
+          this._updateOverlayMode();
         }
 
         _setupDrawerToggleClickListener() {
@@ -238,24 +242,36 @@ This program is available under Apache License Version 2.0, available at https:/
           const navbar = this.shadowRoot.querySelector('[part="navbar"]');
           const navbarRect = navbar.getBoundingClientRect();
 
-          // TODO(jouni): use shady css if we want to support IE11
-          this.style.setProperty('--_vaadin-app-layout-navbar-offset-size', navbarRect.height + 'px');
-
           const navbarBottom = this.shadowRoot.querySelector('[part="navbar"][bottom]');
           const navbarBottomRect = navbarBottom.getBoundingClientRect();
-          this.style.setProperty('--_vaadin-app-layout-navbar-offset-size-bottom', navbarBottomRect.height + 'px');
+
+          if (this._isShadyCSS()) {
+            window.ShadyCSS.styleSubtree(this, {
+              '--_vaadin-app-layout-navbar-offset-size': navbarRect.height + 'px',
+              '--_vaadin-app-layout-navbar-offset-size-bottom': navbarBottomRect.height + 'px'
+            });
+          } else {
+            this.style.setProperty('--_vaadin-app-layout-navbar-offset-size', navbarRect.height + 'px');
+            this.style.setProperty('--_vaadin-app-layout-navbar-offset-size-bottom', navbarBottomRect.height + 'px');
+          }
 
           const drawer = this.shadowRoot.querySelector('[part="drawer"]');
           const drawerRect = drawer.getBoundingClientRect();
 
-          // TODO(jouni): use shady css if we want to support IE11
-          this.style.setProperty('--_vaadin-app-layout-drawer-offset-size', drawerRect.width + 'px');
+          if (this._isShadyCSS()) {
+            window.ShadyCSS.styleSubtree(this, {
+              '--_vaadin-app-layout-drawer-offset-size': drawerRect.width + 'px',
+              // Have to update both because ShadyCSS may not apply the one below if not in use
+              '--vaadin-app-layout-drawer-offset-left': 'var(--_vaadin-app-layout-drawer-offset-size)'
+            });
+          } else {
+            this.style.setProperty('--_vaadin-app-layout-drawer-offset-size', drawerRect.width + 'px');
+          }
+
         }
 
         _updateOverlayMode() {
-          // TODO(jouni): use shady css if we want to support IE11
-          let overlay = getComputedStyle(this).getPropertyValue('--vaadin-app-layout-drawer-overlay');
-          overlay = overlay.trim().toLowerCase() == 'true';
+          const overlay = this._getCustomPropertyValue('--vaadin-app-layout-drawer-overlay') == 'true';
 
           this.overlay = overlay;
 
@@ -271,12 +287,21 @@ This program is available under Apache License Version 2.0, available at https:/
           this.drawerOpened = false;
         }
 
+        _getCustomPropertyValue(customProperty) {
+          let customPropertyValue;
+
+          if (this._isShadyCSS()) {
+            window.ShadyCSS.styleSubtree(this);
+            customPropertyValue = window.ShadyCSS.getComputedStyleValue(this, customProperty);
+          } else {
+            customPropertyValue = getComputedStyle(this).getPropertyValue(customProperty);
+          }
+
+          return (customPropertyValue || '').trim().toLowerCase();
+        }
+
         _updateTouchOptimizedMode() {
-          // TODO(jouni): use shady css if we want to support IE11
-          const touchOptimized = getComputedStyle(this)
-            .getPropertyValue('--vaadin-app-layout-touch-optimized')
-            .trim()
-            .toLowerCase() == 'true';
+          const touchOptimized = this._getCustomPropertyValue('--vaadin-app-layout-touch-optimized') == 'true';
 
           const navbarBottom = this.shadowRoot.querySelector('[part="navbar"][bottom]');
           const navbars = this.querySelectorAll('[slot*="navbar"]');

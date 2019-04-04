@@ -81,6 +81,16 @@
           layout.style.removeProperty('--vaadin-app-layout-drawer-overlay');
         });
       });
+
+      it('should close drawer on small devices if [part=backdrop] is clicked', () => {
+        layout.overlay = true; // force overlay=true to show backdrop
+        layout.drawerOpened = true; // force drawer to be opened
+
+        const backdrop = layout.shadowRoot.querySelector('[part="backdrop"]');
+        backdrop.click();
+
+        expect(layout.drawerOpened).to.be.false;
+      });
     });
   </script>
 </body>

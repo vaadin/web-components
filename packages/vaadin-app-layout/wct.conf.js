@@ -39,8 +39,7 @@ module.exports = {
 
     const saucelabsPlatformsMicrosoft = [
       'Windows 10/microsoftedge@17',
-      // Remove IE11 temporarily
-      // 'Windows 10/internet explorer@11'
+      'Windows 10/internet explorer@11'
     ];
 
     const saucelabsPlatformsDesktop = [
