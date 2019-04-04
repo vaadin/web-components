@@ -41,7 +41,12 @@
             text: 'Menu Item 1',
             children: [
               {text: 'Menu Item 1 1'},
-              {text: 'Menu Item 1 2'}
+              {
+                text: 'Menu Item 1 2',
+                children: [
+                  {text: 'Menu Item 1 2 1'}
+                ]
+              }
             ]
           },
           {text: 'Menu Item 2'},
@@ -210,6 +215,17 @@
         expect(subMenu.opened).to.be.false;
         expect(spy).to.be.calledOnce;
         expect(spy.firstCall.args[0].detail.value).to.deep.equal({text: 'Menu Item 1 1'});
+      });
+
+      (isIOS ? it.skip : it)('should not close on parent item click', async() => {
+        arrowUp(buttons[0]);
+        await onceOpened(subMenu);
+        const items = subMenu.$.overlay.querySelectorAll('vaadin-context-menu-item');
+        const last = items[items.length - 1];
+        await nextRender(subMenu);
+        last.click();
+        await nextRender(subMenu);
+        expect(subMenu.opened).to.be.true;
       });
 
       it('should dispatch item-selected event on leaf button click', () => {

@@ -231,7 +231,8 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     __outsideClickListener(e) {
-      if (e.composedPath().indexOf(this) === -1) {
+      const path = e.composedPath();
+      if (path.indexOf(this) === -1 && path.indexOf(this._subMenu.$.overlay) === -1) {
         this._close();
       }
     }
