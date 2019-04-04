@@ -193,6 +193,26 @@ This program is available under Apache License Version 2.0, available at https:/
         },
 
         /**
+         * Object with translated strings used for localization. Has
+         * the following structure and default values:
+         *
+         * ```
+         * {
+         *   // Translation of the clear icon button accessible label
+         *   clear: 'Clear'
+         * }
+         * ```
+         */
+        i18n: {
+          type: Object,
+          value: () => {
+            return {
+              clear: 'Clear'
+            };
+          }
+        },
+
+        /**
          * String used for the label element.
          */
         label: {
