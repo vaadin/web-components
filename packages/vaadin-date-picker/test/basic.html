@@ -44,12 +44,6 @@
     </template>
   </test-fixture>
 
-  <test-fixture id="datepicker-theme">
-    <template>
-      <vaadin-date-picker theme="foo"></vaadin-date-picker>
-    </template>
-  </test-fixture>
-
   <test-fixture id="datepicker-clear-button-visible">
     <template>
       <vaadin-date-picker clear-button-visible></vaadin-date-picker>
@@ -647,50 +641,6 @@
           datepicker.clearButtonVisible = true;
           expect(datepicker).to.have.property('clearButtonVisible', true);
           expect(textfield).to.have.property('clearButtonVisible', true);
-        });
-      });
-    });
-
-    describe('Basic features theme attribute', () => {
-      let datepicker;
-
-      beforeEach(() => datepicker = fixture('datepicker-theme'));
-
-      it('should propagate theme attribute to text-field', () => {
-        expect(datepicker._inputElement.getAttribute('theme')).to.equal('foo');
-      });
-
-      it('should propagate theme attribute to overlay', () => {
-        datepicker.open();
-        expect(datepicker.$.overlay.getAttribute('theme')).to.equal('foo');
-      });
-
-      it('should propagate theme attribute to overlay content', () => {
-        datepicker.open();
-        const overlayContent = datepicker.$.overlay.content
-          .querySelector('#overlay-content');
-        expect(overlayContent.getAttribute('theme')).to.equal('foo');
-      });
-
-      describe('in content', () => {
-        let overlayContent;
-
-        beforeEach(done => {
-          open(datepicker, () => {
-            overlayContent = datepicker.$.overlay.content
-              .querySelector('#overlay-content');
-            overlayContent.$.yearScroller.bufferSize = 0;
-            overlayContent.$.monthScroller.bufferSize = 1;
-            overlayContent.$.yearScroller._finishInit();
-            overlayContent.$.monthScroller._finishInit();
-            done();
-          });
-        });
-
-        it('should propagate theme attribute to month calendar', () => {
-          const monthCalendar = overlayContent.$.monthScroller
-            .querySelector('vaadin-month-calendar');
-          expect(monthCalendar.getAttribute('theme')).to.equal('foo');
         });
       });
     });

@@ -36,8 +36,8 @@ function listenForEvent(elem, type, callback) {
 }
 
 function open(datepicker, callback) {
-  datepicker.open();
   listenForEvent(datepicker.$.overlay, 'vaadin-overlay-open', callback);
+  datepicker.open();
 }
 
 function close(datepicker, callback) {

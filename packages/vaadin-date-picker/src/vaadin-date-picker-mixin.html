@@ -498,6 +498,13 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+
+    __getOverlayTheme(theme, overlayInitialized) {
+      if (overlayInitialized) {
+        return theme;
+      }
+    }
+
     _handleDateChange(property, value, oldValue) {
       if (!value) {
         this[property] = '';

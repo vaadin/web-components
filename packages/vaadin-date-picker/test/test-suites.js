@@ -10,6 +10,7 @@ window.VaadinDatePickerSuites = [
   'custom-input.html',
   'keyboard-navigation.html',
   'keyboard-input.html',
+  'theme-propagation.html',
   'wai-aria.html'
 ];
 

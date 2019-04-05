@@ -32,7 +32,7 @@ This program is available under Apache License Version 2.0, available at https:/
         fullscreen$="[[_fullscreen]]"
         on-vaadin-overlay-open="_onOverlayOpened"
         on-vaadin-overlay-close="_onOverlayClosed"
-        theme$="[[theme]]">
+        theme$="[[__getOverlayTheme(theme, _overlayInitialized)]]">
       <template>
         <vaadin-date-picker-overlay-content
           id="overlay-content" i18n="[[i18n]]"
@@ -47,7 +47,7 @@ This program is available under Apache License Version 2.0, available at https:/
           on-date-tap="_close"
           role="dialog"
           part="overlay-content"
-          theme$="[[theme]]">
+          theme$="[[__getOverlayTheme(theme, _overlayInitialized)]]">
         </vaadin-date-picker-overlay-content>
       </template>
     </vaadin-date-picker-overlay>
