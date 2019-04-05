@@ -124,8 +124,7 @@ This program is available under Apache License Version 2.0, available at https:/
       // IE names for arrows do not include the Arrow prefix
       const key = event.key.replace(/^Arrow/, '');
       const buttons = this._buttons;
-
-      const currentBtn = this.shadowRoot.activeElement;
+      const currentBtn = this.shadowRoot.activeElement || this._expandedButton;
       const currentIdx = buttons.indexOf(currentBtn);
       let idx;
       let increment;
@@ -157,7 +156,7 @@ This program is available under Apache License Version 2.0, available at https:/
         const btn = buttons[idx];
         const wasExpanded = currentBtn === this._expandedButton;
         if (wasExpanded) {
-          this._close(true);
+          this._close();
         }
         this._focusButton(btn);
         if (wasExpanded && btn.item && btn.item.children) {
@@ -221,7 +220,8 @@ This program is available under Apache License Version 2.0, available at https:/
       }
       // ArrowLeft, or ArrowRight on non-parent submenu item
       if (e.keyCode === 37 || (e.keyCode === 39 && !item._item.children)) {
-        this._close(true);
+        // Prevent ArrowLeft from being handled in context-menu
+        e.stopImmediatePropagation();
         this._navigateByKey(e);
         const button = this.shadowRoot.activeElement;
         if (button && button.item && button.item.children) {
