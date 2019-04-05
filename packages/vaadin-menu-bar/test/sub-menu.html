@@ -337,7 +337,7 @@
           await nextRender(subMenu);
           expect(buttons[0].hasAttribute('expanded')).to.be.true;
 
-          MockInteractions.pressAndReleaseKeyOn(subMenu.$.overlay, 27, [], 'Escape');
+          esc(subMenu.$.overlay);
           await nextRender(subMenu);
           expect(buttons[0].hasAttribute('expanded')).to.be.false;
           expect(buttons[0].hasAttribute('focus-ring')).to.be.true;

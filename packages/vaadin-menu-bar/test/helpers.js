@@ -23,7 +23,7 @@ window.end = function(target) {
 };
 
 window.esc = function(target) {
-  MockInteractions.keyDownOn(target, 27, [], 'Esc');
+  MockInteractions.keyDownOn(target, 27, [], 'Escape');
 };
 
 window.onceOpened = function(element) {
