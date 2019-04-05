@@ -762,6 +762,15 @@ This program is available under Apache License Version 2.0, available at https:/
           this.notifyResize();
         }
       }
+
+      __forceReflow() {
+        this._debouncerForceReflow = Polymer.Debouncer.debounce(this._debouncerForceReflow,
+          Polymer.Async.animationFrame, () => {
+            this.$.scroller.style.overflow = 'hidden';
+            setTimeout(() => this.$.scroller.style.overflow = '');
+          }
+        );
+      }
     }
 
     /**

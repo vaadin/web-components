@@ -19,6 +19,9 @@
     if (grid._debounceScrollPeriod) {
       grid._debounceScrollPeriod.flush();
     }
+    if (grid._debouncerForceReflow) {
+      grid._debouncerForceReflow.flush();
+    }
     Polymer.flush();
     if (grid._debouncerLoad) {
       grid._debouncerLoad.flush();

@@ -155,6 +155,23 @@
           expect(grid.$.items.children.length).to.equal(rows);
         });
 
+        // NOTE: This issue only manifests with scrollbars that affect the layout
+        // (On mac: Show scroll bars: Always) and Chrome / Safari browser
+        it('should have correct layout after column width change', done => {
+          grid.style.height = '';
+          grid.heightByRows = true;
+          grid.querySelector('vaadin-grid-column').width = '300px';
+          // Before next render
+          animationFrameFlush(() => {
+            // After next render
+            setTimeout(() => {
+              expect(grid.$.scroller.getBoundingClientRect().bottom)
+                .to.equal(grid.$.table.getBoundingClientRect().bottom);
+              done();
+            });
+          });
+        });
+
         describe('flexbox parent', () => {
 
           beforeEach(() => {

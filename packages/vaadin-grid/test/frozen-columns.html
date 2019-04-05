@@ -58,7 +58,7 @@
 
       it('should not transform frozen sizer elements', done => {
         columns[0].frozen = true;
-        grid.$.table.addEventListener('scroll', () => {
+        listenOnce(grid.$.table, 'scroll', () => {
           const outerCell = grid.$.outerscroller.querySelector('[frozen]');
           expect(getComputedStyle(outerCell).transform).to.equal('none');
           done();
@@ -100,7 +100,7 @@
             const containerTop = parseInt(borderTopWidth) + initialContainerRect.top + 2;
             const cells = getRowCells(containerRows[0]);
 
-            grid.$.table.addEventListener('scroll', () => {
+            listenOnce(grid.$.table, 'scroll', () => {
               expect(isVisible(cells[0])).to.equal(true);
               expect(isVisible(cells[2])).to.equal(true);
               done();
@@ -112,8 +112,9 @@
           it('should update transforms when frozen columns decrease', done => {
             let cells = getRowCells(containerRows[0]);
 
-            grid.$.table.addEventListener('scroll', () => {
-              expect(cells[0].style.transform).to.eql('translate(' + defaultCellWidth + 'px, 0px)');
+            listenOnce(grid.$.table, 'scroll', () => {
+              const expected = ['translate(' + defaultCellWidth + 'px, 0px)', 'translate(' + defaultCellWidth + 'px)'];
+              expect(expected).to.include(cells[0].style.transform);
 
               grid._columnTree[0][0].frozen = false;
               cells = getRowCells(getRows(containerElement)[0]);
@@ -129,14 +130,15 @@
           it('should update transforms when frozen columns increase', done => {
             let cells = getRowCells(containerRows[0]);
 
-            grid.$.table.addEventListener('scroll', () => {
+            listenOnce(grid.$.table, 'scroll', () => {
               expect(cells[1].style.transform).to.eql('');
 
               grid._columnTree[0][1].frozen = true;
               cells = getRowCells(getRows(containerElement)[0]);
               grid._debouncerCacheElements.flush();
 
-              expect(cells[1].style.transform).to.eql('translate(' + defaultCellWidth + 'px, 0px)');
+              const expected = ['translate(' + defaultCellWidth + 'px, 0px)', 'translate(' + defaultCellWidth + 'px)'];
+              expect(expected).to.include(cells[1].style.transform);
               done();
             });
             grid.$.table.scrollLeft = defaultCellWidth;
