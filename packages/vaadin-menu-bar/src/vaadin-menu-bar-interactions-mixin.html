@@ -304,7 +304,7 @@ This program is available under Apache License Version 2.0, available at https:/
     _focusLastItem() {
       const list = this._subMenu.$.overlay.firstElementChild;
       const item = list.items[list.items.length - 1];
-      item.focus();
+      item && item.focus();
     }
 
     __onceOpened(cb) {
