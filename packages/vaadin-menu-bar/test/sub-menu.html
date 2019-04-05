@@ -188,7 +188,7 @@
         expect(spy).to.be.calledOnce;
       });
 
-      (isIOS ? it.skip : it)('should focus last item on arrow down after opened on arrow left', async() => {
+      (isIOS ? it.skip : it)('should focus last item on arrow up after opened on arrow left', async() => {
         arrowDown(buttons[0]);
         await onceOpened(subMenu);
         expect(subMenu.opened).to.be.true;
