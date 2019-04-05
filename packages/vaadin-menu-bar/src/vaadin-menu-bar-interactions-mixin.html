@@ -114,6 +114,8 @@ This program is available under Apache License Version 2.0, available at https:/
           } else {
             this.__openSubMenu(button, {focusLast: true});
           }
+        } else if (event.keyCode === 27 && button === this._expandedButton) {
+          this._close(true);
         } else {
           this._navigateByKey(event);
         }
@@ -244,7 +246,9 @@ This program is available under Apache License Version 2.0, available at https:/
     __onButtonClick(e) {
       e.stopPropagation();
       const button = this._getButtonFromEvent(e);
-      this.__openSubMenu(button);
+      if (button) {
+        this.__openSubMenu(button);
+      }
     }
 
     __openSubMenu(button, options = {}) {

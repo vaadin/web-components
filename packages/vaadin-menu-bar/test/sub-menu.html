@@ -220,6 +220,20 @@
         expect(buttons[1].hasAttribute('focused')).to.be.true;
       });
 
+      (isIOS ? it.skip : it)('should close submenu on Esc after switch on arrow left', async() => {
+        arrowDown(buttons[0]);
+        await onceOpened(subMenu);
+        expect(subMenu.opened).to.be.true;
+        await nextRender(subMenu);
+        const item = subMenu.$.overlay.querySelector('vaadin-context-menu-item');
+        arrowLeft(item);
+        await nextRender(subMenu);
+        esc(buttons[2]);
+        await nextRender(subMenu);
+        expect(subMenu.opened).to.be.false;
+        expect(buttons[2].hasAttribute('focused')).to.be.true;
+      });
+
       it('should close sub-menu on outside click', async() => {
         buttons[0].click();
         await nextRender(subMenu);
