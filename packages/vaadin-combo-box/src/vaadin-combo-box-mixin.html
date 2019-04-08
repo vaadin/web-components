@@ -247,7 +247,7 @@ This program is available under Apache License Version 2.0, available at https:/
       // 2.0 does not support 'overlay.selection-changed' syntax in listeners
       this.$.overlay.addEventListener('selection-changed', this._overlaySelectedItemChanged.bind(this));
 
-      this.addEventListener('vaadin-combo-box-dropdown-closed', this._onClosed.bind(this));
+      this.addEventListener('vaadin-combo-box-dropdown-closed', this.close.bind(this));
       this.addEventListener('vaadin-combo-box-dropdown-opened', this._onOpened.bind(this));
       this.addEventListener('keydown', this._onKeyDown.bind(this));
       this.addEventListener('click', this._onClick.bind(this));
