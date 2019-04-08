@@ -248,6 +248,14 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       this.__edited = {cell, column, model};
       column._startCellEdit(cell, model);
 
+      this.dispatchEvent(new CustomEvent('cell-edit-started', {
+        detail: {
+          index: model.index,
+          item: model.item,
+          path: column.path
+        },
+        composed: true
+      }));
       this.addEventListener('item-property-changed', this.__boundItemPropertyChanged);
     }
 
