@@ -290,11 +290,15 @@
             if (subMenu.items !== itemElement._item.children) {
               subMenu.close();
             }
-
-            if (menu.opened && itemElement._item.children && itemElement._item.children.length) {
+            if (!menu.opened) {
+              return;
+            }
+            if (itemElement._item.children && itemElement._item.children.length) {
               itemElement.setAttribute('aria-expanded', 'true');
               itemElement.setAttribute('expanded', '');
               this.__openSubMenu(subMenu, itemElement);
+            } else {
+              subMenu.listenOn.focus();
             }
           }
         };
