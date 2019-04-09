@@ -305,6 +305,18 @@
           expect(subMenu.opened).to.be.true;
         });
 
+        it('should open item on enter', () => {
+          subMenu.close();
+          fire(menuComponents()[0], 'keydown', {}, {keyCode: 13, key: 'Enter'});
+          expect(subMenu.opened).to.be.true;
+        });
+
+        it('should open item on space', () => {
+          subMenu.close();
+          fire(menuComponents()[0], 'keydown', {}, {keyCode: 32, key: 'Space'});
+          expect(subMenu.opened).to.be.true;
+        });
+
         it('should have modeless sub menus', () => {
           const rootItemRect = menuComponents()[0].getBoundingClientRect();
           const element = document.elementFromPoint(rootItemRect.left, rootItemRect.top);

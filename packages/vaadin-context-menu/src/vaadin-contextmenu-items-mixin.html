@@ -305,7 +305,8 @@
 
         const openEvent = this._touch ? 'touchstart' : 'mouseover';
         menu.$.overlay.addEventListener(openEvent, openSubMenu);
-        menu.$.overlay.addEventListener('keydown', e => e.keyCode === 39 && openSubMenu(e));
+        menu.$.overlay.addEventListener('keydown', e =>
+          (e.keyCode === 39 || e.keyCode === 13 || e.keyCode === 32) && openSubMenu(e));
       }
     }
 
