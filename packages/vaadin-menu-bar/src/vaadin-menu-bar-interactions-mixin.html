@@ -283,6 +283,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }}));
 
         button.setAttribute('expanded', '');
+        button.setAttribute('aria-expanded', 'true');
       });
 
       if (options.focusLast) {
@@ -330,6 +331,7 @@ This program is available under Apache License Version 2.0, available at https:/
       const button = this._expandedButton;
       if (button && button.hasAttribute('expanded')) {
         button.removeAttribute('expanded');
+        button.setAttribute('aria-expanded', 'false');
         if (restoreFocus) {
           this._focusButton(button);
         }

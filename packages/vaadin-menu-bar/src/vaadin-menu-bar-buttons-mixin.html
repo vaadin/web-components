@@ -49,7 +49,13 @@ This program is available under Apache License Version 2.0, available at https:/
     ready() {
       super.ready();
 
+      this.setAttribute('role', 'menubar');
+
       this.addEventListener('iron-resize', e => this.__onResize());
+
+      this._ellipsis.setAttribute('role', 'menuitem');
+      this._ellipsis.setAttribute('aria-haspopup', 'true');
+      this._ellipsis.setAttribute('aria-expanded', 'false');
     }
 
     get _buttons() {
@@ -58,6 +64,10 @@ This program is available under Apache License Version 2.0, available at https:/
 
     get _container() {
       return this.shadowRoot.querySelector('[part="container"]');
+    }
+
+    get _ellipsis() {
+      return this.shadowRoot.querySelector('[part="ellipsis-button"]');
     }
 
     _menuItemsChanged(items, splices) {
@@ -159,7 +169,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     __renderButtons(items = []) {
       const container = this._container;
-      const ellipsis = container.querySelector('[part="ellipsis-button"]');
+      const ellipsis = this._ellipsis;
 
       while (container.children.length > 1) {
         container.removeChild(container.firstElementChild);
@@ -198,11 +208,16 @@ This program is available under Apache License Version 2.0, available at https:/
         } else {
           button.setAttribute('tabindex', '0');
         }
+        if (button.item.children) {
+          button.setAttribute('aria-haspopup', 'true');
+          button.setAttribute('aria-expanded', 'false');
+        }
         button.setAttribute('part', 'menu-bar-button');
         if (this.theme && this.theme !== '') {
           button.setAttribute('theme', this.theme);
         }
         container.insertBefore(button, ellipsis);
+        button.setAttribute('role', 'menuitem');
       });
 
       this.__detectOverflow();
