@@ -1,6 +1,6 @@
 <!--
 @license
-Vaadin Navbar Layout
+Vaadin App Layout
 Copyright (C) 2019 Vaadin Ltd
 This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
 -->
@@ -8,19 +8,35 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="safe-area-inset.html">
 <link rel="import" href="detect-ios-navbar.html">
 <link rel="import" href="../../polymer/polymer-element.html">
-<link rel="import" href="vaadin-app-layout-mixin.html">
+<link rel="import" href="../../polymer/lib/utils/render-status.html">
+<link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
+<link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
+
 <link rel="import" href="../../polymer/lib/utils/flattened-nodes-observer.html">
 
 <dom-module id="vaadin-app-layout">
   <template>
-    <style include="vaadin-app-layout-mixin">
+    <style>
       :host {
+        display: block;
+        box-sizing: border-box;
+        height: 100%;
+        --vaadin-app-layout-transition: 200ms;
+        transition: padding var(--vaadin-app-layout-transition);
         --vaadin-app-layout-touch-optimized: false;
         --vaadin-app-layout-navbar-offset-top: var(--_vaadin-app-layout-navbar-offset-size);
         --vaadin-app-layout-navbar-offset-bottom: var(--_vaadin-app-layout-navbar-offset-size-bottom);
         padding-top: var(--vaadin-app-layout-navbar-offset-top);
         padding-bottom: var(--vaadin-app-layout-navbar-offset-bottom);
         padding-left: var(--vaadin-app-layout-navbar-offset-left);
+      }
+
+      :host([hidden]) {
+        display: none !important;
+      }
+
+      :host([no-anim]) {
+        --vaadin-app-layout-transition: none !important;
       }
 
       :host([drawer-opened]) {
@@ -30,6 +46,15 @@ This program is available under Apache License Version 2.0, available at https:/
       :host([overlay]) {
         --vaadin-app-layout-drawer-offset-left: 0;
         --vaadin-app-layout-navbar-offset-left: 0;
+      }
+
+      :host(:not([no-scroll])) [content] {
+        overflow: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      [content] {
+        height: 100%;
       }
 
       @media (pointer: coarse) and (max-width: 800px) and (min-height: 500px) {
@@ -152,11 +177,11 @@ This program is available under Apache License Version 2.0, available at https:/
 
       /**
        * @memberof Vaadin
-       * @mixes Vaadin.AppLayoutMixin
-       * @extends Polymer.Element
+       * @mixes Vaadin.ElementMixin
+       * @mixes Vaadin.ThemableMixin
        * @demo demo/index.html
        */
-      class AppLayoutElement extends Vaadin.AppLayoutMixin(Polymer.Element) {
+      class AppLayoutElement extends Vaadin.ElementMixin(Vaadin.ThemableMixin(Polymer.Element)) {
         static get is() {
           return 'vaadin-app-layout';
         }
@@ -189,11 +214,36 @@ This program is available under Apache License Version 2.0, available at https:/
           };
         }
 
+        constructor() {
+          super();
+          // TODO(jouni): might want to debounce
+          this.__boundResizeListener = this._resize.bind(this);
+          this.__drawerToggleClickListener = this._drawerToggleClick.bind(this);
+        }
+
         connectedCallback() {
           super.connectedCallback();
 
+          this._blockAnimationUntilAfterNextRender();
+
+          window.addEventListener('resize', this.__boundResizeListener);
+          this.addEventListener('drawer-toggle-click', this.__drawerToggleClickListener);
+
+          // Wait for all children to upgrade before trying to measure sizes
+          if (window.HTMLImports && !window.HTMLImports.useNative) {
+            Array.from(this.querySelectorAll('*')).forEach(child => {
+              if (child.localName.indexOf('-') > -1) {
+                window.customElements.whenDefined(child.localName).then(() => {
+                  // TODO(jouni): might want to debounce
+                  Polymer.RenderStatus.beforeNextRender(this, this._afterFirstRender);
+                });
+              }
+            });
+          } else {
+            Polymer.RenderStatus.beforeNextRender(this, this._afterFirstRender);
+          }
+
           this._updateTouchOptimizedMode();
-          this._setupDrawerToggleClickListener();
 
           this._navbarChildObserver = new Polymer.FlattenedNodesObserver(this.$.drawer, (info) => {
             this._updateDrawerSize();
@@ -202,11 +252,24 @@ This program is available under Apache License Version 2.0, available at https:/
           this._updateOverlayMode();
         }
 
-        _setupDrawerToggleClickListener() {
-          this.toggleClickListener = this.addEventListener('drawer-toggle-click', this._drawerToggleClickListener);
+        disconnectedCallback() {
+          super.disconnectedCallback();
+
+          this._navbarChildObserver && this._navbarChildObserver.disconnect();
+          window.removeEventListener('resize', this.__boundResizeListener);
+          this.removeEventListener('drawer-toggle-click', this.__drawerToggleClickListener);
         }
 
-        _drawerToggleClickListener(e) {
+        _isShadyCSS() {
+          return window.ShadyCSS && !window.ShadyCSS.nativeCss;
+        }
+
+        _afterFirstRender() {
+          this._blockAnimationUntilAfterNextRender();
+          this._updateOffsetSize();
+        }
+
+        _drawerToggleClick(e) {
           e.stopPropagation();
           this.drawerOpened = !this.drawerOpened;
         }
@@ -223,22 +286,13 @@ This program is available under Apache License Version 2.0, available at https:/
           this._updateOffsetSize();
         }
 
-        disconnectedCallback() {
-          super.disconnectedCallback();
-
-          this._navbarChildObserver && this._navbarChildObserver.disconnect();
-          this.removeEventListener('drawer-toggle-click', this._drawerToggleClickListener);
-        }
-
         _resize() {
-          super._resize();
+          this._blockAnimationUntilAfterNextRender();
           this._updateTouchOptimizedMode();
           this._updateOverlayMode();
         }
 
         _updateOffsetSize() {
-          super._updateOffsetSize();
-
           const navbar = this.shadowRoot.querySelector('[part="navbar"]');
           const navbarRect = navbar.getBoundingClientRect();
 
@@ -327,6 +381,16 @@ This program is available under Apache License Version 2.0, available at https:/
           }
 
           this._updateOffsetSize();
+        }
+
+        _blockAnimationUntilAfterNextRender() {
+          this.setAttribute('no-anim', '');
+          Polymer.RenderStatus.afterNextRender(this, () => {
+            this.removeAttribute('no-anim');
+            if (this._isShadyCSS()) {
+              window.ShadyCSS.styleSubtree(this);
+            }
+          });
         }
       }
 
