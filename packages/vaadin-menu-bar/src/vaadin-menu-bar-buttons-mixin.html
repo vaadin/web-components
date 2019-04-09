@@ -126,7 +126,7 @@ This program is available under Apache License Version 2.0, available at https:/
           const btnWidth = btn.getBoundingClientRect().width;
 
           if ((ellipsisLeft + ellipsis.offsetWidth + btnWidth) < containerWidth) {
-            btn.disabled = false;
+            btn.disabled = btn.item.disabled;
             btn.style.visibility = '';
             btn.style.position = '';
             btn.style.width = '';

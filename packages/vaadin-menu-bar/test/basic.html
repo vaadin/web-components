@@ -212,7 +212,7 @@
           {text: 'Item 2'},
           {text: 'Item 3'},
           {text: 'Item 4'},
-          {text: 'Item 5'}
+          {text: 'Item 5', disabled: true}
         ];
         await nextRender(menu);
         buttons = menu._buttons;
@@ -276,6 +276,8 @@
           expect(buttons[2].disabled).to.not.be.true;
           assertVisible(buttons[3]);
           expect(buttons[3].disabled).to.not.be.true;
+          assertVisible(buttons[4]);
+          expect(buttons[4].disabled).to.be.true;
           expect(ellipsis.hasAttribute('hidden')).to.be.true;
           expect(ellipsis.item.children.length).to.equal(0);
           done();
