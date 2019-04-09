@@ -10,6 +10,16 @@
       "description": "",
       "image": ""
      }
+  },
+  {
+    "name": "Items",
+    "url": "menu-bar-items-demos",
+    "src": "menu-bar-items-demos.html",
+    "meta": {
+      "title": "Vaadin Menu Bar Items",
+      "description": "",
+      "image": ""
+     }
   }
   ]
 }

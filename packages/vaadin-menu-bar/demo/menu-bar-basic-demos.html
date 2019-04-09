@@ -6,27 +6,75 @@
       }
     </style>
 
-
     <h3>Menu Bar</h3>
+    <p>
+      Menu bar is a set of horizontally stacked buttons offering the user quick access to a consistent set of commands.
+      Buttons are defined by <code>items</code> property, which accepts an array of objects. Each button can toggle
+      a submenu defined by <code>children</code> sub-property of the item object. The submenu items can have children
+      of their own, creating additional levels of nested menus.
+    </p>
+    <p>
+      By default, submenu can be opened on click and from keyboard, using <kbd>Enter</kbd>, <kbd>Space</kbd>,
+      <kbd>Up</kbd> and <kbd>Down</kbd> arrow keys. Keyboard navigation for menu bar buttons and submenu items is
+      implemented according to <a href="https://www.w3.org/TR/wai-aria-practices-1.1/#menu">WAI-ARIA Authoring Practices 1.1</a>.
+    </p>
+    <p>
+      When either a submenu item or menu bar button without nested children is clicked, the <code>item-selected</code>
+      event is fired with the event detail containing a <code>value</code>, which is a reference to the actual menu
+      item object provided in the original <code>items</code> property.
+    </p>
     <vaadin-demo-snippet id="menu-bar-basic-demos-basic" when-defined="vaadin-menu-bar">
       <template preserve-content>
         <vaadin-menu-bar></vaadin-menu-bar>
+        <p>Selected item: <i></i></p>
         <script>
           window.addDemoReadyListener('#menu-bar-basic-demos-basic', function(document) {
             const menu = document.querySelector('vaadin-menu-bar');
-            menu.items = [{text: 'File'}, {text: 'Edit', disabled: true}, {text: 'Help'}];
+            menu.addEventListener('item-selected', function(e) {
+              document.querySelector('i').textContent = JSON.stringify(e.detail.value);
+            });
+            menu.items = [
+              {
+                text: 'Project',
+                children: [
+                  {text: 'Users',
+                    children: [{text: 'List'}, {text: 'Add'}]
+                  },
+                  {text: 'Billing',
+                    children: [{text: 'Invoices'}, {text: 'Balance Events'}]
+                  },
+                ]
+              },
+              {
+                text: 'Account',
+                children: [
+                  {text: 'Edit Profile'},
+                  {text: 'Privacy Settings'}
+                ]
+              },
+              {text: 'Sign Out'}
+            ];
           });
         </script>
       </template>
     </vaadin-demo-snippet>
 
-    <h3>Nested Sub Menu</h3>
-    <vaadin-demo-snippet id="menu-bar-basic-demos-nested" when-defined="vaadin-menu-bar">
+    <h3>Open on Hover</h3>
+    <p>
+      When opened, submenu can be switched by moving cursor over another button. Set <code>open-on-hover</code>
+      attribute to also open the submenu on <i>mouseover</i> event instead of click. Submenu can always be
+      closed by outside click, regardless of how it was opened.
+    </p>
+    <vaadin-demo-snippet id="menu-bar-basic-demos-open-on-hover" when-defined="vaadin-menu-bar">
       <template preserve-content>
-        <vaadin-menu-bar></vaadin-menu-bar>
+        <vaadin-menu-bar open-on-hover></vaadin-menu-bar>
+        <p>Selected item: <i></i></p>
         <script>
-          window.addDemoReadyListener('#menu-bar-basic-demos-nested', function(document) {
+          window.addDemoReadyListener('#menu-bar-basic-demos-open-on-hover', function(document) {
             const menu = document.querySelector('vaadin-menu-bar');
+            menu.addEventListener('item-selected', function(e) {
+              document.querySelector('i').textContent = JSON.stringify(e.detail.value);
+            });
             menu.items = [
               {
                 text: 'Project',
@@ -58,6 +106,11 @@
     </vaadin-demo-snippet>
 
     <h3>Overflowing Buttons</h3>
+    <p>
+      If there is not enough width to fit all the menu bar, some buttons from the end are moved to submenu under
+      the "<i>ellipsis</i>" button. When resizing screen or browser window, changing device orientation etc, width is
+      dynamically recalculated to always fit.
+    </p>
     <vaadin-demo-snippet id="menu-bar-basic-demos-overflowing-buttons" when-defined="vaadin-menu-bar">
       <template preserve-content>
         <vaadin-menu-bar></vaadin-menu-bar>
@@ -81,74 +134,6 @@
                 ]
               },
               {text: 'Help'}
-            ];
-          });
-        </script>
-      </template>
-    </vaadin-demo-snippet>
-
-    <h3>Using Components in Menu Buttons</h3>
-    <vaadin-demo-snippet id="menu-bar-basic-demos-components-buttons" when-defined="vaadin-menu-bar">
-      <template preserve-content>
-        <vaadin-menu-bar></vaadin-menu-bar>
-        <script>
-          window.addDemoReadyListener('#menu-bar-basic-demos-components-buttons', function(document) {
-            const menu = document.querySelector('vaadin-menu-bar');
-            const makeIcon = function(icon) {
-              const element = window.document.createElement('iron-icon');
-              element.icon = icon;
-              return element;
-            };
-            menu.items = [
-              {
-                component: makeIcon('lumo:plus'),
-                children: [{text: 'Create project'}, {text: 'Create report'}]
-              },
-              {
-                component: makeIcon('lumo:user'),
-                children: [{text: 'Users list'}, {text: 'Add user'}]
-              },
-              {
-                component: makeIcon('lumo:bell'),
-                children: [{text: 'Notifications'}, {text: 'Mark as read'}]
-              },
-            ];
-          });
-        </script>
-      </template>
-    </vaadin-demo-snippet>
-
-    <h3>Open on Hover</h3>
-    <vaadin-demo-snippet id="menu-bar-basic-demos-open-on-hover" when-defined="vaadin-menu-bar">
-      <template preserve-content>
-        <vaadin-menu-bar open-on-hover></vaadin-menu-bar>
-        <script>
-          window.addDemoReadyListener('#menu-bar-basic-demos-open-on-hover', function(document) {
-            const menu = document.querySelector('vaadin-menu-bar');
-            menu.items = [
-              {
-                text: 'Project',
-                children: [
-                  {text: 'Dashboard'},
-                  {component: 'hr'},
-                  {text: 'Users',
-                    children: [{text: 'List'}, {text: 'Add'}]
-                  },
-                  {text: 'Billing',
-                    children: [{text: 'Invoices'}, {text: 'Balance Events'}]
-                  },
-                ]
-              },
-              {
-                text: 'Account',
-                children: [
-                  {text: 'Edit Profile'},
-                  {component: 'hr'},
-                  {text: 'Privacy Settings'},
-                  {text: 'Terms of Service'}
-                ]
-              },
-              {text: 'Sign Out'}
             ];
           });
         </script>
