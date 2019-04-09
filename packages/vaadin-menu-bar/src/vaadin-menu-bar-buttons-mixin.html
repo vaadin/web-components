@@ -163,6 +163,10 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /**
+     * Call this method after updating menu bar `items` dynamically, including changing
+     * any property on the item object corresponding to one of the menu bar buttons.
+     */
     render() {
       this.__renderButtons(this.items);
     }

@@ -23,7 +23,7 @@ This program is available under Apache License Version 2.0, available at https:/
     static get properties() {
       return {
         /**
-         * If true, the nested menu will open on hover (mouseover) instead of click.
+         * If true, the submenu will open on hover (mouseover) instead of click.
          */
         openOnHover: {
           type: Boolean
@@ -62,11 +62,17 @@ This program is available under Apache License Version 2.0, available at https:/
       container.addEventListener('mouseover', e => this._onMouseOver(e));
     }
 
+    /**
+     * @protected
+     */
     connectedCallback() {
       super.connectedCallback();
       document.addEventListener('click', this.__boundOutsideClickListener, true);
     }
 
+    /**
+     * @protected
+     */
     disconnectedCallback() {
       super.disconnectedCallback();
       document.removeEventListener('click', this.__boundOutsideClickListener, true);
