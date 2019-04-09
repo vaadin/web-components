@@ -38,14 +38,20 @@
 
       :host(:first-of-type) {
         border-radius: 0.25em 0 0 0.25em;
-
-        /* Needed to retain the focsu-ring with border-radius */
-        margin-left: 1px;
       }
 
       :host(:nth-last-of-type(2)),
       :host([part~="ellipsis-button"]) {
         border-radius: 0 0.25em 0.25em 0;
+      }
+
+      :host([theme="outlined"]) {
+        margin-right: -1px;
+      }
+
+      :host([theme="outlined"]:nth-last-of-type(2)),
+      :host([theme="outlined"][part~="ellipsis-button"]) {
+        margin-right: 0;
       }
 
       :host([theme="text"]),
