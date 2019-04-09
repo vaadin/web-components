@@ -90,7 +90,7 @@
       </template>
     </vaadin-demo-snippet>
 
-    <h3>Using Components in Menu Bar Buttons</h3>
+    <h3>Item Components</h3>
     <p>
       Item objects corresponding to menu bar buttons support the <code>component</code> property.
       It accepts two different types of values:
@@ -99,6 +99,10 @@
       <li><b>string</b> representing a tag name of HTML element to be created,</li>
       <li><b>HTML element</b> created by the user to be placed inside the button.</li>
     </ul>
+    <p>
+      Same API also applies to submenu. In addition, <code>&lt;hr&gt;</code> component
+      can be used to create a separator between submenu items.
+    </p>
     <vaadin-demo-snippet id="menu-bar-items-demos-component" when-defined="vaadin-menu-bar">
       <template preserve-content>
         <vaadin-menu-bar></vaadin-menu-bar>
@@ -109,8 +113,13 @@
             menu.items = [
               {component: 'b', text: 'Home'},
               {
-                component: makeIcon('lumo:plus', 'New'),
-                children: [{text: 'New project'}, {text: 'New report'}]
+                component: makeIcon('lumo:user', 'Profile'),
+                children: [
+                  {text: 'Edit Profile'},
+                  {component: 'hr'},
+                  {text: 'Privacy Settings'},
+                  {text: 'Terms of Service'}
+                ]
               },
               {
                 component: makeIcon('lumo:bell'),
