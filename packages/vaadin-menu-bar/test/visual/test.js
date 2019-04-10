@@ -38,19 +38,24 @@ gemini.suite('vaadin-menu-bar', function(rootSuite) {
     });
 
     if (theme === 'material') {
-      gemini.suite(`theme-variants-tests-${theme}`, function(suite) {
+      gemini.suite(`${theme}-outlined-tests`, function(suite) {
         suite
-          .setUrl(`theme-variants.html?theme=${theme}`)
-          .setCaptureElements('#theme-variants-tests')
-          .capture('theme-variants-1', function(actions) {
+          .setUrl(`${theme}-outlined.html?theme=${theme}`)
+          .setCaptureElements(`#${theme}-outlined-tests`)
+          .capture('outlined', function(actions) {
             actions.executeJS(function(window) {
-              window.openSubMenu(0);
+              window.openSubMenu();
             });
-          })
-          .capture('theme-variants-2', function(actions) {
+          });
+      });
+
+      gemini.suite(`${theme}-contained-tests`, function(suite) {
+        suite
+          .setUrl(`${theme}-contained.html?theme=${theme}`)
+          .setCaptureElements(`#${theme}-contained-tests`)
+          .capture('contained', function(actions) {
             actions.executeJS(function(window) {
-              window.closeSubMenus();
-              window.openSubMenu(1);
+              window.openSubMenu();
             });
           });
       });
