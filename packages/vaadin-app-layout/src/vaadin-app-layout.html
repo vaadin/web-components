@@ -192,20 +192,33 @@ This program is available under Apache License Version 2.0, available at https:/
 
         static get properties() {
           return {
-
+            /**
+             * Defines how the navbar and the drawer will interact with eacth other on desktop view when the drawer is opened.
+             * - By default, the navbar takes the full available width and moves the drawer down.
+             * - If `drawer-first` is set, then the drawer will move the navbar, taking the full available height.
+             */
             drawerFirst: {
               type: Boolean,
               reflectToAttribute: true
             },
 
+            /**
+             * Controls whether the drawer is opened (visible) or not.
+             * Its default value depends on the viewport:
+             * - `true`, for desktop size views
+             * - `false`, for mobile size views
+             */
             drawerOpened: {
               type: Boolean,
               value: true,
               reflectToAttribute: true
             },
 
-            // Drawer is an overlay on top of the content
-            // Controlled via CSS using --vaadin-app-layout-drawer-overlay: true|false;
+            /**
+             *  Drawer is an overlay on top of the content
+             *  Controlled via CSS using --vaadin-app-layout-drawer-overlay: true|false;
+             * @private
+             */
             overlay: {
               type: Boolean,
               value: false,
