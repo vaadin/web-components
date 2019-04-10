@@ -129,19 +129,6 @@
         vaadinButton.dispatchEvent(new CustomEvent('blur'));
         expect(vaadinButton.hasAttribute('active')).to.be.false;
       });
-
-      it('should set buttom text to native button aria-label', () => {
-        expect(nativeButton.hasAttribute('aria-label')).to.be.true;
-        // Remove extra line breaks
-        expect(nativeButton.getAttribute('aria-label').replace(/(\r\n|\n|\r)/gm, ''))
-          .to.contain(vaadinButton.innerText.replace(/(\r\n|\n|\r)/gm, ''));
-      });
-
-      it('should set button aria-label to native button aria-label', () => {
-        vaadinButton.ariaLabel = 'accessible';
-        expect(nativeButton.hasAttribute('aria-label')).to.be.true;
-        expect(nativeButton.getAttribute('aria-label')).to.be.eql(vaadinButton.ariaLabel);
-      });
     });
   </script>
 </body>
