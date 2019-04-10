@@ -18,6 +18,8 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
      * `<vaadin-grid-pro-edit-column>` is a helper element for the `<vaadin-grid-pro>`
      * that provides default inline editing for the items.
      *
+     * __Note that the `path` property must be explicitly specified for edit column.__
+     *
      * #### Example:
      * ```html
      * <vaadin-grid-pro items="[[items]]">
@@ -89,7 +91,10 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           /**
            * JS Path of the property in the item used for the editable content.
            */
-          path: String,
+          path: {
+            type: String,
+            observer: '_pathChanged'
+          },
 
           _oldTemplate: Object,
 
@@ -133,6 +138,12 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         super.connectedCallback();
 
         this._editTemplateObserver.flush();
+      }
+
+      _pathChanged(path) {
+        if (!path || path.length == 0) {
+          throw new Error('You should specify the path for the edit column');
+        }
       }
 
       _removeNewRendererOrTemplate(template, oldTemplate, renderer, oldRenderer) {

@@ -519,6 +519,16 @@
           flushGrid(grid);
         });
 
+        it('should throw an error when no path is set for the edit column', () => {
+          const column = grid.querySelector('vaadin-grid-pro-edit-column');
+          expect(() => column.path = undefined).to.throw(Error);
+        });
+
+        it('should throw an error when path is set to empty string for the edit column', () => {
+          const column = grid.querySelector('vaadin-grid-pro-edit-column');
+          expect(() => column.path = '').to.throw(Error);
+        });
+
         it('should not fire active-item-changed on grid edit column', () => {
           // Propagation of click should be stopped on edit colunm
           const spy = sinon.spy();
