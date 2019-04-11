@@ -35,7 +35,7 @@ This program is available under Apache License Version 2.0, available at https:/
       <!-- TODO(jouni): don't use Lumo in the core styles, and make this customizable (font-icon) -->
       <iron-icon icon="lumo:menu"></iron-icon>
     </slot>
-    <button id="button" type="button"></button>
+    <button id="button" type="button" aria-label$="[[ariaLabel]]"></button>
   </template>
 
   <script>
@@ -57,6 +57,12 @@ This program is available under Apache License Version 2.0, available at https:/
       class DrawerToggleElement extends Vaadin.ButtonElement {
         static get is() {
           return 'vaadin-drawer-toggle';
+        }
+
+        static get properties() {
+          return {
+            ariaLabel: String
+          };
         }
 
         constructor() {

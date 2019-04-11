@@ -101,6 +101,7 @@ This program is available under Apache License Version 2.0, available at https:/
         width: 16em;
         box-sizing: border-box;
         padding: var(--safe-area-inset-top) 0 var(--safe-area-inset-bottom) var(--safe-area-inset-left);
+        outline: none;
       }
 
       :host([drawer-opened]) [part="drawer"] {
@@ -158,15 +159,15 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
     </style>
+    <div part="navbar">
+      <slot name="navbar"></slot>
+    </div>
     <div part="backdrop" on-click="_close" on-touchstart="_close"></div>
-    <div part="drawer">
-      <slot name="drawer" id="drawer"></slot>
+    <div part="drawer" id="drawer">
+      <slot name="drawer" id="drawerSlot"></slot>
     </div>
     <div content>
       <slot></slot>
-    </div>
-    <div part="navbar">
-      <slot name="navbar"></slot>
     </div>
     <div part="navbar" bottom hidden>
       <slot name="navbar-bottom"></slot>
@@ -258,7 +259,8 @@ This program is available under Apache License Version 2.0, available at https:/
               type: Boolean,
               notify: true,
               value: true,
-              reflectToAttribute: true
+              reflectToAttribute: true,
+              observer: '_drawerOpenedObserver'
             },
 
             /**
@@ -309,7 +311,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
           this._updateTouchOptimizedMode();
 
-          this._navbarChildObserver = new Polymer.FlattenedNodesObserver(this.$.drawer, (info) => {
+          this._navbarChildObserver = new Polymer.FlattenedNodesObserver(this.$.drawerSlot, (info) => {
             this._updateDrawerSize();
           });
           this._updateDrawerSize();
@@ -376,7 +378,7 @@ This program is available under Apache License Version 2.0, available at https:/
             this.style.setProperty('--_vaadin-app-layout-navbar-offset-size-bottom', navbarBottomRect.height + 'px');
           }
 
-          const drawer = this.shadowRoot.querySelector('[part="drawer"]');
+          const drawer = this.$.drawer;
           const drawerRect = drawer.getBoundingClientRect();
 
           if (this._isShadyCSS()) {
@@ -391,13 +393,35 @@ This program is available under Apache License Version 2.0, available at https:/
 
         }
 
+        _drawerOpenedObserver() {
+          const drawer = this.$.drawer;
+
+          drawer.removeAttribute('tabindex');
+
+          if (this.overlay) {
+            if (this.drawerOpened) {
+              drawer.setAttribute('tabindex', 0);
+              drawer.focus();
+            }
+          }
+        }
+
         _updateOverlayMode() {
           const overlay = this._getCustomPropertyValue('--vaadin-app-layout-drawer-overlay') == 'true';
+          const drawer = this.$.drawer;
 
           this._setOverlay(overlay);
 
           if (this.overlay) {
             this.drawerOpened = false;
+
+            drawer.setAttribute('role', 'dialog');
+            drawer.setAttribute('aria-modal', 'true');
+            drawer.setAttribute('aria-label', 'drawer');
+          } else {
+            drawer.removeAttribute('role');
+            drawer.removeAttribute('aria-modal');
+            drawer.removeAttribute('aria-label');
           }
 
           // TODO(jouni): ARIA attributes. The drawer should act similar to a modal dialog when in ”overlay” mode
