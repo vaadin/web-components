@@ -176,6 +176,51 @@ This program is available under Apache License Version 2.0, available at https:/
     (function() {
 
       /**
+       * `<vaadin-app-layout>` is a Web Component providing a quick and easy way to get a common application layout structure done.
+       *
+       * ```
+       * <vaadin-app-layout [drawer-first]>
+       *  <vaadin-drawer-toggle slot="navbar [touch-optimized]"></vaadin-drawer-toggle>
+       *  <h3 slot="navbar [touch-optimized]">Company Name</h3>
+       *  <vaadin-tabs orientation="vertical" slot="drawer">
+       *    <vaadin-tab>Menu item 1</vaadin-tab>
+       *  </vaadin-tabs>
+       *  <!-- Everything else will be the page content -->
+       *  <div>
+       *    <h3>Page title</h3>
+       *    <p>Page content</p>
+       *  </div>
+       * </vaadin-app-layout>
+       * ```
+       *
+       * For best results, the component should be added to the root level of your application (i.e., as a direct child of `<body>`)
+       *
+       * ### Styling
+       *
+       * The following Shadow DOM parts of the `<vaadin-app-layout>` are available for styling:
+       *
+       * Part name     | Description
+       * --------------|---------------------------------------------------------|
+       * `navbar`      | Container for the navigation bar
+       * `drawer`      | Container for the drawer area
+       * `content`     | Container for page content.
+       *
+       * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+       *
+       * ### Component's slots
+       *
+       * The following slots are available to be set
+       *
+       * Slot name          | Description
+       * -------------------|---------------------------------------------------|
+       * no name            | Default container for the page content
+       * `navbar `          | Container for the top navbar area
+       * `drawer`           | Container for an application menu
+       * `touch-optimized`  | Container for the bottom navbar area (only visible for mobile devices)
+       *
+       *
+       * See examples of setting the content into slots in the live demos.
+       *
        * @memberof Vaadin
        * @mixes Vaadin.ElementMixin
        * @mixes Vaadin.ThemableMixin
