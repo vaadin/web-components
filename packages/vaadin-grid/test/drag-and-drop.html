@@ -29,6 +29,83 @@
 describe('drag and drop', () => {
   let grid;
 
+  const getDraggable = (grid, rowIndex = 0) => {
+    const row = Array.from(grid.$.items.children).filter(row => row.index === rowIndex)[0];
+    const cellContent = row.querySelector('slot').assignedNodes()[0];
+    return [row, cellContent].filter(node => node.getAttribute('draggable') === 'true')[0];
+  };
+
+  const fireDragStart = (draggable = getDraggable(grid)) => {
+    const event = new Event('dragstart', {
+      bubbles: true,
+      cancelable: true,
+      composed: true
+    });
+    event.dataTransfer = {
+      setDragImage: () => {},
+      setData: (type, data) => {
+        event.__dataType = type;
+        event.__data = data;
+      }
+    };
+    draggable.dispatchEvent(event);
+    return event;
+  };
+
+  const fireDragEnd = (draggable = getDraggable(grid)) => {
+    const event = new Event('dragend', {
+      bubbles: true,
+      cancelable: true,
+      composed: true
+    });
+    draggable.dispatchEvent(event);
+  };
+
+  const fireDragLeave = (draggable = getDraggable(grid)) => {
+    const event = new Event('dragleave', {
+      bubbles: true,
+      cancelable: true,
+      composed: true
+    });
+    draggable.dispatchEvent(event);
+  };
+
+  const fireDrop = (draggable = getDraggable(grid)) => {
+    const event = new Event('drop', {
+      bubbles: true,
+      cancelable: true,
+      composed: true
+    });
+    event.dataTransfer = {
+      getData: () => 'foo'
+    };
+    draggable.dispatchEvent(event);
+  };
+
+  const fireDragOver = (row, location) => {
+    const event = new Event('dragover', {
+      bubbles: true,
+      cancelable: true,
+      composed: true
+    });
+    if (row) {
+      const rect = row.getBoundingClientRect();
+      if (location === 'on-top') {
+        event.clientY = rect.top + rect.height / 2;
+      } else if (location === 'above') {
+        event.clientY = rect.top;
+      } else if (location === 'below') {
+        event.clientY = rect.bottom;
+      } else if (location === 'under') {
+        event.clientY = rect.bottom + rect.height / 2;
+      }
+      row.dispatchEvent(event);
+    } else {
+      getDraggable(grid).dispatchEvent(event);
+    }
+    return event;
+  };
+
   beforeEach(done => {
     grid = fixture('default');
     grid.hidden = true;
@@ -46,96 +123,19 @@ describe('drag and drop', () => {
     });
   });
 
-  const getDraggable = grid => {
-    return grid.querySelector('[draggable="true"]') || grid.shadowRoot.querySelector('[draggable="true"]');
-  };
-
   it('should not be draggable by default', () => {
     expect(getDraggable(grid)).not.to.be.ok;
   });
 
   describe('draggable', () => {
-    let draggable;
-
-    const fireDragStart = node => {
-      const event = new Event('dragstart', {
-        bubbles: true,
-        cancelable: true,
-        composed: true
-      });
-      event.dataTransfer = {
-        setDragImage: () => {},
-        setData: (type, data) => {
-          event.__dataType = type;
-          event.__data = data;
-        }
-      };
-      (node || draggable).dispatchEvent(event);
-      return event;
-    };
-
-    const fireDragEnd = () => {
-      const event = new Event('dragend', {
-        bubbles: true,
-        cancelable: true,
-        composed: true
-      });
-      draggable.dispatchEvent(event);
-    };
-
-    const fireDragLeave = () => {
-      const event = new Event('dragleave', {
-        bubbles: true,
-        cancelable: true,
-        composed: true
-      });
-      draggable.dispatchEvent(event);
-    };
-
-    const fireDrop = () => {
-      const event = new Event('drop', {
-        bubbles: true,
-        cancelable: true,
-        composed: true
-      });
-      event.dataTransfer = {
-        getData: () => 'foo'
-      };
-      draggable.dispatchEvent(event);
-    };
-
-    const fireDragOver = (row, location) => {
-      const event = new Event('dragover', {
-        bubbles: true,
-        cancelable: true,
-        composed: true
-      });
-      if (row) {
-        const rect = row.getBoundingClientRect();
-        if (location === 'on-top') {
-          event.clientY = rect.top + rect.height / 2;
-        } else if (location === 'above') {
-          event.clientY = rect.top;
-        } else if (location === 'below') {
-          event.clientY = rect.bottom;
-        } else if (location === 'under') {
-          event.clientY = rect.bottom + rect.height / 2;
-        }
-        row.dispatchEvent(event);
-      } else {
-        draggable.dispatchEvent(event);
-      }
-      return event;
-    };
 
     beforeEach(() => {
       grid.rowsDraggable = true;
       flushGrid(grid);
-      draggable = getDraggable(grid);
     });
 
     it('should be draggable', () => {
-      expect(draggable).to.be.ok;
+      expect(getDraggable(grid)).to.be.ok;
     });
 
     it('should not be draggable', () => {
@@ -171,7 +171,12 @@ describe('drag and drop', () => {
         const spy = sinon.spy();
         grid.addEventListener('dragstart', spy);
         grid.rowsDraggable = false;
-        fireDragStart();
+        const event = new Event('dragstart', {
+          bubbles: true,
+          cancelable: true,
+          composed: true
+        });
+        getBodyCellContent(grid, 0, 0).dispatchEvent(event);
         expect(spy.called).to.be.true;
       });
 
@@ -339,13 +344,6 @@ describe('drag and drop', () => {
         expect(grid.hasAttribute('dragover')).to.be.true;
       });
 
-      it('should set dragover attribute to empty grid', () => {
-        grid.items = [];
-        grid.dropMode = 'on-top-or-between';
-        fireDragOver();
-        expect(grid.hasAttribute('dragover')).to.be.true;
-      });
-
       it('should not set dragover attribute to the grid', () => {
         grid.dropMode = 'on-top';
         const row = grid.$.items.children[0];
@@ -436,6 +434,7 @@ describe('drag and drop', () => {
       let dropSpy;
 
       beforeEach(() => {
+        grid.dropMode = 'on-top';
         dropSpy = sinon.spy();
         grid.addEventListener('grid-drop', dropSpy);
       });
@@ -501,11 +500,102 @@ describe('drag and drop', () => {
         expect(event.detail.data).to.eql('foo');
       });
 
-
     });
 
   });
 
+  describe('filtering row drag', () => {
+
+    beforeEach(() => {
+      grid.dragFilter = ({item}) => item.first !== 'foo';
+      grid.rowsDraggable = true;
+    });
+
+    it('should not disable row drag', () => {
+      expect(getDraggable(grid, 1)).to.be.ok;
+      expect(grid.$.items.children[1].hasAttribute('drag-disabled')).to.be.false;
+    });
+
+    it('should disable row drag', () => {
+      expect(getDraggable(grid, 0)).not.to.be.ok;
+      expect(grid.$.items.children[0].hasAttribute('drag-disabled')).to.be.true;
+    });
+
+    it('should re-run the row drag filter', () => {
+      grid.items[1].first = 'foo';
+      grid.filterDragAndDrop();
+      expect(getDraggable(grid, 1)).not.to.be.ok;
+    });
+
+    it('should re-enable row drag', () => {
+      grid.dragFilter = ({item}) => item.first === 'foo';
+      expect(getDraggable(grid, 0)).to.be.ok;
+    });
+
+    it('should re-enable row drag 2', () => {
+      grid.dragFilter = undefined;
+      expect(getDraggable(grid, 0)).to.be.ok;
+    });
+
+  });
+
+  describe('filtering row drop', () => {
+
+    beforeEach(() => {
+      grid.dropFilter = ({item}) => item.first !== 'foo';
+      grid.dropMode = 'on-top';
+    });
+
+    it('should not disable drop on row', () => {
+      const row = grid.$.items.children[1];
+      fireDragOver(row, 'above');
+      expect(row.hasAttribute('dragover')).to.be.true;
+      expect(row.hasAttribute('drop-disabled')).to.be.false;
+    });
+
+    it('should disable drop on row', () => {
+      const row = grid.$.items.children[0];
+      fireDragOver(row, 'above');
+      expect(row.hasAttribute('dragover')).to.be.false;
+      expect(row.hasAttribute('drop-disabled')).to.be.true;
+    });
+
+    it('should re-enable drop on row', () => {
+      grid.dropFilter = ({item}) => item.first === 'foo';
+      const row = grid.$.items.children[0];
+      fireDragOver(row, 'above');
+      expect(row.hasAttribute('dragover')).to.be.true;
+      expect(row.hasAttribute('drop-disabled')).to.be.false;
+    });
+
+    it('should re-enable drop on row 2', () => {
+      grid.dropFilter = undefined;
+      const row = grid.$.items.children[0];
+      fireDragOver(row, 'above');
+      expect(row.hasAttribute('dragover')).to.be.true;
+      expect(row.hasAttribute('drop-disabled')).to.be.false;
+    });
+
+    it('should emit a grid-drop event for non drop disabled row', () => {
+      const spy = sinon.spy();
+      grid.addEventListener('grid-drop', spy);
+      fireDrop(grid.$.items.children[1]);
+      expect(spy.called).to.be.true;
+    });
+
+    it('should cancel dragover on a row with drop enabled', () => {
+      const row = grid.$.items.children[1];
+      const e = fireDragOver(row, 'above');
+      expect(e.defaultPrevented).to.be.true;
+    });
+
+    it('should not cancel dragover on a row with drop disabled', () => {
+      const row = grid.$.items.children[0];
+      const e = fireDragOver(row, 'above');
+      expect(e.defaultPrevented).to.be.false;
+    });
+
+  });
 });
 
 

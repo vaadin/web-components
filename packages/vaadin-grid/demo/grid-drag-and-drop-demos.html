@@ -170,6 +170,11 @@
       </ul>
     </p>
 
+    <p>
+      <b>Hint: Try dragging users from the grid on the left on top of the users of the grid on
+        the right to create a hierarchical structure.</b>
+    </p>
+
     <vaadin-demo-snippet id='grid-drag-and-drop-demos-drop-location'>
       <template preserve-content>
         <div style="display: flex">
@@ -312,6 +317,99 @@
                 .concat(targetGrid.items.slice(index));
 
             });
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Drag and Drop Filters</h3>
+    <p>
+      When <code>rows-draggable</code> and <code>drop-mode</code> properties are set, by default, all the grid rows
+      can be dragged and dropped on top of. This can be controlled per row basis by using <code>dragFilter</code>
+      and <code>dropFilter</code> hook functions.
+    </p>
+    <p>
+      The <code>dragFilter</code> function receives information about the row as the argument and
+      should return a boolean value indicating whether dragging of the corresponding row should be enabled.
+      Respectively, <code>dropFilter</code> can be used for disabling dropping on top of specific rows.
+    </p>
+
+    <p>
+      <b>
+        Hint: Try changing the subordinates of the main level supervisors by dragging. The filters prevent
+        <ul>
+          <li>dragging the supervisor rows</li>
+          <li>dropping on top of the same supervisor the subordinate is already under</li>
+          <li>dropping more than 4 subordinates under one supervisor</li>
+          <li>dropping on top of the subordinates</li>
+        </ul>
+      </b>
+    </p>
+    <vaadin-demo-snippet id='grid-drag-and-drop-demos-filters'>
+      <template preserve-content>
+        <b>Supervisors</b>
+        <vaadin-grid rows-draggable>
+          <vaadin-grid-tree-column path="name.first" header="First name" item-has-children-path="subordinates"></vaadin-grid-tree-column>
+          <vaadin-grid-column path="name.last" header="Last name"></vaadin-grid-column>
+          <vaadin-grid-column path="email"></vaadin-grid-column>
+        </vaadin-grid>
+
+        <script>
+          window.addDemoReadyListener('#grid-drag-and-drop-demos-filters', function(document) {
+            const grid = document.querySelector('vaadin-grid');
+            let draggedUser;
+
+            const supervisors = Vaadin.GridDemo.users.slice(0, 3);
+            supervisors[0].subordinates = Vaadin.GridDemo.users.slice(3, 6);
+            supervisors[1].subordinates = Vaadin.GridDemo.users.slice(6, 8);
+            supervisors[2].subordinates = [];
+
+            grid.dataProvider = function(params, cb) {
+              const items = params.parentItem ? params.parentItem.subordinates : supervisors;
+              const start = params.pageSize * params.page;
+              cb(items.slice(start, start + params.pageSize), items.length);
+            };
+
+            grid.dragFilter = function(rowData) {
+              // Disallow dragging supervisors
+              return !rowData.item.subordinates;
+            };
+
+            grid.dropFilter = function(rowData) {
+              return rowData.item.subordinates // Only support dropping on top of supervisors
+                && rowData.item.subordinates.length < 4 // Don't allow more than 4 subordinates
+                && rowData.item.subordinates.indexOf(draggedUser) === -1; // Disallow dropping on own supervisor
+            };
+
+            grid.expandedItems = Array.from(supervisors);
+
+            grid.addEventListener('grid-dragstart', function(e) {
+              draggedUser = e.detail.items[0];
+              // Enabling the drop mode on drag start. This will
+              // also automatically re-run any drag and drop filters on the grid.
+              grid.dropMode = 'on-top';
+            });
+
+            grid.addEventListener('grid-dragend', function() {
+              grid.dropMode = undefined;
+            });
+
+            grid.addEventListener('grid-drop', function(e) {
+              const supervisor = e.detail.item;
+              if (supervisor) {
+                // Remove the item from it's previous supervisor's subordinates list
+                supervisors.forEach(function(supervisor) {
+                  supervisor.subordinates = supervisor.subordinates.filter(function(subordinate) {
+                    return subordinate !== draggedUser;
+                  });
+                });
+
+                // Add the item to the target supervisor's subordinates list
+                supervisor.subordinates.push(draggedUser);
+                grid.clearCache();
+              }
+            });
+
           });
         </script>
       </template>

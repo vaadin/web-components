@@ -44,14 +44,44 @@ This program is available under Apache License Version 2.0, available at https:/
           /**
            * Marks the grid's rows to be available for dragging.
            */
-          rowsDraggable: Boolean
+          rowsDraggable: Boolean,
+
+          /**
+           * A function that filters dragging of specific grid rows. The return value should be false
+           * if dragging of the row should be disabled.
+           *
+           * Receives one argument:
+           * - `rowData` The object with the properties related with
+           *   the rendered item, contains:
+           *   - `rowData.index` The index of the item.
+           *   - `rowData.item` The item.
+           *   - `rowData.expanded` Sublevel toggle state.
+           *   - `rowData.level` Level of the tree represented with a horizontal offset of the toggle button.
+           *   - `rowData.selected` Selected state.
+           */
+          dragFilter: Function,
+
+          /**
+           * A function that filters dropping on specific grid rows. The return value should be false
+           * if dropping on the row should be disabled.
+           *
+           * Receives one argument:
+           * - `rowData` The object with the properties related with
+           *   the rendered item, contains:
+           *   - `rowData.index` The index of the item.
+           *   - `rowData.item` The item.
+           *   - `rowData.expanded` Sublevel toggle state.
+           *   - `rowData.level` Level of the tree represented with a horizontal offset of the toggle button.
+           *   - `rowData.selected` Selected state.
+           */
+          dropFilter: Function,
 
         };
       }
 
       static get observers() {
         return [
-          '_rowsDraggableChanged(rowsDraggable)'
+          '_dragDropAccessChanged(rowsDraggable, dropMode, dragFilter, dropFilter)'
         ];
       }
 
@@ -62,10 +92,6 @@ This program is available under Apache License Version 2.0, available at https:/
         this.$.table.addEventListener('dragover', this._onDragOver.bind(this));
         this.$.table.addEventListener('dragleave', this._onDragLeave.bind(this));
         this.$.table.addEventListener('drop', this._onDrop.bind(this));
-      }
-
-      _rowsDraggableChanged() {
-        this._assignModels();
       }
 
       _onDragStart(e) {
@@ -145,9 +171,6 @@ This program is available under Apache License Version 2.0, available at https:/
       _onDragOver(e) {
 
         if (this.dropMode) {
-          e.stopPropagation();
-          e.preventDefault();
-
           this._dropLocation = undefined;
           this._dragOverItem = undefined;
 
@@ -184,8 +207,18 @@ This program is available under Apache License Version 2.0, available at https:/
             }
           }
 
+          if (row && row.hasAttribute('drop-disabled')) {
+            this._dropLocation = undefined;
+            return;
+          }
+
+          e.stopPropagation();
+          e.preventDefault();
+
           if (this._dropLocation === DropLocation.EMPTY) {
-            this._toggleAttribute('dragover', true, this);
+            if (this.dropMode === DropMode.ON_GRID) {
+              this._toggleAttribute('dragover', true, this);
+            }
           } else if (row) {
             this._dragOverItem = row._item;
             if (row.getAttribute('dragover') !== this._dropLocation) {
@@ -203,20 +236,22 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       _onDrop(e) {
-        e.stopPropagation();
-        const data = e.dataTransfer.getData('text');
-        this._clearDragStyles();
+        if (this.dropMode) {
+          e.stopPropagation();
+          const data = e.dataTransfer.getData('text');
+          this._clearDragStyles();
 
-        const event = new CustomEvent('grid-drop', {
-          bubbles: e.bubbles,
-          cancelable: e.cancelable,
-          detail: {
-            item: this._dragOverItem,
-            dropLocation: this._dropLocation,
-            data
-          }
-        });
-        this.dispatchEvent(event);
+          const event = new CustomEvent('grid-drop', {
+            bubbles: e.bubbles,
+            cancelable: e.cancelable,
+            detail: {
+              item: this._dragOverItem,
+              dropLocation: this._dropLocation,
+              data
+            }
+          });
+          this.dispatchEvent(event);
+        }
       }
 
       formatDragData(items) {
@@ -234,20 +269,42 @@ This program is available under Apache License Version 2.0, available at https:/
         }).join('\n');
       }
 
-      _updateItem(row, item) {
-        super._updateItem && super._updateItem(row, item);
+      _dragDropAccessChanged(rowsDraggable, dropMode, dragFilter, dropFilter) {
+        this.filterDragAndDrop();
+      }
+
+      /**
+       * Runs the `dragFilter` and `dropFilter` hooks for the visible cells.
+       * If the filter depends on varying conditions, you may need to
+       * call this function manually in order to update the draggability when
+       * the conditions change.
+       */
+      filterDragAndDrop() {
+        Array.from(this.$.items.children).filter(row => !row.hidden).forEach(
+          row => {
+            this._filterDragAndDrop(row, this.__getRowModel(row));
+          }
+        );
+      }
+
+      _filterDragAndDrop(row, rowData) {
+        const dragDisabled = !this.rowsDraggable || (this.dragFilter && !this.dragFilter(rowData));
+        const dropDisabled = !this.dropMode || (this.dropFilter && !this.dropFilter(rowData));
 
         const draggableElements = window.ShadyDOM
           ? [row]
           : Array.from(row.children).map(cell => cell._content);
 
         draggableElements.forEach(e => {
-          if (this.rowsDraggable) {
-            e.setAttribute('draggable', true);
-          } else {
+          if (dragDisabled) {
             e.removeAttribute('draggable');
+          } else {
+            e.setAttribute('draggable', true);
           }
         });
+
+        this._toggleAttribute('drag-disabled', dragDisabled, row);
+        this._toggleAttribute('drop-disabled', dropDisabled, row);
       }
 
       /**

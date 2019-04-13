@@ -274,6 +274,7 @@ This program is available under Apache License Version 2.0, available at https:/
      * `overflow` | Set when rows are overflowing the grid viewport. Possible values: `top`, `bottom`, `left`, `right` | :host
      * `reordering` | Set when the grid's columns are being reordered | :host
      * `dragover` | Set when the grid (not a specific row) is dragged over | :host
+     * `dragging-rows` : Set when grid rows are dragged  | :host
      * `reorder-status` | Reflects the status of a cell while columns are being reordered | cell
      * `frozen` | Frozen cell | cell
      * `last-frozen` | Last frozen cell | cell
@@ -286,6 +287,8 @@ This program is available under Apache License Version 2.0, available at https:/
      * `first` | The first body row | row
      * `dragstart` | Set for one frame when drag of a row is starting. The value is a number when multiple rows are dragged | row
      * `dragover` | Set when the row is dragged over | row
+     * `drag-disabled` | Set to a row that isn't available for dragging | row
+     * `drop-disabled` | Set to a row that can't be dropped on top of | row
      *
      * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
      *
@@ -704,8 +707,6 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       _updateItem(row, item) {
-        super._updateItem && super._updateItem(row, item);
-
         row._item = item;
         const model = this.__getRowModel(row);
 
@@ -717,6 +718,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this._toggleDetailsCell(row, item);
         }
         this._generateCellClassNames(row, model);
+        this._filterDragAndDrop(row, model);
 
         Array.from(row.children).forEach(cell => {
           if (cell._renderer) {

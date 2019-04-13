@@ -344,7 +344,6 @@
             grid.dataProvider.reset();
             const renderSpy = sinon.spy(grid, '_effectiveSizeChanged');
             const increasePoolSpy = sinon.spy(grid, '_increasePoolIfNeeded');
-            const toggleAttributeSpy = sinon.spy(grid, '_toggleAttribute');
             const updateItemSpy = sinon.spy(grid, '_updateItem');
             grid.clearCache();
 
@@ -353,7 +352,6 @@
             // Effective size should not have changed in between the data requests
             expect(renderSpy.called).to.be.false;
             expect(increasePoolSpy.callCount).to.equal(1);
-            expect(toggleAttributeSpy.callCount).to.be.below(90);
             expect(updateItemSpy.callCount).to.be.below(70);
           });
 
