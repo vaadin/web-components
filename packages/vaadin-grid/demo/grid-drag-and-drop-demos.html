@@ -247,7 +247,8 @@
     </p>
     <p>
       To customize the drag event data, override the grid's <code>formatDragData</code> function. It receives the list of dragged
-      items as arguments and returns the payload as a string representation.
+      items as arguments and returns an array of items with the payload as a string representation as the <code>data</code> property
+      and the type of the data as <code>type</code> property.
     </p>
     <p>
       <b>Hint:</b> Try dragging the grid's rows to the grid of the same demo but on another browser window.
@@ -270,9 +271,12 @@
             grid.items = Vaadin.GridDemo.users.slice(0);
 
             grid.formatDragData = function(items) {
-              return items.map(function(item) {
-                return item.email;
-              }).join(',');
+              return [{
+                type: 'text',
+                data: '[' + items.map(function(item) {
+                  return JSON.stringify(item);
+                }).join(',') + ']'
+              }];
             };
 
             let draggedItems;
@@ -280,29 +284,9 @@
               draggedItems = e.detail.items;
             });
 
-            grid.addEventListener('grid-dragend', function(e) {
-              // Remove the items from the source grid
-              grid.items = grid.items.filter(function(item) {
-                return draggedItems.indexOf(item) === -1;
-              });
-              grid.selectedItems = [];
-            });
-
             grid.addEventListener('grid-drop', function(e) {
-              const data = e.detail.data;
-              const emails = data.split(',');
-              const draggedItems = Vaadin.GridDemo.users.filter(function(user) {
-                return emails.indexOf(user.email) > -1;
-              }).map(function(user) {
-                // Create new instances so we don't get duplicate selections
-                return {
-                  name: {
-                    first: user.name.first,
-                    last: user.name.last
-                  },
-                  email: user.email
-                };
-              });
+              // Restore the dragged items from the drag data object
+              const draggedItems = JSON.parse(e.detail.dragData[0].data);
 
               const targetGrid = e.target;
               let index = targetGrid.items.length;
@@ -316,6 +300,16 @@
                 .concat(draggedItems)
                 .concat(targetGrid.items.slice(index));
 
+            });
+
+            grid.addEventListener('grid-dragend', function(e) {
+              // Remove the items from the source grid.
+              // Additional server-side logic might be required to validate if this should actually happen.
+              // The demo just removes the items regardless of whether the drop was legal.
+              grid.items = grid.items.filter(function(item) {
+                return draggedItems.indexOf(item) === -1;
+              });
+              grid.selectedItems = [];
             });
           });
         </script>

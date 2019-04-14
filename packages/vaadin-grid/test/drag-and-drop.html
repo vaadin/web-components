@@ -78,7 +78,8 @@ describe('drag and drop', () => {
       composed: true
     });
     event.dataTransfer = {
-      getData: () => 'foo'
+      getData: () => 'foo',
+      types: ['text']
     };
     draggable.dispatchEvent(event);
     return event;
@@ -262,13 +263,25 @@ describe('drag and drop', () => {
         expect(e.__data).to.eql('foo\tbar\nbaz\tqux');
       });
 
+      it('should auto generate data transfer text data in order', () => {
+        grid.selectedItems = grid.items;
+        const columns = grid.querySelectorAll('vaadin-grid-column');
+        grid._swapColumnOrders(columns[0], columns[1]);
+        const e = fireDragStart();
+        expect(e.__data).to.eql('bar\tfoo\nqux\tbaz');
+      });
+
       it('should generate custom data transfer text data', () => {
         grid.selectedItems = grid.items;
         grid.formatDragData = items => {
-          return items.map(item => item.last).join(',');
+          return [{
+            type: 'text/plain',
+            data: items.map(item => item.last).join(',')
+          }];
         };
         const e = fireDragStart();
         expect(e.__data).to.eql('bar,qux');
+        expect(e.__dataType).to.eql('text/plain');
       });
 
     });
@@ -446,6 +459,11 @@ describe('drag and drop', () => {
         expect(spy.called).to.be.false;
       });
 
+      it('should cancel the native event', () => {
+        const event = fireDrop();
+        expect(event.defaultPrevented).to.be.true;
+      });
+
       it('should clear the grid drag styles', () => {
         grid.dropMode = 'on-grid';
         fireDragOver();
@@ -497,7 +515,7 @@ describe('drag and drop', () => {
         fireDragOver();
         fireDrop();
         const event = dropSpy.getCall(0).args[0];
-        expect(event.detail.data).to.eql('foo');
+        expect(event.detail.dragData).to.eql([{type: 'text', data: 'foo'}]);
       });
 
       it('should have the original event', () => {
