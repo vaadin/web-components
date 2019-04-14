@@ -59,6 +59,7 @@ describe('drag and drop', () => {
       composed: true
     });
     draggable.dispatchEvent(event);
+    return event;
   };
 
   const fireDragLeave = (draggable = getDraggable(grid)) => {
@@ -80,6 +81,7 @@ describe('drag and drop', () => {
       getData: () => 'foo'
     };
     draggable.dispatchEvent(event);
+    return event;
   };
 
   const fireDragOver = (row, location) => {
@@ -228,11 +230,10 @@ describe('drag and drop', () => {
         expect(dragStartSpy.calledOnce).to.be.true;
       });
 
-      it('should bubble and be cancelable', () => {
-        fireDragStart();
+      it('should have the original event', () => {
+        const originalEvent = fireDragStart();
         const event = dragStartSpy.getCall(0).args[0];
-        expect(event.bubbles).to.be.true;
-        expect(event.cancelable).to.be.true;
+        expect(event.originalEvent).to.equal(originalEvent);
       });
 
       it('should reference the dragged item', () => {
@@ -299,11 +300,10 @@ describe('drag and drop', () => {
         expect(dragEndSpy.calledOnce).to.be.true;
       });
 
-      it('should bubble and be cancelable', () => {
-        fireDragEnd();
+      it('should have the original event', () => {
+        const originalEvent = fireDragEnd();
         const event = dragEndSpy.getCall(0).args[0];
-        expect(event.bubbles).to.be.true;
-        expect(event.cancelable).to.be.true;
+        expect(event.originalEvent).to.equal(originalEvent);
       });
 
     });
@@ -500,6 +500,11 @@ describe('drag and drop', () => {
         expect(event.detail.data).to.eql('foo');
       });
 
+      it('should have the original event', () => {
+        const originalEvent = fireDrop();
+        const event = dropSpy.getCall(0).args[0];
+        expect(event.originalEvent).to.equal(originalEvent);
+      });
     });
 
   });

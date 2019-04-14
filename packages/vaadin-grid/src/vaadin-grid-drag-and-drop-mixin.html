@@ -143,12 +143,11 @@ This program is available under Apache License Version 2.0, available at https:/
           });
 
           const event = new CustomEvent('grid-dragstart', {
-            bubbles: e.bubbles,
-            cancelable: e.cancelable,
             detail: {
               items
             }
           });
+          event.originalEvent = e;
           this.dispatchEvent(event);
         }
       }
@@ -156,10 +155,8 @@ This program is available under Apache License Version 2.0, available at https:/
       _onDragEnd(e) {
         this._toggleAttribute('dragging-rows', false, this);
         e.stopPropagation();
-        const event = new CustomEvent('grid-dragend', {
-          bubbles: e.bubbles,
-          cancelable: e.cancelable,
-        });
+        const event = new CustomEvent('grid-dragend');
+        event.originalEvent = e;
         this.dispatchEvent(event);
       }
 
@@ -250,6 +247,7 @@ This program is available under Apache License Version 2.0, available at https:/
               data
             }
           });
+          event.originalEvent = e;
           this.dispatchEvent(event);
         }
       }
@@ -311,6 +309,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * Fired when starting to drag grid rows.
        *
        * @event grid-dragstart
+       * @param {Object} originalEvent The native dragstart event
        * @param {Object} detail
        * @param {Object} detail.items the items being dragged
        */
@@ -319,12 +318,14 @@ This program is available under Apache License Version 2.0, available at https:/
        * Fired when the dragging of the rows ends.
        *
        * @event grid-dragend
+       * @param {Object} originalEvent The native dragend event
        */
 
       /**
        * Fired when a drop occurs on top of the grid.
        *
        * @event grid-drop
+       * @param {Object} originalEvent The native drop event
        * @param {Object} detail
        * @param {Object} detail.item The item of the grid row on which the drop occurred.
        * @param {string} detail.dropLocation The position at which the drop event took place relative to a row.
