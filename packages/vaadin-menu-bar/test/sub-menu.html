@@ -472,5 +472,97 @@
         expect(buttons[0].getAttribute('aria-expanded')).to.equal('false');
       });
     });
+
+    describe('touch', () => {
+      let menu, buttons, subMenu, items, item;
+
+      const open = (openTarget) => {
+        const menu = openTarget.parentElement.parentElement.__dataHost;
+        if (menu) {
+          menu.__openListenerActive = true;
+          const overlay = menu.$.overlay;
+          overlay.__openingHandler && overlay.__openingHandler();
+        }
+        MockInteractions.tap(openTarget, {emulateTouch: true});
+      };
+
+      beforeEach(async() => {
+        menu = fixture('default');
+        menu.items = [
+          {
+            text: 'Menu Item 1',
+            children: [
+              {text: 'Menu Item 1 1'},
+              {
+                text: 'Menu Item 1 2',
+                children: [
+                  {text: 'Menu Item 1 2 1', children: [
+                    {text: 'Menu Item 1 2 1 1'}
+                  ]},
+                  {text: 'Menu Item 1 2 2'}
+                ]
+              }
+            ]
+          },
+          {text: 'Menu Item 2'},
+          {
+            text: 'Menu Item 3',
+            children: [
+              {text: 'Menu Item 3 1'},
+              {text: 'Menu Item 3 2'}
+            ]
+          },
+        ];
+        await nextRender(menu);
+        subMenu = menu._subMenu;
+        buttons = menu._buttons;
+        // simulate mobile & touch events
+        subMenu._touch = true;
+        window.top.document.querySelector('#subsuites').style.width = '400px';
+      });
+
+      afterEach(() => {
+        if (subMenu && subMenu.opened) {
+          subMenu.close();
+        }
+        window.top.document.querySelector('#subsuites').style.removeProperty('width');
+      });
+
+      it('should close submenu on mobile when selecting an item in the nested one', async() => {
+        arrowDown(buttons[0]);
+        await onceOpened(subMenu);
+        await nextRender(subMenu);
+        const subMenu2 = subMenu.$.overlay.querySelector('vaadin-context-menu');
+        subMenu2._touch = true;
+        items = subMenu.$.overlay.querySelectorAll('vaadin-context-menu-item');
+        item = items[items.length - 1];
+        open(item);
+        await nextRender(subMenu2);
+        items = subMenu2.$.overlay.querySelectorAll('vaadin-context-menu-item');
+        item = items[items.length - 1];
+        MockInteractions.tap(item, {emulateTouch: true});
+        await nextRender(subMenu2);
+        expect(subMenu2.opened).to.be.false;
+      });
+
+      it('should not close submenu on mobile when opening the nested submenu', async() => {
+        arrowDown(buttons[0]);
+        await onceOpened(subMenu);
+        await nextRender(subMenu);
+        const subMenu2 = subMenu.$.overlay.querySelector('vaadin-context-menu');
+        subMenu2._touch = true;
+        items = subMenu.$.overlay.querySelectorAll('vaadin-context-menu-item');
+        item = items[items.length - 1];
+        open(item);
+        await nextRender(subMenu2);
+        const subMenu3 = subMenu2.$.overlay.querySelector('vaadin-context-menu');
+        item = subMenu2.$.overlay.querySelector('vaadin-context-menu-item');
+        expect(item).to.be.ok;
+        open(item);
+        await nextRender(subMenu3);
+        expect(subMenu3.opened).to.be.true;
+        subMenu3.dispatchEvent(new CustomEvent('close-all-menus'));
+      });
+    });
   </script>
 </body>

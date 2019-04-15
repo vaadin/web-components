@@ -213,6 +213,21 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    __isOverlayClick(e) {
+      const path = e.composedPath();
+      let overlay = path.filter(node => node instanceof customElements.get('vaadin-context-menu-overlay'))[0];
+
+      while (overlay) {
+        if (overlay === this._subMenu.$.overlay) {
+          return true;
+        } else if (overlay.parentOverlay) {
+          overlay = overlay.parentOverlay;
+        } else {
+          return false;
+        }
+      }
+    }
+
     _onMouseOver(e) {
       const button = Array.from(e.composedPath()).filter(el => el.item)[0];
       if (button && button !== this._expandedButton && (this.openOnHover || (button.item.children && this._subMenu.opened))) {
@@ -241,7 +256,7 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     __outsideClickListener(e) {
-      if (!this._getButtonFromEvent(e) && e.composedPath().indexOf(this._subMenu.$.overlay) === -1) {
+      if (!this._getButtonFromEvent(e) && !this.__isOverlayClick(e)) {
         this._close();
       }
     }
