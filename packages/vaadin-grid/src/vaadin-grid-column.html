@@ -544,6 +544,26 @@ This program is available under Apache License Version 2.0, available at https:/
             type: String
           },
 
+          /**
+           * Automatically sets the width of the column based on the column contents when this is set to `true`.
+           *
+           * For performance reasons the column width is calculated automatically only once when the grid items
+           * are rendered for the first time and the calculation only considers the rows which are currently
+           * rendered in DOM (a bit more than what is currently visible). If the grid is scrolled, or the cell
+           * content changes, the column width might not match the contents anymore.
+           *
+           * Hidden columns are ignored in the calculation and their widths are not automatically updated when
+           * you show a column that was initially hidden.
+           *
+           * You can manually trigger the auto sizing behavior again by calling `grid.recalculateColumnWidths()`.
+           *
+           * The column width may still grow larger when `flexGrow` is not 0.
+           */
+          autoWidth: {
+            type: Boolean,
+            value: false
+          },
+
           _bodyTemplate: {
             type: Object
           },

@@ -1,0 +1,128 @@
+<!doctype html>
+
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <link rel="import" href="../../test-fixture/test-fixture.html">
+
+  <link rel="import" href="helpers.html">
+  <link rel="import" href="../vaadin-grid.html">
+</head>
+
+<body>
+
+  <test-fixture id="auto-width">
+    <template>
+      <vaadin-grid style="width: 600px; height: 200px;" hidden>
+        <vaadin-grid-column auto-width flex-grow="0" path="a"></vaadin-grid-column>
+        <vaadin-grid-column auto-width flex-grow="0" path="b"></vaadin-grid-column>
+        <vaadin-grid-column auto-width flex-grow="0" path="c"></vaadin-grid-column>
+        <vaadin-grid-column auto-width flex-grow="0" path="d" header="foo bar baz"></vaadin-grid-column>
+      </vaadin-grid>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('column auto-width', function() {
+      let grid;
+      let columns;
+      const testItems = [
+        {a: 'fubar', b: 'foo', c: 'foo', d: 'a'},
+        {a: 'foo', b: 'foo bar baz', c: 'foo', d: 'bar'},
+        {a: 'foo', b: 'foo baz', c: 'foo bar', d: 'baz'},
+      ];
+
+      function expectColumnWidthsToBeOk(columns, expectedWidths = [71, 114, 84, 107]) {
+        // Allowed margin of measurement to keep the test from failing if there are small differences in rendered text
+        // width on different platforms or if there are small changes to styles which affect horizontal margin/padding.
+        const delta = 5;
+
+        expectedWidths.forEach((expectedWidth, index) => {
+          const columnWidth = parseInt(columns[index].width);
+          expect(columnWidth).to.be.closeTo(expectedWidth, delta);
+        });
+      }
+
+      function whenColumnWidthsCalculated(cb) {
+        if (grid._recalculateColumnWidths.called) {
+          cb();
+        } else {
+          requestAnimationFrame(() => whenColumnWidthsCalculated(cb));
+        }
+      }
+
+      beforeEach(done => {
+        grid = fixture('auto-width');
+        sinon.spy(grid, '_recalculateColumnWidths');
+        columns = grid.querySelectorAll('vaadin-grid-column');
+        // Show the grid and wait for animationend event ("vaadin-grid-appear")
+        // to ensure the grid is in a consistent state before starting each test
+        whenGridAppearAnimationEnd(grid, done);
+        grid.hidden = false;
+      });
+
+      it('should have correct column widths when items are set', done => {
+        grid.items = testItems;
+
+        whenColumnWidthsCalculated(() => {
+          expectColumnWidthsToBeOk(columns);
+          done();
+        });
+      });
+
+      it('should have correct column widths when using lazy dataProvider', done => {
+        grid.dataProvider = (params, callback) => {
+          requestAnimationFrame(() => {
+            callback(
+              testItems.slice(0, params.pageSize),
+              testItems.length
+            );
+          });
+        };
+
+        whenColumnWidthsCalculated(() => {
+          expectColumnWidthsToBeOk(columns);
+          done();
+        });
+      });
+
+      it('should have correct column widths once visible', done => {
+        grid.hidden = true;
+        grid.items = testItems;
+
+        requestAnimationFrame(() => {
+          grid.hidden = false;
+
+          whenColumnWidthsCalculated(() => {
+            expectColumnWidthsToBeOk(columns);
+            done();
+          });
+        });
+      });
+
+      it('should have correct column widths when using renderers', done => {
+        columns[0].renderer = function(root, column, rowData) {
+          root.textContent = rowData.index;
+        };
+        columns[1].renderer = function(root, column, rowData) {
+          root.innerHTML = `<div style="width: ${10 + 10 * rowData.index}px; height: 25px; outline: 1px solid green;">`;
+        };
+        grid.items = testItems;
+
+        whenColumnWidthsCalculated(() => {
+          expectColumnWidthsToBeOk(columns, [42, 62, 84, 107]);
+          done();
+        });
+      });
+
+    });
+  </script>
+
+</body>
+
+</html>

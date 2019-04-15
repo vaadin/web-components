@@ -56,6 +56,7 @@
     "ensureDefined": false,
     "getContainerCell": false,
     "footerTrap": false,
-    "wheel": false
+    "wheel": false,
+    "whenGridAppearAnimationEnd": false
   }
 }

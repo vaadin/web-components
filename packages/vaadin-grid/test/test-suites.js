@@ -5,6 +5,7 @@ window.VaadinGridSuites = [
   'array-data-provider.html',
   'basic.html',
   'class-name-generator.html',
+  'column-auto-width.html',
   'column-group.html',
   'column-groups.html',
   'column-reordering.html',

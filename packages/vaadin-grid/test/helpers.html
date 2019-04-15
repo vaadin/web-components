@@ -11,6 +11,16 @@
     }
   };
 
+  window.whenGridAppearAnimationEnd = (grid, cb) => {
+    const onAnimationEnd = e => {
+      if (e.animationName.indexOf('vaadin-grid-appear') === 0) {
+        grid.removeEventListener('animationend', onAnimationEnd);
+        cb();
+      }
+    };
+    grid.addEventListener('animationend', onAnimationEnd);
+  };
+
   window.flushGrid = (grid) => {
     grid._observer.flush();
     if (grid._debounceScrolling) {
