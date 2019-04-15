@@ -1,0 +1,506 @@
+<!doctype html>
+
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <link rel="import" href="../../test-fixture/test-fixture.html">
+
+  <link rel="import" href="helpers.html">
+  <link rel="import" href="../all-imports.html">
+</head>
+
+<body>
+
+<test-fixture id="default">
+  <template>
+    <vaadin-grid>
+      <vaadin-grid-column path="first" header="First name"></vaadin-grid-column>
+      <vaadin-grid-column path="last" header="Last name"></vaadin-grid-column>
+    </vaadin-grid>
+  </template>
+</test-fixture>
+
+<script>
+describe('drag and drop', () => {
+  let grid;
+
+  beforeEach(done => {
+    grid = fixture('default');
+    grid.hidden = true;
+    requestAnimationFrame(() => {
+      // Wait for the appear animation to finish
+      grid.addEventListener('animationend', () => {
+        grid.items = [
+          {first: 'foo', last: 'bar'},
+          {first: 'baz', last: 'qux'}
+        ];
+        flushGrid(grid);
+        flush(() => done());
+      });
+      requestAnimationFrame(() => grid.hidden = false);
+    });
+  });
+
+  const getDraggable = grid => {
+    return grid.querySelector('[draggable="true"]') || grid.shadowRoot.querySelector('[draggable="true"]');
+  };
+
+  it('should not be draggable by default', () => {
+    expect(getDraggable(grid)).not.to.be.ok;
+  });
+
+  describe('draggable', () => {
+    let draggable;
+
+    const fireDragStart = node => {
+      const event = new Event('dragstart', {
+        bubbles: true,
+        cancelable: true,
+        composed: true
+      });
+      event.dataTransfer = {
+        setDragImage: () => {},
+        setData: (type, data) => {
+          event.__dataType = type;
+          event.__data = data;
+        }
+      };
+      (node || draggable).dispatchEvent(event);
+      return event;
+    };
+
+    const fireDragEnd = () => {
+      const event = new Event('dragend', {
+        bubbles: true,
+        cancelable: true,
+        composed: true
+      });
+      draggable.dispatchEvent(event);
+    };
+
+    const fireDragLeave = () => {
+      const event = new Event('dragleave', {
+        bubbles: true,
+        cancelable: true,
+        composed: true
+      });
+      draggable.dispatchEvent(event);
+    };
+
+    const fireDrop = () => {
+      const event = new Event('drop', {
+        bubbles: true,
+        cancelable: true,
+        composed: true
+      });
+      event.dataTransfer = {
+        getData: () => 'foo'
+      };
+      draggable.dispatchEvent(event);
+    };
+
+    const fireDragOver = (row, location) => {
+      const event = new Event('dragover', {
+        bubbles: true,
+        cancelable: true,
+        composed: true
+      });
+      if (row) {
+        const rect = row.getBoundingClientRect();
+        if (location === 'on-top') {
+          event.clientY = rect.top + rect.height / 2;
+        } else if (location === 'above') {
+          event.clientY = rect.top;
+        } else if (location === 'below') {
+          event.clientY = rect.bottom;
+        } else if (location === 'under') {
+          event.clientY = rect.bottom + rect.height / 2;
+        }
+        row.dispatchEvent(event);
+      } else {
+        draggable.dispatchEvent(event);
+      }
+      return event;
+    };
+
+    beforeEach(() => {
+      grid.rowsDraggable = true;
+      flushGrid(grid);
+      draggable = getDraggable(grid);
+    });
+
+    it('should be draggable', () => {
+      expect(draggable).to.be.ok;
+    });
+
+    it('should not be draggable', () => {
+      grid.rowsDraggable = false;
+      expect(getDraggable(grid)).not.to.be.ok;
+    });
+
+    describe('dragstart', () => {
+
+      let dragStartSpy;
+
+      beforeEach(() => {
+        grid.rowsDraggable = true;
+        dragStartSpy = sinon.spy();
+        grid.addEventListener('grid-dragstart', dragStartSpy);
+      });
+
+      it('should stop the native event', () => {
+        const spy = sinon.spy();
+        grid.addEventListener('dragstart', spy);
+        fireDragStart();
+        expect(spy.called).to.be.false;
+      });
+
+      it('should not stop the native event', () => {
+        const spy = sinon.spy();
+        grid.addEventListener('dragstart', spy);
+        fireDragStart(getFirstCell(grid));
+        expect(spy.called).to.be.true;
+      });
+
+      it('should not stop the native event when not draggable', () => {
+        const spy = sinon.spy();
+        grid.addEventListener('dragstart', spy);
+        grid.rowsDraggable = false;
+        fireDragStart();
+        expect(spy.called).to.be.true;
+      });
+
+      it('should add dragging state attribute', () => {
+        fireDragStart();
+        expect(grid.hasAttribute('dragging-rows')).to.be.true;
+      });
+
+      it('should add dragged row count state attribute for drag image', done => {
+        fireDragStart();
+        const row = getRows(grid.$.items)[0];
+        expect(row.getAttribute('dragged-row-count')).to.equal('1');
+
+        requestAnimationFrame(() => {
+          expect(row.hasAttribute('dragged-row-count')).to.be.false;
+          done();
+        });
+      });
+
+      if (!window.ShadyDOM) {
+        it('should use top on native shadow for drag image', done => {
+          const row = getRows(grid.$.items)[0];
+          const originalTransform = row.style.transform;
+          fireDragStart();
+
+          expect(row.style.top).to.be.ok;
+          expect(row.style.transform).to.equal('none');
+
+          requestAnimationFrame(() => {
+            expect(row.style.top).not.to.be.ok;
+            expect(row.style.transform).to.equal(originalTransform);
+            done();
+          });
+        });
+      }
+
+      it('should dispatch a grid specific event', () => {
+        fireDragStart();
+        expect(dragStartSpy.calledOnce).to.be.true;
+      });
+
+      it('should bubble and be cancelable', () => {
+        fireDragStart();
+        const event = dragStartSpy.getCall(0).args[0];
+        expect(event.bubbles).to.be.true;
+        expect(event.cancelable).to.be.true;
+      });
+
+      it('should reference the dragged item', () => {
+        fireDragStart();
+        const event = dragStartSpy.getCall(0).args[0];
+        expect(event.detail.items).to.eql([grid.items[0]]);
+      });
+
+      it('should reference the dragged item only', () => {
+        grid.selectItem(grid.items[1]);
+        fireDragStart();
+        const event = dragStartSpy.getCall(0).args[0];
+        expect(event.detail.items).to.eql([grid.items[0]]);
+      });
+
+      it('should reference all the selected items', () => {
+        grid.selectedItems = grid.items;
+        fireDragStart();
+        const event = dragStartSpy.getCall(0).args[0];
+        expect(event.detail.items).to.eql(grid.items);
+      });
+
+      it('should auto generate data transfer text data', () => {
+        grid.selectedItems = grid.items;
+        const e = fireDragStart();
+        expect(e.__data).to.eql('foo\tbar\nbaz\tqux');
+      });
+
+      it('should generate custom data transfer text data', () => {
+        grid.selectedItems = grid.items;
+        grid.formatDragData = items => {
+          return items.map(item => item.last).join(',');
+        };
+        const e = fireDragStart();
+        expect(e.__data).to.eql('bar,qux');
+      });
+
+    });
+
+    describe('dragend', () => {
+
+      let dragEndSpy;
+
+      beforeEach(() => {
+        dragEndSpy = sinon.spy();
+        grid.addEventListener('grid-dragend', dragEndSpy);
+      });
+
+      it('should stop the native event', () => {
+        const spy = sinon.spy();
+        grid.addEventListener('dragend', spy);
+        fireDragEnd();
+        expect(spy.called).to.be.false;
+      });
+
+      it('should remove dragging state attribute', () => {
+        fireDragStart();
+        fireDragEnd();
+        expect(grid.hasAttribute('dragging-rows')).to.be.false;
+      });
+
+      it('should dispatch a grid specific event', () => {
+        fireDragEnd();
+        expect(dragEndSpy.calledOnce).to.be.true;
+      });
+
+      it('should bubble and be cancelable', () => {
+        fireDragEnd();
+        const event = dragEndSpy.getCall(0).args[0];
+        expect(event.bubbles).to.be.true;
+        expect(event.cancelable).to.be.true;
+      });
+
+    });
+
+    describe('dragover', () => {
+
+      it('should not stop the native event', () => {
+        const spy = sinon.spy();
+        grid.addEventListener('dragover', spy);
+        fireDragOver();
+        expect(spy.called).to.be.true;
+      });
+
+      it('should stop the native event', () => {
+        grid.dropMode = 'between';
+
+        const spy = sinon.spy();
+        grid.addEventListener('dragover', spy);
+        fireDragOver();
+        expect(spy.called).to.be.false;
+      });
+
+      it('should not cancel the native event', () => {
+        const e = fireDragOver();
+        expect(e.defaultPrevented).to.be.false;
+      });
+
+      it('should cancel the native event', () => {
+        grid.dropMode = 'between';
+
+        const e = fireDragOver();
+        expect(e.defaultPrevented).to.be.true;
+      });
+
+      it('should set row-drag attribute to grid on on-grid dropmode', () => {
+        grid.dropMode = 'on-grid';
+        fireDragOver();
+        expect(grid.hasAttribute('row-drag')).to.be.true;
+      });
+
+      it('should set row-drag attribute to empty grid', () => {
+        grid.items = [];
+        grid.dropMode = 'on-top-or-between';
+        fireDragOver();
+        expect(grid.hasAttribute('row-drag')).to.be.true;
+      });
+
+      it('should not set row-drag attribute to the grid', () => {
+        grid.dropMode = 'on-top';
+        const row = grid.$.items.children[0];
+        fireDragOver(row, 'above');
+        expect(grid.hasAttribute('row-drag')).to.be.false;
+      });
+
+      it('should set row-drag=on-top attribute to the row', () => {
+        grid.dropMode = 'on-top';
+        const row = grid.$.items.children[0];
+        fireDragOver(row, 'above');
+        expect(row.getAttribute('row-drag')).to.equal('on-top');
+      });
+
+      it('should set row-drag=on-top attribute to the row 2', () => {
+        grid.dropMode = 'on-top-or-between';
+        const row = grid.$.items.children[0];
+        fireDragOver(row, 'on-top');
+        expect(row.getAttribute('row-drag')).to.equal('on-top');
+      });
+
+      it('should set row-drag=above attribute to the row', () => {
+        grid.dropMode = 'between';
+        const row = grid.$.items.children[0];
+        fireDragOver(row, 'above');
+        expect(row.getAttribute('row-drag')).to.equal('above');
+      });
+
+      it('should set row-drag=below attribute to the row', () => {
+        grid.dropMode = 'between';
+        const row = grid.$.items.children[0];
+        fireDragOver(row, 'below');
+        expect(row.getAttribute('row-drag')).to.equal('below');
+      });
+
+      it('should set row-drag=above attribute to the row 2', () => {
+        grid.dropMode = 'on-top-or-between';
+        const row = grid.$.items.children[0];
+        fireDragOver(row, 'above');
+        expect(row.getAttribute('row-drag')).to.equal('above');
+      });
+
+      it('should set row-drag=below attribute to the row 2', () => {
+        grid.dropMode = 'on-top-or-between';
+        const row = grid.$.items.children[0];
+        fireDragOver(row, 'below');
+        expect(row.getAttribute('row-drag')).to.equal('below');
+      });
+
+      it('should set row-drag=below attribute to the last row', () => {
+        grid.dropMode = 'on-top-or-between';
+        const row = grid.$.items.children[1];
+        fireDragOver(row, 'under');
+        expect(row.getAttribute('row-drag')).to.equal('below');
+      });
+
+    });
+
+    describe('dragleave', () => {
+
+      it('should stop the native event', () => {
+        const spy = sinon.spy();
+        grid.addEventListener('dragleave', spy);
+        fireDragLeave();
+        expect(spy.called).to.be.false;
+      });
+
+      it('should clear the grid drag styles', () => {
+        grid.dropMode = 'on-grid';
+        fireDragOver();
+        expect(grid.hasAttribute('row-drag')).to.be.true;
+        fireDragLeave();
+        expect(grid.hasAttribute('row-drag')).to.be.false;
+      });
+
+      it('should clear the row drag styles', () => {
+        grid.dropMode = 'on-top';
+        fireDragOver();
+        const row = grid.$.items.children[0];
+        expect(row.hasAttribute('row-drag')).to.be.true;
+        fireDragLeave();
+        expect(row.hasAttribute('row-drag')).to.be.false;
+      });
+
+    });
+
+    describe('drop', () => {
+      let dropSpy;
+
+      beforeEach(() => {
+        dropSpy = sinon.spy();
+        grid.addEventListener('grid-drop', dropSpy);
+      });
+
+      it('should stop the native event', () => {
+        const spy = sinon.spy();
+        grid.addEventListener('drop', spy);
+        fireDrop();
+        expect(spy.called).to.be.false;
+      });
+
+      it('should clear the grid drag styles', () => {
+        grid.dropMode = 'on-grid';
+        fireDragOver();
+        expect(grid.hasAttribute('row-drag')).to.be.true;
+        fireDrop();
+        expect(grid.hasAttribute('row-drag')).to.be.false;
+      });
+
+      it('should clear the row drag styles', () => {
+        grid.dropMode = 'on-top';
+        fireDragOver();
+        const row = grid.$.items.children[0];
+        expect(row.hasAttribute('row-drag')).to.be.true;
+        fireDrop();
+        expect(row.hasAttribute('row-drag')).to.be.false;
+      });
+
+      it('should dispatch a grid specific event', () => {
+        fireDrop();
+        expect(dropSpy.calledOnce).to.be.true;
+      });
+
+      it('should bubble and be cancelable', () => {
+        fireDrop();
+        const event = dropSpy.getCall(0).args[0];
+        expect(event.bubbles).to.be.true;
+        expect(event.cancelable).to.be.true;
+      });
+
+      it('should reference the drop target item', () => {
+        grid.dropMode = 'on-top';
+        fireDragOver();
+        fireDrop();
+        const event = dropSpy.getCall(0).args[0];
+        expect(event.detail.item).to.eql(grid.items[0]);
+      });
+
+      it('should have the drop location', () => {
+        grid.dropMode = 'between';
+        const row = grid.$.items.children[0];
+        fireDragOver(row, 'above');
+        fireDrop();
+        const event = dropSpy.getCall(0).args[0];
+        expect(event.detail.dropLocation).to.eql('above');
+      });
+
+      it('should have the payload data', () => {
+        grid.dropMode = 'on-top';
+        fireDragOver();
+        fireDrop();
+        const event = dropSpy.getCall(0).args[0];
+        expect(event.detail.data).to.eql('foo');
+      });
+
+
+    });
+
+  });
+
+});
+
+
+</script>
+
+</body>
+
+</html>

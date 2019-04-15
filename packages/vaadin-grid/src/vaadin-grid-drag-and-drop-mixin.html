@@ -1,0 +1,269 @@
+<!--
+@license
+Copyright (c) 2019 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<script>
+  window.Vaadin = window.Vaadin || {};
+  window.Vaadin.Grid = window.Vaadin.Grid || {};
+
+  (function() {
+    const DropMode = {
+      BETWEEN: 'between',
+      ON_TOP: 'on-top',
+      ON_TOP_OR_BETWEEN: 'on-top-or-between',
+      ON_GRID: 'on-grid'
+    };
+
+    const DropLocation = {
+      ON_TOP: 'on-top',
+      ABOVE: 'above',
+      BELOW: 'below',
+      EMPTY: 'empty'
+    };
+
+    /**
+     * @polymerMixin
+     */
+    Vaadin.Grid.DragAndDropMixin = superClass => class DragAndDropMixin extends superClass {
+
+      static get properties() {
+        return {
+          /**
+           * Defines the locations within the Grid row where an element can be dropped.
+           *
+           * Possible values are:
+           * - `between`: The drop event can happen between Grid rows.
+           * - `on-top`: The drop event can happen on top of Grid rows.
+           * - `on-top-or-between`: The drop event can happen either on top of or between Grid rows.
+           * - `on-grid`: The drop event will not happen on any specific row, it will show the drop target outline around the whole grid.
+           */
+          dropMode: String,
+
+          /**
+           * Marks the grid's rows to be available for dragging.
+           */
+          rowsDraggable: Boolean
+
+        };
+      }
+
+      static get observers() {
+        return [
+          '_rowsDraggableChanged(rowsDraggable)'
+        ];
+      }
+
+      ready() {
+        super.ready();
+        this.$.table.addEventListener('dragstart', this._onDragStart.bind(this));
+        this.$.table.addEventListener('dragend', this._onDragEnd.bind(this));
+        this.$.table.addEventListener('dragover', this._onDragOver.bind(this));
+        this.$.table.addEventListener('dragleave', this._onDragLeave.bind(this));
+        this.$.table.addEventListener('drop', this._onDrop.bind(this));
+      }
+
+      _rowsDraggableChanged() {
+        this._assignModels();
+      }
+
+      _onDragStart(e) {
+        if (this.rowsDraggable) {
+          let row = e.target;
+          if (row.localName === 'vaadin-grid-cell-content') {
+            // In browsers that support shadow, the draggable node is the cell content element
+            row = row.assignedSlot.parentNode.parentNode;
+          }
+          if (row.localName !== 'tr') {
+            return;
+          }
+
+          e.stopPropagation();
+          this._toggleAttribute('dragging-rows', true, this);
+
+          if (!window.ShadyDOM) {
+            // Safari doesn't get proper drag images from transformed
+            // elements so we need to switch to top temporarily
+            const transform = row.style.transform;
+            row.style.top = /translateY\((.*)\)/.exec(transform)[1];
+            row.style.transform = 'none';
+
+            const rect = row.getBoundingClientRect();
+            e.dataTransfer.setDragImage(row, e.clientX - rect.left, e.clientY - rect.top);
+
+            requestAnimationFrame(() => {
+              row.style.top = '';
+              row.style.transform = transform;
+            });
+          }
+
+          const items = this._isSelected(row._item) ? this.selectedItems.slice(0) : [row._item];
+          e.dataTransfer.setData('text', this.formatDragData(items));
+
+          row.setAttribute('dragged-row-count', items.length);
+          requestAnimationFrame(() => row.removeAttribute('dragged-row-count'));
+
+          const event = new CustomEvent('grid-dragstart', {
+            bubbles: e.bubbles,
+            cancelable: e.cancelable,
+            detail: {
+              items
+            }
+          });
+          this.dispatchEvent(event);
+        }
+      }
+
+      _onDragEnd(e) {
+        this._toggleAttribute('dragging-rows', false, this);
+        e.stopPropagation();
+        const event = new CustomEvent('grid-dragend', {
+          bubbles: e.bubbles,
+          cancelable: e.cancelable,
+        });
+        this.dispatchEvent(event);
+      }
+
+      _onDragLeave(e) {
+        e.stopPropagation();
+        this._clearDragStyles();
+      }
+
+      _onDragOver(e) {
+
+        if (this.dropMode) {
+          e.stopPropagation();
+          e.preventDefault();
+
+          this._clearDragStyles();
+          this._dropLocation = undefined;
+          this._dragOverItem = undefined;
+
+          let row = e.composedPath().filter(node => node.localName === 'tr')[0];
+
+          if (!this._effectiveSize || this.dropMode === DropMode.ON_GRID) {
+            // The grid is empty or "on-grid" drop mode was used, always default to "empty"
+            this._dropLocation = DropLocation.EMPTY;
+          } else if (!row || row.parentNode !== this.$.items) {
+            // The dragover didn't occur on a body row, default to "empty"...
+            this._dropLocation = DropLocation.EMPTY;
+
+            if (this.dropMode === DropMode.BETWEEN || this.dropMode === DropMode.ON_TOP_OR_BETWEEN) {
+              // ...unless if the drop mode allows setting the last row as the drag over item
+              row = Array.from(this.$.items.children).filter(row => !row.hidden).pop();
+              this._dropLocation = DropLocation.BELOW;
+            }
+          } else {
+            // The dragover occurred on a body row, determine the drop location from coordinates
+            const rowRect = row.getBoundingClientRect();
+
+            this._dropLocation = DropLocation.ON_TOP;
+
+            if (this.dropMode === DropMode.BETWEEN) {
+              const dropAbove = e.clientY - rowRect.top < rowRect.bottom - e.clientY;
+              this._dropLocation = dropAbove ? DropLocation.ABOVE : DropLocation.BELOW;
+
+            } else if (this.dropMode === DropMode.ON_TOP_OR_BETWEEN) {
+              if (e.clientY - rowRect.top < rowRect.height / 3) {
+                this._dropLocation = DropLocation.ABOVE;
+              } else if (e.clientY - rowRect.top > (rowRect.height / 3) * 2) {
+                this._dropLocation = DropLocation.BELOW;
+              }
+            }
+          }
+
+          if (this._dropLocation === DropLocation.EMPTY) {
+            this.setAttribute('row-drag', '');
+          } else if (row) {
+            this._dragOverItem = row._item;
+            row.setAttribute('row-drag', this._dropLocation);
+          }
+        }
+      }
+
+      _clearDragStyles() {
+        this.removeAttribute('row-drag');
+        Array.from(this.$.items.children).forEach(row => row.removeAttribute('row-drag'));
+      }
+
+      _onDrop(e) {
+        e.stopPropagation();
+        const data = e.dataTransfer.getData('text');
+        this._clearDragStyles();
+
+        const event = new CustomEvent('grid-drop', {
+          bubbles: e.bubbles,
+          cancelable: e.cancelable,
+          detail: {
+            item: this._dragOverItem,
+            dropLocation: this._dropLocation,
+            data
+          }
+        });
+        this.dispatchEvent(event);
+      }
+
+      formatDragData(items) {
+        // TODO: Change this to either get the the default data from
+        // the physical cell content OR document properly that column "path"
+        // is needed to genrate the default payload
+        return items.map(item => {
+          return this._columnTree.slice(0).pop()
+            .sort((a, b) => {
+              return a._order > b._order ? 1 : -1;
+            })
+            .filter(col => col.path)
+            .map(col => this.get(col.path, item))
+            .join('\t');
+        }).join('\n');
+      }
+
+      _updateItem(row, item) {
+        super._updateItem && super._updateItem(row, item);
+
+        const draggableElements = window.ShadyDOM
+          ? [row]
+          : Array.from(row.children).map(cell => cell._content);
+
+        draggableElements.forEach(e => {
+          if (this.rowsDraggable) {
+            e.setAttribute('draggable', true);
+          } else {
+            e.removeAttribute('draggable');
+          }
+        });
+      }
+
+      /**
+       * Fired when starting to drag grid rows.
+       *
+       * @event grid-dragstart
+       * @param {Object} detail
+       * @param {Object} detail.items the items being dragged
+       */
+
+      /**
+       * Fired when the dragging of the rows ends.
+       *
+       * @event grid-dragend
+       */
+
+      /**
+       * Fired when a drop occurs on top of the grid.
+       *
+       * @event grid-drop
+       * @param {Object} detail
+       * @param {Object} detail.item The item of the grid row on which the drop occurred.
+       * @param {string} detail.dropLocation The position at which the drop event took place relative to a row.
+       * Depending on the dropMode value, the drop location can be one of the following
+       * - `on-top`: when the drop occurred on top of the row
+       * - `above`: when the drop occurred above the row
+       * - `below`: when the drop occurred below the row
+       * - `empty`: when the drop occurred over the grid, not relative to any specific row
+       * @param {string} detail.data The payload of the drag and drop operation.
+       */
+    };
+
+  })();
+</script>

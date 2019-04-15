@@ -11,6 +11,7 @@ window.VaadinGridSuites = [
   'column-resizing.html',
   'column.html',
   'data-provider.html',
+  'drag-and-drop.html',
   'dynamic-item-size.html',
   'event-context.html',
   'filtering.html',

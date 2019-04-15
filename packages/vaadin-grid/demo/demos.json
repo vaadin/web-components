@@ -101,6 +101,17 @@
   }
   ,
   {
+    "name": "Drag and Drop",
+    "url": "grid-drag-and-drop-demos",
+    "src": "grid-drag-and-drop-demos.html",
+    "meta": {
+      "title": "vaadin-grid – Drag and Drop",
+      "description": "",
+      "image": ""
+    }
+  }
+  ,
+  {
     "name": "Styling",
     "url": "grid-styling-demos",
     "src": "grid-styling-demos.html",

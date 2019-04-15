@@ -1,0 +1,329 @@
+<dom-module id="grid-drag-and-drop-demos">
+  <template>
+    <style include="vaadin-component-demo-shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+
+    <h3>Row Reordering</h3>
+    <p>
+      Switch on the <code>rowsDraggable</code> flag to make the grid's rows draggable with mouse (or touch).
+    </p>
+    <p>
+      Specifying <code>dropMode</code> enables dropping on top of the grid or grid rows.
+      Supported values for the <code>dropMode</code> are
+      <ul>
+        <li><b>on-grid</b> <i>allows dropping on top of the grid</i></li>
+        <li><b>on-top</b> <i>allows dropping on top of the grid rows</i></li>
+        <li><b>between</b> <i>allows dropping between the grid rows</i></li>
+        <li><b>on-top-or-between</b> <i>allows dropping on top of or between the grid rows</i></li>
+      </ul>
+    </p>
+    <p>
+      Depending on <code>rowsDraggable</code> and <code>dropMode</code> configuration,
+      grid fires events during the different phases of drag and drop sequence.
+      <ul>
+        <li><b>grid-dragstart</b> <i>fired when starting to drag grid rows</i></li>
+        <li><b>grid-dragend</b> <i>fired when the dragging of the rows ends</i></li>
+        <li><b>grid-drop</b> <i>fired when a drop occurs on top of the grid</i></li>
+      </ul>
+    </p>
+    <vaadin-demo-snippet id='grid-drag-and-drop-demos-row-reordering'>
+      <template preserve-content>
+        <vaadin-grid drop-mode="between" rows-draggable>
+          <vaadin-grid-column path="name.first" header="First name"></vaadin-grid-column>
+          <vaadin-grid-column path="name.last" header="Last name"></vaadin-grid-column>
+          <vaadin-grid-column path="email"></vaadin-grid-column>
+        </vaadin-grid>
+
+        <script>
+          window.addDemoReadyListener('#grid-drag-and-drop-demos-row-reordering', function(document) {
+            // Assign an array of user objects as the grid's items
+            const grid = document.querySelector('vaadin-grid');
+            grid.items = Vaadin.GridDemo.users.slice(0);
+
+            let draggedItem;
+
+            grid.addEventListener('grid-dragstart', function(e) {
+              draggedItem = e.detail.items[0];
+            });
+
+            grid.addEventListener('grid-dragend', function(e) {
+              draggedItem = null;
+            });
+
+            grid.addEventListener('grid-drop', function(e) {
+              const dropOverItem = e.detail.item;
+              if (draggedItem && draggedItem !== dropOverItem) {
+                // Reorder the items
+                const items = grid.items.filter(function(i) {
+                  return i !== draggedItem;
+                });
+                const dropLocation = e.detail.dropLocation;
+                const dropIndex = items.indexOf(dropOverItem) + (dropLocation === 'below' ? 1 : 0);
+                items.splice(dropIndex, 0, draggedItem);
+                grid.items = items;
+              }
+            });
+
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Drag Rows Between Grids</h3>
+    <p>
+      By default, only one row gets dragged at once. Make the grid rows selectable,
+      for example with the selection column helper, to enable dragging multiple rows at the same time.
+    </p>
+    <p>
+      The <code>detail.items</code> property of the <code>grid-dragstart</code> event
+      is an array containing all items getting dragged.
+    </p>
+    <p>
+      The <code>detail.item</code> property of the <code>grid-drop</code> event
+      refers to the item of the grid row on which the drop occurred.
+    </p>
+
+    <vaadin-demo-snippet id='grid-drag-and-drop-demos-drag-between-grids'>
+      <template preserve-content>
+        <div style="display: flex">
+          <vaadin-grid rows-draggable drop-mode="between">
+            <vaadin-grid-selection-column auto-select></vaadin-grid-selection-column>
+            <vaadin-grid-column path="name.first" header="First name"></vaadin-grid-column>
+            <vaadin-grid-column path="name.last" header="Last name"></vaadin-grid-column>
+            <vaadin-grid-column path="email"></vaadin-grid-column>
+          </vaadin-grid>
+
+          &nbsp;
+
+          <vaadin-grid rows-draggable drop-mode="between">
+            <vaadin-grid-selection-column auto-select></vaadin-grid-selection-column>
+            <vaadin-grid-column path="name.first" header="First name"></vaadin-grid-column>
+            <vaadin-grid-column path="name.last" header="Last name"></vaadin-grid-column>
+            <vaadin-grid-column path="email"></vaadin-grid-column>
+          </vaadin-grid>
+        </div>
+        <script>
+          window.addDemoReadyListener('#grid-drag-and-drop-demos-drag-between-grids', function(document) {
+            let draggedItems;
+            let sourceGrid;
+
+            const dragStartListener = function(e) {
+              draggedItems = e.detail.items;
+              sourceGrid = e.target;
+            };
+
+            const dragEndListener = function(e) {
+              draggedItems = null;
+              sourceGrid = null;
+            };
+
+            const dropListener = function(e) {
+              const dropOverItem = e.detail.item;
+              if (sourceGrid && draggedItems && draggedItems.indexOf(dropOverItem) === -1) {
+                // Remove the items from the source grid
+                sourceGrid.items = sourceGrid.items.filter(function(i) {
+                  return draggedItems.indexOf(i) === -1;
+                });
+                sourceGrid.selectedItems = [];
+
+                // Add dragged items to the target Grid
+                const targetGrid = e.target;
+                let index = targetGrid.items.length;
+                if (dropOverItem) {
+                  index = targetGrid.items.indexOf(dropOverItem)
+                    + (e.detail.dropLocation === 'below' ? 1 : 0);
+                }
+                targetGrid.items = []
+                  .concat(targetGrid.items.slice(0, index))
+                  .concat(draggedItems)
+                  .concat(targetGrid.items.slice(index));
+              }
+            };
+
+            Array.from(document.querySelectorAll('vaadin-grid'))
+              .forEach(function(grid, index) {
+                grid.items = index === 0 ? Vaadin.GridDemo.users.slice(0, 5) : Vaadin.GridDemo.users.slice(6, 7);
+                grid.addEventListener('grid-dragstart', dragStartListener);
+                grid.addEventListener('grid-dragend', dragEndListener);
+                grid.addEventListener('grid-drop', dropListener);
+              });
+
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Drop Location</h3>
+    <p>
+      The <code>detail.dropLocation</code> property of the <code>grid-drop</code> event
+      indicates the position at which the drop event took place relative to a row. Depending
+      on the <code>dropMode</code> value, the drop location can be one of the following:
+
+      <ul>
+        <li><b>on-top</b> <i>when the drop occurred on top of the row</i></li>
+        <li><b>above</b> <i>when the drop occurred above the row</i></li>
+        <li><b>below</b> <i>when the drop occurred below the row</i></li>
+        <li><b>empty</b> <i>when the drop occurred over the grid, not relative to any specific row</i></li>
+      </ul>
+    </p>
+
+    <vaadin-demo-snippet id='grid-drag-and-drop-demos-drop-location'>
+      <template preserve-content>
+        <div style="display: flex">
+          <vaadin-grid id="source" rows-draggable>
+            <vaadin-grid-column path="name.first" header="First name"></vaadin-grid-column>
+            <vaadin-grid-column path="name.last" header="Last name"></vaadin-grid-column>
+            <vaadin-grid-column path="email"></vaadin-grid-column>
+          </vaadin-grid>
+
+          &nbsp;
+
+          <vaadin-grid id="target" drop-mode="on-top-or-between">
+            <vaadin-grid-tree-column path="name.first" header="First name"></vaadin-grid-tree-column>
+            <vaadin-grid-column path="name.last" header="Last name"></vaadin-grid-column>
+            <vaadin-grid-column path="email"></vaadin-grid-column>
+          </vaadin-grid>
+        </div>
+        <script>
+          window.addDemoReadyListener('#grid-drag-and-drop-demos-drop-location', function(document) {
+            const sourceGrid = document.querySelector('#source');
+            const targetGrid = document.querySelector('#target');
+
+            sourceGrid.items = Vaadin.GridDemo.users.slice(2);
+            const targetGridItems = Vaadin.GridDemo.users.slice(0, 2);
+            targetGrid.dataProvider = function(params, cb) {
+              const items = params.parentItem ? params.parentItem.children : targetGridItems;
+              const start = params.pageSize * params.page;
+              cb(items.slice(start, start + params.pageSize), items.length);
+            };
+
+            let draggedItem;
+
+            sourceGrid.addEventListener('grid-dragstart', function(e) {
+              draggedItem = e.detail.items[0];
+            });
+
+            targetGrid.addEventListener('grid-drop', function(e) {
+              sourceGrid.items = sourceGrid.items.filter(function(i) {
+                return i !== draggedItem;
+              });
+
+              const dropOverItem = e.detail.item;
+              const array = dropOverItem.array || targetGridItems;
+
+              if (e.detail.dropLocation === 'on-top') {
+                dropOverItem.children = (dropOverItem.children || []).concat(draggedItem);
+                draggedItem.array = dropOverItem.children;
+              } else {
+                draggedItem.array = array;
+                const dropIndex = array.indexOf(dropOverItem) + (e.detail.dropLocation === 'below' ? 1 : 0);
+                array.splice(dropIndex, 0, draggedItem);
+              }
+              targetGrid.clearCache();
+            });
+
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Custom Drag Data</h3>
+    <p>
+      Operating with the drag event text data enables you to process drag and drop between different application windows.
+      The default payload of the drag event is generated from the visible grid columns and items as a line break
+      separated list of tab-separated values.
+    </p>
+    <p>
+      The <code>detail.data</code> property of the <code>grid-drop</code> event
+      is the payload of the drag and drop operation.
+    </p>
+    <p>
+      To customize the drag event data, override the grid's <code>formatDragData</code> function. It receives the list of dragged
+      items as arguments and returns the payload as a string representation.
+    </p>
+    <p>
+      <b>Hint:</b> Try dragging the grid's rows to the grid of the same demo but on another browser window.
+    </p>
+    <vaadin-demo-snippet id='grid-drag-and-drop-demos-drag-data'>
+      <template preserve-content>
+        <div style="display: flex">
+          <vaadin-grid drop-mode="between" rows-draggable>
+            <vaadin-grid-selection-column auto-select></vaadin-grid-selection-column>
+            <vaadin-grid-column path="name.first" header="First name"></vaadin-grid-column>
+            <vaadin-grid-column path="name.last" header="Last name"></vaadin-grid-column>
+            <vaadin-grid-column path="email"></vaadin-grid-column>
+          </vaadin-grid>
+        </div>
+
+        <script>
+          window.addDemoReadyListener('#grid-drag-and-drop-demos-drag-data', function(document) {
+            // Assign an array of user objects as the grid's items
+            const grid = document.querySelector('vaadin-grid');
+            grid.items = Vaadin.GridDemo.users.slice(0);
+
+            grid.formatDragData = function(items) {
+              return items.map(function(item) {
+                return item.email;
+              }).join(',');
+            };
+
+            let draggedItems;
+            grid.addEventListener('grid-dragstart', function(e) {
+              draggedItems = e.detail.items;
+            });
+
+            grid.addEventListener('grid-dragend', function(e) {
+              // Remove the items from the source grid
+              grid.items = grid.items.filter(function(item) {
+                return draggedItems.indexOf(item) === -1;
+              });
+              grid.selectedItems = [];
+            });
+
+            grid.addEventListener('grid-drop', function(e) {
+              const data = e.detail.data;
+              const emails = data.split(',');
+              const draggedItems = Vaadin.GridDemo.users.filter(function(user) {
+                return emails.indexOf(user.email) > -1;
+              }).map(function(user) {
+                // Create new instances so we don't get duplicate selections
+                return {
+                  name: {
+                    first: user.name.first,
+                    last: user.name.last
+                  },
+                  email: user.email
+                };
+              });
+
+              const targetGrid = e.target;
+              let index = targetGrid.items.length;
+              const dropOverItem = e.detail.item;
+              if (dropOverItem) {
+                index = targetGrid.items.indexOf(dropOverItem)
+                  + (e.detail.dropLocation === 'below' ? 1 : 0);
+              }
+              targetGrid.items = []
+                .concat(targetGrid.items.slice(0, index))
+                .concat(draggedItems)
+                .concat(targetGrid.items.slice(index));
+
+            });
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+  </template>
+  <script>
+    class GridDragAndDropDemos extends DemoReadyEventEmitter(GridDemo(Polymer.Element)) {
+      static get is() {
+        return 'grid-drag-and-drop-demos';
+      }
+    }
+    customElements.define(GridDragAndDropDemos.is, GridDragAndDropDemos);
+  </script>
+</dom-module>
