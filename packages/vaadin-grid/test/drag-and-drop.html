@@ -34,7 +34,7 @@ describe('drag and drop', () => {
     grid.hidden = true;
     requestAnimationFrame(() => {
       // Wait for the appear animation to finish
-      grid.addEventListener('animationend', () => {
+      listenOnce(grid, 'animationend', () => {
         grid.items = [
           {first: 'foo', last: 'bar'},
           {first: 'baz', last: 'qux'}
@@ -181,18 +181,25 @@ describe('drag and drop', () => {
       });
 
       it('should add dragged row count state attribute for drag image', done => {
+        grid.selectedItems = grid.items;
         fireDragStart();
         const row = getRows(grid.$.items)[0];
-        expect(row.getAttribute('dragged-row-count')).to.equal('1');
+        expect(row.getAttribute('dragstart')).to.equal('2');
 
         requestAnimationFrame(() => {
-          expect(row.hasAttribute('dragged-row-count')).to.be.false;
+          expect(row.hasAttribute('dragstart')).to.be.false;
           done();
         });
       });
 
-      if (!window.ShadyDOM) {
-        it('should use top on native shadow for drag image', done => {
+      it('should not add count to dragstart attribute on single row drag', () => {
+        fireDragStart();
+        const row = getRows(grid.$.items)[0];
+        expect(row.getAttribute('dragstart')).to.equal('');
+      });
+
+      it('should use top on Safari for drag image', done => {
+        if (grid._safari) {
           const row = getRows(grid.$.items)[0];
           const originalTransform = row.style.transform;
           fireDragStart();
@@ -205,8 +212,11 @@ describe('drag and drop', () => {
             expect(row.style.transform).to.equal(originalTransform);
             done();
           });
-        });
-      }
+        } else {
+          // The test only concerns Safari
+          done();
+        }
+      });
 
       it('should dispatch a grid specific event', () => {
         fireDragStart();
@@ -323,73 +333,73 @@ describe('drag and drop', () => {
         expect(e.defaultPrevented).to.be.true;
       });
 
-      it('should set row-drag attribute to grid on on-grid dropmode', () => {
+      it('should set dragover attribute to grid on on-grid dropmode', () => {
         grid.dropMode = 'on-grid';
         fireDragOver();
-        expect(grid.hasAttribute('row-drag')).to.be.true;
+        expect(grid.hasAttribute('dragover')).to.be.true;
       });
 
-      it('should set row-drag attribute to empty grid', () => {
+      it('should set dragover attribute to empty grid', () => {
         grid.items = [];
         grid.dropMode = 'on-top-or-between';
         fireDragOver();
-        expect(grid.hasAttribute('row-drag')).to.be.true;
+        expect(grid.hasAttribute('dragover')).to.be.true;
       });
 
-      it('should not set row-drag attribute to the grid', () => {
+      it('should not set dragover attribute to the grid', () => {
         grid.dropMode = 'on-top';
         const row = grid.$.items.children[0];
         fireDragOver(row, 'above');
-        expect(grid.hasAttribute('row-drag')).to.be.false;
+        expect(grid.hasAttribute('dragover')).to.be.false;
       });
 
-      it('should set row-drag=on-top attribute to the row', () => {
+      it('should set dragover=on-top attribute to the row', () => {
         grid.dropMode = 'on-top';
         const row = grid.$.items.children[0];
         fireDragOver(row, 'above');
-        expect(row.getAttribute('row-drag')).to.equal('on-top');
+        expect(row.getAttribute('dragover')).to.equal('on-top');
       });
 
-      it('should set row-drag=on-top attribute to the row 2', () => {
+      it('should set dragover=on-top attribute to the row 2', () => {
         grid.dropMode = 'on-top-or-between';
         const row = grid.$.items.children[0];
         fireDragOver(row, 'on-top');
-        expect(row.getAttribute('row-drag')).to.equal('on-top');
+        expect(row.getAttribute('dragover')).to.equal('on-top');
       });
 
-      it('should set row-drag=above attribute to the row', () => {
+      it('should set dragover=above attribute to the row', () => {
         grid.dropMode = 'between';
         const row = grid.$.items.children[0];
         fireDragOver(row, 'above');
-        expect(row.getAttribute('row-drag')).to.equal('above');
+        expect(row.getAttribute('dragover')).to.equal('above');
       });
 
-      it('should set row-drag=below attribute to the row', () => {
+      it('should set dragover=below attribute to the row', () => {
         grid.dropMode = 'between';
         const row = grid.$.items.children[0];
         fireDragOver(row, 'below');
-        expect(row.getAttribute('row-drag')).to.equal('below');
+        expect(row.getAttribute('dragover')).to.equal('below');
       });
 
-      it('should set row-drag=above attribute to the row 2', () => {
+      it('should set dragover=above attribute to the row 2', () => {
         grid.dropMode = 'on-top-or-between';
         const row = grid.$.items.children[0];
         fireDragOver(row, 'above');
-        expect(row.getAttribute('row-drag')).to.equal('above');
+        expect(row.getAttribute('dragover')).to.equal('above');
       });
 
-      it('should set row-drag=below attribute to the row 2', () => {
+      it('should set dragover=below attribute to the row 2', () => {
         grid.dropMode = 'on-top-or-between';
         const row = grid.$.items.children[0];
         fireDragOver(row, 'below');
-        expect(row.getAttribute('row-drag')).to.equal('below');
+        expect(row.getAttribute('dragover')).to.equal('below');
       });
 
-      it('should set row-drag=below attribute to the last row', () => {
+      it('should set dragover=below attribute to the last row', () => {
         grid.dropMode = 'on-top-or-between';
         const row = grid.$.items.children[1];
         fireDragOver(row, 'under');
-        expect(row.getAttribute('row-drag')).to.equal('below');
+        expect(row.getAttribute('dragover')).to.equal('below');
       });
 
     });
@@ -406,18 +416,18 @@ describe('drag and drop', () => {
       it('should clear the grid drag styles', () => {
         grid.dropMode = 'on-grid';
         fireDragOver();
-        expect(grid.hasAttribute('row-drag')).to.be.true;
+        expect(grid.hasAttribute('dragover')).to.be.true;
         fireDragLeave();
-        expect(grid.hasAttribute('row-drag')).to.be.false;
+        expect(grid.hasAttribute('dragover')).to.be.false;
       });
 
       it('should clear the row drag styles', () => {
         grid.dropMode = 'on-top';
         fireDragOver();
         const row = grid.$.items.children[0];
-        expect(row.hasAttribute('row-drag')).to.be.true;
+        expect(row.hasAttribute('dragover')).to.be.true;
         fireDragLeave();
-        expect(row.hasAttribute('row-drag')).to.be.false;
+        expect(row.hasAttribute('dragover')).to.be.false;
       });
 
     });
@@ -440,18 +450,18 @@ describe('drag and drop', () => {
       it('should clear the grid drag styles', () => {
         grid.dropMode = 'on-grid';
         fireDragOver();
-        expect(grid.hasAttribute('row-drag')).to.be.true;
+        expect(grid.hasAttribute('dragover')).to.be.true;
         fireDrop();
-        expect(grid.hasAttribute('row-drag')).to.be.false;
+        expect(grid.hasAttribute('dragover')).to.be.false;
       });
 
       it('should clear the row drag styles', () => {
         grid.dropMode = 'on-top';
         fireDragOver();
         const row = grid.$.items.children[0];
-        expect(row.hasAttribute('row-drag')).to.be.true;
+        expect(row.hasAttribute('dragover')).to.be.true;
         fireDrop();
-        expect(row.hasAttribute('row-drag')).to.be.false;
+        expect(row.hasAttribute('dragover')).to.be.false;
       });
 
       it('should dispatch a grid specific event', () => {

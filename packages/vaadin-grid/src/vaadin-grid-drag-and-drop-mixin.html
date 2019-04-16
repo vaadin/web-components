@@ -72,37 +72,49 @@ This program is available under Apache License Version 2.0, available at https:/
         if (this.rowsDraggable) {
           let row = e.target;
           if (row.localName === 'vaadin-grid-cell-content') {
-            // In browsers that support shadow, the draggable node is the cell content element
+            // The draggable node is the cell content element on browsers that support native shadow
             row = row.assignedSlot.parentNode.parentNode;
           }
-          if (row.localName !== 'tr') {
+          if (row.parentNode !== this.$.items) {
             return;
           }
 
           e.stopPropagation();
           this._toggleAttribute('dragging-rows', true, this);
 
-          if (!window.ShadyDOM) {
+          if (this._safari) {
             // Safari doesn't get proper drag images from transformed
             // elements so we need to switch to top temporarily
             const transform = row.style.transform;
             row.style.top = /translateY\((.*)\)/.exec(transform)[1];
             row.style.transform = 'none';
-
-            const rect = row.getBoundingClientRect();
-            e.dataTransfer.setDragImage(row, e.clientX - rect.left, e.clientY - rect.top);
-
             requestAnimationFrame(() => {
               row.style.top = '';
               row.style.transform = transform;
             });
           }
 
+          const rowRect = row.getBoundingClientRect();
+          if (!window.ShadyDOM) {
+            e.dataTransfer.setDragImage(row, e.clientX - rowRect.left, e.clientY - rowRect.top);
+          }
+
           const items = this._isSelected(row._item) ? this.selectedItems.slice(0) : [row._item];
           e.dataTransfer.setData('text', this.formatDragData(items));
 
-          row.setAttribute('dragged-row-count', items.length);
-          requestAnimationFrame(() => row.removeAttribute('dragged-row-count'));
+          row.setAttribute('dragstart', '');
+          if (items.length > 1) {
+            this.updateStyles({
+              '--_grid-drag-start-x': `${e.clientX - rowRect.left + 20}px`,
+              '--_grid-drag-start-y': `${e.clientY - rowRect.top + 10}px`
+            });
+            row.setAttribute('dragstart', items.length);
+          }
+
+          requestAnimationFrame(() => {
+            row.removeAttribute('dragstart');
+            this.updateStyles({'--_grid-drag-start-x': '', '--_grid-drag-start-y': ''});
+          });
 
           const event = new CustomEvent('grid-dragstart', {
             bubbles: e.bubbles,
@@ -136,7 +148,6 @@ This program is available under Apache License Version 2.0, available at https:/
           e.stopPropagation();
           e.preventDefault();
 
-          this._clearDragStyles();
           this._dropLocation = undefined;
           this._dragOverItem = undefined;
 
@@ -174,17 +185,21 @@ This program is available under Apache License Version 2.0, available at https:/
           }
 
           if (this._dropLocation === DropLocation.EMPTY) {
-            this.setAttribute('row-drag', '');
+            this._toggleAttribute('dragover', true, this);
           } else if (row) {
             this._dragOverItem = row._item;
-            row.setAttribute('row-drag', this._dropLocation);
+            if (row.getAttribute('dragover') !== this._dropLocation) {
+              row.setAttribute('dragover', this._dropLocation);
+            }
+          } else {
+            this._clearDragStyles();
           }
         }
       }
 
       _clearDragStyles() {
-        this.removeAttribute('row-drag');
-        Array.from(this.$.items.children).forEach(row => row.removeAttribute('row-drag'));
+        this.removeAttribute('dragover');
+        Array.from(this.$.items.children).forEach(row => row.removeAttribute('dragover'));
       }
 
       _onDrop(e) {

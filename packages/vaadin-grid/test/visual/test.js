@@ -74,6 +74,45 @@ gemini.suite('vaadin-grid', (rootSuite) => {
           });
         });
     });
+
+    gemini.suite(`drag-and-drop-${theme}`, (suite) => {
+      suite
+        .setUrl(`drag-and-drop.html?theme=${theme}`)
+        .setCaptureElements('.capture-block')
+        .capture('grid-dragover', {}, (actions, find) => {
+          actions.executeJS(function(window) {
+            var grid = window.document.querySelector('vaadin-grid');
+            grid.setAttribute('dragover', '');
+          });
+          actions.wait(6000);
+        })
+        .capture('row-dragover-on-top', {}, (actions, find) => {
+          actions.executeJS(function(window) {
+            var grid = window.document.querySelector('vaadin-grid');
+            grid.removeAttribute('dragover');
+            grid.$.items.children[1].setAttribute('dragover', 'on-top');
+          });
+        })
+        .capture('row-dragover-above', {}, (actions, find) => {
+          actions.executeJS(function(window) {
+            var grid = window.document.querySelector('vaadin-grid');
+            grid.$.items.children[1].setAttribute('dragover', 'above');
+          });
+        })
+        .capture('row-dragover-below', {}, (actions, find) => {
+          actions.executeJS(function(window) {
+            var grid = window.document.querySelector('vaadin-grid');
+            grid.$.items.children[1].setAttribute('dragover', 'below');
+          });
+        })
+        .capture('row-dragstart', {}, (actions, find) => {
+          actions.executeJS(function(window) {
+            var grid = window.document.querySelector('vaadin-grid');
+            grid.$.items.children[1].removeAttribute('dragover');
+            grid.$.items.children[1].setAttribute('dragstart', '123');
+          });
+        });
+    });
   });
 
 });

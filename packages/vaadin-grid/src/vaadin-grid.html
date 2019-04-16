@@ -273,6 +273,7 @@ This program is available under Apache License Version 2.0, available at https:/
      * `navigating` | Keyboard navigation in navigation mode | :host
      * `overflow` | Set when rows are overflowing the grid viewport. Possible values: `top`, `bottom`, `left`, `right` | :host
      * `reordering` | Set when the grid's columns are being reordered | :host
+     * `dragover` | Set when the grid (not a specific row) is dragged over | :host
      * `reorder-status` | Reflects the status of a cell while columns are being reordered | cell
      * `frozen` | Frozen cell | cell
      * `last-frozen` | Last frozen cell | cell
@@ -283,6 +284,8 @@ This program is available under Apache License Version 2.0, available at https:/
      * `loading` | Row that is waiting for data from data provider | row
      * `odd` | Odd row | row
      * `first` | The first body row | row
+     * `dragstart` | Set for one frame when drag of a row is starting. The value is a number when multiple rows are dragged | row
+     * `dragover` | Set when the row is dragged over | row
      *
      * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
      *

@@ -121,6 +121,88 @@
       :host([navigating]) [part~="cell"]:focus {
         box-shadow: inset 0 0 0 2px var(--material-primary-color);
       }
+
+      /* Drag and Drop styles */
+      :host([dragover])::after {
+        content: "";
+        position: absolute;
+        z-index: 100;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        pointer-events: none;
+        box-shadow: inset 0 0 0 2px var(--material-primary-color);
+      }
+
+      [part~="row"][dragover] {
+        z-index: 100 !important;
+      }
+
+      [part~="row"][dragover] [part~="cell"] {
+        overflow: visible;
+      }
+
+      [part~="row"][dragover] [part~="cell"]::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        height: 3px;
+        pointer-events: none;
+        background: var(--material-primary-color);
+      }
+
+      [part~="row"][dragover="below"] [part~="cell"]::after {
+        top: 100%;
+        bottom: auto;
+        margin-top: -1px;
+      }
+
+      [part~="row"][dragover="above"] [part~="cell"]::after {
+        top: auto;
+        bottom: 100%;
+        margin-bottom: -1px;
+      }
+
+      [part~="row"][dragover][dragover="on-top"] [part~="cell"]::after {
+        height: 100%;
+        opacity: 0.5;
+      }
+
+      [part~="row"][dragstart] {
+        /* Add bottom-space to the row so the drag number doesn't get clipped. Needed for IE/Edge */
+        border-bottom: 100px solid transparent;
+        z-index: 100 !important;
+        opacity: 0.9;
+      }
+
+      [part~="row"][dragstart] [part~="cell"] {
+        border: none !important;
+        box-shadow: none !important;
+      }
+
+      [part~="row"][dragstart]:not([dragstart=""])::after {
+        display: block;
+        position: absolute;
+        left: var(--_grid-drag-start-x);
+        top: var(--_grid-drag-start-y);
+        z-index: 100;
+        content: attr(dragstart);
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
+        padding: 4px;
+        color: var(--material-primary-contrast-color);
+        background-color: var(--material-error-color);
+        min-width: 24px;
+        border-radius: 2px;
+        font-size: var(--material-caption-font-size);
+        text-align: center;
+        line-height: 1;
+      }
     </style>
   </template>
 </dom-module>
