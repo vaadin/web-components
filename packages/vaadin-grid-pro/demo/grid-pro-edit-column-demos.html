@@ -68,8 +68,8 @@
         <vaadin-grid-pro>
           <vaadin-grid-column path="name.first" header="First Name"></vaadin-grid-column>
           <vaadin-grid-column path="name.last" header="Last name"></vaadin-grid-column>
-          <vaadin-grid-pro-edit-column path="name.title" header="Title (edit)" editor-type="select"></vaadin-grid-pro-edit-column>
           <vaadin-grid-pro-edit-column path="married" header="Married (edit)" editor-type="checkbox"></vaadin-grid-pro-edit-column>
+          <vaadin-grid-pro-edit-column path="name.title" header="Title (edit)" editor-type="select"></vaadin-grid-pro-edit-column>
         </vaadin-grid-pro>
         <script>
           window.addDemoReadyListener('#grid-pro-edit-column-demos-editor-type', function(document) {
@@ -106,20 +106,20 @@
       </template>
     </vaadin-demo-snippet>
 
-    <h3>Keep Editor Open</h3>
+    <h3>Single Cell Edit</h3>
     <p>
-      When <code>keepEditorOpen</code> is set on the grid element, focusing the next editable cell from keyboard will activate edit mode for it.
+      When <code>singleCellEdit</code> is set on the grid element, focusing the next editable cell from keyboard will exit the edit mode.
     </p>
-    <vaadin-demo-snippet id="grid-pro-edit-column-demos-keep-editor-open" when-defined="vaadin-grid-pro">
+    <vaadin-demo-snippet id="grid-pro-edit-column-demos-single-cell-edit" when-defined="vaadin-grid-pro">
       <template preserve-content>
-        <vaadin-grid-pro keep-editor-open>
+        <vaadin-grid-pro single-cell-edit>
           <vaadin-grid-pro-edit-column path="name.first" header="First name (edit)"></vaadin-grid-pro-edit-column>
           <vaadin-grid-column path="name.last" header="Last name (view)"></vaadin-grid-column>
-          <vaadin-grid-pro-edit-column path="name.title" header="Title (edit)" editor-type="select"></vaadin-grid-pro-edit-column>
           <vaadin-grid-pro-edit-column path="name.last" header="Last name (edit)"></vaadin-grid-pro-edit-column>
+          <vaadin-grid-pro-edit-column path="name.title" header="Title (edit)" editor-type="select"></vaadin-grid-pro-edit-column>
         </vaadin-grid-pro>
         <script>
-          window.addDemoReadyListener('#grid-pro-edit-column-demos-keep-editor-open', function(document) {
+          window.addDemoReadyListener('#grid-pro-edit-column-demos-single-cell-edit', function(document) {
             const grid = document.querySelector('vaadin-grid-pro');
             grid.items = Vaadin.GridDemo.getUsers();
             grid.querySelector('[path="name.title"]').editorOptions = ['mr', 'mrs', 'ms'];
@@ -138,7 +138,7 @@
     </ul>
     <vaadin-demo-snippet id="grid-pro-edit-column-demos-enter-next-row" when-defined="vaadin-grid-pro">
       <template preserve-content>
-        <vaadin-grid-pro enter-next-row keep-editor-open>
+        <vaadin-grid-pro enter-next-row>
           <vaadin-grid-pro-edit-column path="name.first" header="First name (edit)"></vaadin-grid-pro-edit-column>
           <vaadin-grid-column path="name.last" header="Last name (view)"></vaadin-grid-column>
           <vaadin-grid-pro-edit-column path="name.last" header="Last name (edit)"></vaadin-grid-pro-edit-column>

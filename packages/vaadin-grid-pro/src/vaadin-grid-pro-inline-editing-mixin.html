@@ -35,12 +35,12 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
         /**
          * When true, after moving to next or previous editable cell using
-         * Tab / Shift+Tab, it will be focused in edit mode.
+         * Tab / Shift+Tab, it will be focused without edit mode.
          *
          * When `enterNextRow` is true, pressing Enter will also
          * preserve edit mode, otherwise, it will have no effect.
          */
-        keepEditorOpen: {
+        singleCellEdit: {
           type: Boolean,
           notify: true // FIXME(yuriy-fix): needed by Flow counterpart
         }
@@ -347,7 +347,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         const nextCell = Array.from(nextRow.children).filter(cell => cell._column === nextCol)[0];
         e.preventDefault();
 
-        if (this.keepEditorOpen && nextCell !== cell) {
+        if (!this.singleCellEdit && nextCell !== cell) {
           this._startEdit(nextCell, nextCol);
         } else {
           this._ensureScrolledToIndex(nextIdx);

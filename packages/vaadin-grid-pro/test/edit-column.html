@@ -95,7 +95,11 @@
           flushGrid(grid);
         });
 
-        describe('when `keepEditorOpen` is false', () => {
+        describe('when `singleCellEdit` is true', () => {
+          beforeEach(() => {
+            grid.singleCellEdit = true;
+          });
+
           it('should focus cell next available for editing within a same row in non-edit mode on Tab', () => {
             const firstCell = getContainerCell(grid.$.items, 1, 0);
             dblclick(firstCell._content);
@@ -183,11 +187,7 @@
           });
         });
 
-        describe('when `keepEditorOpen` is true', () => {
-          beforeEach(() => {
-            grid.keepEditorOpen = true;
-          });
-
+        describe('when `singleCellEdit` is false', () => {
           it('should focus cell next available for editing within a same row in edit mode on Tab', () => {
             const firstCell = getContainerCell(grid.$.items, 1, 0);
             dblclick(firstCell._content);
@@ -282,7 +282,6 @@
               grid.items = getItems();
               grid.querySelector('[path="title"]').editorOptions = ['mr', 'mrs', 'ms'];
               flushGrid(grid);
-              grid.keepEditorOpen = true;
               textCell = getContainerCell(grid.$.items, 1, 0);
               selectCell = getContainerCell(grid.$.items, 1, 1);
               checkboxCell = getContainerCell(grid.$.items, 1, 2);
@@ -328,6 +327,7 @@
         });
 
         it('should focus correct editable cell after column reordering', () => {
+          grid.singleCellEdit = true;
           grid.columnReorderingAllowed = true;
           const headerContent = [
             getContainerCell(grid.$.header, 0, 0)._content,
@@ -346,6 +346,7 @@
         });
 
         it('should focus correct editable cell when column is hidden', () => {
+          grid.singleCellEdit = true;
           const column = grid.querySelector('vaadin-grid-pro-edit-column');
           column.hidden = true;
 
