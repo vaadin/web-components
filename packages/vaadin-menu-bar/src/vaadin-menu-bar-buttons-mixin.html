@@ -53,9 +53,9 @@ This program is available under Apache License Version 2.0, available at https:/
 
       this.addEventListener('iron-resize', e => this.__onResize());
 
-      this._ellipsis.setAttribute('role', 'menuitem');
-      this._ellipsis.setAttribute('aria-haspopup', 'true');
-      this._ellipsis.setAttribute('aria-expanded', 'false');
+      this._overflow.setAttribute('role', 'menuitem');
+      this._overflow.setAttribute('aria-haspopup', 'true');
+      this._overflow.setAttribute('aria-expanded', 'false');
     }
 
     get _buttons() {
@@ -66,8 +66,8 @@ This program is available under Apache License Version 2.0, available at https:/
       return this.shadowRoot.querySelector('[part="container"]');
     }
 
-    get _ellipsis() {
-      return this.shadowRoot.querySelector('[part="ellipsis-button"]');
+    get _overflow() {
+      return this.shadowRoot.querySelector('[part="overflow-button"]');
     }
 
     _menuItemsChanged(items, splices) {
@@ -92,7 +92,7 @@ This program is available under Apache License Version 2.0, available at https:/
     __detectOverflow() {
       const container = this._container;
       const buttons = this._buttons.slice(0);
-      const ellipsis = buttons.pop();
+      const overflow = buttons.pop();
       const containerWidth = container.offsetWidth;
 
       if (container.offsetWidth < container.scrollWidth) {
@@ -107,7 +107,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
 
           const btnWidth = btn.offsetWidth;
-          if ((btn.offsetLeft + btnWidth) < (containerWidth - ellipsis.offsetWidth)) {
+          if ((btn.offsetLeft + btnWidth) < (containerWidth - overflow.offsetWidth)) {
             break;
           }
 
@@ -117,7 +117,7 @@ This program is available under Apache License Version 2.0, available at https:/
           // save width for buttons with component
           btn.style.width = btnStyle.width;
         }
-        ellipsis.item = {
+        overflow.item = {
           children: buttons.filter((b, idx) => idx >= i).map(b => b.item)
         };
       } else if (this._hasOverflow) {
@@ -132,29 +132,29 @@ This program is available under Apache License Version 2.0, available at https:/
             continue;
           }
 
-          const ellipsisLeft = ellipsis.offsetLeft;
+          const overflowLeft = overflow.offsetLeft;
           const btnWidth = btn.getBoundingClientRect().width;
 
-          if ((ellipsisLeft + ellipsis.offsetWidth + btnWidth) < containerWidth) {
+          if ((overflowLeft + overflow.offsetWidth + btnWidth) < containerWidth) {
             btn.disabled = btn.item.disabled;
             btn.style.visibility = '';
             btn.style.position = '';
             btn.style.width = '';
 
-            // teleport item component back from "ellipsis" sub-menu
+            // teleport item component back from "overflow" sub-menu
             const item = btn.item && btn.item.component;
             if (item instanceof HTMLElement && item.classList.contains('vaadin-menu-item')) {
               btn.appendChild(item);
               item.classList.remove('vaadin-menu-item');
             }
 
-            ellipsis.item = {
+            overflow.item = {
               children: buttons.filter((b, idx) => idx >= i + 1).map(b => b.item)
             };
 
             if (btn === buttons[buttons.length - 1]) {
               this._hasOverflow = false;
-              ellipsis.item = {children: []};
+              overflow.item = {children: []};
             }
           } else {
             break;
@@ -173,7 +173,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     __renderButtons(items = []) {
       const container = this._container;
-      const ellipsis = this._ellipsis;
+      const overflow = this._overflow;
 
       while (container.children.length > 1) {
         container.removeChild(container.firstElementChild);
@@ -200,7 +200,7 @@ This program is available under Apache License Version 2.0, available at https:/
             node.textContent = item.text;
           }
           itemCopy.component = component;
-          // save item for ellipsis menu
+          // save item for overflow menu
           component.item = itemCopy;
           button.appendChild(component);
         } else if (item.text) {
@@ -220,7 +220,7 @@ This program is available under Apache License Version 2.0, available at https:/
         if (this.theme && this.theme !== '') {
           button.setAttribute('theme', this.theme);
         }
-        container.insertBefore(button, ellipsis);
+        container.insertBefore(button, overflow);
         button.setAttribute('role', 'menuitem');
       });
 

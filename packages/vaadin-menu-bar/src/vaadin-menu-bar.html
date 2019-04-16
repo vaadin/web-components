@@ -35,13 +35,13 @@ This program is available under Apache License Version 2.0, available at https:/
         flex-shrink: 0;
       }
 
-      [part="ellipsis-button"] {
+      [part="overflow-button"] {
         margin-right: 0;
       }
     </style>
 
     <div part="container">
-      <vaadin-menu-bar-button part="ellipsis-button" hidden$="[[!_hasOverflow]]">...</vaadin-menu-bar-button>
+      <vaadin-menu-bar-button part="overflow-button" hidden$="[[!_hasOverflow]]">...</vaadin-menu-bar-button>
     </div>
     <vaadin-context-menu
       open-on="opensubmenu">
@@ -76,7 +76,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * ------------------|----------------
        * `container`       | The container wrapping menu bar buttons.
        * `menu-bar-button` | The menu bar button.
-       * `ellipsis-button` | The "ellipsis" button appearing when menu bar width is not enough to fit all the buttons.
+       * `overflow-button` | The "overflow" button appearing when menu bar width is not enough to fit all the buttons.
        *
        * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
        *

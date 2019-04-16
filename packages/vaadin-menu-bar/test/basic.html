@@ -63,14 +63,14 @@
         buttons = menu._buttons;
       });
 
-      it('should render button for each item, plus ellipsis button', () => {
+      it('should render button for each item, plus overflow button', () => {
         expect(buttons.length).to.equal(menu.items.length + 1);
       });
 
-      it('should make the ellipsis button hidden by default', () => {
-        const ellipsis = buttons[menu.items.length];
-        expect(ellipsis.getAttribute('part')).to.equal('ellipsis-button');
-        expect(ellipsis.hasAttribute('hidden')).to.be.true;
+      it('should make the overflow button hidden by default', () => {
+        const overflow = buttons[menu.items.length];
+        expect(overflow.getAttribute('part')).to.equal('overflow-button');
+        expect(overflow.hasAttribute('hidden')).to.be.true;
       });
 
       it('should set buttons text content based on the text property', () => {
@@ -187,8 +187,8 @@
       });
     });
 
-    describe('ellipsis button', () => {
-      let menu, buttons, ellipsis;
+    describe('overflow button', () => {
+      let menu, buttons, overflow;
 
       const assertHidden = elem => {
         const style = getComputedStyle(elem);
@@ -216,59 +216,59 @@
         ];
         await nextRender(menu);
         buttons = menu._buttons;
-        ellipsis = buttons[buttons.length - 1];
+        overflow = buttons[buttons.length - 1];
       });
 
-      it('should show ellipsis button and hide the buttons which do not fit', () => {
+      it('should show overflow button and hide the buttons which do not fit', () => {
         assertHidden(buttons[2]);
         expect(buttons[2].disabled).to.be.true;
         assertHidden(buttons[3]);
         expect(buttons[3].disabled).to.be.true;
-        expect(ellipsis.hasAttribute('hidden')).to.be.false;
+        expect(overflow.hasAttribute('hidden')).to.be.false;
       });
 
-      it('should set items to ellipsis button for buttons which do not fit', () => {
-        expect(ellipsis.item).to.be.an.object;
-        expect(ellipsis.item.children).to.be.an.array;
-        expect(ellipsis.item.children.length).to.equal(3);
-        expect(ellipsis.item.children[0]).to.deep.equal(menu.items[2]);
-        expect(ellipsis.item.children[1]).to.deep.equal(menu.items[3]);
-        expect(ellipsis.item.children[2]).to.deep.equal(menu.items[4]);
+      it('should set items to overflow button for buttons which do not fit', () => {
+        expect(overflow.item).to.be.an.object;
+        expect(overflow.item.children).to.be.an.array;
+        expect(overflow.item.children.length).to.equal(3);
+        expect(overflow.item.children[0]).to.deep.equal(menu.items[2]);
+        expect(overflow.item.children[1]).to.deep.equal(menu.items[3]);
+        expect(overflow.item.children[2]).to.deep.equal(menu.items[4]);
       });
 
-      it('should show ellipsis button after calling render() with same items', () => {
+      it('should show overflow button after calling render() with same items', () => {
         menu.render();
-        expect(ellipsis.hasAttribute('hidden')).to.be.false;
+        expect(overflow.hasAttribute('hidden')).to.be.false;
       });
 
-      it('should show buttons and update ellipsis items when width increased', done => {
+      it('should show buttons and update overflow items when width increased', done => {
         menu.style.width = '350px';
         menu.notifyResize();
         Polymer.RenderStatus.afterNextRender(menu, () => {
           assertVisible(buttons[1]);
           expect(buttons[1].disabled).to.not.be.true;
-          expect(ellipsis.item.children.length).to.equal(1);
-          expect(ellipsis.item.children[0]).to.deep.equal(menu.items[4]);
+          expect(overflow.item.children.length).to.equal(1);
+          expect(overflow.item.children[0]).to.deep.equal(menu.items[4]);
           done();
         });
       });
 
-      it('should hide buttons and update ellipsis items when width decreased', done => {
+      it('should hide buttons and update overflow items when width decreased', done => {
         menu.style.width = '150px';
         menu.notifyResize();
         Polymer.RenderStatus.afterNextRender(menu, () => {
           assertHidden(buttons[2]);
           expect(buttons[2].disabled).to.be.true;
-          expect(ellipsis.item.children.length).to.equal(4);
-          expect(ellipsis.item.children[0]).to.deep.equal(menu.items[1]);
-          expect(ellipsis.item.children[1]).to.deep.equal(menu.items[2]);
-          expect(ellipsis.item.children[2]).to.deep.equal(menu.items[3]);
-          expect(ellipsis.item.children[3]).to.deep.equal(menu.items[4]);
+          expect(overflow.item.children.length).to.equal(4);
+          expect(overflow.item.children[0]).to.deep.equal(menu.items[1]);
+          expect(overflow.item.children[1]).to.deep.equal(menu.items[2]);
+          expect(overflow.item.children[2]).to.deep.equal(menu.items[3]);
+          expect(overflow.item.children[3]).to.deep.equal(menu.items[4]);
           done();
         });
       });
 
-      it('should hide ellipsis button and reset its items when all buttons fit', done => {
+      it('should hide overflow button and reset its items when all buttons fit', done => {
         menu.style.width = 'auto';
         menu.notifyResize();
         Polymer.RenderStatus.afterNextRender(menu, () => {
@@ -278,15 +278,15 @@
           expect(buttons[3].disabled).to.not.be.true;
           assertVisible(buttons[4]);
           expect(buttons[4].disabled).to.be.true;
-          expect(ellipsis.hasAttribute('hidden')).to.be.true;
-          expect(ellipsis.item.children.length).to.equal(0);
+          expect(overflow.hasAttribute('hidden')).to.be.true;
+          expect(overflow.item.children.length).to.equal(0);
           done();
         });
       });
     });
 
     describe('item components', () => {
-      let menu, buttons, ellipsis;
+      let menu, buttons, overflow;
 
       function makeComponent(id) {
         const div = document.createElement('div');
@@ -306,7 +306,7 @@
         ];
         await nextRender(menu);
         buttons = menu._buttons;
-        ellipsis = buttons[buttons.length - 1];
+        overflow = buttons[buttons.length - 1];
       });
 
       it('should render the component inside the context-menu item', () => {
@@ -338,12 +338,12 @@
         expect(buttons[4].item.component.textContent).to.equal('Item 5');
       });
 
-      it('should teleport the same component to ellipsis sub-menu and back', async() => {
+      it('should teleport the same component to overflow sub-menu and back', async() => {
         menu.style.width = '250px';
         menu.notifyResize();
         await nextRender(menu);
         const subMenu = menu._subMenu;
-        ellipsis.click();
+        overflow.click();
         await nextRender(subMenu);
         const listBox = subMenu.$.overlay.querySelector('vaadin-context-menu-list-box');
         expect(listBox.items[0]).to.equal(buttons[2].item.component);
@@ -358,12 +358,12 @@
         expect(item.classList.contains('vaadin-menu-item')).to.be.false;
       });
 
-      it('should close the ellipsis sub-menu on resize', async() => {
+      it('should close the overflow sub-menu on resize', async() => {
         menu.style.width = '150px';
         menu.notifyResize();
         await nextRender(menu);
         const subMenu = menu._subMenu;
-        ellipsis.click();
+        overflow.click();
         await nextRender(subMenu);
         menu.style.width = '300px';
         menu.notifyResize();

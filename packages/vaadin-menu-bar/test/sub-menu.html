@@ -406,7 +406,7 @@
     });
 
     describe('accessibility', () => {
-      let menu, buttons, subMenu, ellipsis;
+      let menu, buttons, subMenu, overflow;
 
       beforeEach(async() => {
         menu = fixture('default');
@@ -430,7 +430,7 @@
         await nextRender(menu);
         subMenu = menu._subMenu;
         buttons = menu._buttons;
-        ellipsis = menu._ellipsis;
+        overflow = menu._overflow;
       });
 
       afterEach(() => {
@@ -451,14 +451,14 @@
 
       it('should set aria-haspopup attribute on buttons with nested items', () => {
         buttons.forEach(btn => {
-          const hasPopup = btn === ellipsis || btn.item.children ? 'true' : null;
+          const hasPopup = btn === overflow || btn.item.children ? 'true' : null;
           expect(btn.getAttribute('aria-haspopup')).to.equal(hasPopup);
         });
       });
 
       it('should set aria-expanded attribute on buttons with nested items', () => {
         buttons.forEach(btn => {
-          const expanded = btn === ellipsis || btn.item.children ? 'false' : null;
+          const expanded = btn === overflow || btn.item.children ? 'false' : null;
           expect(btn.getAttribute('aria-expanded')).to.equal(expanded);
         });
       });
