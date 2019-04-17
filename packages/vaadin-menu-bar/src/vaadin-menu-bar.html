@@ -38,10 +38,19 @@ This program is available under Apache License Version 2.0, available at https:/
       [part="overflow-button"] {
         margin-right: 0;
       }
+
+      .dots::before {
+        display: block;
+        content: "\00B7\00B7\00B7";
+        font-size: inherit;
+        line-height: inherit;
+      }
     </style>
 
     <div part="container">
-      <vaadin-menu-bar-button part="overflow-button" hidden$="[[!_hasOverflow]]">...</vaadin-menu-bar-button>
+      <vaadin-menu-bar-button part="overflow-button" hidden$="[[!_hasOverflow]]">
+        <div class="dots"></div>
+      </vaadin-menu-bar-button>
     </div>
     <vaadin-context-menu
       open-on="opensubmenu">

@@ -37,6 +37,10 @@
         padding-right: calc(var(--lumo-button-size) / 4);
       }
 
+      :host([part="overflow-button"]) ::slotted(*) {
+        font-size: var(--lumo-font-size-xl);
+      }
+
       :host([part="overflow-button"]) [part="prefix"],
       :host([part="overflow-button"]) [part="suffix"] {
         margin-left: 0;
