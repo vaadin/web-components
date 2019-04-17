@@ -3,13 +3,27 @@
 <dom-module id="material-menu-bar-button" theme-for="vaadin-menu-bar-button">
   <template>
     <style include="material-button">
-      :host ::slotted(vaadin-context-menu-item) {
-        padding: 0;
+      :host {
+        --iron-icon-width: 18px;
+        --iron-icon-height: 18px;
+      }
+
+      [part="label"] ::slotted(vaadin-context-menu-item) {
+        line-height: 20px;
+        margin: -8px;
+        padding: 8px;
+        justify-content: center;
       }
 
       :host([theme="outlined"]),
       :host([theme="contained"]) {
         border-radius: 0;
+      }
+
+      :host([theme~="contained"]) ::slotted(vaadin-context-menu-item),
+      :host([theme~="outlined"]) ::slotted(vaadin-context-menu-item) {
+        margin: -8px -16px;
+        padding: 8px 16px;
       }
 
       :host([expanded])::before {

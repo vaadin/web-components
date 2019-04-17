@@ -3,12 +3,17 @@
 <dom-module id="lumo-menu-bar-button" theme-for="vaadin-menu-bar-button">
   <template>
     <style include="lumo-button">
-      :host ::slotted(vaadin-context-menu-item) {
-        padding: 0;
+      :host {
+        margin: 0;
+        border-radius: 0;
       }
 
-      :host {
-        border-radius: 0;
+      /* NOTE(web-padawan): avoid using nested calc() for IE11 and Edge */
+      [part="label"] ::slotted(vaadin-context-menu-item) {
+        margin-left: calc((var(--lumo-size-m) / 3 + var(--lumo-border-radius) / 2) * -1);
+        margin-right: calc((var(--lumo-size-m) / 3 + var(--lumo-border-radius) / 2) * -1);
+        padding-left: calc(var(--lumo-size-m) / 3 + var(--lumo-border-radius) / 2);
+        padding-right: calc(var(--lumo-size-m) / 3 + var(--lumo-border-radius) / 2);
       }
 
       :host([expanded]) {
@@ -18,7 +23,7 @@
       :host(:first-of-type) {
         border-radius: var(--lumo-border-radius-m) 0 0 var(--lumo-border-radius-m);
 
-        /* Needed to retain the focsu-ring with border-radius */
+        /* Needed to retain the focus-ring with border-radius */
         margin-left: calc(var(--lumo-space-xs) / 2);
       }
 

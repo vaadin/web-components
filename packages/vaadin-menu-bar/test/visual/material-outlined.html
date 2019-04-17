@@ -8,6 +8,8 @@
     const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
     document.write(`<link rel="import" href="../../theme/${theme}/vaadin-menu-bar.html">`);
   </script>
+  <link rel="import" href="../../../vaadin-lumo-styles/icons.html">
+  <link rel="import" href="../../../iron-icon/iron-icon.html">
   <style>
     /* cover all the viewport */
     #material-outlined-tests {
@@ -26,9 +28,19 @@
   </div>
 
   <script>
+    function makeIcon(img) {
+      const span = document.createElement('span');
+      span.style.display = 'flex';
+      span.style.alignItems = 'center';
+      const icon = document.createElement('iron-icon');
+      icon.icon = img;
+      span.appendChild(icon);
+      return span;
+    }
+
     const menu = document.querySelector('vaadin-menu-bar');
     menu.items = [
-      {text: 'Home'},
+      {component: 'u', text: 'Home'},
       {
         text: 'Reports',
         children: [
@@ -36,8 +48,11 @@
           {text: 'Generate Report'}
         ]
       },
-      {text: 'Dashboard', disabled: true},
-      {text: 'Billing'},
+      {text: 'Manage', disabled: true},
+      {
+        component: makeIcon('lumo:chevron-down'),
+        children: [{text: 'Notifications'}, {text: 'Mark as read'}]
+      },
       {text: 'Help'}
     ];
 

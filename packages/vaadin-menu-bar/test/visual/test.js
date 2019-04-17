@@ -26,6 +26,18 @@ gemini.suite('vaadin-menu-bar', function(rootSuite) {
         });
     });
 
+    gemini.suite(`component-tests-${theme}`, function(suite) {
+      suite
+        .setUrl(`component.html?theme=${theme}`)
+        .setCaptureElements('#component-tests')
+        .capture('component', function(actions) {
+          actions.executeJS(function(window) {
+            window.openSubMenu();
+          });
+        });
+    });
+
+
     gemini.suite(`overflow-tests-${theme}`, function(suite) {
       suite
         .setUrl(`overflow.html?theme=${theme}`)
