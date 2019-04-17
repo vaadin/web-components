@@ -35,6 +35,8 @@ describe('drag and drop', () => {
     return [row, cellContent].filter(node => node.getAttribute('draggable') === 'true')[0];
   };
 
+  let dragData;
+
   const fireDragStart = (draggable = getDraggable(grid)) => {
     const event = new Event('dragstart', {
       bubbles: true,
@@ -43,10 +45,7 @@ describe('drag and drop', () => {
     });
     event.dataTransfer = {
       setDragImage: () => {},
-      setData: (type, data) => {
-        event.__dataType = type;
-        event.__data = data;
-      }
+      setData: (type, data) => dragData[type] = data
     };
     draggable.dispatchEvent(event);
     return event;
@@ -78,8 +77,8 @@ describe('drag and drop', () => {
       composed: true
     });
     event.dataTransfer = {
-      getData: () => 'foo',
-      types: ['text']
+      getData: type => dragData[type],
+      types: Object.keys(dragData)
     };
     draggable.dispatchEvent(event);
     return event;
@@ -112,6 +111,7 @@ describe('drag and drop', () => {
   beforeEach(done => {
     grid = fixture('default');
     grid.hidden = true;
+    dragData = {};
     requestAnimationFrame(() => {
       // Wait for the appear animation to finish
       listenOnce(grid, 'animationend', () => {
@@ -149,11 +149,15 @@ describe('drag and drop', () => {
     describe('dragstart', () => {
 
       let dragStartSpy;
+      let dropSpy;
 
       beforeEach(() => {
         grid.rowsDraggable = true;
+        grid.dropMode = 'on-top';
         dragStartSpy = sinon.spy();
+        dropSpy = sinon.spy();
         grid.addEventListener('grid-dragstart', dragStartSpy);
+        grid.addEventListener('grid-drop', dropSpy);
       });
 
       it('should stop the native event', () => {
@@ -259,16 +263,23 @@ describe('drag and drop', () => {
 
       it('should auto generate data transfer text data', () => {
         grid.selectedItems = grid.items;
-        const e = fireDragStart();
-        expect(e.__data).to.eql('foo\tbar\nbaz\tqux');
+        let foo = dragData;
+        fireDragStart();
+        fireDrop();
+        const event = dropSpy.getCall(0).args[0];
+        const textData = event.detail.dragData.filter(d => d.type === 'text')[0].data;
+        expect(textData).to.eql('foo\tbar\nbaz\tqux');
       });
 
       it('should auto generate data transfer text data in order', () => {
         grid.selectedItems = grid.items;
         const columns = grid.querySelectorAll('vaadin-grid-column');
         grid._swapColumnOrders(columns[0], columns[1]);
-        const e = fireDragStart();
-        expect(e.__data).to.eql('bar\tfoo\nqux\tbaz');
+        fireDragStart();
+        fireDrop();
+        const event = dropSpy.getCall(0).args[0];
+        const textData = event.detail.dragData.filter(d => d.type === 'text')[0].data;
+        expect(textData).to.eql('bar\tfoo\nqux\tbaz');
       });
 
       it('should generate custom data transfer text data', () => {
@@ -279,9 +290,12 @@ describe('drag and drop', () => {
             data: items.map(item => item.last).join(',')
           }];
         };
-        const e = fireDragStart();
-        expect(e.__data).to.eql('bar,qux');
-        expect(e.__dataType).to.eql('text/plain');
+        fireDragStart();
+        fireDrop();
+        const event = dropSpy.getCall(0).args[0];
+        const dragData = event.detail.dragData[0];
+        expect(dragData.data).to.eql('bar,qux');
+        expect(dragData.type).to.eql('text/plain');
       });
 
     });
@@ -511,11 +525,13 @@ describe('drag and drop', () => {
       });
 
       it('should have the payload data', () => {
+        grid.rowsDraggable = true;
         grid.dropMode = 'on-top';
+        fireDragStart();
         fireDragOver();
         fireDrop();
         const event = dropSpy.getCall(0).args[0];
-        expect(event.detail.dragData).to.eql([{type: 'text', data: 'foo'}]);
+        expect(event.detail.dragData).to.eql([{type: 'text', data: 'foo\tbar'}]);
       });
 
       it('should have the original event', () => {
