@@ -91,6 +91,33 @@
 
         expect(layout.drawerOpened).to.be.false;
       });
+
+      it('should be able to change primary-section to "drawer"', () => {
+        // force it to desktop layout
+        window.ShadyCSS.styleSubtree(layout, {'--vaadin-app-layout-drawer-overlay': 'false'});
+        layout.drawerOpened = true; // force drawer to be opened
+        layout._updateOverlayMode();
+
+        const drawer = layout.$.drawer;
+
+        const layoutHeight = layout.getBoundingClientRect().height;
+        let drawerHeight = drawer.getBoundingClientRect().height;
+
+        expect(drawerHeight).to.not.be.equal(layoutHeight);
+
+        layout.primarySection = 'drawer';
+
+        drawerHeight = drawer.getBoundingClientRect().height;
+
+        expect(drawerHeight).to.be.equal(layoutHeight);
+        window.ShadyCSS.styleSubtree(layout, {'--vaadin-app-layout-drawer-overlay': null});
+      });
+
+      it('should fallback to navbar if invalid value is set on primary-section property', () => {
+        layout.primarySection = 'foobar';
+
+        expect(layout.primarySection).to.be.equal('navbar');
+      });
     });
   </script>
 </body>

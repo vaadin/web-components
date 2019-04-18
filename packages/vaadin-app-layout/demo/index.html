@@ -17,6 +17,16 @@
       <style>
         :host([mobile]) #demo {
           max-width: 375px;
+          margin: auto;
+          box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+        }
+
+        #demo {
+          height: 700px;
+        }
+
+        vaadin-demo-iframe-renderer {
+          height: 100%;
         }
       </style>
     </template>

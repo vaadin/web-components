@@ -75,11 +75,11 @@ This program is available under Apache License Version 2.0, available at https:/
         padding-right: var(--safe-area-inset-right);
       }
 
-      :host([drawer-first][drawer-opened]:not([overlay])) [part="navbar"] {
+      :host([primary-section="drawer"][drawer-opened]:not([overlay])) [part="navbar"] {
         left: var(--vaadin-app-layout-drawer-offset-left, 0);
       }
 
-      :host([drawer-first]) [part="drawer"] {
+      :host([primary-section="drawer"]) [part="drawer"] {
         top: 0;
       }
 
@@ -180,7 +180,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * `<vaadin-app-layout>` is a Web Component providing a quick and easy way to get a common application layout structure done.
        *
        * ```
-       * <vaadin-app-layout [drawer-first]>
+       * <vaadin-app-layout primary-section="navbar|drawer">
        *  <vaadin-drawer-toggle slot="navbar [touch-optimized]"></vaadin-drawer-toggle>
        *  <h3 slot="navbar [touch-optimized]">Company Name</h3>
        *  <vaadin-tabs orientation="vertical" slot="drawer">
@@ -239,14 +239,16 @@ This program is available under Apache License Version 2.0, available at https:/
         static get properties() {
           return {
             /**
-             * Defines how the navbar and the drawer will interact with each other on desktop view when the drawer is opened.
-             * - By default, the navbar takes the full available width and moves the drawer down.
-             * - If `drawer-first` is set, then the drawer will move the navbar, taking the full available height.
+             * Defines whether navbar or drawer will come first visually.
+             * - By default (`primary-section="navbar"`), the navbar takes the full available width and moves the drawer down.
+             * - If `primary-section="drawer"` is set, then the drawer will move the navbar, taking the full available height.
              */
-            drawerFirst: {
-              type: Boolean,
+            primarySection: {
+              type: String,
+              value: 'navbar',
               notify: true,
-              reflectToAttribute: true
+              reflectToAttribute: true,
+              observer: '_primarySectionObserver'
             },
 
             /**
@@ -329,6 +331,27 @@ This program is available under Apache License Version 2.0, available at https:/
           this.removeEventListener('drawer-toggle-click', this.__drawerToggleClickListener);
         }
 
+        _primarySectionObserver(value) {
+          const isValid = ['navbar', 'drawer'].indexOf(value) !== -1;
+          if (!isValid) {
+            this.set('primarySection', 'navbar');
+          }
+        }
+
+        _drawerOpenedObserver() {
+          const drawer = this.$.drawer;
+
+          drawer.removeAttribute('tabindex');
+
+          if (this.overlay) {
+            if (this.drawerOpened) {
+              drawer.setAttribute('tabindex', 0);
+              drawer.focus();
+            }
+          }
+        }
+
+
         _isShadyCSS() {
           return window.ShadyCSS && !window.ShadyCSS.nativeCss;
         }
@@ -391,19 +414,6 @@ This program is available under Apache License Version 2.0, available at https:/
             this.style.setProperty('--_vaadin-app-layout-drawer-offset-size', drawerRect.width + 'px');
           }
 
-        }
-
-        _drawerOpenedObserver() {
-          const drawer = this.$.drawer;
-
-          drawer.removeAttribute('tabindex');
-
-          if (this.overlay) {
-            if (this.drawerOpened) {
-              drawer.setAttribute('tabindex', 0);
-              drawer.focus();
-            }
-          }
         }
 
         _updateOverlayMode() {

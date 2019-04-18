@@ -15,10 +15,6 @@
           </style>
         </custom-style>
         <style>
-          .content {
-            padding: 16px;
-          }
-
           nav {
             display: flex;
             align-items: center;
@@ -57,7 +53,99 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>App layout with drawer as primary section</h3>
+    <vaadin-demo-snippet id="element-basic-demos-drawer" iframe-src="iframe-lumo-styled.html">
+      <template preserve-content>
+        <!-- Apply typography and color theme modules globally from `vaadin-lumo-styles` -->
+        <custom-style>
+          <style include="lumo-typography lumo-color">
+          </style>
+        </custom-style>
+        <style>
+          nav {
+            display: flex;
+            align-items: center;
+          }
+        </style>
+        <vaadin-app-layout primary-section="drawer">
+          <nav slot="navbar">
+            <vaadin-drawer-toggle></vaadin-drawer-toggle>
+            <img referrerpolicy="no-referrer" src="https://i.imgur.com/GPpnszs.png" alt="Vaadin Logo" width="100"
+              height="31" />
+          </nav>
+          <vaadin-tabs slot="drawer" orientation="vertical" theme="minimal" style="margin: 0 auto; flex: 1;">
+            <vaadin-tab>
+              <iron-icon icon="vaadin:home"></iron-icon>
+              Page 1
+            </vaadin-tab>
+            <vaadin-tab>
+              <iron-icon icon="vaadin:list"></iron-icon>
+              Page 2
+            </vaadin-tab>
+            <vaadin-tab>
+              <iron-icon icon="vaadin:options"></iron-icon>
+              Page 3
+            </vaadin-tab>
+            <vaadin-tab>
+              <iron-icon icon="vaadin:question"></iron-icon>
+              Page 4
+            </vaadin-tab>
+          </vaadin-tabs>
 
+          <div class="content">
+            <h3>Page title</h3>
+            <p>Page content</p>
+          </div>
+        </vaadin-app-layout>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>App layout in mobile</h3>
+    <vaadin-demo-snippet id="element-basic-demos-mobile" iframe-src="iframe-lumo-styled.html" mobile>
+      <template preserve-content>
+        <!-- Apply typography and color theme modules globally from `vaadin-lumo-styles` -->
+        <custom-style>
+          <style include="lumo-typography lumo-color">
+          </style>
+        </custom-style>
+        <style>
+          nav {
+            display: flex;
+            align-items: center;
+          }
+        </style>
+        <vaadin-app-layout>
+          <nav slot="navbar touch-optimized">
+            <vaadin-drawer-toggle></vaadin-drawer-toggle>
+            <img referrerpolicy="no-referrer" src="https://i.imgur.com/GPpnszs.png" alt="Vaadin Logo" width="100"
+              height="31" />
+          </nav>
+          <vaadin-tabs slot="drawer" orientation="vertical" theme="minimal" style="margin: 0 auto; flex: 1;">
+            <vaadin-tab>
+              <iron-icon icon="vaadin:home"></iron-icon>
+              Page 1
+            </vaadin-tab>
+            <vaadin-tab>
+              <iron-icon icon="vaadin:list"></iron-icon>
+              Page 2
+            </vaadin-tab>
+            <vaadin-tab>
+              <iron-icon icon="vaadin:options"></iron-icon>
+              Page 3
+            </vaadin-tab>
+            <vaadin-tab>
+              <iron-icon icon="vaadin:question"></iron-icon>
+              Page 4
+            </vaadin-tab>
+          </vaadin-tabs>
+
+          <div class="content">
+            <h3>Page title</h3>
+            <p>Page content</p>
+          </div>
+        </vaadin-app-layout>
+      </template>
+    </vaadin-demo-snippet>
   </template>
   <script>
     class ElementBasicDemos extends DemoReadyEventEmitter(ElementDemo(Polymer.Element)) {
