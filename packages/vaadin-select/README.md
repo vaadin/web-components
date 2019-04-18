@@ -29,17 +29,25 @@
 ```
 -->
 ```html
-<vaadin-select label="Label" placeholder="Placeholder" value="Option one">
-  <template>
-    <vaadin-list-box>
-      <vaadin-item>Option one</vaadin-item>
-      <vaadin-item>Option two</vaadin-item>
-      <vaadin-item>Option three</vaadin-item>
-      <hr>
-      <vaadin-item disabled>Option four</vaadin-item>
-    </vaadin-list-box>
-  </template>
-</vaadin-select>
+<vaadin-select></vaadin-select>
+<script>
+  document.querySelector('vaadin-select').renderer = function(root) {
+    // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
+    if (root.firstChild) {
+      return;
+    }
+    // create the <vaadin-list-box>
+    const listBox = document.createElement('vaadin-list-box');
+    // append 3 <vaadin-item> elements
+    ['Jose', 'Manolo', 'Pedro'].forEach(function(name) {
+      const item = document.createElement('vaadin-item');
+      item.textContent = name;
+      listBox.appendChild(item);
+    });
+    // update the content
+    root.appendChild(listBox);
+  };
+</script>
 ```
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-select/master/screenshot.gif" width="220" alt="Screenshot of vaadin-select">](https://vaadin.com/components/vaadin-select)
