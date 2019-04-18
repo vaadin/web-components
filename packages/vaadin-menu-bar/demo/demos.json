@@ -20,6 +20,16 @@
       "description": "",
       "image": ""
      }
+  },
+  {
+    "name": "Theme Variants",
+    "url": "menu-bar-theme-demos",
+    "src": "menu-bar-theme-demos.html",
+    "meta": {
+      "title": "Vaadin Menu Bar Theme Variants",
+      "description": "",
+      "image": ""
+    }
   }
   ]
 }

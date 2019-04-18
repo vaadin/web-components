@@ -1,0 +1,189 @@
+<dom-module id="menu-bar-theme-demos">
+    <template>
+      <style include="vaadin-component-demo-shared-styles">
+        :host {
+          display: block;
+        }
+      </style>
+
+      <h3>Primary Buttons</h3>
+      <p>
+        Use the <code>primary</code> theme variant if you need to bring a special attention to the menu bar on the page.
+      </p>
+      <vaadin-demo-snippet id="menu-bar-theme-demos-primary" when-defined="vaadin-menu-bar">
+        <template preserve-content>
+          <vaadin-menu-bar theme="primary"></vaadin-menu-bar>
+          <p>Selected item: <i></i></p>
+          <script>
+            window.addDemoReadyListener('#menu-bar-theme-demos-primary', function(document) {
+              const menu = document.querySelector('vaadin-menu-bar');
+              menu.items = [
+                {
+                  text: 'Project',
+                  children: [
+                    {text: 'Users',
+                      children: [{text: 'List'}, {text: 'Add'}]
+                    },
+                    {text: 'Billing',
+                      children: [{text: 'Invoices'}, {text: 'Balance Events'}]
+                    },
+                  ]
+                },
+                {
+                  text: 'Account',
+                  children: [
+                    {text: 'Edit Profile'},
+                    {text: 'Privacy Settings'}
+                  ]
+                },
+                {text: 'Sign Out'}
+              ];
+              menu.addEventListener('item-selected', function(e) {
+                document.querySelector('i').textContent = JSON.stringify(e.detail.value);
+              });
+            });
+          </script>
+        </template>
+      </vaadin-demo-snippet>
+
+      <h3>Tertiary Buttons</h3>
+      <p>
+        Use the <code>tertiary</code> theme variant if you prefer minimalism and don't need to bring attention.
+      </p>
+      <vaadin-demo-snippet id="menu-bar-theme-demos-tertiary" when-defined="vaadin-menu-bar">
+        <template preserve-content>
+          <vaadin-menu-bar theme="tertiary"></vaadin-menu-bar>
+          <p>Selected item: <i></i></p>
+          <script>
+            window.addDemoReadyListener('#menu-bar-theme-demos-tertiary', function(document) {
+              const menu = document.querySelector('vaadin-menu-bar');
+              menu.items = [
+                {
+                  text: 'Project',
+                  children: [
+                    {text: 'Users',
+                      children: [{text: 'List'}, {text: 'Add'}]
+                    },
+                    {text: 'Billing',
+                      children: [{text: 'Invoices'}, {text: 'Balance Events'}]
+                    },
+                  ]
+                },
+                {
+                  text: 'Account',
+                  children: [
+                    {text: 'Edit Profile'},
+                    {text: 'Privacy Settings'}
+                  ]
+                },
+                {text: 'Sign Out'}
+              ];
+              menu.addEventListener('item-selected', function(e) {
+                document.querySelector('i').textContent = JSON.stringify(e.detail.value);
+              });
+            });
+          </script>
+        </template>
+      </vaadin-demo-snippet>
+
+      <h3>Tertiary Inline Buttons</h3>
+      <p>
+        The <code>tertiary-inline</code> theme variant does not set any padding on the menu bar buttons, leaving
+        it to the user's responsibility.
+      </p>
+      <vaadin-demo-snippet id="menu-bar-theme-demos-tertiary-inline" when-defined="vaadin-menu-bar">
+        <template preserve-content>
+          <vaadin-menu-bar theme="tertiary-inline"></vaadin-menu-bar>
+          <p>Selected item: <i></i></p>
+          <script>
+            window.addDemoReadyListener('#menu-bar-theme-demos-tertiary-inline', function(document) {
+              const menu = document.querySelector('vaadin-menu-bar');
+              menu.items = [
+                {
+                  component: makeIcon('lumo:menu'),
+                  children: [
+                    {text: 'Dashboard'},
+                    {text: 'Reports'}
+                  ]
+                },
+                {
+                  component: makeIcon('lumo:user'),
+                  children: [
+                    {text: 'Edit Profile'},
+                    {component: 'hr'},
+                    {text: 'Privacy Settings'},
+                    {text: 'Terms of Service'}
+                  ]
+                },
+                {
+                  component: makeIcon('lumo:bell'),
+                  children: [
+                    {text: 'Notifications'},
+                    {text: 'Mark as read'}
+                  ]
+                }
+              ];
+              function makeIcon(img, txt) {
+                const icon = window.document.createElement('iron-icon');
+                icon.icon = img;
+                icon.style.margin = '0 6px';
+                return icon;
+              }
+              menu.addEventListener('item-selected', function(e) {
+                document.querySelector('i').textContent = JSON.stringify(e.detail.value);
+              });
+            });
+          </script>
+        </template>
+      </vaadin-demo-snippet>
+
+      <h3>Small Buttons</h3>
+      <p>
+        The <code>small</code> theme variant can be used on its own, or in combination with any of the above variants.
+      </p>
+      <vaadin-demo-snippet id="menu-bar-theme-demos-tertiary-small" when-defined="vaadin-menu-bar">
+        <template preserve-content>
+          <vaadin-menu-bar theme="tertiary small"></vaadin-menu-bar>
+          <p>Selected item: <i></i></p>
+          <script>
+            window.addDemoReadyListener('#menu-bar-theme-demos-tertiary-small', function(document) {
+              const menu = document.querySelector('vaadin-menu-bar');
+              menu.items = [
+                {
+                  text: 'Project',
+                  children: [
+                    {text: 'Users',
+                      children: [{text: 'List'}, {text: 'Add'}]
+                    },
+                    {text: 'Billing',
+                      children: [{text: 'Invoices'}, {text: 'Balance Events'}]
+                    },
+                  ]
+                },
+                {
+                  text: 'Account',
+                  children: [
+                    {text: 'Edit Profile'},
+                    {text: 'Privacy Settings'}
+                  ]
+                },
+                {text: 'Sign Out'}
+              ];
+              menu.addEventListener('item-selected', function(e) {
+                document.querySelector('i').textContent = JSON.stringify(e.detail.value);
+              });
+            });
+          </script>
+        </template>
+      </vaadin-demo-snippet>
+
+    </template>
+    <script>
+      class MenuBarThemeDemos extends DemoReadyEventEmitter(MenuBarDemo(Polymer.Element)) {
+        static get is() {
+          return 'menu-bar-theme-demos';
+        }
+      }
+      customElements.define(MenuBarThemeDemos.is, MenuBarThemeDemos);
+    </script>
+  </dom-module>
