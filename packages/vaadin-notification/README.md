@@ -29,11 +29,15 @@
 ```
 -->
 ```html
-<vaadin-notification opened position="middle" duration="-1">
-  <template>
-    Your work has been saved
-  </template>
-</vaadin-notification>
+<vaadin-notification opened position="middle" duration="-1"></vaadin-notification>
+
+<script>
+  const notification = document.querySelector('vaadin-notification');
+
+  notification.renderer = function(root) {
+    root.textContent = 'Your work has been saved';
+  };
+</script>
 ```
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-notification/master/screenshot.png" width="336" alt="Screenshot of vaadin-notification">](https://vaadin.com/components/vaadin-notification)
