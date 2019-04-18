@@ -11,7 +11,6 @@
 ## Example Usage
 ```html
 <vaadin-upload accept=".pdf">
-  <iron-icon slot="drop-label-icon" icon="description"></iron-icon>
   <span slot="drop-label">Drop your favourite Novels here (PDF files only)</span>
 </vaadin-upload>
 ```
