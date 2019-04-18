@@ -92,6 +92,30 @@
         expect(layout.drawerOpened).to.be.false;
       });
 
+      it('should close drawer when calling helper method', () => {
+        // force overlay=true to show backdrop
+        window.ShadyCSS.styleSubtree(layout, {'--vaadin-app-layout-drawer-overlay': 'true'});
+        layout._updateOverlayMode();
+        layout.drawerOpened = true;
+
+        Vaadin.AppLayoutElement.dispatchCloseOverlayDrawerEvent();
+
+        expect(layout.drawerOpened).to.be.false;
+        window.ShadyCSS.styleSubtree(layout, {'--vaadin-app-layout-drawer-overlay': null});
+      });
+
+      it('should close drawer when dispatching custom event', () => {
+        // force overlay=true to show backdrop
+        window.ShadyCSS.styleSubtree(layout, {'--vaadin-app-layout-drawer-overlay': 'true'});
+        layout._updateOverlayMode();
+        layout.drawerOpened = true;
+
+        window.dispatchEvent(new CustomEvent('close-overlay-drawer'));
+
+        expect(layout.drawerOpened).to.be.false;
+        window.ShadyCSS.styleSubtree(layout, {'--vaadin-app-layout-drawer-overlay': null});
+      });
+
       it('should be able to change primary-section to "drawer"', () => {
         // force it to desktop layout
         window.ShadyCSS.styleSubtree(layout, {'--vaadin-app-layout-drawer-overlay': 'false'});

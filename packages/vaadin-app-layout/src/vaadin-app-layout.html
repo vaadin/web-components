@@ -222,6 +222,16 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * See examples of setting the content into slots in the live demos.
        *
+       * ### Navigation
+       *
+       * As the drawer opens as an overlay in small devices, it makes sense to close it once a navigation happens.
+       *
+       * In order to do so, there are two options:
+       * - If the `vaadin-app-layout` instance is available, then `drawerOpened` can be set to `false`
+       * - If not, a custom event `close-overlay-drawer` can be dispatched either by calling
+       *  `window.dispatchEvent(new CustomEvent('close-overlay-drawer'))` or by calling
+       *  `Vaadin.AppLayoutElement.dispatchCloseOverlayDrawerEvent()`
+       *
        * @memberof Vaadin
        * @mixes Vaadin.ElementMixin
        * @mixes Vaadin.ThemableMixin
@@ -284,6 +294,7 @@ This program is available under Apache License Version 2.0, available at https:/
           // TODO(jouni): might want to debounce
           this.__boundResizeListener = this._resize.bind(this);
           this.__drawerToggleClickListener = this._drawerToggleClick.bind(this);
+          this.__closeOverlayDrawerListener = this.__closeOverlayDrawer.bind(this);
         }
 
         /**
@@ -318,6 +329,8 @@ This program is available under Apache License Version 2.0, available at https:/
           });
           this._updateDrawerSize();
           this._updateOverlayMode();
+
+          window.addEventListener('close-overlay-drawer', this.__closeOverlayDrawerListener);
         }
 
         /**
@@ -329,6 +342,14 @@ This program is available under Apache License Version 2.0, available at https:/
           this._navbarChildObserver && this._navbarChildObserver.disconnect();
           window.removeEventListener('resize', this.__boundResizeListener);
           this.removeEventListener('drawer-toggle-click', this.__drawerToggleClickListener);
+          this.removeEventListener('close-overlay-drawer', this.__drawerToggleClickListener);
+        }
+
+        /**
+         * Helper static method that dispatches a `close-overlay-drawer` event
+         */
+        static dispatchCloseOverlayDrawerEvent() {
+          window.dispatchEvent(new CustomEvent('close-overlay-drawer'));
         }
 
         _primarySectionObserver(value) {
@@ -364,6 +385,22 @@ This program is available under Apache License Version 2.0, available at https:/
         _drawerToggleClick(e) {
           e.stopPropagation();
           this.drawerOpened = !this.drawerOpened;
+        }
+
+        /**
+         * App Layout listens to `close-overlay-drawer` on the window level.
+         * A custom event can be dispatched and the App Layout will close the drawer in overlay.
+         *
+         * That can be used, for instance, when a navigation occurs when user clicks in a menu item inside the drawer.
+         *
+         * See `dispatchCloseOverlayDrawerEvent()` helper method.
+         *
+         * @event close-overlay-drawer
+         */
+        __closeOverlayDrawer() {
+          if (this.overlay) {
+            this.drawerOpened = false;
+          }
         }
 
         _updateDrawerSize() {
