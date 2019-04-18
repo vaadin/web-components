@@ -12,8 +12,12 @@
 ## Example Usage
 ```html
 <vaadin-dialog opened>
-  <template>
-    Sample dialog
-  </template>
 </vaadin-dialog>
+
+<script>
+  const dialog = document.querySelector('vaadin-dialog');
+  dialog.renderer = function(root, dialog) {
+    root.textContent = 'Sample dialog';
+  };
+</script>
 ```

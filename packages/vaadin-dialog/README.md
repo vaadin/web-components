@@ -30,10 +30,14 @@
 -->
 ```html
 <vaadin-dialog opened>
-  <template>
-    Sample dialog
-  </template>
 </vaadin-dialog>
+
+<script>
+  const dialog = document.querySelector('vaadin-dialog');
+  dialog.renderer = function(root, dialog) {
+    root.textContent = 'Sample dialog';
+  };
+</script>
 ```
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-dialog/master/screenshot.png" width="264" alt="Screenshot of vaadin-dialog">](https://vaadin.com/components/vaadin-dialog)
