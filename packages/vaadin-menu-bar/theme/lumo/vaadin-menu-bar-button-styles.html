@@ -4,16 +4,45 @@
   <template>
     <style include="lumo-button">
       :host {
-        margin: 0;
+        margin: 0 calc(var(--lumo-space-xs) / 2) 0 0;
         border-radius: 0;
       }
 
-      /* NOTE(web-padawan): avoid using nested calc() for IE11 and Edge */
+      [part="label"] {
+        width: 100%;
+      }
+
+      /* NOTE(web-padawan): avoid using shorthand properties for IE11 */
       [part="label"] ::slotted(vaadin-context-menu-item) {
+        height: var(--lumo-button-size);
         margin-left: calc((var(--lumo-size-m) / 3 + var(--lumo-border-radius) / 2) * -1);
         margin-right: calc((var(--lumo-size-m) / 3 + var(--lumo-border-radius) / 2) * -1);
         padding-left: calc(var(--lumo-size-m) / 3 + var(--lumo-border-radius) / 2);
         padding-right: calc(var(--lumo-size-m) / 3 + var(--lumo-border-radius) / 2);
+      }
+
+      :host([theme~="small"]) [part="label"] ::slotted(vaadin-context-menu-item) {
+        min-height: var(--lumo-size-s);
+        margin-left: calc((var(--lumo-size-s) / 3 + var(--lumo-border-radius) / 2) * -1);
+        margin-right: calc((var(--lumo-size-s) / 3 + var(--lumo-border-radius) / 2) * -1);
+        padding-left: calc(var(--lumo-size-s) / 3 + var(--lumo-border-radius) / 2);
+        padding-right: calc(var(--lumo-size-s) / 3 + var(--lumo-border-radius) / 2);
+      }
+
+      :host([theme~="tertiary"]) [part="label"] ::slotted(vaadin-context-menu-item) {
+        margin-left: calc((var(--lumo-button-size) / 6) * -1);
+        margin-right: calc((var(--lumo-button-size) / 6) * -1);
+        padding-left: calc(var(--lumo-button-size) / 6);
+        padding-right: calc(var(--lumo-button-size) / 6);
+      }
+
+      :host([theme~="tertiary-inline"]) {
+        margin-right: calc(var(--lumo-space-xs) / 2);
+      }
+
+      :host([theme~="tertiary-inline"]) [part="label"] ::slotted(vaadin-context-menu-item) {
+        margin: 0;
+        padding: 0;
       }
 
       :host([expanded]) {
@@ -30,10 +59,6 @@
       :host(:nth-last-of-type(2)),
       :host([part="overflow-button"]) {
         border-radius: 0 var(--lumo-border-radius-m) var(--lumo-border-radius-m) 0;
-      }
-
-      :host {
-        margin-right: calc(var(--lumo-space-xs) / 2);
       }
 
       :host([part="overflow-button"]) {

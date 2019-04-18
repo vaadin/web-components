@@ -5,26 +5,25 @@
 
   <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
   <script>
-    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+    const theme = new URL(document.location).searchParams.get('theme') || 'lumo';
     document.write(`<link rel="import" href="../../theme/${theme}/vaadin-menu-bar.html">`);
   </script>
   <link rel="import" href="../../../vaadin-lumo-styles/icons.html">
   <link rel="import" href="../../../iron-icon/iron-icon.html">
   <style>
-    /* cover all the viewport */
-    #material-contained-tests {
+    /* Force the overflow */
+    #theme-tests {
       padding: 10px;
-      width: 400px;
-      height: 400px;
+      width: 320px;
+      height: 320px;
     }
   </style>
 </head>
 
 <body>
 
-  <div id="material-contained-tests">
-    Contained:
-    <vaadin-menu-bar theme="contained"></vaadin-menu-bar>
+  <div id="theme-tests">
+    <vaadin-menu-bar></vaadin-menu-bar>
   </div>
 
   <script>
@@ -32,6 +31,7 @@
       const span = document.createElement('span');
       span.style.display = 'flex';
       span.style.alignItems = 'center';
+      span.style.justifyContent = 'center';
       const icon = document.createElement('iron-icon');
       icon.icon = img;
       span.appendChild(icon);
@@ -39,19 +39,30 @@
     }
 
     const menu = document.querySelector('vaadin-menu-bar');
+
+    const variant = new URL(document.location).searchParams.get('variant') || '';
+    menu.setAttribute('theme', variant);
+
+    // Force overflow for tertiary and tertiary-inline
+    if (variant === 'tertiary' || variant === 'small') {
+      menu.parentElement.style.width = '270px';
+    } else if (variant === 'tertiary-inline') {
+      menu.parentElement.style.width = '200px';
+    }
+
     menu.items = [
       {component: 'u', text: 'Home'},
+      {
+        component: makeIcon('lumo:chevron-down'),
+        children: [{text: 'Notifications'}, {text: 'Mark as read'}]
+      },
+      {text: 'Manage', disabled: true},
       {
         text: 'Reports',
         children: [
           {text: 'View Reports'},
           {text: 'Generate Report'}
         ]
-      },
-      {text: 'Manage', disabled: true},
-      {
-        component: makeIcon('lumo:chevron-down'),
-        children: [{text: 'Notifications'}, {text: 'Mark as read'}]
       },
       {text: 'Help'}
     ];

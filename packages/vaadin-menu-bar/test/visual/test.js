@@ -15,7 +15,7 @@ gemini.suite('vaadin-menu-bar', function(rootSuite) {
     .after(goToAboutBlank);
 
   ['lumo', 'material'].forEach(theme => {
-    gemini.suite(`default-tests-${theme}`, function(suite) {
+    gemini.suite(`${theme}-default-tests`, function(suite) {
       suite
         .setUrl(`default.html?theme=${theme}`)
         .setCaptureElements('#default-tests')
@@ -26,50 +26,33 @@ gemini.suite('vaadin-menu-bar', function(rootSuite) {
         });
     });
 
-    gemini.suite(`component-tests-${theme}`, function(suite) {
-      suite
-        .setUrl(`component.html?theme=${theme}`)
-        .setCaptureElements('#component-tests')
-        .capture('component', function(actions) {
-          actions.executeJS(function(window) {
-            window.openSubMenu();
-          });
-        });
-    });
-
-
-    gemini.suite(`overflow-tests-${theme}`, function(suite) {
-      suite
-        .setUrl(`overflow.html?theme=${theme}`)
-        .setCaptureElements('#overflow-tests')
-        .capture('overflow', function(actions) {
-          actions.executeJS(function(window) {
-            window.openSubMenu();
-          });
-        });
-    });
-
     if (theme === 'material') {
-      gemini.suite(`${theme}-outlined-tests`, function(suite) {
-        suite
-          .setUrl(`${theme}-outlined.html?theme=${theme}`)
-          .setCaptureElements(`#${theme}-outlined-tests`)
-          .capture('outlined', function(actions) {
-            actions.executeJS(function(window) {
-              window.openSubMenu();
+      ['outlined', 'contained', 'text'].forEach(variant => {
+        gemini.suite(`${theme}-${variant}-tests`, function(suite) {
+          suite
+            .setUrl(`theme.html?theme=${theme}&variant=${variant}`)
+            .setCaptureElements(`#theme-tests`)
+            .capture(`${variant}`, function(actions) {
+              actions.executeJS(function(window) {
+                window.openSubMenu();
+              });
             });
-          });
+        });
       });
+    }
 
-      gemini.suite(`${theme}-contained-tests`, function(suite) {
-        suite
-          .setUrl(`${theme}-contained.html?theme=${theme}`)
-          .setCaptureElements(`#${theme}-contained-tests`)
-          .capture('contained', function(actions) {
-            actions.executeJS(function(window) {
-              window.openSubMenu();
+    if (theme === 'lumo') {
+      ['primary', 'secondary', 'tertiary', 'tertiary-inline', 'small'].forEach(variant => {
+        gemini.suite(`${theme}-${variant}-tests`, function(suite) {
+          suite
+            .setUrl(`theme.html?theme=${theme}&variant=${variant}`)
+            .setCaptureElements(`#theme-tests`)
+            .capture(`${variant}`, function(actions) {
+              actions.executeJS(function(window) {
+                window.openSubMenu();
+              });
             });
-          });
+        });
       });
     }
   });
