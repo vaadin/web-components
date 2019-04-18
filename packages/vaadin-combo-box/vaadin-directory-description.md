@@ -10,10 +10,13 @@
 
 ## Example Usage
 ```html
-<dom-bind>
-  <template>
-    <iron-ajax url="https://randomuser.me/api?results=100&inc=name,email" last-response="{{response}}" auto></iron-ajax>
-    <vaadin-combo-box label="User" placeholder="Please select" items="[[response.results]]" item-value-path="email" item-label-path="email"></vaadin-combo-box>
-  </template>
-</dom-bind>
+<vaadin-combo-box label="User" placeholder="Please select" item-value-path="email" item-label-path="email"></vaadin-combo-box>
+
+<script>
+  const comboBox = document.querySelector('vaadin-combo-box');
+
+  fetch('https://randomuser.me/api?results=100&inc=name,email')
+    .then(res => res.json())
+    .then(json => comboBox.items = json.results);
+</script>
 ```
