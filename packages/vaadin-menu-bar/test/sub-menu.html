@@ -403,6 +403,23 @@
         expect(subMenu.opened).to.be.true;
         expect(subMenu.listenOn).to.equal(buttons[2]);
       });
+
+      it('should not select value of button without nested items', async() => {
+        const spy = sinon.spy();
+        menu.addEventListener('item-selected', spy);
+
+        buttons[1].dispatchEvent(new CustomEvent('mouseover', {bubbles: true, composed: true}));
+
+        expect(spy).to.be.not.called;
+      });
+
+      it('should not close sub-menu on expanded button mouseover', async() => {
+        buttons[0].dispatchEvent(new CustomEvent('mouseover', {bubbles: true, composed: true}));
+        await nextRender(subMenu);
+        buttons[0].dispatchEvent(new CustomEvent('mouseover', {bubbles: true, composed: true}));
+        await nextRender(subMenu);
+        expect(subMenu.opened).to.be.true;
+      });
     });
 
     describe('accessibility', () => {
