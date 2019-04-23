@@ -457,15 +457,23 @@ This program is available under Apache License Version 2.0, available at https:/
           const overlay = this._getCustomPropertyValue('--vaadin-app-layout-drawer-overlay') == 'true';
           const drawer = this.$.drawer;
 
+          if (!this.overlay && overlay) { // Changed from not overlay to overlay
+            this._drawerStateSaved = this.drawerOpened;
+            this.drawerOpened = false;
+          }
+
           this._setOverlay(overlay);
 
           if (this.overlay) {
-            this.drawerOpened = false;
-
             drawer.setAttribute('role', 'dialog');
             drawer.setAttribute('aria-modal', 'true');
             drawer.setAttribute('aria-label', 'drawer');
           } else {
+            if (this._drawerStateSaved) {
+              this.drawerOpened = this._drawerStateSaved;
+              this._drawerStateSaved = null;
+            }
+
             drawer.removeAttribute('role');
             drawer.removeAttribute('aria-modal');
             drawer.removeAttribute('aria-label');
