@@ -263,7 +263,6 @@ describe('drag and drop', () => {
 
       it('should auto generate data transfer text data', () => {
         grid.selectedItems = grid.items;
-        let foo = dragData;
         fireDragStart();
         fireDrop();
         const event = dropSpy.getCall(0).args[0];
