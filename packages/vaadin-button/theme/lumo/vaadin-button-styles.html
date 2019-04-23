@@ -19,8 +19,8 @@
         font-family: var(--lumo-font-family);
         font-size: var(--lumo-font-size-m);
         font-weight: 500;
-        color: var(--lumo-primary-text-color);
-        background-color: var(--lumo-contrast-5pct);
+        color: var(--_lumo-button-color, var(--lumo-primary-text-color));
+        background-color: var(--_lumo-button-background-color, var(--lumo-contrast-5pct));
         border-radius: var(--lumo-border-radius);
         cursor: default;
         -webkit-tap-highlight-color: transparent;
@@ -156,8 +156,8 @@
       }
 
       :host([theme~="primary"]) {
-        background-color: var(--lumo-primary-color);
-        color: var(--lumo-primary-contrast-color);
+        background-color: var(--_lumo-button-primary-background-color, var(--lumo-primary-color));
+        color: var(--_lumo-button-primary-color, var(--lumo-primary-contrast-color));
         font-weight: 600;
         min-width: calc(var(--lumo-button-size) * 2.5);
       }
