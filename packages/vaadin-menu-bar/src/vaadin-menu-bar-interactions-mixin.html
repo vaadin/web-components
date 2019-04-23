@@ -229,13 +229,14 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _onMouseOver(e) {
-      const button = Array.from(e.composedPath()).filter(el => el.item)[0];
-      const hasSubmenu = button && button.item.children;
-      const isOpened = this._subMenu.opened;
-      if (button !== this._expandedButton && hasSubmenu && (this.openOnHover || isOpened)) {
-        this.__openSubMenu(button);
-      } else if (!hasSubmenu && isOpened) {
-        this._close();
+      const button = this._getButtonFromEvent(e);
+      if (button && button !== this._expandedButton) {
+        const isOpened = this._subMenu.opened;
+        if (button.item.children && (this.openOnHover || isOpened)) {
+          this.__openSubMenu(button);
+        } else if (isOpened) {
+          this._close();
+        }
       }
     }
 
