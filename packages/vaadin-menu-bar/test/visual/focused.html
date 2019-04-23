@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+
+<head lang="en">
+  <meta charset="UTF-8">
+
+  <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../../iron-test-helpers/mock-interactions.js"></script>
+  <script src="../helpers.js"></script>
+  <script>
+    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-menu-bar.html">`);
+  </script>
+  <style>
+    /* cover all the viewport */
+    #focused-tests {
+      padding: 10px;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="focused-tests">
+    <vaadin-menu-bar></vaadin-menu-bar>
+  </div>
+
+  <script>
+    window.addEventListener('WebComponentsReady', () => {
+      const menu = document.querySelector('vaadin-menu-bar');
+      menu.items = [
+        {
+          text: 'Home'
+        },
+        {
+          text: 'Reports',
+          children: [
+            {text: 'View Reports'},
+            {text: 'Generate Report'}
+          ]
+        },
+        {text: 'Dashboard', disabled: true},
+        {text: 'Help'}
+      ];
+
+      const button = menu.shadowRoot.querySelectorAll('vaadin-menu-bar-button')[1];
+      button.focus();
+      arrowLeft(button);
+    });
+  </script>
+
+</body>

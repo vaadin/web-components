@@ -26,6 +26,13 @@ gemini.suite('vaadin-menu-bar', function(rootSuite) {
         });
     });
 
+    gemini.suite(`${theme}-focused-tests`, function(suite) {
+      suite
+        .setUrl(`focused.html?theme=${theme}`)
+        .setCaptureElements('#focused-tests')
+        .capture('focused');
+    });
+
     if (theme === 'material') {
       ['outlined', 'contained', 'text'].forEach(variant => {
         gemini.suite(`${theme}-${variant}-tests`, function(suite) {

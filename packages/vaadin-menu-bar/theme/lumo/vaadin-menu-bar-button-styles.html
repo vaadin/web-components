@@ -4,7 +4,8 @@
   <template>
     <style include="lumo-button">
       :host {
-        margin: 0 calc(var(--lumo-space-xs) / 2) 0 0;
+        margin: calc(var(--lumo-space-xs) / 2);
+        margin-left: 0;
         border-radius: 0;
       }
 
@@ -34,6 +35,8 @@
       }
 
       :host([theme~="tertiary-inline"]) {
+        margin-top: calc(var(--lumo-space-xs) / 2);
+        margin-bottom: calc(var(--lumo-space-xs) / 2);
         margin-right: calc(var(--lumo-space-xs) / 2);
       }
 
