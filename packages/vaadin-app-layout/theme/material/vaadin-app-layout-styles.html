@@ -15,6 +15,27 @@
         box-shadow: var(--material-shadow-elevation-8dp);
       }
 
+      [part="drawer"] {
+        background: var(--material-background-color);
+        border-right: 1px solid var(--material-secondary-background-color);
+      }
+
+      :host([primary-section="navbar"]:not([overlay])) [part="navbar"] {
+        z-index: 1;
+      }
+
+      [part] ::slotted(h2),
+      [part] ::slotted(h3),
+      [part] ::slotted(h4) {
+        margin-top: 0.25rem !important;
+        margin-bottom: 0.25rem !important;
+      }
+
+      [part="navbar"][bottom] {
+          padding: 0 1em;
+          box-shadow: var(--material-shadow-elevation-4dp);
+        }
+
       @media (min-width: 700px) {
         [part="navbar"] {
           padding: 0 1em;

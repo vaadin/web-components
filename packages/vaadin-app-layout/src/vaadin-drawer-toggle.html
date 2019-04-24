@@ -5,9 +5,7 @@ Copyright (C) 2018 Vaadin Ltd
 This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
 -->
 
-<link rel="import" href="../../vaadin-button/vaadin-button.html">
-<link rel="import" href="../../vaadin-lumo-styles/icons.html">
-<link rel="import" href="../../iron-icon/iron-icon.html">
+<link rel="import" href="../../vaadin-button/src/vaadin-button.html">
 
 <dom-module id="vaadin-drawer-toggle">
   <template>
@@ -19,6 +17,9 @@ This program is available under Apache License Version 2.0, available at https:/
         cursor: default;
         position: relative;
         outline: none;
+        height: 24px;
+        width: 24px;
+        padding: 4px;
       }
 
       #button {
@@ -30,10 +31,32 @@ This program is available under Apache License Version 2.0, available at https:/
         opacity: 0;
         cursor: inherit;
       }
+
+      [part="icon"],
+      [part="icon"]::after,
+      [part="icon"]::before {
+        position: absolute;
+        top: 8px;
+        height: 3px;
+        width: 24px;
+        background-color: #000;
+      }
+
+      [part="icon"]::after,
+      [part="icon"]::before {
+        content: "";
+      }
+
+      [part="icon"]::after {
+        top: 6px;
+      }
+
+      [part="icon"]::before {
+        top: 12px;
+      }
     </style>
     <slot>
-      <!-- TODO(jouni): don't use Lumo in the core styles, and make this customizable (font-icon) -->
-      <iron-icon icon="lumo:menu"></iron-icon>
+      <div part="icon"></div>
     </slot>
     <button id="button" type="button" aria-label$="[[ariaLabel]]"></button>
   </template>
