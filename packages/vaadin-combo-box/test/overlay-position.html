@@ -145,6 +145,7 @@
         const spy = sinon.spy();
         comboBox.$.overlay.$.dropdown.notifyResize = spy;
         comboBox.items = [1, 2, 3];
+        comboBox.__repositionOverlayDebouncer.flush();
         expect(spy.called).to.be.true;
       });
 

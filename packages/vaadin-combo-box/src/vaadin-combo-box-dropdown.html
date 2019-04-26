@@ -225,6 +225,9 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       _setPosition(e) {
+        if (this.hidden) {
+          return;
+        }
         if (e && e.target) {
           const target = e.target === document ? document.body : e.target;
           const parent = this.$.overlay.parentElement;
