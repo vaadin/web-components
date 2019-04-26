@@ -117,12 +117,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
         this.__editModeRenderer = function(root, column, rowData) {
           const cell = root.assignedSlot.parentNode;
-          const grid = column._grid;
-
-          if (grid.__edited && grid.__edited.model.item !== rowData.item) {
-            grid._stopEdit();
-            return;
-          }
 
           const tagName = column._getEditorTagName(cell);
           if (!root.firstElementChild || root.firstElementChild.localName.toLowerCase() !== tagName) {
