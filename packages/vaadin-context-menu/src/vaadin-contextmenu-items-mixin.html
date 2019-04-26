@@ -124,6 +124,22 @@
       document.documentElement.removeEventListener('click', this.__itemsOutsideClickListener);
     }
 
+    __forwardFocus() {
+      const overlay = this.$.overlay;
+      const child = overlay.content.querySelector(':not(style):not(slot)');
+      // if parent item is not focused, do not focus submenu
+      if (overlay.parentOverlay) {
+        const parent = overlay.parentOverlay.querySelector('[expanded]');
+        if (parent && parent.hasAttribute('focused') && child) {
+          child.focus();
+        } else {
+          overlay.$.overlay.focus();
+        }
+      } else if (child) {
+        child.focus();
+      }
+    }
+
     __openSubMenu(subMenu, itemElement) {
       subMenu.items = itemElement._item.children;
       subMenu.listenOn = itemElement;

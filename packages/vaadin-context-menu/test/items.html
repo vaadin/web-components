@@ -317,6 +317,38 @@
           expect(subMenu.opened).to.be.true;
         });
 
+        it('should not focus item if parent item is not focused', async() => {
+          subMenu.close();
+          rootMenu.$.overlay.focus();
+          open(menuComponents()[0]);
+          await nextRender(subMenu);
+          expect(subMenu.opened).to.be.true;
+          expect(menuComponents(subMenu)[0].hasAttribute('focused')).to.be.false;
+        });
+
+        it('should focus first item in submenu on arrow down', async() => {
+          subMenu.close();
+          rootMenu.$.overlay.focus();
+          open(menuComponents()[0]);
+          await nextRender(subMenu);
+          const item = menuComponents(subMenu)[0];
+          const spy = sinon.spy(item, 'focus');
+          fire(subMenu.$.overlay, 'keydown', {}, {keyCode: 40, key: 'ArrowDown'});
+          expect(spy).to.be.calledOnce;
+        });
+
+        it('should focus last item in submenu on arrow up', async() => {
+          subMenu.close();
+          rootMenu.$.overlay.focus();
+          open(menuComponents()[0]);
+          await nextRender(subMenu);
+          const items = menuComponents(subMenu);
+          const item = items[items.length - 1];
+          const spy = sinon.spy(item, 'focus');
+          fire(subMenu.$.overlay, 'keydown', {}, {keyCode: 38, key: 'ArrowUp'});
+          expect(spy).to.be.calledOnce;
+        });
+
         it('should have modeless sub menus', () => {
           const rootItemRect = menuComponents()[0].getBoundingClientRect();
           const element = document.elementFromPoint(rootItemRect.left, rootItemRect.top);
