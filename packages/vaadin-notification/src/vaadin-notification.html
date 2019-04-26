@@ -411,6 +411,7 @@ This program is available under Apache License Version 2.0, available at https:/
             }
 
             this._animatedAppendNotificationCard();
+            setTimeout(() => this._updateShadyButtonStyles());
           } else if (this._card) {
             this._closeNotificationCard();
           }
@@ -546,6 +547,29 @@ This program is available under Apache License Version 2.0, available at https:/
             if (duration > 0) {
               this._durationTimeoutId = setTimeout(() => this.close(), duration);
             }
+          }
+        }
+
+        _updateShadyButtonStyles() {
+          // ShadyCSS doesn't propagate CSS properties to slotted children,
+          // so this is done manually to allow vaadin-buttons to be themed
+          // correctly on IE11
+          if (window.ShadyCSS && !this.__buttonStylesPending) {
+            customElements.whenDefined('vaadin-button').then(() => {
+              const isButton = node => node instanceof customElements.get('vaadin-button');
+              Array.from(this._card.querySelectorAll('*')).filter(isButton).forEach(btn => {
+                const styles = ['--_lumo-button-color', '--_lumo-button-background-color',
+                  '--_lumo-button-primary-color', '--_lumo-button-primary-background-color']
+                  .reduce((obj, propName) => {
+                    const propValue = window.ShadyCSS.getComputedStyleValue(this._card, propName);
+                    propValue && (obj[propName] = propValue);
+                    return obj;
+                  }, {});
+                btn.updateStyles(styles);
+              });
+              this.__buttonStylesPending = false;
+            });
+            this.__buttonStylesPending = true;
           }
         }
       }
