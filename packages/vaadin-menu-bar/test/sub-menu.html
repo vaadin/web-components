@@ -93,6 +93,36 @@
         expect(spy).to.be.calledOnce;
       });
 
+      it('should focus the overlay when sub-menu opened on click', async() => {
+        const spy = sinon.spy(subMenu.$.overlay.$.overlay, 'focus');
+        buttons[0].click();
+        await nextRender(subMenu);
+        expect(spy).to.be.calledOnce;
+        const item = subMenu.$.overlay.querySelector('vaadin-context-menu-item');
+        expect(item.hasAttribute('focused')).to.be.false;
+      });
+
+      it('should focus the first item on overlay arrow down after open on click', async() => {
+        buttons[0].click();
+        await nextRender(subMenu);
+        const overlay = subMenu.$.overlay.$.overlay;
+        const item = subMenu.$.overlay.querySelector('vaadin-context-menu-item');
+        const spy = sinon.spy(item, 'focus');
+        arrowDown(overlay);
+        expect(spy).to.be.calledOnce;
+      });
+
+      it('should focus the last item on overlay arrow up after open on click', async() => {
+        buttons[0].click();
+        await nextRender(subMenu);
+        const overlay = subMenu.$.overlay.$.overlay;
+        const items = subMenu.$.overlay.querySelectorAll('vaadin-context-menu-item');
+        const last = items[items.length - 1];
+        const spy = sinon.spy(last, 'focus');
+        arrowUp(overlay);
+        expect(spy).to.be.calledOnce;
+      });
+
       (isIOS ? it.skip : it)('should open sub-menu on arrow down', async() => {
         const spy = sinon.spy();
         menu._container.addEventListener('keydown', spy);
@@ -100,6 +130,16 @@
         await nextRender(subMenu);
         expect(subMenu.opened).to.be.true;
         expect(spy.firstCall.args[0].defaultPrevented).to.be.true;
+      });
+
+      (isIOS ? it.skip : it)('should focus first sub-menu item when opened on arrow down', async() => {
+        arrowDown(buttons[0]);
+        await onceOpened(subMenu);
+        expect(subMenu.opened).to.be.true;
+        const item = subMenu.$.overlay.querySelector('vaadin-context-menu-item');
+        const spy = sinon.spy(item, 'focus');
+        await nextRender(subMenu);
+        expect(spy).to.be.calledOnce;
       });
 
       (isIOS ? it.skip : it)('should open sub-menu and focus last item on arrow up', async() => {

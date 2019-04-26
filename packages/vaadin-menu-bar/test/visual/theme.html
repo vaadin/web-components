@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
 
   <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../../iron-test-helpers/mock-interactions.js"></script>
+  <script src="../helpers.js"></script>
   <script>
     const theme = new URL(document.location).searchParams.get('theme') || 'lumo';
     document.write(`<link rel="import" href="../../theme/${theme}/vaadin-menu-bar.html">`);
@@ -69,7 +71,8 @@
 
     // eslint-disable-next-line no-unused-vars
     function openSubMenu() {
-      menu.shadowRoot.querySelectorAll('vaadin-menu-bar-button')[1].click();
+      // open on Arrow Down to make sure the submenu item is focused
+      arrowDown(menu.shadowRoot.querySelectorAll('vaadin-menu-bar-button')[1]);
     }
   </script>
 

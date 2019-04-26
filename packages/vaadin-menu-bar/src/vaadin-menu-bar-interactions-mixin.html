@@ -109,7 +109,7 @@ This program is available under Apache License Version 2.0, available at https:/
             // Menu opened previously, focus first item
             this._focusFirstItem();
           } else {
-            this.__openSubMenu(button);
+            this.__openSubMenu(button, event);
           }
         } else if (event.keyCode === 38) {
           // ArrowUp, prevent page scroll
@@ -118,7 +118,7 @@ This program is available under Apache License Version 2.0, available at https:/
             // Menu opened previously, focus last item
             this._focusLastItem();
           } else {
-            this.__openSubMenu(button, {focusLast: true});
+            this.__openSubMenu(button, event, {focusLast: true});
           }
         } else if (event.keyCode === 27 && button === this._expandedButton) {
           this._close(true);
@@ -168,7 +168,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
         this._focusButton(btn);
         if (wasExpanded && btn.item && btn.item.children) {
-          this.__openSubMenu(btn, {keepFocus: true});
+          this.__openSubMenu(btn, event, {keepFocus: true});
         }
       }
     }
@@ -233,7 +233,7 @@ This program is available under Apache License Version 2.0, available at https:/
       if (button && button !== this._expandedButton) {
         const isOpened = this._subMenu.opened;
         if (button.item.children && (this.openOnHover || isOpened)) {
-          this.__openSubMenu(button);
+          this.__openSubMenu(button, e);
         } else if (isOpened) {
           this._close();
         }
@@ -254,8 +254,15 @@ This program is available under Apache License Version 2.0, available at https:/
           this._navigateByKey(e);
           const button = this.shadowRoot.activeElement;
           if (button && button.item && button.item.children) {
-            this.__openSubMenu(button, {keepFocus: true});
+            this.__openSubMenu(button, e, {keepFocus: true});
           }
+        }
+      } else if ([38, 40].indexOf(e.keyCode) > -1) {
+        e.preventDefault();
+        if (e.keyCode === 38) {
+          this._focusLastItem();
+        } else {
+          this._focusFirstItem();
         }
       }
     }
@@ -274,11 +281,11 @@ This program is available under Apache License Version 2.0, available at https:/
       e.stopPropagation();
       const button = this._getButtonFromEvent(e);
       if (button) {
-        this.__openSubMenu(button);
+        this.__openSubMenu(button, e);
       }
     }
 
-    __openSubMenu(button, options = {}) {
+    __openSubMenu(button, event, options = {}) {
       const subMenu = this._subMenu;
       const item = button.item;
 
@@ -319,6 +326,13 @@ This program is available under Apache License Version 2.0, available at https:/
       if (options.keepFocus) {
         this.__onceOpened(() => {
           this._focusButton(this._expandedButton);
+        });
+      }
+
+      // do not focus item when open not from keyboard
+      if (event.type !== 'keydown') {
+        this.__onceOpened(() => {
+          subMenu.$.overlay.$.overlay.focus();
         });
       }
     }
