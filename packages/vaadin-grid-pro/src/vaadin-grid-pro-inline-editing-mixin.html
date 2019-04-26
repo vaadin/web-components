@@ -70,7 +70,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       // Prevent click/selection on edit column
       this.$.table.addEventListener('click', e => {
         const column = this.getEventContext(e).column;
-        if (this._isEditColumn(column)) {
+        if (column && this._isEditColumn(column)) {
           e.preventDefault();
         }
       });
