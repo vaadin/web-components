@@ -335,10 +335,10 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
       } else {
+        this._onClosed();
         if (this._openedWithFocusRing && this.hasAttribute('focused')) {
           this.focusElement.setAttribute('focus-ring', '');
         }
-        this._onClosed();
       }
     }
 
