@@ -125,18 +125,23 @@ This program is available under Apache License Version 2.0, available at https:/
             e.dataTransfer.setDragImage(row, e.clientX - rowRect.left, e.clientY - rowRect.top);
           }
 
-          const items = this._isSelected(row._item) ? this.selectedItems.slice(0) : [row._item];
+          let rows = [row];
+          if (this._isSelected(row._item)) {
+            rows = this.__getViewportRows()
+              .filter(row => this._isSelected(row._item))
+              .filter(row => !this.dragFilter || this.dragFilter(this.__getRowModel(row)));
+          }
 
           // Set the default transfer data
-          e.dataTransfer.setData('text', this.__formatDefaultTransferData(items));
+          e.dataTransfer.setData('text', this.__formatDefaultTransferData(rows));
 
           row.setAttribute('dragstart', '');
-          if (items.length > 1) {
+          if (rows.length > 1) {
             this.updateStyles({
               '--_grid-drag-start-x': `${e.clientX - rowRect.left + 20}px`,
               '--_grid-drag-start-y': `${e.clientY - rowRect.top + 10}px`
             });
-            row.setAttribute('dragstart', items.length);
+            row.setAttribute('dragstart', rows.length);
           }
 
           requestAnimationFrame(() => {
@@ -146,7 +151,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
           const event = new CustomEvent('grid-dragstart', {
             detail: {
-              items,
+              items: rows.map(row => row._item),
               setDragData: (type, data) => e.dataTransfer.setData(type, data)
             }
           });
@@ -230,6 +235,16 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
+      __getViewportRows() {
+        const headerBotton = this.$.header.getBoundingClientRect().bottom;
+        const footerTop = this.$.footer.getBoundingClientRect().top;
+        return Array.from(this.$.items.children)
+          .filter(row => {
+            const rowRect = row.getBoundingClientRect();
+            return rowRect.bottom > headerBotton && rowRect.top < footerTop;
+          });
+      }
+
       _clearDragStyles() {
         this.removeAttribute('dragover');
         Array.from(this.$.items.children).forEach(row => row.removeAttribute('dragover'));
@@ -263,11 +278,8 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
-      __formatDefaultTransferData(items) {
-        return Array.from(this.$.items.children)
-          .filter(row => {
-            return !row.hidden && items.indexOf(row._item) > -1;
-          })
+      __formatDefaultTransferData(rows) {
+        return rows
           .map(row => {
             return Array.from(row.children)
               .filter(cell => !cell.hidden && cell.getAttribute('part').indexOf('details-cell') === -1)
@@ -327,6 +339,8 @@ This program is available under Apache License Version 2.0, available at https:/
        * @param {Object} detail
        * @param {Object} detail.items the items being dragged
        * @param {Function} detail.setDragData Sets dataTransfer data for the drag operation.
+       * Note that on multi selection, only the items in the viewport are included
+       * in the items property.
        * Note that "text" is the only data type supported by all the browsers the grid currently supports (including IE11).
        * The function takes two parameters:
        * - type:string The type of the data
