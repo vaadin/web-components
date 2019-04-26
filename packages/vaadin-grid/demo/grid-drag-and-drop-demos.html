@@ -246,9 +246,15 @@
       is the payload of the drag and drop operation.
     </p>
     <p>
-      To customize the drag event data, override the grid's <code>formatDragData</code> function. It receives the list of dragged
-      items as arguments and returns an array of items with the payload as a string representation as the <code>data</code> property
-      and the type of the data as <code>type</code> property.
+      To customize the drag event data, use the <code>detail.setDragData</code> function of the <code>grid-dragstart</code> event.
+      The function takes two parameters:
+      <ul>
+        <li><b>type:string</b> <i>The type of the data</i></li>
+        <li><b>data:string</b> <i>The data</i></li>
+      </ul>
+    </p>
+    <p>
+      <b>Note:</b> "text" is the only data type supported by all the browsers the grid currently supports (including IE11).
     </p>
     <p>
       <b>Hint:</b> Try dragging the grid's rows to the grid of the same demo but on another browser window.
@@ -270,18 +276,13 @@
             const grid = document.querySelector('vaadin-grid');
             grid.items = Vaadin.GridDemo.users.slice(0);
 
-            grid.formatDragData = function(items) {
-              return [{
-                type: 'text',
-                data: '[' + items.map(function(item) {
-                  return JSON.stringify(item);
-                }).join(',') + ']'
-              }];
-            };
-
             let draggedItems;
             grid.addEventListener('grid-dragstart', function(e) {
               draggedItems = e.detail.items;
+              const data = '[' + draggedItems.map(function(item) {
+                return JSON.stringify(item);
+              }).join(',') + ']';
+              e.detail.setDragData('text', data);
             });
 
             grid.addEventListener('grid-drop', function(e) {

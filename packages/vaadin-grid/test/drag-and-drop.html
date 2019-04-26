@@ -283,16 +283,13 @@ describe('drag and drop', () => {
 
       it('should generate custom data transfer text data', () => {
         grid.selectedItems = grid.items;
-        grid.formatDragData = items => {
-          return [{
-            type: 'text/plain',
-            data: items.map(item => item.last).join(',')
-          }];
-        };
+        grid.addEventListener('grid-dragstart', e => {
+          e.detail.setDragData('text/plain', e.detail.items.map(item => item.last).join(','));
+        });
         fireDragStart();
         fireDrop();
         const event = dropSpy.getCall(0).args[0];
-        const dragData = event.detail.dragData[0];
+        const dragData = event.detail.dragData.filter(d => d.type === 'text/plain')[0];
         expect(dragData.data).to.eql('bar,qux');
         expect(dragData.type).to.eql('text/plain');
       });

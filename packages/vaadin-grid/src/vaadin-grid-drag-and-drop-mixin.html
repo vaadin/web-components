@@ -126,15 +126,9 @@ This program is available under Apache License Version 2.0, available at https:/
           }
 
           const items = this._isSelected(row._item) ? this.selectedItems.slice(0) : [row._item];
-          this.formatDragData(items).forEach(({type, data}) => {
-            try {
-              e.dataTransfer.setData(type, data);
-            } catch (e) {
-              // IE11 throws when type other than "text" is used, fallback to "text"
-              e.dataTransfer.setData('text', data);
-            }
-          });
-  
+
+          // Set the default transfer data
+          e.dataTransfer.setData('text', this.__formatDefaultTransferData(items));
 
           row.setAttribute('dragstart', '');
           if (items.length > 1) {
@@ -152,7 +146,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
           const event = new CustomEvent('grid-dragstart', {
             detail: {
-              items
+              items,
+              setDragData: (type, data) => e.dataTransfer.setData(type, data)
             }
           });
           event.originalEvent = e;
@@ -251,7 +246,7 @@ This program is available under Apache License Version 2.0, available at https:/
               data: e.dataTransfer.getData(type)
             };
           });
-  
+
           this._clearDragStyles();
 
           const event = new CustomEvent('grid-drop', {
@@ -268,25 +263,10 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
-      /**
-       * Generates dataTransfer data for the given items. Return value is an array of objects with
-       * `type` and `data` properties. The drag start event's `dataTransfer.setData(type, data)` is applied
-       * for each of them individually.
-       *
-       * Note that the default implementation:
-       * 1. Only reads textContent from the rows that are currently visible in the DOM. Grid
-       * uses virtual scrolling so some rows, even when selected, might be excluded from the data
-       * if they're not in the viewport.
-       * 2. Only sets dataTransfer data of type "text" which is the only data type supported
-       * by all the browsers the grid currently supports (including IE11).
-       *
-       * Override this method to modify the behaviour.
-       */
-      formatDragData(items) {
-        const data = Array.from(this.$.items.children)
+      __formatDefaultTransferData(items) {
+        return Array.from(this.$.items.children)
           .filter(row => {
             return !row.hidden && items.indexOf(row._item) > -1;
-  
           })
           .map(row => {
             return Array.from(row.children)
@@ -299,11 +279,6 @@ This program is available under Apache License Version 2.0, available at https:/
               .join('\t');
           })
           .join('\n');
-
-        return [{
-          type: 'text',
-          data
-        }];
       }
 
       _dragDropAccessChanged(rowsDraggable, dropMode, dragFilter, dropFilter) {
@@ -351,6 +326,11 @@ This program is available under Apache License Version 2.0, available at https:/
        * @param {Object} originalEvent The native dragstart event
        * @param {Object} detail
        * @param {Object} detail.items the items being dragged
+       * @param {Function} detail.setDragData Sets dataTransfer data for the drag operation.
+       * Note that "text" is the only data type supported by all the browsers the grid currently supports (including IE11).
+       * The function takes two parameters:
+       * - type:string The type of the data
+       * - data:string The data
        */
 
       /**
