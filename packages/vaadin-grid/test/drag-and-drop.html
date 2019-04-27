@@ -44,7 +44,7 @@ describe('drag and drop', () => {
       composed: true
     });
     event.dataTransfer = {
-      setDragImage: () => {},
+      setDragImage: sinon.spy(),
       setData: (type, data) => dragData[type] = data
     };
     draggable.dispatchEvent(event);
@@ -68,6 +68,16 @@ describe('drag and drop', () => {
       composed: true
     });
     draggable.dispatchEvent(event);
+  };
+
+  const fireDragEnter = (draggable = getDraggable(grid)) => {
+    const event = new Event('dragenter', {
+      bubbles: true,
+      cancelable: true,
+      composed: true
+    });
+    draggable.dispatchEvent(event);
+    return event;
   };
 
   const fireDrop = (draggable = getDraggable(grid)) => {
@@ -320,6 +330,20 @@ describe('drag and drop', () => {
         expect(dragData.type).to.eql('text/plain');
       });
 
+      if (!window.ShadyDOM) {
+        it('should genrate drag image with offset', () => {
+          grid._ios = false;
+          const event = fireDragStart();
+          expect(event.dataTransfer.setDragImage.getCall(0).args.length).to.equal(3);
+        });
+
+        it('should genrate drag image without offset', () => {
+          grid._ios = true;
+          const event = fireDragStart();
+          expect(event.dataTransfer.setDragImage.getCall(0).args.length).to.equal(1);
+        });
+      }
+
     });
 
     describe('dragend', () => {
@@ -475,6 +499,28 @@ describe('drag and drop', () => {
         expect(row.hasAttribute('dragover')).to.be.true;
         fireDragLeave();
         expect(row.hasAttribute('dragover')).to.be.false;
+      });
+
+    });
+
+    describe('dragenter', () => {
+
+      // The dragenter event needs to be cancelled to enable the mobile polyfill
+      it('should stop and cancel the native event', () => {
+        grid.dropMode = 'between';
+        const spy = sinon.spy();
+        grid.addEventListener('dragenter', spy);
+        const event = fireDragEnter();
+        expect(spy.called).to.be.false;
+        expect(event.defaultPrevented).to.be.true;
+      });
+
+      it('should not stop and cancel the native event', () => {
+        const spy = sinon.spy();
+        grid.addEventListener('dragenter', spy);
+        const event = fireDragEnter();
+        expect(spy.called).to.be.true;
+        expect(event.defaultPrevented).to.be.false;
       });
 
     });

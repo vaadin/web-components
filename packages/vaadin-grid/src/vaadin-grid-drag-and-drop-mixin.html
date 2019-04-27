@@ -92,6 +92,13 @@ This program is available under Apache License Version 2.0, available at https:/
         this.$.table.addEventListener('dragover', this._onDragOver.bind(this));
         this.$.table.addEventListener('dragleave', this._onDragLeave.bind(this));
         this.$.table.addEventListener('drop', this._onDrop.bind(this));
+        this.$.table.addEventListener('dragenter', e => {
+          if (this.dropMode) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+        });
+
       }
 
       _onDragStart(e) {
@@ -122,7 +129,12 @@ This program is available under Apache License Version 2.0, available at https:/
 
           const rowRect = row.getBoundingClientRect();
           if (!window.ShadyDOM) {
-            e.dataTransfer.setDragImage(row, e.clientX - rowRect.left, e.clientY - rowRect.top);
+            if (this._ios) {
+              e.dataTransfer.setDragImage(row);
+            } else {
+              e.dataTransfer.setDragImage(row, e.clientX - rowRect.left, e.clientY - rowRect.top);
+            }
+
           }
 
           let rows = [row];
