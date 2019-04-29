@@ -76,6 +76,10 @@ This program is available under Apache License Version 2.0, available at https:/
            */
           dropFilter: Function,
 
+          __dndAutoScrollThreshold: {
+            value: 50
+          }
+
         };
       }
 
@@ -147,14 +151,11 @@ This program is available under Apache License Version 2.0, available at https:/
           // Set the default transfer data
           e.dataTransfer.setData('text', this.__formatDefaultTransferData(rows));
 
-          row.setAttribute('dragstart', '');
-          if (rows.length > 1) {
-            this.updateStyles({
-              '--_grid-drag-start-x': `${e.clientX - rowRect.left + 20}px`,
-              '--_grid-drag-start-y': `${e.clientY - rowRect.top + 10}px`
-            });
-            row.setAttribute('dragstart', rows.length);
-          }
+          row.setAttribute('dragstart', rows.length > 1 ? rows.length : '');
+          this.updateStyles({
+            '--_grid-drag-start-x': `${e.clientX - rowRect.left + 20}px`,
+            '--_grid-drag-start-y': `${e.clientY - rowRect.top + 10}px`
+          });
 
           requestAnimationFrame(() => {
             row.removeAttribute('dragstart');
@@ -163,8 +164,9 @@ This program is available under Apache License Version 2.0, available at https:/
 
           const event = new CustomEvent('grid-dragstart', {
             detail: {
-              items: rows.map(row => row._item),
-              setDragData: (type, data) => e.dataTransfer.setData(type, data)
+              draggedItems: rows.map(row => row._item),
+              setDragData: (type, data) => e.dataTransfer.setData(type, data),
+              setDraggedItemsCount: count => row.setAttribute('dragstart', count)
             }
           });
           event.originalEvent = e;
@@ -190,6 +192,11 @@ This program is available under Apache License Version 2.0, available at https:/
         if (this.dropMode) {
           this._dropLocation = undefined;
           this._dragOverItem = undefined;
+
+          if (this.__dndAutoScroll(e.clientY)) {
+            this._clearDragStyles();
+            return;
+          }
 
           let row = e.composedPath().filter(node => node.localName === 'tr')[0];
 
@@ -247,13 +254,44 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
+      __dndAutoScroll(clientY) {
+        if (this.__dndAutoScrolling) {
+          return true;
+        }
+
+        const headerBottom = this.$.header.getBoundingClientRect().bottom;
+        const footerTop = this.$.footer.getBoundingClientRect().top;
+        const topDiff = headerBottom - clientY + this.__dndAutoScrollThreshold;
+        const bottomDiff = clientY - footerTop + this.__dndAutoScrollThreshold;
+        let scrollTopDelta = 0;
+
+        if (bottomDiff > 0) {
+          scrollTopDelta = bottomDiff * 2;
+        } else if (topDiff > 0) {
+          scrollTopDelta = -topDiff * 2;
+        }
+
+        if (scrollTopDelta) {
+          const scrollTop = this.$.table.scrollTop;
+          this.$.table.scrollTop += scrollTopDelta;
+          const scrollTopChanged = scrollTop !== this.$.table.scrollTop;
+          if (scrollTopChanged) {
+            this.__dndAutoScrolling = true;
+            // Disallow more auto-scrolls within 20ms
+            setTimeout(() => this.__dndAutoScrolling = false, 20);
+            this._scrollHandler();
+            return true;
+          }
+        }
+      }
+
       __getViewportRows() {
-        const headerBotton = this.$.header.getBoundingClientRect().bottom;
+        const headerBottom = this.$.header.getBoundingClientRect().bottom;
         const footerTop = this.$.footer.getBoundingClientRect().top;
         return Array.from(this.$.items.children)
           .filter(row => {
             const rowRect = row.getBoundingClientRect();
-            return rowRect.bottom > headerBotton && rowRect.top < footerTop;
+            return rowRect.bottom > headerBottom && rowRect.top < footerTop;
           });
       }
 
@@ -280,7 +318,7 @@ This program is available under Apache License Version 2.0, available at https:/
             bubbles: e.bubbles,
             cancelable: e.cancelable,
             detail: {
-              item: this._dragOverItem,
+              dropTargetItem: this._dragOverItem,
               dropLocation: this._dropLocation,
               dragData
             }
@@ -349,10 +387,10 @@ This program is available under Apache License Version 2.0, available at https:/
        * @event grid-dragstart
        * @param {Object} originalEvent The native dragstart event
        * @param {Object} detail
-       * @param {Object} detail.items the items being dragged
+       * @param {Object} detail.draggedItems the items in the visible viewport that are dragged
+       * @param {Function} detail.setDraggedItemsCount Overrides the default number shown in the drag image on multi row drag.
+       * Parameter is of type number.
        * @param {Function} detail.setDragData Sets dataTransfer data for the drag operation.
-       * Note that on multi selection, only the items in the viewport are included
-       * in the items property.
        * Note that "text" is the only data type supported by all the browsers the grid currently supports (including IE11).
        * The function takes two parameters:
        * - type:string The type of the data
@@ -372,7 +410,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * @event grid-drop
        * @param {Object} originalEvent The native drop event
        * @param {Object} detail
-       * @param {Object} detail.item The item of the grid row on which the drop occurred.
+       * @param {Object} detail.dropTargetItem The item of the grid row on which the drop occurred.
        * @param {string} detail.dropLocation The position at which the drop event took place relative to a row.
        * Depending on the dropMode value, the drop location can be one of the following
        * - `on-top`: when the drop occurred on top of the row

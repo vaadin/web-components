@@ -222,6 +222,17 @@ describe('drag and drop', () => {
         expect(row.getAttribute('dragstart')).to.equal('');
       });
 
+      it('should override row count state attribute', () => {
+        grid.style.height = '80px';
+        grid.addEventListener('grid-dragstart', e => {
+          e.detail.setDraggedItemsCount(2);
+        });
+        grid.selectedItems = grid.items;
+        fireDragStart();
+        const row = getRows(grid.$.items)[0];
+        expect(row.getAttribute('dragstart')).to.equal('2');
+      });
+
       it('should not add count to dragstart attribute on single row drag', () => {
         fireDragStart();
         const row = getRows(grid.$.items)[0];
@@ -262,21 +273,21 @@ describe('drag and drop', () => {
       it('should reference the dragged item', () => {
         fireDragStart();
         const event = dragStartSpy.getCall(0).args[0];
-        expect(event.detail.items).to.eql([grid.items[0]]);
+        expect(event.detail.draggedItems).to.eql([grid.items[0]]);
       });
 
       it('should reference the dragged item only', () => {
         grid.selectItem(grid.items[1]);
         fireDragStart();
         const event = dragStartSpy.getCall(0).args[0];
-        expect(event.detail.items).to.eql([grid.items[0]]);
+        expect(event.detail.draggedItems).to.eql([grid.items[0]]);
       });
 
       it('should reference all the selected items', () => {
         grid.selectedItems = grid.items;
         fireDragStart();
         const event = dragStartSpy.getCall(0).args[0];
-        expect(event.detail.items).to.eql(grid.items);
+        expect(event.detail.draggedItems).to.eql(grid.items);
       });
 
       it('should only include visible rows in the event items', () => {
@@ -284,7 +295,7 @@ describe('drag and drop', () => {
         grid.selectedItems = grid.items;
         fireDragStart();
         const event = dragStartSpy.getCall(0).args[0];
-        expect(event.detail.items).to.eql([grid.items[0]]);
+        expect(event.detail.draggedItems).to.eql([grid.items[0]]);
       });
 
       it('should auto generate data transfer text data', () => {
@@ -320,7 +331,7 @@ describe('drag and drop', () => {
       it('should generate custom data transfer text data', () => {
         grid.selectedItems = grid.items;
         grid.addEventListener('grid-dragstart', e => {
-          e.detail.setDragData('text/plain', e.detail.items.map(item => item.last).join(','));
+          e.detail.setDragData('text/plain', e.detail.draggedItems.map(item => item.last).join(','));
         });
         fireDragStart();
         fireDrop();
@@ -580,7 +591,7 @@ describe('drag and drop', () => {
         fireDragOver();
         fireDrop();
         const event = dropSpy.getCall(0).args[0];
-        expect(event.detail.item).to.eql(grid.items[0]);
+        expect(event.detail.dropTargetItem).to.eql(grid.items[0]);
       });
 
       it('should have the drop location', () => {
@@ -651,7 +662,7 @@ describe('drag and drop', () => {
       grid.addEventListener('grid-dragstart', dragStartSpy);
       fireDragStart();
       const event = dragStartSpy.getCall(0).args[0];
-      expect(event.detail.items).to.eql([grid.items[0]]);
+      expect(event.detail.draggedItems).to.eql([grid.items[0]]);
     });
 
     it('should exclude non-draggable items from dragged row count', () => {
@@ -718,6 +729,42 @@ describe('drag and drop', () => {
       const row = grid.$.items.children[0];
       const e = fireDragOver(row, 'above');
       expect(e.defaultPrevented).to.be.false;
+    });
+
+  });
+
+  describe('auto scroll', () => {
+
+    beforeEach(() => {
+      grid.dropMode = 'between';
+      grid.items = Array(...new Array(100)).map(() => {});
+      flushGrid(grid);
+    });
+
+    it('should auto scroll down', () => {
+      const scrollTop = grid.$.table.scrollTop;
+      fireDragOver(grid.__getViewportRows().pop(), 'above');
+      expect(grid.$.table.scrollTop).to.be.within(scrollTop + 20, scrollTop + 100);
+    });
+
+    it('should auto scroll down fast', () => {
+      const scrollTop = grid.$.table.scrollTop;
+      fireDragOver(grid.__getViewportRows().pop(), 'below');
+      expect(grid.$.table.scrollTop).to.be.within(scrollTop + 100, scrollTop + 200);
+    });
+
+    it('should auto scroll up', () => {
+      grid._scrollToIndex(50);
+      const scrollTop = grid.$.table.scrollTop;
+      fireDragOver(grid.__getViewportRows()[0], 'below');
+      expect(grid.$.table.scrollTop).to.be.within(scrollTop - 100, scrollTop - 20);
+    });
+
+    it('should auto scroll up fast', () => {
+      grid._scrollToIndex(50);
+      const scrollTop = grid.$.table.scrollTop;
+      fireDragOver(grid.__getViewportRows()[0], 'above');
+      expect(grid.$.table.scrollTop).to.be.within(scrollTop - 200, scrollTop - 100);
     });
 
   });

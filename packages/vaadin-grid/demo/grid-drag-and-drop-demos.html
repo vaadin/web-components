@@ -31,7 +31,7 @@
     </p>
     <vaadin-demo-snippet id='grid-drag-and-drop-demos-row-reordering'>
       <template preserve-content>
-        <vaadin-grid drop-mode="between" rows-draggable>
+        <vaadin-grid rows-draggable>
           <vaadin-grid-column path="name.first" header="First name"></vaadin-grid-column>
           <vaadin-grid-column path="name.last" header="Last name"></vaadin-grid-column>
           <vaadin-grid-column path="email"></vaadin-grid-column>
@@ -46,22 +46,23 @@
             let draggedItem;
 
             grid.addEventListener('grid-dragstart', function(e) {
-              draggedItem = e.detail.items[0];
+              draggedItem = e.detail.draggedItems[0];
+              grid.dropMode = 'between';
             });
 
             grid.addEventListener('grid-dragend', function(e) {
-              draggedItem = null;
+              draggedItem = grid.dropMode = null;
             });
 
             grid.addEventListener('grid-drop', function(e) {
-              const dropOverItem = e.detail.item;
-              if (draggedItem && draggedItem !== dropOverItem) {
+              const dropTargetItem = e.detail.dropTargetItem;
+              if (draggedItem && draggedItem !== dropTargetItem) {
                 // Reorder the items
                 const items = grid.items.filter(function(i) {
                   return i !== draggedItem;
                 });
-                const dropLocation = e.detail.dropLocation;
-                const dropIndex = items.indexOf(dropOverItem) + (dropLocation === 'below' ? 1 : 0);
+                const dropIndex = items.indexOf(dropTargetItem)
+                  + (e.detail.dropLocation === 'below' ? 1 : 0);
                 items.splice(dropIndex, 0, draggedItem);
                 grid.items = items;
               }
@@ -78,18 +79,18 @@
       for example with the selection column helper, to enable dragging multiple rows at the same time.
     </p>
     <p>
-      The <code>detail.items</code> property of the <code>grid-dragstart</code> event
-      is an array containing all items getting dragged.
+      The <code>detail.draggedItems</code> property of the <code>grid-dragstart</code> event
+      is an array containing the items in the visible viewport that are dragged.
     </p>
     <p>
-      The <code>detail.item</code> property of the <code>grid-drop</code> event
+      The <code>detail.dropTargetItem</code> property of the <code>grid-drop</code> event
       refers to the item of the grid row on which the drop occurred.
     </p>
 
     <vaadin-demo-snippet id='grid-drag-and-drop-demos-drag-between-grids'>
       <template preserve-content>
         <div style="display: flex">
-          <vaadin-grid rows-draggable drop-mode="between">
+          <vaadin-grid rows-draggable>
             <vaadin-grid-selection-column auto-select></vaadin-grid-selection-column>
             <vaadin-grid-column path="name.first" header="First name"></vaadin-grid-column>
             <vaadin-grid-column path="name.last" header="Last name"></vaadin-grid-column>
@@ -98,7 +99,7 @@
 
           &nbsp;
 
-          <vaadin-grid rows-draggable drop-mode="between">
+          <vaadin-grid rows-draggable>
             <vaadin-grid-selection-column auto-select></vaadin-grid-selection-column>
             <vaadin-grid-column path="name.first" header="First name"></vaadin-grid-column>
             <vaadin-grid-column path="name.last" header="Last name"></vaadin-grid-column>
@@ -109,20 +110,26 @@
           window.addDemoReadyListener('#grid-drag-and-drop-demos-drag-between-grids', function(document) {
             let draggedItems;
             let sourceGrid;
+            const grids = Array.from(document.querySelectorAll('vaadin-grid'));
 
             const dragStartListener = function(e) {
-              draggedItems = e.detail.items;
+              draggedItems = e.detail.draggedItems;
               sourceGrid = e.target;
+              grids.forEach(function(grid) {
+                grid.dropMode = 'between';
+              });
             };
 
             const dragEndListener = function(e) {
-              draggedItems = null;
-              sourceGrid = null;
+              draggedItems = sourceGrid = null;
+              grids.forEach(function(grid) {
+                grid.dropMode = null;
+              });
             };
 
             const dropListener = function(e) {
-              const dropOverItem = e.detail.item;
-              if (sourceGrid && draggedItems && draggedItems.indexOf(dropOverItem) === -1) {
+              const dropTargetItem = e.detail.dropTargetItem;
+              if (draggedItems.indexOf(dropTargetItem) === -1) {
                 // Remove the items from the source grid
                 sourceGrid.items = sourceGrid.items.filter(function(i) {
                   return draggedItems.indexOf(i) === -1;
@@ -132,8 +139,8 @@
                 // Add dragged items to the target Grid
                 const targetGrid = e.target;
                 let index = targetGrid.items.length;
-                if (dropOverItem) {
-                  index = targetGrid.items.indexOf(dropOverItem)
+                if (dropTargetItem) {
+                  index = targetGrid.items.indexOf(dropTargetItem)
                     + (e.detail.dropLocation === 'below' ? 1 : 0);
                 }
                 targetGrid.items = []
@@ -143,13 +150,12 @@
               }
             };
 
-            Array.from(document.querySelectorAll('vaadin-grid'))
-              .forEach(function(grid, index) {
-                grid.items = index === 0 ? Vaadin.GridDemo.users.slice(0, 5) : Vaadin.GridDemo.users.slice(6, 7);
-                grid.addEventListener('grid-dragstart', dragStartListener);
-                grid.addEventListener('grid-dragend', dragEndListener);
-                grid.addEventListener('grid-drop', dropListener);
-              });
+            grids.forEach(function(grid, index) {
+              grid.items = index === 0 ? Vaadin.GridDemo.users.slice(0, 5) : Vaadin.GridDemo.users.slice(6, 7);
+              grid.addEventListener('grid-dragstart', dragStartListener);
+              grid.addEventListener('grid-dragend', dragEndListener);
+              grid.addEventListener('grid-drop', dropListener);
+            });
 
           });
         </script>
@@ -186,7 +192,7 @@
 
           &nbsp;
 
-          <vaadin-grid id="target" drop-mode="on-top-or-between">
+          <vaadin-grid id="target">
             <vaadin-grid-tree-column path="name.first" header="First name"></vaadin-grid-tree-column>
             <vaadin-grid-column path="name.last" header="Last name"></vaadin-grid-column>
             <vaadin-grid-column path="email"></vaadin-grid-column>
@@ -197,8 +203,12 @@
             const sourceGrid = document.querySelector('#source');
             const targetGrid = document.querySelector('#target');
 
-            sourceGrid.items = Vaadin.GridDemo.users.slice(2);
-            const targetGridItems = Vaadin.GridDemo.users.slice(0, 2);
+            const clone = function(user) {
+              return Object.assign({}, user);
+            };
+            sourceGrid.items = Vaadin.GridDemo.users.slice(2).map(clone);
+            const targetGridItems = Vaadin.GridDemo.users.slice(0, 2).map(clone);
+
             targetGrid.dataProvider = function(params, cb) {
               const items = params.parentItem ? params.parentItem.children : targetGridItems;
               const start = params.pageSize * params.page;
@@ -208,7 +218,12 @@
             let draggedItem;
 
             sourceGrid.addEventListener('grid-dragstart', function(e) {
-              draggedItem = e.detail.items[0];
+              draggedItem = e.detail.draggedItems[0];
+              targetGrid.dropMode = 'on-top-or-between';
+            });
+
+            sourceGrid.addEventListener('grid-dragend', function() {
+              draggedItem = targetGrid.dropMode = null;
             });
 
             targetGrid.addEventListener('grid-drop', function(e) {
@@ -216,16 +231,16 @@
                 return i !== draggedItem;
               });
 
-              const dropOverItem = e.detail.item;
-              const array = dropOverItem.array || targetGridItems;
+              const dropTargetItem = e.detail.dropTargetItem;
 
               if (e.detail.dropLocation === 'on-top') {
-                dropOverItem.children = (dropOverItem.children || []).concat(draggedItem);
-                draggedItem.array = dropOverItem.children;
+                draggedItem.parentItem = dropTargetItem;
+                dropTargetItem.children = (dropTargetItem.children || []).concat(draggedItem);
               } else {
-                draggedItem.array = array;
-                const dropIndex = array.indexOf(dropOverItem) + (e.detail.dropLocation === 'below' ? 1 : 0);
-                array.splice(dropIndex, 0, draggedItem);
+                const siblings = dropTargetItem.parentItem ? dropTargetItem.parentItem.children : targetGridItems;
+                const dropIndex = siblings.indexOf(dropTargetItem)
+                  + (e.detail.dropLocation === 'below' ? 1 : 0);
+                siblings.splice(dropIndex, 0, draggedItem);
               }
               targetGrid.clearCache();
             });
@@ -281,7 +296,18 @@
 
             let draggedItems;
             grid.addEventListener('grid-dragstart', function(e) {
-              draggedItems = e.detail.items;
+              // We'll use grid.selectedItems since e.detail.draggedItems only contains the visible dragged items
+
+              // e.detail.draggedItems can only contain items from the visible
+              // viewport, so when the user is dragging the selected items, let's
+              // instead treat the whole selection (not just the visible items) as
+              // dragged items
+              const draggingSelected = grid.selectedItems.indexOf(e.detail.draggedItems[0]) > -1;
+              draggedItems = draggingSelected ? grid.selectedItems : e.detail.draggedItems;
+              if (draggedItems.length > 1) {
+                e.detail.setDraggedItemsCount(draggedItems.length);
+              }
+
               const data = '[' + draggedItems.map(function(item) {
                 return JSON.stringify(item);
               }).join(',') + ']';
@@ -294,9 +320,9 @@
 
               const targetGrid = e.target;
               let index = targetGrid.items.length;
-              const dropOverItem = e.detail.item;
-              if (dropOverItem) {
-                index = targetGrid.items.indexOf(dropOverItem)
+              const dropTargetItem = e.detail.dropTargetItem;
+              if (dropTargetItem) {
+                index = targetGrid.items.indexOf(dropTargetItem)
                   + (e.detail.dropLocation === 'below' ? 1 : 0);
               }
               targetGrid.items = []
@@ -357,9 +383,12 @@
             const grid = document.querySelector('vaadin-grid');
             let draggedUser;
 
-            const supervisors = Vaadin.GridDemo.users.slice(0, 3);
-            supervisors[0].subordinates = Vaadin.GridDemo.users.slice(3, 6);
-            supervisors[1].subordinates = Vaadin.GridDemo.users.slice(6, 8);
+            const clone = function(user) {
+              return Object.assign({}, user);
+            };
+            const supervisors = Vaadin.GridDemo.users.slice(0, 3).map(clone);
+            supervisors[0].subordinates = Vaadin.GridDemo.users.slice(3, 6).map(clone);
+            supervisors[1].subordinates = Vaadin.GridDemo.users.slice(6, 8).map(clone);
             supervisors[2].subordinates = [];
 
             grid.dataProvider = function(params, cb) {
@@ -382,18 +411,18 @@
             grid.expandedItems = Array.from(supervisors);
 
             grid.addEventListener('grid-dragstart', function(e) {
-              draggedUser = e.detail.items[0];
+              draggedUser = e.detail.draggedItems[0];
               // Enabling the drop mode on drag start. This will
               // also automatically re-run any drag and drop filters on the grid.
               grid.dropMode = 'on-top';
             });
 
             grid.addEventListener('grid-dragend', function() {
-              grid.dropMode = undefined;
+              draggedUser = grid.dropMode = null;
             });
 
             grid.addEventListener('grid-drop', function(e) {
-              const supervisor = e.detail.item;
+              const supervisor = e.detail.dropTargetItem;
               if (supervisor) {
                 // Remove the item from it's previous supervisor's subordinates list
                 supervisors.forEach(function(supervisor) {
