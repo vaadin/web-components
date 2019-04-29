@@ -61,6 +61,7 @@ This program is available under Apache License Version 2.0, available at https:/
           max$="[[max]]"
           aria-label$="[[label]]"
           clear-button-visible="[[clearButtonVisible]]"
+          i18n="[[i18n]]"
           theme$="[[theme]]">
         <span slot="suffix" part="toggle-button" role="button" aria-label$="[[i18n.selector]]"></span>
       </vaadin-time-picker-text-field>
@@ -314,6 +315,9 @@ This program is available under Apache License Version 2.0, available at https:/
 
                   // Translation of the time selector icon button title.
                   selector: 'Time selector',
+
+                  // Translation of the time selector clear button title.
+                  clear: 'Clear'
                 }
               */
             i18n: {
@@ -351,7 +355,8 @@ This program is available under Apache License Version 2.0, available at https:/
                       return {hours: parts[1], minutes: parts[2], seconds: parts[3], milliseconds: parts[4]};
                     }
                   },
-                  selector: 'Time selector'
+                  selector: 'Time selector',
+                  clear: 'Clear'
                 };
               }
             }

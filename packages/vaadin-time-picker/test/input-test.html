@@ -246,6 +246,23 @@
           timePicker.readonly = true;
           expect(getComputedStyle(clearButton).display).to.equal('none');
         });
+
+        it('should have default accessible label', function() {
+          expect(clearButton.getAttribute('aria-label')).to.equal('Clear');
+        });
+
+        it('should translate accessible label with new i18n object', function() {
+          const i18n = {};
+          Object.assign(i18n, timePicker.i18n);
+          i18n.clear = 'tyhjennä';
+          timePicker.i18n = i18n;
+          expect(clearButton.getAttribute('aria-label')).to.equal('tyhjennä');
+        });
+
+        it('should translate accessible label with set API', function() {
+          timePicker.set('i18n.clear', 'tyhjennä');
+          expect(clearButton.getAttribute('aria-label')).to.equal('tyhjennä');
+        });
       });
     });
   </script>
