@@ -222,6 +222,31 @@
         });
       });
 
+      describe('clear-button-visible', () => {
+        let textField, clearButton;
+
+        beforeEach(() => {
+          textField = timePicker.__inputElement;
+          clearButton = textField.$.clearButton;
+        });
+
+        it('should propagate clear-button-visible attribute to text-field', () => {
+          timePicker.clearButtonVisible = true;
+          expect(textField).to.have.property('clearButtonVisible', true);
+        });
+
+        it('should not show clear button when disabled', () => {
+          timePicker.clearButtonVisible = true;
+          timePicker.disabled = true;
+          expect(getComputedStyle(clearButton).display).to.equal('none');
+        });
+
+        it('should not show clear button when read-only', () => {
+          timePicker.clearButtonVisible = true;
+          timePicker.readonly = true;
+          expect(getComputedStyle(clearButton).display).to.equal('none');
+        });
+      });
     });
   </script>
 </body>
