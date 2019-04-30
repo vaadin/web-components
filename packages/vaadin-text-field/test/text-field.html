@@ -244,12 +244,12 @@
             expect(textField.hasAttribute('has-value')).to.be.true;
           });
 
-          it('setting value to undefine should not update has-value attribute', function() {
+          it('setting value to undefined should not update has-value attribute', function() {
             textField.value = undefined;
             expect(textField.hasAttribute('has-value')).to.be.false;
           });
 
-          it('setting value to undefine should clear the native input value', function() {
+          it('setting value to undefined should clear the native input value', function() {
             textField.value = 'foo';
             textField.value = undefined;
             expect(textField.inputElement.value).to.equal('');
@@ -260,7 +260,7 @@
             expect(textField.hasAttribute('has-value')).to.be.false;
           });
 
-          // User could accidently set a 0 or false value
+          // User could accidentally set a 0 or false value
           it('setting number value updates has-value attribute', function() {
             textField.value = 0;
             expect(textField.hasAttribute('has-value')).to.be.true;
