@@ -113,7 +113,7 @@
             menu.items = [
               {component: 'b', text: 'Home'},
               {
-                component: makeIcon('lumo:user', 'Profile'),
+                component: makeIcon('vaadin:user', 'Profile'),
                 children: [
                   {text: 'Edit Profile'},
                   {component: 'hr'},
@@ -127,17 +127,14 @@
               }
             ];
             function makeIcon(img, txt) {
-              const span = window.document.createElement('span');
-              span.style.display = 'flex';
-              span.style.alignItems = 'center';
-              span.style.justifyContent = 'center';
+              const item = window.document.createElement('vaadin-context-menu-item');
               const icon = window.document.createElement('iron-icon');
-              icon.icon = img;
-              span.appendChild(icon);
+              icon.setAttribute('icon', img);
+              item.appendChild(icon);
               if (txt) {
-                span.appendChild(window.document.createTextNode(txt));
+                item.appendChild(window.document.createTextNode(txt));
               }
-              return span;
+              return item;
             }
             menu.addEventListener('item-selected', function(e) {
               document.querySelector('i').textContent = e.detail.value.text;

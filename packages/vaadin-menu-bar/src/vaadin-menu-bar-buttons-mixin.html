@@ -202,6 +202,7 @@ This program is available under Apache License Version 2.0, available at https:/
           itemCopy.component = component;
           // save item for overflow menu
           component.item = itemCopy;
+          component.setAttribute('theme', 'menu-bar-item');
           button.appendChild(component);
         } else if (item.text) {
           button.textContent = item.text;

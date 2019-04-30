@@ -33,6 +33,17 @@ gemini.suite('vaadin-menu-bar', function(rootSuite) {
         .capture('focused');
     });
 
+    gemini.suite(`${theme}-icons-tests`, function(suite) {
+      suite
+        .setUrl(`icons.html?theme=${theme}`)
+        .setCaptureElements('#icons-tests')
+        .capture('icons', function(actions) {
+          actions.executeJS(function(window) {
+            window.openSubMenu();
+          });
+        });
+    });
+
     if (theme === 'material') {
       ['outlined', 'contained', 'text'].forEach(variant => {
         gemini.suite(`${theme}-${variant}-tests`, function(suite) {

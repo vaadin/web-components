@@ -30,14 +30,12 @@
 
   <script>
     function makeIcon(img) {
-      const span = document.createElement('span');
-      span.style.display = 'flex';
-      span.style.alignItems = 'center';
-      span.style.justifyContent = 'center';
-      const icon = document.createElement('iron-icon');
-      icon.icon = img;
-      span.appendChild(icon);
-      return span;
+      const item = window.document.createElement('vaadin-context-menu-item');
+      const icon = window.document.createElement('iron-icon');
+      icon.setAttribute('icon', img);
+      item.appendChild(icon);
+      item.setAttribute('theme', 'menu-bar-item');
+      return item;
     }
 
     const menu = document.querySelector('vaadin-menu-bar');
