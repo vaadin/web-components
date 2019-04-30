@@ -1,0 +1,9 @@
+{
+  "files": ["package.json"],
+  "from": [
+    "\"resolutions\": {"
+  ],
+  "to": [
+    "\"resolutions\": {\n\"@vaadin/vaadin-tabs\": \"3.0.0-alpha1\","
+  ]
+}
