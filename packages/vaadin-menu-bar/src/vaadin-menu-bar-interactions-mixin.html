@@ -257,13 +257,6 @@ This program is available under Apache License Version 2.0, available at https:/
             this.__openSubMenu(button, e, {keepFocus: true});
           }
         }
-      } else if ([38, 40].indexOf(e.keyCode) > -1) {
-        e.preventDefault();
-        if (e.keyCode === 38) {
-          this._focusLastItem();
-        } else {
-          this._focusFirstItem();
-        }
       }
     }
 
