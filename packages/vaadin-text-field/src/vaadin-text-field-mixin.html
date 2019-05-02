@@ -364,7 +364,22 @@ This program is available under Apache License Version 2.0, available at https:/
           return;
         }
       }
-      this.__userInput = true;
+
+      if (this.__inputFromClearButton) {
+        this.__inputFromClearButton = false;
+        // In this case when input event is triggered by clear button we need to skip
+        // setting "this.__userInput = true" because the clear button clears the value
+        // first triggering _valueChanged() before this input event. If we wouldn't
+        // skip this, then __userInput would be left true until the next _valueChanged()
+        // happens which would then prevent setting this.inputElement.value correctly
+        // leaving it out of sync with this.value.
+      } else {
+        // This is used to prevent setting this.inputElement.value in _valueChanged()
+        // when this input event was actually triggered by the user from the input
+        // element itself (thus the value there should be correct already).
+        // This flag is set back to false in _valueChanged().
+        this.__userInput = true;
+      }
       this.value = e.target.value;
     }
 
@@ -597,6 +612,7 @@ This program is available under Apache License Version 2.0, available at https:/
         // below to propagate normally.
         this.__preventInput = false;
       }
+      this.__inputFromClearButton = true;
       this.inputElement.dispatchEvent(new Event('input', {bubbles: true, composed: true}));
       this.inputElement.dispatchEvent(new Event('change', {bubbles: !this._slottedInput}));
     }

@@ -161,10 +161,23 @@
           expect(textField.value).not.to.be.ok;
         });
 
+        it('should clear the value of native input on ESC if clear button is visible', function() {
+          textField.value = 'Foo';
+          textField.clearButtonVisible = true;
+          textField.dispatchEvent(escKeyDownEvent);
+          expect(textField.inputElement.value).to.equal('');
+        });
+
         it('should not clear the value on ESC if clear button is not visible', function() {
           textField.value = 'Foo';
           textField.dispatchEvent(escKeyDownEvent);
-          expect(textField.value).to.be.equal('Foo');
+          expect(textField.value).to.equal('Foo');
+        });
+
+        it('should not clear the value of native input on ESC if clear button is not visible', function() {
+          textField.value = 'Foo';
+          textField.dispatchEvent(escKeyDownEvent);
+          expect(textField.inputElement.value).to.equal('Foo');
         });
 
       });

@@ -175,6 +175,20 @@
             expect(getComputedStyle(textField.$.clearButton).getPropertyValue('display')).to.be.equal('none');
           });
 
+          it('should clear the value when clear button is clicked', function() {
+            textField.clearButtonVisible = true;
+            textField.value = 'Foo';
+            textField.$.clearButton.click();
+            expect(textField.value).not.to.be.ok;
+          });
+
+          it('should clear the native input value when clear button is clicked', function() {
+            textField.clearButtonVisible = true;
+            textField.value = 'Foo';
+            textField.$.clearButton.click();
+            expect(textField.inputElement.value).to.equal('');
+          });
+
           it('should dispatch input event when clear button is clicked', function() {
             const inputSpy = sinon.spy();
             textField.addEventListener('input', inputSpy);
@@ -199,7 +213,7 @@
             expect(event.defaultPrevented).to.be.true;
           });
 
-          it('should set _valueClearing flag not to dipatch change event on mousedown and remove it it on click', function() {
+          it('should set _valueClearing flag not to dispatch change event on mousedown and remove it on click', function() {
             // Testing internal implementation as it impossible to test native change event.
             // For case when the field is focused, value is changed, clear button is pressed.
             // Should not fire two change events.
@@ -216,6 +230,14 @@
             expect(textField._valueClearing).to.be.false;
 
             expect(changeSpy).to.be.calledOnce;
+          });
+
+          it('should update input value when setting value after clicking clear button', function() {
+            textField.clearButtonVisible = true;
+            textField.value = 'Foo';
+            textField.$.clearButton.click();
+            textField.value = 'Bar';
+            expect(textField.inputElement.value).to.equal('Bar');
           });
 
           ['disabled', 'readonly'].forEach(state => {
@@ -438,6 +460,13 @@
           textField.value = 'Foo';
           textField.clear();
           expect(textField.value).not.to.be.ok;
+        });
+
+        it('should clear the value of native input when clear() is called', () => {
+          const textField = fixture(`default${fixtureName}`);
+          textField.value = 'Foo';
+          textField.clear();
+          expect(textField.inputElement.value).to.equal('');
         });
       });
     });
