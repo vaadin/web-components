@@ -13,7 +13,7 @@
 
 [Live Demo ↗](https://vaadin.com/components/vaadin-charts/examples)
 |
-[API documentation ↗](https://vaadin.com/components/vaadin-api/html-api)
+[API documentation ↗](https://vaadin.com/components/vaadin-charts/html-api)
 
 
 [Vaadin Charts](https://vaadin.com/components/vaadin-charts) is a Web Component for creating high quality charts, part of the [Vaadin components](https://vaadin.com/components).
