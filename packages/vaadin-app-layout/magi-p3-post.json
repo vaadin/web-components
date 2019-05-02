@@ -4,6 +4,6 @@
     "\"resolutions\": {"
   ],
   "to": [
-    "\"resolutions\": {\n\"@vaadin/vaadin-tabs\": \"3.0.0-alpha1\","
+    "\"resolutions\": {\n\"@vaadin/vaadin-tabs\": \"3.0.0\","
   ]
 }
