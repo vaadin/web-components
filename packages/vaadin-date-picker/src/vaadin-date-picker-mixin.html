@@ -804,7 +804,7 @@ This program is available under Apache License Version 2.0, available at https:/
           const parsedDate = dateObject &&
             this._parseDate(dateObject.year + '-' + (dateObject.month + 1) + '-' + dateObject.day);
 
-          if (this._overlayContent.focusedDate && this._isValidDate(parsedDate)) {
+          if (this._overlayInitialized && this._overlayContent.focusedDate && this._isValidDate(parsedDate)) {
             this._selectedDate = this._overlayContent.focusedDate;
           }
           this.close();

@@ -290,6 +290,13 @@
           });
         });
 
+        it('should not throw on enter before opening overlay', () => {
+          expect(() => {
+            datepicker.focus();
+            enter();
+          }).not.to.throw(Error);
+        });
+
         describe('no parseDate', () => {
 
           beforeEach(() => {
