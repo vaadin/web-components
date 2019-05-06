@@ -55,13 +55,13 @@
 
       it('should open calendar on input', done => {
         var target = datepicker._inputElement;
-        target.value = '1';
-        datepicker._nativeInput.dispatchEvent(new CustomEvent('input', {bubbles: true}));
+        target.bindValue = '1';
 
-        listenForEvent(datepicker.$.overlay, 'vaadin-overlay-open', () => {
+        listenForEvent(document, 'vaadin-overlay-open', () => {
           expect(datepicker.$.overlay.opened).to.be.true;
           done();
         });
+        datepicker._nativeInput.dispatchEvent(new CustomEvent('input', {bubbles: true}));
       });
 
       it('should show week numbers', () => {
