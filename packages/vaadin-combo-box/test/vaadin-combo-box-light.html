@@ -74,6 +74,14 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="combobox-light-vaadin-text-field">
+    <template>
+      <vaadin-combo-box-light>
+        <vaadin-text-field></vaadin-text-field>
+      </vaadin-combo-box-light>
+    </template>
+  </test-fixture>
+
   <script>
     describe('vaadin-combo-box-light', () => {
       let comboBox, ironInput;
@@ -389,6 +397,24 @@
 
       it('should not throw error on open', () => {
         expect(() => comboBox.open()).not.to.throw(Error);
+      });
+    });
+
+    describe('vaadin-combo-box-light with vaadin-text-field', () => {
+      let comboBox, textField;
+
+      beforeEach(() => {
+        comboBox = fixture('combobox-light-vaadin-text-field');
+        comboBox.items = ['bar', 'baz', 'qux'];
+        textField = comboBox.inputElement;
+      });
+
+      it('should immediately clear value when using clear button of vaadin-text-field', () => {
+        textField.clearButtonVisible = true;
+        comboBox.value = 'bar';
+        textField.$.clearButton.click();
+
+        expect(comboBox.value).not.to.be.ok;
       });
     });
   </script>

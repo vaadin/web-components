@@ -115,6 +115,7 @@ This program is available under Apache License Version 2.0, available at https:/
       constructor() {
         super();
         this._boundInputValueChanged = this._inputValueChanged.bind(this);
+        this.__boundInputValueCommitted = this.__inputValueCommitted.bind(this);
       }
 
       ready() {
@@ -141,13 +142,23 @@ This program is available under Apache License Version 2.0, available at https:/
         this._setInputElement(this.querySelector(cssSelector));
         this._revertInputValue();
         this.inputElement.addEventListener('input', this._boundInputValueChanged);
+        this.inputElement.addEventListener('change', this.__boundInputValueCommitted);
         this._preventInputBlur();
       }
 
       disconnectedCallback() {
         super.disconnectedCallback();
         this.inputElement.removeEventListener('input', this._boundInputValueChanged);
+        this.inputElement.removeEventListener('change', this.__boundInputValueCommitted);
         this._restoreInputBlur();
+      }
+
+      __inputValueCommitted(e) {
+        // Detect if the input was cleared (e.g. by clicking the clear button on a vaadin-text-field)
+        // and propagate the value change to combo box value immediately.
+        if (this._inputElementValue === '') {
+          this._clear();
+        }
       }
 
       get _propertyForValue() {
