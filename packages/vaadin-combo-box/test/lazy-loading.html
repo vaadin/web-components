@@ -39,6 +39,8 @@
       const SIZE = 200;
       const allItems = Array(...new Array(SIZE)).map((_, i) => `item ${i}`);
       let dataProviderItems;
+      let spyDataProvider;
+      let spyAsyncDataProvider;
 
       const dataProvider = (params, callback) => {
         const filteredItems = allItems.filter(item => item.indexOf(params.filter) > -1);
@@ -46,6 +48,10 @@
         const offset = params.page * params.pageSize;
         dataProviderItems = filteredItems.slice(offset, offset + params.pageSize);
         callback(dataProviderItems, size);
+      };
+
+      const asyncDataProvider = (params, callback) => {
+        setTimeout(() => dataProvider(params, callback));
       };
 
       const objectDataProvider = (params, callback) => {
@@ -57,15 +63,9 @@
         callback(dataProviderItems, SIZE);
       };
 
-      const spyDataProvider = sinon.spy(dataProvider);
-
-      const spyAsyncDataProvider = sinon.spy((params, callback) => {
-        setTimeout(() => dataProvider(params, callback));
-      });
-
       beforeEach(() => {
-        spyDataProvider.reset();
-        spyAsyncDataProvider.reset();
+        spyDataProvider = sinon.spy(dataProvider);
+        spyAsyncDataProvider = sinon.spy(asyncDataProvider);
       });
 
       let comboBox;
