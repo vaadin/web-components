@@ -257,6 +257,23 @@
           expect(() => column._editModeTemplate = {}).to.throw(Error);
           expect(column._editModeTemplate).to.be.not.ok;
         });
+
+        it('should close editor and update value when scrolling edited cell out of view', () => {
+          grid.items = Array.apply(null, {length: 30}).map(_ => Object.assign({}, getItems()[0]));
+          cell = getContainerCell(grid.$.items, 0, 0);
+          column.editModeRenderer = function(root, owner, model) {
+            root.innerHTML = '<input>';
+          };
+
+          dblclick(cell._content);
+          getCellEditor(cell).value = 'Bar';
+          grid._scrollToIndex(29);
+          expect(getCellEditor(cell)).to.be.not.ok;
+          expect(grid.items[0].name).to.equal('Bar');
+
+          grid._scrollToIndex(0);
+          expect(getContainerCellContent(grid.$.items, 0, 0).innerHTML).to.equal('Bar');
+        });
       });
 
       describe('editorValuePath property', () => {

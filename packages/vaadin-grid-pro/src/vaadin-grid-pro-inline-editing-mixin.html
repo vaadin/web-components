@@ -357,14 +357,13 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
     }
 
     _updateItem(row, item) {
-      super._updateItem(row, item);
-
       if (this.__edited) {
         const {cell, model} = this.__edited;
         if (cell.parentNode === row && model.item !== item) {
           this._stopEdit();
         }
       }
+      super._updateItem(row, item);
     }
 
     /**
