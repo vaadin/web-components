@@ -113,7 +113,8 @@
             expect(comboBox.items).to.be.undefined;
           });
 
-          describe('when open', () => {
+          describe('when open', function() {
+            this.timeout(15000);
             beforeEach(() => comboBox.opened = true);
 
             it('should be invoked when set', () => {
