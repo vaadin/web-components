@@ -145,7 +145,7 @@
               expect(params.page).to.equal(0);
             });
 
-            it('should request page 1 on scroll', () => {
+            (window.innerHeight > 900 ? it.skip : it)('should request page 1 on scroll', () => {
               comboBox.dataProvider = spyDataProvider;
               spyDataProvider.reset();
               comboBox.$.overlay._scrollIntoView(75);
@@ -154,7 +154,7 @@
               expect(pages).to.contain(1);
             });
 
-            it('should request page 2 on scroll', () => {
+            (window.innerHeight > 900 ? it.skip : it)('should request page 2 on scroll', () => {
               comboBox.dataProvider = spyDataProvider;
               spyDataProvider.reset();
               comboBox.$.overlay._scrollIntoView(125);
@@ -204,14 +204,11 @@
               expect(comboBox.filter).to.equal('');
             });
 
-            it('should not request on value change', done => {
+            it('should not request on value change', () => {
               comboBox.dataProvider = spyDataProvider;
-              flush(() => {
-                spyDataProvider.reset();
-                comboBox.value = 'item 1';
-                expect(spyDataProvider).not.to.be.called;
-                done();
-              });
+              spyDataProvider.reset();
+              comboBox.value = 'item 1';
+              expect(spyDataProvider).not.to.be.called;
             });
 
             it('should populate filteredItems', () => {
@@ -313,7 +310,7 @@
               expect(spyAsyncDataProvider).to.be.calledOnce;
             });
 
-            it('should request page 1 on scroll', () => {
+            (window.innerHeight > 900 ? it.skip : it)('should request page 1 on scroll', () => {
               comboBox.size = SIZE;
               comboBox.dataProvider = spyAsyncDataProvider;
               comboBox.opened = true;
@@ -324,7 +321,7 @@
               expect(pages).to.contain(1);
             });
 
-            it('should request page 2 on scroll', () => {
+            (window.innerHeight > 900 ? it.skip : it)('should request page 2 on scroll', () => {
               comboBox.size = SIZE;
               comboBox.dataProvider = spyAsyncDataProvider;
               comboBox.opened = true;
