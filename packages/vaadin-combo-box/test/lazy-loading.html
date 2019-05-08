@@ -188,20 +188,17 @@
             });
 
             it('should clear filter on value clear', () => {
-              comboBox.dataProvider = spyDataProvider;
+              comboBox.dataProvider = dataProvider;
               comboBox.filter = 'item 1';
               comboBox.value = 'item 1';
-              spyDataProvider.reset();
               comboBox.value = '';
               Polymer.flush();
-              const params = spyDataProvider.lastCall.args[0];
               expect(comboBox.filter).to.equal('');
             });
 
             it('should clear filter on opened change', () => {
-              comboBox.dataProvider = spyDataProvider;
+              comboBox.dataProvider = dataProvider;
               comboBox.filter = 'item 1';
-              spyDataProvider.reset();
               comboBox.opened = false;
               Polymer.flush();
               expect(comboBox.filter).to.equal('');
@@ -219,7 +216,7 @@
 
             it('should populate filteredItems', () => {
               expect(comboBox.filteredItems).to.be.undefined;
-              comboBox.dataProvider = spyDataProvider;
+              comboBox.dataProvider = dataProvider;
               expect(comboBox.filteredItems).to.be.instanceof(Array);
               expect(comboBox.filteredItems).to.have.lengthOf(SIZE);
               const filteredItemsFirstPage = comboBox.filteredItems.slice(0, comboBox.pageSize);
