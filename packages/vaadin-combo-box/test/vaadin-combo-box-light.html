@@ -345,6 +345,12 @@
           expect(comboBox.opened).to.eql(true);
         });
     
+        it('should not open the dropdown after clearing a selection', () => {
+          fire('click', clearButton);
+    
+          expect(comboBox.opened).to.eql(false);
+        });
+    
         it('should cancel click event to avoid input blur', () => {
           comboBox.open();
     
@@ -409,12 +415,33 @@
         textField = comboBox.inputElement;
       });
 
-      it('should immediately clear value when using clear button of vaadin-text-field', () => {
-        textField.clearButtonVisible = true;
-        comboBox.value = 'bar';
-        textField.$.clearButton.click();
+      describe('clear-button-visible', () => {
+        let clearButton;
 
-        expect(comboBox.value).not.to.be.ok;
+        beforeEach(() => {
+          textField.clearButtonVisible = true;
+          clearButton = textField.$.clearButton;
+          comboBox.value = 'bar';
+        });
+
+        it('should immediately clear value when using clear button of vaadin-text-field', () => {
+          fire('click', clearButton);
+          expect(comboBox.value).not.to.be.ok;
+        });
+
+        it('should not close the dropdown after clearing a selection', () => {
+          comboBox.open();
+
+          fire('click', clearButton);
+
+          expect(comboBox.opened).to.eql(true);
+        });
+
+        it('should not open the dropdown after clearing a selection', () => {
+          fire('click', clearButton);
+
+          expect(comboBox.opened).to.eql(false);
+        });
       });
     });
   </script>

@@ -354,7 +354,8 @@ This program is available under Apache License Version 2.0, available at https:/
       this._closeOnBlurIsPrevented = true;
 
       const path = e.composedPath();
-      if (path.indexOf(this._clearElement) !== -1) {
+      const isClearElement = (path.indexOf(this._clearElement) !== -1) || (path[0].getAttribute('part') === 'clear-button');
+      if (isClearElement) {
         this._clear();
         this.focus();
       } else if (path.indexOf(this.inputElement) !== -1) {
@@ -615,12 +616,12 @@ This program is available under Apache License Version 2.0, available at https:/
       // Handle only input events from our inputElement.
       if (e.composedPath().indexOf(this.inputElement) !== -1) {
         this._inputElementValue = this.inputElement[this._propertyForValue];
-        this._filterFromInput();
+        this._filterFromInput(e);
       }
     }
 
     _filterFromInput(e) {
-      if (!this.opened) {
+      if (!this.opened && !e.__fromClearButton) {
         this.open();
       }
 

@@ -313,6 +313,12 @@
       expect(combobox.opened).to.eql(true);
     });
 
+    it('should not open the dropdown after clearing a selection', () => {
+      fire('click', clearIcon);
+
+      expect(combobox.opened).to.eql(false);
+    });
+
     it('should cancel click event to avoid input blur', () => {
       combobox.open();
 

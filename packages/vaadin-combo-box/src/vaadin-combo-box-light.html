@@ -154,9 +154,9 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       __inputValueCommitted(e) {
-        // Detect if the input was cleared (e.g. by clicking the clear button on a vaadin-text-field)
+        // Detect if the input was cleared (by clicking the clear button on a vaadin-text-field)
         // and propagate the value change to combo box value immediately.
-        if (this._inputElementValue === '') {
+        if (e.__fromClearButton) {
           this._clear();
         }
       }
