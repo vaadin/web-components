@@ -21,6 +21,7 @@
   "files": [
     "*.js",
     "mixins/*.js",
+    "presets/*.js",
     "!wdio.conf.js"
   ],
   "scripts": {
