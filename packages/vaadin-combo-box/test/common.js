@@ -3,6 +3,7 @@
 
 var ua = navigator.userAgent;
 var ios = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
+var android = /android/i.test(ua);
 var edge = /Edge/i.test(ua);
 var linux = /Linux/i.test(ua);
 

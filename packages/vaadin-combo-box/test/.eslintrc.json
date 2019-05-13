@@ -6,6 +6,7 @@
     "sinon": false,
     "WCT": false,
     "ios": false,
+    "android": false,
     "edge": false,
     "linux": false,
     "getItemArray": false,
