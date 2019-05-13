@@ -352,7 +352,8 @@
             expect(grid.$.scroller.getBoundingClientRect().width).to.be.closeTo(300 - 2, 1);
           });
 
-          it('should stretch height', () => {
+          // Skip this test on iOS 10 since there Safari has a bug that makes this fail (works in iOS 9, 11 and 12)
+          (/iPhone OS 10_/.test(navigator.userAgent) ? it.skip : it)('should stretch height', () => {
             expect(grid.getBoundingClientRect().height).to.be.closeTo(200, 1);
             expect(grid.$.scroller.getBoundingClientRect().height).to.be.closeTo(200 - 2, 1);
           });
