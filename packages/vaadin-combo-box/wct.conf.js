@@ -34,8 +34,7 @@ module.exports = {
 
   registerHooks: function(context) {
     const saucelabsPlatformsMobile = [
-      'iOS Simulator/iphone@11.3',
-      'iOS Simulator/iphone@9.3'
+      'iOS Simulator/iphone@11.3'
     ];
 
     const saucelabsPlatformsMicrosoft = [

@@ -193,6 +193,13 @@
         expect(comboBox.opened).to.equal(false);
       });
 
+      it('should stop propagation of the keyboard enter event', () => {
+        const keydownSpy = sinon.spy();
+        document.addEventListener('keydown', keydownSpy);
+        enter();
+        expect(keydownSpy).not.to.be.called;
+      });
+
       it('should not close the overlay with enter when custom values are not allowed', () => {
         filter('foobar');
 

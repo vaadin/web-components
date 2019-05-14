@@ -490,6 +490,9 @@ This program is available under Apache License Version 2.0, available at https:/
 
         // Do not submit the surrounding form.
         e.preventDefault();
+
+        // Do not trigger global listeners
+        e.stopPropagation();
       }
     }
 
