@@ -179,7 +179,8 @@ This program is available under Apache License Version 2.0, available at https:/
         } else if (this._optPhysicalSize !== Infinity) {
           this._debounceIncreasePool = Polymer.Debouncer.debounce(
             this._debounceIncreasePool,
-            Polymer.Async.animationFrame,
+            // TODO: Reverted back to microTask on desktop to fix testbench
+            (this._android || this._ios ? Polymer.Async.animationFrame : Polymer.Async.microTask),
             () => {
               this._updateMetrics();
               const remainingPhysicalSize = this._optPhysicalSize - this._physicalSize;
