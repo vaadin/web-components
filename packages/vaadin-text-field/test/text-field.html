@@ -232,6 +232,19 @@
             expect(changeSpy).to.be.calledOnce;
           });
 
+          it('should not prevent dispatching the change event if clear button wasn\'t clicked', function() {
+            const changeSpy = sinon.spy();
+            textField.addEventListener('change', changeSpy);
+
+            // Simulate leaving the clear button after mousedown
+            textField.$.clearButton.dispatchEvent(new CustomEvent('mousedown'));
+            textField.$.clearButton.dispatchEvent(new CustomEvent('mouseleave'));
+
+            // Emulates native change coming from input.
+            textField.inputElement.dispatchEvent(new Event('change', {bubbles: !condition}));
+            expect(changeSpy).to.be.calledOnce;
+          });
+
           it('should update input value when setting value after clicking clear button', function() {
             textField.clearButtonVisible = true;
             textField.value = 'Foo';

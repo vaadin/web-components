@@ -553,6 +553,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       this.$.clearButton.addEventListener('mousedown', () => this._valueClearing = true);
+      this.$.clearButton.addEventListener('mouseleave', () => this._valueClearing = false);
       this.$.clearButton.addEventListener('click', this._onClearButtonClick.bind(this));
       this.addEventListener('keydown', this._onKeyDown.bind(this));
 
