@@ -368,6 +368,19 @@ This program is available under Apache License Version 2.0, available at https:/
           this._boundOnGlobalContextMenu = this._onGlobalContextMenu.bind(this);
         }
 
+        connectedCallback() {
+          super.connectedCallback();
+
+          this.__boundOnScroll = this.__onScroll.bind(this);
+          window.addEventListener('scroll', this.__boundOnScroll, true);
+        }
+
+        disconnectedCallback() {
+          super.disconnectedCallback();
+
+          window.removeEventListener('scroll', this.__boundOnScroll, true);
+        }
+
         ready() {
           super.ready();
           this._observer = new Polymer.FlattenedNodesObserver(this, info => {
@@ -536,11 +549,40 @@ This program is available under Apache License Version 2.0, available at https:/
 
               // Used in alignment which is delayed until overlay is rendered
               this.__x = this._getEventCoordinate(e, 'x');
+              this.__pageXOffset = window.pageXOffset;
+
               this.__y = this._getEventCoordinate(e, 'y');
+              this.__pageYOffset = window.pageYOffset;
+
               this.$.overlay.style.opacity = '0';
               this._setOpened(true);
             }
           }
+        }
+
+        __onScroll() {
+          if (!this.opened) {
+            return;
+          }
+
+          const yDiff = window.pageYOffset - this.__pageYOffset;
+          const xDiff = window.pageXOffset - this.__pageXOffset;
+
+          this.__adjustPosition('left', -xDiff);
+          this.__adjustPosition('right', xDiff);
+
+          this.__adjustPosition('top', -yDiff);
+          this.__adjustPosition('bottom', yDiff);
+
+          this.__pageYOffset += yDiff;
+          this.__pageXOffset += xDiff;
+        }
+
+        __adjustPosition(coord, diff) {
+          const overlay = this.$.overlay;
+          const style = overlay.style;
+
+          style[coord] = (parseInt(style[coord]) || 0) + diff + 'px';
         }
 
         __alignOverlayPosition() {

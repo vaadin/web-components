@@ -413,6 +413,74 @@
           expect(menuComponents()[0].hasAttribute('expanded')).to.be.false;
           expect(menuComponents()[0].getAttribute('aria-expanded')).to.equal('false');
         });
+
+        if (!MOBILE) {
+          describe('scrolling', () => {
+            let rootOverlay, subOverlay1, subOverlay2, scrollElm;
+
+            beforeEach(done => {
+              const testStyle = document.createElement('style');
+              testStyle.innerHTML = `
+                html {
+                  overflow:scroll;
+                }
+
+                body {
+                  width: 2000px;
+                  height: 2000px;
+                }
+              `;
+              window.document.body.appendChild(testStyle);
+
+              scrollElm = window.document.scrollingElement || window.document.querySelector('html');
+
+              rootOverlay = rootMenu.$.overlay;
+              subOverlay1 = subMenu.$.overlay;
+
+              flush(async() => {
+                open(menuComponents(subMenu)[2]);
+                const subMenu2 = getSubMenu(subMenu);
+                await nextRender(subMenu2);
+                subOverlay2 = subMenu2.$.overlay;
+                flush(done);
+              });
+            });
+
+            it('Should properly move overlays on scrolling distance within y axis', done => {
+              const scrollDistance = 150;
+
+              // Default indentation is 16
+              const rootBRCTop = rootOverlay.getBoundingClientRect().top;
+              const subBRCTop1 = subOverlay1.getBoundingClientRect().top;
+              const subBRCTop2 = subOverlay2.getBoundingClientRect().top;
+
+              scrollElm.scrollTop = scrollDistance;
+              Polymer.RenderStatus.afterNextRender(rootMenu, () => {
+                expect(rootOverlay.getBoundingClientRect().top).to.be.closeTo(rootBRCTop - scrollDistance, 1);
+                expect(subOverlay1.getBoundingClientRect().top).to.be.closeTo(subBRCTop1 - scrollDistance, 1);
+                expect(subOverlay2.getBoundingClientRect().top).to.be.closeTo(subBRCTop2 - scrollDistance, 1);
+                done();
+              });
+            });
+
+            it('Should properly move overlays on scrolling distance within x axis', done => {
+              const scrollDistance = 150;
+
+              // Default indentation is 16
+              const rootBRCLeft = rootOverlay.getBoundingClientRect().left;
+              const subBRCLeft1 = subOverlay1.getBoundingClientRect().left;
+              const subBRCLeft2 = subOverlay2.getBoundingClientRect().left;
+
+              scrollElm.scrollLeft = scrollDistance;
+              Polymer.RenderStatus.afterNextRender(rootMenu, () => {
+                expect(rootOverlay.getBoundingClientRect().left).to.be.closeTo(rootBRCLeft - scrollDistance, 1);
+                expect(subOverlay1.getBoundingClientRect().left).to.be.closeTo(subBRCLeft1 - scrollDistance, 1);
+                expect(subOverlay2.getBoundingClientRect().left).to.be.closeTo(subBRCLeft2 - scrollDistance, 1);
+                done();
+              });
+            });
+          });
+        }
       });
     });
   </script>
