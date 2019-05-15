@@ -234,17 +234,12 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _addCheckboxToValue(value) {
           if (this.value.indexOf(value) === -1) {
-            const update = this.value.slice(0);
-            update.push(value);
-            this.value = update;
+            this.value = this.value.concat(value);
           }
         }
 
         _removeCheckboxFromValue(value) {
-          const update = this.value.slice(0);
-          const index = update.indexOf(value);
-          update.splice(index, 1);
-          this.value = update;
+          this.value = this.value.filter(v => v !== value);
         }
 
         _changeSelectedCheckbox(checkbox) {
