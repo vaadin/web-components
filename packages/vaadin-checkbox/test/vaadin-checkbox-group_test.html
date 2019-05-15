@@ -94,6 +94,16 @@
       expect(vaadinCheckboxGroup.value).to.include('new');
     });
 
+    it('should not add duplicate values when added checked checkbox already included in value', () => {
+      const checkbox = document.createElement('vaadin-checkbox');
+      checkbox.value = 'new';
+      checkbox.checked = true;
+      vaadinCheckboxGroup.value = ['new'];
+      vaadinCheckboxGroup.appendChild(checkbox);
+      vaadinCheckboxGroup._observer.flush();
+      expect(vaadinCheckboxGroup.value).to.eql(['new']);
+    });
+
     it('should remove checked checkbox value from checkbox group value, when checkbox is dynamically removed', () => {
       const checkbox = vaadinCheckboxList[0];
       checkbox.checked = true;

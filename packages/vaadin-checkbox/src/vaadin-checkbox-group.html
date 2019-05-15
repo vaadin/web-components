@@ -231,9 +231,11 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _addCheckboxToValue(value) {
-          const update = this.value.slice(0);
-          update.push(value);
-          this.value = update;
+          if (this.value.indexOf(value) === -1) {
+            const update = this.value.slice(0);
+            update.push(value);
+            this.value = update;
+          }
         }
 
         _removeCheckboxFromValue(value) {
