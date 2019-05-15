@@ -53,7 +53,6 @@ This program is available under Apache License Version 2.0, available at https:/
       this._subMenu.addEventListener('close-all-menus', this.__onEscapeClose.bind(this));
 
       const overlay = this._subMenu.$.overlay;
-      overlay.modeless = true;
       overlay.addEventListener('keydown', this.__boundOnContextMenuKeydown);
       overlay.addEventListener('vaadin-overlay-open', this.__alignOverlayPosition.bind(this));
 
@@ -87,7 +86,7 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _getButtonFromEvent(e) {
-      return Array.from(e.composedPath()).filter(el => el.item)[0];
+      return Array.from(e.composedPath()).filter(el => el.localName === 'vaadin-menu-bar-button')[0];
     }
 
     _onFocusin(event) {
@@ -197,12 +196,12 @@ This program is available under Apache License Version 2.0, available at https:/
 
     __alignOverlayPosition(e) {
       const overlay = e.target;
-      const getRect = () => this._expandedButton.getBoundingClientRect();
+      const {width, height} = this._expandedButton.getBoundingClientRect();
       if (overlay.hasAttribute('bottom-aligned')) {
-        overlay.style.bottom = parseInt(getComputedStyle(overlay).bottom) + getRect().height + 'px';
+        overlay.style.bottom = parseInt(getComputedStyle(overlay).bottom) + height + 'px';
       }
       if (overlay.hasAttribute('right-aligned')) {
-        overlay.style.right = parseInt(getComputedStyle(overlay).right) - getRect().width + 'px';
+        overlay.style.right = parseInt(getComputedStyle(overlay).right) - width + 'px';
       }
     }
 
@@ -342,6 +341,7 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     __onceOpened(cb) {
+      this.style.pointerEvents = 'auto';
       const overlay = this._subMenu.$.overlay;
       const listener = () => {
         cb();
@@ -373,6 +373,7 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _close(restoreFocus) {
+      this.style.pointerEvents = '';
       this.__deactivateButton(restoreFocus);
       this._subMenu.opened && this._subMenu.close();
     }
