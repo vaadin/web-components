@@ -21,18 +21,17 @@ module.exports = {
 
   registerHooks: function(context) {
     const saucelabsPlatformsMobile = [
-      'iOS Simulator/iphone@11.3',
-      'iOS Simulator/iphone@10.3',
-      'iOS Simulator/iphone@9.3'
+      'iOS Simulator/iphone@12.2',
+      'iOS Simulator/iphone@10.3'
     ];
 
     const saucelabsPlatformsMicrosoft = [
-      'Windows 10/microsoftedge@17',
+      'Windows 10/microsoftedge@18',
       'Windows 10/internet explorer@11'
     ];
 
     const saucelabsPlatformsDesktop = [
-      'macOS 10.13/safari@11.1'
+      'macOS 10.13/safari@latest'
     ];
 
     const saucelabsPlatforms = [
@@ -43,7 +42,7 @@ module.exports = {
       {
         deviceName: 'Android GoogleAPI Emulator',
         platformName: 'Android',
-        platformVersion: '7.1',
+        platformVersion: '8.1',
         browserName: 'chrome'
       },
       'Windows 10/chrome@latest',
