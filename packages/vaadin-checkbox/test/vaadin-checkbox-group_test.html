@@ -104,6 +104,16 @@
       expect(vaadinCheckboxGroup.value).to.eql(['new']);
     });
 
+    it('should check dynamically added checkbox if included in value', () => {
+      const checkbox = document.createElement('vaadin-checkbox');
+      checkbox.value = 'new';
+      vaadinCheckboxGroup.value = ['new'];
+      vaadinCheckboxGroup.appendChild(checkbox);
+      vaadinCheckboxGroup._observer.flush();
+      expect(vaadinCheckboxGroup.value).to.eql(['new']);
+      expect(checkbox.checked).to.be.true;
+    });
+
     it('should remove checked checkbox value from checkbox group value, when checkbox is dynamically removed', () => {
       const checkbox = vaadinCheckboxList[0];
       checkbox.checked = true;

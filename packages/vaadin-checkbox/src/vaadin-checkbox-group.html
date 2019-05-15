@@ -188,6 +188,8 @@ This program is available under Apache License Version 2.0, available at https:/
               }
               if (checkbox.checked) {
                 this._addCheckboxToValue(checkbox.value);
+              } else if (this.value.indexOf(checkbox.value) > -1) {
+                checkbox.checked = true;
               }
             });
 
