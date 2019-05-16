@@ -316,6 +316,11 @@
           expect(monthCalendar.hasAttribute('disabled')).to.be.true;
         });
 
+        it('should not be disabled if the last day is enabled', () => {
+          monthCalendar.minDate = new Date(2016, 1, 29);
+          expect(monthCalendar.hasAttribute('disabled')).to.be.false;
+        });
+
         it('should not be disabled when some dates are disabled', () => {
           monthCalendar.minDate = new Date(2016, 1, 15);
           monthCalendar.maxDate = new Date(2016, 1, 20);
