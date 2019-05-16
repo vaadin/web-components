@@ -166,5 +166,27 @@
         });
       });
     });
+
+    describe('simultaneous opening', () => {
+      let wrapper, overlays;
+
+      beforeEach(() => {
+        wrapper = fixture('switching');
+        overlays = Array.from(wrapper.shadowRoot.querySelectorAll('vaadin-overlay'));
+        overlays.forEach(overlay => mockOverlayAnimations(overlay));
+      });
+
+      it('should not remove pointer events on last opened overlay', done => {
+        overlays[1].addEventListener('vaadin-overlay-open', e => {
+          Polymer.RenderStatus.afterNextRender(overlays[1], () => {
+            expect(overlays[0].$.overlay.style.pointerEvents).to.equal('none');
+            expect(overlays[1].$.overlay.style.pointerEvents).to.equal('');
+            done();
+          });
+        });
+        overlays[0].opened = true;
+        overlays[1].opened = true;
+      });
+    });
   </script>
 </body>

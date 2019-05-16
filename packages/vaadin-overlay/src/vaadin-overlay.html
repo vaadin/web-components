@@ -706,7 +706,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         // Disable pointer events in other attached overlays
         OverlayElement.__attachedInstances.forEach(el => {
-          if (el !== this) {
+          if (el !== this && !el.hasAttribute('opening') && !el.hasAttribute('closing')) {
             el.shadowRoot.querySelector('[part="overlay"]').style.pointerEvents = 'none';
           }
         });
