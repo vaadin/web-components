@@ -194,7 +194,7 @@ This program is available under Apache License Version 2.0, available at https:/
           var lastDate = new Date(0, 0);
           lastDate.setFullYear(month.getFullYear());
           lastDate.setMonth(month.getMonth() + 1);
-          lastDate.setDate(-1);
+          lastDate.setDate(0);
 
           if ((minDate && maxDate)
             && minDate.getMonth() === maxDate.getMonth()
