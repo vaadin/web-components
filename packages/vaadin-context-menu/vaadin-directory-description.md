@@ -11,19 +11,26 @@
 ## Example Usage
 ```html
 <vaadin-context-menu>
-  <template>
-    <vaadin-list-box>
-      <vaadin-item>First menu item</vaadin-item>
-      <vaadin-item>Second menu item</vaadin-item>
-      <vaadin-item>Third menu item</vaadin-item>
-      <hr>
-      <vaadin-item disabled>Fourth menu item</vaadin-item>
-      <vaadin-item disabled>Fifth menu item</vaadin-item>
-      <hr>
-      <vaadin-item>Sixth menu item</vaadin-item>
-    </vaadin-list-box>
-  </template>
-
   Open a context menu with <b>right click</b> or with <b>long touch.</b>
 </vaadin-context-menu>
+
+<script>
+  const contextMenu = document.querySelector('vaadin-context-menu');
+  contextMenu.renderer = function(root) {
+    let listBox = root.firstElementChild;
+    // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
+    if (listBox) {
+      listBox.innerHTML = '';
+    } else {
+      listBox = document.createElement('vaadin-list-box');
+      root.appendChild(listBox);
+    }
+
+    ['First', 'Second', 'Third'].forEach(function(name) {
+      const item = document.createElement('vaadin-item');
+      item.textContent = name + ' menu item';
+      listBox.appendChild(item);
+    });
+  };
+</script>
 ```
