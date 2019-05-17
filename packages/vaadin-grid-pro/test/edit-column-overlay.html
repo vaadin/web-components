@@ -1,0 +1,106 @@
+<!doctype html>
+
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>edit-column-overlay test</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../iron-test-helpers/mock-interactions.js"></script>
+  <link rel="import" href="../../test-fixture/test-fixture.html">
+
+  <link rel="import" href="helpers.html">
+  <link rel="import" href="not-animated-styles.html">
+  <link rel="import" href="../vaadin-grid-pro.html">
+  <link rel="import" href="../vaadin-grid-pro-edit-column.html">
+
+  <link rel="import" href="../../vaadin-date-picker/vaadin-date-picker.html">
+  <link rel="import" href="../../vaadin-dialog/vaadin-dialog.html">
+</head>
+
+<body>
+  <test-fixture id="default">
+    <template>
+      <vaadin-dialog opened>
+        <template>
+          <vaadin-grid-pro id="grid">
+            <vaadin-grid-column path="name" header="First Name"></vaadin-grid-column>
+            <vaadin-grid-pro-edit-column path="custom" header="Custom"></vaadin-grid-pro-edit-column>
+          </vaadin-grid-pro>
+          <vaadin-text-field></vaadin-text-field>
+        </template>
+      </vaadin-dialog>
+    </template>
+  </test-fixture>
+
+  <script>
+    function getItems() {
+      return [
+        {name: 'foo', custom: 'custom1	2019-01-01'},
+        {name: 'bar', custom: 'custom2	2019-01-01'},
+        {name: 'baz', custom: 'custom3	2019-01-01'}
+      ];
+    }
+
+    function enter(target) {
+      MockInteractions.keyDownOn(target, 13, [], 'Enter');
+    }
+
+    describe('default', () => {
+      let dialog, grid, dateCell;
+
+      beforeEach(() => {
+        dialog = fixture('default');
+        grid = dialog.$.overlay.querySelector('vaadin-grid-pro');
+        grid.items = getItems();
+        grid.style.width = '100px'; // column default min width is 100px
+        flushGrid(grid);
+
+        dateCell = getContainerCell(grid.$.items, 0, 1);
+
+        grid.querySelector('[path="custom"]').editModeRenderer = function(root, column, rowData) {
+          root.innerHTML = '';
+          const datePicker = document.createElement('vaadin-date-picker');
+          root.appendChild(datePicker);
+        };
+      });
+
+      it('should not stop editing when focusing input related overlay', () => {
+        enter(dateCell);
+        const datePicker = getCellEditor(dateCell);
+        datePicker.click();
+
+        // Mimic clicking the date-icker overlay
+        const focusout = new CustomEvent('focusout', {bubbles: true, composed: true});
+        datePicker.dispatchEvent(focusout);
+
+        const focusin = new CustomEvent('focusin', {bubbles: true, composed: true});
+        datePicker.$.overlay.dispatchEvent(focusin);
+        grid._debouncerStopEdit && grid._debouncerStopEdit.flush();
+
+        expect(getCellEditor(dateCell)).to.be.ok;
+      });
+
+      it('should stop editing when focusing overlay containing grid', () => {
+        enter(dateCell);
+        const datePicker = getCellEditor(dateCell);
+
+        // Mimic clicking the dialog overlay
+        const evt = new CustomEvent('focusout', {bubbles: true, composed: true});
+        datePicker.dispatchEvent(evt);
+
+        const focusin = new CustomEvent('focusin', {bubbles: true, composed: true});
+        dialog.$.overlay.dispatchEvent(focusin);
+        grid._debouncerStopEdit && grid._debouncerStopEdit.flush();
+
+        expect(getCellEditor(dateCell)).to.be.not.ok;
+      });
+    });
+  </script>
+
+</body>
+
+</html>
