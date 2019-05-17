@@ -20,6 +20,12 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="theme">
+    <template>
+      <vaadin-menu-bar theme="foo"></vaadin-menu-bar>
+    </template>
+  </test-fixture>
+
   <script>
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
     const iOSVersion = isIOS && parseInt(navigator.appVersion.match(/OS (\d+)_(\d+)_?(\d+)?/)[1], 10);
@@ -544,6 +550,50 @@
 
         buttons[0].click();
         expect(buttons[0].getAttribute('aria-expanded')).to.equal('false');
+      });
+    });
+
+    describe('theme attribute', () => {
+      let menu, subMenu, buttons;
+
+      beforeEach(async() => {
+        menu = fixture('theme');
+        menu.items = [
+          {
+            text: 'Menu Item 1',
+            children: [
+              {text: 'Menu Item 1 1'},
+              {
+                text: 'Menu Item 1 2'
+              }
+            ]
+          },
+          {text: 'Menu Item 2'},
+          {text: 'Menu Item 3'}
+        ];
+        await nextRender(menu);
+        subMenu = menu._subMenu;
+        buttons = menu._buttons;
+
+        // open submenu
+        menu.openOnHover = true;
+        buttons[0].dispatchEvent(new CustomEvent('mouseover', {bubbles: true, composed: true}));
+        await nextRender(subMenu);
+      });
+
+      afterEach(() => {
+        if (subMenu && subMenu.opened) {
+          subMenu.close();
+        }
+      });
+
+      it('should propagate theme attribute to the submenu', () => {
+        expect(subMenu.getAttribute('theme')).to.be.equal('foo');
+      });
+
+      it('should remove theme attribute from the submenu', () => {
+        menu.removeAttribute('theme');
+        expect(subMenu.hasAttribute('theme')).to.be.false;
       });
     });
 

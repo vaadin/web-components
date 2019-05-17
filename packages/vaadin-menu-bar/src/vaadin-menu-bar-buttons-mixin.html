@@ -30,12 +30,6 @@ This program is available under Apache License Version 2.0, available at https:/
         _hasOverflow: {
           type: Boolean,
           value: false
-        },
-
-        theme: {
-          type: String,
-          reflectToAttribute: true,
-          observer: '_themeChanged'
         }
       };
     }
@@ -77,16 +71,6 @@ This program is available under Apache License Version 2.0, available at https:/
           this.__renderButtons(items);
         }
       }
-    }
-
-    _themeChanged(theme) {
-      this._buttons.forEach(button => {
-        if (theme && theme !== '') {
-          button.setAttribute('theme', theme);
-        } else {
-          button.removeAttribute('theme');
-        }
-      });
     }
 
     __detectOverflow() {

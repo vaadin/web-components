@@ -39,7 +39,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
     static get observers() {
       return [
-        '_itemsChanged(items, items.splices)'
+        '_itemsChanged(items, items.splices)',
+        '_themeChanged(theme)'
       ];
     }
 
@@ -75,6 +76,16 @@ This program is available under Apache License Version 2.0, available at https:/
     disconnectedCallback() {
       super.disconnectedCallback();
       document.removeEventListener('click', this.__boundOutsideClickListener, true);
+    }
+
+    _themeChanged(theme) {
+      if (theme) {
+        this._buttons.forEach(button => button.setAttribute('theme', theme));
+        this._subMenu.setAttribute('theme', theme);
+      } else {
+        this._buttons.forEach(button => button.removeAttribute('theme'));
+        this._subMenu.removeAttribute('theme');
+      }
     }
 
     _focusButton(button) {
