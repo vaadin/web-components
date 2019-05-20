@@ -18,11 +18,21 @@
         opacity: 0.2;
       }
 
+      :host([has-controls]) [part="input-field"] {
+        padding: 0;
+      }
+
       [part="decrease-button"],
       [part="increase-button"] {
         cursor: pointer;
         font-size: var(--lumo-icon-size-s);
-        padding-bottom: 0.21em;
+        width: 1.6em;
+        height: 1.6em;
+      }
+
+      [part="decrease-button"]::before,
+      [part="increase-button"]::before {
+        margin-top: 0.2em;
       }
     </style>
   </template>
