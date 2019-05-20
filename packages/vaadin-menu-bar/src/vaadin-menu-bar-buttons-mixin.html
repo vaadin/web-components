@@ -168,6 +168,9 @@ This program is available under Apache License Version 2.0, available at https:/
      * any property on the item object corresponding to one of the menu bar buttons.
      */
     render() {
+      if (!this.shadowRoot) {
+        return;
+      }
       this.__renderButtons(this.items);
     }
 

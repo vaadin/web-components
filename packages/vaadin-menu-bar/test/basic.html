@@ -161,6 +161,10 @@
         expect(buttons[3].hasAttribute('focused')).to.be.true;
       });
 
+      it('should not throw when render() is called before menu bar is attached', () => {
+        expect(() => document.createElement('vaadin-menu-bar').render()).to.not.throw(Error);
+      });
+
       describe('theme attribute', () => {
         it('should propagate theme attribute to all internal buttons', () => {
           menu.setAttribute('theme', 'contained');
