@@ -10,7 +10,7 @@
 
 # Style Scopes
 
-With the addition of Shadow DOM, styles on a webpage can be divided into two groups: 
+With the addition of Shadow DOM, styles on a webpage can be divided into two groups:
 1. Styles affecting elements in the [global scope](#global-style-scope), i.e. traditional styles
 2. Styles affecting elements inside a [local scope](#local-style-scope-shadow-dom), i.e. styles inside a shadow DOM
 
@@ -152,6 +152,8 @@ You can place these “theme module” definitions directly in your `index.html`
 > Note: a theme module needs to be imported and registered in the DOM before the element(s), which the module targets with the `theme-for` attribute, are registered and upgraded (before the first instantiation of the component).
 
 The `id` attribute of the theme module should be unique. You can also re-use an existing id if you want to override a previously defined/imported module.
+
+> Note: The theme modules are included in an order that enables custom modules to override styles defined by the Vaadin's built-in modules. The built-in theme modules use id's prefixed with `vaadin-`, `lumo-` and `material-` so avoid using these prefixes in your custom theme module `id`'s.
 
 The value of the `theme-for` attribute can be a space-separated list of element names, and can contain wildcard element names as well.</p>
 
@@ -314,9 +316,9 @@ The styles defined in a “theme module” affect all the instances of the eleme
 
 There are two ways to scope the styles that you write in a theme module.
 
- 1. **Expose new custom properties**  
+ 1. **Expose new custom properties**
 This is the recommended first option for simple situations. If you end up exposing more than a handful of properties, you should consider the second option.
- 2. **Use scoping selectors**  
+ 2. **Use scoping selectors**
 This approach is used by the built-in variations in Vaadin themes (Valo and Material), i.e. `theme` attribute. The downside of this approach is that you end up adding the selectors and properties to all instances, even though only some instances will need those styles (they won’t apply unless the scoping selector is used on the host element).
 
 #### Example: expose new custom properties
