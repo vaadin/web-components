@@ -14,7 +14,7 @@
   <link rel="import" href="helpers.html">
   <link rel="import" href="../vaadin-grid.html">
   <link rel="import" href="../vaadin-grid-filter.html">
-  <link rel="import" href="../../paper-input/paper-input.html">
+  <link rel="import" href="../../vaadin-text-field/vaadin-text-field.html">
 </head>
 
 <body>
@@ -29,23 +29,23 @@
         </vaadin-grid-column>
         <vaadin-grid-column>
           <template>
-            <paper-input on-value-changed="_valueChanged" value="{{parentProp}}"></paper-input>
+            <vaadin-text-field on-value-changed="_valueChanged" value="{{parentProp}}"></vaadin-text-field>
           </template>
           <template class="header">
-            <paper-input on-invalid-changed="_invalidChanged" value="{{parentProp}}"></paper-input>
+            <vaadin-text-field on-invalid-changed="_invalidChanged" value="{{parentProp}}"></vaadin-text-field>
           </template>
         </vaadin-grid-column>
         <vaadin-grid-column>
           <template>
-            <paper-input value="{{parentPath.foo}}"></paper-input>
+            <vaadin-text-field value="{{parentPath.foo}}"></vaadin-text-field>
           </template>
           <template class="header">
-            <paper-input value="{{parentPath.foo}}"></paper-input>
+            <vaadin-text-field value="{{parentPath.foo}}"></vaadin-text-field>
           </template>
         </vaadin-grid-column>
         <vaadin-grid-column>
           <template>
-            <paper-input value="{{item.value}}"></paper-input>
+            <vaadin-text-field value="{{item.value}}"></vaadin-text-field>
           </template>
         </vaadin-grid-column>
         <vaadin-grid-column>
@@ -213,14 +213,20 @@
 
       describe('formatting', () => {
 
-        beforeEach(() => {
+        before(() => {
           container = fixture('formatting');
           grid = container.$.grid;
           flushGrid(grid);
         });
 
+        beforeEach(() => {
+          if (!grid.parentElement) {
+            document.body.appendChild(grid);
+          }
+        });
+
         it('should fire an event when a non-focusable element is clicked', done => {
-          grid.addEventListener('cell-activate', e => {
+          listenOnce(grid, 'cell-activate', e => {
             expect(e.detail.model.index).to.eql(0);
             done();
           });
@@ -229,13 +235,17 @@
         });
 
         it('should not fire an event when a focusable element is clicked', done => {
-          grid.addEventListener('cell-activate', e => done('Should not come here!'));
+          const listener = e => done('Should not come here!');
+          grid.addEventListener('cell-activate', listener);
 
-          const input = getCellContent(getCell(grid, 1)).querySelector('paper-input');
+          const input = getCellContent(getCell(grid, 1)).querySelector('vaadin-text-field');
           input.focus();
           input.click();
 
-          grid.async(done, 100);
+          setTimeout(() => {
+            grid.removeEventListener('cell-activate', listener);
+            done();
+          }, 100);
         });
 
         it('should not restamp header templates on attach', () => {
@@ -276,6 +286,7 @@
             spy.getCalls().forEach(call => {
               expect(call.args[0]).not.to.be.null;
             });
+            spy.restore();
           });
 
           it('should not invoke computed functions with empty item', () => {
@@ -285,6 +296,7 @@
             spy.getCalls().forEach(call => {
               expect(call.args[0]).not.to.be.empty;
             });
+            spy.restore();
           });
         });
 
@@ -297,7 +309,7 @@
           });
 
           it('should two-way bind parent properties inside cell templates', () => {
-            const input = getCellContent(getCell(grid, 1)).querySelector('paper-input');
+            const input = getCellContent(getCell(grid, 1)).querySelector('vaadin-text-field');
             expect(input.value).to.eql('foobar');
 
             input.value = 'value';
@@ -310,7 +322,7 @@
           });
 
           it('should two-way bind parent properties inside header templates', () => {
-            const input = getCellContent(getHeaderCell(grid, 1)).querySelector('paper-input');
+            const input = getCellContent(getHeaderCell(grid, 1)).querySelector('vaadin-text-field');
             expect(input.value).to.eql('foobar');
 
             input.value = 'value';
@@ -321,7 +333,7 @@
 
         describe('using event handlers inside templates', () => {
           it('should add event listeners inside cell templates', () => {
-            const input = getCellContent(getCell(grid, 1)).querySelector('paper-input');
+            const input = getCellContent(getCell(grid, 1)).querySelector('vaadin-text-field');
 
             input.value = 'foo';
 
@@ -329,7 +341,7 @@
           });
 
           it('should add event listeners inside header templates', () => {
-            const input = getCellContent(getHeaderCell(grid, 1)).querySelector('paper-input');
+            const input = getCellContent(getHeaderCell(grid, 1)).querySelector('vaadin-text-field');
 
             input.invalid = 'foo';
 
@@ -357,12 +369,12 @@
           });
 
           it('should bind inside cell templates', () => {
-            expect(getCellContent(getCell(grid, 2)).querySelector('paper-input').value).to.contain('bar');
-            expect(getCellContent(getCell(grid, 8)).querySelector('paper-input').value).to.contain('bar');
+            expect(getCellContent(getCell(grid, 2)).querySelector('vaadin-text-field').value).to.contain('bar');
+            expect(getCellContent(getCell(grid, 8)).querySelector('vaadin-text-field').value).to.contain('bar');
           });
 
           it('should two-way bind parent path inside cell templates', () => {
-            const input = getCellContent(getCell(grid, 2)).querySelector('paper-input');
+            const input = getCellContent(getCell(grid, 2)).querySelector('vaadin-text-field');
             expect(input.value).to.eql('bar');
 
             input.value = 'value';
@@ -371,11 +383,11 @@
           });
 
           it('should bind inside header templates', () => {
-            expect(getCellContent(getHeaderCell(grid, 2)).querySelector('paper-input').value).to.contain('bar');
+            expect(getCellContent(getHeaderCell(grid, 2)).querySelector('vaadin-text-field').value).to.contain('bar');
           });
 
           it('should two-way bind parent path inside header templates', () => {
-            const input = getCellContent(getHeaderCell(grid, 2)).querySelector('paper-input');
+            const input = getCellContent(getHeaderCell(grid, 2)).querySelector('vaadin-text-field');
             expect(input.value).to.eql('bar');
 
             input.value = 'value';
@@ -391,7 +403,10 @@
         describe('using instance paths inside templates', () => {
           let input;
           beforeEach(() => {
-            input = getCellContent(getCell(grid, 3)).querySelector('paper-input');
+            container = fixture('formatting');
+            grid = container.$.grid;
+            flushGrid(grid);
+            input = getCellContent(getCell(grid, 3)).querySelector('vaadin-text-field');
             expect(input.value).to.eql('foo0');
           });
 
@@ -412,7 +427,7 @@
       describe('using items array', () => {
         let input, div, grid;
 
-        beforeEach(() => {
+        before(() => {
           const bind = fixture('items');
           bind.set('items', [{foo: 'bar'}]);
           div = bind.$.div;
@@ -443,7 +458,7 @@
       describe('slotted templates', () => {
         let slotted, grid;
 
-        beforeEach(() => {
+        before(() => {
           slotted = fixture('slotted-templates');
           const xgrid = slotted.$.xgrid;
           grid = xgrid.$.grid;

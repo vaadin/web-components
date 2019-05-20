@@ -25,7 +25,7 @@
         }
       </style>
 
-      <vaadin-grid id="grid" style="width: 200px; height: 400px;" size="10" data-provider="[[dataProvider]]">
+      <vaadin-grid id="grid" style="width: 200px; height: 400px;" size="10" data-provider="[[dataProvider]]" hidden>
         <template class="row-details">
           [[index]]
         </template>
@@ -84,6 +84,7 @@
             flushGrid(grid);
             done();
           });
+          requestAnimationFrame(() => grid.hidden = false);
         });
 
         it('should align rows correctly', () => {

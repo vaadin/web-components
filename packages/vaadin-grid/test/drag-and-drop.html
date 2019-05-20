@@ -118,22 +118,43 @@ describe('drag and drop', () => {
     return event;
   };
 
-  beforeEach(done => {
+  before(done => {
     grid = fixture('default');
     grid.hidden = true;
-    dragData = {};
     requestAnimationFrame(() => {
       // Wait for the appear animation to finish
       listenOnce(grid, 'animationend', () => {
-        grid.items = [
-          {first: 'foo', last: 'bar'},
-          {first: 'baz', last: 'qux'}
-        ];
-        flushGrid(grid);
         flush(() => done());
       });
       requestAnimationFrame(() => grid.hidden = false);
     });
+  });
+
+  beforeEach(done => {
+    dragData = {};
+    if (!grid.parentElement) {
+      document.body.appendChild(grid);
+    }
+    grid.items = [
+      {first: 'foo', last: 'bar'},
+      {first: 'baz', last: 'qux'}
+    ];
+    flushGrid(grid);
+    if (grid._safari) {
+      setTimeout(() => done());
+    } else {
+      done();
+    }
+
+  });
+
+  afterEach(() => {
+    fireDragEnd(grid.$.table);
+    fireDrop(grid.$.table);
+    grid.rowsDraggable = false;
+    grid.dropMode = null;
+    grid.style.height = '';
+    grid.selectedItems = [];
   });
 
   it('should not be draggable by default', () => {
@@ -161,32 +182,37 @@ describe('drag and drop', () => {
       let dragStartSpy;
       let dropSpy;
 
-      beforeEach(() => {
-        grid.rowsDraggable = true;
-        grid.dropMode = 'on-top';
+      before(() => {
         dragStartSpy = sinon.spy();
         dropSpy = sinon.spy();
         grid.addEventListener('grid-dragstart', dragStartSpy);
         grid.addEventListener('grid-drop', dropSpy);
       });
 
+      beforeEach(() => {
+        grid.rowsDraggable = true;
+        grid.dropMode = 'on-top';
+        dragStartSpy.reset();
+        dropSpy.reset();
+      });
+
       it('should stop the native event', () => {
         const spy = sinon.spy();
-        grid.addEventListener('dragstart', spy);
+        listenOnce(grid, 'dragstart', spy);
         fireDragStart();
         expect(spy.called).to.be.false;
       });
 
       it('should not stop the native event', () => {
         const spy = sinon.spy();
-        grid.addEventListener('dragstart', spy);
+        listenOnce(grid, 'dragstart', spy);
         fireDragStart(getFirstCell(grid));
         expect(spy.called).to.be.true;
       });
 
       it('should not stop the native event when not draggable', () => {
         const spy = sinon.spy();
-        grid.addEventListener('dragstart', spy);
+        listenOnce(grid, 'dragstart', spy);
         grid.rowsDraggable = false;
         const event = new Event('dragstart', {
           bubbles: true,
@@ -224,7 +250,7 @@ describe('drag and drop', () => {
 
       it('should override row count state attribute', () => {
         grid.style.height = '80px';
-        grid.addEventListener('grid-dragstart', e => {
+        listenOnce(grid, 'grid-dragstart', e => {
           e.detail.setDraggedItemsCount(2);
         });
         grid.selectedItems = grid.items;
@@ -326,11 +352,12 @@ describe('drag and drop', () => {
         const event = dropSpy.getCall(0).args[0];
         const textData = event.detail.dragData.filter(d => d.type === 'text')[0].data;
         expect(textData).to.eql('bar\tfoo\nqux\tbaz');
+        grid._swapColumnOrders(columns[0], columns[1]);
       });
 
       it('should generate custom data transfer text data', () => {
         grid.selectedItems = grid.items;
-        grid.addEventListener('grid-dragstart', e => {
+        listenOnce(grid, 'grid-dragstart', e => {
           e.detail.setDragData('text/plain', e.detail.draggedItems.map(item => item.last).join(','));
         });
         fireDragStart();
@@ -363,12 +390,12 @@ describe('drag and drop', () => {
 
       beforeEach(() => {
         dragEndSpy = sinon.spy();
-        grid.addEventListener('grid-dragend', dragEndSpy);
+        listenOnce(grid, 'grid-dragend', dragEndSpy);
       });
 
       it('should stop the native event', () => {
         const spy = sinon.spy();
-        grid.addEventListener('dragend', spy);
+        listenOnce(grid, 'dragend', spy);
         fireDragEnd();
         expect(spy.called).to.be.false;
       });
@@ -396,7 +423,7 @@ describe('drag and drop', () => {
 
       it('should not stop the native event', () => {
         const spy = sinon.spy();
-        grid.addEventListener('dragover', spy);
+        listenOnce(grid, 'dragover', spy);
         fireDragOver();
         expect(spy.called).to.be.true;
       });
@@ -405,7 +432,7 @@ describe('drag and drop', () => {
         grid.dropMode = 'between';
 
         const spy = sinon.spy();
-        grid.addEventListener('dragover', spy);
+        listenOnce(grid, 'dragover', spy);
         fireDragOver();
         expect(spy.called).to.be.false;
       });
@@ -490,7 +517,7 @@ describe('drag and drop', () => {
 
       it('should stop the native event', () => {
         const spy = sinon.spy();
-        grid.addEventListener('dragleave', spy);
+        listenOnce(grid, 'dragleave', spy);
         fireDragLeave();
         expect(spy.called).to.be.false;
       });
@@ -520,7 +547,7 @@ describe('drag and drop', () => {
       it('should stop and cancel the native event', () => {
         grid.dropMode = 'between';
         const spy = sinon.spy();
-        grid.addEventListener('dragenter', spy);
+        listenOnce(grid, 'dragenter', spy);
         const event = fireDragEnter();
         expect(spy.called).to.be.false;
         expect(event.defaultPrevented).to.be.true;
@@ -528,7 +555,7 @@ describe('drag and drop', () => {
 
       it('should not stop and cancel the native event', () => {
         const spy = sinon.spy();
-        grid.addEventListener('dragenter', spy);
+        listenOnce(grid, 'dragenter', spy);
         const event = fireDragEnter();
         expect(spy.called).to.be.true;
         expect(event.defaultPrevented).to.be.false;
@@ -542,12 +569,12 @@ describe('drag and drop', () => {
       beforeEach(() => {
         grid.dropMode = 'on-top';
         dropSpy = sinon.spy();
-        grid.addEventListener('grid-drop', dropSpy);
+        listenOnce(grid, 'grid-drop', dropSpy);
       });
 
       it('should stop the native event', () => {
         const spy = sinon.spy();
-        grid.addEventListener('drop', spy);
+        listenOnce(grid, 'drop', spy);
         fireDrop();
         expect(spy.called).to.be.false;
       });
@@ -659,7 +686,7 @@ describe('drag and drop', () => {
       grid.dragFilter = ({item}) => item.first === 'foo';
       grid.selectedItems = grid.items;
       const dragStartSpy = sinon.spy();
-      grid.addEventListener('grid-dragstart', dragStartSpy);
+      listenOnce(grid, 'grid-dragstart', dragStartSpy);
       fireDragStart();
       const event = dragStartSpy.getCall(0).args[0];
       expect(event.detail.draggedItems).to.eql([grid.items[0]]);
@@ -714,7 +741,7 @@ describe('drag and drop', () => {
 
     it('should emit a grid-drop event for non drop disabled row', () => {
       const spy = sinon.spy();
-      grid.addEventListener('grid-drop', spy);
+      listenOnce(grid, 'grid-drop', spy);
       fireDrop(grid.$.items.children[1]);
       expect(spy.called).to.be.true;
     });
@@ -735,10 +762,13 @@ describe('drag and drop', () => {
 
   describe('auto scroll', () => {
 
-    beforeEach(() => {
+    beforeEach(done => {
       grid.dropMode = 'between';
       grid.items = Array(...new Array(100)).map(() => {});
+
+      grid.$.table.scrollTop = 0;
       flushGrid(grid);
+      flush(() => done());
     });
 
     it('should auto scroll down', () => {

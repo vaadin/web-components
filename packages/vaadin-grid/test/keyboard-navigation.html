@@ -294,12 +294,10 @@
     const android = /android/i.test(navigator.userAgent);
 
     !ios && !android && describe('keyboard navigation', () => {
-      beforeEach(done => {
+      before(done => {
         const fixtureElements = fixture('default');
         grid = fixtureElements[0];
         focusable = fixtureElements[1];
-
-        grid.items = ['foo', 'bar'];
 
         scroller = grid.$.scroller;
         header = grid.$.header;
@@ -313,6 +311,33 @@
         flushGrid(grid);
 
         flush(done);
+      });
+
+      beforeEach(() => {
+        if (!grid.parentElement) {
+          document.body.appendChild(grid);
+          document.body.appendChild(focusable);
+        }
+
+        // Reset side effects from tests
+        grid.style.width = '';
+        grid.style.border = '';
+
+        if (grid.items[0] !== 'foo' || grid.items[1] !== 'bar') {
+          grid.size = undefined;
+          grid.dataProvider = undefined;
+          grid.items = ['foo', 'bar'];
+          flushGrid(grid);
+        }
+        grid.activeItem = null;
+        grid.detailsOpenedItems = [];
+        grid._columnTree[0].forEach(column => column.hidden = column.frozen = false);
+
+        grid._focusedItemIndex = 0;
+        grid._focusedColumnOrder = undefined;
+        grid._resetKeyboardNavigation();
+        grid.removeAttribute('navigating');
+        focusable.focus();
       });
 
       describe('navigation mode', () => {
@@ -351,7 +376,8 @@
         });
 
         it('should enable navigation mode when tabbed into footer', () => {
-          // simulating tabbing into header
+          // simulating tabbing into footer
+          grid.nextElementSibling.focus();
           shiftTabToFooter();
 
           expect(grid.hasAttribute('navigating')).to.be.true;
@@ -459,20 +485,19 @@
 
           let keydownEvent;
           const listener = (e) => keydownEvent = e;
-          grid.$.scroller.addEventListener('keydown', listener);
 
           // assuming grid has been tabbed into.
           tabbableElements[1].focus();
 
+          listenOnce(grid.$.scroller, 'keydown', listener);
           tab(); // to body cell
           expect(keydownEvent.defaultPrevented).to.be.true;
           expect(grid.shadowRoot.activeElement).to.equal(tabbableElements[2]);
 
+          listenOnce(grid.$.scroller, 'keydown', listener);
           tab(); // to footer cell
           expect(keydownEvent.defaultPrevented).to.be.true;
           expect(grid.shadowRoot.activeElement).to.equal(tabbableElements[3]);
-
-          grid.$.scroller.removeEventListener('keydown', listener);
         });
 
         it('should be possible to shift-tab through grid', () => {
@@ -480,20 +505,19 @@
 
           let keydownEvent;
           const listener = (e) => keydownEvent = e;
-          grid.$.scroller.addEventListener('keydown', listener);
 
           // assuming grid has been shift-tabbed into.
           tabbableElements[3].focus();
 
+          listenOnce(grid.$.scroller, 'keydown', listener);
           shiftTab(); // to body cell
           expect(keydownEvent.defaultPrevented).to.be.true;
           expect(grid.shadowRoot.activeElement).to.equal(tabbableElements[2]);
 
+          listenOnce(grid.$.scroller, 'keydown', listener);
           shiftTab(); // to header cell
           expect(keydownEvent.defaultPrevented).to.be.true;
           expect(grid.shadowRoot.activeElement).to.equal(tabbableElements[1]);
-
-          grid.$.scroller.removeEventListener('keydown', listener);
         });
 
         it('should be possible to tab through the grid when first column is hidden', () => {
@@ -504,20 +528,19 @@
 
           let keydownEvent;
           const listener = (e) => keydownEvent = e;
-          grid.$.scroller.addEventListener('keydown', listener);
 
           // assuming grid has been tabbed into.
           tabbableElements[1].focus();
 
+          listenOnce(grid.$.scroller, 'keydown', listener);
           tab(); // to body cell
           expect(keydownEvent.defaultPrevented).to.be.true;
           expect(grid.shadowRoot.activeElement).to.equal(tabbableElements[2]);
 
+          listenOnce(grid.$.scroller, 'keydown', listener);
           tab(); // to footer cell
           expect(keydownEvent.defaultPrevented).to.be.true;
           expect(grid.shadowRoot.activeElement).to.equal(tabbableElements[3]);
-
-          grid.$.scroller.removeEventListener('keydown', listener);
         });
 
         it('should be possible to shift-tab through grid when first column is hidden', () => {
@@ -528,20 +551,19 @@
 
           let keydownEvent;
           const listener = (e) => keydownEvent = e;
-          grid.$.scroller.addEventListener('keydown', listener);
 
           // assuming grid has been shift-tabbed into.
           tabbableElements[3].focus();
 
+          listenOnce(grid.$.scroller, 'keydown', listener);
           shiftTab(); // to body cell
           expect(keydownEvent.defaultPrevented).to.be.true;
           expect(grid.shadowRoot.activeElement).to.equal(tabbableElements[2]);
 
+          listenOnce(grid.$.scroller, 'keydown', listener);
           shiftTab(); // to header cell
           expect(keydownEvent.defaultPrevented).to.be.true;
           expect(grid.shadowRoot.activeElement).to.equal(tabbableElements[1]);
-
-          grid.$.scroller.removeEventListener('keydown', listener);
         });
 
         it('should be possible to exit grid with tab', () => {
@@ -960,11 +982,12 @@
 
             animationFrameFlush(() => {
               const input = getCellContent(grid.shadowRoot.activeElement).children[0];
-              input.focus = sinon.spy();
+              const spy = sinon.spy(input, 'focus');
 
               enter();
 
-              expect(input.focus.callCount).to.equal(1);
+              expect(spy.callCount).to.equal(1);
+              spy.restore();
               done();
             });
           });
@@ -1516,13 +1539,14 @@
         it('should focus the first element when entering interaction mode with enter', () => {
           const cell = getRowCell(0, 1);
           const input = getCellContent(cell).children[0];
-          input.focus = sinon.spy();
+          const spy = sinon.spy(input, 'focus');
 
           right(); // focus the cell with input.
 
           enter();
 
-          expect(input.focus.callCount).to.equal(1);
+          expect(spy.callCount).to.equal(1);
+          spy.restore();
         });
 
         it('should exit interaction mode from focused single-line input with enter', () => {
@@ -1554,12 +1578,13 @@
         it('should focus the first element when entering interaction mode with f2', () => {
           const cell = getRowCell(0, 1);
           const input = getCellContent(cell).children[0];
-          input.focus = sinon.spy();
+          const spy = sinon.spy(input, 'focus');
 
           right(); // focus the cell with input.
 
           f2();
-          expect(input.focus.callCount).to.equal(1);
+          expect(spy.callCount).to.equal(1);
+          spy.restore();
         });
 
         it('should focus the next input element when tabbing in interaction mode', () => {
@@ -1575,15 +1600,20 @@
         it('should focus the element with `focus-target` when entering interaction mode', () => {
           const cell = getRowCell(0, 1);
           const input = getCellContent(cell).children[0];
-          input.focus = sinon.spy();
-          input.parentElement.insertBefore(document.createElement('div'), input);
+          const spy = sinon.spy(input, 'focus');
+          const div = document.createElement('div');
+          input.parentElement.insertBefore(div, input);
           input.setAttribute('focus-target', '');
 
           right(); // focus the cell with input.
 
           enter();
 
-          expect(input.focus.callCount).to.equal(1);
+          expect(spy.callCount).to.equal(1);
+
+          input.removeAttribute('focus-target');
+          input.parentElement.removeChild(div);
+          spy.restore();
         });
 
         it('should not navigate with arrow up when in interaction mode', () => {
