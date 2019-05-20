@@ -449,6 +449,46 @@ describe('drag and drop', () => {
         expect(e.defaultPrevented).to.be.true;
       });
 
+      it('should indicate drop over an empty grid', () => {
+        grid.dropMode = 'between';
+        grid.items = [];
+        fireDragOver();
+        expect(grid.hasAttribute('dragover')).to.be.true;
+      });
+
+      it('should indicate drop below the last row when dragging over body', () => {
+        grid.dropMode = 'between';
+        const row = grid.$.items.children[1];
+        fireDragOver(grid.$.items);
+        expect(row.getAttribute('dragover')).to.equal('below');
+      });
+
+      it('should not indicate drop when dragging over body on on-top mode', () => {
+        grid.dropMode = 'on-top';
+        const row = grid.$.items.children[1];
+        const e = fireDragOver(grid.$.items);
+        expect(grid.hasAttribute('dragover')).to.be.false;
+        expect(row.hasAttribute('dragover')).to.be.false;
+        expect(e.defaultPrevented).to.be.false;
+      });
+
+      it('should not allow drop over header when there are items', () => {
+        grid.dropMode = 'between';
+        const row = grid.$.items.children[1];
+        const e = fireDragOver(grid.$.header.children[0]);
+        expect(grid.hasAttribute('dragover')).to.be.false;
+        expect(row.hasAttribute('dragover')).to.be.false;
+        expect(e.defaultPrevented).to.be.false;
+      });
+
+      it('should allow drop over header when there are no items', () => {
+        grid.dropMode = 'between';
+        grid.items = [];
+        const e = fireDragOver(grid.$.header.children[0]);
+        expect(grid.hasAttribute('dragover')).to.be.true;
+        expect(e.defaultPrevented).to.be.true;
+      });
+
       it('should set dragover attribute to grid on on-grid dropmode', () => {
         grid.dropMode = 'on-grid';
         fireDragOver();

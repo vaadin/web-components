@@ -204,13 +204,17 @@ This program is available under Apache License Version 2.0, available at https:/
             // The grid is empty or "on-grid" drop mode was used, always default to "empty"
             this._dropLocation = DropLocation.EMPTY;
           } else if (!row || row.parentNode !== this.$.items) {
-            // The dragover didn't occur on a body row, default to "empty"...
-            this._dropLocation = DropLocation.EMPTY;
-
-            if (this.dropMode === DropMode.BETWEEN || this.dropMode === DropMode.ON_TOP_OR_BETWEEN) {
-              // ...unless if the drop mode allows setting the last row as the drag over item
+            // The dragover didn't occur on a body row but the grid has items
+            if (row) {
+              // The dragover occurred over a header/footer row
+              return;
+            } else if (this.dropMode === DropMode.BETWEEN || this.dropMode === DropMode.ON_TOP_OR_BETWEEN) {
+              // The drop mode allows setting the last row as the drag over item
               row = Array.from(this.$.items.children).filter(row => !row.hidden).pop();
               this._dropLocation = DropLocation.BELOW;
+            } else {
+              // Drop mode on-top used but the dragover didn't occur over one of the existing rows
+              return;
             }
           } else {
             // The dragover occurred on a body row, determine the drop location from coordinates
@@ -240,9 +244,7 @@ This program is available under Apache License Version 2.0, available at https:/
           e.preventDefault();
 
           if (this._dropLocation === DropLocation.EMPTY) {
-            if (this.dropMode === DropMode.ON_GRID) {
-              this._toggleAttribute('dragover', true, this);
-            }
+            this._toggleAttribute('dragover', true, this);
           } else if (row) {
             this._dragOverItem = row._item;
             if (row.getAttribute('dragover') !== this._dropLocation) {
