@@ -707,6 +707,11 @@ This program is available under Apache License Version 2.0, available at https:/
         const value = this._getItemValue(selectedItem);
         if (this.value !== value) {
           this.value = value;
+          if (this.value !== value) {
+            // The value was changed to something else in value-changed listener,
+            // so prevent from resetting it to the previous value.
+            return;
+          }
         }
 
         this._updateHasValue(true);
@@ -878,9 +883,7 @@ This program is available under Apache License Version 2.0, available at https:/
       if (this.opened) {
         this._focusedIndex = this.filteredItems.indexOf(e.detail.item);
         this.close();
-      }
-
-      if (this.selectedItem !== e.detail.item) {
+      } else if (this.selectedItem !== e.detail.item) {
         this.selectedItem = e.detail.item;
         this._detectAndDispatchChange();
       }

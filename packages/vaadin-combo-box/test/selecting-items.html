@@ -174,6 +174,44 @@
       expect(newComboBox.value).to.equal('foo');
     });
 
+    it('should allow changing the value in value-changed listener', done => {
+      combobox.open();
+      const items = combobox.$.overlay._selector.querySelectorAll('vaadin-combo-box-item');
+
+      combobox.addEventListener('value-changed', () => {
+        if (combobox.value === 'foo') {
+          combobox.value = 'bar';
+          setTimeout(() => {
+            expect(combobox.value).to.eql('bar');
+            expect(combobox.selectedItem).to.eql('bar');
+            expect(items[0].selected).to.be.false;
+            expect(items[1].selected).to.be.true;
+            done();
+          });
+        }
+      });
+      items[0].click();
+    });
+
+    it('should allow clearing the value in value-changed listener', done => {
+      combobox.open();
+      const item = combobox.$.overlay._selector.querySelector('vaadin-combo-box-item');
+
+      combobox.addEventListener('value-changed', () => {
+        if (combobox.value) {
+          combobox.value = '';
+          setTimeout(() => {
+            expect(combobox.value).to.eql('');
+            expect(combobox.selectedItem).not.to.be.ok;
+            expect(item.selected).to.be.false;
+            expect(combobox.hasAttribute('has-value')).to.be.false;
+            done();
+          });
+        }
+      });
+      item.click();
+    });
+
     describe('`change` event', () => {
       it('should fire `value-changed` and `selected-item-changed` before `changed`', done => {
         combobox.addEventListener('change', () => {
