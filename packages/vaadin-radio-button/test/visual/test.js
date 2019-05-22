@@ -18,7 +18,11 @@ gemini.suite('vaadin-radio-button', function(rootSuite) {
       suite
         .setUrl(`default.html?theme=${theme}`)
         .setCaptureElements('#default-tests')
-        .capture('default');
+        .capture('default', function(actions) {
+          actions.executeJS(function(window) {
+            window.focusRadio();
+          });
+        });
     });
   });
 

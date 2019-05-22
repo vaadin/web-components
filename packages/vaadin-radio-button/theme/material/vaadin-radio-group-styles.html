@@ -1,3 +1,4 @@
+<link rel="import" href="../../../vaadin-material-styles/color.html">
 <link rel="import" href="../../../vaadin-material-styles/mixins/required-field.html">
 
 <dom-module id="material-radio-group" theme-for="vaadin-radio-group">
@@ -42,6 +43,10 @@
       :host([disabled]) [part="label"] {
         color: var(--material-disabled-text-color);
         -webkit-text-fill-color: var(--material-disabled-text-color);
+      }
+
+      :host([focused]:not([invalid])) [part="label"] {
+        color: var(--material-primary-text-color);
       }
     </style>
   </template>

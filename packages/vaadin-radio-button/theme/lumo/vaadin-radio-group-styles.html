@@ -1,3 +1,4 @@
+<link rel="import" href="../../../vaadin-lumo-styles/color.html">
 <link rel="import" href="../../../vaadin-lumo-styles/mixins/required-field.html">
 
 <dom-module id="lumo-radio-group" theme-for="vaadin-radio-group">
@@ -27,6 +28,21 @@
 
       [part="label"] {
         padding-bottom: 0.7em;
+      }
+
+      :host([focused]:not([readonly])) [part="label"] {
+        color: var(--lumo-primary-text-color);
+      }
+
+      :host(:hover:not([readonly]):not([focused])) [part="label"] {
+        color: var(--lumo-body-text-color);
+      }
+
+      /* Touch device adjustment */
+      @media (pointer: coarse) {
+        :host(:hover:not([readonly]):not([focused])) [part="label"] {
+          color: var(--lumo-secondary-text-color);
+        }
       }
     </style>
   </template>

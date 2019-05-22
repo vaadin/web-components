@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title></title>
   <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../bower_components/iron-test-helpers/mock-interactions.js"></script>
   <script>
     const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
     document.write(`<link rel="import" href="../../theme/${theme}/vaadin-radio-button.html">`);
@@ -39,6 +40,21 @@
     Empty labels
     <vaadin-radio-button></vaadin-radio-button>
     <vaadin-radio-button></vaadin-radio-button>
+
+    <br/>
+
+    <vaadin-radio-group label="Focused">
+      <vaadin-radio-button id="radio">1</vaadin-radio-button>
+      <vaadin-radio-button>2</vaadin-radio-button>
+    </vaadin-radio-group>
   </div>
+
+  <script>
+    // eslint-disable-next-line no-unused-vars
+    function focusRadio() {
+      MockInteractions.keyDownOn(document.body, 9);
+      document.getElementById('radio').dispatchEvent(new CustomEvent('focusin', {composed: true, bubbles: true}));
+    }
+  </script>
 
 </body>
