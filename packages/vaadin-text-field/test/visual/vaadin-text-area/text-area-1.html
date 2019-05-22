@@ -39,7 +39,7 @@
       <p>
       focused: <vaadin-text-area autofocus class="hidden-caret"></vaadin-text-area>
       <p>
-      readonly: <vaadin-text-area readonly value="
+      readonly: <vaadin-text-area readonly style="max-height: 100px;" value="
       Go Vaadin
       Go
       Go
@@ -47,5 +47,13 @@
       "></vaadin-text-area>
     </fieldset>
   </form>
+
+  <script>
+    // eslint-disable-next-line no-unused-vars
+    function scrollTextArea() {
+      const textarea = document.querySelector('[readonly]');
+      textarea.shadowRoot.querySelector('[part="input-field"]').scrollTop = 50;
+    }
+  </script>
 
 </body>

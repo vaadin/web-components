@@ -91,7 +91,11 @@ gemini.suite('vaadin-text-field', function(rootSuite) {
       suite
         .setUrl(`vaadin-text-area/text-area-1.html?theme=${theme}`)
         .setCaptureElements('#text-area')
-        .capture('text-area-1');
+        .capture('text-area-1', function(actions) {
+          actions.executeJS(function(window) {
+            window.scrollTextArea();
+          });
+        });
     });
 
     gemini.suite(`text-area-2-${theme}`, function(suite) {
