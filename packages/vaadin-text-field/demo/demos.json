@@ -32,16 +32,6 @@
       }
     },
     {
-      "name": "RTL",
-      "url": "text-field-rtl-demos",
-      "src": "text-field-rtl-demos.html",
-      "meta": {
-        "title": "Vaadin Text Field RTL Examples",
-        "description": "",
-        "image": ""
-      }
-    },
-    {
       "name": "Password Field",
       "url": "password-field-demos",
       "src": "password-field-demos.html",

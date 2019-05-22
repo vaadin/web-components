@@ -32,15 +32,20 @@
       checked against.</p>
     <vaadin-demo-snippet id="text-field-basic-demos-pattern-validation">
       <template preserve-content>
-        <vaadin-text-field pattern="\d\d\d*" label="Min 2 numbers"></vaadin-text-field>
+        <vaadin-text-field pattern="[A-Z]{2}\d{3,4}" label="Flight number"></vaadin-text-field>
+        <p>Valid flight number: 2 uppercase letters followed by 3 or 4 numbers. For example: SA1234</p>
       </template>
     </vaadin-demo-snippet>
 
 
     <h3>Prevent Invalid Input</h3>
+    <p>Username contains alphanumeric characters, underscores and dots.</p>
     <vaadin-demo-snippet id="text-field-basic-demos-preventing-invalid-input">
       <template preserve-content>
-        <vaadin-text-field prevent-invalid-input pattern="[0-9]*" label="Numbers only"></vaadin-text-field>
+        <vaadin-text-field prevent-invalid-input pattern="[a-zA-Z0-9_.]{0,20}"
+          label="Username"></vaadin-text-field>
+        <p>Valid username: Alphanumeric characters, underscores and dots. For example:
+          name.family</p>
       </template>
     </vaadin-demo-snippet>
 
@@ -49,29 +54,45 @@
 
     <p>Extend <code>Vaadin.TextFieldElement</code> to create your own custom element,
       then override the <code>checkValidity()</code> method to validate the user’s input.</p>
-
-    <vaadin-demo-snippet id="text-field-validators-demos-synchronous-custom-validator" ignore-ie when-defined="vaadin-text-field">
+    <vaadin-demo-snippet id="text-field-validators-demos-synchronous-custom-validator"
+      when-defined="vaadin-text-field">
       <template preserve-content>
-        <employee-role-text-field label="Position"></employee-role-text-field>
-        Valid options: Architect, Developer or Designer
+        <vaadin-text-field label="ID" minlength="10" maxlength="10"></vaadin-text-field>
+        <p>Valid ID: Use a 10 digit number. The sum of digits must be dividable by 10. For
+          example 1111111111.</p>
 
         <script>
           window.addDemoReadyListener('#text-field-validators-demos-synchronous-custom-validator', function(document) {
-            class EmployeeRole extends Vaadin.TextFieldElement {
-              static get is() {
-                return 'employee-role-text-field';
-              }
-              checkValidity() {
-                return ['Architect', 'Developer', 'Designer'].indexOf(this.value) > -1;
-              }
-            }
+            document.querySelector('vaadin-text-field').checkValidity = function() {
+              const textField = this;
 
-            if (!customElements.get(EmployeeRole.is)) {
-              customElements.define(EmployeeRole.is, EmployeeRole);
-            }
+              if (isNaN(textField.value)) {
+                textField.errorMessage = 'Must enter digits';
+                return false;
+              }
+
+              if (textField.value.length !== 10) {
+                textField.errorMessage = 'Length must be 10 digits';
+                return false;
+              }
+
+              const sumOfDigits = textField.value.toString().split('')
+                .map(function(s) {
+                  return parseInt(s);
+                })
+                .reduce(function(a, b) {
+                  return a + b;
+                });
+
+              if (sumOfDigits % 10 !== 0) {
+                textField.errorMessage = 'ID is not correct';
+                return false;
+              }
+              textField.errorMessage = '';
+              return true;
+            };
           });
         </script>
-
       </template>
     </vaadin-demo-snippet>
 
@@ -81,183 +102,35 @@
     <p>Extend <code>Vaadin.TextFieldElement</code> to create your own custom element,
       then override the <code>checkValidity()</code> to make your asynchronous validation,
       and finally set the <code>invalid</code> flag appropriately in the callback.</p>
-
-    <vaadin-demo-snippet id="text-field-validators-demos-asynchronous-custom-validator" ignore-ie when-defined="vaadin-text-field">
+    <vaadin-demo-snippet id="text-field-validators-demos-asynchronous-custom-validator"
+      when-defined="vaadin-text-field">
       <template preserve-content>
-        <my-ajax id="ajax1" handle-as="json" url="https://vaadin.com/validate-element"></my-ajax>
-        <chemical-element-text-field label="Element Name"></chemical-element-text-field>
-        Type a valid Chemical Element such as Hydrogen, Oxygen, Carbon, etc.
-
+        <vaadin-text-field label="Username"></vaadin-text-field>
+        <p>Valid username: Must be unique. For example, the username "Kamren" is taken.</p>
         <script>
           window.addDemoReadyListener('#text-field-validators-demos-asynchronous-custom-validator', function(document) {
-            class ChemicalElement extends Vaadin.TextFieldElement {
-              static get is() {
-                return 'chemical-element-text-field';
-              }
-
-              ready() {
-                super.ready();
-
-                this.ajax = document.getElementById('ajax1');
-                this.ajax.addEventListener('response', function() {
-                  var elementName = this.value || '';
-                  this.invalid = this.ajax.lastResponse.elements.indexOf(elementName.toLowerCase()) < 0;
-                  this.errorMessage = this.invalid ? elementName + 'is not a Chemical Element' : '';
-                }.bind(this));
-              }
-
-              checkValidity() {
-                this.ajax.generateRequest();
-                return true;
-              }
-            }
-
-            if (!customElements.get(ChemicalElement.is)) {
-              customElements.define(ChemicalElement.is, ChemicalElement);
-            }
+            document.querySelector('vaadin-text-field').checkValidity = function() {
+              const xhr = new XMLHttpRequest();
+              const textField = this;
+              const url = 'https://jsonplaceholder.typicode.com/users?username=' + textField.value;
+              xhr.open('GET', url, true);
+              xhr.addEventListener('load', function() {
+                const response = JSON.parse(xhr.responseText);
+                if (response && response.length > 0) {
+                  textField.invalid = true;
+                  textField.errorMessage = 'Username is already taken';
+                } else {
+                  textField.invalid = false;
+                  textField.errorMessage = '';
+                }
+              });
+              xhr.send();
+              return true;
+            };
           });
         </script>
-
       </template>
     </vaadin-demo-snippet>
-
-  <dom-module id="my-ajax">
-    <template>
-    </template>
-    <script>
-        Polymer({
-          is: 'my-ajax',
-
-          generateRequest: function() {
-            setTimeout(function() {
-              this.dispatchEvent(new CustomEvent('response'));
-            }.bind(this), 1000);
-          },
-
-          lastResponse: {'elements': [
-            'hydrogen',
-            'helium',
-            'lithium',
-            'beryllium',
-            'boron',
-            'carbon',
-            'nitrogen',
-            'oxygen',
-            'fluorine',
-            'neon',
-            'sodium',
-            'magnesium',
-            'aluminum',
-            'silicon',
-            'phosphorus',
-            'sulfur',
-            'chlorine',
-            'argon',
-            'potassium',
-            'calcium',
-            'scandium',
-            'titanium',
-            'vanadium',
-            'chromium',
-            'manganese',
-            'iron',
-            'cobalt',
-            'nickel',
-            'copper',
-            'zinc',
-            'gallium',
-            'germanium',
-            'arsenic',
-            'selenium',
-            'bromine',
-            'krypton',
-            'rubidium',
-            'strontium',
-            'yttrium',
-            'zirconium',
-            'niobium',
-            'molybdenum',
-            'technetium',
-            'ruthenium',
-            'rhodium',
-            'palladium',
-            'silver',
-            'cadmium',
-            'indium',
-            'tin',
-            'antimony',
-            'tellurium',
-            'iodine',
-            'xenon',
-            'cesium',
-            'barium',
-            'lanthanum',
-            'cerium',
-            'praseodymium',
-            'neodymium',
-            'promethium',
-            'samarium',
-            'europium',
-            'gadolinium',
-            'terbium',
-            'dysprosium',
-            'holmium',
-            'erbium',
-            'thulium',
-            'ytterbium',
-            'lutetium',
-            'hafnium',
-            'tantalum',
-            'tungsten',
-            'rhenium',
-            'osmium',
-            'iridium',
-            'platinum',
-            'gold',
-            'mercury',
-            'thallium',
-            'lead',
-            'bismuth',
-            'polonium',
-            'astatine',
-            'radon',
-            'francium',
-            'radium',
-            'actinium',
-            'thorium',
-            'protactinium',
-            'uranium',
-            'neptunium',
-            'plutonium',
-            'americium',
-            'curium',
-            'berkelium',
-            'californium',
-            'einsteinium',
-            'fermium',
-            'mendelevium',
-            'nobelium',
-            'lawrencium',
-            'rutherfordium',
-            'dubnium',
-            'seaborgium',
-            'bohrium',
-            'hassium',
-            'meitnerium',
-            'ununnilium',
-            'unununium',
-            'ununbium',
-            'ununtrium',
-            'ununquadium',
-            'ununpentium',
-            'ununhexium',
-            'ununseptium',
-            'ununoctium'
-          ]}
-        });
-
-    </script>
-  </dom-module>
 
   </template>
   <script>

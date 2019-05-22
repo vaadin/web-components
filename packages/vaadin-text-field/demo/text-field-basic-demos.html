@@ -6,7 +6,6 @@
       }
     </style>
 
-
     <h3>Label, Placeholder and Value</h3>
     <vaadin-demo-snippet id="text-field-basic-demos-label-placeholder-value">
       <template preserve-content>
@@ -17,27 +16,27 @@
     </vaadin-demo-snippet>
 
 
-    <h3>States</h3>
+    <h3>Disabled and Read-only</h3>
     <vaadin-demo-snippet id="text-field-basic-demos-states">
       <template preserve-content>
-        <vaadin-text-field label="Enabled" value="Value"></vaadin-text-field>
         <vaadin-text-field label="Disabled" value="Value" disabled></vaadin-text-field>
-        <vaadin-text-field label="Read only" value="Value" readonly></vaadin-text-field>
+        <vaadin-text-field label="Read-only" value="Value" readonly></vaadin-text-field>
       </template>
     </vaadin-demo-snippet>
 
     <h3>Autoselect</h3>
     <vaadin-demo-snippet id="text-field-basic-demos-autoselect">
       <template preserve-content>
-        <vaadin-text-field label="Autoselect" value="Text selected on focus" autoselect></vaadin-text-field>
+        <vaadin-text-field autoselect label="Autoselect" value="Text selected on focus"></vaadin-text-field>
       </template>
     </vaadin-demo-snippet>
 
     <h3>Display the Clear Button</h3>
-    <p>Use the <code>clear-button-visible</code> attribute to display the clear button of an individual text field.</p>
+    <p>Use the <code>clear-button-visible</code> attribute to display the clear button of
+      an individual text field.</p>
     <vaadin-demo-snippet id="text-field-basic-demos-clear-button">
       <template preserve-content>
-        <vaadin-text-field label="Search" clear-button-visible value="Value"></vaadin-text-field>
+        <vaadin-text-field clear-button-visible value="Value"></vaadin-text-field>
       </template>
     </vaadin-demo-snippet>
 
