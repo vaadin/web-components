@@ -161,7 +161,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
           this.setAttribute('role', 'radio');
 
-          this._addActiveListeners();
+          this._addListeners();
 
           const attrName = this.getAttribute('name');
           if (attrName) {
@@ -196,7 +196,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this.setAttribute('aria-checked', checked);
         }
 
-        _addActiveListeners() {
+        _addListeners() {
           this._addEventListenerToNode(this, 'down', (e) => {
             if (!this.disabled) {
               this.setAttribute('active', '');

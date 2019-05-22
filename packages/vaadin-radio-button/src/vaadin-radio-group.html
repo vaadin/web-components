@@ -82,6 +82,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * `invalid` | Set when the element is invalid | :host
        * `has-label` | Set when the element has a label | :host
        * `has-value` | Set when the element has a value | :host
+       * `focused` | Set when the element contains focus | :host
        *
        * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
        *
@@ -172,7 +173,7 @@ This program is available under Apache License Version 2.0, available at https:/
         ready() {
           super.ready();
 
-          this._addActiveListeners();
+          this._addListeners();
 
           this._observer = new Polymer.FlattenedNodesObserver(this, info => {
             const checkedChangedListener = e => {
@@ -206,16 +207,20 @@ This program is available under Apache License Version 2.0, available at https:/
 
           this.setAttribute('role', 'radiogroup');
 
-          // Need to check e.composed as a workaround for https://bugzilla.mozilla.org/show_bug.cgi?id=1472887
-          // otherwise FF runs validation on keyboard focus
-          this.addEventListener('focusout', e => e.composed && this.validate());
-
           const uniqueId = RadioGroupElement._uniqueId = 1 + RadioGroupElement._uniqueId || 0;
           this._errorId = `${this.constructor.is}-error-${uniqueId}`;
         }
 
         get _radioButtons() {
           return this._filterRadioButtons(this.querySelectorAll('*'));
+        }
+
+        _setFocused(focused) {
+          if (focused) {
+            this.setAttribute('focused', '');
+          } else {
+            this.removeAttribute('focused');
+          }
         }
 
         _filterRadioButtons(nodes) {
@@ -246,7 +251,7 @@ This program is available under Apache License Version 2.0, available at https:/
           (newV || oldV) && this._updateDisableButtons();
         }
 
-        _addActiveListeners() {
+        _addListeners() {
           this.addEventListener('keydown', e => {
             // if e.target is vaadin-radio-group then assign to checkedRadioButton currently checked radio button
             var checkedRadioButton = (e.target == this) ? this._checkedButton : e.target;
@@ -262,6 +267,15 @@ This program is available under Apache License Version 2.0, available at https:/
               e.preventDefault();
               this._selectNextButton(checkedRadioButton);
             }
+          });
+
+          this.addEventListener('focusin', () => this._setFocused(this._containsFocus()));
+
+          // Need to check e.composed as a workaround for https://bugzilla.mozilla.org/show_bug.cgi?id=1472887
+          // otherwise FF runs validation on keyboard focus
+          this.addEventListener('focusout', e => {
+            e.composed && this.validate();
+            this._setFocused(false);
           });
         }
 
@@ -281,7 +295,6 @@ This program is available under Apache License Version 2.0, available at https:/
           const activeElement = root._activeElement !== undefined ? root._activeElement : root.activeElement;
           return this.contains(activeElement);
         }
-
 
         _hasEnabledButtons() {
           return !this._radioButtons.every((button) => button.disabled);

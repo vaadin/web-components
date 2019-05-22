@@ -381,6 +381,34 @@
         }, 100);
       });
 
+      it('should set focused attribute on focusin event dispatched', () => {
+        vaadinRadioButtonList[0].dispatchEvent(new CustomEvent('focusin', {composed: true, bubbles: true}));
+        expect(vaadinRadioButtonGroup.hasAttribute('focused')).to.be.true;
+      });
+
+      it('should set focused attribute on radio-button focus', () => {
+        vaadinRadioButtonList[0].focus();
+        expect(vaadinRadioButtonGroup.hasAttribute('focused')).to.be.true;
+      });
+
+      it('should not set focused attribute on focusin event dispatched when disabled', () => {
+        vaadinRadioButtonGroup.disabled = true;
+        vaadinRadioButtonList[0].dispatchEvent(new CustomEvent('focusin', {composed: true, bubbles: true}));
+        expect(vaadinRadioButtonGroup.hasAttribute('focused')).to.be.false;
+      });
+
+      it('should remove focused attribute on radio-button blur', () => {
+        vaadinRadioButtonList[0].dispatchEvent(new CustomEvent('focusin', {composed: true, bubbles: true}));
+        blur(vaadinRadioButtonList[0]);
+        expect(vaadinRadioButtonGroup.hasAttribute('focused')).to.be.false;
+      });
+
+      it('should remove focused attribute on radio-group blur', () => {
+        vaadinRadioButtonList[0].dispatchEvent(new CustomEvent('focusin', {composed: true, bubbles: true}));
+        blur(vaadinRadioButtonGroup);
+        expect(vaadinRadioButtonGroup.hasAttribute('focused')).to.be.false;
+      });
+
       describe('change event', () => {
         it('should fire on right/down', () => {
           vaadinRadioButtonList[1].focus();
