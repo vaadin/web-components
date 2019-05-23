@@ -77,17 +77,22 @@ This program is available under Apache License Version 2.0, available at https:/
           super.ready();
 
           this.addEventListener('keydown', e => {
-            if (!e.defaultPrevented && [38, 40].indexOf(e.keyCode) > -1) {
-              e.preventDefault();
-              const list = this.firstElementChild;
-              if (e.keyCode === 38) {
-                const item = list.items[list.items.length - 1];
-                item && item.focus();
-              } else {
-                list.focus();
+            if (!e.defaultPrevented && e.composedPath()[0] === this.$.overlay && [38, 40].indexOf(e.keyCode) > -1) {
+              const child = this.getFirstChild();
+              if (child && Array.isArray(child.items) && child.items.length) {
+                e.preventDefault();
+                if (e.keyCode === 38) {
+                  child.items[child.items.length - 1].focus();
+                } else {
+                  child.focus();
+                }
               }
             }
           });
+        }
+
+        getFirstChild() {
+          return this.content.querySelector(':not(style):not(slot)');
         }
 
         getBoundaries() {

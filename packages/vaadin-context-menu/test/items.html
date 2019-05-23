@@ -326,18 +326,18 @@
           expect(menuComponents(subMenu)[0].hasAttribute('focused')).to.be.false;
         });
 
-        it('should focus first item in submenu on arrow down', async() => {
+        it('should focus first item in submenu on overlay element arrow down', async() => {
           subMenu.close();
           rootMenu.$.overlay.focus();
           open(menuComponents()[0]);
           await nextRender(subMenu);
           const item = menuComponents(subMenu)[0];
           const spy = sinon.spy(item, 'focus');
-          fire(subMenu.$.overlay, 'keydown', {}, {keyCode: 40, key: 'ArrowDown'});
+          fire(subMenu.$.overlay.$.overlay, 'keydown', {}, {keyCode: 40, key: 'ArrowDown'});
           expect(spy).to.be.calledOnce;
         });
 
-        it('should focus last item in submenu on arrow up', async() => {
+        it('should focus last item in submenu on overlay element arrow up', async() => {
           subMenu.close();
           rootMenu.$.overlay.focus();
           open(menuComponents()[0]);
@@ -345,7 +345,7 @@
           const items = menuComponents(subMenu);
           const item = items[items.length - 1];
           const spy = sinon.spy(item, 'focus');
-          fire(subMenu.$.overlay, 'keydown', {}, {keyCode: 38, key: 'ArrowUp'});
+          fire(subMenu.$.overlay.$.overlay, 'keydown', {}, {keyCode: 38, key: 'ArrowUp'});
           expect(spy).to.be.calledOnce;
         });
 

@@ -126,7 +126,7 @@
 
     __forwardFocus() {
       const overlay = this.$.overlay;
-      const child = overlay.content.querySelector(':not(style):not(slot)');
+      const child = overlay.getFirstChild();
       // if parent item is not focused, do not focus submenu
       if (overlay.parentOverlay) {
         const parent = overlay.parentOverlay.querySelector('[expanded]');
