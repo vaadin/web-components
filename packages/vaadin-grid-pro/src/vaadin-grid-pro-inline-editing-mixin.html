@@ -51,6 +51,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       super();
       this.__boundItemPropertyChanged = this._onItemPropertyChanged.bind(this);
       this.__boundEditorFocusOut = this._onEditorFocusOut.bind(this);
+      this.__boundGlobalFocusIn = this._onGlobalFocusIn.bind(this);
 
       this._addEditColumnListener('mousedown', e => {
         // prevent grid from resetting navigating state
@@ -236,6 +237,21 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         this._debouncerStopEdit,
         Polymer.Async.timeOut.after(200),
         this._stopEdit.bind(this));
+    }
+
+    _onGlobalFocusIn(e) {
+      const edited = this.__edited;
+      if (edited) {
+        const editor = edited.column._getEditorComponent(edited.cell);
+
+        // detect focus moving to e.g. vaadin-select-overlay
+        const overlay = Array.from(e.composedPath())
+          .filter(node => node.nodeType === Node.ELEMENT_NODE && /vaadin-(?!dialog).*-overlay/i.test(node.localName))[0];
+
+        if (overlay && overlay.__dataHost === editor) {
+          this._cancelStopEdit();
+        }
+      }
     }
 
     _startEdit(cell, column) {

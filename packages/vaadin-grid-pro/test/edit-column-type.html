@@ -117,7 +117,7 @@
           cell = getContainerCell(grid.$.items, 0, 1);
           dblclick(cell._content);
           editor = column._getEditorComponent(cell);
-          expect(editor._select instanceof Vaadin.SelectElement).to.equal(true);
+          expect(editor instanceof Vaadin.SelectElement).to.equal(true);
         });
 
         it('should render the checkbox to cell with text checkbox type specified', () => {
@@ -165,7 +165,7 @@
       });
 
       describe('select', () => {
-        let grid, cell, column, editor, select;
+        let grid, cell, column, editor;
 
         const nextRender = (elem) => {
           return new Promise(resolve => {
@@ -196,56 +196,56 @@
             cell = getContainerCell(grid.$.items, 0, 1);
             enter(cell._content);
             editor = getCellEditor(cell);
-            select = editor._select;
-            onceOpened(select).then(() => done());
+            onceOpened(editor).then(() => done());
           });
 
           it('should render the opened select to cell in edit mode', () => {
-            expect(select instanceof Vaadin.SelectElement).to.equal(true);
-            expect(select.value).to.be.equal('mrs');
-            expect(select.opened).to.equal(true);
+            expect(editor instanceof Vaadin.SelectElement).to.equal(true);
+            expect(editor.value).to.be.equal('mrs');
+            expect(editor.opened).to.equal(true);
           });
 
           it('should open the select and stop focusout on editor click', async() => {
-            select.opened = false;
-            select.focusElement.click();
-            const evt = new CustomEvent('focusout', {bubbles: true, composed: true});
-            evt.relatedTarget = editor._overlay.querySelector('vaadin-item');
-            select.dispatchEvent(evt);
+            editor.opened = false;
+            editor.focusElement.click();
+            const focusout = new CustomEvent('focusout', {bubbles: true, composed: true});
+            editor.dispatchEvent(focusout);
+            const focusin = new CustomEvent('focusin', {bubbles: true, composed: true});
+            editor._overlayElement.querySelector('vaadin-item').dispatchEvent(focusin);
             grid._flushStopEdit();
-            await nextRender(select._menuElement);
-            expect(select.opened).to.equal(true);
+            await nextRender(editor._menuElement);
+            expect(editor.opened).to.equal(true);
           });
 
           it('should close the select and exit edit mode on outside click', () => {
             document.body.click();
-            expect(select.opened).to.equal(false);
+            expect(editor.opened).to.equal(false);
           });
 
           it('should open the select on space key', async() => {
-            select.opened = false;
-            space(select.focusElement);
-            await nextRender(select._menuElement);
-            expect(select.opened).to.equal(true);
+            editor.opened = false;
+            space(editor.focusElement);
+            await nextRender(editor._menuElement);
+            expect(editor.opened).to.equal(true);
           });
 
           it('should open the select on arrow down key', async() => {
-            select.opened = false;
-            down(select.focusElement);
-            await nextRender(select._menuElement);
-            expect(select.opened).to.equal(true);
+            editor.opened = false;
+            down(editor.focusElement);
+            await nextRender(editor._menuElement);
+            expect(editor.opened).to.equal(true);
           });
 
           it('should open the select on arrow up key', async() => {
-            select.opened = false;
-            up(select.focusElement);
-            await nextRender(select._menuElement);
-            expect(select.opened).to.equal(true);
+            editor.opened = false;
+            up(editor.focusElement);
+            await nextRender(editor._menuElement);
+            expect(editor.opened).to.equal(true);
           });
 
           it('should update value and exit edit mode when item is selected', () => {
             grid.singleCellEdit = true;
-            const item = editor._overlay.querySelector('vaadin-item');
+            const item = editor._overlayElement.querySelector('vaadin-item');
             const value = item.textContent;
             const spy = sinon.spy(cell, 'focus');
             item.click();
@@ -256,7 +256,7 @@
 
           it('should work with `enterNextRow`', async() => {
             grid.enterNextRow = true;
-            const item = editor._overlay.querySelector('vaadin-item');
+            const item = editor._overlayElement.querySelector('vaadin-item');
             enter(item);
             item.click();
             expect(column._getEditorComponent(cell)).to.not.be.ok;
@@ -276,48 +276,46 @@
             cell = getContainerCell(grid.$.items, 0, 1);
             enter(cell._content);
             editor = getCellEditor(cell);
-            select = editor._select;
-            Polymer.RenderStatus.afterNextRender(select, () => done());
+            Polymer.RenderStatus.afterNextRender(editor, () => done());
           });
 
           it('should render the closed select to cell in edit mode', () => {
-            expect(select instanceof Vaadin.SelectElement).to.equal(true);
-            expect(select.value).to.be.equal('mrs');
-            expect(select.opened).to.equal(false);
+            expect(editor instanceof Vaadin.SelectElement).to.equal(true);
+            expect(editor.value).to.be.equal('mrs');
+            expect(editor.opened).to.equal(false);
           });
 
           it('should not throw when moving focus out of the select', () => {
             const evt = new CustomEvent('focusout', {bubbles: true, composed: true});
-            evt.relatedTarget = document.body;
-            select.dispatchEvent(evt);
+            editor.dispatchEvent(evt);
             grid._debouncerStopEdit && grid._debouncerStopEdit.flush();
             expect(column._getEditorComponent(cell)).to.not.be.ok;
           });
 
           it('should warn about missing options on enter key', async() => {
             sinon.stub(console, 'warn');
-            enter(select.focusElement);
+            enter(editor.focusElement);
             expect(console.warn.called).to.be.true;
             console.warn.restore();
           });
 
           it('should warn about missing options on space key', async() => {
             sinon.stub(console, 'warn');
-            space(select.focusElement);
+            space(editor.focusElement);
             expect(console.warn.called).to.be.true;
             console.warn.restore();
           });
 
           it('should warn about missing options on arrow down key', async() => {
             sinon.stub(console, 'warn');
-            down(select.focusElement);
+            down(editor.focusElement);
             expect(console.warn.called).to.be.true;
             console.warn.restore();
           });
 
           it('should warn about missing options on arrow up key', async() => {
             sinon.stub(console, 'warn');
-            up(select.focusElement);
+            up(editor.focusElement);
             expect(console.warn.called).to.be.true;
             console.warn.restore();
           });

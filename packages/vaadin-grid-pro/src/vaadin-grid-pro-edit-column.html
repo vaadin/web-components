@@ -222,7 +222,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             type = 'checkbox';
             break;
           case 'select':
-            type = 'select-wrapper';
+            type = 'select';
             break;
           case 'text':
           default:
@@ -296,6 +296,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         this._grid.notifyResize();
         const editor = this._getEditorComponent(cell);
         editor.addEventListener('focusout', this._grid.__boundEditorFocusOut);
+        document.body.addEventListener('focusin', this._grid.__boundGlobalFocusIn);
         this._setEditorOptions(editor);
         this._setEditorValue(editor, Polymer.Path.get(model.item, this.path));
         editor._grid = this._grid;
@@ -328,6 +329,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           // avoid notify resize of editor removed due to scroll
           shouldResize = false;
         }
+        document.body.removeEventListener('focusin', this._grid.__boundGlobalFocusIn);
         this._removeEditor(cell, model);
         shouldResize && this._grid.notifyResize();
       }

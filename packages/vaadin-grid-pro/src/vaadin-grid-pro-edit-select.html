@@ -5,42 +5,32 @@ This program is available under Commercial Vaadin Add-On License 3.0 (CVALv3).
 See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete license.
 -->
 
-<link rel="import" href="../../polymer/polymer-element.html">
 <link rel="import" href="../../vaadin-select/src/vaadin-select.html">
 <link rel="import" href="../../vaadin-list-box/src/vaadin-list-box.html">
 <link rel="import" href="../../vaadin-item/src/vaadin-item.html">
 
-<dom-module id="vaadin-grid-pro-edit-select-wrapper">
-  <template>
-    <vaadin-grid-pro-edit-select
-      id="selectEditor"
-      value="{{value}}"
-      theme="grid-pro-editor"
-      on-keydown="_onSelectKeydown"
-      on-focusout="_onSelectFocusout"
-    ></vaadin-grid-pro-edit-select>
-  </template>
-</dom-module>
-
 <script>
   (function() {
     /**
-     * The cell editor select element wrapper.
+     * The cell editor select element.
+     *
+     * ### Styling
+     *
+     * See [`<vaadin-select>` documentation](https://github.com/vaadin/vaadin-select/blob/master/src/vaadin-select.html)
+     * for `<vaadin-grid-pro-edit-select>` parts.
+     *
+     * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
      *
      * @memberof Vaadin
+     * @extends Vaadin.SelectElement
      */
-    class GridProEditSelectWrapperElement extends Polymer.Element {
+    class GridProEditSelectElement extends Vaadin.SelectElement {
       static get is() {
-        return 'vaadin-grid-pro-edit-select-wrapper';
+        return 'vaadin-grid-pro-edit-select';
       }
 
       static get properties() {
         return {
-          value: {
-            type: String,
-            observer: '_valueChanged'
-          },
-
           options: {
             type: Array,
             value: () => []
@@ -52,62 +42,28 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
           _initialized: {
             type: Boolean
-          },
-
-          _select: {
-            type: Object
-          },
-
-          _overlay: {
-            type: Object
           }
         };
       }
 
-      connectedCallback() {
-        super.connectedCallback();
-        this.__boundOnKeydown = this.__onKeydown.bind(this);
-        this._select._overlayElement.addEventListener('keydown', this.__boundOnKeydown);
-      }
-
-      disconnectedCallback() {
-        super.disconnectedCallback();
-        this._select._overlayElement.removeEventListener('keydown', this.__boundOnKeydown);
+      static get observers() {
+        return [
+          '_optionsChanged(options)'
+        ];
       }
 
       ready() {
         super.ready();
-        this._select = this.$.selectEditor;
+
+        this.setAttribute('theme', 'grid-pro-editor');
+
+        this.__boundOnKeyDown = this.__onOverlayKeyDown.bind(this);
+        this._overlayElement.addEventListener('keydown', this.__boundOnKeyDown);
       }
 
-      __onKeydown(e) {
-        if (e.keyCode === 9) {
-          !this._grid.singleCellEdit && this._grid._switchEditCell(e);
-        }
-      }
+      _onKeyDown(e) {
+        super._onKeyDown(e);
 
-      static get observers() {
-        return [
-          '_optionsChanged(_select, options)'
-        ];
-      }
-
-      focus() {
-        this.$.selectEditor.focus();
-      }
-
-      get select() {
-        return this.$.selectEditor;
-      }
-
-      _onSelectFocusout(e) {
-        // Do not exit edit mode when opening overlay
-        if (this._overlay && this._overlay.contains(e.relatedTarget)) {
-          e.stopPropagation();
-        }
-      }
-
-      _onSelectKeydown(e) {
         if (this.options.length === 0 && /^(ArrowDown|Down|ArrowUp|Up|Enter|SpaceBar| )$/.test(e.key)) {
           console.warn('Missing "editorOptions" for <vaadin-grid-pro-edit-column> select editor!');
         }
@@ -117,7 +73,15 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         }
       }
 
+      __onOverlayKeyDown(e) {
+        if (e.keyCode === 9) {
+          !this._grid.singleCellEdit && this._grid._switchEditCell(e);
+        }
+      }
+
       _valueChanged(value, oldValue) {
+        super._valueChanged(value, oldValue);
+
         // select is first created without a value
         if (value === '' && oldValue === undefined) {
           return;
@@ -128,13 +92,15 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             this._grid._switchEditCell(enter);
           } else if (this._grid.singleCellEdit) {
             this._grid._stopEdit(false, true);
+          } else {
+            this.focus();
           }
         }
       }
 
-      _optionsChanged(select, options) {
-        if (select && options && options.length) {
-          select.renderer = root => {
+      _optionsChanged(options) {
+        if (options && options.length) {
+          this.renderer = root => {
             if (root.firstChild) {
               return;
             }
@@ -159,41 +125,18 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             window.ShadyDOM && window.ShadyDOM.flush();
           };
 
-          this._overlay = select.shadowRoot.querySelector('vaadin-select-overlay');
-
-          this._overlay.addEventListener('vaadin-overlay-outside-click', e => {
+          this._overlayElement.addEventListener('vaadin-overlay-outside-click', e => {
             this._grid._stopEdit();
           });
 
           // FIXME(web-padawan): _updateValueSlot() in `vaadin-select` resets opened to false
           // see https://github.com/vaadin/vaadin-list-mixin/issues/49
           setTimeout(() => {
-            select.opened = true;
+            this.opened = true;
             // any value change after first open will stop edit
             this._initialized = true;
           });
         }
-      }
-    }
-
-    customElements.define(GridProEditSelectWrapperElement.is, GridProEditSelectWrapperElement);
-
-    /**
-     * The cell editor select element.
-     *
-     * ### Styling
-     *
-     * See [`<vaadin-select>` documentation](https://github.com/vaadin/vaadin-select/blob/master/src/vaadin-select.html)
-     * for `<vaadin-grid-pro-edit-select>` parts.
-     *
-     * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
-     *
-     * @memberof Vaadin
-     * @extends Vaadin.SelectElement
-     */
-    class GridProEditSelectElement extends Vaadin.SelectElement {
-      static get is() {
-        return 'vaadin-grid-pro-edit-select';
       }
     }
 

@@ -292,7 +292,7 @@
               input = getCellEditor(textCell);
               tab(input);
 
-              selectOverlay = getCellEditor(selectCell)._select._overlayElement;
+              selectOverlay = getCellEditor(selectCell)._overlayElement;
               selectOverlay.addEventListener('vaadin-overlay-open', e => {
                 tab(selectOverlay);
                 input = getCellEditor(checkboxCell);
@@ -306,7 +306,7 @@
               input = getCellEditor(checkboxCell);
               shiftTab(input);
 
-              selectOverlay = getCellEditor(selectCell)._select._overlayElement;
+              selectOverlay = getCellEditor(selectCell)._overlayElement;
               selectOverlay.addEventListener('vaadin-overlay-open', e => {
                 shiftTab(selectOverlay);
                 input = getCellEditor(textCell);
