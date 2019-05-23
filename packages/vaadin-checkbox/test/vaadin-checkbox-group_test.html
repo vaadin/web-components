@@ -181,6 +181,29 @@
       expect(vaadinCheckboxList[2].checked).to.be.false;
     });
 
+    it('should set focused attribute on focusin event dispatched', () => {
+      vaadinCheckboxList[0].dispatchEvent(new CustomEvent('focusin', {composed: true, bubbles: true}));
+      expect(vaadinCheckboxGroup.hasAttribute('focused')).to.be.true;
+    });
+
+    it('should not set focused attribute on focusin event dispatched when disabled', () => {
+      vaadinCheckboxGroup.disabled = true;
+      vaadinCheckboxList[0].dispatchEvent(new CustomEvent('focusin', {composed: true, bubbles: true}));
+      expect(vaadinCheckboxGroup.hasAttribute('focused')).to.be.false;
+    });
+
+    it('should remove focused attribute on checkbox focusout', () => {
+      vaadinCheckboxList[0].dispatchEvent(new CustomEvent('focusin', {composed: true, bubbles: true}));
+      vaadinCheckboxList[0].dispatchEvent(new CustomEvent('focusout', {composed: true, bubbles: true}));
+      expect(vaadinCheckboxGroup.hasAttribute('focused')).to.be.false;
+    });
+
+    it('should remove focused attribute on checkbox-group focusout', () => {
+      vaadinCheckboxList[0].dispatchEvent(new CustomEvent('focusin', {composed: true, bubbles: true}));
+      vaadinCheckboxGroup.dispatchEvent(new CustomEvent('focusout', {composed: true, bubbles: true}));
+      expect(vaadinCheckboxGroup.hasAttribute('focused')).to.be.false;
+    });
+
     it('should NOT steal focus from currently focused element', () => {
       const focusInput = document.createElement('input');
       document.body.appendChild(focusInput);

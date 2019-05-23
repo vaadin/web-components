@@ -80,6 +80,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * Attribute  | Description | Part name
        * -----------|-------------|------------
        * `disabled`   | Set when the checkbox group and its children are disabled. | :host
+       * `focused` | Set when the checkbox group contains focus | :host
        * `has-label` | Set when the element has a label | :host
        * `has-value` | Set when the element has a value | :host
        * `required` | Set when the element is required | :host
@@ -167,10 +168,13 @@ This program is available under Apache License Version 2.0, available at https:/
         ready() {
           super.ready();
 
+          this.addEventListener('focusin', () => this._setFocused(this._containsFocus()));
+
           this.addEventListener('focusout', e => {
             // validate when stepping out of the checkbox group
             if (!this._checkboxes.some(checkbox => e.relatedTarget === checkbox || checkbox.shadowRoot.contains(e.relatedTarget))) {
               this.validate();
+              this._setFocused(false);
             }
           });
 
@@ -288,6 +292,21 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _getErrorMessageAriaHidden(invalid, errorMessage) {
           return (!errorMessage || !invalid).toString();
+        }
+
+        _containsFocus() {
+          const root = this.getRootNode();
+          // Safari 9 needs polyfilled `_activeElement` to return correct node
+          const activeElement = root._activeElement !== undefined ? root._activeElement : root.activeElement;
+          return this.contains(activeElement);
+        }
+
+        _setFocused(focused) {
+          if (focused) {
+            this.setAttribute('focused', '');
+          } else {
+            this.removeAttribute('focused');
+          }
         }
       }
 
