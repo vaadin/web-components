@@ -21,7 +21,7 @@
 
   <dom-module id="x-grid">
     <template>
-      <vaadin-grid size="10" id="grid" style="height: 300px" data-provider="[[dataProvider]]">
+      <vaadin-grid size="10" id="grid" style="height: 300px;" data-provider="[[dataProvider]]">
         <vaadin-grid-column>
           <template>[[_format(index)]] [[parentProp]] [[_formatItem(item)]]</template>
           <template class="header">[[_format('header1')]] [[parentProp]]</template>
