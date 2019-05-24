@@ -6,9 +6,9 @@
     function getJSON(url, callback) {
       if (url.indexOf('randomuser.me') > -1) {
         const index = parseInt(getParameterByName(url, 'index') || 0);
-        return JSON.parse(JSON.stringify(users.results[index % users.results.length])); //clone object
+        return JSON.parse(JSON.stringify(users.results[index % users.results.length])); // clone object
       }
-    };
+    }
 
     function getParameterByName(url, name) {
       name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
@@ -18,10 +18,10 @@
     }
 
     const users = {
-      "results": window.Vaadin.GridDemo.users,
-      "nationality": "FR",
-      "seed": "f94158be2e69b5cf03",
-      "version": "0.7"
+      results: window.Vaadin.GridDemo.users,
+      nationality: 'FR',
+      seed: 'f94158be2e69b5cf03',
+      version: '0.7'
     };
 
 
