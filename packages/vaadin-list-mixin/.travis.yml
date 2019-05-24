@@ -8,7 +8,7 @@ cache:
     - node_modules
 
 addons:
-  firefox: latest
+  firefox: "66.0"
   chrome: stable
 
 before_script:
