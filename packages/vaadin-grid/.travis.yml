@@ -43,7 +43,6 @@ jobs:
 script:
   - if [[ "$POLYMER" = "2" ]]; then
       npm -q i && npm i -q --no-save bower polymer-cli && bower -q i &&
-      gulp lint version:check &&
       if [[ "$TRAVIS_EVENT_TYPE" != "pull_request" && "$TRAVIS_BRANCH" != quick/* ]]; then
         if [[ "$TEST_SUITE" = "visual_tests" ]]; then
           npm i -q --no-save gemini@^4.0.0 gemini-sauce gemini-polyserve &&
@@ -52,6 +51,8 @@ script:
           wct --env saucelabs:$TEST_SUITE;
         fi;
       else
+        npm run check &&
+        npm run lint &&
         wct;
       fi &&
       if [[ "$TRAVIS_EVENT_TYPE" = "cron" && "$TEST_SUITE" = "unit_tests" ]]; then
