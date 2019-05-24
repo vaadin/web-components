@@ -222,6 +222,13 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * See examples of setting the content into slots in the live demos.
        *
+       * #### Touch optimized
+       *
+       * App Layout has a pseudo-slot `touch-optimized` in order to give more control of the presentation of
+       * elements with `slot[navbar]`. Internally, when the user is interacting with App Layout from a
+       * touchscreen device, the component will search for elements with `slot[navbar touch-optimized]` and move
+       * them to the bottom of the page.
+       *
        * ### Navigation
        *
        * As the drawer opens as an overlay in small devices, it makes sense to close it once a navigation happens.

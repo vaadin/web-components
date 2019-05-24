@@ -101,6 +101,10 @@
     </vaadin-demo-snippet>
 
     <h3>App layout in mobile</h3>
+    <p>
+      Adding <code>touch-optimized</code> in the slot value along with <code>navbar</code>
+      will make it move to bottom in touch screen devices.
+    </p>
     <vaadin-demo-snippet id="element-basic-demos-mobile" iframe-src="iframe-lumo-styled.html" mobile>
       <template preserve-content>
         <!-- Apply typography and color theme modules globally from `vaadin-lumo-styles` -->
@@ -109,6 +113,11 @@
           </style>
         </custom-style>
         <style>
+          /* Forcing touch-optimized for demo purposes */
+          vaadin-app-layout[overlay] {
+            --vaadin-app-layout-touch-optimized: true;
+          }
+
           nav {
             display: flex;
             align-items: center;
@@ -144,6 +153,11 @@
             <p>Page content</p>
           </div>
         </vaadin-app-layout>
+        <script>
+          // Forcing touch-optimized for demo purposes
+          const appLayoutOverlay = document.querySelector('vaadin-app-layout');
+          appLayoutOverlay && appLayoutOverlay._updateTouchOptimizedMode();
+        </script>
       </template>
     </vaadin-demo-snippet>
 
