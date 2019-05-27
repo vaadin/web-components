@@ -28,7 +28,6 @@
 
   <script>
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-    const iOSVersion = isIOS && parseInt(navigator.appVersion.match(/OS (\d+)_(\d+)_?(\d+)?/)[1], 10);
 
     function nextRender(target) {
       return new Promise(resolve => {
@@ -606,8 +605,7 @@
       });
     });
 
-    // FIXME(yuriy): timed out in CI on iOS 10.3. Passing locally.
-    (iOSVersion === 10 ? describe.skip : describe)('touch', () => {
+    describe('touch', () => {
       let menu, buttons, subMenu, items, item;
 
       const open = (openTarget) => {
