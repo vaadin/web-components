@@ -46,7 +46,7 @@
     "iron-icon": "^2.0.1",
     "webcomponentsjs": "^1.0.0",
     "web-component-tester": "^6.1.5",
-    "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^2.2.0",
+    "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^3.0.0",
     "vaadin-button": "vaadin/vaadin-button#^2.1.0"
   },
   "resolutions": {
