@@ -43,7 +43,7 @@
     "iron-demo-helpers": "^2.0.0",
     "webcomponentsjs": "^1.0.0",
     "web-component-tester": "^6.1.5",
-    "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^2.0.0",
+    "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^3.0.0",
     "vaadin-dropdown-menu": "^1.1.0",
     "vaadin-item": "^2.1.0",
     "vaadin-list-box": "^1.1.0",
