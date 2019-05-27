@@ -31,7 +31,7 @@
     "iron-test-helpers": "^2.0.0",
     "webcomponentsjs": "^1.0.0",
     "web-component-tester": "^6.1.5",
-    "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^2.2.0"
+    "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^3.0.0"
   },
   "dependencies": {
     "polymer": "^2.0.0",
