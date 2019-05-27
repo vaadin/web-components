@@ -42,7 +42,7 @@
     "vaadin-date-picker": "vaadin/vaadin-date-picker#^3.2.0",
     "webcomponentsjs": "^1.0.1",
     "web-component-tester": "^6.1.5",
-    "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^2.0.1",
+    "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^3.0.0",
     "vaadin-ordered-layout": "vaadin/vaadin-ordered-layout#^1.1.0"
   },
   "resolutions": {
