@@ -32,7 +32,7 @@
     "vaadin-material-styles": "vaadin/vaadin-material-styles#^1.2.0"
   },
   "devDependencies": {
-    "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^2.0.1",
+    "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^3.0.0",
     "iron-component-page": "^3.0.0",
     "iron-demo-helpers": "^2.0.0",
     "iron-test-helpers": "^2.0.0",
