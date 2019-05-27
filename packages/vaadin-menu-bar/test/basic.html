@@ -165,6 +165,18 @@
         expect(() => document.createElement('vaadin-menu-bar').render()).to.not.throw(Error);
       });
 
+      describe('updating items', () => {
+        it('should remove buttons when setting empty array', () => {
+          menu.items = [];
+          expect(menu._buttons.filter(b => b !== menu._overflow).length).to.eql(0);
+        });
+
+        it('should remove buttons when setting falsy items property', () => {
+          menu.items = undefined;
+          expect(menu._buttons.filter(b => b !== menu._overflow).length).to.eql(0);
+        });
+      });
+
       describe('theme attribute', () => {
         it('should propagate theme attribute to all internal buttons', () => {
           menu.setAttribute('theme', 'contained');

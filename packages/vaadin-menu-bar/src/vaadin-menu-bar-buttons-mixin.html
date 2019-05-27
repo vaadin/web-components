@@ -65,11 +65,9 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _menuItemsChanged(items, splices) {
-      if (items.length) {
-        if (items !== this._oldItems) {
-          this._oldItems = items;
-          this.__renderButtons(items);
-        }
+      if (items !== this._oldItems) {
+        this._oldItems = items;
+        this.__renderButtons(items);
       }
     }
 
