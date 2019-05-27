@@ -42,7 +42,7 @@
     "webcomponentsjs": "^1.0.0",
     "web-component-tester": "^6.1.5",
     "iron-test-helpers": "^2.0.0",
-    "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^2.0.0",
+    "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^3.0.0",
     "vaadin-icons": "vaadin/vaadin-icons#^4.2.1",
     "vaadin-dialog": "^2.2.0"
   }
