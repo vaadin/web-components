@@ -156,6 +156,13 @@
       // Store the reference to align based on parent overlay coordinates
       subMenu.$.overlay._setParentOverlay(parent);
 
+      // Set theme attribute from parent element
+      if (parent.theme) {
+        subMenu.setAttribute('theme', parent.theme);
+      } else {
+        subMenu.removeAttribute('theme');
+      }
+
       let x;
       content.style.minWidth = '';
       if (document.documentElement.clientWidth - itemRect.right > itemRect.width) {
@@ -200,6 +207,7 @@
           component.setAttribute('role', 'separator');
         }
         component.classList.add('vaadin-menu-item');
+        this.theme && component.setAttribute('theme', this.theme);
 
         component._item = item;
 
@@ -242,6 +250,7 @@
         `;
         Polymer.flush();
         const listBox = root.querySelector('vaadin-context-menu-list-box');
+        this.theme && listBox.setAttribute('theme', this.theme);
         listBox.classList.add('vaadin-menu-list-box');
         requestAnimationFrame(() => listBox.setAttribute('role', 'menu'));
 
@@ -325,6 +334,13 @@
         menu.$.overlay.addEventListener(openEvent, openSubMenu);
         menu.$.overlay.addEventListener('keydown', e =>
           (e.keyCode === 39 || e.keyCode === 13 || e.keyCode === 32) && openSubMenu(e));
+      } else {
+        const listBox = root.querySelector('vaadin-context-menu-list-box');
+        if (this.theme) {
+          listBox.setAttribute('theme', this.theme);
+        } else {
+          listBox.removeAttribute('theme');
+        }
       }
     }
 

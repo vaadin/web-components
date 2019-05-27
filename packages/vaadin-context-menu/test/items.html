@@ -20,6 +20,14 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="theme">
+    <template>
+      <vaadin-context-menu theme="foo">
+        <button id="target"></button>
+      </vaadin-context-menu>
+    </template>
+  </test-fixture>
+
   <script>
     const MOBILE = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     const OPENEVENT = MOBILE ? 'touchstart' : 'mouseover';
@@ -481,6 +489,86 @@
             });
           });
         }
+      });
+
+      describe('theme propagation', () => {
+        let subMenu2;
+
+        beforeEach(done => {
+          rootMenu = fixture('theme');
+          rootMenu.openOn = OPENEVENT;
+          target = rootMenu.firstElementChild;
+          rootMenu.items = [
+            {text: 'foo-0', children:
+              [
+                {text: 'foo-0-0'},
+                {text: 'foo-0-1', children: [
+                  {text: 'foo-0-1-0'}
+                ]},
+              ]
+            },
+            {text: 'foo-1'}
+          ];
+          open();
+          flush(() => {
+            open(menuComponents()[0]);
+            subMenu = getSubMenu();
+            flush(() => {
+              open(menuComponents(subMenu)[1]);
+              subMenu2 = getSubMenu();
+              flush(done);
+            });
+          });
+        });
+
+        it('should propagate theme attribute to the nested elements', () => {
+          [rootMenu, subMenu, subMenu2].forEach(subMenu => {
+            const overlay = subMenu.$.overlay;
+            const listBox = overlay.querySelector('vaadin-context-menu-list-box');
+            const items = Array.from(listBox.querySelectorAll('vaadin-context-menu-item'));
+
+            expect(overlay.getAttribute('theme')).to.equal('foo');
+            expect(listBox.getAttribute('theme')).to.equal('foo');
+
+            const itemsThemeEqualsFoo = items.filter(item => item.getAttribute('theme') !== 'foo').length === 0;
+            expect(itemsThemeEqualsFoo).to.be.true;
+          });
+        });
+
+        it('should close the menu and submenu on theme changed', () => {
+          rootMenu.setAttribute('theme', 'bar');
+          expect(rootMenu.opened).to.be.false;
+          expect(subMenu.opened).to.be.false;
+          expect(subMenu2.opened).to.be.false;
+        });
+
+        it('should remove theme attribute from the nested elements', async() => {
+          rootMenu.removeAttribute('theme');
+
+          // Should wait until submenus will be opened again.
+          await new Promise(resolve => {
+            open();
+            flush(() => {
+              open(menuComponents()[0]);
+              flush(() => {
+                open(menuComponents(subMenu)[1]);
+                flush(resolve);
+              });
+            });
+          });
+
+          [rootMenu, subMenu, subMenu2].forEach(subMenu => {
+            const overlay = subMenu.$.overlay;
+            const listBox = overlay.querySelector('vaadin-context-menu-list-box');
+            const items = Array.from(listBox.querySelectorAll('vaadin-context-menu-item'));
+
+            expect(overlay.hasAttribute('theme')).to.be.false;
+            expect(listBox.hasAttribute('theme')).to.be.false;
+
+            const itemsDoNotHaveTheme = items.filter(item => item.hasAttribute('theme')).length === 0;
+            expect(itemsDoNotHaveTheme).to.be.true;
+          });
+        });
       });
     });
   </script>

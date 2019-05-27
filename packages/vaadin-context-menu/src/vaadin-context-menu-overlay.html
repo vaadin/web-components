@@ -73,6 +73,10 @@ This program is available under Apache License Version 2.0, available at https:/
           };
         }
 
+        static get observers() {
+          return ['_themeChanged(theme)'];
+        }
+
         ready() {
           super.ready();
 
@@ -93,6 +97,10 @@ This program is available under Apache License Version 2.0, available at https:/
 
         getFirstChild() {
           return this.content.querySelector(':not(style):not(slot)');
+        }
+
+        _themeChanged(theme) {
+          this.close();
         }
 
         getBoundaries() {
