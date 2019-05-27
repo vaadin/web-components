@@ -31,14 +31,13 @@ script:
     fi
 
   - if [[ "$POLYMER" = "3" ]]; then
-      npm --no-save -q install -g yarn bower magi-cli web-component-tester &&
-      (cd .. && git clone --depth 1 -b vaadin-components-rc git://github.com/web-padawan/polymer-modulizer.git && cd polymer-modulizer && npm -q link) &&
+      npm --no-save -q install -g yarn bower magi-cli web-component-tester polymer-modulizer &&
       rm -rf node_modules &&
       magi p3-convert --out . --import-style=name &&
       yarn install --flat &&
       if [[ "$TRAVIS_EVENT_TYPE" != "pull_request" && "$TRAVIS_BRANCH" != quick/* ]]; then
-        wct --module-resolution=node --npm --env saucelabs;
+        wct --npm --env saucelabs;
       else
-        xvfb-run -s '-screen 0 1024x768x24' wct --module-resolution=node --npm;
+        xvfb-run -s '-screen 0 1024x768x24' wct --npm;
       fi;
     fi
