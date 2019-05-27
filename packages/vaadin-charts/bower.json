@@ -41,7 +41,7 @@
     "iron-demo-helpers": "^2.0.0",
     "webcomponentsjs": "1.2.4",
     "web-component-tester": "^6.1.5",
-    "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^2.0.1",
+    "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^3.0.0",
     "vaadin-grid": "vaadin/vaadin-grid#^5.1.0",
     "app-route": "PolymerElements/app-route#^2.0.0",
     "app-menu": "^2.0.0",
