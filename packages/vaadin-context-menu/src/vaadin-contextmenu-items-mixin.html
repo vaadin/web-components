@@ -177,7 +177,7 @@
     __itemsRenderer(root, menu, context) {
       this.__initMenu(root, menu);
 
-      const subMenu = root.querySelector('vaadin-context-menu');
+      const subMenu = root.querySelector(this.constructor.is);
       subMenu.closeOn = menu.closeOn;
 
       const listBox = root.querySelector('vaadin-context-menu-list-box');
@@ -235,15 +235,17 @@
 
     __initMenu(root, menu) {
       if (!root.firstElementChild) {
+        const is = this.constructor.is;
         root.innerHTML = `
           <vaadin-context-menu-list-box></vaadin-context-menu-list-box>
-          <vaadin-context-menu hidden></vaadin-context-menu>
+          <${is} hidden></${is}>
         `;
         Polymer.flush();
         const listBox = root.querySelector('vaadin-context-menu-list-box');
         listBox.classList.add('vaadin-menu-list-box');
         requestAnimationFrame(() => listBox.setAttribute('role', 'menu'));
-        const subMenu = root.querySelector('vaadin-context-menu');
+
+        const subMenu = root.querySelector(is);
         subMenu.$.overlay.modeless = true;
         subMenu.openOn = 'opensubmenu';
 
