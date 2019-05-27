@@ -38,7 +38,6 @@
   },
   "devDependencies": {
     "iron-component-page": "^3.0.0",
-    "iron-demo-helpers": "^2.0.0",
     "webcomponentsjs": "1.2.4",
     "web-component-tester": "^6.1.5",
     "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^3.0.0",
@@ -48,8 +47,6 @@
     "iron-icon": "^2.1.0",
     "iron-icons": "^2.0.0",
     "iron-iconset-svg": "^2.1.0",
-    "iron-localstorage": "PolymerElements/iron-localstorage#^2.0.0",
-    "iron-media-query": "2.0.0",
     "iron-pages": "2.0.0",
     "paper-button": "2.0.0",
     "vaadin-split-layout": "^4.1.0",
