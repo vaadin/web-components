@@ -1,0 +1,35 @@
+<!--
+@license
+Copyright (c) 2019 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<link rel="import" href="../../vaadin-context-menu/src/vaadin-context-menu.html">
+
+<script>
+  (function() {
+    /**
+     * @memberof Vaadin
+     */
+    class MenuBarSubmenuElement extends Vaadin.ContextMenuElement {
+      static get is() {
+        return 'vaadin-menu-bar-submenu';
+      }
+
+      constructor() {
+        super();
+
+        this.openOn = 'opensubmenu';
+      }
+
+      /**
+       * Overriding the observer to not add global "contextmenu" listener.
+       */
+      _openedChanged(opened) {
+        this.$.overlay.opened = opened;
+      }
+    }
+
+    customElements.define(MenuBarSubmenuElement.is, MenuBarSubmenuElement);
+  })();
+</script>

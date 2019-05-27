@@ -304,6 +304,15 @@
         expect(spy.firstCall.args[0].detail.value).to.deep.equal({text: 'Menu Item 1 1'});
       });
 
+      it('should not close submenu on item contextmenu event', async() => {
+        buttons[0].click();
+        await nextRender(subMenu);
+        item = subMenu.$.overlay.querySelector('vaadin-context-menu-item');
+        item.dispatchEvent(new CustomEvent('contextmenu', {bubbles: true, composed: true}));
+        await nextRender(subMenu);
+        expect(subMenu.opened).to.be.true;
+      });
+
       (isIOS ? it.skip : it)('should not close on parent item click', async() => {
         arrowUp(buttons[0]);
         await onceOpened(subMenu);
@@ -657,7 +666,7 @@
         arrowDown(buttons[0]);
         await onceOpened(subMenu);
         await nextRender(subMenu);
-        const subMenu2 = subMenu.$.overlay.querySelector('vaadin-context-menu');
+        const subMenu2 = subMenu.$.overlay.querySelector('vaadin-menu-bar-submenu');
         subMenu2._touch = true;
         items = subMenu.$.overlay.querySelectorAll('vaadin-context-menu-item');
         item = items[items.length - 1];
@@ -674,13 +683,13 @@
         arrowDown(buttons[0]);
         await onceOpened(subMenu);
         await nextRender(subMenu);
-        const subMenu2 = subMenu.$.overlay.querySelector('vaadin-context-menu');
+        const subMenu2 = subMenu.$.overlay.querySelector('vaadin-menu-bar-submenu');
         subMenu2._touch = true;
         items = subMenu.$.overlay.querySelectorAll('vaadin-context-menu-item');
         item = items[items.length - 1];
         open(item);
         await nextRender(subMenu2);
-        const subMenu3 = subMenu2.$.overlay.querySelector('vaadin-context-menu');
+        const subMenu3 = subMenu2.$.overlay.querySelector('vaadin-menu-bar-submenu');
         item = subMenu2.$.overlay.querySelector('vaadin-context-menu-item');
         expect(item).to.be.ok;
         open(item);

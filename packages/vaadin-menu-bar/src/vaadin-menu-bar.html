@@ -7,10 +7,10 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../polymer/polymer-element.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
-<link rel="import" href="../../vaadin-context-menu/src/vaadin-context-menu.html">
 <link rel="import" href="vaadin-menu-bar-button.html">
 <link rel="import" href="vaadin-menu-bar-buttons-mixin.html">
 <link rel="import" href="vaadin-menu-bar-interactions-mixin.html">
+<link rel="import" href="vaadin-menu-bar-submenu.html">
 
 <dom-module id="vaadin-menu-bar">
   <template>
@@ -52,9 +52,7 @@ This program is available under Apache License Version 2.0, available at https:/
         <div class="dots"></div>
       </vaadin-menu-bar-button>
     </div>
-    <vaadin-context-menu
-      open-on="opensubmenu">
-    </vaadin-context-menu>
+    <vaadin-menu-bar-submenu></vaadin-menu-bar-submenu>
   </template>
 
   <script>

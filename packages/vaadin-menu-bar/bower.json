@@ -30,7 +30,7 @@
     "vaadin-themable-mixin": "vaadin/vaadin-themable-mixin#^1.2.0",
     "vaadin-element-mixin": "vaadin/vaadin-element-mixin#^2.0.0",
     "vaadin-button": "vaadin/vaadin-button#^2.1.4",
-    "vaadin-context-menu": "vaadin/vaadin-context-menu#^4.3.5",
+    "vaadin-context-menu": "vaadin/vaadin-context-menu#^4.3.8",
     "vaadin-lumo-styles": "vaadin/vaadin-lumo-styles#^1.4.1",
     "vaadin-material-styles": "vaadin/vaadin-material-styles#^1.2.2"
   },
