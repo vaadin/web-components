@@ -28,6 +28,19 @@ This program is available under Apache License Version 2.0, available at https:/
       _openedChanged(opened) {
         this.$.overlay.opened = opened;
       }
+
+
+      /**
+       * Overriding the public method to reset expanded button state.
+       */
+      close() {
+        super.close();
+
+        // only handle 1st level submenu
+        if (this.hasAttribute('is-root')) {
+          this.getRootNode().host._close();
+        }
+      }
     }
 
     customElements.define(MenuBarSubmenuElement.is, MenuBarSubmenuElement);

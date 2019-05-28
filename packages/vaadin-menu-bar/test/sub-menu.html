@@ -397,6 +397,16 @@
           expect(buttons[0].hasAttribute('expanded')).to.be.false;
           expect(buttons[0].hasAttribute('focus-ring')).to.be.true;
         });
+
+        it('should remove expanded attribute when submenu closed on overlay backdrop click', async() => {
+          buttons[0].click();
+          await nextRender(subMenu);
+
+          subMenu.$.overlay.$.backdrop.dispatchEvent(new CustomEvent('click', {bubbles: true, composed: true}));
+          await nextRender(subMenu);
+          expect(subMenu.opened).to.be.false;
+          expect(buttons[0].hasAttribute('expanded')).to.be.false;
+        });
       });
     });
 

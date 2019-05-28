@@ -33,7 +33,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
     constructor() {
       super();
-      this.__boundOutsideClickListener = this.__outsideClickListener.bind(this);
       this.__boundOnContextMenuKeydown = this.__onContextMenuKeydown.bind(this);
     }
 
@@ -223,21 +222,6 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
-    __isOverlayClick(e) {
-      const path = e.composedPath();
-      let overlay = path.filter(node => node instanceof customElements.get('vaadin-context-menu-overlay'))[0];
-
-      while (overlay) {
-        if (overlay === this._subMenu.$.overlay) {
-          return true;
-        } else if (overlay.parentOverlay) {
-          overlay = overlay.parentOverlay;
-        } else {
-          return false;
-        }
-      }
-    }
-
     _onMouseOver(e) {
       const button = this._getButtonFromEvent(e);
       if (button && button !== this._expandedButton) {
@@ -267,12 +251,6 @@ This program is available under Apache License Version 2.0, available at https:/
             this.__openSubMenu(button, e, {keepFocus: true});
           }
         }
-      }
-    }
-
-    __outsideClickListener(e) {
-      if (!this._getButtonFromEvent(e) && !this.__isOverlayClick(e)) {
-        this._close();
       }
     }
 
