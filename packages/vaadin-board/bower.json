@@ -5,8 +5,20 @@
     "Vaadin Ltd"
   ],
   "description": "Polymer element to create flexible responsive layouts and build nice looking dashboard.",
-  "main": "vaadin-board.html",
+  "main": [
+    "vaadin-board.html",
+    "vaadin-board-row.html",
+    "theme/material/vaadin-board.html",
+    "theme/material/vaadin-board-row.html"
+  ],
   "license": "https://raw.githubusercontent.com/vaadin/vaadin-board/master/LICENSE.txt",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "package-lock.json",
+    "wct.conf.js"
+  ],
   "dependencies": {
     "polymer": "^2.0.0",
     "iron-resizable-behavior": "^2.0.0",

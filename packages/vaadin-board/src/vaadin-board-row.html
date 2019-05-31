@@ -1,0 +1,288 @@
+<!--
+@license
+Copyright (c) 2017 Vaadin Ltd.
+This program is available under Commercial Vaadin Add-On License 3.0, available at http://vaadin.com/license/cval-3.
+-->
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../iron-resizable-behavior/iron-resizable-behavior.html">
+<link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
+
+<dom-module id="vaadin-board-row">
+  <template>
+    <style>
+       :host {
+        display: flex;
+        flex-flow: row wrap;
+        align-items: stretch;
+        --small-size: var(--vaadin-board-width-small, 600px);
+        --medium-size: var(--vaadin-board-width-medium, 960px);
+      }
+
+       :host ::slotted(*) {
+        box-sizing: border-box;
+        flex-grow: 1;
+        overflow: hidden;
+      }
+    </style>
+    <slot id="insertionPoint"></slot>
+  </template>
+
+  <script>
+    (function () {
+       /**
+       * `<vaadin-board-row>` is a Polymer element that together with `vaadin-board` element allows to create flexible responsive layouts and build nice looking dashboard.
+       *
+       * Each row can contain up to four elements (fewer if colspan is used) and is automatically responsive. The row changes between `large`, `medium` and `small` modes depending on the available width and the set breakpoints. In `large` mode, typically all content is shown side-by-side, in `medium` half of the content is side by side and in `small` mode, content is laid out vertically.
+       *
+       * The breakpoints can be set using custom CSS properties. By default the breakpoints are `small: <600px`, `medium: < 960px`, `large >= 960px`.
+       *
+       *
+       * ```html
+       * <vaadin-board>
+       *   <vaadin-board-row>
+       *     <div>This could be chart 1</div>
+       *     <div>This could be chart 2</div>
+       *     <div>This could be chart 3</div>
+       *     <div>This could be chart 4</div>
+       *   </vaadin-board-row>
+       * </vaadin-board>
+       * ```
+       *
+       * ### Styling
+       *
+       * The following custom properties are available for styling:
+       *
+       * Custom property | Description | Default
+       * ----------------|-------------|-------------
+       * `--vaadin-board-width-small` | Determines the width where mode changes from `small` to `medium` | `600px`
+       * `--vaadin-board-width-medium` | Determines the width where mode changes from `medium` to `large` | `960px`
+       *
+       * @memberof Vaadin
+       * @mixes Vaadin.ElementMixin
+       * @demo demo/index.html
+       */
+      class BoardRowElement extends Vaadin.ElementMixin(Polymer.mixinBehaviors([Polymer.IronResizableBehavior], Polymer.Element)) {
+        static get is() {
+          return "vaadin-board-row";
+        }
+
+        constructor() {
+          super();
+          this._onIronResize = this._onIronResize.bind(this);
+
+          this._SMALL_VIEWPORT_CLASSNAME = "small";
+          this._MEDIUM_VIEWPORT_CLASSNAME = "medium";
+          this._LARGE_VIEWPORT_CLASSNAME = "large";
+
+          this._oldWidth = 0;
+          this._oldBreakpoints = {'smallSize': 600, 'mediumSize': 960};
+          this._oldFlexBasis = [];
+        }
+
+        ready() {
+          super.ready();
+          this.addEventListener('iron-resize', this._onIronResize, true);
+          this.$.insertionPoint.addEventListener('slotchange', this.redraw.bind(this));
+          Polymer.RenderStatus.afterNextRender(this, function () {
+            //force this as an interested resizable of parent
+            this.dispatchEvent(new CustomEvent('iron-request-resize-notifications', {
+              node: this,
+              bubbles: true,
+              cancelable: true,
+              composed: true,
+              detail: {}
+            }));
+          });
+        }
+
+        connectedCallback() {
+          super.connectedCallback();
+          Polymer.RenderStatus.afterNextRender(this, this._onIronResize);
+        }
+
+        /**
+         * Adds styles for board row based on width.
+         */
+        _addStyleNames(width, breakpoints) {
+          if (width < breakpoints.smallSize) {
+            this.classList.add(this._SMALL_VIEWPORT_CLASSNAME);
+            this.classList.remove(this._MEDIUM_VIEWPORT_CLASSNAME);
+            this.classList.remove(this._LARGE_VIEWPORT_CLASSNAME);
+          } else if (width < breakpoints.mediumSize) {
+            this.classList.remove(this._SMALL_VIEWPORT_CLASSNAME);
+            this.classList.add(this._MEDIUM_VIEWPORT_CLASSNAME);
+            this.classList.remove(this._LARGE_VIEWPORT_CLASSNAME);
+          } else {
+            this.classList.remove(this._SMALL_VIEWPORT_CLASSNAME);
+            this.classList.remove(this._MEDIUM_VIEWPORT_CLASSNAME);
+            this.classList.add(this._LARGE_VIEWPORT_CLASSNAME);
+          }
+        }
+
+        /**
+         * Calculates flex basis based on colSpan, width and breakpoints.
+         * @param {Number} colSpan colspan value of the row
+         * @param {Number} width width of the row in px
+         * @param {Number} colsInRow number of columns in the row
+         * @param {Object} breakpoints object with smallSize and mediumSize number properties, which tells
+         * where the row should switch rendering size in pixels.
+         */
+        _calculateFlexBasis(colSpan, width, colsInRow, breakpoints) {
+          if (width < breakpoints.smallSize) {
+            colsInRow = 1;
+          } else if (width < breakpoints.mediumSize && colsInRow == 4) {
+            colsInRow = 2;
+          }
+          let flexBasis = colSpan / colsInRow * 100;
+          flexBasis = flexBasis > 100 ? 100 : flexBasis;
+          return flexBasis + '%';
+        }
+
+        _reportError() {
+          const errorMessage = "The column configuration is not valid; column count should add up to 3 or 4.";
+          console.warn(errorMessage, "check: \r\n" + this.outerHTML);
+        }
+
+        /**
+         * Parses board-cols from DOM.
+         * If there is not enough space in the row drop board cols.
+         * @param {Array} array of nodes
+         *
+         * @return {Array} array of boardCols
+         */
+        _parseBoardCols(nodes) {
+          const boardCols = nodes.map(node => {
+            if (node.getAttribute("board-cols")) {
+              return parseInt(node.getAttribute("board-cols"));
+            }
+            return 1;
+          });
+
+          let spaceLeft = 4;
+          let returnBoardCols = [];
+          nodes.forEach((node, i) => {
+            spaceLeft = spaceLeft - boardCols[i];
+          });
+
+          if (spaceLeft < 0) {
+            this._reportError();
+            boardCols.forEach((node, i) => {
+              returnBoardCols[i] = 1;
+            });
+          }
+          else {
+            returnBoardCols = boardCols.slice(0);
+          }
+
+          return returnBoardCols;
+        }
+
+        /**
+         * If there is not enough space in the row.
+         * Extra items are dropped from DOM.
+         * @param {Array} array of board-cols for every node
+         * @param {Array} array of nodes
+         *
+         * @return {Array} filtered array of nodes
+         */
+        _removeExtraNodesFromDOM(boardCols, nodes) {
+          let isErrorReported = false;
+          let spaceLeft = 4;
+          let returnNodes = [];
+          nodes.forEach((node, i) => {
+            spaceLeft = spaceLeft - boardCols[i];
+            if (spaceLeft < 0) {
+              if (!isErrorReported) {
+                isErrorReported = true;
+                this._reportError();
+              }
+              this.removeChild(node);
+            }
+            else {
+              returnNodes[i] = node;
+            }
+          });
+          return returnNodes;
+        }
+
+        /**
+         * Redraws the row, if necessary.
+         *
+         * In most cases, a board row will redraw itself if your reconfigure it. If you dynamically change CSS which affects the row, then you need to call this method.
+         */
+        redraw() {
+          this._recalculateFlexBasis(true);
+        }
+
+        _onIronResize() {
+          this._recalculateFlexBasis(false);
+        }
+
+        _recalculateFlexBasis(forceResize) {
+          const width = this.getBoundingClientRect().width;
+          const breakpoints = this._measureBreakpointsInPx();
+          if (forceResize || width != this._oldWidth
+              || breakpoints.smallSize != this._oldBreakpoints.smallSize
+              || breakpoints.mediumSize != this._oldBreakpoints.mediumSize) {
+            const nodes = this.$.insertionPoint.assignedNodes({ flatten: true });
+            const isElementNode = function (node) {
+              return !((node.nodeType === node.TEXT_NODE)
+                || (node instanceof Polymer.DomRepeat)
+                || (node instanceof Polymer.DomIf));
+            }
+            const filteredNodes = nodes.filter(isElementNode);
+            this._addStyleNames(width, breakpoints);
+            const boardCols = this._parseBoardCols(filteredNodes);
+            const colsInRow = boardCols.reduce((a, b) => a + b, 0);
+            this._removeExtraNodesFromDOM(boardCols, filteredNodes).forEach((e, i) => {
+              let newFlexBasis = this._calculateFlexBasis(boardCols[i], width, colsInRow, breakpoints);
+              if (forceResize || !this._oldFlexBasis[i] || this._oldFlexBasis[i] != newFlexBasis) {
+                this._oldFlexBasis[i] = newFlexBasis
+                e.style.flexBasis = newFlexBasis;
+              }
+            });
+            this._oldWidth = width;
+            this._oldBreakpoints = breakpoints;
+          }
+        }
+
+        /**
+         * Measure the breakpoints in pixels.
+         *
+         * The breakpoints for `small` and `medium` can be given in any unit: `px`, `em`, `in` etc.
+         * We need to know them in `px` so that they are comparable with the actual size.
+         *
+         * @return {Object} object with smallSize and mediumSize number properties, which tells
+         * where the row should switch rendering size in pixels.
+         */
+        _measureBreakpointsInPx() {
+            // Convert minWidth to px units for comparison
+            const breakpoints = {};
+            const tmpStyleProp = 'background-position';
+            var smallSize;
+            var mediumSize;
+            if (window.ShadyCSS) {
+              smallSize = window.ShadyCSS.getComputedStyleValue(this, '--small-size');
+              mediumSize = window.ShadyCSS.getComputedStyleValue(this, '--medium-size');
+            } else {
+              smallSize = getComputedStyle(this).getPropertyValue('--small-size');
+              mediumSize = getComputedStyle(this).getPropertyValue('--medium-size');
+            }
+            this.style.setProperty(tmpStyleProp, smallSize);
+            breakpoints.smallSize = parseFloat(getComputedStyle(this).getPropertyValue(tmpStyleProp));
+            this.style.setProperty(tmpStyleProp, mediumSize);
+            breakpoints.mediumSize = parseFloat(getComputedStyle(this).getPropertyValue(tmpStyleProp));
+            this.style.removeProperty(tmpStyleProp);
+            return breakpoints;
+        }
+      }
+
+      customElements.define(BoardRowElement.is, BoardRowElement);
+
+      /**
+       * @namespace Vaadin
+       */
+      window.Vaadin.BoardRowElement = BoardRowElement;
+    })();
+  </script>
+</dom-module>

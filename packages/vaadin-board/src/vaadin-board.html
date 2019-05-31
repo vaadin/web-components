@@ -1,0 +1,90 @@
+<!--
+@license
+Copyright (c) 2017 Vaadin Ltd.
+This program is available under Commercial Vaadin Add-On License 3.0, available at http://vaadin.com/license/cval-3.
+-->
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../iron-resizable-behavior/iron-resizable-behavior.html">
+<link rel="import" href="vaadin-board-row.html">
+<link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
+<link rel="import" href="../../vaadin-license-checker/vaadin-license-checker.html">
+
+<dom-module id="vaadin-board">
+  <template>
+    <style>
+       :host {
+        display: block;
+      }
+    </style>
+    <slot></slot>
+  </template>
+
+  <script>
+    (function () {
+      /**
+       * `<vaadin-board>` is a Polymer element to create flexible responsive layouts
+       * and build nice looking dashboards.
+       *
+       * A Vaadin Board is built using `<vaadin-board-row>` elements containing your child elements.
+       * Each board row consists of four columns, and can contain up to four elements. Using column spans
+       * you can tune the layout to your liking.
+       *
+       * ```html
+       * <vaadin-board>
+       *   <vaadin-board-row>
+       *     <div>This could be chart 1</div>
+       *     <div>This could be chart 2</div>
+       *     <div>This could be chart 3</div>
+       *     <div>This could be chart 4</div>
+       *   </vaadin-board-row>
+       * </vaadin-board>
+       * ```
+       *
+       * @memberof Vaadin
+       * @mixes Vaadin.ElementMixin
+       * @demo demo/index.html
+       */
+      class BoardElement extends Vaadin.ElementMixin(Polymer.mixinBehaviors([Polymer.IronResizableBehavior], Polymer.Element)) {
+        static get is() {
+          return 'vaadin-board';
+        }
+
+        static get version() {
+          return '2.1.0';
+        }
+
+        constructor() {
+          super();
+        }
+
+        connectedCallback() {
+          super.connectedCallback();
+        }
+
+        /**
+         * Redraws the board and all rows inside it, if necessary.
+         *
+         * In most cases, board will redraw itself if your reconfigure it. If you dynamically change CSS
+         * which affects this element, then you need to call this method.
+         **/
+         redraw() {
+          this.notifyResize();
+        }
+
+      }
+
+      customElements.define(BoardElement.is, BoardElement);
+
+      /**
+       * @namespace Vaadin
+       */
+      window.Vaadin.BoardElement = BoardElement;
+
+      const licenseChecker = window.Vaadin.developmentModeCallback
+        && window.Vaadin.developmentModeCallback['vaadin-license-checker'];
+      if (typeof licenseChecker === 'function') {
+        licenseChecker(BoardElement);
+      }
+    })();
+  </script>
+</dom-module>

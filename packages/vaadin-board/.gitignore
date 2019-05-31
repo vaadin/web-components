@@ -5,3 +5,4 @@ travis.log
 package-lock.json
 yarn.lock
 coverage
+analysis.json
