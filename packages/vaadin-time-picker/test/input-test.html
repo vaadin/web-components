@@ -5,6 +5,7 @@
   <title>vaadin-time-picker tests</title>
   <script src='../../web-component-tester/browser.js'></script>
   <script src='../../webcomponentsjs/webcomponents-lite.js'></script>
+  <script src="../../iron-test-helpers/mock-interactions.js"></script>
   <link rel="import" href="../../test-fixture/test-fixture.html">
   <link rel="import" href="../src/vaadin-time-picker.html">
 </head>
@@ -262,6 +263,112 @@
         it('should translate accessible label with set API', function() {
           timePicker.set('i18n.clear', 'tyhjennä');
           expect(clearButton.getAttribute('aria-label')).to.equal('tyhjennä');
+        });
+      });
+
+      describe('change event', () => {
+        let spy, input;
+
+        function arrowUp() {
+          MockInteractions.pressAndReleaseKeyOn(input, 38);
+        }
+
+        function arrowDown() {
+          MockInteractions.pressAndReleaseKeyOn(input, 40);
+        }
+
+        function esc() {
+          MockInteractions.pressAndReleaseKeyOn(input, 27);
+        }
+
+        function enter() {
+          MockInteractions.pressEnter(input);
+        }
+
+        function inputChar(char) {
+          input.value += char;
+          MockInteractions.keyDownOn(input, char.charCodeAt(0));
+          input.dispatchEvent(new CustomEvent('input', {bubbles: true, composed: true}));
+        }
+
+        function inputText(text) {
+          for (var i = 0; i < text.length; i++) {
+            inputChar(text[i]);
+          }
+        }
+
+        beforeEach(() => {
+          input = timePicker.__inputElement;
+          spy = sinon.spy();
+          timePicker.addEventListener('change', spy);
+        });
+
+        it('should fire change on user text input commit', () => {
+          inputText('00:00');
+          enter();
+          expect(spy).to.be.calledOnce;
+        });
+
+        it('should fire change on user arrow input commit', () => {
+          arrowDown();
+          arrowDown();
+          enter();
+          expect(spy).to.be.calledOnce;
+        });
+
+        it('should fire change on clear button click', () => {
+          timePicker.clearButtonVisible = true;
+          const clearButton = input.$.clearButton;
+          timePicker.value = '00:00';
+          clearButton.dispatchEvent(new CustomEvent('click', {bubbles: true, composed: true}));
+          expect(spy).to.be.calledOnce;
+        });
+
+        it('should fire change on arrow key when no dropdown opens', () => {
+          timePicker.step = 0.5;
+          arrowDown();
+          expect(spy).to.be.calledOnce;
+          arrowUp();
+          expect(spy).to.be.calledTwice;
+        });
+
+        it('should not fire change on focused time change', () => {
+          inputText('00:00');
+          expect(spy.called).to.be.false;
+        });
+
+        it('should not fire change on programmatic value change', () => {
+          timePicker.value = '01:00';
+          expect(spy.called).to.be.false;
+        });
+
+        it('should not fire change on programmatic value change after manual one', () => {
+          timePicker.value = '00:00';
+          timePicker.__dropdownElement.opened = true;
+          input.inputElement.value = '';
+          arrowDown();
+          enter();
+          expect(spy).to.be.calledOnce;
+          // mimic native change happening on text-field blur
+          document.body.click();
+          input.inputElement.dispatchEvent(new Event('change', {bubbles: true}));
+          timePicker.value = '02:00';
+          expect(spy).to.be.calledOnce;
+        });
+
+        it('should not fire change if the value was not changed', () => {
+          timePicker.value = '01:00';
+          timePicker.__dropdownElement.opened = true;
+          enter();
+          expect(spy.called).to.be.false;
+        });
+
+        it('should not fire change on revert', () => {
+          timePicker.__dropdownElement.opened = true;
+          timePicker.value = '01:00';
+          esc();
+          esc();
+          expect(spy.called).to.be.false;
         });
       });
     });
