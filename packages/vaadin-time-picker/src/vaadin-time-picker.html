@@ -274,8 +274,7 @@ This program is available under Apache License Version 2.0, available at https:/
              * not recommended to use it for better UX experience.
              */
             step: {
-              type: Number,
-              observer: '__stepChanged'
+              type: Number
             },
 
             /**
@@ -365,13 +364,12 @@ This program is available under Apache License Version 2.0, available at https:/
 
         static get observers() {
           return [
-            '__updateDropdownItems(i18n.*, min, max)'
+            '__updateDropdownItems(i18n.*, min, max, step)'
           ];
         }
 
         ready() {
           super.ready();
-          this.__updateDropdownItems();
 
           // Not using declarative because we receive an event before text-element shadow is ready,
           // thus querySelector in textField.focusElement raises an undefined exception on validate
@@ -474,41 +472,44 @@ This program is available under Apache License Version 2.0, available at https:/
           return {hours: (hh < 24) ? hh : 0, minutes: mm, seconds: ss, milliseconds: msec};
         }
 
-        __updateDropdownItems() {
-          this.__dropdownItems = this.__generateDropdownList();
+        __updateDropdownItems(i8n, min, max, step) {
+          const minTimeObj = this.__validateTime(this.__parseISO(min));
+          const minSec = this.__getSec(minTimeObj);
+
+          const maxTimeObj = this.__validateTime(this.__parseISO(max));
+          const maxSec = this.__getSec(maxTimeObj);
+
+          this.__adjustValue(minSec, maxSec, minTimeObj, maxTimeObj);
+
+          this.__dropdownItems = this.__generateDropdownList(minSec, maxSec, step);
+
+          if (step !== this.__oldStep) {
+            this.__oldStep = step;
+            const parsedObj = this.__validateTime(this.__parseISO(this.value));
+            this.__updateValue(parsedObj);
+          }
+
           if (this.value) {
             this.__dropdownElement.value = this.i18n.formatTime(this.i18n.parseTime(this.value));
           }
         }
 
-        __generateDropdownList() {
-          if (this.step < 15 * 60 || !this.__validDayDivisor(this.step)) {
+        __generateDropdownList(minSec, maxSec, step) {
+          if (step < 15 * 60 || !this.__validDayDivisor(step)) {
             return [];
           }
 
           const generatedList = [];
 
           // Default step in overlay items is 1 hour
-          const step = this.step || 3600;
-
-          const minTimeObj = this.__validateTime(this.__parseISO(this.min));
-          const minSec = this.__getSec(minTimeObj);
-
-          const maxTimeObj = this.__validateTime(this.__parseISO(this.max));
-          const maxSec = this.__getSec(maxTimeObj);
-
-          this.__adjustValue(minSec, maxSec, minTimeObj, maxTimeObj);
+          step = step || 3600;
 
           let time = -step + minSec;
           while (time + step >= minSec && time + step <= maxSec) {
             const timeObj = this.__validateTime(this.__addStep(time * 1000, step));
             time += step;
-            generatedList.push({
-              // we only pick items with minute resolution
-              label: this.i18n.formatTime(timeObj),
-              // but we set value with step defined resolution
-              value: this.i18n.formatTime(timeObj)
-            });
+            const formatted = this.i18n.formatTime(timeObj);
+            generatedList.push({label: formatted, value: formatted});
           }
 
           return generatedList;
@@ -598,12 +599,6 @@ This program is available under Apache License Version 2.0, available at https:/
         __parseISO(text) {
           // The default i18n parser implementation is ISO 8601 compliant
           return TimePickerElement.properties.i18n.value().parseTime(text);
-        }
-
-        __stepChanged(step) {
-          this.__updateDropdownItems();
-          const parsedObj = this.__validateTime(this.__parseISO(this.value));
-          this.__updateValue(parsedObj);
         }
 
         get __inputElement() {
