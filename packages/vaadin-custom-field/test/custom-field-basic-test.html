@@ -32,6 +32,12 @@
         expect(customField.localName).to.be.equal('vaadin-custom-field');
       });
 
+      it('should focus the first input on `focus()`', function() {
+        const spy = sinon.spy(customField.inputs[0], 'focus');
+        customField.focus();
+        expect(spy).to.be.calledOnce;
+      });
+
       it('should properly define internal inputs', function() {
         expect(customField.inputs.length).to.equal(2);
         for (var i = 0; i < 2; i ++) {

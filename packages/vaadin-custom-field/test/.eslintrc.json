@@ -9,6 +9,7 @@
     "gemini": false,
     "sinon": false,
     "dispatchChange": false,
-    "dispatchSlotChange": false
+    "dispatchSlotChange": false,
+    "MockInteractions": false
   }
 }

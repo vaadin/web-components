@@ -80,9 +80,25 @@
 
       this.__setInputsFromChildNodes();
 
+      this.addEventListener('keydown', e => {
+        if (e.keyCode === 9) {
+          if (this.inputs.indexOf(e.target) < this.inputs.length - 1 && !e.shiftKey ||
+              this.inputs.indexOf(e.target) > 0 && e.shiftKey) {
+            this.dispatchEvent(new CustomEvent('internal-tab'));
+          }
+        }
+      });
+
       var uniqueId = Vaadin.CustomFieldMixin._uniqueId = 1 + Vaadin.CustomFieldMixin._uniqueId || 1;
       this.__errorId = `${this.constructor.is}-error-${uniqueId}`;
       this.__labelId = `${this.constructor.is}-label-${uniqueId}`;
+    }
+
+    /*
+     * @private
+     */
+    focus() {
+      this.inputs && this.inputs[0].focus();
     }
 
     __observeChildrenInputsChange() {
@@ -138,5 +154,12 @@
         this.validate();
       }
     }
+
+    /**
+     * Fired on Tab keydown triggered from the internal inputs,
+     * meaning focus will not leave the inputs.
+     *
+     * @event internal-tab
+     */
   };
 </script>
