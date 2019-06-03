@@ -817,6 +817,65 @@
           expect(spy).not.to.have.been.called;
         });
       });
+
+      describe('`change` event', () => {
+        let menu, changeSpy;
+        beforeEach(done => {
+          menu = select._menuElement;
+          Polymer.RenderStatus.afterNextRender(menu, done);
+
+          changeSpy = sinon.spy();
+          select.addEventListener('change', changeSpy);
+        });
+
+        it('should not fire `change` event when programmatically opened and selected changed', () => {
+          select.opened = true;
+          menu.selected = 1;
+          select.opened = false;
+
+          expect(changeSpy).not.to.be.called;
+        });
+
+        it('should not fire `change` event when programmatically opened and value changed', () => {
+          select.opened = true;
+          select.value = 'Option 1';
+          expect(changeSpy).not.to.be.called;
+        });
+
+        it('should not fire `change` event when commiting a value programmatically', () => {
+          menu.selected = 1;
+          select.value = 'Option 1';
+          expect(changeSpy).not.to.be.called;
+        });
+
+        it('should stop input `change` event from bubbling', () => {
+          select._inputElement.dispatchEvent(new CustomEvent('change'));
+          expect(changeSpy).not.to.be.called;
+        });
+
+        it('should fire `change` event when value changes when alphanumeric keys are pressed', () => {
+          keyDownChar(input, 'o');
+          keyDownChar(input, 'p');
+          keyDownChar(input, 't');
+          expect(changeSpy.callCount).to.equal(1);
+        });
+
+        it('should fire `change` event when value changes by user clicking the item', () => {
+          select.opened = true;
+          menu.firstElementChild.click();
+          expect(changeSpy.callCount).to.equal(1);
+        });
+
+        it('should fire `change` event when value changes by user selecting item with keyboard', () => {
+          select.opened = true;
+          arrowUp(menu);
+
+          const secondOption = menu.querySelector('[value="v2"]');
+          MockInteractions.keyDownOn(secondOption, 13, [], 'Enter');
+          MockInteractions.keyUpOn(secondOption, 13, [], 'Enter');
+          expect(changeSpy.callCount).to.equal(1);
+        });
+      });
     });
 
     describe('vaadin-select theme attribute', () => {

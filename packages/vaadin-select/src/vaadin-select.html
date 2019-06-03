@@ -430,7 +430,10 @@ This program is available under Apache License Version 2.0, available at https:/
             });
             this._menuElement.addEventListener('selected-changed', e => this._updateValueSlot());
             this._menuElement.addEventListener('keydown', e => this._onKeyDownInside(e));
-            this._menuElement.addEventListener('click', e => this.opened = false);
+            this._menuElement.addEventListener('click', e => {
+              this.__userInteraction = true;
+              this.opened = false;
+            }, true);
           }
         }
 
@@ -487,6 +490,7 @@ This program is available under Apache License Version 2.0, available at https:/
               const currentIdx = selected !== undefined ? selected : -1;
               const newIdx = this._menuElement._searchKey(currentIdx, e.key);
               if (newIdx >= 0) {
+                this.__userInteraction = true;
                 this._updateSelectedItem(this._items[newIdx].value, this._items);
               }
             }
@@ -592,6 +596,10 @@ This program is available under Apache License Version 2.0, available at https:/
           if (!this._valueChanging && selected) {
             this._selectedChanging = true;
             this.value = selected.value || '';
+            if (this.__userInteraction) {
+              this.dispatchEvent(new CustomEvent('change', {bubbles: true}));
+              this.__userInteraction = false;
+            }
             delete this._selectedChanging;
           }
         }
@@ -644,6 +652,12 @@ This program is available under Apache License Version 2.0, available at https:/
         validate() {
           return !(this.invalid = !(this.disabled || !this.required || this.value));
         }
+
+        /**
+         * Fired when the user commits a value change.
+         *
+         * @event change
+         */
       }
 
       customElements.define(SelectElement.is, SelectElement);

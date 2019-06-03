@@ -41,6 +41,9 @@
       if (attrValue !== null) {
         this.value = attrValue;
       }
+
+      this.addEventListener('keydown', e => this._onKeydown(e));
+      this.addEventListener('keyup', e => this._onKeyup(e));
     }
 
     get value() {
@@ -54,6 +57,28 @@
     _disabledChanged(disabled) {
       if (disabled) {
         this.selected = false;
+      }
+    }
+
+    _setActive(active) {
+      if (active) {
+        this.setAttribute('active', '');
+      } else {
+        this.removeAttribute('active');
+      }
+    }
+
+    _onKeydown(event) {
+      if (/^( |SpaceBar|Enter)$/.test(event.key) && !event.defaultPrevented) {
+        event.preventDefault();
+        this._setActive(true);
+      }
+    }
+
+    _onKeyup(event) {
+      if (this.hasAttribute('active')) {
+        this._setActive(false);
+        this.click();
       }
     }
   }
