@@ -128,8 +128,8 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       }
 
       /** @protected */
-      connectedCallback() {
-        super.connectedCallback();
+      ready() {
+        super.ready();
 
         this._editTemplateObserver.flush();
       }
@@ -296,6 +296,8 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         this._grid.notifyResize();
         const editor = this._getEditorComponent(cell);
         editor.addEventListener('focusout', this._grid.__boundEditorFocusOut);
+        editor.addEventListener('focusin', this._grid.__boundEditorFocusIn);
+        editor.addEventListener('internal-tab', this._grid.__boundCancelCellSwitch);
         document.body.addEventListener('focusin', this._grid.__boundGlobalFocusIn);
         this._setEditorOptions(editor);
         this._setEditorValue(editor, Polymer.Path.get(model.item, this.path));
@@ -325,6 +327,8 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         let shouldResize = true;
         if (editor) {
           editor.removeEventListener('focusout', this._grid.__boundEditorFocusOut);
+          editor.removeEventListener('focusin', this._grid.__boundEditorFocusIn);
+          editor.removeEventListener('internal-tab', this._grid.__boundCancelCellSwitch);
         } else {
           // avoid notify resize of editor removed due to scroll
           shouldResize = false;

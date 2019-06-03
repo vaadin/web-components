@@ -51,6 +51,8 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       super();
       this.__boundItemPropertyChanged = this._onItemPropertyChanged.bind(this);
       this.__boundEditorFocusOut = this._onEditorFocusOut.bind(this);
+      this.__boundEditorFocusIn = this._onEditorFocusIn.bind(this);
+      this.__boundCancelCellSwitch = this._setCancelCellSwitch.bind(this);
       this.__boundGlobalFocusIn = this._onGlobalFocusIn.bind(this);
 
       this._addEditColumnListener('mousedown', e => {
@@ -239,16 +241,19 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         this._stopEdit.bind(this));
     }
 
+    _onEditorFocusIn(e) {
+      this._cancelStopEdit();
+    }
+
     _onGlobalFocusIn(e) {
       const edited = this.__edited;
       if (edited) {
-        const editor = edited.column._getEditorComponent(edited.cell);
-
         // detect focus moving to e.g. vaadin-select-overlay
         const overlay = Array.from(e.composedPath())
-          .filter(node => node.nodeType === Node.ELEMENT_NODE && /vaadin-(?!dialog).*-overlay/i.test(node.localName))[0];
+          .filter(node => node.nodeType === Node.ELEMENT_NODE && /^vaadin-(?!dialog).*-overlay$/i.test(node.localName))[0];
 
-        if (overlay && overlay.__dataHost === editor) {
+        if (overlay) {
+          overlay.addEventListener('vaadin-overlay-outside-click', this.__boundEditorFocusOut);
           this._cancelStopEdit();
         }
       }
@@ -312,7 +317,17 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       }
     }
 
+    _setCancelCellSwitch() {
+      this.__cancelCellSwitch = true;
+      window.requestAnimationFrame(() => this.__cancelCellSwitch = false);
+    }
+
     _switchEditCell(e) {
+      if (this.__cancelCellSwitch ||
+          e.defaultPrevented && e.keyCode === 9) {
+        return;
+      }
+
       this._cancelStopEdit();
 
       const cols = this._getEditColumns();
