@@ -22,7 +22,7 @@ deploy:
       branch: master
 
 addons:
-  firefox: latest
+  firefox: "66.0"
   chrome: stable
   ssh_known_hosts: app.fi
   sauce_connect:
@@ -38,12 +38,12 @@ jobs:
     - if: type = pull_request
       env: POLYMER=2
       addons:
-        firefox: latest
+        firefox: "66.0"
         chrome: stable
     - if: type = pull_request
       env: POLYMER=3
       addons:
-        firefox: latest
+        firefox: "66.0"
         chrome: stable
     - if: type = cron
       env: TEST_SUITE=unit_tests POLYMER=2
