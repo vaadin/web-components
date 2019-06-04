@@ -161,6 +161,20 @@
           expect(textField.value).not.to.be.ok;
         });
 
+        it('should dispatch `change` event on ESC after value is cleared', function() {
+          textField.value = 'Foo';
+          textField.clearButtonVisible = true;
+
+          const changeSpy = sinon.spy();
+          textField.addEventListener('change', changeSpy);
+
+          textField.dispatchEvent(escKeyDownEvent);
+          // Check when value was already cleared
+          textField.dispatchEvent(escKeyDownEvent);
+
+          expect(changeSpy).to.be.calledOnce;
+        });
+
         it('should clear the value of native input on ESC if clear button is visible', function() {
           textField.value = 'Foo';
           textField.clearButtonVisible = true;

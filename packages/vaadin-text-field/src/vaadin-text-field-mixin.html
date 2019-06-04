@@ -611,7 +611,9 @@ This program is available under Apache License Version 2.0, available at https:/
 
     _onKeyDown(e) {
       if (e.keyCode === 27 && this.clearButtonVisible) {
+        const dispatchChange = !!this.value;
         this.clear();
+        dispatchChange && this.inputElement.dispatchEvent(new Event('change', {bubbles: !this._slottedInput}));
       }
     }
 
