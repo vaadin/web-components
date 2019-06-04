@@ -2,7 +2,7 @@
 // Workaround for https://github.com/vaadin/vaadin-charts/issues/389
 (function() {
   if (Highcharts) {
-    ['exportChart', 'exportChartLocal'].forEach(methodName => {
+    ['exportChart', 'exportChartLocal', 'getSVG'].forEach(methodName => {
       Highcharts.wrap(
         Highcharts.Chart.prototype,
         methodName,
