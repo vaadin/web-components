@@ -5,3 +5,4 @@ yarn.lock
 build
 .DS_Store
 .idea/
+analysis.json 

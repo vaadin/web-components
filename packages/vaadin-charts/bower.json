@@ -5,7 +5,10 @@
     "Vaadin Ltd"
   ],
   "description": "vaadin-charts",
-  "main": "vaadin-chart.html",
+  "main": [
+    "vaadin-chart.html",
+    "vaadin-chart-series.html"
+  ],
   "keywords": [
     "Vaadin",
     "vaadin-chart",
@@ -25,7 +28,6 @@
     "node_modules",
     "bower_components",
     "test",
-    "gulpfile.js",
     "package-lock.json",
     "wct.conf.js"
   ],
