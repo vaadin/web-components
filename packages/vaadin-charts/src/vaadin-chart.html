@@ -69,7 +69,7 @@ MAGI ADD END -->
 
   <script>
     if (!Polymer.Element) {
-      throw new Error(`Unexpected Polymer version ${Polymer.version} is used, expected v2.0.0 or later.`);
+      console.warn(`Unexpected Polymer version ${Polymer.version} is used, expected v2.0.0 or later.`);
     }
 
     (() => {
@@ -938,6 +938,7 @@ MAGI ADD END -->
           Polymer.RenderStatus.beforeNextRender(this, () => {
             this._childObserver = new Polymer.FlattenedNodesObserver(this.$.slot, (info) => {
               this.__addSeries(info.addedNodes.filter(this.__filterSeriesNodes));
+              this.__removeSeries(info.removedNodes.filter(this.__filterSeriesNodes));
               this.__cleanupAfterSeriesRemoved(info.removedNodes.filter(this.__filterSeriesNodes));
             });
           });
@@ -980,6 +981,18 @@ MAGI ADD END -->
             seriesElement.setSeries(seriesConfiguration);
           }
           this.__removeAxisIfEmpty();
+        }
+
+        __removeSeries(seriesNodes) {
+          if (this.__isSeriesEmpty(seriesNodes)) {
+            return;
+          }
+
+          seriesNodes.forEach(series => {
+            if (series instanceof Vaadin.ChartSeriesElement) {
+              series._series.remove();
+            }
+          });
         }
 
         __setYAxisProps(yAxes, yAxisId, props) {

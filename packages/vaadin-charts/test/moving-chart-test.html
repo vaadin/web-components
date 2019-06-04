@@ -1,0 +1,49 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-chart tests</title>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../vaadin-chart.html">
+</head>
+
+<body>
+  <test-fixture id="default">
+    <template>
+      <vaadin-chart>
+        <vaadin-chart-series value="[0,1,2]"></vaadin-chart-series>
+        <vaadin-chart-series value="[3,2,1]"></vaadin-chart-series>
+      </vaadin-chart>
+      <div id="newContainer"></div>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('Empty chart', function() {
+      var element, newContainer;
+
+      beforeEach(function(done) {
+        const testElements = fixture('default');
+        element = testElements[0];
+        newContainer = testElements[1];
+
+        setTimeout(function() {
+          done();
+        }, 50);
+      });
+
+
+      it('should keep chart configuration if element is moved to a new parent node', (done) => {
+
+        expect(element.configuration.series.length).to.be.equal(element.childElementCount);
+        newContainer.appendChild(element);
+        setTimeout(() => {
+          expect(element.configuration.series.length).to.be.equal(element.childElementCount);
+          done();
+        }, 50);
+      });
+
+    });
+  </script>
+</body>

@@ -17,5 +17,6 @@ window.VaadinChartsSuites = [
   'js-private-api-chart-test.html',
   'style-test.html',
   'element-json-merge-test.html',
-  'theme-test.html'
+  'theme-test.html',
+  'moving-chart-test.html'
 ];

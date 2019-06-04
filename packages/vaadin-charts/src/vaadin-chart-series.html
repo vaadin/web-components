@@ -11,10 +11,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
 <dom-module id="vaadin-chart-series">
   <script>
-    if (!Polymer.Element) {
-      throw new Error(`Unexpected Polymer version ${Polymer.version} is used, expected v2.0.0 or later.`);
-    }
-
     (() => {
       /**
        * `<vaadin-chart-series>` is a custom element for creating series for Vaadin Charts.
@@ -261,14 +257,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             '__valuesObserver(values.splices)',
             '__additionalOptionsObserver(additionalOptions.*)'
           ];
-        }
-
-        /** @private */
-        disconnectedCallback() {
-          super.disconnectedCallback();
-          if (this.__hasSeriesConfig()) {
-            this._series.remove();
-          }
         }
 
         /**
