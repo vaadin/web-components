@@ -5,7 +5,8 @@
 <dom-module id="material-color-light">
   <template>
     <style>
-      :host {
+      :host,
+      #host-fix {
         /* Text colors */
         --material-body-text-color: var(--light-theme-text-color, rgba(0, 0, 0, 0.87));
         --material-secondary-text-color: var(--light-theme-secondary-color, rgba(0, 0, 0, 0.54));
@@ -105,7 +106,8 @@
 <dom-module id="material-color-dark">
   <template>
     <style>
-      :host {
+      :host,
+      #host-fix {
         /* Text colors */
         --material-body-text-color: var(--dark-theme-text-color, rgba(255, 255, 255, 1));
         --material-secondary-text-color: var(--dark-theme-secondary-color, rgba(255, 255, 255, 0.7));
