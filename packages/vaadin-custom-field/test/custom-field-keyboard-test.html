@@ -57,6 +57,13 @@
         expect(internalTabSpy).not.to.be.called;
       });
 
+      it('should update the value on Tab from the last input', () => {
+        customField.inputs[3].value = 1;
+        tab(customField.inputs[3]);
+
+        expect(customField.value).to.equal('\t\t\t1');
+      });
+
       it('should fire `internal-tab` event on Shift Tab', () => {
         const internalTabSpy = sinon.spy();
         customField.addEventListener('internal-tab', internalTabSpy);
@@ -73,6 +80,13 @@
         shiftTab(customField.inputs[0]);
 
         expect(internalTabSpy).not.to.be.called;
+      });
+
+      it('should update the value on Shift Tab from the first input', () => {
+        customField.inputs[0].value = 1;
+        shiftTab(customField.inputs[0]);
+
+        expect(customField.value).to.equal('1\t\t\t');
       });
 
     });

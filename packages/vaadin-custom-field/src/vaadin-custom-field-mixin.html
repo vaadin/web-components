@@ -85,6 +85,9 @@
           if (this.inputs.indexOf(e.target) < this.inputs.length - 1 && !e.shiftKey ||
               this.inputs.indexOf(e.target) > 0 && e.shiftKey) {
             this.dispatchEvent(new CustomEvent('internal-tab'));
+          } else {
+            // FIXME (yuriy): remove this workaround when value should not be updated before focusout
+            this.__setValue();
           }
         }
       });
