@@ -5,8 +5,9 @@
     <style>
       :host([theme="menu-bar-item"]) [part="content"] {
         display: flex;
-        align-items: center;
-        justify-content: center;
+        /* tweak to inherit centering from menu bar button */
+        align-items: inherit;
+        justify-content: inherit;
         font-size: var(--material-button-font-size);
       }
 
