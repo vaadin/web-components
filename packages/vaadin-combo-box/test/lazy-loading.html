@@ -258,6 +258,23 @@
               comboBox.open();
               expect(dp).to.be.calledOnce;
             });
+
+            it('should render all visible items after delayed response', done => {
+              const items = [...Array(10)].map((_, i) => 'item ' + i);
+              comboBox.dataProvider = (params, callback) => {
+                setTimeout(() => {
+                  callback(items, 10);
+                  setTimeout(() => {
+                    const renderedTexts = Array.from(comboBox.$.overlay._selector
+                      .querySelectorAll('vaadin-combo-box-item'))
+                      .map(i => i.shadowRoot.querySelector('#content').innerText);
+                    expect(renderedTexts).to.eql(items);
+                    done();
+                  });
+                }, 50);
+              };
+              comboBox.open();
+            });
           });
 
           describe('when selecting item', () => {
