@@ -76,30 +76,6 @@ Once installed, import it in your application:
 import '@vaadin/vaadin-rich-text-editor/vaadin-rich-text-editor.js';
 ```
 
-### Bundling with webpack
-
-When using `webpack` to bundle the application, do the following steps:
-
-1. Install the loader:
-
-```sh
-npm install expose-loader --save-dev
-```
-
-2. Add these lines to the webpack config:
-```
-module: {
-  rules: [
-  ...
-  {
-    test: require.resolve('@vaadin/vaadin-rich-text-editor/vendor/vaadin-quill.js'),
-    use: [{
-      loader: 'expose-loader',
-      options: 'Quill'
-    }]
-  }
-```
-
 ## Getting started
 
 Vaadin components use the Lumo theme by default.
