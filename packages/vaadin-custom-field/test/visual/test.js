@@ -22,7 +22,12 @@ gemini.suite('vaadin-custom-field', function(rootSuite) {
       suite
         .setUrl(`default.html?theme=${theme}`)
         .setCaptureElements('#default-tests')
-        .capture('default');
+        .capture('default')
+        .capture('focused', function(actions) {
+          actions.executeJS(function(window) {
+            window.document.querySelector('vaadin-custom-field').setAttribute('focused', '');
+          });
+        });
     });
 
     gemini.suite(`alignment-tests-${theme}`, function(suite) {

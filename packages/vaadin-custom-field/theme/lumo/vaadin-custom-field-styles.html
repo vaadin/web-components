@@ -48,6 +48,21 @@
       :host([invalid]) [part="error-message"]:not(:empty)::after {
         height: calc(0.4em + var(--lumo-space-xs));
       }
+
+      :host([focused]:not([disabled])) [part="label"] {
+        color: var(--lumo-primary-text-color);
+      }
+
+      :host(:hover:not([disabled]):not([focused])) [part="label"] {
+        color: var(--lumo-body-text-color);
+      }
+
+      /* Touch device adjustment */
+      @media (pointer: coarse) {
+        :host(:hover:not([disabled]):not([focused])) [part="label"] {
+          color: var(--lumo-secondary-text-color);
+        }
+      }
     </style>
   </template>
 </dom-module>

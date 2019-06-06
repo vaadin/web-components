@@ -55,6 +55,10 @@
       :host([has-label]) ::slotted(vaadin-time-picker) {
         margin-top: -8px;
       }
+
+      :host([focused]:not([invalid])) [part="label"] {
+        color: var(--material-primary-text-color);
+      }
     </style>
   </template>
 </dom-module>

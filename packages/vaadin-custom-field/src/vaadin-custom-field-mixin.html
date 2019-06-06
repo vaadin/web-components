@@ -92,6 +92,15 @@
         }
       });
 
+      this.addEventListener('focusin', () => this.setAttribute('focused', ''));
+
+      this.addEventListener('focusout', e => {
+        const activeElement = this.getRootNode().activeElement;
+        if (!this.inputs.some(el => activeElement === el || el.shadowRoot && el.shadowRoot.contains(activeElement))) {
+          this.removeAttribute('focused');
+        }
+      });
+
       var uniqueId = Vaadin.CustomFieldMixin._uniqueId = 1 + Vaadin.CustomFieldMixin._uniqueId || 1;
       this.__errorId = `${this.constructor.is}-error-${uniqueId}`;
       this.__labelId = `${this.constructor.is}-label-${uniqueId}`;

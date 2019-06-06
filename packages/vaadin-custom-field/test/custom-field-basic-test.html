@@ -110,6 +110,18 @@
 
       });
 
+      describe('focused', function() {
+        it('should set focused attribute on input focusin', () => {
+          customField.inputs[0].dispatchEvent(new CustomEvent('focusin', {composed: true, bubbles: true}));
+          expect(customField.hasAttribute('focused')).to.be.true;
+        });
+
+        it('should remove focused attribute on input focusout', () => {
+          customField.inputs[0].dispatchEvent(new CustomEvent('focusin', {composed: true, bubbles: true}));
+          customField.inputs[0].dispatchEvent(new CustomEvent('focusout', {composed: true, bubbles: true}));
+          expect(customField.hasAttribute('focused')).to.be.false;
+        });
+      });
     });
   </script>
 </body>
