@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-custom-field",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "vaadin-custom-field",
   "main": "vaadin-custom-field.html",
   "repository": "vaadin/vaadin-custom-field",
