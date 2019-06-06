@@ -24,7 +24,7 @@ module.exports = {
       exclude: [],
       thresholds: {
         global: {
-          statements: env === 'saucelabs' ? 86 : 100
+          statements: env === 'saucelabs' ? 86 : 99
         }
       }
     }
