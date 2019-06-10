@@ -59,6 +59,13 @@ gemini.suite('vaadin-checkbox', function(rootSuite) {
         .setCaptureElements('#focus-tests')
         .capture('focus');
     });
+
+    gemini.suite(`wrapping-group-tests-${theme}`, function(suite) {
+      suite
+        .setUrl(`default.html?theme=${theme}`)
+        .setCaptureElements('#wrapping-group-tests')
+        .capture('default');
+    });
   });
 
 });
