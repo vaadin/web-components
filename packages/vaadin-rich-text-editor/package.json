@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-rich-text-editor",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "vaadin-rich-text-editor",
   "main": "vaadin-rich-text-editor.html",
   "repository": "vaadin/vaadin-rich-text-editor",
