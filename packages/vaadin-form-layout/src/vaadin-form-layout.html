@@ -51,14 +51,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       #layout ::slotted(br) {
-        /*
-          Line break element wraps the following item on a new line. Makes
-          a block with zero height, stretched to fill all the available width
-          of layout, so that the next sibling item is wrapped for sure.
-        */
-        display: block;
-        content: '';
-        flex: 1 1 100%;
+        display: none;
       }
     </style>
     <div id="layout">
@@ -470,34 +463,32 @@ This program is available under Apache License Version 2.0, available at https:/
           }
 
           let col = 0;
-          Array.from(this.children).forEach((child) => {
-            if (getComputedStyle(child).display !== 'none') {
-              let colspan;
-
+          Array.from(this.children)
+            .filter(child => child.localName === 'br' || getComputedStyle(child).display !== 'none')
+            .forEach((child, index, children) => {
               if (child.localName === 'br') {
-                colspan = this._columnCount - col;
-              } else {
-                colspan = this._naturalNumberOrOne(parseFloat(child.getAttribute('colspan')));
-
-                // Never span further than the number of columns
-                colspan = Math.min(colspan, this._columnCount);
+                // Reset column count on line break
+                col = 0;
+                return;
               }
+
+              let colspan;
+              colspan = this._naturalNumberOrOne(parseFloat(child.getAttribute('colspan')));
+
+              // Never span further than the number of columns
+              colspan = Math.min(colspan, this._columnCount);
 
               const childRatio = colspan / this._columnCount;
 
-              if (child.localName === 'br') {
-                // IE and Edge only accept fixed padding
-                child.style.paddingRight = `calc(${childRatio * containerWidth}px - ${1 - childRatio} * ${columnSpacing})`;
-              } else {
-                // Note: using 99.9% for 100% fixes rounding errors in MS Edge
-                // (< v16), otherwise the items might wrap, resizing is wobbly.
-                child.style.width = `calc(${childRatio * 99.9}% - ${1 - childRatio} * ${columnSpacing})`;
-              }
+              // Note: using 99.9% for 100% fixes rounding errors in MS Edge
+              // (< v16), otherwise the items might wrap, resizing is wobbly.
+              child.style.width = `calc(${childRatio * 99.9}% - ${1 - childRatio} * ${columnSpacing})`;
 
               if (col + colspan > this._columnCount) {
                 // Too big to fit on this row, let’s wrap it
                 col = 0;
               }
+
 
               // At the start edge
               if (col === 0) {
@@ -506,9 +497,15 @@ This program is available under Apache License Version 2.0, available at https:/
                 child.style.removeProperty(marginStartProp);
               }
 
+              const nextIndex = index + 1;
+              const nextLineBreak = nextIndex < children.length && children[nextIndex].localName === 'br';
+
               // At the end edge
               if (col + colspan === this._columnCount) {
                 child.style.setProperty(marginEndProp, '0px');
+              } else if (nextLineBreak) {
+                const colspanRatio = (this._columnCount - col - colspan) / this._columnCount;
+                child.style.setProperty(marginEndProp, `calc(${colspanRatio * containerWidth}px + ${colspanRatio} * ${columnSpacing})`);
               } else {
                 child.style.removeProperty(marginEndProp);
               }
@@ -523,8 +520,7 @@ This program is available under Apache License Version 2.0, available at https:/
                   child.removeAttribute('label-position');
                 }
               }
-            }
-          });
+            });
         }
       }
 

@@ -58,7 +58,8 @@
           <div at-end>3 end</div>
           <br>
           <div style="display: none;">invisible</div>
-          <div at-start="">4 start</div>
+          <div at-start="" colspan="2">4 start</div>
+          <div style="display: none;">invisible</div>
           <br>
           <div at-start>5 start</div>
           <div colspan="2" at-end>6 end</div>
@@ -426,6 +427,12 @@
 
       it('should not overflow containers horizontally', () => {
         expect(container.scrollWidth).to.equal(container.clientWidth);
+      });
+
+      it('should maintain the colspan value before the line break', () => {
+        const secondItemRect = layout.children[1].getBoundingClientRect();
+        const fourthItemRect = layout.children[5].getBoundingClientRect();
+        expect(secondItemRect.right).to.be.closeTo(fourthItemRect.right, .5);
       });
 
       describe('no spacing on edges', () => {
