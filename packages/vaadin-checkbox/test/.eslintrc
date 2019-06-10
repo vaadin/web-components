@@ -8,6 +8,7 @@
     "sinon": false,
     "expect": false,
     "gemini": false,
-    "MockInteractions": false
+    "MockInteractions": false,
+    "animationFrameFlush": false
   }
 }

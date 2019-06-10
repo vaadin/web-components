@@ -51,6 +51,25 @@
   </dom-bind>
 </test-fixture>
 
+<test-fixture id="wrapping">
+  <template>
+    <vaadin-checkbox-group>
+      <vaadin-checkbox value="c_1">Checkbox 1</vaadin-checkbox>
+      <vaadin-checkbox value="c_2">Checkbox 2</vaadin-checkbox>
+      <vaadin-checkbox value="c_3">Checkbox 3</vaadin-checkbox>
+      <vaadin-checkbox value="c_4">Checkbox 4</vaadin-checkbox>
+      <vaadin-checkbox value="c_5">Checkbox 5</vaadin-checkbox>
+      <vaadin-checkbox value="c_6">Checkbox 6</vaadin-checkbox>
+      <vaadin-checkbox value="c_7">Checkbox 7</vaadin-checkbox>
+      <vaadin-checkbox value="c_8">Checkbox 8</vaadin-checkbox>
+      <vaadin-checkbox value="c_9">Checkbox 9</vaadin-checkbox>
+      <vaadin-checkbox value="c_10">Checkbox 10</vaadin-checkbox>
+      <vaadin-checkbox value="c_11">Checkbox 11</vaadin-checkbox>
+      <vaadin-checkbox value="c_12">Checkbox 12</vaadin-checkbox>
+    </vaadin-checkbox-group>
+  </template>
+</test-fixture>
+
 <script>
   describe('vaadin-checkbox-group', () => {
 
@@ -420,6 +439,42 @@
       expect(vaadinCheckboxList[0].checked).to.be.true;
       expect(vaadinCheckboxList[1].checked).to.be.false;
       expect(vaadinCheckboxList[2].checked).to.be.true;
+    });
+  });
+
+  describe('vaadin-checkbox-group wrapping', () => {
+    let vaadinCheckboxGroup;
+
+    beforeEach((done) => {
+      vaadinCheckboxGroup = fixture('wrapping');
+      vaadinCheckboxGroup._observer.flush();
+      animationFrameFlush(done);
+    });
+
+    it('should not overflow horizontally', () => {
+      const parentWidth = vaadinCheckboxGroup.parentElement.offsetWidth;
+
+      expect(vaadinCheckboxGroup.offsetWidth).to.be.lte(parentWidth);
+      expect(
+        vaadinCheckboxGroup
+          .shadowRoot
+          .querySelector('[part~="group-field"]')
+          .offsetWidth
+      ).to.be.lte(parentWidth);
+    });
+
+    it('should wrap checkboxes', () => {
+      const checkboxes = Array.from(vaadinCheckboxGroup.children);
+      const {top: firstTop, left: firstLeft} =
+        checkboxes[0].getBoundingClientRect();
+
+      const wrappedCheckboxes = Array.from(checkboxes)
+        .slice(1)
+        .filter(checkbox => checkbox.getBoundingClientRect().top > firstTop);
+
+      expect(wrappedCheckboxes).not.be.empty;
+      expect(wrappedCheckboxes[0].getBoundingClientRect().left)
+        .to.equal(firstLeft);
     });
   });
 </script>
