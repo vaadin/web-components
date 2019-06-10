@@ -462,6 +462,7 @@
       });
 
       it('should scroll down after reaching the last visible item', () => {
+        selector.scrollToIndex(0);
         comboBox._focusedIndex = comboBox.$.overlay._visibleItemsCount() - 1;
         expect(selector.firstVisibleIndex).to.eql(0);
 
