@@ -385,15 +385,11 @@
         comboBox = fixture('combobox');
       });
 
-      it('should properly display all items in the selector', done => {
-        comboBox.opened = true;
-        setTimeout(() => {
-          comboBox.filteredItems = Array.apply(null, Array(20)).map((_, i) => `item${i}`);
-          setTimeout(() => {
-            expect(comboBox.$.overlay._selector.querySelectorAll('vaadin-combo-box-item').length).to.equal(20);
-            done();
-          }, 1);
-        });
+      it('should properly display all items in the selector', () => {
+        comboBox.open();
+        comboBox.filteredItems = Array.apply(null, Array(20)).map((_, i) => `item${i}`);
+        Polymer.flush();
+        expect(comboBox.$.overlay._selector.querySelectorAll('vaadin-combo-box-item').length).to.equal(20);
       });
     });
   });
