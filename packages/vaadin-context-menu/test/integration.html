@@ -45,13 +45,14 @@
       });
 
       describe('integration', () => {
-        let contextMenuButton, menu, button;
+        let contextMenuButton, menu, button, overlay;
 
         beforeEach((done) => {
           customElements.whenDefined('context-menu-button').then(() => {
             contextMenuButton = fixture('default');
             menu = contextMenuButton.$.menu;
             button = contextMenuButton.$.button;
+            overlay = menu.$.overlay;
             done();
           });
         });
@@ -60,6 +61,20 @@
           MockInteractions.tap(button);
           expect(menu.opened).to.eql(true);
         });
+
+        if (!MOBILE) {
+          it('should open context menu below button', (done) => {
+            MockInteractions.makeSoloTouchEvent('click', {y: 0, x: 0}, button);
+
+            setTimeout(() => {
+              const buttonRect = button.getBoundingClientRect();
+              const overlayRect = overlay.getBoundingClientRect();
+              expect(overlayRect.left).to.be.closeTo(buttonRect.left, 0.1);
+              expect(overlayRect.top).to.be.closeTo(buttonRect.top + buttonRect.height, 0.1);
+              done();
+            }, 1000);
+          });
+        }
       });
     </script>
 

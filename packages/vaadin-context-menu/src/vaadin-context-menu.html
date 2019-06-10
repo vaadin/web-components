@@ -656,9 +656,17 @@ This program is available under Apache License Version 2.0, available at https:/
               return this._getEventCoordinate(event.detail.sourceEvent, coord);
             }
           } else {
-            // Native mouse or touch event
             const prop = 'client' + coord.toUpperCase();
-            return event.changedTouches ? event.changedTouches[0][prop] : event[prop];
+            const position = event.changedTouches ? event.changedTouches[0][prop] : event[prop];
+
+            if (position === 0) {
+              // Native keyboard event
+              const rect = event.target.getBoundingClientRect();
+              return coord === 'x' ? rect.left : rect.top + rect.height;
+            } else {
+              // Native mouse or touch event
+              return position;
+            }
           }
         }
 

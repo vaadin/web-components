@@ -14,6 +14,7 @@
     "fire": false,
     "MockInteractions": false,
     "MockTouchInteractions": false,
-    "gemini": false
+    "gemini": false,
+    "MOBILE": false
   }
 }

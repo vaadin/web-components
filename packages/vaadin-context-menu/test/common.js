@@ -13,3 +13,5 @@ window.fire = (node, eventType, detail, eventProps) => {
   node.dispatchEvent(evt);
   return evt;
 };
+
+window.MOBILE = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
