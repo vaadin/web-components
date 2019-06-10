@@ -253,6 +253,16 @@ This program is available under Apache License Version 2.0, available at https:/
        *  `window.dispatchEvent(new CustomEvent('close-overlay-drawer'))` or by calling
        *  `Vaadin.AppLayoutElement.dispatchCloseOverlayDrawerEvent()`
        *
+       * ### Scrolling areas
+       *
+       * By default, the component will act with the "body scrolling", so on mobile (iOS Safari and Android Chrome),
+       * the toolbars will collapse when a scroll happens.
+       *
+       * To use the "content scrolling", in case of the content of the page relies on a pre-defined height (for instance,
+       * it has a `height:100%`), then the developer can set `height: 100%` to both `html` and `body`.
+       * That will make the `[content]` element of app layout scrollable.
+       * On this case, the toolbars on mobile device won't collapse.
+       *
        * @memberof Vaadin
        * @mixes Vaadin.ElementMixin
        * @mixes Vaadin.ThemableMixin
