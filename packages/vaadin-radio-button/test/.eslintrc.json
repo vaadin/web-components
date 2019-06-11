@@ -9,6 +9,7 @@
     "gemini": false,
     "sinon": false,
     "MockInteractions": false,
+    "animationFrameFlush": false,
     "flush": false
   }
 }
