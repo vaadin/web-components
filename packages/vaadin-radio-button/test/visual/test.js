@@ -24,6 +24,13 @@ gemini.suite('vaadin-radio-button', function(rootSuite) {
           });
         });
     });
+
+    gemini.suite(`wrapping-tests-${theme}`, function(suite) {
+      suite
+        .setUrl(`wrapping.html?theme=${theme}`)
+        .setCaptureElements('#wrapping-tests')
+        .capture('wrapping');
+    });
   });
 
 });

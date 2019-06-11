@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+
+<head lang="en">
+  <meta charset="UTF-8">
+  <title></title>
+  <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <script>
+    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-radio-button.html">`);
+    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-radio-group.html">`);
+  </script>
+</head>
+
+<body>
+
+  <div id="wrapping-tests" style="width: 320px; padding: 6px;">
+    <vaadin-radio-group label="Choose a number">
+      <vaadin-radio-button value="1">Radio button 1</vaadin-radio-button>
+      <vaadin-radio-button value="2">Radio button 2</vaadin-radio-button>
+      <vaadin-radio-button value="3">Radio button 3</vaadin-radio-button>
+      <vaadin-radio-button value="4">Radio button 4</vaadin-radio-button>
+    </vaadin-radio-group>
+  </div>
+
+</body>
