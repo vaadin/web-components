@@ -36,7 +36,8 @@
         margin-top: calc(var(--lumo-space-xs) * -1.5);
       }
 
-      :host(:not([has-label])) [part="label"] {
+      :host(:not([has-label])) [part="label"],
+      :host(:not([has-label]))::before {
         display: none;
       }
 

@@ -24,6 +24,10 @@
         box-sizing: border-box;
       }
 
+      :host(:not([has-label]))::before {
+        display: none;
+      }
+
       :host([has-label]) {
         padding-top: 24px;
       }

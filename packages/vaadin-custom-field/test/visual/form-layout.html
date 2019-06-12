@@ -9,7 +9,9 @@
     document.write(`
       <link rel="import" href="../../theme/${theme}/vaadin-custom-field.html">
       <link rel="import" href="../../../vaadin-text-field/theme/${theme}/vaadin-text-field.html">
+      <link rel="import" href="../../../vaadin-text-field/theme/${theme}/vaadin-text-area.html">
       <link rel="import" href="../../../vaadin-form-layout/theme/${theme}/vaadin-form-layout.html">
+      <link rel="import" href="../../../vaadin-form-layout/theme/${theme}/vaadin-form-item.html">
     `);
 
     window.addEventListener('WebComponentsReady', function() {
@@ -29,12 +31,32 @@
         <vaadin-text-field></vaadin-text-field>
       </vaadin-custom-field>
     </vaadin-form-layout>
-    <br>
+
     <vaadin-form-layout style="width: 60em">
       <vaadin-text-field label="Text field" theme="always-float-label"></vaadin-text-field>
       <vaadin-custom-field label="Custom field">
         <vaadin-text-field></vaadin-text-field>
       </vaadin-custom-field>
+    </vaadin-form-layout>
+
+    <vaadin-form-layout style="width: 60em">
+      <vaadin-text-field></vaadin-text-field>
+      <vaadin-custom-field>
+        <vaadin-text-field></vaadin-text-field>
+      </vaadin-custom-field>
+    </vaadin-form-layout>
+
+    <vaadin-form-layout style="width: 60em">
+      <vaadin-form-item>
+        <label slot="label">Custom field with text area</label>
+        <vaadin-custom-field>
+          <vaadin-text-area value="Sed libero enim, sed faucibus turpis in eu? Euismod lacinia at quis risus sed vulputate odio ut enim blandit volutpat maecenas volutpat blandit aliquam etiam erat velit, scelerisque in dictum!"></vaadin-text-area>
+        </vaadin-custom-field>
+      </vaadin-form-item>
+      <vaadin-form-item>
+        <label slot="label">Text field</label>
+        <vaadin-text-field></vaadin-text-field>
+      </vaadin-form-item>
     </vaadin-form-layout>
   </div>
 
