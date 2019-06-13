@@ -107,6 +107,10 @@
         z-index: -1;
       }
 
+      [part="date"][disabled] {
+        color: var(--material-disabled-text-color);
+      }
+
       :host([focused]) [part="date"]:not([disabled])[focused]::after {
         opacity: 1;
       }
