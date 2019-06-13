@@ -18,20 +18,16 @@
       display: inline-block;
       width: 800px;
     }
-
-    vaadin-tab {
-      text-align: center;
-    }
   </style>
 
   <div class="capture-block" id="vertical-tabs">
-    <vaadin-tabs orientation="vertical">
+    <vaadin-tabs orientation="vertical" style="width: 150px;">
       <vaadin-tab>Foo</vaadin-tab>
       <vaadin-tab>Bar</vaadin-tab>
       <vaadin-tab>Baz</vaadin-tab>
       <vaadin-tab disabled>Disabled</vaadin-tab>
-      <vaadin-tab>Ipsum</vaadin-tab>
-      <vaadin-tab>Dolor</vaadin-tab>
+      <vaadin-tab>Tab with text in two lines</vaadin-tab>
+      <vaadin-tab><a href="https://example.com">Link with text in two lines</a></vaadin-tab>
     </vaadin-tabs>
   </div>
 
