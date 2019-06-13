@@ -388,6 +388,9 @@ This program is available under Apache License Version 2.0, available at https:/
          */
         render() {
           this._overlayElement.render();
+          if (this._menuElement && this._menuElement.items) {
+            this._updateSelectedItem(this.value, this._menuElement.items);
+          }
         }
 
         _removeNewRendererOrTemplate(template, oldTemplate, renderer, oldRenderer) {
