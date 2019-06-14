@@ -15,15 +15,15 @@
 
 
     <h3>Setting Restrictions on Files to Upload</h3>
-    <vaadin-demo-snippet id='upload-limit-files-demos-setting-restrictions-on-files-to-upload'>
+    <vaadin-demo-snippet id="upload-limit-files-demos-setting-restrictions-on-files-to-upload" when-defined="vaadin-upload">
       <template preserve-content>
-        <vaadin-upload id="rejectEventDemo" max-files="3" accept="application/pdf" max-file-size="1000000">
+        <vaadin-upload max-files="3" accept="application/pdf" max-file-size="1000000">
           <span slot="drop-label">Up to 3 PDF files, 1 MB each</span>
         </vaadin-upload>
 
         <script>
           window.addDemoReadyListener('#upload-limit-files-demos-setting-restrictions-on-files-to-upload', function(document) {
-            var upload = document.querySelector('vaadin-upload#rejectEventDemo');
+            const upload = document.querySelector('vaadin-upload');
 
             upload.addEventListener('file-reject', function(event) {
               window.alert(event.detail.file.name + ' error: ' + event.detail.error);
@@ -33,7 +33,6 @@
       </template>
     </vaadin-demo-snippet>
 
-    
   </template>
   <script>
     class UploadLimitFilesDemos extends DemoReadyEventEmitter(UploadDemo(Polymer.Element)) {

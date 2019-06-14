@@ -8,13 +8,12 @@
 
 
     <h3>Customizing the Upload Request</h3>
-    <vaadin-demo-snippet id='upload-customize-upload-events-demos-customizing-the-upload-request'>
+    <vaadin-demo-snippet id="upload-customize-upload-events-demos-customizing-the-upload-request" when-defined="vaadin-upload">
       <template preserve-content>
-        <vaadin-upload id="requestDemo"></vaadin-upload>
-
+        <vaadin-upload></vaadin-upload>
         <script>
           window.addDemoReadyListener('#upload-customize-upload-events-demos-customizing-the-upload-request', function(document) {
-            var upload = document.querySelector('vaadin-upload#requestDemo');
+            const upload = document.querySelector('vaadin-upload');
 
             upload.addEventListener('upload-before', function(event) {
               console.log('upload xhr before open: ', event.detail.xhr);
@@ -48,13 +47,12 @@
 
 
     <h3>Sending Files Without Wrapping in FormData</h3>
-    <vaadin-demo-snippet id='upload-customize-upload-events-demos-sending-files-without-wrapping-in-formdata'>
+    <vaadin-demo-snippet id='upload-customize-upload-events-demos-sending-files-without-wrapping-in-formdata' when-defined="vaadin-upload">
       <template preserve-content>
-        <vaadin-upload id="rawDemo"></vaadin-upload>
-
+        <vaadin-upload></vaadin-upload>
         <script>
           window.addDemoReadyListener('#upload-customize-upload-events-demos-sending-files-without-wrapping-in-formdata', function(document) {
-            var upload = document.querySelector('vaadin-upload#rawDemo');
+            const upload = document.querySelector('vaadin-upload');
 
             upload.addEventListener('upload-request', function(event) {
               event.preventDefault();
@@ -67,13 +65,12 @@
 
 
     <h3>Custom Reaction on Server Response</h3>
-    <vaadin-demo-snippet id='upload-customize-upload-events-demos-custom-reaction-on-server-response'>
+    <vaadin-demo-snippet id="upload-customize-upload-events-demos-custom-reaction-on-server-response" when-defined="vaadin-upload">
       <template preserve-content>
-        <vaadin-upload id="responseDemo"></vaadin-upload>
-
+        <vaadin-upload></vaadin-upload>
         <script>
           window.addDemoReadyListener('#upload-customize-upload-events-demos-custom-reaction-on-server-response', function(document) {
-            var upload = document.querySelector('vaadin-upload#responseDemo');
+            const upload = document.querySelector('vaadin-upload');
 
             upload.addEventListener('upload-response', function(event) {
               console.log('upload xhr after server response: ', event.detail.xhr);
@@ -89,16 +86,15 @@
 
 
     <h3>Manual Upload Trigger</h3>
-    <vaadin-demo-snippet id='upload-customize-upload-events-demos-manual-upload-trigger'>
+    <vaadin-demo-snippet id="upload-customize-upload-events-demos-manual-upload-trigger" when-defined="vaadin-upload">
       <template preserve-content>
-        <vaadin-upload id="manualUpload" no-auto></vaadin-upload>
+        <vaadin-upload no-auto></vaadin-upload>
         <br>
-        <button id="uploadButton">Start Upload(s)</button>
-
+        <vaadin-button>Start Upload(s)</vaadin-button>
         <script>
           window.addDemoReadyListener('#upload-customize-upload-events-demos-manual-upload-trigger', function(document) {
-            var upload = document.querySelector('vaadin-upload#manualUpload');
-            var uploadButton = document.getElementById('uploadButton');
+            const upload = document.querySelector('vaadin-upload');
+            const uploadButton = document.querySelector('vaadin-button');
 
             uploadButton.addEventListener('click', function() {
               upload.uploadFiles();

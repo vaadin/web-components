@@ -8,12 +8,12 @@
 
 
     <h3>I18n</h3>
-    <vaadin-demo-snippet id='upload-i18n-demos-i18n'>
+    <vaadin-demo-snippet id="upload-i18n-demos-i18n" when-defined="vaadin-upload">
       <template preserve-content>
-        <vaadin-upload id="ru"></vaadin-upload>
+        <vaadin-upload></vaadin-upload>
         <script>
           window.addDemoReadyListener('#upload-i18n-demos-i18n', function(document) {
-            var upload = document.querySelector('vaadin-upload#ru');
+            const upload = document.querySelector('vaadin-upload');
             upload.i18n = {
               dropFiles: {
                 one: 'Перетащите файл сюда',
@@ -56,12 +56,12 @@
 
 
     <h3>Custom progress status</h3>
-    <vaadin-demo-snippet id='upload-i18n-demos-custom-progress-status'>
+    <vaadin-demo-snippet id="upload-i18n-demos-custom-progress-status" when-defined="vaadin-upload">
       <template preserve-content>
-        <vaadin-upload id="shortTime"></vaadin-upload>
+        <vaadin-upload></vaadin-upload>
         <script>
           window.addDemoReadyListener('#upload-i18n-demos-custom-progress-status', function(document) {
-            var upload = document.querySelector('vaadin-upload#shortTime');
+            const upload = document.querySelector('vaadin-upload');
 
             upload.set('i18n.formatTime', function(seconds, split) {
               return split
