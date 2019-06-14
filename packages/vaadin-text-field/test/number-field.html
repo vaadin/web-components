@@ -37,6 +37,16 @@
         increaseButton = numberField.root.querySelector('[part=increase-button]');
       });
 
+      describe('properties', () => {
+        ['min', 'max', 'step'].forEach(prop => {
+          it(`should reflect "${prop}" property to attribute`, () => {
+            var value = 5;
+            numberField[prop] = value;
+            expect(numberField.getAttribute(prop)).to.be.equal(String(value));
+          });
+        });
+      });
+
       describe('native', () => {
 
         it('should have [type=number]', () => {
@@ -528,7 +538,7 @@
             expect(numberField.value).to.be.equal('19');
           });
 
-          it(`should set value to the first step value above zero when min is below zero 
+          it(`should set value to the first step value above zero when min is below zero
               and max is above zero and increaseButton is clicked`, () => {
             numberField.min = -19;
             numberField.max = 19;
@@ -569,7 +579,7 @@
             expect(numberField.value).to.be.equal('-3');
           });
 
-          it(`should set value to the first step value below zero when min is below zero and max 
+          it(`should set value to the first step value below zero when min is below zero and max
               is above zero and decreaseButton is clicked`, () => {
             numberField.min = -19;
             numberField.max = 19;
