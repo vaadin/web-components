@@ -1,0 +1,48 @@
+<!doctype html>
+
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../iron-test-helpers/mock-interactions.js"></script>
+  <link rel="import" href="../../test-fixture/test-fixture.html">
+
+  <link rel="import" href="helpers.html">
+  <link rel="import" href="../theme/material/vaadin-grid.html">
+</head>
+
+<body>
+  <test-fixture id="default">
+    <template>
+      <vaadin-grid size="10">
+        <vaadin-grid-column header="Name"></vaadin-grid-column>
+        <vaadin-grid-column header="Surname"></vaadin-grid-column>
+        <vaadin-grid-column header="Effort" resizable></vaadin-grid-column>
+      </vaadin-grid>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('resizing material grid', () => {
+
+      let grid;
+
+      beforeEach(() => {
+        grid = fixture('default');
+        grid.dataProvider = infiniteDataProvider;
+        flushGrid(grid);
+      });
+
+      it('should not overflow with last resizable column', () => {
+        expect(grid.$.table.scrollWidth).to.be.equal(grid.$.table.clientWidth);
+      });
+    });
+  </script>
+
+</body>
+
+</html>

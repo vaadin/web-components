@@ -27,6 +27,7 @@ window.VaadinGridSuites = [
   'outer-scroller.html',
   'physical-count.html',
   'resizing.html',
+  'resizing-material.html',
   'row-details.html',
   'row-height.html',
   'scroll-to-index.html',
