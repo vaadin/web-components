@@ -339,7 +339,9 @@
         });
       });
 
-      describe(`resize ${condition}`, () => {
+      // FIXME(platosha): Flacky with P2 in IE 11, fails with undefined `spy`.
+      const isIe = /\bTrident\b/.test(navigator.userAgent);
+      (isIe ? describe.skip : describe)(`resize ${condition}`, () => {
         let textArea, spy;
 
         beforeEach(() => {

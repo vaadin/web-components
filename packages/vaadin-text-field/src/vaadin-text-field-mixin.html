@@ -318,7 +318,9 @@ This program is available under Apache License Version 2.0, available at https:/
         '_hostPropsChanged(' + HOST_PROPS.default.join(', ') + ')',
         '_hostAccessiblePropsChanged(' + HOST_PROPS.accessible.join(', ') + ')',
         '_getActiveErrorId(invalid, errorMessage, _errorId)',
-        '_getActiveLabelId(label, _labelId)'];
+        '_getActiveLabelId(label, _labelId)',
+        '__observeOffsetHeight(errorMessage, invalid, label)'
+      ];
     }
 
     get focusElement() {
@@ -560,6 +562,13 @@ This program is available under Apache License Version 2.0, available at https:/
       var uniqueId = Vaadin.TextFieldMixin._uniqueId = 1 + Vaadin.TextFieldMixin._uniqueId || 0;
       this._errorId = `${this.constructor.is}-error-${uniqueId}`;
       this._labelId = `${this.constructor.is}-label-${uniqueId}`;
+
+      // Lumo theme defines a max-height transition for the "error-message"
+      // part on invalid state change.
+      this.shadowRoot.querySelector('[part="error-message"]')
+        .addEventListener('transitionend', () => {
+          this.__observeOffsetHeight();
+        });
     }
 
     /**
@@ -660,6 +669,22 @@ This program is available under Apache License Version 2.0, available at https:/
       return (!(errorMessage && invalid ? errorId : undefined)).toString();
     }
 
+    _dispatchIronResizeEventIfNeeded(sizePropertyName, value) {
+      const previousSizePropertyName = '__previous' + sizePropertyName;
+      if (this[previousSizePropertyName] !== undefined
+          && this[previousSizePropertyName] !== value) {
+        this.dispatchEvent(
+          new CustomEvent('iron-resize', {bubbles: true})
+        );
+      }
+
+      this[previousSizePropertyName] = value;
+    }
+
+    __observeOffsetHeight() {
+      this._dispatchIronResizeEventIfNeeded('Height', this.offsetHeight);
+    }
+
     /**
      * @protected
      */
@@ -696,6 +721,12 @@ This program is available under Apache License Version 2.0, available at https:/
      * and the value is cleared using the clear button.
      *
      * @event input
+     */
+
+    /**
+     * Fired when the size of the element changes.
+     *
+     * @event iron-resize
      */
   };
 </script>

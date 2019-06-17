@@ -481,6 +481,59 @@
           textField.clear();
           expect(textField.inputElement.value).to.equal('');
         });
+
+        describe(`resize notification ${condition}`, () => {
+          let textField, spy;
+
+          beforeEach(() => {
+            textField = fixture(`default${fixtureName}`);
+            spy = sinon.spy();
+            textField.addEventListener('iron-resize', spy);
+          });
+
+          it('should not dispatch `iron-resize` event on init', () => {
+            expect(spy).to.not.be.called;
+          });
+
+          it('should dispatch `iron-resize` event on invalid height change', done => {
+            // Lumo theme defines a max-height transition for the "error-message"
+            // part on invalid state change.
+
+            // NOTE(platosha): Transition events are unreilable, IE skips
+            // the transition sometimes, Safari does not fire anything but
+            // 'transitionend', so transitions are hard to detect properly.
+            // Have to use a timeout here and in the next test instead.
+            setTimeout(() => {
+              expect(spy).to.be.called;
+              done();
+            }, 1000);
+
+            textField.errorMessage = 'Error';
+            textField.invalid = true;
+          });
+
+          it('should dispatch `iron-resize` event on error message height change', done => {
+            // Lumo theme defines a max-height transition for the "error-message"
+            // part on invalid state change.
+            setTimeout(() => {
+              spy.reset();
+
+              // Long message that spans on multiple lines
+              textField.errorMessage = [...new Array(42)].map(() => 'bla').join(' ');
+
+              expect(spy).to.be.calledOnce;
+              done();
+            }, 1000);
+
+            textField.errorMessage = 'Error';
+            textField.invalid = true;
+          });
+
+          it('should dispatch `iron-resize` event on label height change', () => {
+            textField.label = 'Label';
+            expect(spy).to.be.calledOnce;
+          });
+        });
       });
     });
   </script>

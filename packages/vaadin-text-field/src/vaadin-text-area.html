@@ -192,15 +192,7 @@ This program is available under Apache License Version 2.0, available at https:/
           inputField.style.removeProperty('display');
           inputField.scrollTop = scrollTop;
 
-          if (this.__previousInputHeight && this.__previousInputHeight !== inputHeight) {
-            this.dispatchEvent(
-              new CustomEvent('iron-resize', {
-                bubbles: true
-              })
-            );
-          }
-
-          this.__previousInputHeight = inputHeight;
+          this._dispatchIronResizeEventIfNeeded('InputHeight', inputHeight);
         }
 
         /**
