@@ -40,7 +40,7 @@
     </vaadin-demo-snippet>
 
     <h3>Selectable Item</h3>
-    <vaadin-demo-snippet id="item-basic-demos-selectable-item">
+    <vaadin-demo-snippet id="item-basic-demos-selectable-item" when-defined="vaadin-item">
       <template preserve-content>
         <style>
           vaadin-item[selected] {
@@ -52,7 +52,7 @@
 
         <script>
           window.addDemoReadyListener('#item-basic-demos-selectable-item', document => {
-            var item = document.querySelector('#selectable');
+            const item = document.querySelector('#selectable');
             item.addEventListener('click', e => item.selected = !item.selected);
           });
         </script>
