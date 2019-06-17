@@ -156,6 +156,29 @@ This program is available under Apache License Version 2.0, available at https:/
           this._storedName = name;
         }
 
+        /**
+         * @protected
+         */
+        attributeChangedCallback(prop, oldVal, newVal) {
+          super.attributeChangedCallback(prop, oldVal, newVal);
+          // Needed until Edge has CSS Custom Properties (present in Edge Preview)
+          /* istanbul ignore if */
+          if (/^(disabled|checked)$/.test(prop)) {
+            // iOS 10.3 Safari has an issue with repainting shadow root element styles when a host attribute changes.
+            // Need this workaround (toggle any inline css property on and off) until we drop iOS 10.
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+            /* istanbul ignore if */
+            if (isIOS && this.shadowRoot && parseInt(navigator.appVersion.match(/OS (\d+)_(\d+)_?(\d+)?/)[1], 10)) {
+              const WEBKIT_PROPERTY = '-webkit-backface-visibility';
+              this.shadowRoot.querySelectorAll('*').forEach(el => {
+                el.style[WEBKIT_PROPERTY] = 'visible';
+                el.style[WEBKIT_PROPERTY] = '';
+              });
+            }
+          }
+        }
+
+
         ready() {
           super.ready();
 
@@ -205,6 +228,10 @@ This program is available under Apache License Version 2.0, available at https:/
 
           this._addEventListenerToNode(this, 'up', (e) => {
             this.removeAttribute('active');
+
+            if (!this.checked && !this.disabled) {
+              this.checked = true;
+            }
           });
 
           this.addEventListener('keydown', e => {

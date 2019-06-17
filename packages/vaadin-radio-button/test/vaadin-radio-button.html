@@ -123,6 +123,12 @@
         expect(vaadinRadioButton.hasAttribute('active')).to.be.false;
       });
 
+      it('should be checked after up', () => {
+        down(vaadinRadioButton);
+        up(vaadinRadioButton);
+        expect(vaadinRadioButton.checked).to.be.true;
+      });
+
       it('should have active attribute on space', () => {
         MockInteractions.keyDownOn(vaadinRadioButton, 32);
         expect(vaadinRadioButton.hasAttribute('active')).to.be.true;
