@@ -25,7 +25,10 @@ gemini.suite('vaadin-custom-field', function(rootSuite) {
         .capture('default')
         .capture('focused', function(actions) {
           actions.executeJS(function(window) {
-            window.document.querySelector('vaadin-custom-field').setAttribute('focused', '');
+            var customFields = window.document.querySelectorAll('vaadin-custom-field');
+            for (var customField of customFields) {
+              customField.setAttribute('focused', '');
+            }
           });
         });
     });

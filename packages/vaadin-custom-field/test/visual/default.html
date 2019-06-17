@@ -15,21 +15,80 @@
       });
     });
   </script>
+  <style>
+    [type="number"] {
+      width: 30px;
+    }
+  </style>
 </head>
 
 <body>
 
-  <div id="default-tests" style="padding: 10px;">
-    Labeled
+  <div id="default-tests" style="padding: 10px; text-align: right; width: 650px;">
+    Default
     <vaadin-custom-field label="Home address">
       <input type="text">
       <input type="number">
+    </vaadin-custom-field>
+    with value
+    <vaadin-custom-field label="Home address">
+      <input type="text" value="Foo street">
+      <input type="number" value="42">
     </vaadin-custom-field>
     <br>
     Invalid
     <vaadin-custom-field label="Home address" invalid error-message="Foo">
       <input type="text">
       <input type="number">
+    </vaadin-custom-field>
+    with value
+    <vaadin-custom-field label="Home address" invalid error-message="Foo">
+      <input type="text" value="Foo street">
+      <input type="number" value="42">
+    </vaadin-custom-field>
+    <br>
+    Invalid (no message)
+    <vaadin-custom-field label="Home address" invalid>
+      <input type="text">
+      <input type="number">
+    </vaadin-custom-field>
+    with value
+    <vaadin-custom-field label="Home address" invalid>
+      <input type="text" value="Foo street">
+      <input type="number" value="42">
+    </vaadin-custom-field>
+    <br>
+    Required
+    <vaadin-custom-field label="Home address" required>
+      <input type="text">
+      <input type="number">
+    </vaadin-custom-field>
+    with value
+    <vaadin-custom-field label="Home address" required>
+      <input type="text" value="Foo street">
+      <input type="number" value="42">
+    </vaadin-custom-field>
+    <br>
+    Required Invalid
+    <vaadin-custom-field label="Home address" required invalid error-message="Foo">
+      <input type="text">
+      <input type="number">
+    </vaadin-custom-field>
+    with value
+    <vaadin-custom-field label="Home address" required invalid error-message="Foo">
+      <input type="text" value="Foo street">
+      <input type="number" value="42">
+    </vaadin-custom-field>
+    <br>
+    Required Invalid (no message)
+    <vaadin-custom-field label="Home address" required invalid>
+      <input type="text">
+      <input type="number">
+    </vaadin-custom-field>
+    with value
+    <vaadin-custom-field label="Home address" required invalid>
+      <input type="text" value="Foo street">
+      <input type="number" value="42">
     </vaadin-custom-field>
   </div>
 
