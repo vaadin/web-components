@@ -72,6 +72,16 @@ This program is available under Apache License Version 2.0, available at https:/
         static get version() {
           return '2.1.0';
         }
+
+        constructor() {
+          super();
+
+          /**
+           * Submittable string value. The default value is the trimmed text content of the element.
+           * @type {string}
+           */
+          this.value;
+        }
       }
 
       customElements.define(ItemElement.is, ItemElement);

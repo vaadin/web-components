@@ -54,16 +54,6 @@ This program is available under Apache License Version 2.0, available at https:/
       };
     }
 
-    constructor() {
-      super();
-
-      /**
-       * Submittable string value. The default value is the trimmed text content of the element.
-       * @type {string}
-       */
-      this.value;
-    }
-
     get value() {
       return this._value !== undefined ? this._value : this.textContent.trim();
     }
