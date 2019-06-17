@@ -127,8 +127,8 @@
       // Stop native change events
       e && e.stopPropagation();
 
-      this.validate();
       this.__setValue();
+      this.validate();
       this.dispatchEvent(new CustomEvent('change', {
         bubbles: true,
         cancelable: false,

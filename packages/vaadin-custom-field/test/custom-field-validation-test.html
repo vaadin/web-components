@@ -36,10 +36,11 @@
 
   <script>
     describe('validation', function() {
-      var customField;
+      let customField, textInput;
 
       beforeEach(function() {
         customField = fixture('default');
+        textInput = customField.querySelector('input[type="text"]');
       });
 
       it('should check validity on validate', function() {
@@ -50,9 +51,8 @@
 
       it('should run validation on input change', function() {
         const spy = sinon.spy(customField, 'checkValidity');
-        const input = customField.querySelector('input');
-        input.value = 'foo';
-        dispatchChange(input);
+        textInput.value = 'foo';
+        dispatchChange(textInput);
         expect(spy.called).to.be.true;
       });
 
@@ -98,6 +98,19 @@
         it('should become invalid on validate call when empty', function() {
           expect(customField.invalid).to.be.false;
           customField.validate();
+          expect(customField.invalid).to.be.true;
+        });
+
+        it('should become valid after receiving a non-empty value from "change" event', function() {
+          textInput.value = 'foo';
+          dispatchChange(textInput);
+          expect(customField.invalid).to.be.false;
+        });
+
+        it('should become invalid after receiving an empty value from "change" event', function() {
+          customField.value = 'foo';
+          textInput.value = '';
+          dispatchChange(textInput);
           expect(customField.invalid).to.be.true;
         });
 
