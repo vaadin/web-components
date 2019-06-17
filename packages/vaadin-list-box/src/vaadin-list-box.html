@@ -81,6 +81,13 @@ This program is available under Apache License Version 2.0, available at https:/
           };
         }
 
+        constructor() {
+          super();
+
+          /** @protected */
+          this.focused;
+        }
+
         ready() {
           super.ready();
           this.setAttribute('role', 'list');
