@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+
+<head lang="en">
+  <meta charset="UTF-8">
+  <title></title>
+  <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <script>
+    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+    document.write(`
+      <link rel="import" href="../../theme/${theme}/vaadin-app-layout.html">
+      <link rel="import" href="../../theme/${theme}/vaadin-drawer-toggle.html">
+    `);
+
+    window.addEventListener('WebComponentsReady', function() {
+      setTimeout(function() {
+        window.ShadyDOM && window.ShadyDOM.flush(); // Force DOM composition
+        window.webComponentsAreReady = true; // Checked in gemini before capture callback
+      });
+    });
+  </script>
+</head>
+
+<body>
+  <style>
+    body {
+      margin: 0;
+      height: 100%;
+    }
+
+    #drawer-tests {
+      min-height: 300px;
+    }
+  </style>
+
+  <div id="drawer-tests">
+    <vaadin-app-layout>
+      <vaadin-drawer-toggle slot="navbar"></vaadin-drawer-toggle>
+      <h2 slot="navbar">App Name</h2>
+      <section slot="drawer">
+        Drawer content
+      </section>
+      <main>
+        Page content
+      </main>
+    </vaadin-app-layout>
+  </div>
+
+</body>

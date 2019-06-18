@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+
+<head lang="en">
+  <meta charset="UTF-8">
+  <title></title>
+  <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <script>
+    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+    document.write(`
+      <link rel="import" href="../../theme/${theme}/vaadin-app-layout.html">
+      <link rel="import" href="../../theme/${theme}/vaadin-drawer-toggle.html">
+      <link rel="import" href="../../../vaadin-tabs/theme/${theme}/vaadin-tabs.html">
+      <link rel="import" href="../../../vaadin-lumo-styles/icons.html">
+    `);
+
+    window.addEventListener('WebComponentsReady', function() {
+      setTimeout(function() {
+        window.ShadyDOM && window.ShadyDOM.flush(); // Force DOM composition
+        window.webComponentsAreReady = true; // Checked in gemini before capture callback
+      });
+    });
+  </script>
+</head>
+
+<body>
+  <style>
+    body {
+      margin: 0;
+      height: 100%;
+    }
+
+    #tabs-tests {
+      min-height: 300px;
+    }
+  </style>
+
+  <div id="tabs-tests">
+    <vaadin-app-layout>
+      <vaadin-drawer-toggle slot="navbar"></vaadin-drawer-toggle>
+      <h2 slot="navbar">App Name</h2>
+      <vaadin-tabs orientation="vertical" slot="drawer">
+        <vaadin-tab>
+          <a href="/">
+            <iron-icon icon="lumo:calendar"></iron-icon>
+            Page 1
+          </a>
+        </vaadin-tab>
+        <vaadin-tab>
+          <a href="page2">
+            <iron-icon icon="lumo:user"></iron-icon>
+            Page 2
+          </a>
+        </vaadin-tab>
+        <vaadin-tab>
+          <a href="page3">
+            <iron-icon icon="lumo:phone"></iron-icon>
+            Page 3
+          </a>
+        </vaadin-tab>
+      </vaadin-tabs>
+      <main>
+        Page content
+      </main>
+    </vaadin-app-layout>
+  </div>
+
+</body>
