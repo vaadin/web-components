@@ -13,7 +13,6 @@
         font-size: var(--lumo-font-size-m);
         line-height: var(--lumo-line-height-xs);
         font-weight: 500;
-        text-align: center;
         opacity: 1;
         color: var(--lumo-contrast-60pct);
         transition: 0.15s color, 0.2s transform;
@@ -34,12 +33,15 @@
         user-select: none;
       }
 
+      :host(:not([orientation="vertical"])) {
+        text-align: center;
+      }
+
       :host([orientation="vertical"]) {
         transform-origin: 0% 50%;
         padding: 0.25rem 1rem;
         min-height: var(--lumo-size-m);
         min-width: 0;
-        text-align: left;
       }
 
       :host(:hover),
@@ -111,10 +113,13 @@
         opacity: 0;
       }
 
+      :host(:not([orientation="vertical"])) ::slotted(a[href]) {
+        justify-content: center;
+      }
+
       :host ::slotted(a[href]) {
         display: flex;
         width: 100%;
-        justify-content: center;
         align-items: center;
         height: 100%;
         margin: -0.5rem -0.75rem;
