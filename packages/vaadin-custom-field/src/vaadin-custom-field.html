@@ -151,6 +151,15 @@ This program is available under Apache License Version 2.0, available at https:/
             },
 
             /**
+             * Specifies that the custom field has a value.
+             */
+            hasValue: {
+              type: Boolean,
+              reflectToAttribute: true,
+              computed: '__computeHasValue(value)'
+            },
+
+            /**
              * Error to show when the input value is invalid.
              */
             errorMessage: {
@@ -171,6 +180,9 @@ This program is available under Apache License Version 2.0, available at https:/
           this.__setOrToggleAttribute('aria-invalid', invalid, this);
         }
 
+        __computeHasValue(value) {
+          return value !== null && value.trim() !== '';
+        }
 
         _labelChanged(label) {
           if (label !== '' && label != null) {
