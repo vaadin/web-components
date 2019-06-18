@@ -12,26 +12,6 @@
       }
     },
     {
-      "name": "Prefix and Suffix",
-      "url": "text-field-prefix-suffix-demos",
-      "src": "text-field-prefix-suffix-demos.html",
-      "meta": {
-        "title": "Vaadin Text Field Prefix and Suffix Examples",
-        "description": "",
-        "image": ""
-      }
-    },
-    {
-      "name": "Validation",
-      "url": "text-field-validators-demos",
-      "src": "text-field-validators-demos.html",
-      "meta": {
-        "title": "Vaadin Text Field Validation Examples",
-        "description": "",
-        "image": ""
-      }
-    },
-    {
       "name": "Password Field",
       "url": "password-field-demos",
       "src": "password-field-demos.html",
@@ -72,11 +52,21 @@
       }
     },
     {
-      "name": "Styling",
-      "url": "text-field-styling-demos",
-      "src": "text-field-styling-demos.html",
+      "name": "Prefix and Suffix",
+      "url": "text-field-prefix-suffix-demos",
+      "src": "text-field-prefix-suffix-demos.html",
       "meta": {
-        "title": "Vaadin Text Field Styling Examples",
+        "title": "Vaadin Text Field Prefix and Suffix Examples",
+        "description": "",
+        "image": ""
+      }
+    },
+    {
+      "name": "Validation",
+      "url": "text-field-validators-demos",
+      "src": "text-field-validators-demos.html",
+      "meta": {
+        "title": "Vaadin Text Field Validation Examples",
         "description": "",
         "image": ""
       }
@@ -87,6 +77,16 @@
       "src": "text-field-theme-demos.html",
       "meta": {
         "title": "Vaadin Text Field Theme Variants",
+        "description": "",
+        "image": ""
+      }
+    },
+    {
+      "name": "Styling",
+      "url": "text-field-styling-demos",
+      "src": "text-field-styling-demos.html",
+      "meta": {
+        "title": "Vaadin Text Field Styling Examples",
         "description": "",
         "image": ""
       }

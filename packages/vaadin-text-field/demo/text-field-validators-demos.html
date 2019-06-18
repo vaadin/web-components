@@ -18,10 +18,10 @@
     </vaadin-demo-snippet>
 
 
-    <h3>Minlength and Maxlength</h3>
+    <h3>Minlength and maxlength</h3>
     <vaadin-demo-snippet id="text-field-basic-demos-minlength-and-maxlength-validation">
       <template preserve-content>
-        <vaadin-text-field minlength="2" label="Min 2 characters"></vaadin-text-field>
+        <vaadin-text-field minlength="2" label="Min 2 characters" error-message="Minimum 2 characters"></vaadin-text-field>
         <vaadin-text-field maxlength="4" label="Max 4 characters"></vaadin-text-field>
       </template>
     </vaadin-demo-snippet>
@@ -32,13 +32,13 @@
       checked against.</p>
     <vaadin-demo-snippet id="text-field-basic-demos-pattern-validation">
       <template preserve-content>
-        <vaadin-text-field pattern="[A-Z]{2}\d{3,4}" label="Flight number"></vaadin-text-field>
+        <vaadin-text-field pattern="[A-Z]{2}\d{3,4}" label="Flight number" error-message="Not a valid flight number"></vaadin-text-field>
         <p>Valid flight number: 2 uppercase letters followed by 3 or 4 numbers. For example: SA1234</p>
       </template>
     </vaadin-demo-snippet>
 
 
-    <h3>Prevent Invalid Input</h3>
+    <h3>Prevent invalid input</h3>
     <p>Username contains alphanumeric characters, underscores and dots.</p>
     <vaadin-demo-snippet id="text-field-basic-demos-preventing-invalid-input">
       <template preserve-content>
@@ -50,7 +50,7 @@
     </vaadin-demo-snippet>
 
 
-    <h3>Synchronous Custom Validator</h3>
+    <h3>Synchronous custom validator</h3>
 
     <p>Extend <code>Vaadin.TextFieldElement</code> to create your own custom element,
       then override the <code>checkValidity()</code> method to validate the user’s input.</p>
@@ -58,7 +58,7 @@
       when-defined="vaadin-text-field">
       <template preserve-content>
         <vaadin-text-field label="ID" minlength="10" maxlength="10"></vaadin-text-field>
-        <p>Valid ID: Use a 10 digit number. The sum of digits must be dividable by 10. For
+        <p>Valid ID: Use a 10 digit number. The sum of digits must be divisible by 10. For
           example 1111111111.</p>
 
         <script>
@@ -97,7 +97,7 @@
     </vaadin-demo-snippet>
 
 
-    <h3>Asynchronous Custom Validator</h3>
+    <h3>Asynchronous custom validator</h3>
 
     <p>Extend <code>Vaadin.TextFieldElement</code> to create your own custom element,
       then override the <code>checkValidity()</code> to make your asynchronous validation,
