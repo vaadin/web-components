@@ -128,24 +128,18 @@ This program is available under Apache License Version 2.0, available at https:/
             },
 
             /**
+             * Name of the element.
+             */
+            name: String,
+
+            /**
              * The value for this element.
              */
             value: {
               type: String,
               value: 'on'
             }
-
           };
-        }
-
-        constructor() {
-          super();
-
-          /**
-           * @type {string}
-           * Name of the element.
-           */
-          this.name;
         }
 
         get name() {
