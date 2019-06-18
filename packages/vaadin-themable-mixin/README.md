@@ -4,6 +4,7 @@
 1. [Adding Styles to Local Scope](#adding-styles-to-local-scope)
 1. [Stylable Shadow Parts](#stylable-shadow-parts)
 1. [Scoping Styles in a Theme Module](#scoping-styles-in-a-theme-module)
+1. [Theme Attribute and Subcomponents](#theme-attribute-and-subcomponents)
 1. [External resources](#external-resources)
 
 
@@ -371,6 +372,108 @@ This approach is used by the built-in variations in Vaadin themes (Valo and Mate
   <vaadin-text-field class="special-field"></vaadin-text-field>
 </div>
 ```
+
+
+
+# Theme Attribute and Subcomponents
+
+Sometimes components using `VaadinThemableMixin` are contained in Shadow DOM of other components. In such a case, we propagate the `theme` attribute of the host web component to subcomponents.
+
+For example, Vaadin components using `<vaadin-text-field>` is used as an internal input field subcomponent, including `<vaadin-combo-box>`, `<vaadin-date-picker>`, and so on, propagate the `theme` attribute. You can use theme variants defined for `<vaadin-text-field>` in, e. g., `<vaadin-combo-box>`, and this will affect the internal subcomponent:
+
+#### Example: using `small` Lumo theme variant on `<vaadin-combo-box>`
+
+```html
+<vaadin-combo-box theme="small"></vaadin-combo-box>
+```
+
+If you can define a custom theme variant for `<vaadin-text-field>`, you can use it with other Vaadin components that have an internal `<vaadin-text-field>` too:
+
+#### Example: using a custom text field `theme` variant with `<vaadin-combo-box>`
+
+```html
+<!-- Define the theme module (in index.html or in a separate HTML import) -->
+<dom-module id="special-field-theme" theme-for="vaadin-text-field">
+  <template>
+    <style>
+      :host([theme~="special-field"]) [part="input-field"] {
+        background-color: #000;
+        color: #fff;
+        border: 2px solid #fff;
+        border-radius: 9px;
+        ...
+      }
+    </style>
+  </template>
+</dom-module>
+
+<!-- Apply the theme attribute to <vaadin-combo-box> -->
+<vaadin-combo-box theme="special-field"></vaadin-combo-box>
+```
+
+### How to propagate the `theme` attribute in your components
+
+With your Polymer-based web components you can use `VaadinThemePropertyMixin` to propagate the `theme` to subcomponents. The mixin provides the `theme` property that you can bind to descendant attributes.
+
+#### Example: a Polymer-based element that propagates the `theme` to Vaadin subcomponents:
+
+```js
+class MyFieldElement extends Vaadin.ThemePropertyMixin(Polymer.Element) {
+  static get is() { return 'my-field'; }
+
+  static get template() {
+    return html`<vaadin-text-field theme$="[[theme]]"></vaadin-text-field>`;
+  }
+}
+
+CustomElements.define(MyFieldElement.is, MyFieldElement);
+```
+
+```html
+<my-field theme="small"></my-field>
+```
+
+## List of Vaadin components that propagate `theme` to subcomponents
+
+- `<vaadin-context-menu>`’s theme propagates to internal:
+  - `<vaadin-context-menu-overlay>`
+- `<vaadin-time-picker>`:
+  - `<vaadin-combo-box-light>`
+  - `<vaadin-time-picker-text-field>`
+- `<vaadin-select>`:
+  - `<vaadin-text-field>`
+  - `<vaadin-select-overlay>`
+- `<vaadin-dialog>`:
+  - `<vaadin-dialog-overlay>`
+- `<vaadin-combo-box>`:
+  - `<vaadin-text-field>`
+  - `<vaadin-combo-box-dropdown-wrapper>`
+  - `<vaadin-combo-box-dropdown>`
+  - `<vaadin-combo-box-item>`
+- `<vaadin-combo-box-light>`:
+  - `<vaadin-combo-box-dropdown-wrapper>`
+  - `<vaadin-combo-box-dropdown>`
+  - `<vaadin-combo-box-item>`
+- `<vaadin-crud>`:
+  - `<vaadin-crud-grid>`
+  - `<vaadin-dialog-layout>`
+  - `<vaadin-dialog>`
+  - `<vaadin-confirm-dialog>`
+- `<vaadin-date-picker>`:
+  - `<vaadin-text-field>`
+  - `<vaadin-date-picker-overlay>`
+  - `<vaadin-date-picker-overlay-content>`
+  - `<vaadin-month-calendar>`
+- `<vaadin-date-picker-light>`:
+  - `<vaadin-date-picker-overlay>`
+  - `<vaadin-date-picker-overlay-content>`
+  - `<vaadin-month-calendar>`
+- `<vaadin-notification>`:
+  - `<vaadin-notification-card>`
+- `<vaadin-login-overlay>`:
+  - `<vaadin-login-overlay-wrapper>`
+- `<vaadin-login-form>`:
+  - `<vaadin-login-form-wrapper>`
 
 
 
