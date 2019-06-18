@@ -6,14 +6,37 @@
     <style include="material-button">
       :host {
         min-width: 0 !important;
-        border-radius: 0;
-        padding: 16px;
+        width: 48px;
+        height: 48px;
+        margin-right: 1em;
+        padding: 0;
+        border-radius: 50%;
       }
 
       [part="icon"],
       [part="icon"]::after,
       [part="icon"]::before {
         background-color: var(--material-primary-color);
+      }
+
+      [part='icon'] {
+        top: 18px;
+        left: 15px;
+      }
+
+      [part='icon'],
+      [part='icon']::after,
+      [part='icon']::before {
+        height: 2px;
+        width: 18px;
+      }
+
+      [part='icon']::after {
+        top: 5px;
+      }
+
+      [part='icon']::before {
+        top: 10px;
       }
     </style>
   </template>
