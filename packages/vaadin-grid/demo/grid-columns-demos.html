@@ -28,7 +28,7 @@
       <code>dataProvider</code>. Otherwise the initial column widths may be calculated before the renderers have been run and
       the widths of the renderer columns might be wrong initially.
     </p>
-    <vaadin-demo-snippet id='grid-columns-demos-auto-width'>
+    <vaadin-demo-snippet id="grid-columns-demos-auto-width" when-defined="vaadin-grid">
       <template preserve-content>
         <vaadin-button>Recalculate column widths</vaadin-button>
         <vaadin-grid theme="compact column-borders" aria-label="Automatic Column Width Example">
@@ -79,7 +79,7 @@
     <p>
       <b>NOTE: You must explicitly import the <code>vaadin-grid-column-group</code> in order to use it.</b>
     </p>
-    <vaadin-demo-snippet id='grid-columns-demos-column-grouping'>
+    <vaadin-demo-snippet id="grid-columns-demos-column-grouping" when-defined="vaadin-grid">
       <template preserve-content>
         <vaadin-grid aria-label="Column Grouping Example">
           <vaadin-grid-column width="60px" flex-grow="0" text-align="end" header="#"></vaadin-grid-column>
@@ -128,7 +128,7 @@
       <b>Note:</b> Columns are frozen in-place, freeze columns from left to right
       for a consistent outcome.
     </p>
-    <vaadin-demo-snippet id='grid-columns-demos-freezing-columns'>
+    <vaadin-demo-snippet id="grid-columns-demos-freezing-columns" when-defined="vaadin-grid">
       <template preserve-content>
         <vaadin-checkbox>Freeze First Two Columns</vaadin-checkbox>
 
@@ -174,7 +174,7 @@
     <p>
       Applying <code>hidden</code> on a column or column group will hide it.
     </p>
-    <vaadin-demo-snippet id='grid-columns-demos-hiding-columns'>
+    <vaadin-demo-snippet id="grid-columns-demos-hiding-columns" when-defined="vaadin-grid">
       <template preserve-content>
         <vaadin-context-menu>
           <vaadin-button theme="icon" aria-label="Hide column menu">
@@ -246,7 +246,7 @@
       <b>Note: </b>When using column groups, columns can be reordered only within
       their parent group.
     </p>
-    <vaadin-demo-snippet id='grid-columns-demos-reordering-and-resizing-columns'>
+    <vaadin-demo-snippet id="grid-columns-demos-reordering-and-resizing-columns" when-defined="vaadin-grid">
       <template preserve-content>
         <vaadin-grid aria-label="Reordering and Resizing Columns Example" size="200" column-reordering-allowed>
           <vaadin-grid-column resizable width="60px" flex-grow="0" text-align="end" header="#"></vaadin-grid-column>

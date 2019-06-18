@@ -23,8 +23,8 @@
             margin-bottom: 20px;
           }
         </style>
-        <vaadin-button raised id="add-btn">Add Item</vaadin-button>
-        <vaadin-button raised id="remove-btn">Remove Item</vaadin-button>
+        <vaadin-button id="add-btn">Add Item</vaadin-button>
+        <vaadin-button id="remove-btn">Remove Item</vaadin-button>
 
         <vaadin-grid aria-label="Dynamic Data Example">
           <vaadin-grid-column path="name.first" header="First name"></vaadin-grid-column>
@@ -57,15 +57,15 @@
       Setting <code>height-by-rows</code> will make <code>&lt;vaadin-grid&gt;</code> grow
       and shrink in height depending on the number of rows.
     </p>
-    <vaadin-demo-snippet id='grid-data-demos-dynamic-height'>
+    <vaadin-demo-snippet id="grid-data-demos-dynamic-height" when-defined="vaadin-grid">
       <template preserve-content>
         <style>
           vaadin-button {
             margin-bottom: 20px;
           }
         </style>
-        <vaadin-button raised id="add-btn">Add Item</vaadin-button>
-        <vaadin-button raised id="remove-btn">Remove Item</vaadin-button>
+        <vaadin-button id="add-btn">Add Item</vaadin-button>
+        <vaadin-button id="remove-btn">Remove Item</vaadin-button>
 
         <vaadin-grid aria-label="Dynamic Data Example" height-by-rows>
           <vaadin-grid-column path="name.first" header="First name"></vaadin-grid-column>
@@ -105,7 +105,7 @@
       Size can be provided as the second argument of the data provider <code>callback</code> also.
       See the "Tree Grid" demo for example.
     </p>
-    <vaadin-demo-snippet id='grid-data-demos-assigning-remotefunction-data'>
+    <vaadin-demo-snippet id="grid-data-demos-assigning-remotefunction-data" when-defined="vaadin-grid">
       <template preserve-content>
         <vaadin-grid aria-label="Remote Data Example">
           <vaadin-grid-column path="firstName"></vaadin-grid-column>

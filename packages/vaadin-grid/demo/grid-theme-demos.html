@@ -25,7 +25,7 @@
       </ul>
     </ul>
 
-    <vaadin-demo-snippet id='grid-theme-demos-compact'>
+    <vaadin-demo-snippet id="grid-theme-demos-compact" when-defined="vaadin-grid">
       <template preserve-content>
         <vaadin-grid theme="compact" column-reordering-allowed multi-sort>
           <vaadin-grid-selection-column auto-select></vaadin-grid-selection-column>
@@ -45,7 +45,7 @@
     <h3>No border</h3>
     <p><code>&lt;vaadin-grid <b>theme="no-border"</b>&gt;</code></p>
     <p>When setting <code><b>theme="no-border"</b></code>, the outer border on the grid is removed.</p>
-    <vaadin-demo-snippet id='grid-theme-demos-bordered'>
+    <vaadin-demo-snippet id="grid-theme-demos-bordered" when-defined="vaadin-grid">
       <template preserve-content>
         <vaadin-grid theme="no-border" column-reordering-allowed multi-sort>
           <vaadin-grid-selection-column auto-select></vaadin-grid-selection-column>
@@ -65,7 +65,7 @@
     <h3>No row borders</h3>
     <p><code>&lt;vaadin-grid <b>theme="no-row-borders"</b>&gt;</code></p>
     <p>When setting <code><b>theme="no-row-borders"</b></code>, all the borders on the grid rows are removed.</p>
-    <vaadin-demo-snippet id='grid-theme-demos-row-borders'>
+    <vaadin-demo-snippet id="grid-theme-demos-row-borders" when-defined="vaadin-grid">
       <template preserve-content>
         <vaadin-grid theme="no-row-borders" column-reordering-allowed multi-sort>
           <vaadin-grid-selection-column auto-select></vaadin-grid-selection-column>
@@ -84,10 +84,10 @@
 
     <h3>Column borders</h3>
     <p><code>&lt;vaadin-grid <b>theme="column-borders"</b>&gt;</code></p>
-    <p>When setting <code><b>theme="column-borders"</b></code>, 
-      all the cells (except row details) have the border-right set. 
+    <p>When setting <code><b>theme="column-borders"</b></code>,
+      all the cells (except row details) have the border-right set.
       This doesn't apply to the last column, to ensure proper outer grid border appearance.</p>
-    <vaadin-demo-snippet id='grid-theme-demos-column-borders'>
+    <vaadin-demo-snippet id="grid-theme-demos-column-borders" when-defined="vaadin-grid">
       <template preserve-content>
         <vaadin-grid theme="column-borders" column-reordering-allowed multi-sort>
           <vaadin-grid-selection-column auto-select></vaadin-grid-selection-column>
@@ -106,11 +106,11 @@
 
     <h3>Row Stripes</h3>
     <p><code>&lt;vaadin-grid <b>theme="row-stripes"</b>&gt;</code></p>
-    <p>When setting <code><b>theme="row-stripes"</b></code>, 
-      all the even grid rows (their body and details cells) are filled with the background of 
-      <code><b>--lumo-contrast-5pct</b></code>. 
+    <p>When setting <code><b>theme="row-stripes"</b></code>,
+      all the even grid rows (their body and details cells) are filled with the background of
+      <code><b>--lumo-contrast-5pct</b></code>.
       The odd rows cells appearance is left unchanged.</p>
-    <vaadin-demo-snippet id='grid-theme-demos-row-stripes'>
+    <vaadin-demo-snippet id="grid-theme-demos-row-stripes" when-defined="vaadin-grid">
       <template preserve-content>
         <vaadin-grid theme="row-stripes" column-reordering-allowed multi-sort>
           <vaadin-grid-selection-column auto-select></vaadin-grid-selection-column>
@@ -130,7 +130,7 @@
     <h3>Wrap Cell Content</h3>
     <p><code>&lt;vaadin-grid <b>theme="wrap-cell-content"</b>&gt;</code></p>
     <p>By default, cell contents don’t wrap and all overflowing content is either clipped or truncated. Apply the <code>wrap-cell-content</code> theme to make the cell content wrap instead.</p>
-    <vaadin-demo-snippet id='grid-theme-demos-wrap-cell-content'>
+    <vaadin-demo-snippet id="grid-theme-demos-wrap-cell-content" when-defined="vaadin-grid">
       <template preserve-content>
         <vaadin-grid theme="wrap-cell-content" column-reordering-allowed multi-sort>
           <vaadin-grid-selection-column auto-select></vaadin-grid-selection-column>

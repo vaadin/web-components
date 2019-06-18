@@ -19,7 +19,7 @@
     <p>
       <strong>NOTE: You must explicitly import <code>vaadin-grid-tree-column</code> in order to use it.</strong>
     </p>
-    <vaadin-demo-snippet id="grid-tree-demos-renderer-data-provider">
+    <vaadin-demo-snippet id="grid-tree-demos-renderer-data-provider" when-defined="vaadin-grid">
       <template preserve-content>
         <vaadin-grid aria-label="Tree Data Grid Example" data-provider="[[_dataProvider]]">
           <vaadin-grid-tree-column path="name" header="Expense category" item-has-children-path="hasChildren"></vaadin-grid-tree-column>
@@ -68,7 +68,7 @@
     <p>
       <strong>NOTE: You must explicitly import <code>vaadin-grid-tree-toggle</code> in order to use it.</strong>
     </p>
-    <vaadin-demo-snippet id="grid-tree-demos-tree-toggle">
+    <vaadin-demo-snippet id="grid-tree-demos-tree-toggle" when-defined="vaadin-grid">
       <template preserve-content>
         <vaadin-grid aria-label="Tree Data Grid Example" data-provider="[[_dataProvider]]">
           <vaadin-grid-column header="Expense category"></vaadin-grid-column>
@@ -135,7 +135,7 @@
       for the <code>expanded</code>, <code>level</code>, and <code>leaf</code>
       properties.
     </p>
-    <vaadin-demo-snippet id="grid-tree-demos-polymer-template">
+    <vaadin-demo-snippet id="grid-tree-demos-polymer-template" when-defined="vaadin-grid">
       <template preserve-content>
         <vaadin-grid aria-label="Tree Data Grid Example" data-provider="[[_dataProvider]]">
           <vaadin-grid-column>

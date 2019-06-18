@@ -6,7 +6,7 @@
       }
     </style>
 
-    <p>Read more about writing custom CSS for themable elements from the 
+    <p>Read more about writing custom CSS for themable elements from the
       <a href="https://github.com/vaadin/vaadin-themable-mixin/wiki">
         styling and theming documentation
       </a>.
@@ -14,7 +14,7 @@
 
     <h3>Generating Class Names for Grid Cells</h3>
 
-    <vaadin-demo-snippet id='grid-styling-demos-cell-class-generator'>
+    <vaadin-demo-snippet id="grid-styling-demos-cell-class-generator" when-defined="vaadin-grid">
       <template preserve-content>
 
         <!-- Place these styles in index.html or in a separate HTML import -->
@@ -37,7 +37,7 @@
           </template>
         </dom-module>
 
-        <vaadin-grid aria-label="Styling Grid With Cell Class Generator Example" id="grid" size="200">
+        <vaadin-grid aria-label="Styling Grid With Cell Class Generator Example" size="200">
           <vaadin-grid-column path="name.first" header="First name"></vaadin-grid-column>
           <vaadin-grid-column path="name.last" header="Last name"></vaadin-grid-column>
           <vaadin-grid-column path="email"></vaadin-grid-column>
@@ -63,7 +63,7 @@
 
     <h3>Updating Styles After Changes in the Data</h3>
 
-    <vaadin-demo-snippet id='grid-styling-demos-regenerate-classes'>
+    <vaadin-demo-snippet id="grid-styling-demos-regenerate-classes" when-defined="vaadin-grid">
       <template preserve-content>
 
         <!-- Place these styles in index.html or in a separate HTML import -->
@@ -90,7 +90,7 @@
           </template>
         </dom-module>
 
-        <vaadin-grid aria-label="Updating Cell Class Generator Example" id="grid" size="200">
+        <vaadin-grid aria-label="Updating Cell Class Generator Example" size="200">
           <vaadin-grid-column id="check" flex-grow="0" width="60px"></vaadin-grid-column>
           <vaadin-grid-column path="name.first" header="First name"></vaadin-grid-column>
           <vaadin-grid-column path="name.last" header="Last name"></vaadin-grid-column>

@@ -23,7 +23,7 @@
     <p>
       <b>NOTE: You must explicitly import the <code>vaadin-grid-selection-column</code> in order to use it.</b>
     </p>
-    <vaadin-demo-snippet id='grid-selection-demos-selecting'>
+    <vaadin-demo-snippet id="grid-selection-demos-selecting" when-defined="vaadin-grid">
       <template preserve-content>
         <vaadin-grid aria-label="Multi-Selection Example">
           <vaadin-grid-selection-column auto-select></vaadin-grid-selection-column>
@@ -55,9 +55,9 @@
       In the example below, the grid's <code>selectedItems</code> array is replaced
       whenever <code>activeItem</code> changes, making it single-selectable.
     </p>
-    <vaadin-demo-snippet id='grid-selection-demos-selection-using-active-item'>
+    <vaadin-demo-snippet id="grid-selection-demos-selection-using-active-item" when-defined="vaadin-grid">
       <template preserve-content>
-        <vaadin-grid aria-label="Selection using Active Item Example" id="grid">
+        <vaadin-grid aria-label="Selection using Active Item Example">
           <vaadin-grid-column path="name.first" header="First name"></vaadin-grid-column>
           <vaadin-grid-column path="name.last" header="Last name"></vaadin-grid-column>
           <vaadin-grid-column path="email"></vaadin-grid-column>
@@ -90,7 +90,7 @@
       The <code>selected</code> property of the <code>rowData</code> renderer parameter is used
       here to reflect the item's selection state to a checkbox on the corresponding row.
     </p>
-    <vaadin-demo-snippet id='grid-selection-demos-custom-select-all-with-data-provider'>
+    <vaadin-demo-snippet id="grid-selection-demos-custom-select-all-with-data-provider" when-defined="vaadin-grid">
       <template preserve-content>
         <vaadin-grid aria-label="Select All with Data Example">
           <vaadin-grid-column width="60px" flex-grow="0"></vaadin-grid-column>
@@ -178,7 +178,7 @@
       Try clicking and pressing <kbd>Space</kbd> for the body cell contents
       in the example below.
     </p>
-    <vaadin-demo-snippet id='grid-selection-demos-space-key-action-and-click-to-activate'>
+    <vaadin-demo-snippet id="grid-selection-demos-space-key-action-and-click-to-activate" when-defined="vaadin-grid">
       <template preserve-content>
         <vaadin-grid aria-label="Space Key Action Example">
           <vaadin-grid-column></vaadin-grid-column>
@@ -273,7 +273,7 @@
       with Polymer templates, the instance property <code>{{selected}}</code> can also be
       toggled to apply selection.
     </p>
-    <vaadin-demo-snippet id='grid-selection-demos-selection-using-templates'>
+    <vaadin-demo-snippet id="grid-selection-demos-selection-using-templates" when-defined="vaadin-grid">
       <template preserve-content>
         <dom-bind>
           <template>
