@@ -38,7 +38,7 @@
     "webcomponentsjs": "^1.0.0",
     "web-component-tester": "^6.1.5",
     "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^3.0.0",
-    "vaadin-tabs": "vaadin/vaadin-tabs#^3.0.0",
+    "vaadin-tabs": "vaadin/vaadin-tabs#^3.0.2",
     "vaadin-icons": "vaadin/vaadin-icons#^4.2.0"
   }
 }
