@@ -20,16 +20,29 @@
 
 ```html
 <vaadin-app-layout>
-  <h3 slot="branding">Application Name</h3>
-  <vaadin-tabs slot="menu">
-      <vaadin-tab>Page 1</vaadin-tab>
-      <vaadin-tab>Page 2</vaadin-tab>
+  <nav slot="navbar touch-optimized">
+    <vaadin-drawer-toggle></vaadin-drawer-toggle>
+    <h3>Application Name</h3>
+  </nav>
+  <vaadin-tabs orientation="vertical" slot="drawer">
+    <vaadin-tab>
+      <a href="/profile">
+        <iron-icon icon="lumo:user"></iron-icon>
+        Profile
+      </a>
+    </vaadin-tab>
+    <vaadin-tab>
+      <a href="/contact">
+        <iron-icon icon="lumo:phone"></iron-icon>
+        Contact
+      </a>
+    </vaadin-tab>
   </vaadin-tabs>
   <div>Page content</div>
 </vaadin-app-layout>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-app-layout/master/screenshot.png" width="500" alt="Screenshot of vaadin-app-layout">](https://vaadin.com/components/vaadin-app-layout)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-app-layout/master/screenshot.png" width="801" alt="Screenshot of vaadin-app-layout">](https://vaadin.com/components/vaadin-app-layout)
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-app-layout/master/screenshot-mobile.png" width="350" alt="Screenshot of vaadin-app-layout on mobile">](https://vaadin.com/components/vaadin-app-layout)
 
@@ -55,6 +68,7 @@ Once installed, import it in your application:
 
 ```html
 <link rel="import" href="bower_components/vaadin-app-layout/vaadin-app-layout.html">
+<link rel="import" href="bower_components/vaadin-app-layout/vaadin-drawer.toggle.html">
 ```
 ### Polymer 3 and ES Modules compatible version
 
@@ -69,25 +83,31 @@ Once installed, import it in your application:
 
 ```js
 import '@vaadin/vaadin-app-layout/vaadin-app-layout.js';
+import '@vaadin/vaadin-app-layout/vaadin-drawer-toggle.js';
 ```
 
 ## Getting Started
 
 Vaadin components use the Lumo theme by default.
 
-## The file structure for Vaadin components
+To use the Material theme, import the correspondent file from the `theme/material` folder.
 
-- `src/vaadin-app-layout.html`
+## Entry points
 
-  Unstyled component.
+- The components with the Lumo theme:
 
-- `theme/lumo/vaadin-app-layout.html`
+  `theme/lumo/vaadin-app-layout.html`
+  `theme/lumo/vaadin-drawer-toggle.html`
 
-  Component with Lumo theme.
+- The components with the Material theme:
 
-- `vaadin-app-layout.html`
+  `theme/material/vaadin-app-layout.html`
+  `theme/material/vaadin-drawer-toggle.html`
 
-  Alias for theme/lumo/vaadin-app-layout.html
+- Aliases for `theme/lumo/vaadin-app-layout.html` `theme/lumo/vaadin-drawer-toggle.html`
+
+  `vaadin-app-layout.html`
+  `vaadin-drawer-toggle.html`
 
 
 ## Running demos and tests in browser
