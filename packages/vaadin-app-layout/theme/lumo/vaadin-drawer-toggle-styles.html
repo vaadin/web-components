@@ -5,9 +5,12 @@
   <template>
     <style include="lumo-button">
       :host {
-        min-width: 0 !important;
-        height: inherit;
-        width: inherit;
+        width: var(--lumo-size-l);
+        height: var(--lumo-size-l);
+        min-width: auto;
+        margin: 0 var(--lumo-space-s);
+        padding: 0;
+        background: transparent;
       }
 
       [part="icon"],
