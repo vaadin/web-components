@@ -4,6 +4,6 @@
     "\"resolutions\": {"
   ],
   "to": [
-    "\"resolutions\": {\n\"@vaadin/vaadin-dialog\": \"2.2.0-alpha2\",\n\"@vaadin/vaadin-overlay\": \"3.2.0-alpha3\",\n\"@vaadin/vaadin-notification\": \"1.2.0-alpha2\","
+    "\"resolutions\": {\n\"@vaadin/vaadin-dialog\": \"2.2.1\",\n\"@vaadin/vaadin-overlay\": \"3.2.12\",\n\"@vaadin/vaadin-notification\": \"1.4.0\","
   ]
 }

@@ -26,16 +26,16 @@
   ],
   "dependencies": {
     "polymer": "^2.0.0",
-    "vaadin-themable-mixin": "vaadin/vaadin-themable-mixin#^1.3.2",
-    "vaadin-element-mixin": "vaadin/vaadin-element-mixin#^2.1.2",
-    "vaadin-lumo-styles": "vaadin/vaadin-lumo-styles#^1.3.1",
-    "vaadin-material-styles": "vaadin/vaadin-material-styles#^1.2.0",
-    "vaadin-dialog": "^2.2.0",
-    "vaadin-grid": "^5.2.1",
-    "vaadin-form-layout": "^2.1.0",
-    "vaadin-text-field": "^2.1.3",
-    "vaadin-button": "^2.1.0",
-    "vaadin-confirm-dialog": "^1.1.0",
+    "vaadin-themable-mixin": "vaadin/vaadin-themable-mixin#^1.4.4",
+    "vaadin-element-mixin": "vaadin/vaadin-element-mixin#^2.1.3",
+    "vaadin-lumo-styles": "vaadin/vaadin-lumo-styles#^1.5.0",
+    "vaadin-material-styles": "vaadin/vaadin-material-styles#^1.2.3",
+    "vaadin-dialog": "^2.2.1",
+    "vaadin-grid": "^5.4.5",
+    "vaadin-form-layout": "^2.1.4",
+    "vaadin-text-field": "^2.4.5",
+    "vaadin-button": "^2.2.0",
+    "vaadin-confirm-dialog": "^1.1.1",
     "vaadin-license-checker": "vaadin/license-checker#^2.1.0"
   },
   "devDependencies": {
@@ -44,7 +44,7 @@
     "webcomponentsjs": "^1.0.0",
     "web-component-tester": "^6.1.5",
     "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^3.0.0",
-    "vaadin-combo-box": "^4.1.0",
-    "vaadin-notification": "^1.2.0"
+    "vaadin-combo-box": "^5.0.3",
+    "vaadin-notification": "^1.4.0"
   }
 }
