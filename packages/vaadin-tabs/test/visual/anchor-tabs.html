@@ -7,8 +7,13 @@
 
   <script>
     const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
-    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-tab.html">`);
-    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-tabs.html">`);
+    document.write(`
+      <link rel="import" href="../../theme/${theme}/vaadin-tab.html">
+      <link rel="import" href="../../theme/${theme}/vaadin-tabs.html">
+      <custom-style>
+        <style include="${theme}-typography ${theme === 'lumo' ? theme + '-color' : theme + '-color-light'}"></style>
+      </custom-style>
+    `);
   </script>
 </head>
 

@@ -117,21 +117,21 @@
         justify-content: center;
       }
 
-      :host ::slotted(a[href]) {
+      :host ::slotted(a) {
         display: flex;
         width: 100%;
         align-items: center;
         height: 100%;
         margin: -0.5rem -0.75rem;
         padding: 0.5rem 0.75rem;
-        text-decoration: none;
-        color: inherit;
         outline: none;
-      }
 
-      :host ::slotted(a[href]:hover),
-      :host ::slotted(a[href]:focus) {
-        color: inherit;
+        /*
+          Override the CSS inherited from `lumo-color` and `lumo-typography`.
+          Note: `!important` is needed because of the `:slotted` specificity.
+        */
+        text-decoration: none !important;
+        color: inherit !important;
       }
 
       :host ::slotted(iron-icon) {
