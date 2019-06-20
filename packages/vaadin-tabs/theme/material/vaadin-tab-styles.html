@@ -35,6 +35,12 @@
         user-select: none;
       }
 
+      /* do not prevent click on slotted links */
+      :host::before,
+      :host::after {
+        pointer-events: none;
+      }
+
       :host::before {
         content: "";
         position: absolute;
