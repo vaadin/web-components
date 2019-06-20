@@ -20,10 +20,8 @@
 
 ```html
 <vaadin-app-layout>
-  <nav slot="navbar touch-optimized">
-    <vaadin-drawer-toggle></vaadin-drawer-toggle>
-    <h3>Application Name</h3>
-  </nav>
+  <vaadin-drawer-toggle slot="navbar touch-optimized"></vaadin-drawer-toggle>
+  <h3 slot="navbar touch-optimized">Application Name</h3>
   <vaadin-tabs orientation="vertical" slot="drawer">
     <vaadin-tab>
       <a href="/profile">
@@ -42,7 +40,7 @@
 </vaadin-app-layout>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-app-layout/master/screenshot.png" width="801" alt="Screenshot of vaadin-app-layout">](https://vaadin.com/components/vaadin-app-layout)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-app-layout/master/screenshot.png" width="900" alt="Screenshot of vaadin-app-layout">](https://vaadin.com/components/vaadin-app-layout)
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-app-layout/master/screenshot-mobile.png" width="350" alt="Screenshot of vaadin-app-layout on mobile">](https://vaadin.com/components/vaadin-app-layout)
 

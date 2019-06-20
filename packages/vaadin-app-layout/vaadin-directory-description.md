@@ -13,10 +13,21 @@
 
 ```html
 <vaadin-app-layout>
-  <h3 slot="branding">Application Name</h3>
-  <vaadin-tabs slot="menu">
-      <vaadin-tab>Page 1</vaadin-tab>
-      <vaadin-tab>Page 2</vaadin-tab>
+  <vaadin-drawer-toggle slot="navbar touch-optimized"></vaadin-drawer-toggle>
+  <h3 slot="navbar touch-optimized">Application Name</h3>
+  <vaadin-tabs orientation="vertical" slot="drawer">
+    <vaadin-tab>
+      <a href="/profile">
+        <iron-icon icon="lumo:user"></iron-icon>
+        Profile
+      </a>
+    </vaadin-tab>
+    <vaadin-tab>
+      <a href="/contact">
+        <iron-icon icon="lumo:phone"></iron-icon>
+        Contact
+      </a>
+    </vaadin-tab>
   </vaadin-tabs>
   <div>Page content</div>
 </vaadin-app-layout>
