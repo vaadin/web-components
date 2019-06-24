@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-text-field",
-  "version": "2.4.5",
+  "version": "2.4.6",
   "description": "vaadin-text-field",
   "main": "vaadin-text-field.html",
   "repository": "vaadin/vaadin-text-field",
