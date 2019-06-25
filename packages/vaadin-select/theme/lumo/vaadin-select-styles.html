@@ -21,11 +21,20 @@
       [selected] {
         padding-left: 0;
         padding-right: 0;
+        flex: auto;
       }
 
       :host([theme~="small"]) [selected] {
         padding: 0;
         min-height: var(--lumo-size-s);
+      }
+
+      :host([theme~="align-right"]) [selected] {
+        text-align: right;
+      }
+
+      :host([theme~="align-center"]) [selected] {
+        text-align: center;
       }
 
       [part="toggle-button"]::before {
@@ -43,6 +52,14 @@
 <dom-module id="lumo-select-text-field" theme-for="vaadin-select-text-field">
   <template>
     <style>
+      :host([theme~="align-center"]) ::slotted([part~="value"]) {
+        --_lumo-text-field-overflow-mask-image: none;
+      }
+
+      :host([theme~="align-right"]) ::slotted([part~="value"]) {
+        --_lumo-text-field-overflow-mask-image: linear-gradient(to right, transparent 0.25em, #000 1.5em);
+      }
+
       [part="input-field"] {
         cursor: default;
       }

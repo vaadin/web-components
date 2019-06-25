@@ -64,6 +64,22 @@
       </template>
     </vaadin-select>
 
+    <vaadin-select label="aligned center & selected" theme="align-center" value="Item one">
+      <template>
+        <vaadin-list-box>
+          <vaadin-item>Item one</vaadin-item>
+        </vaadin-list-box>
+      </template>
+    </vaadin-select>
+
+    <vaadin-select label="aligned right & selected" theme="align-right" value="Item one">
+      <template>
+        <vaadin-list-box>
+          <vaadin-item>Item one</vaadin-item>
+        </vaadin-list-box>
+      </template>
+    </vaadin-select>
+
     <br/>
 
     <vaadin-select label="Item as value" placeholder="Placeholder" value="Html&nbsp;as&nbsp;Content">
@@ -105,6 +121,10 @@
     <script>
       window.addEventListener('WebComponentsReady', () => {
         const drop1 = document.getElementById('drop1');
+
+        Array.from(document.querySelectorAll('[label^="aligned "]'))
+          .forEach(select => theme !== 'lumo' && select.setAttribute('hidden', ''));
+
         Polymer.RenderStatus.afterNextRender(drop1._menuElement, () => {
           drop1.opened = true;
 
