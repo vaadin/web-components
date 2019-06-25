@@ -22,6 +22,14 @@
       </template>
     </test-fixture>
 
+    <test-fixture id="one-child-layout">
+      <template>
+        <vaadin-split-layout>
+          <div id="first">some content</div>
+        </vaadin-split-layout>
+      </template>
+    </test-fixture>
+
     <script>
       var touchDevice = (() => {
         try {
@@ -126,6 +134,28 @@
           expect(getComputedStyle(second).pointerEvents).to.equal('visible');
         });
 
+      });
+
+      describe('layout with one child', () => {
+
+        beforeEach(done => {
+          splitLayout = fixture('one-child-layout');
+          setTimeout(() => {
+            first = splitLayout.$.primary.assignedNodes({flatten: true})[0];
+            done();
+          }, 1);
+        });
+
+        it('does not throw when setting and removing pointer-events', () => {
+          const splitter = splitLayout.$.splitter;
+
+          const downAndUp = () => {
+            splitter.dispatchEvent(new Event('down', {bubbles: true}));
+            splitter.dispatchEvent(new Event('up', {bubbles: true}));
+          };
+
+          expect(downAndUp).to.not.throw(Error);
+        });
       });
 
       describe('splitter', () => {
