@@ -424,7 +424,7 @@ This program is available under Apache License Version 2.0, available at https:/
           let result = (obj && obj.hours || 0) * 60 * 60 * 1000;
           result += (obj && obj.minutes || 0) * 60 * 1000;
           result += (obj && obj.seconds || 0) * 1000;
-          result += (obj && obj.milliseconds || 0);
+          result += (obj && parseInt(obj.milliseconds) || 0);
 
           return result;
         }
@@ -627,6 +627,14 @@ This program is available under Apache License Version 2.0, available at https:/
           return !(this.invalid = !this.checkValidity());
         }
 
+        _timeAllowed(time) {
+          const parsedMin = this.i18n.parseTime(this.min);
+          const parsedMax = this.i18n.parseTime(this.max);
+
+          return (!this.__getMsec(parsedMin) || this.__getMsec(time) >= this.__getMsec(parsedMin)) &&
+            (!this.__getMsec(parsedMax) || this.__getMsec(time) <= this.__getMsec(parsedMax));
+        }
+
         /**
          * Returns true if the current input value satisfies all constraints (if any)
          *
@@ -634,6 +642,7 @@ This program is available under Apache License Version 2.0, available at https:/
          */
         checkValidity() {
           return this.__inputElement.focusElement.checkValidity() &&
+            (!this.value || this._timeAllowed(this.i18n.parseTime(this.value))) &&
             (!this.__dropdownElement.value || this.i18n.parseTime(this.__dropdownElement.value));
         }
       }

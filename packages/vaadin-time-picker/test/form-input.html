@@ -92,6 +92,32 @@
         expect(timepicker.invalid).to.be.equal(false);
       });
 
+      it('should respect min value during validation', () => {
+        timepicker.step = '0.5';
+        timepicker.min = '01:00';
+        timepicker.value = '00:59:59.500';
+
+        expect(timepicker.validate()).to.equal(false);
+        expect(timepicker.invalid).to.be.equal(true);
+
+        timepicker.value = '01:00:00.000';
+        expect(timepicker.validate()).to.equal(true);
+        expect(timepicker.invalid).to.be.equal(false);
+      });
+
+      it('should respect max value during validation', () => {
+        timepicker.step = '0.5';
+        timepicker.max = '01:00';
+        timepicker.value = '01:00:00.500';
+
+        expect(timepicker.validate()).to.equal(false);
+        expect(timepicker.invalid).to.be.equal(true);
+
+        timepicker.value = '01:00:00.000';
+        expect(timepicker.validate()).to.equal(true);
+        expect(timepicker.invalid).to.be.equal(false);
+      });
+
       it('should not mark empty input as invalid', () => {
         expect(timepicker.validate()).to.equal(true);
 
