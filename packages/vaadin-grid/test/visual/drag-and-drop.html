@@ -29,6 +29,7 @@
 
   <script>
     const grid = document.querySelector('vaadin-grid');
+    grid.rowDetailsRenderer = root => root.innerHTML = '<p>Details</p>';
     grid.items = Vaadin.GridDemo.users;
   </script>
 

@@ -105,9 +105,24 @@ gemini.suite('vaadin-grid', (rootSuite) => {
             grid.$.items.children[1].setAttribute('dragover', 'below');
           });
         })
+        .capture('row-dragover-above-details', {}, (actions, find) => {
+          actions.executeJS(function(window) {
+            var grid = window.document.querySelector('vaadin-grid');
+            grid.detailsOpenedItems = [grid.items[1]];
+            grid.$.items.children[1].setAttribute('dragover', 'above');
+          });
+        })
+        .capture('row-dragover-below-details', {}, (actions, find) => {
+          actions.executeJS(function(window) {
+            var grid = window.document.querySelector('vaadin-grid');
+            grid.detailsOpenedItems = [grid.items[1]];
+            grid.$.items.children[1].setAttribute('dragover', 'below');
+          });
+        })
         .capture('row-dragstart', {}, (actions, find) => {
           actions.executeJS(function(window) {
             var grid = window.document.querySelector('vaadin-grid');
+            grid.detailsOpenedItems = [];
             grid.$.items.children[1].removeAttribute('dragover');
             grid.$.items.children[1].setAttribute('dragstart', '123');
           });

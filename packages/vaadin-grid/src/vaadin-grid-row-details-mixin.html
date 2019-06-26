@@ -94,6 +94,7 @@ This program is available under Apache License Version 2.0, available at https:/
       Array.from(this.$.items.children).forEach(row => {
         this._toggleDetailsCell(row, row._item);
         this._a11yUpdateRowDetailsOpened(row, this._isDetailsOpened(row._item));
+        this._toggleAttribute('details-opened', this._isDetailsOpened(row._item), row);
       });
     }
 

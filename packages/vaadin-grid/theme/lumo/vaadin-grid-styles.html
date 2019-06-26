@@ -124,6 +124,11 @@
         margin-bottom: -1px;
       }
 
+      [part~="row"][details-opened][dragover="below"] [part~="cell"]:not([part~="details-cell"])::after,
+      [part~="row"][details-opened][dragover="above"] [part~="details-cell"]::after {
+        display: none;
+      }
+
       [part~="row"][dragover][dragover="on-top"] [part~="cell"]::after {
         height: 100%;
       }

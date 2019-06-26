@@ -205,6 +205,13 @@
           assertDetailsBounds();
         });
 
+        it('should have state attribute', () => {
+          openRowDetails(1);
+          expect(bodyRows[1].hasAttribute('details-opened')).to.be.true;
+          closeRowDetails(1);
+          expect(bodyRows[1].hasAttribute('details-opened')).to.be.false;
+        });
+
         it('should have correct bounds when modified after opening', done => {
           openRowDetails(1);
           const cells = getRowCells(bodyRows[1]);
