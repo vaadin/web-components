@@ -20,7 +20,8 @@
         box-shadow: inset 0 0 0 2px var(--lumo-primary-color-50pct);
       }
 
-      :host([theme~="grid-pro-editor"]) [part="input-field"] {
+      /* Needs extra specificity to take priority in ShadyDOM */
+      :host([theme~="grid-pro-editor"]) [part][part="input-field"] {
         padding: 0;
         border-radius: 0;
         flex-grow: 1;
