@@ -509,6 +509,12 @@ This program is available under Apache License Version 2.0, available at https:/
       if (toggleElement) {
         // Don't blur the input on toggle mousedown
         toggleElement.addEventListener('mousedown', e => e.preventDefault());
+        // Unfocus previously focused element if focus is not inside combo box (on touch devices)
+        toggleElement.addEventListener('click', e => {
+          if (this.$.overlay.touchDevice && !this.hasAttribute('focused')) {
+            document.activeElement.blur();
+          }
+        });
       }
     }
 
