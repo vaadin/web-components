@@ -662,6 +662,15 @@
           return div.firstChild;
         };
 
+        it('should update htmlValue and value on dangerously setting of the editor htmlValue', () => {
+          rte.dangerouslySetHtmlValue('<h3><i>Foo</i>Bar</h3>');
+          flushValueDebouncer();
+          const delta = '[{"attributes":{"italic":true},"insert":"Foo"},{"insert":"Bar"},{"attributes":{"header":3},"insert":"\\n"}]';
+          expect(rte.value).to.equal(delta);
+          // Quill is converting the italic font to use appropriate tag
+          expect(rte.htmlValue).to.equal('<h3><em>Foo</em>Bar</h3>');
+        });
+
         it('should return the quill editor innerHTML', () => {
           expect(rte.htmlValue).to.equal('<p><br></p>');
         });
