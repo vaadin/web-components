@@ -29,8 +29,6 @@
   </test-fixture>
 
   <script>
-    const OPENEVENT = MOBILE ? 'touchstart' : 'mouseover';
-
     describe('items', () => {
       let rootMenu, subMenu, target;
 
@@ -45,7 +43,7 @@
           const overlay = menu.$.overlay;
           overlay.__openingHandler && overlay.__openingHandler();
         }
-        fire(openTarget, OPENEVENT, {});
+        fire(openTarget, 'mouseover', {});
       };
 
       const getSubMenu = (menu = rootMenu) => {
@@ -61,7 +59,7 @@
       describe('default', () => {
         beforeEach(done => {
           rootMenu = fixture('default');
-          rootMenu.openOn = OPENEVENT;
+          rootMenu.openOn = 'mouseover';
           target = rootMenu.firstElementChild;
           rootMenu.items = [
             {text: 'foo-0', children:
@@ -495,7 +493,7 @@
 
         beforeEach(done => {
           rootMenu = fixture('theme');
-          rootMenu.openOn = OPENEVENT;
+          rootMenu.openOn = 'mouseover';
           target = rootMenu.firstElementChild;
           rootMenu.items = [
             {text: 'foo-0', children:
