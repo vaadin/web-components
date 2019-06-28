@@ -378,6 +378,19 @@
           expect(getCellEditor(firstCell)).to.be.not.ok;
         });
 
+        it('should re-focus cell after exit edit mode on ESC', () => {
+          const firstCell = getContainerCell(grid.$.items, 1, 0);
+          firstCell.focus();
+          enter(firstCell._content);
+          input = getCellEditor(firstCell);
+
+          const focusSpy = sinon.spy(firstCell, 'focus');
+          const stopSpy = sinon.spy(grid, '_stopEdit');
+          esc(input);
+
+          expect(focusSpy.calledAfter(stopSpy)).to.be.true;
+        });
+
         it('should focus correct editable cell after column reordering', () => {
           grid.singleCellEdit = true;
           grid.columnReorderingAllowed = true;
