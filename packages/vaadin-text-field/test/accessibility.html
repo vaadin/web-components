@@ -200,21 +200,24 @@
         describe(`${el}: accessibility ${condition}`, function() {
 
           describe(`default ${condition}`, function() {
-            let tf, label, input;
+            let tf, label, inputField, input;
 
             beforeEach(function() {
               tf = fixture(`${el}-default${fixtureName}`);
+              inputField = tf.shadowRoot.querySelector('[part="input-field"]');
               input = tf.inputElement;
               label = tf.root.querySelector('[part=label]');
             });
 
-            it('should label the input', function() {
-              tf.label = 'foo';
-              expect(input.getAttribute('aria-labelledby')).to.equal(label.id);
+            it('should have input-field in accessible label', function() {
+              expect(input.getAttribute('aria-labelledby'))
+                .to.equal(`${inputField.id}`);
             });
 
-            it('should not label the input', function() {
-              expect(input.hasAttribute('aria-labelledby')).to.be.false;
+            it('should have input-field with label in accessible label', function() {
+              tf.label = 'foo';
+              expect(input.getAttribute('aria-labelledby'))
+                .to.equal(`${label.id} ${inputField.id}`);
             });
 
             it('should not be marked required', function() {

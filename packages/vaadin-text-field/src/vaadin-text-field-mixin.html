@@ -303,13 +303,11 @@ This program is available under Apache License Version 2.0, available at https:/
           type: Boolean
         },
 
-        _labelId: {
-          type: String
-        },
+        _labelId: String,
 
-        _errorId: {
-          type: String
-        }
+        _errorId: String,
+
+        _inputId: String
       };
     }
 
@@ -318,7 +316,7 @@ This program is available under Apache License Version 2.0, available at https:/
         '_hostPropsChanged(' + HOST_PROPS.default.join(', ') + ')',
         '_hostAccessiblePropsChanged(' + HOST_PROPS.accessible.join(', ') + ')',
         '_getActiveErrorId(invalid, errorMessage, _errorId)',
-        '_getActiveLabelId(label, _labelId)',
+        '_getActiveLabelId(label, _labelId, _inputId)',
         '__observeOffsetHeight(errorMessage, invalid, label)'
       ];
     }
@@ -562,6 +560,7 @@ This program is available under Apache License Version 2.0, available at https:/
       var uniqueId = Vaadin.TextFieldMixin._uniqueId = 1 + Vaadin.TextFieldMixin._uniqueId || 0;
       this._errorId = `${this.constructor.is}-error-${uniqueId}`;
       this._labelId = `${this.constructor.is}-label-${uniqueId}`;
+      this._inputId = `${this.constructor.is}-input-${uniqueId}`;
 
       // Lumo theme defines a max-height transition for the "error-message"
       // part on invalid state change.
@@ -656,13 +655,15 @@ This program is available under Apache License Version 2.0, available at https:/
     _getActiveErrorId(invalid, errorMessage, errorId) {
       this._setOrToggleAttribute('aria-describedby',
         (errorMessage && invalid ? errorId : undefined),
-        this.inputElement);
+        this.focusElement);
     }
 
-    _getActiveLabelId(label, labelId) {
-      this._setOrToggleAttribute('aria-labelledby',
-        (label ? labelId : undefined),
-        this.inputElement);
+    _getActiveLabelId(label, _labelId, _inputId) {
+      let ids = _inputId;
+      if (label) {
+        ids = `${_labelId} ${_inputId}`;
+      }
+      this.focusElement.setAttribute('aria-labelledby', ids);
     }
 
     _getErrorMessageAriaHidden(invalid, errorMessage, errorId) {
