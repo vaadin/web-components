@@ -147,6 +147,7 @@
       }
 
       [part="label"] {
+        width: 133%;
         transition: transform 0.175s, color 0.175s, width 0.175s;
         transition-timing-function: ease, ease, step-end;
       }
@@ -205,6 +206,7 @@
 
       /* Only target the visible floating label */
       :host([has-label]:not([has-value]):not([focused]):not([invalid]):not([theme~="always-float-label"])) [part="label"] {
+        width: 100%;
         /* IE11 doesn’t work with calc inside the translate function, so we need to have a fixed pixel value instead of 50% + 16px */
         transform: scale(1) translateY(24px);
         transition-timing-function: ease, ease, step-start;

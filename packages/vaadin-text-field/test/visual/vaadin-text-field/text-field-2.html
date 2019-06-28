@@ -10,6 +10,9 @@
 
     window.addEventListener('WebComponentsReady', function() {
       setTimeout(function() {
+        if (theme !== 'material') {
+          document.getElementById('material').setAttribute('hidden', '');
+        }
         window.ShadyDOM && window.ShadyDOM.flush(); // Force DOM composition
         window.webComponentsAreReady = true; // Checked in gemini before capture callback
       });
@@ -39,6 +42,12 @@
     <fieldset id="text-field">
       <p>
       label: <vaadin-text-field label="Foo"></vaadin-text-field>
+      <p>
+      <p>
+      overflow label: <vaadin-text-field label="Very long label which definitely overflows"></vaadin-text-field>
+      <p>
+      <p id="material">
+      overflow float label: <vaadin-text-field label="Very long label which definitely overflows" theme="always-float-label"></vaadin-text-field>
       <p>
       label and value: <vaadin-text-field label="Foo" value="Bar"></vaadin-text-field>
       <p>
