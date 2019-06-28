@@ -363,6 +363,24 @@
         expect(dropdown.$).to.be.ok;
       });
     });
+
+    describe('external focus (initially)', () => {
+      let input, blurSpy;
+
+      beforeEach(() => {
+        input = document.createElement('input');
+        combobox.insertAdjacentElement('beforebegin', input);
+        input.focus();
+        blurSpy = sinon.spy(input, 'blur');
+      });
+
+      if (touchDevice) {
+        it('should blur previously focused element when clicking on toggle button', () => {
+          clickToggleIcon();
+          expect(blurSpy).to.be.called;
+        });
+      }
+    });
   });
 </script>
 
