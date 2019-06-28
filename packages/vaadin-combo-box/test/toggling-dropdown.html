@@ -47,7 +47,6 @@
 <script>
   describe('toggling the dropdown', () => {
     let combobox;
-    let comboboxLight;
 
     function clickToggleIcon() {
       fireMousedownMouseupClick(combobox._toggleElement);
@@ -59,7 +58,6 @@
 
     beforeEach(() => {
       combobox = fixture('combobox');
-      comboboxLight = fixture('combobox-light');
     });
 
     describe('opening', () => {
@@ -215,9 +213,11 @@
           });
 
           it('should prevent default on overlay mousedown (vaadin-combo-box-light)', () => {
+            combobox = fixture('combobox-light');
+
             const preventDefaultSpy = sinon.spy();
-            comboboxLight.open();
-            comboboxLight.$.overlay.$.dropdown.$.overlay.dispatchEvent(createMouseDown(preventDefaultSpy));
+            combobox.open();
+            combobox.$.overlay.$.dropdown.$.overlay.dispatchEvent(createMouseDown(preventDefaultSpy));
 
             expect(preventDefaultSpy).to.have.been.called;
           });
