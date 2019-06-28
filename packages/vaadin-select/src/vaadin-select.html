@@ -62,7 +62,7 @@ This program is available under Apache License Version 2.0, available at https:/
       >
       <slot name="prefix" slot="prefix"></slot>
       <div part="value"></div>
-      <div part="toggle-button" slot="suffix" role="button" aria-label="Toggle"></div>
+      <div part="toggle-button" slot="suffix" role="button" aria-haspopup="listbox" aria-label="Toggle"></div>
     </vaadin-select-text-field>
     <vaadin-select-overlay
       opened="{{opened}}"
@@ -325,7 +325,7 @@ This program is available under Apache License Version 2.0, available at https:/
         static get observers() {
           return [
             '_updateSelectedItem(value, _items)',
-            '_updateAriaExpanded(opened, _toggleElement)',
+            '_updateAriaExpanded(opened, _toggleElement, _inputElement)',
             '_templateOrRendererChanged(_contentTemplate, renderer, _overlayElement)'
           ];
         }
@@ -430,6 +430,7 @@ This program is available under Apache License Version 2.0, available at https:/
           if (this._menuElement) {
             this._menuElement.addEventListener('items-changed', e => {
               this._items = this._menuElement.items;
+              this._items.forEach(item => item.setAttribute('role', 'option'));
             });
             this._menuElement.addEventListener('selected-changed', e => this._updateValueSlot());
             this._menuElement.addEventListener('keydown', e => this._onKeyDownInside(e));
@@ -437,6 +438,8 @@ This program is available under Apache License Version 2.0, available at https:/
               this.__userInteraction = true;
               this.opened = false;
             }, true);
+
+            this._menuElement.setAttribute('role', 'listbox');
           }
         }
 
@@ -571,8 +574,11 @@ This program is available under Apache License Version 2.0, available at https:/
           labelItem.selected = true;
         }
 
-        _updateAriaExpanded(opened, toggleElement) {
+        _updateAriaExpanded(opened, toggleElement, inputElement) {
           toggleElement && toggleElement.setAttribute('aria-expanded', opened);
+          if (inputElement && inputElement.focusElement) {
+            inputElement.focusElement.setAttribute('aria-expanded', opened);
+          }
         }
 
         _updateValueSlot() {

@@ -6,6 +6,8 @@
   <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
   <link rel="import" href="../../../polymer/polymer.html">
   <script>
+    // eslint-disable-next-line no-unused-vars
+    /* global theme */
     const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
     document.write(`<link rel="import" href="../../theme/${theme}/vaadin-select.html">`);
     document.write(`<link rel="import" href="../../../vaadin-list-box/theme/${theme}/vaadin-list-box.html">`);
@@ -122,6 +124,7 @@
       window.addEventListener('WebComponentsReady', () => {
         const drop1 = document.getElementById('drop1');
 
+        /* global theme */
         Array.from(document.querySelectorAll('[label^="aligned "]'))
           .forEach(select => theme !== 'lumo' && select.setAttribute('hidden', ''));
 
