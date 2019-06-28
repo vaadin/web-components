@@ -37,37 +37,40 @@
         background-image: var(--lumo-progress-indeterminate-progress-bar-background);
         opacity: 0.75;
         will-change: transform;
-        animation: vaadin-progress-slide 1.6s infinite cubic-bezier(.645, .045, .355, 1), vaadin-progress-scale 1.6s infinite cubic-bezier(.645, .045, .355, 1);
+        animation: vaadin-progress-indeterminate 1.6s infinite cubic-bezier(.645, .045, .355, 1);
       }
 
-      @keyframes vaadin-progress-slide {
+      @keyframes vaadin-progress-indeterminate {
         0% {
+          transform: scaleX(0.015);
           transform-origin: 0% 0%;
         }
 
+        25% {
+          transform: scaleX(0.4);
+        }
+
         50% {
+          transform: scaleX(0.015);
           transform-origin: 100% 0%;
           background-image: var(--lumo-progress-indeterminate-progress-bar-background);
         }
 
         50.1% {
+          transform: scaleX(0.015);
           transform-origin: 100% 0%;
           background-image: var(--lumo-progress-indeterminate-progress-bar-background-reverse);
         }
 
+        75% {
+          transform: scaleX(0.4);
+        }
+
         100% {
+          transform: scaleX(0.015);
           transform-origin: 0% 0%;
           background-image: var(--lumo-progress-indeterminate-progress-bar-background-reverse);
         }
-      }
-
-      @keyframes vaadin-progress-scale {
-        0% { transform: scaleX(0.015); }
-        25% { transform: scaleX(0.4); }
-        50% { transform: scaleX(0.015); }
-        50.1% { transform: scaleX(0.015); }
-        75% { transform: scaleX(0.4); }
-        100% { transform: scaleX(0.015); }
       }
 
       :host(:not([aria-valuenow])) [part="value"]::before,
