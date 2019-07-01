@@ -34,7 +34,7 @@
     "vaadin-grid": "^5.4.5",
     "vaadin-form-layout": "^2.1.4",
     "vaadin-text-field": "^2.4.5",
-    "vaadin-button": "^2.2.0",
+    "vaadin-button": "^2.1.0",
     "vaadin-confirm-dialog": "^1.1.1",
     "vaadin-license-checker": "vaadin/license-checker#^2.1.0"
   },
