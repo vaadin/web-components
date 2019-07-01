@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-crud",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "vaadin-crud",
   "main": "vaadin-crud.html",
   "repository": "vaadin/vaadin-crud",
