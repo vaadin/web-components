@@ -1,0 +1,91 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-confirm-dialog tests</title>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../../test-fixture/test-fixture.html">
+  <link rel="import" href="../vaadin-confirm-dialog.html">
+</head>
+
+<body>
+  <test-fixture id="default">
+    <template>
+      <vaadin-confirm-dialog opened>Confirmation message</vaadin-confirm-dialog>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('Resize API test', function() {
+      var confirm;
+
+      beforeEach(function() {
+        confirm = fixture('default');
+      });
+
+      function waitForTransition(confirmDialog, callback) {
+        if (confirmDialog && confirmDialog.$.dialog && typeof callback === 'function') {
+          const _cb = function() {
+            callback();
+            confirmDialog.$.dialog.$.overlay.removeEventListener('animationend', _cb);
+          };
+          confirmDialog.$.dialog.$.overlay.addEventListener('animationend', _cb);
+        }
+      }
+
+      function getConfirmDialogContent(confirmDialog) {
+        return confirmDialog && confirmDialog.$.dialog.$.overlay.content.querySelector('[part="content"]');
+      }
+
+      it('should allow setting width', function(done) {
+        confirm._setWidth('500px');
+        waitForTransition(confirm, function() {
+          expect(getConfirmDialogContent(confirm).getBoundingClientRect().width).to.be.approximately(500, 2);
+          done();
+        });
+      });
+
+      it('Should not throw exception if _setWidth is called before attach', function(done) {
+        const confirmNotAttached = new window.Vaadin.ConfirmDialogElement();
+        const spy = sinon.spy(confirmNotAttached, '_setDimension');
+
+        confirmNotAttached._setWidth('150px');
+        document.body.appendChild(confirmNotAttached);
+        confirmNotAttached.opened = true;
+
+        expect(spy.calledWith('width', '150px')).to.be.true;
+
+        waitForTransition(confirmNotAttached, function() {
+          expect(getConfirmDialogContent(confirmNotAttached).getBoundingClientRect().width).to.approximately(150, 2);
+          done();
+        });
+      });
+
+      it('should allow setting height', function(done) {
+        confirm._setHeight('500px');
+        waitForTransition(confirm, function() {
+          expect(getConfirmDialogContent(confirm).getBoundingClientRect().height).to.be.approximately(500, 2);
+          done();
+        });
+      });
+
+      it('Should not throw exception if _setHeight is called before attach', function(done) {
+        const confirmNotAttached = new window.Vaadin.ConfirmDialogElement();
+        const spy = sinon.spy(confirmNotAttached, '_setDimension');
+
+        confirmNotAttached._setHeight('150px');
+        document.body.appendChild(confirmNotAttached);
+        confirmNotAttached.opened = true;
+
+        expect(spy.calledWith('height', '150px')).to.be.true;
+
+        waitForTransition(confirmNotAttached, function() {
+          expect(getConfirmDialogContent(confirmNotAttached).getBoundingClientRect().height).to.be.approximately(150, 2);
+          done();
+        });
+      });
+
+    });
+  </script>
+</body>
