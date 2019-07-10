@@ -74,7 +74,7 @@
         chart.addEventListener('chart-redraw', chartRedrawListener);
         setTimeout(() => {
           chart.configuration.redraw();
-        }, 10);
+        }, 50);
       });
 
       it('should trigger chart events to declarative listeners', done => {
@@ -97,7 +97,7 @@
         setTimeout(() => {
           expect(element.seriesShow).to.be.equal(1);
           done();
-        });
+        }, 50);
       });
 
       it('should trigger point events to imperative listeners', done => {

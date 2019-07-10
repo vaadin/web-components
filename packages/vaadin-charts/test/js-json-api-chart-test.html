@@ -79,7 +79,7 @@
         setTimeout(function() {
           expect(chartContainer.querySelector('.highcharts-title > tspan').textContent).to.be.equal('The chart title');
           done();
-        });
+        }, 50);
       });
 
       it('should not have credits by default', function(done) {

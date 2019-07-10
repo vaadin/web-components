@@ -67,7 +67,7 @@
         setTimeout(function() {
           expect(chart.$.chart.querySelector('.highcharts-title > tspan').textContent).to.be.equal('The chart title');
           done();
-        });
+        }, 50);
       });
 
       it('should have one column series and twelve points', function(done) {
