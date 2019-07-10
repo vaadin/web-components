@@ -13,21 +13,22 @@
 ```html
 <vaadin-select></vaadin-select>
 <script>
-  document.querySelector('vaadin-select').renderer = function(root) {
-    // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
-    if (root.firstChild) {
+  document.querySelector('vaadin-select').renderer = root => {
+    if (root.firstElementChild) {
       return;
     }
-    // create the <vaadin-list-box>
-    const listBox = document.createElement('vaadin-list-box');
-    // append 3 <vaadin-item> elements
-    ['Jose', 'Manolo', 'Pedro'].forEach(function(name) {
-      const item = document.createElement('vaadin-item');
-      item.textContent = name;
-      listBox.appendChild(item);
-    });
-    // update the content
-    root.appendChild(listBox);
+
+    // Note that innerHTML is only used for demo purposes here!
+    // Prefer using a templating library instead.
+    root.innerHTML = `
+      <vaadin-list-box>
+        <vaadin-item>Option one</vaadin-item>
+        <vaadin-item>Option two</vaadin-item>
+        <vaadin-item>Option three</vaadin-item>
+        <hr>
+        <vaadin-item disabled>Option four</vaadin-item>
+      </vaadin-list-box>
+    `;
   };
 </script>
 ```
