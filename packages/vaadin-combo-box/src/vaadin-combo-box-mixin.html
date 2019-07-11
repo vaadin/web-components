@@ -843,10 +843,21 @@ This program is available under Apache License Version 2.0, available at https:/
         // which is very slow in Edge
         Polymer.Async.timeOut.after(500),
         () => {
+          const selector = this.$.overlay._selector;
+          if (!selector._isClientFull()) {
+            // Due to the mismatch of the Y position of the item rendered
+            // at the top of the scrolling list with some specific scroll
+            // position values (2324, 3486, 6972, 60972, 95757 etc.)
+            // iron-list loops the increasing of the pool and adds
+            // too many items to the DOM.
+            // Adjusting scroll position to equal the current scrollTop value
+            // to avoid looping.
+            selector._resetScrollPosition(selector._physicalTop);
+          }
           this._resizeDropdown();
           this.$.overlay.updateViewportBoundaries();
           this.$.overlay.ensureItemsRendered();
-          this.$.overlay._selector.notifyResize();
+          selector.notifyResize();
           Polymer.flush();
         }
       );
