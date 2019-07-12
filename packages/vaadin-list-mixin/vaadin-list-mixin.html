@@ -115,7 +115,7 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _onClick(event) {
-      if (event.metaKey || event.shiftKey || event.ctrlKey) {
+      if (event.metaKey || event.shiftKey || event.ctrlKey || event.defaultPrevented) {
         return;
       }
 
