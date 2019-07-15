@@ -17,6 +17,12 @@
       [part="clear-button"]::before {
         content: var(--lumo-icons-cross);
       }
+
+      @media (max-width: 420px), (max-height: 420px) {
+        [part="overlay-content"] {
+          height: 70vh;
+        }
+      }
     </style>
   </template>
 </dom-module>
