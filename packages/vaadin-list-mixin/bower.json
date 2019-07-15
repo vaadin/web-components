@@ -5,7 +5,10 @@
     "Vaadin Ltd"
   ],
   "description": "vaadin-list-mixin",
-  "main": "vaadin-list-mixin.html",
+  "main": [
+    "vaadin-list-mixin.html",
+    "vaadin-multi-select-list-mixin.html"
+  ],
   "keywords": [
     "Vaadin",
     "vaadin-list-mixin",
