@@ -45,6 +45,12 @@
             expect(numberField.getAttribute(prop)).to.be.equal(String(value));
           });
         });
+
+        it('should not throw with autoselect', done => {
+          numberField.autoselect = true;
+          numberField.focus();
+          setTimeout(done);
+        });
       });
 
       describe('native', () => {

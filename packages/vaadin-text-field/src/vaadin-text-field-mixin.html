@@ -593,7 +593,12 @@ This program is available under Apache License Version 2.0, available at https:/
         this.inputElement.select();
         // iOS 9 workaround: https://stackoverflow.com/a/7436574
         setTimeout(() => {
-          this.inputElement.setSelectionRange(0, 9999);
+          try {
+            this.inputElement.setSelectionRange(0, 9999);
+          } catch (e) {
+            // The workaround may cause errors on different input types.
+            // Needs to be suppressed. See https://github.com/vaadin/flow/issues/6070
+          }
         });
       }
     }
