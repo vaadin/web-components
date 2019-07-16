@@ -1,0 +1,9 @@
+{
+  "files": ["package.json"],
+  "from": [
+    "\"resolutions\": {"
+  ],
+  "to": [
+    "\"resolutions\": {\n\"@vaadin/vaadin-list-mixin\": \"2.2.2-alpha3\","
+  ]
+}

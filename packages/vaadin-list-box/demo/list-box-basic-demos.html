@@ -20,6 +20,20 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Multi Select List Box</h3>
+    <vaadin-demo-snippet id='list-box-basic-demos-multi-select'>
+      <template preserve-content>
+        <vaadin-list-box multiple>
+          <b>Register to Language Courses</b>
+          <vaadin-item>Finnish</vaadin-item>
+          <vaadin-item>Swedish</vaadin-item>
+          <hr>
+          <vaadin-item disabled>Spanish (not available)</vaadin-item>
+          <vaadin-item>English</vaadin-item>
+        </vaadin-list-box>
+      </template>
+    </vaadin-demo-snippet>
+
   </template>
   <script>
     class ListBoxBasicDemos extends DemoReadyEventEmitter(ListBoxDemo(Polymer.Element)) {
