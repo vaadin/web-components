@@ -115,6 +115,8 @@
       <vaadin-overlay focus-trap="">
         <template>
           <container-with-shadow></container-with-shadow>
+          <!-- On IE11 SVGElement#children returns undefined instead of an empty HTMLCollection -->
+          <svg></svg>
           <input type="text" id="text">
         </template>
       </vaadin-overlay>
