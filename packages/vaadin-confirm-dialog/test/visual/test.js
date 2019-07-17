@@ -1,6 +1,9 @@
 gemini.suite('vaadin-confirm-dialog', function(rootSuite) {
   function wait(actions, find) {
-    actions.wait(5000);
+    return actions
+      .waitForJSCondition(function(window) {
+        return window.webComponentsAreReady;
+      }, 80000);
   }
 
   function goToAboutBlank(actions, find) {
@@ -14,11 +17,28 @@ gemini.suite('vaadin-confirm-dialog', function(rootSuite) {
     .before(wait)
     .after(goToAboutBlank);
 
-  gemini.suite('default-tests', function(suite) {
-    suite
-      .setUrl('/default.html')
-      .setCaptureElements('#default-tests')
-      .capture('normal-button');
+  ['lumo', 'material'].forEach(theme => {
+
+    gemini.suite(`default-tests-${theme}`, function(suite) {
+      suite
+        .setUrl(`default.html?theme=${theme}`)
+        .setCaptureElements('body')
+        .capture('confirm-dialog');
+    });
+
+    gemini.suite(`three-actions-tests-${theme}`, function(suite) {
+      suite
+        .setUrl(`three-actions.html?theme=${theme}`)
+        .setCaptureElements('body')
+        .capture('confirm-dialog');
+    });
+
+    gemini.suite(`custom-buttons-tests-${theme}`, function(suite) {
+      suite
+        .setUrl(`custom-buttons.html?theme=${theme}`)
+        .setCaptureElements('body')
+        .capture('confirm-dialog');
+    });
   });
 
 });

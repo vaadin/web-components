@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+
+<head lang="en">
+  <meta charset="UTF-8">
+  <title></title>
+  <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <script>
+    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+    document.write(`
+      <link rel="import" href="../../theme/${theme}/vaadin-confirm-dialog.html">
+      <link rel="import" href="../../../vaadin-button/theme/${theme}/vaadin-button.html">
+      <link rel="import" href="../../../vaadin-icons/vaadin-icons.html">
+    `);
+
+    window.addEventListener('WebComponentsReady', function() {
+      setTimeout(function() {
+        window.ShadyDOM && window.ShadyDOM.flush(); // Force DOM composition
+        window.webComponentsAreReady = true; // Checked in gemini before capture callback
+      });
+    });
+  </script>
+</head>
+
+<body style="height: 600px">
+  <vaadin-confirm-dialog cancel opened>
+    <h2 slot="header">Unsaved changes</h2>
+    <p id="description">Do you want to <b>save</b> or <b>discard</b> your changes before navigating away?</p>
+    <vaadin-button id="save" slot="confirm-button" theme="primary" aria-describedby="description">
+      <iron-icon icon="vaadin:envelope-open" slot="prefix"></iron-icon>
+      Save
+    </vaadin-button>
+    <vaadin-button id="discard" slot="reject-button" theme="error tertiary">
+      <iron-icon icon="vaadin:trash" slot="prefix"></iron-icon>
+      Discard
+    </vaadin-button>
+  </vaadin-confirm-dialog>
+</body>

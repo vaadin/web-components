@@ -20,7 +20,7 @@
 </head>
 
 <body style="height: 600px">
-    <vaadin-confirm-dialog header="Meeting starting" confirm-text="Ok" opened>
-      Your next meeting starts in 5 minutes
-    </vaadin-confirm-dialog>
+  <vaadin-confirm-dialog cancel reject header="Unsaved changes" confirm-text="Save" reject-text="Discard" opened>
+    Do you want to save or discard your changes before navigating away?
+  </vaadin-confirm-dialog>
 </body>
