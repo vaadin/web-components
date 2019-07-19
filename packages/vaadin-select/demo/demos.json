@@ -24,6 +24,17 @@
     }
     ,
     {
+      "name": "Presentation",
+      "url": "select-presentation-demos",
+      "src": "select-presentation-demos.html",
+      "meta": {
+        "title": "vaadin-select Presentation",
+        "description": "",
+        "image": ""
+      }
+    }
+    ,
+    {
       "name": "Styling",
       "url": "select-styling-demos",
       "src": "select-styling-demos.html",
@@ -32,7 +43,8 @@
         "description": "",
         "image": ""
       }
-    },
+    }
+    ,
     {
       "name": "Theme Variants",
       "url": "select-theme-variants-demos",

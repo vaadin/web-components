@@ -6,12 +6,12 @@
       }
     </style>
 
-    <h3>Styling the Template Content</h3>
+    <h3>Styling the template content</h3>
     <vaadin-demo-snippet id="select-list-box-custom-styling">
       <template preserve-content>
         <style>
           vaadin-item {
-            font-style: italic;
+            font-weight: bold;
           }
         </style>
         <vaadin-select label="Name">
@@ -26,34 +26,90 @@
       </template>
     </vaadin-demo-snippet>
 
-    <h3>Customizing the Template Content</h3>
-    <vaadin-demo-snippet id="select-list-box-custom-content">
+
+    <h3>Custom input field style</h3>
+    <vaadin-demo-snippet id="select-list-box-custom-border">
       <template preserve-content>
-        <vaadin-select label="User">
-          <div slot="prefix"><iron-icon icon="lumo:user"></iron-icon></div>
+        <dom-module id="custom-select-border" theme-for="vaadin-select-text-field">
+          <template>
+            <style>
+              :host([theme~="custom-border"]) [part="input-field"] {
+                border: 1px solid black;
+                background-color: white;
+              }
+            </style>
+          </template>
+        </dom-module>
+        <vaadin-select label="Name" theme="custom-border">
           <template>
             <vaadin-list-box>
-              <vaadin-item>
-                <img style="width: 21px; border-radius: 50%; vertical-align: bottom;" src="https://randomuser.me/api/portraits/women/43.jpg" />
-                &nbsp;Gabriella
-              </vaadin-item>
-              <vaadin-item>
-                <img style="width: 21px; border-radius: 50%; vertical-align: bottom;" src="https://randomuser.me/api/portraits/men/77.jpg" />
-                &nbsp;Rudi
-              </vaadin-item>
-              <vaadin-item>
-                <img style="width: 21px; border-radius: 50%; vertical-align: bottom;" src="https://randomuser.me/api/portraits/men/35.jpg" />
-                &nbsp;Hamsa
-              </vaadin-item>
-              <vaadin-item>
-                <img style="width: 21px; border-radius: 50%; vertical-align: bottom;" src="https://randomuser.me/api/portraits/men/76.jpg" />
-                &nbsp;Jacob
-              </vaadin-item>
+              <vaadin-item>Jose</vaadin-item>
+              <vaadin-item>Manolo</vaadin-item>
+              <vaadin-item>Pedro</vaadin-item>
             </vaadin-list-box>
           </template>
         </vaadin-select>
       </template>
     </vaadin-demo-snippet>
+
+    <h3>Custom icon</h3>
+    <vaadin-demo-snippet id="select-custom-background2">
+      <template preserve-content>
+        <dom-module id="custom-select-icon" theme-for="vaadin-select">
+          <template>
+            <style>
+              :host([theme~="custom-icon"]) [part="toggle-button"]::before {
+                content: var(--lumo-icons-arrow-down);
+              }
+            </style>
+          </template>
+        </dom-module>
+        <vaadin-select label="Name" theme="custom-icon">
+          <template>
+            <vaadin-list-box>
+              <vaadin-item>Jose</vaadin-item>
+              <vaadin-item>Manolo</vaadin-item>
+              <vaadin-item>Pedro</vaadin-item>
+            </vaadin-list-box>
+          </template>
+        </vaadin-select>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Custom theme variant</h3>
+    <vaadin-demo-snippet id="select-theme-variants-demos-custom">
+      <template preserve-content>
+        <dom-module id="custom-select-font-style" theme-for="vaadin-text-field vaadin-item">
+          <template>
+            <style>
+              :host([theme~="custom"]) {
+                font-family: monospace;
+              }
+            </style>
+          </template>
+        </dom-module>
+        <dom-module id="custom-select-overlay-font-style" theme-for="vaadin-text-field vaadin-select-overlay">
+          <template>
+            <style>
+              :host([theme~="custom"]) [part~="overlay"] {
+                background: linear-gradient(hsla(214, 61%, 25%, 0.05), hsla(214, 61%, 25%, 0.05)) #fff;
+              }
+            </style>
+          </template>
+        </dom-module>
+        <vaadin-select label="Name" theme="custom">
+          <template>
+            <vaadin-list-box>
+              <vaadin-item theme="custom">Jose</vaadin-item>
+              <vaadin-item theme="custom">Manolo</vaadin-item>
+              <vaadin-item theme="custom">Pedro</vaadin-item>
+            </vaadin-list-box>
+          </template>
+        </vaadin-select>
+      </template>
+    </vaadin-demo-snippet>
+
 
   </template>
   <script>

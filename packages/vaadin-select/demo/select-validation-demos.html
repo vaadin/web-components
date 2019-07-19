@@ -5,49 +5,24 @@
         display: block;
       }
     </style>
-
-    <h3>Using as a form field</h3>
-    <vaadin-demo-snippet id="select-validation" when-defined="vaadin-select">
+    <h3>Required</h3>
+    <vaadin-demo-snippet id="select-required" when-defined="vaadin-select">
       <template preserve-content>
-        <iron-form>
-          <form method="post">
-            <vaadin-select name="title" label="Title" error-message="Please choose the option closest to your profession" required>
-              <template>
-                <vaadin-list-box>
-                  <vaadin-item value="">Select your title</vaadin-item>
-                  <hr>
-                  <vaadin-item value="sales">Account manager</vaadin-item>
-                  <vaadin-item value="design">Designer</vaadin-item>
-                  <vaadin-item value="marketing">Marketing manager</vaadin-item>
-                  <vaadin-item value="dev">Developer</vaadin-item>
-                </vaadin-list-box>
-              </template>
-            </vaadin-select>
-            <vaadin-button>Submit</vaadin-button>
-          </form>
-        </iron-form>
-
-        <script>
-          window.addDemoReadyListener('#select-validation', function(document) {
-            var form = document.querySelector('iron-form');
-
-            form.addEventListener('iron-form-presubmit', function(e) {
-              // Prevent actual form submission
-              e.preventDefault();
-              alert('Form submitted with title: ' + form.serializeForm().title);
-              return false;
-            });
-
-            var button = document.querySelector('vaadin-button');
-            button.addEventListener('click', function() {
-              form.submit();
-            });
-          });
-        </script>
+        <vaadin-select label="Required" required error-message="Please choose one option">
+          <template>
+            <vaadin-list-box>
+              <vaadin-item></vaadin-item>
+              <hr>
+              <vaadin-item>Option one</vaadin-item>
+              <vaadin-item>Option two</vaadin-item>
+              <vaadin-item>Option three</vaadin-item>
+            </vaadin-list-box>
+          </template>
+        </vaadin-select>
       </template>
     </vaadin-demo-snippet>
-
   </template>
+
   <script>
     class SelectValidationDemos extends DemoReadyEventEmitter(SelectDemo(Polymer.Element)) {
       static get is() {

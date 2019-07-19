@@ -7,38 +7,84 @@
     </style>
 
     <h3>Basic usage</h3>
-    <vaadin-demo-snippet id="select-list-box-basic" when-defined="vaadin-select">
+    <vaadin-demo-snippet id="select-list-box-basic-usage" when-defined="vaadin-select">
       <template preserve-content>
-        <vaadin-select>
+        <vaadin-select label="Label">
           <template>
             <vaadin-list-box>
-              <vaadin-item>Jose</vaadin-item>
-              <vaadin-item>Manolo</vaadin-item>
-              <vaadin-item>Pedro</vaadin-item>
+              <vaadin-item>Option one</vaadin-item>
+              <vaadin-item>Option two</vaadin-item>
+            </vaadin-list-box>
+          </template>
+        </vaadin-select>
+
+        <vaadin-select placeholder="Placeholder">
+          <template>
+            <vaadin-list-box>
+              <vaadin-item>Option one</vaadin-item>
+              <vaadin-item>Option two</vaadin-item>
+            </vaadin-list-box>
+          </template>
+        </vaadin-select>
+
+        <vaadin-select value="Value">
+          <template>
+            <vaadin-list-box>
+              <vaadin-item>Value</vaadin-item>
+              <vaadin-item>Option one</vaadin-item>
+              <vaadin-item>Option two</vaadin-item>
+            </vaadin-list-box>
+          </template>
+        </vaadin-select>
+
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Disabled and read-only</h3>
+    <vaadin-demo-snippet id="select-list-box-disabled-readonly" when-defined="vaadin-select">
+      <template preserve-content>
+        <vaadin-select label="Disabled" disabled value="Value">
+          <template>
+            <vaadin-list-box>
+              <vaadin-item>Value</vaadin-item>
+            </vaadin-list-box>
+          </template>
+        </vaadin-select>
+
+        <vaadin-select label="Read-only" readonly value="Value">
+          <template>
+            <vaadin-list-box>
+              <vaadin-item>Value</vaadin-item>
             </vaadin-list-box>
           </template>
         </vaadin-select>
       </template>
     </vaadin-demo-snippet>
 
-    <h3>Dynamically creating the contents</h3>
+    <h3>Object list</h3>
     <vaadin-demo-snippet id="select-list-box-dynamic" when-defined="vaadin-select">
       <template preserve-content>
-        <vaadin-select></vaadin-select>
+        <vaadin-select label="Department"></vaadin-select>
         <script>
           window.addDemoReadyListener('#select-list-box-dynamic', function(document) {
+            const department = [
+              {id: '1', name: 'Product'},
+              {id: '2', name: 'Service'},
+              {id: '3', name: 'HR'},
+              {id: '4', name: 'Accounting'}
+            ];
             document.querySelector('vaadin-select').renderer = function(root) {
               // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
               if (root.firstChild) {
                 return;
               }
-              // create the <vaadin-list-box>
+              // Create the <vaadin-list-box>
               const listBox = window.document.createElement('vaadin-list-box');
-              // append 3 <vaadin-item> elements
-              ['Jose', 'Manolo', 'Pedro'].forEach(function(name) {
-                const item = window.document.createElement('vaadin-item');
-                item.textContent = name;
-                listBox.appendChild(item);
+              department.forEach(function(item) {
+                const vaadinItem = window.document.createElement('vaadin-item');
+                vaadinItem.textContent = item.name;
+                listBox.appendChild(vaadinItem);
+                vaadinItem.setAttribute('value', item.id);
               });
               // update the content
               root.appendChild(listBox);
@@ -48,10 +94,11 @@
       </template>
     </vaadin-demo-snippet>
 
-    <h3>Configuring the select</h3>
-    <vaadin-demo-snippet id="select-list-box-configuring" when-defined="vaadin-select">
+
+    <h3>Value changed</h3>
+    <vaadin-demo-snippet id="select-list-box-on-change" when-defined="vaadin-select">
       <template preserve-content>
-        <vaadin-select label="Label" placeholder="Placeholder">
+        <vaadin-select label="Label">
           <template>
             <vaadin-list-box>
               <vaadin-item>Option one</vaadin-item>
@@ -59,51 +106,31 @@
             </vaadin-list-box>
           </template>
         </vaadin-select>
+        <div id="output">Select a value</div>
+        <script>
 
-        <vaadin-select label="Disabled" disabled value="Option one">
-          <template>
-            <vaadin-list-box>
-              <vaadin-item>Option one</vaadin-item>
-            </vaadin-list-box>
-          </template>
-        </vaadin-select>
-
-        <vaadin-select label="Read-only" readonly value="Option one">
-          <template>
-            <vaadin-list-box>
-              <vaadin-item>Option one</vaadin-item>
-            </vaadin-list-box>
-          </template>
-        </vaadin-select>
-
-        <vaadin-select label="Required" required>
-          <template>
-            <vaadin-list-box>
-              <vaadin-item value="" disabled>Select an option</vaadin-item>
-              <hr>
-              <vaadin-item value="1">Option one</vaadin-item>
-              <vaadin-item value="2">Option two</vaadin-item>
-              <vaadin-item value="3">Option three</vaadin-item>
-              <vaadin-item value="4">Option four</vaadin-item>
-            </vaadin-list-box>
-          </template>
-        </vaadin-select>
+          window.addDemoReadyListener('#select-list-box-on-change', function(document) {
+            document.querySelector('vaadin-select').addEventListener('change', function(event) {
+              const output = document.querySelector('#output');
+              output.innerText = event.target.value;
+            });
+          });
+        </script>
       </template>
     </vaadin-demo-snippet>
 
-    <h3>Customize the label of selected value</h3>
-    <p>
-        By setting the <code>label</code> attribute of inner vaadin-items you will be able to change the visual representation of the selected value in the input part.
-    </p>
-    <vaadin-demo-snippet id="select-list-box-custom-label" when-defined="vaadin-select">
+    <h3>Disabled item</h3>
+    <vaadin-demo-snippet id="select-list-box-disabled-item">
       <template preserve-content>
-        <vaadin-select placeholder="Language">
+        <vaadin-select label="Team">
           <template>
             <vaadin-list-box>
-              <vaadin-item>Other</vaadin-item>
-              <vaadin-item label="ES">Spanish</vaadin-item>
-              <vaadin-item label="FI">Finnish</vaadin-item>
-              <vaadin-item label="EN">English</vaadin-item>
+              <vaadin-item>Flow</vaadin-item>
+              <vaadin-item>Components</vaadin-item>
+              <vaadin-item>Pro tools</vaadin-item>
+              <vaadin-item disabled>Developers Journey and Onboarding</vaadin-item>
+              <vaadin-item>Experts</vaadin-item>
+              <vaadin-item>Incubator</vaadin-item>
             </vaadin-list-box>
           </template>
         </vaadin-select>

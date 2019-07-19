@@ -6,10 +6,49 @@
       }
     </style>
 
-    <h3>Small Size</h3>
-    <vaadin-demo-snippet id="select-theme-variants-demos-sizes">
+    <h3>Text align</h3>
+
+    <vaadin-demo-snippet id="select-theme-variants-demos-custom">
       <template preserve-content>
-        <vaadin-select label="Name" theme="small">
+        <dom-module id="custom-select" theme-for="vaadin-item">
+          <template>
+            <style>
+              :host([theme~="custom-center"]) [part~="content"] {
+                text-align: center;
+              }
+            </style>
+          </template>
+        </dom-module>
+        <dom-module id="custom-select-overlay" theme-for="vaadin-text-field vaadin-select-overlay">
+          <template>
+            <style>
+              :host([theme~="custom-center"]) [part~="items"] {
+                text-align: center;
+              }
+            </style>
+          </template>
+        </dom-module>
+
+
+        <dom-module id="custom-select" theme-for="vaadin-item">
+          <template>
+            <style>
+              :host([theme~="custom-right"]) [part~="content"] {
+                text-align: right;
+              }
+            </style>
+          </template>
+        </dom-module>
+        <dom-module id="custom-select-overlay" theme-for="vaadin-text-field vaadin-select-overlay">
+          <template>
+            <style>
+              :host([theme~="custom-right"]) [part~="items"] {
+                text-align: right;
+              }
+            </style>
+          </template>
+        </dom-module>
+        <vaadin-select value="Jose">
           <template>
             <vaadin-list-box>
               <vaadin-item>Jose</vaadin-item>
@@ -18,36 +57,38 @@
             </vaadin-list-box>
           </template>
         </vaadin-select>
+
+        <vaadin-select theme="custom-center" value="Jose">
+          <template>
+            <vaadin-list-box>
+              <vaadin-item theme="custom-center">Jose</vaadin-item>
+              <vaadin-item theme="custom-center">Manolo</vaadin-item>
+              <vaadin-item theme="custom-center">Pedro</vaadin-item>
+            </vaadin-list-box>
+          </template>
+        </vaadin-select>
+
+        <vaadin-select theme="custom-right" value="Jose">
+          <template>
+            <vaadin-list-box>
+              <vaadin-item theme="custom-right">Jose</vaadin-item>
+              <vaadin-item theme="custom-right">Manolo</vaadin-item>
+              <vaadin-item theme="custom-right">Pedro</vaadin-item>
+            </vaadin-list-box>
+          </template>
+        </vaadin-select>
       </template>
     </vaadin-demo-snippet>
 
-    <h3>Custom Theme Variant</h3>
-    <vaadin-demo-snippet id="select-theme-variants-demos-custom">
+    <h3>Small size</h3>
+    <vaadin-demo-snippet id="select-theme-variants-demos-sizes">
       <template preserve-content>
-        <dom-module id="custom-select" theme-for="vaadin-text-field vaadin-item">
-          <template>
-            <style>
-              :host([theme~="custom"]) {
-                font-family: monospace;
-              }
-            </style>
-          </template>
-        </dom-module>
-        <dom-module id="custom-select-overlay" theme-for="vaadin-text-field vaadin-select-overlay">
-          <template>
-            <style>
-              :host([theme~="custom"]) [part~="overlay"] {
-                background: linear-gradient(hsla(214, 61%, 25%, 0.05), hsla(214, 61%, 25%, 0.05)) #fff;
-              }
-            </style>
-          </template>
-        </dom-module>
-        <vaadin-select label="Name" theme="custom">
+        <vaadin-select label="Name" theme="small">
           <template>
             <vaadin-list-box>
-              <vaadin-item theme="custom">Jose</vaadin-item>
-              <vaadin-item theme="custom">Manolo</vaadin-item>
-              <vaadin-item theme="custom">Pedro</vaadin-item>
+              <vaadin-item>Jose</vaadin-item>
+              <vaadin-item>Manolo</vaadin-item>
+              <vaadin-item>Pedro</vaadin-item>
             </vaadin-list-box>
           </template>
         </vaadin-select>

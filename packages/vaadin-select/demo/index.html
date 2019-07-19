@@ -1,5 +1,6 @@
 <!doctype html>
 <html>
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
@@ -18,6 +19,7 @@
 
   <link rel="import" href="../vaadin-select.html">
   <link rel="import" href="../../iron-icon/iron-icon.html">
+  <link rel="import" href="../../vaadin-icons/vaadin-icons.html">
   <link rel="import" href="../../vaadin-lumo-styles/icons.html">
   <link rel="import" href="../../iron-form/iron-form.html">
 
@@ -27,7 +29,7 @@
 </head>
 
 <body>
-  <dom-module id="custom-select" theme-for="vaadin-text-field vaadin-item">
+  <dom-module id="custom-select-font-styles" theme-for="vaadin-text-field vaadin-item">
     <template>
       <style>
         :host([theme~="custom"]) {
@@ -36,7 +38,7 @@
       </style>
     </template>
   </dom-module>
-  <dom-module id="custom-select-overlay" theme-for="vaadin-text-field vaadin-select-overlay">
+  <dom-module id="custom-select-overlay-font-style" theme-for="vaadin-text-field vaadin-select-overlay">
     <template>
       <style>
         :host([theme~="custom"]) [part~="overlay"] {
@@ -46,6 +48,70 @@
     </template>
   </dom-module>
 
+  <!-- Used in the theme variants examples, keep in sync but use different ID -->
+
+
+  <dom-module id="custom-select-border" theme-for="vaadin-select-text-field">
+    <template>
+      <style>
+        :host([theme~="custom-border"]) [part="input-field"] {
+          border: 1px solid black;
+          background-color: white;
+        }
+      </style>
+    </template>
+  </dom-module>
+
+
+  <dom-module id="custom-select-styles" theme-for="vaadin-item">
+    <template>
+      <style>
+        :host([theme~="custom-center"]) [part~="content"] {
+          text-align: center;
+        }
+      </style>
+    </template>
+  </dom-module>
+  <dom-module id="custom-select-overlay-styles" theme-for="vaadin-text-field vaadin-select-overlay">
+    <template>
+      <style>
+        :host([theme~="custom-center"]) [part~="items"] {
+          text-align: center;
+        }
+      </style>
+    </template>
+  </dom-module>
+
+  <dom-module id="custom-select-style" theme-for="vaadin-item">
+    <template>
+      <style>
+        :host([theme~="custom-right"]) [part~="content"] {
+          text-align: right;
+        }
+      </style>
+    </template>
+  </dom-module>
+  <dom-module id="custom-select-overlay-style" theme-for="vaadin-text-field vaadin-select-overlay">
+    <template>
+      <style>
+        :host([theme~="custom-right"]) [part~="items"] {
+          text-align: right;
+        }
+      </style>
+    </template>
+  </dom-module>
+
+  <dom-module id="custom-select-icon" theme-for="vaadin-select">
+    <template>
+      <style>
+        :host([theme~="custom-icon"]) [part="toggle-button"]::before {
+          content: var(--lumo-icons-arrow-down);
+        }
+      </style>
+    </template>
+  </dom-module>
+
   <vaadin-component-demo config-src="demos.json"></vaadin-component-demo>
 </body>
+
 </html>

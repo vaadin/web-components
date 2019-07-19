@@ -47,7 +47,8 @@
     "webcomponentsjs": "^1.0.0",
     "web-component-tester": "^6.1.5",
     "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^3.0.0",
-    "vaadin-button": "vaadin/vaadin-button#^2.1.0"
+    "vaadin-button": "vaadin/vaadin-button#^2.1.0",
+    "vaadin-icons": "vaadin/vaadin-icons#^4.3.1"
   },
   "resolutions": {
     "vaadin-element-mixin": "^2.0.0"
