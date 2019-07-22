@@ -256,7 +256,7 @@
 
       /* Icon-only */
 
-      :host([theme~="icon"]) {
+      :host([theme~="icon"]:not([theme~="tertiary-inline"])) {
         min-width: var(--lumo-button-size);
         padding-left: calc(var(--lumo-button-size) / 4);
         padding-right: calc(var(--lumo-button-size) / 4);
