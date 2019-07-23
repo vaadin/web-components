@@ -20,18 +20,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         display: none;
         --_vaadin-confirm-dialog-content-width: auto;
         --_vaadin-confirm-dialog-content-height: auto;
-      }
-
-      [part="content"] {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        width: var(--_vaadin-confirm-dialog-content-width);
-        height: var(--_vaadin-confirm-dialog-content-height);
-      }
-
-      [part="message"] {
-        flex: 1 0 auto;
+        --_vaadin-confirm-dialog-footer-height: auto;
       }
     </style>
     <vaadin-dialog
@@ -41,7 +30,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       no-close-on-outside-click
       no-close-on-esc="[[noCloseOnEsc]]">
       <template>
-        <div part="content">
+        <div id="content">
           <div part="header">
             <slot name="header">
               <h3 class="header">[[header]]</h3>
@@ -52,29 +41,29 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             <slot></slot>
             [[message]]
           </div>
+        </div>
 
-          <div part="footer">
-            <div class="cancel-button">
-              <slot name="cancel-button">
-                <vaadin-button id="cancel" theme$="[[cancelTheme]]" on-click="_cancel" hidden$="[[!cancel]]" aria-describedby="message">
-                  [[cancelText]]
-                </vaadin-button>
-              </slot>
-            </div>
-            <div class="reject-button">
-              <slot name="reject-button">
-                <vaadin-button id="reject" theme$="[[rejectTheme]]" on-click="_reject" hidden$="[[!reject]]" aria-describedby="message">
-                  [[rejectText]]
-                </vaadin-button>
-              </slot>
-            </div>
-            <div class="confirm-button">
-              <slot name="confirm-button">
-                <vaadin-button id="confirm" theme$="[[confirmTheme]]" on-click="_confirm" aria-describedby="message">
-                  [[confirmText]]
-                </vaadin-button>
-              </slot>
-            </div>
+        <div part="footer">
+          <div class="cancel-button">
+            <slot name="cancel-button">
+              <vaadin-button id="cancel" theme$="[[cancelTheme]]" on-click="_cancel" hidden$="[[!cancel]]" aria-describedby="message">
+                [[cancelText]]
+              </vaadin-button>
+            </slot>
+          </div>
+          <div class="reject-button">
+            <slot name="reject-button">
+              <vaadin-button id="reject" theme$="[[rejectTheme]]" on-click="_reject" hidden$="[[!reject]]" aria-describedby="message">
+                [[rejectText]]
+              </vaadin-button>
+            </slot>
+          </div>
+          <div class="confirm-button">
+            <slot name="confirm-button">
+              <vaadin-button id="confirm" theme$="[[confirmTheme]]" on-click="_confirm" aria-describedby="message">
+                [[confirmText]]
+              </vaadin-button>
+            </slot>
           </div>
         </div>
       </template>
@@ -254,6 +243,12 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           Polymer.RenderStatus.beforeNextRender(this, () => {
             var confirmButton = this._confirmButton || this.$.dialog.$.overlay.content.querySelector('#confirm');
             confirmButton.focus();
+
+            const {height} = getComputedStyle(this.$.dialog.$.overlay.content.querySelector('[part=footer]'));
+            if (height != this._footerHeight) {
+              window.ShadyCSS.styleSubtree(this.$.dialog.$.overlay, {'--_vaadin-confirm-dialog-footer-height': height});
+              this._footerHeight = height;
+            }
           });
         }
 

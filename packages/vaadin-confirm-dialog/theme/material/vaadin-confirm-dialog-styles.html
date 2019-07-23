@@ -1,6 +1,11 @@
 <dom-module id="material-confirm-dialog" theme-for="vaadin-confirm-dialog">
   <template>
     <style>
+      #content {
+        height: calc(var(--_vaadin-confirm-dialog-content-height) - var(--_vaadin-confirm-dialog-footer-height) - 39px);
+        width: var(--_vaadin-confirm-dialog-content-width);
+      }
+
       [part="message"] {
         width: 25em;
         max-width: 100%;
