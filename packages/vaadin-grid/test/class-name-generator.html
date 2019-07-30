@@ -73,6 +73,16 @@
         assertClassList(getContainerCell(grid.$.items, 10, 0), ['10', 'foo10', 'col0']);
       });
 
+      it('should be called for details cell with undefined column', done => {
+        grid.rowDetailsRenderer = (root, grid, rowData) => {};
+        grid.cellClassNameGenerator = (column, rowData) =>
+          rowData.index + ' ' + column;
+        requestAnimationFrame(() => {
+          assertClassList(getContainerCell(grid.$.items, 0, 2), ['0', 'undefined']);
+          done();
+        });
+      });
+
       it('should add classes when loading new items', function(done) {
         grid.cellClassNameGenerator = (column, rowData) => rowData.item.value;
         scrollToEnd(grid, () => {
