@@ -387,6 +387,48 @@
           increaseButton.click();
           expect(numberField.value).to.be.equal('5.11');
         });
+
+        describe('problematic values', () => {
+          it('should correctly increase value', () => {
+            const configs = [
+              {props: {step: 0.001, value: 1.001}, expectedValue: '1.002'},
+              {props: {step: 0.001, value: 1.003}, expectedValue: '1.004'},
+              {props: {step: 0.001, value: 1.005}, expectedValue: '1.006'},
+              {props: {step: 0.001, value: 2.002}, expectedValue: '2.003'},
+              {props: {step: 0.001, value: 4.004}, expectedValue: '4.005'},
+              {props: {step: 0.001, value: 8.008}, expectedValue: '8.009'},
+              {props: {step: 0.01, value: 16.08}, expectedValue: '16.09'},
+              {props: {step: 0.01, value: 73.10}, expectedValue: '73.11'},
+              {props: {step: 0.001, value: 1.0131, min: 0.0001}, expectedValue: '1.0141'},
+            ];
+            const reset = {step: 1, min: undefined, max: undefined, value: ''};
+
+            for (let i = 0; i < configs.length; i ++) {
+              const {props, expectedValue} = configs[i];
+              Object.assign(numberField, reset, props);
+              increaseButton.click();
+              expect(numberField.value).to.be.equal(expectedValue);
+            }
+          });
+
+          it('should correctly decrease value', () => {
+            const configs = [
+              {props: {step: 0.01, value: 72.90}, expectedValue: '72.89'},
+              {props: {step: 0.001, min: 0.0001, value: 1.0031}, expectedValue: '1.0021'},
+              {props: {step: 0.001, min: 0.0001, value: 1.0051}, expectedValue: '1.0041'},
+              {props: {step: 0.001, min: 0.0001, value: 1.0071}, expectedValue: '1.0061'},
+              {props: {step: 0.001, min: 0.0001, value: 1.0091}, expectedValue: '1.0081'},
+            ];
+            const reset = {step: 1, min: undefined, max: undefined, value: ''};
+
+            for (let i = 0; i < configs.length; i ++) {
+              const {props, expectedValue} = configs[i];
+              Object.assign(numberField, reset, props);
+              decreaseButton.click();
+              expect(numberField.value).to.be.equal(expectedValue);
+            }
+          });
+        });
       });
 
       describe('no initial value', () => {
