@@ -260,15 +260,15 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        _getDecimalCount(number) {
+          const s = String(number);
+          const i = s.indexOf('.');
+          return i === -1 ? 1 : s.length - i - 1;
+        }
+
         _getMultiplier(number) {
           if (!isNaN(number)) {
-            let multiplier = 1;
-            // Increase the multiplier until the float point will disappear
-            while (Math.floor(number * multiplier) !== number * multiplier) {
-              multiplier = multiplier * 10;
-            }
-
-            return multiplier;
+            return Math.pow(10, this._getDecimalCount(number));
           }
         }
 
