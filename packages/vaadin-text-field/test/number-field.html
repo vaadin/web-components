@@ -366,6 +366,27 @@
             expect(numberField.value).to.be.equal(String(correctSteps[i]));
           }
         });
+
+        it('should correctly increase value when step is a decimal number and increaseButton is clicked', () => {
+          numberField.min = -0.02;
+          numberField.max = 0.02;
+          numberField.value = -0.03;
+          numberField.step = 0.01;
+
+          const correctSteps = [-0.02, -0.01, 0, 0.01, 0.02];
+          for (var i = 0; i < correctSteps.length; i ++) {
+            increaseButton.click();
+            expect(numberField.value).to.be.equal(String(correctSteps[i]));
+          }
+        });
+
+        it('should correctly calculate the precision with decimal value', () => {
+          numberField.value = 5.1;
+          numberField.step = 0.01;
+
+          increaseButton.click();
+          expect(numberField.value).to.be.equal('5.11');
+        });
       });
 
       describe('no initial value', () => {

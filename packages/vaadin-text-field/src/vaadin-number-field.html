@@ -232,7 +232,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _setValue(value) {
-          this.value = this.inputElement.value = parseFloat(value).toFixed(this.__decimals);
+          this.value = this.inputElement.value = parseFloat(value);
           this.dispatchEvent(new CustomEvent('change', {bubbles: true}));
         }
 
@@ -246,7 +246,7 @@ This program is available under Apache License Version 2.0, available at https:/
             this._getMultiplier(min));
 
           step *= multiplier;
-          currentValue *= multiplier;
+          currentValue = Math.round(currentValue * multiplier);
           min *= multiplier;
 
           const margin = (currentValue - min) % step;
@@ -294,7 +294,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _valueChanged(newVal, oldVal) {
           // Validate value to be numeric
-          if (newVal && isNaN(parseFloat(newVal).toFixed(this.__decimals))) {
+          if (newVal && isNaN(parseFloat(newVal))) {
             this.value = '';
           } else if (typeof this.value !== 'string') {
             this.value = String(this.value);
@@ -320,11 +320,6 @@ This program is available under Apache License Version 2.0, available at https:/
         _stepOrMinChanged(step, min) {
           this.inputElement.step = step;
           this.inputElement.min = this.min;
-          const countDecimalPlaces = number => {
-            return number ? String(Math.abs(number)).replace(/^\d*\.?(.*)?$/, '$1').length : 0;
-          };
-          // Compute number of dedimals to display in input based on provided step
-          this.__decimals = Math.max(countDecimalPlaces(step), countDecimalPlaces(min));
         }
 
         checkValidity() {
