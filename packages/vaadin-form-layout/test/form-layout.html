@@ -554,6 +554,22 @@
         await nextRender();
         expect(estimateEffectiveColspan(item)).to.be.closeTo(2, .1);
       });
+
+      it('should update layout after a new item is added', async() => {
+        const newFormItem = document.createElement('vaadin-form-item');
+        newFormItem.innerHTML = '<label slot="label">Age</label><input class="full-width">';
+        layout.appendChild(newFormItem);
+        await nextRender();
+        expect(getComputedStyle(newFormItem).marginLeft).to.be.equal('0px');
+      });
+
+      it('should update layout after an item is removed', async() => {
+        const itemsList = layout.querySelectorAll('vaadin-form-item');
+        expect(getComputedStyle(itemsList[1]).marginLeft).to.not.be.equal('0px');
+        layout.removeChild(itemsList[0]);
+        await nextRender();
+        expect(getComputedStyle(itemsList[1]).marginLeft).to.be.equal('0px');
+      });
     });
   </script>
 </body>

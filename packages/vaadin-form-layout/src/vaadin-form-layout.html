@@ -303,18 +303,23 @@ This program is available under Apache License Version 2.0, available at https:/
           });
 
           this.__childObserver = new Polymer.FlattenedNodesObserver(this, info => {
-            const ignore = ['template', 'style', 'dom-repeat', 'dom-if'];
-            const nodes = Array.from(info.addedNodes)
-              .filter(node => node.nodeType === Node.ELEMENT_NODE && ignore.indexOf(node.localName.toLowerCase()) === -1);
+            const addedNodes = this._getObservableNodes(info.addedNodes);
+            const removedNodes = this._getObservableNodes(info.removedNodes);
 
-            nodes.forEach(child => {
+            addedNodes.forEach(child => {
               this.__mutationObserver.observe(child, mutationObserverConfig);
             });
 
-            if (nodes.some(node => node.hasAttribute('colspan'))) {
+            if (addedNodes.length > 0 || removedNodes.length > 0) {
               this._invokeUpdateStyles();
             }
           });
+        }
+
+        _getObservableNodes(nodeList) {
+          const ignore = ['template', 'style', 'dom-repeat', 'dom-if'];
+          return Array.from(nodeList)
+            .filter(node => node.nodeType === Node.ELEMENT_NODE && ignore.indexOf(node.localName.toLowerCase()) === -1);
         }
 
         _naturalNumberOrOne(n) {
