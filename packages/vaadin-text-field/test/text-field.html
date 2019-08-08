@@ -10,6 +10,7 @@
   <link rel="import" href="../vaadin-text-field.html">
   <link rel="import" href="../../iron-form/iron-form.html">
 
+  <link rel="import" href="helpers.html">
 </head>
 
 <body>
@@ -387,7 +388,7 @@
         it('should dispatch change event on native input change', done => {
           const changeEvent = new Event('change');
 
-          textField.addEventListener('change', e => {
+          listenOnce(textField, 'change', e => {
             expect(e.detail.sourceEvent).to.equal(changeEvent);
             done();
           });

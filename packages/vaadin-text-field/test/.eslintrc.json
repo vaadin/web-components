@@ -9,8 +9,8 @@
     "expect": false,
     "gemini": false,
     "sinon": false,
-    "HTMLImports": false,
     "MockInteractions": false,
-    "animationFrameFlush": false
+    "animationFrameFlush": false,
+    "listenOnce": false
   }
 }
