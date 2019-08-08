@@ -68,6 +68,15 @@ This program is available under Apache License Version 2.0, available at https:/
       ];
     }
 
+    // Override (from iron-scroll-target-behavior) to avoid document scroll
+    set _scrollTop(top) {
+      this.$.table.scrollTop = top;
+    }
+
+    get _scrollTop() {
+      return this.$.table.scrollTop;
+    }
+
     ready() {
       super.ready();
       this.scrollTarget = this.$.table;
