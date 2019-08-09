@@ -699,19 +699,19 @@
           expect(numberField.value).to.be.equal('7.6');
         });
 
-        it('should not prevent invalid values applied programatically (step)', () => {
+        it('should not prevent invalid values applied programmatically (step)', () => {
           numberField.step = 0.1;
           numberField.value = 7.686;
           expect(numberField.value).to.be.equal('7.686');
         });
 
-        it('should not prevent invalid values applied programatically (min)', () => {
+        it('should not prevent invalid values applied programmatically (min)', () => {
           numberField.min = 2;
           numberField.value = 1;
           expect(numberField.value).to.be.equal('1');
         });
 
-        it('should not prevent invalid values applied programatically (max)', () => {
+        it('should not prevent invalid values applied programmatically (max)', () => {
           numberField.max = 2;
           numberField.value = 3;
           expect(numberField.value).to.be.equal('3');
@@ -735,6 +735,59 @@
 
           numberField.value = '5';
           expect(numberField.validate(), 'value should not be greater than max').to.be.false;
+        });
+
+        describe('removing validation constraints', () => {
+          it('should update "invalid" state when "min" is removed', () => {
+            numberField.value = '42';
+            numberField.min = 50;
+            numberField.validate();
+            expect(numberField.invalid).to.be.true;
+
+            numberField.min = '';
+            expect(numberField.invalid).to.be.false;
+          });
+
+          it('should update "invalid" state when "max" is removed', () => {
+            numberField.value = '42';
+            numberField.max = 20;
+            numberField.validate();
+            expect(numberField.invalid).to.be.true;
+
+            numberField.max = '';
+            expect(numberField.invalid).to.be.false;
+          });
+
+          it('should update "invalid" state when "step" is removed', () => {
+            numberField.value = '3';
+            numberField.min = 0;
+            numberField.step = 2;
+            numberField.validate();
+            expect(numberField.invalid).to.be.true;
+
+            numberField.step = '';
+            expect(numberField.invalid).to.be.false;
+          });
+
+          it('should not set "invalid" to false when "min" is set to 0', () => {
+            numberField.value = '-5';
+            numberField.min = -1;
+            numberField.validate();
+            expect(numberField.invalid).to.be.true;
+
+            numberField.min = 0;
+            expect(numberField.invalid).to.be.true;
+          });
+
+          it('should not set "invalid" to false when "max" is set to 0', () => {
+            numberField.value = '5';
+            numberField.max = 1;
+            numberField.validate();
+            expect(numberField.invalid).to.be.true;
+
+            numberField.max = 0;
+            expect(numberField.invalid).to.be.true;
+          });
         });
       });
 

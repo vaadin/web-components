@@ -244,12 +244,12 @@
                 expect(tf.$.clearButton.getAttribute('aria-label')).to.equal('Clear');
               });
 
-              it('should translate accesible label with new i18n object', function() {
+              it('should translate accessible label with new i18n object', function() {
                 tf.i18n = {clear: 'tyhjennä'};
                 expect(tf.$.clearButton.getAttribute('aria-label')).to.equal('tyhjennä');
               });
 
-              it('should translate accesible label with set API', function() {
+              it('should translate accessible label with set API', function() {
                 tf.set('i18n.clear', 'tyhjennä');
                 expect(tf.$.clearButton.getAttribute('aria-label')).to.equal('tyhjennä');
               });

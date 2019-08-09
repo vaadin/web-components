@@ -35,7 +35,7 @@
       'email@example'
     ];
 
-    const invalidAdresses = [
+    const invalidAddresses = [
       'plainaddress',
       '#@%^%#$@#$@#.com',
       '@example.com',
@@ -71,7 +71,7 @@
         });
 
         describe('invalid email addresses', () => {
-          invalidAdresses.map(address => {
+          invalidAddresses.map(address => {
             it(address, () => {
               emailField.value = address;
               emailField.validate();

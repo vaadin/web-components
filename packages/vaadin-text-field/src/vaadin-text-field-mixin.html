@@ -321,6 +321,15 @@ This program is available under Apache License Version 2.0, available at https:/
       ];
     }
 
+    constructor() {
+      super();
+      // This complex observer needs to be added dynamically here (instead of defining it above in the `get observers()`)
+      // so that it runs after complex observers of inheriting classes. Otherwise e.g. `_stepOrMinChanged()` observer of
+      // vaadin-number-field would run after this and the `min` and `step` properties would not yet be propagated to
+      // the `inputElement` when this runs.
+      this._createMethodObserver('__constraintsChanged(required, minlength, maxlength, pattern, min, max, step)');
+    }
+
     get focusElement() {
       if (!this.shadowRoot) {
         return;
@@ -502,6 +511,20 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    __constraintsChanged(required, minlength, maxlength, pattern, min, max, step) {
+      if (!this.invalid) {
+        return;
+      }
+
+      const isNumUnset = n => (!n && n !== 0);
+
+      if (!required && !minlength && !maxlength && !pattern && isNumUnset(min) && isNumUnset(max)) {
+        this.invalid = false;
+      } else {
+        this.validate();
+      }
+    }
+
     /**
      * Returns true if the current input value satisfies all constraints (if any)
      * @returns {boolean}
@@ -572,7 +595,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     /**
      * Returns true if `value` is valid.
-     * `<iron-form>` uses this to check the validity or all its elements.
+     * `<iron-form>` uses this to check the validity for all its elements.
      *
      * @return {boolean} True if the value is valid.
      */

@@ -10,7 +10,6 @@
   <link rel="import" href="../vaadin-text-field.html">
   <link rel="import" href="../vaadin-text-area.html">
   <link rel="import" href="../../iron-form/iron-form.html">
-  <link rel="import" href="../../iron-input/iron-input.html">
 
 </head>
 
@@ -32,7 +31,6 @@
           <vaadin-text-field name="foo">
             <input slot="input">
           </vaadin-text-field>
-          <iron-input name="iron-value" value="1"><input name="iron-value" value="1" type="number"></iron-input>
         </form>
       </iron-form>
     </template>
@@ -131,7 +129,7 @@
             expect(spy.called).to.be.true;
           });
 
-          it('should not change invalid property is no constraints are set', function() {
+          it('should not change invalid property if no constraints are set', function() {
             tf.validate();
             expect(tf.invalid).to.be.false;
             tf.invalid = true;
@@ -139,11 +137,10 @@
             expect(tf.invalid).to.be.true;
           });
 
-          it('should override explicilty set invalid if constraints are set', function() {
+          it('should override explicitly set invalid if constraints are set', function() {
             tf.invalid = true;
             tf.value = 'foo';
             tf.required = true;
-            tf.validate();
             expect(tf.invalid).to.be.false;
           });
 

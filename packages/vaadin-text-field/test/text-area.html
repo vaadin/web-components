@@ -120,7 +120,7 @@
             expect(textArea.hasAttribute('has-value')).to.be.true;
           });
 
-          it('setting value to undefine should not update has-value attribute', () => {
+          it('setting value to undefined should not update has-value attribute', () => {
             textArea.value = undefined;
             expect(textArea.hasAttribute('has-value')).to.be.false;
           });
@@ -130,7 +130,7 @@
             expect(textArea.hasAttribute('has-value')).to.be.false;
           });
 
-          // User could accidently set a 0 or false value
+          // User could accidentally set a 0 or false value
           it('setting number value updates has-value attribute', () => {
             textArea.value = 0;
             expect(textArea.hasAttribute('has-value')).to.be.true;
@@ -340,7 +340,7 @@
         });
       });
 
-      // FIXME(platosha): Flacky with P2 in IE 11, fails with undefined `spy`.
+      // FIXME(platosha): Flaky with P2 in IE 11, fails with undefined `spy`.
       const isIe = /\bTrident\b/.test(navigator.userAgent);
       (isIe ? describe.skip : describe)(`resize ${condition}`, () => {
         let textArea, spy;

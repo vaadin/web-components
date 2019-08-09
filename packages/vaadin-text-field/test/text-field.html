@@ -364,6 +364,79 @@
           });
         });
 
+        describe(`removing validation constraints ${condition}`, () => {
+          it('should update "invalid" state when "required" is removed', () => {
+            textField.required = true;
+            textField.validate();
+            expect(textField.invalid).to.be.true;
+
+            textField.required = false;
+            expect(textField.invalid).to.be.false;
+          });
+
+          it.skip('should update "invalid" state when "minlength" is removed', () => {
+            textField.minlength = 5;
+            textField.value = 'foo';
+
+            // There seems to be no way to make minlength/maxlength trigger invalid
+            // state in a native input programmatically. It can only become invalid
+            // if the user really types into the input. Using MockInteractions,
+            // triggering `input` and/or `change` events didn't seem to help.
+            // Since vaadin-text-field currently relies on inputElement.checkValidity()
+            // for setting the `invalid` property (thus simulating native behaviour)
+            // there is currently no way to test this.
+
+            // Let's enable this test if we find a way to make this invalid first
+
+            textField.validate();
+            expect(textField.invalid).to.be.true; // Fails here
+
+            textField.minlength = undefined;
+            expect(textField.invalid).to.be.false;
+          });
+
+          it.skip('should update "invalid" state when "maxlength" is removed', () => {
+            textField.maxlength = 3;
+            textField.value = 'foobar';
+
+            // There seems to be no way to make minlength/maxlength trigger invalid
+            // state in a native input programmatically. It can only become invalid
+            // if the user really types into the input. Using MockInteractions,
+            // triggering `input` and/or `change` events didn't seem to help.
+            // Since vaadin-text-field currently relies on inputElement.checkValidity()
+            // for setting the `invalid` property (thus simulating native behaviour)
+            // there is currently no way to test this.
+
+            // Let's enable this test if we find a way to make this invalid first
+
+            textField.validate();
+            expect(textField.invalid).to.be.true; // Fails here
+
+            textField.maxlength = undefined;
+            expect(textField.invalid).to.be.false;
+          });
+
+          it('should update "invalid" state when "pattern" is removed', () => {
+            textField.value = '123foo';
+            textField.pattern = '\\d+';
+            textField.validate();
+            expect(textField.invalid).to.be.true;
+
+            textField.pattern = '';
+            expect(textField.invalid).to.be.false;
+          });
+
+          it('should update "invalid" state when a constraint is removed even while other constraints are still active', () => {
+            textField.required = true;
+            textField.pattern = '\\d*';
+            textField.validate();
+            expect(textField.invalid).to.be.true;
+
+            textField.required = false;
+            expect(textField.invalid).to.be.false;
+          });
+        });
+
       });
 
       describe(`events ${condition}`, function() {
@@ -500,7 +573,7 @@
             // Lumo theme defines a max-height transition for the "error-message"
             // part on invalid state change.
 
-            // NOTE(platosha): Transition events are unreilable, IE skips
+            // NOTE(platosha): Transition events are unreliable, IE skips
             // the transition sometimes, Safari does not fire anything but
             // 'transitionend', so transitions are hard to detect properly.
             // Have to use a timeout here and in the next test instead.
