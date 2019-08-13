@@ -172,7 +172,7 @@ MAGI ADD END -->
        *     <vaadin-chart id="mychart"></vaadin-chart>
        * ```
        * 1. Add a function that uses `configuration` property (JS Api) to set chart title, categories and data
-       * ```
+       * ```js
        * initChartWithJSApi() {
        *     Polymer.RenderStatus.beforeNextRender(this, () => {
        *        const configuration = this.$.mychart.configuration;
@@ -187,7 +187,7 @@ MAGI ADD END -->
        * }
        * ```
        * 1. Call that function from connectedCallback (when the element is added to a document)
-       * ```
+       * ```js
        * connectedCallback() {
        *     super.connectedCallback();
        *     this.initChartWithJSApi();
@@ -212,7 +212,7 @@ MAGI ADD END -->
        *     <vaadin-chart id="mychart"></vaadin-chart>
        * ```
        * 1. Add a function that uses `update` method (JS JSON Api) to set chart title, categories and data
-       * ```
+       * ```js
        * initChartWithJSJSONApi() {
        *     this.$.mychart.update({
        *       title: {
@@ -232,7 +232,7 @@ MAGI ADD END -->
        * }
        * ```
        * 1. Call that function from connectedCallback (when the element is added to a document)
-       * ```
+       * ```js
        * connectedCallback() {
        *     super.connectedCallback();
        *     this.initChartWithJSJSONApi();
@@ -266,7 +266,7 @@ MAGI ADD END -->
        *
        * ### Example: Two Charts with a Red Title but only one with a Blue Subtitle
        *
-       * ```
+       * ```html
        * <link rel="import" href="shared-styles.html">
        * ...
        * <vaadin-chart title="Red Title" subtitle="Not Styled">
@@ -280,7 +280,7 @@ MAGI ADD END -->
        *
        * shared-styles.html
        *
-       * ```
+       * ```html
        * <link rel="import" href="../bower_components/vaadin-charts/theme/vaadin-chart-default-theme.html">
        *
        * <dom-module id="css-style-example" theme-for="vaadin-chart">
