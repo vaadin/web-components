@@ -74,6 +74,9 @@ This program is available under Apache License Version 2.0, available at https:/
 
         if (e.detail.state === 'end') {
           this._toggleAttribute('column-resizing', false, this.$.scroller);
+          this.dispatchEvent(new CustomEvent('column-resize', {
+            detail: {resizedColumn: column}
+          }));
         }
 
         // Notify resize
@@ -81,5 +84,12 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /**
+    * Fired when a column in the grid is resized by the user.
+    *
+    * @event column-resize
+    * @param {Object} detail
+    * @param {Object} detail.resizedColumn the column that was resized
+    */
   };
 </script>

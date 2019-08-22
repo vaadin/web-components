@@ -210,6 +210,20 @@
         expect(spy.called).to.be.true;
       });
 
+      it('should fire column-resize event on column resize', done => {
+        grid.addEventListener('column-resize', (event) => {
+          expect(event.detail.resizedColumn).to.equal(grid._getColumns()[0]);
+          done();
+        });
+
+        const options = {node: handle};
+        const rect = headerCells[0].getBoundingClientRect();
+
+        fire('track', {state: 'start'}, options);
+        fire('track', {state: 'track', x: rect.left + 200, y: 0}, options);
+        fire('track', {state: 'end'}, options);
+      });
+
       it('should prevent default mousedown action on resize handle', () => {
         const event = new CustomEvent('mousedown', {bubbles: true, cancelable: true, composed: true});
         handle.dispatchEvent(event);
