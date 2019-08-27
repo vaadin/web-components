@@ -158,7 +158,63 @@ The `id` attribute of the theme module should be unique. You can also re-use an 
 
 The value of the `theme-for` attribute can be a space-separated list of element names, and can contain wildcard element names as well.</p>
 
-#### Examples of valid `theme-for` attribute values:
+### Styling in JavaScript
+
+When working with ES modules/JavaScript generally, constructing theme modules programmatically might end up producing boilterplace code to the application. Where possible, you should prefer the `registerStyles` utility which provides a convenient abstraction over the declarative API.
+
+Importing the helper (as an HTMLImport)
+```html
+<link rel="import" href="../register-styles.html">
+```
+
+Importing the helper (as an ES module)
+```js
+import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+```
+
+Use the `registerStyles(themeFor, styles)` function to register CSS styles to be included in a component's local scope. The `themeFor` parameter is of type string and is used to identify the component type the styles are applied to. It works the same as with style modules. The `styles` accepts an object or an array of objects built as template literals tagged with `css`, containing CSS style rules to be included in the targeted component's local style.
+
+Using registerStyles imported as an HTMLImport
+```js
+Vaadin.registerStyles('my-element', Vaadin.css`
+  /* Styles which will be included in my-element local scope */
+`);
+```
+Using registerStyles imported as an ES module
+```js
+registerStyles('my-element', css`
+  /* Styles which will be included in my-element local scope */
+`);
+```
+
+> Note: Use `unsafeCSS` to wrap a trusted CSS value for interpolation in a css tagged template literal or as a separate item for the `styles` array.
+
+```js
+Vaadin.registerStyles('my-element', [Vaadin.css`
+  /* Styles which will be included in my-element local scope */
+`, Vaadin.unsafeCSS(trustedCSSValue)]);
+```
+
+> Note: If you need to include styles defined as Polymer style modules with id, you can still pass the module ids as `include` array of the third `options` parameter to the function. Consider this API deprecated.
+
+```js
+// Use of "include" is deprecated!
+Vaadin.registerStyles('my-element', Vaadin.css`
+  /* Styles which will be included in my-element local scope */
+`, {include: ['my-style-module']});
+```
+
+> Note: If you need to get styles defined with `registerStyles` registered as a Polymer style module with a pre-defined id, you can still do so by passing an object with `moduleId` as the third parameter for the function. Consider this API deprecated.
+
+```js
+// Use of "moduleId" is deprecated!
+Vaadin.registerStyles(undefined, Vaadin.css`
+  /* Styles which will be included in the style module */
+`, {moduleId: 'my-extended-style-module'});
+```
+
+
+#### Examples of valid `theme-for` values:
  - `"vaadin-button"`
  - `"vaadin-overlay vaadin-date-picker-overlay"`
  - `"vaadin-*"`

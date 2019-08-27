@@ -12,7 +12,8 @@
   <script>
     WCT.loadSuites([
       'basic.html',
-      'theme-property.html'
+      'theme-property.html',
+      'register-styles.html'
     ].reduce(function(suites, suite) {
       return suites.concat([suite, suite.replace(/(.+)\?(.*)|$/, '$1?wc-shadydom=true&$2')]);
     }, []));

@@ -6,6 +6,9 @@
     "fixture": false,
     "it": false,
     "expect": false,
-    "sinon": false
+    "sinon": false,
+    "afterEach": false,
+    "before": false,
+    "CSSResult": false
   }
 }
