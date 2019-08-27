@@ -443,6 +443,9 @@
           // Emulate setting the value from keyboard
           editor.focus();
           setContent('Foo');
+          // Setting selection range to null in Quill
+          // Needed for proper hasFocus() check
+          content.blur();
           content.dispatchEvent(new CustomEvent('focusout'));
 
           expect(spy).to.be.calledOnce;
@@ -454,6 +457,7 @@
 
           rte.value = JSON.stringify([{insert: 'Foo\n'}]);
           editor.focus();
+          content.blur();
           content.dispatchEvent(new CustomEvent('focusout'));
 
           expect(spy).to.not.be.called;
@@ -475,6 +479,7 @@
           btn.dispatchEvent(new MouseEvent('mousedown', {bubbles: true}));
           const evt = new CustomEvent('focusout');
           evt.relatedTarget = btn;
+          content.blur();
           content.dispatchEvent(evt);
           btn.click();
 
@@ -533,6 +538,7 @@
           btn.dispatchEvent(new MouseEvent('mousedown', {bubbles: true}));
           btn.click();
 
+          content.blur();
           content.dispatchEvent(new CustomEvent('focusout'));
 
           expect(spy).to.not.be.called;

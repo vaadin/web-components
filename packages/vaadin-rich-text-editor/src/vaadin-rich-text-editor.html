@@ -675,9 +675,14 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         __emitChangeEvent() {
-          this.__debounceSetValue && this.__debounceSetValue.flush();
+          let lastCommittedChange = this.__lastCommittedChange;
 
-          if (this.__lastCommittedChange !== this.value) {
+          if (this.__debounceSetValue && this.__debounceSetValue.isActive()) {
+            lastCommittedChange = this.value;
+            this.__debounceSetValue.flush();
+          }
+
+          if (lastCommittedChange !== this.value) {
             this.dispatchEvent(new CustomEvent('change', {bubbles: true, cancelable: false}));
             this.__lastCommittedChange = this.value;
           }
