@@ -190,6 +190,20 @@
               static get is() {
                 return 'x-app-layout';
               }
+
+              connectedCallback() {
+                super.connectedCallback();
+                window.addEventListener('vaadin-router-location-changed', this._routerLocationChanged);
+              }
+
+              disconnectedCallback() {
+                super.disconnectedCallback();
+                this.removeEventListener('vaadin-router-location-changed', this._routerLocationChanged);
+              }
+
+              _routerLocationChanged() {
+                Vaadin.AppLayoutElement.dispatchCloseOverlayDrawerEvent();
+              }
             });
           </script>
         </dom-module>
