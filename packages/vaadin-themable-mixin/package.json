@@ -17,7 +17,8 @@
   },
   "homepage": "https://vaadin.com/elements",
   "files": [
-    "vaadin-*.js"
+    "vaadin-*.js",
+    "register-styles.js"
   ],
   "husky": {
     "hooks": {
