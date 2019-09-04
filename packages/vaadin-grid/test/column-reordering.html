@@ -550,6 +550,46 @@
         expectVisualOrder(grid, [21, 22, 12, 11]);
       });
 
+      describe('physical reordering', () => {
+
+        let groups;
+
+        beforeEach(() => {
+          groups = Array.from(grid.querySelectorAll('vaadin-grid-column-group'));
+        });
+
+        it('should reflect the physically reordered columns order', () => {
+          grid.insertBefore(groups[1], groups[0]);
+          flushGrid(grid);
+          expectVisualOrder(grid, [21, 22, 11, 12]);
+        });
+
+        it('should reflect the physically reordered child columns order', done => {
+          const columns = groups[0].querySelectorAll('vaadin-grid-column');
+          groups[0].insertBefore(columns[1], columns[0]);
+          flush(() => {
+            expectVisualOrder(grid, [12, 11, 21, 22]);
+            done();
+          });
+        });
+
+        it('should reset drag orders on physical order', done => {
+          dragAndDropOver(
+            getVisualHeaderCellContent(grid, 1, 2),
+            getVisualHeaderCellContent(grid, 1, 3)
+          );
+          expectVisualOrder(grid, [11, 12, 22, 21]);
+          const columns = groups[0].querySelectorAll('vaadin-grid-column');
+
+          groups[0].insertBefore(columns[1], columns[0]);
+          flush(() => {
+            expectVisualOrder(grid, [12, 11, 21, 22]);
+            done();
+          });
+        });
+
+      });
+
     });
 
     describe('reordering grid with different column widths', () => {

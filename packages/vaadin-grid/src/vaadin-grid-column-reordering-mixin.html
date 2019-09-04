@@ -254,6 +254,8 @@ This program is available under Apache License Version 2.0, available at https:/
         return;
       }
 
+      // Reset all column orders
+      columnTree[0].forEach((column, index) => column._order = 0);
       // Set order numbers to top-level columns
       columnTree[0].forEach((column, index) => column._order = (index + 1) * this._orderBaseScope);
     }
