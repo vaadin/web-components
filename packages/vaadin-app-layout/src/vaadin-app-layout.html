@@ -63,7 +63,8 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
-      [part="navbar"] {
+      [part="navbar"],
+      [part="navbar"]::before {
         position: fixed;
         display: flex;
         align-items: center;
@@ -138,7 +139,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
       :host([overlay]) [part="drawer"],
       :host([overlay]) [part="backdrop"] {
-        z-index: 1;
+        z-index: 2;
       }
 
       :host([drawer-opened][overlay]) [part="backdrop"] {

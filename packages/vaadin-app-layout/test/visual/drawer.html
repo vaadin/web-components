@@ -5,11 +5,23 @@
   <title></title>
   <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
   <script>
-    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+    const themeQuery = window.location.search.replace(/.*theme=([\w\-]+).*/, '$1') || 'lumo';
+    const [theme, variant] = themeQuery.split('-');
+
     document.write(`
       <link rel="import" href="../../theme/${theme}/vaadin-app-layout.html">
       <link rel="import" href="../../theme/${theme}/vaadin-drawer-toggle.html">
     `);
+
+    if (variant) {
+      document.documentElement.setAttribute('theme', variant);
+      document.write(`
+        <custom-style>
+          <style include="lumo-color">
+          </style>
+        </custom-style>
+      `);
+    }
 
     window.addEventListener('WebComponentsReady', function() {
       setTimeout(function() {

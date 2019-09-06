@@ -17,7 +17,7 @@ gemini.suite('vaadin-app-layout', function(rootSuite) {
     .before(wait)
     .after(goToAboutBlank);
 
-  ['lumo', 'material'].forEach(theme => {
+  ['lumo', 'lumo-dark', 'material'].forEach(theme => {
     gemini.suite(`drawer-${theme}`, function(suite) {
       suite
         .setUrl(`/drawer.html?theme=${theme}`)
