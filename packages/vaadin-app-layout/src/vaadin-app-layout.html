@@ -31,7 +31,8 @@ This program is available under Apache License Version 2.0, available at https:/
         padding-left: var(--vaadin-app-layout-navbar-offset-left);
       }
 
-      :host([hidden]) {
+      :host([hidden]),
+      [hidden] {
         display: none !important;
       }
 
@@ -162,7 +163,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
     </style>
-    <div part="navbar">
+    <div part="navbar" id="navbarTop">
       <slot name="navbar"></slot>
     </div>
     <div part="backdrop" on-click="_close" on-touchstart="_close"></div>
@@ -172,7 +173,7 @@ This program is available under Apache License Version 2.0, available at https:/
     <div content>
       <slot></slot>
     </div>
-    <div part="navbar" bottom hidden>
+    <div part="navbar" id="navbarBottom" bottom hidden>
       <slot name="navbar-bottom"></slot>
     </div>
   </template>
@@ -438,7 +439,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _updateDrawerSize() {
           const childCount = this.querySelectorAll('[slot=drawer]').length;
-          const drawer = this.shadowRoot.querySelector('[part=drawer]');
+          const drawer = this.$.drawer;
 
           if (childCount === 0) {
             drawer.setAttribute('hidden', '');
@@ -515,7 +516,6 @@ This program is available under Apache License Version 2.0, available at https:/
           // TODO(jouni): ARIA attributes. The drawer should act similar to a modal dialog when in ”overlay” mode
         }
 
-        // TODO(jouni): what mechanism should we use to close the overlay drawer a navigation is triggered?
         _close() {
           this.drawerOpened = false;
         }
@@ -536,11 +536,10 @@ This program is available under Apache License Version 2.0, available at https:/
         _updateTouchOptimizedMode() {
           const touchOptimized = this._getCustomPropertyValue('--vaadin-app-layout-touch-optimized') == 'true';
 
-          const navbarBottom = this.shadowRoot.querySelector('[part="navbar"][bottom]');
-          const navbars = this.querySelectorAll('[slot*="navbar"]');
+          const navbarItems = this.querySelectorAll('[slot*="navbar"]');
 
-          if (navbars.length > 0) {
-            Array.from(navbars).forEach(navbar => {
+          if (navbarItems.length > 0) {
+            Array.from(navbarItems).forEach(navbar => {
               if (navbar.getAttribute('slot').indexOf('touch-optimized') > -1) {
                 navbar.__touchOptimized = true;
               }
@@ -553,10 +552,16 @@ This program is available under Apache License Version 2.0, available at https:/
             });
           }
 
-          if (touchOptimized) {
-            navbarBottom.removeAttribute('hidden');
+          if (this.$.navbarTop.querySelector('[name=navbar]').assignedNodes().length === 0) {
+            this.$.navbarTop.setAttribute('hidden', '');
           } else {
-            navbarBottom.setAttribute('hidden', '');
+            this.$.navbarTop.removeAttribute('hidden');
+          }
+
+          if (touchOptimized) {
+            this.$.navbarBottom.removeAttribute('hidden');
+          } else {
+            this.$.navbarBottom.setAttribute('hidden', '');
           }
 
           this._updateOffsetSize();
