@@ -1,0 +1,67 @@
+sudo: false
+dist: trusty
+language: node_js
+node_js: 8.11
+
+cache:
+  directories:
+    - node_modules
+
+addons:
+  firefox: "66.0"
+  chrome: stable
+
+jobs:
+  include:
+    - if: type = push
+      env: TEST_SUITE=unit_tests POLYMER=2
+    - if: type = push
+      env: TEST_SUITE=visual_tests POLYMER=2
+    - if: type = push
+      env: TEST_SUITE=unit_tests POLYMER=3
+    - if: type = pull_request
+      env: POLYMER=2
+      addons:
+        firefox: "66.0"
+        chrome: stable
+    - if: type = pull_request
+      env: POLYMER=3
+      addons:
+        firefox: "66.0"
+        chrome: stable
+    - if: type = cron
+      env: TEST_SUITE=unit_tests POLYMER=2
+
+script:
+  - if [[ "$POLYMER" = "2" ]]; then
+      npm -q i && npm i -q --no-save bower polymer-cli && bower -q i &&
+      if [[ "$TRAVIS_EVENT_TYPE" != "pull_request" && "$TRAVIS_BRANCH" != quick/* ]]; then
+        if [[ "$TEST_SUITE" = "visual_tests" ]]; then
+          npm i -q --no-save gemini@^4.0.0 gemini-sauce gemini-polyserve &&
+          gemini test test/visual;
+        else
+          wct --env saucelabs;
+        fi;
+      else
+        npm run check &&
+        npm run lint &&
+        xvfb-run -s '-screen 0 1024x768x24' wct;
+      fi &&
+      if [[ "$TRAVIS_EVENT_TYPE" = "cron" && "$TEST_SUITE" = "unit_tests" ]]; then
+        wct --env saucelabs-cron;
+      fi;
+    fi
+  - if [[ "$POLYMER" = "3" ]]; then
+      npm --no-save -q install -g yarn bower magi-cli web-component-tester polymer-modulizer &&
+      rm -rf node_modules &&
+      magi p3-convert --out . --import-style=name &&
+      yarn install --flat &&
+      if [[ "$TRAVIS_EVENT_TYPE" != "pull_request" && "$TRAVIS_BRANCH" != quick/* ]]; then
+        wct --npm --env saucelabs;
+      else
+        xvfb-run -s '-screen 0 1024x768x24' wct --npm;
+      fi;
+    fi
+
+after_success:
+  - "cat ${TRAVIS_BUILD_DIR}/coverage/lcov.info | coveralls"

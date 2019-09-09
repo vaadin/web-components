@@ -1,0 +1,32 @@
+<dom-module id="date-time-picker-basic-demos">
+  <template>
+    <style include="vaadin-component-demo-shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+
+
+    <h3>Sample example</h3>
+    <vaadin-demo-snippet id="date-time-picker-basic-demos-sample-example" when-defined="vaadin-date-time-picker">
+      <template preserve-content>
+        <vaadin-date-time-picker></vaadin-date-time-picker>
+        <script>
+          window.addDemoReadyListener('#date-time-picker-basic-demos-sample-example', function(document) {
+            const element = document.querySelector('vaadin-date-time-picker');
+            element.textContent = 'Foobar';
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+  </template>
+  <script>
+    class DateTimePickerBasicDemos extends DemoReadyEventEmitter(DateTimePickerDemo(Polymer.Element)) {
+      static get is() {
+        return 'date-time-picker-basic-demos';
+      }
+    }
+    customElements.define(DateTimePickerBasicDemos.is, DateTimePickerBasicDemos);
+  </script>
+</dom-module>
