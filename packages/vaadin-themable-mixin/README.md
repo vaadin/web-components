@@ -160,19 +160,23 @@ The value of the `theme-for` attribute can be a space-separated list of element 
 
 ### Styling in JavaScript
 
-When working with ES modules/JavaScript generally, constructing theme modules programmatically might end up producing boilerplate code to the application. Where possible, you should prefer the `registerStyles` utility which provides a convenient abstraction over the declarative API.
+When working with ES modules/JavaScript generally, constructing theme modules programmatically might end up producing boilerplate code to the application. Where possible, prefer the `registerStyles` utility which provides a convenient abstraction over the declarative API.
 
-Importing the helper (as an HTMLImport)
+Importing the helper as an HTMLImport
 ```html
-<link rel="import" href="../register-styles.html">
+<link rel="import" href="/bower_components/vaadin-themable-mixin/register-styles.html">
 ```
 
-Importing the helper (as an ES module)
+Importing the helper as an ES module
 ```js
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 ```
 
-Use the `registerStyles(themeFor, styles)` function to register CSS styles to be included in a component's local scope. The `themeFor` parameter is of type string and is used to identify the component type the styles are applied to. It works the same as with style modules. The `styles` accepts an object or an array of objects built as template literals tagged with `css`, containing CSS style rules to be included in the targeted component's local style.
+Use the `registerStyles(themeFor, styles)` function to register CSS styles to be included in a component's local scope.
+
+The `themeFor` parameter is of type string and is used to identify the component type the styles are applied to. It works the same as with style modules.
+
+The `styles` accepts an object or an array of objects built as template literals tagged with `css`, containing CSS style rules to be included in the targeted component's local style.
 
 Using registerStyles imported as an HTMLImport
 ```js
@@ -180,6 +184,7 @@ Vaadin.registerStyles('my-element', Vaadin.css`
   /* Styles which will be included in my-element local scope */
 `);
 ```
+
 Using registerStyles imported as an ES module
 ```js
 registerStyles('my-element', css`
@@ -187,24 +192,38 @@ registerStyles('my-element', css`
 `);
 ```
 
-> Note: Use `unsafeCSS` to wrap a trusted CSS value for interpolation in a css tagged template literal or as a separate item for the `styles` array.
+Including untrusted CSS can also be a security issue. Whenever you're dealing with predefined CSS text, you can use `unsafeCSS` function to wrap the value as an object that can be passed to the `registerStyles` function.
+
+> Note: Only use `unsafeCSS` with CSS text that you trust.
 
 ```js
-Vaadin.registerStyles('my-element', [Vaadin.css`
-  /* Styles which will be included in my-element local scope */
-`, Vaadin.unsafeCSS(trustedCSSValue)]);
+const trustedCSSValue = ... // some CSS string fetched from a DB for example
+
+Vaadin.registerStyles('my-element', Vaadin.unsafeCSS(trustedCSSValue));
 ```
 
-> Note: If you need to include styles defined as Polymer style modules with id, you can still pass the module ids as `include` array of the third `options` parameter to the function. Consider this API deprecated.
+The second parameter for `registerStyles` also accepts an array, so you can include multiple styles to an element at the same time.
+
+Using registerStyles imported as an ES module
+```js
+const myStyles = css`
+  /* Styles which will be included in my-element local scope */
+`;
+const trustedStyles = Vaadin.unsafeCSS(trustedCSSValue);
+
+Vaadin.registerStyles('my-element', [myStyles, trustedStyles]);
+```
+
+If you need to include styles defined as Polymer style modules with id, you can still pass the module ids as `include` array of the third `options` parameter to the function. Consider this API deprecated.
 
 ```js
 // Use of "include" is deprecated!
 Vaadin.registerStyles('my-element', Vaadin.css`
-  /* Styles which will be included in my-element local scope */
+  /* Optional styles to be included in my-element local scope */
 `, {include: ['my-style-module']});
 ```
 
-> Note: If you need to get styles defined with `registerStyles` registered as a Polymer style module with a pre-defined id, you can still do so by passing an object with `moduleId` as the third parameter for the function. Consider this API deprecated.
+If you need to get styles defined with `registerStyles` registered as a Polymer style module with a pre-defined id, you can still do so by passing an object with `moduleId` as the third parameter for the function. Consider this API deprecated.
 
 ```js
 // Use of "moduleId" is deprecated!
