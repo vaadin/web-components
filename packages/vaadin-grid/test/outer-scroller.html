@@ -148,7 +148,7 @@
         });
 
         it('should scroll the target', done => {
-          outerScroller.addEventListener('scroll', () => {
+          listenOnce(outerScroller, 'scroll', () => {
             animationFrameFlush(() => {
               expect(target.scrollLeft).to.equal(100);
               done();
@@ -256,7 +256,7 @@
           });
 
           it('should passtrough pointer events', done => {
-            scroller.addEventListener('mousemove', () => {
+            listenOnce(scroller, 'mousemove', () => {
               expect(outerScrollerAccessible()).to.be.false;
               done();
             });
@@ -265,7 +265,7 @@
           });
 
           it('should not passtrough if and only if scrollbars exist (vertical scrollbar hover)', done => {
-            scroller.addEventListener('mousemove', () => {
+            listenOnce(scroller, 'mousemove', () => {
               expect(outerScrollerAccessible()).to.equal(getScrollbarWidth() > 0);
               done();
             });
@@ -273,7 +273,7 @@
           });
 
           it('should not passtrough if and only if scrollbars exist (horizontal scrollbar hover)', done => {
-            scroller.addEventListener('mousemove', () => {
+            listenOnce(scroller, 'mousemove', () => {
               expect(outerScrollerAccessible()).to.equal(getScrollbarWidth() > 0);
               done();
             });
@@ -282,7 +282,7 @@
 
           it('should not passtrough if hovered after srcoll period', done => {
             grid._scrollHandler();
-            scroller.addEventListener('mousemove', () => {
+            listenOnce(scroller, 'mousemove', () => {
               expect(outerScrollerAccessible()).to.equal(outerScrollerScrollable());
               done();
             });

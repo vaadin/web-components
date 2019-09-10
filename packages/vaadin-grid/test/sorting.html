@@ -123,7 +123,7 @@
         });
 
         it('should fire a sorter-changed event', done => {
-          sorter.addEventListener('sorter-changed', () => done());
+          listenOnce(sorter, 'sorter-changed', () => done());
           sorter.direction = 'asc';
         });
 
@@ -458,7 +458,7 @@
           });
 
           it('should notify direction property change from the internal vaadin-grid-sorter', done => {
-            sortColumn.addEventListener('direction-changed', e => {
+            listenOnce(sortColumn, 'direction-changed', e => {
               expect(e.detail.value).to.equal('desc');
               done();
             });

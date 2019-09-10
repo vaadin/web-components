@@ -109,7 +109,7 @@
         });
 
         it('should notify', done => {
-          grid.addEventListener('selected-items-changed', () => done());
+          listenOnce(grid, 'selected-items-changed', () => done());
           grid.selectedItems = [cachedItems[1]];
         });
       });

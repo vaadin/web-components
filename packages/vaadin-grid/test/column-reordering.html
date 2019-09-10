@@ -431,7 +431,7 @@
         });
 
         it('should fire `column-reorder` event with columns', done => {
-          grid.addEventListener('column-reorder', e => {
+          listenOnce(grid, 'column-reorder', e => {
             expect(e.detail.columns.map(column => column.getAttribute('index'))).to.eql(['2', '1', '3', '4']);
             done();
           });

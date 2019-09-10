@@ -238,7 +238,7 @@
           const _warn = console.warn;
           const spy = console.warn = sinon.spy();
 
-          filter.addEventListener('filter-changed', e => {
+          listenOnce(filter, 'filter-changed', e => {
             setTimeout(() => {
               console.warn = _warn;
               expect(spy.called).to.be.true;
@@ -253,7 +253,7 @@
           const _warn = console.warn;
           const spy = console.warn = sinon.spy();
 
-          filter.addEventListener('filter-changed', e => {
+          listenOnce(filter, 'filter-changed', e => {
             setTimeout(() => {
               console.warn = _warn;
               expect(spy.called).to.be.false;
@@ -268,7 +268,7 @@
           const _warn = console.warn;
           const spy = console.warn = sinon.spy();
 
-          filter.addEventListener('filter-changed', e => {
+          listenOnce(filter, 'filter-changed', e => {
             setTimeout(() => {
               console.warn = _warn;
               expect(spy.called).to.be.false;

@@ -72,7 +72,7 @@
           beforeEach(function(done) {
             container = fixture('grid');
             grid = container.$.grid;
-            container.addEventListener('app-localize-resources-loaded', () => done());
+            listenOnce(container, 'app-localize-resources-loaded', () => done());
           });
 
           it('should localize', () => {

@@ -84,7 +84,7 @@
       });
 
       it('should fire `filter-changed` on value change', done => {
-        filter.addEventListener('filter-changed', e => done());
+        listenOnce(filter, 'filter-changed', e => done());
 
         filter.value = 'foo';
       });
@@ -93,12 +93,12 @@
         filter.value = 'foo';
         filter._debouncerFilterChanged.flush();
 
-        filter.addEventListener('filter-changed', e => done());
+        listenOnce(filter, 'filter-changed', e => done());
         filter.path = 'bar';
       });
 
       it('should update value', done => {
-        filter.addEventListener('filter-changed', e => {
+        listenOnce(filter, 'filter-changed', e => {
           expect(filter.value).to.eql('foo');
           done();
         });

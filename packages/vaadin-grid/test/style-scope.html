@@ -174,7 +174,7 @@
 
             expect(window.getComputedStyle(content).color).to.equal('rgb(255, 0, 0)');
 
-            table.addEventListener('scroll', () => {
+            listenOnce(table, 'scroll', () => {
               flushGrid(grid);
               expect(window.getComputedStyle(content).color).to.equal('rgb(255, 0, 0)');
               done();

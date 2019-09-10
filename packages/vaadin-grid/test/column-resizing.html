@@ -211,7 +211,7 @@
       });
 
       it('should fire column-resize event on column resize', done => {
-        grid.addEventListener('column-resize', (event) => {
+        listenOnce(grid, 'column-resize', (event) => {
           expect(event.detail.resizedColumn).to.equal(grid._getColumns()[0]);
           done();
         });

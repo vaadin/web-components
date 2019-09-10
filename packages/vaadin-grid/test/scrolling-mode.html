@@ -208,7 +208,7 @@
         requestAnimationFrame(() => {
           flushGrid(grid);
           const scroller = grid.$.scroller;
-          grid.$.table.addEventListener('scroll', () => {
+          listenOnce(grid.$.table, 'scroll', () => {
             expect(scroller.hasAttribute('scrolling')).to.be.false;
             requestAnimationFrame(() => {
               expect(scroller.hasAttribute('scrolling')).to.be.true;
@@ -222,7 +222,7 @@
       it('should not sync outer scroller on IOS', done => {
         grid._ios = true;
         const spy = sinon.spy(grid.$.outerscroller, 'syncOuterScroller');
-        grid.$.table.addEventListener('scroll', () => {
+        listenOnce(grid.$.table, 'scroll', () => {
           expect(spy.called).to.be.false;
           done();
         });
