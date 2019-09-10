@@ -2,7 +2,7 @@
   "rules": {
   },
   "globals": {
-    "ElementDemo": false,
+    "DateTimePickerDemo": false,
     "DemoReadyEventEmitter": false
   }
 }

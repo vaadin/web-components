@@ -1,6 +1,6 @@
 # &lt;vaadin-date-time-picker&gt;
 
-[&lt;vaadin-date-time-picker&gt;](https://vaadin.com/components/vaadin-date-time-picker) is a Web Component providing &lt;element-functionality&gt;, part of the [Vaadin components](https://vaadin.com/components).
+[&lt;vaadin-date-time-picker&gt;](https://vaadin.com/components/vaadin-date-time-picker) is a Web Component providing a date and time selection field which includes a scrollable month calendar view, part of the [Vaadin components](https://vaadin.com/components).
 
 [Live Demo ↗](https://vaadin.com/components/vaadin-date-time-picker/html-examples)
 |

@@ -1,12 +1,12 @@
 {
-  "name": "Vaadin DateTimePicker",
+  "name": "Vaadin Date Time Picker",
   "pages": [
   {
-    "name": "Basics",
+    "name": "Basic Examples",
     "url": "date-time-picker-basic-demos",
     "src": "date-time-picker-basic-demos.html",
     "meta": {
-      "title": "Vaadin DateTimePicker Basics",
+      "title": "vaadin-date-time-picker Basic Examples",
       "description": "",
       "image": ""
      }
@@ -17,7 +17,7 @@
     "url": "date-time-picker-advanced-demos",
     "src": "date-time-picker-advanced-demos.html",
     "meta": {
-      "title": "Vaadin DateTimePicker Advanced Examples",
+      "title": "vaadin-date-time-picker Advanced Examples",
       "description": "",
       "image": ""
      }

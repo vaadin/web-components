@@ -37,7 +37,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * @mixes Vaadin.ThemableMixin
        * @demo demo/index.html
        */
-      class VaadinDateTimePicker extends Vaadin.ElementMixin(Vaadin.ThemableMixin(Polymer.Element)) {
+      class DateTimePicker extends Vaadin.ElementMixin(Vaadin.ThemableMixin(Polymer.Element)) {
         static get is() {
           return 'vaadin-date-time-picker';
         }
@@ -51,12 +51,12 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
-      customElements.define(VaadinDateTimePicker.is, VaadinDateTimePicker);
+      customElements.define(DateTimePicker.is, DateTimePicker);
 
       /**
        * @namespace Vaadin
        */
-      window.Vaadin.VaadinDateTimePicker = VaadinDateTimePicker;
+      window.Vaadin.DateTimePicker = DateTimePicker;
     })();
   </script>
 </dom-module>
