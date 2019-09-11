@@ -43,14 +43,31 @@
         return window.getComputedStyle(element).position === 'fixed';
       }
 
-      function wheel(deltaX, deltaY) {
+      function wheel(deltaX, deltaY, deltaMode = WheelEvent.DOM_DELTA_PIXEL) {
         const e = new CustomEvent('wheel', {bubbles: true, cancelable: true});
         e.deltaY = deltaY;
         e.deltaX = deltaX;
+        e.deltaMode = deltaMode;
         getBodyCellContent(grid, 0, 0).dispatchEvent(e);
         grid._debouncerWheelAnimationFrame.flush();
         return e;
       }
+
+      it('should scroll by pixels when deltaMode is DOM_DELTA_PIXEL (default)', () => {
+        wheel(0, 1, WheelEvent.DOM_DELTA_PIXEL);
+        expect(grid.$.table.scrollTop).to.equal(1);
+      });
+
+      it('should scroll by lines when deltaMode is DOM_DELTA_LINE', () => {
+        wheel(0, 1, WheelEvent.DOM_DELTA_LINE);
+        expect(grid.$.table.scrollTop).to.equal(16);
+      });
+
+      it('should scroll by pages when deltaMode is DOM_DELTA_PAGE', () => {
+        wheel(0, 1, WheelEvent.DOM_DELTA_PAGE);
+        expect(grid._scrollPageHeight).to.be.above(1);
+        expect(grid.$.table.scrollTop).to.equal(grid._scrollPageHeight);
+      });
 
       it('should have the right amount of scrollbars/scrollers', () => {
         let scrollbars = 0;
