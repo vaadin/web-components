@@ -28,7 +28,8 @@ This program is available under Apache License Version 2.0, available at https:/
         },
 
         /**
-         * The index of the item selected in the items array
+         * The index of the item selected in the items array.
+         * Note: Not updated when used in `multiple` selection mode.
          */
         selected: {
           type: Number,
@@ -260,5 +261,14 @@ This program is available under Apache License Version 2.0, available at https:/
     _scroll(pixels) {
       this._scrollerElement['scroll' + (this._vertical ? 'Top' : 'Left')] += pixels;
     }
+
+    /**
+     * Fired when the selection is changed.
+     * Not fired when used in `multiple` selection mode.
+     *
+     * @event selected-changed
+     * @param {Object} detail
+     * @param {Object} detail.value the index of the item selected in the items array.
+     */
   };
 </script>

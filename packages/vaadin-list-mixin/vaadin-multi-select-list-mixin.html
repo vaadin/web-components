@@ -32,6 +32,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         /**
          * Array of indexes of the items selected in the items array
+         * Note: Not updated when used in single selection mode.
          */
         selectedValues: {
           type: Array,
@@ -100,5 +101,14 @@ This program is available under Apache License Version 2.0, available at https:/
         this.selected = undefined;
       }
     }
+
+    /**
+     * Fired when the selection is changed.
+     * Not fired in single selection mode.
+     *
+     * @event selected-values-changed
+     * @param {Object} detail
+     * @param {Object} detail.value the array of indexes of the items selected in the items array.
+     */
   };
 </script>
