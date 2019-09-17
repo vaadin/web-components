@@ -157,6 +157,46 @@
       </template>
     </demo-snippet>
 
+    <h3>Position Target</h3>
+    <demo-snippet>
+      <template>
+        <vaadin-overlay id="positionOverlay" opened modeless></vaadin-overlay>
+        <div id="positionTarget" style="border:1px solid; width:100px; height:100px;">target</div>
+        <script>
+          const positionOverlay = document.querySelector('#positionOverlay');
+          const target = document.querySelector('#positionTarget');
+
+          positionOverlay.positionTarget = target;
+          positionOverlay.noVerticalOverlap = true;
+
+          const createToggleButton = function(prop, val1, val2) {
+            const btn = document.createElement('button');
+            btn.addEventListener('click', e => {
+              positionOverlay[prop] = positionOverlay[prop] === val1
+                ? val2 : val1;
+              btn.textContent = `${prop}: ${positionOverlay[prop]}`;
+            });
+            btn.textContent = `${prop}: ${positionOverlay[prop]}`;
+            return btn;
+          };
+
+          positionOverlay.renderer = function(root) {
+            if (root.firstElementChild) {
+              return;
+            }
+            const div = document.createElement('div');
+            root.appendChild(div);
+            div.appendChild(createToggleButton('horizontalAlign', 'start', 'end'));
+            div.appendChild(createToggleButton('verticalAlign', 'top', 'bottom'));
+            div.appendChild(createToggleButton('noHorizontalOverlap', true, false));
+            div.appendChild(createToggleButton('noVerticalOverlap', true, false));
+
+            div.style.width = div.style.height = '200px';
+          };
+        </script>
+      </template>
+    </demo-snippet>
+
     <h3>Restore Focus on Close</h3>
     <demo-snippet>
       <template>

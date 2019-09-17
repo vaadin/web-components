@@ -34,7 +34,8 @@
     "lint:css": "stylelint *.html src/*.html demo/*.html theme/**/*.html test/*html",
     "lint:html": "eslint *.html src demo test --ext .html",
     "lint:js": "eslint *.js test",
-    "lint:polymer": "polymer lint --rules polymer-2 --input ./src/*.html ./theme/**/*.html"
+    "lint:polymer": "polymer lint --rules polymer-2 --input ./src/*.html ./theme/**/*.html",
+    "start": "polymer serve --port 3000 --open"
   },
   "devDependencies": {
     "@vaadin/vaadin-component-dev-dependencies": "^3.0.0"

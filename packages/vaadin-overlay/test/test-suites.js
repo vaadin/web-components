@@ -13,4 +13,6 @@ window.VaadinOverlaySuites = [
   'templating.html?wc-shadydom=true',
   'animations.html',
   'animations.html?wc-shadydom=true',
+  'position-target.html',
+  'position-target.html?wc-shadydom=true'
 ];

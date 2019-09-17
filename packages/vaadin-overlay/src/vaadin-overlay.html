@@ -10,6 +10,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../polymer/lib/utils/flattened-nodes-observer.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="vaadin-focusables-helper.html">
+<link rel="import" href="vaadin-overlay-position-mixin.html">
 
 <dom-module id="vaadin-overlay">
   <template>
@@ -236,9 +237,13 @@ This program is available under Apache License Version 2.0, available at https:/
      *
      * @memberof Vaadin
      * @mixes Vaadin.ThemableMixin
+     * @mixes Vaadin.Overlay.PositionMixin
      * @demo demo/index.html
      */
-    class OverlayElement extends Vaadin.ThemableMixin(Polymer.Element) {
+    class OverlayElement extends Vaadin.ThemableMixin(
+      Vaadin.Overlay.PositionMixin(
+        Polymer.Element)) {
+
       static get is() {
         return 'vaadin-overlay';
       }
@@ -965,11 +970,9 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     customElements.define(OverlayElement.is, OverlayElement);
-
     /**
      * @namespace Vaadin
      */
-    window.Vaadin = window.Vaadin || {};
-    Vaadin.OverlayElement = OverlayElement;
+    window.Vaadin.OverlayElement = OverlayElement;
   })();
 </script>
