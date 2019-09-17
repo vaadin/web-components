@@ -91,10 +91,19 @@ This program is available under Apache License Version 2.0, available at https:/
         ready() {
           super.ready();
           this.setAttribute('role', 'list');
+
+          setTimeout(this._checkImport.bind(this), 2000);
         }
 
         get _scrollerElement() {
           return this.shadowRoot.querySelector('[part="items"]');
+        }
+
+        _checkImport() {
+          var item = this.querySelector('vaadin-item');
+          if (item && !(item instanceof Polymer.Element)) {
+            console.warn(`Make sure you have imported the vaadin-item element.`);
+          }
         }
       }
 
