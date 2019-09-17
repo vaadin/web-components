@@ -12,14 +12,14 @@
         <vaadin-combo-box label="Label"></vaadin-combo-box>
         <vaadin-combo-box placeholder="Placeholder"></vaadin-combo-box>
         <vaadin-combo-box value="Value"></vaadin-combo-box>
-          <script>
-            window.addDemoReadyListener('#basic-usage', function(document) {
-              const comboBox = document.querySelectorAll('vaadin-combo-box');
-              comboBox[0].items = ['Option one', 'Option two'];
-              comboBox[1].items = ['Option one', 'Option two'];
-              comboBox[2].items = ['Value', 'Option one', 'Option two'];
-            });
-          </script>
+        <script>
+          window.addDemoReadyListener('#basic-usage', function(document) {
+            const comboBox = document.querySelectorAll('vaadin-combo-box');
+            comboBox[0].items = ['Option one', 'Option two'];
+            comboBox[1].items = ['Option one', 'Option two'];
+            comboBox[2].items = ['Value', 'Option one', 'Option two'];
+          });
+        </script>
       </template>
     </vaadin-demo-snippet>
 
@@ -42,26 +42,26 @@
 
     <h3>Object list</h3>
     <vaadin-demo-snippet id="object-list" when-defined="vaadin-combo-box">
-     <template preserve-content>
-      <vaadin-combo-box label="Department"></vaadin-combo-box>
-      <script>
-        window.addDemoReadyListener('#object-list', function(document) {
-          const departments = [
-            {id: '1', name: 'Product'},
-            {id: '2', name: 'Service'},
-            {id: '3', name: 'HR'},
-            {id: '4', name: 'Accounting'}
-          ];
-          const comboBox = document.querySelectorAll('vaadin-combo-box');
-          comboBox.forEach(function(combo) {
-            combo.items = departments;
-            combo.itemValuePath = 'id';
-            combo.itemLabelPath = 'name';
-            combo.value = '1';
+      <template preserve-content>
+        <vaadin-combo-box label="Department"></vaadin-combo-box>
+        <script>
+          window.addDemoReadyListener('#object-list', function(document) {
+            const departments = [
+              {id: '1', name: 'Product'},
+              {id: '2', name: 'Service'},
+              {id: '3', name: 'HR'},
+              {id: '4', name: 'Accounting'}
+            ];
+            const comboBox = document.querySelectorAll('vaadin-combo-box');
+            comboBox.forEach(function(combo) {
+              combo.items = departments;
+              combo.itemValuePath = 'id';
+              combo.itemLabelPath = 'name';
+              combo.value = '1';
+            });
           });
-        });
-      </script>
-     </template>
+        </script>
+      </template>
     </vaadin-demo-snippet>
 
     <h3>Clear button</h3>
@@ -119,44 +119,40 @@
     </vaadin-demo-snippet>
 
     <h3>Storing custom values</h3>
-   <vaadin-demo-snippet id="combo-box-second-custom-value" when-defined="vaadin-combo-box">
-    <template preserve-content>
-     <vaadin-combo-box label="Project" allow-custom-value></vaadin-combo-box>
-     <p>Selected id: <span></span></span></p>
-     <script>
-      window.addDemoReadyListener('#combo-box-second-custom-value', function(document) {
-        const comboBox = document.querySelector('vaadin-combo-box');
-        const span = document.querySelector('span');
+    <vaadin-demo-snippet id="combo-box-second-custom-value" when-defined="vaadin-combo-box">
+      <template preserve-content>
+        <vaadin-combo-box label="Project" allow-custom-value></vaadin-combo-box>
+        <p>Selected id: <span></span></span></p>
+        <script>
+          window.addDemoReadyListener('#combo-box-second-custom-value', function(document) {
+            const comboBox = document.querySelector('vaadin-combo-box');
+            const span = document.querySelector('span');
 
-        comboBox.items = fetchProjects();
-        comboBox.itemValuePath = 'id';
-        comboBox.itemLabelPath = 'name';
+            comboBox.items = fetchProjects();
+            comboBox.itemValuePath = 'id';
+            comboBox.itemLabelPath = 'name';
 
-        if (comboBox.items.length > 0) {
-          comboBox.value = comboBox.items[0].name;
-          span.textContent = comboBox.items[0].id;
-        }
-        comboBox.addEventListener('value-changed', function() {
-          span.textContent = comboBox.value;
-        });
-        comboBox.addEventListener('custom-value-set', function(e) {
-          e.preventDefault();
+            if (comboBox.items.length > 0) {
+              comboBox.value = comboBox.items[0].name;
+              span.textContent = comboBox.items[0].id;
+            }
+            comboBox.addEventListener('value-changed', function() {
+              span.textContent = comboBox.value;
+            });
+            comboBox.addEventListener('custom-value-set', function(e) {
+              e.preventDefault();
 
-          if (comboBox.items.filter(item => item.name === e.detail).length) {
-            return;
-          }
-
-          // insertProject calls an Ajax request to insert a project asynchronously
-          insertProject(e.detail, function(newProject) {
-            comboBox.items.push(newProject);
-            comboBox.value = newProject.name;
-            span.textContent = newProject.id + ' set!';
+              // insertProject calls an Ajax request to insert a project asynchronously
+              insertProject(e.detail, function(newProject) {
+                comboBox.items.push(newProject);
+                comboBox.value = newProject.name;
+                span.textContent = newProject.id + ' set!';
+              });
+            });
           });
-        });
-      });
-      </script>
-     </template>
-   </vaadin-demo-snippet>
+        </script>
+      </template>
+    </vaadin-demo-snippet>
 
     <h3>Lazy loading</h3>
     <p>
@@ -183,8 +179,8 @@
               };
               var index = params.page * params.pageSize;
               const url = 'https://demo.vaadin.com/demo-data/1.0/filtered-countries?index=' + index +
-                          '&count=' + params.pageSize +
-                          '&filter=' + params.filter;
+              '&count=' + params.pageSize +
+              '&filter=' + params.filter;
               xhr.open('GET', url, true);
               xhr.send();
             };

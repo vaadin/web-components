@@ -11,21 +11,21 @@
         <dom-module id="custom-combo-box-border" theme-for="vaadin-text-field">
           <template>
             <style>
-          :host([theme~="custom-border"]) [part="input-field"] {
-            border: 1px solid black;
-            background-color: white;
-          }
-        </style>
+              :host([theme~="custom-border"]) [part="input-field"] {
+                border: 1px solid black;
+                background-color: white;
+              }
+            </style>
           </template>
         </dom-module>
         <vaadin-combo-box label="Label" theme="custom-border"></vaadin-combo-box>
         <script>
-      window.addDemoReadyListener('#combo-box-border-style', function(document) {
-        const comboBox = document.querySelector('vaadin-combo-box');
-        comboBox.items = ['Option one', 'Option two'];
-        comboBox.value = 'Option one';
-      });
-    </script>
+          window.addDemoReadyListener('#combo-box-border-style', function(document) {
+            const comboBox = document.querySelector('vaadin-combo-box');
+            comboBox.items = ['Option one', 'Option two'];
+            comboBox.value = 'Option one';
+          });
+        </script>
       </template>
     </vaadin-demo-snippet>
 
@@ -38,59 +38,59 @@
               :host([theme~="custom-icon"]) [part="toggle-button"]::before {
                 content: var(--lumo-icons-arrow-down);
               }
-        </style>
+            </style>
           </template>
         </dom-module>
         <vaadin-combo-box label="Label" theme="custom-icon"></vaadin-combo-box>
         <script>
-      window.addDemoReadyListener('#combo-box-icon-style', function(document) {
-        const comboBox = document.querySelector('vaadin-combo-box');
-        comboBox.items = ['Option one', 'Option two'];
-        comboBox.value = 'Option one';
-      });
-    </script>
-      </template>
-    </vaadin-demo-snippet>
-
-    <h3>Custom theme variant</h3>
-    <vaadin-demo-snippet id="combo-box-styling-demos-custom-theme-variant"
-      when-defined="vaadin-combo-box">
-      <template preserve-content>
-        <dom-module id="custom-text-field-and-item" theme-for="vaadin-text-field
-          vaadin-combo-box-item">
-          <template>
-            <style>
-              :host([theme~="custom"]) {
-                font-family: monospace;
-              }
-            </style>
-          </template>
-        </dom-module>
-        <dom-module id="custom-combo-box-overlay" theme-for="vaadin-combo-box-overlay">
-          <template>
-            <style>
-              :host([theme~="custom"]) [part="overlay"] {
-                background-image: linear-gradient(hsla(214, 61%, 25%, 0.05), hsla(214, 61%, 25%, 0.05));
-              }
-            </style>
-          </template>
-        </dom-module>
-        <vaadin-combo-box label="Element" value="Carbon" theme="custom"></vaadin-combo-box>
-        <script>
-          window.addDemoReadyListener('#combo-box-styling-demos-custom-theme-variant', function(document) {
-            document.querySelector('vaadin-combo-box').items = elements;
+          window.addDemoReadyListener('#combo-box-icon-style', function(document) {
+            const comboBox = document.querySelector('vaadin-combo-box');
+            comboBox.items = ['Option one', 'Option two'];
+            comboBox.value = 'Option one';
           });
         </script>
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Custom theme variant</h3>
+    <vaadin-demo-snippet id="combo-box-styling-demos-custom-theme-variant"
+    when-defined="vaadin-combo-box">
+    <template preserve-content>
+      <dom-module id="custom-text-field-and-item" theme-for="vaadin-text-field
+      vaadin-combo-box-item">
+      <template>
+        <style>
+          :host([theme~="custom"]) {
+            font-family: monospace;
+          }
+        </style>
+      </template>
+    </dom-module>
+    <dom-module id="custom-combo-box-overlay" theme-for="vaadin-combo-box-overlay">
+      <template>
+        <style>
+          :host([theme~="custom"]) [part="overlay"] {
+            background-image: linear-gradient(hsla(214, 61%, 25%, 0.05), hsla(214, 61%, 25%, 0.05));
+          }
+        </style>
+      </template>
+    </dom-module>
+    <vaadin-combo-box label="Element" value="Carbon" theme="custom"></vaadin-combo-box>
+    <script>
+      window.addDemoReadyListener('#combo-box-styling-demos-custom-theme-variant', function(document) {
+        document.querySelector('vaadin-combo-box').items = elements;
+      });
+    </script>
   </template>
-  <script>
-    class ComboBoxStylingDemos extends DemoReadyEventEmitter(ComboBoxDemo(Polymer.Element)) {
-      static get is() {
-        return 'combo-box-styling-demos';
-      }
+</vaadin-demo-snippet>
+
+</template>
+<script>
+  class ComboBoxStylingDemos extends DemoReadyEventEmitter(ComboBoxDemo(Polymer.Element)) {
+    static get is() {
+      return 'combo-box-styling-demos';
     }
-    customElements.define(ComboBoxStylingDemos.is, ComboBoxStylingDemos);
-  </script>
+  }
+  customElements.define(ComboBoxStylingDemos.is, ComboBoxStylingDemos);
+</script>
 </dom-module>

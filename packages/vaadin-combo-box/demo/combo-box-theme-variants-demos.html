@@ -1,10 +1,10 @@
 <dom-module id="combo-box-theme-variants-demos">
   <template>
     <style include="vaadin-component-demo-shared-styles">
-        :host {
-          display: block;
-        }
-      </style>
+      :host {
+        display: block;
+      }
+    </style>
     <h3>Text align</h3>
     <vaadin-demo-snippet id="theme-variants" when-defined="vaadin-combo-box">
       <template preserve-content>
@@ -12,13 +12,13 @@
         <vaadin-combo-box value="Center" theme="align-center"></vaadin-combo-box>
         <vaadin-combo-box value="Right" theme="align-right"></vaadin-combo-box>
         <script>
-        window.addDemoReadyListener('#theme-variants', function(document) {
-          const comboBox = document.querySelectorAll('vaadin-combo-box');
-          comboBox[0].items = ['Left', 'Right', 'Center'];
-          comboBox[1].items = ['Left', 'Right', 'Center'];
-          comboBox[2].items = ['Left', 'Right', 'Center'];
-        });
-      </script>
+          window.addDemoReadyListener('#theme-variants', function(document) {
+            const comboBox = document.querySelectorAll('vaadin-combo-box');
+            comboBox[0].items = ['Left', 'Right', 'Center'];
+            comboBox[1].items = ['Left', 'Right', 'Center'];
+            comboBox[2].items = ['Left', 'Right', 'Center'];
+          });
+        </script>
       </template>
     </vaadin-demo-snippet>
 
@@ -27,21 +27,21 @@
       <template preserve-content>
         <vaadin-combo-box label="Label" theme="small"></vaadin-combo-box>
         <script>
-        window.addDemoReadyListener('#small-size', function(document) {
-          const comboBox = document.querySelectorAll('vaadin-combo-box');
-          comboBox[0].items = ['Option one', 'Option two', 'Option three'];
-        });
-      </script>
+          window.addDemoReadyListener('#small-size', function(document) {
+            const comboBox = document.querySelectorAll('vaadin-combo-box');
+            comboBox[0].items = ['Option one', 'Option two', 'Option three'];
+          });
+        </script>
       </template>
     </vaadin-demo-snippet>
 
   </template>
   <script>
-  class ComboBoxThemeVariantsDemos extends DemoReadyEventEmitter(ComboBoxDemo(Polymer.Element)) {
-    static get is() {
-      return 'combo-box-theme-variants-demos';
+    class ComboBoxThemeVariantsDemos extends DemoReadyEventEmitter(ComboBoxDemo(Polymer.Element)) {
+      static get is() {
+        return 'combo-box-theme-variants-demos';
+      }
     }
-  }
-  customElements.define(ComboBoxThemeVariantsDemos.is, ComboBoxThemeVariantsDemos);
-</script>
+    customElements.define(ComboBoxThemeVariantsDemos.is, ComboBoxThemeVariantsDemos);
+  </script>
 </dom-module>
