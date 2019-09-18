@@ -231,6 +231,17 @@
             comboBox.$.overlay._selector.querySelector('vaadin-combo-box-item').click();
             expect(spy).to.not.have.been.called;
           });
+
+          it('should not be fired when existing item is entered and overlay is closed', () => {
+            const spy = sinon.spy();
+            comboBox.addEventListener('custom-value-set', spy);
+
+            comboBox.open();
+            comboBox.inputElement.value = 'a';
+            comboBox.close();
+            comboBox.inputElement.blur();
+            expect(spy).to.not.have.been.called;
+          });
         });
       });
 
@@ -384,8 +395,8 @@
           comboBox.items = ['bar', 'baz'];
           comboBox.open();
           expect(
-            comboBox.$.overlay._selector.querySelector('vaadin-combo-box-item')
-              .getAttribute('theme')
+          comboBox.$.overlay._selector.querySelector('vaadin-combo-box-item')
+          .getAttribute('theme')
           ).to.equal('foo');
         });
       });
