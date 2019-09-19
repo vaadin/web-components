@@ -6,5 +6,6 @@ window.VaadinTextFieldSuites = [
   'validation.html',
   'accessibility.html',
   'custom-input.html',
-  'email-field.html'
+  'email-field.html',
+  'integer-field.html'
 ];

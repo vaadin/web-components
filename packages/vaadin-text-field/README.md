@@ -25,6 +25,7 @@
     <link rel="import" href="vaadin-text-area.html">
     <link rel="import" href="vaadin-email-field.html">
     <link rel="import" href="vaadin-number-field.html">
+    <link rel="import" href="vaadin-integer-field.html">
     <next-code-block></next-code-block>
   </template>
 </custom-element-demo>
@@ -35,7 +36,8 @@
 <vaadin-password-field label="Password"></vaadin-password-field>
 <vaadin-text-area label="Description"></vaadin-text-area>
 <vaadin-email-field label="Email"></vaadin-email-field>
-<vaadin-number-field label="Count" has-controls></vaadin-number-field>
+<vaadin-number-field label="Price"></vaadin-number-field>
+<vaadin-integer-field label="Count" has-controls></vaadin-integer-field>
 ```
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-text-field/master/screenshot.png" width="710" alt="Screenshot of vaadin-text-field">](https://vaadin.com/components/vaadin-text-field)
@@ -65,6 +67,7 @@ Once installed, import the components you need in your application:
 <link rel="import" href="bower_components/vaadin-text-field/vaadin-password-field.html">
 <link rel="import" href="bower_components/vaadin-text-field/vaadin-email-field.html">
 <link rel="import" href="bower_components/vaadin-text-field/vaadin-number-field.html">
+<link rel="import" href="bower_components/vaadin-text-field/vaadin-integer-field.html">
 ```
 ### Polymer 3 and ES Modules Compatible Version
 
@@ -82,6 +85,7 @@ import '@vaadin/vaadin-text-field/vaadin-text-area.js';
 import '@vaadin/vaadin-text-field/vaadin-password-field.js';
 import '@vaadin/vaadin-text-field/vaadin-email-field.js';
 import '@vaadin/vaadin-text-field/vaadin-number-field.js';
+import '@vaadin/vaadin-text-field/vaadin-integer-field.js';
 ```
 
 ## Getting started
@@ -99,6 +103,7 @@ To use the Material theme, import the correspondent file from the `theme/materia
   `theme/lumo/vaadin-password-field.html`
   `theme/lumo/vaadin-email-field.html`
   `theme/lumo/vaadin-number-field.html`
+  `theme/lumo/vaadin-integer-field.html`
 
 - The components with the Material theme:
 
@@ -107,18 +112,21 @@ To use the Material theme, import the correspondent file from the `theme/materia
   `theme/material/vaadin-password-field.html`
   `theme/material/vaadin-email-field.html`
   `theme/material/vaadin-number-field.html`
+  `theme/material/vaadin-integer-field.html`
 
 - Aliases for `theme/lumo/vaadin-text-field.html`
   `theme/lumo/vaadin-text-area.html`
   `theme/lumo/vaadin-password-field.html`
   `theme/lumo/vaadin-email-field.html`
-  `theme/lumo/vaadin-number-field.html`:
+  `theme/lumo/vaadin-number-field.html`
+  `theme/lumo/vaadin-integer-field.html`:
 
   `vaadin-text-field.html`
   `vaadin-text-area.html`
   `vaadin-password-field.html`
   `vaadin-email-field.html`
   `vaadin-number-field`
+  `vaadin-integer-field`
 
 
 ## Running demos and tests in a browser

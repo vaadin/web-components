@@ -14,4 +14,6 @@
 <vaadin-password-field label="Password"></vaadin-password-field>
 <vaadin-text-area label="Description"></vaadin-text-area>
 <vaadin-email-field label="Email"></vaadin-email-field>
+<vaadin-number-field label="Price"></vaadin-number-field>
+<vaadin-integer-field label="Count" has-controls></vaadin-integer-field>
 ```
