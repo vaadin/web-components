@@ -591,11 +591,10 @@ This program is available under Apache License Version 2.0, available at https:/
         if (this.allowCustomValue) {
           const e = new CustomEvent('custom-value-set', {detail: this._inputElementValue, composed: true, cancelable: true, bubbles: true});
           // to prevent a repetitive input value being saved after pressing ESC and Tab.
-          if (this.filteredItems && this.filteredItems.filter(item => this._getItemLabel(item) === e.detail).length) {
-            return;
+          if (!(this.filteredItems && this.filteredItems.filter(item => this._getItemLabel(item) === e.detail).length)) {
+            this.dispatchEvent(e);
           }
 
-          this.dispatchEvent(e);
           if (!e.defaultPrevented) {
             const customValue = this._inputElementValue;
             this._selectItemForValue(customValue);
