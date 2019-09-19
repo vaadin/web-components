@@ -395,8 +395,8 @@
           comboBox.items = ['bar', 'baz'];
           comboBox.open();
           expect(
-          comboBox.$.overlay._selector.querySelector('vaadin-combo-box-item')
-          .getAttribute('theme')
+            comboBox.$.overlay._selector.querySelector('vaadin-combo-box-item')
+              .getAttribute('theme')
           ).to.equal('foo');
         });
       });
