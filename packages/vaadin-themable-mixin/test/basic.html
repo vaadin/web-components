@@ -92,6 +92,18 @@
     }
     customElements.define(TestOwnTemplate.is, TestOwnTemplate);
 
+    class TestOwnStaticTemplate extends TestFoo {
+      static get is() {
+        return 'test-own-static-template';
+      }
+      static get template() {
+        return Polymer.html`
+          <div part="text" id="text">text</div>
+        `;
+      }
+    }
+    customElements.define(TestOwnStaticTemplate.is, TestOwnStaticTemplate);
+
     class TestNoTemplate extends Vaadin.ThemableMixin(Polymer.Element) {
       static get is() {
         return 'test-no-template';
@@ -263,6 +275,7 @@
       <test-own-template></test-own-template>
       <test-no-template></test-no-template>
       <test-style-override></test-style-override>
+      <test-own-static-template></test-own-static-template>
     </template>
   </test-fixture>
 
@@ -326,6 +339,10 @@
 
       it('should not inherit parent themes to own custom template', function() {
         expect(window.getComputedStyle(components[4].$.text).backgroundColor).not.to.equal('rgb(255, 0, 0)');
+      });
+
+      it('should not inherit parent themes to own custom template defined with getter', function() {
+        expect(window.getComputedStyle(components[7].$.text).backgroundColor).not.to.equal('rgb(255, 0, 0)');
       });
 
       it('should override vaadin module styles', function() {
