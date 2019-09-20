@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="UTF-8">
   <title>vaadin-integer-field tests</title>
@@ -20,7 +21,154 @@
 
   <script>
     describe('integer-field', () => {
+
+      let integerField, input;
+
+      beforeEach(() => {
+        integerField = fixture('default');
+        input = integerField.inputElement;
+      });
+
+      describe('prevented keys', () => {
+
+        let keydownSpy;
+
+        beforeEach(() => {
+          keydownSpy = sinon.spy();
+          input.addEventListener('keydown', keydownSpy);
+        });
+
+        it('should prevent comma key', () => {
+          MockInteractions.keyDownOn(input, 188, [], ',');
+          const event = keydownSpy.lastCall.args[0];
+          expect(event.defaultPrevented).to.be.true;
+        });
+
+        it('should prevent period key', () => {
+          MockInteractions.keyDownOn(input, 190, [], '.');
+          const event = keydownSpy.lastCall.args[0];
+          expect(event.defaultPrevented).to.be.true;
+        });
+
+        it('should prevent e key', () => {
+          MockInteractions.keyDownOn(input, 69, [], 'e');
+          const event = keydownSpy.lastCall.args[0];
+          expect(event.defaultPrevented).to.be.true;
+        });
+
+        it('should not prevent number keys', () => {
+          MockInteractions.keyDownOn(input, 49, [], '1');
+          const event = keydownSpy.lastCall.args[0];
+          expect(event.defaultPrevented).to.be.false;
+        });
+      });
+
+      const fireDropEvent = draggedText => {
+        const event = new Event('drop', {
+          bubbles: true,
+          cancelable: true,
+          composed: true
+        });
+        event.dataTransfer = {
+          getData: () => draggedText
+        };
+        input.dispatchEvent(event);
+        return event;
+      };
+
+      const firePasteEvent = pastedText => {
+        const event = new Event('paste', {
+          bubbles: true,
+          cancelable: true,
+          composed: true
+        });
+        // For IE11, window.clipboardData should be used,
+        // but monkey-patching that one for testing causes issues
+        event.clipboardData = {
+          getData: () => pastedText
+        };
+        input.dispatchEvent(event);
+        return event;
+      };
+
+      const testEvent = (eventName, fireEvent) => {
+
+        describe(`${eventName} event`, () => {
+
+          it(`should prevent ${eventName} with text`, () => {
+            const event = fireEvent('foo');
+            expect(event.defaultPrevented).to.be.true;
+          });
+
+          it(`should prevent ${eventName} with decimals`, () => {
+            const event = fireEvent('1.2');
+            expect(event.defaultPrevented).to.be.true;
+          });
+
+          it(`should not prevent ${eventName} with integer`, () => {
+            const event = fireEvent('123');
+            expect(event.defaultPrevented).to.be.false;
+          });
+
+          it(`should not prevent ${eventName} with negative integer`, () => {
+            const event = fireEvent('-123');
+            expect(event.defaultPrevented).to.be.false;
+          });
+
+          it(`should not prevent ${eventName} with minus and plus signs`, () => {
+            // because the same can be done by typing
+            const event = fireEvent('1-2+3');
+            expect(event.defaultPrevented).to.be.false;
+          });
+        });
+      };
+      testEvent('drop', fireDropEvent);
+      testEvent('paste', firePasteEvent);
+
+      describe('value property', () => {
+
+        const initialValue = '1';
+
+        beforeEach(() => {
+          integerField.value = initialValue;
+        });
+
+        it('should accept integer value as string', () => {
+          expect(integerField.value).to.eql(initialValue);
+        });
+
+        it('should accept integer value as number and convert to string', () => {
+          integerField.value = 2;
+          expect(integerField.value).to.eql('2');
+        });
+
+        it('should accept negative integer value as string', () => {
+          integerField.value = '-2';
+          expect(integerField.value).to.eql('-2');
+        });
+
+        it('should accept negative integer value as number and convert to string', () => {
+          integerField.value = -2;
+          expect(integerField.value).to.eql('-2');
+        });
+
+        it('should accept empty string', () => {
+          integerField.value = '';
+          expect(integerField.value).to.eql('');
+        });
+
+        ['foo', '1.2', 1.2, '+2', '2-', '2-2', '-', '+', '1e1'].forEach(invalidValue => {
+
+          it(`should reset previous value when setting ${typeof invalidValue} "${invalidValue}"`, () => {
+            integerField.value = invalidValue;
+            expect(integerField.value).to.eql(initialValue);
+          });
+
+        });
+      });
+
     });
   </script>
 </body>
+
 </html>

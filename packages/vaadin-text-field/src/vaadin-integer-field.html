@@ -36,6 +36,53 @@ This program is available under Apache License Version 2.0, available at https:/
 
         ready() {
           super.ready();
+          this.inputElement.addEventListener('drop', this.__onDrop.bind(this));
+          this.inputElement.addEventListener('paste', this.__onPaste.bind(this));
+        }
+
+        _valueChanged(newVal, oldVal) {
+          if (newVal !== '' && !this.__isInteger(newVal)) {
+            console.warn(`Trying to set non-integer value "${newVal}" to <vaadin-integer-field>.`
+              + ` Resetting the previous value "${oldVal}".`);
+            this.value = oldVal;
+            return;
+          }
+
+          super._valueChanged(newVal, oldVal);
+        }
+
+        _onKeyDown(e) {
+          const unAllowedKeyCodes = [
+            188, // ,
+            190, // .
+            69   // e
+          ];
+          if (unAllowedKeyCodes.indexOf(e.keyCode) > -1) {
+            e.preventDefault();
+          }
+          super._onKeyDown(e);
+        }
+
+        __onDrop(e) {
+          const draggedText = e.dataTransfer.getData('text');
+          if (!this.__isValidInput(draggedText)) {
+            e.preventDefault();
+          }
+        }
+
+        __onPaste(e) {
+          const pastedText = (e.clipboardData || window.clipboardData).getData('text');
+          if (!this.__isValidInput(pastedText)) {
+            e.preventDefault();
+          }
+        }
+
+        __isInteger(value) {
+          return /^(-\d)?\d*$/.test(String(value));
+        }
+
+        __isValidInput(value) {
+          return /^[\d+-]*$/.test(String(value));
         }
       }
 
