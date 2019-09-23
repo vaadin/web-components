@@ -6,17 +6,17 @@
       }
     </style>
 
-
-    <h3>Sample example</h3>
-    <vaadin-demo-snippet id="date-time-picker-basic-demos-sample-example" when-defined="vaadin-date-time-picker">
+    <h3>Date time picker</h3>
+    <vaadin-demo-snippet id="date-time-picker-basic-demos-minimal">
       <template preserve-content>
         <vaadin-date-time-picker></vaadin-date-time-picker>
-        <script>
-          window.addDemoReadyListener('#date-time-picker-basic-demos-sample-example', function(document) {
-            const element = document.querySelector('vaadin-date-time-picker');
-            element.textContent = 'Foobar';
-          });
-        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Pre-selected value</h3>
+    <vaadin-demo-snippet id="date-time-picker-basic-demos-pre-selected-value">
+      <template preserve-content>
+        <vaadin-date-time-picker value="2019-09-16T15:00"></vaadin-date-time-picker>
       </template>
     </vaadin-demo-snippet>
 

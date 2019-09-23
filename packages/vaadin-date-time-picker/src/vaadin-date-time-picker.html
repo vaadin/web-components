@@ -7,6 +7,9 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../polymer/polymer-element.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
+<link rel="import" href="../../vaadin-custom-field/vaadin-custom-field.html">
+<link rel="import" href="../../vaadin-date-picker/vaadin-date-picker.html">
+<link rel="import" href="../../vaadin-time-picker/vaadin-time-picker.html">
 
 <dom-module id="vaadin-date-time-picker">
   <template>
@@ -19,22 +22,63 @@ This program is available under Apache License Version 2.0, available at https:/
         display: none !important;
       }
     </style>
-    <slot></slot>
+    <vaadin-custom-field id="customField" on-value-changed="__customFieldValueChanged" theme$="[[theme]]">
+      <slot name="date-picker">
+        <vaadin-date-picker part="date" theme$="[[theme]]"></vaadin-date-picker>
+      </slot>
+      <slot name="time-picker">
+        <vaadin-time-picker part="time" theme$="[[theme]]"></vaadin-time-picker>
+      </slot>
+    </vaadin-custom-field>
   </template>
 
   <script>
     (function() {
 
       /**
-       * `<vaadin-date-time-picker>` is a Web Component.
+       * `<vaadin-date-time-picker>` is a Web Component providing a date time selection field.
        *
+       * ```html
+       * <vaadin-date-time-picker value="2019-09-16T15:00"></vaadin-date-time-picker>
        * ```
-       * <vaadin-date-time-picker></vaadin-date-time-picker>
+       *
+       * ```js
+       * dateTimePicker.value = '2019-09-16T15:00';
        * ```
+       *
+       * When the selected `value` is changed, a `value-changed` event is triggered.
+       *
+       * ### Styling
+       *
+       * The following shadow DOM parts are available for styling:
+       *
+       * Part name | Description | Theme for Element
+       * ----------------|----------------|----------------
+       * `date` | Date picker element | vaadin-date-time-picker
+       * `time` | Time picker element | vaadin-date-time-picker
+       *
+       * See [ThemableMixin – Stylable Shadow Parts](https://github.com/vaadin/vaadin-themable-mixin#stylable-shadow-parts)
+       *
+       * In addition to `<vaadin-date-time-picker>` itself, the following internal
+       * components are themable:
+       *
+       * - `<vaadin-custom-field>`, see
+       *   [`custom-field` documentation](https://vaadin.com/components/vaadin-custom-field/html-api/elements/Vaadin.CustomFieldElement)
+       *   for the custom field parts.
+       * - `<vaadin-date-picker>`, see
+       *   [`date-picker` documentation](https://vaadin.com/components/vaadin-date-picker/html-api/elements/Vaadin.DatePickerElement)
+       *   for the date picker parts.
+       * - `<vaadin-time-picker>`, see
+       *   [`time-picker` documentation](https://vaadin.com/components/vaadin-time-picker/html-api/elements/Vaadin.TimePickerElement)
+       *   for the time picker parts.
+       *
+       * Note: the `theme` attribute value set on `<vaadin-date-time-picker>` is
+       * propagated to the internal themable components listed above.
        *
        * @memberof Vaadin
        * @mixes Vaadin.ElementMixin
        * @mixes Vaadin.ThemableMixin
+       * @mixes Vaadin.ThemePropertyMixin
        * @demo demo/index.html
        */
       class DateTimePicker extends Vaadin.ElementMixin(Vaadin.ThemableMixin(Polymer.Element)) {
@@ -47,7 +91,203 @@ This program is available under Apache License Version 2.0, available at https:/
 
         static get properties() {
           return {
+            /**
+             * The value for this element.
+             *
+             * Supported date time format is based on ISO 8601 (without a time zone designator):
+             * - Minute precision `"YYYY-MM-DDThh:mm"`
+             * - Second precision `"YYYY-MM-DDThh:mm:ss"`
+             * - Millisecond precision `"YYYY-MM-DDThh:mm:ss.fff"` (default)
+             */
+            value: {
+              type: String,
+              notify: true,
+              value: '',
+              observer: '__valueChanged'
+            },
+
+            /**
+             * The current selected date time.
+             */
+            __selectedDateTime: {
+              type: Date
+            },
           };
+        }
+
+        static get observers() {
+          return [
+            '__selectedDateTimeChanged(__selectedDateTime)'
+          ];
+        }
+
+        __parseDate(str) {
+          return customElements.get('vaadin-date-picker').prototype._parseDate(str);
+        }
+
+        __formatDateISO(str) {
+          return customElements.get('vaadin-date-picker').prototype._formatISO(str);
+        }
+
+        __formatTimeISO(time) {
+          return customElements.get('vaadin-time-picker').properties.i18n.value().formatTime(time);
+        }
+
+        __parseTimeISO(str) {
+          return customElements.get('vaadin-time-picker').properties.i18n.value().parseTime(str);
+        }
+
+        __parseDateTime(str) {
+          const [dateValue, timeValue] = str.split('T');
+          if (!(dateValue && timeValue)) {
+            return;
+          }
+
+          /** @type {Date} */
+          const date = this.__parseDate(dateValue);
+          if (!date) {
+            return;
+          }
+
+          const time = this.__parseTimeISO(timeValue);
+          if (!time) {
+            return;
+          }
+
+          date.setHours(parseInt(time.hours));
+          date.setMinutes(parseInt(time.minutes || 0));
+          date.setSeconds(parseInt(time.seconds || 0));
+          date.setMilliseconds(parseInt(time.milliseconds || 0));
+
+          return date;
+        }
+
+        /**
+         * @param {Date} date1
+         * @param {Date} date2
+         */
+        __dateTimeEquals(date1, date2) {
+          if (!Vaadin.DatePickerHelper._dateEquals(date1, date2)) {
+            return false;
+          }
+          return date1.getHours() === date2.getHours() &&
+          date1.getMinutes() === date2.getMinutes() &&
+          date1.getSeconds() === date2.getSeconds() &&
+          date1.getMilliseconds() === date2.getMilliseconds();
+        }
+
+        __handleDateTimeChange(property, parsedProperty, value, oldValue) {
+          if (!value) {
+            this[property] = '';
+            this[parsedProperty] = '';
+            return;
+          }
+
+          const dateTime = this.__parseDateTime(value);
+          if (!dateTime) { // Invalid date, revert to old value
+            this[property] = oldValue;
+            return;
+          }
+          if (!this.__dateTimeEquals(this[parsedProperty], dateTime)) {
+            this[parsedProperty] = dateTime;
+          }
+        }
+
+        __valueChanged(value, oldValue) {
+          // Setting initial value to empty string, skip
+          if (value === '' && oldValue === undefined) {
+            return;
+          }
+
+          this.__handleDateTimeChange('value', '__selectedDateTime', value, oldValue);
+        }
+
+        /**
+         * FIXME(haprog): This method can probably be removed once we support "step" property
+         * and know what the precision of the date string should be.
+         *
+         * @param {string} date1
+         * @param {string} date2
+         */
+        __dateTimeStringEquals(date1, date2) {
+          if (date1.length === date2.length) {
+            return date1 === date2;
+          }
+
+          let shortDate, longDate;
+          /* istanbul ignore else */
+          if (date1.length < date2.length) {
+            shortDate = date1;
+            longDate = date2;
+          } else {
+            shortDate = date2;
+            longDate = date1;
+          }
+
+          if (shortDate !== longDate.substr(0, shortDate.length)) {
+            return false;
+          }
+
+          const endDiff = longDate.substr(shortDate.length);
+          const okEndDiffs = [
+            ':00.000',
+            ':00',
+            '.000'
+          ];
+          return okEndDiffs.indexOf(endDiff) !== -1;
+        }
+
+        __selectedDateTimeChanged(selectedDateTime) {
+          /* istanbul ignore if */
+          if (!selectedDateTime === undefined) {
+            return;
+          }
+
+          const dateValue = this.__formatDateISO(selectedDateTime);
+          // FIXME(haprog): Once we add support for "step" property, timeValue should take that into account
+          // and use correct precision (like in vaadin-time-picker)
+          const timeValue = (selectedDateTime && this.__formatTimeISO({
+            hours: selectedDateTime.getHours(),
+            minutes: selectedDateTime.getMinutes(),
+            seconds: selectedDateTime.getSeconds(),
+            milliseconds: selectedDateTime.getMilliseconds()
+          })) || '';
+
+          const formattedValue = `${dateValue}T${timeValue}`;
+          if (!this.__dateTimeStringEquals(this.value, formattedValue)) {
+            this.value = formattedValue;
+          }
+
+          this.$.customField.value = formattedValue;
+        }
+
+        __customFieldValueChanged(e) {
+          /** @type {string} */
+          const value = e.detail.value;
+          /* istanbul ignore if */
+          if (typeof value !== 'string') {
+            return;
+          }
+
+          // Initial empty value ('\t') from custom field
+          if (value === '\t') {
+            // Set value format for custom field
+            /* istanbul ignore next */
+            this.$.customField.set('i18n.parseValue', combinedValue => combinedValue.split('T'));
+            /* istanbul ignore next */
+            this.$.customField.set('i18n.formatValue', inputValues => inputValues.join('T'));
+            // Ignore initial value from custom field so we don't override initial value of date time picker
+            return;
+          }
+
+          const [date, time] = value.split('T');
+          if (date && time) {
+            if (!this.__dateTimeStringEquals(this.value, value)) {
+              this.value = value;
+            }
+          } else {
+            this.value = '';
+          }
         }
       }
 
