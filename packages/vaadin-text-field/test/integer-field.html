@@ -167,6 +167,33 @@
         });
       });
 
+      describe('step property', () => {
+
+        const initialStep = 3;
+
+        beforeEach(() => {
+          integerField.step = initialStep;
+        });
+
+        it('should allow setting positive integer', () => {
+          expect(integerField.step).to.eql(initialStep);
+        });
+
+        it('should allow setting positive integer as string', () => {
+          integerField.step = '5';
+          expect(integerField.step).to.eql('5');
+        });
+
+        ['foo', '-1', -1, '1.2', 1.2, '+1', '1e1'].forEach(invalidStep => {
+
+          it(`should reset previous step when setting ${typeof invalidStep} "${invalidStep}"`, () => {
+            integerField.step = invalidStep;
+            expect(integerField.step).to.eql(initialStep);
+          });
+
+        });
+      });
+
     });
   </script>
 </body>

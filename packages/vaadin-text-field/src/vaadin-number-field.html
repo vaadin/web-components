@@ -102,7 +102,8 @@ This program is available under Apache License Version 2.0, available at https:/
             */
             min: {
               type: Number,
-              reflectToAttribute: true
+              reflectToAttribute: true,
+              observer: '_minChanged'
             },
 
             /**
@@ -120,16 +121,11 @@ This program is available under Apache License Version 2.0, available at https:/
             step: {
               type: Number,
               reflectToAttribute: true,
-              value: 1
+              value: 1,
+              observer: '_stepChanged'
             }
 
           };
-        }
-
-        static get observers() {
-          return [
-            '_stepOrMinChanged(step, min)'
-          ];
         }
 
         ready() {
@@ -287,8 +283,16 @@ This program is available under Apache License Version 2.0, available at https:/
           return !this.value || (!this.disabled && this._incrementIsInsideTheLimits(incr, value));
         }
 
-        _maxChanged() {
-          this.inputElement.max = this.max;
+        _stepChanged(step) {
+          this.inputElement.step = step;
+        }
+
+        _minChanged(min) {
+          this.inputElement.min = min;
+        }
+
+        _maxChanged(max) {
+          this.inputElement.max = max;
         }
 
         _valueChanged(newVal, oldVal) {
@@ -315,11 +319,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
         __onInputChange() {
           this.checkValidity();
-        }
-
-        _stepOrMinChanged(step, min) {
-          this.inputElement.step = step;
-          this.inputElement.min = this.min;
         }
 
         checkValidity() {

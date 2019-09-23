@@ -77,12 +77,27 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        _stepChanged(newVal, oldVal) {
+          if (!this.__hasOnlyDigits(newVal)) {
+            console.warn(`Trying to set invalid step size "${newVal}",`
+              + ` which is not a positive integer, to <vaadin-integer-field>.`
+              + ` Resetting the previous value "${oldVal}".`);
+            this.step = oldVal;
+            return;
+          }
+          super._stepChanged(newVal, oldVal);
+        }
+
         __isInteger(value) {
           return /^(-\d)?\d*$/.test(String(value));
         }
 
         __isValidInput(value) {
           return /^[\d+-]*$/.test(String(value));
+        }
+
+        __hasOnlyDigits(value) {
+          return /^\d*$/.test(String(value));
         }
       }
 
