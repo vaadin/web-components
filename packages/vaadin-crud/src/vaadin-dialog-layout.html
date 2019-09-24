@@ -15,7 +15,17 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
   <template>
     <style>
       :host {
+        z-index: 1;
+      }
+
+      [part="editor"][hidden] {
         display: none;
+      }
+
+      :host([editor-position='bottom']) [part="editor"]:not([hidden]) {
+        height: 250px;
+        display: flex;
+        flex-direction: column;
       }
 
       [part="scroller"] {
@@ -33,26 +43,28 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       }
     </style>
 
+    <div id="editor" part="editor" hidden$="{{!_computeEditorOpened(opened, 'bottom')}}">
+      <div part="scroller" id="scroller" role="group" aria-labelledby="header">
+        <div part="header" id="header">
+          <slot name="header"></slot>
+        </div>
+        <slot></slot>
+      </div>
+
+      <div part="footer" role="toolbar">
+        <slot name="footer"></slot>
+      </div>
+    </div>
+
     <vaadin-dialog
       id="dialog"
-      opened="{{opened}}"
+      opened="{{_computeEditorOpened(opened, 'overlay')}}"
       aria-label="[[__ariaLabel]]"
       no-close-on-outside-click="[[noCloseOnOutsideClick]]"
       no-close-on-esc="[[noCloseOnEsc]]"
       theme$="[[theme]] layout"
       >
       <template>
-
-        <div part="scroller" role="group" aria-labelledby="header">
-          <div part="header" id="header">
-            <slot name="header"></slot>
-          </div>
-          <slot></slot>
-        </div>
-
-        <div part="footer" role="toolbar">
-          <slot name="footer"></slot>
-        </div>
       </template>
     </vaadin-dialog>
   </template>
@@ -122,6 +134,10 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
                 notify: true,
                 observer: '_openedChanged'
               },
+              editorPosition: {
+                type: String,
+                reflectToAttribute: true
+              },
               /** Theme to use */
               theme: String,
               /** Disable closing when user clicks outside */
@@ -134,12 +150,22 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
           _openedChanged(opened) {
             if (this.opened) {
-              Array.from(this.childNodes).forEach(c => this.$.dialog.$.overlay.$.content.appendChild(c));
-              // Wait to set label until slotted element have been moved.
-              setTimeout(() =>
-                this.__ariaLabel = Array.from(this.$.dialog.$.overlay.$.content.querySelectorAll('[slot=header]'))
-                  .reduce((prev, ele) => prev + ' ' + ele.textContent, '').trim());
+              if (this.editorPosition === 'overlay') {
+                Array.from(this.$.editor.childNodes).forEach(c => this.$.dialog.$.overlay.$.content.shadowRoot.appendChild(c));
+                Array.from(this.childNodes).forEach(c => this.$.dialog.$.overlay.$.content.appendChild(c));
+                // Wait to set label until slotted element have been moved.
+                setTimeout(() =>
+                  this.__ariaLabel = Array.from(this.$.dialog.$.overlay.$.content.querySelectorAll('[slot=header]'))
+                    .reduce((prev, ele) => prev + ' ' + ele.textContent, '').trim());
+              }
             }
+
+            // Make sure to reset scroll position
+            this.$.scroller.scrollTop = 0;
+          }
+
+          _computeEditorOpened(opened, editor) {
+            return this.editorPosition === editor && opened;
           }
         }
       )();

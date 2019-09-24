@@ -104,6 +104,36 @@
         margin-left: var(--lumo-space-s);
         margin-right: var(--lumo-space-s);
       }
+
+      [part="editor"] {
+        background: var(--lumo-base-color);
+      }
+
+      :host([editor-position='bottom']) [part="editor"]:not([hidden]) {
+        box-shadow: var(--lumo-box-shadow-m);
+      }
+
+      @media (max-width: 600px), (max-height: 600px) {
+        :host([editor-position='bottom']) [part="editor"]:not([hidden]) {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          padding: 0;
+          height: 100%;
+        }
+
+        :host([theme~="layout"]) [part="overlay"] {
+          height: 100vh;
+          width: 100vw;
+          border-radius: 0 !important;
+        }
+
+        :host([theme~="layout"]) [part="content"] {
+          flex: 1;
+        }
+      }
     </style>
   </template>
 </dom-module>

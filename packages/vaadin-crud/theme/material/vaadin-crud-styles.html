@@ -80,8 +80,13 @@
 <dom-module id="dialog-layout-theme" theme-for="vaadin-dialog-layout">
   <template>
     <style>
+      :host([editor-position='bottom']) [part="editor"]:not([hidden]) {
+        box-shadow: var(--material-shadow-elevation-12dp);
+      }
+
       [part="scroller"] {
         padding: 16px;
+        background: var(--material-background-color);
       }
 
       [part="footer"] {
@@ -92,6 +97,24 @@
       [part="footer"] ::slotted(*) {
         margin-left: 4px;
         margin-right: 4px;
+      }
+
+      @media (max-width: 600px), (max-height: 600px) {
+        :host([editor-position='bottom']) [part="editor"]:not([hidden]) {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          padding: 0;
+          height: 100%;
+        }
+
+        :host([theme~="layout"]) [part="overlay"] {
+          height: 100vh;
+          width: 100vw;
+          border-radius: 0 !important;
+        }
       }
     </style>
   </template>
