@@ -788,19 +788,3 @@ var users = [
   }
 ];
 
-const projects = [
-  { id: 1, name: "Apollo" },
-  { id: 2, name: "Aquarius" },
-  { id: 3, name: "Polar" }
-];
-
-function fetchProjects() {
-  return projects.slice(0);
-}
-
-function insertProject(name, callback) {
-  const id = projects.length + 1;
-  const project = { id: id, name: name };
-  projects.push(project);
-  callback(project);
-}

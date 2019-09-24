@@ -6,12 +6,12 @@
       }
     </style>
     <h3>Customizing drop down item with item renderer</h3>
-    <vaadin-demo-snippet id="customizing-template-content"
+    <vaadin-demo-snippet id="customizing-with-item-renderer"
     when-defined="vaadin-combo-box">
     <template preserve-content>
       <vaadin-combo-box label="Users" item-label-path="name"></vaadin-combo-box>
       <script>
-        window.addDemoReadyListener('#customizing-template-content', function(document) {
+        window.addDemoReadyListener('#customizing-with-item-renderer', function(document) {
           const users = [
             {name: 'Gabriella', photo: 'https://randomuser.me/api/portraits/women/43.jpg'},
             {name: 'Rudi', photo: 'https://randomuser.me/api/portraits/men/77.jpg'},
@@ -38,7 +38,7 @@
       The content can be provided declaratively using templates. This feature might be
       removed in near future.
     </p>
-    <vaadin-demo-snippet id="combo-box-styling-demos-custom-item-template"
+    <vaadin-demo-snippet id="customizing-item-with-template"
     when-defined="vaadin-combo-box">
     <template preserve-content>
       <vaadin-combo-box label="Element" item-label-path="name" item-value-path="symbol"
@@ -49,7 +49,7 @@
       </template>
     </vaadin-combo-box>
     <script>
-      window.addDemoReadyListener('#combo-box-styling-demos-custom-item-template', function(document) {
+      window.addDemoReadyListener('#customizing-item-with-template', function(document) {
         document.querySelector('vaadin-combo-box').items = elementsJson;
       });
     </script>

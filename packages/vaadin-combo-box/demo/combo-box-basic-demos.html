@@ -79,12 +79,12 @@
     </vaadin-demo-snippet>
 
     <h3>Value change event</h3>
-    <vaadin-demo-snippet id="allow-custom-value" when-defined="vaadin-combo-box">
+    <vaadin-demo-snippet id="value-change-event" when-defined="vaadin-combo-box">
       <template preserve-content>
         <vaadin-combo-box label="Label"></vaadin-combo-box>
         <div id="output">Selected value:</div>
         <script>
-          window.addDemoReadyListener('#allow-custom-value', function(document) {
+          window.addDemoReadyListener('#value-change-event', function(document) {
             const comboBox = document.querySelector('vaadin-combo-box');
             const output = document.querySelector('#output');
             comboBox.items = ['Option one', 'Option two'];
@@ -98,20 +98,20 @@
 
     <h3>Allow custom values</h3>
     <p>Allow the user to set any value for the field in addition to selecting a value from the dropdown menu.</p>
-    <vaadin-demo-snippet id="combo-box-basic-demos-allow-custom-values" when-defined="vaadin-combo-box">
+    <vaadin-demo-snippet id="allow-custom-values" when-defined="vaadin-combo-box">
       <template preserve-content>
         <vaadin-combo-box label="Fruit" allow-custom-value></vaadin-combo-box>
-        <p>Selected value: <span></span></span></p>
+        <p>Selected value: <span></span></p>
         <script>
-          window.addDemoReadyListener('#combo-box-basic-demos-allow-custom-values', function(document) {
+          window.addDemoReadyListener('#allow-custom-values', function(document) {
             const comboBox = document.querySelector('vaadin-combo-box');
             const span = document.querySelector('span');
             const fruits = ['Apple', 'Orange', 'Banana'];
             comboBox.items = fruits;
-            comboBox.value = span.textContent = 'Apple';
+            comboBox.value = 'Apple';
 
-            comboBox.addEventListener('change', function() {
-              span.textContent = comboBox.value;
+            comboBox.addEventListener('change', function(event) {
+              span.textContent = event.target.value;
             });
           });
         </script>
@@ -119,35 +119,35 @@
     </vaadin-demo-snippet>
 
     <h3>Storing custom values</h3>
-    <vaadin-demo-snippet id="combo-box-second-custom-value" when-defined="vaadin-combo-box">
+    <vaadin-demo-snippet id="storing-custom-value" when-defined="vaadin-combo-box">
       <template preserve-content>
         <vaadin-combo-box label="Project" allow-custom-value></vaadin-combo-box>
-        <p>Selected id: <span></span></span></p>
+        <p>Selected id: <span></span></p>
         <script>
-          window.addDemoReadyListener('#combo-box-second-custom-value', function(document) {
+          window.addDemoReadyListener('#storing-custom-value', function(document) {
             const comboBox = document.querySelector('vaadin-combo-box');
             const span = document.querySelector('span');
 
-            comboBox.items = fetchProjects();
+            comboBox.addEventListener('value-changed', function(event) {
+              span.textContent = event.target.value;
+            });
+
             comboBox.itemValuePath = 'id';
             comboBox.itemLabelPath = 'name';
 
-            if (comboBox.items.length > 0) {
-              comboBox.value = comboBox.items[0].name;
-              span.textContent = comboBox.items[0].id;
-            }
-            comboBox.addEventListener('value-changed', function() {
-              span.textContent = comboBox.value;
-            });
             comboBox.addEventListener('custom-value-set', function(e) {
               e.preventDefault();
 
               // insertProject calls an Ajax request to insert a project asynchronously
-              insertProject(e.detail, function(newProject) {
-                comboBox.items.push(newProject);
-                comboBox.value = newProject.name;
-                span.textContent = newProject.id + ' set!';
+              insertProject(e.detail, function(newProject, allProjects) {
+                comboBox.items = allProjects;
+                comboBox.selectedItem = newProject;
               });
+            });
+
+            fetchProjects(function(projects) {
+              comboBox.items = projects;
+              comboBox.selectedItem = projects[0];
             });
           });
         </script>
@@ -162,11 +162,11 @@
     <p>
       <b>Note:</b> the total number of items must be provided as the second argument of the data provider <code>callback</code>.
     </p>
-    <vaadin-demo-snippet id="combo-box-basic-demos-lazy-loading" when-defined="vaadin-combo-box">
+    <vaadin-demo-snippet id="lazy-loading" when-defined="vaadin-combo-box">
       <template preserve-content>
         <vaadin-combo-box label="Country"></vaadin-combo-box>
         <script>
-          window.addDemoReadyListener('#combo-box-basic-demos-lazy-loading', function(document) {
+          window.addDemoReadyListener('#lazy-loading', function(document) {
             const combo = document.querySelector('vaadin-combo-box');
 
             combo.dataProvider = function(params, callback) {
@@ -179,8 +179,8 @@
               };
               var index = params.page * params.pageSize;
               const url = 'https://demo.vaadin.com/demo-data/1.0/filtered-countries?index=' + index +
-              '&count=' + params.pageSize +
-              '&filter=' + params.filter;
+                '&count=' + params.pageSize +
+                '&filter=' + params.filter;
               xhr.open('GET', url, true);
               xhr.send();
             };
@@ -199,3 +199,22 @@
     customElements.define(ComboBoxBasicDemos.is, ComboBoxBasicDemos);
   </script>
 </dom-module>
+
+<script>
+  const projects = [
+    {id: '1', name: 'Apollo'},
+    {id: '2', name: 'Aquarius'},
+    {id: '3', name: 'Polar'}
+  ];
+
+  function fetchProjects(callback) {
+    callback(projects.slice(0));
+  }
+
+  function insertProject(name, callback) {
+    const id = String(projects.length + 1);
+    const project = {id: id, name: name};
+    projects.push(project);
+    callback(project, projects.slice(0));
+  }
+  </script>

@@ -6,7 +6,7 @@
       }
     </style>
     <h3>Custom input field style</h3>
-    <vaadin-demo-snippet id="combo-box-border-style" when-defined="vaadin-combo-box">
+    <vaadin-demo-snippet id="customizing-border-style" when-defined="vaadin-combo-box">
       <template preserve-content>
         <dom-module id="custom-combo-box-border" theme-for="vaadin-text-field">
           <template>
@@ -20,7 +20,7 @@
         </dom-module>
         <vaadin-combo-box label="Label" theme="custom-border"></vaadin-combo-box>
         <script>
-          window.addDemoReadyListener('#combo-box-border-style', function(document) {
+          window.addDemoReadyListener('#customizing-border-style', function(document) {
             const comboBox = document.querySelector('vaadin-combo-box');
             comboBox.items = ['Option one', 'Option two'];
             comboBox.value = 'Option one';
@@ -30,7 +30,7 @@
     </vaadin-demo-snippet>
 
     <h3>Custom icon</h3>
-    <vaadin-demo-snippet id="combo-box-icon-style" when-defined="vaadin-combo-box">
+    <vaadin-demo-snippet id="customizing-icon" when-defined="vaadin-combo-box">
       <template preserve-content>
         <dom-module id="custom-combo-box-icon" theme-for="vaadin-combo-box">
           <template>
@@ -43,7 +43,7 @@
         </dom-module>
         <vaadin-combo-box label="Label" theme="custom-icon"></vaadin-combo-box>
         <script>
-          window.addDemoReadyListener('#combo-box-icon-style', function(document) {
+          window.addDemoReadyListener('#customizing-icon', function(document) {
             const comboBox = document.querySelector('vaadin-combo-box');
             comboBox.items = ['Option one', 'Option two'];
             comboBox.value = 'Option one';
@@ -53,7 +53,7 @@
     </vaadin-demo-snippet>
 
     <h3>Custom theme variant</h3>
-    <vaadin-demo-snippet id="combo-box-styling-demos-custom-theme-variant"
+    <vaadin-demo-snippet id="customizing-theme-variant"
     when-defined="vaadin-combo-box">
     <template preserve-content>
       <dom-module id="custom-text-field-and-item" theme-for="vaadin-text-field
@@ -77,7 +77,7 @@
     </dom-module>
     <vaadin-combo-box label="Element" value="Carbon" theme="custom"></vaadin-combo-box>
     <script>
-      window.addDemoReadyListener('#combo-box-styling-demos-custom-theme-variant', function(document) {
+      window.addDemoReadyListener('#customizing-theme-variant', function(document) {
         document.querySelector('vaadin-combo-box').items = elements;
       });
     </script>

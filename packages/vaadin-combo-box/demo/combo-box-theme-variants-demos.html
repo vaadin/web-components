@@ -6,13 +6,13 @@
       }
     </style>
     <h3>Text align</h3>
-    <vaadin-demo-snippet id="theme-variants" when-defined="vaadin-combo-box">
+    <vaadin-demo-snippet id="text-align" when-defined="vaadin-combo-box">
       <template preserve-content>
         <vaadin-combo-box value="Left" theme="align-left"></vaadin-combo-box>
         <vaadin-combo-box value="Center" theme="align-center"></vaadin-combo-box>
         <vaadin-combo-box value="Right" theme="align-right"></vaadin-combo-box>
         <script>
-          window.addDemoReadyListener('#theme-variants', function(document) {
+          window.addDemoReadyListener('#text-align', function(document) {
             const comboBox = document.querySelectorAll('vaadin-combo-box');
             comboBox[0].items = ['Left', 'Right', 'Center'];
             comboBox[1].items = ['Left', 'Right', 'Center'];
