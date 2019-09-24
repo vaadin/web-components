@@ -184,11 +184,11 @@
           expect(integerField.step).to.eql('5');
         });
 
-        ['foo', '-1', -1, '1.2', 1.2, '+1', '1e1'].forEach(invalidStep => {
+        ['foo', '-1', -1, '1.2', 1.2, '+1', '1e1', undefined, null, {}].forEach(invalidStep => {
 
-          it(`should reset previous step when setting ${typeof invalidStep} "${invalidStep}"`, () => {
+          it(`should reset default step when setting ${typeof invalidStep} value: ${invalidStep}`, () => {
             integerField.step = invalidStep;
-            expect(integerField.step).to.eql(initialStep);
+            expect(integerField.step).to.eql(1);
           });
 
         });
