@@ -157,11 +157,11 @@
           expect(integerField.value).to.eql('');
         });
 
-        ['foo', '1.2', 1.2, '+2', '2-', '2-2', '-', '+', '1e1'].forEach(invalidValue => {
+        ['foo', '1.2', 1.2, '+2', '2-', '2-2', '-', '+', '1e1', undefined, null, {}].forEach(invalidValue => {
 
-          it(`should reset previous value when setting ${typeof invalidValue} "${invalidValue}"`, () => {
+          it(`should clear the value when setting ${typeof invalidValue} value: ${invalidValue}`, () => {
             integerField.value = invalidValue;
-            expect(integerField.value).to.eql(initialValue);
+            expect(integerField.value).to.eql('');
           });
 
         });

@@ -43,11 +43,10 @@ This program is available under Apache License Version 2.0, available at https:/
         _valueChanged(newVal, oldVal) {
           if (newVal !== '' && !this.__isInteger(newVal)) {
             console.warn(`Trying to set non-integer value "${newVal}" to <vaadin-integer-field>.`
-              + ` Resetting the previous value "${oldVal}".`);
-            this.value = oldVal;
+              + ` Clearing the value.`);
+            this.value = '';
             return;
           }
-
           super._valueChanged(newVal, oldVal);
         }
 
