@@ -57,8 +57,8 @@
           it('should scroll to scaled index', () => {
             [0, 1, 2, 3, 5, 8, 13, 21, 34, 55, 77, 88, 100].forEach(percentage => {
               const index = Math.ceil((grid.size - 1) * percentage / 100);
-              grid._scrollToIndex(grid._firefox ? 1 : 0); // FF58 workaround
-              grid._scrollToIndex(index);
+              grid.scrollToIndex(grid._firefox ? 1 : 0); // FF58 workaround
+              grid.scrollToIndex(index);
 
               if (percentage === 100) {
                 expect(grid._vidxOffset + grid.lastVisibleIndex).to.equal(index);
@@ -73,17 +73,17 @@
           });
 
           it('should scroll to last index', () => {
-            grid._scrollToIndex(grid.size * 2);
+            grid.scrollToIndex(grid.size * 2);
             expect(grid._vidxOffset + grid.lastVisibleIndex).to.equal(grid.size - 1);
           });
 
           it('should scroll to first index', () => {
-            grid._scrollToIndex(-100);
+            grid.scrollToIndex(-100);
             expect(grid._vidxOffset + grid._firstVisibleIndex).to.equal(0);
           });
 
           it('should set scroll position half-way', () => {
-            grid._scrollToIndex(grid.size / 2);
+            grid.scrollToIndex(grid.size / 2);
             flushGrid(grid);
             expect(grid.$.table.scrollTop).to.be.closeTo(
               (grid.$.table.scrollHeight - grid.$.table.offsetHeight) / 2, grid.$.table.scrollHeight / 20
@@ -92,7 +92,7 @@
 
           it('should retain virtual scroll position on size change', () => {
             const index = grid.size / 2;
-            grid._scrollToIndex(index);
+            grid.scrollToIndex(index);
             flushGrid(grid);
             grid.scrollTop += 1; // Scroll a little to validate the test
             let row = Array.from(grid.$.items.children).filter(r => r.index === index)[0];
@@ -112,7 +112,7 @@
 
         beforeEach(done => {
           grid = fixture('large');
-          grid._scrollToIndex(10);
+          grid.scrollToIndex(10);
           grid.dataProvider = infiniteDataProvider;
           flushGrid(grid);
           animationFrameFlush(done);
@@ -133,7 +133,7 @@
             done();
           };
 
-          grid._scrollToIndex(100);
+          grid.scrollToIndex(100);
           listenOnce(grid.$.table, 'scroll', listener);
           grid.$.table.scrollTop -= 1;
         });
@@ -141,7 +141,7 @@
         it('should scroll close to end', () => {
           const viewPortItemCount = Math.round(grid._viewportHeight / grid._physicalAverage - 1); // - header;
           const targetIndex = grid.size - viewPortItemCount - 2;
-          grid._scrollToIndex(targetIndex);
+          grid.scrollToIndex(targetIndex);
 
           const rect = grid.$.header.getBoundingClientRect();
           grid.$.outerscroller.hidden = true;

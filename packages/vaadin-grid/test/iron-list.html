@@ -48,9 +48,8 @@
         const spy = console.warn = sinon.spy();
         grid.firstVisibleIndex;
         grid.lastVisibleIndex;
-        grid.scrollToIndex(2);
         console.warn = _warn;
-        expect(spy.callCount).to.be.above(2);
+        expect(spy.callCount).to.be.above(1);
       });
 
     });
