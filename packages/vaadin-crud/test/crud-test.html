@@ -626,6 +626,39 @@
           crud.__save();
         });
       });
+
+      describe('editor-position', () => {
+        let crud;
+
+        beforeEach(done => {
+          crud = fixture('default');
+          Polymer.RenderStatus.afterNextRender(crud, done);
+        });
+
+        afterEach(() => crud.editorOpened = false);
+
+        it('should have "overlay" as default', () => {
+          expect(crud.editorPosition).to.be.equal('overlay');
+        });
+
+        it('should fallback to "overlay" if invalid value is inserted', () => {
+          crud.editorPosition = 'invalid-value';
+          expect(crud.editorPosition).to.be.equal('overlay');
+        });
+
+        it('should hide toolbar when editor position is "bottom" and opened', () => {
+          crud.editorPosition = 'bottom';
+          crud.$.new.click();
+
+          expect(crud.$.toolbar.style.display).to.be.equal('none');
+        });
+
+        it('should show toolbar when editor position is not "bottom" and opened', () => {
+          crud.$.new.click();
+
+          expect(crud.$.toolbar.style.display).to.be.not.equal('none');
+        });
+      });
     });
   </script>
 </body>
