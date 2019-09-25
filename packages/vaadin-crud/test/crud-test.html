@@ -637,13 +637,13 @@
 
         afterEach(() => crud.editorOpened = false);
 
-        it('should have "overlay" as default', () => {
-          expect(crud.editorPosition).to.be.equal('overlay');
+        it('should have "" as default', () => {
+          expect(crud.editorPosition).to.be.equal('');
         });
 
-        it('should fallback to "overlay" if invalid value is inserted', () => {
+        it('should fallback to "" if invalid value is inserted', () => {
           crud.editorPosition = 'invalid-value';
-          expect(crud.editorPosition).to.be.equal('overlay');
+          expect(crud.editorPosition).to.be.equal('');
         });
 
         it('should hide toolbar when editor position is "bottom" and opened', () => {

@@ -18,12 +18,17 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         z-index: 1;
       }
 
+      :host([editor-position='bottom'][opened]) {
+        flex: 1 1 100%;
+        max-height: var(--vaadin-crud-editor-max-height);
+      }
+
       [part="editor"][hidden] {
         display: none;
       }
 
       :host([editor-position='bottom']) [part="editor"]:not([hidden]) {
-        height: 250px;
+        height: 100%;
         display: flex;
         flex-direction: column;
       }
@@ -43,7 +48,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       }
     </style>
 
-    <div id="editor" part="editor" hidden$="{{!_computeEditorOpened(opened, 'bottom')}}">
+    <div id="editor" part="editor" hidden$="[[!_computeEditorOpened(opened, 'bottom')]]">
       <div part="scroller" id="scroller" role="group" aria-labelledby="header">
         <div part="header" id="header">
           <slot name="header"></slot>
@@ -58,7 +63,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
     <vaadin-dialog
       id="dialog"
-      opened="{{_computeEditorOpened(opened, 'overlay')}}"
+      opened="[[_computeEditorOpened(opened, '')]]"
       aria-label="[[__ariaLabel]]"
       no-close-on-outside-click="[[noCloseOnOutsideClick]]"
       no-close-on-esc="[[noCloseOnEsc]]"
@@ -132,6 +137,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
                 type: Boolean,
                 value: false,
                 notify: true,
+                reflectToAttribute: true,
                 observer: '_openedChanged'
               },
               editorPosition: {
@@ -148,9 +154,19 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             };
           }
 
+          ready() {
+            super.ready();
+            this._dialogOpenedChangedListener = this._dialogOpenedChangedListener.bind(this);
+            this.$.dialog.addEventListener('opened-changed', this._dialogOpenedChangedListener);
+          }
+
+          _dialogOpenedChangedListener() {
+            this.opened = this.$.dialog.opened;
+          }
+
           _openedChanged(opened) {
             if (this.opened) {
-              if (this.editorPosition === 'overlay') {
+              if (this.editorPosition === '') {
                 Array.from(this.$.editor.childNodes).forEach(c => this.$.dialog.$.overlay.$.content.shadowRoot.appendChild(c));
                 Array.from(this.childNodes).forEach(c => this.$.dialog.$.overlay.$.content.appendChild(c));
                 // Wait to set label until slotted element have been moved.
