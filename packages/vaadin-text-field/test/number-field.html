@@ -133,6 +133,18 @@
 
           increaseButton.click();
           expect(changeSpy.callCount).to.equal(1);
+          decreaseButton.click();
+          expect(changeSpy.callCount).to.equal(2);
+        });
+
+        it('should dispatch single value-changed event when button is clicked', () => {
+          const spy = sinon.spy();
+          numberField.addEventListener('value-changed', spy);
+
+          increaseButton.click();
+          expect(spy.callCount).to.equal(1);
+          decreaseButton.click();
+          expect(spy.callCount).to.equal(2);
         });
 
         it('should not focus input when a button is clicked', () => {

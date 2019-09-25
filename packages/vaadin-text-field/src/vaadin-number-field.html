@@ -232,7 +232,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _setValue(value) {
-          this.value = this.inputElement.value = parseFloat(value);
+          this.value = this.inputElement.value = String(parseFloat(value));
           this.dispatchEvent(new CustomEvent('change', {bubbles: true}));
         }
 
