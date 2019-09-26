@@ -6,91 +6,155 @@
       }
     </style>
 
-    <h3>Combo Box</h3>
-
-    <vaadin-demo-snippet id="combo-box-basic-combo-box" when-defined="vaadin-combo-box">
+    <h3>Basic usage</h3>
+    <vaadin-demo-snippet id="basic-usage" when-defined="vaadin-combo-box">
       <template preserve-content>
-        <vaadin-combo-box label="Element"></vaadin-combo-box>
+        <vaadin-combo-box label="Label"></vaadin-combo-box>
+        <vaadin-combo-box placeholder="Placeholder"></vaadin-combo-box>
+        <vaadin-combo-box value="Value"></vaadin-combo-box>
         <script>
-          window.addDemoReadyListener('#combo-box-basic-combo-box', function(document) {
-            document.querySelector('vaadin-combo-box').items = ['Hydrogen', 'Helium', 'Lithium'];
+          window.addDemoReadyListener('#basic-usage', function(document) {
+            const comboBox = document.querySelectorAll('vaadin-combo-box');
+            comboBox[0].items = ['Option one', 'Option two'];
+            comboBox[1].items = ['Option one', 'Option two'];
+            comboBox[2].items = ['Value', 'Option one', 'Option two'];
           });
         </script>
       </template>
     </vaadin-demo-snippet>
 
-
-    <h3>Configuring the Combo Box</h3>
-
-    <vaadin-demo-snippet id="combo-box-basic-demos-configuring-the-combo-box" when-defined="vaadin-combo-box">
+    <h3>Disabled and read-only</h3>
+    <vaadin-demo-snippet id="disabled-and-readonly" when-defined="vaadin-combo-box">
       <template preserve-content>
-        <vaadin-combo-box label="Element"></vaadin-combo-box>
         <vaadin-combo-box label="Disabled" disabled></vaadin-combo-box>
         <vaadin-combo-box label="Read-only" readonly></vaadin-combo-box>
         <script>
-          window.addDemoReadyListener('#combo-box-basic-demos-configuring-the-combo-box', function(document) {
+          window.addDemoReadyListener('#disabled-and-readonly', function(document) {
             const combos = document.querySelectorAll('vaadin-combo-box');
             combos.forEach(function(comboBox) {
-              // NOTE: elements is an array of the form {'Carbon', ...}
-              comboBox.items = elements;
-              comboBox.value = 'Carbon';
+              comboBox.items = ['Value', 'Option one', 'Option two'];
+              comboBox.value = 'Value';
             });
           });
         </script>
       </template>
     </vaadin-demo-snippet>
 
-    <h3>Clear Button</h3>
-
-    <p>Use the clear-button-visible attribute to display the clear button of an individual combobox.</p>
-
-    <vaadin-demo-snippet id="combo-box-basic-demos-clear-button" when-defined="vaadin-combo-box">
+    <h3>Object list</h3>
+    <vaadin-demo-snippet id="object-list" when-defined="vaadin-combo-box">
       <template preserve-content>
-        <vaadin-combo-box label="Element" clear-button-visible></vaadin-combo-box>
+        <vaadin-combo-box label="Department"></vaadin-combo-box>
         <script>
-          window.addDemoReadyListener('#combo-box-basic-demos-clear-button', function(document) {
-            const comboBox = document.querySelector('vaadin-combo-box');
-            comboBox.items = ['Hydrogen', 'Helium', 'Lithium'];
-            comboBox.value = 'Hydrogen';
+          window.addDemoReadyListener('#object-list', function(document) {
+            const departments = [
+              {id: '1', name: 'Product'},
+              {id: '2', name: 'Service'},
+              {id: '3', name: 'HR'},
+              {id: '4', name: 'Accounting'}
+            ];
+            const comboBox = document.querySelectorAll('vaadin-combo-box');
+            comboBox.forEach(function(combo) {
+              combo.items = departments;
+              combo.itemValuePath = 'id';
+              combo.itemLabelPath = 'name';
+              combo.value = '1';
+            });
           });
         </script>
       </template>
     </vaadin-demo-snippet>
 
-
-    <h3>Allow Custom Values</h3>
-    <p>Allow the user to set any value for the field in addition to selecting a value from the dropdown menu.</p>
-    <vaadin-demo-snippet id="combo-box-basic-demos-allow-custom-values" when-defined="vaadin-combo-box">
+    <h3>Clear button</h3>
+    <vaadin-demo-snippet id="clear-button" when-defined="vaadin-combo-box">
       <template preserve-content>
-        <vaadin-combo-box label="Element" allow-custom-value></vaadin-combo-box>
-        <p>Selected value: <span></span></p>
-
+        <vaadin-combo-box label="Label" clear-button-visible></vaadin-combo-box>
         <script>
-          window.addDemoReadyListener('#combo-box-basic-demos-allow-custom-values', function(document) {
+          window.addDemoReadyListener('#clear-button', function(document) {
+            const comboBox = document.querySelector('vaadin-combo-box');
+            comboBox.items = ['Option one', 'Option two'];
+            comboBox.value = 'Option one';
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Value change event</h3>
+    <vaadin-demo-snippet id="value-change-event" when-defined="vaadin-combo-box">
+      <template preserve-content>
+        <vaadin-combo-box label="Label"></vaadin-combo-box>
+        <div id="output">Selected value:</div>
+        <script>
+          window.addDemoReadyListener('#value-change-event', function(document) {
+            const comboBox = document.querySelector('vaadin-combo-box');
+            const output = document.querySelector('#output');
+            comboBox.items = ['Option one', 'Option two'];
+            comboBox.addEventListener('change', function(event) {
+              output.textContent = event.target.value;
+            });
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Allow custom values</h3>
+    <p>Allow the user to set any value for the field in addition to selecting a value from the dropdown menu.</p>
+    <vaadin-demo-snippet id="allow-custom-values" when-defined="vaadin-combo-box">
+      <template preserve-content>
+        <vaadin-combo-box label="Fruit" allow-custom-value></vaadin-combo-box>
+        <p>Selected value: <span></span></p>
+        <script>
+          window.addDemoReadyListener('#allow-custom-values', function(document) {
+            const comboBox = document.querySelector('vaadin-combo-box');
+            const span = document.querySelector('span');
+            const fruits = ['Apple', 'Orange', 'Banana'];
+            comboBox.items = fruits;
+            comboBox.value = 'Apple';
+
+            comboBox.addEventListener('change', function(event) {
+              span.textContent = event.target.value;
+            });
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Storing custom values</h3>
+    <vaadin-demo-snippet id="storing-custom-value" when-defined="vaadin-combo-box">
+      <template preserve-content>
+        <vaadin-combo-box label="Project" allow-custom-value></vaadin-combo-box>
+        <p>Selected id: <span></span></p>
+        <script>
+          window.addDemoReadyListener('#storing-custom-value', function(document) {
             const comboBox = document.querySelector('vaadin-combo-box');
             const span = document.querySelector('span');
 
-            comboBox.addEventListener('value-changed', function() {
-              span.textContent = comboBox.value;
+            comboBox.addEventListener('value-changed', function(event) {
+              span.textContent = event.target.value;
             });
+
+            comboBox.itemValuePath = 'id';
+            comboBox.itemLabelPath = 'name';
+
             comboBox.addEventListener('custom-value-set', function(e) {
-              // Prevents setting the value property automatically.
               e.preventDefault();
 
-              comboBox.value = e.detail;
-              span.textContent = 'custom value "' + e.detail + '" set!';
+              // insertProject calls an Ajax request to insert a project asynchronously
+              insertProject(e.detail, function(newProject, allProjects) {
+                comboBox.items = allProjects;
+                comboBox.selectedItem = newProject;
+              });
             });
 
-            comboBox.items = elements;
-            comboBox.value = 'Carbon';
+            fetchProjects(function(projects) {
+              comboBox.items = projects;
+              comboBox.selectedItem = projects[0];
+            });
           });
         </script>
-
       </template>
     </vaadin-demo-snippet>
 
-
-    <h3>Lazy Loading</h3>
+    <h3>Lazy loading</h3>
     <p>
       The <code>dataProvider</code> property can be assigned a function to provide
       data from a remote source.
@@ -98,11 +162,11 @@
     <p>
       <b>Note:</b> the total number of items must be provided as the second argument of the data provider <code>callback</code>.
     </p>
-    <vaadin-demo-snippet id="combo-box-basic-demos-lazy-loading" when-defined="vaadin-combo-box">
+    <vaadin-demo-snippet id="lazy-loading" when-defined="vaadin-combo-box">
       <template preserve-content>
         <vaadin-combo-box label="Country"></vaadin-combo-box>
         <script>
-          window.addDemoReadyListener('#combo-box-basic-demos-lazy-loading', function(document) {
+          window.addDemoReadyListener('#lazy-loading', function(document) {
             const combo = document.querySelector('vaadin-combo-box');
 
             combo.dataProvider = function(params, callback) {
@@ -115,8 +179,8 @@
               };
               var index = params.page * params.pageSize;
               const url = 'https://demo.vaadin.com/demo-data/1.0/filtered-countries?index=' + index +
-                          '&count=' + params.pageSize +
-                          '&filter=' + params.filter;
+                '&count=' + params.pageSize +
+                '&filter=' + params.filter;
               xhr.open('GET', url, true);
               xhr.send();
             };
@@ -135,3 +199,22 @@
     customElements.define(ComboBoxBasicDemos.is, ComboBoxBasicDemos);
   </script>
 </dom-module>
+
+<script>
+  const projects = [
+    {id: '1', name: 'Apollo'},
+    {id: '2', name: 'Aquarius'},
+    {id: '3', name: 'Polar'}
+  ];
+
+  function fetchProjects(callback) {
+    callback(projects.slice(0));
+  }
+
+  function insertProject(name, callback) {
+    const id = String(projects.length + 1);
+    const project = {id: id, name: name};
+    projects.push(project);
+    callback(project, projects.slice(0));
+  }
+  </script>

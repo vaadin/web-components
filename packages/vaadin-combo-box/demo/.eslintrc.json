@@ -7,6 +7,8 @@
     "DemoReadyEventEmitter": false,
     "elements": false,
     "users": false,
+    "insertProject": false,
+    "fetchProjects": false,
     "elementsJson": false,
     "HTMLImports": false
   }

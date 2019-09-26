@@ -1,54 +1,63 @@
 <!doctype html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-  <title>vaadin-combo-box Examples</title>
-  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1"/>
+    <title>vaadin-combo-box Examples</title>
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 
-  <link rel="import" href="../../polymer/polymer.html">
-  <link rel="import" href="../../vaadin-demo-helpers/vaadin-component-demo.html">
-  <link rel="import" href="../../vaadin-demo-helpers/vaadin-demo-snippet.html">
-  <script src="../../vaadin-demo-helpers/vaadin-demo-ready-event-emitter.js"></script>
+    <link rel="import" href="../../polymer/polymer.html">
+    <link rel="import" href="../../vaadin-demo-helpers/vaadin-component-demo.html">
+    <link rel="import" href="../../vaadin-demo-helpers/vaadin-demo-snippet.html">
+    <script src="../../vaadin-demo-helpers/vaadin-demo-ready-event-emitter.js"></script>
+    <script src="combo-box-demo.js"></script>
+    <link rel="import" href="../vaadin-combo-box.html">
 
-  <script src="combo-box-demo.js"></script>
+    <custom-style>
+      <style include="vaadin-component-demo-shared-styles"></style>
+    </custom-style>
+  </head>
 
-  <link rel="import" href="../vaadin-combo-box-light.html">
-  <link rel="import" href="../../paper-icon-button/paper-icon-button.html">
-  <link rel="import" href="../../iron-ajax/iron-ajax.html">
-  <link rel="import" href="../../iron-icon/iron-icon.html">
-  <link rel="import" href="../../iron-icons/iron-icons.html">
-  <link rel="import" href="../../iron-input/iron-input.html">
-  <link rel="import" href="../../paper-input/paper-input.html">
-  <link rel="import" href="../../vaadin-button/vaadin-button.html">
-  <link rel="import" href="../vaadin-combo-box.html">
-  <link rel="import" href="../../iron-form/iron-form.html">
+  <body>
+    <dom-module id="custom-font" theme-for="vaadin-text-field vaadin-combo-box-item">
+      <template>
+        <style>
+          :host([theme~="custom"]) {
+            font-family: monospace;
+          }
+        </style>
+      </template>
+    </dom-module>
+    <dom-module id="custom-combo-box-overlay" theme-for="vaadin-combo-box-overlay">
+      <template>
+        <style>
+          :host([theme~="custom"]) [part="overlay"] {
+            background-image: linear-gradient(var(--lumo-shade-5pct), var(--lumo-shade-5pct));
+          }
+        </style>
+      </template>
+    </dom-module>
+    <dom-module id="custom-select-border" theme-for="vaadin-text-field">
+      <template>
+        <style>
+          :host([theme~="custom-border"]) [part="input-field"] {
+            border: 1px solid black;
+            background-color: white;
+          }
+        </style>
+      </template>
+    </dom-module>
 
-  <custom-style>
-    <style include="vaadin-component-demo-shared-styles"></style>
-  </custom-style>
-</head>
+    <dom-module id="custom-combo-box-icon" theme-for="vaadin-combo-box">
+      <template>
+        <style>
+          :host([theme~="custom-icon"]) [part="toggle-button"]::before {
+            content: var(--lumo-icons-arrow-down);
+          }
+        </style>
+      </template>
+    </dom-module>
 
-<body>
-  <dom-module id="custom-font" theme-for="vaadin-text-field vaadin-combo-box-item">
-    <template>
-      <style>
-        :host([theme~="custom"]) {
-          font-family: monospace;
-        }
-      </style>
-    </template>
-  </dom-module>
-  <dom-module id="custom-combo-box-overlay" theme-for="vaadin-combo-box-overlay">
-    <template>
-      <style>
-        :host([theme~="custom"]) [part="overlay"] {
-          background-image: linear-gradient(var(--lumo-shade-5pct), var(--lumo-shade-5pct));
-        }
-      </style>
-    </template>
-  </dom-module>
-
-  <vaadin-component-demo config-src="demos.json"></vaadin-component-demo>
-</body>
+    <vaadin-component-demo config-src="demos.json"></vaadin-component-demo>
+  </body>
 </html>

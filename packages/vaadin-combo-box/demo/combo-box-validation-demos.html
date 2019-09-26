@@ -5,37 +5,20 @@
         display: block;
       }
     </style>
-
-
-    <h3>Using as a Form Field</h3>
-    <vaadin-demo-snippet id="combo-box-validation-demos-using-as-a-form-field" when-defined="vaadin-combo-box">
+    <h3>Required</h3>
+    <vaadin-demo-snippet id="required" when-defined="vaadin-combo-box">
       <template preserve-content>
-        <iron-form>
-          <form method="post">
-            <vaadin-combo-box name="name" required error-message="This field is required"></vaadin-combo-box>
-            <vaadin-button>Submit</vaadin-button>
-          </form>
-        </iron-form>
-
+        <vaadin-combo-box label="Label" required error-message="Please choose one option"
+        clear-button-visible></vaadin-combo-box>
         <script>
-          window.addDemoReadyListener('#combo-box-validation-demos-using-as-a-form-field', function(document) {
-            const form = document.querySelector('iron-form');
+          window.addDemoReadyListener('#required', function(document) {
             const comboBox = document.querySelector('vaadin-combo-box');
-            const button = document.querySelector('vaadin-button');
-            // NOTE: elements is an array of the form {'Carbon', ...}
-            comboBox.items = elements;
-
-            form.addEventListener('iron-form-submit', function() {
-              alert('Form submitted with name: ' + form.serializeForm().name);
-              return false;
-            });
-            button.addEventListener('click', function() {
-              form.submit();
-            });
+            comboBox.items = ['Option one', 'Option two', 'Option three'];
           });
         </script>
       </template>
     </vaadin-demo-snippet>
+
 
   </template>
   <script>

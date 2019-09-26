@@ -5,177 +5,92 @@
         display: block;
       }
     </style>
-
-    <h3>Customizing Item</h3>
-    <vaadin-demo-snippet id="combo-box-styling-demos-renderer" when-defined="vaadin-combo-box">
+    <h3>Custom input field style</h3>
+    <vaadin-demo-snippet id="customizing-border-style" when-defined="vaadin-combo-box">
       <template preserve-content>
-        <vaadin-combo-box label="Element" item-label-path="name" item-value-path="symbol" style="width: 240px;">
-        </vaadin-combo-box>
-        <script>
-        window.addDemoReadyListener('#combo-box-styling-demos-renderer', function(document) {
-          const comboBox = document.querySelector('vaadin-combo-box');
-          // NOTE: elementsJson is an Array of `{name: 'Hydrogen', symbol: 'H', number: 1}` Objects
-          comboBox.items = elementsJson;
-          comboBox.renderer = function(root, owner, model) {
-            if (!root.firstElementChild) {
-              root.innerHTML = '<b><span class="name"></span>, <sub class="number"></sub><span class="symbol"></span></b>'
-               + '<br> array index: <span class="index"></span>';
-            }
-            root.querySelector('.name').textContent = model.item.name;
-            root.querySelector('.number').textContent = model.item.number;
-            root.querySelector('.symbol').textContent = model.item.symbol;
-            root.querySelector('.index').textContent = model.index;
-          };
-        });
-        </script>
-      </template>
-    </vaadin-demo-snippet>
-
-    <h3>Customizing Item with Template</h3>
-    <p>
-      The content can be provided declaratively using templates
-    </p>
-    <vaadin-demo-snippet id="combo-box-styling-demos-custom-item-template" when-defined="vaadin-combo-box">
-      <template preserve-content>
-        <vaadin-combo-box label="Element" item-label-path="name" item-value-path="symbol" style="width: 240px;">
+        <dom-module id="custom-combo-box-border" theme-for="vaadin-text-field">
           <template>
-            <b>[[item.name]], <sub>[[item.number]]</sub>[[item.symbol]]</b><br>
-            array index: [[index]]
+            <style>
+              :host([theme~="custom-border"]) [part="input-field"] {
+                border: 1px solid black;
+                background-color: white;
+              }
+            </style>
           </template>
-        </vaadin-combo-box>
+        </dom-module>
+        <vaadin-combo-box label="Label" theme="custom-border"></vaadin-combo-box>
         <script>
-          window.addDemoReadyListener('#combo-box-styling-demos-custom-item-template', function(document) {
-            document.querySelector('vaadin-combo-box').items = elementsJson;
+          window.addDemoReadyListener('#customizing-border-style', function(document) {
+            const comboBox = document.querySelector('vaadin-combo-box');
+            comboBox.items = ['Option one', 'Option two'];
+            comboBox.value = 'Option one';
           });
         </script>
       </template>
     </vaadin-demo-snippet>
 
-
-    <h3>Configuring Icons</h3>
-    <vaadin-demo-snippet id="combo-box-styling-demos-configuring-icons" when-defined="vaadin-combo-box-light">
+    <h3>Custom icon</h3>
+    <vaadin-demo-snippet id="customizing-icon" when-defined="vaadin-combo-box">
       <template preserve-content>
+        <dom-module id="custom-combo-box-icon" theme-for="vaadin-combo-box">
+          <template>
+            <style>
+              :host([theme~="custom-icon"]) [part="toggle-button"]::before {
+                content: var(--lumo-icons-arrow-down);
+              }
+            </style>
+          </template>
+        </dom-module>
+        <vaadin-combo-box label="Label" theme="custom-icon"></vaadin-combo-box>
+        <script>
+          window.addDemoReadyListener('#customizing-icon', function(document) {
+            const comboBox = document.querySelector('vaadin-combo-box');
+            comboBox.items = ['Option one', 'Option two'];
+            comboBox.value = 'Option one';
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Custom theme variant</h3>
+    <vaadin-demo-snippet id="customizing-theme-variant"
+    when-defined="vaadin-combo-box">
+    <template preserve-content>
+      <dom-module id="custom-text-field-and-item" theme-for="vaadin-text-field
+      vaadin-combo-box-item">
+      <template>
         <style>
-          paper-icon-button {
-            opacity: 0.4;
-            width: 24px;
-            height: 24px;
-            padding: 2px;
+          :host([theme~="custom"]) {
+            font-family: monospace;
           }
         </style>
-        <vaadin-combo-box-light>
-          <vaadin-text-field label="Custom Icons">
-            <paper-icon-button slot="suffix" icon="remove-circle" class="clear-button"></paper-icon-button>
-            <paper-icon-button slot="suffix" icon="search" class="toggle-button"></paper-icon-button>
-          </vaadin-text-field>
-        </vaadin-combo-box-light>
-        <script>
-          window.addDemoReadyListener('#combo-box-styling-demos-configuring-icons', function(document) {
-            // NOTE: elements is an array of the form {'Carbon', ...}
-            document.querySelector('vaadin-combo-box-light').items = elements;
-          });
-        </script>
       </template>
-    </vaadin-demo-snippet>
-
-
-    <h3>Replacing the Input</h3>
-    <p>
-      If you are using other custom input fields like &lt;iron-input>, you
-      need to define the name of the bindable property with the `attrForValue` attribute.
-    </p>
-    <vaadin-demo-snippet id="combo-box-styling-demos-replacing-the-input-with-an-iron-input" when-defined="vaadin-combo-box-light">
-      <template preserve-content>
-        <vaadin-combo-box-light attr-for-value="bind-value">
-          <iron-input>
-            <input>
-          </iron-input>
-        </vaadin-combo-box-light>
-        <script>
-          window.addDemoReadyListener('#combo-box-styling-demos-replacing-the-input-with-an-iron-input', function(document) {
-            document.querySelector('vaadin-combo-box-light').items = elements;
-          });
-        </script>
+    </dom-module>
+    <dom-module id="custom-combo-box-overlay" theme-for="vaadin-combo-box-overlay">
+      <template>
+        <style>
+          :host([theme~="custom"]) [part="overlay"] {
+            background-image: linear-gradient(hsla(214, 61%, 25%, 0.05), hsla(214, 61%, 25%, 0.05));
+          }
+        </style>
       </template>
-    </vaadin-demo-snippet>
-
-
-    <h3>Using Focused and Selected Flags</h3>
-    <vaadin-demo-snippet id="combo-box-styling-demos-focused-and-selected-flags" when-defined="vaadin-combo-box">
-      <template preserve-content>
-        <vaadin-combo-box label="Element" value="Carbon">
-          <template>
-            <style>
-              span[focused] {
-                color: var(--lumo-primary-color);
-              }
-
-              span[selected] {
-                font-weight: bold;
-              }
-            </style>
-            <span selected$="[[selected]]" focused$="[[focused]]">[[item]]</span>
-          </template>
-        </vaadin-combo-box>
-
-        <script>
-          window.addDemoReadyListener('#combo-box-styling-demos-focused-and-selected-flags', function(document) {
-            document.querySelector('vaadin-combo-box').items = elements;
-          });
-        </script>
-      </template>
-    </vaadin-demo-snippet>
-
-    <h3>Small Text Field (Lumo Theme Variant)</h3>
-    <vaadin-demo-snippet id="combo-box-styling-demos-small" when-defined="vaadin-combo-box">
-      <template preserve-content>
-        <vaadin-combo-box label="Element" value="Carbon" theme="small"></vaadin-combo-box>
-        <script>
-          window.addDemoReadyListener('#combo-box-styling-demos-small', function(document) {
-            document.querySelector('vaadin-combo-box').items = elements;
-          });
-        </script>
-      </template>
-    </vaadin-demo-snippet>
-
-    <h3>Custom Theme Variant</h3>
-    <vaadin-demo-snippet id="combo-box-styling-demos-custom-theme-variant" when-defined="vaadin-combo-box">
-      <template preserve-content>
-        <dom-module id="custom-text-field-and-item" theme-for="vaadin-text-field vaadin-combo-box-item">
-          <template>
-            <style>
-              :host([theme~="custom"]) {
-                font-family: monospace;
-              }
-            </style>
-          </template>
-        </dom-module>
-        <dom-module id="custom-combo-box-overlay" theme-for="vaadin-combo-box-overlay">
-          <template>
-            <style>
-              :host([theme~="custom"]) [part="overlay"] {
-                background-image: linear-gradient(hsla(214, 61%, 25%, 0.05), hsla(214, 61%, 25%, 0.05));
-              }
-            </style>
-          </template>
-        </dom-module>
-        <vaadin-combo-box label="Element" value="Carbon" theme="custom"></vaadin-combo-box>
-        <script>
-          window.addDemoReadyListener('#combo-box-styling-demos-custom-theme-variant', function(document) {
-            document.querySelector('vaadin-combo-box').items = elements;
-          });
-        </script>
-      </template>
-    </vaadin-demo-snippet>
-
-
+    </dom-module>
+    <vaadin-combo-box label="Element" value="Carbon" theme="custom"></vaadin-combo-box>
+    <script>
+      window.addDemoReadyListener('#customizing-theme-variant', function(document) {
+        document.querySelector('vaadin-combo-box').items = elements;
+      });
+    </script>
   </template>
-  <script>
-    class ComboBoxStylingDemos extends DemoReadyEventEmitter(ComboBoxDemo(Polymer.Element)) {
-      static get is() {
-        return 'combo-box-styling-demos';
-      }
+</vaadin-demo-snippet>
+
+</template>
+<script>
+  class ComboBoxStylingDemos extends DemoReadyEventEmitter(ComboBoxDemo(Polymer.Element)) {
+    static get is() {
+      return 'combo-box-styling-demos';
     }
-    customElements.define(ComboBoxStylingDemos.is, ComboBoxStylingDemos);
-  </script>
+  }
+  customElements.define(ComboBoxStylingDemos.is, ComboBoxStylingDemos);
+</script>
 </dom-module>
