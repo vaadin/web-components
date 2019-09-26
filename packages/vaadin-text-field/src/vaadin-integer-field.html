@@ -51,15 +51,17 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _onKeyDown(e) {
-          const unAllowedKeyCodes = [
-            188, // ,
-            190, // .
-            69   // e
-          ];
-          if (unAllowedKeyCodes.indexOf(e.keyCode) > -1) {
+          if (!this.__shouldAcceptKey(e)) {
             e.preventDefault();
           }
           super._onKeyDown(e);
+        }
+
+        __shouldAcceptKey(event) {
+          return (event.metaKey || event.ctrlKey)
+            || !event.key // allow typing anything if event.key is not supported
+            || event.key.length !== 1 // allow "Backspace", "ArrowLeft" etc.
+            || /^[-+\d]$/.test(event.key);
         }
 
         __onDrop(e) {

@@ -29,7 +29,7 @@
         input = integerField.inputElement;
       });
 
-      describe('prevented keys', () => {
+      describe('keyboard input', () => {
 
         let keydownSpy;
 
@@ -38,29 +38,51 @@
           input.addEventListener('keydown', keydownSpy);
         });
 
-        it('should prevent comma key', () => {
-          MockInteractions.keyDownOn(input, 188, [], ',');
-          const event = keydownSpy.lastCall.args[0];
-          expect(event.defaultPrevented).to.be.true;
-        });
+        [
+          [188, [], ','],
+          [190, [], '.'],
+          [69, [], 'e'],
+          [69, ['shift'], 'E'],
+          [106, [], '*'],
+          [32, [], ' '],
+          [187, [], '?']
+        ]
+          .forEach(([keyCode, modifiers, key]) => {
 
-        it('should prevent period key', () => {
-          MockInteractions.keyDownOn(input, 190, [], '.');
-          const event = keydownSpy.lastCall.args[0];
-          expect(event.defaultPrevented).to.be.true;
-        });
+            const keyCombo = modifiers.concat(key).join('+');
 
-        it('should prevent e key', () => {
-          MockInteractions.keyDownOn(input, 69, [], 'e');
-          const event = keydownSpy.lastCall.args[0];
-          expect(event.defaultPrevented).to.be.true;
-        });
+            it(`should prevent "${keyCombo}"`, () => {
+              MockInteractions.keyDownOn(input, keyCode, modifiers, key);
+              const event = keydownSpy.lastCall.args[0];
+              expect(event.defaultPrevented).to.be.true;
+            });
 
-        it('should not prevent number keys', () => {
-          MockInteractions.keyDownOn(input, 49, [], '1');
-          const event = keydownSpy.lastCall.args[0];
-          expect(event.defaultPrevented).to.be.false;
-        });
+          });
+
+        [
+          [49, [], '1'],
+          [187, [], '+'],
+          [189, [], '-'],
+          [49, ['ctrl'], '1'],
+          [49, ['meta'], '1'],
+          [65, ['ctrl'], 'e'],
+          [65, ['meta'], 'e'],
+          [65, ['ctrl', 'shift'], 'E'],
+          [112, [], 'F1'],
+          [8, [], 'Backspace'],
+          [37, [], 'ArrowLeft'],
+          [37, ['ctrl'], 'ArrowLeft']
+        ]
+          .forEach(([keyCode, modifiers, key]) => {
+
+            const keyCombo = modifiers.concat(key).join('+');
+
+            it(`should not prevent "${keyCombo}"`, () => {
+              MockInteractions.keyDownOn(input, keyCode, modifiers, key);
+              const event = keydownSpy.lastCall.args[0];
+              expect(event.defaultPrevented).to.be.false;
+            });
+          });
       });
 
       const fireDropEvent = draggedText => {
