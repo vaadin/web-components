@@ -328,6 +328,10 @@ This program is available under Apache License Version 2.0, available at https:/
       [ios][scrolling] #outerscroller {
         z-index: 0;
       }
+
+      [ios] [frozen] {
+        will-change: auto;
+      }
     `;
     VaadinGridStyles.querySelector('template').content.appendChild(scrollingStyles);
   }
