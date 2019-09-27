@@ -512,7 +512,7 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     __constraintsChanged(required, minlength, maxlength, pattern, min, max, step) {
-      if (!this.invalid) {
+      if (!this.invalid || !this.__isReady) {
         return;
       }
 
@@ -553,6 +553,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     ready() {
       super.ready();
+      this.__isReady = true;
 
       this._boundOnInput = this._onInput.bind(this);
       this._boundOnChange = this._onChange.bind(this);

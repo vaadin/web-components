@@ -322,8 +322,8 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         checkValidity() {
-          // text-field mixin does not check against `min` and `max`
-          if (this.min !== undefined || this.max !== undefined || this.step) {
+          // text-field mixin does not check against `min`, `max` and `step`
+          if (this.min !== undefined || this.max !== undefined || this.step !== 1) {
             this.invalid = !this.inputElement.checkValidity();
           }
           return super.checkValidity();

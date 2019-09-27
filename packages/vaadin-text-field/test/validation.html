@@ -7,8 +7,11 @@
   <script src="../../web-component-tester/browser.js"></script>
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <link rel="import" href="../../test-fixture/test-fixture.html">
-  <link rel="import" href="../vaadin-text-field.html">
+  <link rel="import" href="../vaadin-email-field.html">
+  <link rel="import" href="../vaadin-number-field.html">
+  <link rel="import" href="../vaadin-password-field.html">
   <link rel="import" href="../vaadin-text-area.html">
+  <link rel="import" href="../vaadin-text-field.html">
   <link rel="import" href="../../iron-form/iron-form.html">
 
 </head>
@@ -55,6 +58,23 @@
           </vaadin-text-area>
         </form>
       </iron-form>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="initially-invalid">
+    <template>
+      <div>
+        <vaadin-email-field invalid></vaadin-email-field>
+        <vaadin-email-field invalid value="foo@example.com"></vaadin-email-field>
+        <vaadin-number-field invalid></vaadin-number-field>
+        <vaadin-number-field invalid value="42"></vaadin-number-field>
+        <vaadin-password-field invalid></vaadin-password-field>
+        <vaadin-password-field invalid value="foo"></vaadin-password-field>
+        <vaadin-text-area invalid></vaadin-text-area>
+        <vaadin-text-area invalid value="foo"></vaadin-text-area>
+        <vaadin-text-field invalid></vaadin-text-field>
+        <vaadin-text-field invalid value="foo"></vaadin-text-field>
+      </div>
     </template>
   </test-fixture>
 
@@ -245,6 +265,19 @@
 
         });
       });
+    });
+
+    describe('initially invalid', () => {
+      const elements = Array.from(fixture('initially-invalid').children);
+
+      elements.forEach(elem => {
+        const tagName = elem.tagName.toLowerCase();
+        const hasValue = elem.getAttribute('value') !== null;
+        it(`should not remove "invalid" state when ready <${tagName}>${hasValue ? ' with value' : ''}`, () => {
+          expect(elem.invalid).to.be.true;
+        });
+      });
+
     });
   </script>
 </body>

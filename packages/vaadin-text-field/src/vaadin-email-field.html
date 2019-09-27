@@ -37,11 +37,18 @@ This program is available under Apache License Version 2.0, available at https:/
         return '2.5.0-alpha1';
       }
 
+      set __isReady(value) {}
+
+      get __isReady() {
+        return this.__emailFieldIsReady;
+      }
+
       ready() {
         super.ready();
         this.inputElement.type = 'email';
         this.inputElement.autocapitalize = 'off';
         this.pattern = '^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$';
+        this.__emailFieldIsReady = true;
       }
     }
 
