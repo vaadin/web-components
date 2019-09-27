@@ -61,20 +61,63 @@
     </template>
   </test-fixture>
 
-  <test-fixture id="initially-invalid">
+  <test-fixture id="initially-invalid-email-field">
     <template>
-      <div>
-        <vaadin-email-field invalid></vaadin-email-field>
-        <vaadin-email-field invalid value="foo@example.com"></vaadin-email-field>
-        <vaadin-number-field invalid></vaadin-number-field>
-        <vaadin-number-field invalid value="42"></vaadin-number-field>
-        <vaadin-password-field invalid></vaadin-password-field>
-        <vaadin-password-field invalid value="foo"></vaadin-password-field>
-        <vaadin-text-area invalid></vaadin-text-area>
-        <vaadin-text-area invalid value="foo"></vaadin-text-area>
-        <vaadin-text-field invalid></vaadin-text-field>
-        <vaadin-text-field invalid value="foo"></vaadin-text-field>
-      </div>
+      <vaadin-email-field invalid></vaadin-email-field>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="initially-invalid-email-field-with-value">
+    <template>
+      <vaadin-email-field invalid value="foo@example.com"></vaadin-email-field>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="initially-invalid-number-field">
+    <template>
+      <vaadin-number-field invalid></vaadin-number-field>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="initially-invalid-number-field-with-value">
+    <template>
+      <vaadin-number-field invalid value="42"></vaadin-number-field>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="initially-invalid-password-field">
+    <template>
+      <vaadin-password-field invalid></vaadin-password-field>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="initially-invalid-password-field-with-value">
+    <template>
+      <vaadin-password-field invalid value="foo"></vaadin-password-field>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="initially-invalid-text-area">
+    <template>
+      <vaadin-text-area invalid></vaadin-text-area>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="initially-invalid-text-area-with-value">
+    <template>
+      <vaadin-text-area invalid value="foo"></vaadin-text-area>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="initially-invalid-text-field">
+    <template>
+      <vaadin-text-field invalid></vaadin-text-field>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="initially-invalid-text-field-with-value">
+    <template>
+      <vaadin-text-field invalid value="foo"></vaadin-text-field>
     </template>
   </test-fixture>
 
@@ -268,16 +311,22 @@
     });
 
     describe('initially invalid', () => {
-      const elements = Array.from(fixture('initially-invalid').children);
+      ['email-field', 'email-field-with-value', 'number-field', 'number-field-with-value', 'password-field', 'password-field-with-value',
+        'text-area', 'text-area-with-value', 'text-field', 'text-field-with-value'].forEach(testCase => {
 
-      elements.forEach(elem => {
-        const tagName = elem.tagName.toLowerCase();
-        const hasValue = elem.getAttribute('value') !== null;
-        it(`should not remove "invalid" state when ready <${tagName}>${hasValue ? ' with value' : ''}`, () => {
-          expect(elem.invalid).to.be.true;
+        describe(testCase, () => {
+          let field;
+
+          beforeEach(() => {
+            field = fixture(`initially-invalid-${testCase}`);
+          });
+
+          it('should not remove "invalid" state when ready', () => {
+            expect(field.invalid).to.be.true;
+          });
         });
-      });
 
+      });
     });
   </script>
 </body>
