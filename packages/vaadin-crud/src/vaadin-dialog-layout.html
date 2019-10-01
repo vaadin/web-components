@@ -180,8 +180,8 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             this.$.scroller.scrollTop = 0;
           }
 
-          _computeEditorOpened(opened, editor) {
-            return this.editorPosition === editor && opened;
+          _computeEditorOpened(opened, editorPosition) {
+            return this.editorPosition === editorPosition && opened;
           }
         }
       )();
