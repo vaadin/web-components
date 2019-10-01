@@ -321,15 +321,6 @@ This program is available under Apache License Version 2.0, available at https:/
       ];
     }
 
-    constructor() {
-      super();
-      // This complex observer needs to be added dynamically here (instead of defining it above in the `get observers()`)
-      // so that it runs after complex observers of inheriting classes. Otherwise e.g. `_stepOrMinChanged()` observer of
-      // vaadin-number-field would run after this and the `min` and `step` properties would not yet be propagated to
-      // the `inputElement` when this runs.
-      this._createMethodObserver('__constraintsChanged(required, minlength, maxlength, pattern, min, max, step)');
-    }
-
     get focusElement() {
       if (!this.shadowRoot) {
         return;
@@ -350,6 +341,14 @@ This program is available under Apache License Version 2.0, available at https:/
 
     get _slottedTagName() {
       return 'input';
+    }
+
+    _createConstraintsObserver() {
+      // This complex observer needs to be added dynamically here (instead of defining it above in the `get observers()`)
+      // so that it runs after complex observers of inheriting classes. Otherwise e.g. `_stepOrMinChanged()` observer of
+      // vaadin-number-field would run after this and the `min` and `step` properties would not yet be propagated to
+      // the `inputElement` when this runs.
+      this._createMethodObserver('_constraintsChanged(required, minlength, maxlength, pattern)');
     }
 
     _onInput(e) {
@@ -511,14 +510,12 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
-    __constraintsChanged(required, minlength, maxlength, pattern, min, max, step) {
-      if (!this.invalid || !this.__isReady) {
+    _constraintsChanged(required, minlength, maxlength, pattern) {
+      if (!this.invalid) {
         return;
       }
 
-      const isNumUnset = n => (!n && n !== 0);
-
-      if (!required && !minlength && !maxlength && !pattern && isNumUnset(min) && isNumUnset(max)) {
+      if (!required && !minlength && !maxlength && !pattern) {
         this.invalid = false;
       } else {
         this.validate();
@@ -553,7 +550,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
     ready() {
       super.ready();
-      this.__isReady = true;
+
+      this._createConstraintsObserver();
 
       this._boundOnInput = this._onInput.bind(this);
       this._boundOnChange = this._onChange.bind(this);

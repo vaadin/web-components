@@ -169,6 +169,25 @@ This program is available under Apache License Version 2.0, available at https:/
           return memoizedTemplate;
         }
 
+        _createConstraintsObserver() {
+          // NOTE: do not call "super" but instead override the method to add extra arguments
+          this._createMethodObserver('_constraintsChanged(required, minlength, maxlength, pattern, min, max, step)');
+        }
+
+        _constraintsChanged(required, minlength, maxlength, pattern, min, max, step) {
+          if (!this.invalid) {
+            return;
+          }
+
+          const isNumUnset = n => (!n && n !== 0);
+
+          if (!isNumUnset(min) || !isNumUnset(max)) {
+            this.validate();
+          } else {
+            super._constraintsChanged(required, minlength, maxlength, pattern);
+          }
+        }
+
         _decreaseValue() {
           this._incrementValue(-1);
         }
