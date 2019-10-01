@@ -630,9 +630,8 @@
       describe('editor-position', () => {
         let crud;
 
-        beforeEach(done => {
+        beforeEach(() => {
           crud = fixture('default');
-          Polymer.RenderStatus.afterNextRender(crud, done);
         });
 
         afterEach(() => crud.editorOpened = false);
