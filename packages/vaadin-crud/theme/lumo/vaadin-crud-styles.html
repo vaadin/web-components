@@ -107,10 +107,16 @@
 
       [part="editor"] {
         background: var(--lumo-base-color);
+        box-sizing: border-box;
       }
 
       :host([editor-position='bottom']) [part="editor"]:not([hidden]) {
         box-shadow: var(--lumo-box-shadow-m);
+      }
+
+      :host(:not([theme~="no-border"])[editor-position=bottom]) [part="editor"]:not([hidden]) {
+        border: 1px solid var(--lumo-contrast-20pct);
+        border-top: 0;
       }
 
       @media (max-width: 600px), (max-height: 600px) {
