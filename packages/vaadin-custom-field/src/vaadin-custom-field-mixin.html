@@ -1,3 +1,5 @@
+<link rel="import" href="../../polymer/lib/utils/flattened-nodes-observer.html">
+
 <script>
   /**
    * @namespace Vaadin
@@ -67,18 +69,23 @@
 
     connectedCallback() {
       super.connectedCallback();
-      this.__observeChildrenInputsChange();
+      if (this.__observer) {
+        this.__observer.connect();
+      }
     }
 
     disconnectedCallback() {
       super.disconnectedCallback();
-      this.__childMutationObserver.disconnect();
+      this.__observer.disconnect();
     }
 
     ready() {
       super.ready();
 
-      this.__setInputsFromChildNodes();
+      this.__setInputsFromSlot();
+      this.__observer = new Polymer.FlattenedNodesObserver(this.$.slot, () => {
+        this.__setInputsFromSlot();
+      });
 
       this.addEventListener('keydown', e => {
         if (e.keyCode === 9) {
@@ -113,16 +120,6 @@
       this.inputs && this.inputs[0].focus();
     }
 
-    __observeChildrenInputsChange() {
-      const mutationObserverConfig = {
-        'childList': true,
-        'subtree': true
-      };
-
-      this.__childMutationObserver = new MutationObserver(this.__setInputsFromChildNodes.bind(this));
-      this.__childMutationObserver.observe(this, mutationObserverConfig);
-    }
-
     __updateValue(e) {
       // Stop native change events
       e && e.stopPropagation();
@@ -144,9 +141,23 @@
       this.__settingValue = false;
     }
 
-    __setInputsFromChildNodes() {
-      const inputs = Array.from(this.querySelectorAll('*')).filter(node => node.validate || node.checkValidity);
-      this._setInputs(inputs);
+    __getInputsFromSlot() {
+      const isInput = (node => node.validate || node.checkValidity);
+      const slottedElements = this.$.slot.assignedNodes({flatten: true}).filter(node => node.nodeType === Node.ELEMENT_NODE);
+      const inputs = [];
+      slottedElements.forEach(elem => {
+        if (isInput(elem)) {
+          inputs.push(elem);
+        } else {
+          const newInputs = Array.from(elem.querySelectorAll('*')).filter(isInput);
+          inputs.push(...newInputs);
+        }
+      });
+      return inputs;
+    }
+
+    __setInputsFromSlot() {
+      this._setInputs(this.__getInputsFromSlot());
       this.__setValue();
     }
 
