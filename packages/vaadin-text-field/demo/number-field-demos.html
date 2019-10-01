@@ -37,6 +37,14 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Integer field</h3>
+    <p>Integer field prevents the user from entering decimals.</p>
+    <vaadin-demo-snippet id="integer-field-demos">
+      <template preserve-content>
+        <vaadin-integer-field min="0" max="10" has-controls></vaadin-integer-field>
+      </template>
+    </vaadin-demo-snippet>
+
   </template>
   <script>
     class NumberFieldDemos extends DemoReadyEventEmitter(TextFieldDemo(Polymer.Element)) {

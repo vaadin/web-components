@@ -66,7 +66,7 @@ This program is available under Apache License Version 2.0, available at https:/
       let memoizedTemplate;
 
       /**
-      * `<vaadin-number-field>` is a Polymer 2 element for number field control in forms.
+      * `<vaadin-number-field>` is a Web Component for number field control in forms.
       *
       * ```html
       * <vaadin-number-field label="Number">
@@ -102,7 +102,8 @@ This program is available under Apache License Version 2.0, available at https:/
             */
             min: {
               type: Number,
-              reflectToAttribute: true
+              reflectToAttribute: true,
+              observer: '_minChanged'
             },
 
             /**
@@ -120,23 +121,17 @@ This program is available under Apache License Version 2.0, available at https:/
             step: {
               type: Number,
               reflectToAttribute: true,
-              value: 1
+              value: 1,
+              observer: '_stepChanged'
             }
 
           };
-        }
-
-        static get observers() {
-          return [
-            '_stepOrMinChanged(step, min)'
-          ];
         }
 
         ready() {
           super.ready();
           this.__previousValidInput = this.value || '';
           this.inputElement.type = 'number';
-          this.inputElement.addEventListener('keydown', this.__onKeyDown.bind(this));
           this.inputElement.addEventListener('change', this.__onInputChange.bind(this));
         }
 
@@ -288,8 +283,16 @@ This program is available under Apache License Version 2.0, available at https:/
           return !this.value || (!this.disabled && this._incrementIsInsideTheLimits(incr, value));
         }
 
-        _maxChanged() {
-          this.inputElement.max = this.max;
+        _stepChanged(step) {
+          this.inputElement.step = step;
+        }
+
+        _minChanged(min) {
+          this.inputElement.min = min;
+        }
+
+        _maxChanged(max) {
+          this.inputElement.max = max;
         }
 
         _valueChanged(newVal, oldVal) {
@@ -303,7 +306,7 @@ This program is available under Apache License Version 2.0, available at https:/
           super._valueChanged(this.value, oldVal);
         }
 
-        __onKeyDown(e) {
+        _onKeyDown(e) {
           if (e.keyCode == 38) {
             e.preventDefault();
             this._increaseValue();
@@ -311,15 +314,11 @@ This program is available under Apache License Version 2.0, available at https:/
             e.preventDefault();
             this._decreaseValue();
           }
+          super._onKeyDown(e);
         }
 
         __onInputChange() {
           this.checkValidity();
-        }
-
-        _stepOrMinChanged(step, min) {
-          this.inputElement.step = step;
-          this.inputElement.min = this.min;
         }
 
         checkValidity() {

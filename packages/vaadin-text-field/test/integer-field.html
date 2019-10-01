@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-integer-field tests</title>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../../test-fixture/test-fixture.html">
+  <link rel="import" href="../vaadin-integer-field.html">
+  <link rel="import" href="../../iron-form/iron-form.html">
+  <script src="../../iron-test-helpers/mock-interactions.js"></script>
+</head>
+
+<body>
+  <test-fixture id="default">
+    <template>
+      <vaadin-integer-field></vaadin-integer-field>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('integer-field', () => {
+
+      let integerField, input;
+
+      beforeEach(() => {
+        integerField = fixture('default');
+        input = integerField.inputElement;
+      });
+
+      describe('keyboard input', () => {
+
+        let keydownSpy;
+
+        beforeEach(() => {
+          keydownSpy = sinon.spy();
+          input.addEventListener('keydown', keydownSpy);
+        });
+
+        [
+          [188, [], ','],
+          [190, [], '.'],
+          [69, [], 'e'],
+          [69, ['shift'], 'E'],
+          [106, [], '*'],
+          [32, [], ' '],
+          [187, [], '?']
+        ]
+          .forEach(([keyCode, modifiers, key]) => {
+
+            const keyCombo = modifiers.concat(key).join('+');
+
+            it(`should prevent "${keyCombo}"`, () => {
+              MockInteractions.keyDownOn(input, keyCode, modifiers, key);
+              const event = keydownSpy.lastCall.args[0];
+              expect(event.defaultPrevented).to.be.true;
+            });
+
+          });
+
+        [
+          [49, [], '1'],
+          [187, [], '+'],
+          [189, [], '-'],
+          [49, ['ctrl'], '1'],
+          [49, ['meta'], '1'],
+          [65, ['ctrl'], 'e'],
+          [65, ['meta'], 'e'],
+          [65, ['ctrl', 'shift'], 'E'],
+          [112, [], 'F1'],
+          [8, [], 'Backspace'],
+          [37, [], 'ArrowLeft'],
+          [37, ['ctrl'], 'ArrowLeft']
+        ]
+          .forEach(([keyCode, modifiers, key]) => {
+
+            const keyCombo = modifiers.concat(key).join('+');
+
+            it(`should not prevent "${keyCombo}"`, () => {
+              MockInteractions.keyDownOn(input, keyCode, modifiers, key);
+              const event = keydownSpy.lastCall.args[0];
+              expect(event.defaultPrevented).to.be.false;
+            });
+          });
+      });
+
+      const fireDropEvent = draggedText => {
+        const event = new Event('drop', {
+          bubbles: true,
+          cancelable: true,
+          composed: true
+        });
+        event.dataTransfer = {
+          getData: () => draggedText
+        };
+        input.dispatchEvent(event);
+        return event;
+      };
+
+      const firePasteEvent = pastedText => {
+        const event = new Event('paste', {
+          bubbles: true,
+          cancelable: true,
+          composed: true
+        });
+        // For IE11, window.clipboardData should be used,
+        // but monkey-patching that one for testing causes issues
+        event.clipboardData = {
+          getData: () => pastedText
+        };
+        input.dispatchEvent(event);
+        return event;
+      };
+
+      const testEvent = (eventName, fireEvent) => {
+
+        describe(`${eventName} event`, () => {
+
+          it(`should prevent ${eventName} with text`, () => {
+            const event = fireEvent('foo');
+            expect(event.defaultPrevented).to.be.true;
+          });
+
+          it(`should prevent ${eventName} with decimals`, () => {
+            const event = fireEvent('1.2');
+            expect(event.defaultPrevented).to.be.true;
+          });
+
+          it(`should not prevent ${eventName} with integer`, () => {
+            const event = fireEvent('123');
+            expect(event.defaultPrevented).to.be.false;
+          });
+
+          it(`should not prevent ${eventName} with negative integer`, () => {
+            const event = fireEvent('-123');
+            expect(event.defaultPrevented).to.be.false;
+          });
+
+          it(`should not prevent ${eventName} with minus and plus signs`, () => {
+            // because the same can be done by typing
+            const event = fireEvent('1-2+3');
+            expect(event.defaultPrevented).to.be.false;
+          });
+        });
+      };
+      testEvent('drop', fireDropEvent);
+      testEvent('paste', firePasteEvent);
+
+      describe('value property', () => {
+
+        const initialValue = '1';
+
+        beforeEach(() => {
+          integerField.value = initialValue;
+        });
+
+        it('should accept integer value as string', () => {
+          expect(integerField.value).to.eql(initialValue);
+        });
+
+        it('should accept integer value as number and convert to string', () => {
+          integerField.value = 2;
+          expect(integerField.value).to.eql('2');
+        });
+
+        it('should accept negative integer value as string', () => {
+          integerField.value = '-2';
+          expect(integerField.value).to.eql('-2');
+        });
+
+        it('should accept negative integer value as number and convert to string', () => {
+          integerField.value = -2;
+          expect(integerField.value).to.eql('-2');
+        });
+
+        it('should accept empty string', () => {
+          integerField.value = '';
+          expect(integerField.value).to.eql('');
+        });
+
+        ['foo', '1.2', 1.2, '+2', '2-', '2-2', '-', '+', '1e1', undefined, null, {}].forEach(invalidValue => {
+
+          it(`should clear the value when setting ${typeof invalidValue} value: ${invalidValue}`, () => {
+            integerField.value = invalidValue;
+            expect(integerField.value).to.eql('');
+          });
+
+        });
+      });
+
+      describe('step property', () => {
+
+        const initialStep = 3;
+
+        beforeEach(() => {
+          integerField.step = initialStep;
+        });
+
+        it('should allow setting positive integer', () => {
+          expect(integerField.step).to.eql(initialStep);
+        });
+
+        it('should allow setting positive integer as string', () => {
+          integerField.step = '5';
+          expect(integerField.step).to.eql('5');
+        });
+
+        ['foo', '-1', -1, '1.2', 1.2, '+1', '1e1', undefined, null, {}].forEach(invalidStep => {
+
+          it(`should reset default step when setting ${typeof invalidStep} value: ${invalidStep}`, () => {
+            integerField.step = invalidStep;
+            expect(integerField.step).to.eql(1);
+          });
+
+        });
+      });
+
+    });
+  </script>
+</body>
+
+</html>
