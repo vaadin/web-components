@@ -21,6 +21,7 @@
     "getCellEditor": false,
     "getContainerCell": false,
     "getContainerCellContent": false,
+    "getNativeInput": false,
     "getRows": false,
     "getRowCells": false
   }

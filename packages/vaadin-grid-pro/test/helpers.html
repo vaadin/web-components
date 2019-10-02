@@ -116,4 +116,8 @@
   window.getCellEditor = (cell) => {
     return cell._column._getEditorComponent(cell);
   };
+
+  window.getNativeInput = (editor) => {
+    return editor.shadowRoot.querySelector('input');
+  };
 </script>

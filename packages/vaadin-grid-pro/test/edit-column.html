@@ -317,6 +317,17 @@
             expect(input).to.be.ok;
           });
 
+          it('should not re-focus previous cell in edit mode on Enter, if `enterNextRow` is true', () => {
+            grid.enterNextRow = true;
+            const firstCell = getContainerCell(grid.$.items, 1, 0);
+            enter(firstCell._content);
+            input = getNativeInput(getCellEditor(firstCell));
+
+            const spy = sinon.spy(firstCell, 'focus');
+            enter(input);
+            expect(spy).to.not.be.called;
+          });
+
           it('should exit the edit mode for the cell on Shift Enter, if `enterNextRow` is false', () => {
             const firstCell = getContainerCell(grid.$.items, 1, 0);
             dblclick(firstCell._content);

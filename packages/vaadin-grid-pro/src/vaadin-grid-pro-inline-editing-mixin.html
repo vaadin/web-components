@@ -379,6 +379,9 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         const nextCell = Array.from(nextRow.children).filter(cell => cell._column === nextCol)[0];
         e.preventDefault();
 
+        // prevent vaadin-grid handler from being called
+        e.stopImmediatePropagation();
+
         if (!this.singleCellEdit && nextCell !== cell) {
           this._startEdit(nextCell, nextCol);
         } else {
