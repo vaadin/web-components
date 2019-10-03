@@ -488,6 +488,7 @@ This program is available under Apache License Version 2.0, available at https:/
       this.__userInputOccurred = true;
       if (!this._ignoreFocusedDateChange && !this._noInput) {
         this._inputValue = focusedDate ? formatDate(Vaadin.DatePickerHelper._extractDateParts(focusedDate)) : '';
+        this.invalid = false;
       }
     }
 
