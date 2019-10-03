@@ -477,7 +477,9 @@ This program is available under Apache License Version 2.0, available at https:/
       }
       this.__userInputOccurred = false;
       this.__dispatchChange = false;
+      this._ignoreFocusedDateChange = true;
       this._focusedDate = selectedDate;
+      this._ignoreFocusedDateChange = false;
       this._inputValue = selectedDate ? inputValue : '';
     }
 
