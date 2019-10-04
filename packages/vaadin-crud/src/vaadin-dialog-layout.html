@@ -15,7 +15,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
   <template>
     <style>
       :host {
-        z-index: 9999;
+        z-index: 1;
       }
 
       :host([editor-position='bottom'][opened]) {
@@ -48,7 +48,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       }
     </style>
 
-    <div id="editor" part="editor" hidden$="[[!_computeEditorOpened(opened, 'bottom')]]">
+    <div id="editor" part="editor" hidden$="[[!_computeEditorOpened(opened, mobile, 'bottom')]]">
       <div part="scroller" id="scroller" role="group" aria-labelledby="header">
         <div part="header" id="header">
           <slot name="header"></slot>
@@ -63,7 +63,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
     <vaadin-dialog
       id="dialog"
-      opened="[[_computeEditorOpened(opened, '')]]"
+      opened="[[_computeEditorOpened(opened, mobile, '')]]"
       aria-label="[[__ariaLabel]]"
       no-close-on-outside-click="[[noCloseOnOutsideClick]]"
       no-close-on-esc="[[noCloseOnEsc]]"
@@ -150,6 +150,10 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
               noCloseOnOutsideClick: Boolean,
               /** Disable closing when user presses escape */
               noCloseOnEsc: Boolean,
+              mobile: {
+                type: Boolean,
+                observer: '__mobileChanged'
+              },
               __ariaLabel: String
             };
           }
@@ -166,21 +170,47 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
           _openedChanged(opened) {
             if (this.opened) {
-              if (this.editorPosition === '') {
-                Array.from(this.$.editor.childNodes).forEach(c => this.$.dialog.$.overlay.$.content.shadowRoot.appendChild(c));
-                Array.from(this.childNodes).forEach(c => this.$.dialog.$.overlay.$.content.appendChild(c));
-                // Wait to set label until slotted element have been moved.
-                setTimeout(() =>
-                  this.__ariaLabel = Array.from(this.$.dialog.$.overlay.$.content.querySelectorAll('[slot=header]'))
-                    .reduce((prev, ele) => prev + ' ' + ele.textContent, '').trim());
-              }
+              this._ensureChildren();
             }
 
             // Make sure to reset scroll position
             this.$.scroller.scrollTop = 0;
           }
 
-          _computeEditorOpened(opened, editorPosition) {
+          __mobileChanged() {
+            this._ensureChildren();
+          }
+
+          _ensureChildren() {
+            if (!this.$.dialog.$.overlay.$.content.shadowRoot) {
+              return;
+            }
+
+            if (this.editorPosition === '' || this.mobile) {
+              // Move children from editor to dialog
+              Array.from(this.$.editor.childNodes).forEach(c => this.$.dialog.$.overlay.$.content.shadowRoot.appendChild(c));
+              Array.from(this.childNodes).forEach(c => this.$.dialog.$.overlay.$.content.appendChild(c));
+
+              // Wait to set label until slotted element have been moved.
+              setTimeout(() =>
+                this.__ariaLabel = Array.from(this.$.dialog.$.overlay.$.content.querySelectorAll('[slot=header]'))
+                  .reduce((prev, ele) => prev + ' ' + ele.textContent, '').trim());
+            } else {
+              // Move children from dialog to editor
+              Array.from(this.$.dialog.$.overlay.$.content.shadowRoot.childNodes).forEach(c => this.$.editor.appendChild(c));
+              Array.from(this.$.dialog.$.overlay.$.content.childNodes).forEach(c => this.appendChild(c));
+
+              // Wait to set label until slotted element have been moved.
+              setTimeout(() =>
+                this.__ariaLabel = Array.from(this.querySelectorAll('[slot=header]'))
+                  .reduce((prev, ele) => prev + ' ' + ele.textContent, '').trim());
+            }
+          }
+
+          _computeEditorOpened(opened, isMobile, editorPosition) {
+            if (isMobile && editorPosition === '') {
+              return opened;
+            }
             return this.editorPosition === editorPosition && opened;
           }
         }

@@ -628,10 +628,11 @@
       });
 
       describe('editor-position', () => {
-        let crud;
+        let crud, dialogLayout;
 
         beforeEach(() => {
           crud = fixture('default');
+          dialogLayout = crud.$.dialog;
         });
 
         afterEach(() => crud.editorOpened = false);
@@ -647,8 +648,8 @@
 
         it('should hide toolbar when editor position is "bottom" and opened', () => {
           crud.editorPosition = 'bottom';
+          crud.__mobile = false;
           crud.$.new.click();
-
           expect(crud.$.toolbar.style.display).to.be.equal('none');
         });
 
@@ -656,6 +657,30 @@
           crud.$.new.click();
 
           expect(crud.$.toolbar.style.display).to.be.not.equal('none');
+        });
+
+        it('should always show the editor in dialog on mobile', () => {
+          crud.editorPosition = 'bottom';
+          crud.__mobile = true;
+          crud.$.new.click();
+          expect(dialogLayout.$.dialog.opened).to.be.true;
+        });
+
+        it('should always show the editor below grid on desktop', () => {
+          crud.editorPosition = 'bottom';
+          crud.__mobile = false;
+          crud.$.new.click();
+          expect(dialogLayout.$.dialog.opened).to.be.false;
+        });
+
+        it('should switch from overlay to below grid if resize happens', () => {
+          crud.editorPosition = 'bottom';
+          crud.__mobile = true;
+          crud.$.new.click();
+          expect(dialogLayout.$.dialog.opened).to.be.true;
+
+          crud.__mobile = false;
+          expect(dialogLayout.$.dialog.opened).to.be.false;
         });
       });
     });

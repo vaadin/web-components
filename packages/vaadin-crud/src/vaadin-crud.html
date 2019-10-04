@@ -5,6 +5,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
 -->
 
 <link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../iron-media-query/iron-media-query.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
 <link rel="import" href="../../vaadin-button/src/vaadin-button.html">
@@ -67,7 +68,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           </slot>
         </div>
       </div>
-      <vaadin-dialog-layout theme$="[[theme]]" id="dialog" no-close-on-outside-click=[[__isDirty]] no-close-on-esc=[[__isDirty]] opened="{{editorOpened}}" editor-position$="{{editorPosition}}" theme="crud">
+      <vaadin-dialog-layout theme$="[[theme]]" id="dialog" no-close-on-outside-click=[[__isDirty]] no-close-on-esc=[[__isDirty]] opened="{{editorOpened}}" editor-position$="{{editorPosition}}" mobile="[[__mobile]]" theme="crud">
         <h3 slot="header">[[__editorHeader]]</h3>
         <div id="editor">
           <slot name="form">
@@ -94,6 +95,8 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
       header="[[i18n.confirm.delete.title]]"
       message="[[i18n.confirm.delete.content]]" confirm-theme="primary error">
     </vaadin-confirm-dialog>
+
+    <iron-media-query query="[[__mobileMediaQuery]]" query-matches="{{__mobile}}"></iron-media-query>
   </template>
 
   <script>
@@ -378,7 +381,14 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
             },
             __isDirty: Boolean,
             __isNew: Boolean,
-            __editorHeader: String
+            __editorHeader: String,
+            __mobileMediaQuery: {
+              value: '(max-width: 600px), (max-height: 600px)'
+            },
+            __mobile: {
+              type: Boolean,
+              observer: '__mobileChanged'
+            }
           };
         }
 
@@ -432,9 +442,17 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
             this.__onFormChange(this._form);
           }
 
+          this.__toggleToolbar();
+        }
+
+        __mobileChanged() {
+          this.__toggleToolbar();
+        }
+
+        __toggleToolbar() {
           // Hide toolbar to give more room for the editor when it's positioned below the grid
-          if (this.editorPosition === 'bottom') {
-            this.$.toolbar.style.display = opened ? 'none' : '';
+          if (this.editorPosition === 'bottom' && !this.__mobile) {
+            this.$.toolbar.style.display = this.editorOpened ? 'none' : '';
           }
         }
 
