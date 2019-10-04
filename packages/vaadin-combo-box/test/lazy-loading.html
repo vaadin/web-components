@@ -430,6 +430,12 @@
             expect(() => comboBox.pageSize = '10').to.throw('pageSize');
             expect(comboBox.pageSize).to.equal(123);
           });
+
+          it('should throw when set to negative value', () => {
+            comboBox.pageSize = 10;
+            expect(() => comboBox.pageSize = -1).to.throw('pageSize');
+            expect(comboBox.pageSize).to.equal(10);
+          });
         });
 
         describe('size', () => {
