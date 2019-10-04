@@ -588,20 +588,19 @@ This program is available under Apache License Version 2.0, available at https:/
           this.value = '';
         }
       } else {
-        if (this.allowCustomValue) {
-          const e = new CustomEvent('custom-value-set', {detail: this._inputElementValue, composed: true, cancelable: true, bubbles: true});
+        if (this.allowCustomValue
           // to prevent a repetitive input value being saved after pressing ESC and Tab.
-          if (!(this.filteredItems && this.filteredItems.filter(item => this._getItemLabel(item) === e.detail).length)) {
-            this.dispatchEvent(e);
-          }
+          && !(this.filteredItems && this.filteredItems.filter(item => this._getItemLabel(item) === this._inputElementValue).length)) {
 
+          const e = new CustomEvent('custom-value-set', {detail: this._inputElementValue, composed: true, cancelable: true, bubbles: true});
+          this.dispatchEvent(e);
           if (!e.defaultPrevented) {
             const customValue = this._inputElementValue;
             this._selectItemForValue(customValue);
             this.value = customValue;
           }
         } else {
-          this._inputElementValue = this.selectedItem ? this._getItemLabel(this.selectedItem) : '';
+          this._inputElementValue = this.selectedItem ? this._getItemLabel(this.selectedItem) : (this.value || '');
         }
       }
 

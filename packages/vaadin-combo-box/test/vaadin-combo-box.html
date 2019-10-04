@@ -182,6 +182,24 @@
           expect(comboBox.value).to.eql('foo');
         });
 
+        it('should keep custom value after entering label matching to an item, blurring that item and closing overlay', () => {
+          comboBox.items = ['a', 'b'];
+
+          comboBox.open();
+          comboBox.inputElement.value = 'foo';
+          comboBox.inputElement.dispatchEvent(new CustomEvent('input'));
+          comboBox.close();
+
+          comboBox.open();
+          comboBox.inputElement.value = 'a';
+          comboBox.inputElement.dispatchEvent(new CustomEvent('input'));
+          comboBox._focusedIndex = -1;
+          comboBox.close();
+
+          expect(comboBox.value).to.eql('foo');
+          expect(comboBox.inputElement.value).to.eql('foo');
+        });
+
         describe('`custom-value-set` event', () => {
 
           beforeEach(() => comboBox.items = ['a', 'b']);
