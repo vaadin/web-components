@@ -257,6 +257,19 @@
           });
         });
 
+        it('should validate on blur', done => {
+          inputText('foo');
+          datepicker.$.overlay.addEventListener('vaadin-overlay-close', () => {
+            target.value = '';
+            var spy = sinon.spy(datepicker, 'validate');
+            datepicker.dispatchEvent(new Event('blur'));
+            expect(spy).to.be.calledOnce;
+            expect(datepicker.invalid).to.be.false;
+            done();
+          });
+          datepicker.close();
+        });
+
         it('should empty value with false input', done => {
           datepicker.value = '2000-01-01';
           target.value = '';
