@@ -124,7 +124,7 @@ Currently, the only global CSS that can affect styles inside a shadow DOM’s lo
     :host {
       background-color: inherit;
     }
-  </style
+  </style>
 ```
 
 
