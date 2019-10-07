@@ -76,7 +76,7 @@
 
     disconnectedCallback() {
       super.disconnectedCallback();
-      this.__observer.disconnect();
+      this.__observer && this.__observer.disconnect();
     }
 
     ready() {
