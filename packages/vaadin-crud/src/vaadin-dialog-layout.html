@@ -18,7 +18,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         z-index: 1;
       }
 
-      :host([editor-position='bottom'][opened]) {
+      :host([editor-position='bottom'][opened]:not([mobile])) {
         flex: 1 1 100%;
         max-height: var(--vaadin-crud-editor-max-height);
       }
@@ -152,7 +152,8 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
               noCloseOnEsc: Boolean,
               mobile: {
                 type: Boolean,
-                observer: '__mobileChanged'
+                observer: '__mobileChanged',
+                reflectToAttribute: true
               },
               __ariaLabel: String
             };
