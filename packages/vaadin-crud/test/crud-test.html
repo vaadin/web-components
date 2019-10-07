@@ -663,7 +663,7 @@
         it('should always show the editor in dialog on mobile', () => {
           if (isIOS) {
             // Only setting crud.__mobile = trueis not working on iOS test
-            crud.__mobileMediaQuery = '(max-width: 900px), (max-height: 900px)';
+            crud.__mobileMediaQuery = '(max-width: 1000px), (max-height: 1000px)';
           }
           crud.__mobile = true;
           crud.editorPosition = 'bottom';
