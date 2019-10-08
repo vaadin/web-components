@@ -5,19 +5,89 @@
         display: block;
       }
     </style>
-
-
-    <h3>Radio Button</h3>
-    <vaadin-demo-snippet id="radio-button-basic-demos-default-radio">
+    <h3>Basic usage</h3>
+    <vaadin-demo-snippet id="basic-usage">
       <template preserve-content>
-        <vaadin-radio-button value="en">English</vaadin-radio-button>
+        <vaadin-radio-group label="Label" theme="vertical">
+          <vaadin-radio-button checked>Option one</vaadin-radio-button>
+          <vaadin-radio-button>Option two</vaadin-radio-button>
+          <vaadin-radio-button>Option three</vaadin-radio-button>
+        </vaadin-radio-group>
       </template>
     </vaadin-demo-snippet>
 
-    <h3>Disabled Radio Button</h3>
-    <vaadin-demo-snippet id="radio-button-basic-demos-disabled-radio">
+    <h3>Disabled state</h3>
+    <vaadin-demo-snippet id="disabled-state">
       <template preserve-content>
-        <vaadin-radio-button disabled>Disabled</vaadin-radio-button>
+        <vaadin-radio-group label="Disabled" disabled theme="vertical">
+          <vaadin-radio-button checked>Option one</vaadin-radio-button>
+          <vaadin-radio-button>Option two</vaadin-radio-button>
+          <vaadin-radio-button>Option three</vaadin-radio-button>
+        </vaadin-radio-group>
+
+      <span style="margin-right: 200px;"></span>
+
+        <vaadin-radio-group label="Team" theme="vertical">
+          <vaadin-radio-button>Option one</vaadin-radio-button>
+          <vaadin-radio-button>Option two</vaadin-radio-button>
+          <vaadin-radio-button disabled>Option three</vaadin-radio-button>
+        </vaadin-radio-group>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Read-only</h3>
+    <vaadin-demo-snippet id="read-only">
+      <template preserve-content>
+        <vaadin-radio-group label="Read-only" readonly theme="vertical">
+          <vaadin-radio-button checked>Option one</vaadin-radio-button>
+          <vaadin-radio-button>Option two</vaadin-radio-button>
+          <vaadin-radio-button>Option three</vaadin-radio-button>
+        </vaadin-radio-group>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Object list</h3>
+    <vaadin-demo-snippet id="object-list" when-defined="vaadin-radio-button">
+      <template preserve-content>
+        <vaadin-radio-group label="Label" theme="vertical"></vaadin-radio-group>
+        <script>
+          window.addDemoReadyListener('#object-list', function(document) {
+            const departments = [
+              {id: '1', name: 'Product'},
+              {id: '2', name: 'Service'},
+              {id: '3', name: 'HR'},
+              {id: '4', name: 'Accounting'}
+            ];
+            const radioGroup = document.querySelector('vaadin-radio-group');
+            departments.forEach(function(item) {
+              const radioButton = window.document.createElement('vaadin-radio-button');
+              radioButton.textContent = item.name;
+              radioButton.value = item.id;
+              radioGroup.appendChild(radioButton);
+            });
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Value change event</h3>
+    <vaadin-demo-snippet id="value-change-event" when-defined="vaadin-radio-button">
+      <template preserve-content>
+        <vaadin-radio-group label="Label" theme="vertical">
+          <vaadin-radio-button value="one">Option one</vaadin-radio-button>
+          <vaadin-radio-button value="two">Option two</vaadin-radio-button>
+          <vaadin-radio-button value="three">Option three</vaadin-radio-button>
+        </vaadin-radio-group>
+        <div id="output">Selected value:</div>
+        <script>
+          window.addDemoReadyListener('#value-change-event', function(document) {
+            const radioButtonGroup = document.querySelector('vaadin-radio-group');
+            const output = document.querySelector('#output');
+            radioButtonGroup.addEventListener('value-changed', function(event) {
+              output.textContent = radioButtonGroup.value;
+            });
+          });
+        </script>
       </template>
     </vaadin-demo-snippet>
 

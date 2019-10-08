@@ -1,48 +1,55 @@
 {
   "name": "Vaadin Radio Button",
   "pages": [
-  {
-    "name": "Radio Button",
-    "url": "radio-button-basic-demos",
-    "src": "radio-button-basic-demos.html",
-    "meta": {
-      "title": "vaadin-radio-button Examples",
-      "description": "",
-      "image": ""
+    {
+      "name": "Basic Usage",
+      "url": "radio-button-basic-demos",
+      "src": "radio-button-basic-demos.html",
+      "meta": {
+        "title": "vaadin-radio-button Examples",
+        "description": "",
+        "image": ""
+      }
+    },
+    {
+      "name": "Validation",
+      "url": "radio-button-validation-demos",
+      "src": "radio-button-validation-demos.html",
+      "meta": {
+        "title": "vaadin-radio-button Validation Examples",
+        "description": "",
+        "image": ""
+      }
+    },
+    {
+      "name": "Presentation",
+      "url": "radio-button-presentation-demos",
+      "src": "radio-button-presentation-demos.html",
+      "meta": {
+        "title": "vaadin-radio-button Presentation Examples",
+        "description": "",
+        "image": ""
+      }
+    },
+    {
+      "name": "Theme Variants",
+      "url": "radio-button-theme-variants-demos",
+      "src": "radio-button-theme-variants-demos.html",
+      "meta": {
+        "title": "vaadin-radio-button Theme Variants",
+        "description": "",
+        "image": ""
+      }
+    },
+    {
+      "name": "Styling",
+      "url": "radio-button-styling-demos",
+      "src": "radio-button-styling-demos.html",
+      "meta": {
+        "title": "vaadin-radio-group Styling Examples",
+        "description": "",
+        "image": ""
+      }
     }
-  }
-  ,
-  {
-    "name": "Radio Group",
-    "url": "radio-group-demos",
-    "src": "radio-group-demos.html",
-    "meta": {
-      "title": "vaadin-radio-group Examples",
-      "description": "",
-      "image": ""
-    }
-  }
-  ,
-  {
-    "name": "Validation",
-    "url": "radio-group-validation-demos",
-    "src": "radio-group-validation-demos.html",
-    "meta": {
-      "title": "vaadin-radio-group Validation Examples",
-      "description": "",
-      "image": ""
-    }
-  }
-  ,
-  {
-    "name": "Theme Variants",
-    "url": "radio-group-lumo-theme-demos",
-    "src": "radio-group-lumo-theme-demos.html",
-    "meta": {
-      "title": "vaadin-radio-button Theme Variants",
-      "description": "",
-      "image": ""
-    }
-  }
   ]
 }

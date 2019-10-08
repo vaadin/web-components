@@ -1,11 +1,10 @@
-<dom-module id="radio-group-lumo-theme-demos">
+<dom-module id="radio-button-theme-variants-demos">
   <template>
     <style include="vaadin-component-demo-shared-styles">
       :host {
         display: block;
       }
     </style>
-
     <h3>Direction</h3>
     <vaadin-demo-snippet id="radio-group-lumo-theme-demos-direction">
       <template preserve-content>
@@ -25,35 +24,14 @@
       </template>
     </vaadin-demo-snippet>
 
-    <h3>Multi-line Label</h3>
-    <vaadin-demo-snippet id="radio-group-lumo-theme-demos-multi-line-label">
-      <template preserve-content>
-        <vaadin-radio-group theme="vertical">
-          <vaadin-radio-button>
-            <b>Option</b>
-            <div>Description</div>
-          </vaadin-radio-button>
-
-          <vaadin-radio-button>
-            <b>Option</b>
-            <div>Description</div>
-          </vaadin-radio-button>
-
-          <vaadin-radio-button disabled>
-            <b>Option</b>
-            <div>Description</div>
-          </vaadin-radio-button>
-        </vaadin-radio-group>
-      </template>
-    </vaadin-demo-snippet>
 
   </template>
   <script>
-    class RadioGroupLumoThemeDemos extends DemoReadyEventEmitter(RadioButtonDemo(Polymer.Element)) {
+    class RadioButtonThemeVariantsDemos extends DemoReadyEventEmitter(RadioButtonDemo(Polymer.Element)) {
       static get is() {
-        return 'radio-group-lumo-theme-demos';
+        return 'radio-button-theme-variants-demos';
       }
     }
-    customElements.define(RadioGroupLumoThemeDemos.is, RadioGroupLumoThemeDemos);
+    customElements.define(RadioButtonThemeVariantsDemos.is, RadioButtonThemeVariantsDemos);
   </script>
 </dom-module>

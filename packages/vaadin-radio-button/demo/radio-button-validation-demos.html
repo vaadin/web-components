@@ -1,0 +1,39 @@
+<dom-module id="radio-button-validation-demos">
+  <template>
+    <style include="vaadin-component-demo-shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+
+    <h3>Required</h3>
+    <vaadin-demo-snippet id="select-required" when-defined="vaadin-radio-group">
+      <template preserve-content>
+        <vaadin-radio-group label="Required" required error-message="Please choose one option" theme="vertical" id="radioGroup">
+          <vaadin-radio-button>Option one</vaadin-radio-button>
+          <vaadin-radio-button>Option two</vaadin-radio-button>
+          <vaadin-radio-button>Option three</vaadin-radio-button>
+        </vaadin-radio-group>
+        <vaadin-button id="submit">Submit</vaadin-button>
+        <script>
+          window.addDemoReadyListener('#select-required', function(document) {
+            var submit = document.getElementById('submit');
+            var radioGroup = document.getElementById('radioGroup');
+            submit.addEventListener('click', function(event) {
+              radioGroup.validate();
+            });
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+  </template>
+  <script>
+    class RadioButtonValidationDemos extends DemoReadyEventEmitter(RadioButtonDemo(Polymer.Element)) {
+      static get is() {
+        return 'radio-button-validation-demos';
+      }
+    }
+    customElements.define(RadioButtonValidationDemos.is, RadioButtonValidationDemos);
+  </script>
+</dom-module>
