@@ -105,14 +105,6 @@
         }).to.throw(Error);
       });
 
-      it('should throw if CSSResult is constructed', () => {
-        expect(() => {
-          new CSSResult(`:host {
-            color: rgb(255, 0, 0);
-          }`);
-        }).to.throw(Error);
-      });
-
       // The following tests exists mainly due to the current techincal limitations
       // of Polymer style module based themable-mixin implementation.
       // Once the component theming is based on constructable stylesheets
