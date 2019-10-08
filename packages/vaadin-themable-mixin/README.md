@@ -165,6 +165,10 @@ When working with ES modules/JavaScript generally, constructing theme modules pr
 Importing the helper as an HTMLImport
 ```html
 <link rel="import" href="/bower_components/vaadin-themable-mixin/register-styles.html">
+...
+<script>
+  const { registerStyles, css, unsafeCSS } = Vaadin;
+</script>
 ```
 
 Importing the helper as an ES module
@@ -178,14 +182,6 @@ The `themeFor` parameter is of type string and is used to identify the component
 
 The `styles` accepts an object or an array of objects built as template literals tagged with `css`, containing CSS style rules to be included in the targeted component's local style.
 
-Using registerStyles imported as an HTMLImport
-```js
-Vaadin.registerStyles('my-element', Vaadin.css`
-  /* Styles which will be included in my-element local scope */
-`);
-```
-
-Using registerStyles imported as an ES module
 ```js
 registerStyles('my-element', css`
   /* Styles which will be included in my-element local scope */
@@ -199,7 +195,7 @@ Including untrusted CSS can also be a security issue. Whenever you're dealing wi
 ```js
 const trustedCSSValue = ... // some CSS string fetched from a DB for example
 
-Vaadin.registerStyles('my-element', Vaadin.unsafeCSS(trustedCSSValue));
+registerStyles('my-element', unsafeCSS(trustedCSSValue));
 ```
 
 The second parameter for `registerStyles` also accepts an array, so you can include multiple styles to an element at the same time.
@@ -209,16 +205,16 @@ Using registerStyles imported as an ES module
 const myStyles = css`
   /* Styles which will be included in my-element local scope */
 `;
-const trustedStyles = Vaadin.unsafeCSS(trustedCSSValue);
+const trustedStyles = unsafeCSS(trustedCSSValue);
 
-Vaadin.registerStyles('my-element', [myStyles, trustedStyles]);
+registerStyles('my-element', [myStyles, trustedStyles]);
 ```
 
 If you need to include styles defined as Polymer style modules with id, you can still pass the module ids as `include` array of the third `options` parameter to the function. Consider this API deprecated.
 
 ```js
 // Use of "include" is deprecated!
-Vaadin.registerStyles('my-element', Vaadin.css`
+registerStyles('my-element', css`
   /* Optional styles to be included in my-element local scope */
 `, {include: ['my-style-module']});
 ```
@@ -227,7 +223,7 @@ If you need to get styles defined with `registerStyles` registered as a Polymer 
 
 ```js
 // Use of "moduleId" is deprecated!
-Vaadin.registerStyles(undefined, Vaadin.css`
+registerStyles(undefined, css`
   /* Styles which will be included in the style module */
 `, {moduleId: 'my-extended-style-module'});
 ```
@@ -392,9 +388,9 @@ The styles defined in a “theme module” affect all the instances of the eleme
 
 There are two ways to scope the styles that you write in a theme module.
 
- 1. **Expose new custom properties**  
+ 1. **Expose new custom properties**
 This is the recommended first option for simple situations. If you end up exposing more than a handful of properties, you should consider the second option.
- 2. **Use scoping selectors**  
+ 2. **Use scoping selectors**
 This approach is used by the built-in variations in Vaadin themes (Lumo and Material), i.e. `theme` attribute. The downside of this approach is that you end up adding the selectors and properties to all instances, even though only some instances will need those styles (they won’t apply unless the scoping selector is used on the host element).
 
 #### Example: expose new custom properties
