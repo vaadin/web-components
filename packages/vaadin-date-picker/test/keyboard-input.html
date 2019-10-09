@@ -270,6 +270,22 @@
           datepicker.close();
         });
 
+        it('should validate on clear button', done => {
+          datepicker.clearButtonVisible = true;
+          const clearButton = target.shadowRoot.querySelector('[part="clear-button"]');
+          inputText('foo');
+          datepicker.$.overlay.addEventListener('vaadin-overlay-close', () => {
+            // wait for overlay to finish closing. Without this, clear button click
+            // will trigger "close()" again, which will result in infinite loop.
+            Polymer.RenderStatus.afterNextRender(datepicker, () => {
+              click(clearButton);
+              expect(datepicker.invalid).to.equal(false);
+              done();
+            });
+          });
+          datepicker.close();
+        });
+
         it('should empty value with false input', done => {
           datepicker.value = '2000-01-01';
           target.value = '';
