@@ -80,8 +80,13 @@
 <dom-module id="dialog-layout-theme" theme-for="vaadin-dialog-layout">
   <template>
     <style>
+      :host([editor-position='bottom']) [part="editor"]:not([hidden]) {
+        box-shadow: var(--material-shadow-elevation-12dp);
+      }
+
       [part="scroller"] {
         padding: 16px;
+        background: var(--material-background-color);
       }
 
       [part="footer"] {

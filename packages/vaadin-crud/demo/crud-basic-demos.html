@@ -27,6 +27,27 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Crud with editor below the grid</h3>
+    <p>By setting <code>editor-position</code> attribute to <code>bottom</code>, editor will open below the grid.</p>
+    <vaadin-demo-snippet id="crud-basic-demos-bottom">
+      <template preserve-content>
+        <vaadin-crud editor-position="bottom" style="height: 600px;"></vaadin-crud>
+        <script>
+          window.addDemoReadyListener('#crud-basic-demos-bottom', function(document) {
+            /* window.users is an array of objects with the following structure:
+            [{
+              _id: '…',
+              name: {first: '…', last: '…'},
+              details: {picture: '', email: '…'},
+              password: '…',
+              role: '…'
+            }, ... ] */
+            document.querySelector('vaadin-crud').items = window.users;
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
     <h3>Include fields</h3>
     <p>Grid columns and editor fields can be defined by providing a list of fields in the <code>include</code> property.</p>
     <p><i>NOTE: </i>When there is no initial data, use this to configure grid and editor, then you can add new items</p>

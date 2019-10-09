@@ -5,6 +5,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
 -->
 
 <link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../iron-media-query/iron-media-query.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
 <link rel="import" href="../../vaadin-button/src/vaadin-button.html">
@@ -19,12 +20,22 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
   <template>
     <style>
       :host {
+        --vaadin-crud-editor-max-height: 40%;
+      }
+
+      :host,
+      #main {
         display: flex;
         flex-direction: column;
         height: 400px;
         flex: 1 1 100%;
         align-self: stretch;
         position: relative;
+        overflow: hidden;
+      }
+
+      #main {
+        height: 100%;
       }
 
       :host([hidden]) {
@@ -37,31 +48,40 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         align-items: baseline;
         justify-content: flex-end;
       }
+
+      #container {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+      }
     </style>
 
-    <slot name="grid">
-      <vaadin-crud-grid theme$="[[theme]]" id="grid" include="[[include]]" exclude="[[exclude]]" no-sort="[[noSort]]" no-filter="[[noFilter]]" no-head="[[noHead]]"></vaadin-crud-grid>
-    </slot>
-
-    <div part="toolbar" on-click="__new">
-      <slot name="toolbar">
-        <vaadin-button new-button id="new" theme="primary">[[i18n.newItem]]</vaadin-button>
-      </slot>
-    </div>
-
-    <vaadin-dialog-layout theme$="[[theme]]" id="dialog" no-close-on-outside-click=[[__isDirty]] no-close-on-esc=[[__isDirty]] opened="{{editorOpened}}" theme="crud">
-      <h3 slot="header">[[__editorHeader]]</h3>
-      <div id="editor">
-        <slot name="form">
-          <vaadin-crud-form theme$="[[theme]]" id="form" include="[[include]]" exclude="[[exclude]]"></vaadin-crud-form>
+    <div id="container">
+      <div id="main">
+        <slot name="grid">
+          <vaadin-crud-grid theme$="[[theme]]" id="grid" include="[[include]]" exclude="[[exclude]]" no-sort="[[noSort]]" no-filter="[[noFilter]]" no-head="[[noHead]]"></vaadin-crud-grid>
         </slot>
-      </div>
 
-      <vaadin-button slot="footer" on-click="__save" theme="primary" disabled="[[!__isDirty]]">[[i18n.saveItem]]</vaadin-button>
-      <vaadin-button slot="footer" on-click="__cancel" theme="tertiary">[[i18n.cancel]]</vaadin-button>
-      <div slot="footer" style="flex: auto;"></div>
-      <vaadin-button slot="footer" on-click="__delete" theme="tertiary error" hidden="[[__isNew]]">[[i18n.deleteItem]]</vaadin-button>
-    </vaadin-dialog-layout>
+        <div id="toolbar" part="toolbar" on-click="__new">
+          <slot name="toolbar">
+            <vaadin-button new-button id="new" theme="primary">[[i18n.newItem]]</vaadin-button>
+          </slot>
+        </div>
+      </div>
+      <vaadin-dialog-layout theme$="[[theme]]" id="dialog" no-close-on-outside-click=[[__isDirty]] no-close-on-esc=[[__isDirty]] opened="{{editorOpened}}" editor-position$="{{editorPosition}}" mobile="[[__mobile]]" theme="crud">
+        <h3 slot="header">[[__editorHeader]]</h3>
+        <div id="editor">
+          <slot name="form">
+            <vaadin-crud-form theme$="[[theme]]" id="form" include="[[include]]" exclude="[[exclude]]"></vaadin-crud-form>
+          </slot>
+        </div>
+
+        <vaadin-button slot="footer" on-click="__save" theme="primary" disabled="[[!__isDirty]]">[[i18n.saveItem]]</vaadin-button>
+        <vaadin-button slot="footer" on-click="__cancel" theme="tertiary">[[i18n.cancel]]</vaadin-button>
+        <div slot="footer" style="flex: auto;"></div>
+        <vaadin-button slot="footer" on-click="__delete" theme="tertiary error" hidden="[[__isNew]]">[[i18n.deleteItem]]</vaadin-button>
+      </vaadin-dialog-layout>
+    </div>
 
     <vaadin-confirm-dialog theme$="[[theme]]" id="confirmCancel" on-confirm="__confirmCancel"
       cancel confirm-text="[[i18n.confirm.cancel.button.confirm]]"
@@ -75,6 +95,8 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
       header="[[i18n.confirm.delete.title]]"
       message="[[i18n.confirm.delete.content]]" confirm-theme="primary error">
     </vaadin-confirm-dialog>
+
+    <iron-media-query query="[[__mobileMediaQuery]]" query-matches="{{__mobile}}"></iron-media-query>
   </template>
 
   <script>
@@ -165,6 +187,12 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
        * ----------------|----------------
        * `toolbar` | Toolbar container at the bottom. By default it contains the the `new` button
        *
+       * The following custom properties are available:
+       *
+       * Custom Property | Description | Default
+       * ----------------|----------------
+       * --vaadin-crud-editor-max-height | max height of editor when opened on the bottom | 40%
+       *
        * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
        *
        * @memberof Vaadin
@@ -207,6 +235,18 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
             editedItem: {
               type: Object,
               observer: '__onItemChange'
+            },
+            /**
+             * Sets how editor will be presented on desktop screen.
+             *
+             * Accepted values are:
+             *   - `` (default) - form will open as overlay
+             *   - `bottom` - form will open below the grid
+            */
+            editorPosition: {
+              type: String,
+              value: '',
+              observer: '__onEditorPositionChange'
             },
             /**
              * Function that provides items lazily. Receives arguments `params`, `callback`
@@ -341,7 +381,14 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
             },
             __isDirty: Boolean,
             __isNew: Boolean,
-            __editorHeader: String
+            __editorHeader: String,
+            __mobileMediaQuery: {
+              value: '(max-width: 600px), (max-height: 600px)'
+            },
+            __mobile: {
+              type: Boolean,
+              observer: '__mobileChanged'
+            }
           };
         }
 
@@ -376,12 +423,36 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           }
         }
 
+        __onEditorPositionChange(editorPosition, currentEditorPosition) {
+          if (CrudElement._isValidEditorPosition(editorPosition)) {
+            return;
+          }
+          this.editorPosition = '';
+        }
+
+        static _isValidEditorPosition(editorPosition) {
+          return ['bottom'].indexOf(editorPosition) != -1;
+        }
+
         __onOpenedChanged(opened, old) {
           if (!opened && old) {
             this.__closeEditor();
           } else {
             this.__editorHeader = this.__isNew ? this.i18n.newItem : this.i18n.editItem;
             this.__onFormChange(this._form);
+          }
+
+          this.__toggleToolbar();
+        }
+
+        __mobileChanged() {
+          this.__toggleToolbar();
+        }
+
+        __toggleToolbar() {
+          // Hide toolbar to give more room for the editor when it's positioned below the grid
+          if (this.editorPosition === 'bottom' && !this.__mobile) {
+            this.$.toolbar.style.display = this.editorOpened ? 'none' : '';
           }
         }
 
@@ -442,8 +513,8 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
             this.__onItemChange(this.editedItem);
           }
           if (this.$.form != form) {
-            // move slotted from this to the overlay DOM so as it can target the slot
-            this.$.dialog.$.dialog.$.overlay.appendChild(form);
+            // move slotted from this to the slot parent
+            this.$.editor.appendChild(form);
           }
           form.addEventListener('change', this.__changeListener);
           form.addEventListener('input', this.__changeListener);
