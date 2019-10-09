@@ -31,6 +31,10 @@ This program is available under Apache License Version 2.0, available at https:/
 
       </div>
 
+      <div part="helper-text" on-click="focus" id="[[_helperTextId]]">
+        <slot name="helper">[[helperText]]</slot>
+      </div>
+
       <div part="error-message"
         id="[[_errorId]]"
         aria-live="assertive"
@@ -89,6 +93,8 @@ This program is available under Apache License Version 2.0, available at https:/
        * `disabled` | Set to a disabled text field | :host
        * `has-value` | Set when the element has a value | :host
        * `has-label` | Set when the element has a label | :host
+       * `has-helper` | Set when the element has helper text or slot | :host
+       * `has-error-message` | Set when the element has an error message | :host
        * `invalid` | Set when the element is invalid | :host
        * `input-prevented` | Temporarily set when invalid input is prevented | :host
        * `focused` | Set when the element is focused | :host

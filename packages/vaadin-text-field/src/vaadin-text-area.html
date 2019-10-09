@@ -17,8 +17,9 @@ This program is available under Apache License Version 2.0, available at https:/
         min-height: inherit; /* MSIE 11 */
       }
 
-      /* The label and the error message should neither grow nor shrink. */
+      /* The label, helper text and the error message should neither grow nor shrink. */
       [part="label"],
+      [part="helper-text"],
       [part="error-message"] {
         flex: none;
       }
@@ -63,6 +64,10 @@ This program is available under Apache License Version 2.0, available at https:/
         <div part="clear-button" id="clearButton" role="button" aria-label$="[[i18n.clear]]"></div>
         <slot name="suffix"></slot>
 
+      </div>
+
+      <div part="helper-text" on-click="focus" id="[[_helperTextId]]">
+        <slot name="helper">[[helperText]]</slot>
       </div>
 
       <div part="error-message"
@@ -117,6 +122,8 @@ This program is available under Apache License Version 2.0, available at https:/
        * `disabled` | Set to a disabled text field | :host
        * `has-value` | Set when the element has a value | :host
        * `has-label` | Set when the element has a label | :host
+       * `has-helper` | Set when the element has helper text | :host
+       * `has-error-message` | Set when the element has an error message | :host
        * `invalid` | Set when the element is invalid | :host
        * `focused` | Set when the element is focused | :host
        * `focus-ring` | Set when the element is keyboard focused | :host
