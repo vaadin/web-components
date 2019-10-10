@@ -648,6 +648,13 @@
           expect(crud.editorPosition).to.be.equal('');
         });
 
+        it('should accept "bottom" and "aside" as valid values', () => {
+          crud.editorPosition = 'bottom';
+          expect(crud.editorPosition).to.be.equal('bottom');
+          crud.editorPosition = 'aside';
+          expect(crud.editorPosition).to.be.equal('aside');
+        });
+
         (isIOS ? it.skip : it)('should hide toolbar when editor position is "bottom" and opened', () => {
           crud.editorPosition = 'bottom';
           crud.__mobile = false;
@@ -655,7 +662,7 @@
           expect(crud.$.toolbar.style.display).to.be.equal('none');
         });
 
-        it('should show toolbar when editor position is not "bottom" and opened', () => {
+        it('should show toolbar with default editor position and opened', () => {
           crud.$.new.click();
 
           expect(crud.$.toolbar.style.display).to.be.not.equal('none');
@@ -672,7 +679,7 @@
           expect(crud.__mobile).to.be.true;
         });
 
-        (isIOS ? it.skip : it)('should always show the editor below grid on desktop', () => {
+        (isIOS ? it.skip : it)('should not open dialog on desktop if not in default editor position', () => {
           crud.editorPosition = 'bottom';
           crud.__mobile = false;
           crud.$.new.click();

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+
+<head lang="en">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+  <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <script>
+    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+    document.write('<link rel="import" href="../../theme/' + theme + '/vaadin-crud.html">');
+  </script>
+</head>
+
+<body style="height: 100vh;">
+  <vaadin-crud style="height: 50vh" items='[{"name": {"first": "Susan", "last": "Smith"}}]' edited-item='{}' editor-position="aside">
+  </vaadin-crud>
+</body>

@@ -24,6 +24,20 @@ gemini.suite('vaadin-crud', function(rootSuite) {
         .setCaptureElements('body')
         .capture('vaadin-crud');
     });
+
+    gemini.suite(`editor-bottom-tests-${theme}`, function(suite) {
+      suite
+        .setUrl(`/editor-bottom.html?theme=${theme}`)
+        .setCaptureElements('vaadin-crud')
+        .capture('vaadin-crud');
+    });
+
+    gemini.suite(`editor-aside-tests-${theme}`, function(suite) {
+      suite
+        .setUrl(`/editor-aside.html?theme=${theme}`)
+        .setCaptureElements('vaadin-crud')
+        .capture('vaadin-crud');
+    });
   });
 
 });

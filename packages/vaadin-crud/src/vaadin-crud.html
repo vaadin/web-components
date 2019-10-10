@@ -21,6 +21,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
     <style>
       :host {
         --vaadin-crud-editor-max-height: 40%;
+        --vaadin-crud-editor-max-width: 40%;
       }
 
       :host,
@@ -51,8 +52,11 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
 
       #container {
         display: flex;
-        flex-direction: column;
         height: 100%;
+      }
+
+      :host([editor-position="bottom"]) #container {
+        flex-direction: column;
       }
     </style>
 
@@ -192,6 +196,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
        * Custom Property | Description | Default
        * ----------------|----------------
        * --vaadin-crud-editor-max-height | max height of editor when opened on the bottom | 40%
+       * --vaadin-crud-editor-max-width | max width of editor when opened on the side | 40%
        *
        * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
        *
@@ -242,6 +247,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
              * Accepted values are:
              *   - `` (default) - form will open as overlay
              *   - `bottom` - form will open below the grid
+             *   - `aside` - form will open on the grid side (_right_, if lft and _left_ if rtl)
             */
             editorPosition: {
               type: String,
@@ -431,7 +437,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         }
 
         static _isValidEditorPosition(editorPosition) {
-          return ['bottom'].indexOf(editorPosition) != -1;
+          return ['bottom', 'aside'].indexOf(editorPosition) != -1;
         }
 
         __onOpenedChanged(opened, old) {

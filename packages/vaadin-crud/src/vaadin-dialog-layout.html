@@ -18,9 +18,23 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         z-index: 1;
       }
 
+      :host(:not([editor-position=''])[opened]:not([mobile])) {
+        flex: 1 0 100%;
+      }
+
       :host([editor-position='bottom'][opened]:not([mobile])) {
-        flex: 1 1 100%;
         max-height: var(--vaadin-crud-editor-max-height);
+      }
+
+      :host([editor-position='aside'][opened]:not([mobile])) {
+        min-width: 300px;
+        max-width: var(--vaadin-crud-editor-max-width);
+      }
+
+      [part="editor"] {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
       }
 
       [part="editor"][hidden] {
@@ -48,7 +62,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       }
     </style>
 
-    <div id="editor" part="editor" hidden$="[[!_computeEditorOpened(opened, mobile, 'bottom')]]">
+    <div id="editor" part="editor" hidden$="[[!_computeEditorOpened(opened, mobile, 'bottom','aside')]]">
       <div part="scroller" id="scroller" role="group" aria-labelledby="header">
         <div part="header" id="header">
           <slot name="header"></slot>
@@ -208,11 +222,11 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             }
           }
 
-          _computeEditorOpened(opened, isMobile, editorPosition) {
-            if (isMobile && editorPosition === '') {
+          _computeEditorOpened(opened, isMobile, ...editorPositions) {
+            if (isMobile && editorPositions.indexOf('') !== -1) {
               return opened;
             }
-            return this.editorPosition === editorPosition && opened;
+            return editorPositions.indexOf(this.editorPosition) !== -1 && opened;
           }
         }
       )();

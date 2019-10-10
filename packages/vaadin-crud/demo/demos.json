@@ -13,6 +13,17 @@
   }
   ,
   {
+    "name": "Editor position",
+    "url": "crud-editor-position-demos",
+    "src": "crud-editor-position-demos.html",
+    "meta": {
+      "title": "vaadin-crud Editor position examples",
+      "description": "",
+      "image": ""
+     }
+  }
+  ,
+  {
     "name": "Custom content",
     "url": "crud-custom-demos",
     "src": "crud-custom-demos.html",
