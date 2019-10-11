@@ -203,20 +203,15 @@
       });
 
       it('should defer adding scrolling state attributes', done => {
-        flushGrid(grid);
-        // Async to make sure any unwanted scroll events have dispatched (iOS)
-        requestAnimationFrame(() => {
-          flushGrid(grid);
-          const scroller = grid.$.scroller;
-          listenOnce(grid.$.table, 'scroll', () => {
-            expect(scroller.hasAttribute('scrolling')).to.be.false;
-            requestAnimationFrame(() => {
-              expect(scroller.hasAttribute('scrolling')).to.be.true;
-              done();
-            });
+        const scroller = grid.$.scroller;
+        listenOnce(grid.$.table, 'scroll', () => {
+          expect(scroller.hasAttribute('scrolling')).to.be.false;
+          requestAnimationFrame(() => {
+            expect(scroller.hasAttribute('scrolling')).to.be.true;
+            done();
           });
-          wheel(10, 10);
         });
+        grid.$.table.dispatchEvent(new CustomEvent('scroll'));
       });
 
       it('should not sync outer scroller on IOS', done => {
