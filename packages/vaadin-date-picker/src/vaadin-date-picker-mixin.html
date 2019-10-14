@@ -337,7 +337,7 @@ This program is available under Apache License Version 2.0, available at https:/
       this.addEventListener('keydown', this._onKeydown.bind(this));
       this.addEventListener('input', this._onUserInput.bind(this));
       this.addEventListener('focus', e => this._noInput && e.target.blur());
-      this.addEventListener('blur', e => !this._noInput && this.validate());
+      this.addEventListener('blur', e => !this.opened && this.validate());
     }
 
     _initOverlay() {
