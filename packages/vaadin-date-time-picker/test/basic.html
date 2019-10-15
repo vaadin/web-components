@@ -37,6 +37,15 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="slotted-values">
+    <template>
+      <vaadin-date-time-picker>
+        <vaadin-date-picker slot="date-picker" value="2019-09-16"></vaadin-date-picker>
+        <vaadin-time-picker slot="time-picker" value="15:00"></vaadin-time-picker>
+      </vaadin-date-time-picker>
+    </template>
+  </test-fixture>
+
   <script>
     describe('Basic features', () => {
       let dateTimePicker;
@@ -142,7 +151,7 @@
 
       it('should use initial value from attribute without clearing it', () => {
         expect(dateTimePicker.value).to.equal('2019-09-16T15:00');
-        expect(customField.value).to.equal('2019-09-16T15:00:00.000');
+        expect(customField.value).to.equal('2019-09-16T15:00');
       });
 
     });
@@ -208,6 +217,26 @@
         datePicker.value = '2019-09-16';
         timePicker.value = '15:00';
         customField.__setValue();
+        expect(dateTimePicker.value).to.equal('2019-09-16T15:00');
+      });
+
+    });
+
+    describe('Initial value from slotted inputs', () => {
+      let dateTimePicker;
+      let customField;
+
+      beforeEach(() => {
+        dateTimePicker = fixture('slotted-values');
+        customField = dateTimePicker.$.customField;
+        if (window.ShadyDOM) {
+          window.ShadyDOM.flush();
+        }
+      });
+
+      // This test simulates how DatePicker sets the initial value from server side
+      it('should get initial value from slotted inputs', () => {
+        expect(customField.value).to.equal('2019-09-16T15:00');
         expect(dateTimePicker.value).to.equal('2019-09-16T15:00');
       });
 

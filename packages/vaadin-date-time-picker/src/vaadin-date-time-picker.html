@@ -22,7 +22,7 @@ This program is available under Apache License Version 2.0, available at https:/
         display: none !important;
       }
     </style>
-    <vaadin-custom-field id="customField" on-value-changed="__customFieldValueChanged" theme$="[[theme]]">
+    <vaadin-custom-field id="customField" on-value-changed="__customFieldValueChanged" i18n="[[__customFieldValueFormat]]" theme$="[[theme]]">
       <slot name="date-picker">
         <vaadin-date-picker part="date" theme$="[[theme]]"></vaadin-date-picker>
       </slot>
@@ -112,6 +112,14 @@ This program is available under Apache License Version 2.0, available at https:/
             __selectedDateTime: {
               type: Date
             },
+
+            __customFieldValueFormat: {
+              type: Object,
+              value: () => ({
+                parseValue: combinedValue => combinedValue.split('T'),
+                formatValue: inputValues => inputValues.join('T')
+              })
+            }
           };
         }
 
@@ -258,7 +266,25 @@ This program is available under Apache License Version 2.0, available at https:/
             this.value = formattedValue;
           }
 
-          this.$.customField.value = formattedValue;
+          // Setting the customField.value below triggers validation of the date picker and time picker.
+          // If the inputs are slotted (e.g. when using the Java API) and have an initial value this can
+          // happen before date picker ready() which triggers an error when date picker is trying to read
+          // `this.$.input` (as a result of value change triggered by setting custom field value).
+          // Workaround the problem by overriding customField.validate while setting the initial value.
+          if (!this.$.customField.inputs[0].$) {
+            const validate = this.$.customField.validate;
+            /* istanbul ignore next */
+            this.$.customField.validate = () => true;
+
+            this.$.customField.value = this.value;
+
+            this.$.customField.validate = validate;
+            setTimeout(() => {
+              this.$.customField.validate();
+            });
+          } else {
+            this.$.customField.value = this.value;
+          }
         }
 
         __customFieldValueChanged(e) {
@@ -269,13 +295,9 @@ This program is available under Apache License Version 2.0, available at https:/
             return;
           }
 
-          // Initial empty value ('\t') from custom field
-          if (value === '\t') {
-            // Set value format for custom field
-            /* istanbul ignore next */
-            this.$.customField.set('i18n.parseValue', combinedValue => combinedValue.split('T'));
-            /* istanbul ignore next */
-            this.$.customField.set('i18n.formatValue', inputValues => inputValues.join('T'));
+          // Initial empty value from custom field
+          if (value === 'T' && !this.__customFieldInitialValueChangeReceived) {
+            this.__customFieldInitialValueChangeReceived = true;
             // Ignore initial value from custom field so we don't override initial value of date time picker
             return;
           }
