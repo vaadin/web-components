@@ -664,6 +664,13 @@
         expect(datepicker.value).to.equal('');
       });
 
+      it('should not prevent touchend event on clear button', () => {
+        datepicker.value = '2000-02-01';
+        const e = new CustomEvent('touchend', {cancelable: true});
+        clearButton.dispatchEvent(e);
+        expect(e.defaultPrevented).to.be.false;
+      });
+
       it('should validate on clear', () => {
         datepicker.required = true;
         datepicker.value = '1991-20-12';

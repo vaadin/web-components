@@ -316,24 +316,29 @@ This program is available under Apache License Version 2.0, available at https:/
       this._boundFocus = this._focus.bind(this);
       this._boundUpdateAlignmentAndPosition = this._updateAlignmentAndPosition.bind(this);
 
+      const isClearButton = e => {
+        const path = e.composedPath();
+        const inputIndex = path.indexOf(this._inputElement);
+        return path.slice(0, inputIndex)
+          .filter(el => el.getAttribute && el.getAttribute('part') === 'clear-button')
+          .length === 1;
+      };
+
       Polymer.Gestures.addListener(this, 'tap', e => {
         // FIXME(platosha): use preventDefault in the text field clear button,
         // then the following composedPath check could be simplified down
         // to `if (!e.defaultPrevented)`.
         // https://github.com/vaadin/vaadin-text-field/issues/352
-        const inputIndex = e.composedPath().indexOf(this._inputElement);
-        if (
-          e.composedPath().slice(0, inputIndex)
-            .filter(el => el.getAttribute && el.getAttribute('part') === 'clear-button')
-            .length === 0
-        ) {
+        if (!isClearButton(e)) {
           this.open();
-        } else {
-          this.validate();
         }
       });
 
-      this.addEventListener('touchend', this._preventDefault.bind(this));
+      this.addEventListener('touchend', e => {
+        if (!isClearButton(e)) {
+          e.preventDefault();
+        }
+      });
       this.addEventListener('keydown', this._onKeydown.bind(this));
       this.addEventListener('input', this._onUserInput.bind(this));
       this.addEventListener('focus', e => this._noInput && e.target.blur());
@@ -753,10 +758,6 @@ This program is available under Apache License Version 2.0, available at https:/
       if (this._nativeInput && this._nativeInput.setSelectionRange) {
         this._nativeInput.setSelectionRange(a, b);
       }
-    }
-
-    _preventDefault(e) {
-      e.preventDefault();
     }
 
     /**
