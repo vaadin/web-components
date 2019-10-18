@@ -308,6 +308,32 @@
             expect(crud.__isDirty).to.be.true;
           });
 
+          it('should prevent changing edited items if dirty', () => {
+            crud.editorPosition = 'bottom';
+            crud.clickRowToEdit = true;
+            crud.items = [{foo: 'bar'}, {foo: 'baz'}];
+
+            crud._grid.activeItem = crud.items[0];
+            expect(crud.editorOpened).to.be.true;
+            change();
+            crud._grid.activeItem = crud.items[1];
+            expect(crud.$.confirmCancel.opened).to.be.true;
+            expect(crud.editedItem).to.be.equal(crud.items[0]);
+          });
+
+          it('should change edited items if dirty when user discard changes', () => {
+            crud.editorPosition = 'bottom';
+            crud.clickRowToEdit = true;
+            crud.items = [{foo: 'bar'}, {foo: 'baz'}];
+
+            crud._grid.activeItem = crud.items[0];
+            change();
+            crud._grid.activeItem = crud.items[1];
+            expect(crud.$.confirmCancel.opened).to.be.true;
+            btnConfDialog(crud.$.confirmCancel, 'confirm').click();
+            expect(crud.editedItem).to.be.equal(crud.items[1]);
+          });
+
           it('should hide delete button on new', done => {
             crud.$.new.click();
             Polymer.RenderStatus.afterNextRender(crud.$.dialog.$.overlay, () => {
@@ -371,6 +397,14 @@
                 done();
               });
               edit(crud.items[0]);
+            });
+
+            it('should not fire the edit event over the same opened item', () => {
+              const editListener = sinon.spy();
+              crud.addEventListener('edit', editListener);
+              edit(crud.items[0]);
+              edit(crud.items[0]);
+              expect(editListener.calledOnce).to.be.true;
             });
 
             it('on edit should set the item and open dialog if not default prevented', () => {
@@ -693,6 +727,61 @@
           expect(dialogLayout.$.dialog.opened).to.be.true;
           crud.__mobile = false;
           expect(dialogLayout.$.dialog.opened).to.be.false;
+        });
+      });
+
+      describe('click-row-to-edit', () => {
+        let crud;
+
+        beforeEach((done) => {
+          crud = fixture('default');
+          crud.editorPosition = 'bottom';
+          crud.clickRowToEdit = true;
+          crud.items = [{foo: 'bar'}, {foo: 'baz'}];
+          Polymer.RenderStatus.afterNextRender(crud, () => {
+            window.flushGrid(crud._grid);
+            done();
+          });
+        });
+
+        function fakeClickOnRow(idx) {
+          crud._grid.activeItem = crud.items[idx];
+        }
+
+        it('should not open editor on row click by default', () => {
+          crud.clickRowToEdit = false;
+          fakeClickOnRow(0);
+          expect(crud.editorOpened).to.be.false;
+        });
+
+        it('should open editor on row click if click-row-to-edit is set', () => {
+          fakeClickOnRow(0);
+          expect(crud.editorOpened).to.be.true;
+        });
+
+        it('should be able to open rows in sequence', () => {
+          fakeClickOnRow(0);
+          expect(crud.editorOpened).to.be.true;
+          expect(crud.editedItem).to.be.equal(crud.items[0]);
+          fakeClickOnRow(1);
+          expect(crud.editorOpened).to.be.true;
+          expect(crud.editedItem).to.be.equal(crud.items[1]);
+        });
+
+        it('should show edit column by default', () => {
+          crud.clickRowToEdit = false; // Default
+          expect(crud._grid.querySelector('vaadin-crud-edit-column')).to.be.not.null;
+        });
+
+        it('should hide edit column if click-row-to-edit is set', () => {
+          expect(crud._grid.querySelector('vaadin-crud-edit-column')).to.be.null;
+        });
+
+        it('should close editor after a second click on the same row', () => {
+          fakeClickOnRow(0);
+          expect(crud.editorOpened).to.be.true;
+          crud._grid.activeItem = null; // A second click will set grid active item to null
+          expect(crud.editorOpened).to.be.false;
         });
       });
     });

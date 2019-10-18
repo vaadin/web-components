@@ -43,17 +43,36 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
             /**
              * Do not add headers to columns.
              */
-            noHead: Boolean
+            noHead: Boolean,
+            __hideEditColumn: Boolean
           };
         }
 
         static get observers() {
-          return ['__onItemsChange(items)'];
+          return [
+            '__onItemsChange(items)',
+            '__onHideEditColumnChange(hideEditColumn)'
+          ];
         }
 
         __onItemsChange(items) {
           if ((!this.dataProvider || this.dataProvider == this._arrayDataProvider) && !this.include && items && items[0]) {
             this._configure(items[0]);
+          }
+        }
+
+        __onHideEditColumnChange(hideEditColumn) {
+          if (this.firstChild) {
+            this.__toggleEditColumn();
+          }
+        }
+
+        __toggleEditColumn() {
+          const el = this.querySelector('vaadin-crud-edit-column');
+          if (this.hideEditColumn) {
+            el && this.removeChild(el);
+          } else if (!el) {
+            this.appendChild(document.createElement('vaadin-crud-edit-column'));
           }
         }
 
@@ -89,7 +108,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         _configure(item) {
           this.innerHTML = '';
           this.__createColumns(this, item);
-          this.appendChild(document.createElement('vaadin-crud-edit-column'));
+          this.__toggleEditColumn();
         }
 
         __createColumn(parent, path) {
