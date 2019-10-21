@@ -601,9 +601,12 @@ This program is available under Apache License Version 2.0, available at https:/
           return TimePickerElement.properties.i18n.value().parseTime(text);
         }
 
+        _getInputElement() {
+          return this.shadowRoot.querySelector('vaadin-time-picker-text-field');
+        }
+
         get __inputElement() {
-          return this.__memoInput ||
-            (this.__memoInput = this.shadowRoot.querySelector('vaadin-time-picker-text-field'));
+          return this.__memoInput || (this.__memoInput = this._getInputElement());
         }
 
         get __dropdownElement() {
