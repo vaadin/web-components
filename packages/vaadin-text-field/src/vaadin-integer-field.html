@@ -34,6 +34,28 @@ This program is available under Apache License Version 2.0, available at https:/
           return '2.5.0-alpha2';
         }
 
+        static get properties() {
+          // Hide inherited props that don't work with <input type="number"> from JSDoc.
+          return {
+            /**
+             * @private
+             */
+            pattern: String,
+            /**
+             * @private
+             */
+            preventInvalidInput: Boolean,
+            /**
+             * @private
+             */
+            minlength: Number,
+            /**
+             * @private
+             */
+            maxlength: Number
+          };
+        }
+
         ready() {
           super.ready();
           this._enabledCharPattern = '[-+\\d]';
