@@ -23,6 +23,38 @@
     </template>
   </test-fixture>
 
+  <dom-module id="wrapper-field">
+    <template>
+      <vaadin-custom-field id="customField">
+        <slot name="input-1">
+          <input type="text">
+        </slot>
+        <slot name="input-2">
+          <input type="text">
+        </slot>
+        <slot name="input-3">
+          <input type="text">
+        </slot>
+      </vaadin-custom-field>
+    </template>
+    <script>
+      window.addEventListener('WebComponentsReady', () => {
+        class WrapperField extends Polymer.Element {
+          static get is() {
+            return 'wrapper-field';
+          }
+        }
+        customElements.define(WrapperField.is, WrapperField);
+      });
+    </script>
+  </dom-module>
+
+  <test-fixture id="wrapping-slots">
+    <template>
+      <wrapper-field></wrapper-field>
+    </template>
+  </test-fixture>
+
   <script>
     describe('keyboard navigation', function() {
       var customField;
@@ -35,58 +67,88 @@
         MockInteractions.keyDownOn(target, 9, 'shift', 'Tab');
       }
 
-      beforeEach(function() {
-        customField = fixture('default');
+      describe('default', function() {
+
+        beforeEach(function() {
+          customField = fixture('default');
+        });
+
+        it('should fire `internal-tab` event on Tab', () => {
+          const internalTabSpy = sinon.spy();
+          customField.addEventListener('internal-tab', internalTabSpy);
+          for (let i = 0; i < 3; i ++) {
+            tab(customField.inputs[i]);
+          }
+
+          expect(internalTabSpy.callCount).to.equal(3);
+        });
+
+        it('should not fire `internal-tab` event on Tab from the last input', () => {
+          const internalTabSpy = sinon.spy();
+          customField.addEventListener('internal-tab', internalTabSpy);
+          tab(customField.inputs[3]);
+
+          expect(internalTabSpy).not.to.be.called;
+        });
+
+        it('should update the value on Tab from the last input', () => {
+          customField.inputs[3].value = 1;
+          tab(customField.inputs[3]);
+
+          expect(customField.value).to.equal('\t\t\t1');
+        });
+
+        it('should fire `internal-tab` event on Shift Tab', () => {
+          const internalTabSpy = sinon.spy();
+          customField.addEventListener('internal-tab', internalTabSpy);
+          for (let i = 3; i > 0; i --) {
+            shiftTab(customField.inputs[i]);
+          }
+
+          expect(internalTabSpy.callCount).to.equal(3);
+        });
+
+        it('should not fire `internal-tab` event on Shift Tab from the first input', () => {
+          const internalTabSpy = sinon.spy();
+          customField.addEventListener('internal-tab', internalTabSpy);
+          shiftTab(customField.inputs[0]);
+
+          expect(internalTabSpy).not.to.be.called;
+        });
+
+        it('should update the value on Shift Tab from the first input', () => {
+          customField.inputs[0].value = 1;
+          shiftTab(customField.inputs[0]);
+
+          expect(customField.value).to.equal('1\t\t\t');
+        });
+
       });
 
-      it('should fire `internal-tab` event on Tab', () => {
-        const internalTabSpy = sinon.spy();
-        customField.addEventListener('internal-tab', internalTabSpy);
-        for (let i = 0; i < 3; i ++) {
-          tab(customField.inputs[i]);
-        }
+      describe('wrapping-slots', function() {
+        let wrapper;
 
-        expect(internalTabSpy.callCount).to.equal(3);
-      });
+        beforeEach(function() {
+          wrapper = fixture('wrapping-slots');
+          customField = wrapper.$.customField;
+        });
 
-      it('should not fire `internal-tab` event on Tab from the last input', () => {
-        const internalTabSpy = sinon.spy();
-        customField.addEventListener('internal-tab', internalTabSpy);
-        tab(customField.inputs[3]);
+        const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+        // Skip this test on any platform apart from Chrome
+        (isChrome ? it : it.skip)('should properly set tabindexes on Shift Tab for wrapping slots', done => {
+          for (let i = 2; i > -1; i --) {
+            const input = customField.inputs[i];
+            expect(input.parentElement.hasAttribute('tabindex')).to.be.false;
+            shiftTab(input);
+            expect(input.parentElement.getAttribute('tabindex')).to.equal('-1');
+          }
 
-        expect(internalTabSpy).not.to.be.called;
-      });
+          setTimeout(() => {
+            expect(customField.inputs.filter(input => input.hasAttribute('tabindex')).length).to.equal(0);
+            done();
+          });
+        });
 
-      it('should update the value on Tab from the last input', () => {
-        customField.inputs[3].value = 1;
-        tab(customField.inputs[3]);
-
-        expect(customField.value).to.equal('\t\t\t1');
-      });
-
-      it('should fire `internal-tab` event on Shift Tab', () => {
-        const internalTabSpy = sinon.spy();
-        customField.addEventListener('internal-tab', internalTabSpy);
-        for (let i = 3; i > 0; i --) {
-          shiftTab(customField.inputs[i]);
-        }
-
-        expect(internalTabSpy.callCount).to.equal(3);
-      });
-
-      it('should not fire `internal-tab` event on Shift Tab from the first input', () => {
-        const internalTabSpy = sinon.spy();
-        customField.addEventListener('internal-tab', internalTabSpy);
-        shiftTab(customField.inputs[0]);
-
-        expect(internalTabSpy).not.to.be.called;
-      });
-
-      it('should update the value on Shift Tab from the first input', () => {
-        customField.inputs[0].value = 1;
-        shiftTab(customField.inputs[0]);
-
-        expect(customField.value).to.equal('1\t\t\t');
       });
 
     });

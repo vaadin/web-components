@@ -87,8 +87,17 @@
         this.__setInputsFromSlot();
       });
 
+      const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
       this.addEventListener('keydown', e => {
         if (e.keyCode === 9) {
+          // FIXME (yuriy): remove this workaround once this issue is fixed:
+          // https://bugs.chromium.org/p/chromium/issues/detail?id=1014868&can=2&num=100&q=slot%20shift%20tab
+          if (e.target.parentElement.localName === 'slot' &&
+          !e.defaultPrevented && isChrome) {
+            const slot = e.target.parentElement;
+            slot.setAttribute('tabindex', -1);
+            setTimeout(() => slot.removeAttribute('tabindex'));
+          }
           if (this.inputs.indexOf(e.target) < this.inputs.length - 1 && !e.shiftKey ||
               this.inputs.indexOf(e.target) > 0 && e.shiftKey) {
             this.dispatchEvent(new CustomEvent('internal-tab'));
