@@ -570,7 +570,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           if (item) {
             this.__edit(item);
           } else {
-            this.__cancel();
+            this.__closeEditor();
           }
         }
 
@@ -581,10 +581,13 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
             this.editedItem !== item // Item is different
           ) {
             this.$.confirmCancel.opened = true;
-
             const listenOnce = (event) => {
               event.preventDefault(); // prevent editor to get closed
-              this.__edit(item);
+              if (item) {
+                this.__edit(item);
+              } else {
+                this.__closeEditor();
+              }
               this.removeEventListener('cancel', listenOnce);
             };
             this.addEventListener('cancel', listenOnce);

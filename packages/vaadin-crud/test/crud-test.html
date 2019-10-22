@@ -257,6 +257,36 @@
               expect(crud.$.confirmCancel.opened).not.to.be.ok;
               expect(crud.$.dialog.opened).not.to.be.ok;
             });
+
+            it('should trigger "cancel" only once after user hits "Cancel"', (done) => {
+              crud.clickRowToEdit = true;
+
+              const cancelSpyListener = sinon.spy();
+              crud.addEventListener('cancel', cancelSpyListener);
+
+              crud._grid.activeItem = crud.items[0];
+              btnCancel().click();
+              setTimeout(() => {
+                expect(cancelSpyListener.calledOnce).to.be.ok;
+                done();
+              });
+            });
+
+            it('should not trigger "cancel" after user hits "Save"', (done) => {
+              crud.clickRowToEdit = true;
+
+              const cancelSpyListener = sinon.spy();
+              crud.addEventListener('cancel', cancelSpyListener);
+
+              crud._grid.activeItem = crud.items[0];
+              edit(crud.items[0]);
+              change();
+              btnSave().click();
+              setTimeout(() => {
+                expect(cancelSpyListener.notCalled).to.be.ok;
+                done();
+              });
+            });
           });
 
           describe('delete', () => {
@@ -781,6 +811,15 @@
           fakeClickOnRow(0);
           expect(crud.editorOpened).to.be.true;
           crud._grid.activeItem = null; // A second click will set grid active item to null
+          expect(crud.editorOpened).to.be.false;
+        });
+
+        it('should close editor after a second click on the same row after dirty editor is discarded', () => {
+          fakeClickOnRow(0);
+          expect(crud.editorOpened).to.be.true;
+          crud.__isDirty = true;
+          crud._grid.activeItem = null; // A second click will set grid active item to null
+          btnConfDialog(crud.$.confirmCancel, 'confirm').click();
           expect(crud.editorOpened).to.be.false;
         });
       });
