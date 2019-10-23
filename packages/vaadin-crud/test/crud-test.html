@@ -217,6 +217,17 @@
             btnConfDialog(crud.$.confirmDelete, 'confirm').click();
             expect(crud.items.length).to.be.equal(1);
           });
+
+          it('should highlight the edited item', () => {
+            edit(crud.items[0]);
+            expect(crud._grid.selectedItems).to.eql([crud.items[0]]);
+          });
+
+          it('should clear highlighting of the edited item after closing the editor', () => {
+            edit(crud.items[0]);
+            crud.editorOpened = false;
+            expect(crud._grid.selectedItems).to.eql([]);
+          });
         });
 
         describe('confirmation', () => {
@@ -652,6 +663,28 @@
             expect(getBodyCellContent(crud._grid, 1, 0).textContent).to.be.equal('2');
             done();
           });
+        });
+
+        it('should not highlight the edited item', () => {
+          grid.setAttribute('slot', 'grid');
+          crud.appendChild(grid);
+          crud._observer.flush();
+          crud.items = [{foo: 'bar'}];
+
+          edit(crud.items[0]);
+          expect(crud._grid.selectedItems).to.eql([]);
+        });
+
+        it('should not clear selection of a custom grid', () => {
+          grid.setAttribute('slot', 'grid');
+          crud.appendChild(grid);
+          crud._observer.flush();
+          crud.items = [{foo: 'bar'}];
+          grid.selectedItems = [crud.items[0]];
+
+          edit(crud.items[0]);
+          crud.editorOpened = false;
+          expect(crud._grid.selectedItems).to.eql([crud.items[0]]);
         });
       });
 

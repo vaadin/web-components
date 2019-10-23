@@ -656,9 +656,17 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           return this._fields.every(e => (e.validate || e.checkValidity).call(e));
         }
 
+        __setHighlightedItem(item) {
+          if (this._grid === this.$.grid) {
+            this._grid.selectedItems = item ? [item] : [];
+          }
+        }
+
         __closeEditor() {
           this.editorOpened = false;
           this.__isDirty = false;
+          this.__setHighlightedItem(null);
+
           // Delay changing the item in order not to modify editor while closing
           setTimeout(() => this.editedItem = this._grid.activeItem = undefined);
         }
@@ -674,6 +682,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           if (this.editedItem === item) {
             return;
           }
+          this.__setHighlightedItem(item);
           this.__openEditor('edit', item);
         }
 
