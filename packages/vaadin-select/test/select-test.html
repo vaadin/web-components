@@ -355,6 +355,14 @@
           expect(valueElement.hasAttribute('tabindex')).to.be.false;
         });
 
+        it('Should remove role when cloning the selected element', () => {
+          menu.selected = 2;
+          const itemElement = select._items[menu.selected];
+          const valueElement = select._valueElement.firstChild;
+          expect(itemElement.tabIndex).to.be.equal(0);
+          expect(valueElement.hasAttribute('role')).to.be.false;
+        });
+
         it('Should update selection slot textContent with the selected item `label` string', () => {
           menu.selected = 1;
           expect(select._valueElement.textContent.trim()).to.be.equal('o2');
