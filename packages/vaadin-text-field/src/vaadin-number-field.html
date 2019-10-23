@@ -197,7 +197,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _incrementValue(incr) {
-          if (this.disabled) {
+          if (this.disabled || this.readonly) {
             return;
           }
 

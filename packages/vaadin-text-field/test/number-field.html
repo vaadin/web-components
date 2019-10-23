@@ -106,6 +106,17 @@
 
           expect(numberField.value).equal('-3');
         });
+
+        it('should not change value on arrow keys when readonly', () => {
+          numberField.readonly = true;
+          numberField.value = 0;
+
+          up();
+          expect(numberField.value).to.be.equal('0');
+
+          down();
+          expect(numberField.value).to.be.equal('0');
+        });
       });
 
       describe('value control buttons', () => {
