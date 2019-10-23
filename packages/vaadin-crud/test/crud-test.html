@@ -270,7 +270,7 @@
             });
 
             it('should trigger "cancel" only once after user hits "Cancel"', (done) => {
-              crud.clickRowToEdit = true;
+              crud.editOnClick = true;
 
               const cancelSpyListener = sinon.spy();
               crud.addEventListener('cancel', cancelSpyListener);
@@ -284,7 +284,7 @@
             });
 
             it('should not trigger "cancel" after user hits "Save"', (done) => {
-              crud.clickRowToEdit = true;
+              crud.editOnClick = true;
 
               const cancelSpyListener = sinon.spy();
               crud.addEventListener('cancel', cancelSpyListener);
@@ -351,7 +351,7 @@
 
           it('should prevent changing edited items if dirty', () => {
             crud.editorPosition = 'bottom';
-            crud.clickRowToEdit = true;
+            crud.editOnClick = true;
             crud.items = [{foo: 'bar'}, {foo: 'baz'}];
 
             crud._grid.activeItem = crud.items[0];
@@ -364,7 +364,7 @@
 
           it('should change edited items if dirty when user discard changes', () => {
             crud.editorPosition = 'bottom';
-            crud.clickRowToEdit = true;
+            crud.editOnClick = true;
             crud.items = [{foo: 'bar'}, {foo: 'baz'}];
 
             crud._grid.activeItem = crud.items[0];
@@ -793,13 +793,13 @@
         });
       });
 
-      describe('click-row-to-edit', () => {
+      describe('edit-on-click', () => {
         let crud;
 
         beforeEach((done) => {
           crud = fixture('default');
           crud.editorPosition = 'bottom';
-          crud.clickRowToEdit = true;
+          crud.editOnClick = true;
           crud.items = [{foo: 'bar'}, {foo: 'baz'}];
           Polymer.RenderStatus.afterNextRender(crud, () => {
             window.flushGrid(crud._grid);
@@ -812,12 +812,12 @@
         }
 
         it('should not open editor on row click by default', () => {
-          crud.clickRowToEdit = false;
+          crud.editOnClick = false;
           fakeClickOnRow(0);
           expect(crud.editorOpened).to.be.false;
         });
 
-        it('should open editor on row click if click-row-to-edit is set', () => {
+        it('should open editor on row click if edit-on-click is set', () => {
           fakeClickOnRow(0);
           expect(crud.editorOpened).to.be.true;
         });
@@ -832,11 +832,11 @@
         });
 
         it('should show edit column by default', () => {
-          crud.clickRowToEdit = false; // Default
+          crud.editOnClick = false; // Default
           expect(crud._grid.querySelector('vaadin-crud-edit-column')).to.be.not.null;
         });
 
-        it('should hide edit column if click-row-to-edit is set', () => {
+        it('should hide edit column if edit-on-click is set', () => {
           expect(crud._grid.querySelector('vaadin-crud-edit-column')).to.be.null;
         });
 
