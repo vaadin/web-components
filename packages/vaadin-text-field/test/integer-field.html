@@ -113,6 +113,17 @@
         return event;
       };
 
+      const fireBeforeInputEvent = textToInput => {
+        const event = new Event('beforeinput', {
+          bubbles: true,
+          cancelable: true,
+          composed: true
+        });
+        event.data = textToInput;
+        input.dispatchEvent(event);
+        return event;
+      };
+
       const testEvent = (eventName, fireEvent) => {
 
         describe(`${eventName} event`, () => {
@@ -146,6 +157,7 @@
       };
       testEvent('drop', fireDropEvent);
       testEvent('paste', firePasteEvent);
+      testEvent('beforeinput', fireBeforeInputEvent);
 
       describe('value property', () => {
 

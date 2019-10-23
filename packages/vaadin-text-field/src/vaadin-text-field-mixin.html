@@ -554,6 +554,7 @@ This program is available under Apache License Version 2.0, available at https:/
       node.addEventListener('focus', this._boundOnFocus);
       node.addEventListener('paste', this._boundOnPaste);
       node.addEventListener('drop', this._boundOnDrop);
+      node.addEventListener('beforeinput', this._boundOnBeforeInput);
     }
 
     _removeInputListeners(node) {
@@ -563,6 +564,7 @@ This program is available under Apache License Version 2.0, available at https:/
       node.removeEventListener('focus', this._boundOnFocus);
       node.removeEventListener('paste', this._boundOnPaste);
       node.removeEventListener('drop', this._boundOnDrop);
+      node.removeEventListener('beforeinput', this._boundOnBeforeInput);
     }
 
     ready() {
@@ -576,6 +578,7 @@ This program is available under Apache License Version 2.0, available at https:/
       this._boundOnFocus = this._onFocus.bind(this);
       this._boundOnPaste = this._onPaste.bind(this);
       this._boundOnDrop = this._onDrop.bind(this);
+      this._boundOnBeforeInput = this._onBeforeInput.bind(this);
 
       const defaultInput = this.shadowRoot.querySelector('[part="value"]');
       this._slottedInput = this.querySelector(`${this._slottedTagName}[slot="${this._slottedTagName}"]`);
@@ -697,6 +700,15 @@ This program is available under Apache License Version 2.0, available at https:/
         if (!this.__enabledTextRegExp.test(draggedText)) {
           e.preventDefault();
         }
+      }
+    }
+
+    _onBeforeInput(e) {
+      // The `beforeinput` event covers all the cases for `_enabledCharPattern`: keyboard, pasting and dropping,
+      // but it is still experimental technology so we can't rely on it. It's used here just as an additional check,
+      // because it seems to be the only way to detect and prevent specific keys on mobile devices. See issue #429.
+      if (this._enabledCharPattern && e.data && !this.__enabledTextRegExp.test(e.data)) {
+        e.preventDefault();
       }
     }
 
