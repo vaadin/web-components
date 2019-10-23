@@ -150,19 +150,23 @@
       this.__settingValue = false;
     }
 
+    /* Like querySelectorAll('*') but also gets all elements through any nested slots recursively */
+    __queryAllAssignedElements(elem) {
+      const result = [];
+      let elements;
+      if (elem.tagName === 'SLOT') {
+        elements = elem.assignedNodes({flatten: true}).filter(node => node.nodeType === Node.ELEMENT_NODE);
+      } else {
+        result.push(elem);
+        elements = Array.from(elem.children);
+      }
+      elements.forEach(elem => result.push(...this.__queryAllAssignedElements(elem)));
+      return result;
+    }
+
     __getInputsFromSlot() {
       const isInput = (node => node.validate || node.checkValidity);
-      const slottedElements = this.$.slot.assignedNodes({flatten: true}).filter(node => node.nodeType === Node.ELEMENT_NODE);
-      const inputs = [];
-      slottedElements.forEach(elem => {
-        if (isInput(elem)) {
-          inputs.push(elem);
-        } else {
-          const newInputs = Array.from(elem.querySelectorAll('*')).filter(isInput);
-          inputs.push(...newInputs);
-        }
-      });
-      return inputs;
+      return this.__queryAllAssignedElements(this.$.slot).filter(isInput);
     }
 
     __setInputsFromSlot() {

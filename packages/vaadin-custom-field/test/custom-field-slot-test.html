@@ -29,6 +29,26 @@
     </script>
   </dom-module>
 
+  <dom-module id="x-field2">
+    <template>
+      <vaadin-custom-field id="customField">
+        <div id="wrapper">
+          <slot></slot>
+        </div>
+      </vaadin-custom-field>
+    </template>
+    <script>
+      window.addEventListener('WebComponentsReady', () => {
+        class XField2 extends Polymer.Element {
+          static get is() {
+            return 'x-field2';
+          }
+        }
+        customElements.define(XField2.is, XField2);
+      });
+    </script>
+  </dom-module>
+
   <test-fixture id="default">
     <template>
       <vaadin-custom-field>
@@ -47,6 +67,15 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="nested2">
+    <template>
+      <x-field2>
+        <input type="text">
+        <input type="number">
+      </x-field2>
+    </template>
+  </test-fixture>
+
   <test-fixture id="nested-deep">
     <template>
       <x-field>
@@ -60,18 +89,31 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="nested-deep2">
+    <template>
+      <x-field2>
+        <div>
+          <div>
+            <input type="text">
+            <input type="number">
+          </div>
+        </div>
+      </x-field2>
+    </template>
+  </test-fixture>
+
   <script>
-    ['default', 'nested', 'nested-deep'].forEach(set => {
+    ['default', 'nested', 'nested2', 'nested-deep', 'nested-deep2'].forEach(set => {
       describe(`slot updates (${set})`, function() {
         let parent, customField, inputElement;
 
         beforeEach(function() {
           // 'parent' is the element to add and remove inputs to/from for testing
           const root = fixture(set);
-          if (set === 'nested') {
+          if (set === 'nested' || set === 'nested2') {
             parent = root; // <x-field>
             customField = root.$.customField; // <custom-field>
-          } else if (set === 'nested-deep') {
+          } else if (set === 'nested-deep' || set === 'nested-deep2') {
             parent = root.firstElementChild.firstElementChild; // inner <div>
             customField = root.$.customField; // <custom-field>
           } else {
