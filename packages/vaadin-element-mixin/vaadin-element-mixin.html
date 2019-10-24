@@ -24,18 +24,23 @@
 
   let statsJob;
 
+  const registered = new Set();
+
   /**
    * @polymerMixin
    * @memberof Vaadin
    */
   Vaadin.ElementMixin = superClass => class VaadinElementMixin extends superClass {
     /** @protected */
-    static _finalizeClass() {
-      super._finalizeClass();
+    static finalize() {
+      super.finalize();
+
+      const {is} = this;
 
       // Registers a class prototype for telemetry purposes.
-      if (this.is) {
+      if (is && !registered.has(is)) {
         window.Vaadin.registrations.push(this);
+        registered.add(is);
 
         if (window.Vaadin.developmentModeCallback) {
           statsJob = Polymer.Debouncer.debounce(statsJob,
@@ -47,8 +52,8 @@
         }
       }
     }
-    ready() {
-      super.ready();
+    constructor() {
+      super();
       if (document.doctype === null) {
         console.warn(
           'Vaadin components require the "standards mode" declaration. Please add <!DOCTYPE html> to the HTML document.'
