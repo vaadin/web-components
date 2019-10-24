@@ -22,7 +22,7 @@
   ],
   "dependencies": {
     "polymer": "Polymer/polymer#^2.0.0",
-    "vaadin-usage-statistics": "vaadin/vaadin-usage-statistics#^2.0.2",
+    "vaadin-usage-statistics": "vaadin/vaadin-usage-statistics#^2.0.4",
     "vaadin-development-mode-detector": "vaadin/vaadin-development-mode-detector#^2.0.0"
   },
   "devDependencies": {
