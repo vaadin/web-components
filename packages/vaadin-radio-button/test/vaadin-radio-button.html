@@ -175,6 +175,15 @@
           expect(spy).to.be.calledOnce;
         });
 
+        it('should fire on down / up event', () => {
+          const spy = sinon.spy();
+          vaadinRadioButton.addEventListener('change', spy);
+
+          down(vaadinRadioButton);
+          up(vaadinRadioButton);
+          expect(spy).to.be.calledOnce;
+        });
+
         it('should fire on space keyup', () => {
           const spy = sinon.spy();
           vaadinRadioButton.addEventListener('change', spy);
