@@ -120,7 +120,6 @@ This program is available under Apache License Version 2.0, available at https:/
              */
             step: {
               type: Number,
-              reflectToAttribute: true,
               value: 1,
               observer: '_stepChanged'
             }
@@ -303,7 +302,12 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _stepChanged(step) {
-          this.inputElement.step = step;
+          // Avoid using initial value in validation
+          this.__validateByStep = this.__stepChangedCalled || this.getAttribute('step') !== null;
+          this.inputElement.step = this.__validateByStep ? step : 'any';
+
+          this.__stepChangedCalled = true;
+          this.setAttribute('step', step);
         }
 
         _minChanged(min) {
@@ -342,7 +346,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         checkValidity() {
           // text-field mixin does not check against `min`, `max` and `step`
-          if (this.min !== undefined || this.max !== undefined || this.step !== 1) {
+          if (this.min !== undefined || this.max !== undefined || this.__validateByStep) {
             this.invalid = !this.inputElement.checkValidity();
           }
           return super.checkValidity();

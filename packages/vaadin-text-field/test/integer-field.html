@@ -215,7 +215,7 @@
 
         it('should allow setting positive integer as string', () => {
           integerField.step = '5';
-          expect(integerField.step).to.eql('5');
+          expect(integerField.step).to.eql(5);
         });
 
         ['foo', '-1', -1, '1.2', 1.2, '+1', '1e1', undefined, null, {}].forEach(invalidStep => {

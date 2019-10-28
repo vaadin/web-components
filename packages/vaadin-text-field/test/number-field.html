@@ -17,6 +17,16 @@
       <vaadin-number-field></vaadin-number-field>
     </template>
   </test-fixture>
+  <test-fixture id="step-as-attribute">
+    <template>
+      <vaadin-number-field step="1.5"></vaadin-number-field>
+    </template>
+  </test-fixture>
+  <test-fixture id="default-step-as-attribute">
+    <template>
+      <vaadin-number-field step="1"></vaadin-number-field>
+    </template>
+  </test-fixture>
 
   <script>
     describe('number-field', () => {
@@ -758,6 +768,58 @@
 
           numberField.value = '5';
           expect(numberField.validate(), 'value should not be greater than max').to.be.false;
+        });
+
+        it('should validate by step when defined by user', () => {
+          numberField.step = 1.5;
+
+          [-6, -1.5, 0, 1.5, 4.5].forEach(validValue => {
+            numberField.value = validValue;
+            expect(numberField.validate()).to.be.true;
+          });
+
+          [-3.5, -1, 2, 2.5].forEach(invalidValue => {
+            numberField.value = invalidValue;
+            expect(numberField.validate()).to.be.false;
+          });
+        });
+
+        it('should validate by step when defined as attribute', () => {
+          const numberField = fixture('step-as-attribute');
+          numberField.value = 1;
+          expect(numberField.validate()).to.be.false;
+          numberField.value = 1.5;
+          expect(numberField.validate()).to.be.true;
+        });
+
+        it('should validate by step when default value defined as attribute', () => {
+          const numberField = fixture('default-step-as-attribute');
+          numberField.value = 1.5;
+          expect(numberField.validate()).to.be.false;
+          numberField.value = 1;
+          expect(numberField.validate()).to.be.true;
+        });
+
+        it('should use min as step basis in validation when both are defined', () => {
+          numberField.min = 1;
+          numberField.step = 1.5;
+
+          [1, 2.5, 4, 5.5].forEach(validValue => {
+            numberField.value = validValue;
+            expect(numberField.validate()).to.be.true;
+          });
+
+          [1.5, 3, 5].forEach(invalidValue => {
+            numberField.value = invalidValue;
+            expect(numberField.validate()).to.be.false;
+          });
+        });
+
+        it('should not validate by step when only min and max are set', () => {
+          numberField.min = 1;
+          numberField.max = 5;
+          numberField.value = 1.5; // would be invalid by default step=1
+          expect(numberField.validate()).to.be.true;
         });
 
         describe('removing validation constraints', () => {
