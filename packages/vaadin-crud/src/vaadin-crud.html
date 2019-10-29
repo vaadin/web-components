@@ -60,8 +60,8 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
       }
     </style>
 
-    <div id="container" part="container">
-      <div id="main" part="main">
+    <div id="container">
+      <div id="main">
         <slot name="grid">
           <vaadin-crud-grid theme$="[[theme]]" id="grid" include="[[include]]" exclude="[[exclude]]" no-sort="[[noSort]]" no-filter="[[noFilter]]" no-head="[[noHead]]" hide-edit-column="[[editOnClick]]"></vaadin-crud-grid>
         </slot>
@@ -189,8 +189,6 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
        *
        * Part name | Description
        * ----------------|----------------
-       * `container`| Contains the `part="main"` and editor. Useful with `editorPosition` `bottom` or `aside`.
-       * `main` | Contains the grid and `part="toolbar"
        * `toolbar` | Toolbar container at the bottom. By default it contains the the `new` button
        *
        * The following custom properties are available:
