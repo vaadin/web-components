@@ -1,0 +1,34 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-confirm-dialog tests</title>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../../test-fixture/test-fixture.html">
+  <link rel="import" href="../vaadin-confirm-dialog.html">
+</head>
+
+<body>
+  <test-fixture id="confirm-dialog-theme">
+    <template>
+      <vaadin-confirm-dialog theme="foo"></vaadin-confirm-dialog>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('theme attribute', () => {
+      let confirmDialog;
+
+      beforeEach(() => confirmDialog = fixture('confirm-dialog-theme'));
+
+      it('should propagate theme attribute to vaadin-dialog', () => {
+        expect(confirmDialog.$.dialog.getAttribute('theme')).to.equal('foo');
+      });
+
+      it('should propagate theme attribute to overlay', () => {
+        expect(confirmDialog.$.dialog.$.overlay.getAttribute('theme')).to.equal('foo');
+      });
+    });
+  </script>
+</body>
