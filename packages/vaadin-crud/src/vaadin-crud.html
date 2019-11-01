@@ -73,7 +73,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         </div>
       </div>
       <vaadin-dialog-layout theme$="[[theme]]" id="dialog" no-close-on-outside-click=[[__isDirty]] no-close-on-esc=[[__isDirty]] opened="{{editorOpened}}" editor-position$="{{editorPosition}}" mobile="[[__mobile]]" theme="crud">
-        <h3 slot="header">[[__editorHeader]]</h3>
+        <h3 slot="header">[[__computeEditorHeader(__isNew, i18n.newItem, i18n.editItem)]]</h3>
         <div id="editor">
           <slot name="form">
             <vaadin-crud-form theme$="[[theme]]" id="form" include="[[include]]" exclude="[[exclude]]"></vaadin-crud-form>
@@ -396,7 +396,6 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
             },
             __isDirty: Boolean,
             __isNew: Boolean,
-            __editorHeader: String,
             __mobileMediaQuery: {
               value: '(max-width: 600px), (max-height: 600px)'
             },
@@ -431,6 +430,10 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           this._form = this.$.form;
         }
 
+        __computeEditorHeader(isNew, newItem, editItem) {
+          return isNew ? newItem : editItem;
+        }
+
         __onI18Change(i18n, grid) {
           if (grid) {
             Polymer.RenderStatus.afterNextRender(grid, () => {
@@ -457,7 +460,6 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           if (!opened && old) {
             this.__closeEditor();
           } else {
-            this.__editorHeader = this.__isNew ? this.i18n.newItem : this.i18n.editItem;
             this.__onFormChange(this._form);
           }
 

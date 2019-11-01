@@ -54,6 +54,8 @@
       const btnCancel = () => buttons()[1];
       const btnDelete = () => buttons()[2];
 
+      const editorHeader = () => crud.$.dialog.$.dialog.$.overlay.shadowRoot.querySelector('[slot=header]');
+
       const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
       // Buttons in confirm dialogs
@@ -102,7 +104,7 @@
 
         it('should open the new item editor if item is provided declarativelly', () => {
           expect(crud.editorOpened).to.be.true;
-          expect(crud.__editorHeader).to.be.equal('New item');
+          expect(crud.__isNew).to.be.true;
         });
 
         it('should be able to internationalise via `i18n` property', done => {
@@ -169,6 +171,25 @@
         beforeEach(done => {
           crud.items = [{foo: 'bar'}];
           Polymer.RenderStatus.afterNextRender(crud._grid, done);
+        });
+
+        describe('editor header', () => {
+          it('should have new item title', () => {
+            crud.$.new.click();
+            expect(editorHeader().textContent).to.be.equal('New item');
+          });
+
+          it('should have edit item title', () => {
+            crud.editedItem = crud.items[0];
+            expect(editorHeader().textContent).to.be.equal('Edit item');
+          });
+
+          it('should change to new item title', () => {
+            crud.editedItem = crud.items[0];
+            expect(editorHeader().textContent).to.be.equal('Edit item');
+            crud.$.new.click();
+            expect(editorHeader().textContent).to.be.equal('New item');
+          });
         });
 
         describe('actions', () => {
