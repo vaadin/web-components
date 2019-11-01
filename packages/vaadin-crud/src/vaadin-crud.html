@@ -568,15 +568,14 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
             this.__confirmBeforeChangingEditedItem(item);
             return;
           }
-
           if (item) {
             this.__edit(item);
-          } else {
+          } else if (!this.__keepOpened) {
             this.__closeEditor();
           }
         }
 
-        __confirmBeforeChangingEditedItem(item) {
+        __confirmBeforeChangingEditedItem(item, keepOpened) {
           if (
             this.editorOpened && // Editor opened
             this.__isDirty && // Form change has been made
@@ -585,8 +584,9 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
             this.$.confirmCancel.opened = true;
             const listenOnce = (event) => {
               event.preventDefault(); // prevent editor to get closed
-              if (item) {
+              if (item || keepOpened) {
                 this.__edit(item);
+                this.__clearItemAndKeepEditorOpened(item, keepOpened);
               } else {
                 this.__closeEditor();
               }
@@ -595,6 +595,16 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
             this.addEventListener('cancel', listenOnce);
           } else {
             this.__edit(item);
+            this.__clearItemAndKeepEditorOpened(item, keepOpened);
+          }
+        }
+
+        __clearItemAndKeepEditorOpened(item, keepOpened) {
+          if (!item) {
+            setTimeout(() => {
+              this.__keepOpened = keepOpened;
+              this.editedItem = this._grid.activeItem = undefined;
+            });
           }
         }
 
@@ -643,7 +653,9 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           }
 
           this.__isNew = this.__isNew || this.items && this.items.indexOf(item) < 0;
-          this.editorOpened = !!item;
+          if (item) {
+            this.editorOpened = true;
+          }
         }
 
         /** A reference to all fields inside the [`_form`](#/elements/vaadin-crud#property-_form) element */
@@ -670,13 +682,13 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           this.__setHighlightedItem(null);
 
           // Delay changing the item in order not to modify editor while closing
-          setTimeout(() => this.editedItem = this._grid.activeItem = undefined);
+          setTimeout(() => this.__clearItemAndKeepEditorOpened(null, false));
         }
 
         __new(event) {
           // This allows listening to parent element and fire only when clicking on default or custom new-button.
           if (event.composedPath().filter(e => e.nodeType == 1 && e.hasAttribute('new-button'))[0]) {
-            this.__openEditor('new');
+            this.__confirmBeforeChangingEditedItem(null, true);
           }
         }
 

@@ -383,6 +383,34 @@
             expect(crud.editedItem).to.be.equal(crud.items[0]);
           });
 
+          it('should prompt confirm if dirty and new button is clicked', () => {
+            crud.editorPosition = 'bottom';
+            crud.editOnClick = true;
+            crud.items = [{foo: 'bar'}, {foo: 'baz'}];
+
+            crud._grid.activeItem = crud.items[0];
+            expect(crud.editorOpened).to.be.true;
+            change();
+
+            crud.$.new.click();
+            expect(crud.$.confirmCancel.opened).to.be.true;
+          });
+
+          it('should keep editor opened if dirty, new button is clicked and changes are discarded', () => {
+            crud.editorPosition = 'bottom';
+            crud.editOnClick = true;
+            crud.items = [{foo: 'bar'}, {foo: 'baz'}];
+
+            crud._grid.activeItem = crud.items[0];
+            expect(crud.editorOpened).to.be.true;
+            change();
+
+            crud.$.new.click();
+            expect(crud.$.confirmCancel.opened).to.be.true;
+            btnConfDialog(crud.$.confirmCancel, 'confirm').click();
+            expect(crud.editorOpened).to.be.true;
+          });
+
           it('should change edited items if dirty when user discard changes', () => {
             crud.editorPosition = 'bottom';
             crud.editOnClick = true;
@@ -875,6 +903,45 @@
           crud._grid.activeItem = null; // A second click will set grid active item to null
           btnConfDialog(crud.$.confirmCancel, 'confirm').click();
           expect(crud.editorOpened).to.be.false;
+        });
+
+        it('should open same row again after item closed after click on "New"', (done) => {
+          crud.__mobile = false;
+
+          fakeClickOnRow(0);
+          expect(crud.editorOpened).to.be.true;
+          crud.$.new.click();
+          setTimeout(() => {
+            expect(crud.editorOpened).to.be.true;
+            setTimeout(() => {
+              expect(crud._grid.activeItem).to.be.undefined;
+              fakeClickOnRow(0);
+              expect(crud.editorOpened).to.be.true;
+              expect(crud.editedItem).to.be.equal(crud.items[0]);
+              done();
+            });
+          });
+        });
+
+        it('should open same row again after item was discarded after click on "New"', (done) => {
+          crud.__mobile = false;
+
+          fakeClickOnRow(0);
+          expect(crud.editorOpened).to.be.true;
+          crud.__isDirty = true;
+          crud.$.new.click();
+          setTimeout(() => {
+            expect(crud.$.confirmCancel.opened).to.be.true;
+            btnConfDialog(crud.$.confirmCancel, 'confirm').click();
+            expect(crud.editorOpened).to.be.true;
+            setTimeout(() => {
+              expect(crud._grid.activeItem).to.be.undefined;
+              fakeClickOnRow(0);
+              expect(crud.editorOpened).to.be.true;
+              expect(crud.editedItem).to.be.equal(crud.items[0]);
+              done();
+            });
+          });
         });
       });
     });
