@@ -1,0 +1,47 @@
+<!--
+@license
+Copyright (c) 2019 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<link rel="import" href="../../vaadin-date-picker/src/vaadin-date-picker.html">
+<link rel="import" href="vaadin-date-time-picker-date-text-field.html">
+
+<script>
+  (function() {
+    let memoizedTemplate;
+
+    /**
+      * The date-picker element.
+      *
+      * ### Styling
+      *
+      * See [`<vaadin-date-picker>` documentation](https://github.com/vaadin/vaadin-date-picker/blob/master/src/vaadin-date-picker.html)
+      * for `<vaadin-date-time-picker-date-picker>` parts and available slots (prefix, suffix etc.)
+      *
+      * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+      *
+      * @memberof Vaadin
+      * @extends Vaadin.DatePickerElement
+      */
+    class DateTimePickerDatePickerElement extends Vaadin.DatePickerElement {
+      static get is() {
+        return 'vaadin-date-time-picker-date-picker';
+      }
+
+      static get template() {
+        if (!memoizedTemplate) {
+          memoizedTemplate = super.template.cloneNode(true);
+
+          memoizedTemplate.innerHTML = memoizedTemplate.innerHTML.replace(
+            'vaadin-text-field',
+            'vaadin-date-time-picker-date-text-field'
+          );
+        }
+        return memoizedTemplate;
+      }
+    }
+
+    customElements.define(DateTimePickerDatePickerElement.is, DateTimePickerDatePickerElement);
+  })();
+</script>

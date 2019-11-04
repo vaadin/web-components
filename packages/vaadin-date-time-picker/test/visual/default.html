@@ -2,7 +2,7 @@
 
 <head lang="en">
   <meta charset="UTF-8">
-  <title></title>
+
   <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
   <script>
     const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
@@ -12,10 +12,12 @@
 
 <body>
 
-  <span id="default-tests">
-    <vaadin-date-time-picker>
-      <button>Go Vaadin!</button>
-    </vaadin-date-time-picker>
-  </span>
+  <div id="default-tests" style="padding: 10px;">
+    Plain
+    <vaadin-date-time-picker></vaadin-date-time-picker>
+
+    <br>Value
+    <vaadin-date-time-picker value="2017-10-20T12:00"></vaadin-date-time-picker>
+  </div>
 
 </body>

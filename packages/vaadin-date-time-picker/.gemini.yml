@@ -12,7 +12,7 @@ browsers:
   chrome:
     desiredCapabilities:
       browserName: "chrome"
-      version: "66.0"
+      version: "77.0"
       platform: "Windows 10"
 
   firefox:

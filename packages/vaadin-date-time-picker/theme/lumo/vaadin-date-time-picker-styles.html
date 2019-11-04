@@ -1,0 +1,35 @@
+<link rel="import" href="../../../vaadin-custom-field/theme/lumo/vaadin-custom-field.html">
+<link rel="import" href="../../../vaadin-date-picker/theme/lumo/vaadin-date-picker.html">
+<link rel="import" href="../../../vaadin-time-picker/theme/lumo/vaadin-time-picker.html">
+
+<dom-module id="lumo-date-time-picker-date-text-field" theme-for="vaadin-date-time-picker-date-text-field">
+  <template>
+    <style>
+      [part~="input-field"] {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="lumo-date-time-picker-time-text-field" theme-for="vaadin-date-time-picker-time-text-field">
+  <template>
+    <style>
+      [part~="input-field"] {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+      }
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="lumo-date-time-picker-date-picker" theme-for="vaadin-date-time-picker-date-picker">
+  <template>
+    <style>
+      :host {
+        margin-right: 2px;
+      }
+    </style>
+  </template>
+</dom-module>

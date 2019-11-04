@@ -19,7 +19,28 @@ gemini.suite('vaadin-date-time-picker', function(rootSuite) {
       suite
         .setUrl(`/default.html?theme=${theme}`)
         .setCaptureElements('#default-tests')
-        .capture(`vaadin-date-time-picker`);
+        .capture('default');
+    });
+
+    gemini.suite(`flex-behaviour-${theme}`, function(suite) {
+      suite
+        .setUrl(`/flex-behaviour.html?theme=${theme}`)
+        .setCaptureElements('#flex-behaviour-tests')
+        .capture('default')
+        .capture('small-container', function(actions) {
+          actions.executeJS(function(window) {
+            const container = window.document.querySelector('#flex-behaviour-tests');
+            container.style.display = 'block';
+            container.style.width = '235px';
+          });
+        });
+    });
+
+    gemini.suite(`alignment-${theme}`, function(suite) {
+      suite
+        .setUrl(`/alignment.html?theme=${theme}`)
+        .setCaptureElements('#alignment-tests')
+        .capture('default');
     });
   });
 
