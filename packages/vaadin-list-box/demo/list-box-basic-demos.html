@@ -6,30 +6,36 @@
       }
     </style>
 
-    <h3>List Box</h3>
-    <vaadin-demo-snippet id='list-box-basic-demos-basic'>
+    <h3>Basic usage</h3>
+    <vaadin-demo-snippet id="list-box-basic-demos-basic">
       <template preserve-content>
-        <vaadin-list-box>
-          <b>Register to a Run Event</b>
-          <vaadin-item>5k</vaadin-item>
-          <vaadin-item disabled>10k (sold out)</vaadin-item>
-          <hr>
-          <vaadin-item>Half marathon</vaadin-item>
-          <vaadin-item>Marathon</vaadin-item>
+        <vaadin-list-box selected="0">
+          <vaadin-item>Option one</vaadin-item>
+          <vaadin-item>Option two</vaadin-item>
+          <vaadin-item>Option three</vaadin-item>
         </vaadin-list-box>
       </template>
     </vaadin-demo-snippet>
 
-    <h3>Multi Select List Box</h3>
-    <vaadin-demo-snippet id='list-box-basic-demos-multi-select'>
+    <h3>Disabled item</h3>
+    <vaadin-demo-snippet id="list-box-basic-demos-disabled">
+      <template preserve-content>
+        <vaadin-list-box selected="0">
+          <vaadin-item>Option one</vaadin-item>
+          <vaadin-item>Option two</vaadin-item>
+          <vaadin-item  disabled>Option three</vaadin-item>
+        </vaadin-list-box>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Multi select list box</h3>
+    <vaadin-demo-snippet id="list-box-basic-demos-multi-select">
       <template preserve-content>
         <vaadin-list-box multiple>
-          <b>Register to Language Courses</b>
-          <vaadin-item>Finnish</vaadin-item>
-          <vaadin-item>Swedish</vaadin-item>
-          <hr>
-          <vaadin-item disabled>Spanish (not available)</vaadin-item>
-          <vaadin-item>English</vaadin-item>
+          <vaadin-item>Option one</vaadin-item>
+          <vaadin-item>Option two</vaadin-item>
+          <vaadin-item>Option three</vaadin-item>
+          <vaadin-item>Option four</vaadin-item>
         </vaadin-list-box>
       </template>
     </vaadin-demo-snippet>

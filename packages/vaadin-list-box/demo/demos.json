@@ -1,13 +1,37 @@
 {
   "name": "Vaadin List Box",
-  "pages": [{
-    "name": "Basics",
-    "url": "list-box-basic-demos",
-    "src": "list-box-basic-demos.html",
-    "meta": {
-      "title": "vaadin-list-box Basic Examples",
-      "description": "",
-      "image": ""
+  "pages": [
+    {
+      "name": "Basics",
+      "url": "list-box-basic-demos",
+      "src": "list-box-basic-demos.html",
+      "meta": {
+        "title": "vaadin-list-box Basic Examples",
+        "description": "",
+        "image": ""
+      }
     }
-  }]
+    ,
+    {
+      "name": "Presentation",
+      "url": "list-box-presentation-demos",
+      "src": "list-box-presentation-demos.html",
+      "meta": {
+        "title": "Vaadin Listbox Presentation Examples",
+        "description": "",
+        "image": ""
+      }
+    }
+    ,
+    {
+      "name": "Styling",
+      "url": "list-box-styling-demos",
+      "src": "list-box-styling-demos.html",
+      "meta": {
+        "title": "Vaadin Listbox Styling Examples",
+        "description": "",
+        "image": ""
+      }
+    }
+  ]
 }

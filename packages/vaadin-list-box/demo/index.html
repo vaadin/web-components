@@ -10,12 +10,10 @@
   <link rel="import" href="../../vaadin-demo-helpers/vaadin-component-demo.html">
   <link rel="import" href="../../vaadin-demo-helpers/vaadin-demo-snippet.html">
   <script src="../../vaadin-demo-helpers/vaadin-demo-ready-event-emitter.js"></script>
-
   <script src="./list-box-demo.js"></script>
 
   <link rel="import" href="../../vaadin-item/vaadin-item.html">
   <link rel="import" href="../vaadin-list-box.html">
-
   <custom-style>
     <style include="vaadin-component-demo-shared-styles"></style>
   </custom-style>
@@ -23,5 +21,25 @@
 
 <body>
   <vaadin-component-demo config-src="demos.json"></vaadin-component-demo>
+  <dom-module id="custom-list-box-index" theme-for="vaadin-list-box">
+    <template>
+      <style>
+        :host([theme~="custom-border"]) {
+          border: 1px solid black;
+          height: 100px;
+        }
+      </style>
+    </template>
+  </dom-module>
+
+  <dom-module id="custom-listbox-icon" theme-for="vaadin-item">
+    <template>
+      <style>
+        :host([theme~="custom"][tabindex])::before {
+          content: var(--lumo-icons-cross);
+        }
+      </style>
+    </template>
+  </dom-module>
 </body>
 </html>
