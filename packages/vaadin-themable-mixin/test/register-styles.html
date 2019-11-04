@@ -45,6 +45,10 @@
     });
 
     describe('registerStyles', () => {
+      /* MAGI REMOVE START */
+      let registerStyles, css, unsafeCSS;
+      /* MAGI REMOVE END */
+
       let styles;
 
       let testId = 0;
@@ -53,23 +57,28 @@
         return `foo-${testId}-${seed}`;
       }
 
-      before(() => styles = Vaadin.css`
-        :host {
-          color: rgb(255, 0, 0);
-        }
-      `);
+      before(() => {
+        /* MAGI REMOVE START */
+        ({registerStyles, css, unsafeCSS} = window.Vaadin);
+        /* MAGI REMOVE END */
+        styles = css`
+          :host {
+            color: rgb(255, 0, 0);
+          }
+        `;
+      });
 
       beforeEach(() => testId++);
 
       it('should add theme for a component', () => {
-        Vaadin.registerStyles(unique(), styles);
+        registerStyles(unique(), styles);
 
         const instance = defineAndInstantiate(unique());
         expect(window.getComputedStyle(instance).color).to.equal('rgb(255, 0, 0)');
       });
 
       it('should add multiple themes for a component', () => {
-        Vaadin.registerStyles(unique(), [styles, Vaadin.css`:host {
+        registerStyles(unique(), [styles, css`:host {
           background-color: rgb(0, 255, 0);
         }`]);
 
@@ -82,14 +91,14 @@
         const unsafe = `:host {
           color: rgb(255, 0, 0);
         }`;
-        Vaadin.registerStyles(unique(), Vaadin.unsafeCSS(unsafe));
+        registerStyles(unique(), unsafeCSS(unsafe));
 
         const instance = defineAndInstantiate(unique());
         expect(window.getComputedStyle(instance).color).to.equal('rgb(255, 0, 0)');
       });
 
       it('should interpolate numbers in the template literal', () => {
-        Vaadin.registerStyles(unique(), Vaadin.css`:host {
+        registerStyles(unique(), css`:host {
           color: rgb(${255}, 0, 0);
         }`);
 
@@ -99,7 +108,7 @@
 
       it('should throw if strings are interpolated in the literal', () => {
         expect(() => {
-          Vaadin.css`:host {
+          css`:host {
             color: rgb(${'255'}, 0, 0);
           }`;
         }).to.throw(Error);
@@ -119,18 +128,18 @@
       describe('style module support', () => {
 
         it('should add theme for a component and register with specified module id', () => {
-          Vaadin.registerStyles(undefined, Vaadin.css`:host {
+          registerStyles(undefined, css`:host {
             color: rgb(255, 0, 0);
           }`, {moduleId: unique('id')});
 
-          Vaadin.registerStyles(unique('component'), undefined, {include: [unique('id')]});
+          registerStyles(unique('component'), undefined, {include: [unique('id')]});
 
           const instance = defineAndInstantiate(unique('component'));
           expect(window.getComputedStyle(instance).color).to.equal('rgb(255, 0, 0)');
         });
 
         it('should not add a theme-for attribute to the module with id', () => {
-          Vaadin.registerStyles(undefined, Vaadin.css`:host {
+          registerStyles(undefined, css`:host {
             color: rgb(255, 0, 0);
           }`, {moduleId: unique('id')});
 
@@ -143,7 +152,7 @@
           defineAndInstantiate(unique());
           const warn = sinon.stub(console, 'warn');
 
-          Vaadin.registerStyles(unique(), styles);
+          registerStyles(unique(), styles);
 
           expect(warn.called).to.be.true;
           warn.restore();
@@ -151,7 +160,7 @@
 
         it('should not warn about registering the style too late', () => {
           const warn = sinon.stub(console, 'warn');
-          Vaadin.registerStyles(unique(), styles);
+          registerStyles(unique(), styles);
 
           expect(warn.called).to.be.false;
           warn.restore();
@@ -160,7 +169,7 @@
         it('should not warn about registering the style too late 2', () => {
           define(unique());
           const warn = sinon.stub(console, 'warn');
-          Vaadin.registerStyles(unique(), styles);
+          registerStyles(unique(), styles);
 
           expect(warn.called).to.be.false;
           warn.restore();
