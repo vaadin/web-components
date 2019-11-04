@@ -126,7 +126,7 @@
      * @private
      */
     focus() {
-      this.inputs && this.inputs[0].focus();
+      this.inputs && this.inputs[0] && this.inputs[0].focus();
     }
 
     __updateValue(e) {
