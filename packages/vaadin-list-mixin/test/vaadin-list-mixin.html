@@ -72,12 +72,20 @@
                 value: true
               },
               disabled: {
-                type: Boolean
+                type: Boolean,
+                observer: '_disabledChanged'
               },
               selected: {
                 type: Boolean
               }
             };
+          }
+
+          _disabledChanged(disabled) {
+            if (disabled) {
+              // Simplified version of Vaadin.ItemMixin behavior
+              this.selected = false;
+            }
           }
         }
         customElements.define('test-item-element', TestElement);
@@ -476,6 +484,20 @@
           list._scroll(1);
 
           expect(list._scrollerElement.scrollTop).to.be.greaterThan(0);
+        });
+      });
+
+      describe('Disable', () => {
+        it(`when list and items are disabled the previously selected item should be selected after enabling the list`, () => {
+          list.selected = 3;
+          expect(list.items[3].selected).to.be.true;
+
+          list.disabled = true;
+          list.items.forEach(item => item.disabled = true);
+          expect(list.items[3].selected).to.be.false;
+
+          list.disabled = false;
+          expect(list.items[3].selected).to.be.true;
         });
       });
 

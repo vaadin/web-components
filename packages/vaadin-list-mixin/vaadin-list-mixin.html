@@ -76,7 +76,7 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     static get observers() {
-      return ['_enhanceItems(items, orientation, selected)'];
+      return ['_enhanceItems(items, orientation, selected, disabled)'];
     }
 
     ready() {
@@ -89,20 +89,22 @@ This program is available under Apache License Version 2.0, available at https:/
       });
     }
 
-    _enhanceItems(items, orientation, selected) {
-      if (items) {
-        this.setAttribute('aria-orientation', orientation || 'vertical');
-        this.items.forEach(item => {
-          orientation ? item.setAttribute('orientation', orientation) : item.removeAttribute('orientation');
-          item.updateStyles();
-        });
+    _enhanceItems(items, orientation, selected, disabled) {
+      if (!disabled) {
+        if (items) {
+          this.setAttribute('aria-orientation', orientation || 'vertical');
+          this.items.forEach(item => {
+            orientation ? item.setAttribute('orientation', orientation) : item.removeAttribute('orientation');
+            item.updateStyles();
+          });
 
-        this._setFocusable(selected);
+          this._setFocusable(selected);
 
-        const itemToSelect = items[selected];
-        items.forEach(item => item.selected = item === itemToSelect);
-        if (itemToSelect && !itemToSelect.disabled) {
-          this._scrollToItem(selected);
+          const itemToSelect = items[selected];
+          items.forEach(item => item.selected = item === itemToSelect);
+          if (itemToSelect && !itemToSelect.disabled) {
+            this._scrollToItem(selected);
+          }
         }
       }
     }
