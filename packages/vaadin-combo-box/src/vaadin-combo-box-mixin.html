@@ -227,42 +227,37 @@ This program is available under Apache License Version 2.0, available at https:/
       ];
     }
 
+    constructor() {
+      super();
+      this._boundOnFocusout = this._onFocusout.bind(this);
+      this._boundOverlaySelectedItemChanged = this._overlaySelectedItemChanged.bind(this);
+      this._boundClose = this.close.bind(this);
+      this._boundOnOpened = this._onOpened.bind(this);
+      this._boundOnKeyDown = this._onKeyDown.bind(this);
+      this._boundOnClick = this._onClick.bind(this);
+      this._boundOnOverlayTouchAction = this._onOverlayTouchAction.bind(this);
+      this._boundOnTouchend = this._onTouchend.bind(this);
+    }
+
     ready() {
       super.ready();
 
-      this.addEventListener('focusout', e => {
-        // Fixes the problem with `focusout` happening when clicking on the scroll bar on Edge
-        const dropdown = this.$.overlay.$.dropdown;
-        if (dropdown && dropdown.$ && e.relatedTarget === dropdown.$.overlay) {
-          e.composedPath()[0].focus();
-          return;
-        }
-        if (!this._closeOnBlurIsPrevented) {
-          this.close();
-        }
-      });
+      this.addEventListener('focusout', this._boundOnFocusout);
 
       this._lastCommittedValue = this.value;
       Polymer.IronA11yAnnouncer.requestAvailability();
 
       // 2.0 does not support 'overlay.selection-changed' syntax in listeners
-      this.$.overlay.addEventListener('selection-changed', this._overlaySelectedItemChanged.bind(this));
+      this.$.overlay.addEventListener('selection-changed', this._boundOverlaySelectedItemChanged);
 
-      this.addEventListener('vaadin-combo-box-dropdown-closed', this.close.bind(this));
-      this.addEventListener('vaadin-combo-box-dropdown-opened', this._onOpened.bind(this));
-      this.addEventListener('keydown', this._onKeyDown.bind(this));
-      this.addEventListener('click', this._onClick.bind(this));
+      this.addEventListener('vaadin-combo-box-dropdown-closed', this._boundClose);
+      this.addEventListener('vaadin-combo-box-dropdown-opened', this._boundOnOpened);
+      this.addEventListener('keydown', this._boundOnKeyDown);
+      this.addEventListener('click', this._boundOnClick);
 
-      this.$.overlay.addEventListener('vaadin-overlay-touch-action', this._onOverlayTouchAction.bind(this));
+      this.$.overlay.addEventListener('vaadin-overlay-touch-action', this._boundOnOverlayTouchAction);
 
-      this.addEventListener('touchend', e => {
-        if (!this._clearElement || e.composedPath()[0] !== this._clearElement) {
-          return;
-        }
-
-        e.preventDefault();
-        this._clear();
-      });
+      this.addEventListener('touchend', this._boundOnTouchend);
 
       this._observer = new Polymer.FlattenedNodesObserver(this, info => {
         this._setTemplateFromNodes(info.addedNodes);
@@ -905,6 +900,26 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    _onFocusout(event) {
+      // Fixes the problem with `focusout` happening when clicking on the scroll bar on Edge
+      const dropdown = this.$.overlay.$.dropdown;
+      if (dropdown && dropdown.$ && event.relatedTarget === dropdown.$.overlay) {
+        event.composedPath()[0].focus();
+        return;
+      }
+      if (!this._closeOnBlurIsPrevented) {
+        this.close();
+      }
+    }
+
+    _onTouchend(event) {
+      if (!this._clearElement || event.composedPath()[0] !== this._clearElement) {
+        return;
+      }
+
+      event.preventDefault();
+      this._clear();
+    }
 
     /**
      * Returns true if `value` is valid, and sets the `invalid` flag appropriately.
