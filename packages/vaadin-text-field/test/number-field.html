@@ -727,6 +727,25 @@
           expect(numberField.validate()).to.be.true;
         });
 
+        it('should not validate when explicitly set to invalid', () => {
+          numberField.invalid = true;
+
+          expect(numberField.value).to.be.empty;
+          expect(numberField.validate()).to.be.false;
+
+          expect(numberField.invalid).to.be.true;
+        });
+
+        it('should validate when inherited validation constraint is provided and explicitly set to invalid', () => {
+          numberField.invalid = true;
+          numberField.maxlength = 5;
+
+          expect(numberField.value).to.be.empty;
+          expect(numberField.validate()).to.be.true;
+
+          expect(numberField.invalid).to.be.false;
+        });
+
         it('should allow setting decimals', () => {
           numberField.value = 7.6;
           expect(numberField.value).to.be.equal('7.6');
