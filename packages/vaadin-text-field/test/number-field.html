@@ -727,6 +727,13 @@
           expect(numberField.validate()).to.be.true;
         });
 
+        it('should align checkValidity with the native input element', () => {
+          numberField.value = -1;
+          numberField.min = 0;
+
+          expect(numberField.checkValidity()).to.equal(numberField.inputElement.checkValidity());
+        });
+
         it('should not validate when explicitly set to invalid', () => {
           numberField.invalid = true;
 
