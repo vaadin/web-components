@@ -219,6 +219,19 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           };
         }
 
+        /**
+         * @protected
+         */
+        static _finalizeClass() {
+          super._finalizeClass();
+
+          const devModeCallback = window.Vaadin.developmentModeCallback;
+          const licenseChecker = devModeCallback && devModeCallback['vaadin-license-checker'];
+          if (typeof licenseChecker === 'function') {
+            licenseChecker(ConfirmDialogElement);
+          }
+        }
+
         ready() {
           super.ready();
           this.$.dialog.$.overlay.addEventListener('vaadin-overlay-escape-press', this._escPressed.bind(this));
@@ -328,12 +341,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
        * @namespace Vaadin
        */
       window.Vaadin.ConfirmDialogElement = ConfirmDialogElement;
-
-      const licenseChecker = window.Vaadin.developmentModeCallback
-        && window.Vaadin.developmentModeCallback['vaadin-license-checker'];
-      if (typeof licenseChecker === 'function') {
-        licenseChecker(ConfirmDialogElement);
-      }
     })();
   </script>
 </dom-module>
