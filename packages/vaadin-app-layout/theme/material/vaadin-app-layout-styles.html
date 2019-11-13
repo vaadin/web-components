@@ -21,6 +21,10 @@
         border-right: 1px solid var(--material-secondary-background-color);
       }
 
+      :host([primary-section="drawer"]) [part="drawer"] {
+        z-index: 1;
+      }
+
       :host([primary-section="navbar"]:not([overlay])) [part="navbar"] {
         z-index: 1;
       }
