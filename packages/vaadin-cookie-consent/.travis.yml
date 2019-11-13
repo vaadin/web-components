@@ -1,5 +1,5 @@
 sudo: false
-dist: trusty
+dist: xenial
 language: node_js
 node_js: 8.11
 
@@ -8,7 +8,7 @@ cache:
     - node_modules
 
 addons:
-  firefox: "62.0.3"
+  firefox: latest
   chrome: stable
 
 jobs:
@@ -20,12 +20,12 @@ jobs:
     - if: type = pull_request
       env: POLYMER=2
       addons:
-        firefox: "62.0.3"
+        firefox: latest
         chrome: stable
     - if: type = pull_request
       env: POLYMER=3
       addons:
-        firefox: "62.0.3"
+        firefox: latest
         chrome: stable
     - if: type = cron
       env: TEST_SUITE=unit_tests POLYMER=2
