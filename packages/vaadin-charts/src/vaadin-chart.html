@@ -508,6 +508,19 @@ MAGI ADD END -->
           ];
         }
 
+        /**
+         * @protected
+         */
+        static _finalizeClass() {
+          super._finalizeClass();
+
+          const devModeCallback = window.Vaadin.developmentModeCallback;
+          const licenseChecker = devModeCallback && devModeCallback['vaadin-license-checker'];
+          if (typeof licenseChecker === 'function') {
+            licenseChecker(ChartElement);
+          }
+        }
+
         constructor() {
           super();
 
@@ -1747,12 +1760,6 @@ MAGI ADD END -->
        * @namespace Vaadin
        */
       window.Vaadin.ChartElement = ChartElement;
-
-      const licenseChecker = window.Vaadin.developmentModeCallback
-        && window.Vaadin.developmentModeCallback['vaadin-license-checker'];
-      if (typeof licenseChecker === 'function') {
-        licenseChecker(ChartElement);
-      }
     })();
   </script>
 </dom-module>
