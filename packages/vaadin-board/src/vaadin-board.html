@@ -53,12 +53,17 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           return '2.1.0';
         }
 
-        constructor() {
-          super();
-        }
+        /**
+         * @protected
+         */
+        static _finalizeClass() {
+          super._finalizeClass();
 
-        connectedCallback() {
-          super.connectedCallback();
+          const devModeCallback = window.Vaadin.developmentModeCallback;
+          const licenseChecker = devModeCallback && devModeCallback['vaadin-license-checker'];
+          if (typeof licenseChecker === 'function') {
+            licenseChecker(BoardElement);
+          }
         }
 
         /**
@@ -66,8 +71,8 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
          *
          * In most cases, board will redraw itself if your reconfigure it. If you dynamically change CSS
          * which affects this element, then you need to call this method.
-         **/
-         redraw() {
+         */
+        redraw() {
           this.notifyResize();
         }
 
@@ -79,12 +84,6 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
        * @namespace Vaadin
        */
       window.Vaadin.BoardElement = BoardElement;
-
-      const licenseChecker = window.Vaadin.developmentModeCallback
-        && window.Vaadin.developmentModeCallback['vaadin-license-checker'];
-      if (typeof licenseChecker === 'function') {
-        licenseChecker(BoardElement);
-      }
     })();
   </script>
 </dom-module>
