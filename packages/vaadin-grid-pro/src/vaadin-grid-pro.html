@@ -38,6 +38,19 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         static get version() {
           return '2.0.4';
         }
+
+        /**
+         * @protected
+         */
+        static _finalizeClass() {
+          super._finalizeClass();
+
+          const devModeCallback = window.Vaadin.developmentModeCallback;
+          const licenseChecker = devModeCallback && devModeCallback['vaadin-license-checker'];
+          if (typeof licenseChecker === 'function') {
+            licenseChecker(GridProElement);
+          }
+        }
       }
 
       customElements.define(GridProElement.is, GridProElement);
@@ -47,12 +60,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
        */
       window.Vaadin = window.Vaadin || {};
       window.Vaadin.GridProElement = GridProElement;
-
-      const devModeCallback = window.Vaadin.developmentModeCallback;
-      const licenseChecker = devModeCallback && devModeCallback['vaadin-license-checker'];
-      if (typeof licenseChecker === 'function') {
-        licenseChecker(GridProElement);
-      }
     })();
   </script>
 </dom-module>
