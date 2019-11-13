@@ -413,6 +413,19 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           ];
         }
 
+        /**
+         * @protected
+         */
+        static _finalizeClass() {
+          super._finalizeClass();
+
+          const devModeCallback = window.Vaadin.developmentModeCallback;
+          const licenseChecker = devModeCallback && devModeCallback['vaadin-license-checker'];
+          if (typeof licenseChecker === 'function') {
+            licenseChecker(CrudElement);
+          }
+        }
+
         constructor() {
           super();
           this._observer = new Polymer.FlattenedNodesObserver(this, info => {
@@ -819,12 +832,6 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
        * @namespace Vaadin
        */
       window.Vaadin.CrudElement = CrudElement;
-
-      const licenseChecker = window.Vaadin.developmentModeCallback
-        && window.Vaadin.developmentModeCallback['vaadin-license-checker'];
-      if (typeof licenseChecker === 'function') {
-        licenseChecker(CrudElement);
-      }
     })();
   </script>
 </dom-module>
