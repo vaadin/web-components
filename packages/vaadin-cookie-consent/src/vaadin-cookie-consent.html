@@ -124,6 +124,20 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             }
           };
         }
+
+        /**
+         * @protected
+         */
+        static _finalizeClass() {
+          super._finalizeClass();
+
+          const devModeCallback = window.Vaadin.developmentModeCallback;
+          const licenseChecker = devModeCallback && devModeCallback['vaadin-license-checker'];
+          if (typeof licenseChecker === 'function') {
+            licenseChecker(CookieConsentElement);
+          }
+        }
+
         _showLink(learnMoreLink) {
           return !!learnMoreLink;
         }
@@ -218,12 +232,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
        * @namespace Vaadin
        */
       window.Vaadin.CookieConsentElement = CookieConsentElement;
-
-      const licenseChecker = window.Vaadin.developmentModeCallback
-        && window.Vaadin.developmentModeCallback['vaadin-license-checker'];
-      if (typeof licenseChecker === 'function') {
-        licenseChecker(CookieConsentElement);
-      }
     })();
   </script>
 </dom-module>
