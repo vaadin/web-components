@@ -420,6 +420,19 @@ This program is available under Apache License Version 2.0, available at https:/
         /**
          * @protected
          */
+        static _finalizeClass() {
+          super._finalizeClass();
+
+          const devModeCallback = window.Vaadin.developmentModeCallback;
+          const licenseChecker = devModeCallback && devModeCallback['vaadin-license-checker'];
+          if (typeof licenseChecker === 'function') {
+            licenseChecker(RichTextEditorElement);
+          }
+        }
+
+        /**
+         * @protected
+         */
         attributeChangedCallback(prop, oldVal, newVal) {
           super.attributeChangedCallback(prop, oldVal, newVal);
           // Needed until Edge has CSS Custom Properties (present in Edge Preview)
@@ -977,12 +990,6 @@ This program is available under Apache License Version 2.0, available at https:/
        * @namespace Vaadin
        */
       window.Vaadin.RichTextEditorElement = RichTextEditorElement;
-
-      const devModeCallback = window.Vaadin.developmentModeCallback;
-      const licenseChecker = devModeCallback && devModeCallback['vaadin-license-checker'];
-      if (typeof licenseChecker === 'function') {
-        licenseChecker(RichTextEditorElement);
-      }
     })();
   </script>
 </dom-module>
