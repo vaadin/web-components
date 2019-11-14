@@ -80,6 +80,18 @@
         expect(timepicker.__inputElement.required).to.be.false;
       });
 
+      it('should have synced invalid property wiht input on validation with required flag', () => {
+        timepicker.name = 'foo';
+        timepicker.required = true;
+        timepicker.min = '14:00';
+        timepicker.value = '13:00';
+
+        expect(timepicker.__inputElement.invalid).to.equal(true);
+
+        timepicker.value = '12:00';
+        expect(timepicker.__inputElement.invalid).to.equal(true);
+      });
+
       it('should validate correctly with required flag', () => {
         timepicker.name = 'foo';
         timepicker.required = true;

@@ -371,6 +371,9 @@ This program is available under Apache License Version 2.0, available at https:/
         ready() {
           super.ready();
 
+          // In order to have synchronized invalid property, we need to use the same validate logic.
+          this.__inputElement.validate = () => {};
+
           // Not using declarative because we receive an event before text-element shadow is ready,
           // thus querySelector in textField.focusElement raises an undefined exception on validate
           this.__dropdownElement.addEventListener('value-changed', e => this.__onInputChange(e));
