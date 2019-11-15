@@ -182,6 +182,22 @@
           expect(focusableElements[10]).to.eql(overlay.content.querySelector('vaadin-button').focusElement);
         });
 
+        it('should not focus next focusable element inside the content when Tab is prevented', (done) => {
+          overlay.addEventListener('keydown', event => {
+            if (event.key === 'Tab') {
+              event.preventDefault();
+            }
+          });
+
+          overlay.addEventListener('vaadin-overlay-open', () => {
+            focusWithTab(false, focusableElements[overlay._focusedIndex()]);
+            expect(overlay._focusedIndex()).to.equal(0);
+            done();
+          });
+
+          overlay.opened = true;
+        });
+
         it('should focus focusable elements inside the content when focusTrap = true', (done) => {
           overlay.addEventListener('vaadin-overlay-open', () => {
             // TAB

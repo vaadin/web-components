@@ -511,7 +511,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         // TAB
-        if (event.key === 'Tab' && this.focusTrap) {
+        if (event.key === 'Tab' && this.focusTrap && !event.defaultPrevented) {
           // if only tab key is pressed, cycle forward, else cycle backwards.
           this._cycleTab(event.shiftKey ? -1 : 1);
 
