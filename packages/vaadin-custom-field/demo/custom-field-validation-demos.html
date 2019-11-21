@@ -1,0 +1,47 @@
+<dom-module id="custom-field-validation-demos">
+  <template>
+    <style include="vaadin-component-demo-shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+
+    <h3>Required</h3>
+    <vaadin-demo-snippet id="custom-value-required" when-defined="vaadin-custom-field">
+      <template preserve-content>
+        <vaadin-custom-field required label="Price" error-message="Please fill the price amount">
+          <vaadin-number-field required prevent-invalid-input pattern="^[0-9]*$" maxlength="4" placeholder="Price" style="width: 9em;"></vaadin-number-field>
+          <vaadin-select required style="width: 8em;" placeholder="Currency">
+            <template>
+              <vaadin-list-box>
+                <vaadin-item>Euro</vaadin-item>
+                <vaadin-item>Dollars</vaadin-item>
+                <vaadin-item>Pounds</vaadin-item>
+              </vaadin-list-box>
+            </template>
+          </vaadin-select>
+
+        </vaadin-custom-field>
+        <vaadin-button>Submit</vaadin-button>
+        <script>
+          window.addDemoReadyListener('#custom-value-required', function(document) {
+            const submit = document.querySelector('vaadin-button');
+            const customField = document.querySelector('vaadin-custom-field');
+            submit.addEventListener('click', function(event) {
+              customField.validate();
+            });
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+  </template>
+  <script>
+    class CustomFieldValidationDemos extends DemoReadyEventEmitter(CustomFieldDemo(Polymer.Element)) {
+      static get is() {
+        return 'custom-field-validation-demos';
+      }
+    }
+    customElements.define(CustomFieldValidationDemos.is, CustomFieldValidationDemos);
+  </script>
+</dom-module>
