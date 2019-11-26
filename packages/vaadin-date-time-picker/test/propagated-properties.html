@@ -1,0 +1,206 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-date-time-picker tests</title>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../../test-fixture/test-fixture.html">
+  <link rel="import" href="../vaadin-date-time-picker.html">
+</head>
+
+<body>
+  <test-fixture id="default">
+    <template>
+      <vaadin-date-time-picker></vaadin-date-time-picker>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="slotted-inputs">
+    <template>
+      <vaadin-date-time-picker>
+        <vaadin-date-picker slot="date-picker"></vaadin-date-picker>
+        <vaadin-time-picker slot="time-picker"></vaadin-time-picker>
+      </vaadin-date-time-picker>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="initial-properties">
+    <template>
+      <vaadin-date-time-picker 
+        value="2019-09-16T15:00"
+        date-placeholder="Pick a date"
+        time-placeholder="Pick a time"
+        step="1800"
+        initial-position="1980-01-01"
+        show-week-numbers
+        label="Birth date and time"
+        disabled
+        readonly
+      ></vaadin-date-time-picker>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="slotted-initial-properties">
+    <template>
+      <vaadin-date-time-picker label="Birth date and time">
+        <vaadin-date-picker slot="date-picker"
+          value="2019-09-16"
+          placeholder="Pick a date"
+          initial-position="1980-01-01"
+          show-week-numbers
+          disabled
+          readonly
+        ></vaadin-date-picker>
+        <vaadin-time-picker slot="time-picker"
+          value="15:00"
+          placeholder="Pick a time"
+          step="1800"
+          disabled
+          readonly
+        ></vaadin-time-picker>
+      </vaadin-date-time-picker>
+    </template>
+  </test-fixture>
+
+  <script>
+    ['default', 'slotted'].forEach(set => {
+      describe(`Property propagation (${set})`, () => {
+        let dateTimePicker;
+        let customField;
+        let datePicker;
+        let timePicker;
+
+        beforeEach(() => {
+          if (set === 'default') {
+            dateTimePicker = fixture('default');
+            customField = dateTimePicker.$.customField;
+            datePicker = customField.inputs[0];
+            timePicker = customField.inputs[1];
+          } else if (set === 'slotted') {
+            dateTimePicker = fixture('slotted-inputs');
+            customField = dateTimePicker.$.customField;
+            datePicker = dateTimePicker.querySelector('[slot="date-picker"]');
+            timePicker = dateTimePicker.querySelector('[slot="time-picker"]');
+          }
+        });
+
+        it('should propagate datePlaceholder to date picker', () => {
+          dateTimePicker.datePlaceholder = 'Pick a date';
+          expect(datePicker.placeholder).to.equal('Pick a date');
+        });
+
+        it('should propagate timePlaceholder to time picker', () => {
+          dateTimePicker.timePlaceholder = 'Pick a time';
+          expect(timePicker.placeholder).to.equal('Pick a time');
+        });
+
+        it('should propagate step to time picker', () => {
+          dateTimePicker.step = 1800;
+          expect(timePicker.step).to.equal(1800);
+        });
+
+        it('should propagate initialPosition to date picker', () => {
+          dateTimePicker.initialPosition = '1980-01-01';
+          expect(datePicker.initialPosition).to.equal('1980-01-01');
+        });
+
+        it('should propagate showWeekNumbers to date picker', () => {
+          expect(datePicker.showWeekNumbers).to.be.not.ok;
+          dateTimePicker.showWeekNumbers = true;
+          expect(datePicker.showWeekNumbers).to.be.true;
+        });
+
+        it('should propagate label to custom field', () => {
+          dateTimePicker.label = 'Birth date and time';
+          expect(customField.label).to.equal('Birth date and time');
+        });
+
+        it('should propagate disabled to date and time pickers', () => {
+          expect(datePicker.disabled).to.be.false;
+          expect(timePicker.disabled).to.be.false;
+          dateTimePicker.disabled = true;
+          expect(datePicker.disabled).to.be.true;
+          expect(timePicker.disabled).to.be.true;
+        });
+
+        it('should propagate readonly to date and time pickers', () => {
+          expect(datePicker.readonly).to.be.false;
+          expect(timePicker.readonly).to.be.false;
+          dateTimePicker.readonly = true;
+          expect(datePicker.readonly).to.be.true;
+          expect(timePicker.readonly).to.be.true;
+        });
+
+      });
+    });
+
+    ['default', 'slotted'].forEach(set => {
+      describe(`Initial property values (${set})`, () => {
+        let dateTimePicker;
+        let customField;
+        let datePicker;
+        let timePicker;
+
+        // No need for "beforeEach" to recreate the fixture before every test since these tests do not
+        // modify the state but only check the initial state.
+        before(() => {
+          if (set === 'default') {
+            dateTimePicker = fixture('initial-properties');
+            customField = dateTimePicker.$.customField;
+            datePicker = customField.inputs[0];
+            timePicker = customField.inputs[1];
+          } else if (set === 'slotted') {
+            dateTimePicker = fixture('slotted-initial-properties');
+            customField = dateTimePicker.$.customField;
+            datePicker = dateTimePicker.querySelector('[slot="date-picker"]');
+            timePicker = dateTimePicker.querySelector('[slot="time-picker"]');
+          }
+        });
+
+        it('should have initial value for datePlaceholder', () => {
+          expect(dateTimePicker.datePlaceholder).to.equal('Pick a date');
+          expect(datePicker.placeholder).to.equal('Pick a date');
+        });
+
+        it('should have initial value for timePlaceholder', () => {
+          expect(dateTimePicker.timePlaceholder).to.equal('Pick a time');
+          expect(timePicker.placeholder).to.equal('Pick a time');
+        });
+
+        it('should have initial value for step', () => {
+          expect(dateTimePicker.step).to.equal(1800);
+          expect(timePicker.step).to.equal(1800);
+        });
+
+        it('should have initial value for initialPosition', () => {
+          expect(dateTimePicker.initialPosition).to.equal('1980-01-01');
+          expect(datePicker.initialPosition).to.equal('1980-01-01');
+        });
+
+        it('should have initial value for showWeekNumbers', () => {
+          expect(dateTimePicker.showWeekNumbers).to.be.true;
+          expect(datePicker.showWeekNumbers).to.be.true;
+        });
+
+        it('should have initial value for label', () => {
+          expect(dateTimePicker.label).to.equal('Birth date and time');
+          expect(customField.label).to.equal('Birth date and time');
+        });
+
+        it('should have initial value for disabled', () => {
+          expect(dateTimePicker.disabled).to.be.true;
+          expect(datePicker.disabled).to.be.true;
+          expect(timePicker.disabled).to.be.true;
+        });
+
+        it('should have initial value for readonly', () => {
+          expect(dateTimePicker.readonly).to.be.true;
+          expect(datePicker.readonly).to.be.true;
+          expect(timePicker.readonly).to.be.true;
+        });
+
+      });
+    });
+  </script>
+</body>

@@ -53,13 +53,14 @@ This program is available under Apache License Version 2.0, available at https:/
         id="customField"
         on-value-changed="__customFieldValueChanged"
         i18n="[[__customFieldValueFormat]]"
+        label="[[label]]"
         theme$="[[theme]]"
       >
       <div class="slot-container">
-        <slot name="date-picker">
+        <slot name="date-picker" id="dateSlot">
           <vaadin-date-time-picker-date-picker part="date" theme$="[[theme]]"></vaadin-date-time-picker-date-picker>
         </slot>
-        <slot name="time-picker">
+        <slot name="time-picker" id="timeSlot">
           <vaadin-date-time-picker-time-picker part="time" theme$="[[theme]]"></vaadin-date-time-picker-time-picker>
         </slot>
       </div>
@@ -141,6 +142,82 @@ This program is available under Apache License Version 2.0, available at https:/
             },
 
             /**
+             * A placeholder string for the date field.
+             */
+            datePlaceholder: {
+              type: String
+            },
+
+            /**
+             * A placeholder string for the time field.
+             */
+            timePlaceholder: {
+              type: String
+            },
+
+            /**
+             * Specifies the number of valid intervals in a day used for
+             * configuring the items displayed in the time selection box.
+             *
+             * It also configures the precision of the time part of the value string. By default
+             * the component formats time values as `hh:mm` but setting a step value
+             * lower than one minute or one second, format resolution changes to
+             * `hh:mm:ss` and `hh:mm:ss.fff` respectively.
+             *
+             * Unit must be set in seconds, and for correctly configuring intervals
+             * in the dropdown, it need to evenly divide a day.
+             *
+             * Note: it is possible to define step that is dividing an hour in inexact
+             * fragments (i.e. 5760 seconds which equals 1 hour 36 minutes), but it is
+             * not recommended to use it for better UX.
+             */
+            step: {
+              type: Number
+            },
+
+            /**
+             * Date which should be visible in the date picker overlay when there is no value selected.
+             *
+             * The same date formats as for the `value` property are supported but without the time part.
+             */
+            initialPosition: String,
+
+            /**
+             * Set true to display ISO-8601 week numbers in the calendar. Notice that
+             * displaying week numbers is only supported when `i18n.firstDayOfWeek`
+             * is 1 (Monday).
+             */
+            showWeekNumbers: {
+              type: Boolean
+            },
+
+            /**
+             * String used for the label element.
+             */
+            label: {
+              type: String,
+              value: ''
+            },
+
+            /**
+             * Set to true to disable this element.
+             */
+            disabled: {
+              type: Boolean,
+              value: false,
+              reflectToAttribute: true
+            },
+
+            /**
+             * Set to true to make this element read-only.
+             */
+            readonly: {
+              type: Boolean,
+              value: false,
+              reflectToAttribute: true
+            },
+
+            /**
              * The current selected date time.
              */
             __selectedDateTime: {
@@ -159,8 +236,123 @@ This program is available under Apache License Version 2.0, available at https:/
 
         static get observers() {
           return [
-            '__selectedDateTimeChanged(__selectedDateTime)'
+            '__selectedDateTimeChanged(__selectedDateTime)',
+            '__datePlaceholderChanged(datePlaceholder)',
+            '__timePlaceholderChanged(timePlaceholder)',
+            '__stepChanged(step)',
+            '__initialPositionChanged(initialPosition)',
+            '__showWeekNumbersChanged(showWeekNumbers)',
+            '__disabledChanged(disabled)',
+            '__readonlyChanged(readonly)'
           ];
+        }
+
+        ready() {
+          super.ready();
+          this.__filterElements = node => node.nodeType === Node.ELEMENT_NODE;
+
+          this.__datePickerChanged();
+          this.__timePickerChanged();
+
+          this.$.dateSlot.addEventListener('slotchange', this.__datePickerChanged.bind(this));
+          this.$.timeSlot.addEventListener('slotchange', this.__timePickerChanged.bind(this));
+        }
+
+        __datePickerChanged() {
+          const defaultDatePicker = this.shadowRoot.querySelector('[part="date"]');
+          const assignedElements = this.$.dateSlot.assignedNodes({flatten: true}).filter(this.__filterElements);
+          const datePicker = assignedElements[0];
+          if (this.__datePicker === datePicker) {
+            return;
+          }
+          this.__datePicker = datePicker;
+
+          if (datePicker === defaultDatePicker) {
+            // Synchronize properties to default date picker
+            datePicker.placeholder = this.datePlaceholder;
+            datePicker.initialPosition = this.initialPosition;
+            datePicker.showWeekNumbers = this.showWeekNumbers;
+            datePicker.disabled = this.disabled;
+            datePicker.readonly = this.readonly;
+          } else {
+            // Synchronize properties from slotted date picker
+            this.datePlaceholder = datePicker.placeholder;
+            this.initialPosition = datePicker.initialPosition;
+            this.showWeekNumbers = datePicker.showWeekNumbers;
+            this.disabled = datePicker.disabled;
+            this.readonly = datePicker.readonly;
+          }
+        }
+
+        __timePickerChanged() {
+          const defaultTimePicker = this.shadowRoot.querySelector('[part="time"]');
+          const assignedElements = this.$.timeSlot.assignedNodes({flatten: true}).filter(this.__filterElements);
+          const timePicker = assignedElements[0];
+          if (this.__timePicker === timePicker) {
+            return;
+          }
+          this.__timePicker = timePicker;
+
+          if (timePicker === defaultTimePicker) {
+            // Synchronize properties to default time picker
+            timePicker.placeholder = this.timePlaceholder;
+            timePicker.step = this.step;
+            timePicker.disabled = this.disabled;
+            timePicker.readonly = this.readonly;
+          } else {
+            // Synchronize properties from slotted time picker
+            this.timePlaceholder = timePicker.placeholder;
+            this.step = timePicker.step;
+            // Don't set disabled or readonly from time picker since they're already set from date picker
+          }
+        }
+
+        __datePlaceholderChanged(datePlaceholder) {
+          if (this.__datePicker) {
+            this.__datePicker.placeholder = datePlaceholder;
+          }
+        }
+
+        __timePlaceholderChanged(timePlaceholder) {
+          if (this.__timePicker) {
+            this.__timePicker.placeholder = timePlaceholder;
+          }
+        }
+
+        __stepChanged(step) {
+          if (this.__timePicker) {
+            this.__timePicker.step = step;
+          }
+        }
+
+        __initialPositionChanged(initialPosition) {
+          if (this.__datePicker) {
+            this.__datePicker.initialPosition = initialPosition;
+          }
+        }
+
+        __showWeekNumbersChanged(showWeekNumbers) {
+          if (this.__datePicker) {
+            this.__datePicker.showWeekNumbers = showWeekNumbers;
+          }
+        }
+
+        __disabledChanged(disabled) {
+          if (this.__datePicker) {
+            this.__datePicker.disabled = disabled;
+          }
+          if (this.__timePicker) {
+            this.__timePicker.disabled = disabled;
+          }
+        }
+
+        __readonlyChanged(readonly) {
+          if (this.__datePicker) {
+            this.__datePicker.readonly = readonly;
+          }
+          if (this.__timePicker) {
+            this.__timePicker.readonly = readonly;
+          }
         }
 
         __parseDate(str) {

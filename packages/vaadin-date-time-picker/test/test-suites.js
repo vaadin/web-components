@@ -1,3 +1,4 @@
 window.VaadinDateTimePickerSuites = [
-  'basic.html'
+  'basic.html',
+  'propagated-properties.html'
 ];

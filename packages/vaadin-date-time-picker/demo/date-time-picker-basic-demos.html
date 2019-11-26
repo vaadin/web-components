@@ -9,7 +9,7 @@
     <h3>Date time picker</h3>
     <vaadin-demo-snippet id="date-time-picker-basic-demos-minimal">
       <template preserve-content>
-        <vaadin-date-time-picker></vaadin-date-time-picker>
+        <vaadin-date-time-picker label="Date and time"></vaadin-date-time-picker>
       </template>
     </vaadin-demo-snippet>
 
@@ -17,6 +17,56 @@
     <vaadin-demo-snippet id="date-time-picker-basic-demos-pre-selected-value">
       <template preserve-content>
         <vaadin-date-time-picker value="2019-09-16T15:00"></vaadin-date-time-picker>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Placeholders</h3>
+    <vaadin-demo-snippet id="date-time-picker-basic-demos-placeholders">
+      <template preserve-content>
+        <vaadin-date-time-picker date-placeholder="Pick a date" time-placeholder="Pick a time"></vaadin-date-time-picker>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Disabled and readonly</h3>
+    <vaadin-demo-snippet id="date-time-picker-basic-demos-state">
+      <template preserve-content>
+        <vaadin-date-time-picker disabled label="Disabled input" value="2019-09-16T15:00"></vaadin-date-time-picker>
+        <vaadin-date-time-picker readonly label="Readonly input" value="2019-09-16T15:00"></vaadin-date-time-picker>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Initial position of date picker</h3>
+    <vaadin-demo-snippet id="date-time-picker-basic-demos-initial-position">
+      <template preserve-content>
+        <vaadin-date-time-picker label="Birth date and time" initial-position="1980-01-01"></vaadin-date-time-picker>
+      </template>
+    </vaadin-demo-snippet>
+
+    <!--
+    ! FIXME(haprog):
+    ! Uncomment this demo after i18n has been implemented as part of https://github.com/vaadin/vaadin-date-time-picker/issues/4
+    ! since show-week-numbers doesn't do anything without being able to set i18n.firstDayOfWeek for date picker
+
+    <h3>Date picker with week numbers</h3>
+    <vaadin-demo-snippet id="date-time-picker-basic-demos-week-numbers">
+      <template preserve-content>
+        <vaadin-date-time-picker show-week-numbers></vaadin-date-time-picker>
+        <script>
+          customElements.whenDefined('vaadin-date-time-picker').then(function() {
+            const dateTimepicker = document.querySelector('vaadin-date-time-picker');
+            dateTimepicker.set('i18n.firstDayOfWeek', 1);
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+    -->
+
+    <h3>Value resolution</h3>
+    <p>The <code>step</code> property specified in seconds affects the resolution of the time picker and visibility of the time picker dropdown. If <code>step</code> is less than 15 minutes the dropdown is hidden.</p>
+    <vaadin-demo-snippet id="date-time-picker-basic-demos-step">
+      <template preserve-content>
+        <vaadin-date-time-picker step="1800" label="30 min intervals in time dropdown" time-placeholder="hh:mm"></vaadin-date-time-picker>
+        <vaadin-date-time-picker step="0.5" label="Time includes milliseconds" time-placeholder="hh:mm:ss.fff"></vaadin-date-time-picker>
       </template>
     </vaadin-demo-snippet>
 
