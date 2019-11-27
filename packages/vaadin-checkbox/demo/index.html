@@ -9,15 +9,11 @@
   <link rel="import" href="../../polymer/polymer.html">
   <link rel="import" href="../../vaadin-demo-helpers/vaadin-component-demo.html">
   <link rel="import" href="../../vaadin-demo-helpers/vaadin-demo-snippet.html">
-  <script src="../../vaadin-demo-helpers/vaadin-demo-ready-event-emitter.js"></script>
 
   <script src="./checkbox-demo.js"></script>
-  <link rel="import" href="../../iron-form/iron-form.html">
   <link rel="import" href="../../vaadin-button/vaadin-button.html">
   <link rel="import" href="../vaadin-checkbox.html">
   <link rel="import" href="../vaadin-checkbox-group.html">
-
-  <link rel="import" href="../../vaadin-lumo-styles/icons.html">
 
   <custom-style>
     <style include="vaadin-component-demo-shared-styles"></style>
@@ -26,5 +22,16 @@
 
 <body>
   <vaadin-component-demo config-src="demos.json"></vaadin-component-demo>
+
+  <dom-module id="checkbox-button-icon-color" theme-for="vaadin-checkbox">
+    <template>
+      <style>
+        :host([theme~="custom"][checked]) [part="checkbox"] {
+          background-color: green;
+        }
+      </style>
+    </template>
+  </dom-module>
+
 </body>
 </html>

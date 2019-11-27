@@ -9,48 +9,48 @@
       "title": "Vaadin Checkbox Basics",
       "description": "",
       "image": ""
-     }
+    }
   }
   ,
   {
-    "name": "Indeterminate State",
-    "url": "checkbox-indeterminate-demos",
-    "src": "checkbox-indeterminate-demos.html",
+    "name": "Validation",
+    "url": "checkbox-validation-demos",
+    "src": "checkbox-validation-demos.html",
     "meta": {
-      "title": "Vaadin Checkbox Indeterminate State",
-      "description": "",
-      "image": ""
-     }
-  }
-  ,
-  {
-    "name": "Accessibility",
-    "url": "checkbox-accessibility-demos",
-    "src": "checkbox-a11y-demos.html",
-    "meta": {
-      "title": "Vaadin Checkbox Accessibility",
-      "description": "",
-      "image": ""
-     }
-  }
-  ,
-  {
-    "name": "Checkbox Group",
-    "url": "checkbox-group-demos",
-    "src": "checkbox-group-demos.html",
-    "meta": {
-      "title": "vaadin-checkbox-group Examples",
+      "title": "Vaadin Checkbox Validations",
       "description": "",
       "image": ""
     }
   }
   ,
   {
-    "name": "Checkbox Group Validation",
-    "url": "checkbox-group-validation-demos",
-    "src": "checkbox-group-validation-demos.html",
+    "name": "Presentation",
+    "url": "checkbox-presentation-demos",
+    "src": "checkbox-presentation-demos.html",
     "meta": {
-      "title": "vaadin-checkbox-group Validation Examples",
+      "title": "Vaadin Checkbox Presentations",
+      "description": "",
+      "image": ""
+    }
+  }
+  ,
+  {
+    "name": "Theme Variants",
+    "url": "checkbox-theme-variants-demos",
+    "src": "checkbox-theme-variants-demos.html",
+    "meta": {
+      "title": "vaadin-checkbox Theme Variants",
+      "description": "",
+      "image": ""
+    }
+  }
+  ,
+  {
+    "name": "Styling",
+    "url": "checkbox-styling-demos",
+    "src": "checkbox-styling-demos.html",
+    "meta": {
+      "title": "vaadin-checkbox-group Styling Examples",
       "description": "",
       "image": ""
     }

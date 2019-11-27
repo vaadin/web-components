@@ -5,47 +5,142 @@
         display: block;
       }
     </style>
-
-    <h3>Basic Checkbox</h3>
-    <vaadin-demo-snippet id="checkbox-basic-demos-default-checkbox">
+    <h3>Basic usage</h3>
+    <vaadin-demo-snippet>
       <template preserve-content>
-        <vaadin-checkbox checked>I agree with <a href>Terms & Conditions</a></vaadin-checkbox>
+        <vaadin-checkbox value="Option" checked>Option</vaadin-checkbox>
       </template>
     </vaadin-demo-snippet>
 
-    <h3>Custom Label</h3>
-    <vaadin-demo-snippet id="checkbox-basic-demos-multiline-checkbox">
+    <h3>Basic usage with checkbox group</h3>
+    <vaadin-demo-snippet>
       <template preserve-content>
-        <vaadin-checkbox checked>
-          <iron-icon icon="lumo:bell" style="vertical-align: top;"></iron-icon>
-          Notifications
-          <br>
-          <small>Enable desktop notifications</small>
-        </vaadin-checkbox>
+        <vaadin-checkbox-group label="Label" theme="vertical">
+          <vaadin-checkbox value="1" checked>Option one</vaadin-checkbox>
+          <vaadin-checkbox value="2">Option two</vaadin-checkbox>
+          <vaadin-checkbox value="3">Option three</vaadin-checkbox>
+        </vaadin-checkbox-group>
       </template>
     </vaadin-demo-snippet>
 
-    <h3>Disabled</h3>
-    <vaadin-demo-snippet id="checkbox-basic-demos-disabled-checkbox">
+    <h3>Disabled state</h3>
+    <vaadin-demo-snippet>
       <template preserve-content>
-        <vaadin-checkbox disabled checked>
-          Option two<br>
-          <small>Description for this option</small>
-        </vaadin-checkbox>
+        <vaadin-checkbox-group label="Disabled" theme="vertical" disabled>
+          <vaadin-checkbox value="1" checked>Option one</vaadin-checkbox>
+          <vaadin-checkbox value="2">Option two</vaadin-checkbox>
+          <vaadin-checkbox value="3">Option three</vaadin-checkbox>
+        </vaadin-checkbox-group>
 
-        <vaadin-checkbox disabled>Option two</vaadin-checkbox>
-
-        <vaadin-checkbox disabled indeterminate>Indeterminate</vaadin-checkbox>
+        <vaadin-checkbox-group label="Disabled item" theme="vertical">
+          <vaadin-checkbox value="1">Option one</vaadin-checkbox>
+          <vaadin-checkbox value="2">Option two</vaadin-checkbox>
+          <vaadin-checkbox value="3" disabled>Option three</vaadin-checkbox>
+        </vaadin-checkbox-group>
+        <style>
+          vaadin-checkbox-group:first-of-type {
+            margin-right: 200px;
+          }
+        </style>
       </template>
     </vaadin-demo-snippet>
 
-  </template>
-  <script>
-    class CheckboxBasicDemos extends DemoReadyEventEmitter(CheckboxDemo(Polymer.Element)) {
-      static get is() {
-        return 'checkbox-basic-demos';
+    <h3>Object list</h3>
+    <vaadin-demo-snippet id="object-list" when-defined="vaadin-checkbox">
+      <template preserve-content>
+        <vaadin-checkbox-group label="Department" theme="vertical"></vaadin-checkbox-group>
+        <script>
+          window.addDemoReadyListener('#object-list', function(document) {
+            const departments = [
+              {id: '1', name: 'Product'},
+              {id: '2', name: 'Service'},
+              {id: '3', name: 'HR'},
+              {id: '4', name: 'Accounting'}
+            ];
+            const checkboxGroup = document.querySelector('vaadin-checkbox-group');
+            departments.forEach(function(item) {
+              const checkbox = window.document.createElement('vaadin-checkbox');
+              checkbox.textContent = item.name;
+              checkbox.value = item.id;
+              checkboxGroup.appendChild(checkbox);
+            });
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Value change event</h3>
+    <vaadin-demo-snippet id="value-change-event" when-defined="vaadin-radio-button">
+      <template preserve-content>
+        <vaadin-checkbox-group label="Label" theme="vertical">
+          <vaadin-checkbox value = "1">Option one</vaadin-checkbox>
+          <vaadin-checkbox value = "2">Option two</vaadin-checkbox>
+          <vaadin-checkbox value = "3">Option three</vaadin-checkbox>
+        </vaadin-checkbox-group>
+        <div>Selected value: <span id="output"></span></div>
+        <script>
+          window.addDemoReadyListener('#value-change-event', function(document) {
+            const checkboxGroup = document.querySelector('vaadin-checkbox-group');
+            const output = document.querySelector('#output');
+            checkboxGroup.addEventListener('change', function(event) {
+              output.textContent = checkboxGroup.value;
+            });
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Indeterminate checkbox</h3>
+    <p>An <a
+      href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#Indeterminate_state_checkboxes"
+      target="_blank" rel="noopener">indeterminate checkbox</a> is neither checked nor
+      unchecked. A typical use case
+      is a “Select All” checkbox indicating that some, but not all, items are selected.</p>
+      <vaadin-demo-snippet id="checkbox-indeterminate" when-defined="vaadin-checkbox">
+        <template preserve-content>
+          <vaadin-checkbox-group label="Label" theme="vertical">
+            <vaadin-checkbox class="select-all">Select All</vaadin-checkbox>
+            <vaadin-checkbox value="1">Option one</vaadin-checkbox>
+            <vaadin-checkbox value="2">Option two</vaadin-checkbox>
+            <script>
+              window.addDemoReadyListener('#checkbox-indeterminate', function(document) {
+                const options = Array.from(document.querySelectorAll('vaadin-checkbox[value]'));
+                const selectAll = document.querySelector('.select-all');
+
+                selectAll.addEventListener('change', function() {
+                  options.forEach(function(option) {
+                    option.checked = selectAll.checked;
+                  });
+                });
+
+                const syncState = function() {
+                  const isChecked = function(cb) {
+                    return cb.checked;
+                  };
+                  selectAll.checked = options.every(isChecked);
+                  selectAll.indeterminate = options.some(isChecked) && !options.every(isChecked);
+                };
+
+                options.forEach(function(option) {
+                  option.addEventListener('change', syncState);
+                });
+
+                options[0].checked = true;
+                syncState();
+              });
+            </script>
+          </vaadin-checkbox-group>
+        </template>
+      </vaadin-demo-snippet>
+
+    </template>
+    <script>
+      class CheckboxBasicDemos extends DemoReadyEventEmitter(CheckboxDemo(Polymer.Element)) {
+        static get is() {
+          return 'checkbox-basic-demos';
+        }
       }
-    }
-    customElements.define(CheckboxBasicDemos.is, CheckboxBasicDemos);
-  </script>
-</dom-module>
+      customElements.define(CheckboxBasicDemos.is, CheckboxBasicDemos);
+    </script>
+  </dom-module>
