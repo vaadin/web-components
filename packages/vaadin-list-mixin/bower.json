@@ -31,6 +31,9 @@
   "devDependencies": {
     "iron-test-helpers": "^2.0.0",
     "web-component-tester": "^6.1.5",
-    "webcomponentsjs": "^1.0.0"
+    "webcomponentsjs": "^1.0.0",
+    "vaadin-context-menu": "^4.3.13",
+    "vaadin-select": "^2.1.6",
+    "vaadin-tabs": "^3.0.5"
   }
 }

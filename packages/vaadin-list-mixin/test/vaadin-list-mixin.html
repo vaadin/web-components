@@ -54,7 +54,16 @@
       <style>
         :host {
           display: block;
-          flex-shrink: 0; /* fix Safari 9 flex bug: https://github.com/philipwalton/flexbugs#flexbug-1 */
+          flex-shrink: 0;
+          /* fix Safari 9 flex bug: https://github.com/philipwalton/flexbugs#flexbug-1 */
+        }
+
+        :host([hidden]) {
+          display: none !important;
+        }
+
+        :host(.hidden-attribute) {
+          display: none;
         }
       </style>
       <slot></slot>
@@ -108,6 +117,19 @@
           <span>Xyzzy</span>
         </test-item-element>
         <test-item-element>Bax</test-item-element>
+      </test-list-element>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="list-hidden">
+    <template>
+      <test-list-element style="width: 400px; height: 400px;">
+        <test-item-element>Foo</test-item-element>
+        <test-item-element hidden>Bar</test-item-element>
+        <test-item-element>Bax</test-item-element>
+        <test-item-element style="display: none;">Bay</test-item-element>
+        <test-item-element>Fox</test-item-element>
+        <test-item-element class="hidden-attribute">Pub</test-item-element>
       </test-list-element>
     </template>
   </test-fixture>
@@ -171,7 +193,6 @@
 
         it('should update items list when removing nodes', () => {
           expect(list.items.length).to.be.equal(7);
-
           list.removeChild(list.items[3]);
           list._observer.flush();
           expect(list.items.length).to.be.equal(6);
@@ -592,6 +613,34 @@
 
           list.items[3].click();
           expect(list._scrollerElement.scrollTop).to.be.greaterThan(0);
+        });
+      });
+    });
+    describe('vaadin-list-mixin-hidden', () => {
+      let list;
+
+      beforeEach(done => {
+        list = fixture('list-hidden');
+        Polymer.RenderStatus.afterNextRender(list, done);
+      });
+
+      describe('focus', () => {
+
+        beforeEach(() => list._focus(0));
+
+        it('should move focus to next not hidden element on "arrow-down"', () => {
+          expect(list.items[0].focused).to.be.true;
+          expect(getComputedStyle(list.items[0]).getPropertyValue('display')).to.equal('block');
+          arrowDown(list);
+          expect(getComputedStyle(list.items[1]).getPropertyValue('display')).to.equal('none');
+          expect(list.items[2].focused).to.be.true;
+        });
+        it('should move focus to next not hidden element on "arrow-up"', () => {
+          expect(list.items[0].focused).to.be.true;
+          expect(getComputedStyle(list.items[0]).getPropertyValue('display')).to.equal('block');
+          arrowUp(list);
+          expect(getComputedStyle(list.items[list.items.length - 1]).getPropertyValue('display')).to.equal('none');
+          expect(list.items[list.items.length - 2].focused).to.be.true;
         });
       });
     });

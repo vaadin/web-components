@@ -166,7 +166,7 @@ This program is available under Apache License Version 2.0, available at https:/
         return;
       }
 
-      const condition = item => !item.disabled;
+      const condition = item => !(item.disabled || getComputedStyle(item).getPropertyValue('display') === 'none');
       let idx, increment;
 
       if (this._vertical && key === 'Up' || !this._vertical && key === 'Left') {
@@ -200,6 +200,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         const item = this.items[idx];
+
         if (condition(item)) {
           return idx;
         }
