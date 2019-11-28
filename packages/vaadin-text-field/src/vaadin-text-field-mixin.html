@@ -313,6 +313,18 @@ This program is available under Apache License Version 2.0, available at https:/
           type: Boolean
         },
 
+        /**
+         * A pattern matched against individual characters the user inputs.
+         * When set, the field will prevent:
+         * - `keyDown` events if the entered key doesn't match `/^_enabledCharPattern$/`
+         * - `paste` events if the pasted text doesn't match `/^_enabledCharPattern*$/`
+         * - `drop` events if the dropped text doesn't match `/^_enabledCharPattern*$/`
+         *
+         * For example, to enable entering only numbers and minus signs,
+         * `_enabledCharPattern = "[\\d-]"`
+         */
+        _enabledCharPattern: String,
+
         _labelId: String,
 
         _helperTextId: String,
@@ -331,7 +343,8 @@ This program is available under Apache License Version 2.0, available at https:/
         '_hostAccessiblePropsChanged(' + HOST_PROPS.accessible.join(', ') + ')',
         '_getActiveErrorId(invalid, errorMessage, _errorId, helperText, _helperTextId, _hasSlottedHelper)',
         '_getActiveLabelId(label, _labelId, _inputId)',
-        '__observeOffsetHeight(errorMessage, invalid, label, helperText)'
+        '__observeOffsetHeight(errorMessage, invalid, label, helperText)',
+        '__enabledCharPatternChanged(_enabledCharPattern)'
       ];
     }
 
@@ -571,6 +584,9 @@ This program is available under Apache License Version 2.0, available at https:/
       node.addEventListener('change', this._boundOnChange);
       node.addEventListener('blur', this._boundOnBlur);
       node.addEventListener('focus', this._boundOnFocus);
+      node.addEventListener('paste', this._boundOnPaste);
+      node.addEventListener('drop', this._boundOnDrop);
+      node.addEventListener('beforeinput', this._boundOnBeforeInput);
     }
 
     _removeInputListeners(node) {
@@ -578,6 +594,9 @@ This program is available under Apache License Version 2.0, available at https:/
       node.removeEventListener('change', this._boundOnChange);
       node.removeEventListener('blur', this._boundOnBlur);
       node.removeEventListener('focus', this._boundOnFocus);
+      node.removeEventListener('paste', this._boundOnPaste);
+      node.removeEventListener('drop', this._boundOnDrop);
+      node.removeEventListener('beforeinput', this._boundOnBeforeInput);
     }
 
     ready() {
@@ -589,6 +608,9 @@ This program is available under Apache License Version 2.0, available at https:/
       this._boundOnChange = this._onChange.bind(this);
       this._boundOnBlur = this._onBlur.bind(this);
       this._boundOnFocus = this._onFocus.bind(this);
+      this._boundOnPaste = this._onPaste.bind(this);
+      this._boundOnDrop = this._onDrop.bind(this);
+      this._boundOnBeforeInput = this._onBeforeInput.bind(this);
 
       const defaultInput = this.shadowRoot.querySelector('[part="value"]');
       this._slottedInput = this.querySelector(`${this._slottedTagName}[slot="${this._slottedTagName}"]`);
@@ -686,6 +708,49 @@ This program is available under Apache License Version 2.0, available at https:/
         this.clear();
         dispatchChange && this.inputElement.dispatchEvent(new Event('change', {bubbles: !this._slottedInput}));
       }
+
+      if (this._enabledCharPattern && !this.__shouldAcceptKey(e)) {
+        e.preventDefault();
+      }
+    }
+
+    __shouldAcceptKey(event) {
+      return (event.metaKey || event.ctrlKey)
+        || !event.key // allow typing anything if event.key is not supported
+        || event.key.length !== 1 // allow "Backspace", "ArrowLeft" etc.
+        || this.__enabledCharRegExp.test(event.key);
+    }
+
+    _onPaste(e) {
+      if (this._enabledCharPattern) {
+        const pastedText = (e.clipboardData || window.clipboardData).getData('text');
+        if (!this.__enabledTextRegExp.test(pastedText)) {
+          e.preventDefault();
+        }
+      }
+    }
+
+    _onDrop(e) {
+      if (this._enabledCharPattern) {
+        const draggedText = e.dataTransfer.getData('text');
+        if (!this.__enabledTextRegExp.test(draggedText)) {
+          e.preventDefault();
+        }
+      }
+    }
+
+    _onBeforeInput(e) {
+      // The `beforeinput` event covers all the cases for `_enabledCharPattern`: keyboard, pasting and dropping,
+      // but it is still experimental technology so we can't rely on it. It's used here just as an additional check,
+      // because it seems to be the only way to detect and prevent specific keys on mobile devices. See issue #429.
+      if (this._enabledCharPattern && e.data && !this.__enabledTextRegExp.test(e.data)) {
+        e.preventDefault();
+      }
+    }
+
+    __enabledCharPatternChanged(_enabledCharPattern) {
+      this.__enabledCharRegExp = _enabledCharPattern && new RegExp('^' + _enabledCharPattern + '$');
+      this.__enabledTextRegExp = _enabledCharPattern && new RegExp('^' + _enabledCharPattern + '*$');
     }
 
     _addIEListeners(node) {

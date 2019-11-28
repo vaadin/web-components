@@ -34,10 +34,31 @@ This program is available under Apache License Version 2.0, available at https:/
           return '2.6.0-alpha1';
         }
 
+        static get properties() {
+          // Hide inherited props that don't work with <input type="number"> from JSDoc.
+          return {
+            /**
+             * @private
+             */
+            pattern: String,
+            /**
+             * @private
+             */
+            preventInvalidInput: Boolean,
+            /**
+             * @private
+             */
+            minlength: Number,
+            /**
+             * @private
+             */
+            maxlength: Number
+          };
+        }
+
         ready() {
           super.ready();
-          this.inputElement.addEventListener('drop', this.__onDrop.bind(this));
-          this.inputElement.addEventListener('paste', this.__onPaste.bind(this));
+          this._enabledCharPattern = '[-+\\d]';
         }
 
         _valueChanged(newVal, oldVal) {
@@ -48,34 +69,6 @@ This program is available under Apache License Version 2.0, available at https:/
             return;
           }
           super._valueChanged(newVal, oldVal);
-        }
-
-        _onKeyDown(e) {
-          if (!this.__shouldAcceptKey(e)) {
-            e.preventDefault();
-          }
-          super._onKeyDown(e);
-        }
-
-        __shouldAcceptKey(event) {
-          return (event.metaKey || event.ctrlKey)
-            || !event.key // allow typing anything if event.key is not supported
-            || event.key.length !== 1 // allow "Backspace", "ArrowLeft" etc.
-            || /^[-+\d]$/.test(event.key);
-        }
-
-        __onDrop(e) {
-          const draggedText = e.dataTransfer.getData('text');
-          if (!this.__isValidInput(draggedText)) {
-            e.preventDefault();
-          }
-        }
-
-        __onPaste(e) {
-          const pastedText = (e.clipboardData || window.clipboardData).getData('text');
-          if (!this.__isValidInput(pastedText)) {
-            e.preventDefault();
-          }
         }
 
         _stepChanged(newVal, oldVal) {
@@ -91,10 +84,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
         __isInteger(value) {
           return /^(-\d)?\d*$/.test(String(value));
-        }
-
-        __isValidInput(value) {
-          return /^[\d+-]*$/.test(String(value));
         }
 
         __hasOnlyDigits(value) {

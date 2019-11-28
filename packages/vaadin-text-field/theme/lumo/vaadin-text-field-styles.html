@@ -61,8 +61,8 @@
       }
 
       [part="value"]:focus,
-      [part="input-field"] ::slotted(input):focus,
-      [part="input-field"] ::slotted(textarea):focus {
+      :host([focused]) [part="input-field"] ::slotted(input),
+      :host([focused]) [part="input-field"] ::slotted(textarea) {
         -webkit-mask-image: none;
         mask-image: none;
       }
