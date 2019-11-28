@@ -14,7 +14,6 @@
         <script>
           window.addDemoReadyListener('#date-picker-localizing', function(document) {
             // Set up the parser library for Finnish locale
-            Sugar.Date.setLocale('fi');
             var datepicker = document.querySelector('vaadin-date-picker');
             datepicker.i18n = {
               week: 'viikko',
@@ -27,15 +26,17 @@
                 'tammikuu_helmikuu_maaliskuu_huhtikuu_toukokuu_kesäkuu_heinäkuu_elokuu_syyskuu_lokakuu_marraskuu_joulukuu'.split('_'),
               weekdays: 'sunnuntai_maanantai_tiistai_keskiviikko_torstai_perjantai_lauantai'.split('_'),
               weekdaysShort: 'su_ma_ti_ke_to_pe_la'.split('_'),
-              formatDate: function(date) {
-                // Sugar Date expects a native date. The `date` is in format `{ day: ..., month: ..., year: ... }`
-                return Sugar.Date.format(Sugar.Date.create(date), '{short}');
+              formatDate: function(dateObject) {
+                // The `dateObject` is in format `{ day: ..., month: ..., year: ... }`
+                // Sugar Date expects a native date so we convert to it first.
+                const date = Sugar.Date.create(dateObject);
+                return Sugar.Date.format(date, '{short}', 'fi');
               },
               formatTitle: function(monthName, fullYear) {
                 return monthName + ' ' + fullYear;
               },
               parseDate: function(dateString) {
-                const date = Sugar.Date.create(dateString);
+                const date = Sugar.Date.create(dateString, 'fi');
                 return {
                   day: date.getDate(),
                   month: date.getMonth(),
