@@ -6,54 +6,53 @@
       }
     </style>
 
-    <h3>Using as a Form Field</h3>
-    <vaadin-demo-snippet id="date-picker-validation-demos-using-as-a-form-field" when-defined="vaadin-date-picker">
+    <h3>Required</h3>
+    <vaadin-demo-snippet id="date-picker-required">
       <template preserve-content>
-        <iron-form>
-          <form method="post">
-            <vaadin-date-picker name="date" required error-message="This field is required"></vaadin-date-picker>
-            <vaadin-button>Submit</vaadin-button>
-          </form>
-        </iron-form>
-
+        <vaadin-date-picker label="Required" required error-message="Please choose a date" id="datePicker">
+        </vaadin-date-picker>
+        <vaadin-button>Submit</vaadin-button>
         <script>
-          window.addDemoReadyListener('#date-picker-validation-demos-using-as-a-form-field', function(document) {
-            var form = document.querySelector('iron-form');
-
-            form.addEventListener('iron-form-presubmit', function(e) {
-              // prevent actual form submission
-              e.preventDefault();
-              alert('Form submitted with date: ' + form.serializeForm().date);
-              return false;
-            });
-
-            var button = document.querySelector('vaadin-button');
-            button.addEventListener('click', function() {
-              form.submit();
+          window.addDemoReadyListener('#date-picker-required', function(document) {
+            const submit = document.querySelector('vaadin-button');
+            const datePicker = document.querySelector('vaadin-date-picker');
+            submit.addEventListener('click', function(event) {
+              datePicker.validate();
             });
           });
         </script>
       </template>
     </vaadin-demo-snippet>
 
-
-    <h3>Custom Validator</h3>
-    <p>Extend <code>Vaadin.DatePickerElement</code> to create your own custom element,
-       then override the <code>checkValidity(value)</code> method to validate the input.</p>
-    <vaadin-demo-snippet id="date-picker-validation-demos-custom-validator" ignore-ie when-defined="vaadin-date-picker">
+    <h3>Min and max date validation</h3>
+    <vaadin-demo-snippet>
       <template preserve-content>
-        <vaadin-date-picker-current-year></vaadin-date-picker-current-year>
+        <vaadin-date-picker label="Label" min="2019-11-10" max="2019-11-11" initial-position="2019-11-11"></vaadin-date-picker>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Custom validator</h3>
+    <p>
+      Extend <code>Vaadin.DatePickerElement</code> to create your own custom element,
+      then override the <code>checkValidity(value)</code> method to validate the input.
+    </p>
+    <vaadin-demo-snippet id="date-picker-custom-validator" ignore-ie when-defined="vaadin-date-picker">
+      <template preserve-content>
+        <vaadin-date-picker-working-days label="Select a date working day"></vaadin-date-picker-working-days>
 
         <script>
-          window.addDemoReadyListener('#date-picker-validation-demos-custom-validator', function(document) {
-            class DatePickerCurrentYearElement extends Vaadin.DatePickerElement {
+          window.addDemoReadyListener('#date-picker-custom-validator', function(document) {
+            class DatePickerWorkingDaysElement extends Vaadin.DatePickerElement {
               checkValidity(value) {
-                var currentYear = new Date().getFullYear();
-                return new Date(value).getFullYear() === currentYear;
+
+                if (new Date(value).getDay() == 0 || new Date(value).getDay() == 6) {
+                  return false;
+                }
+                return true;
               }
             }
-            if (!customElements.get('vaadin-date-picker-current-year')) {
-              customElements.define('vaadin-date-picker-current-year', DatePickerCurrentYearElement);
+            if (!customElements.get('vaadin-date-picker-working-days')) {
+              customElements.define('vaadin-date-picker-working-days', DatePickerWorkingDaysElement);
             }
           });
         </script>

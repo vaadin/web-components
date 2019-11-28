@@ -1,0 +1,70 @@
+<dom-module id="date-picker-presentation-demos">
+  <template>
+    <style include="vaadin-component-demo-shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+
+    <h3>Date range</h3>
+    <vaadin-demo-snippet id="date-picker-date-range" when-defined="vaadin-date-picker">
+      <template preserve-content>
+        <vaadin-date-picker id="start" label="From date"></vaadin-date-picker>
+        <vaadin-date-picker id="end" label="To date"></vaadin-date-picker>
+
+        <p>Selected range: <span></span></p>
+        <script>
+          window.addDemoReadyListener('#date-picker-date-range', function(document) {
+            const start = document.querySelector('#start');
+            const end = document.querySelector('#end');
+            const span = document.querySelector('span');
+
+            start.addEventListener('change', function(event) {
+              end.min = event.target.value;
+
+              // Open the second date picker when the user has selected a value
+              if (start.value) {
+                end.open();
+              }
+            });
+
+            end.addEventListener('change', function(event) {
+              start.max = event.target.value;
+            });
+
+            start.addEventListener('change', function(event) {
+              span.textContent = event.target.value.trim() + ' - ' + end.value.trim();
+            });
+
+            end.addEventListener('change', function(event) {
+              span.textContent = start.value.trim() + ' - ' + event.target.value.trim();
+            });
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Date picker with week numbers</h3>
+    <p>Week numbers are only supported for locales that start the week on Monday.</p>
+    <vaadin-demo-snippet id="date-picker-with-week-numbers" when-defined="vaadin-date-picker">
+      <template preserve-content>
+        <vaadin-date-picker show-week-numbers label="Label"></vaadin-date-picker>
+        <script>
+          window.addDemoReadyListener('#date-picker-with-week-numbers', function(document) {
+            const datepicker = document.querySelector('vaadin-date-picker');
+            datepicker.set('i18n.firstDayOfWeek', 1);
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+  </template>
+  <script>
+    class DatePickerPresentationDemos extends DemoReadyEventEmitter(DatePickerDemo(Polymer.Element)) {
+      static get is() {
+        return 'date-picker-presentation-demos';
+      }
+    }
+    customElements.define(DatePickerPresentationDemos.is, DatePickerPresentationDemos);
+  </script>
+</dom-module>

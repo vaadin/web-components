@@ -6,63 +6,35 @@
       }
     </style>
 
-
-    <h3>Custom Inputs</h3>
-    <vaadin-demo-snippet id="date-picker-styling-demos-custom-inputs">
+    <h3>Small text field</h3>
+    <vaadin-demo-snippet>
       <template preserve-content>
-        <style>
-          .my-input1 input {
-            background: #f5f5f5;
-            border: 2px solid #2196f3;
-            border-radius: 4px;
-            padding: 4px;
-            text-align: center;
-          }
-        </style>
-        <vaadin-date-picker-light class="my-input1">
-          <iron-input>
-            <input placeholder="Date" size="10"/>
-          </iron-input>
-        </vaadin-date-picker-light>
+        <vaadin-date-picker theme="small" label="Label"></vaadin-date-picker>
       </template>
     </vaadin-demo-snippet>
 
-    <vaadin-demo-snippet id="date-picker-styling-demos-custom-icons">
+    <h3>Custom overlay border</h3>
+    <vaadin-demo-snippet>
       <template preserve-content>
-        <style>
-          .my-input2 input {
-            border: none;
-            font-size: 14px;
-            background: none;
-          }
-        </style>
-        <vaadin-date-picker-light>
-         <div class="my-input2">
-           <iron-icon icon="event"></iron-icon>
-           CHECK-IN:
-           <iron-input>
-             <input size="10"/>
-           </iron-input>
-
-         </div>
-        </vaadin-date-picker-light>
-      </template>
-    </vaadin-demo-snippet>
-
-
-    <h3>Small Text Field</h3>
-    <vaadin-demo-snippet id="date-picker-styling-demos-small-text-field">
-      <template preserve-content>
-        <vaadin-date-picker theme="small" label="Select date"></vaadin-date-picker>
-      </template>
-    </vaadin-demo-snippet>
-
-
-    <h3>Custom Theme Variant</h3>
-    <vaadin-demo-snippet id="date-picker-styling-demos-small-text-field">
-      <template preserve-content>
-        <dom-module id="custom-date-picker" theme-for="vaadin-text-field vaadin-date-picker-overlay-content">
+        <dom-module id="custom-overlay-border" theme-for="vaadin-date-picker-overlay">
           <template>
+            <style>
+              :host([theme~="custom-overlay-style"]) [part="overlay"] {
+                border: 0.5em solid black;
+                background-color: white;
+              }
+            </style>
+          </template>
+        </dom-module>
+        <vaadin-date-picker theme="custom-overlay-style" label="Label"></vaadin-date-picker>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Custom overlay font</h3>
+    <vaadin-demo-snippet>
+      <template preserve-content>
+        <dom-module id="custom-date-picker" theme-for=" vaadin-date-picker-overlay-content">
+          <template>ss
             <style>
               :host([theme~="custom"]) {
                 font-family: monospace;
@@ -70,7 +42,7 @@
             </style>
           </template>
         </dom-module>
-        <vaadin-date-picker theme="custom" label="Select date"></vaadin-date-picker>
+        <vaadin-date-picker theme="custom" label="Label"></vaadin-date-picker>
       </template>
     </vaadin-demo-snippet>
 
