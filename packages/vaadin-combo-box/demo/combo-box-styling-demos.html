@@ -52,45 +52,43 @@
       </template>
     </vaadin-demo-snippet>
 
-    <h3>Custom theme variant</h3>
-    <vaadin-demo-snippet id="customizing-theme-variant"
-    when-defined="vaadin-combo-box">
-    <template preserve-content>
-      <dom-module id="custom-text-field-and-item" theme-for="vaadin-text-field
-      vaadin-combo-box-item">
-      <template>
-        <style>
-          :host([theme~="custom"]) {
-            font-family: monospace;
-          }
-        </style>
+    <h3>Custom overlay style</h3>
+    <vaadin-demo-snippet id="customizing-theme-variant" when-defined="vaadin-combo-box">
+      <template preserve-content>
+        <dom-module id="custom-text-field-and-item" theme-for="vaadin-combo-box-item">
+          <template>
+            <style>
+              :host([theme~="custom"]) {
+                font-family: monospace;
+              }
+            </style>
+          </template>
+        </dom-module>
+        <dom-module id="custom-combo-box-overlay" theme-for="vaadin-combo-box-overlay">
+          <template>
+            <style>
+              :host([theme~="custom"]) [part="overlay"] {
+                background-image: linear-gradient(hsla(214, 61%, 25%, 0.05), hsla(214, 61%, 25%, 0.05));
+              }
+            </style>
+          </template>
+        </dom-module>
+        <vaadin-combo-box label="Element" value="Carbon" theme="custom"></vaadin-combo-box>
+        <script>
+          window.addDemoReadyListener('#customizing-theme-variant', function(document) {
+            document.querySelector('vaadin-combo-box').items = elements;
+          });
+        </script>
       </template>
-    </dom-module>
-    <dom-module id="custom-combo-box-overlay" theme-for="vaadin-combo-box-overlay">
-      <template>
-        <style>
-          :host([theme~="custom"]) [part="overlay"] {
-            background-image: linear-gradient(hsla(214, 61%, 25%, 0.05), hsla(214, 61%, 25%, 0.05));
-          }
-        </style>
-      </template>
-    </dom-module>
-    <vaadin-combo-box label="Element" value="Carbon" theme="custom"></vaadin-combo-box>
-    <script>
-      window.addDemoReadyListener('#customizing-theme-variant', function(document) {
-        document.querySelector('vaadin-combo-box').items = elements;
-      });
-    </script>
-  </template>
-</vaadin-demo-snippet>
+    </vaadin-demo-snippet>
 
-</template>
-<script>
-  class ComboBoxStylingDemos extends DemoReadyEventEmitter(ComboBoxDemo(Polymer.Element)) {
-    static get is() {
-      return 'combo-box-styling-demos';
+  </template>
+  <script>
+    class ComboBoxStylingDemos extends DemoReadyEventEmitter(ComboBoxDemo(Polymer.Element)) {
+      static get is() {
+        return 'combo-box-styling-demos';
+      }
     }
-  }
-  customElements.define(ComboBoxStylingDemos.is, ComboBoxStylingDemos);
-</script>
+    customElements.define(ComboBoxStylingDemos.is, ComboBoxStylingDemos);
+  </script>
 </dom-module>
