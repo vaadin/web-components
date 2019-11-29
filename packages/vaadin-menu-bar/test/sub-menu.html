@@ -625,7 +625,7 @@
           const overlay = menu.$.overlay;
           overlay.__openingHandler && overlay.__openingHandler();
         }
-        MockInteractions.tap(openTarget, {emulateTouch: true});
+        openTarget.dispatchEvent(new CustomEvent('mouseover', {bubbles: true, composed: true}));
       };
 
       beforeEach(async() => {
@@ -658,8 +658,6 @@
         await nextRender(menu);
         subMenu = menu._subMenu;
         buttons = menu._buttons;
-        // simulate mobile & touch events
-        subMenu._touch = true;
         window.top.document.querySelector('#subsuites').style.width = '400px';
       });
 
@@ -675,7 +673,6 @@
         await onceOpened(subMenu);
         await nextRender(subMenu);
         const subMenu2 = subMenu.$.overlay.querySelector('vaadin-menu-bar-submenu');
-        subMenu2._touch = true;
         items = subMenu.$.overlay.querySelectorAll('vaadin-context-menu-item');
         item = items[items.length - 1];
         open(item);
@@ -692,7 +689,6 @@
         await onceOpened(subMenu);
         await nextRender(subMenu);
         const subMenu2 = subMenu.$.overlay.querySelector('vaadin-menu-bar-submenu');
-        subMenu2._touch = true;
         items = subMenu.$.overlay.querySelectorAll('vaadin-context-menu-item');
         item = items[items.length - 1];
         open(item);
