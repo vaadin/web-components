@@ -86,6 +86,12 @@
 <dom-module id="lumo-context-menu-item" theme-for="vaadin-context-menu-item">
   <template>
     <style>
+      :host {
+        user-select: none;
+        -ms-user-select: none;
+        -webkit-user-select: none;
+      }
+
       :host(.vaadin-menu-item[menu-item-checked])::before {
         opacity: 1;
       }

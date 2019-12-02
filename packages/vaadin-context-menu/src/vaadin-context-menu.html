@@ -413,6 +413,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
             this._oldListenOn.style.webkitTouchCallout = '';
             this._oldListenOn.style.webkitUserSelect = '';
+            this._oldListenOn.style.msUserSelect = '';
+            this._oldListenOn.style.userSelect = '';
 
             this._oldListenOn = null;
             this._oldOpenOn = null;
@@ -421,13 +423,22 @@ This program is available under Apache License Version 2.0, available at https:/
           if (listenOn && openOn) {
             this._listen(listenOn, openOn, this._boundOpen);
 
-            // note: these styles don't seem to work in Firefox on iOS.
-            listenOn.style.webkitTouchCallout = 'none';
-            listenOn.style.webkitUserSelect = 'none';
-
             this._oldListenOn = listenOn;
             this._oldOpenOn = openOn;
           }
+        }
+
+        _setListenOnUserSelect(value) {
+          // note: these styles don't seem to work in Firefox on iOS.
+          this.listenOn.style.webkitTouchCallout = value;
+          this.listenOn.style.webkitUserSelect = value; // Chrome, Safari, Firefox
+          this.listenOn.style.msUserSelect = value; // IE 10+
+          this.listenOn.style.userSelect = value;
+
+          // note: because user-selection is disabled on the overlay
+          // before opening the menu the text could be already selected
+          // so we need to clear that selection
+          document.getSelection().removeAllRanges();
         }
 
         _closeOnChanged(closeOn, oldCloseOn) {
@@ -461,8 +472,10 @@ This program is available under Apache License Version 2.0, available at https:/
               this._instance = this.$.overlay._instance;
             }
             document.documentElement.addEventListener('contextmenu', this._boundOnGlobalContextMenu, true);
+            this._setListenOnUserSelect('none');
           } else {
             document.documentElement.removeEventListener('contextmenu', this._boundOnGlobalContextMenu, true);
+            this._setListenOnUserSelect('');
           }
 
           // Has to be set after instance has been created

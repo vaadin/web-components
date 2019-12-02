@@ -106,6 +106,52 @@
             contextmenu();
           });
 
+          it('should clear selected ranges on openning', done => {
+            listenOnce(overlay, 'vaadin-overlay-open', () => {
+              expect(window.getSelection().rangeCount).to.equal(0);
+              done();
+            });
+
+            const range = document.createRange();
+            range.selectNode(menu.listenOn.querySelector('#target'));
+            window.getSelection().addRange(range);
+            contextmenu();
+          });
+
+          it('should set `user-select` to `none` on openning', done => {
+            listenOnce(overlay, 'vaadin-overlay-open', () => {
+              expect(menu.opened).to.eql(true);
+
+              const userSelect = getComputedStyle(menu).webkitUserSelect ||
+                getComputedStyle(menu).msUserSelect ||
+                getComputedStyle(menu).userSelect;
+
+              expect(userSelect).to.equal('none');
+              done();
+            });
+
+            ['webkitUserSelect', 'msUserSelect', 'userSelect'].forEach(prop =>
+              expect(getComputedStyle(menu)[prop]).not.to.equal('none'));
+            contextmenu();
+          });
+
+          it('should unset `user-select` if the listenOn target was changed when opened', done => {
+            listenOnce(overlay, 'vaadin-overlay-open', () => {
+              expect(menu.opened).to.eql(true);
+              const newTarget = document.createElement('span');
+              newTarget.textContent = 'New target';
+              menu.listenOn.parentElement.appendChild(newTarget);
+              menu.listenOn = newTarget;
+
+              ['webkitUserSelect', 'msUserSelect', 'userSelect'].forEach(prop =>
+                expect(getComputedStyle(menu)[prop]).not.to.equal('none'));
+
+              done();
+            });
+
+            contextmenu();
+          });
+
           it('should be positioned on click target', done => {
             listenOnce(overlay, 'vaadin-overlay-open', () => {
               const rect = overlay.getBoundingClientRect();
