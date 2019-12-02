@@ -123,6 +123,17 @@
 
           expect(menu.opened).to.be.true;
         });
+
+        it('should be closed after detached', () => {
+          fire(target, 'contextmenu');
+          expect(menu.opened).to.be.true;
+
+          const spy = sinon.spy(menu, 'close');
+
+          menu.parentNode.removeChild(menu);
+          expect(spy).to.be.calledOnce;
+          expect(menu.opened).to.be.false;
+        });
       });
     </script>
 
