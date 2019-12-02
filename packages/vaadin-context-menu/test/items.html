@@ -101,8 +101,9 @@
 
         it('should remove close listener', () => {
           rootMenu.parentNode.removeChild(rootMenu);
+          const spy = sinon.spy(rootMenu, 'close');
           fire(document.documentElement, 'click');
-          expect(rootMenu.opened).to.be.true;
+          expect(spy).not.to.be.called;
         });
 
         if (!MOBILE) {
