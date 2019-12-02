@@ -20,7 +20,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
       info: {
         sourceEvent: null,
-        _ios: /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
+        _ios: (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream)
+          || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
       },
 
       reset: function() {
