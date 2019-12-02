@@ -26,22 +26,46 @@
 <body>
   <vaadin-component-demo config-src="demos.json"></vaadin-component-demo>
 
-  <dom-module id="custom-overlay-font" theme-for="vaadin-date-picker-overlay-content">
+  <dom-module id="custom-input-field-style-" theme-for="vaadin-text-field">
     <template>
       <style>
-        :host([theme~="custom"]) {
-          font-family: monospace;
+        :host([theme~="custom-input-field-style"]) [part="input-field"] {
+          border: 1px solid black;
+          background-color: white;
         }
       </style>
     </template>
   </dom-module>
 
-  <dom-module id="custom-overlay-border-style" theme-for="vaadin-date-picker-overlay">
+  <dom-module id="custom-icon-style-" theme-for="vaadin-date-picker">
+    <template>
+      <style>
+        :host([theme~="custom-icon-style"]) [part="toggle-button"]::before {
+          display: none;
+        }
+
+        :host([theme~="custom-icon-style"]) [part="toggle-button"] {
+          background-image: url(icon.svg);
+        }
+      </style>
+    </template>
+  </dom-module>
+
+  <dom-module id="custom-overlay-style-" theme-for="vaadin-date-picker-overlay">
     <template>
       <style>
         :host([theme~="custom-overlay-style"]) [part="overlay"] {
-          border: 0.5em solid black;
-          background-color: white;
+          background: var(--lumo-shade-80pct);
+          --lumo-header-text-color: var(--lumo-tint-80pct);
+          --lumo-body-text-color: var(--lumo-tint-60pct);
+          --lumo-secondary-text-color: var(--lumo-tint-50pct);
+          --lumo-tertiary-text-color: var(--lumo-tint-40pct);
+          --lumo-disabled-text-color: var(--lumo-tint-20pct);
+          --lumo-primary-color-10pct: var(--lumo-tint-5pct);
+          --lumo-primary-color-50pct: var(--lumo-tint-50pct);
+          --lumo-primary-text-color: var(--lumo-tint);
+          -webkit-backdrop-filter: blur(20px);
+          backdrop-filter: blur(20px);
         }
       </style>
     </template>

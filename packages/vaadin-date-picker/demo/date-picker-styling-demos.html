@@ -6,22 +6,41 @@
       }
     </style>
 
-    <h3>Small text field</h3>
+    <h3>Custom input field style</h3>
     <vaadin-demo-snippet>
       <template preserve-content>
-        <vaadin-date-picker theme="small" label="Label"></vaadin-date-picker>
+        <dom-module id="custom-input-field-style" theme-for="vaadin-text-field">
+          <template>
+            <style>
+              :host([theme~="custom-input-field-style"]) [part="input-field"] {
+                border: 1px solid black;
+                background-color: white;
+              }
+            </style>
+          </template>
+        </dom-module>
+        <vaadin-date-picker theme="custom-input-field-style" label="Label"></vaadin-date-picker>
       </template>
     </vaadin-demo-snippet>
 
-    <h3>Custom overlay border</h3>
+    <h3>Custom overlay style</h3>
     <vaadin-demo-snippet>
       <template preserve-content>
-        <dom-module id="custom-overlay-border" theme-for="vaadin-date-picker-overlay">
+        <dom-module id="custom-overlay-style" theme-for="vaadin-date-picker-overlay">
           <template>
             <style>
               :host([theme~="custom-overlay-style"]) [part="overlay"] {
-                border: 0.5em solid black;
-                background-color: white;
+                background: var(--lumo-shade-80pct);
+                --lumo-header-text-color: var(--lumo-tint-80pct);
+                --lumo-body-text-color: var(--lumo-tint-60pct);
+                --lumo-secondary-text-color: var(--lumo-tint-50pct);
+                --lumo-tertiary-text-color: var(--lumo-tint-40pct);
+                --lumo-disabled-text-color: var(--lumo-tint-20pct);
+                --lumo-primary-color-10pct: var(--lumo-tint-5pct);
+                --lumo-primary-color-50pct: var(--lumo-tint-50pct);
+                --lumo-primary-text-color: var(--lumo-tint);
+                -webkit-backdrop-filter: blur(20px);
+                backdrop-filter: blur(20px);
               }
             </style>
           </template>
@@ -30,19 +49,23 @@
       </template>
     </vaadin-demo-snippet>
 
-    <h3>Custom overlay font</h3>
+    <h3>Custom icon</h3>
     <vaadin-demo-snippet>
       <template preserve-content>
-        <dom-module id="custom-date-picker" theme-for=" vaadin-date-picker-overlay-content">
-          <template>ss
+        <dom-module id="custom-icon-style" theme-for="vaadin-date-picker">
+          <template>
             <style>
-              :host([theme~="custom"]) {
-                font-family: monospace;
+              :host([theme~="custom-icon-style"]) [part="toggle-button"]::before {
+                display: none;
+              }
+
+              :host([theme~="custom-icon-style"]) [part="toggle-button"] {
+                background-image: url(icon.svg);
               }
             </style>
           </template>
         </dom-module>
-        <vaadin-date-picker theme="custom" label="Label"></vaadin-date-picker>
+        <vaadin-date-picker theme="custom-icon-style" label="Label"></vaadin-date-picker>
       </template>
     </vaadin-demo-snippet>
 

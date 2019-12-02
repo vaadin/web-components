@@ -46,6 +46,17 @@
     }
     ,
     {
+      "name": "Theme Variants",
+      "url": "date-picker-theme-variants-demos",
+      "src": "date-picker-theme-variants-demos.html",
+      "meta": {
+        "title": "vaadin-date-picker Theme Variants Examples",
+        "description": "",
+        "image": ""
+      }
+    }
+    ,
+    {
       "name": "Styling",
       "url": "date-picker-styling-demos",
       "src": "date-picker-styling-demos.html",
