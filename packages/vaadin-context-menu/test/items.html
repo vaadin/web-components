@@ -123,7 +123,7 @@
             open(menuComponents()[0]);
             rootItemRect = menuComponents()[0].getBoundingClientRect();
             const subItemRect = menuComponents(subMenu)[0].getBoundingClientRect();
-            expect(subItemRect.right).to.be.below(rootItemRect.left);
+            expect(subItemRect.right).to.be.below(rootItemRect.left + rootItemRect.width / 2);
           });
 
           it('should open the subMenu on the top if root menu is bottom-aligned', done => {

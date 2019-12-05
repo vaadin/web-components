@@ -398,6 +398,7 @@ This program is available under Apache License Version 2.0, available at https:/
         // Runs before overlay is fully rendered
         _onOverlayOpened(e) {
           this._setOpened(e.detail.value);
+          this.__alignOverlayPosition();
         }
 
         // Runs after overlay is fully rendered
