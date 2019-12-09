@@ -9,8 +9,7 @@
     <h3>Required</h3>
     <vaadin-demo-snippet id="date-picker-required">
       <template preserve-content>
-        <vaadin-date-picker label="Required" required error-message="Please choose a date" id="datePicker">
-        </vaadin-date-picker>
+        <vaadin-date-picker label="Required" required error-message="Please choose a date" id="datePicker"></vaadin-date-picker>
         <vaadin-button>Submit</vaadin-button>
         <script>
           window.addDemoReadyListener('#date-picker-required', function(document) {
@@ -39,12 +38,10 @@
     <vaadin-demo-snippet id="date-picker-custom-validator" ignore-ie when-defined="vaadin-date-picker">
       <template preserve-content>
         <vaadin-date-picker-working-days label="Select a date working day"></vaadin-date-picker-working-days>
-
         <script>
           window.addDemoReadyListener('#date-picker-custom-validator', function(document) {
             class DatePickerWorkingDaysElement extends Vaadin.DatePickerElement {
               checkValidity(value) {
-
                 if (new Date(value).getDay() == 0 || new Date(value).getDay() == 6) {
                   return false;
                 }

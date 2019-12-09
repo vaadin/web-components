@@ -9,12 +9,19 @@
     <h3>Localizing</h3>
     <vaadin-demo-snippet id="date-picker-localizing" when-defined="vaadin-date-picker">
       <template preserve-content>
-        <vaadin-date-picker label="Syntymäpäivä" value="1980-08-14">
-        </vaadin-date-picker>
+        <vaadin-date-picker label="Syntymäpäivä"></vaadin-date-picker>
+        <div>Day of week: <span id="output"></span></div>
         <script>
           window.addDemoReadyListener('#date-picker-localizing', function(document) {
             // Set up the parser library for Finnish locale
             var datepicker = document.querySelector('vaadin-date-picker');
+            const output = document.querySelector('#output');
+            datepicker.addEventListener('change', function(event) {
+              const date = Sugar.Date.create(event.target.value, 'fi');
+              const weekday = Sugar.Date.format(date, '{weekday}', 'fi');
+              const month = Sugar.Date.format(date, '{month}', 'fi');
+              output.textContent = weekday + ', Month: ' + month;
+            });
             datepicker.i18n = {
               week: 'viikko',
               calendar: 'kalenteri',
