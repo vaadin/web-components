@@ -123,7 +123,7 @@
             open(menuComponents()[0]);
             rootItemRect = menuComponents()[0].getBoundingClientRect();
             const subItemRect = menuComponents(subMenu)[0].getBoundingClientRect();
-            expect(subItemRect.right).to.be.below(rootItemRect.left + rootItemRect.width / 2);
+            expect(subItemRect.right).to.be.below(rootItemRect.left);
           });
 
           it('should open the subMenu on the top if root menu is bottom-aligned', done => {
@@ -151,13 +151,12 @@
             rootOverlay.style.removeProperty('left');
             rootOverlay.style.right = rootItemRect.width + 'px';
             rootOverlay.setAttribute('right-aligned', '');
-            const padding = parseFloat(getComputedStyle(rootOverlay.$.content).paddingLeft) * 2;
             open(rootItem);
             await nextRender(subMenu);
             expect(subMenu.$.overlay.hasAttribute('right-aligned')).to.be.true;
             const rootMenuRect = rootOverlay.$.content.getBoundingClientRect();
             const subMenuRect = subMenu.$.overlay.$.content.getBoundingClientRect();
-            expect(subMenuRect.right).to.be.closeTo(rootMenuRect.left + padding, 1);
+            expect(subMenuRect.right).to.be.closeTo(rootMenuRect.left, 2);
           });
 
           it('should open the second subMenu on the right again if not enough space', async() => {
@@ -180,7 +179,7 @@
             expect(subMenu.$.overlay.hasAttribute('right-aligned')).to.be.true;
             const rootMenuRect = rootOverlay.$.content.getBoundingClientRect();
             const subMenuRect = subMenu.$.overlay.$.content.getBoundingClientRect();
-            expect(subMenuRect.right).to.be.closeTo(rootMenuRect.left + padding, 1);
+            expect(subMenuRect.right).to.be.closeTo(rootMenuRect.left, 1);
 
             /* second sub-menu left-aligned */
             const nestedItem = menuComponents(subMenu)[2];
@@ -191,7 +190,7 @@
             const subMenu2 = getSubMenu(subMenu);
             expect(subMenu2.$.overlay.hasAttribute('right-aligned')).to.be.false;
             const subMenu2Rect = subMenu2.$.overlay.$.content.getBoundingClientRect();
-            expect(subMenu2Rect.left).to.be.closeTo(nestedItemRect.right, 1);
+            expect(subMenu2Rect.left).to.be.closeTo(nestedItemRect.right + padding / 2, 1);
           });
         }
 

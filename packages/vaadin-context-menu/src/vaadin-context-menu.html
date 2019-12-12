@@ -614,7 +614,7 @@ This program is available under Apache License Version 2.0, available at https:/
           const {xMax, yMax, left, top, width} = overlay.getBoundaries();
           // Reuse saved x and y event values, in order to this method be used async
           // in the `vaadin-overlay-change` which guarantees that overlay is ready
-          const x = this.__x || left;
+          let x = this.__x || left;
           const y = this.__y || top;
 
           // Select one overlay corner and move to the event x/y position.
@@ -625,11 +625,11 @@ This program is available under Apache License Version 2.0, available at https:/
           // Align to the parent menu overlay, if any.
           const parent = overlay.parentOverlay;
           let alignedToParent = false;
+          let parentContentRect;
           if (parent) {
-            const parentContentRect = parent.$.overlay.getBoundingClientRect();
+            parentContentRect = parent.$.overlay.getBoundingClientRect();
             if (parent.hasAttribute('right-aligned')) {
               const parentStyle = getComputedStyle(parent);
-
               const getPadding = (el, direction) => {
                 return parseFloat(getComputedStyle(el.$.content)['padding' + direction]);
               };
@@ -639,16 +639,29 @@ This program is available under Apache License Version 2.0, available at https:/
               // Preserve right-aligned, if possible.
               if ((wdthVport - (right - padding)) > width) {
                 overlay.setAttribute('right-aligned', '');
-                style.right = right - padding + 'px';
+                style.right = right + 'px';
                 alignedToParent = true;
               }
+            } else if (x < parentContentRect.x) {
+              // Check if sub menu opens on the left side and the parent menu is not right aligned.
+              // If so, use actual width of the submenu content instead of the parent menu content.
+              x = x - (width - parentContentRect.width);
             }
           }
 
           if (!alignedToParent) {
-            if (x < wdthVport / 2 || x < xMax) {
+            // Sub-menu is displayed in the right side of root menu
+            if ((x < wdthVport / 2 || x < xMax) && !parent) {
               style.left = x + 'px';
-            } else {
+            } else if ((parent && (wdthVport - parentContentRect.width - parentContentRect.left
+              >= parentContentRect.width))) { // Sub-menu is displayed in the right side of root menu If it is nested menu
+              style.left = parentContentRect.left + parentContentRect.width + 'px';
+            } else if (parent) { // Sub-menu is displayed in the left side of root menu If it is nested menu
+              style.right = 'auto';
+              style.left = Math.max(overlay.getBoundingClientRect().left,
+                parentContentRect.left - overlay.getBoundingClientRect().width) + 'px';
+              overlay.setAttribute('right-aligned', '');
+            } else { // Sub-menu is displayed in the left side of root menu
               style.right = Math.max(0, (wdthVport - x)) + 'px';
               overlay.setAttribute('right-aligned', '');
             }
