@@ -85,6 +85,11 @@
           }
         });
 
+        it('should propagate value to date and time pickers', () => {
+          dateTimePicker.value = '2019-09-16T15:00';
+          expect(datePicker.value).to.equal('2019-09-16');
+          expect(timePicker.value).to.equal('15:00');
+        });
         it('should propagate datePlaceholder to date picker', () => {
           dateTimePicker.datePlaceholder = 'Pick a date';
           expect(datePicker.placeholder).to.equal('Pick a date');
@@ -158,6 +163,11 @@
           }
         });
 
+        it('should have initial value for value property', () => {
+          expect(dateTimePicker.value).to.equal('2019-09-16T15:00');
+          expect(datePicker.value).to.equal('2019-09-16');
+          expect(timePicker.value).to.equal('15:00');
+        });
         it('should have initial value for datePlaceholder', () => {
           expect(dateTimePicker.datePlaceholder).to.equal('Pick a date');
           expect(datePicker.placeholder).to.equal('Pick a date');

@@ -82,7 +82,7 @@
       it('should get value from custom field', () => {
         datePicker.value = '2019-09-19';
         timePicker.value = '15:00';
-        customField.__setValue();
+        dateTimePicker.__triggerCustomFieldValueUpdate();
         expect(dateTimePicker.value).to.equal('2019-09-19T15:00');
       });
 
@@ -125,14 +125,28 @@
 
           date.setFullYear(0);
           dateTimePicker.__selectedDateTime = date;
+          expect(dateTimePicker.value).to.equal('0000-02-03T08:30');
+          dateTimePicker.step = 1;
+          expect(dateTimePicker.value).to.equal('0000-02-03T08:30:00');
+          dateTimePicker.step = .001;
           expect(dateTimePicker.value).to.equal('0000-02-03T08:30:00.000');
 
           date.setFullYear(10000);
+          dateTimePicker.step = undefined;
           dateTimePicker.__selectedDateTime = new Date(date.getTime());
+          expect(dateTimePicker.value).to.equal('+010000-02-03T08:30');
+          dateTimePicker.step = 1;
+          expect(dateTimePicker.value).to.equal('+010000-02-03T08:30:00');
+          dateTimePicker.step = .001;
           expect(dateTimePicker.value).to.equal('+010000-02-03T08:30:00.000');
 
           date.setFullYear(-10000);
+          dateTimePicker.step = undefined;
           dateTimePicker.__selectedDateTime = new Date(date.getTime());
+          expect(dateTimePicker.value).to.equal('-010000-02-03T08:30');
+          dateTimePicker.step = 1;
+          expect(dateTimePicker.value).to.equal('-010000-02-03T08:30:00');
+          dateTimePicker.step = .001;
           expect(dateTimePicker.value).to.equal('-010000-02-03T08:30:00.000');
         });
 
@@ -216,7 +230,7 @@
       it('should get value from slotted inputs', () => {
         datePicker.value = '2019-09-16';
         timePicker.value = '15:00';
-        customField.__setValue();
+        dateTimePicker.__triggerCustomFieldValueUpdate();
         expect(dateTimePicker.value).to.equal('2019-09-16T15:00');
       });
 
