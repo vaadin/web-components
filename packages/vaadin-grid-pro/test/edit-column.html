@@ -544,6 +544,25 @@
         });
       });
 
+      describe('disable editing', () => {
+
+        let grid;
+
+        beforeEach(() => {
+          grid = fixture('default');
+          grid.items = getItems();
+          flushGrid(grid);
+        });
+
+        it('should not show editor when editing is disabled', () => {
+          const cell = getContainerCell(grid.$.items, 1, 0);
+          grid._editingDisabled = true;
+          enter(cell);
+          const input = getCellEditor(cell);
+          expect(input).to.be.not.ok;
+        });
+      });
+
       describe('vertical scrolling', () => {
         let grid, input, firstCell;
 

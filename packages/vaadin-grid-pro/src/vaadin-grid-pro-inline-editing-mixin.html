@@ -43,6 +43,10 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         singleCellEdit: {
           type: Boolean,
           notify: true // FIXME(yuriy-fix): needed by Flow counterpart
+        },
+
+        _editingDisabled: {
+          type: Boolean
         }
       };
     }
@@ -261,6 +265,9 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
     }
 
     _startEdit(cell, column) {
+      if (this._editingDisabled) {
+        return;
+      }
       // cancel debouncer enqueued on focusout
       this._cancelStopEdit();
 
