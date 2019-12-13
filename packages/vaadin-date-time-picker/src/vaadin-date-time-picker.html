@@ -370,22 +370,47 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /**
+         * String (ISO date) to Date object
+         * @param {string} str e.g. 'yyyy-mm-dd'
+         * @return {(Date|undefined)}
+         */
         __parseDate(str) {
           return customElements.get('vaadin-date-time-picker-date-picker').prototype._parseDate(str);
         }
 
-        __formatDateISO(str) {
-          return customElements.get('vaadin-date-time-picker-date-picker').prototype._formatISO(str);
+        /**
+         * Date object to string (ISO date)
+         * @param {Date} date
+         * @return {string} e.g. 'yyyy-mm-dd'
+         */
+        __formatDateISO(date) {
+          return customElements.get('vaadin-date-time-picker-date-picker').prototype._formatISO(date);
         }
 
+        /**
+         * Custom time object to string (ISO time)
+         * @param {object} time Time components as properties { hours, minutes, seconds, milliseconds }
+         * @return {string} e.g. 'hh:mm', 'hh:mm:ss', 'hh:mm:ss.fff'
+         */
         __formatTimeISO(time) {
           return customElements.get('vaadin-time-picker').properties.i18n.value().formatTime(time);
         }
 
+        /**
+         * String (ISO time) to custom time object
+         * @param {string} str e.g. 'hh:mm', 'hh:mm:ss', 'hh:mm:ss.fff'
+         * @return {object} Time components as properties { hours, minutes, seconds, milliseconds }
+         */
         __parseTimeISO(str) {
           return customElements.get('vaadin-time-picker').properties.i18n.value().parseTime(str);
         }
 
+        /**
+         * String (ISO date time) to Date object
+         * @param {string} str e.g. 'yyyy-mm-ddThh:mm', 'yyyy-mm-ddThh:mm:ss', 'yyyy-mm-ddThh:mm:ss.fff'
+         * @return {(Date|undefined)}
+         */
         __parseDateTime(str) {
           const [dateValue, timeValue] = str.split('T');
           if (!(dateValue && timeValue)) {

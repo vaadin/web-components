@@ -62,7 +62,7 @@
     -->
 
     <h3>Value resolution</h3>
-    <p>The <code>step</code> property specified in seconds affects the resolution of the time picker and visibility of the time picker dropdown. If <code>step</code> is less than 15 minutes the dropdown is hidden.</p>
+    <p>The <code>step</code> property specified in seconds affects the resolution of the time picker and visibility of the time picker dropdown. If <code>step</code> is less than 15 minutes (<code>&lt;900</code>) the dropdown is hidden.</p>
     <vaadin-demo-snippet id="date-time-picker-basic-demos-step">
       <template preserve-content>
         <vaadin-date-time-picker step="1800" label="30 min intervals in time dropdown" time-placeholder="hh:mm"></vaadin-date-time-picker>
