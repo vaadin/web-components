@@ -205,6 +205,13 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     __alignOverlayPosition(e) {
+      /* istanbul ignore if */
+      if (!this._expandedButton) {
+        // When `openOnHover` is true, quickly moving cursor can close submenu,
+        // so by the time when event listener gets executed button is null.
+        // See https://github.com/vaadin/vaadin-menu-bar/issues/85
+        return;
+      }
       const overlay = e.target;
       const {width, height} = this._expandedButton.getBoundingClientRect();
       if (overlay.hasAttribute('bottom-aligned')) {
