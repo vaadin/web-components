@@ -70,6 +70,14 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Valid range</h3>
+    <p>The <code>min</code> and <code>max</code> properties affect the range of dates and times that will be available in the picker.</p>
+    <vaadin-demo-snippet id="date-time-picker-basic-demos-step">
+      <template preserve-content>
+        <vaadin-date-time-picker min="2019-12-16T20:00" max="2019-12-20T10:00" label="Time of arrival"></vaadin-date-time-picker>
+      </template>
+    </vaadin-demo-snippet>
+
   </template>
   <script>
     class DateTimePickerBasicDemos extends DemoReadyEventEmitter(DateTimePickerDemo(Polymer.Element)) {

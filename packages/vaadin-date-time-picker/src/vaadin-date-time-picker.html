@@ -5,8 +5,9 @@ This program is available under Apache License Version 2.0, available at https:/
 -->
 
 <link rel="import" href="../../polymer/polymer-element.html">
-<link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
+<link rel="import" href="../../vaadin-date-picker/src/vaadin-date-picker-helper.html">
 <link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
+<link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="vaadin-date-time-picker-custom-field.html">
 <link rel="import" href="vaadin-date-time-picker-date-picker.html">
 <link rel="import" href="vaadin-date-time-picker-time-picker.html">
@@ -142,6 +143,52 @@ This program is available under Apache License Version 2.0, available at https:/
             },
 
             /**
+             * The earliest allowed value (date and time) that can be selected. All earlier values will be disabled.
+             *
+             * Supported date time format is based on ISO 8601 (without a time zone designator):
+             * - Minute precision `"YYYY-MM-DDThh:mm"`
+             * - Second precision `"YYYY-MM-DDThh:mm:ss"`
+             * - Millisecond precision `"YYYY-MM-DDThh:mm:ss.fff"`
+             *
+             * @type {String}
+             */
+            min: {
+              type: String,
+              observer: '__minChanged'
+            },
+
+            /**
+             * The latest value (date and time) that can be selected. All later values will be disabled.
+             *
+             * Supported date time format is based on ISO 8601 (without a time zone designator):
+             * - Minute precision `"YYYY-MM-DDThh:mm"`
+             * - Second precision `"YYYY-MM-DDThh:mm:ss"`
+             * - Millisecond precision `"YYYY-MM-DDThh:mm:ss.fff"`
+             *
+             * @type {String}
+             */
+            max: {
+              type: String,
+              observer: '__maxChanged'
+            },
+
+            /**
+             * The earliest value that can be selected. All earlier values will be disabled.
+             */
+            __minDateTime: {
+              type: Date,
+              value: ''
+            },
+
+            /**
+             * The latest value that can be selected. All later values will be disabled.
+             */
+            __maxDateTime: {
+              type: Date,
+              value: ''
+            },
+
+            /**
              * A placeholder string for the date field.
              */
             datePlaceholder: {
@@ -247,6 +294,16 @@ This program is available under Apache License Version 2.0, available at https:/
           ];
         }
 
+        constructor() {
+          super();
+          // Default value for "min" and "max" properties of vaadin-date-picker (for removing constraint)
+          this.__defaultDateMinMaxValue = undefined;
+          // Default value for "min" property of vaadin-time-picker (for removing constraint)
+          this.__defaultTimeMinValue = '00:00:00.000';
+          // Default value for "max" property of vaadin-time-picker (for removing constraint)
+          this.__defaultTimeMaxValue = '23:59:59.999';
+        }
+
         ready() {
           super.ready();
           this.__filterElements = node => node.nodeType === Node.ELEMENT_NODE;
@@ -282,6 +339,11 @@ This program is available under Apache License Version 2.0, available at https:/
             this.disabled = datePicker.disabled;
             this.readonly = datePicker.readonly;
           }
+
+          // min and max are always synchronized from date time picker (host) to inner fields because time picker
+          // min and max need to be dynamically set depending on currently selected date instead of simple propagation
+          datePicker.min = this.__formatDateISO(this.__minDateTime, this.__defaultDateMinMaxValue);
+          datePicker.max = this.__formatDateISO(this.__maxDateTime, this.__defaultDateMinMaxValue);
         }
 
         __timePickerChanged() {
@@ -304,6 +366,37 @@ This program is available under Apache License Version 2.0, available at https:/
             this.timePlaceholder = timePicker.placeholder;
             this.step = timePicker.step;
             // Don't set disabled or readonly from time picker since they're already set from date picker
+          }
+
+          // min and max are always synchronized from parent to slotted because time picker min and max
+          // need to be dynamically set depending on currently selected date instead of simple propagation
+          this.__updateTimePickerMinMax();
+        }
+
+        __updateTimePickerMinMax() {
+          if (this.__timePicker && this.__datePicker) {
+            const dateEquals = Vaadin.DatePickerHelper._dateEquals;
+            const selectedDate = this.__parseDate(this.__datePicker.value);
+            const isMinMaxSameDay = dateEquals(this.__minDateTime, this.__maxDateTime);
+
+            if (this.__minDateTime && dateEquals(selectedDate, this.__minDateTime) || isMinMaxSameDay) {
+              const oldTimeValue = this.__timePicker.value;
+
+              this.__timePicker.min = this.__dateToIsoTimeString(this.__minDateTime, this.__defaultTimeMinValue);
+
+              // Workaround for https://github.com/vaadin/vaadin-time-picker/issues/123
+              if (oldTimeValue === '' && this.__timePicker.value !== oldTimeValue) {
+                this.__timePicker.value = oldTimeValue;
+              }
+            } else {
+              this.__timePicker.min = this.__defaultTimeMinValue;
+            }
+
+            if (this.__maxDateTime && dateEquals(selectedDate, this.__maxDateTime) || isMinMaxSameDay) {
+              this.__timePicker.max = this.__dateToIsoTimeString(this.__maxDateTime, this.__defaultTimeMaxValue);
+            } else {
+              this.__timePicker.max = this.__defaultTimeMaxValue;
+            }
           }
         }
 
@@ -382,9 +475,13 @@ This program is available under Apache License Version 2.0, available at https:/
         /**
          * Date object to string (ISO date)
          * @param {Date} date
-         * @return {string} e.g. 'yyyy-mm-dd'
+         * @param {string} defaultValue
+         * @return {string} e.g. 'yyyy-mm-dd' (or defaultValue when date is falsy)
          */
-        __formatDateISO(date) {
+        __formatDateISO(date, defaultValue = '') {
+          if (!date) {
+            return defaultValue;
+          }
           return customElements.get('vaadin-date-time-picker-date-picker').prototype._formatISO(date);
         }
 
@@ -451,11 +548,13 @@ This program is available under Apache License Version 2.0, available at https:/
         /**
          * Date object to string (ISO time)
          * @param {Date} date
+         * @param {string} defaultValue
          * @return {string} e.g. 'hh:mm', 'hh:mm:ss', 'hh:mm:ss.fff' (depending on precision defined by "step" property)
+         *                  or defaultValue when date is falsy
          */
-        __dateToIsoTimeString(date) {
+        __dateToIsoTimeString(date, defaultValue = '') {
           if (!date) {
-            return '';
+            return defaultValue;
           }
           return this.__formatTimeISO(this.__validateTime({
             hours: date.getHours(),
@@ -534,6 +633,22 @@ This program is available under Apache License Version 2.0, available at https:/
           this.__handleDateTimeChange('value', '__selectedDateTime', value, oldValue);
         }
 
+        __minChanged(value, oldValue) {
+          this.__handleDateTimeChange('min', '__minDateTime', value, oldValue);
+          if (this.__datePicker) {
+            this.__datePicker.min = this.__formatDateISO(this.__minDateTime, this.__defaultDateMinMaxValue);
+          }
+          this.__updateTimePickerMinMax();
+        }
+
+        __maxChanged(value, oldValue) {
+          this.__handleDateTimeChange('max', '__maxDateTime', value, oldValue);
+          if (this.__datePicker) {
+            this.__datePicker.max = this.__formatDateISO(this.__maxDateTime, this.__defaultDateMinMaxValue);
+          }
+          this.__updateTimePickerMinMax();
+        }
+
         __selectedDateTimeChanged(selectedDateTime) {
           /* istanbul ignore if */
           if (!selectedDateTime === undefined) {
@@ -588,6 +703,11 @@ This program is available under Apache License Version 2.0, available at https:/
             }
           } else {
             this.value = '';
+          }
+
+          if (this.__oldDateValue !== date) {
+            this.__oldDateValue = date;
+            this.__updateTimePickerMinMax();
           }
         }
       }

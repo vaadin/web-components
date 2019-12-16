@@ -29,6 +29,8 @@
     <template>
       <vaadin-date-time-picker 
         value="2019-09-16T15:00"
+        min="2019-09-01T08:00"
+        max="2019-09-30T22:00"
         date-placeholder="Pick a date"
         time-placeholder="Pick a time"
         step="1800"
@@ -43,7 +45,7 @@
 
   <test-fixture id="slotted-initial-properties">
     <template>
-      <vaadin-date-time-picker label="Birth date and time">
+      <vaadin-date-time-picker label="Birth date and time" min="2019-09-01T08:00" max="2019-09-30T22:00">
         <vaadin-date-picker slot="date-picker"
           value="2019-09-16"
           placeholder="Pick a date"
@@ -90,6 +92,41 @@
           expect(datePicker.value).to.equal('2019-09-16');
           expect(timePicker.value).to.equal('15:00');
         });
+
+        it('should propagate min to date and time pickers', () => {
+          dateTimePicker.min = '2019-09-01T08:00';
+          expect(datePicker.min).to.equal('2019-09-01');
+          expect(timePicker.min).to.equal('00:00:00.000');
+          dateTimePicker.value = '2019-09-01T12:00';
+          expect(timePicker.min).to.equal('08:00');
+          dateTimePicker.value = '2019-09-10T12:00';
+          expect(timePicker.min).to.equal('00:00:00.000');
+        });
+
+        it('should propagate max to date and time pickers', () => {
+          dateTimePicker.max = '2019-09-30T22:00';
+          expect(datePicker.max).to.equal('2019-09-30');
+          expect(timePicker.max).to.equal('23:59:59.999');
+          dateTimePicker.value = '2019-09-30T12:00';
+          expect(timePicker.max).to.equal('22:00');
+          dateTimePicker.value = '2019-09-20T12:00';
+          expect(timePicker.max).to.equal('23:59:59.999');
+        });
+
+        it('should always propagate same day min and max to time picker', () => {
+          dateTimePicker.min = '2019-09-10T08:00';
+          dateTimePicker.max = '2019-09-30T22:00';
+
+          // Default min and max when date has not been selected and min/max are on different days
+          expect(timePicker.min).to.equal('00:00:00.000');
+          expect(timePicker.max).to.equal('23:59:59.999');
+
+          // Time picker always constrained by min/max when they are on the same day
+          dateTimePicker.max = '2019-09-10T22:00';
+          expect(timePicker.min).to.equal('08:00');
+          expect(timePicker.max).to.equal('22:00');
+        });
+
         it('should propagate datePlaceholder to date picker', () => {
           dateTimePicker.datePlaceholder = 'Pick a date';
           expect(datePicker.placeholder).to.equal('Pick a date');
@@ -168,6 +205,23 @@
           expect(datePicker.value).to.equal('2019-09-16');
           expect(timePicker.value).to.equal('15:00');
         });
+
+        it('should have initial value for min', () => {
+          expect(dateTimePicker.min).to.equal('2019-09-01T08:00');
+          expect(datePicker.min).to.equal('2019-09-01');
+          expect(timePicker.min).to.equal('00:00:00.000');
+          dateTimePicker.value = '2019-09-01T12:00';
+          expect(timePicker.min).to.equal('08:00');
+        });
+
+        it('should have initial value for max', () => {
+          expect(dateTimePicker.max).to.equal('2019-09-30T22:00');
+          expect(datePicker.max).to.equal('2019-09-30');
+          expect(timePicker.max).to.equal('23:59:59.999');
+          dateTimePicker.value = '2019-09-30T12:00';
+          expect(timePicker.max).to.equal('22:00');
+        });
+
         it('should have initial value for datePlaceholder', () => {
           expect(dateTimePicker.datePlaceholder).to.equal('Pick a date');
           expect(datePicker.placeholder).to.equal('Pick a date');
