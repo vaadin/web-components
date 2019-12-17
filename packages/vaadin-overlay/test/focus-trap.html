@@ -167,25 +167,6 @@
           overlay.opened = true;
         });
 
-        it('should restore focus on focusout', done => {
-          const spy = sinon.spy(overlay, 'focus');
-          overlay.dispatchEvent(new CustomEvent('focusout'));
-          setTimeout(() => {
-            expect(spy.called).to.be.true;
-            done();
-          });
-        });
-
-        it('should not restore focus on focusout if not a focustrap', done => {
-          overlay.focusTrap = false;
-          const spy = sinon.spy(overlay, 'focus');
-          overlay.dispatchEvent(new CustomEvent('focusout'));
-          setTimeout(() => {
-            expect(spy.called).to.be.false;
-            done();
-          });
-        });
-
         it('should properly detect focusable elements inside the content', () => {
           expect(focusableElements.length).to.eql(11);
           expect(focusableElements[0]).to.eql(overlay.content.querySelector('textarea'));

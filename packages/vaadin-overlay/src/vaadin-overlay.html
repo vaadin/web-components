@@ -410,18 +410,6 @@ This program is available under Apache License Version 2.0, available at https:/
         // and <vaadin-context-menu>).
         this.addEventListener('click', () => {});
         this.$.backdrop.addEventListener('click', () => {});
-
-        // Make sure the focus stays within the overlay (even on caret browsing)
-        this.addEventListener('focusout', e => {
-          const related = e.relatedTarget;
-          if (this.focusTrap && (!related || !this._deepContains(related))) {
-            setTimeout(() => {
-              this.tabIndex = -1;
-              this.focus();
-              this.tabIndex = undefined;
-            });
-          }
-        });
       }
 
       _detectIosNavbar() {
