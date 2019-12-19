@@ -631,6 +631,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         // Copied from vaadin-time-picker
+        /* istanbul ignore next */
         get __stepSegment() {
           const step = this.step == undefined ? 60 : parseInt(this.step);
           if (step % 3600 === 0) {
