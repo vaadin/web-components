@@ -130,6 +130,8 @@
         <test-item-element style="display: none;">Bay</test-item-element>
         <test-item-element>Fox</test-item-element>
         <test-item-element class="hidden-attribute">Pub</test-item-element>
+        <test-item-element>Bin</test-item-element>
+        <test-item-element style="display: none;">Bop</test-item-element>
       </test-list-element>
     </template>
   </test-fixture>
@@ -616,7 +618,7 @@
         });
       });
     });
-    describe('vaadin-list-mixin-hidden', () => {
+    describe('hidden-items', () => {
       let list;
 
       beforeEach(done => {
@@ -633,14 +635,32 @@
           expect(getComputedStyle(list.items[0]).getPropertyValue('display')).to.equal('block');
           arrowDown(list);
           expect(getComputedStyle(list.items[1]).getPropertyValue('display')).to.equal('none');
-          expect(list.items[2].focused).to.be.true;
+          expect(list.items.filter(item => item.textContent === 'Bax')[0].focused).to.be.true;
         });
+
         it('should move focus to next not hidden element on "arrow-up"', () => {
           expect(list.items[0].focused).to.be.true;
           expect(getComputedStyle(list.items[0]).getPropertyValue('display')).to.equal('block');
           arrowUp(list);
           expect(getComputedStyle(list.items[list.items.length - 1]).getPropertyValue('display')).to.equal('none');
-          expect(list.items[list.items.length - 2].focused).to.be.true;
+          expect(list.items.filter(item => item.textContent === 'Bin')[0].focused).to.be.true;
+        });
+
+        it('should not set tabIndex=0 to hidden items, but the next one in the loop', () => {
+          arrowDown(list);
+          [-1, -1, 0].forEach((val, idx) => expect(list.items[idx].tabIndex).to.be.equal(val));
+        });
+
+        it('should skip hidden items to key search', () => {
+          keyDownChar(list, 'b');
+          keyDownChar(list, 'b');
+          expect(list.items.filter(item => item.textContent === 'Bin')[0].focused).to.be.true;
+        });
+
+        it('should skip hidden items to focus loop', () => {
+          arrowDown(list);
+          arrowDown(list);
+          expect(list.items.filter(item => item.textContent === 'Fox')[0].focused).to.be.true;
         });
       });
     });

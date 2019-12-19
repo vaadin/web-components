@@ -137,7 +137,7 @@ This program is available under Apache License Version 2.0, available at https:/
       );
       this._searchBuf += key.toLowerCase();
       const increment = 1;
-      const condition = item => !item.disabled &&
+      const condition = item => !(item.disabled || this._isItemHidden(item)) &&
         item.textContent.replace(/[^a-zA-Z0-9]/g, '').toLowerCase().indexOf(this._searchBuf) === 0;
 
       if (!this.items.some(item => item.textContent.replace(/[^a-zA-Z0-9]/g, '').toLowerCase().indexOf(this._searchBuf) === 0)) {
@@ -166,7 +166,7 @@ This program is available under Apache License Version 2.0, available at https:/
         return;
       }
 
-      const condition = item => !(item.disabled || getComputedStyle(item).getPropertyValue('display') === 'none');
+      const condition = item => !(item.disabled || this._isItemHidden(item));
       let idx, increment;
 
       if (this._vertical && key === 'Up' || !this._vertical && key === 'Left') {
@@ -206,6 +206,10 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
       return -1;
+    }
+
+    _isItemHidden(item) {
+      return getComputedStyle(item).display === 'none';
     }
 
     _setFocusable(idx) {
