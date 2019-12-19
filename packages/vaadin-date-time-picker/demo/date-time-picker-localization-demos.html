@@ -1,0 +1,112 @@
+<dom-module id="date-time-picker-localization-demos">
+  <template>
+    <style include="vaadin-component-demo-shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+
+    <h3>Localizing</h3>
+    <vaadin-demo-snippet id="date-time-picker-localizing" when-defined="vaadin-date-time-picker">
+      <template preserve-content>
+        <vaadin-date-time-picker label="Syntymäpäivä"></vaadin-date-time-picker>
+        <div>Day of week: <span id="output"></span></div>
+        <script>
+          window.addDemoReadyListener('#date-time-picker-localizing', function(document) {
+            // Set up the parser library for Finnish locale
+            const dateTimePicker = document.querySelector('vaadin-date-time-picker');
+            const output = document.querySelector('#output');
+            dateTimePicker.addEventListener('value-changed', function(event) {
+              const date = Sugar.Date.create(event.target.value, 'fi');
+              if (!date.getDate()) {
+                output.textContent = '-';
+                return;
+              }
+              const weekday = Sugar.Date.format(date, '{weekday}', 'fi');
+              const month = Sugar.Date.format(date, '{month}', 'fi');
+              output.textContent = weekday + ', Month: ' + month;
+            });
+            const i18n = {
+              week: 'viikko',
+              calendar: 'kalenteri',
+              clear: 'tyhjennä',
+              today: 'tänään',
+              cancel: 'peruuta',
+              selector: 'ajan valitsin',
+              firstDayOfWeek: 1,
+              monthNames:
+              'tammikuu_helmikuu_maaliskuu_huhtikuu_toukokuu_kesäkuu_heinäkuu_elokuu_syyskuu_lokakuu_marraskuu_joulukuu'.split('_'),
+              weekdays: 'sunnuntai_maanantai_tiistai_keskiviikko_torstai_perjantai_lauantai'.split('_'),
+              weekdaysShort: 'su_ma_ti_ke_to_pe_la'.split('_'),
+              formatDate: function(dateObject) {
+                // The `dateObject` is in format `{ day: ..., month: ..., year: ... }`
+                // Sugar Date expects a native date so we convert to it first.
+                const date = Sugar.Date.create(dateObject);
+                return Sugar.Date.format(date, '{short}', 'fi');
+              },
+              formatTitle: function(monthName, fullYear) {
+                return monthName + ' ' + fullYear;
+              },
+              parseDate: function(dateString) {
+                const date = Sugar.Date.create(dateString, 'fi');
+                return {
+                  day: date.getDate(),
+                  month: date.getMonth(),
+                  year: date.getFullYear()
+                };
+              }
+            };
+            dateTimePicker.i18n = Object.assign({}, dateTimePicker.i18n, i18n);
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Custom date parser</h3>
+    <p>You can use a 3rd party library to parse dates from the input text.</p>
+    <vaadin-demo-snippet id="date-time-picker-custom-key-input" when-defined="vaadin-date-time-picker">
+      <template preserve-content>
+        <!--
+          Try typing the following examples:
+          "5/13/2014"
+          "today"
+          "in 20 days"
+          "three months from now"
+          "last year"
+          "in half a year"
+          "next week Thursday"
+        -->
+
+        <vaadin-date-time-picker label="Label"></vaadin-date-time-picker>
+        <script>
+          window.addDemoReadyListener('#date-time-picker-custom-key-input', function(document) {
+            const dateTimePicker = document.querySelector('vaadin-date-time-picker');
+            dateTimePicker.set('i18n.parseDate', function(dateString) {
+              // See if we get exactly 1 match from the month names
+              const matches = dateTimePicker.i18n.monthNames.filter(function(monthName) {
+                return monthName.toLowerCase().startsWith(dateString.trim().toLowerCase());
+              });
+              dateString = matches.length === 1 ? matches[0] : dateString;
+              // Parse the date (using a 3rd party library)
+              const date = Sugar.Date.create(dateString);
+              return {
+                day: date.getDate(),
+                month: date.getMonth(),
+                year: date.getFullYear()
+              };
+            });
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+  </template>
+  <script>
+    class DateTimePickerLocalizationDemos extends DemoReadyEventEmitter(DateTimePickerDemo(Polymer.Element)) {
+      static get is() {
+        return 'date-time-picker-localization-demos';
+      }
+    }
+    customElements.define(DateTimePickerLocalizationDemos.is, DateTimePickerLocalizationDemos);
+  </script>
+</dom-module>

@@ -42,24 +42,18 @@
       </template>
     </vaadin-demo-snippet>
 
-    <!--
-    ! FIXME(haprog):
-    ! Uncomment this demo after i18n has been implemented as part of https://github.com/vaadin/vaadin-date-time-picker/issues/4
-    ! since show-week-numbers doesn't do anything without being able to set i18n.firstDayOfWeek for date picker
-
     <h3>Date picker with week numbers</h3>
-    <vaadin-demo-snippet id="date-time-picker-basic-demos-week-numbers">
+    <vaadin-demo-snippet id="date-time-picker-basic-demos-week-numbers" when-defined="vaadin-date-time-picker">
       <template preserve-content>
         <vaadin-date-time-picker show-week-numbers></vaadin-date-time-picker>
         <script>
-          customElements.whenDefined('vaadin-date-time-picker').then(function() {
-            const dateTimepicker = document.querySelector('vaadin-date-time-picker');
-            dateTimepicker.set('i18n.firstDayOfWeek', 1);
+          window.addDemoReadyListener('#date-time-picker-basic-demos-week-numbers', function(document) {
+            const dateTimePicker = document.querySelector('vaadin-date-time-picker');
+            dateTimePicker.set('i18n.firstDayOfWeek', 1);
           });
         </script>
       </template>
     </vaadin-demo-snippet>
-    -->
 
     <h3>Value resolution</h3>
     <p>The <code>step</code> property specified in seconds affects the resolution of the time picker and visibility of the time picker dropdown. If <code>step</code> is less than 15 minutes (<code>&lt;900</code>) the dropdown is hidden.</p>

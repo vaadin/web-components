@@ -40,9 +40,7 @@
     "web-component-tester": "^6.1.5",
     "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^3.0.0",
     "vaadin-text-field": "vaadin/vaadin-text-field#^2.4.12",
-    "vaadin-date-picker": "vaadin/vaadin-date-picker#^4.0.5"
-  },
-  "resolutions": {
-    "vaadin-element-mixin": "^2.0.0"
+    "vaadin-date-picker": "vaadin/vaadin-date-picker#^4.0.5",
+    "sugar": "2.0.4"
   }
 }

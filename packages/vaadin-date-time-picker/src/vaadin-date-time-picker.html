@@ -71,6 +71,23 @@ This program is available under Apache License Version 2.0, available at https:/
   <script>
     (function() {
 
+      // Find a property definition from the prototype chain of a Polymer element class
+      const getPropertyFromPrototype = function(clazz, prop) {
+        while (clazz) {
+          if (clazz.properties && clazz.properties[prop]) {
+            return clazz.properties[prop];
+          }
+          clazz = clazz.__proto__;
+        }
+      };
+
+      const datePickerClass = customElements.get('vaadin-date-time-picker-date-picker');
+      const timePickerClass = customElements.get('vaadin-date-time-picker-time-picker');
+      const datePickerI18nDefaults = getPropertyFromPrototype(datePickerClass, 'i18n').value();
+      const timePickerI18nDefaults = getPropertyFromPrototype(timePickerClass, 'i18n').value();
+      const datePickerI18nProps = Object.keys(datePickerI18nDefaults);
+      const timePickerI18nProps = Object.keys(timePickerI18nDefaults);
+
       /**
        * `<vaadin-date-time-picker>` is a Web Component providing a date time selection field.
        *
@@ -277,6 +294,21 @@ This program is available under Apache License Version 2.0, available at https:/
                 parseValue: combinedValue => combinedValue.split('T'),
                 formatValue: inputValues => inputValues.join('T')
               })
+            },
+
+            /**
+             * The object used to localize this component.
+             * To change the default localization, replace the entire
+             * `i18n` object or just the properties you want to modify.
+             *
+             * The object is a combination of the i18n properties supported by
+             * `<vaadin-date-picker>` and `<vaadin-time-picker>`. See `i18n` property at:
+             * - [`date-picker` documentation](https://vaadin.com/components/vaadin-date-picker/html-api/elements/Vaadin.DatePickerElement)
+             * - [`time-picker` documentation](https://vaadin.com/components/vaadin-time-picker/html-api/elements/Vaadin.TimePickerElement)
+             */
+            i18n: {
+              type: Object,
+              value: () => Object.assign({}, datePickerI18nDefaults, timePickerI18nDefaults)
             }
           };
         }
@@ -290,7 +322,8 @@ This program is available under Apache License Version 2.0, available at https:/
             '__initialPositionChanged(initialPosition)',
             '__showWeekNumbersChanged(showWeekNumbers)',
             '__disabledChanged(disabled)',
-            '__readonlyChanged(readonly)'
+            '__readonlyChanged(readonly)',
+            '__i18nChanged(i18n.*)'
           ];
         }
 
@@ -315,6 +348,15 @@ This program is available under Apache License Version 2.0, available at https:/
           this.$.timeSlot.addEventListener('slotchange', this.__timePickerChanged.bind(this));
         }
 
+        __syncI18n(target, source, props) {
+          props = props || Object.keys(source.i18n);
+          props.forEach(prop => {
+            if (source.i18n.hasOwnProperty(prop)) {
+              target.set(`i18n.${prop}`, source.i18n[prop]);
+            }
+          });
+        }
+
         __datePickerChanged() {
           const defaultDatePicker = this.shadowRoot.querySelector('[part="date"]');
           const assignedElements = this.$.dateSlot.assignedNodes({flatten: true}).filter(this.__filterElements);
@@ -331,6 +373,7 @@ This program is available under Apache License Version 2.0, available at https:/
             datePicker.showWeekNumbers = this.showWeekNumbers;
             datePicker.disabled = this.disabled;
             datePicker.readonly = this.readonly;
+            this.__syncI18n(datePicker, this, datePickerI18nProps);
           } else {
             // Synchronize properties from slotted date picker
             this.datePlaceholder = datePicker.placeholder;
@@ -338,6 +381,7 @@ This program is available under Apache License Version 2.0, available at https:/
             this.showWeekNumbers = datePicker.showWeekNumbers;
             this.disabled = datePicker.disabled;
             this.readonly = datePicker.readonly;
+            this.__syncI18n(this, datePicker, datePickerI18nProps);
           }
 
           // min and max are always synchronized from date time picker (host) to inner fields because time picker
@@ -361,11 +405,13 @@ This program is available under Apache License Version 2.0, available at https:/
             timePicker.step = this.step;
             timePicker.disabled = this.disabled;
             timePicker.readonly = this.readonly;
+            this.__syncI18n(timePicker, this, timePickerI18nProps);
           } else {
             // Synchronize properties from slotted time picker
             this.timePlaceholder = timePicker.placeholder;
             this.step = timePicker.step;
             // Don't set disabled or readonly from time picker since they're already set from date picker
+            this.__syncI18n(this, timePicker, timePickerI18nProps);
           }
 
           // min and max are always synchronized from parent to slotted because time picker min and max
@@ -397,6 +443,15 @@ This program is available under Apache License Version 2.0, available at https:/
             } else {
               this.__timePicker.max = this.__defaultTimeMaxValue;
             }
+          }
+        }
+
+        __i18nChanged(changeRecord) {
+          if (this.__datePicker) {
+            this.__datePicker.set(changeRecord.path, changeRecord.value);
+          }
+          if (this.__timePicker) {
+            this.__timePicker.set(changeRecord.path, changeRecord.value);
           }
         }
 
@@ -469,7 +524,7 @@ This program is available under Apache License Version 2.0, available at https:/
          * @return {(Date|undefined)}
          */
         __parseDate(str) {
-          return customElements.get('vaadin-date-time-picker-date-picker').prototype._parseDate(str);
+          return datePickerClass.prototype._parseDate(str);
         }
 
         /**
@@ -482,7 +537,7 @@ This program is available under Apache License Version 2.0, available at https:/
           if (!date) {
             return defaultValue;
           }
-          return customElements.get('vaadin-date-time-picker-date-picker').prototype._formatISO(date);
+          return datePickerClass.prototype._formatISO(date);
         }
 
         /**
@@ -491,7 +546,7 @@ This program is available under Apache License Version 2.0, available at https:/
          * @return {string} e.g. 'hh:mm', 'hh:mm:ss', 'hh:mm:ss.fff'
          */
         __formatTimeISO(time) {
-          return customElements.get('vaadin-time-picker').properties.i18n.value().formatTime(time);
+          return timePickerI18nDefaults.formatTime(time);
         }
 
         /**
@@ -500,7 +555,7 @@ This program is available under Apache License Version 2.0, available at https:/
          * @return {object} Time components as properties { hours, minutes, seconds, milliseconds }
          */
         __parseTimeISO(str) {
-          return customElements.get('vaadin-time-picker').properties.i18n.value().parseTime(str);
+          return timePickerI18nDefaults.parseTime(str);
         }
 
         /**
