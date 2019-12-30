@@ -46,6 +46,13 @@ gemini.suite('vaadin-custom-field', function(rootSuite) {
         .setCaptureElements('#form-layout-tests')
         .capture('default');
     });
+
+    gemini.suite(`width-${theme}`, function(suite) {
+      suite
+        .setUrl(`/width.html?theme=${theme}`)
+        .setCaptureElements('#width-tests')
+        .capture('default');
+    });
   });
 
 });
