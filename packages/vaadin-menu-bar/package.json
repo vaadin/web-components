@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-menu-bar",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "vaadin-menu-bar",
   "main": "vaadin-menu-bar.html",
   "repository": "vaadin/vaadin-menu-bar",
