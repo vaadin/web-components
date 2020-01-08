@@ -1,0 +1,137 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-element-mixin tests</title>
+
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../vaadin-element-mixin.html">
+  <link rel="import" href="../../polymer/polymer-element.html">
+  <link rel="import" href="../../polymer/lib/utils/render-status.html">
+</head>
+
+<body>
+  <script>
+    window.addEventListener('WebComponentsReady', () => {
+      class TestElement extends Vaadin.ElementMixin(Polymer.Element) {
+        static get is() {
+          return 'test-element';
+        }
+      }
+      customElements.define(TestElement.is, TestElement);
+    });
+
+    describe('basic functionality', function() {
+      const element = document.createElement('test-element');
+
+      before(() => {
+        document.body.appendChild(element);
+      });
+
+      beforeEach(() => {
+        // Clean up the dir attribute
+        document.documentElement.removeAttribute('dir');
+        element.removeAttribute('dir');
+      });
+
+      function nextRender(element) {
+        return new Promise(resolve => {
+          Polymer.RenderStatus.afterNextRender(element, resolve);
+        });
+      }
+
+      // Checks that for each `documentDirections` value set,
+      // `testElement` dir attibute value equals to the correspondent value from `elementDirections`
+      async function elementDirectionsAreCorrect(documentDirections, elementDirections, testElement) {
+        for (let index = 0; index < documentDirections.length; index++) {
+          setDir(documentDirections[index]);
+          await nextRender(testElement);
+          if (testElement.getAttribute('dir') !== elementDirections[index]) {
+            return;
+          }
+        }
+        return true;
+      }
+
+      // Setting or unsetting the document dir attribute value
+      function setDir(direction) {
+        if (direction) {
+          document.documentElement.setAttribute('dir', direction);
+        } else {
+          document.documentElement.removeAttribute('dir');
+        }
+      }
+
+      it('should propagate direction as dir attribute to the element from the documentElement', async() => {
+        expect(await elementDirectionsAreCorrect(
+          ['rtl', 'ltr', '', 'rtl', null],
+          ['rtl', 'ltr', null, 'rtl', null],
+          element
+        )).to.be.true;
+      });
+
+      it('should preserve direction if was set by the user', async() => {
+        element.setAttribute('dir', 'ltr');
+
+        expect(await elementDirectionsAreCorrect(
+          ['rtl', 'ltr', '', 'rtl', null],
+          ['ltr', 'ltr', 'ltr', 'ltr', 'ltr'],
+          element
+        )).to.be.true;
+      });
+
+      it('should subscribe to the changes if set to equal the document direction', async() => {
+        element.setAttribute('dir', 'ltr');
+
+        expect(await elementDirectionsAreCorrect(
+          ['rtl', 'ltr', 'rtl'],
+          ['ltr', 'ltr', 'ltr'],
+          element
+        )).to.be.true;
+
+        element.setAttribute('dir', 'rtl');
+
+        expect(await elementDirectionsAreCorrect(
+          ['ltr', 'rtl', ''],
+          ['ltr', 'rtl', null],
+          element
+        )).to.be.true;
+      });
+
+      it('should subscribe to the changes if attribute removed', async() => {
+        element.setAttribute('dir', 'ltr');
+
+        expect(await elementDirectionsAreCorrect(
+          ['rtl', 'ltr', 'rtl'],
+          ['ltr', 'ltr', 'ltr'],
+          element
+        )).to.be.true;
+
+        element.removeAttribute('dir');
+
+        expect(await elementDirectionsAreCorrect(
+          ['ltr', 'rtl', ''],
+          ['ltr', 'rtl', null],
+          element
+        )).to.be.true;
+      });
+
+      it('should unsubscribe if attribute set by the user', async() => {
+        expect(await elementDirectionsAreCorrect(
+          ['rtl', 'ltr', 'rtl'],
+          ['rtl', 'ltr', 'rtl'],
+          element
+        )).to.be.true;
+
+        element.setAttribute('dir', 'ltr');
+
+        expect(await elementDirectionsAreCorrect(
+          ['ltr', 'rtl', ''],
+          ['ltr', 'ltr', 'ltr'],
+          element
+        )).to.be.true;
+      });
+    });
+  </script>
+</body>

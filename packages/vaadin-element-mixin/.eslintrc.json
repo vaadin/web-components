@@ -14,5 +14,8 @@
   },
   "rules": {
     "arrow-spacing": "error"
+  },
+  "parserOptions": {
+    "ecmaVersion": 2017
   }
 }

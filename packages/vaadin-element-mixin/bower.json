@@ -5,7 +5,10 @@
     "Vaadin Ltd"
   ],
   "description": "vaadin-element-mixin",
-  "main": "vaadin-element-mixin.html",
+  "main": [
+    "vaadin-element-mixin.html",
+    "vaadin-dir-mixin.html"
+  ],
   "keywords": [
     "Vaadin",
     "web-components",
