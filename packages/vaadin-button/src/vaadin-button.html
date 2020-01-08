@@ -147,6 +147,9 @@ This program is available under Apache License Version 2.0, available at https:/
           this.$.button.setAttribute('role', 'presentation');
 
           this._addActiveListeners();
+
+          // Fix for https://github.com/vaadin/vaadin-button-flow/issues/120
+          window.ShadyDOM && window.ShadyDOM.flush();
         }
 
         /**

@@ -1,0 +1,38 @@
+<!doctype html>
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-button tests</title>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../../test-fixture/test-fixture.html">
+  <link rel="import" href="../vaadin-button.html">
+</head>
+<body>
+  <test-fixture id="wrapped-button">
+    <template>
+      <button-test></button-test>
+    </template>
+  </test-fixture>
+  <script>
+    customElements.whenDefined('vaadin-button').then(() => {
+      class ButtonTest extends Polymer.Element {
+        static get template() {
+          return Polymer.html`
+          <vaadin-button id="button">Old text</vaadin-button>
+          `;
+        }
+        ready() {
+          super.ready();
+          this.$.button.textContent = 'New text';
+        }
+      }
+      customElements.define('button-test', ButtonTest);
+    });
+    describe('vaadin-button in template', () => {
+      it('should flush in ready callback and update inner text', () => {
+        const wrapper = fixture('wrapped-button');
+        expect(wrapper.$.button.innerText.trim()).to.equal('New text');
+      });
+    });
+  </script>
+  </body>
