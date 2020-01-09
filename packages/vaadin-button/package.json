@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-button",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "description": "vaadin-button",
   "main": "vaadin-button.html",
   "repository": "vaadin/vaadin-button",
