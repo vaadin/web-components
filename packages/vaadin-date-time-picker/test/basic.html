@@ -150,6 +150,13 @@
           expect(dateTimePicker.value).to.equal('-010000-02-03T08:30:00.000');
         });
 
+        it('should allow millisecond precision values', () => {
+          dateTimePicker.step = .5;
+          const testValue = '2020-01-09T12:34:56.789';
+          dateTimePicker.value = testValue;
+          expect(dateTimePicker.value).to.equal(testValue);
+        });
+
       });
 
     });
