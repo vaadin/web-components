@@ -94,6 +94,8 @@
         });
 
         it('should propagate min to date and time pickers', () => {
+          expect(datePicker.min).to.equal(dateTimePicker.__defaultDateMinMaxValue);
+          expect(timePicker.min).to.equal(dateTimePicker.__defaultTimeMinValue);
           dateTimePicker.min = '2019-09-01T08:00';
           expect(datePicker.min).to.equal('2019-09-01');
           expect(timePicker.min).to.equal('00:00:00.000');
@@ -104,6 +106,8 @@
         });
 
         it('should propagate max to date and time pickers', () => {
+          expect(datePicker.max).to.equal(dateTimePicker.__defaultDateMinMaxValue);
+          expect(timePicker.max).to.equal(dateTimePicker.__defaultTimeMaxValue);
           dateTimePicker.max = '2019-09-30T22:00';
           expect(datePicker.max).to.equal('2019-09-30');
           expect(timePicker.max).to.equal('23:59:59.999');
