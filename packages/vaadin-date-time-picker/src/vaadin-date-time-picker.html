@@ -612,13 +612,10 @@ This program is available under Apache License Version 2.0, available at https:/
           }));
         }
 
-        // Copied from vaadin-time-picker
         __validateTime(timeObject) {
           if (timeObject) {
-            timeObject.hours = parseInt(timeObject.hours);
-            timeObject.minutes = parseInt(timeObject.minutes || 0);
-            timeObject.seconds = this.__stepSegment < 3 ? undefined : parseInt(timeObject.seconds || 0);
-            timeObject.milliseconds = this.__stepSegment < 4 ? undefined : parseInt(timeObject.milliseconds || 0);
+            timeObject.seconds = this.__stepSegment < 3 ? undefined : timeObject.seconds;
+            timeObject.milliseconds = this.__stepSegment < 4 ? undefined : timeObject.milliseconds;
           }
           return timeObject;
         }
