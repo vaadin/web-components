@@ -93,6 +93,16 @@
         expect(timePicker.value).to.be.equal('16:00');
       });
 
+      it('setting min should not change an empty value', () => {
+        timePicker.min = '10:00';
+        expect(timePicker.value).to.be.equal('');
+      });
+
+      it('setting max should not change an empty value', () => {
+        timePicker.max = '10:00';
+        expect(timePicker.value).to.be.equal('');
+      });
+
     });
   </script>
 </body>

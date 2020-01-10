@@ -519,6 +519,11 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         __adjustValue(minSec, maxSec, minTimeObj, maxTimeObj) {
+          // Do not change the value if it is empty
+          if (!this.__memoValue) {
+            return;
+          }
+
           const valSec = this.__getSec(this.__memoValue);
 
           if (valSec < minSec) {
