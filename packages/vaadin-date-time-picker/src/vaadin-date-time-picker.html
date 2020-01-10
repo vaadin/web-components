@@ -426,14 +426,7 @@ This program is available under Apache License Version 2.0, available at https:/
             const isMinMaxSameDay = dateEquals(this.__minDateTime, this.__maxDateTime);
 
             if (this.__minDateTime && dateEquals(selectedDate, this.__minDateTime) || isMinMaxSameDay) {
-              const oldTimeValue = this.__timePicker.value;
-
               this.__timePicker.min = this.__dateToIsoTimeString(this.__minDateTime, this.__defaultTimeMinValue);
-
-              // Workaround for https://github.com/vaadin/vaadin-time-picker/issues/123
-              if (oldTimeValue === '' && this.__timePicker.value !== oldTimeValue) {
-                this.__timePicker.value = oldTimeValue;
-              }
             } else {
               this.__timePicker.min = this.__defaultTimeMinValue;
             }
