@@ -126,9 +126,19 @@
           date.setFullYear(0);
           dateTimePicker.__selectedDateTime = date;
           expect(dateTimePicker.value).to.equal('0000-02-03T08:30');
+
           dateTimePicker.step = 1;
           expect(dateTimePicker.value).to.equal('0000-02-03T08:30:00');
+          // test that format stays even after setting the value again
+          dateTimePicker.value = '';
+          dateTimePicker.__selectedDateTime = date;
+          expect(dateTimePicker.value).to.equal('0000-02-03T08:30:00');
+
           dateTimePicker.step = .001;
+          expect(dateTimePicker.value).to.equal('0000-02-03T08:30:00.000');
+          // test that format stays even after setting the value again
+          dateTimePicker.value = '';
+          dateTimePicker.__selectedDateTime = date;
           expect(dateTimePicker.value).to.equal('0000-02-03T08:30:00.000');
 
           date.setFullYear(10000);
