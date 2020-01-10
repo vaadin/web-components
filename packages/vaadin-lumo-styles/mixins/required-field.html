@@ -76,6 +76,29 @@
         max-height: 0;
         overflow: hidden;
       }
+
+      /* RTL specific styles */
+
+      :host([dir="rtl"]) [part="label"] {
+        margin-left: 0;
+        margin-right: calc(var(--lumo-border-radius-m) / 4);
+      }
+
+      :host([required][dir="rtl"]) [part="label"] {
+        padding-left: 1em;
+        padding-right: 0;
+      }
+
+      :host([dir="rtl"]) [part="label"]::after {
+        right: auto;
+        left: 0;
+      }
+
+      :host([dir="rtl"]) [part="error-message"] {
+        margin-left: 0;
+        margin-right: calc(var(--lumo-border-radius-m) / 4);
+      }
+
     </style>
   </template>
 </dom-module>
