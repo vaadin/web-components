@@ -1,9 +1,0 @@
-{
-  "files": ["typography.js"],
-  "from": [
-    "/* Import Roboto from Google Fonts */"
-  ],
-  "to": [
-    "import './font-roboto.js';"
-  ]
-}
