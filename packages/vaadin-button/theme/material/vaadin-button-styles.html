@@ -138,6 +138,37 @@
         margin-left: 8px;
         margin-right: -4px;
       }
+
+      /* RTL specific styles */
+
+      :host([dir="rtl"])::before {
+        left: auto;
+        right: 0;
+      }
+
+      :host([dir="rtl"])::after {
+        left: auto;
+        right: 50%;
+        transform: translate(50%, -50%);
+      }
+
+      :host([active][dir="rtl"])::after {
+        transform: translate(50%, -50%) scale(0.0000001);
+      }
+
+      :host(:hover:not([active])[dir="rtl"])::after {
+        transform: translate(50%, -50%) scale(1);
+      }
+
+      :host([dir="rtl"]) [part="prefix"] ::slotted(iron-icon) {
+        margin-right: -4px;
+        margin-left: 8px;
+      }
+
+      :host([dir="rtl"]) [part="suffix"] ::slotted(iron-icon) {
+        margin-left: -4px;
+        margin-right: 8px;
+      }
     </style>
   </template>
 </dom-module>

@@ -267,6 +267,24 @@
         margin-left: 0;
         margin-right: 0;
       }
+
+      /* RTL specific styles */
+
+      :host([dir="rtl"]) [part="prefix"] {
+        margin-left: 0.25em;
+        margin-right: -0.25em;
+      }
+
+      :host([dir="rtl"]) [part="suffix"] {
+        margin-left: -0.25em;
+        margin-right: 0.25em;
+      }
+
+      :host([dir="rtl"][theme~="icon"]) [part="prefix"],
+      :host([dir="rtl"][theme~="icon"]) [part="suffix"] {
+        margin-left: 0;
+        margin-right: 0;
+      }
     </style>
   </template>
 </dom-module>

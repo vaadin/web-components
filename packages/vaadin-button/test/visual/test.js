@@ -21,6 +21,13 @@ gemini.suite('vaadin-button', function(rootSuite) {
         .capture('default');
     });
 
+    gemini.suite(`default-rtl-tests-${theme}`, function(suite) {
+      suite
+        .setUrl(`default-rtl.html?theme=${theme}`)
+        .setCaptureElements('body')
+        .capture('default');
+    });
+
     gemini.suite(`colors-${theme}`, function(suite) {
       suite
         .setUrl(`colors.html?theme=${theme}`)
