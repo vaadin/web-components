@@ -715,22 +715,12 @@ This program is available under Apache License Version 2.0, available at https:/
 
           // Setting the customField.value below triggers validation of the date picker and time picker.
           // If the inputs are slotted (e.g. when using the Java API) and have an initial value this can
-          // happen before date picker ready() which triggers an error when date picker is trying to read
+          // happen before date picker ready() which would throw an error when date picker is trying to read
           // `this.$.input` (as a result of value change triggered by setting custom field value).
-          // Workaround the problem by overriding customField.validate while setting the initial value.
-          if (!this.$.customField.inputs[0].$) {
-            const validate = this.$.customField.validate;
-            /* istanbul ignore next */
-            this.$.customField.validate = () => true;
-
-            this.$.customField.value = this.value;
-
-            this.$.customField.validate = validate;
-            setTimeout(() => {
-              this.$.customField.validate();
-            });
-          } else {
-            this.$.customField.value = this.value;
+          // Workaround the problem by setting custom field value only if date picker is ready.
+          const isDatePickerReady = !!this.$.customField.inputs[0].$;
+          if (isDatePickerReady) {
+            this.$.customField.value = this.value !== '' ? this.value : 'T';
           }
         }
 
