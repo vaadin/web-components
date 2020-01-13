@@ -114,6 +114,34 @@
       :host([theme~="reverse"][theme~="filled"]) [part="summary"] {
         padding-left: var(--lumo-space-m);
       }
+
+      /* RTL specific styles */
+
+      :host([dir="rtl"]) [part="toggle"] {
+        margin-left: var(--lumo-space-xs);
+        margin-right: calc(var(--lumo-space-xs) * -1);
+      }
+
+      :host([dir="rtl"]) [part="toggle"]::before {
+        content: var(--lumo-icons-angle-left);
+      }
+
+      :host([opened][dir="rtl"]) [part="toggle"] {
+        transform: rotate(-90deg);
+      }
+
+      :host([theme~="small"][dir="rtl"]) [part="toggle"] {
+        margin-left: calc(var(--lumo-space-xs) / 2);
+      }
+
+      :host([theme~="reverse"][dir="rtl"]) [part="toggle"] {
+        margin-left: 0;
+      }
+
+      :host([theme~="reverse"][theme~="filled"][dir="rtl"]) [part="summary"] {
+        padding-right: var(--lumo-space-m);
+      }
+
     </style>
   </template>
 </dom-module>

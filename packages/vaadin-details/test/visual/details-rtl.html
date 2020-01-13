@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+
+<head lang="en">
+  <meta charset="UTF-8">
+  <title></title>
+  <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <script>
+    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+    document.write('<link rel="import" href="../../theme/' + theme + '/vaadin-details.html">');
+
+    window.addEventListener('WebComponentsReady', function() {
+      setTimeout(function() {
+        window.ShadyDOM && window.ShadyDOM.flush(); // Force DOM composition
+        window.webComponentsAreReady = true; // Checked in gemini before capture callback
+      });
+    });
+  </script>
+</head>
+
+<body>
+
+  <span id="details-tests">
+    <vaadin-details dir="rtl">
+      <div slot="summary">Closed</div>
+      <span>Go Vaadin!</span>
+    </vaadin-details>
+    <br>
+    <vaadin-details opened dir="rtl">
+      <div slot="summary">Opened</div>
+      <span>Go Vaadin!</span>
+    </vaadin-details>
+    <br>
+    <vaadin-details theme="small" opened dir="rtl">
+      <div slot="summary">Small</div>
+      <span>Go Vaadin!</span>
+    </vaadin-details>
+    <br>
+    <vaadin-details theme="reverse" opened dir="rtl">
+      <div slot="summary">Reverse</div>
+      <span>Go Vaadin!</span>
+    </vaadin-details>
+    <br>
+    <vaadin-details theme="reverse filled" opened dir="rtl">
+      <div slot="summary">Reverse filled</div>
+      <span>Go Vaadin!</span>
+    </vaadin-details>
+  </span>
+
+</body>

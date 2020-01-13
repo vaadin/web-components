@@ -26,6 +26,15 @@ gemini.suite('vaadin-details', function(rootSuite) {
     });
   });
 
+  ['lumo', 'material'].forEach(theme => {
+    gemini.suite(`details-rtl-${theme}`, function(suite) {
+      suite
+        .setUrl(`/details-rtl.html?theme=${theme}`)
+        .setCaptureElements('#details-tests')
+        .capture(`default`);
+    });
+  });
+
   ['filled', 'reverse', 'small'].forEach(variant => {
     gemini.suite(`lumo-${variant}`, function(suite) {
       suite
