@@ -90,6 +90,16 @@
         expect(dateTimePicker.value).to.equal('');
       });
 
+      it('should convert null and undefined values to empty string', () => {
+        dateTimePicker.value = '2019-09-19T08:26'; // init with valid value
+        dateTimePicker.value = null;
+        expect(dateTimePicker.value).to.equal('');
+
+        dateTimePicker.value = '2019-09-19T08:26'; // init with valid value
+        dateTimePicker.value = undefined;
+        expect(dateTimePicker.value).to.equal('');
+      });
+
       it('should notify value change', () => {
         const spy = sinon.spy();
         dateTimePicker.addEventListener('value-changed', spy);
