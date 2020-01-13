@@ -117,7 +117,7 @@
           expect(timePicker.max).to.equal('23:59:59.999');
         });
 
-        it('should always propagate same day min and max to time picker', () => {
+        it('should always propagate same day min and max to time picker (min first)', () => {
           dateTimePicker.min = '2019-09-10T08:00';
           dateTimePicker.max = '2019-09-30T22:00';
 
@@ -127,6 +127,22 @@
 
           // Time picker always constrained by min/max when they are on the same day
           dateTimePicker.max = '2019-09-10T22:00';
+          expect(timePicker.min).to.equal('08:00');
+          expect(timePicker.max).to.equal('22:00');
+        });
+
+        it('should always propagate same day min and max to time picker (max first)', () => {
+          // Same as previous test but setting min and max in different order so that both
+          // __minChanged and __maxChanged get covered
+          dateTimePicker.max = '2019-09-30T22:00';
+          dateTimePicker.min = '2019-09-10T08:00';
+
+          // Default min and max when date has not been selected and min/max are on different days
+          expect(timePicker.min).to.equal('00:00:00.000');
+          expect(timePicker.max).to.equal('23:59:59.999');
+
+          // Time picker always constrained by min/max when they are on the same day
+          dateTimePicker.min = '2019-09-30T08:00';
           expect(timePicker.min).to.equal('08:00');
           expect(timePicker.max).to.equal('22:00');
         });
