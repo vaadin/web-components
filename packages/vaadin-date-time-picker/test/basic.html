@@ -37,11 +37,29 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="lazy-slotted-inputs">
+    <template>
+      <vaadin-date-time-picker>
+        <vaadin-date-picker slot="setAfterReady"></vaadin-date-picker>
+        <vaadin-time-picker slot="setAfterReady"></vaadin-time-picker>
+      </vaadin-date-time-picker>
+    </template>
+  </test-fixture>
+
   <test-fixture id="slotted-values">
     <template>
       <vaadin-date-time-picker>
         <vaadin-date-picker slot="date-picker" value="2019-09-16"></vaadin-date-picker>
         <vaadin-time-picker slot="time-picker" value="15:00"></vaadin-time-picker>
+      </vaadin-date-time-picker>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="lazy-slotted-values">
+    <template>
+      <vaadin-date-time-picker>
+        <vaadin-date-picker slot="setAfterReady" value="2019-09-16"></vaadin-date-picker>
+        <vaadin-time-picker slot="setAfterReady" value="15:00"></vaadin-time-picker>
       </vaadin-date-time-picker>
     </template>
   </test-fixture>
@@ -214,63 +232,80 @@
 
     });
 
-    describe('Slotted inputs', () => {
-      let dateTimePicker;
-      let customField;
-      let datePicker;
-      let timePicker;
+    ['default', 'lazy'].forEach(set => {
+      describe(`Slotted inputs (${set})`, () => {
+        let dateTimePicker;
+        let customField;
+        let datePicker;
+        let timePicker;
 
-      beforeEach(() => {
-        dateTimePicker = fixture('slotted-inputs');
-        customField = dateTimePicker.$.customField;
-        if (window.ShadyDOM) {
-          window.ShadyDOM.flush();
-        }
-        datePicker = dateTimePicker.querySelector('vaadin-date-picker');
-        timePicker = dateTimePicker.querySelector('vaadin-time-picker');
-        if (window.ShadyDOM) {
-          window.ShadyDOM.flush();
-        }
+        beforeEach(done => {
+          if (set === 'default') {
+            dateTimePicker = fixture('slotted-inputs');
+          } else if (set === 'lazy') {
+            dateTimePicker = fixture('lazy-slotted-inputs');
+          }
+          customField = dateTimePicker.$.customField;
+          datePicker = dateTimePicker.querySelector('vaadin-date-picker');
+          timePicker = dateTimePicker.querySelector('vaadin-time-picker');
+          if (set === 'lazy') {
+            // Assign the slots lazily simulating the case if Flow adds the slotted elements after date time picker is ready
+            datePicker.slot = 'date-picker';
+            timePicker.slot = 'time-picker';
+            setTimeout(() => done(), 0);
+          } else {
+            done();
+          }
+        });
+
+        it('should have correct inputs set in custom-field', () => {
+          expect(customField.inputs[0]).to.equal(datePicker);
+          expect(customField.inputs[1]).to.equal(timePicker);
+        });
+
+        it('should propagate value to slotted inputs', () => {
+          dateTimePicker.value = '2019-09-16T15:00';
+          expect(datePicker.value).to.equal('2019-09-16');
+          expect(timePicker.value).to.equal('15:00');
+        });
+
+        it('should get value from slotted inputs', () => {
+          datePicker.value = '2019-09-16';
+          timePicker.value = '15:00';
+          dateTimePicker.__triggerCustomFieldValueUpdate();
+          expect(dateTimePicker.value).to.equal('2019-09-16T15:00');
+        });
+
       });
-
-      it('should have correct inputs set in custom-field', () => {
-        expect(customField.inputs[0]).to.equal(datePicker);
-        expect(customField.inputs[1]).to.equal(timePicker);
-      });
-
-      it('should propagate value to slotted inputs', () => {
-        dateTimePicker.value = '2019-09-16T15:00';
-        expect(datePicker.value).to.equal('2019-09-16');
-        expect(timePicker.value).to.equal('15:00');
-      });
-
-      it('should get value from slotted inputs', () => {
-        datePicker.value = '2019-09-16';
-        timePicker.value = '15:00';
-        dateTimePicker.__triggerCustomFieldValueUpdate();
-        expect(dateTimePicker.value).to.equal('2019-09-16T15:00');
-      });
-
     });
 
-    describe('Initial value from slotted inputs', () => {
-      let dateTimePicker;
-      let customField;
+    ['default', 'lazy'].forEach(set => {
+      describe(`Initial value from slotted inputs (${set})`, () => {
+        let dateTimePicker;
+        let customField;
 
-      beforeEach(() => {
-        dateTimePicker = fixture('slotted-values');
-        customField = dateTimePicker.$.customField;
-        if (window.ShadyDOM) {
-          window.ShadyDOM.flush();
-        }
+        beforeEach(done => {
+          if (set === 'default') {
+            dateTimePicker = fixture('slotted-values');
+            customField = dateTimePicker.$.customField;
+            done();
+          } else if (set === 'lazy') {
+            dateTimePicker = fixture('lazy-slotted-values');
+            customField = dateTimePicker.$.customField;
+            // Assign the slots lazily simulating the case if Flow adds the slotted elements after date time picker is ready
+            dateTimePicker.querySelector('vaadin-date-picker').slot = 'date-picker';
+            dateTimePicker.querySelector('vaadin-time-picker').slot = 'time-picker';
+            setTimeout(() => done(), 0);
+          }
+        });
+
+        // This test simulates how DatePicker sets the initial value from server side
+        it('should get initial value from slotted inputs', () => {
+          expect(customField.value).to.equal('2019-09-16T15:00');
+          expect(dateTimePicker.value).to.equal('2019-09-16T15:00');
+        });
+
       });
-
-      // This test simulates how DatePicker sets the initial value from server side
-      it('should get initial value from slotted inputs', () => {
-        expect(customField.value).to.equal('2019-09-16T15:00');
-        expect(dateTimePicker.value).to.equal('2019-09-16T15:00');
-      });
-
     });
   </script>
 </body>

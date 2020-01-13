@@ -357,6 +357,18 @@ This program is available under Apache License Version 2.0, available at https:/
           });
         }
 
+        // This is needed only for the case when date or time picker is slotted/changed after ready
+        // since custom field doesn't automatically pick that change because we use a wrapper element
+        // in the custom field slot.
+        __updateCustomFieldInputs() {
+          const cfInputs = this.$.customField.inputs;
+          if (this.__datePicker && this.__timePicker
+              && (cfInputs[0] !== this.__datePicker || cfInputs[1] !== this.__timePicker)
+          ) {
+            this.$.customField._setInputs([this.__datePicker, this.__timePicker]);
+          }
+        }
+
         __datePickerChanged() {
           const defaultDatePicker = this.shadowRoot.querySelector('[part="date"]');
           const assignedElements = this.$.dateSlot.assignedNodes({flatten: true}).filter(this.__filterElements);
@@ -365,6 +377,7 @@ This program is available under Apache License Version 2.0, available at https:/
             return;
           }
           this.__datePicker = datePicker;
+          this.__updateCustomFieldInputs();
 
           if (datePicker === defaultDatePicker) {
             // Synchronize properties to default date picker
@@ -398,6 +411,7 @@ This program is available under Apache License Version 2.0, available at https:/
             return;
           }
           this.__timePicker = timePicker;
+          this.__updateCustomFieldInputs();
 
           if (timePicker === defaultTimePicker) {
             // Synchronize properties to default time picker
