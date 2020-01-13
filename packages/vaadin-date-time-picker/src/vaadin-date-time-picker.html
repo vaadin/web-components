@@ -685,11 +685,6 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         __valueChanged(value, oldValue) {
-          // Setting initial value to empty string, skip
-          if (value === '' && oldValue === undefined) {
-            return;
-          }
-
           this.__handleDateTimeChange('value', '__selectedDateTime', value, oldValue);
         }
 
