@@ -105,6 +105,10 @@
         dateTimePicker.addEventListener('value-changed', spy);
         dateTimePicker.value = '2019-09-19T08:26';
         expect(spy).to.have.been.calledOnce;
+
+        spy.reset();
+        dateTimePicker.value = '';
+        expect(spy).to.have.been.calledOnce;
       });
 
       it('should get value from custom field', () => {

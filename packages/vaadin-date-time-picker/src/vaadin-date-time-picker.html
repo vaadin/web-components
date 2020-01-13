@@ -602,6 +602,9 @@ This program is available under Apache License Version 2.0, available at https:/
          *                  (depending on precision defined by "step" property)
          */
         __formatDateTime(date) {
+          if (!date) {
+            return '';
+          }
           const dateValue = this.__formatDateISO(date, '');
           const timeValue = this.__dateToIsoTimeString(date);
           return `${dateValue}T${timeValue}`;
@@ -705,11 +708,6 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         __selectedDateTimeChanged(selectedDateTime) {
-          /* istanbul ignore if */
-          if (!selectedDateTime === undefined) {
-            return;
-          }
-
           const formattedValue = this.__formatDateTime(selectedDateTime);
           if (this.value !== formattedValue) {
             this.value = formattedValue;
