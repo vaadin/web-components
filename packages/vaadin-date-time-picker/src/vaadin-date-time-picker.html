@@ -727,10 +727,6 @@ This program is available under Apache License Version 2.0, available at https:/
         __customFieldValueChanged(e) {
           /** @type {string} */
           const value = e.detail.value;
-          /* istanbul ignore if */
-          if (typeof value !== 'string') {
-            return;
-          }
 
           // Initial empty value from custom field
           if (value === 'T' && !this.__customFieldInitialValueChangeReceived) {
