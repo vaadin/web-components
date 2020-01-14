@@ -12,8 +12,8 @@
 
 <body>
   <script>
-    const formatTime = customElements.get('vaadin-time-picker').properties.i18n.value().formatTime;
-    const parseTime = customElements.get('vaadin-time-picker').properties.i18n.value().parseTime;
+    const formatTime = (...args) => customElements.get('vaadin-time-picker').properties.i18n.value().formatTime(...args);
+    const parseTime = (...args) => customElements.get('vaadin-time-picker').properties.i18n.value().parseTime(...args);
   </script>
 
   <test-fixture id="default">
