@@ -440,13 +440,13 @@ This program is available under Apache License Version 2.0, available at https:/
             const isMinMaxSameDay = dateEquals(this.__minDateTime, this.__maxDateTime);
 
             if (this.__minDateTime && dateEquals(selectedDate, this.__minDateTime) || isMinMaxSameDay) {
-              this.__timePicker.min = this.__dateToIsoTimeString(this.__minDateTime, this.__defaultTimeMinValue);
+              this.__timePicker.min = this.__dateToIsoTimeString(this.__minDateTime);
             } else {
               this.__timePicker.min = this.__defaultTimeMinValue;
             }
 
             if (this.__maxDateTime && dateEquals(selectedDate, this.__maxDateTime) || isMinMaxSameDay) {
-              this.__timePicker.max = this.__dateToIsoTimeString(this.__maxDateTime, this.__defaultTimeMaxValue);
+              this.__timePicker.max = this.__dateToIsoTimeString(this.__maxDateTime);
             } else {
               this.__timePicker.max = this.__defaultTimeMaxValue;
             }
@@ -572,6 +572,7 @@ This program is available under Apache License Version 2.0, available at https:/
          */
         __parseDateTime(str) {
           const [dateValue, timeValue] = str.split('T');
+          /* istanbul ignore if */
           if (!(dateValue && timeValue)) {
             return;
           }
@@ -613,14 +614,9 @@ This program is available under Apache License Version 2.0, available at https:/
         /**
          * Date object to string (ISO time)
          * @param {Date} date
-         * @param {string} defaultValue
          * @return {string} e.g. 'hh:mm', 'hh:mm:ss', 'hh:mm:ss.fff' (depending on precision defined by "step" property)
-         *                  or defaultValue when date is falsy
          */
-        __dateToIsoTimeString(date, defaultValue = '') {
-          if (!date) {
-            return defaultValue;
-          }
+        __dateToIsoTimeString(date) {
           return this.__formatTimeISO(this.__validateTime({
             hours: date.getHours(),
             minutes: date.getMinutes(),
