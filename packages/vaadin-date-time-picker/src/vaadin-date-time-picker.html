@@ -438,6 +438,7 @@ This program is available under Apache License Version 2.0, available at https:/
             const dateEquals = Vaadin.DatePickerHelper._dateEquals;
             const selectedDate = this.__parseDate(this.__datePicker.value);
             const isMinMaxSameDay = dateEquals(this.__minDateTime, this.__maxDateTime);
+            const oldTimeValue = this.__timePicker.value;
 
             if (this.__minDateTime && dateEquals(selectedDate, this.__minDateTime) || isMinMaxSameDay) {
               this.__timePicker.min = this.__dateToIsoTimeString(this.__minDateTime);
@@ -449,6 +450,13 @@ This program is available under Apache License Version 2.0, available at https:/
               this.__timePicker.max = this.__dateToIsoTimeString(this.__maxDateTime);
             } else {
               this.__timePicker.max = this.__defaultTimeMaxValue;
+            }
+
+            // If time picker value changes due to the new min or max
+            // propagate the updated value change to custom-field (which doesn't
+            // automatically process programmatically triggered value updates)
+            if (this.__timePicker.value !== oldTimeValue) {
+              this.__triggerCustomFieldValueUpdate();
             }
           }
         }
