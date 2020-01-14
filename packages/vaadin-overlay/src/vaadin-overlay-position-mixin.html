@@ -14,7 +14,7 @@ This program is available under Apache License Version 2.0, available at https:/
   /**
    * @polymerMixin
    */
-  Vaadin.Overlay.PositionMixin = superClass => class PositionMixin extends superClass {
+  Vaadin.Overlay._PositionMixin = superClass => class PositionMixin extends superClass {
 
     static get properties() {
       return {
@@ -93,6 +93,12 @@ This program is available under Apache License Version 2.0, available at https:/
           this._updatePosition();
         }
       });
+    }
+
+    ready() {
+      super.ready();
+
+      console.warn('PositionMixin is not considered stable and might change any time');
     }
 
     __positionSettingsChanged() {

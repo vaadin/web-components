@@ -4,6 +4,7 @@
     "describe": false,
     "afterEach": false,
     "beforeEach": false,
+    "before": false,
     "fixture": false,
     "it": false,
     "expect": false,

@@ -7,6 +7,7 @@
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <link rel="import" href="../../test-fixture/test-fixture.html">
   <link rel="import" href="../vaadin-overlay.html">
+  <link rel="import" href="../src/vaadin-overlay-position-mixin.html">
 </head>
 
 <body>
@@ -27,21 +28,42 @@
     }
   </style>
 
+  <script>
+    const importsReady = () => {
+      return new Promise(resolve => {
+        if (window.HTMLImports && window.HTMLImports.whenReady) {
+          window.HTMLImports.whenReady(resolve);
+        } else {
+          customElements.whenDefined('vaadin-overlay').then(resolve);
+        }
+      });
+    };
+
+    importsReady().then(() => {
+      class PositionedOverlay extends Vaadin.Overlay._PositionMixin(Vaadin.OverlayElement) {
+        static get is() {
+          return 'vaadin-positioned-overlay';
+        }
+      }
+
+      customElements.define(PositionedOverlay.is, PositionedOverlay);
+    });
+  </script>
+
   <test-fixture id="default">
     <template>
       <div id="parent">
         <div id="target">target</div>
-        <vaadin-overlay id="overlay">
+        <vaadin-positioned-overlay id="overlay">
           <template>
             <div id="overlay-child"></div>
           </template>
-        </vaadin-overlay>
+        </vaadin-positioned-overlay>
       </div>
     </template>
   </test-fixture>
 
   <script>
-
     describe('position target', () => {
 
       const TOP = 'top', BOTTOM = 'bottom';
@@ -65,6 +87,10 @@
       function setRTL() {
         overlay.setAttribute('dir', 'rtl');
       }
+
+      before(done => {
+        customElements.whenDefined('vaadin-positioned-overlay').then(done);
+      });
 
       beforeEach(() => {
         const parent = fixture('default');
