@@ -624,6 +624,7 @@ This program is available under Apache License Version 2.0, available at https:/
         this._placeholder = document.createComment('vaadin-overlay-placeholder');
         this.parentNode.insertBefore(this._placeholder, this);
         document.body.appendChild(this);
+        this.bringToFront();
       }
 
       _animatedClosing() {
@@ -671,10 +672,12 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       /**
-       * Returns all attached overlays.
+       * Returns all attached overlays in visual stacking order.
        */
       static get __attachedInstances() {
-        return Array.from(document.body.children).filter(el => el instanceof OverlayElement);
+        return Array.from(document.body.children)
+          .filter(el => el instanceof OverlayElement)
+          .sort((a, b) => (a.__zIndex - b.__zIndex) || 0);
       }
 
       /**
@@ -967,6 +970,21 @@ This program is available under Apache License Version 2.0, available at https:/
         }
         return n === this;
       }
+
+      /**
+       * Brings the overlay as visually the frontmost one
+       */
+      bringToFront() {
+        let zIndex = '';
+        const frontmost = OverlayElement.__attachedInstances.filter(o => o !== this).pop();
+        if (frontmost) {
+          const frontmostZIndex = frontmost.__zIndex;
+          zIndex = frontmostZIndex + 1;
+        }
+        this.style.zIndex = zIndex;
+        this.__zIndex = zIndex || parseFloat(getComputedStyle(this).zIndex);
+      }
+
     }
 
     customElements.define(OverlayElement.is, OverlayElement);

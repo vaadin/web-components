@@ -292,6 +292,85 @@
           // (in this case overlay 1 at step 3)
           expect(getComputedStyle(overlay1Part).pointerEvents).to.equal('auto');
         });
+
+        describe('modeless', () => {
+
+          let modeless1, modeless2;
+
+          const getFrontmostOverlayFromScreenCenter = () => {
+            let elementFromPoint = document.elementFromPoint(window.innerWidth / 2, window.innerHeight / 2);
+            while (elementFromPoint && elementFromPoint.localName !== 'vaadin-overlay') {
+              elementFromPoint = elementFromPoint.host || elementFromPoint.parentNode;
+            }
+            return elementFromPoint;
+          };
+
+          beforeEach(() => {
+            overlay.opened = false;
+            modeless1 = fixture('default').firstElementChild.firstElementChild;
+            modeless2 = fixture('default').firstElementChild.firstElementChild;
+            modeless1.modeless = modeless2.modeless = true;
+          });
+
+          afterEach(() => {
+            modeless1.opened = modeless2.opened = false;
+          });
+
+          it('should bring the overlay to front with bringToFront', () => {
+            modeless1.opened = true;
+            modeless2.opened = true;
+            modeless1.bringToFront();
+
+            expect(modeless1._last).to.be.true;
+            // Check that the overlay is also visually the frontmost
+            const frontmost = getFrontmostOverlayFromScreenCenter();
+            expect(frontmost).to.equal(modeless1);
+          });
+
+          it('should not lose scroll position when brought to front', () => {
+            modeless1.opened = true;
+            modeless1.content.$.content.style.height = '200px';
+
+            const overlay = modeless1.$.overlay;
+            overlay.style.height = '100px';
+            overlay.scrollTop = 100;
+
+            modeless2.opened = true;
+            modeless1.bringToFront();
+            expect(overlay.scrollTop).to.equal(100);
+          });
+
+          it('should grow the z-index by 1', () => {
+            modeless1.opened = true;
+            modeless2.opened = true;
+            modeless1.bringToFront();
+
+            expect(parseFloat(getComputedStyle(modeless1).zIndex)).to.equal(parseFloat(getComputedStyle(modeless2).zIndex) + 1);
+          });
+
+          it('should bring the newly opened overlay to front', () => {
+            modeless1.opened = true;
+            modeless2.opened = true;
+            modeless1.bringToFront();
+            modeless2.opened = false;
+            modeless2.opened = true;
+
+            const frontmost = getFrontmostOverlayFromScreenCenter();
+            expect(frontmost).to.equal(modeless2);
+          });
+
+          it('should reset z-indexes', () => {
+            modeless1.opened = true;
+            modeless2.opened = true;
+            expect(parseFloat(modeless2.style.zIndex)).to.equal(parseFloat(getComputedStyle(modeless1).zIndex) + 1);
+
+            modeless1.opened = modeless2.opened = false;
+            modeless2.opened = true;
+            expect(modeless2.style.zIndex).to.be.empty;
+          });
+
+        });
+
       });
 
       it('should close on esc', () => {
