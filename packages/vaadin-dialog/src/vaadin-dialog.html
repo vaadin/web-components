@@ -10,6 +10,9 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
 <link rel="import" href="../../polymer/lib/utils/flattened-nodes-observer.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-theme-property-mixin.html">
+<link rel="import" href="./vaadin-dialog-draggable-mixin.html">
+<link rel="import" href="./vaadin-dialog-resizable-mixin.html">
+<link rel="import" href="../../iron-resizable-behavior/iron-resizable-behavior.html">
 
 <dom-module id="vaadin-dialog-overlay-styles" theme-for="vaadin-dialog-overlay">
   <template>
@@ -35,13 +38,18 @@ This program is available under Apache License Version 2.0, available at https:/
 
     <vaadin-dialog-overlay id="overlay"
       on-opened-changed="_onOverlayOpened"
-      with-backdrop
+      on-mousedown="_bringOverlayToFront"
       theme$="[[theme]]"
+      modeless="[[modeless]]"
+      with-backdrop="[[!modeless]]"
+      resizable$="[[resizable]]"
       focus-trap>
     </vaadin-dialog-overlay>
   </template>
   <script>
     (function() {
+      let memoizedTemplate;
+
       /**
        * @namespace Vaadin
        */
@@ -58,9 +66,31 @@ This program is available under Apache License Version 2.0, available at https:/
        * @memberof Vaadin
        * @private
        */
-      class DialogOverlayElement extends Vaadin.OverlayElement {
+      class DialogOverlayElement extends Polymer.mixinBehaviors(Polymer.IronResizableBehavior, Vaadin.OverlayElement) {
         static get is() {
           return 'vaadin-dialog-overlay';
+        }
+
+        static get template() {
+          if (!memoizedTemplate) {
+            memoizedTemplate = super.template.cloneNode(true);
+            const contentPart = memoizedTemplate.content.querySelector('[part="content"]');
+            const overlayPart = memoizedTemplate.content.querySelector('[part="overlay"]');
+            const resizerContainer = document.createElement('div');
+            resizerContainer.id = 'resizerContainer';
+            resizerContainer.classList.add('resizer-container');
+            resizerContainer.appendChild(contentPart);
+            overlayPart.appendChild(resizerContainer);
+          }
+          return memoizedTemplate;
+        }
+
+        static get properties() {
+          return {
+            modeless: Boolean,
+
+            withBackdrop: Boolean
+          };
         }
       }
 
@@ -126,7 +156,12 @@ This program is available under Apache License Version 2.0, available at https:/
        * @mixes Vaadin.ThemePropertyMixin
        * @demo demo/index.html
        */
-      class DialogElement extends Vaadin.ThemePropertyMixin(Vaadin.ElementMixin(Polymer.Element)) {
+      class DialogElement extends
+        Vaadin.ThemePropertyMixin(
+          Vaadin.ElementMixin(
+            Vaadin.DialogDraggableMixin(
+              Vaadin.DialogResizableMixin(
+                Polymer.Element)))) {
         static get is() {
           return 'vaadin-dialog';
         }
@@ -187,6 +222,32 @@ This program is available under Apache License Version 2.0, available at https:/
              * - `dialog` The reference to the `<vaadin-dialog>` element.
              */
             renderer: Function,
+
+            /**
+             * Set to true to remove backdrop and allow click events on background elements.
+             */
+            modeless: {
+              type: Boolean,
+              value: false
+            },
+
+            /**
+             * Set to true to enable repositioning the dialog by clicking and dragging.
+             */
+            draggable: {
+              type: Boolean,
+              value: false,
+              reflectToAttribute: true
+            },
+
+            /**
+             * Set to true to enable resizing the dialog by dragging the corners and edges.
+             */
+            resizable: {
+              type: Boolean,
+              value: false,
+              reflectToAttribute: true
+            },
 
             _oldTemplate: Object,
 
@@ -288,6 +349,43 @@ This program is available under Apache License Version 2.0, available at https:/
           if (this.noCloseOnEsc) {
             e.preventDefault();
           }
+        }
+
+        _setBounds(bounds) {
+          const overlay = this.$.overlay.$.overlay;
+          const parsedBounds = Object.assign({}, bounds);
+
+          if (overlay.style.position !== 'absolute') {
+            overlay.style.position = 'absolute';
+            overlay.style.maxWidth = 'none';
+          }
+
+          for (const arg in parsedBounds) {
+            if (typeof parsedBounds[arg] === 'number') {
+              parsedBounds[arg] = `${parsedBounds[arg]}px`;
+            }
+          }
+
+          Object.assign(overlay.style, parsedBounds);
+        }
+
+        _bringOverlayToFront() {
+          this.$.overlay.bringToFront();
+        }
+
+        _getOverlayBounds() {
+          const overlay = this.$.overlay.$.overlay;
+          const overlayBounds = overlay.getBoundingClientRect();
+          const containerBounds = this.$.overlay.getBoundingClientRect();
+          const top = overlayBounds.top - containerBounds.top;
+          const left = overlayBounds.left - containerBounds.left;
+          const width = overlayBounds.width;
+          const height = overlayBounds.height;
+          return {top, left, width, height};
+        }
+
+        _mouseInWindow(e) {
+          return e.clientX >= 0 && e.clientX <= window.innerWidth && e.clientY >= 0 && e.clientY <= window.innerHeight;
         }
       }
 

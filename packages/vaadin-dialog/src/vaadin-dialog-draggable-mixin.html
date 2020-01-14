@@ -1,0 +1,55 @@
+<script>
+  /**
+   * @namespace Vaadin
+   */
+  window.Vaadin = window.Vaadin || {};
+
+  /**
+   * @polymerMixin
+   * @memberof Vaadin
+   */
+  Vaadin.DialogDraggableMixin = (superClass) =>
+    class VaadinDialogDraggableMixin extends superClass {
+      ready() {
+        super.ready();
+        this._originalBounds = {};
+        this._originalMouseCoords = {};
+        this._startDrag = this._startDrag.bind(this);
+        this._drag = this._drag.bind(this);
+        this._stopDrag = this._stopDrag.bind(this);
+        this.$.overlay.$.overlay.addEventListener('mousedown', this._startDrag);
+      }
+
+      _startDrag(e) {
+        if (this.draggable && e.button === 0) {
+          const resizerContainer = this.$.overlay.$.resizerContainer;
+          const isResizerContainer = e.target === resizerContainer;
+          const isResizerContainerScrollbar = e.offsetX > resizerContainer.clientWidth || e.offsetY > resizerContainer.clientHeight;
+          const isContentPart = e.target === this.$.overlay.$.content;
+          if ((isResizerContainer && !isResizerContainerScrollbar) || isContentPart) {
+            e.preventDefault();
+            this._originalBounds = this._getOverlayBounds();
+            this._originalMouseCoords = {top: e.pageY, left: e.pageX};
+            window.addEventListener('mouseup', this._stopDrag);
+            window.addEventListener('mousemove', this._drag);
+            if (this.$.overlay.$.overlay.style.position !== 'absolute') {
+              this._setBounds(this._originalBounds);
+            }
+          }
+        }
+      }
+
+      _drag(e) {
+        if (this._mouseInWindow(e)) {
+          const top = this._originalBounds.top + (e.pageY - this._originalMouseCoords.top);
+          const left = this._originalBounds.left + (e.pageX - this._originalMouseCoords.left);
+          this._setBounds({top, left});
+        }
+      }
+
+      _stopDrag() {
+        window.removeEventListener('mouseup', this._stopDrag);
+        window.removeEventListener('mousemove', this._drag);
+      }
+    };
+</script>

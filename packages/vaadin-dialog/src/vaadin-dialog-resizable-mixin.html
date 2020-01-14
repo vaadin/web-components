@@ -1,0 +1,185 @@
+<dom-module id="vaadin-dialog-resizable-overlay-styles" theme-for="vaadin-dialog-overlay">
+  <template>
+    <style>
+      [part='overlay'] {
+        position: relative;
+        overflow: visible;
+      }
+
+      [part='content'] {
+        box-sizing: border-box;
+        height: 100%;
+      }
+
+      .resizer-container {
+        height: 100%;
+        overflow: auto;
+      }
+
+      :host(:not([resizable])) .resizer {
+        display: none;
+      }
+
+      .resizer {
+        position: absolute;
+        height: 16px;
+        width: 16px;
+      }
+
+      .resizer.edge {
+        height: 8px;
+        width: 8px;
+        top: -4px;
+        right: -4px;
+        bottom: -4px;
+        left: -4px;
+      }
+
+      .resizer.edge.n {
+        width: auto;
+        bottom: auto;
+        cursor: ns-resize;
+      }
+
+      .resizer.ne {
+        top: -4px;
+        right: -4px;
+        cursor: nesw-resize;
+      }
+
+      .resizer.edge.e {
+        height: auto;
+        left: auto;
+        cursor: ew-resize;
+      }
+
+      .resizer.se {
+        bottom: -4px;
+        right: -4px;
+        cursor: nwse-resize;
+      }
+
+      .resizer.edge.s {
+        width: auto;
+        top: auto;
+        cursor: ns-resize;
+      }
+
+      .resizer.sw {
+        bottom: -4px;
+        left: -4px;
+        cursor: nesw-resize;
+      }
+
+      .resizer.edge.w {
+        height: auto;
+        right: auto;
+        cursor: ew-resize;
+      }
+
+      .resizer.nw {
+        top: -4px;
+        left: -4px;
+        cursor: nwse-resize;
+      }
+    </style>
+  </template>
+</dom-module>
+
+<script>
+  /**
+   * @namespace Vaadin
+   */
+  window.Vaadin = window.Vaadin || {};
+
+  /**
+   * @polymerMixin
+   * @memberof Vaadin
+   */
+  Vaadin.DialogResizableMixin = (superClass) =>
+    class VaadinDialogResizableMixin extends superClass {
+      ready() {
+        super.ready();
+        this._originalBounds = {};
+        this._originalMouseCoords = {};
+        this._resizeListeners = {start: {}, resize: {}, stop: {}};
+        this._addResizeListeners();
+      }
+
+      _addResizeListeners() {
+        // Note: edge controls added before corners
+        ['n', 'e', 's', 'w', 'nw', 'ne', 'se', 'sw'].forEach((direction) => {
+          const resizer = document.createElement('div');
+          this._resizeListeners.start[direction] = (e) => this._startResize(e, direction);
+          this._resizeListeners.resize[direction] = (e) => this._resize(e, direction);
+          this._resizeListeners.stop[direction] = () => this._stopResize(direction);
+          if (direction.length === 1) {
+            resizer.classList.add('edge');
+          }
+          resizer.classList.add('resizer');
+          resizer.classList.add(direction);
+          resizer.addEventListener('mousedown', this._resizeListeners.start[direction]);
+          this.$.overlay.$.resizerContainer.appendChild(resizer);
+        });
+      }
+
+      _startResize(e, direction) {
+        if (e.button === 0) {
+          e.preventDefault();
+          this._originalBounds = this._getOverlayBounds();
+          this._originalMouseCoords = {top: e.pageY, left: e.pageX};
+          window.addEventListener('mousemove', this._resizeListeners.resize[direction]);
+          window.addEventListener('mouseup', this._resizeListeners.stop[direction]);
+          if (this.$.overlay.$.overlay.style.position !== 'absolute') {
+            this._setBounds(this._originalBounds);
+          }
+        }
+      }
+
+      _resize(e, resizer) {
+        if (this._mouseInWindow(e)) {
+          const minimumSize = 40;
+          resizer.split('').forEach((direction) => {
+            switch (direction) {
+              case 'n': {
+                const height = this._originalBounds.height - (e.pageY - this._originalMouseCoords.top);
+                const top = this._originalBounds.top + (e.pageY - this._originalMouseCoords.top);
+                if (height > minimumSize) {
+                  this._setBounds({top, height});
+                }
+                break;
+              }
+              case 'e': {
+                const width = this._originalBounds.width + (e.pageX - this._originalMouseCoords.left);
+                if (width > minimumSize) {
+                  this._setBounds({width});
+                }
+                break;
+              }
+              case 's': {
+                const height = this._originalBounds.height + (e.pageY - this._originalMouseCoords.top);
+                if (height > minimumSize) {
+                  this._setBounds({height});
+                }
+                break;
+              }
+              case 'w': {
+                const width = this._originalBounds.width - (e.pageX - this._originalMouseCoords.left);
+                const left = this._originalBounds.left + (e.pageX - this._originalMouseCoords.left);
+                if (width > minimumSize) {
+                  this._setBounds({left, width});
+                }
+                break;
+              }
+            }
+          });
+          this.$.overlay.notifyResize();
+        }
+      }
+
+      _stopResize(direction) {
+        window.removeEventListener('mousemove', this._resizeListeners.resize[direction]);
+        window.removeEventListener('mouseup', this._resizeListeners.stop[direction]);
+      }
+    };
+</script>

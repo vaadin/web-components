@@ -222,6 +222,38 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Modeless Draggable Resizable Dialogs</h3>
+    <p>The <code>resizable</code> and <code>draggable</code> features only work on desktop.</p>
+    <vaadin-demo-snippet id="dialog-basic-demos-modeless-draggable-resizable-dialog" when-defined="vaadin-dialog">
+      <template preserve-content>
+        <vaadin-dialog modeless draggable resizable></vaadin-dialog>
+        <vaadin-dialog modeless draggable resizable></vaadin-dialog>
+        <vaadin-button>Toggle dialog 1</vaadin-button>
+        <vaadin-button>Toggle dialog 2</vaadin-button>
+        <script>
+          window.addDemoReadyListener('#dialog-basic-demos-modeless-draggable-resizable-dialog', function(document) {
+            const dialogs = document.querySelectorAll('vaadin-dialog');
+            for (let i = 0; i < dialogs.length; i++) {
+              const dialog = dialogs[i];
+              const dialogIndex = i + 1;
+              dialog.renderer = function(root, dialog) {
+                const closeButton = window.document.createElement('vaadin-button');
+                closeButton.textContent = 'Close';
+                closeButton.addEventListener('click', function() {
+                  dialog.opened = false;
+                });
+                root.textContent = 'Dialog ' + dialogIndex + ': Drag me around and resize me! ';
+                root.appendChild(closeButton);
+              };
+              document.querySelectorAll('vaadin-button')[i].addEventListener('click', function() {
+                dialog.opened = !dialog.opened;
+              });
+            }
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
   </template>
   <script>
     class DialogBasicDemos extends DemoReadyEventEmitter(DialogDemo(Polymer.Element)) {
