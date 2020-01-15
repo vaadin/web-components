@@ -135,6 +135,12 @@
       [part="native-checkbox"]:checked ~ [part="checkbox"] {
         opacity: 1;
       }
+
+      /* RTL specific styles */
+
+      :host([dir="rtl"]) [part="label"]:not([empty]) {
+        margin: 3px 6px 3px 12px;
+      }
     </style>
   </template>
 </dom-module>

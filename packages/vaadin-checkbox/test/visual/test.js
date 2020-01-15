@@ -66,6 +66,32 @@ gemini.suite('vaadin-checkbox', function(rootSuite) {
         .setCaptureElements('#wrapping-group-tests')
         .capture('default');
     });
+
+    gemini.suite(`default-rtl-tests-${theme}`, function(suite) {
+      suite
+        .setUrl(`default-rtl.html?theme=${theme}`)
+        .setCaptureElements('#default-tests')
+        .capture('default')
+        .capture('checked', function(actions) {
+          actions.executeJS(function(window) {
+            window.document.querySelector('vaadin-checkbox').checked = true;
+          });
+        });
+    });
+
+    gemini.suite(`validation-rtl-tests-${theme}`, function(suite) {
+      suite
+        .setUrl(`default-rtl.html?theme=${theme}`)
+        .setCaptureElements('#validation-tests')
+        .capture('error');
+    });
+
+    gemini.suite(`wrapping-rtl-tests-${theme}`, function(suite) {
+      suite
+        .setUrl(`default-rtl.html?theme=${theme}`)
+        .setCaptureElements('#wrapping-group-tests')
+        .capture('default');
+    });
   });
 
 });
