@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+
+<head lang="en">
+  <meta charset="UTF-8">
+  <title></title>
+  <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../bower_components/iron-test-helpers/mock-interactions.js"></script>
+  <script>
+    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-radio-button.html">`);
+    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-radio-group.html">`);
+    document.documentElement.setAttribute('dir', 'rtl');
+  </script>
+</head>
+
+<body>
+
+  <div id="default-tests" style="padding: 6px;">
+    <vaadin-radio-group label="Foo">
+      <vaadin-radio-button checked>1</vaadin-radio-button>
+      <vaadin-radio-button disabled>2</vaadin-radio-button>
+      <vaadin-radio-button>3</vaadin-radio-button>
+    </vaadin-radio-group>
+
+    <br/>
+
+    <vaadin-radio-group label="Label" required error-message="Error message" invalid>
+      <vaadin-radio-button>1</vaadin-radio-button>
+      <vaadin-radio-button>2</vaadin-radio-button>
+    </vaadin-radio-group>
+
+    <br/>
+
+    <vaadin-radio-group label="Vertical" theme="vertical">
+      <vaadin-radio-button>1</vaadin-radio-button>
+      <vaadin-radio-button>2</vaadin-radio-button>
+    </vaadin-radio-group>
+
+    <br/>
+
+    <vaadin-radio-button></vaadin-radio-button>
+    <vaadin-radio-button></vaadin-radio-button>
+    Empty labels
+
+    <br/>
+
+    <vaadin-radio-group label="Choose a number">
+      <vaadin-radio-button value="1">Radio button 1</vaadin-radio-button>
+      <vaadin-radio-button value="2">Radio button 2</vaadin-radio-button>
+      <vaadin-radio-button value="3">Radio button 3</vaadin-radio-button>
+      <vaadin-radio-button value="4">Radio button 4</vaadin-radio-button>
+    </vaadin-radio-group>
+
+  <script>
+    // eslint-disable-next-line no-unused-vars
+    function focusRadio() {
+      MockInteractions.keyDownOn(document.body, 9);
+    }
+  </script>
+
+</body>

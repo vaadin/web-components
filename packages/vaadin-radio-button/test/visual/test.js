@@ -25,6 +25,13 @@ gemini.suite('vaadin-radio-button', function(rootSuite) {
         });
     });
 
+    gemini.suite(`default-rtl-tests-${theme}`, function(suite) {
+      suite
+        .setUrl(`default-rtl.html?theme=${theme}`)
+        .setCaptureElements('#default-tests')
+        .capture('default');
+    });
+
     gemini.suite(`wrapping-tests-${theme}`, function(suite) {
       suite
         .setUrl(`wrapping.html?theme=${theme}`)

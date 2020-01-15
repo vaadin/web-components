@@ -117,6 +117,12 @@
       [part="radio"] {
         line-height: 1;
       }
+
+      /* RTL specific styles */
+
+      :host([dir="rtl"]) [part="label"]:not([empty]) {
+        margin: 0.1875em 0.375em 0.1875em 0.875em;
+      }
     </style>
   </template>
 </dom-module>

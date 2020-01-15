@@ -114,6 +114,12 @@
       :host([disabled]) [part="radio"]::after {
         background-color: var(--material-disabled-color);
       }
+
+      /* RTL specific styles */
+
+      :host([dir="rtl"]) [part="label"]:not([empty]) {
+        margin: 4px 0.375em 4px 0.875em;
+      }
     </style>
   </template>
 </dom-module>
