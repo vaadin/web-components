@@ -262,17 +262,19 @@ This program is available under Apache License Version 2.0, available at https:/
           this.addEventListener('keydown', e => {
             // if e.target is vaadin-radio-group then assign to checkedRadioButton currently checked radio button
             var checkedRadioButton = (e.target == this) ? this._checkedButton : e.target;
+            const horizontalRTL = this.getAttribute('dir') === 'rtl'
+              && this.theme !== 'vertical';
 
             // LEFT, UP - select previous radio button
             if (e.keyCode === 37 || e.keyCode === 38) {
               e.preventDefault();
-              this._selectPreviousButton(checkedRadioButton);
+              this._selectIncButton(horizontalRTL, checkedRadioButton);
             }
 
             // RIGHT, DOWN - select next radio button
             if (e.keyCode === 39 || e.keyCode === 40) {
               e.preventDefault();
-              this._selectNextButton(checkedRadioButton);
+              this._selectIncButton(!horizontalRTL, checkedRadioButton);
             }
           });
 
@@ -284,6 +286,14 @@ This program is available under Apache License Version 2.0, available at https:/
             e.composed && this.validate();
             this._setFocused(false);
           });
+        }
+
+        _selectIncButton(next, checkedRadioButton) {
+          if (next) {
+            this._selectNextButton(checkedRadioButton);
+          } else {
+            this._selectPreviousButton(checkedRadioButton);
+          }
         }
 
         _selectButton(element, setFocusRing) {

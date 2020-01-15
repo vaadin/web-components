@@ -428,6 +428,74 @@
         expect(vaadinRadioButtonGroup.hasAttribute('focused')).to.be.false;
       });
 
+      describe('RTL mode', () => {
+
+        beforeEach(() => vaadinRadioButtonGroup.setAttribute('dir', 'rtl'));
+
+        it('previous/first radio button in the layout should be focused and checked after left', () => {
+          vaadinRadioButtonList[1].checked = true;
+
+          MockInteractions.keyDownOn(vaadinRadioButtonGroup, 37);
+          MockInteractions.keyUpOn(vaadinRadioButtonGroup, 37);
+
+          expect(vaadinRadioButtonList[2].checked).to.be.true;
+          expect(vaadinRadioButtonList[1].checked).to.be.false;
+        });
+
+        it('previous/first radio button in the layout should be focused and checked after up in horizontal', () => {
+          vaadinRadioButtonList[1].checked = true;
+
+          MockInteractions.keyDownOn(vaadinRadioButtonGroup, 38);
+          MockInteractions.keyUpOn(vaadinRadioButtonGroup, 38);
+
+          expect(vaadinRadioButtonList[2].checked).to.be.true;
+          expect(vaadinRadioButtonList[1].checked).to.be.false;
+        });
+
+        it('previous/first radio button should be focused and checked after up in vertical', () => {
+          vaadinRadioButtonGroup.setAttribute('theme', 'vertical');
+          vaadinRadioButtonList[1].checked = true;
+
+          MockInteractions.keyDownOn(vaadinRadioButtonGroup, 38);
+          MockInteractions.keyUpOn(vaadinRadioButtonGroup, 38);
+
+          expect(vaadinRadioButtonList[0].checked).to.be.true;
+          expect(vaadinRadioButtonList[1].checked).to.be.false;
+        });
+
+        it('next/last radio button in the layout should be focused and checked after right', () => {
+          vaadinRadioButtonList[1].checked = true;
+
+          MockInteractions.keyDownOn(vaadinRadioButtonGroup, 39);
+          MockInteractions.keyUpOn(vaadinRadioButtonGroup, 39);
+
+          expect(vaadinRadioButtonList[0].checked).to.be.true;
+          expect(vaadinRadioButtonList[1].checked).to.be.false;
+        });
+
+        it('next/last radio button in the layout should be focused and checked after down in horizontal', () => {
+          vaadinRadioButtonList[1].checked = true;
+
+          MockInteractions.keyDownOn(vaadinRadioButtonGroup, 40);
+          MockInteractions.keyUpOn(vaadinRadioButtonGroup, 40);
+
+          expect(vaadinRadioButtonList[0].checked).to.be.true;
+          expect(vaadinRadioButtonList[1].checked).to.be.false;
+        });
+
+        it('next/last radio button should be focused and checked after down in vertical', () => {
+          vaadinRadioButtonGroup.setAttribute('theme', 'vertical');
+          vaadinRadioButtonList[1].checked = true;
+
+          MockInteractions.keyDownOn(vaadinRadioButtonGroup, 40);
+          MockInteractions.keyUpOn(vaadinRadioButtonGroup, 40);
+
+          expect(vaadinRadioButtonList[2].checked).to.be.true;
+          expect(vaadinRadioButtonList[1].checked).to.be.false;
+        });
+
+      });
+
       describe('change event', () => {
         it('should fire on right/down', () => {
           vaadinRadioButtonList[1].focus();
