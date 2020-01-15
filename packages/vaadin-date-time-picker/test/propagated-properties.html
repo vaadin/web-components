@@ -119,28 +119,38 @@
           expect(timePicker.max).to.equal('23:59:59.999');
         });
 
-        it('should propagate value change from time picker when date change affects min of time picker and time value is updated', () => {
+        it('should ignore value change from time picker when date change affects min of time picker', () => {
+          const valueChangedSpy = sinon.spy();
+          dateTimePicker.addEventListener('value-changed', valueChangedSpy);
+
           dateTimePicker.min = '2019-12-16T20:00';
           timePicker.value = '01:00';
           dispatchChange(timePicker);
           expect(timePicker.value).to.equal('01:00');
           expect(dateTimePicker.value).to.equal('');
+
           datePicker.value = '2019-12-16';
           dispatchChange(datePicker);
-          expect(timePicker.value).to.equal('20:00');
-          expect(dateTimePicker.value).to.equal('2019-12-16T20:00');
+          expect(timePicker.value).to.equal('01:00');
+          expect(dateTimePicker.value).to.equal('2019-12-16T01:00');
+          expect(valueChangedSpy).to.have.been.calledOnce;
         });
 
-        it('should propagate value change from time picker when date change affects max of time picker and time value is updated', () => {
+        it('should ignore value change from time picker when date change affects max of time picker', () => {
+          const valueChangedSpy = sinon.spy();
+          dateTimePicker.addEventListener('value-changed', valueChangedSpy);
+
           dateTimePicker.max = '2019-12-20T10:00';
           timePicker.value = '12:00';
           dispatchChange(timePicker);
           expect(timePicker.value).to.equal('12:00');
           expect(dateTimePicker.value).to.equal('');
+
           datePicker.value = '2019-12-20';
           dispatchChange(datePicker);
-          expect(timePicker.value).to.equal('10:00');
-          expect(dateTimePicker.value).to.equal('2019-12-20T10:00');
+          expect(timePicker.value).to.equal('12:00');
+          expect(dateTimePicker.value).to.equal('2019-12-20T12:00');
+          expect(valueChangedSpy).to.have.been.calledOnce;
         });
 
         it('should always propagate same day min and max to time picker (min first)', () => {

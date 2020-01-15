@@ -452,11 +452,10 @@ This program is available under Apache License Version 2.0, available at https:/
               this.__timePicker.max = this.__defaultTimeMaxValue;
             }
 
-            // If time picker value changes due to the new min or max
-            // propagate the updated value change to custom-field (which doesn't
-            // automatically process programmatically triggered value updates)
+            // If time picker automatically adjusts the time value due to the new min or max
+            // revert the time value
             if (this.__timePicker.value !== oldTimeValue) {
-              this.__triggerCustomFieldValueUpdate();
+              this.__timePicker.value = oldTimeValue;
             }
           }
         }
@@ -740,20 +739,22 @@ This program is available under Apache License Version 2.0, available at https:/
           }
 
           const [date, time] = value.split('T');
+
+          // Handle updating time picker min/max if the date changed.
+          // This may cause the time picker value to be adjusted.
+          // __oldDateValue is used only here and the if condition is only a minor performance optimization
+          // not to run the update checks unnecessarily if only the time was changed.
+          if (this.__oldDateValue !== date) {
+            this.__oldDateValue = date;
+            this.__updateTimePickerMinMax();
+          }
+
           if (date && time) {
             if (value !== this.value) {
               this.value = value;
             }
           } else {
             this.value = '';
-          }
-
-          // Handle updating time picker min/max if the date changed.
-          // __oldDateValue is used only here and the if condition is only a minor performance optimization
-          // not to run the update checks unnecessarily if only the time was changed.
-          if (this.__oldDateValue !== date) {
-            this.__oldDateValue = date;
-            this.__updateTimePickerMinMax();
           }
         }
       }
