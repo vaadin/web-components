@@ -13,11 +13,11 @@
   }
   ,
   {
-    "name": "Advanced Usage",
-    "url": "date-time-picker-advanced-demos",
-    "src": "date-time-picker-advanced-demos.html",
+    "name": "Localization",
+    "url": "date-time-picker-localization-demos",
+    "src": "date-time-picker-localization-demos.html",
     "meta": {
-      "title": "vaadin-date-time-picker Advanced Examples",
+      "title": "vaadin-date-time-picker Localization Examples",
       "description": "",
       "image": ""
      }

@@ -5,8 +5,9 @@ This program is available under Apache License Version 2.0, available at https:/
 -->
 
 <link rel="import" href="../../polymer/polymer-element.html">
-<link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
+<link rel="import" href="../../vaadin-date-picker/src/vaadin-date-picker-helper.html">
 <link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
+<link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="vaadin-date-time-picker-custom-field.html">
 <link rel="import" href="vaadin-date-time-picker-date-picker.html">
 <link rel="import" href="vaadin-date-time-picker-time-picker.html">
@@ -70,6 +71,23 @@ This program is available under Apache License Version 2.0, available at https:/
   <script>
     (function() {
 
+      // Find a property definition from the prototype chain of a Polymer element class
+      const getPropertyFromPrototype = function(clazz, prop) {
+        while (clazz) {
+          if (clazz.properties && clazz.properties[prop]) {
+            return clazz.properties[prop];
+          }
+          clazz = clazz.__proto__;
+        }
+      };
+
+      const datePickerClass = customElements.get('vaadin-date-time-picker-date-picker');
+      const timePickerClass = customElements.get('vaadin-date-time-picker-time-picker');
+      const datePickerI18nDefaults = getPropertyFromPrototype(datePickerClass, 'i18n').value();
+      const timePickerI18nDefaults = getPropertyFromPrototype(timePickerClass, 'i18n').value();
+      const datePickerI18nProps = Object.keys(datePickerI18nDefaults);
+      const timePickerI18nProps = Object.keys(timePickerI18nDefaults);
+
       /**
        * `<vaadin-date-time-picker>` is a Web Component providing a date time selection field.
        *
@@ -130,15 +148,61 @@ This program is available under Apache License Version 2.0, available at https:/
              * The value for this element.
              *
              * Supported date time format is based on ISO 8601 (without a time zone designator):
-             * - Minute precision `"YYYY-MM-DDThh:mm"`
+             * - Minute precision `"YYYY-MM-DDThh:mm"` (default)
              * - Second precision `"YYYY-MM-DDThh:mm:ss"`
-             * - Millisecond precision `"YYYY-MM-DDThh:mm:ss.fff"` (default)
+             * - Millisecond precision `"YYYY-MM-DDThh:mm:ss.fff"`
              */
             value: {
               type: String,
               notify: true,
               value: '',
               observer: '__valueChanged'
+            },
+
+            /**
+             * The earliest allowed value (date and time) that can be selected. All earlier values will be disabled.
+             *
+             * Supported date time format is based on ISO 8601 (without a time zone designator):
+             * - Minute precision `"YYYY-MM-DDThh:mm"`
+             * - Second precision `"YYYY-MM-DDThh:mm:ss"`
+             * - Millisecond precision `"YYYY-MM-DDThh:mm:ss.fff"`
+             *
+             * @type {String}
+             */
+            min: {
+              type: String,
+              observer: '__minChanged'
+            },
+
+            /**
+             * The latest value (date and time) that can be selected. All later values will be disabled.
+             *
+             * Supported date time format is based on ISO 8601 (without a time zone designator):
+             * - Minute precision `"YYYY-MM-DDThh:mm"`
+             * - Second precision `"YYYY-MM-DDThh:mm:ss"`
+             * - Millisecond precision `"YYYY-MM-DDThh:mm:ss.fff"`
+             *
+             * @type {String}
+             */
+            max: {
+              type: String,
+              observer: '__maxChanged'
+            },
+
+            /**
+             * The earliest value that can be selected. All earlier values will be disabled.
+             */
+            __minDateTime: {
+              type: Date,
+              value: ''
+            },
+
+            /**
+             * The latest value that can be selected. All later values will be disabled.
+             */
+            __maxDateTime: {
+              type: Date,
+              value: ''
             },
 
             /**
@@ -230,6 +294,21 @@ This program is available under Apache License Version 2.0, available at https:/
                 parseValue: combinedValue => combinedValue.split('T'),
                 formatValue: inputValues => inputValues.join('T')
               })
+            },
+
+            /**
+             * The object used to localize this component.
+             * To change the default localization, replace the entire
+             * `i18n` object or just the properties you want to modify.
+             *
+             * The object is a combination of the i18n properties supported by
+             * `<vaadin-date-picker>` and `<vaadin-time-picker>`. See `i18n` property at:
+             * - [`date-picker` documentation](https://vaadin.com/components/vaadin-date-picker/html-api/elements/Vaadin.DatePickerElement)
+             * - [`time-picker` documentation](https://vaadin.com/components/vaadin-time-picker/html-api/elements/Vaadin.TimePickerElement)
+             */
+            i18n: {
+              type: Object,
+              value: () => Object.assign({}, datePickerI18nDefaults, timePickerI18nDefaults)
             }
           };
         }
@@ -243,8 +322,19 @@ This program is available under Apache License Version 2.0, available at https:/
             '__initialPositionChanged(initialPosition)',
             '__showWeekNumbersChanged(showWeekNumbers)',
             '__disabledChanged(disabled)',
-            '__readonlyChanged(readonly)'
+            '__readonlyChanged(readonly)',
+            '__i18nChanged(i18n.*)'
           ];
+        }
+
+        constructor() {
+          super();
+          // Default value for "min" and "max" properties of vaadin-date-picker (for removing constraint)
+          this.__defaultDateMinMaxValue = undefined;
+          // Default value for "min" property of vaadin-time-picker (for removing constraint)
+          this.__defaultTimeMinValue = '00:00:00.000';
+          // Default value for "max" property of vaadin-time-picker (for removing constraint)
+          this.__defaultTimeMaxValue = '23:59:59.999';
         }
 
         ready() {
@@ -258,6 +348,27 @@ This program is available under Apache License Version 2.0, available at https:/
           this.$.timeSlot.addEventListener('slotchange', this.__timePickerChanged.bind(this));
         }
 
+        __syncI18n(target, source, props) {
+          props = props || Object.keys(source.i18n);
+          props.forEach(prop => {
+            if (source.i18n.hasOwnProperty(prop)) {
+              target.set(`i18n.${prop}`, source.i18n[prop]);
+            }
+          });
+        }
+
+        // This is needed only for the case when date or time picker is slotted/changed after ready
+        // since custom field doesn't automatically pick that change because we use a wrapper element
+        // in the custom field slot.
+        __updateCustomFieldInputs() {
+          const cfInputs = this.$.customField.inputs;
+          if (this.__datePicker && this.__timePicker
+              && (cfInputs[0] !== this.__datePicker || cfInputs[1] !== this.__timePicker)
+          ) {
+            this.$.customField._setInputs([this.__datePicker, this.__timePicker]);
+          }
+        }
+
         __datePickerChanged() {
           const defaultDatePicker = this.shadowRoot.querySelector('[part="date"]');
           const assignedElements = this.$.dateSlot.assignedNodes({flatten: true}).filter(this.__filterElements);
@@ -266,6 +377,7 @@ This program is available under Apache License Version 2.0, available at https:/
             return;
           }
           this.__datePicker = datePicker;
+          this.__updateCustomFieldInputs();
 
           if (datePicker === defaultDatePicker) {
             // Synchronize properties to default date picker
@@ -274,6 +386,7 @@ This program is available under Apache License Version 2.0, available at https:/
             datePicker.showWeekNumbers = this.showWeekNumbers;
             datePicker.disabled = this.disabled;
             datePicker.readonly = this.readonly;
+            this.__syncI18n(datePicker, this, datePickerI18nProps);
           } else {
             // Synchronize properties from slotted date picker
             this.datePlaceholder = datePicker.placeholder;
@@ -281,7 +394,13 @@ This program is available under Apache License Version 2.0, available at https:/
             this.showWeekNumbers = datePicker.showWeekNumbers;
             this.disabled = datePicker.disabled;
             this.readonly = datePicker.readonly;
+            this.__syncI18n(this, datePicker, datePickerI18nProps);
           }
+
+          // min and max are always synchronized from date time picker (host) to inner fields because time picker
+          // min and max need to be dynamically set depending on currently selected date instead of simple propagation
+          datePicker.min = this.__formatDateISO(this.__minDateTime, this.__defaultDateMinMaxValue);
+          datePicker.max = this.__formatDateISO(this.__maxDateTime, this.__defaultDateMinMaxValue);
         }
 
         __timePickerChanged() {
@@ -292,6 +411,7 @@ This program is available under Apache License Version 2.0, available at https:/
             return;
           }
           this.__timePicker = timePicker;
+          this.__updateCustomFieldInputs();
 
           if (timePicker === defaultTimePicker) {
             // Synchronize properties to default time picker
@@ -299,11 +419,53 @@ This program is available under Apache License Version 2.0, available at https:/
             timePicker.step = this.step;
             timePicker.disabled = this.disabled;
             timePicker.readonly = this.readonly;
+            this.__syncI18n(timePicker, this, timePickerI18nProps);
           } else {
             // Synchronize properties from slotted time picker
             this.timePlaceholder = timePicker.placeholder;
             this.step = timePicker.step;
             // Don't set disabled or readonly from time picker since they're already set from date picker
+            this.__syncI18n(this, timePicker, timePickerI18nProps);
+          }
+
+          // min and max are always synchronized from parent to slotted because time picker min and max
+          // need to be dynamically set depending on currently selected date instead of simple propagation
+          this.__updateTimePickerMinMax();
+        }
+
+        __updateTimePickerMinMax() {
+          if (this.__timePicker && this.__datePicker) {
+            const dateEquals = Vaadin.DatePickerHelper._dateEquals;
+            const selectedDate = this.__parseDate(this.__datePicker.value);
+            const isMinMaxSameDay = dateEquals(this.__minDateTime, this.__maxDateTime);
+            const oldTimeValue = this.__timePicker.value;
+
+            if (this.__minDateTime && dateEquals(selectedDate, this.__minDateTime) || isMinMaxSameDay) {
+              this.__timePicker.min = this.__dateToIsoTimeString(this.__minDateTime);
+            } else {
+              this.__timePicker.min = this.__defaultTimeMinValue;
+            }
+
+            if (this.__maxDateTime && dateEquals(selectedDate, this.__maxDateTime) || isMinMaxSameDay) {
+              this.__timePicker.max = this.__dateToIsoTimeString(this.__maxDateTime);
+            } else {
+              this.__timePicker.max = this.__defaultTimeMaxValue;
+            }
+
+            // If time picker automatically adjusts the time value due to the new min or max
+            // revert the time value
+            if (this.__timePicker.value !== oldTimeValue) {
+              this.__timePicker.value = oldTimeValue;
+            }
+          }
+        }
+
+        __i18nChanged(changeRecord) {
+          if (this.__datePicker) {
+            this.__datePicker.set(changeRecord.path, changeRecord.value);
+          }
+          if (this.__timePicker) {
+            this.__timePicker.set(changeRecord.path, changeRecord.value);
           }
         }
 
@@ -320,8 +482,23 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         __stepChanged(step) {
-          if (this.__timePicker) {
+          if (this.__timePicker && this.__timePicker.step !== step) {
+            const oldTimeValue = this.__timePicker.value;
+
             this.__timePicker.step = step;
+
+            // If time picker value changes due to the new step (precision change)
+            // propagate the updated value change to custom-field (which doesn't
+            // automatically process programmatically triggered value updates)
+            if (this.__timePicker.value !== oldTimeValue) {
+              this.__triggerCustomFieldValueUpdate();
+            }
+          }
+        }
+
+        __triggerCustomFieldValueUpdate() {
+          if (this.__timePicker) {
+            this.__timePicker.dispatchEvent(new CustomEvent('change', {bubbles: true}));
           }
         }
 
@@ -355,24 +532,54 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /**
+         * String (ISO date) to Date object
+         * @param {string} str e.g. 'yyyy-mm-dd'
+         * @return {(Date|undefined)}
+         */
         __parseDate(str) {
-          return customElements.get('vaadin-date-time-picker-date-picker').prototype._parseDate(str);
+          return datePickerClass.prototype._parseDate(str);
         }
 
-        __formatDateISO(str) {
-          return customElements.get('vaadin-date-time-picker-date-picker').prototype._formatISO(str);
+        /**
+         * Date object to string (ISO date)
+         * @param {Date} date
+         * @param {string} defaultValue
+         * @return {string} e.g. 'yyyy-mm-dd' (or defaultValue when date is falsy)
+         */
+        __formatDateISO(date, defaultValue) {
+          if (!date) {
+            return defaultValue;
+          }
+          return datePickerClass.prototype._formatISO(date);
         }
 
+        /**
+         * Custom time object to string (ISO time)
+         * @param {object} time Time components as properties { hours, minutes, seconds, milliseconds }
+         * @return {string} e.g. 'hh:mm', 'hh:mm:ss', 'hh:mm:ss.fff'
+         */
         __formatTimeISO(time) {
-          return customElements.get('vaadin-time-picker').properties.i18n.value().formatTime(time);
+          return timePickerI18nDefaults.formatTime(time);
         }
 
+        /**
+         * String (ISO time) to custom time object
+         * @param {string} str e.g. 'hh:mm', 'hh:mm:ss', 'hh:mm:ss.fff'
+         * @return {object} Time components as properties { hours, minutes, seconds, milliseconds }
+         */
         __parseTimeISO(str) {
-          return customElements.get('vaadin-time-picker').properties.i18n.value().parseTime(str);
+          return timePickerI18nDefaults.parseTime(str);
         }
 
+        /**
+         * String (ISO date time) to Date object
+         * @param {string} str e.g. 'yyyy-mm-ddThh:mm', 'yyyy-mm-ddThh:mm:ss', 'yyyy-mm-ddThh:mm:ss.fff'
+         * @return {(Date|undefined)}
+         */
         __parseDateTime(str) {
           const [dateValue, timeValue] = str.split('T');
+          /* istanbul ignore if */
           if (!(dateValue && timeValue)) {
             return;
           }
@@ -394,6 +601,62 @@ This program is available under Apache License Version 2.0, available at https:/
           date.setMilliseconds(parseInt(time.milliseconds || 0));
 
           return date;
+        }
+
+        /**
+         * Date object to string (ISO date time)
+         * @param {Date} date
+         * @return {string} e.g. 'yyyy-mm-ddThh:mm', 'yyyy-mm-ddThh:mm:ss', 'yyyy-mm-ddThh:mm:ss.fff'
+         *                  (depending on precision defined by "step" property)
+         */
+        __formatDateTime(date) {
+          if (!date) {
+            return '';
+          }
+          const dateValue = this.__formatDateISO(date, '');
+          const timeValue = this.__dateToIsoTimeString(date);
+          return `${dateValue}T${timeValue}`;
+        }
+
+        /**
+         * Date object to string (ISO time)
+         * @param {Date} date
+         * @return {string} e.g. 'hh:mm', 'hh:mm:ss', 'hh:mm:ss.fff' (depending on precision defined by "step" property)
+         */
+        __dateToIsoTimeString(date) {
+          return this.__formatTimeISO(this.__validateTime({
+            hours: date.getHours(),
+            minutes: date.getMinutes(),
+            seconds: date.getSeconds(),
+            milliseconds: date.getMilliseconds()
+          }));
+        }
+
+        __validateTime(timeObject) {
+          if (timeObject) {
+            timeObject.seconds = this.__stepSegment < 3 ? undefined : timeObject.seconds;
+            timeObject.milliseconds = this.__stepSegment < 4 ? undefined : timeObject.milliseconds;
+          }
+          return timeObject;
+        }
+
+        // Copied from vaadin-time-picker
+        /* istanbul ignore next */
+        get __stepSegment() {
+          const step = this.step == undefined ? 60 : parseFloat(this.step);
+          if (step % 3600 === 0) {
+            // Accept hours
+            return 1;
+          } else if (step % 60 === 0 || !step) {
+            // Accept minutes
+            return 2;
+          } else if (step % 1 === 0) {
+            // Accept seconds
+            return 3;
+          } else if (step < 1) {
+            // Accept milliseconds
+            return 4;
+          }
         }
 
         /**
@@ -428,98 +691,45 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         __valueChanged(value, oldValue) {
-          // Setting initial value to empty string, skip
-          if (value === '' && oldValue === undefined) {
-            return;
-          }
-
           this.__handleDateTimeChange('value', '__selectedDateTime', value, oldValue);
         }
 
-        /**
-         * FIXME(haprog): This method can probably be removed once we support "step" property
-         * and know what the precision of the date string should be.
-         *
-         * @param {string} date1
-         * @param {string} date2
-         */
-        __dateTimeStringEquals(date1, date2) {
-          if (date1.length === date2.length) {
-            return date1 === date2;
+        __minChanged(value, oldValue) {
+          this.__handleDateTimeChange('min', '__minDateTime', value, oldValue);
+          if (this.__datePicker) {
+            this.__datePicker.min = this.__formatDateISO(this.__minDateTime, this.__defaultDateMinMaxValue);
           }
+          this.__updateTimePickerMinMax();
+        }
 
-          let shortDate, longDate;
-          /* istanbul ignore else */
-          if (date1.length < date2.length) {
-            shortDate = date1;
-            longDate = date2;
-          } else {
-            shortDate = date2;
-            longDate = date1;
+        __maxChanged(value, oldValue) {
+          this.__handleDateTimeChange('max', '__maxDateTime', value, oldValue);
+          if (this.__datePicker) {
+            this.__datePicker.max = this.__formatDateISO(this.__maxDateTime, this.__defaultDateMinMaxValue);
           }
-
-          if (shortDate !== longDate.substr(0, shortDate.length)) {
-            return false;
-          }
-
-          const endDiff = longDate.substr(shortDate.length);
-          const okEndDiffs = [
-            ':00.000',
-            ':00',
-            '.000'
-          ];
-          return okEndDiffs.indexOf(endDiff) !== -1;
+          this.__updateTimePickerMinMax();
         }
 
         __selectedDateTimeChanged(selectedDateTime) {
-          /* istanbul ignore if */
-          if (!selectedDateTime === undefined) {
-            return;
-          }
-
-          const dateValue = this.__formatDateISO(selectedDateTime);
-          // FIXME(haprog): Once we add support for "step" property, timeValue should take that into account
-          // and use correct precision (like in vaadin-time-picker)
-          const timeValue = (selectedDateTime && this.__formatTimeISO({
-            hours: selectedDateTime.getHours(),
-            minutes: selectedDateTime.getMinutes(),
-            seconds: selectedDateTime.getSeconds(),
-            milliseconds: selectedDateTime.getMilliseconds()
-          })) || '';
-
-          const formattedValue = `${dateValue}T${timeValue}`;
-          if (!this.__dateTimeStringEquals(this.value, formattedValue)) {
+          const formattedValue = this.__formatDateTime(selectedDateTime);
+          if (this.value !== formattedValue) {
             this.value = formattedValue;
           }
 
           // Setting the customField.value below triggers validation of the date picker and time picker.
           // If the inputs are slotted (e.g. when using the Java API) and have an initial value this can
-          // happen before date picker ready() which triggers an error when date picker is trying to read
+          // happen before date picker ready() which would throw an error when date picker is trying to read
           // `this.$.input` (as a result of value change triggered by setting custom field value).
-          // Workaround the problem by overriding customField.validate while setting the initial value.
-          if (!this.$.customField.inputs[0].$) {
-            const validate = this.$.customField.validate;
-            /* istanbul ignore next */
-            this.$.customField.validate = () => true;
-
-            this.$.customField.value = this.value;
-
-            this.$.customField.validate = validate;
-            setTimeout(() => {
-              this.$.customField.validate();
-            });
-          } else {
-            this.$.customField.value = this.value;
+          // Workaround the problem by setting custom field value only if date picker is ready.
+          const isDatePickerReady = !!this.$.customField.inputs[0].$;
+          if (isDatePickerReady) {
+            this.$.customField.value = this.value !== '' ? this.value : 'T';
           }
         }
 
         __customFieldValueChanged(e) {
           /** @type {string} */
           const value = e.detail.value;
-          /* istanbul ignore if */
-          if (typeof value !== 'string') {
-            return;
-          }
 
           // Initial empty value from custom field
           if (value === 'T' && !this.__customFieldInitialValueChangeReceived) {
@@ -529,8 +739,18 @@ This program is available under Apache License Version 2.0, available at https:/
           }
 
           const [date, time] = value.split('T');
+
+          // Handle updating time picker min/max if the date changed.
+          // This may cause the time picker value to be adjusted.
+          // __oldDateValue is used only here and the if condition is only a minor performance optimization
+          // not to run the update checks unnecessarily if only the time was changed.
+          if (this.__oldDateValue !== date) {
+            this.__oldDateValue = date;
+            this.__updateTimePickerMinMax();
+          }
+
           if (date && time) {
-            if (!this.__dateTimeStringEquals(this.value, value)) {
+            if (value !== this.value) {
               this.value = value;
             }
           } else {
