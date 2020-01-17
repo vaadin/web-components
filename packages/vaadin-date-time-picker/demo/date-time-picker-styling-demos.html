@@ -1,0 +1,35 @@
+<dom-module id="date-time-picker-styling-demos">
+  <template>
+    <style include="vaadin-component-demo-shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+
+    <h3>Custom input field style</h3>
+    <vaadin-demo-snippet>
+      <template preserve-content>
+        <dom-module id="custom-input-field-style" theme-for="vaadin-text-field">
+          <template>
+            <style>
+              :host([theme~="custom-input-field-style"]) [part="input-field"] {
+                border: 1px solid black;
+                background-color: white;
+              }
+            </style>
+          </template>
+        </dom-module>
+        <vaadin-date-time-picker theme="custom-input-field-style" label="Label"></vaadin-date-time-picker>
+      </template>
+    </vaadin-demo-snippet>
+
+  </template>
+  <script>
+    class DateTimePickerStylingDemos extends DemoReadyEventEmitter(DateTimePickerDemo(Polymer.Element)) {
+      static get is() {
+        return 'date-time-picker-styling-demos';
+      }
+    }
+    customElements.define(DateTimePickerStylingDemos.is, DateTimePickerStylingDemos);
+  </script>
+</dom-module>
