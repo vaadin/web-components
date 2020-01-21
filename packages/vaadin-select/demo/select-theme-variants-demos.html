@@ -8,46 +8,8 @@
 
     <h3>Text align</h3>
 
-    <vaadin-demo-snippet id="select-theme-variants-demos-custom">
+    <vaadin-demo-snippet id="select-theme-variants-demos-align">
       <template preserve-content>
-        <dom-module id="custom-select" theme-for="vaadin-item">
-          <template>
-            <style>
-              :host([theme~="custom-center"]) [part~="content"] {
-                text-align: center;
-              }
-            </style>
-          </template>
-        </dom-module>
-        <dom-module id="custom-select-overlay" theme-for="vaadin-text-field vaadin-select-overlay">
-          <template>
-            <style>
-              :host([theme~="custom-center"]) [part~="items"] {
-                text-align: center;
-              }
-            </style>
-          </template>
-        </dom-module>
-
-
-        <dom-module id="custom-select" theme-for="vaadin-item">
-          <template>
-            <style>
-              :host([theme~="custom-right"]) [part~="content"] {
-                text-align: right;
-              }
-            </style>
-          </template>
-        </dom-module>
-        <dom-module id="custom-select-overlay" theme-for="vaadin-text-field vaadin-select-overlay">
-          <template>
-            <style>
-              :host([theme~="custom-right"]) [part~="items"] {
-                text-align: right;
-              }
-            </style>
-          </template>
-        </dom-module>
         <vaadin-select value="Jose">
           <template>
             <vaadin-list-box>
@@ -58,7 +20,7 @@
           </template>
         </vaadin-select>
 
-        <vaadin-select theme="custom-center" value="Jose">
+        <vaadin-select theme="align-center" value="Jose">
           <template>
             <vaadin-list-box>
               <vaadin-item theme="custom-center">Jose</vaadin-item>
@@ -68,7 +30,7 @@
           </template>
         </vaadin-select>
 
-        <vaadin-select theme="custom-right" value="Jose">
+        <vaadin-select theme="align-right" value="Jose">
           <template>
             <vaadin-list-box>
               <vaadin-item theme="custom-right">Jose</vaadin-item>

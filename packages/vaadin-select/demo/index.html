@@ -39,7 +39,7 @@
     </template>
   </dom-module>
 
-  <dom-module id="custom-select-overlay-font-style" theme-for="vaadin-text-field vaadin-select-overlay">
+  <dom-module id="custom-select-overlay-font-style" theme-for="vaadin-select-overlay">
     <template>
       <style>
         :host([theme~="custom"]) [part~="overlay"] {
@@ -58,45 +58,6 @@
         :host([theme~="custom-border"]) [part="input-field"] {
           border: 1px solid black;
           background-color: white;
-        }
-      </style>
-    </template>
-  </dom-module>
-
-
-  <dom-module id="custom-select-styles" theme-for="vaadin-item">
-    <template>
-      <style>
-        :host([theme~="custom-center"]) [part~="content"] {
-          text-align: center;
-        }
-      </style>
-    </template>
-  </dom-module>
-  <dom-module id="custom-select-overlay-styles" theme-for="vaadin-text-field vaadin-select-overlay">
-    <template>
-      <style>
-        :host([theme~="custom-center"]) [part~="items"] {
-          text-align: center;
-        }
-      </style>
-    </template>
-  </dom-module>
-
-  <dom-module id="custom-select-style" theme-for="vaadin-item">
-    <template>
-      <style>
-        :host([theme~="custom-right"]) [part~="content"] {
-          text-align: right;
-        }
-      </style>
-    </template>
-  </dom-module>
-  <dom-module id="custom-select-overlay-style" theme-for="vaadin-text-field vaadin-select-overlay">
-    <template>
-      <style>
-        :host([theme~="custom-right"]) [part~="items"] {
-          text-align: right;
         }
       </style>
     </template>
