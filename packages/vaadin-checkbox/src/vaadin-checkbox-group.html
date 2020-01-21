@@ -211,7 +211,11 @@ This program is available under Apache License Version 2.0, available at https:/
               }
             });
 
-            if (addedCheckboxes.some(checkbox => !checkbox.hasAttribute('value'))) {
+            const hasValue = checkbox => {
+              const {value} = checkbox;
+              return checkbox.hasAttribute('value') || value && value !== 'on';
+            };
+            if (!addedCheckboxes.every(hasValue)) {
               console.warn('Please add value attribute to all checkboxes in checkbox group');
             }
           });

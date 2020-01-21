@@ -280,6 +280,38 @@
 
       expect(spy).to.not.be.called;
     });
+
+    it('should warn when adding checkbox without value', () => {
+      sinon.stub(console, 'warn');
+
+      const checkbox = document.createElement('vaadin-checkbox');
+      vaadinCheckboxGroup.appendChild(checkbox);
+      vaadinCheckboxGroup._observer.flush();
+      expect(console.warn.callCount).to.equal(1);
+      console.warn.restore();
+    });
+
+    it('should not warn when adding checkbox with value attribute', () => {
+      sinon.stub(console, 'warn');
+
+      const checkbox = document.createElement('vaadin-checkbox');
+      checkbox.setAttribute('value', 'something');
+      vaadinCheckboxGroup.appendChild(checkbox);
+      vaadinCheckboxGroup._observer.flush();
+      expect(console.warn.callCount).to.equal(0);
+      console.warn.restore();
+    });
+
+    it('should not warn when adding checkbox with value property', () => {
+      sinon.stub(console, 'warn');
+
+      const checkbox = document.createElement('vaadin-checkbox');
+      checkbox.value = 'something';
+      vaadinCheckboxGroup.appendChild(checkbox);
+      vaadinCheckboxGroup._observer.flush();
+      expect(console.warn.callCount).to.equal(0);
+      console.warn.restore();
+    });
   });
 
   describe('vaadin-checkbox-group validation', () => {
