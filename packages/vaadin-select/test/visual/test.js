@@ -23,4 +23,10 @@ gemini.suite('vaadin-select', function(rootSuite) {
     });
   });
 
+  gemini.suite(`lumo-variants-tests`, function(suite) {
+    suite
+      .setUrl(`lumo.html`)
+      .setCaptureElements('#select')
+      .capture('select');
+  });
 });

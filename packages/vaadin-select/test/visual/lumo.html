@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+
+<head lang="en">
+  <meta charset="UTF-8">
+  <title>Select tests</title>
+  <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../../../polymer/polymer.html">
+  <link rel="import" href="../../theme/lumo/vaadin-select.html">
+  <link rel="import" href="../../../vaadin-list-box/theme/lumo/vaadin-list-box.html">
+  <link rel="import" href="../../../vaadin-item/theme/lumo/vaadin-item.html">
+</head>
+
+<body>
+  <style>
+    body {
+      font-family: sans-serif;
+    }
+
+    .space {
+      display: inline-block;
+      width: 175px;
+    }
+
+    .capture-block {
+      display: inline-block;
+      width: 800px;
+      height: 350px;
+    }
+  </style>
+
+  <div class="capture-block" id="select">
+
+    <vaadin-select label="small" theme="small">
+    </vaadin-select>
+
+    <vaadin-select label="small & selected" theme="small" value="Item one">
+      <template>
+        <vaadin-list-box>
+          <vaadin-item>Item one</vaadin-item>
+        </vaadin-list-box>
+      </template>
+    </vaadin-select>
+
+    <br/>
+
+    <vaadin-select label="aligned center & selected" theme="align-center" value="Item one">
+      <template>
+        <vaadin-list-box>
+          <vaadin-item>Item one</vaadin-item>
+        </vaadin-list-box>
+      </template>
+    </vaadin-select>
+
+    <vaadin-select label="aligned right & selected" theme="align-right" value="Item one">
+      <template>
+        <vaadin-list-box>
+          <vaadin-item>Item one</vaadin-item>
+        </vaadin-list-box>
+      </template>
+    </vaadin-select>
+
+    <br/>
+
+    <vaadin-select id="drop1" label="aligned center & opened" theme="align-center" value="Item one">
+      <template>
+        <vaadin-list-box>
+          <vaadin-item>Item one</vaadin-item>
+        </vaadin-list-box>
+      </template>
+    </vaadin-select>
+
+    <vaadin-select id="drop2" label="aligned right & opened" theme="align-right" value="Item one">
+      <template>
+        <vaadin-list-box>
+          <vaadin-item>Item one</vaadin-item>
+        </vaadin-list-box>
+      </template>
+    </vaadin-select>
+  </div>
+
+  <script>
+    window.addEventListener('WebComponentsReady', () => {
+      const drop1 = document.getElementById('drop1');
+
+      Polymer.RenderStatus.afterNextRender(drop1._menuElement, () => {
+        drop1._overlayElement.modeless = true;
+        drop1.opened = true;
+
+        const drop2 = document.getElementById('drop2');
+        Polymer.RenderStatus.afterNextRender(drop2._menuElement, () => {
+          drop2._overlayElement.modeless = true;
+          drop2.opened = true;
+          window.webComponentsAreReady = true;
+        });
+      });
+    });
+  </script>
+</body>
