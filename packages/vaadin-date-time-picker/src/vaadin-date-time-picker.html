@@ -106,9 +106,16 @@ This program is available under Apache License Version 2.0, available at https:/
        * The following shadow DOM parts are available for styling:
        *
        * Part name | Description | Theme for Element
-       * ----------------|----------------|----------------
+       * ----------|-------------|------------------
        * `date` | Date picker element | vaadin-date-time-picker
        * `time` | Time picker element | vaadin-date-time-picker
+       *
+       * The following state attributes are available for styling:
+       *
+       * Attribute | Description | Part name
+       * ----------|-------------|----------
+       * `disabled` | Set when the element is disabled | :host
+       * `readonly` | Set when the element is read-only | :host
        *
        * See [ThemableMixin – Stylable Shadow Parts](https://github.com/vaadin/vaadin-themable-mixin#stylable-shadow-parts)
        *
@@ -282,6 +289,13 @@ This program is available under Apache License Version 2.0, available at https:/
             },
 
             /**
+             * Specify that this control should have input focus when the page loads.
+             */
+            autofocus: {
+              type: Boolean
+            },
+
+            /**
              * The current selected date time.
              */
             __selectedDateTime: {
@@ -347,6 +361,17 @@ This program is available under Apache License Version 2.0, available at https:/
 
           this.$.dateSlot.addEventListener('slotchange', this.__datePickerChanged.bind(this));
           this.$.timeSlot.addEventListener('slotchange', this.__timePickerChanged.bind(this));
+
+          if (this.autofocus && !this.disabled) {
+            window.requestAnimationFrame(() => this.focus());
+          }
+        }
+
+        /**
+         * @private
+         */
+        focus() {
+          this.$.customField.focus();
         }
 
         __syncI18n(target, source, props) {

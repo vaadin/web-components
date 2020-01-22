@@ -64,6 +64,12 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="autofocus">
+    <template>
+      <vaadin-date-time-picker autofocus></vaadin-date-time-picker>
+    </template>
+  </test-fixture>
+
   <script>
     function changeInputValue(el, value) {
       el.value = value;
@@ -121,6 +127,20 @@
         timePicker.value = '15:00';
         dateTimePicker.__triggerCustomFieldValueUpdate();
         expect(dateTimePicker.value).to.equal('2019-09-19T15:00');
+      });
+
+      it('should delegate focus() to date picker', () => {
+        dateTimePicker.focus();
+        expect(datePicker.hasAttribute('focused')).to.be.true;
+      });
+
+      it('should focus date picker when autofocus is set', done => {
+        dateTimePicker = fixture('autofocus');
+        datePicker = dateTimePicker.__datePicker;
+        requestAnimationFrame(() => {
+          expect(datePicker.hasAttribute('focused')).to.be.true;
+          done();
+        });
       });
 
       describe('change event', () => {
