@@ -6,6 +6,7 @@
   <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
   <script>
     const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+    document.documentElement.setAttribute('dir', 'rtl');
     document.write(`<link rel="import" href="../../../vaadin-item/theme/${theme}/vaadin-item.html">`);
     document.write(`<link rel="import" href="../../theme/${theme}/vaadin-list-box.html">`);
   </script>
@@ -19,7 +20,7 @@
 </head>
 
 <body>
-  <div id="list-box-tests">
+  <div id="rtl-list-box-tests">
     <vaadin-list-box selected="2">
       <vaadin-item>Item 0</vaadin-item>
       <vaadin-item>Item 1</vaadin-item>

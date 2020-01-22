@@ -56,6 +56,12 @@
         margin: 8px 0;
         background-color: var(--material-divider-color);
       }
+
+      /* RTL specific styles */
+
+      :host([dir="rtl"]) [part="items"] ::slotted(vaadin-item) {
+        padding: 8px 10px 8px 32px;
+      }
     </style>
   </template>
 </dom-module>

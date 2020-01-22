@@ -71,6 +71,13 @@
         margin: var(--lumo-space-s) var(--lumo-border-radius);
         background-color: var(--lumo-contrast-10pct);
       }
+
+      /* RTL specific styles */
+
+      :host([dir="rtl"]) [part="items"] ::slotted(vaadin-item) {
+        padding-left: calc(var(--lumo-space-l) + var(--lumo-border-radius) / 4);
+        padding-right: var(--_lumo-list-box-item-padding-left, calc(var(--lumo-border-radius) / 4));
+      }
     </style>
   </template>
 </dom-module>
