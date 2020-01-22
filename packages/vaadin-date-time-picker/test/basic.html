@@ -65,6 +65,11 @@
   </test-fixture>
 
   <script>
+    function changeInputValue(el, value) {
+      el.value = value;
+      el.dispatchEvent(new CustomEvent('change', {bubbles: true}));
+    }
+
     describe('Basic features', () => {
       let dateTimePicker;
       let customField;
@@ -116,6 +121,54 @@
         timePicker.value = '15:00';
         dateTimePicker.__triggerCustomFieldValueUpdate();
         expect(dateTimePicker.value).to.equal('2019-09-19T15:00');
+      });
+
+      describe('change event', () => {
+
+        let spy;
+
+        beforeEach(() => {
+          spy = sinon.spy();
+          dateTimePicker.addEventListener('change', spy);
+        });
+
+        it('should fire change on date picker change event', () => {
+          changeInputValue(timePicker, '16:00');
+          expect(spy).to.not.have.been.called;
+          changeInputValue(datePicker, '2020-01-17');
+          expect(spy).to.have.been.calledOnce;
+          changeInputValue(datePicker, '');
+          expect(spy).to.have.been.calledTwice;
+        });
+
+        it('should fire change on time picker change event', () => {
+          changeInputValue(datePicker, '2020-01-17');
+          expect(spy).to.not.have.been.called;
+          changeInputValue(timePicker, '16:00');
+          expect(spy).to.have.been.calledOnce;
+          changeInputValue(timePicker, '');
+          expect(spy).to.have.been.calledTwice;
+        });
+
+        it('should not fire change on programmatic value change', () => {
+          dateTimePicker.value = '2020-01-17T16:00';
+          expect(spy).to.not.have.been.called;
+        });
+
+        it('should not fire change on programmatic value change after manual one', () => {
+          dateTimePicker.value = '2020-01-17T16:00'; // Init with valid value
+          changeInputValue(datePicker, '2020-01-20');
+          spy.reset();
+          dateTimePicker.value = '2020-01-10T12:00';
+          expect(spy).to.not.have.been.called;
+        });
+
+        it('should not fire change on programmatic value change after partial manual one', () => {
+          changeInputValue(datePicker, '2020-01-17');
+          // Time picker has no value so date time picker value is still empty
+          dateTimePicker.value = '2020-01-17T16:00';
+          expect(spy).to.not.have.been.called;
+        });
       });
 
       describe('value property formats', () => {
@@ -290,6 +343,27 @@
           expect(dateTimePicker.value).to.equal('2019-09-16T15:00');
         });
 
+        describe('Removing change listeners', () => {
+
+          it('should remove change listener from removed date picker', done => {
+            dateTimePicker.removeChild(datePicker); // Remove slotted date picker
+            setTimeout(() => {
+              changeInputValue(datePicker, '2019-09-16');
+              expect(dateTimePicker.__doDispatchChange).to.be.not.true;
+              done();
+            }, 0);
+          });
+
+          it('should remove change listener from removed time picker', done => {
+            dateTimePicker.removeChild(timePicker); // Remove slotted time picker
+            setTimeout(() => {
+              changeInputValue(timePicker, '15:00');
+              expect(dateTimePicker.__doDispatchChange).to.be.not.true;
+              done();
+            }, 0);
+          });
+
+        });
       });
     });
 

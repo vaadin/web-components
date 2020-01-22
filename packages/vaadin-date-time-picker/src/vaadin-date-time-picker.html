@@ -339,6 +339,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         ready() {
           super.ready();
+          this.__changeEventHandler = this.__changeEventHandler.bind(this);
           this.__filterElements = node => node.nodeType === Node.ELEMENT_NODE;
 
           this.__datePickerChanged();
@@ -369,6 +370,20 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        __changeEventHandler(event) {
+          this.__doDispatchChange = true;
+        }
+
+        __removeChangeListener(node) {
+          if (node) {
+            node.removeEventListener('change', this.__changeEventHandler, false);
+          }
+        }
+
+        __addChangeListener(node) {
+          node.addEventListener('change', this.__changeEventHandler, false);
+        }
+
         __datePickerChanged() {
           const defaultDatePicker = this.shadowRoot.querySelector('[part="date"]');
           const assignedElements = this.$.dateSlot.assignedNodes({flatten: true}).filter(this.__filterElements);
@@ -376,6 +391,8 @@ This program is available under Apache License Version 2.0, available at https:/
           if (this.__datePicker === datePicker) {
             return;
           }
+          this.__removeChangeListener(this.__datePicker);
+          this.__addChangeListener(datePicker);
           this.__datePicker = datePicker;
           this.__updateCustomFieldInputs();
 
@@ -410,6 +427,8 @@ This program is available under Apache License Version 2.0, available at https:/
           if (this.__timePicker === timePicker) {
             return;
           }
+          this.__removeChangeListener(this.__timePicker);
+          this.__addChangeListener(timePicker);
           this.__timePicker = timePicker;
           this.__updateCustomFieldInputs();
 
@@ -692,6 +711,14 @@ This program is available under Apache License Version 2.0, available at https:/
 
         __valueChanged(value, oldValue) {
           this.__handleDateTimeChange('value', '__selectedDateTime', value, oldValue);
+
+          if (this.__doDispatchChange) {
+            this.__dispatchChange();
+          }
+        }
+
+        __dispatchChange() {
+          this.dispatchEvent(new CustomEvent('change', {bubbles: true}));
         }
 
         __minChanged(value, oldValue) {
@@ -722,8 +749,8 @@ This program is available under Apache License Version 2.0, available at https:/
           // `this.$.input` (as a result of value change triggered by setting custom field value).
           // Workaround the problem by setting custom field value only if date picker is ready.
           const isDatePickerReady = !!this.$.customField.inputs[0].$;
-          if (isDatePickerReady) {
-            this.$.customField.value = this.value !== '' ? this.value : 'T';
+          if (isDatePickerReady && this.value !== '') {
+            this.$.customField.value = this.value;
           }
         }
 
@@ -756,7 +783,14 @@ This program is available under Apache License Version 2.0, available at https:/
           } else {
             this.value = '';
           }
+          this.__doDispatchChange = false;
         }
+
+        /**
+         * Fired when the user commits a value change.
+         *
+         * @event change
+         */
       }
 
       customElements.define(DateTimePicker.is, DateTimePicker);

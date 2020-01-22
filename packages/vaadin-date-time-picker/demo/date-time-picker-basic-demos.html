@@ -72,6 +72,24 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Value change event</h3>
+    <p>Note: The date time picker has a non-empty value only when both a date and a time have been selected.</p>
+    <vaadin-demo-snippet id="value-change-event" when-defined="vaadin-date-time-picker">
+      <template preserve-content>
+        <vaadin-date-time-picker label="Label"></vaadin-date-time-picker>
+        <div>Selected value: <span id="output"></span></div>
+        <script>
+          window.addDemoReadyListener('#value-change-event', function(document) {
+            const dateTimePicker = document.querySelector('vaadin-date-time-picker');
+            const output = document.querySelector('#output');
+            dateTimePicker.addEventListener('change', function(event) {
+              output.textContent = event.target.value;
+            });
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
   </template>
   <script>
     class DateTimePickerBasicDemos extends DemoReadyEventEmitter(DateTimePickerDemo(Polymer.Element)) {
