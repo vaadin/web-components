@@ -82,6 +82,37 @@
         }
       }
 
+      /* RTL specific styles */
+
+      :host([dir="rtl"]) [part="bar"] {
+        transform-origin: 100% 0;
+      }
+
+      :host([indeterminate][dir="rtl"]) [part="bar"] {
+        left: auto;
+        right: -100%;
+        animation: primary-indeterminate-translate-rtl 2s infinite linear;
+      }
+
+      @keyframes primary-indeterminate-translate-rtl {
+        0% {
+          transform: translateX(0);
+        }
+
+        20% {
+          animation-timing-function: cubic-bezier(.5, 0, .701732, .495819);
+          transform: translateX(0);
+        }
+
+        59.15% {
+          animation-timing-function: cubic-bezier(.302435, .381352, .55, .956352);
+          transform: translateX(-83.67142%);
+        }
+
+        100% {
+          transform: translateX(-200.611057%);
+        }
+      }
     </style>
   </template>
 </dom-module>

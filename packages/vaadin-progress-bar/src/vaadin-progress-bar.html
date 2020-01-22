@@ -33,6 +33,11 @@ This program is available under Apache License Version 2.0, available at https:/
         transform: scaleX(var(--vaadin-progress-value));
       }
 
+      /* RTL specific styles */
+
+      :host([dir="rtl"]) [part="value"] {
+        transform-origin: 100% 50%;
+      }
     </style>
 
     <div part="bar">

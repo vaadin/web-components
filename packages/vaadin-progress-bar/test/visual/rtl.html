@@ -7,6 +7,7 @@
   <script>
     const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
     document.write(`<link rel="import" href="../../theme/${theme}/vaadin-progress-bar.html">`);
+    document.documentElement.setAttribute('dir', 'rtl');
 
     window.addEventListener('WebComponentsReady', function() {
       customElements.whenDefined('vaadin-progress-bar').then(function() {
@@ -19,7 +20,7 @@
 
 <body>
 
-  <span id="default-tests">
+  <span id="rtl-tests">
     <vaadin-progress-bar value="0.1">
     </vaadin-progress-bar>
   </span>
