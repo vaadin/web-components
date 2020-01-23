@@ -338,6 +338,27 @@
 
             expect(spy.called).to.be.true;
           });
+
+          describe('RTL mode', () => {
+
+            beforeEach(() => splitLayout.setAttribute('dir', 'rtl'));
+
+            it('resizes forwards', () => {
+              dragHandle(distance);
+
+              expect(Math.abs((isVertical ? first : second).getBoundingClientRect()[size] - (initialSize + distance))).to.be.at.most(1);
+              expect(Math.abs((isVertical ? second : first).getBoundingClientRect()[size] - (initialSize - distance))).to.be.at.most(1);
+            });
+
+            it('resizes backwards', () => {
+              dragHandle(distance);
+              dragHandle(-distance);
+
+              expect(Math.abs((isVertical ? first : second).getBoundingClientRect()[size] - initialSize)).to.be.at.most(1);
+              expect(Math.abs((isVertical ? second : first).getBoundingClientRect()[size] - initialSize)).to.be.at.most(1);
+            });
+
+          });
         });
 
       }

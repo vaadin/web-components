@@ -317,8 +317,11 @@ This program is available under Apache License Version 2.0, available at https:/
           }
 
           var distance = this.orientation === 'vertical' ? event.detail.dy : event.detail.dx;
-          this._setFlexBasis(this._primaryChild, this._startSize.primary + distance, this._startSize.container);
-          this._setFlexBasis(this._secondaryChild, this._startSize.secondary - distance, this._startSize.container);
+          const isRtl = this.orientation !== 'vertical' && this.getAttribute('dir') === 'rtl';
+          const dirDistance = isRtl ? -distance : distance;
+
+          this._setFlexBasis(this._primaryChild, this._startSize.primary + dirDistance, this._startSize.container);
+          this._setFlexBasis(this._secondaryChild, this._startSize.secondary - dirDistance, this._startSize.container);
 
           this.notifyResize();
 

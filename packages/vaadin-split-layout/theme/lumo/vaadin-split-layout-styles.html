@@ -92,6 +92,13 @@
       :host([theme~="minimal"]) > [part="splitter"]:active > [part="handle"]::after {
         opacity: 1;
       }
+
+      /* RTL specific styles */
+
+      :host([theme~="small"][dir="rtl"]) > [part="splitter"] {
+        border-left: auto;
+        border-right: 1px solid var(--lumo-contrast-10pct);
+      }
     </style>
   </template>
 </dom-module>
