@@ -46,6 +46,7 @@
         top: -0.2px; /* NOTE(platosha): Adjusts for wrong flex baseline in Chrome & Safari */
         height: 32px;
         padding-left: 0;
+        padding-right: 0;
         background-color: transparent;
         margin: 0;
       }
@@ -230,6 +231,7 @@
         transition-timing-function: ease, ease, step-start;
         pointer-events: none;
         left: auto;
+        right: auto;
         transition-delay: 0.1s;
       }
 
@@ -241,6 +243,12 @@
 
       [part="clear-button"]::before {
         content: var(--material-icons-clear);
+      }
+
+      /* RTL specific styles */
+
+      :host([disabled][dir="rtl"]) [part="input-field"]::before {
+        background-image: linear-gradient(-90deg, var(--_material-text-field-input-line-background-color, #000) 0, var(--_material-text-field-input-line-background-color, #000) 2px, transparent 2px);
       }
     </style>
   </template>

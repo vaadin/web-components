@@ -87,6 +87,13 @@ gemini.suite('vaadin-text-field', function(rootSuite) {
         .capture('number-field');
     });
 
+    gemini.suite(`number-field-rtl-${theme}`, function(suite) {
+      suite
+        .setUrl(`vaadin-number-field/rtl.html?theme=${theme}`)
+        .setCaptureElements('#rtl')
+        .capture('rtl');
+    });
+
     gemini.suite(`text-area-1-${theme}`, function(suite) {
       suite
         .setUrl(`vaadin-text-area/text-area-1.html?theme=${theme}`)

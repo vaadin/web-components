@@ -7,6 +7,7 @@
   <script>
     const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
     document.write(`<link rel="import" href="../../../theme/${theme}/vaadin-text-area.html">`);
+    document.documentElement.setAttribute('dir', 'rtl');
 
     window.addEventListener('WebComponentsReady', function() {
       setTimeout(function() {
@@ -20,7 +21,7 @@
 
 <body>
 
-  <fieldset id="rtl" dir="rtl">
+  <fieldset id="rtl">
     <vaadin-text-area label="كلمه السر" placeholder="أنشئ كلمة مرور"></vaadin-text-area>
     <p>
     <vaadin-text-area label="البادئة واللاحقة">

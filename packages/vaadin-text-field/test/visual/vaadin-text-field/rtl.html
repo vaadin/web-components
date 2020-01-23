@@ -7,6 +7,7 @@
   <script>
     const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
     document.write(`<link rel="import" href="../../../theme/${theme}/vaadin-text-field.html">`);
+    document.documentElement.setAttribute('dir', 'rtl');
 
     window.addEventListener('WebComponentsReady', function() {
       setTimeout(function() {
@@ -20,13 +21,22 @@
 
 <body>
 
-  <fieldset id="rtl" dir="rtl">
+  <fieldset id="rtl">
+    <vaadin-text-field label="كلمه السر" value="هذه عبارة طويلة للغاية ، وسوف تغمر الحقل"></vaadin-text-field>
+    <p>
     <vaadin-text-field label="كلمه السر" placeholder="أنشئ كلمة مرور"></vaadin-text-field>
     <p>
     <vaadin-text-field label="البادئة واللاحقة">
       <span slot="prefix">اختصار</span>
       <span slot="suffix">لاحقة</span>
     </vaadin-text-field>
+    <p>
+    <vaadin-text-field label="كلمه السر" placeholder="أنشئ كلمة مرور" theme="align-left"></vaadin-text-field>
+    <p>
+    <vaadin-text-field label="كلمه السر" placeholder="أنشئ كلمة مرور" theme="align-center"></vaadin-text-field>
+    <p>
+    <vaadin-text-field label="كلمه السر" placeholder="أنشئ كلمة مرور" theme="align-right"></vaadin-text-field>
+    <p>
   </fieldset>
 
 </body>
