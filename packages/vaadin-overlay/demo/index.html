@@ -157,7 +157,8 @@
       </template>
     </demo-snippet>
 
-    <h3>Position Target</h3>
+    <!-- Demo disabled because PositionMixin is not considered stable and might change any time -->
+    <!-- <h3>Position Target</h3>
     <demo-snippet>
       <template>
         <vaadin-overlay id="positionOverlay" opened modeless></vaadin-overlay>
@@ -195,7 +196,7 @@
           };
         </script>
       </template>
-    </demo-snippet>
+    </demo-snippet> -->
 
     <h3>Restore Focus on Close</h3>
     <demo-snippet>
@@ -293,11 +294,14 @@
             overlayPointer.renderer = function(root) {
               root.textContent = 'I am next to the pointer';
             };
+            const isRtl = overlayPointer.getAttribute('rtl');
             overlayPointer.setAttribute(
               'style',
               'left: ' + event.clientX + 'px;' +
               'top: ' + event.clientY + 'px;' +
-              'align-items: flex-start; justify-content: flex-start;'
+              'align-items: flex-' +
+              (isRtl ? 'start' : 'end') +
+              '; justify-content: flex-start;'
             );
             overlayPointer.opened = true;
           });
