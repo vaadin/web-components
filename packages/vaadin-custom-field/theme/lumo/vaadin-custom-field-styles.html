@@ -64,6 +64,21 @@
         color: var(--lumo-disabled-text-color);
         -webkit-text-fill-color: var(--lumo-disabled-text-color);
       }
+
+      /* Small theme */
+
+      :host([theme~="small"]) {
+        font-size: var(--lumo-font-size-s);
+        --lumo-text-field-size: var(--lumo-size-s);
+      }
+
+      :host([theme~="small"][has-label]) [part="label"] {
+        font-size: var(--lumo-font-size-xs);
+      }
+
+      :host([theme~="small"][has-label]) [part="error-message"] {
+        font-size: var(--lumo-font-size-xxs);
+      }
     </style>
   </template>
 </dom-module>

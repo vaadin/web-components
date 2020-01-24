@@ -69,4 +69,11 @@ gemini.suite('vaadin-custom-field', function(rootSuite) {
     });
   });
 
+  gemini.suite(`lumo-tests`, function(suite) {
+    suite
+      .setUrl(`lumo.html?theme=lumo`)
+      .setCaptureElements('#lumo-tests')
+      .capture('default');
+  });
+
 });

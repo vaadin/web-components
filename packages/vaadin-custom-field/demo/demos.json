@@ -22,5 +22,16 @@
         "image": ""
       }
     }
+    ,
+    {
+      "name": "Theme Variants",
+      "url": "custom-field-theme-variants-demos",
+      "src": "custom-field-theme-variants-demos.html",
+      "meta": {
+        "title": "vaadin-custom-field Theme Variants Examples",
+        "description": "",
+        "image": ""
+       }
+    }
   ]
 }
