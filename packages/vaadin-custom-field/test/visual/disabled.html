@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+
+<head lang="en">
+  <meta charset="UTF-8">
+  <title></title>
+  <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <script>
+    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-custom-field.html">`);
+
+    window.addEventListener('WebComponentsReady', function() {
+      customElements.whenDefined('vaadin-custom-field').then(() => {
+        window.ShadyDOM && window.ShadyDOM.flush(); // Force DOM composition
+        window.webComponentsAreReady = true; // Checked in gemini before capture callback
+      });
+    });
+  </script>
+  <style>
+    [type="number"] {
+      width: 30px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="disabled-tests" style="padding: 10px; text-align: right; width: 700px;">
+    Disabled
+    <vaadin-custom-field label="Home address" disabled>
+      <input type="text" disabled>
+      <input type="number" disabled>
+    </vaadin-custom-field>
+    with value
+    <vaadin-custom-field label="Home address" disabled>
+      <input type="text" value="Foo street" disabled>
+      <input type="number" value="42" disabled>
+    </vaadin-custom-field>
+    <br>
+    Disabled invalid
+    <vaadin-custom-field label="Home address" invalid error-message="Foo" disabled>
+      <input type="text" disabled>
+      <input type="number" disabled>
+    </vaadin-custom-field>
+    with value
+    <vaadin-custom-field label="Home address" invalid error-message="Foo" disabled>
+      <input type="text" value="Foo street" disabled>
+      <input type="number" value="42" disabled>
+    </vaadin-custom-field>
+    <br>
+    Disabled required
+    <vaadin-custom-field label="Home address" required disabled>
+      <input type="text" disabled>
+      <input type="number" disabled>
+    </vaadin-custom-field>
+    with value
+    <vaadin-custom-field label="Home address" required disabled>
+      <input type="text" value="Foo street" disabled>
+      <input type="number" value="42" disabled>
+    </vaadin-custom-field>
+    <br>
+    Disabled required invalid
+    <vaadin-custom-field label="Home address" required invalid error-message="Foo" disabled>
+      <input type="text" disabled>
+      <input type="number" disabled>
+    </vaadin-custom-field>
+    with value
+    <vaadin-custom-field label="Home address" required invalid error-message="Foo" disabled>
+      <input type="text" value="Foo street" disabled>
+      <input type="number" value="42" disabled>
+    </vaadin-custom-field>
+  </div>
+
+</body>

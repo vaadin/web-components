@@ -33,6 +33,20 @@ gemini.suite('vaadin-custom-field', function(rootSuite) {
         });
     });
 
+    gemini.suite(`disabled-tests-${theme}`, function(suite) {
+      suite
+        .setUrl(`disabled.html?theme=${theme}`)
+        .setCaptureElements('#disabled-tests')
+        .capture('default');
+    });
+
+    gemini.suite(`readonly-tests-${theme}`, function(suite) {
+      suite
+        .setUrl(`readonly.html?theme=${theme}`)
+        .setCaptureElements('#readonly-tests')
+        .capture('default');
+    });
+
     gemini.suite(`alignment-tests-${theme}`, function(suite) {
       suite
         .setUrl(`alignment.html?theme=${theme}`)

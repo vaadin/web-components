@@ -43,19 +43,26 @@
         height: calc(0.4em - var(--lumo-space-xs));
       }
 
-      :host([focused]:not([disabled])) [part="label"] {
+      :host([focused]:not([readonly]):not([disabled])) [part="label"] {
         color: var(--lumo-primary-text-color);
       }
 
-      :host(:hover:not([disabled]):not([focused])) [part="label"] {
+      :host(:hover:not([readonly]):not([disabled]):not([focused])) [part="label"] {
         color: var(--lumo-body-text-color);
       }
 
       /* Touch device adjustment */
       @media (pointer: coarse) {
-        :host(:hover:not([disabled]):not([focused])) [part="label"] {
+        :host(:hover:not([readonly]):not([disabled]):not([focused])) [part="label"] {
           color: var(--lumo-secondary-text-color);
         }
+      }
+
+      /* Disabled style */
+
+      :host([disabled]) [part="label"] {
+        color: var(--lumo-disabled-text-color);
+        -webkit-text-fill-color: var(--lumo-disabled-text-color);
       }
     </style>
   </template>

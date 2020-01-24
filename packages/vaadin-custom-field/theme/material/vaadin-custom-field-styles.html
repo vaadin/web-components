@@ -28,6 +28,11 @@
         margin-top: -8px;
       }
 
+      :host([disabled]) [part="label"] {
+        color: var(--material-disabled-text-color);
+        -webkit-text-fill-color: var(--material-disabled-text-color);
+      }
+
       :host([focused]:not([invalid])) [part="label"] {
         color: var(--material-primary-text-color);
       }
