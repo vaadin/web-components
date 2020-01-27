@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-list-box",
-  "version": "1.3.0-alpha2",
+  "version": "1.3.0-alpha3",
   "description": "vaadin-list-box",
   "main": "vaadin-list-box.html",
   "repository": "vaadin/vaadin-list-box",
