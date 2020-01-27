@@ -32,7 +32,7 @@
     "vaadin-material-styles": "vaadin/vaadin-material-styles#^1.2.2",
     "vaadin-date-picker": "^4.0.5",
     "vaadin-time-picker": "^2.0.5",
-    "vaadin-custom-field": "^1.0.9"
+    "vaadin-custom-field": "^1.0.11"
   },
   "devDependencies": {
     "iron-component-page": "^3.0.0",

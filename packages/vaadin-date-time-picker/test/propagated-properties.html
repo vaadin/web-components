@@ -296,16 +296,12 @@
           expect(dateTimePicker.min).to.equal('2019-09-01T08:00');
           expect(datePicker.min).to.equal('2019-09-01');
           expect(timePicker.min).to.equal('00:00:00.000');
-          dateTimePicker.value = '2019-09-01T12:00';
-          expect(timePicker.min).to.equal('08:00');
         });
 
         it('should have initial value for max', () => {
           expect(dateTimePicker.max).to.equal('2019-09-30T22:00');
           expect(datePicker.max).to.equal('2019-09-30');
           expect(timePicker.max).to.equal('23:59:59.999');
-          dateTimePicker.value = '2019-09-30T12:00';
-          expect(timePicker.max).to.equal('22:00');
         });
 
         it('should have initial value for datePlaceholder', () => {
