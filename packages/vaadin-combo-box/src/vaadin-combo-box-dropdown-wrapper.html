@@ -254,12 +254,10 @@ This program is available under Apache License Version 2.0, available at https:/
       _maxOverlayHeight(targetRect) {
         const margin = 8;
         const minHeight = 116; // Height of two items in combo-box
-        const bottom = Math.min(window.innerHeight, document.body.scrollHeight - document.body.scrollTop);
-
         if (this.$.dropdown.alignedAbove) {
           return Math.max(targetRect.top - margin + Math.min(document.body.scrollTop, 0), minHeight) + 'px';
         } else {
-          return Math.max(bottom - targetRect.bottom - margin, minHeight) + 'px';
+          return Math.max(document.documentElement.clientHeight - targetRect.bottom - margin, minHeight) + 'px';
         }
       }
 
