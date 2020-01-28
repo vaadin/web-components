@@ -6,6 +6,11 @@
         overflow: visible;
       }
 
+      /* Hack for iOS to make the overlay take full size */
+      [part='overlay'][style] {
+        display: flex;
+      }
+
       [part='content'] {
         box-sizing: border-box;
         height: 100%;
@@ -13,6 +18,7 @@
 
       .resizer-container {
         height: 100%;
+        width: 100%;
         overflow: auto;
       }
 
@@ -119,17 +125,21 @@
           resizer.classList.add('resizer');
           resizer.classList.add(direction);
           resizer.addEventListener('mousedown', this._resizeListeners.start[direction]);
+          resizer.addEventListener('touchstart', this._resizeListeners.start[direction]);
           this.$.overlay.$.resizerContainer.appendChild(resizer);
         });
       }
 
       _startResize(e, direction) {
-        if (e.button === 0) {
+        if (e.button === 0 || e.touches) {
           e.preventDefault();
           this._originalBounds = this._getOverlayBounds();
-          this._originalMouseCoords = {top: e.pageY, left: e.pageX};
+          const event = this.__getMouseOrFirstTouchEvent(e);
+          this._originalMouseCoords = {top: event.pageY, left: event.pageX};
           window.addEventListener('mousemove', this._resizeListeners.resize[direction]);
+          window.addEventListener('touchmove', this._resizeListeners.resize[direction]);
           window.addEventListener('mouseup', this._resizeListeners.stop[direction]);
+          window.addEventListener('touchend', this._resizeListeners.stop[direction]);
           if (this.$.overlay.$.overlay.style.position !== 'absolute') {
             this._setBounds(this._originalBounds);
           }
@@ -137,35 +147,36 @@
       }
 
       _resize(e, resizer) {
-        if (this._mouseInWindow(e)) {
+        const event = this.__getMouseOrFirstTouchEvent(e);
+        if (this._eventInWindow(event)) {
           const minimumSize = 40;
           resizer.split('').forEach((direction) => {
             switch (direction) {
               case 'n': {
-                const height = this._originalBounds.height - (e.pageY - this._originalMouseCoords.top);
-                const top = this._originalBounds.top + (e.pageY - this._originalMouseCoords.top);
+                const height = this._originalBounds.height - (event.pageY - this._originalMouseCoords.top);
+                const top = this._originalBounds.top + (event.pageY - this._originalMouseCoords.top);
                 if (height > minimumSize) {
                   this._setBounds({top, height});
                 }
                 break;
               }
               case 'e': {
-                const width = this._originalBounds.width + (e.pageX - this._originalMouseCoords.left);
+                const width = this._originalBounds.width + (event.pageX - this._originalMouseCoords.left);
                 if (width > minimumSize) {
                   this._setBounds({width});
                 }
                 break;
               }
               case 's': {
-                const height = this._originalBounds.height + (e.pageY - this._originalMouseCoords.top);
+                const height = this._originalBounds.height + (event.pageY - this._originalMouseCoords.top);
                 if (height > minimumSize) {
                   this._setBounds({height});
                 }
                 break;
               }
               case 'w': {
-                const width = this._originalBounds.width - (e.pageX - this._originalMouseCoords.left);
-                const left = this._originalBounds.left + (e.pageX - this._originalMouseCoords.left);
+                const width = this._originalBounds.width - (event.pageX - this._originalMouseCoords.left);
+                const left = this._originalBounds.left + (event.pageX - this._originalMouseCoords.left);
                 if (width > minimumSize) {
                   this._setBounds({left, width});
                 }
@@ -179,7 +190,9 @@
 
       _stopResize(direction) {
         window.removeEventListener('mousemove', this._resizeListeners.resize[direction]);
+        window.removeEventListener('touchmove', this._resizeListeners.resize[direction]);
         window.removeEventListener('mouseup', this._resizeListeners.stop[direction]);
+        window.removeEventListener('touchend', this._resizeListeners.stop[direction]);
       }
     };
 </script>

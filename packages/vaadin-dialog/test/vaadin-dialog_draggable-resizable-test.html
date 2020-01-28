@@ -10,6 +10,13 @@
 </head>
 
 <body>
+  <style>
+    /* Hack for Safari to make the overlay take full size */
+    vaadin-dialog-overlay[opening] {
+      animation: 0 foo;
+    }
+  </style>
+
   <test-fixture id="default">
     <template>
       <vaadin-dialog opened>
@@ -421,6 +428,119 @@
           drag(container);
           expect(container.scrollTop).to.equal(100);
         });
+      });
+
+      describe('touch', () => {
+
+        function dispatchTouchEvent(target, type, coords = {x: 0, y: 0}) {
+          const e = new CustomEvent(type, {
+            bubbles: true,
+            cancelable: true,
+            composed: true,
+          });
+          e.touches = [{
+            clientX: coords.x,
+            clientY: coords.y,
+            pageX: coords.x,
+            pageY: coords.y,
+          }];
+          target.dispatchEvent(e);
+        }
+
+        function touchDrag(target, dx = 1, dy = 1) {
+          const bounds = target.getBoundingClientRect();
+          const fromXY = {
+            x: Math.floor(bounds.left + (bounds.width / 2)),
+            y: Math.floor(bounds.top + (bounds.height / 2))
+          };
+          const toXY = {x: fromXY.x + dx, y: fromXY.y + dx};
+          dispatchTouchEvent(target, 'touchstart', fromXY);
+          dispatchTouchEvent(target, 'touchmove', toXY);
+          dispatchTouchEvent(target, 'touchend', toXY);
+        }
+
+        function touchResize(target, dx = 1, dy = 1) {
+          const bounds = target.getBoundingClientRect();
+          const fromXY = {
+            x: Math.floor(bounds.left + (bounds.width / 2)),
+            y: Math.floor(bounds.top + (bounds.height / 2))
+          };
+
+          const toXY = {x: fromXY.x + dx, y: fromXY.y + dy};
+          dispatchTouchEvent(target, 'touchstart', fromXY);
+          dispatchTouchEvent(target, 'touchmove', toXY);
+          dispatchTouchEvent(target, 'touchend', toXY);
+        }
+
+        function getFrontmostOverlayFromScreenCenter() {
+          let elementFromPoint = document.elementFromPoint(window.innerWidth / 2, window.innerHeight / 2);
+          while (elementFromPoint && elementFromPoint.localName !== 'vaadin-dialog-overlay') {
+            elementFromPoint = elementFromPoint.host || elementFromPoint.parentNode;
+          }
+          return elementFromPoint;
+        }
+
+        let resizable, draggable, resizableOverlay, resizableOverlayPart, draggableOverlay, resizableContainer, draggableContainer;
+
+        beforeEach(() => {
+          resizable = fixture('resizable');
+          draggable = fixture('draggable');
+          resizableOverlay = resizable.$.overlay;
+          draggableOverlay = draggable.$.overlay;
+          resizableContainer = resizableOverlay.$.resizerContainer;
+          draggableContainer = draggableOverlay.$.resizerContainer;
+          resizableOverlayPart = resizableOverlay.$.overlay;
+          resizable.opened = true;
+          draggable.opened = true;
+        });
+
+        it('should bring to front on touch start', () => {
+          dispatchTouchEvent(resizableContainer, 'touchstart');
+          expect(getFrontmostOverlayFromScreenCenter()).to.equal(resizableOverlay);
+        });
+
+        it('should drag and move dialog', () => {
+          const d = 1;
+          const bounds = draggableContainer.getBoundingClientRect();
+          touchDrag(draggableContainer, d, d);
+          const draggedBounds = draggableContainer.getBoundingClientRect();
+          expect(Math.floor(draggedBounds.top)).to.be.eql(Math.floor(bounds.top + d));
+          expect(Math.floor(draggedBounds.left)).to.be.eql(Math.floor(bounds.left + d));
+        });
+
+        it('should remove event handlers after drag', () => {
+          touchDrag(draggableContainer);
+          const bounds = draggableContainer.getBoundingClientRect();
+          dispatchTouchEvent(draggableContainer, 'touchmove', {x: 1, y: 1});
+          const draggedBounds = draggableContainer.getBoundingClientRect();
+          expect(draggedBounds.left).to.eql(bounds.left);
+          expect(draggedBounds.top).to.eql(bounds.top);
+        });
+
+        it('should resize dialog from top right corner', () => {
+          const d = 100;
+          const bounds = resizableContainer.getBoundingClientRect();
+          touchResize(resizableOverlayPart.querySelector('.ne'), d, -d);
+          const resizedBounds = resizableContainer.getBoundingClientRect();
+          expect(Math.floor(resizedBounds.top)).to.be.eql(Math.floor(bounds.top - d));
+          expect(Math.floor(resizedBounds.left)).to.be.eql(Math.floor(bounds.left));
+          expect(Math.floor(resizedBounds.width)).to.be.eql(Math.floor(bounds.width + d));
+          expect(Math.floor(resizedBounds.height)).to.be.eql(Math.floor(bounds.height + d));
+        });
+
+        it('should remove event handlers after resize', () => {
+          touchResize(resizableOverlayPart.querySelector('.ne'));
+          const bounds = resizableContainer.getBoundingClientRect();
+          dispatchTouchEvent(resizableOverlayPart.querySelector('.ne'), 'touchmove', {x: 1, y: 1});
+          const resizedBounds = resizableContainer.getBoundingClientRect();
+          expect(resizedBounds.left).to.eql(bounds.left);
+          expect(resizedBounds.top).to.eql(bounds.top);
+
+          const removeSpy = sinon.spy(resizable, '_stopResize');
+          dispatchTouchEvent(resizableOverlayPart.querySelector('.ne'), 'touchend', {x: 1, y: 1});
+          expect(removeSpy.called).to.be.false;
+        });
+
       });
   </script>
 </body>

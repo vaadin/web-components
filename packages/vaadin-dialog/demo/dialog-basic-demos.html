@@ -233,22 +233,20 @@
         <script>
           window.addDemoReadyListener('#dialog-basic-demos-modeless-draggable-resizable-dialog', function(document) {
             const dialogs = document.querySelectorAll('vaadin-dialog');
-            for (let i = 0; i < dialogs.length; i++) {
-              const dialog = dialogs[i];
-              const dialogIndex = i + 1;
+            dialogs.forEach(function(dialog, i) {
               dialog.renderer = function(root, dialog) {
                 const closeButton = window.document.createElement('vaadin-button');
                 closeButton.textContent = 'Close';
                 closeButton.addEventListener('click', function() {
                   dialog.opened = false;
                 });
-                root.textContent = 'Dialog ' + dialogIndex + ': Drag me around and resize me! ';
+                root.textContent = 'Dialog ' + (i + 1) + ': Drag me around and resize me! ';
                 root.appendChild(closeButton);
               };
               document.querySelectorAll('vaadin-button')[i].addEventListener('click', function() {
                 dialog.opened = !dialog.opened;
               });
-            }
+            });
           });
         </script>
       </template>
