@@ -640,7 +640,13 @@ This program is available under Apache License Version 2.0, available at https:/
           const viewportHeight = Math.min(window.innerHeight, document.documentElement.clientHeight);
           const bottomAlign = inputRect.top > (viewportHeight - inputRect.height) / 2;
 
-          this._overlayElement.style.left = inputRect.left + 'px';
+          const isRtl = this.getAttribute('dir') === 'rtl';
+          if (isRtl) {
+            this._overlayElement.style.right = document.documentElement.clientWidth - inputRect.right + 'px';
+          } else {
+            this._overlayElement.style.left = inputRect.left + 'px';
+          }
+
           if (bottomAlign) {
             this._overlayElement.setAttribute('bottom-aligned', '');
             this._overlayElement.style.removeProperty('top');

@@ -21,6 +21,22 @@ gemini.suite('vaadin-select', function(rootSuite) {
         .setCaptureElements('#select')
         .capture('select');
     });
+
+    gemini.suite(`rtl-tests-${theme}`, function(suite) {
+      suite
+        .setUrl(`rtl.html?theme=${theme}`)
+        .setCaptureElements('#select')
+        .capture('select');
+    });
+  });
+
+  ['ltr', 'rtl'].forEach(dir => {
+    gemini.suite(`${dir}-align-tests`, function(suite) {
+      suite
+        .setUrl(`align-themes.html?dir=${dir}`)
+        .setCaptureElements('#select')
+        .capture('select');
+    });
   });
 
   gemini.suite(`lumo-variants-tests`, function(suite) {

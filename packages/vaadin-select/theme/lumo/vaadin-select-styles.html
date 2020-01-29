@@ -29,6 +29,10 @@
         min-height: var(--lumo-size-s);
       }
 
+      :host([theme~="align-left"]) [selected] {
+        text-align: left;
+      }
+
       :host([theme~="align-right"]) [selected] {
         text-align: right;
       }
@@ -53,6 +57,10 @@
   <template>
     <style>
       :host([theme~="align-center"]) ::slotted([part~="value"]) {
+        --_lumo-text-field-overflow-mask-image: linear-gradient(to left, transparent 0.25em, #000 1.5em);
+      }
+
+      :host([theme~="align-center"]) ::slotted([part~="value"]) {
         --_lumo-text-field-overflow-mask-image: none;
       }
 
@@ -75,6 +83,21 @@
 
       [part="input-field"]:focus {
         outline: none;
+      }
+
+      /* RTL specific styles */
+
+      :host([theme~="align-left"][dir="rtl"]) ::slotted([part~="value"]) {
+        --_lumo-text-field-overflow-mask-image: linear-gradient(to left, transparent 0.25em, #000 1.5em);
+      }
+
+      :host([theme~="align-center"][dir="rtl"]) ::slotted([part~="value"]) {
+        --_lumo-text-field-overflow-mask-image: none;
+      }
+
+      :host([dir="rtl"]) ::slotted([part~="value"]),
+      :host([theme~="align-right"][dir="rtl"]) ::slotted([part~="value"]) {
+        --_lumo-text-field-overflow-mask-image: linear-gradient(to right, transparent 0.25em, #000 1.5em);
       }
     </style>
   </template>
@@ -103,6 +126,10 @@
         left: 0 !important;
         align-items: stretch;
         justify-content: flex-end;
+      }
+
+      :host([theme~="align-left"]) {
+        text-align: left;
       }
 
       :host([theme~="align-right"]) {
