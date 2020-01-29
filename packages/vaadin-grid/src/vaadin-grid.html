@@ -415,10 +415,10 @@ This program is available under Apache License Version 2.0, available at https:/
         return !!Array.from(this.$.items.children).filter(row => row.clientHeight).length;
       }
 
-      __setInitialColumnWidths() {
-        if (!this._initialColumnWidthsSet && this.__hasRowsWithClientHeight()) {
-          this._initialColumnWidthsSet = true;
+      __itemsReceived() {
+        if (this._recalculateColumnWidthOnceLoadingFinished && !this._cache.isLoading() && this.__hasRowsWithClientHeight()) {
           this.recalculateColumnWidths();
+          this._recalculateColumnWidthOnceLoadingFinished = false;
         }
       }
 
@@ -461,8 +461,12 @@ This program is available under Apache License Version 2.0, available at https:/
         if (!this._columnTree) {
           return; // No columns
         }
-        const cols = this._getColumns().filter(col => !col.hidden && col.autoWidth);
-        this._recalculateColumnWidths(cols);
+        if (this._cache.isLoading()) {
+          this._recalculateColumnWidthOnceLoadingFinished = true;
+        } else {
+          const cols = this._getColumns().filter(col => !col.hidden && col.autoWidth);
+          this._recalculateColumnWidths(cols);
+        }
       }
 
       _createScrollerRows(count) {
@@ -772,7 +776,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this._updateHeaderFooterMetrics();
           e.stopPropagation();
           this.notifyResize();
-          this.__setInitialColumnWidths();
+          this.__itemsReceived();
         }
       }
 

@@ -32,6 +32,17 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="aysnc-tree-grid">
+    <template>
+      <vaadin-grid style="width:600px;">
+        <vaadin-grid-tree-column auto-width path="name"></vaadin-grid-tree-column>
+        <vaadin-grid-column auto-width>
+          <template >Code</template>
+        </vaadin-grid-column>
+      </vaadin-grid>
+    </template>
+  </test-fixture>
+
   <script>
     describe('tree toggle', () => {
       let toggle;
@@ -157,6 +168,32 @@
         expect(toggle.leaf).to.be.false;
       });
 
+    });
+
+    describe('async recalculateWidth columns', () => {
+      let grid;
+    
+      beforeEach(() => {
+        grid = fixture('aysnc-tree-grid');
+      });
+    
+      it('should recalculate width columns when children nodes rendered', () => {
+        const data = [{name: 'foo', children: [{
+          name: 'bar'
+        }]}];
+        grid.dataProvider = (parmas, cb) => {
+          grid._getData = () => cb(parmas.parentItem ? parmas.parentItem.children : data, 1);
+        };
+        grid._getData();
+        flushGrid(grid);
+        sinon.spy(grid, '_recalculateColumnWidths');
+        grid.expandItem(data[0]);
+        grid.recalculateColumnWidths();
+        expect(grid._recalculateColumnWidths.called).to.be.false;
+        grid._getData();
+        flushGrid(grid);
+        expect(grid._recalculateColumnWidths.called).to.be.true;
+      });
     });
   </script>
 
