@@ -193,6 +193,16 @@
         window.removeEventListener('touchmove', this._resizeListeners.resize[direction]);
         window.removeEventListener('mouseup', this._resizeListeners.stop[direction]);
         window.removeEventListener('touchend', this._resizeListeners.stop[direction]);
+        this.dispatchEvent(new CustomEvent('resize', {detail: this._getResizeDimensions()}));
+      }
+
+      _getResizeDimensions() {
+        const {width, height} = getComputedStyle(this.$.overlay.$.overlay);
+        const content = this.$.overlay.$.content;
+        content.setAttribute('style', 'position: absolute; top: 0; right: 0; bottom: 0; left: 0; box-sizing: content-box; height: auto;');
+        const {width: contentWidth, height: contentHeight} = getComputedStyle(content);
+        content.removeAttribute('style');
+        return {width, height, contentWidth, contentHeight};
       }
     };
 </script>
