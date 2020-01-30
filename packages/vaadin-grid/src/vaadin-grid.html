@@ -416,9 +416,10 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       __itemsReceived() {
-        if (this._recalculateColumnWidthOnceLoadingFinished && !this._cache.isLoading() && this.__hasRowsWithClientHeight()) {
+        if (!this._initialColumnWidthsSet
+          && !this._cache.isLoading()
+          && this.__hasRowsWithClientHeight()) {
           this.recalculateColumnWidths();
-          this._recalculateColumnWidthOnceLoadingFinished = false;
         }
       }
 
@@ -462,9 +463,10 @@ This program is available under Apache License Version 2.0, available at https:/
           return; // No columns
         }
         if (this._cache.isLoading()) {
-          this._recalculateColumnWidthOnceLoadingFinished = true;
+          this._initialColumnWidthsSet = false;
         } else {
           const cols = this._getColumns().filter(col => !col.hidden && col.autoWidth);
+          this._initialColumnWidthsSet = true;
           this._recalculateColumnWidths(cols);
         }
       }
