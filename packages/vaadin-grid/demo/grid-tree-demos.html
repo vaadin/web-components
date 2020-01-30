@@ -25,17 +25,19 @@
           <vaadin-grid-tree-column path="name" header="Expense category" item-has-children-path="hasChildren"></vaadin-grid-tree-column>
           <vaadin-grid-column path="uuid" header="Code" width="8em" flex-grow="0"></vaadin-grid-column>
         </vaadin-grid>
-
+        <button id="btn1">get data</button>
+        <button id="btn2">recal</button>
         <script>
           window.addDemoReadyListener('#grid-tree-demos-renderer-data-provider', function(document) {
             const grid = document.querySelector('vaadin-grid');
             grid.dataProvider = function(params, callback) {
-              // If the data request concerns a tree sub-level, `params` has an additional
+              grid._getData = () => {
+      // If the data request concerns a tree sub-level, `params` has an additional
               // `parentItem` property that refers to the sub-level's parent item
-              const parentUuid = params.parentItem ? params.parentItem.uuid : null;
+                const parentUuid = params.parentItem ? params.parentItem.uuid : null;
 
-              // Demo helper API that fetches expenses categories
-              Vaadin.GridDemo._getExpensesCategories(parentUuid, function(categories) {
+                // Demo helper API that fetches expenses categories
+                Vaadin.GridDemo._getExpensesCategories(parentUuid, function(categories) {
                 // Here `categories` is an array consisting of items with the following structure:
                 // {
                 //   hasChildren: false
@@ -46,15 +48,30 @@
                 // This demo uses the `hasChildren` flag as an indicator of the item having child items.
                 // The property is used internally by the `<vaadin-grid-tree-column>`.
 
-                // Slice out only the requested items
-                const startIndex = params.page * params.pageSize;
-                const pageItems = categories.slice(startIndex, startIndex + params.pageSize);
-                // Inform grid of the requested tree level's full size
-                const treeLevelSize = categories.length;
-                callback(pageItems, treeLevelSize);
-              });
+                  // Slice out only the requested items
+                  const startIndex = params.page * params.pageSize;
+                  const pageItems = categories.slice(startIndex, startIndex + params.pageSize);
+                  // Inform grid of the requested tree level's full size
+                  const treeLevelSize = categories.length;
+                  callback(pageItems, treeLevelSize);
+                });
+              };
             };
+
+            // const toggle = grid.querySelector('vaadin-grid-tree-column');
+            // toggle.addEventListener('click', () => {
+            //   grid._getData();
+            //   grid.recalculateColumnWidths();
+            // });
+            document.getElementById('btn1').addEventListener('click', () => {
+              grid._getData();
+  });
+
+  document.getElementById('btn2').addEventListener('click', () => {
+              grid.recalculateColumnWidths();
+  });
           });
+          
         </script>
       </template>
     </vaadin-demo-snippet>

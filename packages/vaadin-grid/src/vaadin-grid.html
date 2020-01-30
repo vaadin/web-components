@@ -402,6 +402,10 @@ This program is available under Apache License Version 2.0, available at https:/
             value: false,
             reflectToAttribute: true,
             observer: '_heightByRowsChanged'
+          },
+          _recalculateColumnWidthOnceLoadingFinished: {
+            type: Boolean,
+            value: true
           }
         };
       }
@@ -416,9 +420,10 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       __itemsReceived() {
-        if (!this._initialColumnWidthsSet
+        if (this._recalculateColumnWidthOnceLoadingFinished
           && !this._cache.isLoading()
           && this.__hasRowsWithClientHeight()) {
+          this._recalculateColumnWidthOnceLoadingFinished = false;
           this.recalculateColumnWidths();
         }
       }
@@ -463,11 +468,11 @@ This program is available under Apache License Version 2.0, available at https:/
           return; // No columns
         }
         if (this._cache.isLoading()) {
-          this._initialColumnWidthsSet = false;
+          this._recalculateColumnWidthOnceLoadingFinished = true;
         } else {
           const cols = this._getColumns().filter(col => !col.hidden && col.autoWidth);
-          this._initialColumnWidthsSet = true;
           this._recalculateColumnWidths(cols);
+  
         }
       }
 
