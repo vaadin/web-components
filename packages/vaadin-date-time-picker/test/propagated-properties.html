@@ -93,6 +93,10 @@
           dateTimePicker.value = '2019-09-16T15:00';
           expect(datePicker.value).to.equal('2019-09-16');
           expect(timePicker.value).to.equal('15:00');
+
+          dateTimePicker.value = '';
+          expect(datePicker.value).to.equal('');
+          expect(timePicker.value).to.equal('');
         });
 
         it('should propagate min to date and time pickers', () => {

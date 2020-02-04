@@ -776,8 +776,12 @@ This program is available under Apache License Version 2.0, available at https:/
           // `this.$.input` (as a result of value change triggered by setting custom field value).
           // Workaround the problem by setting custom field value only if date picker is ready.
           const isDatePickerReady = !!this.$.customField.inputs[0].$;
-          if (isDatePickerReady && this.value !== '') {
-            this.$.customField.value = this.value;
+          if (isDatePickerReady) {
+            const doDispatchChange = this.__doDispatchChange;
+
+            this.$.customField.value = this.value !== '' ? this.value : 'T';
+
+            this.__doDispatchChange = doDispatchChange;
           }
         }
 

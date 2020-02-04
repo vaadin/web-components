@@ -354,6 +354,10 @@
           dateTimePicker.value = '2019-09-16T15:00';
           expect(datePicker.value).to.equal('2019-09-16');
           expect(timePicker.value).to.equal('15:00');
+
+          dateTimePicker.value = '';
+          expect(datePicker.value).to.equal('');
+          expect(timePicker.value).to.equal('');
         });
 
         it('should get value from slotted inputs', () => {
@@ -361,6 +365,10 @@
           timePicker.value = '15:00';
           dateTimePicker.__triggerCustomFieldValueUpdate();
           expect(dateTimePicker.value).to.equal('2019-09-16T15:00');
+
+          datePicker.value = '';
+          dateTimePicker.__triggerCustomFieldValueUpdate();
+          expect(dateTimePicker.value).to.equal('');
         });
 
         describe('Removing change listeners', () => {
