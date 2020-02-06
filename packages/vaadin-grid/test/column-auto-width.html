@@ -27,6 +27,14 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="aysnc-grid">
+    <template>
+      <vaadin-grid>
+        <vaadin-grid-tree-column auto-width path="name"></vaadin-grid-tree-column>
+      </vaadin-grid>
+    </template>
+  </test-fixture>
+
   <script>
     describe('column auto-width', function() {
       let grid;
@@ -120,6 +128,32 @@
         });
       });
 
+    });
+
+    describe('async recalculateWidth columns', () => {
+      let grid;
+    
+      beforeEach(() => {
+        grid = fixture('aysnc-grid');
+      });
+    
+      it('should recalculate column widths when child items loaded', () => {
+        const data = [{name: 'foo', children: [{
+          name: 'bar'
+        }]}];
+        grid.dataProvider = (parmas, cb) => {
+          grid._getData = () => cb(parmas.parentItem ? parmas.parentItem.children : data, 1);
+        };
+        grid._getData();
+        flushGrid(grid);
+        sinon.spy(grid, '_recalculateColumnWidths');
+        grid.expandItem(data[0]);
+        grid.recalculateColumnWidths();
+        expect(grid._recalculateColumnWidths.called).to.be.false;
+        grid._getData();
+        flushGrid(grid);
+        expect(grid._recalculateColumnWidths.called).to.be.true;
+      });
     });
   </script>
 
