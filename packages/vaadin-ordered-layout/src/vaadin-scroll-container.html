@@ -1,0 +1,78 @@
+<!--
+@license
+Copyright (c) 2020 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
+<link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
+
+<dom-module id="vaadin-scroll-container">
+  <template>
+    <style>
+      :host([hidden]) {
+        display: none !important;
+      }
+
+      :host {
+        display: block;
+        overflow: auto;
+      }
+
+      :host([horizontal-scroll-disabled]) {
+        overflow-x: hidden;
+      }
+
+      :host([vertical-scroll-disabled]) {
+        overflow-y: hidden;
+      }
+    </style>
+
+    <slot></slot>
+
+  </template>
+
+  <script>
+    (function() {
+      /**
+       * `<vaadin-scroll-container>` provides a simple way to display scrollbars when its content is overflowing.
+       *
+       * ```
+       * <vaadin-scroll-container>
+       *   <div>Content</div>
+       * </vaadin-scroll-container>
+       * ```
+       * ### Styling
+       *
+       * The following state attributes are available for styling:
+       *
+       * Attribute    | Description
+       * -------------|-------------
+       * `horizontal-scroll-disabled` | Set to disable horizontal scrolling
+       * `vertical-scroll-disabled` | Set to disable vertical scrolling
+       *
+       * @memberof Vaadin
+       * @mixes Vaadin.ThemableMixin
+       * @demo demo/index.html
+       */
+      class ScrollContainerElement extends Vaadin.ElementMixin(Vaadin.ThemableMixin(Polymer.Element)) {
+        static get is() {
+          return 'vaadin-scroll-container';
+        }
+
+        static get version() {
+          return '1.1.0';
+        }
+      }
+
+      customElements.define(ScrollContainerElement.is, ScrollContainerElement);
+
+      /**
+       * @namespace Vaadin
+       */
+      window.Vaadin = window.Vaadin || {};
+      Vaadin.ScrollContainerElement = ScrollContainerElement;
+    })();
+  </script>
+</dom-module>
