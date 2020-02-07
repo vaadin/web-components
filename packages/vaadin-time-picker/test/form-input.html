@@ -80,11 +80,12 @@
         expect(timepicker.__inputElement.required).to.be.false;
       });
 
-      it('should have synced invalid property wiht input on validation with required flag', () => {
+      it('should have synced invalid property with input on validation with required flag', () => {
         timepicker.name = 'foo';
         timepicker.required = true;
         timepicker.min = '14:00';
         timepicker.value = '13:00';
+        timepicker.__dropdownElement.dispatchEvent(new CustomEvent('change', {bubbles: true}));
 
         expect(timepicker.__inputElement.invalid).to.equal(true);
 
@@ -102,6 +103,14 @@
         timepicker.value = '13:00';
         expect(timepicker.validate()).to.equal(true);
         expect(timepicker.invalid).to.be.equal(false);
+      });
+
+      it('should validate correctly with required flag on blur', () => {
+        timepicker.name = 'foo';
+        timepicker.required = true;
+
+        timepicker.__inputElement.dispatchEvent(new CustomEvent('blur', {composed: true}));
+        expect(timepicker.invalid).to.be.equal(true);
       });
 
       it('should respect min value during validation', () => {

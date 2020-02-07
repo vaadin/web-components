@@ -379,6 +379,10 @@ This program is available under Apache License Version 2.0, available at https:/
           this.__dropdownElement.addEventListener('value-changed', e => this.__onInputChange(e));
           this.__inputElement.addEventListener('keydown', this.__onKeyDown.bind(this));
 
+          // Validation listeners
+          this.__dropdownElement.addEventListener('change', e => this.validate());
+          this.__inputElement.addEventListener('blur', e => this.validate());
+
           this.__dropdownElement.addEventListener('change', e => {
             // `vaadin-combo-box-light` forwards 'change' event from text-field.
             // So we need to filter out in order to avoid duplicates.
@@ -559,8 +563,6 @@ This program is available under Apache License Version 2.0, available at https:/
           } else {
             this.value = '';
           }
-
-          this.validate();
         }
 
         __updateValue(obj) {
