@@ -52,6 +52,7 @@
   "devDependencies": {
     "webcomponentsjs": "1.2.0",
     "web-component-tester": "^6.1.5",
+    "sinonjs": "Polymer/sinon.js#^1.14.1",
     "iron-test-helpers": "^v2.0.0",
     "paper-input": "^v2.0.0",
     "paper-checkbox": "^v2.0.0",
