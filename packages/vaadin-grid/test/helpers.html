@@ -44,6 +44,9 @@
       grid._debounceIncreasePool = null;
       Polymer.flush();
     }
+    if (grid._debouncerHiddenChanged) {
+      grid._debouncerHiddenChanged.flush();
+    }
   };
 
   window.getCell = (grid, index) => {

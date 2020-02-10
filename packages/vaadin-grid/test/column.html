@@ -148,20 +148,23 @@
 
           it('should not be bound to column header cells', () => {
             column.hidden = true;
+            flushGrid(grid);
 
-            expect(window.getComputedStyle(getContainerCell(grid.$.header, 1, 0)).display).to.eql('none');
+            expect(column._headerCell.parentElement).to.be.not.ok;
           });
 
           it('should be bound to row cells', () => {
             column.hidden = true;
+            flushGrid(grid);
 
-            expect(window.getComputedStyle(getContainerCell(grid.$.items, 0, 0)).display).to.eql('none');
+            expect(column._cells[0].parentElement).to.be.not.ok;
           });
 
           it('should be bound to footer cells', () => {
             column.hidden = true;
+            flushGrid(grid);
 
-            expect(window.getComputedStyle(getContainerCell(grid.$.footer, 0, 0)).display).to.eql('none');
+            expect(column._footerCell.parentElement).to.be.not.ok;
           });
 
           it('should notify resize', () => {
@@ -177,6 +180,13 @@
             expect(column.hidden).to.be.undefined;
             column.hidden = false;
             expect(spy.called).to.be.false;
+          });
+
+          it('should dettach cells from a hidden column', () => {
+            const childCountBefore = grid.childElementCount;
+            column.hidden = true;
+            const childCountAfter = grid.childElementCount;
+            expect(childCountAfter).to.be.below(childCountBefore);
           });
         });
 

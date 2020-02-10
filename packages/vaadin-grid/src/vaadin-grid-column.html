@@ -470,9 +470,24 @@ This program is available under Apache License Version 2.0, available at https:/
         this.parentElement._columnPropChanged('hidden', hidden);
       }
 
-      this._allCells.forEach(cell => this._toggleAttribute('hidden', hidden, cell));
-
       if (!!hidden !== !!this._previousHidden && this._grid) {
+        if (hidden === true) {
+          this._allCells.forEach(cell => {
+            if (cell._content.parentNode) {
+              cell._content.parentNode.removeChild(cell._content);
+            }
+          });
+        }
+        this._grid._debouncerHiddenChanged = Polymer.Debouncer.debounce(
+          this._grid._debouncerHiddenChanged,
+          Polymer.Async.animationFrame,
+          () => {
+            if (this._grid && this._grid._renderColumnTree) {
+              this._grid._renderColumnTree(this._grid._columnTree);
+            }
+          }
+        );
+
         this._grid._updateLastFrozen && this._grid._updateLastFrozen();
         this._grid.notifyResize && this._grid.notifyResize();
         this._grid._resetKeyboardNavigation && this._grid._resetKeyboardNavigation();

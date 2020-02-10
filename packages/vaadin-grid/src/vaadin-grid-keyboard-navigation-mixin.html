@@ -229,15 +229,15 @@ This program is available under Apache License Version 2.0, available at https:/
         if (isRowDetails) {
           this._focusedColumnOrder = 0;
         } else {
-          this._focusedColumnOrder = this._getColumns(activeRowGroup, rowIndex)[columnIndex]._order;
+          this._focusedColumnOrder = this._getColumns(activeRowGroup, rowIndex).filter(c => !c.hidden)[columnIndex]._order;
         }
       }
 
       // Find orderedColumnIndex — the index of order closest matching the
       // original _focusedColumnOrder in the sorted array of orders
       // of the visible columns on the destination row.
-      const dstColumns = this._getColumns(activeRowGroup, dstRowIndex);
-      const dstSortedColumnOrders = dstColumns.filter(c => !c.hidden).map(c => c._order)
+      const dstColumns = this._getColumns(activeRowGroup, dstRowIndex).filter(c => !c.hidden);
+      const dstSortedColumnOrders = dstColumns.map(c => c._order)
         .sort((b, a) => (b - a));
       const maxOrderedColumnIndex = dstSortedColumnOrders.length - 1;
       const orderedColumnIndex = dstSortedColumnOrders.indexOf(

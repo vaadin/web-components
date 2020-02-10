@@ -560,66 +560,68 @@ This program is available under Apache License Version 2.0, available at https:/
         if (row.id !== 'outersizer' && row.id !== 'fixedsizer') {
           row.hidden = true;
         }
-        columns.forEach((column, index) => {
-          let cell;
+        columns
+          .filter(column => !column.hidden)
+          .forEach((column, index) => {
+            let cell;
 
-          if (section === 'body') {
+            if (section === 'body') {
             // Body
-            column._cells = column._cells || [];
-            cell = column._cells.filter(cell => cell._vacant)[0];
-            if (!cell) {
-              cell = this._createCell('td');
-              column._cells.push(cell);
-            }
-            cell.setAttribute('part', 'cell body-cell');
-            row.appendChild(cell);
+              column._cells = column._cells || [];
+              cell = column._cells.filter(cell => cell._vacant)[0];
+              if (!cell) {
+                cell = this._createCell('td');
+                column._cells.push(cell);
+              }
+              cell.setAttribute('part', 'cell body-cell');
+              row.appendChild(cell);
 
-            if (index === columns.length - 1 && (this._rowDetailsTemplate || this.rowDetailsRenderer)) {
+              if (index === columns.length - 1 && (this._rowDetailsTemplate || this.rowDetailsRenderer)) {
               // Add details cell as last cell to body rows
-              this._detailsCells = this._detailsCells || [];
-              const detailsCell = this._detailsCells.filter(cell => cell._vacant)[0] || this._createCell('td');
-              if (this._detailsCells.indexOf(detailsCell) === -1) {
-                this._detailsCells.push(detailsCell);
+                this._detailsCells = this._detailsCells || [];
+                const detailsCell = this._detailsCells.filter(cell => cell._vacant)[0] || this._createCell('td');
+                if (this._detailsCells.indexOf(detailsCell) === -1) {
+                  this._detailsCells.push(detailsCell);
+                }
+                if (!detailsCell._content.parentElement) {
+                  contentsFragment.appendChild(detailsCell._content);
+                }
+                this._configureDetailsCell(detailsCell);
+                row.appendChild(detailsCell);
+                this._a11ySetRowDetailsCell(row, detailsCell);
+                detailsCell._vacant = false;
               }
-              if (!detailsCell._content.parentElement) {
-                contentsFragment.appendChild(detailsCell._content);
-              }
-              this._configureDetailsCell(detailsCell);
-              row.appendChild(detailsCell);
-              this._a11ySetRowDetailsCell(row, detailsCell);
-              detailsCell._vacant = false;
-            }
 
-            if (column.notifyPath && !noNotify) {
-              column.notifyPath('_cells.*', column._cells);
-            }
-          } else {
-            // Header & footer
-            const tagName = section === 'header' ? 'th' : 'td';
-            if (isColumnRow || column.localName === 'vaadin-grid-column-group') {
-              cell = column[`_${section}Cell`] || this._createCell(tagName);
-              cell._column = column;
-              row.appendChild(cell);
-              column[`_${section}Cell`] = cell;
+              if (column.notifyPath && !noNotify) {
+                column.notifyPath('_cells.*', column._cells);
+              }
             } else {
-              column._emptyCells = column._emptyCells || [];
-              cell = column._emptyCells.filter(cell => cell._vacant)[0] || this._createCell(tagName);
-              cell._column = column;
-              row.appendChild(cell);
-              if (column._emptyCells.indexOf(cell) === -1) {
-                column._emptyCells.push(cell);
+            // Header & footer
+              const tagName = section === 'header' ? 'th' : 'td';
+              if (isColumnRow || column.localName === 'vaadin-grid-column-group') {
+                cell = column[`_${section}Cell`] || this._createCell(tagName);
+                cell._column = column;
+                row.appendChild(cell);
+                column[`_${section}Cell`] = cell;
+              } else {
+                column._emptyCells = column._emptyCells || [];
+                cell = column._emptyCells.filter(cell => cell._vacant)[0] || this._createCell(tagName);
+                cell._column = column;
+                row.appendChild(cell);
+                if (column._emptyCells.indexOf(cell) === -1) {
+                  column._emptyCells.push(cell);
+                }
               }
+              cell.setAttribute('part', `cell ${section}-cell`);
+              this.__updateHeaderFooterRowVisibility(row);
             }
-            cell.setAttribute('part', `cell ${section}-cell`);
-            this.__updateHeaderFooterRowVisibility(row);
-          }
 
-          if (!cell._content.parentElement) {
-            contentsFragment.appendChild(cell._content);
-          }
-          cell._vacant = false;
-          cell._column = column;
-        });
+            if (!cell._content.parentElement) {
+              contentsFragment.appendChild(cell._content);
+            }
+            cell._vacant = false;
+            cell._column = column;
+          });
 
         // Might be empty if only cache was used
         this.appendChild(contentsFragment);
@@ -683,7 +685,11 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       _columnTreeChanged(columnTree, splices) {
-        Array.from(this.$.items.children).forEach(row => this._updateRow(row, columnTree[columnTree.length - 1]));
+        this._renderColumnTree(columnTree);
+      }
+
+      _renderColumnTree(columnTree) {
+        Array.from(this.$.items.children).forEach((row) => this._updateRow(row, columnTree[columnTree.length - 1], null, false, true));
 
         while (this.$.header.children.length < columnTree.length) {
           const headerRow = document.createElement('tr');
@@ -708,7 +714,7 @@ This program is available under Apache License Version 2.0, available at https:/
           .forEach((footerRow, index) => this._updateRow(footerRow, columnTree[columnTree.length - 1 - index], 'footer', index === 0));
 
         // Sizer rows
-        this._updateRow(this.$.outersizer, columnTree[columnTree.length - 1]);
+        this._updateRow(this.$.outersizer, columnTree[columnTree.length - 1], null, false, true);
         this._updateRow(this.$.fixedsizer, columnTree[columnTree.length - 1]);
 
         this._resizeHandler();
