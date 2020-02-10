@@ -53,6 +53,7 @@
     "iron-icons": "^2.0.0",
     "iron-input": "^2.0.0",
     "iron-test-helpers": "^2.0.0",
+    "sinonjs": "Polymer/sinon.js#^1.14.1",
     "sugar": "2.0.4",
     "web-component-tester": "^6.1.5",
     "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^3.0.0",
