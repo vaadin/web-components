@@ -26,21 +26,26 @@
         element = fixture('default');
       });
 
-      it('should have horizontal scrollbars by default', () => {
+      it('should have horizontal and vertical scrollbars by default', () => {
         expect(getComputedStyle(element).overflowX).to.equal('auto');
-      });
-
-      it('should have vertical scrollbars by default', () => {
         expect(getComputedStyle(element).overflowY).to.equal('auto');
       });
 
-      it('should be possible to disable horizontal scrollbars', () => {
-        element.setAttribute('horizontal-scroll-disabled', '');
+      it('should be possible to enable only vertical scrollbars', () => {
+        element.setAttribute('scroll-direction', 'vertical');
+        expect(getComputedStyle(element).overflowY).to.equal('auto');
         expect(getComputedStyle(element).overflowX).to.equal('hidden');
       });
 
-      it('should be possible to disable vertical scrollbars', () => {
-        element.setAttribute('vertical-scroll-disabled', '');
+      it('should be possible to enable only horizontal scrollbars', () => {
+        element.setAttribute('scroll-direction', 'horizontal');
+        expect(getComputedStyle(element).overflowX).to.equal('auto');
+        expect(getComputedStyle(element).overflowY).to.equal('hidden');
+      });
+
+      it('should be possible to disable both direction scrollbars', () => {
+        element.setAttribute('scroll-direction', 'none');
+        expect(getComputedStyle(element).overflowX).to.equal('hidden');
         expect(getComputedStyle(element).overflowY).to.equal('hidden');
       });
 

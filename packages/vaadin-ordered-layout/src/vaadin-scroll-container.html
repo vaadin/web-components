@@ -20,12 +20,16 @@ This program is available under Apache License Version 2.0, available at https:/
         overflow: auto;
       }
 
-      :host([horizontal-scroll-disabled]) {
+      :host([scroll-direction='vertical']) {
         overflow-x: hidden;
       }
 
-      :host([vertical-scroll-disabled]) {
+      :host([scroll-direction='horizontal']) {
         overflow-y: hidden;
+      }
+
+      :host([scroll-direction='none']) {
+        overflow: hidden;
       }
     </style>
 
@@ -43,14 +47,6 @@ This program is available under Apache License Version 2.0, available at https:/
        *   <div>Content</div>
        * </vaadin-scroll-container>
        * ```
-       * ### Styling
-       *
-       * The following state attributes are available for styling:
-       *
-       * Attribute    | Description
-       * -------------|-------------
-       * `horizontal-scroll-disabled` | Set to disable horizontal scrolling
-       * `vertical-scroll-disabled` | Set to disable vertical scrolling
        *
        * @memberof Vaadin
        * @mixes Vaadin.ThemableMixin
@@ -59,6 +55,19 @@ This program is available under Apache License Version 2.0, available at https:/
       class ScrollContainerElement extends Vaadin.ElementMixin(Vaadin.ThemableMixin(Polymer.Element)) {
         static get is() {
           return 'vaadin-scroll-container';
+        }
+
+        static get properties() {
+          return {
+            /**
+            * This property indicates the scroll direction. Supported values are `vertical`, `horizontal`, `none`.
+            * When `scrollDirection` is undefined scrollbars will be shown in both directions.
+            */
+            scrollDirection: {
+              type: String,
+              reflectToAttribute: true
+            }
+          };
         }
 
         static get version() {
