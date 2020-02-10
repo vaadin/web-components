@@ -200,6 +200,15 @@
             expect(tf.invalid).to.be.true;
           });
 
+          it('should force check and change invalid property if `__forceCheckValidity` is set', function() {
+            tf.validate();
+            expect(tf.invalid).to.be.false;
+            tf.invalid = true;
+            tf.__forceCheckValidity = true;
+            tf.validate();
+            expect(tf.invalid).to.be.false;
+          });
+
           it('should override explicitly set invalid if constraints are set', function() {
             tf.invalid = true;
             tf.value = 'foo';

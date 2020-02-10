@@ -540,7 +540,9 @@ This program is available under Apache License Version 2.0, available at https:/
      * @returns {boolean}
      */
     checkValidity() {
-      if (this.required || this.pattern || this.maxlength || this.minlength) {
+      // Note (Yuriy): `__forceCheckValidity` is used in containing components (i.e. `vaadin-date-picker`) in order
+      // to force the checkValidity instead of returning the previous invalid state.
+      if (this.required || this.pattern || this.maxlength || this.minlength || this.__forceCheckValidity) {
         return this.inputElement.checkValidity();
       } else {
         return !this.invalid;
