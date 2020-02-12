@@ -303,7 +303,6 @@ This program is available under Apache License Version 2.0, available at https:/
     static get observers() {
       return [
         '_updateHasValue(value)',
-        '_validateInput(_selectedDate, _minDate, _maxDate)',
         '_selectedDateChanged(_selectedDate, i18n.formatDate)',
         '_focusedDateChanged(_focusedDate, i18n.formatDate)',
         '_announceFocusedDate(_focusedDate, opened, _ignoreAnnounce)'
@@ -478,8 +477,9 @@ This program is available under Apache License Version 2.0, available at https:/
       }
       const inputValue = selectedDate && formatDate(Vaadin.DatePickerHelper._extractDateParts(selectedDate));
       const value = this._formatISO(selectedDate);
+      this._inputValue = selectedDate ? inputValue : '';
       if (value !== this.value) {
-        this.validate(inputValue);
+        this.validate();
         this.value = value;
       }
       this.__userInputOccurred = false;
@@ -487,7 +487,6 @@ This program is available under Apache License Version 2.0, available at https:/
       this._ignoreFocusedDateChange = true;
       this._focusedDate = selectedDate;
       this._ignoreFocusedDateChange = false;
-      this._inputValue = selectedDate ? inputValue : '';
     }
 
     _focusedDateChanged(focusedDate, formatDate) {
@@ -528,6 +527,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
       if (!Vaadin.DatePickerHelper._dateEquals(this[property], date)) {
         this[property] = date;
+        this.value && this.validate();
       }
     }
 
@@ -690,7 +690,9 @@ This program is available under Apache License Version 2.0, available at https:/
       if (this._nativeInput && this._nativeInput.selectionStart) {
         this._nativeInput.selectionStart = this._nativeInput.selectionEnd;
       }
-      this.validate();
+      // No need to revalidate the value after `_selectedDateChanged`
+      // Needed in case the value was not changed: open and close dropdown.
+      !this.value && this.validate();
     }
 
     /**
@@ -699,11 +701,11 @@ This program is available under Apache License Version 2.0, available at https:/
      * @param {string} value Value to validate. Optional, defaults to user's input value.
      * @return {boolean} True if the value is valid and sets the `invalid` flag appropriately
      */
-    validate(value) {
-      // reset invalid state on the underlying text field
-      this.invalid = false;
-      value = value !== undefined ? value : this._inputValue;
-      return !(this.invalid = !this.checkValidity(value));
+    validate() {
+      // Note (Yuriy): Workaround `this._inputValue` is used in order
+      // to avoid breaking change on custom `checkValidity`.
+      // Can be removed with next major.
+      return !(this.invalid = !this.checkValidity(this._inputValue));
     }
 
     /**
@@ -714,20 +716,22 @@ This program is available under Apache License Version 2.0, available at https:/
      * @param {string} value Value to validate. Optional, defaults to the selected date.
      * @return {boolean} True if the value is valid
      */
-    checkValidity(value) {
-      var inputValid = !value ||
-        (this._selectedDate && value === this.i18n.formatDate(Vaadin.DatePickerHelper._extractDateParts(this._selectedDate)));
-      var minMaxValid = !this._selectedDate ||
+    checkValidity() {
+      const inputValid = !this._inputValue ||
+        (this._selectedDate && this._inputValue === this.i18n.formatDate(Vaadin.DatePickerHelper._extractDateParts(this._selectedDate)));
+      const minMaxValid = !this._selectedDate ||
         Vaadin.DatePickerHelper._dateAllowed(this._selectedDate, this._minDate, this._maxDate);
 
-      var inputValidity = true;
+      let inputValidity = true;
       if (this._inputElement) {
         if (this._inputElement.checkValidity) {
           // vaadin native input elements have the checkValidity method
-          inputValidity = this._inputElement.checkValidity(value);
+          this._inputElement.__forceCheckValidity = true;
+          inputValidity = this._inputElement.checkValidity();
+          this._inputElement.__forceCheckValidity = false;
         } else if (this._inputElement.validate) {
           // iron-form-elements have the validate API
-          inputValidity = this._inputElement.validate(value);
+          inputValidity = this._inputElement.validate();
         }
       }
 
@@ -834,12 +838,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
           }
           break;
-      }
-    }
-
-    _validateInput(date, min, max) {
-      if (date && (min || max)) {
-        this.invalid = !Vaadin.DatePickerHelper._dateAllowed(date, min, max);
       }
     }
 

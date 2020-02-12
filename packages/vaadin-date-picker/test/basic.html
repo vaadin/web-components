@@ -540,6 +540,18 @@
           getOverlayContent(datepicker).selectedDate = new Date('2017-01-01'); // invalid
         });
 
+        it('should change invalid state only once', done => {
+          datepicker.addEventListener('value-changed', () => {
+            expect(invalidChangedSpy.calledOnce).to.be.true;
+            done();
+          });
+
+          var invalidChangedSpy = sinon.spy();
+          datepicker.addEventListener('invalid-changed', invalidChangedSpy);
+          datepicker.open();
+          getOverlayContent(datepicker).selectedDate = new Date('2017-01-01');
+        });
+
         it('should scroll to min date when today is not allowed', done => {
           datepicker.max = null;
           datepicker.min = '2100-01-01';
