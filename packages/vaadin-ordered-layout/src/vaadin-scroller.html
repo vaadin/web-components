@@ -8,7 +8,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
 
-<dom-module id="vaadin-scroll-container">
+<dom-module id="vaadin-scroller">
   <template>
     <style>
       :host([hidden]) {
@@ -40,21 +40,20 @@ This program is available under Apache License Version 2.0, available at https:/
   <script>
     (function() {
       /**
-       * `<vaadin-scroll-container>` provides a simple way to display scrollbars when its content is overflowing.
+       * `<vaadin-scroller>` provides a simple way to enable scrolling when its content is overflowing.
        *
        * ```
-       * <vaadin-scroll-container>
+       * <vaadin-scroller>
        *   <div>Content</div>
-       * </vaadin-scroll-container>
+       * </vaadin-scroller>
        * ```
        *
        * @memberof Vaadin
        * @mixes Vaadin.ThemableMixin
-       * @demo demo/index.html
        */
-      class ScrollContainerElement extends Vaadin.ElementMixin(Vaadin.ThemableMixin(Polymer.Element)) {
+      class ScrollerElement extends Vaadin.ElementMixin(Vaadin.ThemableMixin(Polymer.Element)) {
         static get is() {
-          return 'vaadin-scroll-container';
+          return 'vaadin-scroller';
         }
 
         static get properties() {
@@ -75,13 +74,13 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
-      customElements.define(ScrollContainerElement.is, ScrollContainerElement);
+      customElements.define(ScrollerElement.is, ScrollerElement);
 
       /**
        * @namespace Vaadin
        */
       window.Vaadin = window.Vaadin || {};
-      Vaadin.ScrollContainerElement = ScrollContainerElement;
+      Vaadin.ScrollerElement = ScrollerElement;
     })();
   </script>
 </dom-module>

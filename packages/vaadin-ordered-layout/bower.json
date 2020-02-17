@@ -8,11 +8,11 @@
   "main": [
     "vaadin-horizontal-layout.html",
     "vaadin-vertical-layout.html",
-    "vaadin-scroll-container.html",
+    "vaadin-scroller.html",
     "imports.html",
     "theme/material/vaadin-horizontal-layout.html",
     "theme/material/vaadin-vertical-layout.html",
-    "theme/material/vaadin-scroll-container.html"
+    "theme/material/vaadin-scroller.html"
   ],
   "keywords": [
     "Vaadin",
