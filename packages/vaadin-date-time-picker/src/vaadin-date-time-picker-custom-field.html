@@ -25,6 +25,22 @@ This program is available under Apache License Version 2.0, available at https:/
       static get is() {
         return 'vaadin-date-time-picker-custom-field';
       }
+
+      connectedCallback() {
+        this.__toggleHasValue = function(value) {
+          if (value !== null && value !== '' && value.split('T').indexOf('') === -1) {
+            this.setAttribute('has-value', '');
+          } else {
+            this.removeAttribute('has-value');
+          }
+        };
+
+        super.connectedCallback();
+      }
+
+      validate() {
+        return;
+      }
     }
 
     customElements.define(DateTimePickerCustomFieldElement.is, DateTimePickerCustomFieldElement);

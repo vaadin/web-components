@@ -13,6 +13,17 @@
   }
   ,
   {
+    "name": "Validation",
+    "url": "date-time-picker-validation-demos",
+    "src": "date-time-picker-validation-demos.html",
+    "meta": {
+      "title": "vaadin-date-time-picker Validation Examples",
+      "description": "",
+      "image": ""
+     }
+  }
+  ,
+  {
     "name": "Localization",
     "url": "date-time-picker-localization-demos",
     "src": "date-time-picker-localization-demos.html",

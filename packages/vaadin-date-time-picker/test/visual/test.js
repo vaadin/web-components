@@ -1,6 +1,6 @@
 gemini.suite('vaadin-date-time-picker', function(rootSuite) {
   function wait(actions, find) {
-    actions.wait(5000);
+    actions.wait(15000);
   }
 
   function goToAboutBlank(actions, find) {

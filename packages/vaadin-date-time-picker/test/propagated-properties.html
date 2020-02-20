@@ -37,29 +37,25 @@
         initial-position="1980-01-01"
         show-week-numbers
         label="Birth date and time"
-        disabled
-        readonly
+        error-message="error-message"
+        required
       ></vaadin-date-time-picker>
     </template>
   </test-fixture>
 
   <test-fixture id="slotted-initial-properties">
     <template>
-      <vaadin-date-time-picker label="Birth date and time" min="2019-09-01T08:00" max="2019-09-30T22:00">
+      <vaadin-date-time-picker label="Birth date and time" error-message="error-message" required min="2019-09-01T08:00" max="2019-09-30T22:00">
         <vaadin-date-picker slot="date-picker"
           value="2019-09-16"
           placeholder="Pick a date"
           initial-position="1980-01-01"
           show-week-numbers
-          disabled
-          readonly
         ></vaadin-date-picker>
         <vaadin-time-picker slot="time-picker"
           value="15:00"
           placeholder="Pick a time"
           step="1800"
-          disabled
-          readonly
         ></vaadin-time-picker>
       </vaadin-date-time-picker>
     </template>
@@ -218,6 +214,23 @@
           expect(customField.label).to.equal('Birth date and time');
         });
 
+        it('should propagate invalid to custom field', () => {
+          dateTimePicker.invalid = true;
+          expect(customField.invalid).to.be.true;
+        });
+
+        it('should propagate required to custom field', () => {
+          dateTimePicker.required = true;
+          expect(customField.required).to.be.true;
+          expect(datePicker.required).to.be.true;
+          expect(timePicker.required).to.be.true;
+        });
+
+        it('should propagate error-message to custom field', () => {
+          dateTimePicker.errorMessage = 'error-message';
+          expect(customField.errorMessage).to.equal('error-message');
+        });
+
         it('should propagate disabled to date and time pickers', () => {
           expect(datePicker.disabled).to.be.false;
           expect(timePicker.disabled).to.be.false;
@@ -290,6 +303,18 @@
           }
         });
 
+        it('should have initial value for errorMessage property', () => {
+          expect(dateTimePicker.errorMessage).to.equal('error-message');
+          expect(customField.errorMessage).to.equal('error-message');
+        });
+
+        it('should have initial value for required property', () => {
+          expect(dateTimePicker.required).to.be.true;
+          expect(customField.required).to.be.true;
+          expect(datePicker.required).to.be.true;
+          expect(timePicker.required).to.be.true;
+        });
+
         it('should have initial value for value property', () => {
           expect(dateTimePicker.value).to.equal('2019-09-16T15:00');
           expect(datePicker.value).to.equal('2019-09-16');
@@ -338,17 +363,6 @@
           expect(customField.label).to.equal('Birth date and time');
         });
 
-        it('should have initial value for disabled', () => {
-          expect(dateTimePicker.disabled).to.be.true;
-          expect(datePicker.disabled).to.be.true;
-          expect(timePicker.disabled).to.be.true;
-        });
-
-        it('should have initial value for readonly', () => {
-          expect(dateTimePicker.readonly).to.be.true;
-          expect(datePicker.readonly).to.be.true;
-          expect(timePicker.readonly).to.be.true;
-        });
 
       });
     });

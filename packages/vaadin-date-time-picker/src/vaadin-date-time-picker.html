@@ -40,12 +40,14 @@ This program is available under Apache License Version 2.0, available at https:/
 
       [part="date"],
       .slot-container ::slotted([slot="date-picker"]) {
+        pointer-events: all;
         min-width: 0;
         flex: 1 1 auto;
       }
 
       [part="time"],
       .slot-container ::slotted([slot="time-picker"]) {
+        pointer-events: all;
         min-width: 0;
         flex: 1 1.65 auto;
       }
@@ -56,8 +58,11 @@ This program is available under Apache License Version 2.0, available at https:/
         i18n="[[__customFieldValueFormat]]"
         label="[[label]]"
         theme$="[[theme]]"
+        invalid="[[invalid]]"
+        required="[[required]]"
         disabled$="[[disabled]]"
         readonly$="[[readonly]]"
+        error-message="[[errorMessage]]"
       >
       <div class="slot-container">
         <slot name="date-picker" id="dateSlot">
@@ -153,6 +158,36 @@ This program is available under Apache License Version 2.0, available at https:/
 
         static get properties() {
           return {
+            /**
+             * The name of the control, which is submitted with the form data.
+             */
+            name: {
+              type: String
+            },
+
+            /**
+             * Set to true if the value is invalid.
+             */
+            invalid: {
+              type: Boolean,
+              reflectToAttribute: true,
+              notify: true,
+              value: false
+            },
+
+            /**
+             * Set to true to mark the input as required.
+             */
+            required: {
+              type: Boolean,
+              value: false
+            },
+
+            /**
+             * The error message to display when the input is invalid.
+             */
+            errorMessage: String,
+
             /**
              * The value for this element.
              *
@@ -337,6 +372,8 @@ This program is available under Apache License Version 2.0, available at https:/
             '__stepChanged(step)',
             '__initialPositionChanged(initialPosition)',
             '__showWeekNumbersChanged(showWeekNumbers)',
+            '__requiredChanged(required)',
+            '__invalidChanged(invalid)',
             '__disabledChanged(disabled)',
             '__readonlyChanged(readonly)',
             '__i18nChanged(i18n.*)'
@@ -355,6 +392,13 @@ This program is available under Apache License Version 2.0, available at https:/
 
         ready() {
           super.ready();
+
+          this.addEventListener('focusout', e => {
+            if (e.relatedTarget !== this.__datePicker.$.overlay) {
+              this.validate();
+            }
+          });
+
           this.__changeEventHandler = this.__changeEventHandler.bind(this);
           this.__filterElements = node => node.nodeType === Node.ELEMENT_NODE;
 
@@ -426,6 +470,7 @@ This program is available under Apache License Version 2.0, available at https:/
           if (datePicker === defaultDatePicker) {
             // Synchronize properties to default date picker
             datePicker.placeholder = this.datePlaceholder;
+            datePicker.invalid = this.invalid;
             datePicker.initialPosition = this.initialPosition;
             datePicker.showWeekNumbers = this.showWeekNumbers;
             datePicker.disabled = this.disabled;
@@ -436,8 +481,6 @@ This program is available under Apache License Version 2.0, available at https:/
             this.datePlaceholder = datePicker.placeholder;
             this.initialPosition = datePicker.initialPosition;
             this.showWeekNumbers = datePicker.showWeekNumbers;
-            this.disabled = datePicker.disabled;
-            this.readonly = datePicker.readonly;
             this.__syncI18n(this, datePicker, datePickerI18nProps);
           }
 
@@ -445,6 +488,11 @@ This program is available under Apache License Version 2.0, available at https:/
           // min and max need to be dynamically set depending on currently selected date instead of simple propagation
           datePicker.min = this.__formatDateISO(this.__minDateTime, this.__defaultDateMinMaxValue);
           datePicker.max = this.__formatDateISO(this.__maxDateTime, this.__defaultDateMinMaxValue);
+          datePicker.required = this.required;
+
+          // Disable default internal validation for the component
+          datePicker.validate = () => {};
+          datePicker._validateInput = () => {};
         }
 
         __timePickerChanged() {
@@ -463,6 +511,7 @@ This program is available under Apache License Version 2.0, available at https:/
             // Synchronize properties to default time picker
             timePicker.placeholder = this.timePlaceholder;
             timePicker.step = this.step;
+            timePicker.invalid = this.invalid;
             timePicker.disabled = this.disabled;
             timePicker.readonly = this.readonly;
             this.__syncI18n(timePicker, this, timePickerI18nProps);
@@ -470,13 +519,16 @@ This program is available under Apache License Version 2.0, available at https:/
             // Synchronize properties from slotted time picker
             this.timePlaceholder = timePicker.placeholder;
             this.step = timePicker.step;
-            // Don't set disabled or readonly from time picker since they're already set from date picker
             this.__syncI18n(this, timePicker, timePickerI18nProps);
           }
 
           // min and max are always synchronized from parent to slotted because time picker min and max
           // need to be dynamically set depending on currently selected date instead of simple propagation
           this.__updateTimePickerMinMax();
+          timePicker.required = this.required;
+
+          // Disable default internal validation for the component
+          timePicker.validate = () => {};
         }
 
         __updateTimePickerMinMax() {
@@ -557,6 +609,24 @@ This program is available under Apache License Version 2.0, available at https:/
         __showWeekNumbersChanged(showWeekNumbers) {
           if (this.__datePicker) {
             this.__datePicker.showWeekNumbers = showWeekNumbers;
+          }
+        }
+
+        __invalidChanged(invalid) {
+          if (this.__datePicker) {
+            this.__datePicker.invalid = invalid;
+          }
+          if (this.__timePicker) {
+            this.__timePicker.invalid = invalid;
+          }
+        }
+
+        __requiredChanged(required) {
+          if (this.__datePicker) {
+            this.__datePicker.required = required;
+          }
+          if (this.__timePicker) {
+            this.__timePicker.required = required;
           }
         }
 
@@ -686,6 +756,31 @@ This program is available under Apache License Version 2.0, available at https:/
           return timeObject;
         }
 
+        /**
+         * Returns true if `value` is valid, and sets the `invalid` flag appropriately.
+         *
+         * @return {boolean} True if the value is valid.
+         */
+        validate() {
+          return !(this.invalid = !this.checkValidity());
+        }
+
+        /**
+         * Returns true if the current input value satisfies all constraints (if any)
+         *
+         * You can override the `checkValidity` method for custom validations.
+         */
+        checkValidity() {
+          const hasInvalidFields = this.$.customField.inputs
+            .filter(input => !(input.checkValidity).call(input)).length > 0;
+          const hasEmptyFields = this.required && this.$.customField.inputs.filter(el => !el.value).length > 0;
+
+          if (hasInvalidFields || hasEmptyFields) {
+            return false;
+          }
+          return true;
+        }
+
         // Copied from vaadin-time-picker
         /* istanbul ignore next */
         get __stepSegment() {
@@ -741,7 +836,9 @@ This program is available under Apache License Version 2.0, available at https:/
 
           if (this.__doDispatchChange) {
             this.__dispatchChange();
+            this.validate();
           }
+
         }
 
         __dispatchChange() {
