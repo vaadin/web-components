@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-date-time-picker",
-  "version": "1.0.0-alpha5",
+  "version": "1.0.0-alpha6",
   "description": "vaadin-date-time-picker",
   "main": "vaadin-date-time-picker.html",
   "repository": "vaadin/vaadin-date-time-picker",
