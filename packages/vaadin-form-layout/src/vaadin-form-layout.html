@@ -296,7 +296,9 @@ This program is available under Apache License Version 2.0, available at https:/
 
           this.__mutationObserver = new MutationObserver(mutationRecord => {
             mutationRecord.forEach(mutation => {
-              if (mutation.type === 'attributes' && mutation.attributeName === 'colspan') {
+              if (mutation.type === 'attributes'
+                && ((mutation.attributeName === 'colspan')
+                || (mutation.attributeName === 'hidden'))) {
                 this._invokeUpdateStyles();
               }
             });

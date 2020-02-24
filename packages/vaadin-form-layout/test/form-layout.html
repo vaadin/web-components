@@ -545,6 +545,20 @@
         expect(estimateEffectiveColspan(layout.children[0])).to.be.closeTo(2, .1);
       });
 
+      it('should update style if hidden property of layout-item is changed and the element has not had style yet', async() => {
+        const itemWidth = layout.children[0].getBoundingClientRect().width;
+        expect(itemWidth).to.be.above(0);
+        const newFormItem = document.createElement('vaadin-form-item');
+        newFormItem.hidden = true;
+        layout.appendChild(newFormItem);
+        await nextRender();
+        expect(newFormItem.getBoundingClientRect().width).to.equal(0);
+        newFormItem.hidden = false;
+        await nextRender();
+        const unhiddenItemWidth = newFormItem.getBoundingClientRect().width;
+        expect(unhiddenItemWidth).to.equal(itemWidth);
+      });
+
       it('should update layout after updating a colspan attribute on the lazily stamped node', async() => {
         container.push('items', {label: 'Email', colspan: 1});
         await nextRender();

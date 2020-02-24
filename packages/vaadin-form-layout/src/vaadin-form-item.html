@@ -28,6 +28,10 @@ This program is available under Apache License Version 2.0, available at https:/
         align-items: stretch;
       }
 
+      :host([hidden]) {
+        display: none !important;
+      }
+
       #label {
         width: var(--vaadin-form-item-label-width);
         flex: 0 0 auto;
