@@ -154,6 +154,7 @@ This program is available under Apache License Version 2.0, available at https:/
     static get observers() {
       return [
         '_sizeChanged(size)',
+        '_itemIdPathChanged(itemIdPath)',
         '_expandedItemsChanged(expandedItems.*)'
       ];
     }
@@ -231,13 +232,27 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _isExpanded(item) {
-      return this.expandedItems && this._getItemIndexInArray(item, this.expandedItems) > -1;
+      return this.__expandedKeys.has(this.getItemId(item));
     }
 
     _expandedItemsChanged(e) {
+      this.__cacheExpandedKeys();
       this._cache.updateSize();
       this._effectiveSize = this._cache.effectiveSize;
       this._assignModels();
+    }
+
+    _itemIdPathChanged(e) {
+      this.__cacheExpandedKeys();
+    }
+
+    __cacheExpandedKeys() {
+      if (this.expandedItems) {
+        this.__expandedKeys = new Set();
+        this.expandedItems.forEach(item => {
+          this.__expandedKeys.add(this.getItemId(item));
+        });
+      }
     }
 
     /**
@@ -294,11 +309,13 @@ This program is available under Apache License Version 2.0, available at https:/
             }
           }
 
+          const currentItems = Array.from(this.$.items.children).map(row => row._item);
+
           // Populate the cache with new items
           items.forEach((item, itemsIndex) => {
             const itemIndex = page * this.pageSize + itemsIndex;
             cache.items[itemIndex] = item;
-            if (this._isExpanded(item)) {
+            if (this._isExpanded(item) && currentItems.indexOf(item) > -1) {
               // Force synchronous data request for expanded item sub-cache
               cache.ensureSubCacheForScaledIndex(itemIndex);
             }
@@ -308,24 +325,21 @@ This program is available under Apache License Version 2.0, available at https:/
 
           delete cache.pendingRequests[page];
 
-          if (!this._cache.isLoading()) {
-            // All active requests have finished, update the effective size and rows
-            this._setLoading(false);
-            this._cache.updateSize();
-            this._effectiveSize = this._cache.effectiveSize;
+          this._setLoading(false);
+          this._cache.updateSize();
+          this._effectiveSize = this._cache.effectiveSize;
 
-            Array.from(this.$.items.children)
-              .filter(row => !row.hidden)
-              .forEach(row => {
-                const cachedItem = this._cache.getItemForIndex(row.index);
-                if (cachedItem) {
-                  this._toggleAttribute('loading', false, row);
-                  this._updateItem(row, cachedItem);
-                }
-              });
+          Array.from(this.$.items.children)
+            .filter(row => !row.hidden)
+            .forEach(row => {
+              const cachedItem = this._cache.getItemForIndex(row.index);
+              if (cachedItem) {
+                this._toggleAttribute('loading', false, row);
+                this._updateItem(row, cachedItem);
+              }
+            });
 
-            this._increasePoolIfNeeded(0);
-          }
+          this._increasePoolIfNeeded(0);
 
           this.__itemsReceived();
         });
