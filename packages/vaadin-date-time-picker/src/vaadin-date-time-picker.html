@@ -473,8 +473,6 @@ This program is available under Apache License Version 2.0, available at https:/
             datePicker.invalid = this.invalid;
             datePicker.initialPosition = this.initialPosition;
             datePicker.showWeekNumbers = this.showWeekNumbers;
-            datePicker.disabled = this.disabled;
-            datePicker.readonly = this.readonly;
             this.__syncI18n(datePicker, this, datePickerI18nProps);
           } else {
             // Synchronize properties from slotted date picker
@@ -489,6 +487,8 @@ This program is available under Apache License Version 2.0, available at https:/
           datePicker.min = this.__formatDateISO(this.__minDateTime, this.__defaultDateMinMaxValue);
           datePicker.max = this.__formatDateISO(this.__maxDateTime, this.__defaultDateMinMaxValue);
           datePicker.required = this.required;
+          datePicker.disabled = this.disabled;
+          datePicker.readonly = this.readonly;
 
           // Disable default internal validation for the component
           datePicker.validate = () => {};
@@ -512,8 +512,6 @@ This program is available under Apache License Version 2.0, available at https:/
             timePicker.placeholder = this.timePlaceholder;
             timePicker.step = this.step;
             timePicker.invalid = this.invalid;
-            timePicker.disabled = this.disabled;
-            timePicker.readonly = this.readonly;
             this.__syncI18n(timePicker, this, timePickerI18nProps);
           } else {
             // Synchronize properties from slotted time picker
@@ -526,6 +524,8 @@ This program is available under Apache License Version 2.0, available at https:/
           // need to be dynamically set depending on currently selected date instead of simple propagation
           this.__updateTimePickerMinMax();
           timePicker.required = this.required;
+          timePicker.disabled = this.disabled;
+          timePicker.readonly = this.readonly;
 
           // Disable default internal validation for the component
           timePicker.validate = () => {};

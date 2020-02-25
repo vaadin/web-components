@@ -7,6 +7,7 @@
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <link rel="import" href="../../test-fixture/test-fixture.html">
   <link rel="import" href="../vaadin-date-time-picker.html">
+  <script src="common.js"></script>
 </head>
 
 <body>
@@ -27,7 +28,7 @@
 
   <test-fixture id="initial-properties">
     <template>
-      <vaadin-date-time-picker 
+      <vaadin-date-time-picker
         value="2019-09-16T15:00"
         min="2019-09-01T08:00"
         max="2019-09-30T22:00"
@@ -39,13 +40,21 @@
         label="Birth date and time"
         error-message="error-message"
         required
+        disabled
+        readonly
       ></vaadin-date-time-picker>
     </template>
   </test-fixture>
 
   <test-fixture id="slotted-initial-properties">
     <template>
-      <vaadin-date-time-picker label="Birth date and time" error-message="error-message" required min="2019-09-01T08:00" max="2019-09-30T22:00">
+      <vaadin-date-time-picker label="Birth date and time"
+          error-message="error-message"
+          required
+          disabled
+          readonly
+          min="2019-09-01T08:00"
+          max="2019-09-30T22:00">
         <vaadin-date-picker slot="date-picker"
           value="2019-09-16"
           placeholder="Pick a date"
@@ -303,19 +312,39 @@
           }
         });
 
-        it('should have initial value for errorMessage property', () => {
+        it('should have initial value for errorMessage', () => {
           expect(dateTimePicker.errorMessage).to.equal('error-message');
           expect(customField.errorMessage).to.equal('error-message');
         });
 
-        it('should have initial value for required property', () => {
+        it('should have initial value for required', () => {
           expect(dateTimePicker.required).to.be.true;
           expect(customField.required).to.be.true;
           expect(datePicker.required).to.be.true;
           expect(timePicker.required).to.be.true;
         });
 
+        it('should have initial value for disabled', () => {
+          expect(dateTimePicker.disabled).to.be.true;
+          expect(datePicker.disabled).to.be.true;
+          expect(timePicker.disabled).to.be.true;
+        });
+
+        it('should have initial value for readonly', () => {
+          expect(dateTimePicker.readonly).to.be.true;
+          expect(datePicker.readonly).to.be.true;
+          expect(timePicker.readonly).to.be.true;
+        });
+
         it('should have initial value for value property', () => {
+          if (ie11 && set === 'slotted' && customField.hasAttribute('disabled')) {
+            // In IE11 with the slotted fixture the value doesn't get propagated from custom-field
+            // to date-time-picker for some reason when the custom-field has "disabled" attribute.
+            // For this tests sake (which is not supposed to test disabled state anyway) we can fix
+            // this by manually triggering the custom-field value change handler in date-time-picker.
+            dateTimePicker.__customFieldValueChanged(new CustomEvent('value-changed', {detail: {value: customField.value}}));
+          }
+
           expect(dateTimePicker.value).to.equal('2019-09-16T15:00');
           expect(datePicker.value).to.equal('2019-09-16');
           expect(timePicker.value).to.equal('15:00');
@@ -362,7 +391,6 @@
           expect(dateTimePicker.label).to.equal('Birth date and time');
           expect(customField.label).to.equal('Birth date and time');
         });
-
 
       });
     });
