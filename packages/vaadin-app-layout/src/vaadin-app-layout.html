@@ -176,6 +176,7 @@ This program is available under Apache License Version 2.0, available at https:/
     <div part="navbar" id="navbarBottom" bottom hidden>
       <slot name="navbar-bottom"></slot>
     </div>
+    <div hidden><slot id="touchSlot" name="navbar touch-optimized"></slot></div>
   </template>
   <script>
     (function() {
@@ -358,7 +359,16 @@ This program is available under Apache License Version 2.0, available at https:/
 
           this._updateTouchOptimizedMode();
 
-          this._navbarChildObserver = new Polymer.FlattenedNodesObserver(this.$.drawerSlot, (info) => {
+          const navbarSlot = this.$.navbarTop.firstElementChild;
+          this._navbarChildObserver = new Polymer.FlattenedNodesObserver(navbarSlot, (info) => {
+            this._updateTouchOptimizedMode();
+          });
+
+          this._touchChildObserver = new Polymer.FlattenedNodesObserver(this.$.touchSlot, (info) => {
+            this._updateTouchOptimizedMode();
+          });
+
+          this._drawerChildObserver = new Polymer.FlattenedNodesObserver(this.$.drawerSlot, (info) => {
             this._updateDrawerSize();
           });
           this._updateDrawerSize();
@@ -374,6 +384,8 @@ This program is available under Apache License Version 2.0, available at https:/
           super.disconnectedCallback();
 
           this._navbarChildObserver && this._navbarChildObserver.disconnect();
+          this._drawerChildObserver && this._drawerChildObserver.disconnect();
+          this._touchChildObserver && this._touchChildObserver.disconnect();
           window.removeEventListener('resize', this.__boundResizeListener);
           this.removeEventListener('drawer-toggle-click', this.__drawerToggleClickListener);
           this.removeEventListener('close-overlay-drawer', this.__drawerToggleClickListener);
