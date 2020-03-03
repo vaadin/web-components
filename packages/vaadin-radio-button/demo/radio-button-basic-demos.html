@@ -78,12 +78,12 @@
           <vaadin-radio-button value="two">Option two</vaadin-radio-button>
           <vaadin-radio-button value="three">Option three</vaadin-radio-button>
         </vaadin-radio-group>
-        <div id="output">Selected value:</div>
+        <div>Selected value: <span id="output"></span></div>
         <script>
           window.addDemoReadyListener('#value-change-event', function(document) {
             const radioButtonGroup = document.querySelector('vaadin-radio-group');
             const output = document.querySelector('#output');
-            radioButtonGroup.addEventListener('value-changed', function(event) {
+            radioButtonGroup.addEventListener('change', function(event) {
               output.textContent = radioButtonGroup.value;
             });
           });
