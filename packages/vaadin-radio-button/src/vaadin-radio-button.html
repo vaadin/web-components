@@ -50,7 +50,7 @@ This program is available under Apache License Version 2.0, available at https:/
       <span part="radio">
         <input
           type="radio"
-          checked="{{checked::change}}"
+          checked="[[checked]]"
           disabled$="[[disabled]]"
           role="presentation"
           on-change="_onChange"
@@ -260,6 +260,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _onChange(e) {
+          this.checked = e.target.checked;
           // In the Shadow DOM, the `change` event is not leaked into the
           // ancestor tree, so we must do this manually.
           const changeEvent = new CustomEvent('change', {

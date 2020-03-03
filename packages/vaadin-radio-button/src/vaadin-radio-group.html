@@ -352,6 +352,10 @@ This program is available under Apache License Version 2.0, available at https:/
 
           this._checkedButton = button;
 
+          if (this._checkedButton) {
+            this.value = this._checkedButton.value;
+          }
+    
           this._radioButtons.forEach(button => {
             if (button === this._checkedButton) {
               if (fireChangeEvent) {
@@ -363,10 +367,6 @@ This program is available under Apache License Version 2.0, available at https:/
               button.checked = false;
             }
           });
-
-          if (this._checkedButton) {
-            this.value = this._checkedButton.value;
-          }
 
           this.validate();
           this.readonly && this._updateDisableButtons();
