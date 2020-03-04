@@ -57,6 +57,7 @@
       <vaadin-dialog draggable opened>
         <template>
           <div>Draggable dialog</div>
+          <div class="draggable">Draggable area</div>
           <button>OK</button>
         </template>
       </vaadin-dialog>
@@ -359,6 +360,13 @@
 
         it('should drag and move dialog if mousedown on [part="content"]', () => {
           drag(content);
+          const draggedBounds = container.getBoundingClientRect();
+          expect(Math.floor(draggedBounds.top)).to.be.eql(Math.floor(bounds.top + dx));
+          expect(Math.floor(draggedBounds.left)).to.be.eql(Math.floor(bounds.left + dx));
+        });
+
+        it('should drag and move dialog if mousedown on element with [class="draggable"]', () => {
+          drag(dialog.$.overlay.querySelector('.draggable'));
           const draggedBounds = container.getBoundingClientRect();
           expect(Math.floor(draggedBounds.top)).to.be.eql(Math.floor(bounds.top + dx));
           expect(Math.floor(draggedBounds.left)).to.be.eql(Math.floor(bounds.left + dx));
