@@ -294,13 +294,13 @@
             overlayPointer.renderer = function(root) {
               root.textContent = 'I am next to the pointer';
             };
-            const isRtl = overlayPointer.getAttribute('rtl');
+            const isRtl = overlayPointer.getAttribute('dir') === 'rtl';
             overlayPointer.setAttribute(
               'style',
               'left: ' + event.clientX + 'px;' +
               'top: ' + event.clientY + 'px;' +
               'align-items: flex-' +
-              (isRtl ? 'start' : 'end') +
+              (isRtl ? 'end' : 'start') +
               '; justify-content: flex-start;'
             );
             overlayPointer.opened = true;
