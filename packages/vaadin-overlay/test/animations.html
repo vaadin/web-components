@@ -13,6 +13,22 @@
 </head>
 
 <body>
+  <dom-module id="overlay-test-styles" theme-for="vaadin-overlay">
+    <template>
+      <style>
+        :host([animate][opening]),
+        :host([animate][closing]) {
+          animation: 50ms overlay-dummy-animation;
+        }
+
+        @keyframes overlay-dummy-animation {
+          to {
+            opacity: 1 !important; /* stylelint-disable-line keyframe-declaration-no-important */
+          }
+        }
+      </style>
+    </template>
+  </dom-module>
 
   <test-fixture id="default">
     <template>
@@ -70,122 +86,218 @@
     </script>
   </dom-module>
 
+  <test-fixture id="content-animation">
+    <template>
+      <div>
+        <vaadin-overlay>
+          <template>
+            <div>Plain old content</div>
+          </template>
+        </vaadin-overlay>
+        <vaadin-overlay>
+          <template>
+            <animated-div>Fancy content</animated-div>
+          </template>
+        </vaadin-overlay>
+      </div>
+    </template>
+  </test-fixture>
+
+  <dom-module id="animated-div">
+    <template>
+      <style>
+        :host {
+          animation: 1ms div-dummy-animation;
+        }
+
+        @keyframes div-dummy-animation {
+          to {
+            opacity: 1 !important; /* stylelint-disable-line keyframe-declaration-no-important */
+          }
+        }
+      </style>
+      <slot></slot>
+    </template>
+
+    <script>
+      customElements.whenDefined('vaadin-overlay').then(() => {
+        class AnimatedDiv extends Polymer.Element {
+          static get is() {
+            return 'animated-div';
+          }
+        }
+
+        customElements.define(AnimatedDiv.is, AnimatedDiv);
+      });
+    </script>
+  </dom-module>
+
   <script>
-    function mockOverlayAnimations(overlay) {
-      overlay.style.setProperty('animation-name', 'close-anim');
-
-      sinon.stub(overlay, '_enqueueAnimation', (type, callback) => {
-        const handler = `__${type}Handler`;
-        overlay[handler] = Polymer.Debouncer.debounce(overlay[handler], Polymer.Async.timeOut, () => {
-          callback();
-        });
+    function afterOverlayOpeningFinished(overlay, callback) {
+      const observer = new MutationObserver((mutations, observer) => {
+        for (let i = 0; i < mutations.length; i++) {
+          const mutation = mutations[i];
+          if (mutation.attributeName === 'opening') {
+            const target = mutation.target;
+            const hasFinishedOpening = target.hasAttribute('opened') && !target.hasAttribute('opening');
+            if (hasFinishedOpening) {
+              observer.disconnect();
+              Polymer.RenderStatus.afterNextRender(overlay, callback);
+              return;
+            }
+          }
+        }
       });
-
-      sinon.stub(overlay, '_flushAnimation', type => {
-        const handler = `__${type}Handler`;
-        overlay[handler].flush();
-      });
+      observer.observe(overlay, {attributes: true, attributeFilter: ['opening']});
     }
 
-    describe('animated overlay', () => {
-      let overlay;
-
-      beforeEach(() => {
-        overlay = fixture('default');
-        mockOverlayAnimations(overlay);
+    function afterOverlayClosingFinished(overlay, callback) {
+      const observer = new MutationObserver((mutations, observer) => {
+        for (let i = 0; i < mutations.length; i++) {
+          const mutation = mutations[i];
+          if (mutation.attributeName === 'closing') {
+            const target = mutation.target;
+            const hasFinishedClosing = !target.hasAttribute('opened') && !target.hasAttribute('closing');
+            if (hasFinishedClosing) {
+              observer.disconnect();
+              Polymer.RenderStatus.afterNextRender(overlay, callback);
+              return;
+            }
+          }
+        }
       });
+      observer.observe(overlay, {attributes: true, attributeFilter: ['closing']});
+    }
 
-      afterEach(() => {
-        overlay.opened = false;
-      });
+    [false, true].forEach(withAnimation => {
+      const titleSuffix = withAnimation ? ' (animated)' : '';
 
-      it('should flush closing overlay when re-opened while closing animation is in progress', () => {
-        overlay.opened = true;
-        overlay._flushAnimation('opening');
+      describe(`animated overlay${titleSuffix}`, () => {
+        let overlay;
 
-        overlay.opened = false;
-        overlay.opened = true;
+        beforeEach(() => {
+          overlay = fixture('default');
+          if (withAnimation) {
+            overlay.setAttribute('animate', '');
+          }
+        });
 
-        expect(overlay.hasAttribute('closing')).to.be.false;
-      });
+        afterEach(() => {
+          overlay.opened = false;
+        });
 
-      it('should flush opening overlay when closed while opening animation is in progress', () => {
-        overlay.opened = true;
-        overlay.opened = false;
+        it('should flush closing overlay when re-opened while closing animation is in progress', () => {
+          overlay.opened = true;
+          overlay._flushAnimation('opening');
 
-        expect(overlay.hasAttribute('opening')).to.be.false;
-      });
+          overlay.opened = false;
+          overlay.opened = true;
 
-      it('should detach the overlay even if it is scheduled for reopening', () => {
-        overlay.opened = true;
-        overlay.opened = false;
-        overlay.opened = true;
-        overlay.opened = false;
-        overlay._flushAnimation('closing');
+          expect(overlay.hasAttribute('closing')).to.be.false;
+        });
 
-        expect(overlay.parentNode).not.to.equal(document.body);
-      });
+        it('should flush opening overlay when closed while opening animation is in progress', () => {
+          overlay.opened = true;
+          overlay.opened = false;
 
-      it('should not animate closing if the overlay is explicilty hidden', () => {
-        overlay.opened = true;
-        overlay.hidden = true;
-        overlay.opened = false;
-        expect(overlay.parentNode).not.to.equal(document.body);
-      });
+          expect(overlay.hasAttribute('opening')).to.be.false;
+        });
 
-      it('should close the overlay if hidden is set while closing', () => {
-        overlay.opened = true;
-        overlay.opened = false;
-        overlay.hidden = true;
-        expect(overlay.parentNode).not.to.equal(document.body);
-      });
+        it('should detach the overlay even if it is scheduled for reopening', () => {
+          overlay.opened = true;
+          overlay.opened = false;
+          overlay.opened = true;
+          overlay.opened = false;
+          overlay._flushAnimation('closing');
 
-      it('should close the overlay when ESC pressed while opening', () => {
-        overlay.opened = true;
-        MockInteractions.pressAndReleaseKeyOn(document.body, 27, [], 'Escape');
-        expect(overlay.opened).to.equal(false);
-      });
-    });
+          expect(overlay.parentNode).not.to.equal(document.body);
+        });
 
-    describe('switching two overlays', () => {
-      let wrapper, overlays;
+        it('should not animate closing if the overlay is explicitly hidden', () => {
+          overlay.opened = true;
+          overlay.hidden = true;
+          overlay.opened = false;
+          expect(overlay.parentNode).not.to.equal(document.body);
+        });
 
-      beforeEach(done => {
-        wrapper = fixture('switching');
-        overlays = Array.from(wrapper.shadowRoot.querySelectorAll('vaadin-overlay'));
-        overlays.forEach(overlay => mockOverlayAnimations(overlay));
-        overlays[0].opened = true;
-        Polymer.RenderStatus.afterNextRender(overlays[0], done);
-      });
+        it('should close the overlay if hidden is set while closing', () => {
+          overlay.opened = true;
+          overlay.opened = false;
+          overlay.hidden = true;
+          expect(overlay.parentNode).not.to.equal(document.body);
+        });
 
-      it('should remove pointer events on previously opened overlay', done => {
-        overlays[0].content.querySelector('button').click();
-        Polymer.RenderStatus.afterNextRender(overlays[1], () => {
-          expect(overlays[0].$.overlay.style.pointerEvents).to.equal('');
-          done();
+        it('should close the overlay when ESC pressed while opening', () => {
+          overlay.opened = true;
+          MockInteractions.pressAndReleaseKeyOn(document.body, 27, [], 'Escape');
+          expect(overlay.opened).to.equal(false);
         });
       });
-    });
 
-    describe('simultaneous opening', () => {
-      let wrapper, overlays;
+      describe(`switching two overlays${titleSuffix}`, () => {
+        let wrapper, overlays;
 
-      beforeEach(() => {
-        wrapper = fixture('switching');
-        overlays = Array.from(wrapper.shadowRoot.querySelectorAll('vaadin-overlay'));
-        overlays.forEach(overlay => mockOverlayAnimations(overlay));
+        beforeEach(done => {
+          wrapper = fixture('switching');
+          overlays = Array.from(wrapper.shadowRoot.querySelectorAll('vaadin-overlay'));
+          if (withAnimation) {
+            overlays.forEach(overlay => overlay.setAttribute('animate', ''));
+          }
+          afterOverlayOpeningFinished(overlays[0], done);
+          overlays[0].opened = true;
+        });
+
+        it('should remove pointer events on previously opened overlay', done => {
+          afterOverlayClosingFinished(overlays[0], () => {
+            expect(overlays[0].$.overlay.style.pointerEvents).to.equal('');
+            done();
+          });
+          overlays[0].content.querySelector('button').click();
+        });
       });
 
-      it('should not remove pointer events on last opened overlay', done => {
-        overlays[1].addEventListener('vaadin-overlay-open', e => {
-          Polymer.RenderStatus.afterNextRender(overlays[1], () => {
+      describe(`simultaneous opening${titleSuffix}`, () => {
+        let wrapper, overlays;
+
+        beforeEach(() => {
+          wrapper = fixture('switching');
+          overlays = Array.from(wrapper.shadowRoot.querySelectorAll('vaadin-overlay'));
+          if (withAnimation) {
+            overlays.forEach(overlay => overlay.setAttribute('animate', ''));
+          }
+        });
+
+        it('should not remove pointer events on last opened overlay', done => {
+          afterOverlayOpeningFinished(overlays[1], () => {
             expect(overlays[0].$.overlay.style.pointerEvents).to.equal('none');
             expect(overlays[1].$.overlay.style.pointerEvents).to.equal('');
             done();
           });
+          overlays[0].opened = true;
+          overlays[1].opened = true;
         });
-        overlays[0].opened = true;
-        overlays[1].opened = true;
+      });
+
+      describe(`simultaneous opening with animated content${titleSuffix}`, () => {
+        let wrapper, overlays;
+
+        beforeEach(() => {
+          wrapper = fixture('content-animation');
+          overlays = Array.from(wrapper.querySelectorAll('vaadin-overlay'));
+          if (withAnimation) {
+            overlays.forEach(overlay => overlay.setAttribute('animate', ''));
+          }
+        });
+
+        it('should not remove pointer events on last opened overlay', done => {
+          afterOverlayOpeningFinished(overlays[1], () => {
+            expect(overlays[0].$.overlay.style.pointerEvents).to.equal('none');
+            expect(overlays[1].$.overlay.style.pointerEvents).to.equal('');
+            done();
+          });
+          overlays[0].opened = true;
+          overlays[1].opened = true;
+        });
       });
     });
   </script>
