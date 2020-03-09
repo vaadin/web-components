@@ -225,6 +225,10 @@ This program is available under Apache License Version 2.0, available at https:/
             this.removeAttribute('active');
 
             if (!this.checked && !this.disabled) {
+              // If you change this block, please test manually that radio-button and
+              // radio-group still works ok on iOS 12/13 and up as it may cause
+              // an issue that is not possible to test programmatically.
+              // See: https://github.com/vaadin/vaadin-radio-button/issues/140
               this.click();
             }
           });
@@ -251,7 +255,13 @@ This program is available under Apache License Version 2.0, available at https:/
          * @protected
          */
         click() {
-          this.shadowRoot.querySelector('input').click();
+          // If you change this block, please test manually that radio-button and
+          // radio-group still works ok on iOS 12/13 and up as it may cause
+          // an issue that is not possible to test programmatically.
+          // See: https://github.com/vaadin/vaadin-radio-button/issues/140
+          if (!this.disabled) {
+            this.shadowRoot.querySelector('input').dispatchEvent(new MouseEvent('click'));
+          }
         }
 
         /** @protected */
