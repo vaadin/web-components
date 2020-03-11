@@ -7,6 +7,8 @@
   <script src='../../webcomponentsjs/webcomponents-lite.js'></script>
   <link rel="import" href="../../test-fixture/test-fixture.html">
   <link rel="import" href="../src/vaadin-combo-box-dropdown.html">
+  <link rel="import" href="../src/vaadin-combo-box.html">
+  <link rel="import" href="../../vaadin-dialog/src/vaadin-dialog.html">
 </head>
 
 <body>
@@ -15,6 +17,16 @@
         <vaadin-combo-box-dropdown>
           <template></template>
         </vaadin-combo-box-dropdown>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="in-modeless-dialog">
+    <template>
+      <vaadin-dialog modeless>
+        <template>
+          <vaadin-combo-box items="[1,2,3]"></vaadin-combo-box>
+        </template>
+      </vaadin-dialog>
     </template>
   </test-fixture>
 
@@ -52,6 +64,51 @@
 
         it('should be before content part', () => {
           expect(loader.nextElementSibling.getAttribute('part')).to.include('content');
+        });
+      });
+    });
+
+    describe('frontmost', () => {
+      var dialog;
+      beforeEach(() => {
+        dialog = fixture('in-modeless-dialog');
+        dialog.opened = true;
+      });
+
+      function touchstart(node) {
+        const event = new CustomEvent('touchstart', {bubbles: true, cancelable: true});
+    
+        const nodeRect = node.getBoundingClientRect();
+        const clientX = nodeRect.left;
+        const clientY = nodeRect.top;
+
+        event.touches = event.changedTouches = event.targetTouches = [{clientX, clientY}];
+        node.dispatchEvent(event);
+      }
+
+      it('should not end up behind the dialog overlay on mousedown', (done) => {
+        const dialogOverlay = dialog.$.overlay;
+        const cbBox = dialog.$.overlay.querySelector('vaadin-combo-box');
+
+        cbBox.open();
+        const cbBoxDropdownWrapper = cbBox.$.overlay;
+        cbBox.dispatchEvent(new CustomEvent('mousedown', {bubbles: true, composed: true}));
+        requestAnimationFrame(() => {
+          expect(cbBoxDropdownWrapper.$.dropdown.$.overlay._last).to.be.true;
+          done();
+        });
+      });
+
+      it('should not end up behind the dialog overlay on touchstart', (done) => {
+        const dialogOverlay = dialog.$.overlay;
+        const cbBox = dialog.$.overlay.querySelector('vaadin-combo-box');
+
+        cbBox.open();
+        const cbBoxDropdownWrapper = cbBox.$.overlay;
+        touchstart(cbBox);
+        requestAnimationFrame(() => {
+          expect(cbBoxDropdownWrapper.$.dropdown.$.overlay._last).to.be.true;
+          done();
         });
       });
     });

@@ -262,6 +262,20 @@ This program is available under Apache License Version 2.0, available at https:/
       this._observer = new Polymer.FlattenedNodesObserver(this, info => {
         this._setTemplateFromNodes(info.addedNodes);
       });
+
+      const bringToFrontListener = (e) => {
+        const overlay = this.$.overlay;
+        const dropdown = overlay && overlay.$.dropdown;
+        // Check dropdown.$ because overlay is lazily instantiated
+        if (dropdown && dropdown.$ && this.$.overlay.$.dropdown.$.overlay.bringToFront) {
+          requestAnimationFrame(() => {
+            dropdown.$.overlay.bringToFront();
+          });
+        }
+      };
+  
+      this.addEventListener('mousedown', bringToFrontListener);
+      this.addEventListener('touchstart', bringToFrontListener);
     }
 
 
