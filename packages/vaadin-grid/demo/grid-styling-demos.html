@@ -22,11 +22,11 @@
           <template>
             <style>
               /* Background needs a stronger selector to not be overridden */
-              [part~="cell"].female {
+              [part~="cell"].subscribed {
                 background: rgb(255, 240, 240);
               }
 
-              [part~="cell"].male {
+              [part~="cell"].not-subscribed {
                 background: rgb(245, 245, 255);
               }
 
@@ -49,7 +49,7 @@
             grid.items = Vaadin.GridDemo.users;
 
             grid.cellClassNameGenerator = function(column, rowData) {
-              let classes = rowData.item.gender;
+              let classes = rowData.item.subscribed == 'true' ? 'subscribed' : 'not-subscribed';
               if (column.path === 'email') {
                 classes += ' email';
               }
@@ -71,11 +71,11 @@
           <template>
             <style>
               /* Background needs a stronger selector to not be overridden */
-              [part~="cell"].female {
+              [part~="cell"].subscribed {
                 background: rgb(255, 240, 240);
               }
 
-              [part~="cell"].male {
+              [part~="cell"].not-subscribed {
                 background: rgb(245, 245, 255);
               }
 
@@ -126,7 +126,7 @@
             };
 
             grid.cellClassNameGenerator = function(column, rowData) {
-              let classes = rowData.item.gender;
+              let classes = rowData.item.subscribed == 'true' ? 'subscribed' : 'not-subscribed';
               if (column.path === 'email') {
                 classes += ' email';
               } else if (column.path === 'name.first' && checkedItems.indexOf(rowData.item) > -1) {
