@@ -277,6 +277,15 @@ This program is available under Apache License Version 2.0, available at https:/
           this._observer = new Polymer.FlattenedNodesObserver(this, info => {
             this._setTemplateFromNodes(info.addedNodes);
           });
+
+          // We need to prevent dragging behind the non-draggable content of the dialog (i.e slotted text / button)
+          this.$.overlay.$.content.addEventListener('touchmove', this._preventMove, {passive: false});
+        }
+
+        _preventMove(e) {
+          if (e.touches.length < 2) {
+            e.preventDefault();
+          }
         }
 
         _setTemplateFromNodes(nodes) {

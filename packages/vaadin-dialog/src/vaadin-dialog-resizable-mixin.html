@@ -148,7 +148,8 @@
 
       _resize(e, resizer) {
         const event = this.__getMouseOrFirstTouchEvent(e);
-        if (this._eventInWindow(event)) {
+        if (this._eventInWindow(event) &&
+          (e.type !== 'touchmove' || e.type === 'touchmove' && e.touches.length < 2)) {
           const minimumSize = 40;
           resizer.split('').forEach((direction) => {
             switch (direction) {

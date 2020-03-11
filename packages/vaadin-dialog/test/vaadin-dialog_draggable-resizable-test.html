@@ -480,7 +480,7 @@
 
       describe('touch', () => {
 
-        function dispatchTouchEvent(target, type, coords = {x: 0, y: 0}) {
+        function dispatchTouchEvent(target, type, coords = {x: 0, y: 0}, multitouch = false) {
           const e = new CustomEvent(type, {
             bubbles: true,
             cancelable: true,
@@ -492,10 +492,20 @@
             pageX: coords.x,
             pageY: coords.y,
           }];
+
+          if (multitouch) {
+            e.touches.push({
+              clientX: coords.x + 10,
+              clientY: coords.y + 10,
+              pageX: coords.x + 10,
+              pageY: coords.y + 10,
+            });
+          }
           target.dispatchEvent(e);
+          return e;
         }
 
-        function touchDrag(target, dx = 1, dy = 1) {
+        function touchDrag(target, dx = 1, dy = 1, multitouch = false) {
           const bounds = target.getBoundingClientRect();
           const fromXY = {
             x: Math.floor(bounds.left + (bounds.width / 2)),
@@ -503,11 +513,11 @@
           };
           const toXY = {x: fromXY.x + dx, y: fromXY.y + dx};
           dispatchTouchEvent(target, 'touchstart', fromXY);
-          dispatchTouchEvent(target, 'touchmove', toXY);
+          dispatchTouchEvent(target, 'touchmove', toXY, multitouch);
           dispatchTouchEvent(target, 'touchend', toXY);
         }
 
-        function touchResize(target, dx = 1, dy = 1) {
+        function touchResize(target, dx = 1, dy = 1, multitouch = false) {
           const bounds = target.getBoundingClientRect();
           const fromXY = {
             x: Math.floor(bounds.left + (bounds.width / 2)),
@@ -516,7 +526,7 @@
 
           const toXY = {x: fromXY.x + dx, y: fromXY.y + dy};
           dispatchTouchEvent(target, 'touchstart', fromXY);
-          dispatchTouchEvent(target, 'touchmove', toXY);
+          dispatchTouchEvent(target, 'touchmove', toXY, multitouch);
           dispatchTouchEvent(target, 'touchend', toXY);
         }
 
@@ -542,9 +552,32 @@
           draggable.opened = true;
         });
 
+        it('should prevent default of the touchmove when dragged', () => {
+          const e = dispatchTouchEvent(draggableOverlay.$.content, 'touchmove');
+          expect(e.defaultPrevented).to.be.true;
+        });
+
         it('should bring to front on touch start', () => {
           dispatchTouchEvent(resizableContainer, 'touchstart');
           expect(getFrontmostOverlayFromScreenCenter()).to.equal(resizableOverlay);
+        });
+
+        it('should not move dialog if there more than two fingers used', () => {
+          const d = 1;
+          const bounds = draggableContainer.getBoundingClientRect();
+          touchDrag(draggableContainer, d, d, true);
+          const draggedBounds = draggableContainer.getBoundingClientRect();
+          ['top', 'left'].forEach(prop =>
+            expect(Math.floor(draggedBounds[prop])).to.be.eql(Math.floor(bounds[prop])));
+        });
+
+        it('should not resize dialog if there more than two fingers used', () => {
+          const d = 100;
+          const bounds = resizableContainer.getBoundingClientRect();
+          touchResize(resizableOverlayPart.querySelector('.ne'), d, -d, true);
+          const resizedBounds = resizableContainer.getBoundingClientRect();
+          ['top', 'left', 'width', 'height'].forEach(prop =>
+            expect(Math.floor(resizedBounds[prop])).to.be.eql(Math.floor(bounds[prop])));
         });
 
         it('should drag and move dialog', () => {
@@ -567,9 +600,9 @@
 
         it('should resize dialog from top right corner', () => {
           const d = 100;
-          const bounds = resizableContainer.getBoundingClientRect();
+          const bounds = resizableOverlayPart.getBoundingClientRect();
           touchResize(resizableOverlayPart.querySelector('.ne'), d, -d);
-          const resizedBounds = resizableContainer.getBoundingClientRect();
+          const resizedBounds = resizableOverlayPart.getBoundingClientRect();
           expect(Math.floor(resizedBounds.top)).to.be.eql(Math.floor(bounds.top - d));
           expect(Math.floor(resizedBounds.left)).to.be.eql(Math.floor(bounds.left));
           expect(Math.floor(resizedBounds.width)).to.be.eql(Math.floor(bounds.width + d));

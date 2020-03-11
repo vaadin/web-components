@@ -29,7 +29,6 @@
           const isContentPart = e.target === this.$.overlay.$.content;
           const isDraggable = e.target.classList.contains('draggable');
           if ((isResizerContainer && !isResizerContainerScrollbar) || isContentPart || isDraggable) {
-            !isDraggable && e.preventDefault();
             this._originalBounds = this._getOverlayBounds();
             const event = this.__getMouseOrFirstTouchEvent(e);
             this._originalMouseCoords = {top: event.pageY, left: event.pageX};
@@ -46,7 +45,8 @@
 
       _drag(e) {
         const event = this.__getMouseOrFirstTouchEvent(e);
-        if (this._eventInWindow(event)) {
+        if (this._eventInWindow(event) &&
+          (e.type !== 'touchmove' || e.type === 'touchmove' && e.touches.length < 2)) {
           const top = this._originalBounds.top + (event.pageY - this._originalMouseCoords.top);
           const left = this._originalBounds.left + (event.pageX - this._originalMouseCoords.left);
           this._setBounds({top, left});
