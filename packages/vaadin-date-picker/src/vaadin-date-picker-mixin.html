@@ -358,6 +358,17 @@ This program is available under Apache License Version 2.0, available at https:/
       this._overlayContent.addEventListener('focus', () => this.focusElement._setFocused(true));
 
       this.$.overlay.addEventListener('vaadin-overlay-close', this._onVaadinOverlayClose.bind(this));
+
+      const bringToFrontListener = (e) => {
+        if (this.$.overlay.bringToFront) {
+          requestAnimationFrame(() => {
+            this.$.overlay.bringToFront();
+          });
+        }
+      };
+  
+      this.addEventListener('mousedown', bringToFrontListener);
+      this.addEventListener('touchstart', bringToFrontListener);
     }
 
     /**

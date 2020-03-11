@@ -10,6 +10,8 @@
   <link rel="import" href="../../test-fixture/test-fixture.html">
 
   <link rel="import" href="../src/vaadin-date-picker-overlay-content.html">
+  <link rel="import" href="../src/vaadin-date-picker.html">
+  <link rel="import" href="../../vaadin-dialog/src/vaadin-dialog.html">
   <link rel="import" href="../../polymer/lib/utils/render-status.html">
 </head>
 
@@ -18,6 +20,16 @@
   <test-fixture id="overlay">
     <template>
       <vaadin-date-picker-overlay-content></vaadin-date-picker-overlay-content>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="in-modeless-dialog">
+    <template>
+      <vaadin-dialog modeless>
+        <template>
+          <vaadin-date-picker></vaadin-date-picker>
+        </template>
+      </vaadin-dialog>
     </template>
   </test-fixture>
 
@@ -344,6 +356,54 @@
               expect(overlay.$.todayButton.disabled).to.be.true;
             });
           });
+        });
+      });
+    });
+
+    describe('frontmost', () => {
+      var dialog;
+      beforeEach(() => {
+        dialog = fixture('in-modeless-dialog');
+      });
+
+      function touchstart(node) {
+        const event = new CustomEvent('touchstart', {bubbles: true, cancelable: true});
+    
+        const nodeRect = node.getBoundingClientRect();
+        const clientX = nodeRect.left;
+        const clientY = nodeRect.top;
+
+        event.touches = event.changedTouches = event.targetTouches = [{clientX, clientY}];
+        node.dispatchEvent(event);
+      }
+
+      it('should not end up behind the dialog overlay on mousedown', (done) => {
+        dialog.opened = true;
+        const dialogOverlay = dialog.$.overlay;
+        const datePicker = dialog.$.overlay.querySelector('vaadin-date-picker');
+        const datePickerOverlay = datePicker.$.overlay;
+    
+        datePicker.opened = true;
+    
+        datePicker.dispatchEvent(new CustomEvent('mousedown', {bubbles: true, composed: true}));
+        requestAnimationFrame(() => {
+          expect(datePickerOverlay._last).to.be.true;
+          done();
+        });
+      });
+
+      it('should not end up behind the dialog overlay on touchstart', (done) => {
+        dialog.opened = true;
+        const dialogOverlay = dialog.$.overlay;
+        const datePicker = dialog.$.overlay.querySelector('vaadin-date-picker');
+        const datePickerOverlay = datePicker.$.overlay;
+
+        datePicker.opened = true;
+
+        touchstart(datePicker);
+        requestAnimationFrame(() => {
+          expect(datePickerOverlay._last).to.be.true;
+          done();
         });
       });
     });
