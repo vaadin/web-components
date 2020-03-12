@@ -39,6 +39,7 @@
                       // for 12am midnight, set hours to 0
                       hours = 0;
                     } else {
+                      // Add 12 hours if the time is after noon.
                       hours = parseInt(parts[1]) + (parts[3] === 'PM' ? 12 : 0);
                     }
                   }
