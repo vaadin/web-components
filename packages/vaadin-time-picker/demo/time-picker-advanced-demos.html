@@ -56,36 +56,37 @@
 
     <h3>Custom Validator</h3>
     <p>Extend <code>Vaadin.TimePickerElement</code> to create your own custom element,
-      then override the <code>checkValidity()</code> method to validate the input.</p>
-      <vaadin-demo-snippet id="time-picker-advanced-demos-custom-validator" when-defined="vaadin-time-picker" ignore-ie>
-        <template preserve-content>
-          <vaadin-time-picker-working-hours label="Delivery hour"
-          error-message="Select a vaild working hour (9:00 to 17:00)"></vaadin-time-picker-working-hours>
+      then override the <code>checkValidity()</code> method to validate the input.
+    </p>
+    <vaadin-demo-snippet id="time-picker-advanced-demos-custom-validator" when-defined="vaadin-time-picker" ignore-ie>
+      <template preserve-content>
+        <vaadin-time-picker-working-hours label="Delivery hour"
+        error-message="Select a vaild working hour (9:00 to 17:00)"></vaadin-time-picker-working-hours>
 
-          <script>
-            window.addDemoReadyListener('#time-picker-advanced-demos-custom-validator', function(document) {
-              class TimePickerWorkingHoursElement extends Vaadin.TimePickerElement {
-                checkValidity() {
-                  var hour = /^(\d+)/.exec(this.value)[1];
-                  return hour >= 9 && hour < 17;
-                }
+        <script>
+          window.addDemoReadyListener('#time-picker-advanced-demos-custom-validator', function(document) {
+            class TimePickerWorkingHoursElement extends Vaadin.TimePickerElement {
+              checkValidity() {
+                var hour = /^(\d+)/.exec(this.value)[1];
+                return hour >= 9 && hour < 17;
               }
+            }
 
-              if (!customElements.get('vaadin-time-picker-working-hours')) {
-                customElements.define('vaadin-time-picker-working-hours', TimePickerWorkingHoursElement);
-              }
-            });
-          </script>
-        </template>
-      </vaadin-demo-snippet>
+            if (!customElements.get('vaadin-time-picker-working-hours')) {
+              customElements.define('vaadin-time-picker-working-hours', TimePickerWorkingHoursElement);
+            }
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
 
-    </template>
-    <script>
-      class TimePickerAdvancedDemos extends DemoReadyEventEmitter(ElementDemo(Polymer.Element)) {
-        static get is() {
-          return 'time-picker-advanced-demos';
-        }
+  </template>
+  <script>
+    class TimePickerAdvancedDemos extends DemoReadyEventEmitter(ElementDemo(Polymer.Element)) {
+      static get is() {
+        return 'time-picker-advanced-demos';
       }
-      customElements.define(TimePickerAdvancedDemos.is, TimePickerAdvancedDemos);
-    </script>
-  </dom-module>
+    }
+    customElements.define(TimePickerAdvancedDemos.is, TimePickerAdvancedDemos);
+  </script>
+</dom-module>
