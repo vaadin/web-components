@@ -19,9 +19,38 @@
       The <code>step</code> property specified in seconds affects the resolution of the time picker and visibility of the dropdown.
       If step is less than 15 mins dropdown is hidden
     </p>
-    <vaadin-demo-snippet id="time-picker-basic-demos-step-example">
+    <vaadin-demo-snippet id="time-picker-basic-demos-step-example" when-defined="vaadin-time-picker">
       <template preserve-content>
-        <vaadin-time-picker step="0.5" label="Duration (hh:mm:ss.fff)"></vaadin-time-picker>
+        <vaadin-combo-box id="combobox-step-selection" value="1800" label="Step" style="width: 250px;"></vaadin-combo-box>
+        <vaadin-time-picker id="time-picker-basic-demos-value-resolution" value="12:00:00" step="1800" label="Duration (hh:mm)"></vaadin-time-picker>
+        <script>
+          window.addDemoReadyListener('#time-picker-basic-demos-step-example', function(document) {
+            const comboBox = document.querySelector('#combobox-step-selection');
+            const timePicker = document.querySelector('#time-picker-basic-demos-value-resolution');
+            comboBox.items = [
+              {value: '0.5', label: '0.5 seconds (hh:mm:ss.fff)'},
+              {value: '1', label: '1 second (hh:mm:ss)'},
+              {value: '60', label: '1 minute (hh:mm)'},
+              {value: String(60 * 15), label: '15 minutes (hh:mm)'},
+              {value: String(60 * 30), label: '30 minutes (hh:mm)'},
+              {value: String(60 * 60), label: '1 hour (hh:mm)'},
+              {value: String(60 * 60 * 2), label: '2 hours (hh:mm)'}
+            ];
+            comboBox.addEventListener('change', function(event) {
+              const step = parseFloat(event.target.value);
+              timePicker.step = step;
+              if (step < 1) {
+                // Less than a second
+                timePicker.label = 'Duration (hh:mm:ss.fff)';
+              } else if (step < 60) {
+                // Less than a minute
+                timePicker.label = 'Duration (hh:mm:ss)';
+              } else {
+                timePicker.label = 'Duration (hh:mm)';
+              }
+            });
+          });
+        </script>
       </template>
     </vaadin-demo-snippet>
 
