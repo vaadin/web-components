@@ -29,8 +29,24 @@
               parseTime: function(timeString) {
                 if (timeString) {
                   const parts = /^(\d{1,2})(?::(\d{1,2}))?(?:\s(\w{2}))?$/.exec(timeString);
+                  let hours;
+
+                  if (parts) {
+                    if (parts[1] === '12') {
+                      if (parts[3] === 'PM') {
+                        // for 12pm noon, set hours to 12
+                        hours = 12;
+                      } else if (parts[3] === 'AM') {
+                        // for 12am midnight, set hours to 0
+                        hours = 0;
+                      }
+                    } else {
+                      // Add 12 hours if the time is after noon.
+                      hours = parseInt(parts[1]) + (parts[3] === 'PM' ? 12 : 0);
+                    }
+                  }
                   return parts && {
-                    hours: parseInt(parts[1]) + (parts[3] == 'PM' ? 12 : 0),
+                    hours: hours,
                     minutes: parts[2]
                   };
                 }
@@ -43,11 +59,12 @@
 
     <h3>Custom Validator</h3>
     <p>Extend <code>Vaadin.TimePickerElement</code> to create your own custom element,
-       then override the <code>checkValidity()</code> method to validate the input.</p>
+      then override the <code>checkValidity()</code> method to validate the input.
+    </p>
     <vaadin-demo-snippet id="time-picker-advanced-demos-custom-validator" when-defined="vaadin-time-picker" ignore-ie>
       <template preserve-content>
         <vaadin-time-picker-working-hours label="Delivery hour"
-          error-message="Select a vaild working hour (9:00 to 17:00)"></vaadin-time-picker-working-hours>
+        error-message="Select a valid working hour (9:00 to 17:00)"></vaadin-time-picker-working-hours>
 
         <script>
           window.addDemoReadyListener('#time-picker-advanced-demos-custom-validator', function(document) {
