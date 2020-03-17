@@ -76,6 +76,7 @@
     disconnectedCallback() {
       super.disconnectedCallback();
       this.__subscribe(false);
+      this.removeAttribute('dir');
     }
 
     __subscribe(push = true) {

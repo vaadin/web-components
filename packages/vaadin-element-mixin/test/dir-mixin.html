@@ -132,6 +132,16 @@
           element
         )).to.be.true;
       });
+
+      it('should clean up the changes after unsubscribing', async() => {
+        // Emulating overlay behaviour
+        setDir('rtl');
+        await nextRender(element);
+        document.body.appendChild(element);
+        setDir('ltr');
+        await nextRender(element);
+        expect(element.getAttribute('dir')).to.eql('ltr');
+      });
     });
   </script>
 </body>
