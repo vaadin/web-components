@@ -205,6 +205,11 @@
           });
         });
 
+        it('should reflect to attribute when readonly property is set', () => {
+          timePicker.readonly = true;
+          expect(timePicker.hasAttribute('readonly')).to.be.true;
+        });
+
         describe('aria', () => {
           it('text-field should have the `aria-label` attribute', () => {
             expect(timePicker.__inputElement.hasAttribute('aria-label')).to.be.false;
