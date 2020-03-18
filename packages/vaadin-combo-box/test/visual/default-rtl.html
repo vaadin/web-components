@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+
+<head lang="en">
+  <meta charset="UTF-8">
+
+  <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script>
+    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-combo-box.html">`);
+    document.documentElement.setAttribute('dir', 'rtl');
+  </script>
+</head>
+
+<body>
+
+  <div id="default-rtl-tests" style="padding: 10px;">
+    Plain
+    <vaadin-combo-box></vaadin-combo-box>
+
+    <br>Label
+    <vaadin-combo-box label="Element"></vaadin-combo-box>
+
+    <br>Value
+    <vaadin-combo-box value="Carbon" items='["Carbon"]'></vaadin-combo-box>
+  </div>
+
+</body>

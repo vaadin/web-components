@@ -5,9 +5,13 @@
 
   <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
   <script>
+    const dir = window.location.search.replace(/.*dir=(\w+).*/, '$1') || 'ltr';
+    document.documentElement.setAttribute('dir', dir);
+
     const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
     document.write(`<link rel="import" href="../../theme/${theme}/vaadin-combo-box.html">`);
   </script>
+
   <dom-module id="text-field-styles" theme-for="vaadin-text-field">
     <template>
       <style>
@@ -23,8 +27,8 @@
 <body>
 
   <div id="dropdown-tests" style="padding: 10px; min-height: 300px;">
-    Plain template
-    <vaadin-combo-box id="plain" item-label-path="name" item-value-path="symbol"></vaadin-combo-box>
+    Selected item
+    <vaadin-combo-box id="selected" value="He" item-label-path="name" item-value-path="symbol"></vaadin-combo-box>
 
     <br> Item template
     <vaadin-combo-box id="template" item-label-path="name" item-value-path="symbol">

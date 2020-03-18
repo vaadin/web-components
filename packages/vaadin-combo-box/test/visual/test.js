@@ -15,6 +15,13 @@ gemini.suite('vaadin-combo-box', function(rootSuite) {
     .after(goToAboutBlank);
 
   ['lumo', 'material'].forEach(theme => {
+    gemini.suite(`default-rtl-tests-${theme}`, function(suite) {
+      suite
+        .setUrl(`default-rtl.html?theme=${theme}`)
+        .setCaptureElements('#default-rtl-tests')
+        .capture('default');
+    });
+
     gemini.suite(`default-tests-${theme}`, function(suite) {
       suite
         .setUrl(`default.html?theme=${theme}`)
@@ -36,20 +43,28 @@ gemini.suite('vaadin-combo-box', function(rootSuite) {
         .capture('default');
     });
 
-    gemini.suite(`dropdown-${theme}`, function(suite) {
-      suite
-        .setUrl(`dropdown.html?theme=${theme}`)
-        .setCaptureElements('#dropdown-tests')
-        .capture('default', function(actions) {
-          actions.executeJS(function(window) {
-            window.document.querySelector('#plain').open();
+    ['ltr', 'rtl'].forEach(dir => {
+      gemini.suite(`dropdown-${theme}-${dir}-selected`, function(suite) {
+        suite
+          .setUrl(`dropdown.html?theme=${theme}&dir=${dir}`)
+          .setCaptureElements('#dropdown-tests')
+          .capture('default', function(actions) {
+            actions.executeJS(function(window) {
+              window.document.querySelector('#selected').open();
+            });
           });
-        })
-        .capture('template', function(actions) {
-          actions.executeJS(function(window) {
-            window.document.querySelector('#template').open();
+      });
+
+      gemini.suite(`dropdown-${theme}-${dir}-template`, function(suite) {
+        suite
+          .setUrl(`dropdown.html?theme=${theme}&dir=${dir}`)
+          .setCaptureElements('#dropdown-tests')
+          .capture('template', function(actions) {
+            actions.executeJS(function(window) {
+              window.document.querySelector('#template').open();
+            });
           });
-        });
+      });
     });
   });
 
