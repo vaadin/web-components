@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-time-picker",
-  "version": "2.0.6",
+  "version": "2.0.7",
   "description": "vaadin-time-picker",
   "main": "vaadin-time-picker.html",
   "repository": "vaadin/vaadin-time-picker",
