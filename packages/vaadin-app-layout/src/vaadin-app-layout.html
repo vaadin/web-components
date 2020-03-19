@@ -94,6 +94,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       [part="drawer"] {
+        overflow: auto;
         position: fixed;
         top: var(--vaadin-app-layout-navbar-offset-top, 0);
         right: auto;
@@ -414,6 +415,7 @@ This program is available under Apache License Version 2.0, available at https:/
             if (this.drawerOpened) {
               drawer.setAttribute('tabindex', 0);
               drawer.focus();
+              this._updateDrawerHeight();
             }
           }
         }
@@ -496,7 +498,19 @@ This program is available under Apache License Version 2.0, available at https:/
           } else {
             this.style.setProperty('--_vaadin-app-layout-drawer-offset-size', drawerRect.width + 'px');
           }
+        }
 
+        _updateDrawerHeight() {
+          const {scrollHeight, offsetHeight} = this.$.drawer;
+          const height = scrollHeight > offsetHeight ? `${scrollHeight}px` : '100%';
+
+          if (this._isShadyCSS()) {
+            window.ShadyCSS.styleSubtree(this, {
+              '--_vaadin-app-layout-drawer-scroll-size': height
+            });
+          } else {
+            this.style.setProperty('--_vaadin-app-layout-drawer-scroll-size', height);
+          }
         }
 
         _updateOverlayMode() {
@@ -524,6 +538,8 @@ This program is available under Apache License Version 2.0, available at https:/
             drawer.removeAttribute('aria-modal');
             drawer.removeAttribute('aria-label');
           }
+
+          this._updateDrawerHeight();
 
           // TODO(jouni): ARIA attributes. The drawer should act similar to a modal dialog when in ”overlay” mode
         }

@@ -116,6 +116,23 @@
         window.ShadyCSS.styleSubtree(layout, {'--vaadin-app-layout-drawer-overlay': null});
       });
 
+      it('should set custom CSS property to scrollHeight when drawer has overflow', () => {
+        // force overlay=true to show backdrop
+        window.ShadyCSS.styleSubtree(layout, {'--vaadin-app-layout-drawer-overlay': 'true'});
+        layout._updateOverlayMode();
+
+        const drawer = layout.$.drawer;
+        drawer.style.height = '50px';
+        layout.drawerOpened = true;
+
+        const property = '--_vaadin-app-layout-drawer-scroll-size';
+        const value = window.ShadyCSS ?
+          window.ShadyCSS.getComputedStyleValue(layout, property) :
+          getComputedStyle(layout).getPropertyValue(property);
+        expect(value).to.equal(`${drawer.scrollHeight}px`);
+        window.ShadyCSS.styleSubtree(layout, {'--vaadin-app-layout-drawer-overlay': null});
+      });
+
       it('should be able to change primary-section to "drawer"', () => {
         // force it to desktop layout
         window.ShadyCSS.styleSubtree(layout, {'--vaadin-app-layout-drawer-overlay': 'false'});
