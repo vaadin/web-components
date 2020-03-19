@@ -11,19 +11,22 @@ gemini.suite('vaadin-ordered-layout', function(rootSuite) {
         window.location.href = 'about:blank'; // just go away, please!
       });
     });
-  ['lumo', 'material'].forEach(theme => {
-    gemini.suite(`horizontal-layout-${theme}`, function(suite) {
-      suite
-        .setUrl(`default.html?theme=${theme}`)
-        .setCaptureElements('#horizontal-layout')
-        .capture('horizontal-layout');
-    });
 
-    gemini.suite(`vertical-layout-${theme}`, function(suite) {
-      suite
-        .setUrl(`default.html?theme=${theme}`)
-        .setCaptureElements('#vertical-layout')
-        .capture('vertical-layout');
+  ['ltr', 'rtl'].forEach(dir => {
+    ['lumo', 'material'].forEach(theme => {
+      gemini.suite(`horizontal-layout-${theme}-${dir}`, function(suite) {
+        suite
+          .setUrl(`default.html?theme=${theme}&dir=${dir}`)
+          .setCaptureElements('#horizontal-layout')
+          .capture('horizontal-layout');
+      });
+
+      gemini.suite(`vertical-layout-${theme}-${dir}`, function(suite) {
+        suite
+          .setUrl(`default.html?theme=${theme}&dir=${dir}`)
+          .setCaptureElements('#vertical-layout')
+          .capture('vertical-layout');
+      });
     });
   });
 });

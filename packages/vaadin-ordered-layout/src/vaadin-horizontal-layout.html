@@ -29,8 +29,12 @@ This program is available under Apache License Version 2.0, available at https:/
         padding: 1em;
       }
 
-      :host([theme~="spacing"]) ::slotted(*) {
+      :host([theme~="spacing"]:not([dir="rtl"])) ::slotted(*) {
         margin-left: 1em;
+      }
+
+      :host([theme~="spacing"][dir="rtl"]) ::slotted(*) {
+        margin-right: 1em;
       }
 
       /*
@@ -39,7 +43,14 @@ This program is available under Apache License Version 2.0, available at https:/
        */
       :host([theme~="spacing"])::before {
         content: "";
+      }
+
+      :host([theme~="spacing"]:not([dir="rtl"]))::before {
         margin-left: -1em;
+      }
+
+      :host([theme~="spacing"][dir="rtl"])::before {
+        margin-right: -1em;
       }
     </style>
 
