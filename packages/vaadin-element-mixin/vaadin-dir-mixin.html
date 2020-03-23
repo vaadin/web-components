@@ -1,3 +1,5 @@
+<link rel="import" href="vaadin-dir-helper.html">
+
 <script>
 (function() {
   /**
@@ -10,6 +12,8 @@
       alignDirs(element, documentDir);
     });
   };
+
+  const scrollType = Vaadin.DirHelper.detectScrollType();
 
   const directionObserver = new MutationObserver(directionUpdater);
   directionObserver.observe(document.documentElement, {attributes: true, attributeFilter: ['dir']});
@@ -87,6 +91,14 @@
         directionSubscribers.indexOf(this) > -1 &&
           directionSubscribers.splice(directionSubscribers.indexOf(this), 1);
       }
+    }
+
+    __getNormalizedScrollLeft(element) {
+      return Vaadin.DirHelper.getNormalizedScrollLeft(scrollType, this.getAttribute('dir') || 'ltr', element);
+    }
+
+    __setNormalizedScrollLeft(element, scrollLeft) {
+      return Vaadin.DirHelper.setNormalizedScrollLeft(scrollType, this.getAttribute('dir') || 'ltr', element, scrollLeft);
     }
   };
 })();
