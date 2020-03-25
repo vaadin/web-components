@@ -221,21 +221,30 @@
             });
 
             it('should not be marked required', function() {
-              expect(input.hasAttribute('aria-required')).to.be.false;
+              expect(input.hasAttribute('required')).to.be.false;
             });
 
             it('should be marked required', function() {
               tf.required = true;
-              expect(input.hasAttribute('aria-required')).to.be.true;
+              expect(input.getAttribute('required')).to.equal('');
             });
 
             it('should not be marked readonly', function() {
-              expect(input.hasAttribute('aria-readonly')).to.be.false;
+              expect(input.hasAttribute('readonly')).to.be.false;
             });
 
             it('should be marked readonly', function() {
               tf.readonly = true;
-              expect(input.hasAttribute('aria-readonly')).to.be.true;
+              expect(input.getAttribute('readonly')).to.equal('');
+            });
+
+            it('should not be marked disabled', function() {
+              expect(input.hasAttribute('disabled')).to.be.false;
+            });
+
+            it('should be marked disabled', function() {
+              tf.disabled = true;
+              expect(input.getAttribute('disabled')).to.equal('');
             });
 
             describe('clear icon button', function() {
@@ -316,7 +325,7 @@
             });
 
             it('should be marked invalid', function() {
-              expect(input.hasAttribute('aria-invalid')).to.be.true;
+              expect(input.getAttribute('aria-invalid')).to.equal('true');
             });
 
             it('should not be marked invalid', function() {
