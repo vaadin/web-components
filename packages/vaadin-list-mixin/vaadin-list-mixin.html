@@ -4,6 +4,7 @@ Copyright (c) 2017 Vaadin Ltd.
 This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
 -->
 <link rel="import" href="../polymer/lib/utils/flattened-nodes-observer.html">
+<link rel="import" href="../vaadin-element-mixin/vaadin-dir-helper.html">
 
 <script>
   /**
@@ -148,6 +149,10 @@ This program is available under Apache License Version 2.0, available at https:/
       return this._getAvailableIndex(idx, increment, condition);
     }
 
+    get _isRTL() {
+      return !this._vertical && this.getAttribute('dir') === 'rtl';
+    }
+
     _onKeydown(event) {
       if (event.metaKey || event.ctrlKey) {
         return;
@@ -169,8 +174,7 @@ This program is available under Apache License Version 2.0, available at https:/
       const condition = item => !(item.disabled || this._isItemHidden(item));
       let idx, increment;
 
-      const isRTL = !this._vertical && this.getAttribute('dir') === 'rtl';
-      const dirIncrement = isRTL ? -1 : 1;
+      const dirIncrement = this._isRTL ? -1 : 1;
 
       if (this._vertical && key === 'Up' || !this._vertical && key === 'Left') {
         increment = -dirIncrement;
@@ -178,10 +182,10 @@ This program is available under Apache License Version 2.0, available at https:/
       } else if (this._vertical && key === 'Down' || !this._vertical && key === 'Right') {
         increment = dirIncrement;
         idx = currentIdx + dirIncrement;
-      } else if ((key === 'Home' && !isRTL) || (key === 'End' && isRTL)) {
+      } else if (key === 'Home') {
         increment = 1;
         idx = 0;
-      } else if ((key === 'End' && !isRTL) || (key === 'Home' && isRTL)) {
+      } else if (key === 'End') {
         increment = -1;
         idx = this.items.length - 1;
       }
@@ -248,15 +252,19 @@ This program is available under Apache License Version 2.0, available at https:/
         return;
       }
 
-      const props = this._vertical ? ['top', 'bottom'] : ['left', 'right'];
+      const props = this._vertical ? ['top', 'bottom'] :
+        this._isRTL ? ['right', 'left'] : ['left', 'right'];
+
       const scrollerRect = this._scrollerElement.getBoundingClientRect();
       const nextItemRect = (this.items[idx + 1] || item).getBoundingClientRect();
       const prevItemRect = (this.items[idx - 1] || item).getBoundingClientRect();
 
       let scrollDistance = 0;
-      if (nextItemRect[props[1]] >= scrollerRect[props[1]]) {
+      if (!this._isRTL && nextItemRect[props[1]] >= scrollerRect[props[1]] ||
+        this._isRTL && nextItemRect[props[1]] <= scrollerRect[props[1]]) {
         scrollDistance = nextItemRect[props[1]] - scrollerRect[props[1]];
-      } else if (prevItemRect[props[0]] <= scrollerRect[props[0]]) {
+      } else if (!this._isRTL && prevItemRect[props[0]] <= scrollerRect[props[0]] ||
+        this._isRTL && prevItemRect[props[0]] >= scrollerRect[props[0]]) {
         scrollDistance = prevItemRect[props[0]] - scrollerRect[props[0]];
       }
 
@@ -269,7 +277,15 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _scroll(pixels) {
-      this._scrollerElement['scroll' + (this._vertical ? 'Top' : 'Left')] += pixels;
+      if (this._vertical) {
+        this._scrollerElement['scrollTop'] += pixels;
+      } else {
+        const scrollType = Vaadin.DirHelper.detectScrollType();
+        const scrollLeft = Vaadin.DirHelper.getNormalizedScrollLeft(scrollType,
+          this.getAttribute('dir') || 'ltr', this._scrollerElement) + pixels;
+        Vaadin.DirHelper.setNormalizedScrollLeft(scrollType,
+          this.getAttribute('dir') || 'ltr', this._scrollerElement, scrollLeft);
+      }
     }
 
     /**

@@ -26,7 +26,8 @@
     "wct.conf.js"
   ],
   "dependencies": {
-    "polymer": "^2.0.0"
+    "polymer": "^2.0.0",
+    "vaadin-element-mixin": "^2.3.1"
   },
   "devDependencies": {
     "iron-test-helpers": "^2.0.0",

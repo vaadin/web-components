@@ -312,15 +312,15 @@
             expect(list.items[0].focused).to.be.true;
           });
 
-          it('should move focus to last element on "home" keydown', () => {
+          it('should move focus to first element on "home" keydown', () => {
             home(list);
-            expect(list.items[6].focused).to.be.true;
+            expect(list.items[0].focused).to.be.true;
           });
 
-          it('should move focus to first element on "end" keydown', () => {
+          it('should move focus to last element on "end" keydown', () => {
             list._focus(3);
             end(list);
-            expect(list.items[0].focused).to.be.true;
+            expect(list.items[6].focused).to.be.true;
           });
 
         });
@@ -532,14 +532,36 @@
           list.style.width = list.style.height = '50px';
         });
 
-        it(`when orientation is horizontal should move scroll horizontally`, () => {
+        it('when orientation is horizontal should scroll in advance when reaching right most visible item', () => {
+          list.orientation = 'horizontal';
+          list._focus(0);
+          arrowRight(list);
+
+          const itemRectRight = list.items[2].getBoundingClientRect().right;
+          const listRectRight = list.getBoundingClientRect().right;
+
+          expect(listRectRight).to.be.closeTo(itemRectRight, 1);
+        });
+
+        it('when orientation is horizontal should scroll in advance when reaching left most visible item', () => {
+          list.orientation = 'horizontal';
+          list._focus(3);
+          arrowLeft(list);
+
+          const itemRectLeft = list.items[0].getBoundingClientRect().left;
+          const listRectLeft = list.getBoundingClientRect().left;
+
+          expect(listRectLeft).to.be.closeTo(itemRectLeft, 1);
+        });
+
+        it('when orientation is horizontal should move scroll horizontally', () => {
           list.orientation = 'horizontal';
           expect(list._scrollerElement.scrollLeft).to.be.equal(0);
           list._scrollToItem(1);
           expect(list._scrollerElement.scrollLeft).to.be.greaterThan(0);
         });
 
-        it(`when orientation is vertical should move scroll vertically`, () => {
+        it('when orientation is vertical should move scroll vertically', () => {
           list.orientation = 'vertical';
           expect(list._scrollerElement.scrollTop).to.be.equal(0);
 
@@ -552,10 +574,38 @@
 
           expect(list._scrollerElement.scrollTop).to.be.greaterThan(0);
         });
+
+        describe('RTL mode', () => {
+
+          beforeEach(() => {
+            list.orientation = 'horizontal';
+            list.setAttribute('dir', 'rtl');
+          });
+
+          it('should scroll in advance when reaching left most visible item', () => {
+            list._focus(0);
+            arrowLeft(list);
+
+            const itemRectLeft = list.items[2].getBoundingClientRect().left;
+            const listRectLeft = list.getBoundingClientRect().left;
+
+            expect(listRectLeft).to.be.closeTo(itemRectLeft, 1);
+          });
+
+          it('should scroll in advance when reaching right most visible item', () => {
+            list._focus(3);
+            arrowRight(list);
+
+            const itemRectRight = list.items[0].getBoundingClientRect().right;
+            const listRectRight = list.getBoundingClientRect().right;
+
+            expect(listRectRight).to.be.closeTo(itemRectRight, 1);
+          });
+        });
       });
 
       describe('Disable', () => {
-        it(`when list and items are disabled the previously selected item should be selected after enabling the list`, () => {
+        it('when list and items are disabled the previously selected item should be selected after enabling the list', () => {
           list.selected = 3;
           expect(list.items[3].selected).to.be.true;
 
@@ -650,7 +700,7 @@
           expect(list._scrollerElement.scrollLeft).to.be.greaterThan(0);
         });
 
-        it(`when orientation is vertical should move scroll vertically on item selection`, () => {
+        it('when orientation is vertical should move scroll vertically on item selection', () => {
           list.multiple = true;
           list.style.display = 'flex';
           list.style.height = '50px';
