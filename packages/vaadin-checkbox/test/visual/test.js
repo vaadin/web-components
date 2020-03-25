@@ -39,6 +39,13 @@ gemini.suite('vaadin-checkbox', function(rootSuite) {
         .capture('default');
     });
 
+    gemini.suite(`theme-vertical-group-tests-${theme}`, (suite) => {
+      suite
+        .setUrl(`default.html?theme=${theme}`)
+        .setCaptureElements('#theme-vertical-group-tests')
+        .capture('default');
+    });
+
     gemini.suite(`disabled-group-tests-${theme}`, (suite) => {
       suite
         .setUrl(`default.html?theme=${theme}`)
