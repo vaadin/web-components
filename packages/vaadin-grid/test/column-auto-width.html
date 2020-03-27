@@ -39,6 +39,7 @@
     describe('column auto-width', function() {
       let grid;
       let columns;
+      let spy;
       const testItems = [
         {a: 'fubar', b: 'foo', c: 'foo', d: 'a'},
         {a: 'foo', b: 'foo bar baz', c: 'foo', d: 'bar'},
@@ -66,7 +67,7 @@
 
       beforeEach(done => {
         grid = fixture('auto-width');
-        sinon.spy(grid, '_recalculateColumnWidths');
+        spy = sinon.spy(grid, '_recalculateColumnWidths');
         columns = grid.querySelectorAll('vaadin-grid-column');
         // Show the grid and wait for animationend event ("vaadin-grid-appear")
         // to ensure the grid is in a consistent state before starting each test
@@ -92,7 +93,8 @@
             );
           });
         };
-
+        spy.reset();
+        expect(grid._recalculateColumnWidths.called).to.be.false;
         whenColumnWidthsCalculated(() => {
           expectColumnWidthsToBeOk(columns);
           done();
@@ -106,6 +108,8 @@
         requestAnimationFrame(() => {
           grid.hidden = false;
 
+          spy.reset();
+          expect(grid._recalculateColumnWidths.called).to.be.false;
           whenColumnWidthsCalculated(() => {
             expectColumnWidthsToBeOk(columns);
             done();
