@@ -36,6 +36,11 @@ This program is available under Apache License Version 2.0, available at https:/
         },
 
         /**
+         * Set true to prevent the overlay from opening automatically.
+         */
+        autoOpenDisabled: Boolean,
+
+        /**
          * Set to true to disable this element.
          */
         disabled: {
@@ -273,7 +278,7 @@ This program is available under Apache License Version 2.0, available at https:/
           });
         }
       };
-  
+
       this.addEventListener('mousedown', bringToFrontListener);
       this.addEventListener('touchstart', bringToFrontListener);
     }
@@ -366,7 +371,7 @@ This program is available under Apache License Version 2.0, available at https:/
       } else if (path.indexOf(this.inputElement) !== -1) {
         if (path.indexOf(this._toggleElement) > -1 && this.opened) {
           this.close();
-        } else {
+        } else if (path.indexOf(this._toggleElement) > -1 || !this.autoOpenDisabled) {
           this.open();
         }
       }
@@ -487,11 +492,19 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    _closeOrCommit() {
+      if (this.autoOpenDisabled && !this.opened) {
+        this._commitValue();
+      } else {
+        this.close();
+      }
+    }
+
     _onEnter(e) {
       // should close on enter when custom values are allowed, input field is cleared, or when an existing
-      // item is focused with keyboard.
-      if (this.opened && (this.allowCustomValue || this._inputElementValue === '' || this._focusedIndex > -1)) {
-        this.close();
+      // item is focused with keyboard. If auto open is disabled, under the same conditions, commit value.
+      if ((this.opened || this.autoOpenDisabled) && (this.allowCustomValue || this._inputElementValue === '' || this._focusedIndex > -1)) {
+        this._closeOrCommit();
 
         // Do not submit the surrounding form.
         e.preventDefault();
@@ -502,7 +515,10 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _onEscape(e) {
-      if (this.opened) {
+      if (this.autoOpenDisabled) {
+        this._focusedIndex = -1;
+        this.cancel();
+      } else if (this.opened) {
         this._stopPropagation(e);
 
         if (this._focusedIndex > -1) {
@@ -547,7 +563,7 @@ This program is available under Apache License Version 2.0, available at https:/
       this._revertInputValueToValue();
       // In the next _detectAndDispatchChange() call, the change detection should not pass
       this._lastCommittedValue = this.value;
-      this.close();
+      this._closeOrCommit();
     }
 
     _onOpened() {
@@ -577,12 +593,15 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _onClosed() {
-
       // Happens when the overlay is closed by clicking outside
       if (this.opened) {
         this.close();
       }
 
+      this._commitValue();
+    }
+
+    _commitValue() {
       if (this.$.overlay._items && this._focusedIndex > -1) {
         const focusedItem = this.$.overlay._items[this._focusedIndex];
         if (this.selectedItem !== focusedItem) {
@@ -638,7 +657,7 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _filterFromInput(e) {
-      if (!this.opened && !e.__fromClearButton) {
+      if (!this.opened && !e.__fromClearButton && !this.autoOpenDisabled) {
         this.open();
       }
 
@@ -805,7 +824,7 @@ This program is available under Apache License Version 2.0, available at https:/
       if (e.path === 'filteredItems' || e.path === 'filteredItems.splices') {
         this._setOverlayItems(this.filteredItems);
 
-        this._focusedIndex = this.opened ?
+        this._focusedIndex = this.opened || this.autoOpenDisabled ?
           this.$.overlay.indexOfLabel(this.filter) :
           this._indexOfValue(this.value, this.filteredItems);
 
@@ -820,11 +839,13 @@ This program is available under Apache License Version 2.0, available at https:/
         return arr;
       }
 
-      return arr.filter(item => {
+      const filteredItems = arr.filter(item => {
         filter = filter ? filter.toString().toLowerCase() : '';
         // Check if item contains input value.
         return this._getItemLabel(item).toString().toLowerCase().indexOf(filter) > -1;
       });
+
+      return !filteredItems.length && this.autoOpenDisabled ? arr : filteredItems;
     }
 
     _selectItemForValue(value) {
@@ -922,7 +943,7 @@ This program is available under Apache License Version 2.0, available at https:/
         return;
       }
       if (!this._closeOnBlurIsPrevented) {
-        this.close();
+        this._closeOrCommit();
       }
     }
 

@@ -55,6 +55,19 @@
       }
     }
 
+    function inputChar(char) {
+      const target = comboBox.inputElement;
+      target.value += char;
+      MockInteractions.keyDownOn(target, char.charCodeAt(0));
+      target.dispatchEvent(new CustomEvent('input', {bubbles: true, composed: true}));
+    }
+
+    function inputText(text) {
+      for (var i = 0; i < text.length; i++) {
+        inputChar(text[i]);
+      }
+    }
+
     function arrowDown(cb) {
       pushKey(40, cb);
     }
@@ -543,6 +556,66 @@
           done();
         });
       });
+    });
+
+    describe('auto open disabled', () => {
+
+      beforeEach(() => {
+        comboBox.autoOpenDisabled = true;
+      });
+
+      it('should open the overlay with arrow down', () => {
+        arrowDown();
+        expect(comboBox.opened).to.equal(true);
+      });
+
+      it('should open the overlay with arrow up', () => {
+        arrowUp();
+        expect(comboBox.opened).to.equal(true);
+      });
+
+      it('should apply input value on focusout if input valid', () => {
+        inputText('FOO');
+        comboBox.dispatchEvent(new Event('focusout'));
+        expect(comboBox._inputElementValue).to.equal('foo');
+        expect(comboBox.value).to.equal('foo');
+      });
+
+      it('should apply input value on enter if input valid', () => {
+        inputText('FOO');
+        enter();
+        expect(comboBox._inputElementValue).to.equal('foo');
+        expect(comboBox.value).to.equal('foo');
+      });
+
+      it('should not apply input value on enter if input invalid', () => {
+        inputText('quux');
+        enter();
+        expect(comboBox._inputElementValue).to.equal('quux');
+        expect(comboBox.value).to.equal('');
+      });
+
+      it('should revert input value on focusout if input invalid', () => {
+        inputText('quux');
+        comboBox.dispatchEvent(new Event('focusout'));
+        expect(comboBox._inputElementValue).to.equal('');
+        expect(comboBox.value).to.equal('');
+      });
+
+      it('should revert input value on esc if input valid', () => {
+        inputText('foo');
+        esc();
+        expect(comboBox._inputElementValue).to.equal('');
+        expect(comboBox.value).to.equal('');
+      });
+
+      it('should revert input value on esc if input invalid', () => {
+        inputText('quux');
+        esc();
+        expect(comboBox._inputElementValue).to.equal('');
+        expect(comboBox.value).to.equal('');
+      });
+
     });
   });
 </script>

@@ -67,6 +67,13 @@
         expect(combobox.opened).to.be.true;
       });
 
+      it('should not open synchronously by clicking label when autoOpenDisabled is true', () => {
+        combobox.autoOpenDisabled = true;
+        expect(combobox.opened).to.be.false;
+        fireMousedownMouseupClick(combobox.inputElement.root.querySelector('label'));
+        expect(combobox.opened).to.be.false;
+      });
+
       it('should restore attribute focus-ring if it was initially set before opening and combo-box is focused', () => {
         combobox.setAttribute('focus-ring', '');
         combobox.opened = true;
@@ -80,7 +87,24 @@
         expect(combobox.opened).to.be.true;
       });
 
+      it('should not open synchronously by clicking input when autoOpenDisabled is true', () => {
+        combobox.autoOpenDisabled = true;
+        expect(combobox.opened).to.be.false;
+        fireMousedownMouseupClick(combobox.inputElement);
+        expect(combobox.opened).to.be.false;
+      });
+
       it('should open by clicking icon', () => {
+        clickToggleIcon();
+
+        expect(combobox.opened).to.be.true;
+      });
+
+      it('should open by clicking icon when autoOpenDisabled is true and input is invalid', () => {
+        combobox.autoOpenDisabled = true;
+        combobox.inputElement.value = 3;
+        combobox.inputElement.dispatchEvent(new CustomEvent('input'));
+
         clickToggleIcon();
 
         expect(combobox.opened).to.be.true;
