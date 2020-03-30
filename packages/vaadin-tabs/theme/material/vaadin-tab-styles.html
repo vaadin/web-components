@@ -130,6 +130,12 @@
       ::slotted(iron-icon:not(:only-child)) {
         margin-bottom: 8px;
       }
+
+      /* RTL specific styles */
+
+      :host([dir="rtl"][orientation="vertical"][selected]) {
+        box-shadow: inset -2px 0 0 0 var(--material-primary-color);
+      }
     </style>
   </template>
 </dom-module>

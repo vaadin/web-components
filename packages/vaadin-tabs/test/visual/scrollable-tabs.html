@@ -6,10 +6,14 @@
   <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
 
   <script>
+    const dir = window.location.search.replace(/.*dir=(\w+).*/, '$1') || 'ltr';
+    document.documentElement.setAttribute('dir', dir);
+
     const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
     document.write(`<link rel="import" href="../../theme/${theme}/vaadin-tab.html">`);
     document.write(`<link rel="import" href="../../theme/${theme}/vaadin-tabs.html">`);
   </script>
+
 </head>
 
 <body>

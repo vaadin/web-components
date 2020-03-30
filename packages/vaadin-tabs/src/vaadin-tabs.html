@@ -80,6 +80,16 @@ This program is available under Apache License Version 2.0, available at https:/
       :host([orientation="vertical"]) [part="forward-button"] {
         display: none;
       }
+
+      /* RTL specific styles */
+
+      :host([dir="rtl"]) [part="back-button"]::after {
+        content: '▶';
+      }
+
+      :host([dir="rtl"]) [part="forward-button"]::after {
+        content: '◀';
+      }
     </style>
     <div on-click="_scrollBack" part="back-button"></div>
 
@@ -182,11 +192,11 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _scrollForward() {
-          this._scroll(this._scrollOffset);
+          this._scroll(-this.__direction * this._scrollOffset);
         }
 
         _scrollBack() {
-          this._scroll(-1 * this._scrollOffset);
+          this._scroll(this.__direction * this._scrollOffset);
         }
 
         get _scrollOffset() {
@@ -197,14 +207,25 @@ This program is available under Apache License Version 2.0, available at https:/
           return this.$.scroll;
         }
 
+        get __direction() {
+          return !this._vertical && this.getAttribute('dir') === 'rtl' ? 1 : -1;
+        }
+
         _updateOverflow() {
-          const scrollPosition = this._vertical ? this._scrollerElement.scrollTop : this._scrollerElement.scrollLeft;
+          const scrollPosition = this._vertical ? this._scrollerElement.scrollTop : this.__getNormalizedScrollLeft(this._scrollerElement);
           let scrollSize = this._vertical ? this._scrollerElement.scrollHeight : this._scrollerElement.scrollWidth;
           // In Edge we need to adjust the size in 1 pixel
           scrollSize -= 1;
 
           let overflow = scrollPosition > 0 ? 'start' : '';
           overflow += scrollPosition + this._scrollOffset < scrollSize ? ' end' : '';
+
+          if (this.__direction == 1) {
+            overflow = overflow.replace(/start|end/gi, matched => {
+              return matched === 'start' ? 'end' : 'start';
+            });
+          }
+
           overflow ? this.setAttribute('overflow', overflow.trim()) : this.removeAttribute('overflow');
 
           this._repaintShadowNodesHack();

@@ -91,76 +91,85 @@
 
       ['horizontal', 'vertical'].forEach(orientation => {
 
-        describe(`Overflow ${orientation}`, () => {
+        ['ltr', 'rtl'].forEach(direction => {
 
-          beforeEach(() => nav.orientation = orientation);
+          describe(`Overflow ${orientation} ${direction}`, () => {
+            let horizontalRtl;
 
-          describe('In large viewport', () => {
-            it(`when orientation=${orientation} should not have overflow`, function(done) {
-              setTimeout(() => {
-                expect(nav.hasAttribute('overflow')).to.be.false;
-                done();
-              }, 10);
-            });
-          });
-
-          describe('In small viewport', () => {
-
-            // these tests pass in latest Safari but fails in previous version
-            if (safari10) {
-              return;
-            }
-
-            beforeEach(done => {
-              nav.style.width = '200px';
-              nav.style.height = '100px';
-              nav._updateOverflow();
-              Polymer.RenderStatus.afterNextRender(this, done);
+            beforeEach(() => {
+              horizontalRtl = orientation === 'horizontal' && direction === 'rtl';
+              document.documentElement.setAttribute('dir', direction);
+              nav.orientation = orientation;
             });
 
-            it(`when orientation=${orientation} should have overflow="end" if scroll is at the beginning`, done => {
-              setTimeout(() => {
+            describe('In large viewport', () => {
+              it(`when orientation=${orientation} should not have overflow`, function(done) {
+                setTimeout(() => {
+                  expect(nav.hasAttribute('overflow')).to.be.false;
+                  done();
+                }, 10);
+              });
+            });
+
+            describe('In small viewport', () => {
+
+              // these tests pass in latest Safari but fails in previous version
+              if (safari10) {
+                return;
+              }
+
+              beforeEach(done => {
+                nav.style.width = '200px';
+                nav.style.height = '100px';
+                nav._updateOverflow();
+                Polymer.RenderStatus.afterNextRender(this, done);
+              });
+
+              it(`when orientation=${orientation} should have overflow="end" if scroll is at the beginning`, done => {
+                setTimeout(() => {
+                  expect(nav.getAttribute('overflow')).to.be.equal('end');
+                  done();
+                }, 100);
+              });
+
+              it(`when orientation=${orientation} should have overflow="start end" if scroll is at the middle`, done => {
+                const listener = nav._scrollerElement.addEventListener('scroll', () => {
+                  expect(nav.getAttribute('overflow')).to.contain('start');
+                  expect(nav.getAttribute('overflow')).to.contain('end');
+                  nav._scrollerElement.removeEventListener('scroll', listener);
+                  done();
+                });
+                nav._scroll(horizontalRtl ? -2 : 2);
+              });
+
+              it(`when orientation=${orientation} should have overflow="start" if scroll is at the end`, done => {
+                const listener = nav._scrollerElement.addEventListener('scroll', () => {
+                  expect(nav.getAttribute('overflow')).to.be.equal('start');
+                  nav._scrollerElement.removeEventListener('scroll', listener);
+                  done();
+                });
+                nav._scroll(horizontalRtl ? -400 : 400);
+              });
+
+              it(`when orientation=${orientation} should not have overflow="start" when over-scrolling`, () => {
+                const scroll = nav._scrollerElement;
+
+                // Cannot set negative values to native scroll, monkey patching the properties
+                let pixels = 0;
+                Object.defineProperty(scroll, orientation == 'horizontal' ? 'scrollLeft' : 'scrollTop', {
+                  get: () => pixels,
+                  set: (v) => pixels = v
+                });
+
+                // Simulate over-scrolling
+                nav._scroll(horizontalRtl ? 400 : -400);
+                scroll.dispatchEvent(new CustomEvent('scroll'));
+
                 expect(nav.getAttribute('overflow')).to.be.equal('end');
-                done();
-              }, 100);
-            });
-
-            it(`when orientation=${orientation} should have overflow="start end" if scroll is at the middle`, done => {
-              const listener = nav._scrollerElement.addEventListener('scroll', () => {
-                expect(nav.getAttribute('overflow')).to.be.equal('start end');
-                nav._scrollerElement.removeEventListener('scroll', listener);
-                done();
               });
-              nav._scroll(2);
             });
 
-            it(`when orientation=${orientation} should have overflow="start" if scroll is at the end`, done => {
-              const listener = nav._scrollerElement.addEventListener('scroll', () => {
-                expect(nav.getAttribute('overflow')).to.be.equal('start');
-                nav._scrollerElement.removeEventListener('scroll', listener);
-                done();
-              });
-              nav._scroll(400);
-            });
-
-            it(`when orientation=${orientation} should not have overflow="start" when over-scrolling`, () => {
-              const scroll = nav._scrollerElement;
-
-              // Cannot set negative values to native scroll, monkey patching the properties
-              let pixels = 0;
-              Object.defineProperty(scroll, orientation == 'horizontal' ? 'scrollLeft' : 'scrollTop', {
-                get: () => pixels,
-                set: (v) => pixels = v
-              });
-
-              // Simulate over-scrolling
-              nav._scroll(-1);
-              scroll.dispatchEvent(new CustomEvent('scroll'));
-
-              expect(nav.getAttribute('overflow')).to.be.equal('end');
-            });
           });
-
         });
       });
     });

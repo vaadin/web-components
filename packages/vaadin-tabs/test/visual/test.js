@@ -39,9 +39,23 @@ gemini.suite('vaadin-tabs', function(rootSuite) {
         .capture('scrollable-tabs');
     });
 
+    gemini.suite(`scrollable-tabs-rtl-${theme}`, (suite) => {
+      suite
+        .setUrl(`scrollable-tabs.html?theme=${theme}&dir=rtl`)
+        .setCaptureElements('#scrollable-tabs')
+        .capture('scrollable-tabs');
+    });
+
     gemini.suite(`anchor-tabs-${theme}`, (suite) => {
       suite
         .setUrl(`anchor-tabs.html?theme=${theme}`)
+        .setCaptureElements('#anchor-tabs')
+        .capture('anchor-tabs');
+    });
+
+    gemini.suite(`anchor-tabs-rtl-${theme}`, (suite) => {
+      suite
+        .setUrl(`anchor-tabs.html?theme=${theme}&dir=rtl`)
         .setCaptureElements('#anchor-tabs')
         .capture('anchor-tabs');
     });

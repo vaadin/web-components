@@ -56,7 +56,7 @@
         color: inherit;
       }
 
-      [part="forward-button"] {
+      :host(:not([dir="rtl"])) [part="forward-button"] {
         right: 0;
       }
 
@@ -182,6 +182,56 @@
 
       :host([theme~="equal-width-tabs"]) [part="tabs"] ::slotted(vaadin-tab) {
         flex: 1 0 0%;
+      }
+
+      /* RTL specific styles */
+
+      :host([dir="rtl"]) [part="forward-button"]::after {
+        content: var(--lumo-icons-angle-left);
+      }
+
+      :host([dir="rtl"]) [part="back-button"]::after {
+        content: var(--lumo-icons-angle-right);
+      }
+
+      :host([orientation="vertical"][dir="rtl"]) {
+        box-shadow: 1px 0 0 0 var(--lumo-contrast-10pct);
+      }
+
+      :host([dir="rtl"]) [part="forward-button"] {
+        left: 0;
+      }
+
+      :host([dir="rtl"]) [part="tabs"] ::slotted(:not(vaadin-tab)) {
+        margin-left: 0;
+        margin-right: var(--lumo-space-m);
+      }
+
+      /* Both ends overflowing */
+      :host([dir="rtl"][overflow~="start"][overflow~="end"]:not([orientation="vertical"])) [part="tabs"] {
+        --_lumo-tabs-overflow-mask-image: linear-gradient(-90deg, transparent 2em, #000 4em, #000 calc(100% - 4em), transparent calc(100% - 2em));
+      }
+
+      /* End overflowing */
+      :host([dir="rtl"][overflow~="end"]:not([orientation="vertical"])) [part="tabs"] {
+        --_lumo-tabs-overflow-mask-image: linear-gradient(-90deg, #000 calc(100% - 4em), transparent calc(100% - 2em));
+      }
+
+      /* Start overflowing */
+      :host([dir="rtl"][overflow~="start"]:not([orientation="vertical"])) [part="tabs"] {
+        --_lumo-tabs-overflow-mask-image: linear-gradient(-90deg, transparent 2em, #000 4em);
+      }
+
+      :host([dir="rtl"][theme~="hide-scroll-buttons"][overflow~="start"][overflow~="end"]:not([orientation="vertical"])) [part="tabs"] {
+        --_lumo-tabs-overflow-mask-image: linear-gradient(-90deg, transparent, #000 2em, #000 calc(100% - 2em), transparent 100%);
+      }
+
+      :host([dir="rtl"][theme~="hide-scroll-buttons"][overflow~="end"]:not([orientation="vertical"])) [part="tabs"] {
+        --_lumo-tabs-overflow-mask-image: linear-gradient(-90deg, #000 calc(100% - 2em), transparent 100%);
+      }
+
+      :host([dir="rtl"][theme~="hide-scroll-buttons"][overflow~="start"]:not([orientation="vertical"])) [part="tabs"] {
+        --_lumo-tabs-overflow-mask-image: linear-gradient(-90deg, transparent, #000 2em);
       }
     </style>
   </template>

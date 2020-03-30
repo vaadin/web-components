@@ -49,7 +49,7 @@
         color: inherit;
       }
 
-      [part="forward-button"] {
+      :host(:not([dir="rtl"])) [part="forward-button"] {
         right: 0;
       }
 
@@ -71,6 +71,20 @@
       /* Fixed width tabs */
       :host([theme~="fixed"]) [part="tabs"] ::slotted(vaadin-tab) {
         flex-basis: 0.0001px;
+      }
+
+      /* RTL specific styles */
+
+      :host([dir="rtl"]) [part="forward-button"] {
+        left: 0;
+      }
+
+      :host([dir="rtl"]) [part="forward-button"]::after {
+        content: var(--material-icons-chevron-left);
+      }
+
+      :host([dir="rtl"]) [part="back-button"]::after {
+        content: var(--material-icons-chevron-right);
       }
     </style>
   </template>
