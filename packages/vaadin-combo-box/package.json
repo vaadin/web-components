@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-combo-box",
-  "version": "5.0.11",
+  "version": "5.1.0-alpha1",
   "description": "Web Component for displaying a list of items with filtering",
   "main": "vaadin-combo-box.html",
   "repository": "vaadin/vaadin-combo-box",
