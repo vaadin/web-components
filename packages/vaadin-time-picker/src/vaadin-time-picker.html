@@ -38,6 +38,7 @@ This program is available under Apache License Version 2.0, available at https:/
         filtered-items="[[__dropdownItems]]"
         disabled="[[disabled]]"
         readonly="[[readonly]]"
+        auto-open-disabled="[[autoOpenDisabled]]"
         theme$="[[theme]]">
       <template>
         [[item.label]]
@@ -285,6 +286,11 @@ This program is available under Apache License Version 2.0, available at https:/
               type: Boolean,
               value: false
             },
+
+            /**
+             * Set true to prevent the overlay from opening automatically.
+             */
+            autoOpenDisabled: Boolean,
 
             __dropdownItems: {
               type: Array

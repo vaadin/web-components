@@ -90,6 +90,12 @@
         expect(timePicker.value).to.be.equal('01:00');
         expect(timePicker.__dropdownElement.selectedItem).to.deep.equal(timePicker.__dropdownElement.filteredItems[1]);
       });
+
+      it('should propagate autoOpenDisabled property to vaadin-combo-box-light', () => {
+        expect(timePicker.__dropdownElement.autoOpenDisabled).to.be.not.ok;
+        timePicker.autoOpenDisabled = true;
+        expect(timePicker.__dropdownElement.autoOpenDisabled).to.be.true;
+      });
     });
   </script>
 </body>
