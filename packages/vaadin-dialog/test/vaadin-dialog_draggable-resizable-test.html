@@ -552,6 +552,12 @@
           draggable.opened = true;
         });
 
+        it('should prevent default of the touchstart when dragged on desktop', () => {
+          draggable._touchDevice = false;
+          const e = dispatchTouchEvent(draggableOverlay.$.content, 'touchstart');
+          expect(e.defaultPrevented).to.be.true;
+        });
+
         it('should prevent default of the touchmove when dragged', () => {
           const e = dispatchTouchEvent(draggableOverlay.$.content, 'touchmove');
           expect(e.defaultPrevented).to.be.true;
