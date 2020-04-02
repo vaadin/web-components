@@ -81,6 +81,12 @@
           });
         });
 
+        afterEach(() => {
+          // Forcing dir to ltr because Safari scroll can get lost if attribute
+          // is set to `rtl` and then removed
+          document.documentElement.setAttribute('dir', 'ltr');
+        });
+
         it('should render root level items', () => {
           expect(menuComponents()[0].textContent).to.equal('foo-0');
         });
@@ -142,7 +148,7 @@
             });
           });
 
-          it('should open the subMenu on the left if root menu is right-aligned', async() => {
+          it('should open the subMenu on the left if root menu is end-aligned', async() => {
             subMenu.close();
             await nextRender(subMenu);
             const rootItem = menuComponents()[0];
@@ -150,10 +156,10 @@
             const rootOverlay = rootMenu.$.overlay;
             rootOverlay.style.removeProperty('left');
             rootOverlay.style.right = rootItemRect.width + 'px';
-            rootOverlay.setAttribute('right-aligned', '');
+            rootOverlay.setAttribute('end-aligned', '');
             open(rootItem);
             await nextRender(subMenu);
-            expect(subMenu.$.overlay.hasAttribute('right-aligned')).to.be.true;
+            expect(subMenu.$.overlay.hasAttribute('end-aligned')).to.be.true;
             const rootMenuRect = rootOverlay.$.content.getBoundingClientRect();
             const subMenuRect = subMenu.$.overlay.$.content.getBoundingClientRect();
             expect(subMenuRect.right).to.be.closeTo(rootMenuRect.left, 2);
@@ -170,13 +176,13 @@
             const rootOverlay = rootMenu.$.overlay;
             rootOverlay.style.removeProperty('left');
             rootOverlay.style.right = rootItemRect.width + 'px';
-            rootOverlay.setAttribute('right-aligned', '');
+            rootOverlay.setAttribute('end-aligned', '');
             padding = parseFloat(getComputedStyle(rootOverlay.$.content).paddingLeft) * 2;
 
-            /* first sub-menu right-aligned */
+            /* first sub-menu end-aligned */
             open(rootItem);
             await nextRender(subMenu);
-            expect(subMenu.$.overlay.hasAttribute('right-aligned')).to.be.true;
+            expect(subMenu.$.overlay.hasAttribute('end-aligned')).to.be.true;
             const rootMenuRect = rootOverlay.$.content.getBoundingClientRect();
             const subMenuRect = subMenu.$.overlay.$.content.getBoundingClientRect();
             expect(subMenuRect.right).to.be.closeTo(rootMenuRect.left, 1);
@@ -188,7 +194,7 @@
             open(nestedItem);
             await nextRender(subMenu);
             const subMenu2 = getSubMenu(subMenu);
-            expect(subMenu2.$.overlay.hasAttribute('right-aligned')).to.be.false;
+            expect(subMenu2.$.overlay.hasAttribute('end-aligned')).to.be.false;
             const subMenu2Rect = subMenu2.$.overlay.$.content.getBoundingClientRect();
             expect(subMenu2Rect.left).to.be.closeTo(nestedItemRect.right + padding / 2, 1);
           });
@@ -269,6 +275,18 @@
           expect(focusSpy).to.have.been.called;
         });
 
+        it('should close the submenu on right arrow if RTL', (done) => {
+          document.documentElement.setAttribute('dir', 'rtl');
+          requestAnimationFrame(() => {
+            const focusSpy = sinon.spy(menuComponents()[0], 'focus');
+            fire(menuComponents(subMenu)[0], 'keydown', {}, {keyCode: 39, key: 'ArrowRight'});
+            expect(subMenu.opened).to.be.false;
+            expect(focusSpy).to.have.been.called;
+            document.documentElement.setAttribute('dir', 'ltr');
+            done();
+          });
+        });
+
         it('should close all menus on esc', () => {
           fire(menuComponents(subMenu)[0], 'keydown', {}, {keyCode: 27, key: 'Esc'});
           expect(rootMenu.opened).to.be.false;
@@ -284,7 +302,7 @@
           expect(rootMenu.opened).to.be.true;
         });
 
-        it('shuold close on backdrop click', () => {
+        it('should close on backdrop click', () => {
           subMenu.$.overlay.$.backdrop.click();
           expect(subMenu.opened).to.be.false;
         });
@@ -308,6 +326,17 @@
           subMenu.close();
           fire(menuComponents()[0], 'keydown', {}, {keyCode: 39, key: 'ArrowRight'});
           expect(subMenu.opened).to.be.true;
+        });
+
+        it('should open item on left arrow if RTL', (done) => {
+          document.documentElement.setAttribute('dir', 'rtl');
+          requestAnimationFrame(() => {
+            subMenu.close();
+            fire(menuComponents()[0], 'keydown', {}, {keyCode: 37, key: 'ArrowLeft'});
+            expect(subMenu.opened).to.be.true;
+            document.documentElement.setAttribute('dir', 'ltr');
+            done();
+          });
         });
 
         it('should open item on enter', () => {

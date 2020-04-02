@@ -72,6 +72,17 @@
         background-color: var(--lumo-primary-color-10pct);
       }
 
+      /* RTL styles */
+      :host([dir="rtl"])[part="items"] ::slotted(.vaadin-menu-item) {
+        padding-left: calc(var(--lumo-space-l) + var(--lumo-border-radius) / 4);
+        padding-right: var(--_lumo-list-box-item-padding-left, calc(var(--lumo-border-radius) / 4));
+      }
+
+      :host([dir="rtl"].vaadin-menu-list-box) [part="items"] ::slotted(.vaadin-menu-item) {
+        padding-left: calc(var(--lumo-space-l) + var(--lumo-border-radius) / 4);
+        padding-right: calc(var(--lumo-border-radius) / 4);
+      }
+
       /* Focused item */
 
       @media (pointer: coarse) {
@@ -101,6 +112,9 @@
         font-size: var(--lumo-icon-size-xs);
         content: var(--lumo-icons-angle-right);
         color: var(--lumo-tertiary-text-color);
+      }
+
+      :host(:not([dir="rtl"]).vaadin-menu-item.vaadin-context-menu-parent-item)::after {
         margin-right: calc(var(--lumo-space-m) * -1);
         padding-left: var(--lumo-space-m);
       }
@@ -108,6 +122,14 @@
       :host([expanded]) {
         background-color: var(--lumo-primary-color-10pct);
       }
+
+      /* RTL styles */
+      :host([dir="rtl"].vaadin-menu-item.vaadin-context-menu-parent-item)::after {
+        content: var(--lumo-icons-angle-left);
+        margin-left: calc(var(--lumo-space-m) * -1);
+        padding-right: var(--lumo-space-m);
+      }
+
     </style>
   </template>
 </dom-module>

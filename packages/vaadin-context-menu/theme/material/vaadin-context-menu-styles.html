@@ -28,6 +28,10 @@
         line-height: 24px;
       }
 
+      :host([dir="rtl"]) [part="items"] ::slotted(.vaadin-menu-item:not(hr)) {
+        padding: 8px 10px 8px 32px;
+      }
+
       [part="items"] ::slotted(.vaadin-menu-item:hover:not([disabled])) {
         background-color: var(--material-secondary-background-color);
       }
@@ -51,10 +55,19 @@
     <style>
       :host(.vaadin-menu-item.vaadin-context-menu-parent-item)::after {
         font-family: material-icons;
-        content: var(--material-icons-chevron-right);
         font-size: var(--material-icon-font-size);
+      }
+
+      :host(:not([dir="rtl"]).vaadin-menu-item.vaadin-context-menu-parent-item)::after {
+        content: var(--material-icons-chevron-right);
         padding-left: 9px;
         margin-right: -9px;
+      }
+
+      :host([dir="rtl"].vaadin-menu-item.vaadin-context-menu-parent-item)::after {
+        content: var(--material-icons-chevron-left);
+        padding-right: 9px;
+        margin-left: -9px;
       }
 
       :host(.vaadin-menu-item)::before {

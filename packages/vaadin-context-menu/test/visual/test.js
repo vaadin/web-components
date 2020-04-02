@@ -15,30 +15,33 @@ gemini.suite('vaadin-context-menu', function(rootSuite) {
     .after(goToAboutBlank);
 
   ['lumo', 'material'].forEach(theme => {
-    gemini.suite(`default-tests-${theme}`, function(suite) {
-      suite
-        .setUrl(`default.html?theme=${theme}`)
-        .setCaptureElements('#default-tests')
-        .capture('default', function(actions) {
-          actions.executeJS(function(window) {
-            window.contextmenu(window.document.querySelector('#plain'));
+    ['rtl', 'ltr'].forEach(dir => {
+
+      gemini.suite(`default-tests-${theme}-${dir}`, function(suite) {
+        suite
+          .setUrl(`default.html?theme=${theme}&dir=${dir}`)
+          .setCaptureElements('#default-tests')
+          .capture('default', function(actions) {
+            actions.executeJS(function(window) {
+              window.contextmenu(window.document.querySelector('#plain'));
+            });
+          })
+          .capture('long-menu', function(actions) {
+            actions.executeJS(function(window) {
+              window.contextmenu(window.document.querySelector('#long'));
+            });
+          })
+          .capture('bottom-menu', function(actions) {
+            actions.executeJS(function(window) {
+              window.contextmenu(window.document.querySelector('#bottom'));
+            });
+          })
+          .capture('items', function(actions) {
+            actions.executeJS(function(window) {
+              window.contextmenu(window.document.querySelector('#items'));
+            });
           });
-        })
-        .capture('long-menu', function(actions) {
-          actions.executeJS(function(window) {
-            window.contextmenu(window.document.querySelector('#long'));
-          });
-        })
-        .capture('bottom-menu', function(actions) {
-          actions.executeJS(function(window) {
-            window.contextmenu(window.document.querySelector('#bottom'));
-          });
-        })
-        .capture('items', function(actions) {
-          actions.executeJS(function(window) {
-            window.contextmenu(window.document.querySelector('#items'));
-          });
-        });
+      });
     });
   });
 

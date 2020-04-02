@@ -35,7 +35,6 @@
           content.style.boxSizing = 'border-box';
           // Compute viewport at the end of the test setup
           viewHeight = document.documentElement.clientHeight;
-          viewWidth = document.documentElement.clientWidth;
         });
 
         afterEach(() => overlay.opened = false);
@@ -152,151 +151,233 @@
             contextmenu();
           });
 
-          it('should be positioned on click target', done => {
-            listenOnce(overlay, 'vaadin-overlay-open', () => {
-              const rect = overlay.getBoundingClientRect();
-              expect(rect.left).to.eql(menu._phone ? 0 : 10);
-              expect(rect.top).to.eql(menu._phone ? 0 : 10);
-              done();
-            });
+          ['ltr', 'rtl'].forEach(direction => {
 
-            contextmenu(10, 10);
-          });
-
-          describe('position', () => {
-            if (!MOBILE) {
-              it('should be aligned relative to top-left corner', done => {
-                listenOnce(overlay, 'vaadin-overlay-open', () => {
-                  expect(overlay.hasAttribute('right-aligned')).to.be.false;
-                  expect(overlay.hasAttribute('bottom-aligned')).to.be.false;
-                  expect(overlay.style.left).to.be.equal(menu._phone ? '' : '10px');
-                  expect(overlay.style.top).to.be.equal(menu._phone ? '' : '10px');
+            describe(`[dir=${direction}] opening`, () => {
+              let isRTL;
+              before((done) => {
+                isRTL = direction === 'rtl';
+                document.documentElement.setAttribute('dir', direction);
+                if (isRTL) {
+                  document.body.style.margin = 0;
+                }
+                requestAnimationFrame(() => {
+                  viewWidth = document.documentElement.clientWidth;
                   done();
                 });
-                contextmenu(10, 10);
               });
 
-              it('should be aligned relative to bottom-right corner', done => {
+              after(() => {
+                // Forcing dir to ltr because Safari scroll can get lost if attribute
+                // is set to `rtl` and then removed
+                if (isRTL) {
+                  document.documentElement.setAttribute('dir', 'ltr');
+                  document.body.style.margin = null;
+                }
+              });
+
+              it('should be positioned on click target', done => {
                 listenOnce(overlay, 'vaadin-overlay-open', () => {
-                  expect(menu._phone || overlay.hasAttribute('right-aligned')).to.be.true;
-                  expect(menu._phone || overlay.hasAttribute('bottom-aligned')).to.be.true;
-                  expect(overlay.style.right).to.be.equal(menu._phone ? '' : '0px');
-                  expect(overlay.style.bottom).to.be.equal(menu._phone ? '' : '0px');
+                  const rect = overlay.getBoundingClientRect();
+
+                  if (isRTL) {
+                    expect(rect.right).to.closeTo(menu._phone ? viewWidth : 450, 0.1);
+                  } else {
+                    expect(rect.left).to.eql(menu._phone ? 0 : 10);
+                  }
+                  expect(rect.top).to.eql(menu._phone ? 0 : 10);
                   done();
                 });
-                contextmenu(viewWidth, viewHeight);
+
+                contextmenu(isRTL ? 450 : 10, 10);
               });
-            }
 
-            it('css should be correctly configured to set content position', done => {
-              listenOnce(overlay, 'vaadin-overlay-open', () => {
-                const rect = content.getBoundingClientRect();
-                expect(rect.width).to.be.equal(100);
-                expect(rect.height).to.be.equal(100);
-                !menu._phone && expect(rect.left).to.be.equal(viewWidth - 100);
-                !menu._phone && expect(rect.top).to.be.equal(viewHeight - 100);
-                done();
-              });
-              contextmenu(viewWidth, viewHeight);
-            });
-
-            it('should reset css properties and attributes on each open', done => {
-              listenOnce(overlay, 'vaadin-overlay-open', () => {
-
-                overlay.opened = false;
+              it('should be positioned on detailed mouse event', done => {
                 listenOnce(overlay, 'vaadin-overlay-open', () => {
-                  const rect = content.getBoundingClientRect();
-                  !menu._phone && expect(rect.left).to.be.equal(16);
-                  !menu._phone && expect(rect.top).to.be.equal(16);
-                  expect(overlay.hasAttribute('right-aligned')).to.be.false;
-                  expect(overlay.hasAttribute('bottom-aligned')).to.be.false;
-                  expect(overlay.style.right).to.be.empty;
-                  expect(overlay.style.bottom).to.be.empty;
+                  const rect = overlay.getBoundingClientRect();
+                  if (isRTL) {
+                    expect(rect.right).to.closeTo(menu._phone ? viewWidth : 450, 0.1);
+                  } else {
+                    expect(rect.left).to.eql(menu._phone ? 0 : 10);
+                  }
+                  expect(rect.top).to.eql(menu._phone ? 0 : 20);
                   done();
                 });
-                contextmenu(16, 16);
 
+                menu.openOn = 'foobar';
+
+                fire(menu.listenOn, 'foobar', {sourceEvent: {clientX: isRTL ? 450 : 10, clientY: 20}});
               });
-              contextmenu(viewWidth, viewHeight);
-            });
 
-            it('overlay position should be constrained to the viewport', done => {
-              listenOnce(overlay, 'vaadin-overlay-open', () => {
-                const rect = content.getBoundingClientRect();
-                !menu._phone && expect(rect.left).to.be.equal(viewWidth - 100);
-                !menu._phone && expect(rect.top).to.be.equal(viewHeight - 100);
-                done();
+              it('should be positioned by gesture event', done => {
+                listenOnce(overlay, 'vaadin-overlay-open', () => {
+                  const rect = overlay.getBoundingClientRect();
+                  if (isRTL) {
+                    expect(rect.right).to.closeTo(menu._phone ? viewWidth : 450, 0.1);
+                  } else {
+                    expect(rect.left).to.eql(menu._phone ? 0 : 5);
+                  }
+                  expect(rect.top).to.eql(menu._phone ? 0 : 5);
+                  done();
+                });
+
+                menu.openOn = 'foobar';
+
+                fire(menu.listenOn, 'foobar', {x: isRTL ? 450 : 5, y: 5, sourceEvent: {clientX: 10, clientY: 20}});
               });
-              contextmenu(viewWidth * 1.1, viewHeight * 1.1);
-            });
-          });
 
-          it('should be positioned on detailed mouse event', done => {
-            listenOnce(overlay, 'vaadin-overlay-open', () => {
-              const rect = overlay.getBoundingClientRect();
-              expect(rect.left).to.eql(menu._phone ? 0 : 10);
-              expect(rect.top).to.eql(menu._phone ? 0 : 20);
-              done();
-            });
+              it('should be positioned by detailed gesture event', done => {
+                listenOnce(overlay, 'vaadin-overlay-open', () => {
+                  const rect = overlay.getBoundingClientRect();
+                  if (isRTL) {
+                    expect(rect.right).to.closeTo(menu._phone ? viewWidth : 450, 0.1);
+                  } else {
+                    expect(rect.left).to.eql(menu._phone ? 0 : 5);
+                  }
+                  expect(rect.top).to.eql(menu._phone ? 0 : 5);
+                  done();
+                });
 
-            menu.openOn = 'foobar';
+                menu.openOn = 'foobar';
 
-            fire(menu.listenOn, 'foobar', {sourceEvent: {clientX: 10, clientY: 20}});
-          });
+                fire(menu.listenOn, 'foobar', {x: isRTL ? 450 : 5, y: 5, sourceEvent: {clientX: 10, clientY: 20}});
+              });
 
-          it('should be positioned by gesture event', done => {
-            listenOnce(overlay, 'vaadin-overlay-open', () => {
-              const rect = overlay.getBoundingClientRect();
-              expect(rect.left).to.eql(menu._phone ? 0 : 5);
-              expect(rect.top).to.eql(menu._phone ? 0 : 5);
-              done();
-            });
+              it('should be positioned by touch event', done => {
+                listenOnce(overlay, 'vaadin-overlay-open', () => {
+                  const rect = overlay.getBoundingClientRect();
+                  if (isRTL) {
+                    expect(rect.right).to.closeTo(menu._phone ? viewWidth : 450, 0.1);
+                  } else {
+                    expect(rect.left).to.eql(menu._phone ? 0 : 10);
+                  }
+                  expect(rect.top).to.eql(menu._phone ? 0 : 20);
+                  done();
+                });
 
-            menu.openOn = 'foobar';
+                menu.openOn = 'touchstart';
 
-            fire(menu.listenOn, 'foobar', {x: 5, y: 5, sourceEvent: {clientX: 10, clientY: 20}});
-          });
+                const event = new CustomEvent('touchstart', {bubbles: true, cancelable: true});
+                event.touches = event.changedTouches = event.targetTouches = [{clientX: isRTL ? 450 : 10, clientY: 20}];
 
-          it('should be positioned by detailed gesture event', done => {
-            listenOnce(overlay, 'vaadin-overlay-open', () => {
-              const rect = overlay.getBoundingClientRect();
-              expect(rect.left).to.eql(menu._phone ? 0 : 5);
-              expect(rect.top).to.eql(menu._phone ? 0 : 5);
-              done();
-            });
+                menu.children[0].dispatchEvent(event);
+              });
 
-            menu.openOn = 'foobar';
+              it('should be positioned by detailed touch event', done => {
+                listenOnce(overlay, 'vaadin-overlay-open', () => {
+                  const rect = overlay.getBoundingClientRect();
+                  if (isRTL) {
+                    expect(rect.right).to.closeTo(menu._phone ? viewWidth : 450, 0.1);
+                  } else {
+                    expect(rect.left).to.eql(menu._phone ? 0 : 10);
+                  }
+                  expect(rect.top).to.eql(menu._phone ? 0 : 20);
+                  done();
+                });
 
-            fire(menu.listenOn, 'foobar', {x: 5, y: 5, sourceEvent: {clientX: 10, clientY: 20}});
-          });
+                menu.openOn = 'foobar';
 
-          it('should be positioned by touch event', done => {
-            listenOnce(overlay, 'vaadin-overlay-open', () => {
-              const rect = overlay.getBoundingClientRect();
-              expect(rect.left).to.eql(menu._phone ? 0 : 10);
-              expect(rect.top).to.eql(menu._phone ? 0 : 20);
-              done();
-            });
-
-            menu.openOn = 'touchstart';
-
-            const event = new CustomEvent('touchstart', {bubbles: true, cancelable: true});
-            event.touches = event.changedTouches = event.targetTouches = [{clientX: 10, clientY: 20}];
-
-            menu.children[0].dispatchEvent(event);
-          });
-
-          it('should be positioned by detailed touch event', done => {
-            listenOnce(overlay, 'vaadin-overlay-open', () => {
-              const rect = overlay.getBoundingClientRect();
-              expect(rect.left).to.eql(menu._phone ? 0 : 10);
-              expect(rect.top).to.eql(menu._phone ? 0 : 20);
-              done();
+                fire(menu.listenOn, 'foobar', {sourceEvent: {changedTouches: [{clientX: isRTL ? 450 : 10, clientY: 20}]}});
+              });
             });
 
-            menu.openOn = 'foobar';
+            describe(`[dir=${direction}] position`, () => {
+              if (!MOBILE) {
+                let isRTL;
+                before((done) => {
+                  isRTL = direction === 'rtl';
+                  document.documentElement.setAttribute('dir', direction);
+                  if (isRTL) {
+                    document.body.style.margin = 0;
+                  }
+                  requestAnimationFrame(() => {
+                    viewWidth = document.documentElement.clientWidth;
+                    done();
+                  });
+                });
 
-            fire(menu.listenOn, 'foobar', {sourceEvent: {changedTouches: [{clientX: 10, clientY: 20}]}});
+                after(() => {
+                  // Forcing dir to ltr because Safari scroll can get lost if attribute
+                  // is set to `rtl` and then removed
+                  if (isRTL) {
+                    document.documentElement.setAttribute('dir', 'ltr');
+                    document.body.style.margin = null;
+                  }
+                });
+
+                it(`should be aligned relative to top-${isRTL ? 'right' : 'left'} corner`, done => {
+                  listenOnce(overlay, 'vaadin-overlay-open', () => {
+                    expect(overlay.hasAttribute('end-aligned')).to.be.false;
+                    expect(overlay.hasAttribute('bottom-aligned')).to.be.false;
+                    expect(overlay.style[isRTL ? 'right' : 'left']).to.be.equal(menu._phone ? '' : isRTL ? `${viewWidth - 450}px` : '10px');
+                    expect(overlay.style.top).to.be.equal(menu._phone ? '' : '10px');
+                    done();
+                  });
+                  contextmenu(isRTL ? 450 : 10, 10);
+                });
+
+                it('should be aligned relative to bottom-right corner', done => {
+                  listenOnce(overlay, 'vaadin-overlay-open', () => {
+                    if (isRTL) {
+                      expect(menu._phone || overlay.hasAttribute('end-aligned')).to.be.false;
+                    } else {
+                      expect(menu._phone || overlay.hasAttribute('end-aligned')).to.be.true;
+                    }
+                    expect(menu._phone || overlay.hasAttribute('bottom-aligned')).to.be.true;
+                    expect(overlay.style.right).to.be.equal(menu._phone ? '' : '0px');
+                    expect(overlay.style.bottom).to.be.equal(menu._phone ? '' : '0px');
+                    done();
+                  });
+                  contextmenu(viewWidth, viewHeight);
+                });
+
+                it('css should be correctly configured to set content position', done => {
+                  listenOnce(overlay, 'vaadin-overlay-open', () => {
+                    const rect = content.getBoundingClientRect();
+                    expect(rect.width).to.be.closeTo(100, 0.5);
+                    expect(rect.height).to.be.closeTo(100, 0.5);
+                    !menu._phone && expect(rect.left).to.be.closeTo(viewWidth - 100, 0.5);
+                    !menu._phone && expect(rect.top).to.be.closeTo(viewHeight - 100, 0.5);
+                    done();
+                  });
+                  contextmenu(viewWidth, viewHeight);
+                });
+
+                it('should reset css properties and attributes on each open', done => {
+                  listenOnce(overlay, 'vaadin-overlay-open', () => {
+
+                    overlay.opened = false;
+                    listenOnce(overlay, 'vaadin-overlay-open', () => {
+                      const rect = content.getBoundingClientRect();
+                      !menu._phone && expect(rect.left).to.be.closeTo(16, 0.5);
+                      !menu._phone && expect(rect.top).to.be.closeTo(16, 0.5);
+                      if (isRTL) {
+                        expect(overlay.hasAttribute('end-aligned')).to.be.true;
+                      } else {
+                        expect(overlay.hasAttribute('end-aligned')).to.be.false;
+                      }
+                      expect(overlay.hasAttribute('bottom-aligned')).to.be.false;
+                      expect(overlay.style.right).to.be.empty;
+                      expect(overlay.style.bottom).to.be.empty;
+                      done();
+                    });
+                    contextmenu(16, 16);
+
+                  });
+                  contextmenu(viewWidth, viewHeight);
+                });
+
+                it('overlay position should be constrained to the viewport', done => {
+                  listenOnce(overlay, 'vaadin-overlay-open', () => {
+                    const rect = content.getBoundingClientRect();
+                    !menu._phone && expect(rect.left).to.be.closeTo(viewWidth - 100, 0.5);
+                    !menu._phone && expect(rect.top).to.be.closeTo(viewHeight - 100, 0.5);
+                    done();
+                  });
+                  contextmenu(viewWidth * 1.1, viewHeight * 1.1);
+                });
+              }
+            });
           });
 
           describe('with shift key', () => {

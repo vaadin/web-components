@@ -608,13 +608,13 @@ This program is available under Apache License Version 2.0, available at https:/
 
           // Reset all properties before measuring
           ['top', 'right', 'bottom', 'left'].forEach(prop => style.removeProperty(prop));
-          ['right-aligned', 'bottom-aligned'].forEach(attr => overlay.removeAttribute(attr));
+          ['right-aligned', 'end-aligned', 'bottom-aligned'].forEach(attr => overlay.removeAttribute(attr));
 
           // Maximum x and y values are imposed by content size and overlay limits.
-          const {xMax, yMax, left, top, width} = overlay.getBoundaries();
+          const {xMax, xMin, yMax, left, right, top, width} = overlay.getBoundaries();
           // Reuse saved x and y event values, in order to this method be used async
           // in the `vaadin-overlay-change` which guarantees that overlay is ready
-          let x = this.__x || left;
+          let x = this.__x || (!this.__isRTL ? left : right);
           const y = this.__y || top;
 
           // Select one overlay corner and move to the event x/y position.
@@ -628,18 +628,18 @@ This program is available under Apache License Version 2.0, available at https:/
           let parentContentRect;
           if (parent) {
             parentContentRect = parent.$.overlay.getBoundingClientRect();
-            if (parent.hasAttribute('right-aligned')) {
+            if (parent.hasAttribute('right-aligned') || parent.hasAttribute('end-aligned')) {
               const parentStyle = getComputedStyle(parent);
               const getPadding = (el, direction) => {
                 return parseFloat(getComputedStyle(el.$.content)['padding' + direction]);
               };
-              const right = parseFloat(parentStyle.right) + parentContentRect.width;
+              const dimensionToSet = parseFloat(parentStyle[this.__isRTL ? 'left' : 'right']) + parentContentRect.width;
               const padding = getPadding(parent, 'Left') + getPadding(overlay, 'Right');
 
-              // Preserve right-aligned, if possible.
-              if ((wdthVport - (right - padding)) > width) {
-                overlay.setAttribute('right-aligned', '');
-                style.right = right + 'px';
+              // Preserve end-aligned, if possible.
+              if ((wdthVport - (dimensionToSet - padding)) > width) {
+                this._setEndAligned(overlay);
+                style[this.__isRTL ? 'left' : 'right'] = dimensionToSet + 'px';
                 alignedToParent = true;
               }
             } else if (x < parentContentRect.x) {
@@ -650,20 +650,38 @@ This program is available under Apache License Version 2.0, available at https:/
           }
 
           if (!alignedToParent) {
-            // Sub-menu is displayed in the right side of root menu
-            if ((x < wdthVport / 2 || x < xMax) && !parent) {
-              style.left = x + 'px';
-            } else if ((parent && (wdthVport - parentContentRect.width - parentContentRect.left
-              >= parentContentRect.width))) { // Sub-menu is displayed in the right side of root menu If it is nested menu
-              style.left = parentContentRect.left + parentContentRect.width + 'px';
-            } else if (parent) { // Sub-menu is displayed in the left side of root menu If it is nested menu
-              style.right = 'auto';
-              style.left = Math.max(overlay.getBoundingClientRect().left,
-                parentContentRect.left - overlay.getBoundingClientRect().width) + 'px';
-              overlay.setAttribute('right-aligned', '');
-            } else { // Sub-menu is displayed in the left side of root menu
-              style.right = Math.max(0, (wdthVport - x)) + 'px';
-              overlay.setAttribute('right-aligned', '');
+            if (!this.__isRTL) {
+              // Sub-menu is displayed in the right side of root menu
+              if ((x < wdthVport / 2 || x < xMax) && !parent) {
+                style.left = x + 'px';
+              } else if ((parent && (wdthVport - parentContentRect.width - parentContentRect.left
+                >= parentContentRect.width))) { // Sub-menu is displayed in the right side of root menu If it is nested menu
+                style.left = parentContentRect.left + parentContentRect.width + 'px';
+              } else if (parent) { // Sub-menu is displayed in the left side of root menu If it is nested menu
+                style.right = 'auto';
+                style.left = Math.max(overlay.getBoundingClientRect().left,
+                  parentContentRect.left - overlay.getBoundingClientRect().width) + 'px';
+                this._setEndAligned(overlay);
+              } else { // Sub-menu is displayed in the left side of root menu
+                style.right = Math.max(0, (wdthVport - x)) + 'px';
+                this._setEndAligned(overlay);
+              }
+            } else {
+              // Sub-menu is displayed in the left side of root menu
+              if ((x > wdthVport / 2 || x > xMin) && !parent) {
+                style.right = Math.max(0, (wdthVport - x)) + 'px';
+              } else if (parent && (parentContentRect.left >= parentContentRect.width)) {
+                // Sub-menu is displayed in the left side of root menu If it is nested menu
+                style.right = (wdthVport - parentContentRect.right + parentContentRect.width) + 'px';
+              } else if (parent) { // Sub-menu is displayed in the right side of root menu If it is nested menu
+                style.right = 'auto';
+                style.left = Math.max(overlay.getBoundingClientRect().left - overlay.getBoundingClientRect().width,
+                  parentContentRect.right) + 'px';
+                this._setEndAligned(overlay);
+              } else { // Sub-menu is displayed in the left side of root menu
+                style.left = x + 'px';
+                this._setEndAligned(overlay);
+              }
             }
           }
           if (y < hghtVport / 2 || y < yMax) {
@@ -671,6 +689,13 @@ This program is available under Apache License Version 2.0, available at https:/
           } else {
             style.bottom = Math.max(0, (hghtVport - y)) + 'px';
             overlay.setAttribute('bottom-aligned', '');
+          }
+        }
+
+        _setEndAligned(element) {
+          element.setAttribute('end-aligned', '');
+          if (!this.__isRTL) {
+            element.setAttribute('right-aligned', '');
           }
         }
 

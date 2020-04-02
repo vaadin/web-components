@@ -1,5 +1,6 @@
 <link rel="import" href="../../vaadin-item/src/vaadin-item.html">
 <link rel="import" href="../../vaadin-list-box/src/vaadin-list-box.html">
+<link rel="import" href="../../vaadin-element-mixin/vaadin-dir-mixin.html">
 
 <script>
   (function() {
@@ -122,6 +123,10 @@
     disconnectedCallback() {
       super.disconnectedCallback();
       document.documentElement.removeEventListener('click', this.__itemsOutsideClickListener);
+    }
+
+    get __isRTL() {
+      return this.getAttribute('dir') === 'rtl';
     }
 
     __forwardFocus() {
@@ -292,7 +297,8 @@
         menu.$.overlay.$.backdrop.addEventListener('click', () => menu.close());
 
         menu.$.overlay.addEventListener('keydown', e => {
-          if (e.keyCode === 37) {
+          const isRTL = this.__isRTL;
+          if ((!isRTL && e.keyCode === 37) || (isRTL && e.keyCode === 39)) {
             menu.close();
             menu.listenOn.focus();
           } else if (e.keyCode === 27) {
@@ -331,8 +337,15 @@
         };
 
         menu.$.overlay.addEventListener('mouseover', openSubMenu);
-        menu.$.overlay.addEventListener('keydown', e =>
-          (e.keyCode === 39 || e.keyCode === 13 || e.keyCode === 32) && openSubMenu(e));
+        menu.$.overlay.addEventListener('keydown', e => {
+          const isRTL = this.__isRTL;
+          const shouldOpenSubMenu = (!isRTL && e.keyCode === 39)
+              || (isRTL && e.keyCode === 37)
+              || e.keyCode === 13
+              || e.keyCode === 32;
+
+          shouldOpenSubMenu && openSubMenu(e);
+        });
       } else {
         const listBox = root.querySelector('vaadin-context-menu-list-box');
         if (this.theme) {

@@ -15,7 +15,8 @@ This program is available under Apache License Version 2.0, available at https:/
         justify-content: flex-start;
       }
 
-      :host([right-aligned]) {
+      :host([right-aligned]),
+      :host([end-aligned]) {
         align-items: flex-end;
       }
 
@@ -40,6 +41,9 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * See [`<vaadin-overlay>` documentation](https://github.com/vaadin/vaadin-overlay/blob/master/src/vaadin-overlay.html)
        * for `<vaadin-context-menu-overlay>` parts.
+       *
+       * #### Deprecated
+       * `right-aligned` is deprecated in favor of `end-aligned`
        *
        * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
        *
@@ -120,8 +124,10 @@ This program is available under Apache License Version 2.0, available at https:/
 
           return {
             xMax: overlayRect.right - contentRect.width,
+            xMin: overlayRect.left + contentRect.width,
             yMax,
             left: overlayRect.left,
+            right: overlayRect.right,
             top: overlayRect.top,
             width: contentRect.width
           };
