@@ -187,17 +187,30 @@
             expect(overlay.focusedDate).to.eql(new Date(1999, 11, 25));
           });
 
-          it('should focus one day forward with arrow right', () => {
-            arrowRight();
+          ['ltr', 'rtl'].forEach(direction => {
+            describe(`[dir="${direction}"]`, () => {
+              const isRTL = direction === 'rtl';
+              before(() => {
+                document.documentElement.setAttribute('dir', direction);
+              });
 
-            expect(overlay.focusedDate).to.eql(new Date(2000, 0, 2));
+              after(() => {
+                if (isRTL) {
+                  document.documentElement.setAttribute('dir', 'ltr');
+                }
+              });
 
-          });
+              it(`should focus one day ${isRTL ? 'backward' : 'forward'} with arrow 'right'`, () => {
+                arrowRight();
+                expect(overlay.focusedDate).to.eql(isRTL ? new Date(1999, 11, 31) : new Date(2000, 0, 2));
+              });
 
-          it('should focus one day backward with arrow left', () => {
-            arrowLeft();
+              it(`should focus one day ${isRTL ? 'forward' : 'backward'} with arrow left`, () => {
+                arrowLeft();
 
-            expect(overlay.focusedDate).to.eql(new Date(1999, 11, 31));
+                expect(overlay.focusedDate).to.eql(isRTL ? new Date(2000, 0, 2) : new Date(1999, 11, 31));
+              });
+            });
           });
 
           it('should close overlay with enter', () => {

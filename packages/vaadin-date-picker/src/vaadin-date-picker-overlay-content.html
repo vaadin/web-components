@@ -12,6 +12,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../vaadin-button/src/vaadin-button.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-theme-property-mixin.html">
+<link rel="import" href="../../vaadin-element-mixin/vaadin-dir-mixin.html">
 <link rel="import" href="vaadin-month-calendar.html">
 <link rel="import" href="vaadin-infinite-scroller.html">
 <link rel="import" href="vaadin-date-picker-helper.html">
@@ -218,8 +219,8 @@ This program is available under Apache License Version 2.0, available at https:/
       class DatePickerOverlayContentElement extends
         Vaadin.ThemableMixin(
           Vaadin.ThemePropertyMixin(
-            Polymer.GestureEventListeners(Polymer.Element))) {
-
+            Vaadin.DirMixin(
+              Polymer.GestureEventListeners(Polymer.Element)))) {
         static get is() {
           return 'vaadin-date-picker-overlay-content';
         }
@@ -298,6 +299,10 @@ This program is available under Apache License Version 2.0, available at https:/
              */
             label: String
           };
+        }
+
+        get __isRTL() {
+          return this.getAttribute('dir') === 'rtl';
         }
 
         ready() {
@@ -737,12 +742,12 @@ This program is available under Apache License Version 2.0, available at https:/
                 break;
               case 'right':
                 if (isScroller) {
-                  this._moveFocusByDays(1);
+                  this._moveFocusByDays(this.__isRTL ? -1 : 1);
                 }
                 break;
               case 'left':
                 if (isScroller) {
-                  this._moveFocusByDays(-1);
+                  this._moveFocusByDays(this.__isRTL ? 1 : -1);
                 }
                 break;
               case 'enter':
