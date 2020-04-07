@@ -35,14 +35,6 @@
       </vaadin-text-field>
     </template>
   </test-fixture>
-  
-  <test-fixture id="default-with-slotted-helper">
-    <template>
-      <vaadin-text-field>
-        <div slot="helper">foo</div>
-      </vaadin-text-field>
-    </template>
-  </test-fixture>
 
   <script>
 
@@ -273,12 +265,6 @@
         });
 
         describe(`binding ${condition}`, function() {
-          function dispatchHelperSlotChange() {
-            // Workaround not to use timeouts
-            const evt = new CustomEvent('slotchange');
-            textField.shadowRoot.querySelector('[name="helper"]').dispatchEvent(evt);
-          }
-
           it('default value should be empty string', function() {
             expect(textField.value).to.be.equal('');
           });
@@ -340,67 +326,6 @@
             textField.label = 0;
             expect(textField.hasAttribute('has-label')).to.be.true;
           });
-
-          it('setting helper updates has-helper attribute', function() {
-            textField.helperText = 'foo';
-            expect(textField.hasAttribute('has-helper')).to.be.true;
-          });
-
-          it('setting helper to empty string does not update has-helper attribute', function() {
-            textField.helperText = '';
-            expect(textField.hasAttribute('has-helper')).to.be.false;
-          });
-
-          it('setting helper to null does not update has-helper attribute', function() {
-            textField.helperText = null;
-            expect(textField.hasAttribute('has-helper')).to.be.false;
-          });
-
-          it('setting number helper updates has-helper attribute', function() {
-            textField.helperText = 0;
-            expect(textField.hasAttribute('has-helper')).to.be.true;
-          });
-
-          it('text-field with slotted helper updates has-helper attribute', function() {
-            const textFieldSlottedHelper = fixture('default-with-slotted-helper');
-            dispatchHelperSlotChange();
-            expect(textFieldSlottedHelper.hasAttribute('has-helper')).to.be.true;
-          });
-
-          it('setting helper with slot updates has-helper attribute', function() {
-            const helper = document.createElement('div');
-            helper.setAttribute('slot', 'helper');
-            helper.textContent = 'foo';
-            textField.appendChild(helper);
-            dispatchHelperSlotChange();
-            expect(textField.hasAttribute('has-helper')).to.be.true;
-          });
-
-          it('removing slotted helper removes has-helper attribute', function(done) {
-            const textFieldSlottedHelper = fixture('default-with-slotted-helper');
-            const helper = textFieldSlottedHelper.querySelector('[slot="helper"]');
-            textFieldSlottedHelper.removeChild(helper);
-            // dispatchHelperSlotChange does not work with this test
-            setTimeout(() => {
-              expect(textFieldSlottedHelper.hasAttribute('has-helper')).to.be.false;
-              done();
-            }, 1);
-          });
-
-          it('setting errorMessage updates has-error-message attribute', function() {
-            textField.errorMessage = 'foo';
-            expect(textField.hasAttribute('has-error-message')).to.be.true;
-          });
-
-          it('setting errorMessage to empty string does not update has-error-message attribute', function() {
-            textField.errorMessage = '';
-            expect(textField.hasAttribute('has-error-message')).to.be.false;
-          });
-
-          it('setting errorMessage to null does not update has-error-message attribute', function() {
-            textField.errorMessage = null;
-            expect(textField.hasAttribute('has-error-message')).to.be.false;
-          });
         });
 
         if (!window.ShadyDOM) {
@@ -409,15 +334,6 @@
               textField.disabled = true;
               const label = textField.root.querySelector('[part="label"]');
               label.click();
-              expect(textField.getAttribute('focused')).to.be.null;
-            });
-          });
-
-          describe(`helper ${condition}`, function() {
-            it('should not update focused property on click if disabled', function() {
-              textField.disabled = true;
-              const helper = textField.root.querySelector('[part="helper-text"]');
-              helper.click();
               expect(textField.getAttribute('focused')).to.be.null;
             });
           });

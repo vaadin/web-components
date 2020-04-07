@@ -10,9 +10,6 @@
 
     window.addEventListener('WebComponentsReady', function() {
       setTimeout(function() {
-        if (theme !== 'lumo') {
-          document.getElementById('lumo').setAttribute('hidden', '');
-        }
         window.ShadyDOM && window.ShadyDOM.flush(); // Force DOM composition
         window.webComponentsAreReady = true; // Checked in gemini before capture callback
       });
@@ -52,12 +49,6 @@
       <p>
       <vaadin-text-field label="Label" invalid error-message="Error"></vaadin-text-field>
       <vaadin-text-field label="Label" value="value"></vaadin-text-field>
-      <p>
-      <vaadin-text-field label="Label" helper-text="Helper" invalid error-message="Error"></vaadin-text-field>
-      <vaadin-text-field helper-text="Helper" value="value"></vaadin-text-field>
-      <p id="lumo">
-      <vaadin-text-field label="Label" helper-text="Helper" invalid error-message="Error" theme="helper-above-field"></vaadin-text-field>
-      <vaadin-text-field helper-text="Helper" value="value" theme="helper-above-field"></vaadin-text-field>
     </fieldset>
   </form>
 
