@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-date-picker",
-  "version": "4.0.8",
+  "version": "4.1.0-alpha1",
   "description": "Polymer element providing a date selection field with scrollable month calendar",
   "main": "vaadin-date-picker.html",
   "repository": "vaadin/vaadin-date-picker",
