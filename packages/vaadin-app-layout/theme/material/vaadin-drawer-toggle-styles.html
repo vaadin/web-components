@@ -8,9 +8,16 @@
         min-width: 0 !important;
         width: 48px;
         height: 48px;
-        margin-right: 1em;
         padding: 0;
         border-radius: 50%;
+      }
+
+      :host(:not([dir="rtl"])) {
+        margin-right: 1em;
+      }
+
+      :host([dir="rtl"]) {
+        margin-left: 1em;
       }
 
       [part="icon"],

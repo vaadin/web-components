@@ -22,14 +22,24 @@ gemini.suite('vaadin-app-layout', function(rootSuite) {
       suite
         .setUrl(`/drawer.html?theme=${theme}`)
         .setCaptureElements('#drawer-tests')
-        .capture('default');
+        .capture('default')
+        .capture('rtl', actions => {
+          actions.executeJS(function(window) {
+            window.document.documentElement.setAttribute('dir', 'rtl');
+          });
+        });
     });
 
     gemini.suite(`primary-drawer-${theme}`, function(suite) {
       suite
         .setUrl(`/primary-drawer.html?theme=${theme}`)
         .setCaptureElements('#primary-drawer-tests')
-        .capture('default');
+        .capture('default')
+        .capture('rtl', actions => {
+          actions.executeJS(function(window) {
+            window.document.documentElement.setAttribute('dir', 'rtl');
+          });
+        });
     });
 
     gemini.suite(`tabs-${theme}`, function(suite) {

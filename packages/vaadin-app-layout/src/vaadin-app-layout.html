@@ -31,6 +31,11 @@ This program is available under Apache License Version 2.0, available at https:/
         padding-left: var(--vaadin-app-layout-navbar-offset-left);
       }
 
+      :host([dir="rtl"]) {
+        padding-left: 0;
+        padding-right: var(--vaadin-app-layout-navbar-offset-left);
+      }
+
       :host([hidden]),
       [hidden] {
         display: none !important;
@@ -79,8 +84,12 @@ This program is available under Apache License Version 2.0, available at https:/
         z-index: 1;
       }
 
-      :host([primary-section="drawer"][drawer-opened]:not([overlay])) [part="navbar"] {
+      :host(:not([dir="rtl"])[primary-section="drawer"][drawer-opened]:not([overlay])) [part="navbar"] {
         left: var(--vaadin-app-layout-drawer-offset-left, 0);
+      }
+
+      :host([dir="rtl"][primary-section="drawer"][drawer-opened]:not([overlay])) [part="navbar"] {
+        right: var(--vaadin-app-layout-drawer-offset-left, 0);
       }
 
       :host([primary-section="drawer"]) [part="drawer"] {
@@ -149,8 +158,27 @@ This program is available under Apache License Version 2.0, available at https:/
         touch-action: manipulation;
       }
 
-      :host([drawer-opened]:not([overlay])) {
+      :host([dir="rtl"]) [part="drawer"] {
+        left: auto;
+        right: var(--vaadin-app-layout-navbar-offset-start, 0);
+        transform: translateX(100%);
+      }
+
+      :host([dir="rtl"]) [part="navbar"],
+      :host([dir="rtl"]) [part="navbar"]::before {
+        transition: right var(--vaadin-app-layout-transition);
+      }
+
+      :host([dir="rtl"][drawer-opened]) [part='drawer'] {
+        transform: translateX(0%);
+      }
+
+      :host(:not([dir="rtl"])[drawer-opened]:not([overlay])) {
         padding-left: var(--vaadin-app-layout-drawer-offset-left);
+      }
+
+      :host([dir="rtl"][drawer-opened]:not([overlay])) {
+        padding-right: var(--vaadin-app-layout-drawer-offset-left);
       }
 
       @media (max-width: 800px),
