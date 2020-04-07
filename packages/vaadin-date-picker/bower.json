@@ -37,7 +37,7 @@
     "iron-media-query": "^2.0.0",
     "iron-resizable-behavior": "^2.0.0",
     "polymer": "^2.0.0",
-    "vaadin-button": "vaadin/vaadin-button#^2.2.2",
+    "vaadin-button": "vaadin/vaadin-button#^2.3.0-alpha1",
     "vaadin-text-field": "vaadin/vaadin-text-field#^2.6.0-alpha4",
     "vaadin-themable-mixin": "vaadin/vaadin-themable-mixin#^1.5.2",
     "vaadin-control-state-mixin": "vaadin/vaadin-control-state-mixin#^2.1.1",
