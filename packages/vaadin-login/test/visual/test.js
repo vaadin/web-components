@@ -14,12 +14,25 @@ gemini.suite('vaadin-login-overlay', function(rootSuite) {
     .before(wait)
     .after(goToAboutBlank);
 
-  ['lumo', 'material'].forEach(theme => {
-    gemini.suite(`default-tests-${theme}`, function(suite) {
-      suite
-        .setUrl(`/default.html?theme=${theme}`)
-        .setCaptureElements('body')
-        .capture(`vaadin-login-overlay`);
+  const screens = [
+    {name: 'desktop', width: 1600, height: 1000},
+    {name: 'medium', width: 1000, height: 600},
+    {name: 'small-portrait', width: 500, height: 1000}
+  ];
+
+  screens.forEach(({name, width, height}) => {
+
+    ['lumo', 'material'].forEach(theme => {
+      ['ltr', 'rtl'].forEach(direction => {
+
+        gemini.suite(`default-tests-${name}-${theme}-${direction}`, function(suite) {
+          suite
+            .before(action => action.setWindowSize(width, height))
+            .setUrl(`default.html?theme=${theme}&dir=${direction}`)
+            .setCaptureElements('body')
+            .capture(`vaadin-login-overlay`);
+        });
+      });
     });
   });
 

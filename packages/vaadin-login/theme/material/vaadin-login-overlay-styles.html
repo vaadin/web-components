@@ -81,6 +81,11 @@
         margin-bottom: 0;
       }
 
+      /* RTL styles */
+      :host([dir="rtl"]) [part="brand"] {
+        padding: 2.8rem 3.5rem 1.5rem 2.5rem;
+      }
+
       /* Small screen */
       @media only screen
       and (max-width: 1023px) {
@@ -99,6 +104,11 @@
         [part="form"] {
           margin-top: -80px;
           margin-bottom: 20px;
+        }
+
+        /* RTL styles */
+        :host([dir="rtl"]) [part="brand"] {
+          padding: 0 2rem 5.5rem 2.5rem;
         }
       }
 
@@ -221,6 +231,15 @@
         [part="form"] ::slotted(*) {
           height: 100%;
         }
+
+        /* RTL styles */
+        :host([dir="rtl"]) [part="brand"] {
+          padding: 1.5rem 1.5rem 1.5rem 2.5rem;
+        }
+
+        :host([dir="rtl"]) [part="form"] {
+          margin: 80px -20px 40px 30px;
+        }
       }
 
       /* Landscape really big screen */
@@ -242,12 +261,29 @@
 
         [part="form"] {
           height: 100%;
-          margin-right: 22px;
           -webkit-overflow-scrolling: touch;
         }
 
-        [part="form"] ::slotted(*) {
+        :host(:not([dir="rtl"])) [part="form"] {
+          margin-right: 22px;
+        }
+
+        :host(:not([dir="rtl"])) [part="form"] ::slotted(*) {
           right: 80px;
+        }
+
+        /* RTL styles */
+        :host([dir="rtl"]) [part="brand"] {
+          padding-right: 4rem;
+          padding-left: 1rem;
+        }
+
+        :host([dir="rtl"]) [part="form"] {
+          margin-left: 22px;
+        }
+
+        :host([dir="rtl"]) [part="form"]::slotted(*) {
+          left: 80px;
         }
       }
 
@@ -261,10 +297,17 @@
           padding: 0 env(safe-area-inset-bottom);
         }
 
-        [part="brand"] {
+        :host(:not([dir="rtl"])) [part="brand"] {
           margin-left: calc(constant(safe-area-inset-bottom) * -1);
           margin-left: calc(env(safe-area-inset-bottom) * -1);
           padding-left: calc(1.5rem + constant(safe-area-inset-bottom));
+        }
+
+        /* RTL styles */
+        :host([dir="rtl"]) [part="brand"] {
+          margin-right: calc(constant(safe-area-inset-bottom) * -1);
+          margin-right: calc(env(safe-area-inset-bottom) * -1);
+          padding-right: calc(1.5rem + constant(safe-area-inset-bottom));
         }
       }
     </style>
@@ -315,6 +358,11 @@
           margin-top: 20px;
           min-height: 250px;
         }
+      }
+
+      /* RTL styles */
+      :host([dir="rtl"][theme~="with-overlay"]) [part="form"] {
+        padding: 2rem 1.8rem 2rem 2.5rem;
       }
     </style>
   </template>

@@ -30,11 +30,18 @@
       [part="error-message"] {
         background-color: hsla(3, 100%, 60%, 0.1);
         padding: 1rem;
-        padding-left: 2.25rem;
         border-radius: 0.25em;
         margin-top: 1rem;
         margin-bottom: 0.5rem;
         color: var(--material-error-text-color);
+      }
+
+      :host(:not([dir="rtl"])) [part="error-message"] {
+        padding-left: 2.25rem;
+      }
+
+      :host([dir="rtl"]) [part="error-message"] {
+        padding-right: 2.25rem;
       }
 
       [part="error-message"]::before {
@@ -46,8 +53,16 @@
         height: 1em;
         line-height: 1;
         text-align: center;
+      }
+
+      :host(:not([dir="rtl"])) [part="error-message"]::before {
         /* Visual centering */
         margin-left: calc(2.25rem * -0.95);
+      }
+
+      :host([dir="rtl"]) [part="error-message"]::before {
+        /* Visual centering */
+        margin-right: calc(2.25rem * -0.95);
       }
 
       [part="error-message"] h5 {

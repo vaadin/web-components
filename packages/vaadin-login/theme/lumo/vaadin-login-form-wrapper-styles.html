@@ -25,11 +25,18 @@
       [part="error-message"] {
         background-color: var(--lumo-error-color-10pct);
         padding: var(--lumo-space-m);
-        padding-left: var(--lumo-size-m);
         border-radius: var(--lumo-border-radius);
         margin-top: var(--lumo-space-m);
         margin-bottom: var(--lumo-space-s);
         color: var(--lumo-error-text-color);
+      }
+
+      :host(:not([dir="rtl"])) [part="error-message"] {
+        padding-left: var(--lumo-size-m);
+      }
+
+      :host([dir="rtl"]) [part="error-message"] {
+        padding-right: var(--lumo-size-m);
       }
 
       [part="error-message"]::before {
@@ -41,8 +48,16 @@
         height: 1em;
         line-height: 1;
         text-align: center;
+      }
+
+      :host(:not([dir="rtl"])) [part="error-message"]::before {
         /* Visual centering */
         margin-left: calc(var(--lumo-size-m) * -0.95);
+      }
+
+      :host([dir="rtl"]) [part="error-message"]::before {
+        /* Visual centering */
+        margin-right: calc(var(--lumo-size-m) * -0.95);
       }
 
       [part="error-message-title"] {

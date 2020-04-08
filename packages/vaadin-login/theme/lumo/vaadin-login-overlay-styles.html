@@ -31,14 +31,6 @@
         height: 100%;
       }
 
-      @media only screen
-      and (max-width: 500px) {
-        [part="overlay"],
-        [part="content"] {
-          height: 100%;
-        }
-      }
-
       [part="card"] {
         width: calc(var(--lumo-size-m) * 10);
         background: var(--lumo-base-color) linear-gradient(var(--lumo-tint-5pct), var(--lumo-tint-5pct));
@@ -74,6 +66,11 @@
       /* Small screen */
       @media only screen
       and (max-width: 500px) {
+        [part="overlay"],
+        [part="content"] {
+          height: 100%;
+        }
+
         [part="content"] {
           min-height: 100%;
           background: var(--lumo-base-color);
@@ -86,6 +83,11 @@
           border-radius: 0;
           box-shadow: none;
           margin: 0;
+        }
+
+        /* RTL styles */
+        :host([dir="rtl"]) [part="brand"] {
+          padding: var(--lumo-space-l) var(--lumo-space-l) var(--lumo-space-l) var(--lumo-space-xl);
         }
       }
 
@@ -167,6 +169,21 @@
 
           padding-left: calc(var(--lumo-space-l) + constant(safe-area-inset-left));
           padding-left: calc(var(--lumo-space-l) + env(safe-area-inset-left));
+        }
+
+        /* RTL styles */
+        :host([dir="rtl"]) [part="card"] {
+          padding-left: constant(safe-area-inset-right);
+          padding-left: env(safe-area-inset-right);
+          padding-right: constant(safe-area-inset-left);
+          padding-right: env(safe-area-inset-left);
+        }
+
+        :host([dir="rtl"]) [part="brand"] {
+          margin-right: calc(constant(safe-area-inset-left) * -1);
+          margin-right: calc(env(safe-area-inset-left) * -1);
+          padding-right: calc(var(--lumo-space-l) + constant(safe-area-inset-left));
+          padding-right: calc(var(--lumo-space-l) + env(safe-area-inset-left));
         }
       }
     </style>
