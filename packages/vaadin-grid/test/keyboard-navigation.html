@@ -706,14 +706,6 @@
           expect(grid.hasAttribute('navigating')).to.be.true;
         });
 
-        it('should navigate on left when navigation mode is off', () => {
-          getRows(body)[0].children[1].focus();
-
-          left();
-
-          expect(getFocusedCellIndex()).to.equal(0);
-        });
-
         it('should enable navigation mode on right', () => {
           focusItem(0);
 
@@ -722,12 +714,27 @@
           expect(grid.hasAttribute('navigating')).to.be.true;
         });
 
-        it('should navigate on right when navigation mode is off', () => {
-          focusItem(0);
+        ['rtl', 'ltr'].forEach(direction => {
+          describe(`navigation left / right in ${direction}`, () => {
+            beforeEach(() => grid.setAttribute('dir', direction));
 
-          right();
+            it('should navigate on left when navigation mode is off', () => {
+              getRows(body)[0].children[1].focus();
 
-          expect(getFocusedCellIndex()).to.equal(1);
+              left();
+
+              expect(getFocusedCellIndex()).to.equal(direction === 'rtl' ? 2 : 0);
+            });
+
+            it('should navigate on right when navigation mode is off', () => {
+              getRows(body)[0].children[1].focus();
+
+              right();
+
+              expect(getFocusedCellIndex()).to.equal(direction === 'rtl' ? 0 : 2);
+            });
+
+          });
         });
 
         it('should focus cell below with down', () => {

@@ -126,14 +126,17 @@
         expect(getElementFromPoint(grid, x, y)).to.equal(handle);
       });
 
-      it('should resize on track', () => {
-        const options = {node: handle};
-        const rect = headerCells[0].getBoundingClientRect();
+      ['rtl', 'ltr'].forEach(direction => {
+        it(`should resize on track in ${direction}`, () => {
+          grid.setAttribute('dir', direction);
+          const options = {node: handle};
+          const rect = headerCells[0].getBoundingClientRect();
 
-        fire('track', {state: 'start'}, options);
-        fire('track', {state: 'track', x: rect.left + 200, y: 0}, options);
+          fire('track', {state: 'start'}, options);
+          fire('track', {state: 'track', x: rect.left + (direction === 'rtl' ? -200 : 200), y: 0}, options);
 
-        expect(headerCells[0].clientWidth).to.equal(200);
+          expect(headerCells[0].clientWidth).to.equal(direction === 'rtl' ? 349 : 200);
+        });
       });
 
       it('should not listen to track event on scroller', () => {
@@ -285,49 +288,55 @@
         expect(newColumn.resizable).to.be.undefined;
       });
 
-      it('should resize the child column', () => {
-        const headerRows = getRows(grid.$.header);
-        const handle = getRowCells(headerRows[0])[0].querySelector('[part~="resize-handle"]');
+      ['rtl', 'ltr'].forEach(direction => {
+        describe(`child columns resizing in ${direction}`, () => {
+          beforeEach(() => grid.setAttribute('dir', direction));
 
-        const cell = getRowCells(headerRows[1])[1];
-        const rect = cell.getBoundingClientRect();
-        const options = {node: handle};
-        fire('track', {state: 'start'}, options);
-        fire('track', {state: 'track', x: rect.right + 100, y: 0}, options);
+          it('should resize the child column', () => {
+            const headerRows = getRows(grid.$.header);
+            const handle = getRowCells(headerRows[0])[0].querySelector('[part~="resize-handle"]');
 
-        expect(cell.clientWidth).to.equal(200);
-      });
+            const cell = getRowCells(headerRows[1])[1];
+            const rect = cell.getBoundingClientRect();
+            const options = {node: handle};
+            fire('track', {state: 'start'}, options);
+            fire('track', {state: 'track', x: rect.right + (direction === 'rtl' ? -100 : 100), y: 0}, options);
 
-      it('should resize the last non-hidden child column', () => {
-        grid._columnTree[1][1].hidden = true;
-        const headerRows = getRows(grid.$.header);
-        const handle = getRowCells(headerRows[0])[0].querySelector('[part~="resize-handle"]');
+            expect(cell.clientWidth).to.equal(direction === 'rtl' ? 100 : 200);
+          });
 
-        const cell = getRowCells(headerRows[1])[0];
-        const rect = cell.getBoundingClientRect();
-        const options = {node: handle};
-        fire('track', {state: 'start'}, options);
-        fire('track', {state: 'track', x: rect.right + 100, y: 0}, options);
+          it('should resize the last non-hidden child column', () => {
+            grid._columnTree[1][1].hidden = true;
+            const headerRows = getRows(grid.$.header);
+            const handle = getRowCells(headerRows[0])[0].querySelector('[part~="resize-handle"]');
 
-        expect(cell.clientWidth).to.equal(200);
-      });
+            const cell = getRowCells(headerRows[1])[0];
+            const rect = cell.getBoundingClientRect();
+            const options = {node: handle};
+            fire('track', {state: 'start'}, options);
+            fire('track', {state: 'track', x: rect.right + (direction === 'rtl' ? -100 : 100), y: 0}, options);
 
-      it('should resize the child group\'s child column', done => {
-        grid = fixture('group-inside-group');
-        grid.dataProvider = infiniteDataProvider;
+            expect(cell.clientWidth).to.equal(direction === 'rtl' ? 100 : 200);
+          });
 
-        animationFrameFlush(() => {
-          const headerRows = getRows(grid.$.header);
-          const handle = getRowCells(headerRows[0])[0].querySelector('[part~="resize-handle"]');
+          it('should resize the child group\'s child column', done => {
+            grid = fixture('group-inside-group');
+            grid.dataProvider = infiniteDataProvider;
 
-          const cell = getRowCells(headerRows[1])[1];
-          const rect = cell.getBoundingClientRect();
-          const options = {node: handle};
-          fire('track', {state: 'start'}, options);
-          fire('track', {state: 'track', x: rect.right + 100, y: 0}, options);
+            animationFrameFlush(() => {
+              const headerRows = getRows(grid.$.header);
+              const handle = getRowCells(headerRows[0])[0].querySelector('[part~="resize-handle"]');
 
-          expect(cell.clientWidth).to.equal(100);
-          done();
+              const cell = getRowCells(headerRows[1])[1];
+              const rect = cell.getBoundingClientRect();
+              const options = {node: handle};
+              fire('track', {state: 'start'}, options);
+              fire('track', {state: 'track', x: rect.right + 100, y: 0}, options);
+
+              expect(cell.clientWidth).to.equal(100);
+              done();
+            });
+          });
         });
       });
 
