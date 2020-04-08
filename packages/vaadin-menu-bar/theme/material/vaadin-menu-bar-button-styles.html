@@ -45,7 +45,7 @@
         opacity: 0;
       }
 
-      :host([theme="contained"]) {
+      :host([theme="contained"]:not([dir="rtl"])) {
         margin-right: 1px;
       }
 
@@ -68,18 +68,41 @@
         font-size: 24px;
       }
 
-      :host([theme="outlined"]) {
+      :host([theme="outlined"]:not([dir="rtl"])) {
         margin-right: -1px;
       }
 
-      :host([theme="outlined"]:nth-last-of-type(2)),
-      :host([theme="outlined"][part~="overflow-button"]) {
+      :host([theme="outlined"]:not([dir="rtl"]):nth-last-of-type(2)),
+      :host([theme="outlined"]:not([dir="rtl"])[part~="overflow-button"]) {
         margin-right: 0;
       }
 
       :host([theme="text"]),
       :host(:not([theme])) {
         border-radius: 4px;
+      }
+
+      /* RTL styles */
+      :host([dir="rtl"]:first-of-type) {
+        border-radius: 0 0.25em 0.25em 0;
+      }
+
+      :host([dir="rtl"]:nth-last-of-type(2)),
+      :host([dir="rtl"][part="overflow-button"]) {
+        border-radius: 0.25em 0 0 0.25em;
+      }
+
+      :host([dir="rtl"][theme="contained"]) {
+        margin-left: 1px;
+      }
+
+      :host([dir="rtl"][theme="outlined"]) {
+        margin-left: -1px;
+      }
+
+      :host([theme="outlined"][dir="rtl"]:nth-last-of-type(2)),
+      :host([theme="outlined"][dir="rtl"][part~="overflow-button"]) {
+        margin-left: 0;
       }
     </style>
   </template>

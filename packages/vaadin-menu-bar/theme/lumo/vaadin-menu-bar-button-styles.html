@@ -96,6 +96,23 @@
         margin-left: 0;
         margin-right: 0;
       }
+
+      /* RTL styles */
+      :host([dir="rtl"]) {
+        margin-left: calc(var(--lumo-space-xs) / 2);
+        margin-right: 0;
+        border-radius: 0;
+      }
+
+      :host([dir="rtl"]:first-of-type) {
+        border-radius: 0 var(--lumo-border-radius-m) var(--lumo-border-radius-m) 0;
+        margin-right: calc(var(--lumo-space-xs) / 2);
+      }
+
+      :host([dir="rtl"]:nth-last-of-type(2)),
+      :host([dir="rtl"][part="overflow-button"]) {
+        border-radius: var(--lumo-border-radius-m) 0 0 var(--lumo-border-radius-m);
+      }
     </style>
   </template>
 </dom-module>
