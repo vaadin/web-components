@@ -139,10 +139,10 @@ This program is available under Apache License Version 2.0, available at https:/
       let dx = 0, dy = 0;
       switch (key) {
         case 'ArrowRight':
-          dx = 1;
+          dx = this.__isRTL ? -1 : 1;
           break;
         case 'ArrowLeft':
-          dx = -1;
+          dx = this.__isRTL ? 1 : -1;
           break;
         case 'Home':
           dx = -Infinity;

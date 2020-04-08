@@ -56,7 +56,9 @@ This program is available under Apache License Version 2.0, available at https:/
           var style = window.getComputedStyle(targetCell);
           var minWidth = 10 + parseInt(style.paddingLeft) + parseInt(style.paddingRight) + parseInt(style.borderLeftWidth)
             + parseInt(style.borderRightWidth) + parseInt(style.marginLeft) + parseInt(style.marginRight);
-          column.width = Math.max(minWidth, targetCell.offsetWidth + e.detail.x - targetCell.getBoundingClientRect().right) + 'px';
+          const maxWidth = targetCell.offsetWidth + (this.__isRTL ? targetCell.getBoundingClientRect().left - e.detail.x :
+            e.detail.x - targetCell.getBoundingClientRect().right);
+          column.width = Math.max(minWidth, maxWidth) + 'px';
           column.flexGrow = 0;
         }
         // Fix width and flex-grow for all preceding columns
