@@ -669,6 +669,33 @@
           expect(spy.called).to.be.true;
         });
       });
+
+      describe('part attribute', () => {
+
+        let grid, rows;
+
+        beforeEach(() => {
+          grid = fixture('default');
+          grid.items = getItems();
+          flushGrid(grid);
+          rows = Array.from(getRows(grid.$.items));
+        });
+
+        it('should have editable-cell attribute on edit column cells', () => {
+          const editColumnCells = flatMap(rows, row => getRowCells(row).slice(0, 2));
+          expect(editColumnCells).to.have.lengthOf(6);
+          editColumnCells.forEach(cell =>
+            expect(cell.getAttribute('part')).to.equal('cell body-cell editable-cell'));
+        });
+
+        it('should not have editable-cell attribute on normal column cells', () => {
+          const normalColumnCells = rows.map(row => getRowCells(row)[2]);
+          expect(normalColumnCells).to.have.lengthOf(3);
+          normalColumnCells.forEach(cell =>
+            expect(cell.getAttribute('part')).to.equal('cell body-cell'));
+        });
+
+      });
     });
   </script>
 

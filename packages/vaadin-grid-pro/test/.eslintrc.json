@@ -23,6 +23,7 @@
     "getContainerCellContent": false,
     "getNativeInput": false,
     "getRows": false,
-    "getRowCells": false
+    "getRowCells": false,
+    "flatMap": false
   }
 }

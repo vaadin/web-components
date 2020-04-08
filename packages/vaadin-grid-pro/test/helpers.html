@@ -120,4 +120,7 @@
   window.getNativeInput = (editor) => {
     return editor.shadowRoot.querySelector('input');
   };
+
+  window.flatMap = (array, mapper) => [].concat(...array.map(mapper));
+
 </script>

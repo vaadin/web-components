@@ -105,6 +105,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       static get observers() {
         return [
           '_editModeTemplateOrRendererChanged(_editModeTemplate, editModeRenderer)',
+          '_cellsChanged(_cells.*)'
         ];
       }
 
@@ -138,6 +139,15 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         if (!path || path.length == 0) {
           throw new Error('You should specify the path for the edit column');
         }
+      }
+
+      _cellsChanged() {
+        this._cells.forEach(cell => {
+          const part = cell.getAttribute('part');
+          if (part.indexOf('editable-cell') < 0) {
+            cell.setAttribute('part', part + ' editable-cell');
+          }
+        });
       }
 
       _removeNewRendererOrTemplate(template, oldTemplate, renderer, oldRenderer) {
