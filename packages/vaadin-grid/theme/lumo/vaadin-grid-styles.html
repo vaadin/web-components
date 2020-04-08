@@ -334,6 +334,30 @@
       :host([theme~="wrap-cell-content"]) [part~="cell"] ::slotted(vaadin-grid-cell-content) {
         white-space: normal;
       }
+
+      /* RTL specific styles */
+
+      :host([dir="rtl"]) [part~="row"][dragstart] [part~="cell"][last-column] {
+        border-radius: var(--lumo-border-radius-s) 0 0 var(--lumo-border-radius-s);
+      }
+
+      :host([dir="rtl"]) [part~="row"][dragstart] [part~="cell"][first-column] {
+        border-radius: 0 var(--lumo-border-radius-s) var(--lumo-border-radius-s) 0;
+      }
+
+      :host([dir="rtl"][theme~="column-borders"]) [part~="cell"]:not([last-column]):not([part~="details-cell"]) {
+        border-right: none;
+        border-left: var(--_lumo-grid-border-width) solid var(--_lumo-grid-secondary-border-color);
+      }
+
+      :host([dir="rtl"]) [last-frozen] {
+        border-right: none;
+        border-left: var(--_lumo-grid-border-width) solid transparent;
+      }
+
+      :host([dir="rtl"][overflow~="right"]) [part~="cell"][last-frozen]:not([part~="details-cell"]) {
+        border-left-color: var(--_lumo-grid-border-color);
+      }
     </style>
   </template>
 </dom-module>

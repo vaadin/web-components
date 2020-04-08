@@ -40,6 +40,8 @@
     "scrollToEnd": false,
     "isFullOfItems": false,
     "isVisible": false,
+    "isWithinParentConstraints": false,
+    "getCustomCSSPropertyValue": false,
     "defaultCellWidth": false,
     "listenOnce": false,
     "MockInteractions": false,

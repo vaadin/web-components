@@ -350,10 +350,20 @@ This program is available under Apache License Version 2.0, available at https:/
             cell.style.transform = '';
           });
           this._frozenCells = Array.prototype.slice.call(this.$.table.querySelectorAll('[frozen]'));
+          this._updateScrollerMeasurements();
           this._translateStationaryElements();
         }
       );
       this._updateLastFrozen();
+    }
+
+    _updateScrollerMeasurements() {
+      if (this._frozenCells.length > 0 && this.__isRTL) {
+        this.__scrollerMetrics = {
+          scrollWidth: this.$.outerscroller.scrollWidth,
+          clientWidth: this.$.outerscroller.clientWidth
+        };
+      }
     }
 
     _updateLastFrozen() {
@@ -386,9 +396,15 @@ This program is available under Apache License Version 2.0, available at https:/
         this.$.footer.style.transform = this.$.header.style.transform = this._getTranslate(0, this._scrollTop);
       }
 
-      var frozenCellTransform = this._getTranslate(this._scrollLeft, 0);
-      for (var i = 0; i < this._frozenCells.length; i++) {
-        this._frozenCells[i].style.transform = frozenCellTransform;
+      if (this._frozenCells.length > 0) {
+        const x = this.__isRTL ?
+          this.__getNormalizedScrollLeft(this.$.table) + this.__scrollerMetrics.clientWidth -
+          this.__scrollerMetrics.scrollWidth
+          : this._scrollLeft;
+        var frozenCellTransform = this._getTranslate(x, 0);
+        for (var i = 0; i < this._frozenCells.length; i++) {
+          this._frozenCells[i].style.transform = frozenCellTransform;
+        }
       }
     }
 

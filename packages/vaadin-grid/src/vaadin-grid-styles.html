@@ -306,6 +306,28 @@ This program is available under Apache License Version 2.0, available at https:/
         width: 100%;
         will-change: transform;
       }
+
+      /* RTL specific styles */
+
+      :host([dir="rtl"]) [part~="reorder-ghost"] {
+        left: auto;
+        right: 0;
+      }
+
+      :host([dir="rtl"]) [part~="resize-handle"] {
+        left: 0;
+        right: auto;
+      }
+
+      :host([dir="rtl"]) [part~="resize-handle"]::before {
+        transform: translateX(50%);
+      }
+
+      :host([dir="rtl"]) [last-column] [part~="resize-handle"]::before,
+      :host([dir="rtl"]) [last-frozen] [part~="resize-handle"]::before {
+        left: 0;
+        right: auto;
+      }
     </style>
   `);
 

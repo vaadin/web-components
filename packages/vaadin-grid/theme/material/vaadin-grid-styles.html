@@ -211,6 +211,23 @@
         text-align: center;
         line-height: 1;
       }
+
+      /* RTL specific styles */
+
+      :host([dir="rtl"]) [part~="cell"][last-frozen] {
+        border-right: none;
+        border-left: 1px solid var(--material-divider-color);
+      }
+
+      :host([dir="rtl"]) [part~="cell"]:not([last-frozen]) [part="resize-handle"] {
+        border-right: none;
+        border-left: 1px solid var(--material-divider-color);
+      }
+
+      :host([dir="rtl"]) #scroller:not([ios]) [part~="row"][dragstart]:not([dragstart=""])::after {
+        left: auto;
+        right: var(--_grid-drag-start-x);
+      }
     </style>
   </template>
 </dom-module>

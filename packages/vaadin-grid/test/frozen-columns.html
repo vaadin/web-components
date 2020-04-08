@@ -36,135 +36,150 @@
   </test-fixture>
 
   <script>
-    describe('frozen columns', () => {
-      let grid;
-      let columns;
+    ['ltr', 'rtl'].forEach(direction => {
+      describe(`frozen columns ${direction}`, () => {
+        let grid;
+        let columns;
+        const isRTL = direction === 'rtl';
 
-      beforeEach(() => {
-        grid = fixture('frozen-columns');
-        grid.dataProvider = infiniteDataProvider;
-        columns = grid.querySelectorAll('vaadin-grid-column');
+        beforeEach(() => {
+          grid = fixture('frozen-columns');
+          grid.dataProvider = infiniteDataProvider;
+          columns = grid.querySelectorAll('vaadin-grid-column');
+          document.documentElement.setAttribute('dir', direction);
 
-        flushGrid(grid);
-      });
-
-      it('should have last frozen only when there are frozen columns', () => {
-        expect(columns[0]._lastFrozen).to.be.true;
-
-        columns[0].frozen = false;
-
-        expect(columns[0]._lastFrozen).to.be.false;
-      });
-
-      it('should not transform frozen sizer elements', done => {
-        columns[0].frozen = true;
-        listenOnce(grid.$.table, 'scroll', () => {
-          const outerCell = grid.$.outerscroller.querySelector('[frozen]');
-          expect(getComputedStyle(outerCell).transform).to.equal('none');
-          done();
+          flushGrid(grid);
         });
-        grid.$.table.scrollLeft = 100;
-      });
 
-      ['header', 'body'].forEach(container => {
+        it('should have last frozen only when there are frozen columns', () => {
+          expect(columns[0]._lastFrozen).to.be.true;
 
-        describe(container, () => {
+          columns[0].frozen = false;
 
-          let containerElement;
-          let containerRows;
+          expect(columns[0]._lastFrozen).to.be.false;
+        });
 
-          beforeEach(() => {
-            containerElement = grid.shadowRoot.querySelector(container === 'header' ? 'thead' : 'tbody');
-            containerRows = getRows(containerElement);
+        it('should not transform frozen sizer elements', done => {
+          columns[0].frozen = true;
+          listenOnce(grid.$.table, 'scroll', () => {
+            const outerCell = grid.$.outerscroller.querySelector('[frozen]');
+            expect(getComputedStyle(outerCell).transform).to.equal('none');
+            done();
           });
+          grid.__setNormalizedScrollLeft(grid.$.table, 100);
+        });
 
-          it('should have a frozen cell in a row', () => {
-            const cells = getRowCells(containerRows[0]);
-            expect(cells[0].hasAttribute('frozen')).to.be.true;
-            expect(cells[1].hasAttribute('frozen')).not.to.be.true;
-            expect(cells[2].hasAttribute('frozen')).not.to.be.true;
-          });
+        ['header', 'body'].forEach(container => {
 
-          it('should have the correct last-frozen cell in a row', () => {
-            grid._columnTree[0][1].frozen = true;
-            containerRows = getRows(containerElement);
-            const cells = getRowCells(containerRows[0]);
-            expect(cells[0].hasAttribute('last-frozen')).not.to.be.true;
-            expect(cells[1].hasAttribute('last-frozen')).to.be.true;
-            expect(cells[2].hasAttribute('last-frozen')).not.to.be.true;
-          });
+          describe(container, () => {
 
-          it('should not move while content scrolls horizontally', done => {
-            const initialContainerRect = containerElement.getBoundingClientRect();
-            const borderTopWidth = containerElement.style.borderTopWidth || '0';
-            const containerTop = parseInt(borderTopWidth) + initialContainerRect.top + 2;
-            const cells = getRowCells(containerRows[0]);
+            let containerElement;
+            let containerRows;
+            let scrollbarWidth;
+            let borderWidth;
+            let translateValue;
 
-            listenOnce(grid.$.table, 'scroll', () => {
-              expect(isVisible(cells[0])).to.equal(true);
-              expect(isVisible(cells[2])).to.equal(true);
-              done();
+            beforeEach(() => {
+              containerElement = grid.shadowRoot.querySelector(container === 'header' ? 'thead' : 'tbody');
+              containerRows = getRows(containerElement);
+              scrollbarWidth = grid.$.table.offsetWidth - grid.$.table.clientWidth;
+              borderWidth = parseInt(getCustomCSSPropertyValue(grid, '--_lumo-grid-border-width'));
+              translateValue = isRTL ? - (defaultCellWidth + 2 * borderWidth) : defaultCellWidth;
             });
 
-            grid.$.table.scrollLeft = defaultCellWidth;
-          });
-
-          it('should update transforms when frozen columns decrease', done => {
-            let cells = getRowCells(containerRows[0]);
-
-            listenOnce(grid.$.table, 'scroll', () => {
-              const expected = ['translate(' + defaultCellWidth + 'px, 0px)', 'translate(' + defaultCellWidth + 'px)'];
-              expect(expected).to.include(cells[0].style.transform);
-
-              grid._columnTree[0][0].frozen = false;
-              cells = getRowCells(getRows(containerElement)[0]);
-              grid._debouncerCacheElements.flush();
-
-              expect(cells[0].style.transform).to.be.empty;
-              done();
+            it('should have a frozen cell in a row', () => {
+              const cells = getRowCells(containerRows[0]);
+              expect(cells[0].hasAttribute('frozen')).to.be.true;
+              expect(cells[1].hasAttribute('frozen')).not.to.be.true;
+              expect(cells[2].hasAttribute('frozen')).not.to.be.true;
             });
-            grid.$.table.scrollLeft = defaultCellWidth;
 
-          });
-
-          it('should update transforms when frozen columns increase', done => {
-            let cells = getRowCells(containerRows[0]);
-
-            listenOnce(grid.$.table, 'scroll', () => {
-              expect(cells[1].style.transform).to.eql('');
-
+            it('should have the correct last-frozen cell in a row', () => {
               grid._columnTree[0][1].frozen = true;
-              cells = getRowCells(getRows(containerElement)[0]);
-              grid._debouncerCacheElements.flush();
-
-              const expected = ['translate(' + defaultCellWidth + 'px, 0px)', 'translate(' + defaultCellWidth + 'px)'];
-              expect(expected).to.include(cells[1].style.transform);
-              done();
+              containerRows = getRows(containerElement);
+              const cells = getRowCells(containerRows[0]);
+              expect(cells[0].hasAttribute('last-frozen')).not.to.be.true;
+              expect(cells[1].hasAttribute('last-frozen')).to.be.true;
+              expect(cells[2].hasAttribute('last-frozen')).not.to.be.true;
             });
-            grid.$.table.scrollLeft = defaultCellWidth;
 
-          });
+            it('should not move while content scrolls horizontally', done => {
+              const initialContainerRect = containerElement.getBoundingClientRect();
+              const borderTopWidth = containerElement.style.borderTopWidth || '0';
+              const containerTop = parseInt(borderTopWidth) + initialContainerRect.top + 2;
+              const cells = getRowCells(containerRows[0]);
 
-          it('should have the correct last-frozen cell in a row with hidden columns', () => {
-            grid._columnTree[0][1].frozen = grid._columnTree[0][2].frozen = true;
+              listenOnce(grid.$.table, 'scroll', () => {
+                if (isRTL) {
+                  expect(isWithinParentConstraints(cells[0], grid.$.table)).to.equal(true);
+                  expect(isWithinParentConstraints(cells[2], grid.$.table)).to.equal(true);
+                } else {
+                  expect(isVisible(cells[0])).to.equal(true);
+                  expect(isVisible(cells[2])).to.equal(true);
+                }
+                done();
+              });
 
-            containerRows = getRows(containerElement);
-            const cells = getRowCells(containerRows[0]);
+              grid.__setNormalizedScrollLeft(grid.$.table, isRTL ? scrollbarWidth : defaultCellWidth);
+            });
 
-            expect(cells[0].hasAttribute('last-frozen')).not.to.be.true;
-            expect(cells[1].hasAttribute('last-frozen')).not.to.be.true;
-            expect(cells[2].hasAttribute('last-frozen')).to.be.trues;
+            it('should update transforms when frozen columns decrease', done => {
+              let cells = getRowCells(containerRows[0]);
 
-            grid._columnTree[0][2].hidden = true;
+              listenOnce(grid.$.table, 'scroll', () => {
+                const expected = ['translate(' + translateValue + 'px, 0px)', 'translate(' + translateValue + 'px)'];
+                expect(expected).to.include(cells[0].style.transform);
 
-            expect(cells[0].hasAttribute('last-frozen')).not.to.be.true;
-            expect(cells[1].hasAttribute('last-frozen')).to.be.true;
-            expect(cells[2].hasAttribute('last-frozen')).not.to.be.true;
+                grid._columnTree[0][0].frozen = false;
+                cells = getRowCells(getRows(containerElement)[0]);
+                grid._debouncerCacheElements.flush();
+
+                expect(cells[0].style.transform).to.be.empty;
+                done();
+              });
+              grid.__setNormalizedScrollLeft(grid.$.table, isRTL ? scrollbarWidth : defaultCellWidth);
+
+            });
+
+            it('should update transforms when frozen columns increase', done => {
+              let cells = getRowCells(containerRows[0]);
+
+              listenOnce(grid.$.table, 'scroll', () => {
+                expect(cells[1].style.transform).to.eql('');
+
+                grid._columnTree[0][1].frozen = true;
+                cells = getRowCells(getRows(containerElement)[0]);
+                grid._debouncerCacheElements.flush();
+
+                const expected = ['translate(' + translateValue + 'px, 0px)', 'translate(' + translateValue + 'px)'];
+                expect(expected).to.include(cells[1].style.transform);
+                done();
+              });
+              grid.__setNormalizedScrollLeft(grid.$.table, isRTL ? scrollbarWidth : defaultCellWidth);
+
+            });
+
+            it('should have the correct last-frozen cell in a row with hidden columns', () => {
+              grid._columnTree[0][1].frozen = grid._columnTree[0][2].frozen = true;
+
+              containerRows = getRows(containerElement);
+              const cells = getRowCells(containerRows[0]);
+
+              expect(cells[0].hasAttribute('last-frozen')).not.to.be.true;
+              expect(cells[1].hasAttribute('last-frozen')).not.to.be.true;
+              expect(cells[2].hasAttribute('last-frozen')).to.be.trues;
+
+              grid._columnTree[0][2].hidden = true;
+
+              expect(cells[0].hasAttribute('last-frozen')).not.to.be.true;
+              expect(cells[1].hasAttribute('last-frozen')).to.be.true;
+              expect(cells[2].hasAttribute('last-frozen')).not.to.be.true;
+            });
           });
         });
+
+
       });
-
-
     });
   </script>
 

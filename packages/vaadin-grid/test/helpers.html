@@ -205,6 +205,17 @@
     return visibleRows;
   };
 
+  window.isWithinParentConstraints = (el, parent) => {
+    return ['top', 'bottom', 'left', 'right'].every(constraint =>
+      el.getBoundingClientRect[constraint] === parent.getBoundingClientRect[constraint]);
+  };
+
+  window.getCustomCSSPropertyValue = (element, propertyName) => {
+    return window.ShadyCSS
+      ? window.ShadyCSS.getComputedStyleValue(element, propertyName)
+      : getComputedStyle(element).getPropertyValue(propertyName);
+  };
+
   // http://stackoverflow.com/a/15203639/1331425
   window.isVisible = (el) => {
     let top = el.offsetTop;

@@ -8,6 +8,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../polymer/lib/elements/custom-style.html">
 <link rel="import" href="../../polymer/lib/utils/debounce.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
+<link rel="import" href="../../vaadin-element-mixin/vaadin-dir-mixin.html">
 
 <custom-style>
   <style>
@@ -129,7 +130,7 @@ This program is available under Apache License Version 2.0, available at https:/
      * @memberof Vaadin
      * @mixes Vaadin.ThemableMixin
      */
-    class GridTreeToggleElement extends Vaadin.ThemableMixin(Polymer.Element) {
+    class GridTreeToggleElement extends Vaadin.ThemableMixin(Vaadin.DirMixin(Polymer.Element)) {
       static get is() {
         return 'vaadin-grid-tree-toggle';
       }

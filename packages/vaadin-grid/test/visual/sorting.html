@@ -8,6 +8,9 @@
     const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
     document.write(`<link rel="import" href="../../theme/${theme}/vaadin-grid.html">`);
     document.write(`<link rel="import" href="../../theme/${theme}/vaadin-grid-sorter.html">`);
+
+    const dir = window.location.search.replace(/.*dir=(\w+).*/, '$1') || 'ltr';
+    document.documentElement.setAttribute('dir', dir);
   </script>
   <script src="../../demo/grid-demo-data.js"></script>
   <link href="../../demo/x-data-provider.html" rel="import">
