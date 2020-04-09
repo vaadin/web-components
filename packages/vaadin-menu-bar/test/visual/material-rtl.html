@@ -4,12 +4,8 @@
   <meta charset="UTF-8">
 
   <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
-  <script src="../../../iron-test-helpers/mock-interactions.js"></script>
-  <script src="../helpers.js"></script>
+  <link rel="import" href="../../theme/material/vaadin-menu-bar.html">
   <script>
-    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
-    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-menu-bar.html">`);
-
     window.addEventListener('WebComponentsReady', function() {
       setTimeout(function() {
         window.ShadyDOM && window.ShadyDOM.flush(); // Force DOM composition
@@ -18,8 +14,7 @@
     });
   </script>
   <style>
-    /* cover all the viewport */
-    #focused-tests {
+    #rtl-tests {
       padding: 10px;
       position: absolute;
       top: 0;
@@ -32,17 +27,16 @@
 
 <body>
 
-  <div id="focused-tests">
-    <vaadin-menu-bar></vaadin-menu-bar>
+  <div id="rtl-tests">
+    <vaadin-menu-bar theme="outlined"></vaadin-menu-bar>
+
+    <vaadin-menu-bar theme="contained"></vaadin-menu-bar>
   </div>
 
   <script>
-    window.addEventListener('WebComponentsReady', () => {
-      const menu = document.querySelector('vaadin-menu-bar');
+    Array.from(document.querySelectorAll('vaadin-menu-bar')).forEach(menu => {
       menu.items = [
-        {
-          text: 'Home'
-        },
+        {text: 'Home'},
         {
           text: 'Reports',
           children: [
@@ -53,10 +47,6 @@
         {text: 'Dashboard', disabled: true},
         {text: 'Help'}
       ];
-
-      const button = menu.shadowRoot.querySelectorAll('vaadin-menu-bar-button')[1];
-      button.focus();
-      arrowLeft(button);
     });
   </script>
 

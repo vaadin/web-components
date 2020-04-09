@@ -1,6 +1,9 @@
 gemini.suite('vaadin-menu-bar', function(rootSuite) {
   function wait(actions, find) {
-    actions.wait(5000);
+    return actions
+      .waitForJSCondition(function(window) {
+        return window.webComponentsAreReady;
+      }, 80000);
   }
 
   function goToAboutBlank(actions, find) {
@@ -73,6 +76,16 @@ gemini.suite('vaadin-menu-bar', function(rootSuite) {
         });
       });
     }
-  });
 
+    gemini.suite(`${theme}-rtl-tests`, function(suite) {
+      suite
+        .setUrl(`${theme}-rtl.html`)
+        .setCaptureElements(`#rtl-tests`)
+        .capture(`${theme}-rtl`, function(actions) {
+          actions.executeJS(function(window) {
+            window.document.documentElement.setAttribute('dir', 'rtl');
+          });
+        });
+    });
+  });
 });

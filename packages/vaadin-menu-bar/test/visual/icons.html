@@ -6,6 +6,13 @@
   <script>
     var theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
     document.write(`<link rel="import" href="../../theme/${theme}/vaadin-menu-bar.html">`);
+
+    window.addEventListener('WebComponentsReady', function() {
+      setTimeout(function() {
+        window.ShadyDOM && window.ShadyDOM.flush(); // Force DOM composition
+        window.webComponentsAreReady = true; // Checked in gemini before capture callback
+      });
+    });
   </script>
   <link rel="import" href="../../../vaadin-lumo-styles/icons.html">
   <link rel="import" href="../../../vaadin-icons/vaadin-icons.html">
@@ -44,7 +51,7 @@
 
     var theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
     if (theme === 'lumo') {
-      menu.parentElement.style.width = '550px';
+      menu.parentElement.style.width = '540px';
     } else if (theme === 'material') {
       menu.parentElement.style.width = '600px';
     }
