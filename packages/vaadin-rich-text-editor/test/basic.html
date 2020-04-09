@@ -209,7 +209,13 @@
             expect(spy).to.be.calledOnce;
           });
 
-          it('should insert image from the file dialog on file input change event', done => {
+          const isDesktopSafari = (() => {
+            const uA = navigator.userAgent;
+            const vendor = navigator.vendor;
+            return /Safari/i.test(uA) && /Apple Computer/.test(vendor) && !/Mobi|Android/i.test(uA);
+          })();
+
+          !isDesktopSafari && it('should insert image from the file dialog on file input change event', done => {
             // We can't simply assign `files` property of input[type="file"].
             // Tweaking __proto__ to make it assignable below.
             const fileInput = rte.shadowRoot.querySelector('input[type="file"]');
@@ -233,7 +239,7 @@
             fileInput.dispatchEvent(new Event('change'));
           });
 
-          it('should mark image button as clicked for subsequent change event', done => {
+          !isDesktopSafari && it('should mark image button as clicked for subsequent change event', done => {
             const markClickedSpy = sinon.spy(rte, '_markToolbarClicked');
 
             const fileInput = rte.shadowRoot.querySelector('input[type="file"]');
