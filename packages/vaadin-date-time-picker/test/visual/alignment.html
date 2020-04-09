@@ -11,6 +11,9 @@
       <link rel="import" href="../../../vaadin-text-field/theme/${theme}/vaadin-text-field.html">
       <link rel="import" href="../../../vaadin-date-picker/theme/${theme}/vaadin-date-picker.html">
     `);
+
+    const dir = window.location.search.replace(/.*dir=(\w+).*/, '$1') || 'ltr';
+    document.documentElement.setAttribute('dir', dir);
   </script>
 </head>
 

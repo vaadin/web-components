@@ -15,32 +15,34 @@ gemini.suite('vaadin-date-time-picker', function(rootSuite) {
     .after(goToAboutBlank);
 
   ['lumo', 'material'].forEach(theme => {
-    gemini.suite(`default-tests-${theme}`, function(suite) {
-      suite
-        .setUrl(`/default.html?theme=${theme}`)
-        .setCaptureElements('#default-tests')
-        .capture('default');
-    });
+    ['ltr', 'rtl'].forEach(direction => {
+      gemini.suite(`default-tests-${theme}-${direction}`, function(suite) {
+        suite
+          .setUrl(`/default.html?theme=${theme}&dir=${direction}`)
+          .setCaptureElements('#default-tests')
+          .capture('default');
+      });
 
-    gemini.suite(`flex-behaviour-${theme}`, function(suite) {
-      suite
-        .setUrl(`/flex-behaviour.html?theme=${theme}`)
-        .setCaptureElements('#flex-behaviour-tests')
-        .capture('default')
-        .capture('small-container', function(actions) {
-          actions.executeJS(function(window) {
-            const container = window.document.querySelector('#flex-behaviour-tests');
-            container.style.display = 'block';
-            container.style.width = '235px';
+      gemini.suite(`flex-behaviour-${theme}-${direction}`, function(suite) {
+        suite
+          .setUrl(`/flex-behaviour.html?theme=${theme}&dir=${direction}`)
+          .setCaptureElements('#flex-behaviour-tests')
+          .capture('default')
+          .capture('small-container', function(actions) {
+            actions.executeJS(function(window) {
+              const container = window.document.querySelector('#flex-behaviour-tests');
+              container.style.display = 'block';
+              container.style.width = '235px';
+            });
           });
-        });
-    });
+      });
 
-    gemini.suite(`alignment-${theme}`, function(suite) {
-      suite
-        .setUrl(`/alignment.html?theme=${theme}`)
-        .setCaptureElements('#alignment-tests')
-        .capture('default');
+      gemini.suite(`alignment-${theme}-${direction}`, function(suite) {
+        suite
+          .setUrl(`/alignment.html?theme=${theme}&dir=${direction}`)
+          .setCaptureElements('#alignment-tests')
+          .capture('default');
+      });
     });
   });
 

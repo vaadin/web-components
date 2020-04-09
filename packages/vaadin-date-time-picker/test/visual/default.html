@@ -7,6 +7,9 @@
   <script>
     const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
     document.write('<link rel="import" href="../../theme/' + theme + '/vaadin-date-time-picker.html">');
+
+    const dir = window.location.search.replace(/.*dir=(\w+).*/, '$1') || 'ltr';
+    document.documentElement.setAttribute('dir', dir);
   </script>
 </head>
 

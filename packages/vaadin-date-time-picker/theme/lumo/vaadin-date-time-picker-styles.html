@@ -9,6 +9,13 @@
         border-top-right-radius: 0;
         border-bottom-right-radius: 0;
       }
+
+      /* RTL specific styles */
+      :host([dir="rtl"]) [part~="input-field"] {
+        border-radius: var(--lumo-border-radius);
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+      }
     </style>
   </template>
 </dom-module>
@@ -20,6 +27,13 @@
         border-top-left-radius: 0;
         border-bottom-left-radius: 0;
       }
+
+      /* RTL specific styles */
+      :host([dir="rtl"]) [part~="input-field"] {
+        border-radius: var(--lumo-border-radius);
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+      }
     </style>
   </template>
 </dom-module>
@@ -29,6 +43,12 @@
     <style>
       :host {
         margin-right: 2px;
+      }
+
+      /* RTL specific styles */
+      :host([dir="rtl"]) {
+        margin-right: auto;
+        margin-left: 2px;
       }
     </style>
   </template>
