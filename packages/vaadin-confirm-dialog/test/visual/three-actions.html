@@ -20,6 +20,9 @@
       <link rel="import" href="../../theme/${theme}/vaadin-confirm-dialog.html">
     `);
 
+    const direction = window.location.search.replace(/.*dir=(\w+).*/, '$1') || 'ltr';
+    document.documentElement.setAttribute('dir', direction);
+
     window.addEventListener('WebComponentsReady', function() {
       setTimeout(function() {
         window.ShadyDOM && window.ShadyDOM.flush(); // Force DOM composition

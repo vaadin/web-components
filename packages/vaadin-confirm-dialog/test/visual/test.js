@@ -17,27 +17,29 @@ gemini.suite('vaadin-confirm-dialog', function(rootSuite) {
     .before(wait)
     .after(goToAboutBlank);
 
-  ['lumo', 'material'].forEach(theme => {
+  ['ltr', 'rtl'].forEach(direction => {
+    ['lumo', 'material'].forEach(theme => {
 
-    gemini.suite(`default-tests-${theme}`, function(suite) {
-      suite
-        .setUrl(`default.html?theme=${theme}`)
-        .setCaptureElements('body')
-        .capture('confirm-dialog');
-    });
+      gemini.suite(`default-tests-${theme}-${direction}`, function(suite) {
+        suite
+          .setUrl(`default.html?theme=${theme}&dir=${direction}`)
+          .setCaptureElements('body')
+          .capture('confirm-dialog');
+      });
 
-    gemini.suite(`three-actions-tests-${theme}`, function(suite) {
-      suite
-        .setUrl(`three-actions.html?theme=${theme}`)
-        .setCaptureElements('body')
-        .capture('confirm-dialog');
-    });
+      gemini.suite(`three-actions-tests-${theme}-${direction}`, function(suite) {
+        suite
+          .setUrl(`three-actions.html?theme=${theme}&dir=${direction}`)
+          .setCaptureElements('body')
+          .capture('confirm-dialog');
+      });
 
-    gemini.suite(`custom-buttons-tests-${theme}`, function(suite) {
-      suite
-        .setUrl(`custom-buttons.html?theme=${theme}`)
-        .setCaptureElements('body')
-        .capture('confirm-dialog');
+      gemini.suite(`custom-buttons-tests-${theme}-${direction}`, function(suite) {
+        suite
+          .setUrl(`custom-buttons.html?theme=${theme}&dir=${direction}`)
+          .setCaptureElements('body')
+          .capture('confirm-dialog');
+      });
     });
   });
 

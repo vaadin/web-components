@@ -20,8 +20,8 @@
         margin-right: -16px;
       }
 
-      [part="footer"] div:nth-child(-n + 2) vaadin-button,
-      [part="footer"] div:nth-child(-n + 2) ::slotted(*) {
+      [part="footer"]:not([dir="rtl"]) div:nth-child(-n + 2) vaadin-button,
+      [part="footer"]:not([dir="rtl"]) div:nth-child(-n + 2) ::slotted(*) {
         margin-right: 8px;
       }
 
@@ -41,6 +41,30 @@
         [part="footer"] div:nth-last-child(1) ::slotted(*) {
           margin-top: 8px;
         }
+
+        /* RTL specific styles */
+
+        [part="footer"][dir="rtl"] div:nth-child(-n + 2) vaadin-button,
+        [part="footer"][dir="rtl"] div:nth-child(-n + 2) ::slotted(*) {
+          margin-left: 0;
+        }
+      }
+
+      /* RTL specific styles */
+
+      [dir="rtl"] > [part="message"] {
+        margin-left: 24px;
+        margin-right: 0;
+      }
+
+      [part="footer"][dir="rtl"] {
+        margin-left: -16px;
+        margin-right: 0;
+      }
+
+      [part="footer"][dir="rtl"] div:nth-child(-n + 2) vaadin-button,
+      [part="footer"][dir="rtl"] div:nth-child(-n + 2) ::slotted(*) {
+        margin-left: 8px;
       }
     </style>
   </template>

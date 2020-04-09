@@ -242,6 +242,27 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           }
         }
 
+        attributeChangedCallback(name, oldValue, newValue) {
+          super.attributeChangedCallback(name, oldValue, newValue);
+          if (name === 'dir') {
+            const value = newValue === 'rtl';
+            this.__isRTL = value;
+            this.opened && this.__toggleContentRTL(value);
+          }
+        }
+
+        __toggleContentRTL(rtl) {
+          const contentBlock = this.$.dialog.$.overlay.content.querySelector('#content');
+          const footerBlock = this.$.dialog.$.overlay.content.querySelector('[part=footer]');
+          if (rtl) {
+            contentBlock.setAttribute('dir', 'rtl');
+            footerBlock.setAttribute('dir', 'rtl');
+          } else {
+            contentBlock.removeAttribute('dir');
+            footerBlock.removeAttribute('dir');
+          }
+        }
+
         _openedChanged() {
           if (!this.opened) {
             return;
@@ -253,6 +274,8 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
               this._confirmButton = newChild;
             }
           });
+
+          this.opened && this.__toggleContentRTL(this.__isRTL);
 
           Polymer.RenderStatus.beforeNextRender(this, () => {
             var confirmButton = this._confirmButton || this.$.dialog.$.overlay.content.querySelector('#confirm');

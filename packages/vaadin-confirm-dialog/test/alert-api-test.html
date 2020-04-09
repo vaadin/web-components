@@ -51,6 +51,22 @@
         var confirmButtonText = confirmButton.textContent;
         expect(confirmButtonText).to.contain('Of course');
       });
+
+      describe('RTL', function() {
+        it('should apply rtl to content and footer before openning', function() {
+          confirm.setAttribute('dir', 'rtl');
+          confirm.opened = true;
+          expect(content.querySelector('#content').getAttribute('dir')).to.be.equal('rtl');
+          expect(content.querySelector('[part="footer"]').getAttribute('dir')).to.be.equal('rtl');
+        });
+
+        it('should apply rtl to content and footer when opened', function() {
+          confirm.opened = true;
+          confirm.setAttribute('dir', 'rtl');
+          expect(content.querySelector('#content').getAttribute('dir')).to.be.equal('rtl');
+          expect(content.querySelector('[part="footer"]').getAttribute('dir')).to.be.equal('rtl');
+        });
+      });
     });
   </script>
 </body>
