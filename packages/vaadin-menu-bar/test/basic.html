@@ -91,78 +91,120 @@
         });
       });
 
-      it('should move focus to next button on "arrow-right" keydown', () => {
-        buttons[0].focus();
-        const spy = sinon.spy(buttons[1], 'focus');
-        arrowRight(buttons[0]);
-        expect(spy).to.be.calledOnce;
-        expect(buttons[1].hasAttribute('focused')).to.be.true;
-      });
-
-      it('should move focus to prev button on "arrow-left" keydown', () => {
-        buttons[1].focus();
-        const spy = sinon.spy(buttons[0], 'focus');
-        arrowLeft(buttons[1]);
-        expect(spy).to.be.calledOnce;
-        expect(buttons[0].hasAttribute('focused')).to.be.true;
-      });
-
-      it('should move focus to first button on "home" keydown', () => {
-        buttons[1].focus();
-        const spy = sinon.spy(buttons[0], 'focus');
-        home(buttons[1]);
-        expect(spy).to.be.calledOnce;
-        expect(buttons[0].hasAttribute('focused')).to.be.true;
-      });
-
-      it('should move focus to second button if first is disabled on "home" keydown', () => {
-        menu.set('items.0.disabled', true);
-        menu.render();
-        buttons = menu._buttons;
-        buttons[3].focus();
-        const spy = sinon.spy(buttons[1], 'focus');
-        home(buttons[3]);
-        expect(spy).to.be.calledOnce;
-        expect(buttons[1].hasAttribute('focused')).to.be.true;
-      });
-
-      it('should move focus to last button on "end" keydown', () => {
-        buttons[0].focus();
-        const spy = sinon.spy(buttons[3], 'focus');
-        end(buttons[0]);
-        expect(spy).to.be.calledOnce;
-        expect(buttons[3].hasAttribute('focused')).to.be.true;
-      });
-
-      it('should move focus to the closest enabled button if last is disabled on "end" keydown', () => {
-        menu.set('items.3.disabled', true);
-        menu.render();
-        buttons = menu._buttons;
-        buttons[0].focus();
-        const spy = sinon.spy(buttons[1], 'focus');
-        end(buttons[0]);
-        expect(spy).to.be.calledOnce;
-        expect(buttons[1].hasAttribute('focused')).to.be.true;
-      });
-
-      it('should move focus to first button on "arrow-right", if last button has focus', () => {
-        buttons[3].focus();
-        const spy = sinon.spy(buttons[0], 'focus');
-        arrowRight(buttons[3]);
-        expect(spy).to.be.calledOnce;
-        expect(buttons[0].hasAttribute('focused')).to.be.true;
-      });
-
-      it('should move focus to last button on "arrow-up", if first button has focus', () => {
-        buttons[0].focus();
-        const spy = sinon.spy(buttons[3], 'focus');
-        arrowLeft(buttons[0]);
-        expect(spy).to.be.calledOnce;
-        expect(buttons[3].hasAttribute('focused')).to.be.true;
-      });
-
       it('should not throw when render() is called before menu bar is attached', () => {
         expect(() => document.createElement('vaadin-menu-bar').render()).to.not.throw(Error);
+      });
+
+      describe('keyboard navigation', () => {
+        describe('default mode', () => {
+          it('should move focus to next button on "arrow-right" keydown', () => {
+            buttons[0].focus();
+            const spy = sinon.spy(buttons[1], 'focus');
+            arrowRight(buttons[0]);
+            expect(spy).to.be.calledOnce;
+            expect(buttons[1].hasAttribute('focused')).to.be.true;
+          });
+
+          it('should move focus to prev button on "arrow-left" keydown', () => {
+            buttons[1].focus();
+            const spy = sinon.spy(buttons[0], 'focus');
+            arrowLeft(buttons[1]);
+            expect(spy).to.be.calledOnce;
+            expect(buttons[0].hasAttribute('focused')).to.be.true;
+          });
+
+          it('should move focus to first button on "home" keydown', () => {
+            buttons[1].focus();
+            const spy = sinon.spy(buttons[0], 'focus');
+            home(buttons[1]);
+            expect(spy).to.be.calledOnce;
+            expect(buttons[0].hasAttribute('focused')).to.be.true;
+          });
+
+          it('should move focus to second button if first is disabled on "home" keydown', () => {
+            menu.set('items.0.disabled', true);
+            menu.render();
+            buttons = menu._buttons;
+            buttons[3].focus();
+            const spy = sinon.spy(buttons[1], 'focus');
+            home(buttons[3]);
+            expect(spy).to.be.calledOnce;
+            expect(buttons[1].hasAttribute('focused')).to.be.true;
+          });
+
+          it('should move focus to last button on "end" keydown', () => {
+            buttons[0].focus();
+            const spy = sinon.spy(buttons[3], 'focus');
+            end(buttons[0]);
+            expect(spy).to.be.calledOnce;
+            expect(buttons[3].hasAttribute('focused')).to.be.true;
+          });
+
+          it('should move focus to the closest enabled button if last is disabled on "end" keydown', () => {
+            menu.set('items.3.disabled', true);
+            menu.render();
+            buttons = menu._buttons;
+            buttons[0].focus();
+            const spy = sinon.spy(buttons[1], 'focus');
+            end(buttons[0]);
+            expect(spy).to.be.calledOnce;
+            expect(buttons[1].hasAttribute('focused')).to.be.true;
+          });
+
+          it('should move focus to first button on "arrow-right", if last button has focus', () => {
+            buttons[3].focus();
+            const spy = sinon.spy(buttons[0], 'focus');
+            arrowRight(buttons[3]);
+            expect(spy).to.be.calledOnce;
+            expect(buttons[0].hasAttribute('focused')).to.be.true;
+          });
+
+          it('should move focus to last button on "arrow-left", if first button has focus', () => {
+            buttons[0].focus();
+            const spy = sinon.spy(buttons[3], 'focus');
+            arrowLeft(buttons[0]);
+            expect(spy).to.be.calledOnce;
+            expect(buttons[3].hasAttribute('focused')).to.be.true;
+          });
+        });
+
+        describe('RTL mode', () => {
+          beforeEach(() => {
+            menu.setAttribute('dir', 'rtl');
+          });
+
+          it('should move focus to next button on "arrow-left" keydown', () => {
+            buttons[0].focus();
+            const spy = sinon.spy(buttons[1], 'focus');
+            arrowLeft(buttons[0]);
+            expect(spy).to.be.calledOnce;
+            expect(buttons[1].hasAttribute('focused')).to.be.true;
+          });
+
+          it('should move focus to prev button on "arrow-right" keydown', () => {
+            buttons[1].focus();
+            const spy = sinon.spy(buttons[0], 'focus');
+            arrowRight(buttons[1]);
+            expect(spy).to.be.calledOnce;
+            expect(buttons[0].hasAttribute('focused')).to.be.true;
+          });
+
+          it('should move focus to first button on "arrow-left", if last button has focus', () => {
+            buttons[3].focus();
+            const spy = sinon.spy(buttons[0], 'focus');
+            arrowLeft(buttons[3]);
+            expect(spy).to.be.calledOnce;
+            expect(buttons[0].hasAttribute('focused')).to.be.true;
+          });
+
+          it('should move focus to last button on "arrow-right", if first button has focus', () => {
+            buttons[0].focus();
+            const spy = sinon.spy(buttons[3], 'focus');
+            arrowRight(buttons[0]);
+            expect(spy).to.be.calledOnce;
+            expect(buttons[3].hasAttribute('focused')).to.be.true;
+          });
+        });
       });
 
       describe('updating items', () => {

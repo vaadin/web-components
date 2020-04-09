@@ -341,7 +341,7 @@
         expect(overlayRect.top + overlayRect.height).to.be.closeTo(buttonRect.top, 1);
       });
 
-      (isIOS ? it.skip : it)('should position right-aligned sub-menu to button right', async() => {
+      (isIOS ? it.skip : it)('should position end-aligned sub-menu to button right in LTR', async() => {
         document.body.style.position = 'relative';
         document.body.style.width = '450px';
         document.body.style.minWidth = '450px';
@@ -355,6 +355,46 @@
         document.body.style.position = '';
         document.body.style.width = '';
         document.body.style.minWidth = '';
+      });
+
+      (isIOS ? it.skip : it)('should position sub-menu in RTL to button right', async() => {
+        document.body.style.position = 'relative';
+        document.body.style.width = '450px';
+        document.body.style.minWidth = '450px';
+        document.body.style.overflow = 'hidden';
+        menu.style.position = 'absolute';
+        menu.style.left = '0px';
+        // set dir on document to also it apply to submenu
+        document.documentElement.setAttribute('dir', 'rtl');
+        buttons[0].click();
+        await nextRender(subMenu);
+        const overlayRect = subMenu.$.overlay.getBoundingClientRect();
+        const buttonRect = buttons[0].getBoundingClientRect();
+        expect(overlayRect.right).to.be.closeTo(buttonRect.right, 1);
+        document.body.style.position = '';
+        document.body.style.width = '';
+        document.body.style.minWidth = '';
+        document.body.style.overflow = '';
+      });
+
+      (isIOS ? it.skip : it)('should position end-aligned sub-menu in RTL to button left', async() => {
+        document.body.style.position = 'relative';
+        document.body.style.width = '450px';
+        document.body.style.minWidth = '450px';
+        document.body.style.overflow = 'hidden';
+        menu.style.position = 'absolute';
+        menu.style.left = '0px';
+        // set dir on document to also it apply to submenu
+        document.documentElement.setAttribute('dir', 'rtl');
+        buttons[2].click();
+        await nextRender(subMenu);
+        const overlayRect = subMenu.$.overlay.getBoundingClientRect();
+        const buttonRect = buttons[2].getBoundingClientRect();
+        expect(overlayRect.left).to.be.closeTo(buttonRect.left, 1);
+        document.body.style.position = '';
+        document.body.style.width = '';
+        document.body.style.minWidth = '';
+        document.body.style.overflow = '';
       });
 
       it('should close sub-menu on items change', async() => {

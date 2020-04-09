@@ -77,6 +77,10 @@ This program is available under Apache License Version 2.0, available at https:/
       document.removeEventListener('click', this.__boundOutsideClickListener, true);
     }
 
+    get __isRTL() {
+      return this.getAttribute('dir') === 'rtl';
+    }
+
     _themeChanged(theme) {
       if (theme) {
         this._buttons.forEach(button => button.setAttribute('theme', theme));
@@ -145,15 +149,16 @@ This program is available under Apache License Version 2.0, available at https:/
       const currentIdx = buttons.indexOf(currentBtn);
       let idx;
       let increment;
+      const dirIncrement = this.__isRTL ? -1 : 1;
 
       switch (key) {
         case 'Left':
-          increment = -1;
-          idx = currentIdx - 1;
+          increment = -dirIncrement;
+          idx = currentIdx - dirIncrement;
           break;
         case 'Right':
-          increment = 1;
-          idx = currentIdx + 1;
+          increment = dirIncrement;
+          idx = currentIdx + dirIncrement;
           break;
         case 'Home':
           increment = 1;
@@ -213,11 +218,18 @@ This program is available under Apache License Version 2.0, available at https:/
         return;
       }
       const overlay = e.target;
-      const {width, height} = this._expandedButton.getBoundingClientRect();
+      const {width, height, left} = this._expandedButton.getBoundingClientRect();
       if (overlay.hasAttribute('bottom-aligned')) {
         overlay.style.bottom = parseInt(getComputedStyle(overlay).bottom) + height + 'px';
       }
-      if (overlay.hasAttribute('right-aligned')) {
+      const endAligned = overlay.hasAttribute('end-aligned');
+      if (this.__isRTL) {
+        if (endAligned) {
+          overlay.style.left = left + 'px';
+        } else {
+          overlay.style.right = parseInt(getComputedStyle(overlay).right) - width + 'px';
+        }
+      } else if (endAligned) {
         overlay.style.right = parseInt(getComputedStyle(overlay).right) - width + 'px';
       }
     }
