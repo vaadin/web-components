@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
 
   <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
-  <link rel="import" href="../../theme/material/vaadin-menu-bar.html">
   <script>
+    window.polymerSkipLoadingFontRoboto = true;
     window.addEventListener('WebComponentsReady', function() {
       setTimeout(function() {
         window.ShadyDOM && window.ShadyDOM.flush(); // Force DOM composition
@@ -13,6 +13,7 @@
       });
     });
   </script>
+  <link rel="import" href="../../theme/material/vaadin-menu-bar.html">
   <style>
     #rtl-tests {
       padding: 10px;

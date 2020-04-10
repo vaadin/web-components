@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
   <script>
+    window.polymerSkipLoadingFontRoboto = true;
+
     var theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
     document.write(`<link rel="import" href="../../theme/${theme}/vaadin-menu-bar.html">`);
 

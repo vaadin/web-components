@@ -7,6 +7,8 @@
   <script src="../../../iron-test-helpers/mock-interactions.js"></script>
   <script src="../helpers.js"></script>
   <script>
+    window.polymerSkipLoadingFontRoboto = true;
+
     const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
     document.write(`<link rel="import" href="../../theme/${theme}/vaadin-menu-bar.html">`);
 
