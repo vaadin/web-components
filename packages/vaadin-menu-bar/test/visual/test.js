@@ -59,6 +59,17 @@ gemini.suite('vaadin-menu-bar', function(rootSuite) {
               });
             });
         });
+
+        gemini.suite(`${theme}-${variant}-rtl-tests`, function(suite) {
+          suite
+            .setUrl(`rtl.html?theme=${theme}&variant=${variant}`)
+            .setCaptureElements(`#rtl-tests`)
+            .capture(`${variant}`, function(actions) {
+              actions.executeJS(function(window) {
+                window.openSubMenu();
+              });
+            });
+        });
       });
     }
 
@@ -74,18 +85,18 @@ gemini.suite('vaadin-menu-bar', function(rootSuite) {
               });
             });
         });
+
+        gemini.suite(`${theme}-${variant}-rtl-tests`, function(suite) {
+          suite
+            .setUrl(`rtl.html?theme=${theme}&variant=${variant}`)
+            .setCaptureElements(`#rtl-tests`)
+            .capture(`${variant}`, function(actions) {
+              actions.executeJS(function(window) {
+                window.openSubMenu();
+              });
+            });
+        });
       });
     }
-
-    gemini.suite(`${theme}-rtl-tests`, function(suite) {
-      suite
-        .setUrl(`${theme}-rtl.html`)
-        .setCaptureElements(`#rtl-tests`)
-        .capture(`${theme}-rtl`, function(actions) {
-          actions.executeJS(function(window) {
-            window.document.documentElement.setAttribute('dir', 'rtl');
-          });
-        });
-    });
   });
 });
