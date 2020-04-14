@@ -5,8 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
   <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
   <script>
+    // mimic flow production mode
+    window.Vaadin = {
+      Flow: {
+        clients: {
+          ROOT: {
+            productionMode: true
+          }
+        }
+      }
+    };
     const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
     document.write('<link rel="import" href="../../theme/' + theme + '/vaadin-crud.html">');
+    const dir = window.location.search.replace(/.*dir=(\w+).*/, '$1') || 'ltr';
+    document.documentElement.setAttribute('dir', dir);
   </script>
 </head>
 

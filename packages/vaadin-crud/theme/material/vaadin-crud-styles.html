@@ -63,8 +63,12 @@
         background-color: var(--material-secondary-background-color);
       }
 
-      [part="toolbar"] ::slotted(*:not(:first-child)) {
+      :host(:not([dir="rtl"])) [part="toolbar"] ::slotted(*:not(:first-child)) {
         margin-left: 0.5em;
+      }
+
+      :host([dir="rtl"]) [part="toolbar"] ::slotted(*:not(:first-child)) {
+        margin-right: 0.5em;
       }
 
       vaadin-text-field[theme~="small"] {

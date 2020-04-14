@@ -68,8 +68,12 @@
         border-top: none;
       }
 
-      [part="toolbar"] ::slotted(*:not(:first-child)) {
+      :host(:not([dir="rtl"])) [part="toolbar"] ::slotted(*:not(:first-child)) {
         margin-left: var(--lumo-space-s);
+      }
+
+      :host([dir="rtl"]) [part="toolbar"] ::slotted(*:not(:first-child)) {
+        margin-right: var(--lumo-space-s);
       }
 
       :host([theme~="no-border"]) [part="toolbar"] {
@@ -122,8 +126,12 @@
         border-top: 0;
       }
 
-      :host(:not([theme~="no-border"])[editor-position="aside"]) [part="editor"]:not([hidden]) {
+      :host(:not([dir="rtl"])[editor-position="aside"]) [part="editor"]:not([hidden]) {
         border-left: 0;
+      }
+
+      :host([dir="rtl"]:not([theme~="no-border"])[editor-position="aside"]) [part="editor"]:not([hidden]) {
+        border-right: 0;
       }
     </style>
   </template>

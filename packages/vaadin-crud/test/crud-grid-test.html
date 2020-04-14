@@ -130,14 +130,18 @@
             expect(crudGrid.querySelectorAll('vaadin-grid-column').length).to.be.equal(3);
           });
 
-          it('should configure include fields in the provided order', () => {
+          it('should configure include fields in the provided order', (done) => {
             crudGrid.include = 'role,password,name.first,name.last';
             window.flushGrid(crudGrid);
-            expect(getHeaderCellContent(crudGrid, 0, 2).textContent.trim()).to.be.equal('Name');
-            expect(getHeaderCellContent(crudGrid, 1, 0).textContent.trim()).to.be.equal('Role');
-            expect(getHeaderCellContent(crudGrid, 1, 1).textContent.trim()).to.be.equal('Password');
-            expect(getHeaderCellContent(crudGrid, 1, 2).textContent.trim()).to.be.equal('First');
-            expect(getHeaderCellContent(crudGrid, 1, 3).textContent.trim()).to.be.equal('Last');
+
+            setTimeout(() => {
+              expect(getHeaderCellContent(crudGrid, 0, 2).textContent.trim()).to.be.equal('Name');
+              expect(getHeaderCellContent(crudGrid, 1, 0).textContent.trim()).to.be.equal('Role');
+              expect(getHeaderCellContent(crudGrid, 1, 1).textContent.trim()).to.be.equal('Password');
+              expect(getHeaderCellContent(crudGrid, 1, 2).textContent.trim()).to.be.equal('First');
+              expect(getHeaderCellContent(crudGrid, 1, 3).textContent.trim()).to.be.equal('Last');
+              done();
+            }, 100);
           });
 
           it('should configure include fields in the provided order when items is provided', () => {
@@ -171,9 +175,12 @@
               expect(crudGrid.querySelectorAll('vaadin-grid-column').length).to.be.equal(3);
             });
 
-            it('should automatically group colums from nested properties', () => {
-              expect(getHeaderCellContent(crudGrid, 0, 0).textContent).to.be.equal('Name');
-              expect(getHeaderCellContent(crudGrid, 0, 1).textContent).to.be.empty;
+            it('should automatically group colums from nested properties', (done) => {
+              setTimeout(() => {
+                expect(getHeaderCellContent(crudGrid, 0, 0).textContent).to.be.equal('Name');
+                expect(getHeaderCellContent(crudGrid, 0, 1).textContent).to.be.empty;
+                done();
+              }, 100);
             });
 
             it('should automatically map columns from items', () => {
