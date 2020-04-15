@@ -10,10 +10,10 @@ This program is available under Apache License Version 2.0, available at https:/
 
     const DirHelper = {
       /**
-      * Get the scroll type in the current browser view.
-      *
-      * @return {String} the scroll type. Possible values are `default|reverse|negative`
-      */
+       * Get the scroll type in the current browser view.
+       *
+       * @return {string} the scroll type. Possible values are `default|reverse|negative`
+       */
       detectScrollType: function() {
         if (!window.document.body) {
           return 'indeterminate';
@@ -44,12 +44,12 @@ This program is available under Apache License Version 2.0, available at https:/
       },
 
       /**
-      * Get the scrollLeft value of the element relative to the direction
-      *
-      * @param {String} scrollType type of the scroll detected with `detectScrollType`
-      * @param {String} direction current direction of the element
-      * @param {Node} element
-      * @return {Number} the scrollLeft value.
+       * Get the scrollLeft value of the element relative to the direction
+       *
+       * @param {string} scrollType type of the scroll detected with `detectScrollType`
+       * @param {string} direction current direction of the element
+       * @param {Element} element
+       * @return {number} the scrollLeft value.
       */
       getNormalizedScrollLeft: function(scrollType, direction, element) {
         const {scrollLeft} = element;
@@ -67,13 +67,13 @@ This program is available under Apache License Version 2.0, available at https:/
       },
 
       /**
-      * Set the scrollLeft value of the element relative to the direction
-      *
-      * @param {String} scrollType type of the scroll detected with `detectScrollType`
-      * @param {String} direction current direction of the element
-      * @param {Node} element
-      * @param {Number} scrollLeft the scrollLeft value to be set
-      */
+       * Set the scrollLeft value of the element relative to the direction
+       *
+       * @param {string} scrollType type of the scroll detected with `detectScrollType`
+       * @param {string} direction current direction of the element
+       * @param {Element} element
+       * @param {number} scrollLeft the scrollLeft value to be set
+       */
       setNormalizedScrollLeft: function(scrollType, direction, element, scrollLeft) {
         if (direction !== 'rtl' || !scrollType) {
           element.scrollLeft = scrollLeft;

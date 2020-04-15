@@ -1,0 +1,11 @@
+{
+  "excludeFiles": [
+    "wct.conf.js",
+    "test/**/*"
+  ],
+  "addReferences": {
+    "vaadin-element-mixin.d.ts": [
+      "custom_typings/vaadin-usage-statistics.d.ts"
+    ]
+  }
+}

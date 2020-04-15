@@ -46,6 +46,8 @@
         }
       };
     }
+
+    /** @protected */
     connectedCallback() {
       super.connectedCallback();
 
@@ -77,12 +79,14 @@
       }
     }
 
+    /** @protected */
     disconnectedCallback() {
       super.disconnectedCallback();
       this.__subscribe(false);
       this.removeAttribute('dir');
     }
 
+    /** @private */
     __subscribe(push = true) {
       if (push) {
         directionSubscribers.indexOf(this) === -1 &&
@@ -93,10 +97,20 @@
       }
     }
 
+    /**
+     * @param {Element} element
+     * @return {string}
+     * @protected
+     */
     __getNormalizedScrollLeft(element) {
       return Vaadin.DirHelper.getNormalizedScrollLeft(scrollType, this.getAttribute('dir') || 'ltr', element);
     }
 
+    /**
+     * @param {Element} element
+     * @param {number} scrollLeft
+     * @protected
+     */
     __setNormalizedScrollLeft(element, scrollLeft) {
       return Vaadin.DirHelper.setNormalizedScrollLeft(scrollType, this.getAttribute('dir') || 'ltr', element, scrollLeft);
     }

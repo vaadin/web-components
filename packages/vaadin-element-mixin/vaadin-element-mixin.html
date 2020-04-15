@@ -29,6 +29,7 @@
 
   /**
    * @polymerMixin
+   * @mixes Vaadin.DirMixin
    * @memberof Vaadin
    */
   Vaadin.ElementMixin = superClass => class VaadinElementMixin extends Vaadin.DirMixin(superClass) {
@@ -53,6 +54,7 @@
         }
       }
     }
+
     constructor() {
       super();
       if (document.doctype === null) {
