@@ -14,6 +14,7 @@ This program is available under Apache License Version 2.0, available at https:/
    * A private mixin to avoid problems with dynamic properties and Polymer Analyzer.
    * No need to expose these properties in the API docs.
    * @polymerMixin
+   * @private
    */
   const TabIndexMixin = superClass => class VaadinTabIndexMixin extends superClass {
     static get properties() {
@@ -59,6 +60,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         /**
          * Stores the previous value of tabindex attribute of the disabled element
+         * @private
          */
         _previousTabIndex: {
           type: Number
@@ -73,12 +75,18 @@ This program is available under Apache License Version 2.0, available at https:/
           reflectToAttribute: true
         },
 
+        /**
+         * @private
+         */
         _isShiftTabbing: {
           type: Boolean
         }
       };
     }
 
+    /**
+     * @protected
+     */
     ready() {
       this.addEventListener('focusin', e => {
         if (e.composedPath()[0] === this) {
@@ -181,6 +189,10 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /**
+     * @param {boolean} focused
+     * @protected
+     */
     _setFocused(focused) {
       if (focused) {
         this.setAttribute('focused', '');
@@ -197,10 +209,17 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /**
+     * @param {KeyboardEvent} e
+     * @private
+     */
     _bodyKeydownListener(e) {
       this._tabPressed = e.keyCode === 9;
     }
 
+    /**
+     * @private
+     */
     _bodyKeyupListener() {
       this._tabPressed = false;
     }
@@ -208,13 +227,17 @@ This program is available under Apache License Version 2.0, available at https:/
     /**
      * Any element extending this mixin is required to implement this getter.
      * It returns the actual focusable element in the component.
+     * @return {HTMLElement}
      */
     get focusElement() {
       window.console.warn(`Please implement the 'focusElement' property in <${this.localName}>`);
       return this;
     }
 
-    _focus(e) {
+    /**
+     * @private
+     */
+    _focus() {
       if (this._isShiftTabbing) {
         return;
       }
@@ -246,6 +269,10 @@ This program is available under Apache License Version 2.0, available at https:/
       this._setFocused(false);
     }
 
+    /**
+     * @param {boolean} disabled
+     * @private
+     */
     _disabledChanged(disabled) {
       this.focusElement.disabled = disabled;
       if (disabled) {
@@ -261,6 +288,10 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /**
+     * @param {number | null | undefined} tabindex
+     * @private
+     */
     _tabindexChanged(tabindex) {
       if (tabindex !== undefined) {
         this.focusElement.tabIndex = tabindex;
