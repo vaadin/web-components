@@ -8,18 +8,17 @@ This program is available under Apache License Version 2.0, available at https:/
   (function() {
     'use strict';
 
-    const DirHelper = {
+    /**
+     * Helper that provides a set of functions for RTL.
+     */
+    class DirHelper {
       /**
        * Get the scroll type in the current browser view.
        *
        * @return {string} the scroll type. Possible values are `default|reverse|negative`
        */
-      detectScrollType: function() {
-        if (!window.document.body) {
-          return 'indeterminate';
-        }
-
-        const dummy = window.document.createElement('div');
+      static detectScrollType() {
+        const dummy = document.createElement('div');
         dummy.textContent = 'ABCD';
         dummy.dir = 'rtl';
         dummy.style.fontSize = '14px';
@@ -41,7 +40,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
         document.body.removeChild(dummy);
         return cachedType;
-      },
+      }
 
       /**
        * Get the scrollLeft value of the element relative to the direction
@@ -51,7 +50,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * @param {Element} element
        * @return {number} the scrollLeft value.
       */
-      getNormalizedScrollLeft: function(scrollType, direction, element) {
+      static getNormalizedScrollLeft(scrollType, direction, element) {
         const {scrollLeft} = element;
         if (direction !== 'rtl' || !scrollType) {
           return scrollLeft;
@@ -64,7 +63,7 @@ This program is available under Apache License Version 2.0, available at https:/
             return element.scrollWidth - element.clientWidth - scrollLeft;
         }
         return scrollLeft;
-      },
+      }
 
       /**
        * Set the scrollLeft value of the element relative to the direction
@@ -74,7 +73,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * @param {Element} element
        * @param {number} scrollLeft the scrollLeft value to be set
        */
-      setNormalizedScrollLeft: function(scrollType, direction, element, scrollLeft) {
+      static setNormalizedScrollLeft(scrollType, direction, element, scrollLeft) {
         if (direction !== 'rtl' || !scrollType) {
           element.scrollLeft = scrollLeft;
           return;
@@ -92,7 +91,7 @@ This program is available under Apache License Version 2.0, available at https:/
             break;
         }
       }
-    };
+    }
 
     /**
      * @namespace Vaadin
