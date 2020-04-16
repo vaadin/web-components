@@ -16,6 +16,11 @@
     "url": "https://github.com/vaadin/vaadin-element-mixin/issues"
   },
   "homepage": "https://vaadin.com/components",
+  "files": [
+    "custom_typings",
+    "vaadin-*.d.ts",
+    "vaadin-*.js"
+  ],
   "husky": {
     "hooks": {
       "pre-commit": "npm run lint"
