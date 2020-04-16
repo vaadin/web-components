@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-control-state-mixin",
-  "version": "2.1.3",
+  "version": "2.2.0",
   "description": "vaadin-control-state-mixin",
   "main": "vaadin-control-state-mixin.html",
   "repository": "vaadin/vaadin-control-state-mixin",
