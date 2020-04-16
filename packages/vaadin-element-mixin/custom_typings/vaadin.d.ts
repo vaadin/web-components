@@ -1,10 +1,10 @@
 interface Vaadin {
-  developmentModeCallback: {
-    'usage-statistics': () => void;
+  developmentModeCallback?: {
+    'usage-statistics'?: () => void;
     'vaadin-license-checker'?: () => void;
   };
-  registrations: Array<{ is: string }>;
-  usageStatsChecker: {
+  registrations?: Array<{ is: string }>;
+  usageStatsChecker?: {
     maybeGatherAndSend: () => void;
   };
 }
