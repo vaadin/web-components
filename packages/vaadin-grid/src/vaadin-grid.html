@@ -395,7 +395,10 @@ This program is available under Apache License Version 2.0, available at https:/
           },
 
           /**
-           * If true, the grid's height is defined by the number of its rows.
+           * If true, the grid's height is defined by its rows.
+           *
+           * Effectively, this disables the grid's virtual scrolling so that all the rows are rendered in the DOM at once.
+           * If the grid has a large number of items, using the feature is discouraged to avoid performance issues.
            */
           heightByRows: {
             type: Boolean,
