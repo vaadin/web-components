@@ -5,7 +5,8 @@
   ],
   "addReferences": {
     "vaadin-element-mixin.d.ts": [
-      "custom_typings/vaadin-usage-statistics.d.ts"
+      "custom_typings/vaadin-usage-statistics.d.ts",
+      "custom_typings/vaadin.d.ts"
     ]
   }
 }
