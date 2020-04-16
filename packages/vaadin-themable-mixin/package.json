@@ -17,6 +17,7 @@
   },
   "homepage": "https://vaadin.com/elements",
   "files": [
+    "*.d.ts",
     "vaadin-*.js",
     "register-styles.js"
   ],
