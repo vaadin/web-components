@@ -336,6 +336,10 @@
           document.createElement('test-wrapper').focus();
         });
 
+        it('should not throw an error when using blur() to a newly created element', () => {
+          document.createElement('test-wrapper').blur();
+        });
+
         it('should remove focused attribute when disconnected from the DOM', () => {
           focusElement.dispatchEvent(new CustomEvent('focusin', {composed: true, bubbles: true}));
           customElement.parentNode.removeChild(customElement);
