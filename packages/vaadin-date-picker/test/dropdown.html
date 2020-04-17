@@ -94,6 +94,39 @@
         });
       }
 
+      describe('alignment', () => {
+
+        function assertEdgesAligned(datepickerEdge, overlayEdge) {
+          expect(datepicker.getBoundingClientRect()[datepickerEdge]).to.equal(
+            datepicker.$.overlay.$.content.getBoundingClientRect()[overlayEdge]);
+        }
+
+        it('should align below the field, by left edge', () => {
+          datepicker.open();
+          assertEdgesAligned('left', 'left');
+          assertEdgesAligned('bottom', 'top');
+        });
+
+        it('should flip to align by right edge', () => {
+          datepicker.style.position = 'fixed';
+          datepicker.style.left = (window.innerWidth / 2) + 'px';
+
+          datepicker.open();
+          assertEdgesAligned('right', 'right');
+          assertEdgesAligned('bottom', 'top');
+        });
+
+        it('should flip to align above the field', () => {
+          datepicker.style.position = 'fixed';
+          datepicker.style.bottom = 0 + 'px';
+
+          datepicker.open();
+          assertEdgesAligned('left', 'left');
+          assertEdgesAligned('top', 'bottom');
+        });
+
+      });
+
       describe('Sizing', () => {
 
         beforeEach(() => {
