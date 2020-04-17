@@ -125,6 +125,35 @@
           assertEdgesAligned('top', 'bottom');
         });
 
+        describe('right-to-left', () => {
+
+          before(() => {
+            document.body.setAttribute('dir', 'rtl');
+
+            // Workaround: The scrollbars of the document element slightly mess up the
+            // alignment calculations, but this can be reproduced only inside <iframe>
+            document.documentElement.style.overflow = 'hidden';
+          });
+
+          after(() => {
+            document.body.removeAttribute('dir');
+            document.documentElement.style.removeProperty('overflow');
+          });
+
+          it('should align by right edge', () => {
+            datepicker.open();
+            assertEdgesAligned('right', 'right');
+          });
+
+          it('should flip to align by left edge', () => {
+            datepicker.style.position = 'fixed';
+            datepicker.style.right = (window.innerWidth / 2) + 'px';
+
+            datepicker.open();
+            assertEdgesAligned('left', 'left');
+          });
+        });
+
       });
 
       describe('Sizing', () => {

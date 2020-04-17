@@ -16,7 +16,11 @@
         align-items: flex-end;
       }
 
-      :host([right-aligned][dir="rtl"]) {
+      :host([dir="rtl"]) {
+        align-items: flex-end;
+      }
+
+      :host([dir="rtl"][right-aligned]) {
         align-items: flex-start;
       }
 
