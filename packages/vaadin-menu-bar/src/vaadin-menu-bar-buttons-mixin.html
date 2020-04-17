@@ -75,6 +75,7 @@ This program is available under Apache License Version 2.0, available at https:/
       const buttons = this._buttons.slice(0);
       const overflow = buttons.pop();
       const containerWidth = container.offsetWidth;
+      const isRTL = this.getAttribute('dir') === 'rtl';
 
       if (container.offsetWidth < container.scrollWidth) {
         this._hasOverflow = true;
@@ -88,7 +89,10 @@ This program is available under Apache License Version 2.0, available at https:/
           }
 
           const btnWidth = btn.offsetWidth;
-          if ((btn.offsetLeft + btnWidth) < (containerWidth - overflow.offsetWidth)) {
+          if (
+            (!isRTL && (btn.offsetLeft + btnWidth) < (containerWidth - overflow.offsetWidth)) ||
+            (isRTL && btn.offsetLeft >= overflow.offsetWidth)
+          ) {
             break;
           }
 
@@ -108,15 +112,16 @@ This program is available under Apache License Version 2.0, available at https:/
 
         for (let i = 0; i < buttons.length; i++) {
           const btn = buttons[i];
+          const btnWidth = btn.getBoundingClientRect().width;
 
           if (getComputedStyle(btn).visibility !== 'hidden') {
             continue;
           }
 
-          const overflowLeft = overflow.offsetLeft;
-          const btnWidth = btn.getBoundingClientRect().width;
-
-          if ((overflowLeft + overflow.offsetWidth + btnWidth) < containerWidth) {
+          if (
+            (!isRTL && (overflow.offsetLeft + overflow.offsetWidth + btnWidth) < containerWidth) ||
+            (isRTL && (btnWidth < overflow.offsetLeft))
+          ) {
             btn.disabled = btn.item.disabled;
             btn.style.visibility = '';
             btn.style.position = '';

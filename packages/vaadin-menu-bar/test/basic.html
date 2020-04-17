@@ -303,8 +303,25 @@
         menu.style.width = '350px';
         menu.notifyResize();
         Polymer.RenderStatus.afterNextRender(menu, () => {
-          assertVisible(buttons[1]);
-          expect(buttons[1].disabled).to.not.be.true;
+          assertVisible(buttons[2]);
+          expect(buttons[2].disabled).to.not.be.true;
+          assertVisible(buttons[3]);
+          expect(buttons[3].disabled).to.not.be.true;
+          expect(overflow.item.children.length).to.equal(1);
+          expect(overflow.item.children[0]).to.deep.equal(menu.items[4]);
+          done();
+        });
+      });
+
+      it('should show buttons and update overflow items when width increased in RTL', done => {
+        menu.setAttribute('dir', 'rtl');
+        menu.style.width = '350px';
+        menu.notifyResize();
+        Polymer.RenderStatus.afterNextRender(menu, () => {
+          assertVisible(buttons[2]);
+          expect(buttons[2].disabled).to.not.be.true;
+          assertVisible(buttons[3]);
+          expect(buttons[3].disabled).to.not.be.true;
           expect(overflow.item.children.length).to.equal(1);
           expect(overflow.item.children[0]).to.deep.equal(menu.items[4]);
           done();
@@ -315,8 +332,24 @@
         menu.style.width = '150px';
         menu.notifyResize();
         Polymer.RenderStatus.afterNextRender(menu, () => {
-          assertHidden(buttons[2]);
-          expect(buttons[2].disabled).to.be.true;
+          assertHidden(buttons[1]);
+          expect(buttons[1].disabled).to.be.true;
+          expect(overflow.item.children.length).to.equal(4);
+          expect(overflow.item.children[0]).to.deep.equal(menu.items[1]);
+          expect(overflow.item.children[1]).to.deep.equal(menu.items[2]);
+          expect(overflow.item.children[2]).to.deep.equal(menu.items[3]);
+          expect(overflow.item.children[3]).to.deep.equal(menu.items[4]);
+          done();
+        });
+      });
+
+      it('should hide buttons and update overflow items when width decreased in RTL', done => {
+        menu.setAttribute('dir', 'rtl');
+        menu.style.width = '150px';
+        menu.notifyResize();
+        Polymer.RenderStatus.afterNextRender(menu, () => {
+          assertHidden(buttons[1]);
+          expect(buttons[1].disabled).to.be.true;
           expect(overflow.item.children.length).to.equal(4);
           expect(overflow.item.children[0]).to.deep.equal(menu.items[1]);
           expect(overflow.item.children[1]).to.deep.equal(menu.items[2]);
