@@ -223,14 +223,12 @@ This program is available under Apache License Version 2.0, available at https:/
         overlay.style.bottom = parseInt(getComputedStyle(overlay).bottom) + height + 'px';
       }
       const endAligned = overlay.hasAttribute('end-aligned');
-      if (this.__isRTL) {
-        if (endAligned) {
+      if (endAligned) {
+        if (this.__isRTL) {
           overlay.style.left = left + 'px';
         } else {
           overlay.style.right = parseInt(getComputedStyle(overlay).right) - width + 'px';
         }
-      } else if (endAligned) {
-        overlay.style.right = parseInt(getComputedStyle(overlay).right) - width + 'px';
       }
     }
 
@@ -310,7 +308,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
       requestAnimationFrame(() => {
         button.dispatchEvent(new CustomEvent('opensubmenu', {detail: {
-          x: rect.left,
+          x: this.__isRTL ? rect.right : rect.left,
           y: rect.bottom,
           children: items
         }}));
