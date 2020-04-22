@@ -864,6 +864,19 @@ text.highcharts-drilldown-data-label,
 }
 
 
+/* RTL styles */
+:host([dir="rtl"]) .highcharts-container {
+  text-align: right;
+}
+
+:host([dir="rtl"]) input.highcharts-range-selector {
+  left: auto;
+  right: -9em;
+}
+
+:host([dir="rtl"]) .highcharts-menu {
+  box-shadow: -3px 3px 10px #888;
+}
 
 
 /* stylelint-enable */

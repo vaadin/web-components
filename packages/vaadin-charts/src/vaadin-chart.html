@@ -117,7 +117,7 @@ MAGI ADD END -->
        * ```
        * 1. Install Vaadin Charts
        * ```
-       * npm i @vaadin/vaadin-charts@6.2.3 --save
+       * npm i @vaadin/vaadin-charts@6.2.4 --save
        * ```
        * 1. Import `<vaadin-chart>` to your app
        * Edit the file `src/my-app/my-app.js` and add the following snipped on the top, after the first `import` declaration
@@ -299,6 +299,33 @@ MAGI ADD END -->
        * </dom-module>
        * ```
        *
+       * ### RTL support
+       *
+       * `vaadin-charts` as well as [Highcharts](https://www.highcharts.com/) by itself are not adjusting the layout
+       * based on the `dir` attribute. In order to make `vaadin-charts` display RTL content properly additional
+       * JSON configuration should be used.
+       * Each chart should be updated based on the specific needs, but general recommendations are:
+       *
+       *  1. Set `reversed` to true for xAxis (https://api.highcharts.com/highcharts/xAxis.reversed).
+       *  2. Set `useHTML` to true for text elements, i.e. `tooltip` (https://api.highcharts.com/highcharts/tooltip.useHTML).
+       *  3. Set `rtl` to true for `legend` (https://api.highcharts.com/highcharts/legend.rtl).
+       *
+       * Using as a base the project created with in Quick Start and an `additionalOptions` in order to make RTL adjustments:
+       *
+       * ```html
+       *  <vaadin-chart title="۱- عنوان نمودار" subtitle="۲- عنوان فرعی نمودار"
+       *    additional-options='{"title": {"useHTML": true}, "tooltip": {"useHTML": true}, "subtitle": {"useHTML": true},
+       *    "legend": {"rtl": true}, "yAxis": [{"id": "۴- مقادیر", "title": {"text": "۴- مقادیر", "useHTML": true}}],
+       *    "xAxis": {"reversed": true}}'>
+       *    <vaadin-chart-series
+       *          type= "column"
+       *          title="۳- عنوان ردیف"
+       *          unit="۴- مقادیر"
+       *          values="[10,20,30]">
+       *    </vaadin-chart-series>
+       *  </vaadin-chart>
+       * ```
+       *
        * ### Setting colors
        *
        * Although charts can be styled as described above, there is a simpler way for setting colors.
@@ -319,7 +346,7 @@ MAGI ADD END -->
         }
 
         static get version() {
-          return '6.2.3';
+          return '6.2.4';
         }
 
         static get properties() {
