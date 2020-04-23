@@ -53,12 +53,6 @@ module.exports = {
     ];
 
     const cronPlatforms = [
-      {
-        deviceName: 'Android GoogleAPI Emulator',
-        platformName: 'Android',
-        platformVersion: '8.1',
-        browserName: 'chrome'
-      },
       'iOS Simulator/ipad@12.2',
       'iOS Simulator/iphone@10.3',
       'Windows 10/chrome@latest',
