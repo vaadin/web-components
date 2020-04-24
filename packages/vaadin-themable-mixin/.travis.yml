@@ -25,6 +25,8 @@ script:
       npm run lint &&
       if [[ "$TRAVIS_EVENT_TYPE" = "pull_request" ]]; then
         xvfb-run -s '-screen 0 1024x768x24' wct;
+      elif [[ "$TRAVIS_EVENT_TYPE" = "cron" ]]; then
+        wct --env saucelabs-cron;
       else
         wct --env saucelabs;
       fi;
@@ -37,12 +39,9 @@ script:
       yarn install --flat &&
       if [[ "$TRAVIS_EVENT_TYPE" = "pull_request" ]]; then
         xvfb-run -s '-screen 0 1024x768x24' wct --npm;
+      elif [[ "$TRAVIS_EVENT_TYPE" = "cron" ]]; then
+        wct --npm --env saucelabs-cron;
       else
         wct --npm --env saucelabs;
       fi;
-    fi
-
-  - if [[ "$TRAVIS_EVENT_TYPE" = "cron" ]]; then
-      npm install &&
-      wct --env saucelabs-cron;
     fi
