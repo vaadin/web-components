@@ -96,7 +96,23 @@
             expect(datepicker.opened).to.be.true;
           });
 
+          it('should open overlay on down even if autoOpenDisabled is true', () => {
+            datepicker.autoOpenDisabled = true;
+            target = datepicker.$.input;
+            arrowDown();
+
+            expect(datepicker.opened).to.be.true;
+          });
+
           it('should open overlay on up', () => {
+            target = datepicker.$.input;
+            arrowUp();
+
+            expect(datepicker.opened).to.be.true;
+          });
+
+          it('should open overlay on up even if autoOpenDisabled is true', () => {
+            datepicker.autoOpenDisabled = true;
             target = datepicker.$.input;
             arrowUp();
 

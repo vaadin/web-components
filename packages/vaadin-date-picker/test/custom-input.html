@@ -64,6 +64,14 @@
         datepicker._nativeInput.dispatchEvent(new CustomEvent('input', {bubbles: true}));
       });
 
+      it('should not open calendar on input when autoOpenDisabled is true', () => {
+        var target = datepicker._inputElement;
+        datepicker.autoOpenDisabled = true;
+        target.bindValue = '1';
+        datepicker._nativeInput.dispatchEvent(new CustomEvent('input', {bubbles: true}));
+        expect(datepicker.$.overlay.opened).not.to.be.true;
+      });
+
       it('should show week numbers', () => {
         datepicker.showWeekNumbers = true;
         expect(overlayContent.showWeekNumbers).to.equal(true);

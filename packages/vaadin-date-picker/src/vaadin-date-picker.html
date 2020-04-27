@@ -256,15 +256,11 @@ This program is available under Apache License Version 2.0, available at https:/
           // In order to have synchronized invalid property, we need to use the same validate logic.
           Polymer.RenderStatus.afterNextRender(this, () => this._inputElement.validate = () => {});
 
-          // FIXME(platosha): dispatch `input` event on
-          // <vaadin-text-field> clear button
-          // https://github.com/vaadin/vaadin-text-field/issues/347
-          this._inputElement.addEventListener('change', () => {
-            if (this._inputElement.value === '') {
+          this._inputElement.addEventListener('change', (e) => {
+            // For change event on text-field blur, after the field is cleared,
+            // we schedule change event to be dispatched on date-picker blur.
+            if (this._inputElement.value === '' && !e.__fromClearButton) {
               this.__dispatchChange = true;
-              this.value = '';
-              this.validate();
-              this.__dispatchChange = false;
             }
           });
         }
