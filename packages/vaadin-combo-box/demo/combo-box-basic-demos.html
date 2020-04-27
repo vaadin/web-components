@@ -118,6 +118,23 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Auto open disabled</h3>
+    <p>Dropdown is only opened when clicking the toggle button or pressing Up or Down arrow keys.</p>
+    <vaadin-demo-snippet id="auto-open-disabled" when-defined="vaadin-combo-box">
+      <template preserve-content>
+        <vaadin-combo-box label="Label" auto-open-disabled></vaadin-combo-box>
+        <script>
+          window.addDemoReadyListener('#auto-open-disabled', function(document) {
+            const combos = document.querySelectorAll('vaadin-combo-box');
+            combos.forEach(function(comboBox) {
+              comboBox.items = ['Value', 'Option one', 'Option two'];
+              comboBox.value = 'Value';
+            });
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
     <h3>Storing custom values</h3>
     <vaadin-demo-snippet id="storing-custom-value" when-defined="vaadin-combo-box">
       <template preserve-content>
