@@ -47,6 +47,13 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Auto open disabled</h3>
+    <p>Dropdown is only opened when clicking the toggle button or pressing Up or Down arrow keys.</p>
+    <vaadin-demo-snippet id="auto-open-disabled" when-defined="vaadin-date-picker">
+      <template preserve-content>
+        <vaadin-date-picker label="Label" auto-open-disabled></vaadin-date-picker>
+      </template>
+    </vaadin-demo-snippet>
   </template>
   <script>
     class DatePickerBasicDemos extends DemoReadyEventEmitter(DatePickerDemo(Polymer.Element)) {
