@@ -67,6 +67,16 @@
       [part~="toolbar-button-undo"]::before {
         content: var(--vaadin-rte-icons-undo);
       }
+
+      /* RTL specific styles */
+
+      :host([dir="rtl"]) [part~="toolbar-button-redo"]::before {
+        content: var(--vaadin-rte-icons-undo);
+      }
+
+      :host([dir="rtl"]) [part~="toolbar-button-undo"]::before {
+        content: var(--vaadin-rte-icons-redo);
+      }
     </style>
   </template>
 </dom-module>

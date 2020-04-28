@@ -26,6 +26,13 @@ gemini.suite('vaadin-rich-text-editor', function(rootSuite) {
           .capture(`vaadin-rich-text-editor`);
       });
     });
+
+    gemini.suite(`default-${theme}-rtl`, function(suite) {
+      suite
+        .setUrl(`/default.html?theme=${theme}&dir=rtl`)
+        .setCaptureElements(`#default`)
+        .capture(`vaadin-rich-text-editor`);
+    });
   });
 
 });

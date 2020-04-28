@@ -18,6 +18,10 @@
 
     const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
     document.write('<link rel="import" href="../../theme/' + theme + '/vaadin-rich-text-editor.html">');
+
+    const dir = window.location.search.replace(/.*dir=(\w+).*/, '$1') || 'ltr';
+    document.documentElement.setAttribute('dir', dir);
+
     window.addEventListener('WebComponentsReady', function() {
       customElements.whenDefined('vaadin-rich-text-editor').then(function() {
         window.webComponentsAreReady = true; // Checked in gemini before capture callback
