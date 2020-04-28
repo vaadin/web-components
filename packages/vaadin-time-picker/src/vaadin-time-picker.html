@@ -64,7 +64,7 @@ This program is available under Apache License Version 2.0, available at https:/
           clear-button-visible="[[clearButtonVisible]]"
           i18n="[[i18n]]"
           theme$="[[theme]]">
-        <span slot="suffix" part="toggle-button" role="button" aria-label$="[[i18n.selector]]"></span>
+        <span slot="suffix" part="toggle-button" class="toggle-button" role="button" aria-label$="[[i18n.selector]]"></span>
       </vaadin-time-picker-text-field>
     </vaadin-combo-box-light>
   </template>
@@ -289,10 +289,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * Set true to prevent the overlay from opening automatically.
-             *
-             * TODO: make it public in the next minor, and add a demo.
-             *
-             * @private
              */
             autoOpenDisabled: Boolean,
 

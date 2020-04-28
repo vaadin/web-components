@@ -28,6 +28,10 @@
         expect(timePicker.__dropdownElement instanceof Vaadin.ComboBoxLightElement).to.be.true;
       });
 
+      it('vaadin-combo-box-light should have a toogle element', () => {
+        expect(timePicker.__dropdownElement._toggleElement).to.not.be.null;
+      });
+
       it('vaadin-combo-box-light should have an hour array as filteredItems by default', () => {
         expect(timePicker.__dropdownElement.filteredItems.length).to.be.equal(24);
         const pad = (num = 0, fmt = '00') => (fmt + num).substr((fmt + num).length - fmt.length);

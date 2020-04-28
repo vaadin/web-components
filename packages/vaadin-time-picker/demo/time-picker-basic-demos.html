@@ -75,6 +75,13 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Auto open disabled</h3>
+    <p>Dropdown is only opened when clicking the toggle button or pressing Up or Down arrow keys.</p>
+    <vaadin-demo-snippet id="time-picker-basic-demos-auto-open-disabled">
+      <template preserve-content>
+        <vaadin-time-picker label="Time" value="10:10" auto-open-disabled></vaadin-time-picker>
+      </template>
+    </vaadin-demo-snippet>
   </template>
   <script>
     class TimePickerBasicDemos extends DemoReadyEventEmitter(ElementDemo(Polymer.Element)) {
