@@ -18,5 +18,6 @@ window.VaadinChartsSuites = [
   'style-test.html',
   'element-json-merge-test.html',
   'theme-test.html',
-  'moving-chart-test.html'
+  'moving-chart-test.html',
+  'chart-in-rtl-test.html'
 ];

@@ -1074,6 +1074,19 @@ MAGI ADD END -->
           } else {
             this.configuration = Highcharts.chart(this.$.chart, options);
           }
+
+          // Workaround for https://github.com/highcharts/highcharts/issues/9978
+          const elementsToChange = [
+            ...Array.from(this.$.chart.getElementsByTagName('h4'))
+              .filter(el => el.style.left === '-9999px'),
+            this.configuration.screenReaderRegion,
+            this.configuration.tabExitAnchor
+          ];
+
+          elementsToChange.forEach(el => {
+            el.style.left = '';
+            el.style.top = '-999em';
+          });
         }
 
         /** @private */
