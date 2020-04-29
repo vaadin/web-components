@@ -166,6 +166,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         _addActiveListeners() {
           Polymer.Gestures.addListener(this, 'down', () => !this.disabled && this.setAttribute('active', ''));
           Polymer.Gestures.addListener(this, 'up', () => this.removeAttribute('active'));
@@ -176,6 +177,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         /**
          * @protected
+         * @return {Element}
          */
         get focusElement() {
           return this.$.button;
