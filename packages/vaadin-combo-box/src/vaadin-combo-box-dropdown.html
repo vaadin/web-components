@@ -32,6 +32,16 @@ This program is available under Apache License Version 2.0, available at https:/
   </template>
 </dom-module>
 
+<dom-module id="vaadin-combo-box-overlay-styles" theme-for="vaadin-combo-box-overlay">
+  <template>
+    <style>
+      :host {
+        width: var(--vaadin-combo-box-overlay-width, var(--_vaadin-combo-box-overlay-default-width, auto));
+      }
+    </style>
+  </template>
+</dom-module>
+
 <script>
   (function() {
     /**
@@ -224,6 +234,32 @@ This program is available under Apache License Version 2.0, available at https:/
         return spaceBelow < 0.30;
       }
 
+      _getCustomWidth() {
+        return window.ShadyCSS ?
+          window.ShadyCSS.getComputedStyleValue(this, '--vaadin-combo-box-overlay-width') :
+          getComputedStyle(this).getPropertyValue('--vaadin-combo-box-overlay-width');
+      }
+
+      _setOverlayWidth() {
+        const inputWidth = this.positionTarget.clientWidth + 'px';
+        const customWidth = this._getCustomWidth();
+
+        if (window.ShadyCSS && !window.ShadyCSS.nativeCss) {
+          window.ShadyCSS.styleSubtree(this.$.overlay, {
+            '--vaadin-combo-box-overlay-width': customWidth,
+            '--_vaadin-combo-box-overlay-default-width': inputWidth
+          });
+        } else {
+          this.$.overlay.style.setProperty('--_vaadin-combo-box-overlay-default-width', inputWidth);
+
+          if (customWidth === '') {
+            this.$.overlay.style.removeProperty('--vaadin-combo-box-overlay-width');
+          } else {
+            this.$.overlay.style.setProperty('--vaadin-combo-box-overlay-width', customWidth);
+          }
+        }
+      }
+
       _setPosition(e) {
         if (this.hidden) {
           return;
@@ -249,8 +285,9 @@ This program is available under Apache License Version 2.0, available at https:/
         this._translateY = Math.round(this._translateY * _devicePixelRatio) / _devicePixelRatio;
         this.$.overlay.style.transform = `translate3d(${this._translateX}px, ${this._translateY}px, 0)`;
 
-        this.$.overlay.style.width = this.positionTarget.clientWidth + 'px';
         this.$.overlay.style.justifyContent = this.alignedAbove ? 'flex-end' : 'flex-start';
+
+        this._setOverlayWidth();
 
         // TODO: fire only when position actually changes changes
         this.dispatchEvent(new CustomEvent('position-changed'));

@@ -200,6 +200,32 @@
         expect(comboBox.$.overlay.$.dropdown._translateY * _devicePixelRatio % 1).to.closeTo(0, 0.1);
         expect(comboBox.$.overlay.$.dropdown._translateX * _devicePixelRatio % 1).to.closeTo(0, 0.1);
       });
+
+      it('should have custom width bigger than input', () => {
+        comboBox.style.setProperty('--vaadin-combo-box-overlay-width', '400px');
+        if (window.ShadyCSS) {
+          window.ShadyCSS.styleSubtree(comboBox, {
+            '--vaadin-combo-box-overlay-width': '400px'
+          });
+        }
+        comboBox.open();
+
+        expect(dropContentRect().width).to.equal(400);
+        expect(dropContentRect().width).to.be.above(inputContentRect().width);
+      });
+
+      it('should have custom width smaller than input', () => {
+        comboBox.style.setProperty('--vaadin-combo-box-overlay-width', '130px');
+        if (window.ShadyCSS) {
+          window.ShadyCSS.styleSubtree(comboBox, {
+            '--vaadin-combo-box-overlay-width': '130px'
+          });
+        }
+        comboBox.open();
+
+        expect(dropContentRect().width).to.equal(130);
+        expect(dropContentRect().width).to.be.below(inputContentRect().width);
+      });
     });
 
     describeSkipIf(ios, 'overlay alignment', () => {

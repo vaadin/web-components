@@ -52,6 +52,33 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Custom overlay width</h3>
+    <vaadin-demo-snippet id="overlay-width" when-defined="vaadin-combo-box">
+      <template preserve-content>
+        <vaadin-combo-box label="Narrow overlay"></vaadin-combo-box>
+        <vaadin-combo-box label="Wide overlay"></vaadin-combo-box>
+        <script>
+          window.addDemoReadyListener('#overlay-width', function(document) {
+            const combos = document.querySelectorAll('vaadin-combo-box');
+            // If you don't need IE 11 support you can set the overlay width also with an inline
+            // style attribute like: style="--vaadin-combo-box-overlay-width: 130px".
+            combos[0].style.setProperty('--vaadin-combo-box-overlay-width', '130px');
+            combos[1].style.setProperty('--vaadin-combo-box-overlay-width', '330px');
+            if (window.ShadyCSS) {
+              window.ShadyCSS.styleSubtree(combos[0], {'--vaadin-combo-box-overlay-width': '130px'});
+              window.ShadyCSS.styleSubtree(combos[1], {'--vaadin-combo-box-overlay-width': '330px'});
+            }
+
+            combos.forEach(function(comboBox) {
+              comboBox.items = Array.apply(0, Array(100)).map(function(_, i) {
+                return 'Item ' + (i + 1);
+              });
+            });
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
     <h3>Custom overlay style</h3>
     <vaadin-demo-snippet id="customizing-theme-variant" when-defined="vaadin-combo-box">
       <template preserve-content>
