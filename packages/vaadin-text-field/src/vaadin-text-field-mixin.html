@@ -117,8 +117,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
   const HOST_PROPS = {
     default: ['list', 'autofocus', 'pattern', 'autocapitalize', 'autocorrect', 'maxlength',
-      'minlength', 'name', 'placeholder', 'autocomplete', 'title'],
-    accessible: ['disabled', 'readonly', 'required', 'invalid']
+      'minlength', 'name', 'placeholder', 'autocomplete', 'title', 'disabled', 'readonly', 'required'],
+    accessible: ['invalid']
   };
 
   const PROP_TYPE = {
@@ -499,10 +499,10 @@ This program is available under Apache License Version 2.0, available at https:/
       const input = this.inputElement;
       const attributeNames = HOST_PROPS[type];
 
-      if (type === 'accessible') {
+      if (type === PROP_TYPE.ACCESSIBLE) {
         attributeNames.forEach((attr, index) => {
           this._setOrToggleAttribute(attr, attributesValues[index], input);
-          this._setOrToggleAttribute(`aria-${attr}`, attributesValues[index], input);
+          this._setOrToggleAttribute(`aria-${attr}`, attributesValues[index] ? 'true' : false, input);
         });
       } else {
         attributeNames.forEach((attr, index) => {

@@ -43,6 +43,7 @@
     "iron-test-helpers": "^2.0.0",
     "webcomponentsjs": "^1.0.0",
     "web-component-tester": "^6.1.5",
+    "sinonjs": "Polymer/sinon.js#^1.14.1",
     "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^3.0.0",
     "vaadin-button": "vaadin/vaadin-button#^2.1.0"
   },
