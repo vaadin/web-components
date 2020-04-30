@@ -131,7 +131,9 @@ This program is available under Apache License Version 2.0, available at https:/
         this._virtualCount = Math.min(this.items.length, size) || 0;
 
         if (this._scrollTop === 0) {
-          this._accessIronListAPI(() => this._scrollToIndex(Math.min(size - 1, fvi)));
+          if (fvi > 0) {
+            this._accessIronListAPI(() => this._scrollToIndex(Math.min(size - 1, fvi)));
+          }
           this._iterateItems((pidx, vidx) => {
             const row = this._physicalItems[pidx];
             if (row.index === fvi) {
