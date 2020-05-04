@@ -297,9 +297,9 @@
         transform-origin: 0% 0;
       }
 
-      :host([dir="rtl"]:not(vaadin-number-field):not(vaadin-big-decimal-field)) [part="value"],
-      :host([dir="rtl"]:not(vaadin-number-field):not(vaadin-big-decimal-field)) [part="input-field"] ::slotted(input),
-      :host([dir="rtl"]:not(vaadin-number-field):not(vaadin-big-decimal-field)) [part="input-field"] ::slotted(textarea) {
+      :host([dir="rtl"]) [part="value"],
+      :host([dir="rtl"]) [part="input-field"] ::slotted(input),
+      :host([dir="rtl"]) [part="input-field"] ::slotted(textarea) {
         --_lumo-text-field-overflow-mask-image: linear-gradient(to right, transparent, #000 1.25em);
       }
 
