@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-list-mixin",
-  "version": "2.4.0",
+  "version": "2.5.0",
   "description": "vaadin-list-mixin",
   "main": "vaadin-list-mixin.html",
   "repository": "vaadin/vaadin-list-mixin",
