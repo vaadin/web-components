@@ -23,6 +23,7 @@ This program is available under Apache License Version 2.0, available at https:/
       return {
         /**
          * Used for mixin detection because `instanceof` does not work with mixins.
+         * @type {boolean}
          */
         _hasVaadinListMixin: {
           value: true
@@ -42,6 +43,7 @@ This program is available under Apache License Version 2.0, available at https:/
          * Define how items are disposed in the dom.
          * Possible values are: `horizontal|vertical`.
          * It also changes navigation keys from left/right to up/down.
+         * @type {!ListOrientation}
          */
         orientation: {
           type: String,
@@ -59,6 +61,7 @@ This program is available under Apache License Version 2.0, available at https:/
          * Note: unlike `<vaadin-combo-box>`, this property is read-only,
          * so if you want to provide items by iterating array of data,
          * you have to use `dom-repeat` and place it to the light DOM.
+         * @type {!Array<!Element> | undefined}
          */
         items: {
           type: Array,
@@ -68,6 +71,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         /**
          * The search buffer for the keyboard selection feature.
+         * @private
          */
         _searchBuf: {
           type: String,
@@ -80,6 +84,7 @@ This program is available under Apache License Version 2.0, available at https:/
       return ['_enhanceItems(items, orientation, selected, disabled)'];
     }
 
+    /** @protected */
     ready() {
       super.ready();
       this.addEventListener('keydown', e => this._onKeydown(e));
@@ -90,6 +95,7 @@ This program is available under Apache License Version 2.0, available at https:/
       });
     }
 
+    /** @private */
     _enhanceItems(items, orientation, selected, disabled) {
       if (!disabled) {
         if (items) {
@@ -110,14 +116,26 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /**
+     * @return {Element}
+     */
     get focused() {
       return this.getRootNode().activeElement;
     }
 
+    /**
+     * @param {!Array<!Element>} array
+     * @return {!Array<!Element>}
+     * @protected
+     */
     _filterItems(array) {
       return array.filter(e => e._hasVaadinItemMixin);
     }
 
+    /**
+     * @param {!MouseEvent} event
+     * @protected
+     */
     _onClick(event) {
       if (event.metaKey || event.shiftKey || event.ctrlKey || event.defaultPrevented) {
         return;
@@ -130,6 +148,12 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /**
+     * @param {number} currentIdx
+     * @param {string} key
+     * @return {number}
+     * @protected
+     */
     _searchKey(currentIdx, key) {
       this._searchReset = Polymer.Debouncer.debounce(
         this._searchReset,
@@ -149,10 +173,18 @@ This program is available under Apache License Version 2.0, available at https:/
       return this._getAvailableIndex(idx, increment, condition);
     }
 
+    /**
+     * @return {boolean}
+     * @protected
+     */
     get _isRTL() {
       return !this._vertical && this.getAttribute('dir') === 'rtl';
     }
 
+    /**
+     * @param {!KeyboardEvent} event
+     * @protected
+     */
     _onKeydown(event) {
       if (event.metaKey || event.ctrlKey) {
         return;
@@ -197,6 +229,13 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /**
+     * @param {number} idx
+     * @param {number} increment
+     * @param {function(!Element):boolean} condition
+     * @return {number}
+     * @protected
+     */
     _getAvailableIndex(idx, increment, condition) {
       const totalItems = this.items.length;
       for (let i = 0; typeof idx == 'number' && i < totalItems; i++, idx += (increment || 1)) {
@@ -215,16 +254,29 @@ This program is available under Apache License Version 2.0, available at https:/
       return -1;
     }
 
+    /**
+     * @param {!Element} item
+     * @return {boolean}
+     * @protected
+     */
     _isItemHidden(item) {
       return getComputedStyle(item).display === 'none';
     }
 
+    /**
+     * @param {number} idx
+     * @protected
+     */
     _setFocusable(idx) {
       idx = this._getAvailableIndex(idx, 1, item => !item.disabled);
       const item = this.items[idx] || this.items[0];
       this.items.forEach(e => e.tabIndex = e === item ? 0 : -1);
     }
 
+    /**
+     * @param {number} idx
+     * @protected
+     */
     _focus(idx) {
       const item = this.items[idx];
       this.items.forEach(e => e.focused = e === item);
@@ -240,12 +292,19 @@ This program is available under Apache License Version 2.0, available at https:/
       firstItem && firstItem.focus();
     }
 
-    /* @protected */
+    /**
+     * @return {!HTMLElement}
+     * @protected
+     */
     get _scrollerElement() {
       // Returning scroller element of the component
     }
 
-    // Scroll the container to have the next item by the edge of the viewport
+    /**
+     * Scroll the container to have the next item by the edge of the viewport.
+     * @param {number} idx
+     * @protected
+     */
     _scrollToItem(idx) {
       const item = this.items[idx];
       if (!item) {
@@ -271,11 +330,18 @@ This program is available under Apache License Version 2.0, available at https:/
       this._scroll(scrollDistance);
     }
 
-    /* @protected */
+    /**
+     * @return {boolean}
+     * @protected
+     */
     get _vertical() {
       return this.orientation !== 'horizontal';
     }
 
+    /**
+     * @param {number} pixels
+     * @protected
+     */
     _scroll(pixels) {
       if (this._vertical) {
         this._scrollerElement['scrollTop'] += pixels;

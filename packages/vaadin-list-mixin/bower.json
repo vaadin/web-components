@@ -27,7 +27,7 @@
   ],
   "dependencies": {
     "polymer": "^2.0.0",
-    "vaadin-element-mixin": "^2.3.1"
+    "vaadin-element-mixin": "^2.4.1"
   },
   "devDependencies": {
     "iron-test-helpers": "^2.0.0",

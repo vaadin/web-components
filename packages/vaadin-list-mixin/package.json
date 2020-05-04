@@ -18,6 +18,7 @@
   },
   "homepage": "https://vaadin.com/elements",
   "files": [
+    "*.d.ts",
     "vaadin-*.js"
   ],
   "husky": {
