@@ -166,12 +166,6 @@ This program is available under Apache License Version 2.0, available at https:/
       this._effectiveSize = this._cache.effectiveSize;
     }
 
-    _updateRowItem(item, el) {
-      el.children.forEach(cell => {
-        cell._instance && (cell._instance.item = item);
-      });
-    }
-
     _getItem(index, el) {
       if (index >= this._effectiveSize) {
         return;
@@ -191,25 +185,6 @@ This program is available under Apache License Version 2.0, available at https:/
         this._loadPage(this._getPageForIndex(scaledIndex), cache);
       }
 
-    }
-
-    _pagesForPhysicalItems() {
-      // TODO: potentially heavy operation to run first visible index,
-      // reconsider if performance issues occur on data binding / scrolling.
-      // TODO: _vidxOffset shouldn't be read from here.
-      const firstVisiblePage = this._getPageForIndex(this._firstVisibleIndex + this._vidxOffset);
-
-      return [firstVisiblePage].concat(
-        this._physicalItems
-          .filter(row => row.index)
-          .items(row => this._getPageForIndex(row.index))
-      ).reduce((prev, curr) => {
-        if (prev.indexOf(curr) === -1) {
-          prev.push(curr);
-        }
-
-        return prev;
-      }, []);
     }
 
     _expandedInstanceChangedCallback(inst, value) {
@@ -368,12 +343,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
       if (!this._effectiveSize) {
         this._loadPage(0, this._cache);
-      }
-    }
-
-    _flushItemsDebouncer() {
-      if (this._debouncerLoad) {
-        this._debouncerLoad.flush();
       }
     }
 
