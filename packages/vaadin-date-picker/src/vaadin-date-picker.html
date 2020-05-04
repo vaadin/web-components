@@ -13,7 +13,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="vaadin-date-picker-overlay.html">
 <link rel="import" href="vaadin-date-picker-overlay-content.html">
 <link rel="import" href="vaadin-date-picker-mixin.html">
-<link rel="import" href="../../vaadin-text-field/src/vaadin-text-field.html">
+<link rel="import" href="vaadin-date-picker-text-field.html">
 <link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
 
 <dom-module id="vaadin-date-picker">
@@ -38,7 +38,7 @@ This program is available under Apache License Version 2.0, available at https:/
     </style>
 
 
-    <vaadin-text-field id="input"
+    <vaadin-date-picker-text-field id="input"
         role="application"
         autocomplete="off"
         on-focus="_focus"
@@ -58,7 +58,7 @@ This program is available under Apache License Version 2.0, available at https:/
       >
       <slot name="prefix" slot="prefix"></slot>
       <div part="toggle-button" slot="suffix" on-tap="_toggle" role="button" aria-label$="[[i18n.calendar]]" aria-expanded$="[[_getAriaExpanded(opened)]]"></div>
-    </vaadin-text-field>
+    </vaadin-date-picker-text-field>
 
     <vaadin-date-picker-overlay
         id="overlay"

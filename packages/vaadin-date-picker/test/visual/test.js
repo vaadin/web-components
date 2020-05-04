@@ -22,7 +22,12 @@ gemini.suite('vaadin-date-picker', function(rootSuite) {
       suite
         .setUrl(`default.html?theme=${theme}`)
         .setCaptureElements('#default-tests')
-        .capture('default');
+        .capture('default')
+        .capture('rtl', function(actions) {
+          actions.executeJS(function(window) {
+            window.document.dir = 'rtl';
+          });
+        });
     });
 
     gemini.suite(`dropdown-${theme}`, function(suite) {
