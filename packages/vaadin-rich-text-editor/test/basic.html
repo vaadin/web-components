@@ -124,6 +124,25 @@
           });
         });
 
+        describe('RTL', () => {
+          beforeEach(() => rte.setAttribute('dir', 'rtl'));
+
+          after(() => rte.removeAttribute('dir'));
+
+          ['center', 'left'].forEach(align => {
+            it(`should apply ${align} alignment when clicking the "toolbar-button-align-${align}" part in RTL`, () => {
+              btn = getButton(`align-${align}`);
+
+              btn.click();
+              expect(editor.getFormat(0).align).to.be.equal(align);
+
+              btn = getButton('align-right');
+              btn.click();
+              expect(editor.getFormat(0).align).to.be.empty;
+            });
+          });
+        });
+
         it('should clear formatting when clicking the "clean-button" part', () => {
           editor.format('bold', true);
           editor.format('underline', true);
@@ -786,9 +805,15 @@
         });
 
         it('should use inline styles for text alignment', () => {
-          setValueAndFormatLine('align', 'center');
-          el = getHtml(rte.htmlValue);
-          expect(el.style.textAlign).to.equal('center');
+          ['rtl', 'ltr'].forEach(dir => {
+            ['center', dir === 'rtl' ? 'left' : 'right'].forEach(align => {
+              rte.setAttribute('dir', dir);
+              setValueAndFormatLine('align', align);
+              el = getHtml(rte.htmlValue);
+              expect(el.style.textAlign).to.equal(align);
+              rte.removeAttribute('dir');
+            });
+          });
         });
       });
 

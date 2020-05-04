@@ -46,6 +46,10 @@
         cursor: text;
       }
 
+      .ql-align-left {
+        text-align: left;
+      }
+
       .ql-direction-rtl {
         direction: rtl;
         text-align: inherit;
@@ -91,6 +95,13 @@
 
       img {
         max-width: 100%;
+      }
+
+      /* RTL specific styles */
+
+      :host([dir="rtl"]) .ql-editor {
+        direction: rtl;
+        text-align: right;
       }
     </style>
   </template>

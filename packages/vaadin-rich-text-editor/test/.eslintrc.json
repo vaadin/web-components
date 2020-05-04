@@ -3,6 +3,7 @@
     "WCT": false,
     "describe": false,
     "beforeEach": false,
+    "after": false,
     "fixture": false,
     "it": false,
     "expect": false,

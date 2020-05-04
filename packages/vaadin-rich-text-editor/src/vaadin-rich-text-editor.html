@@ -450,7 +450,29 @@ This program is available under Apache License Version 2.0, available at https:/
                 el.style[WEBKIT_PROPERTY] = '';
               });
             }
+          } else if (/^dir$/.test(prop)) {
+            this.__dir = newVal;
+            this.__setDirection(newVal);
           }
+        }
+
+        __setDirection(dir) {
+          // Needed for proper `ql-align` class to be set and activate the toolbar align button
+          const alignAttributor = Quill.import('attributors/class/align');
+          alignAttributor.whitelist = [dir === 'rtl' ? 'left' : 'right', 'center', 'justify'];
+          Quill.register(alignAttributor, true);
+
+          const alignGroup = this._toolbar.querySelector('[part~="toolbar-group-alignment"]');
+
+          if (dir === 'rtl') {
+            alignGroup.querySelector('[part~="toolbar-button-align-left"]').value = 'left';
+            alignGroup.querySelector('[part~="toolbar-button-align-right"]').value = '';
+          } else {
+            alignGroup.querySelector('[part~="toolbar-button-align-left"]').value = '';
+            alignGroup.querySelector('[part~="toolbar-button-align-right"]').value = 'right';
+          }
+
+          this._editor.getModule('toolbar').update(this._editor.getSelection());
         }
 
         ready() {
@@ -796,7 +818,7 @@ This program is available under Apache License Version 2.0, available at https:/
           content = content.replace(/\s*ql-(?!align)[\w\-]*\s*/g, '');
 
           // Replace Quill align classes with inline styles
-          ['right', 'center', 'justify'].forEach(align => {
+          [this.__dir === 'rtl' ? 'left' : 'right', 'center', 'justify'].forEach(align => {
             content = content.replace(new RegExp(` class=[\\\\]?"\\s?ql-align-${align}[\\\\]?"`, 'g'), ` style="text-align: ${align}"`);
           });
 
