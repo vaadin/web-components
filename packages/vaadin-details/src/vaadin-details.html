@@ -114,6 +114,7 @@ This program is available under Apache License Version 2.0, available at https:/
           return {
             /**
              * If true, the details content is visible.
+             * @type {boolean}
              */
             opened: {
               type: Boolean,
@@ -125,12 +126,17 @@ This program is available under Apache License Version 2.0, available at https:/
           };
         }
 
+        /**
+         * @return {!HTMLElement}
+         * @protected
+         */
         get _collapsible() {
           return this.shadowRoot.querySelector('[part="content"]');
         }
 
         /**
          * Focusable element used by vaadin-control-state-mixin
+         * @return {!HTMLElement}
          * @protected
          */
         get focusElement() {
@@ -147,22 +153,33 @@ This program is available under Apache License Version 2.0, available at https:/
           });
         }
 
+        /** @private */
         _getAriaExpanded(opened) {
           return opened ? 'true' : 'false';
         }
 
+        /** @private */
         _getAriaHidden(opened) {
           return opened ? 'false' : 'true';
         }
 
+        /** @private */
         _openedChanged(opened) {
           this._collapsible.style.maxHeight = opened ? '' : '0px';
         }
 
+        /**
+         * @param {!MouseEvent} e
+         * @protected
+         */
         _onToggleClick(e) {
           this.opened = !this.opened;
         }
 
+        /**
+         * @param {!KeyboardEvent} e
+         * @protected
+         */
         _onToggleKeyDown(e) {
           if ([13, 32].indexOf(e.keyCode) > -1) {
             e.preventDefault();
