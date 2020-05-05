@@ -42,6 +42,7 @@
         required
         disabled
         readonly
+        auto-open-disabled
       ></vaadin-date-time-picker>
     </template>
   </test-fixture>
@@ -53,6 +54,7 @@
           required
           disabled
           readonly
+          auto-open-disabled
           min="2019-09-01T08:00"
           max="2019-09-30T22:00">
         <vaadin-date-picker slot="date-picker"
@@ -256,6 +258,14 @@
           expect(timePicker.readonly).to.be.true;
         });
 
+        it('should propagate auto-open-disabled to date and time pickers', () => {
+          expect(datePicker.autoOpenDisabled).to.be.undefined;
+          expect(timePicker.autoOpenDisabled).to.be.undefined;
+          dateTimePicker.autoOpenDisabled = true;
+          expect(datePicker.autoOpenDisabled).to.be.true;
+          expect(timePicker.autoOpenDisabled).to.be.true;
+        });
+
         it('should have default i18n properties coming from date and time pickers', () => {
           // From date picker
           expect(dateTimePicker.i18n).to.have.property('formatDate').that.is.a('function');
@@ -334,6 +344,12 @@
           expect(dateTimePicker.readonly).to.be.true;
           expect(datePicker.readonly).to.be.true;
           expect(timePicker.readonly).to.be.true;
+        });
+
+        it('should have initial value for auto-open-disabled', () => {
+          expect(dateTimePicker.autoOpenDisabled).to.be.true;
+          expect(datePicker.autoOpenDisabled).to.be.true;
+          expect(timePicker.autoOpenDisabled).to.be.true;
         });
 
         it('should have initial value for value property', () => {

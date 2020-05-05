@@ -308,6 +308,11 @@ This program is available under Apache License Version 2.0, available at https:/
             },
 
             /**
+             * Set to true to prevent the overlays from opening automatically.
+             */
+            autoOpenDisabled: Boolean,
+
+            /**
              * Set to true to disable this element.
              */
             disabled: {
@@ -376,7 +381,8 @@ This program is available under Apache License Version 2.0, available at https:/
             '__invalidChanged(invalid)',
             '__disabledChanged(disabled)',
             '__readonlyChanged(readonly)',
-            '__i18nChanged(i18n.*)'
+            '__i18nChanged(i18n.*)',
+            '__autoOpenDisabledChanged(autoOpenDisabled)'
           ];
         }
 
@@ -489,6 +495,7 @@ This program is available under Apache License Version 2.0, available at https:/
           datePicker.required = this.required;
           datePicker.disabled = this.disabled;
           datePicker.readonly = this.readonly;
+          datePicker.autoOpenDisabled = this.autoOpenDisabled;
 
           // Disable default internal validation for the component
           datePicker.validate = () => {};
@@ -526,6 +533,7 @@ This program is available under Apache License Version 2.0, available at https:/
           timePicker.required = this.required;
           timePicker.disabled = this.disabled;
           timePicker.readonly = this.readonly;
+          timePicker.autoOpenDisabled = this.autoOpenDisabled;
 
           // Disable default internal validation for the component
           timePicker.validate = () => {};
@@ -912,6 +920,15 @@ This program is available under Apache License Version 2.0, available at https:/
             this.value = '';
           }
           this.__doDispatchChange = false;
+        }
+
+        __autoOpenDisabledChanged(autoOpenDisabled) {
+          if (this.__datePicker) {
+            this.__datePicker.autoOpenDisabled = autoOpenDisabled;
+          }
+          if (this.__timePicker) {
+            this.__timePicker.autoOpenDisabled = autoOpenDisabled;
+          }
         }
 
         /**
