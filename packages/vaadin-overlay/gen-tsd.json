@@ -1,0 +1,14 @@
+{
+  "excludeFiles": [
+    "src/vaadin-overlay-position-mixin.js",
+    "wct.conf.js",
+    "index.html",
+    "demo/**/*",
+    "test/**/*"
+  ],
+  "autoImport": {
+    "./@types/interfaces": [
+      "OverlayRenderer"
+    ]
+  }
+}

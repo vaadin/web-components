@@ -19,7 +19,9 @@
   },
   "homepage": "https://vaadin.com/components",
   "files": [
+    "vaadin-*.d.ts",
     "vaadin-*.js",
+    "@types",
     "src",
     "theme"
   ],

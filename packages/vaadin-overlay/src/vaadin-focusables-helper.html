@@ -27,7 +27,7 @@
      * That's why we have this helper here.
      * See https://github.com/PolymerElements/iron-overlay-behavior/issues/282
      */
-    const FocusablesHelper = {
+    class FocusablesHelper {
 
       /**
        * Returns a sorted array of tabbable nodes, including the root node.
@@ -36,7 +36,7 @@
        * @param {!Node} node
        * @return {!Array<!HTMLElement>}
        */
-      getTabbableNodes: function(node) {
+      static getTabbableNodes(node) {
         const result = [];
         // If there is at least one element with tabindex > 0, we need to sort
         // the final array by tabindex.
@@ -45,14 +45,14 @@
           return this._sortByTabIndex(result);
         }
         return result;
-      },
+      }
 
       /**
        * Returns if a element is focusable.
        * @param {!HTMLElement} element
        * @return {boolean}
        */
-      isFocusable: function(element) {
+      static isFocusable(element) {
         // From http://stackoverflow.com/a/1600194/4228703:
         // There isn't a definite list, it's up to the browser. The only
         // standard we have is DOM Level 2 HTML
@@ -69,7 +69,7 @@
         }
         // Elements that can be focused even if they have [disabled] attribute.
         return matches.call(element, 'a[href], area[href], iframe, [tabindex], [contentEditable]');
-      },
+      }
 
       /**
        * Returns if a element is tabbable. To be tabbable, a element must be
@@ -77,11 +77,11 @@
        * @param {!HTMLElement} element
        * @return {boolean}
        */
-      isTabbable: function(element) {
+      static isTabbable(element) {
         return this.isFocusable(element) &&
             matches.call(element, ':not([tabindex="-1"])') &&
             this._isVisible(element);
-      },
+      }
 
       /**
        * Returns the normalized element tabindex. If not focusable, returns -1.
@@ -92,13 +92,13 @@
        * @return {!number}
        * @private
        */
-      _normalizedTabIndex: function(element) {
+      static _normalizedTabIndex(element) {
         if (this.isFocusable(element)) {
           const tabIndex = element.getAttribute('tabindex') || 0;
           return Number(tabIndex);
         }
         return -1;
-      },
+      }
 
       /**
        * Searches for nodes that are tabbable and adds them to the `result` array.
@@ -108,7 +108,7 @@
        * @return {boolean}
        * @private
        */
-      _collectTabbableNodes: function(node, result) {
+      static _collectTabbableNodes(node, result) {
         // If not an element or not visible, no need to explore children.
         if (node.nodeType !== Node.ELEMENT_NODE || !this._isVisible(node)) {
           return false;
@@ -146,7 +146,7 @@
           }
         }
         return needsSort;
-      },
+      }
 
       /**
        * Returns false if the element has `visibility: hidden` or `display: none`
@@ -154,7 +154,7 @@
        * @return {boolean}
        * @private
        */
-      _isVisible: function(element) {
+      static _isVisible(element) {
         // Check inline style first to save a re-flow. If looks good, check also
         // computed style.
         let style = element.style;
@@ -163,7 +163,7 @@
           return (style.visibility !== 'hidden' && style.display !== 'none');
         }
         return false;
-      },
+      }
 
       /**
        * Sorts an array of tabbable elements by tabindex. Returns a new array.
@@ -171,7 +171,7 @@
        * @return {!Array<!HTMLElement>}
        * @private
        */
-      _sortByTabIndex: function(tabbables) {
+      static _sortByTabIndex(tabbables) {
         // Implement a merge sort as Array.prototype.sort does a non-stable sort
         // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
         const len = tabbables.length;
@@ -182,7 +182,7 @@
         const left = this._sortByTabIndex(tabbables.slice(0, pivot));
         const right = this._sortByTabIndex(tabbables.slice(pivot));
         return this._mergeSortByTabIndex(left, right);
-      },
+      }
 
       /**
        * Merge sort iterator, merges the two arrays into one, sorted by tab index.
@@ -191,7 +191,7 @@
        * @return {!Array<!HTMLElement>}
        * @private
        */
-      _mergeSortByTabIndex: function(left, right) {
+      static _mergeSortByTabIndex(left, right) {
         const result = [];
         while ((left.length > 0) && (right.length > 0)) {
           if (this._hasLowerTabOrder(left[0], right[0])) {
@@ -202,7 +202,7 @@
         }
 
         return result.concat(left, right);
-      },
+      }
 
       /**
        * Returns if element `a` has lower tab order compared to element `b`
@@ -215,14 +215,14 @@
        * @return {boolean}
        * @private
        */
-      _hasLowerTabOrder: function(a, b) {
+      static _hasLowerTabOrder(a, b) {
         // Normalize tabIndexes
         // e.g. in Firefox `<div contenteditable>` has `tabIndex = -1`
         const ati = Math.max(a.tabIndex, 0);
         const bti = Math.max(b.tabIndex, 0);
         return (ati === 0 || bti === 0) ? bti > ati : ati > bti;
       }
-    };
+    }
 
     /**
      * @namespace Vaadin
