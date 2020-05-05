@@ -19,7 +19,7 @@ cache:
     - node_modules
 
 addons:
-  firefox: "66.0"
+  firefox: latest
   chrome: stable
 
 jobs:
