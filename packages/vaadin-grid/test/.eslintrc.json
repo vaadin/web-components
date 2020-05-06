@@ -22,6 +22,7 @@
     "flush": false,
     "animationFrameFlush": false,
     "before": false,
+    "after": false,
     "beforeEach": false,
     "buildDataSet": false,
     "infiniteDataProvider": false,
