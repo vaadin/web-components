@@ -197,6 +197,17 @@
         datepicker.close();
       });
 
+      it('should keep invalid input value during value-changed event', done => {
+        datepicker.value = '2020-01-01';
+        inputValue('foo');
+
+        datepicker.addEventListener('value-changed', () => {
+          expect(datepicker._inputValue).to.equal('foo');
+          done();
+        });
+        datepicker.close();
+      });
+
       it('should validate keyboard input (valid)', done => {
         inputValue('01/01/2000');
 

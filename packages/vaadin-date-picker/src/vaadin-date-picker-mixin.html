@@ -509,7 +509,9 @@ This program is available under Apache License Version 2.0, available at https:/
         this.__dispatchChange = true;
       }
       const value = this._formatISO(selectedDate);
-      this._applyInputValue(selectedDate);
+
+      this.__keepInputValue || this._applyInputValue(selectedDate);
+
       if (value !== this.value) {
         this.validate();
         this.value = value;
@@ -690,14 +692,15 @@ This program is available under Apache License Version 2.0, available at https:/
       // Select the parsed input or focused date
       this._ignoreFocusedDateChange = true;
       if (this.i18n.parseDate) {
-        var inputValue = this._inputValue || '';
+        const inputValue = this._inputValue || '';
         const parsedDate = this._getParsedDate(inputValue);
 
         if (this._isValidDate(parsedDate)) {
           this._selectedDate = parsedDate;
         } else {
+          this.__keepInputValue = true;
           this._selectedDate = null;
-          this._inputValue = inputValue;
+          this.__keepInputValue = false;
         }
       } else if (this._focusedDate) {
         this._selectedDate = this._focusedDate;
