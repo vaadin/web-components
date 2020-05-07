@@ -59,6 +59,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * @memberof Vaadin
        * @mixes Vaadin.MultiSelectListMixin
        * @mixes Vaadin.ThemableMixin
+       * @mixes Vaadin.ElementMixin
        * @demo demo/index.html
        */
       class ListBoxElement extends Vaadin.ElementMixin(Vaadin.MultiSelectListMixin(Vaadin.ThemableMixin(Polymer.Element))) {
@@ -84,7 +85,10 @@ This program is available under Apache License Version 2.0, available at https:/
         constructor() {
           super();
 
-          /** @protected */
+          /**
+           * @type {Element | null}
+           * @protected
+           */
           this.focused;
         }
 
@@ -95,10 +99,15 @@ This program is available under Apache License Version 2.0, available at https:/
           setTimeout(this._checkImport.bind(this), 2000);
         }
 
+        /**
+         * @return {!HTMLElement}
+         * @protected
+         */
         get _scrollerElement() {
           return this.shadowRoot.querySelector('[part="items"]');
         }
 
+        /** @private */
         _checkImport() {
           var item = this.querySelector('vaadin-item');
           if (item && !(item instanceof Polymer.Element)) {
