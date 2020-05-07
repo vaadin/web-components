@@ -89,6 +89,7 @@ This program is available under Apache License Version 2.0, available at https:/
              * The index of currently opened panel. First panel is opened by
              * default. Only one panel can be opened at the same time.
              * Setting null or undefined closes all the accordion panels.
+             * @type {number}
              */
             opened: {
               type: Number,
@@ -101,6 +102,7 @@ This program is available under Apache License Version 2.0, available at https:/
              * The list of `<vaadin-accordion-panel>` child elements.
              * It is populated from the elements passed to the light DOM,
              * and updated dynamically when adding or removing panels.
+             * @type {!Array<!AccordionPanelElement>}
              */
             items: {
               type: Array,
@@ -122,6 +124,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         /**
+         * @return {Element | null}
          * @protected
          */
         get focused() {
@@ -155,10 +158,16 @@ This program is available under Apache License Version 2.0, available at https:/
           });
         }
 
+        /**
+         * @param {!Array<!Element>} array
+         * @return {!Array<!AccordionPanelElement>}
+         * @protected
+         */
         _filterItems(array) {
           return array.filter(el => el instanceof Vaadin.AccordionPanelElement);
         }
 
+        /** @private */
         _updateItems(items, opened) {
           if (items) {
             const itemToOpen = items[opened];
@@ -168,6 +177,10 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /**
+         * @param {!KeyboardEvent} event
+         * @protected
+         */
         _onKeydown(event) {
           // only check keyboard events on details toggle buttons
           const item = event.composedPath()[0];
@@ -211,6 +224,12 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /**
+         * @param {number} index
+         * @param {number} increment
+         * @return {number}
+         * @protected
+         */
         _getAvailableIndex(index, increment) {
           const totalItems = this.items.length;
           let idx = index;
@@ -229,6 +248,7 @@ This program is available under Apache License Version 2.0, available at https:/
           return -1;
         }
 
+        /** @private */
         _updateOpened(e) {
           const target = this._filterItems(e.composedPath())[0];
           const idx = this.items.indexOf(target);
