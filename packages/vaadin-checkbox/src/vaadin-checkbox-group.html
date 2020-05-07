@@ -97,6 +97,7 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * @memberof Vaadin
        * @mixes Vaadin.ThemableMixin
+       * @mixes Vaadin.DirMixin
        * @element vaadin-checkbox-group
        * @demo demo/index.html
        */
@@ -130,6 +131,7 @@ This program is available under Apache License Version 2.0, available at https:/
              * Note: toggling the checkboxes modifies the value by creating new
              * array each time, to override Polymer dirty-checking for arrays.
              * You can still use Polymer array mutation methods to update the value.
+             * @type {!Array<!string>}
              */
             value: {
               type: Array,
@@ -155,6 +157,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * This property is set to true when the control value is invalid.
+             * @type {boolean}
              */
             invalid: {
               type: Boolean,
@@ -232,31 +235,46 @@ This program is available under Apache License Version 2.0, available at https:/
           return !this.invalid;
         }
 
+        /** @private */
         get _checkboxes() {
           return this._filterCheckboxes(this.querySelectorAll('*'));
         }
 
+        /** @private */
         _filterCheckboxes(nodes) {
           return Array.from(nodes)
             .filter(child => child instanceof Vaadin.CheckboxElement);
         }
 
+        /** @private */
         _disabledChanged(disabled) {
           this.setAttribute('aria-disabled', disabled);
 
           this._checkboxes.forEach(checkbox => checkbox.disabled = disabled);
         }
 
+        /**
+         * @param {string} value
+         * @protected
+         */
         _addCheckboxToValue(value) {
           if (this.value.indexOf(value) === -1) {
             this.value = this.value.concat(value);
           }
         }
 
+        /**
+         * @param {string} value
+         * @protected
+         */
         _removeCheckboxFromValue(value) {
           this.value = this.value.filter(v => v !== value);
         }
 
+        /**
+         * @param {CheckboxElement} checkbox
+         * @protected
+         */
         _changeSelectedCheckbox(checkbox) {
           if (this._updatingValue) {
             return;
@@ -269,6 +287,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         _updateValue(value, splices) {
           // setting initial value to empty array, skip validation
           if (value.length === 0 && this._oldValue === undefined) {
@@ -293,6 +312,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this.validate();
         }
 
+        /** @private */
         _labelChanged(label) {
           if (label) {
             this.setAttribute('has-label', '');
@@ -301,10 +321,15 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         _getErrorMessageAriaHidden(invalid, errorMessage) {
           return (!errorMessage || !invalid).toString();
         }
 
+        /**
+         * @return {boolean}
+         * @protected
+         */
         _containsFocus() {
           const root = this.getRootNode();
           // Safari 9 needs polyfilled `_activeElement` to return correct node
@@ -312,6 +337,10 @@ This program is available under Apache License Version 2.0, available at https:/
           return this.contains(activeElement);
         }
 
+        /**
+         * @param {boolean} focused
+         * @protected
+         */
         _setFocused(focused) {
           if (focused) {
             this.setAttribute('focused', '');
