@@ -8,7 +8,7 @@ cache:
     - node_modules
 
 addons:
-  firefox: "66.0"
+  firefox: latest
   chrome: stable
 
 jobs:
@@ -22,12 +22,12 @@ jobs:
     - if: type = pull_request
       env: POLYMER=2
       addons:
-        firefox: "66.0"
+        firefox: latest
         chrome: stable
     - if: type = pull_request
       env: POLYMER=3
       addons:
-        firefox: "66.0"
+        firefox: latest
         chrome: stable
     - if: type = cron
       env: TEST_SUITE=unit_tests POLYMER=2
@@ -35,20 +35,17 @@ jobs:
 script:
   - if [[ "$POLYMER" = "2" ]]; then
       npm -q i && npm i -q --no-save bower polymer-cli && bower -q i &&
-      if [[ "$TRAVIS_EVENT_TYPE" != "pull_request" && "$TRAVIS_BRANCH" != quick/* ]]; then
-        if [[ "$TEST_SUITE" = "visual_tests" ]]; then
-          npm i -q --no-save gemini@^4.0.0 gemini-sauce gemini-polyserve &&
-          gemini test test/visual;
-        else
-          wct --env saucelabs;
-        fi;
-      else
+      if [[ "$TRAVIS_EVENT_TYPE" = "pull_request" ]]; then
         npm run check &&
         npm run lint &&
         xvfb-run -s '-screen 0 1024x768x24' wct;
-      fi &&
-      if [[ "$TRAVIS_EVENT_TYPE" = "cron" && "$TEST_SUITE" = "unit_tests" ]]; then
+      elif [[ "$TRAVIS_EVENT_TYPE" = "cron" ]]; then
         wct --env saucelabs-cron;
+      elif [[ "$TEST_SUITE" = "visual_tests" ]]; then
+        npm i -q --no-save gemini@^4.0.0 gemini-sauce gemini-polyserve &&
+        gemini test test/visual;
+      else
+        wct --env saucelabs;
       fi;
     fi
   - if [[ "$POLYMER" = "3" ]]; then
@@ -56,10 +53,10 @@ script:
       rm -rf node_modules &&
       magi p3-convert --out . --import-style=name &&
       yarn install --flat &&
-      if [[ "$TRAVIS_EVENT_TYPE" != "pull_request" && "$TRAVIS_BRANCH" != quick/* ]]; then
-        wct --npm --env saucelabs;
-      else
+      if [[ "$TRAVIS_EVENT_TYPE" = "pull_request" ]]; then
         xvfb-run -s '-screen 0 1024x768x24' wct --npm;
+      else
+        wct --npm --env saucelabs;
       fi;
     fi
 
