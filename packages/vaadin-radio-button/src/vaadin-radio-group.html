@@ -95,6 +95,7 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * @memberof Vaadin
        * @mixes Vaadin.ThemableMixin
+       * @mixes Vaadin.DirMixin
        * @element vaadin-radio-group
        * @demo demo/index.html
        */
@@ -125,6 +126,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * This property is set to true when the value is invalid.
+             * @type {boolean}
              */
             invalid: {
               type: Boolean,
@@ -143,22 +145,26 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * Error to show when the input value is invalid.
+             * @type {string}
              */
             errorMessage: {
               type: String,
               value: ''
             },
 
+            /** @private */
             _errorId: {
               type: String
             },
 
+            /** @private */
             _checkedButton: {
               type: Object
             },
 
             /**
              * String used for the label element.
+             * @type {string}
              */
             label: {
               type: String,
@@ -177,6 +183,7 @@ This program is available under Apache License Version 2.0, available at https:/
           };
         }
 
+        /** @protected */
         ready() {
           super.ready();
 
@@ -218,10 +225,15 @@ This program is available under Apache License Version 2.0, available at https:/
           this._errorId = `${this.constructor.is}-error-${uniqueId}`;
         }
 
+        /** @private */
         get _radioButtons() {
           return this._filterRadioButtons(this.querySelectorAll('*'));
         }
 
+        /**
+         * @param {boolean} focused
+         * @protected
+         */
         _setFocused(focused) {
           if (focused) {
             this.setAttribute('focused', '');
@@ -230,16 +242,19 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         _filterRadioButtons(nodes) {
           return Array.from(nodes)
             .filter(child => child instanceof Vaadin.RadioButtonElement);
         }
 
+        /** @private */
         _disabledChanged(disabled) {
           this.setAttribute('aria-disabled', disabled);
           this._updateDisableButtons();
         }
 
+        /** @private */
         _updateDisableButtons() {
           this._radioButtons.forEach(button => {
             if (this.disabled) {
@@ -254,10 +269,12 @@ This program is available under Apache License Version 2.0, available at https:/
           });
         }
 
+        /** @private */
         _readonlyChanged(newV, oldV) {
           (newV || oldV) && this._updateDisableButtons();
         }
 
+        /** @private */
         _addListeners() {
           this.addEventListener('keydown', e => {
             // if e.target is vaadin-radio-group then assign to checkedRadioButton currently checked radio button
@@ -288,6 +305,11 @@ This program is available under Apache License Version 2.0, available at https:/
           });
         }
 
+        /**
+         * @param {boolean} next
+         * @param {!RadioButtonElement} checkedRadioButton
+         * @protected
+         */
         _selectIncButton(next, checkedRadioButton) {
           if (next) {
             this._selectNextButton(checkedRadioButton);
@@ -296,6 +318,11 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /**
+         * @param {!RadioButtonElement} element
+         * @param {boolean=} setFocusRing
+         * @protected
+         */
         _selectButton(element, setFocusRing) {
           if (this._containsFocus()) {
             element.focus();
@@ -306,6 +333,10 @@ This program is available under Apache License Version 2.0, available at https:/
           this._changeSelectedButton(element, setFocusRing);
         }
 
+        /**
+         * @return {boolean}
+         * @protected
+         */
         _containsFocus() {
           const root = this.getRootNode();
           // Safari 9 needs polyfilled `_activeElement` to return correct node
@@ -313,10 +344,18 @@ This program is available under Apache License Version 2.0, available at https:/
           return this.contains(activeElement);
         }
 
+        /**
+         * @return {boolean}
+         * @protected
+         */
         _hasEnabledButtons() {
           return !this._radioButtons.every((button) => button.disabled);
         }
 
+        /**
+         * @param {!RadioButtonElement} element
+         * @protected
+         */
         _selectNextButton(element) {
           if (!this._hasEnabledButtons()) {
             return;
@@ -331,6 +370,10 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /**
+         * @param {!RadioButtonElement} element
+         * @protected
+         */
         _selectPreviousButton(element) {
           if (!this._hasEnabledButtons()) {
             return;
@@ -345,6 +388,11 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /**
+         * @param {RadioButtonElement} button
+         * @param {boolean=} fireChangeEvent
+         * @protected
+         */
         _changeSelectedButton(button, fireChangeEvent) {
           if (this._checkedButton === button) {
             return;
@@ -355,7 +403,7 @@ This program is available under Apache License Version 2.0, available at https:/
           if (this._checkedButton) {
             this.value = this._checkedButton.value;
           }
-    
+
           this._radioButtons.forEach(button => {
             if (button === this._checkedButton) {
               if (fireChangeEvent) {
@@ -373,6 +421,7 @@ This program is available under Apache License Version 2.0, available at https:/
           button && this._setFocusable(this._radioButtons.indexOf(button));
         }
 
+        /** @private */
         _valueChanged(newV, oldV) {
           if (oldV && (newV === '' || newV === null || newV === undefined)) {
             this._changeSelectedButton(null);
@@ -404,17 +453,22 @@ This program is available under Apache License Version 2.0, available at https:/
 
         /**
          * Returns true if the current input value satisfies all constraints (if any)
-         * @returns {boolean}
+         * @return {boolean}
          */
         checkValidity() {
           return !this.required || !!this.value;
         }
 
+        /**
+         * @param {number} idx
+         * @protected
+         */
         _setFocusable(idx) {
           const items = this._radioButtons;
           items.forEach(e => e.tabindex = e === items[idx] ? 0 : -1);
         }
 
+        /** @private */
         _labelChanged(label) {
           if (label) {
             this.setAttribute('has-label', '');
@@ -423,10 +477,12 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         _getActiveErrorId(invalid, errorMessage, errorId) {
           return errorMessage && invalid ? errorId : undefined;
         }
 
+        /** @private */
         _getErrorMessageAriaHidden(invalid, errorMessage, errorId) {
           return (!this._getActiveErrorId(invalid, errorMessage, errorId)).toString();
         }

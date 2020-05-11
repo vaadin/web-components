@@ -119,6 +119,7 @@ This program is available under Apache License Version 2.0, available at https:/
           return {
             /**
              * True if the radio button is checked.
+             * @type {boolean}
              */
             checked: {
               type: Boolean,
@@ -135,6 +136,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * The value for this element.
+             * @type {string}
              */
             value: {
               type: String,
@@ -152,6 +154,9 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         /**
+         * @param {string} prop
+         * @param {?string} oldVal
+         * @param {?string} newVal
          * @protected
          */
         attributeChangedCallback(prop, oldVal, newVal) {
@@ -173,7 +178,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
-
+        /** @protected */
         ready() {
           super.ready();
 
@@ -192,6 +197,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this._updateLabelAttribute();
         }
 
+        /** @private */
         _updateLabelAttribute() {
           const label = this.shadowRoot.querySelector('[part~="label"]');
           const assignedNodes = label.firstElementChild.assignedNodes();
@@ -202,6 +208,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         _isAssignedNodesEmpty(nodes) {
           // The assigned nodes considered to be empty if there is no slotted content or only one empty text node
           return nodes.length === 0 ||
@@ -210,10 +217,12 @@ This program is available under Apache License Version 2.0, available at https:/
               && nodes[0].textContent.trim() === '');
         }
 
+        /** @private */
         _checkedChanged(checked) {
           this.setAttribute('aria-checked', checked);
         }
 
+        /** @private */
         _addListeners() {
           this._addEventListenerToNode(this, 'down', (e) => {
             if (!this.disabled) {
@@ -264,11 +273,15 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
-        /** @protected */
+        /**
+         * @return {!HTMLInputElement}
+         * @protected
+         */
         get focusElement() {
           return this.shadowRoot.querySelector('input');
         }
 
+        /** @private */
         _onChange(e) {
           this.checked = e.target.checked;
           // In the Shadow DOM, the `change` event is not leaked into the
