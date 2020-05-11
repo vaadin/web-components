@@ -159,6 +159,7 @@ This program is available under Apache License Version 2.0, available at https:/
           return {
             /**
              * Set tabs disposition. Possible values are `horizontal|vertical`
+             * @type {!ListOrientation}
              */
             orientation: {
               value: 'horizontal',
@@ -167,6 +168,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * The index of the selected tab.
+             * @type {number}
              */
             selected: {
               value: 0,
@@ -191,26 +193,38 @@ This program is available under Apache License Version 2.0, available at https:/
           });
         }
 
+        /** @private */
         _scrollForward() {
           this._scroll(-this.__direction * this._scrollOffset);
         }
 
+        /** @private */
         _scrollBack() {
           this._scroll(this.__direction * this._scrollOffset);
         }
 
+        /**
+         * @return {number}
+         * @protected
+         */
         get _scrollOffset() {
           return this._vertical ? this._scrollerElement.offsetHeight : this._scrollerElement.offsetWidth;
         }
 
+        /**
+         * @return {!HTMLElement}
+         * @protected
+         */
         get _scrollerElement() {
           return this.$.scroll;
         }
 
+        /** @private */
         get __direction() {
           return !this._vertical && this.getAttribute('dir') === 'rtl' ? 1 : -1;
         }
 
+        /** @private */
         _updateOverflow() {
           const scrollPosition = this._vertical ? this._scrollerElement.scrollTop : this.__getNormalizedScrollLeft(this._scrollerElement);
           let scrollSize = this._vertical ? this._scrollerElement.scrollHeight : this._scrollerElement.scrollWidth;
@@ -231,6 +245,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this._repaintShadowNodesHack();
         }
 
+        /** @private */
         _repaintShadowNodesHack() {
           // Safari 10 has an issue with repainting shadow root element styles when a host attribute changes.
           // Need this workaround (toggle any inline css property on and off) until the issue gets fixed.
