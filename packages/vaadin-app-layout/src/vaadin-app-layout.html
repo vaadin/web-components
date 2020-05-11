@@ -316,6 +316,7 @@ This program is available under Apache License Version 2.0, available at https:/
              * Defines whether navbar or drawer will come first visually.
              * - By default (`primary-section="navbar"`), the navbar takes the full available width and moves the drawer down.
              * - If `primary-section="drawer"` is set, then the drawer will move the navbar, taking the full available height.
+             * @type {!PrimarySection}
              */
             primarySection: {
               type: String,
@@ -330,6 +331,7 @@ This program is available under Apache License Version 2.0, available at https:/
              * Its default value depends on the viewport:
              * - `true`, for desktop size views
              * - `false`, for mobile size views
+             * @type {boolean}
              */
             drawerOpened: {
               type: Boolean,
@@ -342,6 +344,7 @@ This program is available under Apache License Version 2.0, available at https:/
             /**
              *  Drawer is an overlay on top of the content
              *  Controlled via CSS using `--vaadin-app-layout-drawer-overlay: true|false`;
+             * @type {boolean}
              */
             overlay: {
               type: Boolean,
@@ -361,9 +364,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this.__closeOverlayDrawerListener = this.__closeOverlayDrawer.bind(this);
         }
 
-        /**
-        * @private
-        */
+        /** @protected */
         connectedCallback() {
           super.connectedCallback();
 
@@ -406,9 +407,7 @@ This program is available under Apache License Version 2.0, available at https:/
           window.addEventListener('close-overlay-drawer', this.__closeOverlayDrawerListener);
         }
 
-        /**
-        * @private
-        */
+        /** @protected */
         disconnectedCallback() {
           super.disconnectedCallback();
 
@@ -427,6 +426,7 @@ This program is available under Apache License Version 2.0, available at https:/
           window.dispatchEvent(new CustomEvent('close-overlay-drawer'));
         }
 
+        /** @private */
         _primarySectionObserver(value) {
           const isValid = ['navbar', 'drawer'].indexOf(value) !== -1;
           if (!isValid) {
@@ -434,6 +434,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         _drawerOpenedObserver() {
           const drawer = this.$.drawer;
 
@@ -448,37 +449,31 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
-
+        /** @private */
         _isShadyCSS() {
           return window.ShadyCSS && !window.ShadyCSS.nativeCss;
         }
 
+        /** @protected */
         _afterFirstRender() {
           this._blockAnimationUntilAfterNextRender();
           this._updateOffsetSize();
         }
 
+        /** @private */
         _drawerToggleClick(e) {
           e.stopPropagation();
           this.drawerOpened = !this.drawerOpened;
         }
 
-        /**
-         * App Layout listens to `close-overlay-drawer` on the window level.
-         * A custom event can be dispatched and the App Layout will close the drawer in overlay.
-         *
-         * That can be used, for instance, when a navigation occurs when user clicks in a menu item inside the drawer.
-         *
-         * See `dispatchCloseOverlayDrawerEvent()` helper method.
-         *
-         * @event close-overlay-drawer
-         */
+        /** @private */
         __closeOverlayDrawer() {
           if (this.overlay) {
             this.drawerOpened = false;
           }
         }
 
+        /** @protected */
         _updateDrawerSize() {
           const childCount = this.querySelectorAll('[slot=drawer]').length;
           const drawer = this.$.drawer;
@@ -491,12 +486,14 @@ This program is available under Apache License Version 2.0, available at https:/
           this._updateOffsetSize();
         }
 
+        /** @private */
         _resize() {
           this._blockAnimationUntilAfterNextRender();
           this._updateTouchOptimizedMode();
           this._updateOverlayMode();
         }
 
+        /** @protected */
         _updateOffsetSize() {
           const navbar = this.shadowRoot.querySelector('[part="navbar"]');
           const navbarRect = navbar.getBoundingClientRect();
@@ -528,6 +525,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @protected */
         _updateDrawerHeight() {
           const {scrollHeight, offsetHeight} = this.$.drawer;
           const height = scrollHeight > offsetHeight ? `${scrollHeight}px` : '100%';
@@ -541,6 +539,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @protected */
         _updateOverlayMode() {
           const overlay = this._getCustomPropertyValue('--vaadin-app-layout-drawer-overlay') == 'true';
           const drawer = this.$.drawer;
@@ -572,10 +571,12 @@ This program is available under Apache License Version 2.0, available at https:/
           // TODO(jouni): ARIA attributes. The drawer should act similar to a modal dialog when in ”overlay” mode
         }
 
+        /** @protected */
         _close() {
           this.drawerOpened = false;
         }
 
+        /** @private */
         _getCustomPropertyValue(customProperty) {
           let customPropertyValue;
 
@@ -589,6 +590,7 @@ This program is available under Apache License Version 2.0, available at https:/
           return (customPropertyValue || '').trim().toLowerCase();
         }
 
+        /** @protected */
         _updateTouchOptimizedMode() {
           const touchOptimized = this._getCustomPropertyValue('--vaadin-app-layout-touch-optimized') == 'true';
 
@@ -623,6 +625,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this._updateOffsetSize();
         }
 
+        /** @protected */
         _blockAnimationUntilAfterNextRender() {
           this.setAttribute('no-anim', '');
           Polymer.RenderStatus.afterNextRender(this, () => {
@@ -632,6 +635,17 @@ This program is available under Apache License Version 2.0, available at https:/
             }
           });
         }
+
+        /**
+         * App Layout listens to `close-overlay-drawer` on the window level.
+         * A custom event can be dispatched and the App Layout will close the drawer in overlay.
+         *
+         * That can be used, for instance, when a navigation occurs when user clicks in a menu item inside the drawer.
+         *
+         * See `dispatchCloseOverlayDrawerEvent()` helper method.
+         *
+         * @event close-overlay-drawer
+         */
       }
 
       customElements.define(AppLayoutElement.is, AppLayoutElement);

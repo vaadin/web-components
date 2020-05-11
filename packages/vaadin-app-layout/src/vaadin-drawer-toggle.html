@@ -73,7 +73,6 @@ This program is available under Apache License Version 2.0, available at https:/
        * </vaadin-app-layout>
        * ```
        *
-       * @memberof Vaadin
        * @extends Vaadin.ButtonElement
        * @demo demo/index.html
        */
@@ -95,11 +94,6 @@ This program is available under Apache License Version 2.0, available at https:/
             this.dispatchEvent(new CustomEvent('drawer-toggle-click', {bubbles: true, composed: true}));
           });
         }
-
-        connectedCallback() {
-          super.connectedCallback();
-        }
-
       }
 
       customElements.define(DrawerToggleElement.is, DrawerToggleElement);
