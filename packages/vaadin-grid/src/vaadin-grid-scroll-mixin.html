@@ -12,7 +12,7 @@ This program is available under Apache License Version 2.0, available at https:/
    * @polymerMixin
    */
   Vaadin.Grid.ScrollMixin = superClass => class ScrollMixin extends superClass {
-
+    /** @private */
     get _timeouts() {
       return {
         SCROLL_PERIOD: 1000,
@@ -24,8 +24,10 @@ This program is available under Apache License Version 2.0, available at https:/
 
     static get properties() {
       return {
-
-        // Cached array of frozen cells
+        /**
+         * Cached array of frozen cells
+         * @private
+         */
         _frozenCells: {
           type: Array,
           value: function() {
@@ -33,6 +35,10 @@ This program is available under Apache License Version 2.0, available at https:/
           },
         },
 
+        /**
+         * @type {number}
+         * @protected
+         */
         _scrollbarWidth: {
           type: Number,
           value: function() {
@@ -52,8 +58,10 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         },
 
+        /** @private */
         _rowWithFocusedElement: Element,
 
+        /** @private */
         _deltaYAcc: {
           type: Number,
           value: 0
@@ -69,11 +77,15 @@ This program is available under Apache License Version 2.0, available at https:/
       ];
     }
 
-    // Override (from iron-scroll-target-behavior) to avoid document scroll
+    /**
+     * Override (from iron-scroll-target-behavior) to avoid document scroll
+     * @private
+     */
     set _scrollTop(top) {
       this.$.table.scrollTop = top;
     }
 
+    /** @private */
     get _scrollTop() {
       return this.$.table.scrollTop;
     }
@@ -85,6 +97,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     /**
      * @returns {Number|undefined} - The browser's default font-size in pixels
+     * @private
      */
     _getScrollLineHeight() {
       const el = document.createElement('div');
@@ -96,10 +109,12 @@ This program is available under Apache License Version 2.0, available at https:/
       return fontSize ? window.parseInt(fontSize) : undefined;
     }
 
+    /** @private */
     _scrollViewportHeightUpdated(_viewportHeight) {
       this._scrollPageHeight = _viewportHeight - this.$.header.clientHeight - this.$.footer.clientHeight - this._scrollLineHeight;
     }
 
+    /** @protected */
     ready() {
       super.ready();
       this.scrollTarget = this.$.table;
@@ -138,6 +153,7 @@ This program is available under Apache License Version 2.0, available at https:/
       this._accessIronListAPI(() => super.scrollToIndex(index));
     }
 
+    /** @private */
     _onWheel(e) {
       if (e.ctrlKey || this._hasScrolledAncestor(e.target, e.deltaX, e.deltaY)) {
         return;
@@ -197,6 +213,7 @@ This program is available under Apache License Version 2.0, available at https:/
     /**
      * Determines if the element has an ancestor prior to this
      * cell content that handles the scroll delta
+     * @private
      */
     _hasScrolledAncestor(el, deltaX, deltaY) {
       if (el.localName === 'vaadin-grid-cell-content') {
@@ -212,6 +229,7 @@ This program is available under Apache License Version 2.0, available at https:/
     /**
      * Determines if the the given scroll deltas can be applied to the element
      * (fully or partially)
+     * @private
      */
     _canScroll(el, deltaX, deltaY) {
       return (deltaY > 0 && el.scrollTop < el.scrollHeight - el.offsetHeight) ||
@@ -220,6 +238,7 @@ This program is available under Apache License Version 2.0, available at https:/
       (deltaX < 0 && el.scrollLeft > 0);
     }
 
+    /** @private */
     _scheduleScrolling() {
       if (!this._scrollingFrame) {
         // Defer setting state attributes to avoid Edge hiccups
@@ -252,6 +271,7 @@ This program is available under Apache License Version 2.0, available at https:/
       );
     }
 
+    /** @private */
     _afterScroll() {
       this._translateStationaryElements();
 
@@ -274,6 +294,7 @@ This program is available under Apache License Version 2.0, available at https:/
       this._updateOverflow();
     }
 
+    /** @private */
     _updateOverflow() {
       // Set overflow styling attributes
       let overflow = '';
@@ -308,7 +329,10 @@ This program is available under Apache License Version 2.0, available at https:/
       );
     }
 
-    // correct order needed for preserving correct tab order between cell contents.
+    /**
+     * Correct order needed for preserving correct tab order between cell contents.
+     * @private
+     */
     _reorderRows() {
       const body = this.$.items;
       const items = body.querySelectorAll('tr');
@@ -341,6 +365,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @protected */
     _frozenCellsChanged() {
       this._debouncerCacheElements = Polymer.Debouncer.debounce(
         this._debouncerCacheElements,
@@ -357,6 +382,7 @@ This program is available under Apache License Version 2.0, available at https:/
       this._updateLastFrozen();
     }
 
+    /** @protected */
     _updateScrollerMeasurements() {
       if (this._frozenCells.length > 0 && this.__isRTL) {
         this.__scrollerMetrics = {
@@ -366,6 +392,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @protected */
     _updateLastFrozen() {
       if (!this._columnTree) {
         return;
@@ -384,6 +411,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _translateStationaryElements() {
       if (this._edge && !this._scrollbarWidth) {
         // Fixed mode (Tablet Edge)
@@ -408,10 +436,12 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _getTranslate(x, y) {
       return 'translate(' + x + 'px,' + y + 'px)';
     }
 
+    /** @private */
     _scrollHeightUpdated(_estScrollHeight) {
       this.$.outersizer.style.top = this.$.fixedsizer.style.top = _estScrollHeight + 'px';
     }

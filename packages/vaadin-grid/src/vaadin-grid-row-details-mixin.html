@@ -18,6 +18,7 @@ This program is available under Apache License Version 2.0, available at https:/
       return {
         /**
          * An array containing references to items with open row details.
+         * @type {Array<GridItem> | null | undefined}
          */
         detailsOpenedItems: {
           type: Array,
@@ -26,6 +27,10 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         },
 
+        /**
+         * @type {HTMLTemplateElement}
+         * @protected
+         */
         _rowDetailsTemplate: Object,
 
         /**
@@ -38,9 +43,15 @@ This program is available under Apache License Version 2.0, available at https:/
          *   the rendered item, contains:
          *   - `rowData.index` The index of the item.
          *   - `rowData.item` The item.
+         *
+         * @type {GridRowDetailsRenderer | null | undefined}
          */
         rowDetailsRenderer: Function,
 
+        /**
+         * @type {!Array<!HTMLElement> | undefined}
+         * @protected
+         */
         _detailsCells: {
           type: Array,
         }
@@ -54,6 +65,7 @@ This program is available under Apache License Version 2.0, available at https:/
       ];
     }
 
+    /** @private */
     _rowDetailsTemplateOrRendererChanged(rowDetailsTemplate, rowDetailsRenderer) {
       if (rowDetailsTemplate && rowDetailsRenderer) {
         throw new Error('You should only use either a renderer or a template for row details');
@@ -86,6 +98,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _detailsOpenedItemsChanged(changeRecord, rowDetailsTemplate, rowDetailsRenderer) {
       if (changeRecord.path === 'detailsOpenedItems.length' || !changeRecord.value) {
         // Let’s avoid duplicate work of both “.splices” and “.length” updates.
@@ -98,6 +111,10 @@ This program is available under Apache License Version 2.0, available at https:/
       });
     }
 
+    /**
+     * @param {!HTMLElement} cell
+     * @protected
+     */
     _configureDetailsCell(cell) {
       cell.setAttribute('part', 'cell details-cell');
       // Freeze the details cell, so that it does not scroll horizontally
@@ -105,6 +122,11 @@ This program is available under Apache License Version 2.0, available at https:/
       this._toggleAttribute('frozen', true, cell);
     }
 
+    /**
+     * @param {!HTMLElement} row
+     * @param {!GridItem} item
+     * @protected
+     */
     _toggleDetailsCell(row, item) {
       const cell = row.querySelector('[part~="details-cell"]');
       if (!cell) {
@@ -141,18 +163,25 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @protected */
     _updateDetailsCellHeights() {
       Array.from(this.$.items.querySelectorAll('[part~="details-cell"]:not([hidden])')).forEach(cell => {
         cell.parentElement.style.setProperty('padding-bottom', `${cell.offsetHeight}px`);
       });
     }
 
+    /**
+     * @param {!GridItem} item
+     * @return {boolean}
+     * @protected
+     */
     _isDetailsOpened(item) {
       return this.detailsOpenedItems && this._getItemIndexInArray(item, this.detailsOpenedItems) !== -1;
     }
 
     /**
      * Open the details row of a given item.
+     * @param {!GridItem} item
      */
     openItemDetails(item) {
       if (!this._isDetailsOpened(item)) {
@@ -162,6 +191,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     /**
      * Close the details row of a given item.
+     * @param {!GridItem} item
      */
     closeItemDetails(item) {
       if (this._isDetailsOpened(item)) {
@@ -169,6 +199,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _detailsOpenedInstanceChangedCallback(instance, value) {
       if (super._detailsOpenedInstanceChangedCallback) {
         super._detailsOpenedInstanceChangedCallback(instance, value);

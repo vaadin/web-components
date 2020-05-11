@@ -34,10 +34,14 @@ To update:
   var IDLE_TIME = Polymer.Async.idlePeriod;
   var MICRO_TASK = Polymer.Async.microTask;
 
+  window.Vaadin = window.Vaadin || {};
+  window.Vaadin.Grid = window.Vaadin.Grid || {};
+
   /**
-   * @namespace
+   * @constructor
+   * @memberof Vaadin.Grid
    */
-  window.PolymerIronList = Polymer.Class({
+  Vaadin.Grid.PolymerIronList = Polymer.Class({
 
     behaviors: [
       Polymer.IronResizableBehavior,
@@ -847,7 +851,9 @@ To update:
     }
 
   });
-
+  /* MAGI REMOVE START */
+  window.PolymerIronList = Vaadin.Grid.PolymerIronList;
+  /* MAGI REMOVE END */
 })();
 
 </script>

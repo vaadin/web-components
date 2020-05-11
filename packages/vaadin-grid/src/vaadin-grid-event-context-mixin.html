@@ -30,6 +30,9 @@ This program is available under Apache License Version 2.0, available at https:/
      * This means mostly mouse and keyboard events. If such a grid part is not found in the path, an empty object is returned.
      * This may be the case eg. if the event is fired on the `<vaadin-grid>` element and not any deeper in the DOM, or if
      * the event targets the empty part of the grid body.
+     *
+     * @param {!Event} event
+     * @return {GridEventContext | object}
      */
     getEventContext(event) {
 

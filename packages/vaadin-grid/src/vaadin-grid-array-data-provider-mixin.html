@@ -19,6 +19,8 @@ This program is available under Apache License Version 2.0, available at https:/
         /**
          * An array containing the items which will be stamped to the column template
          * instances.
+         *
+         * @type {Array<!GridItem> | undefined}
          */
         items: Array
 
@@ -31,6 +33,7 @@ This program is available under Apache License Version 2.0, available at https:/
       ];
     }
 
+    /** @private */
     _itemsChanged(items, splices, isAttached) {
       if (!isAttached) {
         return;
@@ -51,6 +54,11 @@ This program is available under Apache License Version 2.0, available at https:/
       this._ensureFirstPageLoaded();
     }
 
+    /**
+     * @param {GridDataProviderParams} opts
+     * @param {GridDataProviderCallback} cb
+     * @protected
+     */
     _arrayDataProvider(opts, cb) {
       let items = (Array.isArray(this.items) ? this.items : []).slice(0);
 
@@ -72,9 +80,10 @@ This program is available under Apache License Version 2.0, available at https:/
 
     /**
      * Check array of filters/sorters for paths validity, console.warn invalid items
-     * @param {Array}  arrayToCheck The array of filters/sorters to check
-     * @param {string} action       The name of action to include in warning (filtering, sorting)
-     * @param {Array}  items
+     * @param {!Array<!GridFilter | !GridSorter>} arrayToCheck The array of filters/sorters to check
+     * @param {string} action The name of action to include in warning (filtering, sorting)
+     * @param {!Array<!GridItem>} items
+     * @protected
      */
     _checkPaths(arrayToCheck, action, items) {
       if (!items.length) {
@@ -101,6 +110,12 @@ This program is available under Apache License Version 2.0, available at https:/
       return result;
     }
 
+    /**
+     * @param {unknown} a
+     * @param {unknown} b
+     * @return {number}
+     * @protected
+     */
     _multiSort(a, b) {
       return this._sorters.map(sort => {
         if (sort.direction === 'asc') {
@@ -114,6 +129,11 @@ This program is available under Apache License Version 2.0, available at https:/
       }, 0);
     }
 
+    /**
+     * @param {unknown} value
+     * @return {string}
+     * @protected
+     */
     _normalizeEmptyValue(value) {
       if ([undefined, null].indexOf(value) >= 0) {
         return '';
@@ -124,6 +144,12 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /**
+     * @param {unknown} a
+     * @param {unknown} b
+     * @return {number}
+     * @protected
+     */
     _compare(a, b) {
       a = this._normalizeEmptyValue(a);
       b = this._normalizeEmptyValue(b);
@@ -137,6 +163,11 @@ This program is available under Apache License Version 2.0, available at https:/
       return 0;
     }
 
+    /**
+     * @param {!Array<!GridItem>} items
+     * @return {!Array<!GridItem>}
+     * @protected
+     */
     _filter(items) {
       return items.filter((item, index) => {
         return this._filters.filter(filter => {

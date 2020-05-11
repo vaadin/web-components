@@ -9,24 +9,43 @@ This program is available under Apache License Version 2.0, available at https:/
   window.Vaadin.Grid = window.Vaadin.Grid || {};
 
   Vaadin.Grid.ItemCache = class ItemCache {
-
+    /**
+     * @param {!HTMLElement} grid
+     * @param {!ItemCache | undefined} parentCache
+     * @param {!GridItem | undefined} parentItem
+     */
     constructor(grid, parentCache, parentItem) {
+      /** @type {!HTMLElement} */
       this.grid = grid;
+      /** @type {!ItemCache | undefined} */
       this.parentCache = parentCache;
+      /** @type {!GridItem | undefined} */
       this.parentItem = parentItem;
+      /** @type {object} */
       this.itemCaches = {};
+      /** @type {object} */
       this.items = {};
+      /** @type {number} */
       this.effectiveSize = 0;
+      /** @type {number} */
       this.size = 0;
+      /** @type {object} */
       this.pendingRequests = {};
     }
 
+    /**
+     * @return {boolean}
+     */
     isLoading() {
-      return Object.keys(this.pendingRequests).length || Object.keys(this.itemCaches).filter(index => {
+      return Boolean(Object.keys(this.pendingRequests).length || Object.keys(this.itemCaches).filter(index => {
         return this.itemCaches[index].isLoading();
-      })[0];
+      })[0]);
     }
 
+    /**
+     * @param {number} index
+     * @return {!GridItem | undefined}
+     */
     getItemForIndex(index) {
       const {cache, scaledIndex} = this.getCacheAndIndex(index);
       return cache.items[scaledIndex];
@@ -42,6 +61,9 @@ This program is available under Apache License Version 2.0, available at https:/
         0;
     }
 
+    /**
+     * @param {number} scaledIndex
+     */
     ensureSubCacheForScaledIndex(scaledIndex) {
       if (!this.itemCaches[scaledIndex]) {
         const subCache = new Vaadin.Grid.ItemCache(this.grid, this, this.items[scaledIndex]);
@@ -50,6 +72,10 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /**
+     * @param {number} index
+     * @return {{cache: !ItemCache, scaledIndex: number}}
+     */
     getCacheAndIndex(index) {
       let thisLevelIndex = index;
       const keys = Object.keys(this.itemCaches);
@@ -79,6 +105,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         /**
          * Number of items fetched at a time from the dataprovider.
+         * @type {number}
          */
         pageSize: {
           type: Number,
@@ -106,6 +133,8 @@ This program is available under Apache License Version 2.0, available at https:/
          *   - `size` Total number of items. When tree sublevel items
          *     are requested, total number of items in the requested sublevel.
          *     Optional when tree is not used, required for tree.
+         *
+         * @type {GridDataProvider | null | undefined}
          */
         dataProvider: {
           type: Object,
@@ -123,6 +152,10 @@ This program is available under Apache License Version 2.0, available at https:/
           reflectToAttribute: true
         },
 
+        /**
+         * @type {!ItemCache}
+         * @protected
+         */
         _cache: {
           type: Object,
           value: function() {
@@ -141,6 +174,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         /**
          * An array that contains the expanded items.
+         * @type {!Array<!GridItem>}
          */
         expandedItems: {
           type: Object,
@@ -159,6 +193,7 @@ This program is available under Apache License Version 2.0, available at https:/
       ];
     }
 
+    /** @private */
     _sizeChanged(size) {
       const delta = size - this._cache.size;
       this._cache.size += delta;
@@ -166,6 +201,11 @@ This program is available under Apache License Version 2.0, available at https:/
       this._effectiveSize = this._cache.effectiveSize;
     }
 
+    /**
+     * @param {number} index
+     * @param {HTMLElement} el
+     * @protected
+     */
     _getItem(index, el) {
       if (index >= this._effectiveSize) {
         return;
@@ -187,6 +227,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     }
 
+    /** @private */
     _expandedInstanceChangedCallback(inst, value) {
       if (inst.item === undefined) {
         return;
@@ -201,15 +242,23 @@ This program is available under Apache License Version 2.0, available at https:/
     /**
      * Returns a value that identifies the item. Uses `itemIdPath` if available.
      * Can be customized by overriding.
+     * @param {!GridItem} item
+     * @return {!GridItem | !unknown}
      */
     getItemId(item) {
       return this.itemIdPath ? this.get(this.itemIdPath, item) : item;
     }
 
+    /**
+     * @param {!GridItem} item
+     * @return {boolean}
+     * @protected
+     */
     _isExpanded(item) {
       return this.__expandedKeys.has(this.getItemId(item));
     }
 
+    /** @private */
     _expandedItemsChanged(e) {
       this.__cacheExpandedKeys();
       this._cache.updateSize();
@@ -217,10 +266,12 @@ This program is available under Apache License Version 2.0, available at https:/
       this._assignModels();
     }
 
+    /** @private */
     _itemIdPathChanged(e) {
       this.__cacheExpandedKeys();
     }
 
+    /** @private */
     __cacheExpandedKeys() {
       if (this.expandedItems) {
         this.__expandedKeys = new Set();
@@ -232,6 +283,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     /**
      * Expands the given item tree.
+     * @param {!GridItem} item
      */
     expandItem(item) {
       if (!this._isExpanded(item)) {
@@ -241,6 +293,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     /**
      * Collapses the given item tree.
+     * @param {!GridItem} item
      */
     collapseItem(item) {
       if (this._isExpanded(item)) {
@@ -248,6 +301,11 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /**
+     * @param {number} index
+     * @return {number}
+     * @protected
+     */
     _getIndexLevel(index) {
       let {cache} = this._cache.getCacheAndIndex(index);
       let level = 0;
@@ -258,10 +316,19 @@ This program is available under Apache License Version 2.0, available at https:/
       return level;
     }
 
+    /**
+     * @return {boolean}
+     * @protected
+     */
     _canPopulate() {
-      return this._hasData && this._columnTree;
+      return Boolean(this._hasData && this._columnTree);
     }
 
+    /**
+     * @param {number} page
+     * @param {ItemCache} cache
+     * @protected
+     */
     _loadPage(page, cache) {
       // make sure same page isn't requested multiple times.
       if (!cache.pendingRequests[page] && this.dataProvider) {
@@ -321,6 +388,11 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /**
+     * @param {number} index
+     * @return {number}
+     * @private
+     */
     _getPageForIndex(index) {
       return Math.floor(index / this.pageSize);
     }
@@ -346,12 +418,14 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _pageSizeChanged(pageSize, oldPageSize) {
       if (oldPageSize !== undefined && pageSize !== oldPageSize) {
         this.clearCache();
       }
     }
 
+    /** @protected */
     _checkSize() {
       if (this.size === undefined && this._effectiveSize === 0) {
         console.warn(
@@ -363,6 +437,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _dataProviderChanged(dataProvider, oldDataProvider) {
       if (oldDataProvider !== undefined) {
         this.clearCache();
@@ -383,6 +458,7 @@ This program is available under Apache License Version 2.0, available at https:/
       this._scrollHandler();
     }
 
+    /** @protected */
     _ensureFirstPageLoaded() {
       if (!this._hasData) {
         // load data before adding rows to make sure they have content when
@@ -397,10 +473,22 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /**
+     * @param {!GridItem} item1
+     * @param {!GridItem} item2
+     * @return {boolean}
+     * @protected
+     */
     _itemsEqual(item1, item2) {
       return this.getItemId(item1) === this.getItemId(item2);
     }
 
+    /**
+     * @param {!GridItem} item
+     * @param {!Array<!GridItem>} array
+     * @return {number}
+     * @protected
+     */
     _getItemIndexInArray(item, array) {
       let result = -1;
       array.forEach((i, idx) => {

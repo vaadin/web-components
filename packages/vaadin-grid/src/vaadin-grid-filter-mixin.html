@@ -15,6 +15,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     static get properties() {
       return {
+        /** @private */
         _filters: {
           type: Array,
           value: function() {
@@ -24,11 +25,13 @@ This program is available under Apache License Version 2.0, available at https:/
       };
     }
 
+    /** @protected */
     ready() {
       super.ready();
       this.addEventListener('filter-changed', this._filterChanged.bind(this));
     }
 
+    /** @private */
     _filterChanged(e) {
       if (this._filters.indexOf(e.target) === -1) {
         this._filters.push(e.target);
@@ -41,6 +44,10 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /**
+     * @return {!Array<!GridFilter>}
+     * @protected
+     */
     _mapFilters() {
       return this._filters.map(filter => {
         return {

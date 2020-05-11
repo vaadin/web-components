@@ -29,6 +29,8 @@ This program is available under Apache License Version 2.0, available at https:/
          *   - `rowData.expanded` Sublevel toggle state.
          *   - `rowData.level` Level of the tree represented with a horizontal offset of the toggle button.
          *   - `rowData.selected` Selected state.
+         *
+         * @type {GridCellClassNameGenerator | null | undefined}
          */
         cellClassNameGenerator: Function
       };
@@ -55,6 +57,7 @@ This program is available under Apache License Version 2.0, available at https:/
         row => this._generateCellClassNames(row, this.__getRowModel(row)));
     }
 
+    /** @private */
     _generateCellClassNames(row, rowData) {
       Array.from(row.children).forEach(cell => {
         if (cell.__generatedClasses) {

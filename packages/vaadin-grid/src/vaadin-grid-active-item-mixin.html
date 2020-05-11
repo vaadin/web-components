@@ -18,6 +18,7 @@ This program is available under Apache License Version 2.0, available at https:/
         /**
          * The item user has last interacted with. Turns to `null` after user deactivates
          * the item by re-interacting with the currently active item.
+         * @type {GridItem}
          */
         activeItem: {
           type: Object,
@@ -34,6 +35,7 @@ This program is available under Apache License Version 2.0, available at https:/
       this.addEventListener('cell-activate', this._activateItem.bind(this));
     }
 
+    /** @private */
     _activateItem(e) {
       const model = e.detail.model;
       const clickedItem = model ? model.item : null;
@@ -43,9 +45,13 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
-    // we need to listen to click instead of tap because on mobile safari, the
-    // document.activeElement has not been updated (focus has not been shifted)
-    // yet at the point when tap event is being executed.
+    /**
+     * We need to listen to click instead of tap because on mobile safari, the
+     * document.activeElement has not been updated (focus has not been shifted)
+     * yet at the point when tap event is being executed.
+     * @param {!MouseEvent} e
+     * @protected
+     */
     _onClick(e) {
       if (e.defaultPrevented) {
         // Something has handled this click already, e. g., <vaadin-grid-sorter>
@@ -70,6 +76,11 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /**
+     * @param {!Element} target
+     * @return {boolean}
+     * @protected
+     */
     _isFocusable(target) {
       if (!target.parentNode) {
         return false;

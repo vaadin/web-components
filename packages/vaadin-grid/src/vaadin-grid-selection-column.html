@@ -64,6 +64,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
           /**
            * Flex grow ratio for the cell widths. When set to 0, cell width is fixed.
+           * @type {number}
            */
           flexGrow: {
             type: Number,
@@ -72,6 +73,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
           /**
            * When true, all the items are selected.
+           * @type {boolean}
            */
           selectAll: {
             type: Boolean,
@@ -81,20 +83,24 @@ This program is available under Apache License Version 2.0, available at https:/
 
           /**
            * When true, the active gets automatically selected.
+           * @type {boolean}
            */
           autoSelect: {
             type: Boolean,
             value: false,
           },
 
+          /** @private */
           _indeterminate: Boolean,
 
           /**
            * The previous state of activeItem. When activeItem turns to `null`,
            * previousActiveItem will have an Object with just unselected activeItem
+           * @private
            */
           _previousActiveItem: Object,
 
+          /** @private */
           _selectAllHidden: Boolean
         };
       }
@@ -105,6 +111,7 @@ This program is available under Apache License Version 2.0, available at https:/
         ];
       }
 
+      /** @private */
       _pathOrHeaderChanged(path, header, headerCell, footerCell, cells, renderer, headerRenderer, bodyTemplate, headerTemplate) {
         // As a special case, allow overriding the default header / body templates
         if (cells.value && (path !== undefined || renderer !== undefined)) {
@@ -118,6 +125,7 @@ This program is available under Apache License Version 2.0, available at https:/
         super._pathOrHeaderChanged(path, header, headerCell, footerCell, cells, renderer, headerRenderer, bodyTemplate, headerTemplate);
       }
 
+      /** @private */
       __cleanCellsOfTemplateProperties(cells) {
         cells.forEach(cell => {
           cell._content.innerHTML = '';
@@ -126,6 +134,7 @@ This program is available under Apache License Version 2.0, available at https:/
         });
       }
 
+      /** @private */
       _prepareHeaderTemplate() {
         const headerTemplate = this._prepareTemplatizer(this._findTemplate(true) || this.$.defaultHeaderTemplate);
         // needed to override the dataHost correctly in case internal template is used.
@@ -134,6 +143,7 @@ This program is available under Apache License Version 2.0, available at https:/
         return headerTemplate;
       }
 
+      /** @private */
       _prepareBodyTemplate() {
         const template = this._prepareTemplatizer(this._findTemplate() || this.$.defaultBodyTemplate);
         // needed to override the dataHost correctly in case internal template is used.
@@ -185,6 +195,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
+      /** @private */
       _onSelectAllChanged(selectAll) {
         if (selectAll === undefined || !this._grid) {
           return;
@@ -197,22 +208,30 @@ This program is available under Apache License Version 2.0, available at https:/
         this._grid.selectedItems = selectAll && Array.isArray(this._grid.items) ? this._grid._filter(this._grid.items) : [];
       }
 
-      // Return true if array `a` contains all the items in `b`
-      // We need this when sorting or to preserve selection after filtering.
+      /**
+       * Return true if array `a` contains all the items in `b`
+       * We need this when sorting or to preserve selection after filtering.
+       * @private
+       */
       _arrayContains(a, b) {
         for (var i = 0; a && b && b[i] && a.indexOf(b[i]) >= 0; i++); // eslint-disable-line
         return i == b.length;
       }
 
+      /** @private */
       _onSelectAllCheckedChanged(e) {
         this.selectAll = this._indeterminate || e.target.checked;
       }
 
-      // iOS needs indeterminated + checked at the same time
+      /**
+       * iOS needs indeterminated + checked at the same time
+       * @private
+       */
       _isChecked(selectAll, indeterminate) {
         return indeterminate || selectAll;
       }
 
+      /** @private */
       _onActiveItemChanged(e) {
         const activeItem = e.detail.value;
         if (this.autoSelect) {
@@ -224,6 +243,7 @@ This program is available under Apache License Version 2.0, available at https:/
         this._previousActiveItem = activeItem;
       }
 
+      /** @private */
       _onSelectedItemsChanged(e) {
         this._selectAllChangeLock = true;
         if (Array.isArray(this._grid.items)) {
@@ -241,6 +261,7 @@ This program is available under Apache License Version 2.0, available at https:/
         this._selectAllChangeLock = false;
       }
 
+      /** @private */
       _onDataProviderChanged(e) {
         this._selectAllHidden = !Array.isArray(this._grid.items);
       }

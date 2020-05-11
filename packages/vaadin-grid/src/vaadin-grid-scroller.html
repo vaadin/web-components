@@ -15,8 +15,10 @@ This program is available under Apache License Version 2.0, available at https:/
      * This Element is used internally by vaadin-grid.
      *
      * @private
+     * @implements Vaadin.Grid.PolymerIronList
+     * @extends HTMLElement
      */
-    class GridScrollerElement extends window.PolymerIronList {
+    class GridScrollerElement extends Vaadin.Grid.PolymerIronList {
 
       static get is() {
         return 'vaadin-grid-scroller';
@@ -28,6 +30,11 @@ This program is available under Apache License Version 2.0, available at https:/
             type: Number,
             notify: true
           },
+
+          /**
+           * @type {number}
+           * @protected
+           */
           _vidxOffset: {
             value: 0
           }
@@ -40,35 +47,35 @@ This program is available under Apache License Version 2.0, available at https:/
         ];
       }
 
+      /** @protected */
       connectedCallback() {
         super.connectedCallback();
         this._scrollHandler();
       }
 
       /**
-      * @protected
-      */
+       * @param {!HTMLTableRowElement} item
+       * @param {number} index
+       * @protected
+       */
       _updateScrollerItem(item, index) {}
-      /**
-      * @protected
-      */
+
+      /** @protected */
       _afterScroll() {}
-      /**
-      * @protected
-      */
+
+      /** @protected */
       _getRowTarget() {}
-      /**
-      * @protected
-      */
+
+      /** @protected */
       _createScrollerRows() {}
-      /**
-      * @protected
-      */
+
+      /** @protected */
       _canPopulate() {}
 
       /**
-      * @private
-      */
+       * @param {number} index
+       * @protected
+       */
       scrollToIndex(index) {
         this._warnPrivateAPIAccess('scrollToIndex');
 
@@ -105,6 +112,7 @@ This program is available under Apache License Version 2.0, available at https:/
         this._scrollingToIndex = false;
       }
 
+      /** @private */
       _effectiveSizeChanged(size) {
         let fvi; // first visible (adjusted) index
         let fviOffset = 0;
@@ -148,6 +156,7 @@ This program is available under Apache License Version 2.0, available at https:/
         requestAnimationFrame(() => this._update());
       }
 
+      /** @protected */
       _positionItems() {
         this._adjustScrollPosition();
 
@@ -168,6 +177,10 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
+      /**
+       * @param {number} count
+       * @protected
+       */
       _increasePoolIfNeeded(count) {
         if ((count === 0 && this._scrollingToIndex) || !this._canPopulate() || !this._effectiveSize) {
           return;
@@ -199,6 +212,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
+      /** @private */
       __reorderChildNodes() {
         const childNodes = Array.from(this.$.items.childNodes);
         const rowsInOrder = !!childNodes.reduce((inOrder, current, currentIndex, array) => {
@@ -214,6 +228,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
+      /** @private */
       _createPool(size) {
         const fragment = document.createDocumentFragment();
         const physicalItems = this._createScrollerRows(size);
@@ -238,6 +253,7 @@ This program is available under Apache License Version 2.0, available at https:/
       /**
        * Assigns the data models to a given set of items.
        * @param {!Array<number>=} itemSet
+       * @protected
        */
       _assignModels(itemSet) {
         this._iterateItems((pidx, vidx) => {
@@ -247,6 +263,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }, itemSet);
       }
 
+      /** @protected */
       _scrollHandler() {
         const delta = this.$.table.scrollTop - this._scrollPosition;
         this._accessIronListAPI(super._scrollHandler);
@@ -260,6 +277,7 @@ This program is available under Apache License Version 2.0, available at https:/
         this._afterScroll();
       }
 
+      /** @private */
       _adjustVirtualIndexOffset(delta) {
         if (Math.abs(delta) > 10000) {
           if (this._noScale) {
@@ -304,6 +322,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
+      /** @private */
       _accessIronListAPI(cb) {
         this._warnPrivateAPIAccessAsyncEnabled = false;
         const returnValue = cb.apply(this);
@@ -315,53 +334,97 @@ This program is available under Apache License Version 2.0, available at https:/
         return returnValue;
       }
 
-      /* Allow iron-list to access its APIs from debounced callbacks without warns */
+      /**
+       * Allow iron-list to access its APIs from debounced callbacks without warns
+       * @private
+       */
       _debounceRender(cb, asyncModule) {
         super._debounceRender(() => this._accessIronListAPI(cb), asyncModule);
       }
 
-      /* Warn when iron-list APIs are being accessed directly */
+      /**
+       * Warn when iron-list APIs are being accessed directly
+       * @private
+       */
       _warnPrivateAPIAccess(apiName) {
         if (this._warnPrivateAPIAccessAsyncEnabled) {
           console.warn(`Accessing private API (${apiName})!`);
         }
       }
 
+      /** @protected */
       _render() {
         this._accessIronListAPI(super._render);
       }
 
+      /** @private */
       _createFocusBackfillItem() { /* Ignore */ }
+
+      /** @private */
       _multiSelectionChanged() { /* Ignore */ }
+
+      /** @private */
       clearSelection() { /* Ignore */ }
+
+      /** @protected */
       _itemsChanged() { /* Ignore */ }
+
+      /** @private */
       _manageFocus() { /* Ignore */ }
+
+      /** @private */
       _removeFocusedItem() { /* Ignore */ }
 
+      /**
+       * @return {number}
+       * @protected
+       */
       get _firstVisibleIndex() {
         return this._accessIronListAPI(() => super.firstVisibleIndex);
       }
+
+      /**
+       * @return {number}
+       * @protected
+       */
       get _lastVisibleIndex() {
         return this._accessIronListAPI(() => super.lastVisibleIndex);
       }
+
+      /**
+       * @param {number} index
+       * @protected
+       */
       _scrollToIndex(index) {
         this._accessIronListAPI(() => this.scrollToIndex(index));
       }
+
+      /** @private */
       get firstVisibleIndex() {
         this._warnPrivateAPIAccess('firstVisibleIndex'); return super.firstVisibleIndex;
       }
+
+      /** @private */
       set firstVisibleIndex(value) {
         this._warnPrivateAPIAccess('firstVisibleIndex'); super.firstVisibleIndex = value;
       }
+
+      /** @private */
       get lastVisibleIndex() {
         this._warnPrivateAPIAccess('lastVisibleIndex'); return super.lastVisibleIndex;
       }
+
+      /** @private */
       set lastVisibleIndex(value) {
         this._warnPrivateAPIAccess('lastVisibleIndex'); super.lastVisibleIndex = value;
       }
+
+      /** @private */
       updateViewportBoundaries() {
         this._warnPrivateAPIAccess('updateViewportBoundaries'); super.updateViewportBoundaries.apply(this, arguments);
       }
+
+      /** @protected */
       _resizeHandler() {
         super._resizeHandler();
         Polymer.flush();

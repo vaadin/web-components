@@ -16,12 +16,17 @@ This program is available under Apache License Version 2.0, available at https:/
       return {
         /**
          * When `true`, all `<vaadin-grid-sorter>` are applied for sorting.
+         * @type {boolean}
          */
         multiSort: {
           type: Boolean,
           value: false
         },
 
+        /**
+         * @type {!Array<!GridSorter>}
+         * @protected
+         */
         _sorters: {
           type: Array,
           value: function() {
@@ -29,6 +34,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         },
 
+        /** @private */
         _previousSorters: {
           type: Array,
           value: function() {
@@ -38,6 +44,7 @@ This program is available under Apache License Version 2.0, available at https:/
       };
     }
 
+    /** @protected */
     ready() {
       super.ready();
       this.addEventListener('sorter-changed', this._onSorterChanged);
@@ -59,6 +66,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _onSorterChanged(e) {
       const sorter = e.target;
 
@@ -94,6 +102,10 @@ This program is available under Apache License Version 2.0, available at https:/
       this._previousSorters = this._mapSorters();
     }
 
+    /**
+     * @return {!Array<!GridSorter>}
+     * @protected
+     */
     _mapSorters() {
       return this._sorters.map(sorter => {
         return {
@@ -103,6 +115,7 @@ This program is available under Apache License Version 2.0, available at https:/
       });
     }
 
+    /** @private */
     _removeArrayItem(array, item) {
       const index = array.indexOf(item);
       if (index > -1) {

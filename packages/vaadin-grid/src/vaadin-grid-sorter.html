@@ -120,6 +120,7 @@ This program is available under Apache License Version 2.0, available at https:/
              * How to sort the data.
              * Possible values are `asc` to use an ascending algorithm, `desc` to sort the data in
              * descending direction, or `null` for not sorting the data.
+             * @type {GridSorterDirection | undefined}
              */
             direction: {
               type: String,
@@ -128,11 +129,16 @@ This program is available under Apache License Version 2.0, available at https:/
               value: null
             },
 
+            /**
+             * @type {number | null}
+             * @protected
+             */
             _order: {
               type: Number,
               value: null
             },
 
+            /** @private */
             _isConnected: {
               type: Boolean,
               value: false
@@ -147,6 +153,7 @@ This program is available under Apache License Version 2.0, available at https:/
           ];
         }
 
+        /** @protected */
         ready() {
           super.ready();
           this.addEventListener('click', this._onClick.bind(this));
@@ -164,6 +171,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this._isConnected = false;
         }
 
+        /** @private */
         _pathOrDirectionChanged(path, direction, isConnected) {
           if (path === undefined || direction === undefined || isConnected === undefined) {
             return;
@@ -174,10 +182,12 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         _getDisplayOrder(order) {
           return order === null ? '' : order + 1;
         }
 
+        /** @private */
         _onClick(e) {
           const activeElement = this.getRootNode().activeElement;
           if (this !== activeElement && this.contains(activeElement)) {
@@ -195,6 +205,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         _directionOrOrderChanged(direction, order) {
           if (direction === undefined || order === undefined) {
             return;

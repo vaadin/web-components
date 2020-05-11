@@ -51,7 +51,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
         static get properties() {
           return {
-
             /**
              * JS Path of the property in the item used for filtering the data.
              */
@@ -65,6 +64,7 @@ This program is available under Apache License Version 2.0, available at https:/
               notify: true
             },
 
+            /** @private */
             _connected: Boolean
           };
         }
@@ -79,6 +79,7 @@ This program is available under Apache License Version 2.0, available at https:/
           return ['_filterChanged(path, value, _connected)'];
         }
 
+        /** @protected */
         ready() {
           super.ready();
 
@@ -89,6 +90,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         _filterChanged(path, value, connected) {
           if (path === undefined || value === undefined || !connected) {
             return;

@@ -140,6 +140,7 @@ This program is available under Apache License Version 2.0, available at https:/
           /**
            * Current level of the tree represented with a horizontal offset
            * of the toggle button.
+           * @type {number}
            */
           level: {
             type: Number,
@@ -149,6 +150,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
           /**
            * Hides the toggle icon and disables toggling a tree sublevel.
+           * @type {boolean}
            */
           leaf: {
             type: Boolean,
@@ -158,6 +160,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
           /**
            * Sublevel toggle state.
+           * @type {boolean}
            */
           expanded: {
             type: Boolean,
@@ -168,12 +171,14 @@ This program is available under Apache License Version 2.0, available at https:/
         };
       }
 
+      /** @protected */
       ready() {
         super.ready();
 
         this.addEventListener('click', e => this._onClick(e));
       }
 
+      /** @private */
       _onClick(e) {
         if (this.leaf) {
           return;
@@ -183,6 +188,7 @@ This program is available under Apache License Version 2.0, available at https:/
         this.expanded = !this.expanded;
       }
 
+      /** @private */
       _levelChanged(level) {
         const value = Number(level).toString();
         this.style['---level'] = value;

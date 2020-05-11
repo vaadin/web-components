@@ -38,6 +38,7 @@ This program is available under Apache License Version 2.0, available at https:/
            * - `on-top`: The drop event can happen on top of Grid rows.
            * - `on-top-or-between`: The drop event can happen either on top of or between Grid rows.
            * - `on-grid`: The drop event will not happen on any specific row, it will show the drop target outline around the whole grid.
+           * @type {GridDropMode | null | undefined}
            */
           dropMode: String,
 
@@ -58,6 +59,8 @@ This program is available under Apache License Version 2.0, available at https:/
            *   - `rowData.expanded` Sublevel toggle state.
            *   - `rowData.level` Level of the tree represented with a horizontal offset of the toggle button.
            *   - `rowData.selected` Selected state.
+           *
+           * @type {GridDragAndDropFilter | null | undefined}
            */
           dragFilter: Function,
 
@@ -73,9 +76,12 @@ This program is available under Apache License Version 2.0, available at https:/
            *   - `rowData.expanded` Sublevel toggle state.
            *   - `rowData.level` Level of the tree represented with a horizontal offset of the toggle button.
            *   - `rowData.selected` Selected state.
+           *
+           * @type {GridDragAndDropFilter | null | undefined}
            */
           dropFilter: Function,
 
+          /** @private */
           __dndAutoScrollThreshold: {
             value: 50
           }
@@ -89,6 +95,7 @@ This program is available under Apache License Version 2.0, available at https:/
         ];
       }
 
+      /** @protected */
       ready() {
         super.ready();
         this.$.table.addEventListener('dragstart', this._onDragStart.bind(this));
@@ -105,6 +112,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
       }
 
+      /** @private */
       _onDragStart(e) {
         if (this.rowsDraggable) {
           let row = e.target;
@@ -174,6 +182,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
+      /** @private */
       _onDragEnd(e) {
         this._toggleAttribute('dragging-rows', false, this);
         e.stopPropagation();
@@ -182,11 +191,13 @@ This program is available under Apache License Version 2.0, available at https:/
         this.dispatchEvent(event);
       }
 
+      /** @private */
       _onDragLeave(e) {
         e.stopPropagation();
         this._clearDragStyles();
       }
 
+      /** @private */
       _onDragOver(e) {
 
         if (this.dropMode) {
@@ -256,6 +267,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
+      /** @private */
       __dndAutoScroll(clientY) {
         if (this.__dndAutoScrolling) {
           return true;
@@ -287,6 +299,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
+      /** @private */
       __getViewportRows() {
         const headerBottom = this.$.header.getBoundingClientRect().bottom;
         const footerTop = this.$.footer.getBoundingClientRect().top;
@@ -297,11 +310,13 @@ This program is available under Apache License Version 2.0, available at https:/
           });
       }
 
+      /** @protected */
       _clearDragStyles() {
         this.removeAttribute('dragover');
         Array.from(this.$.items.children).forEach(row => row.removeAttribute('dragover'));
       }
 
+      /** @private */
       _onDrop(e) {
         if (this.dropMode) {
           e.stopPropagation();
@@ -330,6 +345,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
+      /** @private */
       __formatDefaultTransferData(rows) {
         return rows
           .map(row => {
@@ -345,6 +361,7 @@ This program is available under Apache License Version 2.0, available at https:/
           .join('\n');
       }
 
+      /** @private */
       _dragDropAccessChanged(rowsDraggable, dropMode, dragFilter, dropFilter) {
         this.filterDragAndDrop();
       }
@@ -363,6 +380,11 @@ This program is available under Apache License Version 2.0, available at https:/
         );
       }
 
+      /**
+       * @param {!HTMLElement} row
+       * @param {!GridRowData} rowData
+       * @protected
+       */
       _filterDragAndDrop(row, rowData) {
         const dragDisabled = !this.rowsDraggable || (this.dragFilter && !this.dragFilter(rowData));
         const dropDisabled = !this.dropMode || (this.dropFilter && !this.dropFilter(rowData));

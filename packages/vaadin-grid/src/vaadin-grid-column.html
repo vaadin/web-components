@@ -40,10 +40,18 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         },
 
+        /**
+         * @type {HTMLTemplateElement}
+         * @protected
+         */
         _headerTemplate: {
           type: Object
         },
 
+        /**
+         * @type {HTMLTemplateElement}
+         * @protected
+         */
         _footerTemplate: {
           type: Object
         },
@@ -51,6 +59,7 @@ This program is available under Apache License Version 2.0, available at https:/
         /**
          * When true, the column is frozen. When a column inside of a column group is frozen,
          * all of the sibling columns inside the group will get frozen also.
+         * @type {boolean}
          */
         frozen: {
           type: Boolean,
@@ -74,26 +83,40 @@ This program is available under Apache License Version 2.0, available at https:/
         /**
          * Aligns the columns cell content horizontally.
          * Supported values: "start", "center" and "end".
+         * @type {GridColumnTextAlign | null | undefined}
          */
         textAlign: {
           type: String
         },
 
+        /**
+         * @type {boolean}
+         * @protected
+         */
         _lastFrozen: {
           type: Boolean,
           value: false
         },
 
+        /** @protected */
         _order: Number,
 
+        /** @private */
         _reorderStatus: Boolean,
 
+        /**
+         * @type {Array<!HTMLElement>}
+         * @protected
+         */
         _emptyCells: Array,
 
+        /** @private */
         _headerCell: Object,
 
+        /** @private */
         _footerCell: Object,
 
+        /** @protected */
         _grid: Object,
 
         /**
@@ -102,6 +125,8 @@ This program is available under Apache License Version 2.0, available at https:/
          *
          * - `root` The header cell content DOM element. Append your content to it.
          * - `column` The `<vaadin-grid-column>` element.
+         *
+         * @type {GridHeaderFooterRenderer | null | undefined}
          */
         headerRenderer: Function,
 
@@ -111,6 +136,8 @@ This program is available under Apache License Version 2.0, available at https:/
          *
          * - `root` The footer cell content DOM element. Append your content to it.
          * - `column` The `<vaadin-grid-column>` element.
+         *
+         * @type {GridHeaderFooterRenderer | null | undefined}
          */
         footerRenderer: Function
       };
@@ -174,6 +201,10 @@ This program is available under Apache License Version 2.0, available at https:/
       this._gridValue = undefined;
     }
 
+    /**
+     * @return {!GridElement | undefined}
+     * @protected
+     */
     _findHostGrid() {
       let el = this;
       // Custom elements extending grid must have a specific localName
@@ -183,6 +214,10 @@ This program is available under Apache License Version 2.0, available at https:/
       return el || undefined;
     }
 
+    /**
+     * @return {!GridElement | undefined}
+     * @protected
+     */
     get _grid() {
       if (!this._gridValue) {
         this._gridValue = this._findHostGrid();
@@ -190,6 +225,10 @@ This program is available under Apache License Version 2.0, available at https:/
       return this._gridValue;
     }
 
+    /**
+     * @return {!Array<!HTMLElement>}
+     * @protected
+     */
     get _allCells() {
       return []
         .concat(this._cells || [])
@@ -209,18 +248,36 @@ This program is available under Apache License Version 2.0, available at https:/
       });
     }
 
+    /**
+     * @return {HTMLTemplateElement}
+     * @protected
+     */
     _prepareHeaderTemplate() {
       return this._prepareTemplatizer(this._findTemplate(true) || null, {});
     }
 
+    /**
+     * @return {HTMLTemplateElement}
+     * @protected
+     */
     _prepareFooterTemplate() {
       return this._prepareTemplatizer(this._findTemplate(false, true) || null, {});
     }
 
+    /**
+     * @return {HTMLTemplateElement}
+     * @protected
+     */
     _prepareBodyTemplate() {
       return this._prepareTemplatizer(this._findTemplate() || null);
     }
 
+    /**
+     * @param {HTMLTemplateElement} template
+     * @param {object} instanceProps
+     * @return {HTMLTemplateElement}
+     * @protected
+     */
     _prepareTemplatizer(template, instanceProps) {
       if (template && !template.templatizer) {
         const templatizer = new Vaadin.Grid.Templatizer();
@@ -234,6 +291,7 @@ This program is available under Apache License Version 2.0, available at https:/
       return template;
     }
 
+    /** @protected */
     _renderHeaderAndFooter() {
       if (this.headerRenderer) {
         this.__runRenderer(this.headerRenderer, this._headerCell);
@@ -243,6 +301,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     __runRenderer(renderer, cell, rowData) {
       const args = [cell._content, this];
       if (rowData && rowData.item) {
@@ -251,6 +310,7 @@ This program is available under Apache License Version 2.0, available at https:/
       renderer.apply(this, args);
     }
 
+    /** @private */
     __setColumnTemplateOrRenderer(template, renderer, cells) {
       if (template && renderer) {
         throw new Error('You should only use either a renderer or a template');
@@ -280,18 +340,21 @@ This program is available under Apache License Version 2.0, available at https:/
       });
     }
 
+    /** @private */
     _setBodyTemplateOrRenderer(template, renderer, cells, splices) {
       if ((template || renderer) && cells) {
         this.__setColumnTemplateOrRenderer(template, renderer, cells);
       }
     }
 
+    /** @private */
     _setHeaderTemplateOrRenderer(headerTemplate, headerRenderer, headerCell) {
       if ((headerTemplate || headerRenderer) && headerCell) {
         this.__setColumnTemplateOrRenderer(headerTemplate, headerRenderer, [headerCell]);
       }
     }
 
+    /** @private */
     _setFooterTemplateOrRenderer(footerTemplate, footerRenderer, footerCell) {
       if ((footerTemplate || footerRenderer) && footerCell) {
         this.__setColumnTemplateOrRenderer(footerTemplate, footerRenderer, [footerCell]);
@@ -299,6 +362,12 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /**
+     * @param {boolean} header
+     * @param {boolean} footer
+     * @return {HTMLTemplateElement}
+     * @protected
+     */
     _selectFirstTemplate(header = false, footer = false) {
       return Polymer.FlattenedNodesObserver.getFlattenedNodes(this)
         .filter(node =>
@@ -308,6 +377,12 @@ This program is available under Apache License Version 2.0, available at https:/
         )[0];
     }
 
+    /**
+     * @param {boolean} header
+     * @param {boolean} footer
+     * @return {HTMLTemplateElement}
+     * @protected
+     */
     _findTemplate(header, footer) {
       const template = this._selectFirstTemplate(header, footer);
       if (template) {
@@ -319,6 +394,7 @@ This program is available under Apache License Version 2.0, available at https:/
       return template;
     }
 
+    /** @private */
     _flexGrowChanged(flexGrow, headerCell, footerCell, cells) {
       if (this.parentElement && this.parentElement._columnPropChanged) {
         this.parentElement._columnPropChanged('flexGrow');
@@ -327,10 +403,12 @@ This program is available under Apache License Version 2.0, available at https:/
       this._allCells.forEach(cell => cell.style.flexGrow = flexGrow);
     }
 
+    /** @private */
     _orderChanged(order, headerCell, footerCell, cells) {
       this._allCells.forEach(cell => cell.style.order = order);
     }
 
+    /** @private */
     _widthChanged(width, headerCell, footerCell, cells) {
       if (this.parentElement && this.parentElement._columnPropChanged) {
         this.parentElement._columnPropChanged('width');
@@ -345,6 +423,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _frozenChanged(frozen, headerCell, footerCell, cells) {
       if (this.parentElement && this.parentElement._columnPropChanged) {
         this.parentElement._columnPropChanged('frozen', frozen);
@@ -355,6 +434,7 @@ This program is available under Apache License Version 2.0, available at https:/
       this._grid && this._grid._frozenCellsChanged && this._grid._frozenCellsChanged();
     }
 
+    /** @private */
     _lastFrozenChanged(lastFrozen) {
       this._allCells.forEach(cell => this._toggleAttribute('last-frozen', lastFrozen, cell));
 
@@ -363,6 +443,18 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /**
+     * @param {string | undefined} path
+     * @param {string | undefined} header
+     * @param {!HTMLTableCellElement | undefined} headerCell
+     * @param {!HTMLTableCellElement | undefined} footerCell
+     * @param {!object | undefined} cells
+     * @param {GridBodyRenderer | undefined} renderer
+     * @param {GridHeaderFooterRenderer | undefined} headerRenderer
+     * @param {HTMLTemplateElement | undefined} bodyTemplate
+     * @param {HTMLTemplateElement | undefined} headerTemplate
+     * @protected
+     */
     _pathOrHeaderChanged(path, header, headerCell, footerCell, cells, renderer, headerRenderer, bodyTemplate, headerTemplate) {
       const hasHeaderText = header !== undefined;
       if (!headerRenderer && !headerTemplate && hasHeaderText && headerCell) {
@@ -385,10 +477,16 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     __setTextContent(node, textContent) {
       node.textContent !== textContent && (node.textContent = textContent);
     }
 
+    /**
+     * @param {string} path
+     * @return {string}
+     * @protected
+     */
     _generateHeader(path) {
       return path
         .substr(path.lastIndexOf('.') + 1)
@@ -397,6 +495,12 @@ This program is available under Apache License Version 2.0, available at https:/
         .replace(/^./, match => match.toUpperCase());
     }
 
+    /**
+     * @param {string} name
+     * @param {boolean} bool
+     * @param {!Element} node
+     * @protected
+     */
     _toggleAttribute(name, bool, node) {
       if (node.hasAttribute(name) === !bool) {
         if (bool) {
@@ -407,10 +511,12 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _reorderStatusChanged(reorderStatus, headerCell, footerCell, cells) {
       this._allCells.forEach(cell => cell.setAttribute('reorder-status', reorderStatus));
     }
 
+    /** @private */
     _resizableChanged(resizable, headerCell) {
       if (resizable === undefined || headerCell === undefined) {
         return;
@@ -434,6 +540,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _textAlignChanged(textAlign, _cells, _headerCell, _footerCell) {
       if (textAlign === undefined) {
         return;
@@ -466,6 +573,7 @@ This program is available under Apache License Version 2.0, available at https:/
       });
     }
 
+    /** @private */
     _hiddenChanged(hidden, headerCell, footerCell, cells) {
       if (this.parentElement && this.parentElement._columnPropChanged) {
         this.parentElement._columnPropChanged('hidden', hidden);
@@ -530,6 +638,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
           /**
            * Flex grow ratio for the cell widths. When set to 0, cell width is fixed.
+           * @type {number}
            */
           flexGrow: {
             type: Number,
@@ -549,6 +658,8 @@ This program is available under Apache License Version 2.0, available at https:/
            *   - `rowData.expanded` Sublevel toggle state.
            *   - `rowData.level` Level of the tree represented with a horizontal offset of the toggle button.
            *   - `rowData.selected` Selected state.
+           *
+           * @type {GridBodyRenderer | null | undefined}
            */
           renderer: Function,
 
@@ -574,16 +685,25 @@ This program is available under Apache License Version 2.0, available at https:/
            * You can manually trigger the auto sizing behavior again by calling `grid.recalculateColumnWidths()`.
            *
            * The column width may still grow larger when `flexGrow` is not 0.
+           * @type {boolean}
            */
           autoWidth: {
             type: Boolean,
             value: false
           },
 
+          /**
+           * @type {HTMLTemplateElement}
+           * @protected
+           */
           _bodyTemplate: {
             type: Object
           },
 
+          /**
+           * @type {Array<!HTMLElement>}
+           * @protected
+           */
           _cells: Array
 
         };

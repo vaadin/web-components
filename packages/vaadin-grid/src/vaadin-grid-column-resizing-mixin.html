@@ -30,6 +30,7 @@ This program is available under Apache License Version 2.0, available at https:/
       scroller.addEventListener('mousedown', e => e.target.getAttribute('part') === 'resize-handle' && e.preventDefault());
     }
 
+    /** @private */
     _onHeaderTrack(e) {
       const handle = e.target;
       if (handle.getAttribute('part') === 'resize-handle') {
