@@ -10,7 +10,7 @@ module.exports = {
 
     /window.ShadyCSS.ScopingShim/g,
 
-    'import \'highcharts/js/es-modules/masters/highstock.src.js\';',
+    'import \'highcharts/es-modules/masters/highstock.src.js\';',
 
     '/*\n' +
     '  FIXME(polymer-modulizer): the above comments were extracted\n' +
@@ -30,11 +30,11 @@ module.exports = {
 
      import ScopingShim from '@webcomponents/shadycss/src/scoping-shim.js';
 
-     import Highcharts from 'highcharts/js/es-modules/masters/highstock.src.js';`,
+     import Highcharts from 'highcharts/es-modules/masters/highstock.src.js';`,
 
     ``,
 
-    `import Highcharts from 'highcharts/js/es-modules/masters/highstock.src.js';
+    `import Highcharts from 'highcharts/es-modules/masters/highstock.src.js';
      import '../vaadin-chart.js';`
   ]
 };

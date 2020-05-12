@@ -103,7 +103,7 @@
           chartContainer.querySelector('.highcharts-contextbutton').onclick();
 
           // Simulate a PNG export
-          const pngExportButton = chartContainer.querySelectorAll('.highcharts-menu-item')[1];
+          const pngExportButton = chartContainer.querySelectorAll('.highcharts-menu-item')[2];
           pngExportButton.onclick();
           expect(beforeExportCalled).to.be.true;
 
@@ -136,7 +136,7 @@
           observer.observe(document.body, {childList: true});
 
           chartContainer.querySelector('.highcharts-contextbutton').onclick();
-          const pngExportButton = chartContainer.querySelectorAll('.highcharts-menu-item')[1];
+          const pngExportButton = chartContainer.querySelectorAll('.highcharts-menu-item')[2];
           pngExportButton.onclick();
           expect(afterExportCalled).to.be.true;
 
@@ -146,6 +146,8 @@
           }, 200);
         });
       });
+
+      // TODO add test for print button once https://github.com/highcharts/highcharts/issues/13489 is fixed
     });
   </script>
 </body>

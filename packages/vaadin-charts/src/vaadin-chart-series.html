@@ -70,7 +70,9 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         }
 
         get options() {
-          const options = Vaadin.Charts.ChartDeepMerger.__deepMerge({}, this.additionalOptions);
+          // Should be {}, workaround for https://github.com/highcharts/highcharts/issues/13482
+          const baseConfig = {accessibility: {enabled: false}};
+          const options = Vaadin.Charts.ChartDeepMerger.__deepMerge(baseConfig, this.additionalOptions);
 
           if (this.type) {
             options.type = this.type;

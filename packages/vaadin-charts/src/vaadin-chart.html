@@ -15,38 +15,37 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 <link rel="import" href="../../vaadin-license-checker/vaadin-license-checker.html">
 
 <!-- MAGI REMOVE START -->
-<script src="../../highcharts/js/highstock.js"></script>
+<script src="../../highcharts/highstock.js"></script>
 <!-- For some chart types, an error is raised if accessibility is added after highcharts-3d module -->
-<script src="../../highcharts/js/modules/accessibility.js"></script>
-<script src="../../highcharts/js/highcharts-more.js"></script>
-<script src="../../highcharts/js/highcharts-3d.js"></script>
-<script src="../../highcharts/js/modules/data.js"></script>
-<script src="../../highcharts/js/modules/drilldown.js"></script>
-<script src="../../highcharts/js/modules/exporting.js"></script>
-<script src="../../highcharts/js/modules/funnel.js"></script>
-<script src="../../highcharts/js/modules/heatmap.js"></script>
-<script src="../../highcharts/js/modules/solid-gauge.js"></script>
-<script src="../../highcharts/js/modules/treemap.js"></script>
-<script src="../../highcharts/js/modules/no-data-to-display.js"></script>
+<script src="../../highcharts/modules/accessibility.js"></script>
+<script src="../../highcharts/highcharts-more.js"></script>
+<script src="../../highcharts/highcharts-3d.js"></script>
+<script src="../../highcharts/modules/data.js"></script>
+<script src="../../highcharts/modules/drilldown.js"></script>
+<script src="../../highcharts/modules/exporting.js"></script>
+<script src="../../highcharts/modules/funnel.js"></script>
+<script src="../../highcharts/modules/heatmap.js"></script>
+<script src="../../highcharts/modules/solid-gauge.js"></script>
+<script src="../../highcharts/modules/treemap.js"></script>
+<script src="../../highcharts/modules/no-data-to-display.js"></script>
 <!-- MAGI REMOVE END -->
 <!-- MAGI ADD START
-<script src="../../highcharts/js/es-modules/masters/highstock.src.js"></script>
-<script src="../../highcharts/js/es-modules/masters/modules/accessibility.src.js"></script>
-<script src="../../highcharts/js/es-modules/masters/highcharts-more.src.js"></script>
-<script src="../../highcharts/js/es-modules/masters/highcharts-3d.src.js"></script>
-<script src="../../highcharts/js/es-modules/masters/modules/data.src.js"></script>
-<script src="../../highcharts/js/es-modules/masters/modules/drilldown.src.js"></script>
-<script src="../../highcharts/js/es-modules/masters/modules/exporting.src.js"></script>
-<script src="../../highcharts/js/es-modules/masters/modules/funnel.src.js"></script>
-<script src="../../highcharts/js/es-modules/masters/modules/heatmap.src.js"></script>
-<script src="../../highcharts/js/es-modules/masters/modules/solid-gauge.src.js"></script>
-<script src="../../highcharts/js/es-modules/masters/modules/treemap.src.js"></script>
-<script src="../../highcharts/js/es-modules/masters/modules/no-data-to-display.src.js"></script>
+<script src="../../highcharts/es-modules/masters/highstock.src.js"></script>
+<script src="../../highcharts/es-modules/masters/modules/accessibility.src.js"></script>
+<script src="../../highcharts/es-modules/masters/highcharts-more.src.js"></script>
+<script src="../../highcharts/es-modules/masters/highcharts-3d.src.js"></script>
+<script src="../../highcharts/es-modules/masters/modules/data.src.js"></script>
+<script src="../../highcharts/es-modules/masters/modules/drilldown.src.js"></script>
+<script src="../../highcharts/es-modules/masters/modules/exporting.src.js"></script>
+<script src="../../highcharts/es-modules/masters/modules/funnel.src.js"></script>
+<script src="../../highcharts/es-modules/masters/modules/heatmap.src.js"></script>
+<script src="../../highcharts/es-modules/masters/modules/solid-gauge.src.js"></script>
+<script src="../../highcharts/es-modules/masters/modules/treemap.src.js"></script>
+<script src="../../highcharts/es-modules/masters/modules/no-data-to-display.src.js"></script>
 MAGI ADD END -->
 
 <script src="../chart-deep-merger.js"></script>
 <script src="../chart-exporting.js"></script>
-<script src="../chart-3d-stacking.js"></script>
 
 <link rel="import" href="vaadin-chart-series.html">
 
@@ -557,6 +556,9 @@ MAGI ADD END -->
           this._copyStyleProperties = ['flex', '-webkit-flex', '-ms-flex'];
 
           this._baseConfig = {
+            chart: {
+              styledMode: true
+            },
             credits: {
               enabled: false
             },
@@ -1067,26 +1069,11 @@ MAGI ADD END -->
 
         __initChart(options) {
           this.__initEventsListeners(options);
-          // Workaround for https://github.com/highcharts/highcharts/issues/7523
-          this.__ensureObjectPath(options, 'drilldown.activeDataLabelStyle');
           if (this.timeline) {
             this.configuration = Highcharts.stockChart(this.$.chart, options);
           } else {
             this.configuration = Highcharts.chart(this.$.chart, options);
           }
-
-          // Workaround for https://github.com/highcharts/highcharts/issues/9978
-          const elementsToChange = [
-            ...Array.from(this.$.chart.getElementsByTagName('h4'))
-              .filter(el => el.style.left === '-9999px'),
-            this.configuration.screenReaderRegion,
-            this.configuration.tabExitAnchor
-          ];
-
-          elementsToChange.forEach(el => {
-            el.style.left = '';
-            el.style.top = '-999em';
-          });
         }
 
         /** @private */
