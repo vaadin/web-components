@@ -145,7 +145,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
              */
             valueMin: {
               type: Number,
-              observer: '__valueMinObserver',
               reflectToAttribute: true
             },
 
@@ -155,7 +154,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
              */
             valueMax: {
               type: Number,
-              observer: '__valueMaxObserver',
               reflectToAttribute: true
             },
 
@@ -166,7 +164,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
              */
             type: {
               type: String,
-              observer: '__typeObserver',
               reflectToAttribute: true
             },
 
@@ -175,7 +172,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
              */
             title: {
               type: String,
-              observer: '__titleObserver',
               reflectToAttribute: true
             },
 
@@ -188,7 +184,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
              */
             markers: {
               type: String,
-              observer: '__markersObserver',
               reflectToAttribute: true
             },
 
@@ -198,7 +193,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
              */
             unit: {
               type: String,
-              observer: '__unitObserver',
               reflectToAttribute: true
             },
 
@@ -208,7 +202,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
              */
             stack: {
               type: String,
-              observer: '__stackObserver',
               reflectToAttribute: true
             },
 
@@ -218,7 +211,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
              */
             neckPosition: {
               type: String,
-              observer: '__neckPositionOberserver',
               reflectToAttribute: true
             },
 
@@ -228,7 +220,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
              */
             neckWidth: {
               type: String,
-              observer: '__neckWidthOberserver',
               reflectToAttribute: true
             },
 
@@ -247,14 +238,27 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             additionalOptions: {
               type: Object,
               reflectToAttribute: true
+            },
+
+            _series: {
+              type: Object
             }
           };
         }
 
         static get observers() {
           return [
-            '__valuesObserver(values.splices)',
-            '__additionalOptionsObserver(additionalOptions.*)'
+            '__additionalOptionsObserver(additionalOptions.*, _series)',
+            '__markersObserver(markers, _series)',
+            '__neckPositionObserver(neckPosition, _series)',
+            '__neckWidthObserver(neckWidth, _series)',
+            '__stackObserver(stack, _series)',
+            '__titleObserver(title, _series)',
+            '__typeObserver(type, _series)',
+            '__unitObserver(unit, valueMin, valueMax, _series)',
+            '__valueMinObserver(valueMin, _series)',
+            '__valueMaxObserver(valueMax, _series)',
+            '__valuesObserver(values.splices, _series)',
           ];
         }
 
@@ -266,115 +270,105 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           this._series = series;
         }
 
-        __valuesObserver() {
-          if (this.__hasSeriesConfig()) {
-            this._series.setData(this.values);
+        __valuesObserver(splices, series) {
+          if (series) {
+            series.setData(this.values);
           }
         }
 
-        __additionalOptionsObserver() {
-          if (this.__hasSeriesConfig()) {
-            this._series.update(this.additionalOptions);
+        __additionalOptionsObserver(additionalOptions, series) {
+          if (series && additionalOptions.value) {
+            series.update(additionalOptions.value);
           }
         }
 
-        __valueMinObserver() {
-          if (!this.__hasSeriesConfig()) {
+        __updateAxis(series, value, key) {
+          if (!isFinite(value)) {
+            this.__showWarn(`value-${key}`, 'Numbers or null');
             return;
           }
 
-          if (!isFinite(this.valueMin)) {
-            this.__showWarn('value-min', 'Numbers or null');
+          if (series && series.yAxis) {
+            series.yAxis.update({[key]: value});
+          }
+        }
+
+        __valueMinObserver(valueMin, series) {
+          if (valueMin === undefined || series === undefined) {
             return;
           }
 
-          if (this._series.yAxis) {
-            this._series.yAxis.update({
-              min: this.valueMin
-            });
-          }
+          this.__updateAxis(series, valueMin, 'min');
         }
 
-        __valueMaxObserver() {
-          if (!this.__hasSeriesConfig()) {
+        __valueMaxObserver(valueMax, series) {
+          if (valueMax === undefined || series === undefined) {
             return;
           }
 
-          if (!isFinite(this.valueMax)) {
-            this.__showWarn('value-max', 'Numbers or null');
+          this.__updateAxis(series, valueMax, 'max');
+        }
+
+        __typeObserver(type, series) {
+          if (type && series) {
+            series.update({type});
+          }
+        }
+
+        __titleObserver(title, series) {
+          if (title === undefined || series === undefined) {
+            return;
+          }
+          series.update({name: title});
+        }
+
+        __stackObserver(stack, series) {
+          if (stack === undefined || series === undefined) {
+            return;
+          }
+          series.update({stack});
+        }
+
+        __neckPositionObserver(neckPosition, series) {
+          if (neckPosition === undefined || series === undefined) {
             return;
           }
 
-          if (this._series.yAxis) {
-            this._series.yAxis.update({
-              max: this.valueMax
-            });
-          }
+          series.update({neckHeight: neckPosition});
         }
 
-        __typeObserver() {
-          if (this.__hasSeriesConfig()) {
-            this._series.update({
-              type: this.type
-            });
-          }
-        }
-
-        __titleObserver() {
-          if (this.__hasSeriesConfig()) {
-            this._series.update({
-              name: this.title
-            });
-          }
-        }
-
-        __stackObserver() {
-          if (!this.__hasSeriesConfig()) {
+        __neckWidthObserver(neckWidth, series) {
+          if (neckWidth === undefined || series === undefined) {
             return;
           }
 
-          this._series.update({
-            stack: this.stack
-          });
+          series.update({neckWidth});
         }
 
-        __neckPositionOberserver() {
-          if (!this.__hasSeriesConfig()) {
-            return;
-          }
-          this._series.update({
-            neckHeight: this.neckPosition
-          });
-        }
+        __unitObserver(unit, valueMin, valueMax, series) {
+          if (series && unit !== this.__oldUnit) {
+            this.__oldUnit = unit;
 
-        __neckWidthOberserver() {
-          if (!this.__hasSeriesConfig()) {
-            return;
-          }
-          this._series.update({
-            neckWidth: this.neckWidth
-          });
-        }
-
-        __unitObserver() {
-          if (this.__hasSeriesConfig()) {
             const parent = this.parentNode instanceof Vaadin.ChartElement && this.parentNode;
             if (parent && parent instanceof Vaadin.ChartElement) {
 
-              if (this.unit && !parent.__getAxis(this.unit)) {
-                const title = {title: {text: this.unit}};
-                parent.__addAxis(Object.assign({id: this.unit, axisGenerated: true}, title));
+              if (unit && !parent.__getAxis(unit)) {
+                const title = {title: {text: unit}};
+                parent.__addAxis(Object.assign({id: unit, axisGenerated: true}, title));
               }
-              this._series.update({yAxis: this.unit || 0});
-              this.__valueMinObserver();
-              this.__valueMaxObserver();
+              series.update({yAxis: unit || 0});
+
+              if (valueMin !== undefined) {
+                this.__updateAxis(series, valueMin, 'min');
+              }
+
+              if (valueMax !== undefined) {
+                this.__updateAxis(series, valueMax, 'max');
+              }
+
               parent.__removeAxisIfEmpty();
             }
           }
-        }
-
-        __hasSeriesConfig() {
-          return !!this._series;
         }
 
         __isMarkersValid() {
@@ -385,16 +379,19 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           return true;
         }
 
-        __markersObserver() {
+        __markersObserver(markers, series) {
+          if (markers === undefined || series === undefined) {
+            return;
+          }
+
           if (!this.__isMarkersValid()) {
             this.markers = 'auto';
             return;
           }
-          if (this.__hasSeriesConfig()) {
-            this._series.update({
-              marker: this.__markersConfiguration
-            });
-          }
+
+          series.update({
+            marker: this.__markersConfiguration
+          });
         }
 
         get __markersConfiguration() {

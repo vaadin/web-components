@@ -302,8 +302,7 @@ MAGI ADD END -->
              */
             categories: {
               type: Object,
-              reflectToAttribute: true,
-              observer: '__updateCategories'
+              reflectToAttribute: true
             },
 
             /**
@@ -311,7 +310,6 @@ MAGI ADD END -->
              */
             categoryMax: {
               type: Number,
-              observer: '__updateCategoryMax',
               reflectToAttribute: true
             },
 
@@ -320,7 +318,6 @@ MAGI ADD END -->
              */
             categoryMin: {
               type: Number,
-              observer: '__updateCategoryMin',
               reflectToAttribute: true
             },
 
@@ -334,7 +331,6 @@ MAGI ADD END -->
              */
             categoryPosition: {
               type: String,
-              observer: '__updateCategoryPosition',
               reflectToAttribute: true
             },
 
@@ -344,7 +340,6 @@ MAGI ADD END -->
              */
             noLegend: {
               type: Boolean,
-              observer: '__hideLegend',
               reflectToAttribute: true
             },
 
@@ -356,7 +351,6 @@ MAGI ADD END -->
              */
             stacking: {
               type: String,
-              observer: '__stackingObserver',
               reflectToAttribute: true
             },
 
@@ -373,7 +367,6 @@ MAGI ADD END -->
              */
             title: {
               type: String,
-              observer: '__updateTitle',
               reflectToAttribute: true
             },
 
@@ -382,7 +375,6 @@ MAGI ADD END -->
              */
             tooltip: {
               type: Boolean,
-              observer: '__tooltipObserver',
               reflectToAttribute: true
             },
 
@@ -392,7 +384,6 @@ MAGI ADD END -->
              */
             type: {
               type: String,
-              observer: '__updateType',
               reflectToAttribute: true
             },
 
@@ -401,7 +392,6 @@ MAGI ADD END -->
              */
             subtitle: {
               type: String,
-              observer: '__updateSubtitle',
               reflectToAttribute: true
             },
 
@@ -415,7 +405,6 @@ MAGI ADD END -->
              */
             chart3d: {
               type: Boolean,
-              observer: '__chart3dObserver',
               reflectToAttribute: true
             },
 
@@ -425,7 +414,6 @@ MAGI ADD END -->
             emptyText: {
               type: String,
               value: ' ',
-              observer: '__emptyTextObserver',
               reflectToAttribute: true
             },
 
@@ -443,14 +431,26 @@ MAGI ADD END -->
              */
             polar: {
               type: Boolean,
-              reflectToAttribute: true,
-              observer: '__polarObserver'
+              reflectToAttribute: true
             }
           };
         }
 
         static get observers() {
           return [
+            '__chart3dObserver(chart3d, configuration)',
+            '__emptyTextObserver(emptyText, configuration)',
+            '__hideLegend(noLegend, configuration)',
+            '__polarObserver(polar, configuration)',
+            '__stackingObserver(stacking, configuration)',
+            '__tooltipObserver(tooltip, configuration)',
+            '__updateCategories(categories, configuration)',
+            '__updateCategoryMax(categoryMax, configuration)',
+            '__updateCategoryMin(categoryMin, configuration)',
+            '__updateCategoryPosition(categoryPosition, configuration)',
+            '__updateSubtitle(subtitle, configuration)',
+            '__updateTitle(title, configuration)',
+            '__updateType(type, configuration)',
             '__updateAdditionalOptions(additionalOptions.*)'
           ];
         }
@@ -1376,44 +1376,38 @@ MAGI ADD END -->
           return this.configuration.series[position];
         }
 
-        __updateCategories() {
-          if (!this.configuration) {
+        __updateCategories(categories, config) {
+          if (categories === undefined || !config) {
             return;
           }
 
-          this.__updateOrAddAxes([{
-            categories: this.categories
-          }], true);
+          this.__updateOrAddAxes([{categories}], true);
         }
 
-        __updateCategoryMax() {
-          if (!this.configuration) {
+        __updateCategoryMax(max, config) {
+          if (max === undefined || !config) {
             return;
           }
 
-          if (!isFinite(this.categoryMax)) {
+          if (!isFinite(max)) {
             console.warn('<vaadin-chart> Acceptable value for "category-max" are Numbers or null');
             return;
           }
 
-          this.__updateOrAddAxes([{
-            max: this.categoryMax
-          }], true);
+          this.__updateOrAddAxes([{max}], true);
         }
 
-        __updateCategoryMin() {
-          if (!this.configuration) {
+        __updateCategoryMin(min, config) {
+          if (min === undefined || !config) {
             return;
           }
 
-          if (!isFinite(this.categoryMin)) {
+          if (!isFinite(min)) {
             console.warn('<vaadin-chart> Acceptable value for "category-min" are Numbers or null');
             return;
           }
 
-          this.__updateOrAddAxes([{
-            min: this.categoryMin
-          }], true);
+          this.__updateOrAddAxes([{min}], true);
         }
 
         __shouldInvert() {
@@ -1435,83 +1429,81 @@ MAGI ADD END -->
           return (this.type === 'bar' ? oppositeBar : opposite).indexOf(this.categoryPosition) >= 0;
         }
 
-        __updateCategoryPosition() {
-          if (!this.configuration) {
+        __updateCategoryPosition(categoryPosition, config) {
+          if (categoryPosition === undefined || !config) {
             return;
           }
 
           const validPositions = ['left', 'right', 'top', 'bottom'];
 
-          if (validPositions.indexOf(this.categoryPosition) < 0) {
+          if (validPositions.indexOf(categoryPosition) < 0) {
             console.warn(`<vaadin-chart> Acceptable "category-position" values are ${validPositions}`);
             return;
           }
 
-          this.configuration.update({
+          config.update({
             chart: {
               inverted: this.__shouldInvert()
             }
           });
 
-          this.configuration.xAxis.forEach(e => e.update({
+          config.xAxis.forEach(e => e.update({
             opposite: this.__shouldFlipOpposite()
           }));
         }
 
-        __hideLegend(newValue) {
-          if (!this.configuration) {
+        __hideLegend(noLegend, config) {
+          if (noLegend === undefined || !config) {
             return;
           }
 
-          if (this.configuration.legend) {
-            this.configuration.legend.update({enabled: !newValue});
+          if (config.legend) {
+            config.legend.update({enabled: !noLegend});
           } else {
-            this.configuration.legend = {enabled: !newValue};
+            config.legend = {enabled: !noLegend};
           }
         }
 
-        __updateTitle(newValue) {
-          if (!this.configuration) {
+        __updateTitle(title, config) {
+          if (title === undefined || !config) {
             return;
           }
 
-          if (newValue && newValue.length > 0) {
-            this.configuration.title.update({text: newValue});
+          if (title && title.length > 0) {
+            config.title.update({text: title});
           }
         }
 
-        __tooltipObserver(newValue) {
-          if (!this.configuration) {
+        __tooltipObserver(tooltip, config) {
+          if (tooltip === undefined || !config) {
             return;
           }
 
-          this.configuration.tooltip.update({enabled: this.tooltip});
+          config.tooltip.update({enabled: tooltip});
         }
 
-        __updateType(newValue) {
-          if (!this.configuration) {
+        __updateType(type, config) {
+          if (type === undefined || !config) {
             return;
           }
 
-          if (newValue && newValue.length > 0) {
-            this.configuration.update({
-              chart: {
-                type: newValue
-              }
+          if (type && type.length > 0) {
+            config.update({
+              chart: {type}
             });
           }
         }
 
-        __updateSubtitle(newValue) {
-          if (!this.configuration) {
+        __updateSubtitle(subtitle, config) {
+          if (subtitle === undefined || !config) {
             return;
           }
 
-          if (newValue && newValue.length > 0) {
-            if (!this.configuration.subtitle) {
-              this.configuration.setSubtitle({text: newValue});
+          if (subtitle && subtitle.length > 0) {
+            if (!config.subtitle) {
+              config.setSubtitle({text: subtitle});
             } else {
-              this.configuration.subtitle.update({text: newValue});
+              config.subtitle.update({text: subtitle});
             }
           }
         }
@@ -1530,8 +1522,8 @@ MAGI ADD END -->
           return true;
         }
 
-        __stackingObserver() {
-          if (!this.configuration) {
+        __stackingObserver(stacking, config) {
+          if (stacking === undefined || !config) {
             return;
           }
 
@@ -1540,22 +1532,20 @@ MAGI ADD END -->
             return;
           }
 
-          this.configuration.update({
+          config.update({
             plotOptions: {
-              series: {
-                stacking: this.stacking
-              }
+              series: {stacking}
             }
           });
         }
 
-        __chart3dObserver() {
-          if (!this.configuration) {
+        __chart3dObserver(chart3d, config) {
+          if (chart3d === undefined || !config) {
             return;
           }
 
-          if (this.chart3d) {
-            this.configuration.update({
+          if (chart3d) {
+            config.update({
               chart: {
                 options3d: Object.assign(
                   {},
@@ -1570,7 +1560,7 @@ MAGI ADD END -->
               }
             });
           } else {
-            this.configuration.update({
+            config.update({
               chart: {
                 options3d: {
                   enabled: false
@@ -1580,30 +1570,28 @@ MAGI ADD END -->
           }
         }
 
-        __polarObserver() {
-          if (!this.configuration) {
+        __polarObserver(polar, config) {
+          if (polar === undefined || !config) {
             return;
           }
 
-          this.configuration.update({
-            chart: {
-              polar: this.polar
-            }
+          config.update({
+            chart: {polar}
           });
         }
 
-        __emptyTextObserver() {
-          if (!this.configuration) {
+        __emptyTextObserver(emptyText, config) {
+          if (emptyText === undefined || !config) {
             return;
           }
 
-          this.configuration.update({
+          config.update({
             lang: {
-              noData: this.emptyText
+              noData: emptyText
             }
           });
-          this.configuration.hideNoData();
-          this.configuration.showNoData(this.emptyText);
+          config.hideNoData();
+          config.showNoData(emptyText);
         }
 
         __callChartFunction(functionName) {
