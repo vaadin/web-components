@@ -75,69 +75,7 @@ MAGI ADD END -->
       /**
        * `<vaadin-chart>` is a Web Component for creating high quality charts.
        *
-       * ### Quick Start
-       *
-       * #### Polymer 2 App
-       *
-       * 1. Create a Polymer application using [Polymer CLI](https://www.polymer-project.org/2.0/docs/tools/polymer-cli)
-       * ```
-       * mkdir my-app
-       * cd my-app
-       * polymer init
-       * select `polymer-2-application`
-       * ```
-       * 1. Install Vaadin Charts
-       * ```
-       * bower install --save vaadin-charts#6.3.0
-       * ```
-       * 1. Import `<vaadin-chart>` to your app
-       * Edit the file `src/my-app/my-app.html` and add the following snipped before the `<dom-module>` tag
-       * ```html
-       * <link rel="import" href="../../bower_components/vaadin-charts/vaadin-chart.html">
-       * ```
-       * 1. Add your first `<vaadin-chart>`
-       * Also in `my-app.html` add the following snippet before the `</template>` closing tag
-       * ```html
-       * <vaadin-chart></vaadin-chart>
-       * ```
-       * 1. Run your app with:
-       * ```
-       * polymer serve --open
-       * ```
-       *
-       * #### Polymer 3 App
-       *
-       * * 1. Create a Polymer application using [Polymer CLI](https://www.polymer-project.org/3.0/docs/tools/polymer-cli)
-       * ```
-       * mkdir my-app
-       * cd my-app
-       * polymer init
-       * select `polymer-3-application`
-       * ```
-       * 1. Install Vaadin Charts
-       * ```
-       * npm i @vaadin/vaadin-charts@6.3.0 --save
-       * ```
-       * 1. Import `<vaadin-chart>` to your app
-       * Edit the file `src/my-app/my-app.js` and add the following snipped on the top, after the first `import` declaration
-       * ```js
-       * import '@vaadin/vaadin-charts';
-       * ```
-       * 1. Add your first `<vaadin-chart>`
-       * Also in `my-app.js`, at the template getter, add the following snippet after the `</h2>` closing tag
-       * ```html
-       * <vaadin-chart></vaadin-chart>
-       * ```
-       * 1. Run your app with:
-       * ```
-       * polymer serve --npm --open
-       * ```
-       *
-       * Congratulations! You have your first Vaadin Chart setup.
-       *
        * ### Basic use
-       *
-       * Now that we covered the basic steps to create an empty chart, let us show how you can configure it.
        *
        * There are two ways of configuring your `<vaadin-chart>` element: **HTML API**, **JS API** and **JSON API**.
        * Note that you can make use of all APIs in your element.
@@ -145,7 +83,6 @@ MAGI ADD END -->
        * #### Configuring your chart using HTML API
        *
        * `vaadin-chart` has a set of attributes to make it easier for you to customize your chart.
-       * Using as a base the project created with in Quick Start:
        *
        * ```html
        *  <vaadin-chart title="The chart title" subtitle="The chart subtitle">
@@ -162,11 +99,7 @@ MAGI ADD END -->
        *
        * #### Configuring your chart using JS API
        *
-       * Using as a base the project created with in Quick Start
-       *
-       * Do the following changes in `my-app.html`
-       *
-       * 1. Set and id for the `<vaadin-chart>` in the template
+       * 1. Set an id for the `<vaadin-chart>` in the template
        * ```html
        *     <vaadin-chart id="mychart"></vaadin-chart>
        * ```
@@ -192,21 +125,12 @@ MAGI ADD END -->
        *     this.initChartWithJSApi();
        * }
        * ```
-       * 1. And finally run your app with:
-       * ```
-       * polymer serve --open
-       * ```
-       *
        *
        * #### Configuring your chart using JS JSON API
        *
        * JS JSON API is a simple alternative to the JS API.
        *
-       * Using as a base the project created with in Quick Start
-       *
-       * Do the following changes in `my-app.html`
-       *
-       * 1. Set and id for the `<vaadin-chart>` in the template
+       * 1. Set an id for the `<vaadin-chart>` in the template
        * ```html
        *     <vaadin-chart id="mychart"></vaadin-chart>
        * ```
@@ -236,10 +160,6 @@ MAGI ADD END -->
        *     super.connectedCallback();
        *     this.initChartWithJSJSONApi();
        * }
-       * ```
-       * 1. And finally run your app with:
-       * ```
-       * polymer serve --open
        * ```
        *
        * It should be noted that chart style customization cannot be done via the JS or JSON API.
@@ -333,7 +253,8 @@ MAGI ADD END -->
        * For example `--vaadin-charts-color-0` sets the color of the first series on a chart.
        *
        * ### Validating your License
-       * After one day using Vaadin Charts in a development environment you will see a pop-up that asks you
+       *
+       * When using Vaadin Charts in a development environment, you will see a pop-up that asks you
        * to validate your license by signing in to vaadin.com.
        *
        * @memberof Vaadin

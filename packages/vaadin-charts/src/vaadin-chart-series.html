@@ -17,7 +17,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
        *
        * ### Basic use
        *
-       * To use `<vaadin-chart-series>`, simply add it inside a `<vaadin-chart>` element:
+       * To use `<vaadin-chart-series>`, add it inside a `<vaadin-chart>` element:
        *
        * ```html
        *  <vaadin-chart>
@@ -38,7 +38,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
        *
        * You are also able to add and remove series by using DOM API.
        *
-       * To create a new series, simply call `document.createElement('vaadin-chart-series')` and append it to your `<vaadin-chart>`:
+       * To create a new series, call `document.createElement('vaadin-chart-series')` and append it to your `<vaadin-chart>`:
        *
        * ```js
        *  const chart = \* a <vaadin-chart> reference *\
@@ -54,9 +54,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
        *  const seriesToBeRemoved = \* a <vaadin-chart-series> reference to remove*\
        *  chart.removeChild(seriesToBeRemoved);
        * ```
-       *
-       * (There's an issue with `#remove()` method on Firefox, so we advice to remove the element from its parent)
-       *
        *
        * @polymer
        * @customElement
