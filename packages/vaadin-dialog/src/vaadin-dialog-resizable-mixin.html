@@ -105,6 +105,7 @@
    */
   Vaadin.DialogResizableMixin = (superClass) =>
     class VaadinDialogResizableMixin extends superClass {
+      /** @protected */
       ready() {
         super.ready();
         this._originalBounds = {};
@@ -113,6 +114,7 @@
         this._addResizeListeners();
       }
 
+      /** @private */
       _addResizeListeners() {
         // Note: edge controls added before corners
         ['n', 'e', 's', 'w', 'nw', 'ne', 'se', 'sw'].forEach((direction) => {
@@ -131,6 +133,11 @@
         });
       }
 
+      /**
+       * @param {!MouseEvent | !TouchEvent} e
+       * @param {!DialogResizableDirection} direction
+       * @protected
+       */
       _startResize(e, direction) {
         if (e.button === 0 || e.touches) {
           e.preventDefault();
@@ -147,6 +154,11 @@
         }
       }
 
+      /**
+       * @param {!MouseEvent | !TouchEvent} e
+       * @param {!DialogResizableDirection} resizer
+       * @protected
+       */
       _resize(e, resizer) {
         const event = this.__getMouseOrFirstTouchEvent(e);
         if (this._eventInWindow(event) &&
@@ -190,6 +202,10 @@
         }
       }
 
+      /**
+       * @param {!DialogResizableDirection} direction
+       * @protected
+       */
       _stopResize(direction) {
         window.removeEventListener('mousemove', this._resizeListeners.resize[direction]);
         window.removeEventListener('touchmove', this._resizeListeners.resize[direction]);
@@ -198,6 +214,10 @@
         this.dispatchEvent(new CustomEvent('resize', {detail: this._getResizeDimensions()}));
       }
 
+      /**
+       * @return {!DialogResizeDimensions}
+       * @protected
+       */
       _getResizeDimensions() {
         const {width, height} = getComputedStyle(this.$.overlay.$.overlay);
         const content = this.$.overlay.$.content;

@@ -21,6 +21,7 @@
     class VaadinDialogDraggableMixin extends superClass {
       static get properties() {
         return {
+          /** @private */
           _touchDevice: {
             type: Boolean,
             value: TOUCH_DEVICE
@@ -28,6 +29,7 @@
         };
       }
 
+      /** @protected */
       ready() {
         super.ready();
         this._originalBounds = {};
@@ -39,6 +41,7 @@
         this.$.overlay.$.overlay.addEventListener('touchstart', this._startDrag);
       }
 
+      /** @private */
       _startDrag(e) {
         if (this.draggable && (e.button === 0 || e.touches)) {
           const resizerContainer = this.$.overlay.$.resizerContainer;
@@ -63,6 +66,7 @@
         }
       }
 
+      /** @private */
       _drag(e) {
         const event = this.__getMouseOrFirstTouchEvent(e);
         if (this._eventInWindow(event) &&
@@ -73,6 +77,7 @@
         }
       }
 
+      /** @private */
       _stopDrag() {
         window.removeEventListener('mouseup', this._stopDrag);
         window.removeEventListener('touchend', this._stopDrag);

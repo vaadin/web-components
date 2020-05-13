@@ -153,8 +153,10 @@ This program is available under Apache License Version 2.0, available at https:/
        * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
        *
        * @memberof Vaadin
-       * @mixes Vaadin.ElementMixin
        * @mixes Vaadin.ThemePropertyMixin
+       * @mixes Vaadin.ElementMixin
+       * @mixes Vaadin.DialogDraggableMixin
+       * @mixes Vaadin.DialogResizableMixin
        * @demo demo/index.html
        */
       class DialogElement extends
@@ -175,6 +177,7 @@ This program is available under Apache License Version 2.0, available at https:/
           return {
             /**
              * True if the overlay is currently displayed.
+             * @type {boolean}
              */
             opened: {
               type: Boolean,
@@ -184,6 +187,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * Set to true to disable closing dialog on outside click
+             * @type {boolean}
              */
             noCloseOnOutsideClick: {
               type: Boolean,
@@ -192,6 +196,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * Set to true to disable closing dialog on Escape press
+             * @type {boolean}
              */
             noCloseOnEsc: {
               type: Boolean,
@@ -209,10 +214,9 @@ This program is available under Apache License Version 2.0, available at https:/
             },
 
             /**
-             * Theme to apply to the overlay element
+             * @type {HTMLTemplateElement | undefined}
+             * @protected
              */
-            theme: String,
-
             _contentTemplate: Object,
 
             /**
@@ -221,11 +225,13 @@ This program is available under Apache License Version 2.0, available at https:/
              *
              * - `root` The root container DOM element. Append your content to it.
              * - `dialog` The reference to the `<vaadin-dialog>` element.
+             * @type {OverlayRenderer | undefined}
              */
             renderer: Function,
 
             /**
              * Set to true to remove backdrop and allow click events on background elements.
+             * @type {boolean}
              */
             modeless: {
               type: Boolean,
@@ -238,6 +244,7 @@ This program is available under Apache License Version 2.0, available at https:/
              * By default, only the overlay area can be used to drag the element. But,
              * a child element can be marked as a draggable area by adding a
              * "`draggable`" class to it.
+             * @type {boolean}
              */
             draggable: {
               type: Boolean,
@@ -247,6 +254,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * Set to true to enable resizing the dialog by dragging the corners and edges.
+             * @type {boolean}
              */
             resizable: {
               type: Boolean,
@@ -254,8 +262,10 @@ This program is available under Apache License Version 2.0, available at https:/
               reflectToAttribute: true
             },
 
+            /** @private */
             _oldTemplate: Object,
 
+            /** @private */
             _oldRenderer: Object
           };
         }
@@ -268,6 +278,7 @@ This program is available under Apache License Version 2.0, available at https:/
           ];
         }
 
+        /** @protected */
         ready() {
           super.ready();
           this.$.overlay.setAttribute('role', 'dialog');
@@ -282,16 +293,22 @@ This program is available under Apache License Version 2.0, available at https:/
           this.$.overlay.$.content.addEventListener('touchmove', this._preventMove, {passive: false});
         }
 
+        /** @private */
         _preventMove(e) {
           if (e.touches.length < 2) {
             e.preventDefault();
           }
         }
 
+        /**
+         * @param {!Array<!Node>} nodes
+         * @protected
+         */
         _setTemplateFromNodes(nodes) {
           this._contentTemplate = nodes.filter(node => node.localName && node.localName === 'template')[0] || this._contentTemplate;
         }
 
+        /** @private */
         _removeNewRendererOrTemplate(template, oldTemplate, renderer, oldRenderer) {
           if (template !== oldTemplate) {
             this._contentTemplate = undefined;
@@ -307,6 +324,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this.$.overlay.render();
         }
 
+        /** @private */
         _templateOrRendererChanged(template, renderer) {
           if (template && renderer) {
             this._removeNewRendererOrTemplate(template, this._oldTemplate, renderer, this._oldRenderer);
@@ -321,11 +339,13 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @protected */
         disconnectedCallback() {
           super.disconnectedCallback();
           this.opened = false;
         }
 
+        /** @private */
         _openedChanged(opened) {
           if (opened) {
             this.$.overlay.template = this.querySelector('template');
@@ -333,6 +353,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this.$.overlay.opened = opened;
         }
 
+        /** @private */
         _ariaLabelChanged(ariaLabel) {
           if (ariaLabel !== undefined && ariaLabel !== null) {
             this.$.overlay.setAttribute('aria-label', ariaLabel);
@@ -341,6 +362,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         _onOverlayOpened(e) {
           if (e.detail.value === false) {
             this.opened = false;
@@ -349,6 +371,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         /**
          * Close the dialog if `noCloseOnOutsideClick` isn't set to true
+         * @private
          */
         _handleOutsideClick(e) {
           if (this.noCloseOnOutsideClick) {
@@ -358,6 +381,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         /**
          * Close the dialog if `noCloseOnEsc` isn't set to true
+         * @private
          */
         _handleEscPress(e) {
           if (this.noCloseOnEsc) {
@@ -365,6 +389,10 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /**
+         * @param {!DialogOverlayBoundsParam} bounds
+         * @protected
+         */
         _setBounds(bounds) {
           const overlay = this.$.overlay.$.overlay;
           const parsedBounds = Object.assign({}, bounds);
@@ -383,12 +411,17 @@ This program is available under Apache License Version 2.0, available at https:/
           Object.assign(overlay.style, parsedBounds);
         }
 
+        /** @private */
         _bringOverlayToFront() {
           if (this.modeless) {
             this.$.overlay.bringToFront();
           }
         }
 
+        /**
+         * @return {!DialogOverlayBounds}
+         * @protected
+         */
         _getOverlayBounds() {
           const overlay = this.$.overlay.$.overlay;
           const overlayBounds = overlay.getBoundingClientRect();
@@ -400,10 +433,20 @@ This program is available under Apache License Version 2.0, available at https:/
           return {top, left, width, height};
         }
 
+        /**
+         * @param {!MouseEvent | !TouchEvent} e
+         * @return {boolean}
+         * @protected
+         */
         _eventInWindow(e) {
           return e.clientX >= 0 && e.clientX <= window.innerWidth && e.clientY >= 0 && e.clientY <= window.innerHeight;
         }
 
+        /**
+         * @param {!MouseEvent | !TouchEvent} e
+         * @return {!MouseEvent | !Touch}
+         * @protected
+         */
         __getMouseOrFirstTouchEvent(e) {
           return e.touches ? e.touches[0] : e;
         }
