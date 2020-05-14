@@ -18,7 +18,9 @@
   },
   "homepage": "https://vaadin.com/charts",
   "files": [
+    "vaadin-*.d.ts",
     "vaadin-*.js",
+    "@types",
     "src",
     "theme"
   ],

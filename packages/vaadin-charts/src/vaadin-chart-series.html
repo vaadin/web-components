@@ -55,13 +55,10 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
        *  chart.removeChild(seriesToBeRemoved);
        * ```
        *
-       * @polymer
-       * @customElement
-       * @extends {Polymer.Element}
        * @memberof Vaadin
        * @demo demo/index.html
        */
-      class ChartSeriesElement extends Polymer.Element {
+      class ChartSeriesElement extends (class extends Polymer.Element {}) {
         static get is() {
           return 'vaadin-chart-series';
         }
@@ -69,7 +66,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         get options() {
           // Should be {}, workaround for https://github.com/highcharts/highcharts/issues/13482
           const baseConfig = {accessibility: {enabled: false}};
-          const options = Vaadin.Charts.ChartDeepMerger.__deepMerge(baseConfig, this.additionalOptions);
+          const options = Vaadin.Charts.deepMerge(baseConfig, this.additionalOptions);
 
           if (this.type) {
             options.type = this.type;
@@ -131,6 +128,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
              * Note that you should always use [Polymer API](https://www.polymer-project.org/2.0/docs/devguide/model-data#array-mutation)
              * to mutate the values array in order to make the component aware of the
              * change and be able to synchronize it.
+             * @type {ChartSeriesValues}
              */
             values: {
               type: Array,
@@ -138,10 +136,10 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             },
 
             /**
-             *  Value-axis minimum-value.
-             *  Sets the value to a series bound by 'unit' property.
-             *  Otherwise sets the value to the first series.
-             *  Undefined by default (determined from data).
+             * Value-axis minimum-value.
+             * Sets the value to a series bound by 'unit' property.
+             * Otherwise sets the value to the first series.
+             * Undefined by default (determined from data).
              */
             valueMin: {
               type: Number,
@@ -149,8 +147,8 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             },
 
             /**
-             *  Value-axis maximum-value.
-             *  See the 'valueMin'
+             * Value-axis maximum-value.
+             * See the 'valueMin'
              */
             valueMax: {
               type: Number,
@@ -158,8 +156,8 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             },
 
             /**
-             *  A string with the type of the series.
-             *  Defaults to `'line'` in case no type is set for the chart.
+             * A string with the type of the series.
+             * Defaults to `'line'` in case no type is set for the chart.
              * Note that `'bar'`, `'gauge'` and `'solidgauge'` should be set as default series type on `<vaadin-chart>`.
              */
             type: {
@@ -169,6 +167,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
             /**
              * The name of the series as shown in the legend, tooltip etc.
+             * @type {string}
              */
             title: {
               type: String,
@@ -181,13 +180,15 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
              *  - `shown`: markers are always visible
              *  - `hidden`: markers are always hidden
              *  - `auto`: markers are visible for widespread data and hidden, when data is dense *(default)*
+             * @type {ChartSeriesMarkers | undefined}
              */
             markers: {
               type: String,
               reflectToAttribute: true
             },
 
-            /** Used to connect the series to an axis; if multiple series have the same “unit”, they will share axis.
+            /**
+             * Used to connect the series to an axis; if multiple series have the same “unit”, they will share axis.
              * Displayed as a title for the axis.
              * If no unit is defined, then series will be connected to the first axis.
              */
@@ -196,27 +197,33 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
               reflectToAttribute: true
             },
 
-            /** Used to group series in a different stacks.
+            /**
+             * Used to group series in a different stacks.
              * "stacking" property should be specified either for each series or in plotOptions.
              * It is recommended to place series in a single stack, when they belong to the same yAxis.
+             * @type {number | string}
              */
             stack: {
               type: String,
               reflectToAttribute: true
             },
 
-            /** The height of the neck, the lower part of the funnel.
+            /**
+             * The height of the neck, the lower part of the funnel.
              * A number defines pixel width, a percentage string defines a percentage of the plot area height. Defaults to 30%.
              * Note that this property only applies for "funnel" charts.
+             * @type {number | string}
              */
             neckPosition: {
               type: String,
               reflectToAttribute: true
             },
 
-            /** The width of the neck, the lower part of the funnel.
+            /**
+             * The width of the neck, the lower part of the funnel.
              * A number defines pixel width, a percentage string defines a percentage of the plot area width. Defaults to 30%.
              * Note that this property only applies for "funnel" charts.
+             * @type {number | string}
              */
             neckWidth: {
               type: String,
@@ -225,7 +232,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
             /**
              * Object with the configured options defined and used to create a series.
-             *
+             * @type {!ChartSeriesOptions}
              * @readonly
              */
             options: {
@@ -234,12 +241,17 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
             /**
              * Represents additional JSON configuration.
+             * @type {SeriesOptionsType | undefined}
              */
             additionalOptions: {
               type: Object,
               reflectToAttribute: true
             },
 
+            /**
+             * @type {!Series | undefined}
+             * @protected
+             */
             _series: {
               type: Object
             }
@@ -264,24 +276,27 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
         /**
          * Method to attach a series object of type `Highcharts.Series`.
-         * @param series Object of type `Highcharts.Series`
+         * @param {!Series} series Object of type `Highcharts.Series`
          */
         setSeries(series) {
           this._series = series;
         }
 
+        /** @private */
         __valuesObserver(splices, series) {
           if (series) {
             series.setData(this.values);
           }
         }
 
+        /** @private */
         __additionalOptionsObserver(additionalOptions, series) {
           if (series && additionalOptions.value) {
             series.update(additionalOptions.value);
           }
         }
 
+        /** @private */
         __updateAxis(series, value, key) {
           if (!isFinite(value)) {
             this.__showWarn(`value-${key}`, 'Numbers or null');
@@ -293,6 +308,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           }
         }
 
+        /** @private */
         __valueMinObserver(valueMin, series) {
           if (valueMin === undefined || series === undefined) {
             return;
@@ -301,6 +317,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           this.__updateAxis(series, valueMin, 'min');
         }
 
+        /** @private */
         __valueMaxObserver(valueMax, series) {
           if (valueMax === undefined || series === undefined) {
             return;
@@ -309,12 +326,14 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           this.__updateAxis(series, valueMax, 'max');
         }
 
+        /** @private */
         __typeObserver(type, series) {
           if (type && series) {
             series.update({type});
           }
         }
 
+        /** @private */
         __titleObserver(title, series) {
           if (title === undefined || series === undefined) {
             return;
@@ -322,6 +341,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           series.update({name: title});
         }
 
+        /** @private */
         __stackObserver(stack, series) {
           if (stack === undefined || series === undefined) {
             return;
@@ -329,6 +349,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           series.update({stack});
         }
 
+        /** @private */
         __neckPositionObserver(neckPosition, series) {
           if (neckPosition === undefined || series === undefined) {
             return;
@@ -337,6 +358,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           series.update({neckHeight: neckPosition});
         }
 
+        /** @private */
         __neckWidthObserver(neckWidth, series) {
           if (neckWidth === undefined || series === undefined) {
             return;
@@ -345,6 +367,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           series.update({neckWidth});
         }
 
+        /** @private */
         __unitObserver(unit, valueMin, valueMax, series) {
           if (series && unit !== this.__oldUnit) {
             this.__oldUnit = unit;
@@ -371,6 +394,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           }
         }
 
+        /** @private */
         __isMarkersValid() {
           if (['shown', 'hidden', 'auto'].indexOf(this.markers) === -1) {
             this.__showWarn('markers', '"shown", "hidden" or "auto"');
@@ -379,6 +403,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           return true;
         }
 
+        /** @private */
         __markersObserver(markers, series) {
           if (markers === undefined || series === undefined) {
             return;
@@ -394,6 +419,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           });
         }
 
+        /** @private */
         get __markersConfiguration() {
           const config = {};
           switch (this.markers) {
@@ -412,6 +438,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           return config;
         }
 
+        /** @private */
         __showWarn(propertyName, acceptedValues) {
           console.warn('<vaadin-chart-series> Acceptable values for "' + propertyName + '" are ' + acceptedValues);
         }

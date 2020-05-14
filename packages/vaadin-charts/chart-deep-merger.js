@@ -6,29 +6,24 @@ window.Vaadin = window.Vaadin || {};
  * @namespace Vaadin.Charts
  */
 Vaadin.Charts = Vaadin.Charts || {};
+
 /** @private */
-// eslint-disable-next-line no-unused-vars
-Vaadin.Charts.ChartDeepMerger = (() => class {
+Vaadin.Charts.deepMerge = function deepMerge(target, source) {
+  const isObject = item => (item && typeof item === 'object' && !Array.isArray(item));
 
-  static __isObject(item) {
-    return (item && typeof item === 'object' && !Array.isArray(item));
-  }
-
-  static __deepMerge(target, source) {
-    if (this.__isObject(source) && this.__isObject(target)) {
-      for (const key in source) {
-        if (this.__isObject(source[key])) {
-          if (!target[key]) {
-            Object.assign(target, {[key]: {}});
-          }
-
-          this.__deepMerge(target[key], source[key]);
-        } else {
-          Object.assign(target, {[key]: source[key]});
+  if (isObject(source) && isObject(target)) {
+    for (const key in source) {
+      if (isObject(source[key])) {
+        if (!target[key]) {
+          Object.assign(target, {[key]: {}});
         }
+
+        deepMerge(target[key], source[key]);
+      } else {
+        Object.assign(target, {[key]: source[key]});
       }
     }
-
-    return target;
   }
-})();
+
+  return target;
+};

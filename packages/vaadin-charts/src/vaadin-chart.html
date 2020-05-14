@@ -258,6 +258,8 @@ MAGI ADD END -->
        * to validate your license by signing in to vaadin.com.
        *
        * @memberof Vaadin
+       * @mixes Vaadin.ThemableMixin
+       * @mixes Vaadin.ElementMixin
        * @demo demo/index.html
        */
       class ChartElement extends Vaadin.ElementMixin(Vaadin.ThemableMixin(Polymer.Element)) {
@@ -289,9 +291,7 @@ MAGI ADD END -->
              * - `configuration.title`: The chart title.
              *
              * For detailed documentation of available API check the [API site](http://api.highcharts.com/class-reference/classes.list)
-             * @readonly
-             * @public
-             * @type {Object}
+             * @type {!Chart | undefined}
              */
             configuration: Object,
 
@@ -299,6 +299,7 @@ MAGI ADD END -->
              * If categories are present names are used instead of numbers for the category axis.
              * The format of categories can be an `Array` with a list of categories, such as `['2010', '2011', '2012']`
              * or a mapping `Object`, like `{0:'1',9:'Target (10)', 15: 'Max'}`.
+             * @type {ChartCategories | undefined}
              */
             categories: {
               type: Object,
@@ -328,6 +329,8 @@ MAGI ADD END -->
              * except for bar charts that appear as though they have `category-position="left"`.
              *
              * Defaults to `undefined`
+             *
+             * @type {ChartCategoryPosition | undefined}
              */
             categoryPosition: {
               type: String,
@@ -348,6 +351,7 @@ MAGI ADD END -->
              * Possible values are null, "normal" or "percent".
              * If "stack" property is not defined on the vaadin-chart-series elements, then series will be put into
              * the default stack.
+             * @type {ChartStacking | undefined}
              */
             stacking: {
               type: String,
@@ -364,6 +368,7 @@ MAGI ADD END -->
 
             /**
              * Represents the title of the chart.
+             * @type {string}
              */
             title: {
               type: String,
@@ -389,6 +394,7 @@ MAGI ADD END -->
 
             /**
              * Represents the subtitle of the chart.
+             * @type {string | undefined}
              */
             subtitle: {
               type: String,
@@ -410,6 +416,7 @@ MAGI ADD END -->
 
             /**
              * Specifies the message displayed on a chart without displayable data.
+             * @type {string}
              */
             emptyText: {
               type: String,
@@ -419,6 +426,7 @@ MAGI ADD END -->
 
             /**
              * Represents additional JSON configuration.
+             * @type {Options | undefined}
              */
             additionalOptions: {
               type: Object,
@@ -508,7 +516,7 @@ MAGI ADD END -->
           this.__mutationCallback = this.__mutationCallback.bind(this);
         }
 
-        /** @private */
+        /** @protected */
         connectedCallback() {
           super.connectedCallback();
           this.__updateStyles();
@@ -530,9 +538,12 @@ MAGI ADD END -->
           });
         }
 
+        /**
+         * @return {!Options}
+         */
         get options() {
           const options = Object.assign({}, this._baseConfig);
-          Vaadin.Charts.ChartDeepMerger.__deepMerge(options, this.additionalOptions);
+          Vaadin.Charts.deepMerge(options, this.additionalOptions);
 
           if (this.type) {
             options.chart = options.chart || {};
@@ -633,8 +644,9 @@ MAGI ADD END -->
         }
 
         /**
-         *  Name of the chart events to add to the configuration and its corresponding event for the chart element
-         **/
+         * Name of the chart events to add to the configuration and its corresponding event for the chart element
+         * @private
+         */
         get __chartEventNames() {
           return {
 
@@ -728,8 +740,9 @@ MAGI ADD END -->
         }
 
         /**
-         *  Name of the series events to add to the configuration and its corresponding event for the chart element
-         **/
+         * Name of the series events to add to the configuration and its corresponding event for the chart element
+         * @private
+         */
         get __seriesEventNames() {
           return {
             /**
@@ -792,8 +805,9 @@ MAGI ADD END -->
         }
 
         /**
-         *  Name of the point events to add to the configuration and its corresponding event for the chart element
-         **/
+         * Name of the point events to add to the configuration and its corresponding event for the chart element
+         * @private
+         */
         get __pointEventNames() {
           return {
             /**
@@ -855,6 +869,7 @@ MAGI ADD END -->
           };
         }
 
+        /** @private */
         get __xAxesEventNames() {
           return {
             /**
@@ -867,6 +882,7 @@ MAGI ADD END -->
           };
         }
 
+        /** @private */
         get __yAxesEventNames() {
           return {
             /**
@@ -879,6 +895,7 @@ MAGI ADD END -->
           };
         }
 
+        /** @private */
         __reflow() {
           if (!this.configuration) {
             return;
@@ -888,6 +905,7 @@ MAGI ADD END -->
           });
         }
 
+        /** @private */
         __mutationCallback() {
           const {height: componentHeight} = this.getBoundingClientRect();
           const {chartHeight} = this.configuration;
@@ -897,6 +915,7 @@ MAGI ADD END -->
           }
         }
 
+        /** @private */
         __addChildObserver() {
           Polymer.RenderStatus.beforeNextRender(this, () => {
             this._childObserver = new Polymer.FlattenedNodesObserver(this.$.slot, (info) => {
@@ -907,10 +926,12 @@ MAGI ADD END -->
           });
         }
 
+        /** @private */
         __filterSeriesNodes(node) {
           return node.nodeType === Node.ELEMENT_NODE && node instanceof Vaadin.ChartSeriesElement;
         }
 
+        /** @private */
         __addSeries(series) {
           if (this.__isSeriesEmpty(series)) {
             return;
@@ -946,6 +967,7 @@ MAGI ADD END -->
           this.__removeAxisIfEmpty();
         }
 
+        /** @private */
         __removeSeries(seriesNodes) {
           if (this.__isSeriesEmpty(seriesNodes)) {
             return;
@@ -958,6 +980,7 @@ MAGI ADD END -->
           });
         }
 
+        /** @private */
         __setYAxisProps(yAxes, yAxisId, props) {
           if (yAxisId) {
             yAxes[yAxisId].update(props);
@@ -966,10 +989,12 @@ MAGI ADD END -->
           }
         }
 
+        /** @private */
         __isSeriesEmpty(series) {
           return series === null || series.length === 0;
         }
 
+        /** @private */
         __cleanupAfterSeriesRemoved(series) {
           if (this.__isSeriesEmpty(series)) {
             return;
@@ -988,6 +1013,7 @@ MAGI ADD END -->
           }
         }
 
+        /** @private */
         __initChart(options) {
           this.__initEventsListeners(options);
           if (this.timeline) {
@@ -997,7 +1023,7 @@ MAGI ADD END -->
           }
         }
 
-        /** @private */
+        /** @protected */
         disconnectedCallback() {
           super.disconnectedCallback();
           this.__mutationObserver && this.__mutationObserver.disconnect();
@@ -1007,8 +1033,10 @@ MAGI ADD END -->
         /**
          * Search for axis with given `id`.
          *
-         * @param {String} id contains the id that will be searched
-         * @param {Boolean} isXAxis indicates if it will remove x or y axes. Defaults to `false`.
+         * @param {string} id contains the id that will be searched
+         * @param {boolean} isXAxis indicates if it will remove x or y axes. Defaults to `false`.
+         * @return {Axis}
+         * @protected
          */
         __getAxis(id, isXAxis) {
           id = Number.parseInt(id) || id;
@@ -1023,7 +1051,9 @@ MAGI ADD END -->
          * Add an axis with given options
          *
          * @param {Object} options axis options
-         * @param {Boolean} isXAxis indicates if axis is X (`true`) or Y (`false`). Defaults to `false`.
+         * @param {boolean} isXAxis indicates if axis is X (`true`) or Y (`false`). Defaults to `false`.
+         * @return {!Axis}
+         * @protected
          */
         __addAxis(options, isXAxis) {
           if (this.configuration) {
@@ -1035,7 +1065,8 @@ MAGI ADD END -->
         /**
          * Iterates over axes (y or x) and removes whenever it doesn't contain any series and was created for unit
          *
-         * @param {Boolean}  isXAxis indicates if it will remove x or y axes. Defaults to `false`.
+         * @param {boolean} isXAxis indicates if it will remove x or y axes. Defaults to `false`.
+         * @protected
          */
         __removeAxisIfEmpty(isXAxis) {
           if (this.configuration) {
@@ -1056,7 +1087,7 @@ MAGI ADD END -->
          * Styling properties specified in this configuration will be ignored. To learn about chart styling
          * please see the CSS Styling section above.
          *
-         * @param {Object} jsonConfiguration Object chart configuration. Most important properties are:
+         * @param {!Options} jsonConfiguration Object chart configuration. Most important properties are:
          *
          * - chart `Object` with options regarding the chart area and plot area as well as general chart options.
          *    Detailed API for chart object is available in [API Site](http://api.highcharts.com/highcharts/chart)
@@ -1081,7 +1112,7 @@ MAGI ADD END -->
          * - zAxis `Object[]` The Z axis or depth axis for 3D plots.
          *    Detailed API for zAxis object is available in [API Site](http://api.highcharts.com/highcharts/zAxis)
          *
-         * @param {Boolean} resetConfiguration Optional boolean that should be set to true if no other chart configuration was set before or
+         * @param {boolean=} resetConfiguration Optional boolean that should be set to true if no other chart configuration was set before or
          *    if existing configuration should be discarded.
          */
         update(jsonConfiguration, resetConfiguration) {
@@ -1089,7 +1120,7 @@ MAGI ADD END -->
             this._jsonConfigurationBuffer = {};
           }
 
-          const configCopy = Vaadin.Charts.ChartDeepMerger.__deepMerge({}, jsonConfiguration);
+          const configCopy = Vaadin.Charts.deepMerge({}, jsonConfiguration);
           this.__inflateFunctions(configCopy);
           this._jsonConfigurationBuffer = this.__makeConfigurationBuffer(this._jsonConfigurationBuffer, configCopy);
 
@@ -1124,6 +1155,7 @@ MAGI ADD END -->
           });
         }
 
+        /** @private */
         __makeConfigurationBuffer(target, source) {
           const _source = Highcharts.merge(source);
           const _target = Highcharts.merge(target);
@@ -1135,6 +1167,7 @@ MAGI ADD END -->
           return Highcharts.merge(_target, _source);
         }
 
+        /** @private */
         __mergeConfigurationArray(target, configuration, entry) {
           if (!configuration || !configuration[entry] || !Array.isArray(configuration[entry])) {
             return;
@@ -1152,6 +1185,7 @@ MAGI ADD END -->
           delete configuration[entry];
         }
 
+        /** @private */
         __inflateFunctions(jsonConfiguration) {
           for (const attr in jsonConfiguration) {
             if (jsonConfiguration.hasOwnProperty(attr)) {
@@ -1170,6 +1204,7 @@ MAGI ADD END -->
           }
         }
 
+        /** @private */
         __initEventsListeners(configuration) {
           this.__initChartEventsListeners(configuration);
           this.__initSeriesEventsListeners(configuration);
@@ -1178,18 +1213,22 @@ MAGI ADD END -->
           this.__initAxisEventsListeners(configuration, false);
         }
 
+        /** @private */
         __initChartEventsListeners(configuration) {
           this.__createEventListeners(this.__chartEventNames, configuration, 'chart.events', 'chart');
         }
 
+        /** @private */
         __initSeriesEventsListeners(configuration) {
           this.__createEventListeners(this.__seriesEventNames, configuration, 'plotOptions.series.events', 'series');
         }
 
+        /** @private */
         __initPointsEventsListeners(configuration) {
           this.__createEventListeners(this.__pointEventNames, configuration, 'plotOptions.series.point.events', 'point');
         }
 
+        /** @private */
         __initAxisEventsListeners(configuration, isXAxis) {
           let eventNames, axes;
 
@@ -1208,6 +1247,7 @@ MAGI ADD END -->
           }
         }
 
+        /** @private */
         __createEventListeners(eventList, configuration, pathToAdd, eventType) {
           const self = this;
           const eventObject = this.__ensureObjectPath(configuration, pathToAdd);
@@ -1322,6 +1362,7 @@ MAGI ADD END -->
           }
         }
 
+        /** @private */
         __ensureObjectPath(object, path) {
           if (typeof path !== 'string') {
             return;
@@ -1334,6 +1375,7 @@ MAGI ADD END -->
           }, object);
         }
 
+        /** @private */
         __updateOrAddCredits(credits) {
           if (this.configuration.credits) {
             this.configuration.credits.update(credits);
@@ -1342,6 +1384,7 @@ MAGI ADD END -->
           }
         }
 
+        /** @private */
         __updateOrAddAxes(axes, isX) {
           if (!Array.isArray(axes)) {
             axes = [axes];
@@ -1357,6 +1400,7 @@ MAGI ADD END -->
           }
         }
 
+        /** @private */
         __updateOrAddSeries(series) {
           if (!Array.isArray(series)) {
             throw new Error('The type of jsonConfiguration.series should be Object[]');
@@ -1367,6 +1411,7 @@ MAGI ADD END -->
           }
         }
 
+        /** @private */
         __updateOrAddSeriesInstance(seriesOptions, position) {
           if (this.configuration.series[position]) {
             this.configuration.series[position].update(seriesOptions);
@@ -1376,6 +1421,7 @@ MAGI ADD END -->
           return this.configuration.series[position];
         }
 
+        /** @private */
         __updateCategories(categories, config) {
           if (categories === undefined || !config) {
             return;
@@ -1384,6 +1430,7 @@ MAGI ADD END -->
           this.__updateOrAddAxes([{categories}], true);
         }
 
+        /** @private */
         __updateCategoryMax(max, config) {
           if (max === undefined || !config) {
             return;
@@ -1397,6 +1444,7 @@ MAGI ADD END -->
           this.__updateOrAddAxes([{max}], true);
         }
 
+        /** @private */
         __updateCategoryMin(min, config) {
           if (min === undefined || !config) {
             return;
@@ -1410,6 +1458,7 @@ MAGI ADD END -->
           this.__updateOrAddAxes([{min}], true);
         }
 
+        /** @private */
         __shouldInvert() {
           // A bar chart will never be inverted, consider using a column chart.
           // See https://stackoverflow.com/questions/11235251#answer-21739793
@@ -1423,12 +1472,14 @@ MAGI ADD END -->
           return inverted.indexOf(this.categoryPosition) >= 0;
         }
 
+        /** @private */
         __shouldFlipOpposite() {
           const opposite = ['top', 'right'];
           const oppositeBar = ['right'];
           return (this.type === 'bar' ? oppositeBar : opposite).indexOf(this.categoryPosition) >= 0;
         }
 
+        /** @private */
         __updateCategoryPosition(categoryPosition, config) {
           if (categoryPosition === undefined || !config) {
             return;
@@ -1452,6 +1503,7 @@ MAGI ADD END -->
           }));
         }
 
+        /** @private */
         __hideLegend(noLegend, config) {
           if (noLegend === undefined || !config) {
             return;
@@ -1464,6 +1516,7 @@ MAGI ADD END -->
           }
         }
 
+        /** @private */
         __updateTitle(title, config) {
           if (title === undefined || !config) {
             return;
@@ -1474,6 +1527,7 @@ MAGI ADD END -->
           }
         }
 
+        /** @private */
         __tooltipObserver(tooltip, config) {
           if (tooltip === undefined || !config) {
             return;
@@ -1482,6 +1536,7 @@ MAGI ADD END -->
           config.tooltip.update({enabled: tooltip});
         }
 
+        /** @private */
         __updateType(type, config) {
           if (type === undefined || !config) {
             return;
@@ -1494,6 +1549,7 @@ MAGI ADD END -->
           }
         }
 
+        /** @private */
         __updateSubtitle(subtitle, config) {
           if (subtitle === undefined || !config) {
             return;
@@ -1508,12 +1564,14 @@ MAGI ADD END -->
           }
         }
 
+        /** @private */
         __updateAdditionalOptions() {
           if (this.configuration) {
             this.update(this.additionalOptions);
           }
         }
 
+        /** @private */
         __isStackingValid() {
           if (['normal', 'percent', null].indexOf(this.stacking) === -1) {
             this.__showWarn('stacking', '"normal", "percent" or null');
@@ -1522,6 +1580,7 @@ MAGI ADD END -->
           return true;
         }
 
+        /** @private */
         __stackingObserver(stacking, config) {
           if (stacking === undefined || !config) {
             return;
@@ -1539,6 +1598,7 @@ MAGI ADD END -->
           });
         }
 
+        /** @private */
         __chart3dObserver(chart3d, config) {
           if (chart3d === undefined || !config) {
             return;
@@ -1570,6 +1630,7 @@ MAGI ADD END -->
           }
         }
 
+        /** @private */
         __polarObserver(polar, config) {
           if (polar === undefined || !config) {
             return;
@@ -1580,6 +1641,7 @@ MAGI ADD END -->
           });
         }
 
+        /** @private */
         __emptyTextObserver(emptyText, config) {
           if (emptyText === undefined || !config) {
             return;
@@ -1594,6 +1656,7 @@ MAGI ADD END -->
           config.showNoData(emptyText);
         }
 
+        /** @private */
         __callChartFunction(functionName) {
           if (this.configuration) {
             const functionToCall = this.configuration[functionName];
@@ -1604,6 +1667,7 @@ MAGI ADD END -->
           }
         }
 
+        /** @private */
         __callSeriesFunction(functionName, seriesIndex) {
           if (this.configuration && this.configuration.series[seriesIndex]) {
             const series = this.configuration.series[seriesIndex];
@@ -1615,6 +1679,7 @@ MAGI ADD END -->
           }
         }
 
+        /** @private */
         __callAxisFunction(functionName, axisCategory, axisIndex) {
           /*
            * axisCategory:
@@ -1650,6 +1715,7 @@ MAGI ADD END -->
           }
         }
 
+        /** @private */
         __callPointFunction(functionName, seriesIndex, pointIndex) {
           if (this.configuration && this.configuration.series[seriesIndex] && this.configuration.series[seriesIndex].data[pointIndex]) {
             const point = this.configuration.series[seriesIndex].data[pointIndex];
@@ -1663,6 +1729,7 @@ MAGI ADD END -->
 
         /**
          * Updates chart container and current chart style property depending on flex status
+         * @private
          */
         __updateStyles() {
           // Chrome returns default value if property is not set
@@ -1685,6 +1752,11 @@ MAGI ADD END -->
           } else {
             this.$.chart.setAttribute('style', 'height:100%; width:100%;');
           }
+        }
+
+        /** @private */
+        __showWarn(propertyName, acceptedValues) {
+          console.warn('<vaadin-chart> Acceptable values for "' + propertyName + '" are ' + acceptedValues);
         }
       }
 
