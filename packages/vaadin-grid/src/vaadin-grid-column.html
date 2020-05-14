@@ -293,10 +293,10 @@ This program is available under Apache License Version 2.0, available at https:/
 
     /** @protected */
     _renderHeaderAndFooter() {
-      if (this.headerRenderer) {
+      if (this.headerRenderer && this._headerCell) {
         this.__runRenderer(this.headerRenderer, this._headerCell);
       }
-      if (this.footerRenderer) {
+      if (this.footerRenderer && this._footerCell) {
         this.__runRenderer(this.footerRenderer, this._footerCell);
       }
     }

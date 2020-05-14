@@ -182,11 +182,21 @@
             expect(spy.called).to.be.false;
           });
 
-          it('should dettach cells from a hidden column', () => {
+          it('should detach cells from a hidden column', () => {
             const childCountBefore = grid.childElementCount;
             column.hidden = true;
             const childCountAfter = grid.childElementCount;
             expect(childCountAfter).to.be.below(childCountBefore);
+          });
+
+          it('should not throw on render with initially hidden columns with header/footerRenderer', () => {
+            const newColumn = document.createElement('vaadin-grid-column');
+            newColumn.hidden = true;
+            newColumn.headerRenderer = () => {};
+            newColumn.footerRenderer = () => {};
+            grid.appendChild(newColumn);
+            flushGrid(grid);
+            expect(() => grid.render()).not.to.throw(Error);
           });
         });
 
