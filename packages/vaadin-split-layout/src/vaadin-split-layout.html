@@ -218,6 +218,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
        *
        * @memberof Vaadin
+       * @mixes Vaadin.ElementMixin
        * @mixes Vaadin.ThemableMixin
        * @mixes Polymer.GestureEventListeners
        * @demo demo/index.html
@@ -240,6 +241,7 @@ This program is available under Apache License Version 2.0, available at https:/
           return {
             /**
              * The split layout's orientation. Possible values are: `horizontal|vertical`.
+             * @type {!SplitLayoutOrientation}
              */
             orientation: {
               type: String,
@@ -247,16 +249,21 @@ This program is available under Apache License Version 2.0, available at https:/
               value: 'horizontal'
             },
 
+            /** @private */
             _previousPrimaryPointerEvents: String,
+
+            /** @private */
             _previousSecondaryPointerEvents: String
           };
         }
 
+        /** @protected */
         ready() {
           super.ready();
           new Polymer.FlattenedNodesObserver(this, this._processChildren);
         }
 
+        /** @private */
         _processChildren() {
           this.getEffectiveChildren().forEach((child, i) => {
             if (i === 0) {
@@ -271,6 +278,7 @@ This program is available under Apache License Version 2.0, available at https:/
           });
         }
 
+        /** @private */
         _setFlexBasis(element, flexBasis, containerSize) {
           flexBasis = Math.max(0, Math.min(flexBasis, containerSize));
           if (flexBasis === 0) {
@@ -280,6 +288,7 @@ This program is available under Apache License Version 2.0, available at https:/
           element.style.flex = '1 1 ' + flexBasis + 'px';
         }
 
+        /** @private */
         _setPointerEventsNone(event) {
           if (!this._primaryChild || !this._secondaryChild) {
             return;
@@ -292,6 +301,7 @@ This program is available under Apache License Version 2.0, available at https:/
           event.preventDefault();
         }
 
+        /** @private */
         _restorePointerEvents() {
           if (!this._primaryChild || !this._secondaryChild) {
             return;
@@ -300,6 +310,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this._secondaryChild.style.pointerEvents = this._previousSecondaryPointerEvents;
         }
 
+        /** @private */
         _onHandleTrack(event) {
           if (!this._primaryChild || !this._secondaryChild) {
             return;
@@ -330,6 +341,16 @@ This program is available under Apache License Version 2.0, available at https:/
 
             delete this._startSize;
           }
+        }
+
+        /**
+         * Can be called to manually notify a resizable and its descendant
+         * resizables of a resize change.
+         */
+        notifyResize() {
+          // NOTE: we have this method here to include it to TypeScript definitions.
+          // gen-typescript-declarations does not generate types for `mixinBehaviors`
+          super.notifyResize();
         }
 
         /**
