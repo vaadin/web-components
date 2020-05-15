@@ -116,6 +116,8 @@ This program is available under Apache License Version 2.0, available at https:/
        * The container element for all notifications.
        *
        * @memberof Vaadin
+       * @mixes Vaadin.ElementMixin
+       * @mixes Vaadin.ThemableMixin
        */
       class NotificationContainer extends Vaadin.ThemableMixin(Vaadin.ElementMixin(Polymer.Element)) {
         static get is() {
@@ -126,6 +128,7 @@ This program is available under Apache License Version 2.0, available at https:/
           return {
             /**
              * True when the container is opened
+             * @type {boolean}
              */
             opened: {
               type: Boolean,
@@ -135,6 +138,7 @@ This program is available under Apache License Version 2.0, available at https:/
           };
         }
 
+        /** @private */
         _openedChanged(opened) {
           if (opened) {
             document.body.appendChild(this);
@@ -158,6 +162,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         _detectIosNavbar() {
           const innerHeight = window.innerHeight;
           const innerWidth = window.innerWidth;
@@ -193,6 +198,7 @@ This program is available under Apache License Version 2.0, available at https:/
           return 'vaadin-notification-card';
         }
 
+        /** @protected */
         ready() {
           super.ready();
           this.setAttribute('role', 'alert');
@@ -256,6 +262,7 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * @memberof Vaadin
        * @mixes Vaadin.ThemePropertyMixin
+       * @mixes Vaadin.ElementMixin
        * @demo demo/index.html
        */
       class NotificationElement extends Vaadin.ThemePropertyMixin(Vaadin.ElementMixin(Polymer.Element)) {
@@ -272,6 +279,7 @@ This program is available under Apache License Version 2.0, available at https:/
             /**
              * The duration in milliseconds to show the notification.
              * Set to `0` or a negative number to disable the notification auto-closing.
+             * @type {number}
              */
             duration: {
               type: Number,
@@ -280,6 +288,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * True if the notification is currently displayed.
+             * @type {boolean}
              */
             opened: {
               type: Boolean,
@@ -291,6 +300,7 @@ This program is available under Apache License Version 2.0, available at https:/
             /**
              * Alignment of the notification in the viewport
              * Valid values are `top-stretch|top-start|top-center|top-end|middle|bottom-start|bottom-center|bottom-end|bottom-stretch`
+             * @type {!NotificationPosition}
              */
             position: {
               type: String,
@@ -305,11 +315,14 @@ This program is available under Apache License Version 2.0, available at https:/
              * - `root` The `<vaadin-notification-card>` DOM element. Append
              *   your content to it.
              * - `notification` The reference to the `<vaadin-notification>` element.
+             * @type {!NotificationRenderer | undefined}
              */
             renderer: Function,
 
             /**
              * The template of the notification card content.
+             * @type {!HTMLTemplateElement | undefined}
+             * @protected
              */
             _notificationTemplate: Object
           };
@@ -322,6 +335,7 @@ This program is available under Apache License Version 2.0, available at https:/
           ];
         }
 
+        /** @protected */
         ready() {
           super.ready();
 
@@ -330,6 +344,10 @@ This program is available under Apache License Version 2.0, available at https:/
           });
         }
 
+        /**
+         * @param {!Array<!Node>} nodes
+         * @protected
+         */
         _setTemplateFromNodes(nodes) {
           this._notificationTemplate = nodes.filter(node => node.localName && node.localName === 'template')[0] || this._notificationTemplate;
         }
@@ -344,6 +362,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this.renderer(this._card, this);
         }
 
+        /** @private */
         _removeNewRendererOrTemplate(template, oldTemplate, renderer, oldRenderer) {
           if (template !== oldTemplate) {
             this._notificationTemplate = undefined;
@@ -352,6 +371,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         _templateOrRendererChanged(template, renderer, opened) {
           if (template && renderer) {
             this._removeNewRendererOrTemplate(template, this._oldTemplate, renderer, this._oldRenderer);
@@ -395,6 +415,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this.opened = false;
         }
 
+        /** @private */
         get _container() {
           if (!NotificationElement._container) {
             NotificationElement._container = document.createElement('vaadin-notification-container');
@@ -403,6 +424,7 @@ This program is available under Apache License Version 2.0, available at https:/
           return NotificationElement._container;
         }
 
+        /** @private */
         _openedChanged(opened) {
           if (opened) {
             this._container.opened = true;
@@ -417,6 +439,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         _ensureTemplatized() {
           this._notificationTemplate = this.querySelector('template') || this._notificationTemplate;
 
@@ -476,6 +499,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this._card.setAttribute('aria-label', this._card.textContent.trim());
         }
 
+        /** @private */
         _animatedAppendNotificationCard() {
           if (this._card) {
             this._card.setAttribute('opening', '');
@@ -491,6 +515,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         _appendNotificationCard() {
           if (!this._card) {
             return;
@@ -510,17 +535,20 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         _removeNotificationCard() {
           this._card.parentNode && this._card.parentNode.removeChild(this._card);
           this._card.removeAttribute('closing');
           this._container.opened = Boolean(this._container.firstElementChild);
         }
 
+        /** @private */
         _closeNotificationCard() {
           this._durationTimeoutId && clearTimeout(this._durationTimeoutId);
           this._animatedRemoveNotificationCard();
         }
 
+        /** @private */
         _animatedRemoveNotificationCard() {
           this._card.setAttribute('closing', '');
           const name = getComputedStyle(this._card).getPropertyValue('animation-name');
@@ -535,12 +563,14 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         _positionChanged(position) {
           if (this.opened) {
             this._animatedAppendNotificationCard();
           }
         }
 
+        /** @private */
         _durationChanged(duration, opened) {
           if (opened) {
             clearTimeout(this._durationTimeoutId);
@@ -550,6 +580,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         _updateShadyButtonStyles() {
           // ShadyCSS doesn't propagate CSS properties to slotted children,
           // so this is done manually to allow vaadin-buttons to be themed
