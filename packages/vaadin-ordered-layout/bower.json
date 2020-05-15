@@ -31,10 +31,10 @@
   ],
   "dependencies": {
     "polymer": "^2.0.0",
-    "vaadin-themable-mixin": "vaadin/vaadin-themable-mixin#^1.2.1",
+    "vaadin-themable-mixin": "vaadin/vaadin-themable-mixin#^1.6.1",
     "vaadin-lumo-styles": "vaadin/vaadin-lumo-styles#^1.1.0",
     "vaadin-material-styles": "vaadin/vaadin-material-styles#^1.1.0",
-    "vaadin-element-mixin": "vaadin/vaadin-element-mixin#^2.3.0"
+    "vaadin-element-mixin": "vaadin/vaadin-element-mixin#^2.4.1"
   },
   "devDependencies": {
     "iron-component-page": "^3.0.0",
@@ -43,8 +43,5 @@
     "sinonjs": "Polymer/sinon.js#^1.14.1",
     "web-component-tester": "^6.1.5",
     "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^3.0.0"
-  },
-  "resolutions": {
-    "vaadin-element-mixin": "^2.0.0"
   }
 }

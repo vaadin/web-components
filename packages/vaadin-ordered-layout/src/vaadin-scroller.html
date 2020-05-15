@@ -50,6 +50,7 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * @memberof Vaadin
        * @mixes Vaadin.ThemableMixin
+       * @mixes Vaadin.ElementMixin
        */
       class ScrollerElement extends Vaadin.ElementMixin(Vaadin.ThemableMixin(Polymer.Element)) {
         static get is() {
@@ -61,6 +62,7 @@ This program is available under Apache License Version 2.0, available at https:/
             /**
             * This property indicates the scroll direction. Supported values are `vertical`, `horizontal`, `none`.
             * When `scrollDirection` is undefined scrollbars will be shown in both directions.
+            * @type {!ScrollerScrollDirection}
             */
             scrollDirection: {
               type: String,
