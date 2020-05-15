@@ -172,7 +172,7 @@ This program is available under Apache License Version 2.0, available at https:/
         static get properties() {
           return {
             /**
-             * @typedef ResponsiveStep
+             * @typedef FormLayoutResponsiveStep
              * @type {object}
              * @property {string} minWidth - The threshold value for this step in CSS length units.
              * @property {number} columns - Number of columns. Only natural numbers are valid.
@@ -216,7 +216,7 @@ This program is available under Apache License Version 2.0, available at https:/
              * // 3. Width >= 40em, two columns, labels aside.
              * ```
              *
-             * @type {ResponsiveStep[]}
+             * @type {!Array<!FormLayoutResponsiveStep>}
              */
             responsiveSteps: {
               type: Array,
@@ -232,6 +232,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * Current number of columns in the layout
+             * @private
              */
             _columnCount: {
               type: Number
@@ -239,6 +240,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * Indicates that labels are on top
+             * @private
              */
             _labelsOnTop: {
               type: Boolean
@@ -252,6 +254,7 @@ This program is available under Apache License Version 2.0, available at https:/
           ];
         }
 
+        /** @protected */
         ready() {
           // Here we create and attach a style element that we use for validating
           // CSS values in `responsiveSteps`. We can’t add this to the `<template>`,
@@ -274,6 +277,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this.addEventListener('animationend', this.__onAnimationEnd);
         }
 
+        /** @protected */
         connectedCallback() {
           super.connectedCallback();
 
@@ -283,6 +287,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this._observeChildrenColspanChange();
         }
 
+        /** @protected */
         disconnectedCallback() {
           super.disconnectedCallback();
 
@@ -290,6 +295,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this.__childObserver.disconnect();
         }
 
+        /** @private */
         _observeChildrenColspanChange() {
           // Observe changes in form items' `colspan` attribute and update styles
           const mutationObserverConfig = {attributes: true};
@@ -318,12 +324,14 @@ This program is available under Apache License Version 2.0, available at https:/
           });
         }
 
+        /** @private */
         _getObservableNodes(nodeList) {
           const ignore = ['template', 'style', 'dom-repeat', 'dom-if'];
           return Array.from(nodeList)
             .filter(node => node.nodeType === Node.ELEMENT_NODE && ignore.indexOf(node.localName.toLowerCase()) === -1);
         }
 
+        /** @private */
         _naturalNumberOrOne(n) {
           if (typeof n === 'number' && n >= 1 && n < Infinity) {
             return Math.floor(n);
@@ -331,6 +339,7 @@ This program is available under Apache License Version 2.0, available at https:/
           return 1;
         }
 
+        /** @private */
         _isValidCSSLength(value) {
           // Let us choose a CSS property for validating CSS <length> values:
           // - `border-spacing` accepts `<length> | inherit`, it’s the best! But
@@ -358,6 +367,7 @@ This program is available under Apache License Version 2.0, available at https:/
           return ['', null].indexOf(this._styleElement.sheet.cssRules[0].style.getPropertyValue('word-spacing')) < 0;
         }
 
+        /** @private */
         _responsiveStepsChanged(responsiveSteps, oldResponsiveSteps) {
           try {
             if (!Array.isArray(responsiveSteps)) {
@@ -398,12 +408,14 @@ This program is available under Apache License Version 2.0, available at https:/
           this._selectResponsiveStep();
         }
 
+        /** @private */
         __onAnimationEnd(e) {
           if (e.animationName.indexOf('vaadin-form-layout-appear') === 0) {
             this._selectResponsiveStep();
           }
         }
 
+        /** @private */
         _selectResponsiveStep() {
           // Iterate through responsiveSteps and choose the step
           let selectedStep;
@@ -436,15 +448,18 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         _invokeUpdateStyles() {
           this.updateStyles();
         }
 
         /**
          * Set custom CSS property values and update the layout.
+         * @param {Object<string, string>=} properties
+         * @protected
          */
-        updateStyles(...args) {
-          super.updateStyles(...args);
+        updateStyles(properties) {
+          super.updateStyles(properties);
 
           /*
             The item width formula:
