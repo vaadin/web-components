@@ -79,7 +79,8 @@
             menu._setOpened(true);
           });
 
-          it('should focus the child element on `contextmenu` event', done => {
+          const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+          (isIOS ? it.skip : it)('should focus the child element on `contextmenu` event', done => {
             listenOnce(menu.$.overlay, 'vaadin-overlay-open', () => {
               Polymer.Async.timeOut.run(() => {
                 const item = menu.$.overlay.content.querySelector('#menu vaadin-item');
