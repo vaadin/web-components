@@ -4,8 +4,6 @@ Copyright (c) 2017 Vaadin Ltd.
 This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
 -->
 
-<link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
-<link rel="import" href="../../vaadin-control-state-mixin/vaadin-control-state-mixin.html">
 <link rel="import" href="../../polymer/lib/utils/async.html">
 <link rel="import" href="../../polymer/lib/utils/debounce.html">
 
@@ -130,9 +128,8 @@ This program is available under Apache License Version 2.0, available at https:/
   /**
    * @polymerMixin
    * @memberof Vaadin
-   * @mixes Vaadin.ControlStateMixin
    */
-  Vaadin.TextFieldMixin = subclass => class VaadinTextFieldMixin extends Vaadin.ControlStateMixin(subclass) {
+  Vaadin.TextFieldMixin = subclass => class VaadinTextFieldMixin extends subclass {
     static get properties() {
       return {
         /**
@@ -150,6 +147,7 @@ This program is available under Apache License Version 2.0, available at https:/
          * Possible values are:
          * on: Enable autocorrection.
          * off: Disable autocorrection.
+         * @type {!TextFieldAutoCorrect | undefined}
          */
         autocorrect: {
           type: String
@@ -163,6 +161,7 @@ This program is available under Apache License Version 2.0, available at https:/
          * words: Words capitalization.
          * sentences: Sentences capitalization.
          * none: No capitalization.
+         * @type {!TextFieldAutoCapitalize | undefined}
          */
         autocapitalize: {
           type: String
@@ -170,6 +169,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         /**
          * Specify that the value should be automatically selected when the field gains focus.
+         * @type {boolean}
          */
         autoselect: {
           type: Boolean,
@@ -178,6 +178,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         /**
          * Set to true to display the clear icon which clears the input.
+         * @type {boolean}
          */
         clearButtonVisible: {
           type: Boolean,
@@ -186,6 +187,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         /**
          * Error to show when the input value is invalid.
+         * @type {string}
          */
         errorMessage: {
           type: String,
@@ -202,6 +204,7 @@ This program is available under Apache License Version 2.0, available at https:/
          *   clear: 'Clear'
          * }
          * ```
+         * @type {{clear: string}}
          */
         i18n: {
           type: Object,
@@ -214,6 +217,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         /**
          * String used for the label element.
+         * @type {string}
          */
         label: {
           type: String,
@@ -269,6 +273,7 @@ This program is available under Apache License Version 2.0, available at https:/
         /**
          * The initial value of the control.
          * It can be used for two-way data binding.
+         * @type {string}
          */
         value: {
           type: String,
@@ -279,6 +284,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         /**
          * This property is set to true when the control value is invalid.
+         * @type {boolean}
          */
         invalid: {
           type: Boolean,
@@ -312,13 +318,17 @@ This program is available under Apache License Version 2.0, available at https:/
          *
          * For example, to enable entering only numbers and minus signs,
          * `_enabledCharPattern = "[\\d-]"`
+         * @protected
          */
         _enabledCharPattern: String,
 
+        /** @private */
         _labelId: String,
 
+        /** @private */
         _errorId: String,
 
+        /** @private */
         _inputId: String
       };
     }
@@ -334,6 +344,10 @@ This program is available under Apache License Version 2.0, available at https:/
       ];
     }
 
+    /**
+     * @return {HTMLElement | undefined}
+     * @protected
+     */
     get focusElement() {
       if (!this.shadowRoot) {
         return;
@@ -346,16 +360,22 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     /**
-     * @private
+     * @return {HTMLElement | undefined}}
+     * @protected
      */
     get inputElement() {
       return this.focusElement;
     }
 
+    /**
+     * @return {string}
+     * @protected
+     */
     get _slottedTagName() {
       return 'input';
     }
 
+    /** @protected */
     _createConstraintsObserver() {
       // This complex observer needs to be added dynamically here (instead of defining it above in the `get observers()`)
       // so that it runs after complex observers of inheriting classes. Otherwise e.g. `_stepOrMinChanged()` observer of
@@ -364,6 +384,7 @@ This program is available under Apache License Version 2.0, available at https:/
       this._createMethodObserver('_constraintsChanged(required, minlength, maxlength, pattern)');
     }
 
+    /** @private */
     _onInput(e) {
       if (this.__preventInput) {
         e.stopImmediatePropagation();
@@ -394,6 +415,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     // NOTE(yuriy): Workaround needed for IE11 and Edge for proper displaying
     // of the clear button instead of setting display property for it depending on state.
+    /** @private */
     _stateChanged(disabled, readonly, clearButtonVisible, hasValue) {
       if (!disabled &&
           !readonly &&
@@ -406,6 +428,10 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /**
+     * @param {!Event} e
+     * @protected
+     */
     _onChange(e) {
       if (this._valueClearing) {
         return;
@@ -423,6 +449,11 @@ This program is available under Apache License Version 2.0, available at https:/
       this.dispatchEvent(changeEvent);
     }
 
+    /**
+     * @param {unknown} newVal
+     * @param {unknown} oldVal
+     * @protected
+     */
     _valueChanged(newVal, oldVal) {
       // setting initial value to empty string, skip validation
       if (newVal === '' && oldVal === undefined) {
@@ -449,6 +480,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _labelChanged(label) {
       if (label !== '' && label != null) {
         this.setAttribute('has-label', '');
@@ -457,6 +489,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _onSlotChange() {
       const slotted = this.querySelector(`${this._slottedTagName}[slot="${this._slottedTagName}"]`);
 
@@ -480,14 +513,17 @@ This program is available under Apache License Version 2.0, available at https:/
         this._propagateHostAttributes(HOST_PROPS[type].map(attr => this[attr]), type));
     }
 
+    /** @private */
     _hostPropsChanged(...attributesValues) {
       this._propagateHostAttributes(attributesValues, PROP_TYPE.DEFAULT);
     }
 
+    /** @private */
     _hostAccessiblePropsChanged(...attributesValues) {
       this._propagateHostAttributes(attributesValues, PROP_TYPE.ACCESSIBLE);
     }
 
+    /** @private */
     _validateSlottedValue(slotted) {
       if (slotted.value !== this.value) {
         console.warn('Please define value on the vaadin-text-field component!');
@@ -495,6 +531,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _propagateHostAttributes(attributesValues, type) {
       const input = this.inputElement;
       const attributeNames = HOST_PROPS[type];
@@ -511,6 +548,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _setOrToggleAttribute(name, value, node) {
       if (!name || !node) {
         return;
@@ -523,6 +561,13 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /**
+     * @param {boolean | undefined} required
+     * @param {number | undefined} minlength
+     * @param {number | undefined} maxlength
+     * @param {string | undefined} maxlength
+     * @protected
+     */
     _constraintsChanged(required, minlength, maxlength, pattern) {
       if (!this.invalid) {
         return;
@@ -537,7 +582,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     /**
      * Returns true if the current input value satisfies all constraints (if any)
-     * @returns {boolean}
+     * @return {boolean}
      */
     checkValidity() {
       // Note (Yuriy): `__forceCheckValidity` is used in containing components (i.e. `vaadin-date-picker`) in order
@@ -549,6 +594,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _addInputListeners(node) {
       node.addEventListener('input', this._boundOnInput);
       node.addEventListener('change', this._boundOnChange);
@@ -559,6 +605,7 @@ This program is available under Apache License Version 2.0, available at https:/
       node.addEventListener('beforeinput', this._boundOnBeforeInput);
     }
 
+    /** @private */
     _removeInputListeners(node) {
       node.removeEventListener('input', this._boundOnInput);
       node.removeEventListener('change', this._boundOnChange);
@@ -569,6 +616,7 @@ This program is available under Apache License Version 2.0, available at https:/
       node.removeEventListener('beforeinput', this._boundOnBeforeInput);
     }
 
+    /** @protected */
     ready() {
       super.ready();
 
@@ -630,10 +678,12 @@ This program is available under Apache License Version 2.0, available at https:/
       this.value = '';
     }
 
+    /** @private */
     _onBlur() {
       this.validate();
     }
 
+    /** @private */
     _onFocus() {
       if (this.autoselect) {
         this.inputElement.select();
@@ -649,6 +699,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _onClearButtonClick(e) {
       e.preventDefault();
       // NOTE(yuriy): This line won't affect focus on the host. Cannot be properly tested.
@@ -668,6 +719,10 @@ This program is available under Apache License Version 2.0, available at https:/
       this.inputElement.dispatchEvent(changeEvent);
     }
 
+    /**
+     * @param {!KeyboardEvent} e
+     * @protected
+     */
     _onKeyDown(e) {
       if (e.keyCode === 27 && this.clearButtonVisible) {
         const dispatchChange = !!this.value;
@@ -680,6 +735,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     __shouldAcceptKey(event) {
       return (event.metaKey || event.ctrlKey)
         || !event.key // allow typing anything if event.key is not supported
@@ -687,6 +743,7 @@ This program is available under Apache License Version 2.0, available at https:/
         || this.__enabledCharRegExp.test(event.key);
     }
 
+    /** @private */
     _onPaste(e) {
       if (this._enabledCharPattern) {
         const pastedText = (e.clipboardData || window.clipboardData).getData('text');
@@ -696,6 +753,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _onDrop(e) {
       if (this._enabledCharPattern) {
         const draggedText = e.dataTransfer.getData('text');
@@ -705,6 +763,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _onBeforeInput(e) {
       // The `beforeinput` event covers all the cases for `_enabledCharPattern`: keyboard, pasting and dropping,
       // but it is still experimental technology so we can't rely on it. It's used here just as an additional check,
@@ -714,11 +773,13 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     __enabledCharPatternChanged(_enabledCharPattern) {
       this.__enabledCharRegExp = _enabledCharPattern && new RegExp('^' + _enabledCharPattern + '$');
       this.__enabledTextRegExp = _enabledCharPattern && new RegExp('^' + _enabledCharPattern + '*$');
     }
 
+    /** @private */
     _addIEListeners(node) {
       /* istanbul ignore if */
       if (navigator.userAgent.match(/Trident/)) {
@@ -738,6 +799,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _removeIEListeners(node) {
       /* istanbul ignore if */
       if (navigator.userAgent.match(/Trident/)) {
@@ -746,12 +808,14 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _getActiveErrorId(invalid, errorMessage, errorId) {
       this._setOrToggleAttribute('aria-describedby',
         (errorMessage && invalid ? errorId : undefined),
         this.focusElement);
     }
 
+    /** @private */
     _getActiveLabelId(label, _labelId, _inputId) {
       let ids = _inputId;
       if (label) {
@@ -760,10 +824,12 @@ This program is available under Apache License Version 2.0, available at https:/
       this.focusElement.setAttribute('aria-labelledby', ids);
     }
 
+    /** @private */
     _getErrorMessageAriaHidden(invalid, errorMessage, errorId) {
       return (!(errorMessage && invalid ? errorId : undefined)).toString();
     }
 
+    /** @private */
     _dispatchIronResizeEventIfNeeded(sizePropertyName, value) {
       const previousSizePropertyName = '__previous' + sizePropertyName;
       if (this[previousSizePropertyName] !== undefined
@@ -776,11 +842,15 @@ This program is available under Apache License Version 2.0, available at https:/
       this[previousSizePropertyName] = value;
     }
 
+    /** @private */
     __observeOffsetHeight() {
       this._dispatchIronResizeEventIfNeeded('Height', this.offsetHeight);
     }
 
     /**
+     * @param {string} prop
+     * @param {string} oldVal
+     * @param {string} newVal
      * @protected
      */
     attributeChangedCallback(prop, oldVal, newVal) {

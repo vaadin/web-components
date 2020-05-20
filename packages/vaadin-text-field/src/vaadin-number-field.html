@@ -96,17 +96,16 @@ This program is available under Apache License Version 2.0, available at https:/
       let memoizedTemplate;
 
       /**
-      * `<vaadin-number-field>` is a Web Component for number field control in forms.
-      *
-      * ```html
-      * <vaadin-number-field label="Number">
-      * </vaadin-number-field>
-      * ```
-      *
-      * @memberof Vaadin
-      * @extends Vaadin.TextFieldElement
-      * @demo demo/index.html
-      */
+       * `<vaadin-number-field>` is a Web Component for number field control in forms.
+       *
+       * ```html
+       * <vaadin-number-field label="Number">
+       * </vaadin-number-field>
+       * ```
+       * @memberof Vaadin
+       * @extends Vaadin.TextFieldElement
+       * @demo demo/index.html
+       */
       class NumberFieldElement extends Vaadin.TextFieldElement {
         static get is() {
           return 'vaadin-number-field';
@@ -119,8 +118,9 @@ This program is available under Apache License Version 2.0, available at https:/
         static get properties() {
           return {
             /**
-            * Set to true to display value increase/decrease controls.
-            */
+             * Set to true to display value increase/decrease controls.
+             * @type {boolean}
+             */
             hasControls: {
               type: Boolean,
               value: false,
@@ -128,8 +128,8 @@ This program is available under Apache License Version 2.0, available at https:/
             },
 
             /**
-            * The minimum value of the field.
-            */
+             * The minimum value of the field.
+             */
             min: {
               type: Number,
               reflectToAttribute: true,
@@ -147,6 +147,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * Specifies the allowed number intervals of the field.
+             * @type {number}
              */
             step: {
               type: Number,
@@ -157,6 +158,7 @@ This program is available under Apache License Version 2.0, available at https:/
           };
         }
 
+        /** @protected */
         ready() {
           super.ready();
           this.__previousValidInput = this.value || '';
@@ -164,12 +166,14 @@ This program is available under Apache License Version 2.0, available at https:/
           this.inputElement.addEventListener('change', this.__onInputChange.bind(this));
         }
 
+        /** @private */
         _decreaseButtonTouchend(e) {
           // Cancel the following click and focus events
           e.preventDefault();
           this._decreaseValue();
         }
 
+        /** @private */
         _increaseButtonTouchend(e) {
           // Cancel the following click and focus events
           e.preventDefault();
@@ -198,11 +202,13 @@ This program is available under Apache License Version 2.0, available at https:/
           return memoizedTemplate;
         }
 
+        /** @protected */
         _createConstraintsObserver() {
           // NOTE: do not call "super" but instead override the method to add extra arguments
           this._createMethodObserver('_constraintsChanged(required, minlength, maxlength, pattern, min, max, step)');
         }
 
+        /** @private */
         _constraintsChanged(required, minlength, maxlength, pattern, min, max, step) {
           if (!this.invalid) {
             return;
@@ -217,14 +223,17 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         _decreaseValue() {
           this._incrementValue(-1);
         }
 
+        /** @private */
         _increaseValue() {
           this._incrementValue(1);
         }
 
+        /** @private */
         _incrementValue(incr) {
           if (this.disabled || this.readonly) {
             return;
@@ -274,11 +283,13 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         _setValue(value) {
           this.value = this.inputElement.value = String(parseFloat(value));
           this.dispatchEvent(new CustomEvent('change', {bubbles: true}));
         }
 
+        /** @private */
         _getIncrement(incr, currentValue) {
           let step = this.step || 1,
             min = this.min || 0;
@@ -303,18 +314,21 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         _getDecimalCount(number) {
           const s = String(number);
           const i = s.indexOf('.');
           return i === -1 ? 1 : s.length - i - 1;
         }
 
+        /** @private */
         _getMultiplier(number) {
           if (!isNaN(number)) {
             return Math.pow(10, this._getDecimalCount(number));
           }
         }
 
+        /** @private */
         _incrementIsInsideTheLimits(incr, value) {
           if (incr < 0) {
             return this.min == null || this._getIncrement(incr, value) >= this.min;
@@ -325,29 +339,42 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         _allowed(sign) {
           const incr = sign * (this.step || 1);
           const value = parseFloat(this.value);
           return !this.value || (!this.disabled && this._incrementIsInsideTheLimits(incr, value));
         }
 
-        _stepChanged(step) {
+        /**
+         * @param {number} newVal
+         * @param {number | undefined} oldVal
+         * @protected
+         */
+        _stepChanged(newVal, oldVal) {
           // Avoid using initial value in validation
           this.__validateByStep = this.__stepChangedCalled || this.getAttribute('step') !== null;
-          this.inputElement.step = this.__validateByStep ? step : 'any';
+          this.inputElement.step = this.__validateByStep ? newVal : 'any';
 
           this.__stepChangedCalled = true;
-          this.setAttribute('step', step);
+          this.setAttribute('step', newVal);
         }
 
+        /** @private */
         _minChanged(min) {
           this.inputElement.min = min;
         }
 
+        /** @private */
         _maxChanged(max) {
           this.inputElement.max = max;
         }
 
+        /**
+         * @param {unknown} newVal
+         * @param {unknown} oldVal
+         * @protected
+         */
         _valueChanged(newVal, oldVal) {
           // Validate value to be numeric
           if (newVal && isNaN(parseFloat(newVal))) {
@@ -359,6 +386,10 @@ This program is available under Apache License Version 2.0, available at https:/
           super._valueChanged(this.value, oldVal);
         }
 
+        /**
+         * @param {!KeyboardEvent} e
+         * @protected
+         */
         _onKeyDown(e) {
           if (e.keyCode == 38) {
             e.preventDefault();
@@ -370,10 +401,14 @@ This program is available under Apache License Version 2.0, available at https:/
           super._onKeyDown(e);
         }
 
+        /** @private */
         __onInputChange() {
           this.validate();
         }
 
+        /**
+         * @return {boolean}
+         */
         checkValidity() {
           // text-field mixin does not check against `min`, `max` and `step`
           if (this.min !== undefined || this.max !== undefined || this.__validateByStep) {

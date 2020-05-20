@@ -6,6 +6,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <link rel="import" href="../../polymer/polymer-element.html">
 <link rel="import" href="vaadin-text-field-mixin.html">
+<link rel="import" href="../../vaadin-control-state-mixin/vaadin-control-state-mixin.html">
+<link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
 
 <dom-module id="vaadin-text-area">
@@ -126,10 +128,16 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * @memberof Vaadin
        * @mixes Vaadin.TextFieldMixin
+       * @mixes Vaadin.ControlStateMixin
+       * @mixes Vaadin.ElementMixin
        * @mixes Vaadin.ThemableMixin
        * @demo demo/index.html
        */
-      class TextAreaElement extends Vaadin.ElementMixin(Vaadin.TextFieldMixin(Vaadin.ThemableMixin(Polymer.Element))) {
+      class TextAreaElement extends
+        Vaadin.ElementMixin(
+          Vaadin.TextFieldMixin(
+            Vaadin.ControlStateMixin(
+              Vaadin.ThemableMixin(Polymer.Element)))) {
         static get is() {
           return 'vaadin-text-area';
         }
@@ -144,26 +152,34 @@ This program is available under Apache License Version 2.0, available at https:/
           ];
         }
 
+        /** @protected */
         ready() {
           super.ready();
           this._updateHeight();
           this.addEventListener('animationend', this._onAnimationEnd);
         }
 
+        /** @private */
         _onAnimationEnd(e) {
           if (e.animationName.indexOf('vaadin-text-area-appear') === 0) {
             this._updateHeight();
           }
         }
 
+        /**
+         * @return {string}
+         * @protected
+         */
         get _slottedTagName() {
           return 'textarea';
         }
 
+        /** @private */
         _textAreaValueChanged(value) {
           this._updateHeight();
         }
 
+        /** @private */
         _updateHeight() {
           const inputField = this.root.querySelector('[part=input-field]');
           const scrollTop = inputField.scrollTop;

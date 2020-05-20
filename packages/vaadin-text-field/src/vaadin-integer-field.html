@@ -14,17 +14,16 @@ This program is available under Apache License Version 2.0, available at https:/
     (function() {
 
       /**
-      * `<vaadin-integer-field>` is a Web Component for integer field control in forms.
-      *
-      * ```html
-      * <vaadin-integer-field label="Number">
-      * </vaadin-integer-field>
-      * ```
-      *
-      * @memberof Vaadin
-      * @extends Vaadin.NumberFieldElement
-      * @demo demo/index.html
-      */
+       * `<vaadin-integer-field>` is a Web Component for integer field control in forms.
+       *
+       * ```html
+       * <vaadin-integer-field label="Number">
+       * </vaadin-integer-field>
+       * ```
+       * @memberof Vaadin
+       * @extends Vaadin.NumberFieldElement
+       * @demo demo/index.html
+       */
       class IntegerFieldElement extends Vaadin.NumberFieldElement {
         static get is() {
           return 'vaadin-integer-field';
@@ -37,30 +36,31 @@ This program is available under Apache License Version 2.0, available at https:/
         static get properties() {
           // Hide inherited props that don't work with <input type="number"> from JSDoc.
           return {
-            /**
-             * @private
-             */
+            /** @private */
             pattern: String,
-            /**
-             * @private
-             */
+
+            /** @private */
             preventInvalidInput: Boolean,
-            /**
-             * @private
-             */
+
+            /** @private */
             minlength: Number,
-            /**
-             * @private
-             */
+
+            /** @private */
             maxlength: Number
           };
         }
 
+        /** @protected */
         ready() {
           super.ready();
           this._enabledCharPattern = '[-+\\d]';
         }
 
+        /**
+         * @param {unknown} newVal
+         * @param {unknown} oldVal
+         * @protected
+         */
         _valueChanged(newVal, oldVal) {
           if (newVal !== '' && !this.__isInteger(newVal)) {
             console.warn(`Trying to set non-integer value "${newVal}" to <vaadin-integer-field>.`
@@ -71,6 +71,11 @@ This program is available under Apache License Version 2.0, available at https:/
           super._valueChanged(newVal, oldVal);
         }
 
+        /**
+         * @param {number} newVal
+         * @param {number | undefined} oldVal
+         * @protected
+         */
         _stepChanged(newVal, oldVal) {
           if (!this.__hasOnlyDigits(newVal)) {
             console.warn(`Trying to set invalid step size "${newVal}",`
@@ -82,10 +87,12 @@ This program is available under Apache License Version 2.0, available at https:/
           super._stepChanged(newVal, oldVal);
         }
 
+        /** @private */
         __isInteger(value) {
           return /^(-\d)?\d*$/.test(String(value));
         }
 
+        /** @private */
         __hasOnlyDigits(value) {
           return /^\d*$/.test(String(value));
         }

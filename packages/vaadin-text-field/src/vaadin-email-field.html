@@ -79,12 +79,14 @@ This program is available under Apache License Version 2.0, available at https:/
           return memoizedTemplate;
         }
 
+        /** @protected */
         ready() {
           super.ready();
           this.inputElement.type = 'email';
           this.inputElement.autocapitalize = 'off';
         }
 
+        /** @protected */
         _createConstraintsObserver() {
           // NOTE: pattern needs to be set before constraints observer is initialized
           this.pattern = '^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$';

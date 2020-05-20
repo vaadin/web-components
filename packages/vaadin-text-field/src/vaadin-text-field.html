@@ -6,6 +6,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <link rel="import" href="../../polymer/polymer-element.html">
 <link rel="import" href="vaadin-text-field-mixin.html">
+<link rel="import" href="../../vaadin-control-state-mixin/vaadin-control-state-mixin.html">
+<link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
 
 <dom-module id="vaadin-text-field">
@@ -99,10 +101,16 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * @memberof Vaadin
        * @mixes Vaadin.TextFieldMixin
+       * @mixes Vaadin.ControlStateMixin
        * @mixes Vaadin.ThemableMixin
+       * @mixes Vaadin.ElementMixin
        * @demo demo/index.html
        */
-      class TextFieldElement extends Vaadin.ElementMixin(Vaadin.TextFieldMixin(Vaadin.ThemableMixin(Polymer.Element))) {
+      class TextFieldElement extends
+        Vaadin.ElementMixin(
+          Vaadin.TextFieldMixin(
+            Vaadin.ControlStateMixin(
+              Vaadin.ThemableMixin(Polymer.Element)))) {
         static get is() {
           return 'vaadin-text-field';
         }
@@ -131,6 +139,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * The text usually displayed in a tooltip popup when the mouse is over the field.
+             * @type {string}
              */
             title: {
               type: String
