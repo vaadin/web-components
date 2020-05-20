@@ -1,0 +1,19 @@
+{
+  "excludeFiles": [
+    "wct.conf.js",
+    "index.html",
+    "src/vaadin-context-menu-overlay.js",
+    "src/vaadin-contextmenu-event.js",
+    "src/vaadin-device-detector.js",
+    "demo/**/*",
+    "test/**/*",
+    "theme/**/*"
+  ],
+  "autoImport": {
+    "./@types/interfaces": [
+      "ContextMenuItem",
+      "ContextMenuRendererContext",
+      "ContextMenuRenderer"
+    ]
+  }
+}

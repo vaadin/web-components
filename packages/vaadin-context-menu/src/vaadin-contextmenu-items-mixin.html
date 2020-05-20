@@ -46,7 +46,7 @@
     static get properties() {
       return {
         /**
-         * @typedef MenuItem
+         * @typedef ContextMenuItem
          * @type {object}
          * @property {string} text - Text to be set as the menu item component's textContent
          * @property {union: string | object} component - The component to represent the item.
@@ -84,7 +84,7 @@
          * ];
          * ```
          *
-         * @type {MenuItem[]}
+         * @type {!Array<!ContextMenuItem> | undefined}
          *
          *
          * ### Styling
@@ -100,6 +100,7 @@
       };
     }
 
+    /** @protected */
     ready() {
       super.ready();
 
@@ -113,6 +114,7 @@
       this.addEventListener('items-outside-click', e => this.items && this.close());
     }
 
+    /** @protected */
     connectedCallback() {
       super.connectedCallback();
       // Firefox leaks click to document on contextmenu even if prevented
@@ -120,15 +122,21 @@
       document.documentElement.addEventListener('click', this.__itemsOutsideClickListener);
     }
 
+    /** @protected */
     disconnectedCallback() {
       super.disconnectedCallback();
       document.documentElement.removeEventListener('click', this.__itemsOutsideClickListener);
     }
 
+    /**
+     * @return {boolean}
+     * @protected
+     */
     get __isRTL() {
       return this.getAttribute('dir') === 'rtl';
     }
 
+    /** @protected */
     __forwardFocus() {
       const overlay = this.$.overlay;
       const child = overlay.getFirstChild();
@@ -145,6 +153,7 @@
       }
     }
 
+    /** @private */
     __openSubMenu(subMenu, itemElement) {
       subMenu.items = itemElement._item.children;
       subMenu.listenOn = itemElement;
@@ -186,6 +195,12 @@
       }}));
     }
 
+    /**
+     * @param {!HTMLElement} root
+     * @param {!ContextMenuElement} menu
+     * @param {!ContextMenuRendererContext} context
+     * @protected
+     */
     __itemsRenderer(root, menu, context) {
       this.__initMenu(root, menu);
 
@@ -236,6 +251,7 @@
       });
     }
 
+    /** @private */
     __toggleMenuComponentAttribute(component, attribute, on) {
       if (on) {
         component.setAttribute(attribute, '');
@@ -246,6 +262,7 @@
       }
     }
 
+    /** @private */
     __initMenu(root, menu) {
       if (!root.firstElementChild) {
         const is = this.constructor.is;
