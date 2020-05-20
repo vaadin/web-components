@@ -14,6 +14,9 @@
       "ContextMenuItem",
       "ContextMenuRendererContext",
       "ContextMenuRenderer"
+    ],
+    "./src/vaadin-context-menu.js": [
+      "ContextMenuElement"
     ]
   }
 }
