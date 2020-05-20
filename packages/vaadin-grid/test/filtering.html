@@ -281,7 +281,7 @@
         grid.dataProvider = (params, callback) => {
           // Don't provide any data
         };
-        Polymer.dom.flush();
+        Polymer.flush();
         expect(flushFilters.bind(this, grid)).to.not.throw(Error);
       });
 

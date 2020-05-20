@@ -371,7 +371,7 @@ This program is available under Apache License Version 2.0, available at https:/
         this._debouncerCacheElements,
         Polymer.Async.microTask,
         () => {
-          Array.from(this.root.querySelectorAll('[part~="cell"]')).forEach(function(cell) {
+          Array.from(this.shadowRoot.querySelectorAll('[part~="cell"]')).forEach(function(cell) {
             cell.style.transform = '';
           });
           this._frozenCells = Array.prototype.slice.call(this.$.table.querySelectorAll('[frozen]'));

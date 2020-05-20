@@ -156,7 +156,7 @@
     function getVisualCellContent(section, row, col) {
       let cell = Array.from(section.querySelectorAll('[part~="cell"]:not([part~="details-cell"])')).pop();
       if (section.id === 'footer') {
-        cell = Polymer.dom(section).querySelector('[part~="cell"]');
+        cell = section.querySelector('[part~="cell"]');
       }
       const sectionRect = section.getBoundingClientRect();
       const sectionBorder = parseInt(section.style.borderTopWidth || 0);
@@ -271,7 +271,7 @@
       it('should have the ghost visible again', () => {
         dragAndDropOver(headerContent[0], headerContent[1]);
         dragStart(headerContent[0]);
-        Polymer.dom.flush();
+        Polymer.flush();
         expect(grid._reorderGhost.style.visibility).to.equal('visible');
       });
 
@@ -444,7 +444,7 @@
       describe('frozen columns', () => {
 
         beforeEach(() => {
-          const columns = Polymer.dom(grid).querySelectorAll('vaadin-grid-column');
+          const columns = grid.querySelectorAll('vaadin-grid-column');
           columns[0].frozen = true;
           columns[1].frozen = true;
         });

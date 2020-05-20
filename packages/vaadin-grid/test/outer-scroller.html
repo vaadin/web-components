@@ -328,7 +328,7 @@
         flushGrid(grid);
 
         grid.dataProvider = infiniteDataProvider;
-        Polymer.dom.flush();
+        Polymer.flush();
         if (grid._observer.flush) {
           grid._observer.flush();
         }

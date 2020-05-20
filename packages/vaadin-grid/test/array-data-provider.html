@@ -168,7 +168,7 @@
       describe('invalid sorters paths', () => {
         let sorter;
 
-        beforeEach(() => sorter = Polymer.dom(grid).querySelector('vaadin-grid-sorter'));
+        beforeEach(() => sorter = grid.querySelector('vaadin-grid-sorter'));
 
         it('should warn about invalid path with undefined parent property', () => {
           const _warn = console.warn;
@@ -227,7 +227,7 @@
         let filter;
 
         beforeEach(done => {
-          filter = Polymer.dom(grid).querySelector('vaadin-grid-filter');
+          filter = grid.querySelector('vaadin-grid-filter');
           listenOnce(grid, 'filter-changed', e => {
             done();
           });

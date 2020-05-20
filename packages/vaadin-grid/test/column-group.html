@@ -80,12 +80,12 @@
       // this test is aimed for Safari 9, see #552
       it('should propagate frozen from children when attached', () => {
         const parent = group.parentElement;
-        Polymer.dom(parent).removeChild(group);
+        parent.removeChild(group);
 
         columns[0].frozen = true;
 
-        Polymer.dom(parent).appendChild(group);
-        Polymer.dom.flush();
+        parent.appendChild(group);
+        Polymer.flush();
 
         expect(group.frozen).to.be.true;
       });
@@ -138,13 +138,10 @@
       });
 
       it('should hide the group', () => {
-        Polymer.dom(group).removeChild(columns[0]);
-        Polymer.dom(group).removeChild(columns[1]);
-        Polymer.dom.flush();
-
-        if (Polymer.Element) {
-          group._observer.flush();
-        }
+        group.removeChild(columns[0]);
+        group.removeChild(columns[1]);
+        Polymer.flush();
+        group._observer.flush();
 
         expect(group.hidden).to.be.true;
       });
@@ -191,12 +188,8 @@
           const template = document.createElement('template');
           template.classList.add('header');
 
-          Polymer.dom(group).appendChild(template);
-          if (Polymer.Element) {
-            group._templateObserver.flush();
-          } else {
-            Polymer.dom(group).flush();
-          }
+          group.appendChild(template);
+          group._templateObserver.flush();
 
           expect(group._headerTemplate).to.eql(template);
         });
@@ -206,12 +199,8 @@
           const template = document.createElement('template');
           template.classList.add('footer');
 
-          Polymer.dom(group).appendChild(template);
-          if (Polymer.Element) {
-            group._templateObserver.flush();
-          } else {
-            Polymer.dom(group).flush();
-          }
+          group.appendChild(template);
+          group._templateObserver.flush();
 
           expect(group._footerTemplate).to.eql(template);
         });

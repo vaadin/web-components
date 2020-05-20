@@ -638,7 +638,7 @@ To update:
     _updateMetrics: function(itemSet) {
       // Make sure we distributed all the physical items
       // so we can measure them.
-      Polymer.flush ? Polymer.flush() : Polymer.dom.flush();
+      Polymer.flush();
 
       var newPhysicalSize = 0;
       var oldPhysicalSize = 0;
@@ -753,7 +753,7 @@ To update:
       if (typeof idx !== 'number' || idx < 0 || idx > this.items.length - 1) {
         return;
       }
-      Polymer.flush ? Polymer.flush() : Polymer.dom.flush();
+      Polymer.flush();
       // Items should have been rendered prior scrolling to an index.
       if (this._physicalCount === 0) {
         return;

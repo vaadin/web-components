@@ -142,7 +142,7 @@
       it('check visible item count', () => {
         grid.size = 10;
         flushGrid(grid);
-        expect(Polymer.dom(grid.root).querySelectorAll('tbody tr:not([hidden])').length).to.eql(10);
+        expect(grid.shadowRoot.querySelectorAll('tbody tr:not([hidden])').length).to.eql(10);
       });
 
       it('first visible index', () => {
@@ -243,7 +243,7 @@
           grid._scrollHandler();
           grid._debounceScrolling.flush();
           // Expect the physical rows to be in order after scrolling
-          const rows = Polymer.dom(grid.$.items).querySelectorAll('tr');
+          const rows = grid.$.items.querySelectorAll('tr');
 
           rows.forEach((row, index) => {
             if (index > 0) {
@@ -255,14 +255,14 @@
 
       it('reorder should not affect light dom', () => {
         grid.size = 1000;
-        const wrappers = Polymer.dom(grid).querySelectorAll('vaadin-grid-cell-content');
+        const wrappers = grid.querySelectorAll('vaadin-grid-cell-content');
 
         [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144].forEach(steps => {
           grid.$.table.scrollTop = 5000 + grid._physicalAverage * steps;
           grid._scrollHandler();
           grid._debounceScrolling.flush();
 
-          const newWrappers = Polymer.dom(grid).querySelectorAll('vaadin-grid-cell-content');
+          const newWrappers = grid.querySelectorAll('vaadin-grid-cell-content');
           // Expect the light dom order unchanged
           expect(newWrappers).to.eql(wrappers);
         });
@@ -293,7 +293,7 @@
           grid._debounceScrolling.flush();
 
           // Expect the physical rows to be in order after scrolling
-          const rows = Polymer.dom(grid.$.items).querySelectorAll('tr');
+          const rows = grid.$.items.querySelectorAll('tr');
 
           rows.forEach((row, index) => {
             if (index > 0) {

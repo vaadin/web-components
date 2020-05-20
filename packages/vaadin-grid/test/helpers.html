@@ -283,7 +283,7 @@
   };
 
   window.getRowCells = (row) => {
-    return Array.prototype.slice.call(Polymer.dom(row).querySelectorAll('[part~="cell"]'));
+    return Array.prototype.slice.call(row.querySelectorAll('[part~="cell"]'));
   };
 
   window.getCellContent = (cell) => {

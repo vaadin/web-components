@@ -99,7 +99,7 @@
 
       function getElementFromPoint(context, x, y) {
         if (Polymer.Settings.useShadow) {
-          return context.root.elementFromPoint(x, y);
+          return context.shadowRoot.elementFromPoint(x, y);
         } else {
           return document.elementFromPoint(x, y);
         }
@@ -263,12 +263,9 @@
 
       it('should inherit resizable value from parent group', done => {
         const newColumn = document.createElement('vaadin-grid-column');
-        Polymer.dom(grid._columnTree[0][0]).appendChild(newColumn);
-        Polymer.dom.flush();
-
-        if (Polymer.Element) {
-          grid._columnTree[0][0]._observer.flush();
-        }
+        grid._columnTree[0][0].appendChild(newColumn);
+        Polymer.flush();
+        grid._columnTree[0][0]._observer.flush();
 
         animationFrameFlush(() => {
           expect(newColumn.resizable).to.be.true;

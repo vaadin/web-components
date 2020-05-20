@@ -483,7 +483,7 @@
           const template = document.createElement('template');
           template.classList.add('header');
 
-          Polymer.dom(column).appendChild(template);
+          column.appendChild(template);
           column._templateObserver.flush();
 
           expect(column._headerTemplate).to.eql(template);
@@ -494,7 +494,7 @@
           const template = document.createElement('template');
           template.classList.add('footer');
 
-          Polymer.dom(column).appendChild(template);
+          column.appendChild(template);
           column._templateObserver.flush();
 
           expect(column._footerTemplate).to.eql(template);
@@ -504,7 +504,7 @@
           const column = document.createElement('vaadin-grid-column');
           const template = document.createElement('template');
 
-          Polymer.dom(column).appendChild(template);
+          column.appendChild(template);
           column._templateObserver.flush();
 
           expect(column._bodyTemplate).to.eql(template);
@@ -517,10 +517,10 @@
           const template2 = document.createElement('template');
           template2.classList.add('header');
 
-          Polymer.dom(column).appendChild(template);
+          column.appendChild(template);
           column._templateObserver.flush();
-          Polymer.dom(column).removeChild(template);
-          Polymer.dom(column).appendChild(template2);
+          column.removeChild(template);
+          column.appendChild(template2);
           column._templateObserver.flush();
           expect(column._headerTemplate).to.eql(template2);
         });
@@ -530,10 +530,10 @@
           const template = document.createElement('template');
           const template2 = document.createElement('template');
 
-          Polymer.dom(column).appendChild(template);
+          column.appendChild(template);
           column._templateObserver.flush();
-          Polymer.dom(column).removeChild(template);
-          Polymer.dom(column).appendChild(template2);
+          column.removeChild(template);
+          column.appendChild(template2);
           column._templateObserver.flush();
 
           expect(column._bodyTemplate).to.eql(template2);
@@ -543,10 +543,10 @@
           const column = document.createElement('vaadin-grid-column');
           const template = document.createElement('template');
 
-          Polymer.dom(column).appendChild(template);
+          column.appendChild(template);
           column._templateObserver.flush();
 
-          Polymer.dom(grid).appendChild(column);
+          grid.appendChild(column);
           grid._observer.flush();
 
           expect(template.templatizer.template).to.eql(template);

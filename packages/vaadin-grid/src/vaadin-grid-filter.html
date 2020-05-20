@@ -83,7 +83,7 @@ This program is available under Apache License Version 2.0, available at https:/
         ready() {
           super.ready();
 
-          const child = Polymer.dom(this).firstElementChild;
+          const child = this.firstElementChild;
           if (child && child.getAttribute('slot') !== 'filter') {
             console.warn('Make sure you have assigned slot="filter" to the child elements of <vaadin-grid-filter>');
             child.setAttribute('slot', 'filter');

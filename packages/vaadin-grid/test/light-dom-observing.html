@@ -516,9 +516,9 @@
           });
 
           it('should support removing late', done => {
-            const column = Polymer.dom(firstGroup).querySelector('vaadin-grid-column');
-            Polymer.dom(firstGroup).removeChild(column);
-            Polymer.dom.flush();
+            const column = firstGroup.querySelector('vaadin-grid-column');
+            firstGroup.removeChild(column);
+            Polymer.flush();
 
             flush(() => {
               expectFirstColumn('first bar', 1);
@@ -547,9 +547,9 @@
           });
 
           it('should support removing late', done => {
-            const group = Polymer.dom(grid).querySelector('vaadin-grid-column-group');
-            Polymer.dom(grid).removeChild(group);
-            Polymer.dom.flush();
+            const group = grid.querySelector('vaadin-grid-column-group');
+            grid.removeChild(group);
+            Polymer.flush();
 
             flush(() => {
               expectFirstColumnHeader('second group', 0);
@@ -566,7 +566,7 @@
           beforeEach(() => {
 
             init('nested-groups');
-            firstGroup = Polymer.dom(grid).querySelector('vaadin-grid-column-group');
+            firstGroup = grid.querySelector('vaadin-grid-column-group');
           });
 
           it('should support adding late', done => {
@@ -583,9 +583,9 @@
           });
 
           it('should support removing late', done => {
-            const group = Polymer.dom(firstGroup).querySelector('vaadin-grid-column-group');
-            Polymer.dom(firstGroup).removeChild(group);
-            Polymer.dom.flush();
+            const group = firstGroup.querySelector('vaadin-grid-column-group');
+            firstGroup.removeChild(group);
+            Polymer.flush();
 
             flush(() => {
               expectFirstColumnHeader('second nested group', 1);
@@ -733,9 +733,9 @@
               it('should support adding late', done => {
 
                 const column = fixture('column');
-                Polymer.dom(column).setAttribute('slot', inGroup ? 'group' : 'grid');
-                Polymer.dom(wrapper).insertBefore(column, Polymer.dom(wrapper).firstChild);
-                Polymer.dom.flush();
+                column.setAttribute('slot', inGroup ? 'group' : 'grid');
+                wrapper.insertBefore(column, wrapper.firstChild);
+                Polymer.flush();
 
                 flush(() => {
                   expectFirstColumn('some', 1);
@@ -745,9 +745,9 @@
               });
 
               it('should support removing late', done => {
-                const column = Polymer.dom(wrapper).querySelector('vaadin-grid-column');
-                Polymer.dom(wrapper).removeChild(column);
-                Polymer.dom.flush();
+                const column = wrapper.querySelector('vaadin-grid-column');
+                wrapper.removeChild(column);
+                Polymer.flush();
 
                 flush(() => {
                   expectFirstColumn('bar', 1);
@@ -763,7 +763,7 @@
               beforeEach(() => {
 
                 init('effective-children-groups', {inGroup: inGroup});
-                firstGroup = Polymer.dom(wrapper).querySelector('vaadin-grid-column-group');
+                firstGroup = wrapper.querySelector('vaadin-grid-column-group');
               });
 
               it('should provide initial state', done => {
@@ -776,9 +776,9 @@
 
               it('should support adding late', done => {
                 const group = fixture('group');
-                Polymer.dom(group).setAttribute('slot', inGroup ? 'group' : 'grid');
-                Polymer.dom(wrapper).insertBefore(group, Polymer.dom(wrapper).firstChild);
-                Polymer.dom.flush();
+                group.setAttribute('slot', inGroup ? 'group' : 'grid');
+                wrapper.insertBefore(group, wrapper.firstChild);
+                Polymer.flush();
 
                 flush(() => {
                   expectFirstColumn('some foo', inGroup ? 2 : 1);
@@ -788,8 +788,8 @@
               });
 
               it('should support removing late', done => {
-                Polymer.dom(wrapper).removeChild(firstGroup);
-                Polymer.dom.flush();
+                wrapper.removeChild(firstGroup);
+                Polymer.flush();
 
                 flush(() => {
                   expectFirstColumn('second foo', inGroup ? 2 : 1);
@@ -806,7 +806,7 @@
             beforeEach(() => {
 
               init('effective-children-groups', {inGroup: inGroup});
-              firstGroup = Polymer.dom(wrapper).querySelector('vaadin-grid-column-group');
+              firstGroup = wrapper.querySelector('vaadin-grid-column-group');
             });
 
             describe('with columns', () => {
@@ -823,9 +823,9 @@
               });
 
               it('should support removing late', done => {
-                const column = Polymer.dom(firstGroup).querySelector('vaadin-grid-column');
-                Polymer.dom(firstGroup).removeChild(column);
-                Polymer.dom.flush();
+                const column = firstGroup.querySelector('vaadin-grid-column');
+                firstGroup.removeChild(column);
+                Polymer.flush();
 
                 flush(() => {
                   expectFirstColumn('first bar', inGroup ? 2 : 1);
@@ -838,8 +838,8 @@
             describe('with groups', () => {
               it('should support adding late', done => {
                 const group = fixture('group');
-                Polymer.dom(firstGroup).insertBefore(group, Polymer.dom(firstGroup).firstChild);
-                Polymer.dom.flush();
+                firstGroup.insertBefore(group, firstGroup.firstChild);
+                Polymer.flush();
 
                 flush(() => {
                   expectFirstColumn('some foo', inGroup ? 3 : 2);
@@ -850,13 +850,13 @@
 
               it('should support removing late', done => {
                 const group = fixture('group');
-                Polymer.dom(firstGroup).insertBefore(group, Polymer.dom(firstGroup).firstChild);
-                Polymer.dom.flush();
+                firstGroup.insertBefore(group, firstGroup.firstChild);
+                Polymer.flush();
 
                 flush(() => {
                   expectNumberOfColumns(7);
-                  Polymer.dom(firstGroup).removeChild(group);
-                  Polymer.dom.flush();
+                  firstGroup.removeChild(group);
+                  Polymer.flush();
 
                   flush(() => {
                     expectFirstColumn('first foo', inGroup ? 2 : 1);

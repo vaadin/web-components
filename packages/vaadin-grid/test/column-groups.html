@@ -219,13 +219,13 @@
         beforeEach(() => init('no-headers'));
 
         it('should have empty header', () => {
-          const cells = Polymer.dom(header).querySelectorAll('[part~="cell"]');
+          const cells = header.querySelectorAll('[part~="cell"]');
           expect(cells).not.to.be.empty;
           cells.forEach(cell => expect(cell._instance).to.be.not.ok);
         });
 
         it('should have empty footer', () => {
-          const cells = Polymer.dom(footer).querySelectorAll('[part~="cell"]');
+          const cells = footer.querySelectorAll('[part~="cell"]');
           expect(cells).not.to.be.empty;
 
           cells.forEach(cell => expect(cell._instance).to.be.not.ok);
@@ -375,7 +375,7 @@
         });
 
         it('should have visible footer rows after adding extra column', () => {
-          Polymer.dom(grid).appendChild(extraColumn);
+          grid.appendChild(extraColumn);
           flushGrid(grid);
 
           expect(getRows(footer)[0].hidden).to.be.false;
@@ -383,10 +383,10 @@
         });
 
         it('should not have visible footer rows after removing extra column', () => {
-          Polymer.dom(grid).appendChild(extraColumn);
-          Polymer.dom.flush();
-          Polymer.dom(grid).removeChild(extraColumn);
-          Polymer.dom.flush();
+          grid.appendChild(extraColumn);
+          Polymer.flush();
+          grid.removeChild(extraColumn);
+          Polymer.flush();
           expect(getRows(footer)[0].hidden).to.be.true;
         });
       });
@@ -426,14 +426,14 @@
         });
 
         it('should have cell content wrappers in all header cells', () => {
-          Polymer.dom(header).querySelectorAll('[part~="cell"]').forEach(a => {
+          header.querySelectorAll('[part~="cell"]').forEach(a => {
             const content = getCellContent(a);
             expect(content.localName).to.equal('vaadin-grid-cell-content');
           });
         });
 
         it('should have cell content wrappers in all footer cells', () => {
-          Polymer.dom(footer).querySelectorAll('[part~="cell"]').forEach(a => {
+          footer.querySelectorAll('[part~="cell"]').forEach(a => {
             const content = getCellContent(a);
             expect(content.localName).to.equal('vaadin-grid-cell-content');
           });

@@ -177,7 +177,7 @@
         });
 
         it('should be clickable', () => {
-          const title = Polymer.dom(sorterFirst).querySelector('.title');
+          const title = sorterFirst.querySelector('.title');
           expect(window.getComputedStyle(title).cursor).to.equal('pointer');
         });
 

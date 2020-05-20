@@ -304,9 +304,7 @@
         body = grid.$.items;
         footer = grid.$.footer;
 
-        if (Polymer.Element) {
-          grid._observer.flush();
-        }
+        grid._observer.flush();
 
         flushGrid(grid);
 
@@ -450,9 +448,7 @@
         beforeEach(() => {
           grid.setAttribute('navigating', '');
 
-          if (Polymer.Element) {
-            grid._observer.flush();
-          }
+          grid._observer.flush();
         });
 
         it('should have single tabbable cell in every section', () => {
