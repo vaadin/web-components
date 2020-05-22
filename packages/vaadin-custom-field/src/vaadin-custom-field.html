@@ -110,6 +110,7 @@ This program is available under Apache License Version 2.0, available at https:/
           return {
             /**
              * String used for the label element.
+             * @type {string}
              */
             label: {
               type: String,
@@ -144,6 +145,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * This property is set to true when the control value is invalid.
+             * @type {boolean}
              */
             invalid: {
               type: Boolean,
@@ -155,6 +157,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * Error to show when the input value is invalid.
+             * @type {string}
              */
             errorMessage: {
               type: String,
@@ -171,10 +174,12 @@ This program is available under Apache License Version 2.0, available at https:/
           ];
         }
 
+        /** @private */
         __invalidChanged(invalid) {
           this.__setOrToggleAttribute('aria-invalid', invalid, this);
         }
 
+        /** @private */
         __toggleHasValue(value) {
           if (value !== null && value.trim() !== '') {
             this.setAttribute('has-value', '');
@@ -183,6 +188,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         _labelChanged(label) {
           if (label !== '' && label != null) {
             this.setAttribute('has-label', '');
@@ -203,7 +209,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         /**
          * Returns true if the current inputs values satisfy all constraints (if any)
-         * @returns {boolean}
+         * @return {boolean}
          */
         checkValidity() {
           const invalidFields = this.inputs
@@ -217,6 +223,7 @@ This program is available under Apache License Version 2.0, available at https:/
           return true;
         }
 
+        /** @private */
         __setOrToggleAttribute(name, value, node) {
           if (!name || !node) {
             return;
@@ -230,18 +237,21 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         __getActiveErrorId(invalid, errorMessage, errorId) {
           this.__setOrToggleAttribute('aria-describedby',
             (errorMessage && invalid ? errorId : undefined),
             this);
         }
 
+        /** @private */
         __getActiveLabelId(label, labelId) {
           this.__setOrToggleAttribute('aria-labelledby',
             (label ? labelId : undefined),
             this);
         }
 
+        /** @private */
         __getErrorMessageAriaHidden(invalid, errorMessage, errorId) {
           return (!(errorMessage && invalid ? errorId : undefined)).toString();
         }
