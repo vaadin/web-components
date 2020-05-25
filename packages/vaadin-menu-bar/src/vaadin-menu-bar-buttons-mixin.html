@@ -26,6 +26,10 @@ This program is available under Apache License Version 2.0, available at https:/
 
     static get properties() {
       return {
+        /**
+         * @type {boolean}
+         * @protected
+         */
         _hasOverflow: {
           type: Boolean,
           value: false
@@ -39,6 +43,7 @@ This program is available under Apache License Version 2.0, available at https:/
       ];
     }
 
+    /** @protected */
     ready() {
       super.ready();
 
@@ -51,18 +56,31 @@ This program is available under Apache License Version 2.0, available at https:/
       this._overflow.setAttribute('aria-expanded', 'false');
     }
 
+    /**
+     * @return {!Array<!HTMLElement>}
+     * @protected
+     */
     get _buttons() {
       return Array.from(this.shadowRoot.querySelectorAll('[part$="button"]'));
     }
 
+    /**
+     * @return {!HTMLElement}
+     * @protected
+     */
     get _container() {
       return this.shadowRoot.querySelector('[part="container"]');
     }
 
+    /**
+     * @return {!HTMLElement}
+     * @protected
+     */
     get _overflow() {
       return this.shadowRoot.querySelector('[part="overflow-button"]');
     }
 
+    /** @private */
     _menuItemsChanged(items, splices) {
       if (items !== this._oldItems) {
         this._oldItems = items;
@@ -70,6 +88,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     __detectOverflow() {
       const container = this._container;
       const buttons = this._buttons.slice(0);
@@ -160,6 +179,7 @@ This program is available under Apache License Version 2.0, available at https:/
       this.__renderButtons(this.items);
     }
 
+    /** @private */
     __renderButtons(items = []) {
       const container = this._container;
       const overflow = this._overflow;
@@ -217,6 +237,7 @@ This program is available under Apache License Version 2.0, available at https:/
       this.__detectOverflow();
     }
 
+    /** @private */
     __onResize() {
       this.__debounceOverflow = Polymer.Debouncer.debounce(
         this.__debounceOverflow,

@@ -43,6 +43,7 @@ This program is available under Apache License Version 2.0, available at https:/
       ];
     }
 
+    /** @protected */
     ready() {
       super.ready();
 
@@ -61,26 +62,34 @@ This program is available under Apache License Version 2.0, available at https:/
       container.addEventListener('mouseover', e => this._onMouseOver(e));
     }
 
-    /**
-     * @protected
-     */
+    /** @protected */
     connectedCallback() {
       super.connectedCallback();
       document.addEventListener('click', this.__boundOutsideClickListener, true);
     }
 
-    /**
-     * @protected
-     */
+    /** @protected */
     disconnectedCallback() {
       super.disconnectedCallback();
       document.removeEventListener('click', this.__boundOutsideClickListener, true);
     }
 
+    /**
+     * Can be called to manually notify a resizable and its descendant
+     * resizables of a resize change.
+     */
+    notifyResize() {
+      // NOTE: we have this method here to include it to TypeScript definitions.
+      // gen-typescript-declarations does not generate types for `mixinBehaviors`
+      super.notifyResize();
+    }
+
+    /** @private */
     get __isRTL() {
       return this.getAttribute('dir') === 'rtl';
     }
 
+    /** @private */
     _themeChanged(theme) {
       if (theme) {
         this._buttons.forEach(button => button.setAttribute('theme', theme));
@@ -91,6 +100,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _focusButton(button) {
       button.focus();
       button.setAttribute('focus-ring', '');
@@ -99,10 +109,15 @@ This program is available under Apache License Version 2.0, available at https:/
       });
     }
 
+    /** @private */
     _getButtonFromEvent(e) {
       return Array.from(e.composedPath()).filter(el => el.localName === 'vaadin-menu-bar-button')[0];
     }
 
+    /**
+     * @param {!FocusEvent} event
+     * @protected
+     */
     _onFocusin(event) {
       const target = this.shadowRoot.querySelector('[part$="button"][tabindex="0"]');
       if (target) {
@@ -112,6 +127,10 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /**
+     * @param {!KeyboardEvent} event
+     * @protected
+     */
     _onKeydown(event) {
       const button = this._getButtonFromEvent(event);
       if (button) {
@@ -141,6 +160,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _navigateByKey(event) {
       // IE names for arrows do not include the Arrow prefix
       const key = event.key.replace(/^Arrow/, '');
@@ -187,6 +207,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _getAvailableIndex(index, increment, buttons) {
       const totalItems = buttons.length;
       let idx = index;
@@ -205,10 +226,12 @@ This program is available under Apache License Version 2.0, available at https:/
       return -1;
     }
 
+    /** @private */
     get _subMenu() {
       return this.shadowRoot.querySelector('vaadin-menu-bar-submenu');
     }
 
+    /** @private */
     __alignOverlayPosition(e) {
       /* istanbul ignore if */
       if (!this._expandedButton) {
@@ -232,6 +255,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _itemsChanged(items, splices) {
       const subMenu = this._subMenu;
       if (subMenu && subMenu.opened) {
@@ -239,6 +263,10 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /**
+     * @param {!MouseEvent} e
+     * @protected
+     */
     _onMouseOver(e) {
       const button = this._getButtonFromEvent(e);
       if (button && button !== this._expandedButton) {
@@ -251,6 +279,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     __onContextMenuKeydown(e) {
       const item = Array.from(e.composedPath()).filter(el => el._item)[0];
       if (item) {
@@ -271,10 +300,12 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     __fireItemSelected(value) {
       this.dispatchEvent(new CustomEvent('item-selected', {detail: {value}}));
     }
 
+    /** @private */
     __onButtonClick(e) {
       e.stopPropagation();
       const button = this._getButtonFromEvent(e);
@@ -283,6 +314,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     __openSubMenu(button, event, options = {}) {
       const subMenu = this._subMenu;
       const item = button.item;
@@ -335,17 +367,20 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _focusFirstItem() {
       const list = this._subMenu.$.overlay.firstElementChild;
       list.focus();
     }
 
+    /** @private */
     _focusLastItem() {
       const list = this._subMenu.$.overlay.firstElementChild;
       const item = list.items[list.items.length - 1];
       item && item.focus();
     }
 
+    /** @private */
     __onceOpened(cb) {
       this.style.pointerEvents = 'auto';
       const overlay = this._subMenu.$.overlay;
@@ -356,16 +391,19 @@ This program is available under Apache License Version 2.0, available at https:/
       overlay.addEventListener('vaadin-overlay-open', listener);
     }
 
+    /** @private */
     __onItemSelected(e) {
       e.stopPropagation();
       this._close();
       this.__fireItemSelected(e.detail.value);
     }
 
+    /** @private */
     __onEscapeClose(e) {
       this.__deactivateButton(true);
     }
 
+    /** @private */
     __deactivateButton(restoreFocus) {
       const button = this._expandedButton;
       if (button && button.hasAttribute('expanded')) {
@@ -378,6 +416,10 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /**
+     * @param {boolean} restoreFocus
+     * @protected
+     */
     _close(restoreFocus) {
       this.style.pointerEvents = '';
       this.__deactivateButton(restoreFocus);
