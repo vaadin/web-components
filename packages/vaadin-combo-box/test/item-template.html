@@ -121,6 +121,13 @@
         const content = firstItem.shadowRoot.querySelector('[part="content"]');
         expect(getComputedStyle(content).getPropertyValue('display')).to.equal('block');
       });
+
+      it('should preserve and propagate dir to the items', () => {
+        combobox.close();
+        combobox.setAttribute('dir', 'ltr');
+        combobox.open();
+        expect(firstItem.getAttribute('dir')).to.eql('ltr');
+      });
     });
   </script>
 

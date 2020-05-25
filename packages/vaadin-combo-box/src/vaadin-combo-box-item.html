@@ -132,6 +132,11 @@ This program is available under Apache License Version 2.0, available at https:/
             this.$.content.appendChild(this._itemTemplateInstance.root);
           }
         }
+
+        const hostDir = this._comboBox.getAttribute('dir');
+        if (hostDir) {
+          this.setAttribute('dir', hostDir);
+        }
       }
 
       _render() {
