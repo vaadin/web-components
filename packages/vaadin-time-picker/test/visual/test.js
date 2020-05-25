@@ -18,7 +18,12 @@ gemini.suite('vaadin-time-picker', function(rootSuite) {
     suite
       .setUrl('default.html')
       .setCaptureElements('#default-tests')
-      .capture('default');
+      .capture('default')
+      .capture('rtl', function(actions) {
+        actions.executeJS(function(window) {
+          window.document.dir = 'rtl';
+        });
+      });
   });
 
   gemini.suite('dropdown', function(suite) {
@@ -41,6 +46,13 @@ gemini.suite('vaadin-time-picker', function(rootSuite) {
         actions.executeJS(function(window) {
           window.closeTimePickers();
           window.document.querySelector('#step').__dropdownElement.opened = true;
+        });
+      })
+      .capture('rtl', function(actions) {
+        actions.executeJS(function(window) {
+          window.closeTimePickers();
+          window.document.dir = 'rtl';
+          window.document.querySelector('#plain').__dropdownElement.opened = true;
         });
       });
   });

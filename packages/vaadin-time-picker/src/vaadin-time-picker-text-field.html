@@ -6,6 +6,32 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <link rel="import" href="../../vaadin-text-field/src/vaadin-text-field.html">
 
+<dom-module id="vaadin-time-picker-text-field-styles" theme-for="vaadin-time-picker-text-field">
+  <template>
+    <style>
+      :host([dir="rtl"]) [part="input-field"] {
+        direction: ltr;
+      }
+
+      :host([dir="rtl"]) [part="value"]::placeholder {
+        direction: rtl;
+        text-align: left;
+      }
+
+      :host([dir="rtl"]) [part="input-field"] ::slotted(input)::placeholder {
+        direction: rtl;
+        text-align: left;
+      }
+
+      :host([dir="rtl"]) [part="value"]:-ms-input-placeholder,
+      :host([dir="rtl"]) [part="input-field"] ::slotted(input):-ms-input-placeholder {
+        direction: rtl;
+        text-align: left;
+      }
+    </style>
+  </template>
+</dom-module>
+
 <script>
   (function() {
     /**
