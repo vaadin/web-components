@@ -177,15 +177,13 @@ This program is available under Apache License Version 2.0, available at https:/
        * @mixes Vaadin.ElementMixin
        * @mixes Vaadin.ControlStateMixin
        * @mixes Vaadin.ThemableMixin
-       * @mixes Vaadin.ThemePropertyMixin
        * @demo demo/index.html
        */
       class SelectElement extends
         Vaadin.ElementMixin(
           Vaadin.ControlStateMixin(
             Vaadin.ThemableMixin(
-              Vaadin.ThemePropertyMixin(
-                Polymer.mixinBehaviors(Polymer.IronResizableBehavior, Polymer.Element))))) {
+              Polymer.mixinBehaviors(Polymer.IronResizableBehavior, Polymer.Element)))) {
 
         static get is() {
           return 'vaadin-select';
@@ -199,6 +197,7 @@ This program is available under Apache License Version 2.0, available at https:/
           return {
             /**
              * Set when the select is open
+             * @type {boolean}
              */
             opened: {
               type: Boolean,
@@ -215,11 +214,13 @@ This program is available under Apache License Version 2.0, available at https:/
              * - `root` The `<vaadin-select-overlay>` internal container
              *   DOM element. Append your content to it.
              * - `select` The reference to the `<vaadin-select>` element.
+             * @type {!SelectRenderer | undefined}
              */
             renderer: Function,
 
             /**
              * The error message to display when the select value is invalid
+             * @type {string}
              */
             errorMessage: {
               type: String,
@@ -245,6 +246,7 @@ This program is available under Apache License Version 2.0, available at https:/
              * Hint: If you do not want to select any item by default, you can either set all
              * the values of inner vaadin-items, or set the vaadin-select value to
              * an inexistent value in the items list.
+             * @type {string}
              */
             value: {
               type: String,
@@ -264,6 +266,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * Set to true if the value is invalid.
+             * @type {boolean}
              */
             invalid: {
               type: Boolean,
@@ -293,6 +296,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * When present, it specifies that the element is read-only.
+             * @type {boolean}
              */
             readonly: {
               type: Boolean,
@@ -300,24 +304,33 @@ This program is available under Apache License Version 2.0, available at https:/
               reflectToAttribute: true
             },
 
+            /** @private */
             _phone: Boolean,
 
+            /** @private */
             _phoneMediaQuery: {
               value: '(max-width: 420px), (max-height: 420px)'
             },
 
+            /** @private */
             _overlayElement: Object,
 
+            /** @private */
             _inputElement: Object,
 
+            /** @private */
             _toggleElement: Object,
 
+            /** @private */
             _items: Object,
 
+            /** @private */
             _contentTemplate: Object,
 
+            /** @private */
             _oldTemplate: Object,
 
+            /** @private */
             _oldRenderer: Object
           };
         }
@@ -330,18 +343,18 @@ This program is available under Apache License Version 2.0, available at https:/
           ];
         }
 
-        /** @private */
         constructor() {
           super();
           this._boundSetPosition = this._setPosition.bind(this);
         }
 
-        /** @private */
+        /** @protected */
         connectedCallback() {
           super.connectedCallback();
           this.addEventListener('iron-resize', this._boundSetPosition);
         }
 
+        /** @protected */
         ready() {
           super.ready();
 
@@ -360,12 +373,14 @@ This program is available under Apache License Version 2.0, available at https:/
           this._observer.flush();
         }
 
+        /** @private */
         _setTemplateFromNodes(nodes) {
           const template = Array.from(nodes).filter(node => node.localName && node.localName === 'template')[0] || this._contentTemplate;
           this._overlayElement.template = this._contentTemplate = template;
           this._setForwardHostProps();
         }
 
+        /** @private */
         _setForwardHostProps() {
           if (this._overlayElement.content) {
             const origForwardHostProp = this._overlayElement._instance && this._overlayElement._instance.forwardHostProp;
@@ -393,6 +408,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         _removeNewRendererOrTemplate(template, oldTemplate, renderer, oldRenderer) {
           if (template !== oldTemplate) {
             this._contentTemplate = undefined;
@@ -401,6 +417,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         _templateOrRendererChanged(template, renderer, overlay) {
           if (!overlay) {
             return;
@@ -424,6 +441,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         _assignMenuElement() {
           this._menuElement = Array.from(this._overlayElement.content.children).filter(element => element.localName !== 'style')[0];
 
@@ -443,13 +461,16 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
-        /** @protected */
+        /**
+         * @return {!HTMLElement}
+         * @protected
+         */
         get focusElement() {
           return this._inputElement ||
             (this._inputElement = this.shadowRoot.querySelector('vaadin-select-text-field'));
         }
 
-        /** @private */
+        /** @protected */
         disconnectedCallback() {
           super.disconnectedCallback();
           this.removeEventListener('iron-resize', this._boundSetPosition);
@@ -457,7 +478,6 @@ This program is available under Apache License Version 2.0, available at https:/
           this.opened = false;
         }
 
-        /** @private */
         notifyResize() {
           super.notifyResize();
           if (this.positionTarget && this.opened) {
@@ -467,10 +487,12 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         _requiredChanged(required) {
           this.setAttribute('aria-required', required);
         }
 
+        /** @private */
         _valueChanged(value, oldValue) {
           if (value === '') {
             this.focusElement.removeAttribute('has-value');
@@ -485,6 +507,10 @@ This program is available under Apache License Version 2.0, available at https:/
           this.validate();
         }
 
+        /**
+         * @param {!KeyboardEvent} e
+         * @protected
+         */
         _onKeyDown(e) {
           if (!this.readonly && !this.opened) {
             if (/^(Enter|SpaceBar|\s|ArrowDown|Down|ArrowUp|Up)$/.test(e.key)) {
@@ -503,12 +529,17 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /**
+         * @param {!KeyboardEvent} e
+         * @protected
+         */
         _onKeyDownInside(e) {
           if (/^(Tab)$/.test(e.key)) {
             this.opened = false;
           }
         }
 
+        /** @private */
         _openedChanged(opened, wasOpened) {
           if (opened) {
             if (
@@ -541,6 +572,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         _hasContent(selected) {
           if (!selected) {
             return false;
@@ -552,6 +584,7 @@ This program is available under Apache License Version 2.0, available at https:/
           );
         }
 
+        /** @private */
         _attachSelectedItem(selected) {
           if (!selected) {
             return;
@@ -575,6 +608,7 @@ This program is available under Apache License Version 2.0, available at https:/
           labelItem.selected = true;
         }
 
+        /** @private */
         _updateAriaExpanded(opened, toggleElement, inputElement) {
           toggleElement && toggleElement.setAttribute('aria-expanded', opened);
           if (inputElement && inputElement.focusElement) {
@@ -582,6 +616,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         _updateValueSlot() {
           this.opened = false;
           this._valueElement.innerHTML = '';
@@ -614,6 +649,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         _updateSelectedItem(value, items) {
           if (items) {
             this._menuElement.selected = items.reduce((prev, item, idx) => {
@@ -627,7 +663,10 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
-        /** @override */
+        /**
+         * @param {boolean} focused
+         * @protected
+         */
         _setFocused(focused) {
           // Keep `focused` state when opening the overlay for styling purpose.
           super._setFocused(this.opened || focused);
@@ -635,6 +674,7 @@ This program is available under Apache License Version 2.0, available at https:/
           !this.hasAttribute('focused') && this.validate();
         }
 
+        /** @private */
         _setPosition() {
           const inputRect = this._inputElement.shadowRoot.querySelector('[part~="input-field"]').getBoundingClientRect();
           const viewportHeight = Math.min(window.innerHeight, document.documentElement.clientHeight);
