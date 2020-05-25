@@ -191,7 +191,8 @@ This program is available under Apache License Version 2.0, available at https:/
          */
         errorMessage: {
           type: String,
-          value: ''
+          value: '',
+          observer: '_errorMessageChanged'
         },
 
         /**
@@ -223,6 +224,16 @@ This program is available under Apache License Version 2.0, available at https:/
           type: String,
           value: '',
           observer: '_labelChanged'
+        },
+
+        /**
+         * String used for the helper text.
+         * @type {string | null}
+         */
+        helperText: {
+          type: String,
+          value: '',
+          observer: '_helperTextChanged'
         },
 
         /**
@@ -326,10 +337,16 @@ This program is available under Apache License Version 2.0, available at https:/
         _labelId: String,
 
         /** @private */
+        _helperTextId: String,
+
+        /** @private */
         _errorId: String,
 
         /** @private */
-        _inputId: String
+        _inputId: String,
+
+        /** @private */
+        _hasSlottedHelper: Boolean
       };
     }
 
@@ -337,9 +354,9 @@ This program is available under Apache License Version 2.0, available at https:/
       return ['_stateChanged(disabled, readonly, clearButtonVisible, hasValue)',
         '_hostPropsChanged(' + HOST_PROPS.default.join(', ') + ')',
         '_hostAccessiblePropsChanged(' + HOST_PROPS.accessible.join(', ') + ')',
-        '_getActiveErrorId(invalid, errorMessage, _errorId)',
+        '_getActiveErrorId(invalid, errorMessage, _errorId, helperText, _helperTextId, _hasSlottedHelper)',
         '_getActiveLabelId(label, _labelId, _inputId)',
-        '__observeOffsetHeight(errorMessage, invalid, label)',
+        '__observeOffsetHeight(errorMessage, invalid, label, helperText)',
         '__enabledCharPatternChanged(_enabledCharPattern)'
       ];
     }
@@ -482,10 +499,31 @@ This program is available under Apache License Version 2.0, available at https:/
 
     /** @private */
     _labelChanged(label) {
-      if (label !== '' && label != null) {
-        this.setAttribute('has-label', '');
-      } else {
-        this.removeAttribute('has-label');
+      this._setOrToggleAttribute('has-label', label === 0 || !!label, this);
+    }
+
+    /** @private */
+    _helperTextChanged(helperText) {
+      this._setOrToggleAttribute('has-helper', helperText === 0 || !!helperText, this);
+    }
+
+    /** @private */
+    _errorMessageChanged(errorMessage) {
+      this._setOrToggleAttribute('has-error-message', errorMessage === 0 || !!errorMessage, this);
+    }
+
+    /** @private */
+    _onHelperSlotChange() {
+      const slottedNodes = this.shadowRoot.querySelector(`[name="helper"]`).assignedNodes();
+      // Only has slotted helper if not a text node
+      // Text nodes are added by the helperText prop and not the helper slot
+      // The filter is added due to shady DOM triggering this slotchange event on helperText prop change
+      this._hasSlottedHelper = slottedNodes.filter(node => node.nodeType !== 3).length;
+
+      if (this._hasSlottedHelper) {
+        this.setAttribute('has-helper', 'slotted');
+      } else if (this.helperText === '' || this.helperText === null) {
+        this.removeAttribute('has-helper');
       }
     }
 
@@ -642,6 +680,9 @@ This program is available under Apache License Version 2.0, available at https:/
       this.shadowRoot.querySelector('[name="input"], [name="textarea"]')
         .addEventListener('slotchange', this._onSlotChange.bind(this));
 
+      this._onHelperSlotChange();
+      this.shadowRoot.querySelector('[name="helper"]').addEventListener('slotchange', this._onHelperSlotChange.bind(this));
+
       if (!(window.ShadyCSS && window.ShadyCSS.nativeCss)) {
         this.updateStyles();
       }
@@ -654,6 +695,7 @@ This program is available under Apache License Version 2.0, available at https:/
       var uniqueId = Vaadin.TextFieldMixin._uniqueId = 1 + Vaadin.TextFieldMixin._uniqueId || 0;
       this._errorId = `${this.constructor.is}-error-${uniqueId}`;
       this._labelId = `${this.constructor.is}-label-${uniqueId}`;
+      this._helperTextId = `${this.constructor.is}-helper-${uniqueId}`;
       this._inputId = `${this.constructor.is}-input-${uniqueId}`;
 
       // Lumo theme defines a max-height transition for the "error-message"
@@ -809,10 +851,15 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     /** @private */
-    _getActiveErrorId(invalid, errorMessage, errorId) {
-      this._setOrToggleAttribute('aria-describedby',
-        (errorMessage && invalid ? errorId : undefined),
-        this.focusElement);
+    _getActiveErrorId(invalid, errorMessage, errorId, helperText, helperTextId, hasSlottedHelper) {
+      const ids = [];
+      if (helperText || hasSlottedHelper) {
+        ids.push(helperTextId);
+      }
+      if (errorMessage && invalid) {
+        ids.push(errorId);
+      }
+      this._setOrToggleAttribute('aria-describedby', ids.join(' '), this.focusElement);
     }
 
     /** @private */

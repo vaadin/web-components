@@ -15,7 +15,6 @@
       </template>
     </vaadin-demo-snippet>
 
-
     <h3>Disabled and read-only</h3>
     <vaadin-demo-snippet id="text-field-basic-demos-states">
       <template preserve-content>
@@ -40,6 +39,16 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Helper text</h3>
+    <p>Use the <code>helper-text</code> attribute or add content to the <code>helper</code> slot to set helper content.</p>
+    <vaadin-demo-snippet id="text-field-basic-demos-helper-text">
+      <template preserve-content>
+        <vaadin-text-field label="Username">
+          <span slot="helper">Typically "firstname.lastname"</span>
+        </vaadin-text-field>
+        <vaadin-password-field label="Password" helper-text="Choose a strong password"></vaadin-password-field>
+      </template>
+    </vaadin-demo-snippet>
 
   </template>
   <script>
