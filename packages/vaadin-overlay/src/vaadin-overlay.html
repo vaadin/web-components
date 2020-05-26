@@ -735,7 +735,7 @@ This program is available under Apache License Version 2.0, available at https:/
        */
       static get __attachedInstances() {
         return Array.from(document.body.children)
-          .filter(el => el instanceof OverlayElement)
+          .filter(el => el instanceof OverlayElement && !el.hasAttribute('closing'))
           .sort((a, b) => (a.__zIndex - b.__zIndex) || 0);
       }
 

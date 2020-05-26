@@ -278,6 +278,34 @@
         });
       });
 
+      describe(`simultaneous closing${titleSuffix}`, () => {
+        let wrapper, overlays;
+
+        beforeEach(() => {
+          wrapper = fixture('switching');
+          const third = document.createElement('vaadin-overlay');
+          wrapper.shadowRoot.appendChild(third);
+          overlays = Array.from(wrapper.shadowRoot.querySelectorAll('vaadin-overlay'));
+
+          if (withAnimation) {
+            overlays.forEach(overlay => overlay.setAttribute('animate', ''));
+          }
+        });
+
+        it('should restore pointer events on the remaining overlay', done => {
+          afterOverlayOpeningFinished(overlays[2], () => {
+            expect(overlays[0].$.overlay.style.pointerEvents).to.equal('none');
+            overlays[1].opened = false;
+            overlays[2].opened = false;
+            expect(overlays[0].$.overlay.style.pointerEvents).to.equal('');
+            done();
+          });
+          overlays[0].opened = true;
+          overlays[1].opened = true;
+          overlays[2].opened = true;
+        });
+      });
+
       describe(`simultaneous opening with animated content${titleSuffix}`, () => {
         let wrapper, overlays;
 
