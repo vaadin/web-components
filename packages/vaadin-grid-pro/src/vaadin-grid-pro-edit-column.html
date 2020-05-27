@@ -53,12 +53,14 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
            *   - `rowData.expanded` Sublevel toggle state.
            *   - `rowData.level` Level of the tree represented with a horizontal offset of the toggle button.
            *   - `rowData.selected` Selected state.
+           * @type {!GridBodyRenderer | null | undefined}
            */
           editModeRenderer: Function,
 
           /**
            * The list of options which should be passed to cell editor component.
            * Used with the `select` editor type, to provide a list of items.
+           * @type {!Array<string>}
            */
           editorOptions: {
             type: Array,
@@ -73,6 +75,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
            *
            * Editor type is set to `custom` when either `editModeRenderer` is set,
            * or editor template provided for the column.
+           * @type {!GridProEditorType}
            */
           editorType: {
             type: String,
@@ -82,6 +85,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
           /**
            * Path of the property used for the value of the editor component.
+           * @type {string}
            */
           editorValuePath: {
             type: String,
@@ -96,8 +100,10 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             observer: '_pathChanged'
           },
 
+          /** @private */
           _oldTemplate: Object,
 
+          /** @private */
           _oldRenderer: Function
         };
       }
@@ -135,12 +141,14 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         this._editTemplateObserver.flush();
       }
 
+      /** @private */
       _pathChanged(path) {
         if (!path || path.length == 0) {
           throw new Error('You should specify the path for the edit column');
         }
       }
 
+      /** @private */
       _cellsChanged() {
         this._cells.forEach(cell => {
           const part = cell.getAttribute('part');
@@ -150,6 +158,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         });
       }
 
+      /** @private */
       _removeNewRendererOrTemplate(template, oldTemplate, renderer, oldRenderer) {
         if (template !== oldTemplate) {
           this._editModeTemplate = undefined;
@@ -158,6 +167,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         }
       }
 
+      /** @private */
       _editModeTemplateOrRendererChanged(template, renderer) {
         if (template === undefined && renderer === undefined && !this._oldTemplate && !this._oldRenderer) {
           return;
@@ -177,6 +187,8 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
       /**
        * Override body template preparation to take editor into account.
+       * @return {HTMLTemplateElement}
+       * @protected
        */
       _prepareBodyTemplate() {
         return this._prepareTemplatizer(this._findTemplate(false, false, false) || null);
@@ -184,6 +196,11 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
       /**
        * Override template filtering to take editor into account.
+       * @param {boolean} header
+       * @param {boolean} footer
+       * @param {boolean} editor
+       * @return {HTMLTemplateElement}
+       * @protected
        */
       _selectFirstTemplate(header = false, footer = false, editor = false) {
         return Polymer.FlattenedNodesObserver.getFlattenedNodes(this)
@@ -197,6 +214,11 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
       /**
        * Override template search to take editor into account.
+       * @param {boolean} header
+       * @param {boolean} footer
+       * @param {boolean=} editor
+       * @return {HTMLTemplateElement}
+       * @protected
        */
       _findTemplate(header, footer, editor) {
         const template = this._selectFirstTemplate(header, footer, editor);
@@ -209,22 +231,34 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         return template;
       }
 
+      /** @private */
       _prepareEditModeTemplate() {
         return this._prepareTemplatizer(this._findTemplate(false, false, true) || null, {});
       }
 
+      /**
+       * @param {!HTMLElement} cell
+       * @return {string}
+       * @protected
+       */
       _getEditorTagName(cell) {
         return this.editorType === 'custom' ?
           this._getEditorComponent(cell).localName :
           this._getTagNameByType();
       }
 
+      /**
+       * @param {!HTMLElement} cell
+       * @return {HTMLElement | null}
+       * @protected
+       */
       _getEditorComponent(cell) {
         return this.editorType === 'custom' ?
           cell._content.firstElementChild :
           cell._content.querySelector(this._getEditorTagName(cell));
       }
 
+      /** @private */
       _getTagNameByType() {
         let type;
         switch (this.editorType) {
@@ -242,6 +276,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         return this.constructor.is.replace('column', type);
       }
 
+      /** @private */
       _focusEditor(editor) {
         editor.focus();
         if (this.editorType === 'checkbox') {
@@ -253,11 +288,17 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         }
       }
 
+      /**
+       * @param {!HTMLElement} editor
+       * @return {unknown}
+       * @protected
+       */
       _getEditorValue(editor) {
         const path = this.editorType === 'checkbox' ? 'checked' : this.editorValuePath;
         return Polymer.Path.get(editor, path);
       }
 
+      /** @private */
       _renderEditor(cell, model) {
         if (cell._template) {
           cell.__savedTemplate = cell._template;
@@ -275,6 +316,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         }
       }
 
+      /** @private */
       _removeEditor(cell, model) {
         if (cell.__savedTemplate) {
           this._stampTemplateToCell(cell, cell.__savedTemplate, model);
@@ -287,12 +329,14 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         }
       }
 
+      /** @private */
       _setEditorOptions(editor) {
         if (this.editorOptions && this.editorOptions.length) {
           editor.options = this.editorOptions;
         }
       }
 
+      /** @private */
       _setEditorValue(editor, value) {
         const path = this.editorType === 'checkbox' ? 'checked' : this.editorValuePath;
         // FIXME(yuriy): Required for the flow counterpart as it is passing the string value to webcomponent
@@ -301,6 +345,11 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         editor.notifyPath && editor.notifyPath(path, value);
       }
 
+      /**
+       * @param {!HTMLElement} cell
+       * @param {!GridRowData} model
+       * @protected
+       */
       _startCellEdit(cell, model) {
         this._renderEditor(cell, model);
         this._grid.notifyResize();
@@ -315,6 +364,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         this._focusEditor(editor);
       }
 
+      /** @private */
       _stampTemplateToCell(cell, template, model) {
         cell._template = template;
         cell._content.innerHTML = '';
@@ -326,12 +376,18 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         cell._instance.setProperties(model);
       }
 
+      /** @private */
       _stampRendererToCell(cell, renderer, model) {
         cell._content.innerHTML = '';
         cell._renderer = renderer;
         this.__runRenderer(renderer, cell, model);
       }
 
+      /**
+       * @param {!HTMLElement} cell
+       * @param {!GridRowData} model
+       * @protected
+       */
       _stopCellEdit(cell, model) {
         const editor = this._getEditorComponent(cell);
         let shouldResize = true;

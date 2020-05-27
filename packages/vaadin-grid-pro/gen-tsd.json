@@ -1,0 +1,22 @@
+{
+  "excludeFiles": [
+    "wct.conf.js",
+    "index.html",
+    "src/vaadin-grid-pro-edit-checkbox.js",
+    "src/vaadin-grid-pro-edit-select.js",
+    "src/vaadin-grid-pro-edit-text-field.js",
+    "demo/**/*",
+    "test/**/*",
+    "theme/**/*"
+  ],
+  "autoImport": {
+    "@vaadin/vaadin-grid/@types/interfaces": [
+      "GridBodyRenderer",
+      "GridItem",
+      "GridRowData"
+    ],
+    "./@types/interfaces": [
+      "GridProEditorType"
+    ]
+  }
+}

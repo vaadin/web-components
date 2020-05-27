@@ -45,6 +45,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           notify: true // FIXME(yuriy-fix): needed by Flow counterpart
         },
 
+        /** @private */
         _editingDisabled: {
           type: Boolean
         }
@@ -71,6 +72,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       });
     }
 
+    /** @protected */
     ready() {
       // add listener before `vaadin-grid` interaction mode listener
       this.addEventListener('keydown', e => {
@@ -132,6 +134,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       }
     }
 
+    /** @protected */
     _checkImports() {
       super._checkImports();
       [
@@ -144,11 +147,13 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       });
     }
 
+    /** @private */
     _applyEdit({path, value, index, item}) {
       this.set(path, value, item);
       this.notifyPath('items.' + index + '.' + path, value);
     }
 
+    /** @private */
     _addEditColumnListener(type, callback) {
       this.addEventListener(type, e => {
         const context = this.getEventContext(e);
@@ -172,20 +177,24 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       });
     }
 
+    /** @private */
     _onItemPropertyChanged(e) {
       if (!e.defaultPrevented) {
         this._applyEdit(e.detail);
       }
     }
 
+    /** @private */
     _getRowByIndex(index) {
       return Array.from(this.$.items.children).filter(el => el.index === index)[0];
     }
 
+    /** @private */
     _isEditColumn(column) {
       return column.localName.toLowerCase() === 'vaadin-grid-pro-edit-column';
     }
 
+    /** @private */
     _getEditColumns() {
       const columnTreeLevel = this._columnTree.length - 1;
       return this._columnTree[columnTreeLevel]
@@ -193,6 +202,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         .sort((a, b) => a._order - b._order);
     }
 
+    /** @private */
     _cancelStopEdit() {
       // stop edit on outside click will always trigger notify resize.
       // when tabbing within same row it might not be needed, so cancel
@@ -202,6 +212,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       }
     }
 
+    /** @private */
     _flushStopEdit() {
       if (this._debouncerStopEdit) {
         this._debouncerStopEdit.flush();
@@ -209,6 +220,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       }
     }
 
+    /** @private */
     _enterEditFromEvent(e, type) {
       const context = this.getEventContext(e);
       const column = context.column;
@@ -238,6 +250,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       }
     }
 
+    /** @private */
     _onEditorFocusOut() {
       // schedule stop on editor component focusout
       this._debouncerStopEdit = Polymer.Debouncer.debounce(
@@ -246,10 +259,12 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         this._stopEdit.bind(this));
     }
 
+    /** @private */
     _onEditorFocusIn(e) {
       this._cancelStopEdit();
     }
 
+    /** @private */
     _onGlobalFocusIn(e) {
       const edited = this.__edited;
       if (edited) {
@@ -264,6 +279,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       }
     }
 
+    /** @private */
     _startEdit(cell, column) {
       if (this._editingDisabled) {
         return;
@@ -288,6 +304,11 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       this.addEventListener('item-property-changed', this.__boundItemPropertyChanged);
     }
 
+    /**
+     * @param {boolean=} shouldCancel
+     * @param {boolean=} shouldRestoreFocus
+     * @protected
+     */
     _stopEdit(shouldCancel, shouldRestoreFocus) {
       if (!this.__edited) {
         return;
@@ -325,11 +346,16 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       }
     }
 
+    /** @private */
     _setCancelCellSwitch() {
       this.__cancelCellSwitch = true;
       window.requestAnimationFrame(() => this.__cancelCellSwitch = false);
     }
 
+    /**
+     * @param {!KeyboardEvent} e
+     * @protected
+     */
     _switchEditCell(e) {
       if (this.__cancelCellSwitch ||
           e.defaultPrevented && e.keyCode === 9) {
@@ -398,6 +424,11 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       }
     }
 
+    /**
+     * @param {!HTMLElement} row
+     * @param {GridItem} item
+     * @protected
+     */
     _updateItem(row, item) {
       if (this.__edited) {
         const {cell, model} = this.__edited;
