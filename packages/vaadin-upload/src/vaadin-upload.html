@@ -94,6 +94,7 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * @memberof Vaadin
        * @mixes Vaadin.ThemableMixin
+       * @mixes Vaadin.ElementMixin
        * @demo demo/index.html
        */
       class UploadElement extends Vaadin.ElementMixin(Vaadin.ThemableMixin(Polymer.Element)) {
@@ -114,6 +115,7 @@ This program is available under Apache License Version 2.0, available at https:/
              * it false means that drop is enabled even in touch-devices, and true
              * disables drop in all devices.
              *
+             * @type {boolean}
              * @default true in touch-devices, false otherwise.
              */
             nodrop: {
@@ -131,6 +133,7 @@ This program is available under Apache License Version 2.0, available at https:/
             /**
              * The server URL. The default value is an empty string, which means that
              * _window.location_ will be used.
+             * @type {string}
              */
             target: {
               type: String,
@@ -139,6 +142,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * HTTP Method used to send the files. Only POST and PUT are allowed.
+             * @type {!UploadMethod}
              */
             method: {
               type: String,
@@ -151,6 +155,7 @@ This program is available under Apache License Version 2.0, available at https:/
              * ```
              * <vaadin-upload headers='{"X-Foo": "Bar"}'></vaadin-upload>
              * ```
+             * @type {object | string}
              */
             headers: {
               type: Object,
@@ -160,13 +165,14 @@ This program is available under Apache License Version 2.0, available at https:/
             /**
              * Max time in milliseconds for the entire upload process, if exceeded the
              * request will be aborted. Zero means that there is no timeout.
-             *
+             * @type {number}
              */
             timeout: {
               type: Number,
               value: 0
             },
 
+            /** @private */
             _dragover: {
               type: Boolean,
               value: false,
@@ -194,6 +200,7 @@ This program is available under Apache License Version 2.0, available at https:/
              * - `abort`: True if the file was canceled by the user.
              * - `complete`: True when the file was transferred to the server.
              * - `uploading`: True while transferring data to the server.
+             * @type {!Array<!UploadFile>}
              */
             files: {
               type: Array,
@@ -206,6 +213,7 @@ This program is available under Apache License Version 2.0, available at https:/
             /**
              * Limit of files to upload, by default it is unlimited. If the value is
              * set to one, native file browser will prevent selecting multiple files.
+             * @type {number}
              */
             maxFiles: {
               type: Number,
@@ -214,6 +222,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * Specifies if the maximum number of files have been uploaded
+             * @type {boolean}
              */
             maxFilesReached: {
               type: Boolean,
@@ -230,6 +239,7 @@ This program is available under Apache License Version 2.0, available at https:/
              * Notice that MIME types are widely supported, while file extensions
              * are only implemented in certain browsers, so avoid using it.
              * Example: accept="video/*,image/tiff" or accept=".pdf,audio/mp3"
+             * @type {string}
              */
             accept: {
               type: String,
@@ -241,6 +251,7 @@ This program is available under Apache License Version 2.0, available at https:/
              * Notice that it is a client-side constraint, which will be checked before
              * sending the request. Obviously you need to do the same validation in
              * the server-side and be sure that they are aligned.
+             * @type {number}
              */
             maxFileSize: {
               type: Number,
@@ -250,6 +261,7 @@ This program is available under Apache License Version 2.0, available at https:/
             /**
              * Specifies if the dragover is validated with maxFiles and
              * accept properties.
+             * @private
              */
             _dragoverValid: {
               type: Boolean,
@@ -259,6 +271,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * Specifies the 'name' property at Content-Disposition
+             * @type {string}
              */
             formDataName: {
               type: String,
@@ -268,6 +281,7 @@ This program is available under Apache License Version 2.0, available at https:/
             /**
              * Prevents upload(s) from immediately uploading upon adding file(s).
              * When set, you must manually trigger uploads using the `uploadFiles` method
+             * @type {boolean}
              */
             noAuto: {
               type: Boolean,
@@ -276,6 +290,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * Set the withCredentials flag on the request.
+             * @type {boolean}
              */
             withCredentials: {
               type: Boolean,
@@ -328,7 +343,8 @@ This program is available under Apache License Version 2.0, available at https:/
               }
               },
               units: {
-              size: ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+              size: ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
+              sizeBase: 1000
               },
               formatSize: function(bytes) {
               // returns the size followed by the best suitable unit
@@ -338,7 +354,7 @@ This program is available under Apache License Version 2.0, available at https:/
               }
             }
 
-            *
+            * @type {!UploadI18n}
             * @default {English}
             */
             i18n: {
@@ -385,6 +401,7 @@ This program is available under Apache License Version 2.0, available at https:/
           };
         }
 
+        /** @protected */
         ready() {
           super.ready();
           this.addEventListener('dragover', this._onDragover.bind(this));
@@ -396,6 +413,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this.addEventListener('file-start', this._onFileStart.bind(this));
         }
 
+        /** @private */
         _formatSize(bytes) {
           if (typeof this.i18n.formatSize === 'function') {
             return this.i18n.formatSize(bytes);
@@ -409,6 +427,7 @@ This program is available under Apache License Version 2.0, available at https:/
           return size + ' ' + this.i18n.units.size[unit];
         }
 
+        /** @private */
         _splitTimeByUnits(time) {
           const unitSizes = [60, 60, 24, Infinity];
           const timeValues = [0];
@@ -421,6 +440,7 @@ This program is available under Apache License Version 2.0, available at https:/
           return timeValues;
         }
 
+        /** @private */
         _formatTime(seconds, split) {
           if (typeof this.i18n.formatTime === 'function') {
             return this.i18n.formatTime(seconds, split);
@@ -439,6 +459,7 @@ This program is available under Apache License Version 2.0, available at https:/
             .join(':');
         }
 
+        /** @private */
         _formatFileProgress(file) {
           return file.totalStr + ': ' +
               file.progress + '% (' +
@@ -448,10 +469,12 @@ This program is available under Apache License Version 2.0, available at https:/
             ')';
         }
 
+        /** @private */
         _maxFilesAdded(maxFiles, numFiles) {
           return maxFiles >= 0 && numFiles >= maxFiles;
         }
 
+        /** @private */
         _onDragover(event) {
           event.preventDefault();
           if (!this.nodrop && !this._dragover) {
@@ -461,6 +484,7 @@ This program is available under Apache License Version 2.0, available at https:/
           event.dataTransfer.dropEffect = !this._dragoverValid || this.nodrop ? 'none' : 'copy';
         }
 
+        /** @private */
         _onDragleave(event) {
           event.preventDefault();
           if (this._dragover && !this.nodrop) {
@@ -468,6 +492,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         _onDrop(event) {
           if (!this.nodrop) {
             event.preventDefault();
@@ -476,11 +501,12 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
-        // Override for tests
+        /** @private */
         _createXhr() {
           return new XMLHttpRequest();
         }
 
+        /** @private */
         _configureXhr(xhr) {
           if (typeof this.headers == 'string') {
             try {
@@ -498,6 +524,7 @@ This program is available under Apache License Version 2.0, available at https:/
           xhr.withCredentials = this.withCredentials;
         }
 
+        /** @private */
         _setStatus(file, total, loaded, elapsed) {
           file.elapsed = elapsed;
           file.elapsedStr = this._formatTime(file.elapsed, this._splitTimeByUnits(file.elapsed));
@@ -512,7 +539,7 @@ This program is available under Apache License Version 2.0, available at https:/
         /**
          * Triggers the upload of any files that are not completed
          *
-         * @param {Array} [files] - Files being uploaded. Defaults to all outstanding files
+         * @param {!UploadFile | !Array<!UploadFile>=} files - Files being uploaded. Defaults to all outstanding files
          */
         uploadFiles(files) {
           if (files && !Array.isArray(files)) {
@@ -523,6 +550,7 @@ This program is available under Apache License Version 2.0, available at https:/
           Array.prototype.forEach.call(files, this._uploadFile.bind(this));
         }
 
+        /** @private */
         _uploadFile(file) {
           if (file.uploading) {
             return;
@@ -650,6 +678,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         _retryFileUpload(file) {
           const evt = this.dispatchEvent(
             new CustomEvent('upload-retry', {
@@ -662,6 +691,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         _abortFileUpload(file) {
           const evt = this.dispatchEvent(
             new CustomEvent('upload-abort', {
@@ -678,6 +708,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         _notifyFileChanges(file) {
           var p = 'files.' + this.files.indexOf(file) + '.';
           for (var i in file) {
@@ -687,6 +718,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         _addFiles(files) {
           Array.prototype.forEach.call(files, this._addFile.bind(this));
         }
@@ -694,7 +726,8 @@ This program is available under Apache License Version 2.0, available at https:/
         /**
          * Add the file for uploading. Called internally for each file after picking files from dialog or dropping files.
          *
-         * @param {File} file File being added
+         * @param {!UploadFile} file File being added
+         * @protected
          */
         _addFile(file) {
           if (this.maxFilesReached) {
@@ -735,7 +768,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
         /**
          * Remove file from upload list. Called internally if file upload was canceled.
-         * @param {File} file File to remove
+         * @param {!UploadFile} file File to remove
+         * @protected
          */
         _removeFile(file) {
           if (this.files.indexOf(file) > -1) {
@@ -743,6 +777,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         _onAddFilesTouchEnd(e) {
           // Cancel the event to avoid the following click event
           e.preventDefault();
@@ -753,10 +788,12 @@ This program is available under Apache License Version 2.0, available at https:/
           this._onAddFilesClick();
         }
 
+        /** @private */
         __resetMouseCanceller() {
           Polymer.Gestures.resetMouseCanceller();
         }
 
+        /** @private */
         _onAddFilesClick() {
           if (this.maxFilesReached) {
             return;
@@ -766,38 +803,47 @@ This program is available under Apache License Version 2.0, available at https:/
           this.$.fileInput.click();
         }
 
+        /** @private */
         _onFileInputChange(event) {
           this._addFiles(event.target.files);
         }
 
+        /** @private */
         _onFileStart(event) {
           this._uploadFile(event.detail.file);
         }
 
+        /** @private */
         _onFileRetry(event) {
           this._retryFileUpload(event.detail.file);
         }
 
+        /** @private */
         _onFileAbort(event) {
           this._abortFileUpload(event.detail.file);
         }
 
+        /** @private */
         _onFileRemove(event) {
           this._removeFile(event.detail.file);
         }
 
+        /** @private */
         _dragoverChanged(dragover) {
           dragover ? this.setAttribute('dragover', dragover) : this.removeAttribute('dragover');
         }
 
+        /** @private */
         _dragoverValidChanged(dragoverValid) {
           dragoverValid ? this.setAttribute('dragover-valid', dragoverValid) : this.removeAttribute('dragover-valid');
         }
 
+        /** @private */
         _i18nPlural(value, plural) {
           return value == 1 ? plural.one : plural.many;
         }
 
+        /** @private */
         _isMultiple(maxFiles) {
           return maxFiles != 1;
         }
