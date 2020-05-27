@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-upload",
-  "version": "4.3.0",
+  "version": "4.4.0-alpha1",
   "description": "Web Component for uploading files with drag and drop support",
   "main": "vaadin-upload.html",
   "repository": "vaadin/vaadin-upload",
