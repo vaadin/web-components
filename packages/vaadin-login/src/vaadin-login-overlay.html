@@ -73,33 +73,31 @@ This program is available under Apache License Version 2.0, available at https:/
           return {
             /**
              * Defines the application description
+             * @type {string}
              */
             description: {
               type: String,
               value: 'Application description',
               notify: true
             },
+
             /**
              * True if the overlay is currently displayed.
+             * @type {boolean}
              */
             opened: {
               type: Boolean,
               value: false,
               observer: '_onOpenedChange'
             },
+
             /**
              * Defines the application title
+             * @type {string}
              */
             title: {
               type: String,
               value: 'App name'
-            },
-            /**
-             * Defines the theme of the element.
-             * The value is propagated to vaadin-login-overlay-wrapper element.
-             */
-            theme: {
-              type: String
             }
           };
         }
@@ -110,12 +108,14 @@ This program is available under Apache License Version 2.0, available at https:/
           ];
         }
 
+        /** @protected */
         ready() {
           super.ready();
 
           this._preventClosingLogin = this._preventClosingLogin.bind(this);
         }
 
+        /** @protected */
         connectedCallback() {
           super.connectedCallback();
 
@@ -123,6 +123,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this.$.vaadinLoginOverlayWrapper.addEventListener('vaadin-overlay-escape-press', this._preventClosingLogin);
         }
 
+        /** @protected */
         disconnectedCallback() {
           super.disconnectedCallback();
 
@@ -131,6 +132,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this.$.vaadinLoginOverlayWrapper.opened = false;
         }
 
+        /** @private */
         __i18nChanged(i18n) {
           const header = i18n.base;
           if (!header) {
@@ -140,10 +142,12 @@ This program is available under Apache License Version 2.0, available at https:/
           this.description = header.description;
         }
 
+        /** @private */
         _preventClosingLogin(e) {
           e.preventDefault();
         }
 
+        /** @private */
         _onOpenedChange() {
           if (!this.opened) {
 
@@ -164,6 +168,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         _teleport(elements) {
           const teleported = Array.from(elements).map(e => {
             return this.$.vaadinLoginOverlayWrapper.appendChild(e);
@@ -176,6 +181,7 @@ This program is available under Apache License Version 2.0, available at https:/
           };
         }
 
+        /** @private */
         _getElementsToTeleport() {
           return this.querySelectorAll('[slot=title]');
         }

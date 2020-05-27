@@ -66,27 +66,22 @@
         static get is() {
           return 'vaadin-login-form';
         }
+
         static get version() {
           return '1.1.0';
         }
 
-        static get properties() {
-          return {
-            /**
-             * Defines the theme of the element.
-             * The value is propagated to vaadin-login-form-wrapper element.
-             */
-            theme: {
-              type: String
-            }
-          };
-        }
-
+        /** @protected */
         connectedCallback() {
           super.connectedCallback();
           this._handleInputKeydown = this._handleInputKeydown.bind(this);
         }
 
+        /**
+         * @param {StampedTemplate} dom
+         * @return {null}
+         * @protected
+         */
         _attachDom(dom) {
           this.appendChild(dom);
         }
@@ -97,6 +92,7 @@
           ];
         }
 
+        /** @private */
         _errorChanged() {
           if (this.error && !this._preventAutoEnable) {
             this.disabled = false;
@@ -126,14 +122,17 @@
           }
         }
 
+        /** @private */
         __isValid(input) {
           return (input.validate && input.validate()) || (input.checkValidity && input.checkValidity());
         }
 
+        /** @private */
         _isEnterKey(e) {
           return e.key === 'Enter' || e.keyCode === 13;
         }
 
+        /** @private */
         _handleInputKeydown(e) {
           if (this._isEnterKey(e)) {
             const {currentTarget: inputActive} = e;
@@ -149,6 +148,7 @@
           }
         }
 
+        /** @private */
         _handleInputKeyup(e) {
           const isTab = e.key === 'Tab' || e.keyCode === 9;
           const input = e.currentTarget;

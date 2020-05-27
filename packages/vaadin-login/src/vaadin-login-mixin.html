@@ -15,14 +15,14 @@ This program is available under Apache License Version 2.0, available at https:/
   /**
    * @polymerMixin
    * @memberof Vaadin.Login
-  */
+   */
   Vaadin.Login.LoginMixin = superClass => class LoginMixin extends superClass {
 
     /**
      * Fired when user clicks on the "Forgot password" button.
      *
      * @event forgot-password
-    */
+     */
 
     /**
      * Fired when an user submits the login.
@@ -30,32 +30,37 @@ This program is available under Apache License Version 2.0, available at https:/
      *
      * @event login
      *
-    */
+     */
 
     static get properties() {
       return {
         /**
          * If set, a synchronous POST call will be fired to the path defined.
          * The `login` event is also dispatched, so `event.preventDefault()` can be called to prevent the POST call.
+         * @type {string | null}
         */
         action: {
           type: String,
           value: null,
           notify: true
         },
+
         /**
          * If set, disable the "Log in" button and prevent user from submitting login form.
          * It is re-enabled automatically, when error is set to true, allowing form resubmission
          * after user makes changes.
+         * @type {boolean}
          */
         disabled: {
           type: Boolean,
           value: false,
           notify: true
         },
+
         /**
          * If set, the error message is shown. The message is hidden by default.
          * When set, it changes the disabled state of the submit button.
+         * @type {boolean}
          */
         error: {
           type: Boolean,
@@ -63,8 +68,10 @@ This program is available under Apache License Version 2.0, available at https:/
           reflectToAttribute: true,
           notify: true
         },
+
         /**
          * Whether to hide the forgot password button. The button is visible by default.
+         * @type {boolean}
          */
         noForgotPassword: {
           type: Boolean,
@@ -99,7 +106,7 @@ This program is available under Apache License Version 2.0, available at https:/
             },
             additionalInformation: 'In case you need to provide some additional info for the user.'
           }
-         *
+         * @type {!LoginI18n}
          * @default {English/US}
          */
         i18n: {
@@ -124,6 +131,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         /**
          * If set, prevents auto enabling the component when error property is set to true.
+         * @private
          */
         _preventAutoEnable: {
           type: Boolean,
@@ -132,6 +140,10 @@ This program is available under Apache License Version 2.0, available at https:/
       };
     }
 
+    /**
+     * @param {!Event} e
+     * @protected
+     */
     _retargetEvent(e) {
       e.stopPropagation();
       const {
