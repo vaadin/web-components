@@ -1,12 +1,8 @@
-export type CustomFieldParseValueFn = (
-  value: any
-) => Array<any>;
+export type CustomFieldParseValueFn = (value: string) => Array<unknown>;
 
-export type CustomFieldFormatValueFn = (
-  inputValues: Array<any>
-) => any;
+export type CustomFieldFormatValueFn = (inputValues: Array<unknown>) => string;
 
-export type CustomFieldI18n = {
+export interface CustomFieldI18n {
   parseValue: CustomFieldParseValueFn;
   formatValue: CustomFieldFormatValueFn;
-};
+}
