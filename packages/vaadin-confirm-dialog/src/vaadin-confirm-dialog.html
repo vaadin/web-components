@@ -126,6 +126,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           return {
             /**
              * True if the overlay is currently displayed.
+             * @type {boolean}
              */
             opened: {
               type: Boolean,
@@ -133,42 +134,53 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
               notify: true,
               observer: '_openedChanged'
             },
+
             /**
              * Set the confirmation dialog title.
+             * @type {string}
              */
             header: {
               type: String,
               value: ''
             },
+
             /**
              * Set the message or confirmation question.
              */
             message: {
               type: String
             },
+
             /**
              * Text displayed on confirm-button.
+             * @type {string}
              */
             confirmText: {
               type: String,
               value: 'Confirm'
             },
+
             /**
              * Theme for a confirm-button.
+             * @type {string}
              */
             confirmTheme: {
               type: String,
               value: 'primary'
             },
+
             /**
              * Set to true to disable closing dialog on Escape press
+             * @type {boolean}
              */
             noCloseOnEsc: {
               type: Boolean,
               value: false
             },
+
             /**
              * Whether to show cancel button or not.
+             * @type {boolean}
              */
             reject: {
               type: Boolean,
@@ -176,22 +188,28 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
               value: false,
               notify: true
             },
+
             /**
              * Text displayed on reject-button.
+             * @type {string}
              */
             rejectText: {
               type: String,
               value: 'Reject'
             },
+
             /**
              * Theme for a reject-button.
+             * @type {string}
              */
             rejectTheme: {
               type: String,
               value: 'error tertiary'
             },
+
             /**
              * Whether to show cancel button or not.
+             * @type {boolean}
              */
             cancel: {
               type: Boolean,
@@ -199,29 +217,33 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
               value: false,
               notify: true
             },
+
             /**
              * Text displayed on cancel-button.
+             * @type {string}
              */
             cancelText: {
               type: String,
               value: 'Cancel'
             },
+
             /**
              * Theme for a cancel-button.
+             * @type {string}
              */
             cancelTheme: {
               type: String,
               value: 'tertiary'
             },
+
+            /** @private */
             _confirmButton: {
               type: Element
             }
           };
         }
 
-        /**
-         * @protected
-         */
+        /** @protected */
         static _finalizeClass() {
           super._finalizeClass();
 
@@ -232,6 +254,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           }
         }
 
+        /** @protected */
         ready() {
           super.ready();
           this.$.dialog.$.overlay.addEventListener('vaadin-overlay-escape-press', this._escPressed.bind(this));
@@ -242,6 +265,12 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           }
         }
 
+        /**
+         * @param {string} name
+         * @param {?string} oldValue
+         * @param {?string} newValue
+         * @protected
+         */
         attributeChangedCallback(name, oldValue, newValue) {
           super.attributeChangedCallback(name, oldValue, newValue);
           if (name === 'dir') {
@@ -251,6 +280,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           }
         }
 
+        /** @private */
         __toggleContentRTL(rtl) {
           const contentBlock = this.$.dialog.$.overlay.content.querySelector('#content');
           const footerBlock = this.$.dialog.$.overlay.content.querySelector('[part=footer]');
@@ -263,6 +293,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           }
         }
 
+        /** @private */
         _openedChanged() {
           if (!this.opened) {
             return;
@@ -289,51 +320,47 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           });
         }
 
+        /** @private */
         _escPressed(event) {
           if (!event.defaultPrevented) {
             this._cancel();
           }
         }
 
-        /**
-         * @event confirm
-         * fired when Confirm button was pressed.
-         */
+        /** @private */
         _confirm() {
           this.dispatchEvent(new CustomEvent('confirm'));
           this.opened = false;
         }
 
-        /**
-         * @event cancel
-         * fired when Cancel button or Escape key was pressed.
-         */
+        /** @private */
         _cancel() {
           this.dispatchEvent(new CustomEvent('cancel'));
           this.opened = false;
         }
 
-        /**
-         * @event reject
-         * fired when Reject button was pressed.
-         */
+        /** @private */
         _reject() {
           this.dispatchEvent(new CustomEvent('reject'));
           this.opened = false;
         }
 
+        /** @private */
         _getAriaLabel(header) {
           return header || 'confirmation';
         }
 
+        /** @private */
         _setWidth(width) {
           this._setDimensionIfAttached('width', width);
         }
 
+        /** @private */
         _setHeight(height) {
           this._setDimensionIfAttached('height', height);
         }
 
+        /** @private */
         _setDimensionIfAttached(name, value) {
           if (this.$ && this.$.dialog) {
             this._setDimension(name, value);
@@ -343,6 +370,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           }
         }
 
+        /** @private */
         _setDimension(name, value) {
           this._propsToUpdate = this._propsToUpdate || {};
 
@@ -356,6 +384,21 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             }
           });
         }
+
+        /**
+         * @event confirm
+         * fired when Confirm button was pressed.
+         */
+
+        /**
+         * @event cancel
+         * fired when Cancel button or Escape key was pressed.
+         */
+
+        /**
+         * @event reject
+         * fired when Reject button was pressed.
+         */
       }
 
       customElements.define(ConfirmDialogElement.is, ConfirmDialogElement);
