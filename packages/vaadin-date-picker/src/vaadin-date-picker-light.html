@@ -7,7 +7,6 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../polymer/polymer-element.html">
 <link rel="import" href="../../iron-media-query/iron-media-query.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
-<link rel="import" href="../../vaadin-themable-mixin/vaadin-theme-property-mixin.html">
 <link rel="import" href="vaadin-date-picker-overlay.html">
 <link rel="import" href="vaadin-date-picker-overlay-content.html">
 <link rel="import" href="vaadin-date-picker-mixin.html">
@@ -109,13 +108,11 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * @memberof Vaadin
        * @mixes Vaadin.ThemableMixin
-       * @mixes Vaadin.ThemePropertyMixin
        * @mixes Vaadin.DatePickerMixin
        */
       class DatePickerLightElement extends
         Vaadin.ThemableMixin(
-          Vaadin.ThemePropertyMixin(
-            Vaadin.DatePickerMixin(Polymer.Element))) {
+          Vaadin.DatePickerMixin(Polymer.Element)) {
         static get is() {
           return 'vaadin-date-picker-light';
         }
@@ -125,12 +122,17 @@ This program is available under Apache License Version 2.0, available at https:/
             /**
              * Name of the two-way data-bindable property representing the
              * value of the custom input field.
+             * @type {string}
              */
             attrForValue: {
               type: String,
               value: 'bind-value'
             },
 
+            /**
+             * @type {boolean}
+             * @protected
+             */
             _overlayInitialized: {
               type: Boolean,
               value: true
@@ -138,6 +140,10 @@ This program is available under Apache License Version 2.0, available at https:/
           };
         }
 
+        /**
+         * @return {HTMLElement}
+         * @protected
+         */
         _input() {
           // Using the same selector than in combo-box.
           // TODO: revisit this to decide the selector and document conveniently.
@@ -150,6 +156,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @return {string | undefined} */
         get _inputValue() {
           return this._inputElement && this._inputElement[Polymer.CaseMap.dashToCamelCase(this.attrForValue)];
         }

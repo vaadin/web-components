@@ -22,11 +22,17 @@ This program is available under Apache License Version 2.0, available at https:/
       return {
         /**
          * The current selected date.
+         * @type {Date | undefined}
+         * @protected
          */
         _selectedDate: {
           type: Date
         },
 
+        /**
+         * @type {Date | undefined}
+         * @protected
+         */
         _focusedDate: Date,
 
         /**
@@ -36,7 +42,7 @@ This program is available under Apache License Version 2.0, available at https:/
          * - ISO 8601 `"YYYY-MM-DD"` (default)
          * - 6-digit extended ISO 8601 `"+YYYYYY-MM-DD"`, `"-YYYYYY-MM-DD"`
          *
-         * @type {String}
+         * @type {string}
          */
         value: {
           type: String,
@@ -47,6 +53,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         /**
          * Set to true to mark the input as required.
+         * @type {boolean}
          */
         required: {
           type: Boolean,
@@ -96,17 +103,28 @@ This program is available under Apache License Version 2.0, available at https:/
           type: Boolean
         },
 
+        /**
+         * @type {boolean}
+         * @protected
+         */
         _fullscreen: {
           value: false,
           observer: '_fullscreenChanged'
         },
 
+        /**
+         * @type {string}
+         * @protected
+         */
         _fullscreenMediaQuery: {
           value: '(max-width: 420px), (max-height: 420px)'
         },
 
-        // An array of ancestor elements whose -webkit-overflow-scrolling is forced from value
-        // 'touch' to value 'auto' in order to prevent them from clipping the dropdown. iOS only.
+        /**
+         * An array of ancestor elements whose -webkit-overflow-scrolling is forced from value
+         * 'touch' to value 'auto' in order to prevent them from clipping the dropdown. iOS only.
+         * @private
+         */
         _touchPrevented: Array,
 
         /**
@@ -182,7 +200,7 @@ This program is available under Apache License Version 2.0, available at https:/
               }
             }
 
-         *
+         * @type {!DatePickerI18n}
          * @default {English/US}
          */
         i18n: {
@@ -242,7 +260,7 @@ This program is available under Apache License Version 2.0, available at https:/
          * - ISO 8601 `"YYYY-MM-DD"` (default)
          * - 6-digit extended ISO 8601 `"+YYYYYY-MM-DD"`, `"-YYYYYY-MM-DD"`
          *
-         * @type {String}
+         * @type {string | undefined}
          */
         min: {
           type: String,
@@ -256,7 +274,7 @@ This program is available under Apache License Version 2.0, available at https:/
          * - ISO 8601 `"YYYY-MM-DD"` (default)
          * - 6-digit extended ISO 8601 `"+YYYYYY-MM-DD"`, `"-YYYYYY-MM-DD"`
          *
-         * @type {String}
+         * @type {string | undefined}
          */
         max: {
           type: String,
@@ -265,6 +283,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
         /**
          * The earliest date that can be selected. All earlier dates will be disabled.
+         * @type {Date | string}
+         * @protected
          */
         _minDate: {
           type: Date,
@@ -274,33 +294,41 @@ This program is available under Apache License Version 2.0, available at https:/
 
         /**
          * The latest date that can be selected. All later dates will be disabled.
+         * @type {Date | string}
+         * @protected
          */
         _maxDate: {
           type: Date,
           value: ''
         },
 
+        /** @private */
         _noInput: {
           type: Boolean,
           computed: '_isNoInput(_fullscreen, _ios, i18n, i18n.*)'
         },
 
+        /** @private */
         _ios: {
           type: Boolean,
           value: navigator.userAgent.match(/iP(?:hone|ad;(?: U;)? CPU) OS (\d+)/)
         },
 
+        /** @private */
         _webkitOverflowScroll: {
           type: Boolean,
           value: document.createElement('div').style.webkitOverflowScrolling === ''
         },
 
+        /** @private */
         _ignoreAnnounce: {
           value: true
         },
 
+        /** @private */
         _focusOverlayOnOpen: Boolean,
 
+        /** @protected */
         _overlayInitialized: Boolean
       };
     }
@@ -314,6 +342,7 @@ This program is available under Apache License Version 2.0, available at https:/
       ];
     }
 
+    /** @protected */
     ready() {
       super.ready();
       this._boundOnScroll = this._onScroll.bind(this);
@@ -366,6 +395,7 @@ This program is available under Apache License Version 2.0, available at https:/
       });
     }
 
+    /** @private */
     _initOverlay() {
       this.$.overlay.removeAttribute('disable-upgrade');
       this._overlayInitialized = true;
@@ -393,9 +423,7 @@ This program is available under Apache License Version 2.0, available at https:/
       this.addEventListener('touchstart', bringToFrontListener);
     }
 
-    /**
-     * @protected
-     */
+    /** @protected */
     disconnectedCallback() {
       super.disconnectedCallback();
 
@@ -415,6 +443,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _close(e) {
       if (e) {
         e.stopPropagation();
@@ -432,10 +461,15 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /**
+     * @return {HTMLElement}
+     * @protected
+     */
     get _inputElement() {
       return this._input();
     }
 
+    /** @private */
     get _nativeInput() {
       if (this._inputElement) {
         // vaadin-text-field's input is focusElement
@@ -446,6 +480,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _parseDate(str) {
       // Parsing with RegExp to ensure correct format
       var parts = /^([-+]\d{1}|\d{2,4}|[-+]\d{6})-(\d{1,2})-(\d{1,2})$/.exec(str);
@@ -460,10 +495,12 @@ This program is available under Apache License Version 2.0, available at https:/
       return date;
     }
 
+    /** @private */
     _isNoInput(fullscreen, ios, i18n) {
       return !this._inputElement || fullscreen || ios || !i18n.parseDate;
     }
 
+    /** @private */
     _formatISO(date) {
       if (!(date instanceof Date)) {
         return '';
@@ -489,6 +526,7 @@ This program is available under Apache License Version 2.0, available at https:/
       return [year, month, day].join('-');
     }
 
+    /** @private */
     _openedChanged(opened) {
       if (opened && !this._overlayInitialized) {
         this._initOverlay();
@@ -501,6 +539,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _selectedDateChanged(selectedDate, formatDate) {
       if (selectedDate === undefined || formatDate === undefined) {
         return;
@@ -523,6 +562,7 @@ This program is available under Apache License Version 2.0, available at https:/
       this._ignoreFocusedDateChange = false;
     }
 
+    /** @private */
     _focusedDateChanged(focusedDate, formatDate) {
       if (focusedDate === undefined || formatDate === undefined) {
         return;
@@ -533,6 +573,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _updateHasValue(value) {
       if (value) {
         this.setAttribute('has-value', '');
@@ -541,13 +582,14 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
-
+    /** @private */
     __getOverlayTheme(theme, overlayInitialized) {
       if (overlayInitialized) {
         return theme;
       }
     }
 
+    /** @private */
     _handleDateChange(property, value, oldValue) {
       if (!value) {
         this[property] = '';
@@ -565,6 +607,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _valueChanged(value, oldValue) {
       if (this.__dispatchChange) {
         this.dispatchEvent(new CustomEvent('change', {bubbles: true}));
@@ -572,14 +615,17 @@ This program is available under Apache License Version 2.0, available at https:/
       this._handleDateChange('_selectedDate', value, oldValue);
     }
 
+    /** @private */
     _minChanged(value, oldValue) {
       this._handleDateChange('_minDate', value, oldValue);
     }
 
+    /** @private */
     _maxChanged(value, oldValue) {
       this._handleDateChange('_maxDate', value, oldValue);
     }
 
+    /** @private */
     _updateAlignmentAndPosition() {
       if (!this._overlayInitialized) {
         return;
@@ -619,12 +665,14 @@ This program is available under Apache License Version 2.0, available at https:/
       this._overlayContent._repositionYearScroller();
     }
 
+    /** @private */
     _fullscreenChanged() {
       if (this._overlayInitialized && this.$.overlay.opened) {
         this._updateAlignmentAndPosition();
       }
     }
 
+    /** @protected */
     _onOverlayOpened() {
       this._openedWithFocusRing = this.hasAttribute('focus-ring') || (this.focusElement && this.focusElement.hasAttribute('focus-ring'));
 
@@ -672,6 +720,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     // A hack needed for iOS to prevent dropdown from being clipped in an
     // ancestor container with -webkit-overflow-scrolling: touch;
+    /** @private */
     _preventWebkitOverflowScrollingTouch(element) {
       var result = [];
       while (element) {
@@ -688,6 +737,7 @@ This program is available under Apache License Version 2.0, available at https:/
       return result;
     }
 
+    /** @private */
     _selectParsedOrFocusedDate() {
       // Select the parsed input or focused date
       this._ignoreFocusedDateChange = true;
@@ -708,6 +758,7 @@ This program is available under Apache License Version 2.0, available at https:/
       this._ignoreFocusedDateChange = false;
     }
 
+    /** @protected */
     _onOverlayClosed() {
       this._ignoreAnnounce = true;
 
@@ -737,7 +788,7 @@ This program is available under Apache License Version 2.0, available at https:/
     /**
      * Returns true if `value` is valid, and sets the `invalid` flag appropriately.
      *
-     * @param {string} value Value to validate. Optional, defaults to user's input value.
+     * @param {string=} value Value to validate. Optional, defaults to user's input value.
      * @return {boolean} True if the value is valid and sets the `invalid` flag appropriately
      */
     validate() {
@@ -752,7 +803,7 @@ This program is available under Apache License Version 2.0, available at https:/
      *
      * Override the `checkValidity` method for custom validations.
      *
-     * @param {string} value Value to validate. Optional, defaults to the selected date.
+     * @param {string=} value Value to validate. Optional, defaults to the selected date.
      * @return {boolean} True if the value is valid
      */
     checkValidity() {
@@ -777,12 +828,14 @@ This program is available under Apache License Version 2.0, available at https:/
       return inputValid && minMaxValid && inputValidity;
     }
 
+    /** @private */
     _onScroll(e) {
       if (e.target === window || !this._overlayContent.contains(e.target)) {
         this._updateAlignmentAndPosition();
       }
     }
 
+    /** @protected */
     _focus() {
       if (this._noInput) {
         this._overlayInitialized && this._overlayContent.focus();
@@ -791,19 +844,23 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _focusAndSelect() {
       this._focus();
       this._setSelectionRange(0, this._inputValue.length);
     }
 
+    /** @private */
     _applyInputValue(date) {
       this._inputValue = date ? this._getFormattedDate(this.i18n.formatDate, date) : '';
     }
 
+    /** @private */
     _getFormattedDate(formatDate, date) {
       return formatDate(Vaadin.DatePickerHelper._extractDateParts(date));
     }
 
+    /** @private */
     _setSelectionRange(a, b) {
       if (this._nativeInput && this._nativeInput.setSelectionRange) {
         this._nativeInput.setSelectionRange(a, b);
@@ -812,6 +869,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     /**
      * Keyboard Navigation
+     * @private
      */
     _eventKey(e) {
       var keys = ['down', 'up', 'enter', 'esc', 'tab'];
@@ -824,10 +882,12 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _isValidDate(d) {
       return d && !isNaN(d.getTime());
     }
 
+    /** @private */
     _onKeydown(e) {
       if (this._noInput) {
         // The input element cannot be readonly as it would conflict with
@@ -909,6 +969,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _getParsedDate(inputValue = this._inputValue) {
       const dateObject = this.i18n.parseDate && this.i18n.parseDate(inputValue);
       const parsedDate = dateObject &&
@@ -916,6 +977,7 @@ This program is available under Apache License Version 2.0, available at https:/
       return parsedDate;
     }
 
+    /** @private */
     _onUserInput(e) {
       if (!this.opened && this._inputElement.value && !this.autoOpenDisabled) {
         this.open();
@@ -930,6 +992,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _userInputValueChanged(value) {
       if (this.opened && this._inputValue) {
         const parsedDate = this._getParsedDate();
@@ -944,12 +1007,14 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _announceFocusedDate(_focusedDate, opened, _ignoreAnnounce) {
       if (opened && !_ignoreAnnounce) {
         this._overlayContent.announceFocusedDate();
       }
     }
 
+    /** @private */
     get _overlayContent() {
       return this.$.overlay.content.querySelector('#overlay-content');
     }

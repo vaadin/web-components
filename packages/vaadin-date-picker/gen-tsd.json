@@ -1,0 +1,21 @@
+{
+  "excludeFiles": [
+    "wct.conf.js",
+    "index.html",
+    "src/vaadin-date-picker-helper.js",
+    "src/vaadin-date-picker-overlay-content.js",
+    "src/vaadin-date-picker-overlay.js",
+    "src/vaadin-date-picker-styles.js",
+    "src/vaadin-date-picker-text-field.js",
+    "src/vaadin-infinite-scroller.js",
+    "src/vaadin-month-calendar.js",
+    "demo/**/*",
+    "test/**/*",
+    "theme/**/*"
+  ],
+  "autoImport": {
+    "./@types/interfaces": [
+      "DatePickerI18n"
+    ]
+  }
+}

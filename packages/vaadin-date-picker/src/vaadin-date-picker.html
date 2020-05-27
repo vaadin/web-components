@@ -8,7 +8,6 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../polymer/lib/mixins/gesture-event-listeners.html">
 <link rel="import" href="../../iron-media-query/iron-media-query.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
-<link rel="import" href="../../vaadin-themable-mixin/vaadin-theme-property-mixin.html">
 <link rel="import" href="../../vaadin-control-state-mixin/vaadin-control-state-mixin.html">
 <link rel="import" href="vaadin-date-picker-overlay.html">
 <link rel="import" href="vaadin-date-picker-overlay-content.html">
@@ -170,7 +169,6 @@ This program is available under Apache License Version 2.0, available at https:/
        * @mixes Vaadin.ElementMixin
        * @mixes Vaadin.ControlStateMixin
        * @mixes Vaadin.ThemableMixin
-       * @mixes Vaadin.ThemePropertyMixin
        * @mixes Vaadin.DatePickerMixin
        * @mixes Polymer.GestureEventListeners
        * @demo demo/index.html
@@ -179,9 +177,8 @@ This program is available under Apache License Version 2.0, available at https:/
         Vaadin.ElementMixin(
           Vaadin.ControlStateMixin(
             Vaadin.ThemableMixin(
-              Vaadin.ThemePropertyMixin(
-                Vaadin.DatePickerMixin(
-                  Polymer.GestureEventListeners(Polymer.Element)))))) {
+              Vaadin.DatePickerMixin(
+                Polymer.GestureEventListeners(Polymer.Element))))) {
 
         static get is() {
           return 'vaadin-date-picker';
@@ -195,6 +192,7 @@ This program is available under Apache License Version 2.0, available at https:/
           return {
             /**
              * Set to true to display the clear icon which clears the input.
+             * @type {boolean}
              */
             clearButtonVisible: {
               type: Boolean,
@@ -203,6 +201,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * Set to true to disable this element.
+             * @type {boolean}
              */
             disabled: {
               type: Boolean,
@@ -222,6 +221,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * Set to true to make this element read-only.
+             * @type {boolean}
              */
             readonly: {
               type: Boolean,
@@ -231,6 +231,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * This property is set to true when the control value invalid.
+             * @type {boolean}
              */
             invalid: {
               type: Boolean,
@@ -239,6 +240,7 @@ This program is available under Apache License Version 2.0, available at https:/
               value: false
             },
 
+            /** @private */
             _userInputValue: String
           };
         }
@@ -250,6 +252,7 @@ This program is available under Apache License Version 2.0, available at https:/
           ];
         }
 
+        /** @protected */
         ready() {
           super.ready();
 
@@ -265,6 +268,7 @@ This program is available under Apache License Version 2.0, available at https:/
           });
         }
 
+        /** @private */
         _onVaadinOverlayClose(e) {
           if (this._openedWithFocusRing && this.hasAttribute('focused')) {
             this.focusElement.setAttribute('focus-ring', '');
@@ -276,11 +280,16 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         _toggle(e) {
           e.stopPropagation();
           this[(this._overlayInitialized && this.$.overlay.opened) ? 'close' : 'open']();
         }
 
+        /**
+         * @return {HTMLElement}
+         * @protected
+         */
         _input() {
           return this.$.input;
         }
@@ -289,21 +298,26 @@ This program is available under Apache License Version 2.0, available at https:/
           this._inputElement.value = value;
         }
 
+        /** @return {string} */
         get _inputValue() {
           return this._inputElement.value;
         }
 
+        /** @private */
         _getAriaExpanded(opened) {
           return Boolean(opened).toString();
         }
 
         /**
-         * Focussable element used by vaadin-control-state-mixin
+         * Focusable element used by vaadin-control-state-mixin
+         * @return {!HTMLElement}
+         * @protected
          */
         get focusElement() {
           return this._input() || this;
         }
 
+        /** @private */
         _setClearButtonLabel(i18nClear) {
           // FIXME(platosha): expose i18n API in <vaadin-text-field>
           // https://github.com/vaadin/vaadin-text-field/issues/348
