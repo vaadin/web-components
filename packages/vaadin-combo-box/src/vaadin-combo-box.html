@@ -8,7 +8,6 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../vaadin-text-field/src/vaadin-text-field.html">
 <link rel="import" href="../../vaadin-control-state-mixin/vaadin-control-state-mixin.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
-<link rel="import" href="../../vaadin-themable-mixin/vaadin-theme-property-mixin.html">
 <link rel="import" href="vaadin-combo-box-mixin.html">
 <link rel="import" href="vaadin-combo-box-dropdown-wrapper.html">
 <link rel="import" href="vaadin-combo-box-data-provider-mixin.html">
@@ -243,16 +242,14 @@ This program is available under Apache License Version 2.0, available at https:/
        * @mixes Vaadin.ComboBoxDataProviderMixin
        * @mixes Vaadin.ComboBoxMixin
        * @mixes Vaadin.ThemableMixin
-       * @mixes Vaadin.ThemePropertyMixin
        * @demo demo/index.html
        */
       class ComboBoxElement extends
         Vaadin.ElementMixin(
           Vaadin.ControlStateMixin(
-            Vaadin.ThemePropertyMixin(
-              Vaadin.ThemableMixin(
-                Vaadin.ComboBoxDataProviderMixin(
-                  Vaadin.ComboBoxMixin(Polymer.Element)))))) {
+            Vaadin.ThemableMixin(
+              Vaadin.ComboBoxDataProviderMixin(
+                Vaadin.ComboBoxMixin(Polymer.Element))))) {
         constructor() {
           super();
           /**
@@ -281,6 +278,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * Set to true to mark the input as required.
+             * @type {boolean}
              */
             required: {
               type: Boolean,
@@ -289,6 +287,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * Set to true to disable this input.
+             * @type {boolean}
              */
             disabled: {
               type: Boolean,
@@ -316,18 +315,21 @@ This program is available under Apache License Version 2.0, available at https:/
               type: String
             },
 
+            /** @type {boolean} */
             autofocus: {
               type: Boolean
             },
 
             /**
              * A placeholder string in addition to the label.
+             * @type {string}
              */
             placeholder: {
               type: String,
               value: ''
             },
 
+            /** @type {boolean} */
             readonly: {
               type: Boolean,
               value: false
@@ -335,6 +337,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * Set to true to display the clear icon which clears the input.
+             * @type {boolean}
              */
             clearButtonVisible: {
               type: Boolean,
@@ -347,7 +350,14 @@ This program is available under Apache License Version 2.0, available at https:/
           return ['_updateAriaExpanded(opened)'];
         }
 
-        attributeChanged(name, type) {
+        /**
+         * @param {string} name
+         * @param {?string} oldValue
+         * @param {?string} newValue
+         * @protected
+         */
+        attributeChangedCallback(name, oldValue, newValue) {
+          super.attributeChangedCallback(name, oldValue, newValue);
           // Safari has an issue with repainting shadow root element styles when a host attribute changes.
           // Need this workaround (toggle any inline css property on and off) until the issue gets fixed.
           const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
@@ -359,6 +369,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @protected */
         ready() {
           super.ready();
 
@@ -386,20 +397,24 @@ This program is available under Apache License Version 2.0, available at https:/
           this._updateAriaExpanded();
         }
 
+        /** @protected */
         connectedCallback() {
           super.connectedCallback();
           this._preventInputBlur();
         }
 
+        /** @protected */
         disconnectedCallback() {
           super.disconnectedCallback();
           this._restoreInputBlur();
         }
 
+        /** @private */
         _getPositionTarget() {
           return this.$.input;
         }
 
+        /** @private */
         _updateAriaExpanded() {
           if (this._nativeInput) {
             this._nativeInput.setAttribute('aria-expanded', this.opened);
@@ -407,12 +422,14 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @return {!TextFieldElement | undefined} */
         get inputElement() {
           return this.$.input;
         }
 
         /**
          * Focusable element used by vaadin-control-state-mixin
+         * @return {!HTMLElement}
          */
         get focusElement() {
           // inputElement might not be defined on property changes before ready.

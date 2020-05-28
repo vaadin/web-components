@@ -1,0 +1,24 @@
+{
+  "excludeFiles": [
+    "wct.conf.js",
+    "index.html",
+    "src/vaadin-combo-box-dropdown-wrapper.js",
+    "src/vaadin-combo-box-dropdown.js",
+    "src/vaadin-combo-box-item.js",
+    "src/vaadin-combo-box-placeholder.js",
+    "demo/**/*",
+    "test/**/*",
+    "theme/**/*"
+  ],
+  "autoImport": {
+    "@vaadin/vaadin-text-field/vaadin-text-field": [
+      "TextFieldElement"
+    ],
+    "./@types/interfaces": [
+      "ComboBoxItem",
+      "ComboBoxRendererModel",
+      "ComboBoxRenderer",
+      "ComboBoxDataProvider"
+    ]
+  }
+}

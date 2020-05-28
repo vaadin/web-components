@@ -17,6 +17,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         /**
          * Number of items fetched at a time from the dataprovider.
+         * @type {number}
          */
         pageSize: {
           type: Number,
@@ -26,6 +27,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         /**
          * Total number of items.
+         * @type {number | undefined}
          */
         size: {
           type: Number,
@@ -44,18 +46,21 @@ This program is available under Apache License Version 2.0, available at https:/
          * `callback(items, size)` Callback function with arguments:
          *   - `items` Current page of items
          *   - `size` Total number of items.
+         * @type {ComboBoxDataProvider | undefined}
          */
         dataProvider: {
           type: Object,
           observer: '_dataProviderChanged'
         },
 
+        /** @private */
         _pendingRequests: {
           value: () => {
             return {};
           }
         },
 
+        /** @private */
         __placeHolder: {
           value: new Vaadin.ComboBoxPlaceholder()
         }
@@ -72,8 +77,9 @@ This program is available under Apache License Version 2.0, available at https:/
       ];
     }
 
+    /** @private */
     _dataProviderClearFilter(dataProvider, opened, value) {
-      // Can't depend on filter in this obsever as we don't want
+      // Can't depend on filter in this observer as we don't want
       // to clear the filter whenever it's set
       if (dataProvider && this.filter) {
         this.size = undefined;
@@ -83,6 +89,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @protected */
     ready() {
       super.ready();
       this.clearCache();
@@ -97,6 +104,7 @@ This program is available under Apache License Version 2.0, available at https:/
       });
     }
 
+    /** @private */
     _dataProviderFilterChanged() {
       if (this.dataProvider && this.opened) {
         this.size = undefined;
@@ -105,12 +113,14 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _ensureFirstPage(opened) {
       if (opened && this._shouldLoadPage(0)) {
         this._loadPage(0);
       }
     }
 
+    /** @private */
     _shouldLoadPage(page) {
       if (!this.filteredItems || this._forceNextRequest) {
         this._forceNextRequest = false;
@@ -125,6 +135,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _loadPage(page) {
       // make sure same page isn't requested multiple times.
       if (!this._pendingRequests[page] && this.dataProvider) {
@@ -167,6 +178,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _getPageForIndex(index) {
       return Math.floor(index / this.pageSize);
     }
@@ -191,6 +203,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _sizeChanged(size = 0) {
       const filteredItems = (this.filteredItems || []).slice(0, size);
       for (let i = 0; i < size; i++) {
@@ -199,6 +212,7 @@ This program is available under Apache License Version 2.0, available at https:/
       this.filteredItems = filteredItems;
     }
 
+    /** @private */
     _pageSizeChanged(pageSize, oldPageSize) {
       if (Math.floor(pageSize) !== pageSize || pageSize < 1) {
         this.pageSize = oldPageSize;
@@ -207,12 +221,14 @@ This program is available under Apache License Version 2.0, available at https:/
       this.clearCache();
     }
 
+    /** @private */
     _dataProviderChanged(dataProvider, oldDataProvider) {
       this._ensureItemsOrDataProvider(() => {
         this.dataProvider = oldDataProvider;
       });
     }
 
+    /** @private */
     _ensureItemsOrDataProvider(restoreOldValueCallback) {
       if (this.items !== undefined && this.dataProvider !== undefined) {
         restoreOldValueCallback();
@@ -222,6 +238,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _warnDataProviderValue(dataProvider, value) {
       if (dataProvider && value !== '' && (this.selectedItem === undefined || this.selectedItem === null)) {
         const valueIndex = this._indexOfValue(value, this.filteredItems);

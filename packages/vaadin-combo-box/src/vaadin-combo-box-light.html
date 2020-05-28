@@ -6,7 +6,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <link rel="import" href="../../polymer/polymer-element.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
-<link rel="import" href="../../vaadin-themable-mixin/vaadin-theme-property-mixin.html">
 <link rel="import" href="vaadin-combo-box-mixin.html">
 <link rel="import" href="vaadin-combo-box-data-provider-mixin.html">
 <link rel="import" href="vaadin-combo-box-dropdown-wrapper.html">
@@ -82,13 +81,11 @@ This program is available under Apache License Version 2.0, available at https:/
      * @mixes Vaadin.ComboBoxDataProviderMixin
      * @mixes Vaadin.ComboBoxMixin
      * @mixes Vaadin.ThemableMixin
-     * @mixes Vaadin.ThemePropertyMixin
      */
     class ComboBoxLightElement extends
-      Vaadin.ThemePropertyMixin(
-        Vaadin.ThemableMixin(
-          Vaadin.ComboBoxDataProviderMixin(
-            Vaadin.ComboBoxMixin(Polymer.Element)))) {
+      Vaadin.ThemableMixin(
+        Vaadin.ComboBoxDataProviderMixin(
+          Vaadin.ComboBoxMixin(Polymer.Element))) {
 
       static get is() {
         return 'vaadin-combo-box-light';
@@ -99,12 +96,16 @@ This program is available under Apache License Version 2.0, available at https:/
           /**
            * Name of the two-way data-bindable property representing the
            * value of the custom input field.
+           * @type {string}
            */
           attrForValue: {
             type: String,
             value: 'value'
           },
 
+          /**
+           * @type {!Element | undefined}
+           */
           inputElement: {
             type: Element,
             readOnly: true
@@ -118,6 +119,7 @@ This program is available under Apache License Version 2.0, available at https:/
         this.__boundInputValueCommitted = this.__inputValueCommitted.bind(this);
       }
 
+      /** @protected */
       ready() {
         super.ready();
         this._toggleElement = this.querySelector('.toggle-button');
@@ -132,10 +134,14 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
+      /**
+       * @return {boolean}
+       */
       get focused() {
         return this.getRootNode().activeElement === this.inputElement;
       }
 
+      /** @protected */
       connectedCallback() {
         super.connectedCallback();
         const cssSelector = 'vaadin-text-field,iron-input,paper-input,.paper-input-input,.input';
@@ -146,6 +152,7 @@ This program is available under Apache License Version 2.0, available at https:/
         this._preventInputBlur();
       }
 
+      /** @protected */
       disconnectedCallback() {
         super.disconnectedCallback();
         this.inputElement.removeEventListener('input', this._boundInputValueChanged);
@@ -153,6 +160,7 @@ This program is available under Apache License Version 2.0, available at https:/
         this._restoreInputBlur();
       }
 
+      /** @private */
       __inputValueCommitted(e) {
         // Detect if the input was cleared (by clicking the clear button on a vaadin-text-field)
         // and propagate the value change to combo box value immediately.
@@ -161,14 +169,26 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
+      /**
+       * @return {string}
+       * @protected
+       */
       get _propertyForValue() {
         return Polymer.CaseMap.dashToCamelCase(this.attrForValue);
       }
 
+      /**
+       * @return {string}
+       * @protected
+       */
       get _inputElementValue() {
         return this.inputElement && this.inputElement[this._propertyForValue];
       }
 
+      /**
+       * @param {string} value
+       * @protected
+       */
       set _inputElementValue(value) {
         if (this.inputElement) {
           this.inputElement[this._propertyForValue] = value;

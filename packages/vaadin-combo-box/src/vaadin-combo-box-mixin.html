@@ -26,6 +26,7 @@ This program is available under Apache License Version 2.0, available at https:/
       return {
         /**
          * True if the dropdown is open, false otherwise.
+         * @type {boolean}
          */
         opened: {
           type: Boolean,
@@ -42,6 +43,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         /**
          * Set to true to disable this element.
+         * @type {boolean}
          */
         disabled: {
           type: Boolean,
@@ -51,6 +53,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         /**
          * When present, it specifies that the element field is read-only.
+         * @type {boolean}
          */
         readonly: {
           type: Boolean,
@@ -68,12 +71,14 @@ This program is available under Apache License Version 2.0, available at https:/
          *   item, contains:
          *   - `model.index` The index of the rendered item.
          *   - `model.item` The item.
+         * @type {ComboBoxRenderer | undefined}
          */
         renderer: Function,
 
         /**
          * A full set of items to filter the visible options from.
          * The items can be of either `String` or `Object` type.
+         * @type {!Array<!ComboBoxItem> | undefined}
          */
         items: {
           type: Array,
@@ -85,6 +90,7 @@ This program is available under Apache License Version 2.0, available at https:/
          * `value` property will be set to the input value in this case.
          * Also, when `value` is set programmatically, the input value will be set
          * to reflect that value.
+         * @type {boolean}
          */
         allowCustomValue: {
           type: Boolean,
@@ -95,6 +101,7 @@ This program is available under Apache License Version 2.0, available at https:/
          * A subset of items, filtered based on the user input. Filtered items
          * can be assigned directly to omit the internal filtering functionality.
          * The items can be of either `String` or `Object` type.
+         * @type {!Array<!ComboBoxItem> | undefined}
          */
         filteredItems: {
           type: Array
@@ -108,6 +115,7 @@ This program is available under Apache License Version 2.0, available at https:/
          *
          * Use `selectedItem` property to get the raw selected item from
          * the `items` array.
+         * @type {string}
          */
         value: {
           type: String,
@@ -118,11 +126,13 @@ This program is available under Apache License Version 2.0, available at https:/
 
         /**
          * Used to detect user value changes and fire `change` events.
+         * @private
          */
         _lastCommittedValue: String,
 
-        /*
+        /**
          * When set to `true`, "loading" attribute is added to host and the overlay element.
+         * @type {boolean}
          */
         loading: {
           type: Boolean,
@@ -130,6 +140,10 @@ This program is available under Apache License Version 2.0, available at https:/
           reflectToAttribute: true
         },
 
+        /**
+         * @type {number}
+         * @protected
+         */
         _focusedIndex: {
           type: Number,
           value: -1
@@ -137,6 +151,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         /**
          * Filtering string the user has typed into the input field.
+         * @type {string}
          */
         filter: {
           type: String,
@@ -146,6 +161,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         /**
          * The selected item from the `items` array.
+         * @type {ComboBoxItem | undefined}
          */
         selectedItem: {
           type: Object,
@@ -162,6 +178,7 @@ This program is available under Apache License Version 2.0, available at https:/
          *
          * When using item templates, the property is still needed because it is used
          * for filtering, and for displaying the selected item value in the input box.
+         * @type {string}
          */
         itemLabelPath: {
           type: String,
@@ -176,6 +193,7 @@ This program is available under Apache License Version 2.0, available at https:/
          *
          * The item value is used in the `value` property of the combo box,
          * to provide the form value.
+         * @type {string}
          */
         itemValuePath: {
           type: String,
@@ -199,6 +217,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         /**
          * Set to true if the value is invalid.
+         * @type {boolean}
          */
         invalid: {
           type: Boolean,
@@ -207,15 +226,28 @@ This program is available under Apache License Version 2.0, available at https:/
           value: false
         },
 
+        /**
+         * @type {!HTMLElement | undefined}
+         * @protected
+         */
         _toggleElement: Object,
+
+        /**
+         * @type {!HTMLElement | undefined}
+         * @protected
+         */
         _clearElement: Object,
 
+        /** @protected */
         _inputElementValue: String,
 
+        /** @private */
         _closeOnBlurIsPrevented: Boolean,
 
+        /** @private */
         _previousDocumentPointerEvents: String,
 
+        /** @private */
         _itemTemplate: Object
       };
     }
@@ -244,6 +276,7 @@ This program is available under Apache License Version 2.0, available at https:/
       this._boundOnTouchend = this._onTouchend.bind(this);
     }
 
+    /** @protected */
     ready() {
       super.ready();
 
@@ -293,10 +326,12 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _setTemplateFromNodes(nodes) {
       this._itemTemplate = nodes.filter(node => node.localName && node.localName === 'template')[0] || this._itemTemplate;
     }
 
+    /** @private */
     _removeNewRendererOrTemplate(template, oldTemplate, renderer, oldRenderer) {
       if (template !== oldTemplate) {
         this._itemTemplate = undefined;
@@ -305,6 +340,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _templateOrRendererChanged(template, renderer) {
       if (template && renderer) {
         this._removeNewRendererOrTemplate(template, this._oldTemplate, renderer, this._oldRenderer);
@@ -332,6 +368,7 @@ This program is available under Apache License Version 2.0, available at https:/
       this.opened = false;
     }
 
+    /** @private */
     _openedChanged(value, old) {
       // Prevent _close() being called when opened is set to its default value (false).
       if (old === undefined) {
@@ -352,6 +389,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _onOverlayTouchAction(event) {
       // On touch devices, blur the input on touch start inside the overlay, in order to hide
       // the virtual keyboard. But don't close the overlay on this blur.
@@ -360,6 +398,7 @@ This program is available under Apache License Version 2.0, available at https:/
       this._closeOnBlurIsPrevented = false;
     }
 
+    /** @private */
     _onClick(e) {
       this._closeOnBlurIsPrevented = true;
 
@@ -381,8 +420,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
     /**
      * Keyboard navigation
+     * @private
      */
-
     _onKeyDown(e) {
       if (this._isEventKey(e, 'down')) {
         this._closeOnBlurIsPrevented = true;
@@ -405,14 +444,22 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
-    _isEventKey(e, k) {
-      return Polymer.IronA11yKeysBehavior.keyboardEventMatchesKeys(e, k);
+    /**
+     * @param {!KeyboardEvent} event
+     * @param {string} key
+     * @return {boolean}
+     * @protected
+     */
+    _isEventKey(event, key) {
+      return Polymer.IronA11yKeysBehavior.keyboardEventMatchesKeys(event, key);
     }
 
+    /** @private */
     _getItemLabel(item) {
       return this.$.overlay.getItemLabel(item);
     }
 
+    /** @private */
     _getItemValue(item) {
       let value = item && this.itemValuePath ? this.get(this.itemValuePath, item) : undefined;
       if (value === undefined) {
@@ -421,6 +468,7 @@ This program is available under Apache License Version 2.0, available at https:/
       return value;
     }
 
+    /** @private */
     _onArrowDown() {
       if (this.opened) {
         if (this.$.overlay._items) {
@@ -432,6 +480,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _onArrowUp() {
       if (this.opened) {
         if (this._focusedIndex > -1) {
@@ -448,6 +497,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _prefillFocusedItemLabel() {
       if (this._focusedIndex > -1) {
         // Reset the input value asyncronously to prevent partial value changes
@@ -461,6 +511,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _setSelectionRange(start, end) {
       // vaadin-text-field does not implement setSelectionRange, hence we need the native input
       const input = this._nativeInput || this.inputElement;
@@ -479,12 +530,14 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _markAllSelectionRange() {
       if (this._inputElementValue !== undefined) {
         this._setSelectionRange(0, this._inputElementValue.length);
       }
     }
 
+    /** @private */
     _clearSelectionRange() {
       if (this._inputElementValue !== undefined) {
         const pos = this._inputElementValue ? this._inputElementValue.length : 0;
@@ -492,6 +545,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _closeOrCommit() {
       if (this.autoOpenDisabled && !this.opened) {
         this._commitValue();
@@ -500,6 +554,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _onEnter(e) {
       // should close on enter when custom values are allowed, input field is cleared, or when an existing
       // item is focused with keyboard. If auto open is disabled, under the same conditions, commit value.
@@ -514,6 +569,10 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /**
+     * @param {!KeyboardEvent} e
+     * @protected
+     */
     _onEscape(e) {
       if (this.autoOpenDisabled) {
         this._focusedIndex = -1;
@@ -530,6 +589,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _toggleElementChanged(toggleElement) {
       if (toggleElement) {
         // Don't blur the input on toggle mousedown
@@ -545,6 +605,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     /**
      * Clears the current value.
+     * @protected
      */
     _clear() {
       this.selectedItem = null;
@@ -566,6 +627,7 @@ This program is available under Apache License Version 2.0, available at https:/
       this._closeOrCommit();
     }
 
+    /** @private */
     _onOpened() {
       // Pre P2 iron-list used a debouncer to render. Now that we synchronously render items,
       // we need to flush the DOM to make sure it doesn't get flushed in the middle of _render call
@@ -592,6 +654,7 @@ This program is available under Apache License Version 2.0, available at https:/
       this._lastCommittedValue = this.value;
     }
 
+    /** @private */
     _onClosed() {
       // Happens when the overlay is closed by clicking outside
       if (this.opened) {
@@ -601,6 +664,7 @@ This program is available under Apache License Version 2.0, available at https:/
       this._commitValue();
     }
 
+    /** @private */
     _commitValue() {
       if (this.$.overlay._items && this._focusedIndex > -1) {
         const focusedItem = this.$.overlay._items[this._focusedIndex];
@@ -641,12 +705,18 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /**
+     * @return {string}
+     * @protected
+     */
     get _propertyForValue() {
       return 'value';
     }
 
     /**
-     *  Filtering and items handling
+     * Filtering and items handling
+     * @param {!Event} e
+     * @protected
      */
     _inputValueChanged(e) {
       // Handle only input events from our inputElement.
@@ -656,6 +726,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _filterFromInput(e) {
       if (!this.opened && !e.__fromClearButton && !this.autoOpenDisabled) {
         this.open();
@@ -671,12 +742,14 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _itemLabelPathChanged(itemLabelPath, oldItemLabelPath) {
       if (typeof itemLabelPath !== 'string') {
         console.error('You should set itemLabelPath to a valid string');
       }
     }
 
+    /** @private */
     _filterChanged(filter, itemValuePath, itemLabelPath) {
       if (filter === undefined) {
         return;
@@ -691,12 +764,14 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _loadingChanged(loading) {
       if (loading) {
         this._focusedIndex = -1;
       }
     }
 
+    /** @protected */
     _revertInputValue() {
       if (this.filter !== '') {
         this._inputElementValue = this.filter;
@@ -706,6 +781,7 @@ This program is available under Apache License Version 2.0, available at https:/
       this._clearSelectionRange();
     }
 
+    /** @private */
     _revertInputValueToValue() {
       if (this.allowCustomValue && !this.selectedItem) {
         this._inputElementValue = this.value;
@@ -714,10 +790,12 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _resizeDropdown() {
       this.$.overlay.$.dropdown.notifyResize();
     }
 
+    /** @private */
     _updateHasValue(hasValue) {
       if (hasValue) {
         this.setAttribute('has-value', '');
@@ -726,6 +804,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _selectedItemChanged(selectedItem, itemLabelPath) {
       if (selectedItem === null || selectedItem === undefined) {
         if (this.filteredItems) {
@@ -762,6 +841,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _valueChanged(value, oldVal) {
       if (value === '' && oldVal === undefined) { // initializing, no need to do anything (#554)
         return;
@@ -787,6 +867,7 @@ This program is available under Apache License Version 2.0, available at https:/
       this._lastCommittedValue = undefined;
     }
 
+    /** @private */
     _detectAndDispatchChange() {
       if (this.value !== this._lastCommittedValue) {
         this.dispatchEvent(new CustomEvent('change', {bubbles: true}));
@@ -794,12 +875,14 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _itemsChanged(items, oldItems) {
       this._ensureItemsOrDataProvider(() => {
         this.items = oldItems;
       });
     }
 
+    /** @private */
     _itemsOrPathsChanged(e, itemValuePath, itemLabelPath) {
       if (e.value === undefined) {
         return;
@@ -817,6 +900,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _filteredItemsChanged(e, itemValuePath, itemLabelPath) {
       if (e.value === undefined) {
         return;
@@ -834,6 +918,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _filterItems(arr, filter) {
       if (!arr) {
         return arr;
@@ -848,6 +933,7 @@ This program is available under Apache License Version 2.0, available at https:/
       return !filteredItems.length && this.autoOpenDisabled ? arr : filteredItems;
     }
 
+    /** @private */
     _selectItemForValue(value) {
       const valueIndex = this._indexOfValue(value, this.filteredItems);
       const previouslySelectedItem = this.selectedItem;
@@ -863,10 +949,12 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _setOverlayItems(items) {
       this.$.overlay.set('_items', items);
     }
 
+    /** @private */
     _repositionOverlay() {
       // async needed to reposition correctly after filtering
       // (especially when aligned on top of input)
@@ -896,6 +984,7 @@ This program is available under Apache License Version 2.0, available at https:/
       );
     }
 
+    /** @private */
     _indexOfValue(value, items) {
       if (items && this._isValidValue(value)) {
         for (let i = 0; i < items.length; i++) {
@@ -910,13 +999,13 @@ This program is available under Apache License Version 2.0, available at https:/
 
     /**
      * Checks if the value is supported as an item value in this control.
-     *
-     * @return {boolean}
+     * @private
      */
     _isValidValue(value) {
       return value !== undefined && value !== null;
     }
 
+    /** @private */
     _overlaySelectedItemChanged(e) {
       // stop this private event from leaking outside.
       e.stopPropagation();
@@ -935,6 +1024,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _onFocusout(event) {
       // Fixes the problem with `focusout` happening when clicking on the scroll bar on Edge
       const dropdown = this.$.overlay.$.dropdown;
@@ -947,6 +1037,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _onTouchend(event) {
       if (!this._clearElement || event.composedPath()[0] !== this._clearElement) {
         return;
@@ -969,6 +1060,7 @@ This program is available under Apache License Version 2.0, available at https:/
      * Returns true if the current input value satisfies all constraints (if any)
      *
      * You can override the `checkValidity` method for custom validations.
+     * @return {boolean | undefined}
      */
     checkValidity() {
       if (this.inputElement.validate) {
@@ -976,6 +1068,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     get _instanceProps() {
       return {
         item: true,
@@ -985,6 +1078,7 @@ This program is available under Apache License Version 2.0, available at https:/
       };
     }
 
+    /** @protected */
     _ensureTemplatized() {
       if (!this._TemplateClass) {
         const tpl = this._itemTemplate || this._getRootTemplate();
@@ -1005,10 +1099,12 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _getRootTemplate() {
       return Array.prototype.filter.call(this.children, elem => elem.tagName === 'TEMPLATE')[0];
     }
 
+    /** @protected */
     _preventInputBlur() {
       if (this._toggleElement) {
         this._toggleElement.addEventListener('click', this._preventDefault);
@@ -1018,6 +1114,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @protected */
     _restoreInputBlur() {
       if (this._toggleElement) {
         this._toggleElement.removeEventListener('click', this._preventDefault);
@@ -1027,10 +1124,15 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    /** @private */
     _preventDefault(e) {
       e.preventDefault();
     }
 
+    /**
+     * @param {!Event} e
+     * @protected
+     */
     _stopPropagation(e) {
       e.stopPropagation();
     }

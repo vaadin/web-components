@@ -287,7 +287,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
       /**
        * Gets the index of the item with the provided label.
-       * @return {Number}
+       * @return {number}
        */
       indexOfLabel(label) {
         if (this._items && label) {
@@ -306,7 +306,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * If dataProvider is used, dispatch a request for the item’s index if
        * the item is a placeholder object.
        *
-       * @return {Number}
+       * @return {number}
        */
       __requestItemByIndex(item, index) {
         if ((item instanceof Vaadin.ComboBoxPlaceholder) && index !== undefined) {
@@ -318,7 +318,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
       /**
        * Gets the label string for the item based on the `_itemLabelPath`.
-       * @return {String}
+       * @return {string}
        */
       getItemLabel(item, itemLabelPath) {
         itemLabelPath = itemLabelPath || this._itemLabelPath;
