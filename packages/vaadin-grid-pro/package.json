@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-grid-pro",
-  "version": "2.1.0",
+  "version": "2.2.0-alpha1",
   "description": "vaadin-grid-pro",
   "main": "vaadin-grid-pro.html",
   "repository": "vaadin/vaadin-grid-pro",
