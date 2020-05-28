@@ -45,9 +45,9 @@
     "iron-test-helpers": "^2.0.0",
     "webcomponentsjs": "^1.0.0",
     "web-component-tester": "^6.1.5",
-    "vaadin-combo-box": "vaadin/vaadin-combo-box#^5.1.0",
+    "vaadin-combo-box": "vaadin/vaadin-combo-box#^5.3.0-alpha1",
     "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^3.1.0",
-    "vaadin-date-picker": "vaadin/vaadin-date-picker#^4.1.0",
-    "vaadin-dialog": "vaadin/vaadin-dialog#^2.2.1"
+    "vaadin-date-picker": "vaadin/vaadin-date-picker#^4.3.0-alpha1",
+    "vaadin-dialog": "vaadin/vaadin-dialog#^2.5.0-alpha1"
   }
 }
