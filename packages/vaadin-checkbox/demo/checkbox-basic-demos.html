@@ -45,6 +45,32 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Helper text</h3>
+    <p>Use the <code>helper-text</code> attribute or add content to the <code>helper</code> slot to set helper content.</p>
+    <vaadin-demo-snippet id="basic-demos-helper-text">
+      <template preserve-content>
+        <vaadin-checkbox-group label="Label" theme="vertical"
+          helper-text="Pick an option">
+          <vaadin-checkbox value="1">Option one</vaadin-checkbox>
+          <vaadin-checkbox value="2">Option two</vaadin-checkbox>
+          <vaadin-checkbox value="3">Option three</vaadin-checkbox>
+        </vaadin-checkbox-group>
+
+        <vaadin-checkbox-group label="Label" theme="vertical">
+          <span slot="helper">Pick an option</span>
+          <vaadin-checkbox value="1">Option one</vaadin-checkbox>
+          <vaadin-checkbox value="2">Option two</vaadin-checkbox>
+          <vaadin-checkbox value="3">Option three</vaadin-checkbox>
+        </vaadin-checkbox-group>
+
+        <style>
+          vaadin-checkbox-group:first-of-type {
+            margin-right: 200px;
+          }
+        </style>
+      </template>
+    </vaadin-demo-snippet>
+
     <h3>Object list</h3>
     <vaadin-demo-snippet id="object-list" when-defined="vaadin-checkbox">
       <template preserve-content>

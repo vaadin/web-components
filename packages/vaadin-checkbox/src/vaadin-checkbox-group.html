@@ -50,6 +50,13 @@ This program is available under Apache License Version 2.0, available at https:/
         <slot id="slot"></slot>
       </div>
 
+      <div part="helper-text"
+        on-click="focus"
+        aria-live="assertive"
+        aria-hidden$="[[_getHelperTextAriaHidden(helperText, _hasSlottedHelper)]]">
+        <slot name="helper">[[helperText]]</slot>
+      </div>
+
       <div part="error-message"
         aria-live="assertive"
         aria-hidden$="[[_getErrorMessageAriaHidden(invalid, errorMessage)]]"
@@ -90,6 +97,8 @@ This program is available under Apache License Version 2.0, available at https:/
        * `focused` | Set when the checkbox group contains focus | :host
        * `has-label` | Set when the element has a label | :host
        * `has-value` | Set when the element has a value | :host
+       * `has-helper` | Set when the element has helper text or slot | :host
+       * `has-error-message` | Set when the element has an error message, regardless if the field is valid or not | :host
        * `required` | Set when the element is required | :host
        * `invalid` | Set when the element is invalid | :host
        *
@@ -144,7 +153,18 @@ This program is available under Apache License Version 2.0, available at https:/
              */
             errorMessage: {
               type: String,
-              value: ''
+              value: '',
+              observer: '_errorMessageChanged'
+            },
+
+            /**
+             * String used for the helper text.
+             * @type {string | null}
+             */
+            helperText: {
+              type: String,
+              value: '',
+              observer: '_helperTextChanged'
             },
 
             /**
@@ -165,6 +185,9 @@ This program is available under Apache License Version 2.0, available at https:/
               notify: true,
               value: false
             },
+
+            /** @private */
+            _hasSlottedHelper: Boolean,
 
           };
         }
@@ -213,6 +236,8 @@ This program is available under Apache License Version 2.0, available at https:/
                 this._removeCheckboxFromValue(checkbox.value);
               }
             });
+
+            this._setOrToggleHasHelperAttribute();
 
             const hasValue = checkbox => {
               const {value} = checkbox;
@@ -314,10 +339,29 @@ This program is available under Apache License Version 2.0, available at https:/
 
         /** @private */
         _labelChanged(label) {
-          if (label) {
-            this.setAttribute('has-label', '');
+          this._setOrToggleAttribute('has-label', label === 0 || !!label);
+        }
+
+        /** @private */
+        _errorMessageChanged(errorMessage) {
+          this._setOrToggleAttribute('has-error-message', errorMessage === 0 || !!errorMessage);
+        }
+
+        /** @private */
+        _helperTextChanged(helperText) {
+          this._setOrToggleAttribute('has-helper', helperText === 0 || !!helperText);
+        }
+
+        /** @private */
+        _setOrToggleAttribute(name, value) {
+          if (!name) {
+            return;
+          }
+
+          if (value) {
+            this.setAttribute(name, (typeof value === 'boolean') ? '' : value);
           } else {
-            this.removeAttribute('has-label');
+            this.removeAttribute(name);
           }
         }
 
@@ -347,6 +391,22 @@ This program is available under Apache License Version 2.0, available at https:/
           } else {
             this.removeAttribute('focused');
           }
+        }
+
+        /** @private */
+        _setOrToggleHasHelperAttribute() {
+          const slottedNodes = this.shadowRoot.querySelector(`[name="helper"]`).assignedNodes();
+          // Only has slotted helper if not a text node
+          // Text nodes are added by the helperText prop and not the helper slot
+          // The filter is added due to shady DOM triggering this slotchange event on helperText prop change
+          this._hasSlottedHelper = slottedNodes.filter(node => node.nodeType !== 3).length > 0;
+
+          this._setOrToggleAttribute('has-helper', this._hasSlottedHelper ? 'slotted' : this.helperText === 0 || !!this.helperText);
+        }
+
+        /** @private */
+        _getHelperTextAriaHidden(helperText, hasSlottedHelper) {
+          return (!(helperText || hasSlottedHelper)).toString();
         }
       }
 

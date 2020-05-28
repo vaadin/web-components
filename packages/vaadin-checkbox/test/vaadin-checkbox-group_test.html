@@ -23,6 +23,14 @@
   </template>
 </test-fixture>
 
+<test-fixture id="default-with-slotted-helper">
+  <template>
+    <vaadin-checkbox-group>
+      <div slot="helper">foo</div>
+    </vaadin-checkbox-group>
+  </template>
+</test-fixture>
+
 <test-fixture id="ironForm">
   <template>
     <iron-form>
@@ -311,6 +319,69 @@
       vaadinCheckboxGroup._observer.flush();
       expect(console.warn.callCount).to.equal(0);
       console.warn.restore();
+    });
+
+    it('setting errorMessage updates has-error-message attribute', function() {
+      vaadinCheckboxGroup.errorMessage = 'foo';
+      expect(vaadinCheckboxGroup.hasAttribute('has-error-message')).to.be.true;
+    });
+
+    it('setting errorMessage to empty string does not update has-error-message attribute', function() {
+      vaadinCheckboxGroup.errorMessage = '';
+      expect(vaadinCheckboxGroup.hasAttribute('has-error-message')).to.be.false;
+    });
+
+    it('setting errorMessage to null does not update has-error-message attribute', function() {
+      vaadinCheckboxGroup.errorMessage = null;
+      expect(vaadinCheckboxGroup.hasAttribute('has-error-message')).to.be.false;
+    });
+
+    describe('vaadin-radio-group helper text', () => {
+      it('setting helper updates has-helper attribute', function() {
+        vaadinCheckboxGroup.helperText = 'foo';
+        expect(vaadinCheckboxGroup.hasAttribute('has-helper')).to.be.true;
+      });
+
+      it('setting helper to empty string does not update has-helper attribute', function() {
+        vaadinCheckboxGroup.helperText = '';
+        expect(vaadinCheckboxGroup.hasAttribute('has-helper')).to.be.false;
+      });
+
+      it('setting helper to null does not update has-helper attribute', function() {
+        vaadinCheckboxGroup.helperText = null;
+        expect(vaadinCheckboxGroup.hasAttribute('has-helper')).to.be.false;
+      });
+
+      it('setting number helper updates has-helper attribute', function() {
+        vaadinCheckboxGroup.helperText = 0;
+        expect(vaadinCheckboxGroup.hasAttribute('has-helper')).to.be.true;
+      });
+
+      it('field with slotted helper updates has-helper attribute', function() {
+        const checkboxGroupWithSlottedHelper = fixture('default-with-slotted-helper');
+        checkboxGroupWithSlottedHelper._observer.flush();
+        expect(checkboxGroupWithSlottedHelper.hasAttribute('has-helper')).to.be.true;
+      });
+
+      it('setting helper with slot updates has-helper attribute', function() {
+        const helper = document.createElement('div');
+        helper.setAttribute('slot', 'helper');
+        helper.textContent = 'foo';
+        vaadinCheckboxGroup.appendChild(helper);
+        vaadinCheckboxGroup._observer.flush();
+
+        expect(vaadinCheckboxGroup.hasAttribute('has-helper')).to.be.true;
+      });
+
+      it('removing slotted helper removes has-helper attribute', function() {
+        const radioButtonGroupWithSlottedHelper = fixture('default-with-slotted-helper');
+
+        const helper = radioButtonGroupWithSlottedHelper.querySelector('[slot="helper"]');
+        radioButtonGroupWithSlottedHelper.removeChild(helper);
+        radioButtonGroupWithSlottedHelper._observer.flush();
+
+        expect(radioButtonGroupWithSlottedHelper.hasAttribute('has-helper')).to.be.false;
+      });
     });
   });
 

@@ -74,6 +74,31 @@ gemini.suite('vaadin-checkbox', function(rootSuite) {
         .capture('default');
     });
 
+    gemini.suite(`helper-text-tests-${theme}`, function(suite) {
+      suite
+        .setUrl(`default.html?theme=${theme}`)
+        .setCaptureElements('#helper-text-tests')
+        .capture('default');
+    });
+
+    if (theme === 'lumo') {
+      gemini.suite(`helper-text-above-field-tests-${theme}`, function(suite) {
+        suite
+          .setUrl(`default.html?theme=${theme}`)
+          .setCaptureElements('#helper-text-above-field-tests')
+          .capture('default');
+      });
+    }
+
+    if (theme === 'material') {
+      gemini.suite(`validation-with-helper-tests-${theme}`, function(suite) {
+        suite
+          .setUrl(`default.html?theme=${theme}`)
+          .setCaptureElements('#validation-with-helper-tests')
+          .capture('default');
+      });
+    }
+
     gemini.suite(`default-rtl-tests-${theme}`, function(suite) {
       suite
         .setUrl(`default-rtl.html?theme=${theme}`)
