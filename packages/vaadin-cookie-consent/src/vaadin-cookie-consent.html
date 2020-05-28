@@ -61,6 +61,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         static get is() {
           return 'vaadin-cookie-consent';
         }
+
         static get version() {
           return '1.1.2';
         }
@@ -69,65 +70,78 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           return {
             /**
              * The message to show in the popup.
+             * @type {string}
              */
             message: {
               type: String,
               value: 'This website uses cookies to ensure you get the best experience.'
             },
+
             /**
              * The text to show on the dismiss/consent button.
+             * @type {string}
              */
             dismiss: {
               type: String,
               value: 'Got it!'
             },
+
             /**
              * The text to show on the 'learn more' link.
+             * @type {string}
              */
             learnMore: {
               type: String,
               value: 'Learn more'
             },
+
             /**
              * The URL the 'learn more' link should open.
+             * @type {string}
              */
             learnMoreLink: {
               type: String,
               value: 'https://cookiesandyou.com/'
             },
+
+            /** @private */
             _showLearnMore: {
               type: Boolean,
               computed: '_showLink(learnMoreLink)'
             },
+
             /**
              * Determines the position of the banner.
              *
              * Possible values are: `top`, `bottom`, `top-left`, `top-right`, `bottom-left`, `bottom-right`
              * For `top` and `bottom`, the banner is shown with full width. For the corner positions,
              * it is shown as a smaller popup.
+             * @type {!CookieConsentPosition}
              */
             position: {
               type: String,
               value: 'top'
             },
+
             /**
              * The name of the cookie to set to remember that the user has consented.
              *
              * This rarely needs to be changed.
+             * @type {string}
              */
             cookieName: {
               type: String,
               value: 'cookieconsent_status'
             },
+
+            /** @private */
             _css: {
               type: Object
             }
           };
         }
 
-        /**
-         * @protected
-         */
+        /** @protected */
         static _finalizeClass() {
           super._finalizeClass();
 
@@ -138,13 +152,12 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           }
         }
 
+        /** @private */
         _showLink(learnMoreLink) {
           return !!learnMoreLink;
         }
 
-        /**
-         * @protected
-         */
+        /** @protected */
         connectedCallback() {
           super.connectedCallback();
 
@@ -199,9 +212,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           });
         }
 
-        /**
-         * @protected
-         */
+        /** @protected */
         disconnectedCallback() {
           super.disconnectedCallback();
           var popup = this._getPopup();
@@ -212,11 +223,15 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             document.head.removeChild(this._css);
           }
         }
+
+        /** @private */
         _getPopup() {
           return document.querySelector('[aria-label="cookieconsent"]');
         }
-        /*
+
+        /**
          * Shows the popup even if the user has seen it before.
+         * @protected
          */
         _show() {
           var popup = this._getPopup();
@@ -226,6 +241,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           }
         }
       }
+
       customElements.define(CookieConsentElement.is, CookieConsentElement);
 
       /**

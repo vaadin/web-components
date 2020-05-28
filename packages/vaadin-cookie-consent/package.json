@@ -17,6 +17,13 @@
     "url": "https://github.com/vaadin/vaadin-cookie-consent/issues"
   },
   "homepage": "https://vaadin.com/components",
+  "files": [
+    "vaadin-*.d.ts",
+    "vaadin-*.js",
+    "@types",
+    "src",
+    "theme"
+  ],
   "scripts": {
     "test": "wct",
     "preversion": "gulp version:update"
