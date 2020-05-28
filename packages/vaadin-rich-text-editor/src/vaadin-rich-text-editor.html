@@ -302,6 +302,7 @@ This program is available under Apache License Version 2.0, available at https:/
              * ```
              *
              * See also https://github.com/quilljs/delta for detailed documentation.
+             * @type {string}
              */
             value: {
               type: String,
@@ -320,6 +321,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * When true, the user can not modify, nor copy the editor content.
+             * @type {boolean}
              */
             disabled: {
               type: Boolean,
@@ -329,6 +331,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * When true, the user can not modify the editor content, but can copy it.
+             * @type {boolean}
              */
             readonly: {
               type: Boolean,
@@ -340,10 +343,11 @@ This program is available under Apache License Version 2.0, available at https:/
              * An object used to localize this component. The properties are used
              * e.g. as the tooltips for the editor toolbar buttons.
              *
+             * @type {!RichTextEditorI18n}
              * @default {English/US}
              */
             i18n: {
-              type: Array,
+              type: Object,
               value: () => {
                 return {
                   undo: 'undo',
@@ -375,34 +379,41 @@ This program is available under Apache License Version 2.0, available at https:/
               }
             },
 
+            /** @private */
             _editor: {
               type: Object
             },
 
             /**
              * Stores old value
+             * @private
              */
             __oldValue: String,
 
+            /** @private */
             __lastCommittedChange: {
               type: String,
               value: ''
             },
 
+            /** @private */
             _linkEditing: {
               type: Boolean
             },
 
+            /** @private */
             _linkRange: {
               type: Object,
               value: null
             },
 
+            /** @private */
             _linkIndex: {
               type: Number,
               value: null
             },
 
+            /** @private */
             _linkUrl: {
               type: String,
               value: ''
@@ -417,9 +428,7 @@ This program is available under Apache License Version 2.0, available at https:/
           ];
         }
 
-        /**
-         * @protected
-         */
+        /** @protected */
         static _finalizeClass() {
           super._finalizeClass();
 
@@ -431,6 +440,9 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         /**
+         * @param {string} prop
+         * @param {?string} oldVal
+         * @param {?string} newVal
          * @protected
          */
         attributeChangedCallback(prop, oldVal, newVal) {
@@ -456,6 +468,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         __setDirection(dir) {
           // Needed for proper `ql-align` class to be set and activate the toolbar align button
           const alignAttributor = Quill.import('attributors/class/align');
@@ -475,6 +488,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this._editor.getModule('toolbar').update(this._editor.getSelection());
         }
 
+        /** @protected */
         ready() {
           super.ready();
 
@@ -536,6 +550,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this._editor.on('selection-change', this.__announceFormatting.bind(this));
         }
 
+        /** @private */
         _prepareToolbar() {
           const clean = Quill.imports['modules/toolbar'].DEFAULTS.handlers.clean;
           const self = this;
@@ -560,6 +575,7 @@ This program is available under Apache License Version 2.0, available at https:/
           return toolbar;
         }
 
+        /** @private */
         _addToolbarListeners() {
           const buttons = this._toolbarButtons;
           const toolbar = this._toolbar;
@@ -596,18 +612,22 @@ This program is available under Apache License Version 2.0, available at https:/
           });
         }
 
+        /** @private */
         _markToolbarClicked() {
           this._toolbarState = STATE.CLICKED;
         }
 
+        /** @private */
         _markToolbarFocused() {
           this._toolbarState = STATE.FOCUSED;
         }
 
+        /** @private */
         _cleanToolbarState() {
           this._toolbarState = STATE.DEFAULT;
         }
 
+        /** @private */
         __createFakeFocusTarget() {
           const isRTL = document.documentElement.getAttribute('dir') == 'rtl';
           const elem = document.createElement('textarea');
@@ -624,6 +644,7 @@ This program is available under Apache License Version 2.0, available at https:/
           return elem;
         }
 
+        /** @private */
         __patchFirefoxFocus() {
           // in Firefox 63 with native Shadow DOM, when moving focus out of
           // contenteditable and back again within same shadow root, cursor
@@ -667,6 +688,7 @@ This program is available under Apache License Version 2.0, available at https:/
           });
         }
 
+        /** @private */
         __patchToolbar() {
           const toolbar = this._editor.getModule('toolbar');
           const update = toolbar.update;
@@ -688,6 +710,7 @@ This program is available under Apache License Version 2.0, available at https:/
           };
         }
 
+        /** @private */
         __patchKeyboard() {
           const focusToolbar = () => {
             this._markToolbarFocused();
@@ -709,6 +732,7 @@ This program is available under Apache License Version 2.0, available at https:/
           keyboard.addBinding({key: 121, altKey: true, handler: focusToolbar});
         }
 
+        /** @private */
         __emitChangeEvent() {
           let lastCommittedChange = this.__lastCommittedChange;
 
@@ -723,6 +747,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         _onLinkClick() {
           const range = this._editor.getSelection();
           if (range) {
@@ -739,6 +764,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         _applyLink(link) {
           if (link) {
             this._markToolbarClicked();
@@ -748,6 +774,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this._closeLinkDialog();
         }
 
+        /** @private */
         _insertLink(link, position) {
           if (link) {
             this._markToolbarClicked();
@@ -757,12 +784,14 @@ This program is available under Apache License Version 2.0, available at https:/
           this._closeLinkDialog();
         }
 
+        /** @private */
         _updateLink(link, range) {
           this._markToolbarClicked();
           this._editor.formatText(range, 'link', link, SOURCE.USER);
           this._closeLinkDialog();
         }
 
+        /** @private */
         _removeLink() {
           this._markToolbarClicked();
           if (this._linkRange != null) {
@@ -771,6 +800,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this._closeLinkDialog();
         }
 
+        /** @private */
         _closeLinkDialog() {
           this._linkEditing = false;
           this._linkUrl = '';
@@ -778,6 +808,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this._linkRange = null;
         }
 
+        /** @private */
         _onLinkEditConfirm() {
           if (this._linkIndex != null) {
             this._insertLink(this._linkUrl, this._linkIndex);
@@ -788,16 +819,19 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         _onLinkEditCancel() {
           this._closeLinkDialog();
           this._editor.focus();
         }
 
+        /** @private */
         _onLinkEditRemove() {
           this._removeLink();
           this._closeLinkDialog();
         }
 
+        /** @private */
         _onLinkKeydown(e) {
           if (e.keyCode === 13) {
             e.preventDefault();
@@ -806,6 +840,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         __updateHtmlValue() {
           const className = 'ql-editor';
           const editor = this.shadowRoot.querySelector(`.${className}`);
@@ -827,7 +862,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this._setHtmlValue(content);
         }
 
-        /*
+        /**
          * Sets content represented by HTML snippet into the editor.
          * The snippet is interpreted by [Quill's Clipboard matchers](https://quilljs.com/docs/modules/clipboard/#matchers),
          * which may not produce the exactly input HTML.
@@ -835,12 +870,14 @@ This program is available under Apache License Version 2.0, available at https:/
          * **NOTE:** Improper handling of HTML can lead to cross site scripting (XSS) and failure to sanitize
          * properly is both notoriously error-prone and a leading cause of web vulnerabilities.
          * This method is aptly named to ensure the developer has taken the necessary precautions.
+         * @param {string} htmlValue
          */
         dangerouslySetHtmlValue(htmlValue) {
           const deltaFromHtml = this._editor.clipboard.convert(htmlValue);
           this._editor.setContents(deltaFromHtml, SOURCE.USER);
         }
 
+        /** @private */
         __announceFormatting() {
           const timeout = 200;
 
@@ -859,29 +896,34 @@ This program is available under Apache License Version 2.0, available at https:/
           );
         }
 
+        /** @private */
         get _toolbarButtons() {
           return Array.from(this.shadowRoot.querySelectorAll('[part="toolbar"] button')).filter(btn => {
             return btn.clientHeight > 0;
           });
         }
 
+        /** @private */
         _clear() {
           this._editor.deleteText(0, this._editor.getLength(), SOURCE.SILENT);
           this.__updateHtmlValue();
         }
 
+        /** @private */
         _undo(e) {
           e.preventDefault();
           this._editor.history.undo();
           this._editor.focus();
         }
 
+        /** @private */
         _redo(e) {
           e.preventDefault();
           this._editor.history.redo();
           this._editor.focus();
         }
 
+        /** @private */
         _toggleToolbarDisabled(disable) {
           const buttons = this._toolbarButtons;
           if (disable) {
@@ -891,6 +933,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         _onImageTouchEnd(e) {
           // Cancel the event to avoid the following click event
           e.preventDefault();
@@ -901,15 +944,18 @@ This program is available under Apache License Version 2.0, available at https:/
           this._onImageClick();
         }
 
+        /** @private */
         __resetMouseCanceller() {
           Polymer.Gestures.resetMouseCanceller();
         }
 
+        /** @private */
         _onImageClick() {
           this.$.fileInput.value = '';
           this.$.fileInput.click();
         }
 
+        /** @private */
         _uploadImage(e) {
           const fileInput = e.target;
           // NOTE: copied from https://github.com/quilljs/quill/blob/1.3.6/themes/base.js#L128
@@ -932,6 +978,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         _disabledChanged(disabled, readonly, editor) {
           if (disabled === undefined || readonly === undefined || editor === undefined) {
             return;
@@ -954,6 +1001,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this.__oldDisabled = disabled;
         }
 
+        /** @private */
         _valueChanged(value, editor) {
           if (editor === undefined) {
             return;
