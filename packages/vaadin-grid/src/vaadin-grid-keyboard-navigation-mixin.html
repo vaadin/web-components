@@ -62,6 +62,8 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       this.addEventListener('keydown', this._onKeyDown);
+      this.addEventListener('keyup', this._onKeyUp);
+
       this.addEventListener('focusin', this._onFocusIn);
       this.addEventListener('focusout', this._onFocusOut);
 
@@ -441,14 +443,26 @@ This program is available under Apache License Version 2.0, available at https:/
       e.preventDefault();
 
       const cell = e.composedPath()[0];
+      if (!cell._content || !cell._content.firstElementChild) {
+        this.dispatchEvent(new CustomEvent('cell-activate', {detail: {
+          model: this.__getRowModel(cell.parentElement)
+        }}));
+      }
+    }
+
+    /** @private */
+    _onKeyUp(e) {
+      if (!/^( |SpaceBar)$/.test(e.key)) {
+        return;
+      }
+
+      e.preventDefault();
+
+      const cell = e.composedPath()[0];
       if (cell._content && cell._content.firstElementChild) {
         const wasNavigating = this.hasAttribute('navigating');
         cell._content.firstElementChild.click();
         this._toggleAttribute('navigating', wasNavigating, this);
-      } else {
-        this.dispatchEvent(new CustomEvent('cell-activate', {detail: {
-          model: this.__getRowModel(cell.parentElement)
-        }}));
       }
     }
 

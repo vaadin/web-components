@@ -185,8 +185,12 @@
       MockInteractions.keyDownOn(target || grid.shadowRoot.activeElement, 40, [], 'ArrowDown');
     }
 
-    function space(target) {
+    function spaceDown(target) {
       MockInteractions.keyDownOn(target || grid.shadowRoot.activeElement, 32, [], ' ');
+    }
+
+    function spaceUp(target) {
+      MockInteractions.keyUpOn(target || grid.shadowRoot.activeElement, 32, [], ' ');
     }
 
     function pageUp(target) {
@@ -1307,29 +1311,29 @@
       });
 
       describe('activating items', () => {
-        it('should activate on space', () => {
+        it('should activate on space keydown', () => {
           tabToBody();
 
-          space();
+          spaceDown();
 
           expect(grid.activeItem).to.equal('foo');
         });
 
-        it('should activate item another on space', () => {
+        it('should activate item another on space keydown', () => {
           focusItem(0);
           clickItem(0);
 
           down();
-          space();
+          spaceDown();
 
           expect(grid.activeItem).to.equal('bar');
         });
 
-        it('should deactive item on space', () => {
+        it('should deactive item on space keydown', () => {
           focusItem(0);
           clickItem(0); // activates first item on click
 
-          space();
+          spaceDown();
 
           expect(grid.activeItem).to.be.null;
         });
@@ -1376,19 +1380,19 @@
           expect(grid.activeItem).to.be.null;
         });
 
-        it('should not activate on space click on a native input', () => {
+        it('should not activate on space keydown click on a native input', () => {
           const input = focusFirstBodyInput(0);
           escape(input);
-          space();
+          spaceDown();
 
           expect(grid.activeItem).to.be.null;
         });
 
-        it('should not deactivate on space in non-body row', () => {
+        it('should not deactivate on space keydown in non-body row', () => {
           clickItem(0);
 
           tabToHeader();
-          space();
+          spaceDown();
 
           expect(grid.activeItem).to.equal('foo');
         });
@@ -1416,20 +1420,23 @@
             right();
           });
 
-          it('should click first cell child on space', () => {
+          it('should click first cell child on space keyup', () => {
             const firstChild = getCellContent(header.children[0].children[2]).children[0];
             const clickStub = sinon.stub(firstChild, 'click');
 
-            space();
+            spaceDown();
+            expect(clickStub.called).to.be.false;
 
+            spaceUp();
             expect(clickStub.called).to.be.true;
           });
 
-          it('should not click other cell children on space', () => {
+          it('should not click other cell children on space keyup', () => {
             const secondChild = getCellContent(header.children[0].children[2]).children[1];
             const clickStub = sinon.stub(secondChild, 'click');
 
-            space();
+            spaceDown();
+            spaceUp();
 
             expect(clickStub.called).to.be.false;
           });
@@ -1456,7 +1463,8 @@
             right();
             right();
 
-            space();
+            spaceDown();
+            spaceUp();
 
             expect(spy.called).to.be.true;
             expect(grid.activeItem).to.be.null;
@@ -1740,11 +1748,11 @@
           expect(getFocusedCellIndex()).to.equal(1);
         });
 
-        it('should not activate on space when in interaction mode', () => {
+        it('should not activate on space keydown when in interaction mode', () => {
           grid.activeItem = null;
           const input = focusFirstBodyInput(0);
 
-          space(input);
+          spaceDown(input);
 
           expect(grid.activeItem).to.be.null;
         });
