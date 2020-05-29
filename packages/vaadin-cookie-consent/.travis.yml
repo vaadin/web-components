@@ -33,7 +33,8 @@ jobs:
 script:
   - if [[ "$POLYMER" = "2" ]]; then
       npm -q i && npm i -q --no-save bower polymer-cli && bower -q i &&
-      gulp lint version:check &&
+      npm run check &&
+      npm run lint &&
       polymer lint --rules polymer-2 --input ./src/*.html ./theme/**/*.html &&
       if [[ "$TRAVIS_EVENT_TYPE" != "pull_request" && "$TRAVIS_BRANCH" != quick/* ]]; then
         wct --env saucelabs;

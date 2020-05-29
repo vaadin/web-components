@@ -11,5 +11,9 @@
   "globals": {
     "Polymer": false,
     "Vaadin": false
+  },
+  "parserOptions": {
+    "sourceType": "module",
+    "ecmaVersion": 2018
   }
 }
