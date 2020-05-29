@@ -50,6 +50,14 @@ This program is available under Apache License Version 2.0, available at https:/
         <slot id="slot"></slot>
       </div>
 
+      <div part="helper-text"
+        on-click="focus"
+        id="[[_helperTextId]]"
+        aria-live="assertive"
+        aria-hidden$="[[_getHelperTextAriaHidden(helperText, _helperTextId, _hasSlottedHelper)]]">
+        <slot name="helper">[[helperText]]</slot>
+      </div>
+
       <div part="error-message"
         id="[[_errorId]]"
         aria-live="assertive"
@@ -89,6 +97,8 @@ This program is available under Apache License Version 2.0, available at https:/
        * `invalid` | Set when the element is invalid | :host
        * `has-label` | Set when the element has a label | :host
        * `has-value` | Set when the element has a value | :host
+       * `has-helper` | Set when the element has helper text or slot | :host
+       * `has-error-message` | Set when the element has an error message, regardless if the field is valid or not | :host
        * `focused` | Set when the element contains focus | :host
        *
        * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
@@ -149,13 +159,22 @@ This program is available under Apache License Version 2.0, available at https:/
              */
             errorMessage: {
               type: String,
-              value: ''
+              value: '',
+              observer: '_errorMessageChanged'
             },
 
             /** @private */
             _errorId: {
               type: String
             },
+
+            /** @private */
+            _helperTextId: {
+              type: String
+            },
+
+            /** @private */
+            _hasSlottedHelper: Boolean,
 
             /** @private */
             _checkedButton: {
@@ -170,6 +189,16 @@ This program is available under Apache License Version 2.0, available at https:/
               type: String,
               value: '',
               observer: '_labelChanged'
+            },
+
+            /**
+             * String used for the helper text.
+             * @type {string | null}
+             */
+            helperText: {
+              type: String,
+              value: '',
+              observer: '_helperTextChanged'
             },
 
             /**
@@ -213,6 +242,8 @@ This program is available under Apache License Version 2.0, available at https:/
                 this.value = undefined;
               }
             });
+
+            this._setOrToggleHasHelperAttribute();
           });
 
           if (this._radioButtons.length) {
@@ -223,6 +254,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
           const uniqueId = RadioGroupElement._uniqueId = 1 + RadioGroupElement._uniqueId || 0;
           this._errorId = `${this.constructor.is}-error-${uniqueId}`;
+          this._helperTextId = `${this.constructor.is}-helper-${uniqueId}`;
         }
 
         /** @private */
@@ -470,11 +502,41 @@ This program is available under Apache License Version 2.0, available at https:/
 
         /** @private */
         _labelChanged(label) {
-          if (label) {
-            this.setAttribute('has-label', '');
-          } else {
-            this.removeAttribute('has-label');
+          this._setOrToggleAttribute('has-label', !!label);
+        }
+
+        /** @private */
+        _errorMessageChanged(errorMessage) {
+          this._setOrToggleAttribute('has-error-message', !!errorMessage);
+        }
+
+        /** @private */
+        _helperTextChanged(helperText) {
+          this._setOrToggleAttribute('has-helper', !!helperText);
+        }
+
+        /** @private */
+        _setOrToggleAttribute(name, value) {
+          if (!name) {
+            return;
           }
+
+          if (value) {
+            this.setAttribute(name, (typeof value === 'boolean') ? '' : value);
+          } else {
+            this.removeAttribute(name);
+          }
+        }
+
+        /** @private */
+        _setOrToggleHasHelperAttribute() {
+          const slottedNodes = this.shadowRoot.querySelector(`[name="helper"]`).assignedNodes();
+          // Only has slotted helper if not a text node
+          // Text nodes are added by the helperText prop and not the helper slot
+          // The filter is added due to shady DOM triggering this slotchange event on helperText prop change
+          this._hasSlottedHelper = slottedNodes.filter(node => node.nodeType !== 3).length > 0;
+
+          this._setOrToggleAttribute('has-helper', this._hasSlottedHelper ? 'slotted' : !!this.helperText);
         }
 
         /** @private */
@@ -485,6 +547,10 @@ This program is available under Apache License Version 2.0, available at https:/
         /** @private */
         _getErrorMessageAriaHidden(invalid, errorMessage, errorId) {
           return (!this._getActiveErrorId(invalid, errorMessage, errorId)).toString();
+        }
+
+        _getHelperTextAriaHidden(helperText, helperTextId, hasSlottedHelper) {
+          return (!(helperText || hasSlottedHelper)).toString();
         }
       }
 
