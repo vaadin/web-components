@@ -352,11 +352,6 @@
         expect(vaadinCheckboxGroup.hasAttribute('has-helper')).to.be.false;
       });
 
-      it('setting number helper updates has-helper attribute', function() {
-        vaadinCheckboxGroup.helperText = 0;
-        expect(vaadinCheckboxGroup.hasAttribute('has-helper')).to.be.true;
-      });
-
       it('field with slotted helper updates has-helper attribute', function() {
         const checkboxGroupWithSlottedHelper = fixture('default-with-slotted-helper');
         checkboxGroupWithSlottedHelper._observer.flush();

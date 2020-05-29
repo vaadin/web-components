@@ -339,17 +339,17 @@ This program is available under Apache License Version 2.0, available at https:/
 
         /** @private */
         _labelChanged(label) {
-          this._setOrToggleAttribute('has-label', label === 0 || !!label);
+          this._setOrToggleAttribute('has-label', !!label);
         }
 
         /** @private */
         _errorMessageChanged(errorMessage) {
-          this._setOrToggleAttribute('has-error-message', errorMessage === 0 || !!errorMessage);
+          this._setOrToggleAttribute('has-error-message', !!errorMessage);
         }
 
         /** @private */
         _helperTextChanged(helperText) {
-          this._setOrToggleAttribute('has-helper', helperText === 0 || !!helperText);
+          this._setOrToggleAttribute('has-helper', !!helperText);
         }
 
         /** @private */
@@ -401,7 +401,7 @@ This program is available under Apache License Version 2.0, available at https:/
           // The filter is added due to shady DOM triggering this slotchange event on helperText prop change
           this._hasSlottedHelper = slottedNodes.filter(node => node.nodeType !== 3).length > 0;
 
-          this._setOrToggleAttribute('has-helper', this._hasSlottedHelper ? 'slotted' : this.helperText === 0 || !!this.helperText);
+          this._setOrToggleAttribute('has-helper', this._hasSlottedHelper ? 'slotted' : !!this.helperText);
         }
 
         /** @private */
