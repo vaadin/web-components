@@ -23,15 +23,15 @@
     "polymer": "^2.0.0",
     "iron-resizable-behavior": "^2.0.0",
     "vaadin-license-checker": "vaadin/license-checker#^2.1.0",
-    "vaadin-element-mixin": "vaadin/vaadin-element-mixin#^2.0.0"
+    "vaadin-element-mixin": "vaadin/vaadin-element-mixin#^2.4.1"
   },
   "devDependencies": {
     "app-layout": "PolymerElements/app-layout#v2.0.0",
     "web-component-tester": "^6.1.5",
     "webcomponentsjs": "^1.0.0",
-    "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^3.0.0",
+    "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^3.1.0",
     "iron-icon": "^2.0.1",
-    "vaadin-lumo-styles": "vaadin/vaadin-lumo-styles#^1.1.0",
+    "vaadin-lumo-styles": "vaadin/vaadin-lumo-styles#^1.6.0",
     "iron-component-page": "PolymerElements/iron-component-page#^3.0.1"
   }
 }

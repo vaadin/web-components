@@ -79,6 +79,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           this._oldFlexBasis = [];
         }
 
+        /** @protected */
         ready() {
           super.ready();
           this.addEventListener('iron-resize', this._onIronResize, true);
@@ -95,6 +96,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           });
         }
 
+        /** @protected */
         connectedCallback() {
           super.connectedCallback();
           Polymer.RenderStatus.afterNextRender(this, this._onIronResize);
@@ -102,6 +104,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
 
         /**
          * Adds styles for board row based on width.
+         * @private
          */
         _addStyleNames(width, breakpoints) {
           if (width < breakpoints.smallSize) {
@@ -121,11 +124,12 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
 
         /**
          * Calculates flex basis based on colSpan, width and breakpoints.
-         * @param {Number} colSpan colspan value of the row
-         * @param {Number} width width of the row in px
-         * @param {Number} colsInRow number of columns in the row
-         * @param {Object} breakpoints object with smallSize and mediumSize number properties, which tells
+         * @param {number} colSpan colspan value of the row
+         * @param {number} width width of the row in px
+         * @param {number} colsInRow number of columns in the row
+         * @param {object} breakpoints object with smallSize and mediumSize number properties, which tells
          * where the row should switch rendering size in pixels.
+         * @private
          */
         _calculateFlexBasis(colSpan, width, colsInRow, breakpoints) {
           if (width < breakpoints.smallSize) {
@@ -138,6 +142,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           return flexBasis + '%';
         }
 
+        /** @private */
         _reportError() {
           const errorMessage = "The column configuration is not valid; column count should add up to 3 or 4.";
           console.warn(errorMessage, "check: \r\n" + this.outerHTML);
@@ -146,9 +151,9 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         /**
          * Parses board-cols from DOM.
          * If there is not enough space in the row drop board cols.
-         * @param {Array} array of nodes
-         *
-         * @return {Array} array of boardCols
+         * @param {!Array<!Node>} nodes array of nodes
+         * @return {!Array<number>} array of boardCols
+         * @private
          */
         _parseBoardCols(nodes) {
           const boardCols = nodes.map(node => {
@@ -180,10 +185,10 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         /**
          * If there is not enough space in the row.
          * Extra items are dropped from DOM.
-         * @param {Array} array of board-cols for every node
-         * @param {Array} array of nodes
-         *
-         * @return {Array} filtered array of nodes
+         * @param {!Array<number>} boardCols array of board-cols for every node
+         * @param {!Array<!Node>} nodes array of nodes
+         * @return {!Array<!Node>} filtered array of nodes
+         * @private
          */
         _removeExtraNodesFromDOM(boardCols, nodes) {
           let isErrorReported = false;
@@ -214,10 +219,12 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           this._recalculateFlexBasis(true);
         }
 
+        /** @private */
         _onIronResize() {
           this._recalculateFlexBasis(false);
         }
 
+        /** @private */
         _recalculateFlexBasis(forceResize) {
           const width = this.getBoundingClientRect().width;
           const breakpoints = this._measureBreakpointsInPx();
@@ -252,8 +259,9 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
          * The breakpoints for `small` and `medium` can be given in any unit: `px`, `em`, `in` etc.
          * We need to know them in `px` so that they are comparable with the actual size.
          *
-         * @return {Object} object with smallSize and mediumSize number properties, which tells
+         * @return {object} object with smallSize and mediumSize number properties, which tells
          * where the row should switch rendering size in pixels.
+         * @private
          */
         _measureBreakpointsInPx() {
             // Convert minWidth to px units for comparison
