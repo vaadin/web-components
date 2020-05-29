@@ -78,6 +78,14 @@ This program is available under Apache License Version 2.0, available at https:/
   <script>
     (function() {
 
+      /**
+       * @typedef {object} TimePickerTime
+       * @property {string | number} hours
+       * @property {string | number} minutes
+       * @property {string | number} [seconds]
+       * @property {string | number} [milliseconds]
+       */
+
       // Find a property definition from the prototype chain of a Polymer element class
       const getPropertyFromPrototype = function(clazz, prop) {
         while (clazz) {
@@ -145,7 +153,6 @@ This program is available under Apache License Version 2.0, available at https:/
        * @memberof Vaadin
        * @mixes Vaadin.ElementMixin
        * @mixes Vaadin.ThemableMixin
-       * @mixes Vaadin.ThemePropertyMixin
        * @demo demo/index.html
        */
       class DateTimePicker extends Vaadin.ElementMixin(Vaadin.ThemableMixin(Polymer.Element)) {
@@ -167,6 +174,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * Set to true if the value is invalid.
+             * @type {boolean}
              */
             invalid: {
               type: Boolean,
@@ -177,6 +185,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * Set to true to mark the input as required.
+             * @type {boolean}
              */
             required: {
               type: Boolean,
@@ -195,6 +204,7 @@ This program is available under Apache License Version 2.0, available at https:/
              * - Minute precision `"YYYY-MM-DDThh:mm"` (default)
              * - Second precision `"YYYY-MM-DDThh:mm:ss"`
              * - Millisecond precision `"YYYY-MM-DDThh:mm:ss.fff"`
+             * @type {string}
              */
             value: {
               type: String,
@@ -211,7 +221,7 @@ This program is available under Apache License Version 2.0, available at https:/
              * - Second precision `"YYYY-MM-DDThh:mm:ss"`
              * - Millisecond precision `"YYYY-MM-DDThh:mm:ss.fff"`
              *
-             * @type {String}
+             * @type {string | undefined}
              */
             min: {
               type: String,
@@ -226,7 +236,7 @@ This program is available under Apache License Version 2.0, available at https:/
              * - Second precision `"YYYY-MM-DDThh:mm:ss"`
              * - Millisecond precision `"YYYY-MM-DDThh:mm:ss.fff"`
              *
-             * @type {String}
+             * @type {string | undefined}
              */
             max: {
               type: String,
@@ -235,6 +245,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * The earliest value that can be selected. All earlier values will be disabled.
+             * @private
              */
             __minDateTime: {
               type: Date,
@@ -243,6 +254,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * The latest value that can be selected. All later values will be disabled.
+             * @private
              */
             __maxDateTime: {
               type: Date,
@@ -301,6 +313,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * String used for the label element.
+             * @type {string}
              */
             label: {
               type: String,
@@ -314,6 +327,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * Set to true to disable this element.
+             * @type {boolean}
              */
             disabled: {
               type: Boolean,
@@ -323,6 +337,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * Set to true to make this element read-only.
+             * @type {boolean}
              */
             readonly: {
               type: Boolean,
@@ -332,6 +347,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * Specify that this control should have input focus when the page loads.
+             * @type {boolean}
              */
             autofocus: {
               type: Boolean
@@ -339,11 +355,13 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * The current selected date time.
+             * @private
              */
             __selectedDateTime: {
               type: Date
             },
 
+            /** @private */
             __customFieldValueFormat: {
               type: Object,
               value: () => ({
@@ -361,6 +379,7 @@ This program is available under Apache License Version 2.0, available at https:/
              * `<vaadin-date-picker>` and `<vaadin-time-picker>`. See `i18n` property at:
              * - [`date-picker` documentation](https://vaadin.com/components/vaadin-date-picker/html-api/elements/Vaadin.DatePickerElement)
              * - [`time-picker` documentation](https://vaadin.com/components/vaadin-time-picker/html-api/elements/Vaadin.TimePickerElement)
+             * @type {!DateTimePickerI18n}
              */
             i18n: {
               type: Object,
@@ -396,6 +415,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this.__defaultTimeMaxValue = '23:59:59.999';
         }
 
+        /** @protected */
         ready() {
           super.ready();
 
@@ -419,13 +439,12 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
-        /**
-         * @private
-         */
+        /** @protected */
         focus() {
           this.$.customField.focus();
         }
 
+        /** @private */
         __syncI18n(target, source, props) {
           props = props || Object.keys(source.i18n);
           props.forEach(prop => {
@@ -438,6 +457,7 @@ This program is available under Apache License Version 2.0, available at https:/
         // This is needed only for the case when date or time picker is slotted/changed after ready
         // since custom field doesn't automatically pick that change because we use a wrapper element
         // in the custom field slot.
+        /** @private */
         __updateCustomFieldInputs() {
           const cfInputs = this.$.customField.inputs;
           if (this.__datePicker && this.__timePicker
@@ -447,20 +467,24 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         __changeEventHandler(event) {
           this.__doDispatchChange = true;
         }
 
+        /** @private */
         __removeChangeListener(node) {
           if (node) {
             node.removeEventListener('change', this.__changeEventHandler, false);
           }
         }
 
+        /** @private */
         __addChangeListener(node) {
           node.addEventListener('change', this.__changeEventHandler, false);
         }
 
+        /** @private */
         __datePickerChanged() {
           const defaultDatePicker = this.shadowRoot.querySelector('[part="date"]');
           const assignedElements = this.$.dateSlot.assignedNodes({flatten: true}).filter(this.__filterElements);
@@ -502,6 +526,7 @@ This program is available under Apache License Version 2.0, available at https:/
           datePicker._validateInput = () => {};
         }
 
+        /** @private */
         __timePickerChanged() {
           const defaultTimePicker = this.shadowRoot.querySelector('[part="time"]');
           const assignedElements = this.$.timeSlot.assignedNodes({flatten: true}).filter(this.__filterElements);
@@ -539,6 +564,7 @@ This program is available under Apache License Version 2.0, available at https:/
           timePicker.validate = () => {};
         }
 
+        /** @private */
         __updateTimePickerMinMax() {
           if (this.__timePicker && this.__datePicker) {
             const dateEquals = Vaadin.DatePickerHelper._dateEquals;
@@ -566,6 +592,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         __i18nChanged(changeRecord) {
           if (this.__datePicker) {
             this.__datePicker.set(changeRecord.path, changeRecord.value);
@@ -575,18 +602,21 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         __datePlaceholderChanged(datePlaceholder) {
           if (this.__datePicker) {
             this.__datePicker.placeholder = datePlaceholder;
           }
         }
 
+        /** @private */
         __timePlaceholderChanged(timePlaceholder) {
           if (this.__timePicker) {
             this.__timePicker.placeholder = timePlaceholder;
           }
         }
 
+        /** @private */
         __stepChanged(step) {
           if (this.__timePicker && this.__timePicker.step !== step) {
             const oldTimeValue = this.__timePicker.value;
@@ -602,24 +632,28 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         __triggerCustomFieldValueUpdate() {
           if (this.__timePicker) {
             this.__timePicker.dispatchEvent(new CustomEvent('change', {bubbles: true}));
           }
         }
 
+        /** @private */
         __initialPositionChanged(initialPosition) {
           if (this.__datePicker) {
             this.__datePicker.initialPosition = initialPosition;
           }
         }
 
+        /** @private */
         __showWeekNumbersChanged(showWeekNumbers) {
           if (this.__datePicker) {
             this.__datePicker.showWeekNumbers = showWeekNumbers;
           }
         }
 
+        /** @private */
         __invalidChanged(invalid) {
           if (this.__datePicker) {
             this.__datePicker.invalid = invalid;
@@ -629,6 +663,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         __requiredChanged(required) {
           if (this.__datePicker) {
             this.__datePicker.required = required;
@@ -638,6 +673,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         __disabledChanged(disabled) {
           if (this.__datePicker) {
             this.__datePicker.disabled = disabled;
@@ -647,6 +683,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         __readonlyChanged(readonly) {
           if (this.__datePicker) {
             this.__datePicker.readonly = readonly;
@@ -659,7 +696,8 @@ This program is available under Apache License Version 2.0, available at https:/
         /**
          * String (ISO date) to Date object
          * @param {string} str e.g. 'yyyy-mm-dd'
-         * @return {(Date|undefined)}
+         * @return {Date | undefined}
+         * @private
          */
         __parseDate(str) {
           return datePickerClass.prototype._parseDate(str);
@@ -670,6 +708,7 @@ This program is available under Apache License Version 2.0, available at https:/
          * @param {Date} date
          * @param {string} defaultValue
          * @return {string} e.g. 'yyyy-mm-dd' (or defaultValue when date is falsy)
+         * @private
          */
         __formatDateISO(date, defaultValue) {
           if (!date) {
@@ -680,8 +719,9 @@ This program is available under Apache License Version 2.0, available at https:/
 
         /**
          * Custom time object to string (ISO time)
-         * @param {object} time Time components as properties { hours, minutes, seconds, milliseconds }
+         * @param {!TimePickerTime} time Time components as properties { hours, minutes, seconds, milliseconds }
          * @return {string} e.g. 'hh:mm', 'hh:mm:ss', 'hh:mm:ss.fff'
+         * @private
          */
         __formatTimeISO(time) {
           return timePickerI18nDefaults.formatTime(time);
@@ -690,7 +730,8 @@ This program is available under Apache License Version 2.0, available at https:/
         /**
          * String (ISO time) to custom time object
          * @param {string} str e.g. 'hh:mm', 'hh:mm:ss', 'hh:mm:ss.fff'
-         * @return {object} Time components as properties { hours, minutes, seconds, milliseconds }
+         * @return {!TimePickerTime | undefined} Time components as properties { hours, minutes, seconds, milliseconds }
+         * @private
          */
         __parseTimeISO(str) {
           return timePickerI18nDefaults.parseTime(str);
@@ -699,7 +740,8 @@ This program is available under Apache License Version 2.0, available at https:/
         /**
          * String (ISO date time) to Date object
          * @param {string} str e.g. 'yyyy-mm-ddThh:mm', 'yyyy-mm-ddThh:mm:ss', 'yyyy-mm-ddThh:mm:ss.fff'
-         * @return {(Date|undefined)}
+         * @return {Date | undefined}
+         * @private
          */
         __parseDateTime(str) {
           const [dateValue, timeValue] = str.split('T');
@@ -732,6 +774,7 @@ This program is available under Apache License Version 2.0, available at https:/
          * @param {Date} date
          * @return {string} e.g. 'yyyy-mm-ddThh:mm', 'yyyy-mm-ddThh:mm:ss', 'yyyy-mm-ddThh:mm:ss.fff'
          *                  (depending on precision defined by "step" property)
+         * @private
          */
         __formatDateTime(date) {
           if (!date) {
@@ -746,6 +789,7 @@ This program is available under Apache License Version 2.0, available at https:/
          * Date object to string (ISO time)
          * @param {Date} date
          * @return {string} e.g. 'hh:mm', 'hh:mm:ss', 'hh:mm:ss.fff' (depending on precision defined by "step" property)
+         * @private
          */
         __dateToIsoTimeString(date) {
           return this.__formatTimeISO(this.__validateTime({
@@ -756,6 +800,11 @@ This program is available under Apache License Version 2.0, available at https:/
           }));
         }
 
+        /**
+         * @param {!TimePickerTime} timeObject
+         * @return {!TimePickerTime}
+         * @private
+         */
         __validateTime(timeObject) {
           if (timeObject) {
             timeObject.seconds = this.__stepSegment < 3 ? undefined : timeObject.seconds;
@@ -777,6 +826,7 @@ This program is available under Apache License Version 2.0, available at https:/
          * Returns true if the current input value satisfies all constraints (if any)
          *
          * You can override the `checkValidity` method for custom validations.
+         * @return {boolean}
          */
         checkValidity() {
           const hasInvalidFields = this.$.customField.inputs
@@ -791,6 +841,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         // Copied from vaadin-time-picker
         /* istanbul ignore next */
+        /** @private */
         get __stepSegment() {
           const step = this.step == undefined ? 60 : parseFloat(this.step);
           if (step % 3600 === 0) {
@@ -811,6 +862,8 @@ This program is available under Apache License Version 2.0, available at https:/
         /**
          * @param {Date} date1
          * @param {Date} date2
+         * @return {boolean}
+         * @private
          */
         __dateTimeEquals(date1, date2) {
           if (!Vaadin.DatePickerHelper._dateEquals(date1, date2)) {
@@ -822,6 +875,7 @@ This program is available under Apache License Version 2.0, available at https:/
           date1.getMilliseconds() === date2.getMilliseconds();
         }
 
+        /** @private */
         __handleDateTimeChange(property, parsedProperty, value, oldValue) {
           if (!value) {
             this[property] = '';
@@ -839,6 +893,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         __valueChanged(value, oldValue) {
           this.__handleDateTimeChange('value', '__selectedDateTime', value, oldValue);
 
@@ -849,10 +904,12 @@ This program is available under Apache License Version 2.0, available at https:/
 
         }
 
+        /** @private */
         __dispatchChange() {
           this.dispatchEvent(new CustomEvent('change', {bubbles: true}));
         }
 
+        /** @private */
         __minChanged(value, oldValue) {
           this.__handleDateTimeChange('min', '__minDateTime', value, oldValue);
           if (this.__datePicker) {
@@ -861,6 +918,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this.__updateTimePickerMinMax();
         }
 
+        /** @private */
         __maxChanged(value, oldValue) {
           this.__handleDateTimeChange('max', '__maxDateTime', value, oldValue);
           if (this.__datePicker) {
@@ -869,6 +927,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this.__updateTimePickerMinMax();
         }
 
+        /** @private */
         __selectedDateTimeChanged(selectedDateTime) {
           const formattedValue = this.__formatDateTime(selectedDateTime);
           if (this.value !== formattedValue) {
@@ -890,6 +949,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         __customFieldValueChanged(e) {
           /** @type {string} */
           const value = e.detail.value;
@@ -922,6 +982,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this.__doDispatchChange = false;
         }
 
+        /** @private */
         __autoOpenDisabledChanged(autoOpenDisabled) {
           if (this.__datePicker) {
             this.__datePicker.autoOpenDisabled = autoOpenDisabled;
