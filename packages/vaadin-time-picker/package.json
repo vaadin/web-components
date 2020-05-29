@@ -17,6 +17,13 @@
     "url": "https://github.com/vaadin/vaadin-time-picker/issues"
   },
   "homepage": "https://vaadin.com/components",
+  "files": [
+    "vaadin-*.d.ts",
+    "vaadin-*.js",
+    "@types",
+    "src",
+    "theme"
+  ],
   "husky": {
     "hooks": {
       "pre-commit": "npm run lint"

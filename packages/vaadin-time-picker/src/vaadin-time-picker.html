@@ -6,7 +6,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <link rel="import" href="../../polymer/polymer-element.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
-<link rel="import" href="../../vaadin-themable-mixin/vaadin-theme-property-mixin.html">
 <link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
 <link rel="import" href="../../vaadin-combo-box/src/vaadin-combo-box-light.html">
 <link rel="import" href="../../iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
@@ -122,14 +121,12 @@ This program is available under Apache License Version 2.0, available at https:/
        * @mixes Vaadin.ElementMixin
        * @mixes Vaadin.ControlStateMixin
        * @mixes Vaadin.ThemableMixin
-       * @mixes Vaadin.ThemePropertyMixin
        * @demo demo/index.html
        */
       class TimePickerElement extends
         Vaadin.ElementMixin(
           Vaadin.ControlStateMixin(
-            Vaadin.ThemableMixin(
-              Vaadin.ThemePropertyMixin(Polymer.Element)))) {
+            Vaadin.ThemableMixin(Polymer.Element))) {
 
         static get is() {
           return 'vaadin-time-picker';
@@ -154,6 +151,7 @@ This program is available under Apache License Version 2.0, available at https:/
              * - `hh:mm` (default)
              * - `hh:mm:ss`
              * - `hh:mm:ss.fff`
+             * @type {string}
              */
             value: {
               type: String,
@@ -172,6 +170,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * Set to true to mark the input as required.
+             * @type {boolean}
              */
             required: {
               type: Boolean,
@@ -180,6 +179,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * Set to true to disable this input.
+             * @type {boolean}
              */
             disabled: {
               type: Boolean,
@@ -209,6 +209,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * A placeholder string in addition to the label.
+             * @type {string}
              */
             placeholder: {
               type: String,
@@ -217,6 +218,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * Set to true to prevent user picking a date or typing in the input.
+             * @type {boolean}
              */
             readonly: {
               type: Boolean,
@@ -226,6 +228,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * Set to true if the value is invalid.
+             * @type {boolean}
              */
             invalid: {
               type: Boolean,
@@ -241,6 +244,7 @@ This program is available under Apache License Version 2.0, available at https:/
              * - `hh:mm`
              * - `hh:mm:ss`
              * - `hh:mm:ss.fff`
+             * @type {string}
              */
             min: {
               type: String,
@@ -254,6 +258,7 @@ This program is available under Apache License Version 2.0, available at https:/
              * - `hh:mm`
              * - `hh:mm:ss`
              * - `hh:mm:ss.fff`
+             * @type {string}
              */
             max: {
               type: String,
@@ -282,6 +287,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * Set to true to display the clear icon which clears the input.
+             * @type {boolean}
              */
             clearButtonVisible: {
               type: Boolean,
@@ -293,6 +299,7 @@ This program is available under Apache License Version 2.0, available at https:/
              */
             autoOpenDisabled: Boolean,
 
+            /** @private */
             __dropdownItems: {
               type: Array
             },
@@ -326,6 +333,7 @@ This program is available under Apache License Version 2.0, available at https:/
                   // Translation of the time selector clear button title.
                   clear: 'Clear'
                 }
+              * @type {!TimePickerI18n}
               */
             i18n: {
               type: Object,
@@ -376,6 +384,7 @@ This program is available under Apache License Version 2.0, available at https:/
           ];
         }
 
+        /** @protected */
         ready() {
           super.ready();
 
@@ -400,11 +409,13 @@ This program is available under Apache License Version 2.0, available at https:/
           });
         }
 
+        /** @private */
         __validDayDivisor(step) {
           // valid if undefined, or exact divides a day, or has millisecond resolution
           return !step || 24 * 3600 % step === 0 || (step < 1 && step % 1 * 1000 % 1 === 0);
         }
 
+        /** @private */
         __onKeyDown(e) {
 
           if (this.readonly || this.disabled || this.__dropdownItems.length) {
@@ -420,7 +431,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
-
+        /** @private */
         __onArrowPressWithStep(step) {
           const objWithStep = this.__addStep(this.__getMsec(this.__memoValue), step, true);
           this.__memoValue = objWithStep;
@@ -428,12 +439,14 @@ This program is available under Apache License Version 2.0, available at https:/
           this.__dispatchChange();
         }
 
+        /** @private */
         __dispatchChange() {
           this.dispatchEvent(new CustomEvent('change', {bubbles: true}));
         }
 
         /**
          * Returning milliseconds from Object in the format `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`
+         * @private
          */
         __getMsec(obj) {
           let result = (obj && obj.hours || 0) * 60 * 60 * 1000;
@@ -446,6 +459,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         /**
          * Returning seconds from Object in the format `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`
+         * @private
          */
         __getSec(obj) {
           let result = (obj && obj.hours || 0) * 60 * 60;
@@ -460,6 +474,7 @@ This program is available under Apache License Version 2.0, available at https:/
          * Returning Object in the format `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`
          * from the result of adding step value in milliseconds to the milliseconds amount.
          * With `precision` parameter rounding the value to the closest step valid interval.
+         * @private
          */
         __addStep(msec, step, precision) {
           // If the time is `00:00` and step changes value downwards, it should be considered as `24:00`
@@ -487,6 +502,7 @@ This program is available under Apache License Version 2.0, available at https:/
           return {hours: (hh < 24) ? hh : 0, minutes: mm, seconds: ss, milliseconds: msec};
         }
 
+        /** @private */
         __updateDropdownItems(i8n, min, max, step) {
           const minTimeObj = this.__validateTime(this.__parseISO(min));
           const minSec = this.__getSec(minTimeObj);
@@ -509,6 +525,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         __generateDropdownList(minSec, maxSec, step) {
           if (step < 15 * 60 || !this.__validDayDivisor(step)) {
             return [];
@@ -530,6 +547,7 @@ This program is available under Apache License Version 2.0, available at https:/
           return generatedList;
         }
 
+        /** @private */
         __adjustValue(minSec, maxSec, minTimeObj, maxTimeObj) {
           // Do not change the value if it is empty
           if (!this.__memoValue) {
@@ -545,6 +563,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         __valueChanged(value, oldValue) {
           const parsedObj = this.__memoValue = this.__parseISO(value);
           const newValue = this.__formatISO(parsedObj) || '';
@@ -558,6 +577,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         __onInputChange(e) {
           const parsedObj = this.i18n.parseTime(this.__dropdownElement.value);
           const newValue = this.i18n.formatTime(parsedObj) || '';
@@ -573,16 +593,19 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         __updateValue(obj) {
           const timeString = this.__formatISO(this.__validateTime(obj)) || '';
           this.value = timeString;
         }
 
+        /** @private */
         __updateInputValue(obj) {
           const timeString = this.i18n.formatTime(this.__validateTime(obj)) || '';
           this.__dropdownElement.value = timeString;
         }
 
+        /** @private */
         __validateTime(timeObject) {
           if (timeObject) {
             timeObject.hours = parseInt(timeObject.hours);
@@ -593,6 +616,7 @@ This program is available under Apache License Version 2.0, available at https:/
           return timeObject;
         }
 
+        /** @private */
         get __stepSegment() {
           if (this.step % 3600 === 0) {
             // Accept hours
@@ -609,24 +633,29 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         __formatISO(time) {
           // The default i18n formatter implementation is ISO 8601 compliant
           return TimePickerElement.properties.i18n.value().formatTime(time);
         }
 
+        /** @private */
         __parseISO(text) {
           // The default i18n parser implementation is ISO 8601 compliant
           return TimePickerElement.properties.i18n.value().parseTime(text);
         }
 
+        /** @private */
         _getInputElement() {
           return this.shadowRoot.querySelector('vaadin-time-picker-text-field');
         }
 
+        /** @private */
         get __inputElement() {
           return this.__memoInput || (this.__memoInput = this._getInputElement());
         }
 
+        /** @private */
         get __dropdownElement() {
           return this.__memoDropdown ||
             (this.__memoDropdown = this.shadowRoot.querySelector('vaadin-combo-box-light'));
@@ -634,6 +663,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
         /**
          * Focusable element used by vaadin-control-state-mixin
+         * @return {!HTMLElement}
+         * @protected
          */
         get focusElement() {
           return this.__inputElement;
@@ -648,6 +679,13 @@ This program is available under Apache License Version 2.0, available at https:/
           return !(this.invalid = !this.checkValidity());
         }
 
+        /**
+         * Returns true if `time` satisfies the `min` and `max` constraints (if any).
+         *
+         * @param {!TimePickerTime} time Value to check against constraints
+         * @return {boolean} True if `time` satisfies the constraints
+         * @protected
+         */
         _timeAllowed(time) {
           const parsedMin = this.i18n.parseTime(this.min);
           const parsedMax = this.i18n.parseTime(this.max);
@@ -660,11 +698,13 @@ This program is available under Apache License Version 2.0, available at https:/
          * Returns true if the current input value satisfies all constraints (if any)
          *
          * You can override the `checkValidity` method for custom validations.
+         *
+         * @return {boolean} True if the value is valid
          */
         checkValidity() {
-          return this.__inputElement.focusElement.checkValidity() &&
+          return !!(this.__inputElement.focusElement.checkValidity() &&
             (!this.value || this._timeAllowed(this.i18n.parseTime(this.value))) &&
-            (!this.__dropdownElement.value || this.i18n.parseTime(this.__dropdownElement.value));
+            (!this.__dropdownElement.value || this.i18n.parseTime(this.__dropdownElement.value)));
         }
       }
 
