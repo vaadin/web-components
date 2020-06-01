@@ -499,25 +499,25 @@ This program is available under Apache License Version 2.0, available at https:/
 
     /** @private */
     _labelChanged(label) {
-      this._setOrToggleAttribute('has-label', label === 0 || !!label, this);
+      this._setOrToggleAttribute('has-label', !!label, this);
     }
 
     /** @private */
     _helperTextChanged(helperText) {
-      this._setOrToggleAttribute('has-helper', helperText === 0 || !!helperText, this);
+      this._setOrToggleAttribute('has-helper', !!helperText, this);
     }
 
     /** @private */
     _errorMessageChanged(errorMessage) {
-      this._setOrToggleAttribute('has-error-message', errorMessage === 0 || !!errorMessage, this);
+      this._setOrToggleAttribute('has-error-message', !!errorMessage, this);
     }
 
     /** @private */
     _onHelperSlotChange() {
-      const slottedNodes = this.shadowRoot.querySelector(`[name="helper"]`).assignedNodes();
+      const slottedNodes = this.shadowRoot.querySelector(`[name="helper"]`).assignedNodes({flatten: true});
       // Only has slotted helper if not a text node
       // Text nodes are added by the helperText prop and not the helper slot
-      // The filter is added due to shady DOM triggering this slotchange event on helperText prop change
+      // The filter is added due to shady DOM triggering this callback on helperText prop change
       this._hasSlottedHelper = slottedNodes.filter(node => node.nodeType !== 3).length;
 
       if (this._hasSlottedHelper) {

@@ -35,12 +35,42 @@
       </vaadin-text-field>
     </template>
   </test-fixture>
-  
+
   <test-fixture id="default-with-slotted-helper">
     <template>
       <vaadin-text-field>
         <div slot="helper">foo</div>
       </vaadin-text-field>
+    </template>
+  </test-fixture>
+
+  <dom-module id="x-element">
+    <template>
+      <vaadin-text-field id="textField" helper-text="[[helperText]]">
+        <slot slot="helper" name="helper"></slot>
+      </vaadin-text-field>
+    </template>
+  </dom-module>
+
+  <script>
+    addEventListener('WebComponentsReady', () => {
+      class XElement extends Polymer.Element {
+        static get is() {
+          return 'x-element';
+        }
+        static get properties() {
+          return {
+            helperText: String
+          };
+        }
+      }
+      window.customElements.define(XElement.is, XElement);
+    });
+  </script>
+
+  <test-fixture id="custom-element-with-slotted-helper">
+    <template>
+      <x-element></x-element>
     </template>
   </test-fixture>
 
@@ -273,10 +303,10 @@
         });
 
         describe(`binding ${condition}`, function() {
-          function dispatchHelperSlotChange() {
+          function dispatchHelperSlotChange(node) {
             // Workaround not to use timeouts
             const evt = new CustomEvent('slotchange');
-            textField.shadowRoot.querySelector('[name="helper"]').dispatchEvent(evt);
+            node.shadowRoot.querySelector('[name="helper"]').dispatchEvent(evt);
           }
 
           it('default value should be empty string', function() {
@@ -336,11 +366,6 @@
             expect(textField.hasAttribute('has-label')).to.be.false;
           });
 
-          it('setting number label updates has-label attribute', function() {
-            textField.label = 0;
-            expect(textField.hasAttribute('has-label')).to.be.true;
-          });
-
           it('setting helper updates has-helper attribute', function() {
             textField.helperText = 'foo';
             expect(textField.hasAttribute('has-helper')).to.be.true;
@@ -356,14 +381,9 @@
             expect(textField.hasAttribute('has-helper')).to.be.false;
           });
 
-          it('setting number helper updates has-helper attribute', function() {
-            textField.helperText = 0;
-            expect(textField.hasAttribute('has-helper')).to.be.true;
-          });
-
           it('text-field with slotted helper updates has-helper attribute', function() {
             const textFieldSlottedHelper = fixture('default-with-slotted-helper');
-            dispatchHelperSlotChange();
+            dispatchHelperSlotChange(textFieldSlottedHelper);
             expect(textFieldSlottedHelper.hasAttribute('has-helper')).to.be.true;
           });
 
@@ -372,19 +392,43 @@
             helper.setAttribute('slot', 'helper');
             helper.textContent = 'foo';
             textField.appendChild(helper);
-            dispatchHelperSlotChange();
+            dispatchHelperSlotChange(textField);
+
             expect(textField.hasAttribute('has-helper')).to.be.true;
           });
 
-          it('removing slotted helper removes has-helper attribute', function(done) {
+          it('removing slotted helper removes has-helper attribute', function() {
             const textFieldSlottedHelper = fixture('default-with-slotted-helper');
             const helper = textFieldSlottedHelper.querySelector('[slot="helper"]');
             textFieldSlottedHelper.removeChild(helper);
-            // dispatchHelperSlotChange does not work with this test
-            setTimeout(() => {
-              expect(textFieldSlottedHelper.hasAttribute('has-helper')).to.be.false;
-              done();
-            }, 1);
+            dispatchHelperSlotChange(textFieldSlottedHelper);
+            expect(textFieldSlottedHelper.hasAttribute('has-helper')).to.be.false;
+          });
+
+          it('should not add "has-helper" with a slotted "slot" element', function() {
+            const xElement = fixture('custom-element-with-slotted-helper');
+            const textField = xElement.$.textField;
+            expect(textField.hasAttribute('has-helper')).to.be.false;
+          });
+
+          it('should add "has-helper" when slotted "slot" and custom element sets string property', function() {
+            const xElement = fixture('custom-element-with-slotted-helper');
+            const textField = xElement.$.textField;
+            xElement.helperText = 'helper text';
+            expect(textField.hasAttribute('has-helper')).to.be.true;
+          });
+
+          it('should add "has-helper=slotted" when slotted "slot" and custom element sets content to slot', function() {
+            const xElement = fixture('custom-element-with-slotted-helper');
+            const textField = xElement.$.textField;
+            const span = document.createElement('span');
+            span.textContent = 'helper text';
+            span.setAttribute('slot', 'helper');
+            xElement.appendChild(span);
+            dispatchHelperSlotChange(textField);
+
+            expect(textField.hasAttribute('has-helper')).to.be.true;
+            expect(textField.getAttribute('has-helper')).to.be.equal('slotted');
           });
 
           it('setting errorMessage updates has-error-message attribute', function() {
