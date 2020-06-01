@@ -23,18 +23,19 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
          *
          * Default is to exclude any private property.
          *
-         * @type{String|RegExp}
+         * @type {string | RegExp}
          */
         exclude: {
           value: '^_',
           observer: '__onExcludeChange'
         },
+
         /**
          * A list of item properties that should be mapped to form fields.
          *
          * When it is defined [`exclude`](#/elements/vaadin-crud-form#property-exclude) is ignored.
          *
-         * @type{String|Array}
+         * @type {string | !Array<string> | undefined}
          */
         include: {
           observer: '__onIncludeChange'
@@ -42,12 +43,14 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
       };
     }
 
+    /** @private */
     __onExcludeChange(exclude) {
       if (typeof exclude == 'string') {
         this.exclude = exclude ? RegExp(exclude.replace(/, */g, '|'), 'i') : undefined;
       }
     }
 
+    /** @private */
     __onIncludeChange(include) {
       if (typeof include == 'string') {
         this.include = include ? include.split(/, */) : undefined;

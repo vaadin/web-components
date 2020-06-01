@@ -17,6 +17,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
   </template>
 
   <script>
+  (function() {
     /**
      * `<vaadin-crud-edit>` is a helper element for `<vaadin-grid-column>` that provides
      * an easily themable button that fires an `edit` event with the row item as detail
@@ -24,13 +25,16 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
      *
      * Typical usage is in a `<vaadin-grid-column>` of a custom `<vaadin-grid>` inside
      * a `<vaadin-crud>` to enable editing.
+     *
+     * @memberof Vaadin
+     * @mixes Vaadin.ThemableMixin
      */
     class CrudEditElement extends Vaadin.ThemableMixin(Polymer.Element) {
       static get is() {
         return 'vaadin-crud-edit';
       }
 
-      /** @private */
+      /** @protected */
       ready() {
         super.ready();
         this.addEventListener('click', this.__onClick);
@@ -38,6 +42,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         this.setAttribute('role', 'button');
       }
 
+      /** @private */
       __onClick(e) {
         const tr = e.target.parentElement.assignedSlot.parentElement.parentElement;
         tr.dispatchEvent(
@@ -52,7 +57,9 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
        * @param {Object} detail.index the index of the item in the data set
        */
     }
+
     window.customElements.define(CrudEditElement.is, CrudEditElement);
+  })();
   </script>
 </dom-module>
 
@@ -83,6 +90,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
      * ```
      *
      * @memberof Vaadin
+     * @extends Vaadin.GridColumnElement
      */
     class CrudEditColumnElement extends (class extends Vaadin.GridColumnElement {}) {
 

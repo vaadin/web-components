@@ -20,6 +20,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
        * `<vaadin-form-layout>` [Documentation](https://vaadin.com/components/vaadin-form-layout/html-api/elements/Vaadin.FormLayoutElement)
        *
        * @memberof Vaadin
+       * @extends Vaadin.FormLayoutElement
        * @mixes Vaadin.Crud.IncludedMixin
        */
       class CrudFormElement extends Vaadin.Crud.IncludedMixin(class extends Vaadin.FormLayoutElement {}) {
@@ -31,6 +32,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           return {
             /**
              * The item being edited.
+             * @type {CrudItem | undefined}
              */
             item: Object
           };
@@ -44,6 +46,8 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
          * Autogenerate form fields based on the JSON structure of the object provided.
          *
          * If not called, the method will be executed the first time an item is assigned.
+         * @param {!CrudItem} object
+         * @protected
          */
         _configure(object) {
           this.innerHTML = '';
@@ -52,12 +56,14 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           this.notifyResize();
         }
 
+        /** @private */
         __onItemChange(item) {
           if (!this._fields) {
             this._configure(item);
           }
         }
 
+        /** @private */
         __createField(parent, path, type) {
           const field = document.createElement('vaadin-text-field');
           field.label = this.__capitalize(path);
@@ -68,6 +74,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           return field;
         }
 
+        /** @private */
         __createFields(parent, object, path) {
           Object.keys(object).forEach(prop => {
             if (!this.include && this.exclude && this.exclude.test(prop)) {
@@ -85,10 +92,12 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           }
         }
 
+        /** @private */
         __capitalize(path) {
           return path.toLowerCase().replace(/([^\w]+)/g, ' ').trim().replace(/^./, c => c.toUpperCase());
         }
 
+        /** @private */
         __set(path, val, obj) {
           if (obj && path) {
             path.split('.').slice(0, -1).reduce((o, p) => (o[p] = o[p] || {}), obj);

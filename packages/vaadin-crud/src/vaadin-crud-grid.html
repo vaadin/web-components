@@ -23,6 +23,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
        * `<vaadin-grid>` [Documentation](https://vaadin.com/components/vaadin-grid/html-api/elements/Vaadin.GridElement)
        *
        * @memberof Vaadin
+       * @extends Vaadin.GridElement
        * @mixes Vaadin.Crud.IncludedMixin
        */
       class CrudGridElement extends Vaadin.Crud.IncludedMixin(class extends Vaadin.GridElement {}) {
@@ -36,14 +37,18 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
              * Disable filtering in the generated columns.
              */
             noFilter: Boolean,
+
             /**
              * Disable sorting in the generated columns.
              */
             noSort: Boolean,
+
             /**
              * Do not add headers to columns.
              */
             noHead: Boolean,
+
+            /** @private */
             __hideEditColumn: Boolean
           };
         }
@@ -55,18 +60,21 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           ];
         }
 
+        /** @private */
         __onItemsChange(items) {
           if ((!this.dataProvider || this.dataProvider == this._arrayDataProvider) && !this.include && items && items[0]) {
             this._configure(items[0]);
           }
         }
 
+        /** @private */
         __onHideEditColumnChange(hideEditColumn) {
           if (this.firstChild) {
             this.__toggleEditColumn();
           }
         }
 
+        /** @private */
         __toggleEditColumn() {
           const el = this.querySelector('vaadin-crud-edit-column');
           if (this.hideEditColumn) {
@@ -76,6 +84,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           }
         }
 
+        /** @private */
         __dataProviderWrapper(params, callback) {
           this.__dataProvider(params, (items, size) => {
             if (this.innerHTML == '' && !this.include && items[0]) {
@@ -104,6 +113,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
          * Autogenerate grid columns based on the JSON structure of the object provided.
          *
          * Method will be executed when items or dataProvider is assigned.
+         * @private
          */
         _configure(item) {
           this.innerHTML = '';
@@ -111,6 +121,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           this.__toggleEditColumn();
         }
 
+        /** @private */
         __createColumn(parent, path) {
           const col = document.createElement('vaadin-grid-column');
 
@@ -158,6 +169,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           return col;
         }
 
+        /** @private */
         __createColumns(parent, object, path) {
           if (typeof object === 'object') {
             Object.keys(object).forEach(prop => {
@@ -177,6 +189,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           }
         }
 
+        /** @private */
         __createGroup(parent, path, object) {
           const grp = document.createElement('vaadin-grid-column-group');
           grp.headerRenderer = root => root.textContent = this.__capitalize(path.replace(/^.*\./, ''));
@@ -184,10 +197,12 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           return grp;
         }
 
+        /** @private */
         __capitalize(path) {
           return path.toLowerCase().replace(/([^\w]+)/g, ' ').trim().replace(/^./, c => c.toUpperCase());
         }
 
+        /** @private */
         __set(path, val, obj) {
           if (obj && path) {
             path.split('.').slice(0, -1).reduce((o, p) => (o[p] = o[p] || {}), obj);
