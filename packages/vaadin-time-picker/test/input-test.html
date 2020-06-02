@@ -17,7 +17,22 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="time-picker-with-slotted-helper">
+    <template>
+      <vaadin-time-picker>
+        <div slot="helper">foo</div>
+      </vaadin-time-picker>
+    </template>
+  </test-fixture>
+
   <script>
+    const isSafari = (() => {
+      const uA = navigator.userAgent;
+      const vendor = navigator.vendor;
+      return /iPad|iPhone|iPod/.test(uA) ||
+        /Safari/i.test(uA) && /Apple Computer/.test(vendor) && !/Mobi|Android/i.test(uA);
+    })();
+
     function changeInputValue(el, value) {
       el.value = value;
       el.dispatchEvent(new CustomEvent('change'));
@@ -192,6 +207,13 @@
           });
         });
 
+        // Skipped because of the issue with slots order occuring in https://failing-container.glitch.me.
+        (!isSafari ? it : it.skip)(`should propagate helperText property to text-field`, () => {
+          expect(timePicker.__inputElement.helperText).to.be.empty;
+          timePicker.helperText = 'foo';
+          expect(timePicker.__inputElement.helperText).to.be.equal('foo');
+        });
+
         // they are used in both combo-box-mixin and text-field
         ['disabled', 'readonly'].forEach(prop => {
           ['__inputElement', '__dropdownElement'].forEach(elem => {
@@ -208,6 +230,13 @@
         it('should reflect to attribute when readonly property is set', () => {
           timePicker.readonly = true;
           expect(timePicker.hasAttribute('readonly')).to.be.true;
+        });
+
+        it('should display the helper text when slotted helper available', () => {
+          const timePicker = fixture(`time-picker-with-slotted-helper`);
+          const evt = new CustomEvent('slotchange');
+          timePicker.shadowRoot.querySelector('[name="helper"]').dispatchEvent(evt);
+          expect(timePicker.__inputElement.querySelector('[slot="helper"]').assignedNodes()[0].textContent).to.eql('foo');
         });
 
         describe('aria', () => {

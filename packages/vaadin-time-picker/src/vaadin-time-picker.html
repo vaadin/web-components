@@ -63,7 +63,9 @@ This program is available under Apache License Version 2.0, available at https:/
           aria-label$="[[label]]"
           clear-button-visible="[[clearButtonVisible]]"
           i18n="[[i18n]]"
+          helper-text="[[helperText]]"
           theme$="[[theme]]">
+        <slot name="helper" slot="helper">[[helperText]]</slot>
         <span slot="suffix" part="toggle-button" class="toggle-button" role="button" aria-label$="[[i18n.selector]]"></span>
       </vaadin-time-picker-text-field>
     </vaadin-combo-box-light>
@@ -205,6 +207,14 @@ This program is available under Apache License Version 2.0, available at https:/
              */
             errorMessage: {
               type: String
+            },
+
+            /**
+             * String used for the helper text.
+             */
+            helperText: {
+              type: String,
+              value: ''
             },
 
             /**

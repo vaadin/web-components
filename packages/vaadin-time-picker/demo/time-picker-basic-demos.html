@@ -54,6 +54,16 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Helper text</h3>
+    <p>Use the <code>helper-text</code> attribute or add content to the <code>helper</code> slot to set helper content.</p>
+    <vaadin-demo-snippet id="time-picker-basic-demos-helper-text">
+      <template preserve-content>
+        <vaadin-time-picker label="Alarm clock (hh:mm)">
+          <span slot="helper">The alarm will be repeated everyday</span>
+        </vaadin-time-picker>
+      </template>
+    </vaadin-demo-snippet>
+
     <h3>Time Range</h3>
     <p>
       The <code>min</code> and <code>max</code> properties affect the range of times that will be available
