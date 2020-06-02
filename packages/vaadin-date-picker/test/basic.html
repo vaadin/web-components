@@ -50,6 +50,14 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="datepicker-with-slotted-helper">
+    <template>
+      <vaadin-date-picker>
+        <div slot="helper">foo</div>
+      </vaadin-date-picker>
+    </template>
+  </test-fixture>
+
   <script>
     describe('Basic features', () => {
       var datepicker, toggleButton;
@@ -654,6 +662,18 @@
           expect(datepicker).to.have.property('clearButtonVisible', true);
           expect(textfield).to.have.property('clearButtonVisible', true);
         });
+      });
+
+      it('should display the helper text when slotted helper available', () => {
+        const datepicker = fixture(`datepicker-with-slotted-helper`);
+        const evt = new CustomEvent('slotchange');
+        datepicker.shadowRoot.querySelector('[name="helper"]').dispatchEvent(evt);
+        expect(datepicker._inputElement.querySelector('[slot="helper"]').assignedNodes()[0].textContent).to.eql('foo');
+      });
+
+      it('should display the helper text when provided', () => {
+        datepicker.helperText = 'Foo';
+        expect(datepicker._inputElement.helperText).to.equal(datepicker.helperText);
       });
     });
 

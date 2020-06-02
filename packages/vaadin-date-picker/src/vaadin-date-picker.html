@@ -53,9 +53,11 @@ This program is available under Apache License Version 2.0, available at https:/
         clear-button-visible="[[clearButtonVisible]]"
         aria-label$="[[label]]"
         part="text-field"
+        helper-text="[[helperText]]"
         theme$="[[theme]]"
       >
       <slot name="prefix" slot="prefix"></slot>
+      <slot name="helper" slot="helper">[[helperText]]</slot>
       <div part="toggle-button" slot="suffix" on-tap="_toggle" role="button" aria-label$="[[i18n.calendar]]" aria-expanded$="[[_getAriaExpanded(opened)]]"></div>
     </vaadin-date-picker-text-field>
 
@@ -218,6 +220,14 @@ This program is available under Apache License Version 2.0, available at https:/
              * A placeholder string in addition to the label. If this is set, the label will always float.
              */
             placeholder: String,
+
+            /**
+             * String used for the helper text.
+             */
+            helperText: {
+              type: String,
+              value: ''
+            },
 
             /**
              * Set to true to make this element read-only.

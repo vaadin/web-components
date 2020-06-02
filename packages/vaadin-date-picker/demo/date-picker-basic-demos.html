@@ -30,6 +30,16 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Helper text</h3>
+    <p>Use the <code>helper-text</code> attribute or add content to the <code>helper</code> slot to set helper content.</p>
+    <vaadin-demo-snippet id="helper-text">
+      <template preserve-content>
+        <vaadin-date-picker label="Event date">
+          <span slot="helper">International date format</span>
+        </vaadin-date-picker>
+      </template>
+    </vaadin-demo-snippet>
+
     <h3>Value change event</h3>
     <vaadin-demo-snippet id="value-change-event" when-defined="vaadin-date-picker">
       <template preserve-content>
