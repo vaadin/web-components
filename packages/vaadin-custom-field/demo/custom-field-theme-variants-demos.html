@@ -26,6 +26,42 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Helper text position</h3>
+    <p>The theme "helper-above-field" affects the position of the helper text.</p>
+    <vaadin-demo-snippet>
+      <template preserve-content>
+        <h4>Below the field</h4>
+        <vaadin-custom-field label="Phone number" helper-text="Below the field">
+          <vaadin-select style="width: 6em;" placeholder="Code" value="+358">
+            <template>
+              <vaadin-list-box>
+                <vaadin-item>+358</vaadin-item>
+                <vaadin-item>+46</vaadin-item>
+                <vaadin-item>+34</vaadin-item>
+              </vaadin-list-box>
+            </template>
+          </vaadin-select>
+          <vaadin-text-field prevent-invalid-input pattern="[0-9]*" maxlength="4" placeholder="Area" style="width: 5em;"></vaadin-text-field>
+          <vaadin-text-field prevent-invalid-input pattern="[0-9]*" maxlength="8" placeholder="Subscriber"></vaadin-text-field>
+        </vaadin-custom-field>
+
+        <h4>Above the field</h4>
+        <vaadin-custom-field label="Phone number" helper-text="Above the field" theme="helper-above-field">
+          <vaadin-select style="width: 6em;" placeholder="Code" value="+358">
+            <template>
+              <vaadin-list-box>
+                <vaadin-item>+358</vaadin-item>
+                <vaadin-item>+46</vaadin-item>
+                <vaadin-item>+34</vaadin-item>
+              </vaadin-list-box>
+            </template>
+          </vaadin-select>
+          <vaadin-text-field prevent-invalid-input pattern="[0-9]*" maxlength="4" placeholder="Area" style="width: 5em;"></vaadin-text-field>
+          <vaadin-text-field prevent-invalid-input pattern="[0-9]*" maxlength="8" placeholder="Subscriber"></vaadin-text-field>
+        </vaadin-custom-field>
+      </template>
+    </vaadin-demo-snippet>
+
   </template>
   <script>
     class CustomFieldThemeVariantsDemos extends DemoReadyEventEmitter(CustomFieldDemo(Polymer.Element)) {

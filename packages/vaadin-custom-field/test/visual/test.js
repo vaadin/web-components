@@ -63,8 +63,15 @@ gemini.suite('vaadin-custom-field', function(rootSuite) {
 
     gemini.suite(`width-${theme}`, function(suite) {
       suite
-        .setUrl(`/width.html?theme=${theme}`)
+        .setUrl(`width.html?theme=${theme}`)
         .setCaptureElements('#width-tests')
+        .capture('default');
+    });
+
+    gemini.suite(`helper-text-${theme}`, function(suite) {
+      suite
+        .setUrl(`helper-text.html?theme=${theme}`)
+        .setCaptureElements('#helper-text-tests')
         .capture('default');
     });
   });

@@ -20,6 +20,14 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="default-with-slotted-helper">
+    <template>
+      <vaadin-custom-field>
+        <div slot="helper">foo</div>
+      </vaadin-custom-field>
+    </template>
+  </test-fixture>
+
   <script>
     describe('basic functionality', function() {
       var customField;
@@ -120,6 +128,99 @@
           customField.inputs[0].dispatchEvent(new CustomEvent('focusin', {composed: true, bubbles: true}));
           customField.inputs[0].dispatchEvent(new CustomEvent('focusout', {composed: true, bubbles: true}));
           expect(customField.hasAttribute('focused')).to.be.false;
+        });
+      });
+
+      describe('errorMessage', function() {
+        it('setting errorMessage updates has-error-message attribute', function() {
+          customField.errorMessage = 'foo';
+          expect(customField.hasAttribute('has-error-message')).to.be.true;
+        });
+
+        it('setting errorMessage to empty string does not update has-error-message attribute', function() {
+          customField.errorMessage = '';
+          expect(customField.hasAttribute('has-error-message')).to.be.false;
+        });
+
+        it('setting errorMessage to null does not update has-error-message attribute', function() {
+          customField.errorMessage = null;
+          expect(customField.hasAttribute('has-error-message')).to.be.false;
+        });
+      });
+
+      describe('helperText', function() {
+        function dispatchHelperSlotChange(node) {
+          // Workaround not to use timeouts
+          const evt = new CustomEvent('slotchange');
+          node.shadowRoot.querySelector('[name="helper"]').dispatchEvent(evt);
+        }
+        it('setting helper updates has-helper attribute', function() {
+          customField.helperText = 'foo';
+          expect(customField.hasAttribute('has-helper')).to.be.true;
+        });
+
+        it('setting helper to empty string does not update has-helper attribute', function() {
+          customField.helperText = '';
+          expect(customField.hasAttribute('has-helper')).to.be.false;
+        });
+
+        it('setting helper to null does not update has-helper attribute', function() {
+          customField.helperText = null;
+          expect(customField.hasAttribute('has-helper')).to.be.false;
+        });
+
+        it('field with slotted helper updates has-helper attribute', function() {
+          const customFieldWithSlottedHelper = fixture('default-with-slotted-helper');
+          dispatchHelperSlotChange(customFieldWithSlottedHelper);
+          expect(customFieldWithSlottedHelper.hasAttribute('has-helper')).to.be.true;
+        });
+
+        it('setting helper with slot updates has-helper attribute', function() {
+          const helper = document.createElement('div');
+          helper.setAttribute('slot', 'helper');
+          helper.textContent = 'foo';
+          customField.appendChild(helper);
+          dispatchHelperSlotChange(customField);
+
+          expect(customField.hasAttribute('has-helper')).to.be.true;
+        });
+
+        it('removing slotted helper removes has-helper attribute', function() {
+          const customFieldWithSlottedHelper = fixture('default-with-slotted-helper');
+
+          const helper = customFieldWithSlottedHelper.querySelector('[slot="helper"]');
+          customFieldWithSlottedHelper.removeChild(helper);
+          dispatchHelperSlotChange(customFieldWithSlottedHelper);
+
+          expect(customFieldWithSlottedHelper.hasAttribute('has-helper')).to.be.false;
+        });
+      });
+
+      describe('aria-desribedby', function() {
+        it('when helperText is set', function() {
+          customField.helperText = 'helper text';
+          expect(customField.getAttribute('aria-describedby')).to.include(customField.__helperTextId);
+        });
+
+        it('when errorMessage is set and fied is invalid', function() {
+          customField.errorMessage = 'error message';
+          customField.invalid = true;
+          expect(customField.getAttribute('aria-describedby')).to.include(customField.__errorId);
+        });
+
+        it('when helperText and errorMessage are set and field is invalid', function() {
+          customField.helperText = 'helper text';
+          customField.errorMessage = 'error message';
+          customField.invalid = true;
+          expect(customField.getAttribute('aria-describedby')).to.include(customField.__helperTextId);
+          expect(customField.getAttribute('aria-describedby')).to.include(customField.__errorId);
+        });
+
+        it('when helperText and errorMessage are set but field is not invalid', function() {
+          customField.helperText = 'helper text';
+          customField.errorMessage = 'error message';
+          expect(customField.getAttribute('aria-describedby')).to.include(customField.__helperTextId);
+          expect(customField.getAttribute('aria-describedby')).to.not.include(customField.__errorId);
         });
       });
     });

@@ -44,6 +44,9 @@ This program is available under Apache License Version 2.0, available at https:/
       <div class="inputs-wrapper" on-change="__updateValue">
         <slot id="slot"></slot>
       </div>
+      <div part="helper-text" on-click="focus" id="[[__helperTextId]]">
+        <slot name="helper" id="helperSlot">[[helperText]]</slot>
+      </div>
       <div part="error-message"
           id="[[__errorId]]"
           aria-live="assertive"
@@ -87,6 +90,8 @@ This program is available under Apache License Version 2.0, available at https:/
        * Attribute    | Description | Part name
        * -------------|-------------|------------
        * `has-label`  | Set when the field has a label | :host
+       * `has-helper` | Set when the element has helper text or slot | :host
+       * `has-error-message` | Set when the element has an error message, regardless if the field is valid or not | :host
        * `invalid`    | Set when the field is invalid | :host
        * `focused`    | Set when the field contains focus | :host
        *
@@ -161,14 +166,25 @@ This program is available under Apache License Version 2.0, available at https:/
              */
             errorMessage: {
               type: String,
-              value: ''
+              value: '',
+              observer: '__errorMessageChanged'
+            },
+
+            /**
+             * String used for the helper text.
+             * @type {string | null}
+             */
+            helperText: {
+              type: String,
+              value: '',
+              observer: '__helperTextChanged'
             }
           };
         }
 
         static get observers() {
           return [
-            '__getActiveErrorId(invalid, errorMessage, __errorId)',
+            '__getActiveErrorId(invalid, errorMessage, __errorId, helperText, __helperTextId, __hasSlottedHelper)',
             '__getActiveLabelId(label, __labelId)',
             '__toggleHasValue(value)'
           ];
@@ -177,6 +193,16 @@ This program is available under Apache License Version 2.0, available at https:/
         /** @private */
         __invalidChanged(invalid) {
           this.__setOrToggleAttribute('aria-invalid', invalid, this);
+        }
+
+        /** @private */
+        __errorMessageChanged(errorMessage) {
+          this.__setOrToggleAttribute('has-error-message', !!errorMessage, this);
+        }
+
+        /** @private */
+        __helperTextChanged(helperText) {
+          this.__setOrToggleAttribute('has-helper', !!helperText, this);
         }
 
         /** @private */
@@ -238,10 +264,19 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         /** @private */
-        __getActiveErrorId(invalid, errorMessage, errorId) {
-          this.__setOrToggleAttribute('aria-describedby',
-            (errorMessage && invalid ? errorId : undefined),
-            this);
+        __getActiveErrorId(invalid, errorMessage, errorId, helperText, helperTextId, hasSlottedHelper) {
+          const ids = [];
+          if (helperText || hasSlottedHelper) {
+            ids.push(helperTextId);
+          }
+          if (errorMessage && invalid) {
+            ids.push(errorId);
+          }
+          if (ids.length > 0) {
+            this.setAttribute('aria-describedby', ids.join(' '));
+          } else {
+            this.removeAttribute('aria-describedby');
+          }
         }
 
         /** @private */
