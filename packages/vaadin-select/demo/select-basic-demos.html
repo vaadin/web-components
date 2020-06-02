@@ -40,6 +40,37 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Helper text</h3>
+    <p>Use the <code>helper-text</code> attribute or add content to the <code>helper</code> slot to set helper content.</p>
+    <vaadin-demo-snippet id="helper-text">
+      <template preserve-content>
+        <vaadin-select label="Label" value="Value" helper-text="Helper text">
+          <template>
+            <vaadin-list-box>
+              <vaadin-item>Option one</vaadin-item>
+              <vaadin-item>Option two</vaadin-item>
+            </vaadin-list-box>
+          </template>
+        </vaadin-select>
+
+        <vaadin-select label="Label" value="Value">
+          <template>
+            <vaadin-list-box>
+              <vaadin-item>Option one</vaadin-item>
+              <vaadin-item>Option two</vaadin-item>
+            </vaadin-list-box>
+          </template>
+          <span slot="helper">Helper text</span>
+        </vaadin-select>
+
+        <style>
+          vaadin-select:first-of-type {
+            margin-right: 200px;
+          }
+        </style>
+      </template>
+    </vaadin-demo-snippet>
+
     <h3>Disabled and read-only</h3>
     <vaadin-demo-snippet id="select-list-box-disabled-readonly" when-defined="vaadin-select">
       <template preserve-content>

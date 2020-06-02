@@ -57,6 +57,33 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Helper text position</h3>
+    <vaadin-demo-snippet id="helper-text-positions">
+      <template preserve-content>
+        <h4>Below the field</h4>
+        <vaadin-select label="Name" value="Jose" helper-text="Helper text below">
+          <template>
+            <vaadin-list-box>
+              <vaadin-item>Jose</vaadin-item>
+              <vaadin-item>Manolo</vaadin-item>
+              <vaadin-item>Pedro</vaadin-item>
+            </vaadin-list-box>
+          </template>
+        </vaadin-select>
+        <h4>Above the field</h4>
+        <vaadin-select label="Name" value="Jose" helper-text="Helper text above"
+          theme="helper-above-field">
+        <template>
+          <vaadin-list-box>
+            <vaadin-item>Jose</vaadin-item>
+            <vaadin-item>Manolo</vaadin-item>
+            <vaadin-item>Pedro</vaadin-item>
+          </vaadin-list-box>
+        </template>
+        </vaadin-select>
+      </template>
+    </vaadin-demo-snippet>
+
   </template>
   <script>
     class SelectThemeVariantsDemos extends DemoReadyEventEmitter(SelectDemo(Polymer.Element)) {

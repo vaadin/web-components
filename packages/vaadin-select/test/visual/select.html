@@ -29,7 +29,7 @@
     .capture-block {
       display: inline-block;
       width: 800px;
-      height: 350px;
+      height: 400px;
     }
   </style>
 
@@ -51,6 +51,16 @@
           <vaadin-item>Selected and Focused</vaadin-item>
         </vaadin-list-box>
       </template>
+    </vaadin-select>
+
+    <br />
+
+    <vaadin-select label="With helper" placeholder="Placeholder"
+      helper-text="Helper text as string">
+    </vaadin-select>
+
+    <vaadin-select label="With helper" placeholder="Placeholder">
+      <span slot="helper">Helper text as slot</span>
     </vaadin-select>
 
     <br/>

@@ -58,9 +58,11 @@ This program is available under Apache License Version 2.0, available at https:/
         invalid="[[invalid]]"
         error-message="[[errorMessage]]"
         readonly$="[[readonly]]"
+        helper-text="[[helperText]]"
         theme$="[[theme]]"
       >
       <slot name="prefix" slot="prefix"></slot>
+      <slot name="helper" slot="helper">[[helperText]]</slot>
       <div part="value"></div>
       <div part="toggle-button" slot="suffix" role="button" aria-haspopup="listbox" aria-label="Toggle"></div>
     </vaadin-select-text-field>
@@ -292,6 +294,14 @@ This program is available under Apache License Version 2.0, available at https:/
              */
             placeholder: {
               type: String
+            },
+
+            /**
+             * String used for the helper text.
+             */
+            helperText: {
+              type: String,
+              value: ''
             },
 
             /**
