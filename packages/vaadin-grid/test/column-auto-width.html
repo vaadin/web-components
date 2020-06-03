@@ -84,6 +84,16 @@
         });
       });
 
+      it('should have correct column widths when the grid is visually scaled', done => {
+        grid.style.transform = 'scale(0.5)';
+        grid.items = testItems;
+
+        whenColumnWidthsCalculated(() => {
+          expectColumnWidthsToBeOk(columns);
+          done();
+        });
+      });
+
       it('should have correct column widths when using lazy dataProvider', done => {
         grid.dataProvider = (params, callback) => {
           requestAnimationFrame(() => {
