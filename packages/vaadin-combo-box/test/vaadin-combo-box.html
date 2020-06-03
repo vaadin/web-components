@@ -48,6 +48,14 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="combo-box-with-slotted-helper">
+    <template>
+      <vaadin-combo-box>
+        <div slot="helper">foo</div>
+      </vaadin-combo-box>
+    </template>
+  </test-fixture>
+
   <script>
     describe('Properties', () => {
       let comboBox;
@@ -332,6 +340,20 @@
           comboBox._clear();
 
           expect(overlayElement.opened).not.to.be.true;
+        });
+      });
+
+      describe('helper-text', () => {
+        it('should display the helper text when slotted helper available', () => {
+          const comboBox = fixture(`combo-box-with-slotted-helper`);
+          const evt = new CustomEvent('slotchange');
+          comboBox.shadowRoot.querySelector('[name="helper"]').dispatchEvent(evt);
+          expect(comboBox.inputElement.querySelector('[slot="helper"]').assignedNodes()[0].textContent).to.eql('foo');
+        });
+
+        it('should display the helper text when provided', () => {
+          comboBox.helperText = 'Foo';
+          expect(comboBox.inputElement.helperText).to.equal(comboBox.helperText);
         });
       });
 

@@ -22,6 +22,25 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Helper text position</h3>
+    <vaadin-demo-snippet id="helper-text-positions">
+      <template preserve-content>
+        <h4>Below the field</h4>
+        <vaadin-combo-box label="Name" value="Jose" helper-text="Helper text below"></vaadin-combo-box>
+        <h4>Above the field</h4>
+        <vaadin-combo-box label="Name" value="Jose" helper-text="Helper text above"
+          theme="helper-above-field"></vaadin-combo-box>
+        <script>
+          window.addDemoReadyListener('#helper-text-positions', function(document) {
+            const comboBox = document.querySelectorAll('vaadin-combo-box');
+            comboBox[0].items = ['Left', 'Right', 'Center'];
+            comboBox[1].items = ['Left', 'Right', 'Center'];
+            comboBox[2].items = ['Left', 'Right', 'Center'];
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
     <h3>Small size</h3>
     <vaadin-demo-snippet id="small-size" when-defined="vaadin-combo-box">
       <template preserve-content>
