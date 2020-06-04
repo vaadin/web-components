@@ -22,6 +22,14 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Helper text position</h3>
+    <vaadin-demo-snippet>
+      <template preserve-content>
+        <vaadin-date-time-picker helper-text="helper text below date time picker"></vaadin-date-time-picker>
+        <vaadin-date-time-picker helper-text="helper text above date time picker" theme="helper-above-field"></vaadin-date-time-picker>
+      </template>
+    </vaadin-demo-snippet>
+
   </template>
   <script>
     class DateTimePickerThemeVariantsDemos extends DemoReadyEventEmitter(DateTimePickerDemo(Polymer.Element)) {

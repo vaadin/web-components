@@ -23,6 +23,14 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="dtp-with-slotted-helper">
+    <template>
+      <vaadin-date-time-picker>
+        <div slot="helper">foo</div>
+      </vaadin-date-time-picker>
+    </template>
+  </test-fixture>
+
   <test-fixture id="theme-attribute">
     <template>
       <vaadin-date-time-picker theme="foo"></vaadin-date-time-picker>
@@ -291,6 +299,24 @@
         expect(customField.value).to.equal('2019-09-16T15:00');
       });
 
+    });
+
+    describe('helperText', () => {
+      let dateTimePicker;
+
+      beforeEach(() => dateTimePicker = fixture('default'));
+
+      it('should display the helper text when provided', () => {
+        dateTimePicker.helperText = 'Foo';
+        expect(dateTimePicker.$.customField.helperText).to.equal(dateTimePicker.helperText);
+      });
+
+      it('should display the helper text when slotted helper available', () => {
+        const dateTimePicker = fixture(`dtp-with-slotted-helper`);
+        const evt = new CustomEvent('slotchange');
+        dateTimePicker.shadowRoot.querySelector('[name="helper"]').dispatchEvent(evt);
+        expect(dateTimePicker.$.customField.querySelector('[slot="helper"]').assignedNodes()[0].textContent).to.eql('foo');
+      });
     });
 
     describe('Theme attribute', () => {

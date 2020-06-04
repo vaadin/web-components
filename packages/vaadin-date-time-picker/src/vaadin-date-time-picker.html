@@ -63,6 +63,7 @@ This program is available under Apache License Version 2.0, available at https:/
         disabled$="[[disabled]]"
         readonly$="[[readonly]]"
         error-message="[[errorMessage]]"
+        helper-text="[[helperText]]"
       >
       <div class="slot-container">
         <slot name="date-picker" id="dateSlot">
@@ -72,6 +73,7 @@ This program is available under Apache License Version 2.0, available at https:/
           <vaadin-date-time-picker-time-picker part="time" theme$="[[theme]]"></vaadin-date-time-picker-time-picker>
         </slot>
       </div>
+      <slot name="helper" slot="helper">[[helperText]]</slot>
     </vaadin-date-time-picker-custom-field>
   </template>
 
@@ -273,6 +275,14 @@ This program is available under Apache License Version 2.0, available at https:/
              */
             timePlaceholder: {
               type: String
+            },
+
+            /**
+             * String used for the helper text.
+             */
+            helperText: {
+              type: String,
+              value: ''
             },
 
             /**
