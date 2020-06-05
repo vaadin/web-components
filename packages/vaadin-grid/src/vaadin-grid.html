@@ -484,7 +484,9 @@ This program is available under Apache License Version 2.0, available at https:/
           col._currentWidth = 0;
           // Note: _allCells only contains cells which are currently rendered in DOM
           col._allCells.forEach(c => {
-            col._currentWidth = Math.max(col._currentWidth, c.offsetWidth);
+            // Add 1px buffer to the offset width to avoid too narrow columns (sub-pixel rendering)
+            const cellWidth = c.offsetWidth + 1;
+            col._currentWidth = Math.max(col._currentWidth, cellWidth);
           });
         });
         // [write] Set column widths to fit widest measured content
