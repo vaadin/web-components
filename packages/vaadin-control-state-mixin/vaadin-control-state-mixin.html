@@ -90,7 +90,10 @@ This program is available under Apache License Version 2.0, available at https:/
     ready() {
       this.addEventListener('focusin', e => {
         if (e.composedPath()[0] === this) {
-          this._focus();
+          // Only focus if the focus is received from somewhere outside
+          if (!this.contains(e.relatedTarget)) {
+            this._focus();
+          }
         } else if (e.composedPath().indexOf(this.focusElement) !== -1 && !this.disabled) {
           this._setFocused(true);
         }

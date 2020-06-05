@@ -311,6 +311,20 @@
           expect(customElement.hasAttribute('focused')).to.be.true;
         });
 
+        it('not focus if the focus is not received from outside', () => {
+          const child = document.createElement('div');
+          customElement.appendChild(child);
+
+          const event = new CustomEvent('focusin', {
+            composed: true,
+            bubbles: true
+          });
+          event.relatedTarget = child;
+          customElement.dispatchEvent(event);
+
+          expect(customElement.hasAttribute('focused')).to.be.false;
+        });
+
         it('should not set focused attribute on focusin event dispatched when disabled', () => {
           customElement.disabled = true;
           focusElement.dispatchEvent(new CustomEvent('focusin', {composed: true, bubbles: true}));
