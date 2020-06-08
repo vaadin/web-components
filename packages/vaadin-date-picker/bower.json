@@ -38,7 +38,7 @@
     "iron-resizable-behavior": "^2.0.0",
     "polymer": "^2.0.0",
     "vaadin-button": "vaadin/vaadin-button#^2.4.0-alpha1",
-    "vaadin-text-field": "vaadin/vaadin-text-field#^2.7.0-alpha3",
+    "vaadin-text-field": "vaadin/vaadin-text-field#^2.8.0-alpha1",
     "vaadin-themable-mixin": "vaadin/vaadin-themable-mixin#^1.6.1",
     "vaadin-control-state-mixin": "vaadin/vaadin-control-state-mixin#^2.2.2",
     "vaadin-overlay": "vaadin/vaadin-overlay#^3.5.0",
