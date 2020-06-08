@@ -17,6 +17,14 @@
       </vaadin-chart>
     </template>
   </test-fixture>
+  <test-fixture id="lang">
+    <template>
+      <vaadin-chart additional-options='{ "xAxis": { "type": "datetime", "labels": { "format": "{value:%a}" } } }'>
+      <vaadin-chart-series values="[5, 6, 4, 7, 6, 2, 1]" additional-options='{ "pointIntervalUnit": "day" }'>
+      </vaadin-chart-series>
+      </vaadin-chart>
+    </template>
+  </test-fixture>
 
   <script>
     describe('Call private API to modify chart configuration', function() {
@@ -60,6 +68,22 @@
         expect(data[4].y).to.equal(5);
         chart.__callPointFunction('update', 0, 4, 1);
         expect(data[4].y).to.equal(1);
+      });
+
+      it('should be possible to modify all charts', function(done) {
+        const lang = fixture('lang');
+        setTimeout(() => {
+          const chartContainer = lang.$.chart;
+          const getLabels = () => Array.from(chartContainer.querySelectorAll('.highcharts-xaxis-labels > text')).map(node => node.textContent);
+          expect(getLabels(chartContainer)).to.be.deep.equal(['Thu', 'Fri', 'Sat', 'Sun', 'Mon', 'Tue', 'Wed']);
+          customElements.get('vaadin-chart').__callHighchartsFunction('setOptions', true, {
+            lang: {
+              shortWeekdays: ['su', 'ma', 'ti', 'ke', 'to', 'pe', 'la']
+            }
+          });
+          expect(getLabels()).to.be.deep.equal(['to', 'pe', 'la', 'su', 'ma', 'ti', 'ke']);
+          done();
+        }, 170);
       });
 
     });

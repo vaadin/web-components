@@ -271,6 +271,18 @@ MAGI ADD END -->
           return '7.0.0-alpha2';
         }
 
+        /** @private */
+        static __callHighchartsFunction(functionName, redrawCharts) {
+          const functionToCall = Highcharts[functionName];
+          const argumentsForCall = Array.prototype.splice.call(arguments, 2);
+          if (functionToCall && typeof functionToCall === 'function') {
+            functionToCall.apply(this.configuration, argumentsForCall);
+            if (redrawCharts) {
+              Highcharts.charts.forEach(c => c.redraw());
+            }
+          }
+        }
+
         static get properties() {
           return {
             /**
