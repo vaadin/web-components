@@ -31,8 +31,8 @@
     "vaadin-element-mixin": "vaadin/vaadin-element-mixin#^2.4.1",
     "vaadin-lumo-styles": "vaadin/vaadin-lumo-styles#^1.6.0",
     "vaadin-material-styles": "vaadin/vaadin-material-styles#^1.3.2",
-    "vaadin-text-field": "vaadin/vaadin-text-field#^2.7.0-alpha3",
-    "vaadin-combo-box": "vaadin/vaadin-combo-box#^5.3.0-alpha1",
+    "vaadin-text-field": "vaadin/vaadin-text-field#^2.8.0-alpha1",
+    "vaadin-combo-box": "vaadin/vaadin-combo-box#^5.4.0-alpha1",
     "vaadin-control-state-mixin": "vaadin/vaadin-control-state-mixin#^2.2.2"
   },
   "devDependencies": {
