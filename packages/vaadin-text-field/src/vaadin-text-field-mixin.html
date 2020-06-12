@@ -427,7 +427,9 @@ This program is available under Apache License Version 2.0, available at https:/
       if (!e.__fromClearButton) {
         this.__userInput = true;
       }
+
       this.value = e.target.value;
+      this.__userInput = false;
     }
 
     // NOTE(yuriy): Workaround needed for IE11 and Edge for proper displaying
@@ -484,7 +486,6 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       if (this.__userInput) {
-        this.__userInput = false;
         return;
       } else if (newVal !== undefined) {
         this.inputElement.value = newVal;

@@ -567,6 +567,26 @@
 
       });
 
+      describe('value property', function() {
+        let textField, input;
+
+        beforeEach(function() {
+          textField = fixture(`default${fixtureName}`);
+          input = textField.inputElement;
+        });
+
+        it('should not consider updating the value as user input if the value is not changed', () => {
+          const event = new Event('input', {
+            bubbles: true,
+            cancelable: true
+          });
+          input.dispatchEvent(event);
+
+          textField.value = 'foo';
+          expect(input.value).to.equal('foo');
+        });
+      });
+
       describe(`events ${condition}`, function() {
         let textField, input;
 
