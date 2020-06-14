@@ -198,6 +198,15 @@
             flushGrid(grid);
             expect(() => grid.render()).not.to.throw(Error);
           });
+
+          it('should not remove details row when a column is hidden', () => {
+            grid.rowDetailsRenderer = root => root.textContent = 'row-details';
+            grid.detailsOpenedItems = [grid._cache.items[0]];
+            column.hidden = true;
+            flushGrid(grid);
+            const details = grid.shadowRoot.querySelector('#items [part~="details-cell"]')._content;
+            expect(details.textContent).to.equal('row-details');
+          });
         });
 
         describe('path', () => {
