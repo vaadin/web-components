@@ -11,19 +11,20 @@ var grepContents = require('gulp-grep-contents');
 var clip = require('gulp-clip-empty-files');
 var git = require('gulp-git');
 
-gulp.task('lint', ['lint:js', 'lint:html', 'lint:css']);
-
-gulp.task('lint:js', function() {
+gulp.task('lint:js', async function() {
   return gulp.src([
     '*.js',
     'test/*.js'
   ])
     .pipe(eslint())
     .pipe(eslint.format())
-    .pipe(eslint.failAfterError('fail'));
+    .pipe(eslint.failAfterError('fail'))
+    .on('error', function(err) {
+      return console.error(err);
+    });
 });
 
-gulp.task('lint:html', function() {
+gulp.task('lint:html', async function() {
   return gulp.src([
     '*.html',
     'demo/**/*.html',
@@ -35,10 +36,13 @@ gulp.task('lint:html', function() {
     }))
     .pipe(eslint())
     .pipe(eslint.format())
-    .pipe(eslint.failAfterError('fail'));
+    .pipe(eslint.failAfterError('fail'))
+    .on('error', function(err) {
+      return console.error(err);
+    });
 });
 
-gulp.task('lint:css', function() {
+gulp.task('lint:css', async function() {
   return gulp.src([
     '*.html',
     'demo/**/*.html',
@@ -52,10 +56,13 @@ gulp.task('lint:css', function() {
       reporters: [
         {formatter: 'string', console: true}
       ]
-    }));
+    }))
+    .on('error', function(err) {
+      return console.error(err);
+    });
 });
 
-gulp.task('version:check', function() {
+gulp.task('version:check', async function() {
   const expectedVersion = new RegExp('^' + require('./package.json').version + '$');
   return gulp.src(['*.html'])
     .pipe(htmlExtract({sel: 'script'}))
@@ -66,7 +73,7 @@ gulp.task('version:check', function() {
     .pipe(expect({reportUnexpected: true}, []));
 });
 
-gulp.task('version:update', function() {
+gulp.task('version:update', async function() {
   // Should be run from 'preversion'
   // Assumes that the old version is in package.json and the new version in the `npm_package_version` environment variable
   const oldversion = require('./package.json').version;
@@ -92,7 +99,7 @@ var fs = require('fs');
 var svgpath = require('svgpath');
 var svgmin = require('gulp-svgmin');
 
-gulp.task('icons', function() {
+gulp.task('icons', async function() {
   var folder = 'icons/svg/';
   var glyphs;
 
@@ -181,7 +188,7 @@ gulp.task('icons', function() {
         .pipe(gulp.dest('.'))
         .on('finish', function(args) {
           // Generate base64 version of the font
-          exec('base64 lumo-icons.woff', function(err, stdout, stderr) {
+          exec('base64 -w 0 lumo-icons.woff', function(err, stdout, stderr) {
             // Write the output to font-icons.html
             var output = `<!-- NOTICE: Generated with 'gulp icons' -->
 <link rel="import" href="../polymer/lib/elements/custom-style.html">
@@ -214,8 +221,14 @@ gulp.task('icons', function() {
             });
 
             // Cleanup
-            fs.unlink('lumo-icons.woff');
+            fs.unlink('lumo-icons.woff', function(err) {
+              if (err) {
+                return console.error(err);
+              }
+            });
           });
         });
     });
 });
+
+gulp.task('lint', gulp.parallel('lint:js', gulp.series('lint:html', 'lint:css')));
