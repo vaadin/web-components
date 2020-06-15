@@ -203,7 +203,7 @@ This program is available under Apache License Version 2.0, available at https:/
                 estimatedMissingRowCount = Math.max(0, this._effectiveSize - this._physicalCount);
               }
 
-              if (this._physicalSize && estimatedMissingRowCount > 0) {
+              if (this._physicalSize && estimatedMissingRowCount > 0 && this._optPhysicalSize !== Infinity) {
                 super._increasePoolIfNeeded(estimatedMissingRowCount);
                 // Ensure the rows are in order after increasing pool
                 this.__reorderChildNodes();

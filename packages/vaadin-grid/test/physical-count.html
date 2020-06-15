@@ -140,7 +140,28 @@
         expect(spy).not.to.be.called;
       });
 
+      it('should not add unlimited amount of physical rows', () => {
+        const itemCount = 50;
+        grid.items = buildDataSet(itemCount);
+        flushGrid(grid);
 
+        // Repro for a really special bug:
+
+        // 1: notifyResize will trigger _increasePoolIfNeeded
+        grid.notifyResize();
+        // 2: Hide grid
+        grid.hidden = true;
+        // 3: notifyResize will trigger updateViewportBoundaries which sets _viewPortHeight to 0 because grid is not rendered
+        grid.notifyResize();
+        // 4: Restore grid to render tree
+        grid.hidden = false;
+        // 5: Finally flush the grid, and finish the async callback started at phase 1.
+        // _optPhysicalSize will be Infinity at this point so unlimited amount of rows would get added!
+        // Only thing that limits it is the grid.items count.
+        flushGrid(grid);
+
+        expect(grid.$.items.childElementCount).to.be.below(itemCount);
+      });
     });
   </script>
 
