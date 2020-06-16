@@ -1,0 +1,107 @@
+<template preserve-content>
+  <vaadin-chart
+      type="organization"
+      title="Acme organization chart"
+      additional-options='{"chart": {
+        "inverted": true,
+        "styledMode": false
+        },
+        "exporting": {
+            "allowHTML": true,
+            "sourceWidth": 800,
+            "sourceHeight": 600
+        },
+        "tooltip": { "outside": true}
+    }'  >
+    <vaadin-chart-series
+        title="Highsoft"
+        values='[
+            ["Acme", "Head Office"],
+            ["Acme", "Labs"],
+            ["Head Office", "Coyote Building"],
+            ["Head Office", "Road Runner Building"],
+            ["Coyote Building", "Sales"],
+            ["Coyote Building", "Marketing"],
+            ["Coyote Building", "Accounting"],
+            ["Road Runner Building", "Administration"],
+            ["Road Runner Building", "MD&apos;s Office"],
+            ["Sales", "Joseph Miler"],
+            ["Marketing", "Erik Perez"],
+            ["Accounting", "Emily Fox"],
+            ["Administration", "Ewan Herbert"],
+            ["MD&apos;s Office", "Sally Brown"],
+            ["Joseph Miler", "Kate Kirby"],
+            ["Joseph Miler", "Vaughn Whiting"],
+            ["Erik Perez", "Lisa Warner"],
+            ["Ewan Herbert", "Molly Dodd"],
+            ["Ewan Herbert", "Natasha Kelly"]
+        ]'
+      additional-options='{
+            "keys": [
+                "from",
+                "to"
+            ],
+            "levels": [
+                {
+                "level": 0,
+                "color": "#99aed3",
+                "height": 25
+                },
+                {
+                "level": 1,
+                "color": "#cce6c3",
+                "height": 25
+                },
+                {
+                "level": 2,
+                "color": "#e1f39d"
+                },
+                {
+                "level": 3,
+                "color": "#cce6c3"
+                },
+                {
+                "level": 4,
+                "color": "#cabedc"
+                },
+                {
+                "level": 5,
+                "color": "#cabdd4"
+                }
+            ],
+            "nodes": [
+                { "id": "Acme" },
+                { "id":"Head Office" },
+                { "id":"Labs" },
+                { "id":"Coyote Building" },
+                { "id":"Road Runner Building" },
+                { "id":"Sales" },
+                { "id":"Marketing" },
+                { "id":"Accounting" },
+                { "id":"Administration" },
+                { "id":"MD&apos;s Office" },
+                { "id":"Joseph Miler", "title": "Head of Sales" },
+                { "id":"Erik Perez", "title": "Head of Marketing" },
+                { "id":"Emily Fox", "title": "Head of Accounting" },
+                { "id":"Ewan Herbert", "title": "Head of Admin" },
+                { "id":"Lisa Warner" },
+                { "id":"Kate Kirby" },
+                { "id":"Vaughn Whiting" },
+                { "id":"Molly Dodd" },
+                { "id":"Natasha Kelly" },
+                {
+                    "id": "Sally Brown",
+                    "title": "Managing Director",
+                    "name": "Sally Brown",
+                    "color": "#e4b651"
+                }
+            ],
+            "colorByPoint": false,
+            "color": "#007ad0",
+            "dataLabels": {
+                "color": "black"
+            },
+            "borderColor": "white",
+            "nodeWidth": 65
+}' ></vaadin-chart-series>
+  </vaadin-chart>
