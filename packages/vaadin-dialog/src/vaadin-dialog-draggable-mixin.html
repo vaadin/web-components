@@ -43,6 +43,11 @@
 
       /** @private */
       _startDrag(e) {
+        // Don't initiate when there's more than 1 touch (pinch zoom)
+        if (e.type === 'touchstart' && e.touches.length > 1) {
+          return;
+        }
+
         if (this.draggable && (e.button === 0 || e.touches)) {
           const resizerContainer = this.$.overlay.$.resizerContainer;
           const isResizerContainer = e.target === resizerContainer;
@@ -50,8 +55,7 @@
           const isContentPart = e.target === this.$.overlay.$.content;
           const isDraggable = e.target.classList.contains('draggable');
           if ((isResizerContainer && !isResizerContainerScrollbar) || isContentPart || isDraggable) {
-            // Is needed to prevent text selection in Safari
-            !this._touchDevice && !isDraggable && e.preventDefault();
+            !isDraggable && e.preventDefault();
             this._originalBounds = this._getOverlayBounds();
             const event = this.__getMouseOrFirstTouchEvent(e);
             this._originalMouseCoords = {top: event.pageY, left: event.pageX};
@@ -69,8 +73,7 @@
       /** @private */
       _drag(e) {
         const event = this.__getMouseOrFirstTouchEvent(e);
-        if (this._eventInWindow(event) &&
-          (e.type !== 'touchmove' || e.type === 'touchmove' && e.touches.length < 2)) {
+        if (this._eventInWindow(event)) {
           const top = this._originalBounds.top + (event.pageY - this._originalMouseCoords.top);
           const left = this._originalBounds.left + (event.pageX - this._originalMouseCoords.left);
           this._setBounds({top, left});

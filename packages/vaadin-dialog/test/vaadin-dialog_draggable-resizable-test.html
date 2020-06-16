@@ -512,7 +512,7 @@
             y: Math.floor(bounds.top + (bounds.height / 2))
           };
           const toXY = {x: fromXY.x + dx, y: fromXY.y + dx};
-          dispatchTouchEvent(target, 'touchstart', fromXY);
+          dispatchTouchEvent(target, 'touchstart', fromXY, multitouch);
           dispatchTouchEvent(target, 'touchmove', toXY, multitouch);
           dispatchTouchEvent(target, 'touchend', toXY);
         }
@@ -525,7 +525,7 @@
           };
 
           const toXY = {x: fromXY.x + dx, y: fromXY.y + dy};
-          dispatchTouchEvent(target, 'touchstart', fromXY);
+          dispatchTouchEvent(target, 'touchstart', fromXY, multitouch);
           dispatchTouchEvent(target, 'touchmove', toXY, multitouch);
           dispatchTouchEvent(target, 'touchend', toXY);
         }
@@ -558,9 +558,9 @@
           expect(e.defaultPrevented).to.be.true;
         });
 
-        it('should prevent default of the touchmove when dragged', () => {
+        it('should not prevent default of the touchmove events', () => {
           const e = dispatchTouchEvent(draggableOverlay.$.content, 'touchmove');
-          expect(e.defaultPrevented).to.be.true;
+          expect(e.defaultPrevented).to.be.false;
         });
 
         it('should bring to front on touch start', () => {

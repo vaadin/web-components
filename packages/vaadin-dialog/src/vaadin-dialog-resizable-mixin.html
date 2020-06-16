@@ -139,6 +139,11 @@
        * @protected
        */
       _startResize(e, direction) {
+        // Don't initiate when there's more than 1 touch (pinch zoom)
+        if (e.type === 'touchstart' && e.touches.length > 1) {
+          return;
+        }
+
         if (e.button === 0 || e.touches) {
           e.preventDefault();
           this._originalBounds = this._getOverlayBounds();
@@ -161,8 +166,7 @@
        */
       _resize(e, resizer) {
         const event = this.__getMouseOrFirstTouchEvent(e);
-        if (this._eventInWindow(event) &&
-          (e.type !== 'touchmove' || e.type === 'touchmove' && e.touches.length < 2)) {
+        if (this._eventInWindow(event)) {
           const minimumSize = 40;
           resizer.split('').forEach((direction) => {
             switch (direction) {
