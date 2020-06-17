@@ -1,20 +1,20 @@
 import { ComboBoxElement } from '../src/vaadin-combo-box.js';
 
-export type ComboBoxItem = string | { [key: string]: unknown };
+export type ComboBoxItem = { [key: string]: unknown };
 
-export interface ComboBoxRendererModel {
+export interface ComboBoxItemModel {
   index: number;
-  item: ComboBoxItem;
+  item: ComboBoxItem | string;
 }
 
 export type ComboBoxRenderer = (
   root: HTMLElement,
   comboBox: ComboBoxElement,
-  model: ComboBoxRendererModel
+  model: ComboBoxItemModel
 ) => void;
 
 export type ComboBoxDataProviderCallback = (
-  items: Array<ComboBoxItem>,
+  items: Array<ComboBoxItem | string>,
   size: number
 ) => void;
 

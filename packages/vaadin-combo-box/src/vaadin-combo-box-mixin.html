@@ -78,7 +78,7 @@ This program is available under Apache License Version 2.0, available at https:/
         /**
          * A full set of items to filter the visible options from.
          * The items can be of either `String` or `Object` type.
-         * @type {!Array<!ComboBoxItem> | undefined}
+         * @type {!Array<!ComboBoxItem | string> | undefined}
          */
         items: {
           type: Array,
@@ -101,7 +101,7 @@ This program is available under Apache License Version 2.0, available at https:/
          * A subset of items, filtered based on the user input. Filtered items
          * can be assigned directly to omit the internal filtering functionality.
          * The items can be of either `String` or `Object` type.
-         * @type {!Array<!ComboBoxItem> | undefined}
+         * @type {!Array<!ComboBoxItem | string> | undefined}
          */
         filteredItems: {
           type: Array
@@ -161,7 +161,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         /**
          * The selected item from the `items` array.
-         * @type {ComboBoxItem | undefined}
+         * @type {ComboBoxItem | string | undefined}
          */
         selectedItem: {
           type: Object,

@@ -16,7 +16,7 @@
     ],
     "./@types/interfaces": [
       "ComboBoxItem",
-      "ComboBoxRendererModel",
+      "ComboBoxItemModel",
       "ComboBoxRenderer",
       "ComboBoxDataProvider"
     ]
