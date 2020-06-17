@@ -80,7 +80,7 @@
             const grid = document.querySelector('vaadin-grid');
             const column = grid.querySelector('vaadin-grid-column');
 
-            column.renderer = function(root, col, rowData) {
+            column.renderer = function(root, col, model) {
               let toggler = root.firstElementChild;
               if (!toggler) {
                 toggler = window.document.createElement('vaadin-grid-tree-toggle');
@@ -90,11 +90,11 @@
                 root.appendChild(toggler);
               }
 
-              toggler.item = rowData.item;
-              toggler.leaf = !rowData.item.hasChildren;
-              toggler.expanded = rowData.expanded;
-              toggler.level = rowData.level;
-              toggler.textContent = rowData.item.name;
+              toggler.item = model.item;
+              toggler.leaf = !model.item.hasChildren;
+              toggler.expanded = model.expanded;
+              toggler.level = model.level;
+              toggler.textContent = model.item.name;
             };
 
             grid.dataProvider = function(params, callback) {

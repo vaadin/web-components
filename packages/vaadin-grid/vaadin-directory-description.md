@@ -19,8 +19,8 @@
 
 <script>
   // Customize the "Address" column's renderer
-  document.querySelector('#addresscolumn').renderer = (root, grid, rowData) => {
-    root.textContent = `${rowData.item.address.street}, ${rowData.item.address.city}`;
+  document.querySelector('#addresscolumn').renderer = (root, grid, model) => {
+    root.textContent = `${model.item.address.street}, ${model.item.address.city}`;
   };
 
   // Populate the grid with data

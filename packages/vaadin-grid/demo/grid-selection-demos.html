@@ -87,7 +87,7 @@
       functionality without having to include all the items to <code>selectedItems</code>.
     </p>
     <p>
-      The <code>selected</code> property of the <code>rowData</code> renderer parameter is used
+      The <code>selected</code> property of the <code>model</code> renderer parameter is used
       here to reflect the item's selection state to a checkbox on the corresponding row.
     </p>
     <vaadin-demo-snippet id="grid-selection-demos-custom-select-all-with-data-provider" when-defined="vaadin-grid">
@@ -133,7 +133,7 @@
               checkbox.indeterminate = indeterminate;
             };
 
-            column.renderer = function(cell, column, rowData) {
+            column.renderer = function(cell, column, model) {
               var checkbox = cell.firstElementChild;
               if (!checkbox) {
                 checkbox = window.document.createElement('vaadin-checkbox');
@@ -149,8 +149,8 @@
                 });
                 cell.appendChild(checkbox);
               }
-              checkbox.__item = rowData.item;
-              checkbox.checked = inverted !== rowData.selected;
+              checkbox.__item = model.item;
+              checkbox.checked = inverted !== model.selected;
             };
           });
         </script>
@@ -196,11 +196,11 @@
 
             const columns = document.querySelectorAll('vaadin-grid-column');
 
-            columns[0].renderer = function(root, column, rowData) {
+            columns[0].renderer = function(root, column, model) {
               root.textContent = 'Space activates';
             };
 
-            columns[1].renderer = function(root, column, rowData) {
+            columns[1].renderer = function(root, column, model) {
               root.innerHTML = '';
               const alertBtn = window.document.createElement('button');
               alertBtn.textContent = 'Button';
@@ -213,7 +213,7 @@
               root.appendChild(textNode);
             };
 
-            columns[2].renderer = function(root, column, rowData) {
+            columns[2].renderer = function(root, column, model) {
               root.innerHTML = '';
               const alertBlock = window.document.createElement('div');
               alertBlock.textContent = 'Div';
@@ -226,7 +226,7 @@
               root.appendChild(textNode);
             };
 
-            columns[3].renderer = function(root, column, rowData) {
+            columns[3].renderer = function(root, column, model) {
               root.innerHTML = '';
               const alertBlock = window.document.createElement('div');
               alertBlock.textContent = 'Div with preventDefault';

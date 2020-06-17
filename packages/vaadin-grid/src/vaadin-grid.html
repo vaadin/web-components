@@ -104,13 +104,13 @@ This program is available under Apache License Version 2.0, available at https:/
      * For custom content `vaadin-grid-column` element provides you with three types of `renderer` callback functions: `headerRenderer`,
      * `renderer` and `footerRenderer`.
      *
-     * Each of those renderer functions provides `root`, `column`, `rowData` arguments when applicable.
+     * Each of those renderer functions provides `root`, `column`, `model` arguments when applicable.
      * Generate DOM content, append it to the `root` element and control the state
      * of the host element by accessing `column`. Before generating new content,
      * users are able to check if there is already content in `root` for reusing it.
      *
      * Renderers are called on initialization of new column cells and each time the
-     * related row data is updated. DOM generated during the renderer call can be reused
+     * related row model is updated. DOM generated during the renderer call can be reused
      * in the next renderer call and will be provided with the `root` argument.
      * On first call it will be empty.
      *
@@ -132,22 +132,22 @@ This program is available under Apache License Version 2.0, available at https:/
      * columns[0].headerRenderer = function(root) {
      *   root.textContent = 'Name';
      * };
-     * columns[0].renderer = function(root, column, rowData) {
-     *   root.textContent = rowData.item.name;
+     * columns[0].renderer = function(root, column, model) {
+     *   root.textContent = model.item.name;
      * };
      *
      * columns[1].headerRenderer = function(root) {
      *   root.textContent = 'Surname';
      * };
-     * columns[1].renderer = function(root, column, rowData) {
-     *   root.textContent = rowData.item.surname;
+     * columns[1].renderer = function(root, column, model) {
+     *   root.textContent = model.item.surname;
      * };
      *
      * columns[2].headerRenderer = function(root) {
      *   root.textContent = 'Role';
      * };
-     * columns[2].renderer = function(root, column, rowData) {
-     *   root.textContent = rowData.item.role;
+     * columns[2].renderer = function(root, column, model) {
+     *   root.textContent = model.item.role;
      * };
      * ```
      *
@@ -879,7 +879,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
       /**
        * @param {!HTMLTableRowElement} row
-       * @return {!GridRowData}
+       * @return {!GridItemModel}
        * @protected
        */
       __getRowModel(row) {

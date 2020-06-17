@@ -35,7 +35,7 @@
       "GridFilter",
       "GridHeaderFooterRenderer",
       "GridItem",
-      "GridRowData",
+      "GridItemModel",
       "GridRowDetailsRenderer",
       "GridSorterDirection",
       "GridSorter"

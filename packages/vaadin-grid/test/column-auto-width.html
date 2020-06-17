@@ -128,11 +128,11 @@
       });
 
       it('should have correct column widths when using renderers', done => {
-        columns[0].renderer = function(root, column, rowData) {
-          root.textContent = rowData.index;
+        columns[0].renderer = function(root, column, model) {
+          root.textContent = model.index;
         };
-        columns[1].renderer = function(root, column, rowData) {
-          root.innerHTML = `<div style="width: ${10 + 10 * rowData.index}px; height: 25px; outline: 1px solid green;">`;
+        columns[1].renderer = function(root, column, model) {
+          root.innerHTML = `<div style="width: ${10 + 10 * model.index}px; height: 25px; outline: 1px solid green;">`;
         };
         grid.items = testItems;
 
@@ -146,11 +146,11 @@
 
     describe('async recalculateWidth columns', () => {
       let grid;
-    
+
       beforeEach(() => {
         grid = fixture('aysnc-grid');
       });
-    
+
       it('should recalculate column widths when child items loaded', () => {
         const data = [{name: 'foo', children: [{
           name: 'bar'

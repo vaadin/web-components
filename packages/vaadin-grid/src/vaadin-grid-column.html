@@ -302,10 +302,10 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     /** @private */
-    __runRenderer(renderer, cell, rowData) {
+    __runRenderer(renderer, cell, model) {
       const args = [cell._content, this];
-      if (rowData && rowData.item) {
-        args.push(rowData);
+      if (model && model.item) {
+        args.push(model);
       }
       renderer.apply(this, args);
     }
@@ -651,13 +651,13 @@ This program is available under Apache License Version 2.0, available at https:/
            *
            * - `root` The cell content DOM element. Append your content to it.
            * - `column` The `<vaadin-grid-column>` element.
-           * - `rowData` The object with the properties related with
+           * - `model` The object with the properties related with
            *   the rendered item, contains:
-           *   - `rowData.index` The index of the item.
-           *   - `rowData.item` The item.
-           *   - `rowData.expanded` Sublevel toggle state.
-           *   - `rowData.level` Level of the tree represented with a horizontal offset of the toggle button.
-           *   - `rowData.selected` Selected state.
+           *   - `model.index` The index of the item.
+           *   - `model.item` The item.
+           *   - `model.expanded` Sublevel toggle state.
+           *   - `model.level` Level of the tree represented with a horizontal offset of the toggle button.
+           *   - `model.selected` Selected state.
            *
            * @type {GridBodyRenderer | null | undefined}
            */

@@ -46,15 +46,15 @@
             const grid = document.querySelector('vaadin-grid');
 
             const columns = document.querySelectorAll('vaadin-grid-column');
-            columns[0].renderer = function(root, column, rowData) {
-              root.textContent = rowData.index;
+            columns[0].renderer = function(root, column, model) {
+              root.textContent = model.index;
             };
-            columns[1].renderer = function(root, column, rowData) {
+            columns[1].renderer = function(root, column, model) {
               if (!root.firstElementChild) {
                 root.innerHTML = '<iron-image width="25" height="25" sizing="cover"></iron-image>';
               }
-              root.firstElementChild.alt = rowData.item.name.first + ' ' + rowData.item.name.last;
-              root.firstElementChild.src = rowData.item.picture.thumbnail;
+              root.firstElementChild.alt = model.item.name.first + ' ' + model.item.name.last;
+              root.firstElementChild.src = model.item.picture.thumbnail;
             };
 
             grid.items = Vaadin.GridDemo.users;
@@ -102,16 +102,16 @@
             document.querySelector('vaadin-grid').items = Vaadin.GridDemo.users;
 
             const columns = document.querySelectorAll('vaadin-grid-column');
-            columns[0].renderer = function(root, column, rowData) {
-              root.textContent = rowData.index;
+            columns[0].renderer = function(root, column, model) {
+              root.textContent = model.index;
             };
 
-            columns[1].renderer = function(root, column, rowData) {
+            columns[1].renderer = function(root, column, model) {
               if (!root.firstElementChild) {
                 root.innerHTML = '<iron-image width="30" height="30" sizing="cover"></iron-image>';
               }
-              root.firstElementChild.alt = rowData.item.name.first + ' ' + rowData.item.name.last;
-              root.firstElementChild.src = rowData.item.picture.thumbnail;
+              root.firstElementChild.alt = model.item.name.first + ' ' + model.item.name.last;
+              root.firstElementChild.src = model.item.picture.thumbnail;
             };
           });
         </script>
@@ -153,16 +153,16 @@
             document.querySelector('vaadin-grid').items = Vaadin.GridDemo.users;
 
             const columns = document.querySelectorAll('vaadin-grid-column');
-            columns[0].renderer = function(root, column, rowData) {
-              root.textContent = rowData.index;
+            columns[0].renderer = function(root, column, model) {
+              root.textContent = model.index;
             };
 
-            columns[1].renderer = function(root, column, rowData) {
+            columns[1].renderer = function(root, column, model) {
               if (!root.firstElementChild) {
                 root.innerHTML = '<iron-image width="30" height="30" sizing="cover"></iron-image>';
               }
-              root.firstElementChild.alt = rowData.item.name.first + ' ' + rowData.item.name.last;
-              root.firstElementChild.src = rowData.item.picture.thumbnail;
+              root.firstElementChild.alt = model.item.name.first + ' ' + model.item.name.last;
+              root.firstElementChild.src = model.item.picture.thumbnail;
             };
           });
         </script>
@@ -196,16 +196,16 @@
             document.querySelector('vaadin-grid').items = Vaadin.GridDemo.users;
 
             const columns = document.querySelectorAll('vaadin-grid-column');
-            columns[0].renderer = function(root, column, rowData) {
-              root.textContent = rowData.index;
+            columns[0].renderer = function(root, column, model) {
+              root.textContent = model.index;
             };
 
-            columns[1].renderer = function(root, column, rowData) {
+            columns[1].renderer = function(root, column, model) {
               if (!root.firstElementChild) {
                 root.innerHTML = '<iron-image width="30" height="30" sizing="cover"></iron-image>';
               }
-              root.firstElementChild.alt = rowData.item.name.first + ' ' + rowData.item.name.last;
-              root.firstElementChild.src = rowData.item.picture.thumbnail;
+              root.firstElementChild.alt = model.item.name.first + ' ' + model.item.name.last;
+              root.firstElementChild.src = model.item.picture.thumbnail;
             };
 
             const contextMenu = document.querySelector('vaadin-context-menu');
@@ -269,16 +269,16 @@
             document.querySelector('vaadin-grid').items = Vaadin.GridDemo.users;
 
             const columns = document.querySelectorAll('vaadin-grid-column');
-            columns[0].renderer = function(root, column, rowData) {
-              root.textContent = rowData.index;
+            columns[0].renderer = function(root, column, model) {
+              root.textContent = model.index;
             };
 
-            columns[1].renderer = function(root, column, rowData) {
+            columns[1].renderer = function(root, column, model) {
               if (!root.firstElementChild) {
                 root.innerHTML = '<iron-image width="30" height="30" sizing="cover"></iron-image>';
               }
-              root.firstElementChild.alt = rowData.item.name.first + ' ' + rowData.item.name.last;
-              root.firstElementChild.src = rowData.item.picture.thumbnail;
+              root.firstElementChild.alt = model.item.name.first + ' ' + model.item.name.last;
+              root.firstElementChild.src = model.item.picture.thumbnail;
             };
           });
         </script>

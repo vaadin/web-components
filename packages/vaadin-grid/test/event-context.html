@@ -43,7 +43,7 @@
         column = grid.querySelector('vaadin-grid-column');
         columnGroup = grid.querySelector('vaadin-grid-column-group');
 
-        grid.rowDetailsRenderer = function(root, grid, rowData) {
+        grid.rowDetailsRenderer = function(root, grid, model) {
           root.innerHTML = '<div>details</div>';
         };
         grid.openItemDetails(grid.items[0]);

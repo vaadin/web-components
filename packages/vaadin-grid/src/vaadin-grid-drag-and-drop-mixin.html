@@ -52,13 +52,13 @@ This program is available under Apache License Version 2.0, available at https:/
            * if dragging of the row should be disabled.
            *
            * Receives one argument:
-           * - `rowData` The object with the properties related with
+           * - `model` The object with the properties related with
            *   the rendered item, contains:
-           *   - `rowData.index` The index of the item.
-           *   - `rowData.item` The item.
-           *   - `rowData.expanded` Sublevel toggle state.
-           *   - `rowData.level` Level of the tree represented with a horizontal offset of the toggle button.
-           *   - `rowData.selected` Selected state.
+           *   - `model.index` The index of the item.
+           *   - `model.item` The item.
+           *   - `model.expanded` Sublevel toggle state.
+           *   - `model.level` Level of the tree represented with a horizontal offset of the toggle button.
+           *   - `model.selected` Selected state.
            *
            * @type {GridDragAndDropFilter | null | undefined}
            */
@@ -69,13 +69,13 @@ This program is available under Apache License Version 2.0, available at https:/
            * if dropping on the row should be disabled.
            *
            * Receives one argument:
-           * - `rowData` The object with the properties related with
+           * - `model` The object with the properties related with
            *   the rendered item, contains:
-           *   - `rowData.index` The index of the item.
-           *   - `rowData.item` The item.
-           *   - `rowData.expanded` Sublevel toggle state.
-           *   - `rowData.level` Level of the tree represented with a horizontal offset of the toggle button.
-           *   - `rowData.selected` Selected state.
+           *   - `model.index` The index of the item.
+           *   - `model.item` The item.
+           *   - `model.expanded` Sublevel toggle state.
+           *   - `model.level` Level of the tree represented with a horizontal offset of the toggle button.
+           *   - `model.selected` Selected state.
            *
            * @type {GridDragAndDropFilter | null | undefined}
            */
@@ -382,12 +382,12 @@ This program is available under Apache License Version 2.0, available at https:/
 
       /**
        * @param {!HTMLElement} row
-       * @param {!GridRowData} rowData
+       * @param {!GridItemModel} model
        * @protected
        */
-      _filterDragAndDrop(row, rowData) {
-        const dragDisabled = !this.rowsDraggable || (this.dragFilter && !this.dragFilter(rowData));
-        const dropDisabled = !this.dropMode || (this.dropFilter && !this.dropFilter(rowData));
+      _filterDragAndDrop(row, model) {
+        const dragDisabled = !this.rowsDraggable || (this.dragFilter && !this.dragFilter(model));
+        const dropDisabled = !this.dropMode || (this.dropFilter && !this.dropFilter(model));
 
         const draggableElements = window.ShadyDOM
           ? [row]

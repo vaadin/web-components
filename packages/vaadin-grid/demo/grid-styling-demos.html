@@ -48,8 +48,8 @@
             const grid = document.querySelector('vaadin-grid');
             grid.items = Vaadin.GridDemo.users;
 
-            grid.cellClassNameGenerator = function(column, rowData) {
-              let classes = rowData.item.subscribed == 'true' ? 'subscribed' : 'not-subscribed';
+            grid.cellClassNameGenerator = function(column, model) {
+              let classes = model.item.subscribed == 'true' ? 'subscribed' : 'not-subscribed';
               if (column.path === 'email') {
                 classes += ' email';
               }
@@ -105,7 +105,7 @@
             const checkedItems = [];
 
             const checkColumn = document.querySelector('#check');
-            checkColumn.renderer = function(root, column, rowData) {
+            checkColumn.renderer = function(root, column, model) {
               if (!root.firstElementChild) {
                 root.innerHTML = '<vaadin-checkbox></vaadin-checkbox>';
                 root.firstElementChild.addEventListener('checked-changed', function(e) {
@@ -121,15 +121,15 @@
                   grid.generateCellClassNames();
                 });
               }
-              root.item = rowData.item;
-              root.firstElementChild.checked = checkedItems.indexOf(rowData.item) > -1;
+              root.item = model.item;
+              root.firstElementChild.checked = checkedItems.indexOf(model.item) > -1;
             };
 
-            grid.cellClassNameGenerator = function(column, rowData) {
-              let classes = rowData.item.subscribed == 'true' ? 'subscribed' : 'not-subscribed';
+            grid.cellClassNameGenerator = function(column, model) {
+              let classes = model.item.subscribed == 'true' ? 'subscribed' : 'not-subscribed';
               if (column.path === 'email') {
                 classes += ' email';
-              } else if (column.path === 'name.first' && checkedItems.indexOf(rowData.item) > -1) {
+              } else if (column.path === 'name.first' && checkedItems.indexOf(model.item) > -1) {
                 classes += ' checked';
               }
               return classes;

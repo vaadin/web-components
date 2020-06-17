@@ -28,7 +28,7 @@
           }
         </style>
 
-        <vaadin-grid aria-label="Toggling and Rendering Details Using JavaScrtipt Example" size="200">
+        <vaadin-grid aria-label="Toggling and Rendering Details Using JavaScript Example" size="200">
           <vaadin-grid-column path="name.first" header="First name"></vaadin-grid-column>
           <vaadin-grid-column path="name.last" header="Last name"></vaadin-grid-column>
           <vaadin-grid-column path="email"></vaadin-grid-column>
@@ -40,7 +40,7 @@
             const grid = document.querySelector('vaadin-grid');
             grid.items = Vaadin.GridDemo.users;
 
-            grid.rowDetailsRenderer = function(root, grid, rowData) {
+            grid.rowDetailsRenderer = function(root, grid, model) {
               if (!root.firstElementChild) {
                 root.innerHTML =
                 '<div class="details">' +
@@ -48,9 +48,9 @@
                 '<small></small></p>' +
                 '</div>';
               }
-              root.firstElementChild.querySelector('img').src = rowData.item.picture.large;
-              root.firstElementChild.querySelector('span').textContent = 'Hi! My name is ' + rowData.item.name.first + '!';
-              root.firstElementChild.querySelector('small').textContent = rowData.item.email;
+              root.firstElementChild.querySelector('img').src = model.item.picture.large;
+              root.firstElementChild.querySelector('span').textContent = 'Hi! My name is ' + model.item.name.first + '!';
+              root.firstElementChild.querySelector('small').textContent = model.item.email;
 
               // If the bounds of the image weren't known/specified beforehand, grid would need to
               // be notified of an asynchronous size change once the image gets loaded.
@@ -60,7 +60,7 @@
             };
 
             const detailsToggleColumn = document.querySelector('#details');
-            detailsToggleColumn.renderer = function(root, column, rowData) {
+            detailsToggleColumn.renderer = function(root, column, model) {
               if (!root.firstElementChild) {
                 root.innerHTML = '<vaadin-checkbox>Show Details</vaadin-checkbox>';
                 root.firstElementChild.addEventListener('checked-changed', function(e) {
@@ -71,7 +71,7 @@
                   }
                 });
               }
-              root.item = rowData.item;
+              root.item = model.item;
               root.firstElementChild.checked = grid.detailsOpenedItems.indexOf(root.item) > -1;
             };
           });

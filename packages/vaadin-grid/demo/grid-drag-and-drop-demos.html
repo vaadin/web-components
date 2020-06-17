@@ -397,15 +397,15 @@
               cb(items.slice(start, start + params.pageSize), items.length);
             };
 
-            grid.dragFilter = function(rowData) {
+            grid.dragFilter = function(model) {
               // Disallow dragging supervisors
-              return !rowData.item.subordinates;
+              return !model.item.subordinates;
             };
 
-            grid.dropFilter = function(rowData) {
-              return rowData.item.subordinates // Only support dropping on top of supervisors
-                && rowData.item.subordinates.length < 4 // Don't allow more than 4 subordinates
-                && rowData.item.subordinates.indexOf(draggedUser) === -1; // Disallow dropping on own supervisor
+            grid.dropFilter = function(model) {
+              return model.item.subordinates // Only support dropping on top of supervisors
+                && model.item.subordinates.length < 4 // Don't allow more than 4 subordinates
+                && model.item.subordinates.indexOf(draggedUser) === -1; // Disallow dropping on own supervisor
             };
 
             grid.expandedItems = Array.from(supervisors);

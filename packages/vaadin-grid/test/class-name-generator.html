@@ -44,39 +44,39 @@
         expect(Array.from(cell.classList)).to.deep.equal(initialCellClasses.concat(expectedClasses));
 
       it('should add classes for cells', () => {
-        grid.cellClassNameGenerator = (column, rowData) => 'foo';
+        grid.cellClassNameGenerator = (column, model) => 'foo';
         assertClassList(firstCell, ['foo']);
         assertClassList(getContainerCell(grid.$.items, 1, 1), ['foo']);
       });
 
       it('should add all classes separated by whitespaces', () => {
-        grid.cellClassNameGenerator = (column, rowData) => 'foo bar baz';
+        grid.cellClassNameGenerator = (column, model) => 'foo bar baz';
         assertClassList(firstCell, ['foo', 'bar', 'baz']);
       });
 
       it('should not remove existing classes', () => {
         firstCell.classList.add('bar');
-        grid.cellClassNameGenerator = (column, rowData) => 'foo';
+        grid.cellClassNameGenerator = (column, model) => 'foo';
         assertClassList(firstCell, ['bar', 'foo']);
       });
 
       it('should remove old generated classes', () => {
-        grid.cellClassNameGenerator = (column, rowData) => 'foo';
-        grid.cellClassNameGenerator = (column, rowData) => 'bar';
+        grid.cellClassNameGenerator = (column, model) => 'foo';
+        grid.cellClassNameGenerator = (column, model) => 'bar';
         assertClassList(firstCell, ['bar']);
       });
 
-      it('should provide column and rowData as parameters', () => {
-        grid.cellClassNameGenerator = (column, rowData) =>
-          rowData.index + ' ' + rowData.item.value + ' ' + column.header;
+      it('should provide column and model as parameters', () => {
+        grid.cellClassNameGenerator = (column, model) =>
+          model.index + ' ' + model.item.value + ' ' + column.header;
         assertClassList(getContainerCell(grid.$.items, 5, 1), ['5', 'foo5', 'col1']);
         assertClassList(getContainerCell(grid.$.items, 10, 0), ['10', 'foo10', 'col0']);
       });
 
       it('should be called for details cell with undefined column', done => {
-        grid.rowDetailsRenderer = (root, grid, rowData) => {};
-        grid.cellClassNameGenerator = (column, rowData) =>
-          rowData.index + ' ' + column;
+        grid.rowDetailsRenderer = (root, grid, model) => {};
+        grid.cellClassNameGenerator = (column, model) =>
+          model.index + ' ' + column;
         requestAnimationFrame(() => {
           assertClassList(getContainerCell(grid.$.items, 0, 2), ['0', 'undefined']);
           done();
@@ -84,7 +84,7 @@
       });
 
       it('should add classes when loading new items', function(done) {
-        grid.cellClassNameGenerator = (column, rowData) => rowData.item.value;
+        grid.cellClassNameGenerator = (column, model) => model.item.value;
         scrollToEnd(grid, () => {
           const rows = getRows(grid.$.items);
           const lastRow = rows[rows.length - 1];
@@ -95,17 +95,17 @@
       });
 
       it('should not throw with falsy return value', () => {
-        expect(() => grid.cellClassNameGenerator = (column, rowData) => {}).not.to.throw(Error);
+        expect(() => grid.cellClassNameGenerator = (column, model) => {}).not.to.throw(Error);
       });
 
       it('should clear generated classes with falsy return value', () => {
-        grid.cellClassNameGenerator = (column, rowData) => 'foo';
-        grid.cellClassNameGenerator = (column, rowData) => {};
+        grid.cellClassNameGenerator = (column, model) => 'foo';
+        grid.cellClassNameGenerator = (column, model) => {};
         assertClassList(firstCell, []);
       });
 
       it('should clear generated classes with falsy property value', () => {
-        grid.cellClassNameGenerator = (column, rowData) => 'foo';
+        grid.cellClassNameGenerator = (column, model) => 'foo';
         grid.cellClassNameGenerator = undefined;
         assertClassList(firstCell, []);
       });
@@ -113,7 +113,7 @@
       ['generateCellClassNames', 'clearCache', 'render'].forEach(funcName => {
         it(`should update classes on ${funcName}`, () => {
           let condition = false;
-          grid.cellClassNameGenerator = (column, rowData) => condition && 'foo';
+          grid.cellClassNameGenerator = (column, model) => condition && 'foo';
           condition = true;
           assertClassList(firstCell, []);
           grid[funcName]();
@@ -131,7 +131,7 @@
       });
 
       it('should not throw with extra whitespace in the result', () => {
-        expect(() => grid.cellClassNameGenerator = (column, rowData) => ' foo  bar ').not.to.throw(Error);
+        expect(() => grid.cellClassNameGenerator = (column, model) => ' foo  bar ').not.to.throw(Error);
         assertClassList(firstCell, ['foo', 'bar']);
       });
     });

@@ -72,7 +72,7 @@
             };
 
             columns[0].renderer =
-            columns[1].renderer = function(root, column, rowData) {
+            columns[1].renderer = function(root, column, model) {
               let textField = root.firstElementChild;
               if (!textField) {
                 textField = window.document.createElement('vaadin-text-field');
@@ -80,17 +80,17 @@
               }
               const property = column == columns[0] ? 'first' : 'last';
               // set an id so as we can find it in the dom when clicking on action buttons.
-              textField.id = property + rowData.index;
-              textField.value = rowData.item.name[property];
+              textField.id = property + model.index;
+              textField.value = model.item.name[property];
               textField.readonly = true;
               textField.setAttribute('focus-target', true);
             };
 
-            columns[2].renderer = function(root, column, rowData) {
-              root.textContent = rowData.item.name.first + '.' + rowData.item.name.last + '@example.com';
+            columns[2].renderer = function(root, column, model) {
+              root.textContent = model.item.name.first + '.' + model.item.name.last + '@example.com';
             };
 
-            columns[3].renderer = function(root, column, rowData) {
+            columns[3].renderer = function(root, column, model) {
               let wrapper = root.firstElementChild;
               if (!wrapper) {
                 root.innerHTML =
@@ -134,7 +134,7 @@
               }
 
               // We reuse rendered content, but maintain a property with the index for actions
-              wrapper.idx = rowData.index;
+              wrapper.idx = model.index;
             };
 
             function updateTextFieldsVisibility(index, editing) {

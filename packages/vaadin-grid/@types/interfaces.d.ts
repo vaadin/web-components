@@ -3,13 +3,13 @@ import { GridElement } from '../src/vaadin-grid.js';
 
 export type GridBodyRenderer = (
   root: HTMLElement,
-  column: GridColumnElement,
-  rowData: GridRowData
+  column?: GridColumnElement,
+  model?: GridItemModel
 ) => void;
 
 export type GridCellClassNameGenerator = (
   column: GridColumnElement,
-  rowData: GridRowData
+  model: GridItemModel
 ) => void;
 
 export type GridColumnTextAlign = 'start' | 'center' | 'end' | null;
@@ -32,7 +32,7 @@ export type GridDataProvider = (
   callback: GridDataProviderCallback
 ) => void;
 
-export type GridDragAndDropFilter = (rowData: GridRowData) => void;
+export type GridDragAndDropFilter = (model: GridItemModel) => void;
 
 export type GridDropMode = 'between' | 'on-top' | 'on-top-or-between' | 'on-grid';
 
@@ -54,12 +54,12 @@ export interface GridEventContext {
 
 export type GridHeaderFooterRenderer = (
   root: HTMLElement,
-  column: GridColumnElement
+  column?: GridColumnElement
 ) => void;
 
 export type GridItem = string | { [key: string]: unknown };
 
-export interface GridRowData {
+export interface GridItemModel {
   index: number;
   item: GridItem;
   selected?: boolean;
@@ -70,8 +70,8 @@ export interface GridRowData {
 
 export type GridRowDetailsRenderer = (
   root: HTMLElement,
-  grid: GridElement,
-  rowData: GridRowData
+  grid?: GridElement,
+  model?: GridItemModel
 ) => void;
 
 export type GridSorterDirection = 'asc' | 'desc' | null;
