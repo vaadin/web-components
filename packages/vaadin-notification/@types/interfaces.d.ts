@@ -6,5 +6,5 @@ export type NotificationPosition =
 
 export type NotificationRenderer = (
   root: HTMLElement,
-  notification: NotificationElement
+  notification?: NotificationElement
 ) => void;
