@@ -1,3 +1,7 @@
+import { DialogElement } from '../src/vaadin-dialog.js';
+
+export type DialogRenderer = (root: HTMLElement, dialog?: DialogElement) => void;
+
 export type DialogResizableDirection = 'n' | 'e' | 's' | 'w' | 'nw' | 'ne' | 'se' | 'sw';
 
 export type DialogResizeDimensions = {

@@ -7,10 +7,8 @@
     "theme/**/*"
   ],
   "autoImport": {
-    "@vaadin/vaadin-overlay/@types/interfaces": [
-      "OverlayRenderer"
-    ],
     "./@types/interfaces": [
+      "DialogRenderer",
       "DialogResizableDirection",
       "DialogResizeDimensions",
       "DialogOverlayBounds",
