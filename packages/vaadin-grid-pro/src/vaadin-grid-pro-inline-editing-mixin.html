@@ -191,7 +191,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
     /** @private */
     _isEditColumn(column) {
-      return column.localName.toLowerCase() === 'vaadin-grid-pro-edit-column';
+      return column && column.localName.toLowerCase() === 'vaadin-grid-pro-edit-column';
     }
 
     /** @private */

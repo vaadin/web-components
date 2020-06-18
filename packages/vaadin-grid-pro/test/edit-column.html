@@ -696,6 +696,28 @@
         });
 
       });
+
+      describe('row details', () => {
+
+        let grid, rows;
+
+        beforeEach(() => {
+          grid = fixture('default');
+          grid.items = getItems();
+          grid.rowDetailsRenderer = root => root.textContent = 'foo';
+          flushGrid(grid);
+          rows = Array.from(getRows(grid.$.items));
+        });
+
+        it('should not throw on details cell click', () => {
+          grid.detailsOpenedItems = [grid.items[0]];
+          const detailsCell = rows[0].querySelector('[part~="details-cell"]');
+
+          const dispatch = () => detailsCell.dispatchEvent(new CustomEvent('mousedown', {bubbles: true, composed: true}));
+          expect(dispatch).to.not.throw(Error);
+        });
+
+      });
     });
   </script>
 
