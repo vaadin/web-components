@@ -9,5 +9,8 @@
     "gemini": false,
     "sinon": false,
     "MockInteractions": false
+  },
+  "parserOptions": {
+    "ecmaVersion": 8
   }
 }
