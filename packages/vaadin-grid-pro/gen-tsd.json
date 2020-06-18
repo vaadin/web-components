@@ -13,7 +13,7 @@
     "@vaadin/vaadin-grid/@types/interfaces": [
       "GridBodyRenderer",
       "GridItem",
-      "GridRowData"
+      "GridItemModel"
     ],
     "./@types/interfaces": [
       "GridProEditorType"
