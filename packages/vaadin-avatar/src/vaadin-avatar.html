@@ -1,0 +1,62 @@
+<!--
+@license
+Copyright (c) 2020 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
+<link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
+
+<dom-module id="vaadin-avatar">
+  <template>
+    <style>
+      :host {
+        display: inline-block;
+      }
+
+      :host([hidden]) {
+        display: none !important;
+      }
+    </style>
+    <slot></slot>
+  </template>
+
+  <script>
+    (function() {
+
+      /**
+       * `<vaadin-avatar>` is a Web Component.
+       *
+       * ```
+       * <vaadin-avatar></vaadin-avatar>
+       * ```
+       *
+       * @memberof Vaadin
+       * @mixes Vaadin.ElementMixin
+       * @mixes Vaadin.ThemableMixin
+       * @demo demo/index.html
+       */
+      class VaadinAvatar extends Vaadin.ElementMixin(Vaadin.ThemableMixin(Polymer.Element)) {
+        static get is() {
+          return 'vaadin-avatar';
+        }
+        static get version() {
+          return '0.1.0';
+        }
+
+        static get properties() {
+          return {
+          };
+        }
+      }
+
+      customElements.define(VaadinAvatar.is, VaadinAvatar);
+
+      /**
+       * @namespace Vaadin
+       */
+      window.Vaadin.VaadinAvatar = VaadinAvatar;
+    })();
+  </script>
+</dom-module>

@@ -1,0 +1,48 @@
+{
+  "name": "@vaadin/vaadin-avatar",
+  "version": "0.1.0",
+  "description": "vaadin-avatar",
+  "main": "vaadin-avatar.html",
+  "repository": "vaadin/vaadin-avatar",
+  "keywords": [
+    "Vaadin",
+    "vaadin-avatar",
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
+  "author": "Vaadin Ltd",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/vaadin/vaadin-avatar/issues"
+  },
+  "homepage": "https://vaadin.com/components",
+  "files": [
+    "vaadin-*.js",
+    "src",
+    "theme"
+  ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint"
+    }
+  },
+  "scripts": {
+    "test": "wct",
+    "check": "npm-run-all --parallel check:*",
+    "check:bower": "magi check-bower",
+    "check:version": "magi check-version",
+    "check:docs": "magi check-events-docs",
+    "lint": "npm-run-all --parallel lint:*",
+    "lint:css": "stylelint *.html src/*.html demo/*.html theme/**/*.html test/*html",
+    "lint:html": "eslint *.html src demo test --ext .html",
+    "lint:js": "eslint *.js test",
+    "lint:polymer": "polymer lint --rules polymer-2 --input ./src/*.html ./theme/**/*.html",
+    "prestart": "polymer analyze vaadin-* > analysis.json",
+    "start": "polymer serve --port 3000 --open",
+    "preversion": "magi update-version"
+  },
+  "devDependencies": {
+    "@vaadin/vaadin-component-dev-dependencies": "^3.0.0"
+  }
+}

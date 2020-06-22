@@ -1,0 +1,18 @@
+<dom-module id="avatar-advanced-demos">
+  <template>
+    <style include="vaadin-component-demo-shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+
+  </template>
+  <script>
+    class AvatarAdvancedDemos extends DemoReadyEventEmitter(AvatarDemo(Polymer.Element)) {
+      static get is() {
+        return 'avatar-advanced-demos';
+      }
+    }
+    customElements.define(AvatarAdvancedDemos.is, AvatarAdvancedDemos);
+  </script>
+</dom-module>

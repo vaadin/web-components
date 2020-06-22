@@ -1,0 +1,26 @@
+{
+  "name": "Vaadin Avatar",
+  "pages": [
+  {
+    "name": "Basics",
+    "url": "avatar-basic-demos",
+    "src": "avatar-basic-demos.html",
+    "meta": {
+      "title": "Vaadin Avatar Basics",
+      "description": "",
+      "image": ""
+     }
+  }
+  ,
+  {
+    "name": "Advanced Usage",
+    "url": "avatar-advanced-demos",
+    "src": "avatar-advanced-demos.html",
+    "meta": {
+      "title": "Vaadin Avatar Advanced Examples",
+      "description": "",
+      "image": ""
+     }
+  }
+  ]
+}

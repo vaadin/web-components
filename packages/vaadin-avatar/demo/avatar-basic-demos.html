@@ -1,0 +1,32 @@
+<dom-module id="avatar-basic-demos">
+  <template>
+    <style include="vaadin-component-demo-shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+
+
+    <h3>Sample example</h3>
+    <vaadin-demo-snippet id="avatar-basic-demos-sample-example" when-defined="vaadin-avatar">
+      <template preserve-content>
+        <vaadin-avatar></vaadin-avatar>
+        <script>
+          window.addDemoReadyListener('#avatar-basic-demos-sample-example', function(document) {
+            const avatar = document.querySelector('vaadin-avatar');
+            avatar.textContent = 'Foobar';
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+  </template>
+  <script>
+    class AvatarBasicDemos extends DemoReadyEventEmitter(AvatarDemo(Polymer.Element)) {
+      static get is() {
+        return 'avatar-basic-demos';
+      }
+    }
+    customElements.define(AvatarBasicDemos.is, AvatarBasicDemos);
+  </script>
+</dom-module>
