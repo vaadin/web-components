@@ -307,13 +307,17 @@
           expect(resizeContainer.scrollTop).to.equal(1);
         });
 
-        it('should expand content if it overflows the overlay', () => {
-          // Fill the content with a lot of text so that it overflows the viewport
-          dialog.$.overlay.firstElementChild.textContent = Array(...new Array(10000)).map(() => 'foo').join(' ');
+        it('should expand content with relative height', async() => {
+          resize(overlayPart.querySelector('.s'), 0, 10);
+          await contentStabilized(dialog);
 
+          // Set the dialog content to have 100% height
+          dialog.$.overlay.firstElementChild.style.height = '100%';
+
+          dialog.$.overlay.$.content.style.padding = '0'; // reset paddings
+          const contentBounds = dialog.$.overlay.firstElementChild.getBoundingClientRect();
           const overlayBounds = overlayPart.getBoundingClientRect();
-          const contentPartBounds = dialog.$.overlay.$.content.getBoundingClientRect();
-          expect(contentPartBounds.height).to.be.above(overlayBounds.height);
+          expect(contentBounds.height).to.equal(overlayBounds.height);
         });
 
         it('should not resize dialog if not left mouse button', () => {
