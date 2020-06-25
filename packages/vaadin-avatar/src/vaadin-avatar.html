@@ -13,23 +13,32 @@ This program is available under Apache License Version 2.0, available at https:/
     <style>
       :host {
         display: inline-block;
+        border-radius: 50%;
+        overflow: hidden;
+        height: 44px;
+        width: 44px;
+      }
+
+      img {
+        height: 100%;
+        width: 100%;
       }
 
       :host([hidden]) {
         display: none !important;
       }
     </style>
-    <slot></slot>
+    <img hidden$="[[!__imgVisible]]" src$="[[img]]" />
   </template>
 
   <script>
     (function() {
 
       /**
-       * `<vaadin-avatar>` is a Web Component.
+       * `<vaadin-avatar>` is a Web Component providing avatar displaying functionality.
        *
-       * ```
-       * <vaadin-avatar></vaadin-avatar>
+       * ```html
+       * <vaadin-avatar img="avatars/avatar-1.jpg"></vaadin-avatar>
        * ```
        *
        * @memberof Vaadin
@@ -47,7 +56,32 @@ This program is available under Apache License Version 2.0, available at https:/
 
         static get properties() {
           return {
+            /**
+             * The path to the image
+             */
+            img: {
+              type: String,
+              reflectToAttribute: true,
+              observer: '__imgChanged'
+            },
+
+            /** @private */
+            __imgVisible: Boolean
           };
+        }
+
+        ready() {
+          super.ready();
+
+          this.__updateVisibility();
+        }
+
+        __imgChanged(img) {
+          this.__updateVisibility();
+        }
+
+        __updateVisibility() {
+          this.__imgVisible = !!this.img;
         }
       }
 

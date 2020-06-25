@@ -1,3 +1,3 @@
 window.VaadinAvatarSuites = [
-  'sample-test.html'
+  'basic-test.html'
 ];

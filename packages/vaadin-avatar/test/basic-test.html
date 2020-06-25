@@ -1,0 +1,64 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-avatar tests</title>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../../test-fixture/test-fixture.html">
+  <link rel="import" href="../vaadin-avatar.html">
+</head>
+
+<body>
+  <test-fixture id="default">
+    <template>
+      <vaadin-avatar></vaadin-avatar>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('basic test', function() {
+      let avatar, imgElement;
+
+      beforeEach(function() {
+        avatar = fixture('default');
+        imgElement = avatar.shadowRoot.querySelector('img');
+      });
+
+      it('should not expose class name globally', function() {
+        expect(window.VaadinAvatar).not.to.be.ok;
+      });
+
+      describe('properties', function() {
+
+        describe('"img" property', function() {
+          const imgSrc = 'https://vaadin.com/';
+
+          it('should have empty "img" prop set by default', function() {
+            expect(avatar.img).to.be.undefined;
+          });
+
+          it('should reflect "img" prop to the attribute', function() {
+            avatar.img = imgSrc;
+            expect(imgElement.getAttribute('src')).to.equal(imgSrc);
+          });
+
+          it('should propagate "img" to the internal img', function() {
+            avatar.img = imgSrc;
+            expect(imgElement.src).to.equal(imgSrc);
+          });
+
+          it('img should be hidden when "img" property is provided', function() {
+            expect(imgElement.hasAttribute('hidden')).to.be.true;
+
+            avatar.img = imgSrc;
+            expect(imgElement.hasAttribute('hidden')).to.be.false;
+          });
+
+        });
+
+      });
+
+    });
+  </script>
+</body>
