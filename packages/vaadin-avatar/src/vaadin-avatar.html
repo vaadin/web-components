@@ -96,6 +96,16 @@ This program is available under Apache License Version 2.0, available at https:/
               reflectToAttribute: true
             },
 
+            /**
+             * Full name of the user
+             * used for the title of the avatar.
+             */
+            name: {
+              type: String,
+              reflectToAttribute: true,
+              observer: '__nameChanged'
+            },
+
             /** @private */
             __imgVisible: Boolean,
 
@@ -117,6 +127,9 @@ This program is available under Apache License Version 2.0, available at https:/
           super.ready();
 
           this.__updateVisibility();
+
+          // Should set `anonymous` if name is not provided
+          this.__setTitleFromName(this.name);
         }
 
         __imgOrAbbrChanged(img, abbr) {
@@ -127,6 +140,18 @@ This program is available under Apache License Version 2.0, available at https:/
           this.__imgVisible = !!this.img;
           this.__abbrVisible = !this.img && !!this.abbr;
           this.__iconVisible = !this.img && !this.abbr;
+        }
+
+        __nameChanged(name) {
+          this.__setTitleFromName(name);
+        }
+
+        __setTitleFromName(name) {
+          if (name) {
+            this.setAttribute('title', name);
+          } else {
+            this.setAttribute('title', 'anonymous');
+          }
         }
       }
 

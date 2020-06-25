@@ -101,6 +101,23 @@
 
         });
 
+        describe('"name" property', function() {
+
+          it('should have undefined "name" prop by default', function() {
+            expect(avatar.name).to.be.undefined;
+          });
+
+          it('should use "name" prop for setting title', function() {
+            avatar.name = 'Foo Bar';
+            expect(avatar.getAttribute('title')).to.equal('Foo Bar');
+          });
+
+          it('if "name" is not provided title should be "anonymous"', function() {
+            expect(avatar.getAttribute('title')).to.equal('anonymous');
+          });
+
+        });
+
       });
 
     });
