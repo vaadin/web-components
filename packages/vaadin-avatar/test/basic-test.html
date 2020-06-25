@@ -99,6 +99,44 @@
             expect(iconElement.hasAttribute('hidden')).to.be.true;
           });
 
+          it('should generate abbreviation from name if none provided', function() {
+            avatar.name = 'Foo Bar';
+            expect(avatar.abbr).to.equal('FB');
+          });
+
+          it('should not generate abbreviation from name if it is provided', function() {
+            avatar.abbr = 'BB';
+            avatar.name = 'Foo Bar';
+            expect(avatar.abbr).to.equal('BB');
+          });
+
+          it('should re-generate abbreviation from name if abbr was unset', function() {
+            avatar.abbr = 'BB';
+            avatar.name = 'Foo Bar';
+            expect(avatar.abbr).to.equal('BB');
+
+            avatar.abbr = '';
+            expect(avatar.abbr).to.equal('FB');
+          });
+
+          it('should clean up abbreviation if name and abbr was unset', function() {
+            avatar.abbr = 'BB';
+            avatar.name = 'Foo Bar';
+
+            avatar.abbr = '';
+            avatar.name = '';
+
+            expect(avatar.abbr).to.be.undefined;
+          });
+
+          it('should re-generate abbreviation from name if it was changed', function() {
+            avatar.name = 'Foo Bar';
+            expect(avatar.abbr).to.equal('FB');
+
+            avatar.name = 'Bar Baz';
+            expect(avatar.abbr).to.equal('BB');
+          });
+
         });
 
         describe('"name" property', function() {
