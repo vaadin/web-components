@@ -923,6 +923,15 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    // Workaround for https://github.com/Polymer/polymer/issues/5259
+    get __data() {
+      return this.__dataValue || {};
+    }
+
+    set __data(value) {
+      this.__dataValue = value;
+    }
+
     /**
      * Fired when the user commits a value change.
      *

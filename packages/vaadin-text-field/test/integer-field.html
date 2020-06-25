@@ -19,6 +19,14 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="mixed">
+    <template>
+      <vaadin-integer-field label="integer fld"></vaadin-integer-field>
+      <vaadin-text-field label="text fld"></vaadin-text-field>
+      <vaadin-number-field label="number fld"></vaadin-number-field>
+    </template>
+  </test-fixture>
+
   <script>
     describe('integer-field', () => {
 
@@ -226,6 +234,14 @@
           });
 
         });
+      });
+
+    });
+
+    describe('mixed', () => {
+
+      it('should work together with text-field and number-field', () => {
+        expect(() => fixture('mixed')).to.not.throw(Error);
       });
 
     });
