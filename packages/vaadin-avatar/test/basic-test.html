@@ -18,11 +18,12 @@
 
   <script>
     describe('basic test', function() {
-      let avatar, imgElement;
+      let avatar, imgElement, iconElement;
 
       beforeEach(function() {
         avatar = fixture('default');
         imgElement = avatar.shadowRoot.querySelector('img');
+        iconElement = avatar.shadowRoot.querySelector('#avatar-icon');
       });
 
       it('should not expose class name globally', function() {
@@ -48,11 +49,18 @@
             expect(imgElement.src).to.equal(imgSrc);
           });
 
-          it('img should be hidden when "img" property is provided', function() {
+          it('img should be visible when "img" property is provided', function() {
             expect(imgElement.hasAttribute('hidden')).to.be.true;
 
             avatar.img = imgSrc;
             expect(imgElement.hasAttribute('hidden')).to.be.false;
+          });
+
+          it('icon should be hidden when "img" property is provided', function() {
+            expect(iconElement.hasAttribute('hidden')).to.be.false;
+
+            avatar.img = imgSrc;
+            expect(iconElement.hasAttribute('hidden')).to.be.true;
           });
 
         });

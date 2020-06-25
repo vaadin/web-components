@@ -7,6 +7,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../polymer/polymer-element.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
+<link rel="import" href="vaadin-avatar-icons.html">
 
 <dom-module id="vaadin-avatar">
   <template>
@@ -24,11 +25,26 @@ This program is available under Apache License Version 2.0, available at https:/
         width: 100%;
       }
 
+      svg {
+        font-size: 5.6em;
+      }
+
+      svg#avatar-icon > text {
+        font-family: 'vaadin-avatar-icons';
+      }
+
       :host([hidden]) {
+        display: none !important;
+      }
+
+      svg[hidden] {
         display: none !important;
       }
     </style>
     <img hidden$="[[!__imgVisible]]" src$="[[img]]" />
+    <svg hidden$="[[__imgVisible]]" id="avatar-icon" viewBox="-50 -50 100 100" preserveAspectRatio="xMidYMid meet">
+      <text dy=".35em" text-anchor="middle">&#xea01;</text>
+    </svg>
   </template>
 
   <script>

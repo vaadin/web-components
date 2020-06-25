@@ -21,13 +21,14 @@
     "**/.*",
     "node_modules",
     "bower_components",
+    "gulpfile.js",
     "package-lock.json",
     "wct.conf.js"
   ],
   "dependencies": {
     "polymer": "^2.0.0",
-    "vaadin-themable-mixin": "vaadin/vaadin-themable-mixin#^1.2.0",
-    "vaadin-element-mixin": "vaadin/vaadin-element-mixin#^2.0.0",
+    "vaadin-themable-mixin": "vaadin/vaadin-themable-mixin#^1.6.1",
+    "vaadin-element-mixin": "vaadin/vaadin-element-mixin#^2.4.1",
     "vaadin-lumo-styles": "vaadin/vaadin-lumo-styles#^1.4.1",
     "vaadin-material-styles": "vaadin/vaadin-material-styles#^1.2.2"
   },
@@ -36,8 +37,5 @@
     "webcomponentsjs": "^1.0.0",
     "web-component-tester": "^6.1.5",
     "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^3.0.0"
-  },
-  "resolutions": {
-    "vaadin-element-mixin": "^2.0.0"
   }
 }

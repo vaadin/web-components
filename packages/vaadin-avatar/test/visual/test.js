@@ -21,6 +21,13 @@ gemini.suite('vaadin-avatar', function(rootSuite) {
         .setCaptureElements('#default-tests')
         .capture(`vaadin-avatar`);
     });
+
+    gemini.suite(`scaled-tests-${theme}`, function(suite) {
+      suite
+        .setUrl(`/scaled.html?theme=${theme}`)
+        .setCaptureElements('#scaled-tests')
+        .capture(`vaadin-avatar`);
+    });
   });
 
 });

@@ -32,6 +32,7 @@
     "check": "npm-run-all --parallel check:*",
     "check:bower": "magi check-bower",
     "check:version": "magi check-version",
+    "icons": "gulp icons",
     "check:docs": "magi check-events-docs",
     "lint": "npm-run-all --parallel lint:*",
     "lint:css": "stylelint *.html src/*.html demo/*.html theme/**/*.html test/*html",
@@ -43,6 +44,9 @@
     "preversion": "magi update-version"
   },
   "devDependencies": {
-    "@vaadin/vaadin-component-dev-dependencies": "^3.0.0"
+    "@vaadin/vaadin-component-dev-dependencies": "^3.0.0",
+    "gulp": "^4.0.0",
+    "gulp-cli": "^2.0.1",
+    "gulp-iconfont": "^10.0.1"
   }
 }
