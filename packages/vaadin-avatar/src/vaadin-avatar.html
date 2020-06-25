@@ -25,8 +25,12 @@ This program is available under Apache License Version 2.0, available at https:/
         width: 100%;
       }
 
-      svg {
+      svg#avatar-icon {
         font-size: 5.6em;
+      }
+
+      svg#avatar-abbr {
+        font-size: 2.2em;
       }
 
       svg#avatar-icon > text {
@@ -42,8 +46,11 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     </style>
     <img hidden$="[[!__imgVisible]]" src$="[[img]]" />
-    <svg hidden$="[[__imgVisible]]" id="avatar-icon" viewBox="-50 -50 100 100" preserveAspectRatio="xMidYMid meet">
+    <svg hidden$="[[!__iconVisible]]" id="avatar-icon" viewBox="-50 -50 100 100" preserveAspectRatio="xMidYMid meet">
       <text dy=".35em" text-anchor="middle">&#xea01;</text>
+    </svg>
+    <svg hidden$="[[!__abbrVisible]]" id="avatar-abbr" viewBox="-50 -50 100 100" preserveAspectRatio="xMidYMid meet">
+      <text dy=".35em" text-anchor="middle">[[abbr]]</text>
     </svg>
   </template>
 
@@ -77,13 +84,33 @@ This program is available under Apache License Version 2.0, available at https:/
              */
             img: {
               type: String,
-              reflectToAttribute: true,
-              observer: '__imgChanged'
+              reflectToAttribute: true
+            },
+
+            /**
+             * A shortened form of name that is displayed
+             * in the avatar when `img` is not provided.
+             */
+            abbr: {
+              type: String,
+              reflectToAttribute: true
             },
 
             /** @private */
-            __imgVisible: Boolean
+            __imgVisible: Boolean,
+
+            /** @private */
+            __iconVisible: Boolean,
+
+            /** @private */
+            __abbrVisible: Boolean
           };
+        }
+
+        static get observers() {
+          return [
+            '__imgOrAbbrChanged(img, abbr)',
+          ];
         }
 
         ready() {
@@ -92,12 +119,14 @@ This program is available under Apache License Version 2.0, available at https:/
           this.__updateVisibility();
         }
 
-        __imgChanged(img) {
+        __imgOrAbbrChanged(img, abbr) {
           this.__updateVisibility();
         }
 
         __updateVisibility() {
           this.__imgVisible = !!this.img;
+          this.__abbrVisible = !this.img && !!this.abbr;
+          this.__iconVisible = !this.img && !this.abbr;
         }
       }
 

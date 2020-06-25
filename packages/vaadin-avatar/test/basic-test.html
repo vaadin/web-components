@@ -18,12 +18,13 @@
 
   <script>
     describe('basic test', function() {
-      let avatar, imgElement, iconElement;
+      let avatar, imgElement, iconElement, abbrElement;
 
       beforeEach(function() {
         avatar = fixture('default');
         imgElement = avatar.shadowRoot.querySelector('img');
         iconElement = avatar.shadowRoot.querySelector('#avatar-icon');
+        abbrElement = avatar.shadowRoot.querySelector('#avatar-abbr');
       });
 
       it('should not expose class name globally', function() {
@@ -35,13 +36,13 @@
         describe('"img" property', function() {
           const imgSrc = 'https://vaadin.com/';
 
-          it('should have empty "img" prop set by default', function() {
+          it('should have undefined "img" prop by default', function() {
             expect(avatar.img).to.be.undefined;
           });
 
           it('should reflect "img" prop to the attribute', function() {
             avatar.img = imgSrc;
-            expect(imgElement.getAttribute('src')).to.equal(imgSrc);
+            expect(avatar.getAttribute('img')).to.equal(imgSrc);
           });
 
           it('should propagate "img" to the internal img', function() {
@@ -60,6 +61,41 @@
             expect(iconElement.hasAttribute('hidden')).to.be.false;
 
             avatar.img = imgSrc;
+            expect(iconElement.hasAttribute('hidden')).to.be.true;
+          });
+
+          it('abbr should be hidden when "img" property is provided', function() {
+            avatar.abbr = 'YY';
+            expect(abbrElement.hasAttribute('hidden')).to.be.false;
+
+            avatar.img = imgSrc;
+            expect(abbrElement.hasAttribute('hidden')).to.be.true;
+          });
+
+        });
+
+        describe('"abbr" property', function() {
+
+          it('should have undefined "abbr" prop by default', function() {
+            expect(avatar.abbr).to.be.undefined;
+          });
+
+          it('should reflect "abbr" prop to the attribute', function() {
+            avatar.abbr = 'YY';
+            expect(avatar.getAttribute('abbr')).to.equal('YY');
+          });
+
+          it('abbr should be visible when "abbr" property is provided', function() {
+            expect(abbrElement.hasAttribute('hidden')).to.be.true;
+            avatar.abbr = 'YY';
+
+            expect(abbrElement.hasAttribute('hidden')).to.be.false;
+          });
+
+          it('icon should be hidden when "abbr" property is provided', function() {
+            expect(iconElement.hasAttribute('hidden')).to.be.false;
+
+            avatar.abbr = 'YY';
             expect(iconElement.hasAttribute('hidden')).to.be.true;
           });
 
