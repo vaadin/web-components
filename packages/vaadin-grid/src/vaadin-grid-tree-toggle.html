@@ -183,6 +183,9 @@ This program is available under Apache License Version 2.0, available at https:/
         if (this.leaf) {
           return;
         }
+        if (Vaadin.GridElement._isFocusable(e.target)) {
+          return;
+        }
 
         e.preventDefault();
         this.expanded = !this.expanded;

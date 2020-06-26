@@ -24,6 +24,14 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="toggle-with-content">
+    <template>
+      <vaadin-grid-tree-toggle>
+        <input><div>foo</div>
+      </vaadin-grid-tree-toggle>
+    </template>
+  </test-fixture>
+
   <test-fixture id="column">
     <template>
       <vaadin-grid>
@@ -66,13 +74,27 @@
         expect(clickEvent.defaultPrevented).to.be.false;
       });
 
-      it('should toggle on click if not ', () => {
+      it('should toggle on click', () => {
         let clickEvent = click(toggle);
         expect(toggle.expanded).to.be.true;
         expect(clickEvent.defaultPrevented).to.be.true;
 
         clickEvent = click(toggle);
         expect(toggle.expanded).to.be.false;
+        expect(clickEvent.defaultPrevented).to.be.true;
+      });
+
+      it('should not toggle on internal focusable click', () => {
+        toggle = fixture('toggle-with-content');
+        const clickEvent = click(toggle.querySelector('input'));
+        expect(toggle.expanded).to.be.false;
+        expect(clickEvent.defaultPrevented).to.be.false;
+      });
+
+      it('should toggle on internal non-focusable element click', () => {
+        toggle = fixture('toggle-with-content');
+        const clickEvent = click(toggle.querySelector('div'));
+        expect(toggle.expanded).to.be.true;
         expect(clickEvent.defaultPrevented).to.be.true;
       });
 
