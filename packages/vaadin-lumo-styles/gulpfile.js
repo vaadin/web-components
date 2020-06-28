@@ -203,6 +203,7 @@ gulp.task('icons', async function() {
           descent: 150,
           fixedWidth: true,
           normalize: true,
+          timestamp: 1, // Truthy!
         }))
         .on('glyphs', function(glyphData, options) {
           // Store for later use
