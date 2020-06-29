@@ -1,6 +1,31 @@
 <dom-module id="demo-styles" theme-for="vaadin-chart">
   <template>
     <style include="vaadin-chart-default-theme">
+        /* BULLET */
+        :host([type~="bullet"]) {
+          --vaadin-charts-color-0: #000;
+        }
+        :host([type~="bullet"]) .highcharts-grid-line {
+          stroke-width: 0px;
+        }
+        :host([type~="bullet"]) .highcharts-plot-band.band-0 {
+          stroke: #666;
+          fill: #666;
+          fill-opacity: 1;
+        }
+
+        :host([type~="bullet"]) .highcharts-plot-band.band-1 {
+          stroke: #999;
+          fill: #999;
+          fill-opacity: 1;
+        }
+
+        :host([type~="bullet"]) .highcharts-plot-band.band-2 {
+          stroke: #bbb;
+          fill: #bbb;
+          fill-opacity: 1;
+        }
+
         /* ERROR-BAR */
         :host([theme~="error-bar"]) .highcharts-tooltip .rainfallSeriesName {
           fill: #7cb5ec;
@@ -137,6 +162,12 @@
 
         :host([theme~="waterfall"]) .highcharts-waterfall-series .highcharts-intermediate-sum {
           fill: lightgoldenrodyellow;
+        }
+
+        /* X-RANGE */
+        :host([type~="xrange"]) .highcharts-color-0 > .highcharts-partfill-overlay{
+          fill: #306aa0;
+          stroke: #306aa0;;
         }
     </style>
   </template>

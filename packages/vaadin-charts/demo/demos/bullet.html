@@ -1,0 +1,158 @@
+<template preserve-content>
+    <dom-module id="bullet-theme" theme-for="vaadin-chart">
+        <template>
+            <style include="vaadin-chart-default-theme">
+            :host([type~="bullet"]) {
+                --vaadin-charts-color-0: #000;
+            }
+            :host([type~="bullet"]) .highcharts-grid-line {
+                stroke-width: 0px;
+            }
+            :host([type~="bullet"]) .highcharts-plot-band.band-0 {
+                stroke: #666;
+                fill: #666;
+                fill-opacity: 1;
+            }
+
+            :host([type~="bullet"]) .highcharts-plot-band.band-1 {
+                stroke: #999;
+                fill: #999;
+                fill-opacity: 1;
+            }
+
+            :host([type~="bullet"]) .highcharts-plot-band.band-2 {
+                stroke: #bbb;
+                fill: #bbb;
+                fill-opacity: 1;
+            }
+            </style>
+        </template>
+    </dom-module>
+    <div style="background-color: #fff;">
+        <vaadin-chart
+            type="bullet"
+            title="2017 YTD"
+            style="height: 115px;"
+            categories='["&lt;span class=\"hc-cat-title\"&gt;Revenue&lt;/span&gt;&lt;br/&gt;U.S. $ (1,000s)"]'
+            additional-options='{"chart": {
+                    "inverted": true,
+                    "marginLeft": 135,
+                    "marginTop": 40
+                },
+                "yAxis": {
+                    "title": {
+                        "text": ""
+                    },
+                    "plotBands":[{
+                        "from":0,
+                        "to":150,
+                        "className": "band-0"
+                    },{
+                        "from":150,
+                        "to":225,
+                        "className": "band-1"
+                    },{
+                        "from":225,
+                        "to":9000000000,
+                        "className": "band-2"
+                    }]
+                },
+                "tooltip": {
+                    "pointFormat": "&lt;b&gt;{point.y}&lt;/b&gt; (with target at {point.target})"
+                }
+            }'
+            no-legend>
+            <vaadin-chart-series
+                values='[{"y":275,"target":250}]'
+                additional-options='{
+                    "pointPadding": 0.25,
+                    "targetOptions": {
+                        "width": "200%"
+                    }
+            }' ></vaadin-chart-series>
+        </vaadin-chart>
+        <vaadin-chart
+            type="bullet"
+            style="height: 85px;"
+            categories='["&lt;span class=\"hc-cat-title\"&gt;Profit&lt;/span&gt;&lt;br/&gt;%"]'
+            additional-options='{"chart": {
+                    "inverted": true,
+                    "marginLeft": 135
+                },
+                "yAxis": {
+                    "title": {
+                        "text": ""
+                    },
+                    "plotBands": [{
+                        "from":0,
+                        "to":20,
+                        "className": "band-0"
+                    },{
+                        "from":20,
+                        "to":25,
+                        "className": "band-1"
+                    },{
+                        "from":25,
+                        "to":100,
+                        "className": "band-2"
+                    }],
+                    "labels": {
+                        "format": "{value}%"
+                    }
+                },
+                "tooltip": {
+                    "pointFormat": "&lt;b&gt;{point.y}&lt;/b&gt; (with target at {point.target})"
+                }
+            }'
+            no-legend>
+            <vaadin-chart-series
+                values='[{"y":22,"target":27}]'
+                additional-options='{
+                    "pointPadding": 0.25,
+                    "targetOptions": {
+                        "width": "200%"
+                    }
+                }' ></vaadin-chart-series>
+        </vaadin-chart>
+        <vaadin-chart
+            type="bullet"
+            style="height: 85px;"
+            categories='["&lt;span class=\"hc-cat-title\"&gt;New Customers&lt;/span&gt;&lt;br/&gt;Count"]'
+            additional-options='{"chart": {
+                    "inverted": true,
+                    "marginLeft": 135
+                },
+                "yAxis": {
+                    "title": {
+                        "text": ""
+                    },
+                    "plotBands": [{
+                        "from":0,
+                        "to":1400,
+                        "className": "band-0"
+                    },{
+                        "from":1400,
+                        "to":2000,
+                        "className": "band-1"
+                    },{
+                        "from":2000,
+                        "to":9e9,
+                        "className": "band-2"
+                    }]
+                },
+                "tooltip": {
+                    "pointFormat": "&lt;b&gt;{point.y}&lt;/b&gt; (with target at {point.target})"
+                }
+            }'
+            no-legend>
+            <vaadin-chart-series
+                values='[{"y":1650,"target":2100}]'
+                additional-options='{
+                    "pointPadding": 0.25,
+                    "targetOptions": {
+                        "width": "200%"
+                    }
+                }' ></vaadin-chart-series>
+        </vaadin-chart>
+    </div>
+</template>

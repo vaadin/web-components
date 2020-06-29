@@ -1,0 +1,61 @@
+<template preserve-content>
+    <dom-module id="xrange-theme" theme-for="vaadin-chart">
+        <template>
+            <style include="vaadin-chart-default-theme">
+            :host([type~="xrange"]) .highcharts-color-0 > .highcharts-partfill-overlay{
+                fill: #306aa0;
+                stroke: #306aa0;;
+            }
+            </style>
+        </template>
+    </dom-module>
+    <vaadin-chart
+      type="xrange"
+      title="X-range"
+      style="height: 300px;"
+      additional-options='{
+        "xAxis": {
+          "type": "datetime"
+        },
+        "yAxis": {
+          "title": {
+            "text": ""
+          },
+          "categories": ["Prototyping","Development","Testing"],
+          "reversed": true
+        }
+    }'  >
+    <vaadin-chart-series
+        title="Project 1"
+        values='[
+        {
+            "x":1416528000000,
+            "x2":1417478400000,
+            "y":0,
+            "partialFill":0.25
+        },{
+            "x":1417478400000,
+            "x2":1417737600000,
+            "y":1
+        },{
+            "x":1417996800000,
+            "x2":1418083200000,
+            "y":2
+        },{
+            "x":1418083200000,
+            "x2":1418947200000,
+            "y":1
+        },{
+            "x":1418169600000,
+            "x2":1419292800000,
+            "y":2
+        }]'
+      additional-options='{
+          "borderColor": "gray",
+          "pointWidth": 20,
+          "dataLabels": {
+              "enabled": true
+          }
+      }' ></vaadin-chart-series>
+  </vaadin-chart>
+</template>
