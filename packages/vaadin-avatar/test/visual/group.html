@@ -21,41 +21,11 @@
       ];
     });
   </script>
-
-  <custom-style>
-    <dom-module id="test-avatar-width" theme-for="vaadin-avatar-group">
-      <template>
-        <style>
-          vaadin-avatar {
-            height: 90px;
-            width: 90px;
-          }
-        </style>
-      </template>
-    </dom-module>
-  </custom-style>
 </head>
 
 <body>
 
-  <style>
-    vaadin-avatar {
-      height: 90px;
-      width: 90px;
-    }
-  </style>
-
-  <div id="scaled-tests" style="width: 600px;">
-    <vaadin-avatar></vaadin-avatar>
-    <vaadin-avatar name="Foo Bar"></vaadin-avatar>
-    <vaadin-avatar name="Foo Bar" abbr="YY"></vaadin-avatar>
-    <vaadin-avatar 
-      img="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAAlElEQVRIie3SMQrCQBRF0UOKrEI7XY8uK65DRPeie9AmUUQs7SQWJk2SYiZEQcmF13yYd2H+Z2TkW6RYoUCOrJoNRoaykWxIQdEhOIc8TAIFZcfsOaRgHTjrTer957kPLfl3SbDEDic8qhyxxUL4HlvMcdA+z2b2mMWWT3ENKK9zwSRGsIkorxN1tvcegluMYOSPeAEUc0pqqc/5JgAAAABJRU5ErkJggg=="
-      name="Foo Bar"
-      abbr="BB"></vaadin-avatar>
-
-    <br />
-
+  <div id="group-tests" style="width: 600px;">
     <vaadin-avatar-group></vaadin-avatar-group>
   </div>
 

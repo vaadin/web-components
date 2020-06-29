@@ -7,7 +7,8 @@
   "description": "vaadin-avatar",
   "main": [
     "vaadin-avatar.html",
-    "theme/material/vaadin-avatar.html"
+    "vaadin-avatar-group.html",
+    "theme/material/vaadin-avatar-group.html"
   ],
   "keywords": [
     "Vaadin",
@@ -27,6 +28,7 @@
   ],
   "dependencies": {
     "polymer": "^2.0.0",
+    "iron-resizable-behavior": "^2.0.0",
     "vaadin-themable-mixin": "vaadin/vaadin-themable-mixin#^1.6.1",
     "vaadin-element-mixin": "vaadin/vaadin-element-mixin#^2.4.1",
     "vaadin-lumo-styles": "vaadin/vaadin-lumo-styles#^1.4.1",

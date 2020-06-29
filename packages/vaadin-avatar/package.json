@@ -2,7 +2,7 @@
   "name": "@vaadin/vaadin-avatar",
   "version": "0.1.0",
   "description": "vaadin-avatar",
-  "main": "vaadin-avatar.html",
+  "main": "vaadin-avatar-group.html",
   "repository": "vaadin/vaadin-avatar",
   "keywords": [
     "Vaadin",

@@ -1,0 +1,115 @@
+<!--
+@license
+Copyright (c) 2020 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
+<link rel="import" href="../../iron-resizable-behavior/iron-resizable-behavior.html">
+<link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
+<link rel="import" href="vaadin-avatar.html">
+
+<dom-module id="vaadin-avatar-group">
+  <template>
+    <style>
+      :host {
+        display: flex;
+        align-items: center;
+      }
+
+      [part="avatar"] {
+        border: calc(var(--_avatar-group-offset) / 20) solid white;
+      }
+
+      #container vaadin-avatar:not(:first-child) {
+        /* Should take scalability of the host into account */
+        margin-left: calc(var(--_avatar-group-offset) / -3);
+        -webkit-mask-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CgogPGc+CiAgPHRpdGxlPmJhY2tncm91bmQ8L3RpdGxlPgogIDxyZWN0IGZpbGw9Im5vbmUiIGlkPSJjYW52YXNfYmFja2dyb3VuZCIgaGVpZ2h0PSI0MDIiIHdpZHRoPSI1ODIiIHk9Ii0xIiB4PSItMSIvPgogPC9nPgogPGc+CiAgPHRpdGxlPkxheWVyIDE8L3RpdGxlPgogIDxwYXRoIHRyYW5zZm9ybT0icm90YXRlKC0xODAgMTYsMTUuOTk5OTk5OTk5OTk5OTk4KSAiIGlkPSJzdmdfMSIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJtMzQsLTAuOTc1NzdjLTYuOTkxMTUsMi40NzEwMiAtMTIsOS4xMzg0NiAtMTIsMTYuOTc1NzdjMCw3LjgzNzMxIDUuMDA4ODUsMTQuNTA0NzUgMTIsMTYuOTc1NzdsMCwxLjAyNDIzbC0zNiwwbDAsLTM2bDM2LDBsMCwxLjAyNDIzeiIvPgogPC9nPgo8L3N2Zz4=);
+        mask-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CgogPGc+CiAgPHRpdGxlPmJhY2tncm91bmQ8L3RpdGxlPgogIDxyZWN0IGZpbGw9Im5vbmUiIGlkPSJjYW52YXNfYmFja2dyb3VuZCIgaGVpZ2h0PSI0MDIiIHdpZHRoPSI1ODIiIHk9Ii0xIiB4PSItMSIvPgogPC9nPgogPGc+CiAgPHRpdGxlPkxheWVyIDE8L3RpdGxlPgogIDxwYXRoIHRyYW5zZm9ybT0icm90YXRlKC0xODAgMTYsMTUuOTk5OTk5OTk5OTk5OTk4KSAiIGlkPSJzdmdfMSIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJtMzQsLTAuOTc1NzdjLTYuOTkxMTUsMi40NzEwMiAtMTIsOS4xMzg0NiAtMTIsMTYuOTc1NzdjMCw3LjgzNzMxIDUuMDA4ODUsMTQuNTA0NzUgMTIsMTYuOTc1NzdsMCwxLjAyNDIzbC0zNiwwbDAsLTM2bDM2LDBsMCwxLjAyNDIzeiIvPgogPC9nPgo8L3N2Zz4=);
+        -webkit-mask-size: 100% 100%;
+        mask-size: 100% 100%;
+        flex: none;
+      }
+    </style>
+    <div id="container">
+      <template is="dom-repeat" items="[[items]]">
+        <vaadin-avatar name="[[item.name]]" abbr="[[item.abbr]]" img="[[item.img]]" part="avatar"></vaadin-avatar>
+      </template>
+    </div>
+  </template>
+  <script>
+    (function() {
+
+      /**
+       * `<vaadin-avatar-group>` is a Web Component providing avatar group displaying functionality.
+       *
+       * ```html
+       *   <vaadin-avatar-group>
+       *     <vaadin-avatar abbr="YY"></vaadin-avatar>
+       *     <vaadin-avatar abbr="SK"></vaadin-avatar>
+       *     <vaadin-avatar abbr="JJ"></vaadin-avatar>
+       *   </vaadin-avatar-group>
+       * ```
+       *
+       * @memberof Vaadin
+       * @mixes Vaadin.ElementMixin
+       * @mixes Vaadin.ThemableMixin
+       * @demo demo/index.html
+       */
+      class AvatarGroupElement extends
+        Vaadin.ElementMixin(
+          Vaadin.ThemableMixin(
+            Polymer.mixinBehaviors([Polymer.IronResizableBehavior], Polymer.Element))) {
+
+        static get is() {
+          return 'vaadin-avatar-group';
+        }
+
+        static get version() {
+          return '0.1.0';
+        }
+
+        static get properties() {
+          return {
+            /**
+             * An array containing the items which will be stamped as avatars
+             */
+            items: {
+              type: Array,
+              observer: '__itemsChanged'
+            }
+          };
+        }
+
+        ready() {
+          super.ready();
+
+          this.addEventListener('iron-resize', this.__updateOffset);
+        }
+
+        __itemsChanged(items) {
+          this.__updateOffset();
+        }
+
+        __updateOffset() {
+          if (this.items && this.items.length > 0) {
+            requestAnimationFrame(() => {
+              const width = this.$.container.clientWidth;
+              const itemsCount = this.items.length;
+
+              this.updateStyles({'--_avatar-group-offset': width / itemsCount + 'px'});
+            });
+          }
+        }
+      }
+
+      customElements.define(AvatarGroupElement.is, AvatarGroupElement);
+
+      /**
+       * @namespace Vaadin
+       */
+      window.Vaadin.AvatarGroupElement = AvatarGroupElement;
+    })();
+  </script>
+</dom-module>

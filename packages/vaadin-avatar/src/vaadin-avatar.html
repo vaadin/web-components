@@ -16,8 +16,8 @@ This program is available under Apache License Version 2.0, available at https:/
         display: inline-block;
         border-radius: 50%;
         overflow: hidden;
-        height: 44px;
-        width: 44px;
+        height: 64px;
+        width: 64px;
       }
 
       img {
@@ -69,10 +69,11 @@ This program is available under Apache License Version 2.0, available at https:/
        * @mixes Vaadin.ThemableMixin
        * @demo demo/index.html
        */
-      class VaadinAvatar extends Vaadin.ElementMixin(Vaadin.ThemableMixin(Polymer.Element)) {
+      class AvatarElement extends Vaadin.ElementMixin(Vaadin.ThemableMixin(Polymer.Element)) {
         static get is() {
           return 'vaadin-avatar';
         }
+
         static get version() {
           return '0.1.0';
         }
@@ -166,12 +167,12 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
-      customElements.define(VaadinAvatar.is, VaadinAvatar);
+      customElements.define(AvatarElement.is, AvatarElement);
 
       /**
        * @namespace Vaadin
        */
-      window.Vaadin.VaadinAvatar = VaadinAvatar;
+      window.Vaadin.AvatarElement = AvatarElement;
     })();
   </script>
 </dom-module>

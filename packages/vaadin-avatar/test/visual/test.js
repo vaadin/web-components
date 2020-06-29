@@ -22,6 +22,13 @@ gemini.suite('vaadin-avatar', function(rootSuite) {
         .capture(`vaadin-avatar`);
     });
 
+    gemini.suite(`group-tests-${theme}`, function(suite) {
+      suite
+        .setUrl(`/group.html?theme=${theme}`)
+        .setCaptureElements('#group-tests')
+        .capture(`vaadin-avatar-group`);
+    });
+
     gemini.suite(`scaled-tests-${theme}`, function(suite) {
       suite
         .setUrl(`/scaled.html?theme=${theme}`)
