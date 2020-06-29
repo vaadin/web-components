@@ -1,0 +1,72 @@
+<link rel="import" href="../../../vaadin-lumo-styles/color.html">
+<link rel="import" href="../../../vaadin-lumo-styles/sizing.html">
+<link rel="import" href="../../../vaadin-lumo-styles/spacing.html">
+<link rel="import" href="../../../vaadin-lumo-styles/style.html">
+<link rel="import" href="../../../vaadin-lumo-styles/typography.html">
+
+<dom-module id="lumo-avatar" theme-for="vaadin-avatar">
+  <template>
+    <style>
+      :host {
+        box-sizing: border-box;
+        width: var(--lumo-size-m);
+        height: var(--lumo-size-m);
+        color: var(--lumo-secondary-text-color);
+        background-color: var(--lumo-contrast-10pct);
+        border-radius: 50%;
+        cursor: default;
+        user-select: none;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      [part="icon"],
+      [part="abbr"] {
+        fill: var(--lumo-contrast-60pct);
+      }
+
+      [part="abbr"] {
+        font-family: var(--lumo-font-family);
+        font-size: 3em;
+        font-weight: 500;
+      }
+
+      :host([theme~="xlarge"]) [part="abbr"],
+      :host([theme~="large"]) [part="abbr"] {
+        font-size: 2.875em;
+      }
+
+      :host([theme~="small"]) [part="abbr"] {
+        font-size: 3.2em;
+      }
+
+      :host([theme~="xsmall"]) [part="abbr"] {
+        font-size: 3.5em;
+      }
+
+      :host([theme~="xlarge"]) {
+        width: var(--lumo-size-xl);
+        height: var(--lumo-size-xl);
+      }
+
+      :host([theme~="large"]) {
+        width: var(--lumo-size-l);
+        height: var(--lumo-size-l);
+      }
+
+      :host([theme~="small"]) {
+        width: var(--lumo-size-s);
+        height: var(--lumo-size-s);
+      }
+
+      :host([theme~="xsmall"]) {
+        width: var(--lumo-size-xs);
+        height: var(--lumo-size-xs);
+      }
+
+      :host([theme~="square"]) {
+        border-radius: var(--lumo-border-radius);
+      }
+    </style>
+  </template>
+</dom-module>

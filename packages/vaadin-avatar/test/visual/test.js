@@ -30,4 +30,12 @@ gemini.suite('vaadin-avatar', function(rootSuite) {
     });
   });
 
+  ['light', 'dark'].forEach(variant => {
+    gemini.suite(`lumo-${variant}`, function(suite) {
+      suite
+        .setUrl(`/lumo.html?variant=${variant}`)
+        .setCaptureElements('#default-tests')
+        .capture(`vaadin-avatar`);
+    });
+  });
 });
