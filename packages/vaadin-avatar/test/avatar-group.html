@@ -66,7 +66,6 @@
         it('should make the overflow avatar hidden by default', () => {
           const items = group.shadowRoot.querySelectorAll('vaadin-avatar');
           const overflow = items[group.items.length];
-          expect(overflow.getAttribute('part')).to.equal('avatar overflow');
           expect(overflow.hasAttribute('hidden')).to.be.true;
         });
 
@@ -90,7 +89,7 @@
         });
 
         it('should show overlay on overflow avatar click', async() => {
-          const overflow = group.shadowRoot.querySelector('[part~="overflow"]');
+          const overflow = group.$.overflow;
           overflow.click();
           expect(overflow.hasAttribute('hidden')).to.be.false;
         });
@@ -107,8 +106,7 @@
           await nextRender(group);
           group.max = null;
           await nextRender(group);
-          const overflow = group.shadowRoot.querySelector('[part~="overflow"]');
-          expect(overflow.hasAttribute('hidden')).to.be.true;
+          expect(group.$.overflow.hasAttribute('hidden')).to.be.true;
         });
 
         it('should hide overflow avatar when max property is set to undefined', async() => {
@@ -116,8 +114,7 @@
           await nextRender(group);
           group.max = undefined;
           await nextRender(group);
-          const overflow = group.shadowRoot.querySelector('[part~="overflow"]');
-          expect(overflow.hasAttribute('hidden')).to.be.true;
+          expect(group.$.overflow.hasAttribute('hidden')).to.be.true;
         });
 
         it('should hide overflow avatar when items property is changed', async() => {
@@ -125,8 +122,7 @@
           await nextRender(group);
           group.splice('items', 1, 2);
           await nextRender(group);
-          const overflow = group.shadowRoot.querySelector('[part~="overflow"]');
-          expect(overflow.hasAttribute('hidden')).to.be.true;
+          expect(group.$.overflow.hasAttribute('hidden')).to.be.true;
         });
       });
 
@@ -143,7 +139,7 @@
           group.max = 2;
           await nextRender(group);
           overlay = group.$.overlay;
-          overflow = group.shadowRoot.querySelector('[part~="overflow"]');
+          overflow = group.$.overflow;
         });
 
         afterEach(() => {
@@ -208,6 +204,19 @@
 
             Polymer.RenderStatus.afterNextRender(overlay, () => {
               expect(overlay.opened).to.be.false;
+              done();
+            });
+          });
+          overflow.click();
+        });
+
+        it('should focus overflow avatar on overlay close', done => {
+          overlay.addEventListener('vaadin-overlay-open', () => {
+            const spy = sinon.spy(overflow, 'focus');
+            overflow.click();
+
+            Polymer.RenderStatus.afterNextRender(overlay, () => {
+              expect(spy).to.be.calledOnce;
               done();
             });
           });

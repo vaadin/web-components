@@ -46,7 +46,8 @@ This program is available under Apache License Version 2.0, available at https:/
         ></vaadin-avatar>
       </template>
       <vaadin-avatar
-        part="avatar overflow"
+        id="overflow"
+        part="avatar"
         hidden$="[[!_maxReached]]"
         abbr="[[__computeMore(items.length, max)]]"
         theme$="[[theme]]"
@@ -210,6 +211,7 @@ This program is available under Apache License Version 2.0, available at https:/
             this.__setPosition();
             window.addEventListener('scroll', this.__boundSetPosition, true);
           } else if (wasOpened) {
+            this.$.overflow.focus();
             window.removeEventListener('scroll', this.__boundSetPosition, true);
           }
         }
@@ -223,7 +225,7 @@ This program is available under Apache License Version 2.0, available at https:/
           if (!this._opened) {
             return;
           }
-          const btnRect = this.shadowRoot.querySelector('[part~="overflow"]').getBoundingClientRect();
+          const btnRect = this.$.overflow.getBoundingClientRect();
           const viewportHeight = Math.min(window.innerHeight, document.documentElement.clientHeight);
           const bottomAlign = btnRect.top > (viewportHeight - btnRect.height) / 2;
 
