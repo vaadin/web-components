@@ -8,6 +8,8 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="../../iron-resizable-behavior/iron-resizable-behavior.html">
 <link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
+<link rel="import" href="vaadin-avatar-group-list-box.html">
+<link rel="import" href="vaadin-avatar-group-overlay.html">
 <link rel="import" href="vaadin-avatar.html">
 
 <dom-module id="vaadin-avatar-group">
@@ -33,10 +35,43 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     </style>
     <div id="container">
-      <template is="dom-repeat" items="[[items]]">
-        <vaadin-avatar name="[[item.name]]" abbr="[[item.abbr]]" img="[[item.img]]" part="avatar"></vaadin-avatar>
+      <template is="dom-repeat" items="[[__computeItems(items.*, max)]]">
+        <vaadin-avatar
+          name="[[item.name]]"
+          abbr="[[item.abbr]]"
+          img="[[item.img]]"
+          part="avatar"
+          theme$="[[theme]]"
+          tabindex="0"
+        ></vaadin-avatar>
       </template>
+      <vaadin-avatar
+        part="avatar overflow"
+        hidden$="[[!_maxReached]]"
+        abbr="[[__computeMore(items.length, max)]]"
+        theme$="[[theme]]"
+        tabindex="0"
+        on-click="_openOverlay"
+      ></vaadin-avatar>
     </div>
+    <vaadin-avatar-group-overlay id="overlay" opened="{{_opened}}" on-vaadin-overlay-close="_onVaadinOverlayClose">
+      <template>
+        <vaadin-avatar-group-list-box on-keydown="__onListKeyDown">
+          <template is="dom-repeat" items="[[__computeExtraItems(items.*, max)]]">
+            <vaadin-avatar-group-item>
+              <vaadin-avatar
+                name="[[item.name]]"
+                abbr="[[item.abbr]]"
+                img="[[item.img]]"
+                part="avatar"
+                theme$="[[theme]]"
+              ></vaadin-avatar>
+              [[item.name]]
+            </vaadin-avatar-group-item>
+          </template>
+        </vaadin-avatar-group-list-box>
+      </template>
+    </vaadin-avatar-group-overlay>
   </template>
   <script>
     (function() {
@@ -78,6 +113,26 @@ This program is available under Apache License Version 2.0, available at https:/
             items: {
               type: Array,
               observer: '__itemsChanged'
+            },
+
+            /**
+             * The maximum number of avatars to display.
+             * By default, all the avatars are displayed.
+             * When max is set, the overflowing avatars are grouped into one avatar.
+             */
+            max: {
+              type: Number
+            },
+
+            _maxReached: {
+              type: Boolean,
+              computed: '__computeMaxReached(items.length, max)'
+            },
+
+            _opened: {
+              type: Boolean,
+              observer: '__openedChanged',
+              value: false
             }
           };
         }
@@ -85,11 +140,100 @@ This program is available under Apache License Version 2.0, available at https:/
         ready() {
           super.ready();
 
-          this.addEventListener('iron-resize', this.__updateOffset);
+          this.__boundSetPosition = this.__setPosition.bind(this);
+
+          this.addEventListener('iron-resize', this.__onResize.bind(this));
+
+          this._overlayElement = this.shadowRoot.querySelector('vaadin-avatar-group-overlay');
+        }
+
+        _openOverlay(e) {
+          e.stopPropagation();
+          if (this._opened) {
+            this.$.overlay.close();
+          } else if (!e.defaultPrevented) {
+            this._opened = true;
+          }
+        }
+
+        _onVaadinOverlayClose(e) {
+          if (e.detail.sourceEvent && e.detail.sourceEvent.composedPath().indexOf(this) !== -1) {
+            e.preventDefault();
+          }
+        }
+
+        __computeItems(arr, max) {
+          const items = arr.base || [];
+          return max != null ? items.slice(0, max) : items;
+        }
+
+        __computeExtraItems(arr, max) {
+          const items = arr.base || [];
+          return max != null ? items.slice(max) : items;
+        }
+
+        __computeMaxReached(items, max) {
+          return max != null && items > max;
+        }
+
+        __computeMore(items, max) {
+          return `+${items - max}`;
         }
 
         __itemsChanged(items) {
           this.__updateOffset();
+        }
+
+        __onListKeyDown(event) {
+          if (event.key === 'Escape' || event.key === 'Esc') {
+            this._opened = false;
+          }
+        }
+
+        __openedChanged(opened, wasOpened) {
+          if (opened) {
+            if (!this._menuElement) {
+              this._menuElement = this._overlayElement.content.querySelector('vaadin-avatar-group-list-box');
+            }
+
+            this._menuElement.focus();
+            this.__setPosition();
+            window.addEventListener('scroll', this.__boundSetPosition, true);
+          } else if (wasOpened) {
+            window.removeEventListener('scroll', this.__boundSetPosition, true);
+          }
+        }
+
+        __onResize() {
+          this.__updateOffset();
+          this.__setPosition();
+        }
+
+        __setPosition() {
+          if (!this._opened) {
+            return;
+          }
+          const btnRect = this.shadowRoot.querySelector('[part~="overflow"]').getBoundingClientRect();
+          const viewportHeight = Math.min(window.innerHeight, document.documentElement.clientHeight);
+          const bottomAlign = btnRect.top > (viewportHeight - btnRect.height) / 2;
+
+          const isRtl = this.getAttribute('dir') === 'rtl';
+
+          if (isRtl) {
+            this._overlayElement.style.right = document.documentElement.clientWidth - btnRect.right + 'px';
+          } else {
+            this._overlayElement.style.left = btnRect.left + 'px';
+          }
+
+          if (bottomAlign) {
+            this._overlayElement.setAttribute('bottom-aligned', '');
+            this._overlayElement.style.removeProperty('top');
+            this._overlayElement.style.bottom = (viewportHeight - btnRect.top) + 'px';
+          } else {
+            this._overlayElement.removeAttribute('bottom-aligned');
+            this._overlayElement.style.removeProperty('bottom');
+            this._overlayElement.style.top = btnRect.bottom + 'px';
+          }
         }
 
         __updateOffset() {

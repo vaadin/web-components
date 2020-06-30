@@ -17,7 +17,7 @@
   </test-fixture>
 
   <script>
-    describe('basic test', function() {
+    describe('vaadin-avatar', function() {
       let avatar, imgElement, iconElement, abbrElement;
 
       beforeEach(function() {
@@ -27,8 +27,18 @@
         abbrElement = avatar.shadowRoot.querySelector('#avatar-abbr');
       });
 
-      it('should not expose class name globally', function() {
-        expect(window.VaadinAvatar).not.to.be.ok;
+      describe('custom element definition', () => {
+        it('should be defined with correct tag name', () => {
+          expect(customElements.get('vaadin-avatar')).to.be.ok;
+        });
+
+        it('should not expose class name globally', () => {
+          expect(window.AvatarElement).not.to.be.ok;
+        });
+
+        it('should have a valid version number', () => {
+          expect(avatar.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta)\d+)?$/);
+        });
       });
 
       describe('properties', function() {

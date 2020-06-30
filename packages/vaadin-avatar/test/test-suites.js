@@ -1,3 +1,4 @@
 window.VaadinAvatarSuites = [
-  'basic-test.html'
+  'avatar.html',
+  'avatar-group.html'
 ];

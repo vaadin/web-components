@@ -1,0 +1,42 @@
+<link rel="import" href="../../polymer/lib/elements/dom-module.html">
+<link rel="import" href="../../vaadin-overlay/src/vaadin-overlay.html">
+
+<dom-module id="vaadin-avatar-group-overlay-styles" theme-for="vaadin-avatar-group-overlay">
+  <template>
+    <style>
+      :host {
+        align-items: flex-start;
+        justify-content: flex-start;
+      }
+
+      :host([bottom-aligned]) {
+        justify-content: flex-end;
+      }
+    </style>
+  </template>
+</dom-module>
+
+<script>
+  (function() {
+    /**
+     * The overlay element.
+     *
+     * ### Styling
+     *
+     * See [`<vaadin-overlay>` documentation](https://github.com/vaadin/vaadin-overlay/blob/master/src/vaadin-overlay.html)
+     * for `<vaadin-avatar-group-overlay>` parts.
+     *
+     * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+     *
+     * @memberof Vaadin
+     * @extends Vaadin.OverlayElement
+     */
+    class AvatarGroupOverlayElement extends Vaadin.OverlayElement {
+      static get is() {
+        return 'vaadin-avatar-group-overlay';
+      }
+    }
+
+    customElements.define(AvatarGroupOverlayElement.is, AvatarGroupOverlayElement);
+  })();
+</script>

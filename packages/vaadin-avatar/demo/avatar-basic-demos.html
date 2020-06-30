@@ -25,6 +25,27 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Max property</h3>
+    <vaadin-demo-snippet id="avatar-basic-demos-avatar-group-max" when-defined="vaadin-avatar">
+      <template preserve-content>
+        <vaadin-avatar-group max="3"></vaadin-avatar-group>
+        <script>
+          window.addDemoReadyListener('#avatar-basic-demos-avatar-group-max', function(document) {
+            const avatarGroup = document.querySelector('vaadin-avatar-group');
+
+            avatarGroup.items = [
+              {name: 'Yuriy Yevstihnyeyev'},
+              {abbr: 'SK'},
+              {name: 'Leif Åstrand'},
+              {name: 'Jens Jansson'},
+              {name: 'Pekka Maanpää'},
+            ];
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+
     <h3>Basic usage</h3>
     <vaadin-demo-snippet id="avatar-basic-demos-basic-usage" when-defined="vaadin-avatar">
       <template preserve-content>

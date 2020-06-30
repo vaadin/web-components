@@ -1,0 +1,205 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-avatar-group tests</title>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../iron-test-helpers/mock-interactions.js"></script>
+  <link rel="import" href="../../test-fixture/test-fixture.html">
+  <link rel="import" href="../vaadin-avatar-group.html">
+</head>
+
+<body>
+  <test-fixture id="group">
+    <template>
+      <vaadin-avatar-group></vaadin-avatar-group>
+    </template>
+  </test-fixture>
+
+  <script>
+    function nextRender(target) {
+      return new Promise(resolve => {
+        Polymer.RenderStatus.afterNextRender(target, () => {
+          resolve();
+        });
+      });
+    }
+
+    describe('avatar-group', () => {
+      let group;
+
+      beforeEach(function() {
+        group = fixture('group');
+      });
+
+      describe('custom element definition', () => {
+        it('should be defined with correct tag name', () => {
+          expect(customElements.get('vaadin-avatar-group')).to.be.ok;
+        });
+
+        it('should not expose class name globally', () => {
+          expect(window.AvatarGroupElement).not.to.be.ok;
+        });
+
+        it('should have a valid version number', () => {
+          expect(group.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta)\d+)?$/);
+        });
+      });
+
+      describe('items property', () => {
+        beforeEach(async() => {
+          group.items = [
+            {abbr: 'PM'},
+            {name: 'Yuriy Yevstihnyeyev'},
+            {abbr: 'SK'},
+            {name: 'Jens Jansson'}
+          ];
+          await nextRender(group);
+        });
+
+        it('should render avatar for each item, plus overflow avatar', () => {
+          const items = group.shadowRoot.querySelectorAll('vaadin-avatar');
+          expect(items.length).to.equal(group.items.length + 1);
+        });
+
+        it('should make the overflow avatar hidden by default', () => {
+          const items = group.shadowRoot.querySelectorAll('vaadin-avatar');
+          const overflow = items[group.items.length];
+          expect(overflow.getAttribute('part')).to.equal('avatar overflow');
+          expect(overflow.hasAttribute('hidden')).to.be.true;
+        });
+
+        it('should propagate theme attribute to all avatars', () => {
+          group.setAttribute('theme', 'small');
+          const items = group.shadowRoot.querySelectorAll('vaadin-avatar');
+          items.forEach(avatar => expect(avatar.getAttribute('theme')).to.equal('small'));
+        });
+      });
+
+      describe('max property', () => {
+        beforeEach(async() => {
+          group.items = [
+            {abbr: 'PM'},
+            {name: 'Yuriy Yevstihnyeyev'},
+            {name: 'Serhii Kulykov'},
+            {name: 'Jens Jansson'},
+          ];
+          group.max = 2;
+          await nextRender(group);
+        });
+
+        it('should show overlay on overflow avatar click', async() => {
+          const overflow = group.shadowRoot.querySelector('[part~="overflow"]');
+          overflow.click();
+          expect(overflow.hasAttribute('hidden')).to.be.false;
+        });
+
+        it('should render avatar based on max, plus overflow avatar', async() => {
+          group.max = 1;
+          await nextRender(group);
+          const items = group.shadowRoot.querySelectorAll('vaadin-avatar');
+          expect(items.length).to.equal(group.max + 1);
+        });
+
+        it('should hide overflow avatar when max property is set to null', async() => {
+          group.max = 1;
+          await nextRender(group);
+          group.max = null;
+          await nextRender(group);
+          const overflow = group.shadowRoot.querySelector('[part~="overflow"]');
+          expect(overflow.hasAttribute('hidden')).to.be.true;
+        });
+
+        it('should hide overflow avatar when max property is set to undefined', async() => {
+          group.max = 1;
+          await nextRender(group);
+          group.max = undefined;
+          await nextRender(group);
+          const overflow = group.shadowRoot.querySelector('[part~="overflow"]');
+          expect(overflow.hasAttribute('hidden')).to.be.true;
+        });
+
+        it('should hide overflow avatar when items property is changed', async() => {
+          group.max = 2;
+          await nextRender(group);
+          group.splice('items', 1, 2);
+          await nextRender(group);
+          const overflow = group.shadowRoot.querySelector('[part~="overflow"]');
+          expect(overflow.hasAttribute('hidden')).to.be.true;
+        });
+      });
+
+      describe('overlay', () => {
+        let overlay, overflow;
+
+        beforeEach(async() => {
+          group.items = [
+            {abbr: 'PM'},
+            {name: 'Yuriy Yevstihnyeyev'},
+            {name: 'Serhii Kulykov'},
+            {name: 'Jens Jansson'},
+          ];
+          group.max = 2;
+          await nextRender(group);
+          overlay = group.$.overlay;
+          overflow = group.shadowRoot.querySelector('[part~="overflow"]');
+        });
+
+        it('should open overlay on overflow avatar click', done => {
+          overlay.addEventListener('vaadin-overlay-open', () => {
+            expect(overlay.opened).to.be.true;
+            done();
+          });
+          overflow.click();
+        });
+
+        it('should render list-box with items in the overlay', done => {
+          overlay.addEventListener('vaadin-overlay-open', () => {
+            const list = overlay.content.querySelector('vaadin-avatar-group-list-box');
+            expect(list).to.be.ok;
+            const items = overlay.content.querySelectorAll('vaadin-avatar-group-item');
+            expect(items.length).to.equal(2);
+            done();
+          });
+          overflow.click();
+        });
+
+        it('should render avatar names in the list-box items', done => {
+          overlay.addEventListener('vaadin-overlay-open', () => {
+            const items = overlay.content.querySelectorAll('vaadin-avatar-group-item');
+            expect(items[0].textContent.trim()).to.equal(group.items[2].name);
+            expect(items[1].textContent.trim()).to.equal(group.items[3].name);
+            done();
+          });
+          overflow.click();
+        });
+
+        it('should close overlay on subsequent overflow click', done => {
+          overlay.addEventListener('vaadin-overlay-open', () => {
+            overflow.click();
+
+            Polymer.RenderStatus.afterNextRender(overlay, () => {
+              expect(overlay.opened).to.be.false;
+              done();
+            });
+          });
+          overflow.click();
+        });
+
+        it('should close overlay on list-box Escape press', done => {
+          overlay.addEventListener('vaadin-overlay-open', () => {
+            const list = overlay.content.querySelector('vaadin-avatar-group-list-box');
+            MockInteractions.keyDownOn(list, 27, [], 'Escape');
+
+            Polymer.RenderStatus.afterNextRender(overlay, () => {
+              expect(overlay.opened).to.be.false;
+              done();
+            });
+          });
+          overflow.click();
+        });
+      });
+    });
+  </script>
+</body>
