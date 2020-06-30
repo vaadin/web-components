@@ -51,7 +51,8 @@ This program is available under Apache License Version 2.0, available at https:/
         abbr="[[__computeMore(items.length, max)]]"
         theme$="[[theme]]"
         tabindex="0"
-        on-click="_openOverlay"
+        on-click="_onOverflowClick"
+        on-keydown="_onOverflowKeyDown"
       ></vaadin-avatar>
     </div>
     <vaadin-avatar-group-overlay id="overlay" opened="{{_opened}}" on-vaadin-overlay-close="_onVaadinOverlayClose">
@@ -147,12 +148,21 @@ This program is available under Apache License Version 2.0, available at https:/
           this._overlayElement = this.shadowRoot.querySelector('vaadin-avatar-group-overlay');
         }
 
-        _openOverlay(e) {
+        _onOverflowClick(e) {
           e.stopPropagation();
           if (this._opened) {
             this.$.overlay.close();
           } else if (!e.defaultPrevented) {
             this._opened = true;
+          }
+        }
+
+        _onOverflowKeyDown(e) {
+          if (!this._opened) {
+            if (/^(Enter|SpaceBar|\s)$/.test(e.key)) {
+              e.preventDefault();
+              this._opened = true;
+            }
           }
         }
 

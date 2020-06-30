@@ -146,12 +146,26 @@
           overflow = group.shadowRoot.querySelector('[part~="overflow"]');
         });
 
+        afterEach(() => {
+          overlay.close();
+        });
+
         it('should open overlay on overflow avatar click', done => {
           overlay.addEventListener('vaadin-overlay-open', () => {
             expect(overlay.opened).to.be.true;
             done();
           });
           overflow.click();
+        });
+
+        it('should open overlay on overflow avatar Enter', () => {
+          MockInteractions.keyDownOn(overflow, 13, [], 'Enter');
+          expect(overlay.opened).to.be.true;
+        });
+
+        it('should open overlay on overflow avatar Space', () => {
+          MockInteractions.keyDownOn(overflow, 32, [], ' ');
+          expect(overlay.opened).to.be.true;
         });
 
         it('should render list-box with items in the overlay', done => {
