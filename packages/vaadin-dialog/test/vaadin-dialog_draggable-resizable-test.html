@@ -200,9 +200,8 @@
         beforeEach(() => {
           dialog = fixture('resizable');
           overlayPart = dialog.$.overlay.$.overlay;
-          dialog.$.overlay.$.content.style.padding = '20px';
           bounds = overlayPart.getBoundingClientRect();
-          dx = 20;
+          dx = 0;
         });
 
         it('should resize dialog from top right corner', () => {
@@ -298,6 +297,24 @@
           expect(Math.floor(resizedBounds.height)).to.be.eql(Math.floor(contentPartBounds.height));
         });
 
+        const ios = (navigator.appVersion).match(/OS (\d+)_(\d+)_?(\d+)?/);
+        const isIOS10 = ios && String(ios).indexOf('OS 10') > -1;
+
+        if (!isIOS10) {
+          it('should support scrollable full size content', async() => {
+            const container = dialog.$.overlay.firstElementChild;
+            container.style.height = '100%';
+            container.style.width = '100%';
+            container.style.overflow = 'auto';
+            container.textContent = Array(...new Array(10000)).map(() => 'foo').join(' ');
+
+            await contentStabilized(dialog);
+
+            const resizeContainer = dialog.$.overlay.$.resizerContainer;
+            expect(container.offsetHeight).to.equal(resizeContainer.offsetHeight);
+          });
+        }
+
         it('should scroll if the content overflows', () => {
           // Fill the content with a lot of text so that it overflows the viewport
           dialog.$.overlay.firstElementChild.textContent = Array(...new Array(10000)).map(() => 'foo').join(' ');
@@ -314,7 +331,6 @@
           // Set the dialog content to have 100% height
           dialog.$.overlay.firstElementChild.style.height = '100%';
 
-          dialog.$.overlay.$.content.style.padding = '0'; // reset paddings
           const contentBounds = dialog.$.overlay.firstElementChild.getBoundingClientRect();
           const overlayBounds = overlayPart.getBoundingClientRect();
           expect(contentBounds.height).to.equal(overlayBounds.height);
@@ -351,6 +367,8 @@
         });
 
         it('should be able to resize dialog to be wider than window', () => {
+          dialog.$.overlay.$.content.style.padding = '20px';
+          dx = 20;
           dialog._setBounds({left: -dx});
           dx = Math.floor(window.innerWidth - bounds.width + 5);
           resize(overlayPart.querySelector('.e'), dx, 0);
