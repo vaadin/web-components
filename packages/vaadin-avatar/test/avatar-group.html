@@ -88,6 +88,12 @@
           await nextRender(group);
         });
 
+        it('should set name and abbr on the overflow avatar', async() => {
+          const overflow = group.$.overflow;
+          expect(overflow.name).to.equal('+2');
+          expect(overflow.abbr).to.equal('+2');
+        });
+
         it('should show overlay on overflow avatar click', async() => {
           const overflow = group.$.overflow;
           overflow.click();
