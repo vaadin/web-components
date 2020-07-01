@@ -43,6 +43,8 @@ This program is available under Apache License Version 2.0, available at https:/
           part="avatar"
           theme$="[[theme]]"
           tabindex="0"
+          on-focusin="_onFocusIn"
+          on-focusout="_onFocusOut"
         ></vaadin-avatar>
       </template>
       <vaadin-avatar
@@ -52,13 +54,15 @@ This program is available under Apache License Version 2.0, available at https:/
         abbr="[[__computeMore(items.length, max)]]"
         theme$="[[theme]]"
         tabindex="0"
+        on-focusin="_onFocusIn"
+        on-focusout="_onFocusOut"
         on-click="_onOverflowClick"
         on-keydown="_onOverflowKeyDown"
       ></vaadin-avatar>
     </div>
     <vaadin-avatar-group-overlay id="overlay" opened="{{_opened}}" on-vaadin-overlay-close="_onVaadinOverlayClose">
       <template>
-        <vaadin-avatar-group-list-box on-keydown="__onListKeyDown">
+        <vaadin-avatar-group-list-box on-keydown="_onListKeyDown">
           <template is="dom-repeat" items="[[__computeExtraItems(items.*, max)]]">
             <vaadin-avatar-group-item>
               <vaadin-avatar
@@ -77,6 +81,28 @@ This program is available under Apache License Version 2.0, available at https:/
   </template>
   <script>
     (function() {
+
+      // We consider the keyboard to be active if the window has received a keydown
+      // event since the last mousedown event.
+      let keyboardActive = false;
+
+      // Listen for top-level keydown and mousedown events.
+      // Use capture phase so we detect events even if they're handled.
+      window.addEventListener(
+        'keydown',
+        () => {
+          keyboardActive = true;
+        },
+        true
+      );
+
+      window.addEventListener(
+        'mousedown',
+        () => {
+          keyboardActive = false;
+        },
+        true
+      );
 
       /**
        * `<vaadin-avatar-group>` is a Web Component providing avatar group displaying functionality.
@@ -144,7 +170,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
           this.__boundSetPosition = this.__setPosition.bind(this);
 
-          this.addEventListener('iron-resize', this.__onResize.bind(this));
+          this.addEventListener('iron-resize', this._onResize.bind(this));
 
           this._overlayElement = this.shadowRoot.querySelector('vaadin-avatar-group-overlay');
         }
@@ -165,6 +191,38 @@ This program is available under Apache License Version 2.0, available at https:/
               this._opened = true;
             }
           }
+        }
+
+        _onFocusIn(event) {
+          this._setFocused(event.composedPath()[0], true);
+        }
+
+        _onFocusOut(event) {
+          this._setFocused(event.composedPath()[0], false);
+        }
+
+        _setFocused(target, focused) {
+          if (focused) {
+            target.setAttribute('focused', '');
+
+            if (keyboardActive) {
+              target.setAttribute('focus-ring', '');
+            }
+          } else {
+            target.removeAttribute('focused');
+            target.removeAttribute('focus-ring');
+          }
+        }
+
+        _onListKeyDown(event) {
+          if (event.key === 'Escape' || event.key === 'Esc') {
+            this._opened = false;
+          }
+        }
+
+        _onResize() {
+          this.__updateOffset();
+          this.__setPosition();
         }
 
         _onVaadinOverlayClose(e) {
@@ -195,12 +253,6 @@ This program is available under Apache License Version 2.0, available at https:/
           this.__updateOffset();
         }
 
-        __onListKeyDown(event) {
-          if (event.key === 'Escape' || event.key === 'Esc') {
-            this._opened = false;
-          }
-        }
-
         __openedChanged(opened, wasOpened) {
           if (opened) {
             if (!this._menuElement) {
@@ -211,14 +263,11 @@ This program is available under Apache License Version 2.0, available at https:/
             this.__setPosition();
             window.addEventListener('scroll', this.__boundSetPosition, true);
           } else if (wasOpened) {
+            // force focus-ring
+            keyboardActive = true;
             this.$.overflow.focus();
             window.removeEventListener('scroll', this.__boundSetPosition, true);
           }
-        }
-
-        __onResize() {
-          this.__updateOffset();
-          this.__setPosition();
         }
 
         __setPosition() {
