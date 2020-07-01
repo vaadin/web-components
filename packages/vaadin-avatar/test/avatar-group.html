@@ -191,6 +191,16 @@
           overflow.click();
         });
 
+        it('should set tabindex="-1" on the avatars in the items', done => {
+          overlay.addEventListener('vaadin-overlay-open', () => {
+            const avatars = overlay.content.querySelectorAll('vaadin-avatar');
+            expect(avatars[0].getAttribute('tabindex')).to.equal('-1');
+            expect(avatars[1].getAttribute('tabindex')).to.equal('-1');
+            done();
+          });
+          overflow.click();
+        });
+
         it('should close overlay on subsequent overflow click', done => {
           overlay.addEventListener('vaadin-overlay-open', () => {
             overflow.click();
@@ -207,6 +217,19 @@
           overlay.addEventListener('vaadin-overlay-open', () => {
             const list = overlay.content.querySelector('vaadin-avatar-group-list-box');
             MockInteractions.keyDownOn(list, 27, [], 'Escape');
+
+            Polymer.RenderStatus.afterNextRender(overlay, () => {
+              expect(overlay.opened).to.be.false;
+              done();
+            });
+          });
+          overflow.click();
+        });
+
+        it('should close overlay on list-box Tab press', done => {
+          overlay.addEventListener('vaadin-overlay-open', () => {
+            const list = overlay.content.querySelector('vaadin-avatar-group-list-box');
+            MockInteractions.keyDownOn(list, 9, [], 'Tab');
 
             Polymer.RenderStatus.afterNextRender(overlay, () => {
               expect(overlay.opened).to.be.false;

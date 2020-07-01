@@ -154,7 +154,10 @@ This program is available under Apache License Version 2.0, available at https:/
           // Should set `anonymous` if name is not provided
           this.__setTitleFromName(this.name);
 
-          this.setAttribute('tabindex', '0');
+          if (!this.hasAttribute('tabindex')) {
+            this.setAttribute('tabindex', '0');
+          }
+
           this.addEventListener('focusin', this._onFocusIn);
           this.addEventListener('focusout', this._onFocusOut);
         }
