@@ -48,7 +48,7 @@ This program is available under Apache License Version 2.0, available at https:/
       <vaadin-avatar
         id="overflow"
         part="avatar"
-        hidden$="[[!_maxReached]]"
+        hidden$="[[!__maxReached]]"
         name="[[__computeMore(items.length, max)]]"
         abbr="[[__computeMore(items.length, max)]]"
         theme$="[[theme]]"
@@ -127,7 +127,7 @@ This program is available under Apache License Version 2.0, available at https:/
               type: Number
             },
 
-            _maxReached: {
+            __maxReached: {
               type: Boolean,
               computed: '__computeMaxReached(items.length, max)'
             },
