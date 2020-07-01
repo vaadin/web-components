@@ -8,6 +8,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="../../iron-resizable-behavior/iron-resizable-behavior.html">
 <link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
+<link rel="import" href="../../vaadin-item/vaadin-item.html">
 <link rel="import" href="vaadin-avatar-group-list-box.html">
 <link rel="import" href="vaadin-avatar-group-overlay.html">
 <link rel="import" href="vaadin-avatar.html">
@@ -64,7 +65,7 @@ This program is available under Apache License Version 2.0, available at https:/
       <template>
         <vaadin-avatar-group-list-box on-keydown="_onListKeyDown">
           <template is="dom-repeat" items="[[__computeExtraItems(items.*, max)]]">
-            <vaadin-avatar-group-item>
+            <vaadin-item theme="avatar-group-item">
               <vaadin-avatar
                 name="[[item.name]]"
                 abbr="[[item.abbr]]"
@@ -73,7 +74,7 @@ This program is available under Apache License Version 2.0, available at https:/
                 theme$="[[theme]]"
               ></vaadin-avatar>
               [[item.name]]
-            </vaadin-avatar-group-item>
+            </vaadin-item>
           </template>
         </vaadin-avatar-group-list-box>
       </template>

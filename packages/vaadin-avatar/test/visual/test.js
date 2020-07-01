@@ -35,6 +35,18 @@ gemini.suite('vaadin-avatar', function(rootSuite) {
         .setCaptureElements('#scaled-tests')
         .capture(`vaadin-avatar`);
     });
+
+    gemini.suite(`group-overlay-tests-${theme}`, function(suite) {
+      suite
+        .setUrl(`group-overlay.html?theme=${theme}`)
+        .setCaptureElements(`#group-tests`)
+        .capture('default')
+        .capture('opened', function(actions) {
+          actions.executeJS(function(window) {
+            window.openOverlay();
+          });
+        });
+    });
   });
 
   ['light', 'dark'].forEach(variant => {

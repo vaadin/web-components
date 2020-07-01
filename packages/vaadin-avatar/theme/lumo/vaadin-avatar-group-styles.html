@@ -32,23 +32,19 @@
   </template>
 </dom-module>
 
-<dom-module id="lumo-avatar-group-item" theme-for="vaadin-avatar-group-item">
+<dom-module id="lumo-avatar-group-item" theme-for="vaadin-item">
   <template>
     <style>
-      :host {
-        outline: none;
-      }
-
-      [part="content"] {
+      :host([theme="avatar-group-item"]) [part="content"] {
         display: flex;
         align-items: center;
       }
 
-      :host(:not([dir="rtl"])) ::slotted(vaadin-avatar) {
+      :host([theme="avatar-group-item"]:not([dir="rtl"])) ::slotted(vaadin-avatar) {
         margin-right: var(--lumo-space-s);
       }
 
-      :host([dir="rtl"]) ::slotted(vaadin-avatar) {
+      :host([theme="avatar-group-item"][dir="rtl"]) ::slotted(vaadin-avatar) {
         margin-left: var(--lumo-space-s);
       }
     </style>
