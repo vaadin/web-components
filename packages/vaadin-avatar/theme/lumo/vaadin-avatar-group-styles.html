@@ -1,4 +1,6 @@
 <link rel="import" href="../../../vaadin-lumo-styles/color.html">
+<link rel="import" href="../../../vaadin-lumo-styles/sizing.html">
+<link rel="import" href="../../../vaadin-lumo-styles/spacing.html">
 <link rel="import" href="../../../vaadin-lumo-styles/mixins/menu-overlay.html">
 
 <dom-module id="lumo-avatar-group" theme-for="vaadin-avatar-group">
@@ -32,12 +34,27 @@
   </template>
 </dom-module>
 
+<dom-module id="lumo-avatar-group-list-box" theme-for="vaadin-avatar-group-list-box">
+  <template>
+    <style>
+      [part="items"] ::slotted(vaadin-item[theme="avatar-group-item"]) {
+        padding: var(--lumo-space-xs);
+      }
+    </style>
+  </template>
+</dom-module>
+
 <dom-module id="lumo-avatar-group-item" theme-for="vaadin-item">
   <template>
     <style>
       :host([theme="avatar-group-item"]) [part="content"] {
         display: flex;
         align-items: center;
+      }
+
+      :host([theme="avatar-group-item"]) ::slotted(vaadin-avatar) {
+        width: var(--lumo-size-xs);
+        height: var(--lumo-size-xs);
       }
 
       :host([theme="avatar-group-item"]:not([dir="rtl"])) ::slotted(vaadin-avatar) {
