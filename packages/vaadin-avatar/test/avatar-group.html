@@ -223,7 +223,7 @@
           overlay.addEventListener('vaadin-overlay-open', () => {
             const list = overlay.content.querySelector('vaadin-avatar-group-list-box');
             expect(list).to.be.ok;
-            const items = overlay.content.querySelectorAll('vaadin-avatar-group-item');
+            const items = overlay.content.querySelectorAll('[theme="avatar-group-item"]');
             expect(items.length).to.equal(2);
             done();
           });
@@ -232,7 +232,7 @@
 
         it('should render avatar names in the list-box items', done => {
           overlay.addEventListener('vaadin-overlay-open', () => {
-            const items = overlay.content.querySelectorAll('vaadin-avatar-group-item');
+            const items = overlay.content.querySelectorAll('[theme="avatar-group-item"]');
             expect(items[0].textContent.trim()).to.equal(group.items[2].name);
             expect(items[1].textContent.trim()).to.equal(group.items[3].name);
             done();
