@@ -76,61 +76,6 @@
         });
       });
 
-      describe('focus', () => {
-        let items;
-
-        function focusin(node) {
-          node.dispatchEvent(new CustomEvent('focusin', {bubbles: true, composed: true}));
-        }
-
-        function focusout(node) {
-          const event = new CustomEvent('focusout', {bubbles: true, composed: true});
-          node.dispatchEvent(event);
-        }
-
-        beforeEach(async() => {
-          group.items = [
-            {name: 'Yuriy Yevstihnyeyev'},
-            {abbr: 'SK'},
-            {name: 'Jens Jansson'}
-          ];
-          await nextRender(group);
-          items = group.shadowRoot.querySelectorAll('vaadin-avatar');
-        });
-
-        it('should set tabindex="0" on each avatar', () => {
-          items.forEach(item => {
-            expect(item.getAttribute('tabindex')).to.equal('0');
-          });
-        });
-
-        it('should set focused attribute on avatar focusin', () => {
-          focusin(items[0]);
-          expect(items[0].hasAttribute('focused')).to.be.true;
-        });
-
-        it('should remove focused attribute on avatar focusout', () => {
-          focusin(items[0]);
-          focusout(items[0]);
-          expect(items[0].hasAttribute('focused')).to.be.false;
-        });
-
-        it('should set focus-ring attribute on avatar focusin after Tab', () => {
-          MockInteractions.keyDownOn(document.body, 9);
-          focusin(items[0]);
-          expect(items[0].hasAttribute('focus-ring')).to.be.true;
-          focusout(items[0]);
-          expect(items[0].hasAttribute('focus-ring')).to.be.false;
-        });
-
-        it('should not set the focus-ring attribute on avatar mousedown', () => {
-          MockInteractions.keyDownOn(document.body, 9);
-          document.body.dispatchEvent(new MouseEvent('mousedown'));
-          focusin(items[0]);
-          expect(items[0].hasAttribute('focus-ring')).to.be.false;
-        });
-      });
-
       describe('max property', () => {
         beforeEach(async() => {
           group.items = [

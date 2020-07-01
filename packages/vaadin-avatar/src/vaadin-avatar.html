@@ -57,6 +57,28 @@ This program is available under Apache License Version 2.0, available at https:/
   <script>
     (function() {
 
+      // We consider the keyboard to be active if the window has received a keydown
+      // event since the last mousedown event.
+      let keyboardActive = false;
+
+      // Listen for top-level keydown and mousedown events.
+      // Use capture phase so we detect events even if they're handled.
+      window.addEventListener(
+        'keydown',
+        () => {
+          keyboardActive = true;
+        },
+        true
+      );
+
+      window.addEventListener(
+        'mousedown',
+        () => {
+          keyboardActive = false;
+        },
+        true
+      );
+
       /**
        * `<vaadin-avatar>` is a Web Component providing avatar displaying functionality.
        *
@@ -131,6 +153,31 @@ This program is available under Apache License Version 2.0, available at https:/
 
           // Should set `anonymous` if name is not provided
           this.__setTitleFromName(this.name);
+
+          this.setAttribute('tabindex', '0');
+          this.addEventListener('focusin', this._onFocusIn);
+          this.addEventListener('focusout', this._onFocusOut);
+        }
+
+        _onFocusIn(event) {
+          this._setFocused(event.composedPath()[0], true);
+        }
+
+        _onFocusOut(event) {
+          this._setFocused(event.composedPath()[0], false);
+        }
+
+        _setFocused(target, focused) {
+          if (focused) {
+            target.setAttribute('focused', '');
+
+            if (keyboardActive) {
+              target.setAttribute('focus-ring', '');
+            }
+          } else {
+            target.removeAttribute('focused');
+            target.removeAttribute('focus-ring');
+          }
         }
 
         __imgOrAbbrOrNameChanged(img, abbr, name) {

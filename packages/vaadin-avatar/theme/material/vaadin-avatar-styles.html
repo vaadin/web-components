@@ -12,9 +12,15 @@
         background-color: var(--material-secondary-background-color);
         border-radius: 50%;
         cursor: default;
+        outline: none;
         user-select: none;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
+      }
+
+      /* TODO: does not work with <img> */
+      :host([focus-ring]) {
+        box-shadow: inset 0 0 0 2px var(--material-primary-color);
       }
 
       [part="icon"],

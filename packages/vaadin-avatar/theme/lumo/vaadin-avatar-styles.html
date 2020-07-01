@@ -14,10 +14,16 @@
         color: var(--lumo-secondary-text-color);
         background-color: var(--lumo-contrast-10pct);
         border-radius: 50%;
+        outline: none;
         cursor: default;
         user-select: none;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
+      }
+
+      /* TODO: does not work with <img> */
+      :host([focus-ring]) {
+        box-shadow: inset 0 0 0 2px var(--lumo-primary-color-50pct);
       }
 
       [part="icon"],

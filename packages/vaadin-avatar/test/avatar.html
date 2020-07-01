@@ -5,6 +5,7 @@
   <title>vaadin-avatar tests</title>
   <script src="../../web-component-tester/browser.js"></script>
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../iron-test-helpers/mock-interactions.js"></script>
   <link rel="import" href="../../test-fixture/test-fixture.html">
   <link rel="import" href="../vaadin-avatar.html">
 </head>
@@ -42,7 +43,6 @@
       });
 
       describe('properties', function() {
-
         describe('"img" property', function() {
           const imgSrc = 'https://vaadin.com/';
 
@@ -81,11 +81,9 @@
             avatar.img = imgSrc;
             expect(abbrElement.hasAttribute('hidden')).to.be.true;
           });
-
         });
 
         describe('"abbr" property', function() {
-
           it('should have undefined "abbr" prop by default', function() {
             expect(avatar.abbr).to.be.undefined;
           });
@@ -146,11 +144,9 @@
             avatar.name = 'Bar Baz';
             expect(avatar.abbr).to.equal('BB');
           });
-
         });
 
         describe('"name" property', function() {
-
           it('should have undefined "name" prop by default', function() {
             expect(avatar.name).to.be.undefined;
           });
@@ -163,11 +159,50 @@
           it('if "name" is not provided title should be "anonymous"', function() {
             expect(avatar.getAttribute('title')).to.equal('anonymous');
           });
-
         });
-
       });
 
+      describe('focus', () => {
+
+        function focusin(node) {
+          node.dispatchEvent(new CustomEvent('focusin', {bubbles: true, composed: true}));
+        }
+
+        function focusout(node) {
+          const event = new CustomEvent('focusout', {bubbles: true, composed: true});
+          node.dispatchEvent(event);
+        }
+
+        it('should set tabindex="0" on the avatar', () => {
+          expect(avatar.getAttribute('tabindex')).to.equal('0');
+        });
+
+        it('should set focused attribute on avatar focusin', () => {
+          focusin(avatar);
+          expect(avatar.hasAttribute('focused')).to.be.true;
+        });
+
+        it('should remove focused attribute on avatar focusout', () => {
+          focusin(avatar);
+          focusout(avatar);
+          expect(avatar.hasAttribute('focused')).to.be.false;
+        });
+
+        it('should set focus-ring attribute on avatar focusin after Tab', () => {
+          MockInteractions.keyDownOn(document.body, 9);
+          focusin(avatar);
+          expect(avatar.hasAttribute('focus-ring')).to.be.true;
+          focusout(avatar);
+          expect(avatar.hasAttribute('focus-ring')).to.be.false;
+        });
+
+        it('should not set the focus-ring attribute on avatar mousedown', () => {
+          MockInteractions.keyDownOn(document.body, 9);
+          document.body.dispatchEvent(new MouseEvent('mousedown'));
+          focusin(avatar);
+          expect(avatar.hasAttribute('focus-ring')).to.be.false;
+        });
+      });
     });
   </script>
 </body>

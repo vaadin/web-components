@@ -43,9 +43,6 @@ This program is available under Apache License Version 2.0, available at https:/
           img="[[item.img]]"
           part="avatar"
           theme$="[[theme]]"
-          tabindex="0"
-          on-focusin="_onFocusIn"
-          on-focusout="_onFocusOut"
         ></vaadin-avatar>
       </template>
       <vaadin-avatar
@@ -54,9 +51,6 @@ This program is available under Apache License Version 2.0, available at https:/
         hidden$="[[!_maxReached]]"
         abbr="[[__computeMore(items.length, max)]]"
         theme$="[[theme]]"
-        tabindex="0"
-        on-focusin="_onFocusIn"
-        on-focusout="_onFocusOut"
         on-click="_onOverflowClick"
         on-keydown="_onOverflowKeyDown"
       ></vaadin-avatar>
@@ -83,27 +77,6 @@ This program is available under Apache License Version 2.0, available at https:/
   <script>
     (function() {
 
-      // We consider the keyboard to be active if the window has received a keydown
-      // event since the last mousedown event.
-      let keyboardActive = false;
-
-      // Listen for top-level keydown and mousedown events.
-      // Use capture phase so we detect events even if they're handled.
-      window.addEventListener(
-        'keydown',
-        () => {
-          keyboardActive = true;
-        },
-        true
-      );
-
-      window.addEventListener(
-        'mousedown',
-        () => {
-          keyboardActive = false;
-        },
-        true
-      );
 
       /**
        * `<vaadin-avatar-group>` is a Web Component providing avatar group displaying functionality.
@@ -194,27 +167,6 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
-        _onFocusIn(event) {
-          this._setFocused(event.composedPath()[0], true);
-        }
-
-        _onFocusOut(event) {
-          this._setFocused(event.composedPath()[0], false);
-        }
-
-        _setFocused(target, focused) {
-          if (focused) {
-            target.setAttribute('focused', '');
-
-            if (keyboardActive) {
-              target.setAttribute('focus-ring', '');
-            }
-          } else {
-            target.removeAttribute('focused');
-            target.removeAttribute('focus-ring');
-          }
-        }
-
         _onListKeyDown(event) {
           if (event.key === 'Escape' || event.key === 'Esc') {
             this._opened = false;
@@ -264,9 +216,8 @@ This program is available under Apache License Version 2.0, available at https:/
             this.__setPosition();
             window.addEventListener('scroll', this.__boundSetPosition, true);
           } else if (wasOpened) {
-            // force focus-ring
-            keyboardActive = true;
             this.$.overflow.focus();
+            this.$.overflow.setAttribute('focus-ring', '');
             window.removeEventListener('scroll', this.__boundSetPosition, true);
           }
         }
