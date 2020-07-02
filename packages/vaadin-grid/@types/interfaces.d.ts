@@ -57,7 +57,7 @@ export type GridHeaderFooterRenderer = (
   column?: GridColumnElement
 ) => void;
 
-export type GridItem = string | { [key: string]: unknown };
+export type GridItem = unknown;
 
 export interface GridItemModel {
   index: number;
