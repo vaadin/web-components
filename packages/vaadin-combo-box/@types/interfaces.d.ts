@@ -1,6 +1,6 @@
 import { ComboBoxElement } from '../src/vaadin-combo-box.js';
 
-export type ComboBoxItem = { [key: string]: unknown };
+export type ComboBoxItem = unknown;
 
 export interface ComboBoxItemModel {
   index: number;
