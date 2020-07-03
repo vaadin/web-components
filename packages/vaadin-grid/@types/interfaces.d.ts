@@ -10,7 +10,7 @@ export type GridBodyRenderer = (
 export type GridCellClassNameGenerator = (
   column: GridColumnElement,
   model: GridItemModel
-) => void;
+) => string;
 
 export type GridColumnTextAlign = 'start' | 'center' | 'end' | null;
 
@@ -32,7 +32,7 @@ export type GridDataProvider = (
   callback: GridDataProviderCallback
 ) => void;
 
-export type GridDragAndDropFilter = (model: GridItemModel) => void;
+export type GridDragAndDropFilter = (model: GridItemModel) => boolean;
 
 export type GridDropMode = 'between' | 'on-top' | 'on-top-or-between' | 'on-grid';
 
