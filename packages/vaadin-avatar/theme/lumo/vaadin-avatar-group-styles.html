@@ -6,8 +6,29 @@
 <dom-module id="lumo-avatar-group" theme-for="vaadin-avatar-group">
   <template>
     <style>
-      [part~="avatar"] {
-        border: calc(var(--_avatar-group-offset) / 20) solid var(--lumo-base-color);
+      [part="avatar"]:not(:first-child) {
+        -webkit-mask-position: calc(50% - var(--lumo-size-m) + var(--vaadin-avatar-group-overlap));
+        mask-position: calc(50% - var(--lumo-size-m) + var(--vaadin-avatar-group-overlap));
+      }
+
+      :host([theme~="xlarge"]) [part="avatar"]:not(:first-child) {
+        -webkit-mask-position: calc(50% - var(--lumo-size-xl) + var(--vaadin-avatar-group-overlap));
+        mask-position: calc(50% - var(--lumo-size-xl) + var(--vaadin-avatar-group-overlap));
+      }
+
+      :host([theme~="large"]) [part="avatar"]:not(:first-child) {
+        -webkit-mask-position: calc(50% - var(--lumo-size-l) + var(--vaadin-avatar-group-overlap));
+        mask-position: calc(50% - var(--lumo-size-l) + var(--vaadin-avatar-group-overlap));
+      }
+
+      :host([theme~="small"]) [part="avatar"]:not(:first-child) {
+        -webkit-mask-position: calc(50% - var(--lumo-size-s) + var(--vaadin-avatar-group-overlap));
+        mask-position: calc(50% - var(--lumo-size-s) + var(--vaadin-avatar-group-overlap));
+      }
+
+      :host([theme~="xsmall"]) [part="avatar"]:not(:first-child) {
+        -webkit-mask-position: calc(50% - var(--lumo-size-xs) + var(--vaadin-avatar-group-overlap));
+        mask-position: calc(50% - var(--lumo-size-xs) + var(--vaadin-avatar-group-overlap));
       }
     </style>
   </template>

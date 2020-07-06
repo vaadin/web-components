@@ -16,8 +16,13 @@ This program is available under Apache License Version 2.0, available at https:/
         display: inline-block;
         border-radius: 50%;
         overflow: hidden;
-        height: 64px;
-        width: 64px;
+        height: var(--vaadin-avatar-size);
+        width: var(--vaadin-avatar-size);
+        border: var(--vaadin-avatar-outline-width) solid transparent;
+        margin: calc(var(--vaadin-avatar-outline-width) * -1);
+        background-clip: content-box;
+        --vaadin-avatar-outline-width: 2px;
+        --vaadin-avatar-size: 64px;
       }
 
       img {
