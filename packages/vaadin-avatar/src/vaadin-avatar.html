@@ -163,28 +163,25 @@ This program is available under Apache License Version 2.0, available at https:/
             this.setAttribute('tabindex', '0');
           }
 
-          this.addEventListener('focusin', this._onFocusIn);
-          this.addEventListener('focusout', this._onFocusOut);
+          this.addEventListener('focusin', () => {
+            this._setFocused(true);
+          });
+
+          this.addEventListener('focusout', () => {
+            this._setFocused(false);
+          });
         }
 
-        _onFocusIn(event) {
-          this._setFocused(event.composedPath()[0], true);
-        }
-
-        _onFocusOut(event) {
-          this._setFocused(event.composedPath()[0], false);
-        }
-
-        _setFocused(target, focused) {
+        _setFocused(focused) {
           if (focused) {
-            target.setAttribute('focused', '');
+            this.setAttribute('focused', '');
 
             if (keyboardActive) {
-              target.setAttribute('focus-ring', '');
+              this.setAttribute('focus-ring', '');
             }
           } else {
-            target.removeAttribute('focused');
-            target.removeAttribute('focus-ring');
+            this.removeAttribute('focused');
+            this.removeAttribute('focus-ring');
           }
         }
 
