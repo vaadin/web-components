@@ -6,15 +6,23 @@
       }
     </style>
 
+    <h3>Avatar</h3>
+    <vaadin-demo-snippet id="avatar-basic-demos-basic-usage" when-defined="vaadin-avatar">
+      <template preserve-content>
+        <vaadin-avatar></vaadin-avatar>
+        <vaadin-avatar abbr="YY"></vaadin-avatar>
+        <vaadin-avatar name="Yuriy Yevstihnyeyev"></vaadin-avatar>
+        <vaadin-avatar img="https://vaadin.com/static/content/view/company/team/photos/Yuriy-Yevstihnyeyev.JPG"></vaadin-avatar>
+      </template>
+    </vaadin-demo-snippet>
+
     <h3>Avatar group</h3>
-    <vaadin-demo-snippet id="avatar-basic-demos-avatar-group" when-defined="vaadin-avatar">
+    <vaadin-demo-snippet id="avatar-basic-demos-avatar-group" when-defined="vaadin-avatar-group">
       <template preserve-content>
         <vaadin-avatar-group></vaadin-avatar-group>
         <script>
           window.addDemoReadyListener('#avatar-basic-demos-avatar-group', function(document) {
-            const avatarGroup = document.querySelector('vaadin-avatar-group');
-
-            avatarGroup.items = [
+            document.querySelector('vaadin-avatar-group').items = [
               {name: 'Yuriy Yevstihnyeyev'},
               {abbr: 'SK'},
               {name: 'Jens Jansson'},
@@ -26,14 +34,12 @@
     </vaadin-demo-snippet>
 
     <h3>Max property</h3>
-    <vaadin-demo-snippet id="avatar-basic-demos-avatar-group-max" when-defined="vaadin-avatar">
+    <vaadin-demo-snippet id="avatar-basic-demos-avatar-group-max" when-defined="vaadin-avatar-group">
       <template preserve-content>
         <vaadin-avatar-group max="3"></vaadin-avatar-group>
         <script>
           window.addDemoReadyListener('#avatar-basic-demos-avatar-group-max', function(document) {
-            const avatarGroup = document.querySelector('vaadin-avatar-group');
-
-            avatarGroup.items = [
+            document.querySelector('vaadin-avatar-group').items = [
               {name: 'Yuriy Yevstihnyeyev'},
               {abbr: 'SK'},
               {name: 'Leif Åstrand'},
@@ -58,25 +64,13 @@
         </style>
         <script>
           window.addDemoReadyListener('#avatar-basic-demos-color-index', function(document) {
-            const avatarGroup = document.querySelector('vaadin-avatar-group');
-
-            avatarGroup.items = [
+            document.querySelector('vaadin-avatar-group').items = [
               {name: 'Yuriy Yevstihnyeyev', colorIndex: 0},
               {abbr: 'SK', colorIndex: 1},
               {name: 'Jens Jansson', colorIndex: 2}
             ];
           });
         </script>
-      </template>
-    </vaadin-demo-snippet>
-
-    <h3>Basic usage</h3>
-    <vaadin-demo-snippet id="avatar-basic-demos-basic-usage" when-defined="vaadin-avatar">
-      <template preserve-content>
-        <vaadin-avatar></vaadin-avatar>
-        <vaadin-avatar abbr="YY"></vaadin-avatar>
-        <vaadin-avatar name="Yuriy Yevstihnyeyev"></vaadin-avatar>
-        <vaadin-avatar img="https://vaadin.com/static/content/view/company/team/photos/Yuriy-Yevstihnyeyev.JPG"></vaadin-avatar>
       </template>
     </vaadin-demo-snippet>
 
