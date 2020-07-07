@@ -45,6 +45,30 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Color index</h3>
+    <vaadin-demo-snippet id="avatar-basic-demos-color-index" when-defined="vaadin-avatar-group">
+      <template preserve-content>
+        <vaadin-avatar-group></vaadin-avatar-group>
+        <style>
+          vaadin-avatar-group {
+            --user-color-0: #b300d0;
+            --user-color-1: #00ae8f;
+            --user-color-2: #5c62f1;
+          }
+        </style>
+        <script>
+          window.addDemoReadyListener('#avatar-basic-demos-color-index', function(document) {
+            const avatarGroup = document.querySelector('vaadin-avatar-group');
+
+            avatarGroup.items = [
+              {name: 'Yuriy Yevstihnyeyev', colorIndex: 0},
+              {abbr: 'SK', colorIndex: 1},
+              {name: 'Jens Jansson', colorIndex: 2}
+            ];
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
 
     <h3>Basic usage</h3>
     <vaadin-demo-snippet id="avatar-basic-demos-basic-usage" when-defined="vaadin-avatar">
