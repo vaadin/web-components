@@ -144,6 +144,11 @@
             avatar.name = 'Bar Baz';
             expect(avatar.abbr).to.equal('BB');
           });
+
+          it('should use "abbr" prop for setting title', function() {
+            avatar.abbr = 'FB';
+            expect(avatar.getAttribute('title')).to.equal('FB');
+          });
         });
 
         describe('"name" property', function() {

@@ -49,7 +49,6 @@ This program is available under Apache License Version 2.0, available at https:/
         id="overflow"
         part="avatar"
         hidden$="[[!__maxReached]]"
-        name="[[__computeMore(items.length, max)]]"
         abbr="[[__computeMore(items.length, max)]]"
         theme$="[[theme]]"
         on-click="_onOverflowClick"
@@ -140,6 +139,10 @@ This program is available under Apache License Version 2.0, available at https:/
           };
         }
 
+        static get observers() {
+          return ['__computeMoreTitle(items.length, max)'];
+        }
+
         ready() {
           super.ready();
 
@@ -200,6 +203,23 @@ This program is available under Apache License Version 2.0, available at https:/
 
         __computeMore(items, max) {
           return `+${items - max}`;
+        }
+
+        __computeMoreTitle(items, max) {
+          if (max == null) {
+            return;
+          }
+          const result = [];
+          for (let i = max; i < items; i++) {
+            const item = this.items[i];
+            result.push(item.name || item.abbr || 'anonymous');
+          }
+          // override generated title attribute
+          this.$.overflow.setAttribute('title', result.join('\n'));
+        }
+
+        __itemsChanged(items) {
+          this.__updateOffset();
         }
 
         __openedChanged(opened, wasOpened) {

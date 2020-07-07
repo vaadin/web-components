@@ -82,16 +82,22 @@
             {abbr: 'PM'},
             {name: 'Yuriy Yevstihnyeyev'},
             {name: 'Serhii Kulykov'},
-            {name: 'Jens Jansson'},
+            {abbr: 'JJ'},
+            {}
           ];
           group.max = 2;
           await nextRender(group);
         });
 
-        it('should set name and abbr on the overflow avatar', async() => {
+        it('should set abbr property on the overflow avatar', async() => {
           const overflow = group.$.overflow;
-          expect(overflow.name).to.equal('+2');
-          expect(overflow.abbr).to.equal('+2');
+          expect(overflow.abbr).to.equal('+3');
+        });
+
+        it('should set title attribute on the overflow avatar', async() => {
+          const overflow = group.$.overflow;
+          const items = group.items;
+          expect(overflow.getAttribute('title')).to.equal([items[2].name, items[3].abbr, 'anonymous'].join('\n'));
         });
 
         it('should show overlay on overflow avatar click', async() => {
@@ -126,7 +132,7 @@
         it('should hide overflow avatar when items property is changed', async() => {
           group.max = 2;
           await nextRender(group);
-          group.splice('items', 1, 2);
+          group.splice('items', 1, 3);
           await nextRender(group);
           expect(group.$.overflow.hasAttribute('hidden')).to.be.true;
         });
