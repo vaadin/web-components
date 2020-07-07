@@ -22,9 +22,23 @@ gemini.suite('vaadin-avatar', function(rootSuite) {
         .capture(`vaadin-avatar`);
     });
 
+    gemini.suite(`border-tests-${theme}`, function(suite) {
+      suite
+        .setUrl(`/border.html?theme=${theme}`)
+        .setCaptureElements('#border-tests')
+        .capture(`vaadin-avatar`);
+    });
+
     gemini.suite(`group-tests-${theme}`, function(suite) {
       suite
         .setUrl(`/group.html?theme=${theme}`)
+        .setCaptureElements('#group-tests')
+        .capture(`vaadin-avatar-group`);
+    });
+
+    gemini.suite(`group-border-tests-${theme}`, function(suite) {
+      suite
+        .setUrl(`/group-border.html?theme=${theme}`)
         .setCaptureElements('#group-tests')
         .capture(`vaadin-avatar-group`);
     });

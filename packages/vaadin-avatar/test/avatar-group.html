@@ -264,6 +264,24 @@
           overflow.click();
         });
       });
+
+      describe('color index', () => {
+        beforeEach(async() => {
+          group.items = [
+            {abbr: 'PM', colorIndex: 0},
+            {name: 'Yuriy Yevstihnyeyev', colorIndex: 1},
+            {name: 'Serhii Kulykov', colorIndex: 2}
+          ];
+          await nextRender(group);
+        });
+
+        it('should pass color index to avatars', () => {
+          const items = group.shadowRoot.querySelectorAll('vaadin-avatar');
+          expect(items[0].colorIndex).to.equal(0);
+          expect(items[1].colorIndex).to.equal(1);
+          expect(items[2].colorIndex).to.equal(2);
+        });
+      });
     });
   </script>
 </body>

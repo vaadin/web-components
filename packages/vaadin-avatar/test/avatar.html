@@ -203,6 +203,22 @@
           expect(avatar.hasAttribute('focus-ring')).to.be.false;
         });
       });
+
+      describe('color index', () => {
+        it('should set box-shadow based on color index', () => {
+          window.ShadyCSS.styleSubtree(avatar, {'--user-color-0': 'red'});
+          avatar.colorIndex = 0;
+          const {boxShadow} = getComputedStyle(avatar, '::before');
+          expect(['rgb(255, 0, 0)', 'red'].some(v => boxShadow.indexOf(v) > -1)).to.be.true;
+        });
+
+        it('should set attribute based on color index', () => {
+          avatar.colorIndex = 0;
+          expect(avatar.hasAttribute('has-color-index')).to.be.true;
+          avatar.colorIndex = null;
+          expect(avatar.hasAttribute('has-color-index')).to.be.false;
+        });
+      });
     });
   </script>
 </body>
