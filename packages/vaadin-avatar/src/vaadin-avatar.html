@@ -213,12 +213,13 @@ This program is available under Apache License Version 2.0, available at https:/
         __colorIndexChanged(index) {
           if (index != null) {
             this.setAttribute('has-color-index', '');
+            const color = `var(--vaadin-user-color-${index})`;
             if (window.ShadyCSS && !window.ShadyCSS.nativeCss) {
               window.ShadyCSS.styleSubtree(this, {
-                '--vaadin-avatar-border-color': `var(--user-color-${index})`
+                '--vaadin-avatar-border-color': color
               });
             } else {
-              this.style.setProperty('--vaadin-avatar-border-color', `var(--user-color-${index})`);
+              this.style.setProperty('--vaadin-avatar-border-color', color);
             }
           } else {
             this.removeAttribute('has-color-index');

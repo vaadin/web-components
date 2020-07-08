@@ -211,7 +211,7 @@
 
       describe('color index', () => {
         it('should set box-shadow based on color index', () => {
-          window.ShadyCSS.styleSubtree(avatar, {'--user-color-0': 'red'});
+          window.ShadyCSS.styleSubtree(avatar, {'--vaadin-user-color-0': 'red'});
           avatar.colorIndex = 0;
           const {boxShadow} = getComputedStyle(avatar, '::before');
           expect(['rgb(255, 0, 0)', 'red'].some(v => boxShadow.indexOf(v) > -1)).to.be.true;
