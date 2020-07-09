@@ -288,6 +288,95 @@
           expect(items[2].colorIndex).to.equal(2);
         });
       });
+
+      describe('ARIA roles', () => {
+        let overlay, overflow;
+
+        beforeEach(async() => {
+          group.items = [
+            {abbr: 'PM'},
+            {name: 'Yuriy Yevstihnyeyev'},
+            {name: 'Serhii Kulykov'},
+            {name: 'Jens Jansson'},
+          ];
+          group.max = 2;
+          await nextRender(group);
+          overlay = group.$.overlay;
+          overflow = group.$.overflow;
+        });
+
+        afterEach(() => {
+          overlay.close();
+        });
+
+        it('should set role="image" on the user avatars', () => {
+          const items = group.shadowRoot.querySelectorAll('vaadin-avatar');
+          expect(items[0].getAttribute('role')).to.equal('img');
+          expect(items[1].getAttribute('role')).to.equal('img');
+        });
+
+        it('should set role="image" on the overflow avatar', () => {
+          expect(overflow.getAttribute('role')).to.equal('button');
+        });
+
+        it('should set aria-haspopup="listbox" on the overflow avatar', () => {
+          expect(overflow.getAttribute('aria-haspopup')).to.equal('listbox');
+        });
+
+        it('should set aria-expanded="false" on the overflow avatar', () => {
+          expect(overflow.getAttribute('aria-expanded')).to.equal('false');
+        });
+
+        it('should set aria-expanded="true" on the overflow avatar on open', done => {
+          overlay.addEventListener('vaadin-overlay-open', () => {
+            expect(overflow.getAttribute('aria-expanded')).to.equal('true');
+            done();
+          });
+          overflow.click();
+        });
+
+        it('should set role="listbox" on the overlay list-box', done => {
+          overlay.addEventListener('vaadin-overlay-open', () => {
+            const list = overlay.content.querySelector('vaadin-avatar-group-list-box');
+            expect(list.getAttribute('role')).to.equal('listbox');
+            done();
+          });
+          overflow.click();
+        });
+
+        it('should set role="option" on the overlay items', done => {
+          overlay.addEventListener('vaadin-overlay-open', () => {
+            const items = overlay.content.querySelectorAll('[theme="avatar-group-item"]');
+            items.forEach(item => {
+              expect(item.getAttribute('role')).to.equal('option');
+            });
+            done();
+          });
+          overflow.click();
+        });
+
+        it('should remove title from the overlay avatars', done => {
+          overlay.addEventListener('vaadin-overlay-open', () => {
+            const avatars = overlay.content.querySelectorAll('vaadin-avatar');
+            avatars.forEach(avatar => {
+              expect(avatar.hasAttribute('title')).to.equal(false);
+            });
+            done();
+          });
+          overflow.click();
+        });
+
+        it('should set aria-hidden="true" on the overlay avatars', done => {
+          overlay.addEventListener('vaadin-overlay-open', () => {
+            const avatars = overlay.content.querySelectorAll('vaadin-avatar');
+            avatars.forEach(avatar => {
+              expect(avatar.getAttribute('aria-hidden')).to.equal('true');
+            });
+            done();
+          });
+          overflow.click();
+        });
+      });
     });
   </script>
 </body>

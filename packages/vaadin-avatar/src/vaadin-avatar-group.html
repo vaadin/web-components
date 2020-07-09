@@ -53,13 +53,15 @@ This program is available under Apache License Version 2.0, available at https:/
         theme$="[[theme]]"
         on-click="_onOverflowClick"
         on-keydown="_onOverflowKeyDown"
+        role="button"
+        aria-haspopup="listbox"
       ></vaadin-avatar>
     </div>
     <vaadin-avatar-group-overlay id="overlay" opened="{{_opened}}" on-vaadin-overlay-close="_onVaadinOverlayClose">
       <template>
         <vaadin-avatar-group-list-box on-keydown="_onListKeyDown">
           <template is="dom-repeat" items="[[__computeExtraItems(items.*, max)]]">
-            <vaadin-item theme="avatar-group-item">
+            <vaadin-item theme="avatar-group-item" role="option">
               <vaadin-avatar
                 name="[[item.name]]"
                 abbr="[[item.abbr]]"
@@ -67,6 +69,7 @@ This program is available under Apache License Version 2.0, available at https:/
                 part="avatar"
                 theme$="[[theme]]"
                 tabindex="-1"
+                aria-hidden="true"
               ></vaadin-avatar>
               [[item.name]]
             </vaadin-item>
@@ -226,7 +229,11 @@ This program is available under Apache License Version 2.0, available at https:/
           if (opened) {
             if (!this._menuElement) {
               this._menuElement = this._overlayElement.content.querySelector('vaadin-avatar-group-list-box');
+              this._menuElement.setAttribute('role', 'listbox');
             }
+
+            const avatars = this._menuElement.querySelectorAll('vaadin-avatar');
+            avatars.forEach(avatar => avatar.removeAttribute('title'));
 
             this._menuElement.focus();
             this.__setPosition();
@@ -236,6 +243,7 @@ This program is available under Apache License Version 2.0, available at https:/
             this.$.overflow.setAttribute('focus-ring', '');
             window.removeEventListener('scroll', this.__boundSetPosition, true);
           }
+          this.$.overflow.setAttribute('aria-expanded', opened === true);
         }
 
         __setPosition() {
