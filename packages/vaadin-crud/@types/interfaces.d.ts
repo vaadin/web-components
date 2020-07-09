@@ -19,7 +19,7 @@ export type CrudDataProvider = (
 
 export type CrudEditorPosition = '' | 'bottom' | 'aside';
 
-export type CrudItem = { [key: string]: unknown };
+export type CrudItem = unknown;
 
 export interface CrudI18n {
   newItem: string;
