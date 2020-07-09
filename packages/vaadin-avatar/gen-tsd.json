@@ -1,0 +1,18 @@
+{
+  "excludeFiles": [
+    "gulpfile.js",
+    "wct.conf.js",
+    "index.html",
+    "src/vaadin-avatar-group-list-box.js",
+    "src/vaadin-avatar-group-overlay.js",
+    "src/vaadin-avatar-icons.js",
+    "demo/**/*",
+    "test/**/*",
+    "theme/**/*"
+  ],
+  "autoImport": {
+    "./@types/interfaces": [
+      "AvatarGroupItem"
+    ]
+  }
+}

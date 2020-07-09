@@ -174,6 +174,7 @@ This program is available under Apache License Version 2.0, available at https:/
           ];
         }
 
+        /** @protected */
         ready() {
           super.ready();
 
@@ -193,15 +194,16 @@ This program is available under Apache License Version 2.0, available at https:/
           }
 
           this.addEventListener('focusin', () => {
-            this._setFocused(true);
+            this.__setFocused(true);
           });
 
           this.addEventListener('focusout', () => {
-            this._setFocused(false);
+            this.__setFocused(false);
           });
         }
 
-        _setFocused(focused) {
+        /** @private */
+        __setFocused(focused) {
           if (focused) {
             this.setAttribute('focused', '');
 
@@ -214,6 +216,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         __colorIndexChanged(index) {
           if (index != null) {
             this.setAttribute('has-color-index', '');
@@ -230,6 +233,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         __imgOrAbbrOrNameChanged(img, abbr, name) {
           this.__updateVisibility();
 
@@ -249,12 +253,14 @@ This program is available under Apache License Version 2.0, available at https:/
           this.__setTitle(name);
         }
 
+        /** @private */
         __updateVisibility() {
           this.__imgVisible = !!this.img;
           this.__abbrVisible = !this.img && !!this.abbr;
           this.__iconVisible = !this.img && !this.abbr;
         }
 
+        /** @private */
         __setTitle(title) {
           if (title) {
             this.setAttribute('title', title);

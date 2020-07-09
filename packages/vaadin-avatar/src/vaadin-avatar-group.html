@@ -115,6 +115,7 @@ This program is available under Apache License Version 2.0, available at https:/
           return {
             /**
              * An array containing the items which will be stamped as avatars
+             * @type {!Array<!AvatarGroupItem> | undefined}
              */
             items: {
               type: Array
@@ -129,11 +130,13 @@ This program is available under Apache License Version 2.0, available at https:/
               type: Number
             },
 
+            /** @private */
             __maxReached: {
               type: Boolean,
               computed: '__computeMaxReached(items.length, max)'
             },
 
+            /** @private */
             _opened: {
               type: Boolean,
               observer: '__openedChanged',
@@ -146,6 +149,7 @@ This program is available under Apache License Version 2.0, available at https:/
           return ['__computeMoreTitle(items.length, max)'];
         }
 
+        /** @protected */
         ready() {
           super.ready();
 
@@ -156,6 +160,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this._overlayElement = this.shadowRoot.querySelector('vaadin-avatar-group-overlay');
         }
 
+        /** @private */
         _onOverflowClick(e) {
           e.stopPropagation();
           if (this._opened) {
@@ -165,6 +170,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         _onOverflowKeyDown(e) {
           if (!this._opened) {
             if (/^(Enter|SpaceBar|\s)$/.test(e.key)) {
@@ -174,40 +180,48 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         _onListKeyDown(event) {
           if (event.key === 'Escape' || event.key === 'Esc' || /^(Tab)$/.test(event.key)) {
             this._opened = false;
           }
         }
 
+        /** @private */
         _onResize() {
           this.__setPosition();
         }
 
+        /** @private */
         _onVaadinOverlayClose(e) {
           if (e.detail.sourceEvent && e.detail.sourceEvent.composedPath().indexOf(this) !== -1) {
             e.preventDefault();
           }
         }
 
+        /** @private */
         __computeItems(arr, max) {
           const items = arr.base || [];
           return max != null ? items.slice(0, max) : items;
         }
 
+        /** @private */
         __computeExtraItems(arr, max) {
           const items = arr.base || [];
           return max != null ? items.slice(max) : items;
         }
 
+        /** @private */
         __computeMaxReached(items, max) {
           return max != null && items > max;
         }
 
+        /** @private */
         __computeMore(items, max) {
           return `+${items - max}`;
         }
 
+        /** @private */
         __computeMoreTitle(items, max) {
           if (max == null) {
             return;
@@ -221,10 +235,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this.$.overflow.setAttribute('title', result.join('\n'));
         }
 
-        __itemsChanged(items) {
-          this.__updateOffset();
-        }
-
+        /** @private */
         __openedChanged(opened, wasOpened) {
           if (opened) {
             if (!this._menuElement) {
@@ -246,6 +257,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this.$.overflow.setAttribute('aria-expanded', opened === true);
         }
 
+        /** @private */
         __setPosition() {
           if (!this._opened) {
             return;
