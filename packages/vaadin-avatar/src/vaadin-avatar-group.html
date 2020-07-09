@@ -266,6 +266,8 @@ This program is available under Apache License Version 2.0, available at https:/
               this._menuElement.setAttribute('role', 'listbox');
             }
 
+            this._openedWithFocusRing = this.$.overflow.hasAttribute('focus-ring');
+
             const avatars = this._menuElement.querySelectorAll('vaadin-avatar');
             avatars.forEach(avatar => avatar.removeAttribute('title'));
 
@@ -274,7 +276,9 @@ This program is available under Apache License Version 2.0, available at https:/
             window.addEventListener('scroll', this.__boundSetPosition, true);
           } else if (wasOpened) {
             this.$.overflow.focus();
-            this.$.overflow.setAttribute('focus-ring', '');
+            if (this._openedWithFocusRing) {
+              this.$.overflow.setAttribute('focus-ring', '');
+            }
             window.removeEventListener('scroll', this.__boundSetPosition, true);
           }
           this.$.overflow.setAttribute('aria-expanded', opened === true);

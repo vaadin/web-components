@@ -258,7 +258,7 @@
           overflow.click();
         });
 
-        it('should set focus-ring attribute on overlay close', done => {
+        it('should restore focus-ring attribute on overlay close', done => {
           overlay.addEventListener('vaadin-overlay-open', () => {
             overflow.click();
 
@@ -267,6 +267,22 @@
               done();
             });
           });
+
+          overflow.setAttribute('focus-ring', '');
+          overflow.click();
+        });
+
+        it('should not restore focus-ring attribute on close if not set', done => {
+          overlay.addEventListener('vaadin-overlay-open', () => {
+            const list = overlay.content.querySelector('vaadin-avatar-group-list-box');
+            MockInteractions.keyDownOn(list, 27, [], 'Escape');
+
+            Polymer.RenderStatus.afterNextRender(overlay, () => {
+              expect(overflow.hasAttribute('focus-ring')).to.be.false;
+              done();
+            });
+          });
+
           overflow.click();
         });
       });
