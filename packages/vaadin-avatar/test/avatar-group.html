@@ -272,6 +272,8 @@
       });
 
       describe('color index', () => {
+        let overlay, overflow;
+
         beforeEach(async() => {
           group.items = [
             {abbr: 'PM', colorIndex: 0},
@@ -279,6 +281,8 @@
             {name: 'Serhii Kulykov', colorIndex: 2}
           ];
           await nextRender(group);
+          overlay = group.$.overlay;
+          overflow = group.$.overflow;
         });
 
         it('should pass color index to avatars', () => {
@@ -286,6 +290,17 @@
           expect(items[0].colorIndex).to.equal(0);
           expect(items[1].colorIndex).to.equal(1);
           expect(items[2].colorIndex).to.equal(2);
+        });
+
+        it('should pass color index to overlay avatars', done => {
+          group.max = 1;
+          overlay.addEventListener('vaadin-overlay-open', () => {
+            const avatars = overlay.content.querySelectorAll('vaadin-avatar');
+            expect(avatars[0].colorIndex).to.equal(group.items[1].colorIndex);
+            expect(avatars[1].colorIndex).to.equal(group.items[2].colorIndex);
+            done();
+          });
+          overflow.click();
         });
       });
 
