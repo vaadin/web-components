@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+
+<head lang="en">
+  <meta charset="UTF-8">
+  <title></title>
+  <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../../theme/lumo/vaadin-avatar-group.html">
+  <script>
+    const variant = window.location.search.replace(/.*variant=(\w+).*/, '$1') || 'light';
+    document.documentElement.setAttribute('theme', variant);
+  </script>
+  <custom-style>
+    <style include="lumo-color">
+    </style>
+  </custom-style>
+</head>
+
+<body>
+
+  <div id="group-tests" style="width: 300px;">
+    <vaadin-avatar-group theme="xlarge"></vaadin-avatar-group>
+    <br>
+    <vaadin-avatar-group theme="large"></vaadin-avatar-group>
+    <br>
+    <vaadin-avatar-group></vaadin-avatar-group>
+    <br>
+    <vaadin-avatar-group theme="small"></vaadin-avatar-group>
+    <br>
+    <vaadin-avatar-group theme="xsmall"></vaadin-avatar-group>
+  </div>
+
+  <script>
+    window.addEventListener('WebComponentsReady', () => {
+      Array.from(document.querySelectorAll('vaadin-avatar-group')).forEach(group => {
+        group.items = [
+          {},
+          {name: 'Foo Bar'},
+          {name: 'Foo Bar', abbr: 'YY'}
+        ];
+      });
+    });
+  </script>
+</body>

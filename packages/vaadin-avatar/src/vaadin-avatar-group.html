@@ -25,13 +25,22 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       [part="avatar"]:not(:first-child) {
-        margin-left: calc(var(--vaadin-avatar-group-overlap) * -1 - var(--vaadin-avatar-outline-width) * 1);
         -webkit-mask-image: url(data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMzAwIDMwMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTMwMCAwSDBWMzAwSDMwMFYwWk0xNTAgMjAwQzE3Ny42MTQgMjAwIDIwMCAxNzcuNjE0IDIwMCAxNTBDMjAwIDEyMi4zODYgMTc3LjYxNCAxMDAgMTUwIDEwMEMxMjIuMzg2IDEwMCAxMDAgMTIyLjM4NiAxMDAgMTUwQzEwMCAxNzcuNjE0IDEyMi4zODYgMjAwIDE1MCAyMDBaIiBmaWxsPSJibGFjayIvPjwvc3ZnPg==);
         mask-image: url(data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMzAwIDMwMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTMwMCAwSDBWMzAwSDMwMFYwWk0xNTAgMjAwQzE3Ny42MTQgMjAwIDIwMCAxNzcuNjE0IDIwMCAxNTBDMjAwIDEyMi4zODYgMTc3LjYxNCAxMDAgMTUwIDEwMEMxMjIuMzg2IDEwMCAxMDAgMTIyLjM4NiAxMDAgMTUwQzEwMCAxNzcuNjE0IDEyMi4zODYgMjAwIDE1MCAyMDBaIiBmaWxsPSJibGFjayIvPjwvc3ZnPg==);
         -webkit-mask-size: calc(300% + var(--vaadin-avatar-group-overlap-border) * 6 - var(--vaadin-avatar-outline-width) * 6);
         mask-size: calc(300% + var(--vaadin-avatar-group-overlap-border) * 6 - var(--vaadin-avatar-outline-width) * 6);
+      }
+
+      [part="avatar"]:not([dir="rtl"]):not(:first-child) {
+        margin-left: calc(var(--vaadin-avatar-group-overlap) * -1 - var(--vaadin-avatar-outline-width));
         -webkit-mask-position: calc(50% - var(--vaadin-avatar-size) + var(--vaadin-avatar-group-overlap));
         mask-position: calc(50% - var(--vaadin-avatar-size) + var(--vaadin-avatar-group-overlap));
+      }
+
+      [part="avatar"][dir="rtl"]:not(:first-child) {
+        margin-right: calc(var(--vaadin-avatar-group-overlap) * -1);
+        -webkit-mask-position: calc(50% + var(--vaadin-avatar-size) - var(--vaadin-avatar-group-overlap) + var(--vaadin-avatar-outline-width));
+        mask-position: calc(50% + var(--vaadin-avatar-size) - var(--vaadin-avatar-group-overlap) + var(--vaadin-avatar-outline-width));
       }
     </style>
     <div id="container">
@@ -159,6 +168,19 @@ This program is available under Apache License Version 2.0, available at https:/
           this.addEventListener('iron-resize', this._onResize.bind(this));
 
           this._overlayElement = this.shadowRoot.querySelector('vaadin-avatar-group-overlay');
+        }
+
+        /**
+         * @param {string} name
+         * @param {?string} oldValue
+         * @param {?string} newValue
+         * @protected
+         */
+        attributeChangedCallback(name, oldValue, newValue) {
+          super.attributeChangedCallback(name, oldValue, newValue);
+          if (name === 'dir') {
+            this.__setPosition();
+          }
         }
 
         /** @private */

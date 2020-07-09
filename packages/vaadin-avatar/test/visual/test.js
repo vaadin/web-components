@@ -33,7 +33,12 @@ gemini.suite('vaadin-avatar', function(rootSuite) {
       suite
         .setUrl(`/group.html?theme=${theme}`)
         .setCaptureElements('#group-tests')
-        .capture(`vaadin-avatar-group`);
+        .capture('default')
+        .capture('rtl', actions => {
+          actions.executeJS(function(window) {
+            window.document.documentElement.setAttribute('dir', 'rtl');
+          });
+        });
     });
 
     gemini.suite(`group-border-tests-${theme}`, function(suite) {
@@ -59,6 +64,11 @@ gemini.suite('vaadin-avatar', function(rootSuite) {
           actions.executeJS(function(window) {
             window.openOverlay();
           });
+        })
+        .capture('rtl', actions => {
+          actions.executeJS(function(window) {
+            window.document.documentElement.setAttribute('dir', 'rtl');
+          });
         });
     });
   });
@@ -70,5 +80,18 @@ gemini.suite('vaadin-avatar', function(rootSuite) {
         .setCaptureElements('#default-tests')
         .capture(`vaadin-avatar`);
     });
+
+    gemini.suite(`lumo-group-${variant}`, function(suite) {
+      suite
+        .setUrl(`/lumo-group.html?variant=${variant}`)
+        .setCaptureElements('#group-tests')
+        .capture('default')
+        .capture('rtl', actions => {
+          actions.executeJS(function(window) {
+            window.document.documentElement.setAttribute('dir', 'rtl');
+          });
+        });
+    });
+
   });
 });

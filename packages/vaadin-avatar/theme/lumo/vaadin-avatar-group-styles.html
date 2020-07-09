@@ -6,29 +6,54 @@
 <dom-module id="lumo-avatar-group" theme-for="vaadin-avatar-group">
   <template>
     <style>
-      [part="avatar"]:not(:first-child) {
+      [part="avatar"]:not([dir="rtl"]):not(:first-child) {
         -webkit-mask-position: calc(50% - var(--lumo-size-m) + var(--vaadin-avatar-group-overlap));
         mask-position: calc(50% - var(--lumo-size-m) + var(--vaadin-avatar-group-overlap));
       }
 
-      :host([theme~="xlarge"]) [part="avatar"]:not(:first-child) {
+      [part="avatar"][dir="rtl"]:not(:first-child) {
+        -webkit-mask-position: calc(50% + var(--lumo-size-m) - var(--vaadin-avatar-group-overlap) + var(--vaadin-avatar-outline-width));
+        mask-position: calc(50% + var(--lumo-size-m) - var(--vaadin-avatar-group-overlap) + var(--vaadin-avatar-outline-width));
+      }
+
+      :host([theme~="xlarge"]) [part="avatar"]:not([dir="rtl"]):not(:first-child) {
         -webkit-mask-position: calc(50% - var(--lumo-size-xl) + var(--vaadin-avatar-group-overlap));
         mask-position: calc(50% - var(--lumo-size-xl) + var(--vaadin-avatar-group-overlap));
       }
 
-      :host([theme~="large"]) [part="avatar"]:not(:first-child) {
+      :host([theme~="xlarge"]) [part="avatar"][dir="rtl"]:not(:first-child) {
+        -webkit-mask-position: calc(50% + var(--lumo-size-xl) - var(--vaadin-avatar-group-overlap) + var(--vaadin-avatar-outline-width));
+        mask-position: calc(50% + var(--lumo-size-xl) - var(--vaadin-avatar-group-overlap) + var(--vaadin-avatar-outline-width));
+      }
+
+      :host([theme~="large"]) [part="avatar"]:not([dir="rtl"]):not(:first-child) {
         -webkit-mask-position: calc(50% - var(--lumo-size-l) + var(--vaadin-avatar-group-overlap));
         mask-position: calc(50% - var(--lumo-size-l) + var(--vaadin-avatar-group-overlap));
       }
 
-      :host([theme~="small"]) [part="avatar"]:not(:first-child) {
+      :host([theme~="large"]) [part="avatar"][dir="rtl"]:not(:first-child) {
+        -webkit-mask-position: calc(50% + var(--lumo-size-l) - var(--vaadin-avatar-group-overlap) + var(--vaadin-avatar-outline-width));
+        mask-position: calc(50% + var(--lumo-size-l) - var(--vaadin-avatar-group-overlap) + var(--vaadin-avatar-outline-width));
+      }
+
+      :host([theme~="small"]) [part="avatar"]:not([dir="rtl"]):not(:first-child) {
         -webkit-mask-position: calc(50% - var(--lumo-size-s) + var(--vaadin-avatar-group-overlap));
         mask-position: calc(50% - var(--lumo-size-s) + var(--vaadin-avatar-group-overlap));
       }
 
-      :host([theme~="xsmall"]) [part="avatar"]:not(:first-child) {
+      :host([theme~="small"]) [part="avatar"][dir="rtl"]:not(:first-child) {
+        -webkit-mask-position: calc(50% + var(--lumo-size-s) - var(--vaadin-avatar-group-overlap) + var(--vaadin-avatar-outline-width));
+        mask-position: calc(50% + var(--lumo-size-s) - var(--vaadin-avatar-group-overlap) + var(--vaadin-avatar-outline-width));
+      }
+
+      :host([theme~="xsmall"]) [part="avatar"]:not([dir="rtl"]):not(:first-child) {
         -webkit-mask-position: calc(50% - var(--lumo-size-xs) + var(--vaadin-avatar-group-overlap));
         mask-position: calc(50% - var(--lumo-size-xs) + var(--vaadin-avatar-group-overlap));
+      }
+
+      :host([theme~="xsmall"]) [part="avatar"][dir="rtl"]:not(:first-child) {
+        -webkit-mask-position: calc(50% + var(--lumo-size-xs) - var(--vaadin-avatar-group-overlap) + var(--vaadin-avatar-outline-width));
+        mask-position: calc(50% + var(--lumo-size-xs) - var(--vaadin-avatar-group-overlap) + var(--vaadin-avatar-outline-width));
       }
     </style>
   </template>
@@ -55,6 +80,11 @@
       [part="items"] ::slotted(vaadin-item[theme="avatar-group-item"]) {
         padding: var(--lumo-space-xs);
         padding-right: var(--lumo-space-m);
+      }
+
+      :host([dir="rtl"]) [part="items"] ::slotted(vaadin-item[theme="avatar-group-item"]) {
+        padding: var(--lumo-space-xs);
+        padding-left: var(--lumo-space-m);
       }
     </style>
   </template>

@@ -15,7 +15,13 @@
   <template>
     <style>
       [part="items"] ::slotted(vaadin-item[theme="avatar-group-item"]) {
-        padding: 0.5rem;
+        padding: 8px;
+        padding-right: 24px;
+      }
+
+      :host([dir="rtl"]) [part="items"] ::slotted(vaadin-item[theme="avatar-group-item"]) {
+        padding: 8px;
+        padding-left: 24px;
       }
 
       [part="items"] ::slotted(vaadin-item[theme="avatar-group-item"])::before {
@@ -34,11 +40,11 @@
       }
 
       :host([theme="avatar-group-item"]:not([dir="rtl"])) ::slotted(vaadin-avatar) {
-        margin-right: 0.5rem;
+        margin-right: 8px;
       }
 
       :host([theme="avatar-group-item"][dir="rtl"]) ::slotted(vaadin-avatar) {
-        margin-left: 0.5rem;
+        margin-left: 8px;
       }
     </style>
   </template>
