@@ -22,5 +22,16 @@
       "image": ""
      }
   }
+  ,
+  {
+    "name": "Theme Variants",
+    "url": "avatar-theme-demos",
+    "src": "avatar-theme-demos.html",
+    "meta": {
+      "title": "Vaadin Avatar Theme Variants",
+      "description": "",
+      "image": ""
+     }
+  }
   ]
 }

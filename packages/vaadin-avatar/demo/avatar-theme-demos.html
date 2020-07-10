@@ -1,0 +1,40 @@
+<dom-module id="avatar-theme-demos">
+  <template>
+    <style include="vaadin-component-demo-shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+
+    <h3>Theme variants</h3>
+    <vaadin-demo-snippet id="avatar-theme-demos-variants" when-defined="vaadin-avatar-group">
+      <template preserve-content>
+        <vaadin-avatar-group theme="xlarge"></vaadin-avatar-group>
+        <vaadin-avatar-group theme="large"></vaadin-avatar-group>
+        <vaadin-avatar-group></vaadin-avatar-group>
+        <vaadin-avatar-group theme="small"></vaadin-avatar-group>
+        <vaadin-avatar-group theme="xsmall"></vaadin-avatar-group>
+        <script>
+          window.addDemoReadyListener('#avatar-theme-demos-variants', function(document) {
+            Array.from(document.querySelectorAll('vaadin-avatar-group')).forEach(function(group) {
+              group.items = [
+                {},
+                {name: 'Foo Bar'},
+                {name: 'Foo Bar', abbr: 'YY'}
+              ];
+            });
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+  </template>
+  <script>
+    class AvatarThemeDemos extends DemoReadyEventEmitter(AvatarDemo(Polymer.Element)) {
+      static get is() {
+        return 'avatar-theme-demos';
+      }
+    }
+    customElements.define(AvatarThemeDemos.is, AvatarThemeDemos);
+  </script>
+</dom-module>
