@@ -340,16 +340,6 @@
           overlay.close();
         });
 
-        it('should set role="image" on the user avatars', () => {
-          const items = group.shadowRoot.querySelectorAll('vaadin-avatar');
-          expect(items[0].getAttribute('role')).to.equal('img');
-          expect(items[1].getAttribute('role')).to.equal('img');
-        });
-
-        it('should set role="image" on the overflow avatar', () => {
-          expect(overflow.getAttribute('role')).to.equal('button');
-        });
-
         it('should set aria-haspopup="listbox" on the overflow avatar', () => {
           expect(overflow.getAttribute('aria-haspopup')).to.equal('listbox');
         });

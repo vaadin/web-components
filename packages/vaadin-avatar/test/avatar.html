@@ -224,6 +224,12 @@
           expect(avatar.hasAttribute('has-color-index')).to.be.false;
         });
       });
+
+      describe('a11y', () => {
+        it('should set role="button" on the avatar', () => {
+          expect(avatar.getAttribute('role')).to.equal('button');
+        });
+      });
     });
   </script>
 </body>
