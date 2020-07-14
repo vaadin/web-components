@@ -229,6 +229,18 @@
         it('should set role="button" on the avatar', () => {
           expect(avatar.getAttribute('role')).to.equal('button');
         });
+
+        it('should set aria-hidden="true" on the img element', () => {
+          expect(imgElement.getAttribute('aria-hidden')).to.equal('true');
+        });
+
+        it('should set aria-hidden="true" on the icon element', () => {
+          expect(iconElement.getAttribute('aria-hidden')).to.equal('true');
+        });
+
+        it('should set aria-hidden="true" on the abbr element', () => {
+          expect(abbrElement.getAttribute('aria-hidden')).to.equal('true');
+        });
       });
     });
   </script>

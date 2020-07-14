@@ -66,11 +66,11 @@ This program is available under Apache License Version 2.0, available at https:/
         box-shadow: inset 0 0 0 2px var(--vaadin-avatar-border-color);
       }
     </style>
-    <img hidden$="[[!__imgVisible]]" src$="[[img]]" />
-    <svg part="icon" hidden$="[[!__iconVisible]]" id="avatar-icon" viewBox="-50 -50 100 100" preserveAspectRatio="xMidYMid meet">
+    <img hidden$="[[!__imgVisible]]" src$="[[img]]" aria-hidden="true">
+    <svg part="icon" hidden$="[[!__iconVisible]]" id="avatar-icon" viewBox="-50 -50 100 100" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
       <text dy=".35em" text-anchor="middle">&#xea01;</text>
     </svg>
-    <svg part="abbr" hidden$="[[!__abbrVisible]]" id="avatar-abbr" viewBox="-50 -50 100 100" preserveAspectRatio="xMidYMid meet">
+    <svg part="abbr" hidden$="[[!__abbrVisible]]" id="avatar-abbr" viewBox="-50 -50 100 100" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
       <text dy=".35em" text-anchor="middle">[[abbr]]</text>
     </svg>
   </template>
