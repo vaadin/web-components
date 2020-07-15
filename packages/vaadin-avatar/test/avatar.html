@@ -81,6 +81,12 @@
             avatar.img = imgSrc;
             expect(abbrElement.hasAttribute('hidden')).to.be.true;
           });
+
+          it('should set title when both "img" and "name" are set', function() {
+            avatar.img = imgSrc;
+            avatar.name = 'Foo Bar';
+            expect(avatar.getAttribute('title')).to.equal('Foo Bar');
+          });
         });
 
         describe('"abbr" property', function() {

@@ -235,10 +235,8 @@ This program is available under Apache License Version 2.0, available at https:/
         __imgOrAbbrOrNameChanged(img, abbr, name) {
           this.__updateVisibility();
 
-          if (img || (abbr && abbr !== this.__generatedAbbr)) {
-            if (abbr) {
-              this.__setTitle(abbr);
-            }
+          if (abbr && abbr !== this.__generatedAbbr) {
+            this.__setTitle(abbr);
             return;
           }
 
