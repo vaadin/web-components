@@ -155,6 +155,12 @@
             avatar.abbr = 'FB';
             expect(avatar.getAttribute('title')).to.equal('FB');
           });
+
+          it('should set title when both "abbr" and "name" are set', function() {
+            avatar.abbr = 'GG';
+            avatar.name = 'Well played';
+            expect(avatar.getAttribute('title')).to.equal('Well played (GG)');
+          });
         });
 
         describe('"name" property', function() {
