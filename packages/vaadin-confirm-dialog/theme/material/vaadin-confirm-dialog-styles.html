@@ -73,12 +73,12 @@
 <dom-module id="material-confirm-dialog-overlay" theme-for="vaadin-dialog-overlay">
   <template>
     <style include="material-vaadin-overlay">
-      [part="overlay"] {
+      :host([theme~="_vaadin-confirm-dialog-dialog-overlay-theme"]) [part="overlay"] {
         max-width: 100%;
         min-width: 0;
       }
 
-      [part="content"] {
+      :host([theme~="_vaadin-confirm-dialog-dialog-overlay-theme"]) [part="content"] {
         padding: 8px 24px;
         min-width: 0;
         height: auto;

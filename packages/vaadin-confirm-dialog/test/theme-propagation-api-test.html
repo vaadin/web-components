@@ -23,11 +23,13 @@
       beforeEach(() => confirmDialog = fixture('confirm-dialog-theme'));
 
       it('should propagate theme attribute to vaadin-dialog', () => {
-        expect(confirmDialog.$.dialog.getAttribute('theme')).to.equal('foo');
+        const themes = confirmDialog.$.dialog.getAttribute('theme').split(' ');
+        expect(themes).to.include.members(['foo']);
       });
 
       it('should propagate theme attribute to overlay', () => {
-        expect(confirmDialog.$.dialog.$.overlay.getAttribute('theme')).to.equal('foo');
+        const themes = confirmDialog.$.dialog.$.overlay.getAttribute('theme').split(' ');
+        expect(themes).to.include.members(['foo']);
       });
     });
   </script>
