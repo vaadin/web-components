@@ -197,6 +197,7 @@ This program is available under Apache License Version 2.0, available at https:/
       ];
 
       const SOURCE = {
+        API: 'api',
         USER: 'user',
         SILENT: 'silent'
       };
@@ -874,7 +875,7 @@ This program is available under Apache License Version 2.0, available at https:/
          */
         dangerouslySetHtmlValue(htmlValue) {
           const deltaFromHtml = this._editor.clipboard.convert(htmlValue);
-          this._editor.setContents(deltaFromHtml, SOURCE.USER);
+          this._editor.setContents(deltaFromHtml, SOURCE.API);
         }
 
         /** @private */
