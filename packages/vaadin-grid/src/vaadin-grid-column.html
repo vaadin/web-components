@@ -83,6 +83,7 @@ This program is available under Apache License Version 2.0, available at https:/
         /**
          * Aligns the columns cell content horizontally.
          * Supported values: "start", "center" and "end".
+         * @attr {start|center|end} text-align
          * @type {GridColumnTextAlign | null | undefined}
          */
         textAlign: {
@@ -638,6 +639,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
           /**
            * Flex grow ratio for the cell widths. When set to 0, cell width is fixed.
+           * @attr {number} flex-grow
            * @type {number}
            */
           flexGrow: {
@@ -685,6 +687,7 @@ This program is available under Apache License Version 2.0, available at https:/
            * You can manually trigger the auto sizing behavior again by calling `grid.recalculateColumnWidths()`.
            *
            * The column width may still grow larger when `flexGrow` is not 0.
+           * @attr {boolean} auto-width
            * @type {boolean}
            */
           autoWidth: {
