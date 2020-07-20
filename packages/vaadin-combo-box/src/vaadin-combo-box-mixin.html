@@ -38,6 +38,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         /**
          * Set true to prevent the overlay from opening automatically.
+         * @attr {boolean} auto-open-disabled
          */
         autoOpenDisabled: Boolean,
 
@@ -90,6 +91,7 @@ This program is available under Apache License Version 2.0, available at https:/
          * `value` property will be set to the input value in this case.
          * Also, when `value` is set programmatically, the input value will be set
          * to reflect that value.
+         * @attr {boolean} allow-custom-value
          * @type {boolean}
          */
         allowCustomValue: {
@@ -178,6 +180,7 @@ This program is available under Apache License Version 2.0, available at https:/
          *
          * When using item templates, the property is still needed because it is used
          * for filtering, and for displaying the selected item value in the input box.
+         * @attr {string} item-label-path
          * @type {string}
          */
         itemLabelPath: {
@@ -193,6 +196,7 @@ This program is available under Apache License Version 2.0, available at https:/
          *
          * The item value is used in the `value` property of the combo box,
          * to provide the form value.
+         * @attr {string} item-value-path
          * @type {string}
          */
         itemValuePath: {
@@ -205,6 +209,7 @@ This program is available under Apache License Version 2.0, available at https:/
          * the `itemIdPath` is used to compare and identify the same item
          * in `selectedItem` and `filteredItems` (items given by the
          * `dataProvider` callback).
+         * @attr {string} item-id-path
          */
         itemIdPath: String,
 
