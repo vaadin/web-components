@@ -140,6 +140,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
              * Sets the value to a series bound by 'unit' property.
              * Otherwise sets the value to the first series.
              * Undefined by default (determined from data).
+             * @attr {number} value-min
              */
             valueMin: {
               type: Number,
@@ -149,6 +150,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             /**
              * Value-axis maximum-value.
              * See the 'valueMin'
+             * @attr {number} value-max
              */
             valueMax: {
               type: Number,
@@ -212,6 +214,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
              * The height of the neck, the lower part of the funnel.
              * A number defines pixel width, a percentage string defines a percentage of the plot area height. Defaults to 30%.
              * Note that this property only applies for "funnel" charts.
+             * @attr {number | string} neck-position
              * @type {number | string}
              */
             neckPosition: {
@@ -223,6 +226,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
              * The width of the neck, the lower part of the funnel.
              * A number defines pixel width, a percentage string defines a percentage of the plot area width. Defaults to 30%.
              * Note that this property only applies for "funnel" charts.
+             * @attr {number | string} neck-width
              * @type {number | string}
              */
             neckWidth: {

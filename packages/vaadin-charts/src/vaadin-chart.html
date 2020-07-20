@@ -330,6 +330,7 @@ MAGI ADD END -->
 
             /**
              * Category-axis maximum value. Defaults to `undefined`.
+             * @attr {number} category-max
              */
             categoryMax: {
               type: Number,
@@ -338,6 +339,7 @@ MAGI ADD END -->
 
             /**
              * Category-axis minimum value. Defaults to `undefined`.
+             * @attr {number} category-min
              */
             categoryMin: {
               type: Number,
@@ -352,6 +354,7 @@ MAGI ADD END -->
              *
              * Defaults to `undefined`
              *
+             * @attr {left|right|top|bottom} category-position
              * @type {ChartCategoryPosition | undefined}
              */
             categoryPosition: {
@@ -362,6 +365,7 @@ MAGI ADD END -->
             /**
              * Specifies whether to hide legend or show.
              * Legend configuration can be set up via additionalOptions property
+             * @attr {boolean} no-legend
              */
             noLegend: {
               type: Boolean,
@@ -373,6 +377,7 @@ MAGI ADD END -->
              * Possible values are null, "normal" or "percent".
              * If "stack" property is not defined on the vaadin-chart-series elements, then series will be put into
              * the default stack.
+             * @attr {normal|percent} stacking
              * @type {ChartStacking | undefined}
              */
             stacking: {
@@ -438,6 +443,7 @@ MAGI ADD END -->
 
             /**
              * Specifies the message displayed on a chart without displayable data.
+             * @attr {string} empty-text
              * @type {string}
              */
             emptyText: {
