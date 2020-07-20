@@ -213,6 +213,7 @@ This program is available under Apache License Version 2.0, available at https:/
             /**
              * Limit of files to upload, by default it is unlimited. If the value is
              * set to one, native file browser will prevent selecting multiple files.
+             * @attr {number} max-files
              * @type {number}
              */
             maxFiles: {
@@ -222,6 +223,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * Specifies if the maximum number of files have been uploaded
+             * @attr {boolean} max-files-reached
              * @type {boolean}
              */
             maxFilesReached: {
@@ -251,6 +253,7 @@ This program is available under Apache License Version 2.0, available at https:/
              * Notice that it is a client-side constraint, which will be checked before
              * sending the request. Obviously you need to do the same validation in
              * the server-side and be sure that they are aligned.
+             * @attr {number} max-file-size
              * @type {number}
              */
             maxFileSize: {
@@ -271,6 +274,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * Specifies the 'name' property at Content-Disposition
+             * @attr {string} form-data-name
              * @type {string}
              */
             formDataName: {
@@ -281,6 +285,7 @@ This program is available under Apache License Version 2.0, available at https:/
             /**
              * Prevents upload(s) from immediately uploading upon adding file(s).
              * When set, you must manually trigger uploads using the `uploadFiles` method
+             * @attr {boolean} no-auto
              * @type {boolean}
              */
             noAuto: {
@@ -290,6 +295,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * Set the withCredentials flag on the request.
+             * @attr {boolean} with-credentials
              * @type {boolean}
              */
             withCredentials: {
