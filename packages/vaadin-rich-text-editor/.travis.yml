@@ -8,7 +8,7 @@ cache:
     - node_modules
 
 addons:
-  firefox: "66.0"
+  firefox: latest
   chrome: stable
 
 jobs:
@@ -21,14 +21,8 @@ jobs:
       env: TEST_SUITE=unit_tests POLYMER=3
     - if: type = pull_request
       env: POLYMER=2
-      addons:
-        firefox: "66.0"
-        chrome: stable
     - if: type = pull_request
       env: POLYMER=3
-      addons:
-        firefox: "66.0"
-        chrome: stable
     - if: type = cron
       env: TEST_SUITE=unit_tests POLYMER=2
 

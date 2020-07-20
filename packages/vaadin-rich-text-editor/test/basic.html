@@ -55,6 +55,27 @@
       describe('toolbar controls', () => {
         let btn;
 
+        describe('selected text', () => {
+          beforeEach(done => {
+            editor.focus();
+            editor.insertText(0, 'Foo', 'user');
+            editor.setSelection(0, 3);
+            Polymer.RenderStatus.afterNextRender(rte, done);
+          });
+
+          ['bold', 'italic', 'underline', 'strike', 'blockquote', 'code-block'].forEach(fmt => {
+            it(`should apply ${fmt} formatting to the selected text on click`, () => {
+              btn = getButton(fmt);
+              btn.dispatchEvent(new MouseEvent('mousedown', {bubbles: true}));
+              editor.root.dispatchEvent(new CustomEvent('focusout', {bubbles: true}));
+              document.body.focus();
+              btn.dispatchEvent(new MouseEvent('mouseup', {bubbles: true}));
+              btn.click();
+              expect(editor.getFormat(0, 3)[fmt]).to.be.true;
+            });
+          });
+        });
+
         ['bold', 'italic', 'underline', 'strike', 'blockquote', 'code-block'].forEach(fmt => {
           it(`should apply ${fmt} formatting when clicking the "toolbar-button-${fmt}" part`, () => {
             btn = getButton(fmt);
