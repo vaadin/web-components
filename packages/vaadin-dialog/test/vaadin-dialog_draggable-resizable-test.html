@@ -79,6 +79,15 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="overflow">
+    <template>
+      <vaadin-dialog draggable opened modeless>
+        <template>
+        </template>
+      </vaadin-dialog>
+    </template>
+  </test-fixture>
+
   <script>
       function dispatchMouseEvent(target, type, coords = {x: 0, y: 0}, button = 0) {
         const e = new MouseEvent(type, {
@@ -726,6 +735,26 @@
           actualTextContent = document.elementFromPoint(windowCenterWidth, windowCenterHeight).innerText.trim();
           expect(actualTextContent).to.be.eql(expectedTextContent);
           expect(modalDialog.opened).to.be.true;
+        });
+      });
+
+      describe('dialog with overflowing content', () => {
+        let dialog;
+
+        beforeEach(() => {
+          dialog = fixture('overflow');
+        });
+
+        it('should not overflow when style attribute is set on the overlay part', () => {
+          const container = document.createElement('div');
+          container.style.maxWidth = '300px';
+          container.style.overflow = 'auto';
+          container.textContent = Array(100).join('Lorem ipsum dolor sit amet');
+          const overlay = dialog.$.overlay;
+          overlay.content.appendChild(container);
+          // emulate removing "pointer-events: none"
+          overlay.$.overlay.setAttribute('style', '');
+          expect(overlay.$.overlay.offsetHeight).to.equal(overlay.$.resizerContainer.offsetHeight);
         });
       });
   </script>
