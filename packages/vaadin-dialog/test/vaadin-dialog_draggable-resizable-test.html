@@ -764,18 +764,20 @@
         const ios = (navigator.appVersion).match(/OS (\d+)_(\d+)_?(\d+)?/);
         const isIOS10 = ios && String(ios).indexOf('OS 10') > -1;
         if (!isIOS10) {
-          it('should not overflow when using vaadin-textarea in the content', async() => {
+          it('should not overflow when using vaadin-textarea in the content', (done) => {
             const textarea = document.createElement('vaadin-text-area');
             textarea.value = Array(20).join('Lorem ipsum dolor sit amet');
             overlay.content.appendChild(textarea);
             window.ShadyDOM && window.ShadyDOM.flush();
             overlay.$.content.style.padding = '20px';
             resize(overlayPart.querySelector('.s'), 0, -50);
-            await contentStabilized(dialog);
-            expect(getComputedStyle(overlayPart).height).to.equal(getComputedStyle(container).height);
+            window.requestAnimationFrame(() => {
+              expect(getComputedStyle(overlayPart).height).to.equal(getComputedStyle(container).height);
+              done();
+            });
           });
 
-          it('should not reset scroll position on resize', async() => {
+          it('should not reset scroll position on resize', (done) => {
             const div = document.createElement('div');
             div.textContent = Array(100).join('Lorem ipsum dolor sit amet');
             overlay.content.appendChild(div);
@@ -784,8 +786,10 @@
             overlay.$.content.style.padding = '20px';
             container.scrollTop = 100;
             resize(overlayPart.querySelector('.s'), 0, -50);
-            await contentStabilized(dialog);
-            expect(container.scrollTop).to.equal(100);
+            window.requestAnimationFrame(() => {
+              expect(container.scrollTop).to.equal(100);
+              done();
+            });
           });
         }
       });
