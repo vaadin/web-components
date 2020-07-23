@@ -774,6 +774,7 @@
           const div = document.createElement('div');
           div.textContent = Array(100).join('Lorem ipsum dolor sit amet');
           overlay.content.appendChild(div);
+          window.ShadyDOM && window.ShadyDOM.flush();
           dialog._setBounds({height: 200});
           overlay.$.content.style.padding = '20px';
           container.scrollTop = 100;
