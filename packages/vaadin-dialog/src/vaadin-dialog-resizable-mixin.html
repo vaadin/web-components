@@ -152,6 +152,7 @@
 
         if (e.button === 0 || e.touches) {
           e.preventDefault();
+          this.__saveScrollPosition();
           this._originalBounds = this._getOverlayBounds();
           const event = this.__getMouseOrFirstTouchEvent(e);
           this._originalMouseCoords = {top: event.pageY, left: event.pageX};
@@ -208,6 +209,7 @@
               }
             }
           });
+          this.__forceSafariReflow();
           this.$.overlay.notifyResize();
         }
       }
@@ -222,6 +224,7 @@
         window.removeEventListener('mouseup', this._resizeListeners.stop[direction]);
         window.removeEventListener('touchend', this._resizeListeners.stop[direction]);
         this.dispatchEvent(new CustomEvent('resize', {detail: this._getResizeDimensions()}));
+        this.__restoreScrollPosition();
       }
 
       /**
@@ -235,6 +238,31 @@
         const {width: contentWidth, height: contentHeight} = getComputedStyle(content);
         content.removeAttribute('style');
         return {width, height, contentWidth, contentHeight};
+      }
+
+      /**
+       * Safari 13 renders overflowing elements incorrectly.
+       * This forces it to recalculate height.
+       * @private
+       */
+      __forceSafariReflow() {
+        const overlay = this.$.overlay.$.overlay;
+        // Force reflow in Safari 13 to recalculate height
+        overlay.style.display = 'block';
+        window.requestAnimationFrame(() => {
+          overlay.style.display = '';
+          this.__restoreScrollPosition();
+        });
+      }
+
+      /** @private */
+      __saveScrollPosition() {
+        this.__scrollTop = this.$.overlay.$.resizerContainer.scrollTop;
+      }
+
+      /** @private */
+      __restoreScrollPosition() {
+        this.$.overlay.$.resizerContainer.scrollTop = this.__scrollTop;
       }
     };
 </script>

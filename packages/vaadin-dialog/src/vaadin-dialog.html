@@ -401,12 +401,6 @@ This program is available under Apache License Version 2.0, available at https:/
           }
 
           Object.assign(overlay.style, parsedBounds);
-
-          // Force reflow in Safari 13 to recalculate height
-          overlay.style.display = 'block';
-          window.requestAnimationFrame(() => {
-            overlay.style.display = '';
-          });
         }
 
         /** @private */

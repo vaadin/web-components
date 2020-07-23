@@ -82,7 +82,7 @@
 
   <test-fixture id="overflow">
     <template>
-      <vaadin-dialog draggable opened modeless>
+      <vaadin-dialog resizable opened modeless>
         <template>
         </template>
       </vaadin-dialog>
@@ -740,37 +740,46 @@
       });
 
       describe('dialog with overflowing content', () => {
-        let dialog;
+        let dialog, overlay, overlayPart, container;
 
         beforeEach(() => {
           dialog = fixture('overflow');
+          overlay = dialog.$.overlay;
+          overlayPart = overlay.$.overlay;
+          container = overlay.$.resizerContainer;
         });
 
         it('should not overflow when style attribute is set on the overlay part', () => {
-          const container = document.createElement('div');
-          container.style.maxWidth = '300px';
-          container.style.overflow = 'auto';
-          container.textContent = Array(100).join('Lorem ipsum dolor sit amet');
-          const overlay = dialog.$.overlay;
-          overlay.content.appendChild(container);
+          const div = document.createElement('div');
+          div.style.maxWidth = '300px';
+          div.style.overflow = 'auto';
+          div.textContent = Array(100).join('Lorem ipsum dolor sit amet');
+          overlay.content.appendChild(div);
           // emulate removing "pointer-events: none"
-          overlay.$.overlay.setAttribute('style', '');
-          expect(overlay.$.overlay.offsetHeight).to.equal(overlay.$.resizerContainer.offsetHeight);
+          overlayPart.setAttribute('style', '');
+          expect(overlayPart.offsetHeight).to.equal(container.offsetHeight);
         });
 
-        it('should not overflow when using vaadin-textarea in the content', (done) => {
+        it('should not overflow when using vaadin-textarea in the content', async() => {
           const textarea = document.createElement('vaadin-text-area');
           textarea.value = Array(20).join('Lorem ipsum dolor sit amet');
-          const overlay = dialog.$.overlay;
           overlay.content.appendChild(textarea);
           overlay.$.content.style.padding = '20px';
-          // emulate resizing the dialog
-          dialog._setBounds({height: 50});
+          resize(overlayPart.querySelector('.s'), 0, -50);
+          await contentStabilized(dialog);
+          expect(getComputedStyle(overlayPart).height).to.equal(getComputedStyle(container).height);
+        });
 
-          window.requestAnimationFrame(() => {
-            expect(getComputedStyle(overlay.$.overlay).height).to.equal(getComputedStyle(overlay.$.resizerContainer).height);
-            done();
-          });
+        it('should not reset scroll position on resize', async() => {
+          const div = document.createElement('div');
+          div.textContent = Array(100).join('Lorem ipsum dolor sit amet');
+          overlay.content.appendChild(div);
+          dialog._setBounds({height: 200});
+          overlay.$.content.style.padding = '20px';
+          container.scrollTop = 100;
+          resize(overlayPart.querySelector('.s'), 0, -50);
+          await contentStabilized(dialog);
+          expect(container.scrollTop).to.equal(100);
         });
       });
   </script>
