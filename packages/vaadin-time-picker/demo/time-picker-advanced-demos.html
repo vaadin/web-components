@@ -70,6 +70,9 @@
           window.addDemoReadyListener('#time-picker-advanced-demos-custom-validator', function(document) {
             class TimePickerWorkingHoursElement extends Vaadin.TimePickerElement {
               checkValidity() {
+                if (!this.value) {
+                  return false;
+                }
                 var hour = /^(\d+)/.exec(this.value)[1];
                 return hour >= 9 && hour < 17;
               }
