@@ -247,7 +247,6 @@
        */
       __forceSafariReflow() {
         const overlay = this.$.overlay.$.overlay;
-        // Force reflow in Safari 13 to recalculate height
         overlay.style.display = 'block';
         window.requestAnimationFrame(() => {
           overlay.style.display = '';
