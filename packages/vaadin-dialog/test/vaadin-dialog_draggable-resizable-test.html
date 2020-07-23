@@ -343,7 +343,7 @@
 
           const contentBounds = dialog.$.overlay.firstElementChild.getBoundingClientRect();
           const overlayBounds = overlayPart.getBoundingClientRect();
-          expect(contentBounds.height).to.equal(overlayBounds.height);
+          expect(Math.floor(contentBounds.height)).to.equal(Math.floor(overlayBounds.height));
         });
 
         it('should not resize dialog if not left mouse button', () => {
@@ -755,6 +755,7 @@
           div.style.overflow = 'auto';
           div.textContent = Array(100).join('Lorem ipsum dolor sit amet');
           overlay.content.appendChild(div);
+          window.ShadyDOM && window.ShadyDOM.flush();
           // emulate removing "pointer-events: none"
           overlayPart.setAttribute('style', '');
           expect(overlayPart.offsetHeight).to.equal(container.offsetHeight);
@@ -764,6 +765,7 @@
           const textarea = document.createElement('vaadin-text-area');
           textarea.value = Array(20).join('Lorem ipsum dolor sit amet');
           overlay.content.appendChild(textarea);
+          window.ShadyDOM && window.ShadyDOM.flush();
           overlay.$.content.style.padding = '20px';
           resize(overlayPart.querySelector('.s'), 0, -50);
           await contentStabilized(dialog);
