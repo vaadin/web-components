@@ -70,6 +70,11 @@ This program is available under Apache License Version 2.0, available at https:/
         items.forEach(item => item.selected = selectedItems.indexOf(item) !== -1);
       }
 
+      this._scrollToLastSelectedItem();
+    }
+
+    /** @private */
+    _scrollToLastSelectedItem() {
       const lastSelectedItem = this.selectedValues.slice(-1)[0];
       if (lastSelectedItem && !lastSelectedItem.disabled) {
         this._scrollToItem(lastSelectedItem);
