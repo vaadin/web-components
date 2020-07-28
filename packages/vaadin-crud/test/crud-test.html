@@ -265,10 +265,36 @@
               expect(crud.$.confirmCancel.opened).not.to.be.ok;
             });
 
+            it('should not ask for confirmation on cancel when not modified - click out', () => {
+              edit(crud.items[0]);
+              crud.$.new.click();
+              expect(crud.$.confirmCancel.opened).not.to.be.ok;
+            });
+
+            it('should not ask for confirmation on cancel when not modified - esc', () => {
+              edit(crud.items[0]);
+              crud.$.dialog.$.dialog.$.overlay.dispatchEvent(new CustomEvent('vaadin-overlay-escape-press'));
+              expect(crud.$.confirmCancel.opened).not.to.be.ok;
+            });
+
             it('should ask for confirmation on cancel when modified', () => {
               edit(crud.items[0]);
               change();
               btnCancel().click();
+              expect(crud.$.confirmCancel.opened).to.be.true;
+            });
+
+            it('should ask for confirmation on cancel when modified - click out', () => {
+              edit(crud.items[0]);
+              change();
+              crud.$.new.click();
+              expect(crud.$.confirmCancel.opened).to.be.true;
+            });
+
+            it('should ask for confirmation on cancel when modified - esc', () => {
+              edit(crud.items[0]);
+              change();
+              crud.$.dialog.$.dialog.$.overlay.dispatchEvent(new CustomEvent('vaadin-overlay-escape-press'));
               expect(crud.$.confirmCancel.opened).to.be.true;
             });
 
@@ -304,6 +330,34 @@
               });
             });
 
+            it('should trigger "cancel" only once after user clicks out', (done) => {
+              crud.editOnClick = true;
+
+              const cancelSpyListener = sinon.spy();
+              crud.addEventListener('cancel', cancelSpyListener);
+
+              crud._grid.activeItem = crud.items[0];
+              crud.$.new.click();
+              setTimeout(() => {
+                expect(cancelSpyListener.calledOnce).to.be.ok;
+                done();
+              });
+            });
+
+            it('should trigger "cancel" only once after user hits esc', (done) => {
+              crud.editOnClick = true;
+
+              const cancelSpyListener = sinon.spy();
+              crud.addEventListener('cancel', cancelSpyListener);
+
+              crud._grid.activeItem = crud.items[0];
+              crud.$.dialog.$.dialog.$.overlay.dispatchEvent(new CustomEvent('vaadin-overlay-escape-press'));
+              setTimeout(() => {
+                expect(cancelSpyListener.calledOnce).to.be.ok;
+                done();
+              });
+            });
+
             it('should not trigger "cancel" after user hits "Save"', (done) => {
               crud.editOnClick = true;
 
@@ -319,6 +373,7 @@
                 done();
               });
             });
+
           });
 
           describe('delete', () => {
