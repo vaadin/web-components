@@ -337,7 +337,11 @@
               crud.addEventListener('cancel', cancelSpyListener);
 
               crud._grid.activeItem = crud.items[0];
-              crud.$.new.click();
+              crud.$.new.dispatchEvent(new CustomEvent('click', {
+                bubbles: true,
+                cancelable: true,
+                composed: true
+              }));
               setTimeout(() => {
                 expect(cancelSpyListener.calledOnce).to.be.ok;
                 done();
