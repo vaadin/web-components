@@ -32,8 +32,8 @@
     "vaadin-element-mixin": "vaadin/vaadin-element-mixin#^2.4.1",
     "vaadin-lumo-styles": "vaadin/vaadin-lumo-styles#^1.6.0",
     "vaadin-material-styles": "vaadin/vaadin-material-styles#^1.3.2",
-    "vaadin-text-field": "vaadin/vaadin-text-field#^2.7.0-alpha1",
-    "vaadin-button": "vaadin/vaadin-button#^2.4.0-alpha1",
+    "vaadin-text-field": "vaadin/vaadin-text-field#^2.7.0-beta1",
+    "vaadin-button": "vaadin/vaadin-button#^2.4.0-beta1",
     "vaadin-overlay": "vaadin/vaadin-overlay#^3.5.0"
   },
   "devDependencies": {
@@ -44,6 +44,6 @@
     "iron-test-helpers": "^2.0.0",
     "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^3.1.0",
     "vaadin-icons": "vaadin/vaadin-icons#^4.2.1",
-    "vaadin-dialog": "^2.5.0-alpha1"
+    "vaadin-dialog": "^2.5.0-beta1"
   }
 }
