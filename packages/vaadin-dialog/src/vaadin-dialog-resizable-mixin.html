@@ -152,6 +152,7 @@
 
         if (e.button === 0 || e.touches) {
           e.preventDefault();
+
           this._originalBounds = this._getOverlayBounds();
           const event = this.__getMouseOrFirstTouchEvent(e);
           this._originalMouseCoords = {top: event.pageY, left: event.pageX};
@@ -208,6 +209,7 @@
               }
             }
           });
+
           this.$.overlay.notifyResize();
         }
       }
@@ -229,11 +231,13 @@
        * @protected
        */
       _getResizeDimensions() {
+        const scrollPosition = this.$.overlay.$.resizerContainer.scrollTop;
         const {width, height} = getComputedStyle(this.$.overlay.$.overlay);
         const content = this.$.overlay.$.content;
         content.setAttribute('style', 'position: absolute; top: 0; right: 0; bottom: 0; left: 0; box-sizing: content-box; height: auto;');
         const {width: contentWidth, height: contentHeight} = getComputedStyle(content);
         content.removeAttribute('style');
+        this.$.overlay.$.resizerContainer.scrollTop = scrollPosition;
         return {width, height, contentWidth, contentHeight};
       }
     };

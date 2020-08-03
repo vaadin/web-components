@@ -37,6 +37,7 @@
     "iron-component-page": "^3.0.0",
     "iron-test-helpers": "^2.0.0",
     "vaadin-button": "vaadin/vaadin-button#^2.4.0-alpha1",
+    "vaadin-text-field": "vaadin/vaadin-text-field#~2.7.0-alpha6",
     "webcomponentsjs": "^1.0.0",
     "web-component-tester": "^6.1.5",
     "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^3.1.0-alpha1"
