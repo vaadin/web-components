@@ -545,14 +545,17 @@
           expect(dialog._setBounds).to.be.calledOnce;
         });
 
-        it('should not reset scroll position on dragstart', () => {
+        it('should not reset scroll position on dragstart', (done) => {
           dialog.modeless = true;
           button.style.marginBottom = '200px';
           dialog._setBounds({height: '100px'});
-          container.scrollTop = 100;
-          expect(container.scrollTop).to.equal(100);
-          drag(container);
-          expect(container.scrollTop).to.equal(100);
+          requestAnimationFrame(() => {
+            container.scrollTop = 100;
+            expect(container.scrollTop).to.equal(100);
+            drag(container);
+            expect(container.scrollTop).to.equal(100);
+            done();
+          });
         });
       });
 
@@ -783,12 +786,14 @@
             overlay.content.appendChild(div);
             window.ShadyDOM && window.ShadyDOM.flush();
             dialog._setBounds({height: 200});
-            overlay.$.content.style.padding = '20px';
-            container.scrollTop = 100;
-            resize(overlayPart.querySelector('.s'), 0, -50);
             window.requestAnimationFrame(() => {
-              expect(container.scrollTop).to.equal(100);
-              done();
+              overlay.$.content.style.padding = '20px';
+              container.scrollTop = 100;
+              resize(overlayPart.querySelector('.s'), 0, -50);
+              window.requestAnimationFrame(() => {
+                expect(container.scrollTop).to.equal(100);
+                done();
+              });
             });
           });
         }

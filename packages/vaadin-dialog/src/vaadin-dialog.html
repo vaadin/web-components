@@ -392,6 +392,7 @@ This program is available under Apache License Version 2.0, available at https:/
           if (overlay.style.position !== 'absolute') {
             overlay.style.position = 'absolute';
             overlay.style.maxWidth = 'none';
+            this.__forceSafariReflow();
           }
 
           for (const arg in parsedBounds) {
@@ -441,6 +442,21 @@ This program is available under Apache License Version 2.0, available at https:/
          */
         __getMouseOrFirstTouchEvent(e) {
           return e.touches ? e.touches[0] : e;
+        }
+
+        /**
+         * Safari 13 renders overflowing elements incorrectly.
+         * This forces it to recalculate height.
+         * @private
+         */
+        __forceSafariReflow() {
+          const scrollPosition = this.$.overlay.$.resizerContainer.scrollTop;
+          const overlay = this.$.overlay.$.overlay;
+          overlay.style.display = 'block';
+          window.requestAnimationFrame(() => {
+            overlay.style.display = '';
+            this.$.overlay.$.resizerContainer.scrollTop = scrollPosition;
+          });
         }
       }
 
