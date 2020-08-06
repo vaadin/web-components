@@ -270,6 +270,8 @@ This program is available under Apache License Version 2.0, available at https:/
         const oldOffset = this._vidxOffset;
         if (this._accessIronListAPI(() => this._maxScrollTop) && this._virtualCount < this._effectiveSize) {
           this._adjustVirtualIndexOffset(delta);
+        } else {
+          this._vidxOffset = 0;
         }
         if (this._vidxOffset !== oldOffset) {
           this._update();

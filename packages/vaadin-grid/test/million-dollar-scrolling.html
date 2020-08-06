@@ -87,6 +87,35 @@
       table.scrollTop += 2500;
     }
 
+    describe('huge grid', function() {
+      let grid;
+
+      beforeEach(() => {
+        grid = fixture('table').$.grid;
+        grid.size = 1000000;
+        grid.dataProvider = infiniteDataProvider;
+        flushGrid(grid);
+      });
+
+      it('should reduce the size of a huge scrolled grid to one', () => {
+        scrollToEnd(grid);
+
+        expect(() => {
+          grid.size = 1;
+          flushGrid(grid);
+        }).not.to.throw(Error);
+      });
+
+      it('should reduce the size of a huge scrolled grid to a size larger than one', () => {
+        scrollToEnd(grid);
+
+        expect(() => {
+          grid.size = 10000;
+          flushGrid(grid);
+        }).not.to.throw(Error);
+      });
+    });
+
     describe('scrolling', function() {
       let container, grid;
       this.timeout(300000);

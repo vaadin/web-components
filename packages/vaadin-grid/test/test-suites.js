@@ -1,6 +1,7 @@
 const isPolymer2 = document.querySelector('script[src*="wct-browser-legacy"]') === null;
 
 window.VaadinGridSuites = [
+  'million-dollar-scrolling.html',
   'accessibility.html',
   'array-data-provider.html',
   'basic.html',
@@ -23,7 +24,6 @@ window.VaadinGridSuites = [
   'keyboard-navigation.html',
   'lazy-import.html',
   'light-dom-observing.html',
-  'million-dollar-scrolling.html',
   'outer-scroller.html',
   'physical-count.html',
   'resizing.html',
