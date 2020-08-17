@@ -320,6 +320,60 @@
         });
       });
 
+      describe('i18n property', () => {
+        let overlay, overflow;
+
+        const customI18n = {
+          anonymous: 'someone',
+          activeUsers: {
+            one: 'One active user',
+            many: '{count} active users'
+          }
+        };
+
+        beforeEach(async() => {
+          group.items = [
+            {abbr: 'PM'},
+            {name: 'Yuriy Yevstihnyeyev'},
+            {name: 'Serhii Kulykov'}
+          ];
+          await nextRender(group);
+          overlay = group.$.overlay;
+          overflow = group.$.overflow;
+        });
+
+        it('should set aria-label based on i18n.activeUsers.many', () => {
+          group.i18n = customI18n;
+          expect(group.getAttribute('aria-label')).to.equal('3 active users');
+        });
+
+        it('should set aria-label based on i18n.activeUsers.one', () => {
+          group.i18n = customI18n;
+          group.items = [group.items[0]];
+          expect(group.getAttribute('aria-label')).to.equal('One active user');
+        });
+
+        it('should pass i18n property to avatars', () => {
+          group.i18n = customI18n;
+          const items = group.shadowRoot.querySelectorAll('vaadin-avatar');
+          expect(items[0].i18n).to.deep.equal(customI18n);
+          expect(items[1].i18n).to.deep.equal(customI18n);
+          expect(items[2].i18n).to.deep.equal(customI18n);
+        });
+
+        it('should pass i18n property to overlay avatars', done => {
+          group.i18n = customI18n;
+          group.max = 1;
+          overlay.addEventListener('vaadin-overlay-open', () => {
+            const avatars = overlay.content.querySelectorAll('vaadin-avatar');
+            expect(avatars[0].i18n).to.deep.equal(customI18n);
+            expect(avatars[1].i18n).to.deep.equal(customI18n);
+            done();
+          });
+          overflow.click();
+        });
+      });
+
       describe('ARIA roles', () => {
         let overlay, overflow;
 

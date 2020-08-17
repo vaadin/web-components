@@ -177,6 +177,32 @@
             expect(avatar.getAttribute('title')).to.equal('anonymous');
           });
         });
+
+        describe('i18n property', () => {
+          it('should set default value for i18n property', () => {
+            expect(avatar.i18n).to.deep.equal({anonymous: 'anonymous'});
+          });
+
+          it('should update title when i18n object is set', () => {
+            avatar.i18n = {anonymous: 'someone'};
+            expect(avatar.getAttribute('title')).to.equal('someone');
+          });
+
+          it('should update title when sub-property is set', () => {
+            avatar.set('i18n.anonymous', 'someone');
+            expect(avatar.getAttribute('title')).to.equal('someone');
+          });
+
+          it('should not update title when empty object is set', () => {
+            avatar.i18n = {};
+            expect(avatar.getAttribute('title')).to.equal('anonymous');
+          });
+
+          it('should not update title when empty value is set', () => {
+            avatar.i18n = null;
+            expect(avatar.getAttribute('title')).to.equal('anonymous');
+          });
+        });
       });
 
       describe('focus', () => {

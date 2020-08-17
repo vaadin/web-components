@@ -53,6 +53,26 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Localization</h3>
+    <vaadin-demo-snippet id="avatar-advanced-demos-l10n" when-defined="vaadin-avatar-group">
+      <template preserve-content>
+        <vaadin-avatar-group></vaadin-avatar-group>
+        <script>
+          window.addDemoReadyListener('#avatar-advanced-demos-l10n', function(document) {
+            const group = document.querySelector('vaadin-avatar-group');
+            group.items = [{}, {abbr: 'SK'}, {name: 'Jens Jansson'}];
+            group.i18n = {
+              anonymous: 'someone',
+              activeUsers: {
+                one: 'One active user',
+                many: '{count} active users'
+              }
+            };
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
   </template>
   <script>
     class AvatarAdvancedDemos extends DemoReadyEventEmitter(AvatarDemo(Polymer.Element)) {

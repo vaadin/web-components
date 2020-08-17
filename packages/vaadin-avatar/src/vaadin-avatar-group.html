@@ -51,6 +51,7 @@ This program is available under Apache License Version 2.0, available at https:/
           img="[[item.img]]"
           part="avatar"
           theme$="[[theme]]"
+          i18n="[[i18n]]"
           color-index="[[item.colorIndex]]"
         ></vaadin-avatar>
       </template>
@@ -74,6 +75,7 @@ This program is available under Apache License Version 2.0, available at https:/
                 name="[[item.name]]"
                 abbr="[[item.abbr]]"
                 img="[[item.img]]"
+                i18n="[[i18n]]"
                 part="avatar"
                 theme$="[[theme]]"
                 color-index="[[item.colorIndex]]"
@@ -139,6 +141,37 @@ This program is available under Apache License Version 2.0, available at https:/
               type: Number
             },
 
+            /**
+             * The object used to localize this component.
+             * To change the default localization, replace the entire
+             * _i18n_ object or just the property you want to modify.
+             *
+             * The object has the following JSON structure and default values:
+                {
+                  // Translation of the anonymous user avatar title.
+                  anonymous: 'anonymous',
+                  // Translation of the avatar group accessible label.
+                  activeUsers: {
+                    one: 'Currently one active user',
+                    many: 'Currently {count} active users'
+                  }
+                }
+            * @type {!AvatarGroupI18n}
+            * @default {English/US}
+            */
+            i18n: {
+              type: Object,
+              value: () => {
+                return {
+                  anonymous: 'anonymous',
+                  activeUsers: {
+                    one: 'Currently one active user',
+                    many: 'Currently {count} active users'
+                  }
+                };
+              }
+            },
+
             /** @private */
             __maxReached: {
               type: Boolean,
@@ -155,7 +188,10 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         static get observers() {
-          return ['__computeMoreTitle(items.length, max)'];
+          return [
+            '__computeMoreTitle(items.length, max)',
+            '__i18nItemsChanged(i18n.*, items.length)'
+          ];
         }
 
         /** @protected */
@@ -255,6 +291,17 @@ This program is available under Apache License Version 2.0, available at https:/
           }
           // override generated title attribute
           this.$.overflow.setAttribute('title', result.join('\n'));
+        }
+
+        /** @private */
+        __i18nItemsChanged(i18n, items) {
+          const {base} = i18n;
+          if (base && base.activeUsers) {
+            const field = items === 1 ? 'one' : 'many';
+            if (base.activeUsers[field]) {
+              this.setAttribute('aria-label', base.activeUsers[field].replace('{count}', items));
+            }
+          }
         }
 
         /** @private */

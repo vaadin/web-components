@@ -12,7 +12,9 @@
   ],
   "autoImport": {
     "./@types/interfaces": [
-      "AvatarGroupItem"
+      "AvatarGroupItem",
+      "AvatarGroupI18n",
+      "AvatarI18n"
     ]
   }
 }

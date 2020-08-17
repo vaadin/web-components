@@ -157,6 +157,28 @@ This program is available under Apache License Version 2.0, available at https:/
               observer: '__colorIndexChanged'
             },
 
+            /**
+             * The object used to localize this component.
+             * To change the default localization, replace the entire
+             * _i18n_ object or just the property you want to modify.
+             *
+             * The object has the following JSON structure and default values:
+                {
+                  // Translation of the anonymous user avatar title.
+                  anonymous: 'anonymous'
+                }
+            * @type {!AvatarI18n}
+            * @default {English/US}
+            */
+            i18n: {
+              type: Object,
+              value: () => {
+                return {
+                  anonymous: 'anonymous'
+                };
+              }
+            },
+
             /** @private */
             __imgVisible: Boolean,
 
@@ -171,6 +193,7 @@ This program is available under Apache License Version 2.0, available at https:/
         static get observers() {
           return [
             '__imgOrAbbrOrNameChanged(img, abbr, name)',
+            '__i18nChanged(i18n.*)'
           ];
         }
 
@@ -250,6 +273,17 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         /** @private */
+        __i18nChanged(i18n) {
+          if (i18n.base && i18n.base.anonymous) {
+            if (this.__oldAnonymous && this.getAttribute('title') === this.__oldAnonymous) {
+              this.__setTitle();
+            }
+
+            this.__oldAnonymous = i18n.base.anonymous;
+          }
+        }
+
+        /** @private */
         __updateVisibility() {
           this.__imgVisible = !!this.img;
           this.__abbrVisible = !this.img && !!this.abbr;
@@ -261,7 +295,7 @@ This program is available under Apache License Version 2.0, available at https:/
           if (title) {
             this.setAttribute('title', title);
           } else {
-            this.setAttribute('title', 'anonymous');
+            this.setAttribute('title', this.i18n.anonymous);
           }
         }
       }
