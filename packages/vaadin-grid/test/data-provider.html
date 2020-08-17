@@ -472,6 +472,60 @@
                 expect(grid._cache.getItemForIndex(i)).to.deep.equal({level: 0, value: `foo${i}`});
               }
             });
+
+            it('should not render synchronously until all data requests have finished', done => {
+              generateItemIds = true;
+              grid.itemIdPath = 'id';
+
+              grid.dataProvider = (params, callback) => {
+                if (!params.parentItem) {
+                  // Resolve normally for root level items
+                  finiteDataProvider(params, callback);
+                } else {
+                  if (params.parentItem.value === 'foo0' && params.page === 0) {
+                    // Resolve asynchronoysly for the first expanded item only
+                    setTimeout(() => {
+                      finiteDataProvider(params, callback);
+                      // Only the root-level items (10) should be rendered at this point even though the
+                      // data request for the first expanded item resolved
+                      expect(grid._effectiveSize).to.equal(10);
+                      done();
+                    }, 0);
+                  }
+                }
+              };
+
+              expandIndex(grid, 0);
+              expandIndex(grid, 1);
+            });
+
+            it('should render asynchronously even if all data requests have not finished', (done) => {
+              generateItemIds = true;
+              grid.itemIdPath = 'id';
+
+              grid.dataProvider = (params, callback) => {
+                if (!params.parentItem) {
+                  // Resolve normally for root level items
+                  finiteDataProvider(params, callback);
+                } else {
+                  if (params.parentItem.value === 'foo0' && params.page === 0) {
+                    // Resolve asynchronoysly for the first expanded item only
+                    setTimeout(() => {
+                      finiteDataProvider(params, callback);
+                      flushGrid(grid);
+                      // The root-level items (10) and the first child item children (10), 20 in total,
+                      // should be rendered at this point even though the data request for the second expanded
+                      // item hasn't still been resolved
+                      expect(grid._effectiveSize).to.equal(20);
+                      done();
+                    }, 0);
+                  }
+                }
+              };
+
+              expandIndex(grid, 0);
+              expandIndex(grid, 1);
+            });
           });
 
           it('should increase full size', () => {

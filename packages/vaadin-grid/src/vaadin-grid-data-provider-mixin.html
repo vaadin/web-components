@@ -369,21 +369,31 @@ This program is available under Apache License Version 2.0, available at https:/
 
           delete cache.pendingRequests[page];
 
-          this._setLoading(false);
-          this._cache.updateSize();
-          this._effectiveSize = this._cache.effectiveSize;
+          this._debouncerApplyCachedData = Polymer.Debouncer.debounce(
+            this._debouncerApplyCachedData,
+            Polymer.Async.timeOut.after(0),
+            () => {
+              this._setLoading(false);
+              this._cache.updateSize();
+              this._effectiveSize = this._cache.effectiveSize;
 
-          Array.from(this.$.items.children)
-            .filter(row => !row.hidden)
-            .forEach(row => {
-              const cachedItem = this._cache.getItemForIndex(row.index);
-              if (cachedItem) {
-                this._toggleAttribute('loading', false, row);
-                this._updateItem(row, cachedItem);
-              }
-            });
+              Array.from(this.$.items.children)
+                .filter(row => !row.hidden)
+                .forEach(row => {
+                  const cachedItem = this._cache.getItemForIndex(row.index);
+                  if (cachedItem) {
+                    this._toggleAttribute('loading', false, row);
+                    this._updateItem(row, cachedItem);
+                  }
+                });
 
-          this._increasePoolIfNeeded(0);
+              this._increasePoolIfNeeded(0);
+            }
+          );
+
+          if (!this._cache.isLoading()) {
+            this._debouncerApplyCachedData.flush();
+          }
 
           this.__itemsReceived();
         });
