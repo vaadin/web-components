@@ -138,6 +138,105 @@
         });
       });
 
+      describe('auto overflow', () => {
+        let overlay, overflow;
+
+        beforeEach(async() => {
+          group.items = [
+            {abbr: '01'},
+            {abbr: '02'},
+            {abbr: '03'},
+            {abbr: '04'},
+            {abbr: '05'},
+          ];
+          await nextRender(group);
+          overlay = group.$.overlay;
+          overflow = group.$.overflow;
+        });
+
+        afterEach(() => {
+          overlay.close();
+        });
+
+        it('should render avatars to fit width on resize', async() => {
+          group.style.width = '110px';
+          group.dispatchEvent(new CustomEvent('iron-resize'));
+          await nextRender(group);
+          Polymer.flush();
+          const items = group.shadowRoot.querySelectorAll('vaadin-avatar');
+          expect(items.length).to.equal(3);
+          expect(overflow.abbr).to.equal('+3');
+        });
+
+        it('should render avatars using notifyResize', async() => {
+          group.style.width = '110px';
+          group.notifyResize();
+          await nextRender(group);
+          Polymer.flush();
+          const items = group.shadowRoot.querySelectorAll('vaadin-avatar');
+          expect(items.length).to.equal(3);
+          expect(overflow.abbr).to.equal('+3');
+        });
+
+        it('should re-render avatars on items change', async() => {
+          group.style.width = '110px';
+          group.dispatchEvent(new CustomEvent('iron-resize'));
+          await nextRender(group);
+          Polymer.flush();
+          group.items = group.items.slice(0, 2);
+          await nextRender(group);
+          Polymer.flush();
+          expect(overflow.hasAttribute('hidden')).to.be.true;
+        });
+
+        it('should render avatars in the list-box items', done => {
+          overlay.addEventListener('vaadin-overlay-open', () => {
+            const items = overlay.content.querySelectorAll('[theme="avatar-group-item"]');
+            expect(items.length).to.equal(3);
+            done();
+          });
+          group.style.width = '110px';
+          group.notifyResize();
+          Polymer.flush();
+          nextRender(group).then(() => overflow.click());
+        });
+
+        it('should re-render overflowing avatars on resize', done => {
+          overlay.addEventListener('vaadin-overlay-open', () => {
+            group.style.width = '75px';
+            group.notifyResize();
+            nextRender(group).then(() => {
+              Polymer.flush();
+              const items = overlay.content.querySelectorAll('[theme="avatar-group-item"]');
+              expect(items.length).to.equal(4);
+              done();
+            });
+          });
+          group.style.width = '110px';
+          group.notifyResize();
+          nextRender(group).then(() => {
+            Polymer.flush();
+            overflow.click();
+          });
+        });
+
+        it('should close overlay on resize when all avatars fit', done => {
+          overlay.addEventListener('vaadin-overlay-open', () => {
+            group.style.width = '';
+            group.notifyResize();
+            Polymer.flush();
+            nextRender(group).then(() => {
+              expect(overlay.opened).to.be.false;
+              done();
+            });
+          });
+          group.style.width = '110px';
+          group.notifyResize();
+          Polymer.flush();
+          nextRender(group).then(() => overflow.click());
+        });
+      });
+
       describe('overlay', () => {
         let overlay, overflow;
 

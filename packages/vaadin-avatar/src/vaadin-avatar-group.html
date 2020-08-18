@@ -5,6 +5,8 @@ This program is available under Apache License Version 2.0, available at https:/
 -->
 
 <link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../polymer/lib/utils/async.html">
+<link rel="import" href="../../polymer/lib/utils/debounce.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="../../iron-resizable-behavior/iron-resizable-behavior.html">
 <link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
@@ -17,11 +19,21 @@ This program is available under Apache License Version 2.0, available at https:/
   <template>
     <style>
       :host {
-        display: flex;
-        align-items: center;
+        display: block;
         --vaadin-avatar-group-overlap: 8px;
         --vaadin-avatar-group-overlap-border: 2px;
         --vaadin-avatar-size: 64px;
+      }
+
+      [part="container"] {
+        display: flex;
+        position: relative;
+        width: 100%;
+        flex-wrap: nowrap;
+      }
+
+      [part="avatar"] {
+        flex-shrink: 0;
       }
 
       [part="avatar"]:not(:first-child) {
@@ -43,8 +55,8 @@ This program is available under Apache License Version 2.0, available at https:/
         mask-position: calc(50% + var(--vaadin-avatar-size) - var(--vaadin-avatar-group-overlap) + var(--vaadin-avatar-outline-width));
       }
     </style>
-    <div id="container">
-      <template is="dom-repeat" items="[[__computeItems(items.*, max)]]">
+    <div id="container" part="container">
+      <template is="dom-repeat" items="[[__computeItems(items.*, __itemsInView, max)]]">
         <vaadin-avatar
           name="[[item.name]]"
           abbr="[[item.abbr]]"
@@ -58,8 +70,8 @@ This program is available under Apache License Version 2.0, available at https:/
       <vaadin-avatar
         id="overflow"
         part="avatar"
-        hidden$="[[!__maxReached]]"
-        abbr="[[__computeMore(items.length, max)]]"
+        hidden$="[[__computeMoreHidden(items.length, __itemsInView, __maxReached)]]"
+        abbr="[[__computeMore(items.length, __itemsInView, max)]]"
         theme$="[[theme]]"
         on-click="_onOverflowClick"
         on-keydown="_onOverflowKeyDown"
@@ -69,7 +81,7 @@ This program is available under Apache License Version 2.0, available at https:/
     <vaadin-avatar-group-overlay id="overlay" opened="{{_opened}}" on-vaadin-overlay-close="_onVaadinOverlayClose">
       <template>
         <vaadin-avatar-group-list-box on-keydown="_onListKeyDown">
-          <template is="dom-repeat" items="[[__computeExtraItems(items.*, max)]]">
+          <template is="dom-repeat" items="[[__computeExtraItems(items.*, __itemsInView, max)]]">
             <vaadin-item theme="avatar-group-item" role="option">
               <vaadin-avatar
                 name="[[item.name]]"
@@ -179,6 +191,12 @@ This program is available under Apache License Version 2.0, available at https:/
             },
 
             /** @private */
+            __itemsInView: {
+              type: Number,
+              value: null
+            },
+
+            /** @private */
             _opened: {
               type: Boolean,
               observer: '__openedChanged',
@@ -189,7 +207,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
         static get observers() {
           return [
-            '__computeMoreTitle(items.length, max)',
+            '__computeMoreTitle(items.length, __itemsInView, max)',
+            '__itemsChanged(items.length)',
             '__i18nItemsChanged(i18n.*, items.length)'
           ];
         }
@@ -203,6 +222,10 @@ This program is available under Apache License Version 2.0, available at https:/
           this.addEventListener('iron-resize', this._onResize.bind(this));
 
           this._overlayElement = this.shadowRoot.querySelector('vaadin-avatar-group-overlay');
+
+          Polymer.RenderStatus.afterNextRender(this, () => {
+            this.__setItemsInView();
+          });
         }
 
         /**
@@ -216,6 +239,14 @@ This program is available under Apache License Version 2.0, available at https:/
           if (name === 'dir') {
             this.__setPosition();
           }
+        }
+
+        /**
+         * @return {!Array<!HTMLElement>}
+         * @protected
+         */
+        get _avatars() {
+          return this.shadowRoot.querySelectorAll('vaadin-avatar');
         }
 
         /** @private */
@@ -247,7 +278,14 @@ This program is available under Apache License Version 2.0, available at https:/
 
         /** @private */
         _onResize() {
-          this.__setPosition();
+          this.__debounceResize = Polymer.Debouncer.debounce(
+            this.__debounceResize,
+            Polymer.Async.timeOut.after(0),
+            () => {
+              this.__setItemsInView();
+              this.__setPosition();
+            }
+          );
         }
 
         /** @private */
@@ -258,15 +296,17 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         /** @private */
-        __computeItems(arr, max) {
+        __computeItems(arr, itemsInView, max) {
           const items = arr.base || [];
-          return max != null ? items.slice(0, max) : items;
+          const limit = this.__getLimit(items.length, itemsInView, max);
+          return limit ? items.slice(0, limit) : items;
         }
 
         /** @private */
-        __computeExtraItems(arr, max) {
+        __computeExtraItems(arr, itemsInView, max) {
           const items = arr.base || [];
-          return max != null ? items.slice(max) : items;
+          const limit = this.__getLimit(items.length, itemsInView, max);
+          return limit ? items.slice(limit) : items;
         }
 
         /** @private */
@@ -275,22 +315,44 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         /** @private */
-        __computeMore(items, max) {
-          return `+${items - max}`;
+        __computeMore(items, itemsInView, max) {
+          return max != null ? `+${items - max}` : `+${items - itemsInView}`;
         }
 
         /** @private */
-        __computeMoreTitle(items, max) {
-          if (max == null) {
+        __computeMoreHidden(items, itemsInView, maxReached) {
+          return !maxReached && !(itemsInView && itemsInView < items);
+        }
+
+        /** @private */
+        __computeMoreTitle(items, itemsInView, max) {
+          const limit = this.__getLimit(items, itemsInView, max);
+          if (limit == null) {
             return;
           }
           const result = [];
-          for (let i = max; i < items; i++) {
+          for (let i = limit; i < items; i++) {
             const item = this.items[i];
             result.push(item.name || item.abbr || 'anonymous');
           }
           // override generated title attribute
           this.$.overflow.setAttribute('title', result.join('\n'));
+        }
+
+        /** @private */
+        __getLimit(items, itemsInView, max) {
+          let limit = null;
+          if (max != null) {
+            limit = max;
+          } else if (itemsInView && itemsInView < items) {
+            limit = itemsInView;
+          }
+          return limit;
+        }
+
+        /** @private */
+        __itemsChanged(items) {
+          this.__setItemsInView();
         }
 
         /** @private */
@@ -328,6 +390,36 @@ This program is available under Apache License Version 2.0, available at https:/
             window.removeEventListener('scroll', this.__boundSetPosition, true);
           }
           this.$.overflow.setAttribute('aria-expanded', opened === true);
+        }
+
+        /** @private */
+        __setItemsInView() {
+          const avatars = this._avatars;
+          if (!avatars || avatars.length < 2) {
+            return;
+          }
+
+          // assume all the avatars have the same width
+          const avatarWidth = avatars[0].clientWidth;
+
+          // take negative margin into account
+          const {marginLeft, marginRight} = getComputedStyle(avatars[1]);
+
+          const offset = this.getAttribute('dir') == 'rtl' ?
+            parseInt(marginRight, 0) - parseInt(marginLeft, 0) :
+            parseInt(marginLeft, 0) - parseInt(marginRight, 0);
+
+          const result = Math.floor((this.$.container.offsetWidth - avatarWidth) / (avatarWidth + offset));
+
+          // close overlay if all avatars become visible
+          if (result >= this.items.length && this._opened) {
+            this.$.overlay.close();
+            // FIXME: hack to avoid jump before closing
+            this.$.overlay._flushAnimation('closing');
+          }
+
+          // reserve space for overflow avatar
+          this.__itemsInView = result;
         }
 
         /** @private */
