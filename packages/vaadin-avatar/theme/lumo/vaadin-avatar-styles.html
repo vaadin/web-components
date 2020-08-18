@@ -35,21 +35,24 @@
 
       [part="abbr"] {
         font-family: var(--lumo-font-family);
-        font-size: 3em;
+        font-size: 2.4375em;
         font-weight: 500;
       }
 
-      :host([theme~="xlarge"]) [part="abbr"],
+      :host([theme~="xlarge"]) [part="abbr"] {
+        font-size: 2.5em;
+      }
+
       :host([theme~="large"]) [part="abbr"] {
-        font-size: 2.875em;
+        font-size: 2.375em;
       }
 
       :host([theme~="small"]) [part="abbr"] {
-        font-size: 3.2em;
+        font-size: 2.75em;
       }
 
       :host([theme~="xsmall"]) [part="abbr"] {
-        font-size: 3.5em;
+        font-size: 3em;
       }
 
       :host([theme~="xlarge"]) {

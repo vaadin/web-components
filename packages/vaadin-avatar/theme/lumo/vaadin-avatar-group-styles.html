@@ -3,6 +3,45 @@
 <link rel="import" href="../../../vaadin-lumo-styles/spacing.html">
 <link rel="import" href="../../../vaadin-lumo-styles/mixins/menu-overlay.html">
 
+<script>
+  (function() {
+    const isIE = !!(navigator.userAgent.match(/Trident/) && !navigator.userAgent.match(/MSIE/));
+
+    // NOTE(web-padawan): re-declaring same custom CSS property crashes IE11
+    if (!isIE) {
+      const AvatarGroupStyles = document.createElement('dom-module');
+      AvatarGroupStyles.setAttribute('theme-for', 'vaadin-avatar-group');
+
+      const tpl = document.createElement('template');
+      tpl.innerHTML = `
+        <style>
+          :host([theme~="xlarge"]) {
+            --vaadin-avatar-group-overlap: 12px;
+            --vaadin-avatar-group-overlap-border: 3px;
+          }
+
+          :host([theme~="large"]) {
+            --vaadin-avatar-group-overlap: 10px;
+            --vaadin-avatar-group-overlap-border: 3px;
+          }
+
+          :host([theme~="small"]) {
+            --vaadin-avatar-group-overlap: 6px;
+            --vaadin-avatar-group-overlap-border: 2px;
+          }
+
+          :host([theme~="xsmall"]) {
+            --vaadin-avatar-group-overlap: 4px;
+            --vaadin-avatar-group-overlap-border: 2px;
+          }
+        </style>
+      `;
+      AvatarGroupStyles.appendChild(tpl);
+      AvatarGroupStyles.register('lumo-avatar-group-variants');
+    }
+  })();
+</script>
+
 <dom-module id="lumo-avatar-group" theme-for="vaadin-avatar-group">
   <template>
     <style>
