@@ -26,9 +26,17 @@
 ```
 -->
 ```html
-<vaadin-avatar>
-  ...
-</vaadin-avatar>
+<vaadin-avatar></vaadin-avatar>
+<vaadin-avatar name="Jens Jansson"></vaadin-avatar>
+<vaadin-avatar abbr="SK"></vaadin-avatar>
+<vaadin-avatar-group max="2"></vaadin-avatar-group>
+<script>
+  document.querySelector('vaadin-avatar-group').items = [
+    {name: 'Foo Bar', colorIndex: 1},
+    {colorIndex: 2},
+    {name: 'Foo Bar', colorIndex: 3}
+  ];
+</script>
 ```
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-avatar/master/screenshot.png" width="200" alt="Screenshot of vaadin-avatar">](https://vaadin.com/components/vaadin-avatar)
@@ -54,6 +62,7 @@ Once installed, import it in your application:
 
 ```html
 <link rel="import" href="bower_components/vaadin-avatar/vaadin-avatar.html">
+<link rel="import" href="bower_components/vaadin-avatar/vaadin-avatar-group.html">
 ```
 
 ### npm (ES Modules compatible version)
@@ -68,6 +77,7 @@ Once installed, import it in your application:
 
 ```js
 import '@vaadin/vaadin-avatar/vaadin-avatar.js';
+import '@vaadin/vaadin-avatar/vaadin-avatar-group.js';
 ```
 
 ## Getting started
@@ -78,17 +88,20 @@ To use the Material theme, import the correspondent file from the `theme/materia
 
 ## Entry points
 
-- The component with the Lumo theme:
+- The components with the Lumo theme:
 
   `theme/lumo/vaadin-avatar.html`
+  `theme/lumo/vaadin-avatar-group.html`
 
-- The component with the Material theme:
+- The components with the Material theme:
 
   `theme/material/vaadin-avatar.html`
+  `theme/material/vaadin-avatar-group.html`
 
-- Alias for `theme/lumo/vaadin-avatar.html`:
+- Alias for `theme/lumo/vaadin-avatar.html` `theme/lumo/vaadin-avatar-group.html`:
 
   `vaadin-avatar.html`
+  `vaadin-avatar-group.html`
 
 
 ## Running demos and tests in a browser

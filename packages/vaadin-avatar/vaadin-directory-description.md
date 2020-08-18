@@ -17,7 +17,15 @@
 ## Example Usage
 
 ```html
-<vaadin-avatar>
-  ...
-</vaadin-avatar>
+<vaadin-avatar></vaadin-avatar>
+<vaadin-avatar name="Jens Jansson"></vaadin-avatar>
+<vaadin-avatar abbr="SK"></vaadin-avatar>
+<vaadin-avatar-group max="2"></vaadin-avatar-group>
+<script>
+  document.querySelector('vaadin-avatar-group').items = [
+    {name: 'Foo Bar', colorIndex: 1},
+    {colorIndex: 2},
+    {name: 'Foo Bar', colorIndex: 3}
+  ];
+</script>
 ```
