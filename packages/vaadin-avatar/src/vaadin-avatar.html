@@ -52,6 +52,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
       :host([has-color-index]) {
         position: relative;
+        background-color: var(--vaadin-avatar-user-color);
       }
 
       :host([has-color-index])::before {
@@ -63,7 +64,7 @@ This program is available under Apache License Version 2.0, available at https:/
         bottom: 0;
         right: 0;
         border-radius: 50%;
-        box-shadow: inset 0 0 0 2px var(--vaadin-avatar-border-color);
+        box-shadow: inset 0 0 0 2px var(--vaadin-avatar-user-color);
       }
     </style>
     <img hidden$="[[!__imgVisible]]" src$="[[img]]" aria-hidden="true">
@@ -244,10 +245,10 @@ This program is available under Apache License Version 2.0, available at https:/
             const color = `var(--vaadin-user-color-${index})`;
             if (window.ShadyCSS && !window.ShadyCSS.nativeCss) {
               window.ShadyCSS.styleSubtree(this, {
-                '--vaadin-avatar-border-color': color
+                '--vaadin-avatar-user-color': color
               });
             } else {
-              this.style.setProperty('--vaadin-avatar-border-color', color);
+              this.style.setProperty('--vaadin-avatar-user-color', color);
             }
           } else {
             this.removeAttribute('has-color-index');

@@ -20,6 +20,10 @@
         -moz-osx-font-smoothing: grayscale;
       }
 
+      :host([has-color-index]) {
+        color: var(--lumo-base-color);
+      }
+
       :host([focus-ring]) {
         border-color: var(--lumo-primary-color-50pct);
       }

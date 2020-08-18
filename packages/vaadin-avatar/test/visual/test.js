@@ -22,10 +22,10 @@ gemini.suite('vaadin-avatar', function(rootSuite) {
         .capture(`vaadin-avatar`);
     });
 
-    gemini.suite(`border-tests-${theme}`, function(suite) {
+    gemini.suite(`colors-tests-${theme}`, function(suite) {
       suite
-        .setUrl(`/border.html?theme=${theme}`)
-        .setCaptureElements('#border-tests')
+        .setUrl(`/colors.html?theme=${theme}`)
+        .setCaptureElements('#colors-tests')
         .capture(`vaadin-avatar`);
     });
 
@@ -39,13 +39,6 @@ gemini.suite('vaadin-avatar', function(rootSuite) {
             window.document.documentElement.setAttribute('dir', 'rtl');
           });
         });
-    });
-
-    gemini.suite(`group-border-tests-${theme}`, function(suite) {
-      suite
-        .setUrl(`/group-border.html?theme=${theme}`)
-        .setCaptureElements('#group-tests')
-        .capture(`vaadin-avatar-group`);
     });
 
     gemini.suite(`scaled-tests-${theme}`, function(suite) {
@@ -70,6 +63,15 @@ gemini.suite('vaadin-avatar', function(rootSuite) {
             window.document.documentElement.setAttribute('dir', 'rtl');
           });
         });
+    });
+  });
+
+  ['lumo', 'lumo-dark', 'material'].forEach(theme => {
+    gemini.suite(`group-colors-tests-${theme}`, function(suite) {
+      suite
+        .setUrl(`/group-colors.html?theme=${theme}`)
+        .setCaptureElements('#group-tests')
+        .capture(`vaadin-avatar-group`);
     });
   });
 

@@ -16,13 +16,17 @@
         -moz-osx-font-smoothing: grayscale;
       }
 
+      :host([has-color-index]) {
+        color: var(--material-primary-contrast-color);
+      }
+
       :host([focus-ring]) {
         border-color: var(--material-primary-color);
       }
 
       [part="icon"],
       [part="abbr"] {
-        fill: var(--material-secondary-text-color);
+        fill: currentColor;
       }
 
       [part="abbr"] {
