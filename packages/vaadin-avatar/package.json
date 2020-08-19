@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-avatar",
-  "version": "1.0.0-alpha6",
+  "version": "1.0.0-alpha7",
   "description": "vaadin-avatar",
   "main": "vaadin-avatar-group.html",
   "repository": "vaadin/vaadin-avatar",
