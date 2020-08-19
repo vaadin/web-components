@@ -610,6 +610,82 @@
           overflow.click();
         });
       });
+
+      describe('announcements', () => {
+        // NOTE: See <iron-a11y-announcer> API
+        function waitForAnnounce(callback) {
+          var listener = event => {
+            document.body.removeEventListener('iron-announce', listener);
+            callback(event.detail.text);
+          };
+          document.body.addEventListener('iron-announce', listener);
+        }
+
+        beforeEach(async() => {
+          group.items = [
+            {name: 'AA'},
+            {name: 'BB'},
+            {name: 'CC'}
+          ];
+          await nextRender(group);
+        });
+
+        it('should announce when adding single item', done => {
+          waitForAnnounce(text => {
+            expect(text).to.equal('DD joined');
+            done();
+          });
+          group.splice('items', 2, 0, {name: 'DD'});
+        });
+
+        it('should announce when removing single item', done => {
+          waitForAnnounce(text => {
+            expect(text).to.equal('CC left');
+            done();
+          });
+          group.splice('items', 2, 1);
+        });
+
+        it('should announce when adding multiple items', done => {
+          waitForAnnounce(text => {
+            expect(text).to.equal('DD joined, EE joined');
+            done();
+          });
+          group.splice('items', 2, 0, {name: 'DD'}, {name: 'EE'});
+        });
+
+        it('should announce when removing multiple items', done => {
+          waitForAnnounce(text => {
+            expect(text).to.equal('BB left, CC left');
+            done();
+          });
+          group.splice('items', 1, 2);
+        });
+
+        it('should announce when adding and removing single item', done => {
+          waitForAnnounce(text => {
+            expect(text).to.equal('CC left, DD joined');
+            done();
+          });
+          group.splice('items', 2, 1, {name: 'DD'});
+        });
+
+        it('should announce when adding and removing multiple items', done => {
+          waitForAnnounce(text => {
+            expect(text).to.equal('BB left, CC left, DD joined, EE joined');
+            done();
+          });
+          group.splice('items', 1, 2, {name: 'DD'}, {name: 'EE'});
+        });
+
+        it('should announce when the items property is reset', done => {
+          waitForAnnounce(text => {
+            expect(text).to.equal('BB left, CC left');
+            done();
+          });
+          group.set('items', [group.items[0]]);
+        });
+      });
     });
 
     describe('in column flex layout', () => {

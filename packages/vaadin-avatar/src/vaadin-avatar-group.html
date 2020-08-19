@@ -7,7 +7,9 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../polymer/polymer-element.html">
 <link rel="import" href="../../polymer/lib/utils/async.html">
 <link rel="import" href="../../polymer/lib/utils/debounce.html">
+<link rel="import" href="../../iron-a11y-announcer/iron-a11y-announcer.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
+<link rel="import" href="../../iron-a11y-announcer/iron-a11y-announcer.html">
 <link rel="import" href="../../iron-resizable-behavior/iron-resizable-behavior.html">
 <link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
 <link rel="import" href="../../vaadin-item/vaadin-item.html">
@@ -57,7 +59,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     </style>
     <div id="container" part="container">
-      <template is="dom-repeat" items="[[__computeItems(items.*, __itemsInView, max)]]">
+      <template id="items" is="dom-repeat" items="[[__computeItems(items.*, __itemsInView, max)]]">
         <vaadin-avatar
           name="[[item.name]]"
           abbr="[[item.abbr]]"
@@ -167,7 +169,11 @@ This program is available under Apache License Version 2.0, available at https:/
                   activeUsers: {
                     one: 'Currently one active user',
                     many: 'Currently {count} active users'
-                  }
+                  },
+                  // Screen reader announcement when user joins group.
+                  joined: '{user} joined',
+                  // Screen reader announcement when user leaves group.
+                  left: '{user} left'
                 }
             * @type {!AvatarGroupI18n}
             * @default {English/US}
@@ -180,7 +186,9 @@ This program is available under Apache License Version 2.0, available at https:/
                   activeUsers: {
                     one: 'Currently one active user',
                     many: 'Currently {count} active users'
-                  }
+                  },
+                  joined: '{user} joined',
+                  left: '{user} left'
                 };
               }
             },
@@ -209,7 +217,7 @@ This program is available under Apache License Version 2.0, available at https:/
         static get observers() {
           return [
             '__computeMoreTitle(items.length, __itemsInView, max)',
-            '__itemsChanged(items.length)',
+            '__itemsChanged(items.splices, items.*)',
             '__i18nItemsChanged(i18n.*, items.length)'
           ];
         }
@@ -217,6 +225,8 @@ This program is available under Apache License Version 2.0, available at https:/
         /** @protected */
         ready() {
           super.ready();
+
+          Polymer.IronA11yAnnouncer.requestAvailability();
 
           this.__boundSetPosition = this.__setPosition.bind(this);
 
@@ -248,6 +258,24 @@ This program is available under Apache License Version 2.0, available at https:/
          */
         get _avatars() {
           return this.shadowRoot.querySelectorAll('vaadin-avatar');
+        }
+
+        /** @private */
+        __announce(text) {
+          this.dispatchEvent(
+            new CustomEvent('iron-announce', {
+              bubbles: true,
+              composed: true,
+              detail: {
+                text
+              }
+            })
+          );
+        }
+
+        /** @private */
+        __getMessage(user, action) {
+          return action.replace('{user}', user.name || user.abbr || this.i18n.anonymous);
         }
 
         /** @private */
@@ -359,8 +387,46 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         /** @private */
-        __itemsChanged(items) {
+        __itemsChanged(splices, itemsChange) {
+          const items = itemsChange.base;
+          this.$.items.render();
           this.__setItemsInView();
+
+          // mutation using group.splice('items')
+          if (splices && Array.isArray(splices.indexSplices)) {
+            splices.indexSplices.forEach((mutation) => {
+              this.__announceItemsChange(items, mutation);
+            });
+          } else if (Array.isArray(items) && Array.isArray(this.__oldItems)) {
+            // mutation using group.set('items')
+            const diff = Polymer.ArraySplice.calculateSplices(items, this.__oldItems);
+            diff.forEach((mutation) => {
+              this.__announceItemsChange(items, mutation);
+            });
+          }
+
+          this.__oldItems = items;
+        }
+
+        /** @private */
+        __announceItemsChange(items, mutation) {
+          const {addedCount, index, removed} = mutation;
+          let addedMsg = [];
+          let removedMsg = [];
+          if (addedCount) {
+            addedMsg = items
+              .slice(index, index + addedCount)
+              .map((user) => this.__getMessage(user, this.i18n.joined || '{user} joined'));
+          }
+
+          if (removed) {
+            removedMsg = removed.map((user) => this.__getMessage(user, this.i18n.left || '{user} left'));
+          }
+
+          const messages = removedMsg.concat(addedMsg);
+          if (messages.length > 0) {
+            this.__announce(messages.join(', '));
+          }
         }
 
         /** @private */

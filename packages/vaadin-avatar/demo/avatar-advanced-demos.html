@@ -73,6 +73,32 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Screen reader announcements</h3>
+    <p>
+      When user joins or leaves the avatar group, a corresponding screen reader announcement is
+      dispatched using <code>iron-announce</code> custom event. In the example below, avatars change
+      very 3 seconds.
+    </p>
+    <vaadin-demo-snippet id="avatar-advanced-demos-sr" when-defined="vaadin-avatar-group">
+      <template preserve-content>
+        <vaadin-avatar-group></vaadin-avatar-group>
+        <script>
+          window.addDemoReadyListener('#avatar-advanced-demos-sr', function(document) {
+            const group = document.querySelector('vaadin-avatar-group');
+            group.items = [{name: 'Pekka Maanpää'}, {name: 'Jens Jansson'}];
+
+            var i = 0;
+
+            setInterval(function() {
+              const user = i % 2 === 0 ? {name: 'Serhii Kulykov'} : {name: 'Jens Jansson'};
+              group.splice('items', 1, 1, user);
+              i += 1;
+            }, 3000);
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
   </template>
   <script>
     class AvatarAdvancedDemos extends DemoReadyEventEmitter(AvatarDemo(Polymer.Element)) {
