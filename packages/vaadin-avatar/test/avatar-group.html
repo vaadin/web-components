@@ -564,5 +564,31 @@
         });
       });
     });
+
+    describe('in column flex layout', () => {
+      let layout;
+      let group;
+
+      beforeEach(async() => {
+        layout = fixture('layout');
+        group = layout.firstElementChild;
+        group.items = [
+          {abbr: 'PM'},
+          {name: 'Yuriy Yevstihnyeyev'},
+          {abbr: 'SK'},
+          {abbr: 'LA'},
+          {name: 'Jens Jansson'}
+        ];
+        await nextRender(group);
+      });
+
+      it('should have width of the parent', () => {
+        expect(group.offsetWidth).to.equal(layout.offsetWidth);
+      });
+
+      it('should not show overflow avatar', () => {
+        expect(group.$.overflow.hasAttribute('hidden')).to.be.true;
+      });
+    });
   </script>
 </body>
