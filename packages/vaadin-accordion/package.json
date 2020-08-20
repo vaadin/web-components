@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-accordion",
-  "version": "1.2.0-beta1",
+  "version": "1.2.0",
   "description": "vaadin-accordion",
   "main": "vaadin-accordion.html",
   "repository": "vaadin/vaadin-accordion",
