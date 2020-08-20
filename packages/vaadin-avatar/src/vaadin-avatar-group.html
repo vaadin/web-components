@@ -361,7 +361,7 @@ This program is available under Apache License Version 2.0, available at https:/
           if (base && base.activeUsers) {
             const field = items === 1 ? 'one' : 'many';
             if (base.activeUsers[field]) {
-              this.setAttribute('aria-label', base.activeUsers[field].replace('{count}', items));
+              this.setAttribute('aria-label', base.activeUsers[field].replace('{count}', items || 0));
             }
           }
         }
@@ -395,7 +395,9 @@ This program is available under Apache License Version 2.0, available at https:/
         /** @private */
         __setItemsInView() {
           const avatars = this._avatars;
-          if (!avatars || avatars.length < 2) {
+          const items = this.items;
+
+          if (!items || !avatars || avatars.length < 2) {
             return;
           }
 
@@ -412,7 +414,7 @@ This program is available under Apache License Version 2.0, available at https:/
           const result = Math.floor((this.$.container.offsetWidth - avatarWidth) / (avatarWidth + offset));
 
           // close overlay if all avatars become visible
-          if (result >= this.items.length && this._opened) {
+          if (result >= items.length && this._opened) {
             this.$.overlay.close();
             // FIXME: hack to avoid jump before closing
             this.$.overlay._flushAnimation('closing');

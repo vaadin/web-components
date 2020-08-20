@@ -452,6 +452,18 @@
           expect(group.getAttribute('aria-label')).to.equal('One active user');
         });
 
+        it('should set aria-label properly when items is empty array', () => {
+          group.i18n = customI18n;
+          group.items = [];
+          expect(group.getAttribute('aria-label')).to.equal('0 active users');
+        });
+
+        it('should set aria-label properly when items is null', () => {
+          group.i18n = customI18n;
+          group.items = null;
+          expect(group.getAttribute('aria-label')).to.equal('0 active users');
+        });
+
         it('should pass i18n property to avatars', () => {
           group.i18n = customI18n;
           const items = group.shadowRoot.querySelectorAll('vaadin-avatar');
