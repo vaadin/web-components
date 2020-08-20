@@ -27,7 +27,7 @@
   "dependencies": {
     "polymer": "^2.0.0",
     "vaadin-themable-mixin": "vaadin/vaadin-themable-mixin#^1.6.1",
-    "vaadin-item": "vaadin/vaadin-item#^2.3.0-beta1",
+    "vaadin-item": "vaadin/vaadin-item#^2.3.0",
     "vaadin-list-mixin": "vaadin/vaadin-list-mixin#^2.5.0",
     "vaadin-lumo-styles": "vaadin/vaadin-lumo-styles#^1.1.0",
     "vaadin-material-styles": "vaadin/vaadin-material-styles#^1.1.0",
