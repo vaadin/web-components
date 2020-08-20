@@ -17,6 +17,14 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="layout">
+    <template>
+      <div style="display: flex; width: 200px; flex-direction: column; align-items: flex-start;">
+        <vaadin-avatar-group></vaadin-avatar-group>
+      </div>
+    </template>
+  </test-fixture>
+
   <script>
     function nextRender(target) {
       return new Promise(resolve => {
@@ -176,6 +184,26 @@
           const items = group.shadowRoot.querySelectorAll('vaadin-avatar');
           expect(items.length).to.equal(3);
           expect(overflow.abbr).to.equal('+3');
+        });
+
+        it('should always show at least two avatars', async() => {
+          group.set('items', group.items.slice(0, 2));
+          group.style.width = '50px';
+          group.notifyResize();
+          await nextRender(group);
+          Polymer.flush();
+          const items = group.shadowRoot.querySelectorAll('vaadin-avatar:not([hidden])');
+          expect(items.length).to.equal(2);
+        });
+
+        // threshold in IE is different because it does not use overlapping
+        const isIE = !!(navigator.userAgent.match(/Trident/) && !navigator.userAgent.match(/MSIE/));
+        it('should not show overlay with only one avatar', async() => {
+          group.style.width = isIE ? '180px' : '170px';
+          group.notifyResize();
+          await nextRender(group);
+          Polymer.flush();
+          expect(overflow.hasAttribute('hidden')).to.be.true;
         });
 
         it('should re-render avatars on items change', async() => {
