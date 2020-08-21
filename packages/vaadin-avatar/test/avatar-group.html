@@ -93,8 +93,13 @@
             {abbr: 'JJ'},
             {}
           ];
-          group.max = 2;
+          group.max = 3;
           await nextRender(group);
+        });
+
+        it('should render avatar based on max, including overflow avatar', () => {
+          const items = group.shadowRoot.querySelectorAll('vaadin-avatar');
+          expect(items.length).to.equal(group.max);
         });
 
         it('should set abbr property on the overflow avatar', async() => {
@@ -114,24 +119,20 @@
           expect(overflow.hasAttribute('hidden')).to.be.false;
         });
 
-        it('should render avatar based on max, plus overflow avatar', async() => {
+        it('should show at least two avatars if max is below 2', async() => {
           group.max = 1;
           await nextRender(group);
           const items = group.shadowRoot.querySelectorAll('vaadin-avatar');
-          expect(items.length).to.equal(group.max + 1);
+          expect(items.length).to.equal(2);
         });
 
         it('should hide overflow avatar when max property is set to null', async() => {
-          group.max = 1;
-          await nextRender(group);
           group.max = null;
           await nextRender(group);
           expect(group.$.overflow.hasAttribute('hidden')).to.be.true;
         });
 
         it('should hide overflow avatar when max property is set to undefined', async() => {
-          group.max = 1;
-          await nextRender(group);
           group.max = undefined;
           await nextRender(group);
           expect(group.$.overflow.hasAttribute('hidden')).to.be.true;
@@ -308,7 +309,7 @@
             const list = overlay.content.querySelector('vaadin-avatar-group-list-box');
             expect(list).to.be.ok;
             const items = overlay.content.querySelectorAll('[theme="avatar-group-item"]');
-            expect(items.length).to.equal(2);
+            expect(items.length).to.equal(3);
             done();
           });
           overflow.click();
@@ -317,8 +318,9 @@
         it('should render avatar names in the list-box items', done => {
           overlay.addEventListener('vaadin-overlay-open', () => {
             const items = overlay.content.querySelectorAll('[theme="avatar-group-item"]');
-            expect(items[0].textContent.trim()).to.equal(group.items[2].name);
-            expect(items[1].textContent.trim()).to.equal(group.items[3].name);
+            expect(items[0].textContent.trim()).to.equal(group.items[1].name);
+            expect(items[1].textContent.trim()).to.equal(group.items[2].name);
+            expect(items[2].textContent.trim()).to.equal(group.items[3].name);
             done();
           });
           overflow.click();
@@ -329,6 +331,7 @@
             const avatars = overlay.content.querySelectorAll('vaadin-avatar');
             expect(avatars[0].getAttribute('tabindex')).to.equal('-1');
             expect(avatars[1].getAttribute('tabindex')).to.equal('-1');
+            expect(avatars[2].getAttribute('tabindex')).to.equal('-1');
             done();
           });
           overflow.click();

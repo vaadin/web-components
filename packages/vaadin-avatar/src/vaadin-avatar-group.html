@@ -146,9 +146,9 @@ This program is available under Apache License Version 2.0, available at https:/
             },
 
             /**
-             * The maximum number of avatars to display.
-             * By default, all the avatars are displayed.
-             * When max is set, the overflowing avatars are grouped into one avatar.
+             * The maximum number of avatars to display. By default, all the avatars are displayed.
+             * When max is set, the overflowing avatars are grouped into one avatar with a dropdown.
+             * Setting 0 or 1 has no effect so there are always at least two avatars visible.
              */
             max: {
               type: Number
@@ -317,7 +317,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         /** @private */
         __computeMore(items, itemsInView, max) {
-          return max != null ? `+${items - max}` : `+${items - itemsInView}`;
+          return max != null ? `+${items - max + 1}` : `+${items - itemsInView}`;
         }
 
         /** @private */
@@ -343,8 +343,9 @@ This program is available under Apache License Version 2.0, available at https:/
         /** @private */
         __getLimit(items, itemsInView, max) {
           let limit = null;
-          if (max != null) {
-            limit = max;
+          if (max != null && max < items) {
+            // handle max set to 0 or 1
+            limit = Math.max(max, 2) - 1;
           } else if (itemsInView && itemsInView < items) {
             limit = itemsInView;
           }

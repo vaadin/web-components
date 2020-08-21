@@ -34,6 +34,11 @@
     </vaadin-demo-snippet>
 
     <h3>Max property</h3>
+    <p>
+      When <code>max</code> property is set on the group, it limits the number of the avatars shown,
+      including the avatar used to toggle a menu with the remaining avatars that exceed this limit.
+      Setting number less than 2 has no effect so there are always at least two avatars shown.
+    </p>
     <vaadin-demo-snippet id="avatar-basic-demos-avatar-group-max" when-defined="vaadin-avatar-group">
       <template preserve-content>
         <vaadin-avatar-group max="3"></vaadin-avatar-group>
