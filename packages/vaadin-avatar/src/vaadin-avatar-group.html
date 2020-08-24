@@ -162,22 +162,29 @@ This program is available under Apache License Version 2.0, available at https:/
              * _i18n_ object or just the property you want to modify.
              *
              * The object has the following JSON structure and default values:
-                {
-                  // Translation of the anonymous user avatar title.
-                  anonymous: 'anonymous',
-                  // Translation of the avatar group accessible label.
-                  activeUsers: {
-                    one: 'Currently one active user',
-                    many: 'Currently {count} active users'
-                  },
-                  // Screen reader announcement when user joins group.
-                  joined: '{user} joined',
-                  // Screen reader announcement when user leaves group.
-                  left: '{user} left'
-                }
-            * @type {!AvatarGroupI18n}
-            * @default {English/US}
-            */
+             * ```
+             * {
+             *   // Translation of the anonymous user avatar title.
+             *   anonymous: 'anonymous',
+             *   // Translation of the avatar group accessible label.
+             *   // {count} is replaced with the actual count of users.
+             *   activeUsers: {
+             *     one: 'Currently one active user',
+             *     many: 'Currently {count} active users'
+             *   },
+             *   // Screen reader announcement when user joins group.
+             *   // {user} is replaced with the name or abbreviation.
+             *   // When neither is set, "anonymous" is used instead.
+             *   joined: '{user} joined',
+             *   // Screen reader announcement when user leaves group.
+             *   // {user} is replaced with the name or abbreviation.
+             *   // When neither is set, "anonymous" is used instead.
+             *   left: '{user} left'
+             * }
+             * ```
+             * @type {!AvatarGroupI18n}
+             * @default {English/US}
+             */
             i18n: {
               type: Object,
               value: () => {

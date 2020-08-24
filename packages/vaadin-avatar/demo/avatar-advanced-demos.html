@@ -75,25 +75,32 @@
 
     <h3>Screen reader announcements</h3>
     <p>
-      When user joins or leaves the avatar group, a corresponding screen reader announcement is
-      dispatched using <code>iron-announce</code> custom event. In the example below, avatars change
-      very 3 seconds.
+      When avatar is added or removed from the group, a corresponding screen reader announcement is
+      dispatched using <code>iron-announce</code> event handled by <code>iron-a11y-announcer</code>
+      element.
+    </p>
+    <p>
+      Check the checkbox in the example below to toggle changing avatars change every 4 seconds.
     </p>
     <vaadin-demo-snippet id="avatar-advanced-demos-sr" when-defined="vaadin-avatar-group">
       <template preserve-content>
+        <vaadin-checkbox>Toggle avatars every 4 seconds</vaadin-checkbox>
         <vaadin-avatar-group></vaadin-avatar-group>
         <script>
           window.addDemoReadyListener('#avatar-advanced-demos-sr', function(document) {
+            const checkbox = document.querySelector('vaadin-checkbox');
             const group = document.querySelector('vaadin-avatar-group');
             group.items = [{name: 'Pekka Maanpää'}, {name: 'Jens Jansson'}];
 
             var i = 0;
-
             setInterval(function() {
+              if (!checkbox.checked) {
+                return;
+              }
               const user = i % 2 === 0 ? {name: 'Serhii Kulykov'} : {name: 'Jens Jansson'};
               group.splice('items', 1, 1, user);
               i += 1;
-            }, 3000);
+            }, 4000);
           });
         </script>
       </template>
