@@ -117,12 +117,28 @@
           const overflow = group.$.overflow;
           overflow.click();
           expect(overflow.hasAttribute('hidden')).to.be.false;
+          group.$.overlay.close();
         });
 
         it('should show at least two avatars if max is below 2', async() => {
           group.max = 1;
           await nextRender(group);
           const items = group.shadowRoot.querySelectorAll('vaadin-avatar');
+          expect(items.length).to.equal(2);
+        });
+
+        it('should set abbr property correctly if max is below 2', async() => {
+          group.max = 1;
+          await nextRender(group);
+          const overflow = group.$.overflow;
+          expect(overflow.abbr).to.equal('+4');
+        });
+
+        it('should show two avatars if max is below 2', async() => {
+          group.items = group.items.slice(0, 2);
+          group.max = 1;
+          await nextRender(group);
+          const items = group.shadowRoot.querySelectorAll('vaadin-avatar:not([hidden])');
           expect(items.length).to.equal(2);
         });
 
