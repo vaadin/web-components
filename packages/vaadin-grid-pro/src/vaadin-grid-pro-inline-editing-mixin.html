@@ -322,6 +322,13 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         if (editor) {
           const value = column._getEditorValue(editor);
           if (value !== this.get(column.path, model.item)) {
+            // In some cases, where the value comes from the editor's change
+            // event (eg. custom editor in vaadin-grid-pro-flow), the event is
+            // not dispatched in FF/Safari/Edge. That's due the change event
+            // doesn't occur when the editor is removed from the DOM. Manually
+            // calling blur makes the event to be dispatched.
+            editor.blur();
+
             this.dispatchEvent(new CustomEvent('item-property-changed', {
               detail: {
                 index: model.index,
