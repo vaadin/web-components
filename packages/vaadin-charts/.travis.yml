@@ -25,9 +25,6 @@ addons:
   firefox: "66.0"
   chrome: stable
   ssh_known_hosts: app.fi
-  sauce_connect:
-    username: $SAUCE_USERNAME
-    access_key: $SAUCE_ACCESS_KEY
 
 jobs:
   include:
