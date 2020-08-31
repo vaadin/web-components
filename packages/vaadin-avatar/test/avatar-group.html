@@ -84,7 +84,7 @@
         });
       });
 
-      describe('max property', () => {
+      describe('maxItemsVisible property', () => {
         beforeEach(async() => {
           group.items = [
             {abbr: 'PM'},
@@ -93,13 +93,13 @@
             {abbr: 'JJ'},
             {}
           ];
-          group.max = 3;
+          group.maxItemsVisible = 3;
           await nextRender(group);
         });
 
-        it('should render avatar based on max, including overflow avatar', () => {
+        it('should render avatar based on maxItemsVisible, including overflow avatar', () => {
           const items = group.shadowRoot.querySelectorAll('vaadin-avatar');
-          expect(items.length).to.equal(group.max);
+          expect(items.length).to.equal(group.maxItemsVisible);
         });
 
         it('should set abbr property on the overflow avatar', async() => {
@@ -120,42 +120,42 @@
           group.$.overlay.close();
         });
 
-        it('should show at least two avatars if max is below 2', async() => {
-          group.max = 1;
+        it('should show at least two avatars if maxItemsVisible is below 2', async() => {
+          group.maxItemsVisible = 1;
           await nextRender(group);
           const items = group.shadowRoot.querySelectorAll('vaadin-avatar');
           expect(items.length).to.equal(2);
         });
 
-        it('should set abbr property correctly if max is below 2', async() => {
-          group.max = 1;
+        it('should set abbr property correctly if maxItemsVisible is below 2', async() => {
+          group.maxItemsVisible = 1;
           await nextRender(group);
           const overflow = group.$.overflow;
           expect(overflow.abbr).to.equal('+4');
         });
 
-        it('should show two avatars if max is below 2', async() => {
+        it('should show two avatars if maxItemsVisible is below 2', async() => {
           group.items = group.items.slice(0, 2);
-          group.max = 1;
+          group.maxItemsVisible = 1;
           await nextRender(group);
           const items = group.shadowRoot.querySelectorAll('vaadin-avatar:not([hidden])');
           expect(items.length).to.equal(2);
         });
 
-        it('should hide overflow avatar when max property is set to null', async() => {
-          group.max = null;
+        it('should hide overflow avatar when maxItemsVisible property is set to null', async() => {
+          group.maxItemsVisible = null;
           await nextRender(group);
           expect(group.$.overflow.hasAttribute('hidden')).to.be.true;
         });
 
-        it('should hide overflow avatar when max property is set to undefined', async() => {
-          group.max = undefined;
+        it('should hide overflow avatar when maxItemsVisible property is set to undefined', async() => {
+          group.maxItemsVisible = undefined;
           await nextRender(group);
           expect(group.$.overflow.hasAttribute('hidden')).to.be.true;
         });
 
         it('should hide overflow avatar when items property is changed', async() => {
-          group.max = 2;
+          group.maxItemsVisible = 2;
           await nextRender(group);
           group.splice('items', 1, 3);
           await nextRender(group);
@@ -292,7 +292,7 @@
             {name: 'Serhii Kulykov'},
             {name: 'Jens Jansson'},
           ];
-          group.max = 2;
+          group.maxItemsVisible = 2;
           await nextRender(group);
           overlay = group.$.overlay;
           overflow = group.$.overflow;
@@ -455,7 +455,7 @@
         });
 
         it('should pass color index to overlay avatars', done => {
-          group.max = 1;
+          group.maxItemsVisible = 1;
           overlay.addEventListener('vaadin-overlay-open', () => {
             const avatars = overlay.content.querySelectorAll('vaadin-avatar');
             expect(avatars[0].colorIndex).to.equal(group.items[1].colorIndex);
@@ -521,7 +521,7 @@
 
         it('should pass i18n property to overlay avatars', done => {
           group.i18n = customI18n;
-          group.max = 1;
+          group.maxItemsVisible = 1;
           overlay.addEventListener('vaadin-overlay-open', () => {
             const avatars = overlay.content.querySelectorAll('vaadin-avatar');
             expect(avatars[0].i18n).to.deep.equal(customI18n);
@@ -542,7 +542,7 @@
             {name: 'Serhii Kulykov'},
             {name: 'Jens Jansson'},
           ];
-          group.max = 2;
+          group.maxItemsVisible = 2;
           await nextRender(group);
           overlay = group.$.overlay;
           overflow = group.$.overflow;

@@ -59,7 +59,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     </style>
     <div id="container" part="container">
-      <template id="items" is="dom-repeat" items="[[__computeItems(items.*, __itemsInView, max)]]">
+      <template id="items" is="dom-repeat" items="[[__computeItems(items.*, __itemsInView, maxItemsVisible)]]">
         <vaadin-avatar
           name="[[item.name]]"
           abbr="[[item.abbr]]"
@@ -74,7 +74,7 @@ This program is available under Apache License Version 2.0, available at https:/
         id="overflow"
         part="avatar"
         hidden$="[[__computeMoreHidden(items.length, __itemsInView, __maxReached)]]"
-        abbr="[[__computeMore(items.length, __itemsInView, max)]]"
+        abbr="[[__computeMore(items.length, __itemsInView, maxItemsVisible)]]"
         theme$="[[theme]]"
         on-click="_onOverflowClick"
         on-keydown="_onOverflowKeyDown"
@@ -84,7 +84,7 @@ This program is available under Apache License Version 2.0, available at https:/
     <vaadin-avatar-group-overlay id="overlay" opened="{{_opened}}" on-vaadin-overlay-close="_onVaadinOverlayClose">
       <template>
         <vaadin-avatar-group-list-box on-keydown="_onListKeyDown">
-          <template is="dom-repeat" items="[[__computeExtraItems(items.*, __itemsInView, max)]]">
+          <template is="dom-repeat" items="[[__computeExtraItems(items.*, __itemsInView, maxItemsVisible)]]">
             <vaadin-item theme="avatar-group-item" role="option">
               <vaadin-avatar
                 name="[[item.name]]"
@@ -149,10 +149,10 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * The maximum number of avatars to display. By default, all the avatars are displayed.
-             * When max is set, the overflowing avatars are grouped into one avatar with a dropdown.
+             * When maxItemsVisible is set, the overflowing avatars are grouped into one avatar with a dropdown.
              * Setting 0 or 1 has no effect so there are always at least two avatars visible.
              */
-            max: {
+            maxItemsVisible: {
               type: Number
             },
 
@@ -203,7 +203,7 @@ This program is available under Apache License Version 2.0, available at https:/
             /** @private */
             __maxReached: {
               type: Boolean,
-              computed: '__computeMaxReached(items.length, max)'
+              computed: '__computeMaxReached(items.length, maxItemsVisible)'
             },
 
             /** @private */
@@ -223,7 +223,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         static get observers() {
           return [
-            '__computeMoreTitle(items.length, __itemsInView, max)',
+            '__computeMoreTitle(items.length, __itemsInView, maxItemsVisible)',
             '__itemsChanged(items.splices, items.*)',
             '__i18nItemsChanged(i18n.*, items.length)'
           ];
@@ -332,27 +332,27 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         /** @private */
-        __computeItems(arr, itemsInView, max) {
+        __computeItems(arr, itemsInView, maxItemsVisible) {
           const items = arr.base || [];
-          const limit = this.__getLimit(items.length, itemsInView, max);
+          const limit = this.__getLimit(items.length, itemsInView, maxItemsVisible);
           return limit ? items.slice(0, limit) : items;
         }
 
         /** @private */
-        __computeExtraItems(arr, itemsInView, max) {
+        __computeExtraItems(arr, itemsInView, maxItemsVisible) {
           const items = arr.base || [];
-          const limit = this.__getLimit(items.length, itemsInView, max);
+          const limit = this.__getLimit(items.length, itemsInView, maxItemsVisible);
           return limit ? items.slice(limit) : items;
         }
 
         /** @private */
-        __computeMaxReached(items, max) {
-          return max != null && items > this.__getMax(max);
+        __computeMaxReached(items, maxItemsVisible) {
+          return maxItemsVisible != null && items > this.__getMax(maxItemsVisible);
         }
 
         /** @private */
-        __computeMore(items, itemsInView, max) {
-          return max != null ? `+${items - this.__getMax(max) + 1}` : `+${items - itemsInView}`;
+        __computeMore(items, itemsInView, maxItemsVisible) {
+          return maxItemsVisible != null ? `+${items - this.__getMax(maxItemsVisible) + 1}` : `+${items - itemsInView}`;
         }
 
         /** @private */
@@ -361,8 +361,8 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         /** @private */
-        __computeMoreTitle(items, itemsInView, max) {
-          const limit = this.__getLimit(items, itemsInView, max);
+        __computeMoreTitle(items, itemsInView, maxItemsVisible) {
+          const limit = this.__getLimit(items, itemsInView, maxItemsVisible);
           if (limit == null) {
             return;
           }
@@ -376,11 +376,11 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         /** @private */
-        __getLimit(items, itemsInView, max) {
+        __getLimit(items, itemsInView, maxItemsVisible) {
           let limit = null;
           // handle max set to 0 or 1
-          const adjustedMax = this.__getMax(max);
-          if (max != null && adjustedMax < items) {
+          const adjustedMax = this.__getMax(maxItemsVisible);
+          if (maxItemsVisible != null && adjustedMax < items) {
             limit = adjustedMax - 1;
           } else if (itemsInView && itemsInView < items) {
             limit = itemsInView;
@@ -389,8 +389,8 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         /** @private */
-        __getMax(max) {
-          return Math.max(max, 2);
+        __getMax(maxItemsVisible) {
+          return Math.max(maxItemsVisible, 2);
         }
 
         /** @private */
