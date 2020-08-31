@@ -249,16 +249,22 @@
 
       describe('color index', () => {
         it('should set box-shadow based on color index', () => {
-          window.ShadyCSS.styleSubtree(avatar, {'--vaadin-user-color-0': 'red'});
+          window.ShadyCSS.styleSubtree(document.documentElement, {'--vaadin-user-color-0': 'red'});
           avatar.colorIndex = 0;
           const {boxShadow} = getComputedStyle(avatar, '::before');
           expect(['rgb(255, 0, 0)', 'red'].some(v => boxShadow.indexOf(v) > -1)).to.be.true;
         });
 
         it('should set attribute based on color index', () => {
+          window.ShadyCSS.styleSubtree(document.documentElement, {'--vaadin-user-color-0': 'red'});
           avatar.colorIndex = 0;
           expect(avatar.hasAttribute('has-color-index')).to.be.true;
           avatar.colorIndex = null;
+          expect(avatar.hasAttribute('has-color-index')).to.be.false;
+        });
+
+        it('should not set attribute for invalid index', () => {
+          avatar.colorIndex = 99;
           expect(avatar.hasAttribute('has-color-index')).to.be.false;
         });
       });

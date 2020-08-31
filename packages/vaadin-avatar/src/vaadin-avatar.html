@@ -241,14 +241,28 @@ This program is available under Apache License Version 2.0, available at https:/
         /** @private */
         __colorIndexChanged(index) {
           if (index != null) {
-            this.setAttribute('has-color-index', '');
-            const color = `var(--vaadin-user-color-${index})`;
-            if (window.ShadyCSS && !window.ShadyCSS.nativeCss) {
-              window.ShadyCSS.styleSubtree(this, {
-                '--vaadin-avatar-user-color': color
-              });
+            const prop = `--vaadin-user-color-${index}`;
+            const isShady = window.ShadyCSS && !window.ShadyCSS.nativeCss;
+
+            // check if custom CSS property is defined
+            const isValid = Boolean(
+              isShady ?
+                window.ShadyCSS.getComputedStyleValue(document.documentElement, prop) :
+                getComputedStyle(document.documentElement).getPropertyValue(prop)
+            );
+
+            if (isValid) {
+              const color = `var(${prop})`;
+              this.setAttribute('has-color-index', '');
+              if (isShady) {
+                window.ShadyCSS.styleSubtree(this, {
+                  '--vaadin-avatar-user-color': color
+                });
+              } else {
+                this.style.setProperty('--vaadin-avatar-user-color', color);
+              }
             } else {
-              this.style.setProperty('--vaadin-avatar-user-color', color);
+              this.removeAttribute('has-color-index');
             }
           } else {
             this.removeAttribute('has-color-index');
