@@ -13,11 +13,33 @@
   }
   ,
   {
-    "name": "Advanced Usage",
-    "url": "avatar-advanced-demos",
-    "src": "avatar-advanced-demos.html",
+    "name": "Avatar group",
+    "url": "avatar-group-demos",
+    "src": "avatar-group-demos.html",
     "meta": {
-      "title": "Vaadin Avatar Advanced Examples",
+      "title": "Vaadin Avatar Group",
+      "description": "",
+      "image": ""
+     }
+  }
+  ,
+  {
+    "name": "Accessibility",
+    "url": "avatar-a11y-demos",
+    "src": "avatar-a11y-demos.html",
+    "meta": {
+      "title": "Vaadin Avatar Accessibility Examples",
+      "description": "",
+      "image": ""
+     }
+  }
+  ,
+  {
+    "name": "Localization",
+    "url": "avatar-localization-demos",
+    "src": "avatar-localization-demos.html",
+    "meta": {
+      "title": "Vaadin Avatar Localization Examples",
       "description": "",
       "image": ""
      }

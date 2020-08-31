@@ -1,0 +1,51 @@
+<dom-module id="avatar-a11y-demos">
+  <template>
+    <style include="vaadin-component-demo-shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+
+    <h3>Accessible avatar group</h3>
+    <p>
+      When avatar is added or removed from the group, a corresponding screen reader announcement is
+      dispatched using <code>iron-announce</code> event handled by <code>iron-a11y-announcer</code>
+      element.
+    </p>
+    <p>
+      Check the checkbox in the example below to toggle changing avatars change every 4 seconds.
+    </p>
+    <vaadin-demo-snippet id="avatar-a11y-demos-sr" when-defined="vaadin-avatar-group">
+      <template preserve-content>
+        <vaadin-checkbox>Toggle avatars every 4 seconds</vaadin-checkbox>
+        <vaadin-avatar-group></vaadin-avatar-group>
+        <script>
+          window.addDemoReadyListener('#avatar-a11y-demos-sr', function(document) {
+            const checkbox = document.querySelector('vaadin-checkbox');
+            const group = document.querySelector('vaadin-avatar-group');
+            group.items = [{name: 'Pekka Maanpää'}, {name: 'Jens Jansson'}];
+
+            var i = 0;
+            setInterval(function() {
+              if (!checkbox.checked) {
+                return;
+              }
+              const user = i % 2 === 0 ? {name: 'Serhii Kulykov'} : {name: 'Jens Jansson'};
+              group.splice('items', 1, 1, user);
+              i += 1;
+            }, 4000);
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+  </template>
+  <script>
+    class AvatarA11yDemos extends DemoReadyEventEmitter(AvatarDemo(Polymer.Element)) {
+      static get is() {
+        return 'avatar-a11y-demos';
+      }
+    }
+    customElements.define(AvatarA11yDemos.is, AvatarA11yDemos);
+  </script>
+</dom-module>

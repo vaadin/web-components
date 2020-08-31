@@ -111,12 +111,19 @@ This program is available under Apache License Version 2.0, available at https:/
       /**
        * `<vaadin-avatar-group>` is a Web Component providing avatar group displaying functionality.
        *
-       * ```html
-       *   <vaadin-avatar-group>
-       *     <vaadin-avatar abbr="YY"></vaadin-avatar>
-       *     <vaadin-avatar abbr="SK"></vaadin-avatar>
-       *     <vaadin-avatar abbr="JJ"></vaadin-avatar>
-       *   </vaadin-avatar-group>
+       * To create the avatar group, first add the component to the page:
+       *
+       * ```
+       * <vaadin-avatar-group></vaadin-avatar-group>
+       * ```
+       *
+       * And then use [`items`](#/elements/vaadin-avatar-group#property-items) property to initialize the structure:
+       *
+       * ```
+       * document.querySelector('vaadin-avatar-group').items = [
+       *   {name: 'John Doe'},
+       *   {abbr: 'AB'}
+       * ];
        * ```
        *
        * @memberof Vaadin
@@ -140,7 +147,28 @@ This program is available under Apache License Version 2.0, available at https:/
         static get properties() {
           return {
             /**
-             * An array containing the items which will be stamped as avatars
+             * An array containing the items which will be stamped as avatars.
+             *
+             * The items objects allow to configure [`name`](#/elements/vaadin-avatar#property-name),
+             * [`abbr`](#/elements/vaadin-avatar#property-abbr), [`img`](#/elements/vaadin-avatar#property-img)
+             * and [`colorIndex`](#/elements/vaadin-avatar#property-colorIndex) properties on the
+             * stamped avatars.
+             *
+             * #### Example
+             *
+             * ```js
+             * group.items = [
+             *   {
+             *     name: 'User name',
+             *     img: 'url-to-image.png'
+             *   },
+             *   {
+             *     abbr: 'JD',
+             *     colorIndex: 1
+             *   },
+             * ];
+             * ```
+             *
              * @type {!Array<!AvatarGroupItem> | undefined}
              */
             items: {
@@ -149,8 +177,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * The maximum number of avatars to display. By default, all the avatars are displayed.
-             * When maxItemsVisible is set, the overflowing avatars are grouped into one avatar with a dropdown.
-             * Setting 0 or 1 has no effect so there are always at least two avatars visible.
+             * When _maxItemsVisible_ is set, the overflowing avatars are grouped into one avatar with
+             * a dropdown. Setting 0 or 1 has no effect so there are always at least two avatars visible.
              */
             maxItemsVisible: {
               type: Number

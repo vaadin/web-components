@@ -16,64 +16,45 @@
       </template>
     </vaadin-demo-snippet>
 
-    <h3>Avatar group</h3>
-    <vaadin-demo-snippet id="avatar-basic-demos-avatar-group" when-defined="vaadin-avatar-group">
-      <template preserve-content>
-        <vaadin-avatar-group></vaadin-avatar-group>
-        <script>
-          window.addDemoReadyListener('#avatar-basic-demos-avatar-group', function(document) {
-            document.querySelector('vaadin-avatar-group').items = [
-              {name: 'Yuriy Yevstihnyeyev'},
-              {abbr: 'SK'},
-              {name: 'Jens Jansson'},
-              {img: 'https://vaadin.com/static/content/view/company/team/photos/Yuriy-Yevstihnyeyev.JPG'}
-            ];
-          });
-        </script>
-      </template>
-    </vaadin-demo-snippet>
-
-    <h3>Max Items Visible property</h3>
+    <h3>Combined properties</h3>
     <p>
-      When <code>maxItemsVisible</code> property is set on the group, it limits the number of the avatars shown,
-      including the avatar used to toggle a menu with the remaining avatars that exceed this limit.
-      Setting number less than 2 has no effect so there are always at least two avatars shown.
+      The <i>name</i>, <i>abbr</i> and <i>img</i> properties can be used in combination. Depending
+      on what properties are set, avatar changes its appearance and <code>title</code> attribute,
+      which represents a text displayed in a tooltip popup when the mouse is over the avatar.
     </p>
-    <vaadin-demo-snippet id="avatar-basic-demos-avatar-group-max" when-defined="vaadin-avatar-group">
+    <vaadin-demo-snippet id="avatar-basic-demos-combined-props" when-defined="vaadin-avatar">
       <template preserve-content>
-        <vaadin-avatar-group max-items-visible="3"></vaadin-avatar-group>
+        <vaadin-avatar name="Serhii Kulykov"></vaadin-avatar>
+        <br />
+        <vaadin-checkbox-group label="Set property values" theme="vertical">
+          <vaadin-checkbox value="img"><b>img</b> property</vaadin-checkbox>
+          <vaadin-checkbox value="name" checked><b>name</b> property</vaadin-checkbox>
+          <vaadin-checkbox value="abbr"><b>abbr</b> property</vaadin-checkbox>
+        </vaadin-checkbox-group>
         <script>
-          window.addDemoReadyListener('#avatar-basic-demos-avatar-group-max', function(document) {
-            document.querySelector('vaadin-avatar-group').items = [
-              {name: 'Yuriy Yevstihnyeyev'},
-              {abbr: 'SK'},
-              {name: 'Leif Åstrand'},
-              {name: 'Jens Jansson'},
-              {name: 'Pekka Maanpää'},
-            ];
-          });
-        </script>
-      </template>
-    </vaadin-demo-snippet>
-
-    <h3>Color index</h3>
-    <vaadin-demo-snippet id="avatar-basic-demos-color-index" when-defined="vaadin-avatar-group">
-      <template preserve-content>
-        <vaadin-avatar-group></vaadin-avatar-group>
-        <style>
-          html {
-            --vaadin-user-color-0: #b300d0;
-            --vaadin-user-color-1: #00ae8f;
-            --vaadin-user-color-2: #5c62f1;
-          }
-        </style>
-        <script>
-          window.addDemoReadyListener('#avatar-basic-demos-color-index', function(document) {
-            document.querySelector('vaadin-avatar-group').items = [
-              {name: 'Yuriy Yevstihnyeyev', colorIndex: 0},
-              {abbr: 'SK', colorIndex: 1},
-              {name: 'Jens Jansson', colorIndex: 2}
-            ];
+          window.addDemoReadyListener('#avatar-basic-demos-combined-props', function(document) {
+            const avatar = document.querySelector('vaadin-avatar');
+            const group = document.querySelector('vaadin-checkbox-group');
+            group.addEventListener('change', function(event) {
+              ['img', 'name', 'abbr'].forEach(function(prop) {
+                if (group.value.indexOf(prop) === -1) {
+                  avatar[prop] = undefined;
+                  return;
+                }
+                switch (prop) {
+                  case 'img':
+                    avatar.img = 'https://vaadin.com/static/content/view/company/team/photos/Yuriy-Yevstihnyeyev.JPG';
+                    break;
+                  case 'name':
+                    avatar.name = 'Serhii Kulykov';
+                    break;
+                  case 'abbr':
+                    avatar.abbr = 'YY';
+                    break;
+                  default:
+                }
+              });
+            });
           });
         </script>
       </template>
