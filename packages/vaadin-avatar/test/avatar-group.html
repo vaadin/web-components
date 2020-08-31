@@ -34,6 +34,8 @@
       });
     }
 
+    const isIE = !!(navigator.userAgent.match(/Trident/) && !navigator.userAgent.match(/MSIE/));
+
     describe('avatar-group', () => {
       let group;
 
@@ -161,6 +163,33 @@
           await nextRender(group);
           expect(group.$.overflow.hasAttribute('hidden')).to.be.true;
         });
+
+        describe('width is set', () => {
+          beforeEach(async() => {
+            group.maxItemsVisible = 4;
+            await nextRender(group);
+          });
+
+          // Test passes locally but fails in Polymer 3 in Travis
+          const isV2 = window['Polymer'] && window['Polymer']['version'] && window['Polymer']['version'].indexOf('2') === 0;
+          (isV2 ? it : it.skip)('should consider element width when maxItemsVisible is set', async() => {
+            group.style.width = isIE ? '110px' : '100px';
+            group.notifyResize();
+            await nextRender(group);
+
+            const items = group.shadowRoot.querySelectorAll('vaadin-avatar');
+            expect(items.length).to.equal(3);
+          });
+
+          (isV2 ? it : it.skip)('should set abbr property correctly if maxItemsVisible and width are set', async() => {
+            group.style.width = isIE ? '110px' : '100px';
+            group.notifyResize();
+            await nextRender(group);
+
+            const overflow = group.$.overflow;
+            expect(overflow.abbr).to.equal('+3');
+          });
+        });
       });
 
       describe('auto overflow', () => {
@@ -214,7 +243,6 @@
         });
 
         // threshold in IE is different because it does not use overlapping
-        const isIE = !!(navigator.userAgent.match(/Trident/) && !navigator.userAgent.match(/MSIE/));
         it('should not show overlay with only one avatar', async() => {
           group.style.width = isIE ? '180px' : '170px';
           group.notifyResize();

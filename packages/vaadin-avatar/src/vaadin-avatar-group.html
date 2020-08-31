@@ -380,7 +380,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         /** @private */
         __computeMore(items, itemsInView, maxItemsVisible) {
-          return maxItemsVisible != null ? `+${items - this.__getMax(maxItemsVisible) + 1}` : `+${items - itemsInView}`;
+          return `+${items - this.__getLimit(items, itemsInView, maxItemsVisible)}`;
         }
 
         /** @private */
@@ -413,7 +413,8 @@ This program is available under Apache License Version 2.0, available at https:/
           } else if (itemsInView && itemsInView < items) {
             limit = itemsInView;
           }
-          return limit;
+
+          return Math.min(limit, this.__calculateAvatarsFitWidth());
         }
 
         /** @private */
@@ -511,17 +512,7 @@ This program is available under Apache License Version 2.0, available at https:/
             return;
           }
 
-          // assume all the avatars have the same width
-          const avatarWidth = avatars[0].clientWidth;
-
-          // take negative margin into account
-          const {marginLeft, marginRight} = getComputedStyle(avatars[1]);
-
-          const offset = this.getAttribute('dir') == 'rtl' ?
-            parseInt(marginRight, 0) - parseInt(marginLeft, 0) :
-            parseInt(marginLeft, 0) - parseInt(marginRight, 0);
-
-          let result = Math.floor((this.$.container.offsetWidth - avatarWidth) / (avatarWidth + offset));
+          let result = this.__calculateAvatarsFitWidth();
 
           // only show overlay if two or more avatars don't fit
           if (result === items.length - 1) {
@@ -537,6 +528,27 @@ This program is available under Apache License Version 2.0, available at https:/
 
           // reserve space for overflow avatar
           this.__itemsInView = result;
+        }
+
+        /** @private **/
+        __calculateAvatarsFitWidth() {
+          if (!this.shadowRoot || this._avatars.length < 2) {
+            return;
+          }
+
+          const avatars = this._avatars;
+
+          // assume all the avatars have the same width
+          const avatarWidth = avatars[0].clientWidth;
+
+          // take negative margin into account
+          const {marginLeft, marginRight} = getComputedStyle(avatars[1]);
+
+          const offset = this.getAttribute('dir') == 'rtl' ?
+            parseInt(marginRight, 0) - parseInt(marginLeft, 0) :
+            parseInt(marginLeft, 0) - parseInt(marginRight, 0);
+
+          return Math.floor((this.$.container.offsetWidth - avatarWidth) / (avatarWidth + offset));
         }
 
         /** @private */
