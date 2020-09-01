@@ -707,6 +707,10 @@
         describe(`resize notification ${condition}`, () => {
           let textField, spy;
 
+          function flushTextField(textField) {
+            textField.__observeOffsetHeightDebouncer.flush();
+          }
+
           beforeEach(() => {
             textField = fixture(`default${fixtureName}`);
             spy = sinon.spy();
@@ -731,7 +735,9 @@
             }, 1000);
 
             textField.errorMessage = 'Error';
+            flushTextField(textField);
             textField.invalid = true;
+            flushTextField(textField);
           });
 
           it('should dispatch `iron-resize` event on error message height change', done => {
@@ -742,17 +748,22 @@
 
               // Long message that spans on multiple lines
               textField.errorMessage = [...new Array(42)].map(() => 'bla').join(' ');
+              flushTextField(textField);
 
               expect(spy).to.be.calledOnce;
               done();
             }, 1000);
 
             textField.errorMessage = 'Error';
+            flushTextField(textField);
             textField.invalid = true;
+            flushTextField(textField);
           });
 
           it('should dispatch `iron-resize` event on label height change', () => {
+            flushTextField(textField);
             textField.label = 'Label';
+            flushTextField(textField);
             expect(spy).to.be.calledOnce;
           });
         });

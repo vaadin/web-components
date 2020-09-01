@@ -897,7 +897,11 @@ This program is available under Apache License Version 2.0, available at https:/
 
     /** @private */
     __observeOffsetHeight() {
-      this._dispatchIronResizeEventIfNeeded('Height', this.offsetHeight);
+      this.__observeOffsetHeightDebouncer = Polymer.Debouncer.debounce(
+        this.__observeOffsetHeightDebouncer,
+        Polymer.Async.animationFrame, () => {
+          this._dispatchIronResizeEventIfNeeded('Height', this.offsetHeight);
+        });
     }
 
     /**
