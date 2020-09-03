@@ -3,6 +3,7 @@ const isPolymer2 = document.querySelector('script[src*="wct-browser-legacy"]') =
 window.VaadinGridSuites = [
   'million-dollar-scrolling.html',
   'accessibility.html',
+  'all-imports.html',
   'array-data-provider.html',
   'basic.html',
   'class-name-generator.html',

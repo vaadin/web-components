@@ -82,24 +82,24 @@ This program is available under Apache License Version 2.0, available at https:/
      * @protected
      */
     _isFocusable(target) {
-      return Vaadin.GridElement._isFocusable(target);
+      return Vaadin.Grid.isFocusable(target);
     }
+  };
 
-    /**
-     * @param {!Element} target
-     * @return {boolean}
-     * @protected
-     */
-    static _isFocusable(target) {
-      if (!target.parentNode) {
-        return false;
-      }
-      const focusables = Array.from(target.parentNode
-        .querySelectorAll('[tabindex], button, input, select, textarea, object, iframe, label, a[href], area[href]'))
-        .filter(element => element.getAttribute('part') !== 'cell body-cell');
-
-      const isFocusableElement = focusables.indexOf(target) !== -1;
-      return !target.disabled && isFocusableElement;
+  /**
+   * @param {!Element} target
+   * @return {boolean}
+   * @protected
+   */
+  Vaadin.Grid.isFocusable = (target) => {
+    if (!target.parentNode) {
+      return false;
     }
+    const focusables = Array.from(target.parentNode
+      .querySelectorAll('[tabindex], button, input, select, textarea, object, iframe, label, a[href], area[href]'))
+      .filter(element => element.getAttribute('part') !== 'cell body-cell');
+
+    const isFocusableElement = focusables.indexOf(target) !== -1;
+    return !target.disabled && isFocusableElement;
   };
 </script>
