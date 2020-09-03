@@ -28,6 +28,10 @@ This program is available under Apache License Version 2.0, available at https:/
         --vaadin-avatar-size: 64px;
       }
 
+      :host([hidden]) {
+        display: none !important;
+      }
+
       [part="container"] {
         display: flex;
         position: relative;
