@@ -40,6 +40,6 @@
     "web-component-tester": "^6.1.5",
     "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^3.0.0",
     "iron-form": "^2.0.1",
-    "vaadin-button": "vaadin/vaadin-button#^2.4.0-alpha1"
+    "vaadin-button": "vaadin/vaadin-button#^2.4.0"
   }
 }
