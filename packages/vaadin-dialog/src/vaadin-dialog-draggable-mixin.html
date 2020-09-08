@@ -25,6 +25,11 @@
           _touchDevice: {
             type: Boolean,
             value: TOUCH_DEVICE
+          },
+
+          /* TODO: Expose as a public property (check naming) */
+          __dragHandleClassName: {
+            type: String
           }
         };
       }
@@ -53,7 +58,10 @@
           const isResizerContainer = e.target === resizerContainer;
           const isResizerContainerScrollbar = e.offsetX > resizerContainer.clientWidth || e.offsetY > resizerContainer.clientHeight;
           const isContentPart = e.target === this.$.overlay.$.content;
-          const isDraggable = e.target.classList.contains('draggable');
+          const isDraggable = e.composedPath().some(node => {
+            return node.classList && node.classList.contains(this.__dragHandleClassName || 'draggable');
+          });
+
           if ((isResizerContainer && !isResizerContainerScrollbar) || isContentPart || isDraggable) {
             !isDraggable && e.preventDefault();
             this._originalBounds = this._getOverlayBounds();

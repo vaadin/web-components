@@ -8,6 +8,8 @@
   <link rel="import" href="../../iron-test-helpers/iron-test-helpers.html">
   <link rel="import" href="../src/vaadin-dialog.html">
   <link rel="import" href="../../vaadin-text-field/vaadin-text-area.html">
+  <link rel="import" href="../../polymer/polymer-element.html">
+  <link rel="import" href="../../polymer/lib/utils/html-tag.html">
 </head>
 
 <body>
@@ -59,6 +61,7 @@
         <template>
           <div>Draggable dialog</div>
           <div class="draggable">Draggable area</div>
+          <internally-draggable></internally-draggable>
           <button>OK</button>
         </template>
       </vaadin-dialog>
@@ -436,6 +439,14 @@
           dispatchMouseEvent(target, 'mouseup', toXY, mouseButton);
         }
 
+        before(() => {
+          customElements.define('internally-draggable', class extends Polymer.Element {
+            static get template() {
+              return Polymer.html`<div class="draggable">draggable</div>`;
+            }
+          });
+        });
+
         beforeEach(() => {
           dialog = fixture('draggable');
           container = dialog.$.overlay.$.resizerContainer;
@@ -461,6 +472,13 @@
 
         it('should drag and move dialog if mousedown on element with [class="draggable"]', () => {
           drag(dialog.$.overlay.querySelector('.draggable'));
+          const draggedBounds = container.getBoundingClientRect();
+          expect(Math.floor(draggedBounds.top)).to.be.eql(Math.floor(bounds.top + dx));
+          expect(Math.floor(draggedBounds.left)).to.be.eql(Math.floor(bounds.left + dx));
+        });
+
+        it('should drag and move dialog if mousedown on element with [class="draggable"] in another shadow root', () => {
+          drag(dialog.$.overlay.querySelector('internally-draggable').shadowRoot.querySelector('.draggable'));
           const draggedBounds = container.getBoundingClientRect();
           expect(Math.floor(draggedBounds.top)).to.be.eql(Math.floor(bounds.top + dx));
           expect(Math.floor(draggedBounds.left)).to.be.eql(Math.floor(bounds.left + dx));
