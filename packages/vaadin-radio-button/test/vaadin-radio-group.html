@@ -684,6 +684,34 @@
         vaadinRadioButtonGroup._observer.flush();
         expect(vaadinRadioButtonGroup.value).to.not.be.equal('2');
       });
+
+      it('should work if value is set immediately after removing and adding new children', () => {
+        const items = [
+          {id: '1', name: 'item_1'},
+          {id: '2', name: 'item_2'},
+          {id: '3', name: 'item_3'},
+          {id: '4', name: 'item_4'}
+        ];
+        let buttonSelected = 0;
+        function removeAndAddChildrenAndSelectNext() {
+          Array.from(vaadinRadioButtonGroup.children).forEach(button => vaadinRadioButtonGroup.removeChild(button));
+          items.forEach(item => {
+            const radioButton = window.document.createElement('vaadin-radio-button');
+            radioButton.textContent = item.name;
+            radioButton.value = item.id;
+            vaadinRadioButtonGroup.appendChild(radioButton);
+          });
+          vaadinRadioButtonGroup.value = ++buttonSelected;
+        }
+
+        removeAndAddChildrenAndSelectNext();
+        vaadinRadioButtonGroup._observer.flush();
+        expect(+vaadinRadioButtonGroup.value).to.be.equal(buttonSelected);
+
+        removeAndAddChildrenAndSelectNext();
+        vaadinRadioButtonGroup._observer.flush();
+        expect(+vaadinRadioButtonGroup.value).to.be.equal(buttonSelected);
+      });
     });
 
     describe('radio-group-with-dom-repeat', () => {
