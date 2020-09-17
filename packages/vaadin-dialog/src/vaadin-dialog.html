@@ -24,6 +24,10 @@ This program is available under Apache License Version 2.0, available at https:/
       [part="content"] {
         min-width: 12em; /* matches the default <vaadin-text-field> width */
       }
+
+      :host([has-bounds-set]) [part="overlay"] {
+        max-width: none;
+      }
     </style>
   </template>
 </dom-module>
@@ -395,7 +399,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
           if (overlay.style.position !== 'absolute') {
             overlay.style.position = 'absolute';
-            overlay.style.maxWidth = 'none';
+            this.$.overlay.setAttribute('has-bounds-set', '');
             this.__forceSafariReflow();
           }
 
