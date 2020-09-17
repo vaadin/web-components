@@ -442,7 +442,10 @@
         before(() => {
           customElements.define('internally-draggable', class extends Polymer.Element {
             static get template() {
-              return Polymer.html`<div class="draggable">draggable</div>`;
+              return Polymer.html`
+              <div class="draggable">
+                <span>draggable</span>
+              </div>`;
             }
           });
         });
@@ -479,6 +482,56 @@
 
         it('should drag and move dialog if mousedown on element with [class="draggable"] in another shadow root', () => {
           drag(dialog.$.overlay.querySelector('internally-draggable').shadowRoot.querySelector('.draggable'));
+          const draggedBounds = container.getBoundingClientRect();
+          expect(Math.floor(draggedBounds.top)).to.be.eql(Math.floor(bounds.top + dx));
+          expect(Math.floor(draggedBounds.left)).to.be.eql(Math.floor(bounds.left + dx));
+        });
+
+        it('should not drag by a draggable-leaf-only if it is not the drag event target', () => {
+          const draggable = dialog.$.overlay.querySelector('internally-draggable').shadowRoot.querySelector('.draggable');
+          draggable.classList.add('draggable-leaf-only');
+          const child = draggable.firstElementChild;
+          drag(child);
+          const draggedBounds = container.getBoundingClientRect();
+          expect(Math.floor(draggedBounds.top)).to.be.eql(Math.floor(bounds.top));
+          expect(Math.floor(draggedBounds.left)).to.be.eql(Math.floor(bounds.left));
+        });
+
+        it('should drag by a draggable-leaf-only if it is directly the dragged element', () => {
+          const draggable = dialog.$.overlay.querySelector('internally-draggable').shadowRoot.querySelector('.draggable');
+          draggable.classList.add('draggable-leaf-only');
+          drag(draggable);
+          const draggedBounds = container.getBoundingClientRect();
+          expect(Math.floor(draggedBounds.top)).to.be.eql(Math.floor(bounds.top + dx));
+          expect(Math.floor(draggedBounds.left)).to.be.eql(Math.floor(bounds.left + dx));
+        });
+
+        it('should drag by a draggable-leaf-only child if it is marked as draggable', () => {
+          const draggable = dialog.$.overlay.querySelector('internally-draggable').shadowRoot.querySelector('.draggable');
+          draggable.classList.add('draggable-leaf-only');
+          const child = draggable.firstElementChild;
+          child.classList.add('draggable');
+          drag(child);
+          const draggedBounds = container.getBoundingClientRect();
+          expect(Math.floor(draggedBounds.top)).to.be.eql(Math.floor(bounds.top + dx));
+          expect(Math.floor(draggedBounds.left)).to.be.eql(Math.floor(bounds.left + dx));
+        });
+
+        it('should drag by a draggable-leaf-only child if it is marked as draggable-leaf-only', () => {
+          const draggable = dialog.$.overlay.querySelector('internally-draggable').shadowRoot.querySelector('.draggable');
+          draggable.classList.add('draggable-leaf-only');
+          const child = draggable.firstElementChild;
+          child.classList.add('draggable-leaf-only');
+          drag(child);
+          const draggedBounds = container.getBoundingClientRect();
+          expect(Math.floor(draggedBounds.top)).to.be.eql(Math.floor(bounds.top + dx));
+          expect(Math.floor(draggedBounds.left)).to.be.eql(Math.floor(bounds.left + dx));
+        });
+
+        it('should drag by a child of a draggable node ', () => {
+          const draggable = dialog.$.overlay.querySelector('internally-draggable').shadowRoot.querySelector('.draggable');
+          const child = draggable.firstElementChild;
+          drag(child);
           const draggedBounds = container.getBoundingClientRect();
           expect(Math.floor(draggedBounds.top)).to.be.eql(Math.floor(bounds.top + dx));
           expect(Math.floor(draggedBounds.left)).to.be.eql(Math.floor(bounds.left + dx));
