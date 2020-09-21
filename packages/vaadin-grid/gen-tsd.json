@@ -5,7 +5,6 @@
     "all-imports.js",
     "src/all-imports.js",
     "src/iron-list.js",
-    "src/vaadin-grid-outer-scroller.js",
     "src/vaadin-grid-styles.js",
     "src/vaadin-grid-templatizer.js",
     "demo/**/*",

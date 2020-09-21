@@ -25,7 +25,6 @@ window.VaadinGridSuites = [
   'keyboard-navigation.html',
   'lazy-import.html',
   'light-dom-observing.html',
-  'outer-scroller.html',
   'physical-count.html',
   'resizing.html',
   'resizing-material.html',

@@ -79,14 +79,6 @@ This program is available under Apache License Version 2.0, available at https:/
       scrollToIndex(index) {
         this._warnPrivateAPIAccess('scrollToIndex');
 
-        if (index > 0) {
-          this._pendingScrollToIndex = null;
-        }
-        if (!parseInt(this.$.items.style.borderTopWidth) && index > 0) {
-          // Schedule another scroll to be invoked once init is complete
-          this._pendingScrollToIndex = index;
-        }
-
         this._scrollingToIndex = true;
         index = Math.min(Math.max(index, 0), this._effectiveSize - 1);
         this.$.table.scrollTop = index / this._effectiveSize * (this.$.table.scrollHeight - this.$.table.offsetHeight);
@@ -154,6 +146,18 @@ This program is available under Apache License Version 2.0, available at https:/
         }
         this._assignModels();
         requestAnimationFrame(() => this._update());
+
+        this.__updateFooterPositioning();
+
+        if (this._ie) {
+          // Workaround an IE flexbox bug where the rows would horizontally collapse
+          // whenever item count change toggles the scrollbar visibility (is tested)
+          this.$.table.style.display = 'block';
+          setTimeout(() => {
+            this.$.table.style.display = 'flex';
+            this._translateStationaryElements();
+          });
+        }
       }
 
       /** @protected */
@@ -243,8 +247,6 @@ This program is available under Apache License Version 2.0, available at https:/
           content.setAttribute('slot', 'foo-bar');
           content.setAttribute('slot', slot);
         }
-
-        this._updateHeaderFooterMetrics();
 
         Polymer.RenderStatus.afterNextRender(this, () => this.notifyResize());
         return physicalItems;

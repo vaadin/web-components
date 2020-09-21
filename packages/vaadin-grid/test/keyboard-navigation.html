@@ -340,6 +340,7 @@
         grid._resetKeyboardNavigation();
         grid.removeAttribute('navigating');
         focusable.focus();
+        flushGrid(grid);
       });
 
       describe('navigation mode', () => {
@@ -1134,11 +1135,14 @@
 
             end();
 
-            expect(grid.$.table.scrollLeft).to.equal(grid.$.table.scrollWidth - grid.$.table.clientWidth);
+            flushGrid(grid);
+
+            expect(grid.$.table.scrollLeft).to.equal(grid.$.table.scrollWidth - grid.$.table.offsetWidth);
           });
 
           it('should scroll cell visible under from frozen cells with left arrow', done => {
-            grid.style.width = '200px'; // column default min width is 100px
+            const scrollbarWidth = grid.$.table.offsetWidth - grid.$.table.clientWidth;
+            grid.style.width = `${200 + scrollbarWidth}px`; // column default min width is 100px
             grid.style.border = 'none';
             grid._columnTree[0][0].frozen = true;
 
@@ -1153,14 +1157,17 @@
             });
           });
 
-          it('should scroll cells visible with left arrow on footer', () => {
+          it('should scroll cells visible with left arrow on footer', done => {
             focusFirstFooterCell();
             down();
             right();
 
-            left();
+            setTimeout(() => {
+              left();
 
-            expect(grid.$.table.scrollLeft).to.equal(0);
+              expect(grid.$.table.scrollLeft).to.equal(0);
+              done();
+            });
           });
         });
 

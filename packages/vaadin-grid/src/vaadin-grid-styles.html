@@ -58,7 +58,8 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       #table {
-        display: block;
+        display: flex;
+        flex-direction: column;
         width: 100%;
         height: 100%;
         overflow: auto;
@@ -67,11 +68,22 @@ This program is available under Apache License Version 2.0, available at https:/
         outline: none;
       }
 
-      #header {
+      [ios] #table {
+        z-index: 0;
+      }
+
+      #header,
+      #footer {
         display: block;
-        position: absolute;
-        top: 0;
+        position: -webkit-sticky;
+        position: sticky;
+        left: 0;
+        overflow: visible;
         width: 100%;
+      }
+
+      #header {
+        top: 0;
       }
 
       th {
@@ -84,24 +96,19 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       #footer {
-        display: block;
-        position: absolute;
         bottom: 0;
-        width: 100%;
       }
 
       #items {
+        flex-grow: 1;
+        flex-shrink: 0;
         display: block;
+        position: -webkit-sticky;
+        position: sticky;
         width: 100%;
-        position: relative;
+        left: 0;
+        overflow: visible;
         z-index: -1;
-      }
-
-      #items,
-      #outersizer,
-      #fixedsizer {
-        border-top: 0 solid transparent;
-        border-bottom: 0 solid transparent;
       }
 
       [part~="row"] {
@@ -160,25 +167,9 @@ This program is available under Apache License Version 2.0, available at https:/
         will-change: transform;
       }
 
-      #outerscroller {
-        /* Needed (at least) for Android Chrome */
-        z-index: 0;
-      }
-
-      #scroller:not([safari]) #outerscroller {
-        /* Needed for Android Chrome (#1020). Can't be applied to Safari
-        since it would re-introduce the sub-pixel overflow bug (#853) */
-        will-change: transform;
-      }
-
-      [no-scrollbars]:not([safari]):not([firefox]) #outerscroller,
       [no-scrollbars][safari] #table,
       [no-scrollbars][firefox] #table {
         overflow: hidden;
-      }
-
-      [no-scrollbars]:not([safari]):not([firefox]) #outerscroller {
-        pointer-events: none;
       }
 
       /* Reordering styles */
@@ -207,10 +198,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
       #scroller[ie][column-reordering-allowed] [part~="header-cell"] {
         -ms-user-select: none;
-      }
-
-      :host([reordering]) #outerscroller {
-        -webkit-overflow-scrolling: auto !important;
       }
 
       /* Resizing styles */
@@ -246,68 +233,46 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       /* Sizer styles */
-      .sizer {
+      #sizer {
         display: flex;
-        position: relative;
-        width: 100%;
+        position: absolute;
         visibility: hidden;
       }
 
-      .sizer [part~="details-cell"] {
+      #sizer [part~="details-cell"] {
         display: none !important;
       }
 
-      .sizer [part~="cell"][hidden] {
+      #sizer [part~="cell"][hidden] {
         display: none !important;
       }
 
-      .sizer [part~="cell"] {
+      #sizer [part~="cell"] {
         display: block;
         flex-shrink: 0;
         line-height: 0;
-        margin-top: -1em;
         height: 0 !important;
         min-height: 0 !important;
         max-height: 0 !important;
         padding: 0 !important;
+        border: none !important;
       }
 
-      .sizer [part~="cell"]::before {
+      #sizer [part~="cell"]::before {
         content: "-";
       }
 
-      .sizer [part~="cell"] ::slotted(vaadin-grid-cell-content) {
+      #sizer [part~="cell"] ::slotted(vaadin-grid-cell-content) {
         display: none !important;
       }
 
-      /* Fixed mode (Tablet Edge) */
-      #fixedsizer {
-        position: absolute;
-      }
-
-      :not([edge][no-scrollbars]) #fixedsizer {
-        display: none;
-      }
-
-      [edge][no-scrollbars] {
-        /* Any value other than ‘none’ for the transform results in the creation of both a stacking context and
-        a containing block. The object acts as a containing block for fixed positioned descendants. */
-        transform: translateZ(0);
-        overflow: hidden;
-      }
-
-      [edge][no-scrollbars] #header,
-      [edge][no-scrollbars] #footer {
-        position: fixed;
-      }
-
-      [edge][no-scrollbars] #items {
-        position: fixed;
-        width: 100%;
-        will-change: transform;
-      }
-
       /* RTL specific styles */
+
+      :host([dir="rtl"]) #items,
+      :host([dir="rtl"]) #header,
+      :host([dir="rtl"]) #footer {
+        left: auto;
+      }
 
       :host([dir="rtl"]) [part~="reorder-ghost"] {
         left: auto;
@@ -330,33 +295,6 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     </style>
   `);
-
-  const safari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-  const firefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
-
-  if (safari || firefox) {
-    const scrollingStyles = document.createElement('style');
-    scrollingStyles.textContent = `
-      [scrolling][safari] #outerscroller,
-      [scrolling][firefox] #outerscroller {
-        pointer-events: auto;
-      }
-
-      [ios] #outerscroller {
-        pointer-events: auto;
-        z-index: -3;
-      }
-
-      [ios][scrolling] #outerscroller {
-        z-index: 0;
-      }
-
-      [ios] [frozen] {
-        will-change: auto;
-      }
-    `;
-    VaadinGridStyles.querySelector('template').content.appendChild(scrollingStyles);
-  }
 
   VaadinGridStyles.register('vaadin-grid-styles');
 </script>

@@ -69,22 +69,9 @@
         expect(grid.$.table.scrollTop).to.equal(grid._scrollPageHeight);
       });
 
-      it('should have the right amount of scrollbars/scrollers', () => {
-        let scrollbars = 0;
-        scrollbars += window.getComputedStyle(grid.$.table).overflow === 'hidden' ? 0 : 1;
-        scrollbars += window.getComputedStyle(grid.$.outerscroller).overflow === 'hidden' ? 0 : 1;
-        expect(scrollbars).to.equal(getScrollbarWidth() > 0 ? 2 : 1);
-      });
-
       it('should/should not have fixed container elements depending on scrolling mode', () => {
         expect(isFixed(grid.$.items)).to.equal(fixedContainers);
         expect(isFixed(grid.$.header)).to.equal(fixedContainers);
-      });
-
-      it('should have correct scroll bounds on all scroll modes', () => {
-        expect(grid.$.outerscroller.scrollHeight).to.be.above(grid.clientHeight);
-        expect(grid.$.table.scrollHeight).to.equal(grid.$.outerscroller.scrollHeight);
-        expect(grid.$.table.scrollWidth).to.equal(grid.$.outerscroller.scrollWidth);
       });
 
       it('should not have the table transformed with fixed containers', () => {
@@ -117,7 +104,7 @@
         const table = grid.$.table;
         table.scrollLeft = table.scrollWidth - table.offsetWidth;
         grid._previousMomentum = 0;
-        grid._debouncerIgnoreNewWheel.flush();
+        flushGrid(grid);
 
         expect(wheel(1, 0).defaultPrevented).to.be.false;
         expect(wheel(-1, 0).defaultPrevented).to.be.true;
@@ -188,20 +175,6 @@
         expect(scrollTop).to.equal(newScrollTop);
       });
 
-      it('should mark wheel scroll', () => {
-        const scroller = grid.$.scroller;
-        expect(scroller.hasAttribute('wheel-scrolling')).to.be.false;
-        expect(grid._wheelScrolling).not.to.be.ok;
-        wheel(grid, 0, 0);
-
-        expect(scroller.hasAttribute('wheel-scrolling')).to.be.true;
-        expect(grid._wheelScrolling).to.be.ok;
-        grid._debouncerWheelScrolling.flush();
-
-        expect(scroller.hasAttribute('wheel-scrolling')).to.be.false;
-        expect(grid._wheelScrolling).not.to.be.ok;
-      });
-
       it('should defer adding scrolling state attributes', done => {
         const scroller = grid.$.scroller;
         listenOnce(grid.$.table, 'scroll', () => {
@@ -212,16 +185,6 @@
           });
         });
         grid.$.table.dispatchEvent(new CustomEvent('scroll'));
-      });
-
-      it('should not sync outer scroller on IOS', done => {
-        grid._ios = true;
-        const spy = sinon.spy(grid.$.outerscroller, 'syncOuterScroller');
-        listenOnce(grid.$.table, 'scroll', () => {
-          expect(spy.called).to.be.false;
-          done();
-        });
-        grid.$.table.scrollTop += 1;
       });
 
       describe('overflow attribute', () => {
@@ -282,7 +245,7 @@
 
       it('should not have vertical scroll bars', done => {
         Polymer.RenderStatus.afterNextRender(grid, () => {
-          expect(grid.clientHeight).to.be.above(grid.$.header.clientHeight + grid.$.items.clientHeight);
+          expect(grid.clientHeight).not.to.be.below(grid.$.header.clientHeight + grid.$.items.clientHeight);
           done();
         });
       });

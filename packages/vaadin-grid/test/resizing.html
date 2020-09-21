@@ -92,7 +92,7 @@
           expect(rows[0].getBoundingClientRect().bottom).to.be.closeTo(rows[1].getBoundingClientRect().top, 1);
         });
 
-        it('should update header height', () => {
+        it('should update header height', done => {
           const _bottom = grid.$.header.getBoundingClientRect().bottom;
 
           getHeaderCellContent(grid, 0, 0).style.fontSize = '100px';
@@ -100,8 +100,11 @@
 
           const _newBottom = grid.$.header.getBoundingClientRect().bottom;
           expect(_newBottom).to.be.above(_bottom);
-          const firstBodyRowRect = getRows(grid.$.items)[0].getBoundingClientRect();
-          expect(firstBodyRowRect.top).to.be.closeTo(_newBottom, 1);
+          animationFrameFlush(() => {
+            const firstBodyRowRect = getRows(grid.$.items)[0].getBoundingClientRect();
+            expect(firstBodyRowRect.top).to.be.closeTo(_newBottom, 1);
+            done();
+          });
         });
 
         it('should update footer height', () => {

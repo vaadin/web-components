@@ -112,13 +112,13 @@
 
         beforeEach(done => {
           grid = fixture('large');
-          grid.scrollToIndex(10);
           grid.dataProvider = infiniteDataProvider;
           flushGrid(grid);
+          grid.scrollToIndex(10);
           animationFrameFlush(done);
         });
 
-        it('should schedule scroll to index', () => {
+        it('should scroll to index', () => {
           expect(grid._firstVisibleIndex).to.equal(10);
         });
 
@@ -144,7 +144,6 @@
           grid.scrollToIndex(targetIndex);
 
           const rect = grid.$.header.getBoundingClientRect();
-          grid.$.outerscroller.hidden = true;
           const cell = (Polymer.Settings.useShadow ? grid.shadowRoot : document).elementFromPoint(rect.left + 1, rect.bottom + 2);
           expect(cell.parentElement.index).to.equal(targetIndex);
         });

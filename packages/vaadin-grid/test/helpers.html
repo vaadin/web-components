@@ -26,9 +26,6 @@
     if (grid._debounceScrolling) {
       grid._debounceScrolling.flush();
     }
-    if (grid._debounceScrollPeriod) {
-      grid._debounceScrollPeriod.flush();
-    }
     if (grid._debouncerForceReflow) {
       grid._debouncerForceReflow.flush();
     }
@@ -47,6 +44,10 @@
     if (grid._debouncerApplyCachedData) {
       grid._debouncerApplyCachedData.flush();
     }
+    if (grid._debouncerIgnoreNewWheel) {
+      grid._debouncerIgnoreNewWheel.flush();
+    }
+    grid._scrollHandler();
   };
 
   window.getCell = (grid, index) => {

@@ -24,7 +24,6 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="vaadin-grid-keyboard-navigation-mixin.html">
 <link rel="import" href="vaadin-grid-column-reordering-mixin.html">
 <link rel="import" href="vaadin-grid-column.html">
-<link rel="import" href="vaadin-grid-outer-scroller.html">
 <link rel="import" href="vaadin-grid-styles.html">
 <link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
 
@@ -33,31 +32,20 @@ This program is available under Apache License Version 2.0, available at https:/
     <style include="vaadin-grid-styles"></style>
 
     <div id="scroller"
-      no-scrollbars$="[[!_scrollbarWidth]]"
-      wheel-scrolling$="[[_wheelScrolling]]"
       safari$="[[_safari]]"
       ios$="[[_ios]]"
-      loading$=[[loading]]
-      edge$="[[_edge]]"
-      firefox$="[[_firefox]]"
       ie$="[[_ie]]"
+      loading$=[[loading]]
       column-reordering-allowed$="[[columnReorderingAllowed]]">
 
       <table id="table" role="grid" aria-multiselectable="true" tabindex="0">
-        <caption id="fixedsizer" class="sizer" part="row"></caption>
+        <caption id="sizer" part="row"></caption>
         <thead id="header" role="rowgroup"></thead>
         <tbody id="items" role="rowgroup"></tbody>
         <tfoot id="footer" role="rowgroup"></tfoot>
       </table>
 
       <div part="reorder-ghost"></div>
-      <vaadin-grid-outer-scroller id="outerscroller"
-          _touch-device="[[_touchDevice]]"
-          scroll-target="[[scrollTarget]]"
-          scroll-handler="[[_this]]"
-          no-scrollbars="[[!_scrollbarWidth]]">
-        <div id="outersizer" class="sizer" part="row"></div>
-      </vaadin-grid-outer-scroller>
     </div>
 
     <!-- The template needs at least one slot or else shady doesn't distribute -->
@@ -352,14 +340,6 @@ This program is available under Apache License Version 2.0, available at https:/
       static get properties() {
         return {
           /** @private */
-          _this: {
-            type: Object,
-            value: function() {
-              return this;
-            }
-          },
-
-          /** @private */
           _safari: {
             type: Boolean,
             value: /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
@@ -606,7 +586,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         Array.from(row.children).forEach(cell => cell._vacant = true);
         row.innerHTML = '';
-        if (row.id !== 'outersizer' && row.id !== 'fixedsizer') {
+        if (row.id !== 'sizer') {
           row.hidden = true;
         }
         columns
@@ -774,8 +754,7 @@ This program is available under Apache License Version 2.0, available at https:/
           .forEach((footerRow, index) => this._updateRow(footerRow, columnTree[columnTree.length - 1 - index], 'footer', index === 0));
 
         // Sizer rows
-        this._updateRow(this.$.outersizer, columnTree[columnTree.length - 1], null, false, true);
-        this._updateRow(this.$.fixedsizer, columnTree[columnTree.length - 1]);
+        this._updateRow(this.$.sizer, columnTree[columnTree.length - 1]);
 
         this._resizeHandler();
         this._frozenCellsChanged();
@@ -783,6 +762,18 @@ This program is available under Apache License Version 2.0, available at https:/
         this._resetKeyboardNavigation();
         this._a11yUpdateHeaderRows();
         this._a11yUpdateFooterRows();
+        this.__updateFooterPositioning();
+      }
+
+      __updateFooterPositioning() {
+        if (this._firefox) {
+          // Sticky (or translated) footer in a flexbox host doesn't get included in
+          // the scroll height calculation on FF. This is a workaround for the issue.
+          this.$.items.style.paddingBottom = 0;
+          if (!this.heightByRows) {
+            this.$.items.style.paddingBottom = `${this.$.footer.offsetHeight}px`;
+          }
+        }
       }
 
       /**
@@ -831,23 +822,7 @@ This program is available under Apache License Version 2.0, available at https:/
         this._updateDetailsCellHeights();
         this._accessIronListAPI(super._resizeHandler, true);
         this._updateScrollerMeasurements();
-        this._updateHeaderFooterMetrics();
-      }
-
-      /** @protected */
-      _updateHeaderFooterMetrics() {
-        const headerHeight = this.$.header.clientHeight + 'px';
-        const footerHeight = this.$.footer.clientHeight + 'px';
-        [this.$.outersizer, this.$.fixedsizer, this.$.items].forEach(element => {
-          element.style.borderTopWidth = headerHeight;
-          element.style.borderBottomWidth = footerHeight;
-        });
-
-        Polymer.RenderStatus.afterNextRender(this.$.header, () => {
-          if (this._pendingScrollToIndex) {
-            this._scrollToIndex(this._pendingScrollToIndex);
-          }
-        });
+        this.__updateFooterPositioning();
       }
 
       /** @private */
@@ -855,10 +830,14 @@ This program is available under Apache License Version 2.0, available at https:/
         // ShadyCSS applies scoping suffixes to animation names
         if (e.animationName.indexOf('vaadin-grid-appear') === 0) {
           this._render();
-          this._updateHeaderFooterMetrics();
           e.stopPropagation();
           this.notifyResize();
           this.__itemsReceived();
+
+          requestAnimationFrame(() => {
+            // This needs to be set programmatically in order to avoid an iOS 10 bug (disappearing grid)
+            this.$.table.style.webkitOverflowScrolling = 'touch';
+          });
         }
       }
 

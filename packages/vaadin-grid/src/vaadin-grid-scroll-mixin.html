@@ -15,9 +15,7 @@ This program is available under Apache License Version 2.0, available at https:/
     /** @private */
     get _timeouts() {
       return {
-        SCROLL_PERIOD: 1000,
-        WHEEL_SCROLLING: 200,
-        SCROLLING: 100,
+        SCROLLING: 500,
         IGNORE_WHEEL: 500
       };
     }
@@ -30,32 +28,7 @@ This program is available under Apache License Version 2.0, available at https:/
          */
         _frozenCells: {
           type: Array,
-          value: function() {
-            return [];
-          },
-        },
-
-        /**
-         * @type {number}
-         * @protected
-         */
-        _scrollbarWidth: {
-          type: Number,
-          value: function() {
-            // Create the measurement node
-            var scrollDiv = document.createElement('div');
-            scrollDiv.style.width = '100px';
-            scrollDiv.style.height = '100px';
-            scrollDiv.style.overflow = 'scroll';
-            scrollDiv.style.position = 'absolute';
-            scrollDiv.style.top = '-9999px';
-            document.body.appendChild(scrollDiv);
-            // Get the scrollbar width
-            var scrollbarWidth = scrollDiv.offsetWidth - scrollDiv.clientWidth;
-            // Delete the DIV
-            document.body.removeChild(scrollDiv);
-            return scrollbarWidth;
-          }
+          value: () => [],
         },
 
         /** @private */
@@ -65,6 +38,13 @@ This program is available under Apache License Version 2.0, available at https:/
         _deltaYAcc: {
           type: Number,
           value: 0
+        },
+
+        /** @private */
+        _useSticky: {
+          type: Boolean,
+          value: window.CSS && window.CSS.supports &&
+            (window.CSS.supports('position', 'sticky') || window.CSS.supports('position', '-webkit-sticky'))
         }
 
       };
@@ -72,7 +52,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
     static get observers() {
       return [
-        '_scrollHeightUpdated(_estScrollHeight)',
         '_scrollViewportHeightUpdated(_viewportHeight)'
       ];
     }
@@ -117,29 +96,30 @@ This program is available under Apache License Version 2.0, available at https:/
     /** @protected */
     ready() {
       super.ready();
+
+      // Preserve accessor to the legacy scrolling functionality
+      this.$.outerscroller = document.createElement('div');
+
       this.scrollTarget = this.$.table;
 
-      this.addEventListener('wheel', e => {
-        this._wheelScrolling = true;
-        this._debouncerWheelScrolling = Polymer.Debouncer.debounce(
-          this._debouncerWheelScrolling,
-          Polymer.Async.timeOut.after(this._timeouts.WHEEL_SCROLLING),
-          () => this._wheelScrolling = false
-        );
-        this._onWheel(e);
-      });
-
-      this.$.table.addEventListener('scroll', e => {
-        if (this.$.outerscroller.outerScrolling) {
-          e.stopImmediatePropagation();
-        }
-      }, true);
+      this.addEventListener('wheel', this._onWheel);
 
       this.$.items.addEventListener('focusin', (e) => {
         const itemsIndex = e.composedPath().indexOf(this.$.items);
         this._rowWithFocusedElement = e.composedPath()[itemsIndex - 1];
       });
       this.$.items.addEventListener('focusout', () => this._rowWithFocusedElement = undefined);
+
+      // Reordering the physical rows cancels the user's grab of the scroll bar handle on Safari.
+      // Need to defer reordering until the user lets go of the scroll bar handle.
+      this.scrollTarget.addEventListener('mousedown', () => this.__mouseDown = true);
+      this.scrollTarget.addEventListener('mouseup', () => {
+        this.__mouseDown = false;
+        if (this.__pendingReorder) {
+          this.__pendingReorder = false;
+          setTimeout(() => this._reorderRows(), this._timeouts.SCROLLING);
+        }
+      });
     }
 
     /**
@@ -251,22 +231,7 @@ This program is available under Apache License Version 2.0, available at https:/
           cancelAnimationFrame(this._scrollingFrame);
           delete this._scrollingFrame;
           this._toggleAttribute('scrolling', false, this.$.scroller);
-          if (!this.$.outerscroller.outerScrolling) {
-            this._reorderRows();
-          }
-        }
-      );
-
-      if (!this._scrollPeriodFrame) {
-        this._scrollPeriodFrame = requestAnimationFrame(() => this._toggleAttribute('scroll-period', true, this.$.scroller));
-      }
-      this._debounceScrollPeriod = Polymer.Debouncer.debounce(
-        this._debounceScrollPeriod,
-        Polymer.Async.timeOut.after(this._timeouts.SCROLL_PERIOD),
-        () => {
-          cancelAnimationFrame(this._scrollPeriodFrame);
-          delete this._scrollPeriodFrame;
-          this._toggleAttribute('scroll-period', false, this.$.scroller);
+          this._reorderRows();
         }
       );
     }
@@ -277,18 +242,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
       if (!this.hasAttribute('reordering')) {
         this._scheduleScrolling();
-      }
-
-      const os = this.$.outerscroller;
-      if (!this._ios && (this._wheelScrolling || os.passthrough)) {
-        os.syncOuterScroller();
-      }
-
-      if (this._ios) {
-        // Enable vertical rubberband feedback
-        const overScroll = Math.max(-os.scrollTop, 0) ||
-          Math.min(0, os.scrollHeight - os.scrollTop - os.offsetHeight);
-        this.$.items.style.transform = `translateY(${overScroll}px)`;
       }
 
       this._updateOverflow();
@@ -334,6 +287,11 @@ This program is available under Apache License Version 2.0, available at https:/
      * @private
      */
     _reorderRows() {
+      if (this.__mouseDown) {
+        this.__pendingReorder = true;
+        return;
+      }
+
       const body = this.$.items;
       const items = body.querySelectorAll('tr');
       if (!items.length) {
@@ -386,8 +344,8 @@ This program is available under Apache License Version 2.0, available at https:/
     _updateScrollerMeasurements() {
       if (this._frozenCells.length > 0 && this.__isRTL) {
         this.__scrollerMetrics = {
-          scrollWidth: this.$.outerscroller.scrollWidth,
-          clientWidth: this.$.outerscroller.clientWidth
+          scrollWidth: this.$.table.scrollWidth,
+          clientWidth: this.$.table.clientWidth
         };
       }
     }
@@ -413,16 +371,21 @@ This program is available under Apache License Version 2.0, available at https:/
 
     /** @private */
     _translateStationaryElements() {
-      if (this._edge && !this._scrollbarWidth) {
-        // Fixed mode (Tablet Edge)
-        this.$.items.style.transform =
-        this._getTranslate(-this._scrollLeft || 0, -this._scrollTop || 0);
+      const scrollLeft = Math.max(0, this._scrollLeft);
+      const scrollTop = Math.max(0, this._scrollTop);
 
-        this.$.footer.style.transform = this.$.header.style.transform =
-        this._getTranslate(-this._scrollLeft || 0, 0);
-      } else {
-        this.$.footer.style.transform = this.$.header.style.transform = this._getTranslate(0, this._scrollTop);
+      let leftOffset = 0;
+      let topOffset = 0;
+      let footerOffset = 0;
+      if (!this._useSticky) {
+        leftOffset = scrollLeft;
+        topOffset = scrollTop;
+        footerOffset = this.$.table.clientHeight - this.$.footer.offsetHeight - this.$.footer.offsetTop;
       }
+
+      this.$.header.style.transform = this._getTranslate(-scrollLeft + leftOffset, topOffset);
+      this.$.footer.style.transform = this._getTranslate(-scrollLeft + leftOffset, topOffset + footerOffset);
+      this.$.items.style.transform = this._getTranslate(-scrollLeft + leftOffset, 0);
 
       if (this._frozenCells.length > 0) {
         const x = this.__isRTL ?
@@ -430,6 +393,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this.__scrollerMetrics.scrollWidth
           : this._scrollLeft;
         var frozenCellTransform = this._getTranslate(x, 0);
+
         for (var i = 0; i < this._frozenCells.length; i++) {
           this._frozenCells[i].style.transform = frozenCellTransform;
         }
@@ -438,12 +402,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     /** @private */
     _getTranslate(x, y) {
-      return 'translate(' + x + 'px,' + y + 'px)';
-    }
-
-    /** @private */
-    _scrollHeightUpdated(_estScrollHeight) {
-      this.$.outersizer.style.top = this.$.fixedsizer.style.top = _estScrollHeight + 'px';
+      return `translate(${x}px, ${y}px)`;
     }
 
   };

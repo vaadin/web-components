@@ -223,6 +223,21 @@ describe('drag and drop', () => {
         expect(spy.called).to.be.true;
       });
 
+      it('should only use visible items for the row count state attribute', done => {
+        grid.style.height = '80px';
+        flushGrid(grid);
+        grid.notifyResize();
+        grid.selectedItems = grid.items;
+
+        setTimeout(() => {
+          flushGrid(grid);
+          fireDragStart();
+          const row = getRows(grid.$.items)[0];
+          expect(row.getAttribute('dragstart')).to.equal('');
+          done();
+        });
+      });
+
       it('should add dragging state attribute', () => {
         fireDragStart();
         expect(grid.hasAttribute('dragging-rows')).to.be.true;
@@ -238,14 +253,6 @@ describe('drag and drop', () => {
           expect(row.hasAttribute('dragstart')).to.be.false;
           done();
         });
-      });
-
-      it('should only use visible items for the row count state attribute', () => {
-        grid.style.height = '80px';
-        grid.selectedItems = grid.items;
-        fireDragStart();
-        const row = getRows(grid.$.items)[0];
-        expect(row.getAttribute('dragstart')).to.equal('');
       });
 
       it('should override row count state attribute', () => {
@@ -316,12 +323,17 @@ describe('drag and drop', () => {
         expect(event.detail.draggedItems).to.eql(grid.items);
       });
 
-      it('should only include visible rows in the event items', () => {
+      it('should only include visible rows in the event items', done => {
         grid.style.height = '80px';
         grid.selectedItems = grid.items;
-        fireDragStart();
-        const event = dragStartSpy.getCall(0).args[0];
-        expect(event.detail.draggedItems).to.eql([grid.items[0]]);
+
+        setTimeout(() => {
+          flushGrid(grid);
+          fireDragStart();
+          const event = dragStartSpy.getCall(0).args[0];
+          expect(event.detail.draggedItems).to.eql([grid.items[0]]);
+          done();
+        });
       });
 
       it('should auto generate data transfer text data', () => {
@@ -333,14 +345,19 @@ describe('drag and drop', () => {
         expect(textData).to.eql('foo\tbar\nbaz\tqux');
       });
 
-      it('should only use visible rows for the transfer data', () => {
+      it('should only use visible rows for the transfer data', done => {
         grid.style.height = '80px';
         grid.selectedItems = grid.items;
-        fireDragStart();
-        fireDrop();
-        const event = dropSpy.getCall(0).args[0];
-        const textData = event.detail.dragData.filter(d => d.type === 'text')[0].data;
-        expect(textData).to.eql('foo\tbar');
+
+        setTimeout(() => {
+          flushGrid(grid);
+          fireDragStart();
+          fireDrop();
+          const event = dropSpy.getCall(0).args[0];
+          const textData = event.detail.dragData.filter(d => d.type === 'text')[0].data;
+          expect(textData).to.eql('foo\tbar');
+          done();
+        });
       });
 
       it('should auto generate data transfer text data in order', () => {
@@ -808,7 +825,7 @@ describe('drag and drop', () => {
 
       grid.$.table.scrollTop = 0;
       flushGrid(grid);
-      flush(() => done());
+      animationFrameFlush(() => done());
     });
 
     it('should auto scroll down', () => {

@@ -155,6 +155,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
     /** @private */
     _onNavigationKeyDown(e, key) {
+      this._scrollHandler();
+
       e.preventDefault();
 
       function indexOfChildElement(el) {

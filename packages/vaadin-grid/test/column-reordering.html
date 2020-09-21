@@ -275,13 +275,6 @@
         expect(grid._reorderGhost.style.visibility).to.equal('visible');
       });
 
-      it('should not adjust outer-scroller z while reordering', () => {
-        const zIndex = window.getComputedStyle(grid.$.outerscroller).zIndex;
-        dragStart(headerContent[0]);
-        grid._scrollHandler();
-        expect(window.getComputedStyle(grid.$.outerscroller).zIndex).to.equal(zIndex);
-      });
-
       it('should prevent contextmenu while reordering', () => {
         dragStart(headerContent[0]);
         const e = new CustomEvent('contextmenu', {cancelable: true, bubbles: true});
@@ -688,7 +681,7 @@
         grid = fixture('empty-header-group');
         grid.dataProvider = infiniteDataProvider;
         flushGrid(grid);
-        done();
+        requestAnimationFrame(() => done());
       });
 
       it('should swap a column and a column of a group with empty header', () => {

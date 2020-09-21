@@ -67,7 +67,6 @@ module.exports = {
           '/vaadin-grid-filter-mixin.html',
           '/vaadin-grid-filter.html',
           '/vaadin-grid-keyboard-navigation-mixin.html',
-          '/vaadin-grid-outer-scroller.html',
           '/vaadin-grid-row-details-mixin.html',
           '/vaadin-grid-scroll-mixin.html',
           '/vaadin-grid-scroller.html',
