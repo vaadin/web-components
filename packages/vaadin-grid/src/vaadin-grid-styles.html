@@ -63,13 +63,8 @@ This program is available under Apache License Version 2.0, available at https:/
         width: 100%;
         height: 100%;
         overflow: auto;
-        z-index: -2;
         position: relative;
         outline: none;
-      }
-
-      [ios] #table {
-        z-index: 0;
       }
 
       #header,
@@ -80,6 +75,7 @@ This program is available under Apache License Version 2.0, available at https:/
         left: 0;
         overflow: visible;
         width: 100%;
+        z-index: 1;
       }
 
       #header {
@@ -108,7 +104,6 @@ This program is available under Apache License Version 2.0, available at https:/
         width: 100%;
         left: 0;
         overflow: visible;
-        z-index: -1;
       }
 
       [part~="row"] {
