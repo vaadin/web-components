@@ -352,6 +352,18 @@
             expect(grid.$.scroller.getBoundingClientRect().width).to.be.closeTo(300 - 2, 1);
           });
 
+          it('should have a visible header after row reorder', done => {
+            grid.querySelector('vaadin-grid-column').header = 'header';
+            grid.scrollToIndex(300);
+            setTimeout(() => {
+              flushGrid(grid);
+              const {left, top} = grid.getBoundingClientRect();
+              const cell = grid._cellFromPoint(left + 1, top + 1);
+              expect(grid.$.header.contains(cell)).to.be.true;
+              done();
+            });
+          });
+
           // Skip this test on iOS 10 since there Safari has a bug that makes this fail (works in iOS 9, 11 and 12)
           (/iPhone OS 10_/.test(navigator.userAgent) ? it.skip : it)('should stretch height', () => {
             expect(grid.getBoundingClientRect().height).to.be.closeTo(200, 1);

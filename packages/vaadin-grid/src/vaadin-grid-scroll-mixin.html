@@ -321,6 +321,14 @@ This program is available under Apache License Version 2.0, available at https:/
           body.insertBefore(items[i], items[0]);
         }
       }
+
+      // Due to a rendering bug, reordering the rows can make the sticky header disappear on Safari
+      // if the grid is used inside of a flex box. This is a workaround for the issue.
+      if (this._safari) {
+        const {transform} = this.$.header.style;
+        this.$.header.style.transform = '';
+        setTimeout(() => this.$.header.style.transform = transform);
+      }
     }
 
     /** @protected */
