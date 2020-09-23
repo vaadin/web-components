@@ -138,7 +138,7 @@
         });
       });
 
-      describe('_tabPressed and focus-ring', () => {
+      describe('focus-ring', () => {
         var focusin = () => {
           focusElement.dispatchEvent(new CustomEvent('focusin', {composed: true, bubbles: true}));
         };
@@ -146,20 +146,6 @@
         var focusout = () => {
           focusElement.dispatchEvent(new CustomEvent('focusout', {composed: true, bubbles: true}));
         };
-
-        it('should set and unset _tabPressed when press TAB', () => {
-          MockInteractions.keyDownOn(document.body, 9);
-          expect(customElement._tabPressed).to.be.true;
-          MockInteractions.keyUpOn(document.body, 9);
-          expect(customElement._tabPressed).to.be.false;
-        });
-
-        it('should set and unset _tabPressed when press SHIFT+TAB', () => {
-          MockInteractions.keyDownOn(document.body, 9, 'shift');
-          expect(customElement._tabPressed).to.be.true;
-          MockInteractions.keyUpOn(document.body, 9, 'shift');
-          expect(customElement._tabPressed).to.be.false;
-        });
 
         it('should set _isShiftTabbing when pressing shift-tab', () => {
           const event = MockInteractions.keyboardEventFor('keydown', 9, 'shift');
@@ -179,13 +165,6 @@
           expect(customElement._isShiftTabbing).not.to.be.ok;
         });
 
-        it('should not change _tabPressed on any other key except TAB', () => {
-          MockInteractions.keyDownOn(document.body, 65);
-          expect(customElement._tabPressed).to.be.false;
-          MockInteractions.keyUpOn(document.body, 65);
-          expect(customElement._tabPressed).to.be.false;
-        });
-
         it('should set the focus-ring attribute when TAB is pressed and focus is received', () => {
           MockInteractions.keyDownOn(document.body, 9);
           focusin();
@@ -199,6 +178,13 @@
           focusin();
           expect(customElement.hasAttribute('focus-ring')).to.be.true;
           focusout();
+          expect(customElement.hasAttribute('focus-ring')).to.be.false;
+        });
+
+        it('should not set the focus-ring attribute when mousedown happens after keydown', () => {
+          MockInteractions.keyDownOn(document.body, 9);
+          document.body.dispatchEvent(new MouseEvent('mousedown'));
+          focusin();
           expect(customElement.hasAttribute('focus-ring')).to.be.false;
         });
 
