@@ -481,13 +481,17 @@
           expect(grid.$.table.scrollLeft).to.be.at.least(100);
         });
 
-        it('should scroll to the left on tab when editable cell is outside the viewport', () => {
+        it('should scroll to the left on tab when editable cell is outside the viewport', (done) => {
           const firstCell = getContainerCell(grid.$.items, 1, 1);
           dblclick(firstCell._content);
-          input = getCellEditor(firstCell);
-          shiftTab(input);
 
-          expect(grid.$.table.scrollLeft).to.closeTo(1, 1);
+          setTimeout(() => {
+            input = getCellEditor(firstCell);
+            shiftTab(input);
+
+            expect(grid.$.table.scrollLeft).to.closeTo(1, 1);
+            done();
+          });
         });
       });
 
