@@ -28,6 +28,11 @@
         font-weight: 400;
       }
 
+      /* reset outline inherited from text-field */
+      :host([theme~="grid-pro-editor"][focus-ring]) [part="input-field"] {
+        box-shadow: none;
+      }
+
       :host([theme~="grid-pro-editor"]) [part="value"] {
         padding: 0 var(--lumo-space-m);
         font-size: inherit;
