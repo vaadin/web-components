@@ -759,6 +759,11 @@ This program is available under Apache License Version 2.0, available at https:/
       if (filter === undefined) {
         return;
       }
+
+      // Notify the dropdown about filter changing, so to let it skip the
+      // scrolling restore
+      this.$.overlay.filterChanged = true;
+
       if (this.items) {
         this.filteredItems = this._filterItems(this.items, filter);
       } else {

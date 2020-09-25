@@ -42,13 +42,15 @@
       let spyDataProvider;
       let spyAsyncDataProvider;
 
-      const dataProvider = (params, callback) => {
+      const getDataProvider = (allItems) => (params, callback) => {
         const filteredItems = allItems.filter(item => item.indexOf(params.filter) > -1);
         const size = filteredItems.length;
         const offset = params.page * params.pageSize;
         dataProviderItems = filteredItems.slice(offset, offset + params.pageSize);
         callback(dataProviderItems, size);
       };
+
+      const dataProvider = getDataProvider(allItems);
 
       const asyncDataProvider = (params, callback) => {
         setTimeout(() => dataProvider(params, callback));
@@ -817,6 +819,29 @@
               comboBox.open();
               expect(emptyDataProvider).to.be.calledOnce;
             });
+          });
+        });
+
+        describe('undefined size', () => {
+          const ESTIMATED_SIZE = 1234;
+          const allItems = Array(...new Array(ESTIMATED_SIZE)).map((_, i) => `item ${i}`);
+
+          it('should restore the scroll position after size update', () => {
+            comboBox.dataProvider = getDataProvider(allItems);
+            comboBox.opened = true;
+            comboBox.$.overlay._scrollIntoView(75);
+            comboBox.size = 300;
+            // verify whether the scroller not jumped to 0 pos and restored
+            // approx between 1 and 2 page (exact value may vary depending of window size)
+            expect(comboBox.$.overlay._selector.firstVisibleIndex).to.be.greaterThan(comboBox.pageSize).and.lessThan(comboBox.pageSize * 2);
+          });
+
+          it('should reset to 0 when filter applied and filtered items size more than page size', () => {
+            comboBox.items = allItems;
+            comboBox.opened = true;
+            comboBox.$.overlay._scrollIntoView(500);
+            comboBox.filter = '1';
+            expect(comboBox.$.overlay._selector.firstVisibleIndex).to.be.equal(0);
           });
         });
       };
