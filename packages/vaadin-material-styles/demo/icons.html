@@ -1,0 +1,156 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>Vaadin Material Icons</title>
+
+  <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
+  <link rel="import" href="common.html">
+
+  <style>
+    [unresolved] {
+      opacity: 0;
+    }
+  </style>
+
+  <custom-style>
+    <style>
+      .material-icons {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0 -1em;
+      }
+
+      .material-icons material-icon {
+        flex: auto;
+        margin: 1em;
+      }
+
+      [class^="icon-size"] {
+        display: flex;
+        flex: none;
+        align-items: center;
+        justify-content: center;
+        width: 2rem;
+        height: 2rem;
+        margin: 0.25rem;
+        color: var(--material-secondary-text-color);
+        background-clip: content-box;
+        position: relative;
+        font-weight: 600;
+        background-color: var(--material-contrast-10pct);
+      }
+    </style>
+  </custom-style>
+</head>
+
+<body unresolved>
+
+  <div class="vertical-section-container centered">
+
+    <demo-navigation>
+      <span slot="header">material</span>
+    </demo-navigation>
+
+    <h2 demo-section>Font icons</h2>
+
+    <nice-demo-snippet code-only>
+      <template slot="source">
+        <link rel="import" href="bower_components/vaadin-material-styles/font-icons.html">
+      </template>
+    </nice-demo-snippet>
+
+    <nice-demo-snippet>
+      <template slot="source">
+        <span class="font-icon arrow-downward"></span>
+        <span class="font-icon arrow-upward"></span>
+        <span class="font-icon calendar"></span>
+        <span class="font-icon check"></span>
+        <span class="font-icon chevron-left"></span>
+        <span class="font-icon chevron-right"></span>
+        <span class="font-icon clear"></span>
+        <span class="font-icon clock"></span>
+        <span class="font-icon dropdown"></span>
+        <span class="font-icon error"></span>
+        <span class="font-icon eye"></span>
+        <span class="font-icon eye-disabled"></span>
+        <span class="font-icon play"></span>
+        <span class="font-icon reload"></span>
+        <span class="font-icon upload"></span>
+
+        <custom-style>
+          <style>
+            .font-icon {
+              font-family: material-icons;
+              font-size: 24px;
+            }
+
+            .font-icon.arrow-downward::before {
+              content: var(--material-icons-arrow-downward);
+            }
+
+            .font-icon.arrow-upward::before {
+              content: var(--material-icons-arrow-upward);
+            }
+
+            .font-icon.calendar::before {
+              content: var(--material-icons-calendar);
+            }
+
+            .font-icon.check::before {
+              content: var(--material-icons-check);
+            }
+
+            .font-icon.chevron-left::before {
+              content: var(--material-icons-chevron-left);
+            }
+
+            .font-icon.chevron-right::before {
+              content: var(--material-icons-chevron-right);
+            }
+
+            .font-icon.clear::before {
+              content: var(--material-icons-clear);
+            }
+
+            .font-icon.clock::before {
+              content: var(--material-icons-clock);
+            }
+
+            .font-icon.dropdown::before {
+              content: var(--material-icons-dropdown);
+            }
+
+            .font-icon.error::before {
+              content: var(--material-icons-error);
+            }
+
+            .font-icon.eye::before {
+              content: var(--material-icons-eye);
+            }
+
+            .font-icon.eye-disabled::before {
+              content: var(--material-icons-eye-disabled);
+            }
+
+            .font-icon.play::before {
+              content: var(--material-icons-play);
+            }
+
+            .font-icon.reload::before {
+              content: var(--material-icons-reload);
+            }
+
+            .font-icon.upload::before {
+              content: var(--material-icons-upload);
+            }
+          </style>
+        </custom-style>
+      </template>
+    </nice-demo-snippet>
+  </div>
+</body>
+</html>
