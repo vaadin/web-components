@@ -72,11 +72,11 @@
 
         var upload = document.querySelector('vaadin-upload');
         upload.addEventListener('upload-response', function(event) {
-          if (event.detail.file.size > 1024 * 1024)
+          if (event.detail.file.size > 1024 * 1024) {
             event.detail.file.error = 'The file is too big';
+          }
+        });
       });
-
-    });
     </script>
 
   </div>
