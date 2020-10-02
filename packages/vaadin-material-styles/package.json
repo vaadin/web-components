@@ -25,13 +25,15 @@
     "!wdio.conf.js"
   ],
   "scripts": {
+    "icons": "gulp icons",
+    "lint": "gulp lint",
     "test": "wct",
     "preversion": "gulp version:update"
   },
   "devDependencies": {
-    "@vaadin/vaadin-component-dev-dependencies": "^1.0.0",
-    "gulp-iconfont": "^9.1.0",
-    "gulp-svgmin": "^1.2.4",
-    "svgicons2svgfont": "^9.0.2"
+    "@vaadin/vaadin-component-dev-dependencies": "^2.0.0",
+    "gulp-iconfont": "^10.0.3",
+    "gulp-sort": "^2.0.0",
+    "gulp-svgmin": "^1.2.4"
   }
 }

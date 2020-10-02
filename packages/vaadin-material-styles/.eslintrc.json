@@ -8,6 +8,9 @@
   "plugins": [
     "html"
   ],
+  "parserOptions": {
+    "ecmaVersion": 8
+  },
   "globals": {
     "Polymer": false,
     "Vaadin": false
