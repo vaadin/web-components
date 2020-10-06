@@ -199,10 +199,10 @@ This program is available under Apache License Version 2.0, available at https:/
     </div>
 
     <div on-touchend="_preventDefault" role="toolbar" part="toolbar">
-      <vaadin-button id="todayButton" part="today-button" disabled="[[!_isTodayAllowed(minDate, maxDate)]]" on-tap="_onTodayTap">
+      <vaadin-button id="todayButton" theme="tertiary" part="today-button" disabled="[[!_isTodayAllowed(minDate, maxDate)]]" on-tap="_onTodayTap">
         [[i18n.today]]
       </vaadin-button>
-      <vaadin-button id="cancelButton" part="cancel-button" on-tap="_cancel">
+      <vaadin-button id="cancelButton" theme="tertiary" part="cancel-button" on-tap="_cancel">
         [[i18n.cancel]]
       </vaadin-button>
     </div>
