@@ -18,6 +18,12 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="custom-pattern">
+    <template>
+      <vaadin-email-field pattern=".+@example\.com"></vaadin-email-field>
+    </template>
+  </test-fixture>
+
   <script>
     const validAddresses = [
       'email@example.com',
@@ -57,6 +63,10 @@
 
       it('should have [type=email]', () => {
         expect(input.type).to.equal('email');
+      });
+
+      it('should not override custom pattern', () => {
+        expect(fixture('custom-pattern').pattern).to.equal('.+@example\\.com');
       });
 
       describe('validation', () => {
