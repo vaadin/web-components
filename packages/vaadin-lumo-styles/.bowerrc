@@ -1,0 +1,5 @@
+{
+  "scripts": {
+    "postinstall": "rm -rf bower_components/vaadin-lumo-styles"
+  }
+}
