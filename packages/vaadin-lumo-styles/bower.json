@@ -37,7 +37,8 @@
     "bower_components",
     "gulpfile.js",
     "package.json",
-    "wct.conf.js"
+    "wct.conf.js",
+    "icons/Lumo Icons.sketch"
   ],
   "dependencies": {
     "polymer": "Polymer/polymer#^2.0.0",
