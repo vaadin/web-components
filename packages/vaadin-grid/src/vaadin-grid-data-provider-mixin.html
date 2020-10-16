@@ -382,8 +382,7 @@ This program is available under Apache License Version 2.0, available at https:/
                 .forEach(row => {
                   const cachedItem = this._cache.getItemForIndex(row.index);
                   if (cachedItem) {
-                    this._toggleAttribute('loading', false, row);
-                    this._updateItem(row, cachedItem);
+                    this._getItem(row.index, row);
                   }
                 });
 

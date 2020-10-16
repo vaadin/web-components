@@ -303,6 +303,20 @@
             expect(grid.dataProvider.getCall(0).args[0].parentItem).to.be.undefined;
           });
 
+          it('should request items when scrolled to an expanded parent', done => {
+            grid.size = 51;
+            grid.dataProvider = sinon.spy(infiniteDataProvider);
+            grid.itemIdPath = 'value';
+            grid.expandedItems = [{value: 'foo50'}];
+            flushGrid(grid);
+            animationFrameFlush(() => {
+              grid.$.table.scrollTop = 10000;
+              flushGrid(grid);
+              expect(grid.dataProvider.lastCall.args[0].parentItem).to.be.ok;
+              done();
+            });
+          });
+
           it('should request pages from 0', () => {
             expect(grid.dataProvider.getCall(0).args[0].page).to.equal(0);
             expect(grid.dataProvider.getCall(1).args[0].page).to.equal(1);
