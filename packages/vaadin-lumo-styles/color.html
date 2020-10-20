@@ -1,10 +1,33 @@
 <link rel="import" href="version.html">
 <link rel="import" href="../polymer/lib/elements/custom-style.html">
+<!-- MAGI REMOVE START -->
 <link rel="import" href="../polymer/lib/elements/dom-module.html">
+<!-- MAGI REMOVE END -->
 
+<!-- MAGI ADD START
+<link rel="import" href="../vaadin-themable-mixin/register-styles.html">
+<script>
+  /**
+   * @namespace Vaadin
+   */
+  window.Vaadin = window.Vaadin || {};
+
+  /**
+   * @namespace Vaadin.LumoStyles
+   */
+  window.Vaadin.LumoStyles = window.Vaadin.LumoStyles || {};
+
+  (function() {
+    const colorBase = Vaadin.css`
+MAGI ADD END -->
+<!-- MAGI REMOVE START -->
 <custom-style>
   <style>
     html {
+    /* MAGI REMOVE END */
+    /* MAGI ADD START
+    :host {
+      MAGI ADD END */
       /* Base (background) */
       --lumo-base-color: #FFF;
 
@@ -75,12 +98,25 @@
       --lumo-success-text-color: hsl(145, 100%, 32%);
       --lumo-success-contrast-color: #FFF;
     }
+    /* MAGI REMOVE START */
   </style>
 </custom-style>
+<!-- MAGI REMOVE END -->
+<!-- MAGI ADD START
+    `;
+    const $tpl = document.createElement('template');
+    $tpl.innerHTML = `<custom-style><style>${colorBase.toString().replace(':host', 'html')}</style></custom-style>`;
+    document.head.appendChild($tpl.content);
 
+    Vaadin.LumoStyles.colorBase = colorBase;
+
+    const color = Vaadin.css`
+MAGI ADD END -->
+<!-- MAGI REMOVE START -->
 <dom-module id="lumo-color">
   <template>
     <style>
+      /* MAGI REMOVE END */
       [theme~="dark"] {
         /* Base (background) */
         --lumo-base-color: hsl(214, 35%, 21%);
@@ -183,18 +219,38 @@
         background-color: var(--lumo-contrast-10pct);
         border-radius: var(--lumo-border-radius-m);
       }
+      /* MAGI REMOVE START */
     </style>
   </template>
 </dom-module>
+<!-- MAGI REMOVE END -->
+<!-- MAGI ADD START
+    `;
+    Vaadin.registerStyles('', color, {moduleId: 'lumo-color'});
 
-<!-- Only needed for IE11 when you want to use the dark palette inside the light palette -->
+    Vaadin.LumoStyles.color = color;
+
+    const colorLegacy = Vaadin.css`
+MAGI ADD END -->
+<!-- MAGI REMOVE START -->
 <dom-module id="lumo-color-legacy">
   <template>
     <style include="lumo-color">
+      /* MAGI REMOVE END */
       :host {
         color: var(--lumo-body-text-color) !important;
         background-color: var(--lumo-base-color) !important;
       }
+      /* MAGI REMOVE START */
     </style>
   </template>
 </dom-module>
+<!-- MAGI REMOVE END -->
+<!-- MAGI ADD START
+    `;
+    Vaadin.registerStyles('', colorLegacy, {moduleId: 'lumo-color-legacy', include: ['lumo-color']});
+
+    Vaadin.LumoStyles.colorLegacy = colorLegacy;
+  })();
+</script>
+MAGI ADD END -->

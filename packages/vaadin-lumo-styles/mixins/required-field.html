@@ -3,9 +3,27 @@
 <link rel="import" href="../style.html">
 <link rel="import" href="../typography.html">
 
+<!-- MAGI ADD START
+<link rel="import" href="../../vaadin-themable-mixin/register-styles.html">
+<script>
+  /**
+   * @namespace Vaadin
+   */
+  window.Vaadin = window.Vaadin || {};
+
+  /**
+   * @namespace Vaadin.LumoStyles
+   */
+  window.Vaadin.LumoStyles = window.Vaadin.LumoStyles || {};
+
+  (function() {
+    const requiredField = Vaadin.css`
+MAGI ADD END -->
+<!-- MAGI REMOVE START -->
 <dom-module id="lumo-required-field">
   <template>
     <style>
+      /* MAGI REMOVE END */
       [part="label"] {
         align-self: flex-start;
         color: var(--lumo-secondary-text-color);
@@ -98,7 +116,16 @@
         margin-left: 0;
         margin-right: calc(var(--lumo-border-radius-m) / 4);
       }
-
+      /* MAGI REMOVE START */
     </style>
   </template>
 </dom-module>
+<!-- MAGI REMOVE END -->
+<!-- MAGI ADD START
+    `;
+    Vaadin.registerStyles('', requiredField, {moduleId: 'lumo-required-field'});
+
+    Vaadin.LumoStyles.requiredField = requiredField;
+  })();
+</script>
+MAGI ADD END -->

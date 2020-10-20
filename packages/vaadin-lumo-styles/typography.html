@@ -1,10 +1,33 @@
 <link rel="import" href="version.html">
 <link rel="import" href="../polymer/lib/elements/custom-style.html">
+<!-- MAGI REMOVE START -->
 <link rel="import" href="../polymer/lib/elements/dom-module.html">
+<!-- MAGI REMOVE END -->
 
+<!-- MAGI ADD START
+<link rel="import" href="../vaadin-themable-mixin/register-styles.html">
+<script>
+  /**
+   * @namespace Vaadin
+   */
+  window.Vaadin = window.Vaadin || {};
+
+  /**
+   * @namespace Vaadin.LumoStyles
+   */
+  window.Vaadin.LumoStyles = window.Vaadin.LumoStyles || {};
+
+  (function() {
+    const font = Vaadin.css`
+MAGI ADD END -->
+<!-- MAGI REMOVE START -->
 <custom-style>
   <style>
     html {
+    /* MAGI REMOVE END */
+    /* MAGI ADD START
+    :host {
+      MAGI ADD END */
       /* Font families */
       --lumo-font-family: -apple-system, BlinkMacSystemFont, "Roboto", "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 
@@ -23,13 +46,25 @@
       --lumo-line-height-s: 1.375;
       --lumo-line-height-m: 1.625;
     }
-
+    /* MAGI REMOVE START */
   </style>
 </custom-style>
+<!-- MAGI REMOVE END -->
+<!-- MAGI ADD START
+    `;
+    const $tpl = document.createElement('template');
+    $tpl.innerHTML = `<custom-style><style>${font.toString().replace(':host', 'html')}</style></custom-style>`;
+    document.head.appendChild($tpl.content);
 
+    Vaadin.LumoStyles.font = font;
+
+    const typography = Vaadin.css`
+MAGI ADD END -->
+<!-- MAGI REMOVE START -->
 <dom-module id="lumo-typography">
   <template>
     <style>
+      /* MAGI REMOVE END */
       html {
         font-family: var(--lumo-font-family);
         font-size: var(--lumo-font-size, var(--lumo-font-size-m));
@@ -142,7 +177,16 @@
         border-left: none;
         border-right: 2px solid var(--lumo-contrast-30pct);
       }
-
+      /* MAGI REMOVE START */
     </style>
   </template>
 </dom-module>
+    <!-- MAGI REMOVE END -->
+    <!-- MAGI ADD START
+    `;
+    Vaadin.registerStyles('', typography, {moduleId: 'lumo-typography'});
+
+    Vaadin.LumoStyles.typography = typography;
+  })();
+</script>
+MAGI ADD END -->

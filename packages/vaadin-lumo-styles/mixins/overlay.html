@@ -3,9 +3,27 @@
 <link rel="import" href="../style.html">
 <link rel="import" href="../typography.html">
 
+<!-- MAGI ADD START
+<link rel="import" href="../../vaadin-themable-mixin/register-styles.html">
+<script>
+  /**
+   * @namespace Vaadin
+   */
+  window.Vaadin = window.Vaadin || {};
+
+  /**
+   * @namespace Vaadin.LumoStyles
+   */
+  window.Vaadin.LumoStyles = window.Vaadin.LumoStyles || {};
+
+  (function() {
+    const overlay = Vaadin.css`
+MAGI ADD END -->
+<!-- MAGI REMOVE START -->
 <dom-module id="lumo-overlay">
   <template>
     <style>
+      /* MAGI REMOVE END */
       :host {
         top: var(--lumo-space-m);
         right: var(--lumo-space-m);
@@ -63,6 +81,16 @@
         0% { opacity: 1; }
         100% { opacity: 1; }
       }
+      /* MAGI REMOVE START */
     </style>
   </template>
 </dom-module>
+<!-- MAGI REMOVE END -->
+<!-- MAGI ADD START
+    `;
+    Vaadin.registerStyles('', overlay, {moduleId: 'lumo-overlay'});
+
+    Vaadin.LumoStyles.overlay = overlay;
+  })();
+</script>
+MAGI ADD END -->
