@@ -474,13 +474,7 @@ This program is available under Apache License Version 2.0, available at https:/
       if (!this._hasData) {
         // load data before adding rows to make sure they have content when
         // rendered for the first time.
-        this._loadPage(0, this._cache, () => {
-          const hadData = this._hasData;
-          this._hasData = true;
-          if (!hadData) {
-            this.notifyResize();
-          }
-        });
+        this._loadPage(0, this._cache);
       }
     }
 
