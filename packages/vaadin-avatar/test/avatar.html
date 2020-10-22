@@ -267,6 +267,16 @@
           avatar.colorIndex = 99;
           expect(avatar.hasAttribute('has-color-index')).to.be.false;
         });
+
+        it('should warn about invalid css property used', () => {
+          const _warn = console.warn;
+          const spy = console.warn = sinon.spy();
+
+          avatar.colorIndex = 99;
+          console.warn = _warn;
+
+          expect(spy.called).to.be.true;
+        });
       });
 
       describe('a11y', () => {
