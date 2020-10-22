@@ -211,6 +211,10 @@ This program is available under Apache License Version 2.0, available at https:/
         filteredItems[i] = filteredItems[i] !== undefined ? filteredItems[i] : this.__placeHolder;
       }
       this.filteredItems = filteredItems;
+
+      // Cleans up the redundant pending requests for pages > size
+      // Refers to https://github.com/vaadin/vaadin-flow-components/issues/229
+      this._flushPendingRequests(size);
     }
 
     /** @private */
@@ -253,6 +257,32 @@ This program is available under Apache License Version 2.0, available at https:/
             'instead of `value`'
           );
           /* eslint-enable no-console */
+        }
+      }
+    }
+
+    /**
+     * This method cleans up the page callbacks which refers to the
+     * non-existing pages, i.e. which item indexes are greater than the
+     * changed size.
+     * This case is basically happens when:
+     * 1. Users scroll fast to the bottom and combo box generates the
+     * redundant page request/callback
+     * 2. Server side uses undefined size lazy loading and suddenly reaches
+     * the exact size which is on the range edge
+     * (for default page size = 50, it will be 100, 200, 300, ...).
+     * @param size the new size of items
+     * @private
+     */
+    _flushPendingRequests(size) {
+      if (this._pendingRequests) {
+        const lastPage = Math.ceil(size / this.pageSize);
+        const pendingRequestsKeys = Object.keys(this._pendingRequests);
+        for (let reqIdx = 0; reqIdx < pendingRequestsKeys.length; reqIdx++) {
+          const page = parseInt(pendingRequestsKeys[reqIdx]);
+          if (page >= lastPage) {
+            this._pendingRequests[page]([], size);
+          }
         }
       }
     }

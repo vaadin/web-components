@@ -459,6 +459,57 @@
             comboBox.size = 1;
             expect(comboBox.filteredItems).to.eql(['foo']);
           });
+
+          it('should not show the loading on size change while pending the data provider', () => {
+            const allItems = Array(...new Array(200)).map((_, i) => `item ${i}`);
+
+            comboBox.size = 200;
+            comboBox.dataProvider = (params, callback) => {
+              if (params.page > 1) {
+                // Pending the page = 2...
+                return;
+              }
+              const offset = params.page * params.pageSize;
+              const slice = allItems.slice(offset, offset + params.pageSize);
+              callback(slice, allItems.length);
+            };
+            comboBox.open();
+            expect(comboBox.loading).to.be.false;
+            comboBox.$.overlay._scrollIntoView(45);
+            expect(comboBox.loading).to.be.false;
+            comboBox.$.overlay._scrollIntoView(150);
+            // Fetching the page = 2 and stucking
+            expect(comboBox.loading).to.be.true;
+            // Updating the size means we don't need pending requests anymore,
+            // and combo box should show no loading
+            comboBox.size = 100;
+            expect(comboBox.loading).to.be.false;
+          });
+
+          it('should not show the loading on fast scrolling and size update', () => {
+            const ITEMS_SIZE = 1000;
+            const allItems = Array(...new Array(ITEMS_SIZE)).map((_, i) => `item ${i}`);
+
+            comboBox.size = ITEMS_SIZE;
+            comboBox.dataProvider = (params, callback) => {
+              // Response for the first page immediately
+              if (params.page === 0) {
+                const offset = params.page * params.pageSize;
+                const slice = allItems.slice(offset, offset + params.pageSize);
+                callback(slice, allItems.length);
+              }
+              // ...and postpone the response for rest of the pages, in order to
+              // have them stuck in the pending queue
+            };
+            comboBox.open();
+            // Scroll fast to a large page
+            comboBox.$.overlay._scrollIntoView(400);
+            expect(comboBox.loading).to.be.true;
+            // Reduce the size and trigger pending queue cleanup
+            comboBox.size = 50;
+            expect(comboBox.loading).to.be.false;
+          });
+
         });
 
         /* eslint-disable no-console */
@@ -843,6 +894,44 @@
             comboBox.filter = '1';
             expect(comboBox.$.overlay._selector.firstVisibleIndex).to.be.equal(0);
           });
+
+          it('should not show the loading when exact size is suddenly reached in the middle of requested range', () => {
+            const REAL_SIZE = 294;
+            const ESTIMATED_SIZE = 400;
+
+            const allItems = Array(...new Array(REAL_SIZE)).map((_, i) => `item ${i}`);
+            let lastPageAlreadyRequested = false;
+
+            comboBox.size = ESTIMATED_SIZE;
+
+            // Simulates a combo-box server side data provider specifics with
+            // undefined size
+            comboBox.dataProvider = (params, callback) => {
+              const offset = params.page * params.pageSize;
+              const slice = allItems.slice(offset, offset + params.pageSize);
+
+              // Combo box server side always notifies about size change
+              comboBox.size = params.page < 5 ? ESTIMATED_SIZE : REAL_SIZE;
+
+              if (params.page < 5) {
+                callback(slice, ESTIMATED_SIZE);
+              } else if (params.page === 5) {
+                // Combo box server side does not update the client with the
+                // items which were sent recently
+                if (!lastPageAlreadyRequested) {
+                  callback(slice, REAL_SIZE);
+                  lastPageAlreadyRequested = true;
+                }
+              }
+            };
+            comboBox.open();
+            // Scroll to last page and verify there is no loading indicator and
+            // the last page has been fetched and rendered
+            comboBox.$.overlay._scrollIntoView(274);
+            expect(comboBox.loading).to.be.false;
+            expect(comboBox.filteredItems).to.contain('item 293');
+          });
+
         });
       };
 
