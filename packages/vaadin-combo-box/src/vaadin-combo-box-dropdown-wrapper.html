@@ -223,7 +223,7 @@ This program is available under Apache License Version 2.0, available at https:/
       _restoreScrollerPosition(items) {
         if (this._isNotEmpty(items) && this._selector && this._oldScrollerPosition !== 0) {
           // new items size might be less than old scrolling position
-          this._selector.scrollToIndex(Math.min(items.length - 1, this._oldScrollerPosition));
+          this._scrollIntoView(Math.min(items.length - 1, this._oldScrollerPosition));
           this.resetScrolling = false;
           // reset position to 0 again in order to properly handle the filter
           // cases (scroll to 0 after typing the filter)
