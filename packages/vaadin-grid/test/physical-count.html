@@ -79,10 +79,6 @@
 
       it('increase pool size after resizing the scroller', () => {
         grid.classList.add('small');
-        // Workaround for FF58 rendering issue
-        grid.size = 0;
-        grid.size = 200;
-
         grid.style.display = 'none';
 
         expect(grid._physicalItems.length).to.eql(25);

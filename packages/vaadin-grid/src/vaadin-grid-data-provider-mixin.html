@@ -201,6 +201,8 @@ This program is available under Apache License Version 2.0, available at https:/
       this._cache.size += delta;
       this._cache.effectiveSize += delta;
       this._effectiveSize = this._cache.effectiveSize;
+      this._increasePoolIfNeeded(0);
+      this._debounceIncreasePool && this._debounceIncreasePool.flush();
     }
 
     /**

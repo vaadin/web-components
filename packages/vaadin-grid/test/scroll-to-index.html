@@ -150,6 +150,33 @@
 
       });
 
+      describe('Added item', () => {
+        let grid, scroller, data;
+
+        beforeEach(() => {
+          grid = fixture('large');
+          data = Array(...new Array(10)).map((_, i) => {
+            return {'index': i};
+          });
+
+          grid.size = 10;
+          grid.dataProvider = function(params, callback) {
+            callback(data);
+          };
+
+          flushGrid(grid);
+        });
+
+        it('should not reassign the first item on scrollToIndex', () => {
+          const newExpectedSize = grid.size + 1;
+          grid.size = newExpectedSize;
+          data.push({'index': 11});
+          grid.scrollToIndex(grid.items.length);
+
+          expect(grid.$.items.children[0]._item.index).to.equal(0);
+        });
+      });
+
     });
   </script>
 
