@@ -82,7 +82,7 @@ This program is available under Apache License Version 2.0, available at https:/
     _dataProviderClearFilter(dataProvider, opened, value) {
       // Can't depend on filter in this observer as we don't want
       // to clear the filter whenever it's set
-      if (dataProvider && this.filter) {
+      if (dataProvider && !this.loading && this.filter) {
         this.size = undefined;
         this._pendingRequests = {};
         this.filter = '';
@@ -107,11 +107,24 @@ This program is available under Apache License Version 2.0, available at https:/
 
     /** @private */
     _dataProviderFilterChanged() {
-      if (this.dataProvider && this.opened) {
-        this.size = undefined;
-        this._pendingRequests = {};
-        this.clearCache();
+      if (!this._shouldFetchData()) {
+        return;
       }
+
+      this.size = undefined;
+      this._pendingRequests = {};
+      this.clearCache();
+    }
+
+    /** @private */
+    _shouldFetchData() {
+
+      if (!this.dataProvider) {
+        return false;
+      }
+
+      return this.opened ||
+          (this.filter && this.filter.length);
     }
 
     /** @private */
@@ -161,6 +174,9 @@ This program is available under Apache License Version 2.0, available at https:/
             if (this._isValidValue(this.value) && this._getItemValue(this.selectedItem) !== this.value) {
               this._selectItemForValue(this.value);
             }
+            if (!this.opened && !this.hasAttribute('focused')) {
+              this._commitValue();
+            }
             this.size = size;
 
             delete this._pendingRequests[page];
@@ -197,7 +213,7 @@ This program is available under Apache License Version 2.0, available at https:/
         filteredItems.push(this.__placeHolder);
       }
       this.filteredItems = filteredItems;
-      if (this.opened) {
+      if (this._shouldFetchData()) {
         this._loadPage(0);
       } else {
         this._forceNextRequest = true;

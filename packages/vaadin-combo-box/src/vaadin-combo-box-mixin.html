@@ -552,7 +552,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     /** @private */
     _closeOrCommit() {
-      if (this.autoOpenDisabled && !this.opened) {
+      if (!this.opened && !this.loading) {
         this._commitValue();
       } else {
         this.close();
@@ -666,7 +666,9 @@ This program is available under Apache License Version 2.0, available at https:/
         this.close();
       }
 
-      this._commitValue();
+      if (!this.loading) {
+        this._commitValue();
+      }
     }
 
     /** @private */
@@ -685,9 +687,12 @@ This program is available under Apache License Version 2.0, available at https:/
           this.value = '';
         }
       } else {
+        const itemsMatchedByLabel = this.filteredItems
+          && this.filteredItems.filter(item => this._getItemLabel(item) === this._inputElementValue)
+          || [];
         if (this.allowCustomValue
           // to prevent a repetitive input value being saved after pressing ESC and Tab.
-          && !(this.filteredItems && this.filteredItems.filter(item => this._getItemLabel(item) === this._inputElementValue).length)) {
+          && !itemsMatchedByLabel.length) {
 
           const e = new CustomEvent('custom-value-set', {detail: this._inputElementValue, composed: true, cancelable: true, bubbles: true});
           this.dispatchEvent(e);
@@ -696,6 +701,8 @@ This program is available under Apache License Version 2.0, available at https:/
             this._selectItemForValue(customValue);
             this.value = customValue;
           }
+        } else if (!this.allowCustomValue && !this.opened && itemsMatchedByLabel.length == 1) {
+          this.value = this._getItemValue(itemsMatchedByLabel[0]);
         } else {
           this._inputElementValue = this.selectedItem ? this._getItemLabel(this.selectedItem) : (this.value || '');
         }

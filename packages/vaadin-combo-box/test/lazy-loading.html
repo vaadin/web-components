@@ -854,6 +854,91 @@
             });
           });
 
+          describe('using data provider, lost focus before data is returned', () => {
+            let returnedItems;
+            const bluringDataProvider = (params, callback) => {
+              comboBox.blur();
+              callback(returnedItems, returnedItems.length);
+            };
+
+            beforeEach(() => {
+              returnedItems = ['item 12'];
+              comboBox.focus();
+              comboBox.opened = true;
+              comboBox.dataProvider = bluringDataProvider;
+              comboBox.opened = false;
+              comboBox.focus();
+            });
+
+            it('should set value without auto-open-disabled', () => {
+              comboBox.autoOpenDisabled = false;
+              expect(comboBox.autoOpenDisabled).to.be.false;
+
+              comboBox._inputElementValue = 'item 12';
+              comboBox.filter = 'item 12';
+              expect(comboBox.opened).to.be.false;
+              expect(comboBox.hasAttribute('focused')).to.be.false;
+              expect(comboBox.value).to.equal('item 12');
+            });
+
+            it('should set value with auto-open-disabled', () => {
+              comboBox.autoOpenDisabled = true;
+              expect(comboBox.autoOpenDisabled).to.be.true;
+
+              comboBox._inputElementValue = 'item 12';
+              comboBox.filter = 'item 12';
+              expect(comboBox.opened).to.be.false;
+              expect(comboBox.hasAttribute('focused')).to.be.false;
+              expect(comboBox.value).to.equal('item 12');
+            });
+
+            it('should keep empty value if it is not an exact match', () => {
+              comboBox._inputElementValue = 'item';
+              comboBox.filter = 'item';
+              expect(comboBox.opened).to.be.false;
+              expect(comboBox.hasAttribute('focused')).to.be.false;
+              expect(comboBox.value).to.equal('');
+            });
+
+            it('should keep previous value if it is not an exact match', () => {
+              comboBox.filteredItems = ['other value', 'item 12'];
+              comboBox.value = 'other value';
+              expect(comboBox.value).to.equal('other value');
+
+              returnedItems = ['item 12'];
+              comboBox._inputElementValue = 'item 1';
+              comboBox.filter = 'item 1';
+              expect(comboBox.opened).to.be.false;
+              expect(comboBox.hasAttribute('focused')).to.be.false;
+              expect(comboBox.value).to.equal('other value');
+            });
+
+            it('should keep previous value if allow-custom-value is set', () => {
+              comboBox.allowCustomValue = true;
+              const setInputValue = value => {
+                if (comboBox.inputElement.tagName === 'IRON-INPUT') {
+                  comboBox.inputElement._initSlottedInput();
+                  comboBox.inputElement.inputElement.value = value;
+                } else {
+                  comboBox.inputElement.value = value;
+                }
+              };
+              comboBox.open();
+              setInputValue('other value');
+              comboBox.inputElement.dispatchEvent(new CustomEvent('input'));
+              comboBox.close();
+              expect(comboBox.value).to.eql('other value');
+
+              comboBox.focus();
+              setInputValue('item 12');
+              comboBox.filter = 'item 12';
+
+              expect(comboBox.value).to.eql('other value');
+              expect(comboBox.inputElement.value).to.eql('other value');
+            });
+
+          });
+
           describe('after empty data set loaded', () => {
 
             const emptyDataProvider = sinon.spy((params, callback) => callback([], 0));
