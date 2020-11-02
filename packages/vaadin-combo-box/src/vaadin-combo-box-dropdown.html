@@ -193,7 +193,7 @@ This program is available under Apache License Version 2.0, available at https:/
           window.addEventListener('scroll', this._boundSetPosition, true);
           document.addEventListener('click', this._boundOutsideClickListener, true);
           this.dispatchEvent(new CustomEvent('vaadin-combo-box-dropdown-opened', {bubbles: true, composed: true}));
-        } else {
+        } else if (!this.__emptyItems) {
           window.removeEventListener('scroll', this._boundSetPosition, true);
           document.removeEventListener('click', this._boundOutsideClickListener, true);
           this.dispatchEvent(new CustomEvent('vaadin-combo-box-dropdown-closed', {bubbles: true, composed: true}));

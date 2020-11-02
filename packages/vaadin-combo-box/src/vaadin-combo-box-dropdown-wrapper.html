@@ -247,10 +247,12 @@ This program is available under Apache License Version 2.0, available at https:/
             this._initDropdown();
           }
         }
-        // Do not attach if no items
-        // Do not dettach if opened but user types an invalid search
-        this.$.dropdown.opened = !!(opened && (loading ||
-                this.$.dropdown.opened || this._isNotEmpty(items)));
+
+        if (this._isEmpty(items)) {
+          this.$.dropdown.__emptyItems = true;
+        }
+        this.$.dropdown.opened = !!(opened && (loading || this._isNotEmpty(items)));
+        this.$.dropdown.__emptyItems = false;
       }
 
       _initDropdown() {

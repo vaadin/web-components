@@ -48,6 +48,11 @@
   describe('toggling the dropdown', () => {
     let combobox;
 
+    function setInputValue(value) {
+      combobox.inputElement.value = value;
+      combobox.inputElement.dispatchEvent(new CustomEvent('input'));
+    }
+
     function clickToggleIcon() {
       fireMousedownMouseupClick(combobox._toggleElement);
     }
@@ -298,6 +303,33 @@
         fire('focusout', combobox.inputElement);
 
         expect(combobox.opened).to.equal(false);
+      });
+
+      describe('filtered items are empty', () => {
+        it('should close the dropdown on non-existent values', () => {
+          combobox.open();
+
+          // Existent value
+          setInputValue('1');
+          expect(combobox.$.overlay.$.dropdown.$.overlay.opened).to.be.true;
+          expect(combobox.opened).to.be.true;
+
+          // Non-existent value
+          setInputValue('3');
+          expect(combobox.$.overlay.$.dropdown.$.overlay.opened).to.be.false;
+          expect(combobox.opened).to.be.true;
+        });
+
+        it('should not commit value the input on dropdown closing', () => {
+          combobox.open();
+
+          setInputValue('3');
+          expect(combobox.inputElement.value).to.equal('3');
+          expect(combobox.value).to.be.empty;
+
+          fire('focusout', combobox.inputElement);
+          expect(combobox.inputElement.value).to.be.empty;
+        });
       });
 
       // When using Shadow DOM polyfill, the style scope of the combobox might
