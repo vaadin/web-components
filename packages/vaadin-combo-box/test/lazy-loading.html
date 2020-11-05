@@ -8,6 +8,7 @@
   <script src="../../web-component-tester/browser.js"></script>
   <script src='../../webcomponentsjs/webcomponents-lite.js'></script>
   <link rel="import" href="../../test-fixture/test-fixture.html">
+  <script src='../../iron-test-helpers/mock-interactions.js'></script>
   <link rel="import" href="common-imports.html">
   <script src="common.js"></script>
   <link rel="import" href="../vaadin-combo-box-light.html">
@@ -63,6 +64,26 @@
           return {id: i, value: `value ${i}`, label: `label ${i}`};
         });
         callback(dataProviderItems, SIZE);
+      };
+
+      const pushKey = (key, cb) => {
+        MockInteractions.pressAndReleaseKeyOn(comboBox.inputElement, key);
+        if (cb) {
+          setTimeout(cb, 1);
+        }
+      };
+
+      const enter = cb => {
+        pushKey(13, cb);
+      };
+
+      const setInputValue = value => {
+        if (comboBox.inputElement.tagName === 'IRON-INPUT') {
+          comboBox.inputElement._initSlottedInput();
+          comboBox.inputElement.inputElement.value = value;
+        } else {
+          comboBox.inputElement.value = value;
+        }
       };
 
       beforeEach(() => {
@@ -373,6 +394,18 @@
               itemElement.click();
               expect(comboBox.opened).to.equal(true);
               expect(comboBox.selectedItem).to.not.be.instanceOf(Vaadin.ComboBoxPlaceholder);
+            });
+
+            it('should set custom value on enter', () => {
+              comboBox.allowCustomValue = true;
+              comboBox.dataProvider = spyAsyncDataProvider;
+              comboBox.opened = true;
+
+              setInputValue('custom value');
+              comboBox.inputElement.dispatchEvent(new CustomEvent('input'));
+
+              enter();
+              expect(comboBox.value).to.eql('custom value');
             });
           });
 
@@ -915,14 +948,6 @@
 
             it('should keep previous value if allow-custom-value is set', () => {
               comboBox.allowCustomValue = true;
-              const setInputValue = value => {
-                if (comboBox.inputElement.tagName === 'IRON-INPUT') {
-                  comboBox.inputElement._initSlottedInput();
-                  comboBox.inputElement.inputElement.value = value;
-                } else {
-                  comboBox.inputElement.value = value;
-                }
-              };
               comboBox.open();
               setInputValue('other value');
               comboBox.inputElement.dispatchEvent(new CustomEvent('input'));
