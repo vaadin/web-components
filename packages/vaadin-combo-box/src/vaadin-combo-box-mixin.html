@@ -947,7 +947,7 @@ This program is available under Apache License Version 2.0, available at https:/
         return this._getItemLabel(item).toString().toLowerCase().indexOf(filter) > -1;
       });
 
-      return !filteredItems.length && this.autoOpenDisabled ? arr : filteredItems;
+      return filteredItems;
     }
 
     /** @private */

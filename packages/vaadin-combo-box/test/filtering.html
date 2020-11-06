@@ -66,6 +66,17 @@
         expect(comboBox.opened).to.equal(false);
       });
 
+      it('should filter items when filter is changed regardless of autoOpenDisabled', () => {
+        comboBox.autoOpenDisabled = true;
+        comboBox.close();
+
+        comboBox.value = 'foo';
+        comboBox.open();
+        setInputValue('foo ');
+
+        expect(getFilteredItems()).to.be.empty;
+      });
+
       it('should open the popup when the value of the input field is set to none', () => {
         comboBox.value = 'foo';
         comboBox.close();
