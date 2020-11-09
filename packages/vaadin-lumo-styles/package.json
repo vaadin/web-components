@@ -20,7 +20,9 @@
   "homepage": "https://vaadin.com/components",
   "files": [
     "*.js",
+    "*.d.ts",
     "mixins/*.js",
+    "mixins/*.d.ts",
     "presets/*.js",
     "!wdio.conf.js"
   ],
