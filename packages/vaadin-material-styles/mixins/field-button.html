@@ -1,9 +1,27 @@
 <link rel="import" href="../font-icons.html">
 
+<!-- MAGI ADD START
+<link rel="import" href="../../vaadin-themable-mixin/register-styles.html">
+<script>
+  /**
+   * @namespace Vaadin
+   */
+  window.Vaadin = window.Vaadin || {};
+
+  /**
+   * @namespace Vaadin.MaterialStyles
+   */
+  window.Vaadin.MaterialStyles = window.Vaadin.MaterialStyles || {};
+
+  (function() {
+    const fieldButton = Vaadin.css`
+MAGI ADD END -->
+<!-- MAGI REMOVE START -->
 <dom-module id="material-field-button">
   <template>
     <style>
       /* TODO(platosha): align icon sizes with other elements */
+      /* MAGI REMOVE END */
       [part$="button"] {
         flex: none;
         width: 24px;
@@ -35,6 +53,16 @@
       [part$="button"]::before {
         font-family: "material-icons";
       }
+      /* MAGI REMOVE START */
     </style>
   </template>
 </dom-module>
+<!-- MAGI REMOVE END -->
+<!-- MAGI ADD START
+    `;
+    Vaadin.registerStyles('', fieldButton, {moduleId: 'material-field-button'});
+
+    Vaadin.MaterialStyles.fieldButton = fieldButton;
+  })();
+</script>
+MAGI ADD END -->

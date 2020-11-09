@@ -21,7 +21,9 @@
   "homepage": "https://vaadin.com/themes",
   "files": [
     "*.js",
+    "*.d.ts",
     "mixins/*.js",
+    "mixins/*.d.ts",
     "!wdio.conf.js"
   ],
   "scripts": {

@@ -1,10 +1,33 @@
 <link rel="import" href="version.html">
 <link rel="import" href="../polymer/lib/elements/custom-style.html">
+<!-- MAGI REMOVE START -->
 <link rel="import" href="../polymer/lib/elements/dom-module.html">
+<!-- MAGI REMOVE END -->
 
+<!-- MAGI ADD START
+<link rel="import" href="../vaadin-themable-mixin/register-styles.html">
+<script>
+  /**
+   * @namespace Vaadin
+   */
+  window.Vaadin = window.Vaadin || {};
+
+  /**
+   * @namespace Vaadin.MaterialStyles
+   */
+  window.Vaadin.MaterialStyles = window.Vaadin.MaterialStyles || {};
+
+  (function() {
+    const font = Vaadin.css`
+MAGI ADD END -->
+<!-- MAGI REMOVE START -->
 <custom-style>
   <style>
     html {
+    /* MAGI REMOVE END */
+    /* MAGI ADD START
+    :host {
+      MAGI ADD END */
       /* Font family */
       --material-font-family: 'Roboto', sans-serif;
 
@@ -23,13 +46,36 @@
       /* Icon size */
       --material-icon-font-size: 20px;
     }
+    /* MAGI REMOVE START */
   </style>
 </custom-style>
+<!-- MAGI REMOVE END -->
+<!-- MAGI ADD START
+    `;
+    const $tpl = document.createElement('template');
+    $tpl.innerHTML = `<custom-style><style>${font.toString().replace(':host', 'html')}</style></custom-style>`;
+    document.head.appendChild($tpl.content);
 
+    Vaadin.MaterialStyles.font = font;
+
+    const typography = Vaadin.css`
+MAGI ADD END -->
+<!-- MAGI REMOVE START -->
 <dom-module id="material-typography">
   <template>
     <style>
+      /* MAGI REMOVE END */
       body {
+        font-family: var(--material-font-family);
+        font-size: var(--material-body-font-size);
+        line-height: 1.4;
+        -webkit-text-size-adjust: 100%;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      /* Can’t combine with the above selector because that doesn’t work in browsers without native shadow dom */
+      :host {
         font-family: var(--material-font-family);
         font-size: var(--material-body-font-size);
         line-height: 1.4;
@@ -100,11 +146,19 @@
       strong {
         font-weight: 500;
       }
+      /* MAGI REMOVE START */
     </style>
   </template>
 </dom-module>
+<!-- MAGI REMOVE END -->
+<!-- MAGI ADD START
+    `;
+    Vaadin.registerStyles('', typography, {moduleId: 'material-typography'});
+
+    Vaadin.MaterialStyles.typography = typography;
+  })();
+</script>
+MAGI ADD END -->
 
 <!-- Import Roboto from Google Fonts -->
-<!-- MAGI REMOVE START -->
 <script src="./font-roboto.js"></script>
-<!-- MAGI REMOVE END -->

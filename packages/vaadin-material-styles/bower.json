@@ -35,7 +35,8 @@
     "wct.conf.js"
   ],
   "dependencies": {
-    "polymer": "Polymer/polymer#^v2.0.0"
+    "polymer": "Polymer/polymer#^v2.0.0",
+    "vaadin-themable-mixin": "^1.6.1"
   },
   "devDependencies": {
     "web-component-tester": "^6.0.0",
