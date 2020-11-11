@@ -1,43 +1,56 @@
 <!DOCTYPE html>
 
 <head lang="en">
-  <meta charset="UTF-8">
-
-  <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
-  <link href="../../vaadin-time-picker.html" rel="import">
+  <meta charset="UTF-8" />
+  <title>Time picker tests</title>
+  <script>
+    window.polymerSkipLoadingFontRoboto = true;
+  </script>
 </head>
 
 <body>
-
-  <div id="default-tests" style="padding: 10px;">
+  <div id="time-picker-tests" style="height: 600px; padding: 10px">
     Plain
     <vaadin-time-picker></vaadin-time-picker>
 
-    <br>Label
+    <br />Label
     <vaadin-time-picker label="Pick a time"></vaadin-time-picker>
 
-    <br>Placeholder
+    <br />Placeholder
     <vaadin-time-picker placeholder="Pick a time"></vaadin-time-picker>
 
-    <br>Disabled
+    <br />Disabled
     <vaadin-time-picker disabled></vaadin-time-picker>
 
-    <br>Read-only
+    <br />Read-only
     <vaadin-time-picker readonly></vaadin-time-picker>
 
-    <br>Value
-    <vaadin-time-picker step='0.5' value="12:12:12.122"></vaadin-time-picker>
+    <br />Value
+    <vaadin-time-picker step="0.5" value="12:12:12.122"></vaadin-time-picker>
 
-    <br>Full-width
-    <vaadin-time-picker style='width: 300px;'></vaadin-time-picker>
+    <br />Full-width
+    <vaadin-time-picker style="width: 300px"></vaadin-time-picker>
 
-    <br>Helper text
+    <br />Helper text
     <vaadin-time-picker label="Foo" value="12:12" helper-text="Bar"></vaadin-time-picker>
 
-    <br>Slotted helper
+    <br />Slotted helper
     <vaadin-time-picker>
       <span slot="helper">Bar</span>
     </vaadin-time-picker>
   </div>
 
+  <script type="module">
+    (async () => {
+      const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+      const dir = window.location.search.replace(/.*dir=(\w+).*/, '$1') || 'ltr';
+      document.documentElement.setAttribute('dir', dir);
+
+      await import('../../theme/' + theme + '/vaadin-time-picker.js');
+
+      window.requestAnimationFrame(() => {
+        document.getElementById('time-picker-tests').dataset.ready = true;
+      });
+    })();
+  </script>
 </body>

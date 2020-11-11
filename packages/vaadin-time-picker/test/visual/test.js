@@ -1,60 +1,47 @@
-gemini.suite('vaadin-time-picker', function(rootSuite) {
-  function wait(actions, find) {
-    actions.wait(5000);
-  }
+describe('vaadin-time-picker', () => {
+  const locator = '#time-picker-tests[data-ready]';
 
-  function goToAboutBlank(actions, find) {
-    // Firefox stops responding on socket after a test, workaround:
-    return actions.executeJS(function(window) {
-      window.location.href = 'about:blank'; // just go away, please!
+  ['lumo', 'material'].forEach((theme) => {
+    it(`${theme}-default`, function () {
+      return this.browser
+        .url(`default.html?theme=${theme}`)
+        .waitForVisible(locator, 10000)
+        .assertView(`${theme}-default`, locator);
     });
-  }
 
-  rootSuite
-    .before(wait)
-    .after(goToAboutBlank);
+    it(`${theme}-rtl`, function () {
+      return this.browser
+        .url(`default.html?theme=${theme}&dir=rtl`)
+        .waitForVisible(locator, 10000)
+        .assertView(`${theme}-rtl`, locator);
+    });
 
-  gemini.suite('default-tests', function(suite) {
-    suite
-      .setUrl('default.html')
-      .setCaptureElements('#default-tests')
-      .capture('default')
-      .capture('rtl', function(actions) {
-        actions.executeJS(function(window) {
-          window.document.dir = 'rtl';
-        });
-      });
+    it(`${theme}-dropdown`, function () {
+      return this.browser
+        .url(`dropdown.html?theme=${theme}`)
+        .waitForVisible(locator, 10000)
+        .assertView(`${theme}-dropdown`, locator);
+    });
+
+    it(`${theme}-dropdown-rtl`, function () {
+      return this.browser
+        .url(`dropdown.html?theme=${theme}&dir=rtl`)
+        .waitForVisible(locator, 10000)
+        .assertView(`${theme}-dropdown-rtl`, locator);
+    });
+
+    it(`${theme}-step`, function () {
+      return this.browser
+        .url(`step.html?theme=${theme}`)
+        .waitForVisible(locator, 10000)
+        .assertView(`${theme}-step`, locator);
+    });
+
+    it(`${theme}-value`, function () {
+      return this.browser
+        .url(`value.html?theme=${theme}`)
+        .waitForVisible(locator, 10000)
+        .assertView(`${theme}-value`, locator);
+    });
   });
-
-  gemini.suite('dropdown', function(suite) {
-    suite
-      .setUrl('dropdown.html')
-      .setCaptureElements('body')
-      .capture('default', function(actions) {
-        actions.executeJS(function(window) {
-          window.closeTimePickers();
-          window.document.querySelector('#plain').__dropdownElement.opened = true;
-        });
-      })
-      .capture('selected-value', function(actions) {
-        actions.executeJS(function(window) {
-          window.closeTimePickers();
-          window.document.querySelector('#selected-value').__dropdownElement.opened = true;
-        });
-      })
-      .capture('step', function(actions) {
-        actions.executeJS(function(window) {
-          window.closeTimePickers();
-          window.document.querySelector('#step').__dropdownElement.opened = true;
-        });
-      })
-      .capture('rtl', function(actions) {
-        actions.executeJS(function(window) {
-          window.closeTimePickers();
-          window.document.dir = 'rtl';
-          window.document.querySelector('#plain').__dropdownElement.opened = true;
-        });
-      });
-  });
-
 });

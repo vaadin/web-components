@@ -2,7 +2,7 @@
 
 <head lang="en">
   <meta charset="UTF-8" />
-  <title>Time picker dropdown</title>
+  <title>Time picker step</title>
   <script>
     window.polymerSkipLoadingFontRoboto = true;
   </script>
@@ -10,14 +10,12 @@
 
 <body>
   <div id="time-picker-tests" style="height: calc(100vh - 20px); padding: 10px">
-    <vaadin-time-picker></vaadin-time-picker>
+    <vaadin-time-picker step="900"></vaadin-time-picker>
   </div>
 
   <script type="module">
     (async () => {
       const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
-      const dir = window.location.search.replace(/.*dir=(\w+).*/, '$1') || 'ltr';
-      document.documentElement.setAttribute('dir', dir);
 
       await import('../../theme/' + theme + '/vaadin-time-picker.js');
 
