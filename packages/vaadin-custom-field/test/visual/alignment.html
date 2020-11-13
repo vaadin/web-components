@@ -1,42 +1,23 @@
 <!DOCTYPE html>
 
 <head lang="en">
-  <meta charset="UTF-8">
-  <title></title>
-  <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <meta charset="UTF-8" />
+  <title>Custom field alignment tests</title>
   <script>
-    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
-    document.write(`
-      <link rel="import" href="../../theme/${theme}/vaadin-custom-field.html">
-      <link rel="import" href="../../../vaadin-combo-box/theme/${theme}/vaadin-combo-box.html">
-      <link rel="import" href="../../../vaadin-date-picker/theme/${theme}/vaadin-date-picker.html">
-      <link rel="import" href="../../../vaadin-select/theme/${theme}/vaadin-select.html">
-      <link rel="import" href="../../../vaadin-text-field/theme/${theme}/vaadin-email-field.html">
-      <link rel="import" href="../../../vaadin-text-field/theme/${theme}/vaadin-number-field.html">
-      <link rel="import" href="../../../vaadin-text-field/theme/${theme}/vaadin-password-field.html">
-      <link rel="import" href="../../../vaadin-text-field/theme/${theme}/vaadin-text-field.html">
-      <link rel="import" href="../../../vaadin-time-picker/theme/${theme}/vaadin-time-picker.html">
-    `);
-
-    window.addEventListener('WebComponentsReady', function() {
-      customElements.whenDefined('vaadin-custom-field').then(() => {
-        window.ShadyDOM && window.ShadyDOM.flush(); // Force DOM composition
-        window.webComponentsAreReady = true; // Checked in gemini before capture callback
-      });
-    });
+    window.polymerSkipLoadingFontRoboto = true;
   </script>
 </head>
 
 <body>
-  <div id="alignment-tests" style="padding: 10px;">
+  <div id="custom-field-tests" style="padding: 10px">
     <vaadin-custom-field invalid error-message="Invalid">
       <vaadin-number-field value="1"></vaadin-number-field>
       <vaadin-password-field value="password"></vaadin-password-field>
     </vaadin-custom-field>
     <vaadin-text-field invalid error-message="Invalid"></vaadin-text-field>
     <vaadin-time-picker value="09:00"></vaadin-time-picker>
-    <br>
-    <br>
+    <br />
+    <br />
     <vaadin-custom-field label="Custom field">
       <vaadin-select value="+358">
         <template>
@@ -58,16 +39,16 @@
         </vaadin-list-box>
       </template>
     </vaadin-select>
-    <br>
-    <br>
+    <br />
+    <br />
     <vaadin-custom-field label="Custom field" invalid error-message="Invalid">
       <vaadin-email-field value="user@example.com"></vaadin-email-field>
       <vaadin-date-picker value="1980-08-14" clear-button-visible></vaadin-date-picker>
     </vaadin-custom-field>
     <vaadin-number-field label="Number" value="2" invalid error-message="Invalid"></vaadin-number-field>
     <vaadin-date-picker label="Date" invalid error-message="Invalid"></vaadin-date-picker>
-    <br>
-    <br>
+    <br />
+    <br />
     <vaadin-custom-field label="Custom field" invalid error-message="Invalid">
       <vaadin-combo-box value="Combo item" allow-custom-value clear-button-visible></vaadin-combo-box>
       <vaadin-time-picker value="09:00"></vaadin-time-picker>
@@ -76,4 +57,25 @@
     <vaadin-password-field value="password"></vaadin-password-field>
   </div>
 
+  <script type="module">
+    (async () => {
+      const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+
+      await Promise.all([
+        import('../../theme/' + theme + '/vaadin-custom-field.js'),
+        import('@vaadin/vaadin-combo-box/theme/' + theme + '/vaadin-combo-box.js'),
+        import('@vaadin/vaadin-date-picker/theme/' + theme + '/vaadin-date-picker.js'),
+        import('@vaadin/vaadin-select/theme/' + theme + '/vaadin-select.js'),
+        import('@vaadin/vaadin-time-picker/theme/' + theme + '/vaadin-time-picker.js'),
+        import('@vaadin/vaadin-text-field/theme/' + theme + '/vaadin-email-field.js'),
+        import('@vaadin/vaadin-text-field/theme/' + theme + '/vaadin-number-field.js'),
+        import('@vaadin/vaadin-text-field/theme/' + theme + '/vaadin-password-field.js'),
+        import('@vaadin/vaadin-text-field/theme/' + theme + '/vaadin-text-field.js')
+      ]);
+
+      window.requestAnimationFrame(() => {
+        document.getElementById('custom-field-tests').dataset.ready = true;
+      });
+    })();
+  </script>
 </body>

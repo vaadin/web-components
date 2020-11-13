@@ -1,86 +1,65 @@
-gemini.suite('vaadin-custom-field', function(rootSuite) {
-  function wait(actions, find) {
-    return actions
-      .waitForJSCondition(function(window) {
-        return window.webComponentsAreReady;
-      }, 6000);
-  }
+describe('vaadin-custom-field', () => {
+  const locator = '#custom-field-tests[data-ready]';
 
-  function goToAboutBlank(actions, find) {
-    // Firefox stops responding on socket after a test, workaround:
-    return actions.executeJS(function(window) {
-      window.location.href = 'about:blank'; // just go away, please!
-    });
-  }
-
-  rootSuite
-    .before(wait)
-    .after(goToAboutBlank);
-
-  ['lumo', 'material'].forEach(theme => {
-    gemini.suite(`default-tests-${theme}`, function(suite) {
-      suite
-        .setUrl(`default.html?theme=${theme}`)
-        .setCaptureElements('#default-tests')
-        .capture('default')
-        .capture('focused', function(actions) {
-          actions.executeJS(function(window) {
-            var customFields = window.document.querySelectorAll('vaadin-custom-field');
-            for (var customField of customFields) {
-              customField.setAttribute('focused', '');
-            }
-          });
-        });
+  ['lumo', 'material'].forEach((theme) => {
+    it(`${theme}-default`, function () {
+      return this.browser
+        .url(`default.html?theme=${theme}`)
+        .waitForVisible(locator, 10000)
+        .assertView(`${theme}-default`, locator);
     });
 
-    gemini.suite(`disabled-tests-${theme}`, function(suite) {
-      suite
-        .setUrl(`disabled.html?theme=${theme}`)
-        .setCaptureElements('#disabled-tests')
-        .capture('default');
+    it(`${theme}-focused`, function () {
+      return this.browser
+        .url(`default.html?theme=${theme}&focus=true`)
+        .waitForVisible(locator, 10000)
+        .assertView(`${theme}-focused`, locator);
     });
 
-    gemini.suite(`readonly-tests-${theme}`, function(suite) {
-      suite
-        .setUrl(`readonly.html?theme=${theme}`)
-        .setCaptureElements('#readonly-tests')
-        .capture('default');
+    it(`${theme}-disabled`, function () {
+      return this.browser
+        .url(`disabled.html?theme=${theme}`)
+        .waitForVisible(locator, 10000)
+        .assertView(`${theme}-disabled`, locator);
     });
 
-    gemini.suite(`alignment-tests-${theme}`, function(suite) {
-      suite
-        .setUrl(`alignment.html?theme=${theme}`)
-        .setCaptureElements('#alignment-tests')
-        .capture('default');
+    it(`${theme}-readonly`, function () {
+      return this.browser
+        .url(`readonly.html?theme=${theme}`)
+        .waitForVisible(locator, 10000)
+        .assertView(`${theme}-readonly`, locator);
     });
 
-    gemini.suite(`form-layout-tests-${theme}`, function(suite) {
-      suite
-        .setUrl(`form-layout.html?theme=${theme}`)
-        .setCaptureElements('#form-layout-tests')
-        .capture('default');
+    it(`${theme}-alignment`, function () {
+      return this.browser
+        .url(`alignment.html?theme=${theme}`)
+        .waitForVisible(locator, 10000)
+        .assertView(`${theme}-alignment`, locator);
     });
 
-    gemini.suite(`width-${theme}`, function(suite) {
-      suite
-        .setUrl(`width.html?theme=${theme}`)
-        .setCaptureElements('#width-tests')
-        .capture('default');
+    it(`${theme}-width`, function () {
+      return this.browser
+        .url(`width.html?theme=${theme}`)
+        .waitForVisible(locator, 10000)
+        .assertView(`${theme}-width`, locator);
     });
 
-    gemini.suite(`helper-text-${theme}`, function(suite) {
-      suite
-        .setUrl(`helper-text.html?theme=${theme}`)
-        .setCaptureElements('#helper-text-tests')
-        .capture('default');
+    it(`${theme}-form-layout`, function () {
+      return this.browser
+        .url(`form-layout.html?theme=${theme}`)
+        .waitForVisible(locator, 10000)
+        .assertView(`${theme}-form-layout`, locator);
+    });
+
+    it(`${theme}-helper-text`, function () {
+      return this.browser
+        .url(`helper-text.html?theme=${theme}`)
+        .waitForVisible(locator, 10000)
+        .assertView(`${theme}-helper-text`, locator);
     });
   });
 
-  gemini.suite(`lumo-tests`, function(suite) {
-    suite
-      .setUrl(`lumo.html?theme=lumo`)
-      .setCaptureElements('#lumo-tests')
-      .capture('default');
+  it('lumo-small', function () {
+    return this.browser.url('lumo.html').waitForVisible(locator, 10000).assertView('lumo-small', locator);
   });
-
 });

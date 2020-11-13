@@ -1,30 +1,15 @@
 <!DOCTYPE html>
 
 <head lang="en">
-  <meta charset="UTF-8">
-  <title></title>
-  <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <meta charset="UTF-8" />
+  <title>Custom field form layout tests</title>
   <script>
-    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
-    document.write(`
-      <link rel="import" href="../../theme/${theme}/vaadin-custom-field.html">
-      <link rel="import" href="../../../vaadin-text-field/theme/${theme}/vaadin-text-field.html">
-      <link rel="import" href="../../../vaadin-text-field/theme/${theme}/vaadin-text-area.html">
-      <link rel="import" href="../../../vaadin-form-layout/theme/${theme}/vaadin-form-layout.html">
-      <link rel="import" href="../../../vaadin-form-layout/theme/${theme}/vaadin-form-item.html">
-    `);
-
-    window.addEventListener('WebComponentsReady', function() {
-      customElements.whenDefined('vaadin-custom-field').then(() => {
-        window.ShadyDOM && window.ShadyDOM.flush(); // Force DOM composition
-        window.webComponentsAreReady = true; // Checked in gemini before capture callback
-      });
-    });
+    window.polymerSkipLoadingFontRoboto = true;
   </script>
 </head>
 
 <body>
-  <div id="form-layout-tests">
+  <div id="custom-field-tests">
     <vaadin-form-layout style="width: 60em">
       <vaadin-text-field label="Text field" invalid error-message="Error"></vaadin-text-field>
       <vaadin-custom-field label="Custom field" invalid error-message="Error">
@@ -50,7 +35,9 @@
       <vaadin-form-item>
         <label slot="label">Custom field with text area</label>
         <vaadin-custom-field>
-          <vaadin-text-area value="Sed libero enim, sed faucibus turpis in eu? Euismod lacinia at quis risus sed vulputate odio ut enim blandit volutpat maecenas volutpat blandit aliquam etiam erat velit, scelerisque in dictum!"></vaadin-text-area>
+          <vaadin-text-area
+            value="Sed libero enim, sed faucibus turpis in eu? Euismod lacinia at quis risus sed vulputate odio ut enim blandit volutpat maecenas volutpat blandit aliquam etiam erat velit, scelerisque in dictum!"
+          ></vaadin-text-area>
         </vaadin-custom-field>
       </vaadin-form-item>
       <vaadin-form-item>
@@ -60,4 +47,21 @@
     </vaadin-form-layout>
   </div>
 
+  <script type="module">
+    (async () => {
+      const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+
+      await Promise.all([
+        import('../../theme/' + theme + '/vaadin-custom-field.js'),
+        import('@vaadin/vaadin-form-layout/theme/' + theme + '/vaadin-form-layout.js'),
+        import('@vaadin/vaadin-form-layout/theme/' + theme + '/vaadin-form-item.js'),
+        import('@vaadin/vaadin-text-field/theme/' + theme + '/vaadin-text-area.js'),
+        import('@vaadin/vaadin-text-field/theme/' + theme + '/vaadin-text-field.js')
+      ]);
+
+      window.requestAnimationFrame(() => {
+        document.getElementById('custom-field-tests').dataset.ready = true;
+      });
+    })();
+  </script>
 </body>

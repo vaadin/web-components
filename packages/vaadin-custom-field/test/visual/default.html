@@ -1,95 +1,103 @@
 <!DOCTYPE html>
 
 <head lang="en">
-  <meta charset="UTF-8">
-  <title></title>
-  <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <meta charset="UTF-8" />
+  <title>Custom field tests</title>
   <script>
-    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
-    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-custom-field.html">`);
-
-    window.addEventListener('WebComponentsReady', function() {
-      customElements.whenDefined('vaadin-custom-field').then(() => {
-        window.ShadyDOM && window.ShadyDOM.flush(); // Force DOM composition
-        window.webComponentsAreReady = true; // Checked in gemini before capture callback
-      });
-    });
+    window.polymerSkipLoadingFontRoboto = true;
   </script>
   <style>
-    [type="number"] {
+    [type='number'] {
       width: 30px;
     }
   </style>
 </head>
 
 <body>
-
-  <div id="default-tests" style="padding: 10px; text-align: right; width: 700px;">
+  <div id="custom-field-tests" style="padding: 10px; text-align: right; width: 800px">
     Default
     <vaadin-custom-field label="Home address">
-      <input type="text">
-      <input type="number">
+      <input type="text" />
+      <input type="number" />
     </vaadin-custom-field>
     with value
     <vaadin-custom-field label="Home address">
-      <input type="text" value="Foo street">
-      <input type="number" value="42">
+      <input type="text" value="Foo street" />
+      <input type="number" value="42" />
     </vaadin-custom-field>
-    <br>
+    <br />
     Invalid
     <vaadin-custom-field label="Home address" invalid error-message="Foo">
-      <input type="text">
-      <input type="number">
+      <input type="text" />
+      <input type="number" />
     </vaadin-custom-field>
     with value
     <vaadin-custom-field label="Home address" invalid error-message="Foo">
-      <input type="text" value="Foo street">
-      <input type="number" value="42">
+      <input type="text" value="Foo street" />
+      <input type="number" value="42" />
     </vaadin-custom-field>
-    <br>
+    <br />
     Invalid (no message)
     <vaadin-custom-field label="Home address" invalid>
-      <input type="text">
-      <input type="number">
+      <input type="text" />
+      <input type="number" />
     </vaadin-custom-field>
     with value
     <vaadin-custom-field label="Home address" invalid>
-      <input type="text" value="Foo street">
-      <input type="number" value="42">
+      <input type="text" value="Foo street" />
+      <input type="number" value="42" />
     </vaadin-custom-field>
-    <br>
+    <br />
     Required
     <vaadin-custom-field label="Home address" required>
-      <input type="text">
-      <input type="number">
+      <input type="text" />
+      <input type="number" />
     </vaadin-custom-field>
     with value
     <vaadin-custom-field label="Home address" required>
-      <input type="text" value="Foo street">
-      <input type="number" value="42">
+      <input type="text" value="Foo street" />
+      <input type="number" value="42" />
     </vaadin-custom-field>
-    <br>
+    <br />
     Required Invalid
     <vaadin-custom-field label="Home address" required invalid error-message="Foo">
-      <input type="text">
-      <input type="number">
+      <input type="text" />
+      <input type="number" />
     </vaadin-custom-field>
     with value
     <vaadin-custom-field label="Home address" required invalid error-message="Foo">
-      <input type="text" value="Foo street">
-      <input type="number" value="42">
+      <input type="text" value="Foo street" />
+      <input type="number" value="42" />
     </vaadin-custom-field>
-    <br>
+    <br />
     Required Invalid (no message)
     <vaadin-custom-field label="Home address" required invalid>
-      <input type="text">
-      <input type="number">
+      <input type="text" />
+      <input type="number" />
     </vaadin-custom-field>
     with value
     <vaadin-custom-field label="Home address" required invalid>
-      <input type="text" value="Foo street">
-      <input type="number" value="42">
+      <input type="text" value="Foo street" />
+      <input type="number" value="42" />
     </vaadin-custom-field>
   </div>
 
+  <script type="module">
+    (async () => {
+      const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+      const focus = window.location.search.replace(/.*focus=(\w+).*/, '$1') || '';
+
+      await import('../../theme/' + theme + '/vaadin-custom-field.js');
+
+      if (focus === 'true') {
+        document.querySelectorAll('vaadin-custom-field').forEach((field) => {
+          field.setAttribute('focused', '');
+        });
+      }
+
+      window.requestAnimationFrame(() => {
+        document.getElementById('custom-field-tests').dataset.ready = true;
+      });
+    })();
+  </script>
 </body>

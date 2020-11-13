@@ -1,28 +1,15 @@
 <!DOCTYPE html>
 
 <head lang="en">
-  <meta charset="UTF-8">
-  <title></title>
-  <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <meta charset="UTF-8" />
+  <title>Custom field Lumo tests</title>
   <script>
-    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
-    document.write(`
-      <link rel="import" href="../../theme/${theme}/vaadin-custom-field.html">
-      <link rel="import" href="../../../vaadin-text-field/theme/${theme}/vaadin-text-field.html">
-      <link rel="import" href="../../../vaadin-time-picker/theme/${theme}/vaadin-time-picker.html">
-    `);
-
-    window.addEventListener('WebComponentsReady', function() {
-      customElements.whenDefined('vaadin-custom-field').then(() => {
-        window.ShadyDOM && window.ShadyDOM.flush(); // Force DOM composition
-        window.webComponentsAreReady = true; // Checked in gemini before capture callback
-      });
-    });
+    window.polymerSkipLoadingFontRoboto = true;
   </script>
 </head>
 
 <body>
-  <div id="lumo-tests" style="padding: 10px;">
+  <div id="custom-field-tests" style="padding: 10px">
     <vaadin-custom-field invalid error-message="Invalid" theme="small" label="Small custom field">
       <vaadin-text-field theme="small"></vaadin-text-field>
     </vaadin-custom-field>
@@ -30,4 +17,13 @@
     <vaadin-time-picker value="09:00" theme="small" label="Small time picker"></vaadin-time-picker>
   </div>
 
+  <script type="module">
+    import '../../theme/lumo/vaadin-custom-field.js';
+    import '@vaadin/vaadin-text-field/vaadin-text-field.js';
+    import '@vaadin/vaadin-time-picker/vaadin-time-picker.js';
+
+    window.requestAnimationFrame(() => {
+      document.getElementById('custom-field-tests').dataset.ready = true;
+    });
+  </script>
 </body>

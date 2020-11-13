@@ -1,73 +1,74 @@
 <!DOCTYPE html>
 
 <head lang="en">
-  <meta charset="UTF-8">
-  <title></title>
-  <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <meta charset="UTF-8" />
+  <title>Disabled custom field tests</title>
   <script>
-    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
-    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-custom-field.html">`);
-
-    window.addEventListener('WebComponentsReady', function() {
-      customElements.whenDefined('vaadin-custom-field').then(() => {
-        window.ShadyDOM && window.ShadyDOM.flush(); // Force DOM composition
-        window.webComponentsAreReady = true; // Checked in gemini before capture callback
-      });
-    });
+    window.polymerSkipLoadingFontRoboto = true;
   </script>
   <style>
-    [type="number"] {
+    [type='number'] {
       width: 30px;
     }
   </style>
 </head>
 
 <body>
-
-  <div id="disabled-tests" style="padding: 10px; text-align: right; width: 700px;">
+  <div id="custom-field-tests" style="padding: 10px; text-align: right; width: 700px">
     Disabled
     <vaadin-custom-field label="Home address" disabled>
-      <input type="text" disabled>
-      <input type="number" disabled>
+      <input type="text" disabled />
+      <input type="number" disabled />
     </vaadin-custom-field>
     with value
     <vaadin-custom-field label="Home address" disabled>
-      <input type="text" value="Foo street" disabled>
-      <input type="number" value="42" disabled>
+      <input type="text" value="Foo street" disabled />
+      <input type="number" value="42" disabled />
     </vaadin-custom-field>
-    <br>
+    <br />
     Disabled invalid
     <vaadin-custom-field label="Home address" invalid error-message="Foo" disabled>
-      <input type="text" disabled>
-      <input type="number" disabled>
+      <input type="text" disabled />
+      <input type="number" disabled />
     </vaadin-custom-field>
     with value
     <vaadin-custom-field label="Home address" invalid error-message="Foo" disabled>
-      <input type="text" value="Foo street" disabled>
-      <input type="number" value="42" disabled>
+      <input type="text" value="Foo street" disabled />
+      <input type="number" value="42" disabled />
     </vaadin-custom-field>
-    <br>
+    <br />
     Disabled required
     <vaadin-custom-field label="Home address" required disabled>
-      <input type="text" disabled>
-      <input type="number" disabled>
+      <input type="text" disabled />
+      <input type="number" disabled />
     </vaadin-custom-field>
     with value
     <vaadin-custom-field label="Home address" required disabled>
-      <input type="text" value="Foo street" disabled>
-      <input type="number" value="42" disabled>
+      <input type="text" value="Foo street" disabled />
+      <input type="number" value="42" disabled />
     </vaadin-custom-field>
-    <br>
+    <br />
     Disabled required invalid
     <vaadin-custom-field label="Home address" required invalid error-message="Foo" disabled>
-      <input type="text" disabled>
-      <input type="number" disabled>
+      <input type="text" disabled />
+      <input type="number" disabled />
     </vaadin-custom-field>
     with value
     <vaadin-custom-field label="Home address" required invalid error-message="Foo" disabled>
-      <input type="text" value="Foo street" disabled>
-      <input type="number" value="42" disabled>
+      <input type="text" value="Foo street" disabled />
+      <input type="number" value="42" disabled />
     </vaadin-custom-field>
   </div>
 
+  <script type="module">
+    (async () => {
+      const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+
+      await import('../../theme/' + theme + '/vaadin-custom-field.js');
+
+      window.requestAnimationFrame(() => {
+        document.getElementById('custom-field-tests').dataset.ready = true;
+      });
+    })();
+  </script>
 </body>
