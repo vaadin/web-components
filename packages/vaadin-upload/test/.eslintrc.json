@@ -1,22 +1,5 @@
 {
-  "globals": {
-    "WCT": false,
-    "describe": false,
-    "beforeEach": false,
-    "fixture": false,
-    "it": false,
-    "expect": false,
-    "gemini": false,
-    "sinon": false,
-    "touchDevice": false,
-    "ieOrEdge": false,
-    "describeIf": false,
-    "createFiles": false,
-    "xhrCreator": false,
-    "MockHttpRequest": false,
-    "flush": false,
-    "createFile": false,
-    "chai": false,
-    "describeSkipIf": false
+  "env": {
+    "mocha": true
   }
 }
