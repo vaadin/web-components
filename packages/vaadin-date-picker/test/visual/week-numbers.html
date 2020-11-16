@@ -7,7 +7,7 @@
 
 <body>
   <div id="date-picker-tests" style="padding: 10px; min-height: 600px">
-    <vaadin-date-picker initial-position="2013-04-27"></vaadin-date-picker>
+    <vaadin-date-picker show-week-numbers initial-position="2018-04-28"></vaadin-date-picker>
   </div>
 
   <script type="module">
@@ -19,6 +19,7 @@
       await import('../../theme/' + theme + '/vaadin-date-picker.js');
 
       const picker = document.querySelector('vaadin-date-picker');
+      picker.set('i18n.firstDayOfWeek', 1);
       picker.$.input.addEventListener('focus', function(e) {
         // Make sure the input doesn't have a blinking caret that might fail the test
         e.target.blur();

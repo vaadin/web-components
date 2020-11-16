@@ -2,24 +2,11 @@
 
 <head lang="en">
   <meta charset="UTF-8">
-
-  <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
-  <script>
-    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
-    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-date-picker.html">`);
-
-    window.addEventListener('WebComponentsReady', function() {
-      customElements.whenDefined('vaadin-date-picker').then(() => {
-        window.ShadyDOM && window.ShadyDOM.flush(); // Force DOM composition
-        window.webComponentsAreReady = true; // Checked in gemini before capture callback
-      });
-    });
-  </script>
+  <title>Date picker tests</title>
 </head>
 
 <body>
-
-  <div id="default-tests" style="padding: 10px;">
+  <div id="date-picker-tests" style="padding: 10px;">
     Plain
     <vaadin-date-picker></vaadin-date-picker>
 
@@ -51,4 +38,17 @@
     </vaadin-date-picker>
   </div>
 
+  <script type="module">
+    (async() => {
+      const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+      const dir = window.location.search.replace(/.*dir=(\w+).*/, '$1') || 'ltr';
+      document.documentElement.setAttribute('dir', dir);
+
+      await import('../../theme/' + theme + '/vaadin-date-picker.js');
+
+      window.requestAnimationFrame(() => {
+        document.getElementById('date-picker-tests').dataset.ready = true;
+      });
+    })();
+  </script>
 </body>
