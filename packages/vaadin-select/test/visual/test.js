@@ -1,48 +1,32 @@
-gemini.suite('vaadin-select', function(rootSuite) {
-  function wait(actions, find) {
-    actions.wait(5000);
-  }
+describe('vaadin-select', () => {
+  const locator = '#select-tests[data-ready]';
 
-  function goToAboutBlank(actions, find) {
-    // Firefox stops responding on socket after a test, workaround:
-    return actions.executeJS(function(window) {
-      window.location.href = 'about:blank'; // just go away, please!
-    });
-  }
-
-  rootSuite
-    .before(wait)
-    .after(goToAboutBlank);
-
-  ['lumo', 'material'].forEach(theme => {
-    gemini.suite(`default-tests-${theme}`, function(suite) {
-      suite
-        .setUrl(`select.html?theme=${theme}`)
-        .setCaptureElements('#select')
-        .capture('select');
+  ['lumo', 'material'].forEach((theme) => {
+    it(`${theme}-default`, function () {
+      return this.browser
+        .url(`select.html?theme=${theme}`)
+        .waitForVisible(locator, 10000)
+        .assertView(`${theme}-default`, locator);
     });
 
-    gemini.suite(`rtl-tests-${theme}`, function(suite) {
-      suite
-        .setUrl(`rtl.html?theme=${theme}`)
-        .setCaptureElements('#select')
-        .capture('select');
+    it(`${theme}-rtl`, function () {
+      return this.browser
+        .url(`rtl.html?theme=${theme}`)
+        .waitForVisible(locator, 10000)
+        .assertView(`${theme}-rtl`, locator);
     });
   });
 
-  ['ltr', 'rtl'].forEach(dir => {
-    gemini.suite(`${dir}-align-tests`, function(suite) {
-      suite
-        .setUrl(`align-themes.html?dir=${dir}`)
-        .setCaptureElements('#select')
-        .capture('select');
+  ['ltr', 'rtl'].forEach((dir) => {
+    it(`${dir}-align`, function () {
+      return this.browser
+        .url(`align-themes.html?dir=${dir}`)
+        .waitForVisible(locator, 10000)
+        .assertView(`${dir}-align`, locator);
     });
   });
 
-  gemini.suite(`lumo-variants-tests`, function(suite) {
-    suite
-      .setUrl(`lumo.html`)
-      .setCaptureElements('#select')
-      .capture('select');
+  it('lumo-variants', function () {
+    return this.browser.url(`lumo.html`).waitForVisible(locator, 10000).assertView('lumo-variants', locator);
   });
 });

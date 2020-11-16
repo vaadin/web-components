@@ -2,18 +2,7 @@
 
 <head lang="en">
   <meta charset="UTF-8">
-  <title>Drop down menu tests</title>
-  <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
-  <link rel="import" href="../../../polymer/polymer.html">
-  <script>
-    // eslint-disable-next-line no-unused-vars
-    /* global theme */
-    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
-    document.documentElement.setAttribute('dir', 'rtl');
-    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-select.html">`);
-    document.write(`<link rel="import" href="../../../vaadin-list-box/theme/${theme}/vaadin-list-box.html">`);
-    document.write(`<link rel="import" href="../../../vaadin-item/theme/${theme}/vaadin-item.html">`);
-  </script>
+  <title>Select RTL tests</title>
 </head>
 
 <body>
@@ -29,42 +18,58 @@
     }
   </style>
 
-  <div class="capture-block" id="select">
+  <div class="capture-block" id="select-tests">
 
     <vaadin-select label="Normal" error-message="Error-message" id="general" required placeholder="Placeholder">
       <div slot="prefix">prefix &nbsp;</div>
     </vaadin-select>
 
-    <vaadin-select label="Selected value" value="Selected">
-      <template>
-        <vaadin-list-box>
-          <vaadin-item>Selected</vaadin-item>
-        </vaadin-list-box>
-      </template>
-    </vaadin-select>
+    <vaadin-select label="Selected value" value="Selected" id="select"></vaadin-select>
 
-    <vaadin-select label="Opened and selected" id="opened-selected">
-      <template>
+    <vaadin-select label="Opened and selected" id="opened-selected"></vaadin-select>
+  </div>
+
+<script type="module">
+  import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
+
+  (async() => {
+    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+
+    await import('../../theme/' + theme + '/vaadin-select.js');
+    await import('@vaadin/vaadin-list-box/theme/' + theme + '/vaadin-list-box.js');
+    await import('@vaadin/vaadin-item/theme/' + theme + '/vaadin-item.js');
+
+    document.documentElement.setAttribute('dir', 'rtl');
+
+    const select1 = document.getElementById('general');
+    const select2 = document.getElementById('opened-selected');
+    const select3 = document.getElementById('select');
+
+    select2.renderer = (root) => {
+      if (root.firstElementChild) return;
+      root.innerHTML = `
         <vaadin-list-box>
           <vaadin-item>default item</vaadin-item>
           <vaadin-item>Very very long item label</vaadin-item>
         </vaadin-list-box>
-      </template>
-    </vaadin-select>
+      `;
+    };
 
-    <script>
-      window.addEventListener('WebComponentsReady', () => {
-        const select1 = document.getElementById('general');
-        const select2 = document.getElementById('opened-selected');
+    select3.renderer = (root) => {
+      if (root.firstElementChild) return;
+      root.innerHTML = `
+        <vaadin-list-box>
+          <vaadin-item>Selected</vaadin-item>
+        </vaadin-list-box>
+      `;
+    };
 
-        Polymer.RenderStatus.afterNextRender(select2._menuElement, () => {
-          select1.opened = true;
-          select2._menuElement.selected = 1;
-          select2.opened = true;
-          window.webComponentsAreReady = true;
-        });
-      });
-    </script>
-
-  </div>
+    afterNextRender(select2._menuElement, () => {
+      select1.opened = true;
+      select2._menuElement.selected = 1;
+      select2.opened = true;
+      document.getElementById('select-tests').dataset.ready = true;
+    });
+  })();
+</script>
 </body>

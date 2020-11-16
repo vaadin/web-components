@@ -1,40 +1,34 @@
 ### Description
-<!-- Example: Error thrown when calling `appendChild` on Vaadin element -->
+<!-- Example: The `vaadin-select` element does not open when the input is clicked. -->
 
 #### Live Demo
 <!-- Click "Remix This" and edit -- must be logged in to persist! -->
-https://glitch.com/edit/#!/rhetorical-oil
+https://glitch.com/edit/#!/vaadin-select-renderer
 <!-- ...or provide your own repro URL -->
 
 #### Steps to Reproduce
-<!--
-Example:
-
-1. Create `vaadin-select`
-2. Append `vaadin-select` to document.body
-3. Create `div`.
-4. Append `div` to `vaadin-select`
+<!-- Example
+1. Put a `vaadin-select` element in the page.
+3. Click the `vaadin-select` element.
 -->
 
-
 #### Expected Results
-<!-- Example: No error is throw -->
+<!-- Example: Overlay should appear when `vaadin-select` is clicked. -->
 
 #### Actual Results
-<!-- Example: Error is thrown -->
+<!-- Example: Overlay stays hidden. -->
 
 ### Browsers Affected
 <!-- Check all that apply -->
 - [ ] Chrome
 - [ ] Firefox
+- [ ] Safari
 - [ ] Edge
-- [ ] Safari 9
-- [ ] Safari 8
-- [ ] IE 11
+- [ ] iOS Safari
+- [ ] Android Chrome
 
-### Versions
+### Version
 <!--
-`bower ls` or `npm ls` will show the version of webcomponents.js or webcomponents-lite.js
+`$ npm ls | grep @vaadin` will show the version of the components.
 -->
 - vaadin-select: vX.X.X
-- webcomponents: vX.X.X

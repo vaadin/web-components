@@ -2,20 +2,7 @@
 
 <head lang="en">
   <meta charset="UTF-8">
-  <title>Drop down menu tests</title>
-  <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
-  <link rel="import" href="../../../polymer/polymer.html">
-  <script>
-    // eslint-disable-next-line no-unused-vars
-    /* global theme */
-    const dir = window.location.search.replace(/.*dir=(\w+).*/, '$1') || 'ltr';
-    document.documentElement.setAttribute('dir', dir);
-
-    const theme = 'lumo';
-    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-select.html">`);
-    document.write(`<link rel="import" href="../../../vaadin-list-box/theme/${theme}/vaadin-list-box.html">`);
-    document.write(`<link rel="import" href="../../../vaadin-item/theme/${theme}/vaadin-item.html">`);
-  </script>
+  <title>Select theme tests</title>
 </head>
 
 <body>
@@ -31,30 +18,52 @@
     }
   </style>
 
-  <div class="capture-block" id="select">
+  <div class="capture-block" id="select-tests">
 
-    <vaadin-select label="align-left" value="Selected" theme="align-left">
-      <template>
-        <vaadin-list-box>
-          <vaadin-item>Selected</vaadin-item>
-        </vaadin-list-box>
-      </template>
-    </vaadin-select>
+    <vaadin-select id="left" label="align-left" value="Selected" theme="align-left"></vaadin-select>
 
-    <vaadin-select label="align-center" value="Selected" theme="align-center">
-      <template>
-        <vaadin-list-box>
-          <vaadin-item>Selected</vaadin-item>
-        </vaadin-list-box>
-      </template>
-    </vaadin-select>
+    <vaadin-select id="center" label="align-center" value="Selected" theme="align-center"></vaadin-select>
 
-    <vaadin-select label="align-right" value="Selected" theme="align-right">
-      <template>
-        <vaadin-list-box>
-          <vaadin-item>Selected</vaadin-item>
-        </vaadin-list-box>
-      </template>
-    </vaadin-select>
+    <vaadin-select id="right" label="align-right" value="Selected" theme="align-right"></vaadin-select>
   </div>
+
+  <script type="module">
+    import '../../theme/lumo/vaadin-select.js';
+    import '@vaadin/vaadin-list-box/theme/lumo/vaadin-list-box.js';
+    import '@vaadin/vaadin-item/theme/lumo/vaadin-item.js';
+
+    const dir = window.location.search.replace(/.*dir=(\w+).*/, '$1') || 'ltr';
+    document.documentElement.setAttribute('dir', dir);
+
+    document.getElementById('left').renderer = (root) => {
+      if (root.firstElementChild) return;
+      root.innerHTML = `
+        <vaadin-list-box>
+          <vaadin-item>Selected</vaadin-item>
+        </vaadin-list-box>
+      `;
+    };
+
+    document.getElementById('center').renderer = (root) => {
+      if (root.firstElementChild) return;
+      root.innerHTML = `
+        <vaadin-list-box>
+          <vaadin-item>Selected</vaadin-item>
+        </vaadin-list-box>
+      `;
+    };
+
+    document.getElementById('right').renderer = (root) => {
+      if (root.firstElementChild) return;
+      root.innerHTML = `
+        <vaadin-list-box>
+          <vaadin-item>Selected</vaadin-item>
+        </vaadin-list-box>
+      `;
+    };
+
+    window.requestAnimationFrame(() => {
+      document.getElementById('select-tests').dataset.ready = true;
+    });
+  </script>
 </body>

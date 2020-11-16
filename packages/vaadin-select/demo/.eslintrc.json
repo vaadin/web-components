@@ -1,8 +1,0 @@
-{
-  "rules": {
-  },
-  "globals": {
-    "SelectDemo": false,
-    "DemoReadyEventEmitter": false
-  }
-}

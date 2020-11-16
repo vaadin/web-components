@@ -2,17 +2,7 @@
 
 <head lang="en">
   <meta charset="UTF-8">
-  <title>Drop down menu tests</title>
-  <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
-  <link rel="import" href="../../../polymer/polymer.html">
-  <script>
-    // eslint-disable-next-line no-unused-vars
-    /* global theme */
-    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
-    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-select.html">`);
-    document.write(`<link rel="import" href="../../../vaadin-list-box/theme/${theme}/vaadin-list-box.html">`);
-    document.write(`<link rel="import" href="../../../vaadin-item/theme/${theme}/vaadin-item.html">`);
-  </script>
+  <title>Select tests</title>
 </head>
 
 <body>
@@ -33,7 +23,7 @@
     }
   </style>
 
-  <div class="capture-block" id="select">
+  <div class="capture-block" id="select-tests">
 
     <vaadin-select label="Normal" placeholder="Placeholder">
       <div slot="prefix">prefix &nbsp;</div>
@@ -44,14 +34,7 @@
     <vaadin-select label="Disabled" placeholder="Placeholder" disabled>
     </vaadin-select>
 
-    <vaadin-select label="Selected and Focused" placeholder="Placeholder" id="drop2">
-      <template>
-        <vaadin-list-box>
-          <vaadin-item>default item</vaadin-item>
-          <vaadin-item>Selected and Focused</vaadin-item>
-        </vaadin-list-box>
-      </template>
-    </vaadin-select>
+    <vaadin-select label="Selected and Focused" placeholder="Placeholder" id="drop2"></vaadin-select>
 
     <br />
 
@@ -65,58 +48,87 @@
 
     <br/>
 
-    <vaadin-select label="Item as value" placeholder="Placeholder" value="Html&nbsp;as&nbsp;Content">
-      <template>
-        <vaadin-list-box>
-          <vaadin-item><strong>Html</strong>&nbsp;as&nbsp;<i>Content</i></vaadin-item>
-        </vaadin-list-box>
-      </template>
-    </vaadin-select>
+    <vaadin-select id="html" label="Item as value" placeholder="Placeholder" value="Html&nbsp;as&nbsp;Content"></vaadin-select>
 
-    <vaadin-select label="Open" placeholder="Placeholder" id="drop1" value="Item one">
-      <template>
-        <vaadin-list-box>
-          <strong>Opened menu</strong>
-          <vaadin-item>Item one</vaadin-item>
-          <vaadin-item>Item two</vaadin-item>
-          <vaadin-item disabled>Disabled item</vaadin-item>
-        </vaadin-list-box>
-      </template>
-    </vaadin-select>
+    <vaadin-select label="Open" placeholder="Placeholder" id="drop1" value="Item one"></vaadin-select>
 
-    <vaadin-select label="Text as Content" placeholder="Placeholder" value="v2">
-      <template>
-        <vaadin-list-box>
-          <vaadin-item>default item</vaadin-item>
-          <vaadin-item value="v2">Text as Content Two</vaadin-item>
-        </vaadin-list-box>
-      </template>
-    </vaadin-select>
+    <vaadin-select id="text" label="Text as Content" placeholder="Placeholder" value="v2"></vaadin-select>
 
-    <vaadin-select label="Label as Content" placeholder="Placeholder" value="Option one">
-      <template>
-        <vaadin-list-box>
-          <vaadin-item label="Label as Content">Option one</vaadin-item>
-        </vaadin-list-box>
-      </template>
-    </vaadin-select>
-
-    <script>
-      window.addEventListener('WebComponentsReady', () => {
-        const drop1 = document.getElementById('drop1');
-
-        Polymer.RenderStatus.afterNextRender(drop1._menuElement, () => {
-          drop1.opened = true;
-
-          const drop2 = document.getElementById('drop2');
-          Polymer.RenderStatus.afterNextRender(drop2._menuElement, () => {
-            drop2.opened = true;
-            drop2._menuElement.selected = 1;
-            window.webComponentsAreReady = true;
-          });
-        });
-      });
-    </script>
+    <vaadin-select id="label" label="Label as Content" placeholder="Placeholder" value="Option one"></vaadin-select>
 
   </div>
+
+  <script type="module">
+    import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
+
+    (async() => {
+      const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+
+      await import('../../theme/' + theme + '/vaadin-select.js');
+      await import('@vaadin/vaadin-list-box/theme/' + theme + '/vaadin-list-box.js');
+      await import('@vaadin/vaadin-item/theme/' + theme + '/vaadin-item.js');
+
+      const drop1 = document.getElementById('drop1');
+      drop1.renderer = (root) => {
+        if (root.firstElementChild) return;
+        root.innerHTML = `
+          <vaadin-list-box>
+            <strong>Opened menu</strong>
+            <vaadin-item>Item one</vaadin-item>
+            <vaadin-item>Item two</vaadin-item>
+            <vaadin-item disabled>Disabled item</vaadin-item>
+          </vaadin-list-box>
+        `;
+      };
+
+      const drop2 = document.getElementById('drop2');
+      drop2.renderer = (root) => {
+        if (root.firstElementChild) return;
+        root.innerHTML = `
+          <vaadin-list-box>
+            <vaadin-item>default item</vaadin-item>
+            <vaadin-item>Selected and Focused</vaadin-item>
+          </vaadin-list-box>
+        `;
+      };
+
+      document.getElementById('html').renderer = (root) => {
+        if (root.firstElementChild) return;
+        root.innerHTML = `
+          <vaadin-list-box>
+            <vaadin-item><strong>Html</strong>&nbsp;as&nbsp;<i>Content</i></vaadin-item>
+          </vaadin-list-box>
+        `;
+      };
+
+      document.getElementById('text').renderer = (root) => {
+        if (root.firstElementChild) return;
+        root.innerHTML = `
+          <vaadin-list-box>
+            <vaadin-item>default item</vaadin-item>
+            <vaadin-item value="v2">Text as Content Two</vaadin-item>
+          </vaadin-list-box>
+        `;
+      };
+
+      document.getElementById('label').renderer = (root) => {
+        if (root.firstElementChild) return;
+        root.innerHTML = `
+          <vaadin-list-box>
+            <vaadin-item label="Label as Content">Option one</vaadin-item>
+          </vaadin-list-box>
+        `;
+      };
+
+      afterNextRender(drop1._menuElement, () => {
+        drop1.opened = true;
+
+        afterNextRender(drop2._menuElement, () => {
+          drop2.opened = true;
+          drop2._menuElement.selected = 1;
+          document.getElementById('select-tests').dataset.ready = true;
+        });
+      });
+    })();
+  </script>
 </body>

@@ -2,12 +2,7 @@
 
 <head lang="en">
   <meta charset="UTF-8">
-  <title>Select tests</title>
-  <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
-  <link rel="import" href="../../../polymer/polymer.html">
-  <link rel="import" href="../../theme/lumo/vaadin-select.html">
-  <link rel="import" href="../../../vaadin-list-box/theme/lumo/vaadin-list-box.html">
-  <link rel="import" href="../../../vaadin-item/theme/lumo/vaadin-item.html">
+  <title>Select Lumo tests</title>
 </head>
 
 <body>
@@ -28,70 +23,89 @@
     }
   </style>
 
-  <div class="capture-block" id="select">
+  <div class="capture-block" id="select-tests">
 
     <vaadin-select label="small" theme="small">
     </vaadin-select>
 
-    <vaadin-select label="small & selected" theme="small" value="Item one">
-      <template>
-        <vaadin-list-box>
-          <vaadin-item>Item one</vaadin-item>
-        </vaadin-list-box>
-      </template>
-    </vaadin-select>
+    <vaadin-select id="small" label="small & selected" theme="small" value="Item one"></vaadin-select>
 
     <br/>
 
-    <vaadin-select label="aligned center & selected" theme="align-center" value="Item one">
-      <template>
-        <vaadin-list-box>
-          <vaadin-item>Item one</vaadin-item>
-        </vaadin-list-box>
-      </template>
-    </vaadin-select>
+    <vaadin-select id="center" label="aligned center & selected" theme="align-center" value="Item one"></vaadin-select>
 
-    <vaadin-select label="aligned right & selected" theme="align-right" value="Item one">
-      <template>
-        <vaadin-list-box>
-          <vaadin-item>Item one</vaadin-item>
-        </vaadin-list-box>
-      </template>
-    </vaadin-select>
+    <vaadin-select id="right" label="aligned right & selected" theme="align-right" value="Item one"></vaadin-select>
 
     <br/>
 
-    <vaadin-select id="drop1" label="aligned center & opened" theme="align-center" value="Item one">
-      <template>
-        <vaadin-list-box>
-          <vaadin-item>Item one</vaadin-item>
-        </vaadin-list-box>
-      </template>
-    </vaadin-select>
+    <vaadin-select id="drop1" label="aligned center & opened" theme="align-center" value="Item one"></vaadin-select>
 
-    <vaadin-select id="drop2" label="aligned right & opened" theme="align-right" value="Item one">
-      <template>
-        <vaadin-list-box>
-          <vaadin-item>Item one</vaadin-item>
-        </vaadin-list-box>
-      </template>
-    </vaadin-select>
+    <vaadin-select id="drop2" label="aligned right & opened" theme="align-right" value="Item one"></vaadin-select>
   </div>
 
-  <script>
-    window.addEventListener('WebComponentsReady', () => {
-      const drop1 = document.getElementById('drop1');
+  <script type="module">
+    import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
+    import '../../theme/lumo/vaadin-select.js';
+    import '@vaadin/vaadin-list-box/theme/lumo/vaadin-list-box.js';
+    import '@vaadin/vaadin-item/theme/lumo/vaadin-item.js';
 
-      Polymer.RenderStatus.afterNextRender(drop1._menuElement, () => {
-        drop1._overlayElement.modeless = true;
-        drop1.opened = true;
+    document.getElementById('small').renderer = (root) => {
+      if (root.firstElementChild) return;
+      root.innerHTML = `
+        <vaadin-list-box>
+          <vaadin-item>Item one</vaadin-item>
+        </vaadin-list-box>
+      `;
+    };
 
-        const drop2 = document.getElementById('drop2');
-        Polymer.RenderStatus.afterNextRender(drop2._menuElement, () => {
-          drop2._overlayElement.modeless = true;
-          drop2.opened = true;
-          window.webComponentsAreReady = true;
-        });
+    document.getElementById('center').renderer = (root) => {
+      if (root.firstElementChild) return;
+      root.innerHTML = `
+        <vaadin-list-box>
+          <vaadin-item>Item one</vaadin-item>
+        </vaadin-list-box>
+      `;
+    };
+
+    document.getElementById('right').renderer = (root) => {
+      if (root.firstElementChild) return;
+      root.innerHTML = `
+        <vaadin-list-box>
+          <vaadin-item>Item one</vaadin-item>
+        </vaadin-list-box>
+      `;
+    };
+
+
+    const drop1 = document.getElementById('drop1');
+    drop1.renderer = (root) => {
+      if (root.firstElementChild) return;
+      root.innerHTML = `
+        <vaadin-list-box>
+          <vaadin-item>Item one</vaadin-item>
+        </vaadin-list-box>
+      `;
+    };
+
+    const drop2 = document.getElementById('drop2');
+    drop2.renderer = (root) => {
+      if (root.firstElementChild) return;
+      root.innerHTML = `
+        <vaadin-list-box>
+          <vaadin-item>Item one</vaadin-item>
+        </vaadin-list-box>
+      `;
+    };
+
+    afterNextRender(drop1._menuElement, () => {
+      drop1._overlayElement.modeless = true;
+      drop1.opened = true;
+
+      const drop2 = document.getElementById('drop2');
+      afterNextRender(drop2._menuElement, () => {
+        drop2._overlayElement.modeless = true;
+        drop2.opened = true;
+        document.getElementById('select-tests').dataset.ready = true;
       });
     });
   </script>
