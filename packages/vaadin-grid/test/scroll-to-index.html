@@ -148,6 +148,56 @@
           expect(cell.parentElement.index).to.equal(targetIndex);
         });
 
+        it('should continue scrolling after child items get loaded', done => {
+          grid.size = 50;
+          grid.expandedItems = ['foo49'];
+          grid.dataProvider = ({page, parentItem}, cb) => {
+            setTimeout(() => {
+              const scope = parentItem || '';
+              cb(Array(...new Array(grid.pageSize)).map((_, index) => scope + 'foo' + index));
+              if (parentItem) {
+                expect(grid._firstVisibleIndex).to.be.above(75);
+                done();
+              }
+            });
+          };
+          grid.scrollToIndex(100);
+        });
+
+        it('should scroll to index after attaching', done => {
+          const parent = grid.parentElement;
+          parent.removeChild(grid);
+          grid.scrollToIndex(100);
+          grid.addEventListener('animationend', () => {
+            requestAnimationFrame(() => {
+              expect(grid._firstVisibleIndex).to.be.above(75);
+              expect(grid.$.table.scrollTop).to.be.above(0);
+              done();
+            });
+          });
+          parent.appendChild(grid);
+        });
+
+        it('should scroll to index only once', done => {
+          grid.dataProvider = ({page, parentItem}, cb) => {
+            if (page === 0) {
+              // Still in loading state, this will end up as pending scroll to index
+              grid.scrollToIndex(100);
+              // Resolve the request, no longer in loading state after this
+              cb(Array(...new Array(grid.pageSize)).map((_, index) => 'foo' + index));
+              flushGrid(grid);
+
+              // Scroll to a new location (new data will get loaded)
+              grid.scrollToIndex(200);
+              flushGrid(grid);
+              expect(grid._firstVisibleIndex).to.be.above(150);
+              done();
+            } else {
+              cb(Array(...new Array(grid.pageSize)).map((_, index) => 'foo' + index));
+            }
+          };
+        });
+
       });
 
       describe('Added item', () => {

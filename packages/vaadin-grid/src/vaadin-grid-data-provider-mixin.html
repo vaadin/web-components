@@ -389,6 +389,7 @@ This program is available under Apache License Version 2.0, available at https:/
                 });
 
               this._increasePoolIfNeeded(0);
+              this.__scrollToPendingIndex();
             }
           );
 
@@ -504,6 +505,21 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       });
       return result;
+    }
+
+    scrollToIndex(index) {
+      super.scrollToIndex(index);
+      if (!isNaN(index) && (this._cache.isLoading() || !this.clientHeight)) {
+        this.__pendingScrollToIndex = index;
+      }
+    }
+
+    __scrollToPendingIndex() {
+      if (this.__pendingScrollToIndex && this.$.items.children.length) {
+        const index = this.__pendingScrollToIndex;
+        delete this.__pendingScrollToIndex;
+        this.scrollToIndex(index);
+      }
     }
 
   };
