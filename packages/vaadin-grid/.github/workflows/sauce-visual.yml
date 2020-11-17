@@ -1,0 +1,28 @@
+name: sauce-visual
+
+on: [push]
+
+jobs:
+  visual-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v1
+      with:
+        node-version: 12
+
+    - name: Install CLI tools
+      run: npm install -g bower gemini gemini-sauce gemini-polyserve
+
+    - name: Install dependencies
+      run: npm -q i
+
+    - name: Install Bower
+      run: bower -q i
+
+    - name: Run visual tests
+      env:
+        SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
+        SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
+      run: gemini test test/visual

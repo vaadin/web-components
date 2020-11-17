@@ -1,0 +1,59 @@
+name: local
+
+on: [pull_request]
+
+jobs:
+  polymer-2:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v1
+      with:
+        node-version: 12
+
+    - name: Install CLI tools
+      run: npm install -g bower
+
+    - name: Install dependencies
+      run: npm -q i
+
+    - name: Install Bower
+      run: bower -q i
+
+    - name: Check version
+      run: npm run check
+
+    - name: Run linters
+      run: npm run lint
+
+    - name: Run unit tests
+      run: xvfb-run -s '-screen 0 1024x768x24' npm test
+
+  polymer-3:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - run: |
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+
+    - uses: actions/setup-node@v1
+      with:
+        node-version: 12
+
+    - name: Install CLI tools
+      run: npm install -g bower magi-cli polymer-modulizer web-component-tester yarn
+
+    - name: Install dependencies
+      run: npm -q i
+
+    - name: Convert to P3
+      run: magi p3-convert --out . --import-style=name
+
+    - name: Run yarn
+      run: yarn install --flat
+
+    - name: Run unit tests
+      run: xvfb-run -s '-screen 0 1024x768x24' wct --npm
