@@ -118,6 +118,13 @@
 
           expect(comboBox._focusedIndex).to.eql(2);
         });
+
+        it('should support resetting items', () => {
+          comboBox.items = ['foo', 'bar'];
+          comboBox.items = undefined;
+          comboBox.opened = true;
+          expect(comboBox.$.overlay._selector._virtualCount).to.eql(0);
+        });
       });
 
       describe('value property', () => {

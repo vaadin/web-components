@@ -274,10 +274,8 @@
 
     describe('external filtering', () => {
       beforeEach(() => {
-        comboBox.setProperties({
-          filteredItems: ['foo', 'bar', 'baz'],
-          items: undefined
-        });
+        comboBox.items = undefined;
+        comboBox.filteredItems = ['foo', 'bar', 'baz'];
       });
 
       it('should set items to filteredItems', () => {
