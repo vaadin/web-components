@@ -1,8 +1,8 @@
-import {IronResizableBehavior} from '@polymer/iron-resizable-behavior/iron-resizable-behavior.js';
+import { IronResizableBehavior } from '@polymer/iron-resizable-behavior/iron-resizable-behavior.js';
 
-import {IronScrollTargetBehavior} from '@polymer/iron-scroll-target-behavior/iron-scroll-target-behavior.js';
+import { IronScrollTargetBehavior } from '@polymer/iron-scroll-target-behavior/iron-scroll-target-behavior.js';
 
-import {LegacyElementMixin} from '@polymer/polymer/lib/legacy/legacy-element-mixin.js';
+import { LegacyElementMixin } from '@polymer/polymer/lib/legacy/legacy-element-mixin.js';
 
 interface PolymerIronList extends IronResizableBehavior, IronScrollTargetBehavior {
   /**
@@ -14,7 +14,6 @@ interface PolymerIronList extends IronResizableBehavior, IronScrollTargetBehavio
   scrollToIndex(idx: number): void;
 }
 
-declare class PolymerIronList extends LegacyElementMixin(HTMLElement) implements PolymerIronList {
-}
+declare class PolymerIronList extends LegacyElementMixin(HTMLElement) implements PolymerIronList {}
 
-export {PolymerIronList};
+export { PolymerIronList };

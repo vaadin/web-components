@@ -1,16 +1,15 @@
 {
-  "extends": "vaadin",
+  "extends": [
+    "eslint:recommended",
+    "plugin:prettier/recommended"
+  ],
+  "plugins": ["prettier"],
   "env": {
     "browser": true,
-    "node": true,
     "es6": true
   },
-  "plugins": [
-    "html"
-  ],
-  "globals": {
-    "vaadin": false,
-    "Vaadin": false,
-    "Polymer": false
+  "parserOptions": {
+    "sourceType": "module",
+    "ecmaVersion": 2018
   }
 }

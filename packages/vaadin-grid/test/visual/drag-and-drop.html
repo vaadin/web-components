@@ -1,25 +1,22 @@
 <!DOCTYPE html>
 
 <head lang="en">
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Drag and drop visual tests</title>
-  <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
   <script>
-    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
-    document.write(`<link rel="import" href="../../theme/${theme}/all-imports.html">`);
+    window.polymerSkipLoadingFontRoboto = true;
   </script>
-  <script src="../../demo/grid-demo-data.js"></script>
 </head>
 
 <body>
-  <style media="screen">
-    .capture-block {
+  <style>
+    #grid-tests {
       display: inline-block;
       width: 800px;
     }
   </style>
 
-  <div class="capture-block" id="sorting">
+  <div id="grid-tests">
     <vaadin-grid drop-mode="on-top-or-between" rows-draggable>
       <vaadin-grid-column path="name.first" header="First name"></vaadin-grid-column>
       <vaadin-grid-column path="name.last" header="Last name"></vaadin-grid-column>
@@ -27,10 +24,26 @@
     </vaadin-grid>
   </div>
 
-  <script>
-    const grid = document.querySelector('vaadin-grid');
-    grid.rowDetailsRenderer = root => root.innerHTML = '<p>Details</p>';
-    grid.items = Vaadin.GridDemo.users;
-  </script>
+  <script></script>
 
+  <script type="module">
+    import '@polymer/polymer/lib/elements/dom-bind.js';
+    import { users } from './helpers/users.js';
+
+    (async () => {
+      const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+
+      await import('../../theme/' + theme + '/vaadin-grid.js');
+
+      const grid = document.querySelector('vaadin-grid');
+      grid.rowDetailsRenderer = (root) => (root.innerHTML = '<p>Details</p>');
+      grid.items = users;
+
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          document.getElementById('grid-tests').dataset.ready = true;
+        }, 300);
+      });
+    })();
+  </script>
 </body>

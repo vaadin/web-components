@@ -14,20 +14,6 @@
 
 [&lt;vaadin-grid&gt;](https://vaadin.com/components/vaadin-grid) is a free, high quality data grid / data table Web Component, part of the [Vaadin components](https://vaadin.com/components).
 
-<!---
-```
-<custom-element-demo>
-  <template>
-    <script src="../webcomponentsjs/webcomponents-lite.js"></script>
-    <link rel="import" href="../iron-ajax/iron-ajax.html">
-    <link rel="import" href="vaadin-grid.html">
-    <link rel="import" href="vaadin-grid-selection-column.html">
-    <link rel="import" href="vaadin-grid-sort-column.html">
-    <next-code-block></next-code-block>
-  </template>
-</custom-element-demo>
-```
--->
 ```html
   <vaadin-grid theme="row-dividers" column-reordering-allowed multi-sort>
     <vaadin-grid-selection-column auto-select frozen></vaadin-grid-selection-column>
@@ -54,28 +40,6 @@
 
 ## Installation
 
-The Vaadin components are distributed as Bower and npm packages.
-Please note that the version range is the same, as the API has not changed.
-You should not mix Bower and npm versions in the same application, though.
-
-Unlike the official Polymer Elements, the converted Polymer 3 compatible Vaadin components
-are only published on npm, not pushed to GitHub repositories.
-
-### Polymer 2 and HTML Imports Compatible Version
-
-Install `vaadin-grid`:
-
-```sh
-bower i vaadin/vaadin-grid --save
-```
-
-Once installed, import it in your application:
-
-```html
-<link rel="import" href="bower_components/vaadin-grid/vaadin-grid.html">
-```
-### Polymer 3 and ES Modules Compatible Version
-
 Install `vaadin-grid`:
 
 ```sh
@@ -98,41 +62,48 @@ To use the Material theme, import the correspondent file from the `theme/materia
 
 - The component with the Lumo theme:
 
-  `theme/lumo/vaadin-grid.html`
+  `theme/lumo/vaadin-grid.js`
 
 - The component with the Material theme:
 
-  `theme/material/vaadin-grid.html`
+  `theme/material/vaadin-grid.js`
 
-- Alias for `theme/lumo/vaadin-grid.html`:
+- Alias for `theme/lumo/vaadin-grid.js`:
 
-  `vaadin-grid.html`
+  `vaadin-grid.js`
 
 
 ## Running demos and tests in a browser
 
 1. Fork the `vaadin-grid` repository and clone it locally.
 
-1. Make sure you have [npm](https://www.npmjs.com/) and [Bower](https://bower.io) installed.
+1. Make sure you have [node.js](https://nodejs.org/) 12.x installed.
 
-1. When in the `vaadin-grid` directory, run `npm install` and then `bower install` to install dependencies.
+1. Make sure you have [npm](https://www.npmjs.com/) installed.
+
+1. When in the `vaadin-grid` directory, run `npm install` to install dependencies.
 
 1. Run `npm start`, browser will automatically open the component API documentation.
 
-1. You can also open demo or in-browser tests by adding **demo** or **test** to the URL, for example:
+1. You can also open visual tests, for example:
 
-  - http://127.0.0.1:3000/components/vaadin-grid/demo
-  - http://127.0.0.1:3000/components/vaadin-grid/test
+  - http://127.0.0.1:3000/test/visual/sorting.html
 
+## Running tests from the command line
+
+1. When in the `vaadin-upload` directory, run `npm test`
 
 ## Running tests from the command line
 
 1. When in the `vaadin-grid` directory, run `polymer test`
 
+## Debugging tests in the browser
+
+1. Run `npm run debug`, then choose manual mode (M) and open the link in browser.
 
 ## Following the coding style
 
-We are using [ESLint](http://eslint.org/) for linting JavaScript code. You can check if your code is following our standards by running `npm run lint`, which will automatically lint all `.js` files as well as JavaScript snippets inside `.html` files.
+We are using [ESLint](http://eslint.org/) for linting JavaScript code. You can check if your code is following our standards by running `npm run lint`, which will automatically lint all `.js` files.
 
 
 ## Big Thanks

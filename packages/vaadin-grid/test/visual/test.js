@@ -1,135 +1,95 @@
-gemini.suite('vaadin-grid', (rootSuite) => {
+describe('vaadin-grid', () => {
+  const locator = '#grid-tests[data-ready]';
 
-  function wait(actions, find) {
-    actions.wait(5000);
-  }
-
-  function goToAboutBlank(actions, find) {
-    // Firefox stops responding on socket after a test, workaround:
-    return actions.executeJS(function(window) {
-      window.location.href = 'about:blank'; // just go away, please!
-    });
-  }
-
-  rootSuite
-    .before(wait)
-    .after(goToAboutBlank);
-
-  ['lumo', 'material'].forEach(theme => {
-    ['ltr', 'rtl'].forEach(direction => {
-      gemini.suite(`header-footer-${theme}-${direction}`, (suite) => {
-        suite
-          .setUrl(`header-footer.html?theme=${theme}&dir=${direction}`)
-          .setCaptureElements('#header-footer')
-          .capture('header-footer', {}, (actions, find) => {
-            actions.wait(6000);
-          });
+  ['lumo', 'material'].forEach((theme) => {
+    ['ltr', 'rtl'].forEach((direction) => {
+      it(`header-footer-${theme}-${direction}`, function () {
+        return this.browser
+          .url(`header-footer.html?theme=${theme}&dir=${direction}`)
+          .waitForVisible(locator, 10000)
+          .assertView(`${theme}-header-footer-${direction}`, locator);
       });
 
-      gemini.suite(`column-groups-${theme}-${direction}`, (suite) => {
-        suite
-          .setUrl(`column-groups.html?theme=${theme}&dir=${direction}`)
-          .setCaptureElements('#column-groups')
-          .capture('column-groups', {}, (actions, find) => {
-            actions.wait(6000);
-          });
+      it(`column-groups-${theme}-${direction}`, function () {
+        return this.browser
+          .url(`column-groups.html?theme=${theme}&dir=${direction}`)
+          .waitForVisible(locator, 10000)
+          .assertView(`${theme}-column-groups-${direction}`, locator);
       });
 
-      gemini.suite(`row-details-${theme}-${direction}`, (suite) => {
-        suite
-          .setUrl(`row-details.html?theme=${theme}`)
-          .setCaptureElements('#row-details')
-          .capture('row-details-initial', {}, (actions, find) => {
-            actions.wait(6000);
+      it(`row-details-${theme}-${direction}`, function () {
+        return this.browser
+          .url(`row-details.html?theme=${theme}&dir=${direction}`)
+          .waitForVisible(locator, 10000)
+          .assertView(`${theme}-row-details-collapsed-${direction}`, locator)
+          .execute(() => {
+            const grid = window.document.querySelector('vaadin-grid');
+            grid.openItemDetails(grid.items[0]);
           })
-          .capture('row-details-visible', {}, (actions, find) => {
-            actions.executeJS(function(window) {
-              var grid = window.document.querySelector('vaadin-grid');
-              grid.openItemDetails(grid.items[0]);
-            });
-          });
+          .assertView(`${theme}-row-details-expanded-${direction}`, locator);
       });
 
-      gemini.suite(`sorting-${theme}-${direction}`, (suite) => {
-        suite
-          .setUrl(`sorting.html?theme=${theme}&dir=${direction}`)
-          .setCaptureElements('#sorting')
-          .capture('sorting-initial', {}, (actions, find) => {
-            actions.wait(6000);
-          })
-          .before((actions, find) => {
-            this.firstNameSorter = find('#first-name-sorter');
-            this.lastNameSorter = find('#last-name-sorter');
-          })
-          .capture('single-column-asc', {}, (actions, find) => {
-            actions.click(this.firstNameSorter);
-          })
-          .capture('multiple-columns-asc-asc', {}, (actions, find) => {
-            actions.click(this.lastNameSorter);
-          })
-          .capture('multiple-columns-asc-desc', {}, (actions, find) => {
-            actions.click(this.lastNameSorter);
-          })
-          .capture('single-column-desc', {}, (actions, find) => {
-            actions.click(this.lastNameSorter);
-            actions.click(this.firstNameSorter);
-          });
+      it(`sorting-${theme}-${direction}`, function () {
+        return this.browser
+          .url(`sorting.html?theme=${theme}&dir=${direction}`)
+          .waitForVisible(locator, 10000)
+          .assertView(`${theme}-sorting-initial-${direction}`, locator)
+          .click('#first-name-sorter')
+          .assertView(`${theme}-sorting-single-asc-${direction}`, locator)
+          .click('#last-name-sorter')
+          .assertView(`${theme}-sorting-multi-asc-asc-${direction}`, locator)
+          .click('#last-name-sorter')
+          .assertView(`${theme}-sorting-multi-asc-desc-${direction}`, locator)
+          .click('#last-name-sorter')
+          .click('#first-name-sorter')
+          .assertView(`${theme}-sorting-single-desc-${direction}`, locator);
       });
     });
 
-    gemini.suite(`drag-and-drop-${theme}`, (suite) => {
-      suite
-        .setUrl(`drag-and-drop.html?theme=${theme}`)
-        .setCaptureElements('.capture-block')
-        .capture('grid-dragover', {}, (actions, find) => {
-          actions.executeJS(function(window) {
-            var grid = window.document.querySelector('vaadin-grid');
-            grid.setAttribute('dragover', '');
-          });
-          actions.wait(6000);
+    it(`drag-and-drop-${theme}`, function () {
+      return this.browser
+        .url(`drag-and-drop.html?theme=${theme}`)
+        .waitForVisible(locator, 10000)
+        .execute(() => {
+          const grid = window.document.querySelector('vaadin-grid');
+          grid.setAttribute('dragover', '');
         })
-        .capture('row-dragover-on-top', {}, (actions, find) => {
-          actions.executeJS(function(window) {
-            var grid = window.document.querySelector('vaadin-grid');
-            grid.removeAttribute('dragover');
-            grid.$.items.children[1].setAttribute('dragover', 'on-top');
-          });
+        .assertView(`${theme}-grid-dragover`, locator)
+        .execute(() => {
+          const grid = window.document.querySelector('vaadin-grid');
+          grid.removeAttribute('dragover');
+          grid.$.items.children[1].setAttribute('dragover', 'on-top');
         })
-        .capture('row-dragover-above', {}, (actions, find) => {
-          actions.executeJS(function(window) {
-            var grid = window.document.querySelector('vaadin-grid');
-            grid.$.items.children[1].setAttribute('dragover', 'above');
-          });
+        .assertView(`${theme}-row-dragover-on-top`, locator)
+        .execute(() => {
+          const grid = window.document.querySelector('vaadin-grid');
+          grid.$.items.children[1].setAttribute('dragover', 'above');
         })
-        .capture('row-dragover-below', {}, (actions, find) => {
-          actions.executeJS(function(window) {
-            var grid = window.document.querySelector('vaadin-grid');
-            grid.$.items.children[1].setAttribute('dragover', 'below');
-          });
+        .assertView(`${theme}-row-dragover-above`, locator)
+        .execute(() => {
+          const grid = window.document.querySelector('vaadin-grid');
+          grid.$.items.children[1].setAttribute('dragover', 'below');
         })
-        .capture('row-dragover-above-details', {}, (actions, find) => {
-          actions.executeJS(function(window) {
-            var grid = window.document.querySelector('vaadin-grid');
-            grid.detailsOpenedItems = [grid.items[1]];
-            grid.$.items.children[1].setAttribute('dragover', 'above');
-          });
+        .assertView(`${theme}-row-dragover-below`, locator)
+        .execute(() => {
+          const grid = window.document.querySelector('vaadin-grid');
+          grid.detailsOpenedItems = [grid.items[1]];
+          grid.$.items.children[1].setAttribute('dragover', 'above');
         })
-        .capture('row-dragover-below-details', {}, (actions, find) => {
-          actions.executeJS(function(window) {
-            var grid = window.document.querySelector('vaadin-grid');
-            grid.detailsOpenedItems = [grid.items[1]];
-            grid.$.items.children[1].setAttribute('dragover', 'below');
-          });
+        .assertView(`${theme}-row-dragover-above-details`, locator)
+        .execute(() => {
+          const grid = window.document.querySelector('vaadin-grid');
+          grid.detailsOpenedItems = [grid.items[1]];
+          grid.$.items.children[1].setAttribute('dragover', 'below');
         })
-        .capture('row-dragstart', {}, (actions, find) => {
-          actions.executeJS(function(window) {
-            var grid = window.document.querySelector('vaadin-grid');
-            grid.detailsOpenedItems = [];
-            grid.$.items.children[1].removeAttribute('dragover');
-            grid.$.items.children[1].setAttribute('dragstart', '123');
-          });
-        });
+        .assertView(`${theme}-row-dragover-below-details`, locator)
+        .execute(() => {
+          const grid = window.document.querySelector('vaadin-grid');
+          grid.detailsOpenedItems = [];
+          grid.$.items.children[1].removeAttribute('dragover');
+          grid.$.items.children[1].setAttribute('dragstart', '123');
+        })
+        .assertView(`${theme}-row-dragstart`, locator);
     });
   });
-
 });

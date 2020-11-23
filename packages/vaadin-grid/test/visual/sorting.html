@@ -1,41 +1,26 @@
 <!DOCTYPE html>
 
 <head lang="en">
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Sorting visual tests</title>
-  <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
   <script>
-    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
-    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-grid.html">`);
-    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-grid-sorter.html">`);
-
-    const dir = window.location.search.replace(/.*dir=(\w+).*/, '$1') || 'ltr';
-    document.documentElement.setAttribute('dir', dir);
+    window.polymerSkipLoadingFontRoboto = true;
   </script>
-  <script src="../../demo/grid-demo-data.js"></script>
-  <link href="../../demo/x-data-provider.html" rel="import">
 </head>
 
 <body>
-  <style media="screen">
-    .capture-block {
+  <style>
+    #grid-tests {
       display: inline-block;
       width: 800px;
     }
   </style>
 
-  <div class="capture-block" id="sorting">
+  <div id="grid-tests">
     <dom-bind>
       <template>
-        <custom-style>
-          <style>
-            vaadin-grid {
-              height: 250px;
-            }
-          </style>
-        </custom-style>
         <x-array-data-provider items="{{items}}"></x-array-data-provider>
-        <vaadin-grid aria-label="Sorting Example" items="[[items]]" multi-sort>
+        <vaadin-grid aria-label="Sorting Example" items="[[items]]" style="height: 250px" multi-sort>
           <vaadin-grid-column width="50px">
             <template class="header">#</template>
             <template>[[index]]</template>
@@ -57,4 +42,25 @@
     </dom-bind>
   </div>
 
+  <script type="module">
+    import '@polymer/polymer/lib/elements/dom-bind.js';
+    import './helpers/x-data-provider.js';
+
+    (async () => {
+      const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+      const dir = window.location.search.replace(/.*dir=(\w+).*/, '$1') || 'ltr';
+      document.documentElement.setAttribute('dir', dir);
+
+      await Promise.all([
+        import('../../theme/' + theme + '/vaadin-grid-sorter.js'),
+        import('../../theme/' + theme + '/vaadin-grid.js')
+      ]);
+
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          document.getElementById('grid-tests').dataset.ready = true;
+        }, 300);
+      });
+    })();
+  </script>
 </body>
