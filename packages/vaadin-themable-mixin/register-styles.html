@@ -64,8 +64,8 @@
 
     themeModuleElement.innerHTML = `
       <template>
-        ${styles.map(style => `<style include=${styleMap[style]}></style>`)}
         ${moduleIncludes.map(include => `<style include=${include}></style>`)}
+        ${styles.map(style => `<style include=${styleMap[style]}></style>`)}
       </template>
     `;
 

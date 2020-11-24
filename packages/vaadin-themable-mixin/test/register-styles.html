@@ -138,6 +138,19 @@
           expect(window.getComputedStyle(instance).color).to.equal('rgb(255, 0, 0)');
         });
 
+        it('should include style modules before the component styles', () => {
+          registerStyles(undefined, css`:host {
+            color: rgb(255, 0, 0);
+          }`, {moduleId: unique('id')});
+
+          registerStyles(unique('component'), css`:host {
+            color: rgb(0, 0, 255);
+          }`, {include: [unique('id')]});
+
+          const instance = defineAndInstantiate(unique('component'));
+          expect(window.getComputedStyle(instance).color).to.equal('rgb(0, 0, 255)');
+        });
+
         it('should not add a theme-for attribute to the module with id', () => {
           registerStyles(undefined, css`:host {
             color: rgb(255, 0, 0);
