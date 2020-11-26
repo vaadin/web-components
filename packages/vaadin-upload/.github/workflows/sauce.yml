@@ -1,10 +1,14 @@
 name: sauce
 
-on: [push]
+on:
+  push:
+    tags-ignore:
+      - 'v**'
 
 jobs:
   unit-tests:
     runs-on: ubuntu-latest
+    if: "! contains(toJSON(github.event.commits.*.message), '[skip ci]')"
 
     steps:
     - uses: actions/checkout@v2
@@ -23,6 +27,7 @@ jobs:
 
   visual-tests:
     runs-on: ubuntu-latest
+    if: "! contains(toJSON(github.event.commits.*.message), '[skip ci]')"
 
     steps:
     - uses: actions/checkout@v2
