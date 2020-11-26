@@ -1,10 +1,14 @@
 name: sauce
 
-on: [push]
+on:
+  push:
+    tags-ignore:
+      - 'v**'
 
 jobs:
   polymer-2:
     runs-on: ubuntu-latest
+    if: "! contains(toJSON(github.event.commits.*.message), '[skip ci]')"
 
     steps:
     - uses: actions/checkout@v2
@@ -29,6 +33,7 @@ jobs:
 
   polymer-3:
     runs-on: ubuntu-latest
+    if: "! contains(toJSON(github.event.commits.*.message), '[skip ci]')"
 
     steps:
     - uses: actions/checkout@v2
@@ -60,6 +65,7 @@ jobs:
 
   visual-tests:
     runs-on: ubuntu-latest
+    if: "! contains(toJSON(github.event.commits.*.message), '[skip ci]')"
 
     steps:
     - uses: actions/checkout@v2
