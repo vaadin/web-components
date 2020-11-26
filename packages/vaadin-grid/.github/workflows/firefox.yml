@@ -1,6 +1,9 @@
 name: firefox
 
-on: [push]
+on:
+  push:
+    tags-ignore:
+      - 'v**'
 
 jobs:
   unit-tests:
