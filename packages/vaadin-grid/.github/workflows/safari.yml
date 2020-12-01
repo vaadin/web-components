@@ -2,8 +2,10 @@ name: safari
 
 on:
   push:
+    branches:
+      - '**'
     tags-ignore:
-      - 'v**'
+      - '*.*'
 
 jobs:
   unit-tests:

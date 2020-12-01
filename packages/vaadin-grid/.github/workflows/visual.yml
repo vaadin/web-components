@@ -2,8 +2,10 @@ name: visual
 
 on:
   push:
+    branches:
+      - '**'
     tags-ignore:
-      - 'v**'
+      - '*.*'
 
 jobs:
   visual-tests:
