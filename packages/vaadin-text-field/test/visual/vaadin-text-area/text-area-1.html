@@ -1,59 +1,61 @@
 <!DOCTYPE html>
 
 <head lang="en">
-  <meta charset="UTF-8">
-  <title></title>
-  <script src="../../../../webcomponentsjs/webcomponents-loader.js"></script>
+  <meta charset="UTF-8" />
+  <title>Text area tests</title>
   <script>
-    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
-    document.write(`<link rel="import" href="../../../theme/${theme}/vaadin-text-area.html">`);
-
-    window.addEventListener('WebComponentsReady', function() {
-      setTimeout(function() {
-        window.ShadyDOM && window.ShadyDOM.flush(); // Force DOM composition
-        window.webComponentsAreReady = true; // Checked in gemini before capture callback
-      });
-    });
+    window.polymerSkipLoadingFontRoboto = true;
   </script>
-  <link href="../common.html" rel="import">
 </head>
 
 <body>
-
-  <custom-style>
-    <style>
-      fieldset {
-        font-family: sans-serif;
-        font-size: 16px;
-        width: 550px;
-        border: solid 1px grey;
-      }
-    </style>
-  </custom-style>
+  <style>
+    fieldset {
+      display: inline-block;
+      font-family: sans-serif;
+      font-size: 16px;
+      width: 550px;
+      border: solid 1px grey;
+    }
+  </style>
 
   <form>
-    <fieldset id="text-area">
-      default: <vaadin-text-area></vaadin-text-area>
+    <fieldset id="tests">
+      <p>default: <vaadin-text-area></vaadin-text-area></p>
+
+      <p>value: <vaadin-text-area value="Go Vaadin"></vaadin-text-area></p>
+
+      <p>focused: <vaadin-text-area focused focus-ring></vaadin-text-area></p>
+
       <p>
-      value: <vaadin-text-area value="Go Vaadin"></vaadin-text-area>
-      <p>
-      focused: <vaadin-text-area autofocus class="hidden-caret"></vaadin-text-area>
-      <p>
-      readonly: <vaadin-text-area readonly style="max-height: 100px;" value="
-      Go Vaadin
-      Go
-      Go
-      Go
-      "></vaadin-text-area>
+        readonly:
+        <vaadin-text-area
+          readonly
+          style="max-height: 100px"
+          value="
+          Go Vaadin
+          Go
+          Go
+          Go
+          Go
+          "
+        ></vaadin-text-area>
+      </p>
     </fieldset>
   </form>
 
-  <script>
-    // eslint-disable-next-line no-unused-vars
-    function scrollTextArea() {
-      const textarea = document.querySelector('[readonly]');
-      textarea.shadowRoot.querySelector('[part="input-field"]').scrollTop = 50;
-    }
-  </script>
+  <script type="module">
+    (async () => {
+      const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
 
+      await import('../../../theme/' + theme + '/vaadin-text-area.js');
+
+      window.requestAnimationFrame(() => {
+        const textarea = document.querySelector('[readonly]');
+        textarea.shadowRoot.querySelector('[part="input-field"]').scrollTop = 50;
+
+        document.getElementById('tests').dataset.ready = true;
+      });
+    })();
+  </script>
 </body>

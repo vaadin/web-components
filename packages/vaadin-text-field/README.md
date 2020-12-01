@@ -15,22 +15,6 @@
 
 [&lt;vaadin-text-field&gt;](https://vaadin.com/components/vaadin-text-field) is a themable Web Component providing input controls in forms, part of the [Vaadin components](https://vaadin.com/components).
 
-<!--
-```
-<custom-element-demo>
-  <template>
-    <script src="../webcomponentsjs/webcomponents-lite.js"></script>
-    <link rel="import" href="vaadin-text-field.html">
-    <link rel="import" href="vaadin-password-field.html">
-    <link rel="import" href="vaadin-text-area.html">
-    <link rel="import" href="vaadin-email-field.html">
-    <link rel="import" href="vaadin-number-field.html">
-    <link rel="import" href="vaadin-integer-field.html">
-    <next-code-block></next-code-block>
-  </template>
-</custom-element-demo>
-```
--->
 ```html
 <vaadin-text-field label="Username"></vaadin-text-field>
 <vaadin-password-field label="Password"></vaadin-password-field>
@@ -43,33 +27,6 @@
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-text-field/master/screenshot.png" width="710" alt="Screenshot of vaadin-text-field">](https://vaadin.com/components/vaadin-text-field)
 
 ## Installation
-
-The Vaadin components are distributed as Bower and npm packages.
-Please note that the version range is the same, as the API has not changed.
-You should not mix Bower and npm versions in the same application, though.
-
-Unlike the official Polymer Elements, the converted Polymer 3 compatible Vaadin components
-are only published on npm, not pushed to GitHub repositories.
-
-### Polymer 2 and HTML Imports Compatible Version
-
-Install `vaadin-text-field`:
-
-```sh
-bower i vaadin/vaadin-text-field --save
-```
-
-Once installed, import the components you need in your application:
-
-```html
-<link rel="import" href="bower_components/vaadin-text-field/vaadin-text-field.html">
-<link rel="import" href="bower_components/vaadin-text-field/vaadin-text-area.html">
-<link rel="import" href="bower_components/vaadin-text-field/vaadin-password-field.html">
-<link rel="import" href="bower_components/vaadin-text-field/vaadin-email-field.html">
-<link rel="import" href="bower_components/vaadin-text-field/vaadin-number-field.html">
-<link rel="import" href="bower_components/vaadin-text-field/vaadin-integer-field.html">
-```
-### Polymer 3 and ES Modules Compatible Version
 
 Install `vaadin-text-field`:
 
@@ -98,61 +55,65 @@ To use the Material theme, import the correspondent file from the `theme/materia
 
 - The components with the Lumo theme:
 
-  `theme/lumo/vaadin-text-field.html`
-  `theme/lumo/vaadin-text-area.html`
-  `theme/lumo/vaadin-password-field.html`
-  `theme/lumo/vaadin-email-field.html`
-  `theme/lumo/vaadin-number-field.html`
-  `theme/lumo/vaadin-integer-field.html`
+  `theme/lumo/vaadin-text-field.js`
+  `theme/lumo/vaadin-text-area.js`
+  `theme/lumo/vaadin-password-field.js`
+  `theme/lumo/vaadin-email-field.js`
+  `theme/lumo/vaadin-number-field.js`
+  `theme/lumo/vaadin-integer-field.js`
 
 - The components with the Material theme:
 
-  `theme/material/vaadin-text-field.html`
-  `theme/material/vaadin-text-area.html`
-  `theme/material/vaadin-password-field.html`
-  `theme/material/vaadin-email-field.html`
-  `theme/material/vaadin-number-field.html`
-  `theme/material/vaadin-integer-field.html`
+  `theme/material/vaadin-text-field.js`
+  `theme/material/vaadin-text-area.js`
+  `theme/material/vaadin-password-field.js`
+  `theme/material/vaadin-email-field.js`
+  `theme/material/vaadin-number-field.js`
+  `theme/material/vaadin-integer-field.js`
 
-- Aliases for `theme/lumo/vaadin-text-field.html`
-  `theme/lumo/vaadin-text-area.html`
-  `theme/lumo/vaadin-password-field.html`
-  `theme/lumo/vaadin-email-field.html`
-  `theme/lumo/vaadin-number-field.html`
-  `theme/lumo/vaadin-integer-field.html`:
+- Aliases for `theme/lumo/vaadin-text-field.js`
+  `theme/lumo/vaadin-text-area.js`
+  `theme/lumo/vaadin-password-field.js`
+  `theme/lumo/vaadin-email-field.js`
+  `theme/lumo/vaadin-number-field.js`
+  `theme/lumo/vaadin-integer-field.js`:
 
-  `vaadin-text-field.html`
-  `vaadin-text-area.html`
-  `vaadin-password-field.html`
-  `vaadin-email-field.html`
-  `vaadin-number-field`
-  `vaadin-integer-field`
+  `vaadin-text-field.js`
+  `vaadin-text-area.js`
+  `vaadin-password-field.js`
+  `vaadin-email-field.js`
+  `vaadin-number-field.js`
+  `vaadin-integer-field.js`
 
 
-## Running demos and tests in a browser
+## Running API docs and tests in a browser
 
 1. Fork the `vaadin-text-field` repository and clone it locally.
 
-1. Make sure you have [npm](https://www.npmjs.com/) and [Bower](https://bower.io) installed.
+1. Make sure you have [node.js](https://nodejs.org/) 12.x installed.
 
-1. When in the `vaadin-text-field` directory, run `npm install` and then `bower install` to install dependencies.
+1. Make sure you have [npm](https://www.npmjs.com/) installed.
+
+1. When in the `vaadin-text-field` directory, run `npm install` to install dependencies.
 
 1. Run `npm start`, browser will automatically open the component API documentation.
 
-1. You can also open demo or in-browser tests by adding **demo** or **test** to the URL, for example:
+1. You can also open visual tests, for example:
 
-  - http://127.0.0.1:3000/components/vaadin-text-field/demo
-  - http://127.0.0.1:3000/components/vaadin-text-field/test
+  - http://127.0.0.1:3000/test/visual/vaadin-text-field/text-field-1.html
 
 
 ## Running tests from the command line
 
-1. When in the `vaadin-text-field` directory, run `polymer test`
+1. When in the `vaadin-text-field` directory, run `npm test`
 
+## Debugging tests in the browser
+
+1. Run `npm run debug`, then choose manual mode (M) and open the link in browser.
 
 ## Following the coding style
 
-We are using [ESLint](http://eslint.org/) for linting JavaScript code. You can check if your code is following our standards by running `npm run lint`, which will automatically lint all `.js` files as well as JavaScript snippets inside `.html` files.
+We are using [ESLint](http://eslint.org/) for linting JavaScript code. You can check if your code is following our standards by running `npm run lint`, which will automatically lint all `.js` files.
 
 
 ## Big Thanks

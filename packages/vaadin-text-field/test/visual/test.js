@@ -1,143 +1,145 @@
-gemini.suite('vaadin-text-field', function(rootSuite) {
-  function wait(actions, find) {
-    return actions
-      .waitForJSCondition(function(window) {
-        return window.webComponentsAreReady;
-      }, 80000);
-  }
+describe('vaadin-text-field', () => {
+  const locator = '#tests[data-ready]';
 
-  function goToAboutBlank(actions, find) {
-    // Firefox stops responding on socket after a test, workaround:
-    return actions.executeJS(function(window) {
-      window.location.href = 'about:blank'; // just go away, please!
-    });
-  }
-
-  rootSuite
-    .before(wait)
-    .after(goToAboutBlank);
-  ['lumo', 'material'].forEach(theme => {
-    gemini.suite(`text-field-1-${theme}`, function(suite) {
-      suite
-        .setUrl(`vaadin-text-field/text-field-1.html?theme=${theme}`)
-        .setCaptureElements('#text-field')
-        .capture('text-field-1');
+  ['lumo', 'material'].forEach((theme) => {
+    it(`text-field-1-${theme}`, function () {
+      return this.browser
+        .url(`vaadin-text-field/text-field-1.html?theme=${theme}`)
+        .waitForVisible(locator, 10000)
+        .assertView(`${theme}-text-field-1`, locator);
     });
 
-    gemini.suite(`text-field-2-${theme}`, function(suite) {
-      suite
-        .setUrl(`vaadin-text-field/text-field-2.html?theme=${theme}`)
-        .setCaptureElements('#text-field')
-        .capture('text-field-2');
+    it(`text-field-2-${theme}`, function () {
+      return this.browser
+        .url(`vaadin-text-field/text-field-2.html?theme=${theme}`)
+        .waitForVisible(locator, 10000)
+        .assertView(`${theme}-text-field-2`, locator);
     });
 
-    gemini.suite(`text-field-3-${theme}`, function(suite) {
-      suite
-        .setUrl(`vaadin-text-field/text-field-3.html?theme=${theme}`)
-        .setCaptureElements('#text-field')
-        .capture('text-field-3');
+    it(`text-field-3-${theme}`, function () {
+      return this.browser
+        .url(`vaadin-text-field/text-field-3.html?theme=${theme}`)
+        .waitForVisible(locator, 10000)
+        .assertView(`${theme}-text-field-3`, locator);
     });
 
-    gemini.suite(`text-field-styling-${theme}`, function(suite) {
-      suite
-        .setUrl(`vaadin-text-field/styling.html?theme=${theme}`)
-        .setCaptureElements('#text-field')
-        .capture('styling');
+    it(`text-field-clear-button-${theme}`, function () {
+      return this.browser
+        .url(`vaadin-text-field/text-field-clear-button.html?theme=${theme}`)
+        .waitForVisible(locator, 10000)
+        .assertView(`${theme}-text-field-clear-button`, locator);
     });
 
-    gemini.suite(`text-field-rtl-${theme}`, function(suite) {
-      suite
-        .setUrl(`vaadin-text-field/rtl.html?theme=${theme}`)
-        .setCaptureElements('#rtl')
-        .capture('rtl');
+    it(`text-field-rtl-${theme}`, function () {
+      return this.browser
+        .url(`vaadin-text-field/text-field-rtl.html?theme=${theme}`)
+        .waitForVisible(locator, 10000)
+        .assertView(`${theme}-text-field-rtl`, locator);
     });
 
-    gemini.suite(`text-field-clear-button-${theme}`, function(suite) {
-      suite
-        .setUrl(`vaadin-text-field/text-field-clear-btn.html?theme=${theme}`)
-        .setCaptureElements('#text-field-clear-button')
-        .capture('text-field-clear-button');
+    it(`text-field-slotted-${theme}`, function () {
+      return this.browser
+        .url(`vaadin-text-field/text-field-slotted.html?theme=${theme}`)
+        .waitForVisible(locator, 10000)
+        .assertView(`${theme}-text-field-slotted`, locator);
     });
 
-    gemini.suite(`password-field-${theme}`, function(suite) {
-      suite
-        .setUrl(`vaadin-password-field/password-field.html?theme=${theme}`)
-        .setCaptureElements('#password-field')
-        .capture('password-field');
+    it(`text-field-styling-${theme}`, function () {
+      return this.browser
+        .url(`vaadin-text-field/text-field-styling.html?theme=${theme}`)
+        .waitForVisible(locator, 10000)
+        .assertView(`${theme}-text-field-styling`, locator);
     });
 
-    gemini.suite(`password-field-rtl-${theme}`, function(suite) {
-      suite
-        .setUrl(`vaadin-password-field/rtl.html?theme=${theme}`)
-        .setCaptureElements('#rtl')
-        .capture('rtl');
+    it(`text-area-1-${theme}`, function () {
+      return this.browser
+        .url(`vaadin-text-area/text-area-1.html?theme=${theme}`)
+        .waitForVisible(locator, 10000)
+        .assertView(`${theme}-text-area-1`, locator);
     });
 
-    gemini.suite(`password-field-clear-button-${theme}`, function(suite) {
-      suite
-        .setUrl(`vaadin-password-field/password-field-clear-btn.html?theme=${theme}`)
-        .setCaptureElements('#password-field-clear-button')
-        .capture('password-field-clear-button');
+    it(`text-area-2-${theme}`, function () {
+      return this.browser
+        .url(`vaadin-text-area/text-area-2.html?theme=${theme}`)
+        .waitForVisible(locator, 10000)
+        .assertView(`${theme}-text-area-2`, locator);
     });
 
-    gemini.suite(`number-field-${theme}`, function(suite) {
-      suite
-        .setUrl(`vaadin-number-field/number-field.html?theme=${theme}`)
-        .setCaptureElements('#number-field')
-        .capture('number-field');
+    it(`text-area-3-${theme}`, function () {
+      return this.browser
+        .url(`vaadin-text-area/text-area-3.html?theme=${theme}`)
+        .waitForVisible(locator, 10000)
+        .assertView(`${theme}-text-area-3`, locator);
     });
 
-    gemini.suite(`number-field-rtl-${theme}`, function(suite) {
-      suite
-        .setUrl(`vaadin-number-field/rtl.html?theme=${theme}`)
-        .setCaptureElements('#rtl')
-        .capture('rtl');
+    it(`text-area-clear-button-${theme}`, function () {
+      return this.browser
+        .url(`vaadin-text-area/text-area-clear-button.html?theme=${theme}`)
+        .waitForVisible(locator, 10000)
+        .assertView(`${theme}-text-area-clear-button`, locator);
     });
 
-    gemini.suite(`text-area-1-${theme}`, function(suite) {
-      suite
-        .setUrl(`vaadin-text-area/text-area-1.html?theme=${theme}`)
-        .setCaptureElements('#text-area')
-        .capture('text-area-1', function(actions) {
-          actions.executeJS(function(window) {
-            window.scrollTextArea();
-          });
-        });
+    it(`text-area-rtl-${theme}`, function () {
+      return this.browser
+        .url(`vaadin-text-area/text-area-rtl.html?theme=${theme}`)
+        .waitForVisible(locator, 10000)
+        .assertView(`${theme}-text-area-rtl`, locator);
     });
 
-    gemini.suite(`text-area-2-${theme}`, function(suite) {
-      suite
-        .setUrl(`vaadin-text-area/text-area-2.html?theme=${theme}`)
-        .setCaptureElements('#text-area')
-        .capture('text-area-2');
+    it(`text-area-slotted-${theme}`, function () {
+      return this.browser
+        .url(`vaadin-text-area/text-area-slotted.html?theme=${theme}`)
+        .waitForVisible(locator, 10000)
+        .assertView(`${theme}-text-area-slotted`, locator);
     });
 
-    gemini.suite(`text-area-3-${theme}`, function(suite) {
-      suite
-        .setUrl(`vaadin-text-area/text-area-3.html?theme=${theme}`)
-        .setCaptureElements('#text-area')
-        .capture('text-area-3');
+    it(`text-area-styling-${theme}`, function () {
+      return this.browser
+        .url(`vaadin-text-area/text-area-styling.html?theme=${theme}`)
+        .waitForVisible(locator, 10000)
+        .assertView(`${theme}-text-area-styling`, locator);
     });
 
-    gemini.suite(`text-area-styling-${theme}`, function(suite) {
-      suite
-        .setUrl(`vaadin-text-area/styling.html?theme=${theme}`)
-        .setCaptureElements('#text-area')
-        .capture('styling');
+    it(`password-field-${theme}`, function () {
+      return this.browser
+        .url(`vaadin-password-field/password-field.html?theme=${theme}`)
+        .waitForVisible(locator, 10000)
+        .assertView(`${theme}-password-field`, locator);
     });
 
-    gemini.suite(`text-area-rtl-${theme}`, function(suite) {
-      suite
-        .setUrl(`vaadin-text-area/rtl.html?theme=${theme}`)
-        .setCaptureElements('#rtl')
-        .capture('rtl');
+    it(`password-field-clear-button-${theme}`, function () {
+      return this.browser
+        .url(`vaadin-password-field/password-field-clear-button.html?theme=${theme}`)
+        .waitForVisible(locator, 10000)
+        .assertView(`${theme}-password-field-clear-button`, locator);
     });
 
-    gemini.suite(`text-area-clear-button-${theme}`, function(suite) {
-      suite
-        .setUrl(`vaadin-text-area/text-area-clear-btn.html?theme=${theme}`)
-        .setCaptureElements('#text-area-clear-button')
-        .capture('text-area-clear-button');
+    it(`password-field-rtl-${theme}`, function () {
+      return this.browser
+        .url(`vaadin-password-field/password-field-rtl.html?theme=${theme}`)
+        .waitForVisible(locator, 10000)
+        .assertView(`${theme}-password-field-rtl`, locator);
+    });
+
+    it(`password-field-slotted-${theme}`, function () {
+      return this.browser
+        .url(`vaadin-password-field/password-field-slotted.html?theme=${theme}`)
+        .waitForVisible(locator, 10000)
+        .assertView(`${theme}-password-field-slotted`, locator);
+    });
+
+    it(`number-field-${theme}`, function () {
+      return this.browser
+        .url(`vaadin-number-field/number-field.html?theme=${theme}`)
+        .waitForVisible(locator, 10000)
+        .assertView(`${theme}-number-field`, locator);
+    });
+
+    it(`number-field-rtl-${theme}`, function () {
+      return this.browser
+        .url(`vaadin-number-field/number-field-rtl.html?theme=${theme}`)
+        .waitForVisible(locator, 10000)
+        .assertView(`${theme}-number-field-rtl`, locator);
     });
   });
 });

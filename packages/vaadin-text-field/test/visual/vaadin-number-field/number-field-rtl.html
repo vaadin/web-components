@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+
+<head lang="ar">
+  <meta charset="UTF-8" />
+  <title>RTL tests</title>
+  <script>
+    window.polymerSkipLoadingFontRoboto = true;
+  </script>
+</head>
+
+<body>
+  <fieldset id="tests">
+    <vaadin-number-field label="كلمه السر" placeholder="أنشئ كلمة مرور"></vaadin-number-field>
+    <vaadin-number-field label="كلمه السر" value="987654321987"></vaadin-number-field>
+  </fieldset>
+
+  <script type="module">
+    (async () => {
+      document.documentElement.setAttribute('dir', 'rtl');
+
+      const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+
+      await import('../../../theme/' + theme + '/vaadin-number-field.js');
+
+      window.requestAnimationFrame(() => {
+        document.getElementById('tests').dataset.ready = true;
+      });
+    })();
+  </script>
+</body>

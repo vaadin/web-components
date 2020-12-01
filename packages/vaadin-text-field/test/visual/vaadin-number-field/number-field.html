@@ -1,39 +1,47 @@
 <!DOCTYPE html>
 
 <head lang="en">
-  <meta charset="UTF-8">
-  <title></title>
-  <script src="../../../../webcomponentsjs/webcomponents-loader.js"></script>
-
+  <meta charset="UTF-8" />
+  <title>Number field tests</title>
   <script>
-    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
-    document.write(`<link rel="import" href="../../../theme/${theme}/vaadin-number-field.html">`);
-
-    window.addEventListener('WebComponentsReady', function() {
-      customElements.whenDefined('vaadin-number-field').then(function() {
-        window.ShadyDOM && window.ShadyDOM.flush(); // Force DOM composition
-        window.webComponentsAreReady = true; // Checked in gemini before capture callback
-      });
-    });
+    window.polymerSkipLoadingFontRoboto = true;
   </script>
-  <link href="../common.html" rel="import">
 </head>
 
 <body>
-  <fieldset id="number-field">
+  <fieldset id="tests">
     <p>
       <vaadin-number-field placeholder="Number"></vaadin-number-field>
+    </p>
     <p>
       <vaadin-number-field value="10"></vaadin-number-field>
+    </p>
     <p>
       <vaadin-number-field has-controls></vaadin-number-field>
+    </p>
     <p>
       <vaadin-number-field value="10" has-controls></vaadin-number-field>
+    </p>
     <p>
       <vaadin-number-field value="10" has-controls theme="align-right"></vaadin-number-field>
+    </p>
     <p>
       <vaadin-number-field invalid error-message="Error"></vaadin-number-field>
+    </p>
     <p>
       <vaadin-number-field value="10" invalid error-message="Error"></vaadin-number-field>
+    </p>
   </fieldset>
+
+  <script type="module">
+    (async () => {
+      const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+
+      await import('../../../theme/' + theme + '/vaadin-number-field.js');
+
+      window.requestAnimationFrame(() => {
+        document.getElementById('tests').dataset.ready = true;
+      });
+    })();
+  </script>
 </body>

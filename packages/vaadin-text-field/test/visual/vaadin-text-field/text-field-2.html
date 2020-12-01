@@ -1,77 +1,86 @@
 <!DOCTYPE html>
 
 <head lang="en">
-  <meta charset="UTF-8">
-  <title></title>
-  <script src="../../../../webcomponentsjs/webcomponents-loader.js"></script>
+  <meta charset="UTF-8" />
+  <title>Text field tests</title>
   <script>
-    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
-    document.write(`<link rel="import" href="../../../theme/${theme}/vaadin-text-field.html">`);
-
-    window.addEventListener('WebComponentsReady', function() {
-      setTimeout(function() {
-        if (theme !== 'material') {
-          document.getElementById('material').setAttribute('hidden', '');
-        }
-        window.ShadyDOM && window.ShadyDOM.flush(); // Force DOM composition
-        window.webComponentsAreReady = true; // Checked in gemini before capture callback
-      });
-    });
+    window.polymerSkipLoadingFontRoboto = true;
   </script>
-  <link href="../common.html" rel="import">
 </head>
 
 <body>
+  <style>
+    fieldset {
+      display: inline-block;
+      font-family: sans-serif;
+      font-size: 16px;
+      width: 550px;
+      border: solid 1px grey;
+    }
 
-  <custom-style>
-    <style>
-      fieldset {
-        font-family: sans-serif;
-        font-size: 16px;
-        width: 550px;
-        border: solid 1px grey;
-      }
-
-      p {
-        margin: 0;
-      }
-    </style>
-  </custom-style>
+    p {
+      margin: 0;
+    }
+  </style>
 
   <form>
-    <fieldset id="text-field">
-      <p>
-      label: <vaadin-text-field label="Foo"></vaadin-text-field>
-      <p>
-      <p>
-      overflow label: <vaadin-text-field label="Very long label which definitely overflows"></vaadin-text-field>
-      <p>
+    <fieldset id="tests">
+      <p>label: <vaadin-text-field label="Foo"></vaadin-text-field></p>
+
+      <p>overflow label: <vaadin-text-field label="Very long label which definitely overflows"></vaadin-text-field></p>
+
       <p id="material">
-      overflow float label: <vaadin-text-field label="Very long label which definitely overflows" theme="always-float-label"></vaadin-text-field>
+        overflow float label:
+        <vaadin-text-field
+          label="Very long label which definitely overflows"
+          theme="always-float-label"
+        ></vaadin-text-field>
+      </p>
+
+      <p>label and value: <vaadin-text-field label="Foo" value="Bar"></vaadin-text-field></p>
+
+      <p>label, helper and value: <vaadin-text-field label="Foo" value="Bar" helper-text="Baz"></vaadin-text-field></p>
+
       <p>
-      label and value: <vaadin-text-field label="Foo" value="Bar"></vaadin-text-field>
-      <p>
-      label, helper and value: <vaadin-text-field label="Foo" value="Bar" helper-text="Baz"></vaadin-text-field>
-      <p>
-      custom helper:
+        custom helper:
         <vaadin-text-field>
           <span slot="helper">Baz</span>
         </vaadin-text-field>
+      </p>
+
       <p>
-      prefix and suffix:
+        prefix and suffix:
         <vaadin-text-field label="Foo" value="Bar">
           <span slot="prefix">prefix</span>
           <span slot="suffix">suffix</span>
         </vaadin-text-field>
+      </p>
+
+      <p>long: <vaadin-text-field label="Foo" value="Bar" style="width: 300px"></vaadin-text-field></p>
+
       <p>
-      long: <vaadin-text-field label="Foo" value="Bar" style="width: 300px;"></vaadin-text-field>
-      <p>
-      short with prefix and suffix:
-        <vaadin-text-field label="Foo" value="Bar" style="width: 100px;">
+        short with prefix and suffix:
+        <vaadin-text-field label="Foo" value="Bar" style="width: 100px">
           <span slot="prefix">prefix</span>
           <span slot="suffix">suffix</span>
         </vaadin-text-field>
+      </p>
     </fieldset>
   </form>
 
+  <script type="module">
+    (async () => {
+      const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+
+      if (theme !== 'material') {
+        document.getElementById('material').setAttribute('hidden', '');
+      }
+
+      await import('../../../theme/' + theme + '/vaadin-text-field.js');
+
+      window.requestAnimationFrame(() => {
+        document.getElementById('tests').dataset.ready = true;
+      });
+    })();
+  </script>
 </body>
