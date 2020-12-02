@@ -2,7 +2,7 @@
 
 <head lang="en">
   <meta charset="UTF-8" />
-  <title>Item tests</title>
+  <title>Multi line item tests</title>
   <script>
     window.polymerSkipLoadingFontRoboto = true;
   </script>
@@ -17,14 +17,15 @@
   </style>
 
   <span id="tests">
-    <vaadin-item>Normal Item</vaadin-item>
+    <vaadin-item>
+      <div>Two lines Item</div>
+      <div>Bax quz</div>
+    </vaadin-item>
   </span>
 
   <script type="module">
     (async () => {
       const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
-      const dir = window.location.search.replace(/.*dir=(\w+).*/, '$1') || 'ltr';
-      document.documentElement.setAttribute('dir', dir);
 
       await import('../../theme/' + theme + '/vaadin-item.js');
 

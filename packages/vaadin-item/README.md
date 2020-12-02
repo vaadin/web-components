@@ -1,33 +1,18 @@
-[![npm version](https://badgen.net/npm/v/@vaadin/vaadin-item)](https://www.npmjs.com/package/@vaadin/vaadin-item)
-[![Bower version](https://badgen.net/github/release/vaadin/vaadin-item)](https://github.com/vaadin/vaadin-item/releases)
-[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/vaadin/vaadin-item)
-[![Build Status](https://travis-ci.org/vaadin/vaadin-item.svg?branch=master)](https://travis-ci.org/vaadin/vaadin-item)
-[![Coverage Status](https://coveralls.io/repos/github/vaadin/vaadin-item/badge.svg?branch=master)](https://coveralls.io/github/vaadin/vaadin-item?branch=master)
-[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/vaadin/web-components?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
-
-[![Published on Vaadin  Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-item)
-[![Stars on vaadin.com/directory](https://img.shields.io/vaadin-directory/star/vaadinvaadin-item.svg)](https://vaadin.com/directory/component/vaadinvaadin-item)
-
 # &lt;vaadin-item&gt;
 
 [Live Demo ↗](https://vaadin.com/components/vaadin-item/html-examples)
 |
 [API documentation ↗](https://vaadin.com/components/vaadin-item/html-api)
 
-
 [&lt;vaadin-item&gt;](https://vaadin.com/components/vaadin-item) is a Web Component providing a container for item elements, part of the [Vaadin components](https://vaadin.com/components).
 
-<!--
-```
-<custom-element-demo>
-  <template>
-    <script src="../webcomponentsjs/webcomponents-lite.js"></script>
-    <link rel="import" href="vaadin-item.html">
-    <next-code-block></next-code-block>
-  </template>
-</custom-element-demo>
-```
--->
+[![npm version](https://badgen.net/npm/v/@vaadin/vaadin-item)](https://www.npmjs.com/package/@vaadin/vaadin-item)
+[![Build Status](https://travis-ci.org/vaadin/vaadin-item.svg?branch=master)](https://travis-ci.org/vaadin/vaadin-item)
+[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/vaadin/vaadin-item)
+[![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-item)
+[![Stars on vaadin.com/directory](https://img.shields.io/vaadin-directory/star/vaadinvaadin-item.svg)](https://vaadin.com/directory/component/vaadinvaadin-item)
+[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
+
 ```html
 <vaadin-item>Simple Item</vaadin-item>
 <vaadin-item disabled>Disabled Item</vaadin-item>
@@ -36,28 +21,6 @@
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-item/master/screenshot.png" width="169" alt="Screenshot of vaadin-item">](https://vaadin.com/components/vaadin-item)
 
 ## Installation
-
-The Vaadin components are distributed as Bower and npm packages.
-Please note that the version range is the same, as the API has not changed.
-You should not mix Bower and npm versions in the same application, though.
-
-Unlike the official Polymer Elements, the converted Polymer 3 compatible Vaadin components
-are only published on npm, not pushed to GitHub repositories.
-
-### Polymer 2 and HTML Imports Compatible Version
-
-Install `vaadin-item`:
-
-```sh
-bower i vaadin/vaadin-item --save
-```
-
-Once installed, import it in your application:
-
-```html
-<link rel="import" href="bower_components/vaadin-item/vaadin-item.html">
-```
-### Polymer 3 and ES Modules Compatible Version
 
 Install `vaadin-item`:
 
@@ -81,41 +44,46 @@ To use the Material theme, import the correspondent file from the `theme/materia
 
 - The component with the Lumo theme:
 
-  `theme/lumo/vaadin-item.html`
+  `theme/lumo/vaadin-item.js`
 
 - The component with the Material theme:
 
-  `theme/material/vaadin-item.html`
+  `theme/material/vaadin-item.js`
 
-- Alias for `theme/lumo/vaadin-item.html`:
+- Alias for `theme/lumo/vaadin-item.js`:
 
-  `vaadin-item.html`
+  `vaadin-item.js`
 
 
-## Running demos and tests in a browser
+## Running API docs and tests in a browser
 
 1. Fork the `vaadin-item` repository and clone it locally.
 
-1. Make sure you have [npm](https://www.npmjs.com/) and [Bower](https://bower.io) installed.
+1. Make sure you have [node.js](https://nodejs.org/) 12.x installed.
 
-1. When in the `vaadin-item` directory, run `npm install` and then `bower install` to install dependencies.
+1. Make sure you have [npm](https://www.npmjs.com/) installed.
+
+1. When in the `vaadin-item` directory, run `npm install` to install dependencies.
 
 1. Run `npm start`, browser will automatically open the component API documentation.
 
-1. You can also open demo or in-browser tests by adding **demo** or **test** to the URL, for example:
+1. You can also open visual tests, for example:
 
-  - http://127.0.0.1:3000/components/vaadin-item/demo
-  - http://127.0.0.1:3000/components/vaadin-item/test
+  - http://127.0.0.1:3000/test/visual/default.html
 
 
 ## Running tests from the command line
 
-1. When in the `vaadin-item` directory, run `polymer test`
+1. When in the `vaadin-item` directory, run `npm test`
+
+## Debugging tests in the browser
+
+1. Run `npm run debug`, then choose manual mode (M) and open the link in browser.
 
 
 ## Following the coding style
 
-We are using [ESLint](http://eslint.org/) for linting JavaScript code. You can check if your code is following our standards by running `npm run lint`, which will automatically lint all `.js` files as well as JavaScript snippets inside `.html` files.
+We are using [ESLint](http://eslint.org/) for linting JavaScript code. You can check if your code is following our standards by running `npm run lint`, which will automatically lint all `.js` files.
 
 
 ## Big Thanks
