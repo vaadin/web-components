@@ -1,12 +1,3 @@
-[![npm version](https://badgen.net/npm/v/@vaadin/vaadin-select)](https://www.npmjs.com/package/@vaadin/vaadin-select)
-[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/vaadin/vaadin-select)
-[![Build Status](https://travis-ci.org/vaadin/vaadin-select.svg?branch=master)](https://travis-ci.org/vaadin/vaadin-select)
-[![Coverage Status](https://coveralls.io/repos/github/vaadin/vaadin-select/badge.svg?branch=master)](https://coveralls.io/github/vaadin/vaadin-select?branch=master)
-[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/vaadin/web-components?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
-
-[![Published on Vaadin  Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-select)
-[![Stars on vaadin.com/directory](https://img.shields.io/vaadin-directory/star/vaadinvaadin-select.svg)](https://vaadin.com/directory/component/vaadinvaadin-select)
-
 # &lt;vaadin-select&gt;
 
 [Live Demo ↗](https://vaadin.com/components/vaadin-select/html-examples)
@@ -15,6 +6,13 @@
 
 
 [&lt;vaadin-select&gt;](https://vaadin.com/components/vaadin-select) is a Web Component similar to a native browser select element, part of the [Vaadin components](https://vaadin.com/components).
+
+[![npm version](https://badgen.net/npm/v/@vaadin/vaadin-select)](https://www.npmjs.com/package/@vaadin/vaadin-select)
+[![Build Status](https://github.com/vaadin/vaadin-select/workflows/tests/badge.svg)](https://github.com/vaadin/vaadin-select/actions)
+[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/vaadin/vaadin-select)
+[![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-select)
+[![Stars on vaadin.com/directory](https://img.shields.io/vaadin-directory/star/vaadinvaadin-select.svg)](https://vaadin.com/directory/component/vaadinvaadin-select)
+[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
 <vaadin-select></vaadin-select>
