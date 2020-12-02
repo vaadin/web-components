@@ -104,7 +104,6 @@ declare class CheckboxGroupElement extends ThemableMixin(DirMixin(HTMLElement)) 
 
   /**
    * Returns true if `value` is valid.
-   * `<iron-form>` uses this to check the validity or all its elements.
    *
    * @returns True if the value is valid.
    */

@@ -250,7 +250,6 @@ class CheckboxGroupElement extends ThemableMixin(DirMixin(PolymerElement)) {
 
   /**
    * Returns true if `value` is valid.
-   * `<iron-form>` uses this to check the validity or all its elements.
    *
    * @return {boolean} True if the value is valid.
    */
