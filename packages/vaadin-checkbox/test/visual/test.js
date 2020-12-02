@@ -1,129 +1,85 @@
-gemini.suite('vaadin-checkbox', function(rootSuite) {
-  function wait(actions, find) {
-    actions.wait(5000);
-  }
+describe('vaadin-checkbox', () => {
+  const locator = '#tests[data-ready]';
 
-  function goToAboutBlank(actions, find) {
-    // Firefox stops responding on socket after a test, workaround:
-    return actions.executeJS(function(window) {
-      window.location.href = 'about:blank'; // just go away, please!
+  ['lumo', 'material'].forEach((theme) => {
+    ['ltr', 'rtl'].forEach((dir) => {
+      it(`checkbox-${theme}-${dir}`, function () {
+        return this.browser
+          .url(`checkbox.html?theme=${theme}&dir=${dir}`)
+          .waitForVisible(locator, 10000)
+          .assertView(`${theme}-checkbox-${dir}`, locator);
+      });
+
+      it(`checkbox-group-${theme}-${dir}`, function () {
+        return this.browser
+          .url(`wrapping.html?theme=${theme}&dir=${dir}`)
+          .waitForVisible(locator, 10000)
+          .assertView(`${theme}-checkbox-group-wrapping-${dir}`, locator);
+      });
     });
-  }
 
-  rootSuite
-    .before(wait)
-    .after(goToAboutBlank);
-
-  ['lumo', 'material'].forEach(theme => {
-    gemini.suite(`default-tests-${theme}`, function(suite) {
-      suite
-        .setUrl(`default.html?theme=${theme}`)
-        .setCaptureElements('#default-tests')
-        .capture('default')
-        .capture('focus-ring', function(actions) {
-          actions.executeJS(function(window) {
-            window.document.querySelector('vaadin-checkbox').setAttribute('focus-ring', '');
-          });
+    it(`checkbox-group-${theme}`, function () {
+      return this.browser
+        .url(`group.html?theme=${theme}`)
+        .waitForVisible(locator, 10000)
+        .assertView(`${theme}-checkbox-group-default`, locator)
+        .execute(() => {
+          const group = window.document.querySelector('vaadin-checkbox-group');
+          group.setAttribute('theme', 'vertical');
         })
-        .capture('checked', function(actions) {
-          actions.executeJS(function(window) {
-            window.document.querySelector('vaadin-checkbox').checked = true;
-          });
-        });
-    });
-
-    gemini.suite(`group-tests-${theme}`, (suite) => {
-      suite
-        .setUrl(`default.html?theme=${theme}`)
-        .setCaptureElements('#group-tests')
-        .capture('default');
-    });
-
-    gemini.suite(`theme-vertical-group-tests-${theme}`, (suite) => {
-      suite
-        .setUrl(`default.html?theme=${theme}`)
-        .setCaptureElements('#theme-vertical-group-tests')
-        .capture('default');
-    });
-
-    gemini.suite(`disabled-group-tests-${theme}`, (suite) => {
-      suite
-        .setUrl(`default.html?theme=${theme}`)
-        .setCaptureElements('#disabled-group-tests')
-        .capture('default');
-    });
-
-    gemini.suite(`validation-tests-${theme}`, function(suite) {
-      suite
-        .setUrl(`default.html?theme=${theme}`)
-        .setCaptureElements('#validation-tests')
-        .capture('error');
-    });
-
-    gemini.suite(`focus-tests-${theme}`, function(suite) {
-      suite
-        .setUrl(`default.html?theme=${theme}`)
-        .setCaptureElements('#focus-tests')
-        .capture('focus');
-    });
-
-    gemini.suite(`wrapping-group-tests-${theme}`, function(suite) {
-      suite
-        .setUrl(`default.html?theme=${theme}`)
-        .setCaptureElements('#wrapping-group-tests')
-        .capture('default');
-    });
-
-    gemini.suite(`helper-text-tests-${theme}`, function(suite) {
-      suite
-        .setUrl(`default.html?theme=${theme}`)
-        .setCaptureElements('#helper-text-tests')
-        .capture('default');
+        .assertView(`${theme}-checkbox-group-vertical`, locator)
+        .execute(() => {
+          const group = window.document.querySelector('vaadin-checkbox-group');
+          group.removeAttribute('theme');
+          group.disabled = true;
+        })
+        .assertView(`${theme}-checkbox-group-disabled`, locator)
+        .execute(() => {
+          const group = window.document.querySelector('vaadin-checkbox-group');
+          group.disabled = false;
+          group.setAttribute('focused', '');
+          group.firstElementChild.setAttribute('focus-ring', '');
+        })
+        .assertView(`${theme}-checkbox-group-focused`, locator)
+        .execute(() => {
+          const group = window.document.querySelector('vaadin-checkbox-group');
+          group.removeAttribute('focused');
+          group.firstElementChild.removeAttribute('focus-ring');
+          group.helperText = 'Helper text';
+        })
+        .assertView(`${theme}-checkbox-group-helper`, locator)
+        .execute(() => {
+          const group = window.document.querySelector('vaadin-checkbox-group');
+          group.helperText = null;
+          group.required = true;
+          group.errorMessage = 'Please choose a number';
+          group.validate();
+        })
+        .assertView(`${theme}-checkbox-group-invalid`, locator)
+        .execute(() => {
+          window.document.documentElement.setAttribute('dir', 'rtl');
+        })
+        .assertView(`${theme}-checkbox-group-invalid-rtl`, locator)
+        .execute(() => {
+          window.document.documentElement.removeAttribute('dir');
+          const group = window.document.querySelector('vaadin-checkbox-group');
+          group.helperText = 'Helper text';
+        })
+        .assertView(`${theme}-checkbox-group-invalid-helper`, locator);
     });
 
     if (theme === 'lumo') {
-      gemini.suite(`helper-text-above-field-tests-${theme}`, function(suite) {
-        suite
-          .setUrl(`default.html?theme=${theme}`)
-          .setCaptureElements('#helper-text-above-field-tests')
-          .capture('default');
+      it(`checkbox-group-theme-${theme}`, function () {
+        return this.browser
+          .url(`group.html?theme=${theme}`)
+          .waitForVisible(locator, 10000)
+          .execute(() => {
+            const group = window.document.querySelector('vaadin-checkbox-group');
+            group.helperText = 'Helper text';
+            group.setAttribute('theme', 'helper-above-field');
+          })
+          .assertView(`${theme}-checkbox-group-helper-above`, locator);
       });
     }
-
-    if (theme === 'material') {
-      gemini.suite(`validation-with-helper-tests-${theme}`, function(suite) {
-        suite
-          .setUrl(`default.html?theme=${theme}`)
-          .setCaptureElements('#validation-with-helper-tests')
-          .capture('default');
-      });
-    }
-
-    gemini.suite(`default-rtl-tests-${theme}`, function(suite) {
-      suite
-        .setUrl(`default-rtl.html?theme=${theme}`)
-        .setCaptureElements('#default-tests')
-        .capture('default')
-        .capture('checked', function(actions) {
-          actions.executeJS(function(window) {
-            window.document.querySelector('vaadin-checkbox').checked = true;
-          });
-        });
-    });
-
-    gemini.suite(`validation-rtl-tests-${theme}`, function(suite) {
-      suite
-        .setUrl(`default-rtl.html?theme=${theme}`)
-        .setCaptureElements('#validation-tests')
-        .capture('error');
-    });
-
-    gemini.suite(`wrapping-rtl-tests-${theme}`, function(suite) {
-      suite
-        .setUrl(`default-rtl.html?theme=${theme}`)
-        .setCaptureElements('#wrapping-group-tests')
-        .capture('default');
-    });
   });
-
 });

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+
+<head lang="en">
+  <meta charset="UTF-8" />
+  <title>Checkbox group tests</title>
+  <script>
+    window.polymerSkipLoadingFontRoboto = true;
+  </script>
+</head>
+
+<body>
+  <div id="tests" style="display: inline-block; padding: 10px">
+    <vaadin-checkbox-group label="Choose a number">
+      <vaadin-checkbox value="1">1</vaadin-checkbox>
+      <vaadin-checkbox value="2">2</vaadin-checkbox>
+    </vaadin-checkbox-group>
+  </div>
+
+  <script type="module">
+    (async () => {
+      const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+
+      await import('../../theme/' + theme + '/vaadin-checkbox-group.js');
+
+      window.requestAnimationFrame(() => {
+        document.getElementById('tests').dataset.ready = true;
+      });
+    })();
+  </script>
+</body>

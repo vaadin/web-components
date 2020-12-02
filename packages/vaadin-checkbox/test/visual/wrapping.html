@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+
+<head lang="en">
+  <meta charset="UTF-8" />
+  <title>Checkbox group tests</title>
+  <script>
+    window.polymerSkipLoadingFontRoboto = true;
+  </script>
+</head>
+
+<body>
+  <div id="tests" style="display: inline-block; padding: 10px">
+    <vaadin-checkbox-group label="Choose a number">
+      <vaadin-checkbox value="1">Checkbox 1</vaadin-checkbox>
+      <vaadin-checkbox value="2">Checkbox 2</vaadin-checkbox>
+      <vaadin-checkbox value="3">Checkbox 3</vaadin-checkbox>
+      <vaadin-checkbox value="4">Checkbox 4</vaadin-checkbox>
+      <vaadin-checkbox value="5">Checkbox 5</vaadin-checkbox>
+      <vaadin-checkbox value="6">Checkbox 6</vaadin-checkbox>
+      <vaadin-checkbox value="7">Checkbox 7</vaadin-checkbox>
+      <vaadin-checkbox value="8">Checkbox 8</vaadin-checkbox>
+      <vaadin-checkbox value="9">Checkbox 9</vaadin-checkbox>
+      <vaadin-checkbox value="10">Checkbox 10</vaadin-checkbox>
+    </vaadin-checkbox-group>
+  </div>
+
+  <script type="module">
+    (async () => {
+      const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+      const dir = window.location.search.replace(/.*dir=(\w+).*/, '$1') || 'ltr';
+      document.documentElement.setAttribute('dir', dir);
+
+      await import('../../theme/' + theme + '/vaadin-checkbox-group.js');
+
+      window.requestAnimationFrame(() => {
+        document.getElementById('tests').dataset.ready = true;
+      });
+    })();
+  </script>
+</body>
