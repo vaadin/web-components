@@ -165,6 +165,23 @@
           const secondCell = getContainerCell(grid.$.items, 0, 2);
           expect(secondCell._content.textContent).to.equal('new');
         });
+
+        describe('single click edit', () => {
+
+          beforeEach(() => grid.editOnClick = true);
+
+          it('should enter edit mode on single click', () => {
+            firstCell._content.dispatchEvent(new CustomEvent('click', {bubbles: true, composed: true}));
+            expect(getCellEditor(firstCell)).to.be.ok;
+          });
+
+          it('should not enter edit mode on single click', () => {
+            grid.editOnClick = false;
+            firstCell._content.dispatchEvent(new CustomEvent('click', {bubbles: true, composed: true}));
+            expect(getCellEditor(firstCell)).not.to.be.ok;
+          });
+
+        });
       });
 
       describe('custom edit mode renderer', () => {

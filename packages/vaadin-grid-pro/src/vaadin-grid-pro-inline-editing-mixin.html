@@ -47,6 +47,14 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           notify: true // FIXME(yuriy-fix): needed by Flow counterpart
         },
 
+        /**
+         * When true, the grid enters cell edit mode on a single click
+         * instead of the default double click.
+         */
+        editOnClick: {
+          type: Boolean,
+        },
+
         /** @private */
         _editingDisabled: {
           type: Boolean
@@ -104,6 +112,9 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         const column = this.getEventContext(e).column;
         if (column && this._isEditColumn(column)) {
           e.preventDefault();
+          if (this.editOnClick) {
+            this._enterEditFromEvent(e);
+          }
         }
       });
 
@@ -131,7 +142,9 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         });
       } else {
         this.addEventListener('dblclick', e => {
-          this._enterEditFromEvent(e);
+          if (!this.editOnClick) {
+            this._enterEditFromEvent(e);
+          }
         });
       }
     }
