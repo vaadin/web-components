@@ -39,7 +39,7 @@ This program is available under Apache License Version 2.0, available at https:/
             <template>
               <vaadin-combo-box-item
                 on-click="_onItemClick"
-                index="[[__requestItemByIndex(item, index)]]"
+                index="[[__requestItemByIndex(item, index, _resetScrolling)]]"
                 item="[[item]]"
                 label="[[getItemLabel(item, _itemLabelPath)]]"
                 selected="[[_isItemSelected(item, _selectedItem, _itemIdPath)]]"
@@ -123,21 +123,21 @@ This program is available under Apache License Version 2.0, available at https:/
           theme: String,
 
           /**
-           * Used to recognize scroller reset after new items have been set
-           * to iron-list and to ignore unwanted pages load. If 'true', then
-           * skip loading of the pages until it becomes 'false'.
-           */
-          resetScrolling: {
-            type: Boolean,
-            value: false
-          },
-
-          /**
            * Used to recognize if the filter changed, so to skip the
            * scrolling restore. If true, then scroll to 0 position. Restore
            * the previous position otherwise.
            */
           filterChanged: {
+            type: Boolean,
+            value: false
+          },
+
+          /**
+           * Used to recognize scroller reset after new items have been set
+           * to iron-list and to ignore unwanted pages load. If 'true', then
+           * skip loading of the pages until it becomes 'false'.
+           */
+          _resetScrolling: {
             type: Boolean,
             value: false
           },
@@ -209,7 +209,7 @@ This program is available under Apache License Version 2.0, available at https:/
             const currentScrollerPosition = this._selector.firstVisibleIndex;
             if (currentScrollerPosition !== 0) {
               this._oldScrollerPosition = currentScrollerPosition;
-              this.resetScrolling = true;
+              this._resetScrolling = true;
             }
           }
           // Let the position to be restored in the future calls unless it's not
@@ -224,7 +224,7 @@ This program is available under Apache License Version 2.0, available at https:/
         if (this._isNotEmpty(items) && this._selector && this._oldScrollerPosition !== 0) {
           // new items size might be less than old scrolling position
           this._scrollIntoView(Math.min(items.length - 1, this._oldScrollerPosition));
-          this.resetScrolling = false;
+          this._resetScrolling = false;
           // reset position to 0 again in order to properly handle the filter
           // cases (scroll to 0 after typing the filter)
           this._oldScrollerPosition = 0;
@@ -379,10 +379,11 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * @return {number}
        */
-      __requestItemByIndex(item, index) {
+      __requestItemByIndex(item, index, resetScrolling) {
         if ((item instanceof Vaadin.ComboBoxPlaceholder) && index !==
-                undefined && !this.resetScrolling) {
-          this.dispatchEvent(new CustomEvent('index-requested', {detail: {index}}));
+                undefined && !resetScrolling) {
+          this.dispatchEvent(new CustomEvent('index-requested', {detail:
+                    {index: index, currentScrollerPos: this._oldScrollerPosition}}));
         }
 
         return index;
