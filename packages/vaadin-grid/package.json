@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-grid",
-  "version": "5.7.7",
+  "version": "6.0.0-alpha1",
   "description": "A free, flexible and high-quality Web Component for showing large amounts of tabular data",
   "main": "vaadin-grid.js",
   "module": "vaadin-grid.js",
