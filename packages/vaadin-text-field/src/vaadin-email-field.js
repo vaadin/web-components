@@ -51,7 +51,7 @@ class EmailFieldElement extends TextFieldElement {
   }
 
   static get version() {
-    return '2.8.2';
+    return '3.0.0-alpha1';
   }
 
   /** @protected */
