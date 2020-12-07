@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-date-picker",
-  "version": "4.4.1",
+  "version": "5.0.0-alpha1",
   "description": "Web component providing a date selection field with scrollable month calendar",
   "main": "vaadin-date-picker.js",
   "module": "vaadin-date-picker.js",
