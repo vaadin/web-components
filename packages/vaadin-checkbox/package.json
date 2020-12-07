@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-checkbox",
-  "version": "2.5.0",
+  "version": "3.0.0-alpha1",
   "description": "vaadin-checkbox",
   "main": "vaadin-checkbox.js",
   "module": "vaadin-checkbox.js",
