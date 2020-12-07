@@ -105,7 +105,7 @@ class UploadElement extends ElementMixin(ThemableMixin(PolymerElement)) {
   }
 
   static get version() {
-    return '4.4.1';
+    return '5.0.0-alpha1';
   }
 
   static get properties() {
