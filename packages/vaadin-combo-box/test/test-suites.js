@@ -1,6 +1,7 @@
 const isPolymer2 = document.querySelector('script[src*="wct-browser-legacy"]') === null;
 
 window.VaadinComboBoxSuites = [
+  'dynamic-size-change.html',
   'vaadin-combo-box.html',
   'toggling-dropdown.html',
   'overlay-position.html',
