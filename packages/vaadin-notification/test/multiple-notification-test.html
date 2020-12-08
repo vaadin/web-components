@@ -150,7 +150,8 @@
 
         it('notification should respond to pointer events', () => {
           notifications.forEach(e => {
-            expect(getComputedStyle(e._card)['pointer-events']).to.be.equal('auto');
+            const overlay = e._card.shadowRoot.querySelector('[part="overlay"]');
+            expect(getComputedStyle(overlay)['pointer-events']).to.be.equal('auto');
           });
         });
 
