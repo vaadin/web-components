@@ -39,7 +39,7 @@
   <script>
     document.documentElement.setAttribute('dir', 'rtl');
 
-    const variant = new URL(document.location).searchParams.get('variant') || '';
+    const variant = window.location.search.replace(/.*variant=([-\w]+).*/, '$1') || '';
 
     const menu = document.querySelector('vaadin-menu-bar');
     menu.setAttribute('theme', variant);

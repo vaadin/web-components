@@ -7,7 +7,7 @@
   <script src="../../../iron-test-helpers/mock-interactions.js"></script>
   <script src="../helpers.js"></script>
   <script>
-    const theme = new URL(document.location).searchParams.get('theme') || 'lumo';
+    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
     document.write(`<link rel="import" href="../../theme/${theme}/vaadin-menu-bar.html">`);
 
     window.addEventListener('WebComponentsReady', function() {
@@ -47,7 +47,7 @@
 
     const menu = document.querySelector('vaadin-menu-bar');
 
-    const variant = new URL(document.location).searchParams.get('variant') || '';
+    const variant = window.location.search.replace(/.*variant=([-\w]+).*/, '$1') || '';
     menu.setAttribute('theme', variant);
 
     // Force overflow for tertiary and tertiary-inline
