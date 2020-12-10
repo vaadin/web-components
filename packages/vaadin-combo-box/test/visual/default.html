@@ -1,40 +1,48 @@
 <!DOCTYPE html>
 
 <head lang="en">
-  <meta charset="UTF-8">
-
-  <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
+  <meta charset="UTF-8" />
+  <title>Combo box tests</title>
   <script>
-    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
-    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-combo-box.html">`);
+    window.polymerSkipLoadingFontRoboto = true;
   </script>
 </head>
 
 <body>
-
-  <div id="default-tests" style="padding: 10px;">
+  <div id="combo-box-tests" style="padding: 10px">
     Plain
     <vaadin-combo-box></vaadin-combo-box>
 
-    <br>Label
+    <br />Label
     <vaadin-combo-box label="Element"></vaadin-combo-box>
 
-    <br>Disabled
+    <br />Disabled
     <vaadin-combo-box disabled></vaadin-combo-box>
 
-    <br>Read-only
+    <br />Read-only
     <vaadin-combo-box readonly></vaadin-combo-box>
 
-    <br>Value
+    <br />Value
     <vaadin-combo-box value="Carbon" items='["Carbon"]'></vaadin-combo-box>
 
-    <br>Helper text
+    <br />Helper text
     <vaadin-combo-box value="Carbon" helper-text="Helper text"></vaadin-combo-box>
 
-    <br>Helper text (slotted)
+    <br />Helper text (slotted)
     <vaadin-combo-box value="Carbon">
       <span slot="helper">Helper text</span>
     </vaadin-combo-box>
   </div>
 
+  <script type="module">
+    (async () => {
+      const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+
+      await import('../../theme/' + theme + '/vaadin-combo-box.js');
+
+      window.requestAnimationFrame(() => {
+        document.getElementById('combo-box-tests').dataset.ready = true;
+      });
+    })();
+  </script>
 </body>

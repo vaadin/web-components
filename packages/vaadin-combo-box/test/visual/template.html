@@ -2,7 +2,7 @@
 
 <head lang="en">
   <meta charset="UTF-8" />
-  <title>Dropdown tests</title>
+  <title>Item template tests</title>
   <script>
     window.polymerSkipLoadingFontRoboto = true;
   </script>
@@ -10,7 +10,12 @@
 
 <body>
   <div id="combo-box-tests" style="padding: 10px; min-height: 300px">
-    <vaadin-combo-box id="selected" value="He" item-label-path="name" item-value-path="symbol"></vaadin-combo-box>
+    <vaadin-combo-box item-label-path="name" item-value-path="symbol">
+      <template>
+        <b>[[item.name]], <sub>[[item.number]]</sub>[[item.symbol]]</b><br />
+        array index: [[index]]
+      </template>
+    </vaadin-combo-box>
   </div>
 
   <script type="module">

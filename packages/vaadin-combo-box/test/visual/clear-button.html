@@ -1,29 +1,37 @@
 <!DOCTYPE html>
 
 <head lang="en">
-  <meta charset="UTF-8">
-
-  <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
+  <meta charset="UTF-8" />
+  <title>Clear button tests</title>
   <script>
-    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
-    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-combo-box.html">`);
+    window.polymerSkipLoadingFontRoboto = true;
   </script>
 </head>
 
 <body>
-
-  <div id="clear-button-tests" style="padding: 10px;">
+  <div id="combo-box-tests" style="padding: 10px">
     No value
     <vaadin-combo-box clear-button-visible></vaadin-combo-box>
 
-    <br>Basic value
+    <br />Basic value
     <vaadin-combo-box clear-button-visible value="Carbon" items='["Carbon"]'></vaadin-combo-box>
 
-    <br>Disabled
+    <br />Disabled
     <vaadin-combo-box clear-button-visible value="Carbon" items='["Carbon"]' disabled></vaadin-combo-box>
 
-    <br>Read-only
+    <br />Read-only
     <vaadin-combo-box clear-button-visible value="Carbon" items='["Carbon"]' readonly></vaadin-combo-box>
   </div>
 
+  <script type="module">
+    (async () => {
+      const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+
+      await import('../../theme/' + theme + '/vaadin-combo-box.js');
+
+      window.requestAnimationFrame(() => {
+        document.getElementById('combo-box-tests').dataset.ready = true;
+      });
+    })();
+  </script>
 </body>

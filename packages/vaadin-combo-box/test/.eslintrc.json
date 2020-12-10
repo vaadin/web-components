@@ -1,39 +1,5 @@
 {
-  "rules": {
-    "no-unused-vars": 0
-  },
-  "globals": {
-    "sinon": false,
-    "WCT": false,
-    "ios": false,
-    "android": false,
-    "edge": false,
-    "linux": false,
-    "getItemArray": false,
-    "before": false,
-    "after": false,
-    "beforeEach": false,
-    "afterEach": false,
-    "describe": false,
-    "describeIf": false,
-    "describeSkipIf": false,
-    "expect": false,
-    "it": false,
-    "fixture": false,
-    "fire": false,
-    "fireMousedownMouseupClick": false,
-    "getCustomPropertyValue": false,
-    "onceOpened": false,
-    "onceScrolled": false,
-    "System": false,
-    "HTMLImports": false,
-    "MockInteractions": false,
-    "MockTouchInteractions": false,
-    "touchDevice": false,
-    "hackIE11Focus": false,
-    "_fixture": false,
-    "gemini": false,
-    "flush": false,
-    "ShadyDOM": false
+  "env": {
+    "mocha": true
   }
 }
