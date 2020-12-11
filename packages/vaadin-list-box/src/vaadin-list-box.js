@@ -69,7 +69,7 @@ class ListBoxElement extends ElementMixin(MultiSelectListMixin(ThemableMixin(Pol
   }
 
   static get version() {
-    return '1.4.0';
+    return '2.0.0-alpha1';
   }
 
   static get properties() {
