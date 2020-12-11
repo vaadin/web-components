@@ -1,64 +1,35 @@
-gemini.suite('vaadin-tabs', function(rootSuite) {
+describe('vaadin-tabs', () => {
+  const locator = '#tabs-tests[data-ready]';
 
-  function wait(actions, find) {
-    return actions
-      .waitForJSCondition(function(window) {
-        return !!(window.WebComponents && window.WebComponents.ready);
-      }, 15000);
-  }
-
-  function goToAboutBlank(actions, find) {
-    // Firefox stops responding on socket after a test, workaround:
-    return actions.executeJS(function(window) {
-      window.location.href = 'about:blank'; // just go away, please!
-    });
-  }
-
-  rootSuite
-    .before(wait)
-    .after(goToAboutBlank);
-  ['lumo', 'material'].forEach(theme => {
-    gemini.suite(`horizontal-tabs-${theme}`, (suite) => {
-      suite
-        .setUrl(`horizontal-tabs.html?theme=${theme}`)
-        .setCaptureElements('#horizontal-tabs')
-        .capture('horizontal-tabs');
+  ['lumo', 'material'].forEach((theme) => {
+    it(`${theme}-horizontal-tabs`, function () {
+      return this.browser
+        .url(`horizontal-tabs.html?theme=${theme}`)
+        .waitForVisible(locator, 15000)
+        .assertView(`${theme}-horizontal-tabs`, locator);
     });
 
-    gemini.suite(`vertical-tabs-${theme}`, (suite) => {
-      suite
-        .setUrl(`vertical-tabs.html?theme=${theme}`)
-        .setCaptureElements('#vertical-tabs')
-        .capture('vertical-tabs');
+    it(`${theme}-vertical-tabs`, function () {
+      return this.browser
+        .url(`vertical-tabs.html?theme=${theme}`)
+        .waitForVisible(locator, 15000)
+        .assertView(`${theme}-vertical-tabs`, locator);
     });
 
-    gemini.suite(`scrollable-tabs-${theme}`, (suite) => {
-      suite
-        .setUrl(`scrollable-tabs.html?theme=${theme}`)
-        .setCaptureElements('#scrollable-tabs')
-        .capture('scrollable-tabs');
-    });
+    ['ltr', 'rtl'].forEach((dir) => {
+      it(`${theme}-scrollable-tabs-${dir}`, function () {
+        return this.browser
+          .url(`scrollable-tabs.html?theme=${theme}&dir=${dir}`)
+          .waitForVisible(locator, 15000)
+          .assertView(`${theme}-scrollable-tabs-${dir}`, locator);
+      });
 
-    gemini.suite(`scrollable-tabs-rtl-${theme}`, (suite) => {
-      suite
-        .setUrl(`scrollable-tabs.html?theme=${theme}&dir=rtl`)
-        .setCaptureElements('#scrollable-tabs')
-        .capture('scrollable-tabs');
-    });
-
-    gemini.suite(`anchor-tabs-${theme}`, (suite) => {
-      suite
-        .setUrl(`anchor-tabs.html?theme=${theme}`)
-        .setCaptureElements('#anchor-tabs')
-        .capture('anchor-tabs');
-    });
-
-    gemini.suite(`anchor-tabs-rtl-${theme}`, (suite) => {
-      suite
-        .setUrl(`anchor-tabs.html?theme=${theme}&dir=rtl`)
-        .setCaptureElements('#anchor-tabs')
-        .capture('anchor-tabs');
+      it(`${theme}-anchor-tabs-${dir}`, function () {
+        return this.browser
+          .url(`anchor-tabs.html?theme=${theme}&dir=${dir}`)
+          .waitForVisible(locator, 15000)
+          .assertView(`${theme}-anchor-tabs-${dir}`, locator);
+      });
     });
   });
-
 });

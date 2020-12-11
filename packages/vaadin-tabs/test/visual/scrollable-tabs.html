@@ -1,26 +1,16 @@
 <!DOCTYPE html>
 
-<head lang="en">
-  <meta charset="UTF-8">
-  <title>Scrollable nav visual tests</title>
-  <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
-
+<head>
+  <meta charset="UTF-8" />
+  <title>Scrollable tabs visual tests</title>
   <script>
-    const dir = window.location.search.replace(/.*dir=(\w+).*/, '$1') || 'ltr';
-    document.documentElement.setAttribute('dir', dir);
-
-    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
-    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-tab.html">`);
-    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-tabs.html">`);
+    window.polymerSkipLoadingFontRoboto = true;
   </script>
-
 </head>
 
 <body>
   <style>
-    .capture-block {
-      font-family: sans-serif;
-      font-size: 14px;
+    #tabs-tests {
       display: flex;
       flex-direction: column;
       width: 400px;
@@ -28,7 +18,7 @@
     }
   </style>
 
-  <div class="capture-block" id="scrollable-tabs">
+  <div id="tabs-tests">
     <vaadin-tabs selected="8">
       <vaadin-tab>Tab-00</vaadin-tab>
       <vaadin-tab>Tab-01</vaadin-tab>
@@ -47,8 +37,8 @@
       <vaadin-tab>Tab-14</vaadin-tab>
       <vaadin-tab>Tab-15</vaadin-tab>
     </vaadin-tabs>
-    <br/>
-    <vaadin-tabs selected="8" style="flex: 1; overflow: hidden;" orientation="vertical">
+    <br />
+    <vaadin-tabs selected="8" style="flex: 1; overflow: hidden" orientation="vertical">
       <vaadin-tab>Tab-00</vaadin-tab>
       <vaadin-tab>Tab-01</vaadin-tab>
       <vaadin-tab>Tab-02</vaadin-tab>
@@ -68,4 +58,17 @@
     </vaadin-tabs>
   </div>
 
+  <script type="module">
+    (async () => {
+      const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+      const dir = window.location.search.replace(/.*dir=(\w+).*/, '$1') || 'ltr';
+      document.documentElement.setAttribute('dir', dir);
+
+      await import('../../theme/' + theme + '/vaadin-tabs.js');
+
+      window.requestAnimationFrame(() => {
+        document.getElementById('tabs-tests').dataset.ready = true;
+      });
+    })();
+  </script>
 </body>

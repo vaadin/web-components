@@ -1,8 +1,0 @@
-{
-  "rules": {
-  },
-  "globals": {
-    "TabsDemo": false,
-    "DemoReadyEventEmitter": false
-  }
-}

@@ -1,30 +1,21 @@
 <!DOCTYPE html>
 
-<head lang="en">
-  <meta charset="UTF-8">
-  <title>Horizontal nav visual tests</title>
-  <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
-
+<head>
+  <meta charset="UTF-8" />
+  <title>Horizontal tabs visual tests</title>
   <script>
-    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
-    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-tab.html">`);
-    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-tabs.html">`);
+    window.polymerSkipLoadingFontRoboto = true;
   </script>
 </head>
 
 <body>
-  <style media="screen">
-    .capture-block {
-      display: inline-block;
+  <style>
+    #tabs-tests {
       width: 800px;
-    }
-
-    vaadin-tab {
-      text-align: center;
     }
   </style>
 
-  <div class="capture-block" id="horizontal-tabs">
+  <div id="tabs-tests">
     <vaadin-tabs>
       <vaadin-tab>Foo</vaadin-tab>
       <vaadin-tab>Bar</vaadin-tab>
@@ -32,4 +23,15 @@
     </vaadin-tabs>
   </div>
 
+  <script type="module">
+    (async () => {
+      const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+
+      await import('../../theme/' + theme + '/vaadin-tabs.js');
+
+      window.requestAnimationFrame(() => {
+        document.getElementById('tabs-tests').dataset.ready = true;
+      });
+    })();
+  </script>
 </body>
