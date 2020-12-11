@@ -1,21 +1,5 @@
 {
-  "globals": {
-    "sinon": false,
-    "WCT": false,
-    "describe": false,
-    "expect": false,
-    "it": false,
-    "before": false,
-    "after": false,
-    "beforeEach": false,
-    "afterEach": false,
-    "listenOnce": false,
-    "fixture": false,
-    "flush": false,
-    "fire": false,
-    "MockInteractions": false,
-    "MockTouchInteractions": false,
-    "gemini": false,
-    "MOBILE": false
+  "env": {
+    "mocha": true
   }
 }
