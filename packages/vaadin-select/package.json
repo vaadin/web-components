@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-select",
-  "version": "2.4.0",
+  "version": "3.0.0-alpha1",
   "description": "vaadin-select",
   "main": "vaadin-select.js",
   "module": "vaadin-select.js",
