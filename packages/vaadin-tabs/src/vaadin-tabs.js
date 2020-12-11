@@ -146,7 +146,7 @@ class TabsElement extends ElementMixin(
   }
 
   static get version() {
-    return '3.2.0';
+    return '4.0.0-alpha4';
   }
 
   static get properties() {

@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-tabs",
-  "version": "3.2.0",
+  "version": "4.0.0-alpha4",
   "description": "vaadin-tabs",
   "main": "vaadin-tabs.js",
   "module": "vaadin-tabs.js",
