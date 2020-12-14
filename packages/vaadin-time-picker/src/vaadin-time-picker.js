@@ -55,6 +55,9 @@ import './vaadin-time-picker-text-field.js';
  * Note: the `theme` attribute value set on `<vaadin-time-picker>` is
  * propagated to the internal themable components listed above.
  *
+ * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
+ * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
+ *
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ControlStateMixin
