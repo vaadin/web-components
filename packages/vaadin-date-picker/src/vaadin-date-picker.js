@@ -96,7 +96,6 @@ import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
  * @mixes ThemableMixin
  * @mixes DatePickerMixin
  * @mixes GestureEventListeners
- * @demo demo/index.html
  */
 class DatePickerElement extends ElementMixin(
   ControlStateMixin(ThemableMixin(DatePickerMixin(GestureEventListeners(PolymerElement))))
