@@ -80,6 +80,10 @@ import { DatePickerEventMap } from './interfaces';
  *
  * Note: the `theme` attribute value set on `<vaadin-date-picker>` is
  * propagated to the internal themable components listed above.
+ *
+ * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
+ * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
+ * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  */
 declare class DatePickerElement extends ElementMixin(
   ControlStateMixin(ThemableMixin(DatePickerMixin(GestureEventListeners(HTMLElement))))

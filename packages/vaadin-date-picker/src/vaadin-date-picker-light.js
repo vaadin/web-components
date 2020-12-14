@@ -46,6 +46,9 @@ import { DatePickerMixin } from './vaadin-date-picker-mixin.js';
  * Note: the `theme` attribute value set on `<vaadin-date-picker-light>`
  * is propagated to the internal themable components listed above.
  *
+ * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
+ * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
+ *
  * @extends HTMLElement
  * @mixes ThemableMixin
  * @mixes DatePickerMixin
