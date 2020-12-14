@@ -11,12 +11,12 @@ export interface CustomFieldI18n {
 /**
  * Fired when the `invalid` property changes.
  */
-export type CustomFieldInvalidChanged = CustomEvent<{ value: boolean; path: 'invalid' }>;
+export type CustomFieldInvalidChanged = CustomEvent<{ value: boolean }>;
 
 /**
  * Fired when the `value` property changes.
  */
-export type CustomFieldValueChanged = CustomEvent<{ value: string; path: 'value' }>;
+export type CustomFieldValueChanged = CustomEvent<{ value: string }>;
 
 export interface CustomFieldElementEventMap {
   'invalid-changed': CustomFieldInvalidChanged;
