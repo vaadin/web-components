@@ -34,6 +34,19 @@ import { UploadEventMap, UploadFile, UploadI18n, UploadMethod } from './interfac
  * `dragover-valid` | A dragged file is valid with `maxFiles` and `accept` criteria | `:host`
  *
  * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+ *
+ * @fires {CustomEvent} file-reject - Fired when a file cannot be added to the queue due to a constrain.
+ * @fires {CustomEvent} files-changed - Fired when the `files` property changes.
+ * @fires {CustomEvent} max-files-reached-changed - Fired when the `maxFilesReached` property changes.
+ * @fires {CustomEvent} upload-before - Fired before the XHR is opened.
+ * @fires {CustomEvent} upload-start - Fired when the XHR is sent.
+ * @fires {CustomEvent} upload-progress - Fired as many times as the progress is updated.
+ * @fires {CustomEvent} upload-success - Fired in case the upload process succeeded.
+ * @fires {CustomEvent} upload-error - Fired in case the upload process failed.
+ * @fires {CustomEvent} upload-request - Fired when the XHR has been opened but not sent yet.
+ * @fires {CustomEvent} upload-response - Fired when on the server response before analyzing it.
+ * @fires {CustomEvent} upload-retry - Fired when retry upload is requested.
+ * @fires {CustomEvent} upload-abort - Fired when upload abort is requested.
  */
 declare class UploadElement extends ThemableMixin(ElementMixin(HTMLElement)) {
   /**
