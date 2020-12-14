@@ -67,12 +67,12 @@ export type UploadFileReject = CustomEvent<{ file: UploadFile; error: string }>;
 /**
  * Fired when the `files` property changes.
  */
-export type UploadFilesChanged = CustomEvent<{ value: UploadFile[]; path: 'files' }>;
+export type UploadFilesChanged = CustomEvent<{ value: UploadFile[] }>;
 
 /**
  * Fired when the `max-files-reached` property changes.
  */
-export type UploadMaxFilesReachedChanged = CustomEvent<{ value: boolean; path: 'max-files-reached' }>;
+export type UploadMaxFilesReachedChanged = CustomEvent<{ value: boolean }>;
 
 /**
  * Fired before the XHR is opened. Could be used for changing the request
@@ -91,7 +91,7 @@ export type UploadStart = CustomEvent<{ xhr: XMLHttpRequest; file: UploadFile }>
 export type UploadProgress = CustomEvent<{ xhr: XMLHttpRequest; file: UploadFile }>;
 
 /**
- * Fired in case the upload process succeed.
+ * Fired in case the upload process succeeded.
  */
 export type UploadSuccess = CustomEvent<{ xhr: XMLHttpRequest; file: UploadFile }>;
 
@@ -119,7 +119,7 @@ export type UploadResponse = CustomEvent<{ xhr: XMLHttpRequest; file: UploadFile
 export type UploadRetry = CustomEvent<{ xhr: XMLHttpRequest; file: UploadFile }>;
 
 /**
- * Fired when retry abort is requested. If the default is prevented, then the
+ * Fired when upload abort is requested. If the default is prevented, then the
  * file upload would not be aborted.
  */
 export type UploadAbort = CustomEvent<{ xhr: XMLHttpRequest; file: UploadFile }>;
