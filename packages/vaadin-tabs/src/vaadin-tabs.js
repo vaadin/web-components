@@ -43,6 +43,9 @@ import './vaadin-tab.js';
  *
  * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
  *
+ * @fires {CustomEvent} items-changed - Fired when the `items` property changes.
+ * @fires {CustomEvent} selected-changed - Fired when the `selected` property changes.
+ *
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ListMixin

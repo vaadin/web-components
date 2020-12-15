@@ -54,6 +54,9 @@ export interface TabsEventMap extends HTMLElementEventMap, TabsElementEventMap {
  * `overflow` | It's set to `start`, `end`, none or both. | :host
  *
  * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+ *
+ * @fires {CustomEvent} items-changed - Fired when the `items` property changes.
+ * @fires {CustomEvent} selected-changed - Fired when the `selected` property changes.
  */
 declare class TabsElement extends ElementMixin(ListMixin(ThemableMixin(HTMLElement))) {
   readonly _scrollerElement: HTMLElement;
