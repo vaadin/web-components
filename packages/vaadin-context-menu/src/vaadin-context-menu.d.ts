@@ -216,6 +216,9 @@ import { ContextMenuEventMap, ContextMenuRenderer } from './interfaces';
  * propagated to the internal `<vaadin-context-menu-overlay>` component.
  * In case of using nested menu items, the `theme` attribute is also propagated
  * to internal `vaadin-context-menu-list-box` and `vaadin-context-menu-item`'s.
+ *
+ * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
+ * @fires {CustomEvent} item-selected - Fired when an item is selected when the context menu is populated using the `items` API.
  */
 declare class ContextMenuElement extends ElementMixin(
   ThemePropertyMixin(ItemsMixin(GestureEventListeners(HTMLElement)))

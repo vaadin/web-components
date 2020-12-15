@@ -25,7 +25,7 @@ export type ContextMenuRenderer = (
 export type ContextMenuOpenedChanged = CustomEvent<{ value: boolean }>;
 
 /**
- * Fired when the item is selected in the menu using `items` API.
+ * Fired when an item is selected when the context menu is populated using the `items` API.
  */
 export type ContextMenuItemSelected = CustomEvent<{ value: ContextMenuItem }>;
 

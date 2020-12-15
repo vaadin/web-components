@@ -224,6 +224,9 @@ import './vaadin-context-menu-overlay.js';
  * In case of using nested menu items, the `theme` attribute is also propagated
  * to internal `vaadin-context-menu-list-box` and `vaadin-context-menu-item`'s.
  *
+ * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
+ * @fires {CustomEvent} item-selected - Fired when an item is selected when the context menu is populated using the `items` API.
+ *
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ThemePropertyMixin
