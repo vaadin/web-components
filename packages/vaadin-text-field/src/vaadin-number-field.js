@@ -92,8 +92,8 @@ let memoizedTemplate;
  * </vaadin-number-field>
  * ```
  *
- * @fires {CustomEvent<boolean>} invalid-changed
- * @fires {CustomEvent<string>} value-changed
+ * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
+ * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  *
  * @extends TextFieldElement
  */

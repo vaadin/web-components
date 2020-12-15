@@ -57,8 +57,8 @@ import { TextFieldEventMap } from './interfaces';
  *
  * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
  *
- * @fires {CustomEvent<boolean>} invalid-changed
- * @fires {CustomEvent<string>} value-changed
+ * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
+ * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  */
 declare class TextAreaElement extends TextFieldMixin(ControlStateMixin(ElementMixin(ThemableMixin(HTMLElement)))) {
   readonly _slottedTagName: string;
