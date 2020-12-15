@@ -51,9 +51,9 @@ export interface ListBoxEventMap extends HTMLElementEventMap, ListBoxElementEven
  *
  * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
  *
- * @fires {CustomEvent<Array<Element>>} items-changed
- * @fires {CustomEvent<number>} selected-changed
- * @fires {CustomEvent<Array<string>>} selected-values-changed
+ * @fires {CustomEvent} items-changed - Fired when the `items` property changes.
+ * @fires {CustomEvent} selected-changed - Fired when the `selected` property changes.
+ * @fires {CustomEvent} selected-values-changed - Fired when the `selectedValues` property changes.
  */
 declare class ListBoxElement extends MultiSelectListMixin(ThemableMixin(ElementMixin(HTMLElement))) {
   focused: Element | null;
