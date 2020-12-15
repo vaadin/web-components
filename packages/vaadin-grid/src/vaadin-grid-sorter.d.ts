@@ -42,6 +42,9 @@ export interface GridSorterEventMap extends HTMLElementEventMap, GridSorterEleme
  * Attribute    | Description | Part name
  * -------------|-------------|------------
  * `direction` | Sort direction of a sorter | :host
+ *
+ * @fires {CustomEvent} direction-changed - Fired when the `direction` property changes.
+ * @fires {CustomEvent} sorter-changed - Fired when the `path` or `direction` property changes.
  */
 declare class GridSorterElement extends HTMLElement {
   /**

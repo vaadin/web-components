@@ -51,6 +51,8 @@ export interface GridTreeToggleEventMap extends HTMLElementEventMap, GridTreeTog
  * Custom CSS property | Description | Default
  * ---|---|---
  * `--vaadin-grid-tree-toggle-level-offset` | Visual offset step for each tree sublevel | `1em`
+ *
+ * @fires {CustomEvent} expanded-changed - Fired when the `expanded` property changes.
  */
 declare class GridTreeToggleElement extends ThemableMixin(HTMLElement) {
   /**

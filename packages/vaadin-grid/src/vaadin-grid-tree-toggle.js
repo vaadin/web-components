@@ -64,6 +64,8 @@ document.head.appendChild($_documentContainer.content);
  * ---|---|---
  * `--vaadin-grid-tree-toggle-level-offset` | Visual offset step for each tree sublevel | `1em`
  *
+ * @fires {CustomEvent} expanded-changed - Fired when the `expanded` property changes.
+ *
  * @extends HTMLElement
  * @mixes ThemableMixin
  */

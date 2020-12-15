@@ -52,6 +52,9 @@ document.head.appendChild($_documentContainer.content);
  * -------------|-------------|------------
  * `direction` | Sort direction of a sorter | :host
  *
+ * @fires {CustomEvent} direction-changed - Fired when the `direction` property changes.
+ * @fires {CustomEvent} sorter-changed - Fired when the `path` or `direction` property changes.
+ *
  * @extends HTMLElement
  */
 class GridSorterElement extends ThemableMixin(DirMixin(PolymerElement)) {

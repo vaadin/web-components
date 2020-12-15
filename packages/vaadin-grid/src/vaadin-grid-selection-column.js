@@ -28,6 +28,8 @@ import '@vaadin/vaadin-checkbox/src/vaadin-checkbox.js';
  * selection for all the items at once.
  *
  * __The default content can also be overridden__
+ *
+ * @fires {CustomEvent} select-all-changed - Fired when the `selectAll` property changes.
  */
 class GridSelectionColumnElement extends GridColumnElement {
   static get template() {

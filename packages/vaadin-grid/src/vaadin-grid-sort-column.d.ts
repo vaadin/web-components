@@ -25,6 +25,8 @@ export interface GridSortColumnEventMap extends HTMLElementEventMap, GridSortCol
  *  <vaadin-grid-column>
  *    ...
  * ```
+ *
+ * @fires {CustomEvent} direction-changed - Fired when the `direction` property changes.
  */
 declare class GridSortColumnElement extends GridColumnElement {
   /**

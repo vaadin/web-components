@@ -22,6 +22,8 @@ export interface GridFilterEventMap extends HTMLElementEventMap, GridFilterEleme
  *   <template>[[item.name.first]]</template>
  * </vaadin-grid-column>
  * ```
+ *
+ * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  */
 declare class GridFilterElement extends HTMLElement {
   /**

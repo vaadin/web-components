@@ -32,6 +32,8 @@ export interface GridSelectionColumnEventMap extends HTMLElementEventMap, GridSe
  * selection for all the items at once.
  *
  * __The default content can also be overridden__
+ *
+ * @fires {CustomEvent} select-all-changed - Fired when the `selectAll` property changes.
  */
 declare class GridSelectionColumnElement extends GridColumnElement {
   /**

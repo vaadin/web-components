@@ -22,6 +22,7 @@ import '@vaadin/vaadin-text-field/src/vaadin-text-field.js';
  * </vaadin-grid-column>
  * ```
  *
+ * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  */
 class GridFilterElement extends PolymerElement {
   static get template() {
