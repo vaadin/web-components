@@ -56,8 +56,8 @@ export interface CheckboxEventMap extends HTMLElementEventMap, CheckboxElementEv
  *
  * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
  *
- * @fires {CustomEvent<boolean>} checked-changed
- * @fires {CustomEvent<boolean>} indeterminate-changed
+ * @fires {CustomEvent} checked-changed - Fired when the `checked` property changes.
+ * @fires {CustomEvent} indeterminate-changed - Fired when the `indeterminate` property changes.
  */
 declare class CheckboxElement extends ElementMixin(
   ControlStateMixin(ThemableMixin(GestureEventListeners(HTMLElement)))
