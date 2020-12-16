@@ -1,27 +1,14 @@
 <!DOCTYPE html>
 
 <head lang="en">
-  <meta charset="UTF-8">
-
-  <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
-  <script src="../../../iron-test-helpers/mock-interactions.js"></script>
-  <script src="../helpers.js"></script>
+  <meta charset="UTF-8" />
+  <title>Theme variants tests</title>
   <script>
-    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
-    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-menu-bar.html">`);
-
-    window.addEventListener('WebComponentsReady', function() {
-      setTimeout(function() {
-        window.ShadyDOM && window.ShadyDOM.flush(); // Force DOM composition
-        window.webComponentsAreReady = true; // Checked in gemini before capture callback
-      });
-    });
+    window.polymerSkipLoadingFontRoboto = true;
   </script>
-  <link rel="import" href="../../../vaadin-lumo-styles/icons.html">
-  <link rel="import" href="../../../iron-icon/iron-icon.html">
   <style>
     /* Force the overflow */
-    #theme-tests {
+    #tests {
       padding: 10px;
       width: 320px;
       height: 320px;
@@ -30,55 +17,59 @@
 </head>
 
 <body>
-
-  <div id="theme-tests">
+  <div id="tests">
     <vaadin-menu-bar></vaadin-menu-bar>
   </div>
 
-  <script>
+  <script type="module">
+    import '@vaadin/vaadin-lumo-styles/icons.js';
+    import '@polymer/iron-icon/iron-icon.js';
+    import { arrowDown } from '../helpers.js';
+
     function makeIcon(img) {
-      const item = window.document.createElement('vaadin-context-menu-item');
-      const icon = window.document.createElement('iron-icon');
+      const item = document.createElement('vaadin-context-menu-item');
+      const icon = document.createElement('iron-icon');
       icon.setAttribute('icon', img);
       item.appendChild(icon);
       item.setAttribute('theme', 'menu-bar-item');
       return item;
     }
 
-    const menu = document.querySelector('vaadin-menu-bar');
+    (async () => {
+      const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
 
-    const variant = window.location.search.replace(/.*variant=([-\w]+).*/, '$1') || '';
-    menu.setAttribute('theme', variant);
+      await import('../../theme/' + theme + '/vaadin-menu-bar.js');
+      const menu = document.querySelector('vaadin-menu-bar');
 
-    // Force overflow for tertiary and tertiary-inline
-    if (variant === 'tertiary' || variant === 'small') {
-      menu.parentElement.style.width = '265px';
-    } else if (variant === 'tertiary-inline') {
-      menu.parentElement.style.width = '200px';
-    }
+      const variant = window.location.search.replace(/.*variant=([-\w]+).*/, '$1') || '';
+      menu.setAttribute('theme', variant);
 
-    menu.items = [
-      {component: 'u', text: 'Home'},
-      {
-        component: makeIcon('lumo:chevron-down'),
-        children: [{text: 'Notifications'}, {text: 'Mark as read'}]
-      },
-      {text: 'Manage', disabled: true},
-      {
-        text: 'Reports',
-        children: [
-          {text: 'View Reports'},
-          {text: 'Generate Report'}
-        ]
-      },
-      {text: 'Help'}
-    ];
+      // Force overflow for tertiary and tertiary-inline
+      if (variant === 'tertiary' || variant === 'small') {
+        menu.parentElement.style.width = '265px';
+      } else if (variant === 'tertiary-inline') {
+        menu.parentElement.style.width = '200px';
+      }
 
-    // eslint-disable-next-line no-unused-vars
-    function openSubMenu() {
-      // open on Arrow Down to make sure the submenu item is focused
+      menu.items = [
+        { component: 'u', text: 'Home' },
+        {
+          component: makeIcon('lumo:chevron-down'),
+          children: [{ text: 'Notifications' }, { text: 'Mark as read' }]
+        },
+        { text: 'Manage', disabled: true },
+        {
+          text: 'Reports',
+          children: [{ text: 'View Reports' }, { text: 'Generate Report' }]
+        },
+        { text: 'Help' }
+      ];
+
       arrowDown(menu.shadowRoot.querySelectorAll('vaadin-menu-bar-button')[1]);
-    }
-  </script>
 
+      window.requestAnimationFrame(() => {
+        document.getElementById('tests').dataset.ready = true;
+      });
+    })();
+  </script>
 </body>

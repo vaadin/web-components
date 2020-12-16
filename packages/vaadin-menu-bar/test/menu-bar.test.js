@@ -1,0 +1,428 @@
+import { expect } from '@esm-bundle/chai';
+import sinon from 'sinon';
+import { fixtureSync } from '@open-wc/testing-helpers';
+import { arrowLeft, arrowRight, end, home, nextRender } from './helpers.js';
+import './not-animated-styles.js';
+import '../vaadin-menu-bar.js';
+
+describe('custom element definition', () => {
+  let menu;
+
+  beforeEach(() => {
+    menu = fixtureSync('<vaadin-menu-bar></vaadin-menu-bar>');
+  });
+
+  it('should be defined with correct tag name', () => {
+    expect(customElements.get('vaadin-menu-bar')).to.be.ok;
+  });
+
+  it('should not expose class name globally', () => {
+    expect(window.MenuBarElement).not.to.be.ok;
+  });
+
+  it('should have a valid version number', () => {
+    expect(menu.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta)\d+)?$/);
+  });
+});
+
+describe('root menu layout', () => {
+  let menu, buttons;
+
+  beforeEach(async () => {
+    menu = fixtureSync('<vaadin-menu-bar></vaadin-menu-bar>');
+    menu.items = [{ text: 'Item 1' }, { text: 'Item 2' }, { text: 'Item 3', disabled: true }, { text: 'Item 4' }];
+    await nextRender(menu);
+    buttons = menu._buttons;
+  });
+
+  it('should render button for each item, plus overflow button', () => {
+    expect(buttons.length).to.equal(menu.items.length + 1);
+  });
+
+  it('should make the overflow button hidden by default', () => {
+    const overflow = buttons[menu.items.length];
+    expect(overflow.getAttribute('part')).to.equal('overflow-button');
+    expect(overflow.hasAttribute('hidden')).to.be.true;
+  });
+
+  it('should set buttons text content based on the text property', () => {
+    menu.items.forEach((item, idx) => {
+      expect(buttons[idx].textContent.trim()).to.equal(item.text);
+    });
+  });
+
+  it('should render disabled button if disabled property is true', () => {
+    expect(buttons[2].disabled).to.be.true;
+  });
+
+  it('should set tabindex to -1 to all the buttons except first one', () => {
+    menu.dispatchEvent(new CustomEvent('focusin', { bubbles: true, composed: true }));
+    expect(buttons[0].getAttribute('tabindex')).to.equal('0');
+    buttons.slice(1).forEach((btn) => {
+      expect(btn.focusElement.getAttribute('tabindex')).to.equal('-1');
+    });
+  });
+
+  it('should not throw when render() is called before menu bar is attached', () => {
+    expect(() => document.createElement('vaadin-menu-bar').render()).to.not.throw(Error);
+  });
+
+  describe('keyboard navigation', () => {
+    describe('default mode', () => {
+      it('should move focus to next button on "arrow-right" keydown', () => {
+        buttons[0].focus();
+        const spy = sinon.spy(buttons[1], 'focus');
+        arrowRight(buttons[0]);
+        expect(spy.calledOnce).to.be.true;
+        expect(buttons[1].hasAttribute('focused')).to.be.true;
+      });
+
+      it('should move focus to prev button on "arrow-left" keydown', () => {
+        buttons[1].focus();
+        const spy = sinon.spy(buttons[0], 'focus');
+        arrowLeft(buttons[1]);
+        expect(spy.calledOnce).to.be.true;
+        expect(buttons[0].hasAttribute('focused')).to.be.true;
+      });
+
+      it('should move focus to first button on "home" keydown', () => {
+        buttons[1].focus();
+        const spy = sinon.spy(buttons[0], 'focus');
+        home(buttons[1]);
+        expect(spy.calledOnce).to.be.true;
+        expect(buttons[0].hasAttribute('focused')).to.be.true;
+      });
+
+      it('should move focus to second button if first is disabled on "home" keydown', () => {
+        menu.set('items.0.disabled', true);
+        menu.render();
+        buttons = menu._buttons;
+        buttons[3].focus();
+        const spy = sinon.spy(buttons[1], 'focus');
+        home(buttons[3]);
+        expect(spy.calledOnce).to.be.true;
+        expect(buttons[1].hasAttribute('focused')).to.be.true;
+      });
+
+      it('should move focus to last button on "end" keydown', () => {
+        buttons[0].focus();
+        const spy = sinon.spy(buttons[3], 'focus');
+        end(buttons[0]);
+        expect(spy.calledOnce).to.be.true;
+        expect(buttons[3].hasAttribute('focused')).to.be.true;
+      });
+
+      it('should move focus to the closest enabled button if last is disabled on "end" keydown', () => {
+        menu.set('items.3.disabled', true);
+        menu.render();
+        buttons = menu._buttons;
+        buttons[0].focus();
+        const spy = sinon.spy(buttons[1], 'focus');
+        end(buttons[0]);
+        expect(spy.calledOnce).to.be.true;
+        expect(buttons[1].hasAttribute('focused')).to.be.true;
+      });
+
+      it('should move focus to first button on "arrow-right", if last button has focus', () => {
+        buttons[3].focus();
+        const spy = sinon.spy(buttons[0], 'focus');
+        arrowRight(buttons[3]);
+        expect(spy.calledOnce).to.be.true;
+        expect(buttons[0].hasAttribute('focused')).to.be.true;
+      });
+
+      it('should move focus to last button on "arrow-left", if first button has focus', () => {
+        buttons[0].focus();
+        const spy = sinon.spy(buttons[3], 'focus');
+        arrowLeft(buttons[0]);
+        expect(spy.calledOnce).to.be.true;
+        expect(buttons[3].hasAttribute('focused')).to.be.true;
+      });
+    });
+
+    describe('RTL mode', () => {
+      beforeEach(() => {
+        menu.setAttribute('dir', 'rtl');
+      });
+
+      it('should move focus to next button on "arrow-left" keydown', () => {
+        buttons[0].focus();
+        const spy = sinon.spy(buttons[1], 'focus');
+        arrowLeft(buttons[0]);
+        expect(spy.calledOnce).to.be.true;
+        expect(buttons[1].hasAttribute('focused')).to.be.true;
+      });
+
+      it('should move focus to prev button on "arrow-right" keydown', () => {
+        buttons[1].focus();
+        const spy = sinon.spy(buttons[0], 'focus');
+        arrowRight(buttons[1]);
+        expect(spy.calledOnce).to.be.true;
+        expect(buttons[0].hasAttribute('focused')).to.be.true;
+      });
+
+      it('should move focus to first button on "arrow-left", if last button has focus', () => {
+        buttons[3].focus();
+        const spy = sinon.spy(buttons[0], 'focus');
+        arrowLeft(buttons[3]);
+        expect(spy.calledOnce).to.be.true;
+        expect(buttons[0].hasAttribute('focused')).to.be.true;
+      });
+
+      it('should move focus to last button on "arrow-right", if first button has focus', () => {
+        buttons[0].focus();
+        const spy = sinon.spy(buttons[3], 'focus');
+        arrowRight(buttons[0]);
+        expect(spy.calledOnce).to.be.true;
+        expect(buttons[3].hasAttribute('focused')).to.be.true;
+      });
+    });
+  });
+
+  describe('updating items', () => {
+    it('should remove buttons when setting empty array', () => {
+      menu.items = [];
+      expect(menu._buttons.filter((b) => b !== menu._overflow).length).to.eql(0);
+    });
+
+    it('should remove buttons when setting falsy items property', () => {
+      menu.items = undefined;
+      expect(menu._buttons.filter((b) => b !== menu._overflow).length).to.eql(0);
+    });
+  });
+
+  describe('theme attribute', () => {
+    it('should propagate theme attribute to all internal buttons', () => {
+      menu.setAttribute('theme', 'contained');
+      buttons.forEach((btn) => expect(btn.getAttribute('theme')).to.equal('contained'));
+    });
+
+    it('should propagate theme attribute to added buttons', async () => {
+      menu.setAttribute('theme', 'contained');
+      menu.unshift('items', { text: 'new' });
+      await nextRender(menu);
+      buttons.forEach((btn) => expect(btn.getAttribute('theme')).to.equal('contained'));
+    });
+
+    it('should remove theme attribute from internal buttons when it is removed from host', () => {
+      menu.setAttribute('theme', 'contained');
+      menu.removeAttribute('theme');
+      buttons.forEach((btn) => expect(btn.hasAttribute('theme')).to.be.false);
+    });
+  });
+});
+
+describe('overflow button', () => {
+  let menu, buttons, overflow;
+
+  const assertHidden = (elem) => {
+    const style = getComputedStyle(elem);
+    expect(style.visibility).to.equal('hidden');
+    expect(style.position).to.equal('absolute');
+  };
+
+  const assertVisible = (elem) => {
+    const style = getComputedStyle(elem);
+    expect(style.visibility).to.equal('visible');
+    expect(style.position).to.not.equal('absolute');
+  };
+
+  beforeEach(async () => {
+    menu = fixtureSync('<vaadin-menu-bar></vaadin-menu-bar>');
+
+    menu.style.width = '250px';
+
+    menu.items = [
+      { text: 'Item 1' },
+      { text: 'Item 2' },
+      { text: 'Item 3' },
+      { text: 'Item 4' },
+      { text: 'Item 5', disabled: true }
+    ];
+    await nextRender(menu);
+    buttons = menu._buttons;
+    overflow = buttons[buttons.length - 1];
+  });
+
+  it('should show overflow button and hide the buttons which do not fit', () => {
+    assertHidden(buttons[2]);
+    expect(buttons[2].disabled).to.be.true;
+    assertHidden(buttons[3]);
+    expect(buttons[3].disabled).to.be.true;
+    expect(overflow.hasAttribute('hidden')).to.be.false;
+  });
+
+  it('should set items to overflow button for buttons which do not fit', () => {
+    expect(overflow.item).to.be.instanceOf(Object);
+    expect(overflow.item.children).to.be.instanceOf(Array);
+    expect(overflow.item.children.length).to.equal(3);
+    expect(overflow.item.children[0]).to.deep.equal(menu.items[2]);
+    expect(overflow.item.children[1]).to.deep.equal(menu.items[3]);
+    expect(overflow.item.children[2]).to.deep.equal(menu.items[4]);
+  });
+
+  it('should show overflow button after calling render() with same items', () => {
+    menu.render();
+    expect(overflow.hasAttribute('hidden')).to.be.false;
+  });
+
+  it('should show buttons and update overflow items when width increased', async () => {
+    menu.style.width = '350px';
+    menu.notifyResize();
+    await nextRender(menu);
+    assertVisible(buttons[2]);
+    expect(buttons[2].disabled).to.not.be.true;
+    assertVisible(buttons[3]);
+    expect(buttons[3].disabled).to.not.be.true;
+    expect(overflow.item.children.length).to.equal(1);
+    expect(overflow.item.children[0]).to.deep.equal(menu.items[4]);
+  });
+
+  it('should show buttons and update overflow items when width increased in RTL', async () => {
+    menu.setAttribute('dir', 'rtl');
+    menu.style.width = '350px';
+    menu.notifyResize();
+    await nextRender(menu);
+    assertVisible(buttons[2]);
+    expect(buttons[2].disabled).to.not.be.true;
+    assertVisible(buttons[3]);
+    expect(buttons[3].disabled).to.not.be.true;
+    expect(overflow.item.children.length).to.equal(1);
+    expect(overflow.item.children[0]).to.deep.equal(menu.items[4]);
+  });
+
+  it('should hide buttons and update overflow items when width decreased', async () => {
+    menu.style.width = '150px';
+    menu.notifyResize();
+    await nextRender(menu);
+    assertHidden(buttons[1]);
+    expect(buttons[1].disabled).to.be.true;
+    expect(overflow.item.children.length).to.equal(4);
+    expect(overflow.item.children[0]).to.deep.equal(menu.items[1]);
+    expect(overflow.item.children[1]).to.deep.equal(menu.items[2]);
+    expect(overflow.item.children[2]).to.deep.equal(menu.items[3]);
+    expect(overflow.item.children[3]).to.deep.equal(menu.items[4]);
+  });
+
+  it('should hide buttons and update overflow items when width decreased in RTL', async () => {
+    menu.setAttribute('dir', 'rtl');
+    menu.style.width = '150px';
+    menu.notifyResize();
+    await nextRender(menu);
+    assertHidden(buttons[1]);
+    expect(buttons[1].disabled).to.be.true;
+    expect(overflow.item.children.length).to.equal(4);
+    expect(overflow.item.children[0]).to.deep.equal(menu.items[1]);
+    expect(overflow.item.children[1]).to.deep.equal(menu.items[2]);
+    expect(overflow.item.children[2]).to.deep.equal(menu.items[3]);
+    expect(overflow.item.children[3]).to.deep.equal(menu.items[4]);
+  });
+
+  it('should hide overflow button and reset its items when all buttons fit', async () => {
+    menu.style.width = 'auto';
+    menu.notifyResize();
+    await nextRender(menu);
+    assertVisible(buttons[2]);
+    expect(buttons[2].disabled).to.not.be.true;
+    assertVisible(buttons[3]);
+    expect(buttons[3].disabled).to.not.be.true;
+    assertVisible(buttons[4]);
+    expect(buttons[4].disabled).to.be.true;
+    expect(overflow.hasAttribute('hidden')).to.be.true;
+    expect(overflow.item.children.length).to.equal(0);
+  });
+});
+
+describe('item components', () => {
+  let menu, buttons, overflow;
+
+  function makeComponent(id) {
+    const div = document.createElement('div');
+    div.style.width = '100px';
+    div.textContent = `Item ${id}`;
+    return div;
+  }
+
+  beforeEach(async () => {
+    menu = fixtureSync('<vaadin-menu-bar></vaadin-menu-bar>');
+    menu.items = [
+      { text: 'Item 1' },
+      { text: 'Item 2' },
+      { component: makeComponent('3') },
+      { text: 'Item 4 text', component: makeComponent('4') },
+      { text: 'Item 5', component: document.createElement('vaadin-context-menu-item') }
+    ];
+    await nextRender(menu);
+    buttons = menu._buttons;
+    overflow = buttons[buttons.length - 1];
+  });
+
+  it('should render the component inside the context-menu item', () => {
+    const item = buttons[2].firstChild;
+    expect(item).to.equal(buttons[2].item.component);
+    expect(item.localName).to.equal('vaadin-context-menu-item');
+    const div = item.firstChild;
+    expect(div).to.equal(menu.items[2].component);
+    expect(div.localName).to.equal('div');
+    expect(div.textContent).to.equal('Item 3');
+    expect(getComputedStyle(div).width).to.equal('100px');
+  });
+
+  it('should override the component text when defined on the item', () => {
+    const item = buttons[3].firstChild;
+    expect(item).to.equal(buttons[3].item.component);
+    expect(item.localName).to.equal('vaadin-context-menu-item');
+    const div = item.firstChild;
+    expect(div).to.equal(menu.items[3].component);
+    expect(div.localName).to.equal('div');
+    expect(div.textContent).to.equal('Item 4 text');
+    expect(getComputedStyle(div).width).to.equal('100px');
+  });
+
+  it('should render provided context-menu item as a component', () => {
+    expect(buttons[4].firstChild).to.equal(buttons[4].item.component);
+    expect(buttons[4].item.component).to.equal(menu.items[4].component);
+    expect(buttons[4].item.component.children.length).to.equal(0);
+    expect(buttons[4].item.component.textContent).to.equal('Item 5');
+  });
+
+  it('should teleport the same component to overflow sub-menu and back', async () => {
+    menu.style.width = '250px';
+    menu.notifyResize();
+    await nextRender(menu);
+    const subMenu = menu._subMenu;
+    overflow.click();
+    await nextRender(subMenu);
+    const listBox = subMenu.$.overlay.querySelector('vaadin-context-menu-list-box');
+    expect(listBox.items[0]).to.equal(buttons[2].item.component);
+    expect(listBox.items[0].firstChild).to.equal(menu.items[2].component);
+    expect(listBox.items[0].firstChild.localName).to.equal('div');
+    subMenu.close();
+    menu.style.width = 'auto';
+    menu.notifyResize();
+    await nextRender(menu);
+    const item = buttons[2].firstChild;
+    expect(item).to.equal(buttons[2].item.component);
+    expect(item.classList.contains('vaadin-menu-item')).to.be.false;
+  });
+
+  it('should close the overflow sub-menu on resize', async () => {
+    menu.style.width = '150px';
+    menu.notifyResize();
+    await nextRender(menu);
+    const subMenu = menu._subMenu;
+    overflow.click();
+    await nextRender(subMenu);
+    menu.style.width = '300px';
+    menu.notifyResize();
+    await nextRender(subMenu);
+    expect(subMenu.opened).to.be.false;
+  });
+
+  it('should set position and z-index on the item component to allow clicks', () => {
+    const item = buttons[2].firstChild;
+    const style = getComputedStyle(item);
+    expect(style.position).to.equal('relative');
+    expect(Number(style.zIndex)).to.equal(1);
+  });
+});

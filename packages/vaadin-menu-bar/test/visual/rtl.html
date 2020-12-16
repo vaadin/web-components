@@ -1,24 +1,13 @@
 <!DOCTYPE html>
 
 <head lang="en">
-  <meta charset="UTF-8">
-
-  <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
+  <meta charset="UTF-8" />
+  <title>RTL menu bar tests</title>
   <script>
     window.polymerSkipLoadingFontRoboto = true;
-
-    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
-    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-menu-bar.html">`);
-
-    window.addEventListener('WebComponentsReady', function() {
-      setTimeout(function() {
-        window.ShadyDOM && window.ShadyDOM.flush(); // Force DOM composition
-        window.webComponentsAreReady = true; // Checked in gemini before capture callback
-      });
-    });
   </script>
   <style>
-    #rtl-tests {
+    #tests {
       width: 500px;
       padding: 10px;
       position: absolute;
@@ -31,36 +20,37 @@
 </head>
 
 <body>
-
-  <div id="rtl-tests">
+  <div id="tests">
     <vaadin-menu-bar></vaadin-menu-bar>
   </div>
 
-  <script>
-    document.documentElement.setAttribute('dir', 'rtl');
+  <script type="module">
+    (async () => {
+      const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+      document.documentElement.setAttribute('dir', 'rtl');
 
-    const variant = window.location.search.replace(/.*variant=([-\w]+).*/, '$1') || '';
+      await import('../../theme/' + theme + '/vaadin-menu-bar.js');
 
-    const menu = document.querySelector('vaadin-menu-bar');
-    menu.setAttribute('theme', variant);
+      const menu = document.querySelector('vaadin-menu-bar');
 
-    menu.items = [
-      {text: 'Home'},
-      {text: 'Dashboard', disabled: true},
-      {
-        text: 'Reports',
-        children: [
-          {text: 'View Reports'},
-          {text: 'Generate Report'}
-        ]
-      },
-      {text: 'Help'}
-    ];
+      const variant = window.location.search.replace(/.*variant=([-\w]+).*/, '$1') || '';
+      menu.setAttribute('theme', variant);
 
-    // eslint-disable-next-line no-unused-vars
-    function openSubMenu() {
+      menu.items = [
+        { text: 'Home' },
+        { text: 'Dashboard', disabled: true },
+        {
+          text: 'Reports',
+          children: [{ text: 'View Reports' }, { text: 'Generate Report' }]
+        },
+        { text: 'Help' }
+      ];
+
       menu.shadowRoot.querySelectorAll('vaadin-menu-bar-button')[2].click();
-    }
-  </script>
 
+      window.requestAnimationFrame(() => {
+        document.getElementById('tests').dataset.ready = true;
+      });
+    })();
+  </script>
 </body>

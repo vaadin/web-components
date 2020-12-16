@@ -1,100 +1,60 @@
-gemini.suite('vaadin-menu-bar', function(rootSuite) {
-  function wait(actions, find) {
-    return actions
-      .waitForJSCondition(function(window) {
-        return window.webComponentsAreReady;
-      }, 80000);
-  }
+describe('vaadin-menu-bar', () => {
+  const locator = '#tests[data-ready]';
 
-  function goToAboutBlank(actions, find) {
-    // Firefox stops responding on socket after a test, workaround:
-    return actions.executeJS(function(window) {
-      window.location.href = 'about:blank'; // just go away, please!
-    });
-  }
-
-  rootSuite
-    .before(wait)
-    .after(goToAboutBlank);
-
-  ['lumo', 'material'].forEach(theme => {
-    gemini.suite(`${theme}-default-tests`, function(suite) {
-      suite
-        .setUrl(`default.html?theme=${theme}`)
-        .setCaptureElements('#default-tests')
-        .capture('default', function(actions) {
-          actions.executeJS(function(window) {
-            window.openSubMenu();
-          });
-        });
+  ['lumo', 'material'].forEach((theme) => {
+    it(`${theme}-default`, function () {
+      return this.browser
+        .url(`default.html?theme=${theme}`)
+        .waitForVisible(locator, 15000)
+        .assertView(`${theme}-default`, locator);
     });
 
-    gemini.suite(`${theme}-focused-tests`, function(suite) {
-      suite
-        .setUrl(`focused.html?theme=${theme}`)
-        .setCaptureElements('#focused-tests')
-        .capture('focused');
+    it(`${theme}-focused`, function () {
+      return this.browser
+        .url(`focused.html?theme=${theme}`)
+        .waitForVisible(locator, 15000)
+        .assertView(`${theme}-focused`, locator);
     });
 
-    gemini.suite(`${theme}-icons-tests`, function(suite) {
-      suite
-        .setUrl(`icons.html?theme=${theme}`)
-        .setCaptureElements('#icons-tests')
-        .capture('icons', function(actions) {
-          actions.executeJS(function(window) {
-            window.openSubMenu();
-          });
-        });
+    it(`${theme}-icons`, function () {
+      return this.browser
+        .url(`icons.html?theme=${theme}`)
+        .waitForVisible(locator, 15000)
+        .assertView(`${theme}-icons`, locator);
     });
 
     if (theme === 'material') {
-      ['outlined', 'contained', 'text'].forEach(variant => {
-        gemini.suite(`${theme}-${variant}-tests`, function(suite) {
-          suite
-            .setUrl(`theme.html?theme=${theme}&variant=${variant}`)
-            .setCaptureElements(`#theme-tests`)
-            .capture(`${variant}`, function(actions) {
-              actions.executeJS(function(window) {
-                window.openSubMenu();
-              });
-            });
+      ['outlined', 'contained', 'text'].forEach((variant) => {
+        it(`${theme}-${variant}`, function () {
+          return this.browser
+            .url(`theme.html?theme=${theme}&variant=${variant}`)
+            .waitForVisible(locator, 15000)
+            .assertView(`${theme}-${variant}`, locator);
         });
 
-        gemini.suite(`${theme}-${variant}-rtl-tests`, function(suite) {
-          suite
-            .setUrl(`rtl.html?theme=${theme}&variant=${variant}`)
-            .setCaptureElements(`#rtl-tests`)
-            .capture(`${variant}`, function(actions) {
-              actions.executeJS(function(window) {
-                window.openSubMenu();
-              });
-            });
+        it(`${theme}-${variant}-rtl`, function () {
+          return this.browser
+            .url(`rtl.html?theme=${theme}&variant=${variant}`)
+            .waitForVisible(locator, 15000)
+            .assertView(`${theme}-${variant}-rtl`, locator);
         });
       });
     }
 
     if (theme === 'lumo') {
-      ['primary', 'secondary', 'tertiary', 'tertiary-inline', 'small'].forEach(variant => {
-        gemini.suite(`${theme}-${variant}-tests`, function(suite) {
-          suite
-            .setUrl(`theme.html?theme=${theme}&variant=${variant}`)
-            .setCaptureElements(`#theme-tests`)
-            .capture(`${variant}`, function(actions) {
-              actions.executeJS(function(window) {
-                window.openSubMenu();
-              });
-            });
+      ['primary', 'secondary', 'tertiary', 'tertiary-inline', 'small'].forEach((variant) => {
+        it(`${theme}-${variant}`, function () {
+          return this.browser
+            .url(`theme.html?theme=${theme}&variant=${variant}`)
+            .waitForVisible(locator, 15000)
+            .assertView(`${theme}-${variant}`, locator);
         });
 
-        gemini.suite(`${theme}-${variant}-rtl-tests`, function(suite) {
-          suite
-            .setUrl(`rtl.html?theme=${theme}&variant=${variant}`)
-            .setCaptureElements(`#rtl-tests`)
-            .capture(`${variant}`, function(actions) {
-              actions.executeJS(function(window) {
-                window.openSubMenu();
-              });
-            });
+        it(`${theme}-${variant}-rtl`, function () {
+          return this.browser
+            .url(`rtl.html?theme=${theme}&variant=${variant}`)
+            .waitForVisible(locator, 15000)
+            .assertView(`${theme}-${variant}-rtl`, locator);
         });
       });
     }
