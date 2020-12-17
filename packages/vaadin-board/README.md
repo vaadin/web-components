@@ -115,6 +115,6 @@ We are using [ESLint](http://eslint.org/) for linting JavaScript code. You can c
 
 ## License
 
-Vaadin Board is distributed under [Commercial Vaadin Add-on License version 3](http://vaadin.com/license/cval-3) (CVALv3). For license terms, see LICENSE.txt.
+Vaadin Board is distributed under [Commercial Vaadin Developer License 4.0](https://vaadin.com/license/cvdl-4.0) (CVDLv4). For license terms, see LICENSE.txt.
 
 Vaadin collects development time usage statistics to improve this product. For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.
