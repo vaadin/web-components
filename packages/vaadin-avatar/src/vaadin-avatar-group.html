@@ -111,6 +111,7 @@ This program is available under Apache License Version 2.0, available at https:/
   <script>
     (function() {
 
+      const MINIMUM_DISPLAYED_AVATARS = 2;
 
       /**
        * `<vaadin-avatar-group>` is a Web Component providing avatar group displaying functionality.
@@ -434,7 +435,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         /** @private */
         __getMax(maxItemsVisible) {
-          return Math.max(maxItemsVisible, 2);
+          return Math.max(maxItemsVisible, MINIMUM_DISPLAYED_AVATARS);
         }
 
         /** @private */
@@ -547,8 +548,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
         /** @private **/
         __calculateAvatarsFitWidth() {
-          if (!this.shadowRoot || this._avatars.length < 2) {
-            return;
+          if (!this.shadowRoot || this._avatars.length < MINIMUM_DISPLAYED_AVATARS) {
+            return MINIMUM_DISPLAYED_AVATARS;
           }
 
           const avatars = this._avatars;

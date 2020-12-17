@@ -164,6 +164,19 @@
           expect(group.$.overflow.hasAttribute('hidden')).to.be.true;
         });
 
+        // https://github.com/vaadin/vaadin-avatar/issues/83
+        it('should show only maxItemsVisible when setting items after being empty', async() => {
+          const maxItemsVisible = 3;
+          group.maxItemsVisible = maxItemsVisible;
+          await nextRender(group);
+          const items = group.items;
+          group.items = [];
+          group.items = items;
+          await nextRender(group);
+          const renderedElements = group.shadowRoot.querySelectorAll('vaadin-avatar');
+          expect(renderedElements.length).to.equal(maxItemsVisible);
+        });
+
         describe('width is set', () => {
           beforeEach(async() => {
             group.maxItemsVisible = 4;
