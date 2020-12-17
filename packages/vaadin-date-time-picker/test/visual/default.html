@@ -1,15 +1,10 @@
 <!DOCTYPE html>
 
 <head lang="en">
-  <meta charset="UTF-8">
-
-  <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <meta charset="UTF-8" />
+  <title>Date time picker tests</title>
   <script>
-    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
-    document.write('<link rel="import" href="../../theme/' + theme + '/vaadin-date-time-picker.html">');
-
-    const dir = window.location.search.replace(/.*dir=(\w+).*/, '$1') || 'ltr';
-    document.documentElement.setAttribute('dir', dir);
+    window.polymerSkipLoadingFontRoboto = true;
   </script>
   <style>
     vaadin-date-time-picker {
@@ -19,27 +14,39 @@
 </head>
 
 <body>
-
-  <div id="default-tests" style="padding: 10px; text-align: end; width: 500px">
+  <div id="tests" style="padding: 10px; text-align: end; width: 500px">
     Plain
     <vaadin-date-time-picker></vaadin-date-time-picker>
 
-    <br>Value
+    <br />Value
     <vaadin-date-time-picker value="2017-10-20T12:00"></vaadin-date-time-picker>
 
-    <br>Disabled
+    <br />Disabled
     <vaadin-date-time-picker disabled label="Label" value="2019-09-16T15:00"></vaadin-date-time-picker>
 
-    <br>Read-only
+    <br />Read-only
     <vaadin-date-time-picker readonly label="Label" value="2019-09-16T15:00"></vaadin-date-time-picker>
 
-    <br>Helper text
+    <br />Helper text
     <vaadin-date-time-picker label="Foo" value="2019-09-16T15:00" helper-text="Bar"></vaadin-date-time-picker>
 
-    <br>Slotted helper
+    <br />Slotted helper
     <vaadin-date-time-picker>
       <span slot="helper">Bar</span>
     </vaadin-date-time-picker>
   </div>
 
+  <script type="module">
+    (async () => {
+      const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+      const dir = window.location.search.replace(/.*dir=(\w+).*/, '$1') || 'ltr';
+      document.documentElement.setAttribute('dir', dir);
+
+      await import('../../theme/' + theme + '/vaadin-date-time-picker.js');
+
+      window.requestAnimationFrame(() => {
+        document.getElementById('tests').dataset.ready = true;
+      });
+    })();
+  </script>
 </body>

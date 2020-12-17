@@ -1,36 +1,43 @@
 <!DOCTYPE html>
 
 <head lang="en">
-  <meta charset="UTF-8">
-
-  <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <meta charset="UTF-8" />
+  <title>Date time picker alignment tests</title>
   <script>
-    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
-    document.write(`
-      <link rel="import" href="../../theme/${theme}/vaadin-date-time-picker.html">
-      <link rel="import" href="../../../vaadin-text-field/theme/${theme}/vaadin-text-field.html">
-      <link rel="import" href="../../../vaadin-date-picker/theme/${theme}/vaadin-date-picker.html">
-    `);
-
-    const dir = window.location.search.replace(/.*dir=(\w+).*/, '$1') || 'ltr';
-    document.documentElement.setAttribute('dir', dir);
+    window.polymerSkipLoadingFontRoboto = true;
   </script>
 </head>
 
 <body>
-
-  <div id="alignment-tests" style="padding: 10px;">
+  <div id="tests" style="padding: 10px">
     Inline <vaadin-date-time-picker value="2017-10-20T12:00"></vaadin-date-time-picker>
     <vaadin-date-picker value="2017-10-20"></vaadin-date-picker>
     <vaadin-text-field value="text field"></vaadin-text-field>
 
-    <br>Labels <vaadin-date-time-picker value="2017-10-20T12:00"></vaadin-date-time-picker>
+    <br />Labels <vaadin-date-time-picker value="2017-10-20T12:00"></vaadin-date-time-picker>
     <vaadin-date-picker label="Date picker"></vaadin-date-picker>
     <vaadin-text-field value="Foo" label="Text field"></vaadin-text-field>
 
-    <br>Error <vaadin-date-time-picker invalid error-message="Invalid"></vaadin-date-time-picker>
+    <br />Error <vaadin-date-time-picker invalid error-message="Invalid"></vaadin-date-time-picker>
     <vaadin-date-picker invalid error-message="Invalid"></vaadin-date-picker>
     <vaadin-text-field invalid error-message="Invalid" label="Text field"></vaadin-text-field>
   </div>
 
+  <script type="module">
+    (async () => {
+      const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+      const dir = window.location.search.replace(/.*dir=(\w+).*/, '$1') || 'ltr';
+      document.documentElement.setAttribute('dir', dir);
+
+      await Promise.all([
+        import('@vaadin/vaadin-date-picker/theme/' + theme + '/vaadin-date-picker.js'),
+        import('@vaadin/vaadin-time-picker/theme/' + theme + '/vaadin-time-picker.js'),
+        import('../../theme/' + theme + '/vaadin-date-time-picker.js')
+      ]);
+
+      window.requestAnimationFrame(() => {
+        document.getElementById('tests').dataset.ready = true;
+      });
+    })();
+  </script>
 </body>

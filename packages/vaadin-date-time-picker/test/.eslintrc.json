@@ -1,18 +1,5 @@
 {
-  "rules": {
-    "no-undef": 0,
-    "no-unused-vars": 0
-  },
-  "globals": {
-    "WCT": false,
-    "describe": false,
-    "before": false,
-    "beforeEach": false,
-    "afterEach": false,
-    "fixture": false,
-    "it": false,
-    "expect": false,
-    "gemini": false,
-    "sinon": false
+  "env": {
+    "mocha": true
   }
 }

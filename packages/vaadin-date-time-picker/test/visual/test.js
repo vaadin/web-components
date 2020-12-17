@@ -1,49 +1,34 @@
-gemini.suite('vaadin-date-time-picker', function(rootSuite) {
-  function wait(actions, find) {
-    actions.wait(15000);
-  }
+describe('vaadin-date-time-picker', () => {
+  const locator = '#tests[data-ready]';
 
-  function goToAboutBlank(actions, find) {
-    // Firefox stops responding on socket after a test, workaround:
-    return actions.executeJS(function(window) {
-      window.location.href = 'about:blank'; // just go away, please!
+  ['lumo', 'material'].forEach((theme) => {
+    ['ltr', 'rtl'].forEach((dir) => {
+      it(`${theme}-default-${dir}`, function () {
+        return this.browser
+          .url(`default.html?theme=${theme}&dir=${dir}`)
+          .waitForVisible(locator, 15000)
+          .assertView(`${theme}-default-${dir}`, locator);
+      });
+
+      it(`${theme}-alignment-${dir}`, function () {
+        return this.browser
+          .url(`alignment.html?theme=${theme}&dir=${dir}`)
+          .waitForVisible(locator, 15000)
+          .assertView(`${theme}-alignment-${dir}`, locator);
+      });
     });
-  }
 
-  rootSuite
-    .before(wait)
-    .after(goToAboutBlank);
-
-  ['lumo', 'material'].forEach(theme => {
-    ['ltr', 'rtl'].forEach(direction => {
-      gemini.suite(`default-tests-${theme}-${direction}`, function(suite) {
-        suite
-          .setUrl(`/default.html?theme=${theme}&dir=${direction}`)
-          .setCaptureElements('#default-tests')
-          .capture('default');
-      });
-
-      gemini.suite(`flex-behaviour-${theme}-${direction}`, function(suite) {
-        suite
-          .setUrl(`/flex-behaviour.html?theme=${theme}&dir=${direction}`)
-          .setCaptureElements('#flex-behaviour-tests')
-          .capture('default')
-          .capture('small-container', function(actions) {
-            actions.executeJS(function(window) {
-              const container = window.document.querySelector('#flex-behaviour-tests');
-              container.style.display = 'block';
-              container.style.width = '235px';
-            });
-          });
-      });
-
-      gemini.suite(`alignment-${theme}-${direction}`, function(suite) {
-        suite
-          .setUrl(`/alignment.html?theme=${theme}&dir=${direction}`)
-          .setCaptureElements('#alignment-tests')
-          .capture('default');
-      });
+    it(`${theme}-flex-behaviour`, function () {
+      return this.browser
+        .url(`flex-behaviour.html?theme=${theme}`)
+        .waitForVisible(locator, 15000)
+        .assertView(`${theme}-flex-normal`, locator)
+        .execute(() => {
+          const container = window.document.querySelector('#tests');
+          container.style.display = 'block';
+          container.style.width = '235px';
+        })
+        .assertView(`${theme}-flex-small`, locator);
     });
   });
-
 });

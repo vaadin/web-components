@@ -1,38 +1,42 @@
 <!DOCTYPE html>
 
 <head lang="en">
-  <meta charset="UTF-8">
-
-  <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <meta charset="UTF-8" />
+  <title>Date time picker flex tests</title>
   <script>
-    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
-    document.write('<link rel="import" href="../../theme/' + theme + '/vaadin-date-time-picker.html">');
-
-    const dir = window.location.search.replace(/.*dir=(\w+).*/, '$1') || 'ltr';
-    document.documentElement.setAttribute('dir', dir);
+    window.polymerSkipLoadingFontRoboto = true;
   </script>
 </head>
 
 <body>
-
-  <div id="flex-behaviour-tests" style="padding: 10px;">
+  <div id="tests" style="padding: 10px">
     Default
-    <br><vaadin-date-time-picker value="2017-10-20T12:00"></vaadin-date-time-picker>
+    <br /><vaadin-date-time-picker value="2017-10-20T12:00"></vaadin-date-time-picker>
 
-    <br>Default (slotted)
-    <br><vaadin-date-time-picker value="2017-10-20T12:00">
+    <br />Default (slotted) <br /><vaadin-date-time-picker value="2017-10-20T12:00">
       <vaadin-date-time-picker-date-picker slot="date-picker"></vaadin-date-time-picker-date-picker>
       <vaadin-date-time-picker-time-picker slot="time-picker"></vaadin-date-time-picker-time-picker>
     </vaadin-date-time-picker>
 
-    <br>Full width
-    <vaadin-date-time-picker value="2017-10-20T12:00" style="width: 100%;"></vaadin-date-time-picker>
+    <br />Full width
+    <vaadin-date-time-picker value="2017-10-20T12:00" style="width: 100%"></vaadin-date-time-picker>
 
-    <br>Full width (slotted)
-    <vaadin-date-time-picker value="2017-10-20T12:00" style="width: 100%;">
+    <br />Full width (slotted)
+    <vaadin-date-time-picker value="2017-10-20T12:00" style="width: 100%">
       <vaadin-date-time-picker-date-picker slot="date-picker"></vaadin-date-time-picker-date-picker>
       <vaadin-date-time-picker-time-picker slot="time-picker"></vaadin-date-time-picker-time-picker>
     </vaadin-date-time-picker>
   </div>
 
+  <script type="module">
+    (async () => {
+      const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+
+      await import('../../theme/' + theme + '/vaadin-date-time-picker.js');
+
+      window.requestAnimationFrame(() => {
+        document.getElementById('tests').dataset.ready = true;
+      });
+    })();
+  </script>
 </body>
