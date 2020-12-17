@@ -132,6 +132,6 @@ We are using [ESLint](http://eslint.org/) for linting JavaScript code. You can c
 ## License
 
 _Vaadin Charts_ is distributed under the terms of
-[Commercial Vaadin Add-On License version 3.0](https://vaadin.com/license/cval-3) ("CVALv3"). A copy of the license is included as ```LICENSE.txt``` in this software package.
+[Commercial Vaadin Developer License 4.0](https://vaadin.com/license/cvdl-4.0) ("CVDLv4"). A copy of the license is included as ```LICENSE.txt``` in this software package.
 
 Vaadin collects development time usage statistics to improve this product. For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.
