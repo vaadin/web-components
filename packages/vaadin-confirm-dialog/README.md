@@ -116,6 +116,6 @@ We are using [ESLint](http://eslint.org/) for linting JavaScript code. You can c
 
 ## License
 
-Commercial Vaadin Add-on License version 3 (CVALv3). For license terms, see LICENSE.
+Commercial Vaadin Developer License 4.0 (CVDLv4). For license terms, see LICENSE.
 
 Vaadin collects development time usage statistics to improve this product. For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.
