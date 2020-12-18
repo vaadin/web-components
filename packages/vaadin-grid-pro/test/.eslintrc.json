@@ -1,29 +1,5 @@
 {
-  "globals": {
-    "WCT": false,
-    "describe": false,
-    "beforeEach": false,
-    "fixture": false,
-    "it": false,
-    "expect": false,
-    "gemini": false,
-    "sinon": false,
-    "MockInteractions": false,
-    "isV2": false,
-    "infiniteDataProvider": false,
-    "flushGrid": false,
-    "dragStart": false,
-    "dragOver": false,
-    "dragAndDropOver": false,
-    "fire": false,
-    "flush": false,
-    "getCellContent": false,
-    "getCellEditor": false,
-    "getContainerCell": false,
-    "getContainerCellContent": false,
-    "getNativeInput": false,
-    "getRows": false,
-    "getRowCells": false,
-    "flatMap": false
+  "env": {
+    "mocha": true
   }
 }

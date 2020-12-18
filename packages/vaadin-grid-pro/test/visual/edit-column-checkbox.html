@@ -1,46 +1,56 @@
 <!DOCTYPE html>
 
 <head lang="en">
-  <meta charset="UTF-8">
-  <title></title>
-  <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <meta charset="UTF-8" />
+  <title>Checkbox edit column tests</title>
   <script>
-    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
-    document.write('<link rel="import" href="../../theme/' + theme + '/vaadin-grid-pro.html">');
-    document.write('<link rel="import" href="../../theme/' + theme + '/vaadin-grid-pro-edit-column.html">');
+    window.polymerSkipLoadingFontRoboto = true;
   </script>
-
-  <script src="../../../vaadin-grid/demo/grid-demo-data.js"></script>
-  <link href="../helpers.html" rel="import">
 </head>
 
 <body>
-<style media="screen">
-  .capture-block {
-    display: inline-block;
-    width: 200px;
-  }
+  <style>
+    #tests {
+      display: inline-block;
+      width: 200px;
+    }
 
-  vaadin-grid-pro {
-    height: 100px;
-  }
-</style>
+    vaadin-grid-pro {
+      height: 100px;
+    }
+  </style>
 
-<div class="capture-block" id="edit-column-checkbox">
-  <vaadin-grid-pro>
-    <vaadin-grid-pro-edit-column path="married" editor-type="checkbox"></vaadin-grid-pro-edit-column>
-  </vaadin-grid-pro>
-  <script>
-    window.addEventListener('WebComponentsReady', function() {
+  <div id="tests">
+    <vaadin-grid-pro>
+      <vaadin-grid-pro-edit-column path="married" editor-type="checkbox"></vaadin-grid-pro-edit-column>
+    </vaadin-grid-pro>
+  </div>
+
+  <script type="module">
+    import { getContainerCell } from '../helpers.js';
+    import { users } from './helpers/users.js';
+
+    (async () => {
+      const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+
+      await Promise.all([
+        import('../../theme/' + theme + '/vaadin-grid-pro-edit-column.js'),
+        import('../../theme/' + theme + '/vaadin-grid-pro.js')
+      ]);
+
       const grid = document.querySelector('vaadin-grid-pro');
-      grid.items = Vaadin.GridDemo.users.map(function(item) {
+      grid.items = users.map((item) => {
         const user = Object.assign({}, item);
         user.married = item.name.title === 'mrs';
         return user;
       });
+
       const cell = getContainerCell(grid.$.items, 0, 0);
-      cell._content.dispatchEvent(new CustomEvent('dblclick', {bubbles: true}));
-      window.webComponentsAreReady = true;
-    });
+      cell._content.dispatchEvent(new CustomEvent('dblclick', { bubbles: true }));
+
+      window.requestAnimationFrame(() => {
+        document.getElementById('tests').dataset.ready = true;
+      });
+    })();
   </script>
-</div>
+</body>
