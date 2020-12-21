@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 
 <head lang="en">
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-  <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <title>CRUD tests</title>
   <script>
+    window.polymerSkipLoadingFontRoboto = true;
     // mimic flow production mode
     window.Vaadin = {
       Flow: {
@@ -15,12 +16,34 @@
         }
       }
     };
-    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
-    document.write('<link rel="import" href="../../theme/' + theme + '/vaadin-crud.html">');
   </script>
 </head>
 
-<body style="height: 100vh;">
-  <vaadin-crud style="height: 50vh" items='[{"name": {"first": "Susan", "last": "Smith"}}]' edited-item='{}'>
-  </vaadin-crud>
+<body>
+  <style>
+    body {
+      height: 100vh;
+    }
+
+    vaadin-crud {
+      height: 50vh;
+    }
+  </style>
+  <vaadin-crud></vaadin-crud>
+
+  <script type="module">
+    (async () => {
+      const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+
+      await import('../../theme/' + theme + '/vaadin-crud.js');
+
+      const crud = document.querySelector('vaadin-crud');
+      crud.items = [{ name: { first: 'Susan', last: 'Smith' } }];
+      crud.editedItem = {};
+
+      window.requestAnimationFrame(() => {
+        crud.dataset.ready = true;
+      });
+    })();
+  </script>
 </body>

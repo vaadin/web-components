@@ -1,17 +1,5 @@
 {
-  "globals": {
-    "WCT": false,
-    "describe": false,
-    "beforeEach": false,
-    "afterEach": false,
-    "fixture": false,
-    "it": false,
-    "expect": false,
-    "gemini": false,
-    "sinon": false,
-    "listenOnce": false,
-    "getHeaderCellContent": false,
-    "getBodyCellContent": false,
-    "flushGrid": false
+  "env": {
+    "mocha": true
   }
 }

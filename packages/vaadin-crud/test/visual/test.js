@@ -1,45 +1,28 @@
-gemini.suite('vaadin-crud', function(rootSuite) {
-  function wait(actions, find) {
-    return actions
-      .waitForJSCondition(function(window) {
-        return !!(window.WebComponents && window.WebComponents.ready);
-      }, 15000);
-  }
+describe('vaadin-crud', () => {
+  const locator = 'vaadin-crud[data-ready]';
 
-  function goToAboutBlank(actions, find) {
-    // Firefox stops responding on socket after a test, workaround:
-    return actions.executeJS(function(window) {
-      window.location.href = 'about:blank'; // just go away, please!
-    });
-  }
-
-  rootSuite
-    .before(wait)
-    .after(goToAboutBlank);
-
-  ['lumo', 'material'].forEach(theme => {
-    gemini.suite(`default-tests-${theme}`, function(suite) {
-      suite
-        .setUrl(`default.html?theme=${theme}`)
-        .setCaptureElements('body')
-        .capture('vaadin-crud');
+  ['lumo', 'material'].forEach((theme) => {
+    it(`${theme}-default`, function () {
+      return this.browser
+        .url(`default.html?theme=${theme}`)
+        .waitForVisible(locator, 15000)
+        .assertView(`${theme}-default`, 'body');
     });
 
-    gemini.suite(`editor-bottom-tests-${theme}`, function(suite) {
-      suite
-        .setUrl(`editor-bottom.html?theme=${theme}`)
-        .setCaptureElements('vaadin-crud')
-        .capture('vaadin-crud');
+    it(`${theme}-editor-bottom`, function () {
+      return this.browser
+        .url(`editor-bottom.html?theme=${theme}`)
+        .waitForVisible(locator, 15000)
+        .assertView(`${theme}-editor-bottom`, locator);
     });
 
-    ['ltr', 'rtl'].forEach(direction => {
-      gemini.suite(`editor-aside-tests-${theme}-${direction}`, function(suite) {
-        suite
-          .setUrl(`editor-aside.html?theme=${theme}&dir=${direction}`)
-          .setCaptureElements('vaadin-crud')
-          .capture('vaadin-crud');
+    ['ltr', 'rtl'].forEach((dir) => {
+      it(`${theme}-aside-${dir}`, function () {
+        return this.browser
+          .url(`editor-aside.html?theme=${theme}&dir=${dir}`)
+          .waitForVisible(locator, 15000)
+          .assertView(`${theme}-editor-aside-${dir}`, locator);
       });
     });
   });
-
 });
