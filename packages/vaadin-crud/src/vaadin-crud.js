@@ -252,7 +252,7 @@ class CrudElement extends ElementMixin(ThemableMixin(PolymerElement)) {
   }
 
   static get version() {
-    return '1.3.0';
+    return '2.0.0-alpha1';
   }
 
   static get properties() {
