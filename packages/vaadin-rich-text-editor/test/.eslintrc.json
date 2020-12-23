@@ -1,15 +1,5 @@
 {
-  "globals": {
-    "WCT": false,
-    "describe": false,
-    "beforeEach": false,
-    "after": false,
-    "fixture": false,
-    "it": false,
-    "expect": false,
-    "gemini": false,
-    "sinon": false,
-    "MockInteractions": false,
-    "createImage": false
+  "env": {
+    "mocha": true
   }
 }

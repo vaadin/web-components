@@ -1,0 +1,40 @@
+name: tests
+
+on: [pull_request]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v1
+      with:
+        node-version: 12
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Check version
+      run: npm run check-version
+
+    - name: Lint JavaScript
+      run: npm run lint:js
+
+    - name: Lint CSS
+      run: npm run lint:css
+
+  unit-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v1
+      with:
+        node-version: 12
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Unit tests
+      run: npm test
