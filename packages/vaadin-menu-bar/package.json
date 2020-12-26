@@ -1,0 +1,44 @@
+{
+  "name": "@vaadin/vaadin-menu-bar",
+  "version": "2.0.0-alpha1",
+  "description": "vaadin-menu-bar",
+  "main": "vaadin-menu-bar.js",
+  "module": "vaadin-menu-bar.js",
+  "repository": "vaadin/vaadin-menu-bar",
+  "keywords": [
+    "Vaadin",
+    "vaadin-menu-bar",
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
+  "author": "Vaadin Ltd",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/vaadin/vaadin-menu-bar/issues"
+  },
+  "homepage": "https://vaadin.com/components",
+  "files": [
+    "vaadin-*.d.ts",
+    "vaadin-*.js",
+    "src",
+    "theme"
+  ],
+  "dependencies": {
+    "@polymer/polymer": "^3.0.0",
+    "@polymer/iron-resizable-behavior": "^3.0.0",
+    "@vaadin/vaadin-themable-mixin": "^1.6.2",
+    "@vaadin/vaadin-element-mixin": "^2.4.1",
+    "@vaadin/vaadin-button": "^2.4.0",
+    "@vaadin/vaadin-context-menu": "^5.0.0-alpha1",
+    "@vaadin/vaadin-lumo-styles": "^1.6.1",
+    "@vaadin/vaadin-material-styles": "^1.3.2"
+  },
+  "devDependencies": {
+    "@esm-bundle/chai": "^4.1.5",
+    "@open-wc/testing-helpers": "^1.8.12",
+    "@polymer/iron-test-helpers": "^3.0.0",
+    "@vaadin/vaadin-icons": "^4.3.1",
+    "sinon": "^9.2.1"
+  }
+}

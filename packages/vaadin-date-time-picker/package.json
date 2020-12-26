@@ -1,0 +1,42 @@
+{
+  "name": "@vaadin/vaadin-date-time-picker",
+  "version": "2.0.0-alpha1",
+  "description": "vaadin-date-time-picker",
+  "main": "vaadin-date-time-picker.js",
+  "module": "vaadin-date-time-picker.js",
+  "repository": "vaadin/vaadin-date-time-picker",
+  "keywords": [
+    "Vaadin",
+    "vaadin-date-time-picker",
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
+  "author": "Vaadin Ltd",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/vaadin/vaadin-date-time-picker/issues"
+  },
+  "homepage": "https://vaadin.com/components",
+  "files": [
+    "vaadin-*.d.ts",
+    "vaadin-*.js",
+    "src",
+    "theme"
+  ],
+  "dependencies": {
+    "@polymer/polymer": "^3.0.0",
+    "@vaadin/vaadin-themable-mixin": "^1.6.1",
+    "@vaadin/vaadin-element-mixin": "^2.4.1",
+    "@vaadin/vaadin-lumo-styles": "^1.6.1",
+    "@vaadin/vaadin-material-styles": "^1.3.2",
+    "@vaadin/vaadin-date-picker": "^5.0.0-alpha1",
+    "@vaadin/vaadin-time-picker": "^3.0.0-alpha1",
+    "@vaadin/vaadin-custom-field": "^2.0.0-alpha1"
+  },
+  "devDependencies": {
+    "@esm-bundle/chai": "^4.1.5",
+    "@open-wc/testing-helpers": "^1.8.12",
+    "sinon": "^9.2.1"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "name": "@vaadin/vaadin-context-menu",
+  "version": "5.0.0-alpha1",
+  "description": "Web Component for showing context dependent items for any element on the page",
+  "main": "vaadin-context-menu.js",
+  "module": "vaadin-context-menu.js",
+  "repository": "vaadin/vaadin-context-menu",
+  "keywords": [
+    "Vaadin",
+    "context menu",
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
+  "author": "Vaadin Ltd",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/vaadin/vaadin-context-menu/issues"
+  },
+  "homepage": "https://vaadin.com/components",
+  "files": [
+    "vaadin-*.d.ts",
+    "vaadin-*.js",
+    "src",
+    "theme"
+  ],
+  "dependencies": {
+    "@polymer/polymer": "^3.0.0",
+    "@polymer/iron-media-query": "^3.0.0",
+    "@vaadin/vaadin-themable-mixin": "^1.6.2",
+    "@vaadin/vaadin-overlay": "^3.5.0",
+    "@vaadin/vaadin-lumo-styles": "^1.6.1",
+    "@vaadin/vaadin-material-styles": "^1.3.2",
+    "@vaadin/vaadin-element-mixin": "^2.4.1",
+    "@vaadin/vaadin-item": "^3.0.0-alpha1",
+    "@vaadin/vaadin-list-box": "^2.0.0-alpha1"
+  },
+  "devDependencies": {
+    "@esm-bundle/chai": "^4.1.5",
+    "@open-wc/testing-helpers": "^1.8.12",
+    "@polymer/iron-test-helpers": "^3.0.0",
+    "sinon": "^9.2.1"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "name": "@vaadin/vaadin-time-picker",
+  "version": "3.0.0-alpha1",
+  "description": "vaadin-time-picker",
+  "main": "vaadin-time-picker.js",
+  "module": "vaadin-time-picker.js",
+  "keywords": [
+    "Vaadin",
+    "vaadin-time-picker",
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
+  "repository": "vaadin/vaadin-time-picker",
+  "author": "Vaadin Ltd",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/vaadin/vaadin-time-picker/issues"
+  },
+  "homepage": "https://vaadin.com/components",
+  "files": [
+    "vaadin-*.d.ts",
+    "vaadin-*.js",
+    "src",
+    "theme"
+  ],
+  "dependencies": {
+    "@polymer/polymer": "^3.0.0",
+    "@vaadin/vaadin-themable-mixin": "^1.6.2",
+    "@vaadin/vaadin-element-mixin": "^2.4.1",
+    "@vaadin/vaadin-lumo-styles": "^1.6.1",
+    "@vaadin/vaadin-material-styles": "^1.3.2",
+    "@vaadin/vaadin-text-field": "^3.0.0-alpha1",
+    "@vaadin/vaadin-combo-box": "^6.0.0-alpha1",
+    "@vaadin/vaadin-control-state-mixin": "^2.2.2"
+  },
+  "devDependencies": {
+    "@esm-bundle/chai": "^4.1.5",
+    "@open-wc/testing-helpers": "^1.8.0",
+    "@polymer/iron-test-helpers": "^3.0.0",
+    "sinon": "^9.2.0"
+  }
+}
