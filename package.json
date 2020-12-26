@@ -1,0 +1,17 @@
+{
+  "name": "test-script",
+  "private": true,
+  "author": "Vaadin Ltd",
+  "license": "Apache-2.0",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "test": "web-test-runner packages/**/test/*.test.js --coverage"
+  },
+  "devDependencies": {
+    "@web/test-runner": "^0.11.4",
+    "jsonfile": "^6.1.0",
+    "lerna": "^3.22.1"
+  }
+}
