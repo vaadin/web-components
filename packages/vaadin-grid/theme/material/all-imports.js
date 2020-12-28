@@ -1,0 +1,11 @@
+import './vaadin-grid-column-group.js';
+import './vaadin-grid-column.js';
+import './vaadin-grid-filter.js';
+import './vaadin-grid-filter-column.js';
+import './vaadin-grid-selection-column.js';
+import './vaadin-grid-sorter.js';
+import './vaadin-grid-sort-column.js';
+import './vaadin-grid-tree-toggle.js';
+import './vaadin-grid-tree-column.js';
+import './vaadin-grid.js';
+import '../../src/all-imports.js';
