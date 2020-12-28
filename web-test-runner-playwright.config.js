@@ -11,7 +11,7 @@ module.exports = {
   browserStartTimeout: 60000, // default 30000
   testsStartTimeout: 60000, // default 10000
   testsFinishTimeout: 60000, // default 20000
-  browsers: [playwrightLauncher({ product: 'firefox', concurrency: 1 })],
+  browsers: [playwrightLauncher({ product: 'firefox' })],
   testFramework: {
     config: {
       ui: 'bdd',
