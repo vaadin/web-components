@@ -112,7 +112,7 @@ describe('checkbox', () => {
   });
 
   it('native checkbox should have the `presentation` role', () => {
-    expect(checkbox.getAttribute('role')).to.be.eql('checkbox');
+    expect(nativeCheckbox.getAttribute('role')).to.be.eql('presentation');
   });
 
   it('host should have the `checkbox` role', () => {
