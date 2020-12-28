@@ -103,21 +103,6 @@ describe('checkbox', () => {
     expect(checkbox.indeterminate).to.be.eql(false);
   });
 
-  it('should set aria-checked to "true" when checked', () => {
-    checkbox.checked = true;
-    expect(checkbox.getAttribute('aria-checked')).to.be.eql('true');
-  });
-
-  it('should set aria-checked to "false" when unchecked', () => {
-    checkbox.checked = false;
-    expect(checkbox.getAttribute('aria-checked')).to.be.eql('false');
-  });
-
-  it('should set aria-checked to "mixed" when indeterminate', () => {
-    checkbox.indeterminate = true;
-    expect(checkbox.getAttribute('aria-checked')).to.be.eql('mixed');
-  });
-
   it('should set indeterminate to false when clicked the first time', () => {
     checkbox.indeterminate = true;
 
