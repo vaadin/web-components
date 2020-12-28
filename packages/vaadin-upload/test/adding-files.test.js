@@ -34,7 +34,9 @@ describe('file list', () => {
     });
   });
 
-  describe('with add button', () => {
+  const isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
+  (isFirefox ? describe.skip : describe)('with add button', () => {
+  
     it('should open file dialog by click', () => {
       // This test checks if the 'click' event is synchronously dispatched
       // on the hidden file input when user clicks Add Files button. The
