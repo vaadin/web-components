@@ -5,12 +5,12 @@ const jsonfile = require('jsonfile');
 const repo = process.argv[2] || process.exit(1);
 
 const dir = path.join(process.cwd(), 'packages', repo);
-const package = require(path.resolve(dir, 'package.json'));
+const packageJson = require(path.resolve(dir, 'package.json'));
 
 // Cleanup package.json
-delete package.scripts;
-delete package.husky;
-delete package['lint-staged'];
+delete packageJson.scripts;
+delete packageJson.husky;
+delete packageJson['lint-staged'];
 
 [
   '@open-wc/rollup-plugin-html',
@@ -36,9 +36,9 @@ delete package['lint-staged'];
   'stylelint-config-prettier',
   'stylelint-config-vaadin',
   'typescript'
-].forEach(dep => {
-  delete package.devDependencies[dep];
+].forEach((dep) => {
+  delete packageJson.devDependencies[dep];
 });
 
 // Format and write changes to package.json
-jsonfile.writeFileSync(`packages/${repo}/package.json`, package, { spaces: 2 });
+jsonfile.writeFileSync(`packages/${repo}/package.json`, packageJson, { spaces: 2 });
