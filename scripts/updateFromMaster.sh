@@ -43,3 +43,5 @@ do
   checkoutProject $i
   updatePackage $i
 done
+
+node scripts/updateTests.js

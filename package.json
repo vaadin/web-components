@@ -7,11 +7,14 @@
     "packages/*"
   ],
   "scripts": {
-    "test": "web-test-runner packages/**/test/*.test.js --coverage"
+    "test": "web-test-runner packages/**/test/*.test.js --coverage",
+    "test:playwright": "web-test-runner --config web-test-runner-playwright.config.js"
   },
   "devDependencies": {
     "@web/test-runner": "^0.11.4",
+    "@web/test-runner-playwright": "^0.7.0",
     "jsonfile": "^6.1.0",
-    "lerna": "^3.22.1"
+    "lerna": "^3.22.1",
+    "replace-in-file": "^6.1.0"
   }
 }
