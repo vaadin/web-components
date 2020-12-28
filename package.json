@@ -7,7 +7,7 @@
     "packages/*"
   ],
   "scripts": {
-    "test": "web-test-runner packages/**/test/*.test.js --coverage",
+    "test": "web-test-runner --coverage",
     "test:playwright": "web-test-runner --config web-test-runner-playwright.config.js"
   },
   "devDependencies": {

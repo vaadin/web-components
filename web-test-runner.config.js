@@ -1,5 +1,13 @@
 /* eslint-env node */
-const config = {
+const fs = require('fs');
+
+const packages = fs
+  .readdirSync('packages')
+  .filter(
+    dir => fs.statSync(`packages/${dir}`).isDirectory() && fs.existsSync(`packages/${dir}/test`),
+  );
+
+module.exports = {
   nodeResolve: true,
   browserStartTimeout: 60000, // default 30000
   testsStartTimeout: 60000, // default 10000
@@ -18,7 +26,11 @@ const config = {
       ui: 'bdd',
       timeout: '10000'
     }
-  }
+  },
+  groups: packages.map(pkg => {
+    return {
+      name: pkg,
+      files: `packages/${pkg}/test/*.test.js`,
+    };
+  }),
 };
-
-module.exports = config;
