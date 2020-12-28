@@ -3,9 +3,7 @@ const fs = require('fs');
 
 const packages = fs
   .readdirSync('packages')
-  .filter(
-    dir => fs.statSync(`packages/${dir}`).isDirectory() && fs.existsSync(`packages/${dir}/test`),
-  );
+  .filter((dir) => fs.statSync(`packages/${dir}`).isDirectory() && fs.existsSync(`packages/${dir}/test`));
 
 module.exports = {
   nodeResolve: true,
@@ -27,10 +25,10 @@ module.exports = {
       timeout: '10000'
     }
   },
-  groups: packages.map(pkg => {
+  groups: packages.map((pkg) => {
     return {
       name: pkg,
-      files: `packages/${pkg}/test/*.test.js`,
+      files: `packages/${pkg}/test/*.test.js`
     };
-  }),
+  })
 };
