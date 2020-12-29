@@ -18,6 +18,8 @@ checkoutProject() {
   git clone -q git@github.com:vaadin/$repo.git --branch master packages/$repo
   # Delete .git and .github
   rm -rf packages/$repo/.??*
+  # Delete old issue template
+  rm -rf packages/$repo/ISSUE_TEMPLATE.md
   # Delete tsconfig.json
   rm -rf packages/$repo/tsconfig.json
   # Delete visual tests
