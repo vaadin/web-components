@@ -17,7 +17,7 @@ const config = {
     threshold: {
       statements: 97,
       branches: 58,
-      functions: 96,
+      functions: 95,
       lines: 97
     }
   }
