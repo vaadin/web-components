@@ -38,7 +38,8 @@ describe('integration', () => {
     expect(menu.opened).to.eql(true);
   });
 
-  (isIOS ? it.skip : it)('should open context menu below button', async () => {
+  const isSafari = /Safari/i.test(navigator.userAgent);
+  (isIOS || isSafari ? it.skip : it)('should open context menu below button', async () => {
     makeSoloTouchEvent('click', { y: 0, x: 0 }, button);
     await aTimeout(100);
     const buttonRect = button.getBoundingClientRect();
