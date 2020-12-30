@@ -10,8 +10,8 @@ module.exports = {
   nodeResolve: true,
   browserStartTimeout: 60000, // default 30000
   testsStartTimeout: 60000, // default 10000
-  testsFinishTimeout: 60000, // default 20000
-  browsers: [playwrightLauncher({ product: 'firefox' }), playwrightLauncher({ product: 'webkit' })],
+  testsFinishTimeout: 120000, // default 20000
+  browsers: [playwrightLauncher({ product: 'webkit' })],
   testFramework: {
     config: {
       ui: 'bdd',
