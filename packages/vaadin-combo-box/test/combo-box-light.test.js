@@ -98,7 +98,8 @@ describe('vaadin-combo-box-light', () => {
       expect(comboBox.opened).to.be.true;
     });
 
-    it('should toggle on input click on touch devices', (done) => {
+    const isSafari = /Safari/i.test(navigator.userAgent);
+    (isSafari ? it.skip : it)('should toggle on input click on touch devices', (done) => {
       downAndUp(
         ironInput,
         () => {
@@ -115,7 +116,7 @@ describe('vaadin-combo-box-light', () => {
       expect(comboBox.value).to.equal('foo');
     });
 
-    it('should not clear on input click on touch devices', (done) => {
+    (isSafari ? it.skip : it)('should not clear on input click on touch devices', (done) => {
       comboBox.value = 'foo';
       downAndUp(
         ironInput,

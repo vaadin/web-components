@@ -14,7 +14,8 @@ describe('device detector', () => {
     expect(detector.wide).to.eql(!isIOS);
   });
 
-  it('should detect touch support', () => {
+  const isSafari = /Safari/i.test(navigator.userAgent);
+  (isSafari ? it.skip : it)('should detect touch support', () => {
     expect(detector.touch).to.eql(isIOS);
   });
 

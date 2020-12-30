@@ -22,7 +22,8 @@
     "lint:css": "stylelint packages/**/src/*.js packages/**/theme/**/*-styles.js",
     "lint:js": "eslint *.js scripts packages",
     "test": "web-test-runner --coverage",
-    "test:playwright": "web-test-runner --config web-test-runner-playwright.config.js"
+    "test:firefox": "web-test-runner --config web-test-runner-firefox.config.js",
+    "test:webkit": "web-test-runner --config web-test-runner-webkit.config.js"
   },
   "devDependencies": {
     "@web/test-runner": "^0.11.5",
