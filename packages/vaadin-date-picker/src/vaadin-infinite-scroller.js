@@ -247,13 +247,7 @@ class InfiniteScrollerElement extends PolymerElement {
 
   get itemHeight() {
     if (!this._itemHeightVal) {
-      if (!(window.ShadyCSS && window.ShadyCSS.nativeCss)) {
-        this.updateStyles();
-      }
-
-      const itemHeight = window.ShadyCSS
-        ? window.ShadyCSS.getComputedStyleValue(this, '--vaadin-infinite-scroller-item-height')
-        : getComputedStyle(this).getPropertyValue('--vaadin-infinite-scroller-item-height');
+      const itemHeight = getComputedStyle(this).getPropertyValue('--vaadin-infinite-scroller-item-height');
       // Use background-position temp inline style for unit conversion
       const tmpStyleProp = 'background-position';
       this.$.fullHeight.style.setProperty(tmpStyleProp, itemHeight);
