@@ -19,11 +19,6 @@ registerStyles(
       --_lumo-item-selected-icon-display: block;
     }
 
-    /* ShadyCSS workaround (show the selected item checkmark) */
-    :host::before {
-      display: block;
-    }
-
     :host(:hover) {
       background-color: var(--lumo-primary-color-10pct);
     }
