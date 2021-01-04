@@ -22,12 +22,6 @@ registerStyles(
       direction: rtl;
       text-align: left;
     }
-
-    :host([dir='rtl']) [part='value']:-ms-input-placeholder,
-    :host([dir='rtl']) [part='input-field'] ::slotted(input):-ms-input-placeholder {
-      direction: rtl;
-      text-align: left;
-    }
   `,
   { moduleId: 'vaadin-date-picker-text-field-styles' }
 );

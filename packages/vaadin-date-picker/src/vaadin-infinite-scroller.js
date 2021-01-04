@@ -30,7 +30,6 @@ class InfiniteScrollerElement extends PolymerElement {
           outline: none;
           margin-right: -40px;
           -webkit-overflow-scrolling: touch;
-          -ms-overflow-style: none;
           overflow-x: hidden;
         }
 
