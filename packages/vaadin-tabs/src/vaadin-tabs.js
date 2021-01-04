@@ -76,7 +76,6 @@ class TabsElement extends ElementMixin(
           align-self: stretch;
           overflow-x: auto;
           -webkit-overflow-scrolling: touch;
-          -ms-overflow-style: none;
         }
 
         /* This seems more future-proof than \`overflow: -moz-scrollbars-none\` which is marked obsolete

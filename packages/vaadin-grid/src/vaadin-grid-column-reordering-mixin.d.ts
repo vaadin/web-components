@@ -23,8 +23,6 @@ interface ColumnReorderingMixin {
 
   _updateGhostPosition(eventClientX: number, eventClientY: number): void;
 
-  _getInnerText(e: Element): string;
-
   _updateGhost(cell: HTMLElement): HTMLElement;
 
   _setSiblingsReorderStatus(column: GridColumnElement, status: string): void;

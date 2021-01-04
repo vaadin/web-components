@@ -35,12 +35,12 @@
     "@esm-bundle/chai": "^4.1.5",
     "@open-wc/testing-helpers": "^1.8.0",
     "@polymer/iron-test-helpers": "^3.0.0",
-    "@vaadin/vaadin-text-field": "^2.8.0",
-    "@vaadin/vaadin-time-picker": "^2.4.0",
-    "@vaadin/vaadin-date-picker": "^4.4.0",
+    "@vaadin/vaadin-text-field": "^3.0.0-alpha1",
+    "@vaadin/vaadin-time-picker": "^3.0.0-alpha1",
+    "@vaadin/vaadin-date-picker": "^5.0.0-alpha1",
     "@vaadin/vaadin-form-layout": "^2.3.0",
-    "@vaadin/vaadin-select": "^2.4.0",
-    "@vaadin/vaadin-list-box": "^1.4.0",
+    "@vaadin/vaadin-select": "^3.0.0-alpha1",
+    "@vaadin/vaadin-list-box": "^2.0.0-alpha1",
     "sinon": "^9.2.0"
   }
 }

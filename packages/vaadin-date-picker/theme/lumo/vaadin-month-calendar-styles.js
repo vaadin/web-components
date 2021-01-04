@@ -10,7 +10,6 @@ registerStyles(
   css`
     :host {
       -moz-user-select: none;
-      -ms-user-select: none;
       -webkit-user-select: none;
       -webkit-tap-highlight-color: transparent;
       user-select: none;

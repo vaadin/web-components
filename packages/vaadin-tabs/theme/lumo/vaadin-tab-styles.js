@@ -30,7 +30,6 @@ registerStyles(
       min-width: var(--lumo-size-m);
       -webkit-user-select: none;
       -moz-user-select: none;
-      -ms-user-select: none;
       user-select: none;
     }
 
