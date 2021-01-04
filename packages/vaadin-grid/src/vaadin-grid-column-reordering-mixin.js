@@ -243,33 +243,13 @@ export const ColumnReorderingMixin = (superClass) =>
     }
 
     /**
-     * @param {!Element} e
-     * @return {string}
-     * @protected
-     */
-    _getInnerText(e) {
-      if (e.localName) {
-        // Custom implementation needed since IE11 doesn't respect the spec in case of hidden elements
-        if (getComputedStyle(e).display === 'none') {
-          return '';
-        } else {
-          return Array.from(e.childNodes)
-            .map((n) => this._getInnerText(n))
-            .join('');
-        }
-      } else {
-        return e.textContent;
-      }
-    }
-
-    /**
      * @param {!HTMLElement} cell
      * @return {!HTMLElement}
      * @protected
      */
     _updateGhost(cell) {
       const ghost = this._reorderGhost;
-      ghost.textContent = this._getInnerText(cell._content);
+      ghost.textContent = cell._content.innerText;
       const style = window.getComputedStyle(cell);
       [
         'boxSizing',

@@ -16,11 +16,6 @@ registerStyles(
       --_material-item-selected-icon-display: block;
     }
 
-    /* ShadyCSS workaround */
-    :host::before {
-      display: block;
-    }
-
     :host(:hover) {
       background-color: var(--material-secondary-background-color);
     }
