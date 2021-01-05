@@ -12,6 +12,7 @@ vaadin-item
 vaadin-list-box
 vaadin-login
 vaadin-menu-bar
+vaadin-rich-text-editor
 vaadin-select
 vaadin-tabs
 vaadin-text-field
