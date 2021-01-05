@@ -23,5 +23,7 @@ module.exports = {
       name: pkg,
       files: `packages/${pkg}/test/*.test.js`
     };
-  })
+  }),
+  // Suppress console warnings in tests (avatar).
+  filterBrowserLogs: (log) => log.type === 'error'
 };

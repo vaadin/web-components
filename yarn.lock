@@ -1597,6 +1597,21 @@
     "@vaadin/vaadin-material-styles" "^1.2.0"
     "@vaadin/vaadin-themable-mixin" "^1.6.1"
 
+"@vaadin/vaadin-confirm-dialog@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@vaadin/vaadin-confirm-dialog/-/vaadin-confirm-dialog-2.0.0.tgz#ff57543088b5e034e64181d3da2ffa7927ab3d90"
+  integrity sha512-UuyLiTomEmPkY5BSs1FjISrqPzfMYUI2XzH/oWfoSugj+/Ms1BoLFGuNCwr0mf8+SZ0klAFNvzVE5Nvgg4aeKA==
+  dependencies:
+    "@polymer/polymer" "^3.0.0"
+    "@vaadin/vaadin-button" "^2.4.0"
+    "@vaadin/vaadin-dialog" "^2.5.0"
+    "@vaadin/vaadin-element-mixin" "^2.4.1"
+    "@vaadin/vaadin-license-checker" "^2.1.0"
+    "@vaadin/vaadin-lumo-styles" "^1.6.0"
+    "@vaadin/vaadin-material-styles" "^1.3.0"
+    "@vaadin/vaadin-overlay" "^3.5.0"
+    "@vaadin/vaadin-themable-mixin" "^1.6.1"
+
 "@vaadin/vaadin-control-state-mixin@^2.2.1", "@vaadin/vaadin-control-state-mixin@^2.2.2", "@vaadin/vaadin-control-state-mixin@^2.2.4":
   version "2.2.4"
   resolved "https://registry.yarnpkg.com/@vaadin/vaadin-control-state-mixin/-/vaadin-control-state-mixin-2.2.4.tgz#9c3779228ada8a9062ad18356e6a9a4317b8a162"
@@ -1652,6 +1667,13 @@
     "@polymer/iron-iconset-svg" "^3.0.0"
     "@polymer/polymer" "^3.0.0"
 
+"@vaadin/vaadin-license-checker@^2.1.0":
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/@vaadin/vaadin-license-checker/-/vaadin-license-checker-2.1.2.tgz#a255bed26291a4937106846690455b9e6e59ee39"
+  integrity sha512-oD6/MoavXyIZp6NWhkbJD5RKrpiWohhaQpgqjM0bFIthRr+1NoiG5R1w0uY3NIdMDuaXlsUFSQJ/Viz1v7F/jQ==
+  dependencies:
+    "@vaadin/vaadin-development-mode-detector" "^2.0.0"
+
 "@vaadin/vaadin-list-mixin@^2.5.0":
   version "2.5.1"
   resolved "https://registry.yarnpkg.com/@vaadin/vaadin-list-mixin/-/vaadin-list-mixin-2.5.1.tgz#f6ab60cc658900d3eb7bfff18cf42d769374b659"
@@ -1669,7 +1691,7 @@
     "@polymer/iron-iconset-svg" "^3.0.0"
     "@polymer/polymer" "^3.0.0"
 
-"@vaadin/vaadin-material-styles@^1.1.0", "@vaadin/vaadin-material-styles@^1.2.0", "@vaadin/vaadin-material-styles@^1.3.2":
+"@vaadin/vaadin-material-styles@^1.1.0", "@vaadin/vaadin-material-styles@^1.2.0", "@vaadin/vaadin-material-styles@^1.3.0", "@vaadin/vaadin-material-styles@^1.3.2":
   version "1.3.2"
   resolved "https://registry.yarnpkg.com/@vaadin/vaadin-material-styles/-/vaadin-material-styles-1.3.2.tgz#d2c1bd290db16721152ae672dbe052c381686696"
   integrity sha512-EFrvGScoxhLNrPnWtT2Ia77whjF2TD4jrcyeh1jv9joCA2n5SUba+4XJciVSGmopqqQato6lwRnZSvMLJX7cyw==
@@ -7715,10 +7737,10 @@ stylelint-config-styled-components@^0.1.1:
   resolved "https://registry.yarnpkg.com/stylelint-config-styled-components/-/stylelint-config-styled-components-0.1.1.tgz#b408388d7c687833ab4be4c4e6522d97d2827ede"
   integrity sha512-z5Xz/9GmvxO6e/DLzBMwkB85zHxEEjN6K7Cj80Bi+o/9vR9eS3GX3E9VuMnX9WLFYulqbqLtTapGGY28JBiy9Q==
 
-stylelint-config-vaadin@^0.2.9:
-  version "0.2.9"
-  resolved "https://registry.yarnpkg.com/stylelint-config-vaadin/-/stylelint-config-vaadin-0.2.9.tgz#a64d965c8a6c046d67042ec401e6f74e7b38ac0b"
-  integrity sha512-VTRn8Fnsb38mFnle7pP6kRIx/SOOVBpRHENT1mUJbkskdghN40XsNvdhz3eqICXD+fnAvIESgsvGbAwfHFPVPw==
+stylelint-config-vaadin@^0.2.10:
+  version "0.2.10"
+  resolved "https://registry.yarnpkg.com/stylelint-config-vaadin/-/stylelint-config-vaadin-0.2.10.tgz#c306ba178dc02ad2509343cf2d69a92792e347dd"
+  integrity sha512-GPuw/zV8e0cfPR+wfMJJP48zOA1dfNJ1S7jLSrKmJKazxBp0M3U7IoJWlMxFMsb92TpBunZNuXgQG5PDU3ACkQ==
   dependencies:
     stylelint-config-styled-components "^0.1.1"
     stylelint-processor-styled-components "^1.9.0"
