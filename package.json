@@ -40,6 +40,6 @@
     "replace-in-file": "^6.1.0",
     "stylelint": "^13.8.0",
     "stylelint-config-prettier": "^8.0.2",
-    "stylelint-config-vaadin": "^0.2.9"
+    "stylelint-config-vaadin": "^0.2.10"
   }
 }

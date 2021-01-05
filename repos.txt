@@ -3,6 +3,7 @@ vaadin-checkbox
 vaadin-combo-box
 vaadin-context-menu
 vaadin-custom-field
+vaadin-crud
 vaadin-date-picker
 vaadin-date-time-picker
 vaadin-grid
