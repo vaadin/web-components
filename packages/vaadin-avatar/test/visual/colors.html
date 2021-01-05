@@ -1,28 +1,24 @@
 <!DOCTYPE html>
 
 <head lang="en">
-  <meta charset="UTF-8">
-  <title></title>
-  <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <meta charset="UTF-8" />
+  <title>Avatar colors tests</title>
   <script>
-    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
-    document.write('<link rel="import" href="../../theme/' + theme + '/vaadin-avatar.html">');
+    window.polymerSkipLoadingFontRoboto = true;
   </script>
 </head>
 
 <body>
-  <custom-style>
-    <style>
-      html {
-        --vaadin-user-color-0: #B300D0;
-        --vaadin-user-color-1: #00AE8F;
-        --vaadin-user-color-2: #5C62F1;
-        --vaadin-user-color-3: #D09600;
-      }
-    </style>
-  </custom-style>
+  <style>
+    html {
+      --vaadin-user-color-0: #b300d0;
+      --vaadin-user-color-1: #00ae8f;
+      --vaadin-user-color-2: #5c62f1;
+      --vaadin-user-color-3: #d09600;
+    }
+  </style>
 
-  <div id="colors-tests" style="width: 600px;">
+  <div id="tests" style="width: 600px">
     <vaadin-avatar color-index="0"></vaadin-avatar>
     <vaadin-avatar color-index="1" name="Foo Bar"></vaadin-avatar>
     <vaadin-avatar color-index="2" name="Foo Bar" abbr="YY"></vaadin-avatar>
@@ -30,8 +26,20 @@
       color-index="3"
       img="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAAlElEQVRIie3SMQrCQBRF0UOKrEI7XY8uK65DRPeie9AmUUQs7SQWJk2SYiZEQcmF13yYd2H+Z2TkW6RYoUCOrJoNRoaykWxIQdEhOIc8TAIFZcfsOaRgHTjrTer957kPLfl3SbDEDic8qhyxxUL4HlvMcdA+z2b2mMWWT3ENKK9zwSRGsIkorxN1tvcegluMYOSPeAEUc0pqqc/5JgAAAABJRU5ErkJggg=="
       name="Foo Bar"
-      abbr="BB"></vaadin-avatar>
+      abbr="BB"
+    ></vaadin-avatar>
     <vaadin-avatar color-index="4" name="Invalid Index"></vaadin-avatar>
   </div>
 
+  <script type="module">
+    (async () => {
+      const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+
+      await import('../../theme/' + theme + '/vaadin-avatar.js');
+
+      window.requestAnimationFrame(() => {
+        document.getElementById('tests').dataset.ready = true;
+      });
+    })();
+  </script>
 </body>

@@ -1,35 +1,40 @@
 <!DOCTYPE html>
 
 <head lang="en">
-  <meta charset="UTF-8">
-  <title></title>
-  <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
-  <link rel="import" href="../../theme/lumo/vaadin-avatar.html">
-  <script>
+  <meta charset="UTF-8" />
+  <title>Avatar Lumo variants</title>
+  <script type="module">
+    import '@polymer/polymer/lib/elements/custom-style.js';
     const variant = window.location.search.replace(/.*variant=(\w+).*/, '$1') || 'light';
     document.documentElement.setAttribute('theme', variant);
   </script>
-  <custom-style>
-    <style include="lumo-color">
-    </style>
-  </custom-style>
 </head>
 
 <body>
+  <custom-style>
+    <style include="lumo-color"></style>
+  </custom-style>
 
-  <div id="default-tests" style="width: 600px;">
+  <div id="tests" style="width: 600px">
     <vaadin-avatar theme="xlarge"></vaadin-avatar>
     <vaadin-avatar theme="large"></vaadin-avatar>
     <vaadin-avatar></vaadin-avatar>
     <vaadin-avatar theme="small"></vaadin-avatar>
     <vaadin-avatar theme="xsmall"></vaadin-avatar>
-    <br>
+    <br />
     <vaadin-avatar name="Foo Bar" theme="xlarge"></vaadin-avatar>
     <vaadin-avatar name="Foo Bar" theme="large"></vaadin-avatar>
     <vaadin-avatar name="Foo Bar"></vaadin-avatar>
     <vaadin-avatar name="Foo Bar" theme="small"></vaadin-avatar>
     <vaadin-avatar name="Foo Bar" theme="xsmall"></vaadin-avatar>
-    <br>
+    <br />
   </div>
 
+  <script type="module">
+    import '../../theme/lumo/vaadin-avatar.js';
+
+    window.requestAnimationFrame(() => {
+      document.getElementById('tests').dataset.ready = true;
+    });
+  </script>
 </body>

@@ -1,47 +1,29 @@
 <!DOCTYPE html>
 
 <head lang="en">
-  <meta charset="UTF-8">
-  <title></title>
-  <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <meta charset="UTF-8" />
+  <title>Avatar scaled tests</title>
   <script>
-    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
-    document.write('<link rel="import" href="../../theme/' + theme + '/vaadin-avatar-group.html">');
+    window.polymerSkipLoadingFontRoboto = true;
   </script>
-  <script>
-    window.addEventListener('WebComponentsReady', function() {
-      document.querySelector('vaadin-avatar-group').items = [
-        {},
-        {name: 'Foo Bar'},
-        {name: 'Foo Bar', abbr: 'YY'},
-        {img: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP'
-         + '+gvaeTAAAAlElEQVRIie3SMQrCQBRF0UOKrEI7XY8uK65DRPeie9AmUUQs7SQWJk2SYiZEQcmF13yYd2H+Z2TkW6RYoUCOr'
-         + 'JoNRoaykWxIQdEhOIc8TAIFZcfsOaRgHTjrTer957kPLfl3SbDEDic8qhyxxUL4HlvMcdA+z2b2mMWWT3ENKK9zwSRGsIko'
-         + 'rxN1tvcegluMYOSPeAEUc0pqqc/5JgAAAABJRU5ErkJggg=='}
-      ];
-    });
-  </script>
-
-  <custom-style>
-    <dom-module id="test-avatar-width" theme-for="vaadin-avatar-group">
-      <template>
-        <style>
-          [part="avatar"] {
-            height: 90px;
-            width: 90px;
-          }
-
-          [part="avatar"]:not(:first-child) {
-            -webkit-mask-position: calc(50% - 90px + var(--vaadin-avatar-group-overlap)) !important;
-            mask-position: calc(50% - 90px + var(--vaadin-avatar-group-overlap)) !important;
-          }
-        </style>
-      </template>
-    </dom-module>
-  </custom-style>
 </head>
 
 <body>
+  <dom-module id="test-avatar-width" theme-for="vaadin-avatar-group">
+    <template>
+      <style>
+        [part='avatar'] {
+          height: 90px;
+          width: 90px;
+        }
+
+        [part='avatar']:not(:first-child) {
+          -webkit-mask-position: calc(50% - 90px + var(--vaadin-avatar-group-overlap)) !important;
+          mask-position: calc(50% - 90px + var(--vaadin-avatar-group-overlap)) !important;
+        }
+      </style>
+    </template>
+  </dom-module>
 
   <style>
     vaadin-avatar {
@@ -50,18 +32,43 @@
     }
   </style>
 
-  <div id="scaled-tests" style="width: 600px;">
+  <div id="tests" style="width: 600px">
     <vaadin-avatar></vaadin-avatar>
     <vaadin-avatar name="Foo Bar"></vaadin-avatar>
     <vaadin-avatar name="Foo Bar" abbr="YY"></vaadin-avatar>
     <vaadin-avatar
       img="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAAlElEQVRIie3SMQrCQBRF0UOKrEI7XY8uK65DRPeie9AmUUQs7SQWJk2SYiZEQcmF13yYd2H+Z2TkW6RYoUCOrJoNRoaykWxIQdEhOIc8TAIFZcfsOaRgHTjrTer957kPLfl3SbDEDic8qhyxxUL4HlvMcdA+z2b2mMWWT3ENKK9zwSRGsIkorxN1tvcegluMYOSPeAEUc0pqqc/5JgAAAABJRU5ErkJggg=="
       name="Foo Bar"
-      abbr="BB"></vaadin-avatar>
+      abbr="BB"
+    ></vaadin-avatar>
 
     <br />
 
     <vaadin-avatar-group></vaadin-avatar-group>
   </div>
 
+  <script type="module">
+    (async () => {
+      const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+
+      await import('../../theme/' + theme + '/vaadin-avatar-group.js');
+
+      document.querySelector('vaadin-avatar-group').items = [
+        {},
+        { name: 'Foo Bar' },
+        { name: 'Foo Bar', abbr: 'YY' },
+        {
+          img:
+            'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP' +
+            '+gvaeTAAAAlElEQVRIie3SMQrCQBRF0UOKrEI7XY8uK65DRPeie9AmUUQs7SQWJk2SYiZEQcmF13yYd2H+Z2TkW6RYoUCOr' +
+            'JoNRoaykWxIQdEhOIc8TAIFZcfsOaRgHTjrTer957kPLfl3SbDEDic8qhyxxUL4HlvMcdA+z2b2mMWWT3ENKK9zwSRGsIko' +
+            'rxN1tvcegluMYOSPeAEUc0pqqc/5JgAAAABJRU5ErkJggg=='
+        }
+      ];
+
+      window.requestAnimationFrame(() => {
+        document.getElementById('tests').dataset.ready = true;
+      });
+    })();
+  </script>
 </body>

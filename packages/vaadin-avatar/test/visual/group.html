@@ -1,32 +1,40 @@
 <!DOCTYPE html>
 
 <head lang="en">
-  <meta charset="UTF-8">
-  <title></title>
-  <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <meta charset="UTF-8" />
+  <title>Avatar group tests</title>
   <script>
-    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
-    document.write('<link rel="import" href="../../theme/' + theme + '/vaadin-avatar-group.html">');
-  </script>
-  <script>
-    window.addEventListener('WebComponentsReady', function() {
-      document.querySelector('vaadin-avatar-group').items = [
-        {},
-        {name: 'Foo Bar'},
-        {name: 'Foo Bar', abbr: 'YY'},
-        {img: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP'
-         + '+gvaeTAAAAlElEQVRIie3SMQrCQBRF0UOKrEI7XY8uK65DRPeie9AmUUQs7SQWJk2SYiZEQcmF13yYd2H+Z2TkW6RYoUCOr'
-         + 'JoNRoaykWxIQdEhOIc8TAIFZcfsOaRgHTjrTer957kPLfl3SbDEDic8qhyxxUL4HlvMcdA+z2b2mMWWT3ENKK9zwSRGsIko'
-         + 'rxN1tvcegluMYOSPeAEUc0pqqc/5JgAAAABJRU5ErkJggg=='}
-      ];
-    });
+    window.polymerSkipLoadingFontRoboto = true;
   </script>
 </head>
 
 <body>
-
-  <div id="group-tests" style="width: 600px;">
+  <div id="tests" style="width: 600px">
     <vaadin-avatar-group></vaadin-avatar-group>
   </div>
 
+  <script type="module">
+    (async () => {
+      const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+
+      await import('../../theme/' + theme + '/vaadin-avatar-group.js');
+
+      document.querySelector('vaadin-avatar-group').items = [
+        {},
+        { name: 'Foo Bar' },
+        { name: 'Foo Bar', abbr: 'YY' },
+        {
+          img:
+            'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP' +
+            '+gvaeTAAAAlElEQVRIie3SMQrCQBRF0UOKrEI7XY8uK65DRPeie9AmUUQs7SQWJk2SYiZEQcmF13yYd2H+Z2TkW6RYoUCOr' +
+            'JoNRoaykWxIQdEhOIc8TAIFZcfsOaRgHTjrTer957kPLfl3SbDEDic8qhyxxUL4HlvMcdA+z2b2mMWWT3ENKK9zwSRGsIko' +
+            'rxN1tvcegluMYOSPeAEUc0pqqc/5JgAAAABJRU5ErkJggg=='
+        }
+      ];
+
+      window.requestAnimationFrame(() => {
+        document.getElementById('tests').dataset.ready = true;
+      });
+    })();
+  </script>
 </body>

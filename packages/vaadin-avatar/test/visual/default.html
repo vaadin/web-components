@@ -1,25 +1,34 @@
 <!DOCTYPE html>
 
 <head lang="en">
-  <meta charset="UTF-8">
-  <title></title>
-  <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <meta charset="UTF-8" />
+  <title>Avatar tests</title>
   <script>
-    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
-    document.write('<link rel="import" href="../../theme/' + theme + '/vaadin-avatar.html">');
+    window.polymerSkipLoadingFontRoboto = true;
   </script>
 </head>
 
 <body>
-
-  <div id="default-tests" style="width: 600px;">
+  <div id="tests" style="width: 600px">
     <vaadin-avatar></vaadin-avatar>
     <vaadin-avatar name="Foo Bar"></vaadin-avatar>
     <vaadin-avatar name="Foo Bar" abbr="YY"></vaadin-avatar>
     <vaadin-avatar
       img="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAAlElEQVRIie3SMQrCQBRF0UOKrEI7XY8uK65DRPeie9AmUUQs7SQWJk2SYiZEQcmF13yYd2H+Z2TkW6RYoUCOrJoNRoaykWxIQdEhOIc8TAIFZcfsOaRgHTjrTer957kPLfl3SbDEDic8qhyxxUL4HlvMcdA+z2b2mMWWT3ENKK9zwSRGsIkorxN1tvcegluMYOSPeAEUc0pqqc/5JgAAAABJRU5ErkJggg=="
       name="Foo Bar"
-      abbr="BB"></vaadin-avatar>
+      abbr="BB"
+    ></vaadin-avatar>
   </div>
 
+  <script type="module">
+    (async () => {
+      const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+
+      await import('../../theme/' + theme + '/vaadin-avatar.js');
+
+      window.requestAnimationFrame(() => {
+        document.getElementById('tests').dataset.ready = true;
+      });
+    })();
+  </script>
 </body>

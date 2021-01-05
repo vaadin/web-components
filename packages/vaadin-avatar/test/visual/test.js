@@ -1,99 +1,77 @@
-gemini.suite('vaadin-avatar', function(rootSuite) {
-  function wait(actions, find) {
-    actions.wait(5000);
-  }
+describe('vaadin-avatar', () => {
+  const locator = '#tests[data-ready]';
 
-  function goToAboutBlank(actions, find) {
-    // Firefox stops responding on socket after a test, workaround:
-    return actions.executeJS(function(window) {
-      window.location.href = 'about:blank'; // just go away, please!
-    });
-  }
-
-  rootSuite
-    .before(wait)
-    .after(goToAboutBlank);
-
-  ['lumo', 'material'].forEach(theme => {
-    gemini.suite(`default-tests-${theme}`, function(suite) {
-      suite
-        .setUrl(`/default.html?theme=${theme}`)
-        .setCaptureElements('#default-tests')
-        .capture(`vaadin-avatar`);
+  ['lumo', 'material'].forEach((theme) => {
+    it(`${theme}-avatar`, function () {
+      return this.browser
+        .url(`default.html?theme=${theme}`)
+        .waitForVisible(locator, 15000)
+        .assertView(`${theme}-avatar`, locator);
     });
 
-    gemini.suite(`colors-tests-${theme}`, function(suite) {
-      suite
-        .setUrl(`/colors.html?theme=${theme}`)
-        .setCaptureElements('#colors-tests')
-        .capture(`vaadin-avatar`);
+    it(`${theme}-colors`, function () {
+      return this.browser
+        .url(`colors.html?theme=${theme}`)
+        .waitForVisible(locator, 15000)
+        .assertView(`${theme}-colors`, locator);
     });
 
-    gemini.suite(`group-tests-${theme}`, function(suite) {
-      suite
-        .setUrl(`/group.html?theme=${theme}`)
-        .setCaptureElements('#group-tests')
-        .capture('default')
-        .capture('rtl', actions => {
-          actions.executeJS(function(window) {
-            window.document.documentElement.setAttribute('dir', 'rtl');
-          });
-        });
-    });
-
-    gemini.suite(`scaled-tests-${theme}`, function(suite) {
-      suite
-        .setUrl(`/scaled.html?theme=${theme}`)
-        .setCaptureElements('#scaled-tests')
-        .capture(`vaadin-avatar`);
-    });
-
-    gemini.suite(`group-overlay-tests-${theme}`, function(suite) {
-      suite
-        .setUrl(`group-overlay.html?theme=${theme}`)
-        .setCaptureElements(`#group-tests`)
-        .capture('default')
-        .capture('opened', function(actions) {
-          actions.executeJS(function(window) {
-            window.openOverlay();
-          });
+    it(`${theme}-group`, function () {
+      return this.browser
+        .url(`group.html?theme=${theme}`)
+        .waitForVisible(locator, 15000)
+        .assertView(`${theme}-group-ltr`, locator)
+        .execute(() => {
+          window.document.documentElement.setAttribute('dir', 'rtl');
         })
-        .capture('rtl', actions => {
-          actions.executeJS(function(window) {
-            window.document.documentElement.setAttribute('dir', 'rtl');
-          });
-        });
+        .assertView(`${theme}-group-rtl`, locator);
+    });
+
+    it(`${theme}-scaled`, function () {
+      return this.browser
+        .url(`scaled.html?theme=${theme}`)
+        .waitForVisible(locator, 15000)
+        .assertView(`${theme}-scaled`, locator);
+    });
+
+    it(`${theme}-group-overlay`, function () {
+      return this.browser
+        .url(`group-overlay.html?theme=${theme}`)
+        .waitForVisible(locator, 15000)
+        .assertView(`${theme}-overlay-default`, locator)
+        .execute(() => {
+          window.openOverlay();
+        })
+        .assertView(`${theme}-overlay-opened-ltr`, locator)
+        .execute(() => {
+          window.document.documentElement.setAttribute('dir', 'rtl');
+        })
+        .assertView(`${theme}-overlay-opened-rtl`, locator);
     });
   });
 
-  ['lumo', 'lumo-dark', 'material'].forEach(theme => {
-    gemini.suite(`group-colors-tests-${theme}`, function(suite) {
-      suite
-        .setUrl(`/group-colors.html?theme=${theme}`)
-        .setCaptureElements('#group-tests')
-        .capture(`vaadin-avatar-group`);
+  ['lumo', 'lumo-dark', 'material'].forEach((theme) => {
+    it(`${theme}-group-colors`, function () {
+      return this.browser
+        .url(`group-colors.html?theme=${theme}`)
+        .waitForVisible(locator, 15000)
+        .assertView(`${theme}-group-colors`, locator);
     });
   });
 
-  ['light', 'dark'].forEach(variant => {
-    gemini.suite(`lumo-${variant}`, function(suite) {
-      suite
-        .setUrl(`/lumo.html?variant=${variant}`)
-        .setCaptureElements('#default-tests')
-        .capture(`vaadin-avatar`);
+  ['light', 'dark'].forEach((variant) => {
+    it(`lumo-${variant}-avatar`, function () {
+      return this.browser
+        .url(`lumo.html?variant=${variant}`)
+        .waitForVisible(locator, 15000)
+        .assertView(`lumo-${variant}-avatar`, locator);
     });
 
-    gemini.suite(`lumo-group-${variant}`, function(suite) {
-      suite
-        .setUrl(`/lumo-group.html?variant=${variant}`)
-        .setCaptureElements('#group-tests')
-        .capture('default')
-        .capture('rtl', actions => {
-          actions.executeJS(function(window) {
-            window.document.documentElement.setAttribute('dir', 'rtl');
-          });
-        });
+    it(`lumo-${variant}-group`, function () {
+      return this.browser
+        .url(`lumo-group.html?variant=${variant}`)
+        .waitForVisible(locator, 15000)
+        .assertView(`lumo-${variant}-group`, locator);
     });
-
   });
 });
