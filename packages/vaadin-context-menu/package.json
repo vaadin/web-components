@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-context-menu",
-  "version": "5.0.0-alpha1",
+  "version": "5.0.0-alpha2",
   "description": "Web Component for showing context dependent items for any element on the page",
   "main": "vaadin-context-menu.js",
   "module": "vaadin-context-menu.js",
