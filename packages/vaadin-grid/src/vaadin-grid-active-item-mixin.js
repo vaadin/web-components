@@ -82,6 +82,18 @@ export const ActiveItemMixin = (superClass) =>
     _isFocusable(target) {
       return isFocusable(target);
     }
+
+    /**
+     * Fired when the `activeItem` property changes.
+     *
+     * @event active-item-changed
+     */
+
+    /**
+     * Fired when the cell is activated with click or keyboard.
+     *
+     * @event cell-activate
+     */
   };
 
 /**
