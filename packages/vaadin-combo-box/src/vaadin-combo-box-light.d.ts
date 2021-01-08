@@ -49,11 +49,12 @@ import { ComboBoxEventMap } from './interfaces';
  * </vaadin-combo-box-light>
  * ```
  *
- * @fires {CustomEvent<string>} filter-changed
- * @fires {CustomEvent<boolean>} invalid-changed
- * @fires {CustomEvent<boolean>} opened-change
- * @fires {CustomEvent<unknown>} selected-item-changed
- * @fires {CustomEvent<string>} value-changed
+ * @fires {Event} change - Fired when the user commits a value change.
+ * @fires {CustomEvent} filter-changed - Fired when the `filter` property changes.
+ * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
+ * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
+ * @fires {CustomEvent} selected-item-changed - Fired when the `selectedItem` property changes.
+ * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  */
 declare class ComboBoxLightElement extends ComboBoxDataProviderMixin(ComboBoxMixin(ThemableMixin(HTMLElement))) {
   readonly _propertyForValue: string;
