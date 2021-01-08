@@ -46,6 +46,19 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Helper text</h3>
+    <p>Use the <code>helper-text</code> attribute or add content to the <code>helper</code> slot to set helper content.</p>
+    <vaadin-demo-snippet id="basic-demos-helper-text">
+      <template preserve-content>
+        <vaadin-radio-group label="Label" theme="vertical">
+          <span slot="helper">Select an option</span>
+          <vaadin-radio-button checked>Option one</vaadin-radio-button>
+          <vaadin-radio-button>Option two</vaadin-radio-button>
+          <vaadin-radio-button>Option three</vaadin-radio-button>
+        </vaadin-radio-group>
+      </template>
+    </vaadin-demo-snippet>
+
     <h3>Object list</h3>
     <vaadin-demo-snippet id="object-list" when-defined="vaadin-radio-button">
       <template preserve-content>
@@ -78,12 +91,12 @@
           <vaadin-radio-button value="two">Option two</vaadin-radio-button>
           <vaadin-radio-button value="three">Option three</vaadin-radio-button>
         </vaadin-radio-group>
-        <div id="output">Selected value:</div>
+        <div>Selected value: <span id="output"></span></div>
         <script>
           window.addDemoReadyListener('#value-change-event', function(document) {
             const radioButtonGroup = document.querySelector('vaadin-radio-group');
             const output = document.querySelector('#output');
-            radioButtonGroup.addEventListener('value-changed', function(event) {
+            radioButtonGroup.addEventListener('change', function(event) {
               output.textContent = radioButtonGroup.value;
             });
           });

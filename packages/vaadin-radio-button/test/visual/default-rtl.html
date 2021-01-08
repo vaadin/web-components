@@ -31,6 +31,23 @@
 
     <br/>
 
+    <vaadin-radio-group label="Label" helper-text="Helper text">
+      <vaadin-radio-button>1</vaadin-radio-button>
+      <vaadin-radio-button>2</vaadin-radio-button>
+    </vaadin-radio-group>
+
+    <br/>
+
+    <span>On material theme, helper text is hidden when error message is shown:</span>
+
+    <vaadin-radio-group label="Label" required error-message="Error message"
+      helper-text="Helper text" invalid>
+      <vaadin-radio-button>1</vaadin-radio-button>
+      <vaadin-radio-button>2</vaadin-radio-button>
+    </vaadin-radio-group>
+
+    <br/>
+
     <vaadin-radio-group label="Vertical" theme="vertical">
       <vaadin-radio-button>1</vaadin-radio-button>
       <vaadin-radio-button>2</vaadin-radio-button>

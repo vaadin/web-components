@@ -77,6 +77,14 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="default-with-slotted-helper">
+    <template>
+      <vaadin-radio-group>
+        <div slot="helper">foo</div>
+      </vaadin-radio-group>
+    </template>
+  </test-fixture>
+
   <script>
     describe('vaadin-radio-group', () => {
 
@@ -428,6 +436,64 @@
         expect(vaadinRadioButtonGroup.hasAttribute('focused')).to.be.false;
       });
 
+      it('setting errorMessage updates has-error-message attribute', function() {
+        vaadinRadioButtonGroup.errorMessage = 'foo';
+        expect(vaadinRadioButtonGroup.hasAttribute('has-error-message')).to.be.true;
+      });
+
+      it('setting errorMessage to empty string does not update has-error-message attribute', function() {
+        vaadinRadioButtonGroup.errorMessage = '';
+        expect(vaadinRadioButtonGroup.hasAttribute('has-error-message')).to.be.false;
+      });
+
+      it('setting errorMessage to null does not update has-error-message attribute', function() {
+        vaadinRadioButtonGroup.errorMessage = null;
+        expect(vaadinRadioButtonGroup.hasAttribute('has-error-message')).to.be.false;
+      });
+
+      describe('vaadin-radio-group helper text', () => {
+        it('setting helper updates has-helper attribute', function() {
+          vaadinRadioButtonGroup.helperText = 'foo';
+          expect(vaadinRadioButtonGroup.hasAttribute('has-helper')).to.be.true;
+        });
+
+        it('setting helper to empty string does not update has-helper attribute', function() {
+          vaadinRadioButtonGroup.helperText = '';
+          expect(vaadinRadioButtonGroup.hasAttribute('has-helper')).to.be.false;
+        });
+
+        it('setting helper to null does not update has-helper attribute', function() {
+          vaadinRadioButtonGroup.helperText = null;
+          expect(vaadinRadioButtonGroup.hasAttribute('has-helper')).to.be.false;
+        });
+
+        it('field with slotted helper updates has-helper attribute', function() {
+          const radioButtonGroupWithSlottedHelper = fixture('default-with-slotted-helper');
+          radioButtonGroupWithSlottedHelper._observer.flush();
+          expect(radioButtonGroupWithSlottedHelper.hasAttribute('has-helper')).to.be.true;
+        });
+
+        it('setting helper with slot updates has-helper attribute', function() {
+          const helper = document.createElement('div');
+          helper.setAttribute('slot', 'helper');
+          helper.textContent = 'foo';
+          vaadinRadioButtonGroup.appendChild(helper);
+          vaadinRadioButtonGroup._observer.flush();
+
+          expect(vaadinRadioButtonGroup.hasAttribute('has-helper')).to.be.true;
+        });
+
+        it('removing slotted helper removes has-helper attribute', function() {
+          const radioButtonGroupWithSlottedHelper = fixture('default-with-slotted-helper');
+
+          const helper = radioButtonGroupWithSlottedHelper.querySelector('[slot="helper"]');
+          radioButtonGroupWithSlottedHelper.removeChild(helper);
+          radioButtonGroupWithSlottedHelper._observer.flush();
+
+          expect(radioButtonGroupWithSlottedHelper.hasAttribute('has-helper')).to.be.false;
+        });
+      });
+
       describe('RTL mode', () => {
 
         beforeEach(() => vaadinRadioButtonGroup.setAttribute('dir', 'rtl'));
@@ -547,6 +613,46 @@
           vaadinRadioButtonGroup.value = '2';
 
           expect(spy).to.not.be.called;
+        });
+
+        it('should value on the vaadin-radio-group is updated at the time when change event is fired after click selection', done => {
+          // Mouse event
+          vaadinRadioButtonGroup.addEventListener('change', e => {
+            expect(vaadinRadioButtonGroup.value).to.equal(vaadinRadioButtonList[2].value);
+            done();
+          });
+          vaadinRadioButtonList[2].click();
+        });
+
+        it('should include updated value on change event on radio-group after click selection', done => {
+          vaadinRadioButtonGroup.addEventListener('change', e => {
+            expect(e.target).to.equal(vaadinRadioButtonList[2]);
+            expect(e.currentTarget.value).to.equal(vaadinRadioButtonList[2].value);
+            done();
+          });
+          vaadinRadioButtonList[2].click();
+        });
+
+        it('should value on the vaadin-radio-group is updated at the time when change event is fired after keyboard selection', done => {
+          vaadinRadioButtonList[1].focus();
+          vaadinRadioButtonList[1].checked = true;
+          // keyboard selection
+          vaadinRadioButtonGroup.addEventListener('change', e => {
+            expect(vaadinRadioButtonGroup.value).to.equal(vaadinRadioButtonList[0].value);
+            done();
+          });
+          MockInteractions.keyDownOn(vaadinRadioButtonGroup, 37);
+        });
+
+        it('should include updated value on change event on radio-group after keyboard selection', done => {
+          vaadinRadioButtonList[1].focus();
+          vaadinRadioButtonList[1].checked = true;
+          vaadinRadioButtonGroup.addEventListener('change', e => {
+            expect(e.target).to.equal(vaadinRadioButtonList[0]);
+            expect(e.currentTarget.value).to.equal(vaadinRadioButtonList[0].value);
+            done();
+          });
+          MockInteractions.keyDownOn(vaadinRadioButtonGroup, 37);
         });
       });
     });

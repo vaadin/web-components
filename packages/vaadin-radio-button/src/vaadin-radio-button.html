@@ -50,7 +50,7 @@ This program is available under Apache License Version 2.0, available at https:/
       <span part="radio">
         <input
           type="radio"
-          checked="{{checked::change}}"
+          checked="[[checked]]"
           disabled$="[[disabled]]"
           role="presentation"
           on-change="_onChange"
@@ -112,13 +112,14 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         static get version() {
-          return '1.2.3';
+          return '1.5.1';
         }
 
         static get properties() {
           return {
             /**
              * True if the radio button is checked.
+             * @type {boolean}
              */
             checked: {
               type: Boolean,
@@ -135,6 +136,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * The value for this element.
+             * @type {string}
              */
             value: {
               type: String,
@@ -152,6 +154,9 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         /**
+         * @param {string} prop
+         * @param {?string} oldVal
+         * @param {?string} newVal
          * @protected
          */
         attributeChangedCallback(prop, oldVal, newVal) {
@@ -173,7 +178,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
-
+        /** @protected */
         ready() {
           super.ready();
 
@@ -192,6 +197,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this._updateLabelAttribute();
         }
 
+        /** @private */
         _updateLabelAttribute() {
           const label = this.shadowRoot.querySelector('[part~="label"]');
           const assignedNodes = label.firstElementChild.assignedNodes();
@@ -202,6 +208,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @private */
         _isAssignedNodesEmpty(nodes) {
           // The assigned nodes considered to be empty if there is no slotted content or only one empty text node
           return nodes.length === 0 ||
@@ -210,10 +217,12 @@ This program is available under Apache License Version 2.0, available at https:/
               && nodes[0].textContent.trim() === '');
         }
 
+        /** @private */
         _checkedChanged(checked) {
           this.setAttribute('aria-checked', checked);
         }
 
+        /** @private */
         _addListeners() {
           this._addEventListenerToNode(this, 'down', (e) => {
             if (!this.disabled) {
@@ -225,6 +234,10 @@ This program is available under Apache License Version 2.0, available at https:/
             this.removeAttribute('active');
 
             if (!this.checked && !this.disabled) {
+              // If you change this block, please test manually that radio-button and
+              // radio-group still works ok on iOS 12/13 and up as it may cause
+              // an issue that is not possible to test programmatically.
+              // See: https://github.com/vaadin/vaadin-radio-button/issues/140
               this.click();
             }
           });
@@ -251,15 +264,26 @@ This program is available under Apache License Version 2.0, available at https:/
          * @protected
          */
         click() {
-          this.shadowRoot.querySelector('input').click();
+          // If you change this block, please test manually that radio-button and
+          // radio-group still works ok on iOS 12/13 and up as it may cause
+          // an issue that is not possible to test programmatically.
+          // See: https://github.com/vaadin/vaadin-radio-button/issues/140
+          if (!this.disabled) {
+            this.shadowRoot.querySelector('input').dispatchEvent(new MouseEvent('click'));
+          }
         }
 
-        /** @protected */
+        /**
+         * @return {!HTMLInputElement}
+         * @protected
+         */
         get focusElement() {
           return this.shadowRoot.querySelector('input');
         }
 
+        /** @private */
         _onChange(e) {
+          this.checked = e.target.checked;
           // In the Shadow DOM, the `change` event is not leaked into the
           // ancestor tree, so we must do this manually.
           const changeEvent = new CustomEvent('change', {

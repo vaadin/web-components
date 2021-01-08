@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-radio-button",
-  "version": "1.2.3",
+  "version": "1.5.1",
   "description": "vaadin-radio-button",
   "main": "vaadin-radio-button.html",
   "repository": "vaadin/vaadin-radio-button",
@@ -19,6 +19,7 @@
   },
   "homepage": "https://vaadin.com/components",
   "files": [
+    "vaadin-*.d.ts",
     "vaadin-*.js",
     "src",
     "theme"
