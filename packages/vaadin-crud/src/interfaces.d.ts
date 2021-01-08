@@ -1,9 +1,6 @@
-import { GridFilter, GridSorter } from '@vaadin/vaadin-grid'
+import { GridFilter, GridSorter } from '@vaadin/vaadin-grid';
 
-export type CrudDataProviderCallback<T> = (
-  items: Array<T>,
-  size?: number
-) => void;
+export type CrudDataProviderCallback<T> = (items: Array<T>, size?: number) => void;
 
 export type CrudDataProviderParams = {
   page: number;
@@ -12,12 +9,9 @@ export type CrudDataProviderParams = {
   sortOrders: Array<GridSorter>;
 };
 
-export type CrudDataProvider<T> = (
-  params: CrudDataProviderParams,
-  callback: CrudDataProviderCallback<T>
-) => void;
+export type CrudDataProvider<T> = (params: CrudDataProviderParams, callback: CrudDataProviderCallback<T>) => void;
 
-export type CrudEditorPosition = '' | 'bottom' | 'aside';
+export type CrudEditorPosition = '' | 'bottom' | 'aside';
 
 export interface CrudI18n {
   newItem: string;
@@ -33,17 +27,17 @@ export interface CrudI18n {
       button: {
         confirm: string;
         dismiss: string;
-      }
-    },
+      };
+    };
     cancel: {
       title: string;
       content: string;
       button: {
         confirm: string;
         dismiss: string;
-      }
-    }
-  }
+      };
+    };
+  };
 }
 
 /**
