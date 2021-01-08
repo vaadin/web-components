@@ -6,6 +6,10 @@ const assert = <T>(value: T) => value;
 
 const comboBox = document.createElement('vaadin-combo-box');
 
+comboBox.addEventListener('custom-value-set', (event) => {
+  assert<string>(event.detail);
+});
+
 comboBox.addEventListener('opened-changed', (event) => {
   assert<boolean>(event.detail.value);
 });
@@ -30,6 +34,10 @@ comboBox.addEventListener(
 );
 
 const light = document.createElement('vaadin-combo-box-light');
+
+light.addEventListener('custom-value-set', (event) => {
+  assert<string>(event.detail);
+});
 
 light.addEventListener('opened-changed', (event) => {
   assert<boolean>(event.detail.value);
