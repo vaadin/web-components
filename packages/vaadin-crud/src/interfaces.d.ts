@@ -47,6 +47,21 @@ export interface CrudI18n {
 }
 
 /**
+ * Fired when the `editorOpened` property changes.
+ */
+export type CrudEditorOpenedChanged = CustomEvent<{ value: boolean }>;
+
+/**
+ * Fired when the `items` property changes.
+ */
+export type CrudItemsChanged<T> = CustomEvent<{ value: Array<T> }>;
+
+/**
+ * Fired when the `size` property changes.
+ */
+export type CrudSizeChanged = CustomEvent<{ value: number }>;
+
+/**
  * Fired when user wants to create a new item.
  */
 export type CrudNew = CustomEvent<{ item: null }>;
@@ -72,6 +87,12 @@ export type CrudCancel<T> = CustomEvent<{ item: T }>;
 export type CrudSave<T> = CustomEvent<{ item: T; new: boolean }>;
 
 export type CrudElementEventMap<T> = {
+  'editor-opened-changed': CrudEditorOpenedChanged;
+
+  'items-changed': CrudItemsChanged<T>;
+
+  'size-changed': CrudSizeChanged;
+
   'new': CrudNew;
 
   'cancel': CrudCancel<T>;

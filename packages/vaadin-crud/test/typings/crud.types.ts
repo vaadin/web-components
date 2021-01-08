@@ -12,6 +12,18 @@ type User = {
 
 const crud: CrudElement<User> = document.createElement('vaadin-crud');
 
+crud.addEventListener('editor-opened-changed', (event) => {
+  assert<boolean>(event.detail.value);
+});
+
+crud.addEventListener('items-changed', (event) => {
+  assert<User[]>(event.detail.value);
+});
+
+crud.addEventListener('size-changed', (event) => {
+  assert<number>(event.detail.value);
+});
+
 crud.addEventListener('new', (event) => {
   assert<null>(event.detail.item);
 });
