@@ -1036,4 +1036,16 @@ export const DatePickerMixin = (subclass) =>
      *
      * @event change
      */
+
+    /**
+     * Fired when `value` property value changes.
+     *
+     * @event value-changed
+     */
+
+    /**
+     * Fired when `opened` property value changes.
+     *
+     * @event opened-changed
+     */
   };

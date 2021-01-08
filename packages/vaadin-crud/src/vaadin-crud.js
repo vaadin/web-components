@@ -111,6 +111,9 @@ import './vaadin-crud-form.js';
  *
  * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
  *
+ * @fires {CustomEvent} editor-opened-changed - Fired when the `editorOpened` property changes.
+ * @fires {CustomEvent} items-changed - Fired when the `items` property changes.
+ * @fires {CustomEvent} size-changed - Fired when the `size` property changes.
  * @fires {CustomEvent} new - Fired when user wants to create a new item.
  * @fires {CustomEvent} edit - Fired when user wants to edit an existing item.
  * @fires {CustomEvent} delete - Fired when user wants to delete item.

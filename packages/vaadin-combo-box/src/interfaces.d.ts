@@ -30,6 +30,11 @@ export type ComboBoxDataProvider = (
 ) => void;
 
 /**
+ * Fired when the user sets a custom value.
+ */
+export type ComboBoxCustomValueSet = CustomEvent<string>;
+
+/**
  * Fired when the `opened` property changes.
  */
 export type ComboBoxOpenedChanged = CustomEvent<{ value: boolean }>;
@@ -55,6 +60,8 @@ export type ComboBoxFilterChanged = CustomEvent<{ value: string }>;
 export type ComboBoxSelectedItemChanged<T> = CustomEvent<{ value: T }>;
 
 export interface ComboBoxElementEventMap {
+  'custom-value-set': ComboBoxCustomValueSet;
+
   'opened-changed': ComboBoxOpenedChanged;
 
   'filter-changed': ComboBoxFilterChanged;
