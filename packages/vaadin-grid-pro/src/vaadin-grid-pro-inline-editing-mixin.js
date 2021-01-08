@@ -463,4 +463,14 @@ export const InlineEditingMixin = (superClass) =>
      * @param {Object} detail.path the column path of the edited cell
      * @param {Object} detail.value the new value of the edited cell
      */
+
+    /**
+     * Fired when the user starts editing a grid cell.
+     *
+     * @event cell-edit-started
+     * @param {Object} detail
+     * @param {Object} detail.index the row index of the edited cell
+     * @param {Object} detail.item the grid item rendered to the row of the edited cell
+     * @param {Object} detail.path the column path of the edited cell
+     */
   };

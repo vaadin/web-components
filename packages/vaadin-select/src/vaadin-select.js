@@ -121,6 +121,7 @@ document.head.appendChild($_documentContainer.content);
  * Note: the `theme` attribute value set on `<vaadin-select>` is
  * propagated to the internal themable components listed above.
  *
+ * @fires {Event} change - Fired when the user commits a value change.
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.

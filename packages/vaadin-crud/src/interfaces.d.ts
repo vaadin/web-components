@@ -1,9 +1,6 @@
-import { GridFilter, GridSorter } from '@vaadin/vaadin-grid'
+import { GridFilter, GridSorter } from '@vaadin/vaadin-grid';
 
-export type CrudDataProviderCallback<T> = (
-  items: Array<T>,
-  size?: number
-) => void;
+export type CrudDataProviderCallback<T> = (items: Array<T>, size?: number) => void;
 
 export type CrudDataProviderParams = {
   page: number;
@@ -12,12 +9,9 @@ export type CrudDataProviderParams = {
   sortOrders: Array<GridSorter>;
 };
 
-export type CrudDataProvider<T> = (
-  params: CrudDataProviderParams,
-  callback: CrudDataProviderCallback<T>
-) => void;
+export type CrudDataProvider<T> = (params: CrudDataProviderParams, callback: CrudDataProviderCallback<T>) => void;
 
-export type CrudEditorPosition = '' | 'bottom' | 'aside';
+export type CrudEditorPosition = '' | 'bottom' | 'aside';
 
 export interface CrudI18n {
   newItem: string;
@@ -33,18 +27,33 @@ export interface CrudI18n {
       button: {
         confirm: string;
         dismiss: string;
-      }
-    },
+      };
+    };
     cancel: {
       title: string;
       content: string;
       button: {
         confirm: string;
         dismiss: string;
-      }
-    }
-  }
+      };
+    };
+  };
 }
+
+/**
+ * Fired when the `editorOpened` property changes.
+ */
+export type CrudEditorOpenedChanged = CustomEvent<{ value: boolean }>;
+
+/**
+ * Fired when the `items` property changes.
+ */
+export type CrudItemsChanged<T> = CustomEvent<{ value: Array<T> }>;
+
+/**
+ * Fired when the `size` property changes.
+ */
+export type CrudSizeChanged = CustomEvent<{ value: number }>;
 
 /**
  * Fired when user wants to create a new item.
@@ -72,6 +81,12 @@ export type CrudCancel<T> = CustomEvent<{ item: T }>;
 export type CrudSave<T> = CustomEvent<{ item: T; new: boolean }>;
 
 export type CrudElementEventMap<T> = {
+  'editor-opened-changed': CrudEditorOpenedChanged;
+
+  'items-changed': CrudItemsChanged<T>;
+
+  'size-changed': CrudSizeChanged;
+
   'new': CrudNew;
 
   'cancel': CrudCancel<T>;

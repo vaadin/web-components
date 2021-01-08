@@ -39,6 +39,7 @@ import { DatePickerEventMap } from './interfaces';
  * Note: the `theme` attribute value set on `<vaadin-date-picker-light>`
  * is propagated to the internal themable components listed above.
  *
+ * @fires {Event} change - Fired when the user commits a value change.
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  */

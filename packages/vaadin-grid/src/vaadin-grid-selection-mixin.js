@@ -94,4 +94,10 @@ export const SelectionMixin = (superClass) =>
         this.deselectItem(instance.item);
       }
     }
+
+    /**
+     * Fired when the `selectedItems` property changes.
+     *
+     * @event selected-items-changed
+     */
   };

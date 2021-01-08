@@ -41,8 +41,9 @@ import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.
  *
  * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
  *
- * @fires {CustomEvent<boolean>} checked-changed
- * @fires {CustomEvent<boolean>} indeterminate-changed
+ * @fires {Event} change - Fired when the user commits a value change.
+ * @fires {CustomEvent} checked-changed - Fired when the `checked` property changes.
+ * @fires {CustomEvent} indeterminate-changed - Fired when the `indeterminate` property changes.
  *
  * @extends HTMLElement
  * @mixes ElementMixin
