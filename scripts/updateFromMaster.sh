@@ -24,8 +24,6 @@ checkoutProject() {
   rm -rf packages/$repo/tsconfig.json
   # Delete visual tests
   rm -rf packages/$repo/test/visual
-  # Delete typings tests
-  rm -rf packages/$repo/test/typings
   # Delete directory description
   rm -rf packages/$repo/vaadin-directory-description.md
   # Delete API docs
