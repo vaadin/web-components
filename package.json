@@ -21,6 +21,7 @@
     "lint": "npm-run-all --parallel lint:*",
     "lint:css": "stylelint packages/**/src/*.js packages/**/theme/**/*-styles.js",
     "lint:js": "eslint *.js scripts packages",
+    "lint:types": "tsc",
     "test": "web-test-runner --coverage",
     "test:firefox": "web-test-runner --config web-test-runner-firefox.config.js",
     "test:webkit": "web-test-runner --config web-test-runner-webkit.config.js"
@@ -40,6 +41,7 @@
     "replace-in-file": "^6.1.0",
     "stylelint": "^13.8.0",
     "stylelint-config-prettier": "^8.0.2",
-    "stylelint-config-vaadin": "^0.2.10"
+    "stylelint-config-vaadin": "^0.2.10",
+    "typescript": "^4.1.3"
   }
 }
