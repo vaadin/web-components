@@ -8,7 +8,7 @@ const config = {
     include: ['**/src/*'],
     threshold: {
       statements: 99,
-      branches: 86,
+      branches: 88,
       functions: 100,
       lines: 99
     }
