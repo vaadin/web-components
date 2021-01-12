@@ -21,14 +21,17 @@
     "dist": "lerna run dist --stream",
     "lint": "npm-run-all --parallel lint:*",
     "lint:css": "stylelint packages/**/src/*.js packages/**/theme/**/*-styles.js",
-    "lint:js": "eslint *.js scripts packages",
+    "lint:js": "eslint *.js scripts packages stories",
     "lint:types": "tsc",
     "preversion": "node scripts/updateVersion.js",
+    "start": "web-dev-server --config .storybook/server.config.js",
     "test": "web-test-runner --coverage",
     "test:firefox": "web-test-runner --config web-test-runner-firefox.config.js",
     "test:webkit": "web-test-runner --config web-test-runner-webkit.config.js"
   },
   "devDependencies": {
+    "@web/dev-server": "^0.1.4",
+    "@web/dev-server-storybook": "^0.3.2",
     "@web/test-runner": "^0.12.14",
     "@web/test-runner-playwright": "^0.8.4",
     "eslint": "^7.21.0",
