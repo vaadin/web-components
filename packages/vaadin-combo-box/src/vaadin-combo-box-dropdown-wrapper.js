@@ -502,8 +502,6 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
       return;
     }
 
-    // Ensure items are rendered
-    this._selector.flushDebouncer('_debounceTemplate');
     // Ensure items are positioned
     this._selector.scrollToIndex(this._selector.firstVisibleIndex);
     // Ensure viewport boundaries are up-to-date
