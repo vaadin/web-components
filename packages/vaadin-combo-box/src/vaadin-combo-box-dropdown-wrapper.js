@@ -342,10 +342,6 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
   }
 
   _onItemClick(e) {
-    if (e.detail && e.detail.sourceEvent && e.detail.sourceEvent.stopPropagation) {
-      this._stopPropagation(e.detail.sourceEvent);
-    }
-
     this.dispatchEvent(new CustomEvent('selection-changed', { detail: { item: e.model.item } }));
   }
 
