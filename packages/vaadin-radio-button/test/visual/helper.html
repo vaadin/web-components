@@ -2,7 +2,7 @@
 
 <head lang="en">
   <meta charset="UTF-8" />
-  <title>Radio button tests</title>
+  <title>Radio group helper tests</title>
   <script>
     window.polymerSkipLoadingFontRoboto = true;
   </script>
@@ -10,50 +10,37 @@
 
 <body>
   <div id="tests" style="padding: 6px">
-    <vaadin-radio-group label="Foo">
-      <vaadin-radio-button checked>1</vaadin-radio-button>
-      <vaadin-radio-button disabled>2</vaadin-radio-button>
-      <vaadin-radio-button>3</vaadin-radio-button>
-    </vaadin-radio-group>
-
-    <br />
-
-    <vaadin-radio-group label="Label" required error-message="Error message" invalid>
+    <vaadin-radio-group label="Label" helper-text="Helper text">
       <vaadin-radio-button>1</vaadin-radio-button>
       <vaadin-radio-button>2</vaadin-radio-button>
     </vaadin-radio-group>
 
     <br />
 
-    <vaadin-radio-group label="Vertical" theme="vertical">
+    <vaadin-radio-group id="helperAboveField" theme="helper-above-field" label="Label" helper-text="Helper text">
       <vaadin-radio-button>1</vaadin-radio-button>
       <vaadin-radio-button>2</vaadin-radio-button>
     </vaadin-radio-group>
 
     <br />
-
-    Empty labels
-    <vaadin-radio-button></vaadin-radio-button>
-    <vaadin-radio-button></vaadin-radio-button>
-
-    <br />
-
-    <vaadin-radio-group label="Focused">
-      <vaadin-radio-button id="radio">1</vaadin-radio-button>
+    <!--
+    On material theme, helper text is hidden when error message is shown:
+    -->
+    <vaadin-radio-group label="Label" required error-message="Error message" helper-text="Helper text" invalid>
+      <vaadin-radio-button>1</vaadin-radio-button>
       <vaadin-radio-button>2</vaadin-radio-button>
     </vaadin-radio-group>
   </div>
 
   <script type="module">
-    import { keyDownOn } from '@polymer/iron-test-helpers/mock-interactions.js';
-
     (async () => {
       const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
 
       await import('../../theme/' + theme + '/vaadin-radio-group.js');
 
-      keyDownOn(document.body, 9);
-      document.getElementById('radio').dispatchEvent(new CustomEvent('focusin', { composed: true, bubbles: true }));
+      if (theme === 'material') {
+        document.querySelector('#helperAboveField').setAttribute('hidden', '');
+      }
 
       window.requestAnimationFrame(() => {
         document.getElementById('tests').dataset.ready = true;

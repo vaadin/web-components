@@ -1,65 +1,42 @@
 <!DOCTYPE html>
 
 <head lang="en">
-  <meta charset="UTF-8">
-  <title></title>
-  <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
-  <script src="../../bower_components/iron-test-helpers/mock-interactions.js"></script>
+  <meta charset="UTF-8" />
+  <title>Radio button RTL tests</title>
   <script>
-    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
-    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-radio-button.html">`);
-    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-radio-group.html">`);
-    document.documentElement.setAttribute('dir', 'rtl');
+    window.polymerSkipLoadingFontRoboto = true;
   </script>
 </head>
 
 <body>
-
-  <div id="default-tests" style="padding: 6px;">
+  <div id="tests" style="padding: 6px">
     <vaadin-radio-group label="Foo">
       <vaadin-radio-button checked>1</vaadin-radio-button>
       <vaadin-radio-button disabled>2</vaadin-radio-button>
       <vaadin-radio-button>3</vaadin-radio-button>
     </vaadin-radio-group>
 
-    <br/>
+    <br />
 
     <vaadin-radio-group label="Label" required error-message="Error message" invalid>
       <vaadin-radio-button>1</vaadin-radio-button>
       <vaadin-radio-button>2</vaadin-radio-button>
     </vaadin-radio-group>
 
-    <br/>
-
-    <vaadin-radio-group label="Label" helper-text="Helper text">
-      <vaadin-radio-button>1</vaadin-radio-button>
-      <vaadin-radio-button>2</vaadin-radio-button>
-    </vaadin-radio-group>
-
-    <br/>
-
-    <span>On material theme, helper text is hidden when error message is shown:</span>
-
-    <vaadin-radio-group label="Label" required error-message="Error message"
-      helper-text="Helper text" invalid>
-      <vaadin-radio-button>1</vaadin-radio-button>
-      <vaadin-radio-button>2</vaadin-radio-button>
-    </vaadin-radio-group>
-
-    <br/>
+    <br />
 
     <vaadin-radio-group label="Vertical" theme="vertical">
       <vaadin-radio-button>1</vaadin-radio-button>
       <vaadin-radio-button>2</vaadin-radio-button>
     </vaadin-radio-group>
 
-    <br/>
+    <br />
 
-    <vaadin-radio-button></vaadin-radio-button>
-    <vaadin-radio-button></vaadin-radio-button>
     Empty labels
+    <vaadin-radio-button></vaadin-radio-button>
+    <vaadin-radio-button></vaadin-radio-button>
 
-    <br/>
+    <br />
 
     <vaadin-radio-group label="Choose a number">
       <vaadin-radio-button value="1">Radio button 1</vaadin-radio-button>
@@ -67,12 +44,18 @@
       <vaadin-radio-button value="3">Radio button 3</vaadin-radio-button>
       <vaadin-radio-button value="4">Radio button 4</vaadin-radio-button>
     </vaadin-radio-group>
+  </div>
 
-  <script>
-    // eslint-disable-next-line no-unused-vars
-    function focusRadio() {
-      MockInteractions.keyDownOn(document.body, 9);
-    }
+  <script type="module">
+    (async () => {
+      const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+      document.documentElement.setAttribute('dir', 'rtl');
+
+      await import('../../theme/' + theme + '/vaadin-radio-group.js');
+
+      window.requestAnimationFrame(() => {
+        document.getElementById('tests').dataset.ready = true;
+      });
+    })();
   </script>
-
 </body>

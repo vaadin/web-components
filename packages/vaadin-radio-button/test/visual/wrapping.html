@@ -1,19 +1,15 @@
 <!DOCTYPE html>
 
 <head lang="en">
-  <meta charset="UTF-8">
-  <title></title>
-  <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <meta charset="UTF-8" />
+  <title>Radio button wrapping tests</title>
   <script>
-    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
-    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-radio-button.html">`);
-    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-radio-group.html">`);
+    window.polymerSkipLoadingFontRoboto = true;
   </script>
 </head>
 
 <body>
-
-  <div id="wrapping-tests" style="width: 320px; padding: 6px;">
+  <div id="tests" style="width: 320px; padding: 6px">
     <vaadin-radio-group label="Choose a number">
       <vaadin-radio-button value="1">Radio button 1</vaadin-radio-button>
       <vaadin-radio-button value="2">Radio button 2</vaadin-radio-button>
@@ -22,4 +18,15 @@
     </vaadin-radio-group>
   </div>
 
+  <script type="module">
+    (async () => {
+      const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+
+      await import('../../theme/' + theme + '/vaadin-radio-group.js');
+
+      window.requestAnimationFrame(() => {
+        document.getElementById('tests').dataset.ready = true;
+      });
+    })();
+  </script>
 </body>

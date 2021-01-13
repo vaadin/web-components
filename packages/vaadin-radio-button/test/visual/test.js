@@ -1,43 +1,37 @@
-gemini.suite('vaadin-radio-button', function(rootSuite) {
-  function wait(actions, find) {
-    actions.wait(5000);
-  }
+describe('vaadin-radio-button', () => {
+  const locator = '#tests[data-ready]';
 
-  function goToAboutBlank(actions, find) {
-    // Firefox stops responding on socket after a test, workaround:
-    return actions.executeJS(function(window) {
-      window.location.href = 'about:blank'; // just go away, please!
-    });
-  }
-
-  rootSuite
-    .before(wait)
-    .after(goToAboutBlank);
-  ['lumo', 'material'].forEach(theme => {
-    gemini.suite(`default-tests-${theme}`, function(suite) {
-      suite
-        .setUrl(`default.html?theme=${theme}`)
-        .setCaptureElements('#default-tests')
-        .capture('default', function(actions) {
-          actions.executeJS(function(window) {
-            window.focusRadio();
-          });
-        });
+  ['lumo', 'material'].forEach((theme) => {
+    it(`${theme}-default`, function () {
+      return this.browser
+        .url(`default.html?theme=${theme}`)
+        .waitForVisible(locator, 15000)
+        .assertView(`${theme}-default`, locator);
     });
 
-    gemini.suite(`default-rtl-tests-${theme}`, function(suite) {
-      suite
-        .setUrl(`default-rtl.html?theme=${theme}`)
-        .setCaptureElements('#default-tests')
-        .capture('default');
+    it(`${theme}-default-rtl`, function () {
+      return this.browser
+        .url(`default-rtl.html?theme=${theme}`)
+        .waitForVisible(locator, 15000)
+        .assertView(`${theme}-default-rtl`, locator);
     });
 
-    gemini.suite(`wrapping-tests-${theme}`, function(suite) {
-      suite
-        .setUrl(`wrapping.html?theme=${theme}`)
-        .setCaptureElements('#wrapping-tests')
-        .capture('wrapping');
+    it(`${theme}-helper`, function () {
+      return this.browser
+        .url(`helper.html?theme=${theme}`)
+        .waitForVisible(locator, 15000)
+        .assertView(`${theme}-helper`, locator)
+        .execute(() => {
+          window.document.documentElement.setAttribute('dir', 'rtl');
+        })
+        .assertView(`${theme}-helper-rtl`, locator);
+    });
+
+    it(`${theme}-wrapping`, function () {
+      return this.browser
+        .url(`wrapping.html?theme=${theme}`)
+        .waitForVisible(locator, 15000)
+        .assertView(`${theme}-wrapping`, locator);
     });
   });
-
 });
