@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-progress-bar",
-  "version": "1.3.0",
+  "version": "2.0.0-alpha2",
   "description": "vaadin-progress-bar",
   "main": "vaadin-progress-bar.js",
   "module": "vaadin-progress-bar.js",
