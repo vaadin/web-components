@@ -1,27 +1,27 @@
 <!DOCTYPE html>
 
 <head lang="en">
-  <meta charset="UTF-8">
-  <title></title>
-  <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <meta charset="UTF-8" />
+  <title>Progress bar tests</title>
   <script>
-    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
-    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-progress-bar.html">`);
-
-    window.addEventListener('WebComponentsReady', function() {
-      customElements.whenDefined('vaadin-progress-bar').then(function() {
-        window.ShadyDOM && window.ShadyDOM.flush(); // Force DOM composition
-        window.webComponentsAreReady = true; // Checked in gemini before capture callback
-      });
-    });
+    window.polymerSkipLoadingFontRoboto = true;
   </script>
 </head>
 
 <body>
+  <div id="tests" style="padding: 10px">
+    <vaadin-progress-bar value="0.1"></vaadin-progress-bar>
+  </div>
 
-  <span id="default-tests">
-    <vaadin-progress-bar value="0.1">
-    </vaadin-progress-bar>
-  </span>
+  <script type="module">
+    (async () => {
+      const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
 
+      await import('../../theme/' + theme + '/vaadin-progress-bar.js');
+
+      window.requestAnimationFrame(() => {
+        document.getElementById('tests').dataset.ready = true;
+      });
+    })();
+  </script>
 </body>
