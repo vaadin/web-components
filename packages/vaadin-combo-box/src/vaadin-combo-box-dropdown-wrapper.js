@@ -31,7 +31,6 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
         id="dropdown"
         hidden="[[_hidden(_items.*, loading)]]"
         position-target="[[positionTarget]]"
-        on-template-changed="_templateChanged"
         on-position-changed="_setOverlayHeight"
         disable-upgrade=""
         theme="[[theme]]"
@@ -183,12 +182,7 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
   }
 
   static get observers() {
-    return [
-      '_selectorChanged(_selector)',
-      '_loadingChanged(loading)',
-      '_openedChanged(opened, _items, loading)',
-      '_restoreScrollerPosition(_items)'
-    ];
+    return ['_loadingChanged(loading)', '_openedChanged(opened, _items, loading)', '_restoreScrollerPosition(_items)'];
   }
 
   _fireTouchAction(sourceEvent) {
@@ -259,7 +253,11 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
   _initDropdown() {
     this.$.dropdown.removeAttribute('disable-upgrade');
 
-    this._templateChanged();
+    this._selector = this.$.dropdown.$.overlay.content.querySelector('#selector');
+    this._scroller = this.$.dropdown.$.overlay.content.querySelector('#scroller');
+
+    this._patchWheelOverScrolling();
+
     this._loadingChanged(this.loading);
 
     this.$.dropdown.$.overlay.addEventListener('touchend', (e) => this._fireTouchAction(e));
@@ -267,15 +265,6 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
 
     // Prevent blurring the input when clicking inside the overlay.
     this.$.dropdown.$.overlay.addEventListener('mousedown', (e) => e.preventDefault());
-  }
-
-  _templateChanged() {
-    if (this.$.dropdown.hasAttribute('disable-upgrade')) {
-      return;
-    }
-
-    this._selector = this.$.dropdown.$.overlay.content.querySelector('#selector');
-    this._scroller = this.$.dropdown.$.overlay.content.querySelector('#scroller');
   }
 
   _loadingChanged(loading) {
@@ -288,10 +277,6 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
     } else {
       this.$.dropdown.$.overlay.removeAttribute('loading');
     }
-  }
-
-  _selectorChanged() {
-    this._patchWheelOverScrolling();
   }
 
   _setOverlayHeight() {
