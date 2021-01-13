@@ -82,7 +82,6 @@ class ComboBoxDropdownElement extends DisableUpgradeMixin(mixinBehaviors(IronRes
         id="overlay"
         hidden$="[[hidden]]"
         opened="[[opened]]"
-        template="{{template}}"
         style="align-items: stretch; margin: 0;"
         theme$="[[theme]]"
       >
@@ -100,11 +99,6 @@ class ComboBoxDropdownElement extends DisableUpgradeMixin(mixinBehaviors(IronRes
       opened: {
         type: Boolean,
         observer: '_openedChanged'
-      },
-
-      template: {
-        type: Object,
-        notify: true
       },
 
       /**

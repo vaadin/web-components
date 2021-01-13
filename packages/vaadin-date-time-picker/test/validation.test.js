@@ -35,11 +35,6 @@ const fixtures = {
       dateTimePicker.remove();
     });
 
-    it('should be required', () => {
-      dateTimePicker.required = true;
-      expect(customField.required).to.be.true;
-    });
-
     it('should not be required', () => {
       expect(customField.required).to.be.false;
     });
@@ -89,11 +84,6 @@ const fixtures = {
       dateTimePicker.value = '2020-02-02T03:00';
       expect(dateTimePicker.validate()).to.equal(true);
       expect(dateTimePicker.invalid).to.equal(false);
-    });
-
-    it('should be possible to force invalid status', () => {
-      dateTimePicker.invalid = true;
-      expect(customField.invalid).to.be.true;
     });
 
     describe('required', () => {
