@@ -12,8 +12,11 @@ vaadin-item
 vaadin-list-box
 vaadin-login
 vaadin-menu-bar
+vaadin-progress-bar
+vaadin-radio-button
 vaadin-rich-text-editor
 vaadin-select
+vaadin-split-layout
 vaadin-tabs
 vaadin-text-field
 vaadin-time-picker

@@ -1,0 +1,39 @@
+{
+  "name": "@vaadin/vaadin-progress-bar",
+  "version": "2.0.0-alpha2",
+  "description": "vaadin-progress-bar",
+  "main": "vaadin-progress-bar.js",
+  "module": "vaadin-progress-bar.js",
+  "repository": "vaadin/vaadin-progress-bar",
+  "keywords": [
+    "Vaadin",
+    "vaadin-progress",
+    "vaadin-progress-bar",
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
+  "author": "Vaadin Ltd",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/vaadin/vaadin-progress-bar/issues"
+  },
+  "homepage": "https://vaadin.com/components",
+  "files": [
+    "vaadin-*.d.ts",
+    "vaadin-*.js",
+    "src",
+    "theme"
+  ],
+  "dependencies": {
+    "@polymer/polymer": "^3.0.0",
+    "@vaadin/vaadin-themable-mixin": "^1.6.1",
+    "@vaadin/vaadin-lumo-styles": "^1.6.1",
+    "@vaadin/vaadin-material-styles": "^1.3.2",
+    "@vaadin/vaadin-element-mixin": "^2.4.1"
+  },
+  "devDependencies": {
+    "@esm-bundle/chai": "^4.1.5",
+    "@open-wc/testing-helpers": "^1.8.12"
+  }
+}
