@@ -43,7 +43,8 @@ describe('selecting items', () => {
     document.addEventListener('click', clickSpy);
     comboBox.$.overlay._selector.dispatchEvent(
       new CustomEvent('click', {
-        bubbles: true
+        bubbles: true,
+        composed: true
       })
     );
     document.removeEventListener('click', clickSpy);

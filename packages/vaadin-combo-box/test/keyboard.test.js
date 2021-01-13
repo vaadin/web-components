@@ -249,30 +249,6 @@ describe('keyboard', () => {
       document.body.removeEventListener('keydown', listener);
     });
 
-    it('click event should not be propagated', () => {
-      const listener = document.body.addEventListener('click', () => {
-        throw new Error('Click event was propagated to body');
-      });
-
-      comboBox.$.overlay._selector
-        .querySelector('vaadin-combo-box-item')
-        .dispatchEvent(new CustomEvent('click', { composed: true, bubbles: true }));
-
-      document.body.removeEventListener('click', listener);
-    });
-
-    it('click event should not be propagated', () => {
-      const listener = document.body.addEventListener('click', () => {
-        throw new Error('Click event was propagated to body');
-      });
-
-      comboBox.$.overlay._selector
-        .querySelector('vaadin-combo-box-item')
-        .dispatchEvent(new CustomEvent('click', { composed: true, bubbles: true }));
-
-      document.body.removeEventListener('click', listener);
-    });
-
     it('should cancel typing with escape', () => {
       filter('baz');
 
