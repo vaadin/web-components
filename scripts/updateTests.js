@@ -9,7 +9,9 @@ const skipTests = {
     'packages/vaadin-context-menu/test/device-detector.test.js',
     'packages/vaadin-context-menu/test/integration.test.js',
     'packages/vaadin-menu-bar/test/sub-menu.test.js',
-    'packages/vaadin-rich-text-editor/test/basic.test.js'
+    'packages/vaadin-rich-text-editor/test/basic.test.js',
+    'packages/vaadin-split-layout/test/split-layout.test.js',
+    'packages/vaadin-radio-button/test/radio-button.test.js'
   ],
   from: [
     `describe('with add button'`,
@@ -21,7 +23,11 @@ const skipTests = {
     `(isIOS ? it.skip : it)('should open context menu below button'`,
     `it('should close submenu on mobile when selecting an item in the nested one'`,
     '(isFirefox ? it.skip : it)(`should apply ${fmt} formatting to the selected text on click`',
-    `describe('image'`
+    `describe('image'`,
+    `document.createEvent('TouchEvent');`,
+    `it('should set checked on touchend'`,
+    `it('should not set checked on touchend when disabled'`,
+    `it('should fire on touchend'`
   ],
   to: [
     `const isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
@@ -40,7 +46,14 @@ const skipTests = {
   (isSafari ? it.skip : it)('should close submenu on mobile when selecting an item in the nested one'`,
     `const isSafari = /Safari/i.test(navigator.userAgent);
         (isFirefox || isSafari ? it.skip : it)(\`should apply \${fmt} formatting to the selected text on click\``,
-    `(isFirefox ? describe.skip : describe)('image'`
+    `(isFirefox ? describe.skip : describe)('image'`,
+    `new Touch({ identifier: 1, target: window });`,
+    `const isSafari = /Safari/i.test(navigator.userAgent);
+    (isSafari ? it.skip : it)('should set checked on touchend'`,
+    `const isSafari = /Safari/i.test(navigator.userAgent);
+    (isSafari ? it.skip : it)('should not set checked on touchend when disabled'`,
+    `const isSafari = /Safari/i.test(navigator.userAgent);
+    (isSafari ? it.skip : it)('should fire on touchend'`
   ]
 };
 

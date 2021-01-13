@@ -1,0 +1,41 @@
+{
+  "name": "@vaadin/vaadin-split-layout",
+  "version": "5.0.0-alpha1",
+  "description": "Web component for partitioning a layout into resizeable areas",
+  "main": "vaadin-split-layout.js",
+  "module": "vaadin-split-layout.js",
+  "repository": "vaadin/vaadin-split-layout",
+  "keywords": [
+    "Vaadin",
+    "split layout",
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
+  "author": "Vaadin Ltd",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/vaadin/vaadin-split-layout/issues"
+  },
+  "homepage": "https://vaadin.com/components",
+  "files": [
+    "vaadin-*.d.ts",
+    "vaadin-*.js",
+    "src",
+    "theme"
+  ],
+  "dependencies": {
+    "@polymer/polymer": "^3.0.0",
+    "@polymer/iron-resizable-behavior": "^3.0.0",
+    "@vaadin/vaadin-themable-mixin": "^1.6.1",
+    "@vaadin/vaadin-lumo-styles": "^1.1.0",
+    "@vaadin/vaadin-material-styles": "^1.1.0",
+    "@vaadin/vaadin-element-mixin": "^2.4.1"
+  },
+  "devDependencies": {
+    "@esm-bundle/chai": "^4.1.5",
+    "@open-wc/testing-helpers": "^1.8.12",
+    "@polymer/iron-test-helpers": "^3.0.0",
+    "sinon": "^9.2.1"
+  }
+}
