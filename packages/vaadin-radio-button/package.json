@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-radio-button",
-  "version": "1.5.1",
+  "version": "2.0.0-alpha2",
   "description": "vaadin-radio-button",
   "main": "vaadin-radio-button.js",
   "module": "vaadin-radio-button.js",
