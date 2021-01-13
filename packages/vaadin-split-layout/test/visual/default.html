@@ -1,25 +1,21 @@
 <!DOCTYPE html>
 
 <head lang="en">
-  <meta charset="UTF-8">
-  <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <meta charset="UTF-8" />
+  <title>Split layout tests</title>
   <script>
-    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
-    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-split-layout.html">`);
+    window.polymerSkipLoadingFontRoboto = true;
   </script>
-
-  <style is="custom-style">
+  <style>
     vaadin-split-layout {
       height: 100px;
       width: 200px;
     }
   </style>
-
 </head>
 
 <body>
-
-  <vaadin-split-layout id="default">
+  <vaadin-split-layout>
     <div style="width: 25%"></div>
     <vaadin-split-layout orientation="vertical" style="width: 75%">
       <div></div>
@@ -27,4 +23,15 @@
     </vaadin-split-layout>
   </vaadin-split-layout>
 
+  <script type="module">
+    (async () => {
+      const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+
+      await import('../../theme/' + theme + '/vaadin-split-layout.js');
+
+      window.requestAnimationFrame(() => {
+        document.querySelector('vaadin-split-layout').dataset.ready = true;
+      });
+    })();
+  </script>
 </body>

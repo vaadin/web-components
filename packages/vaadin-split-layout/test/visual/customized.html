@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 
 <head lang="en">
-  <meta charset="UTF-8">
-  <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <meta charset="UTF-8" />
+  <title>Split layout tests</title>
   <script>
-    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
-    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-split-layout.html">`);
+    window.polymerSkipLoadingFontRoboto = true;
   </script>
 </head>
 
@@ -13,14 +12,14 @@
   <dom-module id="custom-split-layout-styles" theme-for="vaadin-split-layout">
     <template>
       <style>
-        [part~="splitter"] {
+        [part~='splitter'] {
           min-width: 4px;
           min-height: 4px;
           background: #ddd;
         }
 
-        [part~="handle"]::after {
-          content: "\22EE";
+        [part~='handle']::after {
+          content: '\22EE';
           display: block;
           font-size: 16px;
           line-height: 40px;
@@ -29,19 +28,31 @@
           text-shadow: 1px 1px #fff;
         }
 
-        :host([orientation="vertical"]) [part~="handle"]::after {
-          content: "\22EF";
+        :host([orientation='vertical']) [part~='handle']::after {
+          content: '\22EF';
           line-height: 3px;
         }
       </style>
     </template>
   </dom-module>
 
-  <vaadin-split-layout id="customized" style="height: 100px; width: 200px;">
+  <vaadin-split-layout style="height: 100px; width: 200px">
     <div>First</div>
     <vaadin-split-layout orientation="vertical">
       <div>Second</div>
       <div>Third</div>
     </vaadin-split-layout>
   </vaadin-split-layout>
+
+  <script type="module">
+    (async () => {
+      const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+
+      await import('../../theme/' + theme + '/vaadin-split-layout.js');
+
+      window.requestAnimationFrame(() => {
+        document.querySelector('vaadin-split-layout').dataset.ready = true;
+      });
+    })();
+  </script>
 </body>
