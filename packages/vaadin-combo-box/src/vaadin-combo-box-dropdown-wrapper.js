@@ -280,7 +280,7 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
   }
 
   _setOverlayHeight() {
-    if (!this.opened || !this.positionTarget || !this._selector) {
+    if (!this.opened || !this.positionTarget) {
       return;
     }
 
@@ -398,10 +398,6 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
       return;
     }
     const visibleItemsCount = this._visibleItemsCount();
-    if (visibleItemsCount === undefined) {
-      // Scroller is not visible. Moving is unnecessary.
-      return;
-    }
 
     let targetIndex = index;
 
@@ -483,10 +479,6 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
   }
 
   _visibleItemsCount() {
-    if (!this._selector) {
-      return;
-    }
-
     // Ensure items are positioned
     this._selector.scrollToIndex(this._selector.firstVisibleIndex);
     // Ensure viewport boundaries are up-to-date
