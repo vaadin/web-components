@@ -8,6 +8,7 @@ import {
   getCellContent,
   getContainerCell,
   getFirstCell,
+  getFirstVisibleItem,
   getRows,
   getRowCells,
   infiniteDataProvider,
@@ -560,6 +561,32 @@ describe('data provider', () => {
         expect(grid._cache.getItemForIndex(18)).to.deep.equal({ level: 0, value: 'foo8' });
       });
     });
+  });
+});
+
+describe('attached', () => {
+  it('should have rows when attached and shown after cache is cleared on hidden grid', async () => {
+    const grid = document.createElement('vaadin-grid');
+    const col = document.createElement('vaadin-grid-column');
+    col.setAttribute('path', 'item');
+    grid.appendChild(col);
+
+    grid.size = 1;
+    grid.dataProvider = function (params, callback) {
+      callback([{ item: 'A' }]);
+    };
+
+    grid.style.display = 'none';
+    document.body.appendChild(grid);
+
+    await aTimeout(0);
+
+    grid.clearCache();
+    grid.removeAttribute('style');
+    expect(getCellContent(getFirstVisibleItem(grid)).textContent).to.equal('A');
+
+    // Grid should be removed after test as was attached to body.
+    document.body.removeChild(grid);
   });
 });
 
