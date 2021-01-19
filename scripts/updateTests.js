@@ -8,6 +8,7 @@ const skipTests = {
     'packages/vaadin-combo-box/test/keyboard.test.js',
     'packages/vaadin-context-menu/test/device-detector.test.js',
     'packages/vaadin-context-menu/test/integration.test.js',
+    'packages/vaadin-context-menu/test/items.test.js',
     'packages/vaadin-menu-bar/test/sub-menu.test.js',
     'packages/vaadin-rich-text-editor/test/basic.test.js',
     'packages/vaadin-split-layout/test/split-layout.test.js',
@@ -21,6 +22,7 @@ const skipTests = {
     `it('should select the input field text when navigating up'`,
     `it('should detect touch support'`,
     `(isIOS ? it.skip : it)('should open context menu below button'`,
+    `(isIOS ? describe.skip : describe)('scrolling'`,
     `it('should close submenu on mobile when selecting an item in the nested one'`,
     '(isFirefox ? it.skip : it)(`should apply ${fmt} formatting to the selected text on click`',
     `describe('image'`,
@@ -42,6 +44,8 @@ const skipTests = {
   (isSafari ? it.skip : it)('should detect touch support'`,
     `const isSafari = /Safari/i.test(navigator.userAgent);
   (isIOS || isSafari ? it.skip : it)('should open context menu below button'`,
+    `const isChrome = window.chrome || /HeadlessChrome/.test(navigator.userAgent);
+    (isChrome ? describe : describe.skip)('scrolling'`,
     `const isSafari = /Safari/i.test(navigator.userAgent);
   (isSafari ? it.skip : it)('should close submenu on mobile when selecting an item in the nested one'`,
     `const isSafari = /Safari/i.test(navigator.userAgent);
