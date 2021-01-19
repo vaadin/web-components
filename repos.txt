@@ -6,12 +6,14 @@ vaadin-custom-field
 vaadin-crud
 vaadin-date-picker
 vaadin-date-time-picker
+vaadin-form-layout
 vaadin-grid
 vaadin-grid-pro
 vaadin-item
 vaadin-list-box
 vaadin-login
 vaadin-menu-bar
+vaadin-notification
 vaadin-progress-bar
 vaadin-radio-button
 vaadin-rich-text-editor
