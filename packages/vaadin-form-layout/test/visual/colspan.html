@@ -1,46 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title></title>
-  <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
-  <link rel="import" href="../../../polymer/polymer-element.html">
-  <script>
-    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
-    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-form-layout.html">`);
-    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-form-item.html">`);
-  </script>
-  <script>
-    window.addEventListener('WebComponentsReady', function() {
-      setTimeout(function() {
-        window.ShadyDOM && window.ShadyDOM.flush(); // Force DOM composition
-        window.webComponentsAreReady = true; // Checked in gemini before capture callback
-      });
-    });
-  </script>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Form layout colspan tests</title>
+    <script>
+      window.polymerSkipLoadingFontRoboto = true;
+    </script>
+  </head>
+  <body>
+    <vaadin-form-layout id="tests">
+      <vaadin-form-item colspan="2">
+        <label slot="label">Address</label>
+        <input class="full-width" />
+      </vaadin-form-item>
 
-  <h3>Spanning Items on Multiple Columns</h3>
+      <vaadin-form-item>
+        <label slot="label">First Name</label>
+        <input class="full-width" value="Jane" />
+      </vaadin-form-item>
 
-  <vaadin-form-layout id="capture">
+      <vaadin-form-item>
+        <label slot="label">Last Name</label>
+        <input class="full-width" value="Doe" />
+      </vaadin-form-item>
+    </vaadin-form-layout>
 
-    <vaadin-form-item colspan="2">
-      <label slot="label">Address</label>
-      <input class="full-width">
-    </vaadin-form-item>
+    <script type="module">
+      (async () => {
+        const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
 
-    <vaadin-form-item>
-      <label slot="label">First Name</label>
-      <input class="full-width" value="Jane">
-    </vaadin-form-item>
+        await Promise.all([
+          import('../../theme/' + theme + '/vaadin-form-layout.js'),
+          import('../../theme/' + theme + '/vaadin-form-item.js')
+        ]);
 
-    <vaadin-form-item>
-      <label slot="label">Last Name</label>
-      <input class="full-width" value="Doe">
-    </vaadin-form-item>
-
-  </vaadin-form-layout>
-
-</body>
+        window.requestAnimationFrame(() => {
+          setTimeout(() => {
+            document.getElementById('tests').dataset.ready = true;
+          });
+        });
+      })();
+    </script>
+  </body>
 </html>

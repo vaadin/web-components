@@ -1,76 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title></title>
-  <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
-  <link rel="import" href="../../../polymer/polymer-element.html">
-  <script>
-    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
-    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-form-layout.html">`);
-    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-form-item.html">`);
-  </script>
-  <script>
-    window.addEventListener('WebComponentsReady', function() {
-      setTimeout(function() {
-        window.ShadyDOM && window.ShadyDOM.flush(); // Force DOM composition
-        window.webComponentsAreReady = true; // Checked in gemini before capture callback
-      });
-    });
-  </script>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Form layout styling tests</title>
+    <script>
+      window.polymerSkipLoadingFontRoboto = true;
+    </script>
+  </head>
+  <body>
+    <dom-module id="form-layout-bootstrap-styles" theme-for="vaadin-form-layout">
+      <template>
+        <style>
+          :host {
+            --vaadin-form-layout-column-spacing: 2em;
+          }
+        </style>
+      </template>
+    </dom-module>
 
-  <h3>Styling</h3>
+    <dom-module id="form-item-bootstrap-styles" theme-for="vaadin-form-item">
+      <template>
+        <style>
+          :host {
+            --vaadin-form-item-label-width: 8em;
+            --vaadin-form-item-label-spacing: 1em;
+            --vaadin-form-item-row-spacing: 1.25em;
+          }
 
-  <dom-module id="form-layout-bootstrap-styles" theme-for="vaadin-form-layout">
-    <template>
-      <style>
-        :host {
-          --vaadin-form-layout-column-spacing: 2em;
-        }
-      </style>
-    </template>
-  </dom-module>
+          [part~='label'] {
+            font-weight: bold;
+          }
 
-  <dom-module id="form-item-bootstrap-styles" theme-for="vaadin-form-item">
-    <template>
-      <style>
-        :host {
-          --vaadin-form-item-label-width: 8em;
-          --vaadin-form-item-label-spacing: 1em;
-          --vaadin-form-item-row-spacing: 1.25em;
-        }
+          :host(:not([label-position='top'])) [part~='label'] {
+            text-align: right;
+          }
+        </style>
+      </template>
+    </dom-module>
 
-        [part~="label"] {
-          font-weight: bold;
-        }
+    <vaadin-form-layout id="tests">
+      <vaadin-form-item>
+        <label slot="label">First Name</label>
+        <input class="full-width" />
+      </vaadin-form-item>
 
-        :host(:not([label-position="top"])) [part~="label"] {
-          text-align: right;
-        }
-      </style>
-    </template>
-  </dom-module>
+      <vaadin-form-item>
+        <label slot="label">Last Name</label>
+        <input class="full-width" />
+      </vaadin-form-item>
 
-  <vaadin-form-layout id="capture">
+      <vaadin-form-item colspan="2">
+        <label slot="label">Conference Abstract</label>
+        <textarea rows="6" class="full-width" style="display: inline-flex; vertical-align: top"></textarea>
+      </vaadin-form-item>
+    </vaadin-form-layout>
 
-    <vaadin-form-item>
-      <label slot="label">First Name</label>
-      <input class="full-width">
-    </vaadin-form-item>
+    <script type="module">
+      (async () => {
+        const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
 
-    <vaadin-form-item>
-      <label slot="label">Last Name</label>
-      <input class="full-width">
-    </vaadin-form-item>
+        await Promise.all([
+          import('../../theme/' + theme + '/vaadin-form-layout.js'),
+          import('../../theme/' + theme + '/vaadin-form-item.js')
+        ]);
 
-    <vaadin-form-item colspan="2">
-      <label slot="label">Conference Abstract</label>
-      <textarea rows="6" class="full-width" style="display: inline-flex; vertical-align: top;"></textarea>
-    </vaadin-form-item>
-
-  </vaadin-form-layout>
-
-</body>
+        window.requestAnimationFrame(() => {
+          setTimeout(() => {
+            document.getElementById('tests').dataset.ready = true;
+          });
+        });
+      })();
+    </script>
+  </body>
 </html>

@@ -1,63 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title></title>
-  <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
-  <script>
-    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
-    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-form-layout.html">`);
-    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-form-item.html">`);
-  </script>
-  <link rel="import" href="../../../polymer/polymer-element.html">
-  <script>
-    window.addEventListener('WebComponentsReady', function() {
-      setTimeout(function() {
-        window.ShadyDOM && window.ShadyDOM.flush(); // Force DOM composition
-        window.webComponentsAreReady = true; // Checked in gemini before capture callback
-      });
-    });
-  </script>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Form layout tests</title>
+    <script>
+      window.polymerSkipLoadingFontRoboto = true;
+    </script>
+  </head>
+  <body>
+    <vaadin-form-layout id="tests">
+      <vaadin-form-item>
+        <label slot="label">First Name</label>
+        <input class="full-width" value="Jane" />
+      </vaadin-form-item>
 
-  <h3>Basic Usage</h3>
+      <vaadin-form-item>
+        <label slot="label">Last Name</label>
+        <input class="full-width" value="Doe" />
+      </vaadin-form-item>
 
-  <vaadin-form-layout id="capture">
+      <vaadin-form-item>
+        <label slot="label">Email</label>
+        <input class="full-width" value="jane.doe@example.com" />
+      </vaadin-form-item>
 
-    <vaadin-form-item>
-      <label slot="label">First Name</label>
-      <input class="full-width" value="Jane">
-    </vaadin-form-item>
+      <vaadin-form-item>
+        <span slot="label">Date of Birth</span>
+        <input placeholder="YYYY" size="4" /> - <input placeholder="MM" size="2" /> -
+        <input placeholder="DD" size="2" /><br />
+        <em>Example: 1900-01-01</em>
+      </vaadin-form-item>
 
-    <vaadin-form-item>
-      <label slot="label">Last Name</label>
-      <input class="full-width" value="Doe">
-    </vaadin-form-item>
+      <vaadin-form-item colspan="2">
+        <label slot="label">Conference Abstract</label>
+        <textarea rows="6" class="full-width" style="display: inline-flex; vertical-align: top"></textarea>
+      </vaadin-form-item>
 
-    <vaadin-form-item>
-      <label slot="label">Email</label>
-      <input class="full-width" value="jane.doe@example.com">
-    </vaadin-form-item>
+      <vaadin-form-item>
+        <input type="checkbox" />
+        Subscribe to our Newsletter
+      </vaadin-form-item>
+    </vaadin-form-layout>
 
-    <vaadin-form-item>
-      <span slot="label">Date of Birth</span>
-      <input placeholder="YYYY" size="4"> -
-      <input placeholder="MM" size="2"> -
-      <input placeholder="DD" size="2"><br>
-      <em>Example: 1900-01-01</em>
-    </vaadin-form-item>
+    <script type="module">
+      (async () => {
+        const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
 
-    <vaadin-form-item colspan="2">
-      <label slot="label">Conference Abstract</label>
-      <textarea rows="6" class="full-width" style="display: inline-flex; vertical-align: top;"></textarea>
-    </vaadin-form-item>
+        await Promise.all([
+          import('../../theme/' + theme + '/vaadin-form-layout.js'),
+          import('../../theme/' + theme + '/vaadin-form-item.js')
+        ]);
 
-    <vaadin-form-item>
-      <input type="checkbox"> Subscribe to our Newsletter
-    </vaadin-form-item>
-
-  </vaadin-form-layout>
-
-</body>
+        window.requestAnimationFrame(() => {
+          setTimeout(() => {
+            document.getElementById('tests').dataset.ready = true;
+          });
+        });
+      })();
+    </script>
+  </body>
 </html>

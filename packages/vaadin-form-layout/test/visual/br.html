@@ -1,43 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title></title>
-  <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
-  <link rel="import" href="../../../polymer/polymer-element.html">
-  <script>
-    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
-    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-form-layout.html">`);
-    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-form-item.html">`);
-  </script>
-  <script>
-    window.addEventListener('WebComponentsReady', function() {
-      setTimeout(function() {
-        window.ShadyDOM && window.ShadyDOM.flush(); // Force DOM composition
-        window.webComponentsAreReady = true; // Checked in gemini before capture callback
-      });
-    });
-  </script>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Form layout new line tests</title>
+    <script>
+      window.polymerSkipLoadingFontRoboto = true;
+    </script>
+  </head>
+  <body>
+    <vaadin-form-layout id="tests">
+      <vaadin-form-item>
+        <label slot="label">Email</label>
+        <input class="full-width" value="jane.doe@example.com" />
+      </vaadin-form-item>
 
-  <h3>Explicit New Row</h3>
+      <br />
 
-  <vaadin-form-layout id="capture">
+      <vaadin-form-item>
+        <label slot="label">Confirm Email</label>
+        <input class="full-width" value="jane.doe@example.com" />
+      </vaadin-form-item>
+    </vaadin-form-layout>
 
-    <vaadin-form-item>
-      <label slot="label">Email</label>
-      <input class="full-width" value="jane.doe@example.com">
-    </vaadin-form-item>
+    <script type="module">
+      (async () => {
+        const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
 
-    <br>
+        await Promise.all([
+          import('../../theme/' + theme + '/vaadin-form-layout.js'),
+          import('../../theme/' + theme + '/vaadin-form-item.js')
+        ]);
 
-    <vaadin-form-item>
-      <label slot="label">Confirm Email</label>
-      <input class="full-width" value="jane.doe@example.com">
-    </vaadin-form-item>
-
-  </vaadin-form-layout>
-
-</body>
+        window.requestAnimationFrame(() => {
+          setTimeout(() => {
+            document.getElementById('tests').dataset.ready = true;
+          });
+        });
+      })();
+    </script>
+  </body>
 </html>

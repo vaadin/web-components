@@ -1,74 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title></title>
-  <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
-  <link rel="import" href="../../../polymer/polymer-element.html">
-  <script>
-    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
-    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-form-layout.html">`);
-    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-form-item.html">`);
-  </script>
-  <script>
-    window.addEventListener('WebComponentsReady', function() {
-      setTimeout(function() {
-        window.ShadyDOM && window.ShadyDOM.flush(); // Force DOM composition
-        window.webComponentsAreReady = true; // Checked in gemini before capture callback
-      });
-    });
-  </script>
-</head>
-<body>
-
-  <h3>Custom Responsive Steps</h3>
-
-  <div id="capture">
-    <vaadin-form-layout
+  <head>
+    <meta charset="UTF-8" />
+    <title>Form layout responsive steps tests</title>
+    <script>
+      window.polymerSkipLoadingFontRoboto = true;
+    </script>
+  </head>
+  <body>
+    <div id="tests">
+      <vaadin-form-layout
         responsive-steps='[
           {"minWidth": 0, "columns": 2},
           {"minWidth": "640px", "columns": 3}
-        ]'>
+        ]'
+      >
+        <vaadin-form-item>
+          <label slot="label">First Name</label>
+          <input class="full-width" value="Jane" />
+        </vaadin-form-item>
 
-      <vaadin-form-item>
-        <label slot="label">First Name</label>
-        <input class="full-width" value="Jane">
-      </vaadin-form-item>
+        <vaadin-form-item>
+          <label slot="label">Last Name</label>
+          <input class="full-width" value="Doe" />
+        </vaadin-form-item>
 
-      <vaadin-form-item>
-        <label slot="label">Last Name</label>
-        <input class="full-width" value="Doe">
-      </vaadin-form-item>
+        <vaadin-form-item>
+          <label slot="label">Email</label>
+          <input class="full-width" value="jane.doe@example.com" />
+        </vaadin-form-item>
+      </vaadin-form-layout>
 
-      <vaadin-form-item>
-        <label slot="label">Email</label>
-        <input class="full-width" value="jane.doe@example.com">
-      </vaadin-form-item>
-
-    </vaadin-form-layout>
-
-    <vaadin-form-layout
+      <vaadin-form-layout
         responsive-steps='[
           {"minWidth": 0, "columns": 1, "labelsPosition": "top"},
           {"minWidth": "30em", "columns": 1}
-        ]'>
+        ]'
+      >
+        <vaadin-form-item>
+          <label slot="label">First Name</label>
+          <input class="full-width" value="Jane" />
+        </vaadin-form-item>
 
-      <vaadin-form-item>
-        <label slot="label">First Name</label>
-        <input class="full-width" value="Jane">
-      </vaadin-form-item>
+        <vaadin-form-item>
+          <label slot="label">Last Name</label>
+          <input class="full-width" value="Doe" />
+        </vaadin-form-item>
 
-      <vaadin-form-item>
-        <label slot="label">Last Name</label>
-        <input class="full-width" value="Doe">
-      </vaadin-form-item>
+        <vaadin-form-item>
+          <label slot="label">Email</label>
+          <input class="full-width" value="jane.doe@example.com" />
+        </vaadin-form-item>
+      </vaadin-form-layout>
+    </div>
 
-      <vaadin-form-item>
-        <label slot="label">Email</label>
-        <input class="full-width" value="jane.doe@example.com">
-      </vaadin-form-item>
+    <script type="module">
+      (async () => {
+        const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
 
-    </vaadin-form-layout>
-  </div>
-</body>
+        await Promise.all([
+          import('../../theme/' + theme + '/vaadin-form-layout.js'),
+          import('../../theme/' + theme + '/vaadin-form-item.js')
+        ]);
+
+        window.requestAnimationFrame(() => {
+          setTimeout(() => {
+            document.getElementById('tests').dataset.ready = true;
+          });
+        });
+      })();
+    </script>
+  </body>
 </html>
