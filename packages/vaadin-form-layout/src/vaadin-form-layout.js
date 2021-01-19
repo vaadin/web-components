@@ -161,7 +161,7 @@ class FormLayoutElement extends ElementMixin(ThemableMixin(mixinBehaviors([IronR
   }
 
   static get version() {
-    return '2.3.0';
+    return '3.0.0-alpha1';
   }
 
   static get properties() {
