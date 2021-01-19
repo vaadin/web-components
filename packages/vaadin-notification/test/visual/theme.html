@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+
+<head lang="en">
+  <meta charset="UTF-8" />
+  <title>Notification theme tests</title>
+</head>
+
+<body style="height: 100vh">
+  <dom-module id="test-card" theme-for="vaadin-notification-card">
+    <template>
+      <style>
+        :host([opening]) {
+          animation: none !important;
+        }
+      </style>
+    </template>
+  </dom-module>
+
+  <vaadin-notification opened duration="0" position="bottom-start">
+    <template>
+      With buttons (default)
+      <vaadin-button>Dismiss</vaadin-button>
+      <vaadin-button theme="primary">Accept</vaadin-button>
+    </template>
+  </vaadin-notification>
+
+  <vaadin-notification opened duration="0" position="bottom-start" theme="primary">
+    <template>
+      With buttons (primary)
+      <vaadin-button>Dismiss</vaadin-button>
+      <vaadin-button theme="primary">Accept</vaadin-button>
+    </template>
+  </vaadin-notification>
+
+  <vaadin-notification opened duration="0" position="bottom-start" theme="contrast">
+    <template>
+      With buttons (contrast)
+      <vaadin-button>Dismiss</vaadin-button>
+      <vaadin-button theme="primary">Accept</vaadin-button>
+    </template>
+  </vaadin-notification>
+
+  <vaadin-notification opened duration="0" position="bottom-start" theme="success">
+    <template>
+      With buttons (success)
+      <vaadin-button>Dismiss</vaadin-button>
+      <vaadin-button theme="primary">Accept</vaadin-button>
+    </template>
+  </vaadin-notification>
+
+  <vaadin-notification opened duration="0" position="bottom-start" theme="error">
+    <template>
+      With buttons (error)
+      <vaadin-button>Dismiss</vaadin-button>
+      <vaadin-button theme="primary">Accept</vaadin-button>
+    </template>
+  </vaadin-notification>
+
+  <vaadin-notification opened duration="0" position="bottom-end">
+    <template>
+      <div>
+        With nested buttons (default)
+        <vaadin-button>Dismiss</vaadin-button>
+        <vaadin-button theme="primary">Accept</vaadin-button>
+      </div>
+    </template>
+  </vaadin-notification>
+
+  <vaadin-notification opened duration="0" position="bottom-end" theme="primary">
+    <template>
+      <div>
+        With nested buttons (primary)
+        <vaadin-button>Dismiss</vaadin-button>
+        <vaadin-button theme="primary">Accept</vaadin-button>
+      </div>
+    </template>
+  </vaadin-notification>
+
+  <vaadin-notification opened duration="0" position="bottom-end" theme="contrast">
+    <template>
+      <div>
+        With nested buttons (contrast)
+        <vaadin-button>Dismiss</vaadin-button>
+        <vaadin-button theme="primary">Accept</vaadin-button>
+      </div>
+    </template>
+  </vaadin-notification>
+
+  <vaadin-notification opened duration="0" position="bottom-end" theme="success">
+    <template>
+      <div>
+        With nested buttons (success)
+        <vaadin-button>Dismiss</vaadin-button>
+        <vaadin-button theme="primary">Accept</vaadin-button>
+      </div>
+    </template>
+  </vaadin-notification>
+
+  <vaadin-notification opened duration="0" position="bottom-end" theme="error">
+    <template>
+      <div>
+        With nested buttons (error)
+        <vaadin-button>Dismiss</vaadin-button>
+        <vaadin-button theme="primary">Accept</vaadin-button>
+      </div>
+    </template>
+  </vaadin-notification>
+
+  <script type="module">
+    import '../../vaadin-notification.js';
+    import '@vaadin/vaadin-button/vaadin-button.js';
+
+    window.requestAnimationFrame(() => {
+      setTimeout(() => {
+        document.body.dataset.ready = true;
+      });
+    });
+  </script>
+</body>
