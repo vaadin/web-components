@@ -1,0 +1,42 @@
+{
+  "name": "@vaadin/vaadin-form-layout",
+  "version": "3.0.0-alpha1",
+  "description": "Web component providing configurable responsive layout for form elements",
+  "main": "vaadin-form-layout.js",
+  "module": "vaadin-form-layout.js",
+  "repository": "vaadin/vaadin-form-layout",
+  "keywords": [
+    "Vaadin",
+    "form-layout",
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
+  "author": "Vaadin Ltd",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/vaadin/vaadin-form-layout/issues"
+  },
+  "homepage": "https://vaadin.com/components",
+  "files": [
+    "vaadin-*.d.ts",
+    "vaadin-*.js",
+    "src",
+    "theme"
+  ],
+  "dependencies": {
+    "@polymer/iron-resizable-behavior": "^3.0.0",
+    "@polymer/polymer": "^3.0.0",
+    "@vaadin/vaadin-themable-mixin": "^1.6.1",
+    "@vaadin/vaadin-lumo-styles": "^1.6.1",
+    "@vaadin/vaadin-material-styles": "^1.3.2",
+    "@vaadin/vaadin-element-mixin": "^2.4.1"
+  },
+  "devDependencies": {
+    "@esm-bundle/chai": "^4.1.5",
+    "@open-wc/testing-helpers": "^1.8.12",
+    "@vaadin/vaadin-ordered-layout": "^1.3.0",
+    "@vaadin/vaadin-text-field": "^3.0.0-alpha1",
+    "sinon": "^9.2.1"
+  }
+}

@@ -420,7 +420,7 @@ export const DataProviderMixin = (superClass) =>
       this._hasData = false;
       this._assignModels();
 
-      if (!this._effectiveSize) {
+      if (!this._effectiveSize || !this._initialPoolCreated) {
         this._loadPage(0, this._cache);
       }
     }
