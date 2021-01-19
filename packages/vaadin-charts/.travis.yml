@@ -1,7 +1,7 @@
 sudo: true
 dist: xenial
 language: node_js
-node_js: 8.11
+node_js: 10.23
 
 cache:
   directories:
@@ -47,7 +47,7 @@ jobs:
 
 script:
   - if [[ "$POLYMER" = "2" ]]; then
-      npm -q i && npm i -q -g bower polymer-cli && bower -q i &&
+      npm -q i && npm i -q -g bower@1.8.10 polymer-cli && bower -q i &&
       if [[ "$TRAVIS_EVENT_TYPE" != "pull_request" && "$TRAVIS_BRANCH" != quick/* ]]; then
         wct --env saucelabs;
       else
@@ -60,7 +60,7 @@ script:
       fi;
     fi
   - if [[ "$POLYMER" = "3" ]]; then
-      npm --no-save -q install -g yarn bower magi-cli web-component-tester polymer-modulizer &&
+      npm --no-save -q install -g yarn bower@1.8.10 magi-cli web-component-tester polymer-modulizer &&
       rm -rf node_modules &&
       magi p3-convert --out . --import-style=name &&
       yarn install --flat &&
