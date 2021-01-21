@@ -345,20 +345,15 @@ describe('WAI-ARIA', () => {
     });
 
     if (!ios) {
-      it('should announce once', (done) => {
+      it('should announce once', async () => {
         datepicker._focusedDate = new Date(2016, 1, 1);
-
-        open(datepicker, () => {
-          const announceSpy = sinon.spy();
-          document.body.addEventListener('iron-announce', announceSpy);
-          datepicker._focusedDate = new Date(2016, 1, 2);
-
-          setTimeout(() => {
-            expect(announceSpy.callCount).to.be.equal(1);
-            document.body.removeEventListener('iron-announce', announceSpy);
-            done();
-          }, 1);
-        });
+        await open(datepicker);
+        const announceSpy = sinon.spy();
+        document.body.addEventListener('iron-announce', announceSpy);
+        datepicker._focusedDate = new Date(2016, 1, 2);
+        await aTimeout(1);
+        expect(announceSpy.callCount).to.be.equal(1);
+        document.body.removeEventListener('iron-announce', announceSpy);
       });
     }
 

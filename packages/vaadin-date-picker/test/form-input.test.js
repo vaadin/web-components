@@ -2,6 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { aTimeout, fixture, html } from '@open-wc/testing-helpers';
 import './not-animated-styles.js';
+import { close, open } from './common.js';
 import { DatePickerElement } from '../vaadin-date-picker.js';
 
 class DatePicker2016Element extends DatePickerElement {
@@ -76,19 +77,14 @@ describe('form input', () => {
       expect(datepicker._inputElement.invalid).to.be.true;
     });
 
-    it('should re-validate old input after selecting date', (done) => {
+    it('should re-validate old input after selecting date', async () => {
       // Set invalid value.
       inputValue('foo');
       expect(datepicker.validate()).to.equal(false);
-
-      datepicker.$.overlay.addEventListener('vaadin-overlay-close', () => {
-        expect(datepicker.invalid).to.equal(false);
-        done();
-      });
-
-      datepicker.open();
+      await open(datepicker);
       datepicker.value = '2000-02-01';
-      datepicker.close();
+      await close(datepicker);
+      expect(datepicker.invalid).to.equal(false);
     });
 
     it('should set proper validity by the time the value-changed event is fired', (done) => {
@@ -121,15 +117,11 @@ describe('form input', () => {
       expect(datepicker._inputElement.disabled).to.equal(true);
     });
 
-    it('should validate keyboard input (invalid)', (done) => {
+    it('should validate keyboard input (invalid)', async () => {
       inputValue('foo');
-
-      datepicker.$.overlay.addEventListener('vaadin-overlay-close', () => {
-        expect(datepicker.validate()).to.equal(false);
-        expect(datepicker.invalid).to.be.equal(true);
-        done();
-      });
-      datepicker.close();
+      await close(datepicker);
+      expect(datepicker.validate()).to.equal(false);
+      expect(datepicker.invalid).to.be.equal(true);
     });
 
     it('should keep invalid input value during value-changed event', (done) => {
@@ -143,27 +135,19 @@ describe('form input', () => {
       datepicker.close();
     });
 
-    it('should validate keyboard input (valid)', (done) => {
+    it('should validate keyboard input (valid)', async () => {
       inputValue('01/01/2000');
-
-      datepicker.$.overlay.addEventListener('vaadin-overlay-close', () => {
-        expect(datepicker.validate()).to.equal(true);
-        expect(datepicker.invalid).to.be.equal(false);
-        done();
-      });
-      datepicker.close();
+      await close(datepicker);
+      expect(datepicker.validate()).to.equal(true);
+      expect(datepicker.invalid).to.be.equal(false);
     });
 
-    it('should validate keyboard input (disallowed value)', (done) => {
+    it('should validate keyboard input (disallowed value)', async () => {
       datepicker.min = '2001-01-01';
       inputValue('01/01/2000');
-
-      datepicker.$.overlay.addEventListener('vaadin-overlay-close', () => {
-        expect(datepicker.validate()).to.equal(false);
-        expect(datepicker.invalid).to.be.equal(true);
-        done();
-      });
-      datepicker.close();
+      await close(datepicker);
+      expect(datepicker.validate()).to.equal(false);
+      expect(datepicker.invalid).to.be.equal(true);
     });
   });
 

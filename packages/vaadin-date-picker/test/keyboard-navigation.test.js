@@ -111,16 +111,14 @@ import { getDefaultI18n, getOverlayContent, ios, listenForEvent, open } from './
       expect(focusedDate(datepicker)).to.eql(new Date(2001, 0, 2));
     });
 
-    it('should be focused on initial position when no value is set', (done) => {
+    it('should be focused on initial position when no value is set', async () => {
       datepicker.value = null;
       datepicker.initialPosition = '2001-01-01';
 
-      open(datepicker, () => {
-        target = getOverlayContent(datepicker);
-        arrowRight();
-        expect(focusedDate(datepicker)).to.eql(new Date(2001, 0, 2));
-        done();
-      });
+      await open(datepicker);
+      target = getOverlayContent(datepicker);
+      arrowRight();
+      expect(focusedDate(datepicker)).to.eql(new Date(2001, 0, 2));
     });
 
     it('should be focused on today if no initial position is set', () => {

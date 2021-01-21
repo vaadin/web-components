@@ -32,15 +32,13 @@ describe('theme attribute', () => {
   describe('in content', () => {
     let overlayContent;
 
-    beforeEach((done) => {
-      open(datepicker, () => {
-        overlayContent = datepicker.$.overlay.content.querySelector('#overlay-content');
-        overlayContent.$.yearScroller.bufferSize = 0;
-        overlayContent.$.monthScroller.bufferSize = 1;
-        overlayContent.$.yearScroller._finishInit();
-        overlayContent.$.monthScroller._finishInit();
-        done();
-      });
+    beforeEach(async () => {
+      await open(datepicker);
+      overlayContent = datepicker.$.overlay.content.querySelector('#overlay-content');
+      overlayContent.$.yearScroller.bufferSize = 0;
+      overlayContent.$.monthScroller.bufferSize = 1;
+      overlayContent.$.yearScroller._finishInit();
+      overlayContent.$.monthScroller._finishInit();
     });
 
     it('should propagate theme attribute to month calendar', () => {

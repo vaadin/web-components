@@ -426,7 +426,6 @@ describe('items', () => {
     });
 
     const isChrome = window.chrome || /HeadlessChrome/.test(navigator.userAgent);
-    console.log('chrome', isChrome);
     (isChrome ? describe : describe.skip)('scrolling', () => {
       let rootOverlay, subOverlay1, subOverlay2, scrollElm;
 
