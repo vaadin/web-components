@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixture } from '@open-wc/testing-helpers';
+import { aTimeout, fixture } from '@open-wc/testing-helpers';
 import {
   focus,
   keyDownOn,
@@ -11,7 +11,7 @@ import {
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import './not-animated-styles.js';
 import '../vaadin-date-picker.js';
-import { click, getOverlayContent, ios, listenForEvent, open } from './common.js';
+import { click, close, getOverlayContent, ios, listenForEvent, open } from './common.js';
 
 (ios ? describe.skip : describe)('keyboard input', () => {
   let target;
@@ -51,6 +51,19 @@ import { click, getOverlayContent, ios, listenForEvent, open } from './common.js
 
   function esc() {
     keyDownOn(target, 27);
+  }
+
+  function closeWithEnter() {
+    return new Promise((resolve) => {
+      listenForEvent(datepicker.$.overlay, 'vaadin-overlay-close', resolve);
+      enter();
+    });
+  }
+
+  function nextRender(el) {
+    return new Promise((resolve) => {
+      afterNextRender(el, resolve);
+    });
   }
 
   function focusedDate() {
@@ -99,28 +112,20 @@ import { click, getOverlayContent, ios, listenForEvent, open } from './common.js
     expect(focusedDate().getFullYear()).to.equal(2017);
   });
 
-  it('should select focused date on enter', (done) => {
+  it('should select focused date on enter', async () => {
     inputText('1/1/2001');
-
-    listenForEvent(datepicker.$.overlay, 'vaadin-overlay-close', () => {
-      expect(datepicker.value).to.equal('2001-01-01');
-      done();
-    });
-
-    enter();
+    await closeWithEnter();
+    expect(datepicker.value).to.equal('2001-01-01');
   });
 
-  it('should not select a date on enter if input invalid', (done) => {
-    open(datepicker, () => {
-      inputText('foo');
-      enter();
-    });
-    listenForEvent(datepicker.$.overlay, 'vaadin-overlay-close', () => {
-      expect(datepicker.invalid).to.be.true;
-      expect(datepicker.value).to.equal('');
-      expect(target.value).to.equal('foo');
-      done();
-    });
+  it('should not select a date on enter if input invalid', async () => {
+    await open(datepicker);
+    inputText('foo');
+    await closeWithEnter();
+    expect(datepicker.opened).to.be.false;
+    expect(datepicker.invalid).to.be.true;
+    expect(datepicker.value).to.equal('');
+    expect(target.value).to.equal('foo');
   });
 
   it('should display focused date while overlay focused', () => {
@@ -129,16 +134,13 @@ import { click, getOverlayContent, ios, listenForEvent, open } from './common.js
     expect(target.value).not.to.equal('1/2/2000');
   });
 
-  it('should not forward keys after close', (done) => {
+  it('should not forward keys after close', async () => {
     inputText('1/2/2000');
     arrowDown();
-    listenForEvent(datepicker.$.overlay, 'vaadin-overlay-close', () => {
-      const focused = focusedDate();
-      arrowRight();
-      expect(focusedDate()).to.eql(focused);
-      done();
-    });
-    enter();
+    await closeWithEnter();
+    const focused = focusedDate();
+    arrowRight();
+    expect(focusedDate()).to.eql(focused);
   });
 
   it('should not open with wrong keys', () => {
@@ -178,15 +180,13 @@ import { click, getOverlayContent, ios, listenForEvent, open } from './common.js
     });
   });
 
-  it('should not forward after input tap', (done) => {
-    open(datepicker, () => {
-      arrowDown();
-      const focused = focusedDate();
-      target.dispatchEvent(new CustomEvent('tap', { bubbles: true, composed: true }));
-      arrowLeft();
-      expect(focusedDate()).to.eql(focused);
-      done();
-    });
+  it('should not forward after input tap', async () => {
+    await open(datepicker);
+    arrowDown();
+    const focused = focusedDate();
+    target.dispatchEvent(new CustomEvent('tap', { bubbles: true, composed: true }));
+    arrowLeft();
+    expect(focusedDate()).to.eql(focused);
   });
 
   it('should reflect focused date to input', (done) => {
@@ -228,82 +228,58 @@ import { click, getOverlayContent, ios, listenForEvent, open } from './common.js
     expect(focusedDate().getFullYear()).to.equal(2000);
   });
 
-  it('should validate on close', (done) => {
-    open(datepicker, () => {
-      const spy = sinon.spy(datepicker, 'validate');
-
-      listenForEvent(datepicker.$.overlay, 'vaadin-overlay-close', () => {
-        expect(spy.called).to.be.true;
-        done();
-      });
-
-      datepicker.close();
-    });
+  it('should validate on close', async () => {
+    await open(datepicker);
+    const spy = sinon.spy(datepicker, 'validate');
+    await close(datepicker);
+    expect(spy.called).to.be.true;
   });
 
-  it('should validate on blur when not opened', (done) => {
+  it('should validate on blur when not opened', async () => {
     inputText('foo');
-    listenForEvent(datepicker.$.overlay, 'vaadin-overlay-close', () => {
-      // wait for overlay to finish closing
-      afterNextRender(datepicker, () => {
-        target.value = '';
-        const spy = sinon.spy(datepicker, 'validate');
-        datepicker.dispatchEvent(new Event('blur'));
-        expect(spy.callCount).to.equal(1);
-        expect(datepicker.invalid).to.be.false;
-        done();
-      });
-    });
-    datepicker.close();
+    await close(datepicker);
+    // wait for overlay to finish closing
+    await nextRender(datepicker);
+    target.value = '';
+    const spy = sinon.spy(datepicker, 'validate');
+    datepicker.dispatchEvent(new Event('blur'));
+    expect(spy.callCount).to.equal(1);
+    expect(datepicker.invalid).to.be.false;
   });
 
-  it('should validate on clear button', (done) => {
+  it('should validate on clear button', async () => {
     datepicker.clearButtonVisible = true;
     const clearButton = target.shadowRoot.querySelector('[part="clear-button"]');
     inputText('foo');
-    listenForEvent(datepicker.$.overlay, 'vaadin-overlay-close', () => {
-      // wait for overlay to finish closing. Without this, clear button click
-      // will trigger "close()" again, which will result in infinite loop.
-      afterNextRender(datepicker, () => {
-        click(clearButton);
-        expect(datepicker.invalid).to.equal(false);
-        done();
-      });
-    });
-    datepicker.close();
+    await close(datepicker);
+    // wait for overlay to finish closing. Without this, clear button click
+    // will trigger "close()" again, which will result in infinite loop.
+    await nextRender(datepicker);
+    click(clearButton);
+    expect(datepicker.invalid).to.be.false;
   });
 
-  it('should empty value with false input', (done) => {
+  it('should empty value with false input', async () => {
     datepicker.value = '2000-01-01';
     target.value = '';
     inputText('foo');
-    listenForEvent(datepicker.$.overlay, 'vaadin-overlay-close', () => {
-      expect(datepicker.value).to.equal('');
-      done();
-    });
-    datepicker.close();
+    await close(datepicker);
+    expect(datepicker.value).to.equal('');
   });
 
-  it('should be invalid with false input', (done) => {
+  it('should be invalid with false input', async () => {
     datepicker.value = '2000-01-01';
     target.value = '';
     inputText('foo');
-    listenForEvent(datepicker.$.overlay, 'vaadin-overlay-close', () => {
-      expect(datepicker.invalid).to.be.true;
-      done();
-    });
-    datepicker.close();
+    await close(datepicker);
+    expect(datepicker.invalid).to.be.true;
   });
 
-  it('should clear selection on close', (done) => {
-    open(datepicker, () => {
-      arrowDown();
-      datepicker.close();
-    });
-    listenForEvent(datepicker.$.overlay, 'vaadin-overlay-close', () => {
-      expect(target.selectionStart).to.equal(target.selectionEnd);
-      done();
-    });
+  it('should clear selection on close', async () => {
+    await open(datepicker);
+    arrowDown();
+    await close(datepicker);
+    expect(target.selectionStart).to.equal(target.selectionEnd);
   });
 
   it('should not throw on enter before opening overlay', () => {
@@ -329,12 +305,10 @@ import { click, getOverlayContent, ios, listenForEvent, open } from './common.js
       expect(spy.called).to.be.true;
     });
 
-    it('should select focused date on close', (done) => {
-      open(datepicker, () => datepicker.close());
-      listenForEvent(datepicker.$.overlay, 'vaadin-overlay-close', () => {
-        expect(datepicker._selectedDate).to.equal(datepicker._focusedDate);
-        done();
-      });
+    it('should select focused date on close', async () => {
+      await open(datepicker);
+      await close(datepicker);
+      expect(datepicker._selectedDate).to.equal(datepicker._focusedDate);
     });
   });
 
@@ -346,47 +320,35 @@ import { click, getOverlayContent, ios, listenForEvent, open } from './common.js
     });
   });
 
-  it('should forward up/down to overlay', (done) => {
-    open(datepicker, () => {
-      arrowUp();
-      expect(datepicker._focusedDate.getDate()).not.to.eql(new Date().getDate());
-      done();
-    });
+  it('should forward up/down to overlay', async () => {
+    await open(datepicker);
+    arrowUp();
+    expect(datepicker._focusedDate.getDate()).not.to.eql(new Date().getDate());
   });
 
   describe('esc behavior', () => {
-    it('should close the overlay on esc', (done) => {
-      open(datepicker, esc);
-      listenForEvent(datepicker.$.overlay, 'vaadin-overlay-close', () => done());
+    it('should close the overlay on esc', async () => {
+      await open(datepicker);
+      esc();
+      await aTimeout(1);
+      expect(datepicker.opened).to.be.false;
     });
 
-    it('should revert input value on esc', (done) => {
-      datepicker.value = '2000-01-01';
-      open(datepicker, () => {
-        inputText('1/2/2000');
-        arrowDown();
-        arrowDown();
-        esc();
-        expect(target.value).to.equal('1/1/2000');
-        done();
+    describe('empty', () => {
+      beforeEach(async () => {
+        datepicker.value = '';
+        await open(datepicker);
       });
-    });
 
-    it('should revert input value on esc (empty)', (done) => {
-      datepicker.value = '';
-      open(datepicker, () => {
+      it('should revert input value on esc when empty', () => {
         inputText('1/2/2000');
         arrowDown();
         arrowDown();
         esc();
         expect(target.value).to.equal('');
-        done();
       });
-    });
 
-    it('should cancel on overlay content esc', (done) => {
-      datepicker.value = '';
-      open(datepicker, () => {
+      it('should cancel on overlay content esc', () => {
         inputText('1/2/2000 ');
         arrowDown();
         arrowDown();
@@ -396,38 +358,51 @@ import { click, getOverlayContent, ios, listenForEvent, open } from './common.js
         esc();
         expect(datepicker.opened).to.be.false;
         expect(datepicker.value).not.to.be.ok;
-        done();
+      });
+
+      it('should not change value on esc when empty', (done) => {
+        inputText('1/2/2000');
+        arrowDown();
+        arrowDown();
+
+        listenForEvent(datepicker.$.overlay, 'vaadin-overlay-close', () => {
+          expect(datepicker.value).to.equal('');
+          done();
+        });
+
+        esc();
       });
     });
 
-    it('should not change value on esc', (done) => {
-      datepicker.value = '2000-01-01';
-      open(datepicker, () => {
+    describe('with value', () => {
+      beforeEach(async () => {
+        datepicker.value = '2000-01-01';
+        await open(datepicker);
+      });
+
+      it('should revert input value on esc', () => {
         inputText('1/2/2000');
         arrowDown();
         arrowDown();
         esc();
+        expect(target.value).to.equal('1/1/2000');
       });
-      listenForEvent(datepicker.$.overlay, 'vaadin-overlay-close', () => {
-        expect(datepicker.value).to.equal('2000-01-01');
-        done();
-      });
-    });
 
-    it('should not change value on esc (empty)', (done) => {
-      datepicker.value = '';
-      open(datepicker, () => {
+      it('should not change value on esc', (done) => {
         inputText('1/2/2000');
         arrowDown();
         arrowDown();
+
+        listenForEvent(datepicker.$.overlay, 'vaadin-overlay-close', () => {
+          expect(datepicker.value).to.equal('2000-01-01');
+          done();
+        });
+
         esc();
-      });
-      listenForEvent(datepicker.$.overlay, 'vaadin-overlay-close', () => {
-        expect(datepicker.value).to.equal('');
-        done();
       });
     });
   });
+
   describe('default parser', () => {
     const today = new Date();
 
@@ -522,71 +497,56 @@ import { click, getOverlayContent, ios, listenForEvent, open } from './common.js
       expect(datepicker._inputElement.hasAttribute('focused')).to.be.true;
     });
 
-    it('should focus cancel on input shift tab', (done) => {
-      open(datepicker, () => {
-        focus(datepicker._inputElement);
-        pressAndReleaseKeyOn(datepicker._inputElement, 9, 'shift');
-        expect(overlayContent.$.cancelButton.hasAttribute('focused')).to.be.true;
-        done();
-      });
+    it('should focus cancel on input shift tab', async () => {
+      await open(datepicker);
+      focus(datepicker._inputElement);
+      pressAndReleaseKeyOn(datepicker._inputElement, 9, 'shift');
+      expect(overlayContent.$.cancelButton.hasAttribute('focused')).to.be.true;
     });
 
-    it('should focus input in cancel tab', (done) => {
-      open(datepicker, () => {
-        focus(overlayContent.$.cancelButton);
+    it('should focus input in cancel tab', async () => {
+      await open(datepicker);
+      focus(overlayContent.$.cancelButton);
 
-        const spy = sinon.spy(datepicker, '_focus');
-        pressAndReleaseKeyOn(overlayContent.$.cancelButton, 9);
-        setTimeout(() => {
-          expect(spy.called).to.be.true;
-          done();
-        }, 1);
-      });
+      const spy = sinon.spy(datepicker, '_focus');
+      pressAndReleaseKeyOn(overlayContent.$.cancelButton, 9);
+      await aTimeout(1);
+      expect(spy.called).to.be.true;
     });
 
-    it('should keep focused attribute in focusElement when the focus moves to the overlay', (done) => {
-      open(datepicker, () => {
-        tap(overlayContent);
-        datepicker.focusElement.blur();
-        expect(datepicker.focusElement.hasAttribute('focused')).to.be.false;
+    it('should keep focused attribute in focusElement when the focus moves to the overlay', async () => {
+      await open(datepicker);
+      tap(overlayContent);
+      datepicker.focusElement.blur();
+      expect(datepicker.focusElement.hasAttribute('focused')).to.be.false;
 
-        focus(overlayContent);
-        expect(datepicker.focusElement.hasAttribute('focused')).to.be.true;
-        done();
-      });
+      focus(overlayContent);
+      expect(datepicker.focusElement.hasAttribute('focused')).to.be.true;
     });
 
-    it('should not reveal the focused date on tap', (done) => {
-      open(datepicker, () => {
-        const spy = sinon.spy(overlayContent, 'revealDate');
-        tap(overlayContent);
-        focus(overlayContent);
-        setTimeout(() => {
-          expect(spy.called).to.be.false;
-          done();
-        }, 1);
-      });
+    it('should not reveal the focused date on tap', async () => {
+      await open(datepicker);
+      const spy = sinon.spy(overlayContent, 'revealDate');
+      tap(overlayContent);
+      focus(overlayContent);
+      await aTimeout(1);
+      expect(spy.called).to.be.false;
     });
 
-    it('should reveal the focused date on tab focus from input', (done) => {
-      open(datepicker, () => {
-        const spy = sinon.spy(overlayContent, 'revealDate');
-        pressAndReleaseKeyOn(datepicker._inputElement, 9);
-        expect(spy.called).to.be.true;
-        done();
-      });
+    it('should reveal the focused date on tab focus from input', async () => {
+      await open(datepicker);
+      const spy = sinon.spy(overlayContent, 'revealDate');
+      pressAndReleaseKeyOn(datepicker._inputElement, 9);
+      expect(spy.called).to.be.true;
     });
 
-    it('should reveal the focused date on shift-tab focus from today button', (done) => {
-      open(datepicker, () => {
-        const spy = sinon.spy(overlayContent, 'revealDate');
-        pressAndReleaseKeyOn(overlayContent.$.todayButton, 9, 'shift');
-        focus(overlayContent);
-        setTimeout(() => {
-          expect(spy.called).to.be.true;
-          done();
-        }, 1);
-      });
+    it('should reveal the focused date on shift-tab focus from today button', async () => {
+      await open(datepicker);
+      const spy = sinon.spy(overlayContent, 'revealDate');
+      pressAndReleaseKeyOn(overlayContent.$.todayButton, 9, 'shift');
+      focus(overlayContent);
+      await aTimeout(1);
+      expect(spy.called).to.be.true;
     });
 
     it('should not focus overlay on key-input', (done) => {
@@ -755,11 +715,9 @@ import { click, getOverlayContent, ios, listenForEvent, open } from './common.js
     });
 
     describe('overlay is open and value selected', () => {
-      beforeEach((done) => {
-        open(datepicker, () => {
-          inputText('01/02/20');
-          done();
-        });
+      beforeEach(async () => {
+        await open(datepicker);
+        inputText('01/02/20');
       });
 
       it('should validate without change on Esc', (done) => {
@@ -805,21 +763,15 @@ import { click, getOverlayContent, ios, listenForEvent, open } from './common.js
     });
 
     describe('overlay is closed, value is set', () => {
-      beforeEach((done) => {
-        open(datepicker, () => {
-          inputText('01/02/20');
-          listenForEvent(datepicker.$.overlay, 'vaadin-overlay-close', () => {
-            // wait for overlay to finish closing
-            afterNextRender(datepicker, () => {
-              datepicker._focus();
-              done();
-            });
-          });
-
-          datepicker.close();
-          validateSpy.resetHistory();
-          changeSpy.resetHistory();
-        });
+      beforeEach(async () => {
+        await open(datepicker);
+        inputText('01/02/20');
+        await close(datepicker);
+        validateSpy.resetHistory();
+        changeSpy.resetHistory();
+        // wait for overlay to finish closing
+        await nextRender(datepicker);
+        datepicker._focus();
       });
 
       it('should change after validate on clear button click', () => {
