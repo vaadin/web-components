@@ -1,24 +1,30 @@
 <!DOCTYPE html>
 
 <head lang="en">
-  <meta charset="UTF-8">
-  <title></title>
-  <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <meta charset="UTF-8" />
+  <title>Dialog tests</title>
   <script>
-    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
-    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-dialog.html">`);
+    window.polymerSkipLoadingFontRoboto = true;
   </script>
 </head>
 
-<body style="height: 600px;">
+<body style="height: 600px">
+  <vaadin-dialog opened>
+    <template>
+      <div>A very simple dialog with button</div>
+      <button>OK</button>
+    </template>
+  </vaadin-dialog>
 
-  <div id="default-tests">
-    <vaadin-dialog opened>
-      <template>
-        <div>A very simple dialog with button</div>
-        <button>OK</button>
-      </template>
-    </vaadin-dialog>
-  </div>
+  <script type="module">
+    (async () => {
+      const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
 
+      await import('../../theme/' + theme + '/vaadin-dialog.js');
+
+      window.requestAnimationFrame(() => {
+        document.body.dataset.ready = true;
+      });
+    })();
+  </script>
 </body>
