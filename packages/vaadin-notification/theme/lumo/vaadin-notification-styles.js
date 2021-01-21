@@ -40,7 +40,6 @@ registerStyles(
     }
 
     :host([slot^='middle']) {
-      width: 20em;
       max-width: 80vw;
       margin: var(--lumo-space-s) auto;
     }
