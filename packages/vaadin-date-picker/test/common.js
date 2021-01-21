@@ -56,14 +56,18 @@ export function listenForEvent(elem, type, callback) {
   elem.addEventListener(type, listener);
 }
 
-export function open(datepicker, callback) {
-  listenForEvent(datepicker.$.overlay, 'vaadin-overlay-open', callback);
-  datepicker.open();
+export function open(datepicker) {
+  return new Promise((resolve) => {
+    listenForEvent(datepicker.$.overlay, 'vaadin-overlay-open', resolve);
+    datepicker.open();
+  });
 }
 
-export function close(datepicker, callback) {
-  listenForEvent(datepicker.$.overlay, 'vaadin-overlay-close', callback);
-  datepicker.close();
+export function close(datepicker) {
+  return new Promise((resolve) => {
+    listenForEvent(datepicker.$.overlay, 'vaadin-overlay-close', resolve);
+    datepicker.close();
+  });
 }
 
 export function tap(element) {
@@ -110,33 +114,3 @@ export function getOverlayContent(datepicker) {
   overlayContent.$.yearScroller.bufferSize = 0;
   return overlayContent;
 }
-
-// TODO: validate if the statement below is still valid when running in GitHub actions.
-// FF and Chrome are unable to focus input/button when tests are run in the headless window manager used in Travis
-function monkeyPatchNativeFocus() {
-  customElements.whenDefined('vaadin-text-field').then(() => {
-    const TextFieldElement = customElements.get('vaadin-text-field');
-    TextFieldElement.prototype.focus = function () {
-      this._setFocused(true);
-    };
-    TextFieldElement.prototype.blur = function () {
-      this._setFocused(false);
-    };
-  });
-
-  customElements.whenDefined('vaadin-button').then(() => {
-    const ButtonElement = customElements.get('vaadin-button');
-    ButtonElement.prototype.focus = function () {
-      this._setFocused(true);
-    };
-  });
-
-  customElements.whenDefined('vaadin-date-picker').then(() => {
-    const DatePickerElement = customElements.get('vaadin-date-picker');
-    DatePickerElement.prototype.blur = function () {
-      this._inputElement._setFocused(false);
-    };
-  });
-}
-
-window.addEventListener('WebComponentsReady', monkeyPatchNativeFocus);

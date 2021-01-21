@@ -65,13 +65,11 @@ describe('custom input', () => {
     });
 
     describe('in content', () => {
-      beforeEach((done) => {
+      beforeEach(async () => {
         overlayContent.$.monthScroller.bufferSize = 1;
-        open(datepicker, () => {
-          overlayContent.$.yearScroller._finishInit();
-          overlayContent.$.monthScroller._finishInit();
-          done();
-        });
+        await open(datepicker);
+        overlayContent.$.yearScroller._finishInit();
+        overlayContent.$.monthScroller._finishInit();
       });
 
       it('should propagate theme attribute to month calendar', () => {
