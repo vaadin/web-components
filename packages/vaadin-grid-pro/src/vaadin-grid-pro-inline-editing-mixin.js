@@ -42,6 +42,7 @@ export const InlineEditingMixin = (superClass) =>
         /**
          * When true, the grid enters cell edit mode on a single click
          * instead of the default double click.
+         * @attr {boolean} edit-on-click
          */
         editOnClick: {
           type: Boolean
