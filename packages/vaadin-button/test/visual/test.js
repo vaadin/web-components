@@ -1,67 +1,49 @@
-gemini.suite('vaadin-button', function(rootSuite) {
-  function wait(actions, find) {
-    actions.wait(5000);
-  }
+describe('vaadin-button', () => {
+  const locator = '#tests[data-ready]';
 
-  function goToAboutBlank(actions, find) {
-    // Firefox stops responding on socket after a test, workaround:
-    return actions.executeJS(function(window) {
-      window.location.href = 'about:blank'; // just go away, please!
-    });
-  }
-
-  rootSuite
-    .before(wait)
-    .after(goToAboutBlank);
-  ['lumo', 'material'].forEach(theme => {
-    gemini.suite(`default-tests-${theme}`, function(suite) {
-      suite
-        .setUrl(`default.html?theme=${theme}`)
-        .setCaptureElements('body')
-        .capture('default');
+  ['lumo', 'material'].forEach((theme) => {
+    it(`${theme}-default`, function () {
+      return this.browser
+        .url(`default.html?theme=${theme}`)
+        .waitForVisible(locator, 15000)
+        .assertView(`${theme}-default`, locator);
     });
 
-    gemini.suite(`default-rtl-tests-${theme}`, function(suite) {
-      suite
-        .setUrl(`default-rtl.html?theme=${theme}`)
-        .setCaptureElements('body')
-        .capture('default');
+    it(`${theme}-colors`, function () {
+      return this.browser
+        .url(`colors-${theme}.html`)
+        .waitForVisible(locator, 15000)
+        .assertView(`${theme}-colors`, locator);
     });
 
-    gemini.suite(`colors-${theme}`, function(suite) {
-      suite
-        .setUrl(`colors.html?theme=${theme}`)
-        .setCaptureElements('body')
-        .capture('default');
+    it(`${theme}-rtl`, function () {
+      return this.browser
+        .url(`rtl.html?theme=${theme}`)
+        .waitForVisible(locator, 15000)
+        .assertView(`${theme}-rtl`, locator);
     });
 
-    gemini.suite(`icons-${theme}`, function(suite) {
-      suite
-        .setUrl(`icons.html?theme=${theme}`)
-        .setCaptureElements('body')
-        .capture('default');
-    });
-
-    gemini.suite(`sizing-${theme}`, function(suite) {
-      suite
-        .setUrl(`sizing.html?theme=${theme}`)
-        .setCaptureElements('body')
-        .capture('default');
-    });
-
-    gemini.suite(`truncation-expansion-${theme}`, function(suite) {
-      suite
-        .setUrl(`truncation-expansion.html?theme=${theme}`)
-        .setCaptureElements('body')
-        .capture('default');
-    });
-
-    gemini.suite(`types-${theme}`, function(suite) {
-      suite
-        .setUrl(`types.html?theme=${theme}`)
-        .setCaptureElements('body')
-        .capture('default');
+    it(`${theme}-width`, function () {
+      return this.browser
+        .url(`width.html?theme=${theme}`)
+        .waitForVisible(locator, 15000)
+        .assertView(`${theme}-width`, locator);
     });
   });
 
+  it('lumo-sizing', function () {
+    // prettier-ignore
+    return this.browser
+      .url('sizing.html')
+      .waitForVisible(locator, 15000)
+      .assertView('lumo-sizing', locator);
+  });
+
+  it('lumo-types', function () {
+    // prettier-ignore
+    return this.browser
+      .url('types.html')
+      .waitForVisible(locator, 15000)
+      .assertView('lumo-types', locator);
+  });
 });

@@ -1,33 +1,33 @@
 <!DOCTYPE html>
 
 <head lang="en">
-  <meta charset="UTF-8">
-
-  <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
+  <meta charset="UTF-8" />
+  <title>Button tests</title>
   <script>
-    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
-    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-button.html">`);
+    window.polymerSkipLoadingFontRoboto = true;
   </script>
 </head>
 
 <body>
+  <form style="display: inline-block">
+    <fieldset id="tests">
+      <vaadin-button>Default</vaadin-button>
 
-  <form style="display: inline-block;">
-    <fieldset id="default-tests">
+      <vaadin-button disabled>Disabled</vaadin-button>
 
-      <vaadin-button disabled>
-        Disabled
-      </vaadin-button>
-
-      <vaadin-button tabindex="2">
-        <img src="vaadin-logo.svg">
-      </vaadin-button>
-
-      <vaadin-button autofocus tabindex="1">
-        Autofocused
-      </vaadin-button>
-
+      <vaadin-button autofocus>Autofocused</vaadin-button>
     </fieldset>
   </form>
 
+  <script type="module">
+    (async () => {
+      const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+
+      await import('../../theme/' + theme + '/vaadin-button.js');
+
+      window.requestAnimationFrame(() => {
+        document.getElementById('tests').dataset.ready = true;
+      });
+    })();
+  </script>
 </body>

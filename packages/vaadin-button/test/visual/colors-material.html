@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+
+<head lang="en">
+  <meta charset="UTF-8" />
+  <title>Button Material tests</title>
+  <script>
+    window.polymerSkipLoadingFontRoboto = true;
+  </script>
+</head>
+
+<body>
+  <div id="tests">
+    <br />Outlined:
+
+    <vaadin-button theme="outlined">
+      <span>Button</span>
+    </vaadin-button>
+
+    <br />Outlined[disabled]:
+
+    <vaadin-button theme="outlined" disabled>
+      <span>Button</span>
+    </vaadin-button>
+
+    <br />Contained:
+
+    <vaadin-button theme="contained">
+      <span>Button</span>
+    </vaadin-button>
+
+    <br />Contained[disabled]:
+    <vaadin-button theme="contained" disabled>
+      <span>Button</span>
+    </vaadin-button>
+  </div>
+
+  <script type="module">
+    import '../../theme/material/vaadin-button.js';
+
+    window.requestAnimationFrame(() => {
+      document.getElementById('tests').dataset.ready = true;
+    });
+  </script>
+</body>

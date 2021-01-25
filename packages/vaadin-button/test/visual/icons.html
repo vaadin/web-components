@@ -1,16 +1,14 @@
 <!DOCTYPE html>
 
 <head lang="en">
-  <meta charset="UTF-8">
-
-  <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
+  <meta charset="UTF-8" />
+  <title>Button icons tests</title>
   <script>
-    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
-    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-button.html">`);
+    window.polymerSkipLoadingFontRoboto = true;
   </script>
-  <link rel="import" href="../../../vaadin-lumo-styles/icons.html">
-  <link rel="import" href="../../../iron-icon/iron-icon.html">
+</head>
 
+<body>
   <custom-style>
     <style include="lumo-typography lumo-color">
       body {
@@ -19,54 +17,66 @@
     </style>
   </custom-style>
 
-</head>
+  <div id="tests">
+    <vaadin-button aria-label="Icon-only button" theme="large icon">
+      <iron-icon slot="prefix" icon="lumo:plus"></iron-icon>
+    </vaadin-button>
 
-<body>
-  <h2>Icons and size presets</h2>
+    <vaadin-button theme="large">
+      <iron-icon slot="prefix" icon="lumo:edit"></iron-icon>
+      <span>Icon prefix</span>
+    </vaadin-button>
 
-  <vaadin-button aria-label="Icon-only button" theme="large icon">
-    <iron-icon slot="prefix" icon="lumo:plus"></iron-icon>
-  </vaadin-button>
+    <vaadin-button theme="large">
+      <span>Icon suffix</span>
+      <iron-icon slot="suffix" icon="lumo:arrow-right"></iron-icon>
+    </vaadin-button>
 
-  <vaadin-button theme="large">
-    <iron-icon slot="prefix" icon="lumo:edit"></iron-icon>
-    <span>Icon prefix</span>
-  </vaadin-button>
+    <vaadin-button aria-label="Icon-only button" theme="icon">
+      <iron-icon slot="prefix" icon="lumo:plus"></iron-icon>
+    </vaadin-button>
 
-  <vaadin-button theme="large">
-    <span>Icon suffix</span>
-    <iron-icon slot="suffix" icon="lumo:arrow-right"></iron-icon>
-  </vaadin-button>
+    <vaadin-button>
+      <iron-icon slot="prefix" icon="lumo:edit"></iron-icon>
+      <span>Icon prefix</span>
+    </vaadin-button>
 
-  <vaadin-button aria-label="Icon-only button" theme="icon">
-    <iron-icon slot="prefix" icon="lumo:plus"></iron-icon>
-  </vaadin-button>
+    <vaadin-button>
+      <span>Icon suffix</span>
+      <iron-icon slot="suffix" icon="lumo:arrow-right"></iron-icon>
+    </vaadin-button>
 
-  <vaadin-button>
-    <iron-icon slot="prefix" icon="lumo:edit"></iron-icon>
-    <span>Icon prefix</span>
-  </vaadin-button>
+    <vaadin-button aria-label="Icon-only button" theme="small icon">
+      <iron-icon slot="prefix" icon="lumo:plus"></iron-icon>
+    </vaadin-button>
 
-  <vaadin-button>
-    <span>Icon suffix</span>
-    <iron-icon slot="suffix" icon="lumo:arrow-right"></iron-icon>
-  </vaadin-button>
+    <vaadin-button theme="small">
+      <iron-icon slot="prefix" icon="lumo:edit"></iron-icon>
+      <span>Icon prefix</span>
+    </vaadin-button>
 
-  <vaadin-button aria-label="Icon-only button" theme="small icon">
-    <iron-icon slot="prefix" icon="lumo:plus"></iron-icon>
-  </vaadin-button>
+    <vaadin-button theme="small">
+      <span>Icon suffix</span>
+      <iron-icon slot="suffix" icon="lumo:arrow-right"></iron-icon>
+    </vaadin-button>
 
-  <vaadin-button theme="small">
-    <iron-icon slot="prefix" icon="lumo:edit"></iron-icon>
-    <span>Icon prefix</span>
-  </vaadin-button>
+    <vaadin-button theme="icon tertiary-inline">
+      <iron-icon icon="lumo:edit"></iron-icon>
+    </vaadin-button>
+  </div>
 
-  <vaadin-button theme="small">
-    <span>Icon suffix</span>
-    <iron-icon slot="suffix" icon="lumo:arrow-right"></iron-icon>
-  </vaadin-button>
+  <script type="module">
+    import '@polymer/iron-icon/iron-icon.js';
+    import '@vaadin/vaadin-lumo-styles/icons.js';
 
-  <vaadin-button theme="icon tertiary-inline">
-    <iron-icon icon="lumo:edit"></iron-icon>
-  </vaadin-button>
+    (async () => {
+      const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+
+      await import('../../theme/' + theme + '/vaadin-button.js');
+
+      window.requestAnimationFrame(() => {
+        document.getElementById('tests').dataset.ready = true;
+      });
+    })();
+  </script>
 </body>

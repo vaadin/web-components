@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+
+<head lang="en">
+  <meta charset="UTF-8" />
+  <title>Button Lumo tests</title>
+</head>
+
+<body>
+  <custom-style>
+    <style include="lumo-typography lumo-color">
+      body {
+        margin: 2em;
+      }
+    </style>
+  </custom-style>
+
+  <div id="tests">
+    Contrast:
+
+    <vaadin-button theme="primary contrast">
+      <span>Button</span>
+    </vaadin-button>
+
+    <vaadin-button theme="contrast">
+      <span>Button</span>
+    </vaadin-button>
+
+    <vaadin-button theme="tertiary contrast">
+      <span>Button</span>
+    </vaadin-button>
+
+    <br />Contrast[disabled]:
+
+    <vaadin-button theme="primary contrast" disabled>
+      <span>Button</span>
+    </vaadin-button>
+
+    <vaadin-button theme="contrast" disabled>
+      <span>Button</span>
+    </vaadin-button>
+
+    <vaadin-button theme="tertiary contrast" disabled>
+      <span>Button</span>
+    </vaadin-button>
+
+    <br />Success:
+
+    <vaadin-button theme="primary success">
+      <span>Button</span>
+    </vaadin-button>
+
+    <vaadin-button theme="success">
+      <span>Button</span>
+    </vaadin-button>
+
+    <vaadin-button theme="tertiary success">
+      <span>Button</span>
+    </vaadin-button>
+
+    <br />Success[disabled]:
+
+    <vaadin-button theme="primary success" disabled>
+      <span>Button</span>
+    </vaadin-button>
+
+    <vaadin-button theme="success" disabled>
+      <span>Button</span>
+    </vaadin-button>
+
+    <vaadin-button theme="tertiary success" disabled>
+      <span>Button</span>
+    </vaadin-button>
+
+    <br />Error:
+
+    <vaadin-button theme="primary error">
+      <span>Button</span>
+    </vaadin-button>
+
+    <vaadin-button theme="error">
+      <span>Button</span>
+    </vaadin-button>
+
+    <vaadin-button theme="tertiary error">
+      <span>Button</span>
+    </vaadin-button>
+
+    <br />Error[disabled]:
+
+    <vaadin-button theme="primary error" disabled>
+      <span>Button</span>
+    </vaadin-button>
+
+    <vaadin-button theme="error" disabled>
+      <span>Button</span>
+    </vaadin-button>
+
+    <vaadin-button theme="tertiary error" disabled>
+      <span>Button</span>
+    </vaadin-button>
+  </div>
+
+  <script type="module">
+    import '../../theme/lumo/vaadin-button.js';
+
+    window.requestAnimationFrame(() => {
+      document.getElementById('tests').dataset.ready = true;
+    });
+  </script>
+</body>

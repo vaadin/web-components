@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+
+<head lang="en">
+  <meta charset="UTF-8" />
+  <title>Button width tests</title>
+  <script>
+    window.polymerSkipLoadingFontRoboto = true;
+  </script>
+</head>
+
+<body>
+  <custom-style>
+    <style include="lumo-typography lumo-color">
+      body {
+        margin: 2em;
+      }
+    </style>
+  </custom-style>
+
+  <div id="tests">
+    <vaadin-button style="width: 100px">Longer text for a button</vaadin-button>
+
+    <vaadin-button style="width: 100px">
+      <iron-icon slot="prefix" icon="lumo:plus"></iron-icon>
+      <span>Longer text for a button</span>
+    </vaadin-button>
+
+    <vaadin-button style="width: 100px">
+      <span>Longer text for a button</span>
+      <iron-icon slot="suffix" icon="lumo:plus"></iron-icon>
+    </vaadin-button>
+
+    <vaadin-button style="width: 300px">Longer text for a button</vaadin-button>
+
+    <vaadin-button style="width: 300px">
+      <iron-icon slot="prefix" icon="lumo:edit"></iron-icon>
+      <span>Longer text for a button</span>
+    </vaadin-button>
+
+    <vaadin-button style="width: 300px">
+      <span>Longer text for a button</span>
+      <iron-icon slot="suffix" icon="lumo:arrow-right"></iron-icon>
+    </vaadin-button>
+  </div>
+
+  <script type="module">
+    import '@polymer/iron-icon/iron-icon.js';
+    import '@vaadin/vaadin-lumo-styles/icons.js';
+
+    (async () => {
+      const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+
+      await import('../../theme/' + theme + '/vaadin-button.js');
+
+      window.requestAnimationFrame(() => {
+        document.getElementById('tests').dataset.ready = true;
+      });
+    })();
+  </script>
+</body>

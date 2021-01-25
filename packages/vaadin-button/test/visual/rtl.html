@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+
+<head lang="en">
+  <meta charset="UTF-8" />
+  <title>Button RTL tests</title>
+  <script>
+    window.polymerSkipLoadingFontRoboto = true;
+  </script>
+</head>
+
+<body>
+  <form style="display: inline-block">
+    <fieldset id="tests">
+      <vaadin-button disabled>Disabled</vaadin-button>
+
+      <vaadin-button theme="tertiary">Tertiary</vaadin-button>
+
+      <vaadin-button theme="large">
+        <span>Icon suffix</span>
+        <iron-icon slot="suffix" icon="lumo:arrow-right"></iron-icon>
+      </vaadin-button>
+
+      <vaadin-button aria-label="Icon-only button" theme="icon">
+        <iron-icon slot="prefix" icon="lumo:plus"></iron-icon>
+      </vaadin-button>
+
+      <vaadin-button>
+        <iron-icon slot="prefix" icon="lumo:edit"></iron-icon>
+        <span>Icon prefix</span>
+      </vaadin-button>
+    </fieldset>
+  </form>
+
+  <script type="module">
+    import '@polymer/iron-icon/iron-icon.js';
+    import '@vaadin/vaadin-lumo-styles/icons.js';
+
+    (async () => {
+      document.documentElement.setAttribute('dir', 'rtl');
+      const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+
+      await import('../../theme/' + theme + '/vaadin-button.js');
+
+      window.requestAnimationFrame(() => {
+        document.getElementById('tests').dataset.ready = true;
+      });
+    })();
+  </script>
+</body>
