@@ -9,6 +9,10 @@ describe('vaadin-item', () => {
     item = fixtureSync('<vaadin-item>label</vaadin-item>');
   });
 
+  it('should have a valid version number', () => {
+    expect(item.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta)\d+)?$/);
+  });
+
   it('should extend item-mixin', () => {
     expect(item._hasVaadinItemMixin).to.be.true;
   });
