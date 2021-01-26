@@ -10,6 +10,10 @@ describe('progress bar', () => {
     value = progress.shadowRoot.querySelector('[part="value"]');
   });
 
+  it('should have a valid version number', () => {
+    expect(progress.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta)\d+)?$/);
+  });
+
   it('should have proper scale', () => {
     progress.value = 0.1;
     expect(value.getBoundingClientRect().width / progress.offsetWidth).to.be.closeTo(0.1, 0.002);
@@ -45,6 +49,12 @@ describe('progress bar', () => {
   it('should set normalized value to 0 if the value is undefined', () => {
     progress.value = undefined;
     expect(getComputedStyle(progress).getPropertyValue('--vaadin-progress-value')).to.be.equal('0');
+  });
+
+  it('should set normalized value to 0.5 if the value is 0 and min is -1', () => {
+    progress.min = -1;
+    progress.value = 0;
+    expect(getComputedStyle(progress).getPropertyValue('--vaadin-progress-value')).to.be.equal('0.5');
   });
 
   it('should clamp normalized value between 0 and 1', () => {
