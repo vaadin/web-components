@@ -8,5 +8,12 @@ describe('vaadin-dialog', () => {
         .waitForVisible(locator, 15000)
         .assertView(`${theme}-default`, locator);
     });
+
+    it(`${theme}-no-padding`, function () {
+      return this.browser
+        .url(`no-padding.html?theme=${theme}`)
+        .waitForVisible(locator, 15000)
+        .assertView(`${theme}-no-padding`, locator);
+    });
   });
 });

@@ -16,6 +16,11 @@ registerStyles(
     [part='content'] {
       padding: 24px;
     }
+
+    /* No padding */
+    :host([theme~='no-padding']) [part='content'] {
+      padding: 0;
+    }
   `,
   { include: ['material-overlay'], moduleId: 'material-dialog' }
 );

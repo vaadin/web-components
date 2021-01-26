@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+
+<head lang="en">
+  <meta charset="UTF-8" />
+  <title>Dialog tests</title>
+  <script>
+    window.polymerSkipLoadingFontRoboto = true;
+  </script>
+</head>
+
+<body style="height: 600px">
+  <vaadin-dialog theme="no-padding" opened>
+    <template>
+      <div>A very simple dialog with no padding</div>
+      <button>OK</button>
+    </template>
+  </vaadin-dialog>
+
+  <script type="module">
+    (async () => {
+      const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+
+      await import('../../theme/' + theme + '/vaadin-dialog.js');
+
+      window.requestAnimationFrame(() => {
+        document.body.dataset.ready = true;
+      });
+    })();
+  </script>
+</body>

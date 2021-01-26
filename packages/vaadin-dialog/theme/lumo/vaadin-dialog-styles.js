@@ -28,6 +28,11 @@ registerStyles(
       padding: var(--lumo-space-l);
     }
 
+    /* No padding */
+    :host([theme~='no-padding']) [part='content'] {
+      padding: 0;
+    }
+
     /* Animations */
 
     :host([opening]),
