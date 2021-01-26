@@ -128,7 +128,7 @@ class ButtonElement extends ElementMixin(ControlStateMixin(ThemableMixin(Gesture
   }
 
   static get version() {
-    return '2.4.0';
+    return '3.0.0-alpha1';
   }
 
   ready() {
