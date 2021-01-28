@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 
 <head lang="en">
-  <meta charset="UTF-8">
-  <title></title>
-  <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <meta charset="UTF-8" />
+  <title>Confirm dialog tests</title>
   <script>
     // mimic flow production mode
     window.Vaadin = {
@@ -15,25 +14,26 @@
         }
       }
     };
-    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
-    document.write(`
-      <link rel="import" href="../../theme/${theme}/vaadin-confirm-dialog.html">
-    `);
-
-    const direction = window.location.search.replace(/.*dir=(\w+).*/, '$1') || 'ltr';
-    document.documentElement.setAttribute('dir', direction);
-
-    window.addEventListener('WebComponentsReady', function() {
-      setTimeout(function() {
-        window.ShadyDOM && window.ShadyDOM.flush(); // Force DOM composition
-        window.webComponentsAreReady = true; // Checked in gemini before capture callback
-      });
-    });
+    window.polymerSkipLoadingFontRoboto = true;
   </script>
 </head>
 
 <body style="height: 600px">
-    <vaadin-confirm-dialog header="Meeting starting" confirm-text="Ok" opened>
-      Your next meeting starts in 5 minutes
-    </vaadin-confirm-dialog>
+  <vaadin-confirm-dialog header="Meeting starting" confirm-text="Ok" opened>
+    Your next meeting starts in 5 minutes
+  </vaadin-confirm-dialog>
+
+  <script type="module">
+    (async () => {
+      const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+      const dir = window.location.search.replace(/.*dir=(\w+).*/, '$1') || 'ltr';
+      document.documentElement.setAttribute('dir', dir);
+
+      await import('../../theme/' + theme + '/vaadin-confirm-dialog.js');
+
+      window.requestAnimationFrame(() => {
+        document.body.dataset.ready = true;
+      });
+    })();
+  </script>
 </body>

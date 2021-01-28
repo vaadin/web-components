@@ -1,5 +1,7 @@
 bower_components
 node_modules
 package-lock.json
-.vscode
+yarn.lock
+coverage
+dist
 analysis.json

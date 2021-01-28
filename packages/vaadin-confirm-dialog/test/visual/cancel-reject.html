@@ -2,7 +2,7 @@
 
 <head lang="en">
   <meta charset="UTF-8" />
-  <title>Custom buttons tests</title>
+  <title>Cancel reject buttons tests</title>
   <script>
     // mimic flow production mode
     window.Vaadin = {
@@ -19,23 +19,11 @@
 </head>
 
 <body style="height: 600px">
-  <vaadin-confirm-dialog cancel opened>
-    <h2 slot="header">Unsaved changes</h2>
-    <p id="description">Do you want to <b>save</b> or <b>discard</b> your changes before navigating away?</p>
-    <vaadin-button id="save" slot="confirm-button" theme="primary" aria-describedby="description">
-      <iron-icon icon="vaadin:envelope-open" slot="prefix"></iron-icon>
-      Save
-    </vaadin-button>
-    <vaadin-button id="discard" slot="reject-button" theme="error tertiary">
-      <iron-icon icon="vaadin:trash" slot="prefix"></iron-icon>
-      Discard
-    </vaadin-button>
+  <vaadin-confirm-dialog cancel reject header="Unsaved changes" confirm-text="Save" reject-text="Discard" opened>
+    Do you want to save or discard your changes before navigating away?
   </vaadin-confirm-dialog>
 
   <script type="module">
-    import '@polymer/iron-icon/iron-icon.js';
-    import '@vaadin/vaadin-icons/vaadin-icons.js';
-
     (async () => {
       const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
       const dir = window.location.search.replace(/.*dir=(\w+).*/, '$1') || 'ltr';
