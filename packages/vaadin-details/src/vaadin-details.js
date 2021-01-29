@@ -98,7 +98,7 @@ class DetailsElement extends ControlStateMixin(ElementMixin(ThemableMixin(Polyme
   }
 
   static get version() {
-    return '1.2.0';
+    return '2.0.0-alpha6';
   }
 
   static get properties() {
