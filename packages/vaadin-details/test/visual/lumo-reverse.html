@@ -1,43 +1,40 @@
 <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Details Lumo reverse tests</title>
+  </head>
 
-<head lang="en">
-  <meta charset="UTF-8">
-  <title></title>
-  <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
-  <link rel="import" href="../../theme/lumo/vaadin-details.html">
-  <script>
-    window.addEventListener('WebComponentsReady', function() {
-      setTimeout(function() {
-        window.ShadyDOM && window.ShadyDOM.flush(); // Force DOM composition
-        window.webComponentsAreReady = true; // Checked in gemini before capture callback
+  <body>
+    <div id="tests">
+      <vaadin-details theme="reverse">
+        <div slot="summary">Reverse</div>
+        <span>Go Vaadin!</span>
+      </vaadin-details>
+      <vaadin-details theme="reverse" opened>
+        <div slot="summary">Reverse Opened</div>
+        <span>Go Vaadin!</span>
+      </vaadin-details>
+      <vaadin-details theme="reverse filled">
+        <div slot="summary">Reverse Filled</div>
+        <span>Go Vaadin!</span>
+      </vaadin-details>
+      <vaadin-details theme="reverse filled" opened>
+        <div slot="summary">Reverse Filled Opened</div>
+        <span>Go Vaadin!</span>
+      </vaadin-details>
+      <vaadin-details theme="reverse" style="max-width: 200px" opened>
+        <div slot="summary">Long Summary Which Will Wrap In Several Lines</div>
+        <span>Go Vaadin!</span>
+      </vaadin-details>
+    </div>
+
+    <script type="module">
+      import '../../theme/lumo/vaadin-details.js';
+
+      window.requestAnimationFrame(() => {
+        document.getElementById('tests').dataset.ready = true;
       });
-    });
-  </script>
-</head>
-
-<body>
-
-  <span id="details-tests">
-    <vaadin-details theme="reverse">
-      <div slot="summary">Reverse</div>
-      <span>Go Vaadin!</span>
-    </vaadin-details>
-    <vaadin-details theme="reverse" opened>
-      <div slot="summary">Reverse Opened</div>
-      <span>Go Vaadin!</span>
-    </vaadin-details>
-    <vaadin-details theme="reverse filled">
-      <div slot="summary">Reverse Filled</div>
-      <span>Go Vaadin!</span>
-    </vaadin-details>
-    <vaadin-details theme="reverse filled" opened>
-      <div slot="summary">Reverse Filled Opened</div>
-      <span>Go Vaadin!</span>
-    </vaadin-details>
-    <vaadin-details theme="reverse" style="max-width: 200px" opened>
-      <div slot="summary">Long Summary Which Will Wrap In Several Lines</div>
-      <span>Go Vaadin!</span>
-    </vaadin-details>
-  </span>
-
-</body>
+    </script>
+  </body>
+</html>
