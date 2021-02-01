@@ -1,17 +1,17 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@open-wc/testing-helpers';
-import '../vaadin-messages.js';
+import '../vaadin-message.js';
 
-describe('messages', () => {
-  let messages, value;
+describe('message', () => {
+  let message, value;
 
   beforeEach(() => {
-    messages = fixtureSync('<vaadin-messages></vaadin-messages>');
-    value = messages.shadowRoot.querySelector('[part="value"]');
+    message = fixtureSync('<vaadin-message></vaadin-message>');
+    value = message.shadowRoot.querySelector('[part="value"]');
   });
 
   it('should have a valid version number', () => {
-    expect(messages.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta)\d+)?$/);
+    expect(message.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta)\d+)?$/);
   });
 
   it('should say initially hello world', () => {
@@ -19,7 +19,7 @@ describe('messages', () => {
   });
 
   it('should say hello tests', () => {
-    messages.value = 'hello tests';
+    message.value = 'hello tests';
     expect(value.textContent).to.be.equal('hello tests');
   });
 });

@@ -4,7 +4,7 @@
 |
 [API documentation ↗](https://vaadin.com/components/vaadin-messages/html-api)
 
-[&lt;vaadin-messages&gt;](https://vaadin.com/components/vaadin-messages) is a messages Web Component, part of the [Vaadin components](https://vaadin.com/components).
+[&lt;vaadin-message-list&gt;](https://vaadin.com/components/vaadin-messages) is a Web Component for showing a list of messages, part of the [Vaadin components](https://vaadin.com/components).
 
 [![npm version](https://badgen.net/npm/v/@vaadin/vaadin-messages)](https://www.npmjs.com/package/@vaadin/vaadin-messages)
 [![Build Status](https://travis-ci.org/vaadin/vaadin-messages.svg?branch=master)](https://travis-ci.org/vaadin/vaadin-messages)
@@ -14,11 +14,11 @@
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
-<vaadin-messages></vaadin-messages>
-<vaadin-messages foo="bar"></vaadin-messages>
+<vaadin-message></vaadin-message>
+<vaadin-message foo="bar"></vaadin-message>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-messages/master/screenshot.gif" width="418" alt="Screenshot of vaadin-messages">](https://vaadin.com/components/vaadin-messages)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-messages/master/screenshot.png" width="418" alt="Screenshot of vaadin-message">](https://vaadin.com/components/vaadin-messages)
 
 ## Installation
 
@@ -31,7 +31,7 @@ npm i @vaadin/vaadin-messages --save
 Once installed, import it in your application:
 
 ```js
-import '@vaadin/vaadin-messages/vaadin-messages.js';
+import '@vaadin/vaadin-messages/vaadin-message.js';
 ```
 
 ## Getting started
@@ -44,15 +44,15 @@ To use the Material theme, import the correspondent file from the `theme/materia
 
 - The component with the Lumo theme:
 
-  `theme/lumo/vaadin-messages.js`
+  `theme/lumo/vaadin-message.js`
 
 - The component with the Material theme:
 
-  `theme/material/vaadin-messages.js`
+  `theme/material/vaadin-message.js`
 
-- Alias for `theme/lumo/vaadin-messages.js`:
+- Alias for `theme/lumo/vaadin-message.js`:
 
-- `vaadin-messages.js`
+- `vaadin-message.js`
 
 
 ## Running API docs and tests in a browser

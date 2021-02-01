@@ -8,11 +8,11 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
 
 /**
- * `<vaadin-messages>` is a Web Component for showing a list of messages.
+ * `<vaadin-message>` is a Web Component for showing a single message with an author, message and time.
  *
  * ```html
- * <vaadin-messages foo="bar">
- * </vaadin-messages>
+ * <vaadin-message foo="bar">
+ * </vaadin-message>
  * ```
  *
  * ### Styling
@@ -21,7 +21,7 @@ import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.
  *
  * Part name | Description
  * ----------|----------------
- * `foo`     | Messages' part
+ * `avatar`  | The author's avatar
  *
  * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
  *
@@ -29,7 +29,7 @@ import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.
  *
  * Custom property           | Description                              | Default
  *---------------------------|------------------------------------------|-------------
- * `--vaadin-messages-value` | value of the component (between 0 and 1) | 0
+ * `--vaadin-message-value`  | value of the component (between 0 and 1) | 0
  *
  * The following state attributes are available for styling:
  *
@@ -41,7 +41,7 @@ import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.
  * @mixes ThemableMixin
  * @mixes ElementMixin
  */
-class MessagesElement extends ElementMixin(ThemableMixin(PolymerElement)) {
+class MessageElement extends ElementMixin(ThemableMixin(PolymerElement)) {
   static get properties() {
     return {
       /**
@@ -89,7 +89,7 @@ class MessagesElement extends ElementMixin(ThemableMixin(PolymerElement)) {
   }
 
   static get is() {
-    return 'vaadin-messages';
+    return 'vaadin-message';
   }
 
   static get version() {
@@ -97,6 +97,6 @@ class MessagesElement extends ElementMixin(ThemableMixin(PolymerElement)) {
   }
 }
 
-customElements.define(MessagesElement.is, MessagesElement);
+customElements.define(MessageElement.is, MessageElement);
 
-export { MessagesElement };
+export { MessageElement };

@@ -1,16 +1,14 @@
 
-# &lt;vaadin-messages-bar&gt;
+# &lt;vaadin-message-list&gt;
 
 [![Available in Vaadin_Directory](https://img.shields.io/vaadin-directory/v/vaadinvaadin-messages.svg)](https://vaadin.com/directory/component/vaadinvaadin-messages)
 
-[&lt;vaadin-messages&gt;](https://vaadin.com/components/vaadin-messages) is a Web Component message list, part of the [Vaadin components](https://vaadin.com/components).
+[&lt;vaadin-message-list&gt;](https://vaadin.com/components/vaadin-messages) is a Web Component for showing a list of messages, part of the [Vaadin components](https://vaadin.com/components).
 
-
-
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-messages/main/screenshot.gif" width="418" alt="Screenshot of vaadin-messages">](https://vaadin.com/components/vaadin-messages)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-messages/main/screenshot.png" width="418" alt="Screenshot of vaadin-message">](https://vaadin.com/components/vaadin-messages)
 
 ## Example Usage
 ```html
-<vaadin-messages></vaadin-messages>
-<vaadin-messages value="hello world"></vaadin-messages>
+<vaadin-message></vaadin-message>
+<vaadin-message value="hello world"></vaadin-message>
 ```

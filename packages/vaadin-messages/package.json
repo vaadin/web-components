@@ -2,8 +2,8 @@
   "name": "@vaadin/vaadin-messages",
   "version": "0.1.0",
   "description": "vaadin-messages",
-  "main": "vaadin-messages.js",
-  "module": "vaadin-messages.js",
+  "main": "vaadin-message.js",
+  "module": "vaadin-message.js",
   "repository": "vaadin/vaadin-messages",
   "keywords": [
     "Vaadin",

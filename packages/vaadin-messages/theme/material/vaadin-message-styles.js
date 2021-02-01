@@ -2,7 +2,7 @@ import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styl
 import '@vaadin/vaadin-material-styles/color.js';
 
 registerStyles(
-  'vaadin-messages',
+  'vaadin-message',
   css`
     :host {
       margin: 8px 0;
@@ -18,5 +18,5 @@ registerStyles(
       transform-origin: 100% 0;
     }
   `,
-  { moduleId: 'material-messages' }
+  { moduleId: 'material-message' }
 );

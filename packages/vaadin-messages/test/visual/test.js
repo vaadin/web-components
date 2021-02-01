@@ -1,16 +1,16 @@
-describe('vaadin-messages', () => {
+describe('vaadin-message', () => {
   const locator = '#tests[data-ready]';
 
   ['lumo', 'material'].forEach((theme) => {
-    it(`${theme}-messages`, function () {
+    it(`${theme}-message`, function () {
       return this.browser
         .url(`default.html?theme=${theme}`)
         .waitForVisible(locator, 15000)
-        .assertView(`${theme}-messages-ltr`, locator)
+        .assertView(`${theme}-message-ltr`, locator)
         .execute(() => {
           window.document.documentElement.setAttribute('dir', 'rtl');
         })
-        .assertView(`${theme}-messages-rtl`, locator);
+        .assertView(`${theme}-message-rtl`, locator);
     });
   });
 });

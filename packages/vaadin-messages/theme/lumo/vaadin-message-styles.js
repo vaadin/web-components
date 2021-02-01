@@ -5,7 +5,7 @@ import '@vaadin/vaadin-lumo-styles/spacing.js';
 import '@vaadin/vaadin-lumo-styles/style.js';
 
 registerStyles(
-  'vaadin-messages',
+  'vaadin-message',
   css`
     :host {
       height: calc(var(--lumo-size-l) / 10);
@@ -18,5 +18,5 @@ registerStyles(
       color: white;
     }
   `,
-  { moduleId: 'lumo-messages' }
+  { moduleId: 'lumo-message' }
 );

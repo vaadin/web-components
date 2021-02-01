@@ -2,7 +2,7 @@ module.exports = {
   browsers: {
     chrome: {
       baseUrl: 'http://localhost:8080/test/visual/',
-      screenshotsDir: () => 'test/visual/screens/vaadin-messages',
+      screenshotsDir: () => 'test/visual/screens/vaadin-message',
       desiredCapabilities: {
         browserName: 'chrome',
         version: '85.0',

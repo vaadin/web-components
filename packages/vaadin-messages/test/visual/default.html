@@ -2,7 +2,7 @@
 
 <head lang="en">
   <meta charset="UTF-8" />
-  <title>Messages tests</title>
+  <title>Message tests</title>
   <script>
     window.polymerSkipLoadingFontRoboto = true;
   </script>
@@ -10,14 +10,14 @@
 
 <body>
   <div id="tests" style="padding: 10px">
-    <vaadin-messages value="Hello there"></vaadin-messages>
+    <vaadin-message value="Hello there"></vaadin-message>
   </div>
 
   <script type="module">
     (async () => {
       const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
 
-      await import('../../theme/' + theme + '/vaadin-messages.js');
+      await import('../../theme/' + theme + '/vaadin-message.js');
 
       window.requestAnimationFrame(() => {
         document.getElementById('tests').dataset.ready = true;
