@@ -1,3 +1,4 @@
+vaadin-accordion
 vaadin-avatar
 vaadin-checkbox
 vaadin-combo-box
@@ -6,6 +7,7 @@ vaadin-custom-field
 vaadin-crud
 vaadin-date-picker
 vaadin-date-time-picker
+vaadin-details
 vaadin-form-layout
 vaadin-grid
 vaadin-grid-pro
