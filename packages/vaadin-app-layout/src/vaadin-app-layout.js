@@ -302,7 +302,7 @@ class AppLayoutElement extends ElementMixin(ThemableMixin(PolymerElement)) {
   }
 
   static get version() {
-    return '2.2.0';
+    return '3.0.0-alpha3';
   }
 
   static get properties() {

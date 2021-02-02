@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-app-layout",
-  "version": "2.2.0",
+  "version": "3.0.0-alpha3",
   "description": "vaadin-app-layout",
   "main": "vaadin-app-layout.js",
   "module": "vaadin-app-layout.js",
