@@ -1,21 +1,21 @@
 {
-  "name": "@vaadin/vaadin-login",
-  "version": "2.0.0-alpha1",
-  "description": "vaadin-login",
-  "main": "vaadin-login-overlay.js",
-  "module": "vaadin-login-overlay.js",
-  "repository": "vaadin/vaadin-login",
+  "name": "@vaadin/vaadin-confirm-dialog",
+  "version": "3.0.0-alpha1",
+  "description": "vaadin-confirm-dialog",
+  "main": "vaadin-confirm-dialog.js",
+  "module": "vaadin-confirm-dialog.js",
+  "repository": "vaadin/vaadin-confirm-dialog",
   "keywords": [
     "Vaadin",
-    "vaadin-login",
+    "vaadin-confirm-dialog",
     "web-components",
     "web-component",
     "polymer"
   ],
   "author": "Vaadin Ltd",
-  "license": "Apache-2.0",
+  "license": "https://raw.githubusercontent.com/vaadin/vaadin-confirm-dialog/master/LICENSE",
   "bugs": {
-    "url": "https://github.com/vaadin/vaadin-login/issues"
+    "url": "https://github.com/vaadin/vaadin-confirm-dialog/issues"
   },
   "homepage": "https://vaadin.com/components",
   "files": [
@@ -26,11 +26,12 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/vaadin-themable-mixin": "^1.6.2",
+    "@vaadin/vaadin-themable-mixin": "^1.6.1",
     "@vaadin/vaadin-element-mixin": "^2.4.1",
     "@vaadin/vaadin-lumo-styles": "^1.6.1",
     "@vaadin/vaadin-material-styles": "^1.3.2",
-    "@vaadin/vaadin-text-field": "^3.0.0-alpha1",
+    "@vaadin/vaadin-license-checker": "^2.1.0",
+    "@vaadin/vaadin-dialog": "^3.0.0-alpha1",
     "@vaadin/vaadin-button": "^3.0.0-alpha1",
     "@vaadin/vaadin-overlay": "^3.5.0"
   },
@@ -38,6 +39,7 @@
     "@esm-bundle/chai": "^4.1.5",
     "@open-wc/testing-helpers": "^1.8.12",
     "@polymer/iron-test-helpers": "^3.0.0",
+    "@vaadin/vaadin-icons": "^4.2.0",
     "sinon": "^9.2.1"
   }
 }

@@ -40,5 +40,17 @@ delete packageJson['lint-staged'];
   delete packageJson.devDependencies[dep];
 });
 
+// TODO: remove after versions are unified.
+[
+  '@vaadin/vaadin-button',
+  '@vaadin/vaadin-confirm-dialog',
+  '@vaadin/vaadin-dialog',
+  '@vaadin/vaadin-form-layout'
+].forEach((dep) => {
+  if (packageJson.dependencies[dep]) {
+    packageJson.dependencies[dep] = '^3.0.0-alpha1';
+  }
+});
+
 // Format and write changes to package.json
 jsonfile.writeFileSync(`packages/${repo}/package.json`, packageJson, { spaces: 2 });

@@ -1,13 +1,17 @@
 vaadin-accordion
+vaadin-app-layout
 vaadin-avatar
+vaadin-button
 vaadin-checkbox
 vaadin-combo-box
+vaadin-confirm-dialog
 vaadin-context-menu
 vaadin-custom-field
 vaadin-crud
 vaadin-date-picker
 vaadin-date-time-picker
 vaadin-details
+vaadin-dialog
 vaadin-form-layout
 vaadin-grid
 vaadin-grid-pro
