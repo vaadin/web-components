@@ -1,52 +1,34 @@
-gemini.suite('vaadin-app-layout', function(rootSuite) {
-  function wait(actions, find) {
-    return actions
-      .waitForJSCondition(function(window) {
-        return window.webComponentsAreReady;
-      }, 80000);
-  }
+describe('vaadin-app-layout', () => {
+  const locator = 'vaadin-app-layout[data-ready]';
 
-  function goToAboutBlank(actions, find) {
-    // Firefox stops responding on socket after a test, workaround:
-    return actions.executeJS(function(window) {
-      window.location.href = 'about:blank'; // just go away, please!
-    });
-  }
-
-  rootSuite
-    .before(wait)
-    .after(goToAboutBlank);
-
-  ['lumo', 'lumo-dark', 'material'].forEach(theme => {
-    gemini.suite(`drawer-${theme}`, function(suite) {
-      suite
-        .setUrl(`/drawer.html?theme=${theme}`)
-        .setCaptureElements('#drawer-tests')
-        .capture('default')
-        .capture('rtl', actions => {
-          actions.executeJS(function(window) {
-            window.document.documentElement.setAttribute('dir', 'rtl');
-          });
-        });
+  ['lumo', 'lumo-dark', 'material'].forEach((theme) => {
+    it(`${theme}-drawer`, function () {
+      return this.browser
+        .url(`drawer.html?theme=${theme}`)
+        .waitForVisible(locator, 15000)
+        .assertView(`${theme}-drawer-ltr`, locator)
+        .execute(() => {
+          document.documentElement.setAttribute('dir', 'rtl');
+        })
+        .assertView(`${theme}-drawer-rtl`, locator);
     });
 
-    gemini.suite(`primary-drawer-${theme}`, function(suite) {
-      suite
-        .setUrl(`/primary-drawer.html?theme=${theme}`)
-        .setCaptureElements('#primary-drawer-tests')
-        .capture('default')
-        .capture('rtl', actions => {
-          actions.executeJS(function(window) {
-            window.document.documentElement.setAttribute('dir', 'rtl');
-          });
-        });
+    it(`${theme}-primary-drawer`, function () {
+      return this.browser
+        .url(`primary-drawer.html?theme=${theme}`)
+        .waitForVisible(locator, 15000)
+        .assertView(`${theme}-primary-drawer-ltr`, locator)
+        .execute(() => {
+          document.documentElement.setAttribute('dir', 'rtl');
+        })
+        .assertView(`${theme}-primary-drawer-rtl`, locator);
     });
 
-    gemini.suite(`tabs-${theme}`, function(suite) {
-      suite
-        .setUrl(`/tabs.html?theme=${theme}`)
-        .setCaptureElements('#tabs-tests')
-        .capture('default');
+    it(`${theme}-tabs`, function () {
+      return this.browser
+        .url(`tabs.html?theme=${theme}`)
+        .waitForVisible(locator, 15000)
+        .assertView(`${theme}-tabs`, locator);
     });
   });
 });

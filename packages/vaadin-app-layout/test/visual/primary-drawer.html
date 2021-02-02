@@ -1,60 +1,63 @@
 <!DOCTYPE html>
 
 <head lang="en">
-  <meta charset="UTF-8">
-  <title></title>
-  <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Primary Drawer tests</title>
   <script>
-    const themeQuery = window.location.search.replace(/.*theme=([\w\-]+).*/, '$1') || 'lumo';
-    const [theme, variant] = themeQuery.split('-');
-
-    document.write(`
-      <link rel="import" href="../../theme/${theme}/vaadin-app-layout.html">
-      <link rel="import" href="../../theme/${theme}/vaadin-drawer-toggle.html">
-    `);
-
-    if (variant) {
-      document.documentElement.setAttribute('theme', variant);
-      document.write(`
-        <custom-style>
-          <style include="lumo-color">
-          </style>
-        </custom-style>
-      `);
-    }
-
-    window.addEventListener('WebComponentsReady', function() {
-      setTimeout(function() {
-        window.ShadyDOM && window.ShadyDOM.flush(); // Force DOM composition
-        window.webComponentsAreReady = true; // Checked in gemini before capture callback
-      });
-    });
+    window.polymerSkipLoadingFontRoboto = true;
   </script>
 </head>
 
 <body>
   <style>
+    html,
     body {
-      margin: 0;
       height: 100%;
     }
 
-    #primary-drawer-tests {
-      min-height: 300px;
+    body {
+      margin: 0;
     }
   </style>
 
-  <div id="primary-drawer-tests">
-    <vaadin-app-layout primary-section="drawer">
-      <vaadin-drawer-toggle slot="navbar"></vaadin-drawer-toggle>
-      <h2 slot="navbar">App Name</h2>
-      <section slot="drawer">
-        Drawer content
-      </section>
-      <main>
-        Page content
-      </main>
-    </vaadin-app-layout>
-  </div>
+  <vaadin-app-layout primary-section="drawer">
+    <vaadin-drawer-toggle slot="navbar"></vaadin-drawer-toggle>
+    <h2 slot="navbar">App Name</h2>
+    <section slot="drawer">Drawer content</section>
+    <main>Page content</main>
+  </vaadin-app-layout>
 
+  <script type="module">
+    import { cssFromModules } from '@polymer/polymer/lib/utils/style-gather.js';
+
+    (async () => {
+      const themeQuery = window.location.search.replace(/.*theme=([\w\-]+).*/, '$1') || 'lumo';
+      const [theme, variant] = themeQuery.split('-');
+
+      await Promise.all([
+        import('../../theme/' + theme + '/vaadin-drawer-toggle.js'),
+        import('../../theme/' + theme + '/vaadin-app-layout.js')
+      ]);
+
+      if (theme === 'lumo') {
+        const style = document.createElement('style');
+        style.textContent = cssFromModules('lumo-color');
+        document.head.appendChild(style);
+      }
+
+      if (variant === 'dark') {
+        document.documentElement.setAttribute('theme', variant);
+      }
+
+      window.requestAnimationFrame(() => {
+        // Make sure sizes are calculated properly
+        window.dispatchEvent(new Event('resize'));
+
+        setTimeout(() => {
+          document.querySelector('vaadin-app-layout').dataset.ready = true;
+        });
+      });
+    })();
+  </script>
 </body>
