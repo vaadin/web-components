@@ -70,7 +70,7 @@ To use the Material theme, import the correspondent file from the `theme/materia
 
 1. You can also open visual tests, for example:
 
-  - http://127.0.0.1:3000/test/visual/default.html
+  - http://localhost:8000/test/visual/default.html
 
 
 ## Running tests from the command line
