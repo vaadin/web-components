@@ -1,25 +1,15 @@
 <!DOCTYPE html>
 
 <head lang="en">
-  <meta charset="UTF-8">
-  <title></title>
-  <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <meta charset="UTF-8" />
+  <title>Accordion tests</title>
   <script>
-    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
-    document.write('<link rel="import" href="../../theme/' + theme + '/vaadin-accordion.html">');
-
-    window.addEventListener('WebComponentsReady', function() {
-      setTimeout(function() {
-        window.ShadyDOM && window.ShadyDOM.flush(); // Force DOM composition
-        window.webComponentsAreReady = true; // Checked in gemini before capture callback
-      });
-    });
+    window.polymerSkipLoadingFontRoboto = true;
   </script>
 </head>
 
 <body>
-
-  <span id="accordion-tests">
+  <span id="tests">
     <vaadin-accordion opened="1">
       <vaadin-accordion-panel>
         <div slot="summary">Panel Heading 1</div>
@@ -44,4 +34,15 @@
     </vaadin-accordion>
   </span>
 
+  <script type="module">
+    (async () => {
+      const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+
+      await import('../../theme/' + theme + '/vaadin-accordion.js');
+
+      window.requestAnimationFrame(() => {
+        document.getElementById('tests').dataset.ready = true;
+      });
+    })();
+  </script>
 </body>

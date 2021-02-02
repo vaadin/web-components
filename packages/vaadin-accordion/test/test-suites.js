@@ -1,3 +1,0 @@
-window.VaadinAccordionSuites = [
-  'accordion.html'
-];
