@@ -61,16 +61,6 @@ export const InteractionsMixin = (superClass) =>
       document.removeEventListener('click', this.__boundOutsideClickListener, true);
     }
 
-    /**
-     * Can be called to manually notify a resizable and its descendant
-     * resizables of a resize change.
-     */
-    notifyResize() {
-      // NOTE: we have this method here to include it to TypeScript definitions.
-      // gen-typescript-declarations does not generate types for `mixinBehaviors`
-      super.notifyResize();
-    }
-
     /** @private */
     get __isRTL() {
       return this.getAttribute('dir') === 'rtl';
@@ -220,7 +210,7 @@ export const InteractionsMixin = (superClass) =>
 
     /** @private */
     __alignOverlayPosition(e) {
-      /* istanbul ignore if */
+      /* c8 ignore next */
       if (!this._expandedButton) {
         // When `openOnHover` is true, quickly moving cursor can close submenu,
         // so by the time when event listener gets executed button is null.

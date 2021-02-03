@@ -15,7 +15,7 @@ const config = {
     include: ['**/src/*'],
     threshold: {
       statements: 98,
-      branches: 68,
+      branches: 67,
       functions: 98,
       lines: 96
     }
@@ -26,7 +26,7 @@ if (process.env.TEST_ENV === 'sauce') {
   const sauceLabsLauncher = createSauceLabsLauncher(
     {
       user: process.env.SAUCE_USERNAME,
-      key: process.env.SAUCE_ACCESS_KEY,
+      key: process.env.SAUCE_ACCESS_KEY
     },
     {
       name: 'vaadin-menu-bar unit tests',
@@ -34,7 +34,7 @@ if (process.env.TEST_ENV === 'sauce') {
       recordScreenshots: false,
       recordVideo: false
     }
-  );;
+  );
 
   config.concurrency = 1;
   config.browsers = [

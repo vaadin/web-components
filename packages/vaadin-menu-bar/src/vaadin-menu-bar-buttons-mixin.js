@@ -80,9 +80,30 @@ export const ButtonsMixin = (superClass) =>
       const container = this._container;
       const buttons = this._buttons.slice(0);
       const overflow = buttons.pop();
-      const containerWidth = container.offsetWidth;
       const isRTL = this.getAttribute('dir') === 'rtl';
 
+      // reset all buttons in the menu bar and the overflow button
+      for (let i = 0; i < buttons.length; i++) {
+        const btn = buttons[i];
+        btn.disabled = btn.item.disabled;
+        btn.style.visibility = '';
+        btn.style.position = '';
+
+        // teleport item component back from "overflow" sub-menu
+        const item = btn.item && btn.item.component;
+        if (item instanceof HTMLElement && item.classList.contains('vaadin-menu-item')) {
+          btn.appendChild(item);
+          item.classList.remove('vaadin-menu-item');
+        }
+      }
+      overflow.item = { children: [] };
+      this._hasOverflow = false;
+
+      if (this._subMenu.opened) {
+        this._subMenu.close();
+      }
+
+      // hide any overflowing buttons and put them in the 'overflow' button
       if (container.offsetWidth < container.scrollWidth) {
         this._hasOverflow = true;
 
@@ -90,13 +111,11 @@ export const ButtonsMixin = (superClass) =>
         for (i = buttons.length; i > 0; i--) {
           const btn = buttons[i - 1];
           const btnStyle = getComputedStyle(btn);
-          if (btnStyle.visibility === 'hidden') {
-            continue;
-          }
 
           const btnWidth = btn.offsetWidth;
+          // if this button isn't overflowing, then the rest aren't either
           if (
-            (!isRTL && btn.offsetLeft + btnWidth < containerWidth - overflow.offsetWidth) ||
+            (!isRTL && btn.offsetLeft + btnWidth < container.offsetWidth - overflow.offsetWidth) ||
             (isRTL && btn.offsetLeft >= overflow.offsetWidth)
           ) {
             break;
@@ -111,47 +130,6 @@ export const ButtonsMixin = (superClass) =>
         overflow.item = {
           children: buttons.filter((b, idx) => idx >= i).map((b) => b.item)
         };
-      } else if (this._hasOverflow) {
-        if (this._subMenu.opened) {
-          this._subMenu.close();
-        }
-
-        for (let i = 0; i < buttons.length; i++) {
-          const btn = buttons[i];
-          const btnWidth = btn.getBoundingClientRect().width;
-
-          if (getComputedStyle(btn).visibility !== 'hidden') {
-            continue;
-          }
-
-          if (
-            (!isRTL && overflow.offsetLeft + overflow.offsetWidth + btnWidth < containerWidth) ||
-            (isRTL && btnWidth < overflow.offsetLeft)
-          ) {
-            btn.disabled = btn.item.disabled;
-            btn.style.visibility = '';
-            btn.style.position = '';
-            btn.style.width = '';
-
-            // teleport item component back from "overflow" sub-menu
-            const item = btn.item && btn.item.component;
-            if (item instanceof HTMLElement && item.classList.contains('vaadin-menu-item')) {
-              btn.appendChild(item);
-              item.classList.remove('vaadin-menu-item');
-            }
-
-            overflow.item = {
-              children: buttons.filter((b, idx) => idx >= i + 1).map((b) => b.item)
-            };
-
-            if (btn === buttons[buttons.length - 1]) {
-              this._hasOverflow = false;
-              overflow.item = { children: [] };
-            }
-          } else {
-            break;
-          }
-        }
       }
     }
 
