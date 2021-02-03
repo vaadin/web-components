@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-list-box",
-  "version": "2.0.0-alpha1",
+  "version": "2.0.0",
   "description": "vaadin-list-box",
   "main": "vaadin-list-box.js",
   "module": "vaadin-list-box.js",
