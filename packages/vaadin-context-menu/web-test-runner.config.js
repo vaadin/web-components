@@ -3,7 +3,7 @@ const { createSauceLabsLauncher } = require('@web/test-runner-saucelabs');
 
 const config = {
   nodeResolve: true,
-  browserStartTimeout: 60000, // default 30000
+  browserStartTimeout: 120000, // default 30000
   testsStartTimeout: 60000, // default 10000
   testsFinishTimeout: 60000, // default 20000
   testFramework: {
@@ -26,7 +26,7 @@ if (process.env.TEST_ENV === 'sauce') {
   const sauceLabsLauncher = createSauceLabsLauncher(
     {
       user: process.env.SAUCE_USERNAME,
-      key: process.env.SAUCE_ACCESS_KEY,
+      key: process.env.SAUCE_ACCESS_KEY
     },
     {
       name: 'vaadin-context-menu unit tests',
@@ -34,7 +34,7 @@ if (process.env.TEST_ENV === 'sauce') {
       recordScreenshots: false,
       recordVideo: false
     }
-  );;
+  );
 
   config.concurrency = 1;
   config.browsers = [
@@ -51,7 +51,7 @@ if (process.env.TEST_ENV === 'sauce') {
     sauceLabsLauncher({
       browserName: 'iphone',
       platform: 'iPhone X Simulator',
-      version: '13.0'
+      version: '14.0'
     })
   ];
 }
