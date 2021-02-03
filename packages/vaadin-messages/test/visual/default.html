@@ -6,11 +6,29 @@
   <script>
     window.polymerSkipLoadingFontRoboto = true;
   </script>
+  <style>
+    html {
+      --vaadin-user-color-3: red;
+    }
+  </style>
 </head>
 
 <body>
   <div id="tests" style="padding: 10px">
-    <vaadin-message value="Hello there"></vaadin-message>
+    <vaadin-message time="2021-01-28 10:43"
+      user='{"name":"Bob Ross","abbr":"BR","img":"/test/visual/avatars/avatar.jpg"}'>There is no real
+      ending. It's
+      just the place where you stop the story.</vaadin-message>
+    <vaadin-message time="Three years ago"
+      user='{"name":"Tony Robbins","abbr":"TR","img":"/test/visual/avatars/avatar2.jpg"}'>People who succeed
+      have
+      momentum. The more they succeed, the more they want to succeed and the more they find a way to succeed. Similarly,
+      when someone is failing, the tendency is to get on a downward spiral that can even become a self-fulfilling
+      prophecy.</vaadin-message>
+    <vaadin-message></vaadin-message>
+    <vaadin-message time="2021-01-28 10:43"
+      user='{"name":"Dean Winchester","abbr":"DW","colorIndex":"3"}'>There is no real ending. It's
+      just the place where you stop the story.</vaadin-message>
   </div>
 
   <script type="module">

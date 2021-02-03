@@ -6,8 +6,9 @@ import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.
  * `<vaadin-message>` is a Web Component for showing a single message with an author, message and time.
  *
  * ```html
- * <vaadin-message foo="bar">
- * </vaadin-message>
+ * <vaadin-message time="2021-01-28 10:43"
+ *     user='{"name":"Bob Ross","abbr":"BR","img":"/static/img/avatar.jpg"}'>There is no real ending. It's
+ *     just the place where you stop the story.</vaadin-message>
  * ```
  *
  * ### Styling
@@ -17,20 +18,11 @@ import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.
  * Part name | Description
  * ----------|----------------
  * `avatar`  | The author's avatar
+ * `name`    | Author's name
+ * `time`    | When the message was posted
+ * `content` | The message itself as a slotted content
  *
  * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
- *
- * The following custom properties are available:
- *
- * Custom property           | Description                              | Default
- *---------------------------|------------------------------------------|-------------
- * `--vaadin-message-value`  | value of the component (between 0 and 1) | 0
- *
- * The following state attributes are available for styling:
- *
- * Attribute       | Description      | Part name
- * ----------------|------------------|------------
- * `myattribute`   | Set an attribute | :host
  *
  * @extends HTMLElement
  * @mixes ThemableMixin

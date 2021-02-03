@@ -6,13 +6,14 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
-
+import '@vaadin/vaadin-avatar/src/vaadin-avatar.js';
 /**
  * `<vaadin-message>` is a Web Component for showing a single message with an author, message and time.
  *
  * ```html
- * <vaadin-message foo="bar">
- * </vaadin-message>
+ * <vaadin-message time="2021-01-28 10:43"
+ *     user='{"name":"Bob Ross","abbr":"BR","img":"/static/img/avatar.jpg"}'>There is no real ending. It's
+ *     just the place where you stop the story.</vaadin-message>
  * ```
  *
  * ### Styling
@@ -22,20 +23,11 @@ import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.
  * Part name | Description
  * ----------|----------------
  * `avatar`  | The author's avatar
+ * `name`    | Author's name
+ * `time`    | When the message was posted
+ * `content` | The message itself as a slotted content
  *
  * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
- *
- * The following custom properties are available:
- *
- * Custom property           | Description                              | Default
- *---------------------------|------------------------------------------|-------------
- * `--vaadin-message-value`  | value of the component (between 0 and 1) | 0
- *
- * The following state attributes are available for styling:
- *
- * Attribute       | Description      | Part name
- * ----------------|------------------|------------
- * `myattribute`   | Set an attribute | :host
  *
  * @extends HTMLElement
  * @mixes ThemableMixin
@@ -45,11 +37,27 @@ class MessageElement extends ElementMixin(ThemableMixin(PolymerElement)) {
   static get properties() {
     return {
       /**
-       * Current text value.
+       * Time of sending the message. It is rendered as-is to the part='time' slot,
+       * so the formatting is up to you.
        */
-      value: {
+      time: {
         type: String,
         reflectToAttribute: true
+      },
+      /**
+       * A user object that can be used to render avatar and name.
+       * The user object can consist of the following properties:
+       * ```js
+       * user: {
+       *   name: string,
+       *   abbr: string,
+       *   img: string,
+       *   colorIndex: number
+       * }
+       * ```
+       */
+      user: {
+        type: Object
       }
     };
   }
@@ -58,34 +66,52 @@ class MessageElement extends ElementMixin(ThemableMixin(PolymerElement)) {
     return html`
       <style>
         :host {
-          display: block;
-          width: 100%; /* prevent collapsing inside non-stretching column flex */
-          height: 8px;
+          display: flex;
+          flex-direction: row;
         }
 
         :host([hidden]) {
           display: none !important;
         }
 
-        [part='value'] {
-          height: 100%;
+        .vaadin-message-wrapper {
+          display: flex;
+          flex-direction: column;
+          flex: 1;
         }
 
-        /* RTL specific styles */
-        :host([dir='rtl']) [part='value'] {
-          transform-origin: 100% 50%;
+        .vaadin-message-header {
+          display: flex;
+          flex-direction: row;
+        }
+
+        [part='name'] {
+          flex: 1;
         }
       </style>
-
-      <div part="bar">
-        <div part="value">[[value]]</div>
+      <vaadin-avatar
+        part="avatar"
+        name="[[user.name]]"
+        img="[[user.img]]"
+        abbr="[[user.abbr]]"
+        color-index="[[user.colorIndex]]"
+        tabindex="-1"
+        aria-hidden="true"
+      ></vaadin-avatar>
+      <div class="vaadin-message-wrapper">
+        <div class="vaadin-message-header">
+          <div part="name">[[user.name]]</div>
+          <div part="time">[[time]]</div>
+        </div>
+        <div part="content">
+          <slot></slot>
+        </div>
       </div>
     `;
   }
 
   ready() {
     super.ready();
-    this.setAttribute('value', 'hello world');
   }
 
   static get is() {
