@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-text-field",
-  "version": "3.0.0-alpha1",
+  "version": "3.0.0",
   "description": "vaadin-text-field",
   "main": "vaadin-text-field.js",
   "module": "vaadin-text-field.js",
