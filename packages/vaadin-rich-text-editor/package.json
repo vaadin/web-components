@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-rich-text-editor",
-  "version": "2.0.0-alpha2",
+  "version": "2.0.0",
   "description": "vaadin-rich-text-editor",
   "main": "vaadin-rich-text-editor.js",
   "module": "vaadin-rich-text-editor.js",
