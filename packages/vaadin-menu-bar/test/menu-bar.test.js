@@ -5,6 +5,20 @@ import { arrowLeft, arrowRight, end, home, nextRender } from './helpers.js';
 import './not-animated-styles.js';
 import '../vaadin-menu-bar.js';
 
+// utility function to assert a menu item is not visible
+const assertHidden = (elem) => {
+  const style = getComputedStyle(elem);
+  expect(style.visibility).to.equal('hidden');
+  expect(style.position).to.equal('absolute');
+};
+
+// utility function to assert a menu item is visible
+const assertVisible = (elem) => {
+  const style = getComputedStyle(elem);
+  expect(style.visibility).to.equal('visible');
+  expect(style.position).to.not.equal('absolute');
+};
+
 describe('custom element definition', () => {
   let menu;
 
@@ -215,18 +229,6 @@ describe('root menu layout', () => {
 describe('overflow button', () => {
   let menu, buttons, overflow;
 
-  const assertHidden = (elem) => {
-    const style = getComputedStyle(elem);
-    expect(style.visibility).to.equal('hidden');
-    expect(style.position).to.equal('absolute');
-  };
-
-  const assertVisible = (elem) => {
-    const style = getComputedStyle(elem);
-    expect(style.visibility).to.equal('visible');
-    expect(style.position).to.not.equal('absolute');
-  };
-
   beforeEach(async () => {
     menu = fixtureSync('<vaadin-menu-bar></vaadin-menu-bar>');
 
@@ -322,6 +324,68 @@ describe('overflow button', () => {
     menu.style.width = 'auto';
     menu.notifyResize();
     await nextRender(menu);
+    assertVisible(buttons[2]);
+    expect(buttons[2].disabled).to.not.be.true;
+    assertVisible(buttons[3]);
+    expect(buttons[3].disabled).to.not.be.true;
+    assertVisible(buttons[4]);
+    expect(buttons[4].disabled).to.be.true;
+    expect(overflow.hasAttribute('hidden')).to.be.true;
+    expect(overflow.item.children.length).to.equal(0);
+  });
+
+  it('should hide overflow button and reset its items when all buttons fit after changing items', async () => {
+    // see https://github.com/vaadin/vaadin-menu-bar/issues/133
+    menu.items = [{ text: 'Item 1' }, { text: 'Item 2' }];
+    await nextRender(menu);
+    buttons = menu._buttons;
+    overflow = buttons[2];
+    assertVisible(buttons[1]);
+
+    expect(overflow.hasAttribute('hidden')).to.be.true;
+    expect(overflow.item.children.length).to.equal(0);
+  });
+});
+
+describe('responsive behaviour in container', () => {
+  let container, menu, buttons, overflow;
+
+  beforeEach(async () => {
+    container = fixtureSync(
+      '<div style="display: flex;"><vaadin-menu-bar style="min-width: 100%"></vaadin-menu-bar></div>'
+    );
+    menu = container.firstChild;
+
+    container.style.width = '250px';
+
+    menu.items = [
+      { text: 'Item 1' },
+      { text: 'Item 2' },
+      { text: 'Item 3' },
+      { text: 'Item 4' },
+      { text: 'Item 5', disabled: true }
+    ];
+    await nextRender(menu);
+    buttons = menu._buttons;
+    overflow = buttons[buttons.length - 1];
+  });
+
+  it('should hide overflow button and reset its items when all buttons fit ', async () => {
+    // must work even if menu-bar won't automatically resize to a larger size
+    // when more space becomes available
+    // see https://github.com/vaadin/vaadin-menu-bar/issues/130
+    menu.style.minWidth = '0';
+    container.style.width = '150px';
+    menu.notifyResize();
+    await nextRender(container);
+    assertHidden(buttons[2]);
+    expect(buttons[2].disabled).to.be.true;
+    assertHidden(buttons[3]);
+    expect(buttons[3].disabled).to.be.true;
+
+    container.style.width = '390px';
+    menu.notifyResize();
+    await nextRender(container);
     assertVisible(buttons[2]);
     expect(buttons[2].disabled).to.not.be.true;
     assertVisible(buttons[3]);

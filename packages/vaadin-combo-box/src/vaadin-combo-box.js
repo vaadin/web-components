@@ -260,7 +260,7 @@ class ComboBoxElement extends ElementMixin(
   }
 
   static get version() {
-    return '6.0.0-alpha1';
+    return '6.0.0';
   }
 
   static get properties() {
