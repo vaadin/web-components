@@ -59,9 +59,9 @@
     "@vaadin/vaadin-element-mixin": "^2.4.1",
     "@vaadin/vaadin-lumo-styles": "^1.6.1",
     "@vaadin/vaadin-material-styles": "^1.3.2",
-    "@vaadin/vaadin-date-picker": "^5.0.0-alpha1",
-    "@vaadin/vaadin-time-picker": "^3.0.0-alpha1",
-    "@vaadin/vaadin-custom-field": "^2.0.0-alpha1"
+    "@vaadin/vaadin-date-picker": "^5.0.0",
+    "@vaadin/vaadin-time-picker": "^3.0.0",
+    "@vaadin/vaadin-custom-field": "^2.0.0"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.1.5",
