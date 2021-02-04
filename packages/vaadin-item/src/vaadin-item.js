@@ -71,7 +71,7 @@ class ItemElement extends ItemMixin(ThemableMixin(DirMixin(PolymerElement))) {
   }
 
   static get version() {
-    return '3.0.0-alpha1';
+    return '3.0.0';
   }
 
   constructor() {

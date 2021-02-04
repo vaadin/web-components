@@ -116,7 +116,7 @@ class CheckboxElement extends ElementMixin(ControlStateMixin(ThemableMixin(Gestu
   }
 
   static get version() {
-    return '3.0.0-alpha1';
+    return '3.0.0';
   }
 
   static get properties() {
