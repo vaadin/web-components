@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-ordered-layout",
-  "version": "1.4.0",
+  "version": "2.0.0-alpha1",
   "description": "vaadin-ordered-layout",
   "main": "imports.js",
   "module": "imports.js",
