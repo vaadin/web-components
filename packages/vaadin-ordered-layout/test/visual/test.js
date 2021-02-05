@@ -1,32 +1,27 @@
-gemini.suite('vaadin-ordered-layout', function(rootSuite) {
-  rootSuite
-    .before(function(actions, find) {
-      return actions.waitForJSCondition(function(window) {
-        return window.webComponentsAreReady;
-      }, 60000);
-    })
-    .after(function(actions, find) {
-      // Firefox stops responding on socket after a test, workaround:
-      return actions.executeJS(function(window) {
-        window.location.href = 'about:blank'; // just go away, please!
-      });
+describe('vaadin-ordered-layout', () => {
+  const locator = '#tests[data-ready]';
+
+  ['lumo', 'material'].forEach((theme) => {
+    it(`${theme}-horizontal-layout`, function () {
+      return this.browser
+        .url(`horizontal-layout.html?theme=${theme}`)
+        .waitForVisible(locator, 10000)
+        .assertView(`${theme}-horizontal-layout`, locator)
+        .execute(() => {
+          document.documentElement.setAttribute('dir', 'rtl');
+        })
+        .assertView(`${theme}-horizontal-layout-rtl`, locator);
     });
 
-  ['ltr', 'rtl'].forEach(dir => {
-    ['lumo', 'material'].forEach(theme => {
-      gemini.suite(`horizontal-layout-${theme}-${dir}`, function(suite) {
-        suite
-          .setUrl(`default.html?theme=${theme}&dir=${dir}`)
-          .setCaptureElements('#horizontal-layout')
-          .capture('horizontal-layout');
-      });
-
-      gemini.suite(`vertical-layout-${theme}-${dir}`, function(suite) {
-        suite
-          .setUrl(`default.html?theme=${theme}&dir=${dir}`)
-          .setCaptureElements('#vertical-layout')
-          .capture('vertical-layout');
-      });
+    it(`${theme}-vertical-layout`, function () {
+      return this.browser
+        .url(`vertical-layout.html?theme=${theme}`)
+        .waitForVisible(locator, 10000)
+        .assertView(`${theme}-vertical-layout`, locator)
+        .execute(() => {
+          document.documentElement.setAttribute('dir', 'rtl');
+        })
+        .assertView(`${theme}-vertical-layout-rtl`, locator);
     });
   });
 });

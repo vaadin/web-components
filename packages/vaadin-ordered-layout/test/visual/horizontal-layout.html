@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+
+<head lang="en">
+  <meta charset="UTF-8" />
+  <title>Horizontal layout tests</title>
+  <script>
+    window.polymerSkipLoadingFontRoboto = true;
+  </script>
+</head>
+
+<body>
+  <div id="tests">
+    <vaadin-horizontal-layout>
+      <div>HL Block 1</div>
+      <div>HL Block 2</div>
+    </vaadin-horizontal-layout>
+    <vaadin-horizontal-layout theme="margin">
+      <div>HL Block 1 margin</div>
+      <div>HL Block 2 margin</div>
+    </vaadin-horizontal-layout>
+    <vaadin-horizontal-layout theme="padding">
+      <div>HL Block 1 padding</div>
+      <div>HL Block 2 padding</div>
+    </vaadin-horizontal-layout>
+    <vaadin-horizontal-layout theme="spacing">
+      <div>HL Block 1 spacing</div>
+      <div>HL Block 2 spacing</div>
+    </vaadin-horizontal-layout>
+  </div>
+
+  <script type="module">
+    (async () => {
+      const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+
+      await import('../../theme/' + theme + '/vaadin-horizontal-layout.js');
+
+      window.requestAnimationFrame(() => {
+        document.getElementById('tests').dataset.ready = true;
+      });
+    })();
+  </script>
+</body>

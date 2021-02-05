@@ -2,7 +2,8 @@
   "name": "@vaadin/vaadin-ordered-layout",
   "version": "1.4.0",
   "description": "vaadin-ordered-layout",
-  "main": "imports.html",
+  "main": "imports.js",
+  "module": "imports.js",
   "repository": "vaadin/vaadin-ordered-layout",
   "keywords": [
     "Vaadin",
@@ -20,31 +21,69 @@
   "files": [
     "vaadin-*.d.ts",
     "vaadin-*.js",
-    "@types",
     "imports.js",
+    "imports.d.ts",
     "src",
     "theme"
   ],
+  "scripts": {
+    "analyze": "polymer analyze vaadin-* > analysis.json",
+    "check-version": "magi check-version",
+    "debug": "web-test-runner test/*.test.js --watch",
+    "dist": "rimraf dist && npm run analyze && rollup -c rollup.config.js && cp analysis.json dist",
+    "lint": "npm run lint:js && npm run lint:css",
+    "lint:css": "stylelint src/*.js theme/**/*-styles.js",
+    "lint:js": "eslint src theme test",
+    "prestart": "npm run analyze",
+    "preversion": "magi update-version",
+    "screenshots": "hermione test/visual/test.js --update-refs",
+    "serve:dist": "web-dev-server --app-index dist/index.html --open",
+    "start": "web-dev-server --node-resolve --open",
+    "test": "web-test-runner test/*.test.js --coverage",
+    "test:sauce": "TEST_ENV=sauce npm test",
+    "test:visual": "hermione test/visual/test.js"
+  },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint"
+      "pre-commit": "lint-staged"
     }
   },
-  "scripts": {
-    "test": "wct",
-    "check": "npm-run-all --parallel check:*",
-    "check:bower": "magi check-bower",
-    "check:version": "magi check-version",
-    "lint": "npm-run-all --parallel lint:*",
-    "lint:css": "stylelint *.html src/*.html demo/*.html theme/**/*.html test/*html",
-    "lint:html": "eslint *.html src demo test --ext .html",
-    "lint:js": "eslint *.js test",
-    "lint:polymer": "polymer lint --rules polymer-2 --input ./src/*.html ./theme/**/*.html",
-    "prestart": "polymer analyze vaadin-* > analysis.json",
-    "start": "polymer serve --port 3000 --open",
-    "preversion": "magi update-version"
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  },
+  "dependencies": {
+    "@polymer/polymer": "^3.0.0",
+    "@vaadin/vaadin-themable-mixin": "^1.6.1",
+    "@vaadin/vaadin-lumo-styles": "^1.6.1",
+    "@vaadin/vaadin-material-styles": "^1.3.2",
+    "@vaadin/vaadin-element-mixin": "^2.4.1"
   },
   "devDependencies": {
-    "@vaadin/vaadin-component-dev-dependencies": "^3.0.0"
+    "@esm-bundle/chai": "^4.1.5",
+    "@open-wc/rollup-plugin-html": "^1.2.5",
+    "@open-wc/testing-helpers": "^1.8.12",
+    "@polymer/iron-component-page": "^4.0.0",
+    "@web/dev-server": "^0.1.5",
+    "@web/test-runner": "^0.12.7",
+    "@web/test-runner-saucelabs": "^0.4.1",
+    "eslint": "^7.18.0",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "hermione": "^3.9.0",
+    "hermione-esm": "^0.4.0",
+    "hermione-sauce": "^0.1.0",
+    "husky": "^4.3.0",
+    "lint-staged": "^10.5.1",
+    "magi-cli": "^0.28.0",
+    "prettier": "^2.2.0",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.34.1",
+    "rollup-plugin-terser": "^7.0.2",
+    "stylelint": "^13.8.0",
+    "stylelint-config-prettier": "^8.0.2",
+    "stylelint-config-vaadin": "^0.2.10"
   }
 }

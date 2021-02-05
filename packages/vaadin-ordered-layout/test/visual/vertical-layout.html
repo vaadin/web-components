@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+
+<head lang="en">
+  <meta charset="UTF-8" />
+  <title>Vertical layout tests</title>
+  <script>
+    window.polymerSkipLoadingFontRoboto = true;
+  </script>
+</head>
+
+<body>
+  <div id="tests">
+    <vaadin-vertical-layout>
+      <div>VL Block 1</div>
+      <div>VL Block 2</div>
+    </vaadin-vertical-layout>
+    <vaadin-vertical-layout theme="margin">
+      <div>VL Block 1 margin</div>
+      <div>VL Block 2 margin</div>
+    </vaadin-vertical-layout>
+    <vaadin-vertical-layout theme="padding">
+      <div>VL Block 1 padding</div>
+      <div>VL Block 2 padding</div>
+    </vaadin-vertical-layout>
+    <vaadin-vertical-layout theme="spacing">
+      <div>VL Block 1 spacing</div>
+      <div>VL Block 2 spacing</div>
+    </vaadin-vertical-layout>
+  </div>
+
+  <script type="module">
+    (async () => {
+      const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+
+      await import('../../theme/' + theme + '/vaadin-vertical-layout.js');
+
+      window.requestAnimationFrame(() => {
+        document.getElementById('tests').dataset.ready = true;
+      });
+    })();
+  </script>
+</body>
