@@ -7,34 +7,43 @@ registerStyles(
   'vaadin-message',
   css`
     :host {
-      padding: 8px;
-    }
-
-    :host {
       font-family: var(--material-font-family);
-      font-size: var(--material-small-font-size);
+      font-size: var(--material-body-font-size);
+      line-height: 1.5;
+      padding: 0.875em 1em;
+      -moz-osx-font-smoothing: grayscale;
+      -webkit-font-smoothing: antialiased;
+      -webkit-text-size-adjust: 100%;
     }
 
-    .vaadin-message-wrapper {
-      padding-left: 8px;
-      padding-right: 0;
+    vaadin-avatar {
+      margin-right: 0.5em;
+      margin-top: 0.125em;
     }
 
-    :host([dir='rtl']) .vaadin-message-wrapper {
-      padding-left: 0;
-      padding-right: 8px;
-    }
-
-    .vaadin-message-header {
-      padding-bottom: 8px;
+    :host([dir='rtl']) vaadin-avatar {
+      margin-left: 0.5em;
+      margin-right: 0;
     }
 
     [part='name'] {
-      font-weight: 500;
+      margin-right: auto;
+    }
+
+    :host([dir='rtl']) [part='name'] {
+      margin-left: auto;
+      margin-right: 0;
     }
 
     [part='time'] {
       color: var(--material-secondary-text-color);
+      font-size: var(--material-caption-font-size);
+    }
+
+    [part='message'] {
+      color: var(--material-secondary-text-color);
+      font-size: var(--material-small-font-size);
+      line-height: 1.25rem;
     }
   `,
   { moduleId: 'material-message' }
