@@ -193,8 +193,6 @@ class TextAreaElement extends ElementMixin(TextFieldMixin(ControlStateMixin(Them
       // Fix the input element width so its scroll height isn't affected by host's disappearing scrollbars
       input.style.maxWidth = inputWidth;
       input.style.height = 'auto';
-      // Avoid a jumpy Safari rendering issue
-      inputField.style.display = 'block';
     }
     this._oldValueLength = valueLength;
 

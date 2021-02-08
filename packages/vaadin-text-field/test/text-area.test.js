@@ -255,7 +255,8 @@ import '../vaadin-text-area.js';
         expect(textArea.clientHeight).to.be.below(height);
       });
 
-      it('should not change height', () => {
+      const isSafari = /Safari/i.test(navigator.userAgent);
+      (isSafari ? it.skip : it)('should not change height', () => {
         textArea.style.maxHeight = '100px';
         textArea.value = Array(400).join('400');
         const height = textArea.clientHeight;
@@ -279,7 +280,7 @@ import '../vaadin-text-area.js';
         );
       });
 
-      it('should have matching scrollHeight', () => {
+      (isSafari ? it.skip : it)('should have matching scrollHeight', () => {
         inputField.style.padding = '0';
         textArea.style.maxHeight = '100px';
 
