@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+
+<head lang="en">
+  <meta charset="UTF-8" />
+  <title>Message tests</title>
+  <script>
+    window.polymerSkipLoadingFontRoboto = true;
+  </script>
+  <style>
+    html {
+      --vaadin-user-color-1: blue;
+      --vaadin-user-color-2: green;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="tests" style="padding: 10px">
+    <vaadin-message-list
+      items='[{"text":"Hello list","time":"yesterday", "user": {"name":"Matt Mambo","abbr":"MM","colorIndex":"1"}},{"text":"Another message","time":"right now", "user": {"name":"Linsey Listy","abbr":"LL","colorIndex":"2","img":"/test/visual/avatars/avatar.jpg"}}]'>
+    </vaadin-message-list>
+  </div>
+
+  <script type="module">
+    (async () => {
+      const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+
+      await import('../../theme/' + theme + '/vaadin-message-list.js');
+
+      window.requestAnimationFrame(() => {
+        document.getElementById('tests').dataset.ready = true;
+      });
+    })();
+  </script>
+</body>

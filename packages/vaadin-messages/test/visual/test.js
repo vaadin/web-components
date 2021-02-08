@@ -1,16 +1,23 @@
-describe('vaadin-message', () => {
-  const locator = '#tests[data-ready]';
-
+function assertView(testView, testFile) {
   ['lumo', 'material'].forEach((theme) => {
-    it(`${theme}-message`, function () {
+    it(`${theme}-${testView}`, function () {
+      const locator = '#tests[data-ready]';
       return this.browser
-        .url(`default.html?theme=${theme}`)
+        .url(`${testFile}?theme=${theme}`)
         .waitForVisible(locator, 15000)
-        .assertView(`${theme}-message-ltr`, locator)
+        .assertView(`${theme}-${testView}-ltr`, locator)
         .execute(() => {
           window.document.documentElement.setAttribute('dir', 'rtl');
         })
-        .assertView(`${theme}-message-rtl`, locator);
+        .assertView(`${theme}-${testView}-rtl`, locator);
     });
   });
+}
+
+describe('vaadin-message', () => {
+  assertView('message', 'default.html');
+});
+
+describe('vaadin-message-list', () => {
+  assertView('message-list', 'message-list.html');
 });
