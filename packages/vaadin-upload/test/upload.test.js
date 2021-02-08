@@ -1,4 +1,5 @@
 import { expect } from '@esm-bundle/chai';
+import sinon from 'sinon';
 import { fixture, html } from '@open-wc/testing-helpers';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { createFile, createFiles, xhrCreator } from './common.js';
@@ -18,7 +19,7 @@ describe('upload', () => {
       upload._createXhr = xhrCreator({ size: file.size, uploadTime: 200, stepTime: 50 });
     });
 
-    describe('Multiple', () => {
+    describe('File input', () => {
       it('should have the multiple attribute', () => {
         expect(upload.$.fileInput.getAttribute('multiple')).not.to.be.null;
       });
@@ -27,240 +28,265 @@ describe('upload', () => {
         upload.maxFiles = 1;
         expect(upload.$.fileInput.getAttribute('multiple')).to.be.null;
       });
-    });
 
-    it('should fire the upload-start event', (done) => {
-      upload.addEventListener('upload-start', (e) => {
-        expect(e.detail.xhr).to.be.ok;
-        expect(e.detail.file).to.be.ok;
-        expect(e.detail.file.uploading).to.be.ok;
-        done();
+      it('should apply the capture attribute to the input', function () {
+        var input = upload.$.fileInput;
+        var captureType = 'camera';
+        upload.capture = captureType;
+        expect(input.getAttribute('capture')).to.equal(captureType);
       });
-      upload._uploadFile(file);
     });
 
-    it('should fire the upload-progress event multiple times', (done) => {
-      let count = 0;
-      upload.addEventListener('upload-progress', (e) => {
+    describe('Events', () => {
+      let clock;
+
+      beforeEach(() => {
+        clock = sinon.useFakeTimers();
+      });
+
+      afterEach(() => {
+        clock.restore();
+      });
+
+      it('should fire the upload-start event', (done) => {
+        upload.addEventListener('upload-start', (e) => {
+          expect(e.detail.xhr).to.be.ok;
+          expect(e.detail.file).to.be.ok;
+          expect(e.detail.file.uploading).to.be.ok;
+          done();
+        });
+        upload._uploadFile(file);
+      });
+
+      it('should fire the upload-progress event multiple times', async () => {
+        const spy = sinon.spy();
+        upload.addEventListener('upload-progress', spy);
+        upload._uploadFile(file);
+
+        await clock.tickAsync(10);
+        const e = spy.firstCall.args[0];
         const f = e.detail.file;
         expect(e.detail.xhr).to.be.ok;
         expect(f.totalStr).to.be.equal('100 kB');
-        switch (count++) {
-          case 0:
-            expect(f.progress).to.be.equal(0);
-            expect(f.loaded).to.be.equal(0);
-            expect(f.size).to.be.equal(100000);
-            expect(f.uploading).to.be.ok;
-            break;
-          case 1:
-            expect(f.progress).to.be.equal(25);
-            expect(f.loaded).to.be.equal(25000);
-            expect(f.size).to.be.equal(100000);
-            break;
-          case 2:
-            expect(f.progress).to.be.equal(50);
-            expect(f.loaded).to.be.equal(50000);
-            expect(f.size).to.be.equal(100000);
-            expect(f.uploading).to.be.ok;
-            break;
-          case 4:
-            expect(f.progress).to.be.equal(100);
-            expect(f.loaded).to.be.equal(100000);
-            expect(f.size).to.be.equal(100000);
-            expect(f.speed).to.be.gt(100);
-            expect(f.uploading).not.to.be.ok;
-            done();
-        }
-      });
-      upload._uploadFile(file);
-    });
+        expect(f.progress).to.be.equal(0);
+        expect(f.loaded).to.be.equal(0);
+        expect(f.size).to.be.equal(100000);
 
-    it('should fire the upload-success', (done) => {
-      upload.addEventListener('upload-success', (e) => {
+        await clock.tickAsync(50);
+        expect(f.progress).to.be.equal(25);
+        expect(f.loaded).to.be.equal(25000);
+        expect(f.size).to.be.equal(100000);
+
+        await clock.tickAsync(50);
+        expect(f.progress).to.be.equal(50);
+        expect(f.loaded).to.be.equal(50000);
+        expect(f.size).to.be.equal(100000);
+        expect(f.uploading).to.be.ok;
+
+        await clock.tickAsync(100);
+        expect(f.progress).to.be.equal(100);
+        expect(f.loaded).to.be.equal(100000);
+        expect(f.size).to.be.equal(100000);
+        expect(f.speed).to.be.gt(100);
+        expect(f.uploading).not.to.be.ok;
+      });
+
+      it('should fire the upload-success', async () => {
+        const spy = sinon.spy();
+        upload.addEventListener('upload-success', spy);
+        upload._uploadFile(file);
+
+        await clock.tickAsync(400);
+        const e = spy.firstCall.args[0];
         expect(e.detail.xhr).to.be.ok;
         expect(e.detail.file).to.be.ok;
         expect(e.detail.file.uploading).not.to.be.ok;
         expect(e.detail.xhr.status).to.be.equal(200);
-        done();
-      });
-      upload._uploadFile(file);
-    });
-
-    it('should fire the upload-error event on connection error', (done) => {
-      // Simulate a server error when progress is 50%
-      upload.addEventListener('upload-progress', (e) => {
-        if (e.detail.file.progress == 50) {
-          e.detail.xhr.err();
-        }
       });
 
-      upload.addEventListener('upload-error', (e) => {
-        expect(e.detail.file.uploading).not.to.be.ok;
-        expect(e.detail.file.error).to.be.equal('Server Unavailable');
-        expect(e.detail.xhr.status).not.to.be.equal(200);
-        done();
+      it('should fire the upload-error event on connection error', async () => {
+        const progressSpy = sinon.spy();
+        upload.addEventListener('upload-progress', progressSpy);
+        const errorSpy = sinon.spy();
+        upload.addEventListener('upload-error', errorSpy);
+
+        upload._uploadFile(file);
+
+        await clock.tickAsync(100);
+        const progressEvt = progressSpy.firstCall.args[0];
+        progressEvt.detail.xhr.err();
+
+        const errorEvt = errorSpy.firstCall.args[0];
+
+        expect(errorEvt.detail.file.uploading).not.to.be.ok;
+        expect(errorEvt.detail.file.error).to.be.equal('Server Unavailable');
+        expect(errorEvt.detail.xhr.status).not.to.be.equal(200);
       });
-      upload._uploadFile(file);
-    });
 
-    it('should fire the upload-before with configurable request url', (done) => {
-      upload.addEventListener('upload-before', (e) => {
-        expect(e.detail.file).to.be.ok;
-        expect(e.detail.xhr).to.be.ok;
-        expect(e.detail.xhr.readyState).to.equal(0);
-        expect(e.detail.file.uploadTarget).to.be.ok;
+      it('should fire the upload-before with configurable request url', (done) => {
+        upload.addEventListener('upload-before', (e) => {
+          expect(e.detail.file).to.be.ok;
+          expect(e.detail.xhr).to.be.ok;
+          expect(e.detail.xhr.readyState).to.equal(0);
+          expect(e.detail.file.uploadTarget).to.be.ok;
 
+          const modifiedUrl = 'http://example.com/modified/url';
+          e.detail.file.uploadTarget = modifiedUrl;
+
+          // Monkey-patch xhr.open to check the url param passed into
+          const originalOpen = e.detail.xhr.open;
+          e.detail.xhr.open = function (method, url) {
+            expect(url).to.equal(modifiedUrl);
+            originalOpen.apply(this, arguments);
+            done();
+          };
+        });
+        upload._uploadFile(file);
+      });
+
+      it('should not override configurable request url if already set', (done) => {
         const modifiedUrl = 'http://example.com/modified/url';
-        e.detail.file.uploadTarget = modifiedUrl;
-
-        // Monkey-patch xhr.open to check the url param passed into
-        const originalOpen = e.detail.xhr.open;
-        e.detail.xhr.open = function (method, url) {
-          expect(url).to.equal(modifiedUrl);
-          originalOpen.apply(this, arguments);
+        upload.addEventListener('upload-before', (e) => {
+          e.preventDefault();
+          expect(e.detail.file.uploadTarget).to.equal(modifiedUrl);
           done();
+        });
+        file.uploadTarget = modifiedUrl;
+        upload._uploadFile(file);
+      });
+
+      it('should fire the upload-before with configurable form data name', (done) => {
+        function MockFormData() {
+          this.data = [];
+        }
+        MockFormData.prototype.append = function (name, value, filename) {
+          this.data.push({ name: name, value: value, filename: filename });
         };
+        const OriginalFormData = window.FormData;
+        window.FormData = MockFormData;
+
+        upload.addEventListener('upload-before', (e) => {
+          expect(e.detail.file.formDataName).to.equal('file');
+          e.detail.file.formDataName = 'my-attachment';
+
+          // Monkey-patch xhr.send to check the form data name param
+          e.detail.xhr.send = (formData) => {
+            expect(formData.data[0].name).to.equal('my-attachment');
+            expect(formData.data[0].value).to.eql(file);
+            done();
+          };
+        });
+
+        upload._uploadFile(file);
+
+        window.FormData = OriginalFormData;
       });
-      upload._uploadFile(file);
-    });
 
-    it('should not override configurable request url if already set', (done) => {
-      const modifiedUrl = 'http://example.com/modified/url';
-      upload.addEventListener('upload-before', (e) => {
-        e.preventDefault();
-        expect(e.detail.file.uploadTarget).to.equal(modifiedUrl);
-        done();
-      });
-      file.uploadTarget = modifiedUrl;
-      upload._uploadFile(file);
-    });
-
-    it('should fire the upload-before with configurable form data name', (done) => {
-      function MockFormData() {
-        this.data = [];
-      }
-      MockFormData.prototype.append = function (name, value, filename) {
-        this.data.push({ name: name, value: value, filename: filename });
-      };
-      const OriginalFormData = window.FormData;
-      window.FormData = MockFormData;
-
-      upload.addEventListener('upload-before', (e) => {
-        expect(e.detail.file.formDataName).to.equal('file');
-        e.detail.file.formDataName = 'my-attachment';
-
-        // Monkey-patch xhr.send to check the form data name param
-        e.detail.xhr.send = (formData) => {
-          expect(formData.data[0].name).to.equal('my-attachment');
-          expect(formData.data[0].value).to.eql(file);
+      it('should use formDataName property as a default form data name', (done) => {
+        upload.addEventListener('upload-before', (e) => {
+          expect(e.detail.file.formDataName).to.equal('attachment');
           done();
-        };
+        });
+
+        upload.formDataName = 'attachment';
+        upload._uploadFile(file);
       });
 
-      upload._uploadFile(file);
-
-      window.FormData = OriginalFormData;
-    });
-
-    it('should use formDataName property as a default form data name', (done) => {
-      upload.addEventListener('upload-before', (e) => {
-        expect(e.detail.file.formDataName).to.equal('attachment');
-        done();
+      it('should not open xhr if `upload-before` event is cancelled', () => {
+        upload.addEventListener('upload-before', (e) => {
+          e.preventDefault();
+        });
+        upload._uploadFile(file);
+        expect(file.xhr.readyState).to.equal(0);
       });
 
-      upload.formDataName = 'attachment';
-      upload._uploadFile(file);
-    });
-
-    it('should not open xhr if `upload-before` event is cancelled', () => {
-      upload.addEventListener('upload-before', (e) => {
-        e.preventDefault();
-      });
-      upload._uploadFile(file);
-      expect(file.xhr.readyState).to.equal(0);
-    });
-
-    it('should fire upload-request event', (done) => {
-      upload.addEventListener('upload-request', (e) => {
-        expect(e.detail.file).to.be.ok;
-        expect(e.detail.xhr).to.be.ok;
-        expect(e.detail.xhr.readyState).to.equal(1);
-        expect(e.detail.formData).to.be.ok;
-        done();
-      });
-      upload._uploadFile(file);
-    });
-
-    it('should not send xhr if `upload-request` listener prevents default', (done) => {
-      upload.addEventListener('upload-request', (e) => {
-        e.preventDefault();
-
-        setTimeout(() => {
-          expect(e.detail.xhr.readyState).to.be.equal(1);
+      it('should fire upload-request event', (done) => {
+        upload.addEventListener('upload-request', (e) => {
+          expect(e.detail.file).to.be.ok;
+          expect(e.detail.xhr).to.be.ok;
+          expect(e.detail.xhr.readyState).to.equal(1);
+          expect(e.detail.formData).to.be.ok;
           done();
-        }, 100);
+        });
+        upload._uploadFile(file);
       });
 
-      upload._uploadFile(file);
-    });
+      it('should not send xhr if `upload-request` listener prevents default', (done) => {
+        upload.addEventListener('upload-request', (e) => {
+          e.preventDefault();
 
-    it('should fail if a `upload-response` listener sets an error', (done) => {
-      const error = 'Custom Error';
-      upload.addEventListener('upload-response', (e) => {
-        e.detail.file.error = error;
+          clock.tickAsync(100).then(() => {
+            expect(e.detail.xhr.readyState).to.be.equal(1);
+            done();
+          });
+        });
+
+        upload._uploadFile(file);
       });
 
-      upload.addEventListener('upload-error', (e) => {
+      it('should fail if a `upload-response` listener sets an error', async () => {
+        const error = 'Custom Error';
+        upload.addEventListener('upload-response', (e) => {
+          e.detail.file.error = error;
+        });
+
+        const errorSpy = sinon.spy();
+        upload.addEventListener('upload-error', errorSpy);
+
+        upload._uploadFile(file);
+        await clock.tickAsync(250);
+
+        const e = errorSpy.firstCall.args[0];
         expect(e.detail.file.uploading).not.to.be.ok;
         expect(e.detail.file.error).to.be.equal(error);
         expect(e.detail.xhr.status).to.be.equal(200);
-        done();
-      });
-      upload._uploadFile(file);
-    });
-
-    it('should do nothing if a `upload-response` listener prevents default', (done) => {
-      upload.addEventListener('upload-response', (e) => {
-        e.preventDefault();
       });
 
-      setTimeout(() => {
+      it('should do nothing if a `upload-response` listener prevents default', async () => {
+        upload.addEventListener('upload-response', (e) => {
+          e.preventDefault();
+        });
+
+        upload._uploadFile(file);
+        await clock.tickAsync(100);
+
         expect(file.uploading).to.be.ok;
         expect(file.error).not.to.be.ok;
-        done();
-      }, 100);
-      upload._uploadFile(file);
-    });
+      });
 
-    it('should fire the `upload-retry` event on retrying', (done) => {
-      upload.addEventListener('upload-retry', () => {
-        setTimeout(() => {
-          expect(file.uploading).to.be.ok;
+      it('should fire the `upload-retry` event on retrying', (done) => {
+        upload.addEventListener('upload-retry', () => {
+          clock.tickAsync(100).then(() => {
+            expect(file.uploading).to.be.ok;
+            done();
+          });
+        });
+        upload._retryFileUpload(file);
+      });
+
+      it('should propagate with-credentials to the xhr', (done) => {
+        upload.withCredentials = true;
+        upload.addEventListener('upload-start', (e) => {
+          e.preventDefault();
+          expect(e.detail.xhr.withCredentials).to.be.true;
           done();
-        }, 100);
+        });
+        upload._uploadFile(file);
       });
-      upload._retryFileUpload(file);
-    });
-
-    it('should propagate with-credentials to the xhr', (done) => {
-      upload.withCredentials = true;
-      upload.addEventListener('upload-start', (e) => {
-        e.preventDefault();
-        expect(e.detail.xhr.withCredentials).to.be.true;
-        done();
-      });
-      upload._uploadFile(file);
-    });
-
-    it('should apply the capture attribute to the input', function () {
-      var input = upload.$.fileInput;
-      var captureType = 'camera';
-      upload.capture = captureType;
-      expect(input.getAttribute('capture')).to.equal(captureType);
     });
 
     describe('Response Status', () => {
-      function expectResponseErrorForStatus(error, status, done) {
+      let clock;
+
+      beforeEach(() => {
+        clock = sinon.useFakeTimers();
+      });
+
+      afterEach(() => {
+        clock.restore();
+      });
+
+      async function expectResponseErrorForStatus(error, status) {
         upload._createXhr = xhrCreator({
           serverValidation: () => {
             return {
@@ -270,29 +296,34 @@ describe('upload', () => {
           }
         });
 
-        upload.addEventListener('upload-error', (e) => {
-          expect(e.detail.xhr.status).to.be.equal(status);
-          expect(e.detail.file.error).to.be.equal(error);
-          done();
-        });
+        const spy = sinon.spy();
+        upload.addEventListener('upload-error', spy);
+
         upload._uploadFile(file);
+        await clock.tickAsync(50);
+
+        const e = spy.firstCall.args[0];
+        expect(e.detail.xhr.status).to.be.equal(status);
+        expect(e.detail.file.error).to.be.equal(error);
       }
 
       [400, 401, 403, 404, 451].forEach((status) => {
-        it('should fail with forbidden error for status code ' + status, (done) => {
-          expectResponseErrorForStatus(upload.i18n.uploading.error.forbidden, status, done);
+        it('should fail with forbidden error for status code ' + status, async () => {
+          await expectResponseErrorForStatus(upload.i18n.uploading.error.forbidden, status);
         });
       });
 
       [500, 501, 502, 503, 504].forEach((status) => {
-        it('should fail with unexpected error for status code ' + status, (done) => {
-          expectResponseErrorForStatus(upload.i18n.uploading.error.unexpectedServerError, status, done);
+        it('should fail with unexpected error for status code ' + status, async () => {
+          await expectResponseErrorForStatus(upload.i18n.uploading.error.unexpectedServerError, status);
         });
       });
     });
   });
 
   describe('Upload Status', () => {
+    let clock;
+
     beforeEach(() => {
       upload._createXhr = xhrCreator({
         size: file.size,
@@ -301,55 +332,60 @@ describe('upload', () => {
         stepTime: 100,
         serverTime: 500
       });
+
+      clock = sinon.useFakeTimers();
     });
 
-    it('should be indeterminate when connecting', (done) => {
-      setTimeout(() => {
-        expect(file.indeterminate).to.be.ok;
-        expect(file.status).to.be.equal(upload.i18n.uploading.status.connecting);
-        done();
-      }, 200);
-      upload._uploadFile(file);
+    afterEach(() => {
+      clock.restore();
     });
 
-    it('should not be indeterminate when progressing', (done) => {
-      const uploadProgressListener = (e) => {
-        if (file.progress > 0) {
-          expect(e.detail.file.indeterminate).not.to.be.ok;
-          expect(e.detail.file.status).to.contain(upload.i18n.uploading.remainingTime.prefix);
-          upload.removeEventListener('upload-progress', uploadProgressListener);
-          done();
-        }
-      };
-      upload.addEventListener('upload-progress', uploadProgressListener);
+    it('should be indeterminate when connecting', async () => {
       upload._uploadFile(file);
+      await clock.tickAsync(200);
+      expect(file.indeterminate).to.be.ok;
+      expect(file.status).to.be.equal(upload.i18n.uploading.status.connecting);
     });
 
-    it('should be indeterminate when server is processing the file', (done) => {
-      setTimeout(() => {
-        expect(file.indeterminate).to.be.ok;
-        expect(file.status).to.be.equal(upload.i18n.uploading.status.processing);
-        done();
-      }, 800);
+    it('should not be indeterminate when progressing', async () => {
+      const spy = sinon.spy();
+      upload.addEventListener('upload-progress', spy);
       upload._uploadFile(file);
+      await clock.tickAsync(600);
+      const e = spy.firstCall.args[0];
+      expect(e.detail.file.status).to.contain(upload.i18n.uploading.remainingTime.prefix);
+      expect(e.detail.file.indeterminate).not.to.be.ok;
+    });
+
+    it('should be indeterminate when server is processing the file', async () => {
+      upload._uploadFile(file);
+      await clock.tickAsync(800);
+      expect(file.indeterminate).to.be.ok;
+      expect(file.status).to.be.equal(upload.i18n.uploading.status.processing);
     });
   });
 
   describe('Upload is Stalled', () => {
+    let clock;
+
     beforeEach(() => {
       upload._createXhr = xhrCreator({
         size: file.size,
         uploadTime: 2500,
         stepTime: 2500
       });
+
+      clock = sinon.useFakeTimers();
     });
 
-    it('should be stalled when progress is not updated for more than 2 sec.', (done) => {
-      setTimeout(() => {
-        expect(file.status).to.be.equal(upload.i18n.uploading.status.stalled);
-        done();
-      }, 2200);
+    afterEach(() => {
+      clock.restore();
+    });
+
+    it('should be stalled when progress is not updated for more than 2 sec.', async () => {
       upload._uploadFile(file);
+      await clock.tickAsync(2200);
+      expect(file.status).to.be.equal(upload.i18n.uploading.status.stalled);
     });
   });
 
@@ -456,24 +492,33 @@ describe('upload', () => {
   });
 
   describe('Abort Files', () => {
-    let files;
+    let files, clock;
 
     beforeEach(() => {
       upload._createXhr = xhrCreator({ size: file.size, uploadTime: 200, stepTime: 50 });
       files = createFiles(2, 512, 'application/json');
+      clock = sinon.useFakeTimers();
     });
 
-    it('should fire `file-remove` and remove from files', (done) => {
+    afterEach(() => {
+      clock.restore();
+    });
+
+    it('should fire `file-remove` and remove from files', async () => {
       upload.addEventListener('upload-progress', (e) => {
         if (e.detail.file == files[0] && e.detail.file.progress == 50) {
           upload._abortFileUpload(e.detail.file);
         }
       });
-      upload.addEventListener('file-remove', () => {
-        expect(upload.files.length).to.be.equal(1);
-        done();
-      });
+
+      const spy = sinon.spy();
+      upload.addEventListener('file-remove', spy);
+
       upload._addFiles(files);
+      await clock.tickAsync(150);
+
+      expect(spy.calledOnce).to.be.true;
+      expect(upload.files.length).to.be.equal(1);
     });
 
     it('should remove all files', (done) => {
@@ -481,7 +526,9 @@ describe('upload', () => {
         if (upload.files.length === 0) {
           done();
         } else {
-          setTimeout(upload._abortFileUpload.bind(upload, upload.files[0]), 1);
+          clock.tickAsync(1).then(() => {
+            upload._abortFileUpload(upload.files[0]);
+          });
         }
       };
 

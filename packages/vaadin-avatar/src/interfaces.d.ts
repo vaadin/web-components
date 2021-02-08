@@ -14,4 +14,6 @@ export interface AvatarGroupI18n extends AvatarI18n {
     one: string;
     many: string;
   };
+  joined: string;
+  left: string;
 }
