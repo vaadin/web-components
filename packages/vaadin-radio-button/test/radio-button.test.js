@@ -96,7 +96,7 @@ describe('radio-button', () => {
       expect(radio.checked).to.be.true;
     });
 
-    const isSafari = /Safari/i.test(navigator.userAgent);
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
     (isSafari ? it.skip : it)('should set checked on touchend', () => {
       touchstart(radio);
       touchend(radio);
@@ -126,7 +126,7 @@ describe('radio-button', () => {
       expect(radio.checked).to.be.false;
     });
 
-    const isSafari = /Safari/i.test(navigator.userAgent);
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
     (isSafari ? it.skip : it)('should not set checked on touchend when disabled', () => {
       touchstart(radio);
       touchend(radio);
@@ -213,7 +213,7 @@ describe('radio-button', () => {
       expect(spy.calledOnce).to.be.true;
     });
 
-    const isSafari = /Safari/i.test(navigator.userAgent);
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
     (isSafari ? it.skip : it)('should fire on touchend', () => {
       touchstart(radio);
       touchend(radio);

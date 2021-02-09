@@ -255,7 +255,7 @@ import '../vaadin-text-area.js';
         expect(textArea.clientHeight).to.be.below(height);
       });
 
-      const isSafari = /Safari/i.test(navigator.userAgent);
+      const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
       (isSafari ? it.skip : it)('should not change height', () => {
         textArea.style.maxHeight = '100px';
         textArea.value = Array(400).join('400');
