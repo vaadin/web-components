@@ -1,19 +1,5 @@
 {
-  "rules": {
-    "no-unused-vars": 0
-  },
-  "globals": {
-    "suite": false,
-    "expected": false,
-    "test":  false,
-    "assert": false,
-    "setup": false,
-    "teardown":false,
-    "fixture":false,
-    "WCT": false,
-    "ios": false,
-    "chrome": false,
-    "System": false,
-    "HTMLImports": false
+  "env": {
+    "mocha": true
   }
 }
