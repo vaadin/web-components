@@ -30,6 +30,26 @@ describe('message-list', () => {
         userColorIndex: 1
       },
       {
+        text: 'A message in the stream of messages',
+        time: '9:35 AM',
+        user: {
+          name: 'Joan Doe',
+          abbr: 'JD',
+          img: '/test/visual/avatars/avatar.jpg',
+          colorIndex: 1
+        }
+      },
+      {
+        text: 'A message in the stream of messages',
+        time: '9:36 AM',
+        user: {
+          name: 'Joan Doe',
+          abbr: 'JD',
+          img: '/test/visual/avatars/avatar.jpg',
+          colorIndex: 1
+        }
+      },
+      {
         text: 'Call upon the times of glory',
         time: '2:34 PM',
         userName: 'Steve Mops',
@@ -55,7 +75,7 @@ describe('message-list', () => {
 
     it('message list should have two messages', () => {
       const items = messageList.shadowRoot.querySelectorAll('vaadin-message');
-      expect(items.length).to.equal(2);
+      expect(items.length).to.equal(4);
     });
 
     it('message properties should be correctly set', () => {
@@ -73,6 +93,44 @@ describe('message-list', () => {
       expect(messageList.scrollTop).to.be.equal(0);
       messageList.scrollBy(0, 1000);
       expect(messageList.scrollTop).to.be.at.least(1);
+    });
+
+    it('message list should scroll to bottom on new messages', async () => {
+      messageList.style.height = '100px';
+      messageList.scrollBy(0, 1000);
+      const scrollTopBeforeMessage = messageList.scrollTop;
+      messageList.items = [
+        ...messageList.items,
+        {
+          text: 'A new message arrives!',
+          time: '2:35 PM',
+          user: {
+            name: 'Steve Mops',
+            abbr: 'SM',
+            colorIndex: 2
+          }
+        }
+      ];
+      await nextRender(messageList);
+      expect(messageList.scrollTop).to.be.at.least(scrollTopBeforeMessage + 1);
+    });
+
+    it('message list should not scroll if not at the bottom', async () => {
+      messageList.style.height = '100px';
+      messageList.items = [
+        ...messageList.items,
+        {
+          text: 'A new message arrives!',
+          time: '2:35 PM',
+          user: {
+            name: 'Steve Mops',
+            abbr: 'SM',
+            colorIndex: 2
+          }
+        }
+      ];
+      await nextRender(messageList);
+      expect(messageList.scrollTop).to.be.equal(0);
     });
   });
 });
