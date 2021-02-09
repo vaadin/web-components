@@ -24,21 +24,17 @@ describe('message-list', () => {
       {
         text: 'A message in the stream of messages',
         time: '9:34 AM',
-        user: {
-          name: 'Joan Doe',
-          abbr: 'JD',
-          img: '/test/visual/avatars/avatar.jpg',
-          colorIndex: 1
-        }
+        userName: 'Joan Doe',
+        userAbbr: 'JD',
+        userImg: '/test/visual/avatars/avatar.jpg',
+        userColorIndex: 1
       },
       {
         text: 'Call upon the times of glory',
         time: '2:34 PM',
-        user: {
-          name: 'Steve Mops',
-          abbr: 'SM',
-          colorIndex: 2
-        }
+        userName: 'Steve Mops',
+        userAbbr: 'SM',
+        userColorIndex: 2
       }
     ];
   });
@@ -64,8 +60,11 @@ describe('message-list', () => {
 
     it('message properties should be correctly set', () => {
       const firstMessage = messageList.shadowRoot.querySelectorAll('vaadin-message')[0];
-      expect(firstMessage.getAttribute('time')).to.be.equal(messages[0].time);
-      expect(firstMessage.user).to.be.equal(messages[0].user);
+      expect(firstMessage.time).to.be.equal(messages[0].time);
+      expect(firstMessage.userName).to.be.equal(messages[0].userName);
+      expect(firstMessage.userAbbr).to.be.equal(messages[0].userAbbr);
+      expect(firstMessage.userImg).to.be.equal(messages[0].userImg);
+      expect(firstMessage.userColorIndex).to.be.equal(messages[0].userColorIndex);
       expect(firstMessage.textContent).to.be.equal(messages[0].text);
     });
 

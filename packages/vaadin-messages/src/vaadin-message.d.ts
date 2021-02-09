@@ -7,8 +7,9 @@ import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.
  *
  * ```html
  * <vaadin-message time="2021-01-28 10:43"
- *     user='{"name":"Bob Ross","abbr":"BR","img":"/static/img/avatar.jpg"}'>There is no real ending. It's
- *     just the place where you stop the story.</vaadin-message>
+ *     user-name = "Bob Ross"
+ *     user-abbr = "BR"
+ *     user-img = "/static/img/avatar.jpg">There is no real ending. It's just the place where you stop the story.</vaadin-message>
  * ```
  *
  * ### Styling

@@ -11,10 +11,18 @@ import './vaadin-message.js';
 /**
  * `<vaadin-message-list>` is a Web Component for showing an ordered list of messages. The messages are rendered as <vaadin-message>
  *
+ * ### Example
+ * To create a new message list, add the component to the page:
  * ```html
- * <vaadin-message-list
- *   items='[{"text":"Hello list","time":"yesterday", "user": {"name":"Matt Mambo","abbr":"MM","colorIndex":"1"}},{"text":"Hello list","time":"right now", "user": {"name":"Linsey Listy","abbr":"LL","colorIndex":"2"}}]'>
- * </vaadin-message-list>
+ * <vaadin-message-list></vaadin-message-list>
+ * ```
+ *
+ * Provide the messages to the message list with the `items` property.
+ * ```js
+ * document.querySelector('vaadin-message-list').items = [
+ *   { text: 'Hello list', time: 'yesterday', userName: 'Matt Mambo', userAbbr: 'MM', userColorIndex: 1 },
+ *   { text: 'Another message', time: 'right now', userName: 'Linsey Listy', userAbbr: 'LL', userColorIndex: 2, userImg: '/static/img/avatar.jpg' }
+ * ];
  * ```
  *
  * ### Styling
@@ -40,12 +48,10 @@ class MessageListElement extends ElementMixin(ThemableMixin(PolymerElement)) {
        * Array<{
        *   text: string,
        *   time: string,
-       *   user: {
-       *     name: string,
-       *     abbr: string,
-       *     img: string,
-       *     colorIndex: number
-       *   }
+       *   userName: string,
+       *   userAbbr: string,
+       *   userImg: string,
+       *   userColorIndex: number
        * }>
        * ```
        */
@@ -71,7 +77,14 @@ class MessageListElement extends ElementMixin(ThemableMixin(PolymerElement)) {
         }
       </style>
       <template is="dom-repeat" items="[[items]]">
-        <vaadin-message time="[[item.time]]" user="[[item.user]]">[[item.text]]</vaadin-message>
+        <vaadin-message
+          time="[[item.time]]"
+          user-name="[[item.userName]]"
+          user-abbr="[[item.userAbbr]]"
+          user-img="[[item.userImg]]"
+          user-color-index="[[item.userColorIndex]]"
+          >[[item.text]]</vaadin-message
+        >
       </template>
     `;
   }

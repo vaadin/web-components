@@ -12,8 +12,9 @@ import '@vaadin/vaadin-avatar/src/vaadin-avatar.js';
  *
  * ```html
  * <vaadin-message time="2021-01-28 10:43"
- *     user='{"name":"Bob Ross","abbr":"BR","img":"/static/img/avatar.jpg"}'>There is no real ending. It's
- *     just the place where you stop the story.</vaadin-message>
+ *     user-name = "Bob Ross"
+ *     user-abbr = "BR"
+ *     user-img = "/static/img/avatar.jpg">There is no real ending. It's just the place where you stop the story.</vaadin-message>
  * ```
  *
  * ### Styling
@@ -41,23 +42,59 @@ class MessageElement extends ElementMixin(ThemableMixin(PolymerElement)) {
        * so the formatting is up to you.
        */
       time: {
-        type: String,
-        reflectToAttribute: true
+        type: String
       },
+
       /**
-       * A user object that can be used to render avatar and name.
-       * The user object can consist of the following properties:
-       * ```js
-       * user: {
-       *   name: string,
-       *   abbr: string,
-       *   img: string,
-       *   colorIndex: number
+       * The name of the user posting the message.
+       * It will be placed in the name part to indicate who has sent the message.
+       * It is also used as a tooltip for the avatar.
+       * Example: `message.userName = "Jessica Jacobs";`
+       */
+      userName: {
+        type: String
+      },
+
+      /**
+       * The abbreviation of the user.
+       * The abbreviation will be passed on to avatar of the message.
+       * If the user does not have an avatar picture set with `userImg`, `userAbbr` will be shown in the avatar.
+       * Example: `message.userAbbr = "JJ";`
+       */
+      userAbbr: {
+        type: String
+      },
+
+      /**
+       * An URL for a user image.
+       * The image will be used in the avatar component to show who has sent the message.
+       * Example: `message.userImg = "/static/img/avatar.jpg";`
+       */
+      userImg: {
+        type: String
+      },
+
+      /**
+       * A color index to be used to render the color of the avatar.
+       * With no `userColorIndex` set, the basic avatar color will be used.
+       * By setting a userColorIndex, the component will check if there exists a CSS variable defining the color, and uses it if there is one.
+       * If now CSS variable is found for the color index, the property for the color will not be set.
+       *
+       * Example:
+       * CSS:
+       * ```css
+       * html {
+       *   --vaadin-user-color-1: red;
        * }
        * ```
+       *
+       * JavaScript:
+       * ```js
+       * message.userColorIndex = 1;
+       * ```
        */
-      user: {
-        type: Object
+      userColorIndex: {
+        type: Number
       }
     };
   }
@@ -93,16 +130,16 @@ class MessageElement extends ElementMixin(ThemableMixin(PolymerElement)) {
       </style>
       <vaadin-avatar
         part="avatar"
-        name="[[user.name]]"
-        img="[[user.img]]"
-        abbr="[[user.abbr]]"
-        color-index="[[user.colorIndex]]"
+        name="[[userName]]"
+        abbr="[[userAbbr]]"
+        img="[[userImg]]"
+        color-index="[[userColorIndex]]"
         tabindex="-1"
         aria-hidden="true"
       ></vaadin-avatar>
       <div part="content">
         <div part="header">
-          <span part="name">[[user.name]]</span>
+          <span part="name">[[userName]]</span>
           <span part="time">[[time]]</span>
         </div>
         <div part="message">
