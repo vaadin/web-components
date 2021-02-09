@@ -112,7 +112,9 @@ class MessageElement extends ElementMixin(ThemableMixin(PolymerElement)) {
         }
 
         vaadin-avatar {
+          border: none;
           flex-shrink: 0;
+          margin: 0;
         }
 
         [part='content'] {
@@ -151,8 +153,6 @@ class MessageElement extends ElementMixin(ThemableMixin(PolymerElement)) {
 
   ready() {
     super.ready();
-    this.setAttribute('aria-live', 'polite');
-    this.setAttribute('role', 'listitem');
   }
 
   static get is() {

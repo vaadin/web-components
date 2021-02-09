@@ -17,12 +17,14 @@ registerStyles(
     }
 
     vaadin-avatar {
-      margin-right: 0.5em;
+      height: 2.5em;
+      margin-right: 1em;
       margin-top: 0.125em;
+      width: 2.5em;
     }
 
     :host([dir='rtl']) vaadin-avatar {
-      margin-left: 0.5em;
+      margin-left: 1em;
       margin-right: 0;
     }
 

@@ -76,22 +76,27 @@ class MessageListElement extends ElementMixin(ThemableMixin(PolymerElement)) {
           display: none !important;
         }
       </style>
-      <template is="dom-repeat" items="[[items]]">
-        <vaadin-message
-          time="[[item.time]]"
-          user-name="[[item.userName]]"
-          user-abbr="[[item.userAbbr]]"
-          user-img="[[item.userImg]]"
-          user-color-index="[[item.userColorIndex]]"
-          >[[item.text]]</vaadin-message
-        >
-      </template>
+      <div role="list">
+        <template is="dom-repeat" items="[[items]]">
+          <vaadin-message
+            time="[[item.time]]"
+            user-name="[[item.userName]]"
+            user-abbr="[[item.userAbbr]]"
+            user-img="[[item.userImg]]"
+            user-color-index="[[item.userColorIndex]]"
+            role="listitem"
+            >[[item.text]]</vaadin-message
+          >
+        </template>
+      </div>
     `;
   }
 
   ready() {
     super.ready();
-    this.setAttribute('role', 'list');
+    this.setAttribute('aria-relevant', 'additions');
+    this.setAttribute('role', 'log');
+    this.setAttribute('tabindex', '0');
   }
 
   static get is() {
