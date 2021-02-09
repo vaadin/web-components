@@ -276,7 +276,7 @@ describe('keyboard', () => {
       expect(comboBox.inputElement.value).to.eql('baz');
     });
 
-    const isSafari = /Safari/i.test(navigator.userAgent);
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
     (isSafari ? it.skip : it)('should select the input field text when navigating down', async () => {
       arrowDown();
       await aTimeout(1);

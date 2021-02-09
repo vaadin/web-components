@@ -654,7 +654,7 @@ describe('touch', () => {
     }
   });
 
-  const isSafari = /Safari/i.test(navigator.userAgent);
+  const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
   (isSafari ? it.skip : it)('should close submenu on mobile when selecting an item in the nested one', async () => {
     arrowDown(buttons[0]);
     await onceOpened(subMenu);

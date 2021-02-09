@@ -98,7 +98,7 @@ describe('vaadin-combo-box-light', () => {
       expect(comboBox.opened).to.be.true;
     });
 
-    const isSafari = /Safari/i.test(navigator.userAgent);
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
     (isSafari ? it.skip : it)('should toggle on input click on touch devices', (done) => {
       downAndUp(
         ironInput,

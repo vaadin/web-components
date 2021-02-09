@@ -1,6 +1,10 @@
 #!/usr/bin/env node
 const replace = require('replace-in-file');
 
+const chrome = 'window.chrome || /HeadlessChrome/.test(navigator.userAgent)';
+const firefox = `navigator.userAgent.toLowerCase().indexOf('firefox') > -1`;
+const safari = '/^((?!chrome|android).)*safari/i.test(navigator.userAgent)';
+
 const skipTests = {
   files: [
     'packages/vaadin-upload/test/adding-files.test.js',
@@ -36,34 +40,34 @@ const skipTests = {
     `it('should have matching scrollHeight'`
   ],
   to: [
-    `const isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
+    `const isFirefox = ${firefox};
   (isFirefox ? describe.skip : describe)('with add button'`,
-    `const isSafari = /Safari/i.test(navigator.userAgent);
+    `const isSafari = ${safari};
     (isSafari ? it.skip : it)('should toggle on input click on touch devices'`,
     `(isSafari ? it.skip : it)('should not clear on input click on touch devices'`,
-    `const isSafari = /Safari/i.test(navigator.userAgent);
+    `const isSafari = ${safari};
     (isSafari ? it.skip : it)('should select the input field text when navigating down'`,
     `(isSafari ? it.skip : it)('should select the input field text when navigating up'`,
-    `const isSafari = /Safari/i.test(navigator.userAgent);
+    `const isSafari = ${safari};
   (isSafari ? it.skip : it)('should detect touch support'`,
-    `const isSafari = /Safari/i.test(navigator.userAgent);
+    `const isSafari = ${safari};
   (isIOS || isSafari ? it.skip : it)('should open context menu below button'`,
     '<button on-click="_showMenu" id="button" style="margin: 20px">Show context menu</button>',
-    `const isChrome = window.chrome || /HeadlessChrome/.test(navigator.userAgent);
+    `const isChrome = ${chrome};
     (isChrome ? describe : describe.skip)('scrolling'`,
-    `const isSafari = /Safari/i.test(navigator.userAgent);
+    `const isSafari = ${safari};
   (isSafari ? it.skip : it)('should close submenu on mobile when selecting an item in the nested one'`,
-    `const isSafari = /Safari/i.test(navigator.userAgent);
+    `const isSafari = ${safari};
         (isFirefox || isSafari ? it.skip : it)(\`should apply \${fmt} formatting to the selected text on click\``,
     `(isFirefox ? describe.skip : describe)('image'`,
     `new Touch({ identifier: 1, target: window });`,
-    `const isSafari = /Safari/i.test(navigator.userAgent);
+    `const isSafari = ${safari};
     (isSafari ? it.skip : it)('should set checked on touchend'`,
-    `const isSafari = /Safari/i.test(navigator.userAgent);
+    `const isSafari = ${safari};
     (isSafari ? it.skip : it)('should not set checked on touchend when disabled'`,
-    `const isSafari = /Safari/i.test(navigator.userAgent);
+    `const isSafari = ${safari};
     (isSafari ? it.skip : it)('should fire on touchend'`,
-    `const isSafari = /Safari/i.test(navigator.userAgent);
+    `const isSafari = ${safari};
       (isSafari ? it.skip : it)('should not change height'`,
     `(isSafari ? it.skip : it)('should have matching scrollHeight'`
   ]
