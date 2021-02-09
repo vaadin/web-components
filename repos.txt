@@ -2,6 +2,7 @@ vaadin-accordion
 vaadin-app-layout
 vaadin-avatar
 vaadin-button
+vaadin-board
 vaadin-checkbox
 vaadin-combo-box
 vaadin-confirm-dialog
@@ -20,6 +21,7 @@ vaadin-list-box
 vaadin-login
 vaadin-menu-bar
 vaadin-notification
+vaadin-ordered-layout
 vaadin-progress-bar
 vaadin-radio-button
 vaadin-rich-text-editor
