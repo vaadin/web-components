@@ -77,6 +77,7 @@ import './detect-ios-navbar.js';
  * ### Navigation
  *
  * As the drawer opens as an overlay in small devices, it makes sense to close it once a navigation happens.
+ * If you are using Vaadin Router, this will happen automatically unless you change the `closeDrawerOn` event name.
  *
  * In order to do so, there are two options:
  * - If the `vaadin-app-layout` instance is available, then `drawerOpened` can be set to `false`
@@ -349,6 +350,19 @@ class AppLayoutElement extends ElementMixin(ThemableMixin(PolymerElement)) {
         readOnly: true,
         value: false,
         reflectToAttribute: true
+      },
+
+      /**
+       * A global event that causes the drawer to close (be hidden) when it is in overlay mode.
+       * - The default is `vaadin-router-location-changed` dispatched by Vaadin Router
+       *
+       * @attr {string} close-drawer-on
+       * @type {string}
+       */
+      closeDrawerOn: {
+        type: String,
+        value: 'vaadin-router-location-changed',
+        observer: '_closeDrawerOnChanged'
       }
     };
   }
@@ -528,6 +542,15 @@ class AppLayoutElement extends ElementMixin(ThemableMixin(PolymerElement)) {
     this._updateDrawerHeight();
 
     // TODO(jouni): ARIA attributes. The drawer should act similar to a modal dialog when in ”overlay” mode
+  }
+  /** @private */
+  _closeDrawerOnChanged(closeDrawerOn, oldCloseDrawerOn) {
+    if (oldCloseDrawerOn) {
+      window.removeEventListener(oldCloseDrawerOn, this.__closeOverlayDrawerListener);
+    }
+    if (closeDrawerOn) {
+      window.addEventListener(closeDrawerOn, this.__closeOverlayDrawerListener);
+    }
   }
 
   /** @protected */

@@ -157,6 +157,11 @@ describe('vaadin-app-layout', () => {
       expect(drawer.hasAttribute('hidden')).to.be.true;
     });
 
+    it('should not close on navigation event when not in overlay mode', () => {
+      layout.drawerOpened = true;
+      window.dispatchEvent(new CustomEvent('vaadin-router-location-changed'));
+      expect(layout.drawerOpened).to.be.true;
+    });
     describe('overlay mode', () => {
       beforeEach(() => {
         // force overlay=true to show backdrop
@@ -207,6 +212,20 @@ describe('vaadin-app-layout', () => {
         layout.style.setProperty('--vaadin-app-layout-drawer-overlay', 'false');
         layout._updateOverlayMode();
         expect(layout.drawerOpened).to.be.true;
+      });
+
+      it('should close on navigation event when in overlay mode', () => {
+        layout.drawerOpened = true;
+        window.dispatchEvent(new CustomEvent('vaadin-router-location-changed'));
+        expect(layout.drawerOpened).to.be.false;
+      });
+      it('should only close on custom navigation event when in overlay mode', () => {
+        layout.drawerOpened = true;
+        layout.closeDrawerOn = 'foo-bar';
+        window.dispatchEvent(new CustomEvent('vaadin-router-location-changed'));
+        expect(layout.drawerOpened).to.be.true;
+        window.dispatchEvent(new CustomEvent('foo-bar'));
+        expect(layout.drawerOpened).to.be.false;
       });
     });
   });
