@@ -12,7 +12,7 @@ class MenuWrapper extends PolymerElement {
       <vaadin-context-menu id="menu">
         <template>foo</template>
       </vaadin-context-menu>
-      <button on-click="_showMenu" id="button">Show context menu</button>
+      <button on-click="_showMenu" id="button" style="margin: 20px">Show context menu</button>
     `;
   }
 

@@ -18,6 +18,32 @@ module.exports = {
       timeout: '10000'
     }
   },
+  testRunnerHtml: (testFramework) => `
+    <!DOCTYPE html>
+    <html>
+      <body>
+        <style>
+          body {
+            margin: 0;
+            padding: 0;
+          }
+        </style>
+        <script>
+          // mimic flow production mode
+          window.Vaadin = {
+            Flow: {
+              clients: {
+                ROOT: {
+                  productionMode: true
+                }
+              }
+            }
+          };
+        </script>
+        <script type="module" src="${testFramework}"></script>
+      </body>
+    </html>
+  `,
   groups: packages.map((pkg) => {
     return {
       name: pkg,
