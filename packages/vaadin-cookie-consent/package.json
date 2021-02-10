@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-cookie-consent",
-  "version": "2.0.0",
+  "version": "3.0.0-alpha1",
   "description": "vaadin-cookie-consent",
   "main": "vaadin-cookie-consent.js",
   "module": "vaadin-cookie-consent.js",
