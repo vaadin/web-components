@@ -11,7 +11,7 @@ import '@vaadin/vaadin-avatar/src/vaadin-avatar.js';
  * `<vaadin-message>` is a Web Component for showing a single message with an author, message and time.
  *
  * ```html
- * <vaadin-message time="21.0.0-alpha11-28 10:43"
+ * <vaadin-message time="2021-01-28 10:43"
  *     user-name = "Bob Ross"
  *     user-abbr = "BR"
  *     user-img = "/static/img/avatar.jpg">There is no real ending. It's just the place where you stop the story.</vaadin-message>
