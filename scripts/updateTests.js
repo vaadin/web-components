@@ -16,8 +16,7 @@ const skipTests = {
     'packages/vaadin-menu-bar/test/sub-menu.test.js',
     'packages/vaadin-rich-text-editor/test/basic.test.js',
     'packages/vaadin-split-layout/test/split-layout.test.js',
-    'packages/vaadin-radio-button/test/radio-button.test.js',
-    'packages/vaadin-text-field/test/text-area.test.js'
+    'packages/vaadin-radio-button/test/radio-button.test.js'
   ],
   from: [
     `describe('with add button'`,
@@ -35,9 +34,7 @@ const skipTests = {
     `document.createEvent('TouchEvent');`,
     `it('should set checked on touchend'`,
     `it('should not set checked on touchend when disabled'`,
-    `it('should fire on touchend'`,
-    `it('should not change height'`,
-    `it('should have matching scrollHeight'`
+    `it('should fire on touchend'`
   ],
   to: [
     `const isFirefox = ${firefox};
@@ -66,10 +63,7 @@ const skipTests = {
     `const isSafari = ${safari};
     (isSafari ? it.skip : it)('should not set checked on touchend when disabled'`,
     `const isSafari = ${safari};
-    (isSafari ? it.skip : it)('should fire on touchend'`,
-    `const isSafari = ${safari};
-      (isSafari ? it.skip : it)('should not change height'`,
-    `(isSafari ? it.skip : it)('should have matching scrollHeight'`
+    (isSafari ? it.skip : it)('should fire on touchend'`
   ]
 };
 
