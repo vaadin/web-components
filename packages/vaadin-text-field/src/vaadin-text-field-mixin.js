@@ -827,7 +827,7 @@ export const TextFieldMixin = (subclass) =>
     _dispatchIronResizeEventIfNeeded(sizePropertyName, value) {
       const previousSizePropertyName = '__previous' + sizePropertyName;
       if (this[previousSizePropertyName] !== undefined && this[previousSizePropertyName] !== value) {
-        this.dispatchEvent(new CustomEvent('iron-resize', { bubbles: true }));
+        this.dispatchEvent(new CustomEvent('iron-resize', { bubbles: true, composed: true }));
       }
 
       this[previousSizePropertyName] = value;

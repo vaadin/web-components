@@ -151,6 +151,7 @@ class TextAreaElement extends ElementMixin(TextFieldMixin(ControlStateMixin(Them
     super.ready();
     this._updateHeight();
     this.addEventListener('animationend', this._onAnimationEnd);
+    this.__safari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
   }
 
   /** @private */
@@ -193,6 +194,10 @@ class TextAreaElement extends ElementMixin(TextFieldMixin(ControlStateMixin(Them
       // Fix the input element width so its scroll height isn't affected by host's disappearing scrollbars
       input.style.maxWidth = inputWidth;
       input.style.height = 'auto';
+      // Avoid a jumpy Safari rendering issue
+      if (this.__safari) {
+        inputField.style.display = 'block';
+      }
     }
     this._oldValueLength = valueLength;
 
