@@ -16,11 +16,7 @@
 
 <body>
   <div id="tests" style="padding: 10px">
-    <vaadin-message-list
-      items='[{"text":"Hello list","time":"yesterday","userName":"Matt Mambo","userAbbr":"MM",
-      "userColorIndex":1},{"text":"Another message","time":"right now","userName":"Linsey Listy",
-      "userAbbr":"LL","userColorIndex":2,"userImg":"/test/visual/avatars/avatar.jpg"}]'>
-    </vaadin-message-list>
+    <vaadin-message-list></vaadin-message-list>
   </div>
 
   <script type="module">
@@ -30,6 +26,24 @@
       await import('../../theme/' + theme + '/vaadin-message-list.js');
 
       window.requestAnimationFrame(() => {
+        const messageList = document.querySelector('vaadin-message-list');
+        messageList.items = [
+          {
+            text: 'Hello list',
+            time: 'yesterday',
+            userName: 'Matt Mambo',
+            userAbbr: 'MM',
+            userColorIndex: 1
+          },
+          {
+            text: 'Another message',
+            time: 'right now',
+            userName: 'Linsey Listy',
+            userAbbr: 'LL',
+            userColorIndex: 2,
+            userImg: '/test/visual/avatars/avatar.jpg'
+          }
+        ];
         document.getElementById('tests').dataset.ready = true;
       });
     })();
