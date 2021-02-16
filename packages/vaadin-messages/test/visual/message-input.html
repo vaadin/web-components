@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <title>Message tests</title>
@@ -18,6 +19,7 @@
 <body>
   <div id="tests" style="padding: 10px">
     <vaadin-message-list></vaadin-message-list>
+    <vaadin-message-input></vaadin-message-input>
   </div>
 
   <script type="module">
@@ -25,6 +27,7 @@
       const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
 
       await import('../../theme/' + theme + '/vaadin-message-list.js');
+      await import('../../theme/' + theme + '/vaadin-message-input.js');
 
       window.requestAnimationFrame(() => {
         const messageList = document.querySelector('vaadin-message-list');
@@ -50,4 +53,5 @@
     })();
   </script>
 </body>
+
 </html>

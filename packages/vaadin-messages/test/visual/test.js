@@ -21,3 +21,7 @@ describe('vaadin-message', () => {
 describe('vaadin-message-list', () => {
   assertView('message-list', 'message-list.html');
 });
+
+describe('vaadin-message-input', () => {
+  assertView('message-input', 'message-input.html');
+});

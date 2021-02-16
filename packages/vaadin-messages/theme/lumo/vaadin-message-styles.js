@@ -4,7 +4,7 @@ import '@vaadin/vaadin-lumo-styles/sizing.js';
 import '@vaadin/vaadin-lumo-styles/spacing.js';
 import '@vaadin/vaadin-lumo-styles/style.js';
 import '@vaadin/vaadin-lumo-styles/typography.js';
-import '@vaadin/vaadin-avatar/theme/lumo/vaadin-avatar.js';
+import '@vaadin/vaadin-avatar/theme/lumo/vaadin-avatar-styles.js';
 
 registerStyles(
   'vaadin-message',
@@ -35,9 +35,17 @@ registerStyles(
       margin-right: var(--lumo-space-s);
     }
 
+    [part='name']:empty {
+      margin-right: 0;
+    }
+
     :host([dir='rtl']) [part='name'] {
       margin-left: var(--lumo-space-s);
       margin-right: 0;
+    }
+
+    :host([dir='rtl']) [part='name']:empty {
+      margin-left: 0;
     }
 
     [part='time'] {
