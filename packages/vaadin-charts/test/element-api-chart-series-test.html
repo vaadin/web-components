@@ -258,11 +258,9 @@
       });
 
       function markersVisible(container) {
-        // Markers are visible only if there's a child in highcharts-markers with visibility other than 'hidden'
-        return Array.from(container.querySelectorAll('.highcharts-markers'))
-          .map(e => !!e.firstChild && (!e.firstChild.attributes.hasOwnProperty('visibility')
-              || e.firstChild.attributes.visibility.value !== 'hidden'))
-          .reduce((e1, e2) => e1 && e2);
+        return Array.from(container.querySelectorAll('.highcharts-markers')).every((g) => {
+          return Boolean(g.firstChild && getComputedStyle(g.firstChild).opacity !== '0');
+        });
       }
 
       it('should have markers by default for widespread data', function(done) {
