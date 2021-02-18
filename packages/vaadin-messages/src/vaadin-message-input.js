@@ -12,6 +12,10 @@ import '@vaadin/vaadin-text-field/src/vaadin-text-area.js';
  * `<vaadin-message-input>` is a Web Component for sending messages.
  * It consists of a text area that grows on along with the content, and a send button to send message.
  *
+ * The message can be sent by one of the following actions:
+ * - by pressing Enter (use Shift + Enter to add a new line)
+ * - by clicking `submit` button.
+ *
  * ```html
  * <vaadin-message-input></vaadin-message-input>
  * ```
@@ -21,6 +25,17 @@ import '@vaadin/vaadin-text-field/src/vaadin-text-area.js';
  * @mixes ElementMixin
  */
 class MessageInputElement extends ElementMixin(ThemableMixin(PolymerElement)) {
+  static get properties() {
+    return {
+      /**
+       * Current content of the text input field
+       */
+      value: {
+        type: String
+      }
+    };
+  }
+
   static get template() {
     return html`
       <style>
@@ -41,8 +56,8 @@ class MessageInputElement extends ElementMixin(ThemableMixin(PolymerElement)) {
           margin: 0;
         }
       </style>
-      <vaadin-text-area placeholder="Message"></vaadin-text-area>
-      <vaadin-button theme="primary contained">Send</vaadin-button>
+      <vaadin-text-area value="{{value}}" placeholder="Message"></vaadin-text-area>
+      <vaadin-button theme="primary contained" on-click="__submit">Send</vaadin-button>
     `;
   }
 
@@ -65,6 +80,29 @@ class MessageInputElement extends ElementMixin(ThemableMixin(PolymerElement)) {
     // Set initial height to one row
     textarea.setAttribute('rows', 1);
     textarea.style.minHeight = '0';
+
+    // Add enter handling for text area.
+    textarea.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        e.stopPropagation();
+        this.__submit();
+      }
+    });
+  }
+
+  /**
+   * Submits the current value as an custom event named 'submit'.
+   * It also clears the text input and refocuses it for sending another message.
+   * In UI, can be triggered by pressing the submit button or pressing enter key when field is focused.
+   * It does not submit anything if text is empty.
+   */
+  __submit() {
+    if (this.value !== '') {
+      this.dispatchEvent(new CustomEvent('submit', { detail: { value: this.value } }));
+      this.value = '';
+    }
+    this.shadowRoot.querySelector('vaadin-text-area').focus();
   }
 }
 

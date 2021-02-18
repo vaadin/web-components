@@ -12,6 +12,11 @@
     html {
       --vaadin-user-color-1: blue;
       --vaadin-user-color-2: green;
+      --vaadin-user-color-3: red;
+    }
+
+    vaadin-message-list {
+      max-height: 300px;
     }
   </style>
 </head>
@@ -31,6 +36,7 @@
 
       window.requestAnimationFrame(() => {
         const messageList = document.querySelector('vaadin-message-list');
+        const messageInput = document.querySelector('vaadin-message-input');
         messageList.items = [
           {
             text: 'Hello list',
@@ -48,6 +54,17 @@
             userImg: '/test/visual/avatars/avatar.jpg'
           }
         ];
+        messageInput.addEventListener('submit', function(e) {
+          messageList.items = [...messageList.items, 
+            {
+              text: e.detail.value,
+              time: 'seconds ago', 
+              userName: 'Milla Sting', 
+              userAbbr: 'MS',
+              userColorIndex: 3
+            }
+          ];
+        });
         document.getElementById('tests').dataset.ready = true;
       });
     })();

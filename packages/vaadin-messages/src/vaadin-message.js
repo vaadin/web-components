@@ -129,6 +129,10 @@ class MessageElement extends ElementMixin(ThemableMixin(PolymerElement)) {
           flex-direction: row;
           flex-wrap: wrap;
         }
+
+        [part='message'] {
+          white-space: pre-wrap;
+        }
       </style>
       <vaadin-avatar
         part="avatar"
@@ -144,9 +148,7 @@ class MessageElement extends ElementMixin(ThemableMixin(PolymerElement)) {
           <span part="name">[[userName]]</span>
           <span part="time">[[time]]</span>
         </div>
-        <div part="message">
-          <slot></slot>
-        </div>
+        <div part="message"><slot></slot></div>
       </div>
     `;
   }
