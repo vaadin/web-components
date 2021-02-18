@@ -342,7 +342,7 @@ export const DataProviderMixin = (superClass) =>
           filters: this._mapFilters(),
           parentItem: cache.parentItem
         };
-
+        this._debounceIncreasePool && this._debounceIncreasePool.flush();
         this.dataProvider(params, (items, size) => {
           if (size !== undefined) {
             cache.size = size;

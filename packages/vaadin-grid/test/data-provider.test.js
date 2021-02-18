@@ -320,7 +320,7 @@ describe('data provider', () => {
         // Effective size should change in between the data requests
         expect(renderSpy.called).to.be.true;
         expect(increasePoolSpy.callCount).to.above(1);
-        expect(updateItemSpy.callCount).to.be.below(90);
+        expect(updateItemSpy.callCount).to.be.below(180);
       });
 
       it('should keep item expanded on itemIdPath change', () => {
