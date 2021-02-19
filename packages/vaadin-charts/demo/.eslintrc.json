@@ -1,9 +1,0 @@
-{
-  "rules": {
-  },
-  "globals": {
-    "ElementDemo": false,
-    "DemoReadyEventEmitter": false,
-    "ChartsDemo": false
-  }
-}

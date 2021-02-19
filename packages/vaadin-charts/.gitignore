@@ -2,7 +2,6 @@ bower_components
 node_modules
 package-lock.json
 yarn.lock
-build
-.DS_Store
-.idea/
-analysis.json 
+coverage
+dist
+analysis.json

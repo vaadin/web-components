@@ -1,7 +1,0 @@
-{
-  "lint": {
-    "warningsToIgnore": [
-      "multiple-global-declarations"
-    ]
-  }
-}

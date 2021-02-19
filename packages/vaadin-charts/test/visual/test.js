@@ -1,24 +1,11 @@
-gemini.suite('vaadin-charts', function(rootSuite) {
-  function wait(actions, find) {
-    actions.wait(7000);
-  }
+describe('vaadin-chart', () => {
+  const locator = 'vaadin-chart[data-ready]';
 
-  function goToAboutBlank(actions, find) {
-    // Firefox stops responding on socket after a test, workaround:
-    return actions.executeJS(function(window) {
-      window.location.href = 'about:blank'; // just go away, please!
-    });
-  }
-
-  rootSuite
-    .before(wait)
-    .after(goToAboutBlank);
-
-  gemini.suite('empty-chart', function(suite) {
-    suite
-      .setUrl('/default.html')
-      .setCaptureElements('vaadin-chart')
-      .capture('empty-chart');
+  it('default', function () {
+    // prettier-ignore
+    return this.browser
+      .url('default.html')
+      .waitForVisible(locator, 10000)
+      .assertView('default', locator);
   });
-
 });

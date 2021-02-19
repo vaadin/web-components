@@ -1,17 +1,33 @@
 <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Chart tests</title>
+    <script>
+      // mimic flow production mode
+      window.Vaadin = {
+        Flow: {
+          clients: {
+            ROOT: {
+              productionMode: true
+            }
+          }
+        }
+      };
+    </script>
+  </head>
 
-<head lang="en">
-  <meta charset="UTF-8">
-  <title></title>
-  <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
-  <link href="../../vaadin-chart.html" rel="import">
-</head>
+  <body>
+    <vaadin-chart title="The chart title"></vaadin-chart>
 
-<body>
+    <script type="module">
+      import '../../vaadin-chart.js';
 
-  <span id="default-tests">
-    <vaadin-chart title="The chart title">
-    </vaadin-chart>
-  </span>
-
-</body>
+      window.requestAnimationFrame(() => {
+        setTimeout(() => {
+          document.querySelector('vaadin-chart').dataset.ready = true;
+        });
+      });
+    </script>
+  </body>
+</html>

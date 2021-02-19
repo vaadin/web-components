@@ -1,52 +1,16 @@
 <!doctype html>
+
 <html>
+  <head>
+    <title>vaadin-charts</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body>
+    <iron-component-page src="vaadin-chart.js"></iron-component-page>
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-
-  <title>Vaadin Charts for Frontend</title>
-
-  <!-- Load webcomponents-loader.js to check and load any polyfills your browser needs -->
-  <script src="../webcomponentsjs/webcomponents-loader.js"></script>
-
-  <script>
-    /* eslint-disable */
-
-    (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function()
-    { (i[r].q=i[r].q||[]).push(arguments)}
-        ,i[r].l=1*new Date();a=s.createElement(o),
-        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-    ga('create', 'UA-658457-6', 'auto');
-    ga('send', 'pageview', {'page': '/vaadin-charts'});
-
-    /* eslint-enable */
-  </script>
-
-  <!-- Load your application shell -->
-  <link rel="import" href="./demo/charts-demo-app.html">
-
-  <style>
-    html {
-      height: 100%;
-    }
-
-    body {
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      margin: 0;
-      height: 100%;
-      -webkit-tap-highlight-color: transparent;
-      -webkit-font-smoothing: antialiased;
-    }
-  </style>
-</head>
-
-<body>
-  <charts-demo-app id="main" unresolved></charts-demo-app>
-</body>
-
+    <script type="module">
+      import '@polymer/iron-component-page/iron-component-page.js';
+    </script>
+  </body>
 </html>
