@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-charts",
-  "version": "8.0.1",
+  "version": "9.0.0-alpha1",
   "description": "vaadin-charts",
   "main": "vaadin-chart.js",
   "module": "vaadin-chart.js",

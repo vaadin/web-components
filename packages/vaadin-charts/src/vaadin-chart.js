@@ -258,7 +258,7 @@ class ChartElement extends ElementMixin(ThemableMixin(PolymerElement)) {
   }
 
   static get version() {
-    return '8.0.1';
+    return '9.0.0-alpha1';
   }
 
   /** @private */
