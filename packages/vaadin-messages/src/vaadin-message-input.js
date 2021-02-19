@@ -32,6 +32,35 @@ class MessageInputElement extends ElementMixin(ThemableMixin(PolymerElement)) {
        */
       value: {
         type: String
+      },
+      /**
+       *
+       * The object used to localize this component.
+       * For changing the default localization, change the entire
+       * `i18n` object.
+       *
+       * The object has the following JSON structure and default values:
+       *
+       * ```
+       * {
+       *   // Used as the button label
+       *   send: 'Send',
+       *
+       *   // Used as the input field's placeholder and aria-label
+       *   message: 'Message'
+       * }
+       * ```
+       *
+       * @type {!MessageInputI18n}
+       * @default {English}
+       */
+      i18n: {
+        type: Object,
+        value: () => ({
+          send: 'Send',
+          message: 'Message'
+        }),
+        observer: '__i18nChanged'
       }
     };
   }
@@ -56,8 +85,8 @@ class MessageInputElement extends ElementMixin(ThemableMixin(PolymerElement)) {
           margin: 0;
         }
       </style>
-      <vaadin-text-area value="{{value}}" placeholder="Message"></vaadin-text-area>
-      <vaadin-button theme="primary contained" on-click="__submit">Send</vaadin-button>
+      <vaadin-text-area value="{{value}}" placeholder="[[i18n.message]]"></vaadin-text-area>
+      <vaadin-button theme="primary contained" on-click="__submit">[[i18n.send]]</vaadin-button>
     `;
   }
 
@@ -72,9 +101,7 @@ class MessageInputElement extends ElementMixin(ThemableMixin(PolymerElement)) {
   ready() {
     super.ready();
 
-    // Set aria-label to provide an accessible name for the labelless input
-    const textarea = this.shadowRoot.querySelector('vaadin-text-area').inputElement;
-    textarea.setAttribute('aria-label', 'Message');
+    const textarea = this.__inputElement;
     textarea.removeAttribute('aria-labelledby');
 
     // Set initial height to one row
@@ -103,6 +130,18 @@ class MessageInputElement extends ElementMixin(ThemableMixin(PolymerElement)) {
       this.value = '';
     }
     this.shadowRoot.querySelector('vaadin-text-area').focus();
+  }
+
+  __i18nChanged(i18n) {
+    // Set aria-label to provide an accessible name for the labelless input
+    this.__inputElement.setAttribute('aria-label', i18n.message);
+  }
+
+  /**
+   * Gets the native `<textarea>` inside the `<vaadin-text-area>`.
+   */
+  get __inputElement() {
+    return this.shadowRoot.querySelector('vaadin-text-area').inputElement;
   }
 }
 

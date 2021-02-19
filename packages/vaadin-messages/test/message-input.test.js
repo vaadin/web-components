@@ -22,10 +22,6 @@ describe('message-input', () => {
     expect(messageInput.shadowRoot.querySelector('vaadin-button')).to.be.not.undefined;
   });
 
-  it('text area placeholder should be set', () => {
-    expect(messageInput.shadowRoot.querySelector('vaadin-text-area').placeholder).to.be.equal('Message');
-  });
-
   describe('submit functionality', () => {
     it('should fire a submit event on button click', () => {
       const spy = sinon.spy();
@@ -79,6 +75,35 @@ describe('message-input', () => {
       textArea.value = 'foo';
       button.click();
       expect(spy.called).to.be.true;
+    });
+  });
+
+  describe('i18n', () => {
+    it('should have default button text', () => {
+      expect(button.innerText).to.be.equal('Send');
+    });
+
+    it('should have default placeholder', () => {
+      expect(textArea.placeholder).to.be.equal('Message');
+    });
+
+    it('should have default aria-label', () => {
+      expect(textArea.inputElement.getAttribute('aria-label')).to.be.equal('Message');
+    });
+
+    it('should translate button text', () => {
+      messageInput.i18n = { ...messageInput.i18n, send: 'Lähetä' };
+      expect(button.innerText).to.be.equal('Lähetä');
+    });
+
+    it('should translate placeholder', () => {
+      messageInput.i18n = { ...messageInput.i18n, message: 'Viesti' };
+      expect(textArea.placeholder).to.be.equal('Viesti');
+    });
+
+    it('should translate aria-label', () => {
+      messageInput.i18n = { ...messageInput.i18n, message: 'Viesti' };
+      expect(textArea.inputElement.getAttribute('aria-label')).to.be.equal('Viesti');
     });
   });
 });

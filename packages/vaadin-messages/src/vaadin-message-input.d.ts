@@ -1,6 +1,7 @@
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
+import { MessageInputI18n } from './interfaces';
 
 /**
  * `<vaadin-message-input>` is a Web Component for sending messages.
@@ -18,7 +19,27 @@ import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.
  * @mixes ThemableMixin
  * @mixes ElementMixin
  */
-declare class MessageInputElement extends ThemableMixin(ElementMixin(HTMLElement)) {}
+declare class MessageInputElement extends ThemableMixin(ElementMixin(HTMLElement)) {
+  /**
+   *
+   * The object used to localize this component.
+   * For changing the default localization, change the entire
+   * `i18n` object.
+   *
+   * The object has the following JSON structure and default values:
+   *
+   * ```
+   * {
+   *   // Used as the button label
+   *   send: 'Send',
+   *
+   *   // Used as the input field's placeholder and aria-label
+   *   message: 'Message'
+   * }
+   * ```
+   */
+  i18n: MessageInputI18n;
+}
 
 declare global {
   interface HTMLElementTagNameMap {
