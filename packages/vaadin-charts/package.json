@@ -1,0 +1,39 @@
+{
+  "name": "@vaadin/vaadin-charts",
+  "version": "9.0.0-alpha1",
+  "description": "vaadin-charts",
+  "main": "vaadin-chart.js",
+  "module": "vaadin-chart.js",
+  "repository": "vaadin/vaadin-charts",
+  "keywords": [
+    "Vaadin",
+    "vaadin-charts",
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
+  "author": "Vaadin Ltd",
+  "license": "SEE LICENSE IN LICENSE.txt",
+  "bugs": {
+    "url": "https://github.com/vaadin/vaadin-charts/issues"
+  },
+  "homepage": "https://vaadin.com/charts",
+  "files": [
+    "vaadin-*.d.ts",
+    "vaadin-*.js",
+    "src",
+    "theme"
+  ],
+  "dependencies": {
+    "highcharts": "8.1.2",
+    "@polymer/polymer": "^3.0.0",
+    "@vaadin/vaadin-themable-mixin": "^1.6.1",
+    "@vaadin/vaadin-license-checker": "^2.1.0",
+    "@vaadin/vaadin-element-mixin": "^2.4.1"
+  },
+  "devDependencies": {
+    "@esm-bundle/chai": "^4.1.5",
+    "@open-wc/testing-helpers": "^1.8.12",
+    "sinon": "^9.2.4"
+  }
+}
