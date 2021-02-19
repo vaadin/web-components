@@ -401,7 +401,7 @@ class AppLayoutElement extends ElementMixin(ThemableMixin(PolymerElement)) {
     this._touchChildObserver && this._touchChildObserver.disconnect();
     window.removeEventListener('resize', this.__boundResizeListener);
     this.removeEventListener('drawer-toggle-click', this.__drawerToggleClickListener);
-    this.removeEventListener('close-overlay-drawer', this.__drawerToggleClickListener);
+    window.removeEventListener('close-overlay-drawer', this.__drawerToggleClickListener);
   }
 
   /**

@@ -19,6 +19,11 @@ const fixtures = {
         <template>[[index]]</template>
       </vaadin-grid-column>
     </vaadin-grid>
+  `,
+  treeGrid: `
+    <vaadin-grid style="width: 200px; height: 500px;">
+      <vaadin-grid-tree-column path="name" header="foo" item-has-children-path="hasChildren"></vaadin-grid-tree-column>
+    </vaadin-grid>
   `
 };
 
@@ -201,6 +206,38 @@ describe('scroll to index', () => {
       grid.scrollToIndex(grid.items.length);
 
       expect(grid.$.items.children[0]._item.index).to.equal(0);
+    });
+  });
+  describe('Tree grid', () => {
+    // Issue https://github.com/vaadin/vaadin-grid/issues/2107
+    it('should display correctly when scrolled to bottom immediately after setting dataProvider', (done) => {
+      const grid = fixtureSync(fixtures.treeGrid);
+      grid.size = 1;
+      const numberOfChidren = 250;
+      grid.itemIdPath = 'name';
+      const PARENT = { name: 'PARENT', hasChildren: true };
+      grid.dataProvider = ({ page, parentItem }, cb) => {
+        setTimeout(() => {
+          if (!parentItem) {
+            cb([PARENT], 1);
+            return;
+          }
+
+          const offset = page * grid.pageSize;
+          cb(
+            [...new Array(grid.pageSize)].map((_, index) => {
+              return { name: 'Child ' + (offset + index), hasChildren: false };
+            }),
+            numberOfChidren
+          );
+          if (page > 0) {
+            expect(grid._physicalCount).to.be.above(10);
+            done();
+          }
+        });
+      };
+      grid.expandedItems = [PARENT];
+      grid.scrollToIndex(250);
     });
   });
 });

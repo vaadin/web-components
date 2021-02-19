@@ -494,6 +494,15 @@ customElements.define('field-wrapper', FieldWrapper);
           expect(spy.called).to.be.true;
         });
 
+        it('should be a composed event', () => {
+          textField.errorMessage = 'Error';
+          flushTextField(textField);
+          textField.invalid = true;
+          flushTextField(textField);
+          const event = spy.lastCall.lastArg;
+          expect(event.composed).to.be.true;
+        });
+
         it('should dispatch `iron-resize` event on error message height change', () => {
           textField.errorMessage = 'Error';
           flushTextField(textField);
