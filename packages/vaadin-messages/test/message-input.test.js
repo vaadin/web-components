@@ -106,4 +106,25 @@ describe('message-input', () => {
       expect(textArea.inputElement.getAttribute('aria-label')).to.be.equal('Viesti');
     });
   });
+
+  describe('disabled property', () => {
+    it('should be false by default', () => {
+      expect(messageInput.disabled).to.be.false;
+    });
+
+    it('should be reflected to the attribute', () => {
+      messageInput.disabled = true;
+      expect(messageInput.getAttribute('disabled')).to.exist;
+    });
+
+    it('should be propagated to text-area', () => {
+      messageInput.disabled = true;
+      expect(textArea.disabled).to.be.true;
+    });
+
+    it('should be propagated to button', () => {
+      messageInput.disabled = true;
+      expect(button.disabled).to.be.true;
+    });
+  });
 });

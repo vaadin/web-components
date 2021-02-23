@@ -61,6 +61,16 @@ class MessageInputElement extends ElementMixin(ThemableMixin(PolymerElement)) {
           message: 'Message'
         }),
         observer: '__i18nChanged'
+      },
+
+      /**
+       * Set to true to disable this element.
+       * @type {boolean}
+       */
+      disabled: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
       }
     };
   }
@@ -85,8 +95,8 @@ class MessageInputElement extends ElementMixin(ThemableMixin(PolymerElement)) {
           margin: 0;
         }
       </style>
-      <vaadin-text-area value="{{value}}" placeholder="[[i18n.message]]"></vaadin-text-area>
-      <vaadin-button theme="primary contained" on-click="__submit">[[i18n.send]]</vaadin-button>
+      <vaadin-text-area disabled="[[disabled]]" value="{{value}}" placeholder="[[i18n.message]]"></vaadin-text-area>
+      <vaadin-button disabled="[[disabled]]" theme="primary contained" on-click="__submit">[[i18n.send]]</vaadin-button>
     `;
   }
 
