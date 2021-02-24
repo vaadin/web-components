@@ -38,7 +38,7 @@
     "@vaadin/vaadin-text-field": "^3.0.0",
     "@vaadin/vaadin-time-picker": "^3.0.0",
     "@vaadin/vaadin-date-picker": "^5.0.0",
-    "@vaadin/vaadin-form-layout": "^2.3.0",
+    "@vaadin/vaadin-form-layout": "^3.0.0-alpha1",
     "@vaadin/vaadin-select": "^3.0.0",
     "@vaadin/vaadin-list-box": "^2.0.0",
     "sinon": "^9.2.0"

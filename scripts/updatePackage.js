@@ -50,6 +50,18 @@ delete packageJson['lint-staged'];
   if (packageJson.dependencies[dep]) {
     packageJson.dependencies[dep] = '^3.0.0-alpha1';
   }
+  if (packageJson.devDependencies[dep]) {
+    packageJson.devDependencies[dep] = '^3.0.0-alpha1';
+  }
+});
+
+['@vaadin/vaadin-progress-bar', '@vaadin/vaadin-ordered-layout', '@vaadin/vaadin-radio-button'].forEach((dep) => {
+  if (packageJson.dependencies[dep]) {
+    packageJson.dependencies[dep] = '^2.0.0-alpha1';
+  }
+  if (packageJson.devDependencies[dep]) {
+    packageJson.devDependencies[dep] = '^2.0.0-alpha1';
+  }
 });
 
 // Format and write changes to package.json
