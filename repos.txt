@@ -8,6 +8,7 @@ vaadin-checkbox
 vaadin-combo-box
 vaadin-confirm-dialog
 vaadin-context-menu
+vaadin-control-state-mixin
 vaadin-cookie-consent
 vaadin-custom-field
 vaadin-crud
@@ -24,6 +25,7 @@ vaadin-login
 vaadin-menu-bar
 vaadin-notification
 vaadin-ordered-layout
+vaadin-overlay
 vaadin-progress-bar
 vaadin-radio-button
 vaadin-rich-text-editor
