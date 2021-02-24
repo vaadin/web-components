@@ -1,19 +1,5 @@
 {
-  "globals": {
-    "WCT": false,
-    "describe": false,
-    "afterEach": false,
-    "beforeEach": false,
-    "before": false,
-    "fixture": false,
-    "it": false,
-    "expect": false,
-    "gemini": false,
-    "sinon": false,
-    "MockInteractions": false,
-    "flush": false
-  },
-  "parserOptions": {
-    "ecmaVersion": 2017
+  "env": {
+    "mocha": true
   }
 }

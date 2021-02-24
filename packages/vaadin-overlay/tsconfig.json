@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "lib": [ "esnext", "es2018", "dom" ],
+    "noEmit": true,
+    "strict": true
+  },
+  "include": [
+    "test/typings"
+  ]
+}
