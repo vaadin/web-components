@@ -1,30 +1,23 @@
-<link rel="import" href="../polymer/lib/elements/dom-module.html">
-<link rel="import" href="vaadin-theme-property-mixin.html">
+import { DomModule } from '@polymer/polymer/lib/elements/dom-module.js';
+import { ThemePropertyMixin } from './vaadin-theme-property-mixin.js';
 
-<script>
-  /**
-   * @namespace Vaadin
-   */
-  window.Vaadin = window.Vaadin || {};
-
-  /**
-   * @polymerMixin
-   * @memberof Vaadin
-   * @mixes Vaadin.ThemePropertyMixin
-   */
-  Vaadin.ThemableMixin = superClass => class VaadinThemableMixin extends Vaadin.ThemePropertyMixin(superClass) {
-
+/**
+ * @polymerMixin
+ * @mixes ThemePropertyMixin
+ */
+export const ThemableMixin = (superClass) =>
+  class VaadinThemableMixin extends ThemePropertyMixin(superClass) {
     /** @protected */
     static finalize() {
       super.finalize();
 
       const template = this.prototype._template;
 
-      const hasOwnTemplate = this.template && this.template.parentElement && this.template.parentElement.id === this.is;
+      const hasOwnTemplate = Object.prototype.hasOwnProperty.call(this, 'template');
       const inheritedTemplate = Object.getPrototypeOf(this.prototype)._template;
       if (inheritedTemplate && !hasOwnTemplate) {
         // The element doesn't define its own template -> include the theme modules from the inherited template
-        Array.from(inheritedTemplate.content.querySelectorAll('style[include]')).forEach(s => {
+        Array.from(inheritedTemplate.content.querySelectorAll('style[include]')).forEach((s) => {
           this._includeStyle(s.getAttribute('include'), template);
         });
       }
@@ -34,7 +27,7 @@
 
     /** @private */
     static _includeMatchingThemes(template) {
-      const domModule = Polymer.DomModule;
+      const domModule = DomModule;
       const modules = domModule.prototype.modules;
 
       let hasThemes = false;
@@ -46,8 +39,8 @@
           const vaadinB = moduleNameB.indexOf('vaadin-') === 0;
 
           const vaadinThemePrefixes = ['lumo-', 'material-'];
-          const vaadinThemeA = vaadinThemePrefixes.filter(prefix => moduleNameA.indexOf(prefix) === 0).length > 0;
-          const vaadinThemeB = vaadinThemePrefixes.filter(prefix => moduleNameB.indexOf(prefix) === 0).length > 0;
+          const vaadinThemeA = vaadinThemePrefixes.filter((prefix) => moduleNameA.indexOf(prefix) === 0).length > 0;
+          const vaadinThemeB = vaadinThemePrefixes.filter((prefix) => moduleNameB.indexOf(prefix) === 0).length > 0;
 
           if (vaadinA !== vaadinB) {
             // Include vaadin core styles first
@@ -60,11 +53,11 @@
             return 0;
           }
         })
-        .forEach(moduleName => {
+        .forEach((moduleName) => {
           if (moduleName !== defaultModuleName) {
             const themeFor = modules[moduleName].getAttribute('theme-for');
             if (themeFor) {
-              themeFor.split(' ').forEach(themeForToken => {
+              themeFor.split(' ').forEach((themeForToken) => {
                 if (new RegExp('^' + themeForToken.split('*').join('.*') + '$').test(this.is)) {
                   hasThemes = true;
                   this._includeStyle(moduleName, template);
@@ -88,6 +81,4 @@
         template.content.appendChild(styleEl);
       }
     }
-
   };
-</script>

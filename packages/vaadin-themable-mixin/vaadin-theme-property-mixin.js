@@ -1,14 +1,8 @@
-<script>
-  /**
-   * @namespace Vaadin
-   */
-  window.Vaadin = window.Vaadin || {};
-
-  /**
-   * @polymerMixin
-   * @memberof Vaadin
-   */
-  Vaadin.ThemePropertyMixin = superClass => class VaadinThemePropertyMixin extends superClass {
+/**
+ * @polymerMixin
+ */
+export const ThemePropertyMixin = (superClass) =>
+  class VaadinThemePropertyMixin extends superClass {
     static get properties() {
       return {
         /**
@@ -44,4 +38,3 @@
       }
     }
   };
-</script>
