@@ -1,47 +1,41 @@
-<!--
+/**
 @license
 Copyright (c) 2017 Vaadin Ltd.
 This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
--->
+*/
 
-<script>
-(function() {
-  // We consider the keyboard to be active if the window has received a keydown
-  // event since the last mousedown event.
-  let keyboardActive = false;
+// We consider the keyboard to be active if the window has received a keydown
+// event since the last mousedown event.
+let keyboardActive = false;
 
-  // Listen for top-level keydown and mousedown events.
-  // Use capture phase so we detect events even if they're handled.
-  window.addEventListener(
-    'keydown',
-    () => {
-      keyboardActive = true;
-    },
-    {capture: true}
-  );
+// Listen for top-level keydown and mousedown events.
+// Use capture phase so we detect events even if they're handled.
+window.addEventListener(
+  'keydown',
+  () => {
+    keyboardActive = true;
+  },
+  { capture: true }
+);
 
-  window.addEventListener(
-    'mousedown',
-    () => {
-      keyboardActive = false;
-    },
-    {capture: true}
-  );
+window.addEventListener(
+  'mousedown',
+  () => {
+    keyboardActive = false;
+  },
+  { capture: true }
+);
 
-  /**
-   * @namespace Vaadin
-   */
-  window.Vaadin = window.Vaadin || {};
-
-  /**
-   * A private mixin to avoid problems with dynamic properties and Polymer Analyzer.
-   * No need to expose these properties in the API docs.
-   * @polymerMixin
-   * @private
-   */
-  const TabIndexMixin = superClass => class VaadinTabIndexMixin extends superClass {
+/**
+ * A private mixin to avoid problems with dynamic properties and Polymer Analyzer.
+ * No need to expose these properties in the API docs.
+ * @polymerMixin
+ * @private
+ */
+const TabIndexMixin = (superClass) =>
+  class VaadinTabIndexMixin extends superClass {
     static get properties() {
-      var properties = {
+      return {
         /**
          * Internal property needed to listen to `tabindex` attribute changes.
          *
@@ -55,23 +49,16 @@ This program is available under Apache License Version 2.0, available at https:/
           observer: '_tabindexChanged'
         }
       };
-
-      if (window.ShadyDOM) {
-        // ShadyDOM browsers need the `tabIndex` in order to notify when the user changes it programmatically.
-        properties['tabIndex'] = properties.tabindex;
-      }
-
-      return properties;
     }
   };
 
-  /**
-   * Polymer.IronControlState is not a proper 2.0 class, also, its tabindex
-   * implementation fails in the shadow dom, so we have this for vaadin elements.
-   * @polymerMixin
-   * @memberof Vaadin
-   */
-  Vaadin.ControlStateMixin = superClass => class VaadinControlStateMixin extends TabIndexMixin(superClass) {
+/**
+ * Polymer.IronControlState is not a proper 2.0 class, also, its tabindex
+ * implementation fails in the shadow dom, so we have this for vaadin elements.
+ * @polymerMixin
+ */
+export const ControlStateMixin = (superClass) =>
+  class VaadinControlStateMixin extends TabIndexMixin(superClass) {
     static get properties() {
       return {
         /**
@@ -111,7 +98,7 @@ This program is available under Apache License Version 2.0, available at https:/
      * @protected
      */
     ready() {
-      this.addEventListener('focusin', e => {
+      this.addEventListener('focusin', (e) => {
         if (e.composedPath()[0] === this) {
           // Only focus if the focus is received from somewhere outside
           if (!this.contains(e.relatedTarget)) {
@@ -121,7 +108,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this._setFocused(true);
         }
       });
-      this.addEventListener('focusout', e => this._setFocused(false));
+      this.addEventListener('focusout', () => this._setFocused(false));
 
       // In super.ready() other 'focusin' and 'focusout' listeners might be
       // added, so we call it after our own ones to ensure they execute first.
@@ -129,51 +116,14 @@ This program is available under Apache License Version 2.0, available at https:/
       // input field on iOS after “Done” is pressed.
       super.ready();
 
-      // This fixes the bug in Firefox 61 (https://bugzilla.mozilla.org/show_bug.cgi?id=1472887)
-      // where focusout event does not go out of shady DOM because composed property in the event is not true
-      const ensureEventComposed = e => {
-        if (!e.composed) {
-          e.target.dispatchEvent(new CustomEvent(e.type, {
-            bubbles: true,
-            composed: true,
-            cancelable: false
-          }));
-        }
-      };
-      this.shadowRoot.addEventListener('focusin', ensureEventComposed);
-      this.shadowRoot.addEventListener('focusout', ensureEventComposed);
-
-      this.addEventListener('keydown', e => {
-        if (!e.defaultPrevented && e.keyCode === 9) {
-          if (e.shiftKey) {
-            // Flag is checked in _focus event handler.
-            this._isShiftTabbing = true;
-            HTMLElement.prototype.focus.apply(this);
-            this._setFocused(false);
-            // Event handling in IE is asynchronous and the flag is removed asynchronously as well
-            setTimeout(() => this._isShiftTabbing = false, 0);
-          } else {
-            // Workaround for FF63-65 bug that causes the focus to get lost when
-            // blurring a slotted component with focusable shadow root content
-            // https://bugzilla.mozilla.org/show_bug.cgi?id=1528686
-            // TODO: Remove when safe
-            const firefox = window.navigator.userAgent.match(/Firefox\/(\d\d\.\d)/);
-            if (firefox
-              && parseFloat(firefox[1]) >= 63
-              && parseFloat(firefox[1]) < 66
-              && this.parentNode
-              && this.nextSibling) {
-              const fakeTarget = document.createElement('input');
-              fakeTarget.style.position = 'absolute';
-              fakeTarget.style.opacity = '0';
-              fakeTarget.tabIndex = this.tabIndex;
-
-              this.parentNode.insertBefore(fakeTarget, this.nextSibling);
-              fakeTarget.focus();
-              fakeTarget.addEventListener('focusout', () => this.parentNode.removeChild(fakeTarget));
-            }
-          }
-
+      this.addEventListener('keydown', (e) => {
+        if (!e.defaultPrevented && e.keyCode === 9 && e.shiftKey) {
+          // Flag is checked in _focus event handler.
+          this._isShiftTabbing = true;
+          HTMLElement.prototype.focus.apply(this);
+          this._setFocused(false);
+          // Event handling in IE is asynchronous and the flag is removed asynchronously as well
+          setTimeout(() => (this._isShiftTabbing = false), 0);
         }
       });
 
@@ -302,10 +252,6 @@ This program is available under Apache License Version 2.0, available at https:/
         }
         this.tabindex = tabindex = undefined;
       }
-
-      if (window.ShadyDOM) {
-        this.setProperties({tabIndex: tabindex, tabindex: tabindex});
-      }
     }
 
     /**
@@ -317,5 +263,3 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
   };
-})();
-</script>
