@@ -1,24 +1,20 @@
-<!--
-@license
-Copyright (c) 2017 Vaadin Ltd.
-This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
--->
-<link rel="import" href="../polymer/lib/utils/flattened-nodes-observer.html">
-<link rel="import" href="../vaadin-element-mixin/vaadin-dir-helper.html">
+/**
+ * @license
+ * Copyright (c) 2021 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
+import { DirHelper } from '@vaadin/vaadin-element-mixin/vaadin-dir-helper.js';
+import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
+import { timeOut } from '@polymer/polymer/lib/utils/async.js';
 
-<script>
-  /**
-   * @namespace Vaadin
-   */
-  window.Vaadin = window.Vaadin || {};
-
-  /**
-   * A mixin for `nav` elements, facilitating navigation and selection of childNodes.
-   *
-   * @polymerMixin
-   * @memberof Vaadin
-   */
-  Vaadin.ListMixin = superClass => class VaadinListMixin extends superClass {
+/**
+ * A mixin for `nav` elements, facilitating navigation and selection of childNodes.
+ *
+ * @polymerMixin
+ */
+export const ListMixin = (superClass) =>
+  class VaadinListMixin extends superClass {
     static get properties() {
       return {
         /**
@@ -87,10 +83,10 @@ This program is available under Apache License Version 2.0, available at https:/
     /** @protected */
     ready() {
       super.ready();
-      this.addEventListener('keydown', e => this._onKeydown(e));
-      this.addEventListener('click', e => this._onClick(e));
+      this.addEventListener('keydown', (e) => this._onKeydown(e));
+      this.addEventListener('click', (e) => this._onClick(e));
 
-      this._observer = new Polymer.FlattenedNodesObserver(this, info => {
+      this._observer = new FlattenedNodesObserver(this, () => {
         this._setItems(this._filterItems(Array.from(this.children)));
       });
     }
@@ -100,15 +96,14 @@ This program is available under Apache License Version 2.0, available at https:/
       if (!disabled) {
         if (items) {
           this.setAttribute('aria-orientation', orientation || 'vertical');
-          this.items.forEach(item => {
+          this.items.forEach((item) => {
             orientation ? item.setAttribute('orientation', orientation) : item.removeAttribute('orientation');
-            item.updateStyles();
           });
 
           this._setFocusable(selected);
 
           const itemToSelect = items[selected];
-          items.forEach(item => item.selected = item === itemToSelect);
+          items.forEach((item) => (item.selected = item === itemToSelect));
           if (itemToSelect && !itemToSelect.disabled) {
             this._scrollToItem(selected);
           }
@@ -129,7 +124,7 @@ This program is available under Apache License Version 2.0, available at https:/
      * @protected
      */
     _filterItems(array) {
-      return array.filter(e => e._hasVaadinItemMixin);
+      return array.filter((e) => e._hasVaadinItemMixin);
     }
 
     /**
@@ -143,7 +138,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
       const item = this._filterItems(event.composedPath())[0];
       let idx;
-      if (item && !item.disabled && ((idx = this.items.indexOf(item)) >= 0)) {
+      if (item && !item.disabled && (idx = this.items.indexOf(item)) >= 0) {
         this.selected = idx;
       }
     }
@@ -155,17 +150,25 @@ This program is available under Apache License Version 2.0, available at https:/
      * @protected
      */
     _searchKey(currentIdx, key) {
-      this._searchReset = Polymer.Debouncer.debounce(
-        this._searchReset,
-        Polymer.Async.timeOut.after(500),
-        () => this._searchBuf = ''
-      );
+      this._searchReset = Debouncer.debounce(this._searchReset, timeOut.after(500), () => (this._searchBuf = ''));
       this._searchBuf += key.toLowerCase();
       const increment = 1;
-      const condition = item => !(item.disabled || this._isItemHidden(item)) &&
-        item.textContent.replace(/[^a-zA-Z0-9]/g, '').toLowerCase().indexOf(this._searchBuf) === 0;
+      const condition = (item) =>
+        !(item.disabled || this._isItemHidden(item)) &&
+        item.textContent
+          .replace(/[^a-zA-Z0-9]/g, '')
+          .toLowerCase()
+          .indexOf(this._searchBuf) === 0;
 
-      if (!this.items.some(item => item.textContent.replace(/[^a-zA-Z0-9]/g, '').toLowerCase().indexOf(this._searchBuf) === 0)) {
+      if (
+        !this.items.some(
+          (item) =>
+            item.textContent
+              .replace(/[^a-zA-Z0-9]/g, '')
+              .toLowerCase()
+              .indexOf(this._searchBuf) === 0
+        )
+      ) {
         this._searchBuf = key.toLowerCase();
       }
 
@@ -190,8 +193,7 @@ This program is available under Apache License Version 2.0, available at https:/
         return;
       }
 
-      // IE names for arrows do not include the Arrow prefix
-      const key = event.key.replace(/^Arrow/, '');
+      const key = event.key;
 
       const currentIdx = this.items.indexOf(this.focused);
 
@@ -203,15 +205,15 @@ This program is available under Apache License Version 2.0, available at https:/
         return;
       }
 
-      const condition = item => !(item.disabled || this._isItemHidden(item));
+      const condition = (item) => !(item.disabled || this._isItemHidden(item));
       let idx, increment;
 
       const dirIncrement = this._isRTL ? -1 : 1;
 
-      if (this._vertical && key === 'Up' || !this._vertical && key === 'Left') {
+      if ((this._vertical && key === 'ArrowUp') || (!this._vertical && key === 'ArrowLeft')) {
         increment = -dirIncrement;
         idx = currentIdx - dirIncrement;
-      } else if (this._vertical && key === 'Down' || !this._vertical && key === 'Right') {
+      } else if ((this._vertical && key === 'ArrowDown') || (!this._vertical && key === 'ArrowRight')) {
         increment = dirIncrement;
         idx = currentIdx + dirIncrement;
       } else if (key === 'Home') {
@@ -238,7 +240,7 @@ This program is available under Apache License Version 2.0, available at https:/
      */
     _getAvailableIndex(idx, increment, condition) {
       const totalItems = this.items.length;
-      for (let i = 0; typeof idx == 'number' && i < totalItems; i++, idx += (increment || 1)) {
+      for (let i = 0; typeof idx == 'number' && i < totalItems; i++, idx += increment || 1) {
         if (idx < 0) {
           idx = totalItems - 1;
         } else if (idx >= totalItems) {
@@ -268,9 +270,9 @@ This program is available under Apache License Version 2.0, available at https:/
      * @protected
      */
     _setFocusable(idx) {
-      idx = this._getAvailableIndex(idx, 1, item => !item.disabled);
+      idx = this._getAvailableIndex(idx, 1, (item) => !item.disabled);
       const item = this.items[idx] || this.items[0];
-      this.items.forEach(e => e.tabIndex = e === item ? 0 : -1);
+      this.items.forEach((e) => (e.tabIndex = e === item ? 0 : -1));
     }
 
     /**
@@ -279,7 +281,7 @@ This program is available under Apache License Version 2.0, available at https:/
      */
     _focus(idx) {
       const item = this.items[idx];
-      this.items.forEach(e => e.focused = e === item);
+      this.items.forEach((e) => (e.focused = e === item));
       this._setFocusable(idx);
       this._scrollToItem(idx);
       item.focus();
@@ -298,6 +300,8 @@ This program is available under Apache License Version 2.0, available at https:/
      */
     get _scrollerElement() {
       // Returning scroller element of the component
+      console.warn(`Please implement the '_scrollerElement' property in <${this.localName}>`);
+      return this;
     }
 
     /**
@@ -311,19 +315,22 @@ This program is available under Apache License Version 2.0, available at https:/
         return;
       }
 
-      const props = this._vertical ? ['top', 'bottom'] :
-        this._isRTL ? ['right', 'left'] : ['left', 'right'];
+      const props = this._vertical ? ['top', 'bottom'] : this._isRTL ? ['right', 'left'] : ['left', 'right'];
 
       const scrollerRect = this._scrollerElement.getBoundingClientRect();
       const nextItemRect = (this.items[idx + 1] || item).getBoundingClientRect();
       const prevItemRect = (this.items[idx - 1] || item).getBoundingClientRect();
 
       let scrollDistance = 0;
-      if (!this._isRTL && nextItemRect[props[1]] >= scrollerRect[props[1]] ||
-        this._isRTL && nextItemRect[props[1]] <= scrollerRect[props[1]]) {
+      if (
+        (!this._isRTL && nextItemRect[props[1]] >= scrollerRect[props[1]]) ||
+        (this._isRTL && nextItemRect[props[1]] <= scrollerRect[props[1]])
+      ) {
         scrollDistance = nextItemRect[props[1]] - scrollerRect[props[1]];
-      } else if (!this._isRTL && prevItemRect[props[0]] <= scrollerRect[props[0]] ||
-        this._isRTL && prevItemRect[props[0]] >= scrollerRect[props[0]]) {
+      } else if (
+        (!this._isRTL && prevItemRect[props[0]] <= scrollerRect[props[0]]) ||
+        (this._isRTL && prevItemRect[props[0]] >= scrollerRect[props[0]])
+      ) {
         scrollDistance = prevItemRect[props[0]] - scrollerRect[props[0]];
       }
 
@@ -346,11 +353,10 @@ This program is available under Apache License Version 2.0, available at https:/
       if (this._vertical) {
         this._scrollerElement['scrollTop'] += pixels;
       } else {
-        const scrollType = Vaadin.DirHelper.detectScrollType();
-        const scrollLeft = Vaadin.DirHelper.getNormalizedScrollLeft(scrollType,
-          this.getAttribute('dir') || 'ltr', this._scrollerElement) + pixels;
-        Vaadin.DirHelper.setNormalizedScrollLeft(scrollType,
-          this.getAttribute('dir') || 'ltr', this._scrollerElement, scrollLeft);
+        const dir = this.getAttribute('dir') || 'ltr';
+        const scrollType = DirHelper.detectScrollType();
+        const scrollLeft = DirHelper.getNormalizedScrollLeft(scrollType, dir, this._scrollerElement) + pixels;
+        DirHelper.setNormalizedScrollLeft(scrollType, dir, this._scrollerElement, scrollLeft);
       }
     }
 
@@ -363,4 +369,3 @@ This program is available under Apache License Version 2.0, available at https:/
      * @param {Object} detail.value the index of the item selected in the items array.
      */
   };
-</script>

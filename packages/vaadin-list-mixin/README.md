@@ -1,36 +1,29 @@
-![Bower version](https://img.shields.io/bower/v/vaadin-list-mixin.svg)
-[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/vaadin/vaadin-list-mixin)
-[![Build Status](https://travis-ci.org/vaadin/vaadin-list-mixin.svg?branch=master)](https://travis-ci.org/vaadin/vaadin-list-mixin)
-[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/vaadin/web-components?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
-
 # vaadin-list-mixin
+
 `vaadin-list-mixin` is a mixin for `nav` elements, facilitating navigation and selection of childNodes.
+
+[![npm version](https://badgen.net/npm/v/@vaadin/vaadin-list-mixin)](https://www.npmjs.com/package/@vaadin/vaadin-list-mixin)
+[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ## Running tests in browser
 
 1. Fork the `vaadin-list-mixin` repository and clone it locally.
 
-1. Make sure you have [npm](https://www.npmjs.com/) and [Bower](https://bower.io) installed.
+1. Make sure you have [npm](https://www.npmjs.com/).
 
-1. When in the `vaadin-list-mixin` directory, run `npm install` and then `bower install` to install dependencies.
+1. When in the `vaadin-list-mixin` directory, run `npm install` to install dependencies.
 
-1. Make sure you have [polymer-cli](https://www.npmjs.com/package/polymer-cli) installed globally: `npm i -g polymer-cli`.
-
-1. Run `npm start`.
-
-1. Navigate to http://127.0.0.1:3000/components/vaadin-list-mixin/test/index.html
+1. Run `npm test` to start the tests in Chrome.
 
 
-## Running tests from the command line
+## Debugging tests in browser
 
-1. Install [web-component-tester](https://www.npmjs.com/package/web-component-tester): `npm install -g web-component-tester`
-
-1. When in the `vaadin-list-mixin` directory, run `wct` or `npm test`
+1. Run `npm run debug`, then choose manual mode (M) and open the link in browser.
 
 
 ## Following the coding style
 
-We are using [ESLint](http://eslint.org/) for linting JavaScript code. You can check if your code is following our standards by running `npm run lint`, which will automatically lint all `.js` files as well as JavaScript snippets inside `.html` files.
+We are using [ESLint](http://eslint.org/) for linting JavaScript code. You can check if your code is following our standards by running `npm run lint`, which will automatically lint all `.js` files.
 
 
 ## Contributing
