@@ -16,6 +16,7 @@ vaadin-date-picker
 vaadin-date-time-picker
 vaadin-details
 vaadin-dialog
+vaadin-element-mixin
 vaadin-form-layout
 vaadin-grid
 vaadin-grid-pro

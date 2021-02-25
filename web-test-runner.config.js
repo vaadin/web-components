@@ -11,12 +11,12 @@ module.exports = {
   testsStartTimeout: 60000, // default 10000
   testsFinishTimeout: 60000, // default 20000
   coverageConfig: {
-    include: ['packages/**/src/*'],
+    include: ['packages/**/src/*', 'packages/**/*.js'],
     threshold: {
-      statements: 98,
+      statements: 95,
       branches: 59,
-      functions: 96,
-      lines: 98
+      functions: 93,
+      lines: 95
     }
   },
   testFramework: {
@@ -36,16 +36,18 @@ module.exports = {
           }
         </style>
         <script>
-          // mimic flow production mode
-          window.Vaadin = {
-            Flow: {
-              clients: {
-                ROOT: {
-                  productionMode: true
-                }
-              }
-            }
-          };
+          /* Force development mode for element-mixin */
+          localStorage.setItem('vaadin.developmentmode.force', true);
+
+          /* Prevent license checker popup for Pro */
+          const now = new Date().getTime();
+          localStorage.setItem('vaadin.licenses.vaadin-board.lastCheck', now);
+          localStorage.setItem('vaadin.licenses.vaadin-charts.lastCheck', now);
+          localStorage.setItem('vaadin.licenses.vaadin-confirm-dialog.lastCheck', now);
+          localStorage.setItem('vaadin.licenses.vaadin-cookie-consent.lastCheck', now);
+          localStorage.setItem('vaadin.licenses.vaadin-crud.lastCheck', now);
+          localStorage.setItem('vaadin.licenses.vaadin-grid-pro.lastCheck', now);
+          localStorage.setItem('vaadin.licenses.vaadin-rich-text-editor.lastCheck', now);
         </script>
         <script type="module" src="${testFramework}"></script>
       </body>

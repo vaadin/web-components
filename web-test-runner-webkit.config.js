@@ -29,16 +29,18 @@ module.exports = {
           }
         </style>
         <script>
-          // mimic flow production mode
-          window.Vaadin = {
-            Flow: {
-              clients: {
-                ROOT: {
-                  productionMode: true
-                }
-              }
-            }
-          };
+          /* Force development mode for element-mixin */
+          localStorage.setItem('vaadin.developmentmode.force', true);
+
+          /* Prevent license checker popup for Pro */
+          const now = new Date().getTime();
+          localStorage.setItem('vaadin.licenses.vaadin-board.lastCheck', now);
+          localStorage.setItem('vaadin.licenses.vaadin-charts.lastCheck', now);
+          localStorage.setItem('vaadin.licenses.vaadin-confirm-dialog.lastCheck', now);
+          localStorage.setItem('vaadin.licenses.vaadin-cookie-consent.lastCheck', now);
+          localStorage.setItem('vaadin.licenses.vaadin-crud.lastCheck', now);
+          localStorage.setItem('vaadin.licenses.vaadin-grid-pro.lastCheck', now);
+          localStorage.setItem('vaadin.licenses.vaadin-rich-text-editor.lastCheck', now);
         </script>
         <script type="module" src="${testFramework}"></script>
       </body>
