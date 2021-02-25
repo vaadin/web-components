@@ -21,6 +21,7 @@ vaadin-grid
 vaadin-grid-pro
 vaadin-item
 vaadin-list-box
+vaadin-list-mixin
 vaadin-login
 vaadin-menu-bar
 vaadin-notification
@@ -33,5 +34,6 @@ vaadin-select
 vaadin-split-layout
 vaadin-tabs
 vaadin-text-field
+vaadin-themable-mixin
 vaadin-time-picker
 vaadin-upload

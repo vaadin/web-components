@@ -1,0 +1,35 @@
+{
+  "name": "@vaadin/vaadin-list-mixin",
+  "version": "2.5.1",
+  "description": "vaadin-list-mixin",
+  "main": "vaadin-list-mixin.js",
+  "module": "vaadin-list-mixin.js",
+  "repository": "vaadin/vaadin-list-mixin",
+  "keywords": [
+    "Vaadin",
+    "vaadin-list-mixin",
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
+  "author": "Vaadin Ltd",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/vaadin/vaadin-list-mixin/issues"
+  },
+  "homepage": "https://vaadin.com/elements",
+  "files": [
+    "*.d.ts",
+    "vaadin-*.js"
+  ],
+  "dependencies": {
+    "@polymer/polymer": "^3.0.0",
+    "@vaadin/vaadin-element-mixin": "^2.4.1"
+  },
+  "devDependencies": {
+    "@esm-bundle/chai": "^4.1.5",
+    "@open-wc/testing-helpers": "^1.8.12",
+    "@polymer/iron-test-helpers": "^3.0.0",
+    "sinon": "^9.2.4"
+  }
+}
