@@ -1,40 +1,43 @@
-<link rel="import" href="vaadin-dir-helper.html">
+/**
+ * @license
+ * Copyright (c) 2021 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+import { DirHelper } from './vaadin-dir-helper.js';
 
-<script>
-(function() {
-  /**
-   * Array of Vaadin custom element classes that have been subscribed to the dir changes.
-   */
-  const directionSubscribers = [];
-  const directionUpdater = function() {
-    const documentDir = getDocumentDir();
-    directionSubscribers.forEach(element => {
-      alignDirs(element, documentDir);
-    });
-  };
+/**
+ * Array of Vaadin custom element classes that have been subscribed to the dir changes.
+ */
+const directionSubscribers = [];
+const directionUpdater = function () {
+  const documentDir = getDocumentDir();
+  directionSubscribers.forEach((element) => {
+    alignDirs(element, documentDir);
+  });
+};
 
-  let scrollType;
+let scrollType;
 
-  const directionObserver = new MutationObserver(directionUpdater);
-  directionObserver.observe(document.documentElement, {attributes: true, attributeFilter: ['dir']});
+const directionObserver = new MutationObserver(directionUpdater);
+directionObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['dir'] });
 
-  const alignDirs = function(element, documentDir) {
-    if (documentDir) {
-      element.setAttribute('dir', documentDir);
-    } else {
-      element.removeAttribute('dir');
-    }
-  };
+const alignDirs = function (element, documentDir) {
+  if (documentDir) {
+    element.setAttribute('dir', documentDir);
+  } else {
+    element.removeAttribute('dir');
+  }
+};
 
-  const getDocumentDir = function() {
-    return document.documentElement.getAttribute('dir');
-  };
+const getDocumentDir = function () {
+  return document.documentElement.getAttribute('dir');
+};
 
-  /**
-   * @polymerMixin
-   * @memberof Vaadin
-   */
-  Vaadin.DirMixin = superClass => class VaadinDirMixin extends superClass {
+/**
+ * @polymerMixin
+ */
+export const DirMixin = (superClass) =>
+  class VaadinDirMixin extends superClass {
     static get properties() {
       return {
         /**
@@ -52,7 +55,7 @@
       super.finalize();
 
       if (!scrollType) {
-        scrollType = Vaadin.DirHelper.detectScrollType();
+        scrollType = DirHelper.detectScrollType();
       }
     }
 
@@ -98,11 +101,9 @@
     /** @private */
     __subscribe(push = true) {
       if (push) {
-        directionSubscribers.indexOf(this) === -1 &&
-          directionSubscribers.push(this);
+        directionSubscribers.indexOf(this) === -1 && directionSubscribers.push(this);
       } else {
-        directionSubscribers.indexOf(this) > -1 &&
-          directionSubscribers.splice(directionSubscribers.indexOf(this), 1);
+        directionSubscribers.indexOf(this) > -1 && directionSubscribers.splice(directionSubscribers.indexOf(this), 1);
       }
     }
 
@@ -112,7 +113,7 @@
      * @protected
      */
     __getNormalizedScrollLeft(element) {
-      return Vaadin.DirHelper.getNormalizedScrollLeft(scrollType, this.getAttribute('dir') || 'ltr', element);
+      return DirHelper.getNormalizedScrollLeft(scrollType, this.getAttribute('dir') || 'ltr', element);
     }
 
     /**
@@ -121,8 +122,6 @@
      * @protected
      */
     __setNormalizedScrollLeft(element, scrollLeft) {
-      return Vaadin.DirHelper.setNormalizedScrollLeft(scrollType, this.getAttribute('dir') || 'ltr', element, scrollLeft);
+      return DirHelper.setNormalizedScrollLeft(scrollType, this.getAttribute('dir') || 'ltr', element, scrollLeft);
     }
   };
-})();
-</script>

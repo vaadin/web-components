@@ -1,12 +1,5 @@
 {
-  "globals": {
-    "WCT": false,
-    "describe": false,
-    "before": false,
-    "beforeEach": false,
-    "fixture": false,
-    "it": false,
-    "expect": false,
-    "sinon": false
+  "env": {
+    "mocha": true
   }
 }

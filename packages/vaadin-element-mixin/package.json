@@ -2,7 +2,8 @@
   "name": "@vaadin/vaadin-element-mixin",
   "version": "2.4.2",
   "description": "vaadin-element-mixin",
-  "main": "vaadin-element-mixin.html",
+  "main": "vaadin-element-mixin.js",
+  "module": "vaadin-element-mixin.js",
   "repository": "vaadin/vaadin-element-mixin",
   "keywords": [
     "Vaadin",
@@ -21,19 +22,39 @@
     "vaadin-*.d.ts",
     "vaadin-*.js"
   ],
+  "scripts": {
+    "debug": "web-test-runner test/*.test.js --watch",
+    "lint": "eslint vaadin-*.js test",
+    "test": "web-test-runner test/*.test.js --coverage",
+    "test:sauce": "TEST_ENV=sauce npm test"
+  },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint"
+      "pre-commit": "lint-staged"
     }
   },
-  "scripts": {
-    "lint": "npm-run-all --parallel lint:*",
-    "lint:css": "stylelint *.html test/*html",
-    "lint:html": "eslint *.html test --ext .html",
-    "lint:js": "eslint *.js",
-    "lint:polymer": "polymer lint --rules polymer-2 --input *.html"
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  },
+  "dependencies": {
+    "@polymer/polymer": "^3.0.0",
+    "@vaadin/vaadin-usage-statistics": "^2.1.0",
+    "@vaadin/vaadin-development-mode-detector": "^2.0.0"
   },
   "devDependencies": {
-    "@vaadin/vaadin-component-dev-dependencies": "^3.0.0"
+    "@esm-bundle/chai": "^4.1.5",
+    "@open-wc/testing-helpers": "^1.8.12",
+    "@web/test-runner": "^0.12.7",
+    "@web/test-runner-saucelabs": "^0.4.1",
+    "eslint": "^7.18.0",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "husky": "^4.3.0",
+    "lint-staged": "^10.5.1",
+    "prettier": "^2.2.0",
+    "sinon": "^9.2.4"
   }
 }
