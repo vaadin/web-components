@@ -45,3 +45,5 @@ do
 done
 
 node scripts/updateTests.js
+
+node scripts/updateCopyright.js
