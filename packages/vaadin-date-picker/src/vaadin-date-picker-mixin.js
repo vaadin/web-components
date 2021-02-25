@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2020 Vaadin Ltd.
+ * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { IronA11yKeysBehavior } from '@polymer/iron-a11y-keys-behavior/iron-a11y-keys-behavior.js';
