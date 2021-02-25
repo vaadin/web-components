@@ -12,10 +12,18 @@ yarn
 yarn test
 ```
 
-## Run all tests in Playwright
+Note: this and following scripts only run tests for packages changed since `origin/master` branch.
+
+## Run all tests in Firefox
 
 ```sh
-yarn test:playwright
+yarn test:firefox
+```
+
+## Run all tests in WebKit
+
+```sh
+yarn test:webkit
 ```
 
 ## Run tests for single package
