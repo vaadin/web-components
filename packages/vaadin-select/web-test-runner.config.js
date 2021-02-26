@@ -3,7 +3,9 @@ const { createSauceLabsLauncher } = require('@web/test-runner-saucelabs');
 
 const config = {
   nodeResolve: true,
-  testsFinishTimeout: 60000,
+  browserStartTimeout: 120000, // default 30000
+  testsStartTimeout: 60000, // default 10000
+  testsFinishTimeout: 60000, // default 20000
   coverageConfig: {
     include: ['**/src/*'],
     threshold: {
@@ -16,38 +18,36 @@ const config = {
 };
 
 if (process.env.TEST_ENV === 'sauce') {
-  const sauceLabsLauncher = createSauceLabsLauncher({
-    user: process.env.SAUCE_USERNAME,
-    key: process.env.SAUCE_ACCESS_KEY
-  });
-
-  const sharedCapabilities = {
-    'sauce:options': {
+  const sauceLabsLauncher = createSauceLabsLauncher(
+    {
+      user: process.env.SAUCE_USERNAME,
+      key: process.env.SAUCE_ACCESS_KEY
+    },
+    {
       name: 'vaadin-select unit tests',
-      build: `${process.env.GITHUB_REF || 'local'} build ${process.env.GITHUB_RUN_NUMBER || ''}`
+      build: `${process.env.GITHUB_REF || 'local'} build ${process.env.GITHUB_RUN_NUMBER || ''}`,
+      recordScreenshots: false,
+      recordVideo: false
     }
-  };
+  );
 
-  config.concurrency = 2;
+  config.concurrency = 1;
   config.browsers = [
     sauceLabsLauncher({
-      ...sharedCapabilities,
       browserName: 'firefox',
-      platform: 'Windows 10',
+      platformName: 'Windows 10',
       browserVersion: 'latest'
     }),
     sauceLabsLauncher({
-      ...sharedCapabilities,
       browserName: 'safari',
-      platform: 'macOS 10.15',
+      platformName: 'macOS 10.15',
       browserVersion: '13.1'
+    }),
+    sauceLabsLauncher({
+      browserName: 'iphone',
+      platform: 'iPhone X Simulator',
+      version: '14.0'
     })
-    // sauceLabsLauncher({
-    //   ...sharedCapabilities,
-    //   browserName: 'safari',
-    //   platform: 'iOS Simulator',
-    //   browserVersion: '13.1'
-    // })
   ];
 }
 
