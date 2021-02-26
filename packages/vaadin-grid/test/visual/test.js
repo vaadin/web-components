@@ -6,21 +6,21 @@ describe('vaadin-grid', () => {
       it(`header-footer-${theme}-${direction}`, function () {
         return this.browser
           .url(`header-footer.html?theme=${theme}&dir=${direction}`)
-          .waitForVisible(locator, 10000)
+          .waitForVisible(locator, 15000)
           .assertView(`${theme}-header-footer-${direction}`, locator);
       });
 
       it(`column-groups-${theme}-${direction}`, function () {
         return this.browser
           .url(`column-groups.html?theme=${theme}&dir=${direction}`)
-          .waitForVisible(locator, 10000)
+          .waitForVisible(locator, 15000)
           .assertView(`${theme}-column-groups-${direction}`, locator);
       });
 
       it(`row-details-${theme}-${direction}`, function () {
         return this.browser
           .url(`row-details.html?theme=${theme}&dir=${direction}`)
-          .waitForVisible(locator, 10000)
+          .waitForVisible(locator, 15000)
           .assertView(`${theme}-row-details-collapsed-${direction}`, locator)
           .execute(() => {
             const grid = window.document.querySelector('vaadin-grid');
@@ -32,7 +32,7 @@ describe('vaadin-grid', () => {
       it(`sorting-${theme}-${direction}`, function () {
         return this.browser
           .url(`sorting.html?theme=${theme}&dir=${direction}`)
-          .waitForVisible(locator, 10000)
+          .waitForVisible(locator, 15000)
           .assertView(`${theme}-sorting-initial-${direction}`, locator)
           .click('#first-name-sorter')
           .assertView(`${theme}-sorting-single-asc-${direction}`, locator)
@@ -49,7 +49,7 @@ describe('vaadin-grid', () => {
     it(`drag-and-drop-${theme}`, function () {
       return this.browser
         .url(`drag-and-drop.html?theme=${theme}`)
-        .waitForVisible(locator, 10000)
+        .waitForVisible(locator, 15000)
         .execute(() => {
           const grid = window.document.querySelector('vaadin-grid');
           grid.setAttribute('dragover', '');
