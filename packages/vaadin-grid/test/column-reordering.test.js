@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { aTimeout, fixtureSync, nextFrame } from '@open-wc/testing-helpers';
-import '@polymer/polymer/lib/elements/dom-repeat.js';
 import { flush } from '@polymer/polymer/lib/utils/flush.js';
 import {
   dragAndDropOver,
@@ -62,16 +61,15 @@ describe('reordering simple grid', () => {
   beforeEach(async () => {
     grid = fixtureSync(`
       <vaadin-grid style="width: 400px; height: 200px;" size="1" column-reordering-allowed>
-        <dom-repeat items="[1, 2, 3, 4]" as="col">
-          <template is="dom-repeat" items="[1, 2, 3, 4]" as="col">
-            <vaadin-grid-column resizable index$="[[col]]">
-              <template class="header"><span hidden>0</span><span>[[col]]</span></template>
-              <template>[[col]]</template>
-              <template class="footer">[[col]]</template>
+        ${[1, 2, 3, 4].map((col) => {
+          return `
+            <vaadin-grid-column resizable index="${col}">
+              <template class="header"><span hidden>0</span><span>${col}</span></template>
+              <template>${col}</template>
+              <template class="footer">${col}</template>
             </vaadin-grid-column>
-          </template>
-        </dom-repeat>
-
+          `;
+        })}
         <template class="row-details">
           foo
         </template>
@@ -348,23 +346,23 @@ describe('reordering grid with columns groups', () => {
   beforeEach(async () => {
     grid = fixtureSync(`
       <vaadin-grid style="width: 400px; height: 200px;" size="1" column-reordering-allowed>
-        <dom-repeat is="dom-repeat" items="[1, 2]" as="colgroup">
-          <template>
+        ${[1, 2].map((colgroup) => {
+          return `
             <vaadin-grid-column-group>
-              <template class="header">[[colgroup]]</template>
-              <template class="footer">[[colgroup]]</template>
-              <dom-repeat is="dom-repeat" items="[1, 2]" as="col">
-                <template>
+              <template class="header">${colgroup}</template>
+              <template class="footer">${colgroup}</template>
+              ${[1, 2].map((col) => {
+                return `
                   <vaadin-grid-column>
-                    <template class="header">[[colgroup]][[col]]</template>
-                    <template>[[colgroup]][[col]]</template>
-                    <template class="footer">[[colgroup]][[col]]</template>
+                    <template class="header">${colgroup}${col}</template>
+                    <template>${colgroup}${col}</template>
+                    <template class="footer">${colgroup}${col}</template>
                   </vaadin-grid-column>
-                </template>
-              </dom-repeat>
+                `;
+              })}
             </vaadin-grid-column-group>
-          </template>
-        </dom-repeat>
+          `;
+        })}
       </vaadin-grid>
     `);
     grid.dataProvider = infiniteDataProvider;
@@ -485,15 +483,15 @@ describe('large column group', () => {
     grid = fixtureSync(`
       <vaadin-grid style="width: 400px; height: 200px;" size="1" column-reordering-allowed>
         <vaadin-grid-column-group>
-          <dom-repeat items="[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]" as="col">
-            <template is="dom-repeat" items="[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]" as="col">
+          ${[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((col) => {
+            return `
               <vaadin-grid-column width="10px">
-                <template class="header">[[col]]</template>
-                <template>[[col]]</template>
-                <template class="footer">[[col]]</template>
+                <template class="header">${col}</template>
+                <template>${col}</template>
+                <template class="footer">${col}</template>
               </vaadin-grid-column>
-            </template>
-          </dom-repeat>
+            `;
+          })}
         </vaadin-grid-column-group>
         <vaadin-grid-column width="10px">
           <template class="header">12</template>
@@ -518,21 +516,21 @@ describe('reordering with draggable contents', () => {
   beforeEach(async () => {
     grid = fixtureSync(`
       <vaadin-grid style="width: 400px; height: 200px;" size="1" column-reordering-allowed>
-        <dom-repeat items="[1, 2]" as="col">
-          <template is="dom-repeat" items="[1, 2]" as="col">
+        ${[1, 2].map((col) => {
+          return `
             <vaadin-grid-column resizable>
               <template class="header">
-                <div draggable="true">[[col]]</div>
+                <div draggable="true">${col}</div>
               </template>
               <template>
-                <div draggable="true">[[col]]</div>
+                <div draggable="true">${col}</div>
               </template>
               <template class="footer">
-                <div draggable="true">[[col]]</div>
+                <div draggable="true">${col}</div>
               </template>
             </vaadin-grid-column>
-          </template>
-        </dom-repeat>
+          `;
+        })}
       </vaadin-grid>
     `);
     grid.dataProvider = infiniteDataProvider;
