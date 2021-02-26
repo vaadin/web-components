@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { fixtureSync } from '@open-wc/testing-helpers';
 import { keyDownOn } from '@polymer/iron-test-helpers/mock-interactions.js';
-import { flushGrid, getBodyCellContent, getCell, getContainerCell, listenOnce } from './helpers.js';
+import { flushGrid, getBodyCellContent, getCell, getContainerCell, isIOS } from './helpers.js';
 import '../vaadin-grid.js';
 
 function getHeaderCell(grid, index = 0) {
@@ -146,26 +146,29 @@ describe('renderers', () => {
     });
 
     describe('cell-activate', () => {
-      it('should fire a `cell-activate` event with the appropriate model when cell is clicked', (done) => {
-        listenOnce(grid, 'cell-activate', (e) => {
-          expect(e.detail.model.index).to.eql(0);
-          expect(e.detail.model.item).to.be.ok;
-          done();
-        });
-        getCell(grid, 0)._content.click();
+      let spy;
+
+      beforeEach(() => {
+        spy = sinon.spy();
+        grid.addEventListener('cell-activate', spy);
       });
 
-      it('should fire a `cell-activate` event with the appropriate model when pressing space', (done) => {
-        if (!grid._ios) {
-          listenOnce(grid, 'cell-activate', (e) => {
-            expect(e.detail.model.index).to.eql(0);
-            expect(e.detail.model.item).to.be.ok;
-            done();
-          });
-          keyDownOn(getCell(grid, 0) || grid.shadowRoot.activeElement, 32, [], ' ');
-        } else {
-          done();
-        }
+      it('should fire a `cell-activate` event with correct model on cell click', () => {
+        getCell(grid, 0)._content.click();
+        expect(spy.calledOnce).to.be.true;
+
+        const e = spy.firstCall.args[0];
+        expect(e.detail.model.index).to.eql(0);
+        expect(e.detail.model.item).to.be.ok;
+      });
+
+      (isIOS ? it.skip : it)('should fire a `cell-activate` event with correct model on space', () => {
+        keyDownOn(getCell(grid, 0) || grid.shadowRoot.activeElement, 32, [], ' ');
+        expect(spy.calledOnce).to.be.true;
+
+        const e = spy.firstCall.args[0];
+        expect(e.detail.model.index).to.eql(0);
+        expect(e.detail.model.item).to.be.ok;
       });
     });
   });

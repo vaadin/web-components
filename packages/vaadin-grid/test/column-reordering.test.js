@@ -11,7 +11,6 @@ import {
   getRows,
   getRowCells,
   infiniteDataProvider,
-  listenOnce,
   makeSoloTouchEvent
 } from './helpers.js';
 import '../vaadin-grid.js';
@@ -179,23 +178,31 @@ describe('reordering simple grid', () => {
     expect(e.defaultPrevented).to.be.false;
   });
 
-  it('should start reordering after 300ms after touchstart', (done) => {
-    const rect = headerContent[0].getBoundingClientRect();
-    makeSoloTouchEvent('touchstart', { x: rect.left, y: rect.top }, headerContent[0]);
-    setTimeout(() => {
-      expect(grid.hasAttribute('reordering')).to.be.true;
-      done();
-    }, 500);
-  });
+  describe('touch gesture delay', () => {
+    let clock;
 
-  it('should not start reordering after 300ms after touchstart', (done) => {
-    const rect = headerContent[0].getBoundingClientRect();
-    makeSoloTouchEvent('touchstart', { x: rect.left, y: rect.top }, headerContent[0]);
-    makeSoloTouchEvent('touchend', { x: 0, y: 0 }, headerContent[0]);
-    setTimeout(() => {
+    beforeEach(() => {
+      clock = sinon.useFakeTimers();
+    });
+
+    afterEach(() => {
+      clock.restore();
+    });
+
+    it('should start reordering after 300ms after touchstart', () => {
+      const rect = headerContent[0].getBoundingClientRect();
+      makeSoloTouchEvent('touchstart', { x: rect.left, y: rect.top }, headerContent[0]);
+      clock.tick(500);
+      expect(grid.hasAttribute('reordering')).to.be.true;
+    });
+
+    it('should not start reordering after 300ms after touchend', () => {
+      const rect = headerContent[0].getBoundingClientRect();
+      makeSoloTouchEvent('touchstart', { x: rect.left, y: rect.top }, headerContent[0]);
+      makeSoloTouchEvent('touchend', { x: 0, y: 0 }, headerContent[0]);
+      clock.tick(500);
       expect(grid.hasAttribute('reordering')).to.be.false;
-      done();
-    }, 500);
+    });
   });
 
   it('should not start reordering on resize handle move', () => {
@@ -292,13 +299,13 @@ describe('reordering simple grid', () => {
       expect(calls.length).to.equal(columnCount);
     });
 
-    it('should fire `column-reorder` event with columns', (done) => {
-      listenOnce(grid, 'column-reorder', (e) => {
-        expect(e.detail.columns.map((column) => column.getAttribute('index'))).to.eql(['2', '1', '3', '4']);
-        done();
-      });
-
+    it('should fire `column-reorder` event with columns', () => {
+      const spy = sinon.spy();
+      grid.addEventListener('column-reorder', spy);
       dragAndDropOver(headerContent[0], headerContent[1]);
+      expect(spy.calledOnce).to.be.true;
+      const e = spy.firstCall.args[0];
+      expect(e.detail.columns.map((column) => column.getAttribute('index'))).to.eql(['2', '1', '3', '4']);
     });
   });
 

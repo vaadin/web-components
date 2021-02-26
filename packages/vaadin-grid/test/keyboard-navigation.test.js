@@ -1103,7 +1103,7 @@ describe('keyboard navigation', () => {
         expect(grid.$.table.scrollLeft).to.equal(grid.$.table.scrollWidth - grid.$.table.offsetWidth);
       });
 
-      it('should scroll cell visible under from frozen cells with left arrow', (done) => {
+      it('should scroll cell visible under from frozen cells with left arrow', async () => {
         const scrollbarWidth = grid.$.table.offsetWidth - grid.$.table.clientWidth;
         grid.style.width = `${200 + scrollbarWidth}px`; // column default min width is 100px
         grid.style.border = 'none';
@@ -1112,25 +1112,18 @@ describe('keyboard navigation', () => {
         focusItem(0);
         right();
         right();
-
-        grid.async(() => {
-          left();
-          expect(grid.$.table.scrollLeft).to.equal(0);
-          done();
-        });
+        await aTimeout(0);
+        left();
+        expect(grid.$.table.scrollLeft).to.equal(0);
       });
 
-      it('should scroll cells visible with left arrow on footer', (done) => {
+      it('should scroll cells visible with left arrow on footer', async () => {
         focusFirstFooterCell();
         down();
         right();
-
-        setTimeout(() => {
-          left();
-
-          expect(grid.$.table.scrollLeft).to.equal(0);
-          done();
-        });
+        await aTimeout(0);
+        left();
+        expect(grid.$.table.scrollLeft).to.equal(0);
       });
     });
 
@@ -1188,16 +1181,14 @@ describe('keyboard navigation', () => {
         expect(getFocusedRowIndex()).to.equal(previousLastVisibleIndex - 1);
       });
 
-      it('should scroll up one page with page up', (done) => {
+      it('should scroll up one page with page up', async () => {
         focusItem(0);
         pageDown();
 
-        grid.async(() => {
-          pageUp();
+        await aTimeout(0);
+        pageUp();
 
-          expect(getFocusedRowIndex()).to.equal(0);
-          done();
-        });
+        expect(getFocusedRowIndex()).to.equal(0);
       });
 
       it('should scroll the focused item visible when focus is set to body', async () => {

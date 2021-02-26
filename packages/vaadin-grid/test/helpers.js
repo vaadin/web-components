@@ -286,3 +286,7 @@ export const fire = (type, detail, options) => {
   node.dispatchEvent(event);
   return event;
 };
+
+export const isIOS =
+  (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) ||
+  (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);

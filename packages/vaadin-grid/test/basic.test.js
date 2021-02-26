@@ -9,7 +9,6 @@ import {
   getCellContent,
   getFirstVisibleItem,
   infiniteDataProvider,
-  listenOnce,
   scrollToEnd
 } from './helpers.js';
 import '@polymer/iron-list/iron-list.js';
@@ -68,14 +67,11 @@ describe('basic features', () => {
     });
   });
 
-  it('should notify `size` property', (done) => {
-    expect(grid.size).not.equal(10);
-
-    listenOnce(grid, 'size-changed', () => {
-      expect(grid.size).equal(10);
-      done();
-    });
+  it('should notify `size` property', () => {
+    const spy = sinon.spy();
+    grid.addEventListener('size-changed', spy);
     grid.size = 10;
+    expect(spy.calledOnce).to.be.true;
   });
 
   it('should not warn on init', (done) => {
