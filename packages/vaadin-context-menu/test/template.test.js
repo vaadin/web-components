@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@open-wc/testing-helpers';
-import { fire, listenOnce } from './common.js';
+import { fire } from './common.js';
 import './not-animated-styles.js';
 import '../vaadin-context-menu.js';
 
@@ -17,32 +17,23 @@ describe('template', () => {
     target = document.querySelector('#target');
   });
 
-  it('should stamp template on open', (done) => {
+  it('should stamp template on open', () => {
     expect(menu.$.overlay.content).to.be.undefined;
 
-    listenOnce(menu, 'opened-changed', () => {
-      expect(menu.$.overlay.content.textContent).to.contain('FOOBAR');
-      done();
-    });
-
     menu._setOpened(true);
+
+    expect(menu.$.overlay.content.textContent).to.contain('FOOBAR');
   });
 
-  it('should bind target property', (done) => {
-    listenOnce(menu, 'opened-changed', () => {
-      expect(menu.$.overlay.content.textContent).to.contain('target');
-      done();
-    });
-
+  it('should bind target property', () => {
     fire(target, 'vaadin-contextmenu');
+
+    expect(menu.$.overlay.content.textContent).to.contain('target');
   });
 
-  it('should bind detail property', (done) => {
-    listenOnce(menu, 'opened-changed', () => {
-      expect(menu.$.overlay.content.textContent).to.contain('bar');
-      done();
-    });
-
+  it('should bind detail property', () => {
     fire(target, 'vaadin-contextmenu', { foo: 'bar' });
+
+    expect(menu.$.overlay.content.textContent).to.contain('bar');
   });
 });

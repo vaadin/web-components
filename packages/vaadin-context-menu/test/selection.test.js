@@ -1,10 +1,9 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@open-wc/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame, oneEvent } from '@open-wc/testing-helpers';
 import { tap, pressAndReleaseKeyOn } from '@polymer/iron-test-helpers/mock-interactions.js';
-import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import '@vaadin/vaadin-list-box/vaadin-list-box.js';
 import '@vaadin/vaadin-item/vaadin-item.js';
-import { fire, listenOnce, isIOS } from './common.js';
+import { fire, isIOS } from './common.js';
 import './not-animated-styles.js';
 import '../vaadin-context-menu.js';
 
@@ -26,56 +25,40 @@ describe('selection', () => {
   });
 
   describe('selection', () => {
-    it('should close on item tap', (done) => {
-      listenOnce(menu.$.overlay, 'vaadin-overlay-open', () => {
-        const listBox = menu.$.overlay.content.querySelector('#menu');
-        afterNextRender(listBox, () => {
-          tap(listBox.items[0]);
-          expect(menu.opened).to.eql(false);
-          done();
-        });
-      });
-
+    it('should close on item tap', async () => {
       menu._setOpened(true);
+      await oneEvent(menu.$.overlay, 'vaadin-overlay-open');
+
+      const listBox = menu.$.overlay.content.querySelector('#menu');
+      await nextFrame();
+      tap(listBox.items[0]);
+      expect(menu.opened).to.be.false;
     });
 
-    it('should close on keyboard selection', (done) => {
-      listenOnce(menu.$.overlay, 'vaadin-overlay-open', () => {
-        setTimeout(() => {
-          listenOnce(menu, 'opened-changed', () => {
-            done();
-          });
-
-          const item = menu.$.overlay.content.querySelector('#menu vaadin-item');
-          pressAndReleaseKeyOn(item, 13, [], 'Enter');
-        }, 10);
-      });
-
+    it('should close on keyboard selection', async () => {
       menu._setOpened(true);
+      await oneEvent(menu.$.overlay, 'vaadin-overlay-open');
+
+      const item = menu.$.overlay.content.querySelector('#menu vaadin-item');
+      pressAndReleaseKeyOn(item, 13, [], 'Enter');
+      await aTimeout(1);
+      expect(menu.opened).to.be.false;
     });
 
-    it('should focus the child element', (done) => {
-      listenOnce(menu.$.overlay, 'vaadin-overlay-open', () => {
-        setTimeout(() => {
-          const item = menu.$.overlay.content.querySelector('#menu vaadin-item');
-          expect(document.activeElement).to.eql(item);
-          done();
-        });
-      });
-
+    it('should focus the child element', async () => {
       menu._setOpened(true);
+      await oneEvent(menu.$.overlay, 'vaadin-overlay-open');
+      await aTimeout(0);
+      const item = menu.$.overlay.content.querySelector('#menu vaadin-item');
+      expect(document.activeElement).to.eql(item);
     });
 
-    (isIOS ? it.skip : it)('should focus the child element on `contextmenu` event', (done) => {
-      listenOnce(menu.$.overlay, 'vaadin-overlay-open', () => {
-        setTimeout(() => {
-          const item = menu.$.overlay.content.querySelector('#menu vaadin-item');
-          expect(document.activeElement).to.eql(item);
-          done();
-        });
-      });
-
+    (isIOS ? it.skip : it)('should focus the child element on `contextmenu` event', async () => {
       fire(menu, 'contextmenu');
+      await oneEvent(menu.$.overlay, 'vaadin-overlay-open');
+      await aTimeout(0);
+      const item = menu.$.overlay.content.querySelector('#menu vaadin-item');
+      expect(document.activeElement).to.eql(item);
     });
   });
 });

@@ -112,7 +112,7 @@ describe('items', () => {
       expect(subItemRect.right).to.be.below(rootItemRect.left);
     });
 
-    (isIOS ? it.skip : it)('should open the subMenu on the top if root menu is bottom-aligned', (done) => {
+    (isIOS ? it.skip : it)('should open the subMenu on the top if root menu is bottom-aligned', async () => {
       subMenu.close();
       const rootItemRect = menuComponents()[0].getBoundingClientRect();
       rootMenu.$.overlay.style.removeProperty('top');
@@ -120,12 +120,10 @@ describe('items', () => {
       rootMenu.$.overlay.setAttribute('bottom-aligned', '');
       open(menuComponents()[0]);
 
-      afterNextRender(subMenu, () => {
-        const rootMenuRect = rootMenu.$.overlay.getBoundingClientRect();
-        const subMenuRect = subMenu.$.overlay.getBoundingClientRect();
-        expect(subMenuRect.bottom).to.be.below(rootMenuRect.bottom);
-        done();
-      });
+      await nextRender(subMenu);
+      const rootMenuRect = rootMenu.$.overlay.getBoundingClientRect();
+      const subMenuRect = subMenu.$.overlay.getBoundingClientRect();
+      expect(subMenuRect.bottom).to.be.below(rootMenuRect.bottom);
     });
 
     (isIOS ? it.skip : it)('should open the subMenu on the left if root menu is end-aligned', async () => {
@@ -305,15 +303,13 @@ describe('items', () => {
       expect(subMenu.opened).to.be.true;
     });
 
-    it('should open item on left arrow if RTL', (done) => {
+    it('should open item on left arrow if RTL', async () => {
       document.documentElement.setAttribute('dir', 'rtl');
-      requestAnimationFrame(() => {
-        subMenu.close();
-        fire(menuComponents()[0], 'keydown', {}, { keyCode: 37, key: 'ArrowLeft' });
-        expect(subMenu.opened).to.be.true;
-        document.documentElement.setAttribute('dir', 'ltr');
-        done();
-      });
+      await nextFrame();
+      subMenu.close();
+      fire(menuComponents()[0], 'keydown', {}, { keyCode: 37, key: 'ArrowLeft' });
+      expect(subMenu.opened).to.be.true;
+      document.documentElement.setAttribute('dir', 'ltr');
     });
 
     it('should open item on enter', () => {
@@ -454,7 +450,7 @@ describe('items', () => {
         await nextFrame();
       });
 
-      it('Should properly move overlays on scrolling distance within y axis', (done) => {
+      it('Should properly move overlays on scrolling distance within y axis', async () => {
         const scrollDistance = 150;
 
         // Default indentation is 16
@@ -463,15 +459,13 @@ describe('items', () => {
         const subBRCTop2 = subOverlay2.getBoundingClientRect().top;
 
         scrollElm.scrollTop = scrollDistance;
-        afterNextRender(rootMenu, () => {
-          expect(rootOverlay.getBoundingClientRect().top).to.be.closeTo(rootBRCTop - scrollDistance, 1);
-          expect(subOverlay1.getBoundingClientRect().top).to.be.closeTo(subBRCTop1 - scrollDistance, 1);
-          expect(subOverlay2.getBoundingClientRect().top).to.be.closeTo(subBRCTop2 - scrollDistance, 1);
-          done();
-        });
+        await nextRender(rootMenu);
+        expect(rootOverlay.getBoundingClientRect().top).to.be.closeTo(rootBRCTop - scrollDistance, 1);
+        expect(subOverlay1.getBoundingClientRect().top).to.be.closeTo(subBRCTop1 - scrollDistance, 1);
+        expect(subOverlay2.getBoundingClientRect().top).to.be.closeTo(subBRCTop2 - scrollDistance, 1);
       });
 
-      it('Should properly move overlays on scrolling distance within x axis', (done) => {
+      it('Should properly move overlays on scrolling distance within x axis', async () => {
         const scrollDistance = 150;
 
         // Default indentation is 16
@@ -480,12 +474,10 @@ describe('items', () => {
         const subBRCLeft2 = subOverlay2.getBoundingClientRect().left;
 
         scrollElm.scrollLeft = scrollDistance;
-        afterNextRender(rootMenu, () => {
-          expect(rootOverlay.getBoundingClientRect().left).to.be.closeTo(rootBRCLeft - scrollDistance, 1);
-          expect(subOverlay1.getBoundingClientRect().left).to.be.closeTo(subBRCLeft1 - scrollDistance, 1);
-          expect(subOverlay2.getBoundingClientRect().left).to.be.closeTo(subBRCLeft2 - scrollDistance, 1);
-          done();
-        });
+        await nextRender(rootMenu);
+        expect(rootOverlay.getBoundingClientRect().left).to.be.closeTo(rootBRCLeft - scrollDistance, 1);
+        expect(subOverlay1.getBoundingClientRect().left).to.be.closeTo(subBRCLeft1 - scrollDistance, 1);
+        expect(subOverlay2.getBoundingClientRect().left).to.be.closeTo(subBRCLeft2 - scrollDistance, 1);
       });
     });
   });
