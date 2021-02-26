@@ -38,7 +38,7 @@
     "@polymer/iron-overlay-behavior": "^3.0.0",
     "@polymer/iron-test-helpers": "^3.0.0",
     "@vaadin/vaadin-button": "^3.0.0-alpha1",
-    "@vaadin/vaadin-radio-button": "^2.0.0-alpha1",
+    "@vaadin/vaadin-radio-button": "^2.0.0-alpha2",
     "@vaadin/vaadin-text-field": "^3.0.1",
     "sinon": "^9.2.1"
   }

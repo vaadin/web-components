@@ -32,6 +32,9 @@ checkoutProject() {
   rm -rf packages/$repo/rollup.config.js
   # Delete WTR config
   rm -rf packages/$repo/web-test-runner.config.js
+  # Delete meta packages files
+  rm -rf packages/$repo/CONTRIBUTING.md
+  rm -rf packages/$repo/DEVELOPMENT.md
 }
 
 updatePackage() {
