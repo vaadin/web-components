@@ -12,7 +12,9 @@ const group = process.argv.indexOf('--group') !== -1;
 const getChangedPackages = () => {
   const output = execSync('./node_modules/.bin/lerna ls --since origin/master --json --loglevel silent');
   const changedPackages = JSON.parse(output.toString());
-  return changedPackages.map((project) => project.name.replace('@vaadin/', ''));
+  return changedPackages
+    .map((project) => project.name.replace('@vaadin/', ''))
+    .filter((project) => ['vaadin', 'vaadin-core'].indexOf(project) === -1);
 };
 
 /**
