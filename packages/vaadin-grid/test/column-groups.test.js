@@ -105,23 +105,6 @@ const fixtures = {
       </vaadin-grid-column>
     </vaadin-grid>
   `,
-  repeat: `
-    <vaadin-grid style="height: 400px; width: 400px;" size="10">
-      <template is="dom-repeat">
-        <vaadin-grid-column-group>
-          <template class="header">group</template>
-          <vaadin-grid-column>
-            <template class="header">header-1</template>
-            <template>body-1</template>
-          </vaadin-grid-column>
-          <vaadin-grid-column>
-            <template class="header">header-2</template>
-            <template>body-2</template>
-          </vaadin-grid-column>
-        </vaadin-grid-column-group>
-      </template>
-    </vaadin-grid>
-  `,
   'hidden-group': `
     <vaadin-grid>
       <vaadin-grid-column-group hidden>
