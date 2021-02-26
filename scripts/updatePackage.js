@@ -37,32 +37,48 @@ delete packageJson['lint-staged'];
   'stylelint-config-vaadin',
   'typescript'
 ].forEach((dep) => {
-  delete packageJson.devDependencies[dep];
+  if (packageJson.devDependencies && packageJson.devDependencies[dep]) {
+    delete packageJson.devDependencies[dep];
+  }
 });
 
 // TODO: remove after versions are unified.
-[
-  '@vaadin/vaadin-button',
-  '@vaadin/vaadin-confirm-dialog',
-  '@vaadin/vaadin-dialog',
-  '@vaadin/vaadin-form-layout'
-].forEach((dep) => {
-  if (packageJson.dependencies[dep]) {
-    packageJson.dependencies[dep] = '^3.0.0-alpha1';
-  }
-  if (packageJson.devDependencies[dep]) {
-    packageJson.devDependencies[dep] = '^3.0.0-alpha1';
-  }
-});
 
-['@vaadin/vaadin-progress-bar', '@vaadin/vaadin-ordered-layout', '@vaadin/vaadin-radio-button'].forEach((dep) => {
-  if (packageJson.dependencies[dep]) {
-    packageJson.dependencies[dep] = '^2.0.0-alpha1';
-  }
-  if (packageJson.devDependencies[dep]) {
-    packageJson.devDependencies[dep] = '^2.0.0-alpha1';
-  }
-});
+const fixDepsRanges = (deps, range) => {
+  deps.forEach((dep) => {
+    if (packageJson.dependencies[dep]) {
+      packageJson.dependencies[dep] = range;
+    }
+    if (packageJson.devDependencies && packageJson.devDependencies[dep]) {
+      packageJson.devDependencies[dep] = range;
+    }
+  });
+};
+
+fixDepsRanges(
+  [
+    '@vaadin/vaadin-button',
+    '@vaadin/vaadin-confirm-dialog',
+    '@vaadin/vaadin-cookie-consent',
+    '@vaadin/vaadin-dialog',
+    '@vaadin/vaadin-form-layout'
+  ],
+  '^3.0.0-alpha1'
+);
+
+fixDepsRanges(
+  ['@vaadin/vaadin-notification', '@vaadin/vaadin-ordered-layout', '@vaadin/vaadin-radio-button'],
+  '^2.0.0-alpha1'
+);
+
+fixDepsRanges(['@vaadin/vaadin-accordion'], '^2.0.0-alpha5');
+fixDepsRanges(['@vaadin/vaadin-app-layout'], '^3.0.0-alpha3');
+fixDepsRanges(['@vaadin/vaadin-details'], '^2.0.0-alpha6');
+fixDepsRanges(['@vaadin/vaadin-radio-button', '@vaadin/vaadin-progress-bar'], '^2.0.0-alpha2');
+
+fixDepsRanges(['@vaadin/vaadin-board'], '^4.0.0-alpha1');
+fixDepsRanges(['@vaadin/vaadin-charts'], '^9.0.0-alpha1');
+fixDepsRanges(['@vaadin/vaadin-split-layout'], '^5.0.0-alpha1');
 
 // Format and write changes to package.json
 jsonfile.writeFileSync(`packages/${repo}/package.json`, packageJson, { spaces: 2 });

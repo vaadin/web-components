@@ -1,0 +1,30 @@
+{
+  "name": "@vaadin/vaadin",
+  "version": "20.0.0-alpha1",
+  "description": "Vaadin components is an evolving set of open sourced custom HTML elements for building mobile and desktop web applications in modern browsers.",
+  "author": "Vaadin Ltd",
+  "license": "(Apache-2.0 OR SEE LICENSE IN https://vaadin.com/license/cval-3.0)",
+  "main": "vaadin.js",
+  "dependencies": {
+    "@vaadin/vaadin-board": "^4.0.0-alpha1",
+    "@vaadin/vaadin-charts": "^9.0.0-alpha1",
+    "@vaadin/vaadin-confirm-dialog": "^3.0.0-alpha1",
+    "@vaadin/vaadin-cookie-consent": "^3.0.0-alpha1",
+    "@vaadin/vaadin-core": "^20.0.0-alpha1",
+    "@vaadin/vaadin-crud": "^2.0.0",
+    "@vaadin/vaadin-grid-pro": "^3.0.0",
+    "@vaadin/vaadin-rich-text-editor": "^2.0.0"
+  },
+  "files": [
+    "vaadin.js"
+  ],
+  "keywords": [
+    "vaadin",
+    "core",
+    "elements",
+    "web",
+    "components",
+    "webcomponents",
+    "web-components"
+  ]
+}

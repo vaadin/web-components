@@ -1,0 +1,9 @@
+import '@vaadin/vaadin-core/vaadin-core.js';
+import '@vaadin/vaadin-board/vaadin-board.js';
+import '@vaadin/vaadin-charts/vaadin-chart.js';
+import '@vaadin/vaadin-confirm-dialog/vaadin-confirm-dialog.js';
+import '@vaadin/vaadin-cookie-consent/vaadin-cookie-consent.js';
+import '@vaadin/vaadin-crud/vaadin-crud.js';
+import '@vaadin/vaadin-grid-pro/vaadin-grid-pro.js';
+import '@vaadin/vaadin-grid-pro/vaadin-grid-pro-edit-column.js';
+import '@vaadin/vaadin-rich-text-editor/vaadin-rich-text-editor.js';
