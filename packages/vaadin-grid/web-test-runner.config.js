@@ -54,26 +54,22 @@ if (env === 'firefox' || env === 'safari') {
     .filter((file) => file.includes('test.js') && !exclude.includes(file))
     .map((file) => `test/${file}`);
 
-  const sauceLabsLauncher = createSauceLabsLauncher({
-    user: process.env.SAUCE_USERNAME,
-    key: process.env.SAUCE_ACCESS_KEY
-  });
-
-  const sharedCapabilities = {
-    'sauce:options': {
+  const sauceLabsLauncher = createSauceLabsLauncher(
+    {
+      user: process.env.SAUCE_USERNAME,
+      key: process.env.SAUCE_ACCESS_KEY
+    },
+    {
       name: 'vaadin-grid unit tests',
-      build: `${process.env.GITHUB_REF || 'local'} build ${process.env.GITHUB_RUN_NUMBER || ''}`
+      build: `${process.env.GITHUB_REF || 'local'} build ${process.env.GITHUB_RUN_NUMBER || ''}`,
+      recordScreenshots: false,
+      recordVideo: false
     }
-  };
+  );
 
   config.files = tests;
   config.concurrency = env === 'firefox' ? 2 : 1;
-  config.browsers = [
-    sauceLabsLauncher({
-      ...sharedCapabilities,
-      ...sauce[env]
-    })
-  ];
+  config.browsers = [sauceLabsLauncher(sauce[env])];
 }
 
 module.exports = config;
