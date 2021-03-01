@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { aTimeout, fixtureSync, nextFrame } from '@open-wc/testing-helpers';
-import '@polymer/polymer/lib/elements/dom-repeat.js';
 import { flush } from '@polymer/polymer/lib/utils/flush.js';
 import {
   dragAndDropOver,
@@ -12,7 +11,6 @@ import {
   getRows,
   getRowCells,
   infiniteDataProvider,
-  listenOnce,
   makeSoloTouchEvent
 } from './helpers.js';
 import '../vaadin-grid.js';
@@ -62,16 +60,15 @@ describe('reordering simple grid', () => {
   beforeEach(async () => {
     grid = fixtureSync(`
       <vaadin-grid style="width: 400px; height: 200px;" size="1" column-reordering-allowed>
-        <dom-repeat items="[1, 2, 3, 4]" as="col">
-          <template is="dom-repeat" items="[1, 2, 3, 4]" as="col">
-            <vaadin-grid-column resizable index$="[[col]]">
-              <template class="header"><span hidden>0</span><span>[[col]]</span></template>
-              <template>[[col]]</template>
-              <template class="footer">[[col]]</template>
+        ${[1, 2, 3, 4].map((col) => {
+          return `
+            <vaadin-grid-column resizable index="${col}">
+              <template class="header"><span hidden>0</span><span>${col}</span></template>
+              <template>${col}</template>
+              <template class="footer">${col}</template>
             </vaadin-grid-column>
-          </template>
-        </dom-repeat>
-
+          `;
+        })}
         <template class="row-details">
           foo
         </template>
@@ -181,23 +178,31 @@ describe('reordering simple grid', () => {
     expect(e.defaultPrevented).to.be.false;
   });
 
-  it('should start reordering after 300ms after touchstart', (done) => {
-    const rect = headerContent[0].getBoundingClientRect();
-    makeSoloTouchEvent('touchstart', { x: rect.left, y: rect.top }, headerContent[0]);
-    setTimeout(() => {
-      expect(grid.hasAttribute('reordering')).to.be.true;
-      done();
-    }, 500);
-  });
+  describe('touch gesture delay', () => {
+    let clock;
 
-  it('should not start reordering after 300ms after touchstart', (done) => {
-    const rect = headerContent[0].getBoundingClientRect();
-    makeSoloTouchEvent('touchstart', { x: rect.left, y: rect.top }, headerContent[0]);
-    makeSoloTouchEvent('touchend', { x: 0, y: 0 }, headerContent[0]);
-    setTimeout(() => {
+    beforeEach(() => {
+      clock = sinon.useFakeTimers();
+    });
+
+    afterEach(() => {
+      clock.restore();
+    });
+
+    it('should start reordering after 300ms after touchstart', () => {
+      const rect = headerContent[0].getBoundingClientRect();
+      makeSoloTouchEvent('touchstart', { x: rect.left, y: rect.top }, headerContent[0]);
+      clock.tick(500);
+      expect(grid.hasAttribute('reordering')).to.be.true;
+    });
+
+    it('should not start reordering after 300ms after touchend', () => {
+      const rect = headerContent[0].getBoundingClientRect();
+      makeSoloTouchEvent('touchstart', { x: rect.left, y: rect.top }, headerContent[0]);
+      makeSoloTouchEvent('touchend', { x: 0, y: 0 }, headerContent[0]);
+      clock.tick(500);
       expect(grid.hasAttribute('reordering')).to.be.false;
-      done();
-    }, 500);
+    });
   });
 
   it('should not start reordering on resize handle move', () => {
@@ -294,13 +299,13 @@ describe('reordering simple grid', () => {
       expect(calls.length).to.equal(columnCount);
     });
 
-    it('should fire `column-reorder` event with columns', (done) => {
-      listenOnce(grid, 'column-reorder', (e) => {
-        expect(e.detail.columns.map((column) => column.getAttribute('index'))).to.eql(['2', '1', '3', '4']);
-        done();
-      });
-
+    it('should fire `column-reorder` event with columns', () => {
+      const spy = sinon.spy();
+      grid.addEventListener('column-reorder', spy);
       dragAndDropOver(headerContent[0], headerContent[1]);
+      expect(spy.calledOnce).to.be.true;
+      const e = spy.firstCall.args[0];
+      expect(e.detail.columns.map((column) => column.getAttribute('index'))).to.eql(['2', '1', '3', '4']);
     });
   });
 
@@ -348,23 +353,23 @@ describe('reordering grid with columns groups', () => {
   beforeEach(async () => {
     grid = fixtureSync(`
       <vaadin-grid style="width: 400px; height: 200px;" size="1" column-reordering-allowed>
-        <dom-repeat is="dom-repeat" items="[1, 2]" as="colgroup">
-          <template>
+        ${[1, 2].map((colgroup) => {
+          return `
             <vaadin-grid-column-group>
-              <template class="header">[[colgroup]]</template>
-              <template class="footer">[[colgroup]]</template>
-              <dom-repeat is="dom-repeat" items="[1, 2]" as="col">
-                <template>
+              <template class="header">${colgroup}</template>
+              <template class="footer">${colgroup}</template>
+              ${[1, 2].map((col) => {
+                return `
                   <vaadin-grid-column>
-                    <template class="header">[[colgroup]][[col]]</template>
-                    <template>[[colgroup]][[col]]</template>
-                    <template class="footer">[[colgroup]][[col]]</template>
+                    <template class="header">${colgroup}${col}</template>
+                    <template>${colgroup}${col}</template>
+                    <template class="footer">${colgroup}${col}</template>
                   </vaadin-grid-column>
-                </template>
-              </dom-repeat>
+                `;
+              })}
             </vaadin-grid-column-group>
-          </template>
-        </dom-repeat>
+          `;
+        })}
       </vaadin-grid>
     `);
     grid.dataProvider = infiniteDataProvider;
@@ -485,15 +490,15 @@ describe('large column group', () => {
     grid = fixtureSync(`
       <vaadin-grid style="width: 400px; height: 200px;" size="1" column-reordering-allowed>
         <vaadin-grid-column-group>
-          <dom-repeat items="[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]" as="col">
-            <template is="dom-repeat" items="[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]" as="col">
+          ${[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((col) => {
+            return `
               <vaadin-grid-column width="10px">
-                <template class="header">[[col]]</template>
-                <template>[[col]]</template>
-                <template class="footer">[[col]]</template>
+                <template class="header">${col}</template>
+                <template>${col}</template>
+                <template class="footer">${col}</template>
               </vaadin-grid-column>
-            </template>
-          </dom-repeat>
+            `;
+          })}
         </vaadin-grid-column-group>
         <vaadin-grid-column width="10px">
           <template class="header">12</template>
@@ -518,21 +523,21 @@ describe('reordering with draggable contents', () => {
   beforeEach(async () => {
     grid = fixtureSync(`
       <vaadin-grid style="width: 400px; height: 200px;" size="1" column-reordering-allowed>
-        <dom-repeat items="[1, 2]" as="col">
-          <template is="dom-repeat" items="[1, 2]" as="col">
+        ${[1, 2].map((col) => {
+          return `
             <vaadin-grid-column resizable>
               <template class="header">
-                <div draggable="true">[[col]]</div>
+                <div draggable="true">${col}</div>
               </template>
               <template>
-                <div draggable="true">[[col]]</div>
+                <div draggable="true">${col}</div>
               </template>
               <template class="footer">
-                <div draggable="true">[[col]]</div>
+                <div draggable="true">${col}</div>
               </template>
             </vaadin-grid-column>
-          </template>
-        </dom-repeat>
+          `;
+        })}
       </vaadin-grid>
     `);
     grid.dataProvider = infiniteDataProvider;

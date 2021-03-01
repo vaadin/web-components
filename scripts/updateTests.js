@@ -16,7 +16,9 @@ const skipTests = {
     'packages/vaadin-menu-bar/test/sub-menu.test.js',
     'packages/vaadin-rich-text-editor/test/basic.test.js',
     'packages/vaadin-split-layout/test/split-layout.test.js',
-    'packages/vaadin-radio-button/test/radio-button.test.js'
+    'packages/vaadin-radio-button/test/radio-button.test.js',
+    'packages/vaadin-messages/test/message.test.js',
+    'packages/vaadin-messages/test/message-list.test.js'
   ],
   from: [
     `describe('with add button'`,
@@ -34,7 +36,8 @@ const skipTests = {
     `document.createEvent('TouchEvent');`,
     `it('should set checked on touchend'`,
     `it('should not set checked on touchend when disabled'`,
-    `it('should fire on touchend'`
+    `it('should fire on touchend'`,
+    /\/test\/visual\/avatars\/avatar\.jpg/g
   ],
   to: [
     `const isFirefox = ${firefox};
@@ -63,7 +66,8 @@ const skipTests = {
     `const isSafari = ${safari};
     (isSafari ? it.skip : it)('should not set checked on touchend when disabled'`,
     `const isSafari = ${safari};
-    (isSafari ? it.skip : it)('should fire on touchend'`
+    (isSafari ? it.skip : it)('should fire on touchend'`,
+    'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='
   ]
 };
 

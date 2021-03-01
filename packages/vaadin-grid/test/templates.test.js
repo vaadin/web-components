@@ -11,8 +11,7 @@ import {
   getCellContent,
   getContainerCellContent,
   getFirstCell,
-  infiniteDataProvider,
-  listenOnce
+  infiniteDataProvider
 } from './helpers.js';
 import '../vaadin-grid.js';
 
@@ -168,27 +167,26 @@ describe('templates', () => {
       flushGrid(grid);
     });
 
-    it('should fire an event when a non-focusable element is clicked', (done) => {
-      listenOnce(grid, 'cell-activate', (e) => {
-        expect(e.detail.model.index).to.eql(0);
-        done();
-      });
+    it('should fire an event when a non-focusable element is clicked', () => {
+      const spy = sinon.spy();
+      grid.addEventListener('cell-activate', spy);
 
       getCell(grid, 0)._content.click();
+
+      expect(spy.calledOnce).to.be.true;
+      const e = spy.firstCall.args[0];
+      expect(e.detail.model.index).to.eql(0);
     });
 
-    it('should not fire an event when a focusable element is clicked', (done) => {
-      const listener = () => done('Should not come here!');
-      grid.addEventListener('cell-activate', listener);
+    it('should not fire an event when a focusable element is clicked', () => {
+      const spy = sinon.spy();
+      grid.addEventListener('cell-activate', spy);
 
       const input = getCellContent(getCell(grid, 1)).querySelector('vaadin-text-field');
       input.focus();
       input.click();
 
-      setTimeout(() => {
-        grid.removeEventListener('cell-activate', listener);
-        done();
-      }, 100);
+      expect(spy.called).to.be.false;
     });
 
     it('should not restamp header templates on attach', () => {

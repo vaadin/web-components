@@ -88,24 +88,24 @@ describe('scrollable viewport', () => {
   it('should update the position on scrolling', () => {
     enter(input);
 
-    expect(overlay.getBoundingClientRect().bottom).to.be.equal(inputFieldBlock.getBoundingClientRect().bottom);
-    expect(overlay.getBoundingClientRect().left).to.be.equal(inputFieldBlock.getBoundingClientRect().left);
+    expect(overlay.getBoundingClientRect().bottom).to.be.closeTo(inputFieldBlock.getBoundingClientRect().bottom, 1);
+    expect(overlay.getBoundingClientRect().left).to.be.closeTo(inputFieldBlock.getBoundingClientRect().left, 1);
 
     scrollContainer(scrollableContainer, 40, 40);
 
-    expect(overlay.getBoundingClientRect().bottom).to.be.equal(inputFieldBlock.getBoundingClientRect().bottom);
-    expect(overlay.getBoundingClientRect().left).to.be.equal(inputFieldBlock.getBoundingClientRect().left);
+    expect(overlay.getBoundingClientRect().bottom).to.be.closeTo(inputFieldBlock.getBoundingClientRect().bottom, 1);
+    expect(overlay.getBoundingClientRect().left).to.be.closeTo(inputFieldBlock.getBoundingClientRect().left, 1);
   });
 
   it('should update the position on iron-resize event', () => {
     enter(input);
-    expect(overlay.getBoundingClientRect().bottom).to.be.equal(inputFieldBlock.getBoundingClientRect().bottom);
-    expect(overlay.getBoundingClientRect().left).to.be.equal(inputFieldBlock.getBoundingClientRect().left);
+    expect(overlay.getBoundingClientRect().bottom).to.be.closeTo(inputFieldBlock.getBoundingClientRect().bottom, 1);
+    expect(overlay.getBoundingClientRect().left).to.be.closeTo(inputFieldBlock.getBoundingClientRect().left, 1);
 
     container.style.paddingTop = '200px';
     select.dispatchEvent(new CustomEvent('iron-resize', { bubbles: true }));
 
-    expect(overlay.getBoundingClientRect().top).to.be.equal(inputFieldBlock.getBoundingClientRect().top);
-    expect(overlay.getBoundingClientRect().left).to.be.equal(inputFieldBlock.getBoundingClientRect().left);
+    expect(overlay.getBoundingClientRect().top).to.be.closeTo(inputFieldBlock.getBoundingClientRect().top, 1);
+    expect(overlay.getBoundingClientRect().left).to.be.closeTo(inputFieldBlock.getBoundingClientRect().left, 1);
   });
 });

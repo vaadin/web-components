@@ -26,7 +26,7 @@ describe('message-list', () => {
         time: '9:34 AM',
         userName: 'Joan Doe',
         userAbbr: 'JD',
-        userImg: '/test/visual/avatars/avatar.jpg',
+        userImg: 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
         userColorIndex: 1
       },
       {
@@ -35,7 +35,7 @@ describe('message-list', () => {
         user: {
           name: 'Joan Doe',
           abbr: 'JD',
-          img: '/test/visual/avatars/avatar.jpg',
+          img: 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
           colorIndex: 1
         }
       },
@@ -45,7 +45,7 @@ describe('message-list', () => {
         user: {
           name: 'Joan Doe',
           abbr: 'JD',
-          img: '/test/visual/avatars/avatar.jpg',
+          img: 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
           colorIndex: 1
         }
       },
