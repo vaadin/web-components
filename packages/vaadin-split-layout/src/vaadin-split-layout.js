@@ -225,7 +225,7 @@ class SplitLayoutElement extends ElementMixin(
   }
 
   static get version() {
-    return '5.0.0-alpha1';
+    return '20.0.0-alpha1';
   }
 
   static get properties() {
