@@ -27,6 +27,7 @@ vaadin-list-box
 vaadin-list-mixin
 vaadin-login
 vaadin-menu-bar
+vaadin-messages
 vaadin-notification
 vaadin-ordered-layout
 vaadin-overlay
