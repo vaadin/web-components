@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@open-wc/testing-helpers';
+import { fixtureSync, nextFrame } from '@open-wc/testing-helpers';
 import { flushGrid } from './helpers.js';
 import '../vaadin-grid.js';
 import '../vaadin-grid-column-group.js';
@@ -194,17 +194,14 @@ describe('accessibility', () => {
         expect(grid.$.table.getAttribute('aria-colcount')).to.equal('2');
       });
 
-      it('should update aria-colcount when column is added', (done) => {
+      it('should update aria-colcount when column is added', async () => {
         const template = document.createElement('template');
         template.innerHTML = '[[item]]';
         const column = document.createElement('vaadin-grid-column');
         column.appendChild(template);
         grid.appendChild(column);
-
-        setTimeout(() => {
-          expect(grid.$.table.getAttribute('aria-colcount')).to.equal('3');
-          done();
-        });
+        await nextFrame();
+        expect(grid.$.table.getAttribute('aria-colcount')).to.equal('3');
       });
     });
 

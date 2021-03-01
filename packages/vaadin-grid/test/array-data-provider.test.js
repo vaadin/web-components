@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { fixtureSync, nextFrame } from '@open-wc/testing-helpers';
-import { click, flushGrid, getCellContent, getRows, getRowCells, listenOnce } from './helpers.js';
+import { click, flushGrid, getCellContent, getRows, getRowCells } from './helpers.js';
 import '../vaadin-grid.js';
 import '../vaadin-grid-filter.js';
 import '../vaadin-grid-sorter.js';
@@ -224,45 +224,28 @@ describe('invalid paths', () => {
   describe('invalid filters paths', () => {
     let filter;
 
-    beforeEach((done) => {
+    beforeEach(() => {
       filter = grid.querySelector('vaadin-grid-filter');
-      listenOnce(grid, 'filter-changed', () => {
-        done();
-      });
       filter.path = '';
+      filter._debouncerFilterChanged.flush();
     });
 
-    it('should warn about invalid path with undefined parent property', (done) => {
-      listenOnce(filter, 'filter-changed', () => {
-        setTimeout(() => {
-          expect(console.warn.called).to.be.true;
-          done();
-        });
-      });
-
+    it('should warn about invalid path with undefined parent property', () => {
       filter.path = 'foo.bar';
+      filter._debouncerFilterChanged.flush();
+      expect(console.warn.called).to.be.true;
     });
 
-    it('should not warn about undefined values with defined parent property', (done) => {
-      listenOnce(filter, 'filter-changed', () => {
-        setTimeout(() => {
-          expect(console.warn.called).to.be.false;
-          done();
-        });
-      });
-
+    it('should not warn about undefined values with defined parent property', () => {
       filter.path = 'name.foo';
+      filter._debouncerFilterChanged.flush();
+      expect(console.warn.called).to.be.false;
     });
 
-    it('should not warn about invalid path without dots', (done) => {
-      listenOnce(filter, 'filter-changed', () => {
-        setTimeout(() => {
-          expect(console.warn.called).to.be.false;
-          done();
-        });
-      });
-
+    it('should not warn about invalid path without dots', () => {
       filter.path = 'foobar';
+      filter._debouncerFilterChanged.flush();
+      expect(console.warn.called).to.be.false;
     });
   });
 });

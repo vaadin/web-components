@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync } from '@open-wc/testing-helpers';
+import { fixtureSync, nextFrame } from '@open-wc/testing-helpers';
 import { flushGrid, getContainerCell, getRows, infiniteDataProvider, scrollToEnd } from './helpers.js';
 import '../vaadin-grid.js';
 
@@ -55,13 +55,11 @@ describe('class name generator', () => {
     assertClassList(getContainerCell(grid.$.items, 10, 0), ['10', 'foo10', 'col0']);
   });
 
-  it('should be called for details cell with undefined column', (done) => {
+  it('should be called for details cell with undefined column', async () => {
     grid.rowDetailsRenderer = () => {};
     grid.cellClassNameGenerator = (column, model) => model.index + ' ' + column;
-    requestAnimationFrame(() => {
-      assertClassList(getContainerCell(grid.$.items, 0, 2), ['0', 'undefined']);
-      done();
-    });
+    await nextFrame();
+    assertClassList(getContainerCell(grid.$.items, 0, 2), ['0', 'undefined']);
   });
 
   it('should add classes when loading new items', function (done) {

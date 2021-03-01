@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync, oneEvent } from '@open-wc/testing-helpers';
+import { fixtureSync, nextFrame, oneEvent } from '@open-wc/testing-helpers';
 import { flushGrid } from './helpers.js';
 import '../vaadin-grid.js';
 import '../vaadin-grid-tree-column.js';
@@ -35,6 +35,14 @@ describe('column auto-width', function () {
     }
   }
 
+  function recalculateWidths() {
+    return new Promise((resolve) => {
+      whenColumnWidthsCalculated(() => {
+        resolve();
+      });
+    });
+  }
+
   beforeEach(async () => {
     grid = fixtureSync(`
       <vaadin-grid style="width: 600px; height: 200px;" hidden>
@@ -52,26 +60,22 @@ describe('column auto-width', function () {
     await oneEvent(grid, 'animationend');
   });
 
-  it('should have correct column widths when items are set', (done) => {
+  it('should have correct column widths when items are set', async () => {
     grid.items = testItems;
 
-    whenColumnWidthsCalculated(() => {
-      expectColumnWidthsToBeOk(columns);
-      done();
-    });
+    await recalculateWidths();
+    expectColumnWidthsToBeOk(columns);
   });
 
-  it('should have correct column widths when the grid is visually scaled', (done) => {
+  it('should have correct column widths when the grid is visually scaled', async () => {
     grid.style.transform = 'scale(0.5)';
     grid.items = testItems;
 
-    whenColumnWidthsCalculated(() => {
-      expectColumnWidthsToBeOk(columns);
-      done();
-    });
+    await recalculateWidths();
+    expectColumnWidthsToBeOk(columns);
   });
 
-  it('should have correct column widths when using lazy dataProvider', (done) => {
+  it('should have correct column widths when using lazy dataProvider', async () => {
     grid.dataProvider = (params, callback) => {
       requestAnimationFrame(() => {
         callback(testItems.slice(0, params.pageSize), testItems.length);
@@ -79,29 +83,25 @@ describe('column auto-width', function () {
     };
     spy.resetHistory();
     expect(grid._recalculateColumnWidths.called).to.be.false;
-    whenColumnWidthsCalculated(() => {
-      expectColumnWidthsToBeOk(columns);
-      done();
-    });
+    await recalculateWidths();
+    expectColumnWidthsToBeOk(columns);
   });
 
-  it('should have correct column widths once visible', (done) => {
+  it('should have correct column widths once visible', async () => {
     grid.hidden = true;
     grid.items = testItems;
 
-    requestAnimationFrame(() => {
-      grid.hidden = false;
+    await nextFrame();
+    grid.hidden = false;
 
-      spy.resetHistory();
-      expect(grid._recalculateColumnWidths.called).to.be.false;
-      whenColumnWidthsCalculated(() => {
-        expectColumnWidthsToBeOk(columns);
-        done();
-      });
-    });
+    spy.resetHistory();
+    expect(grid._recalculateColumnWidths.called).to.be.false;
+
+    await recalculateWidths();
+    expectColumnWidthsToBeOk(columns);
   });
 
-  it('should have correct column widths when using renderers', (done) => {
+  it('should have correct column widths when using renderers', async () => {
     columns[0].renderer = function (root, column, model) {
       root.textContent = model.index;
     };
@@ -110,10 +110,8 @@ describe('column auto-width', function () {
     };
     grid.items = testItems;
 
-    whenColumnWidthsCalculated(() => {
-      expectColumnWidthsToBeOk(columns, [42, 62, 84, 107]);
-      done();
-    });
+    await recalculateWidths();
+    expectColumnWidthsToBeOk(columns, [42, 62, 84, 107]);
   });
 });
 
