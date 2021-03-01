@@ -23,6 +23,7 @@
     "lint:css": "stylelint packages/**/src/*.js packages/**/theme/**/*-styles.js",
     "lint:js": "eslint *.js scripts packages",
     "lint:types": "tsc",
+    "preversion": "node scripts/updateVersion.js",
     "test": "web-test-runner --coverage",
     "test:firefox": "web-test-runner --config web-test-runner-firefox.config.js",
     "test:webkit": "web-test-runner --config web-test-runner-webkit.config.js"
