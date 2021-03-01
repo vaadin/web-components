@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-select",
-  "version": "3.0.0",
+  "version": "20.0.0-alpha1",
   "description": "vaadin-select",
   "main": "vaadin-select.js",
   "module": "vaadin-select.js",
@@ -28,16 +28,16 @@
     "@polymer/iron-media-query": "^3.0.0",
     "@polymer/iron-resizable-behavior": "^3.0.0",
     "@polymer/polymer": "^3.2.0",
-    "@vaadin/vaadin-control-state-mixin": "^2.2.4",
-    "@vaadin/vaadin-element-mixin": "^2.4.2",
-    "@vaadin/vaadin-item": "^3.0.0",
-    "@vaadin/vaadin-list-box": "^2.0.0",
-    "@vaadin/vaadin-list-mixin": "^2.5.0",
+    "@vaadin/vaadin-control-state-mixin": "^20.0.0-alpha1",
+    "@vaadin/vaadin-element-mixin": "^20.0.0-alpha1",
+    "@vaadin/vaadin-item": "^20.0.0-alpha1",
+    "@vaadin/vaadin-list-box": "^20.0.0-alpha1",
+    "@vaadin/vaadin-list-mixin": "^20.0.0-alpha1",
     "@vaadin/vaadin-lumo-styles": "^1.6.1",
     "@vaadin/vaadin-material-styles": "^1.3.2",
-    "@vaadin/vaadin-overlay": "^3.5.1",
-    "@vaadin/vaadin-text-field": "^3.0.0",
-    "@vaadin/vaadin-themable-mixin": "^1.6.2"
+    "@vaadin/vaadin-overlay": "^20.0.0-alpha1",
+    "@vaadin/vaadin-text-field": "^20.0.0-alpha1",
+    "@vaadin/vaadin-themable-mixin": "^20.0.0-alpha1"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.1.5",
