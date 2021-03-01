@@ -4,6 +4,8 @@ const path = require('path');
 const jsonfile = require('jsonfile');
 const replace = require('replace-in-file');
 
+const VERSION = require('../lerna.json').version;
+
 const repo = process.argv[2] || process.exit(1);
 
 const dir = path.join(process.cwd(), 'packages', repo);
@@ -15,7 +17,7 @@ async function main() {
   // Update version getters
   if (fs.existsSync(src)) {
     const fromRegex = /static get version.*\n.*return '(.*)'/;
-    const newVersion = `static get version() {\n    return '20.0.0-alpha1'`;
+    const newVersion = `static get version() {\n    return '${VERSION}'`;
 
     await replace({ files: [`${dir}/src/*.{js,ts}`], from: fromRegex, to: newVersion });
   }
@@ -65,18 +67,18 @@ async function main() {
     '@vaadin/router'
   ];
 
-  packageJson.version = '20.0.0-alpha1';
+  packageJson.version = VERSION;
 
   Object.keys(packageJson.dependencies).forEach((dep) => {
     if (dep.startsWith('@vaadin') && !IGNORED.includes(dep)) {
-      packageJson.dependencies[dep] = '^20.0.0-alpha1';
+      packageJson.dependencies[dep] = `^${VERSION}`;
     }
   });
 
   if (packageJson.devDependencies) {
     Object.keys(packageJson.devDependencies).forEach((dep) => {
       if (dep.startsWith('@vaadin') && !IGNORED.includes(dep)) {
-        packageJson.devDependencies[dep] = '20.0.0-alpha1';
+        packageJson.devDependencies[dep] = `^${VERSION}`;
       }
     });
   }
