@@ -156,7 +156,7 @@ class AvatarGroupElement extends ElementMixin(ThemableMixin(mixinBehaviors([Iron
   }
 
   static get version() {
-    return '2.0.0';
+    return '20.0.0-alpha1';
   }
 
   static get properties() {

@@ -86,7 +86,7 @@ class ProgressBarElement extends ElementMixin(ThemableMixin(ProgressMixin(Polyme
   }
 
   static get version() {
-    return '2.0.0-alpha2';
+    return '20.0.0-alpha1';
   }
 }
 
