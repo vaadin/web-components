@@ -1,4 +1,6 @@
-# Components monorepo experiment
+# Vaadin web components
+
+This is a monorepo powered by [Lerna](https://github.com/lerna/lerna) that includes all Vaadin web components.
 
 ## Setup
 
