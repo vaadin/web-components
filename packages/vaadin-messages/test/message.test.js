@@ -47,8 +47,8 @@ describe('message', () => {
   });
 
   it('avatar should be set with provided user image', () => {
-    message.userImg = '/test/visual/avatars/avatar.jpg';
-    expect(avatar.img).to.be.equal('/test/visual/avatars/avatar.jpg');
+    message.userImg = 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
+    expect(avatar.img).to.be.equal('data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=');
   });
 
   it('avatar should be set with provided user color', () => {
