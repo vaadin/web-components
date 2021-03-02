@@ -26,10 +26,6 @@ checkoutProject() {
   rm -rf packages/$repo/test/visual
   # Delete directory description
   rm -rf packages/$repo/vaadin-directory-description.md
-  # Delete API docs
-  rm -rf packages/$repo/index.html
-  # Delete Rollup config
-  rm -rf packages/$repo/rollup.config.js
   # Delete WTR config
   rm -rf packages/$repo/web-test-runner.config.js
   # Delete meta packages files
