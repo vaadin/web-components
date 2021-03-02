@@ -24,8 +24,6 @@ checkoutProject() {
   rm -rf packages/$repo/tsconfig.json
   # Delete visual tests
   rm -rf packages/$repo/test/visual
-  # Delete directory description
-  rm -rf packages/$repo/vaadin-directory-description.md
   # Delete WTR config
   rm -rf packages/$repo/web-test-runner.config.js
   # Delete meta packages files
