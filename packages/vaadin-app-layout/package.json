@@ -39,5 +39,8 @@
     "@vaadin/vaadin-icons": "^4.2.0",
     "@vaadin/vaadin-tabs": "^20.0.0-alpha1",
     "sinon": "^9.2.1"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

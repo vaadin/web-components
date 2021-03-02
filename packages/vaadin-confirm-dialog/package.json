@@ -41,5 +41,8 @@
     "@polymer/iron-test-helpers": "^3.0.0",
     "@vaadin/vaadin-icons": "^4.2.0",
     "sinon": "^9.2.1"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
