@@ -4,7 +4,7 @@
  * This program is available under Commercial Vaadin Developer License 4.0 (CVDLv4).
  * See <a href="https://vaadin.com/license/cvdl-4.0">the website</a> for the complete license.
  */
-import { microTask } from '@polymer/polymer/lib/utils/async.js';
+import { animationFrame } from '@polymer/polymer/lib/utils/async.js';
 import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 
@@ -259,7 +259,7 @@ export const InlineEditingMixin = (superClass) =>
     /** @private */
     _onEditorFocusOut() {
       // schedule stop on editor component focusout
-      this._debouncerStopEdit = Debouncer.debounce(this._debouncerStopEdit, microTask, this._stopEdit.bind(this));
+      this._debouncerStopEdit = Debouncer.debounce(this._debouncerStopEdit, animationFrame, this._stopEdit.bind(this));
     }
 
     /** @private */
