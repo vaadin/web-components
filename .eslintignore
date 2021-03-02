@@ -1,1 +1,2 @@
 packages/**/vendor/*.js
+packages/**/dist/*.js
