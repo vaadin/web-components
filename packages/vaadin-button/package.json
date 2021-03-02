@@ -37,5 +37,8 @@
     "@open-wc/testing-helpers": "^1.8.12",
     "@polymer/iron-icon": "^3.0.0",
     "@polymer/iron-test-helpers": "^3.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

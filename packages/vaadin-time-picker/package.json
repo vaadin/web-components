@@ -39,5 +39,8 @@
     "@open-wc/testing-helpers": "^1.8.0",
     "@polymer/iron-test-helpers": "^3.0.0",
     "sinon": "^9.2.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

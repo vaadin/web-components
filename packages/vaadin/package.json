@@ -26,5 +26,8 @@
     "components",
     "webcomponents",
     "web-components"
-  ]
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
 }

@@ -83,6 +83,10 @@ async function main() {
     });
   }
 
+  packageJson.publishConfig = {
+    access: 'public'
+  };
+
   // Format and write changes to package.json
   jsonfile.writeFileSync(`packages/${repo}/package.json`, packageJson, { spaces: 2 });
 }
