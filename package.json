@@ -19,6 +19,7 @@
   },
   "scripts": {
     "debug": "web-test-runner --watch",
+    "dist": "lerna run dist --stream",
     "lint": "npm-run-all --parallel lint:*",
     "lint:css": "stylelint packages/**/src/*.js packages/**/theme/**/*-styles.js",
     "lint:js": "eslint *.js scripts packages",

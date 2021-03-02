@@ -22,14 +22,13 @@ async function main() {
     await replace({ files: [`${dir}/src/*.{js,ts}`], from: fromRegex, to: newVersion });
   }
 
+  const isPublicComponent = fs.existsSync(path.resolve(dir, 'rollup.config.js'));
+
   // Cleanup package.json
-  delete packageJson.scripts;
   delete packageJson.husky;
   delete packageJson['lint-staged'];
 
   [
-    '@open-wc/rollup-plugin-html',
-    '@polymer/iron-component-page',
     '@rollup/plugin-node-resolve',
     '@web/dev-server',
     '@web/test-runner',
@@ -44,9 +43,6 @@ async function main() {
     'lint-staged',
     'magi-cli',
     'prettier',
-    'rimraf',
-    'rollup',
-    'rollup-plugin-terser',
     'stylelint',
     'stylelint-config-prettier',
     'stylelint-config-vaadin',
@@ -56,6 +52,15 @@ async function main() {
       delete packageJson.devDependencies[dep];
     }
   });
+
+  if (isPublicComponent) {
+    packageJson.scripts = {
+      dist:
+        'rimraf dist && polymer analyze vaadin-* > analysis.json && rollup -c rollup.config.js && cp analysis.json dist'
+    };
+  } else {
+    delete packageJson.scripts;
+  }
 
   const IGNORED = [
     '@vaadin/vaadin-lumo-styles',
