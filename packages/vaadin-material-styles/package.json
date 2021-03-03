@@ -3,6 +3,7 @@
   "version": "1.4.0-alpha1",
   "description": "Vaadin Material is a complete theme for Vaadin components, inspired by Google’s Material Design guidelines.",
   "main": "all-imports.js",
+  "module": "all-imports.js",
   "repository": "vaadin/vaadin-material-styles",
   "keywords": [
     "vaadin",
@@ -23,19 +24,37 @@
     "*.js",
     "*.d.ts",
     "mixins/*.js",
-    "mixins/*.d.ts",
-    "!wdio.conf.js"
+    "mixins/*.d.ts"
   ],
   "scripts": {
-    "icons": "gulp icons",
-    "lint": "gulp lint",
-    "test": "wct",
-    "preversion": "gulp version:update"
+    "lint": "npm run lint:js && npm run lint:css",
+    "lint:css": "stylelint *.js mixins/*.js",
+    "lint:js": "eslint *.js mixins"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  },
+  "dependencies": {
+    "@polymer/polymer": "^3.0.0",
+    "@vaadin/vaadin-themable-mixin": "^1.6.1"
   },
   "devDependencies": {
-    "@vaadin/vaadin-component-dev-dependencies": "^2.0.0",
-    "gulp-iconfont": "^10.0.3",
-    "gulp-sort": "^2.0.0",
-    "gulp-svgmin": "^1.2.4"
+    "eslint": "^7.18.0",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "husky": "^4.3.0",
+    "lint-staged": "^10.5.1",
+    "prettier": "^2.2.0",
+    "stylelint": "^13.8.0",
+    "stylelint-config-prettier": "^8.0.2",
+    "stylelint-config-vaadin": "^0.2.10"
   }
 }

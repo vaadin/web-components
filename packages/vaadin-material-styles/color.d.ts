@@ -1,4 +1,4 @@
-import {CSSResult} from 'lit-element';
+import { CSSResult } from 'lit-element';
 
 export const colorLight: CSSResult;
 
