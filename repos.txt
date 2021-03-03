@@ -22,10 +22,13 @@ vaadin-element-mixin
 vaadin-form-layout
 vaadin-grid
 vaadin-grid-pro
+vaadin-icons
 vaadin-item
 vaadin-list-box
 vaadin-list-mixin
 vaadin-login
+vaadin-lumo-styles
+vaadin-material-styles
 vaadin-menu-bar
 vaadin-messages
 vaadin-notification

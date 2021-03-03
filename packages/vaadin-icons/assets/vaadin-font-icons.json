@@ -1,0 +1,7718 @@
+[
+  {
+    "name": "abacus",
+    "code": "e682",
+    "categories": [
+      "Ledger",
+      "Item"
+    ],
+    "meta": [
+      "calc",
+      "calculator",
+      "math"
+    ]
+  },
+  {
+    "name": "absolute-position",
+    "code": "e61e",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "css",
+      "layout"
+    ]
+  },
+  {
+    "name": "accessibility",
+    "code": "e683",
+    "categories": [
+      "Sign"
+    ],
+    "meta": [
+      "wheelchair",
+      "healthcare"
+    ]
+  },
+  {
+    "name": "accordion-menu",
+    "code": "e61f",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "layout",
+      "html",
+      "component",
+      "navigation"
+    ]
+  },
+  {
+    "name": "add-dock",
+    "code": "e620",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "layout",
+      "navigation"
+    ]
+  },
+  {
+    "name": "adjust",
+    "code": "e74a",
+    "categories": [
+      "Web application",
+      "Edit"
+    ],
+    "meta": [
+      "contrast",
+      "brightness",
+      "settings"
+    ]
+  },
+  {
+    "name": "airplane",
+    "code": "e684",
+    "categories": [
+      "Transportation"
+    ],
+    "meta": [
+      "plane",
+      "travel",
+      "vacation",
+      "fly",
+      "flight"
+    ]
+  },
+  {
+    "name": "align-center",
+    "code": "e74b",
+    "categories": [
+      "Text editor"
+    ],
+    "meta": [
+      "paragraph",
+      "column"
+    ]
+  },
+  {
+    "name": "align-justify",
+    "code": "e7ae",
+    "categories": [
+      "Text editor"
+    ],
+    "meta": [
+      "paragraph",
+      "column"
+    ]
+  },
+  {
+    "name": "align-left",
+    "code": "e74c",
+    "categories": [
+      "Text editor"
+    ],
+    "meta": [
+      "paragraph",
+      "column"
+    ]
+  },
+  {
+    "name": "align-right",
+    "code": "e74d",
+    "categories": [
+      "Text editor"
+    ],
+    "meta": [
+      "paragraph",
+      "column"
+    ]
+  },
+  {
+    "name": "anchor",
+    "code": "e685",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "hold",
+      "link"
+    ]
+  },
+  {
+    "name": "angle-double-down",
+    "code": "e6e6",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      "chevron-down"
+    ]
+  },
+  {
+    "name": "angle-double-left",
+    "code": "e6e7",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      "previous",
+      "chevron-left"
+    ]
+  },
+  {
+    "name": "angle-double-right",
+    "code": "e6e8",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      "next",
+      "chevron-right"
+    ]
+  },
+  {
+    "name": "angle-double-up",
+    "code": "e6e9",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      "chevron-up"
+    ]
+  },
+  {
+    "name": "angle-down",
+    "code": "e6ea",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      "chevron-down",
+      "caret-down"
+    ]
+  },
+  {
+    "name": "angle-left",
+    "code": "e6eb",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      "previous",
+      "chevron-left",
+      "caret-left"
+    ]
+  },
+  {
+    "name": "angle-right",
+    "code": "e6ec",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      "next",
+      "chevron-right",
+      "caret-right"
+    ]
+  },
+  {
+    "name": "angle-up",
+    "code": "e6ed",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      "chevron-up",
+      "caret-up"
+    ]
+  },
+  {
+    "name": "archive",
+    "code": "e6ee",
+    "categories": [
+      "Office"
+    ],
+    "meta": [
+      "box",
+      "document",
+      "documents",
+      "documentation",
+      "file",
+      "files",
+      "filing"
+    ]
+  },
+  {
+    "name": "archives",
+    "code": "e621",
+    "categories": [
+      "Office"
+    ],
+    "meta": [
+      "document",
+      "documents",
+      "documentation",
+      "file",
+      "files",
+      "filing",
+      "drawers"
+    ]
+  },
+  {
+    "name": "area-select",
+    "code": "e806",
+    "categories": [
+      "Web application",
+      "Edit"
+    ],
+    "meta": [
+      "html",
+      "pointer"
+    ]
+  },
+  {
+    "name": "arrow-backward",
+    "code": "e622",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      "reply",
+      "back",
+      "previous",
+      "left"
+    ]
+  },
+  {
+    "name": "arrow-circle-down",
+    "code": "e6f0",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      ""
+    ]
+  },
+  {
+    "name": "arrow-circle-down-o",
+    "code": "e6ef",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      ""
+    ]
+  },
+  {
+    "name": "arrow-circle-left",
+    "code": "e6f2",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      "previous"
+    ]
+  },
+  {
+    "name": "arrow-circle-left-o",
+    "code": "e6f1",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      "previous"
+    ]
+  },
+  {
+    "name": "arrow-circle-right",
+    "code": "e6f4",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      "next"
+    ]
+  },
+  {
+    "name": "arrow-circle-right-o",
+    "code": "e6f3",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      "next"
+    ]
+  },
+  {
+    "name": "arrow-circle-up",
+    "code": "e6f6",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      ""
+    ]
+  },
+  {
+    "name": "arrow-circle-up-o",
+    "code": "e6f5",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      ""
+    ]
+  },
+  {
+    "name": "arrow-down",
+    "code": "e7af",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      ""
+    ]
+  },
+  {
+    "name": "arrow-forward",
+    "code": "e623",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      "send",
+      "next",
+      "right"
+    ]
+  },
+  {
+    "name": "arrow-left",
+    "code": "e7b0",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      "previous"
+    ]
+  },
+  {
+    "name": "arrow-long-down",
+    "code": "e74e",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      ""
+    ]
+  },
+  {
+    "name": "arrow-long-left",
+    "code": "e74f",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      "previous"
+    ]
+  },
+  {
+    "name": "arrow-right",
+    "code": "e7b1",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      "next"
+    ]
+  },
+  {
+    "name": "arrow-up",
+    "code": "e7b2",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      ""
+    ]
+  },
+  {
+    "name": "arrows",
+    "code": "e755",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      "move"
+    ]
+  },
+  {
+    "name": "arrows-cross",
+    "code": "e750",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      "expand"
+    ]
+  },
+  {
+    "name": "arrows-long-h",
+    "code": "e751",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      "scroll",
+      "horizontal"
+    ]
+  },
+  {
+    "name": "arrows-long-right",
+    "code": "e752",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      "next"
+    ]
+  },
+  {
+    "name": "arrows-long-up",
+    "code": "e753",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      ""
+    ]
+  },
+  {
+    "name": "arrows-long-v",
+    "code": "e754",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      "scroll",
+      "vertical"
+    ]
+  },
+  {
+    "name": "asterisk",
+    "code": "e686",
+    "categories": [
+      "Medical"
+    ],
+    "meta": [
+      "healthcare",
+      "star"
+    ]
+  },
+  {
+    "name": "at",
+    "code": "e624",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "email"
+    ]
+  },
+  {
+    "name": "automation",
+    "code": "e687",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "machine",
+      "process"
+    ]
+  },
+  {
+    "name": "backwards",
+    "code": "e756",
+    "categories": [
+      "Media",
+      "Player"
+    ],
+    "meta": [
+      "rewind"
+    ]
+  },
+  {
+    "name": "ban",
+    "code": "e6f7",
+    "categories": [
+      "Notification",
+      "Sign"
+    ],
+    "meta": [
+      "forbid",
+      "refuse",
+      "reject",
+      "no"
+    ]
+  },
+  {
+    "name": "bar-chart",
+    "code": "e757",
+    "categories": [
+      "Charts"
+    ],
+    "meta": [
+      "graph",
+      "diagram",
+      "column-chart"
+    ]
+  },
+  {
+    "name": "barcode",
+    "code": "e688",
+    "categories": [
+      "Media"
+    ],
+    "meta": [
+      "ean",
+      "code"
+    ]
+  },
+  {
+    "name": "menu",
+    "code": "e7b3",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "hamburger",
+      "bars"
+    ]
+  },
+  {
+    "name": "bell",
+    "code": "e7b4",
+    "categories": [
+      "Notification",
+      "Item"
+    ],
+    "meta": [
+      "alert",
+      "reminder",
+      "ring"
+    ]
+  },
+  {
+    "name": "bell-o",
+    "code": "e758",
+    "categories": [
+      "Notification",
+      "Item"
+    ],
+    "meta": [
+      "alert",
+      "reminder",
+      "ring"
+    ]
+  },
+  {
+    "name": "bell-slash",
+    "code": "e626",
+    "categories": [
+      "Notification",
+      "Item"
+    ],
+    "meta": [
+      "alert",
+      "reminder",
+      "ring",
+      "mute",
+      "do not disturb",
+      "off",
+      "disable"
+    ]
+  },
+  {
+    "name": "bell-slash-o",
+    "code": "e625",
+    "categories": [
+      "Notification",
+      "Item"
+    ],
+    "meta": [
+      "alert",
+      "reminder",
+      "ring",
+      "mute",
+      "do not disturb",
+      "off",
+      "disable"
+    ]
+  },
+  {
+    "name": "boat",
+    "code": "e627",
+    "categories": [
+      "Transportation"
+    ],
+    "meta": [
+      "travel",
+      "ship",
+      "cruising",
+      "sailing"
+    ]
+  },
+  {
+    "name": "bold",
+    "code": "e6f8",
+    "categories": [
+      "Text editor"
+    ],
+    "meta": [
+      "font",
+      "character",
+      "text-decoration"
+    ]
+  },
+  {
+    "name": "bolt",
+    "code": "e759",
+    "categories": [
+      "Sign"
+    ],
+    "meta": [
+      "lightning",
+      "electricity"
+    ]
+  },
+  {
+    "name": "bomb",
+    "code": "e689",
+    "categories": [
+      "Item"
+    ],
+    "meta": [
+      "explosive"
+    ]
+  },
+  {
+    "name": "book",
+    "code": "e6f9",
+    "categories": [
+      "Media",
+      "Item"
+    ],
+    "meta": [
+      "cover"
+    ]
+  },
+  {
+    "name": "book-dollar",
+    "code": "e600",
+    "categories": [
+      "Ledger",
+      "Item"
+    ],
+    "meta": [
+      "accounting",
+      "bookkeeping"
+    ]
+  },
+  {
+    "name": "book-percent",
+    "code": "e601",
+    "categories": [
+      "Ledger",
+      "Item"
+    ],
+    "meta": [
+      "accounting",
+      "bookkeeping"
+    ]
+  },
+  {
+    "name": "bookmark",
+    "code": "e7b6",
+    "categories": [
+      "Sign"
+    ],
+    "meta": [
+      ""
+    ]
+  },
+  {
+    "name": "bookmark-o",
+    "code": "e7b5",
+    "categories": [
+      "Sign"
+    ],
+    "meta": [
+      ""
+    ]
+  },
+  {
+    "name": "briefcase",
+    "code": "e602",
+    "categories": [
+      "Item"
+    ],
+    "meta": [
+      "suitcase",
+      "work"
+    ]
+  },
+  {
+    "name": "browser",
+    "code": "e628",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "layout",
+      "html",
+      "internet",
+      "web page",
+      "site"
+    ]
+  },
+  {
+    "name": "bug",
+    "code": "e68b",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "insect"
+    ]
+  },
+  {
+    "name": "bug-o",
+    "code": "e68a",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "insect"
+    ]
+  },
+  {
+    "name": "building",
+    "code": "e7b8",
+    "categories": [
+      "Location"
+    ],
+    "meta": [
+      "structure",
+      "headquarters",
+      "office"
+    ]
+  },
+  {
+    "name": "building-o",
+    "code": "e7b7",
+    "categories": [
+      "Location"
+    ],
+    "meta": [
+      "structure",
+      "headquarters",
+      "office"
+    ]
+  },
+  {
+    "name": "bullets",
+    "code": "e629",
+    "categories": [
+      "Text editor"
+    ],
+    "meta": [
+      "list",
+      "order"
+    ]
+  },
+  {
+    "name": "bullseye",
+    "code": "e6fa",
+    "categories": [
+      "Sign"
+    ],
+    "meta": [
+      "target",
+      "hit",
+      "rings"
+    ]
+  },
+  {
+    "name": "button",
+    "code": "e62a",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "layout",
+      "html",
+      "component",
+      "navigation"
+    ]
+  },
+  {
+    "name": "calc",
+    "code": "e68c",
+    "categories": [
+      "Ledger"
+    ],
+    "meta": [
+      "calculator",
+      "math"
+    ]
+  },
+  {
+    "name": "calc-book",
+    "code": "e62b",
+    "categories": [
+      "Ledger"
+    ],
+    "meta": [
+      "accounting",
+      "bookkeeping",
+      "calculator"
+    ]
+  },
+  {
+    "name": "calendar",
+    "code": "e7ba",
+    "categories": [
+      "Scheduling",
+      "Office"
+    ],
+    "meta": [
+      "appointment",
+      "meeting",
+      "time"
+    ]
+  },
+  {
+    "name": "calendar-briefcase",
+    "code": "e604",
+    "categories": [
+      "Scheduling",
+      "Office"
+    ],
+    "meta": [
+      "suitcase",
+      "appointment",
+      "meeting",
+      "time",
+      "work"
+    ]
+  },
+  {
+    "name": "calendar-clock",
+    "code": "e605",
+    "categories": [
+      "Scheduling",
+      "Office"
+    ],
+    "meta": [
+      "appointment",
+      "meeting",
+      "time"
+    ]
+  },
+  {
+    "name": "calendar-envelope",
+    "code": "e62c",
+    "categories": [
+      "Scheduling",
+      "Office"
+    ],
+    "meta": [
+      "letter",
+      "mail",
+      "appointment",
+      "meeting",
+      "time",
+      "work"
+    ]
+  },
+  {
+    "name": "calendar-o",
+    "code": "e7b9",
+    "categories": [
+      "Scheduling",
+      "Office"
+    ],
+    "meta": [
+      "appointment",
+      "meeting",
+      "time"
+    ]
+  },
+  {
+    "name": "calendar-user",
+    "code": "e606",
+    "categories": [
+      "Scheduling",
+      "Office"
+    ],
+    "meta": [
+      "appointment",
+      "meeting",
+      "time"
+    ]
+  },
+  {
+    "name": "camera",
+    "code": "e7bb",
+    "categories": [
+      "Devices",
+      "Item"
+    ],
+    "meta": [
+      "photo",
+      "photography ",
+      "shoot"
+    ]
+  },
+  {
+    "name": "car",
+    "code": "e62d",
+    "categories": [
+      "Transportation"
+    ],
+    "meta": [
+      "vehicle",
+      "auto",
+      "travel",
+      "drive",
+      "driving"
+    ]
+  },
+  {
+    "name": "caret-down",
+    "code": "e7bc",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      "triangle"
+    ]
+  },
+  {
+    "name": "caret-left",
+    "code": "e7bd",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      "triangle",
+      "previous"
+    ]
+  },
+  {
+    "name": "caret-right",
+    "code": "e7be",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      "triangle",
+      "play",
+      "start",
+      "next"
+    ]
+  },
+  {
+    "name": "caret-square-down-o",
+    "code": "e7bf",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      "triangle"
+    ]
+  },
+  {
+    "name": "caret-square-left-o",
+    "code": "e7c0",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      "triangle",
+      "previous"
+    ]
+  },
+  {
+    "name": "caret-square-right-o",
+    "code": "e7c1",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      "triangle",
+      "play",
+      "start",
+      "next"
+    ]
+  },
+  {
+    "name": "caret-square-up-o",
+    "code": "e7c2",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      "triangle"
+    ]
+  },
+  {
+    "name": "caret-up",
+    "code": "e7c3",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      "triangle"
+    ]
+  },
+  {
+    "name": "cart",
+    "code": "e6fc",
+    "categories": [
+      "Shopping"
+    ],
+    "meta": [
+      "shopping",
+      "buy"
+    ]
+  },
+  {
+    "name": "cart-o",
+    "code": "e6fb",
+    "categories": [
+      "Shopping"
+    ],
+    "meta": [
+      "shopping",
+      "buy"
+    ]
+  },
+  {
+    "name": "chart",
+    "code": "e68e",
+    "categories": [
+      "Charts"
+    ],
+    "meta": [
+      "graph",
+      "diagram"
+    ]
+  },
+  {
+    "name": "chart-line",
+    "code": "e68d",
+    "categories": [
+      "Charts"
+    ],
+    "meta": [
+      "graph",
+      "diagram"
+    ]
+  },
+  {
+    "name": "chat",
+    "code": "e75a",
+    "categories": [
+      "Social"
+    ],
+    "meta": [
+      "dialog",
+      "talk"
+    ]
+  },
+  {
+    "name": "check",
+    "code": "e75b",
+    "categories": [
+      "Form"
+    ],
+    "meta": [
+      "confirm",
+      "assign",
+      "agreed",
+      "ok"
+    ]
+  },
+  {
+    "name": "check-circle",
+    "code": "e7c5",
+    "categories": [
+      "Form"
+    ],
+    "meta": [
+      "confirm",
+      "assign",
+      "agreed",
+      "ok"
+    ]
+  },
+  {
+    "name": "check-circle-o",
+    "code": "e7c4",
+    "categories": [
+      "Form"
+    ],
+    "meta": [
+      "confirm",
+      "assign",
+      "agreed",
+      "ok"
+    ]
+  },
+  {
+    "name": "check-square",
+    "code": "e62e",
+    "categories": [
+      "Form"
+    ],
+    "meta": [
+      "confirm",
+      "assign",
+      "agreed",
+      "ok"
+    ]
+  },
+  {
+    "name": "check-square-o",
+    "code": "e6fd",
+    "categories": [
+      "Form"
+    ],
+    "meta": [
+      "confirm",
+      "assign",
+      "agreed",
+      "ok"
+    ]
+  },
+  {
+    "name": "chevron-circle-down",
+    "code": "e7c7",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      ""
+    ]
+  },
+  {
+    "name": "chevron-circle-down-o",
+    "code": "e7c6",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      ""
+    ]
+  },
+  {
+    "name": "chevron-circle-left",
+    "code": "e7c9",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      "previous"
+    ]
+  },
+  {
+    "name": "chevron-circle-left-o",
+    "code": "e7c8",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      "previous"
+    ]
+  },
+  {
+    "name": "chevron-circle-right",
+    "code": "e7cb",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      "next"
+    ]
+  },
+  {
+    "name": "chevron-circle-right-o",
+    "code": "e7ca",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      "next"
+    ]
+  },
+  {
+    "name": "chevron-circle-up",
+    "code": "e7cd",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      ""
+    ]
+  },
+  {
+    "name": "chevron-circle-up-o",
+    "code": "e7cc",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      ""
+    ]
+  },
+  {
+    "name": "chevron-down",
+    "code": "e7ce",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      "caret"
+    ]
+  },
+  {
+    "name": "chevron-left",
+    "code": "e7cf",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      "previous",
+      "caret"
+    ]
+  },
+  {
+    "name": "chevron-right",
+    "code": "e7d0",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      "next",
+      "caret"
+    ]
+  },
+  {
+    "name": "chevron-up",
+    "code": "e7d1",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      "caret"
+    ]
+  },
+  {
+    "name": "child",
+    "code": "e62f",
+    "categories": [
+      "People"
+    ],
+    "meta": [
+      "kid",
+      "hobbit"
+    ]
+  },
+  {
+    "name": "circle",
+    "code": "e75d",
+    "categories": [
+      "Shape"
+    ],
+    "meta": [
+      "ball",
+      "disc"
+    ]
+  },
+  {
+    "name": "circle-thin",
+    "code": "e75c",
+    "categories": [
+      "Shape",
+      "Form"
+    ],
+    "meta": [
+      "ball",
+      "disc"
+    ]
+  },
+  {
+    "name": "clipboard",
+    "code": "e635",
+    "categories": [
+      "Office"
+    ],
+    "meta": [
+      "document",
+      "file",
+      "copy"
+    ]
+  },
+  {
+    "name": "clipboard-cross",
+    "code": "e630",
+    "categories": [
+      "Office",
+      "Medical"
+    ],
+    "meta": [
+      "healtcare",
+      "patient"
+    ]
+  },
+  {
+    "name": "clipboard-heart",
+    "code": "e631",
+    "categories": [
+      "Office",
+      "Medical"
+    ],
+    "meta": [
+      "healtcare",
+      "patient"
+    ]
+  },
+  {
+    "name": "clipboard-pulse",
+    "code": "e632",
+    "categories": [
+      "Office",
+      "Medical"
+    ],
+    "meta": [
+      "healtcare",
+      "patient",
+      "status"
+    ]
+  },
+  {
+    "name": "clipboard-text",
+    "code": "e633",
+    "categories": [
+      "Office"
+    ],
+    "meta": [
+      "document",
+      "file"
+    ]
+  },
+  {
+    "name": "clipboard-user",
+    "code": "e634",
+    "categories": [
+      "Office",
+      "People"
+    ],
+    "meta": [
+      "document",
+      "file",
+      "profile"
+    ]
+  },
+  {
+    "name": "clock",
+    "code": "e7d2",
+    "categories": [
+      "Scheduling",
+      "Item"
+    ],
+    "meta": [
+      "appointment",
+      "meeting",
+      "time"
+    ]
+  },
+  {
+    "name": "cloud",
+    "code": "e763",
+    "categories": [
+      "Web application",
+      "Weather"
+    ],
+    "meta": [
+      ""
+    ]
+  },
+  {
+    "name": "cloud-download",
+    "code": "e75f",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      ""
+    ]
+  },
+  {
+    "name": "cloud-download-o",
+    "code": "e75e",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      ""
+    ]
+  },
+  {
+    "name": "cloud-o",
+    "code": "e760",
+    "categories": [
+      "Web application",
+      "Weather"
+    ],
+    "meta": [
+      ""
+    ]
+  },
+  {
+    "name": "cloud-upload",
+    "code": "e762",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      ""
+    ]
+  },
+  {
+    "name": "cloud-upload-o",
+    "code": "e761",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      ""
+    ]
+  },
+  {
+    "name": "code",
+    "code": "e68f",
+    "categories": [
+      "Web application",
+      "Edit"
+    ],
+    "meta": [
+      "html",
+      "system",
+      "tags"
+    ]
+  },
+  {
+    "name": "coffee",
+    "code": "e690",
+    "categories": [
+      "Food",
+      "Web application"
+    ],
+    "meta": [
+      "java",
+      "cup"
+    ]
+  },
+  {
+    "name": "cog",
+    "code": "e7d3",
+    "categories": [
+      "Web application",
+      "Edit"
+    ],
+    "meta": [
+      "settings",
+      "gear"
+    ]
+  },
+  {
+    "name": "cog-o",
+    "code": "e764",
+    "categories": [
+      "Web application",
+      "Edit"
+    ],
+    "meta": [
+      "settings",
+      "gear"
+    ]
+  },
+  {
+    "name": "cogs",
+    "code": "e691",
+    "categories": [
+      "Web application",
+      "Edit"
+    ],
+    "meta": [
+      "settings",
+      "gears"
+    ]
+  },
+  {
+    "name": "combobox",
+    "code": "e636",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "layout",
+      "html",
+      "component",
+      "navigation",
+      "dropdown"
+    ]
+  },
+  {
+    "name": "comment",
+    "code": "e768",
+    "categories": [
+      "Social"
+    ],
+    "meta": [
+      "speech bubble",
+      "chat",
+      "dialog",
+      "talk"
+    ]
+  },
+  {
+    "name": "comment-ellipsis",
+    "code": "e766",
+    "categories": [
+      "Social"
+    ],
+    "meta": [
+      "chat",
+      "dialog",
+      "talk"
+    ]
+  },
+  {
+    "name": "comment-ellipsis-o",
+    "code": "e765",
+    "categories": [
+      "Social"
+    ],
+    "meta": [
+      "chat",
+      "dialog",
+      "talk"
+    ]
+  },
+  {
+    "name": "comment-o",
+    "code": "e767",
+    "categories": [
+      "Social"
+    ],
+    "meta": [
+      "speech bubble",
+      "chat",
+      "dialog",
+      "talk"
+    ]
+  },
+  {
+    "name": "comments",
+    "code": "e76a",
+    "categories": [
+      "Social"
+    ],
+    "meta": [
+      "chat",
+      "dialog",
+      "talk"
+    ]
+  },
+  {
+    "name": "comments-o",
+    "code": "e769",
+    "categories": [
+      "Social"
+    ],
+    "meta": [
+      "chat",
+      "dialog",
+      "talk"
+    ]
+  },
+  {
+    "name": "compress",
+    "code": "e76b",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "minimize"
+    ]
+  },
+  {
+    "name": "compress-square",
+    "code": "e637",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "minimize",
+      "fit"
+    ]
+  },
+  {
+    "name": "connect",
+    "code": "e76d",
+    "categories": [
+      "Social"
+    ],
+    "meta": [
+      "share",
+      "network"
+    ]
+  },
+  {
+    "name": "connect-o",
+    "code": "e76c",
+    "categories": [
+      "Social"
+    ],
+    "meta": [
+      "share",
+      "network"
+    ]
+  },
+  {
+    "name": "controller",
+    "code": "e692",
+    "categories": [
+      "Edit"
+    ],
+    "meta": [
+      "settings",
+      "adjust",
+      "dial"
+    ]
+  },
+  {
+    "name": "copy",
+    "code": "e7d5",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "duplicate",
+      "documents",
+      "files"
+    ]
+  },
+  {
+    "name": "copy-o",
+    "code": "e7d4",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "duplicate",
+      "documents",
+      "files"
+    ]
+  },
+  {
+    "name": "copyright",
+    "code": "e638",
+    "categories": [
+      "Sign"
+    ],
+    "meta": [
+      ""
+    ]
+  },
+  {
+    "name": "corner-lower-left",
+    "code": "e693",
+    "categories": [
+      "Shape"
+    ],
+    "meta": [
+      "triangle"
+    ]
+  },
+  {
+    "name": "corner-lower-right",
+    "code": "e694",
+    "categories": [
+      "Shape"
+    ],
+    "meta": [
+      "triangle"
+    ]
+  },
+  {
+    "name": "corner-upper-left",
+    "code": "e695",
+    "categories": [
+      "Shape"
+    ],
+    "meta": [
+      "triangle"
+    ]
+  },
+  {
+    "name": "corner-upper-right",
+    "code": "e696",
+    "categories": [
+      "Shape"
+    ],
+    "meta": [
+      "triangle"
+    ]
+  },
+  {
+    "name": "credit-card",
+    "code": "e76e",
+    "categories": [
+      "Shopping",
+      "Item"
+    ],
+    "meta": [
+      "payment"
+    ]
+  },
+  {
+    "name": "crop",
+    "code": "e76f",
+    "categories": [
+      "Edit"
+    ],
+    "meta": [
+      "resize"
+    ]
+  },
+  {
+    "name": "cross-cutlery",
+    "code": "e6fe",
+    "categories": [
+      "Food"
+    ],
+    "meta": [
+      "fork",
+      "knife",
+      "food",
+      "eat"
+    ]
+  },
+  {
+    "name": "crosshairs",
+    "code": "e7d6",
+    "categories": [
+      "Edit"
+    ],
+    "meta": [
+      "scope",
+      "target"
+    ]
+  },
+  {
+    "name": "css",
+    "code": "e639",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "html"
+    ]
+  },
+  {
+    "name": "cube",
+    "code": "e697",
+    "categories": [
+      "Item"
+    ],
+    "meta": [
+      "box",
+      "package"
+    ]
+  },
+  {
+    "name": "cubes",
+    "code": "e698",
+    "categories": [
+      "Item"
+    ],
+    "meta": [
+      "boxes",
+      "packages"
+    ]
+  },
+  {
+    "name": "curly-brackets",
+    "code": "e63a",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "css",
+      "code",
+      "braces"
+    ]
+  },
+  {
+    "name": "cutlery",
+    "code": "e6ff",
+    "categories": [
+      "Food"
+    ],
+    "meta": [
+      "fork",
+      "knife",
+      "eat",
+      "food"
+    ]
+  },
+  {
+    "name": "dashboard",
+    "code": "e700",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "speed meter",
+      "measure",
+      "fast",
+      "dial"
+    ]
+  },
+  {
+    "name": "date-input",
+    "code": "e63b",
+    "categories": [
+      "Scheduling"
+    ],
+    "meta": [
+      "layout",
+      "html",
+      "component"
+    ]
+  },
+  {
+    "name": "deindent",
+    "code": "e770",
+    "categories": [
+      "Text editor"
+    ],
+    "meta": [
+      "paragraph",
+      "column",
+      "unindent",
+      "outdent"
+    ]
+  },
+  {
+    "name": "dental-chair",
+    "code": "e607",
+    "categories": [
+      "Medical"
+    ],
+    "meta": [
+      "dentist",
+      "healthcare"
+    ]
+  },
+  {
+    "name": "desktop",
+    "code": "e7d7",
+    "categories": [
+      "Devices",
+      "Media",
+      "Item"
+    ],
+    "meta": [
+      "computer",
+      "imac",
+      "screen",
+      "monitor"
+    ]
+  },
+  {
+    "name": "disc",
+    "code": "e701",
+    "categories": [
+      "Media",
+      "Item"
+    ],
+    "meta": [
+      "cd",
+      "blue-ray",
+      "dvd"
+    ]
+  },
+  {
+    "name": "doctor",
+    "code": "e609",
+    "categories": [
+      "Medical",
+      "People"
+    ],
+    "meta": [
+      "stethoscope",
+      "healthcare"
+    ]
+  },
+  {
+    "name": "doctor-briefcase",
+    "code": "e608",
+    "categories": [
+      "Medical",
+      "Tools",
+      "Item"
+    ],
+    "meta": [
+      "suitcase",
+      "healthcare"
+    ]
+  },
+  {
+    "name": "dollar",
+    "code": "e60a",
+    "categories": [
+      "Ledger",
+      "Shopping"
+    ],
+    "meta": [
+      "money",
+      "currency"
+    ]
+  },
+  {
+    "name": "dot-circle",
+    "code": "e702",
+    "categories": [
+      "Form"
+    ],
+    "meta": [
+      "radio button"
+    ]
+  },
+  {
+    "name": "download",
+    "code": "e703",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "save"
+    ]
+  },
+  {
+    "name": "download-alt",
+    "code": "e699",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "save"
+    ]
+  },
+  {
+    "name": "insert",
+    "code": "e7d8",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "internal",
+      "link",
+      "put"
+    ]
+  },
+  {
+    "name": "drop",
+    "code": "e704",
+    "categories": [
+      "Shape",
+      "Edit",
+      "Weather"
+    ],
+    "meta": [
+      "blur",
+      "water",
+      "rain",
+      "liquid"
+    ]
+  },
+  {
+    "name": "edit",
+    "code": "e771",
+    "categories": [
+      "Form",
+      "Edit"
+    ],
+    "meta": [
+      "note",
+      "write",
+      "pen"
+    ]
+  },
+  {
+    "name": "eject",
+    "code": "e772",
+    "categories": [
+      "Media",
+      "Player"
+    ],
+    "meta": [
+      ""
+    ]
+  },
+  {
+    "name": "elastic",
+    "code": "e63c",
+    "categories": [
+      "Item"
+    ],
+    "meta": [
+      "rubber-band"
+    ]
+  },
+  {
+    "name": "ellipsis-circle",
+    "code": "e7da",
+    "categories": [
+      "Shape",
+      "Form"
+    ],
+    "meta": [
+      "dots"
+    ]
+  },
+  {
+    "name": "ellipsis-circle-o",
+    "code": "e7d9",
+    "categories": [
+      "Shape",
+      "Form"
+    ],
+    "meta": [
+      "dots"
+    ]
+  },
+  {
+    "name": "ellipsis-h",
+    "code": "e773",
+    "categories": [
+      "Shape",
+      "Form"
+    ],
+    "meta": [
+      "dots"
+    ]
+  },
+  {
+    "name": "ellipsis-v",
+    "code": "e774",
+    "categories": [
+      "Shape",
+      "Form"
+    ],
+    "meta": [
+      "dots"
+    ]
+  },
+  {
+    "name": "envelope",
+    "code": "e7dc",
+    "categories": [
+      "Office",
+      "Item"
+    ],
+    "meta": [
+      "mail",
+      "letter",
+      "email"
+    ]
+  },
+  {
+    "name": "envelope-o",
+    "code": "e7db",
+    "categories": [
+      "Office",
+      "Item"
+    ],
+    "meta": [
+      "mail",
+      "letter",
+      "email"
+    ]
+  },
+  {
+    "name": "envelope-open",
+    "code": "e63e",
+    "categories": [
+      "Office"
+    ],
+    "meta": [
+      "mail",
+      "letter",
+      "email"
+    ]
+  },
+  {
+    "name": "envelope-open-o",
+    "code": "e63d",
+    "categories": [
+      "Office"
+    ],
+    "meta": [
+      "mail",
+      "letter",
+      "email"
+    ]
+  },
+  {
+    "name": "eraser",
+    "code": "e69a",
+    "categories": [
+      "Office",
+      "Item",
+      "Edit"
+    ],
+    "meta": [
+      "erase",
+      "delete",
+      "remove"
+    ]
+  },
+  {
+    "name": "exchange",
+    "code": "e705",
+    "categories": [
+      "Directions",
+      "Web application"
+    ],
+    "meta": [
+      "swap",
+      "arrows",
+      "bidirectional"
+    ]
+  },
+  {
+    "name": "exclamation",
+    "code": "e708",
+    "categories": [
+      "Notification",
+      "Sign"
+    ],
+    "meta": [
+      "warning"
+    ]
+  },
+  {
+    "name": "exclamation-circle",
+    "code": "e707",
+    "categories": [
+      "Notification",
+      "Sign"
+    ],
+    "meta": [
+      "warning"
+    ]
+  },
+  {
+    "name": "exclamation-circle-o",
+    "code": "e706",
+    "categories": [
+      "Notification",
+      "Sign"
+    ],
+    "meta": [
+      "warning"
+    ]
+  },
+  {
+    "name": "exit",
+    "code": "e60c",
+    "categories": [
+      "Sign"
+    ],
+    "meta": [
+      "run",
+      "sign out",
+      "log out"
+    ]
+  },
+  {
+    "name": "exit-o",
+    "code": "e60b",
+    "categories": [
+      "Sign"
+    ],
+    "meta": [
+      "sign out",
+      "log out"
+    ]
+  },
+  {
+    "name": "expand",
+    "code": "e776",
+    "categories": [
+      "Directions",
+      "Web application"
+    ],
+    "meta": [
+      "maximize",
+      "full screen",
+      "arrows"
+    ]
+  },
+  {
+    "name": "expand-full",
+    "code": "e775",
+    "categories": [
+      "Directions",
+      "Web application"
+    ],
+    "meta": [
+      "maximize",
+      "full screen",
+      "arrows"
+    ]
+  },
+  {
+    "name": "expand-square",
+    "code": "e7dd",
+    "categories": [
+      "Directions",
+      "Web application"
+    ],
+    "meta": [
+      "maximize",
+      "full screen",
+      "arrows"
+    ]
+  },
+  {
+    "name": "external-browser",
+    "code": "e63f",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      ""
+    ]
+  },
+  {
+    "name": "external-link",
+    "code": "e7de",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "extract"
+    ]
+  },
+  {
+    "name": "eye",
+    "code": "e7df",
+    "categories": [
+      "Sign"
+    ],
+    "meta": [
+      "visible",
+      "show",
+      "view"
+    ]
+  },
+  {
+    "name": "eye-slash",
+    "code": "e709",
+    "categories": [
+      "Sign"
+    ],
+    "meta": [
+      "hide",
+      "unseen",
+      "disable",
+      "hidden"
+    ]
+  },
+  {
+    "name": "eyedropper",
+    "code": "e640",
+    "categories": [
+      "Tools",
+      "Item"
+    ],
+    "meta": [
+      "color picker"
+    ]
+  },
+  {
+    "name": "facebook",
+    "code": "e69c",
+    "categories": [
+      "Brand",
+      "Social"
+    ],
+    "meta": [
+      ""
+    ]
+  },
+  {
+    "name": "facebook-square",
+    "code": "e69b",
+    "categories": [
+      "Brand",
+      "Social"
+    ],
+    "meta": [
+      ""
+    ]
+  },
+  {
+    "name": "factory",
+    "code": "e641",
+    "categories": [
+      "Location"
+    ],
+    "meta": [
+      "production",
+      "work"
+    ]
+  },
+  {
+    "name": "fast-backward",
+    "code": "e777",
+    "categories": [
+      "Media",
+      "Player"
+    ],
+    "meta": [
+      "previous",
+      "first"
+    ]
+  },
+  {
+    "name": "fast-forward",
+    "code": "e778",
+    "categories": [
+      "Media",
+      "Player"
+    ],
+    "meta": [
+      "next",
+      "last"
+    ]
+  },
+  {
+    "name": "female",
+    "code": "e69d",
+    "categories": [
+      "People"
+    ],
+    "meta": [
+      "human",
+      "person",
+      "woman",
+      "girl"
+    ]
+  },
+  {
+    "name": "file",
+    "code": "e7e3",
+    "categories": [
+      "File types"
+    ],
+    "meta": [
+      "document"
+    ]
+  },
+  {
+    "name": "file-code",
+    "code": "e70a",
+    "categories": [
+      "File types"
+    ],
+    "meta": [
+      "html",
+      "document"
+    ]
+  },
+  {
+    "name": "file-font",
+    "code": "e69e",
+    "categories": [
+      "File types"
+    ],
+    "meta": [
+      "text",
+      "document"
+    ]
+  },
+  {
+    "name": "file-movie",
+    "code": "e70b",
+    "categories": [
+      "File types"
+    ],
+    "meta": [
+      "video",
+      "media",
+      "document"
+    ]
+  },
+  {
+    "name": "file-o",
+    "code": "e7e0",
+    "categories": [
+      "File types"
+    ],
+    "meta": [
+      "document"
+    ]
+  },
+  {
+    "name": "file-picture",
+    "code": "e70c",
+    "categories": [
+      "File types"
+    ],
+    "meta": [
+      "image",
+      "photo",
+      "document"
+    ]
+  },
+  {
+    "name": "file-presentation",
+    "code": "e69f",
+    "categories": [
+      "File types"
+    ],
+    "meta": [
+      "multimedia",
+      "powerpoint",
+      "keynote",
+      "document"
+    ]
+  },
+  {
+    "name": "file-process",
+    "code": "e642",
+    "categories": [
+      "File types"
+    ],
+    "meta": [
+      "document",
+      "cog",
+      "settings",
+      "gear"
+    ]
+  },
+  {
+    "name": "file-refresh",
+    "code": "e643",
+    "categories": [
+      "File types"
+    ],
+    "meta": [
+      "document",
+      "reload"
+    ]
+  },
+  {
+    "name": "file-sound",
+    "code": "e70d",
+    "categories": [
+      "File types"
+    ],
+    "meta": [
+      "music",
+      "voice",
+      "sound",
+      "audio",
+      "document"
+    ]
+  },
+  {
+    "name": "file-start",
+    "code": "e644",
+    "categories": [
+      "File types"
+    ],
+    "meta": [
+      "media",
+      "video",
+      "movie",
+      "document"
+    ]
+  },
+  {
+    "name": "file-table",
+    "code": "e6a0",
+    "categories": [
+      "File types"
+    ],
+    "meta": [
+      "table",
+      "sheet",
+      "document"
+    ]
+  },
+  {
+    "name": "file-text",
+    "code": "e7e2",
+    "categories": [
+      "File types"
+    ],
+    "meta": [
+      "text",
+      "document"
+    ]
+  },
+  {
+    "name": "file-text-o",
+    "code": "e7e1",
+    "categories": [
+      "File types"
+    ],
+    "meta": [
+      "text",
+      "document"
+    ]
+  },
+  {
+    "name": "file-tree",
+    "code": "e647",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "nodes",
+      "mindmap"
+    ]
+  },
+  {
+    "name": "file-tree-small",
+    "code": "e645",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "nodes",
+      "mindmap"
+    ]
+  },
+  {
+    "name": "file-tree-sub",
+    "code": "e646",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "nodes",
+      "mindmap"
+    ]
+  },
+  {
+    "name": "file-zip",
+    "code": "e70e",
+    "categories": [
+      "File types"
+    ],
+    "meta": [
+      "compress",
+      "rar",
+      "document",
+      "archive"
+    ]
+  },
+  {
+    "name": "fill",
+    "code": "e6a1",
+    "categories": [
+      "Tools"
+    ],
+    "meta": [
+      "paint bucket"
+    ]
+  },
+  {
+    "name": "film",
+    "code": "e779",
+    "categories": [
+      "Media"
+    ],
+    "meta": [
+      "movie",
+      "video",
+      "clip"
+    ]
+  },
+  {
+    "name": "filter",
+    "code": "e6a2",
+    "categories": [
+      "Item"
+    ],
+    "meta": [
+      ""
+    ]
+  },
+  {
+    "name": "fire",
+    "code": "e6a3",
+    "categories": [
+      "Sign"
+    ],
+    "meta": [
+      "hot",
+      "burn"
+    ]
+  },
+  {
+    "name": "flag",
+    "code": "e711",
+    "categories": [
+      "Sign"
+    ],
+    "meta": [
+      ""
+    ]
+  },
+  {
+    "name": "flag-checkered",
+    "code": "e70f",
+    "categories": [
+      "Sign"
+    ],
+    "meta": [
+      "goal",
+      "finish"
+    ]
+  },
+  {
+    "name": "flag-o",
+    "code": "e710",
+    "categories": [
+      "Sign"
+    ],
+    "meta": [
+      ""
+    ]
+  },
+  {
+    "name": "adobe-flash",
+    "code": "e648",
+    "categories": [
+      "Brand"
+    ],
+    "meta": [
+      ""
+    ]
+  },
+  {
+    "name": "flash",
+    "code": "e712",
+    "categories": [
+      "Sign",
+      "Shape"
+    ],
+    "meta": [
+      ""
+    ]
+  },
+  {
+    "name": "flask",
+    "code": "e7e4",
+    "categories": [
+      "Medical",
+      "Item"
+    ],
+    "meta": [
+      "test",
+      "lab",
+      "laboratory",
+      "science"
+    ]
+  },
+  {
+    "name": "flip-h",
+    "code": "e649",
+    "categories": [
+      "Edit"
+    ],
+    "meta": [
+      "mirror"
+    ]
+  },
+  {
+    "name": "flip-v",
+    "code": "e64a",
+    "categories": [
+      "Edit"
+    ],
+    "meta": [
+      "mirror"
+    ]
+  },
+  {
+    "name": "folder",
+    "code": "e7e6",
+    "categories": [
+      "File types"
+    ],
+    "meta": [
+      "document",
+      "file",
+      "container"
+    ]
+  },
+  {
+    "name": "folder-o",
+    "code": "e7e5",
+    "categories": [
+      "File types"
+    ],
+    "meta": [
+      "document",
+      "file",
+      "container"
+    ]
+  },
+  {
+    "name": "folder-open",
+    "code": "e77b",
+    "categories": [
+      "File types"
+    ],
+    "meta": [
+      "document",
+      "file",
+      "container"
+    ]
+  },
+  {
+    "name": "folder-open-o",
+    "code": "e77a",
+    "categories": [
+      "File types"
+    ],
+    "meta": [
+      "document",
+      "file",
+      "container"
+    ]
+  },
+  {
+    "name": "font",
+    "code": "e713",
+    "categories": [
+      "Text editor"
+    ],
+    "meta": [
+      "text",
+      "character",
+      "text-decoration",
+      "letter"
+    ]
+  },
+  {
+    "name": "form",
+    "code": "e64b",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "layout",
+      "html",
+      "component"
+    ]
+  },
+  {
+    "name": "forward",
+    "code": "e77c",
+    "categories": [
+      "Media",
+      "Player"
+    ],
+    "meta": [
+      "next"
+    ]
+  },
+  {
+    "name": "frown-o",
+    "code": "e6a4",
+    "categories": [
+      "Social",
+      "Sign"
+    ],
+    "meta": [
+      "unhappy",
+      "sad",
+      "emoji"
+    ]
+  },
+  {
+    "name": "funcion",
+    "code": "e64c",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "math",
+      "code"
+    ]
+  },
+  {
+    "name": "gamepad",
+    "code": "e714",
+    "categories": [
+      "Media",
+      "Item"
+    ],
+    "meta": [
+      "game",
+      "pad",
+      "joystick"
+    ]
+  },
+  {
+    "name": "gavel",
+    "code": "e6a5",
+    "categories": [
+      "Tools",
+      "Item"
+    ],
+    "meta": [
+      "auction",
+      "justice",
+      "hammer"
+    ]
+  },
+  {
+    "name": "gift",
+    "code": "e715",
+    "categories": [
+      "Item"
+    ],
+    "meta": [
+      "present",
+      "birthday"
+    ]
+  },
+  {
+    "name": "glass",
+    "code": "e77d",
+    "categories": [
+      "Food"
+    ],
+    "meta": [
+      "cocktail",
+      "drink",
+      "party"
+    ]
+  },
+  {
+    "name": "globe",
+    "code": "e77e",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "earth",
+      "internet",
+      "global",
+      "world"
+    ]
+  },
+  {
+    "name": "glasses",
+    "code": "e7e7",
+    "categories": [
+      "Item"
+    ],
+    "meta": [
+      "goggles",
+      "nerd"
+    ]
+  },
+  {
+    "name": "golf",
+    "code": "e60d",
+    "categories": [
+      "People"
+    ],
+    "meta": [
+      "leisure",
+      "play",
+      "free time",
+      "sport"
+    ]
+  },
+  {
+    "name": "google-plus",
+    "code": "e6a7",
+    "categories": [
+      "Brand",
+      "Social"
+    ],
+    "meta": [
+      ""
+    ]
+  },
+  {
+    "name": "google-plus-square",
+    "code": "e6a6",
+    "categories": [
+      "Brand",
+      "Social"
+    ],
+    "meta": [
+      ""
+    ]
+  },
+  {
+    "name": "grab",
+    "code": "e64d",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "hold",
+      "hand"
+    ]
+  },
+  {
+    "name": "grid",
+    "code": "e651",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "layout",
+      "html",
+      "component",
+      "table"
+    ]
+  },
+  {
+    "name": "grid-bevel",
+    "code": "e64e",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "layout",
+      "html",
+      "component",
+      "table"
+    ]
+  },
+  {
+    "name": "grid-big",
+    "code": "e7e9",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "menu",
+      "window"
+    ]
+  },
+  {
+    "name": "grid-big-o",
+    "code": "e7e8",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "menu",
+      "window"
+    ]
+  },
+  {
+    "name": "grid-h",
+    "code": "e64f",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "layout",
+      "html",
+      "component",
+      "columns"
+    ]
+  },
+  {
+    "name": "grid-small",
+    "code": "e7eb",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "layout",
+      "html",
+      "component",
+      "table"
+    ]
+  },
+  {
+    "name": "grid-small-o",
+    "code": "e7ea",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "layout",
+      "html",
+      "component",
+      "table"
+    ]
+  },
+  {
+    "name": "grid-v",
+    "code": "e650",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "layout",
+      "html",
+      "component",
+      "rows"
+    ]
+  },
+  {
+    "name": "group",
+    "code": "e60e",
+    "categories": [
+      "People"
+    ],
+    "meta": [
+      "users",
+      "staff"
+    ]
+  },
+  {
+    "name": "hand",
+    "code": "e652",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "pan"
+    ]
+  },
+  {
+    "name": "handle-corner",
+    "code": "e716",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "resize"
+    ]
+  },
+  {
+    "name": "hands-up",
+    "code": "e6a8",
+    "categories": [
+      "People"
+    ],
+    "meta": [
+      "human",
+      "person",
+      "happy",
+      "joy"
+    ]
+  },
+  {
+    "name": "harddrive",
+    "code": "e718",
+    "categories": [
+      "Devices",
+      "Media",
+      "Item"
+    ],
+    "meta": [
+      "disk",
+      "harddisk",
+      "HD",
+      "storage"
+    ]
+  },
+  {
+    "name": "harddrive-o",
+    "code": "e717",
+    "categories": [
+      "Devices",
+      "Media",
+      "Item"
+    ],
+    "meta": [
+      "disk",
+      "harddisk",
+      "HD",
+      "storage"
+    ]
+  },
+  {
+    "name": "hash",
+    "code": "e6a9",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "number",
+      "pound"
+    ]
+  },
+  {
+    "name": "header",
+    "code": "e719",
+    "categories": [
+      "Text editor"
+    ],
+    "meta": [
+      "font",
+      "character",
+      "text-decoration",
+      "letter"
+    ]
+  },
+  {
+    "name": "headphones",
+    "code": "e71a",
+    "categories": [
+      "Devices",
+      "Media",
+      "Item"
+    ],
+    "meta": [
+      "sound",
+      "audio",
+      "voice",
+      "music",
+      "listening"
+    ]
+  },
+  {
+    "name": "health-card",
+    "code": "e60f",
+    "categories": [
+      "Medical"
+    ],
+    "meta": [
+      "insurance",
+      "heart",
+      "healthcare"
+    ]
+  },
+  {
+    "name": "heart",
+    "code": "e780",
+    "categories": [
+      "Medical",
+      "Shape"
+    ],
+    "meta": [
+      "life",
+      "love",
+      "health",
+      "healthcare"
+    ]
+  },
+  {
+    "name": "heart-o",
+    "code": "e77f",
+    "categories": [
+      "Medical"
+    ],
+    "meta": [
+      "life",
+      "love",
+      "health",
+      "healthcare"
+    ]
+  },
+  {
+    "name": "home",
+    "code": "e7ed",
+    "categories": [
+      "Location"
+    ],
+    "meta": [
+      "house"
+    ]
+  },
+  {
+    "name": "home-o",
+    "code": "e7ec",
+    "categories": [
+      "Location"
+    ],
+    "meta": [
+      "house"
+    ]
+  },
+  {
+    "name": "inbox",
+    "code": "e71b",
+    "categories": [
+      "Office"
+    ],
+    "meta": [
+      "email"
+    ]
+  },
+  {
+    "name": "indent",
+    "code": "e781",
+    "categories": [
+      "Text editor"
+    ],
+    "meta": [
+      "paragraph",
+      "column"
+    ]
+  },
+  {
+    "name": "info",
+    "code": "e71e",
+    "categories": [
+      "Notification",
+      "Sign"
+    ],
+    "meta": [
+      "information"
+    ]
+  },
+  {
+    "name": "info-circle",
+    "code": "e71d",
+    "categories": [
+      "Notification",
+      "Sign"
+    ],
+    "meta": [
+      "information"
+    ]
+  },
+  {
+    "name": "info-circle-o",
+    "code": "e71c",
+    "categories": [
+      "Notification",
+      "Sign"
+    ],
+    "meta": [
+      "information"
+    ]
+  },
+  {
+    "name": "input",
+    "code": "e653",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "text",
+      "layout",
+      "html",
+      "component",
+      "field"
+    ]
+  },
+  {
+    "name": "institution",
+    "code": "e6aa",
+    "categories": [
+      "Location"
+    ],
+    "meta": [
+      "academy",
+      "school",
+      "justice",
+      "court",
+      "museum"
+    ]
+  },
+  {
+    "name": "invoice",
+    "code": "e610",
+    "categories": [
+      "Ledger",
+      "Shopping"
+    ],
+    "meta": [
+      "bill",
+      "billing",
+      "payment"
+    ]
+  },
+  {
+    "name": "list-ol",
+    "code": "e71f",
+    "categories": [
+      "Text editor"
+    ],
+    "meta": [
+      "order",
+      "sort",
+      "checklist"
+    ]
+  },
+  {
+    "name": "italic",
+    "code": "e720",
+    "categories": [
+      "Text editor"
+    ],
+    "meta": [
+      "font",
+      "character",
+      "text-decoration"
+    ]
+  },
+  {
+    "name": "key",
+    "code": "e6ac",
+    "categories": [
+      "Item"
+    ],
+    "meta": [
+      "sign in",
+      "log in",
+      "login",
+      "access"
+    ]
+  },
+  {
+    "name": "key-o",
+    "code": "e6ab",
+    "categories": [
+      "Item"
+    ],
+    "meta": [
+      "sign in",
+      "log in",
+      "login",
+      "access"
+    ]
+  },
+  {
+    "name": "keyboard",
+    "code": "e722",
+    "categories": [
+      "Devices",
+      "Item"
+    ],
+    "meta": [
+      "input",
+      "type"
+    ]
+  },
+  {
+    "name": "keyboard-o",
+    "code": "e721",
+    "categories": [
+      "Devices",
+      "Item"
+    ],
+    "meta": [
+      "input",
+      "type"
+    ]
+  },
+  {
+    "name": "laptop",
+    "code": "e782",
+    "categories": [
+      "Devices",
+      "Item"
+    ],
+    "meta": [
+      "macbook",
+      "computer"
+    ]
+  },
+  {
+    "name": "layout",
+    "code": "e654",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "layout",
+      "html",
+      "web page",
+      "site"
+    ]
+  },
+  {
+    "name": "level-down",
+    "code": "e783",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      "arrow",
+      "angle"
+    ]
+  },
+  {
+    "name": "level-down-bold",
+    "code": "e611",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      "arrow",
+      "angle"
+    ]
+  },
+  {
+    "name": "level-left",
+    "code": "e784",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      "arrow",
+      "angle",
+      "back",
+      "reply",
+      "previous"
+    ]
+  },
+  {
+    "name": "level-left-bold",
+    "code": "e612",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      "arrow",
+      "angle",
+      "back",
+      "reply",
+      "previous"
+    ]
+  },
+  {
+    "name": "level-right",
+    "code": "e785",
+    "categories": [
+      "Directions",
+      "Office"
+    ],
+    "meta": [
+      "forward",
+      "arrow",
+      "angle",
+      "next"
+    ]
+  },
+  {
+    "name": "level-right-bold",
+    "code": "e655",
+    "categories": [
+      "Directions",
+      "Office"
+    ],
+    "meta": [
+      "forward",
+      "arrow",
+      "angle",
+      "next"
+    ]
+  },
+  {
+    "name": "level-up",
+    "code": "e786",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      "arrow",
+      "angle"
+    ]
+  },
+  {
+    "name": "level-up-bold",
+    "code": "e613",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      "arrow",
+      "angle"
+    ]
+  },
+  {
+    "name": "lifebuoy",
+    "code": "e6ad",
+    "categories": [
+      "Item"
+    ],
+    "meta": [
+      "lifesaver",
+      "life ring",
+      "help",
+      "insurance"
+    ]
+  },
+  {
+    "name": "lightbulb",
+    "code": "e6ae",
+    "categories": [
+      "Notification",
+      "Item"
+    ],
+    "meta": [
+      "idea",
+      "smart"
+    ]
+  },
+  {
+    "name": "line-h",
+    "code": "e723",
+    "categories": [
+      "Shape"
+    ],
+    "meta": [
+      ""
+    ]
+  },
+  {
+    "name": "line-v",
+    "code": "e724",
+    "categories": [
+      "Shape"
+    ],
+    "meta": [
+      ""
+    ]
+  },
+  {
+    "name": "lines",
+    "code": "e7ef",
+    "categories": [
+      "Text editor",
+      "Shape"
+    ],
+    "meta": [
+      "justify",
+      "text",
+      "align",
+      "paragraph"
+    ]
+  },
+  {
+    "name": "lines-list",
+    "code": "e7ee",
+    "categories": [
+      "Text editor"
+    ],
+    "meta": [
+      "bullets",
+      "text"
+    ]
+  },
+  {
+    "name": "link",
+    "code": "e725",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      ""
+    ]
+  },
+  {
+    "name": "list",
+    "code": "e7f1",
+    "categories": [
+      "Text editor"
+    ],
+    "meta": [
+      "bullets",
+      "text"
+    ]
+  },
+  {
+    "name": "list-select",
+    "code": "e656",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "layout",
+      "html",
+      "component",
+      "navigation"
+    ]
+  },
+  {
+    "name": "list-ul",
+    "code": "e7f0",
+    "categories": [
+      "Text editor",
+      "Web application"
+    ],
+    "meta": [
+      "bullets",
+      "text"
+    ]
+  },
+  {
+    "name": "location-arrow",
+    "code": "e728",
+    "categories": [
+      "Location"
+    ],
+    "meta": [
+      "map",
+      "direction",
+      "compass"
+    ]
+  },
+  {
+    "name": "location-arrow-circle",
+    "code": "e727",
+    "categories": [
+      "Location"
+    ],
+    "meta": [
+      "map",
+      "direction",
+      "compass"
+    ]
+  },
+  {
+    "name": "location-arrow-circle-o",
+    "code": "e726",
+    "categories": [
+      "Location"
+    ],
+    "meta": [
+      "map",
+      "direction",
+      "compass"
+    ]
+  },
+  {
+    "name": "lock",
+    "code": "e7f2",
+    "categories": [
+      "Item"
+    ],
+    "meta": [
+      "secure",
+      "safe",
+      "protect"
+    ]
+  },
+  {
+    "name": "magic",
+    "code": "e6b1",
+    "categories": [
+      "Tools",
+      "Item"
+    ],
+    "meta": [
+      "wand",
+      "staff"
+    ]
+  },
+  {
+    "name": "magnet",
+    "code": "e787",
+    "categories": [
+      "Item",
+      "Sign"
+    ],
+    "meta": [
+      ""
+    ]
+  },
+  {
+    "name": "mailbox",
+    "code": "e729",
+    "categories": [
+      "Office"
+    ],
+    "meta": [
+      "email",
+      "archive"
+    ]
+  },
+  {
+    "name": "male",
+    "code": "e6b2",
+    "categories": [
+      "People"
+    ],
+    "meta": [
+      "human",
+      "person",
+      "man",
+      "boy"
+    ]
+  },
+  {
+    "name": "map-marker",
+    "code": "e788",
+    "categories": [
+      "Location"
+    ],
+    "meta": [
+      "location"
+    ]
+  },
+  {
+    "name": "margin",
+    "code": "e65b",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "css",
+      "layout",
+      "html"
+    ]
+  },
+  {
+    "name": "margin-bottom",
+    "code": "e657",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "css",
+      "layout",
+      "html"
+    ]
+  },
+  {
+    "name": "margin-left",
+    "code": "e658",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "css",
+      "layout",
+      "html"
+    ]
+  },
+  {
+    "name": "margin-right",
+    "code": "e659",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "css",
+      "layout",
+      "html"
+    ]
+  },
+  {
+    "name": "margin-top",
+    "code": "e65a",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "css",
+      "layout",
+      "html"
+    ]
+  },
+  {
+    "name": "medal",
+    "code": "e6b3",
+    "categories": [
+      "Item"
+    ],
+    "meta": [
+      "achievement",
+      "award"
+    ]
+  },
+  {
+    "name": "megafone",
+    "code": "e6b4",
+    "categories": [
+      "Social",
+      "Item"
+    ],
+    "meta": [
+      "campaign",
+      "marketing"
+    ]
+  },
+  {
+    "name": "meh-o",
+    "code": "e6b5",
+    "categories": [
+      "Social",
+      "Sign"
+    ],
+    "meta": [
+      "blah",
+      "whatever",
+      "bored",
+      "emoji"
+    ]
+  },
+  {
+    "name": "microphone",
+    "code": "e72a",
+    "categories": [
+      "Media",
+      "Player",
+      "Item"
+    ],
+    "meta": [
+      "record",
+      "voice"
+    ]
+  },
+  {
+    "name": "minus",
+    "code": "e7f6",
+    "categories": [
+      "Form"
+    ],
+    "meta": [
+      "line",
+      "bar",
+      "minimize",
+      "collapse",
+      "remove"
+    ]
+  },
+  {
+    "name": "minus-circle",
+    "code": "e7f4",
+    "categories": [
+      "Form"
+    ],
+    "meta": [
+      "minimize",
+      "collapse",
+      "remove",
+      "no-entry"
+    ]
+  },
+  {
+    "name": "minus-circle-o",
+    "code": "e7f3",
+    "categories": [
+      "Form"
+    ],
+    "meta": [
+      "minimize",
+      "collapse",
+      "remove",
+      "no-entry"
+    ]
+  },
+  {
+    "name": "minus-square-o",
+    "code": "e7f5",
+    "categories": [
+      "Form"
+    ],
+    "meta": [
+      "minimize",
+      "collapse",
+      "remove"
+    ]
+  },
+  {
+    "name": "mobile",
+    "code": "e7f7",
+    "categories": [
+      "Devices",
+      "Item"
+    ],
+    "meta": [
+      "phone",
+      "iphone",
+      "smartphone"
+    ]
+  },
+  {
+    "name": "modal",
+    "code": "e7f8",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "layout",
+      "html",
+      "internet",
+      "web page",
+      "site",
+      "pop-up"
+    ]
+  },
+  {
+    "name": "modal-list",
+    "code": "e72b",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "layout",
+      "html",
+      "internet",
+      "web page",
+      "site",
+      "pop-up"
+    ]
+  },
+  {
+    "name": "money",
+    "code": "e6b6",
+    "categories": [
+      "Shopping"
+    ],
+    "meta": [
+      "dollar",
+      "bill",
+      "payment"
+    ]
+  },
+  {
+    "name": "moon",
+    "code": "e78a",
+    "categories": [
+      "Sign"
+    ],
+    "meta": [
+      "night",
+      "evening"
+    ]
+  },
+  {
+    "name": "moon-o",
+    "code": "e789",
+    "categories": [
+      "Sign"
+    ],
+    "meta": [
+      "night",
+      "evening"
+    ]
+  },
+  {
+    "name": "movie",
+    "code": "e78b",
+    "categories": [
+      "Media",
+      "Player"
+    ],
+    "meta": [
+      "video",
+      "clip"
+    ]
+  },
+  {
+    "name": "music",
+    "code": "e78c",
+    "categories": [
+      "Media",
+      "Player"
+    ],
+    "meta": [
+      "melody",
+      "voice",
+      "sound",
+      "song",
+      "audio",
+      "note"
+    ]
+  },
+  {
+    "name": "mute",
+    "code": "e72c",
+    "categories": [
+      "Media",
+      "Player"
+    ],
+    "meta": [
+      "microphone",
+      "voice"
+    ]
+  },
+  {
+    "name": "native-button",
+    "code": "e65c",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "layout",
+      "html",
+      "component",
+      "navigation"
+    ]
+  },
+  {
+    "name": "notebook",
+    "code": "e65d",
+    "categories": [
+      "Office",
+      "Item"
+    ],
+    "meta": [
+      "cover",
+      "exercise",
+      "school"
+    ]
+  },
+  {
+    "name": "open-book",
+    "code": "e7f9",
+    "categories": [
+      "Media"
+    ],
+    "meta": [
+      "media",
+      "read",
+      "learn"
+    ]
+  },
+  {
+    "name": "options",
+    "code": "e65e",
+    "categories": [
+      "Web application",
+      "Form"
+    ],
+    "meta": [
+      "list",
+      "order",
+      "form",
+      "select",
+      "radiobuttons"
+    ]
+  },
+  {
+    "name": "orientation",
+    "code": "e65f",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "landscape",
+      "portrait",
+      "viewport",
+      "rotate"
+    ]
+  },
+  {
+    "name": "out",
+    "code": "e614",
+    "categories": [
+      "Notification",
+      "Sign"
+    ],
+    "meta": [
+      "vacation",
+      "out of office"
+    ]
+  },
+  {
+    "name": "outbox",
+    "code": "e660",
+    "categories": [
+      "Office"
+    ],
+    "meta": [
+      "email",
+      "send",
+      "sent"
+    ]
+  },
+  {
+    "name": "package",
+    "code": "e6b7",
+    "categories": [
+      "Transportation",
+      "Item"
+    ],
+    "meta": [
+      "box",
+      "delivery",
+      "logistics",
+      "shipping",
+      "pickup"
+    ]
+  },
+  {
+    "name": "padding",
+    "code": "e665",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "css",
+      "layout",
+      "html"
+    ]
+  },
+  {
+    "name": "padding-bottom",
+    "code": "e661",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "css",
+      "layout",
+      "html"
+    ]
+  },
+  {
+    "name": "padding-left",
+    "code": "e662",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "css",
+      "layout",
+      "html"
+    ]
+  },
+  {
+    "name": "padding-right",
+    "code": "e663",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "css",
+      "layout",
+      "html"
+    ]
+  },
+  {
+    "name": "padding-top",
+    "code": "e664",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "css",
+      "layout",
+      "html"
+    ]
+  },
+  {
+    "name": "paint-roll",
+    "code": "e666",
+    "categories": [
+      "Tools",
+      "Item"
+    ],
+    "meta": [
+      "paint"
+    ]
+  },
+  {
+    "name": "paintbrush",
+    "code": "e6b8",
+    "categories": [
+      "Tools",
+      "Item"
+    ],
+    "meta": [
+      "paint"
+    ]
+  },
+  {
+    "name": "palete",
+    "code": "e667",
+    "categories": [
+      "Tools",
+      "Item"
+    ],
+    "meta": [
+      "color",
+      "paint"
+    ]
+  },
+  {
+    "name": "panel",
+    "code": "e668",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "layout",
+      "html",
+      "component"
+    ]
+  },
+  {
+    "name": "paperclip",
+    "code": "e72d",
+    "categories": [
+      "Office",
+      "Item"
+    ],
+    "meta": [
+      "attachment"
+    ]
+  },
+  {
+    "name": "paperplane",
+    "code": "e6b9",
+    "categories": [
+      "Office"
+    ],
+    "meta": [
+      "email",
+      "send"
+    ]
+  },
+  {
+    "name": "paperplane-o",
+    "code": "e6ba",
+    "categories": [
+      "Office"
+    ],
+    "meta": [
+      "email",
+      "send"
+    ]
+  },
+  {
+    "name": "paragraph",
+    "code": "e6bb",
+    "categories": [
+      "Text editor"
+    ],
+    "meta": [
+      "text",
+      "character",
+      "text-decoration",
+      "pilcrow"
+    ]
+  },
+  {
+    "name": "password",
+    "code": "e669",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "layout",
+      "html",
+      "component",
+      "login",
+      "log in",
+      "sign in"
+    ]
+  },
+  {
+    "name": "paste",
+    "code": "e6bc",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "clipboard",
+      "file",
+      "document"
+    ]
+  },
+  {
+    "name": "pause",
+    "code": "e78d",
+    "categories": [
+      "Media",
+      "Player"
+    ],
+    "meta": [
+      "hold"
+    ]
+  },
+  {
+    "name": "pencil",
+    "code": "e7fa",
+    "categories": [
+      "Text editor",
+      "Item",
+      "Edit"
+    ],
+    "meta": [
+      "draw",
+      "edit",
+      "write",
+      "pen"
+    ]
+  },
+  {
+    "name": "phone",
+    "code": "e7fb",
+    "categories": [
+      "Devices"
+    ],
+    "meta": [
+      "call"
+    ]
+  },
+  {
+    "name": "picture",
+    "code": "e7fc",
+    "categories": [
+      "Media",
+      "Item"
+    ],
+    "meta": [
+      "image",
+      "photo"
+    ]
+  },
+  {
+    "name": "pie-chart",
+    "code": "e6bd",
+    "categories": [
+      "Charts"
+    ],
+    "meta": [
+      "graph",
+      "diagram"
+    ]
+  },
+  {
+    "name": "pill",
+    "code": "e615",
+    "categories": [
+      "Medical"
+    ],
+    "meta": [
+      "medicine",
+      "cure",
+      "healthcare"
+    ]
+  },
+  {
+    "name": "pills",
+    "code": "e616",
+    "categories": [
+      "Medical"
+    ],
+    "meta": [
+      "medicine",
+      "cure",
+      "healthcare"
+    ]
+  },
+  {
+    "name": "pin",
+    "code": "e7fd",
+    "categories": [
+      "Office",
+      "Item"
+    ],
+    "meta": [
+      "attach",
+      "location",
+      "mark"
+    ]
+  },
+  {
+    "name": "pin-post",
+    "code": "e6be",
+    "categories": [
+      "Office"
+    ],
+    "meta": [
+      "note",
+      "remind"
+    ]
+  },
+  {
+    "name": "play",
+    "code": "e78e",
+    "categories": [
+      "Media",
+      "Player",
+      "Shape"
+    ],
+    "meta": [
+      "start",
+      "triangle"
+    ]
+  },
+  {
+    "name": "play-circle",
+    "code": "e731",
+    "categories": [
+      "Media",
+      "Player"
+    ],
+    "meta": [
+      "start"
+    ]
+  },
+  {
+    "name": "play-circle-o",
+    "code": "e72e",
+    "categories": [
+      "Media",
+      "Player"
+    ],
+    "meta": [
+      "start"
+    ]
+  },
+  {
+    "name": "plug",
+    "code": "e66a",
+    "categories": [
+      "Sign"
+    ],
+    "meta": [
+      "attach",
+      "electricy"
+    ]
+  },
+  {
+    "name": "plus",
+    "code": "e801",
+    "categories": [
+      "Form"
+    ],
+    "meta": [
+      "add",
+      "expand"
+    ]
+  },
+  {
+    "name": "plus-circle",
+    "code": "e7ff",
+    "categories": [
+      "Form"
+    ],
+    "meta": [
+      "add",
+      "expand"
+    ]
+  },
+  {
+    "name": "plus-circle-o",
+    "code": "e7fe",
+    "categories": [
+      "Form"
+    ],
+    "meta": [
+      "add",
+      "expand"
+    ]
+  },
+  {
+    "name": "plus-minus",
+    "code": "e603",
+    "categories": [
+      "Ledger",
+      "Shopping"
+    ],
+    "meta": [
+      "calculator"
+    ]
+  },
+  {
+    "name": "plus-square-o",
+    "code": "e800",
+    "categories": [
+      "Form"
+    ],
+    "meta": [
+      "add",
+      "expand"
+    ]
+  },
+  {
+    "name": "pointer",
+    "code": "e66b",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "tap",
+      "hand"
+    ]
+  },
+  {
+    "name": "power-off",
+    "code": "e78f",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "end",
+      "logout",
+      "log out",
+      "sign out",
+      "shut down",
+      "start",
+      "power-on"
+    ]
+  },
+  {
+    "name": "presentation",
+    "code": "e6bf",
+    "categories": [
+      "Office"
+    ],
+    "meta": [
+      "multimedia",
+      "powerpoint",
+      "keynote"
+    ]
+  },
+  {
+    "name": "print",
+    "code": "e802",
+    "categories": [
+      "Devices",
+      "Item"
+    ],
+    "meta": [
+      "printer"
+    ]
+  },
+  {
+    "name": "progressbar",
+    "code": "e66c",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "loading"
+    ]
+  },
+  {
+    "name": "puzzle-piece",
+    "code": "e6c0",
+    "categories": [
+      "Item"
+    ],
+    "meta": [
+      "component",
+      "piece",
+      "part",
+      "add-on"
+    ]
+  },
+  {
+    "name": "qrcode",
+    "code": "e6c1",
+    "categories": [
+      "File types",
+      "Media"
+    ],
+    "meta": [
+      ""
+    ]
+  },
+  {
+    "name": "question",
+    "code": "e732",
+    "categories": [
+      "Notification"
+    ],
+    "meta": [
+      "help",
+      "puzzle"
+    ]
+  },
+  {
+    "name": "question-circle",
+    "code": "e730",
+    "categories": [
+      "Notification"
+    ],
+    "meta": [
+      "help",
+      "puzzle"
+    ]
+  },
+  {
+    "name": "question-circle-o",
+    "code": "e72f",
+    "categories": [
+      "Notification"
+    ],
+    "meta": [
+      "help",
+      "puzzle"
+    ]
+  },
+  {
+    "name": "quote-left",
+    "code": "e6c2",
+    "categories": [
+      "Text editor"
+    ],
+    "meta": [
+      ""
+    ]
+  },
+  {
+    "name": "quote-right",
+    "code": "e6c3",
+    "categories": [
+      "Text editor"
+    ],
+    "meta": [
+      ""
+    ]
+  },
+  {
+    "name": "random",
+    "code": "e733",
+    "categories": [
+      "Directions",
+      "Web application"
+    ],
+    "meta": [
+      "crossing",
+      "shuffle"
+    ]
+  },
+  {
+    "name": "raster",
+    "code": "e6c5",
+    "categories": [
+      "Shape"
+    ],
+    "meta": [
+      "texture"
+    ]
+  },
+  {
+    "name": "raster-lower-left",
+    "code": "e6c4",
+    "categories": [
+      "Shape"
+    ],
+    "meta": [
+      "texture"
+    ]
+  },
+  {
+    "name": "recycle",
+    "code": "e6c6",
+    "categories": [
+      "Sign"
+    ],
+    "meta": [
+      "ecology"
+    ]
+  },
+  {
+    "name": "refresh",
+    "code": "e790",
+    "categories": [
+      "Directions",
+      "Web application"
+    ],
+    "meta": [
+      "update",
+      "reload",
+      "spin",
+      "recycle"
+    ]
+  },
+  {
+    "name": "reply",
+    "code": "e792",
+    "categories": [
+      "Directions",
+      "Office"
+    ],
+    "meta": [
+      "arrow",
+      "back",
+      "previous"
+    ]
+  },
+  {
+    "name": "reply-all",
+    "code": "e791",
+    "categories": [
+      "Directions",
+      "Office"
+    ],
+    "meta": [
+      "arrow",
+      "back",
+      "previous"
+    ]
+  },
+  {
+    "name": "resize-h",
+    "code": "e66d",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "move"
+    ]
+  },
+  {
+    "name": "resize-v",
+    "code": "e66e",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "move"
+    ]
+  },
+  {
+    "name": "retweet",
+    "code": "e793",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      ""
+    ]
+  },
+  {
+    "name": "rhombus",
+    "code": "e66f",
+    "categories": [
+      "Shape"
+    ],
+    "meta": [
+      "square",
+      "diamond"
+    ]
+  },
+  {
+    "name": "road",
+    "code": "e6c7",
+    "categories": [
+      "Sign"
+    ],
+    "meta": [
+      "route",
+      "path",
+      "highway",
+      "street"
+    ]
+  },
+  {
+    "name": "road-branch",
+    "code": "e670",
+    "categories": [
+      "Sign",
+      "Directions",
+      "Web application"
+    ],
+    "meta": [
+      "route",
+      "path",
+      "intersection"
+    ]
+  },
+  {
+    "name": "road-branches",
+    "code": "e671",
+    "categories": [
+      "Sign",
+      "Directions",
+      "Web application"
+    ],
+    "meta": [
+      "route",
+      "path",
+      "intersection"
+    ]
+  },
+  {
+    "name": "road-split",
+    "code": "e672",
+    "categories": [
+      "Directions",
+      "Web application"
+    ],
+    "meta": [
+      "route",
+      "path",
+      "divine",
+      "fork"
+    ]
+  },
+  {
+    "name": "rocket",
+    "code": "e6c8",
+    "categories": [
+      "Transportation"
+    ],
+    "meta": [
+      "space",
+      "ship",
+      "craft",
+      "launch"
+    ]
+  },
+  {
+    "name": "rotate-left",
+    "code": "e794",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      "backward",
+      "history",
+      "earlier",
+      "previous"
+    ]
+  },
+  {
+    "name": "rotate-right",
+    "code": "e795",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      "forward",
+      "future",
+      "upcoming"
+    ]
+  },
+  {
+    "name": "rss",
+    "code": "e6ca",
+    "categories": [
+      "Social",
+      "Notification"
+    ],
+    "meta": [
+      "news",
+      "subscribe"
+    ]
+  },
+  {
+    "name": "rss-square",
+    "code": "e6c9",
+    "categories": [
+      "Social",
+      "Notification"
+    ],
+    "meta": [
+      "news",
+      "subscribe"
+    ]
+  },
+  {
+    "name": "safe",
+    "code": "e6cc",
+    "categories": [
+      "Item"
+    ],
+    "meta": [
+      "security",
+      "protection",
+      "safe keeping",
+      "support",
+      "cover",
+      "vault",
+      "encrypt"
+    ]
+  },
+  {
+    "name": "safe-lock",
+    "code": "e6cb",
+    "categories": [
+      "Item"
+    ],
+    "meta": [
+      "security",
+      "protection",
+      "safe keeping",
+      "support",
+      "cover",
+      "vault",
+      "encrypt"
+    ]
+  },
+  {
+    "name": "scissors",
+    "code": "e734",
+    "categories": [
+      "Tools",
+      "Item",
+      "Edit"
+    ],
+    "meta": [
+      "cut",
+      "clippers"
+    ]
+  },
+  {
+    "name": "screwdriver",
+    "code": "e735",
+    "categories": [
+      "Tools",
+      "Item",
+      "Edit"
+    ],
+    "meta": [
+      "settings",
+      "adjust"
+    ]
+  },
+  {
+    "name": "search",
+    "code": "e805",
+    "categories": [
+      "Tools",
+      "Item"
+    ],
+    "meta": [
+      "looking glass",
+      "inspect"
+    ]
+  },
+  {
+    "name": "search-minus",
+    "code": "e804",
+    "categories": [
+      "Tools",
+      "Item"
+    ],
+    "meta": [
+      "looking glass",
+      "zoom in",
+      "enlarge"
+    ]
+  },
+  {
+    "name": "search-plus",
+    "code": "e803",
+    "categories": [
+      "Tools",
+      "Item"
+    ],
+    "meta": [
+      "looking glass",
+      "zoom out",
+      "shrink"
+    ]
+  },
+  {
+    "name": "select",
+    "code": "e673",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "layout",
+      "html",
+      "component",
+      "navigation",
+      "dropdown"
+    ]
+  },
+  {
+    "name": "database",
+    "code": "e737",
+    "categories": [
+      "Devices",
+      "Media"
+    ],
+    "meta": [
+      "server",
+      "storage",
+      "hdd",
+      "hard disk"
+    ]
+  },
+  {
+    "name": "server",
+    "code": "e736",
+    "categories": [
+      "Devices",
+      "Media"
+    ],
+    "meta": [
+      "storage",
+      "hard drive",
+      "hard disk",
+      "cloud",
+      "hdd"
+    ]
+  },
+  {
+    "name": "share",
+    "code": "e796",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      "send",
+      "next",
+      "right"
+    ]
+  },
+  {
+    "name": "share-square",
+    "code": "e6cd",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      "arrow",
+      "send"
+    ]
+  },
+  {
+    "name": "shield",
+    "code": "e6ce",
+    "categories": [
+      "Item"
+    ],
+    "meta": [
+      "security",
+      "protection",
+      "safe keeping",
+      "support",
+      "cover",
+      "antivirus"
+    ]
+  },
+  {
+    "name": "sign-in",
+    "code": "e797",
+    "categories": [
+      "Directions",
+      "Web application"
+    ],
+    "meta": [
+      "log in",
+      "login",
+      "enter"
+    ]
+  },
+  {
+    "name": "sign-in-alt",
+    "code": "e6b0",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "log in",
+      "login",
+      "enter"
+    ]
+  },
+  {
+    "name": "sign-out",
+    "code": "e798",
+    "categories": [
+      "Directions",
+      "Web application"
+    ],
+    "meta": [
+      "logout",
+      "log out",
+      "leave",
+      "exit"
+    ]
+  },
+  {
+    "name": "sign-out-alt",
+    "code": "e6af",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "logout",
+      "log out",
+      "leave",
+      "exit"
+    ]
+  },
+  {
+    "name": "signal",
+    "code": "e738",
+    "categories": [
+      "Notification",
+      "Sign"
+    ],
+    "meta": [
+      "wlan",
+      "wireless",
+      "Wi-Fi",
+      "cellular",
+      "radio",
+      "waves"
+    ]
+  },
+  {
+    "name": "sitemap",
+    "code": "e739",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "hierarchy",
+      "mindmap"
+    ]
+  },
+  {
+    "name": "slider",
+    "code": "e674",
+    "categories": [
+      "Media",
+      "Player",
+      "Edit"
+    ],
+    "meta": [
+      "adjust"
+    ]
+  },
+  {
+    "name": "sliders",
+    "code": "e6cf",
+    "categories": [
+      "Media",
+      "Player",
+      "Edit"
+    ],
+    "meta": [
+      "settings",
+      "adjust",
+      "mixer"
+    ]
+  },
+  {
+    "name": "smiley-o",
+    "code": "e6d0",
+    "categories": [
+      "Social"
+    ],
+    "meta": [
+      "happy",
+      "smile",
+      "emoji"
+    ]
+  },
+  {
+    "name": "sort",
+    "code": "e799",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      "arrange"
+    ]
+  },
+  {
+    "name": "sound-disable",
+    "code": "e79a",
+    "categories": [
+      "Media",
+      "Player"
+    ],
+    "meta": [
+      "mute",
+      "sound",
+      "voice",
+      "audio",
+      "speaker"
+    ]
+  },
+  {
+    "name": "specialist",
+    "code": "e617",
+    "categories": [
+      "Medical",
+      "People"
+    ],
+    "meta": [
+      "doctor",
+      "healthcare",
+      "surgeon"
+    ]
+  },
+  {
+    "name": "spinner",
+    "code": "e6d3",
+    "categories": [
+      "Shape"
+    ],
+    "meta": [
+      "loader",
+      "loading"
+    ]
+  },
+  {
+    "name": "spinner-arc",
+    "code": "e6d1",
+    "categories": [
+      "Shape"
+    ],
+    "meta": [
+      "loader",
+      "loading"
+    ]
+  },
+  {
+    "name": "spinner-third",
+    "code": "e6d2",
+    "categories": [
+      "Shape"
+    ],
+    "meta": [
+      "loader",
+      "loading"
+    ]
+  },
+  {
+    "name": "split",
+    "code": "e675",
+    "categories": [
+      "Web application",
+      "Edit"
+    ],
+    "meta": [
+      "duplicate",
+      "division"
+    ]
+  },
+  {
+    "name": "split-h",
+    "code": "e807",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "layout",
+      "html",
+      "component"
+    ]
+  },
+  {
+    "name": "split-v",
+    "code": "e808",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "layout",
+      "html",
+      "component"
+    ]
+  },
+  {
+    "name": "spoon",
+    "code": "e73a",
+    "categories": [
+      "Food",
+      "Item"
+    ],
+    "meta": [
+      "soup"
+    ]
+  },
+  {
+    "name": "square-shadow",
+    "code": "e79b",
+    "categories": [
+      "Form",
+      "Shape"
+    ],
+    "meta": [
+      "box",
+      "check"
+    ]
+  },
+  {
+    "name": "star",
+    "code": "e7a1",
+    "categories": [
+      "Social",
+      "Shape"
+    ],
+    "meta": [
+      ""
+    ]
+  },
+  {
+    "name": "star-half-left",
+    "code": "e79d",
+    "categories": [
+      "Social"
+    ],
+    "meta": [
+      ""
+    ]
+  },
+  {
+    "name": "star-half-left-o",
+    "code": "e79c",
+    "categories": [
+      "Social"
+    ],
+    "meta": [
+      ""
+    ]
+  },
+  {
+    "name": "star-half-right",
+    "code": "e79f",
+    "categories": [
+      "Social"
+    ],
+    "meta": [
+      ""
+    ]
+  },
+  {
+    "name": "star-half-right-o",
+    "code": "e79e",
+    "categories": [
+      "Social"
+    ],
+    "meta": [
+      ""
+    ]
+  },
+  {
+    "name": "star-o",
+    "code": "e7a0",
+    "categories": [
+      "Social",
+      "Shape"
+    ],
+    "meta": [
+      ""
+    ]
+  },
+  {
+    "name": "start-cog",
+    "code": "e676",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "play",
+      "process",
+      "gear"
+    ]
+  },
+  {
+    "name": "step-backward",
+    "code": "e7a2",
+    "categories": [
+      "Media",
+      "Player"
+    ],
+    "meta": [
+      "previous"
+    ]
+  },
+  {
+    "name": "step-forward",
+    "code": "e7a3",
+    "categories": [
+      "Media",
+      "Player"
+    ],
+    "meta": [
+      "next"
+    ]
+  },
+  {
+    "name": "stethoscope",
+    "code": "e618",
+    "categories": [
+      "Medical",
+      "Tools",
+      "Item"
+    ],
+    "meta": [
+      "doctor",
+      "healthcare",
+      "diagnose"
+    ]
+  },
+  {
+    "name": "stop",
+    "code": "e7a4",
+    "categories": [
+      "Media",
+      "Player",
+      "Shape"
+    ],
+    "meta": [
+      "box",
+      "square"
+    ]
+  },
+  {
+    "name": "stop-cog",
+    "code": "e677",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "end",
+      "process",
+      "gear"
+    ]
+  },
+  {
+    "name": "strikethrough",
+    "code": "e73b",
+    "categories": [
+      "Text editor"
+    ],
+    "meta": [
+      "font",
+      "character",
+      "text-decoration"
+    ]
+  },
+  {
+    "name": "subscript",
+    "code": "e6d4",
+    "categories": [
+      "Text editor"
+    ],
+    "meta": [
+      "calc",
+      "calculator",
+      "math"
+    ]
+  },
+  {
+    "name": "suitcase",
+    "code": "e809",
+    "categories": [
+      "Item"
+    ],
+    "meta": [
+      "briefcase",
+      "travel"
+    ]
+  },
+  {
+    "name": "sun-o",
+    "code": "e73c",
+    "categories": [
+      "Sign",
+      "Weather"
+    ],
+    "meta": [
+      "summer",
+      "warm"
+    ]
+  },
+  {
+    "name": "superscript",
+    "code": "e6d5",
+    "categories": [
+      "Text editor"
+    ],
+    "meta": [
+      "calc",
+      "calculator",
+      "math"
+    ]
+  },
+  {
+    "name": "sword",
+    "code": "e678",
+    "categories": [
+      "Item"
+    ],
+    "meta": [
+      "sharp",
+      "blade",
+      "weapon"
+    ]
+  },
+  {
+    "name": "table",
+    "code": "e7a5",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "layout",
+      "html",
+      "component"
+    ]
+  },
+  {
+    "name": "tablet",
+    "code": "e80a",
+    "categories": [
+      "Devices",
+      "Media",
+      "Item"
+    ],
+    "meta": [
+      "pad",
+      "ipad"
+    ]
+  },
+  {
+    "name": "tabs",
+    "code": "e679",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "layout",
+      "html",
+      "component",
+      "navigation",
+      "tabsheet"
+    ]
+  },
+  {
+    "name": "tag",
+    "code": "e6d6",
+    "categories": [
+      "Notification",
+      "Sign"
+    ],
+    "meta": [
+      "label",
+      "price"
+    ]
+  },
+  {
+    "name": "tags",
+    "code": "e6d7",
+    "categories": [
+      "Notification",
+      "Sign"
+    ],
+    "meta": [
+      "label",
+      "price"
+    ]
+  },
+  {
+    "name": "tasks",
+    "code": "e73d",
+    "categories": [
+      "Form"
+    ],
+    "meta": [
+      "check",
+      "list",
+      "todo"
+    ]
+  },
+  {
+    "name": "taxi",
+    "code": "e67a",
+    "categories": [
+      "Transportation"
+    ],
+    "meta": [
+      "vehicle",
+      "travel",
+      "auto"
+    ]
+  },
+  {
+    "name": "terminal",
+    "code": "e6d8",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "code",
+      "system",
+      "prompt"
+    ]
+  },
+  {
+    "name": "text-height",
+    "code": "e73e",
+    "categories": [
+      "Text editor"
+    ],
+    "meta": [
+      "font",
+      "character",
+      "text-decoration"
+    ]
+  },
+  {
+    "name": "text-input",
+    "code": "e67b",
+    "categories": [
+      "Text editor",
+      "Web application"
+    ],
+    "meta": [
+      "layout",
+      "html",
+      "component"
+    ]
+  },
+  {
+    "name": "text-label",
+    "code": "e67c",
+    "categories": [
+      "Text editor",
+      "Web application"
+    ],
+    "meta": [
+      "header",
+      "font",
+      "character",
+      "text-decoration"
+    ]
+  },
+  {
+    "name": "text-width",
+    "code": "e73f",
+    "categories": [
+      "Text editor"
+    ],
+    "meta": [
+      "font",
+      "character",
+      "text-decoration"
+    ]
+  },
+  {
+    "name": "teeth",
+    "code": "e619",
+    "categories": [
+      "Medical"
+    ],
+    "meta": [
+      "dental",
+      "dentist",
+      "healthcare",
+      "mouth"
+    ]
+  },
+  {
+    "name": "thin-square",
+    "code": "e7a6",
+    "categories": [
+      "Shape",
+      "Form"
+    ],
+    "meta": [
+      "check box",
+      "stop"
+    ]
+  },
+  {
+    "name": "tooth",
+    "code": "e67d",
+    "categories": [
+      "Media"
+    ],
+    "meta": [
+      "dental",
+      "dentist",
+      "healthcare"
+    ]
+  },
+  {
+    "name": "thumbs-down",
+    "code": "e6da",
+    "categories": [
+      "Social"
+    ],
+    "meta": [
+      "dislike",
+      "facebook"
+    ]
+  },
+  {
+    "name": "thumbs-down-o",
+    "code": "e6d9",
+    "categories": [
+      "Social"
+    ],
+    "meta": [
+      "dislike",
+      "facebook"
+    ]
+  },
+  {
+    "name": "thumbs-up",
+    "code": "e6dc",
+    "categories": [
+      "Social"
+    ],
+    "meta": [
+      "like",
+      "facebook"
+    ]
+  },
+  {
+    "name": "thumbs-up-o",
+    "code": "e6db",
+    "categories": [
+      "Social"
+    ],
+    "meta": [
+      "like",
+      "facebook"
+    ]
+  },
+  {
+    "name": "ticket",
+    "code": "e740",
+    "categories": [
+      "Item"
+    ],
+    "meta": [
+      "pass",
+      "licence",
+      "permit"
+    ]
+  },
+  {
+    "name": "time-backward",
+    "code": "e7a7",
+    "categories": [
+      "Scheduling"
+    ],
+    "meta": [
+      "history",
+      "clock",
+      "earlier",
+      "previous"
+    ]
+  },
+  {
+    "name": "time-forward",
+    "code": "e7a8",
+    "categories": [
+      "Scheduling"
+    ],
+    "meta": [
+      "future",
+      "clock",
+      "upcoming",
+      "postpone",
+      "snooze"
+    ]
+  },
+  {
+    "name": "toolbox",
+    "code": "e741",
+    "categories": [
+      "Tools",
+      "Item"
+    ],
+    "meta": [
+      "settings"
+    ]
+  },
+  {
+    "name": "tools",
+    "code": "e742",
+    "categories": [
+      "Tools",
+      "Item",
+      "Edit"
+    ],
+    "meta": [
+      "wrench",
+      "screwdriver",
+      "settings"
+    ]
+  },
+  {
+    "name": "train",
+    "code": "e67e",
+    "categories": [
+      "Transportation"
+    ],
+    "meta": [
+      "railroad"
+    ]
+  },
+  {
+    "name": "trash",
+    "code": "e80b",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "delete",
+      "remove",
+      "garbage",
+      "bin"
+    ]
+  },
+  {
+    "name": "tree-table",
+    "code": "e67f",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "layout",
+      "html",
+      "component",
+      "navigation"
+    ]
+  },
+  {
+    "name": "trophy",
+    "code": "e743",
+    "categories": [
+      "Item"
+    ],
+    "meta": [
+      "prize",
+      "champion",
+      "award"
+    ]
+  },
+  {
+    "name": "truck",
+    "code": "e6dd",
+    "categories": [
+      "Transportation"
+    ],
+    "meta": [
+      "vehicle",
+      "delivery",
+      "logistics",
+      "shipping",
+      "pickup"
+    ]
+  },
+  {
+    "name": "twin-col-select",
+    "code": "e680",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "layout",
+      "html",
+      "component",
+      "navigation"
+    ]
+  },
+  {
+    "name": "twitter",
+    "code": "e6df",
+    "categories": [
+      "Brand",
+      "Social"
+    ],
+    "meta": [
+      ""
+    ]
+  },
+  {
+    "name": "twitter-square",
+    "code": "e6de",
+    "categories": [
+      "Brand",
+      "Social"
+    ],
+    "meta": [
+      ""
+    ]
+  },
+  {
+    "name": "umbrella",
+    "code": "e6e0",
+    "categories": [
+      "Item"
+    ],
+    "meta": [
+      "security",
+      "protection",
+      "safe keeping",
+      "support",
+      "cover",
+      "antivirus"
+    ]
+  },
+  {
+    "name": "underline",
+    "code": "e744",
+    "categories": [
+      "Text editor"
+    ],
+    "meta": [
+      "font",
+      "character",
+      "text-decoration"
+    ]
+  },
+  {
+    "name": "unlink",
+    "code": "e745",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "broken"
+    ]
+  },
+  {
+    "name": "unlock",
+    "code": "e80c",
+    "categories": [
+      "Item"
+    ],
+    "meta": [
+      "open",
+      "acccess"
+    ]
+  },
+  {
+    "name": "upload",
+    "code": "e746",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "cloud",
+      "storage"
+    ]
+  },
+  {
+    "name": "upload-alt",
+    "code": "e6e1",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "cloud",
+      "storage"
+    ]
+  },
+  {
+    "name": "user",
+    "code": "e80d",
+    "categories": [
+      "People"
+    ],
+    "meta": [
+      "person"
+    ]
+  },
+  {
+    "name": "user-card",
+    "code": "e61a",
+    "categories": [
+      "People"
+    ],
+    "meta": [
+      "ID",
+      "identification"
+    ]
+  },
+  {
+    "name": "user-check",
+    "code": "e61b",
+    "categories": [
+      "People"
+    ],
+    "meta": [
+      "verify"
+    ]
+  },
+  {
+    "name": "user-clock",
+    "code": "e61c",
+    "categories": [
+      "People",
+      "Scheduling"
+    ],
+    "meta": [
+      "time",
+      "appointment"
+    ]
+  },
+  {
+    "name": "user-heart",
+    "code": "e61d",
+    "categories": [
+      "Medical",
+      "People"
+    ],
+    "meta": [
+      "healtcare",
+      "patient"
+    ]
+  },
+  {
+    "name": "users",
+    "code": "e747",
+    "categories": [
+      "People"
+    ],
+    "meta": [
+      "group"
+    ]
+  },
+  {
+    "name": "vaadin-h",
+    "code": "e80e",
+    "categories": [
+      "Brand"
+    ],
+    "meta": [
+      ""
+    ]
+  },
+  {
+    "name": "vaadin-v",
+    "code": "e80f",
+    "categories": [
+      "Brand"
+    ],
+    "meta": [
+      ""
+    ]
+  },
+  {
+    "name": "viewport",
+    "code": "e681",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "screen",
+      "canvas"
+    ]
+  },
+  {
+    "name": "vimeo",
+    "code": "e6e3",
+    "categories": [
+      "Brand",
+      "Social",
+      "Media"
+    ],
+    "meta": [
+      "video",
+      "clip",
+      "movie"
+    ]
+  },
+  {
+    "name": "vimeo-square",
+    "code": "e6e2",
+    "categories": [
+      "Brand",
+      "Social",
+      "Media"
+    ],
+    "meta": [
+      "video",
+      "clip",
+      "movie"
+    ]
+  },
+  {
+    "name": "volume",
+    "code": "e7ac",
+    "categories": [
+      "Media",
+      "Player"
+    ],
+    "meta": [
+      "sound",
+      "voice",
+      "audio",
+      "speaker"
+    ]
+  },
+  {
+    "name": "volume-down",
+    "code": "e7a9",
+    "categories": [
+      "Media",
+      "Player"
+    ],
+    "meta": [
+      "sound",
+      "voice",
+      "audio",
+      "speaker"
+    ]
+  },
+  {
+    "name": "volume-off",
+    "code": "e7aa",
+    "categories": [
+      "Media",
+      "Player"
+    ],
+    "meta": [
+      "mute",
+      "sound",
+      "voice",
+      "audio",
+      "speaker"
+    ]
+  },
+  {
+    "name": "volume-up",
+    "code": "e7ab",
+    "categories": [
+      "Media",
+      "Player"
+    ],
+    "meta": [
+      "sound",
+      "voice",
+      "audio",
+      "speaker",
+      "loud",
+      "louder"
+    ]
+  },
+  {
+    "name": "warning",
+    "code": "e748",
+    "categories": [
+      "Notification",
+      "Sign"
+    ],
+    "meta": [
+      "explanation mark",
+      "triangle"
+    ]
+  },
+  {
+    "name": "wrench",
+    "code": "e749",
+    "categories": [
+      "Tools",
+      "Item",
+      "Edit"
+    ],
+    "meta": [
+      "wrench",
+      "settings"
+    ]
+  },
+  {
+    "name": "close",
+    "code": "e7ad",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "delete",
+      "remove",
+      "x"
+    ]
+  },
+  {
+    "name": "close-circle",
+    "code": "e811",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "x",
+      "delete",
+      "remove"
+    ]
+  },
+  {
+    "name": "close-circle-o",
+    "code": "e810",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "x",
+      "delete",
+      "remove"
+    ]
+  },
+  {
+    "name": "youtube",
+    "code": "e6e5",
+    "categories": [
+      "Brand",
+      "Social",
+      "Media"
+    ],
+    "meta": [
+      "video",
+      "clip",
+      "movie"
+    ]
+  },
+  {
+    "name": "youtube-square",
+    "code": "e6e4",
+    "categories": [
+      "Brand",
+      "Social",
+      "Media"
+    ],
+    "meta": [
+      "video",
+      "clip",
+      "movie"
+    ]
+  },
+  {
+    "name": "diploma",
+    "code": "e964",
+    "categories": [
+      "Education"
+    ],
+    "meta": [
+      "degree",
+      "school",
+      "certificate"
+    ]
+  },
+  {
+    "name": "chevron-down-small",
+    "code": "e965",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      "caret"
+    ]
+  },
+  {
+    "name": "chevron-left-small",
+    "code": "e966",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      "caret",
+      "previous"
+    ]
+  },
+  {
+    "name": "chevron-right-small",
+    "code": "e967",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      "caret",
+      "next"
+    ]
+  },
+  {
+    "name": "chevron-up-small",
+    "code": "e968",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      "caret"
+    ]
+  },
+  {
+    "name": "diploma-scroll",
+    "code": "e969",
+    "categories": [
+      "Education"
+    ],
+    "meta": [
+      "degree",
+      "school",
+      "certificate"
+    ]
+  },
+  {
+    "name": "workplace",
+    "code": "e900",
+    "categories": [
+      "Location",
+      "Office"
+    ],
+    "meta": [
+      "structure",
+      "headquarters",
+      "office",
+      "work",
+      "building"
+    ]
+  },
+  {
+    "name": "cash",
+    "code": "e901",
+    "categories": [
+      "Shopping",
+      "Ledger"
+    ],
+    "meta": [
+      "dollar",
+      "money",
+      "bills",
+      "currency"
+    ]
+  },
+  {
+    "name": "academy-cap",
+    "code": "e902",
+    "categories": [
+      "Education"
+    ],
+    "meta": [
+      "degree",
+      "college",
+      "school"
+    ]
+  },
+  {
+    "name": "alarm",
+    "code": "e903",
+    "categories": [
+      "Scheduling",
+      "Item"
+    ],
+    "meta": [
+      "clock",
+      "woke up",
+      "wake up",
+      "time"
+    ]
+  },
+  {
+    "name": "alt-a",
+    "code": "e904",
+    "categories": [
+      "Keyboard"
+    ],
+    "meta": [
+      "key",
+      "option",
+      "shortcut",
+      "type"
+    ]
+  },
+  {
+    "name": "alt",
+    "code": "e905",
+    "categories": [
+      "Keyboard"
+    ],
+    "meta": [
+      "key",
+      "option",
+      "shortcut",
+      "type"
+    ]
+  },
+  {
+    "name": "ambulance",
+    "code": "e906",
+    "categories": [
+      "Medical",
+      "Transportation"
+    ],
+    "meta": [
+      "emergency",
+      "rescue",
+      "vehicle",
+      "patient"
+    ]
+  },
+  {
+    "name": "backspace-a",
+    "code": "e907",
+    "categories": [
+      "Keyboard"
+    ],
+    "meta": [
+      "key",
+      "delete",
+      "back",
+      "shortcut",
+      "type"
+    ]
+  },
+  {
+    "name": "backspace",
+    "code": "e908",
+    "categories": [
+      "Keyboard"
+    ],
+    "meta": [
+      "key",
+      "delete",
+      "back",
+      "shortcut",
+      "type"
+    ]
+  },
+  {
+    "name": "bar-chart-h",
+    "code": "e909",
+    "categories": [
+      "Charts"
+    ],
+    "meta": [
+      "graph",
+      "diagram",
+      "column-chart",
+      "horizontal"
+    ]
+  },
+  {
+    "name": "bar-chart-v",
+    "code": "e90a",
+    "categories": [
+      "Charts"
+    ],
+    "meta": [
+      "graph",
+      "diagram",
+      "column-chart",
+      "vertical"
+    ]
+  },
+  {
+    "name": "bed",
+    "code": "e90b",
+    "categories": [
+      "Item"
+    ],
+    "meta": [
+      "sleep",
+      "pillow"
+    ]
+  },
+  {
+    "name": "buss",
+    "code": "e90c",
+    "categories": [
+      "Transportation"
+    ],
+    "meta": [
+      "vehicle",
+      "car",
+      "charter",
+      "coach"
+    ]
+  },
+  {
+    "name": "chart-3d",
+    "code": "e90d",
+    "categories": [
+      "Charts"
+    ],
+    "meta": [
+      "graph",
+      "diagram",
+      "column-chart"
+    ]
+  },
+  {
+    "name": "chart-grid",
+    "code": "e90e",
+    "categories": [
+      "Charts"
+    ],
+    "meta": [
+      "graph",
+      "diagram",
+      "table"
+    ]
+  },
+  {
+    "name": "chart-timeline",
+    "code": "e90f",
+    "categories": [
+      "Charts"
+    ],
+    "meta": [
+      "graph",
+      "diagram",
+      "column-chart",
+      "linear"
+    ]
+  },
+  {
+    "name": "clipboard-check",
+    "code": "e910",
+    "categories": [
+      "Office"
+    ],
+    "meta": [
+      "document",
+      "file",
+      "confirm",
+      "assign",
+      "agreed",
+      "ok"
+    ]
+  },
+  {
+    "name": "close-small",
+    "code": "e911",
+    "categories": [
+      "Web application",
+      "Form"
+    ],
+    "meta": [
+      "delete",
+      "remove",
+      "x"
+    ]
+  },
+  {
+    "name": "cluster",
+    "code": "e912",
+    "categories": [
+      "Social",
+      "Item"
+    ],
+    "meta": [
+      "share",
+      "network",
+      "web",
+      "structure"
+    ]
+  },
+  {
+    "name": "coin-piles",
+    "code": "e913",
+    "categories": [
+      "Ledger",
+      "Shopping"
+    ],
+    "meta": [
+      "money",
+      "currency",
+      "dollar",
+      "bills",
+      "cash"
+    ]
+  },
+  {
+    "name": "coins",
+    "code": "e914",
+    "categories": [
+      "Ledger",
+      "Shopping"
+    ],
+    "meta": [
+      "money",
+      "currency",
+      "dollar",
+      "bills",
+      "cash"
+    ]
+  },
+  {
+    "name": "compile",
+    "code": "e915",
+    "categories": [
+      "Web application",
+      "Media"
+    ],
+    "meta": [
+      "compress",
+      "compose"
+    ]
+  },
+  {
+    "name": "close-big",
+    "code": "e916",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "closed",
+      "disabled"
+    ]
+  },
+  {
+    "name": "ctrl-a",
+    "code": "e917",
+    "categories": [
+      "Keyboard"
+    ],
+    "meta": [
+      "key",
+      "shortcut",
+      "type",
+      "control"
+    ]
+  },
+  {
+    "name": "ctrl",
+    "code": "e918",
+    "categories": [
+      "Keyboard"
+    ],
+    "meta": [
+      "key",
+      "shortcut",
+      "type",
+      "control"
+    ]
+  },
+  {
+    "name": "cursor-o",
+    "code": "e919",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "pointer",
+      "click",
+      "mouse"
+    ]
+  },
+  {
+    "name": "cursor",
+    "code": "e91a",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "pointer",
+      "click",
+      "mouse"
+    ]
+  },
+  {
+    "name": "del-a",
+    "code": "e91b",
+    "categories": [
+      "Keyboard"
+    ],
+    "meta": [
+      "key",
+      "shortcut",
+      "type",
+      "delete",
+      "remove"
+    ]
+  },
+  {
+    "name": "del",
+    "code": "e91c",
+    "categories": [
+      "Keyboard"
+    ],
+    "meta": [
+      "key",
+      "shortcut",
+      "type",
+      "delete",
+      "remove"
+    ]
+  },
+  {
+    "name": "diamond-o",
+    "code": "e91d",
+    "categories": [
+      "Item"
+    ],
+    "meta": [
+      "luxury",
+      "gem",
+      "ruby",
+      "jewelry"
+    ]
+  },
+  {
+    "name": "diamond",
+    "code": "e91e",
+    "categories": [
+      "Item"
+    ],
+    "meta": [
+      "luxury",
+      "gem",
+      "ruby",
+      "jewelry"
+    ]
+  },
+  {
+    "name": "ellipsis-dots-h",
+    "code": "e91f",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "navigation",
+      "horizontal",
+      "more",
+      "additional"
+    ]
+  },
+  {
+    "name": "ellipsis-dots-v",
+    "code": "e920",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "navigation",
+      "vertical",
+      "more",
+      "additional"
+    ]
+  },
+  {
+    "name": "enter-arrow",
+    "code": "e921",
+    "categories": [
+      "Keyboard"
+    ],
+    "meta": [
+      "key",
+      "shortcut",
+      "type",
+      "return",
+      "ok"
+    ]
+  },
+  {
+    "name": "enter",
+    "code": "e922",
+    "categories": [
+      "Keyboard"
+    ],
+    "meta": [
+      "key",
+      "shortcut",
+      "type",
+      "return",
+      "ok"
+    ]
+  },
+  {
+    "name": "envelopes-o",
+    "code": "e923",
+    "categories": [
+      "Office",
+      "Item"
+    ],
+    "meta": [
+      "mail",
+      "letter",
+      "email"
+    ]
+  },
+  {
+    "name": "envelopes",
+    "code": "e924",
+    "categories": [
+      "Office",
+      "Item"
+    ],
+    "meta": [
+      "mail",
+      "letter",
+      "email"
+    ]
+  },
+  {
+    "name": "esc-a",
+    "code": "e925",
+    "categories": [
+      "Keyboard"
+    ],
+    "meta": [
+      "key",
+      "shortcut",
+      "type",
+      "escape",
+      "stop",
+      "close",
+      "cancel"
+    ]
+  },
+  {
+    "name": "esc",
+    "code": "e926",
+    "categories": [
+      "Keyboard"
+    ],
+    "meta": [
+      "key",
+      "shortcut",
+      "type",
+      "escape",
+      "stop",
+      "close",
+      "cancel"
+    ]
+  },
+  {
+    "name": "euro",
+    "code": "e927",
+    "categories": [
+      "Ledger",
+      "Shopping"
+    ],
+    "meta": [
+      "money",
+      "currency",
+      "payment"
+    ]
+  },
+  {
+    "name": "family",
+    "code": "e928",
+    "categories": [
+      "People"
+    ],
+    "meta": [
+      "users",
+      "child",
+      "human",
+      "person",
+      "group"
+    ]
+  },
+  {
+    "name": "file-add",
+    "code": "e929",
+    "categories": [
+      "File types"
+    ],
+    "meta": [
+      "document",
+      "attachment",
+      "new",
+      "plus",
+      "page"
+    ]
+  },
+  {
+    "name": "file-remove",
+    "code": "e92a",
+    "categories": [
+      "File types"
+    ],
+    "meta": [
+      "document",
+      "attachment",
+      "destroy",
+      "delete",
+      "x",
+      "page"
+    ]
+  },
+  {
+    "name": "file-search",
+    "code": "e92b",
+    "categories": [
+      "File types"
+    ],
+    "meta": [
+      "document",
+      "attachment",
+      "find",
+      "inspect",
+      "looking glass",
+      "page"
+    ]
+  },
+  {
+    "name": "flight-landing",
+    "code": "e92c",
+    "categories": [
+      "Transportation"
+    ],
+    "meta": [
+      "travel",
+      "airplane",
+      "fly",
+      "arrive",
+      "arrival",
+      "vacation"
+    ]
+  },
+  {
+    "name": "flight-takeoff",
+    "code": "e92d",
+    "categories": [
+      "Transportation"
+    ],
+    "meta": [
+      "travel",
+      "airplane",
+      "fly",
+      "departure",
+      "vacation"
+    ]
+  },
+  {
+    "name": "folder-add",
+    "code": "e92e",
+    "categories": [
+      "File types"
+    ],
+    "meta": [
+      "document",
+      "file",
+      "container",
+      "new",
+      "plus"
+    ]
+  },
+  {
+    "name": "folder-remove",
+    "code": "e92f",
+    "categories": [
+      "File types"
+    ],
+    "meta": [
+      "document",
+      "file",
+      "container",
+      "delete",
+      "destroy",
+      "x"
+    ]
+  },
+  {
+    "name": "folder-search",
+    "code": "e930",
+    "categories": [
+      "File types"
+    ],
+    "meta": [
+      "document",
+      "file",
+      "container",
+      "find",
+      "inspect",
+      "looking glass"
+    ]
+  },
+  {
+    "name": "funnel",
+    "code": "e931",
+    "categories": [
+      "Charts"
+    ],
+    "meta": [
+      "graph",
+      "diagram",
+      "filter",
+      "limit",
+      "define"
+    ]
+  },
+  {
+    "name": "globe-wire",
+    "code": "e932",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "earth",
+      "internet",
+      "web",
+      "global",
+      "world"
+    ]
+  },
+  {
+    "name": "hammer",
+    "code": "e933",
+    "categories": [
+      "Tools",
+      "Item"
+    ],
+    "meta": [
+      "nail",
+      "knock",
+      "building",
+      "construction"
+    ]
+  },
+  {
+    "name": "handshake",
+    "code": "e934",
+    "categories": [
+      "People"
+    ],
+    "meta": [
+      "agreement",
+      "deal",
+      "partnership",
+      "business"
+    ]
+  },
+  {
+    "name": "headset",
+    "code": "e935",
+    "categories": [
+      "Devices",
+      "Media"
+    ],
+    "meta": [
+      "headphones",
+      "microphone",
+      "skype",
+      "sound",
+      "audio",
+      "voice"
+    ]
+  },
+  {
+    "name": "hospital",
+    "code": "e936",
+    "categories": [
+      "Location",
+      "Medical"
+    ],
+    "meta": [
+      "doctor",
+      "emergency",
+      "healthcare",
+      "structure",
+      "building"
+    ]
+  },
+  {
+    "name": "hourglass-empty",
+    "code": "e937",
+    "categories": [
+      "Scheduling",
+      "Item"
+    ],
+    "meta": [
+      "timer",
+      "measurement",
+      "stopwatch"
+    ]
+  },
+  {
+    "name": "hourglass-end",
+    "code": "e938",
+    "categories": [
+      "Scheduling",
+      "Item"
+    ],
+    "meta": [
+      "timer",
+      "measurement",
+      "stopwatch"
+    ]
+  },
+  {
+    "name": "hourglass-start",
+    "code": "e939",
+    "categories": [
+      "Scheduling",
+      "Item"
+    ],
+    "meta": [
+      "timer",
+      "measurement",
+      "stopwatch"
+    ]
+  },
+  {
+    "name": "hourglass",
+    "code": "e93a",
+    "categories": [
+      "Scheduling",
+      "Item"
+    ],
+    "meta": [
+      "timer",
+      "measurement",
+      "stopwatch"
+    ]
+  },
+  {
+    "name": "line-bar-chart",
+    "code": "e93b",
+    "categories": [
+      "Charts"
+    ],
+    "meta": [
+      "graph",
+      "diagram",
+      "column-chart",
+      "dashboard"
+    ]
+  },
+  {
+    "name": "line-chart",
+    "code": "e93c",
+    "categories": [
+      "Charts"
+    ],
+    "meta": [
+      "graph",
+      "diagram"
+    ]
+  },
+  {
+    "name": "mobile-browser",
+    "code": "e93d",
+    "categories": [
+      "Web application",
+      "Devices"
+    ],
+    "meta": [
+      "layout",
+      "html",
+      "internet",
+      "smartphone",
+      "responsive",
+      "web",
+      "page",
+      "site"
+    ]
+  },
+  {
+    "name": "mobile-retro",
+    "code": "e93e",
+    "categories": [
+      "Devices",
+      "Item"
+    ],
+    "meta": [
+      "cellphone",
+      "old"
+    ]
+  },
+  {
+    "name": "money-deposit",
+    "code": "e93f",
+    "categories": [
+      "Ledger",
+      "Shopping"
+    ],
+    "meta": [
+      "dollar",
+      "finance",
+      "banking",
+      "atm"
+    ]
+  },
+  {
+    "name": "money-exchange",
+    "code": "e940",
+    "categories": [
+      "Ledger",
+      "Shopping"
+    ],
+    "meta": [
+      "dollar",
+      "finance",
+      "banking",
+      "buy",
+      "purchase"
+    ]
+  },
+  {
+    "name": "money-withdraw",
+    "code": "e941",
+    "categories": [
+      "Ledger",
+      "Shopping"
+    ],
+    "meta": [
+      "dollar",
+      "finance",
+      "banking",
+      "atm"
+    ]
+  },
+  {
+    "name": "morning",
+    "code": "e942",
+    "categories": [
+      "Weather",
+      "Sign"
+    ],
+    "meta": [
+      "sunrise",
+      "sunset",
+      "horizon",
+      "summer",
+      "time"
+    ]
+  },
+  {
+    "name": "newspaper",
+    "code": "e943",
+    "categories": [
+      "Items"
+    ],
+    "meta": [
+      "journal",
+      "press",
+      "magazine"
+    ]
+  },
+  {
+    "name": "nurse",
+    "code": "e944",
+    "categories": [
+      "Medical",
+      "People"
+    ],
+    "meta": [
+      "healthcare",
+      "medic"
+    ]
+  },
+  {
+    "name": "office",
+    "code": "e945",
+    "categories": [
+      "Location",
+      "Office"
+    ],
+    "meta": [
+      "structure",
+      "headquarters",
+      "building",
+      "work"
+    ]
+  },
+  {
+    "name": "option-a",
+    "code": "e946",
+    "categories": [
+      "Keyboard"
+    ],
+    "meta": [
+      "key",
+      "shortcut",
+      "type",
+      "command",
+      "modifier",
+      "Mac",
+      "OS X"
+    ]
+  },
+  {
+    "name": "option",
+    "code": "e947",
+    "categories": [
+      "Keyboard"
+    ],
+    "meta": [
+      "key",
+      "shortcut",
+      "type",
+      "command",
+      "modifier",
+      "Mac",
+      "OS X"
+    ]
+  },
+  {
+    "name": "phone-landline",
+    "code": "e948",
+    "categories": [
+      "Devices"
+    ],
+    "meta": [
+      "telephone",
+      "call",
+      "dial",
+      "contact"
+    ]
+  },
+  {
+    "name": "pie-bar-chart",
+    "code": "e949",
+    "categories": [
+      "Charts"
+    ],
+    "meta": [
+      "graph",
+      "diagram",
+      "column-chart",
+      "dashboard"
+    ]
+  },
+  {
+    "name": "piggy-bank-coin",
+    "code": "e94a",
+    "categories": [
+      "Ledger",
+      "Shopping"
+    ],
+    "meta": [
+      "money",
+      "currency",
+      "banking",
+      "finance"
+    ]
+  },
+  {
+    "name": "piggy-bank",
+    "code": "e94b",
+    "categories": [
+      "Ledger",
+      "Shopping"
+    ],
+    "meta": [
+      "money",
+      "currency",
+      "banking",
+      "finance"
+    ]
+  },
+  {
+    "name": "pyramid-chart",
+    "code": "e94c",
+    "categories": [
+      "Charts"
+    ],
+    "meta": [
+      "graph",
+      "diagram",
+      "growing",
+      "levels"
+    ]
+  },
+  {
+    "name": "records",
+    "code": "e94d",
+    "categories": [
+      "Office"
+    ],
+    "meta": [
+      "documents",
+      "archive",
+      "files",
+      "filing",
+      "scoresheets"
+    ]
+  },
+  {
+    "name": "scale-unbalance",
+    "code": "e94e",
+    "categories": [
+      "Item"
+    ],
+    "meta": [
+      "measure",
+      "weight",
+      "evaluate"
+    ]
+  },
+  {
+    "name": "scale",
+    "code": "e94f",
+    "categories": [
+      "Item"
+    ],
+    "meta": [
+      "measure",
+      "weight",
+      "evaluate"
+    ]
+  },
+  {
+    "name": "scatter-chart",
+    "code": "e950",
+    "categories": [
+      "Charts"
+    ],
+    "meta": [
+      "graph",
+      "diagram",
+      "points",
+      "measurements"
+    ]
+  },
+  {
+    "name": "shift-arrow",
+    "code": "e951",
+    "categories": [
+      "Keyboard"
+    ],
+    "meta": [
+      "key",
+      "shortcut",
+      "type",
+      "modifier"
+    ]
+  },
+  {
+    "name": "shift",
+    "code": "e952",
+    "categories": [
+      "Keyboard"
+    ],
+    "meta": [
+      "key",
+      "shortcut",
+      "type",
+      "modifier"
+    ]
+  },
+  {
+    "name": "shop",
+    "code": "e953",
+    "categories": [
+      "Location",
+      "Shopping"
+    ],
+    "meta": [
+      "buy",
+      "commerce",
+      "store",
+      "supermarket"
+    ]
+  },
+  {
+    "name": "spark-line",
+    "code": "e954",
+    "categories": [
+      "Charts"
+    ],
+    "meta": [
+      "graph",
+      "diagram",
+      "stock market"
+    ]
+  },
+  {
+    "name": "spline-area-chart",
+    "code": "e955",
+    "categories": [
+      "Charts"
+    ],
+    "meta": [
+      "graph",
+      "diagram",
+      "line"
+    ]
+  },
+  {
+    "name": "spline-chart",
+    "code": "e956",
+    "categories": [
+      "Charts"
+    ],
+    "meta": [
+      "graph",
+      "diagram",
+      "line"
+    ]
+  },
+  {
+    "name": "stock",
+    "code": "e957",
+    "categories": [
+      "Item"
+    ],
+    "meta": [
+      "boxes",
+      "packages",
+      "warehouse",
+      "storing",
+      "pallet"
+    ]
+  },
+  {
+    "name": "stopwatch",
+    "code": "e958",
+    "categories": [
+      "Scheduling",
+      "Item"
+    ],
+    "meta": [
+      "time",
+      "tracking",
+      "measurement",
+      "hours"
+    ]
+  },
+  {
+    "name": "storage",
+    "code": "e959",
+    "categories": [
+      "Location"
+    ],
+    "meta": [
+      "boxes",
+      "packages",
+      "warehouse",
+      "storing",
+      "stock"
+    ]
+  },
+  {
+    "name": "sun-down",
+    "code": "e95a",
+    "categories": [
+      "Weather",
+      "Sign"
+    ],
+    "meta": [
+      "evening",
+      "time",
+      "daytime"
+    ]
+  },
+  {
+    "name": "sun-rise",
+    "code": "e95b",
+    "categories": [
+      "Weather",
+      "Sign"
+    ],
+    "meta": [
+      "morning",
+      "time",
+      "daytime"
+    ]
+  },
+  {
+    "name": "tab-a",
+    "code": "e95c",
+    "categories": [
+      "Keyboard"
+    ],
+    "meta": [
+      "key",
+      "shortcut",
+      "type",
+      "tabulator",
+      "indent"
+    ]
+  },
+  {
+    "name": "tab",
+    "code": "e95d",
+    "categories": [
+      "Keyboard"
+    ],
+    "meta": [
+      "key",
+      "shortcut",
+      "type",
+      "tabulator",
+      "indent"
+    ]
+  },
+  {
+    "name": "timer",
+    "code": "e95e",
+    "categories": [
+      "Scheduling",
+      "Item"
+    ],
+    "meta": [
+      "time",
+      "tracking",
+      "measurement",
+      "hours",
+      "stopwatch"
+    ]
+  },
+  {
+    "name": "touch",
+    "code": "e95f",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "tap",
+      "click",
+      "pointer",
+      "finger"
+    ]
+  },
+  {
+    "name": "trendind-down",
+    "code": "e960",
+    "categories": [
+      "Charts"
+    ],
+    "meta": [
+      "graph",
+      "diagram",
+      "line-chart",
+      "table",
+      "lower"
+    ]
+  },
+  {
+    "name": "trending-up",
+    "code": "e961",
+    "categories": [
+      "Charts"
+    ],
+    "meta": [
+      "graph",
+      "diagram",
+      "line-chart",
+      "table",
+      "rise"
+    ]
+  },
+  {
+    "name": "user-star",
+    "code": "e962",
+    "categories": [
+      "People"
+    ],
+    "meta": [
+      "favorite",
+      "save"
+    ]
+  },
+  {
+    "name": "wallet",
+    "code": "e963",
+    "categories": [
+      "Item"
+    ],
+    "meta": [
+      "money",
+      "currency",
+      "cash",
+      "coins"
+    ]
+  }
+]

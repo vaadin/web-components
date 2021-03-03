@@ -47,7 +47,11 @@ if (!version) {
 async function main() {
   const fromRegex = new RegExp(oldVersion, 'g');
   const newVersion = version.replace(/^v/, '');
-  const results = await replace({ files: ['packages/**/src/*.{js,ts}'], from: fromRegex, to: newVersion });
+  const results = await replace({
+    files: ['packages/**/version.{js,ts}', 'packages/**/src/*.{js,ts}'],
+    from: fromRegex,
+    to: newVersion
+  });
   const changes = results.filter((result) => result.hasChanged).map((result) => result.file);
 
   // Stage the changes for the new version tag commit

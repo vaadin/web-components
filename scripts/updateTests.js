@@ -18,7 +18,8 @@ const skipTests = {
     'packages/vaadin-split-layout/test/split-layout.test.js',
     'packages/vaadin-radio-button/test/radio-button.test.js',
     'packages/vaadin-messages/test/message.test.js',
-    'packages/vaadin-messages/test/message-list.test.js'
+    'packages/vaadin-messages/test/message-list.test.js',
+    'packages/vaadin-form-layout/test/form-item.test.js'
   ],
   from: [
     `describe('with add button'`,
@@ -37,7 +38,8 @@ const skipTests = {
     `it('should set checked on touchend'`,
     `it('should not set checked on touchend when disabled'`,
     `it('should fire on touchend'`,
-    /\/test\/visual\/avatars\/avatar\.jpg/g
+    /\/test\/visual\/avatars\/avatar\.jpg/g,
+    `import '../vaadin-form-item.js';`
   ],
   to: [
     `const isFirefox = ${firefox};
@@ -67,7 +69,9 @@ const skipTests = {
     (isSafari ? it.skip : it)('should not set checked on touchend when disabled'`,
     `const isSafari = ${safari};
     (isSafari ? it.skip : it)('should fire on touchend'`,
-    'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='
+    'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
+    `import '@polymer/polymer/lib/elements/custom-style.js';
+import '../vaadin-form-item.js';`
   ]
 };
 
