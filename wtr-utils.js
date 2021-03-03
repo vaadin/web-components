@@ -6,6 +6,8 @@ const filterBrowserLogs = (log) => log.type === 'error';
 
 const group = process.argv.indexOf('--group') !== -1;
 
+const NO_TESTS = ['vaadin', 'vaadin-core', 'vaadin-icons', 'vaadin-lumo-styles', 'vaadin-material-styles'];
+
 /**
  * Get packages changed since master.
  */
@@ -14,7 +16,7 @@ const getChangedPackages = () => {
   const changedPackages = JSON.parse(output.toString());
   return changedPackages
     .map((project) => project.name.replace('@vaadin/', ''))
-    .filter((project) => ['vaadin', 'vaadin-core'].indexOf(project) === -1);
+    .filter((project) => NO_TESTS.indexOf(project) === -1);
 };
 
 /**

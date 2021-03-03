@@ -14,11 +14,15 @@ const packageJson = require(path.resolve(dir, 'package.json'));
 async function main() {
   const src = path.resolve(dir, './src');
 
-  // Update version getters
-  if (fs.existsSync(src)) {
-    const fromRegex = /static get version.*\n.*return '(.*)'/;
-    const newVersion = `static get version() {\n    return '${VERSION}'`;
+  const fromRegex = /static get version.*\n.*return '(.*)'/;
+  const newVersion = `static get version() {\n    return '${VERSION}'`;
 
+  const hasVersionFile = fs.existsSync(path.resolve(dir, 'version.js'));
+
+  // Update version getters
+  if (hasVersionFile) {
+    await replace({ files: [`${dir}/version.js`], from: fromRegex, to: newVersion });
+  } else if (fs.existsSync(src)) {
     await replace({ files: [`${dir}/src/*.{js,ts}`], from: fromRegex, to: newVersion });
   }
 
@@ -63,9 +67,6 @@ async function main() {
   }
 
   const IGNORED = [
-    '@vaadin/vaadin-lumo-styles',
-    '@vaadin/vaadin-material-styles',
-    '@vaadin/vaadin-icons',
     '@vaadin/vaadin-development-mode-detector',
     '@vaadin/vaadin-license-checker',
     '@vaadin/vaadin-usage-statistics',
