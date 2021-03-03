@@ -33,3 +33,7 @@ yarn test:webkit
 ```sh
 yarn test --group vaadin-upload
 ```
+
+## LICENSE
+
+For specific package(s), check the LICENSE file under the package folder.

@@ -1,8 +1,7 @@
 {
-  "name": "test-script",
+  "name": "vaadin-web-components",
   "private": true,
   "author": "Vaadin Ltd",
-  "license": "Apache-2.0",
   "workspaces": [
     "packages/*"
   ],
