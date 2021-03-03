@@ -2,7 +2,8 @@
   "name": "@vaadin/vaadin-icons",
   "version": "4.3.2",
   "description": "Collection of 600+ unique icons designed for web applications",
-  "main": "vaadin-icons.html",
+  "main": "vaadin-icons.js",
+  "module": "vaadin-icons.js",
   "repository": "vaadin/vaadin-icons",
   "keywords": [
     "Vaadin",
@@ -22,13 +23,30 @@
     "vaadin-icons.js"
   ],
   "scripts": {
-    "prestart": "polymer analyze vaadin-* > analysis.json",
-    "start": "polymer serve --port 3000 --open"
+    "lint": "eslint *.js"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  },
+  "dependencies": {
+    "@polymer/polymer": "^3.0.0",
+    "@polymer/iron-icon": "^3.0.0",
+    "@polymer/iron-iconset-svg": "^3.0.0"
   },
   "devDependencies": {
-    "@vaadin/vaadin-component-dev-dependencies": "^1.0.0",
-    "cheerio": "^1.0.0-rc.2",
-    "gulp-concat": "^2.6.1",
-    "gulp-modify": "^0.1.1"
+    "eslint": "^7.18.0",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "husky": "^4.3.0",
+    "lint-staged": "^10.5.1",
+    "prettier": "^2.2.0"
   }
 }

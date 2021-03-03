@@ -1,8 +1,0 @@
-{
-  "rules": {
-  },
-  "globals": {
-    "IconsDemo": false,
-    "DemoReadyEventEmitter": false
-  }
-}
