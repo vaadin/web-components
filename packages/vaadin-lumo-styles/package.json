@@ -2,7 +2,8 @@
   "name": "@vaadin/vaadin-lumo-styles",
   "version": "1.7.0-alpha2",
   "description": "Lumo is a design system foundation for modern web applications, used by Vaadin components",
-  "main": "all-imports.html",
+  "main": "all-imports.js",
+  "module": "all-imports.js",
   "repository": "vaadin/vaadin-lumo-styles",
   "keywords": [
     "vaadin",
@@ -23,19 +24,39 @@
     "*.d.ts",
     "mixins/*.js",
     "mixins/*.d.ts",
-    "presets/*.js",
-    "!wdio.conf.js"
+    "presets/*.js"
   ],
   "scripts": {
-    "test": "wct",
-    "prestart": "polymer analyze vaadin-* > analysis.json",
-    "start": "polymer serve --port 3000 --open",
-    "preversion": "gulp version:update"
+    "lint": "npm run lint:js && npm run lint:css",
+    "lint:css": "stylelint *.js mixins/*.js",
+    "lint:js": "eslint *.js mixins presets"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  },
+  "dependencies": {
+    "@polymer/polymer": "^3.0.0",
+    "@polymer/iron-icon": "^3.0.0",
+    "@polymer/iron-iconset-svg": "^3.0.0",
+    "@vaadin/vaadin-themable-mixin": "^1.6.1"
   },
   "devDependencies": {
-    "@vaadin/vaadin-component-dev-dependencies": "^2.0.0",
-    "gulp-iconfont": "^10.0.3",
-    "gulp-sort": "^2.0.0",
-    "gulp-svgmin": "^1.2.4"
+    "eslint": "^7.18.0",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "husky": "^4.3.0",
+    "lint-staged": "^10.5.1",
+    "prettier": "^2.2.0",
+    "stylelint": "^13.8.0",
+    "stylelint-config-prettier": "^8.0.2",
+    "stylelint-config-vaadin": "^0.2.10"
   }
 }

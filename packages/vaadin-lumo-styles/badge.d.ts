@@ -1,3 +1,3 @@
-import {CSSResult} from 'lit-element';
+import { CSSResult } from 'lit-element';
 
 export const badge: CSSResult;
