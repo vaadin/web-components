@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-overlay",
-  "version": "20.0.0-alpha1",
+  "version": "20.0.0-alpha2",
   "description": "vaadin-overlay",
   "main": "vaadin-overlay.js",
   "module": "vaadin-overlay.js",
@@ -30,10 +30,10 @@
   },
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/vaadin-element-mixin": "^20.0.0-alpha1",
-    "@vaadin/vaadin-themable-mixin": "^20.0.0-alpha1",
-    "@vaadin/vaadin-lumo-styles": "^20.0.0-alpha1",
-    "@vaadin/vaadin-material-styles": "^20.0.0-alpha1"
+    "@vaadin/vaadin-element-mixin": "^20.0.0-alpha2",
+    "@vaadin/vaadin-themable-mixin": "^20.0.0-alpha2",
+    "@vaadin/vaadin-lumo-styles": "^20.0.0-alpha2",
+    "@vaadin/vaadin-material-styles": "^20.0.0-alpha2"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.1.5",
@@ -42,9 +42,9 @@
     "@polymer/iron-component-page": "^4.0.0",
     "@polymer/iron-overlay-behavior": "^3.0.0",
     "@polymer/iron-test-helpers": "^3.0.0",
-    "@vaadin/vaadin-button": "^20.0.0-alpha1",
-    "@vaadin/vaadin-radio-button": "^20.0.0-alpha1",
-    "@vaadin/vaadin-text-field": "^20.0.0-alpha1",
+    "@vaadin/vaadin-button": "^20.0.0-alpha2",
+    "@vaadin/vaadin-radio-button": "^20.0.0-alpha2",
+    "@vaadin/vaadin-text-field": "^20.0.0-alpha2",
     "rimraf": "^3.0.2",
     "rollup": "^2.34.1",
     "rollup-plugin-terser": "^7.0.2",
