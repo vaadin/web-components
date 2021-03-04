@@ -67,7 +67,7 @@
     "@vaadin/vaadin-element-mixin": "^2.4.1"
   },
   "devDependencies": {
-    "@esm-bundle/chai": "^4.1.5",
+    "@esm-bundle/chai": "4.3.0",
     "@open-wc/rollup-plugin-html": "^1.2.5",
     "@open-wc/testing-helpers": "^1.8.0",
     "@polymer/iron-component-page": "^4.0.0",
