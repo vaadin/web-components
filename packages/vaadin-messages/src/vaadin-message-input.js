@@ -84,6 +84,7 @@ class MessageInputElement extends ElementMixin(ThemableMixin(PolymerElement)) {
           display: flex;
           max-height: 50vh;
           overflow: hidden;
+          flex-shrink: 0;
         }
         vaadin-text-area {
           align-self: stretch;
