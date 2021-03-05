@@ -8,7 +8,7 @@ registerStyles(
   'vaadin-avatar-group',
   css`
     :host {
-      --_lumo-avatar-group-offset: var(--lumo-size-m);
+      --vaadin-avatar-size: var(--lumo-size-m);
     }
 
     :host([theme~='small']) {
@@ -28,7 +28,7 @@ registerStyles(
     :host([theme~='large']) {
       --vaadin-avatar-group-overlap: 10px;
       --vaadin-avatar-group-overlap-border: 3px;
-      --vaadin-avatar-size: var(--lumo-size-xl);
+      --vaadin-avatar-size: var(--lumo-size-l);
     }
 
     :host([theme~='small']) {
