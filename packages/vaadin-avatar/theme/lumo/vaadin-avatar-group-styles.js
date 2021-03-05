@@ -11,42 +11,36 @@ registerStyles(
       --_lumo-avatar-group-offset: var(--lumo-size-m);
     }
 
-    [part='avatar']:not([dir='rtl']):not(:first-child) {
-      -webkit-mask-position: calc(50% - var(--_lumo-avatar-group-offset) + var(--vaadin-avatar-group-overlap));
-      mask-position: calc(50% - var(--_lumo-avatar-group-offset) + var(--vaadin-avatar-group-overlap));
+    :host([theme~='small']) {
+      --vaadin-avatar-size: var(--lumo-size-s);
     }
 
-    [part='avatar'][dir='rtl']:not(:first-child) {
-      -webkit-mask-position: calc(
-        50% + var(--_lumo-avatar-group-offset) - var(--vaadin-avatar-group-overlap) + var(--vaadin-avatar-outline-width)
-      );
-      mask-position: calc(
-        50% + var(--_lumo-avatar-group-offset) - var(--vaadin-avatar-group-overlap) + var(--vaadin-avatar-outline-width)
-      );
+    :host([theme~='xsmall']) {
+      --vaadin-avatar-size: var(--lumo-size-xs);
     }
 
     :host([theme~='xlarge']) {
       --vaadin-avatar-group-overlap: 12px;
       --vaadin-avatar-group-overlap-border: 3px;
-      --_lumo-avatar-group-offset: var(--lumo-size-xl);
+      --vaadin-avatar-size: var(--lumo-size-xl);
     }
 
     :host([theme~='large']) {
       --vaadin-avatar-group-overlap: 10px;
       --vaadin-avatar-group-overlap-border: 3px;
-      --_lumo-avatar-group-offset: var(--lumo-size-l);
+      --vaadin-avatar-size: var(--lumo-size-xl);
     }
 
     :host([theme~='small']) {
       --vaadin-avatar-group-overlap: 6px;
       --vaadin-avatar-group-overlap-border: 2px;
-      --_lumo-avatar-group-offset: var(--lumo-size-s);
+      --vaadin-avatar-size: var(--lumo-size-s);
     }
 
     :host([theme~='xsmall']) {
       --vaadin-avatar-group-overlap: 4px;
       --vaadin-avatar-group-overlap-border: 2px;
-      --_lumo-avatar-group-offset: var(--lumo-size-xs);
+      --vaadin-avatar-size: var(--lumo-size-xs);
     }
   `,
   { moduleId: 'lumo-avatar-group' }
