@@ -45,7 +45,7 @@
   </div>
 
   <script type="module">
-    import { keyDownOn } from '@polymer/iron-test-helpers/mock-interactions.js';
+    import { focusin, keyDownOn } from '@vaadin/testing-helpers';
 
     (async () => {
       const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
@@ -53,7 +53,7 @@
       await import('../../theme/' + theme + '/vaadin-radio-group.js');
 
       keyDownOn(document.body, 9);
-      document.getElementById('radio').dispatchEvent(new CustomEvent('focusin', { composed: true, bubbles: true }));
+      focusin(document.getElementById('radio'));
 
       window.requestAnimationFrame(() => {
         document.getElementById('tests').dataset.ready = true;

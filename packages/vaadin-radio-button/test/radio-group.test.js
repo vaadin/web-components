@@ -1,7 +1,17 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, nextFrame } from '@open-wc/testing-helpers';
 import sinon from 'sinon';
-import { arrowDown, arrowLeft, arrowRight, arrowUp, fixtureSync, focusin, focusout, visible } from './helpers.js';
+import {
+  arrowDown,
+  arrowLeft,
+  arrowRight,
+  arrowUp,
+  aTimeout,
+  fixtureSync,
+  focusin,
+  focusout,
+  nextFrame
+} from '@vaadin/testing-helpers';
+import { visible } from './helpers.js';
 import '../vaadin-radio-group.js';
 
 describe('radio-group', () => {
@@ -18,10 +28,6 @@ describe('radio-group', () => {
     `);
     await nextFrame();
     buttons = group._radioButtons;
-  });
-
-  afterEach(() => {
-    group.remove();
   });
 
   describe('custom element definition', () => {
@@ -503,7 +509,7 @@ describe('radio-group', () => {
       const spy = sinon.spy();
       group.addEventListener('invalid-changed', spy);
       group.required = true;
-      focusout(group, true);
+      focusout(group);
       expect(spy.calledOnce).to.be.true;
     });
 
@@ -614,10 +620,6 @@ describe('radio-group initial value', () => {
     buttons = group._radioButtons;
   });
 
-  afterEach(() => {
-    group.remove();
-  });
-
   it('should set the value based on the initially checked radio button', () => {
     expect(group.value).to.be.equal('2');
   });
@@ -674,10 +676,6 @@ describe('radio-group helper slot', () => {
       </vaadin-radio-group>
     `);
     group._observer.flush();
-  });
-
-  afterEach(() => {
-    group.remove();
   });
 
   it('should have has-helper attribute when slotted helper is present', () => {
