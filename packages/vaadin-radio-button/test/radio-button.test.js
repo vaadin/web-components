@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextFrame } from '@open-wc/testing-helpers';
 import sinon from 'sinon';
-import { keyDownOn, keyUpOn, touchstart, touchend } from '@polymer/iron-test-helpers/mock-interactions.js';
+import { fixtureSync, nextFrame, space, spaceKeyDown, spaceKeyUp, touchstart, touchend } from '@vaadin/testing-helpers';
 import { down, up } from './helpers.js';
 import '../vaadin-radio-button.js';
 
@@ -104,8 +103,7 @@ describe('radio-button', () => {
     });
 
     it('should set checked on space keyup', () => {
-      keyDownOn(radio, 32);
-      keyUpOn(radio, 32);
+      space(radio);
       expect(radio.checked).to.be.true;
     });
   });
@@ -134,21 +132,19 @@ describe('radio-button', () => {
     });
 
     it('should not set checked on space keyup when disabled', () => {
-      keyDownOn(radio, 32);
-      keyUpOn(radio, 32);
+      space(radio);
       expect(radio.checked).to.be.false;
     });
   });
 
   describe('active attribute', () => {
     it('should have active attribute on space keydown', () => {
-      keyDownOn(radio, 32);
+      spaceKeyDown(radio);
       expect(radio.hasAttribute('active')).to.be.true;
     });
 
     it('should not have active attribute on space keyup', () => {
-      keyDownOn(radio, 32);
-      keyUpOn(radio, 32);
+      space(radio);
       expect(radio.hasAttribute('active')).to.be.false;
     });
   });
@@ -181,15 +177,13 @@ describe('radio-button', () => {
     });
 
     it('should be called on space keyup', () => {
-      keyDownOn(radio, 32);
-      keyUpOn(radio, 32);
+      space(radio);
       expect(spy.calledOnce).to.be.true;
     });
 
     it('should not be called on space keyup when disabled', () => {
       radio.disabled = true;
-      keyDownOn(radio, 32);
-      keyUpOn(radio, 32);
+      space(radio);
       expect(spy.called).to.be.false;
     });
   });
@@ -221,9 +215,10 @@ describe('radio-button', () => {
     });
 
     it('should fire on space keyup', () => {
-      keyDownOn(radio, 32);
+      spaceKeyDown(radio);
       expect(spy.called).to.be.false;
-      keyUpOn(radio, 32);
+
+      spaceKeyUp(radio);
       expect(spy.calledOnce).to.be.true;
     });
 

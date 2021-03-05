@@ -40,8 +40,8 @@
   "devDependencies": {
     "@esm-bundle/chai": "^4.1.5",
     "@open-wc/rollup-plugin-html": "^1.2.5",
-    "@open-wc/testing-helpers": "^1.8.12",
     "@polymer/iron-component-page": "^4.0.0",
+    "@vaadin/testing-helpers": "^0.1.0",
     "rimraf": "^3.0.2",
     "rollup": "^2.34.1",
     "rollup-plugin-terser": "^7.0.2",

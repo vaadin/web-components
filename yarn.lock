@@ -1502,7 +1502,7 @@
     "@polymer/iron-overlay-behavior" "^3.0.0-pre.27"
     "@polymer/polymer" "^3.0.0"
 
-"@polymer/polymer@^3.0.0", "@polymer/polymer@^3.2.0":
+"@polymer/polymer@^3.0.0", "@polymer/polymer@^3.2.0", "@polymer/polymer@^3.4.1":
   version "3.4.1"
   resolved "https://registry.yarnpkg.com/@polymer/polymer/-/polymer-3.4.1.tgz#333bef25711f8411bb5624fb3eba8212ef8bee96"
   integrity sha512-KPWnhDZibtqKrUz7enIPOiO4ZQoJNOuLwqrhV2MXzIt3VVnUVJVG5ORz4Z2sgO+UZ+/UZnPD0jqY+jmw/+a9mQ==
@@ -1828,6 +1828,13 @@
   dependencies:
     "@vaadin/vaadin-usage-statistics" "^2.1.0"
     path-to-regexp "2.4.0"
+
+"@vaadin/testing-helpers@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@vaadin/testing-helpers/-/testing-helpers-0.1.0.tgz#6aff194867defeb3a7bafc936ab6629ffb40430f"
+  integrity sha512-nhQXbdWX3PX3izd8oyObBQ7sYhCDXws7PGYGlM7VtMCLqBgSiQPz+YJWf8aLd+r5Irnuh8oQQsCvDnOuj0zBlw==
+  dependencies:
+    "@polymer/polymer" "^3.4.1"
 
 "@vaadin/vaadin-development-mode-detector@^2.0.0", "@vaadin/vaadin-development-mode-detector@^2.0.4":
   version "2.0.4"

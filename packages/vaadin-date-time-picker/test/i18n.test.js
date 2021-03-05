@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from './helpers.js';
+import { fixtureSync } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import '../vaadin-date-time-picker.js';
 
@@ -103,10 +103,6 @@ customElements.define(
         datePicker = dateTimePicker.querySelector('[slot="date-picker"]');
         timePicker = dateTimePicker.querySelector('[slot="time-picker"]');
       }
-    });
-
-    after(() => {
-      dateTimePicker.remove();
     });
 
     it('should have initial value for i18n', () => {
