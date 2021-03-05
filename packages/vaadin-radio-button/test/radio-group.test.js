@@ -499,12 +499,6 @@ describe('radio-group', () => {
       expect(group.invalid).to.be.true;
     });
 
-    it('should not validate on focusout when event is not composed', () => {
-      group.required = true;
-      focusout(group, false);
-      expect(group.invalid).to.be.false;
-    });
-
     it('should dispatch invalid-changed event when invalid changes', () => {
       const spy = sinon.spy();
       group.addEventListener('invalid-changed', spy);

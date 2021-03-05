@@ -335,10 +335,8 @@ class RadioGroupElement extends ThemableMixin(DirMixin(PolymerElement)) {
 
     this.addEventListener('focusin', () => this._setFocused(this._containsFocus()));
 
-    // Need to check e.composed as a workaround for https://bugzilla.mozilla.org/show_bug.cgi?id=1472887
-    // otherwise FF runs validation on keyboard focus
-    this.addEventListener('focusout', (e) => {
-      e.composed && this.validate();
+    this.addEventListener('focusout', () => {
+      this.validate();
       this._setFocused(false);
     });
   }
