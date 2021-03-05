@@ -1,6 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { dispatchChange, fixtureSync } from './helpers.js';
+import { fixtureSync } from '@vaadin/testing-helpers';
+import { dispatchChange } from './helpers.js';
 import '../vaadin-date-time-picker.js';
 
 const fixtures = {
@@ -76,10 +77,6 @@ const fixtures = {
         datePicker = dateTimePicker.querySelector('[slot="date-picker"]');
         timePicker = dateTimePicker.querySelector('[slot="time-picker"]');
       }
-    });
-
-    afterEach(() => {
-      dateTimePicker.remove();
     });
 
     it('should propagate value to date and time pickers', () => {
@@ -306,10 +303,6 @@ const fixtures = {
         datePicker = dateTimePicker.querySelector('[slot="date-picker"]');
         timePicker = dateTimePicker.querySelector('[slot="time-picker"]');
       }
-    });
-
-    after(() => {
-      dateTimePicker.remove();
     });
 
     it('should have initial value for errorMessage', () => {

@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync } from './helpers.js';
+import { fixtureSync } from '@vaadin/testing-helpers';
 import '../vaadin-date-time-picker.js';
 
 class DateTimePicker2020Element extends customElements.get('vaadin-date-time-picker') {
@@ -29,10 +29,6 @@ const fixtures = {
     beforeEach(() => {
       dateTimePicker = fixtureSync(fixtures[set]);
       customField = dateTimePicker.$.customField;
-    });
-
-    afterEach(() => {
-      dateTimePicker.remove();
     });
 
     it('should not be required', () => {
@@ -108,10 +104,6 @@ describe('custom validator', () => {
 
   beforeEach(() => {
     dateTimePicker = fixtureSync('<vaadin-date-time-picker-2020></vaadin-date-time-picker-2020>');
-  });
-
-  afterEach(() => {
-    dateTimePicker.remove();
   });
 
   it('should validate correctly with custom validator', () => {

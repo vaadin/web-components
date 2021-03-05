@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { aTimeout, nextFrame } from '@open-wc/testing-helpers';
-import { changeInputValue, fixtureSync } from './helpers.js';
+import { aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { changeInputValue } from './helpers.js';
 import '../vaadin-date-time-picker.js';
 
 const fixtures = {
@@ -42,10 +42,6 @@ describe('Basic features', () => {
     customField = dateTimePicker.$.customField;
     datePicker = customField.inputs[0];
     timePicker = customField.inputs[1];
-  });
-
-  afterEach(() => {
-    dateTimePicker.remove();
   });
 
   it('should not expose class name globally', () => {
@@ -232,10 +228,6 @@ describe('autofocus', () => {
     await nextFrame();
   });
 
-  afterEach(() => {
-    dateTimePicker.remove();
-  });
-
   it('should focus date picker when autofocus is set', () => {
     expect(datePicker.hasAttribute('focused')).to.be.true;
   });
@@ -250,10 +242,6 @@ describe('Initial value', () => {
     customField = dateTimePicker.$.customField;
   });
 
-  afterEach(() => {
-    dateTimePicker.remove();
-  });
-
   it('should use initial value from attribute without clearing it', () => {
     expect(dateTimePicker.value).to.equal('2019-09-16T15:00');
     expect(customField.value).to.equal('2019-09-16T15:00');
@@ -265,10 +253,6 @@ describe('helperText', () => {
 
   beforeEach(() => {
     dateTimePicker = fixtureSync('<vaadin-date-time-picker></vaadin-date-time-picker>');
-  });
-
-  afterEach(() => {
-    dateTimePicker.remove();
   });
 
   it('should display the helper text when provided', () => {
@@ -290,10 +274,6 @@ describe('slotted helper', () => {
     customField = dateTimePicker.$.customField;
   });
 
-  afterEach(() => {
-    dateTimePicker.remove();
-  });
-
   it('should display the helper text when slotted helper available', () => {
     expect(customField.querySelector('[slot="helper"]').assignedNodes()[0].textContent).to.eql('foo');
   });
@@ -310,10 +290,6 @@ describe('Theme attribute', () => {
     customField = dateTimePicker.$.customField;
     datePicker = customField.inputs[0];
     timePicker = customField.inputs[1];
-  });
-
-  afterEach(() => {
-    dateTimePicker.remove();
   });
 
   it('should propagate theme attribute to custom-field', () => {
@@ -348,10 +324,6 @@ describe('Theme attribute', () => {
         timePicker.slot = 'time-picker';
         await aTimeout(0);
       }
-    });
-
-    afterEach(() => {
-      dateTimePicker.remove();
     });
 
     it('should have correct inputs set in custom-field', () => {
@@ -434,10 +406,6 @@ describe('Theme attribute', () => {
         dateTimePicker.querySelector('vaadin-time-picker').slot = 'time-picker';
         await aTimeout(0);
       }
-    });
-
-    afterEach(() => {
-      dateTimePicker.remove();
     });
 
     // This test simulates how DatePicker sets the initial value from server side
