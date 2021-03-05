@@ -147,7 +147,7 @@ class AvatarElement extends ElementMixin(ThemableMixin(PolymerElement)) {
   }
 
   static get version() {
-    return '2.0.1';
+    return '2.0.2';
   }
 
   static get properties() {
