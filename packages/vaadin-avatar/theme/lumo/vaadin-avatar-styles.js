@@ -9,8 +9,7 @@ registerStyles(
   'vaadin-avatar',
   css`
     :host {
-      width: var(--lumo-size-m);
-      height: var(--lumo-size-m);
+      --vaadin-avatar-size: var(--lumo-size-m);
       color: var(--lumo-secondary-text-color);
       background-color: var(--lumo-contrast-10pct);
       border-radius: 50%;
@@ -58,23 +57,19 @@ registerStyles(
     }
 
     :host([theme~='xlarge']) {
-      width: var(--lumo-size-xl);
-      height: var(--lumo-size-xl);
+      --vaadin-avatar-size: var(--lumo-size-xl);
     }
 
     :host([theme~='large']) {
-      width: var(--lumo-size-l);
-      height: var(--lumo-size-l);
+      --vaadin-avatar-size: var(--lumo-size-l);
     }
 
     :host([theme~='small']) {
-      width: var(--lumo-size-s);
-      height: var(--lumo-size-s);
+      --vaadin-avatar-size: var(--lumo-size-s);
     }
 
     :host([theme~='xsmall']) {
-      width: var(--lumo-size-xs);
-      height: var(--lumo-size-xs);
+      --vaadin-avatar-size: var(--lumo-size-xs);
     }
   `,
   { moduleId: 'lumo-avatar' }

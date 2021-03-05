@@ -112,9 +112,8 @@ class MessageElement extends ElementMixin(ThemableMixin(PolymerElement)) {
         }
 
         vaadin-avatar {
-          border: none;
+          --vaadin-avatar-outline-width: 0px;
           flex-shrink: 0;
-          margin: 0;
         }
 
         [part='content'] {
@@ -128,6 +127,10 @@ class MessageElement extends ElementMixin(ThemableMixin(PolymerElement)) {
           display: flex;
           flex-direction: row;
           flex-wrap: wrap;
+        }
+
+        [part='name'] {
+          font-weight: 500;
         }
 
         [part='message'] {

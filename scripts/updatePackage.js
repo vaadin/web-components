@@ -67,6 +67,7 @@ async function main() {
   }
 
   const IGNORED = [
+    '@vaadin/testing-helpers',
     '@vaadin/vaadin-development-mode-detector',
     '@vaadin/vaadin-license-checker',
     '@vaadin/vaadin-usage-statistics',

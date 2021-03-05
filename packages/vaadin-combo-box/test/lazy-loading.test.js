@@ -123,6 +123,23 @@ describe('lazy loading', () => {
         expect(comboBox.selectedItem).to.be.null;
       });
 
+      (isComboBoxLight ? describe.skip : describe)('when autoOpenDisabled', () => {
+        beforeEach(() => (comboBox.autoOpenDisabled = true));
+
+        it('should not clear filter when loading first page', () => {
+          expect(comboBox.autoOpenDisabled).to.be.true;
+          expect(comboBox.opened).to.be.false;
+          comboBox.dataProvider = spyDataProvider;
+          setInputValue('item 1');
+          comboBox.inputElement.dispatchEvent(new CustomEvent('input'));
+          comboBox.opened = true;
+          flush();
+          expect(comboBox.filter).to.equal('item 1');
+          const { filter } = spyDataProvider.lastCall.args[0];
+          expect(filter).to.equal('item 1');
+        });
+      });
+
       describe('when open', function () {
         this.timeout(15000);
         beforeEach(() => (comboBox.opened = true));

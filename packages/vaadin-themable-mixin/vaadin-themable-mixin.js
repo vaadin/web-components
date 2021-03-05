@@ -13,10 +13,9 @@ export const ThemableMixin = (superClass) =>
 
       const template = this.prototype._template;
 
-      const hasOwnTemplate = Object.prototype.hasOwnProperty.call(this, 'template');
       const inheritedTemplate = Object.getPrototypeOf(this.prototype)._template;
-      if (inheritedTemplate && !hasOwnTemplate) {
-        // The element doesn't define its own template -> include the theme modules from the inherited template
+      if (inheritedTemplate) {
+        // Include the theme modules from the inherited template
         Array.from(inheritedTemplate.content.querySelectorAll('style[include]')).forEach((s) => {
           this._includeStyle(s.getAttribute('include'), template);
         });
