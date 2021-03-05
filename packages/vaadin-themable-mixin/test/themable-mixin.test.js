@@ -316,8 +316,8 @@ describe('ThemableMixin', () => {
     expect(getComputedStyle(components[2].$.text).width).to.equal('100px');
   });
 
-  it('should not inherit parent themes to own custom template', () => {
-    expect(getComputedStyle(components[4].$.text).backgroundColor).not.to.equal('rgb(255, 0, 0)');
+  it('should inherit parent themes to own custom template', () => {
+    expect(getComputedStyle(components[4].$.text).backgroundColor).to.equal('rgb(255, 0, 0)');
   });
 
   it('should override vaadin module styles', () => {
