@@ -3,7 +3,7 @@ const { createSauceLabsLauncher } = require('@web/test-runner-saucelabs');
 
 const config = {
   nodeResolve: true,
-  browserStartTimeout: 60000, // default 30000
+  browserStartTimeout: 120000, // default 30000
   testsStartTimeout: 60000, // default 10000
   testsFinishTimeout: 60000, // default 20000
   testFramework: {
