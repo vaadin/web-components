@@ -21,17 +21,20 @@ registerStyles(
     }
 
     vaadin-avatar {
-      margin-right: var(--lumo-space-m);
-      margin-top: var(--lumo-space-s);
+      margin-right: calc(var(--lumo-space-m) - var(--vaadin-avatar-outline-width));
+      margin-top: calc(var(--lumo-space-s) - var(--vaadin-avatar-outline-width));
     }
 
     :host([dir='rtl']) vaadin-avatar {
-      margin-left: var(--lumo-space-m);
-      margin-right: 0;
+      margin-left: calc(var(--lumo-space-m) - var(--vaadin-avatar-outline-width));
+      margin-right: calc(var(--vaadin-avatar-outline-width) * -1);
+    }
+
+    [part='header'] {
+      min-height: calc(var(--lumo-font-size-m) * var(--lumo-line-height-m));
     }
 
     [part='name'] {
-      font-weight: 500;
       margin-right: var(--lumo-space-s);
     }
 

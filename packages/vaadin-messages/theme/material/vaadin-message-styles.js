@@ -10,39 +10,45 @@ registerStyles(
       font-family: var(--material-font-family);
       font-size: var(--material-body-font-size);
       line-height: 1.5;
-      padding: 0.875em 1em;
+      padding: 0.75rem 1rem;
       -moz-osx-font-smoothing: grayscale;
       -webkit-font-smoothing: antialiased;
       -webkit-text-size-adjust: 100%;
     }
 
     vaadin-avatar {
-      height: 2.5em;
-      margin-right: 1em;
-      margin-top: 0.125em;
-      width: 2.5em;
+      --vaadin-avatar-size: 2.5rem;
+      margin-right: calc(1rem - var(--vaadin-avatar-outline-width));
+      margin-top: calc(0.25rem - var(--vaadin-avatar-outline-width));
     }
 
     :host([dir='rtl']) vaadin-avatar {
-      margin-left: 1em;
-      margin-right: 0;
+      margin-left: calc(1em - var(--vaadin-avatar-outline-width));
+      margin-right: calc(var(--vaadin-avatar-outline-width) * -1);
+    }
+
+    [part='header'] {
+      min-height: calc(var(--material-body-font-size) * 1.5);
     }
 
     [part='name'] {
-      margin-right: auto;
+      margin-right: 0.5rem;
     }
 
-    :host([dir='rtl']) [part='name'] {
-      margin-left: auto;
+    [part='name']:empty {
       margin-right: 0;
     }
 
-    [part='time'] {
-      color: var(--material-secondary-text-color);
-      font-size: var(--material-caption-font-size);
+    :host([dir='rtl']) [part='name'] {
+      margin-left: 0.5rem;
+      margin-right: 0;
     }
 
-    [part='message'] {
+    :host([dir='rtl']) [part='name']:empty {
+      margin-left: 0;
+    }
+
+    [part='time'] {
       color: var(--material-secondary-text-color);
       font-size: var(--material-small-font-size);
       line-height: 1.25rem;
