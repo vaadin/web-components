@@ -9,8 +9,7 @@ registerStyles(
   'vaadin-avatar',
   css`
     :host {
-      width: var(--lumo-size-m);
-      height: var(--lumo-size-m);
+      --vaadin-avatar-size: var(--lumo-size-m);
       color: var(--lumo-secondary-text-color);
       background-color: var(--lumo-contrast-10pct);
       border-radius: 50%;
