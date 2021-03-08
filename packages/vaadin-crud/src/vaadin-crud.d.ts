@@ -99,6 +99,7 @@ import { CrudDataProvider, CrudEditorPosition, CrudEventMap, CrudI18n } from './
  * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
  *
  * @fires {CustomEvent} editor-opened-changed - Fired when the `editorOpened` property changes.
+ * @fires {CustomEvent} edited-item-changed - Fired when `editedItem` property changes.
  * @fires {CustomEvent} items-changed - Fired when the `items` property changes.
  * @fires {CustomEvent} size-changed - Fired when the `size` property changes.
  * @fires {CustomEvent} new - Fired when user wants to create a new item.

@@ -46,6 +46,12 @@ export interface CrudI18n {
 export type CrudEditorOpenedChanged = CustomEvent<{ value: boolean }>;
 
 /**
+ * Fired when the `editedItem` property changes.
+ */
+export type CrudEditedItemChanged<T> = CustomEvent<{ value: T }>;
+
+
+/**
  * Fired when the `items` property changes.
  */
 export type CrudItemsChanged<T> = CustomEvent<{ value: Array<T> }>;
@@ -82,6 +88,8 @@ export type CrudSave<T> = CustomEvent<{ item: T; new: boolean }>;
 
 export type CrudElementEventMap<T> = {
   'editor-opened-changed': CrudEditorOpenedChanged;
+
+  'edited-item-changed': CrudEditedItemChanged<T>;
 
   'items-changed': CrudItemsChanged<T>;
 
