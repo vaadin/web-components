@@ -2,7 +2,7 @@ import { html } from 'lit-html';
 import '../packages/vaadin-text-field/vaadin-integer-field.js';
 
 export default {
-  title: 'Components/Integer Field',
+  title: 'Components/<vaadin-integer-field>',
   argTypes: {
     disabled: { control: 'boolean' },
     readonly: { control: 'boolean' },

@@ -3,7 +3,7 @@ import '../packages/vaadin-form-layout/vaadin-form-item.js';
 import '../packages/vaadin-text-field/vaadin-text-field.js';
 
 export default {
-  title: 'Components/Form Item',
+  title: 'Components/<vaadin-form-item>',
   argTypes: {
     label: { control: 'text' },
     labelPosition: {

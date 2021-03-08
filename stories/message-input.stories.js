@@ -2,7 +2,7 @@ import { html } from 'lit-html';
 import '../packages/vaadin-messages/vaadin-message-input.js';
 
 export default {
-  title: 'Components/Message Input',
+  title: 'Components/<vaadin-message-input>',
   argTypes: {
     disabled: { control: 'boolean' }
   }

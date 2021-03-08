@@ -2,7 +2,7 @@ import { html } from 'lit-html';
 import '../packages/vaadin-item/vaadin-item.js';
 
 export default {
-  title: 'Components/Item',
+  title: 'Components/<vaadin-item>',
   argTypes: {
     disabled: { control: 'boolean' },
     selected: { control: 'boolean' }

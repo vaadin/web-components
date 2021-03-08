@@ -2,7 +2,7 @@ import { html } from 'lit-html';
 import '../packages/vaadin-overlay/vaadin-overlay.js';
 
 export default {
-  title: 'Components/Overlay',
+  title: 'Components/<vaadin-overlay>',
   argTypes: {
     withBackdrop: { control: 'boolean' }
   }

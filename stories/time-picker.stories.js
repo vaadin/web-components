@@ -2,7 +2,7 @@ import { html } from 'lit-html';
 import '../packages/vaadin-time-picker/vaadin-time-picker.js';
 
 export default {
-  title: 'Components/Time Picker',
+  title: 'Components/<vaadin-time-picker>',
   argTypes: {
     disabled: { control: 'boolean' },
     readonly: { control: 'boolean' },

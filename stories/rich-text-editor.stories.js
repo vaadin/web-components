@@ -2,7 +2,7 @@ import { html } from 'lit-html';
 import '../packages/vaadin-rich-text-editor/vaadin-rich-text-editor.js';
 
 export default {
-  title: 'Components/Rich Text Editor',
+  title: 'Components/<vaadin-rich-text-editor>',
   argTypes: {
     disabled: { control: 'boolean' },
     readonly: { control: 'boolean' }

@@ -5,7 +5,7 @@ import '../packages/vaadin-text-field/vaadin-text-area.js';
 import '../packages/vaadin-date-picker/vaadin-date-picker.js';
 
 export default {
-  title: 'Components/Form Layout'
+  title: 'Components/<vaadin-form-layout>'
 };
 
 const FormLayout = () => {

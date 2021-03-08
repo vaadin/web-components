@@ -2,7 +2,7 @@ import { html } from 'lit-html';
 import '../packages/vaadin-date-picker/vaadin-date-picker.js';
 
 export default {
-  title: 'Components/Date Picker',
+  title: 'Components/<vaadin-date-picker>',
   argTypes: {
     disabled: { control: 'boolean' },
     readonly: { control: 'boolean' },

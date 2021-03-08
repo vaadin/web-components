@@ -3,7 +3,7 @@ import '../packages/vaadin-app-layout/vaadin-app-layout.js';
 import '../packages/vaadin-app-layout/vaadin-drawer-toggle.js';
 
 export default {
-  title: 'Components/App Layout',
+  title: 'Components/<vaadin-app-layout>',
   argTypes: {
     primarySection: {
       control: {

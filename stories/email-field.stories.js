@@ -2,7 +2,7 @@ import { html } from 'lit-html';
 import '../packages/vaadin-text-field/vaadin-email-field.js';
 
 export default {
-  title: 'Components/Email Field',
+  title: 'Components/<vaadin-email-field>',
   argTypes: {
     disabled: { control: 'boolean' },
     readonly: { control: 'boolean' },

@@ -2,7 +2,7 @@ import { html } from 'lit-html';
 import '../packages/vaadin-checkbox/vaadin-checkbox-group.js';
 
 export default {
-  title: 'Components/Checkbox Group',
+  title: 'Components/<vaadin-checkbox-group>',
   argTypes: {
     disabled: { control: 'boolean' },
     label: { control: 'text' },

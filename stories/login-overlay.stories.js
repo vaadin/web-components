@@ -2,7 +2,7 @@ import { html } from 'lit-html';
 import '../packages/vaadin-login/vaadin-login-overlay.js';
 
 export default {
-  title: 'Components/Login Overlay',
+  title: 'Components/<vaadin-login-overlay>',
   argTypes: {
     title: { control: 'text' },
     description: { control: 'text' }

@@ -5,7 +5,7 @@ import '../packages/vaadin-grid/vaadin-grid-filter-column.js';
 import '../packages/vaadin-grid/vaadin-grid-sort-column.js';
 
 export default {
-  title: 'Components/Grid',
+  title: 'Components/<vaadin-grid>',
   argTypes: {
     columnReorderingAllowed: { control: 'boolean' },
     rowsDraggable: { control: 'boolean' }

@@ -2,7 +2,7 @@ import { html } from 'lit-html';
 import '../packages/vaadin-details/vaadin-details.js';
 
 export default {
-  title: 'Components/Details',
+  title: 'Components/<vaadin-details>',
   argTypes: {
     disabled: { control: 'boolean' }
   }

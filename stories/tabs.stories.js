@@ -2,7 +2,7 @@ import { html } from 'lit-html';
 import '../packages/vaadin-tabs/vaadin-tabs.js';
 
 export default {
-  title: 'Components/Tabs',
+  title: 'Components/<vaadin-tabs>',
   argTypes: {
     orientation: {
       control: {

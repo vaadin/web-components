@@ -2,7 +2,7 @@ import { html } from 'lit-html';
 import '../packages/vaadin-confirm-dialog/vaadin-confirm-dialog.js';
 
 export default {
-  title: 'Components/Confirm Dialog',
+  title: 'Components/<vaadin-confirm-dialog>',
   argTypes: {
     message: { control: 'text' },
     cancel: { control: 'boolean' },

@@ -2,7 +2,7 @@ import { html } from 'lit-html';
 import '../packages/vaadin-accordion/vaadin-accordion.js';
 
 export default {
-  title: 'Components/Accordion',
+  title: 'Components/<vaadin-accordion>',
   argTypes: {
     opened: { control: 'number' }
   }

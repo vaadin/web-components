@@ -2,7 +2,7 @@ import { html } from 'lit-html';
 import '../packages/vaadin-dialog/vaadin-dialog.js';
 
 export default {
-  title: 'Components/Dialog',
+  title: 'Components/<vaadin-dialog>',
   argTypes: {
     draggable: { control: 'boolean' },
     resizable: { control: 'boolean' }

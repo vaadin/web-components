@@ -2,7 +2,7 @@ import { html } from 'lit-html';
 import '../packages/vaadin-progress-bar/vaadin-progress-bar.js';
 
 export default {
-  title: 'Components/Progress Bar',
+  title: 'Components/<vaadin-progress-bar>',
   argTypes: {
     min: { control: 'number' },
     max: { control: 'number' },

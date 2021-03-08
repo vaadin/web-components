@@ -2,7 +2,7 @@ import { html } from 'lit-html';
 import '../packages/vaadin-context-menu/vaadin-context-menu.js';
 
 export default {
-  title: 'Components/Context Menu'
+  title: 'Components/<vaadin-context-menu>'
 };
 
 const items = [
