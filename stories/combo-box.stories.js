@@ -2,7 +2,7 @@ import { html } from 'lit-html';
 import '../packages/vaadin-combo-box/vaadin-combo-box.js';
 
 export default {
-  title: 'Components/<vaadin-combo-box>',
+  title: 'Form inputs/<vaadin-combo-box>',
   argTypes: {
     disabled: { control: 'boolean' },
     readonly: { control: 'boolean' },

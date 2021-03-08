@@ -5,7 +5,7 @@ import '../packages/vaadin-list-box/vaadin-list-box.js';
 import '../packages/vaadin-item/vaadin-item.js';
 
 export default {
-  title: 'Components/<vaadin-select>',
+  title: 'Form inputs/<vaadin-select>',
   argTypes: {
     disabled: { control: 'boolean' },
     readonly: { control: 'boolean' },

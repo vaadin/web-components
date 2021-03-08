@@ -2,7 +2,7 @@ import { html } from 'lit-html';
 import '../packages/vaadin-menu-bar/vaadin-menu-bar.js';
 
 export default {
-  title: 'Components/<vaadin-menu-bar>',
+  title: 'Interaction/<vaadin-menu-bar>',
   argTypes: {
     openOnHover: { control: 'boolean' },
     theme: {

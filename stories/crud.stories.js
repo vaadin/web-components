@@ -3,7 +3,7 @@ import { users } from './data/users.js';
 import '../packages/vaadin-crud/vaadin-crud.js';
 
 export default {
-  title: 'Components/<vaadin-crud>',
+  title: 'Pro Components/<vaadin-crud>',
   argTypes: {
     editOnClick: { control: 'boolean' },
     editorPosition: {

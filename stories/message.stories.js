@@ -2,7 +2,7 @@ import { html } from 'lit-html';
 import '../packages/vaadin-messages/vaadin-message-list.js';
 
 export default {
-  title: 'Components/<vaadin-message>',
+  title: 'Collaboration/<vaadin-message>',
   argTypes: {
     text: { control: 'text' },
     time: { control: 'text' },

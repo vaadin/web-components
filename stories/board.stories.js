@@ -2,7 +2,7 @@ import { html } from 'lit-html';
 import '../packages/vaadin-board/vaadin-board.js';
 
 export default {
-  title: 'Components/<vaadin-board>'
+  title: 'Pro Components/<vaadin-board>'
 };
 
 const Board = () => {

@@ -2,7 +2,7 @@ import { html } from 'lit-html';
 import '../packages/vaadin-text-field/vaadin-number-field.js';
 
 export default {
-  title: 'Components/<vaadin-number-field>',
+  title: 'Form inputs/<vaadin-number-field>',
   argTypes: {
     disabled: { control: 'boolean' },
     readonly: { control: 'boolean' },

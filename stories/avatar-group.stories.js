@@ -2,7 +2,7 @@ import { html } from 'lit-html';
 import '../packages/vaadin-avatar/vaadin-avatar-group.js';
 
 export default {
-  title: 'Components/<vaadin-avatar-group>',
+  title: 'Collaboration/<vaadin-avatar-group>',
   argTypes: {
     maxItemsVisible: { control: 'number' },
     theme: {

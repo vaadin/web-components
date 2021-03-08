@@ -2,7 +2,7 @@ import { html } from 'lit-html';
 import '../packages/vaadin-notification/vaadin-notification.js';
 
 export default {
-  title: 'Components/<vaadin-notification>',
+  title: 'Overlays/<vaadin-notification>',
   argTypes: {
     position: {
       control: {

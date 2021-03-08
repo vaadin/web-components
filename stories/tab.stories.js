@@ -2,7 +2,7 @@ import { html } from 'lit-html';
 import '../packages/vaadin-tabs/vaadin-tab.js';
 
 export default {
-  title: 'Components/<vaadin-tab>',
+  title: 'Interaction/<vaadin-tab>',
   argTypes: {
     disabled: { control: 'boolean' },
     selected: { control: 'boolean' }

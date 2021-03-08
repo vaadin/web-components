@@ -2,7 +2,7 @@ import { html } from 'lit-html';
 import '../packages/vaadin-text-field/vaadin-password-field.js';
 
 export default {
-  title: 'Components/<vaadin-password-field>',
+  title: 'Form inputs/<vaadin-password-field>',
   argTypes: {
     disabled: { control: 'boolean' },
     readonly: { control: 'boolean' },

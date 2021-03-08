@@ -7,7 +7,7 @@ import '../packages/vaadin-list-box/vaadin-list-box.js';
 import '../packages/vaadin-item/vaadin-item.js';
 
 export default {
-  title: 'Components/<vaadin-custom-field>',
+  title: 'Form inputs/<vaadin-custom-field>',
   argTypes: {
     label: { control: 'text' },
     helperText: { control: 'text' },

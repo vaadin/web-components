@@ -4,7 +4,7 @@ import '../packages/vaadin-grid-pro/vaadin-grid-pro.js';
 import '../packages/vaadin-grid-pro/vaadin-grid-pro-edit-column.js';
 
 export default {
-  title: 'Components/<vaadin-grid-pro>',
+  title: 'Pro Components/<vaadin-grid-pro>',
   argTypes: {
     singleCellEdit: { control: 'boolean' },
     enterNextRow: { control: 'boolean' }

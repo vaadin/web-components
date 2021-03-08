@@ -2,7 +2,7 @@ import { html } from 'lit-html';
 import '../packages/vaadin-radio-button/vaadin-radio-button.js';
 
 export default {
-  title: 'Components/<vaadin-radio-button>',
+  title: 'Form inputs/<vaadin-radio-button>',
   argTypes: {
     disabled: { control: 'boolean' },
     checked: { control: 'boolean' },

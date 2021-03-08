@@ -2,7 +2,7 @@ import { html } from 'lit-html';
 import '../packages/vaadin-messages/vaadin-message.js';
 
 export default {
-  title: 'Components/<vaadin-message-list>'
+  title: 'Collaboration/<vaadin-message-list>'
 };
 
 const MessageList = () => {

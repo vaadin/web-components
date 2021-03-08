@@ -2,7 +2,7 @@ import { html } from 'lit-html';
 import '../packages/vaadin-split-layout/vaadin-split-layout.js';
 
 export default {
-  title: 'Components/<vaadin-split-layout>',
+  title: 'Layouts/<vaadin-split-layout>',
   argTypes: {
     orientation: {
       control: {

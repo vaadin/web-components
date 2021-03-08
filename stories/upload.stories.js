@@ -3,7 +3,7 @@ import { UploadElement } from '../packages/vaadin-upload/vaadin-upload.js';
 import { MockHttpRequest } from '../packages/vaadin-upload/test/mock-http-request.js';
 
 export default {
-  title: 'Components/<vaadin-upload>',
+  title: 'Form inputs/<vaadin-upload>',
   argTypes: {
     nodrop: { control: 'boolean' }
   }

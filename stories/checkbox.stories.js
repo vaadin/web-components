@@ -2,7 +2,7 @@ import { html } from 'lit-html';
 import '../packages/vaadin-checkbox/vaadin-checkbox.js';
 
 export default {
-  title: 'Components/<vaadin-checkbox>',
+  title: 'Form inputs/<vaadin-checkbox>',
   argTypes: {
     disabled: { control: 'boolean' },
     checked: { control: 'boolean' },

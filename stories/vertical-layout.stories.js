@@ -2,7 +2,7 @@ import { html } from 'lit-html';
 import '../packages/vaadin-ordered-layout/vaadin-vertical-layout.js';
 
 export default {
-  title: 'Components/<vaadin-vertical-layout>'
+  title: 'Layouts/<vaadin-vertical-layout>'
 };
 
 const VerticalLayout = () => {

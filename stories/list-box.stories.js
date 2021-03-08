@@ -3,7 +3,7 @@ import '../packages/vaadin-list-box/vaadin-list-box.js';
 import '../packages/vaadin-item/vaadin-item.js';
 
 export default {
-  title: 'Components/<vaadin-list-box>',
+  title: 'Interaction/<vaadin-list-box>',
   argTypes: {
     multiple: { control: 'boolean' }
   }

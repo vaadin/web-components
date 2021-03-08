@@ -2,7 +2,7 @@ import { html } from 'lit-html';
 import '../packages/vaadin-button/vaadin-button.js';
 
 export default {
-  title: 'Components/<vaadin-button>',
+  title: 'Interaction/<vaadin-button>',
   argTypes: {
     disabled: { control: 'boolean' },
     text: { control: 'text' },
