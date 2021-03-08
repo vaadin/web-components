@@ -103,6 +103,8 @@ class MessageListElement extends ElementMixin(ThemableMixin(PolymerElement)) {
 
   _itemsChanged(newVal, oldVal) {
     if (
+      newVal &&
+      newVal.length &&
       (!oldVal || newVal.length > oldVal.length) && // there are new items
       this.scrollHeight < this.clientHeight + this.scrollTop + 50 // bottom of list
     ) {

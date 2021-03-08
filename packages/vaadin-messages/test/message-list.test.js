@@ -78,6 +78,10 @@ describe('message-list', () => {
       expect(items.length).to.equal(4);
     });
 
+    it('should not throw when items is undefined', () => {
+      expect(() => (messageList.items = undefined)).to.not.throw();
+    });
+
     it('message properties should be correctly set', () => {
       const firstMessage = messageList.shadowRoot.querySelectorAll('vaadin-message')[0];
       expect(firstMessage.time).to.be.equal(messages[0].time);
