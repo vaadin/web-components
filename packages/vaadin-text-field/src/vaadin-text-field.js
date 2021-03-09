@@ -115,7 +115,7 @@ class TextFieldElement extends ElementMixin(TextFieldMixin(ControlStateMixin(The
   }
 
   static get version() {
-    return '3.0.1';
+    return '3.0.2';
   }
 
   static get properties() {

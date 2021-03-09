@@ -26,7 +26,7 @@ class IntegerFieldElement extends NumberFieldElement {
   }
 
   static get version() {
-    return '3.0.1';
+    return '3.0.2';
   }
 
   static get properties() {
