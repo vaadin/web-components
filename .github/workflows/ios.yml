@@ -1,0 +1,59 @@
+name: Verify changes
+
+on: pull_request
+
+jobs:
+  tests:
+    name: iOS tests
+    runs-on: macos-10.15
+
+    steps:
+      - name: Start Simulator
+        run: |
+          UDID=$(
+            xcrun xctrace list devices 2>&1 >/dev/null |
+            grep "iPhone 12 (14.4)" |
+            grep -v Watch |
+            awk \
+              -F"[()]" \
+              '{print $(NF -1)}'
+          )
+          xcrun simctl boot "${UDID:?No Simulator with this name found}"
+
+      - uses: actions/checkout@v2
+
+      - name: Setup Node 14.x
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
+
+      - uses: actions/cache@v2
+        with:
+          path: |
+            node_modules
+            */*/node_modules
+          key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Install Dependencies
+        run: yarn --frozen-lockfile --no-progress --non-interactive
+
+      - name: Install Appium
+        run: npm install -g appium --chromedriver-skip-install
+
+      - name: Start Appium server
+        run: appium --log-timestamp --log-no-colors > appium.log &
+
+      - name: Poll for Appium Server
+        run: |
+          until $(curl --output /dev/null --silent --head --fail http://127.0.0.1:4723/wd/hub/sessions); do
+            sleep 5
+          done
+
+      - name: Test in iOS
+        run: yarn test:ios --group vaadin-checkbox
+
+      - name: Upload Appium log
+        uses: actions/upload-artifact@v2
+        with:
+          name: appium
+          path: appium.log

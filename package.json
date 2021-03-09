@@ -26,11 +26,13 @@
     "preversion": "node scripts/updateVersion.js",
     "test": "web-test-runner --coverage",
     "test:firefox": "web-test-runner --config web-test-runner-firefox.config.js",
+    "test:ios": "web-test-runner --config web-test-runner-ios.config.js",
     "test:webkit": "web-test-runner --config web-test-runner-webkit.config.js"
   },
   "devDependencies": {
     "@web/test-runner": "^0.12.14",
     "@web/test-runner-playwright": "^0.8.4",
+    "@web/test-runner-webdriver": "^0.3.0",
     "eslint": "^7.21.0",
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-prettier": "^3.3.1",
