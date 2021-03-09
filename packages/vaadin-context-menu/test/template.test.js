@@ -1,6 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@open-wc/testing-helpers';
-import { fire } from './common.js';
+import { fire, fixtureSync } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
 import '../vaadin-context-menu.js';
 

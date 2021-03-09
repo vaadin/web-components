@@ -1,9 +1,8 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, nextFrame, oneEvent } from '@open-wc/testing-helpers';
-import { tap, pressAndReleaseKeyOn } from '@polymer/iron-test-helpers/mock-interactions.js';
+import sinon from 'sinon';
+import { click, enter, fire, fixtureSync, isIOS, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import '@vaadin/vaadin-list-box/vaadin-list-box.js';
 import '@vaadin/vaadin-item/vaadin-item.js';
-import { fire, isIOS } from './common.js';
 import './not-animated-styles.js';
 import '../vaadin-context-menu.js';
 
@@ -25,30 +24,34 @@ describe('selection', () => {
   });
 
   describe('selection', () => {
-    it('should close on item tap', async () => {
+    it('should close on item click', async () => {
       menu._setOpened(true);
       await oneEvent(menu.$.overlay, 'vaadin-overlay-open');
+      await nextRender(menu.$.overlay);
 
       const listBox = menu.$.overlay.content.querySelector('#menu');
-      await nextFrame();
-      tap(listBox.items[0]);
-      expect(menu.opened).to.be.false;
+      click(listBox.items[0]);
+      expect(menu.opened).to.eql(false);
     });
 
     it('should close on keyboard selection', async () => {
       menu._setOpened(true);
       await oneEvent(menu.$.overlay, 'vaadin-overlay-open');
+      await nextRender(menu.$.overlay);
+
+      const spy = sinon.spy();
+      menu.addEventListener('opened-changed', spy);
 
       const item = menu.$.overlay.content.querySelector('#menu vaadin-item');
-      pressAndReleaseKeyOn(item, 13, [], 'Enter');
-      await aTimeout(1);
-      expect(menu.opened).to.be.false;
+      enter(item);
+      expect(spy.calledOnce).to.be.true;
     });
 
     it('should focus the child element', async () => {
       menu._setOpened(true);
       await oneEvent(menu.$.overlay, 'vaadin-overlay-open');
-      await aTimeout(0);
+      await nextRender(menu.$.overlay);
+
       const item = menu.$.overlay.content.querySelector('#menu vaadin-item');
       expect(document.activeElement).to.eql(item);
     });
@@ -56,7 +59,8 @@ describe('selection', () => {
     (isIOS ? it.skip : it)('should focus the child element on `contextmenu` event', async () => {
       fire(menu, 'contextmenu');
       await oneEvent(menu.$.overlay, 'vaadin-overlay-open');
-      await aTimeout(0);
+      await nextRender(menu.$.overlay);
+
       const item = menu.$.overlay.content.querySelector('#menu vaadin-item');
       expect(document.activeElement).to.eql(item);
     });

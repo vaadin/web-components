@@ -1,8 +1,16 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync, nextFrame } from '@open-wc/testing-helpers';
-import { fire, isIOS } from './common.js';
-import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
+import {
+  arrowDownKeyDown,
+  arrowUpKeyDown,
+  enterKeyDown,
+  fire,
+  fixtureSync,
+  isIOS,
+  nextFrame,
+  nextRender,
+  spaceKeyDown
+} from '@vaadin/testing-helpers';
 import '@vaadin/vaadin-list-box/vaadin-list-box.js';
 import '@vaadin/vaadin-item/vaadin-item.js';
 import './not-animated-styles.js';
@@ -28,11 +36,6 @@ describe('items', () => {
   const getSubMenu = (menu = rootMenu) => {
     return menu.$.overlay.content.querySelector('vaadin-context-menu');
   };
-
-  const nextRender = (el) =>
-    new Promise((resolve) => {
-      afterNextRender(el, () => resolve());
-    });
 
   afterEach(() => {
     rootMenu.close();
@@ -119,7 +122,6 @@ describe('items', () => {
       rootMenu.$.overlay.style.bottom = rootItemRect.height * 2 + 'px';
       rootMenu.$.overlay.setAttribute('bottom-aligned', '');
       open(menuComponents()[0]);
-
       await nextRender(subMenu);
       const rootMenuRect = rootMenu.$.overlay.getBoundingClientRect();
       const subMenuRect = subMenu.$.overlay.getBoundingClientRect();
@@ -314,13 +316,13 @@ describe('items', () => {
 
     it('should open item on enter', () => {
       subMenu.close();
-      fire(menuComponents()[0], 'keydown', {}, { keyCode: 13, key: 'Enter' });
+      enterKeyDown(menuComponents()[0]);
       expect(subMenu.opened).to.be.true;
     });
 
     it('should open item on space', () => {
       subMenu.close();
-      fire(menuComponents()[0], 'keydown', {}, { keyCode: 32, key: 'Space' });
+      spaceKeyDown(menuComponents()[0]);
       expect(subMenu.opened).to.be.true;
     });
 
@@ -340,7 +342,7 @@ describe('items', () => {
       await nextRender(subMenu);
       const item = menuComponents(subMenu)[0];
       const spy = sinon.spy(item, 'focus');
-      fire(subMenu.$.overlay.$.overlay, 'keydown', {}, { keyCode: 40, key: 'ArrowDown' });
+      arrowDownKeyDown(subMenu.$.overlay.$.overlay);
       expect(spy.calledOnce).to.be.true;
     });
 
@@ -352,7 +354,7 @@ describe('items', () => {
       const items = menuComponents(subMenu);
       const item = items[items.length - 1];
       const spy = sinon.spy(item, 'focus');
-      fire(subMenu.$.overlay.$.overlay, 'keydown', {}, { keyCode: 38, key: 'ArrowUp' });
+      arrowUpKeyDown(subMenu.$.overlay.$.overlay);
       expect(spy.calledOnce).to.be.true;
     });
 
