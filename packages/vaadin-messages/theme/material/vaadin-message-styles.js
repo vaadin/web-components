@@ -1,7 +1,7 @@
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import '@vaadin/vaadin-material-styles/color.js';
 import '@vaadin/vaadin-material-styles/typography.js';
-import '@vaadin/vaadin-avatar/theme/material/vaadin-avatar-styles.js';
+import './vaadin-message-avatar-styles.js';
 
 registerStyles(
   'vaadin-message',
@@ -14,17 +14,6 @@ registerStyles(
       -moz-osx-font-smoothing: grayscale;
       -webkit-font-smoothing: antialiased;
       -webkit-text-size-adjust: 100%;
-    }
-
-    vaadin-avatar {
-      --vaadin-avatar-size: 2.5rem;
-      margin-right: calc(1rem - var(--vaadin-avatar-outline-width));
-      margin-top: calc(0.25rem - var(--vaadin-avatar-outline-width));
-    }
-
-    :host([dir='rtl']) vaadin-avatar {
-      margin-left: calc(1em - var(--vaadin-avatar-outline-width));
-      margin-right: calc(var(--vaadin-avatar-outline-width) * -1);
     }
 
     [part='header'] {

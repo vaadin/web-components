@@ -4,7 +4,7 @@ import '@vaadin/vaadin-lumo-styles/sizing.js';
 import '@vaadin/vaadin-lumo-styles/spacing.js';
 import '@vaadin/vaadin-lumo-styles/style.js';
 import '@vaadin/vaadin-lumo-styles/typography.js';
-import '@vaadin/vaadin-avatar/theme/lumo/vaadin-avatar-styles.js';
+import './vaadin-message-avatar-styles.js';
 
 registerStyles(
   'vaadin-message',
@@ -18,16 +18,6 @@ registerStyles(
       -moz-osx-font-smoothing: grayscale;
       -webkit-font-smoothing: antialiased;
       -webkit-text-size-adjust: 100%;
-    }
-
-    vaadin-avatar {
-      margin-right: calc(var(--lumo-space-m) - var(--vaadin-avatar-outline-width));
-      margin-top: calc(var(--lumo-space-s) - var(--vaadin-avatar-outline-width));
-    }
-
-    :host([dir='rtl']) vaadin-avatar {
-      margin-left: calc(var(--lumo-space-m) - var(--vaadin-avatar-outline-width));
-      margin-right: calc(var(--vaadin-avatar-outline-width) * -1);
     }
 
     [part='header'] {

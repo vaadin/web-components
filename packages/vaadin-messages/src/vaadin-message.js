@@ -6,7 +6,7 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
-import '@vaadin/vaadin-avatar/src/vaadin-avatar.js';
+import './vaadin-message-avatar.js';
 /**
  * `<vaadin-message>` is a Web Component for showing a single message with an author, message and time.
  *
@@ -111,11 +111,6 @@ class MessageElement extends ElementMixin(ThemableMixin(PolymerElement)) {
           display: none !important;
         }
 
-        vaadin-avatar {
-          --vaadin-avatar-outline-width: 0px;
-          flex-shrink: 0;
-        }
-
         [part='content'] {
           display: flex;
           flex-direction: column;
@@ -137,7 +132,7 @@ class MessageElement extends ElementMixin(ThemableMixin(PolymerElement)) {
           white-space: pre-wrap;
         }
       </style>
-      <vaadin-avatar
+      <vaadin-message-avatar
         part="avatar"
         name="[[userName]]"
         abbr="[[userAbbr]]"
@@ -145,7 +140,7 @@ class MessageElement extends ElementMixin(ThemableMixin(PolymerElement)) {
         color-index="[[userColorIndex]]"
         tabindex="-1"
         aria-hidden="true"
-      ></vaadin-avatar>
+      ></vaadin-message-avatar>
       <div part="content">
         <div part="header">
           <span part="name">[[userName]]</span>
