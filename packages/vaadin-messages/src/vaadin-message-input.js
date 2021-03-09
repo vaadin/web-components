@@ -59,8 +59,7 @@ class MessageInputElement extends ElementMixin(ThemableMixin(PolymerElement)) {
         value: () => ({
           send: 'Send',
           message: 'Message'
-        }),
-        observer: '__i18nChanged'
+        })
       },
 
       /**
@@ -91,6 +90,7 @@ class MessageInputElement extends ElementMixin(ThemableMixin(PolymerElement)) {
         disabled="[[disabled]]"
         value="{{value}}"
         placeholder="[[i18n.message]]"
+        aria-label="[[i18n.message]]"
         on-enter="__submit"
       ></vaadin-message-input-text-area>
       <vaadin-message-input-button disabled="[[disabled]]" theme="primary contained" on-click="__submit"
@@ -119,10 +119,6 @@ class MessageInputElement extends ElementMixin(ThemableMixin(PolymerElement)) {
       this.value = '';
     }
     this.shadowRoot.querySelector('vaadin-message-input-text-area').focus();
-  }
-
-  __i18nChanged(i18n) {
-    this.shadowRoot.querySelector('vaadin-message-input-text-area')._setAriaLabel(i18n.message);
   }
 }
 

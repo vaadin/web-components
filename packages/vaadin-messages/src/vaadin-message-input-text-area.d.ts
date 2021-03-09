@@ -11,7 +11,7 @@ import { TextAreaElement } from '@vaadin/vaadin-text-field/src/vaadin-text-area.
  * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin#readme)
  */
 declare class MessageInputTextAreaElement extends TextAreaElement {
-  _setAriaLabel(message: string): void;
+  ariaLabel: string;
 }
 
 declare global {

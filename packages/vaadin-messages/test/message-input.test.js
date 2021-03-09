@@ -105,6 +105,11 @@ describe('message-input', () => {
       messageInput.i18n = { ...messageInput.i18n, message: 'Viesti' };
       expect(textArea.inputElement.getAttribute('aria-label')).to.be.equal('Viesti');
     });
+
+    it('should remove aria-label attribute when translation not defined', () => {
+      messageInput.i18n = {};
+      expect(textArea.inputElement.hasAttribute('aria-label')).to.equal(false);
+    });
   });
 
   describe('disabled property', () => {
