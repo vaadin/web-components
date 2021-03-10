@@ -20,6 +20,7 @@ describe('vaadin-message', () => {
 
 describe('vaadin-message-list', () => {
   assertView('message-list', 'message-list.html');
+  assertView('message-list-focus', 'message-list-focus.html');
 });
 
 describe('vaadin-message-input', () => {

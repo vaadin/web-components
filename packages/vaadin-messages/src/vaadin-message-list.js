@@ -78,7 +78,7 @@ class MessageListElement extends ElementMixin(ThemableMixin(PolymerElement)) {
           display: none !important;
         }
       </style>
-      <div role="list">
+      <div part="list" role="list">
         <template is="dom-repeat" items="[[items]]">
           <vaadin-message
             time="[[item.time]]"
@@ -87,6 +87,7 @@ class MessageListElement extends ElementMixin(ThemableMixin(PolymerElement)) {
             user-img="[[item.userImg]]"
             user-color-index="[[item.userColorIndex]]"
             role="listitem"
+            on-focus="_handleFocusEvent"
             >[[item.text]]</vaadin-message
           >
         </template>
@@ -96,19 +97,31 @@ class MessageListElement extends ElementMixin(ThemableMixin(PolymerElement)) {
 
   ready() {
     super.ready();
+
+    // Make screen readers announce new messages
     this.setAttribute('aria-relevant', 'additions');
     this.setAttribute('role', 'log');
-    this.setAttribute('tabindex', '0');
+
+    // Keyboard navi
+    this.addEventListener('keydown', (e) => this._onKeydown(e));
+  }
+
+  /** @protected */
+  get _messages() {
+    return Array.from(this.shadowRoot.querySelectorAll('vaadin-message'));
   }
 
   _itemsChanged(newVal, oldVal) {
-    if (
-      newVal &&
-      newVal.length &&
-      (!oldVal || newVal.length > oldVal.length) && // there are new items
-      this.scrollHeight < this.clientHeight + this.scrollTop + 50 // bottom of list
-    ) {
-      microTask.run(() => this._scrollToLastMessage());
+    const focusedIndex = this._getIndexOfFocusableElement();
+    if (newVal && newVal.length) {
+      const moreItems = !oldVal || newVal.length > oldVal.length;
+      const closeToBottom = this.scrollHeight < this.clientHeight + this.scrollTop + 50;
+      microTask.run(() => {
+        this._setTabIndexesByIndex(focusedIndex);
+        if (moreItems && closeToBottom) {
+          this._scrollToLastMessage();
+        }
+      });
     }
   }
 
@@ -116,6 +129,78 @@ class MessageListElement extends ElementMixin(ThemableMixin(PolymerElement)) {
     if (this.items.length > 0) {
       this.scrollTop = this.scrollHeight - this.clientHeight;
     }
+  }
+
+  /**
+   * @param {!KeyboardEvent} event
+   * @protected
+   */
+  _onKeydown(event) {
+    if (event.metaKey || event.ctrlKey) {
+      return;
+    }
+
+    // get index of the item that was focused when event happened
+    const target = event.composedPath()[0];
+    let currentIndex = this._messages.indexOf(target);
+
+    switch (event.key) {
+      case 'ArrowUp':
+        currentIndex--;
+        break;
+      case 'ArrowDown':
+        currentIndex++;
+        break;
+      case 'Home':
+        currentIndex = 0;
+        break;
+      case 'End':
+        currentIndex = this._messages.length - 1;
+        break;
+      default:
+        return; // nothing to do
+    }
+    if (currentIndex < 0) {
+      currentIndex = this._messages.length - 1;
+    }
+    if (currentIndex > this._messages.length - 1) {
+      currentIndex = 0;
+    }
+    this._focus(currentIndex);
+    event.preventDefault();
+  }
+
+  /**
+   * @param {number} idx
+   * @protected
+   */
+  _focus(idx) {
+    const target = this._messages[idx];
+    target.focus();
+  }
+
+  _handleFocusEvent(e) {
+    const target = e
+      .composedPath()
+      .filter((elem) => elem.nodeType === Node.ELEMENT_NODE && elem.tagName.toLowerCase() === 'vaadin-message')[0];
+    this._setTabIndexesByMessage(target);
+  }
+  /**
+   * @param {number} idx
+   * @protected
+   */
+  _setTabIndexesByIndex(index) {
+    const message = this._messages[index] || this._messages[0];
+    this._setTabIndexesByMessage(message);
+  }
+
+  _setTabIndexesByMessage(message) {
+    this._messages.forEach((e) => (e.tabIndex = e === message ? 0 : -1));
+  }
+
+  _getIndexOfFocusableElement() {
+    const index = this._messages.findIndex((e) => e.tabIndex == 0);
+    return index != -1 ? index : 0;
   }
 
   static get is() {

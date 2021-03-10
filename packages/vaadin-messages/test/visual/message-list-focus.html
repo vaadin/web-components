@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Message tests</title>
+  <script>
+    window.polymerSkipLoadingFontRoboto = true;
+  </script>
+  <style>
+    html {
+      --vaadin-user-color-1: blue;
+      --vaadin-user-color-2: green;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="tests" style="padding: 10px">
+    <vaadin-message-list></vaadin-message-list>
+  </div>
+
+  <script type="module">
+    (async () => {
+      const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+
+      await import('../../theme/' + theme + '/vaadin-message-list.js');
+
+      window.requestAnimationFrame(() => {
+        const messageList = document.querySelector('vaadin-message-list');
+        messageList.items = [
+          {
+            text: 'Hello list',
+            time: 'yesterday',
+            userName: 'Matt Mambo',
+            userAbbr: 'MM',
+            userColorIndex: 1
+          },
+          {
+            text: 'Another message',
+            time: 'right now',
+            userName: 'Linsey Listy',
+            userAbbr: 'LL',
+            userColorIndex: 2,
+            userImg: '/test/visual/avatars/avatar.jpg'
+          },
+          {
+            text: 'Third message',
+            time: 'right now',
+            userName: 'Linsey Listy',
+            userAbbr: 'LL',
+            userColorIndex: 2,
+            userImg: '/test/visual/avatars/avatar.jpg'
+          }
+        ];
+        setTimeout(() => {
+          messageList.shadowRoot.querySelectorAll('vaadin-message')[1].focus();
+          document.getElementById('tests').dataset.ready = true;
+        }, 0);
+      });
+    })();
+  </script>
+</body>
+</html>

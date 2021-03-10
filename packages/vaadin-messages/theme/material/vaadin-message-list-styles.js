@@ -6,7 +6,7 @@ import './vaadin-message-styles.js';
 registerStyles(
   'vaadin-message-list',
   css`
-    div[role='list'] {
+    [part='list'] {
       padding: 8px 0;
     }
   `,

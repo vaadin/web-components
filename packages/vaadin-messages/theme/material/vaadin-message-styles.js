@@ -7,6 +7,7 @@ registerStyles(
   'vaadin-message',
   css`
     :host {
+      color: var(--material-body-text-color);
       font-family: var(--material-font-family);
       font-size: var(--material-body-font-size);
       line-height: 1.5;
@@ -14,6 +15,21 @@ registerStyles(
       -moz-osx-font-smoothing: grayscale;
       -webkit-font-smoothing: antialiased;
       -webkit-text-size-adjust: 100%;
+    }
+
+    :host(:hover:not([disabled])) {
+      background-color: var(--material-secondary-background-color);
+    }
+
+    :host([focused]:not([disabled])) {
+      background-color: var(--material-divider-color);
+    }
+
+    @media (pointer: coarse) {
+      :host(:hover:not([disabled])),
+      :host([focused]:not([disabled])) {
+        background-color: transparent;
+      }
     }
 
     [part='header'] {

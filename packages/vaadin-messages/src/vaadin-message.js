@@ -105,6 +105,7 @@ class MessageElement extends ElementMixin(ThemableMixin(PolymerElement)) {
         :host {
           display: flex;
           flex-direction: row;
+          outline: none;
         }
 
         :host([hidden]) {
@@ -151,16 +152,44 @@ class MessageElement extends ElementMixin(ThemableMixin(PolymerElement)) {
     `;
   }
 
-  ready() {
-    super.ready();
-  }
-
   static get is() {
     return 'vaadin-message';
   }
 
   static get version() {
     return '2.0.0-alpha1';
+  }
+
+  ready() {
+    super.ready();
+
+    // Handle focus
+    this.addEventListener('focus', () => this._setFocused(true), true);
+    this.addEventListener('blur', () => this._setFocused(false), true);
+    this.addEventListener('mousedown', () => {
+      this._mousedown = true;
+      const mouseUpListener = () => {
+        this._mousedown = false;
+        document.removeEventListener('mouseup', mouseUpListener);
+      };
+      document.addEventListener('mouseup', mouseUpListener);
+    });
+  }
+
+  /**
+   * @param {boolean} focused
+   * @protected
+   */
+  _setFocused(focused) {
+    if (focused) {
+      this.setAttribute('focused', '');
+      if (!this._mousedown) {
+        this.setAttribute('focus-ring', '');
+      }
+    } else {
+      this.removeAttribute('focused');
+      this.removeAttribute('focus-ring');
+    }
   }
 }
 
