@@ -1,18 +1,22 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@open-wc/testing-helpers';
-import { downAndUp, keyDownOn, keyUpOn } from '@polymer/iron-test-helpers/mock-interactions.js';
+import sinon from 'sinon';
+import {
+  arrowDownKeyDown,
+  enterKeyDown,
+  enterKeyUp,
+  fixtureSync,
+  isIOS,
+  mousedown,
+  mouseup,
+  spaceKeyDown,
+  spaceKeyUp,
+  touchstart,
+  touchend
+} from '@vaadin/testing-helpers';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import '../vaadin-button.js';
 
 describe('vaadin-button', () => {
-  const down = (node) => {
-    node.dispatchEvent(new CustomEvent('down'));
-  };
-
-  const up = (node) => {
-    node.dispatchEvent(new CustomEvent('up'));
-  };
-
   let vaadinButton, nativeButton, label;
 
   beforeEach(() => {
@@ -36,11 +40,19 @@ describe('vaadin-button', () => {
     expect(nativeButton.hasAttribute('disabled')).to.be.eql(true);
   });
 
-  it('fires click event', (done) => {
-    vaadinButton.addEventListener('click', () => {
-      done();
-    });
-    downAndUp(vaadinButton);
+  it('should fire click event', () => {
+    const spy = sinon.spy();
+    vaadinButton.addEventListener('click', spy);
+    vaadinButton.click();
+    expect(spy.calledOnce).to.be.true;
+  });
+
+  it('should not fire click event when disabled', () => {
+    const spy = sinon.spy();
+    vaadinButton.addEventListener('click', spy);
+    vaadinButton.disabled = true;
+    vaadinButton.click();
+    expect(spy.called).to.be.false;
   });
 
   it('host should have the `button` role', () => {
@@ -55,60 +67,71 @@ describe('vaadin-button', () => {
     expect(nativeButton.getAttribute('role')).to.be.eql('presentation');
   });
 
-  it('should have active attribute on down', () => {
-    down(vaadinButton);
+  (isIOS ? it.skip : it)('should have active attribute on mousedown', () => {
+    mousedown(vaadinButton);
     expect(vaadinButton.hasAttribute('active')).to.be.true;
   });
 
-  it('should not have active attribute after up', () => {
-    down(vaadinButton);
-    up(vaadinButton);
+  (isIOS ? it.skip : it)('should not have active attribute after mouseup', () => {
+    mousedown(vaadinButton);
+    mouseup(vaadinButton);
+    expect(vaadinButton.hasAttribute('active')).to.be.false;
+  });
+
+  it('should have active attribute on touchstart', () => {
+    touchstart(vaadinButton);
+    expect(vaadinButton.hasAttribute('active')).to.be.true;
+  });
+
+  it('should not have active attribute after touchend', () => {
+    touchstart(vaadinButton);
+    touchend(vaadinButton);
     expect(vaadinButton.hasAttribute('active')).to.be.false;
   });
 
   it('should have active attribute on enter', () => {
-    keyDownOn(vaadinButton, 13);
+    enterKeyDown(vaadinButton);
     expect(vaadinButton.hasAttribute('active')).to.be.true;
   });
 
   it('should not have active attribute after enter', () => {
-    keyDownOn(vaadinButton, 13);
-    keyUpOn(vaadinButton, 13);
+    enterKeyDown(vaadinButton);
+    enterKeyUp(vaadinButton);
     expect(vaadinButton.hasAttribute('active')).to.be.false;
   });
 
   it('should have active attribute on space', () => {
-    keyDownOn(vaadinButton, 32);
+    spaceKeyDown(vaadinButton);
     expect(vaadinButton.hasAttribute('active')).to.be.true;
   });
 
   it('should not have active attribute after space', () => {
-    keyDownOn(vaadinButton, 32);
-    keyUpOn(vaadinButton, 32);
+    spaceKeyDown(vaadinButton);
+    spaceKeyUp(vaadinButton);
     expect(vaadinButton.hasAttribute('active')).to.be.false;
   });
 
   it('should not have active attribute on arrow key', () => {
-    keyDownOn(vaadinButton, 37);
+    arrowDownKeyDown(vaadinButton);
     expect(vaadinButton.hasAttribute('active')).to.be.false;
   });
 
   it('should not have active attribute when disabled', () => {
     vaadinButton.disabled = true;
-    down(vaadinButton);
-    keyDownOn(vaadinButton, 13);
-    keyDownOn(vaadinButton, 32);
+    mousedown(vaadinButton);
+    enterKeyDown(vaadinButton);
+    spaceKeyDown(vaadinButton);
     expect(vaadinButton.hasAttribute('active')).to.be.false;
   });
 
   it('should not have active attribute when disconnected from the DOM', () => {
-    keyDownOn(vaadinButton, 32);
+    spaceKeyDown(vaadinButton);
     vaadinButton.parentNode.removeChild(vaadinButton);
     expect(vaadinButton.hasAttribute('active')).to.be.false;
   });
 
   it('should not have active attribute after blur', () => {
-    keyDownOn(vaadinButton, 32);
+    spaceKeyDown(vaadinButton);
     vaadinButton.dispatchEvent(new CustomEvent('blur'));
     expect(vaadinButton.hasAttribute('active')).to.be.false;
   });

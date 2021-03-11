@@ -10,7 +10,7 @@ describe('message', () => {
     root.style.setProperty('--vaadin-user-color-2', 'blue');
 
     message = fixtureSync('<vaadin-message>Hello</vaadin-message>');
-    avatar = message.shadowRoot.querySelector('vaadin-avatar');
+    avatar = message.shadowRoot.querySelector('vaadin-message-avatar');
     name = message.shadowRoot.querySelector('[part="name"]');
     content = message.shadowRoot.querySelector('[part="content"]');
     time = message.shadowRoot.querySelector('[part="time"]');

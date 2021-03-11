@@ -1,6 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@open-wc/testing-helpers';
-import { isIOS } from './common.js';
+import { fixtureSync, isIOS } from '@vaadin/testing-helpers';
 import '../src/vaadin-device-detector.js';
 
 describe('device detector', () => {

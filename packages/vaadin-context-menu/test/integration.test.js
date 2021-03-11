@@ -1,8 +1,6 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync } from '@open-wc/testing-helpers';
-import { makeSoloTouchEvent, tap } from '@polymer/iron-test-helpers/mock-interactions.js';
+import { aTimeout, click, fixtureSync, isIOS, makeSoloTouchEvent } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { isIOS } from './common.js';
 import './not-animated-styles.js';
 import '../vaadin-context-menu.js';
 
@@ -34,12 +32,11 @@ describe('integration', () => {
   });
 
   it('should open context menu on .open(e)', () => {
-    tap(button);
+    click(button);
     expect(menu.opened).to.eql(true);
   });
 
-  const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-  (isIOS || isSafari ? it.skip : it)('should open context menu below button', async () => {
+  (isIOS ? it.skip : it)('should open context menu below button', async () => {
     makeSoloTouchEvent('click', { y: 0, x: 0 }, button);
     await aTimeout(100);
     const buttonRect = button.getBoundingClientRect();

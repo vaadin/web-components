@@ -9,8 +9,8 @@ describe('message-input', () => {
 
   beforeEach(() => {
     messageInput = fixtureSync('<vaadin-message-input></vaadin-message-input>');
-    textArea = messageInput.shadowRoot.querySelector('vaadin-text-area');
-    button = messageInput.shadowRoot.querySelector('vaadin-button');
+    textArea = messageInput.shadowRoot.querySelector('vaadin-message-input-text-area');
+    button = messageInput.shadowRoot.querySelector('vaadin-message-input-button');
   });
 
   it('should have a valid version number', () => {
@@ -104,6 +104,11 @@ describe('message-input', () => {
     it('should translate aria-label', () => {
       messageInput.i18n = { ...messageInput.i18n, message: 'Viesti' };
       expect(textArea.inputElement.getAttribute('aria-label')).to.be.equal('Viesti');
+    });
+
+    it('should remove aria-label attribute when translation not defined', () => {
+      messageInput.i18n = {};
+      expect(textArea.inputElement.hasAttribute('aria-label')).to.equal(false);
     });
   });
 

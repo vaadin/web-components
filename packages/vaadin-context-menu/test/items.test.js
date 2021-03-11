@@ -1,8 +1,16 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync, nextFrame } from '@open-wc/testing-helpers';
-import { fire, isIOS } from './common.js';
-import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
+import {
+  arrowDownKeyDown,
+  arrowUpKeyDown,
+  enterKeyDown,
+  fire,
+  fixtureSync,
+  isIOS,
+  nextFrame,
+  nextRender,
+  spaceKeyDown
+} from '@vaadin/testing-helpers';
 import '@vaadin/vaadin-list-box/vaadin-list-box.js';
 import '@vaadin/vaadin-item/vaadin-item.js';
 import './not-animated-styles.js';
@@ -28,11 +36,6 @@ describe('items', () => {
   const getSubMenu = (menu = rootMenu) => {
     return menu.$.overlay.content.querySelector('vaadin-context-menu');
   };
-
-  const nextRender = (el) =>
-    new Promise((resolve) => {
-      afterNextRender(el, () => resolve());
-    });
 
   afterEach(() => {
     rootMenu.close();
@@ -112,20 +115,17 @@ describe('items', () => {
       expect(subItemRect.right).to.be.below(rootItemRect.left);
     });
 
-    (isIOS ? it.skip : it)('should open the subMenu on the top if root menu is bottom-aligned', (done) => {
+    (isIOS ? it.skip : it)('should open the subMenu on the top if root menu is bottom-aligned', async () => {
       subMenu.close();
       const rootItemRect = menuComponents()[0].getBoundingClientRect();
       rootMenu.$.overlay.style.removeProperty('top');
       rootMenu.$.overlay.style.bottom = rootItemRect.height * 2 + 'px';
       rootMenu.$.overlay.setAttribute('bottom-aligned', '');
       open(menuComponents()[0]);
-
-      afterNextRender(subMenu, () => {
-        const rootMenuRect = rootMenu.$.overlay.getBoundingClientRect();
-        const subMenuRect = subMenu.$.overlay.getBoundingClientRect();
-        expect(subMenuRect.bottom).to.be.below(rootMenuRect.bottom);
-        done();
-      });
+      await nextRender(subMenu);
+      const rootMenuRect = rootMenu.$.overlay.getBoundingClientRect();
+      const subMenuRect = subMenu.$.overlay.getBoundingClientRect();
+      expect(subMenuRect.bottom).to.be.below(rootMenuRect.bottom);
     });
 
     (isIOS ? it.skip : it)('should open the subMenu on the left if root menu is end-aligned', async () => {
@@ -305,26 +305,24 @@ describe('items', () => {
       expect(subMenu.opened).to.be.true;
     });
 
-    it('should open item on left arrow if RTL', (done) => {
+    it('should open item on left arrow if RTL', async () => {
       document.documentElement.setAttribute('dir', 'rtl');
-      requestAnimationFrame(() => {
-        subMenu.close();
-        fire(menuComponents()[0], 'keydown', {}, { keyCode: 37, key: 'ArrowLeft' });
-        expect(subMenu.opened).to.be.true;
-        document.documentElement.setAttribute('dir', 'ltr');
-        done();
-      });
+      await nextFrame();
+      subMenu.close();
+      fire(menuComponents()[0], 'keydown', {}, { keyCode: 37, key: 'ArrowLeft' });
+      expect(subMenu.opened).to.be.true;
+      document.documentElement.setAttribute('dir', 'ltr');
     });
 
     it('should open item on enter', () => {
       subMenu.close();
-      fire(menuComponents()[0], 'keydown', {}, { keyCode: 13, key: 'Enter' });
+      enterKeyDown(menuComponents()[0]);
       expect(subMenu.opened).to.be.true;
     });
 
     it('should open item on space', () => {
       subMenu.close();
-      fire(menuComponents()[0], 'keydown', {}, { keyCode: 32, key: 'Space' });
+      spaceKeyDown(menuComponents()[0]);
       expect(subMenu.opened).to.be.true;
     });
 
@@ -344,7 +342,7 @@ describe('items', () => {
       await nextRender(subMenu);
       const item = menuComponents(subMenu)[0];
       const spy = sinon.spy(item, 'focus');
-      fire(subMenu.$.overlay.$.overlay, 'keydown', {}, { keyCode: 40, key: 'ArrowDown' });
+      arrowDownKeyDown(subMenu.$.overlay.$.overlay);
       expect(spy.calledOnce).to.be.true;
     });
 
@@ -356,7 +354,7 @@ describe('items', () => {
       const items = menuComponents(subMenu);
       const item = items[items.length - 1];
       const spy = sinon.spy(item, 'focus');
-      fire(subMenu.$.overlay.$.overlay, 'keydown', {}, { keyCode: 38, key: 'ArrowUp' });
+      arrowUpKeyDown(subMenu.$.overlay.$.overlay);
       expect(spy.calledOnce).to.be.true;
     });
 
@@ -455,7 +453,7 @@ describe('items', () => {
         await nextFrame();
       });
 
-      it('Should properly move overlays on scrolling distance within y axis', (done) => {
+      it('Should properly move overlays on scrolling distance within y axis', async () => {
         const scrollDistance = 150;
 
         // Default indentation is 16
@@ -464,15 +462,13 @@ describe('items', () => {
         const subBRCTop2 = subOverlay2.getBoundingClientRect().top;
 
         scrollElm.scrollTop = scrollDistance;
-        afterNextRender(rootMenu, () => {
-          expect(rootOverlay.getBoundingClientRect().top).to.be.closeTo(rootBRCTop - scrollDistance, 1);
-          expect(subOverlay1.getBoundingClientRect().top).to.be.closeTo(subBRCTop1 - scrollDistance, 1);
-          expect(subOverlay2.getBoundingClientRect().top).to.be.closeTo(subBRCTop2 - scrollDistance, 1);
-          done();
-        });
+        await nextRender(rootMenu);
+        expect(rootOverlay.getBoundingClientRect().top).to.be.closeTo(rootBRCTop - scrollDistance, 1);
+        expect(subOverlay1.getBoundingClientRect().top).to.be.closeTo(subBRCTop1 - scrollDistance, 1);
+        expect(subOverlay2.getBoundingClientRect().top).to.be.closeTo(subBRCTop2 - scrollDistance, 1);
       });
 
-      it('Should properly move overlays on scrolling distance within x axis', (done) => {
+      it('Should properly move overlays on scrolling distance within x axis', async () => {
         const scrollDistance = 150;
 
         // Default indentation is 16
@@ -481,12 +477,10 @@ describe('items', () => {
         const subBRCLeft2 = subOverlay2.getBoundingClientRect().left;
 
         scrollElm.scrollLeft = scrollDistance;
-        afterNextRender(rootMenu, () => {
-          expect(rootOverlay.getBoundingClientRect().left).to.be.closeTo(rootBRCLeft - scrollDistance, 1);
-          expect(subOverlay1.getBoundingClientRect().left).to.be.closeTo(subBRCLeft1 - scrollDistance, 1);
-          expect(subOverlay2.getBoundingClientRect().left).to.be.closeTo(subBRCLeft2 - scrollDistance, 1);
-          done();
-        });
+        await nextRender(rootMenu);
+        expect(rootOverlay.getBoundingClientRect().left).to.be.closeTo(rootBRCLeft - scrollDistance, 1);
+        expect(subOverlay1.getBoundingClientRect().left).to.be.closeTo(subBRCLeft1 - scrollDistance, 1);
+        expect(subOverlay2.getBoundingClientRect().left).to.be.closeTo(subBRCLeft2 - scrollDistance, 1);
       });
     });
   });

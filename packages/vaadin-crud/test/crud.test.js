@@ -191,6 +191,14 @@ describe('crud', () => {
         crud.items = [{ foo: 'bar' }, { foo: 'baz' }];
       });
 
+      it('should notify editedItem changes', (done) => {
+        listenOnce(crud, 'edited-item-changed', () => {
+          expect(crud.editedItem).to.deep.equal({ foo: 'bar' });
+          done();
+        });
+        edit(crud.items[0]);
+      });
+
       it('should save a new pre-filled item', () => {
         crud.editedItem = { foo: 'baz' };
         crud._form._fields[0].value = 'baz';
