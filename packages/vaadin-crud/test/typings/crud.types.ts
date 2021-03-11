@@ -16,6 +16,10 @@ crud.addEventListener('editor-opened-changed', (event) => {
   assert<boolean>(event.detail.value);
 });
 
+crud.addEventListener('edited-item-changed', (event) => {
+  assert<User>(event.detail.value);
+});
+
 crud.addEventListener('items-changed', (event) => {
   assert<User[]>(event.detail.value);
 });

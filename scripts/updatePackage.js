@@ -88,6 +88,10 @@ async function main() {
         packageJson.devDependencies[dep] = `^${VERSION}`;
       }
     });
+
+    if (packageJson.devDependencies['@vaadin/testing-helpers']) {
+      packageJson.devDependencies['@vaadin/testing-helpers'] = '^0.1.3';
+    }
   }
 
   packageJson.publishConfig = {

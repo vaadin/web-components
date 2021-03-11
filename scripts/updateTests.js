@@ -28,7 +28,6 @@ const skipTests = {
     `it('should select the input field text when navigating down'`,
     `it('should select the input field text when navigating up'`,
     `it('should detect touch support'`,
-    `(isIOS ? it.skip : it)('should open context menu below button'`,
     '<button on-click="_showMenu" id="button">Show context menu</button>',
     `(isIOS ? describe.skip : describe)('scrolling'`,
     `it('should close submenu on mobile when selecting an item in the nested one'`,
@@ -52,8 +51,6 @@ const skipTests = {
     `(isSafari ? it.skip : it)('should select the input field text when navigating up'`,
     `const isSafari = ${safari};
   (isSafari ? it.skip : it)('should detect touch support'`,
-    `const isSafari = ${safari};
-  (isIOS || isSafari ? it.skip : it)('should open context menu below button'`,
     '<button on-click="_showMenu" id="button" style="margin: 20px">Show context menu</button>',
     `const isChrome = ${chrome};
     (isChrome ? describe : describe.skip)('scrolling'`,
