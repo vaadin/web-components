@@ -35,7 +35,7 @@ class MessageAvatarElement extends AvatarElement {
   }
 
   static get version() {
-    return '2.0.0-alpha1';
+    return '2.0.0-alpha2';
   }
 }
 
