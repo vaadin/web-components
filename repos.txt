@@ -1,4 +1,3 @@
-vaadin
 vaadin-accordion
 vaadin-app-layout
 vaadin-avatar
@@ -11,7 +10,6 @@ vaadin-confirm-dialog
 vaadin-context-menu
 vaadin-control-state-mixin
 vaadin-cookie-consent
-vaadin-core
 vaadin-custom-field
 vaadin-crud
 vaadin-date-picker
