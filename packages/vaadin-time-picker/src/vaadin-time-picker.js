@@ -137,7 +137,7 @@ class TimePickerElement extends ElementMixin(ControlStateMixin(ThemableMixin(Pol
     return 'vaadin-time-picker';
   }
   static get version() {
-    return '20.0.0-alpha2';
+    return '20.0.0-alpha0';
   }
 
   static get properties() {

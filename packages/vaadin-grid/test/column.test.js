@@ -186,6 +186,12 @@ describe('column', () => {
         const details = grid.shadowRoot.querySelector('#items [part~="details-cell"]')._content;
         expect(details.textContent).to.equal('row-details');
       });
+
+      it('should not throw error when adding a new row with a hidden column', () => {
+        column.hidden = true;
+        flushGrid(grid);
+        expect(() => (grid.size = 11)).to.not.throw(Error);
+      });
     });
 
     describe('path', () => {

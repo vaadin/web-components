@@ -1,19 +1,19 @@
 {
   "name": "@vaadin/vaadin",
-  "version": "20.0.0-alpha2",
+  "version": "20.0.0-alpha0",
   "description": "Vaadin components is an evolving set of open sourced custom HTML elements for building mobile and desktop web applications in modern browsers.",
   "author": "Vaadin Ltd",
   "license": "(Apache-2.0 OR SEE LICENSE IN https://vaadin.com/license/cvdl-4.0)",
   "main": "vaadin.js",
   "dependencies": {
-    "@vaadin/vaadin-board": "^20.0.0-alpha2",
-    "@vaadin/vaadin-charts": "^20.0.0-alpha2",
-    "@vaadin/vaadin-confirm-dialog": "^20.0.0-alpha2",
-    "@vaadin/vaadin-cookie-consent": "^20.0.0-alpha2",
-    "@vaadin/vaadin-core": "^20.0.0-alpha2",
-    "@vaadin/vaadin-crud": "^20.0.0-alpha2",
-    "@vaadin/vaadin-grid-pro": "^20.0.0-alpha2",
-    "@vaadin/vaadin-rich-text-editor": "^20.0.0-alpha2"
+    "@vaadin/vaadin-board": "^20.0.0-alpha0",
+    "@vaadin/vaadin-charts": "^20.0.0-alpha0",
+    "@vaadin/vaadin-confirm-dialog": "^20.0.0-alpha0",
+    "@vaadin/vaadin-cookie-consent": "^20.0.0-alpha0",
+    "@vaadin/vaadin-core": "^20.0.0-alpha0",
+    "@vaadin/vaadin-crud": "^20.0.0-alpha0",
+    "@vaadin/vaadin-grid-pro": "^20.0.0-alpha0",
+    "@vaadin/vaadin-rich-text-editor": "^20.0.0-alpha0"
   },
   "files": [
     "vaadin.js"

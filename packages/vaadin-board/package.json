@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-board",
-  "version": "20.0.0-alpha2",
+  "version": "20.0.0-alpha0",
   "description": "Polymer element to create flexible responsive layouts and build nice looking dashboard.",
   "main": "vaadin-board.js",
   "module": "vaadin-board.js",
@@ -34,7 +34,7 @@
     "@polymer/polymer": "^3.0.0",
     "@polymer/iron-resizable-behavior": "^3.0.0",
     "@vaadin/vaadin-license-checker": "^2.1.0",
-    "@vaadin/vaadin-element-mixin": "^20.0.0-alpha2"
+    "@vaadin/vaadin-element-mixin": "^20.0.0-alpha0"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.1.5",

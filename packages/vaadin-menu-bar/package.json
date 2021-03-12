@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-menu-bar",
-  "version": "20.0.0-alpha2",
+  "version": "20.0.0-alpha0",
   "description": "vaadin-menu-bar",
   "main": "vaadin-menu-bar.js",
   "module": "vaadin-menu-bar.js",
@@ -30,12 +30,12 @@
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
     "@polymer/iron-resizable-behavior": "^3.0.0",
-    "@vaadin/vaadin-themable-mixin": "^20.0.0-alpha2",
-    "@vaadin/vaadin-element-mixin": "^20.0.0-alpha2",
-    "@vaadin/vaadin-button": "^20.0.0-alpha2",
-    "@vaadin/vaadin-context-menu": "^20.0.0-alpha2",
-    "@vaadin/vaadin-lumo-styles": "^20.0.0-alpha2",
-    "@vaadin/vaadin-material-styles": "^20.0.0-alpha2"
+    "@vaadin/vaadin-themable-mixin": "^20.0.0-alpha0",
+    "@vaadin/vaadin-element-mixin": "^20.0.0-alpha0",
+    "@vaadin/vaadin-button": "^20.0.0-alpha0",
+    "@vaadin/vaadin-context-menu": "^20.0.0-alpha0",
+    "@vaadin/vaadin-lumo-styles": "^20.0.0-alpha0",
+    "@vaadin/vaadin-material-styles": "^20.0.0-alpha0"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.1.5",
@@ -43,7 +43,7 @@
     "@open-wc/testing-helpers": "^1.8.12",
     "@polymer/iron-component-page": "^4.0.0",
     "@polymer/iron-test-helpers": "^3.0.0",
-    "@vaadin/vaadin-icons": "^20.0.0-alpha2",
+    "@vaadin/vaadin-icons": "^20.0.0-alpha0",
     "rimraf": "^3.0.2",
     "rollup": "^2.34.1",
     "rollup-plugin-terser": "^7.0.2",
