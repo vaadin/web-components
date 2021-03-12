@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-themable-mixin",
-  "version": "20.0.0-alpha0",
+  "version": "20.0.0-alpha1",
   "description": "vaadin-themable-mixin",
   "main": "vaadin-themable-mixin.js",
   "module": "vaadin-themable-mixin.js",
@@ -23,8 +23,8 @@
     "register-styles.js"
   ],
   "dependencies": {
-    "lit-element": "^2.0.0",
-    "@polymer/polymer": "^3.0.0"
+    "@polymer/polymer": "^3.0.0",
+    "lit-element": "^2.0.0"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.1.5",

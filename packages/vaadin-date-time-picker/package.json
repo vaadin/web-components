@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-date-time-picker",
-  "version": "20.0.0-alpha0",
+  "version": "20.0.0-alpha1",
   "description": "vaadin-date-time-picker",
   "main": "vaadin-date-time-picker.js",
   "module": "vaadin-date-time-picker.js",
@@ -29,13 +29,13 @@
   },
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/vaadin-themable-mixin": "^20.0.0-alpha0",
-    "@vaadin/vaadin-element-mixin": "^20.0.0-alpha0",
-    "@vaadin/vaadin-lumo-styles": "^20.0.0-alpha0",
-    "@vaadin/vaadin-material-styles": "^20.0.0-alpha0",
-    "@vaadin/vaadin-date-picker": "^20.0.0-alpha0",
-    "@vaadin/vaadin-time-picker": "^20.0.0-alpha0",
-    "@vaadin/vaadin-custom-field": "^20.0.0-alpha0"
+    "@vaadin/vaadin-custom-field": "^20.0.0-alpha1",
+    "@vaadin/vaadin-date-picker": "^20.0.0-alpha1",
+    "@vaadin/vaadin-element-mixin": "^20.0.0-alpha1",
+    "@vaadin/vaadin-lumo-styles": "^20.0.0-alpha1",
+    "@vaadin/vaadin-material-styles": "^20.0.0-alpha1",
+    "@vaadin/vaadin-themable-mixin": "^20.0.0-alpha1",
+    "@vaadin/vaadin-time-picker": "^20.0.0-alpha1"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.1.5",

@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-custom-field",
-  "version": "20.0.0-alpha0",
+  "version": "20.0.0-alpha1",
   "description": "vaadin-custom-field",
   "main": "vaadin-custom-field.js",
   "module": "vaadin-custom-field.js",
@@ -29,10 +29,10 @@
   },
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/vaadin-themable-mixin": "^20.0.0-alpha0",
-    "@vaadin/vaadin-element-mixin": "^20.0.0-alpha0",
-    "@vaadin/vaadin-lumo-styles": "^20.0.0-alpha0",
-    "@vaadin/vaadin-material-styles": "^20.0.0-alpha0"
+    "@vaadin/vaadin-element-mixin": "^20.0.0-alpha1",
+    "@vaadin/vaadin-lumo-styles": "^20.0.0-alpha1",
+    "@vaadin/vaadin-material-styles": "^20.0.0-alpha1",
+    "@vaadin/vaadin-themable-mixin": "^20.0.0-alpha1"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.1.5",
@@ -40,12 +40,12 @@
     "@open-wc/testing-helpers": "^1.8.0",
     "@polymer/iron-component-page": "^4.0.0",
     "@polymer/iron-test-helpers": "^3.0.0",
-    "@vaadin/vaadin-text-field": "^20.0.0-alpha0",
-    "@vaadin/vaadin-time-picker": "^20.0.0-alpha0",
-    "@vaadin/vaadin-date-picker": "^20.0.0-alpha0",
-    "@vaadin/vaadin-form-layout": "^20.0.0-alpha0",
-    "@vaadin/vaadin-select": "^20.0.0-alpha0",
-    "@vaadin/vaadin-list-box": "^20.0.0-alpha0",
+    "@vaadin/vaadin-date-picker": "^20.0.0-alpha1",
+    "@vaadin/vaadin-form-layout": "^20.0.0-alpha1",
+    "@vaadin/vaadin-list-box": "^20.0.0-alpha1",
+    "@vaadin/vaadin-select": "^20.0.0-alpha1",
+    "@vaadin/vaadin-text-field": "^20.0.0-alpha1",
+    "@vaadin/vaadin-time-picker": "^20.0.0-alpha1",
     "rimraf": "^3.0.2",
     "rollup": "^2.34.1",
     "rollup-plugin-terser": "^7.0.2",

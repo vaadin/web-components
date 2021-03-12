@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-split-layout",
-  "version": "20.0.0-alpha0",
+  "version": "20.0.0-alpha1",
   "description": "Web component for partitioning a layout into resizeable areas",
   "main": "vaadin-split-layout.js",
   "module": "vaadin-split-layout.js",
@@ -28,12 +28,12 @@
     "dist": "rimraf dist && polymer analyze vaadin-* > analysis.json && rollup -c rollup.config.js && cp analysis.json dist"
   },
   "dependencies": {
-    "@polymer/polymer": "^3.0.0",
     "@polymer/iron-resizable-behavior": "^3.0.0",
-    "@vaadin/vaadin-themable-mixin": "^20.0.0-alpha0",
-    "@vaadin/vaadin-lumo-styles": "^20.0.0-alpha0",
-    "@vaadin/vaadin-material-styles": "^20.0.0-alpha0",
-    "@vaadin/vaadin-element-mixin": "^20.0.0-alpha0"
+    "@polymer/polymer": "^3.0.0",
+    "@vaadin/vaadin-element-mixin": "^20.0.0-alpha1",
+    "@vaadin/vaadin-lumo-styles": "^20.0.0-alpha1",
+    "@vaadin/vaadin-material-styles": "^20.0.0-alpha1",
+    "@vaadin/vaadin-themable-mixin": "^20.0.0-alpha1"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.1.5",

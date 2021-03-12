@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-avatar",
-  "version": "20.0.0-alpha0",
+  "version": "20.0.0-alpha1",
   "description": "vaadin-avatar",
   "main": "vaadin-avatar-group.js",
   "module": "vaadin-avatar-group.js",
@@ -28,16 +28,16 @@
     "dist": "rimraf dist && polymer analyze vaadin-* > analysis.json && rollup -c rollup.config.js && cp analysis.json dist"
   },
   "dependencies": {
-    "@polymer/polymer": "^3.0.0",
     "@polymer/iron-a11y-announcer": "^3.0.0",
     "@polymer/iron-resizable-behavior": "^3.0.0",
-    "@vaadin/vaadin-themable-mixin": "^20.0.0-alpha0",
-    "@vaadin/vaadin-element-mixin": "^20.0.0-alpha0",
-    "@vaadin/vaadin-list-box": "^20.0.0-alpha0",
-    "@vaadin/vaadin-item": "^20.0.0-alpha0",
-    "@vaadin/vaadin-lumo-styles": "^20.0.0-alpha0",
-    "@vaadin/vaadin-material-styles": "^20.0.0-alpha0",
-    "@vaadin/vaadin-overlay": "^20.0.0-alpha0"
+    "@polymer/polymer": "^3.0.0",
+    "@vaadin/vaadin-element-mixin": "^20.0.0-alpha1",
+    "@vaadin/vaadin-item": "^20.0.0-alpha1",
+    "@vaadin/vaadin-list-box": "^20.0.0-alpha1",
+    "@vaadin/vaadin-lumo-styles": "^20.0.0-alpha1",
+    "@vaadin/vaadin-material-styles": "^20.0.0-alpha1",
+    "@vaadin/vaadin-overlay": "^20.0.0-alpha1",
+    "@vaadin/vaadin-themable-mixin": "^20.0.0-alpha1"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.1.5",

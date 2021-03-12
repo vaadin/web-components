@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-icons",
-  "version": "20.0.0-alpha0",
+  "version": "20.0.0-alpha1",
   "description": "Collection of 600+ unique icons designed for web applications",
   "main": "vaadin-icons.js",
   "module": "vaadin-icons.js",
@@ -23,11 +23,10 @@
     "vaadin-icons.js"
   ],
   "dependencies": {
-    "@polymer/polymer": "^3.0.0",
     "@polymer/iron-icon": "^3.0.0",
-    "@polymer/iron-iconset-svg": "^3.0.0"
+    "@polymer/iron-iconset-svg": "^3.0.0",
+    "@polymer/polymer": "^3.0.0"
   },
-  "devDependencies": {},
   "publishConfig": {
     "access": "public"
   }
