@@ -276,7 +276,8 @@ describe('keyboard', () => {
       expect(comboBox.inputElement.value).to.eql('baz');
     });
 
-    it('should select the input field text when navigating down', async () => {
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+    (isSafari ? it.skip : it)('should select the input field text when navigating down', async () => {
       arrowDown();
       await aTimeout(1);
       expect(comboBox._nativeInput.selectionStart).to.eql(0);
@@ -297,7 +298,7 @@ describe('keyboard', () => {
       expect(comboBox.inputElement.value).to.eql('invalid filter');
     });
 
-    it('should select the input field text when navigating up', async () => {
+    (isSafari ? it.skip : it)('should select the input field text when navigating up', async () => {
       arrowUp();
       await aTimeout(1);
       expect(comboBox._nativeInput.selectionStart).to.eql(0);

@@ -12,7 +12,7 @@ import '../vaadin-split-layout.js';
 
 const touchDevice = (() => {
   try {
-    document.createEvent('TouchEvent');
+    new Touch({ identifier: 1, target: window });
     return true;
   } catch (e) {
     return false;

@@ -423,7 +423,8 @@ describe('items', () => {
       expect(menuComponents()[0].getAttribute('aria-expanded')).to.equal('false');
     });
 
-    (isIOS ? describe.skip : describe)('scrolling', () => {
+    const isChrome = window.chrome || /HeadlessChrome/.test(navigator.userAgent);
+    (isChrome ? describe : describe.skip)('scrolling', () => {
       let rootOverlay, subOverlay1, subOverlay2, scrollElm;
 
       beforeEach(async () => {
