@@ -1,0 +1,49 @@
+{
+  "name": "vaadin-web-components",
+  "private": true,
+  "author": "Vaadin Ltd",
+  "workspaces": [
+    "packages/*"
+  ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  },
+  "scripts": {
+    "debug": "web-test-runner --watch",
+    "dist": "lerna run dist --stream",
+    "lint": "npm-run-all --parallel lint:*",
+    "lint:css": "stylelint packages/**/src/*.js packages/**/theme/**/*-styles.js",
+    "lint:js": "eslint *.js scripts packages",
+    "lint:types": "tsc",
+    "preversion": "node scripts/updateVersion.js",
+    "test": "web-test-runner --coverage",
+    "test:firefox": "web-test-runner --config web-test-runner-firefox.config.js",
+    "test:webkit": "web-test-runner --config web-test-runner-webkit.config.js"
+  },
+  "devDependencies": {
+    "@web/test-runner": "^0.12.14",
+    "@web/test-runner-playwright": "^0.8.4",
+    "eslint": "^7.21.0",
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-plugin-prettier": "^3.3.1",
+    "husky": "^4.3.8",
+    "jsonfile": "^6.1.0",
+    "lerna": "^3.22.1",
+    "lint-staged": "^10.5.4",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.2.1",
+    "replace-in-file": "^6.2.0",
+    "stylelint": "^13.11.0",
+    "stylelint-config-prettier": "^8.0.2",
+    "stylelint-config-vaadin": "^0.2.10",
+    "typescript": "^4.1.3"
+  }
+}

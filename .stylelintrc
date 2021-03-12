@@ -1,0 +1,6 @@
+{
+  "extends": [
+    "stylelint-config-vaadin",
+    "stylelint-config-prettier"
+  ]
+}
