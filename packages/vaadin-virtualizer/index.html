@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>Virtualizer</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+
+  <body>
+    <div id="virtualized-list" style="height: 200px; overflow: auto">
+      <div id="scroll-container"></div>
+    </div>
+
+    <div> <button id="scroll-button">Scroll to index</button><input id="scroll-input" value="0" /> </div>
+    <div> <button id="size-button">Set size</button><input id="size-input" value="0" /> </div>
+
+    <script type="module">
+      import { Virtualizer } from '.';
+
+      const virtualizedList = new Virtualizer({
+        createElements: (count) => Array.from(Array(count)).map(() => document.createElement('div')),
+        updateElement: (el, index) => (el.textContent = index),
+        scrollTarget: document.querySelector('#virtualized-list'),
+        scrollContainer: document.querySelector('#scroll-container'),
+        reorderElements: true
+      });
+
+      virtualizedList.size = 100000000;
+
+      document.querySelector('#scroll-button').addEventListener('click', () => {
+        virtualizedList.scrollToIndex(+document.querySelector('#scroll-input').value);
+      });
+
+      document.querySelector('#size-button').addEventListener('click', () => {
+        virtualizedList.size = +document.querySelector('#size-input').value;
+      });
+    </script>
+  </body>
+</html>

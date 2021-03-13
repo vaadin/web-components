@@ -1,0 +1,45 @@
+{
+  "name": "@vaadin/vaadin-virtualizer",
+  "version": "21.0.0-alpha1",
+  "description": "vaadin-virtualizer",
+  "main": "vaadin-virtualizer.js",
+  "module": "vaadin-virtualizer.js",
+  "repository": "vaadin/vaadin-virtualizer",
+  "keywords": [
+    "Vaadin",
+    "virtualizer",
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
+  "author": "Vaadin Ltd",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/vaadin/vaadin-web-components/issues"
+  },
+  "homepage": "https://vaadin.com/components",
+  "files": [
+    "vaadin-*.d.ts",
+    "vaadin-*.js",
+    "src",
+    "theme"
+  ],
+  "scripts": {
+    "dist": "rimraf dist && polymer analyze vaadin-* > analysis.json && rollup -c rollup.config.js && cp analysis.json dist"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@esm-bundle/chai": "^4.1.5",
+    "@open-wc/rollup-plugin-html": "^1.2.5",
+    "@polymer/iron-component-page": "^4.0.0",
+    "@polymer/iron-icon": "^3.0.0",
+    "@vaadin/testing-helpers": "^0.1.3",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.34.1",
+    "rollup-plugin-terser": "^7.0.2",
+    "sinon": "^9.2.4"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
