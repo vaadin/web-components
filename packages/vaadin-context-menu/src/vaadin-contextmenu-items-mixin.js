@@ -8,9 +8,10 @@ import { ItemElement } from '@vaadin/vaadin-item/src/vaadin-item.js';
 import { ListBoxElement } from '@vaadin/vaadin-list-box/src/vaadin-list-box.js';
 
 /**
- * The vaadin-context-menu-item element.
+ * An element used internally by `<vaadin-context-menu>`. Not intended to be used separately.
  *
  * @extends ItemElement
+ * @protected
  */
 class ContextMenuItemElement extends ItemElement {
   static get is() {
@@ -21,9 +22,10 @@ class ContextMenuItemElement extends ItemElement {
 customElements.define(ContextMenuItemElement.is, ContextMenuItemElement);
 
 /**
- * The vaadin-context-menu-list-box element.
+ * An element used internally by `<vaadin-context-menu>`. Not intended to be used separately.
  *
  * @extends ListBoxElement
+ * @protected
  */
 class ContextMenuListBoxElement extends ListBoxElement {
   static get is() {

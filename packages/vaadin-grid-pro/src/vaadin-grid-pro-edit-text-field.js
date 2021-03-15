@@ -7,14 +7,10 @@
 import { TextFieldElement } from '@vaadin/vaadin-text-field/src/vaadin-text-field.js';
 
 /**
- * The cell editor text-field element.
+ * An element used internally by `<vaadin-grid-pro>`. Not intended to be used separately.
  *
- * ### Styling
- *
- * See [`<vaadin-text-field>` documentation](https://github.com/vaadin/vaadin-text-field/blob/master/src/vaadin-text-field.html)
- * for `<vaadin-text-field>` parts.
- *
- * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+ * @extends TextFieldElement
+ * @private
  */
 class GridProEditTextFieldElement extends TextFieldElement {
   static get is() {

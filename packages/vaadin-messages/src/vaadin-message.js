@@ -30,6 +30,13 @@ import './vaadin-message-avatar.js';
  *
  * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
  *
+ * ### Internal components
+ *
+ * In addition to `<vaadin-message>` itself, the following internal
+ * components are themable:
+ *
+ * - `<vaadin-message-avatar>` - has the same API as [`<vaadin-avatar>`](#/elements/vaadin-avatar).
+ *
  * @extends HTMLElement
  * @mixes ThemableMixin
  * @mixes ElementMixin

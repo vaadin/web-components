@@ -32,6 +32,14 @@ import { AvatarGroupItem, AvatarGroupI18n } from './interfaces';
  * `avatar`    | Individual avatars
  *
  * See [Styling Components](https://vaadin.com/docs/v14/themes/styling-components.html) documentation.
+ *
+ * ### Internal components
+ *
+ * In addition to `<vaadin-avatar-group>` itself, the following internal
+ * components are themable:
+ *
+ * - `<vaadin-avatar-group-list-box>` - has the same API as [`<vaadin-list-box>`](#/elements/vaadin-list-box).
+ * - `<vaadin-avatar-group-overlay>` - has the same API as [`<vaadin-overlay>`](#/elements/vaadin-overlay).
  */
 declare class AvatarGroupElement extends ElementMixin(ThemableMixin(HTMLElement)) {
   readonly _avatars: HTMLElement[];

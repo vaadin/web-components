@@ -7,7 +7,7 @@ import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-p
 import { NotificationEventMap, NotificationPosition, NotificationRenderer } from './interfaces';
 
 /**
- * The container element for all notifications.
+ * An element used internally by `<vaadin-notification>`. Not intended to be used separately.
  */
 declare class NotificationContainer extends ElementMixin(ThemableMixin(HTMLElement)) {
   /**
@@ -17,18 +17,7 @@ declare class NotificationContainer extends ElementMixin(ThemableMixin(HTMLEleme
 }
 
 /**
- * The container element for the notification
- *
- * ### Styling
- *
- * The following shadow DOM parts are available for styling:
- *
- * Part name | Description
- * ----------------|----------------
- * `overlay` | The notification container
- * `content` | The content of the notification
- *
- * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+ * An element used internally by `<vaadin-notification>`. Not intended to be used separately.
  */
 declare class NotificationCard extends ThemableMixin(HTMLElement) {}
 
@@ -78,9 +67,16 @@ declare class NotificationCard extends ThemableMixin(HTMLElement) {}
  * ### Styling
  *
  * `<vaadin-notification>` uses `<vaadin-notification-card>` internal
- * themable component as the actual visible notification cards. See
- * the stylable parts the
- * [`<vaadin-notification-card>` API](https://vaadin.com/components/vaadin-notification/html-api/elements/Vaadin.NotificationCard).
+ * themable component as the actual visible notification cards.
+ *
+ * The following shadow DOM parts of the `<vaadin-notification-card>` are available for styling:
+ *
+ * Part name | Description
+ * ----------------|----------------
+ * `overlay` | The notification container
+ * `content` | The content of the notification
+ *
+ * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
  *
  * Note: the `theme` attribute value set on `<vaadin-notification>` is
  * propagated to the internal `<vaadin-notification-card>`.

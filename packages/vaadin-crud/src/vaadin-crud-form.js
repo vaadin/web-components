@@ -8,14 +8,11 @@ import '@vaadin/vaadin-text-field/src/vaadin-text-field.js';
 import { IncludedMixin } from './vaadin-crud-include-mixin.js';
 
 /**
- * `<vaadin-crud-form>` is a <vaadin-form-layout> which automatically can configures all its items based
- * on the JSON structure of the first item set.
- *
- * You cannot manually configure fields but you can still style the layout as it's described in
- * `<vaadin-form-layout>` [Documentation](https://vaadin.com/components/vaadin-form-layout/html-api/elements/Vaadin.FormLayoutElement)
+ * An element used internally by `<vaadin-crud>`. Not intended to be used separately.
  *
  * @extends FormLayoutElement
  * @mixes IncludedMixin
+ * @private
  */
 class CrudFormElement extends IncludedMixin(FormLayoutElement) {
   static get is() {

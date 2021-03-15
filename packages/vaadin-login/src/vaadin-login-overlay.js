@@ -22,9 +22,21 @@ import './vaadin-login-overlay-wrapper.js';
  *
  * ### Styling
  *
- * To style the element check: [`<vaadin-login-overlay-wrapper>`](#/elements/vaadin-login-overlay-wrapper),
- * [`<vaadin-login-form-wrapper>`](#/elements/vaadin-login-form-wrapper), [`<vaadin-login-form>`](#/elements/vaadin-login-form)
- * and `<vaadin-overlay>` elements
+ * The component doesn't have a shadowRoot, so the `<form>` and input fields can be styled from a global scope.
+ * Use `<vaadin-login-overlay-wrapper>` and `<vaadin-login-form-wrapper>` to apply styles.
+ *
+ * The following shadow DOM parts of the `<vaadin-login-overlay-wrapper>` are available for styling:
+ *
+ * Part name       | Description
+ * ----------------|---------------------------------------------------------|
+ * `card`          | Container for the entire component's content
+ * `brand`         | Container for application title and description
+ * `form`          | Container for the `<vaadin-login-form>` component
+ *
+ * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+ *
+ * See [`<vaadin-login-form>`](#/elements/vaadin-login-form)
+ * documentation for  `<vaadin-login-form-wrapper>` stylable parts.
  *
  * @fires {CustomEvent} forgot-password - Fired when user clicks on the "Forgot password" button.
  * @fires {CustomEvent} login - Fired when a user submits the login.

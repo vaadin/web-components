@@ -77,9 +77,9 @@ import { CrudDataProvider, CrudEditorPosition, CrudEventMap, CrudI18n } from './
  * ### Helpers
  *
  * The following elements are used to auto-configure the grid and the editor
- * - [`<vaadin-crud-grid>`](#/elements/vaadin-crud-grid)
  * - [`<vaadin-crud-edit-column>`](#/elements/vaadin-crud-edit-column)
- * - [`<vaadin-crud-form>`](#/elements/vaadin-crud-form)
+ * - `<vaadin-crud-grid>` - can be replaced with custom [`<vaadin-grid>`](#/elements/vaadin-grid)
+ * - `<vaadin-crud-form>` - can be replaced with custom [`<vaadin-form-layout>`](#/elements/vaadin-form-layout)
  *
  * ### Styling
  *

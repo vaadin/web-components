@@ -107,9 +107,8 @@ interface ColumnBaseMixin {
  * A `<vaadin-grid-column>` is used to configure how a column in `<vaadin-grid>`
  * should look like.
  *
- * See `<vaadin-grid>` documentation and demos for instructions and examples on how
+ * See [`<vaadin-grid>`](#/elements/vaadin-grid) documentation for instructions on how
  * to configure the `<vaadin-grid-column>`.
- * ```
  */
 declare class GridColumnElement extends ColumnBaseMixin(HTMLElement) {
   /**

@@ -27,6 +27,7 @@ import { MessageListItem } from './interfaces';
  *
  * Part name | Description
  * ----------|----------------
+ * `list`    | The container wrapping messages.
  *
  * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
  */

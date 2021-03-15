@@ -27,16 +27,10 @@ registerStyles(
 );
 
 /**
- * The text-field element for date input.
+ * An element used internally by `<vaadin-date-picker>`. Not intended to be used separately.
  *
- * ### Styling
- *
- * See [`<vaadin-text-field>` documentation](https://github.com/vaadin/vaadin-text-field/blob/master/src/vaadin-text-field.html)
- * for `<vaadin-date-picker-text-field>` parts and available slots (prefix, suffix etc.)
- *
- * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
- *
- * @extends TextFieldElement
+ * @extends OverlayElement
+ * @private
  */
 class DatePickerTextFieldElement extends TextFieldElement {
   static get is() {

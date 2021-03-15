@@ -18,14 +18,10 @@ registerStyles(
 );
 
 /**
- * The overlay element.
+ * An element used internally by `<vaadin-select>`. Not intended to be used separately.
  *
- * ### Styling
- *
- * See [`<vaadin-overlay>` documentation](https://github.com/vaadin/vaadin-overlay/blob/master/src/vaadin-overlay.html)
- * for `<vaadin-select-overlay>` parts.
- *
- * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+ * @extends OverlayElement
+ * @protected
  */
 class SelectOverlayElement extends OverlayElement {
   static get is() {

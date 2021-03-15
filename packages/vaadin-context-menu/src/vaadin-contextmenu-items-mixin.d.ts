@@ -7,7 +7,9 @@ import { ContextMenuElement } from './vaadin-context-menu.js';
 import { ContextMenuItem, ContextMenuRendererContext } from './interfaces';
 
 /**
- * The vaadin-context-menu-item element.
+ * An element used internally by `<vaadin-context-menu>`. Not intended to be used separately.
+ *
+ * @protected
  */
 declare class ContextMenuItemElement extends ItemElement {}
 
@@ -19,7 +21,9 @@ declare global {
 }
 
 /**
- * The vaadin-context-menu-list-box element.
+ * An element used internally by `<vaadin-context-menu>`. Not intended to be used separately.
+ *
+ * @protected
  */
 declare class ContextMenuListBoxElement extends ListBoxElement {}
 

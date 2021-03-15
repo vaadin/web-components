@@ -70,16 +70,18 @@ import { DatePickerEventMap } from './interfaces';
  * If you want to replace the default input field with a custom implementation, you should use the
  * [`<vaadin-date-picker-light>`](#vaadin-date-picker-light) element.
  *
+ * ### Internal components
+ *
  * In addition to `<vaadin-date-picker>` itself, the following internal
  * components are themable:
  *
- * - `<vaadin-text-field>`
- * - `<vaadin-date-picker-overlay>`
+ * - `<vaadin-date-picker-text-field>` - has the same API as [`<vaadin-text-field>`](#/elements/vaadin-text-field).
+ * - `<vaadin-date-picker-overlay>` - has the same API as [`<vaadin-overlay>`](#/elements/vaadin-overlay).
  * - `<vaadin-date-picker-overlay-content>`
  * - `<vaadin-month-calendar>`
  *
  * Note: the `theme` attribute value set on `<vaadin-date-picker>` is
- * propagated to the internal themable components listed above.
+ * propagated to the internal components listed above.
  *
  * @fires {Event} change - Fired when the user commits a value change.
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.

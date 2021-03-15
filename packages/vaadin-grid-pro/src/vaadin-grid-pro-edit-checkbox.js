@@ -7,14 +7,10 @@
 import { CheckboxElement } from '@vaadin/vaadin-checkbox/src/vaadin-checkbox.js';
 
 /**
- * The cell editor checkbox element.
+ * An element used internally by `<vaadin-grid-pro>`. Not intended to be used separately.
  *
- * ### Styling
- *
- * See [`<vaadin-checkbox>` documentation](https://github.com/vaadin/vaadin-checkbox/blob/master/src/vaadin-checkbox.html)
- * for `<vaadin-checkbox>` parts.
- *
- * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+ * @extends CheckboxElement
+ * @private
  */
 class GridProEditCheckboxElement extends CheckboxElement {
   static get is() {

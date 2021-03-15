@@ -18,7 +18,10 @@ registerStyles(
 );
 
 /**
- * @extends PolymerElement
+ * An element used internally by `<vaadin-menu-bar>`. Not intended to be used separately.
+ *
+ * @extends ButtonElement
+ * @private
  */
 class MenuBarButtonElement extends ButtonElement {
   static get is() {

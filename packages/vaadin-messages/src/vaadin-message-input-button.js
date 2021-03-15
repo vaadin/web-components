@@ -18,16 +18,10 @@ registerStyles(
 );
 
 /**
- * The button element for a message input.
- *
- * ### Styling
- *
- * See [`<vaadin-button>` documentation](https://github.com/vaadin/vaadin-button/blob/master/src/vaadin-button.js)
- * for `<vaadin-message-input-button>` parts and available slots
- *
- * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin#readme)
+ * An element used internally by `<vaadin-message-input>`. Not intended to be used separately.
  *
  * @extends ButtonElement
+ * @protected
  */
 class MessageInputButtonElement extends ButtonElement {
   static get is() {

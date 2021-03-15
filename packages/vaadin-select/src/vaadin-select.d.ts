@@ -90,14 +90,16 @@ import { SelectEventMap, SelectRenderer } from './interfaces';
  *
  * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
  *
+ * ### Internal components
+ *
  * In addition to `<vaadin-select>` itself, the following internal
  * components are themable:
  *
- * - `<vaadin-select-text-field>`
- * - `<vaadin-select-overlay>`
+ * - `<vaadin-select-text-field>` - has the same API as [`<vaadin-text-field>`](#/elements/vaadin-text-field).
+ * - `<vaadin-select-overlay>` - has the same API as [`<vaadin-overlay>`](#/elements/vaadin-overlay).
  *
  * Note: the `theme` attribute value set on `<vaadin-select>` is
- * propagated to the internal themable components listed above.
+ * propagated to the internal components listed above.
  *
  * @fires {Event} change - Fired when the user commits a value change.
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.

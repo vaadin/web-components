@@ -18,16 +18,10 @@ registerStyles(
 );
 
 /**
- * The avatar element for message.
- *
- * ### Styling
- *
- * See [`<vaadin-avatar>` documentation](https://github.com/vaadin/vaadin-avatar/blob/master/src/vaadin-avatar.js)
- * for `<vaadin-message-avatar>` parts and available slots
- *
- * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin#readme)
+ * An element used internally by `<vaadin-message>`. Not intended to be used separately.
  *
  * @extends AvatarElement
+ * @private
  */
 class MessageAvatarElement extends AvatarElement {
   static get is() {

@@ -37,6 +37,16 @@ import { MenuBarEventMap, MenuBarItem } from './interfaces';
  *
  * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
  *
+ * ### Internal components
+ *
+ * In addition to `<vaadin-menu-bar>` itself, the following internal
+ * components are themable:
+ *
+ * - `<vaadin-menu-bar-button>` - has the same API as [`<vaadin-button>`](#/elements/vaadin-button).
+ * - `<vaadin-context-menu-item>` - has the same API as [`<vaadin-item>`](#/elements/vaadin-item).
+ * - `<vaadin-context-menu-list-box>` - has the same API as [`<vaadin-list-box>`](#/elements/vaadin-list-box).
+ * - `<vaadin-context-menu-overlay>` - has the same API as [`<vaadin-overlay>`](#/elements/vaadin-overlay).
+ *
  * @fires {CustomEvent} item-selected - Fired when a submenu item or menu bar button without children is clicked.
  */
 declare class MenuBarElement extends ButtonsMixin(InteractionsMixin(ElementMixin(ThemableMixin(HTMLElement)))) {

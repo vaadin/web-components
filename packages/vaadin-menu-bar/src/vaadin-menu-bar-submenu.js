@@ -6,7 +6,10 @@
 import { ContextMenuElement } from '@vaadin/vaadin-context-menu/src/vaadin-context-menu.js';
 
 /**
- * @extends PolymerElement
+ * An element used internally by `<vaadin-menu-bar>`. Not intended to be used separately.
+ *
+ * @extends ContextMenuElement
+ * @protected
  */
 class MenuBarSubmenuElement extends ContextMenuElement {
   static get is() {

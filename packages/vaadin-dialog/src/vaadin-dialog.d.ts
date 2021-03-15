@@ -53,7 +53,10 @@ import { DialogEventMap, DialogRenderer } from './interfaces';
  *
  * ### Styling
  *
- * See [`<vaadin-overlay>` documentation](https://github.com/vaadin/vaadin-overlay/blob/master/src/vaadin-overlay.html)
+ * `<vaadin-dialog>` uses `<vaadin-dialog-overlay>` internal
+ * themable component as the actual visible overlay.
+ *
+ * See [`<vaadin-overlay>`](#/elements/vaadin-overlay) documentation.
  * for `<vaadin-dialog-overlay>` parts.
  *
  * Note: the `theme` attribute value set on `<vaadin-dialog>` is

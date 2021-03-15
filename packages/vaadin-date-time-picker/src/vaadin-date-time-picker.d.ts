@@ -35,21 +35,19 @@ import { DateTimePickerEventMap, DateTimePickerI18n } from './interfaces';
  *
  * See [ThemableMixin – Stylable Shadow Parts](https://github.com/vaadin/vaadin-themable-mixin#stylable-shadow-parts)
  *
+ * ### Internal components
+ *
  * In addition to `<vaadin-date-time-picker>` itself, the following internal
  * components are themable:
  *
- * - `<vaadin-custom-field>`, see
- *   [`custom-field` documentation](https://vaadin.com/components/vaadin-custom-field/html-api/elements/Vaadin.CustomFieldElement)
- *   for the custom field parts.
- * - `<vaadin-date-picker>`, see
- *   [`date-picker` documentation](https://vaadin.com/components/vaadin-date-picker/html-api/elements/Vaadin.DatePickerElement)
- *   for the date picker parts.
- * - `<vaadin-time-picker>`, see
- *   [`time-picker` documentation](https://vaadin.com/components/vaadin-time-picker/html-api/elements/Vaadin.TimePickerElement)
- *   for the time picker parts.
+ * - `<vaadin-date-time-picker-date-picker>` - has the same API as [`<vaadin-date-picker>`](#/elements/vaadin-date-picker).
+ * - `<vaadin-date-time-picker-time-picker>` - has the same API as [`<vaadin-time-picker>`](#/elements/vaadin-time-picker).
+ * - `<vaadin-date-time-picker-date-text-field>` - has the same API as [`<vaadin-text-field>`](#/elements/vaadin-text-field).
+ * - `<vaadin-date-time-picker-time-text-field>` - has the same API as [`<vaadin-text-field>`](#/elements/vaadin-text-field).
+ * - `<vaadin-date-time-picker-custom-field>` - has the same API as [`<vaadin-custom-field>`](#/elements/vaadin-custom-field).
  *
  * Note: the `theme` attribute value set on `<vaadin-date-time-picker>` is
- * propagated to the internal themable components listed above.
+ * propagated to the internal components listed above.
  *
  * @fires {Event} change - Fired when the user commits a value change.
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
@@ -191,9 +189,8 @@ declare class DateTimePickerElement extends ElementMixin(ThemableMixin(HTMLEleme
    * `i18n` object or just the properties you want to modify.
    *
    * The object is a combination of the i18n properties supported by
-   * `<vaadin-date-picker>` and `<vaadin-time-picker>`. See `i18n` property at:
-   * - [`date-picker` documentation](https://vaadin.com/components/vaadin-date-picker/html-api/elements/Vaadin.DatePickerElement)
-   * - [`time-picker` documentation](https://vaadin.com/components/vaadin-time-picker/html-api/elements/Vaadin.TimePickerElement)
+   * [`<vaadin-date-picker>`](#/elements/vaadin-date-picker) and
+   * [`<vaadin-time-picker>`](#/elements/vaadin-time-picker).
    */
   i18n: DateTimePickerI18n;
 
