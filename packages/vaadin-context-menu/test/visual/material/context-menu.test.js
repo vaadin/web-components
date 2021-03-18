@@ -1,0 +1,135 @@
+import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { visualDiff } from '@web/test-runner-visual-regression';
+import '../../../theme/material/vaadin-context-menu.js';
+
+describe('context-menu', () => {
+  let element;
+
+  ['ltr', 'rtl'].forEach((dir) => {
+    const contextmenu = (target) => {
+      const domRect = target.getBoundingClientRect();
+      const clientX = dir === 'rtl' ? domRect.right : domRect.left;
+      const e = new MouseEvent('contextmenu', {
+        bubbles: true,
+        cancelable: true,
+        clientX,
+        clientY: domRect.y
+      });
+
+      target.listenOn.dispatchEvent(e);
+    };
+
+    describe(dir, () => {
+      before(() => {
+        document.documentElement.setAttribute('dir', dir);
+      });
+
+      after(() => {
+        document.documentElement.removeAttribute('dir');
+      });
+
+      describe('basic', () => {
+        beforeEach(() => {
+          element = fixtureSync(`
+            <vaadin-context-menu>
+              <template>
+                <vaadin-list-box>
+                  <vaadin-item>Item 1</vaadin-item>
+                  <vaadin-item>Item 2</vaadin-item>
+                </vaadin-list-box>
+              </template>
+
+              <div style="padding: 10px">Target</div>
+            </vaadin-context-menu>
+          `);
+        });
+
+        it('basic', async () => {
+          contextmenu(element);
+          await visualDiff(document.body, `context-menu:${dir}-basic`);
+        });
+      });
+
+      describe('long', () => {
+        beforeEach(() => {
+          element = fixtureSync(`
+            <vaadin-context-menu>
+              <div style="padding: 10px">Target</div>
+            </vaadin-context-menu>
+          `);
+          element.renderer = (root) => {
+            root.innerHTML = `
+              <vaadin-list-box>
+                ${new Array(30)
+                  .fill(0)
+                  .map((_, idx) => `<vaadin-item>Item ${idx}</vaadin-item>`)
+                  .join('')}
+              </vaadin-list-box>
+            `;
+          };
+        });
+
+        it('basic', async () => {
+          contextmenu(element);
+          await visualDiff(document.body, `context-menu:${dir}-long`);
+        });
+
+        it('bottom', async () => {
+          element.style.position = 'absolute';
+          element.style.bottom = '50px';
+          element.style.right = '50px';
+          contextmenu(element);
+          await visualDiff(document.body, `context-menu:${dir}-long-bottom`);
+        });
+      });
+
+      describe('items', () => {
+        beforeEach(() => {
+          element = fixtureSync(`
+            <vaadin-context-menu>
+              <div style="padding: 10px">Target</div>
+            </vaadin-context-menu>
+          `);
+        });
+
+        function openSubMenus(menu) {
+          menu.$.overlay.addEventListener('vaadin-overlay-open', () => {
+            const itemElement = menu.$.overlay.querySelector('.vaadin-context-menu-parent-item');
+            if (itemElement) {
+              itemElement.dispatchEvent(new CustomEvent('mouseover', { bubbles: true, composed: true }));
+              const subMenu = menu.$.overlay.querySelector('vaadin-context-menu');
+              openSubMenus(subMenu);
+            }
+          });
+        }
+
+        it('items', async () => {
+          element.items = [
+            { text: 'Menu Item 1' },
+            { component: 'hr' },
+            {
+              text: 'Menu Item 2',
+              children: [
+                { text: 'Menu Item 2-1' },
+                {
+                  text: 'Menu Item 2-2',
+                  children: [
+                    { text: 'Menu Item 2-2-1' },
+                    { text: 'Menu Item 2-2-2', disabled: true },
+                    { component: 'hr' },
+                    { text: 'Menu Item 2-2-3' }
+                  ]
+                }
+              ]
+            },
+            { text: 'Menu Item 3', disabled: true }
+          ];
+          contextmenu(element);
+          openSubMenus(element);
+          await nextRender(element);
+          await visualDiff(document.body, `context-menu:${dir}-items`);
+        });
+      });
+    });
+  });
+});
