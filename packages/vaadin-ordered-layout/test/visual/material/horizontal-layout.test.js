@@ -10,7 +10,7 @@ describe('horizontal-layout', () => {
     div.style.display = 'flex';
     element = fixtureSync(
       `
-        <vaadin-horizontal-layout>
+        <vaadin-horizontal-layout style="border: solid 2px blue">
           <div style="background: #e2e2e2; padding: 20px;">Item 1</div>
           <div style="background: #f3f3f3; padding: 20px;">Item 2</div>
         </vaadin-horizontal-layout>
