@@ -1,8 +1,8 @@
 /* eslint-env node */
-const { filterBrowserLogs, getPackages, getTestGroups, testRunnerHtml } = require('./wtr-utils.js');
+const { filterBrowserLogs, getUnitTestGroups, getUnitTestPackages, testRunnerHtml } = require('./wtr-utils.js');
 
-const packages = getPackages();
-const groups = getTestGroups(packages);
+const packages = getUnitTestPackages();
+const groups = getUnitTestGroups(packages);
 
 module.exports = {
   nodeResolve: true,

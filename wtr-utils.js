@@ -1,22 +1,20 @@
 /* eslint-env node */
 const fs = require('fs');
+const path = require('path');
 const { execSync } = require('child_process');
 
 const filterBrowserLogs = (log) => log.type === 'error';
 
 const group = process.argv.indexOf('--group') !== -1;
 
-const NO_TESTS = ['vaadin', 'vaadin-core', 'vaadin-icons', 'vaadin-lumo-styles', 'vaadin-material-styles'];
+const NO_UNIT_TESTS = ['vaadin-icons', 'vaadin-lumo-styles', 'vaadin-material-styles'];
 
 /**
  * Get packages changed since master.
  */
 const getChangedPackages = () => {
   const output = execSync('./node_modules/.bin/lerna ls --since origin/master --json --loglevel silent');
-  const changedPackages = JSON.parse(output.toString());
-  return changedPackages
-    .map((project) => project.name.replace('@vaadin/', ''))
-    .filter((project) => NO_TESTS.indexOf(project) === -1);
+  return JSON.parse(output.toString());
 };
 
 /**
@@ -29,15 +27,17 @@ const getAllPackages = () => {
 };
 
 /**
- * Get packages for testing.
+ * Get packages for running unit tests.
  */
-const getPackages = () => {
+const getUnitTestPackages = () => {
   // If --group flag is passed, return all packages.
   if (group) {
     return getAllPackages();
   }
 
-  let packages = getChangedPackages();
+  let packages = getChangedPackages()
+    .map((project) => project.name.replace('@vaadin/', ''))
+    .filter((project) => NO_UNIT_TESTS.indexOf(project) === -1);
 
   if (packages.length == 0) {
     // When running in GitHub Actions, do nothing.
@@ -56,13 +56,54 @@ const getPackages = () => {
 };
 
 /**
- * Get test groups based on packages.
+ * Get packages for running visual tests.
  */
-const getTestGroups = (packages) => {
+const getVisualTestPackages = () => {
+  // If --group flag is passed, return all packages.
+  if (group) {
+    return getAllPackages();
+  }
+
+  let packages = getChangedPackages()
+    .map((project) => project.name.replace('@vaadin/', ''))
+    .filter((project) => NO_UNIT_TESTS.indexOf(project) === -1 && project.indexOf('mixin') === -1);
+
+  if (packages.length == 0) {
+    // When running in GitHub Actions, do nothing.
+    if (process.env.GITHUB_REF) {
+      console.log(`No local packages have changed, exiting.`);
+      process.exit(0);
+    } else {
+      console.log(`No local packages have changed, testing all packages.`);
+      packages = getAllPackages();
+    }
+  } else {
+    console.log(`Running tests for changed packages:\n${packages.join('\n')}`);
+  }
+
+  return packages;
+};
+
+/**
+ * Get unit test groups based on packages.
+ */
+const getUnitTestGroups = (packages) => {
   return packages.map((pkg) => {
     return {
       name: pkg,
       files: `packages/${pkg}/test/*.test.js`
+    };
+  });
+};
+
+/**
+ * Get visual test groups based on packages.
+ */
+const getVisualTestGroups = (packages, theme) => {
+  return packages.map((pkg) => {
+    return {
+      name: pkg,
+      files: `packages/${pkg}/test/visual/${theme}/*.test.js`
     };
   });
 };
@@ -72,12 +113,30 @@ const testRunnerHtml = (testFramework) => `
   <html>
     <body>
       <style>
+        html,
+        body {
+          height: 100%;
+        }
+
         body {
           margin: 0;
           padding: 0;
         }
+
+        html {
+          --vaadin-user-color-0: #df0b92;
+          --vaadin-user-color-1: #650acc;
+          --vaadin-user-color-2: #097faa;
+          --vaadin-user-color-3: #ad6200;
+          --vaadin-user-color-4: #bf16f3;
+          --vaadin-user-color-5: #084391;
+          --vaadin-user-color-6: #078836;
+        }
       </style>
       <script>
+        /* Disable Roboto for Material theme tests */
+        window.polymerSkipLoadingFontRoboto = true;
+
         /* Force development mode for element-mixin */
         localStorage.setItem('vaadin.developmentmode.force', true);
 
@@ -96,9 +155,44 @@ const testRunnerHtml = (testFramework) => `
   </html>
 `;
 
+const getScreenshotFileName = ({ browser, name }, type, diff) => {
+  const [component, test] = name.split(':');
+  return path.join(
+    browser.replace('Windows 10 ', '').replace(' latest', ''),
+    type,
+    component,
+    diff ? `${test}-diff` : test
+  );
+};
+
+const getBaselineScreenshotName = (args) => getScreenshotFileName(args, 'baseline');
+
+const getDiffScreenshotName = (args) => getScreenshotFileName(args, 'failed', true);
+
+const getFailedScreenshotName = (args) => getScreenshotFileName(args, 'failed');
+
+exports.getTestGroups = (theme) => {
+  const dir = `./test/visual/${theme}/`;
+
+  return fs
+    .readdirSync(dir)
+    .filter((file) => file.includes('test.js'))
+    .map((file) => {
+      return {
+        name: file.replace('.test.js', ''),
+        files: `${dir}${file}`
+      };
+    });
+};
+
 module.exports = {
   filterBrowserLogs,
-  getPackages,
-  getTestGroups,
+  getBaselineScreenshotName,
+  getDiffScreenshotName,
+  getFailedScreenshotName,
+  getUnitTestGroups,
+  getUnitTestPackages,
+  getVisualTestGroups,
+  getVisualTestPackages,
   testRunnerHtml
 };
