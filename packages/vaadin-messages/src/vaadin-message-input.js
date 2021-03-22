@@ -20,6 +20,14 @@ import './vaadin-message-input-button.js';
  * <vaadin-message-input></vaadin-message-input>
  * ```
  *
+ * ### Internal components
+ *
+ * In addition to `<vaadin-message-input>` itself, the following internal
+ * components are themable:
+ *
+ * - `<vaadin-message-input-button>` - has the same API as [`<vaadin-button>`](#/elements/vaadin-button).
+ * - `<vaadin-message-input-text-area>` - has the same API as [`<vaadin-text-area>`](#/elements/vaadin-text-area).
+ *
  * @extends HTMLElement
  * @mixes ThemableMixin
  * @mixes ElementMixin

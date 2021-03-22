@@ -9,16 +9,10 @@ import './vaadin-date-time-picker-date-text-field.js';
 let memoizedTemplate;
 
 /**
- * The date-picker element.
+ * An element used internally by `<vaadin-date-time-picker>`. Not intended to be used separately.
  *
- * ### Styling
- *
- * See [`<vaadin-date-picker>` documentation](https://github.com/vaadin/vaadin-date-picker/blob/master/src/vaadin-date-picker.html)
- * for `<vaadin-date-time-picker-date-picker>` parts and available slots (prefix, suffix etc.)
- *
- * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
- *
- * @extends HTMLElement
+ * @extends DatePickerElement
+ * @private
  */
 class DateTimePickerDatePickerElement extends DatePickerElement {
   static get is() {

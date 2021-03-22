@@ -12,14 +12,11 @@ import { IncludedMixin } from './vaadin-crud-include-mixin.js';
 import './vaadin-crud-edit-column.js';
 
 /**
- * `<vaadin-crud-grid>` is a `<vaadin-grid>` which automatically configures all its columns based
- * on the JSON structure of the first item received.
- *
- * You cannot manually configure columns but you can still style the grid as it's described in
- * `<vaadin-grid>` [Documentation](https://vaadin.com/components/vaadin-grid/html-api/elements/Vaadin.GridElement)
+ * An element used internally by `<vaadin-crud>`. Not intended to be used separately.
  *
  * @extends GridElement
  * @mixes IncludedMixin
+ * @private
  */
 class CrudGridElement extends IncludedMixin(GridElement) {
   static get is() {

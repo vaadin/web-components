@@ -1,14 +1,9 @@
 import { ButtonElement } from '@vaadin/vaadin-button/src/vaadin-button.js';
 
 /**
- * The button element for a message input.
+ * An element used internally by `<vaadin-message-input>`. Not intended to be used separately.
  *
- * ### Styling
- *
- * See [`<vaadin-button>` documentation](https://github.com/vaadin/vaadin-button/blob/master/src/vaadin-button.js)
- * for `<vaadin-message-input-button>` parts and available slots
- *
- * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin#readme)
+ * @protected
  */
 declare class MessageInputButtonElement extends ButtonElement {}
 

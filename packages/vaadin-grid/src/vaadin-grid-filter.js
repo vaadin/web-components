@@ -23,8 +23,10 @@ import '@vaadin/vaadin-text-field/src/vaadin-text-field.js';
  * ```
  *
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
+ *
+ * @extends HTMLElement
  */
-class GridFilterElement extends PolymerElement {
+class GridFilterElement extends class extends PolymerElement {} {
   static get template() {
     return html`
       <style>

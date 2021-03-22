@@ -35,13 +35,9 @@ registerStyles(
 let memoizedTemplate;
 
 /**
- * The overlay element.
+ * An element used internally by `<vaadin-dialog>`. Not intended to be used separately.
  *
- * ### Styling
- *
- * See [`<vaadin-overlay>` documentation](https://github.com/vaadin/vaadin-overlay/blob/master/src/vaadin-overlay.html)
- * for `<vaadin-dialog-overlay>` parts.
- *
+ * @extends OverlayElement
  * @private
  */
 class DialogOverlayElement extends mixinBehaviors(IronResizableBehavior, OverlayElement) {
@@ -172,7 +168,10 @@ customElements.define(DialogOverlayElement.is, DialogOverlayElement);
  *
  * ### Styling
  *
- * See [`<vaadin-overlay>` documentation](https://github.com/vaadin/vaadin-overlay/blob/master/src/vaadin-overlay.html)
+ * `<vaadin-dialog>` uses `<vaadin-dialog-overlay>` internal
+ * themable component as the actual visible dialog overlay.
+ *
+ * See [`<vaadin-overlay>`](#/elements/vaadin-overlay) documentation.
  * for `<vaadin-dialog-overlay>` parts.
  *
  * Note: the `theme` attribute value set on `<vaadin-dialog>` is

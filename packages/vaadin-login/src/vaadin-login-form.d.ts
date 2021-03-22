@@ -19,8 +19,22 @@ import { LoginEventMap } from './interfaces';
  *
  * ### Styling
  *
- * The component doesn't have a shadowRoot, so the html form and input fields can be styled in an upper layer. To style
- * `vaadin-login-form-wrapper` check its documentation.
+ * The component doesn't have a shadowRoot, so the `<form>` and input fields can be styled from a global scope.
+ *
+ * Use `<vaadin-login-form-wrapper>` themable component to apply styles.
+ * The following shadow DOM parts of the `<vaadin-login-form-wrapper>` are available for styling:
+ *
+ * Part name      | Description
+ * ---------------|---------------------------------------------------------|
+ * `form`         | Container for the entire component's content
+ * `form-title`   | Title of the login form
+ * `error-message`| Container for error message, contains error-message-title and error-message-description parts. Hidden by default.
+ * `error-message-title`       | Container for error message title
+ * `error-message-description` | Container for error message description
+ * `error-message-description` | Container for error message description
+ * `footer`  | Container additional information text from `i18n` object
+ *
+ * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
  *
  * @fires {CustomEvent} forgot-password - Fired when user clicks on the "Forgot password" button.
  * @fires {CustomEvent} login - Fired when a user submits the login.

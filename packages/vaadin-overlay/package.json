@@ -25,9 +25,6 @@
     "src",
     "theme"
   ],
-  "scripts": {
-    "dist": "rimraf dist && polymer analyze vaadin-* > analysis.json && rollup -c rollup.config.js && cp analysis.json dist"
-  },
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
     "@vaadin/vaadin-element-mixin": "^20.0.0-alpha1",
@@ -37,17 +34,12 @@
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.1.5",
-    "@open-wc/rollup-plugin-html": "^1.2.5",
     "@open-wc/testing-helpers": "^1.8.12",
-    "@polymer/iron-component-page": "^4.0.0",
     "@polymer/iron-overlay-behavior": "^3.0.0",
     "@polymer/iron-test-helpers": "^3.0.0",
     "@vaadin/vaadin-button": "^20.0.0-alpha1",
     "@vaadin/vaadin-radio-button": "^20.0.0-alpha1",
     "@vaadin/vaadin-text-field": "^20.0.0-alpha1",
-    "rimraf": "^3.0.2",
-    "rollup": "^2.34.1",
-    "rollup-plugin-terser": "^7.0.2",
     "sinon": "^9.2.1"
   },
   "publishConfig": {

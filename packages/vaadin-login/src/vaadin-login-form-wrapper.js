@@ -11,38 +11,13 @@ import '@vaadin/vaadin-button/src/vaadin-button.js';
 import { LoginMixin } from './vaadin-login-mixin.js';
 
 /**
- * `<vaadin-login-form-wrapper>` is a helper component providing a wrapper for the login form.
- *
- * See the usage in `<vaadin-login-form>`.
- *
- * ### Styling
- *
- * The following Shadow DOM parts of the `<vaadin-login-form-wrapper>` are available for styling:
- *
- * Part name      | Description
- * ---------------|---------------------------------------------------------|
- * `form`         | Container for the entire component's content
- * `form-title`   | Title of the login form
- * `error-message`| Container for error message, contains error-message-title and error-message-description parts. Hidden by default.
- * `error-message-title`       | Container for error message title
- * `error-message-description` | Container for error message description
- * `error-message-description` | Container for error message description
- * `footer`  | Container additional information text from `i18n` object
- *
- * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
- *
- * ### Component's slots
- *
- * The following slots are available for being set
- *
- * Slot name | Description
- * ----------|---------------------------------------------------|
- * `form`    | Html form placeholder. See the usage in `<vaadin-login-form>`.
+ * An element used internally by `<vaadin-login-form>`. Not intended to be used separately.
  *
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ThemableMixin
  * @mixes LoginMixin
+ * @private
  */
 class LoginFormWrapperElement extends LoginMixin(ElementMixin(ThemableMixin(PolymerElement))) {
   static get template() {

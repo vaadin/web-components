@@ -134,12 +134,6 @@ import { ComboBoxDataProviderMixin } from './vaadin-combo-box-data-provider-mixi
  * `text-field` | The text field
  * `toggle-button` | The toggle button
  *
- * See [`<vaadin-overlay>` documentation](https://github.com/vaadin/vaadin-overlay/blob/master/src/vaadin-overlay.html)
- * for `<vaadin-combo-box-overlay>` parts.
- *
- * See [`<vaadin-text-field>` documentation](https://vaadin.com/components/vaadin-text-field/html-api/elements/Vaadin.TextFieldElement)
- * for the text field parts.
- *
  * The following state attributes are available for styling:
  *
  * Attribute    | Description | Part name
@@ -153,15 +147,17 @@ import { ComboBoxDataProviderMixin } from './vaadin-combo-box-data-provider-mixi
  * `focus-ring` | Set when the element is keyboard focused | :host
  * `loading` | Set when new items are expected | :host
  *
+ * ### Internal components
+ *
  * In addition to `<vaadin-combo-box>` itself, the following internal
  * components are themable:
  *
- * - `<vaadin-text-field>`
- * - `<vaadin-combo-box-overlay>`
+ * - `<vaadin-combo-box-overlay>` - has the same API as [`<vaadin-overlay>`](#/elements/vaadin-overlay).
+ * - [`<vaadin-text-field>`](#/elements/vaadin-text-field)
  * - `<vaadin-combo-box-item>`
  *
  * Note: the `theme` attribute value set on `<vaadin-combo-box>` is
- * propagated to the internal themable components listed above.
+ * propagated to the internal components listed above.
  *
  * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
  *

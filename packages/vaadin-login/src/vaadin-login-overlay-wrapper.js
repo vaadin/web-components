@@ -58,33 +58,9 @@ document.head.appendChild($_documentContainer.content);
 let memoizedTemplate;
 
 /**
- * `<vaadin-login-overlay-wrapper>` is a helper element for `<vaadin-login-overlay>` that provides
- * responsive template for the login form.
+ * An element used internally by `<vaadin-login-overlay>`. Not intended to be used separately.
  *
- * ### Styling
- *
- * The following Shadow DOM parts of the `<vaadin-login-overlay-wrapper>` are available for styling:
- *
- * Part name       | Description
- * ----------------|---------------------------------------------------------|
- * `card`          | Container for the entire component's content
- * `brand`         | Container for application title and description
- * `form`          | Container for the `<vaadin-login-form>` component
- *
- * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
- *
- * ### Component's slots
- *
- * The following slots are available for being set
- *
- * Slot name    | Description
- * -------------|-----------------------------------------------|
- * no name      | Default placeholder for the `<vaadin-login-form>`
- * `title`      | Placeholder for customizing the title
- *
- * See the usage example in `<vaadin-login-overlay>`.
- *
- * @extends HTMLElement
+ * @extends OverlayElement
  * @private
  */
 class LoginOverlayWrapperElement extends OverlayElement {

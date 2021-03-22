@@ -6,24 +6,22 @@
 import { TextFieldElement } from '@vaadin/vaadin-text-field/src/vaadin-text-field.js';
 
 /**
- * The text-field element.
+ * An element used internally by `<vaadin-select>`. Not intended to be used separately.
  *
- * ### Styling
- *
- * See [`<vaadin-text-field>` documentation](https://github.com/vaadin/vaadin-text-field/blob/master/src/vaadin-text-field.html)
- * for `<vaadin-select-text-field>` parts and available slots (prefix, suffix etc.)
- *
- * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+ * @extends TextFieldElement
+ * @protected
  */
 class SelectTextFieldElement extends TextFieldElement {
   static get is() {
     return 'vaadin-select-text-field';
   }
 
+  /** @protected */
   get focusElement() {
     return this.shadowRoot.querySelector('[part=input-field]');
   }
 
+  /** @protected */
   get inputElement() {
     return this.shadowRoot.querySelector('input');
   }

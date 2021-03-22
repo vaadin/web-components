@@ -6,9 +6,10 @@
 import { ListBoxElement } from '@vaadin/vaadin-list-box/src/vaadin-list-box.js';
 
 /**
- * The vaadin-avatar-group-list-box element.
+ * An element used internally by `<vaadin-avatar-group>`. Not intended to be used separately.
  *
- * @extends HTMLElement
+ * @extends ListBoxElement
+ * @private
  */
 class AvatarGroupListBoxElement extends ListBoxElement {
   static get is() {

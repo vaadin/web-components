@@ -13,12 +13,20 @@ import '@vaadin/vaadin-license-checker/vaadin-license-checker.js';
  * `<vaadin-grid-pro>` is a high quality data grid / data table Web Component with extended functionality.
  * It extends `<vaadin-grid>` and adds extra features on top of the basic ones.
  *
- * See [`<vaadin-grid>` documentation](https://github.com/vaadin/vaadin-grid/blob/master/src/vaadin-grid.html)
- * for details.
+ * See [`<vaadin-grid>`](#/elements/vaadin-grid) documentation for details.
  *
  * ```
  * <vaadin-grid-pro></vaadin-grid-pro>
  * ```
+ *
+ * ### Internal components
+ *
+ * In addition to `<vaadin-grid-pro>` itself, the following internal
+ * components are themable:
+ *
+ * - `<vaadin-grid-pro-edit-checkbox>` - has the same API as [`<vaadin-checkbox>`](#/elements/vaadin-checkbox).
+ * - `<vaadin-grid-pro-edit-text-field>` - has the same API as [`<vaadin-text-field>`](#/elements/vaadin-text-field).
+ * - `<vaadin-grid-pro-edit-select>` - has the same API as [`<vaadin-select>`](#/elements/vaadin-select).
  *
  * @fires {CustomEvent} active-item-changed - Fired when the `activeItem` property changes.
  * @fires {CustomEvent} cell-activate - Fired when the cell is activated with click or keyboard.

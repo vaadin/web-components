@@ -31,20 +31,10 @@ registerStyles(
 );
 
 /**
- * The overlay element.
+ * An element used internally by `<vaadin-context-menu>`. Not intended to be used separately.
  *
- * ### Styling
- *
- * See [`<vaadin-overlay>` documentation](https://github.com/vaadin/vaadin-overlay/blob/master/src/vaadin-overlay.html)
- * for `<vaadin-context-menu-overlay>` parts.
- *
- * #### Deprecated
- * `right-aligned` is deprecated in favor of `end-aligned`
- *
- * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
- *
- * @extends PolymerElement
- * @private
+ * @extends OverlayElement
+ * @protected
  */
 class ContextMenuOverlayElement extends OverlayElement {
   static get is() {

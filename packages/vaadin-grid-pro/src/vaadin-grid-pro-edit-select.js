@@ -9,14 +9,10 @@ import '@vaadin/vaadin-list-box/src/vaadin-list-box.js';
 import '@vaadin/vaadin-item/src/vaadin-item.js';
 
 /**
- * The cell editor select element.
+ * An element used internally by `<vaadin-grid-pro>`. Not intended to be used separately.
  *
- * ### Styling
- *
- * See [`<vaadin-select>` documentation](https://github.com/vaadin/vaadin-select/blob/master/src/vaadin-select.html)
- * for `<vaadin-grid-pro-edit-select>` parts.
- *
- * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+ * @extends SelectElement
+ * @private
  */
 class GridProEditSelectElement extends SelectElement {
   static get is() {

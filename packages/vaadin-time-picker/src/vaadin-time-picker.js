@@ -42,18 +42,16 @@ import './vaadin-time-picker-text-field.js';
  * `focused` | Set when the element is focused | :host
  * `focus-ring` | Set when the element is keyboard focused | :host
  *
- * In addition to `<vaadin-time-picker>` itself, the following internal
+ * ### Internal components
+ *
+ * In addition to `<vaadin-select>` itself, the following internal
  * components are themable:
  *
- * - `<vaadin-time-picker-text-field>`, see
- *   [`<vaadin-text-field>` documentation](https://vaadin.com/components/vaadin-text-field/html-api/elements/Vaadin.TextFieldElement)
- *   for the text field parts.
- * - `<vaadin-combo-box-light>`, see
- *   [`<vaadin-combo-box>` documentation](https://vaadin.com/components/vaadin-combo-box/html-api/elements/Vaadin.ComboBoxElement)
- *   for the combo box parts.
+ * - `<vaadin-time-picker-text-field>` - has the same API as [`<vaadin-text-field>`](#/elements/vaadin-text-field).
+ * - [`<vaadin-combo-box-light>`](#/elements/vaadin-combo-box-light).
  *
  * Note: the `theme` attribute value set on `<vaadin-time-picker>` is
- * propagated to the internal themable components listed above.
+ * propagated to the internal components listed above.
  *
  * @fires {Event} change - Fired when the user commits a value change.
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.

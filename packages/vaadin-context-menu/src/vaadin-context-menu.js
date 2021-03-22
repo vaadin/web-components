@@ -213,16 +213,23 @@ import './vaadin-context-menu-overlay.js';
  * ### Styling
  *
  * `<vaadin-context-menu>` uses `<vaadin-context-menu-overlay>` internal
- * themable component as the actual visible context menu overlay. See
- * See [`<vaadin-overlay>` documentation](https://github.com/vaadin/vaadin-overlay/blob/master/src/vaadin-overlay.html)
- * for `<vaadin-context-menu-overlay>` parts.
+ * themable component as the actual visible context menu overlay.
+ *
+ * See [`<vaadin-overlay>`](#/elements/vaadin-overlay)
+ * documentation for `<vaadin-context-menu-overlay>` stylable parts.
  *
  * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
  *
+ * ### Internal components
+ *
+ * When using `items` API, in addition `<vaadin-context-menu-overlay>`, the following
+ * internal components are themable:
+ *
+ * - `<vaadin-context-menu-item>` - has the same API as [`<vaadin-item>`](#/elements/vaadin-item).
+ * - `<vaadin-context-menu-list-box>` - has the same API as [`<vaadin-list-box>`](#/elements/vaadin-list-box).
+ *
  * Note: the `theme` attribute value set on `<vaadin-context-menu>` is
- * propagated to the internal `<vaadin-context-menu-overlay>` component.
- * In case of using nested menu items, the `theme` attribute is also propagated
- * to internal `vaadin-context-menu-list-box` and `vaadin-context-menu-item`'s.
+ * propagated to the internal components listed above.
  *
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  * @fires {CustomEvent} item-selected - Fired when an item is selected when the context menu is populated using the `items` API.

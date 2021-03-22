@@ -24,6 +24,13 @@ import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.
  * `content` | The message itself as a slotted content
  *
  * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+ *
+ * ### Internal components
+ *
+ * In addition to `<vaadin-message>` itself, the following internal
+ * components are themable:
+ *
+ * - `<vaadin-message-avatar>` - has the same API as [`<vaadin-avatar>`](#/elements/vaadin-avatar).
  */
 declare class MessageElement extends ThemableMixin(ElementMixin(HTMLElement)) {
   /**
