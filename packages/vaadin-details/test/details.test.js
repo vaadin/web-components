@@ -121,6 +121,10 @@ describe('vaadin-details', () => {
       expect(toggle.getAttribute('aria-expanded')).to.equal('true');
     });
 
+    it('should set aria-controls on toggle button', () => {
+      expect(/^vaadin-details-content-\d+$/.test(toggle.getAttribute('aria-controls'))).to.be.true;
+    });
+
     it('should set aria-hidden on the content to true by default', () => {
       expect(content.getAttribute('aria-hidden')).to.equal('true');
     });
@@ -128,6 +132,28 @@ describe('vaadin-details', () => {
     it('should set aria-hidden on the content to false when opened', () => {
       details.opened = true;
       expect(content.getAttribute('aria-hidden')).to.equal('false');
+    });
+
+    it('should set unique id on the content', () => {
+      const idRegex = /^vaadin-details-content-\d+$/;
+      const container = fixtureSync(`
+        <div>
+          <vaadin-details>
+            <div slot="summary">Summary</div>
+            <input>
+          </vaadin-details>
+          <vaadin-details>
+            <div slot="summary">Summary</div>
+            <input>
+          </vaadin-details>
+        </div>
+      `);
+      const details = container.querySelectorAll('vaadin-details');
+      const detailsId1 = details[0]._collapsible.id;
+      const detailsId2 = details[1]._collapsible.id;
+      expect(idRegex.test(detailsId1)).to.be.true;
+      expect(idRegex.test(detailsId2)).to.be.true;
+      expect(detailsId1).to.not.equal(detailsId2);
     });
   });
 
