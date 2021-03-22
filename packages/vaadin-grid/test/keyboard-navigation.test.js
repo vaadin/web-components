@@ -1827,6 +1827,18 @@ describe('keyboard navigation', () => {
 
       expect(spy.callCount).to.equal(1);
     });
+
+    it('should dispatch cell-focus on keyboard navigation', () => {
+      tabToBody();
+      right();
+
+      const spy = sinon.spy();
+      grid.addEventListener('cell-focus', spy);
+
+      left();
+
+      expect(spy.callCount).to.equal(1);
+    });
   });
 });
 
