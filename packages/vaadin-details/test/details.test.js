@@ -130,37 +130,38 @@ describe('vaadin-details', () => {
       expect(content.getAttribute('aria-hidden')).to.equal('false');
     });
 
-    describe('unique IDs', () => {
+    it('should set aria-controls on toggle button', () => {
       const idRegex = /^vaadin-details-content-\d+$/;
-      let container, details;
+      expect(idRegex.test(toggle.getAttribute('aria-controls'))).to.be.true;
+    });
+  });
 
-      beforeEach(() => {
-        container = fixtureSync(`
-          <div>
-            <vaadin-details>
-              <div slot="summary">Summary</div>
-              <input>
-            </vaadin-details>
-            <vaadin-details>
-              <div slot="summary">Summary</div>
-              <input>
-            </vaadin-details>
-          </div>
-        `);
-        details = container.querySelectorAll('vaadin-details');
-      });
+  describe('unique IDs', () => {
+    const idRegex = /^vaadin-details-content-\d+$/;
+    let container, details;
 
-      it('should set aria-controls on toggle button', () => {
-        expect(idRegex.test(toggle.getAttribute('aria-controls'))).to.be.true;
-      });
+    beforeEach(() => {
+      container = fixtureSync(`
+        <div>
+          <vaadin-details>
+            <div slot="summary">Summary</div>
+            <input>
+          </vaadin-details>
+          <vaadin-details>
+            <div slot="summary">Summary</div>
+            <input>
+          </vaadin-details>
+        </div>
+      `);
+      details = container.querySelectorAll('vaadin-details');
+    });
 
-      it('should set unique id on the content', () => {
-        const detailsId1 = details[0]._collapsible.id;
-        const detailsId2 = details[1]._collapsible.id;
-        expect(idRegex.test(detailsId1)).to.be.true;
-        expect(idRegex.test(detailsId2)).to.be.true;
-        expect(detailsId1).to.not.equal(detailsId2);
-      });
+    it('should set unique id on the content', () => {
+      const detailsId1 = details[0]._collapsible.id;
+      const detailsId2 = details[1]._collapsible.id;
+      expect(idRegex.test(detailsId1)).to.be.true;
+      expect(idRegex.test(detailsId2)).to.be.true;
+      expect(detailsId1).to.not.equal(detailsId2);
     });
   });
 
