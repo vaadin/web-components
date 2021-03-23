@@ -13,5 +13,5 @@ listBox.addEventListener('selected-changed', (event) => {
 });
 
 listBox.addEventListener('selected-values-changed', (event) => {
-  assert<string[]>(event.detail.value);
+  assert<number[]>(event.detail.value);
 });

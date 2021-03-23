@@ -21,7 +21,7 @@ interface MultiSelectListMixin extends ListMixin {
    * Array of indexes of the items selected in the items array
    * Note: Not updated when used in single selection mode.
    */
-  selectedValues: string[] | null | undefined;
+  selectedValues: number[] | null | undefined;
 
   _onMultipleClick(event: MouseEvent): void;
 }
