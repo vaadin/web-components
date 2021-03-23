@@ -506,7 +506,7 @@ export const KeyboardNavigationMixin = (superClass) =>
         cell._content.dispatchEvent(new CustomEvent('cell-focusin', { bubbles: false }));
 
         // Fire a public event for cell focus.
-        this.dispatchEvent(new CustomEvent('cell-focus'));
+        cell.dispatchEvent(new CustomEvent('cell-focus', { bubbles: true, composed: true }));
       }
 
       this._detectFocusedItemIndex(e);
