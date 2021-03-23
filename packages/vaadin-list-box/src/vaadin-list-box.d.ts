@@ -17,7 +17,7 @@ export type  ListBoxSelectedChanged = CustomEvent<{ value: number }>;
 /**
  * Fired when the `selectedValues` property changes.
  */
-export type  ListBoxSelectedValuesChanged = CustomEvent<{ value: Array<string> }>;
+export type  ListBoxSelectedValuesChanged = CustomEvent<{ value: Array<number> }>;
 
 export interface ListBoxElementEventMap {
   'items-changed': ListBoxItemsChanged;

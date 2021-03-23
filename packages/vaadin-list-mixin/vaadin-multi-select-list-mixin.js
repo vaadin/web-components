@@ -28,7 +28,7 @@ export const MultiSelectListMixin = (superClass) =>
         /**
          * Array of indexes of the items selected in the items array
          * Note: Not updated when used in single selection mode.
-         * @type {string[] | null | undefined}
+         * @type {number[] | null | undefined}
          */
         selectedValues: {
           type: Array,
