@@ -23,6 +23,8 @@
   "files": [
     "vaadin-*.d.ts",
     "vaadin-*.js",
+    "all-imports.d.ts",
+    "all-imports.js",
     "src",
     "theme"
   ],
