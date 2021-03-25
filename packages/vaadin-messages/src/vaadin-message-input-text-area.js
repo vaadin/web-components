@@ -12,7 +12,6 @@ registerStyles(
     :host {
       align-self: stretch;
       flex-grow: 1;
-      padding: 0;
     }
   `,
   { moduleId: 'vaadin-message-input-text-area-styles' }
