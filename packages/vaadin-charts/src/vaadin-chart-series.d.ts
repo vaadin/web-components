@@ -1,6 +1,6 @@
 import { Series, SeriesOptionsType } from 'highcharts';
 
-import { ChartSeriesMarkers, ChartSeriesOptions, ChartSeriesValues } from '../@types/interfaces';
+import { ChartSeriesMarkers, ChartSeriesOptions, ChartSeriesValues } from './interfaces';
 
 /**
  * `<vaadin-chart-series>` is a custom element for creating series for Vaadin Charts.
