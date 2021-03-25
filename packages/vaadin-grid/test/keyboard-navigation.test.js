@@ -1829,23 +1829,25 @@ describe('keyboard navigation', () => {
     });
 
     it('should dispatch cell-focus on keyboard navigation', (done) => {
+      const expectedContext = {
+        column: grid.querySelector('vaadin-grid-column'),
+        detailsOpened: false,
+        expanded: false,
+        index: 0,
+        item: 'foo',
+        level: 0,
+        section: 'body',
+        selected: false
+      };
+
       tabToBody();
       right();
 
       const spy = sinon.spy();
-      grid.addEventListener('cell-focus', spy);
 
       grid.addEventListener('cell-focus', (e) => {
-        const expectedContext = {
-          column: grid.querySelector('vaadin-grid-column'),
-          detailsOpened: false,
-          expanded: false,
-          index: 0,
-          item: 'foo',
-          level: 0,
-          section: 'body',
-          selected: false
-        };
+        spy();
+
         const context = e.target.getEventContext(e);
         expect(context).to.deep.equal(expectedContext);
         done();
@@ -1853,7 +1855,7 @@ describe('keyboard navigation', () => {
 
       left();
 
-      expect(spy.callCount).to.equal(1);
+      expect(spy.calledOnce).to.be.true;
     });
   });
 });
