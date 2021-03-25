@@ -11,7 +11,6 @@ registerStyles(
   css`
     :host {
       flex-shrink: 0;
-      margin: 0;
     }
   `,
   { moduleId: 'vaadin-message-input-button-styles' }
