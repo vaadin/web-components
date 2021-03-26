@@ -17,7 +17,6 @@ export type AppLayoutOverlayChanged = CustomEvent<{ value: boolean }>;
  */
 export type AppLayoutPrimarySectionChanged = CustomEvent<{ value: 'navbar' | 'drawer' }>;
 
-
 export interface AppLayoutElementEventMap {
   'drawer-opened-changed': AppLayoutDrawerOpenedChanged;
 
@@ -94,6 +93,7 @@ export type AppLayoutEventMap = HTMLElementEventMap & AppLayoutElementEventMap;
  * ### Navigation
  *
  * As the drawer opens as an overlay in small devices, it makes sense to close it once a navigation happens.
+ * If you are using Vaadin Router, this will happen automatically unless you change the `closeDrawerOn` event name.
  *
  * In order to do so, there are two options:
  * - If the `vaadin-app-layout` instance is available, then `drawerOpened` can be set to `false`
@@ -138,6 +138,14 @@ declare class AppLayoutElement extends ElementMixin(ThemableMixin(HTMLElement)) 
    * Controlled via CSS using `--vaadin-app-layout-drawer-overlay: true|false`;
    */
   readonly overlay: boolean;
+
+  /**
+   * A global event that causes the drawer to close (be hidden) when it is in overlay mode.
+   * - The default is `vaadin-router-location-changed` dispatched by Vaadin Router
+   *
+   * @attr {string} close-drawer-on
+   */
+  closeDrawerOn: string;
 
   /**
    * Helper static method that dispatches a `close-overlay-drawer` event
