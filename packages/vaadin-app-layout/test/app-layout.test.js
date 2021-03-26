@@ -162,6 +162,7 @@ describe('vaadin-app-layout', () => {
       window.dispatchEvent(new CustomEvent('vaadin-router-location-changed'));
       expect(layout.drawerOpened).to.be.true;
     });
+
     describe('overlay mode', () => {
       beforeEach(() => {
         // force overlay=true to show backdrop
