@@ -41,6 +41,13 @@ describe('app-layout', () => {
         element.primarySection = 'drawer';
         await visualDiff(div, `app-layout:${dir}-primary-drawer`);
       });
+
+      it('overlay', async () => {
+        // See https://github.com/vaadin/vaadin-app-layout/issues/183
+        element.style.setProperty('--vaadin-app-layout-drawer-overlay', ' true');
+        window.dispatchEvent(new Event('resize'));
+        await visualDiff(div, `app-layout:${dir}-overlay`);
+      });
     });
   });
 });

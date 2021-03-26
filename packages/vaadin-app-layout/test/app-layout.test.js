@@ -158,6 +158,9 @@ describe('vaadin-app-layout', () => {
     });
 
     it('should not close on navigation event when not in overlay mode', () => {
+      // force it to desktop layout
+      layout.style.setProperty('--vaadin-app-layout-drawer-overlay', 'false');
+      layout._updateOverlayMode();
       layout.drawerOpened = true;
       window.dispatchEvent(new CustomEvent('vaadin-router-location-changed'));
       expect(layout.drawerOpened).to.be.true;
