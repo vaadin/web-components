@@ -219,6 +219,7 @@ describe('vaadin-app-layout', () => {
         window.dispatchEvent(new CustomEvent('vaadin-router-location-changed'));
         expect(layout.drawerOpened).to.be.false;
       });
+
       it('should only close on custom navigation event when in overlay mode', () => {
         layout.drawerOpened = true;
         layout.closeDrawerOn = 'foo-bar';

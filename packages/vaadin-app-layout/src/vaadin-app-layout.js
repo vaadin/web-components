@@ -543,6 +543,7 @@ class AppLayoutElement extends ElementMixin(ThemableMixin(PolymerElement)) {
 
     // TODO(jouni): ARIA attributes. The drawer should act similar to a modal dialog when in ”overlay” mode
   }
+
   /** @private */
   _closeDrawerOnChanged(closeDrawerOn, oldCloseDrawerOn) {
     if (oldCloseDrawerOn) {

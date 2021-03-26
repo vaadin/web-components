@@ -17,7 +17,6 @@ export type AppLayoutOverlayChanged = CustomEvent<{ value: boolean }>;
  */
 export type AppLayoutPrimarySectionChanged = CustomEvent<{ value: 'navbar' | 'drawer' }>;
 
-
 export interface AppLayoutElementEventMap {
   'drawer-opened-changed': AppLayoutDrawerOpenedChanged;
 
