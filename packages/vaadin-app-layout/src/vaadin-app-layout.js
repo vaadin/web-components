@@ -513,7 +513,7 @@ class AppLayoutElement extends ElementMixin(ThemableMixin(PolymerElement)) {
 
   /** @protected */
   _updateOverlayMode() {
-    const overlay = getComputedStyle(this).getPropertyValue('--vaadin-app-layout-drawer-overlay') == 'true';
+    const overlay = this._getCustomPropertyValue('--vaadin-app-layout-drawer-overlay') == 'true';
     const drawer = this.$.drawer;
 
     if (!this.overlay && overlay) {
@@ -559,9 +559,15 @@ class AppLayoutElement extends ElementMixin(ThemableMixin(PolymerElement)) {
     this.drawerOpened = false;
   }
 
+  /** @private */
+  _getCustomPropertyValue(customProperty) {
+    const customPropertyValue = getComputedStyle(this).getPropertyValue(customProperty);
+    return (customPropertyValue || '').trim().toLowerCase();
+  }
+
   /** @protected */
   _updateTouchOptimizedMode() {
-    const touchOptimized = getComputedStyle(this).getPropertyValue('--vaadin-app-layout-touch-optimized') == 'true';
+    const touchOptimized = this._getCustomPropertyValue('--vaadin-app-layout-touch-optimized') == 'true';
 
     const navbarItems = this.querySelectorAll('[slot*="navbar"]');
 
