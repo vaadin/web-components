@@ -504,6 +504,9 @@ export const KeyboardNavigationMixin = (superClass) =>
         }
         // Inform cell content of the focus (used in <vaadin-grid-sorter>)
         cell._content.dispatchEvent(new CustomEvent('cell-focusin', { bubbles: false }));
+
+        // Fire a public event for cell focus.
+        cell.dispatchEvent(new CustomEvent('cell-focus', { bubbles: true, composed: true }));
       }
 
       this._detectFocusedItemIndex(e);
