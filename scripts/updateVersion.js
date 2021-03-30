@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 const spawn = require('cross-spawn');
 const replace = require('replace-in-file');
+const oldVersion = require('../lerna.json').version;
 
 /**
  * Runs the command without opening a new shell.
@@ -32,16 +33,9 @@ async function exe(cmd, quiet) {
   );
 }
 
-const oldVersion = process.env.npm_config_version;
-if (!oldVersion) {
-  console.log('No old version found');
-  process.exit(1);
-}
-
 const version = process.env.npm_config_bump;
 if (!version) {
-  console.log('No new version found');
-  process.exit(1);
+  throw new Error('No new version found');
 }
 
 async function main() {
