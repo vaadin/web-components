@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-form-layout",
-  "version": "20.0.0-alpha2",
+  "version": "20.0.0-alpha3",
   "description": "Web component providing configurable responsive layout for form elements",
   "main": "vaadin-form-layout.js",
   "module": "vaadin-form-layout.js",
@@ -27,16 +27,16 @@
   "dependencies": {
     "@polymer/iron-resizable-behavior": "^3.0.0",
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/vaadin-element-mixin": "^20.0.0-alpha2",
-    "@vaadin/vaadin-lumo-styles": "^20.0.0-alpha2",
-    "@vaadin/vaadin-material-styles": "^20.0.0-alpha2",
-    "@vaadin/vaadin-themable-mixin": "^20.0.0-alpha2"
+    "@vaadin/vaadin-element-mixin": "^20.0.0-alpha3",
+    "@vaadin/vaadin-lumo-styles": "^20.0.0-alpha3",
+    "@vaadin/vaadin-material-styles": "^20.0.0-alpha3",
+    "@vaadin/vaadin-themable-mixin": "^20.0.0-alpha3"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.1.5",
     "@open-wc/testing-helpers": "^1.8.12",
-    "@vaadin/vaadin-ordered-layout": "^20.0.0-alpha2",
-    "@vaadin/vaadin-text-field": "^20.0.0-alpha2",
+    "@vaadin/vaadin-ordered-layout": "^20.0.0-alpha3",
+    "@vaadin/vaadin-text-field": "^20.0.0-alpha3",
     "sinon": "^9.2.1"
   },
   "publishConfig": {
