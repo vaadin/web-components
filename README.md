@@ -154,6 +154,8 @@ Setup the repo:
 yarn
 ```
 
+### Unit tests
+
 Run all tests in Chrome:
 
 ```sh
@@ -182,6 +184,40 @@ Debug tests for single package:
 
 ```sh
 yarn debug --group vaadin-upload
+```
+
+### Visual tests
+
+To run the visual tests, please define `SAUCE_USERNAME` and `SAUCE_ACCESS_KEY` env variables.
+
+Run tests for Lumo:
+
+```sh
+yarn test:lumo
+```
+
+Run tests for Material:
+
+```sh
+yarn test:material
+```
+
+Update reference screenshots for Lumo:
+
+```sh
+yarn update:lumo
+```
+
+Update reference screenshots forMaterial:
+
+```sh
+yarn update:material
+```
+
+Update screenshots for single package:
+
+```sh
+yarn update:lumo --group vaadin-upload
 ```
 
 ## LICENSE
