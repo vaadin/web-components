@@ -208,7 +208,7 @@ Update reference screenshots for Lumo:
 yarn update:lumo
 ```
 
-Update reference screenshots forMaterial:
+Update reference screenshots for Material:
 
 ```sh
 yarn update:material
