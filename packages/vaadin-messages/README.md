@@ -1,8 +1,8 @@
 # &lt;vaadin-messages&gt;
 
-[Live Demo ↗](https://vaadin.com/components/vaadin-messages/html-examples)
+[Live demo and examples ↗ ](https://vaadin.com/docs/latest/ds/components/messages)
 |
-[API documentation ↗](https://vaadin.com/components/vaadin-messages/html-api)
+[API documentation ↗](https://cdn.vaadin.com/vaadin-messages/1.0.1/)
 
 [&lt;vaadin-message-list&gt;](https://vaadin.com/components/vaadin-messages) is a Web Component for showing a list of messages, part of the [Vaadin components](https://vaadin.com/components).
 
