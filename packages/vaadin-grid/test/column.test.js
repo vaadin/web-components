@@ -552,4 +552,13 @@ describe('column', () => {
       expect(column._bodyTemplate).to.eql(template2);
     });
   });
+
+  it('should not throw an exception when size is changed after removing column', () => {
+    expect(grid.size).to.equal(10);
+    const column = grid.querySelector('vaadin-grid-column');
+    expect(column.isConnected).to.be.true;
+    column.remove();
+    grid.size = 11;
+    expect(column.isConnected).to.be.false;
+  });
 });
