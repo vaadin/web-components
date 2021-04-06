@@ -508,7 +508,9 @@ class GridElement extends ElementMixin(
     }
 
     if (this._columnTree) {
-      this._columnTree[this._columnTree.length - 1].forEach((c) => c.notifyPath && c.notifyPath('_cells.*', c._cells));
+      this._columnTree[this._columnTree.length - 1].forEach(
+        (c) => c.isConnected && c.notifyPath && c.notifyPath('_cells.*', c._cells)
+      );
     }
 
     beforeNextRender(this, () => {
