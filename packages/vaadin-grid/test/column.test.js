@@ -552,4 +552,13 @@ describe('column', () => {
       expect(column._bodyTemplate).to.eql(template2);
     });
   });
+
+  it('should not throw an exception when size is changed after removing column', () => {
+    expect(grid.size).to.equal(10);
+    expect(column.isConnected).to.be.true;
+    column.remove();
+    expect(column.isConnected).to.be.false;
+    expect(() => (grid.size = 11)).not.to.throw();
+    expect(grid.size).to.equal(11);
+  });
 });
