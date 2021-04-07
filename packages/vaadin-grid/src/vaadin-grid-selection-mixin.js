@@ -44,7 +44,7 @@ export const SelectionMixin = (superClass) =>
      */
     selectItem(item) {
       if (!this._isSelected(item)) {
-        this.push('selectedItems', item);
+        this.selectedItems = [...this.selectedItems, item];
       }
     }
 
@@ -55,9 +55,8 @@ export const SelectionMixin = (superClass) =>
      * @param {!GridItem} item The item object
      */
     deselectItem(item) {
-      const index = this._getItemIndexInArray(item, this.selectedItems);
-      if (index > -1) {
-        this.splice('selectedItems', index, 1);
+      if (this._isSelected(item)) {
+        this.selectedItems = this.selectedItems.filter((i) => !this._itemsEqual(i, item));
       }
     }
 

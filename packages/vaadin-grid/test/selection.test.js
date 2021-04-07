@@ -213,6 +213,14 @@ describe('multi selection column', () => {
     expect(grid._isSelected(cachedItems[0])).to.be.true;
   });
 
+  it('should dispatch one event on selection', () => {
+    const spy = sinon.spy();
+    grid.addEventListener('selected-items-changed', spy);
+    firstBodyCheckbox.checked = true;
+    expect(spy.callCount).to.equal(1);
+    expect(spy.getCall(0).args[0].detail.value).to.equal(grid.selectedItems);
+  });
+
   it('should add the item to selectedItems when row is clicked and auto-select is enabled', () => {
     const cell = getRowCells(rows[1])[1];
     cell.click();
@@ -393,24 +401,6 @@ describe('multi selection column', () => {
 
     expect(selectionColumn.selectAll).to.be.true;
     expect(selectAllCheckbox.indeterminate).to.be.false;
-  });
-
-  it('should not reassign selectedItems array when selecting all manually', () => {
-    selectAllCheckbox.click();
-    firstBodyCheckbox.checked = false;
-
-    const details = [];
-    const spy = sinon.spy((e) => {
-      // event object gets reused so need to store the details before asserting.
-      details.push(e.detail);
-    });
-    grid.addEventListener('selected-items-changed', spy);
-
-    firstBodyCheckbox.checked = true;
-
-    expect(details.length).to.eql(2); // should have 3rd event with path 'selectedItems'
-    expect(details[0].path).to.eql('selectedItems.splices');
-    expect(details[1].path).to.eql('selectedItems.length');
   });
 
   it('should select-all when all items are selected', () => {
