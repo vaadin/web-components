@@ -182,7 +182,7 @@ export const RowDetailsMixin = (superClass) =>
      */
     openItemDetails(item) {
       if (!this._isDetailsOpened(item)) {
-        this.push('detailsOpenedItems', item);
+        this.detailsOpenedItems = [...this.detailsOpenedItems, item];
       }
     }
 
@@ -192,7 +192,7 @@ export const RowDetailsMixin = (superClass) =>
      */
     closeItemDetails(item) {
       if (this._isDetailsOpened(item)) {
-        this.splice('detailsOpenedItems', this._getItemIndexInArray(item, this.detailsOpenedItems), 1);
+        this.detailsOpenedItems = this.detailsOpenedItems.filter((i) => !this._itemsEqual(i, item));
       }
     }
 
