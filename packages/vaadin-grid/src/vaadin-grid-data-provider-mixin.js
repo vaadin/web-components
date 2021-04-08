@@ -288,7 +288,7 @@ export const DataProviderMixin = (superClass) =>
      */
     expandItem(item) {
       if (!this._isExpanded(item)) {
-        this.push('expandedItems', item);
+        this.expandedItems = [...this.expandedItems, item];
       }
     }
 
@@ -298,7 +298,7 @@ export const DataProviderMixin = (superClass) =>
      */
     collapseItem(item) {
       if (this._isExpanded(item)) {
-        this.splice('expandedItems', this._getItemIndexInArray(item, this.expandedItems), 1);
+        this.expandedItems = this.expandedItems.filter((i) => !this._itemsEqual(i, item));
       }
     }
 

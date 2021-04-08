@@ -786,7 +786,7 @@ class UploadElement extends ElementMixin(ThemableMixin(PolymerElement)) {
     file.loaded = 0;
     file.held = true;
     file.status = this.i18n.uploading.status.held;
-    this.unshift('files', file);
+    this.files = [file, ...this.files];
 
     if (!this.noAuto) {
       this._uploadFile(file);
@@ -800,7 +800,7 @@ class UploadElement extends ElementMixin(ThemableMixin(PolymerElement)) {
    */
   _removeFile(file) {
     if (this.files.indexOf(file) > -1) {
-      this.splice('files', this.files.indexOf(file), 1);
+      this.files = this.files.filter((i) => i !== file);
     }
   }
 

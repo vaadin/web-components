@@ -103,7 +103,7 @@ export const MultiSelectListMixin = (superClass) =>
 
       // Changing from single to multiple selection, add selected to selectedValues.
       if (value && !oldValue && this.selected !== undefined) {
-        this.push('selectedValues', this.selected);
+        this.selectedValues = [...this.selectedValues, this.selected];
         this.selected = undefined;
       }
     }
