@@ -6,8 +6,8 @@
  * Example
  *   ./scripts/generateReleaseNotes.js --from from_tag --to to_tag --compact
  *
- * When --to is not given HEAD is selected.
- * When --from is not given latest tag is selected.
+ * When --to is not given the latest tag is selected.
+ * When --from is not given the previous tag is selected.
  * When --compact is set, components are not listed, default is false
  */
 
@@ -51,12 +51,12 @@ async function getReleases() {
   if (!from) {
     const branch = await run(`git rev-parse --abbrev-ref HEAD`);
     await run(`git pull origin ${branch} --tags`);
-    const tags = await run(`git tag --merged ${branch} --sort=-committerdate`);
-    from = tags.split('\n')[0];
+    const tags = await run(`git tag --merged ${branch} --sort='-*committerdate'`);
+    from = tags.split('\n')[1];
   }
 
   if (!to) {
-    to = 'HEAD';
+    to = `v${version}`;
   }
 }
 
