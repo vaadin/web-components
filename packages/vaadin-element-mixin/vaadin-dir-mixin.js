@@ -45,7 +45,7 @@ export const DirMixin = (superClass) =>
          */
         dir: {
           type: String,
-          readOnly: true
+          reflectToAttribute: true
         }
       };
     }

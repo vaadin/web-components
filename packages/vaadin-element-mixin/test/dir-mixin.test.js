@@ -50,18 +50,34 @@ describe('DirMixin', () => {
     await expectDirections(['rtl', 'ltr', '', 'rtl', null], ['rtl', 'ltr', null, 'rtl', null]);
   });
 
-  it('should preserve direction if was set by the user', async () => {
+  it('should preserve direction if was set by the user with setAttribute', async () => {
     element.setAttribute('dir', 'ltr');
 
     await expectDirections(['rtl', 'ltr', '', 'rtl', null], ['ltr', 'ltr', 'ltr', 'ltr', 'ltr']);
   });
 
-  it('should subscribe to the changes if set to equal the document direction', async () => {
+  it('should preserve direction if was set by the user with property', async () => {
+    element.dir = 'ltr';
+
+    await expectDirections(['rtl', 'ltr', '', 'rtl', null], ['ltr', 'ltr', 'ltr', 'ltr', 'ltr']);
+  });
+
+  it('should subscribe to the changes if set to equal the document direction using setAttribute', async () => {
     element.setAttribute('dir', 'ltr');
 
     await expectDirections(['rtl', 'ltr', 'rtl'], ['ltr', 'ltr', 'ltr']);
 
     element.setAttribute('dir', 'rtl');
+
+    await expectDirections(['ltr', 'rtl', ''], ['ltr', 'rtl', null]);
+  });
+
+  it('should subscribe to the changes if set to equal the document direction using property', async () => {
+    element.dir = 'ltr';
+
+    await expectDirections(['rtl', 'ltr', 'rtl'], ['ltr', 'ltr', 'ltr']);
+
+    element.dir = 'rtl';
 
     await expectDirections(['ltr', 'rtl', ''], ['ltr', 'rtl', null]);
   });
@@ -76,10 +92,28 @@ describe('DirMixin', () => {
     await expectDirections(['ltr', 'rtl', ''], ['ltr', 'rtl', null]);
   });
 
-  it('should unsubscribe if attribute set by the user', async () => {
+  it('should subscribe to the changes if property cleared', async () => {
+    element.dir = 'ltr';
+
+    await expectDirections(['rtl', 'ltr', 'rtl'], ['ltr', 'ltr', 'ltr']);
+
+    element.dir = '';
+
+    await expectDirections(['ltr', 'rtl', ''], ['ltr', 'rtl', null]);
+  });
+
+  it('should unsubscribe if attribute set by the user with setAttribute', async () => {
     await expectDirections(['rtl', 'ltr', 'rtl'], ['rtl', 'ltr', 'rtl']);
 
     element.setAttribute('dir', 'ltr');
+
+    await expectDirections(['ltr', 'rtl', ''], ['ltr', 'ltr', 'ltr']);
+  });
+
+  it('should unsubscribe if attribute set by the user with property', async () => {
+    await expectDirections(['rtl', 'ltr', 'rtl'], ['rtl', 'ltr', 'rtl']);
+
+    element.dir = 'ltr';
 
     await expectDirections(['ltr', 'rtl', ''], ['ltr', 'ltr', 'ltr']);
   });
