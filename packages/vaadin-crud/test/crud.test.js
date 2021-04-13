@@ -391,6 +391,13 @@ describe('crud', () => {
         expect(crud.__isNew).not.to.be.true;
       });
 
+      it('should configure new flag when editedItem changed', async () => {
+        crud.editedItem = crud.items[0];
+        btnCancel().click();
+        await nextRender(crud);
+        expect(crud.__isNew).not.to.be.true;
+      });
+
       it('should set dirty on editor changes', () => {
         edit(crud.items[0]);
         change();
