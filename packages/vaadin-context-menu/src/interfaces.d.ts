@@ -10,7 +10,7 @@ export interface ContextMenuItem {
 
 export interface ContextMenuRendererContext {
   target: HTMLElement;
-  detail?: object;
+  detail?: { sourceEvent: Event };
 }
 
 export type ContextMenuRenderer = (
