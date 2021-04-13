@@ -257,6 +257,16 @@ describe('login form', () => {
     expect(login.error).to.be.false;
     expect(login.disabled).to.be.true;
   });
+
+  it('should autofocus the username field when requested', () => {
+    const noFocus = fixtureSync('<vaadin-login-form></vaadin-login-form>');
+    const noFocusUsernameElement = noFocus.$.vaadinLoginUsername;
+    expect(document.activeElement).not.to.equal(noFocusUsernameElement);
+
+    const autoFocus = fixtureSync('<vaadin-login-form auto-focus-username></vaadin-login-form>');
+    const focusUsernameElement = autoFocus.$.vaadinLoginUsername;
+    expect(document.activeElement).to.equal(focusUsernameElement.inputElement);
+  });
 });
 
 describe('no forgot password', () => {

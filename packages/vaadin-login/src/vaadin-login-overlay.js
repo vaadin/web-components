@@ -171,6 +171,9 @@ class LoginOverlayElement extends LoginMixin(ElementMixin(ThemableMixin(PolymerE
       // https://github.com/vaadin/vaadin-overlay/blob/041cde4481b6262eac68d3a699f700216d897373/src/vaadin-overlay.html#L660
       document.body.style.pointerEvents = this.$.vaadinLoginOverlayWrapper._previousDocumentPointerEvents;
     }
+    if (this.autoFocusUsername) {
+      this.$.vaadinLoginForm.$.vaadinLoginUsername.focus();
+    }
   }
 
   /** @private */
