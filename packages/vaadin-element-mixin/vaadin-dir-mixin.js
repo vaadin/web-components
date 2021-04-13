@@ -45,6 +45,7 @@ export const DirMixin = (superClass) =>
          */
         dir: {
           type: String,
+          value: '',
           reflectToAttribute: true
         }
       };
@@ -96,6 +97,27 @@ export const DirMixin = (superClass) =>
       super.disconnectedCallback();
       this.__subscribe(false);
       this.removeAttribute('dir');
+    }
+
+    /** @protected */
+    _valueToNodeAttribute(node, value, attribute) {
+      // Override default Polymer attribute reflection to match native behavior of HTMLElement.dir property
+      // If the property contains an empty string then it should not create an empty attribute
+      if (attribute === 'dir' && value === '' && !node.hasAttribute('dir')) {
+        return;
+      }
+      super._valueToNodeAttribute(node, value, attribute);
+    }
+
+    /** @protected */
+    _attributeToProperty(attribute, value, type) {
+      // Override default Polymer attribute reflection to match native behavior of HTMLElement.dir property
+      // If the attribute is removed, then the dir property should contain an empty string instead of null
+      if (attribute === 'dir' && !value) {
+        this.dir = '';
+      } else {
+        super._attributeToProperty(attribute, value, type);
+      }
     }
 
     /** @private */
