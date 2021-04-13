@@ -1,12 +1,12 @@
 import { GridDragAndDropFilter, GridDropMode, GridItemModel } from './interfaces';
 
-declare function DragAndDropMixin<T extends new (...args: any[]) => {}>(base: T): T & DragAndDropMixinConstructor;
+declare function DragAndDropMixin<TItem, T extends new (...args: any[]) => {}>(base: T): T & DragAndDropMixinConstructor<TItem>;
 
-interface DragAndDropMixinConstructor {
-  new (...args: any[]): DragAndDropMixin;
+interface DragAndDropMixinConstructor<TItem> {
+  new (...args: any[]): DragAndDropMixin<TItem>;
 }
 
-interface DragAndDropMixin {
+interface DragAndDropMixin<TItem> {
   /**
    * Defines the locations within the Grid row where an element can be dropped.
    *
@@ -65,7 +65,7 @@ interface DragAndDropMixin {
    */
   filterDragAndDrop(): void;
 
-  _filterDragAndDrop(row: HTMLElement, model: GridItemModel): void;
+  _filterDragAndDrop(row: HTMLElement, model: GridItemModel<TItem>): void;
 }
 
 export { DragAndDropMixin, DragAndDropMixinConstructor };

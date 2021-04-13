@@ -6,8 +6,6 @@ interface ColumnResizingMixinConstructor {
 
 export { ColumnResizingMixinConstructor };
 
-interface ColumnResizingMixin {
-  ready(): void;
-}
+interface ColumnResizingMixin {}
 
 export { ColumnResizingMixin };

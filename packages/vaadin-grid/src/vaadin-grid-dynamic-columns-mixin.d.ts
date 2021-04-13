@@ -2,14 +2,14 @@ import { GridColumnGroupElement } from './vaadin-grid-column-group.js';
 
 import { GridColumnElement } from './vaadin-grid-column.js';
 
-declare function DynamicColumnsMixin<T extends new (...args: any[]) => {}>(base: T): T & DynamicColumnsMixinConstructor;
+declare function DynamicColumnsMixin<TItem, T extends new (...args: any[]) => {}>(base: T): T & DynamicColumnsMixinConstructor<TItem>;
 
-interface DynamicColumnsMixinConstructor {
-  new (...args: any[]): DynamicColumnsMixin;
+interface DynamicColumnsMixinConstructor<TItem> {
+  new (...args: any[]): DynamicColumnsMixin<TItem>;
 }
 
-interface DynamicColumnsMixin {
-  _getChildColumns(el: GridColumnGroupElement): GridColumnElement[];
+interface DynamicColumnsMixin<TItem> {
+  _getChildColumns(el: GridColumnGroupElement<TItem>): GridColumnElement<TItem>[];
 
   _updateColumnTree(): void;
 

@@ -1,17 +1,17 @@
 import { GridElement } from './vaadin-grid.js';
 
-import { GridBodyRenderer, GridColumnTextAlign, GridHeaderFooterRenderer } from './interfaces';
+import { GridBodyRenderer, GridColumnTextAlign, GridHeaderFooterRenderer, DefaultGridItem } from './interfaces';
 
-declare function ColumnBaseMixin<T extends new (...args: any[]) => {}>(base: T): T & ColumnBaseMixinConstructor;
+type TypedConstructor<T> = new (...args: any[]) => T;
 
-interface ColumnBaseMixinConstructor {
-  new (...args: any[]): ColumnBaseMixin;
+declare function ColumnBaseMixin<TItem, TBase>(base: TypedConstructor<TBase>): ColumnBaseMixinConstructor<TBase, TItem>;
+
+export interface ColumnBaseMixinConstructor<TBase, TItem> {
+  new (...args: any[]): TBase & ColumnBaseMixin<TItem>;
 }
 
-export { ColumnBaseMixinConstructor };
-
-interface ColumnBaseMixin {
-  readonly _grid: GridElement | undefined;
+interface ColumnBaseMixin<TItem> {
+  readonly _grid: GridElement<TItem> | undefined;
   readonly _allCells: HTMLElement[];
 
   /**
@@ -32,7 +32,7 @@ interface ColumnBaseMixin {
   /**
    * When set to true, the cells for this column are hidden.
    */
-  hidden: boolean | null | undefined;
+  hidden: boolean;
 
   /**
    * Text content to display in the header cell of the column.
@@ -59,7 +59,7 @@ interface ColumnBaseMixin {
    * - `root` The header cell content DOM element. Append your content to it.
    * - `column` The `<vaadin-grid-column>` element.
    */
-  headerRenderer: GridHeaderFooterRenderer | null | undefined;
+  headerRenderer: GridHeaderFooterRenderer<TItem> | null | undefined;
 
   /**
    * Custom function for rendering the footer content.
@@ -68,9 +68,9 @@ interface ColumnBaseMixin {
    * - `root` The footer cell content DOM element. Append your content to it.
    * - `column` The `<vaadin-grid-column>` element.
    */
-  footerRenderer: GridHeaderFooterRenderer | null | undefined;
+  footerRenderer: GridHeaderFooterRenderer<TItem> | null | undefined;
 
-  _findHostGrid(): GridElement | undefined;
+  _findHostGrid(): GridElement<TItem> | undefined;
 
   _prepareHeaderTemplate(): HTMLTemplateElement | null;
 
@@ -92,8 +92,8 @@ interface ColumnBaseMixin {
     headerCell: HTMLTableCellElement | undefined,
     footerCell: HTMLTableCellElement | undefined,
     cells: object | undefined,
-    renderer: GridBodyRenderer | null | undefined,
-    headerRenderer: GridHeaderFooterRenderer | null | undefined,
+    renderer: GridBodyRenderer<TItem> | null | undefined,
+    headerRenderer: GridHeaderFooterRenderer<TItem> | null | undefined,
     bodyTemplate: HTMLTemplateElement | null | undefined,
     headerTemplate: HTMLTemplateElement | null | undefined
   ): void;
@@ -103,6 +103,8 @@ interface ColumnBaseMixin {
   _toggleAttribute(name: string, bool: boolean, node: Element): void;
 }
 
+interface GridColumnElement<TItem = DefaultGridItem> extends ColumnBaseMixin<TItem> {}
+
 /**
  * A `<vaadin-grid-column>` is used to configure how a column in `<vaadin-grid>`
  * should look like.
@@ -110,7 +112,7 @@ interface ColumnBaseMixin {
  * See [`<vaadin-grid>`](#/elements/vaadin-grid) documentation for instructions on how
  * to configure the `<vaadin-grid-column>`.
  */
-declare class GridColumnElement extends ColumnBaseMixin(HTMLElement) {
+declare class GridColumnElement<TItem = DefaultGridItem> extends HTMLElement {
   /**
    * Width of the cells for this column.
    */
@@ -136,7 +138,7 @@ declare class GridColumnElement extends ColumnBaseMixin(HTMLElement) {
    *   - `model.level` Level of the tree represented with a horizontal offset of the toggle button.
    *   - `model.selected` Selected state.
    */
-  renderer: GridBodyRenderer | null | undefined;
+  renderer: GridBodyRenderer<TItem> | null | undefined;
 
   /**
    * Path to an item sub-property whose value gets displayed in the column body cells.
@@ -169,7 +171,7 @@ declare class GridColumnElement extends ColumnBaseMixin(HTMLElement) {
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-grid-column': GridColumnElement;
+    'vaadin-grid-column': GridColumnElement<DefaultGridItem>;
   }
 }
 

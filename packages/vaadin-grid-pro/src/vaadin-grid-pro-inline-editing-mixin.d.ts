@@ -1,11 +1,9 @@
-import { GridItem } from '@vaadin/vaadin-grid';
-
-declare function InlineEditingMixin<T extends new (...args: any[]) => {}>(base: T): T & InlineEditingMixinConstructor;
-interface InlineEditingMixinConstructor {
-  new (...args: any[]): InlineEditingMixin;
+declare function InlineEditingMixin<TItem, T extends new (...args: any[]) => {}>(base: T): T & InlineEditingMixinConstructor<TItem>;
+interface InlineEditingMixinConstructor<TItem> {
+  new (...args: any[]): InlineEditingMixin<TItem>;
 }
 
-interface InlineEditingMixin {
+interface InlineEditingMixin<TItem> {
   /**
    * When true, pressing Enter while in cell edit mode
    * will move focus to the editable cell in the next row
@@ -36,8 +34,6 @@ interface InlineEditingMixin {
   _stopEdit(shouldCancel?: boolean, shouldRestoreFocus?: boolean): void;
 
   _switchEditCell(e: KeyboardEvent): void;
-
-  _updateItem(row: HTMLElement, item: GridItem | null): void;
 }
 
 export { InlineEditingMixin, InlineEditingMixinConstructor };

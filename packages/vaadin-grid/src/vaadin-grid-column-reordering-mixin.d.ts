@@ -1,23 +1,23 @@
 import { GridColumnElement } from './vaadin-grid-column.js';
 
-declare function ColumnReorderingMixin<T extends new (...args: any[]) => {}>(
+declare function ColumnReorderingMixin<TItem, T extends new (...args: any[]) => {}>(
   base: T
-): T & ColumnReorderingMixinConstructor;
+): T & ColumnReorderingMixinConstructor<TItem>;
 
-interface ColumnReorderingMixinConstructor {
-  new (...args: any[]): ColumnReorderingMixin;
+interface ColumnReorderingMixinConstructor<TItem> {
+  new (...args: any[]): ColumnReorderingMixin<TItem>;
 }
 
 export { ColumnReorderingMixinConstructor };
 
-interface ColumnReorderingMixin {
+interface ColumnReorderingMixin<TItem> {
   /**
    * Set to true to allow column reordering.
    * @attr {boolean} column-reordering-allowed
    */
   columnReorderingAllowed: boolean;
 
-  _getColumnsInOrder(): GridColumnElement[];
+  _getColumnsInOrder(): GridColumnElement<TItem>[];
 
   _cellFromPoint(x: number, y: number): HTMLElement | null | undefined;
 
@@ -25,23 +25,23 @@ interface ColumnReorderingMixin {
 
   _updateGhost(cell: HTMLElement): HTMLElement;
 
-  _setSiblingsReorderStatus(column: GridColumnElement, status: string): void;
+  _setSiblingsReorderStatus(column: GridColumnElement<TItem>, status: string): void;
 
   _autoScroller(): void;
 
   _isSwapAllowed(
-    column1: GridColumnElement | null | undefined,
-    column2: GridColumnElement | null | undefined
+    column1: GridColumnElement<TItem> | null | undefined,
+    column2: GridColumnElement<TItem> | null | undefined
   ): boolean | undefined;
 
-  _isSwappableByPosition(targetColumn: GridColumnElement, clientX: number): boolean;
+  _isSwappableByPosition(targetColumn: GridColumnElement<TItem>, clientX: number): boolean;
 
-  _swapColumnOrders(column1: GridColumnElement, column2: GridColumnElement): void;
+  _swapColumnOrders(column1: GridColumnElement<TItem>, column2: GridColumnElement<TItem>): void;
 
   _getTargetColumn(
     targetCell: HTMLElement | null | undefined,
-    draggedColumn: GridColumnElement | null
-  ): GridColumnElement | null | undefined;
+    draggedColumn: GridColumnElement<TItem> | null
+  ): GridColumnElement<TItem> | null | undefined;
 }
 
 export { ColumnReorderingMixin };

@@ -1,16 +1,15 @@
+import { DefaultGridItem } from '@vaadin/vaadin-grid';
 import { GridElement, GridElementEventMap } from '@vaadin/vaadin-grid/src/vaadin-grid';
-
-import { GridItem } from '@vaadin/vaadin-grid';
 
 import { InlineEditingMixin } from './vaadin-grid-pro-inline-editing-mixin.js';
 
 /**
  * Fired when the user starts editing a grid cell.
  */
-export type GridProCellEditStartedEvent = CustomEvent<{
+export type GridProCellEditStartedEvent<TItem> = CustomEvent<{
   value: {
     index: number;
-    item: GridItem;
+    item: TItem;
     path: string;
   };
 }>;
@@ -18,22 +17,27 @@ export type GridProCellEditStartedEvent = CustomEvent<{
 /**
  * Fired before exiting the cell edit mode, if the value has been changed.
  */
-export type GridProItemPropertyChangedEvent = CustomEvent<{
+export type GridProItemPropertyChangedEvent<TItem> = CustomEvent<{
   value: {
     index: number;
-    item: GridItem;
+    item: TItem;
     path: string;
     value: string | boolean;
   };
 }>;
 
-export interface GridProElementEventMap {
-  'cell-edit-started': GridProCellEditStartedEvent;
+export interface GridProElementEventMap<TItem> {
+  'cell-edit-started': GridProCellEditStartedEvent<TItem>;
 
-  'item-property-changed': GridProItemPropertyChangedEvent;
+  'item-property-changed': GridProItemPropertyChangedEvent<TItem>;
 }
 
-export interface GridProEventMap extends HTMLElementEventMap, GridProElementEventMap, GridElementEventMap {}
+export interface GridProEventMap<TItem>
+  extends HTMLElementEventMap,
+    GridProElementEventMap<TItem>,
+    GridElementEventMap<TItem> {}
+
+interface GridProElement<TItem = DefaultGridItem> extends InlineEditingMixin<TItem> {}
 
 /**
  * `<vaadin-grid-pro>` is a high quality data grid / data table Web Component with extended functionality.
@@ -67,25 +71,25 @@ export interface GridProEventMap extends HTMLElementEventMap, GridProElementEven
  * @fires {CustomEvent} loading-changed - Fired when the `loading` property changes.
  * @fires {CustomEvent} selected-items-changed - Fired when the `selectedItems` property changes.
  */
-declare class GridProElement extends InlineEditingMixin(GridElement) {
+declare class GridProElement<TItem = DefaultGridItem> extends GridElement {
   static _finalizeClass(): void;
 
-  addEventListener<K extends keyof GridProEventMap>(
+  addEventListener<K extends keyof GridProEventMap<TItem>>(
     type: K,
-    listener: (this: GridProElement, ev: GridProEventMap[K]) => void,
+    listener: (this: GridProElement<TItem>, ev: GridProEventMap<TItem>[K]) => void,
     options?: boolean | AddEventListenerOptions
   ): void;
 
-  removeEventListener<K extends keyof GridProEventMap>(
+  removeEventListener<K extends keyof GridProEventMap<TItem>>(
     type: K,
-    listener: (this: GridProElement, ev: GridProEventMap[K]) => void,
+    listener: (this: GridProElement<TItem>, ev: GridProEventMap<TItem>[K]) => void,
     options?: boolean | EventListenerOptions
   ): void;
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-grid-pro': GridProElement;
+    'vaadin-grid-pro': GridProElement<DefaultGridItem>;
   }
 }
 

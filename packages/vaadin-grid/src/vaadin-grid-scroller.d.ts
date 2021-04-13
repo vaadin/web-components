@@ -20,7 +20,7 @@ declare class ScrollerElement extends PolymerIronList {
 
   _createScrollerRows(): void;
 
-  _canPopulate(): void;
+  _canPopulate(): boolean;
 
   scrollToIndex(index: number): void;
 

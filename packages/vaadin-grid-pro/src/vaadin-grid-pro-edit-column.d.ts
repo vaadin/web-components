@@ -1,6 +1,6 @@
 import { GridColumnElement } from '@vaadin/vaadin-grid/src/vaadin-grid-column.js';
 
-import { GridBodyRenderer, GridItemModel } from '@vaadin/vaadin-grid';
+import { DefaultGridItem, GridBodyRenderer, GridItemModel } from '@vaadin/vaadin-grid';
 
 import { GridProEditorType } from './interfaces';
 
@@ -19,7 +19,7 @@ import { GridProEditorType } from './interfaces';
  *    ...
  * ```
  */
-declare class GridProEditColumnElement extends GridColumnElement {
+declare class GridProEditColumnElement<TItem = DefaultGridItem> extends GridColumnElement<TItem> {
   /**
    * JS Path of the property in the item used for the editable content.
    */
@@ -39,7 +39,7 @@ declare class GridProEditColumnElement extends GridColumnElement {
    *   - `rowData.level` Level of the tree represented with a horizontal offset of the toggle button.
    *   - `rowData.selected` Selected state.
    */
-  editModeRenderer: GridBodyRenderer | null | undefined;
+  editModeRenderer: GridBodyRenderer<TItem> | null | undefined;
 
   /**
    * The list of options which should be passed to cell editor component.
@@ -86,14 +86,14 @@ declare class GridProEditColumnElement extends GridColumnElement {
 
   _getEditorValue(editor: HTMLElement): unknown | null;
 
-  _startCellEdit(cell: HTMLElement, model: GridItemModel): void;
+  _startCellEdit(cell: HTMLElement, model: GridItemModel<TItem>): void;
 
-  _stopCellEdit(cell: HTMLElement, model: GridItemModel): void;
+  _stopCellEdit(cell: HTMLElement, model: GridItemModel<TItem>): void;
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-grid-pro-edit-column': GridProEditColumnElement;
+    'vaadin-grid-pro-edit-column': GridProEditColumnElement<DefaultGridItem>;
   }
 }
 

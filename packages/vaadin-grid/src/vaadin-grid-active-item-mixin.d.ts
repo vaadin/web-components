@@ -1,17 +1,16 @@
-import { GridItem } from './interfaces';
 
-declare function ActiveItemMixin<T extends new (...args: any[]) => {}>(base: T): T & ActiveItemMixinConstructor;
+declare function ActiveItemMixin<TItem, T extends new (...args: any[]) => {}>(base: T): T & ActiveItemMixinConstructor<TItem>;
 
-interface ActiveItemMixinConstructor {
-  new (...args: any[]): ActiveItemMixin;
+interface ActiveItemMixinConstructor<TItem> {
+  new (...args: any[]): ActiveItemMixin<TItem>;
 }
 
-interface ActiveItemMixin {
+interface ActiveItemMixin<TItem> {
   /**
    * The item user has last interacted with. Turns to `null` after user deactivates
    * the item by re-interacting with the currently active item.
    */
-  activeItem: GridItem | null;
+  activeItem: TItem | null;
 
   /**
    * We need to listen to click instead of tap because on mobile safari, the
