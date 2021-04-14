@@ -159,6 +159,23 @@ describe('login form', () => {
     expect(submitStub.called).to.be.false;
   });
 
+  it('should include CSRF in submit request if available', () => {
+    const loginWithCSRF = fixtureSync(
+      '<vaadin-login-form></vaadin-login-form><meta name="_csrf_parameter" content="_csrf" /><meta name="_csrf_header" content="X-CSRF-TOKEN" /><meta name="_csrf" content="28e4c684-fb5e-4c79-b8e2-a2177569edfa" />'
+    );
+    loginWithCSRF.action = 'login123';
+    const loginForm = loginWithCSRF.querySelector('[part="vaadin-login-native-form"]');
+    const submit = loginWithCSRF.querySelector('vaadin-button[part="vaadin-login-submit"]');
+    const submitStub = sinon.stub(loginForm, 'submit');
+    fillUsernameAndPassword(loginWithCSRF);
+    tap(submit);
+    expect(submitStub.called).to.be.true;
+    const csrfInput = loginForm.querySelector('#csrf');
+    expect(csrfInput.name).to.equal('_csrf');
+    expect(csrfInput.value).to.equal('28e4c684-fb5e-4c79-b8e2-a2177569edfa');
+    submitStub.restore();
+  });
+
   it('should not disable button on button click if form is invalid', () => {
     const submit = login.querySelector('vaadin-button[part="vaadin-login-submit"]');
     expect(submit.disabled).to.not.be.true;

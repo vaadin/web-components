@@ -70,6 +70,7 @@ class LoginFormElement extends LoginMixin(ElementMixin(ThemableMixin(PolymerElem
         on-forgot-password="_retargetEvent"
       >
         <form part="vaadin-login-native-form" method="POST" action$="[[action]]" slot="form">
+          <input id="csrf" type="hidden" />
           <vaadin-text-field
             name="username"
             label="[[i18n.form.username]]"
@@ -155,6 +156,12 @@ class LoginFormElement extends LoginMixin(ElementMixin(ThemableMixin(PolymerElem
 
     const firedEvent = this.dispatchEvent(new CustomEvent('login', loginEventDetails));
     if (this.action && firedEvent) {
+      const csrfMetaName = document.querySelector('meta[name=_csrf_parameter]');
+      const csrfMetaValue = document.querySelector('meta[name=_csrf]');
+      if (csrfMetaName && csrfMetaValue) {
+        this.$.csrf.name = csrfMetaName.content;
+        this.$.csrf.value = csrfMetaValue.content;
+      }
       this.querySelector('[part="vaadin-login-native-form"]').submit();
     }
   }
