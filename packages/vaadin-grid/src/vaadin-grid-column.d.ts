@@ -101,8 +101,6 @@ interface ColumnBaseMixin<TItem> {
   _toggleAttribute(name: string, bool: boolean, node: Element): void;
 }
 
-interface GridColumnElement<TItem = DefaultGridItem> extends ColumnBaseMixin<TItem> {}
-
 /**
  * A `<vaadin-grid-column>` is used to configure how a column in `<vaadin-grid>`
  * should look like.
@@ -166,6 +164,8 @@ declare class GridColumnElement<TItem = DefaultGridItem> extends HTMLElement {
 
   _cells: HTMLElement[] | null;
 }
+
+interface GridColumnElement<TItem = DefaultGridItem> extends ColumnBaseMixin<TItem> {}
 
 declare global {
   interface HTMLElementTagNameMap {

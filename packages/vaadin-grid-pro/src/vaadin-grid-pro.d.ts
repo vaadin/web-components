@@ -37,8 +37,6 @@ export interface GridProEventMap<TItem>
     GridProElementEventMap<TItem>,
     GridElementEventMap<TItem> {}
 
-interface GridProElement<TItem = DefaultGridItem> extends InlineEditingMixin<TItem> {}
-
 /**
  * `<vaadin-grid-pro>` is a high quality data grid / data table Web Component with extended functionality.
  * It extends `<vaadin-grid>` and adds extra features on top of the basic ones.
@@ -86,6 +84,8 @@ declare class GridProElement<TItem = DefaultGridItem> extends GridElement {
     options?: boolean | EventListenerOptions
   ): void;
 }
+
+interface GridProElement<TItem = DefaultGridItem> extends InlineEditingMixin<TItem> {}
 
 declare global {
   interface HTMLElementTagNameMap {

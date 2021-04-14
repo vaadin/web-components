@@ -1,8 +1,6 @@
 import {DefaultGridItem} from './interfaces';
 import { ColumnBaseMixin, GridColumnElement } from './vaadin-grid-column.js';
 
-interface GridColumnGroupElement<TItem = DefaultGridItem> extends ColumnBaseMixin<TItem> {}
-
 /**
  * A `<vaadin-grid-column-group>` is used to make groups of columns in `<vaadin-grid>` and
  * to configure additional headers and footers.
@@ -47,6 +45,8 @@ declare class GridColumnGroupElement<TItem = DefaultGridItem> extends HTMLElemen
 
   _isColumnElement(node: Node): boolean;
 }
+
+interface GridColumnGroupElement<TItem = DefaultGridItem> extends ColumnBaseMixin<TItem> {}
 
 declare global {
   interface HTMLElementTagNameMap {

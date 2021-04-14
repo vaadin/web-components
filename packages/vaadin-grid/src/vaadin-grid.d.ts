@@ -117,27 +117,6 @@ export interface GridElementEventMap<TItem> {
 
 export interface GridEventMap<TItem> extends HTMLElementEventMap, GridElementEventMap<TItem> {}
 
-interface GridElement<TItem = DefaultGridItem> extends ElementMixin
-    , ThemableMixin
-    , A11yMixin
-    , ActiveItemMixin<TItem>
-    , ArrayDataProviderMixin<TItem>
-    , ColumnResizingMixin
-    , DataProviderMixin<TItem>
-    , DynamicColumnsMixin<TItem>
-    , FilterMixin
-    , RowDetailsMixin<TItem>
-    , ScrollMixin
-    , SelectionMixin<TItem>
-    , SortMixin
-    , KeyboardNavigationMixin<TItem>
-    , ColumnReorderingMixin<TItem>
-    , EventContextMixin<TItem>
-    , StylingMixin<TItem>
-    , DragAndDropMixin<TItem> {
-    readonly dir: string; // Fix DirMixin.dir clashing with HTMLElement.dir declaration
-}
-
 /**
  * `<vaadin-grid>` is a free, high quality data grid / data table Web Component. The content of the
  * the grid can be populated in two ways: imperatively by using renderer callback function and
@@ -424,6 +403,27 @@ declare class GridElement<TItem = DefaultGridItem> extends ScrollerElement {
     listener: (this: GridElement<TItem>, ev: GridEventMap<TItem>[K]) => void,
     options?: boolean | EventListenerOptions
   ): void;
+}
+
+interface GridElement<TItem = DefaultGridItem> extends ElementMixin
+  , ThemableMixin
+  , A11yMixin
+  , ActiveItemMixin<TItem>
+  , ArrayDataProviderMixin<TItem>
+  , ColumnResizingMixin
+  , DataProviderMixin<TItem>
+  , DynamicColumnsMixin<TItem>
+  , FilterMixin
+  , RowDetailsMixin<TItem>
+  , ScrollMixin
+  , SelectionMixin<TItem>
+  , SortMixin
+  , KeyboardNavigationMixin<TItem>
+  , ColumnReorderingMixin<TItem>
+  , EventContextMixin<TItem>
+  , StylingMixin<TItem>
+  , DragAndDropMixin<TItem> {
+  readonly dir: string; // Fix DirMixin.dir clashing with HTMLElement.dir declaration
 }
 
 declare global {
