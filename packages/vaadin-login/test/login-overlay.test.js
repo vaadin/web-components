@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync } from '@open-wc/testing-helpers';
-import { tap, pressAndReleaseKeyOn, pressEnter } from '@polymer/iron-test-helpers/mock-interactions.js';
+import { enter, esc, fixtureSync } from '@vaadin/testing-helpers';
+import { tap } from '@polymer/iron-test-helpers/mock-interactions.js';
 import { fillUsernameAndPassword } from './helpers.js';
 import '../vaadin-login-overlay.js';
 
@@ -23,7 +23,15 @@ describe('login overlay', () => {
 });
 
 describe('opened overlay', () => {
-  let overlay;
+  let overlay, submitStub;
+
+  before(() => {
+    submitStub = sinon.stub(HTMLFormElement.prototype, 'submit');
+  });
+
+  after(() => {
+    submitStub.restore();
+  });
 
   beforeEach(() => {
     overlay = fixtureSync('<vaadin-login-overlay opened theme="some-theme"></vaadin-login-overlay>');
@@ -31,6 +39,7 @@ describe('opened overlay', () => {
 
   afterEach(() => {
     overlay.opened = false;
+    submitStub.resetHistory();
   });
 
   it('should set opened using attribute', () => {
@@ -49,7 +58,7 @@ describe('opened overlay', () => {
   });
 
   it('should not close on ESC key', () => {
-    pressAndReleaseKeyOn(document.body, 27, [], 'Escape');
+    esc(document.body);
 
     expect(overlay.opened).to.be.true;
   });
@@ -64,7 +73,7 @@ describe('opened overlay', () => {
     const loginSpy = sinon.spy(overlay, '_retargetEvent');
     const { vaadinLoginUsername } = fillUsernameAndPassword(overlay.$.vaadinLoginForm);
 
-    pressEnter(vaadinLoginUsername);
+    enter(vaadinLoginUsername);
     expect(loginSpy.called).to.be.true;
 
     const { type } = loginSpy.args[0][0];
@@ -78,7 +87,7 @@ describe('opened overlay', () => {
 
     const { vaadinLoginUsername } = fillUsernameAndPassword(overlay.$.vaadinLoginForm);
 
-    pressEnter(vaadinLoginUsername);
+    enter(vaadinLoginUsername);
     expect(loginSpy.called).to.be.true;
 
     const { type } = loginSpy.args[0][0];
@@ -86,16 +95,13 @@ describe('opened overlay', () => {
   });
 
   it('should be able to prevent default to `login` event', () => {
-    const nativeForm = overlay.$['vaadinLoginForm'].querySelector('[part=vaadin-login-native-form]');
-    const submitSpy = sinon.spy(nativeForm, 'submit');
-
     overlay.action = 'login';
     overlay.addEventListener('login', (e) => e.preventDefault());
 
     const { vaadinLoginUsername } = fillUsernameAndPassword(overlay.$.vaadinLoginForm);
 
-    pressEnter(vaadinLoginUsername);
-    expect(submitSpy.called).to.be.false;
+    enter(vaadinLoginUsername);
+    expect(submitStub.called).to.be.false;
   });
 });
 
