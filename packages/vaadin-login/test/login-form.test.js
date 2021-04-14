@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync } from '@open-wc/testing-helpers';
-import { focus, pressEnter, tap } from '@polymer/iron-test-helpers/mock-interactions.js';
+import { focus, tap } from '@polymer/iron-test-helpers/mock-interactions.js';
+import { enter, fixtureSync } from '@vaadin/testing-helpers';
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import { fillUsernameAndPassword } from './helpers.js';
 import '../vaadin-login-form.js';
@@ -18,11 +18,23 @@ registerStyles(
 );
 
 describe('login form', () => {
-  var login, formWrapper;
+  var login, formWrapper, submitStub;
+
+  before(() => {
+    submitStub = sinon.stub(HTMLFormElement.prototype, 'submit').callsFake(() => {});
+  });
+
+  after(() => {
+    submitStub.restore();
+  });
 
   beforeEach(() => {
-    login = fixtureSync('<vaadin-login-form></vaadin-login-form>');
+    login = fixtureSync('<vaadin-login-form action="login-action"></vaadin-login-form>');
     formWrapper = login.querySelector('[part="vaadin-login-native-form-wrapper"]');
+  });
+
+  afterEach(() => {
+    submitStub.resetHistory();
   });
 
   it('should have a valid version number', () => {
@@ -88,7 +100,7 @@ describe('login form', () => {
     expect(vaadinLoginUsername.invalid).to.be.false;
     expect(vaadinLoginPassword.invalid).to.be.false;
 
-    pressEnter(vaadinLoginUsername);
+    enter(vaadinLoginUsername);
     expect(vaadinLoginUsername.invalid).to.be.true;
     expect(vaadinLoginPassword.invalid).to.be.false;
   });
@@ -97,7 +109,7 @@ describe('login form', () => {
     const { vaadinLoginUsername, vaadinLoginPassword } = login.$;
     vaadinLoginUsername.value = 'username';
 
-    pressEnter(vaadinLoginUsername);
+    enter(vaadinLoginUsername);
     expect(vaadinLoginPassword.hasAttribute('focused')).to.be.true;
   });
 
@@ -107,7 +119,7 @@ describe('login form', () => {
     expect(vaadinLoginUsername.invalid).to.be.false;
     expect(vaadinLoginPassword.invalid).to.be.false;
 
-    pressEnter(vaadinLoginPassword);
+    enter(vaadinLoginPassword);
 
     expect(vaadinLoginUsername.invalid).to.be.false;
     expect(vaadinLoginPassword.invalid).to.be.true;
@@ -118,37 +130,33 @@ describe('login form', () => {
 
     focus(vaadinLoginPassword);
     vaadinLoginPassword.value = 'password';
-    pressEnter(vaadinLoginPassword);
+    enter(vaadinLoginPassword);
     expect(vaadinLoginUsername.hasAttribute('focused')).to.be.true;
   });
 
   it('should trigger submit if both username and password are filled', () => {
     const { vaadinLoginPassword } = fillUsernameAndPassword(login);
-    const submitSpy = sinon.spy(login, 'submit');
-    pressEnter(vaadinLoginPassword);
-    expect(submitSpy.called).to.be.true;
+    enter(vaadinLoginPassword);
+    expect(submitStub.called).to.be.true;
   });
 
   it('should disable button after submitting form', () => {
     const submit = login.querySelector('vaadin-button[part="vaadin-login-submit"]');
     const { vaadinLoginPassword } = fillUsernameAndPassword(login);
-    pressEnter(vaadinLoginPassword);
+    enter(vaadinLoginPassword);
     expect(submit.disabled).to.be.true;
   });
 
   it('should prevent submit call when login is disabled', () => {
-    const loginForm = login.querySelector('[part="vaadin-login-native-form"]');
     const submit = login.querySelector('vaadin-button[part="vaadin-login-submit"]');
     const { vaadinLoginPassword } = fillUsernameAndPassword(login);
 
-    const submitSpy = sinon.spy(loginForm, 'submit');
-
     login.setAttribute('disabled', 'disabled');
-    pressEnter(vaadinLoginPassword);
-    expect(submitSpy.called).to.be.false;
+    enter(vaadinLoginPassword);
+    expect(submitStub.called).to.be.false;
 
     tap(submit);
-    expect(submitSpy.called).to.be.false;
+    expect(submitStub.called).to.be.false;
   });
 
   it('should not disable button on button click if form is invalid', () => {
@@ -167,10 +175,11 @@ describe('login form', () => {
 
   it('should trigger `login` event if no action is defined', () => {
     const { vaadinLoginUsername, vaadinLoginPassword } = fillUsernameAndPassword(login);
-    const loginEventSpy = sinon.spy();
+    login.action = null;
 
+    const loginEventSpy = sinon.spy();
     login.addEventListener('login', loginEventSpy);
-    pressEnter(vaadinLoginPassword);
+    enter(vaadinLoginPassword);
 
     const event = loginEventSpy.args[0][0];
 
