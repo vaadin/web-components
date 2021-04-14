@@ -770,10 +770,8 @@ class CrudElement extends ElementMixin(ThemableMixin(PolymerElement)) {
         const path = e.path || e.getAttribute('path');
         path && (e.value = this.get(path, item));
       });
-    }
 
-    this.__isNew = this.__isNew || (this.items && this.items.indexOf(item) < 0);
-    if (item) {
+      this.__isNew = this.__isNew || (this.items && this.items.indexOf(item) < 0);
       this.editorOpened = true;
     }
   }
