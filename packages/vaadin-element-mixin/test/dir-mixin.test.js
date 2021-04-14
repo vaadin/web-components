@@ -1,6 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { DirMixin } from '../vaadin-dir-mixin.js';
+import sinon from 'sinon';
 
 class DirMixinElement extends DirMixin(PolymerElement) {
   static get is() {
@@ -27,27 +28,38 @@ describe('DirMixin', () => {
       expect(element.dir).to.equal('');
       expect(element.hasAttribute('dir')).to.be.false;
     });
+
     it('should match native behavior when setting property', () => {
       element.dir = 'rtl';
       expect(element.dir).to.equal('rtl');
       expect(element.getAttribute('dir')).to.equal('rtl');
     });
+
     it('should match native behavior when setting attribute', () => {
       element.setAttribute('dir', 'rtl');
       expect(element.dir).to.equal('rtl');
       expect(element.getAttribute('dir')).to.equal('rtl');
     });
+
     it('should match native behavior when clearing property', () => {
       element.dir = 'rtl';
       element.dir = '';
       expect(element.dir).to.equal('');
       expect(element.hasAttribute('dir')).to.be.false;
     });
+
     it('should match native behavior when clearing attribute', () => {
       element.setAttribute('dir', 'rtl');
       element.removeAttribute('dir');
       expect(element.dir).to.equal('');
       expect(element.hasAttribute('dir')).to.be.false;
+    });
+
+    it('should not call removeAttribute twice when clearing value', () => {
+      element.dir = 'rtl';
+      const spy = sinon.spy(element, 'removeAttribute');
+      element.removeAttribute('dir');
+      expect(spy.calledOnce).to.be.true;
     });
   });
 

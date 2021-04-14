@@ -22,6 +22,8 @@ const directionObserver = new MutationObserver(directionUpdater);
 directionObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['dir'] });
 
 const alignDirs = function (element, documentDir) {
+  const elementDir = element.getAttribute('dir');
+  if (elementDir === documentDir) return;
   if (documentDir) {
     element.setAttribute('dir', documentDir);
   } else {
