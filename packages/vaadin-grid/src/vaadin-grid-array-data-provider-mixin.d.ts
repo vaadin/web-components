@@ -8,7 +8,7 @@ interface ArrayDataProviderMixinConstructor<TItem> {
   new (...args: any[]): ArrayDataProviderMixin<TItem>;
 }
 
-declare class ArrayDataProviderMixin<TItem> {
+declare interface ArrayDataProviderMixin<TItem> {
   /**
    * An array containing the items which will be stamped to the column template
    * instances.
