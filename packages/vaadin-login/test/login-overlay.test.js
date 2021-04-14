@@ -26,7 +26,7 @@ describe('opened overlay', () => {
   let overlay, submitStub;
 
   before(() => {
-    submitStub = sinon.stub(HTMLFormElement.prototype, 'submit').callsFake(() => {});
+    submitStub = sinon.stub(HTMLFormElement.prototype, 'submit');
   });
 
   after(() => {
