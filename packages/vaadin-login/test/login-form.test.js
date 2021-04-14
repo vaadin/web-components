@@ -143,7 +143,6 @@ describe('login form', () => {
 
     const submitSpy = sinon.spy(loginForm, 'submit');
 
-    login.setAttribute('disabled', 'disabled');
     pressEnter(vaadinLoginPassword);
     expect(submitSpy.called).to.be.false;
 
