@@ -29,6 +29,10 @@ describe('opened overlay', () => {
     submitStub = sinon.stub(HTMLFormElement.prototype, 'submit').callsFake(() => {});
   });
 
+  after(() => {
+    submitStub.restore();
+  });
+
   beforeEach(() => {
     overlay = fixtureSync('<vaadin-login-overlay opened theme="some-theme"></vaadin-login-overlay>');
   });
