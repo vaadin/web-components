@@ -21,12 +21,10 @@ let scrollType;
 const directionObserver = new MutationObserver(directionUpdater);
 directionObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['dir'] });
 
-const alignDirs = function (element, documentDir) {
-  const elementDir = element.getAttribute('dir');
-  if (elementDir === documentDir) return;
+const alignDirs = function (element, documentDir, elementDir = element.getAttribute('dir')) {
   if (documentDir) {
     element.setAttribute('dir', documentDir);
-  } else {
+  } else if (elementDir != null) {
     element.removeAttribute('dir');
   }
 };
@@ -68,7 +66,7 @@ export const DirMixin = (superClass) =>
 
       if (!this.hasAttribute('dir')) {
         this.__subscribe();
-        alignDirs(this, getDocumentDir());
+        alignDirs(this, getDocumentDir(), null);
       }
     }
 
@@ -79,16 +77,18 @@ export const DirMixin = (superClass) =>
         return;
       }
 
+      const documentDir = getDocumentDir();
+
       // New value equals to the document direction and the element is not subscribed to the changes
-      const newValueEqlDocDir = newValue === getDocumentDir() && directionSubscribers.indexOf(this) === -1;
+      const newValueEqlDocDir = newValue === documentDir && directionSubscribers.indexOf(this) === -1;
       // Value was emptied and the element is not subscribed to the changes
       const newValueEmptied = !newValue && oldValue && directionSubscribers.indexOf(this) === -1;
       // New value is different and the old equals to document direction and the element is not subscribed to the changes
-      const newDiffValue = newValue !== getDocumentDir() && oldValue === getDocumentDir();
+      const newDiffValue = newValue !== documentDir && oldValue === documentDir;
 
       if (newValueEqlDocDir || newValueEmptied) {
         this.__subscribe();
-        alignDirs(this, getDocumentDir());
+        alignDirs(this, documentDir, newValue);
       } else if (newDiffValue) {
         this.__subscribe(false);
       }
