@@ -82,5 +82,3 @@ export interface GridSorter {
   path: string;
   direction: GridSorterDirection;
 }
-
-export { GridColumnElement };

@@ -28,27 +28,6 @@ import { GridSorterElement } from '../../src/vaadin-grid-sorter';
 import { StylingMixin } from '../../src/vaadin-grid-styling-mixin';
 import { GridTreeColumnElement } from '../../src/vaadin-grid-tree-column';
 import { GridTreeToggleElement } from '../../src/vaadin-grid-tree-toggle';
-import {
-  GridColumnElement,
-  GridDropLocation,
-  GridElement,
-  GridItemModel,
-  GridSorterDirection,
-  GridActiveItemChangedEvent,
-  GridCellActivateEvent,
-  GridColumnReorderEvent,
-  GridColumnResizeEvent,
-  GridLoadingChangedEvent,
-  GridExpandedItemsChangedEvent,
-  GridSelectedItemsChangedEvent,
-  GridDragStartEvent,
-  GridDropEvent
-} from '../../vaadin-grid.js';
-import { GridFilterValueChangedEvent } from '../../vaadin-grid-filter.js';
-import { GridSorterDirectionChangedEvent } from '../../vaadin-grid-sorter.js';
-import { GridSortColumnDirectionChangedEvent } from '../../vaadin-grid-sort-column.js';
-import { GridTreeToggleExpandedChangedEvent } from '../../vaadin-grid-tree-toggle.js';
-import { GridSelectionColumnSelectAllChangedEvent } from '../../vaadin-grid-selection-column.js';
 
 interface TestGridItem {
   testProperty: string;

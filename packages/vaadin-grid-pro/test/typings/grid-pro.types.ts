@@ -1,7 +1,8 @@
-import { GridColumnElement, GridElement } from '@vaadin/vaadin-grid';
-import { GridProElement } from '../../src/vaadin-grid-pro';
-import { GridProEditColumnElement } from '../../src/vaadin-grid-pro-edit-column';
+import { GridElement } from '@vaadin/vaadin-grid';
+import { GridColumnElement } from '@vaadin/vaadin-grid/vaadin-grid-column';
 import { InlineEditingMixin } from '../../src/vaadin-grid-pro-inline-editing-mixin';
+import { GridProElement } from '../../vaadin-grid-pro';
+import { GridProEditColumnElement } from '../../vaadin-grid-pro-edit-column';
 
 interface TestGridItem {
   testProperty: string;
