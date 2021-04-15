@@ -1,4 +1,7 @@
-declare function InlineEditingMixin<TItem, T extends new (...args: any[]) => {}>(base: T): T & InlineEditingMixinConstructor<TItem>;
+declare function InlineEditingMixin<TItem, T extends new (...args: any[]) => {}>(
+  base: T
+): T & InlineEditingMixinConstructor<TItem>;
+
 interface InlineEditingMixinConstructor<TItem> {
   new (...args: any[]): InlineEditingMixin<TItem>;
 }
