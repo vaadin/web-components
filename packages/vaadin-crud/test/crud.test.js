@@ -4,9 +4,7 @@ import { aTimeout, fixtureSync } from '@open-wc/testing-helpers';
 import { flushGrid, getBodyCellContent, isIOS, listenOnce, nextRender } from './helpers.js';
 import '../src/vaadin-crud.js';
 
-// FIXME: skipped due to crash: https://github.com/vaadin/web-components/issues/219
-const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-(isSafari ? describe.skip : describe)('crud', () => {
+describe('crud', () => {
   let crud;
 
   // Buttons in the editor dialog
