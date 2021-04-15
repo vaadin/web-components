@@ -33,8 +33,9 @@ interface LoginMixin {
 
   /**
    * If set, the user name field does not automatically receive focus when the component is attached to the document.
+   * @attr {boolean} no-autofocus
    */
-  noAutoFocus: boolean;
+  noAutofocus: boolean;
 
   /**
    * The object used to localize this component.

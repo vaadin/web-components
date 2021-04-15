@@ -73,6 +73,7 @@ export const LoginMixin = (superClass) =>
         /**
          * If set, the user name field automatically receives focus when the component is attached to the document.
          * @type {boolean}
+         * @attr {boolean} no-autofocus
          */
         noAutofocus: {
           type: Boolean,
