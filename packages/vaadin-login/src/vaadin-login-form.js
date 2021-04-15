@@ -115,7 +115,7 @@ class LoginFormElement extends LoginMixin(ElementMixin(ThemableMixin(PolymerElem
   connectedCallback() {
     super.connectedCallback();
     this._handleInputKeydown = this._handleInputKeydown.bind(this);
-    if (this.autoFocusUsername) {
+    if (!this.noAutofocus) {
       this.$.vaadinLoginUsername.focus();
     }
   }

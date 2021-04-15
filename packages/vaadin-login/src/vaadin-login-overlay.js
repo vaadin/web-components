@@ -64,6 +64,7 @@ class LoginOverlayElement extends LoginMixin(ElementMixin(ThemableMixin(PolymerE
           action="{{action}}"
           disabled="{{disabled}}"
           error="{{error}}"
+          no-autofocus="{{noAutofocus}}"
           no-forgot-password="{{noForgotPassword}}"
           i18n="{{i18n}}"
           on-login="_retargetEvent"
@@ -170,9 +171,6 @@ class LoginOverlayElement extends LoginMixin(ElementMixin(ThemableMixin(PolymerE
       // Reverting it back to the previous state
       // https://github.com/vaadin/vaadin-overlay/blob/041cde4481b6262eac68d3a699f700216d897373/src/vaadin-overlay.html#L660
       document.body.style.pointerEvents = this.$.vaadinLoginOverlayWrapper._previousDocumentPointerEvents;
-    }
-    if (this.autoFocusUsername) {
-      this.$.vaadinLoginForm.$.vaadinLoginUsername.focus();
     }
   }
 
