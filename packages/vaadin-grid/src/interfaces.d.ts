@@ -59,7 +59,7 @@ export type GridHeaderFooterRenderer<TItem> = (
   column?: GridColumnElement<TItem>
 ) => void;
 
-export type DefaultGridItem = any;
+export type GridDefaultItem = any;
 
 export interface GridItemModel<TItem> {
   index: number;

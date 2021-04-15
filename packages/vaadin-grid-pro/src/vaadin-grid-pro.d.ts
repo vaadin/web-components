@@ -1,4 +1,4 @@
-import { DefaultGridItem } from '@vaadin/vaadin-grid';
+import { GridDefaultItem } from '@vaadin/vaadin-grid';
 import { GridElement, GridElementEventMap } from '@vaadin/vaadin-grid/src/vaadin-grid';
 
 import { InlineEditingMixin } from './vaadin-grid-pro-inline-editing-mixin.js';
@@ -69,7 +69,7 @@ export interface GridProEventMap<TItem>
  * @fires {CustomEvent} loading-changed - Fired when the `loading` property changes.
  * @fires {CustomEvent} selected-items-changed - Fired when the `selectedItems` property changes.
  */
-declare class GridProElement<TItem = DefaultGridItem> extends GridElement {
+declare class GridProElement<TItem = GridDefaultItem> extends GridElement {
   static _finalizeClass(): void;
 
   addEventListener<K extends keyof GridProEventMap<TItem>>(
@@ -85,11 +85,11 @@ declare class GridProElement<TItem = DefaultGridItem> extends GridElement {
   ): void;
 }
 
-interface GridProElement<TItem = DefaultGridItem> extends InlineEditingMixin<TItem> {}
+interface GridProElement<TItem = GridDefaultItem> extends InlineEditingMixin<TItem> {}
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-grid-pro': GridProElement<DefaultGridItem>;
+    'vaadin-grid-pro': GridProElement<GridDefaultItem>;
   }
 }
 

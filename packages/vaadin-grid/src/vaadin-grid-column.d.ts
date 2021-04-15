@@ -1,6 +1,6 @@
 import { GridElement } from './vaadin-grid.js';
 
-import { GridBodyRenderer, GridColumnTextAlign, GridHeaderFooterRenderer, DefaultGridItem } from './interfaces';
+import { GridBodyRenderer, GridColumnTextAlign, GridHeaderFooterRenderer, GridDefaultItem } from './interfaces';
 
 declare function ColumnBaseMixin<TItem, T extends new (...args: any[]) => {}>(base: T): T & ColumnBaseMixinConstructor<TItem>;
 
@@ -108,7 +108,7 @@ interface ColumnBaseMixin<TItem> {
  * See [`<vaadin-grid>`](#/elements/vaadin-grid) documentation for instructions on how
  * to configure the `<vaadin-grid-column>`.
  */
-declare class GridColumnElement<TItem = DefaultGridItem> extends HTMLElement {
+declare class GridColumnElement<TItem = GridDefaultItem> extends HTMLElement {
   /**
    * Width of the cells for this column.
    */
@@ -165,11 +165,11 @@ declare class GridColumnElement<TItem = DefaultGridItem> extends HTMLElement {
   _cells: HTMLElement[] | null;
 }
 
-interface GridColumnElement<TItem = DefaultGridItem> extends ColumnBaseMixin<TItem> {}
+interface GridColumnElement<TItem = GridDefaultItem> extends ColumnBaseMixin<TItem> {}
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-grid-column': GridColumnElement<DefaultGridItem>;
+    'vaadin-grid-column': GridColumnElement<GridDefaultItem>;
   }
 }
 

@@ -1,4 +1,4 @@
-import {DefaultGridItem} from './interfaces';
+import {GridDefaultItem} from './interfaces';
 import { GridColumnElement } from './vaadin-grid-column.js';
 
 /**
@@ -36,7 +36,7 @@ export interface GridSelectionColumnEventMap extends HTMLElementEventMap, GridSe
  *
  * @fires {CustomEvent} select-all-changed - Fired when the `selectAll` property changes.
  */
-declare class GridSelectionColumnElement<TItem = DefaultGridItem> extends GridColumnElement<TItem> {
+declare class GridSelectionColumnElement<TItem = GridDefaultItem> extends GridColumnElement<TItem> {
   /**
    * Width of the cells for this column.
    */
@@ -75,7 +75,7 @@ declare class GridSelectionColumnElement<TItem = DefaultGridItem> extends GridCo
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-grid-selection-column': GridSelectionColumnElement<DefaultGridItem>;
+    'vaadin-grid-selection-column': GridSelectionColumnElement<GridDefaultItem>;
   }
 }
 

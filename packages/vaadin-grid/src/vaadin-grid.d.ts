@@ -341,7 +341,7 @@ export interface GridEventMap<TItem> extends HTMLElementEventMap, GridElementEve
  * @fires {CustomEvent} loading-changed - Fired when the `loading` property changes.
  * @fires {CustomEvent} selected-items-changed - Fired when the `selectedItems` property changes.
  */
-declare class GridElement<TItem = DefaultGridItem> extends ScrollerElement {
+declare class GridElement<TItem = GridDefaultItem> extends ScrollerElement {
   /**
    * If true, the grid's height is defined by its rows.
    *
@@ -405,7 +405,7 @@ declare class GridElement<TItem = DefaultGridItem> extends ScrollerElement {
   ): void;
 }
 
-interface GridElement<TItem = DefaultGridItem> extends ElementMixin
+interface GridElement<TItem = GridDefaultItem> extends ElementMixin
   , ThemableMixin
   , A11yMixin
   , ActiveItemMixin<TItem>
@@ -428,7 +428,7 @@ interface GridElement<TItem = DefaultGridItem> extends ElementMixin
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-grid': GridElement<DefaultGridItem>;
+    'vaadin-grid': GridElement<GridDefaultItem>;
   }
 }
 
