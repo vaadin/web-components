@@ -21,10 +21,10 @@ let scrollType;
 const directionObserver = new MutationObserver(directionUpdater);
 directionObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['dir'] });
 
-const alignDirs = function (element, documentDir) {
+const alignDirs = function (element, documentDir, elementDir = element.getAttribute('dir')) {
   if (documentDir) {
     element.setAttribute('dir', documentDir);
-  } else {
+  } else if (elementDir != null) {
     element.removeAttribute('dir');
   }
 };
@@ -45,7 +45,8 @@ export const DirMixin = (superClass) =>
          */
         dir: {
           type: String,
-          readOnly: true
+          value: '',
+          reflectToAttribute: true
         }
       };
     }
@@ -65,7 +66,7 @@ export const DirMixin = (superClass) =>
 
       if (!this.hasAttribute('dir')) {
         this.__subscribe();
-        alignDirs(this, getDocumentDir());
+        alignDirs(this, getDocumentDir(), null);
       }
     }
 
@@ -76,16 +77,18 @@ export const DirMixin = (superClass) =>
         return;
       }
 
+      const documentDir = getDocumentDir();
+
       // New value equals to the document direction and the element is not subscribed to the changes
-      const newValueEqlDocDir = newValue === getDocumentDir() && directionSubscribers.indexOf(this) === -1;
+      const newValueEqlDocDir = newValue === documentDir && directionSubscribers.indexOf(this) === -1;
       // Value was emptied and the element is not subscribed to the changes
       const newValueEmptied = !newValue && oldValue && directionSubscribers.indexOf(this) === -1;
       // New value is different and the old equals to document direction and the element is not subscribed to the changes
-      const newDiffValue = newValue !== getDocumentDir() && oldValue === getDocumentDir();
+      const newDiffValue = newValue !== documentDir && oldValue === documentDir;
 
       if (newValueEqlDocDir || newValueEmptied) {
         this.__subscribe();
-        alignDirs(this, getDocumentDir());
+        alignDirs(this, documentDir, newValue);
       } else if (newDiffValue) {
         this.__subscribe(false);
       }
@@ -96,6 +99,27 @@ export const DirMixin = (superClass) =>
       super.disconnectedCallback();
       this.__subscribe(false);
       this.removeAttribute('dir');
+    }
+
+    /** @protected */
+    _valueToNodeAttribute(node, value, attribute) {
+      // Override default Polymer attribute reflection to match native behavior of HTMLElement.dir property
+      // If the property contains an empty string then it should not create an empty attribute
+      if (attribute === 'dir' && value === '' && !node.hasAttribute('dir')) {
+        return;
+      }
+      super._valueToNodeAttribute(node, value, attribute);
+    }
+
+    /** @protected */
+    _attributeToProperty(attribute, value, type) {
+      // Override default Polymer attribute reflection to match native behavior of HTMLElement.dir property
+      // If the attribute is removed, then the dir property should contain an empty string instead of null
+      if (attribute === 'dir' && !value) {
+        this.dir = '';
+      } else {
+        super._attributeToProperty(attribute, value, type);
+      }
     }
 
     /** @private */
