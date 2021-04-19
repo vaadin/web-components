@@ -1,15 +1,16 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { fixtureSync, nextFrame } from '@open-wc/testing-helpers';
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import '@polymer/polymer/lib/elements/dom-repeat.js';
 import {
+  buildDataSet,
   click,
   flushGrid,
   getBodyCellContent,
   getCellContent,
-  getRows,
   getRowCells,
+  getRows,
   infiniteDataProvider,
   scrollToEnd
 } from './helpers.js';
@@ -49,6 +50,14 @@ describe('row details', () => {
   let grid;
   let bodyRows;
 
+  function openRowDetails(index) {
+    grid.openItemDetails(grid._cache.items[index]);
+  }
+
+  function closeRowDetails(index) {
+    grid.closeItemDetails(grid._cache.items[index]);
+  }
+
   it('should not increase row update count', () => {
     grid = fixtureSync(`
       <vaadin-grid style="width: 50px; height: 400px" size="100">
@@ -66,10 +75,6 @@ describe('row details', () => {
   });
 
   describe('simple', () => {
-    function openRowDetails(index) {
-      grid.openItemDetails(grid._cache.items[index]);
-    }
-
     beforeEach(async () => {
       grid = fixtureSync(`
         <vaadin-grid style="width: 50px; height: 400px" size="100">
@@ -84,10 +89,6 @@ describe('row details', () => {
       bodyRows = getRows(grid.$.items);
       await nextFrame();
     });
-
-    function closeRowDetails(index) {
-      grid.closeItemDetails(grid._cache.items[index]);
-    }
 
     it('should not activate on click', () => {
       openRowDetails(0);
@@ -155,13 +156,6 @@ describe('row details', () => {
     it('should have correct bounds', () => {
       openRowDetails(1);
       assertDetailsBounds();
-    });
-
-    it('should have state attribute', () => {
-      openRowDetails(1);
-      expect(bodyRows[1].hasAttribute('details-opened')).to.be.true;
-      closeRowDetails(1);
-      expect(bodyRows[1].hasAttribute('details-opened')).to.be.false;
     });
 
     it('should have correct bounds when modified after opening', async () => {
@@ -295,6 +289,71 @@ describe('row details', () => {
 
       const row = getRows(grid.$.items)[0];
       expect(row.offsetHeight).to.be.above(70);
+    });
+  });
+
+  describe('details opened attribute', () => {
+    let dataset = [];
+    const dataProvider = (params, callback) => callback(dataset);
+
+    const countRowsMarkedAsDetailsOpened = (grid) => {
+      return grid.$.items.querySelectorAll('tr[details-opened]').length;
+    };
+
+    beforeEach(async () => {
+      dataset = buildDataSet(10);
+      grid = fixtureSync(`
+        <vaadin-grid style="width: 50px; height: 400px" size="100">
+          <template class="row-details"><span>[[index]]</span>-details</template>
+          <vaadin-grid-column>
+            <template>[[index]]</template>
+          </vaadin-grid-column>
+        </vaadin-grid>
+      `);
+      grid.dataProvider = dataProvider;
+      flushGrid(grid);
+      bodyRows = getRows(grid.$.items);
+      await nextFrame();
+    });
+
+    it('should update when opening/closing imperatively', () => {
+      openRowDetails(1);
+      expect(bodyRows[1].hasAttribute('details-opened')).to.be.true;
+      expect(countRowsMarkedAsDetailsOpened(grid)).to.equal(1);
+      closeRowDetails(1);
+      expect(bodyRows[1].hasAttribute('details-opened')).to.be.false;
+      expect(countRowsMarkedAsDetailsOpened(grid)).to.equal(0);
+    });
+
+    it('should be removed when item is removed', () => {
+      openRowDetails(0);
+      dataset.shift(); // remove opened item
+      grid.clearCache();
+
+      expect(bodyRows[0].hasAttribute('details-opened')).to.be.false;
+      expect(countRowsMarkedAsDetailsOpened(grid)).to.equal(0);
+    });
+
+    it('should be removed when items are replaced', () => {
+      openRowDetails(0);
+      dataset = buildDataSet(10); // replace data
+      grid.clearCache();
+
+      expect(bodyRows[0].hasAttribute('details-opened')).to.be.false;
+      expect(countRowsMarkedAsDetailsOpened(grid)).to.equal(0);
+    });
+
+    it('should be removed on all rows when items are replaced', () => {
+      // Open all rows
+      dataset.forEach((_, i) => {
+        openRowDetails(i);
+      });
+      expect(countRowsMarkedAsDetailsOpened(grid)).to.equal(dataset.length);
+
+      dataset = buildDataSet(10); // replace data
+      grid.clearCache();
+
+      expect(countRowsMarkedAsDetailsOpened(grid)).to.equal(0);
     });
   });
 });
