@@ -807,6 +807,7 @@ class GridElement extends ElementMixin(
     this._a11yUpdateRowSelected(row, model.selected);
     this._a11yUpdateRowLevel(row, model.level);
     this._toggleAttribute('expanded', model.expanded, row);
+    this._toggleAttribute('details-opened', this._isDetailsOpened(item), row);
     if (this._rowDetailsTemplate || this.rowDetailsRenderer) {
       this._toggleDetailsCell(row, item);
     }
