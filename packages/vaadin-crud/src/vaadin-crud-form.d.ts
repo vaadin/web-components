@@ -26,4 +26,3 @@ declare global {
 }
 
 export { CrudFormElement };
-

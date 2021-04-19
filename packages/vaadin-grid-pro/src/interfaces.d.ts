@@ -1,1 +1,1 @@
-export type GridProEditorType = 'text' | 'checkbox' | 'select' | 'custom';
+export type GridProEditorType = 'text' | 'checkbox' | 'select' | 'custom';

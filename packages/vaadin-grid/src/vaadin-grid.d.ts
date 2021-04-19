@@ -80,7 +80,7 @@ export type GridDragStart = CustomEvent<{
 export type GridDrop = CustomEvent<{
   dropTargetItem: GridItem;
   dropLocation: GridDropLocation;
-  dragData: Array<{ type: string, data: string }>
+  dragData: Array<{ type: string; data: string }>;
 }>;
 
 /**

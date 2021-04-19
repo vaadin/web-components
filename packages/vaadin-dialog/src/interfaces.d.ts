@@ -18,12 +18,14 @@ export type DialogOverlayBounds = {
   height: number;
 };
 
-export type DialogOverlayBoundsParam = DialogOverlayBounds | {
-  top?: string | number;
-  left?: string | number;
-  width?: string | number;
-  height?: string | number;
-};
+export type DialogOverlayBoundsParam =
+  | DialogOverlayBounds
+  | {
+      top?: string | number;
+      left?: string | number;
+      width?: string | number;
+      height?: string | number;
+    };
 
 /**
  * Fired when the `opened` property changes.
@@ -38,7 +40,7 @@ export type DialogResize = CustomEvent<DialogResizeDimensions>;
 export interface DialogElementEventMap {
   'opened-changed': DialogOpenedChanged;
 
-  'resize': DialogResize;
+  resize: DialogResize;
 }
 
 export type DialogEventMap = HTMLElementEventMap & DialogElementEventMap;

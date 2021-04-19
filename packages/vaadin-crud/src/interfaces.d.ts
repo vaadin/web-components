@@ -50,7 +50,6 @@ export type CrudEditorOpenedChanged = CustomEvent<{ value: boolean }>;
  */
 export type CrudEditedItemChanged<T> = CustomEvent<{ value: T }>;
 
-
 /**
  * Fired when the `items` property changes.
  */
@@ -95,15 +94,15 @@ export type CrudElementEventMap<T> = {
 
   'size-changed': CrudSizeChanged;
 
-  'new': CrudNew;
+  new: CrudNew;
 
-  'cancel': CrudCancel<T>;
+  cancel: CrudCancel<T>;
 
-  'delete': CrudDelete<T>;
+  delete: CrudDelete<T>;
 
-  'edit': CrudEdit<T>;
+  edit: CrudEdit<T>;
 
-  'save': CrudSave<T>;
-}
+  save: CrudSave<T>;
+};
 
 export type CrudEventMap<T> = HTMLElementEventMap & CrudElementEventMap<T>;

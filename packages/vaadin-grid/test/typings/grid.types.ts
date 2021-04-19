@@ -4,7 +4,13 @@ import '../../src/vaadin-grid-selection-column';
 import '../../src/vaadin-grid-sorter';
 import '../../src/vaadin-grid-sort-column';
 import '../../src/vaadin-grid-tree-toggle';
-import { GridColumnElement, GridDropLocation, GridItem, GridItemModel, GridSorterDirection } from '../../src/interfaces';
+import {
+  GridColumnElement,
+  GridDropLocation,
+  GridItem,
+  GridItemModel,
+  GridSorterDirection
+} from '../../src/interfaces';
 
 const assert = <T>(value: T) => value;
 
