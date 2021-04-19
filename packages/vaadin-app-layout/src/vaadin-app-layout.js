@@ -8,6 +8,8 @@ import { beforeNextRender, afterNextRender } from '@polymer/polymer/lib/utils/re
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
+import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class';
+import { IronResizableBehavior } from '@polymer/iron-resizable-behavior';
 import './safe-area-inset.js';
 import './detect-ios-navbar.js';
 
@@ -103,7 +105,7 @@ import './detect-ios-navbar.js';
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class AppLayoutElement extends ElementMixin(ThemableMixin(PolymerElement)) {
+class AppLayoutElement extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizableBehavior], PolymerElement))) {
   static get template() {
     return html`
       <style>
@@ -446,6 +448,8 @@ class AppLayoutElement extends ElementMixin(ThemableMixin(PolymerElement)) {
         this._updateDrawerHeight();
       }
     }
+
+    this.notifyResize();
   }
 
   /** @protected */
@@ -502,6 +506,8 @@ class AppLayoutElement extends ElementMixin(ThemableMixin(PolymerElement)) {
     const drawerRect = drawer.getBoundingClientRect();
 
     this.style.setProperty('--_vaadin-app-layout-drawer-offset-size', drawerRect.width + 'px');
+
+    this.notifyResize();
   }
 
   /** @protected */
@@ -540,6 +546,10 @@ class AppLayoutElement extends ElementMixin(ThemableMixin(PolymerElement)) {
     }
 
     this._updateDrawerHeight();
+
+    if (this.overlay !== overlay) {
+      this.notifyResize();
+    }
 
     // TODO(jouni): ARIA attributes. The drawer should act similar to a modal dialog when in ”overlay” mode
   }
