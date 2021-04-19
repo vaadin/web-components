@@ -4,7 +4,7 @@ import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.
 
 import { LoginMixin } from './vaadin-login-mixin.js';
 
-import { LoginEventMap } from './interfaces'
+import { LoginEventMap } from './interfaces';
 
 /**
  * `<vaadin-login-overlay>` is a wrapper of the `<vaadin-login-form>` which opens a login form in an overlay and

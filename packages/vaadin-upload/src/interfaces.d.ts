@@ -56,7 +56,7 @@ export interface UploadI18n {
   formatTime?: (seconds: number, units: number[]) => string;
 }
 
-export type UploadMethod = "POST" | "PUT";
+export type UploadMethod = 'POST' | 'PUT';
 
 /**
  * Fired when a file cannot be added to the queue due to a constrain:

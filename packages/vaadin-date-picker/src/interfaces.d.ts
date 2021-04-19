@@ -14,7 +14,7 @@ export interface DatePickerI18n {
   clear: string;
   today: string;
   cancel: string;
-  parseDate: (date: string) => DatePickerDate | undefined;
+  parseDate: (date: string) => DatePickerDate | undefined;
   formatDate: (date: DatePickerDate) => string;
   formatTitle: (monthName: string, fullYear: number) => string;
 }
@@ -36,7 +36,6 @@ export type DatePickerValueChanged = CustomEvent<{ value: string }>;
 
 export interface DatePickerElementEventMap {
   'opened-changed': DatePickerOpenedChanged;
-
 
   'invalid-changed': DatePickerInvalidChanged;
 

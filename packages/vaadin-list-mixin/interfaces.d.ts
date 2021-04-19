@@ -1,1 +1,1 @@
-export type ListOrientation = 'horizontal' | 'vertical';
+export type ListOrientation = 'horizontal' | 'vertical';

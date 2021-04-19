@@ -25,7 +25,7 @@ export type LoginSubmit = CustomEvent<{ username: string; password: string }>;
 export interface LoginElementEventMap {
   'forgot-password': Event;
 
-  'login': LoginSubmit;
+  login: LoginSubmit;
 }
 
 export interface LoginEventMap extends HTMLElementEventMap, LoginElementEventMap {}

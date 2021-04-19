@@ -4,19 +4,12 @@ export type ComboBoxItem = unknown;
 
 export interface ComboBoxItemModel {
   index: number;
-  item: ComboBoxItem | string;
+  item: ComboBoxItem | string;
 }
 
-export type ComboBoxRenderer = (
-  root: HTMLElement,
-  comboBox: ComboBoxElement,
-  model: ComboBoxItemModel
-) => void;
+export type ComboBoxRenderer = (root: HTMLElement, comboBox: ComboBoxElement, model: ComboBoxItemModel) => void;
 
-export type ComboBoxDataProviderCallback = (
-  items: Array<ComboBoxItem | string>,
-  size: number
-) => void;
+export type ComboBoxDataProviderCallback = (items: Array<ComboBoxItem | string>, size: number) => void;
 
 export interface ComboBoxDataProviderParams {
   page: number;
@@ -24,10 +17,7 @@ export interface ComboBoxDataProviderParams {
   filter: string;
 }
 
-export type ComboBoxDataProvider = (
-  params: ComboBoxDataProviderParams,
-  callback: ComboBoxDataProviderCallback
-) => void;
+export type ComboBoxDataProvider = (params: ComboBoxDataProviderParams, callback: ComboBoxDataProviderCallback) => void;
 
 /**
  * Fired when the user sets a custom value.

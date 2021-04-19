@@ -2,9 +2,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 
 import { DirMixin } from '@vaadin/vaadin-element-mixin/vaadin-dir-mixin.js';
 
-
 import { OverlayEventMap, OverlayRenderer } from './interfaces';
-
 
 /**
  * `<vaadin-overlay>` is a Web Component for creating overlays. The content of the overlay
