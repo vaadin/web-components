@@ -1,5 +1,5 @@
-import '../../src/vaadin-accordion';
-import { AccordionPanelElement } from '../../src/vaadin-accordion-panel';
+import '../../vaadin-accordion';
+import { AccordionPanelElement } from '../../vaadin-accordion-panel';
 
 const assert = <T>(value: T) => value;
 
