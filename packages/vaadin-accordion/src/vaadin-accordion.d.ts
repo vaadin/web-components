@@ -7,17 +7,17 @@ import { AccordionPanelElement } from './vaadin-accordion-panel.js';
 /**
  * Fired when the `items` property changes.
  */
-export type AccordionItemsChanged = CustomEvent<{ value: AccordionPanelElement[] }>;
+export type AccordionItemsChangedEvent = CustomEvent<{ value: AccordionPanelElement[] }>;
 
 /**
  * Fired when the `opened` property changes.
  */
-export type AccordionOpenedChanged = CustomEvent<{ value: number | null }>;
+export type AccordionOpenedChangedEvent = CustomEvent<{ value: number | null }>;
 
 export interface AccordionElementEventMap {
-  'items-changed': AccordionItemsChanged;
+  'items-changed': AccordionItemsChangedEvent;
 
-  'opened-changed': AccordionOpenedChanged;
+  'opened-changed': AccordionOpenedChangedEvent;
 }
 
 export type AccordionEventMap = HTMLElementEventMap & AccordionElementEventMap;
