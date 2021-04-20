@@ -9,17 +9,17 @@ import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.
 /**
  * Fired when the `checked` property changes.
  */
-export type CheckboxCheckedChanged = CustomEvent<{ value: boolean }>;
+export type CheckboxCheckedChangedEvent = CustomEvent<{ value: boolean }>;
 
 /**
  * Fired when the `indeterminate` property changes.
  */
-export type CheckboxIndeterminateChanged = CustomEvent<{ value: boolean }>;
+export type CheckboxIndeterminateChangedEvent = CustomEvent<{ value: boolean }>;
 
 export interface CheckboxElementEventMap {
-  'checked-changed': CheckboxCheckedChanged;
+  'checked-changed': CheckboxCheckedChangedEvent;
 
-  'indeterminate-changed': CheckboxIndeterminateChanged;
+  'indeterminate-changed': CheckboxIndeterminateChangedEvent;
 }
 
 export interface CheckboxEventMap extends HTMLElementEventMap, CheckboxElementEventMap {}

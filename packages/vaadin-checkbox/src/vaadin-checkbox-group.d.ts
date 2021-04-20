@@ -7,17 +7,17 @@ import { CheckboxElement } from './vaadin-checkbox.js';
 /**
  * Fired when the `invalid` property changes.
  */
-export type CheckboxGroupInvalidChanged = CustomEvent<{ value: boolean }>;
+export type CheckboxGroupInvalidChangedEvent = CustomEvent<{ value: boolean }>;
 
 /**
  * Fired when the `value` property changes.
  */
-export type CheckboxGroupValueChanged = CustomEvent<{ value: Array<string> }>;
+export type CheckboxGroupValueChangedEvent = CustomEvent<{ value: Array<string> }>;
 
 export interface CheckboxGroupElementEventMap {
-  'invalid-changed': CheckboxGroupInvalidChanged;
+  'invalid-changed': CheckboxGroupInvalidChangedEvent;
 
-  'value-changed': CheckboxGroupValueChanged;
+  'value-changed': CheckboxGroupValueChangedEvent;
 }
 
 export interface CheckboxGroupEventMap extends HTMLElementEventMap, CheckboxGroupElementEventMap {}

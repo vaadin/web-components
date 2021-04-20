@@ -1,24 +1,16 @@
-import '../../src/vaadin-checkbox';
-import '../../src/vaadin-checkbox-group';
+import '../../vaadin-checkbox';
+import { CheckboxCheckedChangedEvent, CheckboxIndeterminateChangedEvent } from '../../vaadin-checkbox';
+
+const assertType = <TExpected>(value: TExpected) => value;
 
 const checkbox = document.createElement('vaadin-checkbox');
 
-const assert = <T>(value: T) => value;
-
 checkbox.addEventListener('checked-changed', (event) => {
-  assert<boolean>(event.detail.value);
+  assertType<CheckboxCheckedChangedEvent>(event);
+  assertType<boolean>(event.detail.value);
 });
 
 checkbox.addEventListener('indeterminate-changed', (event) => {
-  assert<boolean>(event.detail.value);
-});
-
-const group = document.createElement('vaadin-checkbox-group');
-
-group.addEventListener('invalid-changed', (event) => {
-  assert<boolean>(event.detail.value);
-});
-
-group.addEventListener('value-changed', (event) => {
-  assert<string[]>(event.detail.value);
+  assertType<CheckboxIndeterminateChangedEvent>(event);
+  assertType<boolean>(event.detail.value);
 });
