@@ -1,10 +1,11 @@
 import '../../vaadin-combo-box';
 import {
-  ComboBoxFilterChangedEvent,
-  ComboBoxInvalidChangedEvent,
-  ComboBoxOpenedChangedEvent,
-  ComboBoxValueChangedEvent,
-  ComboBoxCustomValueSetEvent,
+  ComboBoxFilterChanged,
+  ComboBoxInvalidChanged,
+  ComboBoxOpenedChanged,
+  ComboBoxValueChanged,
+  ComboBoxCustomValueSet,
+  ComboBoxSelectedItemChanged,
   ComboBoxSelectedItemChangedEvent
 } from '../../vaadin-combo-box';
 
@@ -15,67 +16,57 @@ const assertType = <TExpected>(actual: TExpected) => actual;
 const comboBox = document.createElement('vaadin-combo-box');
 
 comboBox.addEventListener('custom-value-set', (event) => {
-  assertType<ComboBoxCustomValueSetEvent>(event);
-  assertType<string>(event.detail);
+  assertType<ComboBoxCustomValueSet>(event);
 });
 
 comboBox.addEventListener('opened-changed', (event) => {
-  assertType<ComboBoxOpenedChangedEvent>(event);
-  assertType<boolean>(event.detail.value);
+  assertType<ComboBoxOpenedChanged>(event);
 });
 
 comboBox.addEventListener('invalid-changed', (event) => {
-  assertType<ComboBoxInvalidChangedEvent>(event);
-  assertType<boolean>(event.detail.value);
+  assertType<ComboBoxInvalidChanged>(event);
 });
 
 comboBox.addEventListener('value-changed', (event) => {
-  assertType<ComboBoxValueChangedEvent>(event);
-  assertType<string>(event.detail.value);
+  assertType<ComboBoxValueChanged>(event);
 });
 
 comboBox.addEventListener('filter-changed', (event) => {
-  assertType<ComboBoxFilterChangedEvent>(event);
-  assertType<string>(event.detail.value);
+  assertType<ComboBoxFilterChanged>(event);
 });
 
 comboBox.addEventListener(
   'selected-item-changed',
   (event: ComboBoxSelectedItemChangedEvent<{ label: string; value: string }>) => {
-    assertType<{ label: string; value: string }>(event.detail.value);
+    assertType<ComboBoxSelectedItemChanged<{ label: string; value: string }>>(event);
   }
 );
 
 const light = document.createElement('vaadin-combo-box-light');
 
 light.addEventListener('custom-value-set', (event) => {
-  assertType<ComboBoxCustomValueSetEvent>(event);
-  assertType<string>(event.detail);
+  assertType<ComboBoxCustomValueSet>(event);
 });
 
 light.addEventListener('opened-changed', (event) => {
-  assertType<ComboBoxOpenedChangedEvent>(event);
-  assertType<boolean>(event.detail.value);
+  assertType<ComboBoxOpenedChanged>(event);
 });
 
 light.addEventListener('invalid-changed', (event) => {
-  assertType<ComboBoxInvalidChangedEvent>(event);
-  assertType<boolean>(event.detail.value);
+  assertType<ComboBoxInvalidChanged>(event);
 });
 
 light.addEventListener('value-changed', (event) => {
-  assertType<ComboBoxValueChangedEvent>(event);
-  assertType<string>(event.detail.value);
+  assertType<ComboBoxValueChanged>(event);
 });
 
 light.addEventListener('filter-changed', (event) => {
-  assertType<ComboBoxFilterChangedEvent>(event);
-  assertType<string>(event.detail.value);
+  assertType<ComboBoxFilterChanged>(event);
 });
 
 light.addEventListener(
   'selected-item-changed',
   (event: ComboBoxSelectedItemChangedEvent<{ label: string; value: string }>) => {
-    assertType<{ label: string; value: string }>(event.detail.value);
+    assertType<ComboBoxSelectedItemChanged<{ label: string; value: string }>>(event);
   }
 );
