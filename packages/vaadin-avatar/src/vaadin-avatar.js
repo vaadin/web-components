@@ -339,8 +339,9 @@ class AvatarElement extends ElementMixin(ThemableMixin(PolymerElement)) {
 
   /** @private */
   __handleImageLoadError() {
-    this.__imgFailedToLoad = true;
     if (this.img) {
+      console.warn(`<vaadin-avatar> The specified image could not be loaded: ${this.img}`);
+      this.__imgFailedToLoad = true;
       this.__updateVisibility();
     }
   }

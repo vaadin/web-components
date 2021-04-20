@@ -193,12 +193,25 @@ describe('vaadin-avatar', () => {
     });
 
     describe('img fallback', () => {
+      beforeEach(() => {
+        sinon.stub(console, 'warn');
+      });
+      afterEach(() => {
+        console.warn.restore();
+      });
+
       it('should display abbr as fallback if image can not be loaded', async () => {
         avatar.abbr = 'YY';
         avatar.img = invalidImageSrc;
         await oneEvent(imgElement, 'error');
         expect(imgElement.hasAttribute('hidden')).to.be.true;
         expect(abbrElement.hasAttribute('hidden')).to.be.false;
+      });
+
+      it('should log a warning if image can not be loaded', async () => {
+        avatar.img = invalidImageSrc;
+        await oneEvent(imgElement, 'error');
+        expect(console.warn.calledOnce).to.be.true;
       });
 
       it('should display img when setting a valid source after setting an invalid source', async () => {
