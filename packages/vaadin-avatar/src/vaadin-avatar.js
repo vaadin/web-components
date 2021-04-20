@@ -118,7 +118,7 @@ class AvatarElement extends ElementMixin(ThemableMixin(PolymerElement)) {
           box-shadow: inset 0 0 0 2px var(--vaadin-avatar-user-color);
         }
       </style>
-      <img hidden$="[[!__imgVisible]]" src$="[[img]]" aria-hidden="true" />
+      <img hidden$="[[!__imgVisible]]" src$="[[img]]" aria-hidden="true" on-error="__handleImageLoadError" />
       <svg
         part="icon"
         hidden$="[[!__iconVisible]]"
@@ -157,7 +157,8 @@ class AvatarElement extends ElementMixin(ThemableMixin(PolymerElement)) {
        */
       img: {
         type: String,
-        reflectToAttribute: true
+        reflectToAttribute: true,
+        observer: '__imgChanged'
       },
 
       /**
@@ -284,6 +285,11 @@ class AvatarElement extends ElementMixin(ThemableMixin(PolymerElement)) {
   }
 
   /** @private */
+  __imgChanged() {
+    this.__imgFailedToLoad = false;
+  }
+
+  /** @private */
   __imgOrAbbrOrNameChanged(img, abbr, name) {
     this.__updateVisibility();
 
@@ -317,9 +323,9 @@ class AvatarElement extends ElementMixin(ThemableMixin(PolymerElement)) {
 
   /** @private */
   __updateVisibility() {
-    this.__imgVisible = !!this.img;
-    this.__abbrVisible = !this.img && !!this.abbr;
-    this.__iconVisible = !this.img && !this.abbr;
+    this.__imgVisible = !!this.img && !this.__imgFailedToLoad;
+    this.__abbrVisible = !this.__imgVisible && !!this.abbr;
+    this.__iconVisible = !this.__imgVisible && !this.abbr;
   }
 
   /** @private */
@@ -328,6 +334,14 @@ class AvatarElement extends ElementMixin(ThemableMixin(PolymerElement)) {
       this.setAttribute('title', title);
     } else {
       this.setAttribute('title', this.i18n.anonymous);
+    }
+  }
+
+  /** @private */
+  __handleImageLoadError() {
+    this.__imgFailedToLoad = true;
+    if (this.img) {
+      this.__updateVisibility();
     }
   }
 }
