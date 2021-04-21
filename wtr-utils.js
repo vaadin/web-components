@@ -36,6 +36,21 @@ const getAllVisualPackages = () => {
 };
 
 /**
+ * Gel all packages with updated reference screenshots.
+ */
+const getUpdatedScreenshotsPackages = () => {
+  const packages = new Set();
+  const log = execSync('git diff --name-only origin/master HEAD').toString();
+  log.split('\n').forEach((line) => {
+    if (line.startsWith('screenshots')) {
+      const data = line.split('/');
+      packages.add(`vaadin-${data[data.length - 2]}`);
+    }
+  });
+  return [...packages];
+};
+
+/**
  * Get packages for running unit tests.
  */
 const getUnitTestPackages = () => {
@@ -75,7 +90,9 @@ const getVisualTestPackages = () => {
 
   let packages = getChangedPackages()
     .map((project) => project.name.replace('@vaadin/', ''))
-    .filter((project) => NO_UNIT_TESTS.indexOf(project) === -1 && project.indexOf('mixin') === -1);
+    .filter((project) => NO_UNIT_TESTS.indexOf(project) === -1 && project.indexOf('mixin') === -1)
+    .concat(getUpdatedScreenshotsPackages())
+    .filter((v, i, a) => a.indexOf(v) === i);
 
   if (packages.length == 0) {
     // When running in GitHub Actions, do nothing.
