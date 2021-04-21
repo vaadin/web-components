@@ -1,17 +1,25 @@
-import '../../src/vaadin-list-box';
+import '../../vaadin-list-box.js';
+import {
+  ListBoxItemsChangedEvent,
+  ListBoxSelectedChangedEvent,
+  ListBoxSelectedValuesChangedEvent
+} from '../../vaadin-list-box.js';
+
+const assertType = <TExpected>(actual: TExpected) => actual;
 
 const listBox = document.createElement('vaadin-list-box');
 
-const assert = <T>(value: T) => value;
-
 listBox.addEventListener('items-changed', (event) => {
-  assert<Element[]>(event.detail.value);
+  assertType<ListBoxItemsChangedEvent>(event);
+  assertType<Element[]>(event.detail.value);
 });
 
 listBox.addEventListener('selected-changed', (event) => {
-  assert<number>(event.detail.value);
+  assertType<ListBoxSelectedChangedEvent>(event);
+  assertType<number>(event.detail.value);
 });
 
 listBox.addEventListener('selected-values-changed', (event) => {
-  assert<number[]>(event.detail.value);
+  assertType<ListBoxSelectedValuesChangedEvent>(event);
+  assertType<number[]>(event.detail.value);
 });
