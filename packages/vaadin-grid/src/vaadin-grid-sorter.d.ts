@@ -3,12 +3,12 @@ import { GridSorterDirection } from './interfaces';
 /**
  * Fired when the `direction` property changes.
  */
-export type GridSorterDirectionChanged = CustomEvent<{ value: GridSorterDirection }>;
+export type GridSorterDirectionChangedEvent = CustomEvent<{ value: GridSorterDirection }>;
 
 export interface GridSorterElementEventMap {
   'sorter-changed': Event;
 
-  'direction-changed': GridSorterDirectionChanged;
+  'direction-changed': GridSorterDirectionChangedEvent;
 }
 
 export interface GridSorterEventMap extends HTMLElementEventMap, GridSorterElementEventMap {}

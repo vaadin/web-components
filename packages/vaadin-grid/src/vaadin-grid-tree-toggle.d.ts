@@ -3,10 +3,10 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 /**
  * Fired when the `expanded` property changes.
  */
-export type GridTreeToggleExpandedChanged = CustomEvent<{ value: boolean }>;
+export type GridTreeToggleExpandedChangedEvent = CustomEvent<{ value: boolean }>;
 
 export interface GridTreeToggleElementEventMap {
-  'expanded-changed': GridTreeToggleExpandedChanged;
+  'expanded-changed': GridTreeToggleExpandedChangedEvent;
 }
 
 export interface GridTreeToggleEventMap extends HTMLElementEventMap, GridTreeToggleElementEventMap {}

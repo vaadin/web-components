@@ -3,10 +3,10 @@ import { GridColumnElement } from './vaadin-grid-column.js';
 /**
  * Fired when the `selectAll` property changes.
  */
-export type GridSelectionColumnSelectAllChanged = CustomEvent<{ value: boolean }>;
+export type GridSelectionColumnSelectAllChangedEvent = CustomEvent<{ value: boolean }>;
 
 export interface GridSelectionColumnElementEventMap {
-  'select-all-changed': GridSelectionColumnSelectAllChanged;
+  'select-all-changed': GridSelectionColumnSelectAllChangedEvent;
 }
 
 export interface GridSelectionColumnEventMap extends HTMLElementEventMap, GridSelectionColumnElementEventMap {}

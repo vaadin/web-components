@@ -1,10 +1,10 @@
 /**
  * Fired when the `value` property changes.
  */
-export type GridFilterValueChanged = CustomEvent<{ value: string }>;
+export type GridFilterValueChangedEvent = CustomEvent<{ value: string }>;
 
 export interface GridFilterElementEventMap {
-  'value-changed': GridFilterValueChanged;
+  'value-changed': GridFilterValueChangedEvent;
 }
 
 export interface GridFilterEventMap extends HTMLElementEventMap, GridFilterElementEventMap {}
