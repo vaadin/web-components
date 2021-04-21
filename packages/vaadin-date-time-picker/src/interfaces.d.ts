@@ -6,17 +6,17 @@ export interface DateTimePickerI18n extends DatePickerI18n, TimePickerI18n {}
 /**
  * Fired when the `invalid` property changes.
  */
-export type DateTimePickerInvalidChanged = CustomEvent<{ value: boolean }>;
+export type DateTimePickerInvalidChangedEvent = CustomEvent<{ value: boolean }>;
 
 /**
  * Fired when the `value` property changes.
  */
-export type DateTimePickerValueChanged = CustomEvent<{ value: string }>;
+export type DateTimePickerValueChangedEvent = CustomEvent<{ value: string }>;
 
 export interface DateTimePickerElementEventMap {
-  'invalid-changed': DateTimePickerInvalidChanged;
+  'invalid-changed': DateTimePickerInvalidChangedEvent;
 
-  'value-changed': DateTimePickerValueChanged;
+  'value-changed': DateTimePickerValueChangedEvent;
 }
 
 export interface DateTimePickerEventMap extends DateTimePickerElementEventMap, HTMLElementEventMap {}
