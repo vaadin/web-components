@@ -582,7 +582,7 @@ class UploadElement extends ElementMixin(ThemableMixin(PolymerElement)) {
     }
 
     const ini = Date.now();
-    const xhr = (file.xhr = this._createXhr(file));
+    const xhr = (file.xhr = this._createXhr());
 
     let stalledId, last;
     // onprogress is called always after onreadystatechange
