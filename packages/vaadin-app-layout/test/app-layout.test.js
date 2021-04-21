@@ -269,6 +269,7 @@ describe('vaadin-app-layout', () => {
       resizeAwareChild = layout.querySelector('resize-aware');
       sinon.stub(resizeAwareChild, 'notifyResize');
     });
+
     afterEach(() => {
       resizeAwareChild.notifyResize.restore();
     });
