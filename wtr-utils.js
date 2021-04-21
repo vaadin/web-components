@@ -155,14 +155,9 @@ const testRunnerHtml = (testFramework) => `
   </html>
 `;
 
-const getScreenshotFileName = ({ browser, name }, type, diff) => {
+const getScreenshotFileName = ({ name }, type, diff) => {
   const [component, test] = name.split(':');
-  return path.join(
-    browser.replace('Windows 10 ', '').replace(' latest', ''),
-    type,
-    component,
-    diff ? `${test}-diff` : test
-  );
+  return path.join('chrome', type, component, diff ? `${test}-diff` : test);
 };
 
 const getBaselineScreenshotName = (args) => getScreenshotFileName(args, 'baseline');
