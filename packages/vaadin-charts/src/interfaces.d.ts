@@ -34,148 +34,148 @@ export type ChartPointEvent = { target: Point; type: string };
 /**
  * Fired when a new series is added.
  */
-export type ChartAddSeries = CustomEvent<{ chart: Chart; originalEvent: ChartEvent }>;
+export type ChartAddSeriesEvent = CustomEvent<{ chart: Chart; originalEvent: ChartEvent }>;
 
 /**
  * Fired after a chart is exported.
  */
-export type ChartAfterExport = CustomEvent<{ chart: Chart; originalEvent: ChartEvent }>;
+export type ChartAfterExportEvent = CustomEvent<{ chart: Chart; originalEvent: ChartEvent }>;
 
 /**
  * Fired after a chart is printed.
  */
-export type ChartAfterPrint = CustomEvent<{ chart: Chart; originalEvent: ChartEvent }>;
+export type ChartAfterPrintEvent = CustomEvent<{ chart: Chart; originalEvent: ChartEvent }>;
 
 /**
  * Fired before a chart is exported.
  */
-export type ChartBeforeExport = CustomEvent<{ chart: Chart; originalEvent: ChartEvent }>;
+export type ChartBeforeExportEvent = CustomEvent<{ chart: Chart; originalEvent: ChartEvent }>;
 
 /**
  * Fired before a chart is printed.
  */
-export type ChartBeforePrint = CustomEvent<{ chart: Chart; originalEvent: ChartEvent }>;
+export type ChartBeforePrintEvent = CustomEvent<{ chart: Chart; originalEvent: ChartEvent }>;
 
 /**
  * Fired when clicking on the plot background.
  */
-export type ChartClick = CustomEvent<{ chart: Chart; originalEvent: ChartEvent }>;
+export type ChartClickEvent = CustomEvent<{ chart: Chart; originalEvent: ChartEvent }>;
 
 /**
  * Fired when the chart has finished loading.
  */
-export type ChartLoad = CustomEvent<{ chart: Chart; originalEvent: ChartEvent }>;
+export type ChartLoadEvent = CustomEvent<{ chart: Chart; originalEvent: ChartEvent }>;
 
 /**
  * Fired when drilldown point is clicked.
  */
-export type ChartDrilldown = CustomEvent<{ chart: Chart; originalEvent: ChartEvent }>;
+export type ChartDrilldownEvent = CustomEvent<{ chart: Chart; originalEvent: ChartEvent }>;
 
 /**
  * Fired when drilling up from a drilldown series.
  */
-export type ChartDrillup = CustomEvent<{ chart: Chart; originalEvent: ChartEvent }>;
+export type ChartDrillupEvent = CustomEvent<{ chart: Chart; originalEvent: ChartEvent }>;
 
 /**
  * Fired after all the series has been drilled up if chart has multiple drilldown series.
  */
-export type ChartDrillupall = CustomEvent<{ chart: Chart; originalEvent: ChartEvent }>;
+export type ChartDrillupallEvent = CustomEvent<{ chart: Chart; originalEvent: ChartEvent }>;
 
 /**
  * Fired when the chart is redraw. Can be called after a `Chart.configuration.redraw()`
  * or after an axis, series or point is modified with the `redraw` option set to `true`.
  */
-export type ChartRedraw = CustomEvent<{ chart: Chart; originalEvent: ChartEvent }>;
+export type ChartRedrawEvent = CustomEvent<{ chart: Chart; originalEvent: ChartEvent }>;
 
 /**
  * Fired when an area of the chart has been selected.
  */
-export type ChartSelection = CustomEvent<{ chart: Chart; originalEvent: ChartEvent }>;
+export type ChartSelectionEvent = CustomEvent<{ chart: Chart; originalEvent: ChartEvent }>;
 
 /**
  * Fired when the series has finished its initial animation.
  */
-export type ChartSeriesAfterAnimate = CustomEvent<{ series: Series; originalEvent: ChartSeriesEvent }>;
+export type ChartSeriesAfterAnimateEvent = CustomEvent<{ series: Series; originalEvent: ChartSeriesEvent }>;
 
 /**
  * Fired when the checkbox next to the series' name in the legend is clicked.
  */
-export type ChartSeriesCheckboxClick = CustomEvent<{ series: Series; originalEvent: ChartSeriesEvent }>;
+export type ChartSeriesCheckboxClickEvent = CustomEvent<{ series: Series; originalEvent: ChartSeriesEvent }>;
 
 /**
  * Fired when the series is clicked.
  */
-export type ChartSeriesClick = CustomEvent<{ series: Series; originalEvent: ChartSeriesEvent }>;
+export type ChartSeriesClickEvent = CustomEvent<{ series: Series; originalEvent: ChartSeriesEvent }>;
 
 /**
  * Fired when the series is hidden after chart generation time.
  */
-export type ChartSeriesHide = CustomEvent<{ series: Series; originalEvent: ChartSeriesEvent }>;
+export type ChartSeriesHideEvent = CustomEvent<{ series: Series; originalEvent: ChartSeriesEvent }>;
 
 /**
  * Fired when the legend item belonging to the series is clicked.
  */
-export type ChartSeriesLegendItemClick = CustomEvent<{ series: Series; originalEvent: ChartSeriesEvent }>;
+export type ChartSeriesLegendItemClickEvent = CustomEvent<{ series: Series; originalEvent: ChartSeriesEvent }>;
 
 /**
  * Fired when the mouse leaves the graph.
  */
-export type ChartSeriesMouseOut = CustomEvent<{ series: Series; originalEvent: ChartSeriesEvent }>;
+export type ChartSeriesMouseOutEvent = CustomEvent<{ series: Series; originalEvent: ChartSeriesEvent }>;
 
 /**
  * Fired when the mouse enters the graph.
  */
-export type ChartSeriesMouseOver = CustomEvent<{ series: Series; originalEvent: ChartSeriesEvent }>;
+export type ChartSeriesMouseOverEvent = CustomEvent<{ series: Series; originalEvent: ChartSeriesEvent }>;
 
 /**
  * Fired when the series is shown after chart generation time.
  */
-export type ChartSeriesShow = CustomEvent<{ series: Series; originalEvent: ChartSeriesEvent }>;
+export type ChartSeriesShowEvent = CustomEvent<{ series: Series; originalEvent: ChartSeriesEvent }>;
 
 /**
  * Fired when the point is clicked.
  */
-export type ChartPointClick = CustomEvent<{ point: Point; originalEvent: ChartPointEvent }>;
+export type ChartPointClickEvent = CustomEvent<{ point: Point; originalEvent: ChartPointEvent }>;
 
 /**
  * Fired when the legend item belonging to the point is clicked.
  */
-export type ChartPointLegendItemClick = CustomEvent<{ point: Point; originalEvent: ChartPointEvent }>;
+export type ChartPointLegendItemClickEvent = CustomEvent<{ point: Point; originalEvent: ChartPointEvent }>;
 
 /**
  * Fired when the mouse leaves the area close to the point.
  */
-export type ChartPointMouseOut = CustomEvent<{ point: Point; originalEvent: ChartPointEvent }>;
+export type ChartPointMouseOutEvent = CustomEvent<{ point: Point; originalEvent: ChartPointEvent }>;
 
 /**
  * Fired when the mouse enters the area close to the point.
  */
-export type ChartPointMouseOver = CustomEvent<{ point: Point; originalEvent: ChartPointEvent }>;
+export type ChartPointMouseOverEvent = CustomEvent<{ point: Point; originalEvent: ChartPointEvent }>;
 
 /**
  * Fired when the point is removed from the series.
  */
-export type ChartPointRemove = CustomEvent<{ point: Point; originalEvent: ChartPointEvent }>;
+export type ChartPointRemoveEvent = CustomEvent<{ point: Point; originalEvent: ChartPointEvent }>;
 
 /**
  * Fired when the point is selected either programmatically or by clicking on the point.
  */
-export type ChartPointSelect = CustomEvent<{ point: Point; originalEvent: ChartPointEvent }>;
+export type ChartPointSelectEvent = CustomEvent<{ point: Point; originalEvent: ChartPointEvent }>;
 
 /**
  * Fired when the point is unselected either programmatically or by clicking on the point.
  */
-export type ChartPointUnselect = CustomEvent<{ point: Point; originalEvent: ChartPointEvent }>;
+export type ChartPointUnselectEvent = CustomEvent<{ point: Point; originalEvent: ChartPointEvent }>;
 
 /**
  * Fired when the point is updated programmatically through `.update()` method.
  */
-export type ChartPointUpdate = CustomEvent<{ point: Point; originalEvent: ChartPointEvent }>;
+export type ChartPointUpdateEvent = CustomEvent<{ point: Point; originalEvent: ChartPointEvent }>;
 
 /**
  * Fired when when the minimum and maximum is set for the X axis.
  */
-export type ChartXaxesExtremesSet = CustomEvent<{
+export type ChartXaxesExtremesSetEvent = CustomEvent<{
   axis: Axis;
   originalEvent: ExtremesObject & {
     target: Axis;
@@ -186,7 +186,7 @@ export type ChartXaxesExtremesSet = CustomEvent<{
 /**
  * Fired when when the minimum and maximum is set for the Y axis.
  */
-export type ChartYaxesExtremesSet = CustomEvent<{
+export type ChartYaxesExtremesSetEvent = CustomEvent<{
   axis: Axis;
   originalEvent: ExtremesObject & {
     target: Axis;
@@ -195,65 +195,65 @@ export type ChartYaxesExtremesSet = CustomEvent<{
 }>;
 
 export interface ChartElementEventMap {
-  'chart-add-series': ChartAddSeries;
+  'chart-add-series': ChartAddSeriesEvent;
 
-  'chart-after-export': ChartAfterExport;
+  'chart-after-export': ChartAfterExportEvent;
 
-  'chart-after-print': ChartAfterPrint;
+  'chart-after-print': ChartAfterPrintEvent;
 
-  'chart-before-export': ChartBeforeExport;
+  'chart-before-export': ChartBeforeExportEvent;
 
-  'chart-before-print': ChartBeforePrint;
+  'chart-before-print': ChartBeforePrintEvent;
 
-  'chart-click': ChartClick;
+  'chart-click': ChartClickEvent;
 
-  'chart-drilldown': ChartDrilldown;
+  'chart-drilldown': ChartDrilldownEvent;
 
-  'chart-drillup': ChartDrillup;
+  'chart-drillup': ChartDrillupEvent;
 
-  'chart-drillupall': ChartDrillupall;
+  'chart-drillupall': ChartDrillupallEvent;
 
-  'chart-load': ChartLoad;
+  'chart-load': ChartLoadEvent;
 
-  'chart-redraw': ChartRedraw;
+  'chart-redraw': ChartRedrawEvent;
 
-  'chart-selection': ChartSelection;
+  'chart-selection': ChartSelectionEvent;
 
-  'series-after-animate': ChartSeriesAfterAnimate;
+  'series-after-animate': ChartSeriesAfterAnimateEvent;
 
-  'series-checkbox-click': ChartSeriesCheckboxClick;
+  'series-checkbox-click': ChartSeriesCheckboxClickEvent;
 
-  'series-click': ChartSeriesClick;
+  'series-click': ChartSeriesClickEvent;
 
-  'series-hide': ChartSeriesHide;
+  'series-hide': ChartSeriesHideEvent;
 
-  'series-legend-item-click': ChartSeriesLegendItemClick;
+  'series-legend-item-click': ChartSeriesLegendItemClickEvent;
 
-  'series-mouse-out': ChartSeriesMouseOut;
+  'series-mouse-out': ChartSeriesMouseOutEvent;
 
-  'series-mouse-over': ChartSeriesMouseOver;
+  'series-mouse-over': ChartSeriesMouseOverEvent;
 
-  'series-show': ChartSeriesShow;
+  'series-show': ChartSeriesShowEvent;
 
-  'point-click': ChartPointClick;
+  'point-click': ChartPointClickEvent;
 
-  'point-legend-item-click': ChartPointLegendItemClick;
+  'point-legend-item-click': ChartPointLegendItemClickEvent;
 
-  'point-mouse-out': ChartPointMouseOut;
+  'point-mouse-out': ChartPointMouseOutEvent;
 
-  'point-mouse-over': ChartPointMouseOver;
+  'point-mouse-over': ChartPointMouseOverEvent;
 
-  'point-remove': ChartPointRemove;
+  'point-remove': ChartPointRemoveEvent;
 
-  'point-select': ChartPointSelect;
+  'point-select': ChartPointSelectEvent;
 
-  'point-unselect': ChartPointUnselect;
+  'point-unselect': ChartPointUnselectEvent;
 
-  'point-update': ChartPointUpdate;
+  'point-update': ChartPointUpdateEvent;
 
-  'xaxes-extremes-set': ChartXaxesExtremesSet;
+  'xaxes-extremes-set': ChartXaxesExtremesSetEvent;
 
-  'yaxes-extremes-set': ChartYaxesExtremesSet;
+  'yaxes-extremes-set': ChartYaxesExtremesSetEvent;
 }
 
 export type ChartEventMap = HTMLElementEventMap & ChartElementEventMap;
