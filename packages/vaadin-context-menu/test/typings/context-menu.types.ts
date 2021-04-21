@@ -1,14 +1,20 @@
-import { ContextMenuItem } from '../../src/interfaces';
-import '../../src/vaadin-context-menu';
+import '../../vaadin-context-menu.js';
+import {
+  ContextMenuItem,
+  ContextMenuOpenedChangedEvent,
+  ContextMenuItemSelectedEvent
+} from '../../vaadin-context-menu.js';
 
 const menu = document.createElement('vaadin-context-menu');
 
-const assert = <T>(value: T) => value;
+const assertType = <TExpected>(actual: TExpected) => actual;
 
 menu.addEventListener('opened-changed', (event) => {
-  assert<boolean>(event.detail.value);
+  assertType<ContextMenuOpenedChangedEvent>(event);
+  assertType<boolean>(event.detail.value);
 });
 
 menu.addEventListener('item-selected', (event) => {
-  assert<ContextMenuItem>(event.detail.value);
+  assertType<ContextMenuItemSelectedEvent>(event);
+  assertType<ContextMenuItem>(event.detail.value);
 });
