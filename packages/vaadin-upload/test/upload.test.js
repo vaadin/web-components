@@ -88,7 +88,7 @@ describe('upload', () => {
         expect(f.loaded).to.be.equal(100000);
         expect(f.size).to.be.equal(100000);
         expect(f.speed).to.be.gt(100);
-        expect(f.uploading).not.to.be.ok;
+        expect(f.uploading).to.be.ok;
       });
 
       it('should fire the upload-success', async () => {

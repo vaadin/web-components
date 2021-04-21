@@ -610,7 +610,6 @@ class UploadElement extends ElementMixin(ThemableMixin(PolymerElement)) {
         } else {
           file.loadedStr = file.totalStr;
           file.status = this.i18n.uploading.status.processing;
-          file.uploading = false;
         }
       }
 
