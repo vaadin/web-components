@@ -5,24 +5,24 @@ import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.
 /**
  * Fired when the `drawerOpened` property changes.
  */
-export type AppLayoutDrawerOpenedChanged = CustomEvent<{ value: boolean }>;
+export type AppLayoutDrawerOpenedChangedEvent = CustomEvent<{ value: boolean }>;
 
 /**
  * Fired when the `overlay` property changes.
  */
-export type AppLayoutOverlayChanged = CustomEvent<{ value: boolean }>;
+export type AppLayoutOverlayChangedEvent = CustomEvent<{ value: boolean }>;
 
 /**
  * Fired when the `primarySection` property changes.
  */
-export type AppLayoutPrimarySectionChanged = CustomEvent<{ value: 'navbar' | 'drawer' }>;
+export type AppLayoutPrimarySectionChangedEvent = CustomEvent<{ value: 'navbar' | 'drawer' }>;
 
 export interface AppLayoutElementEventMap {
-  'drawer-opened-changed': AppLayoutDrawerOpenedChanged;
+  'drawer-opened-changed': AppLayoutDrawerOpenedChangedEvent;
 
-  'overlay-changed': AppLayoutOverlayChanged;
+  'overlay-changed': AppLayoutOverlayChangedEvent;
 
-  'primary-section-changed': AppLayoutPrimarySectionChanged;
+  'primary-section-changed': AppLayoutPrimarySectionChangedEvent;
 }
 
 export type AppLayoutEventMap = HTMLElementEventMap & AppLayoutElementEventMap;
