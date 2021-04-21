@@ -22,24 +22,24 @@ export interface DatePickerI18n {
 /**
  * Fired when the `opened` property changes.
  */
-export type DatePickerOpenedChanged = CustomEvent<{ value: boolean }>;
+export type DatePickerOpenedChangedEvent = CustomEvent<{ value: boolean }>;
 
 /**
  * Fired when the `invalid` property changes.
  */
-export type DatePickerInvalidChanged = CustomEvent<{ value: boolean }>;
+export type DatePickerInvalidChangedEvent = CustomEvent<{ value: boolean }>;
 
 /**
  * Fired when the `value` property changes.
  */
-export type DatePickerValueChanged = CustomEvent<{ value: string }>;
+export type DatePickerValueChangedEvent = CustomEvent<{ value: string }>;
 
 export interface DatePickerElementEventMap {
-  'opened-changed': DatePickerOpenedChanged;
+  'opened-changed': DatePickerOpenedChangedEvent;
 
-  'invalid-changed': DatePickerInvalidChanged;
+  'invalid-changed': DatePickerInvalidChangedEvent;
 
-  'value-changed': DatePickerValueChanged;
+  'value-changed': DatePickerValueChangedEvent;
 }
 
 export interface DatePickerEventMap extends HTMLElementEventMap, DatePickerElementEventMap {}
