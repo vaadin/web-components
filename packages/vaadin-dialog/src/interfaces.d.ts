@@ -30,17 +30,17 @@ export type DialogOverlayBoundsParam =
 /**
  * Fired when the `opened` property changes.
  */
-export type DialogOpenedChanged = CustomEvent<{ value: boolean }>;
+export type DialogOpenedChangedEvent = CustomEvent<{ value: boolean }>;
 
 /**
  * Fired when the dialog resize is finished.
  */
-export type DialogResize = CustomEvent<DialogResizeDimensions>;
+export type DialogResizeEvent = CustomEvent<DialogResizeDimensions>;
 
 export interface DialogElementEventMap {
-  'opened-changed': DialogOpenedChanged;
+  'opened-changed': DialogOpenedChangedEvent;
 
-  resize: DialogResize;
+  resize: DialogResizeEvent;
 }
 
 export type DialogEventMap = HTMLElementEventMap & DialogElementEventMap;
