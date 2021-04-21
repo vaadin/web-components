@@ -1,7 +1,18 @@
-import { CrudElement } from '../../src/vaadin-crud';
-import '../../src/vaadin-crud';
+import '../../vaadin-crud.js';
+import {
+  CrudElement,
+  CrudEditedItemChangedEvent,
+  CrudEditorOpenedChangedEvent,
+  CrudCancelEvent,
+  CrudDeleteEvent,
+  CrudEditEvent,
+  CrudItemsChangedEvent,
+  CrudNewEvent,
+  CrudSaveEvent,
+  CrudSizeChangedEvent
+} from '../../vaadin-crud.js';
 
-const assert = <T>(value: T) => value;
+const assertType = <TExpected>(actual: TExpected) => actual;
 
 type User = {
   name: {
@@ -13,38 +24,47 @@ type User = {
 const crud: CrudElement<User> = document.createElement('vaadin-crud');
 
 crud.addEventListener('editor-opened-changed', (event) => {
-  assert<boolean>(event.detail.value);
+  assertType<CrudEditorOpenedChangedEvent>(event);
+  assertType<boolean>(event.detail.value);
 });
 
 crud.addEventListener('edited-item-changed', (event) => {
-  assert<User>(event.detail.value);
+  assertType<CrudEditedItemChangedEvent<User>>(event);
+  assertType<User>(event.detail.value);
 });
 
 crud.addEventListener('items-changed', (event) => {
-  assert<User[]>(event.detail.value);
+  assertType<CrudItemsChangedEvent<User>>(event);
+  assertType<User[]>(event.detail.value);
 });
 
 crud.addEventListener('size-changed', (event) => {
-  assert<number>(event.detail.value);
+  assertType<CrudSizeChangedEvent>(event);
+  assertType<number>(event.detail.value);
 });
 
 crud.addEventListener('new', (event) => {
-  assert<null>(event.detail.item);
+  assertType<CrudNewEvent>(event);
+  assertType<null>(event.detail.item);
 });
 
 crud.addEventListener('edit', (event) => {
-  assert<User>(event.detail.item);
+  assertType<CrudEditEvent<User>>(event);
+  assertType<User>(event.detail.item);
 });
 
 crud.addEventListener('delete', (event) => {
-  assert<User>(event.detail.item);
+  assertType<CrudDeleteEvent<User>>(event);
+  assertType<User>(event.detail.item);
 });
 
 crud.addEventListener('cancel', (event) => {
-  assert<User>(event.detail.item);
+  assertType<CrudCancelEvent<User>>(event);
+  assertType<User>(event.detail.item);
 });
 
 crud.addEventListener('save', (event) => {
-  assert<User>(event.detail.item);
-  assert<boolean>(event.detail.new);
+  assertType<CrudSaveEvent<User>>(event);
+  assertType<User>(event.detail.item);
+  assertType<boolean>(event.detail.new);
 });
