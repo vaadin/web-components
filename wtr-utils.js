@@ -27,6 +27,15 @@ const getAllPackages = () => {
 };
 
 /**
+ * Get all available packages with visual tests.
+ */
+const getAllVisualPackages = () => {
+  return fs
+    .readdirSync('packages')
+    .filter((dir) => fs.statSync(`packages/${dir}`).isDirectory() && fs.existsSync(`packages/${dir}/test/visual`));
+};
+
+/**
  * Get packages for running unit tests.
  */
 const getUnitTestPackages = () => {
@@ -61,7 +70,7 @@ const getUnitTestPackages = () => {
 const getVisualTestPackages = () => {
   // If --group flag is passed, return all packages.
   if (group) {
-    return getAllPackages();
+    return getAllVisualPackages();
   }
 
   let packages = getChangedPackages()
@@ -75,7 +84,7 @@ const getVisualTestPackages = () => {
       process.exit(0);
     } else {
       console.log(`No local packages have changed, testing all packages.`);
-      packages = getAllPackages();
+      packages = getAllVisualPackages();
     }
   } else {
     console.log(`Running tests for changed packages:\n${packages.join('\n')}`);
