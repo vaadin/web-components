@@ -7,10 +7,10 @@ import { ControlStateMixin } from '@vaadin/vaadin-control-state-mixin/vaadin-con
 /**
  * Fired when the `opened` property changes.
  */
-export type DetailsOpenedChanged = CustomEvent<{ value: boolean }>;
+export type DetailsOpenedChangedEvent = CustomEvent<{ value: boolean }>;
 
 export interface DetailsElementEventMap {
-  'opened-changed': DetailsOpenedChanged;
+  'opened-changed': DetailsOpenedChangedEvent;
 }
 
 export type DetailsEventMap = HTMLElementEventMap & DetailsElementEventMap;
