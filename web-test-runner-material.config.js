@@ -39,7 +39,7 @@ const config = {
     sauceLabsLauncher({
       browserName: 'chrome',
       platformName: 'Windows 10',
-      browserVersion: 'latest'
+      browserVersion: '88'
     })
   ],
   plugins: [
