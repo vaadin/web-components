@@ -62,6 +62,20 @@ export const RowDetailsMixin = (superClass) =>
       ];
     }
 
+    ready() {
+      super.ready();
+
+      this._detailsCellResizeObserver = new ResizeObserver((entries) => {
+        entries.forEach(({ target: cell }) => {
+          cell.parentElement.style.setProperty('padding-bottom', `${cell.offsetHeight}px`);
+        });
+
+        // This workaround is needed until Safari also supports
+        // ResizeObserver.observe with {box: 'border-box'}
+        this.__virtualizer.__adapter._resizeHandler();
+      });
+    }
+
     /** @private */
     _rowDetailsTemplateOrRendererChanged(rowDetailsTemplate, rowDetailsRenderer) {
       if (rowDetailsTemplate && rowDetailsRenderer) {
@@ -90,7 +104,6 @@ export const RowDetailsMixin = (superClass) =>
 
         if (this.detailsOpenedItems.length) {
           Array.from(this.$.items.children).forEach(this._toggleDetailsCell, this);
-          this._update();
         }
       }
     }
@@ -117,6 +130,8 @@ export const RowDetailsMixin = (superClass) =>
       // Freeze the details cell, so that it does not scroll horizontally
       // with the normal cells. This way it looks less weird.
       this._toggleAttribute('frozen', true, cell);
+
+      this._detailsCellResizeObserver.observe(cell);
     }
 
     /**
@@ -130,7 +145,6 @@ export const RowDetailsMixin = (superClass) =>
         return;
       }
       const detailsHidden = !this._isDetailsOpened(item);
-      const hiddenChanged = !!cell.hidden !== detailsHidden;
 
       if ((!cell._instance && !cell._renderer) || cell.hidden !== detailsHidden) {
         cell.hidden = detailsHidden;
@@ -153,10 +167,6 @@ export const RowDetailsMixin = (superClass) =>
 
           requestAnimationFrame(() => this.notifyResize());
         }
-      }
-      if (hiddenChanged) {
-        this._updateMetrics();
-        this._positionItems();
       }
     }
 

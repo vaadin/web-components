@@ -7,8 +7,7 @@ import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
 import { animationFrame, timeOut, microTask } from '@polymer/polymer/lib/utils/async.js';
 
 const timeouts = {
-  SCROLLING: 500,
-  IGNORE_WHEEL: 500
+  SCROLLING: 500
 };
 
 /**
@@ -31,12 +30,6 @@ export const ScrollMixin = (superClass) =>
         _rowWithFocusedElement: Element,
 
         /** @private */
-        _deltaYAcc: {
-          type: Number,
-          value: 0
-        },
-
-        /** @private */
         _useSticky: {
           type: Boolean,
           value:
@@ -45,10 +38,6 @@ export const ScrollMixin = (superClass) =>
             (window.CSS.supports('position', 'sticky') || window.CSS.supports('position', '-webkit-sticky'))
         }
       };
-    }
-
-    static get observers() {
-      return ['_scrollViewportHeightUpdated(_viewportHeight)'];
     }
 
     /**
@@ -64,29 +53,9 @@ export const ScrollMixin = (superClass) =>
       return this.$.table.scrollTop;
     }
 
-    constructor() {
-      super();
-      this._scrollLineHeight = this._getScrollLineHeight();
-    }
-
-    /**
-     * @returns {Number|undefined} - The browser's default font-size in pixels
-     * @private
-     */
-    _getScrollLineHeight() {
-      const el = document.createElement('div');
-      el.style.fontSize = 'initial';
-      el.style.display = 'none';
-      document.body.appendChild(el);
-      const fontSize = window.getComputedStyle(el).fontSize;
-      document.body.removeChild(el);
-      return fontSize ? window.parseInt(fontSize) : undefined;
-    }
-
     /** @private */
-    _scrollViewportHeightUpdated(_viewportHeight) {
-      this._scrollPageHeight =
-        _viewportHeight - this.$.header.clientHeight - this.$.footer.clientHeight - this._scrollLineHeight;
+    get _scrollLeft() {
+      return this.$.table.scrollLeft;
     }
 
     /** @protected */
@@ -98,24 +67,13 @@ export const ScrollMixin = (superClass) =>
 
       this.scrollTarget = this.$.table;
 
-      this.addEventListener('wheel', this._onWheel);
-
       this.$.items.addEventListener('focusin', (e) => {
         const itemsIndex = e.composedPath().indexOf(this.$.items);
         this._rowWithFocusedElement = e.composedPath()[itemsIndex - 1];
       });
       this.$.items.addEventListener('focusout', () => (this._rowWithFocusedElement = undefined));
 
-      // Reordering the physical rows cancels the user's grab of the scroll bar handle on Safari.
-      // Need to defer reordering until the user lets go of the scroll bar handle.
-      this.scrollTarget.addEventListener('mousedown', () => (this.__mouseDown = true));
-      this.scrollTarget.addEventListener('mouseup', () => {
-        this.__mouseDown = false;
-        if (this.__pendingReorder) {
-          this.__pendingReorder = false;
-          setTimeout(() => this._reorderRows(), timeouts.SCROLLING);
-        }
-      });
+      this.$.table.addEventListener('scroll', () => this._afterScroll());
     }
 
     /**
@@ -126,96 +84,17 @@ export const ScrollMixin = (superClass) =>
      * @param {number} index Row index to scroll to
      */
     scrollToIndex(index) {
-      this._accessIronListAPI(() => super.scrollToIndex(index));
-    }
+      index = Math.min(this._effectiveSize - 1, Math.max(0, index));
+      this.__virtualizer.scrollToIndex(index);
 
-    /** @private */
-    _onWheel(e) {
-      if (e.ctrlKey || this._hasScrolledAncestor(e.target, e.deltaX, e.deltaY)) {
-        return;
+      // Fine tune the scroll position taking header into account
+      const row = Array.from(this.$.items.children).filter((child) => child.index === index)[0];
+      if (row) {
+        const headerOffset = row.getBoundingClientRect().top - this.$.header.getBoundingClientRect().bottom;
+        if (Math.abs(headerOffset) >= 1) {
+          this.$.table.scrollTop += headerOffset;
+        }
       }
-
-      const table = this.$.table;
-
-      let deltaY = e.deltaY;
-      if (e.deltaMode === WheelEvent.DOM_DELTA_LINE) {
-        // Scrolling by "lines of text" instead of pixels
-        deltaY *= this._scrollLineHeight;
-      } else if (e.deltaMode === WheelEvent.DOM_DELTA_PAGE) {
-        // Scrolling by "pages" instead of pixels
-        deltaY *= this._scrollPageHeight;
-      }
-
-      if (this._wheelAnimationFrame) {
-        // Skip new wheel events while one is being processed
-        this._deltaYAcc += deltaY;
-        e.preventDefault();
-        return;
-      }
-
-      deltaY += this._deltaYAcc;
-      this._deltaYAcc = 0;
-
-      this._wheelAnimationFrame = true;
-      this._debouncerWheelAnimationFrame = Debouncer.debounce(
-        this._debouncerWheelAnimationFrame,
-        animationFrame,
-        () => (this._wheelAnimationFrame = false)
-      );
-
-      const momentum = Math.abs(e.deltaX) + Math.abs(deltaY);
-
-      if (this._canScroll(table, e.deltaX, deltaY)) {
-        e.preventDefault();
-        table.scrollTop += deltaY;
-        table.scrollLeft += e.deltaX;
-        this._scrollHandler();
-        this._hasResidualMomentum = true;
-
-        this._ignoreNewWheel = true;
-        this._debouncerIgnoreNewWheel = Debouncer.debounce(
-          this._debouncerIgnoreNewWheel,
-          timeOut.after(timeouts.IGNORE_WHEEL),
-          () => (this._ignoreNewWheel = false)
-        );
-      } else if ((this._hasResidualMomentum && momentum <= this._previousMomentum) || this._ignoreNewWheel) {
-        e.preventDefault();
-      } else if (momentum > this._previousMomentum) {
-        this._hasResidualMomentum = false;
-      }
-      this._previousMomentum = momentum;
-    }
-
-    /**
-     * Determines if the element has an ancestor prior to this
-     * cell content that handles the scroll delta
-     * @private
-     */
-    _hasScrolledAncestor(el, deltaX, deltaY) {
-      if (el.localName === 'vaadin-grid-cell-content') {
-        return false;
-      } else if (
-        this._canScroll(el, deltaX, deltaY) &&
-        ['auto', 'scroll'].indexOf(getComputedStyle(el).overflow) !== -1
-      ) {
-        return true;
-      } else if (el !== this && el.parentElement) {
-        return this._hasScrolledAncestor(el.parentElement, deltaX, deltaY);
-      }
-    }
-
-    /**
-     * Determines if the the given scroll deltas can be applied to the element
-     * (fully or partially)
-     * @private
-     */
-    _canScroll(el, deltaX, deltaY) {
-      return (
-        (deltaY > 0 && el.scrollTop < el.scrollHeight - el.offsetHeight) ||
-        (deltaY < 0 && el.scrollTop > 0) ||
-        (deltaX > 0 && el.scrollLeft < el.scrollWidth - el.offsetWidth) ||
-        (deltaX < 0 && el.scrollLeft > 0)
-      );
     }
 
     /** @private */
@@ -228,7 +107,6 @@ export const ScrollMixin = (superClass) =>
         cancelAnimationFrame(this._scrollingFrame);
         delete this._scrollingFrame;
         this._toggleAttribute('scrolling', false, this.$.scroller);
-        this._reorderRows();
       });
     }
 
@@ -272,55 +150,6 @@ export const ScrollMixin = (superClass) =>
           this.removeAttribute('overflow');
         }
       });
-    }
-
-    /**
-     * Correct order needed for preserving correct tab order between cell contents.
-     * @private
-     */
-    _reorderRows() {
-      if (this.__mouseDown) {
-        this.__pendingReorder = true;
-        return;
-      }
-
-      const body = this.$.items;
-      const items = body.querySelectorAll('tr');
-      if (!items.length) {
-        return;
-      }
-
-      const adjustedVirtualStart = this._virtualStart + this._vidxOffset;
-
-      // Which row to use as a target?
-      const targetRow = this._rowWithFocusedElement || Array.from(items).filter((row) => !row.hidden)[0];
-      if (!targetRow) {
-        // All rows are hidden, don't reorder
-        return;
-      }
-
-      // Where the target row should be?
-      const targetPhysicalIndex = targetRow.index - adjustedVirtualStart;
-
-      // Reodrer the DOM elements to keep the target row at the target physical index
-      const delta = Array.from(items).indexOf(targetRow) - targetPhysicalIndex;
-      if (delta > 0) {
-        for (let i = 0; i < delta; i++) {
-          body.appendChild(items[i]);
-        }
-      } else if (delta < 0) {
-        for (let i = items.length + delta; i < items.length; i++) {
-          body.insertBefore(items[i], items[0]);
-        }
-      }
-
-      // Due to a rendering bug, reordering the rows can make the sticky header disappear on Safari
-      // if the grid is used inside of a flex box. This is a workaround for the issue.
-      if (this._safari) {
-        const { transform } = this.$.header.style;
-        this.$.header.style.transform = '';
-        setTimeout(() => (this.$.header.style.transform = transform));
-      }
     }
 
     /** @protected */

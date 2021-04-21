@@ -314,7 +314,7 @@ describe('accessibility', () => {
         it('should update aria-rowindex on scroll', () => {
           setANumberOfItems(grid, 1000);
           // scroll to end
-          grid._accessIronListAPI(() => grid.scrollToIndex(1000));
+          grid.scrollToIndex(1000);
 
           const ariaRowindexValues = Array.from(grid.$.items.children).map((row) => row.getAttribute('aria-rowindex'));
           expect(ariaRowindexValues).to.include.members(['1000', '1001', '1002']);

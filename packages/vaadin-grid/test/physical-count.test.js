@@ -1,8 +1,15 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
-import { buildDataSet, flushGrid, getCellContent, infiniteDataProvider } from './helpers.js';
+import {
+  buildDataSet,
+  flushGrid,
+  getCellContent,
+  getLastVisibleItem,
+  getPhysicalAverage,
+  getPhysicalItems,
+  infiniteDataProvider
+} from './helpers.js';
 import '../vaadin-grid.js';
 
 registerStyles(
@@ -42,8 +49,8 @@ describe('dynamic physical count', () => {
   });
 
   it('increase pool size', () => {
-    const lastItem = grid._physicalItems[grid.lastVisibleIndex];
-    const expectedFinalItem = Math.ceil(grid.offsetHeight / grid._physicalAverage) - 1;
+    const lastItem = getLastVisibleItem(grid);
+    const expectedFinalItem = Math.ceil(grid.offsetHeight / getPhysicalAverage(grid)) - 1;
 
     expect(scroller.offsetHeight).to.equal(grid.offsetHeight);
     expect(getCellContent(lastItem).textContent).to.equal(String(expectedFinalItem));
@@ -53,37 +60,33 @@ describe('dynamic physical count', () => {
     grid.classList.add('small');
     grid.style.display = 'none';
 
-    expect(grid._physicalItems.length).to.eql(25);
+    const initialPhysicalSize = getPhysicalItems(grid).length;
 
     grid.style.display = '';
-    grid._resizeHandler();
     flushGrid(grid);
 
-    expect(grid._physicalItems.length).to.be.above(25);
+    expect(getPhysicalItems(grid).length).to.be.above(initialPhysicalSize);
   });
 
   it('pool should not increase if the scroller has no size', () => {
+    const initialPhysicalSize = getPhysicalItems(grid).length;
+
     grid.style.display = 'none';
     grid.style.height = '1000px';
 
     grid.classList.add('small');
-    grid._resizeHandler();
     flushGrid(grid);
 
-    grid._update();
-    grid._increasePoolIfNeeded();
-
-    expect(grid._physicalCount).to.equal(25);
+    expect(getPhysicalItems(grid).length).to.equal(initialPhysicalSize);
   });
 
   it('should minimize physical count', () => {
-    expect(grid._physicalCount).to.be.below(26);
+    expect(getPhysicalItems(grid).length).to.be.below(26);
     grid.style.height = '1000px';
-    grid._resizeHandler();
     flushGrid(grid);
 
-    expect(grid._physicalCount).to.be.above(26);
-    expect(grid._physicalCount).to.be.below(60);
+    expect(getPhysicalItems(grid).length).to.be.above(26);
+    expect(getPhysicalItems(grid).length).to.be.below(70);
   });
 
   it('should not add unlimited amount of physical rows', () => {
@@ -107,38 +110,5 @@ describe('dynamic physical count', () => {
     flushGrid(grid);
 
     expect(grid.$.items.childElementCount).to.be.below(itemCount);
-  });
-});
-
-describe('increase pool', () => {
-  let grid;
-
-  beforeEach(() => {
-    grid = fixtureSync(`
-      <vaadin-grid style="width: 200px; height: 200px;" size="200" theme="no-border">
-        <vaadin-grid-column>
-          <template>[[index]]</template>
-        </vaadin-grid-column>
-      </vaadin-grid>
-    `);
-  });
-
-  it('should minimize pool increase rounds', () => {
-    grid.style.height = '1000px';
-    const spy = sinon.spy(grid, '_createScrollerRows');
-    grid.dataProvider = infiniteDataProvider;
-    flushGrid(grid);
-    expect(spy.callCount).to.equal(2);
-  });
-
-  it('should not try to reorder children if pool is not increased', () => {
-    grid.items = ['foo', 'bar'];
-    flushGrid(grid);
-
-    const spy = sinon.spy(grid, '__reorderChildNodes');
-    grid.items = ['foo'];
-    flushGrid(grid);
-
-    expect(spy.called).to.be.false;
   });
 });

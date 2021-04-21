@@ -88,21 +88,22 @@ export const flushGrid = (grid) => {
   if (grid._debounceScrolling) {
     grid._debounceScrolling.flush();
   }
-  if (grid._debounceScrollPeriod) {
-    grid._debounceScrollPeriod.flush();
+  if (grid._debouncerForceReflow) {
+    grid._debouncerForceReflow.flush();
   }
   flush();
-  if (grid._debouncerLoad) {
-    grid._debouncerLoad.flush();
-  }
+  grid._afterScroll();
   if (grid._debounceOverflow) {
     grid._debounceOverflow.flush();
   }
-  while (grid._debounceIncreasePool) {
-    grid._debounceIncreasePool.flush();
-    grid._debounceIncreasePool = null;
-    flush();
+  if (grid._debouncerHiddenChanged) {
+    grid._debouncerHiddenChanged.flush();
   }
+  if (grid._debouncerApplyCachedData) {
+    grid._debouncerApplyCachedData.flush();
+  }
+
+  grid.__virtualizer.flush();
 };
 
 export const getRows = (container) => {

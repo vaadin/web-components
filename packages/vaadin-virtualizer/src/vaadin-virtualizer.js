@@ -17,6 +17,10 @@ export class Virtualizer {
     this.__adapter.scrollToIndex(index);
   }
 
+  update(startIndex = 0, endIndex = this.size - 1) {
+    this.__adapter.update(startIndex, endIndex);
+  }
+
   flush() {
     this.__adapter.flush();
   }

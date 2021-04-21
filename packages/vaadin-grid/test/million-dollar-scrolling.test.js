@@ -45,7 +45,6 @@ function simulateScrollToStart(grid, done) {
   const listener = () => {
     if (table.scrollTop > 0) {
       table.scrollTop -= 2000;
-      grid._scrollHandler();
     } else {
       table.removeEventListener('scroll', listener);
       setTimeout(done, 100);
@@ -61,7 +60,6 @@ function simulateScrollToEnd(grid, done) {
   const listener = () => {
     if (table.scrollTop < table.scrollHeight - table.clientHeight - 1) {
       table.scrollTop += 2500;
-      grid._scrollHandler();
     } else {
       table.removeEventListener('scroll', listener);
       setTimeout(done, 100);
@@ -113,16 +111,13 @@ describe('scrolling', function () {
         grid.size = size;
 
         scrollToEnd(grid, () => {
-          grid._scrollToIndex(0);
+          grid.scrollToIndex(0);
           done();
         });
       });
 
       it('should be able to scroll to half-way', () => {
-        grid._scrollHandler();
         grid.$.table.scrollTop = (grid.$.table.scrollHeight - grid.$.table.offsetHeight) / 2;
-
-        grid._scrollHandler();
         flushGrid(grid);
 
         expect(getFirstCell(grid)._instance.index).to.be.closeTo(grid.size / 2, 20);
@@ -137,7 +132,7 @@ describe('scrolling', function () {
 
       it('should be able to manually scroll to start', (done) => {
         const index = ~~((20000 / grid.$.table.scrollHeight) * grid.size);
-        grid._scrollToIndex(index);
+        grid.scrollToIndex(index);
 
         simulateScrollToStart(grid, () => {
           expect(getCellContent(getFirstVisibleItem(grid)).textContent).to.contain('item0');
@@ -146,7 +141,7 @@ describe('scrolling', function () {
       });
 
       it('should be able to manually scroll to end', (done) => {
-        grid._scrollToIndex(grid.size * 0.99);
+        grid.scrollToIndex(grid.size * 0.99);
 
         simulateScrollToEnd(grid, () => {
           expect(getCellContent(getLastVisibleItem(grid)).textContent).to.contain('item' + (grid.size - 1));

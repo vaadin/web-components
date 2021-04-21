@@ -1,14 +1,13 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, oneEvent } from '@vaadin/testing-helpers';
-import Sinon from 'sinon';
-import { Virtualizer } from '..';
+import { aTimeout, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import { Virtualizer } from '../vaadin-virtualizer';
 
 describe('virtualizer', () => {
   let virtualizer;
   let scrollTarget;
   let elementsContainer;
 
-  function init(config = {}) {
+  function init(size = 100) {
     scrollTarget = fixtureSync(`
       <div style="height: 100px;">
         <div></div>
@@ -25,11 +24,10 @@ describe('virtualizer', () => {
         el.textContent = el.id;
       },
       scrollTarget,
-      scrollContainer,
-      ...config
+      scrollContainer
     });
 
-    virtualizer.size = 100;
+    virtualizer.size = size;
   }
 
   beforeEach(() => init());
@@ -64,6 +62,24 @@ describe('virtualizer', () => {
   it('should scroll to index', () => {
     virtualizer.scrollToIndex(50);
     const item = elementsContainer.querySelector('#item-50');
+    expect(item.getBoundingClientRect().top).to.equal(scrollTarget.getBoundingClientRect().top);
+  });
+
+  it('should ignore scroll to invalid index', async () => {
+    virtualizer.scrollToIndex();
+    const item = elementsContainer.querySelector('#item-0');
+    expect(item.getBoundingClientRect().top).to.equal(scrollTarget.getBoundingClientRect().top);
+  });
+
+  it('should ignore scroll to index while invisible', async () => {
+    scrollTarget.hidden = true;
+
+    virtualizer.scrollToIndex(100);
+
+    scrollTarget.hidden = false;
+
+    const item = elementsContainer.querySelector('#item-0');
+    expect(item.offsetHeight).to.be.above(0);
     expect(item.getBoundingClientRect().top).to.equal(scrollTarget.getBoundingClientRect().top);
   });
 
@@ -139,221 +155,19 @@ describe('virtualizer', () => {
     expect(item.getBoundingClientRect().top).to.equal(scrollTarget.getBoundingClientRect().top - 10);
   });
 
-  describe('reorder elements', () => {
-    const REORDER_DEBOUNCE_TIMEOUT = 500;
-    let recycledElement;
-    let clock;
+  it('should have physical items once visible', async () => {
+    init(0);
+    // Wait for possibly active resize observers to flush
+    await aTimeout(100);
 
-    // This helper checks whether all the elements are in numerical order by their index
-    function elementsInOrder() {
-      return Array.from(elementsContainer.children).every((element, index, [firstElement]) => {
-        return element.hidden || element.index === firstElement.index + index;
-      });
-    }
+    scrollTarget.hidden = true;
 
-    // This helper scrolls the virtualizer enough to cause some elements to get
-    // recycled but not too much to cause a full recycle.
-    // Returns a list of the elements that were detached while being reordered.
-    async function scrollRecycle(skipFlush = false) {
-      return await new Promise((resolve) => {
-        new MutationObserver((mutations) => {
-          resolve(mutations.flatMap((record) => [...record.removedNodes]));
-        }).observe(elementsContainer, { childList: true });
+    virtualizer.size = 100;
+    await nextFrame();
 
-        virtualizer.scrollToIndex(Math.ceil(elementsContainer.childElementCount / 2));
+    scrollTarget.hidden = false;
 
-        if (!skipFlush) {
-          virtualizer.flush();
-        }
-      });
-    }
-
-    beforeEach(() => {
-      init({ reorderElements: true });
-      recycledElement = elementsContainer.children[2];
-      clock = Sinon.useFakeTimers();
-    });
-
-    afterEach(() => {
-      clock.restore();
-    });
-
-    it('should have the elements in order', async () => {
-      scrollRecycle();
-      expect(elementsInOrder()).to.be.true;
-    });
-
-    it('should not have the elements in order', async () => {
-      init({ reorderElements: false });
-
-      scrollRecycle();
-      expect(elementsInOrder()).to.be.false;
-    });
-
-    it('should detach the element without focus on reorder', async () => {
-      const detachedElements = await scrollRecycle();
-      expect(detachedElements).to.include(recycledElement);
-    });
-
-    it('should not detach the element with focus on reorder', async () => {
-      recycledElement.tabIndex = 0;
-      recycledElement.focus();
-
-      const detachedElements = await scrollRecycle();
-      expect(detachedElements).not.to.include(recycledElement);
-    });
-
-    it('should not try to reorder an empty virtualizer', async () => {
-      virtualizer.size = 0;
-      expect(async () => await scrollRecycle()).not.to.throw(Error);
-    });
-
-    it('should not reorder before debouncer flushes', () => {
-      scrollRecycle(true);
-      clock.tick(REORDER_DEBOUNCE_TIMEOUT - 10);
-      expect(elementsInOrder()).to.be.false;
-    });
-
-    it('should reorder once debouncer flushes', () => {
-      scrollRecycle(true);
-      clock.tick(REORDER_DEBOUNCE_TIMEOUT);
-      expect(elementsInOrder()).to.be.true;
-    });
-  });
-
-  describe('unlimited size', () => {
-    beforeEach(() => (virtualizer.size = 1000000));
-
-    it('should scroll to a large index', async () => {
-      const index = ~~(virtualizer.size / 2);
-      virtualizer.scrollToIndex(index);
-      const item = elementsContainer.querySelector(`#item-${index}`);
-      expect(item.getBoundingClientRect().top).to.equal(scrollTarget.getBoundingClientRect().top);
-    });
-
-    it('should scroll near the end', async () => {
-      virtualizer.scrollToIndex(virtualizer.size - 1000);
-      const item = elementsContainer.querySelector(`#item-${virtualizer.size - 1000}`);
-      expect(item.getBoundingClientRect().top).to.equal(scrollTarget.getBoundingClientRect().top);
-    });
-
-    it('should scroll to the second last index', async () => {
-      virtualizer.scrollToIndex(virtualizer.size - 2);
-      const item = elementsContainer.querySelector(`#item-${virtualizer.size - 1}`);
-      expect(item.getBoundingClientRect().bottom).to.be.closeTo(scrollTarget.getBoundingClientRect().bottom, 1);
-    });
-
-    it('should scroll to the second index', async () => {
-      virtualizer.scrollToIndex(1);
-      const item = elementsContainer.querySelector(`#item-1`);
-      expect(item.getBoundingClientRect().top).to.equal(scrollTarget.getBoundingClientRect().top);
-    });
-
-    it('should scroll backwards to a large index', async () => {
-      const firstIndex = ~~(virtualizer.size / 2);
-      const secondIndex = ~~(virtualizer.size / 3);
-      virtualizer.scrollToIndex(firstIndex);
-      virtualizer.scrollToIndex(secondIndex);
-      virtualizer.flush();
-      const item = elementsContainer.querySelector(`#item-${secondIndex}`);
-      expect(item.getBoundingClientRect().top).to.equal(scrollTarget.getBoundingClientRect().top);
-    });
-
-    it('should manually scroll to around half way', async () => {
-      scrollTarget.scrollTop = scrollTarget.scrollHeight / 2;
-      await oneEvent(scrollTarget, 'scroll');
-      const item = elementsContainer.children[0];
-      expect(item.index).to.be.within(virtualizer.size * 0.4, virtualizer.size * 0.6);
-    });
-
-    it('should manually scroll backwards to start', async () => {
-      scrollTarget.scrollTop = 12000;
-      await oneEvent(scrollTarget, 'scroll');
-      scrollTarget.scrollTop = 6000;
-      await oneEvent(scrollTarget, 'scroll');
-      scrollTarget.scrollTop = 0;
-      await oneEvent(scrollTarget, 'scroll');
-
-      const item = elementsContainer.querySelector('#item-0');
-      expect(item.getBoundingClientRect().top).to.equal(scrollTarget.getBoundingClientRect().top);
-    });
-
-    it('should manually scroll to start after scroll to index', async () => {
-      virtualizer.scrollToIndex(virtualizer.size / 400);
-
-      while (scrollTarget.scrollTop > 0) {
-        scrollTarget.scrollTop = 0;
-        await oneEvent(scrollTarget, 'scroll');
-      }
-
-      const item = elementsContainer.querySelector('#item-0');
-      expect(item.getBoundingClientRect().top).to.equal(scrollTarget.getBoundingClientRect().top);
-    });
-
-    it('should manually scroll to end after scroll to index', async () => {
-      virtualizer.scrollToIndex(Math.floor(virtualizer.size / 2));
-
-      while (scrollTarget.scrollTop < scrollTarget.scrollHeight - scrollTarget.clientHeight) {
-        scrollTarget.scrollTop = scrollTarget.scrollHeight - scrollTarget.clientHeight;
-        await oneEvent(scrollTarget, 'scroll');
-      }
-
-      const item = elementsContainer.querySelector(`#item-${virtualizer.size - 1}`);
-      expect(item.getBoundingClientRect().bottom).to.be.closeTo(scrollTarget.getBoundingClientRect().bottom, 1);
-    });
-
-    it('should manually scroll to end after scroll to start', async () => {
-      virtualizer.scrollToIndex(0);
-
-      while (scrollTarget.scrollTop < scrollTarget.scrollHeight - scrollTarget.clientHeight) {
-        scrollTarget.scrollTop = scrollTarget.scrollHeight - scrollTarget.clientHeight;
-        await oneEvent(scrollTarget, 'scroll');
-      }
-
-      const item = elementsContainer.querySelector(`#item-${virtualizer.size - 1}`);
-      expect(item.getBoundingClientRect().bottom).to.be.closeTo(scrollTarget.getBoundingClientRect().bottom, 1);
-    });
-
-    it('should slowly scroll backwards to start', async () => {
-      virtualizer.scrollToIndex(virtualizer.size / 4000);
-
-      const elementHeight = elementsContainer.children[0].offsetHeight;
-      const elementCount = elementsContainer.children.length;
-
-      let smallestIndex;
-      while (scrollTarget.scrollTop > 0) {
-        smallestIndex = Math.min(...Array.from(elementsContainer.children).map((el) => el.index));
-
-        scrollTarget.scrollTop -= (elementHeight * elementCount) / 2;
-        await oneEvent(scrollTarget, 'scroll');
-
-        const item = elementsContainer.querySelector('#item-' + smallestIndex);
-        expect(item).to.be.ok;
-      }
-
-      const item = elementsContainer.querySelector('#item-0');
-      expect(item.getBoundingClientRect().top).to.equal(scrollTarget.getBoundingClientRect().top);
-    });
-
-    it('should slowly scroll forwards to end', async () => {
-      virtualizer.scrollToIndex(virtualizer.size - virtualizer.size / 4000);
-
-      const elementHeight = elementsContainer.children[0].offsetHeight;
-      const elementCount = elementsContainer.children.length;
-
-      let largestIndex;
-      while (scrollTarget.scrollTop < scrollTarget.scrollHeight - scrollTarget.clientHeight) {
-        largestIndex = Math.max(...Array.from(elementsContainer.children).map((el) => el.index));
-
-        scrollTarget.scrollTop += (elementHeight * elementCount) / 2;
-        await oneEvent(scrollTarget, 'scroll');
-
-        const item = elementsContainer.querySelector('#item-' + largestIndex);
-        expect(item).to.be.ok;
-      }
-
-      const item = elementsContainer.querySelector(`#item-${virtualizer.size - 1}`);
-      expect(item.getBoundingClientRect().bottom).to.be.closeTo(scrollTarget.getBoundingClientRect().bottom, 1);
-    });
+    await nextFrame();
+    expect(elementsContainer.childElementCount).to.be.above(0);
   });
 });

@@ -168,6 +168,10 @@ export const DataProviderMixin = (superClass) =>
           }
         },
 
+        _hasData: {
+          value: false
+        },
+
         /**
          * Path to an item sub-property that identifies the item.
          * @attr {string} item-id-path
@@ -195,12 +199,13 @@ export const DataProviderMixin = (superClass) =>
 
     /** @private */
     _sizeChanged(size) {
+      if (typeof size !== 'number' || isNaN(size)) {
+        return;
+      }
       const delta = size - this._cache.size;
       this._cache.size += delta;
       this._cache.effectiveSize += delta;
       this._effectiveSize = this._cache.effectiveSize;
-      this._increasePoolIfNeeded(0);
-      this._debounceIncreasePool && this._debounceIncreasePool.flush();
     }
 
     /**
@@ -264,7 +269,7 @@ export const DataProviderMixin = (superClass) =>
       this.__cacheExpandedKeys();
       this._cache.updateSize();
       this._effectiveSize = this._cache.effectiveSize;
-      this._assignModels();
+      this.__updateVirtualizer();
     }
 
     /** @private */
@@ -318,14 +323,6 @@ export const DataProviderMixin = (superClass) =>
     }
 
     /**
-     * @return {boolean}
-     * @protected
-     */
-    _canPopulate() {
-      return Boolean(this._hasData && this._columnTree);
-    }
-
-    /**
      * @param {number} page
      * @param {ItemCache} cache
      * @protected
@@ -342,7 +339,7 @@ export const DataProviderMixin = (superClass) =>
           filters: this._mapFilters(),
           parentItem: cache.parentItem
         };
-        this._debounceIncreasePool && this._debounceIncreasePool.flush();
+
         this.dataProvider(params, (items, size) => {
           if (size !== undefined) {
             cache.size = size;
@@ -382,7 +379,6 @@ export const DataProviderMixin = (superClass) =>
                 }
               });
 
-            this._increasePoolIfNeeded(0);
             this.__scrollToPendingIndex();
           });
 
@@ -418,9 +414,9 @@ export const DataProviderMixin = (superClass) =>
       this._cache.size = this.size || 0;
       this._cache.updateSize();
       this._hasData = false;
-      this._assignModels();
+      this.__updateVirtualizer();
 
-      if (!this._effectiveSize || !this._initialPoolCreated) {
+      if (!this._effectiveSize) {
         this._loadPage(0, this._cache);
       }
     }
@@ -450,11 +446,6 @@ export const DataProviderMixin = (superClass) =>
         this.clearCache();
       }
 
-      if (dataProvider && this.items && this.items.length) {
-        // Fixes possibly invalid cached lastVisibleIndex value in <iron-list>
-        this._scrollToIndex(this._firstVisibleIndex);
-      }
-
       this._ensureFirstPageLoaded();
 
       this._debouncerCheckSize = Debouncer.debounce(
@@ -462,8 +453,6 @@ export const DataProviderMixin = (superClass) =>
         timeOut.after(2000),
         this._checkSize.bind(this)
       );
-
-      this._scrollHandler();
     }
 
     /** @protected */
@@ -512,11 +501,6 @@ export const DataProviderMixin = (superClass) =>
       if (this.__pendingScrollToIndex && this.$.items.children.length) {
         const index = this.__pendingScrollToIndex;
         delete this.__pendingScrollToIndex;
-
-        if (this._debounceIncreasePool) {
-          this._debounceIncreasePool.flush();
-        }
-
         this.scrollToIndex(index);
       }
     }

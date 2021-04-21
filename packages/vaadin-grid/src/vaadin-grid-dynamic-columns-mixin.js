@@ -13,6 +13,12 @@ import { timeOut } from '@polymer/polymer/lib/utils/async.js';
  */
 export const DynamicColumnsMixin = (superClass) =>
   class DynamicColumnsMixin extends superClass {
+    static get properties() {
+      return {
+        _columnTree: Object
+      };
+    }
+
     /** @protected */
     ready() {
       super.ready();

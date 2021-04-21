@@ -5,7 +5,6 @@ import {
   getRows,
   getRowCells,
   infiniteDataProvider,
-  isVisible,
   isWithinParentConstraints,
   wheel
 } from './helpers.js';
@@ -97,13 +96,8 @@ import '../vaadin-grid.js';
           const cells = getRowCells(containerRows[0]);
 
           listenOnce(grid.$.table, 'scroll', () => {
-            if (isRTL) {
-              expect(isWithinParentConstraints(cells[0], grid.$.table)).to.equal(true);
-              expect(isWithinParentConstraints(cells[2], grid.$.table)).to.equal(true);
-            } else {
-              expect(isVisible(cells[0])).to.equal(true);
-              expect(isVisible(cells[2])).to.equal(true);
-            }
+            expect(isWithinParentConstraints(cells[0], grid.$.table)).to.equal(true);
+            expect(isWithinParentConstraints(cells[2], grid.$.table)).to.equal(true);
             done();
           });
 

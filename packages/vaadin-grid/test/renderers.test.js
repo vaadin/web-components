@@ -105,6 +105,7 @@ describe('renderers', () => {
         grid.rowDetailsRenderer = function (root, owner, model) {
           root.innerHTML = model.index + ' test';
         };
+        flushGrid(grid);
         expect(getBodyCellContent(grid, 0, 1).innerHTML).to.eql('0 test');
         expect(getBodyCellContent(grid, 1, 1).innerHTML).to.eql('1 test');
       });
@@ -125,6 +126,7 @@ describe('renderers', () => {
         column.renderer = sinon.spy();
         column.renderer.resetHistory();
         grid.rowDetailsRenderer = () => {};
+        flushGrid(grid);
         expect(column.renderer.called).to.be.true;
       });
 

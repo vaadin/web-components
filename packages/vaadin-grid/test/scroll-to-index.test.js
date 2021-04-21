@@ -1,6 +1,13 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, listenOnce, nextFrame } from '@vaadin/testing-helpers';
-import { flushGrid, infiniteDataProvider } from './helpers.js';
+import {
+  flushGrid,
+  getFirstVisibleItem,
+  getLastVisibleItem,
+  getPhysicalAverage,
+  getPhysicalItems,
+  infiniteDataProvider
+} from './helpers.js';
 import '../vaadin-grid.js';
 import '../vaadin-grid-tree-column.js';
 
@@ -47,24 +54,24 @@ describe('scroll to index', () => {
           grid.scrollToIndex(index);
 
           if (percentage === 100) {
-            expect(grid._vidxOffset + grid.lastVisibleIndex).to.equal(index);
+            expect(getLastVisibleItem(grid).index).to.equal(index);
 
             const table = grid.$.table;
             expect(table.scrollTop).to.equal(table.scrollHeight - table.offsetHeight);
           } else {
-            expect(grid._vidxOffset + grid._firstVisibleIndex).to.equal(index);
+            expect(getFirstVisibleItem(grid).index).to.equal(index);
           }
         });
       });
 
       it('should scroll to last index', () => {
         grid.scrollToIndex(grid.size * 2);
-        expect(grid._vidxOffset + grid.lastVisibleIndex).to.equal(grid.size - 1);
+        expect(getLastVisibleItem(grid).index).to.equal(grid.size - 1);
       });
 
       it('should scroll to first index', () => {
         grid.scrollToIndex(-100);
-        expect(grid._vidxOffset + grid._firstVisibleIndex).to.equal(0);
+        expect(getFirstVisibleItem(grid).index).to.equal(0);
       });
 
       it('should set scroll position half-way', () => {
@@ -103,7 +110,7 @@ describe('scroll to index', () => {
     });
 
     it('should scroll to index', () => {
-      expect(grid._firstVisibleIndex).to.equal(10);
+      expect(getFirstVisibleItem(grid).index).to.equal(10);
     });
 
     it('should have correct indexes after scrolling', (done) => {
@@ -123,7 +130,7 @@ describe('scroll to index', () => {
     });
 
     it('should scroll close to end', () => {
-      const viewPortItemCount = Math.round(grid._viewportHeight / grid._physicalAverage - 1); // - header;
+      const viewPortItemCount = Math.round(grid.offsetHeight / getPhysicalAverage(grid) - 1); // - header;
       const targetIndex = grid.size - viewPortItemCount - 2;
       grid.scrollToIndex(targetIndex);
 
@@ -140,7 +147,7 @@ describe('scroll to index', () => {
           const scope = parentItem || '';
           cb(Array(...new Array(grid.pageSize)).map((_, index) => scope + 'foo' + index));
           if (parentItem) {
-            expect(grid._firstVisibleIndex).to.be.above(75);
+            expect(getFirstVisibleItem(grid).index).to.be.above(75);
             done();
           }
         });
@@ -154,7 +161,7 @@ describe('scroll to index', () => {
       grid.scrollToIndex(100);
       grid.addEventListener('animationend', () => {
         requestAnimationFrame(() => {
-          expect(grid._firstVisibleIndex).to.be.above(75);
+          expect(getFirstVisibleItem(grid).index).to.be.above(75);
           expect(grid.$.table.scrollTop).to.be.above(0);
           done();
         });
@@ -174,7 +181,7 @@ describe('scroll to index', () => {
           // Scroll to a new location (new data will get loaded)
           grid.scrollToIndex(200);
           flushGrid(grid);
-          expect(grid._firstVisibleIndex).to.be.above(150);
+          expect(getFirstVisibleItem(grid).index).to.be.above(150);
           done();
         } else {
           cb(Array(...new Array(grid.pageSize)).map((_, index) => 'foo' + index));
@@ -204,7 +211,7 @@ describe('scroll to index', () => {
       const newExpectedSize = grid.size + 1;
       grid.size = newExpectedSize;
       data.push({ index: 11 });
-      grid.scrollToIndex(grid.items.length);
+      grid.scrollToIndex(grid.size - 1);
 
       expect(grid.$.items.children[0]._item.index).to.equal(0);
     });
@@ -237,7 +244,7 @@ describe('scroll to index', () => {
             numberOfChidren
           );
           if (page > 0) {
-            expect(grid._physicalCount).to.be.above(10);
+            expect(getPhysicalItems(grid).length).to.be.above(10);
             done();
           }
         });
@@ -263,7 +270,7 @@ describe('scroll to index', () => {
             }));
             cb(children, children.length);
 
-            expect(grid._physicalCount).to.be.above(10);
+            expect(getPhysicalItems(grid).length).to.be.above(10);
             done();
           }
         });

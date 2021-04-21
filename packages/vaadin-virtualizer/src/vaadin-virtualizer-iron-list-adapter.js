@@ -38,6 +38,18 @@ export class IronListAdapter {
 
     this._scrollLineHeight = this._getScrollLineHeight();
     this.scrollTarget.addEventListener('wheel', (e) => this.__onWheel(e));
+
+    if (this.reorderElements) {
+      // Reordering the physical elements cancels the user's grab of the scroll bar handle on Safari.
+      // Need to defer reordering until the user lets go of the scroll bar handle.
+      this.scrollTarget.addEventListener('mousedown', () => (this.__mouseDown = true));
+      this.scrollTarget.addEventListener('mouseup', () => {
+        this.__mouseDown = false;
+        if (this.__pendingReorder) {
+          this.__reorderElements();
+        }
+      });
+    }
   }
 
   _manageFocus() {}
@@ -47,13 +59,17 @@ export class IronListAdapter {
   }
 
   scrollToIndex(index) {
+    if (typeof index !== 'number' || isNaN(index) || !this.scrollTarget.offsetHeight) {
+      return;
+    }
     index = this._clamp(index, 0, this.size - 1);
 
+    const visibleElementCount = this.__getVisibleElements().length;
     let targetVirtualIndex = Math.floor((index / this.size) * this._virtualCount);
-    if (this._virtualCount - targetVirtualIndex < this.elementsContainer.childElementCount) {
+    if (this._virtualCount - targetVirtualIndex < visibleElementCount) {
       targetVirtualIndex = this._virtualCount - (this.size - index);
       this._vidxOffset = this.size - this._virtualCount;
-    } else if (targetVirtualIndex < this.elementsContainer.childElementCount) {
+    } else if (targetVirtualIndex < visibleElementCount) {
       targetVirtualIndex = index;
       this._vidxOffset = 0;
     } else {
@@ -70,23 +86,42 @@ export class IronListAdapter {
   flush() {
     this._resizeHandler();
     flush();
+    this._scrollHandler();
     this.__scrollReorderDebouncer && this.__scrollReorderDebouncer.flush();
     this.__debouncerWheelAnimationFrame && this.__debouncerWheelAnimationFrame.flush();
   }
 
+  update(startIndex = 0, endIndex = this.size - 1) {
+    this.__getVisibleElements().forEach((el) => {
+      if (el.__virtualIndex >= startIndex && el.__virtualIndex <= endIndex) {
+        this.updateElement(el, el.__virtualIndex);
+      }
+    });
+  }
+
+  __getIndexScrollOffset(index) {
+    const el = this.__getVisibleElements().find((el) => el.__virtualIndex === index);
+    return el ? this.scrollTarget.getBoundingClientRect().top - el.getBoundingClientRect().top : 0;
+  }
+
   set size(size) {
     const fvi = this.firstVisibleIndex + this._vidxOffset;
-    const fviEl = Array.from(this.elementsContainer.children).find((el) => el.__virtualIndex === fvi);
-    const fviOffset = fviEl ? this.scrollTarget.getBoundingClientRect().top - fviEl.getBoundingClientRect().top : 0;
+
+    const fviOffsetBefore = this.__getIndexScrollOffset(fvi);
 
     this.__size = size;
     this._itemsChanged({
       path: 'items'
     });
-    this._render();
 
     this.scrollToIndex(fvi);
-    this._scrollTop += fviOffset;
+
+    const fviOffsetAfter = this.__getIndexScrollOffset(fvi);
+    this._scrollTop += fviOffsetBefore - fviOffsetAfter;
+
+    if (!this.elementsContainer.children.length) {
+      requestAnimationFrame(() => this._resizeHandler());
+    }
   }
 
   get size() {
@@ -134,9 +169,7 @@ export class IronListAdapter {
   }
 
   /** @private */
-  setAttribute(name, value) {
-    this.scrollTarget.setAttribute(name, value);
-  }
+  setAttribute() {}
 
   /** @private */
   _createPool(size) {
@@ -292,13 +325,28 @@ export class IronListAdapter {
     return fontSize ? window.parseInt(fontSize) : undefined;
   }
 
+  __getVisibleElements() {
+    return Array.from(this.elementsContainer.children).filter((element) => !element.hidden);
+  }
+
   /** @private */
   __reorderElements() {
+    if (this.__mouseDown) {
+      this.__pendingReorder = true;
+      return;
+    }
+    this.__pendingReorder = false;
+
     const adjustedVirtualStart = this._virtualStart + (this._vidxOffset || 0);
 
     // Which row to use as a target?
-    const visibleElements = Array.from(this.elementsContainer.children).filter((element) => !element.hidden);
-    const elementWithFocus = visibleElements.find((element) => element.contains(document.activeElement));
+    const visibleElements = this.__getVisibleElements();
+
+    const elementWithFocus = visibleElements.find(
+      (element) =>
+        element.contains(this.elementsContainer.getRootNode().activeElement) ||
+        element.contains(this.scrollTarget.getRootNode().activeElement)
+    );
     const targetElement = elementWithFocus || visibleElements[0];
     if (!targetElement) {
       // All elements are hidden, don't reorder

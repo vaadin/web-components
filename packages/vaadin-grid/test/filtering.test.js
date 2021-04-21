@@ -143,7 +143,7 @@ describe('filtering', () => {
     grid._filters[0].value = '';
   });
 
-  it('should filter display all filtered items', (done) => {
+  it('should filter display all filtered items', () => {
     flushFilters(grid);
     grid._filters[0].value = '';
     grid._filters[1].value = '';
@@ -155,14 +155,10 @@ describe('filtering', () => {
     grid.items = items;
     scrollToEnd(grid);
 
-    setTimeout(() => {
-      grid._filters[0].value = '99';
-      flushFilters(grid);
-      requestAnimationFrame(() => {
-        expect(grid.$.items.querySelectorAll('tr:not([hidden])')).to.have.length(19);
-        done();
-      });
-    }, 200);
+    grid._filters[0].value = '99';
+    flushFilters(grid);
+    flushGrid(grid);
+    expect(grid.$.items.querySelectorAll('tr:not([hidden])')).to.have.length(19);
   });
 
   it('should not overflow filter text field', () => {

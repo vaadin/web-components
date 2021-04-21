@@ -12,7 +12,8 @@ import {
   getRows,
   getRowCells,
   infiniteDataProvider,
-  scrollToEnd
+  scrollToEnd,
+  getLastVisibleItem
 } from './helpers.js';
 import '../vaadin-grid.js';
 
@@ -295,7 +296,8 @@ describe('data provider', () => {
 
       it('should request second level items', () => {
         expandIndex(grid, 7);
-        expect(grid.dataProvider.callCount).to.equal(3);
+        // First level (2 pages) + second level (2 pages) = 4 data requests
+        expect(grid.dataProvider.callCount).to.equal(4);
         expect(grid.dataProvider.getCall(2).args[0].parentItem.value).to.equal('foo7');
       });
 
@@ -311,7 +313,6 @@ describe('data provider', () => {
 
         grid.dataProvider.resetHistory();
         const renderSpy = sinon.spy(grid, '_effectiveSizeChanged');
-        const increasePoolSpy = sinon.spy(grid, '_increasePoolIfNeeded');
         const updateItemSpy = sinon.spy(grid, '_updateItem');
         grid.clearCache();
 
@@ -319,7 +320,6 @@ describe('data provider', () => {
 
         // Effective size should change in between the data requests
         expect(renderSpy.called).to.be.true;
-        expect(increasePoolSpy.callCount).to.above(1);
         expect(updateItemSpy.callCount).to.be.below(180);
       });
 
@@ -522,8 +522,9 @@ describe('data provider', () => {
       });
 
       it('should not request', () => {
+        grid.dataProvider.resetHistory();
         collapseIndex(grid, 7);
-        expect(grid.dataProvider.callCount).to.equal(3);
+        expect(grid.dataProvider.callCount).to.equal(0);
       });
 
       it('should decrease full size', () => {
@@ -545,8 +546,9 @@ describe('data provider', () => {
       });
 
       it('should not request', () => {
+        grid.dataProvider.resetHistory();
         expandIndex(grid, 7);
-        expect(grid.dataProvider.callCount).to.equal(3);
+        expect(grid.dataProvider.callCount).to.equal(0);
       });
 
       it('should increase full size', () => {
@@ -632,10 +634,10 @@ describe('wrapped grid', () => {
     it('should call dataProvider multiple times to load all items', async () => {
       container.dataProvider.resetHistory();
       grid.style.fontSize = '12px';
-      grid.pageSize = 10;
+      grid.pageSize = 5;
       flushGrid(grid);
       await aTimeout(loadDebounceTime);
-      // assuming grid has about 30 items
+      // assuming grid has about 18 items
       expect(container.dataProvider.callCount).to.be.above(2);
       for (let i = 0; i < container.dataProvider.callCount; i++) {
         expect(container.dataProvider.getCall(i).args[0].page).to.eql(i);
@@ -762,7 +764,7 @@ describe('wrapped grid', () => {
       const row = getRows(grid.$.items)[0];
       scrollToEnd(grid);
       expect(row.hasAttribute('loading')).to.be.true;
-      grid._scrollToIndex(0);
+      grid.scrollToIndex(0);
       expect(row.hasAttribute('loading')).to.be.false;
     });
 
@@ -777,15 +779,15 @@ describe('wrapped grid', () => {
       grid.size = 5000;
       flushGrid(grid);
       scrollToEnd(grid);
-      expect(grid.lastVisibleIndex + grid._vidxOffset).to.equal(grid.size - 1);
+      expect(getLastVisibleItem(grid).index).to.equal(grid.size - 1);
 
       grid.size = 50;
       flushGrid(grid);
-      expect(grid.lastVisibleIndex + grid._vidxOffset).to.equal(grid.size - 1);
+      expect(getLastVisibleItem(grid).index).to.equal(grid.size - 1);
 
       // Test actual last visible item
       const rect = grid.getBoundingClientRect();
-      const lastVisibleItem = grid.getRootNode().elementFromPoint(rect.left + 15, rect.bottom - 15);
+      const lastVisibleItem = grid.getRootNode().elementFromPoint(rect.left + 2, rect.bottom - 2);
       expect(lastVisibleItem.innerText.trim()).to.equal('foo' + (grid.size - 1));
     });
   });

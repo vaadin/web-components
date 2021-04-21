@@ -101,8 +101,6 @@ interface DataProviderMixin<TItem> {
 
   _getIndexLevel(index: number): number;
 
-  _canPopulate(): boolean;
-
   _loadPage(page: number, cache: ItemCache<TItem> | null): void;
 
   /**
