@@ -200,12 +200,28 @@ describe('vaadin-avatar', () => {
         console.warn.restore();
       });
 
-      it('should display abbr as fallback if image can not be loaded', async () => {
+      it('should display abbr as fallback if image can not be loaded and an abbreviation was provided', async () => {
         avatar.abbr = 'YY';
         avatar.img = invalidImageSrc;
         await oneEvent(imgElement, 'error');
         expect(imgElement.hasAttribute('hidden')).to.be.true;
         expect(abbrElement.hasAttribute('hidden')).to.be.false;
+      });
+
+      it('should display abbr as fallback if image can not be loaded and a name was provided', async () => {
+        avatar.name = 'Foo Bar';
+        avatar.img = invalidImageSrc;
+        await oneEvent(imgElement, 'error');
+        expect(imgElement.hasAttribute('hidden')).to.be.true;
+        expect(abbrElement.hasAttribute('hidden')).to.be.false;
+      });
+
+      it('should display icon as fallback if image can not be loaded and no other data was provided', async () => {
+        avatar.img = invalidImageSrc;
+        await oneEvent(imgElement, 'error');
+        expect(imgElement.hasAttribute('hidden')).to.be.true;
+        expect(abbrElement.hasAttribute('hidden')).to.be.true;
+        expect(iconElement.hasAttribute('hidden')).to.be.false;
       });
 
       it('should log a warning if image can not be loaded', async () => {
