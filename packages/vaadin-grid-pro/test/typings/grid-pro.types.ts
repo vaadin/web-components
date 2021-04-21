@@ -1,59 +1,87 @@
-import '../../src/vaadin-grid-pro';
-import '../../src/vaadin-grid-pro-edit-column';
-import { GridColumnElement, GridDropLocation, GridItem, GridItemModel } from '@vaadin/vaadin-grid';
+import {
+  GridColumnElement,
+  GridDropLocation,
+  GridItem,
+  GridItemModel,
+  GridActiveItemChangedEvent,
+  GridCellActivateEvent,
+  GridColumnReorderEvent,
+  GridColumnResizeEvent,
+  GridDragStartEvent,
+  GridDropEvent,
+  GridExpandedItemsChangedEvent,
+  GridLoadingChangedEvent,
+  GridSelectedItemsChangedEvent
+} from '@vaadin/vaadin-grid';
 
-const assert = <T>(value: T) => value;
+import '../../vaadin-grid-pro.js';
+import '../../vaadin-grid-pro-edit-column.js';
+
+import { GridProCellEditStartedEvent, GridProItemPropertyChangedEvent } from '../../vaadin-grid-pro.js';
+
+const assertType = <TExpected>(actual: TExpected) => actual;
 
 const grid = document.createElement('vaadin-grid-pro');
 
 /* grid-pro events */
 grid.addEventListener('cell-edit-started', (event) => {
-  assert<string>(event.detail.value.path);
-  assert<number>(event.detail.value.index);
-  assert<GridItem>(event.detail.value.item);
+  assertType<GridProCellEditStartedEvent>(event);
+  assertType<string>(event.detail.value.path);
+  assertType<number>(event.detail.value.index);
+  assertType<GridItem>(event.detail.value.item);
 });
 
 grid.addEventListener('item-property-changed', (event) => {
-  assert<string>(event.detail.value.path);
-  assert<number>(event.detail.value.index);
-  assert<GridItem>(event.detail.value.item);
-  assert<string | boolean>(event.detail.value.value);
+  assertType<GridProItemPropertyChangedEvent>(event);
+  assertType<string>(event.detail.value.path);
+  assertType<number>(event.detail.value.index);
+  assertType<GridItem>(event.detail.value.item);
+  assertType<string | boolean>(event.detail.value.value);
 });
 
 /* grid events */
 grid.addEventListener('active-item-changed', (event) => {
-  assert<GridItem>(event.detail.value);
+  assertType<GridActiveItemChangedEvent>(event);
+  assertType<GridItem>(event.detail.value);
 });
 
 grid.addEventListener('cell-activate', (event) => {
-  assert<GridItemModel>(event.detail.model);
+  assertType<GridCellActivateEvent>(event);
+  assertType<GridItemModel>(event.detail.model);
 });
 
 grid.addEventListener('column-reorder', (event) => {
-  assert<GridColumnElement[]>(event.detail.columns);
+  assertType<GridColumnReorderEvent>(event);
+  assertType<GridColumnElement[]>(event.detail.columns);
 });
 
 grid.addEventListener('column-resize', (event) => {
-  assert<GridColumnElement>(event.detail.resizedColumn);
+  assertType<GridColumnResizeEvent>(event);
+  assertType<GridColumnElement>(event.detail.resizedColumn);
 });
 
 grid.addEventListener('loading-changed', (event) => {
-  assert<boolean>(event.detail.value);
+  assertType<GridLoadingChangedEvent>(event);
+  assertType<boolean>(event.detail.value);
 });
 
 grid.addEventListener('expanded-items-changed', (event) => {
-  assert<GridItem[]>(event.detail.value);
+  assertType<GridExpandedItemsChangedEvent>(event);
+  assertType<GridItem[]>(event.detail.value);
 });
 
 grid.addEventListener('selected-items-changed', (event) => {
-  assert<GridItem[]>(event.detail.value);
+  assertType<GridSelectedItemsChangedEvent>(event);
+  assertType<GridItem[]>(event.detail.value);
 });
 
 grid.addEventListener('grid-dragstart', (event) => {
-  assert<GridItem[]>(event.detail.draggedItems);
+  assertType<GridDragStartEvent>(event);
+  assertType<GridItem[]>(event.detail.draggedItems);
 });
 
 grid.addEventListener('grid-drop', (event) => {
-  assert<GridItem>(event.detail.dropTargetItem);
-  assert<GridDropLocation>(event.detail.dropLocation);
+  assertType<GridDropEvent>(event);
+  assertType<GridItem>(event.detail.dropTargetItem);
+  assertType<GridDropLocation>(event.detail.dropLocation);
 });

@@ -7,7 +7,7 @@ import { InlineEditingMixin } from './vaadin-grid-pro-inline-editing-mixin.js';
 /**
  * Fired when the user starts editing a grid cell.
  */
-export type GridProCellEditStarted = CustomEvent<{
+export type GridProCellEditStartedEvent = CustomEvent<{
   value: {
     index: number;
     item: GridItem;
@@ -18,7 +18,7 @@ export type GridProCellEditStarted = CustomEvent<{
 /**
  * Fired before exiting the cell edit mode, if the value has been changed.
  */
-export type GridProItemPropertyChanged = CustomEvent<{
+export type GridProItemPropertyChangedEvent = CustomEvent<{
   value: {
     index: number;
     item: GridItem;
@@ -28,9 +28,9 @@ export type GridProItemPropertyChanged = CustomEvent<{
 }>;
 
 export interface GridProElementEventMap {
-  'cell-edit-started': GridProCellEditStarted;
+  'cell-edit-started': GridProCellEditStartedEvent;
 
-  'item-property-changed': GridProItemPropertyChanged;
+  'item-property-changed': GridProItemPropertyChangedEvent;
 }
 
 export interface GridProEventMap extends HTMLElementEventMap, GridProElementEventMap, GridElementEventMap {}
