@@ -1,5 +1,6 @@
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
+import { openSubMenus } from '../common.js';
 import '../../../theme/lumo/vaadin-context-menu.js';
 
 describe('context-menu', () => {
@@ -92,17 +93,6 @@ describe('context-menu', () => {
           `);
         });
 
-        function openSubMenus(menu) {
-          menu.$.overlay.addEventListener('vaadin-overlay-open', () => {
-            const itemElement = menu.$.overlay.querySelector('.vaadin-context-menu-parent-item');
-            if (itemElement) {
-              itemElement.dispatchEvent(new CustomEvent('mouseover', { bubbles: true, composed: true }));
-              const subMenu = menu.$.overlay.querySelector('vaadin-context-menu');
-              openSubMenus(subMenu);
-            }
-          });
-        }
-
         it('items', async () => {
           element.items = [
             { text: 'Menu Item 1' },
@@ -125,7 +115,7 @@ describe('context-menu', () => {
             { text: 'Menu Item 3', disabled: true }
           ];
           contextmenu(element);
-          openSubMenus(element);
+          await openSubMenus(element);
           await nextRender(element);
           await visualDiff(document.body, `context-menu:${dir}-items`);
         });
