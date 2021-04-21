@@ -91,8 +91,7 @@ const getVisualTestPackages = () => {
   let packages = getChangedPackages()
     .map((project) => project.name.replace('@vaadin/', ''))
     .filter((project) => NO_UNIT_TESTS.indexOf(project) === -1 && project.indexOf('mixin') === -1)
-    .concat(getUpdatedScreenshotsPackages())
-    .filter((v, i, a) => a.indexOf(v) === i);
+    .concat(getUpdatedScreenshotsPackages());
 
   if (packages.length == 0) {
     // When running in GitHub Actions, do nothing.
@@ -104,6 +103,8 @@ const getVisualTestPackages = () => {
       packages = getAllVisualPackages();
     }
   } else {
+    // Filter out possible duplicates from packages list
+    packages = packages.filter((v, i, a) => a.indexOf(v) === i);
     console.log(`Running tests for changed packages:\n${packages.join('\n')}`);
   }
 
