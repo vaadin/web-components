@@ -2,7 +2,14 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 
 import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
 
-import { MessageListItem } from './interfaces';
+export interface MessageListItem {
+  text?: string;
+  time?: string;
+  userName?: string;
+  userAbbr?: string;
+  userImg?: string;
+  userColorIndex?: number;
+}
 
 /**
  * `<vaadin-message-list>` is a Web Component for showing an ordered list of messages. The messages are rendered as <vaadin-message>

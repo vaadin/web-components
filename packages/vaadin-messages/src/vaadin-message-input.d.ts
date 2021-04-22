@@ -2,7 +2,22 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 
 import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
 
-import { MessageInputEventMap, MessageInputI18n } from './interfaces';
+export interface MessageInputI18n {
+  send: string;
+  message: string;
+}
+
+/**
+ * Fired when a new message is submitted with `<vaadin-message-input>`, either
+ * by clicking the "send" button, or pressing the Enter key.
+ */
+export type MessageInputSubmit = CustomEvent<{ value: string }>;
+
+export interface MessageInputElementEventMap {
+  submit: MessageInputSubmit;
+}
+
+export type MessageInputEventMap = HTMLElementEventMap & MessageInputElementEventMap;
 
 /**
  * `<vaadin-message-input>` is a Web Component for sending messages.
