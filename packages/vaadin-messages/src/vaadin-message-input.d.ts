@@ -11,10 +11,10 @@ export interface MessageInputI18n {
  * Fired when a new message is submitted with `<vaadin-message-input>`, either
  * by clicking the "send" button, or pressing the Enter key.
  */
-export type MessageInputSubmit = CustomEvent<{ value: string }>;
+export type MessageInputSubmitEvent = CustomEvent<{ value: string }>;
 
 export interface MessageInputElementEventMap {
-  submit: MessageInputSubmit;
+  submit: MessageInputSubmitEvent;
 }
 
 export type MessageInputEventMap = HTMLElementEventMap & MessageInputElementEventMap;
