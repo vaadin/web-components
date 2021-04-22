@@ -11,11 +11,8 @@
     }
   },
   "lint-staged": {
-    "*.js": [
+    "*.{js,ts}": [
       "eslint --fix",
-      "prettier --write"
-    ],
-    "*.ts": [
       "prettier --write"
     ]
   },
@@ -26,7 +23,7 @@
     "docs": "yarn analyze && web-dev-server --node-resolve --open",
     "lint": "npm-run-all --parallel lint:*",
     "lint:css": "stylelint packages/**/src/*.js packages/**/theme/**/*-styles.js",
-    "lint:js": "eslint *.js scripts packages",
+    "lint:js": "eslint --ext .js,.ts *.js scripts packages",
     "lint:types": "tsc",
     "serve:dist": "web-dev-server --app-index dist/index.html --open",
     "test": "web-test-runner --coverage",
@@ -47,6 +44,8 @@
     "@web/test-runner-saucelabs": "^0.5.0",
     "@web/test-runner-visual-regression": "^0.5.1",
     "dotenv": "^8.2.0",
+    "@typescript-eslint/eslint-plugin": "^4.22.0",
+    "@typescript-eslint/parser": "^4.22.0",
     "eslint": "^7.23.0",
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-prettier": "^3.3.1",
