@@ -3,3 +3,4 @@ coverage
 dist
 analysis.json
 yarn-error.log
+.env

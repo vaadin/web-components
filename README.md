@@ -154,6 +154,15 @@ Setup the repo:
 yarn
 ```
 
+### Environment variables
+Setup the environment variables needed by the scripts below, by copying the `.env.dist` template file to `.env`:
+```
+cp .env.dist .env
+```
+and then configure the individual variable values in the newly created `.env` file.
+
+Not all variables are necessary for all scripts, individual sections below will note which variables are required to run a command.
+
 ### Unit tests
 
 Run all tests in Chrome:
@@ -188,7 +197,7 @@ yarn debug --group vaadin-upload
 
 ### Visual tests
 
-To run the visual tests, please define `SAUCE_USERNAME` and `SAUCE_ACCESS_KEY` env variables.
+To run the visual tests, please make sure that the `SAUCE_USERNAME` and `SAUCE_ACCESS_KEY` environment variables are defined.
 
 Run tests for Lumo:
 
