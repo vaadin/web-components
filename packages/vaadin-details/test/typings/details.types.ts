@@ -1,9 +1,11 @@
-import '../../src/vaadin-details';
+import '../../vaadin-details.js';
+import { DetailsOpenedChangedEvent } from '../../vaadin-details.js';
 
-const assert = <T>(value: T) => value;
+const assertType = <TExpected>(actual: TExpected) => actual;
 
 const details = document.createElement('vaadin-details');
 
 details.addEventListener('opened-changed', (event) => {
-  assert<boolean>(event.detail.value);
+  assertType<DetailsOpenedChangedEvent>(event);
+  assertType<boolean>(event.detail.value);
 });

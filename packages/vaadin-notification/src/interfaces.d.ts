@@ -16,10 +16,10 @@ export type NotificationRenderer = (root: HTMLElement, notification?: Notificati
 /**
  * Fired when the `opened` property changes.
  */
-export type NotificationOpenedChanged = CustomEvent<{ value: boolean }>;
+export type NotificationOpenedChangedEvent = CustomEvent<{ value: boolean }>;
 
 export interface NotificationElementEventMap {
-  'opened-changed': NotificationOpenedChanged;
+  'opened-changed': NotificationOpenedChangedEvent;
 }
 
 export interface NotificationEventMap extends HTMLElementEventMap, NotificationElementEventMap {}

@@ -7,24 +7,24 @@ import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.
 /**
  * Fired when the `items` property changes.
  */
-export type ListBoxItemsChanged = CustomEvent<{ value: Array<Element> }>;
+export type ListBoxItemsChangedEvent = CustomEvent<{ value: Array<Element> }>;
 
 /**
  * Fired when the `selected` property changes.
  */
-export type ListBoxSelectedChanged = CustomEvent<{ value: number }>;
+export type ListBoxSelectedChangedEvent = CustomEvent<{ value: number }>;
 
 /**
  * Fired when the `selectedValues` property changes.
  */
-export type ListBoxSelectedValuesChanged = CustomEvent<{ value: Array<number> }>;
+export type ListBoxSelectedValuesChangedEvent = CustomEvent<{ value: Array<number> }>;
 
 export interface ListBoxElementEventMap {
-  'items-changed': ListBoxItemsChanged;
+  'items-changed': ListBoxItemsChangedEvent;
 
-  'selected-changed': ListBoxSelectedChanged;
+  'selected-changed': ListBoxSelectedChangedEvent;
 
-  'selected-values-changed': ListBoxSelectedValuesChanged;
+  'selected-values-changed': ListBoxSelectedValuesChangedEvent;
 }
 
 export interface ListBoxEventMap extends HTMLElementEventMap, ListBoxElementEventMap {}

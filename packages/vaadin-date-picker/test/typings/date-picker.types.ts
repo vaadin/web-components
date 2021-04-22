@@ -1,17 +1,25 @@
-import '../../src/vaadin-date-picker';
+import '../../vaadin-date-picker.js';
+import {
+  DatePickerOpenedChangedEvent,
+  DatePickerInvalidChangedEvent,
+  DatePickerValueChangedEvent
+} from '../../vaadin-date-picker.js';
 
-const assert = <T>(value: T) => value;
+const assertType = <TExpected>(actual: TExpected) => actual;
 
 const datePicker = document.createElement('vaadin-date-picker');
 
 datePicker.addEventListener('opened-changed', (event) => {
-  assert<boolean>(event.detail.value);
+  assertType<DatePickerOpenedChangedEvent>(event);
+  assertType<boolean>(event.detail.value);
 });
 
 datePicker.addEventListener('invalid-changed', (event) => {
-  assert<boolean>(event.detail.value);
+  assertType<DatePickerInvalidChangedEvent>(event);
+  assertType<boolean>(event.detail.value);
 });
 
 datePicker.addEventListener('value-changed', (event) => {
-  assert<string>(event.detail.value);
+  assertType<DatePickerValueChangedEvent>(event);
+  assertType<string>(event.detail.value);
 });

@@ -1,10 +1,12 @@
-import { MenuBarItem } from '../../src/interfaces';
-import '../../src/vaadin-menu-bar';
+import '../../vaadin-menu-bar';
+
+import { MenuBarItem, MenuBarItemSelectedEvent } from '../../vaadin-menu-bar';
 
 const menu = document.createElement('vaadin-menu-bar');
 
-const assert = <T>(value: T) => value;
+const assertType = <TExpected>(actual: TExpected) => actual;
 
 menu.addEventListener('item-selected', (event) => {
-  assert<MenuBarItem>(event.detail.value);
+  assertType<MenuBarItemSelectedEvent>(event);
+  assertType<MenuBarItem>(event.detail.value);
 });

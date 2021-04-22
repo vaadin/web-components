@@ -1,18 +1,21 @@
-import '../../src/vaadin-login-overlay';
-import '../../src/vaadin-login-form';
+import '../../vaadin-login-form.js';
 
-const assert = <T>(value: T) => value;
+import { LoginEvent } from '../../vaadin-login-overlay.js';
+
+const assertType = <TExpected>(actual: TExpected) => actual;
 
 const overlay = document.createElement('vaadin-login-overlay');
 
 overlay.addEventListener('login', (event) => {
-  assert<string>(event.detail.username);
-  assert<string>(event.detail.password);
+  assertType<LoginEvent>(event);
+  assertType<string>(event.detail.username);
+  assertType<string>(event.detail.password);
 });
 
 const form = document.createElement('vaadin-login-form');
 
 form.addEventListener('login', (event) => {
-  assert<string>(event.detail.username);
-  assert<string>(event.detail.password);
+  assertType<LoginEvent>(event);
+  assertType<string>(event.detail.username);
+  assertType<string>(event.detail.password);
 });

@@ -43,32 +43,32 @@ import { GridColumnElement } from './vaadin-grid-column.js';
 /**
  * Fired when the `activeItem` property changes.
  */
-export type GridActiveItemChanged = CustomEvent<{ value: GridItem }>;
+export type GridActiveItemChangedEvent = CustomEvent<{ value: GridItem }>;
 
 /**
  * Fired when the cell is activated with click or keyboard.
  */
-export type GridCellActivate = CustomEvent<{ model: GridItemModel }>;
+export type GridCellActivateEvent = CustomEvent<{ model: GridItemModel }>;
 
 /**
  * Fired when the columns in the grid are reordered.
  */
-export type GridColumnReorder = CustomEvent<{ columns: GridColumnElement[] }>;
+export type GridColumnReorderEvent = CustomEvent<{ columns: GridColumnElement[] }>;
 
 /**
  * Fired when the grid column resize is finished.
  */
-export type GridColumnResize = CustomEvent<{ resizedColumn: GridColumnElement }>;
+export type GridColumnResizeEvent = CustomEvent<{ resizedColumn: GridColumnElement }>;
 
 /**
  * Fired when the `expandedItems` property changes.
  */
-export type GridExpandedItemsChanged = CustomEvent<{ value: GridItem[] }>;
+export type GridExpandedItemsChangedEvent = CustomEvent<{ value: GridItem[] }>;
 
 /**
  * Fired when starting to drag grid rows.
  */
-export type GridDragStart = CustomEvent<{
+export type GridDragStartEvent = CustomEvent<{
   draggedItems: GridItem[];
   setDraggedItemsCount: (count: number) => void;
   setDragData: (type: string, data: string) => void;
@@ -77,7 +77,7 @@ export type GridDragStart = CustomEvent<{
 /**
  * Fired when a drop occurs on top of the grid.
  */
-export type GridDrop = CustomEvent<{
+export type GridDropEvent = CustomEvent<{
   dropTargetItem: GridItem;
   dropLocation: GridDropLocation;
   dragData: Array<{ type: string; data: string }>;
@@ -86,33 +86,33 @@ export type GridDrop = CustomEvent<{
 /**
  * Fired when the `loading` property changes.
  */
-export type GridLoadingChanged = CustomEvent<{ value: boolean }>;
+export type GridLoadingChangedEvent = CustomEvent<{ value: boolean }>;
 
 /**
  * Fired when the `selectedItems` property changes.
  */
-export type GridSelectedItemsChanged = CustomEvent<{ value: GridItem[] }>;
+export type GridSelectedItemsChangedEvent = CustomEvent<{ value: GridItem[] }>;
 
 export interface GridElementEventMap {
-  'active-item-changed': GridActiveItemChanged;
+  'active-item-changed': GridActiveItemChangedEvent;
 
-  'cell-activate': GridCellActivate;
+  'cell-activate': GridCellActivateEvent;
 
-  'column-reorder': GridColumnReorder;
+  'column-reorder': GridColumnReorderEvent;
 
-  'column-resize': GridColumnResize;
+  'column-resize': GridColumnResizeEvent;
 
-  'expanded-items-changed': GridExpandedItemsChanged;
+  'expanded-items-changed': GridExpandedItemsChangedEvent;
 
-  'grid-dragstart': GridDragStart;
+  'grid-dragstart': GridDragStartEvent;
 
   'grid-dragend': Event;
 
-  'grid-drop': GridDrop;
+  'grid-drop': GridDropEvent;
 
-  'loading-changed': GridLoadingChanged;
+  'loading-changed': GridLoadingChangedEvent;
 
-  'selected-items-changed': GridSelectedItemsChanged;
+  'selected-items-changed': GridSelectedItemsChangedEvent;
 }
 
 export interface GridEventMap extends HTMLElementEventMap, GridElementEventMap {}

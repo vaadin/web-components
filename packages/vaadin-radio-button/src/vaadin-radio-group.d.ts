@@ -7,17 +7,17 @@ import { RadioButtonElement } from './vaadin-radio-button.js';
 /**
  * Fired when the `invalid` property changes.
  */
-export type RadioGroupInvalidChanged = CustomEvent<{ value: boolean }>;
+export type RadioGroupInvalidChangedEvent = CustomEvent<{ value: boolean }>;
 
 /**
  * Fired when the `value` property changes.
  */
-export type RadioGroupValueChanged = CustomEvent<{ value: string }>;
+export type RadioGroupValueChangedEvent = CustomEvent<{ value: string }>;
 
 export interface RadioGroupElementEventMap {
-  'invalid-changed': RadioGroupInvalidChanged;
+  'invalid-changed': RadioGroupInvalidChangedEvent;
 
-  'value-changed': RadioGroupValueChanged;
+  'value-changed': RadioGroupValueChangedEvent;
 }
 
 export interface RadioGroupEventMap extends HTMLElementEventMap, RadioGroupElementEventMap {}

@@ -5,17 +5,17 @@ export type TextFieldAutoCorrect = 'on' | 'off';
 /**
  * Fired when the `invalid` property changes.
  */
-export type TextFieldInvalidChanged = CustomEvent<{ value: boolean }>;
+export type TextFieldInvalidChangedEvent = CustomEvent<{ value: boolean }>;
 
 /**
  * Fired when the `value` property changes.
  */
-export type TextFieldValueChanged = CustomEvent<{ value: string }>;
+export type TextFieldValueChangedEvent = CustomEvent<{ value: string }>;
 
 export interface TextFieldElementEventMap {
-  'invalid-changed': TextFieldInvalidChanged;
+  'invalid-changed': TextFieldInvalidChangedEvent;
 
-  'value-changed': TextFieldValueChanged;
+  'value-changed': TextFieldValueChangedEvent;
 }
 
 export interface TextFieldEventMap extends HTMLElementEventMap, TextFieldElementEventMap {}

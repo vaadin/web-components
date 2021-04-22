@@ -20,12 +20,12 @@ export interface LoginI18n {
 /**
  * Fired when a user submits the login.
  */
-export type LoginSubmit = CustomEvent<{ username: string; password: string }>;
+export type LoginEvent = CustomEvent<{ username: string; password: string }>;
 
 export interface LoginElementEventMap {
   'forgot-password': Event;
 
-  login: LoginSubmit;
+  login: LoginEvent;
 }
 
 export interface LoginEventMap extends HTMLElementEventMap, LoginElementEventMap {}

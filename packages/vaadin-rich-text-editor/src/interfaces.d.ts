@@ -29,17 +29,17 @@ export interface RichTextEditorI18n {
 /**
  * Fired when the `htmlValue` property changes.
  */
-export type RichTextEditorHtmlValueChanged = CustomEvent<{ value: string }>;
+export type RichTextEditorHtmlValueChangedEvent = CustomEvent<{ value: string }>;
 
 /**
  * Fired when the `value` property changes.
  */
-export type RichTextEditorValueChanged = CustomEvent<{ value: string }>;
+export type RichTextEditorValueChangedEvent = CustomEvent<{ value: string }>;
 
 export interface RichTextEditorElementEventMap {
-  'html-value-changed': RichTextEditorHtmlValueChanged;
+  'html-value-changed': RichTextEditorHtmlValueChangedEvent;
 
-  'value-changed': RichTextEditorValueChanged;
+  'value-changed': RichTextEditorValueChangedEvent;
 }
 
 export interface RichTextEditorEventMap extends HTMLElementEventMap, RichTextEditorElementEventMap {}

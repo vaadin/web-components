@@ -5,10 +5,10 @@ import { GridColumnElement } from './vaadin-grid-column.js';
 /**
  * Fired when the `direction` property changes.
  */
-export type GridSortColumnDirectionChanged = CustomEvent<{ value: GridSorterDirection }>;
+export type GridSortColumnDirectionChangedEvent = CustomEvent<{ value: GridSorterDirection }>;
 
 export interface GridSortColumnElementEventMap {
-  'direction-changed': GridSortColumnDirectionChanged;
+  'direction-changed': GridSortColumnDirectionChangedEvent;
 }
 
 export interface GridSortColumnEventMap extends HTMLElementEventMap, GridSortColumnElementEventMap {}

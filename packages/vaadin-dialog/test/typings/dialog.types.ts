@@ -1,14 +1,16 @@
-import { DialogResizeDimensions } from '../../src/interfaces';
-import '../../src/vaadin-dialog';
+import '../../vaadin-dialog.js';
+import { DialogResizeEvent, DialogOpenedChangedEvent, DialogResizeDimensions } from '../../vaadin-dialog.js';
 
-const assert = <T>(value: T) => value;
+const assertType = <TExpected>(actual: TExpected) => actual;
 
 const dialog = document.createElement('vaadin-dialog');
 
 dialog.addEventListener('opened-changed', (event) => {
-  assert<boolean>(event.detail.value);
+  assertType<DialogOpenedChangedEvent>(event);
+  assertType<boolean>(event.detail.value);
 });
 
 dialog.addEventListener('resize', (event) => {
-  assert<DialogResizeDimensions>(event.detail);
+  assertType<DialogResizeEvent>(event);
+  assertType<DialogResizeDimensions>(event.detail);
 });

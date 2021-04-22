@@ -1,9 +1,12 @@
-import '../../src/vaadin-notification';
+import '../../vaadin-notification.js';
 
-const assert = <T>(value: T) => value;
+import { NotificationOpenedChangedEvent } from '../../vaadin-notification.js';
+
+const assertType = <TExpected>(value: TExpected) => value;
 
 const notification = document.createElement('vaadin-notification');
 
 notification.addEventListener('opened-changed', (event) => {
-  assert<boolean>(event.detail.value);
+  assertType<NotificationOpenedChangedEvent>(event);
+  assertType<boolean>(event.detail.value);
 });

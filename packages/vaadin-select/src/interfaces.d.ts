@@ -13,24 +13,24 @@ export type SelectRenderer = (root: HTMLElement, select?: SelectElement) => void
 /**
  * Fired when the `opened` property changes.
  */
-export type SelectOpenedChanged = CustomEvent<{ value: boolean }>;
+export type SelectOpenedChangedEvent = CustomEvent<{ value: boolean }>;
 
 /**
  * Fired when the `invalid` property changes.
  */
-export type SelectInvalidChanged = CustomEvent<{ value: boolean }>;
+export type SelectInvalidChangedEvent = CustomEvent<{ value: boolean }>;
 
 /**
  * Fired when the `value` property changes.
  */
-export type SelectValueChanged = CustomEvent<{ value: string }>;
+export type SelectValueChangedEvent = CustomEvent<{ value: string }>;
 
 export interface SelectElementEventMap {
-  'opened-changed': SelectOpenedChanged;
+  'opened-changed': SelectOpenedChangedEvent;
 
-  'invalid-changed': SelectInvalidChanged;
+  'invalid-changed': SelectInvalidChangedEvent;
 
-  'value-changed': SelectValueChanged;
+  'value-changed': SelectValueChangedEvent;
 }
 
 export interface SelectEventMap extends HTMLElementEventMap, SelectElementEventMap {}

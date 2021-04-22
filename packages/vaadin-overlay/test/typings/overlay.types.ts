@@ -1,9 +1,12 @@
-import '../../src/vaadin-overlay';
+import '../../vaadin-overlay.js';
 
-const assert = <T>(value: T) => value;
+import { OverlayOpenedChangedEvent } from '../../vaadin-overlay.js';
+
+const assertType = <TExpected>(actual: TExpected) => actual;
 
 const overlay = document.createElement('vaadin-overlay');
 
 overlay.addEventListener('opened-changed', (event) => {
-  assert<boolean>(event.detail.value);
+  assertType<OverlayOpenedChangedEvent>(event);
+  assertType<boolean>(event.detail.value);
 });
