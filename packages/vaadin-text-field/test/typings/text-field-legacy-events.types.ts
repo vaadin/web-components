@@ -1,35 +1,37 @@
-import '../../src/vaadin-text-field';
-import '../../src/vaadin-text-area';
-import '../../src/vaadin-password-field';
+import '../../vaadin-text-field.js';
+import '../../vaadin-text-area.js';
+import '../../vaadin-password-field.js';
 
-const assert = <T>(value: T) => value;
+import { TextFieldInvalidChanged, TextFieldValueChanged } from '../../vaadin-text-field.js';
+
+const assertType = <TExpected>(actual: TExpected) => actual;
 
 const field = document.createElement('vaadin-text-field');
 
 field.addEventListener('invalid-changed', (event) => {
-  assert<boolean>(event.detail.value);
+  assertType<TextFieldInvalidChanged>(event);
 });
 
 field.addEventListener('value-changed', (event) => {
-  assert<string>(event.detail.value);
+  assertType<TextFieldValueChanged>(event);
 });
 
 const area = document.createElement('vaadin-text-area');
 
 area.addEventListener('invalid-changed', (event) => {
-  assert<boolean>(event.detail.value);
+  assertType<TextFieldInvalidChanged>(event);
 });
 
 area.addEventListener('value-changed', (event) => {
-  assert<string>(event.detail.value);
+  assertType<TextFieldValueChanged>(event);
 });
 
 const password = document.createElement('vaadin-password-field');
 
 password.addEventListener('invalid-changed', (event) => {
-  assert<boolean>(event.detail.value);
+  assertType<TextFieldInvalidChanged>(event);
 });
 
 password.addEventListener('value-changed', (event) => {
-  assert<string>(event.detail.value);
+  assertType<TextFieldValueChanged>(event);
 });
