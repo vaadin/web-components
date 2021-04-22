@@ -9,10 +9,10 @@ import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.
 /**
  * Fired when the `checked` property changes.
  */
-export type RadioButtonCheckedChanged = CustomEvent<{ value: boolean }>;
+export type RadioButtonCheckedChangedEvent = CustomEvent<{ value: boolean }>;
 
 export interface RadioButtonElementEventMap {
-  'checked-changed': RadioButtonCheckedChanged;
+  'checked-changed': RadioButtonCheckedChangedEvent;
 }
 
 export interface RadioButtonEventMap extends HTMLElementEventMap, RadioButtonElementEventMap {}
