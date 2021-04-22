@@ -15,17 +15,17 @@ export interface TimePickerI18n {
 /**
  * Fired when the `invalid` property changes.
  */
-export type TimePickerInvalidChanged = CustomEvent<{ value: boolean }>;
+export type TimePickerInvalidChangedEvent = CustomEvent<{ value: boolean }>;
 
 /**
  * Fired when the `value` property changes.
  */
-export type TimePickerValueChanged = CustomEvent<{ value: string }>;
+export type TimePickerValueChangedEvent = CustomEvent<{ value: string }>;
 
 export interface TimePickerElementEventMap {
-  'invalid-changed': TimePickerInvalidChanged;
+  'invalid-changed': TimePickerInvalidChangedEvent;
 
-  'value-changed': TimePickerValueChanged;
+  'value-changed': TimePickerValueChangedEvent;
 }
 
 export interface TimePickerEventMap extends HTMLElementEventMap, TimePickerElementEventMap {}
