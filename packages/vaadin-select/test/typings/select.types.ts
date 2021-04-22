@@ -1,17 +1,22 @@
-import '../../src/vaadin-select';
+import '../../vaadin-select.js';
 
-const assert = <T>(value: T) => value;
+import { SelectInvalidChangedEvent, SelectOpenedChangedEvent, SelectValueChangedEvent } from '../../vaadin-select.js';
+
+const assertType = <TExpected>(actual: TExpected) => actual;
 
 const select = document.createElement('vaadin-select');
 
 select.addEventListener('opened-changed', (event) => {
-  assert<boolean>(event.detail.value);
+  assertType<SelectOpenedChangedEvent>(event);
+  assertType<boolean>(event.detail.value);
 });
 
 select.addEventListener('invalid-changed', (event) => {
-  assert<boolean>(event.detail.value);
+  assertType<SelectInvalidChangedEvent>(event);
+  assertType<boolean>(event.detail.value);
 });
 
 select.addEventListener('value-changed', (event) => {
-  assert<string>(event.detail.value);
+  assertType<SelectValueChangedEvent>(event);
+  assertType<string>(event.detail.value);
 });
