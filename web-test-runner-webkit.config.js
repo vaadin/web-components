@@ -1,4 +1,5 @@
 /* eslint-env node */
+require('dotenv').config();
 const { playwrightLauncher } = require('@web/test-runner-playwright');
 const { filterBrowserLogs, getUnitTestGroups, getUnitTestPackages, testRunnerHtml } = require('./wtr-utils.js');
 

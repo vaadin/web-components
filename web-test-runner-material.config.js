@@ -1,4 +1,5 @@
 /* eslint-env node */
+require('dotenv').config();
 const { createSauceLabsLauncher } = require('@web/test-runner-saucelabs');
 const { visualRegressionPlugin } = require('@web/test-runner-visual-regression/plugin');
 const {

@@ -1,4 +1,5 @@
 /* eslint-env node */
+require('dotenv').config();
 const { filterBrowserLogs, getUnitTestGroups, getUnitTestPackages, testRunnerHtml } = require('./wtr-utils.js');
 
 const packages = getUnitTestPackages();
