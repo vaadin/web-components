@@ -9,17 +9,17 @@ import { ListOrientation } from '@vaadin/vaadin-list-mixin/interfaces';
 /**
  * Fired when the `items` property changes.
  */
-export type TabsItemsChanged = CustomEvent<{ value: Array<Element> }>;
+export type TabsItemsChangedEvent = CustomEvent<{ value: Array<Element> }>;
 
 /**
  * Fired when the `selected` property changes.
  */
-export type TabsSelectedChanged = CustomEvent<{ value: number }>;
+export type TabsSelectedChangedEvent = CustomEvent<{ value: number }>;
 
 export interface TabsElementEventMap {
-  'items-changed': TabsItemsChanged;
+  'items-changed': TabsItemsChangedEvent;
 
-  'selected-changed': TabsSelectedChanged;
+  'selected-changed': TabsSelectedChangedEvent;
 }
 
 export interface TabsEventMap extends HTMLElementEventMap, TabsElementEventMap {}

@@ -1,13 +1,17 @@
-import '../../src/vaadin-tabs';
+import '../../vaadin-tabs.js';
+
+import { TabsItemsChangedEvent, TabsSelectedChangedEvent } from '../../vaadin-tabs.js';
 
 const tabs = document.createElement('vaadin-tabs');
 
-const assert = <T>(value: T) => value;
+const assertType = <TExpected>(actual: TExpected) => actual;
 
 tabs.addEventListener('items-changed', (event) => {
-  assert<Element[]>(event.detail.value);
+  assertType<TabsItemsChangedEvent>(event);
+  assertType<Element[]>(event.detail.value);
 });
 
 tabs.addEventListener('selected-changed', (event) => {
-  assert<number>(event.detail.value);
+  assertType<TabsSelectedChangedEvent>(event);
+  assertType<number>(event.detail.value);
 });
