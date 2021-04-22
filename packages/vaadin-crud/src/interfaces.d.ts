@@ -43,66 +43,66 @@ export interface CrudI18n {
 /**
  * Fired when the `editorOpened` property changes.
  */
-export type CrudEditorOpenedChanged = CustomEvent<{ value: boolean }>;
+export type CrudEditorOpenedChangedEvent = CustomEvent<{ value: boolean }>;
 
 /**
  * Fired when the `editedItem` property changes.
  */
-export type CrudEditedItemChanged<T> = CustomEvent<{ value: T }>;
+export type CrudEditedItemChangedEvent<T> = CustomEvent<{ value: T }>;
 
 /**
  * Fired when the `items` property changes.
  */
-export type CrudItemsChanged<T> = CustomEvent<{ value: Array<T> }>;
+export type CrudItemsChangedEvent<T> = CustomEvent<{ value: Array<T> }>;
 
 /**
  * Fired when the `size` property changes.
  */
-export type CrudSizeChanged = CustomEvent<{ value: number }>;
+export type CrudSizeChangedEvent = CustomEvent<{ value: number }>;
 
 /**
  * Fired when user wants to create a new item.
  */
-export type CrudNew = CustomEvent<{ item: null }>;
+export type CrudNewEvent = CustomEvent<{ item: null }>;
 
 /**
  * Fired when user wants to edit an existing item.
  */
-export type CrudEdit<T> = CustomEvent<{ item: T }>;
+export type CrudEditEvent<T> = CustomEvent<{ item: T }>;
 
 /**
  * Fired when user wants to delete item.
  */
-export type CrudDelete<T> = CustomEvent<{ item: T }>;
+export type CrudDeleteEvent<T> = CustomEvent<{ item: T }>;
 
 /**
  * Fired when user discards edition.
  */
-export type CrudCancel<T> = CustomEvent<{ item: T }>;
+export type CrudCancelEvent<T> = CustomEvent<{ item: T }>;
 
 /**
  * Fired when user wants to save a new or an existing item.
  */
-export type CrudSave<T> = CustomEvent<{ item: T; new: boolean }>;
+export type CrudSaveEvent<T> = CustomEvent<{ item: T; new: boolean }>;
 
 export type CrudElementEventMap<T> = {
-  'editor-opened-changed': CrudEditorOpenedChanged;
+  'editor-opened-changed': CrudEditorOpenedChangedEvent;
 
-  'edited-item-changed': CrudEditedItemChanged<T>;
+  'edited-item-changed': CrudEditedItemChangedEvent<T>;
 
-  'items-changed': CrudItemsChanged<T>;
+  'items-changed': CrudItemsChangedEvent<T>;
 
-  'size-changed': CrudSizeChanged;
+  'size-changed': CrudSizeChangedEvent;
 
-  new: CrudNew;
+  new: CrudNewEvent;
 
-  cancel: CrudCancel<T>;
+  cancel: CrudCancelEvent<T>;
 
-  delete: CrudDelete<T>;
+  delete: CrudDeleteEvent<T>;
 
-  edit: CrudEdit<T>;
+  edit: CrudEditEvent<T>;
 
-  save: CrudSave<T>;
+  save: CrudSaveEvent<T>;
 };
 
 export type CrudEventMap<T> = HTMLElementEventMap & CrudElementEventMap<T>;

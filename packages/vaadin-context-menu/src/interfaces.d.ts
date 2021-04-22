@@ -22,17 +22,17 @@ export type ContextMenuRenderer = (
 /**
  * Fired when the `opened` property changes.
  */
-export type ContextMenuOpenedChanged = CustomEvent<{ value: boolean }>;
+export type ContextMenuOpenedChangedEvent = CustomEvent<{ value: boolean }>;
 
 /**
  * Fired when an item is selected when the context menu is populated using the `items` API.
  */
-export type ContextMenuItemSelected = CustomEvent<{ value: ContextMenuItem }>;
+export type ContextMenuItemSelectedEvent = CustomEvent<{ value: ContextMenuItem }>;
 
 export interface ContextMenuElementEventMap {
-  'opened-changed': ContextMenuOpenedChanged;
+  'opened-changed': ContextMenuOpenedChangedEvent;
 
-  'item-selected': ContextMenuItemSelected;
+  'item-selected': ContextMenuItemSelectedEvent;
 
   'close-all-menus': Event;
 

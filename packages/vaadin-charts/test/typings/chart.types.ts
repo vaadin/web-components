@@ -1,168 +1,230 @@
 import { Axis, Chart, Point, Series } from 'highcharts';
-import '../../src/vaadin-chart';
+import '../../vaadin-chart.js';
+import {
+  ChartAddSeriesEvent,
+  ChartAfterExportEvent,
+  ChartAfterPrintEvent,
+  ChartBeforeExportEvent,
+  ChartBeforePrintEvent,
+  ChartClickEvent,
+  ChartDrilldownEvent,
+  ChartDrillupEvent,
+  ChartDrillupallEvent,
+  ChartLoadEvent,
+  ChartRedrawEvent,
+  ChartSelectionEvent,
+  ChartSeriesAfterAnimateEvent,
+  ChartSeriesCheckboxClickEvent,
+  ChartSeriesClickEvent,
+  ChartSeriesHideEvent,
+  ChartSeriesLegendItemClickEvent,
+  ChartSeriesMouseOutEvent,
+  ChartSeriesMouseOverEvent,
+  ChartSeriesShowEvent,
+  ChartPointClickEvent,
+  ChartPointLegendItemClickEvent,
+  ChartPointMouseOutEvent,
+  ChartPointMouseOverEvent,
+  ChartPointRemoveEvent,
+  ChartPointSelectEvent,
+  ChartPointUnselectEvent,
+  ChartPointUpdateEvent,
+  ChartXaxesExtremesSetEvent,
+  ChartYaxesExtremesSetEvent
+} from '../../vaadin-chart.js';
 
-const assert = <T>(value: T) => value;
+const assertType = <TExpected>(actual: TExpected) => actual;
 
 const chart = document.createElement('vaadin-chart');
 
 chart.addEventListener('chart-add-series', (event) => {
-  assert<Chart>(event.detail.chart);
-  assert<Chart>(event.detail.originalEvent.target);
+  assertType<ChartAddSeriesEvent>(event);
+  assertType<Chart>(event.detail.chart);
+  assertType<Chart>(event.detail.originalEvent.target);
 });
 
 chart.addEventListener('chart-after-export', (event) => {
-  assert<Chart>(event.detail.chart);
-  assert<Chart>(event.detail.originalEvent.target);
+  assertType<ChartAfterExportEvent>(event);
+  assertType<Chart>(event.detail.chart);
+  assertType<Chart>(event.detail.originalEvent.target);
 });
 
 chart.addEventListener('chart-after-print', (event) => {
-  assert<Chart>(event.detail.chart);
-  assert<Chart>(event.detail.originalEvent.target);
+  assertType<ChartAfterPrintEvent>(event);
+  assertType<Chart>(event.detail.chart);
+  assertType<Chart>(event.detail.originalEvent.target);
 });
 
 chart.addEventListener('chart-before-export', (event) => {
-  assert<Chart>(event.detail.chart);
-  assert<Chart>(event.detail.originalEvent.target);
+  assertType<ChartBeforeExportEvent>(event);
+  assertType<Chart>(event.detail.chart);
+  assertType<Chart>(event.detail.originalEvent.target);
 });
 
 chart.addEventListener('chart-before-print', (event) => {
-  assert<Chart>(event.detail.chart);
-  assert<Chart>(event.detail.originalEvent.target);
+  assertType<ChartBeforePrintEvent>(event);
+  assertType<Chart>(event.detail.chart);
+  assertType<Chart>(event.detail.originalEvent.target);
 });
 
 chart.addEventListener('chart-click', (event) => {
-  assert<Chart>(event.detail.chart);
-  assert<Chart>(event.detail.originalEvent.target);
+  assertType<ChartClickEvent>(event);
+  assertType<Chart>(event.detail.chart);
+  assertType<Chart>(event.detail.originalEvent.target);
 });
 
 chart.addEventListener('chart-drilldown', (event) => {
-  assert<Chart>(event.detail.chart);
-  assert<Chart>(event.detail.originalEvent.target);
+  assertType<ChartDrilldownEvent>(event);
+  assertType<Chart>(event.detail.chart);
+  assertType<Chart>(event.detail.originalEvent.target);
 });
 
 chart.addEventListener('chart-drillup', (event) => {
-  assert<Chart>(event.detail.chart);
-  assert<Chart>(event.detail.originalEvent.target);
+  assertType<ChartDrillupEvent>(event);
+  assertType<Chart>(event.detail.chart);
+  assertType<Chart>(event.detail.originalEvent.target);
 });
 
 chart.addEventListener('chart-drillupall', (event) => {
-  assert<Chart>(event.detail.chart);
-  assert<Chart>(event.detail.originalEvent.target);
+  assertType<ChartDrillupallEvent>(event);
+  assertType<Chart>(event.detail.chart);
+  assertType<Chart>(event.detail.originalEvent.target);
 });
 
 chart.addEventListener('chart-load', (event) => {
-  assert<Chart>(event.detail.chart);
-  assert<Chart>(event.detail.originalEvent.target);
+  assertType<ChartLoadEvent>(event);
+  assertType<Chart>(event.detail.chart);
+  assertType<Chart>(event.detail.originalEvent.target);
 });
 
 chart.addEventListener('chart-redraw', (event) => {
-  assert<Chart>(event.detail.chart);
-  assert<Chart>(event.detail.originalEvent.target);
+  assertType<ChartRedrawEvent>(event);
+  assertType<Chart>(event.detail.chart);
+  assertType<Chart>(event.detail.originalEvent.target);
 });
 
 chart.addEventListener('chart-selection', (event) => {
-  assert<Chart>(event.detail.chart);
-  assert<Chart>(event.detail.originalEvent.target);
+  assertType<ChartSelectionEvent>(event);
+  assertType<Chart>(event.detail.chart);
+  assertType<Chart>(event.detail.originalEvent.target);
 });
 
 chart.addEventListener('series-after-animate', (event) => {
-  assert<Series>(event.detail.series);
-  assert<Series>(event.detail.originalEvent.target);
+  assertType<ChartSeriesAfterAnimateEvent>(event);
+  assertType<Series>(event.detail.series);
+  assertType<Series>(event.detail.originalEvent.target);
 });
 
 chart.addEventListener('series-checkbox-click', (event) => {
-  assert<Series>(event.detail.series);
-  assert<Series>(event.detail.originalEvent.target);
+  assertType<ChartSeriesCheckboxClickEvent>(event);
+  assertType<Series>(event.detail.series);
+  assertType<Series>(event.detail.originalEvent.target);
 });
 
 chart.addEventListener('series-click', (event) => {
-  assert<Series>(event.detail.series);
-  assert<Series>(event.detail.originalEvent.target);
+  assertType<ChartSeriesClickEvent>(event);
+  assertType<Series>(event.detail.series);
+  assertType<Series>(event.detail.originalEvent.target);
 });
 
 chart.addEventListener('series-hide', (event) => {
-  assert<Series>(event.detail.series);
-  assert<Series>(event.detail.originalEvent.target);
+  assertType<ChartSeriesHideEvent>(event);
+  assertType<Series>(event.detail.series);
+  assertType<Series>(event.detail.originalEvent.target);
 });
 
 chart.addEventListener('series-legend-item-click', (event) => {
-  assert<Series>(event.detail.series);
-  assert<Series>(event.detail.originalEvent.target);
+  assertType<ChartSeriesLegendItemClickEvent>(event);
+  assertType<Series>(event.detail.series);
+  assertType<Series>(event.detail.originalEvent.target);
 });
 
 chart.addEventListener('series-mouse-out', (event) => {
-  assert<Series>(event.detail.series);
-  assert<Series>(event.detail.originalEvent.target);
+  assertType<ChartSeriesMouseOutEvent>(event);
+  assertType<Series>(event.detail.series);
+  assertType<Series>(event.detail.originalEvent.target);
 });
 
 chart.addEventListener('series-mouse-over', (event) => {
-  assert<Series>(event.detail.series);
-  assert<Series>(event.detail.originalEvent.target);
+  assertType<ChartSeriesMouseOverEvent>(event);
+  assertType<Series>(event.detail.series);
+  assertType<Series>(event.detail.originalEvent.target);
 });
 
 chart.addEventListener('series-show', (event) => {
-  assert<Series>(event.detail.series);
-  assert<Series>(event.detail.originalEvent.target);
+  assertType<ChartSeriesShowEvent>(event);
+  assertType<Series>(event.detail.series);
+  assertType<Series>(event.detail.originalEvent.target);
 });
 
 chart.addEventListener('point-click', (event) => {
-  assert<Point>(event.detail.point);
-  assert<Point>(event.detail.originalEvent.target);
+  assertType<ChartPointClickEvent>(event);
+  assertType<Point>(event.detail.point);
+  assertType<Point>(event.detail.originalEvent.target);
 });
 
 chart.addEventListener('point-legend-item-click', (event) => {
-  assert<Point>(event.detail.point);
-  assert<Point>(event.detail.originalEvent.target);
+  assertType<ChartPointLegendItemClickEvent>(event);
+  assertType<Point>(event.detail.point);
+  assertType<Point>(event.detail.originalEvent.target);
 });
 
 chart.addEventListener('point-mouse-out', (event) => {
-  assert<Point>(event.detail.point);
-  assert<Point>(event.detail.originalEvent.target);
+  assertType<ChartPointMouseOutEvent>(event);
+  assertType<Point>(event.detail.point);
+  assertType<Point>(event.detail.originalEvent.target);
 });
 
 chart.addEventListener('point-mouse-over', (event) => {
-  assert<Point>(event.detail.point);
-  assert<Point>(event.detail.originalEvent.target);
+  assertType<ChartPointMouseOverEvent>(event);
+  assertType<Point>(event.detail.point);
+  assertType<Point>(event.detail.originalEvent.target);
 });
 
 chart.addEventListener('point-remove', (event) => {
-  assert<Point>(event.detail.point);
-  assert<Point>(event.detail.originalEvent.target);
+  assertType<ChartPointRemoveEvent>(event);
+  assertType<Point>(event.detail.point);
+  assertType<Point>(event.detail.originalEvent.target);
 });
 
 chart.addEventListener('point-select', (event) => {
-  assert<Point>(event.detail.point);
-  assert<Point>(event.detail.originalEvent.target);
+  assertType<ChartPointSelectEvent>(event);
+  assertType<Point>(event.detail.point);
+  assertType<Point>(event.detail.originalEvent.target);
 });
 
 chart.addEventListener('point-unselect', (event) => {
-  assert<Point>(event.detail.point);
-  assert<Point>(event.detail.originalEvent.target);
+  assertType<ChartPointUnselectEvent>(event);
+  assertType<Point>(event.detail.point);
+  assertType<Point>(event.detail.originalEvent.target);
 });
 
 chart.addEventListener('point-update', (event) => {
-  assert<Point>(event.detail.point);
-  assert<Point>(event.detail.originalEvent.target);
+  assertType<ChartPointUpdateEvent>(event);
+  assertType<Point>(event.detail.point);
+  assertType<Point>(event.detail.originalEvent.target);
 });
 
 chart.addEventListener('xaxes-extremes-set', (event) => {
-  assert<Axis>(event.detail.axis);
-  assert<Axis>(event.detail.originalEvent.target);
-  assert<number>(event.detail.originalEvent.min);
-  assert<number>(event.detail.originalEvent.max);
-  assert<number>(event.detail.originalEvent.userMin);
-  assert<number>(event.detail.originalEvent.userMax);
-  assert<number>(event.detail.originalEvent.dataMin);
-  assert<number>(event.detail.originalEvent.dataMax);
+  assertType<ChartXaxesExtremesSetEvent>(event);
+  assertType<Axis>(event.detail.axis);
+  assertType<Axis>(event.detail.originalEvent.target);
+  assertType<number>(event.detail.originalEvent.min);
+  assertType<number>(event.detail.originalEvent.max);
+  assertType<number>(event.detail.originalEvent.userMin);
+  assertType<number>(event.detail.originalEvent.userMax);
+  assertType<number>(event.detail.originalEvent.dataMin);
+  assertType<number>(event.detail.originalEvent.dataMax);
 });
 
 chart.addEventListener('yaxes-extremes-set', (event) => {
-  assert<Axis>(event.detail.axis);
-  assert<Axis>(event.detail.originalEvent.target);
-  assert<number>(event.detail.originalEvent.min);
-  assert<number>(event.detail.originalEvent.max);
-  assert<number>(event.detail.originalEvent.userMin);
-  assert<number>(event.detail.originalEvent.userMax);
-  assert<number>(event.detail.originalEvent.dataMin);
-  assert<number>(event.detail.originalEvent.dataMax);
+  assertType<ChartYaxesExtremesSetEvent>(event);
+  assertType<Axis>(event.detail.axis);
+  assertType<Axis>(event.detail.originalEvent.target);
+  assertType<number>(event.detail.originalEvent.min);
+  assertType<number>(event.detail.originalEvent.max);
+  assertType<number>(event.detail.originalEvent.userMin);
+  assertType<number>(event.detail.originalEvent.userMax);
+  assertType<number>(event.detail.originalEvent.dataMin);
+  assertType<number>(event.detail.originalEvent.dataMax);
 });

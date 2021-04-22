@@ -5,10 +5,10 @@ import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.
 /**
  * Fired when the `opened` property changes.
  */
-export type ConfirmDialogOpenedChanged = CustomEvent<{ value: boolean }>;
+export type ConfirmDialogOpenedChangedEvent = CustomEvent<{ value: boolean }>;
 
 export interface ConfirmDialogElementEventMap {
-  'opened-changed': ConfirmDialogOpenedChanged;
+  'opened-changed': ConfirmDialogOpenedChangedEvent;
 
   confirm: Event;
 

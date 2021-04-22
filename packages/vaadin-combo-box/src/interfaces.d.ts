@@ -22,45 +22,45 @@ export type ComboBoxDataProvider = (params: ComboBoxDataProviderParams, callback
 /**
  * Fired when the user sets a custom value.
  */
-export type ComboBoxCustomValueSet = CustomEvent<string>;
+export type ComboBoxCustomValueSetEvent = CustomEvent<string>;
 
 /**
  * Fired when the `opened` property changes.
  */
-export type ComboBoxOpenedChanged = CustomEvent<{ value: boolean }>;
+export type ComboBoxOpenedChangedEvent = CustomEvent<{ value: boolean }>;
 
 /**
  * Fired when the `invalid` property changes.
  */
-export type ComboBoxInvalidChanged = CustomEvent<{ value: boolean }>;
+export type ComboBoxInvalidChangedEvent = CustomEvent<{ value: boolean }>;
 
 /**
  * Fired when the `value` property changes.
  */
-export type ComboBoxValueChanged = CustomEvent<{ value: string }>;
+export type ComboBoxValueChangedEvent = CustomEvent<{ value: string }>;
 
 /**
  * Fired when the `filter` property changes.
  */
-export type ComboBoxFilterChanged = CustomEvent<{ value: string }>;
+export type ComboBoxFilterChangedEvent = CustomEvent<{ value: string }>;
 
 /**
  * Fired when the `selectedItem` property changes.
  */
-export type ComboBoxSelectedItemChanged<T> = CustomEvent<{ value: T }>;
+export type ComboBoxSelectedItemChangedEvent<T> = CustomEvent<{ value: T }>;
 
 export interface ComboBoxElementEventMap {
-  'custom-value-set': ComboBoxCustomValueSet;
+  'custom-value-set': ComboBoxCustomValueSetEvent;
 
-  'opened-changed': ComboBoxOpenedChanged;
+  'opened-changed': ComboBoxOpenedChangedEvent;
 
-  'filter-changed': ComboBoxFilterChanged;
+  'filter-changed': ComboBoxFilterChangedEvent;
 
-  'invalid-changed': ComboBoxInvalidChanged;
+  'invalid-changed': ComboBoxInvalidChangedEvent;
 
-  'value-changed': ComboBoxValueChanged;
+  'value-changed': ComboBoxValueChangedEvent;
 
-  'selected-item-changed': ComboBoxSelectedItemChanged<any>;
+  'selected-item-changed': ComboBoxSelectedItemChangedEvent<any>;
 }
 
 export interface ComboBoxEventMap extends HTMLElementEventMap, ComboBoxElementEventMap {}
