@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, oneEvent } from '@open-wc/testing-helpers';
+import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
 import '../vaadin-chart.js';
 
 describe('vaadin-chart private API', () => {

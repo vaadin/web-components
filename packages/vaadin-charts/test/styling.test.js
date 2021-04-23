@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
-import { fixtureSync, oneEvent } from '@open-wc/testing-helpers';
+import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
 import '../vaadin-chart.js';
 
 registerStyles(

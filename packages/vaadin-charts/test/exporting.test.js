@@ -2,8 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
-import { fixtureSync, oneEvent } from '@open-wc/testing-helpers';
-import { nextRender } from './helpers.js';
+import { fixtureSync, oneEvent, nextRender } from '@vaadin/testing-helpers';
 import Highcharts from 'highcharts/es-modules/masters/highstock.src.js';
 import '../vaadin-chart.js';
 

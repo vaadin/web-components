@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, oneEvent } from '@open-wc/testing-helpers';
+import { aTimeout, fixtureSync, oneEvent } from '@vaadin/testing-helpers';
 import '../vaadin-chart.js';
 
 describe('vaadin-chart', () => {
