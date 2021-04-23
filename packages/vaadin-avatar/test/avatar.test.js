@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync } from '@open-wc/testing-helpers';
-import { keyDownOn } from '@polymer/iron-test-helpers/mock-interactions.js';
+import { fixtureSync, mousedown, tabKeyDown } from '@vaadin/testing-helpers';
+
 import '../vaadin-avatar.js';
 
 describe('vaadin-avatar', () => {
@@ -217,7 +217,7 @@ describe('vaadin-avatar', () => {
     });
 
     it('should set focus-ring attribute on avatar focusin after Tab', () => {
-      keyDownOn(document.body, 9);
+      tabKeyDown(document.body);
       focusin(avatar);
       expect(avatar.hasAttribute('focus-ring')).to.be.true;
       focusout(avatar);
@@ -225,8 +225,8 @@ describe('vaadin-avatar', () => {
     });
 
     it('should not set the focus-ring attribute on avatar mousedown', () => {
-      keyDownOn(document.body, 9);
-      document.body.dispatchEvent(new MouseEvent('mousedown'));
+      tabKeyDown(document.body);
+      mousedown(document.body);
       focusin(avatar);
       expect(avatar.hasAttribute('focus-ring')).to.be.false;
     });
