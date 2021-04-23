@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync, nextFrame } from '@open-wc/testing-helpers';
-import { downAndUp, keyDownOn, keyUpOn } from '@polymer/iron-test-helpers/mock-interactions.js';
+import { click, fixtureSync, mousedown, mouseup, nextFrame, space, spaceKeyDown } from '@vaadin/testing-helpers';
 import '../vaadin-checkbox.js';
 
 describe('checkbox', () => {
@@ -43,11 +42,15 @@ describe('checkbox', () => {
     expect(checkbox.value).to.be.eql('on');
   });
 
-  it('fires click event', (done) => {
-    checkbox.addEventListener('click', () => {
-      done();
-    });
-    downAndUp(checkbox);
+  it('fires click event', () => {
+    const spy = sinon.spy();
+    checkbox.addEventListener('click', spy);
+
+    mousedown(checkbox);
+    mouseup(checkbox);
+    click(checkbox);
+
+    expect(spy.calledOnce).to.be.true;
   });
 
   it('should have proper name', () => {
@@ -134,15 +137,13 @@ describe('checkbox', () => {
   });
 
   it('should have active attribute on space', () => {
-    keyDownOn(checkbox, 32);
+    spaceKeyDown(checkbox);
 
     expect(checkbox.hasAttribute('active')).to.be.true;
   });
 
   it('should not have active attribute after space', () => {
-    keyDownOn(checkbox, 32);
-
-    keyUpOn(checkbox, 32);
+    space(checkbox);
 
     expect(checkbox.hasAttribute('active')).to.be.false;
   });
@@ -151,8 +152,7 @@ describe('checkbox', () => {
     checkbox.checked = false;
     checkbox.indeterminate = true;
 
-    keyDownOn(checkbox, 32);
-    keyUpOn(checkbox, 32);
+    space(checkbox);
 
     expect(checkbox.checked).to.be.true;
     expect(checkbox.indeterminate).to.be.false;
@@ -163,8 +163,7 @@ describe('checkbox', () => {
     checkbox.checked = true;
     checkbox.indeterminate = true;
 
-    keyDownOn(checkbox, 32);
-    keyUpOn(checkbox, 32);
+    space(checkbox);
 
     expect(checkbox.checked).to.be.false;
     expect(checkbox.indeterminate).to.be.false;
@@ -204,41 +203,43 @@ describe('checkbox', () => {
   });
 
   describe('change event', () => {
+    let changeSpy;
+
+    beforeEach(() => {
+      changeSpy = sinon.spy();
+      checkbox.addEventListener('change', changeSpy);
+    });
+
     it('should not fire change-event when changing checked value programmatically', () => {
-      checkbox.addEventListener('change', () => {
-        throw new Error('Should not come here!');
-      });
       checkbox.checked = true;
+
+      expect(changeSpy.called).to.be.false;
     });
 
-    it('should fire change-event when user checks the element', (done) => {
-      checkbox.addEventListener('change', () => done());
+    it('should fire change-event when user checks the element', () => {
       checkbox.click();
+
+      expect(changeSpy.calledOnce).to.be.true;
     });
 
-    it('should fire change-event when user unchecks the element', (done) => {
+    it('should fire change-event when user unchecks the element', () => {
       checkbox.checked = true;
-      checkbox.addEventListener('change', () => done());
       checkbox.click();
+
+      expect(changeSpy.calledOnce).to.be.true;
     });
 
     it('should bubble', () => {
-      const spy = sinon.spy();
-      checkbox.addEventListener('change', spy);
-
       checkbox.click();
 
-      const event = spy.getCall(0).args[0];
+      const event = changeSpy.getCall(0).args[0];
       expect(event).to.have.property('bubbles', true);
     });
 
     it('should not be composed', () => {
-      const spy = sinon.spy();
-      checkbox.addEventListener('change', spy);
-
       checkbox.click();
 
-      const event = spy.getCall(0).args[0];
+      const event = changeSpy.getCall(0).args[0];
       expect(event).to.have.property('composed', false);
     });
   });

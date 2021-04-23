@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync } from '@open-wc/testing-helpers';
+import { fixtureSync, focusin, focusout } from '@vaadin/testing-helpers';
 import '@polymer/polymer/lib/elements/dom-bind.js';
 import '../vaadin-checkbox-group.js';
 
@@ -140,25 +140,25 @@ describe('vaadin-checkbox-group', () => {
   });
 
   it('should set focused attribute on focusin event dispatched', () => {
-    checkboxes[0].dispatchEvent(new CustomEvent('focusin', { composed: true, bubbles: true }));
+    focusin(checkboxes[0]);
     expect(group.hasAttribute('focused')).to.be.true;
   });
 
   it('should not set focused attribute on focusin event dispatched when disabled', () => {
     group.disabled = true;
-    checkboxes[0].dispatchEvent(new CustomEvent('focusin', { composed: true, bubbles: true }));
+    focusin(checkboxes[0]);
     expect(group.hasAttribute('focused')).to.be.false;
   });
 
   it('should remove focused attribute on checkbox focusout', () => {
-    checkboxes[0].dispatchEvent(new CustomEvent('focusin', { composed: true, bubbles: true }));
-    checkboxes[0].dispatchEvent(new CustomEvent('focusout', { composed: true, bubbles: true }));
+    focusin(checkboxes[0]);
+    focusout(checkboxes[0]);
     expect(group.hasAttribute('focused')).to.be.false;
   });
 
   it('should remove focused attribute on checkbox-group focusout', () => {
-    checkboxes[0].dispatchEvent(new CustomEvent('focusin', { composed: true, bubbles: true }));
-    group.dispatchEvent(new CustomEvent('focusout', { composed: true, bubbles: true }));
+    focusin(checkboxes[0]);
+    focusout(group);
     expect(group.hasAttribute('focused')).to.be.false;
   });
 
@@ -289,12 +289,6 @@ describe('vaadin-checkbox-group', () => {
 });
 
 describe('validation', () => {
-  function blur(target, relatedTarget) {
-    const event = new CustomEvent('focusout', { bubbles: true, composed: true });
-    event.relatedTarget = relatedTarget;
-    target.dispatchEvent(event);
-  }
-
   let group, checkboxes;
 
   beforeEach(() => {
@@ -338,21 +332,21 @@ describe('validation', () => {
 
   it('should pass validation and set invalid when field is required and user blurs out of the group', () => {
     group.required = true;
-    blur(group, document.body);
+    focusout(group, document.body);
     expect(group.invalid).to.be.true;
   });
 
   it('should not run validation while user is tabbing between checkboxes inside of the group', () => {
     group.required = true;
     const spy = sinon.spy(group, 'validate');
-    blur(group, checkboxes[1]);
+    focusout(group, checkboxes[1]);
     expect(spy.called).to.be.false;
   });
 
   it('should not run validation while user is tabbing between checkboxes and focus moves to native checkbox', () => {
     group.required = true;
     const spy = sinon.spy(group, 'validate');
-    blur(group, checkboxes[1].focusElement);
+    focusout(group, checkboxes[1].focusElement);
     expect(spy.called).to.be.false;
   });
 
