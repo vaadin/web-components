@@ -1974,10 +1974,10 @@
     "@typescript-eslint/types" "4.22.0"
     eslint-visitor-keys "^2.0.0"
 
-"@vaadin/testing-helpers@^0.1.3":
-  version "0.1.3"
-  resolved "https://registry.yarnpkg.com/@vaadin/testing-helpers/-/testing-helpers-0.1.3.tgz#439a6371da0c6ce103dfa6be477fda79282c4674"
-  integrity sha512-W6ui9t0WdXX1FdMtvp6w+45iEG18KcZ/6Bl5zwrhEfyCwwH178Ufh9q9V7In197Z9YWPklnWAw5p4ubisOw9ig==
+"@vaadin/testing-helpers@^0.1.4":
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/@vaadin/testing-helpers/-/testing-helpers-0.1.4.tgz#214c9d5e49f2240a4d7e979a2972a36500119dbd"
+  integrity sha512-Ifh9e9VCvxgZ18GjvjTTXjszyJG4fQkfXXPVO7dTZJCKqhtgzNZPS9Hco2bH5WeoUbd3zDEV2Z0C6tPS6SlC6w==
   dependencies:
     "@polymer/polymer" "^3.4.1"
 
