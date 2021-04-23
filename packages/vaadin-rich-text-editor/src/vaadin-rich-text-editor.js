@@ -610,6 +610,7 @@ class RichTextEditorElement extends ElementMixin(ThemableMixin(PolymerElement)) 
   /** @private */
   _prepareToolbar() {
     const clean = Quill.imports['modules/toolbar'].DEFAULTS.handlers.clean;
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this;
 
     const toolbar = {
