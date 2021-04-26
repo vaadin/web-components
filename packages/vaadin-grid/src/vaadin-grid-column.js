@@ -204,6 +204,7 @@ export const ColumnBaseMixin = (superClass) =>
      * @protected
      */
     _findHostGrid() {
+      // eslint-disable-next-line @typescript-eslint/no-this-alias
       let el = this;
       // Custom elements extending grid must have a specific localName
       while (el && !/^vaadin.*grid(-pro)?$/.test(el.localName)) {
