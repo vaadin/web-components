@@ -1,6 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@open-wc/testing-helpers';
-import { keyDownOn } from '@polymer/iron-test-helpers/mock-interactions.js';
+import { fixtureSync, arrowDownKeyDown, escKeyDown } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
 
@@ -9,14 +8,6 @@ describe('ARIA', () => {
 
   function getItemElement(i) {
     return comboBox.$.overlay._selector.querySelectorAll('vaadin-combo-box-item')[i];
-  }
-
-  function arrowDown() {
-    keyDownOn(comboBox.inputElement, 40);
-  }
-
-  function esc() {
-    keyDownOn(comboBox.inputElement, 27);
   }
 
   beforeEach(() => {
@@ -42,7 +33,7 @@ describe('ARIA', () => {
 
   describe('when overlay opens or close', () => {
     beforeEach(() => {
-      arrowDown();
+      arrowDownKeyDown(comboBox.inputElement);
     });
 
     it('should set role listbox on the iron-list', () => {
@@ -55,7 +46,7 @@ describe('ARIA', () => {
     });
 
     it('should unset aria-expanded attribute when closed', () => {
-      esc();
+      escKeyDown(comboBox.inputElement);
 
       expect(input.getAttribute('aria-expanded')).to.equal('false');
       expect(toggle.getAttribute('aria-expanded')).to.equal('false');
@@ -64,12 +55,12 @@ describe('ARIA', () => {
 
   describe('navigating the items', () => {
     beforeEach(() => {
-      arrowDown();
+      arrowDownKeyDown(comboBox.inputElement);
     });
 
     it('should set selection aria attributes when focusing an item', () => {
       comboBox.value = 'foo';
-      arrowDown(); // 'focus moves to 2nd item'
+      arrowDownKeyDown(comboBox.inputElement); // 'focus moves to 2nd item'
 
       expect(getItemElement(0).getAttribute('role')).to.equal('option');
       expect(getItemElement(0).getAttribute('aria-selected')).to.equal('false');

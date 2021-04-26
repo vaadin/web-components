@@ -1,13 +1,22 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync } from '@open-wc/testing-helpers';
+import {
+  fire,
+  click,
+  enter,
+  fixtureSync,
+  mousedown,
+  mouseup,
+  touchend,
+  touchstart,
+  isDesktopSafari
+} from '@vaadin/testing-helpers';
 import { resetMouseCanceller } from '@polymer/polymer/lib/utils/gestures.js';
-import { downAndUp, pressAndReleaseKeyOn } from '@polymer/iron-test-helpers/mock-interactions.js';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-input/iron-input.js';
 import '@polymer/paper-input/paper-input.js';
 import '@vaadin/vaadin-text-field/vaadin-text-field.js';
-import { createEventSpy, fire, TOUCH_DEVICE } from './helpers.js';
+import { createEventSpy, TOUCH_DEVICE } from './helpers.js';
 import './not-animated-styles.js';
 import '../vaadin-combo-box-light.js';
 
@@ -75,14 +84,14 @@ describe('vaadin-combo-box-light', () => {
     const e = new CustomEvent('mousedown', { bubbles: true });
     const spy = sinon.spy(e, 'preventDefault');
     comboBox.$.overlay.$.dropdown.$.overlay.dispatchEvent(e);
-    expect(spy.called).to.be.true;
+    expect(spy.calledOnce).to.be.true;
   });
 
   it('should not prevent default on input down', () => {
     const e = new CustomEvent('mousedown', { bubbles: true });
     const spy = sinon.spy(e, 'preventDefault');
     ironInput.dispatchEvent(e);
-    expect(spy.called).to.be.false;
+    expect(spy.calledOnce).to.be.false;
   });
 
   describe('toggling', () => {
@@ -98,16 +107,14 @@ describe('vaadin-combo-box-light', () => {
       expect(comboBox.opened).to.be.true;
     });
 
-    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-    (isSafari ? it.skip : it)('should toggle on input click on touch devices', (done) => {
-      downAndUp(
-        ironInput,
-        () => {
-          expect(comboBox.opened).to.be.true;
-          done();
-        },
-        { emulateTouch: true }
-      );
+    (isDesktopSafari ? it.skip : it)('should toggle on input click on touch devices', () => {
+      touchstart(ironInput);
+      touchend(ironInput);
+      mousedown(ironInput);
+      mouseup(ironInput);
+      click(ironInput);
+
+      expect(comboBox.opened).to.be.true;
     });
 
     it('should not clear on input click', () => {
@@ -116,16 +123,16 @@ describe('vaadin-combo-box-light', () => {
       expect(comboBox.value).to.equal('foo');
     });
 
-    (isSafari ? it.skip : it)('should not clear on input click on touch devices', (done) => {
+    (isDesktopSafari ? it.skip : it)('should not clear on input click on touch devices', () => {
       comboBox.value = 'foo';
-      downAndUp(
-        ironInput,
-        () => {
-          expect(comboBox.value).to.equal('foo');
-          done();
-        },
-        { emulateTouch: true }
-      );
+
+      touchstart(ironInput);
+      touchend(ironInput);
+      mousedown(ironInput);
+      mouseup(ironInput);
+      click(ironInput);
+
+      expect(comboBox.value).to.equal('foo');
     });
   });
 
@@ -189,8 +196,9 @@ describe('attr-for-value', () => {
 
       // Simulate typing an option with a keyboard and confirming it via Enter
       nativeInput.value = 'foo';
-      fire('input', nativeInput);
-      pressAndReleaseKeyOn(nativeInput, 13, null, 'Enter');
+      fire(nativeInput, 'input');
+
+      enter(nativeInput);
 
       expect(comboBox.value).to.eql('foo');
       expect(comboBox._inputElementValue).to.eql('foo');
@@ -215,10 +223,10 @@ describe('paper-input', () => {
   });
 
   it('should toggle overlay by clicking toggle element', () => {
-    comboBox._toggleElement.dispatchEvent(new CustomEvent('click', { bubbles: true }));
+    click(comboBox._toggleElement);
     expect(comboBox.opened).to.be.true;
 
-    comboBox._toggleElement.dispatchEvent(new CustomEvent('click', { bubbles: true }));
+    click(comboBox._toggleElement);
     expect(comboBox.opened).to.be.false;
   });
 
@@ -226,7 +234,7 @@ describe('paper-input', () => {
     const e = new CustomEvent('click', { bubbles: true });
     const spy = sinon.spy(e, 'preventDefault');
     comboBox._toggleElement.dispatchEvent(e);
-    expect(spy.called).to.be.true;
+    expect(spy.calledOnce).to.be.true;
   });
 
   it('should validate the paper-input element on checkValidity', () => {
@@ -236,7 +244,7 @@ describe('paper-input', () => {
     comboBox.value = 'foo';
     comboBox.checkValidity();
 
-    expect(spy.called).to.be.true;
+    expect(spy.calledOnce).to.be.true;
   });
 
   describe('custom clear-button', () => {
@@ -293,7 +301,7 @@ describe('paper-input', () => {
         target = elem;
       }
 
-      fire('click', target);
+      click(target);
     }
 
     beforeEach(() => {
@@ -308,22 +316,22 @@ describe('paper-input', () => {
       comboBox.open();
       clickAtPositionOf(clearButton);
 
-      expect(clickSpy.callCount).to.equal(1);
+      expect(clickSpy.calledOnce).to.be.true;
     });
 
     it('should fire `change` event on clear', () => {
       const changeSpy = sinon.spy();
       comboBox.addEventListener('change', changeSpy);
 
-      fire('click', clearButton);
+      click(clearButton);
 
-      expect(changeSpy.callCount).to.equal(1);
+      expect(changeSpy.calledOnce).to.be.true;
     });
 
     it('should clear the selection when clicking on the clear button', () => {
       comboBox.open();
 
-      fire('click', clearButton);
+      click(clearButton);
 
       expect(comboBox.value).to.eql('');
       expect(comboBox.$.overlay._selectedItem).to.be.null;
@@ -333,23 +341,23 @@ describe('paper-input', () => {
     it('should not close the dropdown after clearing a selection', () => {
       comboBox.open();
 
-      fire('click', clearButton);
+      click(clearButton);
 
-      expect(comboBox.opened).to.eql(true);
+      expect(comboBox.opened).to.be.true;
     });
 
     it('should not open the dropdown after clearing a selection', () => {
-      fire('click', clearButton);
+      click(clearButton);
 
-      expect(comboBox.opened).to.eql(false);
+      expect(comboBox.opened).to.be.false;
     });
 
     it('should cancel click event to avoid input blur', () => {
       comboBox.open();
 
-      const event = fire('click', clearButton);
+      const event = click(clearButton);
 
-      expect(event.defaultPrevented).to.eql(true);
+      expect(event.defaultPrevented).to.be.true;
     });
   });
 });
@@ -437,20 +445,20 @@ describe('vaadin-text-field', () => {
     });
 
     it('should immediately clear value when using clear button of vaadin-text-field', () => {
-      fire('click', clearButton);
+      click(clearButton);
       expect(comboBox.value).not.to.be.ok;
     });
 
     it('should not close the dropdown after clearing a selection', () => {
       comboBox.open();
 
-      fire('click', clearButton);
+      click(clearButton);
 
       expect(comboBox.opened).to.eql(true);
     });
 
     it('should not open the dropdown after clearing a selection', () => {
-      fire('click', clearButton);
+      click(clearButton);
 
       expect(comboBox.opened).to.eql(false);
     });

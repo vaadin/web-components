@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@open-wc/testing-helpers';
-import { IOS, onceOpened, onceScrolled } from './helpers.js';
+import { fixtureSync, focusout, isIOS } from '@vaadin/testing-helpers';
+import { onceOpened, onceScrolled } from './helpers.js';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
 
@@ -11,7 +11,7 @@ describe('scrolling', () => {
     comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
   });
 
-  (IOS ? describe : describe.skip)('iOS', () => {
+  (isIOS ? describe : describe.skip)('iOS', () => {
     it('should have momentum scrolling enabled', () => {
       comboBox.open();
 
@@ -107,19 +107,13 @@ describe('scrolling', () => {
 
     it('should not close the items when touching scroll bar', () => {
       comboBox.open();
-      const e = new CustomEvent('focusout', { bubbles: true, composed: true });
-      e.relatedTarget = comboBox.$.overlay.$.dropdown.$.overlay;
-      comboBox.inputElement.dispatchEvent(e);
-
+      focusout(comboBox.inputElement, comboBox.$.overlay.$.dropdown.$.overlay);
       expect(comboBox.opened).to.be.true;
     });
 
     it('should keep the input focused while scrolling', () => {
       comboBox.open();
-      const e = new CustomEvent('focusout', { bubbles: true, composed: true });
-      e.relatedTarget = comboBox.$.overlay.$.dropdown.$.overlay;
-      comboBox.inputElement.dispatchEvent(e);
-
+      focusout(comboBox.inputElement, comboBox.$.overlay.$.dropdown.$.overlay);
       expect(comboBox.inputElement.hasAttribute('focused')).to.be.true;
     });
   });

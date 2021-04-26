@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync, nextFrame } from '@open-wc/testing-helpers';
-import { keyDownOn } from '@polymer/iron-test-helpers/mock-interactions.js';
+import { fixtureSync, nextFrame, enterKeyDown, fire } from '@vaadin/testing-helpers';
 import { flush } from '@polymer/polymer/lib/utils/flush.js';
 import '@polymer/iron-input/iron-input.js';
 import { ComboBoxPlaceholder } from '../src/vaadin-combo-box-placeholder.js';
@@ -40,10 +39,6 @@ describe('lazy loading', () => {
     });
     callback(dataProviderItems, SIZE);
   };
-
-  function enter() {
-    keyDownOn(comboBox.inputElement, 13);
-  }
 
   const setInputValue = (value) => {
     if (comboBox.inputElement.tagName === 'IRON-INPUT') {
@@ -131,7 +126,7 @@ describe('lazy loading', () => {
           expect(comboBox.opened).to.be.false;
           comboBox.dataProvider = spyDataProvider;
           setInputValue('item 1');
-          comboBox.inputElement.dispatchEvent(new CustomEvent('input'));
+          fire(comboBox.inputElement, 'input');
           comboBox.opened = true;
           flush();
           expect(comboBox.filter).to.equal('item 1');
@@ -323,7 +318,7 @@ describe('lazy loading', () => {
         // FIXME: fails for combo-box-light (items are not updated)
         (isComboBoxLight ? it.skip : it)('should not be invoked if items are filtered', () => {
           setInputValue('1');
-          comboBox.inputElement.dispatchEvent(new CustomEvent('input'));
+          fire(comboBox.inputElement, 'input');
 
           flush();
           spyDataProvider.resetHistory();
@@ -387,9 +382,9 @@ describe('lazy loading', () => {
           comboBox.opened = true;
 
           setInputValue('custom value');
-          comboBox.inputElement.dispatchEvent(new CustomEvent('input'));
+          fire(comboBox.inputElement, 'input');
 
-          enter();
+          enterKeyDown(comboBox.inputElement);
           expect(comboBox.value).to.eql('custom value');
         });
       });
@@ -938,7 +933,7 @@ describe('lazy loading', () => {
           comboBox.allowCustomValue = true;
           comboBox.open();
           setInputValue('other value');
-          comboBox.inputElement.dispatchEvent(new CustomEvent('input'));
+          fire(comboBox.inputElement, 'input');
           comboBox.close();
           expect(comboBox.value).to.eql('other value');
 
