@@ -118,7 +118,7 @@ class AvatarElement extends ElementMixin(ThemableMixin(PolymerElement)) {
           box-shadow: inset 0 0 0 2px var(--vaadin-avatar-user-color);
         }
       </style>
-      <img hidden$="[[!__imgVisible]]" src$="[[img]]" aria-hidden="true" on-error="__handleImageLoadError" />
+      <img hidden$="[[!__imgVisible]]" src$="[[img]]" aria-hidden="true" on-error="__onImageLoadError" />
       <svg
         part="icon"
         hidden$="[[!__iconVisible]]"
@@ -338,7 +338,7 @@ class AvatarElement extends ElementMixin(ThemableMixin(PolymerElement)) {
   }
 
   /** @private */
-  __handleImageLoadError() {
+  __onImageLoadError() {
     if (this.img) {
       console.warn(`<vaadin-avatar> The specified image could not be loaded: ${this.img}`);
       this.__imgFailedToLoad = true;
