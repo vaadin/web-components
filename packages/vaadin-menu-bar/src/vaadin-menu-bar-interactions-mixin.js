@@ -49,18 +49,6 @@ export const InteractionsMixin = (superClass) =>
       container.addEventListener('mouseover', (e) => this._onMouseOver(e));
     }
 
-    /** @protected */
-    connectedCallback() {
-      super.connectedCallback();
-      document.addEventListener('click', this.__boundOutsideClickListener, true);
-    }
-
-    /** @protected */
-    disconnectedCallback() {
-      super.disconnectedCallback();
-      document.removeEventListener('click', this.__boundOutsideClickListener, true);
-    }
-
     /** @private */
     get __isRTL() {
       return this.getAttribute('dir') === 'rtl';
