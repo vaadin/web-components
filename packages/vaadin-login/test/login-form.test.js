@@ -17,6 +17,38 @@ registerStyles(
   `
 );
 
+describe('login form with csrf', () => {
+  var loginForm, submitStub;
+
+  before(() => {
+    submitStub = sinon.stub(HTMLFormElement.prototype, 'submit');
+  });
+
+  after(() => {
+    submitStub.restore();
+  });
+
+  beforeEach(() => {
+    loginForm = fixtureSync(`<vaadin-login-form action='login-action'></vaadin-login-form>
+    <meta name="_csrf_parameter" content="_csrf" />
+    <meta name="_csrf_header" content="X-CSRF-TOKEN" />
+    <meta name="_csrf" content="28e4c684-fb5e-4c79-b8e2-a2177569edfa" />`);
+  });
+
+  afterEach(() => {
+    submitStub.resetHistory();
+  });
+
+  it('should include CSRF in submit request', () => {
+    const { vaadinLoginPassword } = fillUsernameAndPassword(loginForm);
+    enter(vaadinLoginPassword);
+    expect(submitStub.called).to.be.true;
+    const csrfInput = loginForm.querySelector('#csrf');
+    expect(csrfInput.name).to.equal('_csrf');
+    expect(csrfInput.value).to.equal('28e4c684-fb5e-4c79-b8e2-a2177569edfa');
+  });
+});
+
 describe('login form', () => {
   var login, formWrapper, submitStub;
 
