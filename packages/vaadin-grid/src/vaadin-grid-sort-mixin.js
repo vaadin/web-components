@@ -51,31 +51,61 @@ export const SortMixin = (superClass) =>
     /** @private */
     _onSorterChanged(e) {
       const sorter = e.target;
+      e.stopPropagation();
+      this.__updateSorter(sorter);
+      this.__applySorters();
+    }
 
-      this._removeArrayItem(this._sorters, sorter);
+    /** @private */
+    __removeSorters(sortersToRemove) {
+      if (sortersToRemove.length == 0) {
+        return;
+      }
+
+      this._sorters = this._sorters.filter((sorter) => sortersToRemove.indexOf(sorter) < 0);
+      if (this.multiSort) {
+        this.__updateSortOrders();
+      }
+      this.__applySorters();
+    }
+
+    /** @private */
+    __updateSortOrders() {
+      this._sorters.forEach((sorter, index) => (sorter._order = this._sorters.length > 1 ? index : null), this);
+    }
+
+    /** @private */
+    __updateSorter(sorter) {
+      if (!sorter.direction && this._sorters.indexOf(sorter) === -1) {
+        return;
+      }
+
       sorter._order = null;
 
       if (this.multiSort) {
+        this._removeArrayItem(this._sorters, sorter);
         if (sorter.direction) {
           this._sorters.unshift(sorter);
         }
-
-        this._sorters.forEach((sorter, index) => (sorter._order = this._sorters.length > 1 ? index : null), this);
+        this.__updateSortOrders();
       } else {
         if (sorter.direction) {
-          this._sorters.forEach((sorter) => {
+          const otherSorters = this._sorters.filter((s) => s != sorter);
+          this._sorters = [sorter];
+          otherSorters.forEach((sorter) => {
             sorter._order = null;
             sorter.direction = null;
           });
-          this._sorters = [sorter];
         }
       }
+    }
 
-      e.stopPropagation();
-
+    /** @private */
+    __applySorters() {
       if (
         this.dataProvider &&
-        // No need to clear cache if sorters didn't change
+        // No need to clear cache if sorters didn't change and grid is attached
+        this.isAttached &&
         JSON.stringify(this._previousSorters) !== JSON.stringify(this._mapSorters())
       ) {
         this.clearCache();
