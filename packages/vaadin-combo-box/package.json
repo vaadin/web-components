@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-combo-box",
-  "version": "20.0.0-alpha5",
+  "version": "21.0.0-alpha0",
   "description": "Web Component for displaying a list of items with filtering",
   "main": "vaadin-combo-box.js",
   "repository": "vaadin/vaadin-combo-box",
@@ -28,21 +28,21 @@
     "@polymer/iron-list": "^3.0.0",
     "@polymer/iron-resizable-behavior": "^3.0.0",
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/vaadin-control-state-mixin": "^20.0.0-alpha5",
-    "@vaadin/vaadin-element-mixin": "^20.0.0-alpha5",
-    "@vaadin/vaadin-item": "^20.0.0-alpha5",
-    "@vaadin/vaadin-lumo-styles": "^20.0.0-alpha5",
-    "@vaadin/vaadin-material-styles": "^20.0.0-alpha5",
-    "@vaadin/vaadin-overlay": "^20.0.0-alpha5",
-    "@vaadin/vaadin-text-field": "^20.0.0-alpha5",
-    "@vaadin/vaadin-themable-mixin": "^20.0.0-alpha5"
+    "@vaadin/vaadin-control-state-mixin": "^21.0.0-alpha0",
+    "@vaadin/vaadin-element-mixin": "^21.0.0-alpha0",
+    "@vaadin/vaadin-item": "^21.0.0-alpha0",
+    "@vaadin/vaadin-lumo-styles": "^21.0.0-alpha0",
+    "@vaadin/vaadin-material-styles": "^21.0.0-alpha0",
+    "@vaadin/vaadin-overlay": "^21.0.0-alpha0",
+    "@vaadin/vaadin-text-field": "^21.0.0-alpha0",
+    "@vaadin/vaadin-themable-mixin": "^21.0.0-alpha0"
   },
   "devDependencies": {
     "@esm-bundle/chai": "4.3.0",
-    "@vaadin/testing-helpers": "^0.1.5",
     "@polymer/iron-input": "^3.0.1",
     "@polymer/paper-input": "^3.0.0",
-    "@vaadin/vaadin-dialog": "^20.0.0-alpha5",
+    "@vaadin/testing-helpers": "^0.1.5",
+    "@vaadin/vaadin-dialog": "^21.0.0-alpha0",
     "sinon": "^9.2.0"
   },
   "publishConfig": {

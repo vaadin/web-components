@@ -115,7 +115,7 @@ class TextFieldElement extends ElementMixin(TextFieldMixin(ControlStateMixin(The
   }
 
   static get version() {
-    return '20.0.0-alpha5';
+    return '21.0.0-alpha0';
   }
 
   static get properties() {

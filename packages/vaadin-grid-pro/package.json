@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-grid-pro",
-  "version": "20.0.0-alpha5",
+  "version": "21.0.0-alpha0",
   "description": "vaadin-grid-pro",
   "main": "vaadin-grid-pro.js",
   "module": "vaadin-grid-pro.js",
@@ -26,24 +26,24 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/vaadin-checkbox": "^20.0.0-alpha5",
-    "@vaadin/vaadin-element-mixin": "^20.0.0-alpha5",
-    "@vaadin/vaadin-grid": "^20.0.0-alpha5",
-    "@vaadin/vaadin-item": "^20.0.0-alpha5",
+    "@vaadin/vaadin-checkbox": "^21.0.0-alpha0",
+    "@vaadin/vaadin-element-mixin": "^21.0.0-alpha0",
+    "@vaadin/vaadin-grid": "^21.0.0-alpha0",
+    "@vaadin/vaadin-item": "^21.0.0-alpha0",
     "@vaadin/vaadin-license-checker": "^2.1.0",
-    "@vaadin/vaadin-list-box": "^20.0.0-alpha5",
-    "@vaadin/vaadin-lumo-styles": "^20.0.0-alpha5",
-    "@vaadin/vaadin-material-styles": "^20.0.0-alpha5",
-    "@vaadin/vaadin-select": "^20.0.0-alpha5",
-    "@vaadin/vaadin-text-field": "^20.0.0-alpha5",
-    "@vaadin/vaadin-themable-mixin": "^20.0.0-alpha5"
+    "@vaadin/vaadin-list-box": "^21.0.0-alpha0",
+    "@vaadin/vaadin-lumo-styles": "^21.0.0-alpha0",
+    "@vaadin/vaadin-material-styles": "^21.0.0-alpha0",
+    "@vaadin/vaadin-select": "^21.0.0-alpha0",
+    "@vaadin/vaadin-text-field": "^21.0.0-alpha0",
+    "@vaadin/vaadin-themable-mixin": "^21.0.0-alpha0"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.1.5",
     "@open-wc/testing-helpers": "^1.8.12",
     "@polymer/iron-test-helpers": "^3.0.0",
-    "@vaadin/vaadin-date-picker": "^20.0.0-alpha5",
-    "@vaadin/vaadin-dialog": "^20.0.0-alpha5",
+    "@vaadin/vaadin-date-picker": "^21.0.0-alpha0",
+    "@vaadin/vaadin-dialog": "^21.0.0-alpha0",
     "sinon": "^9.2.1"
   },
   "publishConfig": {
