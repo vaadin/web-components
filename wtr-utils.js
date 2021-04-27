@@ -13,7 +13,7 @@ const NO_UNIT_TESTS = ['vaadin-icons', 'vaadin-lumo-styles', 'vaadin-material-st
  * Get packages changed since master.
  */
 const getChangedPackages = () => {
-  const output = execSync('./node_modules/.bin/lerna ls --since origin/master --json --loglevel silent');
+  const output = execSync('./node_modules/.bin/lerna ls --since origin/20.0 --json --loglevel silent');
   return JSON.parse(output.toString());
 };
 
