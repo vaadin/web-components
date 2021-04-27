@@ -1,8 +1,8 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { aTimeout, fixtureSync } from '@open-wc/testing-helpers';
+import { aTimeout, fixtureSync, isIOS, fire } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { fire, IOS, makeItems } from './helpers.js';
+import { makeItems } from './helpers.js';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
 
@@ -113,7 +113,7 @@ describe('overlay', () => {
       comboBox.opened = true;
       comboBox.$.overlay.updateViewportBoundaries = sinon.spy();
 
-      fire('scroll', document);
+      fire(document, 'scroll');
 
       expect(comboBox.$.overlay.updateViewportBoundaries.callCount).to.eql(1);
     });
@@ -170,7 +170,7 @@ describe('overlay', () => {
     });
   });
 
-  (IOS ? describe.skip : describe)('overlay alignment', () => {
+  (isIOS ? describe.skip : describe)('overlay alignment', () => {
     it('should be above input', async () => {
       moveComboBox(xCenter, yBottom, 300);
 
@@ -184,7 +184,7 @@ describe('overlay', () => {
       moveComboBox(xCenter, yBottom, 300);
 
       comboBox.inputElement.value = 'item 1';
-      comboBox.inputElement.dispatchEvent(new CustomEvent('input'));
+      fire(comboBox.inputElement, 'input');
 
       comboBox.open();
       await aTimeout(0);

@@ -39,9 +39,8 @@
   },
   "devDependencies": {
     "@esm-bundle/chai": "4.3.0",
-    "@open-wc/testing-helpers": "^1.8.0",
+    "@vaadin/testing-helpers": "^0.1.5",
     "@polymer/iron-input": "^3.0.1",
-    "@polymer/iron-test-helpers": "^3.0.0",
     "@polymer/paper-input": "^3.0.0",
     "@vaadin/vaadin-dialog": "^20.0.0-alpha5",
     "sinon": "^9.2.0"

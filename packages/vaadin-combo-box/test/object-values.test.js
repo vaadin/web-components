@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { aTimeout, fixtureSync } from '@open-wc/testing-helpers';
+import { aTimeout, fixtureSync, fire } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
 
@@ -9,7 +9,9 @@ describe('object values', () => {
 
   function selectItem(index) {
     // simulates clicking on the overlay items, but it more reliable in tests.
-    comboBox.$.overlay.dispatchEvent(new CustomEvent('selection-changed', { detail: { item: comboBox.items[index] } }));
+    fire(comboBox.$.overlay, 'selection-changed', {
+      item: comboBox.items[index]
+    });
   }
 
   describe('label and value paths', () => {

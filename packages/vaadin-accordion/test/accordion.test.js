@@ -1,28 +1,16 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync } from '@open-wc/testing-helpers';
-import { keyboardEventFor, keyDownOn } from '@polymer/iron-test-helpers/mock-interactions.js';
+import {
+  isIOS,
+  fixtureSync,
+  arrowDownKeyDown,
+  arrowUpKeyDown,
+  keyboardEventFor,
+  homeKeyDown,
+  endKeyDown
+} from '@vaadin/testing-helpers';
+
 import '../vaadin-accordion.js';
-
-const iOS =
-  (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) ||
-  (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-
-function arrowDown(target) {
-  keyDownOn(target, 40, [], 'ArrowDown');
-}
-
-function arrowUp(target) {
-  keyDownOn(target, 38, [], 'ArrowUp');
-}
-
-function home(target) {
-  keyDownOn(target, 36, [], 'Home');
-}
-
-function end(target) {
-  keyDownOn(target, 35, [], 'End');
-}
 
 describe('vaadin-accordion', () => {
   let accordion, heading;
@@ -138,7 +126,7 @@ describe('vaadin-accordion', () => {
     });
   });
 
-  (iOS ? describe.skip : describe)('focus', () => {
+  (isIOS ? describe.skip : describe)('focus', () => {
     it('should focus the first panel heading by default', () => {
       accordion.focus();
       expect(accordion.items[0].hasAttribute('focused')).to.be.true;
@@ -148,7 +136,7 @@ describe('vaadin-accordion', () => {
       accordion.items[0].disabled = true;
       const focusSpy = sinon.spy(accordion.items[1], 'focus');
       accordion.focus();
-      expect(focusSpy.called).to.be.true;
+      expect(focusSpy.calledOnce).to.be.true;
     });
 
     it('should not focus any panel if all the panels are disabled', () => {
@@ -166,7 +154,7 @@ describe('vaadin-accordion', () => {
     });
   });
 
-  (iOS ? describe.skip : describe)('keyboard navigation', () => {
+  (isIOS ? describe.skip : describe)('keyboard navigation', () => {
     beforeEach(() => {
       accordion.focus();
     });
@@ -174,16 +162,16 @@ describe('vaadin-accordion', () => {
     describe('moving focus', () => {
       it('should move focus to the next panel on "arrow-down" keydown', () => {
         heading = getHeading(0);
-        arrowDown(heading);
+        arrowDownKeyDown(heading);
         expect(accordion.items[1].hasAttribute('focused')).to.be.true;
         expect(accordion.items[1].hasAttribute('focus-ring')).to.be.true;
       });
 
       it('should move focus to the previous panel on "arrow-up" keydown', () => {
         heading = getHeading(0);
-        arrowDown(heading);
+        arrowDownKeyDown(heading);
         heading = getHeading(1);
-        arrowUp(heading);
+        arrowUpKeyDown(heading);
         expect(accordion.items[0].hasAttribute('focused')).to.be.true;
         expect(accordion.items[0].hasAttribute('focus-ring')).to.be.true;
       });
@@ -191,7 +179,7 @@ describe('vaadin-accordion', () => {
       it('should move focus to the first panel on "home" keydown', () => {
         accordion.items[2].focus();
         heading = getHeading(2);
-        home(heading);
+        homeKeyDown(heading);
         expect(accordion.items[0].hasAttribute('focused')).to.be.true;
         expect(accordion.items[0].hasAttribute('focus-ring')).to.be.true;
       });
@@ -200,13 +188,13 @@ describe('vaadin-accordion', () => {
         accordion.items[0].disabled = true;
         accordion.items[2].focus();
         heading = getHeading(2);
-        home(heading);
+        homeKeyDown(heading);
         expect(accordion.items[1].hasAttribute('focused')).to.be.true;
       });
 
       it('should move focus to the last panel on "end" keydown', () => {
         heading = getHeading(0);
-        end(heading);
+        endKeyDown(heading);
         expect(accordion.items[2].hasAttribute('focused')).to.be.true;
         expect(accordion.items[2].hasAttribute('focus-ring')).to.be.true;
       });
@@ -214,20 +202,20 @@ describe('vaadin-accordion', () => {
       it('should move focus to the closest enabled panel if last is disabled on "end" keydown', () => {
         accordion.items[2].disabled = true;
         heading = getHeading(0);
-        end(heading);
+        endKeyDown(heading);
         expect(accordion.items[1].hasAttribute('focused')).to.be.true;
       });
 
       it('should move focus to first panel on "arrow-down", if last element has focus', () => {
         accordion.items[2].focus();
         heading = getHeading(2);
-        arrowDown(heading);
+        arrowDownKeyDown(heading);
         expect(accordion.items[0].hasAttribute('focused')).to.be.true;
       });
 
       it('should move focus to last panel on "arrow-up", if first element has focus', () => {
         heading = getHeading(0);
-        arrowUp(heading);
+        arrowUpKeyDown(heading);
         expect(accordion.items[2].hasAttribute('focused')).to.be.true;
       });
 
@@ -240,7 +228,8 @@ describe('vaadin-accordion', () => {
 
       it('should not move focus on keydown event from the panel content', () => {
         const spy = sinon.spy(accordion.items[1], 'focus');
-        arrowDown(accordion.items[0].querySelector('input'));
+        const input = accordion.items[0].querySelector('input');
+        arrowDownKeyDown(input);
         expect(spy.called).to.be.false;
       });
     });
@@ -262,7 +251,7 @@ describe('vaadin-accordion', () => {
         accordion.items[2].disabled = true;
         heading = getHeading(0);
         heading.dispatchEvent(event);
-        expect(preventSpy.called).to.be.true;
+        expect(preventSpy.calledOnce).to.be.true;
       });
 
       it('should not prevent default on keydown event from the panel content', () => {

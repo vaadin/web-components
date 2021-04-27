@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync } from '@open-wc/testing-helpers';
+import { fixtureSync } from '@vaadin/testing-helpers';
 import { keyDownOn } from '@polymer/iron-test-helpers/mock-interactions.js';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { flush } from '@polymer/polymer/lib/utils/flush.js';

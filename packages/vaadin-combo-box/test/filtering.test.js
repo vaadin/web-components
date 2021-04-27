@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { flush } from '@polymer/polymer/lib/utils/flush.js';
-import { fixtureSync } from '@open-wc/testing-helpers';
+import { fixtureSync } from '@vaadin/testing-helpers';
 import { onceOpened } from './helpers.js';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';

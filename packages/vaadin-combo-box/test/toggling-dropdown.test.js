@@ -1,9 +1,10 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { aTimeout, fixtureSync } from '@open-wc/testing-helpers';
-import { createEventSpy, fire, fireDownUpClick, TOUCH_DEVICE } from './helpers.js';
+import { createEventSpy, fireDownUpClick, TOUCH_DEVICE } from './helpers.js';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
+import { click, focusout } from '@vaadin/testing-helpers';
 
 describe('toggling dropdown', () => {
   let comboBox;
@@ -147,7 +148,7 @@ describe('toggling dropdown', () => {
         const event = createEventSpy('mousedown', preventDefaultSpy);
         comboBox.$.overlay.$.dropdown.$.overlay.dispatchEvent(event);
 
-        expect(preventDefaultSpy.called).to.be.true;
+        expect(preventDefaultSpy.calledOnce).to.be.true;
       });
     });
   });
@@ -156,7 +157,7 @@ describe('toggling dropdown', () => {
     (TOUCH_DEVICE ? it : it.skip)('should close popup when clicking outside overlay', () => {
       comboBox.open();
 
-      fire('click', document.body);
+      click(document.body);
 
       expect(comboBox.opened).to.be.false;
     });
@@ -172,7 +173,7 @@ describe('toggling dropdown', () => {
     it('should not close when clicking on the overlay', () => {
       comboBox.open();
 
-      fire('click', comboBox.$.overlay.$.dropdown.$.overlay);
+      click(comboBox.$.overlay.$.dropdown.$.overlay);
 
       expect(comboBox.opened).to.be.true;
     });
@@ -196,7 +197,7 @@ describe('toggling dropdown', () => {
     it('should close the overlay when focus is lost', () => {
       comboBox.open();
 
-      fire('focusout', comboBox.inputElement);
+      focusout(comboBox.inputElement);
 
       expect(comboBox.opened).to.equal(false);
     });
@@ -223,7 +224,7 @@ describe('toggling dropdown', () => {
         expect(comboBox.inputElement.value).to.equal('3');
         expect(comboBox.value).to.be.empty;
 
-        fire('focusout', comboBox.inputElement);
+        focusout(comboBox.inputElement);
         expect(comboBox.inputElement.value).to.be.empty;
       });
     });
@@ -239,7 +240,7 @@ describe('toggling dropdown', () => {
     });
 
     it('dropdown should not be shown when disabled', () => {
-      comboBox.inputElement.dispatchEvent(new CustomEvent('click', { bubbles: true, composed: true }));
+      click(comboBox.inputElement);
       expect(comboBox.opened).to.be.false;
     });
   });
@@ -254,7 +255,7 @@ describe('toggling dropdown', () => {
     });
 
     it('dropdown should not be shown when read-only', () => {
-      comboBox.inputElement.dispatchEvent(new CustomEvent('click', { bubbles: true, composed: true }));
+      click(comboBox.inputElement);
       expect(comboBox.opened).to.be.false;
     });
   });
@@ -308,7 +309,7 @@ describe('toggling dropdown', () => {
 
     it('should blur previously focused element when clicking on toggle button', () => {
       clickToggleIcon();
-      expect(blurSpy.called).to.be.true;
+      expect(blurSpy.calledOnce).to.be.true;
     });
   });
 });

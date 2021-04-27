@@ -1,8 +1,7 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, oneEvent } from '@open-wc/testing-helpers';
+import { fixtureSync, oneEvent, nextRender } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import '@polymer/polymer/lib/elements/dom-repeat.js';
-import { nextRender } from './helpers.js';
 import '../vaadin-chart.js';
 
 customElements.define(

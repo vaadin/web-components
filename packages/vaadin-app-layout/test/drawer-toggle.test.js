@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync } from '@open-wc/testing-helpers';
-import { keyDownOn, keyUpOn } from '@polymer/iron-test-helpers/mock-interactions.js';
+import { fixtureSync, enter, space } from '@vaadin/testing-helpers';
+
 import '../vaadin-drawer-toggle.js';
 
 describe('drawer-toggle', () => {
@@ -42,14 +42,12 @@ describe('drawer-toggle', () => {
       });
 
       it('should fire "drawer-toggle-click" event on Enter', () => {
-        keyDownOn(toggle, 13, [], 'Enter');
-        keyUpOn(toggle, 13, [], 'Enter');
+        enter(toggle);
         expect(spy.calledOnce).to.be.true;
       });
 
       it('should fire "drawer-toggle-click" event on Space', () => {
-        keyDownOn(toggle, 32, [], ' ');
-        keyUpOn(toggle, 32, [], ' ');
+        space(toggle);
         expect(spy.calledOnce).to.be.true;
       });
     });
@@ -69,14 +67,12 @@ describe('drawer-toggle', () => {
       });
 
       it('should not fire "drawer-toggle-click" event on Enter when disabled', () => {
-        keyDownOn(toggle, 13, [], 'Enter');
-        keyUpOn(toggle, 13, [], 'Enter');
+        enter(toggle);
         expect(spy.called).to.be.false;
       });
 
       it('should not fire "drawer-toggle-click" event on Space when disabled', () => {
-        keyDownOn(toggle, 32, [], ' ');
-        keyUpOn(toggle, 32, [], ' ');
+        space(toggle);
         expect(spy.called).to.be.false;
       });
     });

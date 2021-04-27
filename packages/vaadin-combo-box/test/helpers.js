@@ -1,4 +1,4 @@
-export const IOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+import { click, mousedown, mouseup } from '@vaadin/testing-helpers';
 
 export const TOUCH_DEVICE = (() => {
   try {
@@ -27,9 +27,9 @@ export const fire = (type, node, detail) => {
 };
 
 export const fireDownUpClick = (node) => {
-  fire('mousedown', node);
-  fire('mouseup', node);
-  fire('click', node);
+  mousedown(node);
+  mouseup(node);
+  click(node);
 };
 
 export const onceOpened = (element) => {
