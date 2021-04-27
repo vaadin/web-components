@@ -155,10 +155,13 @@ yarn
 ```
 
 ### Environment variables
+
 Setup the environment variables needed by the scripts below, by copying the `.env.dist` template file to `.env`:
+
 ```
 cp .env.dist .env
 ```
+
 and then configure the individual variable values in the newly created `.env` file.
 
 Not all variables are necessary for all scripts, individual sections below will note which variables are required to run a command.
@@ -228,6 +231,78 @@ Update screenshots for single package:
 ```sh
 yarn update:lumo --group vaadin-upload
 ```
+
+### Making a major version bump
+
+#### Create a branch for the current major
+
+Create a new branch from master:
+
+```sh
+git checkout -b 21.0
+```
+
+Push a newly created branch:
+
+```sh
+git push origin 21.0
+```
+
+The newly created branch for the current major is protected by default.
+The rest of the changes to that branch should happen the usual way, through a PR.
+
+Create another branch:
+
+```sh
+git checkout -b update-v21
+```
+
+Update [`wtr-utils.js`](https://github.com/vaadin/web-components/blob/master/wtr-utils.js) as follows:
+
+```diff
+const getChangedPackages = () => {
+-  const output = execSync('./node_modules/.bin/lerna ls --since origin/master --json --loglevel silent');
++  const output = execSync('./node_modules/.bin/lerna ls --since origin/21.0 --json --loglevel silent');
+  return JSON.parse(output.toString());
+};
+```
+
+Create a PR to the version branch ([example](https://github.com/vaadin/web-components/pull/260)).
+
+#### Update the version in `master`
+
+Prepare a new version for the `updateVersion` script:
+
+```sh
+export npm_config_bump=22.0.0-alpha0
+```
+
+Run the script to bump static version getters in every component:
+
+```sh
+node scripts/updateVersion.js
+```
+
+Mark the new version with Lerna:
+
+```sh
+lerna version 22.0.0-alpha0 --no-push --no-git-tag-version --yes
+```
+
+Commit all the changes:
+
+```sh
+git commit -a -m "chore: update master to Vaadin 22 [skip ci]"
+```
+
+Create a PR to the `master` branch ([example](https://github.com/vaadin/web-components/pull/261)).
+
+### CI build updates
+
+Add the new version branch to the `CheckoutBranch` parameter:
+
+- [Release build](https://bender.vaadin.com/admin/editBuildParams.html?id=buildType:VaadinWebComponents_ReleaseVaadinWebComponents)
+- [API docs build](https://bender.vaadin.com/admin/editBuildParams.html?id=buildType:VaadinWebComponents_PublishWebComponentsApiDocs)
 
 ## LICENSE
 
