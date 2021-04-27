@@ -1,4 +1,4 @@
-import { CSSResult } from 'lit-element';
+import { CSSResult } from 'lit';
 
 export { css, unsafeCSS } from 'lit-element';
 
