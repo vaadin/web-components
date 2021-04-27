@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-list-box",
-  "version": "20.0.0-alpha5",
+  "version": "21.0.0-alpha0",
   "description": "vaadin-list-box",
   "main": "vaadin-list-box.js",
   "module": "vaadin-list-box.js",
@@ -26,12 +26,12 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/vaadin-element-mixin": "^20.0.0-alpha5",
-    "@vaadin/vaadin-item": "^20.0.0-alpha5",
-    "@vaadin/vaadin-list-mixin": "^20.0.0-alpha5",
-    "@vaadin/vaadin-lumo-styles": "^20.0.0-alpha5",
-    "@vaadin/vaadin-material-styles": "^20.0.0-alpha5",
-    "@vaadin/vaadin-themable-mixin": "^20.0.0-alpha5"
+    "@vaadin/vaadin-element-mixin": "^21.0.0-alpha0",
+    "@vaadin/vaadin-item": "^21.0.0-alpha0",
+    "@vaadin/vaadin-list-mixin": "^21.0.0-alpha0",
+    "@vaadin/vaadin-lumo-styles": "^21.0.0-alpha0",
+    "@vaadin/vaadin-material-styles": "^21.0.0-alpha0",
+    "@vaadin/vaadin-themable-mixin": "^21.0.0-alpha0"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.1.5",

@@ -107,7 +107,7 @@ class LoginFormElement extends LoginMixin(ElementMixin(ThemableMixin(PolymerElem
   }
 
   static get version() {
-    return '20.0.0-alpha5';
+    return '21.0.0-alpha0';
   }
 
   /** @protected */

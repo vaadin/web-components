@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-upload",
-  "version": "20.0.0-alpha5",
+  "version": "21.0.0-alpha0",
   "description": "Web Component for uploading files with drag and drop support",
   "main": "vaadin-upload.js",
   "module": "vaadin-upload.js",
@@ -26,12 +26,12 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/vaadin-button": "^20.0.0-alpha5",
-    "@vaadin/vaadin-element-mixin": "^20.0.0-alpha5",
-    "@vaadin/vaadin-lumo-styles": "^20.0.0-alpha5",
-    "@vaadin/vaadin-material-styles": "^20.0.0-alpha5",
-    "@vaadin/vaadin-progress-bar": "^20.0.0-alpha5",
-    "@vaadin/vaadin-themable-mixin": "^20.0.0-alpha5"
+    "@vaadin/vaadin-button": "^21.0.0-alpha0",
+    "@vaadin/vaadin-element-mixin": "^21.0.0-alpha0",
+    "@vaadin/vaadin-lumo-styles": "^21.0.0-alpha0",
+    "@vaadin/vaadin-material-styles": "^21.0.0-alpha0",
+    "@vaadin/vaadin-progress-bar": "^21.0.0-alpha0",
+    "@vaadin/vaadin-themable-mixin": "^21.0.0-alpha0"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.1.5",
