@@ -4,6 +4,7 @@ import { getContainerCell } from '../../helpers.js';
 import { users } from '../users.js';
 import '../../../theme/lumo/vaadin-grid-pro.js';
 import '../../../theme/lumo/vaadin-grid-pro-edit-column.js';
+import '../../not-animated-styles.js';
 
 describe('grid-pro', () => {
   let div, element;
