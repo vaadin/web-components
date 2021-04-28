@@ -512,6 +512,11 @@ export const DataProviderMixin = (superClass) =>
       if (this.__pendingScrollToIndex && this.$.items.children.length) {
         const index = this.__pendingScrollToIndex;
         delete this.__pendingScrollToIndex;
+
+        if (this._debounceIncreasePool) {
+          this._debounceIncreasePool.flush();
+        }
+
         this.scrollToIndex(index);
       }
     }
