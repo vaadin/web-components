@@ -74,7 +74,7 @@ declare class AccordionElement extends ElementMixin(ThemableMixin(HTMLElement)) 
    * default. Only one panel can be opened at the same time.
    * Setting null or undefined closes all the accordion panels.
    */
-  opened: number;
+  opened: number | null;
 
   /**
    * The list of `<vaadin-accordion-panel>` child elements.
