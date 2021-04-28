@@ -210,9 +210,14 @@ describe('scroll to index', () => {
     });
   });
   describe('Tree grid', () => {
+    let grid;
+
+    beforeEach(() => {
+      grid = fixtureSync(fixtures.treeGrid);
+    });
+
     // Issue https://github.com/vaadin/vaadin-grid/issues/2107
     it('should display correctly when scrolled to bottom immediately after setting dataProvider', (done) => {
-      const grid = fixtureSync(fixtures.treeGrid);
       grid.size = 1;
       const numberOfChidren = 250;
       grid.itemIdPath = 'name';
@@ -242,7 +247,6 @@ describe('scroll to index', () => {
     });
 
     it('should not reuse rows if subitems are loaded while scrolling to bottom', (done) => {
-      const grid = fixtureSync(fixtures.treeGrid);
       grid.size = 25;
 
       const parents = Array.from({ length: 10 }).map((_, i) => ({ name: i, hasChildren: true }));
