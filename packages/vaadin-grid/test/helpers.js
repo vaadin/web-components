@@ -113,7 +113,7 @@ export const isVisible = (el) => {
   );
 };
 
-const getVisibleItems = (grid) => {
+export const getVisibleItems = (grid) => {
   flushGrid(grid);
   const rows = grid.$.items.children;
   const visibleRows = [];

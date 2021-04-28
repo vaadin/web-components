@@ -145,13 +145,13 @@ class GridSorterElement extends ThemableMixin(DirMixin(PolymerElement)) {
       /** @private */
       _isConnected: {
         type: Boolean,
-        value: false
+        observer: '__isConnectedChanged'
       }
     };
   }
 
   static get observers() {
-    return ['_pathOrDirectionChanged(path, direction, _isConnected)'];
+    return ['_pathOrDirectionChanged(path, direction)'];
   }
 
   /** @protected */
@@ -173,14 +173,26 @@ class GridSorterElement extends ThemableMixin(DirMixin(PolymerElement)) {
   }
 
   /** @private */
-  _pathOrDirectionChanged(path, direction, isConnected) {
-    if (path === undefined || direction === undefined || isConnected === undefined) {
+  _pathOrDirectionChanged() {
+    this.__dispatchSorterChangedEvenIfPossible();
+  }
+
+  /** @private */
+  __isConnectedChanged(newValue, oldValue) {
+    if (oldValue === false) {
       return;
     }
 
-    if (isConnected) {
-      this.dispatchEvent(new CustomEvent('sorter-changed', { bubbles: true, composed: true }));
+    this.__dispatchSorterChangedEvenIfPossible();
+  }
+
+  /** @private */
+  __dispatchSorterChangedEvenIfPossible() {
+    if (this.path === undefined || this.direction === undefined || !this._isConnected) {
+      return;
     }
+
+    this.dispatchEvent(new CustomEvent('sorter-changed', { bubbles: true, composed: true }));
   }
 
   /** @private */

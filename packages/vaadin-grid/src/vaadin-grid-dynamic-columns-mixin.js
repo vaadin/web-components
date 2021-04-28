@@ -87,11 +87,14 @@ export const DynamicColumnsMixin = (superClass) =>
         if (rowDetailsTemplate && this._rowDetailsTemplate !== rowDetailsTemplate) {
           this._rowDetailsTemplate = rowDetailsTemplate;
         }
+        const hasColumnElements = (nodeCollection) => nodeCollection.filter(this._isColumnElement).length > 0;
+        if (hasColumnElements(info.addedNodes) || hasColumnElements(info.removedNodes)) {
+          const allRemovedCells = info.removedNodes.flatMap((c) => c._allCells);
+          const filterNotConnected = (element) =>
+            allRemovedCells.filter((cell) => cell._content.contains(element)).length;
 
-        if (
-          info.addedNodes.filter(this._isColumnElement).length > 0 ||
-          info.removedNodes.filter(this._isColumnElement).length > 0
-        ) {
+          this.__removeSorters(this._sorters.filter(filterNotConnected));
+          this.__removeFilters(this._filters.filter(filterNotConnected));
           this._updateColumnTree();
         }
 
