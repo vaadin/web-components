@@ -29,13 +29,34 @@ export const FilterMixin = (superClass) =>
 
     /** @private */
     _filterChanged(e) {
-      if (this._filters.indexOf(e.target) === -1) {
-        this._filters.push(e.target);
-      }
-
       e.stopPropagation();
 
-      if (this.dataProvider) {
+      this.__addFilter(e.target);
+      this.__applyFilters();
+    }
+
+    /** @private */
+    __removeFilters(filtersToRemove) {
+      if (filtersToRemove.length == 0) {
+        return;
+      }
+
+      this._filters = this._filters.filter((filter) => filtersToRemove.indexOf(filter) < 0);
+      this.__applyFilters();
+    }
+
+    /** @private */
+    __addFilter(filter) {
+      const filterIndex = this._filters.indexOf(filter);
+
+      if (filterIndex === -1) {
+        this._filters.push(filter);
+      }
+    }
+
+    /** @private */
+    __applyFilters() {
+      if (this.dataProvider && this.isAttached) {
         this.clearCache();
       }
     }
