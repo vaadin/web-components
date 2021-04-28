@@ -1,6 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { fixtureSync } from '@open-wc/testing-helpers';
+import '@vaadin/vaadin-template-renderer';
 import '../vaadin-dialog.js';
 
 describe('vaadin-dialog renderer', () => {
@@ -21,16 +22,6 @@ describe('vaadin-dialog renderer', () => {
       dialog.opened = true;
 
       expect(overlay.textContent).to.include('The content of the dialog');
-    });
-
-    it('should remove template when added after renderer', () => {
-      dialog.renderer = () => {};
-      const template = document.createElement('template');
-      expect(() => {
-        dialog.appendChild(template);
-        dialog._observer.flush();
-      }).to.throw(Error);
-      expect(dialog._contentTemplate).to.be.not.ok;
     });
 
     it('should be possible to manually invoke renderer', () => {
@@ -59,17 +50,6 @@ describe('vaadin-dialog renderer', () => {
     it('should default to template if renderer function not provided', () => {
       dialog.opened = true;
       expect(overlay.textContent).to.include('Template content');
-    });
-
-    it('should throw an error when setting a renderer if there is already a template', () => {
-      dialog._observer.flush();
-      expect(() => (dialog.renderer = () => {})).to.throw(Error);
-    });
-
-    it('should remove renderer when added after template', () => {
-      dialog._observer.flush();
-      expect(() => (dialog.renderer = () => {})).to.throw(Error);
-      expect(dialog.renderer).to.be.not.ok;
     });
   });
 });

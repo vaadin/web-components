@@ -9,13 +9,11 @@ import { DialogResizableMixin } from './vaadin-dialog-resizable-mixin.js';
 import { DialogEventMap, DialogRenderer } from './interfaces';
 
 /**
- * `<vaadin-dialog>` is a Web Component for creating customized modal dialogs. The content of the
- * dialog can be populated in two ways: imperatively by using renderer callback function and
- * declaratively by using Polymer's Templates.
+ * `<vaadin-dialog>` is a Web Component for creating customized modal dialogs.
  *
  * ### Rendering
  *
- * By default, the dialog uses the content provided by using the renderer callback function.
+ * The content of the dialog can be populated by using the renderer callback function.
  *
  * The renderer function provides `root`, `dialog` arguments.
  * Generate DOM content, append it to the `root` element and control the state
@@ -37,24 +35,10 @@ import { DialogEventMap, DialogRenderer } from './interfaces';
  * in the next renderer call and will be provided with the `root` argument.
  * On first call it will be empty.
  *
- * ### Polymer Templates
- *
- * Alternatively, the content can be provided with Polymer's Template.
- * Dialog finds the first child template and uses that in case renderer callback function
- * is not provided. You can also set a custom template using the `template` property.
- *
- * ```html
- * <vaadin-dialog opened>
- *   <template>
- *     Sample dialog
- *   </template>
- * </vaadin-dialog>
- * ```
- *
  * ### Styling
  *
  * `<vaadin-dialog>` uses `<vaadin-dialog-overlay>` internal
- * themable component as the actual visible overlay.
+ * themable component as the actual visible dialog overlay.
  *
  * See [`<vaadin-overlay>`](#/elements/vaadin-overlay) documentation.
  * for `<vaadin-dialog-overlay>` parts.
@@ -95,8 +79,6 @@ declare class DialogElement extends ThemePropertyMixin(
    */
   ariaLabel: string | null | undefined;
 
-  _contentTemplate: HTMLTemplateElement | null | undefined;
-
   /**
    * Custom function for rendering the content of the dialog.
    * Receives two arguments:
@@ -110,8 +92,6 @@ declare class DialogElement extends ThemePropertyMixin(
    * Set to true to remove backdrop and allow click events on background elements.
    */
   modeless: boolean;
-
-  _setTemplateFromNodes(nodes: Node[]): void;
 
   /**
    * Manually invoke existing renderer.

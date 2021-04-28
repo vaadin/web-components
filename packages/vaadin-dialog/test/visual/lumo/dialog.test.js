@@ -1,5 +1,6 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
+import '@vaadin/vaadin-template-renderer';
 import '../../../theme/lumo/vaadin-dialog.js';
 
 describe('dialog', () => {

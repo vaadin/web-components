@@ -150,6 +150,9 @@ class DialogLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
       this._ensureChildren();
     }
 
+    // TODO: A temporary hack as far as `vaadin-dialog` doesn't support the Polymer Template API anymore.
+    this.$.dialog.$.overlay.template = this.$.dialog.querySelector('template');
+
     // Make sure to reset scroll position
     this.$.scroller.scrollTop = 0;
   }

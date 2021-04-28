@@ -274,6 +274,7 @@ class ConfirmDialogElement extends ElementMixin(ThemableMixin(PolymerElement)) {
   /** @protected */
   ready() {
     super.ready();
+
     this.$.dialog.$.overlay.addEventListener('vaadin-overlay-escape-press', this._escPressed.bind(this));
     if (this._dimensions) {
       Object.keys(this._dimensions).forEach((name) => {
@@ -315,6 +316,9 @@ class ConfirmDialogElement extends ElementMixin(ThemableMixin(PolymerElement)) {
     if (!this.opened) {
       return;
     }
+
+    // TODO: A temporary hack as far as `vaadin-dialog` doesn't support the Polymer Template API anymore.
+    this.$.dialog.$.overlay.template = this.$.dialog.querySelector('template');
 
     const overlay = this.$.dialog.$.overlay;
 
