@@ -76,6 +76,89 @@ describe('sorting', () => {
     });
   });
 
+  describe('DOM operations', () => {
+    let grid, sorterFirst, sorterSecond, sorterThird, columnFirst, columnThird;
+
+    beforeEach(async () => {
+      grid = fixtureSync(`
+        <vaadin-grid style="width: 400px; height: 200px;" multi-sort>
+          <vaadin-grid-sort-column path="first" direction="desc"></vaadin-grid-sort-column>
+          <vaadin-grid-sort-column path="second" direction="asc"></vaadin-grid-sort-column>
+          <vaadin-grid-sort-column path="third" direction="desc"></vaadin-grid-sort-column>
+        </vaadin-grid>
+      `);
+      await nextFrame();
+
+      // TODO: find better way to select
+      columnFirst = grid.querySelectorAll('vaadin-grid-sort-column')[0];
+      columnThird = grid.querySelectorAll('vaadin-grid-sort-column')[2];
+
+      sorterFirst = getHeaderCellContent(grid, 0, 0).querySelector('vaadin-grid-sorter');
+      sorterSecond = getHeaderCellContent(grid, 0, 1).querySelector('vaadin-grid-sorter');
+      sorterThird = getHeaderCellContent(grid, 0, 2).querySelector('vaadin-grid-sorter');
+
+      grid.items = [
+        { first: '1', second: '2', third: '3' },
+        { first: '2', second: '3', third: '1' },
+        { first: '3', second: '1', third: '2' }
+      ];
+
+      flushGrid(grid);
+    });
+
+    it('should preserve sort order for sorters when grid is re-attached', () => {
+      click(sorterSecond);
+      const parentNode = grid.parentNode;
+      parentNode.removeChild(grid);
+      parentNode.appendChild(grid);
+
+      expect(sorterFirst._order).to.equal(2);
+      expect(sorterSecond._order).to.equal(0);
+      expect(sorterThird._order).to.equal(1);
+    });
+
+    it('should not keep references to sorters when column is removed', () => {
+      grid.removeChild(columnFirst);
+      flushGrid(grid);
+      expect(grid._sorters).to.not.contain(sorterFirst);
+    });
+
+    it('should update sorting when column is removed', () => {
+      grid.removeChild(columnThird);
+      flushGrid(grid);
+
+      expect(getBodyCellContent(grid, 0, 0).innerText).to.equal('3');
+      expect(getBodyCellContent(grid, 1, 0).innerText).to.equal('1');
+      expect(getBodyCellContent(grid, 2, 0).innerText).to.equal('2');
+
+      expect(getBodyCellContent(grid, 0, 1).innerText).to.equal('1');
+      expect(getBodyCellContent(grid, 1, 1).innerText).to.equal('2');
+      expect(getBodyCellContent(grid, 2, 1).innerText).to.equal('3');
+    });
+
+    it('should update sort order when column removed and grid is not attached', () => {
+      const parentNode = grid.parentNode;
+      parentNode.removeChild(grid);
+
+      grid.removeChild(columnThird);
+      flushGrid(grid);
+      expect(sorterFirst._order).to.equal(1);
+      expect(sorterSecond._order).to.equal(0);
+    });
+
+    it('should not sort items before grid is re-attached', () => {
+      const parentNode = grid.parentNode;
+      parentNode.removeChild(grid);
+
+      grid.removeChild(columnThird);
+      flushGrid(grid);
+      expect(getBodyCellContent(grid, 0, 1).innerText).to.equal('2');
+
+      parentNode.appendChild(grid);
+      expect(getBodyCellContent(grid, 0, 1).innerText).to.equal('1');
+    });
+  });
+
   describe('grid', () => {
     let grid, sorterFirst, sorterLast;
 
@@ -286,7 +369,7 @@ describe('sorting', () => {
         grid.dataProvider.resetHistory();
         sorterFirst.direction = 'desc';
 
-        expect(grid.dataProvider.args[1][0].sortOrders.length).to.eql(1);
+        expect(grid.dataProvider.args[0][0].sortOrders.length).to.eql(1);
       });
 
       it('should remove order from sorters', () => {
