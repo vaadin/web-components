@@ -6,6 +6,8 @@ const assertType = <TExpected>(actual: TExpected) => actual;
 
 const accordion = document.createElement('vaadin-accordion');
 
+accordion.opened = null;
+
 accordion.addEventListener('opened-changed', (event) => {
   assertType<AccordionOpenedChangedEvent>(event);
   assertType<number | null>(event.detail.value);
