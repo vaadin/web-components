@@ -2,6 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame } from '@open-wc/testing-helpers';
 import { flushGrid, infiniteDataProvider, listenOnce } from './helpers.js';
 import '../vaadin-grid.js';
+import '../vaadin-grid-tree-column.js';
 
 const fixtures = {
   small: `
@@ -238,6 +239,34 @@ describe('scroll to index', () => {
       };
       grid.expandedItems = [PARENT];
       grid.scrollToIndex(250);
+    });
+
+    it('should not reuse rows if subitems are loaded while scrolling to bottom', (done) => {
+      const grid = fixtureSync(fixtures.treeGrid);
+      grid.size = 25;
+
+      const parents = Array.from({ length: 10 }).map((_, i) => ({ name: i, hasChildren: true }));
+
+      grid.dataProvider = ({ parentItem }, cb) => {
+        setTimeout(() => {
+          if (!parentItem) {
+            cb(parents, parents.length);
+          } else {
+            const { name: parentName } = parentItem;
+            const children = Array.from({ length: 10 }).map((_, i) => ({
+              name: `${parentName * 10 + i}`,
+              hasChildren: false
+            }));
+            cb(children, children.length);
+
+            expect(grid._physicalCount).to.be.above(10);
+            done();
+          }
+        });
+      };
+
+      grid.expandedItems = [parents[parents.length - 1]];
+      grid.scrollToIndex(14);
     });
   });
 });
