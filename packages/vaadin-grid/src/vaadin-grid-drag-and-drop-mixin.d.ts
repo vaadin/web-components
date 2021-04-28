@@ -1,6 +1,8 @@
 import { GridDragAndDropFilter, GridDropMode, GridItemModel } from './interfaces';
 
-declare function DragAndDropMixin<TItem, T extends new (...args: any[]) => {}>(base: T): T & DragAndDropMixinConstructor<TItem>;
+declare function DragAndDropMixin<TItem, T extends new (...args: any[]) => {}>(
+  base: T
+): T & DragAndDropMixinConstructor<TItem>;
 
 interface DragAndDropMixinConstructor<TItem> {
   new (...args: any[]): DragAndDropMixin<TItem>;

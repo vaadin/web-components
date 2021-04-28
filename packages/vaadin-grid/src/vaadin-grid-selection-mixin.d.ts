@@ -1,4 +1,6 @@
-declare function SelectionMixin<TItem, T extends new (...args: any[]) => {}>(base: T): T & SelectionMixinConstructor<TItem>;
+declare function SelectionMixin<TItem, T extends new (...args: any[]) => {}>(
+  base: T
+): T & SelectionMixinConstructor<TItem>;
 
 interface SelectionMixinConstructor<TItem> {
   new (...args: any[]): SelectionMixin<TItem>;
@@ -9,6 +11,7 @@ interface SelectionMixin<TItem> {
    * An array that contains the selected items.
    */
   selectedItems: Array<TItem | null> | null;
+
   _isSelected(item: TItem): boolean;
 
   /**

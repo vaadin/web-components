@@ -1,4 +1,17 @@
-import { GridElement } from '@vaadin/vaadin-grid';
+import {
+  GridActiveItemChangedEvent,
+  GridCellActivateEvent,
+  GridColumnReorderEvent,
+  GridColumnResizeEvent,
+  GridDragStartEvent,
+  GridDropEvent,
+  GridDropLocation,
+  GridElement,
+  GridExpandedItemsChangedEvent,
+  GridItemModel,
+  GridLoadingChangedEvent,
+  GridSelectedItemsChangedEvent
+} from '@vaadin/vaadin-grid';
 import { GridColumnElement } from '@vaadin/vaadin-grid/vaadin-grid-column';
 import { InlineEditingMixin } from '../../src/vaadin-grid-pro-inline-editing-mixin';
 import { GridProElement } from '../../vaadin-grid-pro';
@@ -16,7 +29,7 @@ assertType<GridProElement>(genericGrid);
 
 const narrowedGrid = genericGrid as GridProElement<TestGridItem>;
 assertType<GridElement<TestGridItem>>(narrowedGrid);
-assertType<InlineEditingMixin<TestGridItem>>(narrowedGrid);
+assertType<InlineEditingMixin>(narrowedGrid);
 
 narrowedGrid.addEventListener('cell-edit-started', (event) => {
   assertType<string>(event.detail.value.path);

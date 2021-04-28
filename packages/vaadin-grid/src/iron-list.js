@@ -1,30 +1,31 @@
 /**
-@license
-Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
-*/
+ @license
+ Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+ This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+ The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+ The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+ Code distributed by Google as part of the polymer project is also
+ subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+ */
 
 /**
 
-This is a fork of <iron-list> for <vaadin-grid>'s internal purposes only!
-To update:
-1. Get the most recent code from https://github.com/PolymerElements/iron-list/
-2. Remove `is: 'iron-list'` and `_template` to avoid collisions with actual <iron-list>
-3. Change "Polymer({" to "export const PolymerIronList = Class({" to expose the class
+ This is a fork of <iron-list> for <vaadin-grid>'s internal purposes only!
+ To update:
+ 1. Get the most recent code from https://github.com/PolymerElements/iron-list/
+ 2. Remove `is: 'iron-list'` and `_template` to avoid collisions with actual <iron-list>
+ 3. Change "Polymer({" to "export const PolymerIronList = Class({" to expose the class
 4. Optional: Remove all properties and functions not needed by <vaadin-grid>
 5. Profit!
 
-*/
+ */
 import { IronResizableBehavior } from '@polymer/iron-resizable-behavior/iron-resizable-behavior.js';
 import { IronScrollTargetBehavior } from '@polymer/iron-scroll-target-behavior/iron-scroll-target-behavior.js';
 import { animationFrame, idlePeriod, microTask } from '@polymer/polymer/lib/utils/async.js';
 import { Class } from '@polymer/polymer/lib/legacy/class.js';
 import { flush } from '@polymer/polymer/lib/utils/flush.js';
 import { Debouncer, enqueueDebouncer } from '@polymer/polymer/lib/utils/debounce.js';
+
 const IOS = navigator.userAgent.match(/iP(?:hone|ad;(?: U;)? CPU) OS (\d+)/);
 const IOS_TOUCH_SCROLLING = IOS && IOS[1] >= 8;
 const DEFAULT_PHYSICAL_COUNT = 3;

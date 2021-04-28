@@ -69,7 +69,7 @@ export interface GridProEventMap<TItem>
  * @fires {CustomEvent} loading-changed - Fired when the `loading` property changes.
  * @fires {CustomEvent} selected-items-changed - Fired when the `selectedItems` property changes.
  */
-declare class GridProElement<TItem = GridDefaultItem> extends GridElement {
+declare class GridProElement<TItem = GridDefaultItem> extends GridElement<TItem> {
   static _finalizeClass(): void;
 
   addEventListener<K extends keyof GridProEventMap<TItem>>(
@@ -85,7 +85,7 @@ declare class GridProElement<TItem = GridDefaultItem> extends GridElement {
   ): void;
 }
 
-interface GridProElement<TItem = GridDefaultItem> extends InlineEditingMixin<TItem> {}
+interface GridProElement extends InlineEditingMixin {}
 
 declare global {
   interface HTMLElementTagNameMap {

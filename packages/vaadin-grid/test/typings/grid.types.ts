@@ -1,33 +1,47 @@
 import { ElementMixin } from '@vaadin/vaadin-element-mixin';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin';
-import { GridColumnElement, GridDropLocation, GridItemModel, GridSorterDirection } from '../../src/interfaces';
-import { GridElement } from '../../src/vaadin-grid';
+import { GridDropLocation, GridItemModel, GridSorterDirection } from '../../src/interfaces';
 import { A11yMixin } from '../../src/vaadin-grid-a11y-mixin';
 import { ActiveItemMixin } from '../../src/vaadin-grid-active-item-mixin';
 import { ArrayDataProviderMixin } from '../../src/vaadin-grid-array-data-provider-mixin';
-import { ColumnBaseMixin } from '../../src/vaadin-grid-column';
-import { GridColumnGroupElement } from '../../src/vaadin-grid-column-group';
 import { ColumnReorderingMixin } from '../../src/vaadin-grid-column-reordering-mixin';
 import { ColumnResizingMixin } from '../../src/vaadin-grid-column-resizing-mixin';
 import { DataProviderMixin } from '../../src/vaadin-grid-data-provider-mixin';
 import { DragAndDropMixin } from '../../src/vaadin-grid-drag-and-drop-mixin';
 import { DynamicColumnsMixin } from '../../src/vaadin-grid-dynamic-columns-mixin';
 import { EventContextMixin } from '../../src/vaadin-grid-event-context-mixin';
-import { GridFilterElement } from '../../src/vaadin-grid-filter';
-import { GridFilterColumnElement } from '../../src/vaadin-grid-filter-column';
 import { FilterMixin } from '../../src/vaadin-grid-filter-mixin';
 import { KeyboardNavigationMixin } from '../../src/vaadin-grid-keyboard-navigation-mixin';
 import { RowDetailsMixin } from '../../src/vaadin-grid-row-details-mixin';
 import { ScrollMixin } from '../../src/vaadin-grid-scroll-mixin';
 import { ScrollerElement } from '../../src/vaadin-grid-scroller';
-import { GridSelectionColumnElement } from '../../src/vaadin-grid-selection-column';
 import { SelectionMixin } from '../../src/vaadin-grid-selection-mixin';
-import { GridSortColumnElement } from '../../src/vaadin-grid-sort-column';
 import { SortMixin } from '../../src/vaadin-grid-sort-mixin';
-import { GridSorterElement } from '../../src/vaadin-grid-sorter';
 import { StylingMixin } from '../../src/vaadin-grid-styling-mixin';
-import { GridTreeColumnElement } from '../../src/vaadin-grid-tree-column';
-import { GridTreeToggleElement } from '../../src/vaadin-grid-tree-toggle';
+import { ColumnBaseMixin, GridColumnElement } from '../../vaadin-grid-column';
+import { GridColumnGroupElement } from '../../vaadin-grid-column-group';
+import { GridFilterColumnElement } from '../../vaadin-grid-filter-column';
+import { GridFilterElement, GridFilterValueChangedEvent } from '../../vaadin-grid-filter.js';
+import {
+  GridSelectionColumnElement,
+  GridSelectionColumnSelectAllChangedEvent
+} from '../../vaadin-grid-selection-column.js';
+import { GridSortColumnDirectionChangedEvent, GridSortColumnElement } from '../../vaadin-grid-sort-column.js';
+import { GridSorterDirectionChangedEvent, GridSorterElement } from '../../vaadin-grid-sorter.js';
+import { GridTreeColumnElement } from '../../vaadin-grid-tree-column';
+import { GridTreeToggleElement, GridTreeToggleExpandedChangedEvent } from '../../vaadin-grid-tree-toggle.js';
+import {
+  GridActiveItemChangedEvent,
+  GridCellActivateEvent,
+  GridColumnReorderEvent,
+  GridColumnResizeEvent,
+  GridDragStartEvent,
+  GridDropEvent,
+  GridElement,
+  GridExpandedItemsChangedEvent,
+  GridLoadingChangedEvent,
+  GridSelectedItemsChangedEvent
+} from '../../vaadin-grid.js';
 
 interface TestGridItem {
   testProperty: string;
@@ -61,22 +75,22 @@ assertType<StylingMixin<TestGridItem>>(narrowedGrid);
 assertType<DragAndDropMixin<TestGridItem>>(narrowedGrid);
 
 narrowedGrid.addEventListener('active-item-changed', (event) => {
-  assertType<GridActiveItemChangedEvent>(event);
+  assertType<GridActiveItemChangedEvent<TestGridItem>>(event);
   assertType<TestGridItem>(event.detail.value);
 });
 
 narrowedGrid.addEventListener('cell-activate', (event) => {
-  assertType<GridCellActivateEvent>(event);
+  assertType<GridCellActivateEvent<TestGridItem>>(event);
   assertType<GridItemModel<TestGridItem>>(event.detail.model);
 });
 
 narrowedGrid.addEventListener('column-reorder', (event) => {
-  assertType<GridColumnReorderEvent>(event);
+  assertType<GridColumnReorderEvent<TestGridItem>>(event);
   assertType<GridColumnElement<TestGridItem>[]>(event.detail.columns);
 });
 
 narrowedGrid.addEventListener('column-resize', (event) => {
-  assertType<GridColumnResizeEvent>(event);
+  assertType<GridColumnResizeEvent<TestGridItem>>(event);
   assertType<GridColumnElement<TestGridItem>>(event.detail.resizedColumn);
 });
 
@@ -86,22 +100,22 @@ narrowedGrid.addEventListener('loading-changed', (event) => {
 });
 
 narrowedGrid.addEventListener('expanded-items-changed', (event) => {
-  assertType<GridExpandedItemsChangedEvent>(event);
+  assertType<GridExpandedItemsChangedEvent<TestGridItem>>(event);
   assertType<TestGridItem[]>(event.detail.value);
 });
 
 narrowedGrid.addEventListener('selected-items-changed', (event) => {
-  assertType<GridSelectedItemsChangedEvent>(event);
+  assertType<GridSelectedItemsChangedEvent<TestGridItem>>(event);
   assertType<TestGridItem[]>(event.detail.value);
 });
 
 narrowedGrid.addEventListener('grid-dragstart', (event) => {
-  assertType<GridDragStartEvent>(event);
+  assertType<GridDragStartEvent<TestGridItem>>(event);
   assertType<TestGridItem[]>(event.detail.draggedItems);
 });
 
 narrowedGrid.addEventListener('grid-drop', (event) => {
-  assertType<GridDropEvent>(event);
+  assertType<GridDropEvent<TestGridItem>>(event);
   assertType<TestGridItem>(event.detail.dropTargetItem);
   assertType<GridDropLocation>(event.detail.dropLocation);
 });

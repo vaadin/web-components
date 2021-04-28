@@ -1,6 +1,8 @@
 import { GridEventContext } from './interfaces';
 
-declare function EventContextMixin<TItem, T extends new (...args: any[]) => {}>(base: T): T & EventContextMixinConstructor<TItem>;
+declare function EventContextMixin<TItem, T extends new (...args: any[]) => {}>(
+  base: T
+): T & EventContextMixinConstructor<TItem>;
 
 interface EventContextMixinConstructor<TItem> {
   new (...args: any[]): EventContextMixin<TItem>;

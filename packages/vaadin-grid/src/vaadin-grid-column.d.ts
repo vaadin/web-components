@@ -2,7 +2,9 @@ import { GridElement } from './vaadin-grid.js';
 
 import { GridBodyRenderer, GridColumnTextAlign, GridHeaderFooterRenderer, GridDefaultItem } from './interfaces';
 
-declare function ColumnBaseMixin<TItem, T extends new (...args: any[]) => {}>(base: T): T & ColumnBaseMixinConstructor<TItem>;
+declare function ColumnBaseMixin<TItem, T extends new (...args: any[]) => {}>(
+  base: T
+): T & ColumnBaseMixinConstructor<TItem>;
 
 export interface ColumnBaseMixinConstructor<TItem> {
   new (...args: any[]): ColumnBaseMixin<TItem>;

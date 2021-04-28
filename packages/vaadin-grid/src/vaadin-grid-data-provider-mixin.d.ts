@@ -9,15 +9,23 @@ declare class ItemCache<TItem> {
   effectiveSize: number;
   size: number;
   pendingRequests: object | null;
+
   constructor(grid: HTMLElement, parentCache: ItemCache<TItem> | undefined, parentItem: TItem | undefined);
+
   isLoading(): boolean;
+
   getItemForIndex(index: number): TItem | undefined;
+
   updateSize(): void;
+
   ensureSubCacheForScaledIndex(scaledIndex: number): void;
+
   getCacheAndIndex(index: number): { cache: ItemCache<TItem>; scaledIndex: number };
 }
 
-declare function DataProviderMixin<TItem, T extends new (...args: any[]) => {}>(base: T): T & DataProviderMixinConstructor<TItem>;
+declare function DataProviderMixin<TItem, T extends new (...args: any[]) => {}>(
+  base: T
+): T & DataProviderMixinConstructor<TItem>;
 
 interface DataProviderMixinConstructor<TItem> {
   new (...args: any[]): DataProviderMixin<TItem>;

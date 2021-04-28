@@ -14,10 +14,7 @@ export type GridCellClassNameGenerator<TItem> = (
 
 export type GridColumnTextAlign = 'start' | 'center' | 'end' | null;
 
-export type GridDataProviderCallback<TItem> = (
-  items: Array<TItem>,
-  size?: number
-) => void;
+export type GridDataProviderCallback<TItem> = (items: Array<TItem>, size?: number) => void;
 
 export type GridDataProviderParams<TItem> = {
   page: number;
@@ -44,7 +41,7 @@ export interface GridFilter {
 }
 
 export interface GridEventContext<TItem> {
-  section: 'body' | 'header' | 'footer' | 'details';
+  section: 'body' | 'header' | 'footer' | 'details';
   item?: TItem;
   column?: GridColumnElement<TItem>;
   index?: number;
@@ -54,10 +51,7 @@ export interface GridEventContext<TItem> {
   level?: number;
 }
 
-export type GridHeaderFooterRenderer<TItem> = (
-  root: HTMLElement,
-  column?: GridColumnElement<TItem>
-) => void;
+export type GridHeaderFooterRenderer<TItem> = (root: HTMLElement, column?: GridColumnElement<TItem>) => void;
 
 export type GridDefaultItem = any;
 

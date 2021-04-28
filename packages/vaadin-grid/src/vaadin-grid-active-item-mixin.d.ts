@@ -1,5 +1,6 @@
-
-declare function ActiveItemMixin<TItem, T extends new (...args: any[]) => {}>(base: T): T & ActiveItemMixinConstructor<TItem>;
+declare function ActiveItemMixin<TItem, T extends new (...args: any[]) => {}>(
+  base: T
+): T & ActiveItemMixinConstructor<TItem>;
 
 interface ActiveItemMixinConstructor<TItem> {
   new (...args: any[]): ActiveItemMixin<TItem>;

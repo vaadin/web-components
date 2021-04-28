@@ -2,7 +2,7 @@ import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.
 
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-import { DefaultGridItem, GridDropLocation, GridItemModel } from './interfaces';
+import { GridDefaultItem, GridDropLocation, GridItemModel } from './interfaces';
 
 import { ScrollerElement } from './vaadin-grid-scroller.js';
 
@@ -405,24 +405,25 @@ declare class GridElement<TItem = GridDefaultItem> extends ScrollerElement {
   ): void;
 }
 
-interface GridElement<TItem = GridDefaultItem> extends ElementMixin
-  , ThemableMixin
-  , A11yMixin
-  , ActiveItemMixin<TItem>
-  , ArrayDataProviderMixin<TItem>
-  , ColumnResizingMixin
-  , DataProviderMixin<TItem>
-  , DynamicColumnsMixin<TItem>
-  , FilterMixin
-  , RowDetailsMixin<TItem>
-  , ScrollMixin
-  , SelectionMixin<TItem>
-  , SortMixin
-  , KeyboardNavigationMixin<TItem>
-  , ColumnReorderingMixin<TItem>
-  , EventContextMixin<TItem>
-  , StylingMixin<TItem>
-  , DragAndDropMixin<TItem> {
+interface GridElement<TItem = GridDefaultItem>
+  extends ElementMixin,
+    ThemableMixin,
+    A11yMixin,
+    ActiveItemMixin<TItem>,
+    ArrayDataProviderMixin<TItem>,
+    ColumnResizingMixin,
+    DataProviderMixin<TItem>,
+    DynamicColumnsMixin<TItem>,
+    FilterMixin,
+    RowDetailsMixin<TItem>,
+    ScrollMixin,
+    SelectionMixin<TItem>,
+    SortMixin,
+    KeyboardNavigationMixin<TItem>,
+    ColumnReorderingMixin<TItem>,
+    EventContextMixin<TItem>,
+    StylingMixin<TItem>,
+    DragAndDropMixin<TItem> {
   readonly dir: string; // Fix DirMixin.dir clashing with HTMLElement.dir declaration
 }
 

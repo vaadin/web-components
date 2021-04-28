@@ -1,12 +1,10 @@
-declare function InlineEditingMixin<TItem, T extends new (...args: any[]) => {}>(
-  base: T
-): T & InlineEditingMixinConstructor<TItem>;
+declare function InlineEditingMixin<T extends new (...args: any[]) => {}>(base: T): T & InlineEditingMixinConstructor;
 
-interface InlineEditingMixinConstructor<TItem> {
-  new (...args: any[]): InlineEditingMixin<TItem>;
+interface InlineEditingMixinConstructor {
+  new (...args: any[]): InlineEditingMixin;
 }
 
-interface InlineEditingMixin<TItem> {
+interface InlineEditingMixin {
   /**
    * When true, pressing Enter while in cell edit mode
    * will move focus to the editable cell in the next row

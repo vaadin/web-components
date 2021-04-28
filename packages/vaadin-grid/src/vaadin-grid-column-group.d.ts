@@ -1,4 +1,4 @@
-import {GridDefaultItem} from './interfaces';
+import { GridDefaultItem } from './interfaces';
 import { ColumnBaseMixin, GridColumnElement } from './vaadin-grid-column.js';
 
 /**

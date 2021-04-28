@@ -2,7 +2,9 @@ import { GridColumnGroupElement } from './vaadin-grid-column-group.js';
 
 import { GridColumnElement } from './vaadin-grid-column.js';
 
-declare function DynamicColumnsMixin<TItem, T extends new (...args: any[]) => {}>(base: T): T & DynamicColumnsMixinConstructor<TItem>;
+declare function DynamicColumnsMixin<TItem, T extends new (...args: any[]) => {}>(
+  base: T
+): T & DynamicColumnsMixinConstructor<TItem>;
 
 interface DynamicColumnsMixinConstructor<TItem> {
   new (...args: any[]): DynamicColumnsMixin<TItem>;

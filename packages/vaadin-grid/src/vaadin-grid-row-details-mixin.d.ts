@@ -1,6 +1,8 @@
 import { GridRowDetailsRenderer } from './interfaces';
 
-declare function RowDetailsMixin<TItem, T extends new (...args: any[]) => {}>(base: T): T & RowDetailsMixinConstructor<TItem>;
+declare function RowDetailsMixin<TItem, T extends new (...args: any[]) => {}>(
+  base: T
+): T & RowDetailsMixinConstructor<TItem>;
 
 interface RowDetailsMixinConstructor<TItem> {
   new (...args: any[]): RowDetailsMixin<TItem>;
