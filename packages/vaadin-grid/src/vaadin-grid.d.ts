@@ -423,9 +423,7 @@ interface GridElement<TItem = GridDefaultItem>
     ColumnReorderingMixin<TItem>,
     EventContextMixin<TItem>,
     StylingMixin<TItem>,
-    DragAndDropMixin<TItem> {
-  readonly dir: string; // Fix DirMixin.dir clashing with HTMLElement.dir declaration
-}
+    DragAndDropMixin<TItem> {}
 
 declare global {
   interface HTMLElementTagNameMap {
