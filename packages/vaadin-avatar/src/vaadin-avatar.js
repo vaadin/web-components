@@ -114,7 +114,7 @@ class AvatarElement extends ElementMixin(ThemableMixin(PolymerElement)) {
           left: 0;
           bottom: 0;
           right: 0;
-          border-radius: 50%;
+          border-radius: inherit;
           box-shadow: inset 0 0 0 2px var(--vaadin-avatar-user-color);
         }
       </style>
