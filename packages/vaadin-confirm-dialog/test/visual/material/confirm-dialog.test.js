@@ -1,6 +1,7 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../../theme/material/vaadin-confirm-dialog.js';
+import '../../not-animated-styles.js';
 
 describe('confirm-dialog', () => {
   let div, element;
