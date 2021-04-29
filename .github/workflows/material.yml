@@ -32,7 +32,7 @@ jobs:
         env:
           SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
           SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
-        run: yarn test:material
+        run: yarn test:material --all
 
       - uses: actions/upload-artifact@v2
         if: ${{ failure() }}

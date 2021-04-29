@@ -33,4 +33,4 @@ jobs:
         run: yarn --frozen-lockfile --no-progress --non-interactive
 
       - name: Test
-        run: yarn test:firefox
+        run: yarn test:firefox --all

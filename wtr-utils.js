@@ -6,6 +6,7 @@ const { execSync } = require('child_process');
 const filterBrowserLogs = (log) => log.type === 'error';
 
 const group = process.argv.indexOf('--group') !== -1;
+const runAll = process.argv.indexOf('--all') !== -1;
 
 const NO_UNIT_TESTS = ['vaadin-icons', 'vaadin-lumo-styles', 'vaadin-material-styles'];
 
@@ -36,29 +37,20 @@ const getAllVisualPackages = () => {
 };
 
 /**
- * Gel all packages with updated reference screenshots.
- */
-const getUpdatedScreenshotsPackages = () => {
-  const packages = new Set();
-  const log = execSync('git diff --name-only origin/master HEAD').toString();
-  log.split('\n').forEach((line) => {
-    if (line.startsWith('screenshots')) {
-      const data = line.split('/');
-      packages.add(`vaadin-${data[data.length - 2]}`);
-    }
-  });
-  return [...packages];
-};
-
-/**
  * Get packages for running unit tests.
  */
 const getUnitTestPackages = () => {
-  // If --group flag is passed, return all packages.
+  // If --group flag is passed, return all packages, so that WTR can pick the specified groups from all available packages
   if (group) {
     return getAllPackages();
   }
+  // If --all flag is passed then always run all tests
+  if (runAll) {
+    console.log('Force running all tests');
+    return getAllPackages();
+  }
 
+  // Otherwise run tests only for changed packages
   let packages = getChangedPackages()
     .map((project) => project.name.replace('@vaadin/', ''))
     .filter((project) => NO_UNIT_TESTS.indexOf(project) === -1);
@@ -83,15 +75,20 @@ const getUnitTestPackages = () => {
  * Get packages for running visual tests.
  */
 const getVisualTestPackages = () => {
-  // If --group flag is passed, return all packages.
+  // If --group flag is passed, return all packages, so that WTR can pick the specified groups from all available packages
   if (group) {
     return getAllVisualPackages();
   }
+  // If --all flag is passed then always run all tests
+  if (runAll) {
+    console.log('Force running all tests');
+    return getAllVisualPackages();
+  }
 
+  // Otherwise run tests only for changed packages
   let packages = getChangedPackages()
     .map((project) => project.name.replace('@vaadin/', ''))
-    .filter((project) => NO_UNIT_TESTS.indexOf(project) === -1 && project.indexOf('mixin') === -1)
-    .concat(getUpdatedScreenshotsPackages());
+    .filter((project) => NO_UNIT_TESTS.indexOf(project) === -1 && project.indexOf('mixin') === -1);
 
   if (packages.length == 0) {
     // When running in GitHub Actions, do nothing.

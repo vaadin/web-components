@@ -168,22 +168,40 @@ Not all variables are necessary for all scripts, individual sections below will 
 
 ### Unit tests
 
-Run all tests in Chrome:
+Run tests in Chrome (changed packages):
 
 ```sh
 yarn test
 ```
 
-Run all tests in Firefox:
+Run tests in Chrome (all packages):
+
+```sh
+yarn test --all
+```
+
+Run tests in Firefox (changed packages):
 
 ```sh
 yarn test:firefox
 ```
 
-Run all tests in WebKit:
+Run tests in Firefox (all packages):
+
+```sh
+yarn test:firefox --all
+```
+
+Run tests in WebKit (changed packages):
 
 ```sh
 yarn test:webkit
+```
+
+Run tests in WebKit (all packages):
+
+```sh
+yarn test:webkit --all
 ```
 
 Run tests for single package:
@@ -202,16 +220,28 @@ yarn debug --group vaadin-upload
 
 To run the visual tests, please make sure that the `SAUCE_USERNAME` and `SAUCE_ACCESS_KEY` environment variables are defined.
 
-Run tests for Lumo:
+Run tests for Lumo (changed packages):
 
 ```sh
 yarn test:lumo
 ```
 
-Run tests for Material:
+Run tests for Lumo (all packages):
+
+```sh
+yarn test:lumo --all
+```
+
+Run tests for Material (changed packages):
 
 ```sh
 yarn test:material
+```
+
+Run tests for Material (all packages):
+
+```sh
+yarn test:material --all
 ```
 
 Update reference screenshots for Lumo:
