@@ -1,6 +1,7 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../../theme/lumo/vaadin-combo-box.js';
+import '../../not-animated-styles.js';
 
 describe('combo-box', () => {
   let div, element;

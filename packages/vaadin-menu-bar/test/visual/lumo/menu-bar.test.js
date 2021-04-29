@@ -3,6 +3,7 @@ import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/vaadin-lumo-styles/icons.js';
 import '@polymer/iron-icon/iron-icon.js';
 import '../../../theme/lumo/vaadin-menu-bar.js';
+import '../../not-animated-styles.js';
 
 describe('menu-bar', () => {
   let div, element;
