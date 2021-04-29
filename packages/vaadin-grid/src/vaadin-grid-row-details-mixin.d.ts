@@ -1,16 +1,18 @@
-import { GridItem, GridRowDetailsRenderer } from './interfaces';
+import { GridRowDetailsRenderer } from './interfaces';
 
-declare function RowDetailsMixin<T extends new (...args: any[]) => {}>(base: T): T & RowDetailsMixinConstructor;
+declare function RowDetailsMixin<TItem, T extends new (...args: any[]) => {}>(
+  base: T
+): T & RowDetailsMixinConstructor<TItem>;
 
-interface RowDetailsMixinConstructor {
-  new (...args: any[]): RowDetailsMixin;
+interface RowDetailsMixinConstructor<TItem> {
+  new (...args: any[]): RowDetailsMixin<TItem>;
 }
 
-interface RowDetailsMixin {
+interface RowDetailsMixin<TItem> {
   /**
    * An array containing references to items with open row details.
    */
-  detailsOpenedItems: Array<GridItem | null> | null | undefined;
+  detailsOpenedItems: Array<TItem | null> | null | undefined;
 
   _rowDetailsTemplate: HTMLTemplateElement | null;
 
@@ -25,27 +27,27 @@ interface RowDetailsMixin {
    *   - `model.index` The index of the item.
    *   - `model.item` The item.
    */
-  rowDetailsRenderer: GridRowDetailsRenderer | null | undefined;
+  rowDetailsRenderer: GridRowDetailsRenderer<TItem> | null | undefined;
 
   _detailsCells: HTMLElement[] | undefined;
 
   _configureDetailsCell(cell: HTMLElement): void;
 
-  _toggleDetailsCell(row: HTMLElement, item: GridItem): void;
+  _toggleDetailsCell(row: HTMLElement, item: TItem): void;
 
   _updateDetailsCellHeights(): void;
 
-  _isDetailsOpened(item: GridItem): boolean;
+  _isDetailsOpened(item: TItem): boolean;
 
   /**
    * Open the details row of a given item.
    */
-  openItemDetails(item: GridItem): void;
+  openItemDetails(item: TItem): void;
 
   /**
    * Close the details row of a given item.
    */
-  closeItemDetails(item: GridItem): void;
+  closeItemDetails(item: TItem): void;
 }
 
 export { RowDetailsMixin, RowDetailsMixinConstructor };

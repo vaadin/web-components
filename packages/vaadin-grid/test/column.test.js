@@ -107,8 +107,8 @@ describe('column', () => {
     });
 
     describe('hidden', () => {
-      it('should default to undefined', () => {
-        expect(column.hidden).to.eql(undefined);
+      it('should default to false', () => {
+        expect(column.hidden).to.be.false;
       });
 
       it('should not be bound to column-group header cells', () => {
@@ -156,7 +156,7 @@ describe('column', () => {
 
       it('should not notify resize', () => {
         const spy = sinon.spy(grid, 'notifyResize');
-        expect(column.hidden).to.be.undefined;
+        expect(column.hidden).to.be.false;
         column.hidden = false;
         expect(spy.called).to.be.false;
       });

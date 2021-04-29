@@ -1,29 +1,37 @@
-import { GridDataProvider, GridItem } from './interfaces';
+import { GridDataProvider } from './interfaces';
 
-declare class ItemCache {
+declare class ItemCache<TItem> {
   grid: HTMLElement;
-  parentCache: ItemCache | undefined;
-  parentItem: GridItem | undefined;
+  parentCache: ItemCache<TItem> | undefined;
+  parentItem: TItem | undefined;
   itemCaches: object | null;
   items: object | null;
   effectiveSize: number;
   size: number;
   pendingRequests: object | null;
-  constructor(grid: HTMLElement, parentCache: ItemCache | undefined, parentItem: GridItem | undefined);
+
+  constructor(grid: HTMLElement, parentCache: ItemCache<TItem> | undefined, parentItem: TItem | undefined);
+
   isLoading(): boolean;
-  getItemForIndex(index: number): GridItem | undefined;
+
+  getItemForIndex(index: number): TItem | undefined;
+
   updateSize(): void;
+
   ensureSubCacheForScaledIndex(scaledIndex: number): void;
-  getCacheAndIndex(index: number): { cache: ItemCache; scaledIndex: number };
+
+  getCacheAndIndex(index: number): { cache: ItemCache<TItem>; scaledIndex: number };
 }
 
-declare function DataProviderMixin<T extends new (...args: any[]) => {}>(base: T): T & DataProviderMixinConstructor;
+declare function DataProviderMixin<TItem, T extends new (...args: any[]) => {}>(
+  base: T
+): T & DataProviderMixinConstructor<TItem>;
 
-interface DataProviderMixinConstructor {
-  new (...args: any[]): DataProviderMixin;
+interface DataProviderMixinConstructor<TItem> {
+  new (...args: any[]): DataProviderMixin<TItem>;
 }
 
-interface DataProviderMixin {
+interface DataProviderMixin<TItem> {
   /**
    * Number of items fetched at a time from the dataprovider.
    * @attr {number} page-size
@@ -58,7 +66,7 @@ interface DataProviderMixin {
    */
   readonly loading: boolean | null | undefined;
 
-  _cache: ItemCache;
+  _cache: ItemCache<TItem>;
 
   /**
    * Path to an item sub-property that identifies the item.
@@ -69,7 +77,7 @@ interface DataProviderMixin {
   /**
    * An array that contains the expanded items.
    */
-  expandedItems: GridItem[];
+  expandedItems: TItem[];
 
   _getItem(index: number, el: HTMLElement | null): void;
 
@@ -77,25 +85,25 @@ interface DataProviderMixin {
    * Returns a value that identifies the item. Uses `itemIdPath` if available.
    * Can be customized by overriding.
    */
-  getItemId(item: GridItem): GridItem | unknown;
+  getItemId(item: TItem): TItem | unknown;
 
-  _isExpanded(item: GridItem): boolean;
+  _isExpanded(item: TItem): boolean;
 
   /**
    * Expands the given item tree.
    */
-  expandItem(item: GridItem): void;
+  expandItem(item: TItem): void;
 
   /**
    * Collapses the given item tree.
    */
-  collapseItem(item: GridItem): void;
+  collapseItem(item: TItem): void;
 
   _getIndexLevel(index: number): number;
 
   _canPopulate(): boolean;
 
-  _loadPage(page: number, cache: ItemCache | null): void;
+  _loadPage(page: number, cache: ItemCache<TItem> | null): void;
 
   /**
    * Clears the cached pages and reloads data from dataprovider when needed.
@@ -106,9 +114,9 @@ interface DataProviderMixin {
 
   _ensureFirstPageLoaded(): void;
 
-  _itemsEqual(item1: GridItem, item2: GridItem): boolean;
+  _itemsEqual(item1: TItem, item2: TItem): boolean;
 
-  _getItemIndexInArray(item: GridItem, array: GridItem[]): number;
+  _getItemIndexInArray(item: TItem, array: TItem[]): number;
 }
 
 export { DataProviderMixin, DataProviderMixinConstructor, ItemCache };

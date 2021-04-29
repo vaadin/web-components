@@ -1,25 +1,35 @@
 import { GridColumnElement } from './vaadin-grid-column.js';
 import { GridElement } from './vaadin-grid.js';
 
-export type GridBodyRenderer = (root: HTMLElement, column?: GridColumnElement, model?: GridItemModel) => void;
+export type GridBodyRenderer<TItem> = (
+  root: HTMLElement,
+  column?: GridColumnElement<TItem>,
+  model?: GridItemModel<TItem>
+) => void;
 
-export type GridCellClassNameGenerator = (column: GridColumnElement, model: GridItemModel) => string;
+export type GridCellClassNameGenerator<TItem> = (
+  column: GridColumnElement<TItem>,
+  model: GridItemModel<TItem>
+) => string;
 
 export type GridColumnTextAlign = 'start' | 'center' | 'end' | null;
 
-export type GridDataProviderCallback = (items: Array<GridItem>, size?: number) => void;
+export type GridDataProviderCallback<TItem> = (items: Array<TItem>, size?: number) => void;
 
-export type GridDataProviderParams = {
+export type GridDataProviderParams<TItem> = {
   page: number;
   pageSize: number;
   filters: Array<GridFilter>;
   sortOrders: Array<GridSorter>;
-  parentItem?: GridItem;
+  parentItem?: TItem;
 };
 
-export type GridDataProvider = (params: GridDataProviderParams, callback: GridDataProviderCallback) => void;
+export type GridDataProvider = <TItem>(
+  params: GridDataProviderParams<TItem>,
+  callback: GridDataProviderCallback<TItem>
+) => void;
 
-export type GridDragAndDropFilter = (model: GridItemModel) => boolean;
+export type GridDragAndDropFilter = <TItem>(model: GridItemModel<TItem>) => boolean;
 
 export type GridDropLocation = 'above' | 'on-top' | 'below' | 'empty';
 
@@ -30,10 +40,10 @@ export interface GridFilter {
   value: string;
 }
 
-export interface GridEventContext {
+export interface GridEventContext<TItem> {
   section: 'body' | 'header' | 'footer' | 'details';
-  item?: GridItem;
-  column?: GridColumnElement;
+  item?: TItem;
+  column?: GridColumnElement<TItem>;
   index?: number;
   selected?: boolean;
   detailsOpened?: boolean;
@@ -41,20 +51,24 @@ export interface GridEventContext {
   level?: number;
 }
 
-export type GridHeaderFooterRenderer = (root: HTMLElement, column?: GridColumnElement) => void;
+export type GridHeaderFooterRenderer<TItem> = (root: HTMLElement, column?: GridColumnElement<TItem>) => void;
 
-export type GridItem = unknown;
+export type GridDefaultItem = any;
 
-export interface GridItemModel {
+export interface GridItemModel<TItem> {
   index: number;
-  item: GridItem;
+  item: TItem;
   selected?: boolean;
   expanded?: boolean;
   level?: number;
   detailsOpened?: boolean;
 }
 
-export type GridRowDetailsRenderer = (root: HTMLElement, grid?: GridElement, model?: GridItemModel) => void;
+export type GridRowDetailsRenderer<TItem> = (
+  root: HTMLElement,
+  grid?: GridElement<TItem>,
+  model?: GridItemModel<TItem>
+) => void;
 
 export type GridSorterDirection = 'asc' | 'desc' | null;
 
@@ -62,5 +76,3 @@ export interface GridSorter {
   path: string;
   direction: GridSorterDirection;
 }
-
-export { GridColumnElement };

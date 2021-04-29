@@ -1,6 +1,5 @@
-import { GridItem } from '@vaadin/vaadin-grid';
-
 declare function InlineEditingMixin<T extends new (...args: any[]) => {}>(base: T): T & InlineEditingMixinConstructor;
+
 interface InlineEditingMixinConstructor {
   new (...args: any[]): InlineEditingMixin;
 }
@@ -36,8 +35,6 @@ interface InlineEditingMixin {
   _stopEdit(shouldCancel?: boolean, shouldRestoreFocus?: boolean): void;
 
   _switchEditCell(e: KeyboardEvent): void;
-
-  _updateItem(row: HTMLElement, item: GridItem | null): void;
 }
 
 export { InlineEditingMixin, InlineEditingMixinConstructor };

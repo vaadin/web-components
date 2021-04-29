@@ -1,3 +1,4 @@
+import { GridDefaultItem } from './interfaces';
 import { GridColumnElement } from './vaadin-grid-column.js';
 
 /**
@@ -13,7 +14,7 @@ import { GridColumnElement } from './vaadin-grid-column.js';
  *    ...
  * ```
  */
-declare class GridTreeColumnElement extends GridColumnElement {
+declare class GridTreeColumnElement<TItem = GridDefaultItem> extends GridColumnElement<TItem> {
   /**
    * JS Path of the property in the item used as text content for the tree toggle.
    */
@@ -28,7 +29,7 @@ declare class GridTreeColumnElement extends GridColumnElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-grid-tree-column': GridTreeColumnElement;
+    'vaadin-grid-tree-column': GridTreeColumnElement<GridDefaultItem>;
   }
 }
 

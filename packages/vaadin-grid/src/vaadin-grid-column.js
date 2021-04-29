@@ -67,7 +67,8 @@ export const ColumnBaseMixin = (superClass) =>
          * When set to true, the cells for this column are hidden.
          */
         hidden: {
-          type: Boolean
+          type: Boolean,
+          value: false
         },
 
         /**
