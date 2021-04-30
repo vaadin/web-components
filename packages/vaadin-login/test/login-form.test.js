@@ -257,6 +257,11 @@ describe('login form', () => {
     expect(login.error).to.be.false;
     expect(login.disabled).to.be.true;
   });
+
+  it('should focus the username field', () => {
+    const usernameElement = login.$.vaadinLoginUsername;
+    expect(document.activeElement).to.equal(usernameElement.inputElement);
+  });
 });
 
 describe('no forgot password', () => {
@@ -269,6 +274,19 @@ describe('no forgot password', () => {
   it('should hide forgot password button', () => {
     const formWrapper = login.querySelector('[part="vaadin-login-native-form-wrapper"]');
     expect(formWrapper.$.forgotPasswordButton.hidden).to.be.true;
+  });
+});
+
+describe('no autofocus', () => {
+  let activeElement;
+
+  beforeEach(() => {
+    activeElement = document.activeElement;
+    fixtureSync('<vaadin-login-form no-autofocus></vaadin-login-form>');
+  });
+
+  it('should not focus the username field', () => {
+    expect(document.activeElement).to.equal(activeElement);
   });
 });
 

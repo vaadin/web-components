@@ -32,6 +32,12 @@ interface LoginMixin {
   noForgotPassword: boolean;
 
   /**
+   * If set, the user name field does not automatically receive focus when the component is attached to the document.
+   * @attr {boolean} no-autofocus
+   */
+  noAutofocus: boolean;
+
+  /**
    * The object used to localize this component.
    * For changing the default localization, change the entire
    * _i18n_ object or just the property you want to modify.

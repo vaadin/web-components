@@ -71,6 +71,16 @@ export const LoginMixin = (superClass) =>
         },
 
         /**
+         * If set, the user name field automatically receives focus when the component is attached to the document.
+         * @type {boolean}
+         * @attr {boolean} no-autofocus
+         */
+        noAutofocus: {
+          type: Boolean,
+          value: false
+        },
+
+        /**
        * The object used to localize this component.
        * For changing the default localization, change the entire
        * _i18n_ object or just the property you want to modify.

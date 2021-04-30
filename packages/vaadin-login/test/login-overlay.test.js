@@ -103,6 +103,25 @@ describe('opened overlay', () => {
     enter(vaadinLoginUsername);
     expect(submitStub.called).to.be.false;
   });
+
+  it('should focus the username field', () => {
+    const usernameElement = overlay.$.vaadinLoginForm.$.vaadinLoginUsername;
+    expect(document.activeElement).to.equal(usernameElement.inputElement);
+  });
+});
+
+describe('no autofocus', () => {
+  let overlay;
+
+  beforeEach(() => {
+    overlay = fixtureSync('<vaadin-login-overlay no-autofocus></vaadin-login-overlay>');
+  });
+
+  it('should not focus the username field', () => {
+    const activeElement = document.activeElement;
+    overlay.opened = true;
+    expect(document.activeElement).to.equal(activeElement);
+  });
 });
 
 describe('title and description', () => {

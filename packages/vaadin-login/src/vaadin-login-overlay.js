@@ -64,6 +64,7 @@ class LoginOverlayElement extends LoginMixin(ElementMixin(ThemableMixin(PolymerE
           action="{{action}}"
           disabled="{{disabled}}"
           error="{{error}}"
+          no-autofocus="[[noAutofocus]]"
           no-forgot-password="{{noForgotPassword}}"
           i18n="{{i18n}}"
           on-login="_retargetEvent"
