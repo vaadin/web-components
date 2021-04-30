@@ -11,6 +11,6 @@ describe('cookie-consent', () => {
 
   it('basic', async () => {
     element._show();
-    await visualDiff(document.body, 'cookie-consent:basic');
+    await visualDiff(document.body, `${import.meta.url}_basic`);
   });
 });

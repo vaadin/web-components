@@ -10,6 +10,6 @@ describe('chart', () => {
   });
 
   it('empty with title', async () => {
-    await visualDiff(element, 'chart:empty-title');
+    await visualDiff(element, `${import.meta.url}_empty-title`);
   });
 });

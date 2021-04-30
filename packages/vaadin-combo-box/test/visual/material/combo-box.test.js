@@ -14,39 +14,39 @@ describe('combo-box', () => {
   });
 
   it('basic', async () => {
-    await visualDiff(div, 'combo-box:basic');
+    await visualDiff(div, `${import.meta.url}_basic`);
   });
 
   it('disabled', async () => {
     element.disabled = true;
-    await visualDiff(div, 'combo-box:disabled');
+    await visualDiff(div, `${import.meta.url}_disabled`);
   });
 
   it('readonly', async () => {
     element.readonly = true;
-    await visualDiff(div, 'combo-box:readonly');
+    await visualDiff(div, `${import.meta.url}_readonly`);
   });
 
   it('label', async () => {
     element.label = 'Label';
-    await visualDiff(div, 'combo-box:label');
+    await visualDiff(div, `${import.meta.url}_label`);
   });
 
   it('placeholder', async () => {
     element.placeholder = 'Placeholder';
-    await visualDiff(div, 'combo-box:placeholder');
+    await visualDiff(div, `${import.meta.url}_placeholder`);
   });
 
   it('value', async () => {
     element.allowCustomValue = true;
     element.value = 'value';
-    await visualDiff(div, 'combo-box:value');
+    await visualDiff(div, `${import.meta.url}_value`);
   });
 
   it('required', async () => {
     element.label = 'Label';
     element.required = true;
-    await visualDiff(div, 'combo-box:required');
+    await visualDiff(div, `${import.meta.url}_required`);
   });
 
   it('error message', async () => {
@@ -54,19 +54,19 @@ describe('combo-box', () => {
     element.errorMessage = 'This field is required';
     element.required = true;
     element.validate();
-    await visualDiff(div, 'combo-box:error-message');
+    await visualDiff(div, `${import.meta.url}_error-message`);
   });
 
   it('helper text', async () => {
     element.helperText = 'Helper text';
-    await visualDiff(div, 'combo-box:helper-text');
+    await visualDiff(div, `${import.meta.url}_helper-text`);
   });
 
   it('clear button', async () => {
     element.allowCustomValue = true;
     element.value = 'value';
     element.clearButtonVisible = true;
-    await visualDiff(div, 'combo-box:clear-button');
+    await visualDiff(div, `${import.meta.url}_clear-button`);
   });
 
   it('prefix slot', async () => {
@@ -74,6 +74,6 @@ describe('combo-box', () => {
     span.setAttribute('slot', 'prefix');
     span.textContent = '$';
     element.appendChild(span);
-    await visualDiff(div, 'combo-box:prefix');
+    await visualDiff(div, `${import.meta.url}_prefix`);
   });
 });

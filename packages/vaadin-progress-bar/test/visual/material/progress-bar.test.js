@@ -13,11 +13,11 @@ describe('progress-bar', () => {
   });
 
   it('basic', async () => {
-    await visualDiff(div, 'progress-bar:basic');
+    await visualDiff(div, `${import.meta.url}_basic`);
   });
 
   it('RTL', async () => {
     element.setAttribute('dir', 'rtl');
-    await visualDiff(div, 'progress-bar:rtl-basic');
+    await visualDiff(div, `${import.meta.url}_rtl-basic`);
   });
 });

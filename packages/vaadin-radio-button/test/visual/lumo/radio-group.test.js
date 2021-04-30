@@ -24,33 +24,33 @@ describe('radio-group', () => {
 
   describe('default', () => {
     it('basic', async () => {
-      await visualDiff(div, 'radio-group:basic');
+      await visualDiff(div, `${import.meta.url}_basic`);
     });
 
     it('disabled', async () => {
       element.disabled = true;
-      await visualDiff(div, 'radio-group:disabled');
+      await visualDiff(div, `${import.meta.url}_disabled`);
     });
 
     it('vertical', async () => {
       element.setAttribute('theme', 'vertical');
-      await visualDiff(div, 'radio-group:vertical');
+      await visualDiff(div, `${import.meta.url}_vertical`);
     });
 
     it('label', async () => {
       element.label = 'Label';
-      await visualDiff(div, 'radio-group:label');
+      await visualDiff(div, `${import.meta.url}_label`);
     });
 
     it('value', async () => {
       element.value = 'a';
-      await visualDiff(div, 'radio-group:value');
+      await visualDiff(div, `${import.meta.url}_value`);
     });
 
     it('required', async () => {
       element.label = 'Label';
       element.required = true;
-      await visualDiff(div, 'radio-group:required');
+      await visualDiff(div, `${import.meta.url}_required`);
     });
 
     it('error message', async () => {
@@ -58,17 +58,17 @@ describe('radio-group', () => {
       element.errorMessage = 'This field is required';
       element.required = true;
       element.validate();
-      await visualDiff(div, 'radio-group:error-message');
+      await visualDiff(div, `${import.meta.url}_error-message`);
     });
 
     it('helper text', async () => {
       element.helperText = 'Helper text';
-      await visualDiff(div, 'radio-group:helper-text');
+      await visualDiff(div, `${import.meta.url}_helper-text`);
     });
 
     it('wrapped', async () => {
       element.style.width = '150px';
-      await visualDiff(div, 'radio-group:wrapped');
+      await visualDiff(div, `${import.meta.url}_wrapped`);
     });
   });
 
@@ -82,7 +82,7 @@ describe('radio-group', () => {
     });
 
     it('RTL basic', async () => {
-      await visualDiff(div, 'radio-group:rtl-basic');
+      await visualDiff(div, `${import.meta.url}_rtl-basic`);
     });
 
     it('RTL error message', async () => {
@@ -90,12 +90,12 @@ describe('radio-group', () => {
       element.errorMessage = 'This field is required';
       element.required = true;
       element.validate();
-      await visualDiff(div, 'radio-group:rtl-error-message');
+      await visualDiff(div, `${import.meta.url}_rtl-error-message`);
     });
 
     it('RTL wrapped', async () => {
       element.style.width = '150px';
-      await visualDiff(div, 'radio-group:rtl-wrapped');
+      await visualDiff(div, `${import.meta.url}_rtl-wrapped`);
     });
   });
 });
