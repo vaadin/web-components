@@ -14,39 +14,39 @@ describe('date-time-picker', () => {
 
   describe('default', () => {
     it('basic', async () => {
-      await visualDiff(div, 'date-time-picker:basic');
+      await visualDiff(div, `${import.meta.url}_basic`);
     });
 
     it('disabled', async () => {
       element.disabled = true;
-      await visualDiff(div, 'date-time-picker:disabled');
+      await visualDiff(div, `${import.meta.url}_disabled`);
     });
 
     it('readonly', async () => {
       element.readonly = true;
-      await visualDiff(div, 'date-time-picker:readonly');
+      await visualDiff(div, `${import.meta.url}_readonly`);
     });
 
     it('label', async () => {
       element.label = 'Label';
-      await visualDiff(div, 'date-time-picker:label');
+      await visualDiff(div, `${import.meta.url}_label`);
     });
 
     it('placeholder', async () => {
       element.datePlaceholder = 'Date';
       element.timePlaceholder = 'Time';
-      await visualDiff(div, 'date-time-picker:placeholder');
+      await visualDiff(div, `${import.meta.url}_placeholder`);
     });
 
     it('value', async () => {
       element.value = '2019-09-16T15:00';
-      await visualDiff(div, 'date-time-picker:value');
+      await visualDiff(div, `${import.meta.url}_value`);
     });
 
     it('required', async () => {
       element.label = 'Label';
       element.required = true;
-      await visualDiff(div, 'date-time-picker:required');
+      await visualDiff(div, `${import.meta.url}_required`);
     });
 
     it('error message', async () => {
@@ -54,12 +54,12 @@ describe('date-time-picker', () => {
       element.errorMessage = 'This field is required';
       element.required = true;
       element.validate();
-      await visualDiff(div, 'date-time-picker:error-message');
+      await visualDiff(div, `${import.meta.url}_error-message`);
     });
 
     it('helper text', async () => {
       element.helperText = 'Helper text';
-      await visualDiff(div, 'date-time-picker:helper-text');
+      await visualDiff(div, `${import.meta.url}_helper-text`);
     });
   });
 
@@ -73,7 +73,7 @@ describe('date-time-picker', () => {
     });
 
     it('RTL', async () => {
-      await visualDiff(div, 'date-time-picker:rtl-basic');
+      await visualDiff(div, `${import.meta.url}_rtl-basic`);
     });
 
     it('RTL error message', async () => {
@@ -81,7 +81,7 @@ describe('date-time-picker', () => {
       element.errorMessage = 'This field is required';
       element.required = true;
       element.validate();
-      await visualDiff(div, 'date-time-picker:rtl-error-message');
+      await visualDiff(div, `${import.meta.url}_rtl-error-message`);
     });
   });
 });

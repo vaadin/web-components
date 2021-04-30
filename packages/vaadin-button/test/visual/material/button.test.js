@@ -16,17 +16,17 @@ describe('button', () => {
 
   describe('basic', () => {
     it('basic', async () => {
-      await visualDiff(div, 'button:basic');
+      await visualDiff(div, `${import.meta.url}_basic`);
     });
 
     it('focus-ring', async () => {
       element.setAttribute('focus-ring', '');
-      await visualDiff(div, 'button:focus-ring');
+      await visualDiff(div, `${import.meta.url}_focus-ring`);
     });
 
     it('disabled', async () => {
       element.disabled = true;
-      await visualDiff(div, 'button:disabled');
+      await visualDiff(div, `${import.meta.url}_disabled`);
     });
   });
 
@@ -34,13 +34,13 @@ describe('button', () => {
     describe(variant, () => {
       it(variant, async () => {
         element.setAttribute('theme', `${variant}`);
-        await visualDiff(div, `button:theme-${variant}`);
+        await visualDiff(div, `${import.meta.url}_theme-${variant}`);
       });
 
       it(`${variant} disabled`, async () => {
         element.setAttribute('theme', `${variant}`);
         element.disabled = true;
-        await visualDiff(div, `button:theme-${variant}-disabled`);
+        await visualDiff(div, `${import.meta.url}_theme-${variant}-disabled`);
       });
     });
   });
@@ -56,20 +56,20 @@ describe('button', () => {
     it('prefix', async () => {
       icon.setAttribute('slot', 'prefix');
       element.appendChild(icon);
-      await visualDiff(div, 'button:icon-prefix');
+      await visualDiff(div, `${import.meta.url}_icon-prefix`);
     });
 
     it('suffix', async () => {
       icon.setAttribute('slot', 'suffix');
       element.appendChild(icon);
-      await visualDiff(div, 'button:icon-suffix');
+      await visualDiff(div, `${import.meta.url}_icon-suffix`);
     });
 
     it('icon only', async () => {
       element.textContent = '';
       icon.setAttribute('slot', 'prefix');
       element.appendChild(icon);
-      await visualDiff(div, 'button:icon-only');
+      await visualDiff(div, `${import.meta.url}_icon-only`);
     });
   });
 });

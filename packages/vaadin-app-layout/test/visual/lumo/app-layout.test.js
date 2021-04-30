@@ -34,19 +34,19 @@ describe('app-layout', () => {
       });
 
       it('basic', async () => {
-        await visualDiff(div, `app-layout:${dir}-basic`);
+        await visualDiff(div, `${import.meta.url}_${dir}-basic`);
       });
 
       it('primary-drawer', async () => {
         element.primarySection = 'drawer';
-        await visualDiff(div, `app-layout:${dir}-primary-drawer`);
+        await visualDiff(div, `${import.meta.url}_${dir}-primary-drawer`);
       });
 
       it('overlay', async () => {
         // See https://github.com/vaadin/vaadin-app-layout/issues/183
         element.style.setProperty('--vaadin-app-layout-drawer-overlay', ' true');
         window.dispatchEvent(new Event('resize'));
-        await visualDiff(div, `app-layout:${dir}-overlay`);
+        await visualDiff(div, `${import.meta.url}_${dir}-overlay`);
       });
     });
   });

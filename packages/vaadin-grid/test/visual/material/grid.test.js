@@ -41,7 +41,7 @@ describe('grid', () => {
         });
 
         it('header footer', async () => {
-          await visualDiff(element, `grid:${dir}-header-footer`);
+          await visualDiff(element, `${import.meta.url}_${dir}-header-footer`);
         });
       });
 
@@ -98,7 +98,7 @@ describe('grid', () => {
         });
 
         it('column groups', async () => {
-          await visualDiff(element, `grid:${dir}-column-groups`);
+          await visualDiff(element, `${import.meta.url}_${dir}-column-groups`);
         });
       });
 
@@ -154,7 +154,7 @@ describe('grid', () => {
 
         it('row details', async () => {
           element.openItemDetails(element.items[0]);
-          await visualDiff(element, `grid:${dir}-row-details`);
+          await visualDiff(element, `${import.meta.url}_${dir}-row-details`);
         });
       });
     });
@@ -195,28 +195,28 @@ describe('grid', () => {
       });
 
       it('initial', async () => {
-        await visualDiff(element, `grid:${dir}-sorting-initial`);
+        await visualDiff(element, `${import.meta.url}_${dir}-sorting-initial`);
       });
 
       it('single asc', async () => {
         click(firstSorter);
-        await visualDiff(element, `grid:${dir}-sorting-single-asc`);
+        await visualDiff(element, `${import.meta.url}_${dir}-sorting-single-asc`);
       });
 
       it('multi asc asc', async () => {
         click(secondSorter);
-        await visualDiff(element, `grid:${dir}-sorting-multi-asc-asc`);
+        await visualDiff(element, `${import.meta.url}_${dir}-sorting-multi-asc-asc`);
       });
 
       it('multi asc desc', async () => {
         click(secondSorter);
-        await visualDiff(element, `grid:${dir}-sorting-multi-asc-desc`);
+        await visualDiff(element, `${import.meta.url}_${dir}-sorting-multi-asc-desc`);
       });
 
       it('single desc', async () => {
         click(secondSorter);
         click(firstSorter);
-        await visualDiff(element, `grid:${dir}-sorting-single-desc`);
+        await visualDiff(element, `${import.meta.url}_${dir}-sorting-single-desc`);
       });
     });
   });
@@ -244,42 +244,42 @@ describe('grid', () => {
 
     it('dragover', async () => {
       element.setAttribute('dragover', '');
-      await visualDiff(element, 'grid:dragover');
+      await visualDiff(element, `${import.meta.url}_dragover`);
     });
 
     it('dragover on top', async () => {
       element.removeAttribute('dragover');
       element.$.items.children[1].setAttribute('dragover', 'on-top');
-      await visualDiff(element, 'grid:row-dragover-on-top');
+      await visualDiff(element, `${import.meta.url}_row-dragover-on-top`);
     });
 
     it('dragover above', async () => {
       element.$.items.children[1].setAttribute('dragover', 'above');
-      await visualDiff(element, 'grid:row-dragover-above');
+      await visualDiff(element, `${import.meta.url}_row-dragover-above`);
     });
 
     it('dragover below', async () => {
       element.$.items.children[1].setAttribute('dragover', 'below');
-      await visualDiff(element, 'grid:row-dragover-below');
+      await visualDiff(element, `${import.meta.url}_row-dragover-below`);
     });
 
     it('dragover above details', async () => {
       element.detailsOpenedItems = [element.items[1]];
       element.$.items.children[1].setAttribute('dragover', 'above');
-      await visualDiff(element, 'grid:row-dragover-above-details');
+      await visualDiff(element, `${import.meta.url}_row-dragover-above-details`);
     });
 
     it('dragover below details', async () => {
       element.detailsOpenedItems = [element.items[1]];
       element.$.items.children[1].setAttribute('dragover', 'below');
-      await visualDiff(element, 'grid:row-dragover-below-details');
+      await visualDiff(element, `${import.meta.url}_row-dragover-below-details`);
     });
 
     it('dragover below details', async () => {
       element.detailsOpenedItems = [];
       element.$.items.children[1].removeAttribute('dragover');
       element.$.items.children[1].setAttribute('dragstart', '123');
-      await visualDiff(element, 'grid:row-dragstart');
+      await visualDiff(element, `${import.meta.url}_row-dragstart`);
     });
   });
 });

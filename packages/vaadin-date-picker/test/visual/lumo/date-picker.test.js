@@ -14,38 +14,38 @@ describe('date-picker', () => {
   });
 
   it('basic', async () => {
-    await visualDiff(div, 'date-picker:basic');
+    await visualDiff(div, `${import.meta.url}_basic`);
   });
 
   it('disabled', async () => {
     element.disabled = true;
-    await visualDiff(div, 'date-picker:disabled');
+    await visualDiff(div, `${import.meta.url}_disabled`);
   });
 
   it('readonly', async () => {
     element.readonly = true;
-    await visualDiff(div, 'date-picker:readonly');
+    await visualDiff(div, `${import.meta.url}_readonly`);
   });
 
   it('label', async () => {
     element.label = 'Label';
-    await visualDiff(div, 'date-picker:label');
+    await visualDiff(div, `${import.meta.url}_label`);
   });
 
   it('placeholder', async () => {
     element.placeholder = 'Placeholder';
-    await visualDiff(div, 'date-picker:placeholder');
+    await visualDiff(div, `${import.meta.url}_placeholder`);
   });
 
   it('value', async () => {
     element.value = '1991-12-20';
-    await visualDiff(div, 'date-picker:value');
+    await visualDiff(div, `${import.meta.url}_value`);
   });
 
   it('required', async () => {
     element.label = 'Label';
     element.required = true;
-    await visualDiff(div, 'date-picker:required');
+    await visualDiff(div, `${import.meta.url}_required`);
   });
 
   it('error message', async () => {
@@ -53,18 +53,18 @@ describe('date-picker', () => {
     element.errorMessage = 'This field is required';
     element.required = true;
     element.validate();
-    await visualDiff(div, 'date-picker:error-message');
+    await visualDiff(div, `${import.meta.url}_error-message`);
   });
 
   it('helper text', async () => {
     element.helperText = 'Helper text';
-    await visualDiff(div, 'date-picker:helper-text');
+    await visualDiff(div, `${import.meta.url}_helper-text`);
   });
 
   it('clear button', async () => {
     element.value = '1991-12-20';
     element.clearButtonVisible = true;
-    await visualDiff(div, 'date-picker:clear-button');
+    await visualDiff(div, `${import.meta.url}_clear-button`);
   });
 
   it('prefix slot', async () => {
@@ -72,6 +72,6 @@ describe('date-picker', () => {
     span.setAttribute('slot', 'prefix');
     span.textContent = '$';
     element.appendChild(span);
-    await visualDiff(div, 'date-picker:prefix');
+    await visualDiff(div, `${import.meta.url}_prefix`);
   });
 });

@@ -23,24 +23,24 @@ describe('password-field', () => {
       });
 
       it('basic', async () => {
-        await visualDiff(div, `password-field:${dir}-basic`);
+        await visualDiff(div, `${import.meta.url}_${dir}-basic`);
       });
 
       it('value', async () => {
         element.value = 'value';
-        await visualDiff(div, `password-field:${dir}-value`);
+        await visualDiff(div, `${import.meta.url}_${dir}-value`);
       });
 
       it('clear button', async () => {
         element.value = 'value';
         element.clearButtonVisible = true;
-        await visualDiff(div, `password-field:${dir}-clear-button`);
+        await visualDiff(div, `${import.meta.url}_${dir}-clear-button`);
       });
 
       it('reveal button hidden', async () => {
         element.value = 'value';
         element.revealButtonHidden = true;
-        await visualDiff(div, `password-field:${dir}-reveal-button-hidden`);
+        await visualDiff(div, `${import.meta.url}_${dir}-reveal-button-hidden`);
       });
     });
   });

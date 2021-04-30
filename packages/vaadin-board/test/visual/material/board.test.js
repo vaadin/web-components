@@ -31,6 +31,6 @@ describe('board', () => {
   });
 
   it('basic', async () => {
-    await visualDiff(element, 'board:multiple-rows');
+    await visualDiff(element, `${import.meta.url}_multiple-rows`);
   });
 });
