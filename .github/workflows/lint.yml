@@ -1,15 +1,10 @@
-name: Chrome
+name: Lint
 
-on:
-  workflow_run:
-    workflows: ["Lint"]
-    types:
-      - completed
+on: pull_request
 
 jobs:
-  tests:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
-    name: Unit tests
+  lint:
+    name: Lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -31,5 +26,5 @@ jobs:
       - name: Install Dependencies
         run: yarn --frozen-lockfile --no-progress --non-interactive
 
-      - name: Test
-        run: yarn test
+      - name: Lint
+        run: yarn lint
