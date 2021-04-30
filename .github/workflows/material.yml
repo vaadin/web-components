@@ -38,4 +38,4 @@ jobs:
         if: ${{ failure() }}
         with:
           name: screenshots
-          path: screenshots/material/chrome/failed/**/*.png
+          path: packages/*/test/visual/material/screenshots/*/failed/*.png
