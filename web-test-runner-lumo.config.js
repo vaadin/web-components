@@ -45,7 +45,7 @@ const config = {
   ],
   plugins: [
     visualRegressionPlugin({
-      baseDir: 'screenshots/lumo',
+      baseDir: 'packages',
       getBaselineName: getBaselineScreenshotName,
       getDiffName: getDiffScreenshotName,
       getFailedName: getFailedScreenshotName,

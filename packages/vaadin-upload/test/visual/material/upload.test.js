@@ -22,12 +22,12 @@ describe('upload', () => {
       });
 
       it('basic', async () => {
-        await visualDiff(div, `upload:${dir}-basic`);
+        await visualDiff(div, `${import.meta.url}_${dir}-basic`);
       });
 
       it('nodrop', async () => {
         element.nodrop = true;
-        await visualDiff(div, `upload:${dir}-nodrop`);
+        await visualDiff(div, `${import.meta.url}_${dir}-nodrop`);
       });
 
       it('files', async () => {
@@ -35,7 +35,7 @@ describe('upload', () => {
           { name: 'Don Quixote.pdf', progress: 100, complete: true },
           { name: 'Hamlet.pdf', progress: 100, complete: true }
         ];
-        await visualDiff(div, `upload:${dir}-files`);
+        await visualDiff(div, `${import.meta.url}_${dir}-files`);
       });
     });
   });

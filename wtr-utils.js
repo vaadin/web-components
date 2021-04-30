@@ -44,21 +44,6 @@ const getAllVisualPackages = () => {
 };
 
 /**
- * Gel all packages with updated reference screenshots.
- */
-const getUpdatedScreenshotsPackages = () => {
-  const packages = new Set();
-  const log = execSync('git diff --name-only origin/20.0 HEAD').toString();
-  log.split('\n').forEach((line) => {
-    if (line.startsWith('screenshots')) {
-      const data = line.split('/');
-      packages.add(`vaadin-${data[data.length - 2]}`);
-    }
-  });
-  return [...packages];
-};
-
-/**
  * Get packages for running unit tests.
  */
 const getUnitTestPackages = () => {
@@ -98,8 +83,7 @@ const getVisualTestPackages = () => {
 
   let packages = getChangedPackages()
     .map((project) => project.name.replace('@vaadin/', ''))
-    .filter((project) => NO_UNIT_TESTS.indexOf(project) === -1 && project.indexOf('mixin') === -1)
-    .concat(getUpdatedScreenshotsPackages());
+    .filter((project) => NO_UNIT_TESTS.indexOf(project) === -1 && project.indexOf('mixin') === -1);
 
   if (packages.length == 0) {
     // When running in GitHub Actions, do nothing.
@@ -191,8 +175,11 @@ const testRunnerHtml = (testFramework) => `
 `;
 
 const getScreenshotFileName = ({ name }, type, diff) => {
-  const [component, test] = name.split(':');
-  return path.join('chrome', type, component, diff ? `${test}-diff` : test);
+  const [meta, test] = name.split('_');
+  const { pathname } = new URL(meta);
+  const match = pathname.match(/\/packages\/(.+)\.test\.js/);
+  const folder = match[1].replace(/(lumo|material)/, '$1/screenshots');
+  return path.join(folder, type, diff ? `${test}-diff` : test);
 };
 
 const getBaselineScreenshotName = (args) => getScreenshotFileName(args, 'baseline');

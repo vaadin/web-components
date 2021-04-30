@@ -13,38 +13,38 @@ describe('time-picker', () => {
   });
 
   it('basic', async () => {
-    await visualDiff(div, 'time-picker:basic');
+    await visualDiff(div, `${import.meta.url}_basic`);
   });
 
   it('disabled', async () => {
     element.disabled = true;
-    await visualDiff(div, 'time-picker:disabled');
+    await visualDiff(div, `${import.meta.url}_disabled`);
   });
 
   it('readonly', async () => {
     element.readonly = true;
-    await visualDiff(div, 'time-picker:readonly');
+    await visualDiff(div, `${import.meta.url}_readonly`);
   });
 
   it('label', async () => {
     element.label = 'Label';
-    await visualDiff(div, 'time-picker:label');
+    await visualDiff(div, `${import.meta.url}_label`);
   });
 
   it('placeholder', async () => {
     element.placeholder = 'Placeholder';
-    await visualDiff(div, 'time-picker:placeholder');
+    await visualDiff(div, `${import.meta.url}_placeholder`);
   });
 
   it('value', async () => {
     element.value = '12:12:12.122';
-    await visualDiff(div, 'time-picker:value');
+    await visualDiff(div, `${import.meta.url}_value`);
   });
 
   it('required', async () => {
     element.label = 'Label';
     element.required = true;
-    await visualDiff(div, 'time-picker:required');
+    await visualDiff(div, `${import.meta.url}_required`);
   });
 
   it('error message', async () => {
@@ -52,17 +52,17 @@ describe('time-picker', () => {
     element.errorMessage = 'This field is required';
     element.required = true;
     element.validate();
-    await visualDiff(div, 'time-picker:error-message');
+    await visualDiff(div, `${import.meta.url}_error-message`);
   });
 
   it('helper text', async () => {
     element.helperText = 'Helper text';
-    await visualDiff(div, 'time-picker:helper-text');
+    await visualDiff(div, `${import.meta.url}_helper-text`);
   });
 
   it('clear button', async () => {
     element.value = '12:12:12.122';
     element.clearButtonVisible = true;
-    await visualDiff(div, 'time-picker:clear-button');
+    await visualDiff(div, `${import.meta.url}_clear-button`);
   });
 });

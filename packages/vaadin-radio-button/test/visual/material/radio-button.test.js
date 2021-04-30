@@ -13,37 +13,37 @@ describe('radio-button', () => {
   });
 
   it('basic', async () => {
-    await visualDiff(div, 'radio-button:basic');
+    await visualDiff(div, `${import.meta.url}_basic`);
   });
 
   it('focus-ring', async () => {
     element.setAttribute('focus-ring', '');
-    await visualDiff(div, 'radio-button:focus-ring');
+    await visualDiff(div, `${import.meta.url}_focus-ring`);
   });
 
   it('disabled', async () => {
     element.disabled = true;
-    await visualDiff(div, 'radio-button:disabled');
+    await visualDiff(div, `${import.meta.url}_disabled`);
   });
 
   it('checked', async () => {
     element.checked = true;
-    await visualDiff(div, 'radio-button:checked');
+    await visualDiff(div, `${import.meta.url}_checked`);
   });
 
   it('disabled checked', async () => {
     element.disabled = true;
     element.checked = true;
-    await visualDiff(div, 'radio-button:disabled-checked');
+    await visualDiff(div, `${import.meta.url}_disabled-checked`);
   });
 
   it('empty', async () => {
     element.textContent = '';
-    await visualDiff(div, 'radio-button:empty');
+    await visualDiff(div, `${import.meta.url}_empty`);
   });
 
   it('RTL', async () => {
     document.documentElement.setAttribute('dir', 'rtl');
-    await visualDiff(div, 'radio-button:rtl');
+    await visualDiff(div, `${import.meta.url}_rtl`);
   });
 });

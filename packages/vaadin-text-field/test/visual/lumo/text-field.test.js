@@ -13,38 +13,38 @@ describe('text-field', () => {
   });
 
   it('basic', async () => {
-    await visualDiff(div, 'text-field:basic');
+    await visualDiff(div, `${import.meta.url}_basic`);
   });
 
   it('disabled', async () => {
     element.disabled = true;
-    await visualDiff(div, 'text-field:disabled');
+    await visualDiff(div, `${import.meta.url}_disabled`);
   });
 
   it('readonly', async () => {
     element.readonly = true;
-    await visualDiff(div, 'text-field:readonly');
+    await visualDiff(div, `${import.meta.url}_readonly`);
   });
 
   it('label', async () => {
     element.label = 'Label';
-    await visualDiff(div, 'text-field:label');
+    await visualDiff(div, `${import.meta.url}_label`);
   });
 
   it('placeholder', async () => {
     element.placeholder = 'Placeholder';
-    await visualDiff(div, 'text-field:placeholder');
+    await visualDiff(div, `${import.meta.url}_placeholder`);
   });
 
   it('value', async () => {
     element.value = 'value';
-    await visualDiff(div, 'text-field:value');
+    await visualDiff(div, `${import.meta.url}_value`);
   });
 
   it('required', async () => {
     element.label = 'Label';
     element.required = true;
-    await visualDiff(div, 'text-field:required');
+    await visualDiff(div, `${import.meta.url}_required`);
   });
 
   it('error message', async () => {
@@ -52,18 +52,18 @@ describe('text-field', () => {
     element.errorMessage = 'This field is required';
     element.required = true;
     element.validate();
-    await visualDiff(div, 'text-field:error-message');
+    await visualDiff(div, `${import.meta.url}_error-message`);
   });
 
   it('helper text', async () => {
     element.helperText = 'Helper text';
-    await visualDiff(div, 'text-field:helper-text');
+    await visualDiff(div, `${import.meta.url}_helper-text`);
   });
 
   it('clear button', async () => {
     element.value = 'value';
     element.clearButtonVisible = true;
-    await visualDiff(div, 'text-field:clear-button');
+    await visualDiff(div, `${import.meta.url}_clear-button`);
   });
 
   it('prefix slot', async () => {
@@ -71,7 +71,7 @@ describe('text-field', () => {
     span.setAttribute('slot', 'prefix');
     span.textContent = '$';
     element.appendChild(span);
-    await visualDiff(div, 'text-field:prefix');
+    await visualDiff(div, `${import.meta.url}_prefix`);
   });
 
   it('suffix slot', async () => {
@@ -79,6 +79,6 @@ describe('text-field', () => {
     span.setAttribute('slot', 'suffix');
     span.textContent = '$';
     element.appendChild(span);
-    await visualDiff(div, 'text-field:suffix');
+    await visualDiff(div, `${import.meta.url}_suffix`);
   });
 });
