@@ -63,6 +63,7 @@ class ConfirmDialogElement extends ElementMixin(ThemableMixin(PolymerElement)) {
           --_vaadin-confirm-dialog-footer-height: auto;
         }
       </style>
+
       <vaadin-dialog
         id="dialog"
         opened="{{opened}}"
@@ -70,58 +71,58 @@ class ConfirmDialogElement extends ElementMixin(ThemableMixin(PolymerElement)) {
         theme$="_vaadin-confirm-dialog-dialog-overlay-theme [[theme]]"
         no-close-on-outside-click
         no-close-on-esc="[[noCloseOnEsc]]"
-      >
-        <template>
-          <div id="content">
-            <div part="header">
-              <slot name="header">
-                <h3 class="header">[[header]]</h3>
-              </slot>
-            </div>
+      ></vaadin-dialog>
 
-            <div part="message" id="message">
-              <slot></slot>
-              [[message]]
-            </div>
+      <template id="dialogTemplate">
+        <div id="content">
+          <div part="header">
+            <slot name="header">
+              <h3 class="header">[[header]]</h3>
+            </slot>
           </div>
 
-          <div part="footer">
-            <div class="cancel-button">
-              <slot name="cancel-button">
-                <vaadin-button
-                  id="cancel"
-                  theme$="[[cancelTheme]]"
-                  on-click="_cancel"
-                  hidden$="[[!cancel]]"
-                  aria-describedby="message"
-                >
-                  [[cancelText]]
-                </vaadin-button>
-              </slot>
-            </div>
-            <div class="reject-button">
-              <slot name="reject-button">
-                <vaadin-button
-                  id="reject"
-                  theme$="[[rejectTheme]]"
-                  on-click="_reject"
-                  hidden$="[[!reject]]"
-                  aria-describedby="message"
-                >
-                  [[rejectText]]
-                </vaadin-button>
-              </slot>
-            </div>
-            <div class="confirm-button">
-              <slot name="confirm-button">
-                <vaadin-button id="confirm" theme$="[[confirmTheme]]" on-click="_confirm" aria-describedby="message">
-                  [[confirmText]]
-                </vaadin-button>
-              </slot>
-            </div>
+          <div part="message" id="message">
+            <slot></slot>
+            [[message]]
           </div>
-        </template>
-      </vaadin-dialog>
+        </div>
+
+        <div part="footer">
+          <div class="cancel-button">
+            <slot name="cancel-button">
+              <vaadin-button
+                id="cancel"
+                theme$="[[cancelTheme]]"
+                on-click="_cancel"
+                hidden$="[[!cancel]]"
+                aria-describedby="message"
+              >
+                [[cancelText]]
+              </vaadin-button>
+            </slot>
+          </div>
+          <div class="reject-button">
+            <slot name="reject-button">
+              <vaadin-button
+                id="reject"
+                theme$="[[rejectTheme]]"
+                on-click="_reject"
+                hidden$="[[!reject]]"
+                aria-describedby="message"
+              >
+                [[rejectText]]
+              </vaadin-button>
+            </slot>
+          </div>
+          <div class="confirm-button">
+            <slot name="confirm-button">
+              <vaadin-button id="confirm" theme$="[[confirmTheme]]" on-click="_confirm" aria-describedby="message">
+                [[confirmText]]
+              </vaadin-button>
+            </slot>
+          </div>
+        </div>
+      </template>
     `;
   }
 
@@ -274,6 +275,7 @@ class ConfirmDialogElement extends ElementMixin(ThemableMixin(PolymerElement)) {
   /** @protected */
   ready() {
     super.ready();
+
     this.$.dialog.$.overlay.addEventListener('vaadin-overlay-escape-press', this._escPressed.bind(this));
     if (this._dimensions) {
       Object.keys(this._dimensions).forEach((name) => {
@@ -315,6 +317,9 @@ class ConfirmDialogElement extends ElementMixin(ThemableMixin(PolymerElement)) {
     if (!this.opened) {
       return;
     }
+
+    // TODO: A temporary hack as far as `vaadin-dialog` doesn't support the Polymer Template API anymore.
+    this.$.dialog.$.overlay.template = this.$.dialogTemplate;
 
     const overlay = this.$.dialog.$.overlay;
 

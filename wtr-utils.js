@@ -9,6 +9,8 @@ const group = process.argv.indexOf('--group') !== -1;
 
 const NO_UNIT_TESTS = ['vaadin-icons', 'vaadin-lumo-styles', 'vaadin-material-styles'];
 
+const NO_VISUAL_TESTS = ['vaadin-icons', 'vaadin-lumo-styles', 'vaadin-material-styles', 'vaadin-template-renderer'];
+
 /**
  * Check if lockfile has changed.
  */
@@ -83,7 +85,7 @@ const getVisualTestPackages = () => {
 
   let packages = getChangedPackages()
     .map((project) => project.name.replace('@vaadin/', ''))
-    .filter((project) => NO_UNIT_TESTS.indexOf(project) === -1 && project.indexOf('mixin') === -1);
+    .filter((project) => NO_VISUAL_TESTS.indexOf(project) === -1 && project.indexOf('mixin') === -1);
 
   if (packages.length == 0) {
     // When running in GitHub Actions, do nothing.

@@ -1,6 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame } from '@open-wc/testing-helpers';
 import '@vaadin/vaadin-dialog/vaadin-dialog.js';
+import '@vaadin/vaadin-template-renderer';
 import './not-animated-styles.js';
 import '../vaadin-date-picker.js';
 

@@ -8,7 +8,6 @@ import { IronResizableBehavior } from '@polymer/iron-resizable-behavior/iron-res
 import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
 import { OverlayElement } from '@vaadin/vaadin-overlay/src/vaadin-overlay.js';
 import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
-import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import { DialogDraggableMixin } from './vaadin-dialog-draggable-mixin.js';
@@ -124,13 +123,11 @@ class DialogOverlayElement extends mixinBehaviors(IronResizableBehavior, Overlay
 customElements.define(DialogOverlayElement.is, DialogOverlayElement);
 
 /**
- * `<vaadin-dialog>` is a Web Component for creating customized modal dialogs. The content of the
- * dialog can be populated in two ways: imperatively by using renderer callback function and
- * declaratively by using Polymer's Templates.
+ * `<vaadin-dialog>` is a Web Component for creating customized modal dialogs.
  *
  * ### Rendering
  *
- * By default, the dialog uses the content provided by using the renderer callback function.
+ * The content of the dialog can be populated by using the renderer callback function.
  *
  * The renderer function provides `root`, `dialog` arguments.
  * Generate DOM content, append it to the `root` element and control the state
@@ -151,20 +148,6 @@ customElements.define(DialogOverlayElement.is, DialogOverlayElement);
  * DOM generated during the renderer call can be reused
  * in the next renderer call and will be provided with the `root` argument.
  * On first call it will be empty.
- *
- * ### Polymer Templates
- *
- * Alternatively, the content can be provided with Polymer's Template.
- * Dialog finds the first child template and uses that in case renderer callback function
- * is not provided. You can also set a custom template using the `template` property.
- *
- * ```html
- * <vaadin-dialog opened>
- *   <template>
- *     Sample dialog
- *   </template>
- * </vaadin-dialog>
- * ```
  *
  * ### Styling
  *
@@ -264,12 +247,6 @@ class DialogElement extends ThemePropertyMixin(
       },
 
       /**
-       * @type {HTMLTemplateElement | undefined}
-       * @protected
-       */
-      _contentTemplate: Object,
-
-      /**
        * Custom function for rendering the content of the dialog.
        * Receives two arguments:
        *
@@ -286,22 +263,12 @@ class DialogElement extends ThemePropertyMixin(
       modeless: {
         type: Boolean,
         value: false
-      },
-
-      /** @private */
-      _oldTemplate: Object,
-
-      /** @private */
-      _oldRenderer: Object
+      }
     };
   }
 
   static get observers() {
-    return [
-      '_openedChanged(opened)',
-      '_ariaLabelChanged(ariaLabel)',
-      '_templateOrRendererChanged(_contentTemplate, renderer)'
-    ];
+    return ['_openedChanged(opened)', '_ariaLabelChanged(ariaLabel)', '_rendererChanged(renderer)'];
   }
 
   /** @protected */
@@ -311,26 +278,8 @@ class DialogElement extends ThemePropertyMixin(
     this.$.overlay.addEventListener('vaadin-overlay-outside-click', this._handleOutsideClick.bind(this));
     this.$.overlay.addEventListener('vaadin-overlay-escape-press', this._handleEscPress.bind(this));
 
-    this._observer = new FlattenedNodesObserver(this, (info) => {
-      this._setTemplateFromNodes(info.addedNodes);
-    });
-  }
-
-  /**
-   * @param {!Array<!Node>} nodes
-   * @protected
-   */
-  _setTemplateFromNodes(nodes) {
-    this._contentTemplate =
-      nodes.filter((node) => node.localName && node.localName === 'template')[0] || this._contentTemplate;
-  }
-
-  /** @private */
-  _removeNewRendererOrTemplate(template, oldTemplate, renderer, oldRenderer) {
-    if (template !== oldTemplate) {
-      this._contentTemplate = undefined;
-    } else if (renderer !== oldRenderer) {
-      this.renderer = undefined;
+    if (window.Vaadin && window.Vaadin.templateRendererCallback) {
+      window.Vaadin.templateRendererCallback(this);
     }
   }
 
@@ -342,18 +291,8 @@ class DialogElement extends ThemePropertyMixin(
   }
 
   /** @private */
-  _templateOrRendererChanged(template, renderer) {
-    if (template && renderer) {
-      this._removeNewRendererOrTemplate(template, this._oldTemplate, renderer, this._oldRenderer);
-      throw new Error('You should only use either a renderer or a template for dialog content');
-    }
-
-    this._oldTemplate = template;
-    this._oldRenderer = renderer;
-
-    if (renderer) {
-      this.$.overlay.setProperties({ owner: this, renderer: renderer });
-    }
+  _rendererChanged(renderer) {
+    this.$.overlay.setProperties({ owner: this, renderer });
   }
 
   /** @protected */
@@ -364,9 +303,6 @@ class DialogElement extends ThemePropertyMixin(
 
   /** @private */
   _openedChanged(opened) {
-    if (opened) {
-      this.$.overlay.template = this.querySelector('template');
-    }
     this.$.overlay.opened = opened;
   }
 

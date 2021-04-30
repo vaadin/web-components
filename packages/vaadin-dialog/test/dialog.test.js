@@ -2,6 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@open-wc/testing-helpers';
 import { pressAndReleaseKeyOn } from '@polymer/iron-test-helpers/mock-interactions.js';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import '@vaadin/vaadin-template-renderer';
 import '../vaadin-dialog.js';
 
 customElements.define(
