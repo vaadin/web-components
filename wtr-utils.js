@@ -10,6 +10,14 @@ const group = process.argv.indexOf('--group') !== -1;
 const NO_UNIT_TESTS = ['vaadin-icons', 'vaadin-lumo-styles', 'vaadin-material-styles'];
 
 /**
+ * Check if lockfile has changed.
+ */
+const isLockfileChanged = () => {
+  const log = execSync('git diff --name-only origin/master HEAD').toString();
+  return log.split('\n').some((line) => line.includes('yarn.lock'));
+};
+
+/**
  * Get packages changed since master.
  */
 const getChangedPackages = () => {
@@ -55,7 +63,7 @@ const getUpdatedScreenshotsPackages = () => {
  */
 const getUnitTestPackages = () => {
   // If --group flag is passed, return all packages.
-  if (group) {
+  if (group || isLockfileChanged()) {
     return getAllPackages();
   }
 
@@ -84,7 +92,7 @@ const getUnitTestPackages = () => {
  */
 const getVisualTestPackages = () => {
   // If --group flag is passed, return all packages.
-  if (group) {
+  if (group || isLockfileChanged()) {
     return getAllVisualPackages();
   }
 
