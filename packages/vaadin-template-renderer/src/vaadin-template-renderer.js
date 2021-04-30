@@ -4,9 +4,9 @@ import { Templatizer } from './vaadin-template-renderer-templatizer.js';
 function createRenderer(template) {
   const templatizer = Templatizer.create(template);
 
-  return (root) => {
+  return (root, _owner, model) => {
     template.__templatizer = templatizer;
-    template.__templatizer.render(root);
+    template.__templatizer.render(root, model);
   };
 }
 
