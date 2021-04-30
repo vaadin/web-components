@@ -2,7 +2,8 @@ name: Lumo
 
 on:
   workflow_run:
-    workflows: ["Lint"]
+    workflows:
+      - Lint
     types:
       - completed
 
@@ -17,6 +18,9 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: "0"
+          ref: ${{ github.event.workflow_run.head_branch }}
+      - run: git branch
+      - run: env
 
       - name: Setup Node 14.x
         uses: actions/setup-node@v2
