@@ -6,4 +6,4 @@ yarn-error.log
 .env
 
 # Failures from visual tests
-packages/*/test/visual/lumo/screenshots/*/failed
+packages/*/test/visual/*/screenshots/*/failed
