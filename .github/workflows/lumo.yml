@@ -9,10 +9,9 @@ on:
 
 jobs:
   tests:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     name: Visual tests
     runs-on: ubuntu-latest
-    if: github.repository_owner == 'vaadin'
+    if: ${{ github.repository_owner == 'vaadin' && github.event.workflow_run.conclusion == 'success' }}
 
     steps:
       - uses: actions/checkout@v2
