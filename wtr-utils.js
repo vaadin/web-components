@@ -48,7 +48,7 @@ const getAllVisualPackages = () => {
  */
 const getUpdatedScreenshotsPackages = () => {
   const packages = new Set();
-  const log = execSync('git diff --name-only origin/master HEAD').toString();
+  const log = execSync('git diff --name-only origin/20.0 HEAD').toString();
   log.split('\n').forEach((line) => {
     if (line.startsWith('screenshots')) {
       const data = line.split('/');
