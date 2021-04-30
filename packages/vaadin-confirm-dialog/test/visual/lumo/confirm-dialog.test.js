@@ -21,22 +21,22 @@ describe('confirm-dialog', () => {
   });
 
   it('basic', async () => {
-    await visualDiff(div, 'confirm-dialog:basic');
+    await visualDiff(div, `${import.meta.url}_basic`);
   });
 
   it('cancel', async () => {
     element.cancel = true;
-    await visualDiff(div, 'confirm-dialog:cancel');
+    await visualDiff(div, `${import.meta.url}_cancel`);
   });
 
   it('reject', async () => {
     element.reject = true;
-    await visualDiff(div, 'confirm-dialog:reject');
+    await visualDiff(div, `${import.meta.url}_reject`);
   });
 
   it('cancel reject', async () => {
     element.cancel = true;
     element.reject = true;
-    await visualDiff(div, 'confirm-dialog:cancel-reject');
+    await visualDiff(div, `${import.meta.url}_cancel-reject`);
   });
 });

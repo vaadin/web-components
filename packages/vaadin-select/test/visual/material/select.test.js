@@ -25,38 +25,38 @@ describe('select', () => {
   });
 
   it('basic', async () => {
-    await visualDiff(div, 'select:basic');
+    await visualDiff(div, `${import.meta.url}_basic`);
   });
 
   it('disabled', async () => {
     element.disabled = true;
-    await visualDiff(div, 'select:disabled');
+    await visualDiff(div, `${import.meta.url}_disabled`);
   });
 
   it('readonly', async () => {
     element.readonly = true;
-    await visualDiff(div, 'select:readonly');
+    await visualDiff(div, `${import.meta.url}_readonly`);
   });
 
   it('label', async () => {
     element.label = 'Label';
-    await visualDiff(div, 'select:label');
+    await visualDiff(div, `${import.meta.url}_label`);
   });
 
   it('placeholder', async () => {
     element.placeholder = 'Placeholder';
-    await visualDiff(div, 'select:placeholder');
+    await visualDiff(div, `${import.meta.url}_placeholder`);
   });
 
   it('value', async () => {
     element.value = 'item 1';
-    await visualDiff(div, 'select:value');
+    await visualDiff(div, `${import.meta.url}_value`);
   });
 
   it('required', async () => {
     element.label = 'Label';
     element.required = true;
-    await visualDiff(div, 'select:required');
+    await visualDiff(div, `${import.meta.url}_required`);
   });
 
   it('error message', async () => {
@@ -64,12 +64,12 @@ describe('select', () => {
     element.errorMessage = 'This field is required';
     element.required = true;
     element.validate();
-    await visualDiff(div, 'select:error-message');
+    await visualDiff(div, `${import.meta.url}_error-message`);
   });
 
   it('helper text', async () => {
     element.helperText = 'Helper text';
-    await visualDiff(div, 'select:helper-text');
+    await visualDiff(div, `${import.meta.url}_helper-text`);
   });
 
   it('prefix slot', async () => {
@@ -77,7 +77,7 @@ describe('select', () => {
     span.setAttribute('slot', 'prefix');
     span.textContent = '$';
     element.appendChild(span);
-    await visualDiff(div, 'select:prefix');
+    await visualDiff(div, `${import.meta.url}_prefix`);
   });
 
   it('opened', async () => {
@@ -85,6 +85,6 @@ describe('select', () => {
     div.style.width = '200px';
     element.opened = true;
     await nextFrame();
-    await visualDiff(div, 'select:opened');
+    await visualDiff(div, `${import.meta.url}_opened`);
   });
 });

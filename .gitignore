@@ -4,3 +4,6 @@ dist
 analysis.json
 yarn-error.log
 .env
+
+# Failures from visual tests
+packages/*/test/visual/*/screenshots/*/failed

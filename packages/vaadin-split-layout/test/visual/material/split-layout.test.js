@@ -15,11 +15,11 @@ describe('split-layout', () => {
   });
 
   it('horizontal', async () => {
-    await visualDiff(element, 'split-layout:horizontal');
+    await visualDiff(element, `${import.meta.url}_horizontal`);
   });
 
   it('vertical', async () => {
     element.orientation = 'vertical';
-    await visualDiff(element, 'split-layout:vertical');
+    await visualDiff(element, `${import.meta.url}_vertical`);
   });
 });

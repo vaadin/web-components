@@ -38,4 +38,4 @@ jobs:
         if: ${{ failure() }}
         with:
           name: screenshots
-          path: screenshots/lumo/chrome/failed/**/*.png
+          path: packages/*/test/visual/lumo/screenshots/*/failed/*.png

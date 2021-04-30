@@ -31,7 +31,7 @@ describe('notification', () => {
       element.position = position;
       element.opened = true;
       await nextRender(element);
-      await visualDiff(document.body, `notification:${position}`);
+      await visualDiff(document.body, `${import.meta.url}_${position}`);
     });
   });
 });

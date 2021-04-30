@@ -36,13 +36,13 @@ describe('menu-bar', () => {
         });
 
         it('basic', async () => {
-          await visualDiff(document.body, `menu-bar:${dir}-basic`);
+          await visualDiff(document.body, `${import.meta.url}_${dir}-basic`);
         });
 
         it('opened', async () => {
           element.shadowRoot.querySelectorAll('vaadin-menu-bar-button')[1].click();
           await nextRender(element);
-          await visualDiff(document.body, `menu-bar:${dir}-opened`);
+          await visualDiff(document.body, `${import.meta.url}_${dir}-opened`);
         });
       });
 
@@ -82,7 +82,7 @@ describe('menu-bar', () => {
           element.notifyResize();
           arrowDown(element.shadowRoot.querySelectorAll('vaadin-menu-bar-button')[1]);
           await oneEvent(element._subMenu.$.overlay, 'vaadin-overlay-open');
-          await visualDiff(document.body, `menu-bar:${dir}-primary`);
+          await visualDiff(document.body, `${import.meta.url}_${dir}-primary`);
         });
 
         it('secondary', async () => {
@@ -91,7 +91,7 @@ describe('menu-bar', () => {
           element.notifyResize();
           arrowDown(element.shadowRoot.querySelectorAll('vaadin-menu-bar-button')[1]);
           await oneEvent(element._subMenu.$.overlay, 'vaadin-overlay-open');
-          await visualDiff(document.body, `menu-bar:${dir}-secondary`);
+          await visualDiff(document.body, `${import.meta.url}_${dir}-secondary`);
         });
 
         it('tertiary', async () => {
@@ -100,7 +100,7 @@ describe('menu-bar', () => {
           element.notifyResize();
           arrowDown(element.shadowRoot.querySelectorAll('vaadin-menu-bar-button')[1]);
           await oneEvent(element._subMenu.$.overlay, 'vaadin-overlay-open');
-          await visualDiff(document.body, `menu-bar:${dir}-tertiary`);
+          await visualDiff(document.body, `${import.meta.url}_${dir}-tertiary`);
         });
 
         it('tertiary-inline', async () => {
@@ -109,7 +109,7 @@ describe('menu-bar', () => {
           element.notifyResize();
           arrowDown(element.shadowRoot.querySelectorAll('vaadin-menu-bar-button')[1]);
           await oneEvent(element._subMenu.$.overlay, 'vaadin-overlay-open');
-          await visualDiff(document.body, `menu-bar:${dir}-tertiary-inline`);
+          await visualDiff(document.body, `${import.meta.url}_${dir}-tertiary-inline`);
         });
 
         it('small', async () => {
@@ -118,7 +118,7 @@ describe('menu-bar', () => {
           element.notifyResize();
           arrowDown(element.shadowRoot.querySelectorAll('vaadin-menu-bar-button')[1]);
           await oneEvent(element._subMenu.$.overlay, 'vaadin-overlay-open');
-          await visualDiff(document.body, `menu-bar:${dir}-small`);
+          await visualDiff(document.body, `${import.meta.url}_${dir}-small`);
         });
       });
     });

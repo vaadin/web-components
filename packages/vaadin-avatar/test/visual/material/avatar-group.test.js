@@ -14,13 +14,13 @@ describe('avatar-group', () => {
 
   it('basic', async () => {
     element.items = [{ name: 'Abc Def' }, { name: 'Ghi Jkl' }, { name: 'Mno Pqr' }, { name: 'Stu Vwx' }];
-    await visualDiff(div, 'avatar-group:basic');
+    await visualDiff(div, `${import.meta.url}_basic`);
   });
 
   it('max-items-visible', async () => {
     element.maxItemsVisible = 3;
     element.items = [{ name: 'Abc Def' }, { name: 'Ghi Jkl' }, { name: 'Mno Pqr' }, { name: 'Stu Vwx' }];
-    await visualDiff(div, 'avatar-group:max-items-visible');
+    await visualDiff(div, `${import.meta.url}_max-items-visible`);
   });
 
   it('color-index', async () => {
@@ -33,7 +33,7 @@ describe('avatar-group', () => {
       { abbr: '55', colorIndex: 5 },
       { abbr: '66', colorIndex: 6 }
     ];
-    await visualDiff(div, 'avatar-group:color-index');
+    await visualDiff(div, `${import.meta.url}_color-index`);
   });
 
   it('opened', async () => {
@@ -43,6 +43,6 @@ describe('avatar-group', () => {
     element.items = [{ name: 'Abc Def' }, { name: 'Ghi Jkl' }, { name: 'Mno Pqr' }, { name: 'Stu Vwx' }];
     element.$.overflow.click();
     await nextRender(element);
-    await visualDiff(document.body, 'avatar-group:opened');
+    await visualDiff(document.body, `${import.meta.url}_opened`);
   });
 });
