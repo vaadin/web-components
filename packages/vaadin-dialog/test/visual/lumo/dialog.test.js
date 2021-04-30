@@ -22,11 +22,11 @@ describe('dialog', () => {
   });
 
   it('basic', async () => {
-    await visualDiff(div, 'dialog:basic');
+    await visualDiff(div, `${import.meta.url}_basic`);
   });
 
   it('modeless', async () => {
     element.modeless = true;
-    await visualDiff(div, 'dialog:modeless');
+    await visualDiff(div, `${import.meta.url}_modeless`);
   });
 });

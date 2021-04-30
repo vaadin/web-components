@@ -15,14 +15,14 @@ describe('crud', () => {
 
   it('basic', async () => {
     element.editedItem = {};
-    await visualDiff(div, 'crud:basic');
+    await visualDiff(div, `${import.meta.url}_basic`);
   });
 
   it('editor-position-bottom', async () => {
     element.editorPosition = 'bottom';
     await nextRender(element);
     element.editedItem = {};
-    await visualDiff(div, 'crud:editor-position-bottom');
+    await visualDiff(div, `${import.meta.url}_editor-position-bottom`);
   });
 
   ['ltr', 'rtl'].forEach((dir) => {
@@ -39,7 +39,7 @@ describe('crud', () => {
         element.editorPosition = 'aside';
         await nextRender(element);
         element.editedItem = {};
-        await visualDiff(div, `crud:${dir}-editor-position-aside`);
+        await visualDiff(div, `${import.meta.url}_${dir}-editor-position-aside`);
       });
     });
   });
