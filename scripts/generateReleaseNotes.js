@@ -235,6 +235,7 @@ function logCommitsByType(commits) {
 
 // Output the release notes for the set of commits
 function generateReleaseNotes(commits) {
+  console.log(`${to}\n`);
   console.log(`[API Documentation →](https://cdn.vaadin.com/vaadin-web-components/${version}/)\n`);
   if (commits.length) {
     console.log(`### Changes Since [${from}](https://github.com/vaadin/vaadin-web-components/releases/tag/${from})`);
