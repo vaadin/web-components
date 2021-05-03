@@ -10,7 +10,7 @@ import { TextFieldElement } from './vaadin-text-field.js';
  *
  * ### Styling
  *
- * See vaadin-text-field.html for the styling documentation
+ * See [`<vaadin-text-field>`](#/elements/vaadin-text-field) for the styling documentation.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *

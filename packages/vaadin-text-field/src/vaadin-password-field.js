@@ -47,7 +47,7 @@ let memoizedTemplate;
  *
  * ### Styling
  *
- * See vaadin-text-field.html for the styling documentation
+ * See [`<vaadin-text-field>`](#/elements/vaadin-text-field) for the styling documentation.
  *
  * In addition to vaadin-text-field parts, here's the list of vaadin-password-field specific parts
  *
