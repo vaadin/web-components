@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-login",
-  "version": "20.0.0-alpha6",
+  "version": "20.0.0-beta1",
   "description": "vaadin-login",
   "main": "vaadin-login-overlay.js",
   "module": "vaadin-login-overlay.js",
@@ -26,13 +26,13 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/vaadin-button": "^20.0.0-alpha6",
-    "@vaadin/vaadin-element-mixin": "^20.0.0-alpha6",
-    "@vaadin/vaadin-lumo-styles": "^20.0.0-alpha6",
-    "@vaadin/vaadin-material-styles": "^20.0.0-alpha6",
-    "@vaadin/vaadin-overlay": "^20.0.0-alpha6",
-    "@vaadin/vaadin-text-field": "^20.0.0-alpha6",
-    "@vaadin/vaadin-themable-mixin": "^20.0.0-alpha6"
+    "@vaadin/vaadin-button": "^20.0.0-beta1",
+    "@vaadin/vaadin-element-mixin": "^20.0.0-beta1",
+    "@vaadin/vaadin-lumo-styles": "^20.0.0-beta1",
+    "@vaadin/vaadin-material-styles": "^20.0.0-beta1",
+    "@vaadin/vaadin-overlay": "^20.0.0-beta1",
+    "@vaadin/vaadin-text-field": "^20.0.0-beta1",
+    "@vaadin/vaadin-themable-mixin": "^20.0.0-beta1"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.1.5",

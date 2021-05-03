@@ -75,7 +75,7 @@ class VerticalLayoutElement extends ElementMixin(ThemableMixin(PolymerElement)) 
   }
 
   static get version() {
-    return '20.0.0-alpha6';
+    return '20.0.0-beta1';
   }
 }
 
