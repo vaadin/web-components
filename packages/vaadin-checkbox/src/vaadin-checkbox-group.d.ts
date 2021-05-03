@@ -56,7 +56,7 @@ export interface CheckboxGroupEventMap extends HTMLElementEventMap, CheckboxGrou
  * `required` | Set when the element is required | :host
  * `invalid` | Set when the element is invalid | :host
  *
- * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+ * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.

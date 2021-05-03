@@ -70,7 +70,7 @@ export type AppLayoutEventMap = HTMLElementEventMap & AppLayoutElementEventMap;
  * `drawer`      | Container for the drawer area
  * `content`     | Container for page content.
  *
- * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+ * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
  * ### Component's slots
  *

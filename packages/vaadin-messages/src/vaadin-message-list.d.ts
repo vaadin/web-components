@@ -36,7 +36,7 @@ export interface MessageListItem {
  * ----------|----------------
  * `list`    | The container wrapping messages.
  *
- * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+ * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  */
 declare class MessageListElement extends ThemableMixin(ElementMixin(HTMLElement)) {
   /**

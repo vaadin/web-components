@@ -109,7 +109,7 @@ import './vaadin-crud-form.js';
  * --vaadin-crud-editor-max-height | max height of editor when opened on the bottom | 40%
  * --vaadin-crud-editor-max-width | max width of editor when opened on the side | 40%
  *
- * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+ * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
  * @fires {CustomEvent} editor-opened-changed - Fired when the `editorOpened` property changes.
  * @fires {CustomEvent} edited-item-changed - Fired when `editedItem` property changes.

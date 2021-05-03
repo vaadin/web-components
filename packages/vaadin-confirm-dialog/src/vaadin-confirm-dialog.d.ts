@@ -38,7 +38,7 @@ export type ConfirmDialogEventMap = HTMLElementEventMap & ConfirmDialogElementEv
  * `message`  | Container for the message of the dialog
  * `footer`   | Container for the buttons
  *
- * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+ * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
  * ### Custom content
  *
