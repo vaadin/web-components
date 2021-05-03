@@ -232,6 +232,14 @@ Update screenshots for single package:
 yarn update:lumo --group vaadin-upload
 ```
 
+### Generating icons
+
+Re-generate SVG icons for packages that have them:
+
+```sh
+yarn icons
+```
+
 ### Making a major version bump
 
 #### Create a branch for the current major
