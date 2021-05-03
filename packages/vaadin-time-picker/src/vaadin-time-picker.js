@@ -280,8 +280,8 @@ class TimePickerElement extends ElementMixin(ControlStateMixin(ThemableMixin(Pol
       },
 
       /**
-       * Specifies the number of valid intervals in a day used for
-       * configuring the items displayed in the selection box.
+       * Defines the time interval (in seconds) between the items displayed
+       * in the time selection box. The default is 1 hour (i.e. `3600`).
        *
        * It also configures the precision of the value string. By default
        * the component formats values as `hh:mm` but setting a step value
