@@ -40,7 +40,7 @@ import './vaadin-upload-icons.js';
  * `uploading` | Uploading is in progress | `:host`
  * `complete` | Uploading has finished successfully | `:host`
  *
- * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+ * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
  * @mixes ThemableMixin
  */

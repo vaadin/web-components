@@ -42,7 +42,7 @@ import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.
  * `focus-ring` | Set when the button is focused using the keyboard.
  * `focused` | Set when the button is focused.
  *
- * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+ * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
  * @extends HTMLElement
  * @mixes ElementMixin

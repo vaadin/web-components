@@ -90,7 +90,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * `--vaadin-form-item-label-spacing` | Spacing between the label column and the input column when the labels are aside | `1em`
  * `--vaadin-form-item-row-spacing` | Height of the spacing between the form item elements | `1em`
  *
- * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+ * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  */
 declare class FormItemElement extends ThemableMixin(HTMLElement) {}
 

@@ -159,7 +159,7 @@ import { ComboBoxEventMap } from './interfaces';
  * Note: the `theme` attribute value set on `<vaadin-combo-box>` is
  * propagated to the internal components listed above.
  *
- * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+ * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
  * @fires {Event} change - Fired when the user commits a value change.
  * @fires {CustomEvent} custom-value-set - Fired when the user sets a custom value.

@@ -34,7 +34,7 @@ import { LoginEventMap } from './interfaces';
  * `error-message-description` | Container for error message description
  * `footer`  | Container additional information text from `i18n` object
  *
- * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+ * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
  * @fires {CustomEvent} forgot-password - Fired when user clicks on the "Forgot password" button.
  * @fires {CustomEvent} login - Fired when a user submits the login.

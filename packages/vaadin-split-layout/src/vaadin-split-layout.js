@@ -145,7 +145,7 @@ import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.
  * `splitter` | Split element | vaadin-split-layout
  * `handle` | The handle of the splitter | vaadin-split-layout
  *
- * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+ * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
  * @fires {Event} splitter-dragend - Fired after dragging the splitter have ended.
  *

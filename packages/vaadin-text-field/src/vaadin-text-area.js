@@ -56,7 +56,7 @@ import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.
  * `focus-ring` | Set when the element is keyboard focused | :host
  * `readonly` | Set to a readonly text field | :host
  *
- * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+ * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
  * @fires {Event} input - Fired when the value is changed by the user: on every typing keystroke, and the value is cleared using the clear button.
  * @fires {Event} change - Fired when the user commits a value change.

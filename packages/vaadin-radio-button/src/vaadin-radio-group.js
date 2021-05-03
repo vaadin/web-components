@@ -42,7 +42,7 @@ import { RadioButtonElement } from './vaadin-radio-button.js';
  * `has-error-message` | Set when the element has an error message, regardless if the field is valid or not | :host
  * `focused` | Set when the element contains focus | :host
  *
- * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+ * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.

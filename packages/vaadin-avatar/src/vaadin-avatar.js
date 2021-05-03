@@ -52,7 +52,7 @@ window.addEventListener(
  * --------- | -----------
  * `has-color-index` | Set when the avatar has `colorIndex` and the corresponding custom CSS property exists.
  *
- * See [Styling Components](https://vaadin.com/docs/v14/themes/styling-components.html) documentation.
+ * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
  * @extends HTMLElement
  * @mixes ElementMixin

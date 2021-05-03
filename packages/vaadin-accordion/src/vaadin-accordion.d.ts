@@ -61,7 +61,7 @@ export type AccordionEventMap = HTMLElementEventMap & AccordionElementEventMap;
  * }
  * ```
  *
- * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+ * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
  * @fires {CustomEvent} items-changed - Fired when the `items` property changes.
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.

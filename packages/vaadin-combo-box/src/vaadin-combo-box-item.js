@@ -25,7 +25,7 @@ import { DirMixin } from '@vaadin/vaadin-element-mixin/vaadin-dir-mixin.js';
  * `selected` | Set when the item is selected | :host
  * `focused` | Set when the item is focused | :host
  *
- * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+ * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
  * @mixes ThemableMixin
  * @private

@@ -28,7 +28,7 @@ import { LoginEventMap } from './interfaces';
  * `brand`         | Container for application title and description
  * `form`          | Container for the `<vaadin-login-form>` component
  *
- * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+ * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
  * See [`<vaadin-login-form>`](#/elements/vaadin-login-form)
  * documentation for  `<vaadin-login-form-wrapper>` stylable parts.
