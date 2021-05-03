@@ -211,7 +211,7 @@ import { ContextMenuEventMap, ContextMenuRenderer } from './interfaces';
  * See [`<vaadin-overlay>`](#/elements/vaadin-overlay)
  * documentation for `<vaadin-context-menu-overlay>` stylable parts.
  *
- * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+ * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
  * ### Internal components
  *

@@ -28,7 +28,7 @@ import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.
  * `active` | Set when mousedown or enter/spacebar pressed | :host
  * `orientation` | Set to `horizontal` or `vertical` depending on the direction of items  | :host
  *
- * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+ * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
  * @extends HTMLElement
  * @mixes ElementMixin

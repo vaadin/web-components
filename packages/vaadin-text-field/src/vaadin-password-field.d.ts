@@ -10,7 +10,7 @@ import { TextFieldElement } from './vaadin-text-field.js';
  *
  * ### Styling
  *
- * See vaadin-text-field.html for the styling documentation
+ * See [`<vaadin-text-field>`](#/elements/vaadin-text-field) for the styling documentation.
  *
  * In addition to vaadin-text-field parts, here's the list of vaadin-password-field specific parts
  *
@@ -24,7 +24,7 @@ import { TextFieldElement } from './vaadin-text-field.js';
  * -------------|-------------|------------
  * `password-visible` | Set when the password is visible | :host
  *
- * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+ * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
  * @fires {Event} input - Fired when the value is changed by the user: on every typing keystroke, and the value is cleared using the clear button.
  * @fires {Event} change - Fired when the user commits a value change.

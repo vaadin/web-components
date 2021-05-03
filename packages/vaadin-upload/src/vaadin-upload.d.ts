@@ -33,7 +33,7 @@ import { UploadEventMap, UploadFile, UploadI18n, UploadMethod } from './interfac
  * `dragover` | A file is being dragged over the element | `:host`
  * `dragover-valid` | A dragged file is valid with `maxFiles` and `accept` criteria | `:host`
  *
- * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+ * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
  * @fires {CustomEvent} file-reject - Fired when a file cannot be added to the queue due to a constrain.
  * @fires {CustomEvent} files-changed - Fired when the `files` property changes.

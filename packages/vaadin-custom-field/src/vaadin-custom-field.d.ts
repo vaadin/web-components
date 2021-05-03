@@ -38,7 +38,7 @@ import { CustomFieldEventMap } from './interfaces';
  * `invalid`    | Set when the field is invalid | :host
  * `focused`    | Set when the field contains focus | :host
  *
- * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+ * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
  * @fires {Event} change - Fired when the user commits a value change for any of the internal inputs.
  * @fires {Event} internal-tab - Fired on Tab keydown triggered from the internal inputs, meaning focus will not leave the inputs.

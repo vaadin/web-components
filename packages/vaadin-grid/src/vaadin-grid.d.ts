@@ -328,7 +328,7 @@ export interface GridEventMap extends HTMLElementEventMap, GridElementEventMap {
  * `drag-disabled` | Set to a row that isn't available for dragging | row
  * `drop-disabled` | Set to a row that can't be dropped on top of | row
  *
- * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+ * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
  * @fires {CustomEvent} active-item-changed - Fired when the `activeItem` property changes.
  * @fires {CustomEvent} cell-activate - Fired when the cell is activated with click or keyboard.

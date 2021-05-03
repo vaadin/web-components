@@ -62,7 +62,7 @@ import { DialogEventMap, DialogRenderer } from './interfaces';
  * Note: the `theme` attribute value set on `<vaadin-dialog>` is
  * propagated to the internal `<vaadin-dialog-overlay>` component.
  *
- * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+ * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
  * @fires {CustomEvent} resize - Fired when the dialog resize is finished.
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.

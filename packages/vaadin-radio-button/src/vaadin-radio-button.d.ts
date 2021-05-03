@@ -43,7 +43,7 @@ export interface RadioButtonEventMap extends HTMLElementEventMap, RadioButtonEle
  * `checked`    | Set when the radio button is checked. | :host
  * `empty`      | Set when there is no label provided. | label
  *
- * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+ * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
  * @fires {Event} change - Fired when the user commits a value change.
  * @fires {CustomEvent} checked-changed - Fired when the `checked` property changes.

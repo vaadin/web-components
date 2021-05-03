@@ -34,7 +34,7 @@ import './vaadin-message.js';
  * ----------|----------------
  * `list`    | The container wrapping messages.
  *
- * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+ * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
  * @extends HTMLElement
  * @mixes ThemableMixin
