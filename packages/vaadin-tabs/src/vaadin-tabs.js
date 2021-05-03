@@ -41,7 +41,7 @@ import './vaadin-tab.js';
  * `orientation` | Tabs disposition, valid values are `horizontal` and `vertical`. | :host
  * `overflow` | It's set to `start`, `end`, none or both. | :host
  *
- * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+ * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
  * @fires {CustomEvent} items-changed - Fired when the `items` property changes.
  * @fires {CustomEvent} selected-changed - Fired when the `selected` property changes.

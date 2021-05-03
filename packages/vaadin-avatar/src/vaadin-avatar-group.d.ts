@@ -31,7 +31,7 @@ import { AvatarGroupItem, AvatarGroupI18n } from './interfaces';
  * `container` | The container element
  * `avatar`    | Individual avatars
  *
- * See [Styling Components](https://vaadin.com/docs/v14/themes/styling-components.html) documentation.
+ * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
  * ### Internal components
  *

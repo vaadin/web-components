@@ -66,7 +66,7 @@ import { RichTextEditorEventMap, RichTextEditorI18n } from './interfaces';
  * `toolbar-button-code-block`          | The "code block" button
  * `toolbar-button-clean`               | The "clean formatting" button
  *
- * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+ * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
  * @fires {Event} change - Fired when the user commits a value change.
  * @fires {CustomEvent} html-value-changed - Fired when the `htmlValue` property changes.

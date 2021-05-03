@@ -76,7 +76,7 @@ declare class NotificationCard extends ThemableMixin(HTMLElement) {}
  * `overlay` | The notification container
  * `content` | The content of the notification
  *
- * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+ * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
  * Note: the `theme` attribute value set on `<vaadin-notification>` is
  * propagated to the internal `<vaadin-notification-card>`.

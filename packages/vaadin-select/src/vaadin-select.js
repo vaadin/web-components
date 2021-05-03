@@ -110,7 +110,7 @@ document.head.appendChild($_documentContainer.content);
  * --- | --- | ---
  * `--vaadin-select-text-field-width` | Width of the select text field | `vaadin-select-overlay`
  *
- * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+ * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
  * ### Internal components
  *

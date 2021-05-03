@@ -35,7 +35,7 @@ import { MenuBarEventMap, MenuBarItem } from './interfaces';
  * `menu-bar-button` | The menu bar button.
  * `overflow-button` | The "overflow" button appearing when menu bar width is not enough to fit all the buttons.
  *
- * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+ * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
  * ### Internal components
  *

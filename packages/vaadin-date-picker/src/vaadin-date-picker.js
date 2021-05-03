@@ -57,7 +57,7 @@ import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
  * `week-number` | Week number element | vaadin-month-calendar
  * `date` | Date element | vaadin-month-calendar
  *
- * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+ * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
  * The following state attributes are available for styling:
  *
