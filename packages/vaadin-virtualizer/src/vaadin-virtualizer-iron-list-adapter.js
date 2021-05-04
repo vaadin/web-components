@@ -54,6 +54,8 @@ export class IronListAdapter {
 
   _manageFocus() {}
 
+  _removeFocusedItem() {}
+
   get scrollOffset() {
     return 0;
   }

@@ -116,34 +116,6 @@ export const ironList = {
   _maxPages: 2,
 
   /**
-   * The currently focused physical item.
-   */
-  _focusedItem: null,
-
-  /**
-   * The virtual index of the focused item.
-   */
-  _focusedVirtualIndex: -1,
-
-  /**
-   * The physical index of the focused item.
-   */
-  _focusedPhysicalIndex: -1,
-
-  /**
-   * The the item that is focused if it is moved offscreen.
-   * @private {?HTMLElement}
-   */
-  _offscreenFocusedItem: null,
-
-  /**
-   * The item that backfills the `_offscreenFocusedItem` in the physical items
-   * list when that item is moved offscreen.
-   * @type {?HTMLElement}
-   */
-  _focusBackfillItem: null,
-
-  /**
    * The maximum items per row
    */
   _itemsPerRow: 1,
@@ -196,13 +168,6 @@ export const ironList = {
   get _hiddenContentSize() {
     var size = this.grid ? this._physicalRows * this._rowHeight : this._physicalSize;
     return size - this._viewportHeight;
-  },
-
-  /**
-   * The parent node for the _userTemplate.
-   */
-  get _itemsParent() {
-    return dom(dom(this._userTemplate).parentNode);
   },
 
   /**
@@ -424,9 +389,11 @@ export const ironList = {
       offsetContent = scrollTop - top;
     } else {
       ith = this._physicalEnd;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       lastIth = this._physicalStart;
       offsetContent = bottom - scrollBottom;
     }
+    // eslint-disable-next-line no-constant-condition
     while (true) {
       physicalItemHeight = this._getPhysicalSizeIncrement(ith);
       offsetContent = offsetContent - physicalItemHeight;
@@ -698,6 +665,7 @@ export const ironList = {
     var prevAvgCount = this._physicalAverageCount;
     var prevPhysicalAvg = this._physicalAverage;
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     this._iterateItems(function (pidx, vidx) {
       oldPhysicalSize += this._physicalSizes[pidx];
       this._physicalSizes[pidx] = this._physicalItems[pidx].offsetHeight;
@@ -755,6 +723,7 @@ export const ironList = {
       });
     } else {
       const order = [];
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       this._iterateItems(function (pidx, vidx) {
         const item = this._physicalItems[pidx];
         this.translate3d(0, y + 'px', 0, item);
@@ -949,32 +918,6 @@ export const ironList = {
   },
 
   /**
-   * Creates a temporary backfill item in the rendered pool of physical items
-   * to replace the main focused item. The focused item has tabIndex = 0
-   * and might be currently focused by the user.
-   *
-   * This dynamic replacement helps to preserve the focus state.
-   */
-  _manageFocus: function () {
-    var fidx = this._focusedVirtualIndex;
-
-    if (fidx >= 0 && fidx < this._virtualCount) {
-      // if it's a valid index, check if that index is rendered
-      // in a physical item.
-      if (this._isIndexRendered(fidx)) {
-        this._restoreFocusedItem();
-      } else {
-        this._createFocusBackfillItem();
-      }
-    } else if (this._virtualCount > 0 && this._physicalCount > 0) {
-      // otherwise, assign the initial focused index.
-      this._focusedPhysicalIndex = this._physicalStart;
-      this._focusedVirtualIndex = this._virtualStart;
-      this._focusedItem = this._physicalItems[this._physicalStart];
-    }
-  },
-
-  /**
    * Converts a random index to the index of the item that completes it's row.
    * Allows for better order and fill computation when grid == true.
    */
@@ -994,136 +937,6 @@ export const ironList = {
 
   _getPhysicalIndex: function (vidx) {
     return (this._physicalStart + (vidx - this._virtualStart)) % this._physicalCount;
-  },
-
-  focusItem: function (idx) {
-    this._focusPhysicalItem(idx);
-  },
-
-  _focusPhysicalItem: function (idx) {
-    if (idx < 0 || idx >= this._virtualCount) {
-      return;
-    }
-    this._restoreFocusedItem();
-    // scroll to index to make sure it's rendered
-    if (!this._isIndexRendered(idx)) {
-      this.scrollToIndex(idx);
-    }
-    var physicalItem = this._physicalItems[this._getPhysicalIndex(idx)];
-    var model = this.modelForElement(physicalItem);
-    var focusable;
-    // set a secret tab index
-    model.tabIndex = SECRET_TABINDEX;
-    // check if focusable element is the physical item
-    if (physicalItem.tabIndex === SECRET_TABINDEX) {
-      focusable = physicalItem;
-    }
-    // search for the element which tabindex is bound to the secret tab index
-    if (!focusable) {
-      focusable = dom(physicalItem).querySelector('[tabindex="' + SECRET_TABINDEX + '"]');
-    }
-    // restore the tab index
-    model.tabIndex = 0;
-    // focus the focusable element
-    this._focusedVirtualIndex = idx;
-    focusable && focusable.focus();
-  },
-
-  _removeFocusedItem: function () {
-    if (this._offscreenFocusedItem) {
-      this._itemsParent.removeChild(this._offscreenFocusedItem);
-    }
-    this._offscreenFocusedItem = null;
-    this._focusBackfillItem = null;
-    this._focusedItem = null;
-    this._focusedVirtualIndex = -1;
-    this._focusedPhysicalIndex = -1;
-  },
-
-  _createFocusBackfillItem: function () {
-    var fpidx = this._focusedPhysicalIndex;
-
-    if (this._offscreenFocusedItem || this._focusedVirtualIndex < 0) {
-      return;
-    }
-    if (!this._focusBackfillItem) {
-      // Create a physical item.
-      var inst = this.stamp(null);
-      this._focusBackfillItem = /** @type {!HTMLElement} */ (inst.root.querySelector('*'));
-      this._itemsParent.appendChild(inst.root);
-    }
-    // Set the offcreen focused physical item.
-    this._offscreenFocusedItem = this._physicalItems[fpidx];
-    this.modelForElement(this._offscreenFocusedItem).tabIndex = 0;
-    this._physicalItems[fpidx] = this._focusBackfillItem;
-    this._focusedPhysicalIndex = fpidx;
-    // Hide the focused physical.
-    this.translate3d(0, HIDDEN_Y, 0, this._offscreenFocusedItem);
-  },
-
-  _restoreFocusedItem: function () {
-    if (!this._offscreenFocusedItem || this._focusedVirtualIndex < 0) {
-      return;
-    }
-    // Assign models to the focused index.
-    this._assignModels();
-    // Get the new physical index for the focused index.
-    var fpidx = (this._focusedPhysicalIndex = this._getPhysicalIndex(this._focusedVirtualIndex));
-
-    var onScreenItem = this._physicalItems[fpidx];
-    if (!onScreenItem) {
-      return;
-    }
-    var onScreenInstance = this.modelForElement(onScreenItem);
-    var offScreenInstance = this.modelForElement(this._offscreenFocusedItem);
-    // Restores the physical item only when it has the same model
-    // as the offscreen one. Use key for comparison since users can set
-    // a new item via set('items.idx').
-    if (onScreenInstance[this.as] === offScreenInstance[this.as]) {
-      // Flip the focus backfill.
-      this._focusBackfillItem = onScreenItem;
-      onScreenInstance.tabIndex = -1;
-      // Restore the focused physical item.
-      this._physicalItems[fpidx] = this._offscreenFocusedItem;
-      // Hide the physical item that backfills.
-      this.translate3d(0, HIDDEN_Y, 0, this._focusBackfillItem);
-    } else {
-      this._removeFocusedItem();
-      this._focusBackfillItem = null;
-    }
-    this._offscreenFocusedItem = null;
-  },
-
-  _didFocus: function (e) {
-    var targetModel = this.modelForElement(e.target);
-    var focusedModel = this.modelForElement(this._focusedItem);
-    var hasOffscreenFocusedItem = this._offscreenFocusedItem !== null;
-    var fidx = this._focusedVirtualIndex;
-    if (!targetModel) {
-      return;
-    }
-    if (focusedModel === targetModel) {
-      // If the user focused the same item, then bring it into view if it's not
-      // visible.
-      if (!this._isIndexVisible(fidx)) {
-        this.scrollToIndex(fidx);
-      }
-    } else {
-      this._restoreFocusedItem();
-      // Restore tabIndex for the currently focused item.
-      if (focusedModel) {
-        focusedModel.tabIndex = -1;
-      }
-      // Set the tabIndex for the next focused item.
-      targetModel.tabIndex = 0;
-      fidx = targetModel[this.indexAs];
-      this._focusedVirtualIndex = fidx;
-      this._focusedPhysicalIndex = this._getPhysicalIndex(fidx);
-      this._focusedItem = this._physicalItems[this._focusedPhysicalIndex];
-      if (hasOffscreenFocusedItem && !this._offscreenFocusedItem) {
-        this._update();
-      }
-    }
   },
 
   _clamp: function (v, min, max) {
