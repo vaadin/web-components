@@ -254,3 +254,7 @@ export const fire = (type, detail, options) => {
   node.dispatchEvent(event);
   return event;
 };
+
+export const nextResize = (target) => {
+  return new Promise((resolve) => new ResizeObserver(() => setTimeout(resolve)).observe(target));
+};

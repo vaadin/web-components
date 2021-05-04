@@ -485,6 +485,8 @@ class GridElement extends ElementMixin(
       scrollTarget: this.$.table,
       reorderElements: true
     });
+
+    new ResizeObserver(() => setTimeout(() => this.__updateFooterPositioning())).observe(this.$.footer);
   }
 
   /**
@@ -854,18 +856,6 @@ class GridElement extends ElementMixin(
       this.$.items.style.paddingBottom = 0;
       if (!this.heightByRows) {
         this.$.items.style.paddingBottom = `${this.$.footer.offsetHeight}px`;
-      }
-    }
-
-    if (this._ios) {
-      const isOldIOS = !window.CSS.supports('position', 'sticky');
-      if (isOldIOS) {
-        // Due to a rendering bug, the sticky header may disappear on an older iOS (10-12) Safari
-        // if the grid is used inside of a flex box. This is a workaround for the issue.
-        this.$.table.style.height = '';
-        this.$.table.style.minHeight = '100%';
-        this.$.table.style.maxHeight = '100%';
-        setTimeout(() => (this.$.table.style.height = `${this.$.scroller.offsetHeight}px`));
       }
     }
   }

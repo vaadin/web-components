@@ -8,7 +8,8 @@ import {
   getRows,
   getRowCells,
   infiniteDataProvider,
-  scrollToEnd
+  scrollToEnd,
+  nextResize
 } from './helpers.js';
 import '../vaadin-grid.js';
 import '../vaadin-grid-column-group.js';
@@ -351,7 +352,7 @@ describe('column groups', () => {
       //  |           |         | group-2            | group-3             |          |
       //  | group-0             | group-1                                  |          |
       init('nested');
-      await nextFrame();
+      await nextResize(grid);
     });
 
     it('should have right content in header', () => {

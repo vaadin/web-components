@@ -20,7 +20,8 @@ import {
   getRowCells,
   infiniteDataProvider,
   scrollToEnd,
-  getLastVisibleItem
+  getLastVisibleItem,
+  nextResize
 } from './helpers.js';
 import '../vaadin-grid.js';
 import '../vaadin-grid-column-group.js';
@@ -281,7 +282,7 @@ describe('keyboard navigation', () => {
     grid.remove();
   });
 
-  beforeEach(() => {
+  beforeEach(async () => {
     // Reset side effects from tests
     grid.style.width = '';
     grid.style.border = '';
@@ -306,6 +307,8 @@ describe('keyboard navigation', () => {
 
     focusable.focus();
     flushGrid(grid);
+
+    await nextResize(grid);
   });
 
   describe('navigation mode', () => {
@@ -1127,7 +1130,7 @@ describe('keyboard navigation', () => {
         focusFirstFooterCell();
         down();
         right();
-        await aTimeout(0);
+        await nextFrame();
         left();
         expect(grid.$.table.scrollLeft).to.equal(0);
       });
