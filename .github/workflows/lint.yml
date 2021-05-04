@@ -1,15 +1,13 @@
-name: Chrome
+name: Lint
 
 on: pull_request
 
 jobs:
   tests:
-    name: Unit tests
+    name: Lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        with:
-          fetch-depth: "0"
 
       - name: Setup Node 14.x
         uses: actions/setup-node@v2
@@ -26,5 +24,11 @@ jobs:
       - name: Install Dependencies
         run: yarn --frozen-lockfile --no-progress --non-interactive
 
-      - name: Test
-        run: yarn test
+      - name: Lint JavaScript
+        run: yarn lint:js
+
+      - name: Lint CSS
+        run: yarn lint:css
+
+      - name: Lint TypeScript
+        run: yarn lint:types
