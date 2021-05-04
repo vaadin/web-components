@@ -1,6 +1,25 @@
 # Vaadin virtualizer
 
-Internal virtual scrolling engine
+Virtual scrolling engine meant for internal use in Vaadin components. Note that the package doesn't strictly follow semver and thus may introduce breaking changes even in minor version bumps.
+
+```html
+<div id="virtualized-list" style="height: 200px; overflow: auto">
+  <div id="scroll-container"></div>
+</div>
+
+<script type="module">
+  import { Virtualizer } from '@vaadin/vaadin-virtualizer';
+
+  const virtualizedList = new Virtualizer({
+    createElements: (count) => Array.from(Array(count)).map(() => document.createElement('div')),
+    updateElement: (el, index) => (el.textContent = index),
+    scrollTarget: document.querySelector('#virtualized-list'),
+    scrollContainer: document.querySelector('#scroll-container')
+  });
+
+  virtualizedList.size = 1000;
+</script>
+```
 
 ## Following the coding style
 
