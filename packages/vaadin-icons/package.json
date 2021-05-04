@@ -22,10 +22,20 @@
     "iconset.js",
     "vaadin-icons.js"
   ],
+  "scripts": {
+    "icons": "gulp icons"
+  },
   "dependencies": {
     "@polymer/iron-icon": "^3.0.0",
     "@polymer/iron-iconset-svg": "^3.0.0",
     "@polymer/polymer": "^3.0.0"
+  },
+  "devDependencies": {
+    "cheerio": "^1.0.0-rc.6",
+    "gulp": "^4.0.0",
+    "gulp-cli": "^2.0.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-modify": "^0.1.1"
   },
   "publishConfig": {
     "access": "public"
