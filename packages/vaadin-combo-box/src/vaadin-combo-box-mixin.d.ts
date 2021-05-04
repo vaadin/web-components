@@ -99,9 +99,6 @@ interface ComboBoxMixin {
    *
    * The item label is also used for matching items when processing user
    * input, i.e., for filtering and selecting items.
-   *
-   * When using item templates, the property is still needed because it is used
-   * for filtering, and for displaying the selected item value in the input box.
    * @attr {string} item-label-path
    */
   itemLabelPath: string;
@@ -189,8 +186,6 @@ interface ComboBoxMixin {
    * You can override the `checkValidity` method for custom validations.
    */
   checkValidity(): boolean | undefined;
-
-  _ensureTemplatized(): void;
 
   _preventInputBlur(): void;
 

@@ -16,7 +16,7 @@ import { DirMixin } from '@vaadin/vaadin-element-mixin/vaadin-dir-mixin.js';
  *
  * Part name | Description
  * ---|---
- * `content` | The element that wraps the item label or template content
+ * `content` | The element that wraps the item content
  *
  * The following state attributes are exposed for styling:
  *
@@ -87,11 +87,6 @@ class ComboBoxItemElement extends ThemableMixin(DirMixin(PolymerElement)) {
       },
 
       /**
-       * The template instance corresponding to the item
-       */
-      _itemTemplateInstance: Object,
-
-      /**
        * Custom function for rendering the content of the `<vaadin-combo-box-item>` propagated from the combo box element.
        */
       renderer: Function,
@@ -104,31 +99,16 @@ class ComboBoxItemElement extends ThemableMixin(DirMixin(PolymerElement)) {
   }
 
   static get observers() {
-    return [
-      '_rendererOrItemChanged(renderer, index, item.*)',
-      '_updateLabel(label, _itemTemplateInstance)',
-      '_updateTemplateInstanceVariable("index", index, _itemTemplateInstance)',
-      '_updateTemplateInstanceVariable("item", item, _itemTemplateInstance)',
-      '_updateTemplateInstanceVariable("selected", selected, _itemTemplateInstance)',
-      '_updateTemplateInstanceVariable("focused", focused, _itemTemplateInstance)'
-    ];
+    return ['_rendererOrItemChanged(renderer, index, item.*, selected, focused)', '_updateLabel(label, renderer)'];
   }
 
   connectedCallback() {
     super.connectedCallback();
-    if (!this._itemTemplateInstance) {
-      // 2.0 has __dataHost. Might want to consider assigning combobox reference directly to item.
-      const overlay = this.getRootNode().host.getRootNode().host;
-      const dropdown = overlay.__dataHost;
-      const comboBoxOverlay = dropdown.getRootNode().host;
-      this._comboBox = comboBoxOverlay.getRootNode().host;
-      this._comboBox._ensureTemplatized();
-      if (this._comboBox._TemplateClass) {
-        this._itemTemplateInstance = new this._comboBox._TemplateClass({});
-        this.$.content.textContent = '';
-        this.$.content.appendChild(this._itemTemplateInstance.root);
-      }
-    }
+
+    const overlay = this.getRootNode().host.getRootNode().host;
+    const dropdown = overlay.__dataHost;
+    const comboBoxOverlay = dropdown.getRootNode().host;
+    this._comboBox = comboBoxOverlay.getRootNode().host;
 
     const hostDir = this._comboBox.getAttribute('dir');
     if (hostDir) {
@@ -143,13 +123,15 @@ class ComboBoxItemElement extends ThemableMixin(DirMixin(PolymerElement)) {
 
     const model = {
       index: this.index,
-      item: this.item
+      item: this.item,
+      focused: this.focused,
+      selected: this.selected
     };
 
     this.renderer(this.$.content, this._comboBox, model);
   }
 
-  _rendererOrItemChanged(renderer, index, item) {
+  _rendererOrItemChanged(renderer, index, item, _selected, _focused) {
     if (item === undefined || index === undefined) {
       return;
     }
@@ -164,18 +146,12 @@ class ComboBoxItemElement extends ThemableMixin(DirMixin(PolymerElement)) {
     }
   }
 
-  _updateLabel(label, _itemTemplateInstance) {
-    if (_itemTemplateInstance === undefined && this.$.content && !this.renderer) {
-      // Only set label to textContent no template
+  _updateLabel(label, renderer) {
+    if (renderer) return;
+
+    if (this.$.content) {
       this.$.content.textContent = label;
     }
-  }
-
-  _updateTemplateInstanceVariable(variable, value, _itemTemplateInstance) {
-    if (variable === undefined || value === undefined || _itemTemplateInstance === undefined) {
-      return;
-    }
-    _itemTemplateInstance[variable] = value;
   }
 }
 

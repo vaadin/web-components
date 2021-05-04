@@ -3,6 +3,7 @@ import sinon from 'sinon';
 import { fixtureSync, keyDownOn } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { flush } from '@polymer/polymer/lib/utils/flush.js';
+import '@vaadin/vaadin-template-renderer';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
 

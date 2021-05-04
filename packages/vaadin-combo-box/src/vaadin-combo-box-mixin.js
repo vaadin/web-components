@@ -6,9 +6,7 @@
 import { timeOut } from '@polymer/polymer/lib/utils/async.js';
 import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
 import { flush } from '@polymer/polymer/lib/utils/flush.js';
-import { templatize } from '@polymer/polymer/lib/utils/templatize.js';
 import { IronA11yAnnouncer } from '@polymer/iron-a11y-announcer/iron-a11y-announcer.js';
-import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { ComboBoxPlaceholder } from './vaadin-combo-box-placeholder.js';
 
 /**
@@ -170,9 +168,6 @@ export const ComboBoxMixin = (subclass) =>
          *
          * The item label is also used for matching items when processing user
          * input, i.e., for filtering and selecting items.
-         *
-         * When using item templates, the property is still needed because it is used
-         * for filtering, and for displaying the selected item value in the input box.
          * @attr {string} item-label-path
          * @type {string}
          */
@@ -243,10 +238,7 @@ export const ComboBoxMixin = (subclass) =>
         _closeOnBlurIsPrevented: Boolean,
 
         /** @private */
-        _previousDocumentPointerEvents: String,
-
-        /** @private */
-        _itemTemplate: Object
+        _previousDocumentPointerEvents: String
       };
     }
 
@@ -255,7 +247,6 @@ export const ComboBoxMixin = (subclass) =>
         '_filterChanged(filter, itemValuePath, itemLabelPath)',
         '_itemsOrPathsChanged(items.*, itemValuePath, itemLabelPath)',
         '_filteredItemsChanged(filteredItems.*, itemValuePath, itemLabelPath)',
-        '_templateOrRendererChanged(_itemTemplate, renderer)',
         '_loadingChanged(loading)',
         '_selectedItemChanged(selectedItem, itemLabelPath)',
         '_toggleElementChanged(_toggleElement)'
@@ -295,10 +286,6 @@ export const ComboBoxMixin = (subclass) =>
 
       this.addEventListener('touchend', this._boundOnTouchend);
 
-      this._observer = new FlattenedNodesObserver(this, (info) => {
-        this._setTemplateFromNodes(info.addedNodes);
-      });
-
       const bringToFrontListener = () => {
         const overlay = this.$.overlay;
         const dropdown = overlay && overlay.$.dropdown;
@@ -321,32 +308,6 @@ export const ComboBoxMixin = (subclass) =>
       if (this.$.overlay._selector) {
         this.$.overlay._selector.querySelectorAll('vaadin-combo-box-item').forEach((item) => item._render());
       }
-    }
-
-    /** @private */
-    _setTemplateFromNodes(nodes) {
-      this._itemTemplate =
-        nodes.filter((node) => node.localName && node.localName === 'template')[0] || this._itemTemplate;
-    }
-
-    /** @private */
-    _removeNewRendererOrTemplate(template, oldTemplate, renderer, oldRenderer) {
-      if (template !== oldTemplate) {
-        this._itemTemplate = undefined;
-      } else if (renderer !== oldRenderer) {
-        this.renderer = undefined;
-      }
-    }
-
-    /** @private */
-    _templateOrRendererChanged(template, renderer) {
-      if (template && renderer) {
-        this._removeNewRendererOrTemplate(template, this._oldTemplate, renderer, this._oldRenderer);
-        throw new Error('You should only use either a renderer or a template for combo box items');
-      }
-
-      this._oldTemplate = template;
-      this._oldRenderer = renderer;
     }
 
     /**
@@ -1077,42 +1038,6 @@ export const ComboBoxMixin = (subclass) =>
       if (this.inputElement.validate) {
         return this.inputElement.validate();
       }
-    }
-
-    /** @private */
-    get _instanceProps() {
-      return {
-        item: true,
-        index: true,
-        selected: true,
-        focused: true
-      };
-    }
-
-    /** @protected */
-    _ensureTemplatized() {
-      if (!this._TemplateClass) {
-        const tpl = this._itemTemplate || this._getRootTemplate();
-        if (tpl) {
-          this._TemplateClass = templatize(tpl, this, {
-            instanceProps: this._instanceProps,
-            forwardHostProp: function (prop, value) {
-              const items = this.$.overlay._selector.querySelectorAll('vaadin-combo-box-item');
-              Array.prototype.forEach.call(items, (item) => {
-                if (item._itemTemplateInstance) {
-                  item._itemTemplateInstance.set(prop, value);
-                  item._itemTemplateInstance.notifyPath(prop, value, true);
-                }
-              });
-            }
-          });
-        }
-      }
-    }
-
-    /** @private */
-    _getRootTemplate() {
-      return Array.prototype.filter.call(this.children, (elem) => elem.tagName === 'TEMPLATE')[0];
     }
 
     /** @protected */

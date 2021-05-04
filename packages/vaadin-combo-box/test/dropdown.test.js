@@ -6,11 +6,7 @@ describe('dropdown', () => {
   let dropdown, overlay;
 
   beforeEach(() => {
-    dropdown = fixtureSync(`
-      <vaadin-combo-box-dropdown>
-        <template></template>
-      </vaadin-combo-box-dropdown>
-    `);
+    dropdown = fixtureSync(`<vaadin-combo-box-dropdown></vaadin-combo-box-dropdown>`);
     overlay = dropdown.$.overlay;
   });
 
