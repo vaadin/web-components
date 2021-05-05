@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, keyboardEventFor } from 'vaadin/testing-helpers';
+import { aTimeout, fixtureSync, keyboardEventFor } from '@vaadin/testing-helpers';
 import '../vaadin-cookie-consent.js';
 
 describe('vaadin-cookie-consent', () => {
