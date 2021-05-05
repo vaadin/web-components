@@ -234,7 +234,7 @@ yarn update:lumo --group vaadin-upload
 
 ### Generating icons
 
-Re-generate SVG icons for packages that have them:
+Re-generate SVG icon sets and icon fonts from individual SVG files for the packages that have them (e.g. `vaadin-icons`):
 
 ```sh
 yarn icons
