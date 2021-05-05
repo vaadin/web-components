@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync, keyDownOn, nextRender } from '@vaadin/testing-helpers';
+import { enterKeyDown, escKeyDown, fixtureSync, nextRender, spaceKeyDown, tabKeyDown } from '@vaadin/testing-helpers';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { flush } from '@polymer/polymer/lib/utils/flush.js';
 import '../vaadin-avatar-group.js';
@@ -301,12 +301,12 @@ describe('avatar-group', () => {
     });
 
     it('should open overlay on overflow avatar Enter', () => {
-      keyDownOn(overflow, 13, [], 'Enter');
+      enterKeyDown(overflow);
       expect(overlay.opened).to.be.true;
     });
 
     it('should open overlay on overflow avatar Space', () => {
-      keyDownOn(overflow, 32, [], ' ');
+      spaceKeyDown(overflow);
       expect(overlay.opened).to.be.true;
     });
 
@@ -358,7 +358,7 @@ describe('avatar-group', () => {
     it('should close overlay on list-box Escape press', (done) => {
       overlay.addEventListener('vaadin-overlay-open', () => {
         const list = overlay.content.querySelector('vaadin-avatar-group-list-box');
-        keyDownOn(list, 27, [], 'Escape');
+        escKeyDown(list);
 
         afterNextRender(overlay, () => {
           expect(overlay.opened).to.be.false;
@@ -371,7 +371,7 @@ describe('avatar-group', () => {
     it('should close overlay on list-box Tab press', (done) => {
       overlay.addEventListener('vaadin-overlay-open', () => {
         const list = overlay.content.querySelector('vaadin-avatar-group-list-box');
-        keyDownOn(list, 9, [], 'Tab');
+        tabKeyDown(list);
 
         afterNextRender(overlay, () => {
           expect(overlay.opened).to.be.false;
@@ -411,7 +411,7 @@ describe('avatar-group', () => {
     it('should not restore focus-ring attribute on close if not set', (done) => {
       overlay.addEventListener('vaadin-overlay-open', () => {
         const list = overlay.content.querySelector('vaadin-avatar-group-list-box');
-        keyDownOn(list, 27, [], 'Escape');
+        escKeyDown(list);
 
         afterNextRender(overlay, () => {
           expect(overflow.hasAttribute('focus-ring')).to.be.false;
