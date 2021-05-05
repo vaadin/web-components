@@ -5,10 +5,14 @@ import '@vaadin/vaadin-template-renderer';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
 
-describe('form field', () => {
+describe('item renderer', () => {
   let comboBox;
 
   let items;
+
+  function getFirstItem() {
+    return comboBox.$.overlay._selector.querySelector('vaadin-combo-box-item');
+  }
 
   beforeEach(() => {
     comboBox = fixtureSync(`
@@ -32,8 +36,7 @@ describe('form field', () => {
     };
     comboBox.opened = true;
 
-    const item = comboBox.$.overlay._selector.querySelector('vaadin-combo-box-item');
-    expect(item.$.content.textContent.trim()).to.equal('foo 0');
+    expect(getFirstItem().$.content.textContent.trim()).to.equal('foo 0');
   });
 
   it('renderer should receive root, comboBox and model', (done) => {
@@ -65,5 +68,18 @@ describe('form field', () => {
 
   it('should not throw if render() called before opening', () => {
     expect(() => comboBox.render()).not.to.throw(Error);
+  });
+
+  it('should render the item label when removing the renderer', () => {
+    comboBox.renderer = (root) => {
+      root.textContent = 'bar';
+    };
+    comboBox.opened = true;
+
+    expect(getFirstItem().$.content.textContent).to.equal('bar');
+
+    comboBox.renderer = null;
+
+    expect(getFirstItem().$.content.textContent).to.equal('foo');
   });
 });
