@@ -29,6 +29,42 @@ describe('item renderer', () => {
     comboBox.opened = false;
   });
 
+  describe('arguments', () => {
+    beforeEach(() => {
+      comboBox.renderer = sinon.spy();
+      comboBox.opened = true;
+    });
+
+    it(`should pass the 'root', 'owner', 'model' arguments to the renderer`, () => {
+      const [root, owner, model] = comboBox.renderer.args[0];
+
+      expect(root.getAttribute('part')).to.equal('content');
+      expect(owner).to.eql(comboBox);
+      expect(model).to.deep.equal({
+        item: 'foo',
+        index: 0,
+        focused: false,
+        selected: false
+      });
+    });
+
+    it(`should change the 'model.selected' property`, () => {
+      comboBox.value = 'foo';
+
+      const model = comboBox.renderer.lastCall.args[2];
+
+      expect(model.selected).to.be.true;
+    });
+
+    it(`should change the 'model.focused' property`, () => {
+      comboBox._focusedIndex = 0;
+
+      const model = comboBox.renderer.lastCall.args[2];
+
+      expect(model.focused).to.be.true;
+    });
+  });
+
   it('should use renderer when it is defined', () => {
     comboBox.renderer = (root, comboBox, model) => {
       const textNode = document.createTextNode(`${model.item} ${model.index}`);
@@ -37,23 +73,6 @@ describe('item renderer', () => {
     comboBox.opened = true;
 
     expect(getFirstItem().$.content.textContent.trim()).to.equal('foo 0');
-  });
-
-  it('renderer should receive root, comboBox and model', (done) => {
-    let isDone = false;
-
-    comboBox.renderer = (root, comboBox, model) => {
-      expect(root.getAttribute('part')).to.equal('content');
-      expect(items.indexOf(model.item)).to.not.equal(-1);
-      expect(comboBox).to.eql(comboBox);
-
-      if (!isDone) {
-        isDone = true;
-        done();
-      }
-    };
-
-    comboBox.opened = true;
   });
 
   it('should be possible to manually invoke renderer', () => {
