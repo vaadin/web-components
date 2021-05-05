@@ -313,7 +313,7 @@ export const ColumnBaseMixin = (superClass) =>
     /** @private */
     __setColumnTemplateOrRenderer(template, renderer, cells) {
       // no renderer or template needed in a hidden column
-      if (this.hidden) {
+      if (this.hidden || !this._grid) {
         return;
       }
 
@@ -487,7 +487,7 @@ export const ColumnBaseMixin = (superClass) =>
         }
       }
 
-      if (headerCell) {
+      if (headerCell && this._grid) {
         this._grid.__updateHeaderFooterRowVisibility(headerCell.parentElement);
       }
     }

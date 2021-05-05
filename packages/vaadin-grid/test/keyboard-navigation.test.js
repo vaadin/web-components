@@ -1102,10 +1102,14 @@ describe('keyboard navigation', () => {
         expect(grid.$.table.scrollLeft).to.equal(0);
       });
 
-      it('should scroll cells visible with end', () => {
+      it('should scroll cells visible with end', async () => {
+        await nextFrame();
+
         focusItem(0);
+        await nextFrame();
 
         end();
+        await nextFrame();
 
         flushGrid(grid);
 
