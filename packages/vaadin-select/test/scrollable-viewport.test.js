@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, enterKeyDown } from '@vaadin/testing-helpers';
-import { html, render } from 'lit-html';
+import { html, render } from 'lit';
 import '@vaadin/vaadin-list-box/vaadin-list-box.js';
 import '@vaadin/vaadin-item/vaadin-item.js';
 import '../vaadin-select.js';
