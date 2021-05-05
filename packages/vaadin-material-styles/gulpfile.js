@@ -24,8 +24,8 @@ function sortIconFilesNormalized(file1, file2) {
 }
 
 gulp.task('icons', async function () {
-  var folder = 'icons/svg/';
-  var glyphs;
+  const folder = 'icons/svg/';
+  let glyphs;
 
   // Optimize the source files
   gulp
@@ -79,7 +79,7 @@ gulp.task('icons', async function () {
         .on('finish', function () {
           // Generate base64 version of the font
           const materialIconsWoff = fs.readFileSync('material-icons.woff');
-          // Write the output to font-icons.html
+          // Write the output to font-icons.js
           let output = `/**
  * @license
  * Copyright (c) 2021 Vaadin Ltd.
@@ -101,8 +101,8 @@ $_documentContainer.innerHTML = \`
     html {
 `;
           glyphs.forEach((g) => {
-            var name = g.name.replace(/\s/g, '-').toLowerCase();
-            var unicode = '\\\\' + g.unicode[0].charCodeAt(0).toString(16);
+            const name = g.name.replace(/\s/g, '-').toLowerCase();
+            const unicode = '\\\\' + g.unicode[0].charCodeAt(0).toString(16);
             output += `      --material-icons-${name}: "${unicode}";\n`;
           });
           output += `    }

@@ -25,8 +25,8 @@ function sortIconFilesNormalized(file1, file2) {
 }
 
 gulp.task('icons', async function () {
-  var folder = 'icons/svg/';
-  var glyphs;
+  const folder = 'icons/svg/';
+  let glyphs;
 
   // Optimize the source files
   gulp
@@ -143,7 +143,7 @@ document.head.appendChild($_documentContainer.content);
           // Generate base64 version of the font
           const lumoIconsWoff = fs.readFileSync('lumo-icons.woff');
 
-          // Write the output to font-icons.html
+          // Write the output to font-icons.js
           let output = `/**
  * @license
  * Copyright (c) 2021 Vaadin Ltd.
@@ -165,8 +165,8 @@ $_documentContainer.innerHTML = \`
     html {
 `;
           glyphs.forEach((g) => {
-            var name = g.name.replace(/\s/g, '-').toLowerCase();
-            var unicode = '\\\\' + g.unicode[0].charCodeAt(0).toString(16);
+            const name = g.name.replace(/\s/g, '-').toLowerCase();
+            const unicode = '\\\\' + g.unicode[0].charCodeAt(0).toString(16);
             output += `      --lumo-icons-${name}: "${unicode}";\n`;
           });
           output += `    }

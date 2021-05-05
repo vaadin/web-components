@@ -12,8 +12,8 @@ gulp.task('icons', function () {
     .pipe(
       modify({
         fileModifier: function (file, contents) {
-          var id = file.path.replace(/.*\/(.*).svg/, '$1');
-          var svg = cheerio.load(contents, { xmlMode: true })('svg');
+          const id = file.path.replace(/.*\/(.*).svg/, '$1');
+          const svg = cheerio.load(contents, { xmlMode: true })('svg');
           // Remove fill attributes.
           svg.children('[fill]').removeAttr('fill');
           // Add closing tags instead of self-closing.
@@ -28,8 +28,7 @@ gulp.task('icons', function () {
       modify({
         fileModifier: function (file, contents) {
           // Enclose all icons in an iron-iconset-svg
-          return (
-            `/**
+          return `/**
  * @license
  * Copyright (c) 2015 - 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
@@ -39,15 +38,10 @@ import '@polymer/iron-iconset-svg/iron-iconset-svg.js';
 const $_documentContainer = document.createElement('template');
 
 $_documentContainer.innerHTML = \`<iron-iconset-svg name="vaadin" size="16">
-<svg><defs>
-` +
-            contents +
-            `
-</defs></svg>
+<svg><defs>\n${contents}\n</defs></svg>
 </iron-iconset-svg>\`;
 
-document.head.appendChild($_documentContainer.content);\n`
-          );
+document.head.appendChild($_documentContainer.content);\n`;
         }
       })
     )
