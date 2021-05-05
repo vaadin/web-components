@@ -1,6 +1,6 @@
-import { CSSResult } from 'lit-element';
+import { CSSResult } from 'lit';
 
-export { css, unsafeCSS } from 'lit-element';
+export { css, unsafeCSS } from 'lit';
 
 /**
  * Registers CSS styles for a component type. Make sure to register the styles before

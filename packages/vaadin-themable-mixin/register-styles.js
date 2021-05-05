@@ -1,6 +1,6 @@
 import '@polymer/polymer/lib/elements/dom-module.js';
-import { CSSResult } from 'lit-element';
-export { css, unsafeCSS } from 'lit-element';
+import { CSSResult } from 'lit';
+export { css, unsafeCSS } from 'lit';
 
 let moduleIdIndex = 0;
 // Map of <CSSResult, Polymer.DomModule> pairs.
