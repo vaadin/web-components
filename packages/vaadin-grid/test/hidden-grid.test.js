@@ -1,8 +1,7 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import { flushGrid, getBodyCellContent, infiniteDataProvider } from './helpers.js';
 import '../vaadin-grid.js';
-import { nextFrame } from '@open-wc/testing-helpers/index-no-side-effects';
 
 describe('hidden grid', () => {
   let grid;
