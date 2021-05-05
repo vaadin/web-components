@@ -317,14 +317,14 @@ describe('vaadin-confirm-dialog', () => {
     });
 
     it('should close but not cancel dialog by default', () => {
-      esc(document.body, 27);
+      esc(document.body);
       expect(spy.called).to.be.true;
       expect(confirm.opened).to.be.false;
     });
 
     it('should not close and not cancel dialog with no-close-on-esc', () => {
       confirm.noCloseOnEsc = true;
-      esc(document.body, 27);
+      esc(document.body);
       expect(spy.called).to.be.false;
       expect(confirm.opened).to.be.true;
     });

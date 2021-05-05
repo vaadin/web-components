@@ -81,7 +81,7 @@ describe('vaadin-dialog', () => {
 
       it('should not close itself on ESC press when no-close-on-esc is true', () => {
         dialog.noCloseOnEsc = true;
-        esc(document.body, 27);
+        esc(document.body);
         expect(dialog.opened).to.eql(true);
       });
     });
