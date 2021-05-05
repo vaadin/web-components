@@ -102,11 +102,11 @@ export class IronListAdapter {
 
   __getIndexScrollOffset(index) {
     const element = this.__getVisibleElements().find((el) => el.__virtualIndex === index);
-    return element ? this.scrollTarget.getBoundingClientRect().top - element.getBoundingClientRect().top : 0;
+    return element ? this.scrollTarget.getBoundingClientRect().top - element.getBoundingClientRect().top : undefined;
   }
 
   set size(size) {
-    const fvi = this.firstVisibleIndex + this._vidxOffset;
+    let fvi = this.firstVisibleIndex + this._vidxOffset;
 
     const fviOffsetBefore = this.__getIndexScrollOffset(fvi);
 
@@ -115,10 +115,13 @@ export class IronListAdapter {
       path: 'items'
     });
 
+    fvi = Math.min(fvi, size - 1);
     this.scrollToIndex(fvi);
 
     const fviOffsetAfter = this.__getIndexScrollOffset(fvi);
-    this._scrollTop += fviOffsetBefore - fviOffsetAfter;
+    if (fviOffsetBefore !== undefined && fviOffsetAfter !== undefined) {
+      this._scrollTop += fviOffsetBefore - fviOffsetAfter;
+    }
 
     if (!this.elementsContainer.children.length) {
       requestAnimationFrame(() => this._resizeHandler());

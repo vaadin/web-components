@@ -13,7 +13,8 @@ import {
   getRowCells,
   infiniteDataProvider,
   scrollToEnd,
-  getLastVisibleItem
+  getLastVisibleItem,
+  getPhysicalAverage
 } from './helpers.js';
 import '../vaadin-grid.js';
 
@@ -787,7 +788,9 @@ describe('wrapped grid', () => {
 
       // Test actual last visible item
       const rect = grid.getBoundingClientRect();
-      const lastVisibleItem = grid.getRootNode().elementFromPoint(rect.left + 2, rect.bottom - 2);
+      const lastRowCenterX = rect.left + grid.offsetWidth / 2;
+      const lastRowCenterY = rect.bottom - getPhysicalAverage(grid) / 2;
+      const lastVisibleItem = grid.getRootNode().elementFromPoint(lastRowCenterX, lastRowCenterY);
       expect(lastVisibleItem.innerText.trim()).to.equal('foo' + (grid.size - 1));
     });
   });
