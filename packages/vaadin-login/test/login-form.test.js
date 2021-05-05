@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { click, enter, fixtureSync } from '@vaadin/testing-helpers';
+import { enter, fixtureSync, tap } from '@vaadin/testing-helpers';
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import { fillUsernameAndPassword } from './helpers.js';
 import '../vaadin-login-form.js';
@@ -186,21 +186,21 @@ describe('login form', () => {
     enter(vaadinLoginPassword);
     expect(submitStub.called).to.be.false;
 
-    click(submit);
+    tap(submit);
     expect(submitStub.called).to.be.false;
   });
 
   it('should not disable button on button click if form is invalid', () => {
     const submit = login.querySelector('vaadin-button[part="vaadin-login-submit"]');
     expect(submit.disabled).to.not.be.true;
-    click(submit);
+    tap(submit);
     expect(submit.disabled).to.not.be.true;
   });
 
   it('should disable button on button click if form is valid', () => {
     const submit = login.querySelector('vaadin-button[part="vaadin-login-submit"]');
     fillUsernameAndPassword(login);
-    click(submit);
+    tap(submit);
     expect(submit.disabled).to.be.true;
   });
 

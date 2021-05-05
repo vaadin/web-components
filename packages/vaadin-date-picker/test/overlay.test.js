@@ -1,9 +1,9 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync, listenOnce } from '@vaadin/testing-helpers';
+import { click, fixtureSync, listenOnce, tap } from '@vaadin/testing-helpers';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import '../src/vaadin-date-picker-overlay-content.js';
-import { click, getDefaultI18n, getFirstVisibleItem, monthsEqual } from './common.js';
+import { getDefaultI18n, getFirstVisibleItem, monthsEqual } from './common.js';
 
 function waitUntilScrolledTo(overlay, date, callback) {
   if (overlay.$.monthScroller.position) {
@@ -120,7 +120,7 @@ describe('vaadin-date-picker-overlay', () => {
       const spy = sinon.spy(overlay, '_scrollToPosition');
 
       listenOnce(overlay.$.monthScroller.$.scroller, 'scroll', () => {
-        click(overlay.$.yearScroller);
+        tap(overlay.$.yearScroller);
         expect(spy.called).to.be.false;
         done();
       });
@@ -133,7 +133,7 @@ describe('vaadin-date-picker-overlay', () => {
 
       listenOnce(overlay.$.monthScroller.$.scroller, 'scroll', () => {
         setTimeout(() => {
-          click(overlay.$.yearScroller);
+          tap(overlay.$.yearScroller);
           expect(spy.called).to.be.true;
           done();
         }, 350);
@@ -147,7 +147,7 @@ describe('vaadin-date-picker-overlay', () => {
       overlay._onYearScrollTouchStart();
 
       setTimeout(() => {
-        click(overlay.$.yearScroller);
+        tap(overlay.$.yearScroller);
         expect(spy.called).to.be.false;
         done();
       }, 350);

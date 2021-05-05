@@ -1,9 +1,9 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { aTimeout, fixtureSync, isIOS, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import { aTimeout, click, fixtureSync, isIOS, nextFrame, oneEvent, tap } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
 import '../vaadin-date-picker.js';
-import { click, close, getOverlayContent, monthsEqual, open, tap } from './common.js';
+import { close, getOverlayContent, monthsEqual, open } from './common.js';
 
 describe('basic features', () => {
   let datepicker, toggleButton;

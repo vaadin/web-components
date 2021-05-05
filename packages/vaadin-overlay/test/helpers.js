@@ -1,4 +1,4 @@
-import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
+import { nextRender } from '@vaadin/testing-helpers';
 
 export function open(overlay) {
   return new Promise((resolve) => {
@@ -11,7 +11,7 @@ export function open(overlay) {
 
 export function close(overlay) {
   return new Promise((resolve) => {
-    afterNextRender(overlay, () => {
+    nextRender(overlay).then(() => {
       resolve();
     });
     overlay.opened = false;

@@ -14,7 +14,8 @@ import {
   keyDownOn,
   listenOnce,
   nextRender,
-  tab
+  tab,
+  tap
 } from '@vaadin/testing-helpers';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import './not-animated-styles.js';
@@ -494,7 +495,7 @@ import { close, getOverlayContent, open } from './common.js';
 
     it('should keep focused attribute in focusElement when the focus moves to the overlay', async () => {
       await open(datepicker);
-      click(overlayContent);
+      tap(overlayContent);
       datepicker.focusElement.blur();
       expect(datepicker.focusElement.hasAttribute('focused')).to.be.false;
 
@@ -505,7 +506,7 @@ import { close, getOverlayContent, open } from './common.js';
     it('should not reveal the focused date on tap', async () => {
       await open(datepicker);
       const spy = sinon.spy(overlayContent, 'revealDate');
-      click(overlayContent);
+      tap(overlayContent);
       overlayContent.focus();
       await aTimeout(1);
       expect(spy.called).to.be.false;

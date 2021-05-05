@@ -1,8 +1,8 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, listenOnce } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, listenOnce, tap } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
 import '../vaadin-date-picker-light.js';
-import { getOverlayContent, open, tap } from './common.js';
+import { getOverlayContent, open } from './common.js';
 
 describe('custom input', () => {
   let datepicker, overlayContent;
