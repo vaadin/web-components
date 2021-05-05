@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync } from '@open-wc/testing-helpers';
-import { flushGrid, getBodyCellContent, getHeaderCellContent, listenOnce, nextRender } from './helpers.js';
+import { aTimeout, fixtureSync, listenOnce, nextRender } from '@vaadin/testing-helpers';
+import { flushGrid, getBodyCellContent, getHeaderCellContent } from './helpers.js';
 import '../src/vaadin-crud-grid.js';
 
 describe('crud grid', () => {

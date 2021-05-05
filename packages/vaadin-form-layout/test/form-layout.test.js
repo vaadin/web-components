@@ -1,8 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync } from '@open-wc/testing-helpers';
+import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import '@polymer/polymer/lib/elements/dom-repeat.js';
 import '@vaadin/vaadin-text-field/vaadin-text-field.js';
 import '../vaadin-form-layout.js';
@@ -41,12 +40,6 @@ customElements.define(
     }
   }
 );
-
-function nextRender(el) {
-  return new Promise((resolve) => {
-    afterNextRender(el, resolve);
-  });
-}
 
 function getParsedWidth(el) {
   const width = el.style.getPropertyValue('width');

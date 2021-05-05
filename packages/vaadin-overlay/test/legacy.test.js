@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync } from '@open-wc/testing-helpers';
-import { escKeyDown, nextRender } from './helpers.js';
+import { escKeyDown, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { Polymer } from '@polymer/polymer/lib/legacy/polymer-fn.js';
 import { IronOverlayBehavior } from '@polymer/iron-overlay-behavior/iron-overlay-behavior.js';
 import { OverlayElement } from '../src/vaadin-overlay.js';

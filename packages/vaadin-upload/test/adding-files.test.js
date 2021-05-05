@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixture, html } from '@open-wc/testing-helpers';
+import { fixtureSync } from '@vaadin/testing-helpers';
 import { createFile, createFiles, touchDevice, xhrCreator } from './common.js';
 import '../vaadin-upload.js';
 
@@ -8,8 +8,8 @@ describe('file list', () => {
   let upload, file, files;
   const testFileSize = 512;
 
-  beforeEach(async () => {
-    upload = await fixture(html`<vaadin-upload></vaadin-upload>`);
+  beforeEach(() => {
+    upload = fixtureSync(`<vaadin-upload></vaadin-upload>`);
     upload.target = 'http://foo.com/bar';
     upload._createXhr = xhrCreator({ size: testFileSize, uploadTime: 200, stepTime: 50 });
     files = createFiles(2, testFileSize, 'application/x-octet-stream');

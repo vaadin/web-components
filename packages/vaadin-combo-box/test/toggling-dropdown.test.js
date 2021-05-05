@@ -1,10 +1,9 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { aTimeout, fixtureSync } from '@open-wc/testing-helpers';
+import { aTimeout, click, fixtureSync, focusout } from '@vaadin/testing-helpers';
 import { createEventSpy, fireDownUpClick, TOUCH_DEVICE } from './helpers.js';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
-import { click, focusout } from '@vaadin/testing-helpers';
 
 describe('toggling dropdown', () => {
   let comboBox;

@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync, html } from '@open-wc/testing-helpers';
+import { fixtureSync } from '@vaadin/testing-helpers';
 import { dispatchChange } from './common.js';
 import '../vaadin-custom-field.js';
 
@@ -8,7 +8,7 @@ describe('custom parser and formatter', () => {
   let customField;
 
   beforeEach(() => {
-    customField = fixtureSync(html`
+    customField = fixtureSync(`
       <vaadin-custom-field>
         <input type="text" />
         <input type="number" />

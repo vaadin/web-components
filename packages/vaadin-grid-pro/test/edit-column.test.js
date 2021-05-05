@@ -1,12 +1,10 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync } from '@open-wc/testing-helpers';
+import { enter, esc, fixtureSync, isIOS, tab } from '@vaadin/testing-helpers';
 import {
   createItems,
   dblclick,
   dragAndDropOver,
-  enter,
-  esc,
   flatMap,
   flushGrid,
   getCellEditor,
@@ -14,11 +12,7 @@ import {
   getNativeInput,
   getRowCells,
   getRows,
-  infiniteDataProvider,
-  isIOS,
-  shiftEnter,
-  shiftTab,
-  tab
+  infiniteDataProvider
 } from './helpers.js';
 import '../vaadin-grid-pro.js';
 import '../vaadin-grid-pro-edit-column.js';
@@ -66,7 +60,7 @@ describe('edit column', () => {
 
         const secondCell = getContainerCell(grid.$.items, 1, 0);
         const spy = sinon.spy(secondCell, 'focus');
-        shiftTab(input);
+        tab(input, ['shift']);
         expect(spy.calledOnce).to.be.true;
       });
 
@@ -88,7 +82,7 @@ describe('edit column', () => {
 
         const secondCell = getContainerCell(grid.$.items, 1, 1);
         const spy = sinon.spy(secondCell, 'focus');
-        shiftTab(input);
+        tab(input, ['shift']);
         expect(spy.calledOnce).to.be.true;
       });
 
@@ -121,7 +115,7 @@ describe('edit column', () => {
 
         const secondCell = getContainerCell(grid.$.items, 0, 0);
         const spy = sinon.spy(secondCell, 'focus');
-        shiftEnter(input);
+        enter(input, ['shift']);
         expect(spy.calledOnce).to.be.true;
       });
 
@@ -130,7 +124,7 @@ describe('edit column', () => {
         dblclick(firstCell._content);
         input = getCellEditor(firstCell);
 
-        shiftEnter(input);
+        enter(input, ['shift']);
         expect(getCellEditor(firstCell)).to.be.not.ok;
       });
     });
@@ -187,7 +181,7 @@ describe('edit column', () => {
         input = getCellEditor(firstCell);
 
         const secondCell = getContainerCell(grid.$.items, 1, 0);
-        shiftTab(input);
+        tab(input, ['shift']);
         input = getCellEditor(secondCell);
         expect(input).to.be.ok;
       });
@@ -209,7 +203,7 @@ describe('edit column', () => {
         input = getCellEditor(firstCell);
 
         const secondCell = getContainerCell(grid.$.items, 1, 1);
-        shiftTab(input);
+        tab(input, ['shift']);
         input = getCellEditor(secondCell);
         expect(input).to.be.ok;
       });
@@ -242,7 +236,7 @@ describe('edit column', () => {
         input = getCellEditor(firstCell);
 
         const secondCell = getContainerCell(grid.$.items, 0, 0);
-        shiftEnter(input);
+        enter(input, ['shift']);
         input = getCellEditor(secondCell);
         expect(input).to.be.ok;
       });
@@ -263,7 +257,7 @@ describe('edit column', () => {
         dblclick(firstCell._content);
         input = getCellEditor(firstCell);
 
-        shiftEnter(input);
+        enter(input, ['shift']);
         expect(getCellEditor(firstCell)).to.be.not.ok;
       });
     });
@@ -362,11 +356,11 @@ describe('edit column', () => {
     it('should focus previous cell available for editing in edit mode on Shift Tab', (done) => {
       dblclick(checkboxCell._content);
       input = getCellEditor(checkboxCell);
-      shiftTab(input);
+      tab(input, ['shift']);
 
       selectOverlay = getCellEditor(selectCell)._overlayElement;
       selectOverlay.addEventListener('vaadin-overlay-open', () => {
-        shiftTab(selectOverlay);
+        tab(selectOverlay, ['shift']);
         input = getCellEditor(textCell);
         expect(input).to.be.ok;
         done();
@@ -448,7 +442,7 @@ describe('edit column', () => {
 
       setTimeout(() => {
         input = getCellEditor(firstCell);
-        shiftTab(input);
+        tab(input, ['shift']);
 
         expect(grid.$.table.scrollLeft).to.closeTo(1, 1);
         done();

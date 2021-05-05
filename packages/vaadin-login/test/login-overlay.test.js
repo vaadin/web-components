@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { enter, esc, fixtureSync } from '@vaadin/testing-helpers';
-import { tap } from '@polymer/iron-test-helpers/mock-interactions.js';
+import { enter, esc, fixtureSync, tap } from '@vaadin/testing-helpers';
 import { fillUsernameAndPassword } from './helpers.js';
 import '../vaadin-login-overlay.js';
 

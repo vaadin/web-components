@@ -1,13 +1,16 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { aTimeout, fixtureSync, nextFrame } from '@open-wc/testing-helpers/index-no-side-effects.js';
 import {
+  aTimeout,
+  down as mouseDown,
+  fixtureSync,
   keyDownOn,
   keyUpOn,
-  down as mouseDown,
-  up as mouseUp,
-  keyboardEventFor
-} from '@polymer/iron-test-helpers/mock-interactions.js';
+  keyboardEventFor,
+  listenOnce,
+  nextFrame,
+  up as mouseUp
+} from '@vaadin/testing-helpers/dist/index-no-side-effects.js';
 import {
   flushGrid,
   getCell,
@@ -16,7 +19,6 @@ import {
   getRows,
   getRowCells,
   infiniteDataProvider,
-  listenOnce,
   scrollToEnd
 } from './helpers.js';
 import '../vaadin-grid.js';

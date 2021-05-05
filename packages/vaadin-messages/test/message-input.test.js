@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync } from '@open-wc/testing-helpers';
-import { keyDownOn } from '@polymer/iron-test-helpers/mock-interactions.js';
+import { enterKeyDown, fixtureSync } from '@vaadin/testing-helpers';
 import '../vaadin-message-input.js';
 
 describe('message-input', () => {
@@ -35,7 +34,7 @@ describe('message-input', () => {
       const spy = sinon.spy();
       messageInput.addEventListener('submit', spy);
       textArea.value = 'foo';
-      keyDownOn(textArea.inputElement, 13, [], 'Enter');
+      enterKeyDown(textArea.inputElement);
       expect(spy.calledOnce).to.be.true;
     });
 
@@ -43,7 +42,7 @@ describe('message-input', () => {
       const spy = sinon.spy();
       messageInput.addEventListener('submit', spy);
       textArea.value = 'foo';
-      keyDownOn(textArea.inputElement, 13, ['shift'], 'Enter');
+      enterKeyDown(textArea.inputElement, ['shift']);
       expect(spy.called).to.be.false;
     });
 

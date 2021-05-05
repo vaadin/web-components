@@ -1,6 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@open-wc/testing-helpers';
-import { pressAndReleaseKeyOn } from '@polymer/iron-test-helpers/mock-interactions.js';
+import { esc, fixtureSync } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import '@vaadin/vaadin-template-renderer';
 import '../vaadin-dialog.js';
@@ -76,13 +75,13 @@ describe('vaadin-dialog', () => {
 
     describe('no-close-on-esc', () => {
       it('should close itself on ESC press by default', () => {
-        pressAndReleaseKeyOn(document.body, 27, [], 'Escape');
+        esc(document.body);
         expect(dialog.opened).to.eql(false);
       });
 
       it('should not close itself on ESC press when no-close-on-esc is true', () => {
         dialog.noCloseOnEsc = true;
-        pressAndReleaseKeyOn(document.body, 27, [], 'Escape');
+        esc(document.body);
         expect(dialog.opened).to.eql(true);
       });
     });

@@ -1,10 +1,9 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync } from '@open-wc/testing-helpers';
-import { tap } from '@polymer/iron-test-helpers/mock-interactions.js';
+import { click, fixtureSync, listenOnce, tap } from '@vaadin/testing-helpers';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import '../src/vaadin-date-picker-overlay-content.js';
-import { click, getDefaultI18n, getFirstVisibleItem, listenForEvent, monthsEqual } from './common.js';
+import { getDefaultI18n, getFirstVisibleItem, monthsEqual } from './common.js';
 
 function waitUntilScrolledTo(overlay, date, callback) {
   if (overlay.$.monthScroller.position) {
@@ -103,13 +102,13 @@ describe('vaadin-date-picker-overlay', () => {
   describe('taps', () => {
     beforeEach((done) => {
       // Wait for ignoreTaps to settle after initial scroll event
-      listenForEvent(overlay.$.monthScroller.$.scroller, 'scroll', () => setTimeout(done, 350));
+      listenOnce(overlay.$.monthScroller.$.scroller, 'scroll', () => setTimeout(done, 350));
 
       overlay.$.monthScroller.$.scroller.scrollTop += 1;
     });
 
     it('should set ignoreTaps to calendar on scroll', (done) => {
-      listenForEvent(overlay.$.monthScroller.$.scroller, 'scroll', () => {
+      listenOnce(overlay.$.monthScroller.$.scroller, 'scroll', () => {
         expect(overlay.$.monthScroller.querySelector('vaadin-month-calendar').ignoreTaps).to.be.true;
         done();
       });
@@ -120,7 +119,7 @@ describe('vaadin-date-picker-overlay', () => {
     it('should not react to year tap after scroll', (done) => {
       const spy = sinon.spy(overlay, '_scrollToPosition');
 
-      listenForEvent(overlay.$.monthScroller.$.scroller, 'scroll', () => {
+      listenOnce(overlay.$.monthScroller.$.scroller, 'scroll', () => {
         tap(overlay.$.yearScroller);
         expect(spy.called).to.be.false;
         done();
@@ -132,7 +131,7 @@ describe('vaadin-date-picker-overlay', () => {
     it('should react to year tap after 300ms elapsed after scroll', (done) => {
       const spy = sinon.spy(overlay, '_scrollToPosition');
 
-      listenForEvent(overlay.$.monthScroller.$.scroller, 'scroll', () => {
+      listenOnce(overlay.$.monthScroller.$.scroller, 'scroll', () => {
         setTimeout(() => {
           tap(overlay.$.yearScroller);
           expect(spy.called).to.be.true;

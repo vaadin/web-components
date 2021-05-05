@@ -1,6 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@open-wc/testing-helpers';
-import { nextRender } from './helpers.js';
+import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import '../src/vaadin-crud-form.js';
 
 describe('crud form', () => {

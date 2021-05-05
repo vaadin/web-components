@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync } from '@open-wc/testing-helpers';
-import { arrowLeft, arrowRight, end, home, nextRender } from './helpers.js';
+import { arrowLeft, arrowRight, end, fixtureSync, home, nextRender } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
 import '../vaadin-menu-bar.js';
 

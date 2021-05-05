@@ -1,13 +1,13 @@
 import { expect } from '@esm-bundle/chai';
-import { fixture, html } from '@open-wc/testing-helpers';
+import { fixtureSync } from '@vaadin/testing-helpers';
 import { createFile } from './common.js';
 import '../vaadin-upload.js';
 
 describe('<vaadin-upload-file> element', () => {
   let fileElement, fileObject;
 
-  beforeEach(async () => {
-    fileElement = await fixture(html`<vaadin-upload-file></vaadin-upload-file>`);
+  beforeEach(() => {
+    fileElement = fixtureSync(`<vaadin-upload-file></vaadin-upload-file>`);
     fileObject = createFile(100000, 'application/unknown');
     fileElement.file = fileObject;
   });

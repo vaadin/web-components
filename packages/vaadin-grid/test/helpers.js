@@ -47,14 +47,6 @@ export const infiniteDataProvider = (params, callback) => {
   );
 };
 
-export const listenOnce = (element, eventName, callback) => {
-  const listener = (e) => {
-    element.removeEventListener(eventName, listener);
-    callback(e);
-  };
-  element.addEventListener(eventName, listener);
-};
-
 export const buildItem = (index) => {
   return {
     index: index
@@ -257,16 +249,6 @@ export const makeSoloTouchEvent = (type, xy, node) => {
   return event;
 };
 
-export function click(element) {
-  const event = new CustomEvent('click', {
-    bubbles: true,
-    cancelable: true,
-    composed: true
-  });
-  element.dispatchEvent(event);
-  return event;
-}
-
 export const flushColumns = (grid) => {
   Array.prototype.forEach.call(grid.querySelectorAll('vaadin-grid-column, vaadin-grid-column-group'), (col) =>
     col._templateObserver.flush()
@@ -286,7 +268,3 @@ export const fire = (type, detail, options) => {
   node.dispatchEvent(event);
   return event;
 };
-
-export const isIOS =
-  (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) ||
-  (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);

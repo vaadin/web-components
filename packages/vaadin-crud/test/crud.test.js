@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { aTimeout, fixtureSync } from '@open-wc/testing-helpers';
-import { flushGrid, getBodyCellContent, isIOS, listenOnce, nextRender } from './helpers.js';
+import { aTimeout, fixtureSync, isIOS, listenOnce, nextRender } from '@vaadin/testing-helpers';
+import { flushGrid, getBodyCellContent } from './helpers.js';
 import '../src/vaadin-crud.js';
 
 describe('crud', () => {

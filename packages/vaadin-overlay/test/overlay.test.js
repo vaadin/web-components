@@ -1,10 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync, oneEvent } from '@open-wc/testing-helpers';
-import { keyDownOn } from '@polymer/iron-test-helpers/mock-interactions.js';
+import { click, enterKeyDown, escKeyDown, fixtureSync, mousedown, mouseup, oneEvent } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { click, escKeyDown, mousedown, mouseup } from './helpers.js';
-import '../vaadin-overlay.js';
 import '@vaadin/vaadin-text-field/vaadin-text-field.js';
 import '../vaadin-overlay.js';
 
@@ -181,7 +178,7 @@ describe('vaadin-overlay', () => {
       const spy = sinon.spy();
       overlay.addEventListener('vaadin-overlay-escape-press', spy);
 
-      keyDownOn(document.body, 13, [], 'Enter');
+      enterKeyDown(document.body);
 
       expect(spy.called).to.be.false;
     });

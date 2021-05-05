@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync, nextFrame, oneEvent } from '@open-wc/testing-helpers';
+import { fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import { flushGrid } from './helpers.js';
 import '../vaadin-grid.js';
 import '../vaadin-grid-tree-column.js';

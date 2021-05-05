@@ -1,16 +1,16 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { aTimeout, fixture, html, nextFrame } from '@open-wc/testing-helpers';
+import { aTimeout, fixtureSync, isIOS, nextFrame } from '@vaadin/testing-helpers';
 import { IronA11yAnnouncer } from '@polymer/iron-a11y-announcer/iron-a11y-announcer.js';
 import '../vaadin-date-picker.js';
-import { activateScroller, ios, getDefaultI18n, open } from './common.js';
+import { activateScroller, getDefaultI18n, open } from './common.js';
 
 describe('WAI-ARIA', () => {
   describe('date picker', () => {
     let datepicker, toggleButton;
 
-    beforeEach(async () => {
-      datepicker = await fixture(html`<vaadin-date-picker label="ariatest"></vaadin-date-picker>`);
+    beforeEach(() => {
+      datepicker = fixtureSync(`<vaadin-date-picker label="ariatest"></vaadin-date-picker>`);
       toggleButton = datepicker.shadowRoot.querySelector('[part="toggle-button"]');
     });
 
@@ -55,7 +55,7 @@ describe('WAI-ARIA', () => {
     var overlay;
 
     beforeEach(async () => {
-      overlay = await fixture(html`<vaadin-date-picker-overlay-content></vaadin-date-picker-overlay-content>`);
+      overlay = fixtureSync(`<vaadin-date-picker-overlay-content></vaadin-date-picker-overlay-content>`);
       overlay.$.monthScroller.bufferSize = 0;
       overlay.$.yearScroller.bufferSize = 1;
       overlay.i18n = getDefaultI18n();
@@ -145,7 +145,7 @@ describe('WAI-ARIA', () => {
     let monthCalendar;
 
     beforeEach(async () => {
-      monthCalendar = await fixture(html`<vaadin-month-calendar></vaadin-month-calendar>`);
+      monthCalendar = fixtureSync(`<vaadin-month-calendar></vaadin-month-calendar>`);
       monthCalendar.i18n = getDefaultI18n();
       monthCalendar.month = new Date(2016, 1, 1);
       await nextFrame();
@@ -252,8 +252,8 @@ describe('WAI-ARIA', () => {
     // NOTE: See <iron-a11y-announcer> API
     let datepicker;
 
-    beforeEach(async () => {
-      datepicker = await fixture(html`<vaadin-date-picker label="ariatest"></vaadin-date-picker>`);
+    beforeEach(() => {
+      datepicker = fixtureSync(`<vaadin-date-picker label="ariatest"></vaadin-date-picker>`);
     });
 
     function waitForAnnounce(callback) {
@@ -344,7 +344,7 @@ describe('WAI-ARIA', () => {
       datepicker.open();
     });
 
-    if (!ios) {
+    if (!isIOS) {
       it('should announce once', async () => {
         datepicker._focusedDate = new Date(2016, 1, 1);
         await open(datepicker);

@@ -1,19 +1,10 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync, aTimeout } from '@open-wc/testing-helpers';
-import { keyDownOn } from '@polymer/iron-test-helpers/mock-interactions.js';
+import { arrowDown, arrowUp, fixtureSync, aTimeout } from '@vaadin/testing-helpers';
 import '../vaadin-number-field.js';
 
 describe('number-field', () => {
   var numberField, input, decreaseButton, increaseButton;
-
-  function up() {
-    keyDownOn(input, 38, [], 'ArrowUp');
-  }
-
-  function down() {
-    keyDownOn(input, 40, [], 'ArrowDown');
-  }
 
   beforeEach(() => {
     numberField = fixtureSync('<vaadin-number-field></vaadin-number-field>');
@@ -76,7 +67,7 @@ describe('number-field', () => {
     it('should increment value on arrow up', () => {
       numberField.step = 3;
 
-      up();
+      arrowUp(input);
 
       expect(numberField.value).equal('3');
     });
@@ -84,7 +75,7 @@ describe('number-field', () => {
     it('should decrement value on arrow down', () => {
       numberField.step = 3;
 
-      down();
+      arrowDown(input);
 
       expect(numberField.value).equal('-3');
     });
@@ -93,10 +84,10 @@ describe('number-field', () => {
       numberField.readonly = true;
       numberField.value = 0;
 
-      up();
+      arrowUp(input);
       expect(numberField.value).to.be.equal('0');
 
-      down();
+      arrowDown(input);
       expect(numberField.value).to.be.equal('0');
     });
   });
