@@ -1945,13 +1945,6 @@
     "@typescript-eslint/types" "4.22.0"
     eslint-visitor-keys "^2.0.0"
 
-"@vaadin/testing-helpers@^0.1.5":
-  version "0.1.5"
-  resolved "https://registry.yarnpkg.com/@vaadin/testing-helpers/-/testing-helpers-0.1.5.tgz#f148db53c5cb41250cfaaa7e00134a5552801989"
-  integrity sha512-XiRR/z4nVCGUTe7uNqpayjGHOR15MgKtwko/Zd0Oo5mNumVKmhPf/WNBDmwAa1axA3rEr8urFewDGm2ou5l4pA==
-  dependencies:
-    "@polymer/polymer" "^3.4.1"
-
 "@vaadin/testing-helpers@^0.1.6":
   version "0.1.6"
   resolved "https://registry.yarnpkg.com/@vaadin/testing-helpers/-/testing-helpers-0.1.6.tgz#7dbd8e5d3809d0240edfad819feace6d5b651af3"
