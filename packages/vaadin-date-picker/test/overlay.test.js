@@ -1,10 +1,9 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync } from '@open-wc/testing-helpers';
-import { tap } from '@polymer/iron-test-helpers/mock-interactions.js';
+import { fixtureSync, listenOnce } from '@vaadin/testing-helpers';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import '../src/vaadin-date-picker-overlay-content.js';
-import { click, getDefaultI18n, getFirstVisibleItem, listenForEvent, monthsEqual } from './common.js';
+import { click, getDefaultI18n, getFirstVisibleItem, monthsEqual } from './common.js';
 
 function waitUntilScrolledTo(overlay, date, callback) {
   if (overlay.$.monthScroller.position) {
@@ -103,13 +102,13 @@ describe('vaadin-date-picker-overlay', () => {
   describe('taps', () => {
     beforeEach((done) => {
       // Wait for ignoreTaps to settle after initial scroll event
-      listenForEvent(overlay.$.monthScroller.$.scroller, 'scroll', () => setTimeout(done, 350));
+      listenOnce(overlay.$.monthScroller.$.scroller, 'scroll', () => setTimeout(done, 350));
 
       overlay.$.monthScroller.$.scroller.scrollTop += 1;
     });
 
     it('should set ignoreTaps to calendar on scroll', (done) => {
-      listenForEvent(overlay.$.monthScroller.$.scroller, 'scroll', () => {
+      listenOnce(overlay.$.monthScroller.$.scroller, 'scroll', () => {
         expect(overlay.$.monthScroller.querySelector('vaadin-month-calendar').ignoreTaps).to.be.true;
         done();
       });
@@ -120,8 +119,8 @@ describe('vaadin-date-picker-overlay', () => {
     it('should not react to year tap after scroll', (done) => {
       const spy = sinon.spy(overlay, '_scrollToPosition');
 
-      listenForEvent(overlay.$.monthScroller.$.scroller, 'scroll', () => {
-        tap(overlay.$.yearScroller);
+      listenOnce(overlay.$.monthScroller.$.scroller, 'scroll', () => {
+        click(overlay.$.yearScroller);
         expect(spy.called).to.be.false;
         done();
       });
@@ -132,9 +131,9 @@ describe('vaadin-date-picker-overlay', () => {
     it('should react to year tap after 300ms elapsed after scroll', (done) => {
       const spy = sinon.spy(overlay, '_scrollToPosition');
 
-      listenForEvent(overlay.$.monthScroller.$.scroller, 'scroll', () => {
+      listenOnce(overlay.$.monthScroller.$.scroller, 'scroll', () => {
         setTimeout(() => {
-          tap(overlay.$.yearScroller);
+          click(overlay.$.yearScroller);
           expect(spy.called).to.be.true;
           done();
         }, 350);
@@ -148,7 +147,7 @@ describe('vaadin-date-picker-overlay', () => {
       overlay._onYearScrollTouchStart();
 
       setTimeout(() => {
-        tap(overlay.$.yearScroller);
+        click(overlay.$.yearScroller);
         expect(spy.called).to.be.false;
         done();
       }, 350);
@@ -198,7 +197,7 @@ describe('vaadin-date-picker-overlay', () => {
     it('should fire close on cancel click', () => {
       const spy = sinon.spy();
       overlay.addEventListener('close', spy);
-      tap(overlay.$.cancelButton);
+      click(overlay.$.cancelButton);
       expect(spy.calledOnce).to.be.true;
     });
 
@@ -207,7 +206,7 @@ describe('vaadin-date-picker-overlay', () => {
         const date = new Date(2000, 1, 1);
         overlay.scrollToDate(date);
         waitUntilScrolledTo(overlay, date, () => {
-          tap(overlay.$.todayButton);
+          click(overlay.$.todayButton);
           waitUntilScrolledTo(overlay, new Date(), () => {
             done();
           });
@@ -221,7 +220,7 @@ describe('vaadin-date-picker-overlay', () => {
         overlay.addEventListener('close', spy);
 
         waitUntilScrolledTo(overlay, today, () => {
-          tap(overlay.$.todayButton);
+          click(overlay.$.todayButton);
 
           expect(overlay.selectedDate.getFullYear()).to.equal(today.getFullYear());
           expect(overlay.selectedDate.getMonth()).to.equal(today.getMonth());
@@ -239,7 +238,7 @@ describe('vaadin-date-picker-overlay', () => {
 
         waitUntilScrolledTo(overlay, today, () => {
           overlay.$.monthScroller.$.scroller.scrollTop -= 1;
-          tap(overlay.$.todayButton);
+          click(overlay.$.todayButton);
 
           expect(overlay.selectedDate).to.be.undefined;
           expect(spy.called).to.be.false;
@@ -258,7 +257,7 @@ describe('vaadin-date-picker-overlay', () => {
 
         waitUntilScrolledTo(overlay, initialDate, () => {
           const lastScrollPos = overlay.$.monthScroller.position;
-          tap(overlay.$.todayButton);
+          click(overlay.$.todayButton);
 
           expect(overlay.$.monthScroller.position).to.equal(lastScrollPos);
           // FIXME: fails in FF + Polymer 1.x

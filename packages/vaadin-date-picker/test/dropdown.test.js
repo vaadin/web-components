@@ -1,10 +1,9 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@open-wc/testing-helpers';
+import { click, down, fixtureSync, isIOS } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { down } from '@polymer/iron-test-helpers/mock-interactions.js';
 import './not-animated-styles.js';
 import '../vaadin-date-picker.js';
-import { click, ios, isFullscreen } from './common.js';
+import { isFullscreen } from './common.js';
 
 describe('dropdown', () => {
   let datepicker;
@@ -26,7 +25,7 @@ describe('dropdown', () => {
     expect(datepicker.$.overlay.parentElement).to.not.be.ok;
   });
 
-  (ios ? it : it.skip)('should handle webkit-overflow-scrolling', (done) => {
+  (isIOS ? it : it.skip)('should handle webkit-overflow-scrolling', (done) => {
     document.body.style.webkitOverflowScrolling = 'touch';
 
     datepicker.open();

@@ -1,19 +1,27 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { aTimeout, fixture } from '@open-wc/testing-helpers';
 import {
-  focus,
+  arrowDown,
+  arrowLeft,
+  arrowRight,
+  arrowUp,
+  aTimeout,
+  click,
+  enter,
+  esc,
+  fixtureSync,
+  isIOS,
   keyDownOn,
-  pressAndReleaseKeyOn,
-  pressEnter,
-  tap
-} from '@polymer/iron-test-helpers/mock-interactions.js';
+  listenOnce,
+  nextRender,
+  tab
+} from '@vaadin/testing-helpers';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import './not-animated-styles.js';
 import '../vaadin-date-picker.js';
-import { click, close, getOverlayContent, ios, listenForEvent, open } from './common.js';
+import { close, getOverlayContent, open } from './common.js';
 
-(ios ? describe.skip : describe)('keyboard input', () => {
+(isIOS ? describe.skip : describe)('keyboard input', () => {
   let target;
   let datepicker;
 
@@ -29,40 +37,10 @@ import { click, close, getOverlayContent, ios, listenForEvent, open } from './co
     }
   }
 
-  function arrowDown() {
-    keyDownOn(target, 40);
-  }
-
-  function arrowRight() {
-    keyDownOn(target, 39);
-  }
-
-  function arrowUp() {
-    keyDownOn(target, 38);
-  }
-
-  function arrowLeft() {
-    keyDownOn(target, 37);
-  }
-
-  function enter() {
-    pressEnter(target);
-  }
-
-  function esc() {
-    keyDownOn(target, 27);
-  }
-
   function closeWithEnter() {
     return new Promise((resolve) => {
-      listenForEvent(datepicker.$.overlay, 'vaadin-overlay-close', resolve);
-      enter();
-    });
-  }
-
-  function nextRender(el) {
-    return new Promise((resolve) => {
-      afterNextRender(el, resolve);
+      listenOnce(datepicker.$.overlay, 'vaadin-overlay-close', resolve);
+      enter(target);
     });
   }
 
@@ -70,8 +48,8 @@ import { click, close, getOverlayContent, ios, listenForEvent, open } from './co
     return getOverlayContent(datepicker).focusedDate;
   }
 
-  beforeEach(async () => {
-    datepicker = await fixture('<vaadin-date-picker></vaadin-date-picker>');
+  beforeEach(() => {
+    datepicker = fixtureSync('<vaadin-date-picker></vaadin-date-picker>');
     target = datepicker._inputElement;
   });
 
@@ -98,7 +76,7 @@ import { click, close, getOverlayContent, ios, listenForEvent, open } from './co
     datepicker._inputValue = '1/30/2000';
     target.dispatchEvent(new CustomEvent('input', { bubbles: true, composed: true }));
 
-    listenForEvent(datepicker.$.overlay, 'vaadin-overlay-open', () => {
+    listenOnce(datepicker.$.overlay, 'vaadin-overlay-open', () => {
       expect(focusedDate().getDate()).to.equal(30);
       done();
     });
@@ -130,51 +108,51 @@ import { click, close, getOverlayContent, ios, listenForEvent, open } from './co
 
   it('should display focused date while overlay focused', () => {
     inputText('1/2/2000');
-    arrowDown();
+    arrowDown(target);
     expect(target.value).not.to.equal('1/2/2000');
   });
 
   it('should not forward keys after close', async () => {
     inputText('1/2/2000');
-    arrowDown();
+    arrowDown(target);
     await closeWithEnter();
     const focused = focusedDate();
-    arrowRight();
+    arrowRight(target);
     expect(focusedDate()).to.eql(focused);
   });
 
   it('should not open with wrong keys', () => {
-    arrowRight();
+    arrowRight(target);
     expect(datepicker.opened).not.to.be.ok;
   });
 
   it('should not forward keys after reopen', (done) => {
     inputText('1/2/2000');
-    arrowDown();
+    arrowDown(target);
 
-    listenForEvent(datepicker.$.overlay, 'vaadin-overlay-open', () => {
+    listenOnce(datepicker.$.overlay, 'vaadin-overlay-open', () => {
       const focused = focusedDate();
-      arrowRight();
+      arrowRight(target);
       expect(focusedDate()).to.eql(focused);
       done();
     });
 
-    listenForEvent(datepicker.$.overlay, 'vaadin-overlay-close', () => {
+    listenOnce(datepicker.$.overlay, 'vaadin-overlay-close', () => {
       inputText('0');
     });
-    enter();
+    enter(target);
   });
 
   it('should not forward after user changes input', (done) => {
     inputText('1/2/2000');
-    listenForEvent(datepicker.$.overlay, 'vaadin-overlay-open', () => {
-      arrowDown();
+    listenOnce(datepicker.$.overlay, 'vaadin-overlay-open', () => {
+      arrowDown(target);
       // Forwarding keys to overlay
       target.value = '';
       inputText('foo');
       // Keys shouldn't get forwarded anymore
       const focused = focusedDate();
-      arrowRight();
+      arrowRight(target);
       expect(focusedDate()).to.eql(focused);
       done();
     });
@@ -182,27 +160,27 @@ import { click, close, getOverlayContent, ios, listenForEvent, open } from './co
 
   it('should not forward after input tap', async () => {
     await open(datepicker);
-    arrowDown();
+    arrowDown(target);
     const focused = focusedDate();
     target.dispatchEvent(new CustomEvent('tap', { bubbles: true, composed: true }));
-    arrowLeft();
+    arrowLeft(target);
     expect(focusedDate()).to.eql(focused);
   });
 
   it('should reflect focused date to input', (done) => {
     datepicker.value = '2000-01-01';
 
-    arrowDown();
-    listenForEvent(datepicker.$.overlay, 'vaadin-overlay-open', () => {
-      arrowDown();
+    arrowDown(target);
+    listenOnce(datepicker.$.overlay, 'vaadin-overlay-open', () => {
+      arrowDown(target);
       expect(datepicker._inputValue).to.equal('1/8/2000');
       done();
     });
   });
 
   it('should not reflect focused date on open', (done) => {
-    arrowDown();
-    listenForEvent(datepicker.$.overlay, 'vaadin-overlay-open', () => {
+    arrowDown(target);
+    listenOnce(datepicker.$.overlay, 'vaadin-overlay-open', () => {
       expect(datepicker._inputValue).to.equal('');
       done();
     });
@@ -211,11 +189,11 @@ import { click, close, getOverlayContent, ios, listenForEvent, open } from './co
   it('should stop key event bubbles from overlay', (done) => {
     datepicker.value = '2000-01-01';
 
-    arrowDown();
-    listenForEvent(datepicker.$.overlay, 'vaadin-overlay-open', () => {
-      arrowDown();
+    arrowDown(target);
+    listenOnce(datepicker.$.overlay, 'vaadin-overlay-open', () => {
+      arrowDown(target);
       target = getOverlayContent(datepicker);
-      arrowDown();
+      arrowDown(target);
       expect(datepicker._inputValue).to.equal('1/15/2000');
       done();
     });
@@ -277,7 +255,7 @@ import { click, close, getOverlayContent, ios, listenForEvent, open } from './co
 
   it('should clear selection on close', async () => {
     await open(datepicker);
-    arrowDown();
+    arrowDown(target);
     await close(datepicker);
     expect(target.selectionStart).to.equal(target.selectionEnd);
   });
@@ -285,7 +263,7 @@ import { click, close, getOverlayContent, ios, listenForEvent, open } from './co
   it('should not throw on enter before opening overlay', () => {
     expect(() => {
       datepicker.focus();
-      enter();
+      enter(target);
     }).not.to.throw(Error);
   });
 
@@ -313,8 +291,8 @@ import { click, close, getOverlayContent, ios, listenForEvent, open } from './co
   });
 
   it('should not forward up/down to overlay when closed', (done) => {
-    arrowUp();
-    listenForEvent(datepicker.$.overlay, 'vaadin-overlay-open', () => {
+    arrowUp(target);
+    listenOnce(datepicker.$.overlay, 'vaadin-overlay-open', () => {
       expect(datepicker._focusedDate.getDate()).to.eql(new Date().getDate());
       done();
     });
@@ -322,14 +300,14 @@ import { click, close, getOverlayContent, ios, listenForEvent, open } from './co
 
   it('should forward up/down to overlay', async () => {
     await open(datepicker);
-    arrowUp();
+    arrowUp(target);
     expect(datepicker._focusedDate.getDate()).not.to.eql(new Date().getDate());
   });
 
   describe('esc behavior', () => {
     it('should close the overlay on esc', async () => {
       await open(datepicker);
-      esc();
+      esc(target);
       await aTimeout(1);
       expect(datepicker.opened).to.be.false;
     });
@@ -342,35 +320,35 @@ import { click, close, getOverlayContent, ios, listenForEvent, open } from './co
 
       it('should revert input value on esc when empty', () => {
         inputText('1/2/2000');
-        arrowDown();
-        arrowDown();
-        esc();
+        arrowDown(target);
+        arrowDown(target);
+        esc(target);
         expect(target.value).to.equal('');
       });
 
       it('should cancel on overlay content esc', () => {
         inputText('1/2/2000 ');
-        arrowDown();
-        arrowDown();
+        arrowDown(target);
+        arrowDown(target);
         const overlayContent = datepicker.$.overlay.content.querySelector('vaadin-date-picker-overlay-content').$
           .monthScroller;
         target = overlayContent;
-        esc();
+        esc(target);
         expect(datepicker.opened).to.be.false;
         expect(datepicker.value).not.to.be.ok;
       });
 
       it('should not change value on esc when empty', (done) => {
         inputText('1/2/2000');
-        arrowDown();
-        arrowDown();
+        arrowDown(target);
+        arrowDown(target);
 
-        listenForEvent(datepicker.$.overlay, 'vaadin-overlay-close', () => {
+        listenOnce(datepicker.$.overlay, 'vaadin-overlay-close', () => {
           expect(datepicker.value).to.equal('');
           done();
         });
 
-        esc();
+        esc(target);
       });
     });
 
@@ -382,23 +360,23 @@ import { click, close, getOverlayContent, ios, listenForEvent, open } from './co
 
       it('should revert input value on esc', () => {
         inputText('1/2/2000');
-        arrowDown();
-        arrowDown();
-        esc();
+        arrowDown(target);
+        arrowDown(target);
+        esc(target);
         expect(target.value).to.equal('1/1/2000');
       });
 
       it('should not change value on esc', (done) => {
         inputText('1/2/2000');
-        arrowDown();
-        arrowDown();
+        arrowDown(target);
+        arrowDown(target);
 
-        listenForEvent(datepicker.$.overlay, 'vaadin-overlay-close', () => {
+        listenOnce(datepicker.$.overlay, 'vaadin-overlay-close', () => {
           expect(datepicker.value).to.equal('2000-01-01');
           done();
         });
 
-        esc();
+        esc(target);
       });
     });
   });
@@ -480,55 +458,55 @@ import { click, close, getOverlayContent, ios, listenForEvent, open } from './co
     });
 
     it('should focus the input on esc', () => {
-      arrowDown();
-      esc();
+      arrowDown(target);
+      esc(target);
       expect(datepicker._inputElement.hasAttribute('focused')).to.be.true;
     });
 
     it('should focus the input on date tap', () => {
-      arrowDown();
+      arrowDown(target);
       overlayContent.dispatchEvent(new CustomEvent('date-tap', { bubbles: true, composed: true }));
       expect(datepicker._inputElement.hasAttribute('focused')).to.be.true;
     });
 
     it('should focus the input on date cancel', () => {
-      arrowDown();
-      tap(overlayContent.$.cancelButton);
+      arrowDown(target);
+      click(overlayContent.$.cancelButton);
       expect(datepicker._inputElement.hasAttribute('focused')).to.be.true;
     });
 
     it('should focus cancel on input shift tab', async () => {
       await open(datepicker);
-      focus(datepicker._inputElement);
-      pressAndReleaseKeyOn(datepicker._inputElement, 9, 'shift');
+      datepicker._inputElement.focus();
+      tab(datepicker._inputElement, ['shift']);
       expect(overlayContent.$.cancelButton.hasAttribute('focused')).to.be.true;
     });
 
     it('should focus input in cancel tab', async () => {
       await open(datepicker);
-      focus(overlayContent.$.cancelButton);
+      overlayContent.$.cancelButton.focus();
 
       const spy = sinon.spy(datepicker, '_focus');
-      pressAndReleaseKeyOn(overlayContent.$.cancelButton, 9);
+      tab(overlayContent.$.cancelButton);
       await aTimeout(1);
       expect(spy.called).to.be.true;
     });
 
     it('should keep focused attribute in focusElement when the focus moves to the overlay', async () => {
       await open(datepicker);
-      tap(overlayContent);
+      click(overlayContent);
       datepicker.focusElement.blur();
       expect(datepicker.focusElement.hasAttribute('focused')).to.be.false;
 
-      focus(overlayContent);
+      overlayContent.focus();
       expect(datepicker.focusElement.hasAttribute('focused')).to.be.true;
     });
 
     it('should not reveal the focused date on tap', async () => {
       await open(datepicker);
       const spy = sinon.spy(overlayContent, 'revealDate');
-      tap(overlayContent);
-      focus(overlayContent);
+      click(overlayContent);
+      overlayContent.focus();
       await aTimeout(1);
       expect(spy.called).to.be.false;
     });
@@ -536,15 +514,15 @@ import { click, close, getOverlayContent, ios, listenForEvent, open } from './co
     it('should reveal the focused date on tab focus from input', async () => {
       await open(datepicker);
       const spy = sinon.spy(overlayContent, 'revealDate');
-      pressAndReleaseKeyOn(datepicker._inputElement, 9);
+      tab(datepicker._inputElement);
       expect(spy.called).to.be.true;
     });
 
     it('should reveal the focused date on shift-tab focus from today button', async () => {
       await open(datepicker);
       const spy = sinon.spy(overlayContent, 'revealDate');
-      pressAndReleaseKeyOn(overlayContent.$.todayButton, 9, 'shift');
-      focus(overlayContent);
+      tab(overlayContent.$.todayButton, ['shift']);
+      overlayContent.focus();
       await aTimeout(1);
       expect(spy.called).to.be.true;
     });
@@ -552,7 +530,7 @@ import { click, close, getOverlayContent, ios, listenForEvent, open } from './co
     it('should not focus overlay on key-input', (done) => {
       const spy = sinon.spy(datepicker.$.overlay, 'focus');
 
-      listenForEvent(datepicker.$.overlay, 'vaadin-overlay-open', () => {
+      listenOnce(datepicker.$.overlay, 'vaadin-overlay-open', () => {
         expect(spy.called).to.be.false;
         done();
       });
@@ -571,14 +549,14 @@ import { click, close, getOverlayContent, ios, listenForEvent, open } from './co
 
     it('should fire change on user text input commit', () => {
       inputText('1/2/2000');
-      enter();
+      enter(target);
       expect(spy.calledOnce).to.be.true;
     });
 
     it('should fire change on user arrow input commit', () => {
-      arrowDown();
-      arrowDown();
-      enter();
+      arrowDown(target);
+      arrowDown(target);
+      enter(target);
       expect(spy.calledOnce).to.be.true;
     });
 
@@ -617,13 +595,13 @@ import { click, close, getOverlayContent, ios, listenForEvent, open } from './co
     it('should not fire change if the value was not changed', () => {
       datepicker.value = '2000-01-01';
       datepicker.open();
-      enter();
+      enter(target);
       expect(spy.called).to.be.false;
     });
 
     it('should not fire change on revert', () => {
       datepicker.value = '2000-01-01';
-      esc();
+      esc(target);
       expect(spy.called).to.be.false;
     });
   });
@@ -660,7 +638,7 @@ import { click, close, getOverlayContent, ios, listenForEvent, open } from './co
 
     it('should revert input value on esc when overlay not initialized', () => {
       inputText('1/1/2000');
-      esc();
+      esc(target);
       expect(datepicker._inputValue).to.equal('');
       expect(datepicker.value).to.equal('');
     });
@@ -669,7 +647,7 @@ import { click, close, getOverlayContent, ios, listenForEvent, open } from './co
       datepicker.open();
       datepicker.close();
       inputText('1/1/2000');
-      esc();
+      esc(target);
       expect(datepicker.value).to.equal('');
     });
 
@@ -678,13 +656,13 @@ import { click, close, getOverlayContent, ios, listenForEvent, open } from './co
       inputText('1/1/2000');
       datepicker.close();
       target.value = '';
-      esc();
+      esc(target);
       expect(datepicker.value).to.equal('');
     });
 
     it('should apply the input value on enter when overlay not initialized', () => {
       inputText('1/1/2000');
-      enter();
+      enter(target);
       expect(datepicker.value).to.equal('2000-01-01');
     });
 
@@ -692,13 +670,13 @@ import { click, close, getOverlayContent, ios, listenForEvent, open } from './co
       datepicker.open();
       datepicker.close();
       inputText('1/1/2000');
-      enter();
+      enter(target);
       expect(datepicker.value).to.equal('2000-01-01');
     });
 
     it('should be invalid on enter with false input', () => {
       inputText('foo');
-      enter();
+      enter(target);
       expect(datepicker.value).to.equal('');
       expect(datepicker.invalid).to.be.true;
     });
@@ -721,7 +699,7 @@ import { click, close, getOverlayContent, ios, listenForEvent, open } from './co
       });
 
       it('should validate without change on Esc', (done) => {
-        listenForEvent(datepicker.$.overlay, 'vaadin-overlay-close', () => {
+        listenOnce(datepicker.$.overlay, 'vaadin-overlay-close', () => {
           // wait for overlay to finish closing
           afterNextRender(datepicker, () => {
             expect(validateSpy.calledOnce).to.be.true;
@@ -730,11 +708,11 @@ import { click, close, getOverlayContent, ios, listenForEvent, open } from './co
           });
         });
 
-        esc();
+        esc(target);
       });
 
       it('should change after validate on overlay close', (done) => {
-        listenForEvent(datepicker.$.overlay, 'vaadin-overlay-close', () => {
+        listenOnce(datepicker.$.overlay, 'vaadin-overlay-close', () => {
           // wait for overlay to finish closing
           afterNextRender(datepicker, () => {
             expect(validateSpy.calledOnce).to.be.true;
@@ -748,7 +726,7 @@ import { click, close, getOverlayContent, ios, listenForEvent, open } from './co
       });
 
       it('should change after validate on Enter', (done) => {
-        listenForEvent(datepicker.$.overlay, 'vaadin-overlay-close', () => {
+        listenOnce(datepicker.$.overlay, 'vaadin-overlay-close', () => {
           // wait for overlay to finish closing
           afterNextRender(datepicker, () => {
             expect(validateSpy.calledOnce).to.be.true;
@@ -758,7 +736,7 @@ import { click, close, getOverlayContent, ios, listenForEvent, open } from './co
           });
         });
 
-        enter();
+        enter(target);
       });
     });
 
@@ -784,14 +762,14 @@ import { click, close, getOverlayContent, ios, listenForEvent, open } from './co
 
       it('should change after validate on Esc with clear button', () => {
         datepicker.clearButtonVisible = true;
-        esc();
+        esc(target);
         expect(validateSpy.calledOnce).to.be.true;
         expect(changeSpy.calledOnce).to.be.true;
         expect(changeSpy.calledAfter(validateSpy)).to.be.true;
       });
 
       it('should neither change nor validate on Esc without clear button', () => {
-        esc();
+        esc(target);
         expect(validateSpy.called).to.be.false;
         expect(changeSpy.called).to.be.false;
       });
@@ -799,7 +777,7 @@ import { click, close, getOverlayContent, ios, listenForEvent, open } from './co
       it('should change after validate on Backspace & Enter', () => {
         target.value = '';
         target.dispatchEvent(new CustomEvent('input', { bubbles: true, composed: true }));
-        enter();
+        enter(target);
         expect(validateSpy.calledOnce).to.be.true;
         expect(changeSpy.calledOnce).to.be.true;
         expect(changeSpy.calledAfter(validateSpy)).to.be.true;
@@ -808,7 +786,7 @@ import { click, close, getOverlayContent, ios, listenForEvent, open } from './co
       it('should change after validate on Backspace & Esc', () => {
         target.value = '';
         target.dispatchEvent(new CustomEvent('input', { bubbles: true, composed: true }));
-        esc();
+        esc(target);
         expect(validateSpy.calledOnce).to.be.true;
         expect(changeSpy.calledOnce).to.be.true;
         expect(changeSpy.calledAfter(validateSpy)).to.be.true;
@@ -822,21 +800,21 @@ import { click, close, getOverlayContent, ios, listenForEvent, open } from './co
 
       it('should change after validate on Enter', () => {
         inputText('01/02/20');
-        enter();
+        enter(target);
         expect(validateSpy.calledOnce).to.be.true;
         expect(changeSpy.calledOnce).to.be.true;
         expect(changeSpy.calledAfter(validateSpy)).to.be.true;
       });
 
       it('should validate on Enter when value is the same', () => {
-        enter();
+        enter(target);
         expect(validateSpy.calledOnce).to.be.true;
         expect(changeSpy.called).to.be.false;
       });
 
       it('should validate on Enter when invalid', () => {
         inputText('foo');
-        enter();
+        enter(target);
         expect(validateSpy.calledOnce).to.be.true;
         expect(changeSpy.called).to.be.false;
       });
@@ -849,7 +827,7 @@ import { click, close, getOverlayContent, ios, listenForEvent, open } from './co
 
       it('should neither change nor validate on Esc', () => {
         inputText('01/02/20');
-        esc();
+        esc(target);
         expect(validateSpy.called).to.be.false;
         expect(changeSpy.called).to.be.false;
       });
@@ -857,7 +835,7 @@ import { click, close, getOverlayContent, ios, listenForEvent, open } from './co
       describe('value is set', () => {
         beforeEach(() => {
           inputText('01/02/20');
-          enter();
+          enter(target);
           validateSpy.resetHistory();
           changeSpy.resetHistory();
           datepicker._focusAndSelect();
@@ -865,14 +843,14 @@ import { click, close, getOverlayContent, ios, listenForEvent, open } from './co
 
         it('should change after validate on Esc with clear button', () => {
           datepicker.clearButtonVisible = true;
-          esc();
+          esc(target);
           expect(validateSpy.calledOnce).to.be.true;
           expect(changeSpy.calledOnce).to.be.true;
           expect(changeSpy.calledAfter(validateSpy)).to.be.true;
         });
 
         it('should neither change nor validate on Esc without clear button', () => {
-          esc();
+          esc(target);
           expect(validateSpy.called).to.be.false;
           expect(changeSpy.called).to.be.false;
         });
@@ -880,7 +858,7 @@ import { click, close, getOverlayContent, ios, listenForEvent, open } from './co
         it('should change after validate on Backspace & Enter', () => {
           target.value = '';
           target.dispatchEvent(new CustomEvent('input', { bubbles: true, composed: true }));
-          enter();
+          enter(target);
           expect(validateSpy.calledOnce).to.be.true;
           expect(changeSpy.calledOnce).to.be.true;
           expect(changeSpy.calledAfter(validateSpy)).to.be.true;
@@ -889,7 +867,7 @@ import { click, close, getOverlayContent, ios, listenForEvent, open } from './co
         it('should change after validate on Backspace & Esc', () => {
           target.value = '';
           target.dispatchEvent(new CustomEvent('input', { bubbles: true, composed: true }));
-          esc();
+          esc(target);
           expect(validateSpy.calledOnce).to.be.true;
           expect(changeSpy.calledOnce).to.be.true;
           expect(changeSpy.calledAfter(validateSpy)).to.be.true;

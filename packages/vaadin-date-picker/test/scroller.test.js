@@ -1,8 +1,8 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { aTimeout, fixtureSync } from '@open-wc/testing-helpers';
+import { aTimeout, fixtureSync, listenOnce } from '@vaadin/testing-helpers';
 import '../src/vaadin-infinite-scroller.js';
-import { activateScroller, getFirstVisibleItem, listenForEvent } from './common.js';
+import { activateScroller, getFirstVisibleItem } from './common.js';
 
 describe('vaadin-infinite-scroller', () => {
   let scroller;
@@ -93,7 +93,7 @@ describe('vaadin-infinite-scroller', () => {
   it('should not fire custom-scroll events', (done) => {
     const spy = sinon.spy();
     scroller.addEventListener('custom-scroll', spy);
-    listenForEvent(scroller.$.scroller, 'scroll', () => {
+    listenOnce(scroller.$.scroller, 'scroll', () => {
       expect(spy.called).to.be.false;
       done();
     });

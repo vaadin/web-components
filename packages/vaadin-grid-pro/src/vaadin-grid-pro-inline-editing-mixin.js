@@ -81,6 +81,7 @@ export const InlineEditingMixin = (superClass) =>
       this.addEventListener('keydown', (e) => {
         switch (e.keyCode) {
           case 27:
+            console.log(e);
             this.__edited && this._stopEdit(true);
             break;
           case 9:
@@ -357,6 +358,7 @@ export const InlineEditingMixin = (superClass) =>
       this.removeEventListener('item-property-changed', this.__boundItemPropertyChanged);
 
       if (shouldRestoreFocus) {
+        console.log('restore focus');
         cell.focus();
       }
     }
@@ -433,6 +435,7 @@ export const InlineEditingMixin = (superClass) =>
           this._startEdit(nextCell, nextCol);
         } else {
           this._ensureScrolledToIndex(nextIdx);
+          console.log('focus next cell');
           nextCell.focus();
         }
       }

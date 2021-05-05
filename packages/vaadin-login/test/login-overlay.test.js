@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { enter, esc, fixtureSync } from '@vaadin/testing-helpers';
-import { tap } from '@polymer/iron-test-helpers/mock-interactions.js';
+import { click, enter, esc, fixtureSync } from '@vaadin/testing-helpers';
 import { fillUsernameAndPassword } from './helpers.js';
 import '../vaadin-login-overlay.js';
 
@@ -64,7 +63,7 @@ describe('opened overlay', () => {
   });
 
   it('should not close on click outside', () => {
-    tap(overlay.$.vaadinLoginOverlayWrapper.$.backdrop);
+    click(overlay.$.vaadinLoginOverlayWrapper.$.backdrop);
 
     expect(overlay.opened).to.be.true;
   });

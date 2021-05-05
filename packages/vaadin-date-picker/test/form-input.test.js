@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { aTimeout, fixture, html } from '@open-wc/testing-helpers';
+import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
 import { close, open } from './common.js';
 import { DatePickerElement } from '../vaadin-date-picker.js';
@@ -23,8 +23,8 @@ describe('form input', () => {
   }
 
   describe('date picker', () => {
-    beforeEach(async () => {
-      datepicker = await fixture(html`<vaadin-date-picker></vaadin-date-picker>`);
+    beforeEach(() => {
+      datepicker = fixtureSync(`<vaadin-date-picker></vaadin-date-picker>`);
     });
 
     it('should have the given name', () => {
@@ -152,8 +152,8 @@ describe('form input', () => {
   });
 
   describe('required', () => {
-    beforeEach(async () => {
-      datepicker = await fixture(html`<vaadin-date-picker required></vaadin-date-picker>`);
+    beforeEach(() => {
+      datepicker = fixtureSync(`<vaadin-date-picker required></vaadin-date-picker>`);
     });
 
     it('should not be invalid without user interactions', () => {
@@ -167,8 +167,8 @@ describe('form input', () => {
   });
 
   describe('custom validator', () => {
-    beforeEach(async () => {
-      datepicker = await fixture(html`<vaadin-date-picker-2016></vaadin-date-picker-2016>`);
+    beforeEach(() => {
+      datepicker = fixtureSync(`<vaadin-date-picker-2016></vaadin-date-picker-2016>`);
     });
 
     it('should validate correctly with custom validator', () => {

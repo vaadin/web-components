@@ -1,18 +1,9 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync } from '@open-wc/testing-helpers';
+import { fixtureSync, keyDownOn, nextRender } from '@vaadin/testing-helpers';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { flush } from '@polymer/polymer/lib/utils/flush.js';
-import { keyDownOn } from '@polymer/iron-test-helpers/mock-interactions.js';
 import '../vaadin-avatar-group.js';
-
-function nextRender(target) {
-  return new Promise((resolve) => {
-    afterNextRender(target, () => {
-      resolve();
-    });
-  });
-}
 
 describe('avatar-group', () => {
   let group;

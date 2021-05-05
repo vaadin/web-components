@@ -265,7 +265,7 @@ describe('items', () => {
     });
 
     it('should close all menus on esc', () => {
-      fire(menuComponents(subMenu)[0], 'keydown', {}, { keyCode: 27, key: 'Esc' });
+      fire(menuComponents(subMenu)[0], 'keydown', {}, { keyCode: 27, key: 'Escape' });
       expect(rootMenu.opened).to.be.false;
     });
 

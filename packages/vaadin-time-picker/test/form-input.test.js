@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixture, html } from '@open-wc/testing-helpers';
+import { fixtureSync } from '@vaadin/testing-helpers';
 import { TimePickerElement } from '../src/vaadin-time-picker.js';
 
 class TimePicker20Element extends TimePickerElement {
@@ -24,8 +24,8 @@ describe('form input', () => {
   }
 
   describe('default validator', () => {
-    beforeEach(async () => {
-      timePicker = await fixture(html`<vaadin-time-picker></vaadin-time-picker>`);
+    beforeEach(() => {
+      timePicker = fixtureSync(`<vaadin-time-picker></vaadin-time-picker>`);
       inputElement = timePicker.__inputElement;
     });
 
@@ -179,8 +179,8 @@ describe('form input', () => {
   });
 
   describe('custom validator', () => {
-    beforeEach(async () => {
-      timePicker = await fixture(html`<vaadin-time-picker-20></vaadin-time-picker-20>`);
+    beforeEach(() => {
+      timePicker = fixtureSync(`<vaadin-time-picker-20></vaadin-time-picker-20>`);
     });
 
     it('should validate correctly with custom validator', () => {

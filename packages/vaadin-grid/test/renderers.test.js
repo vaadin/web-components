@@ -1,8 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync } from '@open-wc/testing-helpers';
-import { keyDownOn } from '@polymer/iron-test-helpers/mock-interactions.js';
-import { flushGrid, getBodyCellContent, getCell, getContainerCell, isIOS } from './helpers.js';
+import { fixtureSync, isIOS, keyDownOn } from '@vaadin/testing-helpers';
+import { flushGrid, getBodyCellContent, getCell, getContainerCell } from './helpers.js';
 import '../vaadin-grid.js';
 
 function getHeaderCell(grid, index = 0) {

@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync } from '@open-wc/testing-helpers';
-import { keyDownOn, keyUpOn } from '@polymer/iron-test-helpers/mock-interactions.js';
+import { enter, fire, fixtureSync, spaceKeyDown, spaceKeyUp, space } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { ItemMixin } from '../src/vaadin-item-mixin.js';
 
@@ -15,28 +14,6 @@ customElements.define('test-item', TestItem);
 
 describe('vaadin-item-mixin', () => {
   let item;
-
-  function spaceDown(target) {
-    keyDownOn(target, 32, [], ' ');
-  }
-
-  function spaceUp(target) {
-    keyUpOn(target, 32, [], ' ');
-  }
-
-  function space(target) {
-    spaceDown(target);
-    spaceUp(target);
-  }
-
-  function enter(target) {
-    keyDownOn(target, 13, [], 'Enter');
-    keyUpOn(target, 13, [], 'Enter');
-  }
-
-  function fire(target, type) {
-    target.dispatchEvent(new CustomEvent(type, { composed: true, bubbles: true }));
-  }
 
   describe('properties', () => {
     beforeEach(() => {
@@ -120,18 +97,18 @@ describe('vaadin-item-mixin', () => {
       });
 
       it('should have active attribute on space down', () => {
-        spaceDown(item);
+        spaceKeyDown(item);
         expect(item.hasAttribute('active')).to.be.true;
       });
 
       it('should not have active attribute after space up', () => {
-        spaceDown(item);
-        spaceUp(item);
+        spaceKeyDown(item);
+        spaceKeyUp(item);
         expect(item.hasAttribute('active')).to.be.false;
       });
 
       it('should not have active attribute when disconnected from the DOM', () => {
-        spaceDown(item);
+        spaceKeyDown(item);
         item.parentNode.removeChild(item);
         expect(item.hasAttribute('active')).to.be.false;
       });
@@ -177,7 +154,7 @@ describe('vaadin-item-mixin', () => {
       it('should not fire click event if keyup does not happen after a keydown in the element', () => {
         const clickSpy = sinon.spy();
         item.addEventListener('click', clickSpy);
-        spaceUp(item);
+        spaceKeyUp(item);
         expect(clickSpy.called).to.be.false;
       });
     });
@@ -223,7 +200,7 @@ describe('vaadin-item-mixin', () => {
       button.addEventListener('keydown', (e) => {
         e.preventDefault();
       });
-      spaceDown(button);
+      spaceKeyDown(button);
       expect(item.hasAttribute('active')).to.be.false;
     });
   });

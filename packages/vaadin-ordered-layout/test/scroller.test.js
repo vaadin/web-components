@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@open-wc/testing-helpers';
+import { fixtureSync } from '@vaadin/testing-helpers';
 import '../vaadin-scroller.js';
 
 describe('vaadin-scroller', () => {

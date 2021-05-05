@@ -1,46 +1,7 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, aTimeout } from '@open-wc/testing-helpers';
-import {
-  makeSoloTouchEvent,
-  middleOfNode,
-  touchstart,
-  touchend,
-  track
-} from '@polymer/iron-test-helpers/mock-interactions.js';
+import { fixtureSync, aTimeout, track } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-split-layout.js';
-
-const touchDevice = (() => {
-  try {
-    new Touch({ identifier: 1, target: window });
-    return true;
-  } catch (e) {
-    return false;
-  }
-})();
-
-function trackWithTouchSupport(node, dx, dy, steps) {
-  dx = dx | 0;
-  dy = dy | 0;
-  steps = steps || 5;
-  if (touchDevice) {
-    var xy = middleOfNode(node);
-    touchstart(node, xy);
-    for (var i = 0; i <= steps; i++) {
-      makeSoloTouchEvent(
-        'touchmove',
-        {
-          x: xy.x + (dx * i) / steps,
-          y: xy.y + (dy * i) / steps
-        },
-        node
-      );
-    }
-    touchend(node, { x: xy.x + dx, y: xy.y + dy });
-  } else {
-    track(splitLayout.$.splitter, dx, dy, steps);
-  }
-}
 
 const initialSizes = { width: 128, height: 128 };
 
@@ -174,7 +135,7 @@ function testDimensions(isVertical) {
     const initialSize = (initialSizes[size] - 8) / 2;
 
     function dragHandle(d) {
-      trackWithTouchSupport(splitLayout.$.splitter, isVertical ? 0 : d, isVertical ? d : 0);
+      track(splitLayout.$.splitter, isVertical ? 0 : d, isVertical ? d : 0);
     }
 
     it('should resize forwards', () => {

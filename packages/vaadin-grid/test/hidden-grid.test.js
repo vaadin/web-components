@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, oneEvent } from '@open-wc/testing-helpers';
+import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
 import { flushGrid, getBodyCellContent, infiniteDataProvider } from './helpers.js';
 import '../vaadin-grid.js';
 

@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync, nextFrame } from '@open-wc/testing-helpers';
-import { listenOnce } from './helpers.js';
+import { fixtureSync, listenOnce, nextFrame } from '@vaadin/testing-helpers';
 import '../vaadin-text-field.js';
 
 describe('slotted input', () => {

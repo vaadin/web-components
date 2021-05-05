@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync } from '@open-wc/testing-helpers';
+import { fixtureSync } from '@vaadin/testing-helpers';
 import { flushGrid, infiniteDataProvider } from './helpers.js';
 import '@polymer/iron-list/iron-list.js';
 import '../vaadin-grid.js';

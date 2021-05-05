@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync } from '@open-wc/testing-helpers';
-import { createItems, dblclick, enter, esc, flushGrid, getCellEditor, getContainerCell, space } from './helpers.js';
+import { enter, esc, fixtureSync, space } from '@vaadin/testing-helpers';
+import { createItems, dblclick, flushGrid, getCellEditor, getContainerCell } from './helpers.js';
 import '../vaadin-grid-pro.js';
 import '../vaadin-grid-pro-edit-column.js';
 

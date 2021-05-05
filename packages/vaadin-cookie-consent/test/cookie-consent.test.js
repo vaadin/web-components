@@ -1,6 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync } from '@open-wc/testing-helpers';
-import { keyboardEventFor } from '@polymer/iron-test-helpers/mock-interactions.js';
+import { aTimeout, fixtureSync, keyboardEventFor } from 'vaadin/testing-helpers';
 import '../vaadin-cookie-consent.js';
 
 describe('vaadin-cookie-consent', () => {

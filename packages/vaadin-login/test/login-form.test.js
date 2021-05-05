@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { focus, tap } from '@polymer/iron-test-helpers/mock-interactions.js';
-import { enter, fixtureSync } from '@vaadin/testing-helpers';
+import { click, enter, fixtureSync } from '@vaadin/testing-helpers';
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import { fillUsernameAndPassword } from './helpers.js';
 import '../vaadin-login-form.js';
@@ -160,7 +159,7 @@ describe('login form', () => {
   it('should change focus to username if password is filled and user hits ENTER (username is empty)', () => {
     const { vaadinLoginUsername, vaadinLoginPassword } = login.$;
 
-    focus(vaadinLoginPassword);
+    vaadinLoginPassword.focus();
     vaadinLoginPassword.value = 'password';
     enter(vaadinLoginPassword);
     expect(vaadinLoginUsername.hasAttribute('focused')).to.be.true;
@@ -187,21 +186,21 @@ describe('login form', () => {
     enter(vaadinLoginPassword);
     expect(submitStub.called).to.be.false;
 
-    tap(submit);
+    click(submit);
     expect(submitStub.called).to.be.false;
   });
 
   it('should not disable button on button click if form is invalid', () => {
     const submit = login.querySelector('vaadin-button[part="vaadin-login-submit"]');
     expect(submit.disabled).to.not.be.true;
-    tap(submit);
+    click(submit);
     expect(submit.disabled).to.not.be.true;
   });
 
   it('should disable button on button click if form is valid', () => {
     const submit = login.querySelector('vaadin-button[part="vaadin-login-submit"]');
     fillUsernameAndPassword(login);
-    tap(submit);
+    click(submit);
     expect(submit.disabled).to.be.true;
   });
 

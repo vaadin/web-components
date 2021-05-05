@@ -1,9 +1,9 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { aTimeout, fixtureSync, nextFrame } from '@open-wc/testing-helpers';
+import { aTimeout, fixtureSync, isIOS, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
 import '../vaadin-date-picker.js';
-import { click, close, getOverlayContent, ios, monthsEqual, open, listenForEvent, tap } from './common.js';
+import { click, close, getOverlayContent, monthsEqual, open, tap } from './common.js';
 
 describe('basic features', () => {
   let datepicker, toggleButton;
@@ -70,9 +70,9 @@ describe('basic features', () => {
     expect(datepicker.opened).to.be.false;
   });
 
-  it('should open on input tap', (done) => {
+  it('should open on input tap', async () => {
     tap(datepicker.$.input);
-    listenForEvent(datepicker.$.overlay, 'vaadin-overlay-open', done);
+    await oneEvent(datepicker.$.overlay, 'vaadin-overlay-open');
   });
 
   it('should not open on input tap when autoOpenDisabled is true and not on mobile', () => {
@@ -166,15 +166,15 @@ describe('basic features', () => {
     expect(datepicker._inputElement.value).to.equal('2/1/0099');
   });
 
-  it('should open by tapping the calendar icon', (done) => {
+  it('should open by tapping the calendar icon', async () => {
     tap(toggleButton);
-    listenForEvent(datepicker.$.overlay, 'vaadin-overlay-open', done);
+    await oneEvent(datepicker.$.overlay, 'vaadin-overlay-open');
   });
 
-  it('should open by tapping the calendar icon even if autoOpenDisabled is true', (done) => {
+  it('should open by tapping the calendar icon even if autoOpenDisabled is true', async () => {
     window.autoOpenDisabled = true;
     tap(toggleButton);
-    listenForEvent(datepicker.$.overlay, 'vaadin-overlay-open', done);
+    await oneEvent(datepicker.$.overlay, 'vaadin-overlay-open');
   });
 
   it('should scroll to a date on open', async () => {
@@ -225,7 +225,7 @@ describe('basic features', () => {
     });
 
     // https://github.com/vaadin/vaadin-date-picker/issues/330
-    (ios ? it.skip : it)('should not realign on year/month scroll', async () => {
+    (isIOS ? it.skip : it)('should not realign on year/month scroll', async () => {
       const spy = sinon.spy(datepicker, '_updateAlignmentAndPosition');
       getOverlayContent(datepicker).$.yearScroller.$.scroller.scrollTop += 100;
       await aTimeout(1);

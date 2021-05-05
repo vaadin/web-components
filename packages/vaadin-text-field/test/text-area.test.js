@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync, oneEvent } from '@open-wc/testing-helpers';
-import { listenOnce, makeFixture } from './helpers.js';
+import { fixtureSync, listenOnce, oneEvent } from '@vaadin/testing-helpers';
+import { makeFixture } from './helpers.js';
 import '../vaadin-text-area.js';
 
 ['default', 'slotted'].forEach((condition) => {

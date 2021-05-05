@@ -1,8 +1,8 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync } from '@open-wc/testing-helpers';
+import { aTimeout, fixtureSync, listenOnce } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
 import '../vaadin-date-picker-light.js';
-import { getOverlayContent, listenForEvent, open, tap } from './common.js';
+import { getOverlayContent, open, tap } from './common.js';
 
 describe('custom input', () => {
   let datepicker, overlayContent;
@@ -28,7 +28,7 @@ describe('custom input', () => {
     const target = datepicker._inputElement;
     target.value = '1';
 
-    listenForEvent(document, 'vaadin-overlay-open', () => {
+    listenOnce(document, 'vaadin-overlay-open', () => {
       expect(datepicker.$.overlay.opened).to.be.true;
       done();
     });

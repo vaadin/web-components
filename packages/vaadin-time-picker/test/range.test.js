@@ -1,12 +1,12 @@
 import { expect } from '@esm-bundle/chai';
-import { fixture, html } from '@open-wc/testing-helpers';
+import { fixtureSync } from '@vaadin/testing-helpers';
 import '../vaadin-time-picker.js';
 
 describe('min and max properties', () => {
   let timePicker;
 
-  beforeEach(async () => {
-    timePicker = await fixture(html`<vaadin-time-picker></vaadin-time-picker>`);
+  beforeEach(() => {
+    timePicker = fixtureSync(`<vaadin-time-picker></vaadin-time-picker>`);
   });
 
   it('min property should be 00:00:00.000 by default', () => {

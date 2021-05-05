@@ -1,39 +1,22 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixture, html, nextFrame } from '@open-wc/testing-helpers';
-import { render } from 'lit-html';
-import { keyDownOn, keyUpOn, keyboardEventFor } from '@polymer/iron-test-helpers/mock-interactions.js';
+import {
+  arrowDown,
+  arrowUp,
+  enterKeyDown,
+  enterKeyUp,
+  escKeyDown,
+  fixtureSync,
+  nextFrame,
+  tab,
+  keyboardEventFor,
+  keyDownChar,
+  spaceKeyDown
+} from '@vaadin/testing-helpers';
+import { html, render } from 'lit-html';
 import '@vaadin/vaadin-list-box/vaadin-list-box.js';
 import '@vaadin/vaadin-item/vaadin-item.js';
 import '../vaadin-select.js';
-
-function arrowUp(target) {
-  keyDownOn(target, 38, [], 'ArrowUp');
-}
-
-function arrowDown(target) {
-  keyDownOn(target, 40, [], 'ArrowDown');
-}
-
-function space(target) {
-  keyDownOn(target, 32, [], ' ');
-}
-
-function enter(target) {
-  keyDownOn(target, 13, [], 'Enter');
-}
-
-function esc(target) {
-  keyDownOn(target, 27, [], 'Escape');
-}
-
-function keyDownChar(target, letter, modifier) {
-  keyDownOn(target, letter.charCodeAt(0), modifier, letter);
-}
-
-function tab(target) {
-  keyDownOn(target, 9, [], 'Tab');
-}
 
 describe('vaadin-select', () => {
   let select, input;
@@ -41,8 +24,8 @@ describe('vaadin-select', () => {
   describe('empty', () => {
     let select;
 
-    beforeEach(async () => {
-      select = await fixture(html`<vaadin-select></vaadin-select>`);
+    beforeEach(() => {
+      select = fixtureSync(`<vaadin-select></vaadin-select>`);
     });
 
     it('should not throw an exception if renderer is not set', () => {
@@ -77,7 +60,7 @@ describe('vaadin-select', () => {
 
   describe('with items', () => {
     beforeEach(async () => {
-      select = await fixture(html`<vaadin-select></vaadin-select>`);
+      select = fixtureSync(`<vaadin-select></vaadin-select>`);
       select.renderer = (root) => {
         if (root.firstElementChild) {
           return;
@@ -97,6 +80,7 @@ describe('vaadin-select', () => {
         );
       };
       input = select._inputElement;
+      await nextFrame();
     });
 
     describe('selection', () => {
@@ -253,25 +237,25 @@ describe('vaadin-select', () => {
       });
 
       it('should open overlay on Space', () => {
-        space(input);
+        spaceKeyDown(input);
         expect(select._overlayElement.opened).to.be.true;
       });
 
       it('should open overlay on Enter', () => {
-        enter(input);
+        enterKeyDown(input);
         expect(select._overlayElement.opened).to.be.true;
       });
 
       it('should close overlay on Escape', () => {
         select.opened = true;
-        esc(input);
+        escKeyDown(input);
         expect(select._overlayElement.opened).to.be.false;
       });
 
       it('should align the overlay on top left corner by default on input click', async () => {
         // NOTE: avoid setting bottom-aligned because of web-test-runner window size
         select.setAttribute('style', 'position: absolute; top: 10px');
-        enter(input);
+        enterKeyDown(input);
         await nextFrame();
         const overlayRect = select._overlayElement.getBoundingClientRect();
         const inputRect = input.shadowRoot.querySelector('[part~="input-field"]').getBoundingClientRect();
@@ -283,7 +267,7 @@ describe('vaadin-select', () => {
         select.setAttribute('dir', 'rtl');
         // NOTE: avoid setting bottom-aligned because of web-test-runner window size
         select.setAttribute('style', 'position: absolute; top: 10px');
-        enter(input);
+        enterKeyDown(input);
         await nextFrame();
         const overlayRect = select._overlayElement.getBoundingClientRect();
         const inputRect = input.shadowRoot.querySelector('[part~="input-field"]').getBoundingClientRect();
@@ -307,11 +291,11 @@ describe('vaadin-select', () => {
         menu = select._menuElement;
         await nextFrame();
         select.focus();
-        enter(input);
+        enterKeyDown(input);
       });
 
       it('should close the select on selecting the same value', () => {
-        enter(input);
+        enterKeyDown(input);
         expect(select._overlayElement.opened).to.be.true;
         select._items[0].dispatchEvent(new CustomEvent('click', { bubbles: true }));
         expect(select._overlayElement.opened).to.be.false;
@@ -407,7 +391,7 @@ describe('vaadin-select', () => {
         select.disabled = true;
         expect(input.disabled).to.be.true;
 
-        enter(input);
+        enterKeyDown(input);
         expect(select._overlayElement.opened).to.be.false;
 
         input.dispatchEvent(new CustomEvent('click', { bubbles: true }));
@@ -418,7 +402,7 @@ describe('vaadin-select', () => {
     describe('readonly', () => {
       it('should disable opening if select is readonly', () => {
         select.readonly = true;
-        enter(input);
+        enterKeyDown(input);
         expect(select._overlayElement.opened).to.be.false;
 
         input.dispatchEvent(new CustomEvent('click', { bubbles: true }));
@@ -486,8 +470,8 @@ describe('vaadin-select', () => {
         expect(select.invalid).to.be.false;
         select.setAttribute('required', '');
 
-        enter(input);
-        esc(input);
+        enterKeyDown(input);
+        escKeyDown(input);
         expect(select.invalid).to.be.true;
       });
 
@@ -605,8 +589,8 @@ describe('vaadin-select', () => {
         arrowUp(menu);
 
         const secondOption = menu.querySelector('[value="v2"]');
-        keyDownOn(secondOption, 13, [], 'Enter');
-        keyUpOn(secondOption, 13, [], 'Enter');
+        enterKeyDown(secondOption);
+        enterKeyUp(secondOption);
         expect(changeSpy.callCount).to.equal(1);
       });
     });
@@ -616,7 +600,7 @@ describe('vaadin-select', () => {
     let menu;
 
     beforeEach(async () => {
-      select = await fixture(html`<vaadin-select value="v2"></vaadin-select>`);
+      select = fixtureSync(`<vaadin-select value="v2"></vaadin-select>`);
       select.renderer = (root) => {
         if (root.firstElementChild) {
           return;
@@ -632,6 +616,7 @@ describe('vaadin-select', () => {
         );
       };
       menu = select._menuElement;
+      await nextFrame();
     });
 
     it('should be possible to set value declaratively', () => {
@@ -641,8 +626,8 @@ describe('vaadin-select', () => {
   });
 
   describe('with theme attribute', () => {
-    beforeEach(async () => {
-      select = await fixture(html`<vaadin-select theme="foo"></vaadin-select>`);
+    beforeEach(() => {
+      select = fixtureSync(`<vaadin-select theme="foo"></vaadin-select>`);
     });
 
     it('should propagate theme attribute to field', () => {
@@ -657,12 +642,12 @@ describe('vaadin-select', () => {
   describe('inside flexbox', () => {
     let container;
 
-    beforeEach(async () => {
-      container = await fixture(
-        html`<div style="display: flex; flex-direction: column; width: 500px;">
+    beforeEach(() => {
+      container = fixtureSync(`
+        <div style="display: flex; flex-direction: column; width: 500px;">
           <vaadin-select></vaadin-select>
-        </div>`
-      );
+        </div>
+      `);
     });
 
     it('should stretch inside a column flex container', () => {
@@ -673,8 +658,8 @@ describe('vaadin-select', () => {
   });
 
   describe('with helper text', () => {
-    beforeEach(async () => {
-      select = await fixture(html`<vaadin-select></vaadin-select>`);
+    beforeEach(() => {
+      select = fixtureSync(`<vaadin-select></vaadin-select>`);
     });
 
     it('should display the helper text when slotted helper available', async () => {

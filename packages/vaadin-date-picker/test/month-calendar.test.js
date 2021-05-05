@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { aTimeout, fixtureSync } from '@open-wc/testing-helpers';
+import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
 import '../src/vaadin-month-calendar.js';
 import { getDefaultI18n, tap } from './common.js';
 
