@@ -197,7 +197,7 @@ describe('vaadin-date-picker-overlay', () => {
     it('should fire close on cancel click', () => {
       const spy = sinon.spy();
       overlay.addEventListener('close', spy);
-      click(overlay.$.cancelButton);
+      tap(overlay.$.cancelButton);
       expect(spy.calledOnce).to.be.true;
     });
 
@@ -206,7 +206,7 @@ describe('vaadin-date-picker-overlay', () => {
         const date = new Date(2000, 1, 1);
         overlay.scrollToDate(date);
         waitUntilScrolledTo(overlay, date, () => {
-          click(overlay.$.todayButton);
+          tap(overlay.$.todayButton);
           waitUntilScrolledTo(overlay, new Date(), () => {
             done();
           });
@@ -220,7 +220,7 @@ describe('vaadin-date-picker-overlay', () => {
         overlay.addEventListener('close', spy);
 
         waitUntilScrolledTo(overlay, today, () => {
-          click(overlay.$.todayButton);
+          tap(overlay.$.todayButton);
 
           expect(overlay.selectedDate.getFullYear()).to.equal(today.getFullYear());
           expect(overlay.selectedDate.getMonth()).to.equal(today.getMonth());
@@ -238,7 +238,7 @@ describe('vaadin-date-picker-overlay', () => {
 
         waitUntilScrolledTo(overlay, today, () => {
           overlay.$.monthScroller.$.scroller.scrollTop -= 1;
-          click(overlay.$.todayButton);
+          tap(overlay.$.todayButton);
 
           expect(overlay.selectedDate).to.be.undefined;
           expect(spy.called).to.be.false;
@@ -257,7 +257,7 @@ describe('vaadin-date-picker-overlay', () => {
 
         waitUntilScrolledTo(overlay, initialDate, () => {
           const lastScrollPos = overlay.$.monthScroller.position;
-          click(overlay.$.todayButton);
+          tap(overlay.$.todayButton);
 
           expect(overlay.$.monthScroller.position).to.equal(lastScrollPos);
           // FIXME: fails in FF + Polymer 1.x

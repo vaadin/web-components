@@ -472,7 +472,7 @@ import { close, getOverlayContent, open } from './common.js';
 
     it('should focus the input on date cancel', () => {
       arrowDown(target);
-      click(overlayContent.$.cancelButton);
+      tap(overlayContent.$.cancelButton);
       expect(datepicker._inputElement.hasAttribute('focused')).to.be.true;
     });
 
