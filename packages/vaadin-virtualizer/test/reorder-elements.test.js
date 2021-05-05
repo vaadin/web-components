@@ -22,7 +22,7 @@ describe('reorder elements', () => {
   // recycled but not too much to cause a full recycle.
   // Returns a list of the elements that were detached while being reordered.
   async function scrollRecycle(skipFlush = false) {
-    return await new Promise((resolve) => {
+    return new Promise((resolve) => {
       new MutationObserver((mutations) => {
         resolve(mutations.flatMap((record) => [...record.removedNodes]));
       }).observe(elementsContainer, { childList: true });

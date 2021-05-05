@@ -6,7 +6,6 @@ import { ironList } from './iron-list';
 // When the size is larger than MAX_VIRTUAL_COUNT _vidxOffset is used
 const MAX_VIRTUAL_COUNT = 100000;
 
-// TODO: API for requesting render for an index range
 export class IronListAdapter {
   constructor({ createElements, updateElement, scrollTarget, scrollContainer, elementsContainer, reorderElements }) {
     this.isAttached = true;
@@ -102,8 +101,8 @@ export class IronListAdapter {
   }
 
   __getIndexScrollOffset(index) {
-    const el = this.__getVisibleElements().find((el) => el.__virtualIndex === index);
-    return el ? this.scrollTarget.getBoundingClientRect().top - el.getBoundingClientRect().top : 0;
+    const element = this.__getVisibleElements().find((el) => el.__virtualIndex === index);
+    return element ? this.scrollTarget.getBoundingClientRect().top - element.getBoundingClientRect().top : 0;
   }
 
   set size(size) {

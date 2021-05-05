@@ -976,7 +976,7 @@ class GridElement extends ElementMixin(
    * contained image whose bounds aren't known beforehand finishes loading).
    */
   notifyResize() {
-    // TODO: remove
+    // To be removed in https://github.com/vaadin/web-components/issues/331
   }
 
   /** @private */
