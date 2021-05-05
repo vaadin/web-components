@@ -1,26 +1,9 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@open-wc/testing-helpers';
-import { keyDownOn } from '@polymer/iron-test-helpers/mock-interactions.js';
+import { arrowDown, arrowLeft, arrowRight, arrowUp, fixtureSync } from '@vaadin/testing-helpers';
 import '../vaadin-tabs.js';
 
 describe('scrollable tabs', () => {
   let tabs, items, scroller;
-
-  function arrowDown(target) {
-    keyDownOn(target, 40, [], 'ArrowDown');
-  }
-
-  function arrowRight(target) {
-    keyDownOn(target, 39, [], 'ArrowRight');
-  }
-
-  function arrowUp(target) {
-    keyDownOn(target, 38, [], 'ArrowUp');
-  }
-
-  function arrowLeft(target) {
-    keyDownOn(target, 37, [], 'ArrowLeft');
-  }
 
   beforeEach(() => {
     tabs = fixtureSync(`

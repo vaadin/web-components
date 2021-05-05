@@ -1,23 +1,10 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync } from '@open-wc/testing-helpers';
+import { arrowDown, arrowUp, enter, fixtureSync, keyDownChar, nextRender, space } from '@vaadin/testing-helpers';
 import { TextFieldElement } from '@vaadin/vaadin-text-field/src/vaadin-text-field.js';
 import { SelectElement } from '@vaadin/vaadin-select/src/vaadin-select.js';
 import { CheckboxElement } from '@vaadin/vaadin-checkbox/src/vaadin-checkbox.js';
-import {
-  arrowDown,
-  arrowUp,
-  createItems,
-  dblclick,
-  enter,
-  flushGrid,
-  getCellEditor,
-  getContainerCell,
-  keyDownChar,
-  nextRender,
-  onceOpened,
-  space
-} from './helpers.js';
+import { createItems, dblclick, flushGrid, getCellEditor, getContainerCell, onceOpened } from './helpers.js';
 import './not-animated-styles.js';
 import '../vaadin-grid-pro.js';
 import '../vaadin-grid-pro-edit-column.js';

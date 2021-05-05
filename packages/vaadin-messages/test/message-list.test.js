@@ -1,16 +1,6 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@open-wc/testing-helpers';
-import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
-import { keyDownOn, keyUpOn } from '@polymer/iron-test-helpers/mock-interactions.js';
+import { arrowDown, arrowRight, arrowUp, end, fixtureSync, home, nextRender } from '@vaadin/testing-helpers';
 import '../vaadin-message-list.js';
-
-function nextRender(target) {
-  return new Promise((resolve) => {
-    afterNextRender(target, () => {
-      resolve();
-    });
-  });
-}
 
 describe('message-list', () => {
   let messageList, messages;
@@ -284,26 +274,6 @@ describe('message-list', () => {
       messageElements = messageList.shadowRoot.querySelectorAll('vaadin-message');
     });
 
-    function arrowDown(element) {
-      keyDownOn(element, 40, [], 'ArrowDown');
-      keyUpOn(element, 40, [], 'ArrowDown');
-    }
-
-    function arrowUp(element) {
-      keyDownOn(element, 38, [], 'ArrowUp');
-      keyUpOn(element, 38, [], 'ArrowUp');
-    }
-
-    function home(element) {
-      keyDownOn(element, 36, [], 'Home');
-      keyUpOn(element, 36, [], 'Home');
-    }
-
-    function end(element) {
-      keyDownOn(element, 35, [], 'End');
-      keyUpOn(element, 35, [], 'End');
-    }
-
     it('no focus before interaction', () => {
       messageElements.forEach((aMessage) => {
         expect(aMessage.hasAttribute('focused')).to.be.false;
@@ -372,16 +342,14 @@ describe('message-list', () => {
 
     it('holding down control while pressing keys should not do anything', () => {
       arrowDown(messageElements[1]);
-      keyDownOn(messageElements[2], 40, ['ctrl'], 'ArrowDown');
-      keyUpOn(messageElements[2], 40, ['ctrl'], 'ArrowDown');
+      arrowDown(messageElements[2], ['ctrl']);
       expect(messageElements[3].hasAttribute('focused')).to.be.false;
       expect(messageElements[2].hasAttribute('focused')).to.be.true;
     });
 
     it('random unhandled key press should not affect focus', () => {
       arrowDown(messageElements[0]);
-      keyDownOn(messageElements[1], 75, [], 'KeyK');
-      keyUpOn(messageElements[1], 75, [], 'KeyK');
+      arrowRight(messageElements[1]);
       expect(messageElements[1].hasAttribute('focused')).to.be.true;
     });
   });

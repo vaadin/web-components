@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
-import { fixture, html, nextFrame } from '@open-wc/testing-helpers';
+import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import { createFiles, xhrCreator } from './common.js';
-import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import '../vaadin-upload.js';
 
 describe('file list', () => {
@@ -11,8 +10,8 @@ describe('file list', () => {
     return upload.$.fileList.querySelectorAll('vaadin-upload-file');
   };
 
-  beforeEach(async () => {
-    upload = await fixture(html`<vaadin-upload></vaadin-upload>`);
+  beforeEach(() => {
+    upload = fixtureSync(`<vaadin-upload></vaadin-upload>`);
     upload._createXhr = xhrCreator();
   });
 
@@ -47,13 +46,11 @@ describe('file list', () => {
     expect(getFileListItems(upload).length).to.equal(0);
   });
 
-  it('should not overflow content', (done) => {
+  it('should not overflow content', async () => {
     upload.style.width = '150px';
     upload._addFile(createFiles(1)[0]);
-    afterNextRender(upload, () => {
-      const fileListItem = getFileListItems(upload)[0];
-      expect(fileListItem.scrollWidth).to.equal(fileListItem.offsetWidth);
-      done();
-    });
+    await nextRender(upload);
+    const fileListItem = getFileListItems(upload)[0];
+    expect(fileListItem.scrollWidth).to.equal(fileListItem.offsetWidth);
   });
 });

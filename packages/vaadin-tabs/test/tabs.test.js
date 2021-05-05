@@ -1,20 +1,10 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync } from '@open-wc/testing-helpers';
-import { keyDownOn, keyUpOn } from '@polymer/iron-test-helpers/mock-interactions.js';
-import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
+import { arrowRight, enter, fixtureSync, listenOnce, nextRender, space } from '@vaadin/testing-helpers';
 import '../vaadin-tabs.js';
 
 describe('tabs', () => {
   let tabs;
-
-  function listenOnce(element, eventName, callback) {
-    const listener = (e) => {
-      element.removeEventListener(eventName, listener);
-      callback(e);
-    };
-    element.addEventListener(eventName, listener);
-  }
 
   beforeEach(() => {
     tabs = fixtureSync(`
@@ -81,14 +71,14 @@ describe('tabs', () => {
         describe('small viewport', () => {
           const horizontalRtl = orientation === 'horizontal' && direction === 'rtl';
 
-          beforeEach((done) => {
+          beforeEach(async () => {
             if (orientation === 'horizontal') {
               tabs.style.width = '200px';
             } else {
               tabs.style.height = '100px';
             }
             tabs._updateOverflow();
-            afterNextRender(tabs, done);
+            await nextRender(tabs);
           });
 
           it(`when orientation=${orientation} should have overflow="end" if scroll is at the beginning`, () => {
@@ -151,20 +141,17 @@ describe('tabs', () => {
     });
 
     it('should propagate click to the anchor element when Enter key pressed', () => {
-      keyDownOn(tab, 13, [], 'Enter');
-      keyUpOn(tab, 13, [], 'Enter');
+      enter(tab);
       expect(spy.calledOnce).to.be.true;
     });
 
     it('should propagate click to the anchor element when Space key pressed', () => {
-      keyDownOn(tab, 27, [], ' ');
-      keyUpOn(tab, 27, [], ' ');
+      space(tab);
       expect(spy.calledOnce).to.be.true;
     });
 
     it('should not propagate click to the anchor when other key pressed', () => {
-      keyDownOn(tab, 39, [], 'ArrowRight');
-      keyUpOn(tab, 39, [], 'ArrowRight');
+      arrowRight(tab);
       expect(spy.calledOnce).to.be.false;
     });
   });

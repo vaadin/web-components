@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync } from '@open-wc/testing-helpers';
+import { fixtureSync } from '@vaadin/testing-helpers';
 import { makeFixture } from './helpers.js';
 import '../vaadin-email-field.js';
 import '../vaadin-number-field.js';

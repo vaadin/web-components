@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextFrame } from '@open-wc/testing-helpers';
-import { flushGrid, infiniteDataProvider, listenOnce } from './helpers.js';
+import { fixtureSync, listenOnce, nextFrame } from '@vaadin/testing-helpers';
+import { flushGrid, infiniteDataProvider } from './helpers.js';
 import '../vaadin-grid.js';
 import '../vaadin-grid-tree-column.js';
 

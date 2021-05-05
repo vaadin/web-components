@@ -2,8 +2,11 @@ import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import {
   arrowDownKeyDown,
+  arrowLeftKeyDown,
+  arrowRightKeyDown,
   arrowUpKeyDown,
   enterKeyDown,
+  escKeyDown,
   fire,
   fixtureSync,
   isIOS,
@@ -249,7 +252,7 @@ describe('items', () => {
 
     it('should close the submenu on left arrow', () => {
       const focusSpy = sinon.spy(menuComponents()[0], 'focus');
-      fire(menuComponents(subMenu)[0], 'keydown', {}, { keyCode: 37, key: 'ArrowLeft' });
+      arrowLeftKeyDown(menuComponents(subMenu)[0]);
       expect(subMenu.opened).to.be.false;
       expect(focusSpy.called).to.be.true;
     });
@@ -258,14 +261,14 @@ describe('items', () => {
       document.documentElement.setAttribute('dir', 'rtl');
       await nextFrame();
       const focusSpy = sinon.spy(menuComponents()[0], 'focus');
-      fire(menuComponents(subMenu)[0], 'keydown', {}, { keyCode: 39, key: 'ArrowRight' });
+      arrowRightKeyDown(menuComponents(subMenu)[0]);
       expect(subMenu.opened).to.be.false;
       expect(focusSpy.called).to.be.true;
       document.documentElement.setAttribute('dir', 'ltr');
     });
 
     it('should close all menus on esc', () => {
-      fire(menuComponents(subMenu)[0], 'keydown', {}, { keyCode: 27, key: 'Esc' });
+      escKeyDown(menuComponents(subMenu)[0]);
       expect(rootMenu.opened).to.be.false;
     });
 
@@ -301,7 +304,7 @@ describe('items', () => {
 
     it('should open item on right arrow', () => {
       subMenu.close();
-      fire(menuComponents()[0], 'keydown', {}, { keyCode: 39, key: 'ArrowRight' });
+      arrowRightKeyDown(menuComponents()[0]);
       expect(subMenu.opened).to.be.true;
     });
 
@@ -309,7 +312,7 @@ describe('items', () => {
       document.documentElement.setAttribute('dir', 'rtl');
       await nextFrame();
       subMenu.close();
-      fire(menuComponents()[0], 'keydown', {}, { keyCode: 37, key: 'ArrowLeft' });
+      arrowLeftKeyDown(menuComponents()[0]);
       expect(subMenu.opened).to.be.true;
       document.documentElement.setAttribute('dir', 'ltr');
     });

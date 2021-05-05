@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
-import { fixture, html, nextFrame } from '@open-wc/testing-helpers';
-import { render } from 'lit-html';
+import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { html, render } from 'lit-html';
 import '@vaadin/vaadin-list-box/vaadin-list-box.js';
 import '@vaadin/vaadin-item/vaadin-item.js';
 import '../vaadin-select.js';
@@ -9,7 +9,7 @@ describe('vaadin-select accessibility', () => {
   let select;
 
   beforeEach(async () => {
-    select = await fixture(html`<vaadin-select label="Label"></vaadin-select>`);
+    select = fixtureSync(`<vaadin-select label="Label"></vaadin-select>`);
     select.renderer = (root) => {
       if (root.firstElementChild) {
         return;
@@ -24,6 +24,7 @@ describe('vaadin-select accessibility', () => {
         root
       );
     };
+    await nextFrame();
   });
 
   it('should have aria-required attribute set to true when required', () => {

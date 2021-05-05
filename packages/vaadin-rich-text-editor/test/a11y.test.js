@@ -1,8 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync } from '@open-wc/testing-helpers';
-import { down, keyboardEventFor } from '@polymer/iron-test-helpers/mock-interactions.js';
-import { isFirefox } from './helpers.js';
+import { down, fixtureSync, isFirefox, keyboardEventFor } from '@vaadin/testing-helpers';
 import '../vaadin-rich-text-editor.js';
 
 describe('accessibility', () => {

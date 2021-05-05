@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync, nextFrame } from '@open-wc/testing-helpers';
-import { pressAndReleaseKeyOn } from '@polymer/iron-test-helpers/mock-interactions.js';
+import { fixtureSync, esc, nextFrame } from '@vaadin/testing-helpers';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import './not-animated-styles.js';
 import '../vaadin-confirm-dialog.js';
@@ -318,14 +317,14 @@ describe('vaadin-confirm-dialog', () => {
     });
 
     it('should close but not cancel dialog by default', () => {
-      pressAndReleaseKeyOn(document.body, 27, [], 'Escape');
+      esc(document.body);
       expect(spy.called).to.be.true;
       expect(confirm.opened).to.be.false;
     });
 
     it('should not close and not cancel dialog with no-close-on-esc', () => {
       confirm.noCloseOnEsc = true;
-      pressAndReleaseKeyOn(document.body, 27, [], 'Escape');
+      esc(document.body);
       expect(spy.called).to.be.false;
       expect(confirm.opened).to.be.true;
     });

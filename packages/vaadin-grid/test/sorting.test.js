@@ -1,16 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync, nextFrame } from '@open-wc/testing-helpers';
-import {
-  buildDataSet,
-  click,
-  flushGrid,
-  getBodyCellContent,
-  getHeaderCellContent,
-  getRows,
-  getRowCells,
-  listenOnce
-} from './helpers.js';
+import { click, fixtureSync, listenOnce, nextFrame } from '@vaadin/testing-helpers';
+import { buildDataSet, flushGrid, getBodyCellContent, getHeaderCellContent, getRows, getRowCells } from './helpers.js';
 import '../vaadin-grid.js';
 import '../vaadin-grid-sorter.js';
 import '../vaadin-grid-sort-column.js';

@@ -1,6 +1,5 @@
+import { listenOnce } from '@vaadin/testing-helpers';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
-
-export const ios = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
 export function activateScroller(scroller) {
   scroller.active = true;
@@ -48,34 +47,18 @@ export function getDefaultI18n() {
   };
 }
 
-export function listenForEvent(elem, type, callback) {
-  var listener = function () {
-    elem.removeEventListener(type, listener);
-    callback();
-  };
-  elem.addEventListener(type, listener);
-}
-
 export function open(datepicker) {
   return new Promise((resolve) => {
-    listenForEvent(datepicker.$.overlay, 'vaadin-overlay-open', resolve);
+    listenOnce(datepicker.$.overlay, 'vaadin-overlay-open', resolve);
     datepicker.open();
   });
 }
 
 export function close(datepicker) {
   return new Promise((resolve) => {
-    listenForEvent(datepicker.$.overlay, 'vaadin-overlay-close', resolve);
+    listenOnce(datepicker.$.overlay, 'vaadin-overlay-close', resolve);
     datepicker.close();
   });
-}
-
-export function tap(element) {
-  element.dispatchEvent(new CustomEvent('tap', { bubbles: true, detail: {}, composed: true }));
-}
-
-export function click(element) {
-  element.dispatchEvent(new CustomEvent('click', { bubbles: true, detail: {}, composed: true }));
 }
 
 export function monthsEqual(date1, date2) {
