@@ -81,7 +81,6 @@ export const InlineEditingMixin = (superClass) =>
       this.addEventListener('keydown', (e) => {
         switch (e.keyCode) {
           case 27:
-            console.log(e);
             this.__edited && this._stopEdit(true);
             break;
           case 9:
