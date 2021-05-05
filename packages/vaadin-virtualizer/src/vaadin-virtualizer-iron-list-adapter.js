@@ -208,8 +208,8 @@ export class IronListAdapter {
   }
 
   /** @private */
-  translate3d(x, y, _z, el) {
-    el.style.transform = `translate3d(${x}, ${y}, 0)`;
+  translate3d(_x, y, _z, el) {
+    el.style.transform = `translateY(${y})`;
   }
 
   /** @private */
