@@ -1,13 +1,13 @@
 import { expect } from '@esm-bundle/chai';
-import { fixture, html } from '@open-wc/testing-helpers';
+import { fixtureSync } from '@vaadin/testing-helpers';
 import '../vaadin-date-picker.js';
 import { open } from './common.js';
 
 describe('theme attribute', () => {
   let datepicker;
 
-  beforeEach(async () => {
-    datepicker = await fixture(html`<vaadin-date-picker theme="foo"></vaadin-date-picker>`);
+  beforeEach(() => {
+    datepicker = fixtureSync(`<vaadin-date-picker theme="foo"></vaadin-date-picker>`);
   });
 
   it('should not throw if set programmatically before overlay init', () => {

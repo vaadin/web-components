@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, nextFrame, oneEvent } from '@open-wc/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import { flushGrid, getRows, getRowCells, infiniteDataProvider, scrollToEnd } from './helpers.js';
 import '../vaadin-grid.js';

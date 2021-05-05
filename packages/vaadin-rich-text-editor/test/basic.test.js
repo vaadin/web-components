@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync } from '@open-wc/testing-helpers';
-import { createImage, isDesktopSafari, isFirefox, nextRender } from './helpers.js';
+import { fixtureSync, isDesktopSafari, isFirefox, nextRender } from '@vaadin/testing-helpers';
+import { createImage } from './helpers.js';
 import '../vaadin-rich-text-editor.js';
 
 describe('rich text editor', () => {

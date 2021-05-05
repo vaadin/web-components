@@ -1,5 +1,4 @@
-import { keyDownOn } from '@polymer/iron-test-helpers/mock-interactions.js';
-import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
+import { isIOS } from '@vaadin/testing-helpers';
 import { flush } from '@polymer/polymer/lib/utils/flush.js';
 
 export const infiniteDataProvider = (params, callback) => {
@@ -138,46 +137,6 @@ export const getNativeInput = (editor) => {
 
 export const flatMap = (array, mapper) => [].concat(...array.map(mapper));
 
-export const arrowUp = (target) => {
-  keyDownOn(target, 38, [], 'ArrowUp');
-};
-
-export const arrowDown = (target) => {
-  keyDownOn(target, 40, [], 'ArrowDown');
-};
-
-export const keyDownChar = (target, letter, modifier) => {
-  keyDownOn(target, letter.charCodeAt(0), modifier, letter);
-};
-
-export const space = (target) => {
-  keyDownOn(target, 32, [], ' ');
-};
-
-export const tab = (target) => {
-  keyDownOn(target, 9, [], 'Tab');
-};
-
-export const shiftTab = (target) => {
-  keyDownOn(target, 9, 'shift', 'Tab');
-};
-
-export const enter = (target) => {
-  keyDownOn(target, 13, [], 'Enter');
-};
-
-export const shiftEnter = (target) => {
-  keyDownOn(target, 13, 'shift', 'Enter');
-};
-
-export const esc = (target) => {
-  keyDownOn(target, 27, [], 'Escape');
-};
-
-export const isIOS =
-  (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) ||
-  (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-
 export const dblclick = (target) => {
   if (isIOS) {
     target.dispatchEvent(new CustomEvent('click', { bubbles: true, composed: true }));
@@ -196,14 +155,6 @@ export const onceOpened = (element) => {
       }
     };
     element.addEventListener('opened-changed', listener);
-  });
-};
-
-export const nextRender = (target) => {
-  return new Promise((resolve) => {
-    afterNextRender(target, () => {
-      resolve();
-    });
   });
 };
 

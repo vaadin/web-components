@@ -1,14 +1,9 @@
 import { expect } from '@esm-bundle/chai';
-import { fixture, html } from '@open-wc/testing-helpers';
-import { render } from 'lit-html';
-import { keyDownOn } from '@polymer/iron-test-helpers/mock-interactions.js';
+import { fixtureSync, enterKeyDown } from '@vaadin/testing-helpers';
+import { html, render } from 'lit-html';
 import '@vaadin/vaadin-list-box/vaadin-list-box.js';
 import '@vaadin/vaadin-item/vaadin-item.js';
 import '../vaadin-select.js';
-
-function enter(target) {
-  keyDownOn(target, 13, [], 'Enter');
-}
 
 function scrollContainer(container, value, scrollLeft) {
   if (scrollLeft) {
@@ -21,8 +16,8 @@ function scrollContainer(container, value, scrollLeft) {
 describe('scrollable viewport', () => {
   let scrollableContainer, container, select, overlay, input, inputFieldBlock;
 
-  beforeEach(async () => {
-    scrollableContainer = await fixture(html`
+  beforeEach(() => {
+    scrollableContainer = fixtureSync(`
       <div id="scrollable-container">
         <div id="container">
           <vaadin-select></vaadin-select>
@@ -79,14 +74,14 @@ describe('scrollable viewport', () => {
   });
 
   it('should toggle bottom-aligned attribute depending on the part of the viewport', () => {
-    enter(input);
+    enterKeyDown(input);
     expect(select._overlayElement.hasAttribute('bottom-aligned')).to.be.true;
     scrollContainer(scrollableContainer, 150);
     expect(select._overlayElement.hasAttribute('bottom-aligned')).to.be.false;
   });
 
   it('should update the position on scrolling', () => {
-    enter(input);
+    enterKeyDown(input);
 
     expect(overlay.getBoundingClientRect().bottom).to.be.closeTo(inputFieldBlock.getBoundingClientRect().bottom, 1);
     expect(overlay.getBoundingClientRect().left).to.be.closeTo(inputFieldBlock.getBoundingClientRect().left, 1);
@@ -98,7 +93,7 @@ describe('scrollable viewport', () => {
   });
 
   it('should update the position on iron-resize event', () => {
-    enter(input);
+    enterKeyDown(input);
     expect(overlay.getBoundingClientRect().bottom).to.be.closeTo(inputFieldBlock.getBoundingClientRect().bottom, 1);
     expect(overlay.getBoundingClientRect().left).to.be.closeTo(inputFieldBlock.getBoundingClientRect().left, 1);
 

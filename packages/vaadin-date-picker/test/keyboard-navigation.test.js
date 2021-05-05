@@ -1,58 +1,29 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { aTimeout, fixtureSync } from '@open-wc/testing-helpers';
-import { keyDownOn, pressEnter, pressSpace } from '@polymer/iron-test-helpers/mock-interactions.js';
-import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
+import {
+  arrowDown,
+  arrowLeft,
+  arrowRight,
+  arrowUp,
+  aTimeout,
+  end,
+  enter,
+  esc,
+  fixtureSync,
+  home,
+  isIOS,
+  nextRender,
+  oneEvent,
+  pageDown,
+  pageUp,
+  space
+} from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
 import '../vaadin-date-picker.js';
-import { getDefaultI18n, getOverlayContent, ios, listenForEvent, open } from './common.js';
+import { getDefaultI18n, getOverlayContent, open } from './common.js';
 
-(ios ? describe.skip : describe)('keyboard navigation', () => {
+(isIOS ? describe.skip : describe)('keyboard navigation', () => {
   let target;
-
-  function arrowDown() {
-    keyDownOn(target, 40);
-  }
-
-  function arrowRight() {
-    keyDownOn(target, 39);
-  }
-
-  function arrowUp() {
-    keyDownOn(target, 38);
-  }
-
-  function arrowLeft() {
-    keyDownOn(target, 37);
-  }
-
-  function home() {
-    keyDownOn(target, 36);
-  }
-
-  function end() {
-    keyDownOn(target, 35);
-  }
-
-  function pageDown(modifiers) {
-    keyDownOn(target, 34, modifiers);
-  }
-
-  function pageUp(modifiers) {
-    keyDownOn(target, 33, modifiers);
-  }
-
-  function enter() {
-    pressEnter(target);
-  }
-
-  function space() {
-    pressSpace(target);
-  }
-
-  function esc() {
-    keyDownOn(target, 27, null, 'Escape');
-  }
 
   function focusedDate(datepicker) {
     return getOverlayContent(datepicker).focusedDate;
@@ -71,27 +42,27 @@ import { getDefaultI18n, getOverlayContent, ios, listenForEvent, open } from './
 
     it('should open overlay on down', () => {
       target = datepicker.$.input;
-      arrowDown();
+      arrowDown(target);
       expect(datepicker.opened).to.be.true;
     });
 
     it('should open overlay on down if autoOpenDisabled is true', () => {
       datepicker.autoOpenDisabled = true;
       target = datepicker.$.input;
-      arrowDown();
+      arrowDown(target);
       expect(datepicker.opened).to.be.true;
     });
 
     it('should open overlay on up', () => {
       target = datepicker.$.input;
-      arrowUp();
+      arrowUp(target);
       expect(datepicker.opened).to.be.true;
     });
 
     it('should open overlay on up even if autoOpenDisabled is true', () => {
       datepicker.autoOpenDisabled = true;
       target = datepicker.$.input;
-      arrowUp();
+      arrowUp(target);
       expect(datepicker.opened).to.be.true;
     });
 
@@ -99,7 +70,7 @@ import { getDefaultI18n, getOverlayContent, ios, listenForEvent, open } from './
       datepicker.open();
       target = datepicker.$.overlay;
       await aTimeout(1);
-      esc();
+      esc(target);
       expect(datepicker.opened).to.be.false;
     });
 
@@ -107,7 +78,7 @@ import { getDefaultI18n, getOverlayContent, ios, listenForEvent, open } from './
       datepicker.value = '2001-01-01';
       datepicker.open();
       target = getOverlayContent(datepicker);
-      arrowRight();
+      arrowRight(target);
       expect(focusedDate(datepicker)).to.eql(new Date(2001, 0, 2));
     });
 
@@ -117,7 +88,7 @@ import { getDefaultI18n, getOverlayContent, ios, listenForEvent, open } from './
 
       await open(datepicker);
       target = getOverlayContent(datepicker);
-      arrowRight();
+      arrowRight(target);
       expect(focusedDate(datepicker)).to.eql(new Date(2001, 0, 2));
     });
 
@@ -127,7 +98,7 @@ import { getDefaultI18n, getOverlayContent, ios, listenForEvent, open } from './
       datepicker.initialPosition = null;
       datepicker.open();
       target = getOverlayContent(datepicker);
-      arrowRight();
+      arrowRight(target);
       expect(focusedDate(datepicker)).to.eql(new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1));
     });
 
@@ -135,8 +106,8 @@ import { getDefaultI18n, getOverlayContent, ios, listenForEvent, open } from './
       const focused = focusedDate(datepicker);
       datepicker.open();
       target = getOverlayContent(datepicker);
-      space();
-      space();
+      space(target);
+      space(target);
       expect(focusedDate(datepicker).getTime()).to.equal(focused.getTime());
     });
   });
@@ -144,7 +115,7 @@ import { getDefaultI18n, getOverlayContent, ios, listenForEvent, open } from './
   describe('overlay', () => {
     let overlay;
 
-    beforeEach((done) => {
+    beforeEach(async () => {
       overlay = fixtureSync(`
       <vaadin-date-picker-overlay-content
         style="position: absolute; top: 0"
@@ -156,7 +127,8 @@ import { getDefaultI18n, getOverlayContent, ios, listenForEvent, open } from './
       overlay.focusedDate = new Date(2000, 0, 1);
 
       overlay.scrollToDate(overlay.focusedDate);
-      listenForEvent(overlay, 'scroll-animation-finished', () => afterNextRender(overlay, done));
+      await oneEvent(overlay, 'scroll-animation-finished');
+      await nextRender(target);
     });
 
     it('should focus one week forward with arrow down', () => {
@@ -184,12 +156,12 @@ import { getDefaultI18n, getOverlayContent, ios, listenForEvent, open } from './
         });
 
         it(`should focus one day ${isRTL ? 'backward' : 'forward'} with arrow 'right'`, () => {
-          arrowRight();
+          arrowRight(target);
           expect(overlay.focusedDate).to.eql(isRTL ? new Date(1999, 11, 31) : new Date(2000, 0, 2));
         });
 
         it(`should focus one day ${isRTL ? 'forward' : 'backward'} with arrow left`, () => {
-          arrowLeft();
+          arrowLeft(target);
           expect(overlay.focusedDate).to.eql(isRTL ? new Date(2000, 0, 2) : new Date(1999, 11, 31));
         });
       });
@@ -197,7 +169,7 @@ import { getDefaultI18n, getOverlayContent, ios, listenForEvent, open } from './
 
     it('should close overlay with enter', () => {
       const spy = sinon.spy(overlay, '_close');
-      enter();
+      enter(target);
       expect(spy.calledOnce).to.be.true;
     });
 
@@ -207,63 +179,62 @@ import { getDefaultI18n, getOverlayContent, ios, listenForEvent, open } from './
         done();
       });
 
-      arrowUp();
+      arrowUp(target);
     });
 
     it('should select a date with space', () => {
-      arrowRight();
-      space();
+      arrowRight(target);
+      space(target);
       expect(overlay.selectedDate).to.eql(new Date(2000, 0, 2));
     });
 
     it('should deselect selected date with space', () => {
-      space();
-      space();
+      space(target);
+      space(target);
       expect(overlay.selectedDate).to.be.empty;
     });
 
     it('should focus first day of the month with home', () => {
-      arrowLeft();
-      home();
+      arrowLeft(target);
+      home(target);
       expect(overlay.focusedDate).to.eql(new Date(1999, 11, 1));
     });
 
     it('should focus last day of the month with end', () => {
-      end();
+      end(target);
       expect(overlay.focusedDate).to.eql(new Date(2000, 0, 31));
     });
 
     it('should focus next month with pagedown', () => {
-      target = overlay;
-      pageDown();
+      pageDown(target);
       expect(overlay.focusedDate).to.eql(new Date(2000, 1, 1));
     });
 
     it('should focus previous month with pageup', () => {
-      pageUp();
+      pageUp(target);
       expect(overlay.focusedDate).to.eql(new Date(1999, 11, 1));
     });
 
     it('should not skip a month', () => {
       overlay.focusedDate = new Date(2000, 0, 31);
-      pageDown();
+      pageDown(target);
       expect(overlay.focusedDate).to.eql(new Date(2000, 1, 29));
     });
 
     it('should focus the previously focused date number if available', () => {
       overlay.focusedDate = new Date(2000, 0, 31);
-      pageDown();
-      pageDown();
+      pageDown(target);
+      pageDown(target);
       expect(overlay.focusedDate).to.eql(new Date(2000, 2, 31));
     });
 
     it('should focus next year with shift and pagedown', () => {
-      pageDown('shift');
+      pageDown(target, ['shift']);
       expect(overlay.focusedDate).to.eql(new Date(2001, 0, 1));
     });
 
     it('should focus previous year with shift and pageup', () => {
-      pageUp('shift');
+      pageUp(target, ['shift']);
       expect(overlay.focusedDate).to.eql(new Date(1999, 0, 1));
     });
 
@@ -273,12 +244,12 @@ import { getDefaultI18n, getOverlayContent, ios, listenForEvent, open } from './
         done();
       });
 
-      pageUp('shift');
+      pageUp(target, ['shift']);
     });
 
     it('should not scroll down when focus keeps visible', async () => {
       const initialPosition = overlay.$.monthScroller.position;
-      pageDown();
+      pageDown(target);
       await aTimeout();
       // FF sometimes reports subpixel differences
       expect(overlay.$.monthScroller.position).to.be.closeTo(initialPosition, 1);
@@ -290,7 +261,7 @@ import { getDefaultI18n, getOverlayContent, ios, listenForEvent, open } from './
         done();
       });
 
-      pageDown('shift');
+      pageDown(target, ['shift']);
     });
 
     it('should not focus on today click if no date focused', () => {
@@ -300,7 +271,7 @@ import { getDefaultI18n, getOverlayContent, ios, listenForEvent, open } from './
     });
 
     it('should focus on today click if a date is focused', () => {
-      arrowRight();
+      arrowRight(target);
       overlay._scrollToCurrentMonth();
       expect(overlay.focusedDate.getFullYear()).to.eql(new Date().getFullYear());
       expect(overlay.focusedDate.getMonth()).to.eql(new Date().getMonth());
@@ -321,80 +292,80 @@ import { getDefaultI18n, getOverlayContent, ios, listenForEvent, open } from './
 
     it('should focus min date with home', () => {
       overlay.minDate = new Date(1999, 11, 3);
-      arrowLeft();
-      home();
+      arrowLeft(target);
+      home(target);
       expect(overlay.focusedDate).to.eql(new Date(1999, 11, 3));
     });
 
     it('should focus max date with end', () => {
       overlay.maxDate = new Date(2000, 0, 26);
-      end();
+      end(target);
       expect(overlay.focusedDate).to.eql(new Date(2000, 0, 26));
     });
 
     it('should focus max date with pagedown', () => {
       overlay.maxDate = new Date(2000, 0, 28);
-      pageDown();
+      pageDown(target);
       expect(overlay.focusedDate).to.eql(new Date(2000, 0, 28));
     });
 
     it('should focus min date with pageup', () => {
       overlay.minDate = new Date(1999, 11, 3);
-      pageUp();
+      pageUp(target);
       expect(overlay.focusedDate).to.eql(new Date(1999, 11, 3));
     });
 
     it('should focus max date with shift and pagedown', () => {
       overlay.maxDate = new Date(2000, 11, 28);
-      pageDown('shift');
+      pageDown(target, ['shift']);
       expect(overlay.focusedDate).to.eql(new Date(2000, 11, 28));
     });
 
     it('should focus min date with shift and pageup', () => {
       overlay.minDate = new Date(1999, 5, 3);
-      pageUp('shift');
+      pageUp(target, ['shift']);
       expect(overlay.focusedDate).to.eql(new Date(1999, 5, 3));
     });
 
     it('should focus the closest allowed date with pageup when selected date is disabled', () => {
       overlay.focusedDate = new Date(1999, 5, 10);
       overlay.minDate = new Date(1999, 11, 25);
-      pageUp();
+      pageUp(target);
       expect(overlay.focusedDate).to.eql(new Date(1999, 11, 25));
     });
 
     it('should focus the closest allowed date with pagedown when selected date is disabled', () => {
       overlay.focusedDate = new Date(1999, 5, 10);
       overlay.minDate = new Date(1999, 11, 25);
-      pageDown();
+      pageDown(target);
       expect(overlay.focusedDate).to.eql(new Date(1999, 11, 25));
     });
 
     it('should focus the closest allowed date with shift pageup when selected date is disabled', () => {
       overlay.focusedDate = new Date(1999, 5, 10);
       overlay.minDate = new Date(1999, 11, 25);
-      pageUp('shift');
+      pageUp(target, ['shift']);
       expect(overlay.focusedDate).to.eql(new Date(1999, 11, 25));
     });
 
     it('should focus the closest allowed date with shift pagedown when selected date is disabled', () => {
       overlay.focusedDate = new Date(1999, 5, 10);
       overlay.minDate = new Date(1999, 11, 25);
-      pageUp('shift');
+      pageUp(target, ['shift']);
       expect(overlay.focusedDate).to.eql(new Date(1999, 11, 25));
     });
 
     it('should focus the closest allowed date with home when selected date is disabled', () => {
       overlay.focusedDate = new Date(1999, 5, 10);
       overlay.minDate = new Date(1999, 11, 25);
-      home();
+      home(target);
       expect(overlay.focusedDate).to.eql(new Date(1999, 11, 25));
     });
 
     it('should focus the closest allowed date with end when selected date is disabled', () => {
       overlay.focusedDate = new Date(1999, 5, 10);
       overlay.minDate = new Date(1999, 11, 25);
-      end();
+      end(target);
       expect(overlay.focusedDate).to.eql(new Date(1999, 11, 25));
     });
 
@@ -439,7 +410,7 @@ import { getDefaultI18n, getOverlayContent, ios, listenForEvent, open } from './
       const date = new Date(99, 0, 1);
       date.setFullYear(99);
       overlay.focusedDate = date;
-      pageDown();
+      pageDown(target);
       date.setMonth(1);
       expect(overlay.focusedDate).to.eql(date);
     });
@@ -448,7 +419,7 @@ import { getDefaultI18n, getOverlayContent, ios, listenForEvent, open } from './
       const date = new Date(99, 0, 1);
       date.setFullYear(99);
       overlay.focusedDate = date;
-      end();
+      end(target);
       date.setDate(31);
       expect(overlay.focusedDate).to.eql(date);
     });

@@ -1,5 +1,3 @@
-import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
-
 const BASE64_MARKER = ';base64,';
 
 function convertDataURIToBinary(dataURI) {
@@ -19,20 +17,4 @@ export const createImage = (dataURI, type) => {
   const file = new Blob([array], { type });
   file.name = 'file';
   return file;
-};
-
-export const isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
-
-export const isDesktopSafari = (() => {
-  const uA = navigator.userAgent;
-  const vendor = navigator.vendor;
-  return /Safari/i.test(uA) && /Apple Computer/.test(vendor) && !/Mobi|Android/i.test(uA);
-})();
-
-export const nextRender = (target) => {
-  return new Promise((resolve) => {
-    afterNextRender(target, () => {
-      resolve();
-    });
-  });
 };

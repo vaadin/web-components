@@ -1,6 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, oneEvent } from '@open-wc/testing-helpers';
-import { keyDownOn } from '@polymer/iron-test-helpers/mock-interactions.js';
+import { fixtureSync, oneEvent, tabKeyDown } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import '@vaadin/vaadin-button/vaadin-button.js';
 import '@vaadin/vaadin-text-field/vaadin-text-field.js';
@@ -66,14 +65,6 @@ customElements.define(
 
 function isElementFocused(element) {
   return element && element.getRootNode().activeElement === element;
-}
-
-function tabKeyDown(element) {
-  keyDownOn(element, 9, [], 'Tab');
-}
-
-function shiftTabKeyDown(element) {
-  keyDownOn(element, 9, 'shift', 'Tab');
 }
 
 describe('focus-trap', function () {
@@ -144,7 +135,7 @@ describe('focus-trap', function () {
       expect(overlay._focusedIndex()).to.eql(0);
 
       // SHIFT+TAB
-      shiftTabKeyDown(focusableElements[overlay._focusedIndex()]);
+      tabKeyDown(focusableElements[overlay._focusedIndex()], ['shift']);
       for (let i = focusableElements.length - 1; i >= 0; i--) {
         expect(overlay._focusedIndex()).to.eql(i);
 
@@ -153,7 +144,7 @@ describe('focus-trap', function () {
           i--;
         }
 
-        shiftTabKeyDown(focusableElements[overlay._focusedIndex()]);
+        tabKeyDown(focusableElements[overlay._focusedIndex()], ['shift']);
       }
       expect(overlay._focusedIndex()).to.eql(focusableElements.length - 1);
     });
@@ -179,7 +170,7 @@ describe('focus-trap', function () {
       button.focus();
       button.blur();
 
-      shiftTabKeyDown(document.body);
+      tabKeyDown(document.body, ['shift']);
     });
 
     describe('shadow content', () => {
@@ -235,7 +226,7 @@ describe('focus-trap', function () {
         expect(overlay._focusedIndex()).to.eql(0);
 
         // SHIFT+TAB
-        shiftTabKeyDown(focusableElements[overlay._focusedIndex()]);
+        tabKeyDown(focusableElements[overlay._focusedIndex()], ['shift']);
         for (let i = focusableElements.length - 1; i >= 0; i--) {
           expect(overlay._focusedIndex()).to.eql(i);
 
@@ -244,7 +235,7 @@ describe('focus-trap', function () {
             i--;
           }
 
-          shiftTabKeyDown(focusableElements[overlay._focusedIndex()]);
+          tabKeyDown(focusableElements[overlay._focusedIndex()], ['shift']);
         }
         expect(overlay._focusedIndex()).to.eql(focusableElements.length - 1);
       });
@@ -339,7 +330,7 @@ describe('focus-trap', function () {
       expect(overlay._focusedIndex()).to.eql(0);
 
       // SHIFT+TAB
-      shiftTabKeyDown(focusableElements[overlay._focusedIndex()]);
+      tabKeyDown(focusableElements[overlay._focusedIndex()], ['shift']);
       for (let i = focusableElements.length - 1; i >= 0; i--) {
         expect(overlay._focusedIndex()).to.eql(i);
 
@@ -348,7 +339,7 @@ describe('focus-trap', function () {
           i--;
         }
 
-        shiftTabKeyDown(focusableElements[overlay._focusedIndex()]);
+        tabKeyDown(focusableElements[overlay._focusedIndex()], ['shift']);
       }
       expect(overlay._focusedIndex()).to.eql(focusableElements.length - 1);
     });
@@ -374,7 +365,7 @@ describe('focus-trap', function () {
       button.focus();
       button.blur();
 
-      shiftTabKeyDown(document.body);
+      tabKeyDown(document.body, ['shift']);
     });
 
     describe('shadow content', () => {
@@ -438,7 +429,7 @@ describe('focus-trap', function () {
         expect(overlay._focusedIndex()).to.eql(0);
 
         // SHIFT+TAB
-        shiftTabKeyDown(focusableElements[overlay._focusedIndex()]);
+        tabKeyDown(focusableElements[overlay._focusedIndex()], ['shift']);
         for (let i = focusableElements.length - 1; i >= 0; i--) {
           expect(overlay._focusedIndex()).to.eql(i);
 
@@ -447,7 +438,7 @@ describe('focus-trap', function () {
             i--;
           }
 
-          shiftTabKeyDown(focusableElements[overlay._focusedIndex()]);
+          tabKeyDown(focusableElements[overlay._focusedIndex()], ['shift']);
         }
         expect(overlay._focusedIndex()).to.eql(focusableElements.length - 1);
       });

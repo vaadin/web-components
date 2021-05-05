@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixture, html } from '@open-wc/testing-helpers';
+import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { createFile, createFiles, xhrCreator } from './common.js';
 import '../vaadin-upload.js';
@@ -8,8 +8,8 @@ import '../vaadin-upload.js';
 describe('upload', () => {
   let upload, file;
 
-  beforeEach(async () => {
-    upload = await fixture(html`<vaadin-upload></vaadin-upload>`);
+  beforeEach(() => {
+    upload = fixtureSync(`<vaadin-upload></vaadin-upload>`);
     upload.target = 'http://foo.com/bar';
     file = createFile(100000, 'application/unknown');
   });
@@ -391,19 +391,18 @@ describe('upload', () => {
 
   describe('Manual Upload', () => {
     let files;
+
     beforeEach(() => {
       upload.noAuto = true;
       upload._createXhr = xhrCreator({ size: file.size, uploadTime: 200, stepTime: 50 });
     });
 
-    it('should be in held status', (done) => {
+    it('should be in held status', async () => {
       upload._addFile(file);
-      afterNextRender(upload, () => {
-        expect(file.uploaded).not.to.be.ok;
-        expect(file.held).to.be.true;
-        expect(file.status).to.be.equal(upload.i18n.uploading.status.held);
-        done();
-      });
+      await nextRender(upload);
+      expect(file.uploaded).not.to.be.ok;
+      expect(file.held).to.be.true;
+      expect(file.status).to.be.equal(upload.i18n.uploading.status.held);
     });
 
     it('should start uploading non-completed files after call to uploadFiles', (done) => {

@@ -1,5 +1,4 @@
 import { flush } from '@polymer/polymer/lib/utils/flush.js';
-import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 
 export const flushGrid = (grid) => {
   grid._observer.flush();
@@ -21,14 +20,6 @@ export const flushGrid = (grid) => {
     grid._debounceIncreasePool = null;
     flush();
   }
-};
-
-export const listenOnce = (element, eventName, callback) => {
-  const listener = (e) => {
-    element.removeEventListener(eventName, listener);
-    callback(e);
-  };
-  element.addEventListener(eventName, listener);
 };
 
 export const getRows = (container) => {
@@ -61,16 +52,4 @@ export const getContainerCell = (container, row, col) => {
   const rows = getRows(container);
   const cells = getRowCells(rows[row]);
   return cells[col];
-};
-
-export const isIOS =
-  (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) ||
-  (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-
-export const nextRender = (target) => {
-  return new Promise((resolve) => {
-    afterNextRender(target, () => {
-      resolve();
-    });
-  });
 };

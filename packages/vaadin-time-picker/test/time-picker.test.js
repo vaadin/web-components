@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { keyDownOn, pressAndReleaseKeyOn, pressEnter } from '@polymer/iron-test-helpers/mock-interactions.js';
-import { fixture, html } from '@open-wc/testing-helpers';
+import { arrowDown, arrowUp, enter, esc, fixtureSync, keyDownOn } from '@vaadin/testing-helpers';
 import { TimePickerElement } from '../vaadin-time-picker.js';
 
 describe('time-picker', () => {
@@ -12,8 +11,8 @@ describe('time-picker', () => {
     el.dispatchEvent(new CustomEvent('change'));
   }
 
-  beforeEach(async () => {
-    timePicker = await fixture(html`<vaadin-time-picker></vaadin-time-picker>`);
+  beforeEach(() => {
+    timePicker = fixtureSync(`<vaadin-time-picker></vaadin-time-picker>`);
     dropdown = timePicker.__dropdownElement;
     inputElement = timePicker.__inputElement;
   });
@@ -263,22 +262,6 @@ describe('time-picker', () => {
   describe('change event', () => {
     let spy;
 
-    function arrowUp() {
-      pressAndReleaseKeyOn(inputElement, 38);
-    }
-
-    function arrowDown() {
-      pressAndReleaseKeyOn(inputElement, 40);
-    }
-
-    function esc() {
-      pressAndReleaseKeyOn(inputElement, 27);
-    }
-
-    function enter() {
-      pressEnter(inputElement);
-    }
-
     function inputChar(char) {
       inputElement.value += char;
       keyDownOn(inputElement, char.charCodeAt(0));
@@ -298,14 +281,14 @@ describe('time-picker', () => {
 
     it('should fire change on user text input commit', () => {
       inputText('00:00');
-      enter();
+      enter(inputElement);
       expect(spy.calledOnce).to.be.true;
     });
 
     it('should fire change on user arrow input commit', () => {
-      arrowDown();
-      arrowDown();
-      enter();
+      arrowDown(inputElement);
+      arrowDown(inputElement);
+      enter(inputElement);
       expect(spy.calledOnce).to.be.true;
     });
 
@@ -319,9 +302,9 @@ describe('time-picker', () => {
 
     it('should fire change on arrow key when no dropdown opens', () => {
       timePicker.step = 0.5;
-      arrowDown();
+      arrowDown(inputElement);
       expect(spy.calledOnce).to.be.true;
-      arrowUp();
+      arrowUp(inputElement);
       expect(spy.calledTwice).to.be.true;
     });
 
@@ -339,8 +322,8 @@ describe('time-picker', () => {
       timePicker.value = '00:00';
       dropdown.opened = true;
       inputElement.inputElement.value = '';
-      arrowDown();
-      enter();
+      arrowDown(inputElement);
+      enter(inputElement);
       expect(spy.calledOnce).to.be.true;
       // mimic native change happening on text-field blur
       document.body.click();
@@ -352,15 +335,15 @@ describe('time-picker', () => {
     it('should not fire change if the value was not changed', () => {
       timePicker.value = '01:00';
       dropdown.opened = true;
-      enter();
+      enter(inputElement);
       expect(spy.called).to.be.false;
     });
 
     it('should not fire change on revert', () => {
       dropdown.opened = true;
       timePicker.value = '01:00';
-      esc();
-      esc();
+      esc(inputElement);
+      esc(inputElement);
       expect(spy.called).to.be.false;
     });
   });

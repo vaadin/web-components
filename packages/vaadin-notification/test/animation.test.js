@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, oneEvent } from '@open-wc/testing-helpers';
+import { aTimeout, fixtureSync, oneEvent } from '@vaadin/testing-helpers';
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import '../vaadin-notification.js';
 

@@ -255,7 +255,7 @@ describe('vaadin-accordion', () => {
       });
 
       it('should not prevent default on keydown event from the panel content', () => {
-        const event = keyboardEventFor('keydown', 27, [], 'Esc');
+        const event = keyboardEventFor('keydown', 27, [], 'Escape');
         const preventSpy = sinon.spy(event, 'preventDefault');
         const input = accordion.items[0].querySelector('input');
         input.dispatchEvent(event);
@@ -263,7 +263,7 @@ describe('vaadin-accordion', () => {
       });
 
       it('should not prevent default on keydown if the key is unrelated to focus', () => {
-        const event = keyboardEventFor('keydown', 27, [], 'Esc');
+        const event = keyboardEventFor('keydown', 27, [], 'Escape');
         const preventSpy = sinon.spy(event, 'preventDefault');
         heading = getHeading(0);
         heading.dispatchEvent(event);

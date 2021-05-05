@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync, oneEvent } from '@open-wc/testing-helpers';
-import { click, escKeyDown } from './helpers.js';
+import { click, escKeyDown, fixtureSync, oneEvent } from '@vaadin/testing-helpers';
 import '../vaadin-overlay.js';
 
 describe('multiple overlays', () => {

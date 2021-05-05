@@ -1,8 +1,17 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync, nextFrame } from '@open-wc/testing-helpers';
+import {
+  arrowDown,
+  arrowLeft,
+  arrowRight,
+  arrowUp,
+  end,
+  fixtureSync,
+  home,
+  keyDownChar,
+  nextFrame
+} from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { arrowDown, arrowLeft, arrowRight, arrowUp, home, end, keyDownChar } from './helpers.js';
 import { MultiSelectListMixin } from '../vaadin-multi-select-list-mixin.js';
 import { ListMixin } from '../vaadin-list-mixin.js';
 

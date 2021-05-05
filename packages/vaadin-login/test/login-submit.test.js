@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync } from '@open-wc/testing-helpers';
-import { keyUpOn } from '@polymer/iron-test-helpers/mock-interactions.js';
+import { fixtureSync, tabKeyUp } from '@vaadin/testing-helpers';
 import { fillUsernameAndPassword } from './helpers.js';
 import '../vaadin-login-overlay.js';
 import '../vaadin-login-form.js';
@@ -34,7 +33,7 @@ describe('login form submit', () => {
 
   function testTab(done, element) {
     const input = element.querySelector('input');
-    keyUpOn(input, 9, [], 'Tab');
+    tabKeyUp(input);
     setTimeout(() => {
       const selected = input.selectionEnd - input.selectionStart == input.value.length;
       expect(selected).to.be.true;

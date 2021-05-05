@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { aTimeout, fixtureSync, nextFrame } from '@open-wc/testing-helpers';
-import { keyboardEventFor, keyDownOn } from '@polymer/iron-test-helpers/mock-interactions.js';
+import { aTimeout, fixtureSync, keyboardEventFor, keyDownOn, nextFrame } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { ControlStateMixin } from '../vaadin-control-state-mixin.js';
 

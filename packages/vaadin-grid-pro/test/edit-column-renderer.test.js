@@ -1,17 +1,14 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync } from '@open-wc/testing-helpers';
+import { enter, esc, fixtureSync, space } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import {
   createItems,
   dblclick,
-  enter,
-  esc,
   flushGrid,
   getCellEditor,
   getContainerCell,
-  getContainerCellContent,
-  space
+  getContainerCellContent
 } from './helpers.js';
 import '../vaadin-grid-pro.js';
 import '../vaadin-grid-pro-edit-column.js';

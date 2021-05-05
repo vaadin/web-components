@@ -1,14 +1,13 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync } from '@open-wc/testing-helpers';
+import { fixtureSync, listenOnce } from '@vaadin/testing-helpers';
 import {
   flushGrid,
   getBodyCellContent,
   getCellContent,
   getRows,
   getRowCells,
-  infiniteDataProvider,
-  listenOnce
+  infiniteDataProvider
 } from './helpers.js';
 import '../vaadin-grid.js';
 import '../vaadin-grid-selection-column.js';

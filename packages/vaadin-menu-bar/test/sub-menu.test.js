@@ -1,8 +1,20 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync } from '@open-wc/testing-helpers';
-import { tap } from '@polymer/iron-test-helpers/mock-interactions.js';
-import { arrowDown, arrowLeft, arrowRight, arrowUp, esc, isIOS, nextRender, onceOpened } from './helpers.js';
+import {
+  arrowDown,
+  arrowLeft,
+  arrowRight,
+  arrowUp,
+  click,
+  esc,
+  fixtureSync,
+  isDesktopSafari as isSafari,
+  isIOS,
+  nextRender,
+  touchstart,
+  touchend
+} from '@vaadin/testing-helpers';
+import { onceOpened } from './helpers.js';
 import './not-animated-styles.js';
 import '../vaadin-menu-bar.js';
 
@@ -654,7 +666,6 @@ describe('touch', () => {
     }
   });
 
-  const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
   (isSafari ? it.skip : it)('should close submenu on mobile when selecting an item in the nested one', async () => {
     arrowDown(buttons[0]);
     await onceOpened(subMenu);
@@ -666,7 +677,9 @@ describe('touch', () => {
     await nextRender(subMenu2);
     items = subMenu2.$.overlay.querySelectorAll('vaadin-context-menu-item');
     item = items[items.length - 1];
-    tap(item, { emulateTouch: true });
+    touchstart(item);
+    touchend(item);
+    click(item);
     await nextRender(subMenu2);
     expect(subMenu2.opened).to.be.false;
   });

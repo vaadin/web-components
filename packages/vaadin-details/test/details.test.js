@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync } from '@open-wc/testing-helpers';
-import { keyboardEventFor, keyDownOn } from '@polymer/iron-test-helpers/mock-interactions.js';
+import { fixtureSync, keyboardEventFor, keyDownOn } from '@vaadin/testing-helpers';
 import '../vaadin-details.js';
 
 describe('vaadin-details', () => {
