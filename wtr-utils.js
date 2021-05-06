@@ -20,7 +20,7 @@ const NO_VISUAL_TESTS = [
   'vaadin-lumo-styles',
   'vaadin-material-styles',
   'vaadin-template-renderer',
-  'vaadin-virtualizer'
+  'vaadin-virtual-list'
 ];
 
 /**

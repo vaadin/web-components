@@ -8,7 +8,7 @@ Virtual scrolling engine meant for internal use in Vaadin components. Note that 
 </div>
 
 <script type="module">
-  import { Virtualizer } from '@vaadin/vaadin-virtualizer';
+  import { Virtualizer } from '@vaadin/vaadin-virtual-list/virtualizer.js';
 
   const virtualizedList = new Virtualizer({
     createElements: (count) => Array.from(Array(count)).map(() => document.createElement('div')),

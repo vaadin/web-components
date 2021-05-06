@@ -26,7 +26,7 @@ import { StylingMixin } from './vaadin-grid-styling-mixin.js';
 import { DragAndDropMixin } from './vaadin-grid-drag-and-drop-mixin.js';
 import { KeyboardNavigationMixin } from './vaadin-grid-keyboard-navigation-mixin.js';
 import { ColumnReorderingMixin } from './vaadin-grid-column-reordering-mixin.js';
-import { Virtualizer } from '@vaadin/vaadin-virtualizer';
+import { Virtualizer } from '@vaadin/vaadin-virtual-list/virtualizer';
 import './vaadin-grid-column.js';
 import './vaadin-grid-styles.js';
 

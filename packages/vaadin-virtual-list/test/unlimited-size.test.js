@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
-import { Virtualizer } from '..';
+import { Virtualizer } from '../virtualizer';
 
 describe('unlimited size', () => {
   let virtualizer;

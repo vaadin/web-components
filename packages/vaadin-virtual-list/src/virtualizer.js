@@ -1,4 +1,4 @@
-import { IronListAdapter } from './vaadin-virtualizer-iron-list-adapter';
+import { IronListAdapter } from './virtualizer-iron-list-adapter';
 
 export class Virtualizer {
   constructor(config) {

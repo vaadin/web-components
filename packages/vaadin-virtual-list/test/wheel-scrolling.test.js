@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import Sinon from 'sinon';
-import { Virtualizer } from '..';
+import { Virtualizer } from '../virtualizer';
 
 function canScroll(el, deltaY) {
   return (

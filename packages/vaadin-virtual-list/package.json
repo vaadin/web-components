@@ -1,13 +1,14 @@
 {
-  "name": "@vaadin/vaadin-virtualizer",
+  "name": "@vaadin/vaadin-virtual-list",
   "version": "21.0.0-alpha0",
-  "description": "vaadin-virtualizer",
-  "main": "vaadin-virtualizer.js",
-  "module": "vaadin-virtualizer.js",
-  "repository": "vaadin/vaadin-virtualizer",
+  "description": "vaadin-virtual-list",
+  "main": "vaadin-virtual-list.js",
+  "module": "vaadin-virtual-list.js",
+  "repository": "vaadin/vaadin-virtual-list",
   "keywords": [
     "Vaadin",
     "virtualizer",
+    "virtual-list",
     "web-components",
     "web-component"
   ],

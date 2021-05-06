@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
-import { Virtualizer } from '../vaadin-virtualizer';
+import { Virtualizer } from '../virtualizer';
 
 describe('update range', () => {
   let virtualizer;

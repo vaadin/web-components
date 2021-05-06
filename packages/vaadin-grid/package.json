@@ -31,15 +31,14 @@
     "theme"
   ],
   "dependencies": {
-    "@polymer/iron-resizable-behavior": "^3.0.0",
-    "@polymer/iron-scroll-target-behavior": "^3.0.0",
     "@polymer/polymer": "^3.0.0",
     "@vaadin/vaadin-checkbox": "^21.0.0-alpha0",
     "@vaadin/vaadin-element-mixin": "^21.0.0-alpha0",
     "@vaadin/vaadin-lumo-styles": "^21.0.0-alpha0",
     "@vaadin/vaadin-material-styles": "^21.0.0-alpha0",
     "@vaadin/vaadin-text-field": "^21.0.0-alpha0",
-    "@vaadin/vaadin-themable-mixin": "^21.0.0-alpha0"
+    "@vaadin/vaadin-themable-mixin": "^21.0.0-alpha0",
+    "@vaadin/vaadin-virtual-list": "^21.0.0-alpha0"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.1.5",
