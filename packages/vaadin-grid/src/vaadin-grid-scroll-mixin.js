@@ -88,7 +88,7 @@ export const ScrollMixin = (superClass) =>
       this.__virtualizer.scrollToIndex(index);
 
       // Fine tune the scroll position taking header into account
-      const row = Array.from(this.$.items.children).filter((child) => child.index === index)[0];
+      const row = Array.from(this.$.items.children).find((child) => child.index === index);
       if (row) {
         const headerOffset = row.getBoundingClientRect().top - this.$.header.getBoundingClientRect().bottom;
         if (Math.abs(headerOffset) >= 1) {
