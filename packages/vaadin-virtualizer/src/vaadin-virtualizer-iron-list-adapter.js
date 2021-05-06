@@ -106,6 +106,10 @@ export class IronListAdapter {
   }
 
   set size(size) {
+    if (size === this.size) {
+      return;
+    }
+
     let fvi = this.firstVisibleIndex + this._vidxOffset;
 
     const fviOffsetBefore = this.__getIndexScrollOffset(fvi);

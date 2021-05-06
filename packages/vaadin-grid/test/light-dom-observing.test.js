@@ -552,6 +552,7 @@ describe('light dom observing', () => {
     });
 
     it('should remove cell content', async () => {
+      flushGrid(grid);
       const contentCount = grid.querySelectorAll('vaadin-grid-cell-content').length;
       repeater.shift('items');
       repeater.render();
@@ -725,8 +726,8 @@ describe('light dom observing', () => {
           it('should support removing late', async () => {
             const group = createGroup();
             firstGroup.insertBefore(group, firstGroup.firstChild);
-            flushGrid(grid);
             await nextFrame();
+            flushGrid(grid);
             expectNumberOfColumns(7);
             firstGroup.removeChild(group);
             await nextFrame();

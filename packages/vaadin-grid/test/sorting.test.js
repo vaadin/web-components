@@ -146,6 +146,7 @@ describe('sorting', () => {
       expect(getBodyCellContent(grid, 0, 1).innerText).to.equal('2');
 
       parentNode.appendChild(grid);
+      flushGrid(grid);
       expect(getBodyCellContent(grid, 0, 1).innerText).to.equal('1');
     });
   });

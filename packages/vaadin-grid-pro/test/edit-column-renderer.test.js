@@ -241,9 +241,7 @@ describe('edit column renderer', () => {
 
       cell = getContainerCell(grid.$.items, 0, 0);
       column.editModeRenderer = function (root) {
-        if (!root.firstElementChild) {
-          root.innerHTML = '<input>';
-        }
+        root.innerHTML = '<input>';
       };
 
       dblclick(cell._content);
