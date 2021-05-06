@@ -229,6 +229,14 @@ Update screenshots for single package:
 yarn update:lumo --group vaadin-upload
 ```
 
+### Generating icons
+
+Re-generate SVG icon sets and icon fonts from individual SVG files for the packages that have them (e.g. `vaadin-icons`):
+
+```sh
+yarn icons
+```
+
 ## LICENSE
 
 For specific package(s), check the LICENSE file under the package folder.

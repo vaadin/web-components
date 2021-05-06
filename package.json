@@ -21,6 +21,7 @@
     "debug": "web-test-runner --watch",
     "dist": "rimraf dist && yarn analyze && rollup -c rollup.config.js && cp analysis.json dist",
     "docs": "yarn analyze && web-dev-server --node-resolve --open",
+    "icons": "lerna run icons",
     "lint": "npm-run-all --parallel lint:*",
     "lint:css": "stylelint packages/**/src/*.js packages/**/theme/**/*-styles.js",
     "lint:js": "eslint --ext .js,.ts *.js scripts packages",
