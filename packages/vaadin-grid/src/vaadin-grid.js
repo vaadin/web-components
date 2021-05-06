@@ -410,6 +410,7 @@ class GridElement extends ElementMixin(
         value: true
       },
 
+      /** @private */
       isAttached: {
         value: false
       }
@@ -428,6 +429,7 @@ class GridElement extends ElementMixin(
     this.recalculateColumnWidths();
   }
 
+  /** @protected */
   disconnectedCallback() {
     super.disconnectedCallback();
     this.isAttached = false;
@@ -504,6 +506,7 @@ class GridElement extends ElementMixin(
     }
   }
 
+  /** @private */
   _effectiveSizeChanged(effectiveSize, virtualizer, hasData, columnTree) {
     if (virtualizer && hasData && columnTree) {
       virtualizer.size = effectiveSize;
@@ -966,6 +969,7 @@ class GridElement extends ElementMixin(
     }
   }
 
+  /** @protected */
   __updateVirtualizer() {
     this.__virtualizer && this.__virtualizer.update();
   }
