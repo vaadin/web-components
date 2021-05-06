@@ -37,6 +37,9 @@ gulp.task('icons', async function () {
             removeTitle: true
           },
           {
+            removeViewBox: false
+          },
+          {
             cleanupNumericValues: {
               floatPrecision: 6
             }
