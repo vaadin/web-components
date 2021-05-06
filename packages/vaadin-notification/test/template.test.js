@@ -1,6 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import '@vaadin/vaadin-template-renderer';
 import '../vaadin-notification.js';
 
 class XNotification extends PolymerElement {
@@ -26,12 +27,11 @@ class XNotification extends PolymerElement {
 customElements.define('x-notification', XNotification);
 
 describe('template', () => {
-  let container, notification, content;
+  let container, notification;
 
   beforeEach(() => {
     container = fixtureSync('<x-notification></x-notification>');
     notification = container.$.notification;
-    content = notification._card.shadowRoot.querySelector('[part~="content"]');
   });
 
   afterEach(() => {
@@ -45,11 +45,12 @@ describe('template', () => {
   describe('data-binding', () => {
     it('notification should bind parent property', () => {
       container.message = 'foo';
-      expect(content.shadowRoot.textContent.trim()).to.equal('foo');
+
+      expect(notification._card.textContent.trim()).to.equal('foo');
     });
 
     it('notification should support two-way data binding', () => {
-      const input = content.shadowRoot.querySelector('input');
+      const input = notification._card.querySelector('input');
       input.value = 'bar';
       input.dispatchEvent(new CustomEvent('input'));
       expect(container.text).to.equal('bar');

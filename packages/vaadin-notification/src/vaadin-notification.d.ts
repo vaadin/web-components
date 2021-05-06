@@ -23,12 +23,10 @@ declare class NotificationCard extends ThemableMixin(HTMLElement) {}
 
 /**
  * `<vaadin-notification>` is a Web Component providing accessible and customizable notifications (toasts).
- * The content of the notification can be populated in two ways: imperatively by using renderer callback function
- * and declaratively by using Polymer's Templates.
  *
  * ### Rendering
  *
- * By default, the notification uses the content provided by using the renderer callback function.
+ * The content of the notification can be populated by using the renderer callback function.
  *
  * The renderer function provides `root`, `notification` arguments.
  * Generate DOM content, append it to the `root` element and control the state
@@ -40,7 +38,7 @@ declare class NotificationCard extends ThemableMixin(HTMLElement) {}
  * ```
  * ```js
  * const notification = document.querySelector('#notification');
- * notification.renderer = function(root) {
+ * notification.renderer = function(root, notification) {
  *   root.textContent = "Your work has been saved";
  * };
  * ```
@@ -49,20 +47,6 @@ declare class NotificationCard extends ThemableMixin(HTMLElement) {}
  * DOM generated during the renderer call can be reused
  * in the next renderer call and will be provided with the `root` argument.
  * On first call it will be empty.
- *
- * ### Polymer Templates
- *
- * Alternatively, the content can be provided with Polymer's Template.
- * Notification finds the first child template and uses that in case renderer callback function
- * is not provided. You can also set a custom template using the `template` property.
- *
- * ```
- * <vaadin-notification>
- *   <template>
- *     Your work has been saved
- *   </template>
- * </vaadin-notification>
- * ```
  *
  * ### Styling
  *
@@ -110,13 +94,6 @@ declare class NotificationElement extends ThemePropertyMixin(ElementMixin(HTMLEl
    * - `notification` The reference to the `<vaadin-notification>` element.
    */
   renderer: NotificationRenderer | undefined;
-
-  /**
-   * The template of the notification card content.
-   */
-  _notificationTemplate: HTMLTemplateElement | undefined;
-
-  _setTemplateFromNodes(nodes: Node[]): void;
 
   /**
    * Manually invoke existing renderer.

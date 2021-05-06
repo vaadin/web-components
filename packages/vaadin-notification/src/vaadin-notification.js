@@ -4,8 +4,6 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { templatize } from '@polymer/polymer/lib/utils/templatize.js';
-import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
@@ -188,12 +186,10 @@ class NotificationCard extends ThemableMixin(PolymerElement) {
 
 /**
  * `<vaadin-notification>` is a Web Component providing accessible and customizable notifications (toasts).
- * The content of the notification can be populated in two ways: imperatively by using renderer callback function
- * and declaratively by using Polymer's Templates.
  *
  * ### Rendering
  *
- * By default, the notification uses the content provided by using the renderer callback function.
+ * The content of the notification can be populated by using the renderer callback function.
  *
  * The renderer function provides `root`, `notification` arguments.
  * Generate DOM content, append it to the `root` element and control the state
@@ -205,7 +201,7 @@ class NotificationCard extends ThemableMixin(PolymerElement) {
  * ```
  * ```js
  * const notification = document.querySelector('#notification');
- * notification.renderer = function(root) {
+ * notification.renderer = function(root, notification) {
  *   root.textContent = "Your work has been saved";
  * };
  * ```
@@ -214,20 +210,6 @@ class NotificationCard extends ThemableMixin(PolymerElement) {
  * DOM generated during the renderer call can be reused
  * in the next renderer call and will be provided with the `root` argument.
  * On first call it will be empty.
- *
- * ### Polymer Templates
- *
- * Alternatively, the content can be provided with Polymer's Template.
- * Notification finds the first child template and uses that in case renderer callback function
- * is not provided. You can also set a custom template using the `template` property.
- *
- * ```
- * <vaadin-notification>
- *   <template>
- *     Your work has been saved
- *   </template>
- * </vaadin-notification>
- * ```
  *
  * ### Styling
  *
@@ -315,88 +297,48 @@ class NotificationElement extends ThemePropertyMixin(ElementMixin(PolymerElement
        * - `notification` The reference to the `<vaadin-notification>` element.
        * @type {!NotificationRenderer | undefined}
        */
-      renderer: Function,
-
-      /**
-       * The template of the notification card content.
-       * @type {!HTMLTemplateElement | undefined}
-       * @protected
-       */
-      _notificationTemplate: Object
+      renderer: Function
     };
   }
 
   static get observers() {
-    return [
-      '_durationChanged(duration, opened)',
-      '_templateOrRendererChanged(_notificationTemplate, renderer, opened)'
-    ];
+    return ['_durationChanged(duration, opened)', '_rendererChanged(renderer, opened)'];
   }
 
   /** @protected */
   ready() {
     super.ready();
 
-    this._observer = new FlattenedNodesObserver(this, (info) => {
-      this._setTemplateFromNodes(info.addedNodes);
-    });
-  }
+    this._card = this.$['vaadin-notification-card'];
 
-  /**
-   * @param {!Array<!Node>} nodes
-   * @protected
-   */
-  _setTemplateFromNodes(nodes) {
-    this._notificationTemplate =
-      nodes.find((node) => node.localName && node.localName === 'template') || this._notificationTemplate;
+    if (window.Vaadin && window.Vaadin.templateRendererCallback) {
+      window.Vaadin.templateRendererCallback(this);
+    }
   }
 
   /**
    * Manually invoke existing renderer.
    */
   render() {
-    if (typeof this.renderer !== 'function') {
-      return;
-    }
+    if (!this.renderer) return;
+
     this.renderer(this._card, this);
   }
 
   /** @private */
-  _removeNewRendererOrTemplate(template, oldTemplate, renderer, oldRenderer) {
-    if (template !== oldTemplate) {
-      this._notificationTemplate = undefined;
-    } else if (renderer !== oldRenderer) {
-      this.renderer = undefined;
-    }
-  }
-
-  /** @private */
-  _templateOrRendererChanged(template, renderer, opened) {
-    if (template && renderer) {
-      this._removeNewRendererOrTemplate(template, this._oldTemplate, renderer, this._oldRenderer);
-      throw new Error('You should only use either a renderer or a template for notification content');
-    }
-
-    this._oldTemplate = template;
-
+  _rendererChanged(renderer, opened) {
     const rendererChanged = this._oldRenderer !== renderer;
     this._oldRenderer = renderer;
 
-    if (renderer) {
-      this._card = this.$['vaadin-notification-card'];
+    if (rendererChanged) {
+      this._card.innerHTML = '';
+    }
 
-      if (rendererChanged) {
-        while (this._card.firstChild) {
-          this._card.removeChild(this._card.firstChild);
-        }
+    if (opened) {
+      if (!this._didAnimateNotificationAppend) {
+        this._animatedAppendNotificationCard();
       }
-
-      if (opened) {
-        if (!this._didAnimateNotificationAppend) {
-          this._animatedAppendNotificationCard();
-        }
-        this.render();
-      }
+      this.render();
     }
   }
 
@@ -427,61 +369,10 @@ class NotificationElement extends ThemePropertyMixin(ElementMixin(PolymerElement
   _openedChanged(opened) {
     if (opened) {
       this._container.opened = true;
-      if (!this._instance && !this.renderer) {
-        this._ensureTemplatized();
-      }
-
       this._animatedAppendNotificationCard();
     } else if (this._card) {
       this._closeNotificationCard();
     }
-  }
-
-  /** @private */
-  _ensureTemplatized() {
-    this._notificationTemplate = this.querySelector('template') || this._notificationTemplate;
-
-    if (!this._notificationTemplate) {
-      return;
-    }
-
-    if (!this._notificationTemplate._Templatizer) {
-      this._notificationTemplate._Templatizer = templatize(this._notificationTemplate, this, {
-        forwardHostProp: function (prop, value) {
-          if (this._instance) {
-            this._instance.forwardHostProp(prop, value);
-          }
-        }
-      });
-    }
-    this._instance = new this._notificationTemplate._Templatizer({});
-
-    this._card = this.$['vaadin-notification-card'];
-    this._cardContent = this._card.shadowRoot.querySelector('[part~="content"]');
-
-    const templateRoot = this._notificationTemplate.getRootNode();
-    if (templateRoot !== document) {
-      if (!this._cardContent.shadowRoot) {
-        this._cardContent.attachShadow({ mode: 'open' });
-      }
-
-      const scopeCssText = Array.from(templateRoot.querySelectorAll('style'))
-        .reduce((result, style) => result + style.textContent, '')
-        // The overlay root’s :host styles should not apply inside the overlay
-        .replace(/:host/g, ':host-nomatch');
-
-      if (scopeCssText) {
-        const style = document.createElement('style');
-        style.textContent = scopeCssText;
-        this._cardContent.shadowRoot.appendChild(style);
-      }
-
-      this._cardContent.shadowRoot.appendChild(this._instance.root);
-    } else {
-      this._card.appendChild(this._instance.root);
-    }
-
-    this._card.setAttribute('aria-label', this._card.textContent.trim());
   }
 
   /** @private */

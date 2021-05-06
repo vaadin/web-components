@@ -35,6 +35,7 @@
     "@esm-bundle/chai": "^4.1.5",
     "@vaadin/testing-helpers": "^0.2.1",
     "@vaadin/vaadin-button": "^21.0.0-alpha0",
+    "@vaadin/vaadin-template-renderer": "^21.0.0-alpha0",
     "sinon": "^9.2.1"
   },
   "publishConfig": {

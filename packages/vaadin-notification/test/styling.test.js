@@ -1,6 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import '@vaadin/vaadin-template-renderer';
 import '../vaadin-notification.js';
 
 customElements.define(
@@ -78,28 +79,8 @@ describe('notification content styling', () => {
       delete notification.constructor._container;
     });
 
-    it('should stamp content into a shadowRoot', () => {
-      expect(cardContent.shadowRoot).to.be.instanceof(ShadowRoot);
-    });
-
     it('should not slot the content', () => {
       expect(cardContent.firstElementChild.assignedSlot).to.be.null;
-    });
-
-    it('should apply local styles to notification overlay content', () => {
-      expect(getComputedStyleSource(cardContent.shadowRoot.querySelector('.local-styles-content'))).to.equal(
-        '.local-styles-content'
-      );
-    });
-
-    it('should not apply global styles to notification overlay content', () => {
-      expect(getComputedStyleSource(cardContent.shadowRoot.querySelector('.global-styles-content'))).to.not.equal(
-        '.global-styles-content'
-      );
-    });
-
-    it('should not apply host styles to notification overlay content', () => {
-      expect(getComputedStyleSource(cardContent.shadowRoot.host)).to.not.equal(':host');
     });
 
     it('should not apply local part styles to notification overlay', () => {
@@ -133,7 +114,6 @@ describe('notification content styling', () => {
     });
 
     it('should stamp content into notification overlay host', () => {
-      expect(cardContent.shadowRoot).not.to.be.instanceof(ShadowRoot);
       expect(card.childElementCount).to.be.eql(2);
     });
 
