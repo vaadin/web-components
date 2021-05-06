@@ -5,6 +5,7 @@ import { ironList } from './iron-list';
 // iron-list can by default handle sizes up to around 100000.
 // When the size is larger than MAX_VIRTUAL_COUNT _vidxOffset is used
 const MAX_VIRTUAL_COUNT = 100000;
+const OFFSET_ADJUST_MIN_OFFSET = 1000;
 
 export class IronListAdapter {
   constructor({ createElements, updateElement, scrollTarget, scrollContainer, elementsContainer, reorderElements }) {
@@ -71,8 +72,13 @@ export class IronListAdapter {
       targetVirtualIndex = this._virtualCount - (this.size - index);
       this._vidxOffset = this.size - this._virtualCount;
     } else if (targetVirtualIndex < visibleElementCount) {
-      targetVirtualIndex = index;
-      this._vidxOffset = 0;
+      if (index < OFFSET_ADJUST_MIN_OFFSET) {
+        targetVirtualIndex = index;
+        this._vidxOffset = 0;
+      } else {
+        targetVirtualIndex = OFFSET_ADJUST_MIN_OFFSET;
+        this._vidxOffset = index - targetVirtualIndex;
+      }
     } else {
       this._vidxOffset = index - targetVirtualIndex;
     }
@@ -392,7 +398,7 @@ export class IronListAdapter {
     } else {
       // Make sure user can always swipe/wheel scroll to the start and end
       const oldOffset = this._vidxOffset;
-      const threshold = 1000;
+      const threshold = OFFSET_ADJUST_MIN_OFFSET;
       const maxShift = 100;
 
       // Near start

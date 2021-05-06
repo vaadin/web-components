@@ -58,6 +58,13 @@ describe('unlimited size', () => {
     expect(item.getBoundingClientRect().top).to.equal(scrollTarget.getBoundingClientRect().top);
   });
 
+  it('should scroll to an index with really large size', async () => {
+    virtualizer.size = 10000000000;
+    virtualizer.scrollToIndex(200000);
+    const item = elementsContainer.querySelector(`#item-200000`);
+    expect(item.getBoundingClientRect().top).to.equal(scrollTarget.getBoundingClientRect().top);
+  });
+
   it('should scroll backwards to a large index', async () => {
     const firstIndex = ~~(virtualizer.size / 2);
     const secondIndex = ~~(virtualizer.size / 3);
