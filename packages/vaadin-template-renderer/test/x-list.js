@@ -34,13 +34,15 @@ export class XList extends HTMLElement {
   render() {
     if (!this.__renderer) return;
 
-    this.$.items.innerHTML = '';
+    const children = this.items.map((item, index) => {
+      const root = this.$.items.children[index] ?? document.createElement('div');
 
-    this.items.forEach((item) => {
-      const root = document.createElement('div');
       this.__renderer(root, this, { item });
-      this.$.items.appendChild(root);
+
+      return root;
     });
+
+    this.$.items.replaceChildren(...children);
   }
 }
 

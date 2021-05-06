@@ -72,4 +72,11 @@ describe('list', () => {
     expect(getItemValueText(list.$.items.children[0])).to.equal('foobar');
     expect(getItemValueText(list.$.items.children[1])).to.equal('foobar');
   });
+
+  it('should re-render the template instances when changing items', () => {
+    host.items = ['foo', 'bar'];
+
+    expect(getItemText(list.$.items.children[0])).to.equal('foo');
+    expect(getItemText(list.$.items.children[1])).to.equal('bar');
+  });
 });

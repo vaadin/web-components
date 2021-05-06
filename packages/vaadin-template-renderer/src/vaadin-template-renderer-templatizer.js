@@ -20,7 +20,7 @@ export class Templatizer extends PolymerElement {
     this.__templateInstances = new Set();
   }
 
-  render(element, properties) {
+  render(element, properties = {}) {
     // If the template instance exists and has been instantiated by this templatizer,
     // it only re-renders the instance with the new properties.
     if (this.__templateInstances.has(element.__templateInstance)) {
@@ -37,17 +37,25 @@ export class Templatizer extends PolymerElement {
   }
 
   __createTemplateInstance(properties) {
-    this.__createTemplateClass();
+    this.__createTemplateClass(properties);
 
     const instance = new this.__TemplateClass(properties);
     this.__templateInstances.add(instance);
     return instance;
   }
 
-  __createTemplateClass() {
+  __createTemplateClass(properties) {
     if (this.__TemplateClass) return;
 
+    const instanceProps = Object.keys(properties).reduce((accum, key) => {
+      return { ...accum, [key]: true };
+    }, {});
+
     this.__TemplateClass = templatize(this.__template, this, {
+      // This property prevents the template instance properties
+      // from passing into the `forwardHostProp` callback
+      instanceProps,
+
       // When changing a property of the data host component, this callback forwards
       // the changed property to the template instances so that cause their re-rendering.
       forwardHostProp(prop, value) {
