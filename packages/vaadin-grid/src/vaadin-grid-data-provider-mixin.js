@@ -168,7 +168,11 @@ export const DataProviderMixin = (superClass) =>
           }
         },
 
+        /**
+         * @protected
+         */
         _hasData: {
+          type: Boolean,
           value: false
         },
 

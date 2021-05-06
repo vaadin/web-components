@@ -475,6 +475,7 @@ class GridElement extends ElementMixin(
       .sort((a, b) => a.index - b.index);
   }
 
+  /** @protected */
   ready() {
     super.ready();
 

@@ -14,7 +14,6 @@ import {
   scrollGrid,
   scrollToEnd
 } from './helpers.js';
-import '@polymer/iron-list/iron-list.js';
 import '../vaadin-grid.js';
 
 describe('basic features', () => {

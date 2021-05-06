@@ -15,6 +15,9 @@ export const DynamicColumnsMixin = (superClass) =>
   class DynamicColumnsMixin extends superClass {
     static get properties() {
       return {
+        /**
+         * @protected
+         */
         _columnTree: Object
       };
     }
