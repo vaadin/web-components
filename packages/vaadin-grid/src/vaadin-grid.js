@@ -351,11 +351,6 @@ class GridElement extends ElementMixin(
 
   static get properties() {
     return {
-      size: {
-        type: Number,
-        notify: true
-      },
-
       /** @private */
       _safari: {
         type: Boolean,

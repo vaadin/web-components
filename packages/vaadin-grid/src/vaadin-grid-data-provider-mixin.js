@@ -107,6 +107,16 @@ export const DataProviderMixin = (superClass) =>
     static get properties() {
       return {
         /**
+         * The number of root-level items in the grid.
+         * @attr {number} size
+         * @type {number}
+         */
+        size: {
+          type: Number,
+          notify: true
+        },
+
+        /**
          * Number of items fetched at a time from the dataprovider.
          * @attr {number} page-size
          * @type {number}

@@ -39,6 +39,12 @@ interface DataProviderMixin<TItem> {
   pageSize: number;
 
   /**
+   * The number of root-level items in the grid.
+   * @attr {number} size
+   */
+  size: number;
+
+  /**
    * Function that provides items lazily. Receives arguments `params`, `callback`
    *
    * `params.page` Requested page index

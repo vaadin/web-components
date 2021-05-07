@@ -4,8 +4,6 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 
 import { GridDefaultItem, GridDropLocation, GridItemModel } from './interfaces';
 
-import { PolymerElement } from '@polymer/polymer/polymer-element.js';
-
 import { A11yMixin } from './vaadin-grid-a11y-mixin.js';
 
 import { ActiveItemMixin } from './vaadin-grid-active-item-mixin.js';
