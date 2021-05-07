@@ -3,13 +3,12 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 import { beforeNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
 import { animationFrame } from '@polymer/polymer/lib/utils/async.js';
 import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { A11yMixin } from './vaadin-grid-a11y-mixin.js';
 import { ActiveItemMixin } from './vaadin-grid-active-item-mixin.js';
 import { ArrayDataProviderMixin } from './vaadin-grid-array-data-provider-mixin.js';
