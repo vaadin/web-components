@@ -3,7 +3,13 @@ const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 
-const filterBrowserLogs = (log) => log.type === 'error';
+const ALLOWED_WARNINGS = [
+  '<vaadin-crud> Unable to autoconfigure form because the data structure is unknown. Either specify `include` or ensure at least one item is available beforehand.',
+  'The <vaadin-grid> needs the total number of items in order to display rows. Set the total number of items to the `size` property, or provide the total number of items in the second argument of the `dataProvider`’s `callback` call.',
+  'PositionMixin is not considered stable and might change any time'
+];
+
+const filterBrowserLogs = (log) => ALLOWED_WARNINGS.includes(log.args[0]) === false;
 
 const group = process.argv.indexOf('--group') !== -1;
 
