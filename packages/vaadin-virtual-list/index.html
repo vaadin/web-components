@@ -16,7 +16,7 @@
     <div> <button id="size-button">Set size</button><input id="size-input" value="0" /> </div>
 
     <script type="module">
-      import { Virtualizer } from '@vaadin/vaadin-virtual-list/virtualizer.js';
+      import { Virtualizer } from '@vaadin/vaadin-virtual-list/src/virtualizer.js';
 
       const virtualizedList = new Virtualizer({
         createElements: (count) => Array.from(Array(count)).map(() => document.createElement('div')),
