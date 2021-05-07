@@ -16,6 +16,7 @@ import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-input/iron-input.js';
 import '@polymer/paper-input/paper-input.js';
 import '@vaadin/vaadin-text-field/vaadin-text-field.js';
+import '@vaadin/vaadin-template-renderer';
 import { createEventSpy, TOUCH_DEVICE } from './helpers.js';
 import './not-animated-styles.js';
 import '../vaadin-combo-box-light.js';

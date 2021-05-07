@@ -3,15 +3,16 @@ export class XComponent extends HTMLElement {
     super();
     this.attachShadow({ mode: 'open' });
     this.shadowRoot.innerHTML = `<div id="content"></div>`;
-    this.__content = this.shadowRoot.querySelector('#content');
   }
 
   connectedCallback() {
     window.Vaadin.templateRendererCallback?.(this);
   }
 
-  get content() {
-    return this.__content;
+  get $() {
+    return {
+      content: this.shadowRoot.querySelector('#content')
+    };
   }
 
   set renderer(renderer) {
@@ -20,7 +21,7 @@ export class XComponent extends HTMLElement {
   }
 
   render() {
-    this.__renderer?.(this.__content);
+    this.__renderer?.(this.$.content);
   }
 }
 

@@ -1,6 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { aTimeout, click, fixtureSync, focusout } from '@vaadin/testing-helpers';
+import '@vaadin/vaadin-template-renderer';
 import { createEventSpy, fireDownUpClick, TOUCH_DEVICE } from './helpers.js';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';

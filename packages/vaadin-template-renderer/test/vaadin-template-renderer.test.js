@@ -1,58 +1,53 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { click, fire, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
-import { TemplateInstanceBase } from '@polymer/polymer/lib/utils/templatize';
 
 import '../vaadin-template-renderer.js';
 import { Templatizer } from '../src/vaadin-template-renderer-templatizer.js';
 
-import './x-polymer-host.js';
+import './x-component-host.js';
 import './x-component.js';
 
 describe('vaadin-template-renderer', () => {
-  it('should render the template', () => {
-    const component = fixtureSync(`
-      <x-component>
-        <template>foo</template>
-      </x-component>
-    `);
+  describe('basic', () => {
+    let component, template;
 
-    expect(component.content.textContent).to.equal('foo');
-  });
+    beforeEach(() => {
+      component = fixtureSync(`
+        <x-component>
+          <template>foo</template>
+        </x-component>
+      `);
 
-  it('should process the template only once', () => {
-    const component = fixtureSync(`
-      <x-component>
-        <template>foo</template>
-      </x-component>
-    `);
-    const template = component.querySelector('template');
+      template = component.querySelector('template');
+    });
 
-    const oldTemplatizer = template.__templatizer;
+    it('should render the template', () => {
+      expect(component.$.content.textContent).to.equal('foo');
+    });
 
-    window.Vaadin.templateRendererCallback(component);
+    it('should process the template only once', () => {
+      const oldTemplatizer = template.__templatizer;
 
-    const newTemplatizer = template.__templatizer;
+      window.Vaadin.templateRendererCallback(component);
 
-    expect(newTemplatizer).to.be.instanceOf(Templatizer);
-    expect(newTemplatizer).to.equal(oldTemplatizer);
-  });
+      const newTemplatizer = template.__templatizer;
 
-  it('should keep the same template instance when re-rendering', () => {
-    const component = fixtureSync(`
-      <x-component>
-        <template>foo</template>
-      </x-component>
-    `);
+      expect(newTemplatizer).to.be.instanceOf(Templatizer);
+      expect(newTemplatizer).to.equal(oldTemplatizer);
+    });
 
-    const oldTemplateInstance = component.content.__templateInstance;
+    it('should preserve the template instance when re-rendering', () => {
+      const oldTemplateInstance = component.$.content.__templateInstance;
 
-    component.render();
+      component.render();
 
-    const newTemplateInstance = component.content.__templateInstance;
+      const newTemplateInstance = component.$.content.__templateInstance;
 
-    expect(newTemplateInstance).to.be.instanceOf(TemplateInstanceBase);
-    expect(newTemplateInstance).to.equal(oldTemplateInstance);
+      expect(template.__templatizer.__templateInstances).to.have.lengthOf(1);
+      expect(template.__templatizer.__templateInstances).to.include(newTemplateInstance);
+      expect(template.__templatizer.__templateInstances).to.include(oldTemplateInstance);
+    });
   });
 
   it('should not process non-child templates', () => {
@@ -64,7 +59,7 @@ describe('vaadin-template-renderer', () => {
       </x-component>
     `);
 
-    expect(component.content.textContent).to.equal('');
+    expect(component.$.content.textContent).to.equal('');
   });
 
   it('should render the last child template in case of multiple templates', () => {
@@ -75,13 +70,13 @@ describe('vaadin-template-renderer', () => {
       </x-component>
     `);
 
-    expect(component.content.textContent).to.equal('bar');
+    expect(component.$.content.textContent).to.equal('bar');
   });
 
-  it('should handle events from the template', () => {
-    const host = fixtureSync(`<x-polymer-host></x-polymer-host>`);
+  it('should handle events from the template instance', () => {
+    const host = fixtureSync(`<x-component-host></x-component-host>`);
     const component = host.$.component;
-    const button = component.content.querySelector('button');
+    const button = component.$.content.querySelector('button');
     const spy = sinon.spy(host, 'onClick');
 
     click(button);
@@ -89,32 +84,32 @@ describe('vaadin-template-renderer', () => {
     expect(spy.calledOnce).to.be.true;
   });
 
-  it('should re-render the template when changing a parent property', async () => {
-    const host = fixtureSync(`<x-polymer-host></x-polymer-host>`);
+  it('should re-render the template istance when changing a parent property', async () => {
+    const host = fixtureSync(`<x-component-host></x-component-host>`);
     const component = host.$.component;
 
     host.value = 'foobar';
 
-    expect(component.content.textContent.trim()).to.equal('foobar');
+    expect(component.$.content.textContent.trim()).to.equal('foobar');
   });
 
-  it('should re-render multiple instances of the template independently', async () => {
-    const host1 = fixtureSync(`<x-polymer-host></x-polymer-host>`);
-    const host2 = fixtureSync(`<x-polymer-host></x-polymer-host>`);
+  it('should re-render multiple template instances independently', async () => {
+    const host1 = fixtureSync(`<x-component-host></x-component-host>`);
+    const host2 = fixtureSync(`<x-component-host></x-component-host>`);
     const component1 = host1.$.component;
     const component2 = host2.$.component;
 
     host1.value = 'foo';
     host2.value = 'bar';
 
-    expect(component1.content.textContent.trim()).to.equal('foo');
-    expect(component2.content.textContent.trim()).to.equal('bar');
+    expect(component1.$.content.textContent.trim()).to.equal('foo');
+    expect(component2.$.content.textContent.trim()).to.equal('bar');
   });
 
-  it('should support the two-way property binding', () => {
-    const host = fixtureSync(`<x-polymer-host></x-polymer-host>`);
+  it('should support the 2-way property binding', () => {
+    const host = fixtureSync(`<x-component-host></x-component-host>`);
     const component = host.$.component;
-    const input = component.content.querySelector('input');
+    const input = component.$.content.querySelector('input');
 
     input.value = 'foobar';
     fire(input, 'input');
@@ -130,7 +125,7 @@ describe('vaadin-template-renderer', () => {
       component.appendChild(template);
       await nextFrame();
 
-      expect(component.content.textContent).to.equal('bar');
+      expect(component.$.content.textContent).to.equal('bar');
     });
 
     it('should observe replacing a template', async () => {
@@ -144,7 +139,7 @@ describe('vaadin-template-renderer', () => {
       component.replaceChildren(template);
       await nextFrame();
 
-      expect(component.content.textContent).to.equal('bar');
+      expect(component.$.content.textContent).to.equal('bar');
     });
 
     it('should not observe adding a non-template element', async () => {
@@ -154,7 +149,7 @@ describe('vaadin-template-renderer', () => {
       component.appendChild(element);
       await nextFrame();
 
-      expect(component.content.textContent).to.equal('');
+      expect(component.$.content.textContent).to.equal('');
     });
 
     it('should not observe adding a non-child template', async () => {
@@ -168,7 +163,7 @@ describe('vaadin-template-renderer', () => {
       component.querySelector('div').appendChild(template);
       await nextFrame();
 
-      expect(component.content.textContent).to.equal('');
+      expect(component.$.content.textContent).to.equal('');
     });
   });
 });

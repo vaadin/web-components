@@ -63,20 +63,7 @@ import { ComboBoxDataProviderMixin } from './vaadin-combo-box-data-provider-mixi
  * in the next renderer call and will be provided with the `root` argument.
  * On first call it will be empty.
  *
- * ### Item Template
- *
- * Alternatively, the content of the `<vaadin-combo-box-item>` can be populated by using
- * custom item template provided in the light DOM:
- *
- * ```html
- * <vaadin-combo-box items='[{"label": "Hydrogen", "value": "H"}]'>
- *   <template>
- *     [[index]]: [[item.label]] <b>[[item.value]</b>
- *   </template>
- * </vaadin-combo-box>
- * ```
- *
- * The following properties are available for item template bindings:
+ * The following properties are available in the `model` argument:
  *
  * Property name | Type | Description
  * --------------|------|------------
