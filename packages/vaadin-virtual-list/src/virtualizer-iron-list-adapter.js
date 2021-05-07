@@ -1,6 +1,6 @@
-import { timeOut, animationFrame } from './async';
-import { Debouncer, flush } from './debounce';
-import { ironList } from './iron-list';
+import { timeOut, animationFrame } from './async.js';
+import { Debouncer, flush } from './debounce.js';
+import { ironList } from './iron-list.js';
 
 // iron-list can by default handle sizes up to around 100000.
 // When the size is larger than MAX_VIRTUAL_COUNT _vidxOffset is used
