@@ -62,6 +62,7 @@ export const RowDetailsMixin = (superClass) =>
       ];
     }
 
+    /** @protected */
     ready() {
       super.ready();
 

@@ -7,7 +7,7 @@ describe('unlimited size', () => {
   let scrollTarget;
   let elementsContainer;
 
-  function init(config = {}) {
+  beforeEach(() => {
     scrollTarget = fixtureSync(`
       <div style="height: 100px;">
         <div></div>
@@ -24,14 +24,11 @@ describe('unlimited size', () => {
         el.textContent = el.id;
       },
       scrollTarget,
-      scrollContainer,
-      ...config
+      scrollContainer
     });
 
     virtualizer.size = 1000000;
-  }
-
-  beforeEach(() => init());
+  });
 
   it('should scroll to a large index', async () => {
     const index = ~~(virtualizer.size / 2);
