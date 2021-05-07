@@ -213,9 +213,6 @@ export const DataProviderMixin = (superClass) =>
 
     /** @private */
     _sizeChanged(size) {
-      if (typeof size !== 'number' || isNaN(size)) {
-        return;
-      }
       const delta = size - this._cache.size;
       this._cache.size += delta;
       this._cache.effectiveSize += delta;
