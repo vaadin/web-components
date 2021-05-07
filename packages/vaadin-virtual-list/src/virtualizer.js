@@ -1,4 +1,4 @@
-import { IronListAdapter } from './virtualizer-iron-list-adapter';
+import { IronListAdapter } from './virtualizer-iron-list-adapter.js';
 
 export class Virtualizer {
   /**

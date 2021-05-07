@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, mousedown, mouseup } from '@vaadin/testing-helpers';
 import Sinon from 'sinon';
-import { Virtualizer } from '../virtualizer';
+import { Virtualizer } from '../src/virtualizer.js';
 
 describe('reorder elements', () => {
   let virtualizer;

@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { aTimeout, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
-import { Virtualizer } from '../virtualizer';
+import { Virtualizer } from '../src/virtualizer.js';
 
 describe('virtualizer', () => {
   let virtualizer;
