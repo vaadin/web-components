@@ -87,6 +87,7 @@ import '../vaadin-grid.js';
 
         it('should not move while content scrolls horizontally', (done) => {
           const cells = getRowCells(containerRows[0]);
+          grid.style.borderWidth = '0px';
 
           listenOnce(grid.$.table, 'scroll', () => {
             expect(isWithinParentConstraints(cells[0], grid.$.table)).to.equal(true);

@@ -116,12 +116,11 @@ export const getLastVisibleItem = (grid) => {
 export const isWithinParentConstraints = (el, parent) => {
   const elRect = el.getBoundingClientRect();
   const parentRect = parent.getBoundingClientRect();
-  const offset = 2;
   return (
-    elRect.top >= parentRect.top - offset &&
-    elRect.right <= parentRect.right + offset &&
-    elRect.bottom <= parentRect.bottom + offset &&
-    elRect.left >= parentRect.left - offset
+    elRect.top >= parentRect.top &&
+    elRect.right <= parentRect.right &&
+    elRect.bottom <= parentRect.bottom &&
+    elRect.left >= parentRect.left
   );
 };
 
