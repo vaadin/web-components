@@ -341,7 +341,7 @@ export interface GridEventMap<TItem> extends HTMLElementEventMap, GridElementEve
  * @fires {CustomEvent} loading-changed - Fired when the `loading` property changes.
  * @fires {CustomEvent} selected-items-changed - Fired when the `selectedItems` property changes.
  */
-declare class GridElement<TItem = GridDefaultItem> extends PolymerElement {
+declare class GridElement<TItem = GridDefaultItem> extends HTMLElement {
   /**
    * If true, the grid's height is defined by its rows.
    *
