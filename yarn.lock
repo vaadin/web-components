@@ -2140,10 +2140,10 @@
     "@web/test-runner-core" "^0.10.14"
     mkdirp "^1.0.4"
 
-"@web/test-runner-core@^0.10.13", "@web/test-runner-core@^0.10.14", "@web/test-runner-core@^0.10.16", "@web/test-runner-core@^0.10.8", "@web/test-runner-core@^0.10.9":
-  version "0.10.16"
-  resolved "https://registry.yarnpkg.com/@web/test-runner-core/-/test-runner-core-0.10.16.tgz#a7746dcea0b6d93f8393ac3a884e18029b8b1168"
-  integrity sha512-Ml4twNujR/AMqB16Z4MlDsn+q82lMAdIvabTVAjk+a+sxT+qCEupFC42mTRr8VJo8A1EvCpGgf1d16joQ3G7VQ==
+"@web/test-runner-core@^0.10.13", "@web/test-runner-core@^0.10.14", "@web/test-runner-core@^0.10.17", "@web/test-runner-core@^0.10.8", "@web/test-runner-core@^0.10.9":
+  version "0.10.17"
+  resolved "https://registry.yarnpkg.com/@web/test-runner-core/-/test-runner-core-0.10.17.tgz#bae17071d1e5a5fd9fa01cf759644352c243c513"
+  integrity sha512-T8yLQ6W4tHwREEYlAvAMYXpNkRE4XBynuWQQVq1qf5hf/IFNdYkOVELkgsHevtYLRElxi9/wHeRrn1SkDgj0Ug==
   dependencies:
     "@babel/code-frame" "^7.12.11"
     "@types/co-body" "^5.1.0"
@@ -2234,17 +2234,17 @@
     "@web/test-runner-core" "^0.10.8"
     webdriverio "^7.0.3"
 
-"@web/test-runner@^0.13.3":
-  version "0.13.3"
-  resolved "https://registry.yarnpkg.com/@web/test-runner/-/test-runner-0.13.3.tgz#6f4edd8fd7b65dc8021904b0d3547cfb636dc5c8"
-  integrity sha512-92UedwA+Hynh03/ArcFmcM4fS6KNANmrMmrgG9gb6QTuwW9FnPXOZDjy7DZTHjbSEpXlSEKIxa1YdzQmrNcuXA==
+"@web/test-runner@^0.13.4":
+  version "0.13.4"
+  resolved "https://registry.yarnpkg.com/@web/test-runner/-/test-runner-0.13.4.tgz#e0cd1dcf24b4aa53284b5fa8c099a6b00108f447"
+  integrity sha512-TuS8UnW+bdY0K2RoqldyORJime4R1cnARvUtxsXJDbHq78Dcfud2xCgrOepQbbxbniF77OShuEEwCXNULftobw==
   dependencies:
     "@web/browser-logs" "^0.2.2"
     "@web/config-loader" "^0.1.3"
     "@web/dev-server" "^0.1.17"
     "@web/test-runner-chrome" "^0.10.0"
     "@web/test-runner-commands" "^0.4.5"
-    "@web/test-runner-core" "^0.10.16"
+    "@web/test-runner-core" "^0.10.17"
     "@web/test-runner-mocha" "^0.7.2"
     camelcase "^6.2.0"
     chalk "^4.1.0"
