@@ -83,11 +83,13 @@ export class IronListAdapter {
       this._vidxOffset = index - targetVirtualIndex;
     }
 
-    do {
-      this.__skipNextVirtualIndexAdjust = true;
+    this.__skipNextVirtualIndexAdjust = true;
+    super.scrollToIndex(targetVirtualIndex);
+    if (this.firstVisibleIndex !== index - this._vidxOffset && this._scrollTop < this._maxScrollTop && !this.grid) {
+      // Second invocation to scrollToIndex may be needed to workaround an issue in iron-list
       super.scrollToIndex(targetVirtualIndex);
-      this._scrollHandler();
-    } while (this.firstVisibleIndex !== index - this._vidxOffset && this._scrollTop < this._maxScrollTop && !this.grid);
+    }
+    this._scrollHandler();
   }
 
   flush() {
