@@ -902,17 +902,14 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
     const openedChanged = this._oldOpened !== opened;
     this._oldOpened = opened;
 
+    if (rendererChanged) {
+      this.content = this;
+      this.content.innerHTML = '';
+    }
+
     if (template && templateOrInstancePropsChanged) {
       this._stampOverlayTemplate(template, instanceProps);
     } else if (renderer && (rendererChanged || openedChanged || ownerOrModelChanged)) {
-      this.content = this;
-
-      if (rendererChanged) {
-        while (this.content.firstChild) {
-          this.content.removeChild(this.content.firstChild);
-        }
-      }
-
       if (opened) {
         this.render();
       }
