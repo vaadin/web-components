@@ -299,6 +299,10 @@ export const ComboBoxMixin = (subclass) =>
 
       this.addEventListener('mousedown', bringToFrontListener);
       this.addEventListener('touchstart', bringToFrontListener);
+
+      if (window.Vaadin && window.Vaadin.templateRendererCallback) {
+        window.Vaadin.templateRendererCallback(this);
+      }
     }
 
     /**

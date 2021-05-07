@@ -376,10 +376,6 @@ class ComboBoxElement extends ElementMixin(
     this._nativeInput.setAttribute('role', 'combobox');
     this._nativeInput.setAttribute('aria-autocomplete', 'list');
     this._updateAriaExpanded();
-
-    if (window.Vaadin && window.Vaadin.templateRendererCallback) {
-      window.Vaadin.templateRendererCallback(this);
-    }
   }
 
   /** @protected */
