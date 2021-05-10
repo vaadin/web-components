@@ -27,22 +27,32 @@ class XNotification extends PolymerElement {
 customElements.define('x-notification', XNotification);
 
 describe('template', () => {
-  let container, notification;
+  it('should render the template', () => {
+    const notification = fixtureSync(`
+      <vaadin-notification opened>
+        <template>foo</template>
+      </vaadin-notification>
+    `);
 
-  beforeEach(() => {
-    container = fixtureSync('<x-notification></x-notification>');
-    notification = container.$.notification;
-  });
-
-  afterEach(() => {
-    // Close to stop all pending timers.
-    notification.close();
-    notification._removeNotificationCard(); // Force sync card removal instead of waiting for the animation
-    // delete singleton reference, so as it's created in next test
-    delete notification.constructor._container;
+    expect(notification._card.textContent.trim()).to.equal('foo');
   });
 
   describe('data-binding', () => {
+    let container, notification;
+
+    beforeEach(() => {
+      container = fixtureSync('<x-notification></x-notification>');
+      notification = container.$.notification;
+    });
+
+    afterEach(() => {
+      // Close to stop all pending timers.
+      notification.close();
+      notification._removeNotificationCard(); // Force sync card removal instead of waiting for the animation
+      // delete singleton reference, so as it's created in next test
+      delete notification.constructor._container;
+    });
+
     it('notification should bind parent property', () => {
       container.message = 'foo';
 

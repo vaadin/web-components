@@ -138,4 +138,12 @@ describe('vaadin-notification', () => {
       });
     });
   });
+
+  describe('theme', () => {
+    it('should propagate theme attribute to card', () => {
+      notification.setAttribute('theme', 'foo');
+
+      expect(notification._card.getAttribute('theme')).to.equal('foo');
+    });
+  });
 });
