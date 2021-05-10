@@ -1314,7 +1314,7 @@
     "@polymer/iron-validatable-behavior" "^3.0.0-pre.26"
     "@polymer/polymer" "^3.0.0"
 
-"@polymer/iron-list@^3.0.0", "@polymer/iron-list@^3.1.0":
+"@polymer/iron-list@^3.0.0":
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/@polymer/iron-list/-/iron-list-3.1.0.tgz#9b525249a90a53b6ae249330640b54b12141202a"
   integrity sha512-Eiv6xd3h3oPmn8SXFntXVfC3ZnegH+KHAxiKLKcOASFSRY3mHnr2AdcnExUJ9ItoCMA5UzKaM/0U22eWzGERtA==

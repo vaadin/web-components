@@ -1,10 +1,10 @@
 {
   "name": "@vaadin/vaadin-virtual-list",
   "version": "21.0.0-alpha2",
-  "description": "vaadin-virtual-list",
+  "description": "Web Component for displaying a virtual/infinite list or items.",
   "main": "vaadin-virtual-list.js",
   "module": "vaadin-virtual-list.js",
-  "repository": "vaadin/vaadin-virtual-list",
+  "repository": "vaadin/web-components",
   "keywords": [
     "Vaadin",
     "virtualizer",
@@ -21,8 +21,16 @@
   "files": [
     "vaadin-*.d.ts",
     "vaadin-*.js",
-    "src"
+    "src",
+    "theme"
   ],
+  "dependencies": {
+    "@polymer/polymer": "^3.0.0",
+    "@vaadin/vaadin-element-mixin": "^21.0.0-alpha2",
+    "@vaadin/vaadin-lumo-styles": "^21.0.0-alpha2",
+    "@vaadin/vaadin-material-styles": "^21.0.0-alpha2",
+    "@vaadin/vaadin-themable-mixin": "^21.0.0-alpha2"
+  },
   "devDependencies": {
     "@esm-bundle/chai": "^4.1.5",
     "@vaadin/testing-helpers": "^0.2.1",
