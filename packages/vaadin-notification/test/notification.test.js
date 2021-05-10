@@ -1,6 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import '@vaadin/vaadin-template-renderer';
 import '../vaadin-notification.js';
 
 describe('vaadin-notification', () => {
@@ -101,10 +102,6 @@ describe('vaadin-notification', () => {
     it('notification card should have `aria-live="polite"`', () => {
       expect(notification._card.getAttribute('aria-live')).to.be.equal('polite');
     });
-
-    it('notification card should have correct `aria-label`', () => {
-      expect(notification._card.getAttribute('aria-label')).to.be.equal('Your work has been saved');
-    });
   });
 
   describe('methods', () => {
@@ -139,6 +136,14 @@ describe('vaadin-notification', () => {
         await aTimeout(1);
         expect(notification.opened).to.be.true;
       });
+    });
+  });
+
+  describe('theme', () => {
+    it('should propagate theme attribute to card', () => {
+      notification.setAttribute('theme', 'foo');
+
+      expect(notification._card.getAttribute('theme')).to.equal('foo');
     });
   });
 });
