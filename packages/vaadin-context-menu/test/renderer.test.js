@@ -103,6 +103,19 @@ describe('renderer', () => {
       menu.render();
       expect(menu.renderer.calledTwice).to.be.true;
     });
+
+    it('should clear the content when removing the renderer', () => {
+      menu.renderer = (root) => {
+        root.innerHTML = 'foo';
+      };
+      fire(target, 'vaadin-contextmenu');
+
+      expect(menu.$.overlay.content.textContent.trim()).to.equal('foo');
+
+      menu.renderer = null;
+
+      expect(menu.$.overlay.content.textContent.trim()).to.equal('');
+    });
   });
 
   describe('with template', () => {
