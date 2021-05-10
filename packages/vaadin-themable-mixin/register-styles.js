@@ -11,7 +11,7 @@ const styleMap = {};
  * the first instance of a component of the type is attached to DOM.
  *
  * @param {String} themeFor The local/tag name of the component type to register the styles for
- * @param {CSSResult | CSSResult[]} styles The CSS style rules to be registered for the component type
+ * @param {CSSResultGroup} styles The CSS style rules to be registered for the component type
  * matching themeFor and included in the local scope of each component instance
  * @param {Object=} options Additional options
  * @return {void}
