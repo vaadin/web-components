@@ -959,12 +959,12 @@ class GridElement extends ElementMixin(
       });
 
       // body and row details renderers
-      this.__updateVirtualizer();
+      this.__updateVisibleRows();
     }
   }
 
   /** @protected */
-  __updateVirtualizer() {
+  __updateVisibleRows() {
     this.__virtualizer && this.__virtualizer.update();
   }
 

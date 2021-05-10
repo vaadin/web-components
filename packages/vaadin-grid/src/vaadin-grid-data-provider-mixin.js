@@ -280,7 +280,7 @@ export const DataProviderMixin = (superClass) =>
       this.__cacheExpandedKeys();
       this._cache.updateSize();
       this._effectiveSize = this._cache.effectiveSize;
-      this.__updateVirtualizer();
+      this.__updateVisibleRows();
     }
 
     /** @private */
@@ -425,7 +425,7 @@ export const DataProviderMixin = (superClass) =>
       this._cache.size = this.size || 0;
       this._cache.updateSize();
       this._hasData = false;
-      this.__updateVirtualizer();
+      this.__updateVisibleRows();
 
       if (!this._effectiveSize) {
         this._loadPage(0, this._cache);
