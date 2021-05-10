@@ -337,6 +337,7 @@ class NotificationElement extends ThemePropertyMixin(ElementMixin(PolymerElement
   ready() {
     super.ready();
 
+    this._card = this.$['vaadin-notification-card'];
     this._observer = new FlattenedNodesObserver(this, (info) => {
       this._setTemplateFromNodes(info.addedNodes);
     });
@@ -382,15 +383,11 @@ class NotificationElement extends ThemePropertyMixin(ElementMixin(PolymerElement
     const rendererChanged = this._oldRenderer !== renderer;
     this._oldRenderer = renderer;
 
+    if (rendererChanged) {
+      this._card.innerHTML = '';
+    }
+
     if (renderer) {
-      this._card = this.$['vaadin-notification-card'];
-
-      if (rendererChanged) {
-        while (this._card.firstChild) {
-          this._card.removeChild(this._card.firstChild);
-        }
-      }
-
       if (opened) {
         if (!this._didAnimateNotificationAppend) {
           this._animatedAppendNotificationCard();

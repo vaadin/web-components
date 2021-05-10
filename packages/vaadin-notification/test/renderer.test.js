@@ -101,6 +101,19 @@ describe('vaadin-notification', () => {
       expect(clientRect.height).to.not.equal(0);
       expect(clientRect.top).to.not.equal(0);
     });
+
+    it('should clear the notification card when removing the renderer', () => {
+      notification.opened = true;
+      notification.renderer = (root) => {
+        root.innerHTML = 'foo';
+      };
+
+      expect(notification._card.textContent).to.equal('foo');
+
+      notification.renderer = null;
+
+      expect(notification._card.textContent).to.equal('');
+    });
   });
 
   describe('with template', () => {
