@@ -530,24 +530,29 @@ describe('light dom observing', () => {
     });
 
     it('should add columns late', async () => {
+      flushGrid(grid);
       repeater.unshift('items', 'd');
       repeater.render();
       await nextFrame();
+      flushGrid(grid);
       expectFirstColumn(prefix + ' d', columnsLevel);
       expectFirstColumn('', columnsLevel);
       expectNumberOfColumns(4);
     });
 
     it('should remove columns late', async () => {
+      flushGrid(grid);
       repeater.shift('items');
       repeater.render();
       await nextFrame();
+      flushGrid(grid);
       expectFirstColumn(prefix + ' b', columnsLevel);
       expectFirstColumn('', columnsLevel);
       expectNumberOfColumns(2);
     });
 
     it('should remove cell content', async () => {
+      flushGrid(grid);
       const contentCount = grid.querySelectorAll('vaadin-grid-cell-content').length;
       repeater.shift('items');
       repeater.render();
@@ -566,32 +571,36 @@ describe('light dom observing', () => {
     });
 
     describe('columns inside grid', () => {
-      beforeEach(() => {
+      beforeEach(async () => {
         init('dom-repeat-columns', { columns: columns });
+        await aTimeout(0);
       });
 
       shouldSupportDomRepeat('grid repeats column');
     });
 
     describe('columns inside group', () => {
-      beforeEach(() => {
+      beforeEach(async () => {
         init('dom-repeat-columns-in-group', { columns: columns });
+        await aTimeout(0);
       });
 
       shouldSupportDomRepeat('group repeats column', 1);
     });
 
     describe('groups inside grid', () => {
-      beforeEach(() => {
+      beforeEach(async () => {
         init('dom-repeat-groups', { columns: columns });
+        await aTimeout(0);
       });
 
       shouldSupportDomRepeat('grid repeats group', 1);
     });
 
     describe('groups inside group', () => {
-      beforeEach(() => {
+      beforeEach(async () => {
         init('dom-repeat-groups-in-group', { columns: columns });
+        await aTimeout(0);
       });
 
       shouldSupportDomRepeat('group repeats group', 2);
@@ -718,6 +727,7 @@ describe('light dom observing', () => {
             const group = createGroup();
             firstGroup.insertBefore(group, firstGroup.firstChild);
             await nextFrame();
+            flushGrid(grid);
             expectNumberOfColumns(7);
             firstGroup.removeChild(group);
             await nextFrame();

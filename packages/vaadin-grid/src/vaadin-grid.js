@@ -3,13 +3,12 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 import { beforeNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
-import { timeOut, animationFrame } from '@polymer/polymer/lib/utils/async.js';
+import { animationFrame } from '@polymer/polymer/lib/utils/async.js';
 import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { ScrollerElement } from './vaadin-grid-scroller.js';
+import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { A11yMixin } from './vaadin-grid-a11y-mixin.js';
 import { ActiveItemMixin } from './vaadin-grid-active-item-mixin.js';
 import { ArrayDataProviderMixin } from './vaadin-grid-array-data-provider-mixin.js';
@@ -26,6 +25,7 @@ import { StylingMixin } from './vaadin-grid-styling-mixin.js';
 import { DragAndDropMixin } from './vaadin-grid-drag-and-drop-mixin.js';
 import { KeyboardNavigationMixin } from './vaadin-grid-keyboard-navigation-mixin.js';
 import { ColumnReorderingMixin } from './vaadin-grid-column-reordering-mixin.js';
+import { Virtualizer } from '@vaadin/vaadin-virtual-list/src/virtualizer.js';
 import './vaadin-grid-column.js';
 import './vaadin-grid-styles.js';
 
@@ -262,7 +262,7 @@ const TOUCH_DEVICE = (() => {
  * @fires {CustomEvent} loading-changed - Fired when the `loading` property changes.
  * @fires {CustomEvent} selected-items-changed - Fired when the `selectedItems` property changes.
  *
- * @extends ScrollerElement
+ * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ThemableMixin
  * @mixes A11yMixin
@@ -296,7 +296,7 @@ class GridElement extends ElementMixin(
                       A11yMixin(
                         FilterMixin(
                           ColumnReorderingMixin(
-                            ColumnResizingMixin(EventContextMixin(DragAndDropMixin(StylingMixin(ScrollerElement))))
+                            ColumnResizingMixin(EventContextMixin(DragAndDropMixin(StylingMixin(PolymerElement))))
                           )
                         )
                       )
@@ -343,7 +343,10 @@ class GridElement extends ElementMixin(
   }
 
   static get observers() {
-    return ['_columnTreeChanged(_columnTree, _columnTree.*)'];
+    return [
+      '_columnTreeChanged(_columnTree, _columnTree.*)',
+      '_effectiveSizeChanged(_effectiveSize, __virtualizer, _hasData, _columnTree)'
+    ];
   }
 
   static get properties() {
@@ -399,6 +402,11 @@ class GridElement extends ElementMixin(
       _recalculateColumnWidthOnceLoadingFinished: {
         type: Boolean,
         value: true
+      },
+
+      /** @private */
+      isAttached: {
+        value: false
       }
     };
   }
@@ -411,7 +419,71 @@ class GridElement extends ElementMixin(
   /** @protected */
   connectedCallback() {
     super.connectedCallback();
+    this.isAttached = true;
     this.recalculateColumnWidths();
+  }
+
+  /** @protected */
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this.isAttached = false;
+  }
+
+  /** @private */
+  __getFirstVisibleItem() {
+    return this._getVisibleRows().find((row) => this._isInViewport(row));
+  }
+
+  /** @private */
+  get _firstVisibleIndex() {
+    const firstVisibleItem = this.__getFirstVisibleItem();
+    return firstVisibleItem ? firstVisibleItem.index : undefined;
+  }
+
+  /** @private */
+  __getLastVisibleItem() {
+    return this._getVisibleRows()
+      .reverse()
+      .find((row) => this._isInViewport(row));
+  }
+
+  /** @private */
+  get _lastVisibleIndex() {
+    const lastVisibleItem = this.__getLastVisibleItem();
+    return lastVisibleItem ? lastVisibleItem.index : undefined;
+  }
+
+  /** @private */
+  _isInViewport(item) {
+    const scrollTargetRect = this.$.table.getBoundingClientRect();
+    const itemRect = item.getBoundingClientRect();
+    const headerHeight = this.$.header.offsetHeight;
+    const footerHeight = this.$.footer.offsetHeight;
+    return (
+      itemRect.bottom > scrollTargetRect.top + headerHeight && itemRect.top < scrollTargetRect.bottom - footerHeight
+    );
+  }
+
+  /** @private */
+  _getVisibleRows() {
+    return Array.from(this.$.items.children)
+      .filter((item) => !item.hidden)
+      .sort((a, b) => a.index - b.index);
+  }
+
+  /** @protected */
+  ready() {
+    super.ready();
+
+    this.__virtualizer = new Virtualizer({
+      createElements: this._createScrollerRows.bind(this),
+      updateElement: this._updateScrollerItem.bind(this),
+      scrollContainer: this.$.items,
+      scrollTarget: this.$.table,
+      reorderElements: true
+    });
+
+    new ResizeObserver(() => setTimeout(() => this.__updateFooterPositioning())).observe(this.$.footer);
   }
 
   /**
@@ -425,6 +497,13 @@ class GridElement extends ElementMixin(
     if (name === 'dir') {
       this.__isRTL = newValue === 'rtl';
       this._updateScrollerMeasurements();
+    }
+  }
+
+  /** @private */
+  _effectiveSizeChanged(effectiveSize, virtualizer, hasData, columnTree) {
+    if (virtualizer && hasData && columnTree) {
+      virtualizer.size = effectiveSize;
     }
   }
 
@@ -516,13 +595,10 @@ class GridElement extends ElementMixin(
     beforeNextRender(this, () => {
       this._updateFirstAndLastColumn();
       this._resetKeyboardNavigation();
+      this._afterScroll();
+      this.__itemsReceived();
     });
     return rows;
-  }
-
-  /** @private */
-  _getRowTarget() {
-    return this.$.items;
   }
 
   /** @private */
@@ -731,9 +807,9 @@ class GridElement extends ElementMixin(
    * @protected
    */
   _renderColumnTree(columnTree) {
-    Array.from(this.$.items.children).forEach((row) =>
-      this._updateRow(row, columnTree[columnTree.length - 1], null, false, true)
-    );
+    Array.from(this.$.items.children)
+      .filter((row) => !row.hidden)
+      .forEach((row) => this._updateRow(row, columnTree[columnTree.length - 1], null, false, true));
 
     while (this.$.header.children.length < columnTree.length) {
       const headerRow = document.createElement('tr');
@@ -780,18 +856,6 @@ class GridElement extends ElementMixin(
         this.$.items.style.paddingBottom = `${this.$.footer.offsetHeight}px`;
       }
     }
-
-    if (this._ios) {
-      const isOldIOS = !window.CSS.supports('position', 'sticky');
-      if (isOldIOS) {
-        // Due to a rendering bug, the sticky header may disappear on an older iOS (10-12) Safari
-        // if the grid is used inside of a flex box. This is a workaround for the issue.
-        this.$.table.style.height = '';
-        this.$.table.style.minHeight = '100%';
-        this.$.table.style.maxHeight = '100%';
-        setTimeout(() => (this.$.table.style.height = `${this.$.scroller.offsetHeight}px`));
-      }
-    }
   }
 
   /**
@@ -826,18 +890,11 @@ class GridElement extends ElementMixin(
         cell._instance.setProperties(model);
       }
     });
-
-    this._debouncerUpdateHeights = Debouncer.debounce(this._debouncerUpdateHeights, timeOut.after(1), () => {
-      this._updateMetrics();
-      this._positionItems();
-      this._updateScrollerSize();
-    });
   }
 
   /** @private */
   _resizeHandler() {
     this._updateDetailsCellHeights();
-    this._accessIronListAPI(super._resizeHandler, true);
     this._updateScrollerMeasurements();
     this.__updateFooterPositioning();
   }
@@ -846,7 +903,6 @@ class GridElement extends ElementMixin(
   _onAnimationEnd(e) {
     // ShadyCSS applies scoping suffixes to animation names
     if (e.animationName.indexOf('vaadin-grid-appear') === 0) {
-      this._render();
       e.stopPropagation();
       this.notifyResize();
       this.__itemsReceived();
@@ -903,8 +959,13 @@ class GridElement extends ElementMixin(
       });
 
       // body and row details renderers
-      this._update();
+      this.__updateVisibleRows();
     }
+  }
+
+  /** @protected */
+  __updateVisibleRows() {
+    this.__virtualizer && this.__virtualizer.update();
   }
 
   /**
@@ -914,7 +975,7 @@ class GridElement extends ElementMixin(
    * contained image whose bounds aren't known beforehand finishes loading).
    */
   notifyResize() {
-    super.notifyResize();
+    // To be removed in https://github.com/vaadin/web-components/issues/331
   }
 
   /** @private */

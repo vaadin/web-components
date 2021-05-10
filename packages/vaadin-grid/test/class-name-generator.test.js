@@ -59,6 +59,7 @@ describe('class name generator', () => {
     grid.rowDetailsRenderer = () => {};
     grid.cellClassNameGenerator = (column, model) => model.index + ' ' + column;
     await nextFrame();
+    flushGrid(grid);
     assertClassList(getContainerCell(grid.$.items, 0, 2), ['0', 'undefined']);
   });
 

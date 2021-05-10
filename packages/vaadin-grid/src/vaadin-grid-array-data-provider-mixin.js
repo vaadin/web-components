@@ -32,19 +32,16 @@ export const ArrayDataProviderMixin = (superClass) =>
         return;
       }
       if (!Array.isArray(items)) {
-        if (items === undefined || items === null) {
-          this.size = 0;
-        }
         if (this.dataProvider === this._arrayDataProvider) {
           this.dataProvider = undefined;
+          this.size = 0;
         }
-        return;
+      } else {
+        this.size = items.length;
+        this.dataProvider = this.dataProvider || this._arrayDataProvider;
+        this.clearCache();
+        this._ensureFirstPageLoaded();
       }
-
-      this.size = items.length;
-      this.dataProvider = this.dataProvider || this._arrayDataProvider;
-      this.clearCache();
-      this._ensureFirstPageLoaded();
     }
 
     /**

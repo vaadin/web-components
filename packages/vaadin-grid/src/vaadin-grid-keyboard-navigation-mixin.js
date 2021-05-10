@@ -133,14 +133,12 @@ export const KeyboardNavigationMixin = (superClass) =>
     _ensureScrolledToIndex(index) {
       const targetRowInDom = Array.from(this.$.items.children).filter((child) => child.index === index)[0];
       if (!targetRowInDom) {
-        this._scrollToIndex(index);
+        this.scrollToIndex(index);
       }
     }
 
     /** @private */
     _onNavigationKeyDown(e, key) {
-      this._scrollHandler();
-
       e.preventDefault();
 
       function indexOfChildElement(el) {
@@ -308,10 +306,8 @@ export const KeyboardNavigationMixin = (superClass) =>
         const headerBottom = this.$.header.getBoundingClientRect().bottom;
         if (dstRect.bottom > footerTop) {
           this.$.table.scrollTop += dstRect.bottom - footerTop;
-          this._scrollHandler();
         } else if (dstRect.top < headerBottom) {
           this.$.table.scrollTop -= headerBottom - dstRect.top;
-          this._scrollHandler();
         }
       }
 
@@ -583,11 +579,7 @@ export const KeyboardNavigationMixin = (superClass) =>
       }
 
       if (this.$.items.firstElementChild) {
-        const firstVisibleIndexRow = this._iterateItems((pidx, vidx) => {
-          if (this._firstVisibleIndex === vidx) {
-            return this.$.items.children[pidx];
-          }
-        });
+        const firstVisibleIndexRow = this.__getFirstVisibleItem();
         if (firstVisibleIndexRow) {
           this._itemsFocusable = Array.from(firstVisibleIndexRow.children).filter((el) => !el.hidden)[0];
         }

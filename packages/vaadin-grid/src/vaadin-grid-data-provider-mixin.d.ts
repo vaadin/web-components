@@ -39,6 +39,12 @@ interface DataProviderMixin<TItem> {
   pageSize: number;
 
   /**
+   * The number of root-level items in the grid.
+   * @attr {number} size
+   */
+  size: number;
+
+  /**
    * Function that provides items lazily. Receives arguments `params`, `callback`
    *
    * `params.page` Requested page index
@@ -100,8 +106,6 @@ interface DataProviderMixin<TItem> {
   collapseItem(item: TItem): void;
 
   _getIndexLevel(index: number): number;
-
-  _canPopulate(): boolean;
 
   _loadPage(page: number, cache: ItemCache<TItem> | null): void;
 

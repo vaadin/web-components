@@ -564,7 +564,7 @@ describe('edit column', () => {
       firstCell = getContainerCell(grid.$.items, 1, 0);
       dblclick(firstCell._content);
 
-      grid._scrollToIndex(100);
+      grid.scrollToIndex(100);
       input = getCellEditor(firstCell);
       expect(input).to.be.not.ok;
     });
@@ -573,7 +573,7 @@ describe('edit column', () => {
       firstCell = getContainerCell(grid.$.items, 1, 1);
       dblclick(firstCell._content);
 
-      grid._scrollToIndex(100);
+      grid.scrollToIndex(100);
       input = getCellEditor(firstCell);
       expect(input).to.be.not.ok;
     });

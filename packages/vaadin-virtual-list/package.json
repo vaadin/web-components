@@ -1,0 +1,35 @@
+{
+  "name": "@vaadin/vaadin-virtual-list",
+  "version": "21.0.0-alpha0",
+  "description": "vaadin-virtual-list",
+  "main": "vaadin-virtual-list.js",
+  "module": "vaadin-virtual-list.js",
+  "repository": "vaadin/vaadin-virtual-list",
+  "keywords": [
+    "Vaadin",
+    "virtualizer",
+    "virtual-list",
+    "web-components",
+    "web-component"
+  ],
+  "author": "Vaadin Ltd",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/vaadin/web-components/issues"
+  },
+  "homepage": "https://vaadin.com",
+  "files": [
+    "vaadin-*.d.ts",
+    "vaadin-*.js",
+    "src"
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "@esm-bundle/chai": "^4.1.5",
+    "@vaadin/testing-helpers": "^0.2.1",
+    "sinon": "^9.2.4"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

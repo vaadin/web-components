@@ -300,11 +300,10 @@ export const ColumnReorderingMixin = (superClass) =>
         } else if (leftDiff > 0) {
           this.$.table.scrollLeft -= leftDiff / 10;
         }
-        this._scrollHandler();
       }
 
       if (this._draggedColumn) {
-        this.async(this._autoScroller, 10);
+        setTimeout(() => this._autoScroller(), 10);
       }
     }
 

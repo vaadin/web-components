@@ -8,7 +8,8 @@ import {
   getRows,
   getRowCells,
   infiniteDataProvider,
-  scrollToEnd
+  scrollToEnd,
+  nextResize
 } from './helpers.js';
 import '../vaadin-grid.js';
 import '../vaadin-grid-column-group.js';
@@ -68,9 +69,10 @@ describe('resizing', () => {
     expect(firstBodyRowRect.top).to.be.closeTo(newBottom, 1);
   });
 
-  it('should update footer height', () => {
+  it('should update footer height', async () => {
     getContainerCellContent(grid.$.footer, 0, 0).style.fontSize = '100px';
-    grid.notifyResize();
+    await nextResize(grid.$.footer);
+
     scrollToEnd(grid);
 
     const bodyRows = getRows(grid.$.items);
@@ -132,14 +134,16 @@ describe('resizing', () => {
       expect(grid.getBoundingClientRect().height).to.equal(400);
     });
 
-    it('should auto-grow inside a fixed height column flexbox', () => {
+    it('should auto-grow inside a fixed height column flexbox', async () => {
       component.style.height = '500px';
+      await nextResize(grid);
       expect(grid.getBoundingClientRect().height).to.equal(129);
     });
 
-    it('should auto-grow inside a fixed height row flexbox', () => {
+    it('should auto-grow inside a fixed height row flexbox', async () => {
       component.style.flexDirection = 'row';
       component.style.height = '500px';
+      await nextResize(grid);
       expect(grid.getBoundingClientRect().height).to.equal(129);
     });
 

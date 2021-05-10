@@ -432,6 +432,7 @@ describe('reordering grid with columns groups', () => {
       const columns = groups[0].querySelectorAll('vaadin-grid-column');
       groups[0].insertBefore(columns[1], columns[0]);
       await nextFrame();
+      flushGrid(grid);
       expectVisualOrder(grid, [12, 11, 21, 22]);
     });
 
@@ -442,6 +443,7 @@ describe('reordering grid with columns groups', () => {
 
       groups[0].insertBefore(columns[1], columns[0]);
       await nextFrame();
+      flushGrid(grid);
       expectVisualOrder(grid, [12, 11, 21, 22]);
     });
   });

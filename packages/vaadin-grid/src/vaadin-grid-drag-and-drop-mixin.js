@@ -120,8 +120,8 @@ export const DragAndDropMixin = (superClass) =>
         this._toggleAttribute('dragging-rows', true, this);
 
         if (this._safari) {
-          // Safari doesn't get proper drag images from transformed
-          // elements so we need to switch to top temporarily
+          // Safari doesn't position drag images from transformed
+          // elements properly so we need to switch to use top temporarily
           const transform = row.style.transform;
           row.style.top = /translateY\((.*)\)/.exec(transform)[1];
           row.style.transform = 'none';
@@ -283,7 +283,6 @@ export const DragAndDropMixin = (superClass) =>
           this.__dndAutoScrolling = true;
           // Disallow more auto-scrolls within 20ms
           setTimeout(() => (this.__dndAutoScrolling = false), 20);
-          this._scrollHandler();
           return true;
         }
       }

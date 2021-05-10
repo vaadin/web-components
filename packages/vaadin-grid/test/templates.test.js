@@ -223,7 +223,7 @@ describe('templates', () => {
       it('should not invoke computed functions with null item', () => {
         const spy = sinon.spy(container, '_formatItem');
         grid.size = 1000;
-        grid._scrollToIndex(100);
+        grid.scrollToIndex(100);
         spy.getCalls().forEach((call) => {
           expect(call.args[0]).not.to.be.null;
         });
@@ -233,7 +233,7 @@ describe('templates', () => {
       it('should not invoke computed functions with empty item', () => {
         const spy = sinon.spy(container, '_formatItem');
         grid.size = 1000;
-        grid._scrollToIndex(100);
+        grid.scrollToIndex(100);
         spy.getCalls().forEach((call) => {
           expect(call.args[0]).not.to.be.empty;
         });

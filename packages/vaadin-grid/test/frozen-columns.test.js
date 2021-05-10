@@ -1,14 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, listenOnce } from '@vaadin/testing-helpers';
-import {
-  flushGrid,
-  getRows,
-  getRowCells,
-  infiniteDataProvider,
-  isVisible,
-  isWithinParentConstraints,
-  wheel
-} from './helpers.js';
+import { flushGrid, getRows, getRowCells, infiniteDataProvider, isWithinParentConstraints, wheel } from './helpers.js';
 import '../vaadin-grid.js';
 
 ['ltr', 'rtl'].forEach((direction) => {
@@ -95,15 +87,11 @@ import '../vaadin-grid.js';
 
         it('should not move while content scrolls horizontally', (done) => {
           const cells = getRowCells(containerRows[0]);
+          grid.style.borderWidth = '0px';
 
           listenOnce(grid.$.table, 'scroll', () => {
-            if (isRTL) {
-              expect(isWithinParentConstraints(cells[0], grid.$.table)).to.equal(true);
-              expect(isWithinParentConstraints(cells[2], grid.$.table)).to.equal(true);
-            } else {
-              expect(isVisible(cells[0])).to.equal(true);
-              expect(isVisible(cells[2])).to.equal(true);
-            }
+            expect(isWithinParentConstraints(cells[0], grid.$.table)).to.equal(true);
+            expect(isWithinParentConstraints(cells[2], grid.$.table)).to.equal(true);
             done();
           });
 

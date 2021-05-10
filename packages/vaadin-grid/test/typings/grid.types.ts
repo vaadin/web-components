@@ -14,7 +14,6 @@ import { FilterMixin } from '../../src/vaadin-grid-filter-mixin';
 import { KeyboardNavigationMixin } from '../../src/vaadin-grid-keyboard-navigation-mixin';
 import { RowDetailsMixin } from '../../src/vaadin-grid-row-details-mixin';
 import { ScrollMixin } from '../../src/vaadin-grid-scroll-mixin';
-import { ScrollerElement } from '../../src/vaadin-grid-scroller';
 import { SelectionMixin } from '../../src/vaadin-grid-selection-mixin';
 import { SortMixin } from '../../src/vaadin-grid-sort-mixin';
 import { StylingMixin } from '../../src/vaadin-grid-styling-mixin';
@@ -54,7 +53,6 @@ const genericGrid = document.createElement('vaadin-grid');
 assertType<GridElement>(genericGrid);
 
 const narrowedGrid = genericGrid as GridElement<TestGridItem>;
-assertType<ScrollerElement>(narrowedGrid);
 assertType<ElementMixin>(narrowedGrid);
 assertType<ThemableMixin>(narrowedGrid);
 assertType<A11yMixin>(narrowedGrid);

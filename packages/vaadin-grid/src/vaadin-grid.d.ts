@@ -4,8 +4,6 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 
 import { GridDefaultItem, GridDropLocation, GridItemModel } from './interfaces';
 
-import { ScrollerElement } from './vaadin-grid-scroller.js';
-
 import { A11yMixin } from './vaadin-grid-a11y-mixin.js';
 
 import { ActiveItemMixin } from './vaadin-grid-active-item-mixin.js';
@@ -341,7 +339,7 @@ export interface GridEventMap<TItem> extends HTMLElementEventMap, GridElementEve
  * @fires {CustomEvent} loading-changed - Fired when the `loading` property changes.
  * @fires {CustomEvent} selected-items-changed - Fired when the `selectedItems` property changes.
  */
-declare class GridElement<TItem = GridDefaultItem> extends ScrollerElement {
+declare class GridElement<TItem = GridDefaultItem> extends HTMLElement {
   /**
    * If true, the grid's height is defined by its rows.
    *

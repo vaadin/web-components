@@ -9,13 +9,9 @@ export const flushGrid = (grid) => {
     grid._debouncerForceReflow.flush();
   }
   flush();
+  grid._afterScroll();
   if (grid._debounceOverflow) {
     grid._debounceOverflow.flush();
-  }
-  while (grid._debounceIncreasePool) {
-    grid._debounceIncreasePool.flush();
-    grid._debounceIncreasePool = null;
-    flush();
   }
   if (grid._debouncerHiddenChanged) {
     grid._debouncerHiddenChanged.flush();
@@ -23,10 +19,8 @@ export const flushGrid = (grid) => {
   if (grid._debouncerApplyCachedData) {
     grid._debouncerApplyCachedData.flush();
   }
-  if (grid._debouncerIgnoreNewWheel) {
-    grid._debouncerIgnoreNewWheel.flush();
-  }
-  grid._scrollHandler();
+
+  grid.__virtualizer.flush();
 };
 
 export const getCell = (grid, index) => {
@@ -71,71 +65,62 @@ export const buildDataSet = (size) => {
 };
 
 export const scrollToEnd = (grid, callback) => {
-  grid._scrollToIndex(grid.size - 1);
-
-  // Ensure rows are in order
-  grid._debounceScrolling.flush();
-
-  grid.$.table.scrollTop = grid.$.table.scrollHeight;
-  grid._scrollHandler();
+  grid.scrollToIndex(grid.size - 1);
   flushGrid(grid);
   if (callback) {
     callback();
   }
 };
 
-// http://stackoverflow.com/a/15203639/1331425
-export const isVisible = (el) => {
-  let top = el.offsetTop;
-  let left = el.offsetLeft;
-  const width = el.offsetWidth;
-  const height = el.offsetHeight;
-
-  while (el.offsetParent) {
-    el = el.offsetParent;
-    top += el.offsetTop;
-    left += el.offsetLeft;
-  }
-
+const isVisible = (item, grid) => {
+  const scrollTarget = grid.shadowRoot.querySelector('table');
+  const scrollTargetRect = scrollTarget.getBoundingClientRect();
+  const itemRect = item.getBoundingClientRect();
+  const offset = parseInt(getComputedStyle(item.firstElementChild).borderTopWidth);
+  const headerHeight = grid.shadowRoot.querySelector('thead').offsetHeight;
+  const footerHeight = grid.shadowRoot.querySelector('tfoot').offsetHeight;
   return (
-    top < window.pageYOffset + window.innerHeight &&
-    left < window.pageXOffset + window.innerWidth &&
-    top + height > window.pageYOffset &&
-    left + width > window.pageXOffset
+    itemRect.bottom > scrollTargetRect.top + headerHeight + offset &&
+    itemRect.top < scrollTargetRect.bottom - footerHeight - offset
   );
+};
+
+export const getPhysicalItems = (grid) => {
+  return Array.from(grid.shadowRoot.querySelector('tbody').children)
+    .filter((item) => !item.hidden)
+    .sort((a, b) => a.index - b.index);
+};
+
+export const getPhysicalAverage = (grid) => {
+  const physicalItems = getPhysicalItems(grid);
+  return physicalItems.map((el) => el.offsetHeight).reduce((sum, value) => sum + value, 0) / physicalItems.length;
+};
+
+export const scrollGrid = (grid, left, top) => {
+  grid.shadowRoot.querySelector('table').scroll(left, top);
 };
 
 export const getVisibleItems = (grid) => {
   flushGrid(grid);
-  const rows = grid.$.items.children;
-  const visibleRows = [];
-  for (let i = 0; i < rows.length; i++) {
-    if (isVisible(rows[i])) {
-      visibleRows.push(rows[i]);
-    }
-  }
-  return visibleRows;
+  return getPhysicalItems(grid).filter((item) => isVisible(item, grid));
 };
 
 export const getFirstVisibleItem = (grid) => {
-  const visibleRows = getVisibleItems(grid);
-  if (visibleRows.length) {
-    return visibleRows[0];
-  }
-  return null;
+  return getVisibleItems(grid)[0] || null;
 };
 
 export const getLastVisibleItem = (grid) => {
-  const visibleRows = getVisibleItems(grid);
-  if (visibleRows.length) {
-    return visibleRows.pop();
-  }
-  return null;
+  return getVisibleItems(grid).pop() || null;
 };
 
 export const isWithinParentConstraints = (el, parent) => {
-  return ['top', 'bottom', 'left', 'right'].every(
-    (constraint) => el.getBoundingClientRect[constraint] === parent.getBoundingClientRect[constraint]
+  const elRect = el.getBoundingClientRect();
+  const parentRect = parent.getBoundingClientRect();
+  return (
+    elRect.top >= parentRect.top &&
+    elRect.right <= parentRect.right &&
+    elRect.bottom <= parentRect.bottom &&
+    elRect.left >= parentRect.left
   );
 };
 
@@ -267,4 +252,8 @@ export const fire = (type, detail, options) => {
   const node = options.node || window;
   node.dispatchEvent(event);
   return event;
+};
+
+export const nextResize = (target) => {
+  return new Promise((resolve) => new ResizeObserver(() => setTimeout(resolve)).observe(target));
 };

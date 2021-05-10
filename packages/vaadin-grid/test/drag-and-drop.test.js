@@ -774,14 +774,14 @@ describe('drag and drop', () => {
     });
 
     it('should auto scroll up', () => {
-      grid._scrollToIndex(50);
+      grid.scrollToIndex(50);
       const scrollTop = grid.$.table.scrollTop;
       fireDragOver(grid.__getViewportRows()[0], 'below');
       expect(grid.$.table.scrollTop).to.be.within(scrollTop - 100, scrollTop - 20);
     });
 
     it('should auto scroll up fast', () => {
-      grid._scrollToIndex(50);
+      grid.scrollToIndex(50);
       const scrollTop = grid.$.table.scrollTop;
       fireDragOver(grid.__getViewportRows()[0], 'above');
       expect(grid.$.table.scrollTop).to.be.within(scrollTop - 200, scrollTop - 100);

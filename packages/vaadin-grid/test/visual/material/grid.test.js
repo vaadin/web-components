@@ -1,6 +1,6 @@
-import { click, fixtureSync, nextRender } from '@vaadin/testing-helpers/dist/index-no-side-effects.js';
+import { click, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers/dist/index-no-side-effects.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import { flushGrid } from '../../helpers.js';
+import { flushGrid, nextResize } from '../../helpers.js';
 import { users } from '../users.js';
 import '../../../theme/material/vaadin-grid.js';
 import '../../../theme/material/vaadin-grid-column-group.js';
@@ -275,9 +275,11 @@ describe('grid', () => {
       await visualDiff(element, `${import.meta.url}_row-dragover-below-details`);
     });
 
-    it('dragover below details', async () => {
+    it('dragover row dragstart', async () => {
       element.detailsOpenedItems = [];
+      await nextResize(element);
       element.$.items.children[1].removeAttribute('dragover');
+      await nextFrame();
       element.$.items.children[1].setAttribute('dragstart', '123');
       await visualDiff(element, `${import.meta.url}_row-dragstart`);
     });

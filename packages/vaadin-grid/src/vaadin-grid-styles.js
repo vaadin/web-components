@@ -119,7 +119,7 @@ registerStyles(
     }
 
     #items [part~='row']:empty {
-      height: 1em;
+      height: 100%;
     }
 
     [part~='cell']:not([part~='details-cell']) {

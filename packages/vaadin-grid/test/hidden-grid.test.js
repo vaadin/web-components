@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import { flushGrid, getBodyCellContent, infiniteDataProvider } from './helpers.js';
 import '../vaadin-grid.js';
 
@@ -27,6 +27,7 @@ describe('hidden grid', () => {
   it('should have content on appear', async () => {
     grid.removeAttribute('hidden');
     await oneEvent(grid, 'animationend');
+    await nextFrame();
     expect(getBodyCellContent(grid, 0, 0).textContent).to.equal('0');
   });
 });

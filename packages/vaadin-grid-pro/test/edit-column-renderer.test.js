@@ -246,11 +246,13 @@ describe('edit column renderer', () => {
 
       dblclick(cell._content);
       getCellEditor(cell).value = 'Bar';
-      grid._scrollToIndex(29);
+      grid.scrollToIndex(29);
       expect(getCellEditor(cell)).to.be.not.ok;
       expect(grid.items[0].name).to.equal('Bar');
 
-      grid._scrollToIndex(0);
+      grid.scrollToIndex(0);
+      flushGrid(grid);
+
       expect(getContainerCellContent(grid.$.items, 0, 0).innerHTML).to.equal('Bar');
     });
   });
