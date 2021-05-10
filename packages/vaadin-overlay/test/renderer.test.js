@@ -121,6 +121,19 @@ describe('renderer', () => {
       overlay.renderer = () => spy();
       expect(spy.called).to.be.false;
     });
+
+    it('should clear the content when removing the renderer', () => {
+      overlay.renderer = (root) => {
+        root.innerHTML = 'foo';
+      };
+      overlay.opened = true;
+
+      expect(overlay.textContent.trim()).to.equal('foo');
+
+      overlay.renderer = null;
+
+      expect(overlay.textContent.trim()).to.equal('');
+    });
   });
 
   describe('with template', () => {

@@ -42,6 +42,7 @@
   "devDependencies": {
     "@esm-bundle/chai": "^4.1.5",
     "@vaadin/testing-helpers": "^0.2.1",
+    "@vaadin/vaadin-template-renderer": "^21.0.0-alpha0",
     "lit": "^2.0.0-rc.1",
     "sinon": "^9.2.0"
   },

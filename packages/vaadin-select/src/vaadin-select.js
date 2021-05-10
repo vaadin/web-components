@@ -5,7 +5,6 @@
  */
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
-import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ControlStateMixin } from '@vaadin/vaadin-control-state-mixin/vaadin-control-state-mixin.js';
 import { IronResizableBehavior } from '@polymer/iron-resizable-behavior/iron-resizable-behavior.js';
@@ -29,13 +28,11 @@ $_documentContainer.innerHTML = `
 document.head.appendChild($_documentContainer.content);
 
 /**
- * `<vaadin-select>` is a Web Component for selecting values from a list of items. The content of the
- * the select can be populated in two ways: imperatively by using renderer callback function and
- * declaratively by using Polymer's Templates.
+ * `<vaadin-select>` is a Web Component for selecting values from a list of items.
  *
  * ### Rendering
  *
- * By default, the select uses the content provided by using the renderer callback function.
+ * The content of the select can be populated by using the renderer callback function.
  *
  * The renderer function provides `root`, `select` arguments.
  * Generate DOM content, append it to the `root` element and control the state
@@ -52,6 +49,7 @@ document.head.appendChild($_documentContainer.content);
  *   ['Jose', 'Manolo', 'Pedro'].forEach(function(name) {
  *     const item = document.createElement('vaadin-item');
  *     item.textContent = name;
+ *     item.setAttribute('label', name)
  *     listBox.appendChild(item);
  *   });
  *
@@ -65,25 +63,7 @@ document.head.appendChild($_documentContainer.content);
  * in the next renderer call and will be provided with the `root` argument.
  * On first call it will be empty.
  *
- * ### Polymer Templates
- *
- * Alternatively, the content can be provided with Polymer's Template.
- * Select finds the first child template and uses that in case renderer callback function
- * is not provided. You can also set a custom template using the `template` property.
- *
- * ```
- * <vaadin-select>
- *   <template>
- *     <vaadin-list-box>
- *       <vaadin-item label="foo">Foo</vaadin-item>
- *       <vaadin-item>Bar</vaadin-item>
- *       <vaadin-item>Baz</vaadin-item>
- *     </vaadin-list-box>
- *   </template>
- * </vaadin-select>
- * ```
- *
- * Hint: By setting the `label` property of inner vaadin-items you will
+ * * Hint: By setting the `label` property of inner vaadin-items you will
  * be able to change the visual representation of the selected value in the input part.
  *
  * ### Styling
@@ -334,16 +314,7 @@ class SelectElement extends ElementMixin(
       _toggleElement: Object,
 
       /** @private */
-      _items: Object,
-
-      /** @private */
-      _contentTemplate: Object,
-
-      /** @private */
-      _oldTemplate: Object,
-
-      /** @private */
-      _oldRenderer: Object
+      _items: Object
     };
   }
 
@@ -351,7 +322,7 @@ class SelectElement extends ElementMixin(
     return [
       '_updateSelectedItem(value, _items)',
       '_updateAriaExpanded(opened, _toggleElement, _inputElement)',
-      '_templateOrRendererChanged(_contentTemplate, renderer, _overlayElement)'
+      '_rendererChanged(renderer, _overlayElement)'
     ];
   }
 
@@ -389,33 +360,8 @@ class SelectElement extends ElementMixin(
     this.focusElement.addEventListener('click', () => (this.opened = !this.readonly));
     this.focusElement.addEventListener('keydown', (e) => this._onKeyDown(e));
 
-    this._observer = new FlattenedNodesObserver(this, (info) => this._setTemplateFromNodes(info.addedNodes));
-    this._observer.flush();
-  }
-
-  /** @private */
-  _setTemplateFromNodes(nodes) {
-    const template =
-      Array.from(nodes).filter((node) => node.localName && node.localName === 'template')[0] || this._contentTemplate;
-    this._overlayElement.template = this._contentTemplate = template;
-    this._setForwardHostProps();
-  }
-
-  /** @private */
-  _setForwardHostProps() {
-    if (this._overlayElement.content) {
-      const origForwardHostProp = this._overlayElement._instance && this._overlayElement._instance.forwardHostProp;
-
-      if (this._overlayElement._instance) {
-        this._overlayElement._instance.forwardHostProp = (...args) => {
-          origForwardHostProp.apply(this._overlayElement._instance, args);
-          setTimeout(() => {
-            this._updateValueSlot();
-          });
-        };
-
-        this._assignMenuElement();
-      }
+    if (window.Vaadin && window.Vaadin.templateRendererCallback) {
+      window.Vaadin.templateRendererCallback(this);
     }
   }
 
@@ -430,43 +376,25 @@ class SelectElement extends ElementMixin(
   }
 
   /** @private */
-  _removeNewRendererOrTemplate(template, oldTemplate, renderer, oldRenderer) {
-    if (template !== oldTemplate) {
-      this._contentTemplate = undefined;
-    } else if (renderer !== oldRenderer) {
-      this.renderer = undefined;
-    }
-  }
-
-  /** @private */
-  _templateOrRendererChanged(template, renderer, overlay) {
+  _rendererChanged(renderer, overlay) {
     if (!overlay) {
       return;
     }
 
-    if (template && renderer) {
-      this._removeNewRendererOrTemplate(template, this._oldTemplate, renderer, this._oldRenderer);
-      throw new Error('You should only use either a renderer or a template for select content');
-    }
+    overlay.setProperties({ owner: this, renderer });
 
-    this._oldTemplate = template;
-    this._oldRenderer = renderer;
+    this.render();
 
     if (renderer) {
-      overlay.setProperties({ owner: this, renderer: renderer });
-      this.render();
-
-      if (overlay.content.firstChild) {
-        this._assignMenuElement();
-      }
+      this._assignMenuElement();
     }
   }
 
   /** @private */
   _assignMenuElement() {
-    this._menuElement = Array.from(this._overlayElement.content.children).filter(
+    this._menuElement = Array.from(this._overlayElement.content.children).find(
       (element) => element.localName !== 'style'
-    )[0];
+    );
 
     if (this._menuElement) {
       this._menuElement.addEventListener('items-changed', () => {
