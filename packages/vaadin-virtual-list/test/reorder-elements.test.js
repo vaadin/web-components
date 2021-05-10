@@ -114,7 +114,7 @@ describe('reorder elements', () => {
   it('should not reorder while mouse down', async () => {
     mousedown(elementsContainer);
     scrollRecycle();
-    expect(elementsInOrder()).not.to.be.true;
+    expect(elementsInOrder()).to.be.false;
   });
 
   it('should reorder once mousedown is released', async () => {

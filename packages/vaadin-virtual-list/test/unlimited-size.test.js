@@ -30,41 +30,41 @@ describe('unlimited size', () => {
     virtualizer.size = 1000000;
   });
 
-  it('should scroll to a large index', async () => {
-    const index = ~~(virtualizer.size / 2);
+  it('should scroll to a large index', () => {
+    const index = Math.floor(virtualizer.size / 2);
     virtualizer.scrollToIndex(index);
     const item = elementsContainer.querySelector(`#item-${index}`);
     expect(item.getBoundingClientRect().top).to.equal(scrollTarget.getBoundingClientRect().top);
   });
 
-  it('should scroll near the end', async () => {
+  it('should scroll near the end', () => {
     virtualizer.scrollToIndex(virtualizer.size - 1000);
     const item = elementsContainer.querySelector(`#item-${virtualizer.size - 1000}`);
     expect(item.getBoundingClientRect().top).to.equal(scrollTarget.getBoundingClientRect().top);
   });
 
-  it('should scroll to the second last index', async () => {
+  it('should scroll to the second last index', () => {
     virtualizer.scrollToIndex(virtualizer.size - 2);
     const item = elementsContainer.querySelector(`#item-${virtualizer.size - 1}`);
     expect(item.getBoundingClientRect().bottom).to.be.closeTo(scrollTarget.getBoundingClientRect().bottom, 1);
   });
 
-  it('should scroll to the second index', async () => {
+  it('should scroll to the second index', () => {
     virtualizer.scrollToIndex(1);
     const item = elementsContainer.querySelector(`#item-1`);
     expect(item.getBoundingClientRect().top).to.equal(scrollTarget.getBoundingClientRect().top);
   });
 
-  it('should scroll to an index with really large size', async () => {
+  it('should scroll to an index with really large size', () => {
     virtualizer.size = 10000000000;
     virtualizer.scrollToIndex(200000);
     const item = elementsContainer.querySelector(`#item-200000`);
     expect(item.getBoundingClientRect().top).to.equal(scrollTarget.getBoundingClientRect().top);
   });
 
-  it('should scroll backwards to a large index', async () => {
-    const firstIndex = ~~(virtualizer.size / 2);
-    const secondIndex = ~~(virtualizer.size / 3);
+  it('should scroll backwards to a large index', () => {
+    const firstIndex = Math.floor(virtualizer.size / 2);
+    const secondIndex = Math.floor(virtualizer.size / 3);
     virtualizer.scrollToIndex(firstIndex);
     virtualizer.scrollToIndex(secondIndex);
     virtualizer.flush();

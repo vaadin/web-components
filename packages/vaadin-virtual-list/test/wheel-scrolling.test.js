@@ -4,12 +4,11 @@ import Sinon from 'sinon';
 import { Virtualizer } from '../src/virtualizer.js';
 
 function canScroll(el, deltaY) {
-  return (
-    (['auto', 'scroll'].indexOf(getComputedStyle(el).overflow) !== -1 &&
-      deltaY > 0 &&
-      el.scrollTop < el.scrollHeight - el.offsetHeight) ||
-    (deltaY < 0 && el.scrollTop > 0)
-  );
+  const isScrollableElement = ['auto', 'scroll'].indexOf(getComputedStyle(el).overflow) !== -1;
+  const canScrollAndScrollingDownwards = deltaY > 0 && el.scrollTop < el.scrollHeight - el.offsetHeight;
+  const canScrollAndScrollingUpwards = deltaY < 0 && el.scrollTop > 0;
+
+  return isScrollableElement && (canScrollAndScrollingDownwards || canScrollAndScrollingUpwards);
 }
 
 describe('scrolling mode', () => {

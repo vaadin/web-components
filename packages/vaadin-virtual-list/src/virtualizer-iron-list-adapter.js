@@ -373,7 +373,7 @@ export class IronListAdapter {
     const targetPhysicalIndex = targetElement.__virtualIndex - adjustedVirtualStart;
 
     // Reodrer the DOM elements to keep the target row at the target physical index
-    const delta = Array.from(visibleElements).indexOf(targetElement) - targetPhysicalIndex;
+    const delta = visibleElements.indexOf(targetElement) - targetPhysicalIndex;
     if (delta > 0) {
       for (let i = 0; i < delta; i++) {
         this.elementsContainer.appendChild(visibleElements[i]);
