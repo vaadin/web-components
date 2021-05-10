@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fire, fixtureSync } from '@vaadin/testing-helpers';
+import '@vaadin/vaadin-template-renderer';
 import './not-animated-styles.js';
 import '../vaadin-context-menu.js';
 
@@ -17,8 +18,6 @@ describe('template', () => {
   });
 
   it('should stamp template on open', () => {
-    expect(menu.$.overlay.content).to.be.undefined;
-
     menu._setOpened(true);
 
     expect(menu.$.overlay.content.textContent).to.contain('FOOBAR');

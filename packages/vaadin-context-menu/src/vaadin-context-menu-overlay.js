@@ -43,16 +43,6 @@ class ContextMenuOverlayElement extends OverlayElement {
 
   static get properties() {
     return {
-      instanceProps: {
-        type: Object,
-        value: () => {
-          return {
-            detail: true,
-            target: true
-          };
-        }
-      },
-
       /**
        * @protected
        */

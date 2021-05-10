@@ -9,9 +9,7 @@ import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-p
 import { ContextMenuEventMap, ContextMenuRenderer } from './interfaces';
 
 /**
- * `<vaadin-context-menu>` is a Web Component for creating context menus. The content of the
- * menu can be populated in three ways: imperatively by using the items API or a renderer callback function and
- * declaratively by using Polymer's Templates.
+ * `<vaadin-context-menu>` is a Web Component for creating context menus.
  *
  * ### Items
  *
@@ -46,9 +44,11 @@ import { ContextMenuEventMap, ContextMenuRenderer } from './interfaces';
  * });
  * ```
  *
- * **NOTE:** when the `items` array is defined, the renderer or a template cannot be used.
+ * **NOTE:** when the `items` array is defined, the renderer cannot be used.
  *
  * ### Rendering
+ *
+ * The content of the menu can be populated by using the renderer callback function.
  *
  * The renderer function provides `root`, `contextMenu`, `model` arguments when applicable.
  * Generate DOM content by using `model` object properties if needed, append it to the `root`
@@ -86,29 +86,10 @@ import { ContextMenuEventMap, ContextMenuRenderer } from './interfaces';
  * in the next renderer call and will be provided with the `root` argument.
  * On first call it will be empty.
  *
- * **NOTE:** when the `renderer` function is defined, the template content
- * is not in use.
- *
- * ### Polymer Templates
- *
- * Alternatively to using the `renderer`, you can populate
- * the menu content using Polymer's Templates:
- *
- * ```html
- * <vaadin-context-menu>
- *   <template>
- *     <vaadin-list-box>
- *       <vaadin-item>First menu item</vaadin-item>
- *       <vaadin-item>Second menu item</vaadin-item>
- *     </vaadin-list-box>
- *   </template>
- * </vaadin-context-menu>
- * ```
- *
  * ### “vaadin-contextmenu” Gesture Event
  *
  * `vaadin-contextmenu` is a gesture event (a custom event),
- * which is dispatched after either `contextmenu` and long touch events.
+ * which is dispatched after either `contextmenu` or long touch events.
  * This enables support for both mouse and touch environments in a uniform way.
  *
  * `<vaadin-context-menu>` opens the menu overlay on the `vaadin-contextmenu`
@@ -117,42 +98,18 @@ import { ContextMenuEventMap, ContextMenuRenderer } from './interfaces';
  * ### Menu Listener
  *
  * By default, the `<vaadin-context-menu>` element listens for the menu opening
- * event on itself. In order to have a context menu on your content, wrap
- * your content with the `<vaadin-context-menu>` element, and add a template
- * element with a menu. Example:
- *
- * ```html
- * <vaadin-context-menu>
- *   <template>
- *     <vaadin-list-box>
- *       <vaadin-item>First menu item</vaadin-item>
- *       <vaadin-item>Second menu item</vaadin-item>
- *     </vaadin-list-box>
- *   </template>
- *
- *   <p>This paragraph has the context menu provided in the above template.</p>
- *   <p>Another paragraph with the context menu.</p>
- * </vaadin-context-menu>
- * ```
- *
- * In case if you do not want to wrap the page content, you can listen for
+ * event on itself. In case if you do not want to wrap the target, you can listen for
  * events on an element outside the `<vaadin-context-menu>` by setting the
  * `listenOn` property:
  *
  * ```html
- * <vaadin-context-menu id="customListener">
- *   <template>
- *     <vaadin-list-box>
- *       ...
- *     </vaadin-list-box>
- *   </template>
- * </vaadin-context-menu>
+ * <vaadin-context-menu id="contextMenu"></vaadin-context-menu>
  *
- * <div id="menuListener">The element that listens for the context menu.</div>
+ * <div id="menuListener">The element that listens for the contextmenu event.</div>
  * ```
  * ```javascript
- *   const contextMenu = document.querySelector('vaadin-context-menu#customListener');
- *   contextMenu.listenOn = document.querySelector('#menuListener');
+ * const contextMenu = document.querySelector('#contextMenu');
+ * contextMenu.listenOn = document.querySelector('#menuListener');
  * ```
  *
  * ### Filtering Menu Targets
@@ -165,12 +122,6 @@ import { ContextMenuEventMap, ContextMenuRenderer } from './interfaces';
  *
  * ```html
  * <vaadin-context-menu selector=".has-menu">
- *   <template>
- *     <vaadin-list-box>
- *       ...
- *     </vaadin-list-box>
- *   </template>
- *
  *   <p class="has-menu">This paragraph opens the context menu</p>
  *   <p>This paragraph does not open the context menu</p>
  * </vaadin-context-menu>
@@ -178,7 +129,7 @@ import { ContextMenuEventMap, ContextMenuRenderer } from './interfaces';
  *
  * ### Menu Context
  *
- * You can bind to the following properties in the menu template:
+ * You can use the following properties in the renderer function:
  *
  * - `target` is the menu opening event target, which is the element that
  * the user has called the context menu for
@@ -188,19 +139,30 @@ import { ContextMenuEventMap, ContextMenuRenderer } from './interfaces';
  * of the element that opened the menu:
  *
  * ```html
- * <vaadin-context-menu selector="li">
- *   <template>
- *     <vaadin-list-box>
- *       <vaadin-item>The menu target: [[target.textContent]]</vaadin-item>
- *     </vaadin-list-box>
- *   </template>
- *
+ * <vaadin-context-menu selector="li" id="contextMenu">
  *   <ul>
  *     <li>Foo</li>
  *     <li>Bar</li>
  *     <li>Baz</li>
  *   </ul>
  * </vaadin-context-menu>
+ * ```
+ * ```js
+ * const contextMenu = document.querySelector('#contextMenu');
+ * contextMenu.renderer = (root, contextMenu, context) => {
+ *   let listBox = root.firstElementChild;
+ *   if (!listBox) {
+ *     listBox = document.createElement('vaadin-list-box');
+ *     root.appendChild(listBox);
+ *   }
+ *
+ *   let item = listBox.querySelector('vaadin-item');
+ *   if (!item) {
+ *     item = document.createElement('vaadin-item');
+ *     listBox.appendChild(item);
+ *   }
+ *   item.textContent = 'The menu target: ' + context.target.textContent;
+ * };
  * ```
  *
  * ### Styling

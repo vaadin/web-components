@@ -1,5 +1,6 @@
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
+import '@vaadin/vaadin-template-renderer';
 import { openSubMenus } from '../common.js';
 import '../../../theme/material/vaadin-context-menu.js';
 import '../../not-animated-styles.js';

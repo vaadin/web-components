@@ -390,14 +390,6 @@ describe('items', () => {
       expect(() => (rootMenu.renderer = () => {})).to.throw(Error);
     });
 
-    it('should throw with template', () => {
-      const addTemplate = () => {
-        rootMenu.appendChild(document.createElement('template'));
-        rootMenu._observer.flush();
-      };
-      expect(addTemplate).to.throw(Error);
-    });
-
     it('should not remove the component attributes', () => {
       rootMenu.close();
       const button = document.createElement('button');

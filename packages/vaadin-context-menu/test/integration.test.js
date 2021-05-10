@@ -1,6 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { aTimeout, click, fixtureSync, isIOS, makeSoloTouchEvent } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import '@vaadin/vaadin-template-renderer';
 import './not-animated-styles.js';
 import '../vaadin-context-menu.js';
 

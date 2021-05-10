@@ -6,7 +6,6 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { gestures, addListener, removeListener } from '@polymer/polymer/lib/utils/gestures.js';
 import { GestureEventListeners } from '@polymer/polymer/lib/mixins/gesture-event-listeners.js';
-import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { ItemsMixin } from './vaadin-contextmenu-items-mixin.js';
 import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
@@ -15,10 +14,7 @@ import './vaadin-device-detector.js';
 import './vaadin-context-menu-overlay.js';
 
 /**
- *
- * `<vaadin-context-menu>` is a Web Component for creating context menus. The content of the
- * menu can be populated in three ways: imperatively by using the items API or a renderer callback function and
- * declaratively by using Polymer's Templates.
+ * `<vaadin-context-menu>` is a Web Component for creating context menus.
  *
  * ### Items
  *
@@ -53,9 +49,11 @@ import './vaadin-context-menu-overlay.js';
  * });
  * ```
  *
- * **NOTE:** when the `items` array is defined, the renderer or a template cannot be used.
+ * **NOTE:** when the `items` array is defined, the renderer cannot be used.
  *
  * ### Rendering
+ *
+ * The content of the menu can be populated by using the renderer callback function.
  *
  * The renderer function provides `root`, `contextMenu`, `model` arguments when applicable.
  * Generate DOM content by using `model` object properties if needed, append it to the `root`
@@ -93,29 +91,10 @@ import './vaadin-context-menu-overlay.js';
  * in the next renderer call and will be provided with the `root` argument.
  * On first call it will be empty.
  *
- * **NOTE:** when the `renderer` function is defined, the template content
- * is not in use.
- *
- * ### Polymer Templates
- *
- * Alternatively to using the `renderer`, you can populate
- * the menu content using Polymer's Templates:
- *
- * ```html
- * <vaadin-context-menu>
- *   <template>
- *     <vaadin-list-box>
- *       <vaadin-item>First menu item</vaadin-item>
- *       <vaadin-item>Second menu item</vaadin-item>
- *     </vaadin-list-box>
- *   </template>
- * </vaadin-context-menu>
- * ```
- *
  * ### “vaadin-contextmenu” Gesture Event
  *
  * `vaadin-contextmenu` is a gesture event (a custom event),
- * which is dispatched after either `contextmenu` and long touch events.
+ * which is dispatched after either `contextmenu` or long touch events.
  * This enables support for both mouse and touch environments in a uniform way.
  *
  * `<vaadin-context-menu>` opens the menu overlay on the `vaadin-contextmenu`
@@ -124,42 +103,18 @@ import './vaadin-context-menu-overlay.js';
  * ### Menu Listener
  *
  * By default, the `<vaadin-context-menu>` element listens for the menu opening
- * event on itself. In order to have a context menu on your content, wrap
- * your content with the `<vaadin-context-menu>` element, and add a template
- * element with a menu. Example:
- *
- * ```html
- * <vaadin-context-menu>
- *   <template>
- *     <vaadin-list-box>
- *       <vaadin-item>First menu item</vaadin-item>
- *       <vaadin-item>Second menu item</vaadin-item>
- *     </vaadin-list-box>
- *   </template>
- *
- *   <p>This paragraph has the context menu provided in the above template.</p>
- *   <p>Another paragraph with the context menu.</p>
- * </vaadin-context-menu>
- * ```
- *
- * In case if you do not want to wrap the page content, you can listen for
+ * event on itself. In case if you do not want to wrap the target, you can listen for
  * events on an element outside the `<vaadin-context-menu>` by setting the
  * `listenOn` property:
  *
  * ```html
- * <vaadin-context-menu id="customListener">
- *   <template>
- *     <vaadin-list-box>
- *       ...
- *     </vaadin-list-box>
- *   </template>
- * </vaadin-context-menu>
+ * <vaadin-context-menu id="contextMenu"></vaadin-context-menu>
  *
- * <div id="menuListener">The element that listens for the context menu.</div>
+ * <div id="menuListener">The element that listens for the contextmenu event.</div>
  * ```
  * ```javascript
- *   const contextMenu = document.querySelector('vaadin-context-menu#customListener');
- *   contextMenu.listenOn = document.querySelector('#menuListener');
+ * const contextMenu = document.querySelector('#contextMenu');
+ * contextMenu.listenOn = document.querySelector('#menuListener');
  * ```
  *
  * ### Filtering Menu Targets
@@ -172,12 +127,6 @@ import './vaadin-context-menu-overlay.js';
  *
  * ```html
  * <vaadin-context-menu selector=".has-menu">
- *   <template>
- *     <vaadin-list-box>
- *       ...
- *     </vaadin-list-box>
- *   </template>
- *
  *   <p class="has-menu">This paragraph opens the context menu</p>
  *   <p>This paragraph does not open the context menu</p>
  * </vaadin-context-menu>
@@ -185,7 +134,7 @@ import './vaadin-context-menu-overlay.js';
  *
  * ### Menu Context
  *
- * You can bind to the following properties in the menu template:
+ * The following properties are available in the `context` argument:
  *
  * - `target` is the menu opening event target, which is the element that
  * the user has called the context menu for
@@ -195,19 +144,30 @@ import './vaadin-context-menu-overlay.js';
  * of the element that opened the menu:
  *
  * ```html
- * <vaadin-context-menu selector="li">
- *   <template>
- *     <vaadin-list-box>
- *       <vaadin-item>The menu target: [[target.textContent]]</vaadin-item>
- *     </vaadin-list-box>
- *   </template>
- *
+ * <vaadin-context-menu selector="li" id="contextMenu">
  *   <ul>
  *     <li>Foo</li>
  *     <li>Bar</li>
  *     <li>Baz</li>
  *   </ul>
  * </vaadin-context-menu>
+ * ```
+ * ```js
+ * const contextMenu = document.querySelector('#contextMenu');
+ * contextMenu.renderer = (root, contextMenu, context) => {
+ *   let listBox = root.firstElementChild;
+ *   if (!listBox) {
+ *     listBox = document.createElement('vaadin-list-box');
+ *     root.appendChild(listBox);
+ *   }
+ *
+ *   let item = listBox.querySelector('vaadin-item');
+ *   if (!item) {
+ *     item = document.createElement('vaadin-item');
+ *     listBox.appendChild(item);
+ *   }
+ *   item.textContent = 'The menu target: ' + context.target.textContent;
+ * };
  * ```
  *
  * ### Styling
@@ -358,30 +318,13 @@ class ContextMenuElement extends ElementMixin(ThemePropertyMixin(ItemsMixin(Gest
       /** @private */
       _boundOpen: Object,
 
-      /**
-       * @type {HTMLTemplateElement}
-       * @private
-       */
-      _contentTemplate: Object,
-
-      /** @private */
-      _oldTemplate: Object,
-
-      /** @private */
-      _oldRenderer: Object,
-
       /** @private */
       _touch: Boolean
     };
   }
 
   static get observers() {
-    return [
-      '_openedChanged(opened)',
-      '_contextChanged(_context, _instance)',
-      '_targetOrOpenOnChanged(listenOn, openOn)',
-      '_templateOrRendererChanged(_contentTemplate, renderer, _context, items)'
-    ];
+    return ['_openedChanged(opened)', '_targetOrOpenOnChanged(listenOn, openOn)', '_rendererChanged(renderer, items)'];
   }
 
   constructor() {
@@ -410,18 +353,10 @@ class ContextMenuElement extends ElementMixin(ThemePropertyMixin(ItemsMixin(Gest
   /** @protected */
   ready() {
     super.ready();
-    this._observer = new FlattenedNodesObserver(this, (info) => {
-      this._setTemplateFromNodes(info.addedNodes);
-    });
-  }
 
-  /**
-   * @param {!Array<!Node>} nodes
-   * @private
-   */
-  _setTemplateFromNodes(nodes) {
-    this._contentTemplate =
-      nodes.filter((node) => node.localName && node.localName === 'template')[0] || this._contentTemplate;
+    if (window.Vaadin && window.Vaadin.templateRendererCallback) {
+      window.Vaadin.templateRendererCallback(this);
+    }
   }
 
   /**
@@ -506,10 +441,6 @@ class ContextMenuElement extends ElementMixin(ThemePropertyMixin(ItemsMixin(Gest
   /** @private */
   _openedChanged(opened) {
     if (opened) {
-      if (!this._instance) {
-        this.$.overlay.template = this.querySelector('template');
-        this._instance = this.$.overlay._instance;
-      }
       document.documentElement.addEventListener('contextmenu', this._boundOnGlobalContextMenu, true);
       this._setListenOnUserSelect('none');
     } else {
@@ -529,46 +460,20 @@ class ContextMenuElement extends ElementMixin(ThemePropertyMixin(ItemsMixin(Gest
   }
 
   /** @private */
-  _removeNewRendererOrTemplate(template, oldTemplate, renderer, oldRenderer) {
-    if (template !== oldTemplate) {
-      this._contentTemplate = undefined;
-    } else if (renderer !== oldRenderer) {
-      this.renderer = undefined;
-    }
-  }
-
-  /** @private */
-  _templateOrRendererChanged(template, renderer, context, items) {
-    if (template && renderer) {
-      this._removeNewRendererOrTemplate(template, this._oldTemplate, renderer, this._oldRenderer);
-      throw new Error('You should only use either a renderer or a template for context-menu content');
-    }
-
-    this._oldTemplate = template;
-    this._oldRenderer = renderer;
-
+  _rendererChanged(renderer, items) {
     if (items) {
-      if (template || renderer) {
-        throw new Error('The items API cannot be used together with a template/renderer');
+      if (renderer) {
+        throw new Error('The items API cannot be used together with a renderer');
       }
+
       if (this.closeOn === 'click') {
         this.closeOn = '';
       }
 
       renderer = this.__itemsRenderer;
     }
-    if (renderer && context) {
-      this.$.overlay.setProperties({ owner: this, renderer: renderer });
-    }
-  }
 
-  /** @private */
-  _contextChanged(context, instance) {
-    if (context === undefined || instance === undefined) {
-      return;
-    }
-    instance.detail = context.detail;
-    instance.target = context.target;
+    this.$.overlay.setProperties({ owner: this, renderer });
   }
 
   /**

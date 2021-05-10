@@ -12,6 +12,7 @@ import {
 } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { gestures } from '@polymer/polymer/lib/utils/gestures.js';
+import '@vaadin/vaadin-template-renderer';
 import './not-animated-styles.js';
 import '../vaadin-context-menu.js';
 
