@@ -31,6 +31,19 @@ describe('vaadin-dialog renderer', () => {
       dialog.render();
       expect(dialog.renderer.calledTwice).to.be.true;
     });
+
+    it('should clear the content when removing the renderer', () => {
+      dialog.renderer = (root) => {
+        root.innerHTML = 'foo';
+      };
+      dialog.opened = true;
+
+      expect(overlay.textContent).to.equal('foo');
+
+      dialog.renderer = null;
+
+      expect(overlay.textContent).to.equal('');
+    });
   });
 
   describe('with template', () => {
@@ -39,17 +52,15 @@ describe('vaadin-dialog renderer', () => {
     beforeEach(() => {
       dialog = fixtureSync(`
         <vaadin-dialog>
-          <template>
-            <div>Template content</div>
-          </template>
+          <template>foo</template>
         </vaadin-dialog>
       `);
       overlay = dialog.$.overlay;
     });
 
-    it('should default to template if renderer function not provided', () => {
+    it('should render the template', () => {
       dialog.opened = true;
-      expect(overlay.textContent).to.include('Template content');
+      expect(overlay.textContent).to.equal('foo');
     });
   });
 });
