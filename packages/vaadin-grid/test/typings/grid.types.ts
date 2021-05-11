@@ -1,6 +1,5 @@
 import { ElementMixin } from '@vaadin/vaadin-element-mixin';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin';
-import { GridDropLocation, GridItemModel, GridSorterDirection } from '../../src/interfaces';
 import { A11yMixin } from '../../src/vaadin-grid-a11y-mixin';
 import { ActiveItemMixin } from '../../src/vaadin-grid-active-item-mixin';
 import { ArrayDataProviderMixin } from '../../src/vaadin-grid-array-data-provider-mixin';
@@ -17,7 +16,6 @@ import { ScrollMixin } from '../../src/vaadin-grid-scroll-mixin';
 import { SelectionMixin } from '../../src/vaadin-grid-selection-mixin';
 import { SortMixin } from '../../src/vaadin-grid-sort-mixin';
 import { StylingMixin } from '../../src/vaadin-grid-styling-mixin';
-import { ColumnBaseMixin, GridColumnElement } from '../../vaadin-grid-column';
 import { GridColumnGroupElement } from '../../vaadin-grid-column-group';
 import { GridFilterColumnElement } from '../../vaadin-grid-filter-column';
 import { GridFilterElement, GridFilterValueChangedEvent } from '../../vaadin-grid-filter.js';
@@ -30,16 +28,21 @@ import { GridSorterDirectionChangedEvent, GridSorterElement } from '../../vaadin
 import { GridTreeColumnElement } from '../../vaadin-grid-tree-column';
 import { GridTreeToggleElement, GridTreeToggleExpandedChangedEvent } from '../../vaadin-grid-tree-toggle.js';
 import {
+  ColumnBaseMixin,
   GridActiveItemChangedEvent,
   GridCellActivateEvent,
+  GridColumnElement,
   GridColumnReorderEvent,
   GridColumnResizeEvent,
   GridDragStartEvent,
   GridDropEvent,
+  GridDropLocation,
   GridElement,
   GridExpandedItemsChangedEvent,
+  GridItemModel,
   GridLoadingChangedEvent,
-  GridSelectedItemsChangedEvent
+  GridSelectedItemsChangedEvent,
+  GridSorterDirection
 } from '../../vaadin-grid.js';
 
 interface TestGridItem {
