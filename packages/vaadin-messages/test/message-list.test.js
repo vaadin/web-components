@@ -18,7 +18,8 @@ describe('message-list', () => {
         userName: 'Joan Doe',
         userAbbr: 'JD',
         userImg: 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
-        userColorIndex: 1
+        userColorIndex: 1,
+        theme: 'fancy'
       },
       {
         text: 'A message in the stream of messages',
@@ -74,13 +75,19 @@ describe('message-list', () => {
     });
 
     it('message properties should be correctly set', () => {
-      const firstMessage = messageList.shadowRoot.querySelectorAll('vaadin-message')[0];
+      const firstMessage = messageList.shadowRoot.querySelector('vaadin-message');
       expect(firstMessage.time).to.be.equal(messages[0].time);
       expect(firstMessage.userName).to.be.equal(messages[0].userName);
       expect(firstMessage.userAbbr).to.be.equal(messages[0].userAbbr);
       expect(firstMessage.userImg).to.be.equal(messages[0].userImg);
       expect(firstMessage.userColorIndex).to.be.equal(messages[0].userColorIndex);
       expect(firstMessage.textContent).to.be.equal(messages[0].text);
+      expect(firstMessage.theme).to.be.equal(messages[0].theme);
+    });
+
+    it('should propagate theme to attribute', () => {
+      const firstMessage = messageList.shadowRoot.querySelector('vaadin-message');
+      expect(firstMessage.getAttribute('theme')).to.be.equal(messages[0].theme);
     });
 
     it('message list should scroll when height is less than content', () => {

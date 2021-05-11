@@ -9,6 +9,7 @@ export interface MessageListItem {
   userAbbr?: string;
   userImg?: string;
   userColorIndex?: number;
+  theme?: string;
 }
 
 /**
@@ -49,7 +50,8 @@ declare class MessageListElement extends ThemableMixin(ElementMixin(HTMLElement)
    *   userName: string,
    *   userAbbr: string,
    *   userImg: string,
-   *   userColorIndex: number
+   *   userColorIndex: number,
+   *   theme: string
    * }>
    * ```
    *
