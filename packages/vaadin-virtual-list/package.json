@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-virtual-list",
-  "version": "21.0.0-alpha0",
+  "version": "21.0.0-alpha1",
   "description": "vaadin-virtual-list",
   "main": "vaadin-virtual-list.js",
   "module": "vaadin-virtual-list.js",
@@ -23,7 +23,6 @@
     "vaadin-*.js",
     "src"
   ],
-  "dependencies": {},
   "devDependencies": {
     "@esm-bundle/chai": "^4.1.5",
     "@vaadin/testing-helpers": "^0.2.1",

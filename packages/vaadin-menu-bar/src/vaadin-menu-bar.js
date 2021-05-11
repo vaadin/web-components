@@ -108,7 +108,7 @@ class MenuBarElement extends ButtonsMixin(InteractionsMixin(ElementMixin(Themabl
   }
 
   static get version() {
-    return '21.0.0-alpha0';
+    return '21.0.0-alpha1';
   }
 
   static get properties() {
