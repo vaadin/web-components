@@ -41,7 +41,7 @@ interface ItemsMixin {
    * If a menu item has a non-empty `children` set, a sub-menu with the child items is opened
    * next to the parent menu on mouseover, tap or a right arrow keypress.
    *
-   * The items API can't be used together with a renderer or a template!
+   * The items API can't be used together with a renderer!
    *
    * #### Example
    *
