@@ -544,9 +544,6 @@ class ContextMenuElement extends ElementMixin(ThemePropertyMixin(ItemsMixin(Gest
       throw new Error('You should only use either a renderer or a template for context-menu content');
     }
 
-    this._oldTemplate = template;
-    this._oldRenderer = renderer;
-
     if (items) {
       if (template || renderer) {
         throw new Error('The items API cannot be used together with a template/renderer');
@@ -557,7 +554,13 @@ class ContextMenuElement extends ElementMixin(ThemePropertyMixin(ItemsMixin(Gest
 
       renderer = this.__itemsRenderer;
     }
-    if (renderer && context) {
+
+    const rendererChanged = this._oldRenderer !== renderer;
+
+    this._oldTemplate = template;
+    this._oldRenderer = renderer;
+
+    if (rendererChanged) {
       this.$.overlay.setProperties({ owner: this, renderer: renderer });
     }
   }
