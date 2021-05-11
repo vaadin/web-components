@@ -348,10 +348,12 @@ class DialogElement extends ThemePropertyMixin(
       throw new Error('You should only use either a renderer or a template for dialog content');
     }
 
+    const rendererChanged = this._oldRenderer !== renderer;
+
     this._oldTemplate = template;
     this._oldRenderer = renderer;
 
-    if (renderer) {
+    if (rendererChanged) {
       this.$.overlay.setProperties({ owner: this, renderer: renderer });
     }
   }
