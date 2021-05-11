@@ -87,6 +87,19 @@ describe('renderer', () => {
         document.body.removeChild(select);
       }).to.not.throw(Error);
     });
+
+    it('should clear the content when removing the renderer', () => {
+      select.renderer = (root) => {
+        root.innerHTML = 'foo';
+      };
+      select.opened = true;
+
+      expect(select._overlayElement.textContent).to.equal('foo');
+
+      select.renderer = null;
+
+      expect(select._overlayElement.textContent).to.equal('');
+    });
   });
 
   describe('with template', () => {

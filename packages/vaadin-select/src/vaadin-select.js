@@ -449,11 +449,16 @@ class SelectElement extends ElementMixin(
       throw new Error('You should only use either a renderer or a template for select content');
     }
 
+    const rendererChanged = this._oldRenderer !== renderer;
+
     this._oldTemplate = template;
     this._oldRenderer = renderer;
 
-    if (renderer) {
+    if (rendererChanged) {
       overlay.setProperties({ owner: this, renderer: renderer });
+    }
+
+    if (renderer) {
       this.render();
 
       if (overlay.content.firstChild) {
