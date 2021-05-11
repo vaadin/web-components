@@ -1,5 +1,6 @@
 import '@polymer/polymer/lib/elements/dom-module.js';
 import { CSSResult } from 'lit';
+import { stylesFromTemplate } from '@polymer/polymer/lib/utils/style-gather.js';
 export { css, unsafeCSS } from 'lit';
 
 let moduleIdIndex = 0;
@@ -23,22 +24,18 @@ export const registerStyles = (themeFor, styles, options) => {
     styles = styles ? [styles] : [];
   }
 
-  styles.forEach((cssResult) => {
+  const processedStyles = styles.map((cssResult) => {
     if (!(cssResult instanceof CSSResult)) {
       throw new Error('An item in styles is not of type CSSResult. Use `unsafeCSS` or `css`.');
     }
     if (!styleMap[cssResult]) {
-      const styleModuleElement = document.createElement('dom-module');
-      styleModuleElement.innerHTML = `
-        <template>
-          <style>${cssResult.toString()}</style>
-        </template>
-      `;
+      const template = document.createElement('template');
+      template.innerHTML = `<style>${cssResult.toString()}</style>`;
 
-      const styleId = `custom-style-module-${moduleIdIndex++}`;
-      styleModuleElement.register(styleId);
-      styleMap[cssResult] = styleId;
+      styleMap[cssResult] = stylesFromTemplate(template)[0];
     }
+
+    return styleMap[cssResult].textContent;
   });
 
   const themeModuleElement = document.createElement('dom-module');
@@ -58,7 +55,7 @@ export const registerStyles = (themeFor, styles, options) => {
   themeModuleElement.innerHTML = `
     <template>
       ${moduleIncludes.map((include) => `<style include=${include}></style>`)}
-      ${styles.map((style) => `<style include=${styleMap[style]}></style>`)}
+      ${processedStyles.length ? `<style>${processedStyles.join('\n')}</style>` : ''}
     </template>
   `;
 
