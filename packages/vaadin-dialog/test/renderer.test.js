@@ -40,6 +40,19 @@ describe('vaadin-dialog renderer', () => {
       dialog.render();
       expect(dialog.renderer.calledTwice).to.be.true;
     });
+
+    it('should clear the content when removing the renderer', () => {
+      dialog.renderer = (root) => {
+        root.innerHTML = 'foo';
+      };
+      dialog.opened = true;
+
+      expect(overlay.textContent).to.equal('foo');
+
+      dialog.renderer = null;
+
+      expect(overlay.textContent).to.equal('');
+    });
   });
 
   describe('with template', () => {
