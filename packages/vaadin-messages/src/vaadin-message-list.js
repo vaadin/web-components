@@ -53,7 +53,8 @@ class MessageListElement extends ElementMixin(ThemableMixin(PolymerElement)) {
        *   userName: string,
        *   userAbbr: string,
        *   userImg: string,
-       *   userColorIndex: number
+       *   userColorIndex: number,
+       *   theme: string
        * }>
        * ```
        */
@@ -87,6 +88,7 @@ class MessageListElement extends ElementMixin(ThemableMixin(PolymerElement)) {
             user-abbr="[[item.userAbbr]]"
             user-img="[[item.userImg]]"
             user-color-index="[[item.userColorIndex]]"
+            theme$="[[item.theme]]"
             role="listitem"
             on-focus="_handleFocusEvent"
             >[[item.text]]</vaadin-message
