@@ -44,8 +44,8 @@ class MessageListElement extends ElementMixin(ThemableMixin(PolymerElement)) {
   static get properties() {
     return {
       /**
-       * A user object that can be used to render avatar and name.
-       * The user object can consist of the folowing properties:
+       * An array of objects which will be rendered as messages.
+       * The message objects can have the following properties:
        * ```js
        * Array<{
        *   text: string,
