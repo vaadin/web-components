@@ -160,4 +160,23 @@ describe('vaadin-notification', () => {
       expect(notification.renderer).to.be.not.ok;
     });
   });
+
+  describe('set before connected', () => {
+    let notification;
+
+    beforeEach(() => {
+      notification = document.createElement('vaadin-notification');
+    });
+
+    afterEach(() => {
+      document.body.removeChild(notification);
+    });
+
+    it('should not throw when the renderer is set before adding to DOM', () => {
+      expect(() => {
+        notification.renderer = () => {};
+        document.body.appendChild(notification);
+      }).to.not.throw(Error);
+    });
+  });
 });
