@@ -28,11 +28,24 @@ async function main() {
             per_page: 100
           });
 
-          // iterate through each response
+          // iterate through each page of issues
           for await (const { data: issues } of iterator) {
+            // iterate through each issue in a page
             for (const issue of issues) {
-              issueCount += 1;
+              const [{ data: labels }] = await Promise.all([
+                octokit.rest.issues.listLabelsOnIssue({
+                  owner: 'vaadin',
+                  repo: package,
+                  issue_number: issue.number
+                })
+              ]);
+
               console.log('%s#%d: %s', package, issue.number, issue.title);
+
+              if (labels.length > 0) {
+                console.log(`\t[${labels.map((label) => label.name).join(', ')}]`);
+              }
+              issueCount += 1;
             }
           }
         } catch (e) {
@@ -52,4 +65,4 @@ async function main() {
   console.timeEnd(`issues`);
 }
 
-main();
+main().catch(console.log);
