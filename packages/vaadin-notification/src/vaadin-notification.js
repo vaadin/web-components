@@ -302,7 +302,7 @@ class NotificationElement extends ThemePropertyMixin(ElementMixin(PolymerElement
   }
 
   static get observers() {
-    return ['_durationChanged(duration, opened)', '_rendererChanged(renderer, opened)'];
+    return ['_durationChanged(duration, opened)', '_rendererChanged(renderer, opened, _card)'];
   }
 
   /** @protected */
@@ -326,12 +326,16 @@ class NotificationElement extends ThemePropertyMixin(ElementMixin(PolymerElement
   }
 
   /** @private */
-  _rendererChanged(renderer, opened) {
+  _rendererChanged(renderer, opened, card) {
+    if (!card) {
+      return;
+    }
+
     const rendererChanged = this._oldRenderer !== renderer;
     this._oldRenderer = renderer;
 
     if (rendererChanged) {
-      this._card.innerHTML = '';
+      card.innerHTML = '';
     }
 
     if (opened) {
