@@ -329,7 +329,7 @@ class NotificationElement extends ThemePropertyMixin(ElementMixin(PolymerElement
   static get observers() {
     return [
       '_durationChanged(duration, opened)',
-      '_templateOrRendererChanged(_notificationTemplate, renderer, opened)'
+      '_templateOrRendererChanged(_notificationTemplate, renderer, opened, _card)'
     ];
   }
 
@@ -372,7 +372,11 @@ class NotificationElement extends ThemePropertyMixin(ElementMixin(PolymerElement
   }
 
   /** @private */
-  _templateOrRendererChanged(template, renderer, opened) {
+  _templateOrRendererChanged(template, renderer, opened, card) {
+    if (!card) {
+      return;
+    }
+
     if (template && renderer) {
       this._removeNewRendererOrTemplate(template, this._oldTemplate, renderer, this._oldRenderer);
       throw new Error('You should only use either a renderer or a template for notification content');
@@ -384,7 +388,7 @@ class NotificationElement extends ThemePropertyMixin(ElementMixin(PolymerElement
     this._oldRenderer = renderer;
 
     if (rendererChanged) {
-      this._card.innerHTML = '';
+      card.innerHTML = '';
     }
 
     if (renderer) {
