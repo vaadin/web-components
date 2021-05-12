@@ -30,6 +30,10 @@ describe('vaadin-notification', () => {
     delete notification.constructor._container;
   });
 
+  it('should not set an ID attribute for the card', () => {
+    expect(notification._card.getAttribute('id')).to.be.null;
+  });
+
   describe('vaadin-notification-container', () => {
     it('should be in the body when notification opens', () => {
       expect(document.body.querySelectorAll('vaadin-notification-container').length).to.be.equal(1);
