@@ -242,7 +242,7 @@ class NotificationElement extends ThemePropertyMixin(ElementMixin(PolymerElement
           display: none;
         }
       </style>
-      <vaadin-notification-card id="vaadin-notification-card" theme$="[[theme]]"> </vaadin-notification-card>
+      <vaadin-notification-card theme$="[[theme]]"> </vaadin-notification-card>
     `;
   }
 
@@ -309,7 +309,7 @@ class NotificationElement extends ThemePropertyMixin(ElementMixin(PolymerElement
   ready() {
     super.ready();
 
-    this._card = this.$['vaadin-notification-card'];
+    this._card = this.shadowRoot.querySelector('vaadin-notification-card');
 
     if (window.Vaadin && window.Vaadin.templateRendererCallback) {
       window.Vaadin.templateRendererCallback(this);
