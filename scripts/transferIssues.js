@@ -12,6 +12,34 @@ const zhApi = axios.create({
   }
 });
 
+// Special handling for ZenHub REST API rate limiting
+// (see https://github.com/ZenHubIO/API#api-rate-limit)
+function rateLimitingAdapter(adapter) {
+  return async (config) => {
+    let response;
+    let status = 403;
+    while (status === 403) {
+      try {
+        response = await adapter(config);
+        status = response.status;
+      } catch (e) {
+        if (e.isAxiosError && e.response.status === 403) {
+          const resetAtMs = e.response.headers['x-ratelimit-reset'] * 1000;
+          const sentAtMs = new Date(e.response.headers['date']).getTime();
+          const timeoutMs = resetAtMs - sentAtMs;
+          console.log(`timeout until ZenHub API request rate reset: ${timeoutMs} ms`);
+          await new Promise((r) => setTimeout(r, timeoutMs));
+        } else {
+          throw e;
+        }
+      }
+    }
+
+    return response;
+  };
+}
+zhApi.defaults.adapter = rateLimitingAdapter(zhApi.defaults.adapter);
+
 const zhWorkspaceNameById = new Map();
 async function getZenHubWorkspaceName(workspace_id, repo_id) {
   if (!zhWorkspaceNameById.has(workspace_id)) {
