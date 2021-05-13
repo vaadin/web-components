@@ -137,6 +137,8 @@ async function main() {
   }
 
   let totalIssueCount = 0;
+  let totalZhEpics = 0;
+  let totalIssuesWithZhEstimate = 0;
   console.time('issues');
   const packages = await fs.readdir('packages');
   await Promise.all(
@@ -179,7 +181,7 @@ async function main() {
           for await (const { data: issues } of iterator) {
             // iterate through each issue in a page
             for (const issue of issues) {
-              const [{ data: labels }, pipelines] = await Promise.all([
+              const [{ data: labels }, zhIssue] = await Promise.all([
                 // fetch all labels on the issue
                 // (no need for pagination as there is never too many)
                 octokit.rest.issues.listLabelsOnIssue({
@@ -188,16 +190,28 @@ async function main() {
                   issue_number: issue.number
                 }),
                 // AND at the same time fetch ZenHub pipelines for the issue
-                zhApi.get(`/p1/repositories/${repo.id}/issues/${issue.number}`).then(({ data: { pipelines } }) =>
+                zhApi.get(`/p1/repositories/${repo.id}/issues/${issue.number}`).then(async (response) => ({
+                  ...response.data,
                   // enrich the returned pipelines list with the ZenHub workspace name for each pipeline
-                  Promise.all(
-                    pipelines.map(async (pipeline) => ({
+                  pipelines: await Promise.all(
+                    response.data.pipelines.map(async (pipeline) => ({
                       ...pipeline,
                       workspace: await getZenHubWorkspaceName(pipeline.workspace_id, repo.id)
                     }))
                   )
-                )
+                }))
               ]);
+
+              if (zhIssue.is_epic) {
+                console.log(`Skipping ${package}#${issue.number} because it's a ZH Epic`);
+                totalZhEpics += 1;
+                continue;
+              }
+
+              if (zhIssue.estimate) {
+                console.log(`${package}#${issue.number} has a ZH estimate of ${zhIssue.estimate.value}`);
+                totalIssuesWithZhEstimate += 1;
+              }
 
               if (labels.length > 0) {
                 await Promise.all(labels.map(ensureWebComponentsRepoLabelExists));
@@ -214,9 +228,9 @@ async function main() {
                     .join(', ')}]`
                 );
               }
-              if (pipelines.length > 0) {
+              if (zhIssue.pipelines.length > 0) {
                 console.log(
-                  `\tpipelines: [${pipelines
+                  `\tpipelines: [${zhIssue.pipelines
                     .map((pipeline) => `${pipeline.name} in ${pipeline.workspace}`)
                     .join(', ')}]`
                 );
@@ -231,6 +245,8 @@ async function main() {
       )
   );
   console.log(`total issues in all repos combined: ${totalIssueCount}`);
+  console.log(`total ZenHub Epics skipped in all repos combined: ${totalZhEpics}`);
+  console.log(`total issues with ZenHub estimates in all repos combined: ${totalIssuesWithZhEstimate}`);
   console.timeEnd(`issues`);
 }
 
