@@ -5,6 +5,12 @@ const axios = require('axios');
 
 dotenv.config();
 
+// The packages listed here will be skipped by this script.
+// All issues opened in that repos will remain untouched.
+const EXCLUDED_PACKAGES = [
+  'vaadin-messages' // managed by the CE team
+];
+
 const zhApi = axios.create({
   baseURL: 'https://api.zenhub.com/',
   headers: {
@@ -72,74 +78,84 @@ async function main() {
   console.time('issues');
   const packages = await fs.readdir('packages');
   await Promise.all(
-    packages.map((package) =>
-      (async () => {
-        let repo;
-        try {
-          const response = await octokit.rest.repos.get({
+    packages
+      .filter((package) => {
+        const skip = EXCLUDED_PACKAGES.indexOf(package) > -1;
+        if (skip) {
+          console.log(`Skipped the package ${package} as it's in the skip list`);
+        }
+        return !skip;
+      })
+      .map((package) =>
+        (async () => {
+          let repo;
+          try {
+            const response = await octokit.rest.repos.get({
+              owner: 'vaadin',
+              repo: package
+            });
+            repo = response.data;
+          } catch (e) {
+            if (!!e.constructor && e.constructor.name === 'RequestError' && e.status === 404) {
+              console.log(`Skipped the package ${package} as it has no separate repo`);
+              return;
+            } else {
+              throw e;
+            }
+          }
+
+          let issueCount = 0;
+          console.log(`Transferring issues for the package ${package}...`);
+
+          const iterator = octokit.paginate.iterator(octokit.rest.issues.listForRepo, {
             owner: 'vaadin',
-            repo: package
+            repo: package,
+            per_page: 100
           });
-          repo = response.data;
-        } catch (e) {
-          if (!!e.constructor && e.constructor.name === 'RequestError' && e.status === 404) {
-            console.log(`Skipped the package ${package} as it has no separate repo`);
-            return;
-          } else {
-            throw e;
-          }
-        }
 
-        let issueCount = 0;
-        console.log(`Transferring issues for the package ${package}...`);
-
-        const iterator = octokit.paginate.iterator(octokit.rest.issues.listForRepo, {
-          owner: 'vaadin',
-          repo: package,
-          per_page: 100
-        });
-
-        // iterate through each page of issues
-        for await (const { data: issues } of iterator) {
-          // iterate through each issue in a page
-          for (const issue of issues) {
-            const [{ data: labels }, pipelines] = await Promise.all([
-              // fetch all labels on the issue
-              // (no need for pagination as there is never too many)
-              octokit.rest.issues.listLabelsOnIssue({
-                owner: 'vaadin',
-                repo: package,
-                issue_number: issue.number
-              }),
-              // AND at the same time fetch ZenHub pipelines for the issue
-              zhApi.get(`/p1/repositories/${repo.id}/issues/${issue.number}`).then(({ data: { pipelines } }) =>
-                // enrich the returned pipelines list with the ZenHub workspace name for each pipeline
-                Promise.all(
-                  pipelines.map(async (pipeline) => ({
-                    ...pipeline,
-                    workspace: await getZenHubWorkspaceName(pipeline.workspace_id, repo.id)
-                  }))
+          // iterate through each page of issues
+          for await (const { data: issues } of iterator) {
+            // iterate through each issue in a page
+            for (const issue of issues) {
+              const [{ data: labels }, pipelines] = await Promise.all([
+                // fetch all labels on the issue
+                // (no need for pagination as there is never too many)
+                octokit.rest.issues.listLabelsOnIssue({
+                  owner: 'vaadin',
+                  repo: package,
+                  issue_number: issue.number
+                }),
+                // AND at the same time fetch ZenHub pipelines for the issue
+                zhApi.get(`/p1/repositories/${repo.id}/issues/${issue.number}`).then(({ data: { pipelines } }) =>
+                  // enrich the returned pipelines list with the ZenHub workspace name for each pipeline
+                  Promise.all(
+                    pipelines.map(async (pipeline) => ({
+                      ...pipeline,
+                      workspace: await getZenHubWorkspaceName(pipeline.workspace_id, repo.id)
+                    }))
+                  )
                 )
-              )
-            ]);
+              ]);
 
-            console.log('%s#%d: %s', package, issue.number, issue.title);
-            if (labels.length > 0) {
-              console.log(`\tlabels: [${labels.map((label) => label.name).join(', ')}]`);
+              console.log('%s#%d: %s', package, issue.number, issue.title);
+              if (labels.length > 0) {
+                console.log(`\tlabels: [${labels.map((label) => label.name).join(', ')}]`);
+              }
+              if (pipelines.length > 0) {
+                console.log(
+                  `\tpipelines: [${pipelines
+                    .map((pipeline) => `${pipeline.name} in ${pipeline.workspace}`)
+                    .join(', ')}]`
+                );
+              }
+              issueCount += 1;
             }
-            if (pipelines.length > 0) {
-              console.log(
-                `\tpipelines: [${pipelines.map((pipeline) => `${pipeline.name} in ${pipeline.workspace}`).join(', ')}]`
-              );
-            }
-            issueCount += 1;
           }
-        }
 
-        console.log(`total issues in the ${package} repo: ${issueCount}`);
-        totalIssueCount += issueCount;
-      })(package)
-    )
+          console.log(`total issues in the ${package} repo: ${issueCount}`);
+          totalIssueCount += issueCount;
+        })(package)
+      )
   );
   console.log(`total issues in all repos combined: ${totalIssueCount}`);
   console.timeEnd(`issues`);
