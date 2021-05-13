@@ -5,6 +5,9 @@ const axios = require('axios');
 
 dotenv.config();
 
+// if DRY_RUN then no actual changes are made
+const DRY_RUN = process.env.PRODUCTION_RUN !== true;
+
 // The packages listed here will be skipped by this script.
 // All issues opened in that repos will remain untouched.
 const EXCLUDED_PACKAGES = [
@@ -74,6 +77,65 @@ async function main() {
   } = await octokit.rest.users.getAuthenticated();
   console.log(`Logged-in to GitHub as ${login}`);
 
+  // fetch the list of all existing labels on the '@vaadin/web-components' repo
+  const iterator = octokit.paginate.iterator(octokit.rest.issues.listLabelsForRepo, {
+    owner: 'vaadin',
+    repo: 'web-components',
+    per_page: 100
+  });
+
+  const webComponentsRepoLabels = (() => {
+    // the webComponentsRepoLabels Map is private to ensure it's only accessed
+    // using the functions below that make the key case-insensitive
+    const map = new Map();
+
+    return {
+      get: (labelName) => map.get(labelName.toLowerCase()),
+      set: (labelName, label) => map.set(labelName.toLowerCase(), label),
+      has: (labelName) => map.has(labelName.toLowerCase())
+    };
+  })();
+
+  console.log(`Labels on the @vaadin/web-components repo:`);
+  for await (const { data: labels } of iterator) {
+    for (const label of labels) {
+      webComponentsRepoLabels.set(label.name, { ...label, transferred: false });
+      console.log(`\t${JSON.stringify(webComponentsRepoLabels.get(label.name))}`);
+    }
+  }
+
+  async function ensureWebComponentsRepoLabelExists(label) {
+    if (!webComponentsRepoLabels.has(label.name)) {
+      webComponentsRepoLabels.set(
+        label.name,
+        (async () => {
+          console.log(`creating a label '${label.name}' in the web-components repo`);
+          let newLabel;
+          if (DRY_RUN) {
+            newLabel = await Promise.resolve(label);
+          } else {
+            const { data } = await octokit.rest.issues.createLabel({
+              owner: 'vaadin',
+              repo: 'web-components',
+              name: label.name,
+              description: label.description,
+              color: label.color
+            });
+            newLabel = data;
+          }
+          webComponentsRepoLabels.set(label.name, {
+            ...newLabel,
+            transferred: true
+          });
+          return newLabel;
+        })()
+      );
+    } else if ('then' in webComponentsRepoLabels.get(label.name)) {
+      console.log(`waiting until the label '${label.name}' is created in the web-components repo`);
+      await webComponentsRepoLabels.get(label.name);
+    }
+  }
+
   let totalIssueCount = 0;
   console.time('issues');
   const packages = await fs.readdir('packages');
@@ -137,9 +199,20 @@ async function main() {
                 )
               ]);
 
+              if (labels.length > 0) {
+                await Promise.all(labels.map(ensureWebComponentsRepoLabelExists));
+              }
+
               console.log('%s#%d: %s', package, issue.number, issue.title);
               if (labels.length > 0) {
-                console.log(`\tlabels: [${labels.map((label) => label.name).join(', ')}]`);
+                console.log(
+                  `\tlabels: [${labels
+                    .map(
+                      (label) =>
+                        label.name + (webComponentsRepoLabels.get(label.name).transferred ? ' [TRANSFERRED]' : '')
+                    )
+                    .join(', ')}]`
+                );
               }
               if (pipelines.length > 0) {
                 console.log(
