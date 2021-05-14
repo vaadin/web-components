@@ -1,12 +1,13 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { click, fire, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { click, fire, fixtureSync } from '@vaadin/testing-helpers';
 
 import '../vaadin-template-renderer.js';
 import { Templatizer } from '../src/vaadin-template-renderer-templatizer.js';
 
-import './fixtures/mock-component-host.js';
 import './fixtures/mock-component.js';
+import './fixtures/mock-component-host.js';
+import './fixtures/mock-component-slotted-host.js';
 
 describe('vaadin-template-renderer', () => {
   describe('basic', () => {
@@ -117,53 +118,25 @@ describe('vaadin-template-renderer', () => {
     expect(host.value).to.equal('foobar');
   });
 
-  describe('observer', () => {
-    it('should observe adding a template', async () => {
-      const component = fixtureSync(`<mock-component></mock-component>`);
-      const template = fixtureSync(`<template>bar</template>`);
-
-      component.appendChild(template);
-      await nextFrame();
-
-      expect(component.$.content.textContent).to.equal('bar');
-    });
-
-    it('should observe replacing a template', async () => {
-      const component = fixtureSync(`
-        <mock-component>
-          <template>foo</template>
-        </mock-component>
+  describe('slotted templates', () => {
+    it('should render the fallback template', () => {
+      const host = fixtureSync(`
+        <mock-component-slotted-host></mock-component-slotted-host>
       `);
-      const template = fixtureSync(`<template>bar</template>`);
+      const component = host.$.component;
 
-      component.replaceChildren(template);
-      await nextFrame();
-
-      expect(component.$.content.textContent).to.equal('bar');
+      expect(component.$.content.textContent).to.equal('fallback');
     });
 
-    it('should not observe adding a non-template element', async () => {
-      const component = fixtureSync(`<mock-component></mock-component>`);
-      const element = fixtureSync('<div>bar</div>');
-
-      component.appendChild(element);
-      await nextFrame();
-
-      expect(component.$.content.textContent).to.equal('');
-    });
-
-    it('should not observe adding a non-child template', async () => {
-      const component = fixtureSync(`
-        <mock-component>
-          <div></div>
-        </mock-component>
+    it('should render the slotted template', () => {
+      const host = fixtureSync(`
+        <mock-component-slotted-host>
+          <template slot="template">slotted</template>
+        </mock-component-slotted-host>
       `);
-      const template = fixtureSync(`<template>bar</template>`);
+      const component = host.$.component;
 
-      component.querySelector('div').appendChild(template);
-      await nextFrame();
-
-      expect(component.$.content.textContent).to.equal('');
+      expect(component.$.content.textContent).to.equal('slotted');
     });
   });
 });
