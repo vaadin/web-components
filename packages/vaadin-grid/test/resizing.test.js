@@ -9,7 +9,8 @@ import {
   getRowCells,
   infiniteDataProvider,
   scrollToEnd,
-  nextResize
+  nextResize,
+  getPhysicalItems
 } from './helpers.js';
 import '../vaadin-grid.js';
 import '../vaadin-grid-column-group.js';
@@ -105,6 +106,18 @@ describe('resizing', () => {
     const bodyHeight = grid.$.items.clientHeight;
     const footerHeight = grid.$.footer.clientHeight;
     expect(grid.clientHeight).to.equal(headerHeight + bodyHeight + footerHeight);
+  });
+
+  it('should have body rows if header is not visible', async () => {
+    grid = fixtureSync(`
+      <vaadin-grid>
+        <vaadin-grid-column path="value"></vaadin-grid-column>
+      </vaadin-grid>`);
+    grid.firstElementChild.header = null;
+    grid.heightByRows = true;
+    grid.items = [{ value: 1 }];
+    flushGrid(grid);
+    expect(getPhysicalItems(grid).length).to.be.above(0);
   });
 
   // NOTE: This issue only manifests with scrollbars that affect the layout

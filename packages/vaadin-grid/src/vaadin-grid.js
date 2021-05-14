@@ -964,8 +964,8 @@ class GridElement extends ElementMixin(
   }
 
   /** @protected */
-  __updateVisibleRows() {
-    this.__virtualizer && this.__virtualizer.update();
+  __updateVisibleRows(start, end) {
+    this.__virtualizer && this.__virtualizer.update(start, end);
   }
 
   /**
