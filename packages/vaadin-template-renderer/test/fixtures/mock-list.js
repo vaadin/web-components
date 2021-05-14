@@ -1,4 +1,4 @@
-export class XList extends HTMLElement {
+export class MockList extends HTMLElement {
   constructor() {
     super();
 
@@ -46,4 +46,4 @@ export class XList extends HTMLElement {
   }
 }
 
-customElements.define('x-list', XList);
+customElements.define('mock-list', MockList);

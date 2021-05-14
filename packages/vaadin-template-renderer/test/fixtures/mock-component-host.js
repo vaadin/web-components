@@ -1,17 +1,17 @@
 import { PolymerElement, html } from '@polymer/polymer';
 
-import './x-component.js';
+import './mock-component.js';
 
-export class XComponentHost extends PolymerElement {
+export class MockComponentHost extends PolymerElement {
   static get template() {
     return html`
-      <x-component id="component">
+      <mock-component id="component">
         <template>
           [[value]]
           <input value="{{value::input}}" />
           <button on-click="onClick"></button>
         </template>
-      </x-component>
+      </mock-component>
     `;
   }
 
@@ -24,4 +24,4 @@ export class XComponentHost extends PolymerElement {
   onClick() {}
 }
 
-customElements.define('x-component-host', XComponentHost);
+customElements.define('mock-component-host', MockComponentHost);

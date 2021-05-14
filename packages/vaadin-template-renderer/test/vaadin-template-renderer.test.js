@@ -5,8 +5,8 @@ import { click, fire, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import '../vaadin-template-renderer.js';
 import { Templatizer } from '../src/vaadin-template-renderer-templatizer.js';
 
-import './x-component-host.js';
-import './x-component.js';
+import './fixtures/mock-component-host.js';
+import './fixtures/mock-component.js';
 
 describe('vaadin-template-renderer', () => {
   describe('basic', () => {
@@ -14,9 +14,9 @@ describe('vaadin-template-renderer', () => {
 
     beforeEach(() => {
       component = fixtureSync(`
-        <x-component>
+        <mock-component>
           <template>foo</template>
-        </x-component>
+        </mock-component>
       `);
 
       template = component.querySelector('template');
@@ -52,11 +52,11 @@ describe('vaadin-template-renderer', () => {
 
   it('should not process non-child templates', () => {
     const component = fixtureSync(`
-      <x-component>
+      <mock-component>
         <div>
           <template>foo</template>
         </div>
-      </x-component>
+      </mock-component>
     `);
 
     expect(component.$.content.textContent).to.equal('');
@@ -64,17 +64,17 @@ describe('vaadin-template-renderer', () => {
 
   it('should render the last child template in case of multiple templates', () => {
     const component = fixtureSync(`
-      <x-component>
+      <mock-component>
         <template>foo</template>
         <template>bar</template>
-      </x-component>
+      </mock-component>
     `);
 
     expect(component.$.content.textContent).to.equal('bar');
   });
 
   it('should handle events from the template instance', () => {
-    const host = fixtureSync(`<x-component-host></x-component-host>`);
+    const host = fixtureSync(`<mock-component-host></mock-component-host>`);
     const component = host.$.component;
     const button = component.$.content.querySelector('button');
     const spy = sinon.spy(host, 'onClick');
@@ -85,7 +85,7 @@ describe('vaadin-template-renderer', () => {
   });
 
   it('should re-render the template istance when changing a parent property', async () => {
-    const host = fixtureSync(`<x-component-host></x-component-host>`);
+    const host = fixtureSync(`<mock-component-host></mock-component-host>`);
     const component = host.$.component;
 
     host.value = 'foobar';
@@ -94,8 +94,8 @@ describe('vaadin-template-renderer', () => {
   });
 
   it('should re-render multiple template instances independently', async () => {
-    const host1 = fixtureSync(`<x-component-host></x-component-host>`);
-    const host2 = fixtureSync(`<x-component-host></x-component-host>`);
+    const host1 = fixtureSync(`<mock-component-host></mock-component-host>`);
+    const host2 = fixtureSync(`<mock-component-host></mock-component-host>`);
     const component1 = host1.$.component;
     const component2 = host2.$.component;
 
@@ -107,7 +107,7 @@ describe('vaadin-template-renderer', () => {
   });
 
   it('should support the 2-way property binding', () => {
-    const host = fixtureSync(`<x-component-host></x-component-host>`);
+    const host = fixtureSync(`<mock-component-host></mock-component-host>`);
     const component = host.$.component;
     const input = component.$.content.querySelector('input');
 
@@ -119,7 +119,7 @@ describe('vaadin-template-renderer', () => {
 
   describe('observer', () => {
     it('should observe adding a template', async () => {
-      const component = fixtureSync(`<x-component></x-component>`);
+      const component = fixtureSync(`<mock-component></mock-component>`);
       const template = fixtureSync(`<template>bar</template>`);
 
       component.appendChild(template);
@@ -130,9 +130,9 @@ describe('vaadin-template-renderer', () => {
 
     it('should observe replacing a template', async () => {
       const component = fixtureSync(`
-        <x-component>
+        <mock-component>
           <template>foo</template>
-        </x-component>
+        </mock-component>
       `);
       const template = fixtureSync(`<template>bar</template>`);
 
@@ -143,7 +143,7 @@ describe('vaadin-template-renderer', () => {
     });
 
     it('should not observe adding a non-template element', async () => {
-      const component = fixtureSync(`<x-component></x-component>`);
+      const component = fixtureSync(`<mock-component></mock-component>`);
       const element = fixtureSync('<div>bar</div>');
 
       component.appendChild(element);
@@ -154,9 +154,9 @@ describe('vaadin-template-renderer', () => {
 
     it('should not observe adding a non-child template', async () => {
       const component = fixtureSync(`
-        <x-component>
+        <mock-component>
           <div></div>
-        </x-component>
+        </mock-component>
       `);
       const template = fixtureSync(`<template>bar</template>`);
 
