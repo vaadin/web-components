@@ -52,6 +52,10 @@ registerStyles(
       position: relative;
     }
 
+    :host([height-by-rows]) #items:empty {
+      height: 1px;
+    }
+
     #table {
       display: flex;
       flex-direction: column;
