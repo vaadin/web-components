@@ -6,7 +6,7 @@ const axios = require('axios');
 dotenv.config();
 
 // if DRY_RUN then no actual changes are made
-const DRY_RUN = process.env.PRODUCTION_RUN !== true;
+const DRY_RUN = process.env.PRODUCTION_RUN !== 'true';
 
 // GitHub API client (both REST and GraphQL)
 const octokit = new Octokit({ auth: process.env.GITHUB_API_TOKEN });
@@ -32,8 +32,32 @@ const TARGET_REPO = {
   owner: 'vaadin'
 };
 
+// moslty useful for testing to limit the scope when running this script
+const shouldExcludeIssue = (issue) => {
+  // Run a small-scale test with a signle issue only
+  // That issue was created specifically for testing this script
+  return issue.title !== 'Test issue for the tansfer-issue script';
+
+  // To include all issues (the default):
+  // return false;
+};
+
+// moslty useful for testing to limit the scope when running this script
+const shouldExcludeRepo = (repo) => {
+  // Run a small-scale test with a signle issue only
+  // That issue was created specifically for testing this script
+  return repo.full_name !== 'vaadin/magi-cli';
+
+  // To include all repos (the default):
+  // return false;
+};
+
 async function getSourceReposList() {
-  const packages = await fs.readdir('packages');
+  const packages = [
+    ...(await fs.readdir('packages')),
+    'magi-cli', // for testing only
+    'web-components' // for testing only
+  ];
 
   const repos = await Promise.all(
     packages
@@ -62,7 +86,15 @@ async function getSourceReposList() {
       })
   );
 
-  return repos.filter((repo) => !!repo); // remove skipped packages from the list
+  return repos
+    .filter((repo) => !!repo) // remove skipped packages from the list
+    .filter((repo) => {
+      const skip = shouldExcludeRepo(repo);
+      if (skip) {
+        console.log(`Skipped the repo ${repo.full_name} because the shouldExcludeRepo() filter returned true`);
+      }
+      return !skip;
+    });
 }
 
 const zhWorkspaceNameById = new Map();
@@ -112,7 +144,7 @@ function zhRateLimitingAdapter(adapter) {
   };
 }
 
-async function transferLabel(label, repo) {
+async function createLabelInRepo(label, repo) {
   let newLabel;
   if (DRY_RUN) {
     newLabel = await Promise.resolve(label);
@@ -133,6 +165,71 @@ async function transferLabel(label, repo) {
   };
 }
 
+async function transferIssue(issue, targetRepo) {
+  if (DRY_RUN) {
+    return { ...issue };
+  } else {
+    const response = await octokit.graphql(
+      `mutation TransferIssue($issueNodeId: ID!, $targetRepoNodeId: ID!, $clientMutationId: String) {
+        transferIssue(input: {
+          clientMutationId: $clientMutationId,
+          issueId: $issueNodeId,
+          repositoryId: $targetRepoNodeId
+        }) {
+          issue {
+            number
+            repository {
+              name
+              databaseId
+              owner {
+                login
+              }
+            }
+          }
+        }
+      }`,
+      {
+        clientMutationId: issue.url,
+        issueNodeId: issue.node_id,
+        targetRepoNodeId: targetRepo.node_id
+      }
+    );
+    return response.transferIssue.issue;
+  }
+}
+
+async function transferLabels(labels, issue) {
+  if (DRY_RUN) {
+    return [...labels];
+  } else {
+    const { data } = await octokit.rest.issues.addLabels({
+      owner: issue.repository.owner.login,
+      repo: issue.repository.name,
+      issue_number: issue.number,
+      labels: labels.map((label) => label.name)
+    });
+    return data;
+  }
+}
+
+async function transferZhPipelines(pipelines, issue) {
+  if (DRY_RUN) {
+    return Promise.resolve();
+  } else {
+    await Promise.all(
+      pipelines.map(async (pipeline) => {
+        zhApi.post(
+          `/p2/workspaces/${pipeline.workspace_id}/repositories/${issue.repository.databaseId}/issues/${issue.number}/moves`,
+          {
+            pipeline_id: pipeline.pipeline_id,
+            position: 'bottom'
+          }
+        );
+      })
+    );
+  }
+}
+
 async function makeRepoLabelsMap(repo) {
   const map = new Map();
   const repoLabels = {
@@ -144,7 +241,7 @@ async function makeRepoLabelsMap(repo) {
       if (!repoLabels.has(label.name)) {
         // First store a promise to remember that a transfer of _this_ label has
         // been scheduled to avoid transferring the same label several times.
-        const promise = transferLabel(label, repo);
+        const promise = createLabelInRepo(label, repo);
         repoLabels.set(label.name, promise);
 
         // Eventually, store the transferred label itself
@@ -191,6 +288,8 @@ async function main() {
     console.log(`\t${JSON.stringify({ name, color, description })}`);
   }
 
+  const { data: targetRepoZhWorkspaces } = await zhApi.get(`/p2/repositories/${targetRepo.id}/workspaces`);
+
   console.time('issues');
   let totalIssueCount = 0;
   let totalZhEpics = 0;
@@ -212,6 +311,11 @@ async function main() {
       for await (const { data: issues } of iterator) {
         // iterate through each issue in a page
         for (const issue of issues) {
+          if (shouldExcludeIssue(issue)) {
+            console.log(`Skipping ${repo.name}#${issue.number} because the shouldExcludeIssue() filter returned true`);
+            continue;
+          }
+
           const [{ data: labels }, zhIssue] = await Promise.all([
             // fetch all labels on the issue
             // (no need for pagination as there is never too many)
@@ -247,23 +351,49 @@ async function main() {
             totalIssuesWithZhEstimate += 1;
           }
 
+          const transferredIssue = await transferIssue(issue, targetRepo);
           if (labels.length > 0) {
             await Promise.all(labels.map(targetRepoLabels.ensure));
+            await transferLabels(labels, transferredIssue);
+          }
+          if (zhIssue.pipelines.length > 0) {
+            await transferZhPipelines(
+              zhIssue.pipelines.filter((pipeline) => {
+                const isTargetRepoInPipelineWorkspace =
+                  targetRepoZhWorkspaces.findIndex((workspace) => workspace.id === pipeline.workspace_id) > -1;
+                if (!isTargetRepoInPipelineWorkspace) {
+                  console.log(
+                    `ZenHub pipeline ${pipeline.name} in ${pipeline.workspace} on the ` +
+                      `issue ${repo.name}#${issue.number} cannot be transferred because ` +
+                      `the target repo ${targetRepo.name} is not included into the ` +
+                      `${pipeline.workspace} ZenHub workspace.`
+                  );
+                }
+                return isTargetRepoInPipelineWorkspace;
+              }),
+              transferredIssue
+            );
           }
 
           console.log('%s#%d: %s', repo.name, issue.number, issue.title);
-
+          console.log(`\ttransferred to ---> ${targetRepo.name}#${transferredIssue.number}`);
           if (labels.length > 0) {
             console.log(
               `\tlabels: [${labels
-                .map((label) => label.name + (targetRepoLabels.get(label.name).transferred ? ' [TRANSFERRED]' : ''))
+                .map((label) => label.name + (targetRepoLabels.get(label.name).transferred ? ' [CREATED]' : ''))
                 .join(', ')}]`
             );
           }
           if (zhIssue.pipelines.length > 0) {
             console.log(
               `\tpipelines: [${zhIssue.pipelines
-                .map((pipeline) => `${pipeline.name} in ${pipeline.workspace}`)
+                .map((pipeline) => {
+                  const isTargetRepoInPipelineWorkspace =
+                    targetRepoZhWorkspaces.findIndex((workspace) => workspace.id === pipeline.workspace_id) > -1;
+                  return `${pipeline.name} in ${pipeline.workspace}${
+                    isTargetRepoInPipelineWorkspace ? '' : ' [UNTRANSFERRED]'
+                  }`;
+                })
                 .join(', ')}]`
             );
           }
