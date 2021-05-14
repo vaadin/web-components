@@ -501,9 +501,33 @@ class GridElement extends ElementMixin(
   }
 
   /** @private */
+  __getBodyCellCoordinates(cell) {
+    if (this.$.items.contains(cell) && cell.localName === 'td') {
+      return {
+        item: cell.parentElement._item,
+        column: cell._column
+      };
+    }
+  }
+
+  /** @private */
+  __focusBodyCell({ item, column }) {
+    const row = this._getVisibleRows().find((row) => row._item === item);
+    const cell = row && [...row.children].find((cell) => cell._column === column);
+    cell && cell.focus();
+  }
+
+  /** @private */
   _effectiveSizeChanged(effectiveSize, virtualizer, hasData, columnTree) {
     if (virtualizer && hasData && columnTree) {
+      // Changing the virtualizer size may result in the row with focus getting hidden
+      const cell = this.shadowRoot.activeElement;
+      const cellCoordinates = this.__getBodyCellCoordinates(cell);
+
       virtualizer.size = effectiveSize;
+
+      // If the focused cell's parent row got hidden by the size change, focus the corresponding new cell
+      cellCoordinates && cell.parentElement.hidden && this.__focusBodyCell(cellCoordinates);
     }
   }
 

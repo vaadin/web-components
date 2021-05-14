@@ -282,7 +282,7 @@ export const KeyboardNavigationMixin = (superClass) =>
       // For body rows, use index property to find destination row, otherwise use DOM child index
       const dstRow =
         activeRowGroup === this.$.items
-          ? Array.from(activeRowGroup.children).filter((el) => el.index === dstRowIndex)[0]
+          ? Array.from(activeRowGroup.children).filter((el) => !el.hidden && el.index === dstRowIndex)[0]
           : activeRowGroup.children[dstRowIndex];
       if (!dstRow) {
         return;
