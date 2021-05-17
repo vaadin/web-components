@@ -8,6 +8,10 @@ dotenv.config();
 // if DRY_RUN then no actual changes are made
 const DRY_RUN = process.env.PRODUCTION_RUN !== 'true';
 
+// if TEST_ON_SINGLE_ISSUE then only the special test issue is affected
+// (see https://github.com/vaadin/magi-cli/issues/142)
+const TEST_ON_SINGLE_ISSUE = process.env.TEST_ON_SINGLE_ISSUE === 'true';
+
 // GitHub API client (both REST and GraphQL)
 const octokit = new Octokit({ auth: process.env.GITHUB_API_TOKEN });
 
@@ -23,7 +27,9 @@ const zhApi = axios.create({
 // The packages listed here will be skipped by this script.
 // All issues opened in that repos will remain untouched.
 const EXCLUDED_PACKAGES = [
-  'vaadin-messages' // managed by the CE team
+  // do not exclude even though it's managed by the CE team
+  // https://vaadin.slack.com/archives/C01MHLE0FN3/p1621246586005600
+  // 'vaadin-messages'
 ];
 
 // All open issues from the source repos will be transferred to _this_ repo:
@@ -33,31 +39,30 @@ const TARGET_REPO = {
 };
 
 // moslty useful for testing to limit the scope when running this script
-const shouldExcludeIssue = (issue) => {
+let shouldExcludeIssue = () => false;
+if (TEST_ON_SINGLE_ISSUE) {
   // Run a small-scale test with a signle issue only
   // That issue was created specifically for testing this script
-  return issue.title !== 'Test issue for the tansfer-issue script';
-
-  // To include all issues (the default):
-  // return false;
-};
+  shouldExcludeIssue = (issue) => {
+    return issue.title !== 'Test issue for the tansfer-issue script';
+  };
+}
 
 // moslty useful for testing to limit the scope when running this script
-const shouldExcludeRepo = (repo) => {
+let shouldExcludeRepo = () => false;
+if (TEST_ON_SINGLE_ISSUE) {
   // Run a small-scale test with a signle issue only
   // That issue was created specifically for testing this script
-  return repo.full_name !== 'vaadin/magi-cli';
-
-  // To include all repos (the default):
-  // return false;
-};
+  shouldExcludeRepo = (repo) => {
+    return repo.full_name !== 'vaadin/magi-cli';
+  };
+}
 
 async function getSourceReposList() {
-  const packages = [
-    ...(await fs.readdir('packages')),
-    'magi-cli', // for testing only
-    'web-components' // for testing only
-  ];
+  const packages = await fs.readdir('packages');
+  if (TEST_ON_SINGLE_ISSUE) {
+    packages.push('magi-cli', 'web-components');
+  }
 
   const repos = await Promise.all(
     packages
@@ -352,10 +357,18 @@ async function main() {
           }
 
           const transferredIssue = await transferIssue(issue, targetRepo);
-          if (labels.length > 0) {
-            await Promise.all(labels.map(targetRepoLabels.ensure));
-            await transferLabels(labels, transferredIssue);
-          }
+
+          // add the original repo name as an extra label on the transferred issue
+          // (but use the 'theme' label for styles issues)
+          labels.push(
+            ['vaadin-lumo-styles', 'vaadin-material-styles'].indexOf(repo.name) > -1
+              ? { name: 'theme', color: '5319E7', description: '' }
+              : { name: repo.name, color: 'eeeeee', description: '' }
+          );
+
+          await Promise.all(labels.map(targetRepoLabels.ensure));
+          await transferLabels(labels, transferredIssue);
+
           if (zhIssue.pipelines.length > 0) {
             await transferZhPipelines(
               zhIssue.pipelines.filter((pipeline) => {
