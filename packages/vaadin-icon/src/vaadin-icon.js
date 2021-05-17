@@ -44,7 +44,6 @@ class IconElement extends ThemableMixin(ElementMixin(PolymerElement)) {
         }
 
         :host([dir='rtl']) ::slotted(svg) {
-          -webkit-transform: scale(-1, 1);
           transform: scale(-1, 1);
           transform-origin: center;
         }
