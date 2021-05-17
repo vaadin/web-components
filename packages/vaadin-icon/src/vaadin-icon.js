@@ -123,7 +123,7 @@ class IconElement extends ThemableMixin(ElementMixin(PolymerElement)) {
 
   /** @private */
   __svgChanged(svg, size) {
-    let result = svg == null ? nothing : svg;
+    let result = svg == null || svg === '' ? nothing : svg;
 
     if (!(result === nothing || isTemplateResult(result, TemplateResultType.SVG))) {
       console.error('Invalid svg passed to vaadin-icon, please use Lit svg literal.');

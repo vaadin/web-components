@@ -78,18 +78,8 @@ describe('vaadin-icon', () => {
         expect(console.error.calledOnce).to.be.false;
       });
 
-      it('should not render DOM when invalid svg value is null', () => {
+      it('should not render DOM when svg property is set to null', () => {
         icon.svg = null;
-        expectIcon('');
-      });
-
-      it('should not log error when svg property is set to undefined', () => {
-        icon.undefined = undefined;
-        expect(console.error.calledOnce).to.be.false;
-      });
-
-      it('should not render DOM when invalid svg value is undefined', () => {
-        icon.undefined = undefined;
         expectIcon('');
       });
     });
