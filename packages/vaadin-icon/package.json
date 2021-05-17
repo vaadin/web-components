@@ -1,0 +1,38 @@
+{
+  "name": "@vaadin/vaadin-icon",
+  "version": "21.0.0-alpha2",
+  "description": "Web component for creating SVG icons",
+  "main": "vaadin-icon.js",
+  "module": "vaadin-icon.js",
+  "repository": "vaadin/vaadin-icons",
+  "keywords": [
+    "Vaadin",
+    "icon",
+    "web-components",
+    "web-component"
+  ],
+  "author": "Vaadin Ltd",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/vaadin/web-components/issues"
+  },
+  "homepage": "https://vaadin.com/components",
+  "files": [
+    "vaadin-*.d.ts",
+    "vaadin-*.js",
+    "src"
+  ],
+  "dependencies": {
+    "@polymer/polymer": "^3.0.0",
+    "@vaadin/vaadin-element-mixin": "^21.0.0-alpha2",
+    "@vaadin/vaadin-lumo-styles": "^21.0.0-alpha2",
+    "@vaadin/vaadin-themable-mixin": "^21.0.0-alpha2",
+    "lit": "^2.0.0-rc.1"
+  },
+  "devDependencies": {
+    "@vaadin/testing-helpers": "^0.2.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

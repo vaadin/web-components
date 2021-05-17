@@ -13,10 +13,10 @@ module.exports = {
   coverageConfig: {
     include: ['packages/**/src/*', 'packages/**/*.js'],
     threshold: {
-      statements: 80,
+      statements: 75,
       branches: 50,
       functions: 70,
-      lines: 80
+      lines: 75
     }
   },
   testFramework: {
