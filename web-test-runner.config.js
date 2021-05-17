@@ -15,7 +15,7 @@ module.exports = {
     threshold: {
       statements: 80,
       branches: 50,
-      functions: 77,
+      functions: 70,
       lines: 80
     }
   },
