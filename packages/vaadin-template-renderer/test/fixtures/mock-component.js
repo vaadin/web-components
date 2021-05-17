@@ -1,4 +1,4 @@
-export class XComponent extends HTMLElement {
+export class MockComponent extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
@@ -25,4 +25,4 @@ export class XComponent extends HTMLElement {
   }
 }
 
-customElements.define('x-component', XComponent);
+customElements.define('mock-component', MockComponent);

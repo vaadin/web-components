@@ -4,8 +4,8 @@ import { fixtureSync, fire, click } from '@vaadin/testing-helpers';
 
 import '../vaadin-template-renderer.js';
 
-import './x-list-host.js';
-import './x-list.js';
+import './fixtures/mock-list-host.js';
+import './fixtures/mock-list.js';
 
 describe('list', () => {
   let host, list, template;
@@ -19,7 +19,7 @@ describe('list', () => {
   }
 
   beforeEach(() => {
-    host = fixtureSync(`<x-list-host></x-list-host>`);
+    host = fixtureSync(`<mock-list-host></mock-list-host>`);
     list = host.$.list;
     template = host.$.list.querySelector('template');
   });

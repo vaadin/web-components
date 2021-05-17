@@ -1,11 +1,11 @@
 import { PolymerElement, html } from '@polymer/polymer';
 
-import './x-list.js';
+import './mock-list.js';
 
-export class XListHost extends PolymerElement {
+export class MockListHost extends PolymerElement {
   static get template() {
     return html`
-      <x-list id="list" items="[[items]]">
+      <mock-list id="list" items="[[items]]">
         <template>
           <div class="item-text">[[item]]</div>
 
@@ -15,7 +15,7 @@ export class XListHost extends PolymerElement {
 
           <button on-click="onClick"></button>
         </template>
-      </x-list>
+      </mock-list>
     `;
   }
 
@@ -35,4 +35,4 @@ export class XListHost extends PolymerElement {
   onClick() {}
 }
 
-customElements.define('x-list-host', XListHost);
+customElements.define('mock-list-host', MockListHost);

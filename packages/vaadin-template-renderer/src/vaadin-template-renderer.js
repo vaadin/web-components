@@ -1,3 +1,5 @@
+import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
+
 import './vaadin-template-renderer-templatizer.js';
 import { Templatizer } from './vaadin-template-renderer-templatizer.js';
 
@@ -15,7 +17,7 @@ function processTemplate(component, template) {
 }
 
 function processTemplates(component) {
-  [...component.children]
+  FlattenedNodesObserver.getFlattenedNodes(component)
     .filter((child) => {
       return child instanceof HTMLTemplateElement;
     })
@@ -29,16 +31,16 @@ function processTemplates(component) {
     });
 }
 
-const observer = new MutationObserver((mutations) => {
-  mutations.forEach(({ target }) => {
-    processTemplates(target);
+function observeTemplates(component) {
+  if (component.__templateObserver) return;
+
+  component.__templateObserver = new FlattenedNodesObserver(component, () => {
+    processTemplates(component);
   });
-});
+}
 
 window.Vaadin = window.Vaadin || {};
 window.Vaadin.templateRendererCallback = (component) => {
   processTemplates(component);
-
-  // The observer stops observing automatically as the component node is removed
-  observer.observe(component, { childList: true });
+  observeTemplates(component);
 };
