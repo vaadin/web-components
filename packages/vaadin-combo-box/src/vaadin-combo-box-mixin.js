@@ -670,9 +670,12 @@ export const ComboBoxMixin = (subclass) =>
           this.value = '';
         }
       } else {
+        const toLowerCase = (item) => item && item.toLowerCase && item.toLowerCase();
         const itemsMatchedByLabel =
           (this.filteredItems &&
-            this.filteredItems.filter((item) => this._getItemLabel(item) === this._inputElementValue)) ||
+            this.filteredItems.filter(
+              (item) => toLowerCase(this._getItemLabel(item)) === toLowerCase(this._inputElementValue)
+            )) ||
           [];
         if (
           this.allowCustomValue &&
@@ -691,7 +694,7 @@ export const ComboBoxMixin = (subclass) =>
             this._selectItemForValue(customValue);
             this.value = customValue;
           }
-        } else if (!this.allowCustomValue && !this.opened && itemsMatchedByLabel.length == 1) {
+        } else if (!this.allowCustomValue && !this.opened && itemsMatchedByLabel.length > 0) {
           this.value = this._getItemValue(itemsMatchedByLabel[0]);
         } else {
           this._inputElementValue = this.selectedItem ? this._getItemLabel(this.selectedItem) : this.value || '';
