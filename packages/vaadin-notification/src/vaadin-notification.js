@@ -338,6 +338,9 @@ class NotificationElement extends ThemePropertyMixin(ElementMixin(PolymerElement
     super.ready();
 
     this._card = this.$['vaadin-notification-card'];
+    // A workaround to prevent duplicating ID attributes in the notification container
+    this._card.removeAttribute('id');
+
     this._observer = new FlattenedNodesObserver(this, (info) => {
       this._setTemplateFromNodes(info.addedNodes);
     });
