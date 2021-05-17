@@ -27,6 +27,10 @@ class IconsetElement extends ElementMixin(PolymerElement) {
     return 'vaadin-iconset';
   }
 
+  static get version() {
+    return '21.0.0-alpha2';
+  }
+
   static get properties() {
     return {
       /**
