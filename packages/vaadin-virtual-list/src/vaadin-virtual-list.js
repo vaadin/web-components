@@ -78,12 +78,15 @@ class VirtualListElement extends ElementMixin(ThemableMixin(PolymerElement)) {
        *   - `model.item` The item.
        * @type {VirtualListRenderer | undefined}
        */
-      renderer: Function
+      renderer: Function,
+
+      /** @private */
+      __virtualizer: Object
     };
   }
 
   static get observers() {
-    return ['__itemsOrRendererChanged(items, renderer)'];
+    return ['__itemsOrRendererChanged(items, renderer, __virtualizer)'];
   }
 
   /** @protected */
@@ -125,12 +128,12 @@ class VirtualListElement extends ElementMixin(ThemableMixin(PolymerElement)) {
   }
 
   /** @private */
-  __itemsOrRendererChanged(items = [], renderer) {
-    if (renderer) {
-      if (items.length === this.__virtualizer.size) {
-        this.__virtualizer.update();
+  __itemsOrRendererChanged(items = [], renderer, virtualizer) {
+    if (renderer && virtualizer) {
+      if (items.length === virtualizer.size) {
+        virtualizer.update();
       } else {
-        this.__virtualizer.size = items.length;
+        virtualizer.size = items.length;
       }
     }
   }

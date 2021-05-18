@@ -55,14 +55,14 @@ describe('virtual-list', () => {
     });
 
     it('should change the items to an array of same size', () => {
-      list.items = list.items = new Array(list.items.length).fill().map((e, i) => {
+      list.items = new Array(list.items.length).fill().map((e, i) => {
         return { value: `text-${i}` };
       });
       expect(list.children[0].textContent.trim()).to.equal('text-0');
     });
 
     it('should change the items to a shorter array', () => {
-      list.items = list.items = new Array(list.items.length - 1).fill().map((e, i) => {
+      list.items = new Array(list.items.length - 1).fill().map((e, i) => {
         return { value: `text-${i}` };
       });
       expect(list.children[0].textContent.trim()).to.equal('text-0');
