@@ -37,10 +37,16 @@ class VirtualListElement extends ElementMixin(ThemableMixin(PolymerElement)) {
           display: block;
           height: 200px;
           overflow: auto;
+          flex: auto;
+          align-self: stretch;
         }
 
         :host([hidden]) {
           display: none !important;
+        }
+
+        :host(:not([grid])) #items > ::slotted(*) {
+          width: 100%;
         }
       </style>
 
