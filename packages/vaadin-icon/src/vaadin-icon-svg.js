@@ -1,3 +1,8 @@
+/**
+ * @license
+ * Copyright (c) 2021 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
 import { nothing, render, svg } from 'lit';
 import { isTemplateResult, TemplateResultType } from 'lit/directive-helpers.js';
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
