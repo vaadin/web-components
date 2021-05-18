@@ -10,23 +10,33 @@ export class MockGridHost extends PolymerElement {
         <vaadin-grid-column>
           <template class="header">header</template>
           <template class="footer">footer</template>
-          <template class="content">[[item]]</template>
+          <template class="body">[[item.title]]</template>
         </vaadin-grid-column>
 
-        <!-- <vaadin-grid-column>
+        <vaadin-grid-column>
           <template>
-            <div>[[value]]</div>
+            <div class="parent-property">[[parentProperty]]</div>
+            <input class="parent-property" value="{{parentProperty::input}}" />
 
-            <input value="{{value::input}}" />
+            <div class="item-title">[[item.title]]</div>
+            <input class="item-title" value="{{item.title::input}}" />
 
-            <button on-click="onClick"></button>
+            <vaadin-checkbox class="selected" checked="{{selected}}" />
+            <vaadin-checkbox class="expanded" checked="{{expanded}}" />
+            <vaadin-checkbox class="details-opened" checked="{{detailsOpened}}" />
           </template>
-        </vaadin-grid-column> -->
+        </vaadin-grid-column>
 
         <vaadin-grid-column>
-          <slot name="header-template"></slot>
-          <slot name="footer-template"></slot>
-          <slot name="content-template"></slot>
+          <template>
+            <div class="parent-property">[[parentProperty]]</div>
+
+            <div class="item-title">[[item.title]]</div>
+
+            <vaadin-checkbox class="selected" checked="{{selected}}" />
+            <vaadin-checkbox class="expanded" checked="{{expanded}}" />
+            <vaadin-checkbox class="details-opened" checked="{{detailsOpened}}" />
+          </template>
         </vaadin-grid-column>
       </vaadin-grid>
     `;
@@ -34,12 +44,12 @@ export class MockGridHost extends PolymerElement {
 
   static get properties() {
     return {
-      value: String,
+      parentProperty: String,
 
       items: {
         type: Array,
         value() {
-          return ['item1', 'item2'];
+          return [{ title: 'item1' }, { title: 'item2' }];
         }
       }
     };

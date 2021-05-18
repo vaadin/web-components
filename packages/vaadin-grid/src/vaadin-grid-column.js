@@ -9,7 +9,6 @@ import { DirMixin } from '@vaadin/vaadin-element-mixin/vaadin-dir-mixin.js';
 import { Templatizer } from './vaadin-grid-templatizer.js';
 import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
 import { animationFrame } from '@polymer/polymer/lib/utils/async.js';
-import { templatizerPropertyChangedCallback } from '@vaadin/vaadin-template-renderer/src/vaadin-template-renderer-templatizer.js';
 
 /**
  * @polymerMixin
@@ -630,49 +629,6 @@ export const ColumnBaseMixin = (superClass) =>
         this._grid._resetKeyboardNavigation && this._grid._resetKeyboardNavigation();
       }
       this._previousHidden = hidden;
-    }
-
-    /** @private */
-    [templatizerPropertyChangedCallback](instance, prop, value) {
-      if (prop === 'index' || prop === 'item') {
-        // We don’t need a change notification for these.
-        return;
-      }
-
-      const originalProp = `__${prop}__`;
-
-      // Notify for only user-action changes, not for scrolling updates. E. g.,
-      // if `detailsOpened` is different from `__detailsOpened__`, which was set during render.
-      if (instance[originalProp] === value) {
-        return;
-      }
-      instance[originalProp] = value;
-
-      // TODO: Call `_updateRow` method instead of mutating the template instances
-      const row = Array.from(this._grid.$.items.children).filter((row) =>
-        this._grid._itemsEqual(row._item, instance.item)
-      )[0];
-      if (row) {
-        Array.from(row.children).forEach((cell) => {
-          if (cell._content.__templateInstance) {
-            cell._content.__templateInstance[originalProp] = value;
-            cell._content.__templateInstance.notifyPath(prop, value);
-          }
-        });
-      }
-
-      const itemPrefix = 'item.';
-      if (Array.isArray(this._grid.items) && prop.indexOf(itemPrefix) === 0) {
-        const itemsIndex = this._grid.items.indexOf(instance.item);
-        const path = prop.slice(itemPrefix.length);
-        this._grid.notifyPath(`items.${itemsIndex}.${path}`, value);
-      }
-
-      // TODO: Consider overriding the `templatizerPropertyChangedCallback` callback
-      const gridCallback = `_${prop}InstanceChangedCallback`;
-      if (this._grid && this._grid[gridCallback]) {
-        this._grid[gridCallback](instance, value);
-      }
     }
   };
 

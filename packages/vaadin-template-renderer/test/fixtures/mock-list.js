@@ -1,5 +1,3 @@
-import { templatizerPropertyChangedCallback } from '../../src/vaadin-template-renderer-templatizer.js';
-
 export class MockList extends HTMLElement {
   constructor() {
     super();
@@ -46,8 +44,6 @@ export class MockList extends HTMLElement {
 
     this.$.items.replaceChildren(...children);
   }
-
-  [templatizerPropertyChangedCallback](_instance, _prop, _value) {}
 }
 
 customElements.define('mock-list', MockList);

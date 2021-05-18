@@ -1,7 +1,6 @@
 import sinon from 'sinon';
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, fire, click } from '@vaadin/testing-helpers';
-import { templatizerPropertyChangedCallback } from '../src/vaadin-template-renderer-templatizer.js';
 
 import '../vaadin-template-renderer.js';
 
@@ -79,19 +78,5 @@ describe('list', () => {
 
     expect(getItemText(list.$.items.children[0])).to.equal('foo');
     expect(getItemText(list.$.items.children[1])).to.equal('bar');
-  });
-
-  it('should call the callback when changing the template instance property', () => {
-    const spy = sinon.spy(list, templatizerPropertyChangedCallback);
-    const item = list.$.items.children[0];
-    const input = item.querySelector('.item-input');
-
-    input.value = 'foobar';
-    fire(input, 'input');
-
-    expect(spy.calledOnce).to.be.true;
-    expect(spy.args[0][0]).to.be.equal(item.__templateInstance);
-    expect(spy.args[0][1]).to.be.equal('item');
-    expect(spy.args[0][2]).to.be.equal('foobar');
   });
 });

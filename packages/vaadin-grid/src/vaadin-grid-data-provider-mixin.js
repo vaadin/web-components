@@ -244,18 +244,6 @@ export const DataProviderMixin = (superClass) =>
       }
     }
 
-    /** @private */
-    _expandedInstanceChangedCallback(instance, value) {
-      if (instance.item === undefined) {
-        return;
-      }
-      if (value) {
-        this.expandItem(instance.item);
-      } else {
-        this.collapseItem(instance.item);
-      }
-    }
-
     /**
      * Returns a value that identifies the item. Uses `itemIdPath` if available.
      * Can be customized by overriding.

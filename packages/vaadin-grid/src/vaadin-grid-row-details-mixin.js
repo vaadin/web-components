@@ -206,13 +206,4 @@ export const RowDetailsMixin = (superClass) =>
         this.detailsOpenedItems = this.detailsOpenedItems.filter((i) => !this._itemsEqual(i, item));
       }
     }
-
-    /** @private */
-    _detailsOpenedInstanceChangedCallback(instance, value) {
-      if (value) {
-        this.openItemDetails(instance.item);
-      } else {
-        this.closeItemDetails(instance.item);
-      }
-    }
   };

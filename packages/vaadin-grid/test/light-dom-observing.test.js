@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import '@vaadin/vaadin-template-renderer';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import '@polymer/polymer/lib/elements/dom-bind.js';
@@ -367,30 +367,33 @@ describe('light dom observing', () => {
         await nextFrame();
       });
 
-      it('should support adding late', () => {
+      it('should support adding late', async () => {
         const column = createColumn();
         grid.insertBefore(column, grid.firstChild);
         flushGrid(grid);
+        await nextRender();
         expectFirstColumn('some');
       });
 
-      it('should support adding selection column late', () => {
+      it('should support adding selection column late', async () => {
         const column = document.createElement('vaadin-grid-selection-column');
         column.innerHTML = `
           <template class="header">some header</template>
           <template>some body [[item.value]]</template>
           <template class="footer">some footer</template>
-          `;
+        `;
 
         grid.insertBefore(column, grid.firstChild);
         flushGrid(grid);
+        await nextRender();
         expectFirstColumn('some');
       });
 
-      it('should support removing late', () => {
+      it('should support removing late', async () => {
         const column = grid.querySelector('vaadin-grid-column');
         grid.removeChild(column);
         flushGrid(grid);
+        await nextRender();
         expectFirstColumn('second');
       });
 
@@ -399,7 +402,7 @@ describe('light dom observing', () => {
         const spy = sinon.spy(grid._observer, 'callback');
         grid.removeChild(column);
         flushGrid(grid);
-        await nextFrame();
+        await nextRender();
         // Once for the column and in effect of that, once for the removed cell content elements
         expect(spy.callCount).to.gte(2);
       });
@@ -409,7 +412,7 @@ describe('light dom observing', () => {
         const spy = sinon.spy(grid._observer, 'callback');
         grid.insertBefore(column, grid.firstChild);
         flushGrid(grid);
-        await nextFrame();
+        await nextRender();
         // Once for the column and in effect of that, once for the added cell content elements
         expect(spy.callCount).to.gte(2);
       });

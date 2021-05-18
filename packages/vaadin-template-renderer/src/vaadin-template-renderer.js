@@ -1,11 +1,14 @@
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
+import { GridColumnElement, GridElement } from '@vaadin/vaadin-grid';
 
 import './vaadin-template-renderer-templatizer.js';
+import './vaadin-template-renderer-grid-templatizer.js';
 
 import { Templatizer } from './vaadin-template-renderer-templatizer.js';
+import { GridTemplatizer } from './vaadin-template-renderer-grid-templatizer.js';
 
-function createRenderer(component, template) {
-  const templatizer = Templatizer.create(component, template);
+function createRenderer(component, template, TemplatizerClass = Templatizer) {
+  const templatizer = TemplatizerClass.create(component, template);
 
   const renderer = (root, _owner, model) => {
     templatizer.render(root, model);
@@ -17,25 +20,39 @@ function createRenderer(component, template) {
   return renderer;
 }
 
-function processTemplate(component, template) {
-  const renderer = createRenderer(component, template);
+function processGridTemplate(grid, template) {
+  if (template.matches('.row-details')) {
+    grid.rowDetailsRenderer = createRenderer(grid, template, GridTemplatizer);
+    return;
+  }
+}
 
+function processGridColumnTemplate(column, template) {
   if (template.matches('.header')) {
-    component.headerRenderer = renderer;
+    column.headerRenderer = createRenderer(column, template);
     return;
   }
 
   if (template.matches('.footer')) {
-    component.footerRenderer = renderer;
+    column.footerRenderer = createRenderer(column, template);
     return;
   }
 
-  if (template.matches('.row-details')) {
-    component.rowDetailsRenderer = renderer;
+  column.renderer = createRenderer(column, template, GridTemplatizer);
+}
+
+function processTemplate(component, template) {
+  if (component instanceof GridElement) {
+    processGridTemplate(component, template);
     return;
   }
 
-  component.renderer = renderer;
+  if (component instanceof GridColumnElement) {
+    processGridColumnTemplate(component, template);
+    return;
+  }
+
+  component.renderer = createRenderer(component, template);
 }
 
 function processTemplates(component) {

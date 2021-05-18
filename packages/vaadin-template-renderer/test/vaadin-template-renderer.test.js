@@ -85,7 +85,7 @@ describe('vaadin-template-renderer', () => {
     expect(spy.calledOnce).to.be.true;
   });
 
-  it('should re-render the template istance when changing a parent property', async () => {
+  it('should re-render the template instance when changing a parent property', async () => {
     const host = fixtureSync(`<mock-component-host></mock-component-host>`);
     const component = host.$.component;
 

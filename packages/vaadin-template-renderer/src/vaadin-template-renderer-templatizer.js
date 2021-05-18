@@ -1,11 +1,9 @@
 import { PolymerElement } from '@polymer/polymer';
 import { templatize } from '@polymer/polymer/lib/utils/templatize';
 
-export const templatizerPropertyChangedCallback = Symbol('templatizerPropertyChangedCallback');
-
 export class Templatizer extends PolymerElement {
   static create(component, template) {
-    const templatizer = new Templatizer();
+    const templatizer = new this();
     templatizer.__template = template;
     templatizer.__component = component;
     return templatizer;
@@ -69,14 +67,12 @@ export class Templatizer extends PolymerElement {
       },
 
       notifyInstanceProp(instance, prop, value) {
-        const callback = this.__component[templatizerPropertyChangedCallback];
-
-        if (callback) {
-          callback.call(this.__component, instance, prop, value);
-        }
+        this.__templateInstancePropertyChanged(instance, prop, value);
       }
     });
   }
+
+  __templateInstancePropertyChanged() {}
 }
 
 customElements.define(Templatizer.is, Templatizer);

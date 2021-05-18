@@ -21,11 +21,11 @@
     "src"
   ],
   "dependencies": {
-    "@polymer/polymer": "^3.0.0"
+    "@polymer/polymer": "^3.0.0",
+    "@vaadin/vaadin-grid": "^21.0.0-alpha0"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.1.5",
-    "@vaadin/vaadin-grid": "^21.0.0-alpha0",
     "@vaadin/testing-helpers": "^0.2.1"
   },
   "publishConfig": {
