@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { render, nothing, html as litHtml } from 'lit';
+import { render, nothing } from 'lit';
 import { isTemplateResult, TemplateResultType } from 'lit/directive-helpers.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
@@ -37,18 +37,24 @@ class IconElement extends ThemableMixin(ElementMixin(PolymerElement)) {
           display: none !important;
         }
 
-        ::slotted(svg) {
+        svg {
           display: block;
           width: 100%;
           height: 100%;
         }
 
-        :host([dir='rtl']) ::slotted(svg) {
+        :host([dir='rtl']) svg {
           transform: scale(-1, 1);
           transform-origin: center;
         }
       </style>
-      <slot></slot>
+      <svg
+        version="1.1"
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        viewBox="0 0 [[size]] [[size]]"
+        preserveAspectRatio="xMidYMid meet"
+      ></svg>
     `;
   }
 
@@ -75,7 +81,8 @@ class IconElement extends ThemableMixin(ElementMixin(PolymerElement)) {
        * The SVG icon wrapped in a Lit template literal.
        */
       svg: {
-        type: Object
+        type: Object,
+        observer: '__svgChanged'
       },
 
       /**
@@ -92,7 +99,7 @@ class IconElement extends ThemableMixin(ElementMixin(PolymerElement)) {
   }
 
   static get observers() {
-    return ['__iconChanged(icon, _isAttached)', '__svgChanged(svg, size)'];
+    return ['__iconChanged(icon, _isAttached)'];
   }
 
   /** @protected */
@@ -105,6 +112,12 @@ class IconElement extends ThemableMixin(ElementMixin(PolymerElement)) {
   disconnectedCallback() {
     super.disconnectedCallback();
     this._isAttached = false;
+  }
+
+  /** @protected */
+  ready() {
+    super.ready();
+    this.__svgElement = this.shadowRoot.querySelector('svg');
   }
 
   /** @private */
@@ -121,7 +134,11 @@ class IconElement extends ThemableMixin(ElementMixin(PolymerElement)) {
   }
 
   /** @private */
-  __svgChanged(svg, size) {
+  __svgChanged(svg) {
+    if (!this.__svgElement) {
+      return;
+    }
+
     let result = svg == null || svg === '' ? nothing : svg;
 
     if (!isTemplateResult(result, TemplateResultType.SVG) && result !== nothing) {
@@ -129,21 +146,7 @@ class IconElement extends ThemableMixin(ElementMixin(PolymerElement)) {
       result = nothing;
     }
 
-    this.__renderIcon(result, size || 16);
-  }
-
-  /** @private */
-  __renderIcon(svg, size) {
-    render(
-      litHtml`<svg
-        version="1.1"
-        xmlns="http://www.w3.org/2000/svg"
-        xmlns:xlink="http://www.w3.org/1999/xlink"
-        viewBox="0 0 ${size} ${size}"
-        preserveAspectRatio="xMidYMid meet"
-      >${svg}</svg>`,
-      this
-    );
+    render(result, this.__svgElement);
   }
 }
 

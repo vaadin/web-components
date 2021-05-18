@@ -14,9 +14,9 @@ describe('vaadin-icon', () => {
   let icon;
 
   function expectIcon(content, size = 16) {
-    expect(icon.innerHTML.trim().replace(/<!--[^>]*-->/g, '')).to.equal(
-      `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="xMidYMid meet" viewBox="0 0 ${size} ${size}">${content}</svg>`
-    );
+    const svgElement = icon.shadowRoot.querySelector('svg');
+    expect(svgElement.innerHTML.trim().replace(/<!--[^>]*-->/g, '')).to.equal(content);
+    expect(svgElement.getAttribute('viewBox')).to.equal(`0 0 ${size} ${size}`);
   }
 
   beforeEach(() => {
