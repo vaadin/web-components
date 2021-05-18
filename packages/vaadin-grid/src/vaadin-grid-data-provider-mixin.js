@@ -245,14 +245,14 @@ export const DataProviderMixin = (superClass) =>
     }
 
     /** @private */
-    _expandedInstanceChangedCallback(inst, value) {
-      if (inst.item === undefined) {
+    _expandedInstanceChangedCallback(instance, value) {
+      if (instance.item === undefined) {
         return;
       }
       if (value) {
-        this.expandItem(inst.item);
+        this.expandItem(instance.item);
       } else {
-        this.collapseItem(inst.item);
+        this.collapseItem(instance.item);
       }
     }
 

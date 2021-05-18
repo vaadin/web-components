@@ -9,6 +9,7 @@ import { DirMixin } from '@vaadin/vaadin-element-mixin/vaadin-dir-mixin.js';
 import { Templatizer } from './vaadin-grid-templatizer.js';
 import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
 import { animationFrame } from '@polymer/polymer/lib/utils/async.js';
+import { templatizerPropertyChangedCallback } from '@vaadin/vaadin-template-renderer/src/vaadin-template-renderer-templatizer.js';
 
 /**
  * @polymerMixin
@@ -164,15 +165,15 @@ export const ColumnBaseMixin = (superClass) =>
     connectedCallback() {
       super.connectedCallback();
 
-      this._bodyTemplate && (this._bodyTemplate.templatizer._grid = this._grid);
-      this._headerTemplate && (this._headerTemplate.templatizer._grid = this._grid);
-      this._footerTemplate && (this._footerTemplate.templatizer._grid = this._grid);
+      // this._bodyTemplate && (this._bodyTemplate.templatizer._grid = this._grid);
+      // this._headerTemplate && (this._headerTemplate.templatizer._grid = this._grid);
+      // this._footerTemplate && (this._footerTemplate.templatizer._grid = this._grid);
 
-      this._templateObserver.flush();
-      if (!this._bodyTemplate) {
-        // The observer might not have triggered if the tag is empty. Run manually.
-        this._templateObserver.callback();
-      }
+      // this._templateObserver.flush();
+      // if (!this._bodyTemplate) {
+      //   // The observer might not have triggered if the tag is empty. Run manually.
+      //   this._templateObserver.callback();
+      // }
 
       requestAnimationFrame(() => {
         this._allCells.forEach((cell) => {
@@ -198,6 +199,15 @@ export const ColumnBaseMixin = (superClass) =>
       });
 
       this._gridValue = undefined;
+    }
+
+    /** @protected */
+    ready() {
+      super.ready();
+
+      if (window.Vaadin && window.Vaadin.templateRendererCallback) {
+        window.Vaadin.templateRendererCallback(this);
+      }
     }
 
     /**
@@ -241,11 +251,11 @@ export const ColumnBaseMixin = (superClass) =>
     constructor() {
       super();
 
-      this._templateObserver = new FlattenedNodesObserver(this, () => {
-        this._headerTemplate = this._prepareHeaderTemplate();
-        this._footerTemplate = this._prepareFooterTemplate();
-        this._bodyTemplate = this._prepareBodyTemplate();
-      });
+      // this._templateObserver = new FlattenedNodesObserver(this, () => {
+      //   this._headerTemplate = this._prepareHeaderTemplate();
+      //   this._footerTemplate = this._prepareFooterTemplate();
+      //   this._bodyTemplate = this._prepareBodyTemplate();
+      // });
     }
 
     /**
@@ -330,18 +340,20 @@ export const ColumnBaseMixin = (superClass) =>
           if (model.item || renderer === this.headerRenderer || renderer === this.footerRenderer) {
             this.__runRenderer(renderer, cell, model);
           }
-        } else if (cell._template !== template) {
-          cell._template = template;
-
-          cell._content.innerHTML = '';
-          template.templatizer._grid = template.templatizer._grid || this._grid;
-          const inst = template.templatizer.createInstance();
-          cell._content.appendChild(inst.root);
-          cell._instance = inst;
-          if (model.item) {
-            cell._instance.setProperties(model);
-          }
         }
+
+        // if (cell._template !== template) {
+        //   cell._template = template;
+
+        //   cell._content.innerHTML = '';
+        //   template.templatizer._grid = template.templatizer._grid || this._grid;
+        //   const inst = template.templatizer.createInstance();
+        //   cell._content.appendChild(inst.root);
+        //   cell._instance = inst;
+        //   if (model.item) {
+        //     cell._instance.setProperties(model);
+        //   }
+        // }
       });
     }
 
@@ -618,6 +630,49 @@ export const ColumnBaseMixin = (superClass) =>
         this._grid._resetKeyboardNavigation && this._grid._resetKeyboardNavigation();
       }
       this._previousHidden = hidden;
+    }
+
+    /** @private */
+    [templatizerPropertyChangedCallback](instance, prop, value) {
+      if (prop === 'index' || prop === 'item') {
+        // We don’t need a change notification for these.
+        return;
+      }
+
+      const originalProp = `__${prop}__`;
+
+      // Notify for only user-action changes, not for scrolling updates. E. g.,
+      // if `detailsOpened` is different from `__detailsOpened__`, which was set during render.
+      if (instance[originalProp] === value) {
+        return;
+      }
+      instance[originalProp] = value;
+
+      // TODO: Call `_updateRow` method instead of mutating the template instances
+      const row = Array.from(this._grid.$.items.children).filter((row) =>
+        this._grid._itemsEqual(row._item, instance.item)
+      )[0];
+      if (row) {
+        Array.from(row.children).forEach((cell) => {
+          if (cell._content.__templateInstance) {
+            cell._content.__templateInstance[originalProp] = value;
+            cell._content.__templateInstance.notifyPath(prop, value);
+          }
+        });
+      }
+
+      const itemPrefix = 'item.';
+      if (Array.isArray(this._grid.items) && prop.indexOf(itemPrefix) === 0) {
+        const itemsIndex = this._grid.items.indexOf(instance.item);
+        const path = prop.slice(itemPrefix.length);
+        this._grid.notifyPath(`items.${itemsIndex}.${path}`, value);
+      }
+
+      // TODO: Consider overriding the `templatizerPropertyChangedCallback` callback
+      const gridCallback = `_${prop}InstanceChangedCallback`;
+      if (this._grid && this._grid[gridCallback]) {
+        this._grid[gridCallback](instance, value);
+      }
     }
   };
 

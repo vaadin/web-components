@@ -126,15 +126,28 @@ class GridSelectionColumnElement extends GridColumnElement {
     bodyTemplate,
     headerTemplate
   ) {
-    // As a special case, allow overriding the default header / body templates
-    if (cells.value && (path !== undefined || renderer !== undefined)) {
-      this._bodyTemplate = bodyTemplate = undefined;
+    // Allow overriding the default body template
+    if (this._bodyTemplate && cells.value && (path !== undefined || renderer !== undefined)) {
       this.__cleanCellsOfTemplateProperties(cells.value);
+      this._bodyTemplate = bodyTemplate = undefined;
     }
-    if (headerCell && (header !== undefined || headerRenderer !== undefined)) {
-      this._headerTemplate = headerTemplate = undefined;
+
+    // Return the original template when removing renderer or path
+    if (this._bodyTemplate === undefined && path === undefined && renderer === undefined) {
+      this._bodyTemplate = bodyTemplate = this._prepareBodyTemplate();
+    }
+
+    // Allow overriding the default header template
+    if (this._headerTemplate && headerCell && (header !== undefined || headerRenderer !== undefined)) {
       this.__cleanCellsOfTemplateProperties([headerCell]);
+      this._headerTemplate = headerTemplate = undefined;
     }
+
+    // Return the original template when removing renderer
+    if (this._headerTemplate === undefined && header === undefined && headerRenderer === undefined) {
+      this._headerTemplate = headerTemplate = this._prepareHeaderTemplate();
+    }
+
     super._pathOrHeaderChanged(
       path,
       header,

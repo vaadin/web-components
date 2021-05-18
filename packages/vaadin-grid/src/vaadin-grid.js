@@ -906,12 +906,12 @@ class GridElement extends ElementMixin(
       if (cell._renderer) {
         const owner = cell._column || this;
         cell._renderer.call(owner, cell._content, owner, model);
-      } else if (cell._instance) {
-        cell._instance.__detailsOpened__ = model.detailsOpened;
-        cell._instance.__selected__ = model.selected;
-        cell._instance.__level__ = model.level;
-        cell._instance.__expanded__ = model.expanded;
-        cell._instance.setProperties(model);
+      } else if (cell.__templateInstance) {
+        cell.__templateInstance.__detailsOpened__ = model.detailsOpened;
+        cell.__templateInstance.__selected__ = model.selected;
+        cell.__templateInstance.__level__ = model.level;
+        cell.__templateInstance.__expanded__ = model.expanded;
+        cell.__templateInstance.setProperties(model);
       }
     });
   }
