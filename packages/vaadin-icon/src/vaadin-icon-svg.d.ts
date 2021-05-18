@@ -20,7 +20,7 @@ export function ensureSvgLiteral(source: unknown): IconSvgLiteral;
 /**
  * Render a given SVG literal to the container.
  */
-export function renderSvg(source: unknown, container: SVGElement);
+export function renderSvg(source: unknown, container: SVGElement): void;
 
 /**
  * Create an SVG literal from source string.
