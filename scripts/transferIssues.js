@@ -1,4 +1,4 @@
-const fs = require('fs/promises');
+const fs = require('fs').promises;
 const dotenv = require('dotenv');
 const { Octokit } = require('octokit');
 const axios = require('axios');
