@@ -1,8 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
-import { nothing } from 'lit';
-import { isTemplateResult, TemplateResultType } from 'lit/directive-helpers.js';
 import { IconsetElement } from '../vaadin-iconset.js';
+import { isValidSvg } from '../src/vaadin-icon-svg.js';
 
 describe('vaadin-iconset', () => {
   let iconset;
@@ -23,22 +22,23 @@ describe('vaadin-iconset', () => {
   describe('applyIcon', () => {
     it('should return svg literal when applyIcon called with correct id', () => {
       const icon = iconset.applyIcon('caret-down');
-      expect(isTemplateResult(icon, TemplateResultType.SVG)).to.be.true;
+      expect(isValidSvg(icon)).to.be.true;
     });
 
     it('should return svg literal when applyIcon called with prefixed id', () => {
       const icon = iconset.applyIcon('vaadin-icon:caret-down');
-      expect(isTemplateResult(icon, TemplateResultType.SVG)).to.be.true;
+      expect(isValidSvg(icon)).to.be.true;
     });
 
     it('should return svg literal when applyIcon called with non-prefixed id', () => {
       const icon = iconset.applyIcon('caret-up');
-      expect(isTemplateResult(icon, TemplateResultType.SVG)).to.be.true;
+      expect(isValidSvg(icon)).to.be.true;
     });
 
-    it('should return nothing when applyIcon is called with incorrect id', () => {
+    it('should return empty svg when applyIcon is called with incorrect id', () => {
       const icon = iconset.applyIcon('non-existent');
-      expect(icon).to.equal(nothing);
+      expect(isValidSvg(icon)).to.be.true;
+      expect(typeof icon).to.equal('symbol');
     });
   });
 

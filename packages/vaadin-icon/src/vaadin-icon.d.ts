@@ -1,6 +1,6 @@
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
-import { SVGTemplateResult } from 'lit-html';
+import { IconSvgLiteral } from './vaadin-icon-svg.js';
 
 /**
  * `<vaadin-icon>` is a Web Component for creating SVG icons.
@@ -15,7 +15,7 @@ declare class IconElement extends ThemableMixin(ElementMixin(HTMLElement)) {
   /**
    * The SVG icon wrapped in a Lit template literal.
    */
-  svg: SVGTemplateResult | null;
+  svg: IconSvgLiteral | null;
 
   /**
    * The size of an icon, used to set the `viewBox` attribute.

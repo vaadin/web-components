@@ -5,8 +5,7 @@
  */
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
-import { nothing, svg } from 'lit';
-import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
+import { cloneSvgNode } from './vaadin-icon-svg.js';
 
 const iconRegistry = {};
 
@@ -75,7 +74,7 @@ class IconsetElement extends ElementMixin(PolymerElement) {
     // create the icon map on-demand, since the iconset itself has no discrete
     // signal to know when it's children are fully parsed
     this._icons = this._icons || this.__createIconMap();
-    return this.__prepareSvg(this._icons[getIconId(id)]);
+    return cloneSvgNode(this._icons[getIconId(id)]);
   }
 
   /**
@@ -87,18 +86,6 @@ class IconsetElement extends ElementMixin(PolymerElement) {
       icons[getIconId(icon.id)] = icon;
     });
     return icons;
-  }
-
-  /** @private */
-  __prepareSvg(sourceSvg) {
-    let result = nothing;
-    if (sourceSvg) {
-      const content = sourceSvg.cloneNode(true);
-      content.removeAttribute('id');
-      result = svg`${unsafeSVG(content.innerHTML)}`;
-    }
-
-    return result;
   }
 
   /** @private */

@@ -4,11 +4,10 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { render, nothing } from 'lit';
-import { isTemplateResult, TemplateResultType } from 'lit/directive-helpers.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
 import { IconsetElement, getIconId } from './vaadin-iconset.js';
+import { renderSvg } from './vaadin-icon-svg.js';
 
 const DEFAULT_ICONSET = 'vaadin';
 
@@ -139,14 +138,7 @@ class IconElement extends ThemableMixin(ElementMixin(PolymerElement)) {
       return;
     }
 
-    let result = svg == null || svg === '' ? nothing : svg;
-
-    if (!isTemplateResult(result, TemplateResultType.SVG) && result !== nothing) {
-      console.error('Invalid svg passed to vaadin-icon, please use Lit svg literal.');
-      result = nothing;
-    }
-
-    render(result, this.__svgElement);
+    renderSvg(svg, this.__svgElement);
   }
 }
 

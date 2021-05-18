@@ -1,14 +1,12 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { fixtureSync } from '@vaadin/testing-helpers';
-import { svg } from 'lit';
-import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import { getIconId } from '../vaadin-iconset.js';
+import { unsafeSvgLiteral } from '../src/vaadin-icon-svg.js';
 import '../vaadin-icon.js';
 
 const ANGLE_DOWN = '<path d="M13 4v2l-5 5-5-5v-2l5 5z"></path>';
 const ANGLE_UP = '<path d="M3 12v-2l5-5 5 5v2l-5-5z"></path>';
-const SVG_ANGLE_DOWN = svg`${unsafeSVG(ANGLE_DOWN)}`;
 
 describe('vaadin-icon', () => {
   let icon;
@@ -36,18 +34,18 @@ describe('vaadin-icon', () => {
   describe('svg property', () => {
     describe('valid icon', () => {
       it('should set icon defined with SVG literal', () => {
-        icon.svg = SVG_ANGLE_DOWN;
+        icon.svg = unsafeSvgLiteral(ANGLE_DOWN);
         expectIcon(ANGLE_DOWN);
       });
 
       it('should update icon when size property is set', () => {
         icon.size = 24;
-        icon.svg = SVG_ANGLE_DOWN;
+        icon.svg = unsafeSvgLiteral(ANGLE_DOWN);
         expectIcon(ANGLE_DOWN, 24);
       });
 
       it('should update icon when size property is updated', () => {
-        icon.svg = SVG_ANGLE_DOWN;
+        icon.svg = unsafeSvgLiteral(ANGLE_DOWN);
         expectIcon(ANGLE_DOWN, 16);
         icon.size = 24;
         expectIcon(ANGLE_DOWN, 24);
