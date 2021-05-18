@@ -1,6 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { aTimeout, click, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import '@vaadin/vaadin-template-renderer';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import '@polymer/polymer/lib/elements/dom-repeat.js';
 import {

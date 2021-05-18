@@ -11,6 +11,7 @@ import {
   nextFrame,
   up as mouseUp
 } from '@vaadin/testing-helpers/dist/index-no-side-effects.js';
+import '@vaadin/vaadin-template-renderer';
 import {
   flushGrid,
   getCell,

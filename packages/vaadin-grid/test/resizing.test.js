@@ -1,6 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { aTimeout, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import '@vaadin/vaadin-template-renderer';
 import {
   flushGrid,
   getContainerCellContent,

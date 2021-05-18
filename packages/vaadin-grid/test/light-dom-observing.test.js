@@ -1,6 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import '@vaadin/vaadin-template-renderer';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import '@polymer/polymer/lib/elements/dom-bind.js';
 import '@polymer/polymer/lib/elements/dom-repeat.js';
@@ -379,7 +380,8 @@ describe('light dom observing', () => {
           <template class="header">some header</template>
           <template>some body [[item.value]]</template>
           <template class="footer">some footer</template>
-        `;
+          `;
+
         grid.insertBefore(column, grid.firstChild);
         flushGrid(grid);
         expectFirstColumn('some');

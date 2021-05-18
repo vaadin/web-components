@@ -1,6 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { click, fixtureSync, listenOnce, nextFrame } from '@vaadin/testing-helpers';
+import '@vaadin/vaadin-template-renderer';
 import { buildDataSet, flushGrid, getBodyCellContent, getHeaderCellContent, getRows, getRowCells } from './helpers.js';
 import '../vaadin-grid.js';
 import '../vaadin-grid-sorter.js';
@@ -244,7 +245,7 @@ describe('sorting', () => {
         grid.items = buildDataSet(100);
         const bodyRows = getRows(grid.$.items);
         const cells = getRowCells(bodyRows[0]);
-        expect(cells[0]._instance.item).to.equal(grid.items[0]);
+        expect(cells[0].__templateInstance.item).to.equal(grid.items[0]);
       });
 
       it('should sort empty values', () => {

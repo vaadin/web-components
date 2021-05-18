@@ -1,8 +1,9 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import '@polymer/polymer/lib/elements/dom-bind.js';
+import '@vaadin/vaadin-template-renderer';
 import '@vaadin/vaadin-text-field/vaadin-text-field.js';
 import {
   flushGrid,
@@ -356,15 +357,19 @@ describe('templates', () => {
     });
 
     it('should two-way bind instance path inside cell templates', () => {
+      const cell = getCell(grid, 3);
+
       input.value = 'bar0';
 
-      expect(getCell(grid, 3)._instance.item.value).to.eql('bar0');
+      expect(getCellContent(cell).__templateInstance.item.value).to.eql('bar0');
     });
 
     it('should notify other cell templates for instance path changes', () => {
+      const cell = getCell(grid, 4);
+
       input.value = 'bar0';
 
-      expect(getCellContent(getCell(grid, 4)).textContent).to.contain('bar0');
+      expect(getCellContent(cell).textContent).to.contain('bar0');
     });
   });
 });
@@ -442,7 +447,7 @@ describe('slotted templates', () => {
   });
 
   ['header', 'footer'].forEach((container) => {
-    it(`should change the ${container} template`, () => {
+    it(`should change the ${container} template`, async () => {
       const newTemplate = document.createElement('template');
       newTemplate.classList.add(container);
       newTemplate.setAttribute('slot', `grid-column-${container}-template`);
@@ -451,14 +456,13 @@ describe('slotted templates', () => {
       wrapper.removeChild(wrapper.querySelector(`template.${container}`));
       wrapper.appendChild(newTemplate);
       flushGrid(grid);
-      const column = newTemplate.assignedSlot.parentElement;
-      column._templateObserver.flush();
+      await nextRender();
 
       expect(getContainerCellContent(grid.$[container], 0, 5).textContent).to.equal(`${container}-bar`);
     });
   });
 
-  it(`should change the body template`, () => {
+  it(`should change the body template`, async () => {
     const newTemplate = document.createElement('template');
     newTemplate.setAttribute('slot', `grid-column-template`);
     newTemplate.innerHTML = `bar-[[index]]`;
@@ -466,8 +470,7 @@ describe('slotted templates', () => {
     slotted.removeChild(slotted.querySelector(`template`));
     slotted.appendChild(newTemplate);
     flushGrid(grid);
-    const column = newTemplate.assignedSlot.assignedSlot.parentElement;
-    column._templateObserver.flush();
+    await nextRender();
 
     expect(getContainerCellContent(grid.$.items, 0, 5).textContent).to.equal('bar-0');
   });

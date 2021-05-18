@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import '@vaadin/vaadin-template-renderer';
 import { flushGrid } from './helpers.js';
 import '../vaadin-grid.js';
 import '../vaadin-grid-column-group.js';

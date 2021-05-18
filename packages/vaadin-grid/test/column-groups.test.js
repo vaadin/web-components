@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import '@vaadin/vaadin-template-renderer';
 import {
   flushColumns,
   flushGrid,
@@ -178,14 +179,14 @@ describe('column groups', () => {
     it('should have empty header', () => {
       const cells = header.querySelectorAll('[part~="cell"]');
       expect(cells).not.to.be.empty;
-      cells.forEach((cell) => expect(cell._instance).to.be.not.ok);
+      cells.forEach((cell) => expect(cell._content.__templateInstance).to.be.not.ok);
     });
 
     it('should have empty footer', () => {
       const cells = footer.querySelectorAll('[part~="cell"]');
       expect(cells).not.to.be.empty;
 
-      cells.forEach((cell) => expect(cell._instance).to.be.not.ok);
+      cells.forEach((cell) => expect(cell._content.__templateInstance).to.be.not.ok);
     });
 
     it('should have no visible header rows', () => {

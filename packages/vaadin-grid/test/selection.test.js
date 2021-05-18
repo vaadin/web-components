@@ -9,6 +9,7 @@ import {
   getRowCells,
   infiniteDataProvider
 } from './helpers.js';
+import '@vaadin/vaadin-template-renderer';
 import '../vaadin-grid.js';
 import '../vaadin-grid-selection-column.js';
 import '../vaadin-grid-filter.js';
@@ -116,8 +117,8 @@ describe('selection', () => {
       (type == 'template' ? it : it.skip)('should reflect cell instance value', () => {
         if (type == 'template') {
           const cells = getRowCells(rows[0]);
-          cells[0]._instance.selected = false;
-          expect(cells[0]._instance.selected).to.be.false;
+          cells[0]._content.__templateInstance.selected = false;
+          expect(cells[0]._content.__templateInstance.selected).to.be.false;
           expect(grid.selectedItems).to.be.empty;
         }
       });
@@ -125,15 +126,15 @@ describe('selection', () => {
       it('should bind to cells', () => {
         const cells = getRowCells(rows[0]);
         let cell = cells[0];
-        let model = cell._instance ? cell._instance : grid.__getRowModel(cell.parentElement);
+        let model = cell._content.__templateInstance ?? grid.__getRowModel(cell.parentElement);
         expect(model.selected).to.be.true;
 
         cell = cells[1];
-        model = cell._instance ? cell._instance : grid.__getRowModel(cell.parentElement);
+        model = cell._content.__templateInstance ?? grid.__getRowModel(cell.parentElement);
         expect(model.selected).to.be.true;
 
         cell = getRowCells(rows[1])[0];
-        model = cell._instance ? cell._instance : grid.__getRowModel(cell.parentElement);
+        model = cell._content.__templateInstance ?? grid.__getRowModel(cell.parentElement);
         expect(model.selected).to.be.false;
       });
 
@@ -142,7 +143,7 @@ describe('selection', () => {
         const cells = getRowCells(rows[0]);
         grid.selectedItems = [{ value: 'foo0' }];
         const cell = cells[0];
-        const model = cell._instance ? cell._instance : grid.__getRowModel(cell.parentElement);
+        const model = cell._content.__templateInstance ?? grid.__getRowModel(cell.parentElement);
         expect(model.selected).to.be.true;
       });
     });

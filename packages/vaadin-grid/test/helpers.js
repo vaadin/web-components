@@ -235,9 +235,8 @@ export const makeSoloTouchEvent = (type, xy, node) => {
 };
 
 export const flushColumns = (grid) => {
-  Array.prototype.forEach.call(grid.querySelectorAll('vaadin-grid-column, vaadin-grid-column-group'), (col) =>
-    col._templateObserver.flush()
-  );
+  Array.prototype.forEach.call(grid.querySelectorAll('vaadin-grid-column, vaadin-grid-column-group'), (_col) => {});
+  // col._templateObserver.flush()
 };
 
 export const fire = (type, detail, options) => {
