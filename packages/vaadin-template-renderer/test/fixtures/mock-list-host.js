@@ -8,10 +8,10 @@ export class MockListHost extends PolymerElement {
       <mock-list id="list" items="[[items]]">
         <template>
           <div class="item-text">[[item]]</div>
+          <input class="item-input" value="{{item::input}}" />
 
           <div class="value-text">[[value]]</div>
-
-          <input value="{{value::input}}" />
+          <input class="value-input" value="{{value::input}}" />
 
           <button on-click="onClick"></button>
         </template>

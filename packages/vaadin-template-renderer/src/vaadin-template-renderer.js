@@ -1,19 +1,41 @@
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 
 import './vaadin-template-renderer-templatizer.js';
+
 import { Templatizer } from './vaadin-template-renderer-templatizer.js';
 
-function createRenderer(template) {
-  const templatizer = Templatizer.create(template);
+function createRenderer(component, template) {
+  const templatizer = Templatizer.create(component, template);
 
-  return (root, _owner, model) => {
-    template.__templatizer = templatizer;
-    template.__templatizer.render(root, model);
+  const renderer = (root, _owner, model) => {
+    templatizer.render(root, model);
   };
+
+  template.__templatizer = templatizer;
+  renderer.__templatizer = templatizer;
+
+  return renderer;
 }
 
 function processTemplate(component, template) {
-  component.renderer = createRenderer(template);
+  const renderer = createRenderer(component, template);
+
+  if (template.matches('.header')) {
+    component.headerRenderer = renderer;
+    return;
+  }
+
+  if (template.matches('.footer')) {
+    component.footerRenderer = renderer;
+    return;
+  }
+
+  if (template.matches('.row-details')) {
+    component.rowDetailsRenderer = renderer;
+    return;
+  }
+
+  component.renderer = renderer;
 }
 
 function processTemplates(component) {
@@ -26,7 +48,6 @@ function processTemplates(component) {
       if (template.__templatizer) {
         return;
       }
-
       processTemplate(component, template);
     });
 }
