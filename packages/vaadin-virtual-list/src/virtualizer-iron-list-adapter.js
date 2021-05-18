@@ -103,9 +103,24 @@ export class IronListAdapter {
   update(startIndex = 0, endIndex = this.size - 1) {
     this.__getVisibleElements().forEach((el) => {
       if (el.__virtualIndex >= startIndex && el.__virtualIndex <= endIndex) {
-        this.updateElement(el, el.__virtualIndex);
+        this.__updateElement(el, el.__virtualIndex);
       }
     });
+  }
+
+  __updateElement(el, index) {
+    // Clean up temporary min height
+    el.style.minHeight = '';
+
+    this.updateElement(el, index);
+
+    if (el.offsetHeight === 0) {
+      // If the elements have 0 height after update (for example due to lazy rendering),
+      // it results in iron-list requesting to create an unlimited count of elements.
+      // Assign a temporary min height to elements that would otherwise end up having
+      // no height.
+      el.style.minHeight = '200px';
+    }
   }
 
   __getIndexScrollOffset(index) {
@@ -207,7 +222,7 @@ export class IronListAdapter {
       el.hidden = vidx >= this.size;
       if (!el.hidden) {
         el.__virtualIndex = vidx + (this._vidxOffset || 0);
-        this.updateElement(el, el.__virtualIndex);
+        this.__updateElement(el, el.__virtualIndex);
       }
     }, itemSet);
   }

@@ -7,7 +7,12 @@ describe('virtualizer', () => {
   let scrollTarget;
   let elementsContainer;
 
-  function init(size = 100) {
+  function init({ size = 100, updateElement = undefined }) {
+    if (scrollTarget) {
+      // Hide a discarded instance
+      scrollTarget.hidden = true;
+    }
+
     scrollTarget = fixtureSync(`
       <div style="height: 100px;">
         <div></div>
@@ -18,11 +23,13 @@ describe('virtualizer', () => {
 
     virtualizer = new Virtualizer({
       createElements: (count) => Array.from(Array(count)).map(() => document.createElement('div')),
-      updateElement: (el, index) => {
-        el.index = index;
-        el.id = `item-${index}`;
-        el.textContent = el.id;
-      },
+      updateElement:
+        updateElement ||
+        ((el, index) => {
+          el.index = index;
+          el.id = `item-${index}`;
+          el.textContent = el.id;
+        }),
       scrollTarget,
       scrollContainer
     });
@@ -30,7 +37,7 @@ describe('virtualizer', () => {
     virtualizer.size = size;
   }
 
-  beforeEach(() => init());
+  beforeEach(() => init({}));
 
   it('should have the first item at the top', () => {
     const item = elementsContainer.querySelector('#item-0');
@@ -156,7 +163,7 @@ describe('virtualizer', () => {
   });
 
   it('should have physical items once visible', async () => {
-    init(0);
+    init({ size: 0 });
     // Wait for possibly active resize observers to flush
     await aTimeout(100);
 
@@ -169,5 +176,33 @@ describe('virtualizer', () => {
 
     await nextFrame();
     expect(elementsContainer.childElementCount).to.be.above(0);
+  });
+
+  describe('lazy rendering', () => {
+    let render = false;
+
+    beforeEach(() => {
+      init({
+        size: 100,
+        updateElement: (el, index) => {
+          if (render) {
+            el.textContent = `item-${index}`;
+          }
+        }
+      });
+    });
+
+    it('should not create an excess amount of elements if lazily rendered', () => {
+      expect(elementsContainer.childElementCount).to.be.below(virtualizer.size);
+    });
+
+    it('should create more elements if necessary once rendered', () => {
+      const initialCount = elementsContainer.childElementCount;
+
+      render = true;
+      virtualizer.update();
+      virtualizer.flush();
+      expect(elementsContainer.childElementCount).to.be.above(initialCount);
+    });
   });
 });
