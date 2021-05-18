@@ -26,7 +26,7 @@ import '@vaadin/vaadin-icon/vaadin-icon.js';
 
 Vaadin components use the Lumo theme by default.
 
-To use the Material theme, import the correspondent file from the `theme/material` folder.
+To use the Material theme, import the corresponding file from the `theme/material` folder.
 
 ## Entry points
 

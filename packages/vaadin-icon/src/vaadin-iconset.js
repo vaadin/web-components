@@ -82,7 +82,7 @@ class IconsetElement extends ElementMixin(PolymerElement) {
    * Create a map of child SVG elements by id.
    */
   __createIconMap() {
-    const icons = Object.create(null);
+    const icons = {};
     this.querySelectorAll('[id]').forEach((icon) => {
       icons[getIconId(icon.id)] = icon;
     });
