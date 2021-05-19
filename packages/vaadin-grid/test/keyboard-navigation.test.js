@@ -11,6 +11,7 @@ import {
   nextFrame,
   up as mouseUp
 } from '@vaadin/testing-helpers/dist/index-no-side-effects.js';
+import { sendKeys } from '@web/test-runner-commands';
 import {
   flushGrid,
   getCell,
@@ -103,10 +104,19 @@ function getRowFirstCell(rowIndex) {
   return getRowCell(rowIndex, 0);
 }
 
-function focusFirstBodyInput(rowIndex) {
-  const cell = getRowCell(rowIndex || 0, 1);
-
+function getCellInput(rowIndex, colIndex) {
+  const cell = getRowCell(rowIndex, colIndex);
   const input = getCellContent(cell).children[0];
+
+  if (!input.nodeName || input.nodeName.toLowerCase() !== 'input') {
+    throw new Error('Cell does not contain an input');
+  }
+
+  return input;
+}
+
+function focusFirstBodyInput(rowIndex) {
+  const input = getCellInput(rowIndex || 0, 1);
   input.focus();
   return input;
 }
@@ -1484,6 +1494,53 @@ describe('keyboard navigation', () => {
   });
 
   describe('interaction mode', () => {
+    before(async () => {
+      grid = fixtureSync(`
+      <vaadin-grid theme="no-border">
+        <template class="row-details">
+          <input type="text">
+        </template>
+        <vaadin-grid-column>
+          <template class="header"></template>
+          <template>[[index]] [[item]]</template>
+          <template class="footer"></template>
+        </vaadin-grid-column>
+        <vaadin-grid-column>
+          <template class="header">
+            <input>
+          </template>
+          <template>
+            <input>
+          </template>
+          <template class="footer">
+            <input>
+          </template>
+        </vaadin-grid-column>
+        <vaadin-grid-column>
+          <template class="header">
+            <input>
+          </template>
+          <template>
+            <input>
+          </template>
+          <template class="footer">
+            <input>
+          </template>
+        </vaadin-grid-column>
+      </vaadin-grid>
+    `);
+
+      scroller = grid.$.scroller;
+      header = grid.$.header;
+      body = grid.$.items;
+      footer = grid.$.footer;
+
+      grid._observer.flush();
+      flushGrid(grid);
+
+      await aTimeout(0);
+    });
+
     beforeEach(() => {
       focusItem(0);
       clickItem(0);
@@ -1498,7 +1555,7 @@ describe('keyboard navigation', () => {
     });
 
     it('should exit interaction mode when blurred', () => {
-      grid.setAttribute('interacting', '');
+      grid._setInteracting(true);
 
       focusable.focus();
 
@@ -1506,7 +1563,7 @@ describe('keyboard navigation', () => {
     });
 
     it('should exit interaction mode when tabbed into', () => {
-      grid.setAttribute('interacting', '');
+      grid._setInteracting(true);
 
       tabToHeader();
 
@@ -1514,7 +1571,7 @@ describe('keyboard navigation', () => {
     });
 
     it('should exit interaction mode when shift-tabbed into', () => {
-      grid.setAttribute('interacting', '');
+      grid._setInteracting(true);
 
       shiftTabToFooter();
 
@@ -1572,14 +1629,48 @@ describe('keyboard navigation', () => {
       spy.restore();
     });
 
-    it('should focus the next input element when tabbing in interaction mode', () => {
-      right(); // focus the cell with input.
+    it('should focus the next input element when tabbing in interaction mode', async () => {
+      // Focus first input
+      right();
       enter();
 
-      tab(getCellContent(getRowCell(0, 1)).children[0]); // tab in the input
+      const nextInput = getCellInput(0, 2);
 
-      // expecting focusable item cell to remain in place, instead actual focus moves.
-      expect(grid._itemsFocusable).to.equal(getRowCell(0, 1));
+      await sendKeys({ press: 'Tab' });
+
+      expect(document.activeElement).to.equal(nextInput);
+    });
+
+    /**
+     * This test is a workaround for the fact that the sendKeys command does not support shift+tabbing ATM
+     * Ideally the test would try to shift tab to the previous input and check that the input in a previous cell
+     * was focused, despite the focus target cell being in the tab order between current and previous input
+     */
+    it('should skip the grid focus target when tabbing in interaction mode', async () => {
+      // Focus first input
+      right();
+      enter();
+
+      const nextInput = getCellInput(0, 2);
+
+      // Modify grid state to get the focus target cell in the tab order between current and next input
+      grid._itemsFocusable = getRowCell(0, 2);
+
+      await sendKeys({ press: 'Tab' });
+
+      expect(document.activeElement).to.equal(nextInput);
+    });
+
+    it('should move cell focus target when focusing the next input element in interaction mode', async () => {
+      // Focus first input
+      right();
+      enter();
+
+      const nextCell = getRowCell(0, 2);
+
+      await sendKeys({ press: 'Tab' });
+
+      expect(grid._itemsFocusable).to.equal(nextCell);
     });
 
     it('should focus the element with `focus-target` when entering interaction mode', () => {
@@ -1744,7 +1835,7 @@ describe('keyboard navigation', () => {
     });
 
     it('should exit interaction mode with escape', () => {
-      grid.setAttribute('interacting', '');
+      grid._setInteracting(true);
 
       escape();
 

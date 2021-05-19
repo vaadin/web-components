@@ -45,7 +45,27 @@ export const KeyboardNavigationMixin = (superClass) =>
         },
 
         /** @private */
-        _focusedColumnOrder: Number
+        _focusedColumnOrder: Number,
+
+        /**
+         * Indicates whether the grid is currently in interaction mode.
+         * In interaction mode the user is currently interacting with a control,
+         * such as an input or a select, within a cell.
+         * In interaction mode keyboard navigation between cells is disabled.
+         * Interaction mode also prevents the focus target cell of that section of
+         * the grid from receiving focus, allowing the user to switch focus to
+         * controls in adjacent cells, rather than focussing the outer cell
+         * itself.
+         * @type {boolean}
+         * @private
+         */
+        interacting: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true,
+          readOnly: true,
+          observer: '_interactingChanged'
+        }
       };
     }
 
@@ -82,8 +102,16 @@ export const KeyboardNavigationMixin = (superClass) =>
         oldFocusable.setAttribute('tabindex', '-1');
       }
       if (focusable) {
-        focusable.setAttribute('tabindex', '0');
+        this._updateGridSectionFocusTarget(focusable);
       }
+    }
+
+    /** @private */
+    _interactingChanged() {
+      // Update focus targets when entering / exiting interaction mode
+      this._updateGridSectionFocusTarget(this._headerFocusable);
+      this._updateGridSectionFocusTarget(this._itemsFocusable);
+      this._updateGridSectionFocusTarget(this._footerFocusable);
     }
 
     /**
@@ -119,7 +147,7 @@ export const KeyboardNavigationMixin = (superClass) =>
       }
 
       this._detectInteracting(e);
-      if (this.hasAttribute('interacting') && keyGroup !== 'Interaction') {
+      if (this.interacting && keyGroup !== 'Interaction') {
         // When in the interacting mode, only the “Interaction” keys are handled.
         keyGroup = undefined;
       }
@@ -334,32 +362,32 @@ export const KeyboardNavigationMixin = (superClass) =>
       let wantInteracting;
       switch (key) {
         case 'Enter':
-          wantInteracting = this.hasAttribute('interacting') ? !localTargetIsTextInput : true;
+          wantInteracting = this.interacting ? !localTargetIsTextInput : true;
           break;
         case 'Escape':
           wantInteracting = false;
           break;
         case 'F2':
-          wantInteracting = !this.hasAttribute('interacting');
+          wantInteracting = !this.interacting;
           break;
       }
 
       const { cell } = this._parseEventPath(e.composedPath());
 
-      if (this.hasAttribute('interacting') !== wantInteracting) {
+      if (this.interacting !== wantInteracting) {
         if (wantInteracting) {
           const focusTarget = cell._content.querySelector('[focus-target]') || cell._content.firstElementChild;
           if (focusTarget) {
             e.preventDefault();
             focusTarget.focus();
-            this._toggleAttribute('interacting', true, this);
+            this._setInteracting(true);
             this._toggleAttribute('navigating', false, this);
           }
         } else {
           e.preventDefault();
           this._focusedColumnOrder = undefined;
           cell.focus();
-          this._toggleAttribute('interacting', false, this);
+          this._setInteracting(false);
           this._toggleAttribute('navigating', true, this);
         }
       }
@@ -469,7 +497,7 @@ export const KeyboardNavigationMixin = (superClass) =>
         // tabbed (shift-tabbed) into the grid. Move the focus to
         // the first (the last) focusable.
         this._predictFocusStepTarget(rootTarget, rootTarget === this.$.table ? 1 : -1).focus();
-        this._toggleAttribute('interacting', false, this);
+        this._setInteracting(false);
       } else {
         this._detectInteracting(e);
       }
@@ -486,16 +514,17 @@ export const KeyboardNavigationMixin = (superClass) =>
 
     /** @private */
     _onCellFocusIn(e) {
+      const location = this._getCellFocusEventLocation(e);
       this._detectInteracting(e);
 
-      if (e.composedPath().indexOf(this.$.table) === 3) {
-        const cell = e.composedPath()[0];
-        this._activeRowGroup = cell.parentNode.parentNode;
-        if (this._activeRowGroup === this.$.header) {
+      if (location) {
+        const { section, cell } = location;
+        this._activeRowGroup = section;
+        if (this.$.header === section) {
           this._headerFocusable = cell;
-        } else if (this._activeRowGroup === this.$.items) {
+        } else if (this.$.items === section) {
           this._itemsFocusable = cell;
-        } else if (this._activeRowGroup === this.$.footer) {
+        } else if (this.$.footer === section) {
           this._footerFocusable = cell;
         }
         // Inform cell content of the focus (used in <vaadin-grid-sorter>)
@@ -517,13 +546,14 @@ export const KeyboardNavigationMixin = (superClass) =>
       }
     }
 
-    /** @private */
+    /** @private
+     * Enables interaction mode if a cells descendant receives focus or keyboard
+     * input. Disables it if the event is not related to cell content.
+     * @param {!KeyboardEvent|!FocusEvent} e
+     */
     _detectInteracting(e) {
-      this._toggleAttribute(
-        'interacting',
-        e.composedPath().some((el) => el.localName === 'vaadin-grid-cell-content'),
-        this
-      );
+      const isInteracting = e.composedPath().some((el) => el.localName === 'vaadin-grid-cell-content');
+      this._setInteracting(isInteracting);
     }
 
     /** @private */
@@ -532,6 +562,21 @@ export const KeyboardNavigationMixin = (superClass) =>
       if (rowGroup === this.$.items) {
         this._focusedItemIndex = row.index;
       }
+    }
+
+    /** @private
+     * Enables or disables the focus target cell of the containing section of the
+     * grid from receiving focus, based on whether the user is interacting with
+     * that section of the grid.
+     * @param {HTMLTableCellElement} focusTargetCell
+     */
+    _updateGridSectionFocusTarget(focusTargetCell) {
+      if (!focusTargetCell) return;
+
+      const section = this._getGridSectionFromFocusTarget(focusTargetCell);
+      const isInteractingWithinActiveSection = this.interacting && section === this._activeRowGroup;
+
+      focusTargetCell.tabIndex = isInteractingWithinActiveSection ? -1 : 0;
     }
 
     /**
@@ -638,5 +683,48 @@ export const KeyboardNavigationMixin = (superClass) =>
     /** @private */
     _elementMatches(el, query) {
       return el.matches ? el.matches(query) : Array.from(el.parentNode.querySelectorAll(query)).indexOf(el) !== -1;
+    }
+
+    /**
+     * @typedef {Object} CellFocusEventLocation
+     * @property {HTMLTableSectionElement} section - The grid section element that contains the focused cell (header, body, or footer)
+     * @property {HTMLElement} cell - The cell element that received focus or is ancestor of the element that received focus
+     * @private
+     */
+    /**
+     * Takes a focus event and returns a location object describing in which
+     * section of the grid and in or on which cell the focus event occurred.
+     * The focus event may either target the cell itself or contents of the cell.
+     * If the event does not target a cell then null is returned.
+     * @param {FocusEvent} e
+     * @returns {CellFocusEventLocation | null}
+     * @private
+     */
+    _getCellFocusEventLocation(e) {
+      const path = e.composedPath();
+      const tableIndex = path.indexOf(this.$.table);
+      // Assuming ascending path to table is: [...,] th|td, tr, thead|tbody, table [,...]
+      const section = tableIndex >= 2 ? path[tableIndex - 1] : null;
+      const cell = tableIndex >= 3 ? path[tableIndex - 3] : null;
+
+      if (!section || !cell) return null;
+
+      return {
+        section,
+        cell
+      };
+    }
+
+    /**
+     * Helper method that maps a focus target cell to the containing grid section
+     * @param {HTMLTableCellElement} focusTargetCell
+     * @returns {HTMLTableSectionElement | null}
+     * @private
+     */
+    _getGridSectionFromFocusTarget(focusTargetCell) {
+      if (focusTargetCell === this._headerFocusable) return this.$.header;
+      if (focusTargetCell === this._itemsFocusable) return this.$.items;
+      if (focusTargetCell === this._footerFocusable) return this.$.footer;
+      return null;
     }
   };
