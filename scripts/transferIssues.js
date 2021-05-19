@@ -416,27 +416,6 @@ async function main() {
 
       console.log(`total issues in the ${repo.name} repo: ${issueCount}`);
       totalIssueCount += issueCount;
-
-      const {
-        data: { open_issues_count }
-      } = await octokit.rest.repos.get({
-        owner: repo.owner.login,
-        repo: repo.name
-      });
-
-      if (open_issues_count === 0) {
-        // disable issues on the repo
-        await octokit.rest.repos.update({
-          owner: repo.owner.login,
-          repo: repo.name,
-          has_issues: false
-        });
-        console.log(`issues on the ${repo.name} repo are disabled`);
-      } else {
-        console.log(
-          `issues on the ${repo.name} repo are NOT disabled because it has ${open_issues_count} open issue(s)`
-        );
-      }
     })
   );
 
