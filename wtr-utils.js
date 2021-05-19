@@ -16,6 +16,7 @@ const group = process.argv.indexOf('--group') !== -1;
 const NO_UNIT_TESTS = ['vaadin-icons', 'vaadin-lumo-styles', 'vaadin-material-styles'];
 
 const NO_VISUAL_TESTS = [
+  'vaadin-icon',
   'vaadin-icons',
   'vaadin-lumo-styles',
   'vaadin-material-styles',
