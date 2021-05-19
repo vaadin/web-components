@@ -316,6 +316,11 @@ async function main() {
       for await (const { data: issues } of iterator) {
         // iterate through each issue in a page
         for (const issue of issues) {
+          // do not transfer open PRs
+          if (issue.html_url.indexOf('/pull/') > -1) {
+            continue;
+          }
+
           if (shouldExcludeIssue(issue)) {
             console.log(`Skipping ${repo.name}#${issue.number} because the shouldExcludeIssue() filter returned true`);
             continue;
