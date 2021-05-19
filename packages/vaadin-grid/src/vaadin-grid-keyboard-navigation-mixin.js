@@ -63,6 +63,7 @@ export const KeyboardNavigationMixin = (superClass) =>
           type: Boolean,
           value: false,
           reflectToAttribute: true,
+          readOnly: true,
           observer: '_interactingChanged'
         }
       };
@@ -379,14 +380,14 @@ export const KeyboardNavigationMixin = (superClass) =>
           if (focusTarget) {
             e.preventDefault();
             focusTarget.focus();
-            this.interacting = true;
+            this._setInteracting(true);
             this._toggleAttribute('navigating', false, this);
           }
         } else {
           e.preventDefault();
           this._focusedColumnOrder = undefined;
           cell.focus();
-          this.interacting = false;
+          this._setInteracting(false);
           this._toggleAttribute('navigating', true, this);
         }
       }
@@ -496,7 +497,7 @@ export const KeyboardNavigationMixin = (superClass) =>
         // tabbed (shift-tabbed) into the grid. Move the focus to
         // the first (the last) focusable.
         this._predictFocusStepTarget(rootTarget, rootTarget === this.$.table ? 1 : -1).focus();
-        this.interacting = false;
+        this._setInteracting(false);
       } else {
         this._detectInteracting(e);
       }
@@ -552,7 +553,8 @@ export const KeyboardNavigationMixin = (superClass) =>
      * @param {!KeyboardEvent|!FocusEvent} e
      */
     _detectInteracting(e) {
-      this.interacting = e.composedPath().some((el) => el.localName === 'vaadin-grid-cell-content');
+      const isInteracting = e.composedPath().some((el) => el.localName === 'vaadin-grid-cell-content');
+      this._setInteracting(isInteracting);
     }
 
     /** @private */

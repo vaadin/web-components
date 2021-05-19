@@ -1555,7 +1555,7 @@ describe('keyboard navigation', () => {
     });
 
     it('should exit interaction mode when blurred', () => {
-      grid.setAttribute('interacting', '');
+      grid._setInteracting(true);
 
       focusable.focus();
 
@@ -1563,7 +1563,7 @@ describe('keyboard navigation', () => {
     });
 
     it('should exit interaction mode when tabbed into', () => {
-      grid.setAttribute('interacting', '');
+      grid._setInteracting(true);
 
       tabToHeader();
 
@@ -1571,7 +1571,7 @@ describe('keyboard navigation', () => {
     });
 
     it('should exit interaction mode when shift-tabbed into', () => {
-      grid.setAttribute('interacting', '');
+      grid._setInteracting(true);
 
       shiftTabToFooter();
 
@@ -1835,7 +1835,7 @@ describe('keyboard navigation', () => {
     });
 
     it('should exit interaction mode with escape', () => {
-      grid.setAttribute('interacting', '');
+      grid._setInteracting(true);
 
       escape();
 
