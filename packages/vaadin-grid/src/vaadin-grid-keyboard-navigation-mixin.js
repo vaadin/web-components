@@ -518,8 +518,7 @@ export const KeyboardNavigationMixin = (superClass) =>
       this._detectInteracting(e);
 
       if (location) {
-        const section = location.section;
-        const cell = location.cell;
+        const { section, cell } = location;
         this._activeRowGroup = section;
         if (this.$.header === section) {
           this._headerFocusable = cell;
