@@ -28,6 +28,15 @@ describe('virtual-list', () => {
     expect(list.children.length).to.equal(0);
   });
 
+  it('should not collapse inside a flexbox', () => {
+    const flexBox = fixtureSync(`
+      <div style="display:flex">
+        <vaadin-virtual-list></vaadin-virtual-list>
+      </div>`);
+
+    expect(flexBox.firstElementChild.offsetWidth).to.equal(flexBox.offsetWidth);
+  });
+
   describe('with items', () => {
     beforeEach(() => {
       const size = 100;
@@ -74,6 +83,10 @@ describe('virtual-list', () => {
       const listRect = list.getBoundingClientRect();
       const firstVisibleElement = list.getRootNode().elementFromPoint(listRect.left, listRect.top);
       expect(firstVisibleElement.textContent.trim()).to.equal('value-50');
+    });
+
+    it('should have full width items', () => {
+      expect(list.firstElementChild.offsetWidth).to.equal(list.offsetWidth);
     });
   });
 });
