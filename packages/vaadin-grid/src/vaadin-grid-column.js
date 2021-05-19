@@ -129,6 +129,15 @@ export const ColumnBaseMixin = (superClass) =>
          */
         headerRenderer: Function,
 
+        /** @private */
+        __defaultHeaderRenderer: Function,
+
+        /** @private */
+        __headerRenderer: {
+          type: Function,
+          computed: '__computeHeaderRenderer(headerRenderer, __defaultHeaderRenderer, _headerTemplate)'
+        },
+
         /**
          * Custom function for rendering the footer content.
          * Receives two arguments:
@@ -138,7 +147,16 @@ export const ColumnBaseMixin = (superClass) =>
          *
          * @type {GridHeaderFooterRenderer | null | undefined}
          */
-        footerRenderer: Function
+        footerRenderer: Function,
+
+        /** @private */
+        __defaultFooterRenderer: Function,
+
+        /** @private */
+        __footerRenderer: {
+          type: Function,
+          computed: '__computeFooterRenderer(footerRenderer, __defaultFooterRenderer, _footerTemplate)'
+        }
       };
     }
 
@@ -151,9 +169,9 @@ export const ColumnBaseMixin = (superClass) =>
         '_textAlignChanged(textAlign, _cells.*, _headerCell, _footerCell)',
         '_orderChanged(_order, _headerCell, _footerCell, _cells.*)',
         '_lastFrozenChanged(_lastFrozen)',
-        '_setBodyTemplateOrRenderer(_bodyTemplate, renderer, _cells, _cells.*)',
-        '_setHeaderTemplateOrRenderer(_headerTemplate, headerRenderer, _headerCell)',
-        '_setFooterTemplateOrRenderer(_footerTemplate, footerRenderer, _footerCell)',
+        '_setBodyTemplateOrRenderer(_bodyTemplate, __renderer, _cells, _cells.*)',
+        '_setHeaderTemplateOrRenderer(_headerTemplate, __headerRenderer, _headerCell)',
+        '_setFooterTemplateOrRenderer(_footerTemplate, __footerRenderer, _footerCell)',
         '_resizableChanged(resizable, _headerCell)',
         '_reorderStatusChanged(_reorderStatus, _headerCell, _footerCell, _cells.*)',
         '_hiddenChanged(hidden, _headerCell, _footerCell, _cells.*)'
@@ -293,11 +311,11 @@ export const ColumnBaseMixin = (superClass) =>
 
     /** @protected */
     _renderHeaderAndFooter() {
-      if (this.headerRenderer && this._headerCell) {
-        this.__runRenderer(this.headerRenderer, this._headerCell);
+      if (this.__headerRenderer && this._headerCell) {
+        this.__runRenderer(this.__headerRenderer, this._headerCell);
       }
-      if (this.footerRenderer && this._footerCell) {
-        this.__runRenderer(this.footerRenderer, this._footerCell);
+      if (this.__footerRenderer && this._footerCell) {
+        this.__runRenderer(this.__footerRenderer, this._footerCell);
       }
     }
 
@@ -327,7 +345,7 @@ export const ColumnBaseMixin = (superClass) =>
         if (renderer) {
           cell._renderer = renderer;
 
-          if (model.item || renderer === this.headerRenderer || renderer === this.footerRenderer) {
+          if (model.item || renderer === this.__headerRenderer || renderer === this.__footerRenderer) {
             this.__runRenderer(renderer, cell, model);
           }
         } else if (cell._template !== template) {
@@ -471,7 +489,7 @@ export const ColumnBaseMixin = (superClass) =>
       bodyTemplate,
       headerTemplate
     ) {
-      const hasHeaderText = header !== undefined;
+      const hasHeaderText = header !== undefined && header !== null;
       if (!headerRenderer && !headerTemplate && hasHeaderText && headerCell) {
         this.__setTextContent(headerCell._content, header);
       }
@@ -482,7 +500,7 @@ export const ColumnBaseMixin = (superClass) =>
           this.__setColumnTemplateOrRenderer(undefined, pathRenderer, cells.value);
         }
 
-        if (!headerRenderer && !headerTemplate && !hasHeaderText && headerCell && header !== null) {
+        if (!headerRenderer && !headerTemplate && !hasHeaderText && headerCell) {
           this.__setTextContent(headerCell._content, this._generateHeader(path));
         }
       }
@@ -619,6 +637,32 @@ export const ColumnBaseMixin = (superClass) =>
       }
       this._previousHidden = hidden;
     }
+
+    /** @private */
+    __computeHeaderRenderer(headerRenderer, defaultHeaderRenderer, headerTemplate) {
+      if (headerRenderer) {
+        return headerRenderer;
+      }
+
+      if (headerTemplate) {
+        return;
+      }
+
+      return defaultHeaderRenderer;
+    }
+
+    /** @private */
+    __computeFooterRenderer(footerRenderer, defaultFooterRenderer, footerTemplate) {
+      if (footerRenderer) {
+        return footerRenderer;
+      }
+
+      if (footerTemplate) {
+        return;
+      }
+
+      return defaultFooterRenderer;
+    }
   };
 
 /**
@@ -674,6 +718,15 @@ class GridColumnElement extends ColumnBaseMixin(DirMixin(PolymerElement)) {
        */
       renderer: Function,
 
+      /** @private */
+      __defaultRenderer: Function,
+
+      /** @private */
+      __renderer: {
+        type: Function,
+        computed: '__computeRenderer(renderer, __defaultRenderer, _bodyTemplate)'
+      },
+
       /**
        * Path to an item sub-property whose value gets displayed in the column body cells.
        * The property name is also shown in the column header if an explicit header or renderer isn't defined.
@@ -718,6 +771,19 @@ class GridColumnElement extends ColumnBaseMixin(DirMixin(PolymerElement)) {
        */
       _cells: Array
     };
+  }
+
+  /** @private */
+  __computeRenderer(renderer, defaultRenderer, template) {
+    if (renderer) {
+      return renderer;
+    }
+
+    if (template) {
+      return;
+    }
+
+    return defaultRenderer;
   }
 }
 

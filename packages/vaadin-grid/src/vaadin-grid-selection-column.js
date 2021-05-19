@@ -38,10 +38,10 @@ class GridSelectionColumnElement extends GridColumnElement {
         <vaadin-checkbox
           class="vaadin-grid-select-all-checkbox"
           aria-label="Select All"
-          hidden$="[[_selectAllHidden]]"
-          on-checked-changed="_onSelectAllCheckedChanged"
-          checked="[[_isChecked(selectAll, _indeterminate)]]"
-          indeterminate="[[_indeterminate]]"
+          hidden$="[[__selectAllHidden]]"
+          on-checked-changed="__onSelectAllCheckedChanged"
+          checked="[[__isChecked(selectAll, __indeterminate)]]"
+          indeterminate="[[__indeterminate]]"
         ></vaadin-checkbox>
       </template>
       <template id="defaultBodyTemplate">
@@ -96,91 +96,71 @@ class GridSelectionColumnElement extends GridColumnElement {
       },
 
       /** @private */
-      _indeterminate: Boolean,
+      __indeterminate: Boolean,
 
       /**
        * The previous state of activeItem. When activeItem turns to `null`,
        * previousActiveItem will have an Object with just unselected activeItem
        * @private
        */
-      _previousActiveItem: Object,
+      __previousActiveItem: Object,
 
       /** @private */
-      _selectAllHidden: Boolean
+      __selectAllHidden: Boolean
     };
   }
 
   static get observers() {
-    return ['_onSelectAllChanged(selectAll)'];
-  }
-
-  /** @private */
-  _pathOrHeaderChanged(
-    path,
-    header,
-    headerCell,
-    footerCell,
-    cells,
-    renderer,
-    headerRenderer,
-    bodyTemplate,
-    headerTemplate
-  ) {
-    // As a special case, allow overriding the default header / body templates
-    if (cells.value && (path !== undefined || renderer !== undefined)) {
-      this._bodyTemplate = bodyTemplate = undefined;
-      this.__cleanCellsOfTemplateProperties(cells.value);
-    }
-    if (headerCell && (header !== undefined || headerRenderer !== undefined)) {
-      this._headerTemplate = headerTemplate = undefined;
-      this.__cleanCellsOfTemplateProperties([headerCell]);
-    }
-    super._pathOrHeaderChanged(
-      path,
-      header,
-      headerCell,
-      footerCell,
-      cells,
-      renderer,
-      headerRenderer,
-      bodyTemplate,
-      headerTemplate
-    );
-  }
-
-  /** @private */
-  __cleanCellsOfTemplateProperties(cells) {
-    cells.forEach((cell) => {
-      cell._content.innerHTML = '';
-      delete cell._instance;
-      delete cell._template;
-    });
-  }
-
-  /** @private */
-  _prepareHeaderTemplate() {
-    const headerTemplate = this._prepareTemplatizer(this._findTemplate(true) || this.$.defaultHeaderTemplate);
-    // needed to override the dataHost correctly in case internal template is used.
-    headerTemplate.templatizer.dataHost = headerTemplate === this.$.defaultHeaderTemplate ? this : this.dataHost;
-
-    return headerTemplate;
-  }
-
-  /** @private */
-  _prepareBodyTemplate() {
-    const template = this._prepareTemplatizer(this._findTemplate() || this.$.defaultBodyTemplate);
-    // needed to override the dataHost correctly in case internal template is used.
-    template.templatizer.dataHost = template === this.$.defaultBodyTemplate ? this : this.dataHost;
-
-    return template;
+    return [
+      '__onSelectAllChanged(selectAll)',
+      '__onDefaultHeaderRendererBindingChanged(__indeterminate, __selectAllHidden, selectAll)'
+    ];
   }
 
   constructor() {
     super();
 
-    this._boundOnActiveItemChanged = this._onActiveItemChanged.bind(this);
-    this._boundOnDataProviderChanged = this._onDataProviderChanged.bind(this);
-    this._boundOnSelectedItemsChanged = this._onSelectedItemsChanged.bind(this);
+    this.__defaultHeaderRenderer = (root, _column) => {
+      let checkbox = root.firstElementChild;
+      if (!checkbox) {
+        checkbox = document.createElement('vaadin-checkbox');
+        checkbox.setAttribute('aria-label', 'Select All');
+        checkbox.classList.add('vaadin-grid-select-all-checkbox');
+        checkbox.addEventListener('checked-changed', this.__onSelectAllCheckedChanged.bind(this));
+        root.appendChild(checkbox);
+      }
+
+      const checked = this.__isChecked(this.selectAll, this.__indeterminate);
+      checkbox.__rendererChecked = checked;
+      checkbox.checked = checked;
+
+      checkbox.indeterminate = this.__indeterminate;
+
+      if (this.__selectAllHidden) {
+        checkbox.setAttribute('hidden', 'hidden');
+      } else {
+        checkbox.removeAttribute('hidden');
+      }
+    };
+
+    this.__defaultRenderer = (root, _column, { item, selected }) => {
+      let checkbox = root.firstElementChild;
+      if (!checkbox) {
+        checkbox = document.createElement('vaadin-checkbox');
+        checkbox.setAttribute('aria-label', 'Select Row');
+        checkbox.addEventListener('checked-changed', this.__onSelectRowCheckedChanged.bind(this));
+        root.appendChild(checkbox);
+      }
+
+      checkbox.__rendererChecked = selected;
+      checkbox.checked = selected;
+
+      checkbox.__item = item;
+    };
+
+    this._boundOnActiveItemChanged = this.__onActiveItemChanged.bind(this);
+    this._boundOnDataProviderChanged = this.__onDataProviderChanged.bind(this);
+    this._boundOnSelectedItemsChanged = this.__onSelectedItemsChanged.bind(this);
   }
 
   /** @protected */
@@ -204,8 +184,39 @@ class GridSelectionColumnElement extends GridColumnElement {
     }
   }
 
+  // /** @private */
+  // _prepareHeaderTemplate() {
+  //   const headerTemplate = this._prepareTemplatizer(this._findTemplate(true) || this.$.defaultHeaderTemplate);
+  //   // needed to override the dataHost correctly in case internal template is used.
+  //   headerTemplate.templatizer.dataHost = headerTemplate === this.$.defaultHeaderTemplate ? this : this.dataHost;
+
+  //   return headerTemplate;
+  // }
+
+  // /** @private */
+  // _prepareBodyTemplate() {
+  //   const template = this._prepareTemplatizer(this._findTemplate() || this.$.defaultBodyTemplate);
+  //   // needed to override the dataHost correctly in case internal template is used.
+  //   template.templatizer.dataHost = template === this.$.defaultBodyTemplate ? this : this.dataHost;
+
+  //   return template;
+  // }
+
   /** @private */
-  _onSelectAllChanged(selectAll) {
+  __onDefaultHeaderRendererBindingChanged() {
+    if (!this._headerCell) {
+      return;
+    }
+
+    if (this.__headerRenderer !== this.__defaultHeaderRenderer) {
+      return;
+    }
+
+    this.__runRenderer(this.__headerRenderer, this._headerCell);
+  }
+
+  /** @private */
+  __onSelectAllChanged(selectAll) {
     if (selectAll === undefined || !this._grid) {
       return;
     }
@@ -222,57 +233,86 @@ class GridSelectionColumnElement extends GridColumnElement {
    * We need this when sorting or to preserve selection after filtering.
    * @private
    */
-  _arrayContains(a, b) {
+  __arrayContains(a, b) {
     for (var i = 0; a && b && b[i] && a.indexOf(b[i]) >= 0; i++); // eslint-disable-line
     return i == b.length;
   }
 
-  /** @private */
-  _onSelectAllCheckedChanged(e) {
-    this.selectAll = this._indeterminate || e.target.checked;
+  /**
+   * Updates the `selectAll` property after the Select All Rows checkbox is switched.
+   * The listener handles only user-fired events.
+   *
+   * @private
+   */
+  __onSelectAllCheckedChanged(e) {
+    // Skip if the listener is called after `checked` is set by the renderer.
+    if (e.target.checked === e.target.__rendererChecked) {
+      return;
+    }
+
+    this.selectAll = this.__indeterminate || e.target.checked;
+  }
+
+  /**
+   * Selects or deselects the row after the Select Row checkbox is switched.
+   * The listener handles only user-fired events.
+   *
+   * @private
+   */
+  __onSelectRowCheckedChanged(e) {
+    // Skip if the listener is called after `checked` is set by the renderer
+    if (e.target.checked === e.target.__rendererChecked) {
+      return;
+    }
+
+    if (e.target.checked) {
+      this._grid.selectItem(e.target.__item);
+    } else {
+      this._grid.deselectItem(e.target.__item);
+    }
   }
 
   /**
    * iOS needs indeterminated + checked at the same time
    * @private
    */
-  _isChecked(selectAll, indeterminate) {
+  __isChecked(selectAll, indeterminate) {
     return indeterminate || selectAll;
   }
 
   /** @private */
-  _onActiveItemChanged(e) {
+  __onActiveItemChanged(e) {
     const activeItem = e.detail.value;
     if (this.autoSelect) {
-      const item = activeItem || this._previousActiveItem;
+      const item = activeItem || this.__previousActiveItem;
       if (item) {
         this._grid._toggleItem(item);
       }
     }
-    this._previousActiveItem = activeItem;
+    this.__previousActiveItem = activeItem;
   }
 
   /** @private */
-  _onSelectedItemsChanged() {
+  __onSelectedItemsChanged() {
     this._selectAllChangeLock = true;
     if (Array.isArray(this._grid.items)) {
       if (!this._grid.selectedItems.length) {
         this.selectAll = false;
-        this._indeterminate = false;
-      } else if (this._arrayContains(this._grid.selectedItems, this._grid._filter(this._grid.items))) {
+        this.__indeterminate = false;
+      } else if (this.__arrayContains(this._grid.selectedItems, this._grid._filter(this._grid.items))) {
         this.selectAll = true;
-        this._indeterminate = false;
+        this.__indeterminate = false;
       } else {
         this.selectAll = false;
-        this._indeterminate = true;
+        this.__indeterminate = true;
       }
     }
     this._selectAllChangeLock = false;
   }
 
   /** @private */
-  _onDataProviderChanged() {
-    this._selectAllHidden = !Array.isArray(this._grid.items);
+  __onDataProviderChanged() {
+    this.__selectAllHidden = !Array.isArray(this._grid.items);
   }
 }
 
