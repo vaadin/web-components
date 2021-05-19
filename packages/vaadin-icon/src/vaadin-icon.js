@@ -41,11 +41,6 @@ class IconElement extends ThemableMixin(ElementMixin(PolymerElement)) {
           width: 100%;
           height: 100%;
         }
-
-        :host([dir='rtl']) svg {
-          transform: scale(-1, 1);
-          transform-origin: center;
-        }
       </style>
       <svg
         version="1.1"
