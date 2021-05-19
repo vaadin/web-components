@@ -4,7 +4,7 @@
   "description": "Web component for creating SVG icons",
   "main": "vaadin-icon.js",
   "module": "vaadin-icon.js",
-  "repository": "vaadin/vaadin-icons",
+  "repository": "vaadin/web-components",
   "keywords": [
     "Vaadin",
     "icon",
