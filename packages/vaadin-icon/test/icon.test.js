@@ -17,11 +17,11 @@ describe('vaadin-icon', () => {
     expect(svgElement.getAttribute('viewBox')).to.equal(`0 0 ${size} ${size}`);
   }
 
-  beforeEach(() => {
-    icon = fixtureSync('<vaadin-icon></vaadin-icon>');
-  });
-
   describe('custom element definition', () => {
+    beforeEach(() => {
+      icon = fixtureSync('<vaadin-icon></vaadin-icon>');
+    });
+
     it('should define a custom element with proper tag name', () => {
       expect(customElements.get('vaadin-icon')).to.be.ok;
     });
@@ -32,6 +32,10 @@ describe('vaadin-icon', () => {
   });
 
   describe('svg property', () => {
+    beforeEach(() => {
+      icon = fixtureSync('<vaadin-icon></vaadin-icon>');
+    });
+
     describe('valid icon', () => {
       it('should set icon defined with SVG literal', () => {
         icon.svg = unsafeSvgLiteral(ANGLE_DOWN);
@@ -100,25 +104,47 @@ describe('vaadin-icon', () => {
       icons = Array.from(iconset.querySelectorAll('[id]'));
     });
 
-    it('should render icon from the iconset', () => {
-      icons.forEach((svgIcon) => {
-        icon.icon = getIconId(svgIcon.getAttribute('id'));
-        expectIcon(svgIcon.innerHTML);
+    describe('default', () => {
+      beforeEach(() => {
+        icon = fixtureSync('<vaadin-icon></vaadin-icon>');
+      });
+
+      it('should render icon from the iconset', () => {
+        icons.forEach((svgIcon) => {
+          icon.icon = getIconId(svgIcon.getAttribute('id'));
+          expectIcon(svgIcon.innerHTML);
+        });
+      });
+
+      it('should clear icon when the value is set to null', () => {
+        icon.icon = 'angle-up';
+        expectIcon(ANGLE_UP);
+        icon.icon = null;
+        expectIcon('');
+      });
+
+      it('should clear icon when the value is set to undefined', () => {
+        icon.icon = 'angle-up';
+        expectIcon(ANGLE_UP);
+        icon.icon = undefined;
+        expectIcon('');
       });
     });
 
-    it('should clear icon when the value is set to null', () => {
-      icon.icon = 'angle-up';
-      expectIcon(ANGLE_UP);
-      icon.icon = null;
-      expectIcon('');
-    });
+    describe('set before attach', () => {
+      beforeEach(() => {
+        icon = document.createElement('vaadin-icon');
+      });
 
-    it('should clear icon when the value is set to undefined', () => {
-      icon.icon = 'angle-up';
-      expectIcon(ANGLE_UP);
-      icon.icon = undefined;
-      expectIcon('');
+      afterEach(() => {
+        document.body.removeChild(icon);
+      });
+
+      it('should clear icon when the value is set to null', () => {
+        icon.icon = 'angle-up';
+        document.body.appendChild(icon);
+        expectIcon(ANGLE_UP);
+      });
     });
   });
 });

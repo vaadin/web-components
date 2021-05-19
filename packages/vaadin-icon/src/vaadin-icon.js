@@ -80,8 +80,7 @@ class IconElement extends ThemableMixin(ElementMixin(PolymerElement)) {
        * The SVG icon wrapped in a Lit template literal.
        */
       svg: {
-        type: Object,
-        observer: '__svgChanged'
+        type: Object
       },
 
       /**
@@ -93,24 +92,12 @@ class IconElement extends ThemableMixin(ElementMixin(PolymerElement)) {
       },
 
       /** @private */
-      _isAttached: Boolean
+      __svgElement: Object
     };
   }
 
   static get observers() {
-    return ['__iconChanged(icon, _isAttached)'];
-  }
-
-  /** @protected */
-  connectedCallback() {
-    super.connectedCallback();
-    this._isAttached = true;
-  }
-
-  /** @protected */
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    this._isAttached = false;
+    return ['__svgChanged(svg, __svgElement)'];
   }
 
   /** @protected */
@@ -133,12 +120,12 @@ class IconElement extends ThemableMixin(ElementMixin(PolymerElement)) {
   }
 
   /** @private */
-  __svgChanged(svg) {
-    if (!this.__svgElement) {
+  __svgChanged(svg, svgElement) {
+    if (!svgElement) {
       return;
     }
 
-    renderSvg(svg, this.__svgElement);
+    renderSvg(svg, svgElement);
   }
 }
 

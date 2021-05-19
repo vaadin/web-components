@@ -59,5 +59,11 @@ describe('vaadin-iconset', () => {
       const result = IconsetElement.getIconset('custom');
       expect(result).to.equal(iconset);
     });
+
+    it('should return the new instance for old name after iconset change', () => {
+      iconset.name = 'custom';
+      const result = IconsetElement.getIconset('vaadin');
+      expect(result).to.not.equal(iconset);
+    });
   });
 });
