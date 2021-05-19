@@ -1646,7 +1646,7 @@ describe('keyboard navigation', () => {
      * Ideally the test would try to shift tab to the previous input and check that the input in a previous cell
      * was focused, despite the focus target cell being in the tab order between current and previous input
      */
-    it.skip('should skip the grid focus target when tabbing in interaction mode', async () => {
+    it('should skip the grid focus target when tabbing in interaction mode', async () => {
       // Focus first input
       right();
       enter();
