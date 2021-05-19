@@ -20,7 +20,8 @@
   "files": [
     "vaadin-*.d.ts",
     "vaadin-*.js",
-    "src"
+    "src",
+    "theme"
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
