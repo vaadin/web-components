@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-app-layout",
-  "version": "20.0.0-beta1",
+  "version": "20.0.0-beta2",
   "description": "vaadin-app-layout",
   "main": "vaadin-app-layout.js",
   "module": "vaadin-app-layout.js",
@@ -26,17 +26,17 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/vaadin-button": "^20.0.0-beta1",
-    "@vaadin/vaadin-element-mixin": "^20.0.0-beta1",
-    "@vaadin/vaadin-lumo-styles": "^20.0.0-beta1",
-    "@vaadin/vaadin-material-styles": "^20.0.0-beta1",
-    "@vaadin/vaadin-themable-mixin": "^20.0.0-beta1"
+    "@vaadin/vaadin-button": "^20.0.0-beta2",
+    "@vaadin/vaadin-element-mixin": "^20.0.0-beta2",
+    "@vaadin/vaadin-lumo-styles": "^20.0.0-beta2",
+    "@vaadin/vaadin-material-styles": "^20.0.0-beta2",
+    "@vaadin/vaadin-themable-mixin": "^20.0.0-beta2"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.1.5",
     "@vaadin/testing-helpers": "^0.2.1",
-    "@vaadin/vaadin-icons": "^20.0.0-beta1",
-    "@vaadin/vaadin-tabs": "^20.0.0-beta1",
+    "@vaadin/vaadin-icons": "^20.0.0-beta2",
+    "@vaadin/vaadin-tabs": "^20.0.0-beta2",
     "sinon": "^9.2.1"
   },
   "publishConfig": {
