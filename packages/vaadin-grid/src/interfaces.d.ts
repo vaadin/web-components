@@ -29,7 +29,7 @@ export type GridDataProvider = <TItem>(
   callback: GridDataProviderCallback<TItem>
 ) => void;
 
-export type GridDragAndDropFilter = <TItem>(model: GridItemModel<TItem>) => boolean;
+export type GridDragAndDropFilter<TItem> = (model: GridItemModel<TItem>) => boolean;
 
 export type GridDropLocation = 'above' | 'on-top' | 'below' | 'empty';
 
