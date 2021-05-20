@@ -40,7 +40,7 @@ interface DragAndDropMixin<TItem> {
    *   - `model.level` Level of the tree represented with a horizontal offset of the toggle button.
    *   - `model.selected` Selected state.
    */
-  dragFilter: GridDragAndDropFilter | null | undefined;
+  dragFilter: GridDragAndDropFilter<TItem> | null | undefined;
 
   /**
    * A function that filters dropping on specific grid rows. The return value should be false
@@ -55,7 +55,7 @@ interface DragAndDropMixin<TItem> {
    *   - `model.level` Level of the tree represented with a horizontal offset of the toggle button.
    *   - `model.selected` Selected state.
    */
-  dropFilter: GridDragAndDropFilter | null | undefined;
+  dropFilter: GridDragAndDropFilter<TItem> | null | undefined;
 
   _clearDragStyles(): void;
 

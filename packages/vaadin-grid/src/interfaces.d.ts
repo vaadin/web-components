@@ -24,12 +24,12 @@ export type GridDataProviderParams<TItem> = {
   parentItem?: TItem;
 };
 
-export type GridDataProvider = <TItem>(
+export type GridDataProvider<TItem> = (
   params: GridDataProviderParams<TItem>,
   callback: GridDataProviderCallback<TItem>
 ) => void;
 
-export type GridDragAndDropFilter = <TItem>(model: GridItemModel<TItem>) => boolean;
+export type GridDragAndDropFilter<TItem> = (model: GridItemModel<TItem>) => boolean;
 
 export type GridDropLocation = 'above' | 'on-top' | 'below' | 'empty';
 
