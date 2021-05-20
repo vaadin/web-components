@@ -65,7 +65,7 @@ interface DataProviderMixin<TItem> {
    *     are requested, total number of items in the requested sublevel.
    *     Optional when tree is not used, required for tree.
    */
-  dataProvider: GridDataProvider | null | undefined;
+  dataProvider: GridDataProvider<TItem> | null | undefined;
 
   /**
    * `true` while data is being requested from the data provider.

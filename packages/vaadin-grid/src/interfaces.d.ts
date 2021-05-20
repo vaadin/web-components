@@ -24,7 +24,7 @@ export type GridDataProviderParams<TItem> = {
   parentItem?: TItem;
 };
 
-export type GridDataProvider = <TItem>(
+export type GridDataProvider<TItem> = (
   params: GridDataProviderParams<TItem>,
   callback: GridDataProviderCallback<TItem>
 ) => void;
