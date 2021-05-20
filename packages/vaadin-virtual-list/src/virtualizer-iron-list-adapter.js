@@ -61,7 +61,7 @@ export class IronListAdapter {
   }
 
   scrollToIndex(index) {
-    if (typeof index !== 'number' || isNaN(index) || !this.scrollTarget.offsetHeight) {
+    if (typeof index !== 'number' || isNaN(index) || this.size === 0 || !this.scrollTarget.offsetHeight) {
       return;
     }
     index = this._clamp(index, 0, this.size - 1);
@@ -110,7 +110,9 @@ export class IronListAdapter {
 
   __updateElement(el, index) {
     // Clean up temporary min height
-    el.style.minHeight = '';
+    if (el.style.minHeight) {
+      el.style.minHeight = '';
+    }
 
     this.updateElement(el, index);
 
@@ -133,21 +135,30 @@ export class IronListAdapter {
       return;
     }
 
-    let fvi = this.firstVisibleIndex + this._vidxOffset;
+    // Record the scroll position before changing the size
+    let fvi; // first visible index
+    let fviOffsetBefore; // scroll offset of the first visible index
+    if (size > 0) {
+      fvi = this.firstVisibleIndex + this._vidxOffset;
+      fviOffsetBefore = this.__getIndexScrollOffset(fvi);
+    }
 
-    const fviOffsetBefore = this.__getIndexScrollOffset(fvi);
-
+    // Change the size
     this.__size = size;
     this._itemsChanged({
       path: 'items'
     });
+    flush();
 
-    fvi = Math.min(fvi, size - 1);
-    this.scrollToIndex(fvi);
+    // Try to restore the scroll position if the new size is larger than 0
+    if (size > 0) {
+      fvi = Math.min(fvi, size - 1);
+      this.scrollToIndex(fvi);
 
-    const fviOffsetAfter = this.__getIndexScrollOffset(fvi);
-    if (fviOffsetBefore !== undefined && fviOffsetAfter !== undefined) {
-      this._scrollTop += fviOffsetBefore - fviOffsetAfter;
+      const fviOffsetAfter = this.__getIndexScrollOffset(fvi);
+      if (fviOffsetBefore !== undefined && fviOffsetAfter !== undefined) {
+        this._scrollTop += fviOffsetBefore - fviOffsetAfter;
+      }
     }
 
     if (!this.elementsContainer.children.length) {
