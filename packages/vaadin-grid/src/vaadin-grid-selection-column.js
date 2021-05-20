@@ -3,7 +3,6 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 import { GridColumnElement } from './vaadin-grid-column.js';
 import '@vaadin/vaadin-checkbox/src/vaadin-checkbox.js';
 
@@ -32,24 +31,6 @@ import '@vaadin/vaadin-checkbox/src/vaadin-checkbox.js';
  * @fires {CustomEvent} select-all-changed - Fired when the `selectAll` property changes.
  */
 class GridSelectionColumnElement extends GridColumnElement {
-  static get template() {
-    return html`
-      <template class="header" id="defaultHeaderTemplate">
-        <vaadin-checkbox
-          class="vaadin-grid-select-all-checkbox"
-          aria-label="Select All"
-          hidden$="[[__selectAllHidden]]"
-          on-checked-changed="__onSelectAllCheckedChanged"
-          checked="[[__isChecked(selectAll, __indeterminate)]]"
-          indeterminate="[[__indeterminate]]"
-        ></vaadin-checkbox>
-      </template>
-      <template id="defaultBodyTemplate">
-        <vaadin-checkbox aria-label="Select Row" checked="{{selected}}"></vaadin-checkbox>
-      </template>
-    `;
-  }
-
   static get is() {
     return 'vaadin-grid-selection-column';
   }
@@ -120,55 +101,17 @@ class GridSelectionColumnElement extends GridColumnElement {
   constructor() {
     super();
 
-    this.__defaultHeaderRenderer = (root, _column) => {
-      let checkbox = root.firstElementChild;
-      if (!checkbox) {
-        checkbox = document.createElement('vaadin-checkbox');
-        checkbox.setAttribute('aria-label', 'Select All');
-        checkbox.classList.add('vaadin-grid-select-all-checkbox');
-        checkbox.addEventListener('checked-changed', this.__onSelectAllCheckedChanged.bind(this));
-        root.appendChild(checkbox);
-      }
-
-      const checked = this.__isChecked(this.selectAll, this.__indeterminate);
-      checkbox.__rendererChecked = checked;
-      checkbox.checked = checked;
-
-      checkbox.indeterminate = this.__indeterminate;
-
-      if (this.__selectAllHidden) {
-        checkbox.setAttribute('hidden', 'hidden');
-      } else {
-        checkbox.removeAttribute('hidden');
-      }
-    };
-
-    this.__defaultRenderer = (root, _column, { item, selected }) => {
-      let checkbox = root.firstElementChild;
-      if (!checkbox) {
-        checkbox = document.createElement('vaadin-checkbox');
-        checkbox.setAttribute('aria-label', 'Select Row');
-        checkbox.addEventListener('checked-changed', this.__onSelectRowCheckedChanged.bind(this));
-        root.appendChild(checkbox);
-      }
-
-      checkbox.__rendererChecked = selected;
-      checkbox.checked = selected;
-
-      checkbox.__item = item;
-    };
-
-    this._boundOnActiveItemChanged = this.__onActiveItemChanged.bind(this);
-    this._boundOnDataProviderChanged = this.__onDataProviderChanged.bind(this);
-    this._boundOnSelectedItemsChanged = this.__onSelectedItemsChanged.bind(this);
+    this.__boundOnActiveItemChanged = this.__onActiveItemChanged.bind(this);
+    this.__boundOnDataProviderChanged = this.__onDataProviderChanged.bind(this);
+    this.__boundOnSelectedItemsChanged = this.__onSelectedItemsChanged.bind(this);
   }
 
   /** @protected */
   disconnectedCallback() {
-    this._grid.removeEventListener('active-item-changed', this._boundOnActiveItemChanged);
-    this._grid.removeEventListener('data-provider-changed', this._boundOnDataProviderChanged);
-    this._grid.removeEventListener('filter-changed', this._boundOnSelectedItemsChanged);
-    this._grid.removeEventListener('selected-items-changed', this._boundOnSelectedItemsChanged);
+    this._grid.removeEventListener('active-item-changed', this.__boundOnActiveItemChanged);
+    this._grid.removeEventListener('data-provider-changed', this.__boundOnDataProviderChanged);
+    this._grid.removeEventListener('filter-changed', this.__boundOnSelectedItemsChanged);
+    this._grid.removeEventListener('selected-items-changed', this.__boundOnSelectedItemsChanged);
 
     super.disconnectedCallback();
   }
@@ -177,30 +120,68 @@ class GridSelectionColumnElement extends GridColumnElement {
   connectedCallback() {
     super.connectedCallback();
     if (this._grid) {
-      this._grid.addEventListener('active-item-changed', this._boundOnActiveItemChanged);
-      this._grid.addEventListener('data-provider-changed', this._boundOnDataProviderChanged);
-      this._grid.addEventListener('filter-changed', this._boundOnSelectedItemsChanged);
-      this._grid.addEventListener('selected-items-changed', this._boundOnSelectedItemsChanged);
+      this._grid.addEventListener('active-item-changed', this.__boundOnActiveItemChanged);
+      this._grid.addEventListener('data-provider-changed', this.__boundOnDataProviderChanged);
+      this._grid.addEventListener('filter-changed', this.__boundOnSelectedItemsChanged);
+      this._grid.addEventListener('selected-items-changed', this.__boundOnSelectedItemsChanged);
     }
   }
 
-  // /** @private */
-  // _prepareHeaderTemplate() {
-  //   const headerTemplate = this._prepareTemplatizer(this._findTemplate(true) || this.$.defaultHeaderTemplate);
-  //   // needed to override the dataHost correctly in case internal template is used.
-  //   headerTemplate.templatizer.dataHost = headerTemplate === this.$.defaultHeaderTemplate ? this : this.dataHost;
+  /**
+   * Overrides the path header renderer to render the Select All checkbox
+   * in the header cell even the path property has been defined.
+   *
+   * @private
+   */
+  __pathHeaderRenderer(...args) {
+    return this.__defaultHeaderRenderer(...args);
+  }
 
-  //   return headerTemplate;
-  // }
+  /**
+   * Renders the Select All checkbox in the header cell
+   *
+   * @private
+   */
+  __defaultHeaderRenderer(root, _column) {
+    let checkbox = root.firstElementChild;
+    if (!checkbox) {
+      checkbox = document.createElement('vaadin-checkbox');
+      checkbox.setAttribute('aria-label', 'Select All');
+      checkbox.classList.add('vaadin-grid-select-all-checkbox');
+      checkbox.addEventListener('checked-changed', this.__onSelectAllCheckedChanged.bind(this));
+      root.appendChild(checkbox);
+    }
 
-  // /** @private */
-  // _prepareBodyTemplate() {
-  //   const template = this._prepareTemplatizer(this._findTemplate() || this.$.defaultBodyTemplate);
-  //   // needed to override the dataHost correctly in case internal template is used.
-  //   template.templatizer.dataHost = template === this.$.defaultBodyTemplate ? this : this.dataHost;
+    const checked = this.__isChecked(this.selectAll, this.__indeterminate);
+    checkbox.__rendererChecked = checked;
+    checkbox.checked = checked;
+    checkbox.indeterminate = this.__indeterminate;
 
-  //   return template;
-  // }
+    if (this.__selectAllHidden) {
+      checkbox.setAttribute('hidden', 'hidden');
+    } else {
+      checkbox.removeAttribute('hidden');
+    }
+  }
+
+  /**
+   * Renders the Select Row checkbox in a body cell
+   *
+   * @private
+   */
+  __defaultRenderer(root, _column, { item, selected }) {
+    let checkbox = root.firstElementChild;
+    if (!checkbox) {
+      checkbox = document.createElement('vaadin-checkbox');
+      checkbox.setAttribute('aria-label', 'Select Row');
+      checkbox.addEventListener('checked-changed', this.__onSelectRowCheckedChanged.bind(this));
+      root.appendChild(checkbox);
+    }
+
+    checkbox.__item = item;
+    checkbox.__rendererChecked = selected;
+    checkbox.checked = selected;
+  }
 
   /** @private */
   __onDefaultHeaderRendererBindingChanged() {
@@ -239,7 +220,7 @@ class GridSelectionColumnElement extends GridColumnElement {
   }
 
   /**
-   * Updates the `selectAll` property after the Select All Rows checkbox is switched.
+   * Updates the `selectAll` property after the Select All checkbox is switched.
    * The listener handles only user-fired events.
    *
    * @private
