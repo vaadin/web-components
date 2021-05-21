@@ -54,7 +54,7 @@ class CrudGridElement extends IncludedMixin(GridElement) {
 
   /** @private */
   __onItemsChange(items) {
-    if ((!this.dataProvider || this.dataProvider == this._arrayDataProvider) && !this.include && items && items[0]) {
+    if ((!this.dataProvider || this.dataProvider.__arrayDataProvider) && !this.include && items && items[0]) {
       this._configure(items[0]);
     }
   }
@@ -91,7 +91,7 @@ class CrudGridElement extends IncludedMixin(GridElement) {
    * @private
    */
   _dataProviderChanged(dataProvider, oldDataProvider) {
-    if (this._arrayDataProvider == dataProvider) {
+    if (dataProvider.__arrayDataProvider) {
       super._dataProviderChanged(dataProvider, oldDataProvider);
     } else if (this.__dataProviderWrapper != dataProvider) {
       this.innerHTML = '';

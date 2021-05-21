@@ -21,6 +21,10 @@ export const FilterMixin = (superClass) =>
       };
     }
 
+    static get observers() {
+      return ['__applyFilters(isAttached)'];
+    }
+
     /** @protected */
     ready() {
       super.ready();
@@ -58,6 +62,7 @@ export const FilterMixin = (superClass) =>
     __applyFilters() {
       if (this.dataProvider && this.isAttached) {
         this.clearCache();
+        this._ensureFirstPageLoaded();
       }
     }
 

@@ -10,7 +10,7 @@
 export const A11yMixin = (superClass) =>
   class A11yMixin extends superClass {
     static get observers() {
-      return ['_a11yUpdateGridSize(size, _columnTree, _columnTree.*)'];
+      return ['_a11yUpdateGridSize(_effectiveSize, _columnTree, _columnTree.*)'];
     }
 
     /** @private */
@@ -24,15 +24,15 @@ export const A11yMixin = (superClass) =>
     }
 
     /** @private */
-    _a11yUpdateGridSize(size, _columnTree) {
-      if (size === undefined || _columnTree === undefined) {
+    _a11yUpdateGridSize(effectiveSize, _columnTree) {
+      if (effectiveSize === undefined || _columnTree === undefined) {
         return;
       }
 
       const bodyColumns = _columnTree[_columnTree.length - 1];
       this.$.table.setAttribute(
         'aria-rowcount',
-        size + this._a11yGetHeaderRowCount(_columnTree) + this._a11yGetFooterRowCount(_columnTree)
+        effectiveSize + this._a11yGetHeaderRowCount(_columnTree) + this._a11yGetFooterRowCount(_columnTree)
       );
       this.$.table.setAttribute('aria-colcount', (bodyColumns && bodyColumns.length) || 0);
 
@@ -50,7 +50,10 @@ export const A11yMixin = (superClass) =>
     /** @protected */
     _a11yUpdateFooterRows() {
       Array.from(this.$.footer.children).forEach((footerRow, index) =>
-        footerRow.setAttribute('aria-rowindex', this._a11yGetHeaderRowCount(this._columnTree) + this.size + index + 1)
+        footerRow.setAttribute(
+          'aria-rowindex',
+          this._a11yGetHeaderRowCount(this._columnTree) + this._effectiveSize + index + 1
+        )
       );
     }
 

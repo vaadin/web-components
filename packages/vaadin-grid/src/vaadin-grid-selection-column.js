@@ -184,7 +184,11 @@ class GridSelectionColumnElement extends GridColumnElement {
       return;
     }
 
-    this._grid.selectedItems = selectAll && Array.isArray(this._grid.items) ? this._grid._filter(this._grid.items) : [];
+    if (this.__gridUsesArrayDataProvider() && selectAll) {
+      this.__withFilteredItemsArray((items) => (this._grid.selectedItems = items));
+    } else {
+      this._grid.selectedItems = [];
+    }
   }
 
   /**
@@ -254,24 +258,51 @@ class GridSelectionColumnElement extends GridColumnElement {
   /** @private */
   __onSelectedItemsChanged() {
     this._selectAllChangeLock = true;
-    if (Array.isArray(this._grid.items)) {
-      if (!this._grid.selectedItems.length) {
-        this.selectAll = false;
-        this.__indeterminate = false;
-      } else if (this.__arrayContains(this._grid.selectedItems, this._grid._filter(this._grid.items))) {
-        this.selectAll = true;
-        this.__indeterminate = false;
-      } else {
-        this.selectAll = false;
-        this.__indeterminate = true;
-      }
+    if (this.__gridUsesArrayDataProvider()) {
+      this.__withFilteredItemsArray((items) => {
+        if (!this._grid.selectedItems.length) {
+          this.selectAll = false;
+          this.__indeterminate = false;
+        } else if (this.__arrayContains(this._grid.selectedItems, items)) {
+          this.selectAll = true;
+          this.__indeterminate = false;
+        } else {
+          this.selectAll = false;
+          this.__indeterminate = true;
+        }
+      });
     }
     this._selectAllChangeLock = false;
   }
 
   /** @private */
-  __onDataProviderChanged() {
-    this.__selectAllHidden = !Array.isArray(this._grid.items);
+  _onDataProviderChanged() {
+    this.__selectAllHidden = !this.__gridUsesArrayDataProvider();
+  }
+
+  /**
+   * Assuming the grid uses an array data provider, fetches all the filtered items
+   * from it and invokes the callback with the resulting array.
+   *
+   * @private
+   **/
+  __withFilteredItemsArray(callback) {
+    const params = {
+      page: 0,
+      pageSize: Infinity,
+      sortOrders: [],
+      filters: this._grid._mapFilters()
+    };
+    this._grid.dataProvider(params, (items) => callback(items));
+  }
+
+  /**
+   * Checks whether the grid's dataProvider is an array data provider
+   *
+   * @private
+   **/
+  __gridUsesArrayDataProvider() {
+    return this._grid.dataProvider && this._grid.dataProvider.__arrayDataProvider;
   }
 }
 
