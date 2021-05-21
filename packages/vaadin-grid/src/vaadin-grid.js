@@ -831,9 +831,9 @@ class GridElement extends ElementMixin(
    * @protected
    */
   _renderColumnTree(columnTree) {
-    Array.from(this.$.items.children)
-      .filter((row) => !row.hidden)
-      .forEach((row) => this._updateRow(row, columnTree[columnTree.length - 1], null, false, true));
+    Array.from(this.$.items.children).forEach((row) =>
+      this._updateRow(row, columnTree[columnTree.length - 1], null, false, true)
+    );
 
     while (this.$.header.children.length < columnTree.length) {
       const headerRow = document.createElement('tr');

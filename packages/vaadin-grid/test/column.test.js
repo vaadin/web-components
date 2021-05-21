@@ -168,6 +168,29 @@ describe('column', () => {
         expect(childCountAfter).to.be.below(childCountBefore);
       });
 
+      it('should update the structure of hidden rows', async () => {
+        // Redice the size so we end up with hidden rows
+        grid.size = 0;
+
+        // Detach grid from its parent
+        const parentNode = grid.parentNode;
+        parentNode.removeChild(grid);
+
+        // Remove a column
+        column.parentNode.removeChild(column);
+
+        // Increase the size so one of the hidden rows becomes visible again
+        grid.size = 1;
+        flushGrid(grid);
+
+        // Re-attach the grid
+        parentNode.appendChild(grid);
+
+        await nextFrame();
+
+        expect(getBodyCellContent(grid, 0, 0).innerText).to.equal('cell');
+      });
+
       it('should not throw on render with initially hidden columns with header/footerRenderer', () => {
         const newColumn = document.createElement('vaadin-grid-column');
         newColumn.hidden = true;
