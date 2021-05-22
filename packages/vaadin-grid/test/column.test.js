@@ -10,6 +10,7 @@ import {
   getContainerCell,
   getContainerCellContent,
   getHeaderCellContent,
+  getPhysicalItems,
   infiniteDataProvider
 } from './helpers.js';
 import '../vaadin-grid.js';
@@ -169,8 +170,8 @@ describe('column', () => {
       });
 
       it('should update the structure of hidden rows', async () => {
-        // Redice the size so we end up with hidden rows
-        grid.size = 0;
+        // Reduce the size so we end up with hidden rows
+        grid.size = 1;
 
         // Detach grid from its parent
         const parentNode = grid.parentNode;
@@ -180,15 +181,18 @@ describe('column', () => {
         column.parentNode.removeChild(column);
 
         // Increase the size so one of the hidden rows becomes visible again
-        grid.size = 1;
+        grid.size = 2;
         flushGrid(grid);
 
         // Re-attach the grid
         parentNode.appendChild(grid);
 
         await nextFrame();
+        flushGrid(grid);
 
-        expect(getBodyCellContent(grid, 0, 0).innerText).to.equal('cell');
+        // Expect the two rows (the second one was hidden) to have the same amount of cells
+        const rows = getPhysicalItems(grid);
+        expect(rows[1].childElementCount).to.equal(rows[0].childElementCount);
       });
 
       it('should not throw on render with initially hidden columns with header/footerRenderer', () => {
