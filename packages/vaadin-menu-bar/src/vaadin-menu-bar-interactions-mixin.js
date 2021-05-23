@@ -237,7 +237,7 @@ export const InteractionsMixin = (superClass) =>
      * @protected
      */
     _onMouseOver(e) {
-      this.preventClose = true
+      this.preventClose = true;
       const button = this._getButtonFromEvent(e);
       if (button && button !== this._expandedButton) {
         const isOpened = this._subMenu.opened;
@@ -321,7 +321,7 @@ export const InteractionsMixin = (superClass) =>
         let menu = e.detail.subMenuElement;
         this._addHoverListener(menu);
         this._addSubMenuOpenListener(menu);
-      })
+      });
     }
 
     /** @private */
