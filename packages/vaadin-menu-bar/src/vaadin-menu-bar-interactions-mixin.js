@@ -237,7 +237,9 @@ export const InteractionsMixin = (superClass) =>
      * @protected
      */
     _onMouseOver(e) {
-      this.preventClose = true;
+      if (this.openOnHover) {
+        this.preventClose = true;
+      }
       const button = this._getButtonFromEvent(e);
       if (button && button !== this._expandedButton) {
         const isOpened = this._subMenu.opened;
