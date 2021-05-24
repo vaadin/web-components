@@ -74,7 +74,7 @@ class GridFilterColumnElement extends GridColumnElement {
 
     textField.__rendererValue = this._filterValue;
     textField.value = this._filterValue;
-    textField.label = this.__getFilterTextFieldLabel();
+    textField.label = this.__getHeader();
   }
 
   /**
@@ -95,24 +95,13 @@ class GridFilterColumnElement extends GridColumnElement {
   }
 
   /**
-   * The filter column is only intended to work with the default header renderer
-   * and doesn't allow using custom renderers.
+   * The filter column is supposed to use with no other renderers
+   * except the default header renderer
    *
    * @private
    */
   __computeHeaderRenderer() {
     return this.__defaultHeaderRenderer;
-  }
-
-  /** @private */
-  __getFilterTextFieldLabel() {
-    if (this.header) {
-      return this.header;
-    }
-
-    if (this.path) {
-      return this._generateHeader(this.path);
-    }
   }
 
   /**
@@ -127,6 +116,17 @@ class GridFilterColumnElement extends GridColumnElement {
     }
 
     this._filterValue = e.detail.value;
+  }
+
+  /** @private */
+  __getHeader() {
+    if (this.header) {
+      return this.header;
+    }
+
+    if (this.path) {
+      return this._generateHeader(this.path);
+    }
   }
 }
 

@@ -4,7 +4,6 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { GridColumnElement } from './vaadin-grid-column.js';
-import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 import './vaadin-grid-sorter.js';
 
 /**
@@ -23,14 +22,6 @@ import './vaadin-grid-sorter.js';
  * @fires {CustomEvent} direction-changed - Fired when the `direction` property changes.
  */
 class GridSortColumnElement extends GridColumnElement {
-  static get template() {
-    return html`
-      <template class="header" id="headerTemplate">
-        <vaadin-grid-sorter path="[[path]]" direction="{{direction}}">[[_getHeader(header, path)]]</vaadin-grid-sorter>
-      </template>
-    `;
-  }
-
   static get is() {
     return 'vaadin-grid-sort-column';
   }
@@ -55,17 +46,85 @@ class GridSortColumnElement extends GridColumnElement {
     };
   }
 
-  /** @private */
-  _prepareHeaderTemplate() {
-    const headerTemplate = this._prepareTemplatizer(this.$.headerTemplate);
-    // needed to override the dataHost correctly in case internal template is used.
-    headerTemplate.templatizer.dataHost = this;
-    return headerTemplate;
+  static get observers() {
+    return ['__onDefaultHeaderRendererBindingChanged(direction, path, header)'];
+  }
+
+  constructor() {
+    super();
+
+    this.__boundOnDirectionChanged = this.__onDirectionChanged.bind(this);
+  }
+
+  /**
+   * Renders `vaadin-grid-sorter` to the header cell
+   *
+   * @private
+   */
+  __defaultHeaderRenderer(root, _column) {
+    let sorter = root.firstElementChild;
+    if (!sorter) {
+      sorter = document.createElement('vaadin-grid-sorter');
+      sorter.addEventListener('direction-changed', this.__boundOnDirectionChanged);
+      root.appendChild(sorter);
+    }
+
+    sorter.path = this.path;
+    sorter.__rendererDirection = this.direction;
+    sorter.direction = this.direction;
+    sorter.textContent = this.__getHeader(this.header, this.path);
+  }
+
+  /**
+   * Re-runs the header renderer when a column instance property used in the renderer is changed
+   *
+   * @private
+   */
+  __onDefaultHeaderRendererBindingChanged() {
+    if (this.__headerRenderer !== this.__defaultHeaderRenderer) {
+      return;
+    }
+
+    if (!this._headerCell) {
+      return;
+    }
+
+    this.__runRenderer(this.__headerRenderer, this._headerCell);
+  }
+
+  /**
+   * The sort column is supposed to use with no other renderers
+   * except the default header renderer
+   *
+   * @private
+   */
+  __computeHeaderRenderer() {
+    return this.__defaultHeaderRenderer;
+  }
+
+  /**
+   * Updates the `direction` property after the direction of `vaadin-grid-sorter` is changed.
+   * The listener handles only user-fired events.
+   *
+   * @private
+   */
+  __onDirectionChanged(e) {
+    if (e.detail.value === e.target.__rendererDirection) {
+      return;
+    }
+
+    this.direction = e.detail.value;
   }
 
   /** @private */
-  _getHeader(header, path) {
-    return header || this._generateHeader(path);
+  __getHeader() {
+    if (this.header) {
+      return this.header;
+    }
+
+    if (this.path) {
+      return this._generateHeader(this.path);
+    }
   }
 }
 

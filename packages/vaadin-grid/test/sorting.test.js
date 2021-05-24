@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { click, fixtureSync, listenOnce, nextFrame } from '@vaadin/testing-helpers';
+import { click, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { buildDataSet, flushGrid, getBodyCellContent, getHeaderCellContent, getRows, getRowCells } from './helpers.js';
 import '../vaadin-grid.js';
 import '../vaadin-grid-sorter.js';
@@ -39,9 +39,13 @@ describe('sorting', () => {
       expect(sorter.direction).to.equal(null);
     });
 
-    it('should fire a sorter-changed event', (done) => {
-      listenOnce(sorter, 'sorter-changed', () => done());
+    it('should fire a sorter-changed event', () => {
+      const spy = sinon.spy();
+      sorter.addEventListener('sorter-changed', spy);
+
       sorter.direction = 'asc';
+
+      expect(spy.calledOnce).to.be.true;
     });
 
     it('should show order indicator', () => {
@@ -422,12 +426,15 @@ describe('sorting', () => {
         expect(sorter.direction).to.equal('asc');
       });
 
-      it('should notify direction property change from the internal vaadin-grid-sorter', (done) => {
-        listenOnce(sortColumn, 'direction-changed', (e) => {
-          expect(e.detail.value).to.equal('desc');
-          done();
-        });
+      it('should notify direction property change from the internal vaadin-grid-sorter', () => {
+        const spy = sinon.spy();
+        sortColumn.addEventListener('direction-changed', spy);
+
         sorter.direction = 'desc';
+
+        const event = spy.args[0][0];
+        expect(spy.calledOnce).to.be.true;
+        expect(event.detail.value).to.be.equal('desc');
       });
 
       it('should use header property to determine the text that gets slotted inside the sorter', () => {
