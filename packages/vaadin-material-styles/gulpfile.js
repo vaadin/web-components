@@ -120,6 +120,13 @@ document.head.appendChild($_documentContainer.content);
             }
           });
 
+          const list = glyphs.map((g) => g.name);
+          fs.writeFile('test/glyphs.json', JSON.stringify(list, null, 2), function (err) {
+            if (err) {
+              return console.error(err);
+            }
+          });
+
           // Cleanup
           fs.unlink('material-icons.woff', function (err) {
             if (err) {
