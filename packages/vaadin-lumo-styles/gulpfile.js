@@ -41,14 +41,15 @@ function createIconset(folder, filenames, idPrefix = '') {
     }
 
     const content = fs.readFileSync(folder + filename, 'utf-8');
-    const path = content.match(/<path d="([^"]*)"/);
+    const path = content.match(/<path( fill-rule="evenodd" clip-rule="evenodd")* d="([^"]*)"/);
     if (path) {
-      const newPath = new svgpath(path[1])
+      const newPath = new svgpath(path[2])
         .scale(1000 / 24, 1000 / 24)
         .round(0)
         .toString();
       const name = filename.replace('.svg', '').replace(/\s/g, '-').toLowerCase();
-      output += `<g id="${idPrefix}${name}"><path d="${newPath}"></path></g>\n`;
+      const attrs = path[1] !== undefined ? path[1] : '';
+      output += `<g id="${idPrefix}${name}"><path d="${newPath}"${attrs}></path></g>\n`;
     }
   });
 
@@ -118,8 +119,8 @@ import './version.js';
 
 const $_documentContainer = document.createElement('template');
 
-$_documentContainer.innerHTML = \`<vaadin-iconset name="lumo">
-${createIconset(folder, filenames, 'vaadin-icon:')}
+$_documentContainer.innerHTML = \`<vaadin-iconset name="lumo" size="1000">
+${createIconset(folder, filenames, 'lumo:')}
 </vaadin-iconset>\`;\n\ndocument.head.appendChild($_documentContainer.content);\n`;
 
         fs.writeFile('vaadin-iconset.js', vaadinIcons, function (err) {
@@ -190,6 +191,13 @@ $_documentContainer.innerHTML = \`
 document.head.appendChild($_documentContainer.content);
 `;
           fs.writeFile('font-icons.js', output, function (err) {
+            if (err) {
+              return console.error(err);
+            }
+          });
+
+          const list = glyphs.map((g) => g.name);
+          fs.writeFile('test/glyphs.json', JSON.stringify(list, null, 2), function (err) {
             if (err) {
               return console.error(err);
             }
