@@ -179,11 +179,11 @@ class GridSelectionColumnElement extends GridColumnElement {
    * @private
    */
   __onDefaultHeaderRendererBindingChanged() {
-    if (!this._headerCell) {
+    if (this.__headerRenderer !== this.__defaultHeaderRenderer) {
       return;
     }
 
-    if (this.__headerRenderer !== this.__defaultHeaderRenderer) {
+    if (!this._headerCell) {
       return;
     }
 

@@ -3,7 +3,6 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 import { GridColumnElement } from './vaadin-grid-column.js';
 import './vaadin-grid-filter.js';
 
@@ -21,23 +20,6 @@ import './vaadin-grid-filter.js';
  * ```
  */
 class GridFilterColumnElement extends GridColumnElement {
-  static get template() {
-    return html`
-      <template class="header" id="headerTemplate">
-        <vaadin-grid-filter path="[[path]]" value="[[_filterValue]]">
-          <vaadin-text-field
-            theme="small"
-            focus-target=""
-            style="max-width: 100%;"
-            slot="filter"
-            value="{{_filterValue}}"
-            label="[[_getHeader(header, path)]]"
-          ></vaadin-text-field>
-        </vaadin-grid-filter>
-      </template>
-    `;
-  }
-
   static get is() {
     return 'vaadin-grid-filter-column';
   }
@@ -56,17 +38,95 @@ class GridFilterColumnElement extends GridColumnElement {
     };
   }
 
-  /** @private */
-  _prepareHeaderTemplate() {
-    const headerTemplate = this._prepareTemplatizer(this.$.headerTemplate);
-    // needed to override the dataHost correctly in case internal template is used.
-    headerTemplate.templatizer.dataHost = this;
-    return headerTemplate;
+  static get observers() {
+    return ['__onDefaultHeaderRendererBindingChanged(_filterValue, path, header)'];
+  }
+
+  constructor() {
+    super();
+
+    this.__boundOnFilterValueChanged = this.__onFilterValueChanged.bind(this);
+  }
+
+  /**
+   * Renders `vaadin-grid-filter` with the custom text field to the header cell
+   *
+   * @private
+   */
+  __defaultHeaderRenderer(root, _column) {
+    let filter = root.firstElementChild;
+    let textField = filter?.firstElementChild;
+
+    if (!filter) {
+      filter = document.createElement('vaadin-grid-filter');
+      textField = document.createElement('vaadin-text-field');
+      textField.setAttribute('slot', 'filter');
+      textField.setAttribute('theme', 'small');
+      textField.setAttribute('style', 'max-width: 100%;');
+      textField.setAttribute('focus-target', '');
+      textField.addEventListener('value-changed', this.__boundOnFilterValueChanged);
+      filter.appendChild(textField);
+      root.appendChild(filter);
+    }
+
+    filter.path = this.path;
+    filter.value = this._filterValue;
+
+    textField.__rendererValue = this._filterValue;
+    textField.value = this._filterValue;
+    textField.label = this.__getFilterTextFieldLabel();
+  }
+
+  /**
+   * Re-runs the header renderer when a column instance property used in the renderer is changed
+   *
+   * @private
+   */
+  __onDefaultHeaderRendererBindingChanged() {
+    if (this.__headerRenderer !== this.__defaultHeaderRenderer) {
+      return;
+    }
+
+    if (!this._headerCell) {
+      return;
+    }
+
+    this.__runRenderer(this.__headerRenderer, this._headerCell);
+  }
+
+  /**
+   * The filter column is only intended to work with the default header renderer
+   * and doesn't allow using custom renderers.
+   *
+   * @private
+   */
+  __computeHeaderRenderer() {
+    return this.__defaultHeaderRenderer;
   }
 
   /** @private */
-  _getHeader(header, path) {
-    return header || this._generateHeader(path);
+  __getFilterTextFieldLabel() {
+    if (this.header) {
+      return this.header;
+    }
+
+    if (this.path) {
+      return this._generateHeader(this.path);
+    }
+  }
+
+  /**
+   * Updates the `_filterValue` property after the value of the filter text field is changed.
+   * The listener handles only user-fired events.
+   *
+   * @private
+   */
+  __onFilterValueChanged(e) {
+    if (e.detail.value === e.target.__rendererValue) {
+      return;
+    }
+
+    this._filterValue = e.detail.value;
   }
 }
 
