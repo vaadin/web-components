@@ -43,12 +43,7 @@ function createIconset(folder, filenames, idPrefix = '') {
     const content = fs.readFileSync(folder + filename, 'utf-8');
     const path = content.match(/<path d="([^"]*)"/);
     if (path) {
-      // var xScale = Math.min(1, fontHeight / glyphWidth);
-      // var yScale = -1 * Math.min(1, fontHeight / glyphWidth);
-      // var xTranslate = Math.max(0, (fontHeight - glyphWidth) / 2);
-      // var yTranslate = -1 * fontAscent * (2 - Math.min(1, fontHeight / glyphWidth));
       const newPath = new svgpath(path[1])
-        // .translate(xTranslate, yTranslate)
         .scale(1000 / 24, 1000 / 24)
         .round(0)
         .toString();
