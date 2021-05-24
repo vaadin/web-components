@@ -128,17 +128,7 @@ class GridSelectionColumnElement extends GridColumnElement {
   }
 
   /**
-   * Overrides the path header renderer to render the Select All checkbox
-   * in the header cell even the path property has been defined.
-   *
-   * @private
-   */
-  __pathHeaderRenderer(...args) {
-    return this.__defaultHeaderRenderer(...args);
-  }
-
-  /**
-   * Renders the Select All checkbox in the header cell
+   * Renders the Select All checkbox to the header cell
    *
    * @private
    */
@@ -165,7 +155,7 @@ class GridSelectionColumnElement extends GridColumnElement {
   }
 
   /**
-   * Renders the Select Row checkbox in a body cell
+   * Renders the Select Row checkbox to a body cell
    *
    * @private
    */
@@ -183,7 +173,11 @@ class GridSelectionColumnElement extends GridColumnElement {
     checkbox.checked = selected;
   }
 
-  /** @private */
+  /**
+   * Re-runs the header renderer when a column instance property used in the renderer is changed
+   *
+   * @private
+   */
   __onDefaultHeaderRendererBindingChanged() {
     if (!this._headerCell) {
       return;

@@ -450,24 +450,32 @@ describe('multi selection column', () => {
 
   it('should override the header content with header text', () => {
     selectionColumn.header = 'foo';
+
     expect(firstHeaderCellContent.textContent).to.equal('foo');
     expect(firstBodyCellContent.firstElementChild).to.equal(firstBodyCheckbox);
   });
 
-  it('should override the header content with a header renderer', () => {
-    selectionColumn.headerRenderer = (root) => (root.textContent = 'foo');
-    expect(firstHeaderCellContent.textContent).to.equal('foo');
-    expect(firstBodyCellContent.firstElementChild).to.equal(firstBodyCheckbox);
-  });
-
-  it('should override the body content with path', () => {
+  it('should not override the content of cells when defining a path', () => {
     selectionColumn.path = 'length';
-    expect(firstBodyCellContent.textContent).to.equal('3');
+
+    expect(firstBodyCellContent.firstElementChild).to.equal(firstBodyCheckbox);
     expect(firstHeaderCellContent.firstElementChild).to.equal(selectAllCheckbox);
   });
 
+  it('should override the header content with a header renderer', () => {
+    selectionColumn.headerRenderer = (root) => {
+      root.textContent = 'foo';
+    };
+
+    expect(firstHeaderCellContent.textContent).to.equal('foo');
+    expect(firstBodyCellContent.firstElementChild).to.equal(firstBodyCheckbox);
+  });
+
   it('should override the body content with a renderer', () => {
-    selectionColumn.renderer = (root) => (root.textContent = 'foo');
+    selectionColumn.renderer = (root) => {
+      root.textContent = 'foo';
+    };
+
     expect(firstBodyCellContent.textContent).to.equal('foo');
     expect(firstHeaderCellContent.firstElementChild).to.equal(selectAllCheckbox);
   });

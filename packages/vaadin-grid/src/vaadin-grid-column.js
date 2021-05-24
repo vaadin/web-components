@@ -137,7 +137,7 @@ export const ColumnBaseMixin = (superClass) =>
          */
         __headerRenderer: {
           type: Function,
-          computed: '__computeHeaderRenderer(headerRenderer, _headerTemplate, header, path, _cells.*)'
+          computed: '__computeHeaderRenderer(headerRenderer, _headerTemplate, header)'
         },
 
         /**
@@ -172,9 +172,9 @@ export const ColumnBaseMixin = (superClass) =>
         '_textAlignChanged(textAlign, _cells.*, _headerCell, _footerCell)',
         '_orderChanged(_order, _headerCell, _footerCell, _cells.*)',
         '_lastFrozenChanged(_lastFrozen)',
-        '_setBodyTemplateOrRenderer(_bodyTemplate, __renderer, _cells, _cells.*, path)',
-        '_setHeaderTemplateOrRenderer(_headerTemplate, __headerRenderer, _headerCell, path, header)',
-        '_setFooterTemplateOrRenderer(_footerTemplate, __footerRenderer, _footerCell)',
+        '__setBodyTemplateOrRenderer(_bodyTemplate, __renderer, _cells, _cells.*, path)',
+        '__setHeaderTemplateOrRenderer(_headerTemplate, __headerRenderer, _headerCell, path, header)',
+        '__setFooterTemplateOrRenderer(_footerTemplate, __footerRenderer, _footerCell)',
         '_resizableChanged(resizable, _headerCell)',
         '_reorderStatusChanged(_reorderStatus, _headerCell, _footerCell, _cells.*)',
         '_hiddenChanged(hidden, _headerCell, _footerCell, _cells.*)'
@@ -368,14 +368,14 @@ export const ColumnBaseMixin = (superClass) =>
     }
 
     /** @private */
-    _setBodyTemplateOrRenderer(template, renderer, cells) {
+    __setBodyTemplateOrRenderer(template, renderer, cells) {
       if ((template || renderer) && cells) {
         this.__setColumnTemplateOrRenderer(template, renderer, cells);
       }
     }
 
     /** @private */
-    _setHeaderTemplateOrRenderer(headerTemplate, headerRenderer, headerCell, _path, _header) {
+    __setHeaderTemplateOrRenderer(headerTemplate, headerRenderer, headerCell, _path, _header) {
       if ((headerTemplate || headerRenderer) && headerCell) {
         this.__setColumnTemplateOrRenderer(headerTemplate, headerRenderer, [headerCell]);
         this._grid.__updateHeaderFooterRowVisibility(headerCell.parentElement);
@@ -383,7 +383,7 @@ export const ColumnBaseMixin = (superClass) =>
     }
 
     /** @private */
-    _setFooterTemplateOrRenderer(footerTemplate, footerRenderer, footerCell) {
+    __setFooterTemplateOrRenderer(footerTemplate, footerRenderer, footerCell) {
       if ((footerTemplate || footerRenderer) && footerCell) {
         this.__setColumnTemplateOrRenderer(footerTemplate, footerRenderer, [footerCell]);
         this._grid.__updateHeaderFooterRowVisibility(footerCell.parentElement);
@@ -600,7 +600,7 @@ export const ColumnBaseMixin = (superClass) =>
     }
 
     /**
-     * Renders the header cell content based on the `header` property
+     * Renders a custom text header to the header cell.
      *
      * @private
      */
@@ -609,30 +609,43 @@ export const ColumnBaseMixin = (superClass) =>
     }
 
     /**
-     * Renders the header cell content based on the `path` property
+     * Computes the property name based on the path and renders it to the header cell.
+     * If the path is not defined, then nothing is rendered.
      *
      * @private
      */
-    __pathHeaderRenderer() {
+    __defaultHeaderRenderer() {
+      if (!this.path) return;
+
       this.__setTextContent(this._headerCell._content, this._generateHeader(this.path));
     }
 
     /**
-     * Renders the body cell content based on the `path` property
+     * Computes the item property value based on the path and renders it to the body cell.
+     * If the path is not defined, then nothing is rendered.
      *
      * @private
      */
-    __pathRenderer(root, _owner, { item }) {
+    __defaultRenderer(root, _owner, { item }) {
+      if (!this.path) return;
+
       this.__setTextContent(root, this.get(this.path, item));
     }
 
     /**
-     * Computes the final header renderer that is intended
-     * for internal use when rendering the header content.
+     * By default, nothing is rendered to the footer cell.
      *
      * @private
      */
-    __computeHeaderRenderer(headerRenderer, headerTemplate, header, path, cells) {
+    __defaultFooterRenderer() {}
+
+    /**
+     * Computes the final header renderer that is intended
+     * for internal use when rendering the header cell content.
+     *
+     * @private
+     */
+    __computeHeaderRenderer(headerRenderer, headerTemplate, header) {
       if (headerRenderer) {
         return headerRenderer;
       }
@@ -641,10 +654,6 @@ export const ColumnBaseMixin = (superClass) =>
 
       if (header !== undefined && header !== null) {
         return this.__textHeaderRenderer;
-      }
-
-      if (path && cells.value) {
-        return this.__pathHeaderRenderer;
       }
 
       return this.__defaultHeaderRenderer;
@@ -656,23 +665,19 @@ export const ColumnBaseMixin = (superClass) =>
      *
      * @private
      */
-    __computeRenderer(renderer, template, path, cells) {
+    __computeRenderer(renderer, template) {
       if (renderer) {
         return renderer;
       }
 
       if (template) return;
 
-      if (path && cells.value) {
-        return this.__pathRenderer;
-      }
-
       return this.__defaultRenderer;
     }
 
     /**
      * Computes the final footer renderer that is intended
-     * for internal use when rendering the footer content.
+     * for internal use when rendering the footer cell content.
      *
      * @private
      */
@@ -748,7 +753,7 @@ class GridColumnElement extends ColumnBaseMixin(DirMixin(PolymerElement)) {
        */
       __renderer: {
         type: Function,
-        computed: '__computeRenderer(renderer, _bodyTemplate, path, _cells.*)'
+        computed: '__computeRenderer(renderer, _bodyTemplate)'
       },
 
       /**
