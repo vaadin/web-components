@@ -78,7 +78,8 @@ class GridFilterColumnElement extends GridColumnElement {
   }
 
   /**
-   * Re-runs the header renderer when a column instance property used in the renderer is changed
+   * Re-runs the header default renderer once a column instance property
+   * used in the renderer is changed.
    *
    * @private
    */
@@ -95,7 +96,7 @@ class GridFilterColumnElement extends GridColumnElement {
   }
 
   /**
-   * The filter column is supposed to use with no other renderers
+   * The filter column is not supposed to be used with other renderers
    * except the default header renderer
    *
    * @private
@@ -105,12 +106,13 @@ class GridFilterColumnElement extends GridColumnElement {
   }
 
   /**
-   * Updates the `_filterValue` property after the value of the filter text field is changed.
+   * Updates the `_filterValue` property once the filter text field is changed.
    * The listener handles only user-fired events.
    *
    * @private
    */
   __onFilterValueChanged(e) {
+    // Skip if the value is changed by the renderer.
     if (e.detail.value === e.target.__rendererValue) {
       return;
     }

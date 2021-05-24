@@ -169,7 +169,8 @@ class GridSelectionColumnElement extends GridColumnElement {
   }
 
   /**
-   * Re-runs the header renderer when a column instance property used in the renderer is changed
+   * Re-runs the header default renderer once a column instance property
+   * used in the renderer is changed.
    *
    * @private
    */
@@ -209,13 +210,13 @@ class GridSelectionColumnElement extends GridColumnElement {
   }
 
   /**
-   * Updates the `selectAll` property after the Select All checkbox is switched.
+   * Updates the `selectAll` property once the Select All checkbox is switched.
    * The listener handles only user-fired events.
    *
    * @private
    */
   __onSelectAllCheckedChanged(e) {
-    // Skip if the listener is called after `checked` is set by the renderer.
+    // Skip if the `checked` state is changed by the renderer.
     if (e.target.checked === e.target.__rendererChecked) {
       return;
     }
@@ -224,13 +225,13 @@ class GridSelectionColumnElement extends GridColumnElement {
   }
 
   /**
-   * Selects or deselects the row after the Select Row checkbox is switched.
+   * Selects or deselects the row once the Select Row checkbox is switched.
    * The listener handles only user-fired events.
    *
    * @private
    */
   __onSelectRowCheckedChanged(e) {
-    // Skip if the listener is called after `checked` is set by the renderer
+    // Skip if the `checked` state is changed by the renderer.
     if (e.target.checked === e.target.__rendererChecked) {
       return;
     }

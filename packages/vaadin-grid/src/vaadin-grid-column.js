@@ -130,8 +130,8 @@ export const ColumnBaseMixin = (superClass) =>
         headerRenderer: Function,
 
         /**
-         * Represents the final header renderer computed according to the dependencies,
-         * supposed to use internally when rendering the header cell content.
+         * Represents the final header renderer computed on the set of observable arguments.
+         * It supposed to be used internally when rendering the header cell content.
          *
          * @private
          */
@@ -152,8 +152,8 @@ export const ColumnBaseMixin = (superClass) =>
         footerRenderer: Function,
 
         /**
-         * Represents the final footer renderer computed according to the dependencies,
-         * supposed to use internally when rendering the footer cell content.
+         * Represents the final footer renderer computed on the set of observable arguments.
+         * It supposed to be used internally when rendering the footer cell content.
          *
          * @private
          */
@@ -640,8 +640,9 @@ export const ColumnBaseMixin = (superClass) =>
     __defaultFooterRenderer() {}
 
     /**
-     * Computes the final header renderer that is supposed
-     * to use internally when rendering the header cell content.
+     * Computes the final header renderer for the `__headerRenderer` computed property.
+     * All the arguments are observable by the Polymer, it re-calls the method
+     * once an argument is changed to update the property value.
      *
      * @private
      */
@@ -660,8 +661,9 @@ export const ColumnBaseMixin = (superClass) =>
     }
 
     /**
-     * Computes the final renderer that is supposed
-     * to use internally when rendering the content of a body cell.
+     * Computes the final renderer for the `__renderer` property.
+     * All the arguments are observable by the Polymer, it re-calls the method
+     * once an argument is changed to update the property value.
      *
      * @private
      */
@@ -676,8 +678,9 @@ export const ColumnBaseMixin = (superClass) =>
     }
 
     /**
-     * Computes the final footer renderer that is supposed
-     * to use internally when rendering the footer cell content.
+     * Computes the final footer renderer for the `__footerRenderer` property.
+     * All the arguments are observable by the Polymer, it re-calls the method
+     * once an argument is changed to update the property value.
      *
      * @private
      */
@@ -746,8 +749,8 @@ class GridColumnElement extends ColumnBaseMixin(DirMixin(PolymerElement)) {
       renderer: Function,
 
       /**
-       * Represents the final renderer computed according to the dependencies,
-       * supposed to use internally when rendering the content of a body cell.
+       * Represents the final renderer computed on the set of observable arguments.
+       * It supposed to be used internally when rendering the content of a body cell.
        *
        * @private
        */

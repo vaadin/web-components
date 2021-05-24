@@ -76,7 +76,8 @@ class GridSortColumnElement extends GridColumnElement {
   }
 
   /**
-   * Re-runs the header renderer when a column instance property used in the renderer is changed
+   * Re-runs the header default renderer once a column instance property
+   * used in the renderer is changed.
    *
    * @private
    */
@@ -93,8 +94,8 @@ class GridSortColumnElement extends GridColumnElement {
   }
 
   /**
-   * The sort column is supposed to use with no other renderers
-   * except the default header renderer
+   * The sort column is not supposed to be used with other renderers
+   * except the default header renderer.
    *
    * @private
    */
@@ -103,12 +104,13 @@ class GridSortColumnElement extends GridColumnElement {
   }
 
   /**
-   * Updates the `direction` property after the direction of `vaadin-grid-sorter` is changed.
+   * Updates the `direction` property once the direction of `vaadin-grid-sorter` is changed.
    * The listener handles only user-fired events.
    *
    * @private
    */
   __onDirectionChanged(e) {
+    // Skip if the direction is changed by the renderer.
     if (e.detail.value === e.target.__rendererDirection) {
       return;
     }
