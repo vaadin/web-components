@@ -101,7 +101,7 @@ gulp.task('icons', async function () {
 
         filenames.sort(sortIconFilesNormalized);
 
-        const output = `${createCopyright()}
+        const ironIcons = `${createCopyright()}
 import '@polymer/iron-iconset-svg/iron-iconset-svg.js';
 import './version.js';
 
@@ -111,7 +111,23 @@ $_documentContainer.innerHTML = \`<iron-iconset-svg size="1000" name="lumo">
 ${createIconset(folder, filenames)}
 </iron-iconset-svg>\`;\n\ndocument.head.appendChild($_documentContainer.content);\n`;
 
-        fs.writeFile('iconset.js', output, function (err) {
+        fs.writeFile('iconset.js', ironIcons, function (err) {
+          if (err) {
+            return console.error(err);
+          }
+        });
+
+        const vaadinIcons = `${createCopyright()}
+import '@vaadin/vaadin-icon/vaadin-iconset.js';
+import './version.js';
+
+const $_documentContainer = document.createElement('template');
+
+$_documentContainer.innerHTML = \`<vaadin-iconset name="lumo">
+${createIconset(folder, filenames, 'vaadin-icon:')}
+</vaadin-iconset>\`;\n\ndocument.head.appendChild($_documentContainer.content);\n`;
+
+        fs.writeFile('vaadin-iconset.js', vaadinIcons, function (err) {
           if (err) {
             return console.error(err);
           }
