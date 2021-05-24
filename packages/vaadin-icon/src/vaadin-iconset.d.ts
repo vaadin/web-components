@@ -16,10 +16,15 @@ declare class IconsetElement extends ElementMixin(HTMLElement) {
   name: string;
 
   /**
+   * The size of an individual icon. Note that icons must be square.
+   */
+  size: number;
+
+  /**
    * Produce SVGTemplateResult for the element matching `id` in this
    * iconset, or `undefined` if there is no matching element.
    */
-  applyIcon(name: string): IconSvgLiteral;
+  applyIcon(name: string): { svg: IconSvgLiteral; size: number };
 }
 
 declare global {

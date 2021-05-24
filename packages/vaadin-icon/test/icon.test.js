@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { fixtureSync } from '@vaadin/testing-helpers';
-import { getIconId } from '../vaadin-iconset.js';
 import { unsafeSvgLiteral } from '../src/vaadin-icon-svg.js';
 import '../vaadin-icon.js';
 
@@ -9,12 +8,10 @@ const ANGLE_DOWN = '<path d="M13 4v2l-5 5-5-5v-2l5 5z"></path>';
 const ANGLE_UP = '<path d="M3 12v-2l5-5 5 5v2l-5-5z"></path>';
 
 describe('vaadin-icon', () => {
-  let icon;
+  let icon, svgElement;
 
-  function expectIcon(content, size = 16) {
-    const svgElement = icon.shadowRoot.querySelector('svg');
+  function expectIcon(content) {
     expect(svgElement.innerHTML.trim().replace(/<!--[^>]*-->/g, '')).to.equal(content);
-    expect(svgElement.getAttribute('viewBox')).to.equal(`0 0 ${size} ${size}`);
   }
 
   describe('custom element definition', () => {
@@ -34,6 +31,7 @@ describe('vaadin-icon', () => {
   describe('svg property', () => {
     beforeEach(() => {
       icon = fixtureSync('<vaadin-icon></vaadin-icon>');
+      svgElement = icon.shadowRoot.querySelector('svg');
     });
 
     describe('valid icon', () => {
@@ -42,17 +40,11 @@ describe('vaadin-icon', () => {
         expectIcon(ANGLE_DOWN);
       });
 
-      it('should update icon when size property is set', () => {
-        icon.size = 24;
+      it('should update icon when svg property is updated', () => {
         icon.svg = unsafeSvgLiteral(ANGLE_DOWN);
-        expectIcon(ANGLE_DOWN, 24);
-      });
-
-      it('should update icon when size property is updated', () => {
-        icon.svg = unsafeSvgLiteral(ANGLE_DOWN);
-        expectIcon(ANGLE_DOWN, 16);
-        icon.size = 24;
-        expectIcon(ANGLE_DOWN, 24);
+        expectIcon(ANGLE_DOWN);
+        icon.svg = unsafeSvgLiteral(ANGLE_UP);
+        expectIcon(ANGLE_UP);
       });
     });
 
@@ -87,6 +79,26 @@ describe('vaadin-icon', () => {
     });
   });
 
+  describe('size property', () => {
+    beforeEach(() => {
+      icon = fixtureSync('<vaadin-icon></vaadin-icon>');
+      svgElement = icon.shadowRoot.querySelector('svg');
+    });
+
+    it('should set size property to 24 by default', () => {
+      expect(icon.size).to.equal(24);
+    });
+
+    it('should set viewBox attribute based on size', () => {
+      expect(svgElement.getAttribute('viewBox')).to.equal('0 0 24 24');
+    });
+
+    it('should update viewBox attribute on size change', () => {
+      icon.size = 16;
+      expect(svgElement.getAttribute('viewBox')).to.equal('0 0 16 16');
+    });
+  });
+
   describe('icon property', () => {
     let iconset, icons;
 
@@ -95,8 +107,8 @@ describe('vaadin-icon', () => {
         <vaadin-iconset name="vaadin">
           <svg xmlns="http://www.w3.org/2000/svg">
             <defs>
-              <g id="vaadin-icon:angle-down">${ANGLE_DOWN}</g>
-              <g id="vaadin-icon:angle-up">${ANGLE_UP}</g>
+              <g id="vaadin:angle-down">${ANGLE_DOWN}</g>
+              <g id="vaadin:angle-up">${ANGLE_UP}</g>
             </defs>
           </svg>
         </vaadin-iconset>
@@ -107,24 +119,25 @@ describe('vaadin-icon', () => {
     describe('default', () => {
       beforeEach(() => {
         icon = fixtureSync('<vaadin-icon></vaadin-icon>');
+        svgElement = icon.shadowRoot.querySelector('svg');
       });
 
       it('should render icon from the iconset', () => {
         icons.forEach((svgIcon) => {
-          icon.icon = getIconId(svgIcon.getAttribute('id'));
+          icon.icon = svgIcon.getAttribute('id');
           expectIcon(svgIcon.innerHTML);
         });
       });
 
       it('should clear icon when the value is set to null', () => {
-        icon.icon = 'angle-up';
+        icon.icon = 'vaadin:angle-up';
         expectIcon(ANGLE_UP);
         icon.icon = null;
         expectIcon('');
       });
 
       it('should clear icon when the value is set to undefined', () => {
-        icon.icon = 'angle-up';
+        icon.icon = 'vaadin:angle-up';
         expectIcon(ANGLE_UP);
         icon.icon = undefined;
         expectIcon('');
@@ -140,9 +153,10 @@ describe('vaadin-icon', () => {
         document.body.removeChild(icon);
       });
 
-      it('should clear icon when the value is set to null', () => {
-        icon.icon = 'angle-up';
+      it('should set icon when the value is set before attach', () => {
+        icon.icon = 'vaadin:angle-up';
         document.body.appendChild(icon);
+        svgElement = icon.shadowRoot.querySelector('svg');
         expectIcon(ANGLE_UP);
       });
     });

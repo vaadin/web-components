@@ -6,8 +6,8 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
-import { IconsetElement, getIconId } from './vaadin-iconset.js';
-import { renderSvg } from './vaadin-icon-svg.js';
+import { IconsetElement } from './vaadin-iconset.js';
+import { ensureSvgLiteral, renderSvg } from './vaadin-icon-svg.js';
 
 const DEFAULT_ICONSET = 'vaadin';
 
@@ -46,7 +46,7 @@ class IconElement extends ThemableMixin(ElementMixin(PolymerElement)) {
         version="1.1"
         xmlns="http://www.w3.org/2000/svg"
         xmlns:xlink="http://www.w3.org/1999/xlink"
-        viewBox="0 0 [[size]] [[size]]"
+        viewBox="[[__computeViewBox(size)]]"
         preserveAspectRatio="xMidYMid meet"
       ></svg>
     `;
@@ -83,7 +83,7 @@ class IconElement extends ThemableMixin(ElementMixin(PolymerElement)) {
        */
       size: {
         type: Number,
-        value: 16
+        value: 24
       },
 
       /** @private */
@@ -105,12 +105,15 @@ class IconElement extends ThemableMixin(ElementMixin(PolymerElement)) {
   __iconChanged(icon) {
     if (icon) {
       const parts = icon.split(':');
-      const iconName = getIconId(parts.pop());
-      const iconsetName = parts.pop() || DEFAULT_ICONSET;
+      const iconsetName = parts[0] || DEFAULT_ICONSET;
       const iconset = IconsetElement.getIconset(iconsetName);
-      this.svg = iconset.applyIcon(iconName);
+      const { svg, size } = iconset.applyIcon(icon);
+      if (size !== this.size) {
+        this.size = size;
+      }
+      this.svg = svg;
     } else {
-      this.svg = null;
+      this.svg = ensureSvgLiteral(null);
     }
   }
 
@@ -121,6 +124,11 @@ class IconElement extends ThemableMixin(ElementMixin(PolymerElement)) {
     }
 
     renderSvg(svg, svgElement);
+  }
+
+  /** @private */
+  __computeViewBox(size) {
+    return `0 0 ${size} ${size}`;
   }
 }
 
