@@ -145,13 +145,8 @@ class GridSelectionColumnElement extends GridColumnElement {
     const checked = this.__isChecked(this.selectAll, this.__indeterminate);
     checkbox.__rendererChecked = checked;
     checkbox.checked = checked;
+    checkbox.hidden = this.__selectAllHidden;
     checkbox.indeterminate = this.__indeterminate;
-
-    if (this.__selectAllHidden) {
-      checkbox.setAttribute('hidden', 'hidden');
-    } else {
-      checkbox.removeAttribute('hidden');
-    }
   }
 
   /**

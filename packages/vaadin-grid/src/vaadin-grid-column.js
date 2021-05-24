@@ -130,8 +130,8 @@ export const ColumnBaseMixin = (superClass) =>
         headerRenderer: Function,
 
         /**
-         * Represents the final header renderer computed on the dependencies,
-         * intended to use internally when rendering the header content.
+         * Represents the final header renderer computed according to the dependencies,
+         * supposed to use internally when rendering the header cell content.
          *
          * @private
          */
@@ -152,8 +152,8 @@ export const ColumnBaseMixin = (superClass) =>
         footerRenderer: Function,
 
         /**
-         * Represents the final footer renderer computed on the dependencies,
-         * intended to use internally when rendering the footer content.
+         * Represents the final footer renderer computed according to the dependencies,
+         * supposed to use internally when rendering the footer cell content.
          *
          * @private
          */
@@ -600,7 +600,7 @@ export const ColumnBaseMixin = (superClass) =>
     }
 
     /**
-     * Renders a custom text header to the header cell.
+     * Renders the text header to the header cell.
      *
      * @private
      */
@@ -640,8 +640,8 @@ export const ColumnBaseMixin = (superClass) =>
     __defaultFooterRenderer() {}
 
     /**
-     * Computes the final header renderer that is intended
-     * for internal use when rendering the header cell content.
+     * Computes the final header renderer that is supposed
+     * to use internally when rendering the header cell content.
      *
      * @private
      */
@@ -660,8 +660,8 @@ export const ColumnBaseMixin = (superClass) =>
     }
 
     /**
-     * Computes the final renderer that is intended
-     * for internal use when rendering the content of a body cell.
+     * Computes the final renderer that is supposed
+     * to use internally when rendering the content of a body cell.
      *
      * @private
      */
@@ -676,8 +676,8 @@ export const ColumnBaseMixin = (superClass) =>
     }
 
     /**
-     * Computes the final footer renderer that is intended
-     * for internal use when rendering the footer cell content.
+     * Computes the final footer renderer that is supposed
+     * to use internally when rendering the footer cell content.
      *
      * @private
      */
@@ -746,8 +746,8 @@ class GridColumnElement extends ColumnBaseMixin(DirMixin(PolymerElement)) {
       renderer: Function,
 
       /**
-       * Represents the final renderer computed on the dependencies,
-       * intended to use internally when rendering the content of a body cell.
+       * Represents the final renderer computed according to the dependencies,
+       * supposed to use internally when rendering the content of a body cell.
        *
        * @private
        */
