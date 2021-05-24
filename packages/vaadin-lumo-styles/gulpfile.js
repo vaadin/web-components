@@ -24,6 +24,38 @@ function sortIconFilesNormalized(file1, file2) {
   return file1.replace(/-/g, '~').localeCompare(file2.replace(/-/g, '~'), 'en-US');
 }
 
+function createCopyright() {
+  return `/**
+ * @license
+ * Copyright (c) 2021 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */`;
+}
+
+function createIconset(folder, filenames, idPrefix = '') {
+  let output = `<svg xmlns="http://www.w3.org/2000/svg">\n<defs>\n`;
+  filenames.forEach(function (filename) {
+    // Skip non-svg files
+    if (filename.indexOf('.svg') === -1) {
+      return;
+    }
+
+    const content = fs.readFileSync(folder + filename, 'utf-8');
+    const path = content.match(/<path d="([^"]*)"/);
+    if (path) {
+      const newPath = new svgpath(path[1])
+        .scale(1000 / 24, 1000 / 24)
+        .round(0)
+        .toString();
+      const name = filename.replace('.svg', '').replace(/\s/g, '-').toLowerCase();
+      output += `<g id="${idPrefix}${name}"><path d="${newPath}"></path></g>\n`;
+    }
+  });
+
+  output += `</defs>\n</svg>`;
+  return output;
+}
+
 gulp.task('icons', async function () {
   const folder = 'icons/svg/';
   let glyphs;
@@ -62,53 +94,35 @@ gulp.task('icons', async function () {
           return;
         }
 
-        let output = `/**
- * @license
- * Copyright (c) 2021 Vaadin Ltd.
- * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
- */
+        filenames.sort(sortIconFilesNormalized);
+
+        const ironIcons = `${createCopyright()}
 import '@polymer/iron-iconset-svg/iron-iconset-svg.js';
 import './version.js';
 
 const $_documentContainer = document.createElement('template');
 
 $_documentContainer.innerHTML = \`<iron-iconset-svg size="1000" name="lumo">
-<svg xmlns="http://www.w3.org/2000/svg">
-<defs>
-`;
+${createIconset(folder, filenames)}
+</iron-iconset-svg>\`;\n\ndocument.head.appendChild($_documentContainer.content);\n`;
 
-        filenames.sort(sortIconFilesNormalized);
-        filenames.forEach(function (filename) {
-          // Skip non-svg files
-          if (filename.indexOf('.svg') === -1) {
-            return;
-          }
-
-          const content = fs.readFileSync(folder + filename, 'utf-8');
-          const path = content.match(/<path d="([^"]*)"/);
-          if (path) {
-            // var xScale = Math.min(1, fontHeight / glyphWidth);
-            // var yScale = -1 * Math.min(1, fontHeight / glyphWidth);
-            // var xTranslate = Math.max(0, (fontHeight - glyphWidth) / 2);
-            // var yTranslate = -1 * fontAscent * (2 - Math.min(1, fontHeight / glyphWidth));
-            const newPath = new svgpath(path[1])
-              // .translate(xTranslate, yTranslate)
-              .scale(1000 / 24, 1000 / 24)
-              .round(0)
-              .toString();
-            const name = filename.replace('.svg', '').replace(/\s/g, '-').toLowerCase();
-            output += `<g id="${name}"><path d="${newPath}"></path></g>\n`;
+        fs.writeFile('iconset.js', ironIcons, function (err) {
+          if (err) {
+            return console.error(err);
           }
         });
 
-        output += `</defs>
-</svg>
-</iron-iconset-svg>\`;
+        const vaadinIcons = `${createCopyright()}
+import '@vaadin/vaadin-icon/vaadin-iconset.js';
+import './version.js';
 
-document.head.appendChild($_documentContainer.content);
-`;
+const $_documentContainer = document.createElement('template');
 
-        fs.writeFile('iconset.js', output, function (err) {
+$_documentContainer.innerHTML = \`<vaadin-iconset name="lumo">
+${createIconset(folder, filenames, 'vaadin-icon:')}
+</vaadin-iconset>\`;\n\ndocument.head.appendChild($_documentContainer.content);\n`;
+
+        fs.writeFile('vaadin-iconset.js', vaadinIcons, function (err) {
           if (err) {
             return console.error(err);
           }
@@ -147,11 +161,8 @@ document.head.appendChild($_documentContainer.content);
           const lumoIconsWoff = fs.readFileSync('lumo-icons.woff');
 
           // Write the output to font-icons.js
-          let output = `/**
- * @license
- * Copyright (c) 2021 Vaadin Ltd.
- * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
- */
+          let output = createCopyright();
+          output += `
 import './version.js';
 
 const $_documentContainer = document.createElement('template');
