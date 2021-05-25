@@ -63,7 +63,7 @@ declare class VirtualListElement extends ElementMixin(ThemableMixin(HTMLElement)
   /**
    * Gets the index of the first visible item in the viewport.
    */
-  firstVisibleIndex: number;
+  readonly firstVisibleIndex: number;
 
   /**
    * Gets the index of the last visible item in the viewport.
