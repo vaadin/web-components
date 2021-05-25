@@ -12,6 +12,8 @@ const iconRegistry = {};
 /**
  * `<vaadin-iconset>` is a Web Component for creating SVG icon collections.
  *
+ *
+ *
  * @extends HTMLElement
  * @mixes ElementMixin
  */
@@ -31,7 +33,10 @@ class IconsetElement extends ElementMixin(PolymerElement) {
   static get properties() {
     return {
       /**
-       * The name of the iconset.
+       * The name of the iconset. Every iconset is required to have its own unique name.
+       * All the SVG icons in the iconset must have IDs conforming to its name.
+       *
+       * See also [`name`](#/elements/vaadin-icon#property-name) property of `vaadin-icon`.
        */
       name: {
         type: String,
@@ -40,6 +45,9 @@ class IconsetElement extends ElementMixin(PolymerElement) {
 
       /**
        * The size of an individual icon. Note that icons must be square.
+       *
+       * When using `vaadin-icon`, the size of the iconset will take precedence
+       * over the size defined by the user to ensure correct appearance.
        */
       size: {
         type: Number,
@@ -71,16 +79,16 @@ class IconsetElement extends ElementMixin(PolymerElement) {
   }
 
   /**
-   * Produce SVGTemplateResult for the element matching `id` in this
+   * Produce SVGTemplateResult for the element matching `name` in this
    * iconset, or `undefined` if there is no matching element.
    *
-   * @param {string} id
+   * @param {string} name
    */
-  applyIcon(id) {
+  applyIcon(name) {
     // create the icon map on-demand, since the iconset itself has no discrete
     // signal to know when it's children are fully parsed
     this._icons = this._icons || this.__createIconMap();
-    return { svg: cloneSvgNode(this._icons[this.__getIconId(id)]), size: this.size };
+    return { svg: cloneSvgNode(this._icons[this.__getIconId(name)]), size: this.size };
   }
 
   /**

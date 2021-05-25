@@ -11,17 +11,23 @@ declare class IconsetElement extends ElementMixin(HTMLElement) {
   static getIconset(name: string): IconsetElement;
 
   /**
-   * The name of the iconset.
+   * The name of the iconset. Every iconset is required to have its own unique name.
+   * All the SVG icons in the iconset must have IDs conforming to its name.
+   *
+   * See also [`name`](#/elements/vaadin-icon#property-name) property of `vaadin-icon`.
    */
   name: string;
 
   /**
    * The size of an individual icon. Note that icons must be square.
+   *
+   * When using `vaadin-icon`, the size of the iconset will take precedence
+   * over the size defined by the user to ensure correct appearance.
    */
   size: number;
 
   /**
-   * Produce SVGTemplateResult for the element matching `id` in this
+   * Produce SVGTemplateResult for the element matching `name` in this
    * iconset, or `undefined` if there is no matching element.
    */
   applyIcon(name: string): { svg: IconSvgLiteral; size: number };

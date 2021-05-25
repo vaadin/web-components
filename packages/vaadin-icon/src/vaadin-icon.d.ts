@@ -8,7 +8,13 @@ import { IconSvgLiteral } from './vaadin-icon-svg.js';
 declare class IconElement extends ThemableMixin(ElementMixin(HTMLElement)) {
   /**
    * The name of the icon to use. The name should be of the form:
-   * `iconset_name:icon_name`.
+   * `iconset_name:icon_name`. When using `vaadin-icons` it is possible
+   * to omit the first part and only use `icon_name` as a value.
+   *
+   * Setting the `icon` property updates the `svg` and `size` based on the
+   * values provided by the corresponding `vaadin-iconset` element.
+   *
+   * See also [`name`](#/elements/vaadin-iconset#property-name) property of `vaadin-iconset`.
    */
   icon: string | null;
 

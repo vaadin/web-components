@@ -38,7 +38,7 @@ describe('vaadin-iconset', () => {
     it('should return empty svg when called with incorrect id', () => {
       const { svg } = iconset.applyIcon('non-existent');
       expect(isValidSvg(svg)).to.be.true;
-      expect(typeof svg).to.equal('symbol');
+      expect(svg).to.be.a('symbol');
     });
 
     it('should return default iconset size value when called', () => {
