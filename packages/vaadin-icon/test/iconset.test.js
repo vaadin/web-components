@@ -8,10 +8,10 @@ describe('vaadin-iconset', () => {
 
   beforeEach(() => {
     iconset = fixtureSync(`
-      <vaadin-iconset name="vaadin">
+      <vaadin-iconset name="vaadin" size="16">
         <svg xmlns="http://www.w3.org/2000/svg">
           <defs>
-            <g id="vaadin-icon:caret-down"><path d="M3 4h10l-5 7z"></path></g>
+            <g id="vaadin:caret-down"><path d="M3 4h10l-5 7z"></path></g>
             <g id="caret-up"><path d="M13 12h-10l5-7z"></path></g>
           </defs>
         </svg>
@@ -20,25 +20,36 @@ describe('vaadin-iconset', () => {
   });
 
   describe('applyIcon', () => {
-    it('should return svg literal when applyIcon called with correct id', () => {
-      const icon = iconset.applyIcon('caret-down');
-      expect(isValidSvg(icon)).to.be.true;
+    it('should return svg literal when called with correct id', () => {
+      const { svg } = iconset.applyIcon('caret-down');
+      expect(isValidSvg(svg)).to.be.true;
     });
 
-    it('should return svg literal when applyIcon called with prefixed id', () => {
-      const icon = iconset.applyIcon('vaadin-icon:caret-down');
-      expect(isValidSvg(icon)).to.be.true;
+    it('should return svg literal when called with prefixed id', () => {
+      const { svg } = iconset.applyIcon('vaadin:caret-down');
+      expect(isValidSvg(svg)).to.be.true;
     });
 
-    it('should return svg literal when applyIcon called with non-prefixed id', () => {
-      const icon = iconset.applyIcon('caret-up');
-      expect(isValidSvg(icon)).to.be.true;
+    it('should return svg literal when called with non-prefixed id', () => {
+      const { svg } = iconset.applyIcon('caret-up');
+      expect(isValidSvg(svg)).to.be.true;
     });
 
-    it('should return empty svg when applyIcon is called with incorrect id', () => {
-      const icon = iconset.applyIcon('non-existent');
-      expect(isValidSvg(icon)).to.be.true;
-      expect(typeof icon).to.equal('symbol');
+    it('should return empty svg when called with incorrect id', () => {
+      const { svg } = iconset.applyIcon('non-existent');
+      expect(isValidSvg(svg)).to.be.true;
+      expect(svg).to.be.a('symbol');
+    });
+
+    it('should return default iconset size value when called', () => {
+      const { size } = iconset.applyIcon('caret-down');
+      expect(size).to.equal(16);
+    });
+
+    it('should return new iconset size after it is changed', () => {
+      iconset.size = 1000;
+      const { size } = iconset.applyIcon('caret-down');
+      expect(size).to.equal(1000);
     });
   });
 

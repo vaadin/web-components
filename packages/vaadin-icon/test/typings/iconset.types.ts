@@ -6,4 +6,4 @@ const iconset = document.createElement('vaadin-iconset');
 assertType<IconsetElement>(iconset);
 
 const result = iconset.applyIcon('test');
-assertType<IconSvgLiteral>(result);
+assertType<{ svg: IconSvgLiteral; size: number }>(result);

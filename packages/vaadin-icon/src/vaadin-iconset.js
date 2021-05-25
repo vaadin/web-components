@@ -9,10 +9,10 @@ import { cloneSvgNode } from './vaadin-icon-svg.js';
 
 const iconRegistry = {};
 
-export const getIconId = (id) => (id || '').replace('vaadin-icon:', '');
-
 /**
  * `<vaadin-iconset>` is a Web Component for creating SVG icon collections.
+ *
+ *
  *
  * @extends HTMLElement
  * @mixes ElementMixin
@@ -33,11 +33,25 @@ class IconsetElement extends ElementMixin(PolymerElement) {
   static get properties() {
     return {
       /**
-       * The name of the iconset.
+       * The name of the iconset. Every iconset is required to have its own unique name.
+       * All the SVG icons in the iconset must have IDs conforming to its name.
+       *
+       * See also [`name`](#/elements/vaadin-icon#property-name) property of `vaadin-icon`.
        */
       name: {
         type: String,
         observer: '__nameChanged'
+      },
+
+      /**
+       * The size of an individual icon. Note that icons must be square.
+       *
+       * When using `vaadin-icon`, the size of the iconset will take precedence
+       * over the size defined by the user to ensure correct appearance.
+       */
+      size: {
+        type: Number,
+        value: 24
       }
     };
   }
@@ -65,16 +79,16 @@ class IconsetElement extends ElementMixin(PolymerElement) {
   }
 
   /**
-   * Produce SVGTemplateResult for the element matching `id` in this
+   * Produce SVGTemplateResult for the element matching `name` in this
    * iconset, or `undefined` if there is no matching element.
    *
-   * @param {string} id
+   * @param {string} name
    */
-  applyIcon(id) {
+  applyIcon(name) {
     // create the icon map on-demand, since the iconset itself has no discrete
     // signal to know when it's children are fully parsed
     this._icons = this._icons || this.__createIconMap();
-    return cloneSvgNode(this._icons[getIconId(id)]);
+    return { svg: cloneSvgNode(this._icons[this.__getIconId(name)]), size: this.size };
   }
 
   /**
@@ -83,9 +97,14 @@ class IconsetElement extends ElementMixin(PolymerElement) {
   __createIconMap() {
     const icons = {};
     this.querySelectorAll('[id]').forEach((icon) => {
-      icons[getIconId(icon.id)] = icon;
+      icons[this.__getIconId(icon.id)] = icon;
     });
     return icons;
+  }
+
+  /** @private */
+  __getIconId(id) {
+    return (id || '').replace(`${this.name}:`, '');
   }
 
   /** @private */
