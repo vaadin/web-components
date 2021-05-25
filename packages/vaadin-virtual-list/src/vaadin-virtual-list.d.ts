@@ -59,6 +59,16 @@ declare class VirtualListElement extends ElementMixin(ThemableMixin(HTMLElement)
    * Scroll to a specific index in the virtual list.
    */
   scrollToIndex(index: number): void;
+
+  /**
+   * Gets the index of the first visible item in the viewport.
+   */
+  firstVisibleIndex: number;
+
+  /**
+   * Gets the index of the last visible item in the viewport.
+   */
+  lastVisibleIndex: number;
 }
 
 declare global {

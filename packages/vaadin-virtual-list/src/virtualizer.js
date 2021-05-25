@@ -62,4 +62,22 @@ export class Virtualizer {
   flush() {
     this.__adapter.flush();
   }
+
+  /**
+   * Gets the index of the first visible item in the viewport.
+   *
+   * @type {number}
+   */
+  get firstVisibleIndex() {
+    return this.__adapter.adjustedFirstVisibleIndex;
+  }
+
+  /**
+   * Gets the index of the last visible item in the viewport.
+   *
+   * @type {number}
+   */
+  get lastVisibleIndex() {
+    return this.__adapter.adjustedLastVisibleIndex;
+  }
 }

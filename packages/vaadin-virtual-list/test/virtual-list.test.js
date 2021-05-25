@@ -88,5 +88,17 @@ describe('virtual-list', () => {
     it('should have full width items', () => {
       expect(list.firstElementChild.offsetWidth).to.equal(list.offsetWidth);
     });
+
+    it('should have a first visible index', () => {
+      const item = [...list.children].find((el) => el.textContent === `value-${list.firstVisibleIndex}`);
+      const itemRect = item.getBoundingClientRect();
+      expect(list.getBoundingClientRect().top).to.be.within(itemRect.top, itemRect.bottom);
+    });
+
+    it('should have a last visible index', () => {
+      const item = [...list.children].find((el) => el.textContent === `value-${list.lastVisibleIndex}`);
+      const itemRect = item.getBoundingClientRect();
+      expect(list.getBoundingClientRect().bottom).to.be.within(itemRect.top, itemRect.bottom);
+    });
   });
 });
