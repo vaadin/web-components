@@ -50,6 +50,8 @@ function createIconset(folder, filenames, idPrefix = '') {
       const name = filename.replace('.svg', '').replace(/\s/g, '-').toLowerCase();
       const attrs = path[1] !== undefined ? path[1] : '';
       output += `<g id="${idPrefix}${name}"><path d="${newPath}"${attrs}></path></g>\n`;
+    } else {
+      throw new Error(`Unexpected SVG content: ${filename}`);
     }
   });
 
