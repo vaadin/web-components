@@ -14,6 +14,41 @@ const DEFAULT_ICONSET = 'vaadin';
 /**
  * `<vaadin-icon>` is a Web Component for creating SVG icons.
  *
+ * ### Icon property
+ *
+ * The icon component is designed to be used a drop-in replacement for `<iron-icon>`.
+ * For example, you can use it with `vaadin-icons` like this:
+ *
+ * ```html
+ * <vaadin-icon icon="vaadin:angle-down"></vaadin-icon>
+ * ```
+ *
+ * Alternatively, you can also pick one of the Lumo icons:
+ *
+ * ```html
+ * <vaadin-icon icon="lumo:user"></vaadin-icon>
+ * ```
+ *
+ * ### Custom SVG icon
+ *
+ * You can pass a custom `svg` literal from Lit using [`svg`](#/elements/vaadin-icon#property-svg)
+ * property and define its size using [`size`](#/elements/vaadin-icon#property-size) property:
+ *
+ * ```js
+ * import { html, svg } from 'lit';
+ *
+ * // in your component
+ * render() {
+ *   const svgIcon = svg`<path d="M13 4v2l-5 5-5-5v-2l5 5z"></path>`;
+ *   return html`
+ *     <vaadin-icon
+ *       .svg="${svgIcon}"
+ *       size="16"
+ *     ></vaadin-icon>
+ *   `;
+ * }
+ * ```
+ *
  * @extends HTMLElement
  * @mixes ThemableMixin
  * @mixes ElementMixin
