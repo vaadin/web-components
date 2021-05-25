@@ -68,7 +68,7 @@ declare class VirtualListElement extends ElementMixin(ThemableMixin(HTMLElement)
   /**
    * Gets the index of the last visible item in the viewport.
    */
-  lastVisibleIndex: number;
+  readonly lastVisibleIndex: number;
 }
 
 declare global {
