@@ -47,7 +47,7 @@ class GridSortColumnElement extends GridColumnElement {
   }
 
   static get observers() {
-    return ['__onDefaultHeaderRendererBindingChanged(direction, path, header)'];
+    return ['__renderHeaderCellContent(direction, path, header)'];
   }
 
   constructor() {
@@ -57,7 +57,7 @@ class GridSortColumnElement extends GridColumnElement {
   }
 
   /**
-   * Renders `vaadin-grid-sorter` to the header cell
+   * Renders the grid sorter to the header cell.
    *
    * @private
    */
@@ -76,26 +76,9 @@ class GridSortColumnElement extends GridColumnElement {
   }
 
   /**
-   * Re-runs the header default renderer once a column instance property
-   * used in the renderer is changed.
-   *
-   * @private
-   */
-  __onDefaultHeaderRendererBindingChanged() {
-    if (this.__headerRenderer !== this.__defaultHeaderRenderer) {
-      return;
-    }
-
-    if (!this._headerCell) {
-      return;
-    }
-
-    this.__runRenderer(this.__headerRenderer, this._headerCell);
-  }
-
-  /**
-   * The sort column is not supposed to be used with other renderers
-   * except the default header renderer.
+   * The sort column doesn't allow to use a custom header renderer
+   * to override the header cell content.
+   * It always renders the grid sorter to the header cell.
    *
    * @private
    */
@@ -104,7 +87,7 @@ class GridSortColumnElement extends GridColumnElement {
   }
 
   /**
-   * Updates the `direction` property once the direction of `vaadin-grid-sorter` is changed.
+   * Updates the sorting direction once the grid sorter's direction is changed.
    * The listener handles only user-fired events.
    *
    * @private
@@ -119,13 +102,13 @@ class GridSortColumnElement extends GridColumnElement {
   }
 
   /** @private */
-  __getHeader() {
-    if (this.header) {
-      return this.header;
+  __getHeader(header, path) {
+    if (header) {
+      return header;
     }
 
-    if (this.path) {
-      return this._generateHeader(this.path);
+    if (path) {
+      return this._generateHeader(path);
     }
   }
 }

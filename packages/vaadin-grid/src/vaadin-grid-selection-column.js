@@ -128,7 +128,7 @@ class GridSelectionColumnElement extends GridColumnElement {
   }
 
   /**
-   * Renders the Select All checkbox to the header cell
+   * Renders the Select All checkbox to the header cell.
    *
    * @private
    */
@@ -150,7 +150,7 @@ class GridSelectionColumnElement extends GridColumnElement {
   }
 
   /**
-   * Renders the Select Row checkbox to a body cell
+   * Renders the Select Row checkbox to the body cell.
    *
    * @private
    */
@@ -169,8 +169,9 @@ class GridSelectionColumnElement extends GridColumnElement {
   }
 
   /**
-   * Re-runs the header default renderer once a column instance property
-   * used in the renderer is changed.
+   * When the default header renderer is a current renderer, it re-renders
+   * the header cell content once an instance property of the column
+   * used in the default header renderer is changed.
    *
    * @private
    */
@@ -179,11 +180,7 @@ class GridSelectionColumnElement extends GridColumnElement {
       return;
     }
 
-    if (!this._headerCell) {
-      return;
-    }
-
-    this.__runRenderer(this.__headerRenderer, this._headerCell);
+    this.__renderHeaderCellContent();
   }
 
   /** @private */
@@ -210,13 +207,13 @@ class GridSelectionColumnElement extends GridColumnElement {
   }
 
   /**
-   * Updates the `selectAll` property once the Select All checkbox is switched.
+   * Updates the select all state of the grid once the Select All checkbox is switched.
    * The listener handles only user-fired events.
    *
    * @private
    */
   __onSelectAllCheckedChanged(e) {
-    // Skip if the `checked` state is changed by the renderer.
+    // Skip if the state is changed by the renderer.
     if (e.target.checked === e.target.__rendererChecked) {
       return;
     }
@@ -231,7 +228,7 @@ class GridSelectionColumnElement extends GridColumnElement {
    * @private
    */
   __onSelectRowCheckedChanged(e) {
-    // Skip if the `checked` state is changed by the renderer.
+    // Skip if the state is changed by the renderer.
     if (e.target.checked === e.target.__rendererChecked) {
       return;
     }

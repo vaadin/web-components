@@ -39,7 +39,7 @@ class GridFilterColumnElement extends GridColumnElement {
   }
 
   static get observers() {
-    return ['__onDefaultHeaderRendererBindingChanged(_filterValue, path, header)'];
+    return ['__renderHeaderCellContent(_filterValue, path, header)'];
   }
 
   constructor() {
@@ -49,7 +49,7 @@ class GridFilterColumnElement extends GridColumnElement {
   }
 
   /**
-   * Renders `vaadin-grid-filter` with the custom text field to the header cell
+   * Renders the grid filter with the custom text field to the header cell.
    *
    * @private
    */
@@ -74,30 +74,13 @@ class GridFilterColumnElement extends GridColumnElement {
 
     textField.__rendererValue = this._filterValue;
     textField.value = this._filterValue;
-    textField.label = this.__getHeader();
+    textField.label = this.__getHeader(this.header, this.path);
   }
 
   /**
-   * Re-runs the header default renderer once a column instance property
-   * used in the renderer is changed.
-   *
-   * @private
-   */
-  __onDefaultHeaderRendererBindingChanged() {
-    if (this.__headerRenderer !== this.__defaultHeaderRenderer) {
-      return;
-    }
-
-    if (!this._headerCell) {
-      return;
-    }
-
-    this.__runRenderer(this.__headerRenderer, this._headerCell);
-  }
-
-  /**
-   * The filter column is not supposed to be used with other renderers
-   * except the default header renderer
+   * The filter column doesn't allow to use a custom header renderer
+   * to override the header cell content.
+   * It always renders the grid filter to the header cell.
    *
    * @private
    */
@@ -106,7 +89,7 @@ class GridFilterColumnElement extends GridColumnElement {
   }
 
   /**
-   * Updates the `_filterValue` property once the filter text field is changed.
+   * Updates the internal filter value once the filter text field is changed.
    * The listener handles only user-fired events.
    *
    * @private
@@ -121,13 +104,13 @@ class GridFilterColumnElement extends GridColumnElement {
   }
 
   /** @private */
-  __getHeader() {
-    if (this.header) {
-      return this.header;
+  __getHeader(header, path) {
+    if (header) {
+      return header;
     }
 
-    if (this.path) {
-      return this._generateHeader(this.path);
+    if (path) {
+      return this._generateHeader(path);
     }
   }
 }
