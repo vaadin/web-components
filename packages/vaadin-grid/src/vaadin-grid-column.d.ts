@@ -80,23 +80,9 @@ interface ColumnBaseMixin<TItem> {
 
   _prepareTemplatizer(template: HTMLTemplateElement | null, instanceProps: object | null): HTMLTemplateElement | null;
 
-  _renderHeaderAndFooter(): void;
-
   _selectFirstTemplate(header?: boolean, footer?: boolean): HTMLTemplateElement | null;
 
   _findTemplate(header: boolean, footer: boolean): HTMLTemplateElement | null;
-
-  _pathOrHeaderChanged(
-    path: string | undefined,
-    header: string | undefined,
-    headerCell: HTMLTableCellElement | undefined,
-    footerCell: HTMLTableCellElement | undefined,
-    cells: object | undefined,
-    renderer: GridBodyRenderer<TItem> | null | undefined,
-    headerRenderer: GridHeaderFooterRenderer<TItem> | null | undefined,
-    bodyTemplate: HTMLTemplateElement | null | undefined,
-    headerTemplate: HTMLTemplateElement | null | undefined
-  ): void;
 
   _generateHeader(path: string): string;
 

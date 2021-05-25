@@ -143,5 +143,13 @@ describe('tree toggle', () => {
       column.itemHasChildrenPath = 'hasChildren';
       expect(toggle.leaf).to.be.false;
     });
+
+    it('should ignore a custom renderer', () => {
+      column.renderer = (root) => {
+        root.innerHTML = 'cell';
+      };
+
+      expect(getBodyCellContent(grid, 0, 0).firstElementChild).to.equal(toggle);
+    });
   });
 });

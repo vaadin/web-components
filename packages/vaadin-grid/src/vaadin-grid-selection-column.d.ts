@@ -14,7 +14,7 @@ export interface GridSelectionColumnEventMap extends HTMLElementEventMap, GridSe
 
 /**
  * `<vaadin-grid-selection-column>` is a helper element for the `<vaadin-grid>`
- * that provides default templates and functionality for item selection.
+ * that provides default renderers and functionality for item selection.
  *
  * #### Example:
  * ```html

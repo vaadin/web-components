@@ -131,9 +131,10 @@ export const ColumnBaseMixin = (superClass) =>
 
         /**
          * Represents the final header renderer computed on the set of observable arguments.
-         * It supposed to be used internally when rendering the header cell content.
+         * It is supposed to be used internally when rendering the header cell content.
          *
          * @private
+         * @type {GridHeaderFooterRenderer | undefined}
          */
         __headerRenderer: {
           type: Function,
@@ -153,9 +154,10 @@ export const ColumnBaseMixin = (superClass) =>
 
         /**
          * Represents the final footer renderer computed on the set of observable arguments.
-         * It supposed to be used internally when rendering the footer cell content.
+         * It is supposed to be used internally when rendering the footer cell content.
          *
          * @private
+         * @type {GridHeaderFooterRenderer | undefined}
          */
         __footerRenderer: {
           type: Function,
@@ -546,6 +548,10 @@ export const ColumnBaseMixin = (superClass) =>
         const model = this._grid.__getRowModel(cell.parentElement);
 
         if (renderer) {
+          if (cell._renderer !== renderer) {
+            cell._content.innerHTML = '';
+          }
+
           cell._renderer = renderer;
 
           if (model.item || renderer === this.__headerRenderer || renderer === this.__footerRenderer) {
@@ -572,26 +578,10 @@ export const ColumnBaseMixin = (superClass) =>
      * @private
      */
     __renderBodyCellsContent() {
-      if (!this._bodyTemplate && !this.__renderer) return;
       if (!this._cells) return;
+      if (!this._bodyTemplate && !this.__renderer) return;
 
       this.__renderCellsContent(this._bodyTemplate, this.__renderer, this._cells);
-    }
-
-    /**
-     * Renders the footer cell content using either a template or a renderer
-     * and then updates the visibility of the parent row depending on
-     * whether all its children cells are empty or not.
-     *
-     * @private
-     */
-    __renderHeaderCellContent() {
-      if (!this._headerTemplate && !this.__headerRenderer) return;
-      if (!this._headerCell) return;
-
-      this.__renderCellsContent(this._headerTemplate, this.__headerRenderer, [this._headerCell]);
-
-      this._grid.__updateHeaderFooterRowVisibility(this._headerCell.parentElement);
     }
 
     /**
@@ -601,9 +591,25 @@ export const ColumnBaseMixin = (superClass) =>
      *
      * @private
      */
+    __renderHeaderCellContent() {
+      if (!this._headerCell) return;
+      if (!this._headerTemplate && !this.__headerRenderer) return;
+
+      this.__renderCellsContent(this._headerTemplate, this.__headerRenderer, [this._headerCell]);
+
+      this._grid.__updateHeaderFooterRowVisibility(this._headerCell.parentElement);
+    }
+
+    /**
+     * Renders the footer cell content using either a template or a renderer
+     * and then updates the visibility of the parent row depending on
+     * whether all its children cells are empty or not.
+     *
+     * @private
+     */
     __renderFooterCellContent() {
-      if (!this._footerTemplate && !this.__footerRenderer) return;
       if (!this._footerCell) return;
+      if (!this._footerTemplate && !this.__footerRenderer) return;
 
       this.__renderCellsContent(this._footerTemplate, this.__footerRenderer, [this._footerCell]);
 
@@ -661,6 +667,7 @@ export const ColumnBaseMixin = (superClass) =>
      * once an argument is changed to update the property value.
      *
      * @private
+     * @return {GridHeaderFooterRenderer | undefined}
      */
     __computeHeaderRenderer(headerRenderer, headerTemplate, header) {
       if (headerRenderer) {
@@ -682,6 +689,7 @@ export const ColumnBaseMixin = (superClass) =>
      * once an argument is changed to update the property value.
      *
      * @private
+     * @return {GridBodyRenderer | undefined}
      */
     __computeRenderer(renderer, template) {
       if (renderer) {
@@ -699,6 +707,7 @@ export const ColumnBaseMixin = (superClass) =>
      * once an argument is changed to update the property value.
      *
      * @private
+     * @return {GridHeaderFooterRenderer | undefined}
      */
     __computeFooterRenderer(footerRenderer, footerTemplate) {
       if (footerRenderer) {
@@ -766,9 +775,10 @@ class GridColumnElement extends ColumnBaseMixin(DirMixin(PolymerElement)) {
 
       /**
        * Represents the final renderer computed on the set of observable arguments.
-       * It supposed to be used internally when rendering the content of a body cell.
+       * It is supposed to be used internally when rendering the content of a body cell.
        *
        * @private
+       * @type {GridBodyRenderer | undefined}
        */
       __renderer: {
         type: Function,

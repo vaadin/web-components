@@ -8,7 +8,7 @@ import './vaadin-grid-filter.js';
 
 /**
  * `<vaadin-grid-filter-column>` is a helper element for the `<vaadin-grid>`
- * that provides default header template and functionality for filtering.
+ * that provides default header renderer and functionality for filtering.
  *
  * #### Example:
  * ```html

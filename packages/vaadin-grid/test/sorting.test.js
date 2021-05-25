@@ -409,24 +409,25 @@ describe('sorting', () => {
     });
 
     describe('sort-column', () => {
-      let sortColumn, sorter;
+      let sortColumn, sortCellContent, sorter;
 
       beforeEach(() => {
         sortColumn = grid.querySelector('vaadin-grid-sort-column');
-        sorter = getHeaderCellContent(grid, 0, 2).querySelector('vaadin-grid-sorter');
+        sortCellContent = getHeaderCellContent(grid, 0, 2);
+        sorter = sortCellContent.querySelector('vaadin-grid-sorter');
       });
 
-      it('should propagate path property to the internal vaadin-grid-sorter', () => {
+      it('should propagate path property to the internal grid sorter', () => {
         sortColumn.path = 'last';
         expect(sorter.path).to.equal('last');
       });
 
-      it('should propagate direction property to the internal vaadin-grid-sorter', () => {
+      it('should propagate direction property to the internal grid sorter', () => {
         sortColumn.direction = 'asc';
         expect(sorter.direction).to.equal('asc');
       });
 
-      it('should notify direction property change from the internal vaadin-grid-sorter', () => {
+      it('should fire direction-changed when changing the internal grid sorter direction', () => {
         const spy = sinon.spy();
         sortColumn.addEventListener('direction-changed', spy);
 
@@ -445,6 +446,14 @@ describe('sorting', () => {
       it('should generate the text content based on path property, if header is not defined', () => {
         sortColumn.path = 'last';
         expect(sorter.textContent).to.equal('Last');
+      });
+
+      it('should ignore a custom header renderer', () => {
+        sortColumn.headerRenderer = (root) => {
+          root.innerHTML = 'header';
+        };
+
+        expect(sortCellContent.firstElementChild).to.equal(sorter);
       });
     });
   });

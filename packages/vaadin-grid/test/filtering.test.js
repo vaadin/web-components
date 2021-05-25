@@ -170,12 +170,13 @@ describe('filtering', () => {
   });
 
   describe('filter-column', () => {
-    let filterColumn, filter, filterTextField;
+    let filterColumn, filterCellContent, filter, filterTextField;
 
     beforeEach(() => {
       filterColumn = grid.querySelector('vaadin-grid-filter-column');
-      const content = getHeaderCellContent(grid, 0, 2);
-      filter = content.querySelector('vaadin-grid-filter');
+      filterCellContent = getHeaderCellContent(grid, 0, 2);
+
+      filter = filterCellContent.querySelector('vaadin-grid-filter');
       filterTextField = filter.firstElementChild;
     });
 
@@ -197,6 +198,14 @@ describe('filtering', () => {
     it('should apply the input fields value to the filter', () => {
       filterTextField.value = 'foo';
       expect(filter.value).to.equal('foo');
+    });
+
+    it('should ignore a custom header renderer', () => {
+      filterColumn.headerRenderer = (root) => {
+        root.innerHTML = 'header';
+      };
+
+      expect(filterCellContent.firstElementChild).to.equal(filter);
     });
   });
 });

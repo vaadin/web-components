@@ -8,7 +8,7 @@ import '@vaadin/vaadin-checkbox/src/vaadin-checkbox.js';
 
 /**
  * `<vaadin-grid-selection-column>` is a helper element for the `<vaadin-grid>`
- * that provides default templates and functionality for item selection.
+ * that provides default renderers and functionality for item selection.
  *
  * #### Example:
  * ```html
@@ -169,9 +169,8 @@ class GridSelectionColumnElement extends GridColumnElement {
   }
 
   /**
-   * When the default header renderer is a current renderer, it re-renders
-   * the header cell content once an instance property of the column
-   * used in the default header renderer is changed.
+   * Re-renders the header cell content once a column property
+   * bound in the default header renderer is changed.
    *
    * @private
    */
@@ -207,7 +206,7 @@ class GridSelectionColumnElement extends GridColumnElement {
   }
 
   /**
-   * Updates the select all state of the grid once the Select All checkbox is switched.
+   * Enables or disables the Select All mode once the Select All checkbox is switched.
    * The listener handles only user-fired events.
    *
    * @private
