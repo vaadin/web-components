@@ -49,7 +49,7 @@ export const InteractionsMixin = (superClass) =>
       container.addEventListener('mouseover', (e) => this._onMouseOver(e));
 
       if (this.openOnHover){
-          container.addEventListener('mouseleave', e => this._requestClose(e));
+          container.addEventListener('mouseleave', () => this._requestClose());
       }
     }
 
@@ -287,16 +287,11 @@ export const InteractionsMixin = (superClass) =>
     }
 
     /** @private */
-    _requestClose(e) {
+    _requestClose() {
       this.preventClose = false;
       // wait if something has to prevent the close event
       setTimeout(() => {
-        let toElement = e.toElement;
-        if (!toElement){
-          return;
-        }
-        let id = toElement.id;
-        if (id !== 'overlay' && !this.preventClose) {
+        if (!this.preventClose) {
           this._close(false);
         }
       }, 300);
@@ -306,7 +301,7 @@ export const InteractionsMixin = (superClass) =>
     _addHoverListener(subMenu) {
       let menuOverlay = subMenu.$.overlay.$.overlay;
 
-      menuOverlay.addEventListener('mouseleave', e => this._requestClose(e));
+      menuOverlay.addEventListener('mouseleave', () => this._requestClose());
       // when hovering between sub menus the subMenu will close if we don't prevent it
       menuOverlay.addEventListener('mouseenter', () => this.preventClose = true);
     }
