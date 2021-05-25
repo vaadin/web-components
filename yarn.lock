@@ -1159,11 +1159,6 @@
     "@octokit/types" "^6.12.2"
     btoa-lite "^1.0.0"
 
-"@octokit/openapi-types@^6.0.0":
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/@octokit/openapi-types/-/openapi-types-6.0.0.tgz#7da8d7d5a72d3282c1a3ff9f951c8133a707480d"
-  integrity sha512-CnDdK7ivHkBtJYzWzZm7gEkanA7gKH6a09Eguz7flHw//GacPJLmkHA3f3N++MJmlxD1Fl+mB7B32EEpSCwztQ==
-
 "@octokit/openapi-types@^7.0.0":
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/@octokit/openapi-types/-/openapi-types-7.0.0.tgz#0f6992db9854af15eca77d71ab0ec7fad2f20411"
@@ -1249,19 +1244,12 @@
     "@octokit/plugin-request-log" "^1.0.2"
     "@octokit/plugin-rest-endpoint-methods" "5.0.0"
 
-"@octokit/types@^6.0.1", "@octokit/types@^6.10.0", "@octokit/types@^6.12.2", "@octokit/types@^6.14.1":
+"@octokit/types@^6.0.1", "@octokit/types@^6.0.3", "@octokit/types@^6.10.0", "@octokit/types@^6.11.0", "@octokit/types@^6.12.2", "@octokit/types@^6.13.0", "@octokit/types@^6.14.1", "@octokit/types@^6.7.1":
   version "6.14.2"
   resolved "https://registry.yarnpkg.com/@octokit/types/-/types-6.14.2.tgz#64c9457f38fb8522bdbba3c8cc814590a2d61bf5"
   integrity sha512-wiQtW9ZSy4OvgQ09iQOdyXYNN60GqjCL/UdMsepDr1Gr0QzpW6irIKbH3REuAHXAhxkEk9/F2a3Gcs1P6kW5jA==
   dependencies:
     "@octokit/openapi-types" "^7.0.0"
-
-"@octokit/types@^6.0.3", "@octokit/types@^6.11.0", "@octokit/types@^6.13.0", "@octokit/types@^6.7.1":
-  version "6.13.0"
-  resolved "https://registry.yarnpkg.com/@octokit/types/-/types-6.13.0.tgz#779e5b7566c8dde68f2f6273861dd2f0409480d0"
-  integrity sha512-W2J9qlVIU11jMwKHUp5/rbVUeErqelCsO5vW5PKNb7wAXQVUz87Rc+imjlEvpvbH8yUb+KHmv8NEjVZdsdpyxA==
-  dependencies:
-    "@octokit/openapi-types" "^6.0.0"
 
 "@octokit/webhooks-methods@^1.0.0":
   version "1.0.0"
@@ -10290,9 +10278,9 @@ safe-regex@^1.1.0:
   integrity sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
 
 saucelabs@^4.6.2:
-  version "4.7.4"
-  resolved "https://registry.yarnpkg.com/saucelabs/-/saucelabs-4.7.4.tgz#754527d3f72dadcc1be2c2fdb2498d5ad90f07ba"
-  integrity sha512-+e8+ZNGA0PvTPu/miVPEHGVQLUg5wVy0rTVNbDNU4DALDB5a+IalmoAA+boVQ5N0fUScIyvQD4SXwSnBvCPe7Q==
+  version "4.7.6"
+  resolved "https://registry.yarnpkg.com/saucelabs/-/saucelabs-4.7.6.tgz#f7abe77dd58e7c82ecf3e5140a469d9b840a52f1"
+  integrity sha512-xygqvL/KYL+GQEh4aTqPqRN1iRm9Y7347e1/84fjyURmCrY3c5CPzNKjj0ZbFtkfNXLSvnnwTMNchpMP+axVIw==
   dependencies:
     bin-wrapper "^4.1.0"
     change-case "^4.1.1"
