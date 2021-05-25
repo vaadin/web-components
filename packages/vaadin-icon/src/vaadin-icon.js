@@ -16,7 +16,7 @@ const DEFAULT_ICONSET = 'vaadin';
  *
  * ### Icon property
  *
- * The icon component is designed to be used a drop-in replacement for `<iron-icon>`.
+ * The `<vaadin-icon>` component is designed to be used as a drop-in replacement for `<iron-icon>`.
  * For example, you can use it with `vaadin-icons` like this:
  *
  * ```html
@@ -31,8 +31,9 @@ const DEFAULT_ICONSET = 'vaadin';
  *
  * ### Custom SVG icon
  *
- * You can pass a custom `svg` literal from Lit using [`svg`](#/elements/vaadin-icon#property-svg)
- * property and define its size using [`size`](#/elements/vaadin-icon#property-size) property:
+ * Alternatively, instead of selecting an icon from an iconset by name, you can pass any custom `svg`
+ * literal using the [`svg`](#/elements/vaadin-icon#property-svg) property. In this case you can also
+ * define the size of the SVG `viewBox` using the [`size`](#/elements/vaadin-icon#property-size) property:
  *
  * ```js
  * import { html, svg } from 'lit';
