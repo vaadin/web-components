@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-details",
-  "version": "20.0.0-beta2",
+  "version": "20.0.0-rc1",
   "description": "vaadin-details",
   "main": "vaadin-details.js",
   "module": "vaadin-details.js",
@@ -26,11 +26,11 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/vaadin-control-state-mixin": "^20.0.0-beta2",
-    "@vaadin/vaadin-element-mixin": "^20.0.0-beta2",
-    "@vaadin/vaadin-lumo-styles": "^20.0.0-beta2",
-    "@vaadin/vaadin-material-styles": "^20.0.0-beta2",
-    "@vaadin/vaadin-themable-mixin": "^20.0.0-beta2"
+    "@vaadin/vaadin-control-state-mixin": "^20.0.0-rc1",
+    "@vaadin/vaadin-element-mixin": "^20.0.0-rc1",
+    "@vaadin/vaadin-lumo-styles": "^20.0.0-rc1",
+    "@vaadin/vaadin-material-styles": "^20.0.0-rc1",
+    "@vaadin/vaadin-themable-mixin": "^20.0.0-rc1"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.1.5",
