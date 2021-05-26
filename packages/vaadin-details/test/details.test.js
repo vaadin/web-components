@@ -23,7 +23,7 @@ describe('vaadin-details', () => {
     });
 
     it('should have a valid version number', () => {
-      expect(details.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta)\d+)?$/);
+      expect(details.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta|rc)\d+)?$/);
     });
   });
 

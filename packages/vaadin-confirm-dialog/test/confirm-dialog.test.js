@@ -18,7 +18,7 @@ describe('vaadin-confirm-dialog', () => {
     });
 
     it('should have a valid version number', () => {
-      expect(confirm.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta)\d+)?$/);
+      expect(confirm.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta|rc)\d+)?$/);
     });
   });
 

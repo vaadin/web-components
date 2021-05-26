@@ -18,6 +18,6 @@ describe('vaadin-details', () => {
   });
 
   it('should have a valid version number', () => {
-    expect(board.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta)\d+)?$/);
+    expect(board.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta|rc)\d+)?$/);
   });
 });

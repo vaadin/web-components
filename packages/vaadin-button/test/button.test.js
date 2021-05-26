@@ -26,7 +26,7 @@ describe('vaadin-button', () => {
   });
 
   it('should have a valid version number', () => {
-    expect(vaadinButton.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta)\d+)?$/);
+    expect(vaadinButton.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta|rc)\d+)?$/);
   });
 
   it('should define button label using light DOM', () => {
