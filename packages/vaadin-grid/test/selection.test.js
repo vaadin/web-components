@@ -448,26 +448,39 @@ describe('multi selection column', () => {
     expect(() => checkbox.click()).not.to.throw(Error);
   });
 
-  it('should override the header content with header text', () => {
+  it('should override the header content with a header text', () => {
     selectionColumn.header = 'foo';
+
     expect(firstHeaderCellContent.textContent).to.equal('foo');
+    expect(firstBodyCellContent.firstElementChild).to.equal(firstBodyCheckbox);
+  });
+
+  it('should not override the header content with a path', () => {
+    selectionColumn.path = 'length';
+
+    expect(firstHeaderCellContent.firstElementChild).to.equal(selectAllCheckbox);
+  });
+
+  it('should not override the body content with a path', () => {
+    selectionColumn.path = 'length';
+
     expect(firstBodyCellContent.firstElementChild).to.equal(firstBodyCheckbox);
   });
 
   it('should override the header content with a header renderer', () => {
-    selectionColumn.headerRenderer = (root) => (root.textContent = 'foo');
+    selectionColumn.headerRenderer = (root) => {
+      root.textContent = 'foo';
+    };
+
     expect(firstHeaderCellContent.textContent).to.equal('foo');
     expect(firstBodyCellContent.firstElementChild).to.equal(firstBodyCheckbox);
   });
 
-  it('should override the body content with path', () => {
-    selectionColumn.path = 'length';
-    expect(firstBodyCellContent.textContent).to.equal('3');
-    expect(firstHeaderCellContent.firstElementChild).to.equal(selectAllCheckbox);
-  });
-
   it('should override the body content with a renderer', () => {
-    selectionColumn.renderer = (root) => (root.textContent = 'foo');
+    selectionColumn.renderer = (root) => {
+      root.textContent = 'foo';
+    };
+
     expect(firstBodyCellContent.textContent).to.equal('foo');
     expect(firstHeaderCellContent.firstElementChild).to.equal(selectAllCheckbox);
   });

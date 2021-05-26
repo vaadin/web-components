@@ -62,6 +62,13 @@ describe('renderers', () => {
       expect(getCell(grid, 1)._content.innerHTML).to.eql('1 test');
     });
 
+    it('should clear the content when changing the renderer', () => {
+      column.renderer = (_root, _column, _model) => {};
+
+      expect(getCell(grid, 0)._content.textContent).to.be.empty;
+      expect(getCell(grid, 1)._content.textContent).to.be.empty;
+    });
+
     it('should throw an error when setting a template if there is already a renderer', () => {
       expect(() => (column._bodyTemplate = {})).to.throw(Error);
     });
@@ -175,16 +182,20 @@ describe('renderers', () => {
   });
 
   describe('header cell', () => {
+    let headerCell;
+
     beforeEach(() => {
       column.headerRenderer = (root) => {
-        root.innerHTML = 'RDR header';
+        root.textContent = 'header';
       };
 
       flushGrid(grid);
+
+      headerCell = getHeaderCell(grid);
     });
 
     it('should have valid content when renderer is set', () => {
-      expect(getHeaderCell(grid)._content.innerHTML).to.eql('RDR header');
+      expect(headerCell._content.textContent).to.eql('header');
     });
 
     it('should throw an error when setting a template if there is already a renderer', () => {
@@ -212,23 +223,39 @@ describe('renderers', () => {
       flushGrid(grid);
       expect(grid.$.header.firstElementChild.hidden).to.be.false;
     });
+
+    it('should clear the content when changing the renderer', () => {
+      column.headerRenderer = (_root, _column) => {};
+
+      expect(headerCell._content.textContent).to.be.empty;
+    });
   });
 
   describe('footer cell', () => {
+    let footerCell;
+
     beforeEach(() => {
       column.footerRenderer = (root) => {
-        root.innerHTML = 'RDR footer';
+        root.textContent = 'footer';
       };
 
       flushGrid(grid);
+
+      footerCell = getFooterCell(grid);
     });
 
     it('should have valid content when renderer is set', () => {
-      expect(getFooterCell(grid)._content.innerHTML).to.eql('RDR footer');
+      expect(footerCell._content.textContent).to.eql('footer');
     });
 
     it('should throw an error when setting a template if there is already a renderer', () => {
       expect(() => (column._footerTemplate = {})).to.throw(Error);
+    });
+
+    it('should clear the content when changing the renderer', () => {
+      column.footerRenderer = (_root, _column) => {};
+
+      expect(footerCell._content.textContent).to.be.empty;
     });
   });
 

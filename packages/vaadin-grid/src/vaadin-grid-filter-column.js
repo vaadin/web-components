@@ -3,13 +3,12 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 import { GridColumnElement } from './vaadin-grid-column.js';
 import './vaadin-grid-filter.js';
 
 /**
  * `<vaadin-grid-filter-column>` is a helper element for the `<vaadin-grid>`
- * that provides default header template and functionality for filtering.
+ * that provides default header renderer and functionality for filtering.
  *
  * #### Example:
  * ```html
@@ -21,23 +20,6 @@ import './vaadin-grid-filter.js';
  * ```
  */
 class GridFilterColumnElement extends GridColumnElement {
-  static get template() {
-    return html`
-      <template class="header" id="headerTemplate">
-        <vaadin-grid-filter path="[[path]]" value="[[_filterValue]]">
-          <vaadin-text-field
-            theme="small"
-            focus-target=""
-            style="max-width: 100%;"
-            slot="filter"
-            value="{{_filterValue}}"
-            label="[[_getHeader(header, path)]]"
-          ></vaadin-text-field>
-        </vaadin-grid-filter>
-      </template>
-    `;
-  }
-
   static get is() {
     return 'vaadin-grid-filter-column';
   }
@@ -56,17 +38,82 @@ class GridFilterColumnElement extends GridColumnElement {
     };
   }
 
-  /** @private */
-  _prepareHeaderTemplate() {
-    const headerTemplate = this._prepareTemplatizer(this.$.headerTemplate);
-    // needed to override the dataHost correctly in case internal template is used.
-    headerTemplate.templatizer.dataHost = this;
-    return headerTemplate;
+  static get observers() {
+    return [
+      '_onHeaderTemplateOrRendererOrBindingChanged(_headerTemplate, _headerRenderer, _headerCell, path, header, _filterValue)'
+    ];
+  }
+
+  constructor() {
+    super();
+
+    this.__boundOnFilterValueChanged = this.__onFilterValueChanged.bind(this);
+  }
+
+  /**
+   * Renders the grid filter with the custom text field to the header cell.
+   *
+   * @override
+   */
+  _defaultHeaderRenderer(root, _column) {
+    let filter = root.firstElementChild;
+    let textField = filter?.firstElementChild;
+
+    if (!filter) {
+      filter = document.createElement('vaadin-grid-filter');
+      textField = document.createElement('vaadin-text-field');
+      textField.setAttribute('slot', 'filter');
+      textField.setAttribute('theme', 'small');
+      textField.setAttribute('style', 'max-width: 100%;');
+      textField.setAttribute('focus-target', '');
+      textField.addEventListener('value-changed', this.__boundOnFilterValueChanged);
+      filter.appendChild(textField);
+      root.appendChild(filter);
+    }
+
+    filter.path = this.path;
+    filter.value = this._filterValue;
+
+    textField.__rendererValue = this._filterValue;
+    textField.value = this._filterValue;
+    textField.label = this.__getHeader(this.header, this.path);
+  }
+
+  /**
+   * The filter column doesn't allow to use a custom header renderer
+   * to override the header cell content.
+   * It always renders the grid filter to the header cell.
+   *
+   * @override
+   */
+  _computeHeaderRenderer() {
+    return this._defaultHeaderRenderer;
+  }
+
+  /**
+   * Updates the internal filter value once the filter text field is changed.
+   * The listener handles only user-fired events.
+   *
+   * @private
+   */
+  __onFilterValueChanged(e) {
+    // Skip if the value is changed by the renderer.
+    if (e.detail.value === e.target.__rendererValue) {
+      return;
+    }
+
+    this._filterValue = e.detail.value;
   }
 
   /** @private */
-  _getHeader(header, path) {
-    return header || this._generateHeader(path);
+  __getHeader(header, path) {
+    if (header) {
+      return header;
+    }
+
+    if (path) {
+      return this._generateHeader(path);
+    }
   }
 }
 

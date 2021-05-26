@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { click, fixtureSync, listenOnce, nextFrame } from '@vaadin/testing-helpers';
+import { click, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { buildDataSet, flushGrid, getBodyCellContent, getHeaderCellContent, getRows, getRowCells } from './helpers.js';
 import '../vaadin-grid.js';
 import '../vaadin-grid-sorter.js';
@@ -39,9 +39,13 @@ describe('sorting', () => {
       expect(sorter.direction).to.equal(null);
     });
 
-    it('should fire a sorter-changed event', (done) => {
-      listenOnce(sorter, 'sorter-changed', () => done());
+    it('should fire a sorter-changed event', () => {
+      const spy = sinon.spy();
+      sorter.addEventListener('sorter-changed', spy);
+
       sorter.direction = 'asc';
+
+      expect(spy.calledOnce).to.be.true;
     });
 
     it('should show order indicator', () => {
@@ -405,29 +409,33 @@ describe('sorting', () => {
     });
 
     describe('sort-column', () => {
-      let sortColumn, sorter;
+      let sortColumn, sortCellContent, sorter;
 
       beforeEach(() => {
         sortColumn = grid.querySelector('vaadin-grid-sort-column');
-        sorter = getHeaderCellContent(grid, 0, 2).querySelector('vaadin-grid-sorter');
+        sortCellContent = getHeaderCellContent(grid, 0, 2);
+        sorter = sortCellContent.querySelector('vaadin-grid-sorter');
       });
 
-      it('should propagate path property to the internal vaadin-grid-sorter', () => {
+      it('should propagate path property to the internal grid sorter', () => {
         sortColumn.path = 'last';
         expect(sorter.path).to.equal('last');
       });
 
-      it('should propagate direction property to the internal vaadin-grid-sorter', () => {
+      it('should propagate direction property to the internal grid sorter', () => {
         sortColumn.direction = 'asc';
         expect(sorter.direction).to.equal('asc');
       });
 
-      it('should notify direction property change from the internal vaadin-grid-sorter', (done) => {
-        listenOnce(sortColumn, 'direction-changed', (e) => {
-          expect(e.detail.value).to.equal('desc');
-          done();
-        });
+      it('should fire direction-changed when changing the internal grid sorter direction', () => {
+        const spy = sinon.spy();
+        sortColumn.addEventListener('direction-changed', spy);
+
         sorter.direction = 'desc';
+
+        const event = spy.args[0][0];
+        expect(spy.calledOnce).to.be.true;
+        expect(event.detail.value).to.be.equal('desc');
       });
 
       it('should use header property to determine the text that gets slotted inside the sorter', () => {
@@ -438,6 +446,14 @@ describe('sorting', () => {
       it('should generate the text content based on path property, if header is not defined', () => {
         sortColumn.path = 'last';
         expect(sorter.textContent).to.equal('Last');
+      });
+
+      it('should ignore a custom header renderer', () => {
+        sortColumn.headerRenderer = (root) => {
+          root.innerHTML = 'header';
+        };
+
+        expect(sortCellContent.firstElementChild).to.equal(sorter);
       });
     });
   });

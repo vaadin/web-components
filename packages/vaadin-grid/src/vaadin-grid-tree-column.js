@@ -3,7 +3,6 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 import { GridColumnElement } from './vaadin-grid-column.js';
 import './vaadin-grid-tree-toggle.js';
 
@@ -21,20 +20,6 @@ import './vaadin-grid-tree-toggle.js';
  * ```
  */
 class GridTreeColumnElement extends GridColumnElement {
-  static get template() {
-    return html`
-      <template id="template">
-        <vaadin-grid-tree-toggle
-          leaf="[[__isLeafItem(item, itemHasChildrenPath)]]"
-          expanded="{{expanded}}"
-          level="[[level]]"
-        >
-          [[__getToggleContent(path, item)]]
-        </vaadin-grid-tree-toggle>
-      </template>
-    `;
-  }
-
   static get is() {
     return 'vaadin-grid-tree-column';
   }
@@ -57,18 +42,74 @@ class GridTreeColumnElement extends GridColumnElement {
     };
   }
 
+  static get observers() {
+    return [
+      '_onBodyTemplateOrRendererOrBindingChanged(_bodyTemplate, _renderer, _cells, _cells.*, path, itemHasChildrenPath)'
+    ];
+  }
+
+  constructor() {
+    super();
+
+    this.__boundOnExpandedChanged = this.__onExpandedChanged.bind(this);
+  }
+
+  /**
+   * Renders the grid tree toggle to the body cell
+   *
+   * @private
+   */
+  __defaultRenderer(root, _column, { item, expanded }) {
+    let toggle = root.firstElementChild;
+    if (!toggle) {
+      toggle = document.createElement('vaadin-grid-tree-toggle');
+      toggle.addEventListener('expanded-changed', this.__boundOnExpandedChanged);
+      root.appendChild(toggle);
+    }
+
+    toggle.__item = item;
+    toggle.__rendererExpanded = expanded;
+    toggle.expanded = expanded;
+    toggle.leaf = this.__isLeafItem(item, this.itemHasChildrenPath);
+    toggle.textContent = this.__getToggleContent(this.path, item);
+  }
+
+  /**
+   * The tree column doesn't allow to use a custom renderer
+   * to override the content of body cells.
+   * It always renders the grid tree toggle to body cells.
+   *
+   * @override
+   */
+  _computeRenderer() {
+    return this.__defaultRenderer;
+  }
+
+  /**
+   * Expands or collapses the row once the tree toggle is switched.
+   * The listener handles only user-fired events.
+   *
+   * @private
+   */
+  __onExpandedChanged(e) {
+    // Skip if the state is changed by the renderer.
+    if (e.detail.value === e.target.__rendererExpanded) {
+      return;
+    }
+
+    if (e.detail.value) {
+      this._grid.expandItem(e.target.__item);
+    } else {
+      this._grid.collapseItem(e.target.__item);
+    }
+  }
+
   /** @private */
-  _prepareBodyTemplate() {
-    const template = this._prepareTemplatizer(this.$.template);
-    // needed to override the dataHost correctly in case internal template is used.
-    template.templatizer.dataHost = this;
-    return template;
-  }
-
   __isLeafItem(item, itemHasChildrenPath) {
-    return !(item && item[itemHasChildrenPath]);
+    return !item || !item[itemHasChildrenPath];
   }
 
+  /** @private */
   __getToggleContent(path, item) {
     return path && this.get(path, item);
   }

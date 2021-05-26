@@ -3,7 +3,7 @@ import { GridColumnElement } from './vaadin-grid-column.js';
 
 /**
  * `<vaadin-grid-tree-column>` is a helper element for the `<vaadin-grid>`
- * that provides default template and functionality for toggling tree/hierarchical items.
+ * that provides default renderer and functionality for toggling tree/hierarchical items.
  *
  * #### Example:
  * ```html

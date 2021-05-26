@@ -15,7 +15,7 @@ export interface GridSortColumnEventMap extends HTMLElementEventMap, GridSortCol
 
 /**
  * `<vaadin-grid-sort-column>` is a helper element for the `<vaadin-grid>`
- * that provides default header template and functionality for sorting.
+ * that provides default header renderer and functionality for sorting.
  *
  * #### Example:
  * ```html
