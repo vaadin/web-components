@@ -51,7 +51,7 @@ describe('message-list', () => {
   });
 
   it('should have a valid version number', () => {
-    expect(messageList.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta)\d+)?$/);
+    expect(messageList.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta|rc)\d+)?$/);
   });
 
   it('message list should be initially empty', () => {

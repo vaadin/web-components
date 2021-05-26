@@ -22,7 +22,7 @@ describe('avatar-group', () => {
     });
 
     it('should have a valid version number', () => {
-      expect(group.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta)\d+)?$/);
+      expect(group.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta|rc)\d+)?$/);
     });
   });
 
