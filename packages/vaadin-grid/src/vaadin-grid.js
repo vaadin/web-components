@@ -980,8 +980,7 @@ class GridElement extends ElementMixin(
       // header and footer renderers
       this._columnTree.forEach((level) => {
         level.forEach((column) => {
-          column.__renderHeaderCellContent();
-          column.__renderFooterCellContent();
+          column._renderHeaderAndFooter();
         });
       });
 

@@ -47,7 +47,9 @@ class GridSortColumnElement extends GridColumnElement {
   }
 
   static get observers() {
-    return ['__renderHeaderCellContent(direction, path, header)'];
+    return [
+      '_onHeaderTemplateOrRendererOrBindingChanged(_headerTemplate, _headerRenderer, _headerCell, path, header, direction)'
+    ];
   }
 
   constructor() {
@@ -59,9 +61,9 @@ class GridSortColumnElement extends GridColumnElement {
   /**
    * Renders the grid sorter to the header cell.
    *
-   * @private
+   * @override
    */
-  __defaultHeaderRenderer(root, _column) {
+  _defaultHeaderRenderer(root, _column) {
     let sorter = root.firstElementChild;
     if (!sorter) {
       sorter = document.createElement('vaadin-grid-sorter');
@@ -80,10 +82,10 @@ class GridSortColumnElement extends GridColumnElement {
    * to override the header cell content.
    * It always renders the grid sorter to the header cell.
    *
-   * @private
+   * @override
    */
-  __computeHeaderRenderer() {
-    return this.__defaultHeaderRenderer;
+  _computeHeaderRenderer() {
+    return this._defaultHeaderRenderer;
   }
 
   /**

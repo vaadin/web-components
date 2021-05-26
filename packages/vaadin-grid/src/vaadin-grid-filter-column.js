@@ -39,7 +39,9 @@ class GridFilterColumnElement extends GridColumnElement {
   }
 
   static get observers() {
-    return ['__renderHeaderCellContent(_filterValue, path, header)'];
+    return [
+      '_onHeaderTemplateOrRendererOrBindingChanged(_headerTemplate, _headerRenderer, _headerCell, path, header, _filterValue)'
+    ];
   }
 
   constructor() {
@@ -51,9 +53,9 @@ class GridFilterColumnElement extends GridColumnElement {
   /**
    * Renders the grid filter with the custom text field to the header cell.
    *
-   * @private
+   * @override
    */
-  __defaultHeaderRenderer(root, _column) {
+  _defaultHeaderRenderer(root, _column) {
     let filter = root.firstElementChild;
     let textField = filter?.firstElementChild;
 
@@ -82,10 +84,10 @@ class GridFilterColumnElement extends GridColumnElement {
    * to override the header cell content.
    * It always renders the grid filter to the header cell.
    *
-   * @private
+   * @override
    */
-  __computeHeaderRenderer() {
-    return this.__defaultHeaderRenderer;
+  _computeHeaderRenderer() {
+    return this._defaultHeaderRenderer;
   }
 
   /**

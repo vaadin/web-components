@@ -43,7 +43,9 @@ class GridTreeColumnElement extends GridColumnElement {
   }
 
   static get observers() {
-    return ['__renderBodyCellsContent(itemHasChildrenPath, path)'];
+    return [
+      '_onBodyTemplateOrRendererOrBindingChanged(_bodyTemplate, _renderer, _cells, _cells.*, path, itemHasChildrenPath)'
+    ];
   }
 
   constructor() {
@@ -77,9 +79,9 @@ class GridTreeColumnElement extends GridColumnElement {
    * to override the content of body cells.
    * It always renders the grid tree toggle to body cells.
    *
-   * @private
+   * @override
    */
-  __computeRenderer() {
+  _computeRenderer() {
     return this.__defaultRenderer;
   }
 

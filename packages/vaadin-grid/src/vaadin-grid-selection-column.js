@@ -94,7 +94,7 @@ class GridSelectionColumnElement extends GridColumnElement {
   static get observers() {
     return [
       '__onSelectAllChanged(selectAll)',
-      '__onDefaultHeaderRendererBindingChanged(__indeterminate, __selectAllHidden, selectAll)'
+      '_onHeaderTemplateOrRendererOrBindingChanged(_headerTemplate, _headerRenderer, _headerCell, path, header, selectAll, __indeterminate, __selectAllHidden)'
     ];
   }
 
@@ -130,9 +130,9 @@ class GridSelectionColumnElement extends GridColumnElement {
   /**
    * Renders the Select All checkbox to the header cell.
    *
-   * @private
+   * @override
    */
-  __defaultHeaderRenderer(root, _column) {
+  _defaultHeaderRenderer(root, _column) {
     let checkbox = root.firstElementChild;
     if (!checkbox) {
       checkbox = document.createElement('vaadin-checkbox');
@@ -152,9 +152,9 @@ class GridSelectionColumnElement extends GridColumnElement {
   /**
    * Renders the Select Row checkbox to the body cell.
    *
-   * @private
+   * @override
    */
-  __defaultRenderer(root, _column, { item, selected }) {
+  _defaultRenderer(root, _column, { item, selected }) {
     let checkbox = root.firstElementChild;
     if (!checkbox) {
       checkbox = document.createElement('vaadin-checkbox');
@@ -166,20 +166,6 @@ class GridSelectionColumnElement extends GridColumnElement {
     checkbox.__item = item;
     checkbox.__rendererChecked = selected;
     checkbox.checked = selected;
-  }
-
-  /**
-   * Re-renders the header cell content once a column property
-   * bound in the default header renderer is changed.
-   *
-   * @private
-   */
-  __onDefaultHeaderRendererBindingChanged() {
-    if (this.__headerRenderer !== this.__defaultHeaderRenderer) {
-      return;
-    }
-
-    this.__renderHeaderCellContent();
   }
 
   /** @private */

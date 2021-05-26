@@ -133,12 +133,12 @@ export const ColumnBaseMixin = (superClass) =>
          * Represents the final header renderer computed on the set of observable arguments.
          * It is supposed to be used internally when rendering the header cell content.
          *
-         * @private
+         * @protected
          * @type {GridHeaderFooterRenderer | undefined}
          */
-        __headerRenderer: {
+        _headerRenderer: {
           type: Function,
-          computed: '__computeHeaderRenderer(headerRenderer, _headerTemplate, header)'
+          computed: '_computeHeaderRenderer(headerRenderer, _headerTemplate, header)'
         },
 
         /**
@@ -156,12 +156,12 @@ export const ColumnBaseMixin = (superClass) =>
          * Represents the final footer renderer computed on the set of observable arguments.
          * It is supposed to be used internally when rendering the footer cell content.
          *
-         * @private
+         * @protected
          * @type {GridHeaderFooterRenderer | undefined}
          */
-        __footerRenderer: {
+        _footerRenderer: {
           type: Function,
-          computed: '__computeFooterRenderer(footerRenderer, _footerTemplate)'
+          computed: '_computeFooterRenderer(footerRenderer, _footerTemplate)'
         }
       };
     }
@@ -174,9 +174,9 @@ export const ColumnBaseMixin = (superClass) =>
         '_textAlignChanged(textAlign, _cells.*, _headerCell, _footerCell)',
         '_orderChanged(_order, _headerCell, _footerCell, _cells.*)',
         '_lastFrozenChanged(_lastFrozen)',
-        '__renderBodyCellsContent(_bodyTemplate, __renderer, _cells, _cells.*, path)',
-        '__renderHeaderCellContent(_headerTemplate, __headerRenderer, _headerCell, path, header)',
-        '__renderFooterCellContent(_footerTemplate, __footerRenderer, _footerCell)',
+        '_onBodyTemplateOrRendererOrBindingChanged(_bodyTemplate, _renderer, _cells, _cells.*, path)',
+        '_onHeaderTemplateOrRendererOrBindingChanged(_headerTemplate, _headerRenderer, _headerCell, path, header)',
+        '_onFooterTemplateOrRendererOrBindingChanged(_footerTemplate, _footerRenderer, _footerCell)',
         '_resizableChanged(resizable, _headerCell)',
         '_reorderStatusChanged(_reorderStatus, _headerCell, _footerCell, _cells.*)',
         '_hiddenChanged(hidden, _headerCell, _footerCell, _cells.*)'
@@ -269,6 +269,12 @@ export const ColumnBaseMixin = (superClass) =>
         this._footerTemplate = this._prepareFooterTemplate();
         this._bodyTemplate = this._prepareBodyTemplate();
       });
+    }
+
+    /** @protected */
+    _renderHeaderAndFooter() {
+      this._renderHeaderCellContent(this._headerTemplate, this._headerRenderer, this._headerCell);
+      this._renderFooterCellContent(this._footerTemplate, this._footerRenderer, this._footerCell);
     }
 
     /**
@@ -554,7 +560,7 @@ export const ColumnBaseMixin = (superClass) =>
 
           cell._renderer = renderer;
 
-          if (model.item || renderer === this.__headerRenderer || renderer === this.__footerRenderer) {
+          if (model.item || renderer === this._headerRenderer || renderer === this._footerRenderer) {
             this.__runRenderer(renderer, cell, model);
           }
         } else if (cell._template !== template) {
@@ -573,31 +579,42 @@ export const ColumnBaseMixin = (superClass) =>
     }
 
     /**
-     * Renders the content of body cells using either a template or a renderer.
-     *
-     * @private
-     */
-    __renderBodyCellsContent() {
-      if (!this._cells) return;
-      if (!this._bodyTemplate && !this.__renderer) return;
-
-      this.__renderCellsContent(this._bodyTemplate, this.__renderer, this._cells);
-    }
-
-    /**
      * Renders the header cell content using either a template or a renderer
      * and then updates the visibility of the parent row depending on
      * whether all its children cells are empty or not.
      *
-     * @private
+     * @protected
      */
-    __renderHeaderCellContent() {
-      if (!this._headerCell) return;
-      if (!this._headerTemplate && !this.__headerRenderer) return;
+    _renderHeaderCellContent(headerTemplate, headerRenderer, headerCell) {
+      if (!headerCell || (!headerTemplate && !headerRenderer)) {
+        return;
+      }
 
-      this.__renderCellsContent(this._headerTemplate, this.__headerRenderer, [this._headerCell]);
+      this.__renderCellsContent(headerTemplate, headerRenderer, [headerCell]);
+      this._grid.__updateHeaderFooterRowVisibility(headerCell.parentElement);
+    }
 
-      this._grid.__updateHeaderFooterRowVisibility(this._headerCell.parentElement);
+    /** @protected */
+    _onHeaderTemplateOrRendererOrBindingChanged(headerTemplate, headerRenderer, headerCell, ..._bindings) {
+      this._renderHeaderCellContent(headerTemplate, headerRenderer, headerCell);
+    }
+
+    /**
+     * Renders the content of body cells using either a template or a renderer.
+     *
+     * @protected
+     */
+    _renderBodyCellsContent(template, renderer, cells) {
+      if (!cells || (!template && !renderer)) {
+        return;
+      }
+
+      this.__renderCellsContent(template, renderer, cells);
+    }
+
+    /** @protected */
+    _onBodyTemplateOrRendererOrBindingChanged(template, renderer, cells, ..._bindings) {
+      this._renderBodyCellsContent(template, renderer, cells);
     }
 
     /**
@@ -605,15 +622,20 @@ export const ColumnBaseMixin = (superClass) =>
      * and then updates the visibility of the parent row depending on
      * whether all its children cells are empty or not.
      *
-     * @private
+     * @protected
      */
-    __renderFooterCellContent() {
-      if (!this._footerCell) return;
-      if (!this._footerTemplate && !this.__footerRenderer) return;
+    _renderFooterCellContent(footerTemplate, footerRenderer, footerCell) {
+      if (!footerCell || (!footerTemplate && !footerRenderer)) {
+        return;
+      }
 
-      this.__renderCellsContent(this._footerTemplate, this.__footerRenderer, [this._footerCell]);
+      this.__renderCellsContent(footerTemplate, footerRenderer, [footerCell]);
+      this._grid.__updateHeaderFooterRowVisibility(footerCell.parentElement);
+    }
 
-      this._grid.__updateHeaderFooterRowVisibility(this._footerCell.parentElement);
+    /** @protected */
+    _onFooterTemplateOrRendererOrBindingChanged(footerTemplate, footerRenderer, footerCell) {
+      this._renderFooterCellContent(footerTemplate, footerRenderer, footerCell);
     }
 
     /** @private */
@@ -634,9 +656,9 @@ export const ColumnBaseMixin = (superClass) =>
      * Computes the property name based on the path and renders it to the header cell.
      * If the path is not defined, then nothing is rendered.
      *
-     * @private
+     * @protected
      */
-    __defaultHeaderRenderer() {
+    _defaultHeaderRenderer() {
       if (!this.path) return;
 
       this.__setTextContent(this._headerCell._content, this._generateHeader(this.path));
@@ -646,9 +668,9 @@ export const ColumnBaseMixin = (superClass) =>
      * Computes the item property value based on the path and renders it to the body cell.
      * If the path is not defined, then nothing is rendered.
      *
-     * @private
+     * @protected
      */
-    __defaultRenderer(root, _owner, { item }) {
+    _defaultRenderer(root, _owner, { item }) {
       if (!this.path) return;
 
       this.__setTextContent(root, this.get(this.path, item));
@@ -657,19 +679,19 @@ export const ColumnBaseMixin = (superClass) =>
     /**
      * By default, nothing is rendered to the footer cell.
      *
-     * @private
+     * @protected
      */
-    __defaultFooterRenderer() {}
+    _defaultFooterRenderer() {}
 
     /**
-     * Computes the final header renderer for the `__headerRenderer` computed property.
+     * Computes the final header renderer for the `_headerRenderer` computed property.
      * All the arguments are observable by the Polymer, it re-calls the method
      * once an argument is changed to update the property value.
      *
-     * @private
+     * @protected
      * @return {GridHeaderFooterRenderer | undefined}
      */
-    __computeHeaderRenderer(headerRenderer, headerTemplate, header) {
+    _computeHeaderRenderer(headerRenderer, headerTemplate, header) {
       if (headerRenderer) {
         return headerRenderer;
       }
@@ -680,43 +702,43 @@ export const ColumnBaseMixin = (superClass) =>
         return this.__textHeaderRenderer;
       }
 
-      return this.__defaultHeaderRenderer;
+      return this._defaultHeaderRenderer;
     }
 
     /**
-     * Computes the final renderer for the `__renderer` property.
+     * Computes the final renderer for the `_renderer` property.
      * All the arguments are observable by the Polymer, it re-calls the method
      * once an argument is changed to update the property value.
      *
-     * @private
+     * @protected
      * @return {GridBodyRenderer | undefined}
      */
-    __computeRenderer(renderer, template) {
+    _computeRenderer(renderer, template) {
       if (renderer) {
         return renderer;
       }
 
       if (template) return;
 
-      return this.__defaultRenderer;
+      return this._defaultRenderer;
     }
 
     /**
-     * Computes the final footer renderer for the `__footerRenderer` property.
+     * Computes the final footer renderer for the `_footerRenderer` property.
      * All the arguments are observable by the Polymer, it re-calls the method
      * once an argument is changed to update the property value.
      *
-     * @private
+     * @protected
      * @return {GridHeaderFooterRenderer | undefined}
      */
-    __computeFooterRenderer(footerRenderer, footerTemplate) {
+    _computeFooterRenderer(footerRenderer, footerTemplate) {
       if (footerRenderer) {
         return footerRenderer;
       }
 
       if (footerTemplate) return;
 
-      return this.__defaultFooterRenderer;
+      return this._defaultFooterRenderer;
     }
   };
 
@@ -777,12 +799,12 @@ class GridColumnElement extends ColumnBaseMixin(DirMixin(PolymerElement)) {
        * Represents the final renderer computed on the set of observable arguments.
        * It is supposed to be used internally when rendering the content of a body cell.
        *
-       * @private
+       * @protected
        * @type {GridBodyRenderer | undefined}
        */
-      __renderer: {
+      _renderer: {
         type: Function,
-        computed: '__computeRenderer(renderer, _bodyTemplate)'
+        computed: '_computeRenderer(renderer, _bodyTemplate)'
       },
 
       /**
