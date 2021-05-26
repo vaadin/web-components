@@ -49,7 +49,7 @@ describe('Basic features', () => {
   });
 
   it('should have a valid version number', () => {
-    expect(dateTimePicker.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta)\d+)?$/);
+    expect(dateTimePicker.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta|rc)\d+)?$/);
   });
 
   it('should have default value', () => {

@@ -21,7 +21,7 @@ describe('vaadin-horizontal-layout', () => {
     });
 
     it('should have a valid version number', () => {
-      expect(customElements.get(tagName).version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta)\d+)?$/);
+      expect(customElements.get(tagName).version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta|rc)\d+)?$/);
     });
 
     it('should have a box-sizing set to border-box', () => {

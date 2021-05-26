@@ -24,7 +24,7 @@ describe('vaadin-icon', () => {
     });
 
     it('should have a valid version number', () => {
-      expect(icon.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta)\d+)?$/);
+      expect(icon.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta|rc)\d+)?$/);
     });
   });
 

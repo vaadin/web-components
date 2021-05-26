@@ -17,7 +17,7 @@ describe('message', () => {
   });
 
   it('should have a valid version number', () => {
-    expect(message.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta)\d+)?$/);
+    expect(message.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta|rc)\d+)?$/);
   });
 
   it('avatar should be initially visible but without data', () => {

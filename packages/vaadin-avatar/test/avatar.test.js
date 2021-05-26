@@ -24,7 +24,7 @@ describe('vaadin-avatar', () => {
     });
 
     it('should have a valid version number', () => {
-      expect(avatar.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta)\d+)?$/);
+      expect(avatar.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta|rc)\d+)?$/);
     });
   });
 

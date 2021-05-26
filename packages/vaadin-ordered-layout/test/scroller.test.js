@@ -25,7 +25,7 @@ describe('vaadin-scroller', () => {
     });
 
     it('should have a valid version number', () => {
-      expect(customElements.get(tagName).version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta)\d+)?$/);
+      expect(customElements.get(tagName).version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta|rc)\d+)?$/);
     });
 
     it('should extend ThemableMixin', () => {

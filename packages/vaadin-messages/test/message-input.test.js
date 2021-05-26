@@ -13,7 +13,7 @@ describe('message-input', () => {
   });
 
   it('should have a valid version number', () => {
-    expect(messageInput.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta)\d+)?$/);
+    expect(messageInput.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta|rc)\d+)?$/);
   });
 
   it('message should be initialized', () => {

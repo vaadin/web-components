@@ -34,7 +34,7 @@ describe('custom element definition', () => {
   });
 
   it('should have a valid version number', () => {
-    expect(menu.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta)\d+)?$/);
+    expect(menu.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta|rc)\d+)?$/);
   });
 });
 

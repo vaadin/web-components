@@ -44,7 +44,7 @@ describe('vaadin-dialog', () => {
     });
 
     it('should have a valid version number', () => {
-      expect(dialog.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta)\d+)?$/);
+      expect(dialog.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta|rc)\d+)?$/);
     });
 
     describe('attributes', () => {
