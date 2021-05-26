@@ -52,8 +52,8 @@ registerStyles(
       position: relative;
     }
 
-    :host([height-by-rows]) #items:empty {
-      height: 1px;
+    :host([height-by-rows]) #items {
+      min-height: 1px;
     }
 
     #table {

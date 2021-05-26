@@ -108,18 +108,6 @@ describe('resizing', () => {
     expect(grid.clientHeight).to.equal(headerHeight + bodyHeight + footerHeight);
   });
 
-  it('should have body rows if header is not visible', async () => {
-    grid = fixtureSync(`
-      <vaadin-grid>
-        <vaadin-grid-column path="value"></vaadin-grid-column>
-      </vaadin-grid>`);
-    grid.firstElementChild.header = null;
-    grid.heightByRows = true;
-    grid.items = [{ value: 1 }];
-    flushGrid(grid);
-    expect(getPhysicalItems(grid).length).to.be.above(0);
-  });
-
   // NOTE: This issue only manifests with scrollbars that affect the layout
   // (On mac: Show scroll bars: Always) and Chrome / Safari browser
   it('should have correct layout after column width change', async () => {
@@ -170,7 +158,7 @@ describe('resizing', () => {
 describe('height by rows', () => {
   let grid;
 
-  beforeEach(() => {
+  it('should align height with number of rows after first render', () => {
     grid = fixtureSync(`
       <vaadin-grid>
         <vaadin-grid-column>
@@ -178,9 +166,6 @@ describe('height by rows', () => {
         </vaadin-grid-column>
       </vaadin-grid>
     `);
-  });
-
-  it('should align height with number of rows after first render', () => {
     const rows = 100;
     grid.items = grid.items = Array(...new Array(rows)).map(() => {});
     flushGrid(grid);
@@ -189,5 +174,33 @@ describe('height by rows', () => {
     flushGrid(grid);
 
     expect(grid.$.items.children.length).to.equal(rows);
+  });
+
+  it('should have body rows if header is not visible', () => {
+    grid = fixtureSync(`
+      <vaadin-grid>
+        <vaadin-grid-column path="value"></vaadin-grid-column>
+      </vaadin-grid>`);
+    grid.firstElementChild.header = null;
+    grid.heightByRows = true;
+    grid.items = [{ value: 1 }];
+    flushGrid(grid);
+    expect(getPhysicalItems(grid).length).to.be.above(0);
+  });
+
+  it('should have body rows after items reset and repopulated', () => {
+    grid = fixtureSync(`
+      <vaadin-grid>
+        <vaadin-grid-column path="value"></vaadin-grid-column>
+      </vaadin-grid>`);
+    grid.firstElementChild.header = null;
+    grid.heightByRows = true;
+    grid.items = [{ value: 1 }];
+    flushGrid(grid);
+    grid.items = [];
+    flushGrid(grid);
+    grid.items = [{ value: 1 }];
+    flushGrid(grid);
+    expect(getPhysicalItems(grid).length).to.be.above(0);
   });
 });
