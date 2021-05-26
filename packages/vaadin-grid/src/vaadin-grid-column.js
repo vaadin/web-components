@@ -119,6 +119,17 @@ export const ColumnBaseMixin = (superClass) =>
         _grid: Object,
 
         /**
+         * An internal property that can be used to force initial invoke of a Polymer observer
+         * even the other dependencies in the observer are `undefined`.
+         *
+         * @private
+         */
+        __initialized: {
+          type: Boolean,
+          value: true
+        },
+
+        /**
          * Custom function for rendering the header content.
          * Receives two arguments:
          *
@@ -138,7 +149,7 @@ export const ColumnBaseMixin = (superClass) =>
          */
         _headerRenderer: {
           type: Function,
-          computed: '_computeHeaderRenderer(headerRenderer, _headerTemplate, header)'
+          computed: '_computeHeaderRenderer(headerRenderer, _headerTemplate, header, __initialized)'
         },
 
         /**
@@ -161,7 +172,7 @@ export const ColumnBaseMixin = (superClass) =>
          */
         _footerRenderer: {
           type: Function,
-          computed: '_computeFooterRenderer(footerRenderer, _footerTemplate)'
+          computed: '_computeFooterRenderer(footerRenderer, _footerTemplate, __initialized)'
         }
       };
     }
@@ -804,7 +815,7 @@ class GridColumnElement extends ColumnBaseMixin(DirMixin(PolymerElement)) {
        */
       _renderer: {
         type: Function,
-        computed: '_computeRenderer(renderer, _bodyTemplate)'
+        computed: '_computeRenderer(renderer, _bodyTemplate, __initialized)'
       },
 
       /**
