@@ -168,4 +168,32 @@ describe('unlimited size', () => {
     const item = elementsContainer.querySelector(`#item-${virtualizer.size - 1}`);
     expect(item.getBoundingClientRect().bottom).to.be.closeTo(scrollTarget.getBoundingClientRect().bottom, 1);
   });
+
+  it('should have a first visible index at start', () => {
+    const item = elementsContainer.querySelector(`#item-${virtualizer.firstVisibleIndex}`);
+    const itemRect = item.getBoundingClientRect();
+    expect(scrollTarget.getBoundingClientRect().top).to.be.within(itemRect.top, itemRect.bottom);
+  });
+
+  it('should have a last visible index at start', () => {
+    const item = elementsContainer.querySelector(`#item-${virtualizer.lastVisibleIndex}`);
+    const itemRect = item.getBoundingClientRect();
+    expect(scrollTarget.getBoundingClientRect().bottom).to.be.within(itemRect.top, itemRect.bottom);
+  });
+
+  it('should have a first visible index at end', () => {
+    virtualizer.scrollToIndex(virtualizer.size - 1);
+
+    const item = elementsContainer.querySelector(`#item-${virtualizer.firstVisibleIndex}`);
+    const itemRect = item.getBoundingClientRect();
+    expect(scrollTarget.getBoundingClientRect().top).to.be.within(itemRect.top, itemRect.bottom);
+  });
+
+  it('should have a last visible index at end', () => {
+    virtualizer.scrollToIndex(virtualizer.size - 1);
+
+    const item = elementsContainer.querySelector(`#item-${virtualizer.lastVisibleIndex}`);
+    const itemRect = item.getBoundingClientRect();
+    expect(scrollTarget.getBoundingClientRect().bottom).to.be.within(itemRect.top, itemRect.bottom);
+  });
 });

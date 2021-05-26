@@ -60,6 +60,14 @@ export class IronListAdapter {
     return 0;
   }
 
+  get adjustedFirstVisibleIndex() {
+    return this.firstVisibleIndex + this._vidxOffset;
+  }
+
+  get adjustedLastVisibleIndex() {
+    return this.lastVisibleIndex + this._vidxOffset;
+  }
+
   scrollToIndex(index) {
     if (typeof index !== 'number' || isNaN(index) || this.size === 0 || !this.scrollTarget.offsetHeight) {
       return;

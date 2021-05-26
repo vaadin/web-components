@@ -25,3 +25,6 @@ virtualList.renderer = (root, virtualList, model) => {
 assertType<VirtualListRenderer>(virtualList.renderer);
 
 assertType<void>(virtualList.scrollToIndex(3));
+
+assertType<number>(virtualList.firstVisibleIndex);
+assertType<number>(virtualList.lastVisibleIndex);

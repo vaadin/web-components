@@ -143,6 +143,24 @@ class VirtualListElement extends ElementMixin(ThemableMixin(PolymerElement)) {
       }
     }
   }
+
+  /**
+   * Gets the index of the first visible item in the viewport.
+   *
+   * @type {number}
+   */
+  get firstVisibleIndex() {
+    return this.__virtualizer.firstVisibleIndex;
+  }
+
+  /**
+   * Gets the index of the last visible item in the viewport.
+   *
+   * @type {number}
+   */
+  get lastVisibleIndex() {
+    return this.__virtualizer.lastVisibleIndex;
+  }
 }
 
 customElements.define(VirtualListElement.is, VirtualListElement);
