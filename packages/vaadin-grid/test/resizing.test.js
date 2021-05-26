@@ -120,6 +120,22 @@ describe('resizing', () => {
     expect(getPhysicalItems(grid).length).to.be.above(0);
   });
 
+  it('should have body rows after items reset and repopulated', async () => {
+    grid = fixtureSync(`
+      <vaadin-grid>
+        <vaadin-grid-column path="value"></vaadin-grid-column>
+      </vaadin-grid>`);
+    grid.firstElementChild.header = null;
+    grid.heightByRows = true;
+    grid.items = [{ value: 1 }];
+    flushGrid(grid);
+    grid.items = [];
+    flushGrid(grid);
+    grid.items = [{ value: 1 }];
+    flushGrid(grid);
+    expect(getPhysicalItems(grid).length).to.be.above(0);
+  });
+
   // NOTE: This issue only manifests with scrollbars that affect the layout
   // (On mac: Show scroll bars: Always) and Chrome / Safari browser
   it('should have correct layout after column width change', async () => {
