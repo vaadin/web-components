@@ -119,8 +119,10 @@ export const ColumnBaseMixin = (superClass) =>
         _grid: Object,
 
         /**
-         * An internal property that can be used to force initial invoke of a Polymer observer
-         * even the other dependencies in the observer are `undefined`.
+         * By default, the Polymer doesn't invoke the observer
+         * during initialization if all of its dependencies are `undefined`.
+         * This internal property can be used to force initial invocation of an observer
+         * even the other dependencies of the observer are `undefined`.
          *
          * @private
          */
