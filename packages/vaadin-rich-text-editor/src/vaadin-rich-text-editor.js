@@ -126,7 +126,6 @@ class RichTextEditorElement extends ElementMixin(ThemableMixin(PolymerElement)) 
           display: flex;
           flex-direction: column;
           box-sizing: border-box;
-          overflow: hidden;
         }
 
         :host([hidden]) {
