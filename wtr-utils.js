@@ -15,7 +15,7 @@ const group = process.argv.indexOf('--group') !== -1;
 
 const NO_UNIT_TESTS = ['vaadin-icons', 'vaadin-lumo-styles', 'vaadin-material-styles'];
 
-const NO_VISUAL_TESTS = ['vaadin-icon', 'vaadin-icons', 'vaadin-template-renderer', 'vaadin-virtual-list'];
+const NO_VISUAL_TESTS = ['vaadin-icon', 'vaadin-template-renderer', 'vaadin-virtual-list'];
 
 /**
  * Check if lockfile has changed.
@@ -128,7 +128,9 @@ const getUnitTestGroups = (packages) => {
  */
 const getVisualTestGroups = (packages, theme) => {
   return packages
-    .filter((pkg) => !pkg.includes(theme) && !pkg.includes(theme === 'lumo' ? 'material' : 'lumo'))
+    .filter(
+      (pkg) => !pkg.includes('icons') && !pkg.includes(theme) && !pkg.includes(theme === 'lumo' ? 'material' : 'lumo')
+    )
     .map((pkg) => {
       return {
         name: pkg,
@@ -138,6 +140,10 @@ const getVisualTestGroups = (packages, theme) => {
     .concat({
       name: `vaadin-${theme}-styles`,
       files: `packages/vaadin-${theme}-styles/test/visual/*.test.js`
+    })
+    .concat({
+      name: `vaadin-icons`,
+      files: `packages/vaadin-icons/test/visual/*.test.js`
     });
 };
 
@@ -195,6 +201,8 @@ const getScreenshotFileName = ({ name }, type, diff) => {
   if (name.includes('-styles')) {
     const match = pathname.match(/\/packages\/(vaadin-(lumo|material)-styles\/test\/visual\/)(.+)/);
     folder = match[1] + 'screenshots';
+  } else if (name.includes('vaadin-icons')) {
+    folder = 'vaadin-icons/test/visual/screenshots';
   } else {
     const match = pathname.match(/\/packages\/(.+)\.test\.js/);
     folder = match[1].replace(/(lumo|material)/, '$1/screenshots');
