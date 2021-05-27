@@ -6,21 +6,33 @@ const modify = require('gulp-modify');
 const cheerio = require('cheerio');
 const concat = require('gulp-concat');
 
-gulp.task('icons', function () {
+function createCopyright() {
+  return `/**
+ * @license
+ * Copyright (c) 2015 - 2021 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */`;
+}
+
+function iconFileModifier(prefix) {
+  return function (file, contents) {
+    const id = file.path.replace(/.*\/(.*).svg/, '$1');
+    const svg = cheerio.load(contents, { xmlMode: true })('svg');
+    // Remove fill attributes.
+    svg.children('[fill]').removeAttr('fill');
+    // Add closing tags instead of self-closing.
+    const content = svg.children().toString().replace(/"\/>/g, '"></path>');
+    // Output the "meat" of the SVG as group element.
+    return `<g id="${prefix}${id}">${content}</g>`;
+  };
+}
+
+gulp.task('iron-icons', function () {
   return gulp
     .src(['assets/svg/*.svg'], { base: '.' })
     .pipe(
       modify({
-        fileModifier: function (file, contents) {
-          const id = file.path.replace(/.*\/(.*).svg/, '$1');
-          const svg = cheerio.load(contents, { xmlMode: true })('svg');
-          // Remove fill attributes.
-          svg.children('[fill]').removeAttr('fill');
-          // Add closing tags instead of self-closing.
-          const content = svg.children().toString().replace(/"\/>/g, '"></path>');
-          // Output the "meat" of the SVG as group element.
-          return `<g id="${id}">${content}</g>`;
-        }
+        fileModifier: iconFileModifier('')
       })
     )
     .pipe(concat('iconset.js'))
@@ -28,11 +40,7 @@ gulp.task('icons', function () {
       modify({
         fileModifier: function (file, contents) {
           // Enclose all icons in an iron-iconset-svg
-          return `/**
- * @license
- * Copyright (c) 2015 - 2021 Vaadin Ltd.
- * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
- */
+          return `${createCopyright()}
 import '@polymer/iron-iconset-svg/iron-iconset-svg.js';
 
 const $_documentContainer = document.createElement('template');
@@ -47,3 +55,35 @@ document.head.appendChild($_documentContainer.content);\n`;
     )
     .pipe(gulp.dest('.'));
 });
+
+gulp.task('vaadin-icons', function () {
+  return gulp
+    .src(['assets/svg/*.svg'], { base: '.' })
+    .pipe(
+      modify({
+        fileModifier: iconFileModifier('vaadin:')
+      })
+    )
+    .pipe(concat('vaadin-iconset.js'))
+    .pipe(
+      modify({
+        fileModifier: function (file, contents) {
+          // Enclose all icons in an iron-iconset-svg
+          return `${createCopyright()}
+import '@vaadin/vaadin-icon/vaadin-iconset.js';
+import '@vaadin/vaadin-icon/vaadin-icon.js';
+
+const $_documentContainer = document.createElement('template');
+
+$_documentContainer.innerHTML = \`<vaadin-iconset name="vaadin" size="16">
+<svg><defs>\n${contents}\n</defs></svg>
+</vaadin-iconset>\`;
+
+document.head.appendChild($_documentContainer.content);\n`;
+        }
+      })
+    )
+    .pipe(gulp.dest('.'));
+});
+
+gulp.task('icons', gulp.parallel('iron-icons', 'vaadin-icons'));
