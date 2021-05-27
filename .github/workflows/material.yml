@@ -38,4 +38,6 @@ jobs:
         if: ${{ failure() }}
         with:
           name: screenshots
-          path: packages/*/test/visual/material/screenshots/*/failed/*.png
+          path: |
+            packages/*/test/visual/material/screenshots/*/failed/*.png
+            packages/vaadin-material-styles/test/visual/screenshots/failed/*.png
