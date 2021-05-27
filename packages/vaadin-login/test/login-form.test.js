@@ -37,7 +37,7 @@ describe('login form', () => {
   });
 
   it('should have a valid version number', () => {
-    expect(login.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta)\d+)?$/);
+    expect(login.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta|rc)\d+)?$/);
   });
 
   it('should display default strings', () => {

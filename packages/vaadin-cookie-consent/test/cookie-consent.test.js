@@ -15,7 +15,7 @@ describe('vaadin-cookie-consent', () => {
     });
 
     it('should have a valid version number', () => {
-      expect(consent.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta)\d+)?$/);
+      expect(consent.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta|rc)\d+)?$/);
     });
   });
 

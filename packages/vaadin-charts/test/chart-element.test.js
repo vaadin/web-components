@@ -20,7 +20,7 @@ describe('vaadin-chart', () => {
     });
 
     it('should have a valid version number', () => {
-      expect(chart.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta)\d+)?$/);
+      expect(chart.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta|rc)\d+)?$/);
     });
   });
 

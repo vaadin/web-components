@@ -45,7 +45,7 @@ describe('vaadin-accordion', () => {
     });
 
     it('should have a valid version number', () => {
-      expect(accordion.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta)\d+)?$/);
+      expect(accordion.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta|rc)\d+)?$/);
     });
   });
 
