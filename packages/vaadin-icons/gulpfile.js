@@ -9,7 +9,7 @@ const concat = require('gulp-concat');
 function createCopyright() {
   return `/**
  * @license
- * Copyright (c) 2015 - 2021 Vaadin Ltd.
+ * Copyright (c) 2015 - ${new Date().getFullYear()} Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */`;
 }
@@ -68,7 +68,7 @@ gulp.task('vaadin-icons', function () {
     .pipe(
       modify({
         fileModifier: function (file, contents) {
-          // Enclose all icons in an iron-iconset-svg
+          // Enclose all icons in a vaadin-iconset
           return `${createCopyright()}
 import '@vaadin/vaadin-icon/vaadin-iconset.js';
 import '@vaadin/vaadin-icon/vaadin-icon.js';
