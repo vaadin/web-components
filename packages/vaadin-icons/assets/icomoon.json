@@ -558,7 +558,7 @@
         "isMulticolor": false,
         "grid": 16,
         "tags": [
-          "buss"
+          "bus"
         ],
         "colorPermutations": {
           "12552552551": []
@@ -570,8 +570,8 @@
         "id": 88,
         "prevSize": 16,
         "code": 59660,
-        "name": "buss",
-        "ligatures": "buss"
+        "name": "bus",
+        "ligatures": "bus"
       },
       "setIdx": 0,
       "setId": 1,
@@ -3030,7 +3030,7 @@
         "isMulticolor": false,
         "grid": 16,
         "tags": [
-          "trendind-down"
+          "trending-down"
         ],
         "colorPermutations": {
           "12552552551": []
@@ -3042,8 +3042,8 @@
         "id": 4,
         "prevSize": 16,
         "code": 59744,
-        "name": "trendind-down",
-        "ligatures": "trendind-down"
+        "name": "trending-down",
+        "ligatures": "trending-down"
       },
       "setIdx": 0,
       "setId": 1,
@@ -5679,7 +5679,7 @@
         "isMulticolor": false,
         "grid": 16,
         "tags": [
-          "funcion"
+          "function"
         ]
       },
       "attrs": [
@@ -5690,8 +5690,8 @@
         "id": 453,
         "prevSize": 16,
         "code": 58956,
-        "name": "funcion",
-        "ligatures": "funcion"
+        "name": "function",
+        "ligatures": "function"
       },
       "setIdx": 0,
       "setId": 1,
@@ -7128,7 +7128,7 @@
         "isMulticolor": false,
         "grid": 16,
         "tags": [
-          "palete"
+          "palette"
         ]
       },
       "attrs": [],
@@ -7137,8 +7137,8 @@
         "id": 426,
         "prevSize": 16,
         "code": 58983,
-        "name": "palete",
-        "ligatures": "palete"
+        "name": "palette",
+        "ligatures": "palette"
       },
       "setIdx": 0,
       "setId": 1,
@@ -9582,7 +9582,7 @@
         "isMulticolor": false,
         "grid": 16,
         "tags": [
-          "megafone"
+          "megaphone"
         ]
       },
       "attrs": [
@@ -9593,8 +9593,8 @@
         "id": 349,
         "prevSize": 16,
         "code": 59060,
-        "name": "megafone",
-        "ligatures": "megafone"
+        "name": "megaphone",
+        "ligatures": "megaphone"
       },
       "setIdx": 0,
       "setId": 1,
