@@ -2865,7 +2865,7 @@
     ]
   },
   {
-    "name": "funcion",
+    "name": "function",
     "code": "e64c",
     "categories": [
       "Web application"
@@ -3854,7 +3854,7 @@
     ]
   },
   {
-    "name": "megafone",
+    "name": "megaphone",
     "code": "e6b4",
     "categories": [
       "Social",
@@ -4249,7 +4249,7 @@
     ]
   },
   {
-    "name": "palete",
+    "name": "palette",
     "code": "e667",
     "categories": [
       "Tools",
@@ -6521,7 +6521,7 @@
     ]
   },
   {
-    "name": "buss",
+    "name": "bus",
     "code": "e90c",
     "categories": [
       "Transportation"
@@ -7664,7 +7664,7 @@
     ]
   },
   {
-    "name": "trendind-down",
+    "name": "trending-down",
     "code": "e960",
     "categories": [
       "Charts"

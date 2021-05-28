@@ -289,7 +289,7 @@ The following table lists the icons currently available in the [vaadinelement]#v
 | image:../assets/png/form.png[] | [propertyname]#form# | form | e64b | Web application | layout, html, component
 | image:../assets/png/forward.png[] | [propertyname]#forward# | forward | e77c | Media, Player | next
 | image:../assets/png/frown-o.png[] | [propertyname]#frown-o# | frown-o | e6a4 | Social, Sign | unhappy, sad, emoji
-| image:../assets/png/funcion.png[] | [propertyname]#funcion# | funcion | e64c | Web application | math, code
+| image:../assets/png/function.png[] | [propertyname]#function# | function | e64c | Web application | math, code
 | image:../assets/png/gamepad.png[] | [propertyname]#gamepad# | gamepad | e714 | Media, Item | game, pad, joystick
 | image:../assets/png/gavel.png[] | [propertyname]#gavel# | gavel | e6a5 | Tools, Item | auction, justice, hammer
 | image:../assets/png/gift.png[] | [propertyname]#gift# | gift | e715 | Item | present, birthday
@@ -371,7 +371,7 @@ The following table lists the icons currently available in the [vaadinelement]#v
 | image:../assets/png/margin-right.png[] | [propertyname]#margin-right# | margin-right | e659 | Web application | css, layout, html
 | image:../assets/png/margin-top.png[] | [propertyname]#margin-top# | margin-top | e65a | Web application | css, layout, html
 | image:../assets/png/medal.png[] | [propertyname]#medal# | medal | e6b3 | Item | achievement, award
-| image:../assets/png/megafone.png[] | [propertyname]#megafone# | megafone | e6b4 | Social, Item | campaign, marketing
+| image:../assets/png/megaphone.png[] | [propertyname]#megaphone# | megaphone | e6b4 | Social, Item | campaign, marketing
 | image:../assets/png/meh-o.png[] | [propertyname]#meh-o# | meh-o | e6b5 | Social, Sign | blah, whatever, bored, emoji
 | image:../assets/png/microphone.png[] | [propertyname]#microphone# | microphone | e72a | Media, Player, Item | record, voice
 | image:../assets/png/minus.png[] | [propertyname]#minus# | minus | e7f6 | Form | line, bar, minimize, collapse, remove
@@ -402,7 +402,7 @@ The following table lists the icons currently available in the [vaadinelement]#v
 | image:../assets/png/padding-top.png[] | [propertyname]#padding-top# | padding-top | e664 | Web application | css, layout, html
 | image:../assets/png/paint-roll.png[] | [propertyname]#paint-roll# | paint-roll | e666 | Tools, Item | paint
 | image:../assets/png/paintbrush.png[] | [propertyname]#paintbrush# | paintbrush | e6b8 | Tools, Item | paint
-| image:../assets/png/palete.png[] | [propertyname]#palete# | palete | e667 | Tools, Item | color, paint
+| image:../assets/png/palette.png[] | [propertyname]#palette# | palette | e667 | Tools, Item | color, paint
 | image:../assets/png/panel.png[] | [propertyname]#panel# | panel | e668 | Web application | layout, html, component
 | image:../assets/png/paperclip.png[] | [propertyname]#paperclip# | paperclip | e72d | Office, Item | attachment
 | image:../assets/png/paperplane.png[] | [propertyname]#paperplane# | paperplane | e6b9 | Office | email, send
@@ -589,7 +589,7 @@ The following table lists the icons currently available in the [vaadinelement]#v
 | image:../assets/png/bar-chart-h.png[] | [propertyname]#bar-chart-h# | bar-chart-h | e909 | Charts | graph, diagram, column-chart, horizontal
 | image:../assets/png/bar-chart-v.png[] | [propertyname]#bar-chart-v# | bar-chart-v | e90a | Charts | graph, diagram, column-chart, vertical
 | image:../assets/png/bed.png[] | [propertyname]#bed# | bed | e90b | Item | sleep, pillow
-| image:../assets/png/buss.png[] | [propertyname]#buss# | buss | e90c | Transportation | vehicle, car, charter, coach
+| image:../assets/png/bus.png[] | [propertyname]#bus# | bus | e90c | Transportation | vehicle, car, charter, coach
 | image:../assets/png/chart-3d.png[] | [propertyname]#chart-3d# | chart-3d | e90d | Charts | graph, diagram, column-chart
 | image:../assets/png/chart-grid.png[] | [propertyname]#chart-grid# | chart-grid | e90e | Charts | graph, diagram, table
 | image:../assets/png/chart-timeline.png[] | [propertyname]#chart-timeline# | chart-timeline | e90f | Charts | graph, diagram, column-chart, linear
@@ -673,7 +673,7 @@ The following table lists the icons currently available in the [vaadinelement]#v
 | image:../assets/png/tab.png[] | [propertyname]#tab# | tab | e95d | Keyboard | key, shortcut, type, tabulator, indent
 | image:../assets/png/timer.png[] | [propertyname]#timer# | timer | e95e | Scheduling, Item | time, tracking, measurement, hours, stopwatch
 | image:../assets/png/touch.png[] | [propertyname]#touch# | touch | e95f | Web application | tap, click, pointer, finger
-| image:../assets/png/trendind-down.png[] | [propertyname]#trendind-down# | trendind-down | e960 | Charts | graph, diagram, line-chart, table, lower
+| image:../assets/png/trending-down.png[] | [propertyname]#trending-down# | trending-down | e960 | Charts | graph, diagram, line-chart, table, lower
 | image:../assets/png/trending-up.png[] | [propertyname]#trending-up# | trending-up | e961 | Charts | graph, diagram, line-chart, table, rise
 | image:../assets/png/user-star.png[] | [propertyname]#user-star# | user-star | e962 | People | favorite, save
 | image:../assets/png/wallet.png[] | [propertyname]#wallet# | wallet | e963 | Item | money, currency, cash, coins
