@@ -24,7 +24,7 @@ export class Templatizer extends PolymerElement {
     // If the template instance exists and has been instantiated by this templatizer,
     // it only re-renders the instance with the new properties.
     if (this.__templateInstances.has(element.__templateInstance)) {
-      element.__templateInstance.setProperties(properties);
+      this.__updateProperties(element.__templateInstance, properties);
       return;
     }
 
@@ -34,6 +34,18 @@ export class Templatizer extends PolymerElement {
     element.innerHTML = '';
     element.__templateInstance = templateInstance;
     element.appendChild(templateInstance.root);
+  }
+
+  __updateProperties(instance, properties) {
+    // The Polymer uses `===` to check whether a property is changed and should be re-rendered.
+    // This means, object properties won't be re-rendered when mutated inside.
+    // This workaround forces the `item` property to re-render even
+    // the new item is stricly equal to the old item.
+    if (instance.item === properties.item) {
+      instance._setPendingProperty('item');
+    }
+
+    instance.setProperties(properties);
   }
 
   __createTemplateInstance(properties) {

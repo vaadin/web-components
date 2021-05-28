@@ -7,10 +7,9 @@ export class MockListHost extends PolymerElement {
     return html`
       <mock-list id="list" items="[[items]]">
         <template>
-          <div class="item-text">[[item]]</div>
+          <div class="title">[[item.title]]</div>
 
-          <div class="value-text">[[value]]</div>
-
+          <div class="value">[[value]]</div>
           <input value="{{value::input}}" />
 
           <button on-click="onClick"></button>
@@ -26,7 +25,7 @@ export class MockListHost extends PolymerElement {
       items: {
         type: Array,
         value() {
-          return ['item1', 'item2'];
+          return [{ title: 'title0' }, { title: 'title1' }];
         }
       }
     };
