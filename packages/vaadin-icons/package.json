@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-icons",
-  "version": "21.0.0-alpha2",
+  "version": "21.0.0-alpha3",
   "description": "Collection of 600+ unique icons designed for web applications",
   "main": "vaadin-icons.js",
   "module": "vaadin-icons.js",
@@ -29,7 +29,7 @@
     "@polymer/iron-icon": "^3.0.0",
     "@polymer/iron-iconset-svg": "^3.0.0",
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/vaadin-icon": "^21.0.0-alpha2"
+    "@vaadin/vaadin-icon": "^21.0.0-alpha3"
   },
   "devDependencies": {
     "cheerio": "^1.0.0-rc.6",
