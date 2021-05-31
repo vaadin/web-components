@@ -113,6 +113,16 @@ describe('column auto-width', function () {
     await recalculateWidths();
     expectColumnWidthsToBeOk(columns, [42, 62, 84, 107]);
   });
+
+  it('should exclude non-visible body cells from grid column auto width calc', async () => {
+    // Assign more items to the grid. The last one with the long content, while in the DOM,
+    // will end up outside the visible viewport and therefor should not affect the
+    // calculated column auto-width
+    grid.items = [...testItems, { a: 'a' }, { a: 'aaaaaaaaaaaaaaaaaaaaa' }];
+
+    await recalculateWidths();
+    expectColumnWidthsToBeOk(columns);
+  });
 });
 
 describe('async recalculateWidth columns', () => {

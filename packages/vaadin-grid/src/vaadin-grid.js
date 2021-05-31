@@ -457,8 +457,8 @@ class GridElement extends ElementMixin(
   _isInViewport(item) {
     const scrollTargetRect = this.$.table.getBoundingClientRect();
     const itemRect = item.getBoundingClientRect();
-    const headerHeight = this.$.header.offsetHeight;
-    const footerHeight = this.$.footer.offsetHeight;
+    const headerHeight = this.$.header.getBoundingClientRect().height;
+    const footerHeight = this.$.footer.getBoundingClientRect().height;
     return (
       itemRect.bottom > scrollTargetRect.top + headerHeight && itemRect.top < scrollTargetRect.bottom - footerHeight
     );
@@ -567,11 +567,16 @@ class GridElement extends ElementMixin(
     cols.forEach((col) => {
       col._currentWidth = 0;
       // Note: _allCells only contains cells which are currently rendered in DOM
-      col._allCells.forEach((c) => {
-        // Add 1px buffer to the offset width to avoid too narrow columns (sub-pixel rendering)
-        const cellWidth = c.offsetWidth + 1;
-        col._currentWidth = Math.max(col._currentWidth, cellWidth);
-      });
+      col._allCells
+        .filter((c) => {
+          // Exclude body cells that are out of the visible viewport
+          return !this.$.items.contains(c) || this._isInViewport(c.parentElement);
+        })
+        .forEach((c) => {
+          // Add 1px buffer to the offset width to avoid too narrow columns (sub-pixel rendering)
+          const cellWidth = c.offsetWidth + 1;
+          col._currentWidth = Math.max(col._currentWidth, cellWidth);
+        });
     });
     // [write] Set column widths to fit widest measured content
     cols.forEach((col) => {
