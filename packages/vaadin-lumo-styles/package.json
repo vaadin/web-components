@@ -33,7 +33,6 @@
     "@polymer/iron-icon": "^3.0.0",
     "@polymer/iron-iconset-svg": "^3.0.0",
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/vaadin-icon": "^21.0.0-alpha2",
     "@vaadin/vaadin-themable-mixin": "^21.0.0-alpha2"
   },
   "devDependencies": {
@@ -41,7 +40,8 @@
     "gulp-cli": "^2.0.1",
     "gulp-iconfont": "^11.0.0",
     "gulp-sort": "^2.0.0",
-    "gulp-svgmin": "^3.0.0"
+    "gulp-svgmin": "^3.0.0",
+    "@vaadin/vaadin-icon": "^21.0.0-alpha2"
   },
   "publishConfig": {
     "access": "public"
