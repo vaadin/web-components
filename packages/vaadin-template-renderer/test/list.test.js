@@ -10,12 +10,12 @@ import './fixtures/mock-list.js';
 describe('list', () => {
   let host, list, template;
 
-  function getItemText(item) {
-    return item.querySelector('.item-text').textContent;
+  function getItemTitle(item) {
+    return item.querySelector('.title').textContent;
   }
 
-  function getItemValueText(item) {
-    return item.querySelector('.value-text').textContent;
+  function getItemValue(item) {
+    return item.querySelector('.value').textContent;
   }
 
   beforeEach(() => {
@@ -26,8 +26,8 @@ describe('list', () => {
 
   it('should render the list', () => {
     expect(list.$.items.children).to.have.lengthOf(2);
-    expect(getItemText(list.$.items.children[0])).to.equal('item1');
-    expect(getItemText(list.$.items.children[1])).to.equal('item2');
+    expect(getItemTitle(list.$.items.children[0])).to.equal('title0');
+    expect(getItemTitle(list.$.items.children[1])).to.equal('title1');
   });
 
   it('should handle events from the template instances', () => {
@@ -43,10 +43,10 @@ describe('list', () => {
   });
 
   it('should re-render the list when removing an item', () => {
-    host.items = ['item1'];
+    host.items = [{ title: 'new0' }];
 
     expect(list.$.items.children).to.have.lengthOf(1);
-    expect(getItemText(list.$.items.children[0])).to.equal('item1');
+    expect(getItemTitle(list.$.items.children[0])).to.equal('new0');
   });
 
   it('should create a template instance for each item', () => {
@@ -69,14 +69,22 @@ describe('list', () => {
   it('should re-render the template instances when changing a parent property', () => {
     host.value = 'foobar';
 
-    expect(getItemValueText(list.$.items.children[0])).to.equal('foobar');
-    expect(getItemValueText(list.$.items.children[1])).to.equal('foobar');
+    expect(getItemValue(list.$.items.children[0])).to.equal('foobar');
+    expect(getItemValue(list.$.items.children[1])).to.equal('foobar');
   });
 
   it('should re-render the template instances when changing items', () => {
-    host.items = ['foo', 'bar'];
+    host.items = [{ title: 'new0' }, { title: 'new1' }];
 
-    expect(getItemText(list.$.items.children[0])).to.equal('foo');
-    expect(getItemText(list.$.items.children[1])).to.equal('bar');
+    expect(getItemTitle(list.$.items.children[0])).to.equal('new0');
+    expect(getItemTitle(list.$.items.children[1])).to.equal('new1');
+  });
+
+  it('should re-render the template instances when mutating an item', () => {
+    host.items[0].title = 'new0';
+    list.render();
+
+    expect(getItemTitle(list.$.items.children[0])).to.equal('new0');
+    expect(getItemTitle(list.$.items.children[1])).to.equal('title1');
   });
 });
