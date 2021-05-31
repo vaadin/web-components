@@ -152,7 +152,7 @@ function createGHLink(path) {
 
 // create link to low-components repo given a type or id
 function createLink(type, id, char) {
-  return id ? `[${char ? char : id}](${createGHLink(`vaadin-web-components/${type}/${id})`)}` : '';
+  return id ? `[${char ? char : id}](${createGHLink(`web-components/${type}/${id})`)}` : '';
 }
 
 // convert GH internal links to absolute links
@@ -238,10 +238,10 @@ function generateReleaseNotes(commits) {
   console.log(`${to}\n`);
   console.log(`[API Documentation →](https://cdn.vaadin.com/vaadin-web-components/${version}/)\n`);
   if (commits.length) {
-    console.log(`### Changes Since [${from}](https://github.com/vaadin/vaadin-web-components/releases/tag/${from})`);
+    console.log(`### Changes Since [${from}](https://github.com/vaadin/web-components/releases/tag/${from})`);
   } else {
     console.log(
-      `### No Changes Since [${from}](https://github.com/vaadin/vaadin-web-components/releases/tag/${from})})`
+      `### No Changes Since [${from}](https://github.com/vaadin/web-components/releases/tag/${from})})`
     );
   }
   logCommitsByType(commits);
