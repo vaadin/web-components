@@ -18,6 +18,8 @@ export class IronListAdapter {
     this.elementsContainer = elementsContainer || scrollContainer;
     this.reorderElements = reorderElements;
 
+    this.__safari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
     this.timeouts = {
       SCROLL_REORDER: 500,
       IGNORE_WHEEL: 500
@@ -416,6 +418,15 @@ export class IronListAdapter {
       for (let i = visibleElements.length + delta; i < visibleElements.length; i++) {
         this.elementsContainer.insertBefore(visibleElements[i], visibleElements[0]);
       }
+    }
+
+    // Due to a rendering bug, reordering the rows can make parts of the scroll target disappear
+    // on Safari when using sticky positioning in case the scroll target is inside a flexbox.
+    // This issue manifests with grid (the header can disappear if grid is used inside a flexbox)
+    if (this.__safari) {
+      const { transform } = this.scrollTarget.style;
+      this.scrollTarget.style.transform = 'translateZ(0)';
+      setTimeout(() => (this.scrollTarget.style.transform = transform));
     }
   }
 

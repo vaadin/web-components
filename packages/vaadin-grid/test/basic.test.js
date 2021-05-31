@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, oneEvent } from '@vaadin/testing-helpers';
 import {
   flushGrid,
   getBodyCellContent,
@@ -297,6 +297,10 @@ describe('flex child', () => {
       await aTimeout(0);
       flushGrid(grid);
       const { left, top } = grid.getBoundingClientRect();
+
+      oneEvent(grid.$.table, 'scroll');
+      flushGrid(grid);
+
       const cell = grid._cellFromPoint(left + 1, top + 1);
       expect(grid.$.header.contains(cell)).to.be.true;
     });
