@@ -417,6 +417,13 @@ export class IronListAdapter {
         this.elementsContainer.insertBefore(visibleElements[i], visibleElements[0]);
       }
     }
+
+    // Due to a rendering bug, reordering the rows can make parts of the scroll target disappear
+    // on Safari when using sticky positioning in case the scroll target is inside a flexbox.
+    // This issue manifests with grid (the header can disappear if grid is used inside a flexbox)
+    const { transform } = this.scrollTarget.style;
+    this.scrollTarget.style.transform = 'translateZ(0)';
+    setTimeout(() => (this.scrollTarget.style.transform = transform));
   }
 
   /** @private */
