@@ -17,6 +17,9 @@ const NO_UNIT_TESTS = ['vaadin-icons', 'vaadin-lumo-styles', 'vaadin-material-st
 
 const NO_VISUAL_TESTS = ['vaadin-icon', 'vaadin-template-renderer', 'vaadin-virtual-list'];
 
+const hasUnitTests = (pkg) => !NO_UNIT_TESTS.includes(pkg);
+const hasVisualTests = (pkg) => !NO_VISUAL_TESTS.includes(pkg) && pkg.indexOf('mixin') === -1;
+
 /**
  * Check if lockfile has changed.
  */
@@ -30,7 +33,7 @@ const isLockfileChanged = () => {
  */
 const getChangedPackages = () => {
   const output = execSync('./node_modules/.bin/lerna ls --since origin/master --json --loglevel silent');
-  return JSON.parse(output.toString());
+  return JSON.parse(output.toString()).map((project) => project.name.replace('@vaadin/', ''));
 };
 
 /**
@@ -60,11 +63,9 @@ const getUnitTestPackages = () => {
     return getAllPackages();
   }
 
-  let packages = getChangedPackages()
-    .map((project) => project.name.replace('@vaadin/', ''))
-    .filter((project) => NO_UNIT_TESTS.indexOf(project) === -1);
+  let packages = getChangedPackages();
 
-  if (packages.length == 0) {
+  if (packages.length === 0) {
     // When running in GitHub Actions, do nothing.
     if (process.env.GITHUB_REF) {
       console.log(`No local packages have changed, exiting.`);
@@ -77,7 +78,7 @@ const getUnitTestPackages = () => {
     console.log(`Running tests for changed packages:\n${packages.join('\n')}`);
   }
 
-  return packages;
+  return packages.filter(hasUnitTests);
 };
 
 /**
@@ -89,11 +90,9 @@ const getVisualTestPackages = () => {
     return getAllVisualPackages();
   }
 
-  let packages = getChangedPackages()
-    .map((project) => project.name.replace('@vaadin/', ''))
-    .filter((project) => NO_VISUAL_TESTS.indexOf(project) === -1 && project.indexOf('mixin') === -1);
+  let packages = getChangedPackages();
 
-  if (packages.length == 0) {
+  if (packages.length === 0) {
     // When running in GitHub Actions, do nothing.
     if (process.env.GITHUB_REF) {
       console.log(`No local packages have changed, exiting.`);
@@ -108,7 +107,7 @@ const getVisualTestPackages = () => {
     console.log(`Running tests for changed packages:\n${packages.join('\n')}`);
   }
 
-  return packages;
+  return packages.filter(hasVisualTests);
 };
 
 /**
