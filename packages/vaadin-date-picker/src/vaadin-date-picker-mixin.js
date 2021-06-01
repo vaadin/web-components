@@ -129,7 +129,15 @@ export const DatePickerMixin = (subclass) =>
         /**
          * The object used to localize this component.
          * To change the default localization, replace the entire
-         * _i18n_ object or just the property you want to modify.
+         * `i18n` object with a custom one.
+         *
+         * To update individual properties, extend the existing i18n object like so:
+         * ```
+         * datePicker.i18n = { ...datePicker.i18n, {
+         *   formatDate: date => { ... },
+         *   parseDate: value => { ... },
+         * }};
+         * ```
          *
          * The object has the following JSON structure and default values:
          *
