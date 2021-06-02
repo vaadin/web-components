@@ -923,8 +923,6 @@ class GridElement extends ElementMixin(
     });
 
     this._updateDetailsCellHeight(row);
-
-    requestAnimationFrame(() => this.notifyResize());
   }
 
   /** @private */
