@@ -896,14 +896,16 @@ class GridElement extends ElementMixin(
     row._item = item;
     const model = this.__getRowModel(row);
 
-    this._toggleAttribute('selected', model.selected, row);
-    this._a11yUpdateRowSelected(row, model.selected);
+    this._toggleDetailsCell(row, model.detailsOpened);
+
     this._a11yUpdateRowLevel(row, model.level);
+    this._a11yUpdateRowSelected(row, model.selected);
+    this._a11yUpdateRowDetailsOpened(row, model.detailsOpened);
+
     this._toggleAttribute('expanded', model.expanded, row);
-    this._toggleAttribute('details-opened', this._isDetailsOpened(item), row);
-    if (this._rowDetailsTemplate || this.rowDetailsRenderer) {
-      this._toggleDetailsCell(row, item);
-    }
+    this._toggleAttribute('selected', model.selected, row);
+    this._toggleAttribute('details-opened', model.detailsOpened, row);
+
     this._generateCellClassNames(row, model);
     this._filterDragAndDrop(row, model);
 
@@ -919,6 +921,10 @@ class GridElement extends ElementMixin(
         cell._instance.setProperties(model);
       }
     });
+
+    this._updateDetailsCellHeight(row);
+
+    requestAnimationFrame(() => this.notifyResize());
   }
 
   /** @private */

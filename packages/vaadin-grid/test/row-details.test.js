@@ -146,7 +146,7 @@ describe('row details', () => {
       expect(bounds.height).to.be.above(10);
     };
 
-    it('should have correct bounds', () => {
+    it('should have correct bounds', async () => {
       openRowDetails(1);
       assertDetailsBounds();
     });
@@ -278,7 +278,7 @@ describe('row details', () => {
       `);
     });
 
-    it('should have correct height', () => {
+    it('should have correct height', async () => {
       grid.openItemDetails(items[0]);
 
       grid.dataProvider = (params, callback) => callback(items);
