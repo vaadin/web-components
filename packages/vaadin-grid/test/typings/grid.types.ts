@@ -31,6 +31,7 @@ import {
   ColumnBaseMixin,
   GridActiveItemChangedEvent,
   GridCellActivateEvent,
+  GridCellFocusEvent,
   GridColumnElement,
   GridColumnReorderEvent,
   GridColumnResizeEvent,
@@ -83,6 +84,10 @@ narrowedGrid.addEventListener('active-item-changed', (event) => {
 narrowedGrid.addEventListener('cell-activate', (event) => {
   assertType<GridCellActivateEvent<TestGridItem>>(event);
   assertType<GridItemModel<TestGridItem>>(event.detail.model);
+});
+
+narrowedGrid.addEventListener('cell-focus', (event) => {
+  assertType<GridCellFocusEvent>(event);
 });
 
 narrowedGrid.addEventListener('column-reorder', (event) => {

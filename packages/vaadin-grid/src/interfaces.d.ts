@@ -41,7 +41,7 @@ export interface GridFilter {
 }
 
 export interface GridEventContext<TItem> {
-  section: 'body' | 'header' | 'footer' | 'details';
+  section?: 'body' | 'header' | 'footer' | 'details';
   item?: TItem;
   column?: GridColumnElement<TItem>;
   index?: number;

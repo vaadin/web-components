@@ -253,6 +253,7 @@ const TOUCH_DEVICE = (() => {
  *
  * @fires {CustomEvent} active-item-changed - Fired when the `activeItem` property changes.
  * @fires {CustomEvent} cell-activate - Fired when the cell is activated with click or keyboard.
+ * @fires {CustomEvent} cell-focus - Fired when a cell is focused with click or keyboard navigation.
  * @fires {CustomEvent} column-reorder - Fired when the columns in the grid are reordered.
  * @fires {CustomEvent} column-resize - Fired when the grid column resize is finished.
  * @fires {CustomEvent} expanded-items-changed - Fired when the `expandedItems` property changes.
