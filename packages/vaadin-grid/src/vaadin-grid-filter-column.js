@@ -57,7 +57,7 @@ class GridFilterColumnElement extends GridColumnElement {
    */
   _defaultHeaderRenderer(root, _column) {
     let filter = root.firstElementChild;
-    let textField = filter?.firstElementChild;
+    let textField = filter ? filter.firstElementChild : undefined;
 
     if (!filter) {
       filter = document.createElement('vaadin-grid-filter');
