@@ -60,7 +60,7 @@ const getAllVisualPackages = () => {
 const getUnitTestPackages = () => {
   // If --group flag is passed, return all packages.
   if (group || isLockfileChanged()) {
-    return getAllPackages();
+    return getAllPackages().filter(hasUnitTests);
   }
 
   let packages = getChangedPackages();
@@ -87,7 +87,7 @@ const getUnitTestPackages = () => {
 const getVisualTestPackages = () => {
   // If --group flag is passed, return all packages.
   if (group || isLockfileChanged()) {
-    return getAllVisualPackages();
+    return getAllVisualPackages().filter(hasVisualTests);
   }
 
   let packages = getChangedPackages();
