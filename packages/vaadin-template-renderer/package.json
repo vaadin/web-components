@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-template-renderer",
-  "version": "21.0.0-alpha3",
+  "version": "21.0.0-alpha4",
   "description": "vaadin-template-renderer",
   "main": "vaadin-template-renderer.js",
   "module": "vaadin-template-renderer.js",
