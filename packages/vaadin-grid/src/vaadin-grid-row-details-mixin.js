@@ -156,13 +156,11 @@ export const RowDetailsMixin = (superClass) =>
         return;
       }
 
-      // Assign either a renderer...
+      // Assigns either a renderer or a template when the details cell is opened.
+      // The content of the details cell is rendered later in the `_updateItem` method.
       if (this.rowDetailsRenderer) {
         cell._renderer = this.rowDetailsRenderer;
-      }
-
-      // ...or a template.
-      if (this._rowDetailsTemplate && !cell._instance) {
+      } else if (this._rowDetailsTemplate && !cell._instance) {
         cell._instance = this._rowDetailsTemplate.templatizer.createInstance();
         cell._content.innerHTML = '';
         cell._content.appendChild(cell._instance.root);
