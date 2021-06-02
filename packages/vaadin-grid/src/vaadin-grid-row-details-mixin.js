@@ -105,7 +105,7 @@ export const RowDetailsMixin = (superClass) =>
     }
 
     /** @private */
-    _detailsOpenedItemsChanged(changeRecord, _rowDetailsTemplate, _rowDetailsRenderer) {
+    _detailsOpenedItemsChanged(changeRecord, rowDetailsTemplate, rowDetailsRenderer) {
       // Skip to avoid duplicate work of both “.splices” and “.length” updates.
       if (changeRecord.path === 'detailsOpenedItems.length' || !changeRecord.value) {
         return;
@@ -119,7 +119,7 @@ export const RowDetailsMixin = (superClass) =>
         }
 
         // Re-renders the row to open the details when either a renderer or a template is provided.
-        if ((_rowDetailsTemplate || _rowDetailsRenderer) && this._isDetailsOpened(row._item)) {
+        if ((rowDetailsTemplate || rowDetailsRenderer) && this._isDetailsOpened(row._item)) {
           this._updateItem(row, row._item);
           return;
         }
