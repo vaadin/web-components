@@ -146,7 +146,7 @@ describe('row details', () => {
       expect(bounds.height).to.be.above(10);
     };
 
-    it('should have correct bounds', async () => {
+    it('should have correct bounds', () => {
       openRowDetails(1);
       assertDetailsBounds();
     });
@@ -193,6 +193,34 @@ describe('row details', () => {
       expect(cells[1].hidden).to.be.false;
       grid.closeItemDetails({ value: 'foo0' });
       expect(cells[1].hidden).to.be.true;
+    });
+
+    it('should invoke the body renderer when opening details', () => {
+      grid.renderer = sinon.spy();
+
+      openRowDetails(0);
+
+      grid.renderer.args.forEach(([_root, _owner, model], index) => {
+        if (index === 0) {
+          expect(model.detailsOpened).to.be.true;
+        } else {
+          expect(model.detailsOpened).to.be.false;
+        }
+      });
+    });
+
+    it('should invoke the body renderer when closing details', () => {
+      grid.renderer = sinon.spy();
+
+      openRowDetails(0);
+
+      grid.renderer.resetHistory();
+
+      closeRowDetails(0);
+
+      grid.renderer.args.forEach(([_root, _owner, model]) => {
+        expect(model.detailsOpened).to.be.false;
+      });
     });
   });
 
@@ -278,7 +306,7 @@ describe('row details', () => {
       `);
     });
 
-    it('should have correct height', async () => {
+    it('should have correct height', () => {
       grid.openItemDetails(items[0]);
 
       grid.dataProvider = (params, callback) => callback(items);
