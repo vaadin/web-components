@@ -183,8 +183,8 @@ export const RowDetailsMixin = (superClass) =>
 
     /** @protected */
     _updateDetailsCellHeights() {
-      Array.from(this.$.items.querySelectorAll('[part~="details-cell"]:not([hidden])')).forEach((cell) => {
-        cell.parentElement.style.setProperty('padding-bottom', `${cell.offsetHeight}px`);
+      [...this.$.items.children].forEach((row) => {
+        this._updateDetailsCellHeight(row);
       });
     }
 
