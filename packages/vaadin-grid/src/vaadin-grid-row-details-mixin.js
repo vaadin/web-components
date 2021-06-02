@@ -4,7 +4,6 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { Templatizer } from './vaadin-grid-templatizer.js';
-import { flush } from '@polymer/polymer/lib/utils/flush.js';
 
 /**
  * @polymerMixin
@@ -68,7 +67,7 @@ export const RowDetailsMixin = (superClass) =>
 
       this._detailsCellResizeObserver = new ResizeObserver((entries) => {
         entries.forEach(({ target: cell }) => {
-          cell.parentElement.style.setProperty('padding-bottom', `${cell.offsetHeight}px`);
+          this._updateDetailsCellHeight(cell.parentElement);
         });
 
         // This workaround is needed until Safari also supports
@@ -102,23 +101,28 @@ export const RowDetailsMixin = (superClass) =>
             delete row.querySelector('[part~=details-cell]')._instance;
           });
         }
-
-        if (this.detailsOpenedItems.length) {
-          Array.from(this.$.items.children).forEach(this._toggleDetailsCell, this);
-        }
       }
     }
 
     /** @private */
-    _detailsOpenedItemsChanged(changeRecord) {
+    _detailsOpenedItemsChanged(changeRecord, rowDetailsTemplate, rowDetailsRenderer) {
+      // Skip to avoid duplicate work of both “.splices” and “.length” updates.
       if (changeRecord.path === 'detailsOpenedItems.length' || !changeRecord.value) {
-        // Let’s avoid duplicate work of both “.splices” and “.length” updates.
         return;
       }
-      Array.from(this.$.items.children).forEach((row) => {
-        this._toggleDetailsCell(row, row._item);
-        this._a11yUpdateRowDetailsOpened(row, this._isDetailsOpened(row._item));
-        this._toggleAttribute('details-opened', this._isDetailsOpened(row._item), row);
+
+      [...this.$.items.children].forEach((row) => {
+        // Re-renders the row to possibly close the previously opened details.
+        if (row.hasAttribute('details-opened')) {
+          this._updateItem(row, row._item);
+          return;
+        }
+
+        // Re-renders the row to open the details when either a renderer or a template is provided.
+        if ((rowDetailsTemplate || rowDetailsRenderer) && this._isDetailsOpened(row._item)) {
+          this._updateItem(row, row._item);
+          return;
+        }
       });
     }
 
@@ -140,41 +144,47 @@ export const RowDetailsMixin = (superClass) =>
      * @param {!GridItem} item
      * @protected
      */
-    _toggleDetailsCell(row, item) {
+    _toggleDetailsCell(row, detailsOpened) {
       const cell = row.querySelector('[part~="details-cell"]');
       if (!cell) {
         return;
       }
-      const detailsHidden = !this._isDetailsOpened(item);
 
-      if ((!cell._instance && !cell._renderer) || cell.hidden !== detailsHidden) {
-        cell.hidden = detailsHidden;
-        if (detailsHidden) {
-          row.style.removeProperty('padding-bottom');
-        } else {
-          if (this.rowDetailsRenderer) {
-            cell._renderer = this.rowDetailsRenderer;
-            cell._renderer.call(this, cell._content, this, { index: row.index, item: item });
-          } else if (this._rowDetailsTemplate && !cell._instance) {
-            // Stamp the template
-            cell._instance = this._rowDetailsTemplate.templatizer.createInstance();
-            cell._content.innerHTML = '';
-            cell._content.appendChild(cell._instance.root);
-            this._updateItem(row, item);
-          }
+      cell.hidden = !detailsOpened;
 
-          flush();
-          row.style.setProperty('padding-bottom', `${cell.offsetHeight}px`);
+      if (cell.hidden) {
+        return;
+      }
 
-          requestAnimationFrame(() => this.notifyResize());
-        }
+      // Assigns either a renderer or a template when the details cell is opened.
+      // The content of the details cell is rendered later in the `_updateItem` method.
+      if (this.rowDetailsRenderer) {
+        cell._renderer = this.rowDetailsRenderer;
+      } else if (this._rowDetailsTemplate && !cell._instance) {
+        cell._instance = this._rowDetailsTemplate.templatizer.createInstance();
+        cell._content.innerHTML = '';
+        cell._content.appendChild(cell._instance.root);
+      }
+    }
+
+    /** @protected */
+    _updateDetailsCellHeight(row) {
+      const cell = row.querySelector('[part~="details-cell"]');
+      if (!cell) {
+        return;
+      }
+
+      if (cell.hidden) {
+        row.style.removeProperty('padding-bottom');
+      } else {
+        row.style.setProperty('padding-bottom', `${cell.offsetHeight}px`);
       }
     }
 
     /** @protected */
     _updateDetailsCellHeights() {
-      Array.from(this.$.items.querySelectorAll('[part~="details-cell"]:not([hidden])')).forEach((cell) => {
-        cell.parentElement.style.setProperty('padding-bottom', `${cell.offsetHeight}px`);
+      [...this.$.items.children].forEach((row) => {
+        this._updateDetailsCellHeight(row);
       });
     }
 

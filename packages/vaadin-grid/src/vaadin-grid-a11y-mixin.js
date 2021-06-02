@@ -91,13 +91,13 @@ export const A11yMixin = (superClass) =>
      * @protected
      */
     _a11yUpdateRowDetailsOpened(row, detailsOpened) {
+      const detailsCell = row.querySelector('[part~=details-cell]');
+
       Array.from(row.children).forEach((cell) => {
-        if (typeof detailsOpened === 'boolean') {
+        if (detailsCell) {
           cell.setAttribute('aria-expanded', detailsOpened);
         } else {
-          if (cell.hasAttribute('aria-expanded')) {
-            cell.removeAttribute('aria-expanded');
-          }
+          cell.removeAttribute('aria-expanded');
         }
       });
     }

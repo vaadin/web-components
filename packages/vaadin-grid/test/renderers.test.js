@@ -99,12 +99,24 @@ describe('renderers', () => {
         expect(getContainerCell(grid.$.items, 1, 1).hidden).to.be.false;
       });
 
-      it('should pass column as `owner` and `this` to the renderer', () => {
-        grid.rowDetailsRenderer = function (root, owner) {
-          expect(this).to.eql(owner);
-          expect(owner.localName).to.eql('vaadin-grid');
-        };
-        grid.detailsOpenedItems = grid.items;
+      it('should pass the `root`, `owner`, `model` arguments to the renderer', () => {
+        const detailsCell = getBodyCellContent(grid, 0, 1);
+
+        grid.rowDetailsRenderer = sinon.spy();
+        grid.detailsOpenedItems = [grid.items[0]];
+
+        expect(grid.rowDetailsRenderer.calledOnce).to.be.true;
+        expect(grid.rowDetailsRenderer.thisValues[0]).to.equal(grid);
+        expect(grid.rowDetailsRenderer.args[0][0]).to.equal(detailsCell);
+        expect(grid.rowDetailsRenderer.args[0][1]).to.equal(grid);
+        expect(grid.rowDetailsRenderer.args[0][2]).to.deep.equal({
+          index: 0,
+          level: 0,
+          expanded: false,
+          selected: false,
+          detailsOpened: true,
+          item: grid.items[0]
+        });
       });
 
       it('should allow to change the renderer', () => {

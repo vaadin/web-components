@@ -194,6 +194,34 @@ describe('row details', () => {
       grid.closeItemDetails({ value: 'foo0' });
       expect(cells[1].hidden).to.be.true;
     });
+
+    it('should invoke the body renderer when opening details', () => {
+      grid.renderer = sinon.spy();
+
+      openRowDetails(0);
+
+      grid.renderer.args.forEach(([_root, _owner, model], index) => {
+        if (index === 0) {
+          expect(model.detailsOpened).to.be.true;
+        } else {
+          expect(model.detailsOpened).to.be.false;
+        }
+      });
+    });
+
+    it('should invoke the body renderer when closing details', () => {
+      grid.renderer = sinon.spy();
+
+      openRowDetails(0);
+
+      grid.renderer.resetHistory();
+
+      closeRowDetails(0);
+
+      grid.renderer.args.forEach(([_root, _owner, model]) => {
+        expect(model.detailsOpened).to.be.false;
+      });
+    });
   });
 
   describe('inside a parent scope', () => {
