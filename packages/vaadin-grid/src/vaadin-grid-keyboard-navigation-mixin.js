@@ -727,4 +727,12 @@ export const KeyboardNavigationMixin = (superClass) =>
       if (focusTargetCell === this._footerFocusable) return this.$.footer;
       return null;
     }
+
+    /**
+     * Fired when a cell is focused with click or keyboard navigation.
+     *
+     * Use {@see GridElement#getEventContext} to get detailed information about the event.
+     *
+     * @event cell-focus
+     */
   };

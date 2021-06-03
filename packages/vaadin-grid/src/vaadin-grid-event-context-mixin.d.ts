@@ -27,7 +27,7 @@ interface EventContextMixin<TItem> {
    * This may be the case eg. if the event is fired on the `<vaadin-grid>` element and not any deeper in the DOM, or if
    * the event targets the empty part of the grid body.
    */
-  getEventContext(event: Event): GridEventContext<TItem> | object | null;
+  getEventContext(event: Event): GridEventContext<TItem>;
 }
 
 export { EventContextMixin, EventContextMixinConstructor };

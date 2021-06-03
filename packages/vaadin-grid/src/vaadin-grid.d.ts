@@ -49,6 +49,11 @@ export type GridActiveItemChangedEvent<TItem> = CustomEvent<{ value: TItem }>;
 export type GridCellActivateEvent<TItem> = CustomEvent<{ model: GridItemModel<TItem> }>;
 
 /**
+ * Fired when a cell is focused with click or keyboard navigation.
+ */
+export type GridCellFocusEvent = CustomEvent;
+
+/**
  * Fired when the columns in the grid are reordered.
  */
 export type GridColumnReorderEvent<TItem> = CustomEvent<{ columns: GridColumnElement<TItem>[] }>;
@@ -95,6 +100,8 @@ export interface GridElementEventMap<TItem> {
   'active-item-changed': GridActiveItemChangedEvent<TItem>;
 
   'cell-activate': GridCellActivateEvent<TItem>;
+
+  'cell-focus': GridCellFocusEvent;
 
   'column-reorder': GridColumnReorderEvent<TItem>;
 
@@ -330,6 +337,7 @@ export interface GridEventMap<TItem> extends HTMLElementEventMap, GridElementEve
  *
  * @fires {CustomEvent} active-item-changed - Fired when the `activeItem` property changes.
  * @fires {CustomEvent} cell-activate - Fired when the cell is activated with click or keyboard.
+ * @fires {CustomEvent} cell-focus - Fired when a cell is focused with click or keyboard navigation.
  * @fires {CustomEvent} column-reorder - Fired when the columns in the grid are reordered.
  * @fires {CustomEvent} column-resize - Fired when the grid column resize is finished.
  * @fires {CustomEvent} expanded-items-changed - Fired when the `expandedItems` property changes.
