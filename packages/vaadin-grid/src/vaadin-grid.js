@@ -694,9 +694,7 @@ class GridElement extends ElementMixin(
 
     Array.from(row.children).forEach((cell) => (cell._vacant = true));
     row.innerHTML = '';
-    if (row.id !== 'sizer') {
-      row.hidden = true;
-    }
+
     columns
       .filter((column) => !column.hidden)
       .forEach((column, index, cols) => {
