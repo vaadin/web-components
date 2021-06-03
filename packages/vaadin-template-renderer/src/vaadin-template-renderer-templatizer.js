@@ -20,20 +20,28 @@ export class Templatizer extends PolymerElement {
     this.__templateInstances = new Set();
   }
 
+  /**
+   * If the template instance was created by this templatizer's instance and is still attached to DOM,
+   * it only re-renders the instance with the new properties.
+   * Otherwise, it disposes of the old template instance (if it exists),
+   * creates a new template instance with the given properties and renders the instance's root to the element.
+   */
   render(element, properties = {}) {
-    // If the template instance exists and has been instantiated by this templatizer,
-    // it only re-renders the instance with the new properties.
-    if (this.__templateInstances.has(element.__templateInstance)) {
-      this.__updateProperties(element.__templateInstance, properties);
+    let instance = element.__templateInstance;
+
+    if (this.__hasTemplateInstance(instance) && this.__isTemplateInstanceAttachedToDOM(instance)) {
+      this.__updateProperties(instance, properties);
       return;
     }
 
-    // Otherwise, it instantiates a new template instance
-    // with the given properties and then renders the result to the element
-    const templateInstance = this.__createTemplateInstance(properties);
+    if (this.__hasTemplateInstance(instance)) {
+      this.__disposeOfTemplateInstance(instance);
+    }
+
+    instance = this.__createTemplateInstance(properties);
+    element.__templateInstance = instance;
     element.innerHTML = '';
-    element.__templateInstance = templateInstance;
-    element.appendChild(templateInstance.root);
+    element.appendChild(instance.root);
   }
 
   __updateProperties(instance, properties) {
@@ -54,6 +62,23 @@ export class Templatizer extends PolymerElement {
     const instance = new this.__TemplateClass(properties);
     this.__templateInstances.add(instance);
     return instance;
+  }
+
+  __disposeOfTemplateInstance(instance) {
+    this.__templateInstances.delete(instance);
+  }
+
+  __hasTemplateInstance(instance) {
+    return this.__templateInstances.has(instance);
+  }
+
+  __isTemplateInstanceAttachedToDOM(instance) {
+    // A workaround for the edge-case case when the template is empty
+    if (instance.children.length === 0) {
+      return false;
+    }
+
+    return !!instance.children[0].parentElement;
   }
 
   __createTemplateClass(properties) {

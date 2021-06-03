@@ -46,8 +46,28 @@ describe('vaadin-template-renderer', () => {
       const newTemplateInstance = component.$.content.__templateInstance;
 
       expect(template.__templatizer.__templateInstances).to.have.lengthOf(1);
-      expect(template.__templatizer.__templateInstances).to.include(newTemplateInstance);
       expect(template.__templatizer.__templateInstances).to.include(oldTemplateInstance);
+      expect(template.__templatizer.__templateInstances).to.include(newTemplateInstance);
+    });
+
+    it('should create a new template instance after clearing the content', () => {
+      const oldTemplateInstance = component.$.content.__templateInstance;
+
+      component.$.content.innerHTML = '';
+      component.render();
+
+      const newTemplateInstance = component.$.content.__templateInstance;
+
+      expect(template.__templatizer.__templateInstances).to.have.lengthOf(1);
+      expect(template.__templatizer.__templateInstances).not.to.include(oldTemplateInstance);
+      expect(template.__templatizer.__templateInstances).to.include(newTemplateInstance);
+    });
+
+    it('should render the template after clearing the content', () => {
+      component.$.content.innerHTML = '';
+      component.render();
+
+      expect(component.$.content.textContent).to.equal('foo');
     });
   });
 
