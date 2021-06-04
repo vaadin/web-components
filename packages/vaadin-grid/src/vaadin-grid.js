@@ -516,6 +516,7 @@ class GridElement extends ElementMixin(
       const cellCoordinates = this.__getBodyCellCoordinates(cell);
 
       virtualizer.size = effectiveSize;
+      virtualizer.flush();
 
       // If the focused cell's parent row got hidden by the size change, focus the corresponding new cell
       cellCoordinates && cell.parentElement.hidden && this.__focusBodyCell(cellCoordinates);

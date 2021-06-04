@@ -106,7 +106,7 @@ function filter(items, filters) {
 }
 
 export const createArrayDataProvider = (allItems) => {
-  const arrayDataProvider = (params, callback) => {
+  return (params, callback) => {
     let items = allItems || [];
     if (params.filters && checkPaths(params.filters, 'filtering', items)) {
       items = filter(items, params.filters);
@@ -116,14 +116,10 @@ export const createArrayDataProvider = (allItems) => {
       items = multiSort(items, params.sortOrders);
     }
 
-    const start = params.page * params.pageSize;
-    const end = start + params.pageSize;
+    const count = Math.min(items.length, params.pageSize);
+    const start = params.page * count;
+    const end = start + count;
     const slice = items.slice(start, end);
     callback(slice, items.length);
   };
-
-  // Mark the data provider as an array data provider
-  // (needed by the selection column which has logic depending on it)
-  arrayDataProvider.__arrayDataProvider = true;
-  return arrayDataProvider;
 };

@@ -276,13 +276,13 @@ class GridSelectionColumnElement extends GridColumnElement {
   }
 
   /** @private */
-  _onDataProviderChanged() {
+  __onDataProviderChanged() {
     this.__selectAllHidden = !this.__gridUsesArrayDataProvider();
   }
 
   /**
-   * Assuming the grid uses an array data provider, fetches all the filtered items
-   * from it and invokes the callback with the resulting array.
+   * Assuming the grid uses an items array data provider, fetches all the filtered items
+   * from the data provider and invokes the callback with the resulting array.
    *
    * @private
    **/
@@ -302,7 +302,7 @@ class GridSelectionColumnElement extends GridColumnElement {
    * @private
    **/
   __gridUsesArrayDataProvider() {
-    return this._grid.dataProvider && this._grid.dataProvider.__arrayDataProvider;
+    return this._grid._arrayDataProvider;
   }
 }
 
