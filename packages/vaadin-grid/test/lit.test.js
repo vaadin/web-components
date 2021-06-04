@@ -4,7 +4,7 @@ import { render, html } from 'lit';
 import '../vaadin-grid.js';
 import { getPhysicalItems } from './helpers.js';
 
-describe('renderig with lit', () => {
+describe('rendering with lit', () => {
   let wrapper;
 
   beforeEach(() => {
