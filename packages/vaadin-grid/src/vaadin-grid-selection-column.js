@@ -174,6 +174,12 @@ class GridSelectionColumnElement extends GridColumnElement {
       return;
     }
 
+    if (!this.__selectAllInitialized) {
+      // The initial value for selectAll property was applied, avoid clearing pre-selected items
+      this.__selectAllInitialized = true;
+      return;
+    }
+
     if (this._selectAllChangeLock) {
       return;
     }
