@@ -1,12 +1,14 @@
-import { ComboBoxItem, ComboBoxRenderer } from './interfaces';
+import { ComboBoxRenderer } from './interfaces';
 
-declare function ComboBoxMixin<T extends new (...args: any[]) => {}>(base: T): T & ComboBoxMixinConstructor;
+declare function ComboBoxMixin<TItem, T extends new (...args: any[]) => {}>(
+  base: T
+): T & ComboBoxMixinConstructor<TItem>;
 
-interface ComboBoxMixinConstructor {
-  new (...args: any[]): ComboBoxMixin;
+interface ComboBoxMixinConstructor<TItem> {
+  new (...args: any[]): ComboBoxMixin<TItem>;
 }
 
-interface ComboBoxMixin {
+interface ComboBoxMixin<TItem> {
   readonly _propertyForValue: string;
 
   /**
@@ -41,13 +43,13 @@ interface ComboBoxMixin {
    *   - `model.index` The index of the rendered item.
    *   - `model.item` The item.
    */
-  renderer: ComboBoxRenderer | null | undefined;
+  renderer: ComboBoxRenderer<TItem> | null | undefined;
 
   /**
    * A full set of items to filter the visible options from.
    * The items can be of either `String` or `Object` type.
    */
-  items: Array<ComboBoxItem | string> | undefined;
+  items: Array<TItem> | undefined;
 
   /**
    * If `true`, the user can input a value that is not present in the items list.
@@ -63,7 +65,7 @@ interface ComboBoxMixin {
    * can be assigned directly to omit the internal filtering functionality.
    * The items can be of either `String` or `Object` type.
    */
-  filteredItems: Array<ComboBoxItem | string> | undefined;
+  filteredItems: Array<TItem> | undefined;
 
   /**
    * The `String` value for the selected item of the combo box.
@@ -90,7 +92,7 @@ interface ComboBoxMixin {
   /**
    * The selected item from the `items` array.
    */
-  selectedItem: ComboBoxItem | string | null | undefined;
+  selectedItem: TItem | null | undefined;
 
   /**
    * Path for label of the item. If `items` is an array of objects, the

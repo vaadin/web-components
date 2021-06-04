@@ -1,10 +1,10 @@
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin';
 
-import { ComboBoxMixin } from './vaadin-combo-box-mixin.js';
+import { ComboBoxMixin } from './vaadin-combo-box-mixin';
 
-import { ComboBoxDataProviderMixin } from './vaadin-combo-box-data-provider-mixin.js';
+import { ComboBoxDataProviderMixin } from './vaadin-combo-box-data-provider-mixin';
 
-import { ComboBoxEventMap } from './interfaces';
+import { ComboBoxDefaultItem, ComboBoxEventMap } from './interfaces';
 
 /**
  * `<vaadin-combo-box-light>` is a customizable version of the `<vaadin-combo-box>` providing
@@ -57,7 +57,7 @@ import { ComboBoxEventMap } from './interfaces';
  * @fires {CustomEvent} selected-item-changed - Fired when the `selectedItem` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  */
-declare class ComboBoxLightElement extends ComboBoxDataProviderMixin(ComboBoxMixin(ThemableMixin(HTMLElement))) {
+declare class ComboBoxLightElement<TItem = ComboBoxDefaultItem> extends HTMLElement {
   readonly _propertyForValue: string;
 
   _inputElementValue: string;
@@ -73,22 +73,27 @@ declare class ComboBoxLightElement extends ComboBoxDataProviderMixin(ComboBoxMix
 
   readonly inputElement: Element | undefined;
 
-  addEventListener<K extends keyof ComboBoxEventMap>(
+  addEventListener<K extends keyof ComboBoxEventMap<TItem>>(
     type: K,
-    listener: (this: ComboBoxLightElement, ev: ComboBoxEventMap[K]) => void,
+    listener: (this: ComboBoxLightElement<TItem>, ev: ComboBoxEventMap<TItem>[K]) => void,
     options?: boolean | AddEventListenerOptions
   ): void;
 
-  removeEventListener<K extends keyof ComboBoxEventMap>(
+  removeEventListener<K extends keyof ComboBoxEventMap<TItem>>(
     type: K,
-    listener: (this: ComboBoxLightElement, ev: ComboBoxEventMap[K]) => void,
+    listener: (this: ComboBoxLightElement<TItem>, ev: ComboBoxEventMap<TItem>[K]) => void,
     options?: boolean | EventListenerOptions
   ): void;
 }
 
+interface ComboBoxLightElement<TItem = ComboBoxDefaultItem>
+  extends ComboBoxDataProviderMixin<TItem>,
+    ComboBoxMixin<TItem>,
+    ThemableMixin {}
+
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-combo-box-light': ComboBoxLightElement;
+    'vaadin-combo-box-light': ComboBoxLightElement<ComboBoxDefaultItem>;
   }
 }
 

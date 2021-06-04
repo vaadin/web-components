@@ -1,15 +1,19 @@
-import { ComboBoxElement } from '../src/vaadin-combo-box.js';
+import { ComboBoxElement } from './vaadin-combo-box';
 
-export type ComboBoxItem = unknown;
+export type ComboBoxDefaultItem = any;
 
-export interface ComboBoxItemModel {
+export interface ComboBoxItemModel<TItem> {
   index: number;
-  item: ComboBoxItem | string;
+  item: TItem;
 }
 
-export type ComboBoxRenderer = (root: HTMLElement, comboBox: ComboBoxElement, model: ComboBoxItemModel) => void;
+export type ComboBoxRenderer<TItem> = (
+  root: HTMLElement,
+  comboBox: ComboBoxElement<TItem>,
+  model: ComboBoxItemModel<TItem>
+) => void;
 
-export type ComboBoxDataProviderCallback = (items: Array<ComboBoxItem | string>, size: number) => void;
+export type ComboBoxDataProviderCallback<TItem> = (items: Array<TItem>, size: number) => void;
 
 export interface ComboBoxDataProviderParams {
   page: number;
@@ -17,7 +21,10 @@ export interface ComboBoxDataProviderParams {
   filter: string;
 }
 
-export type ComboBoxDataProvider = (params: ComboBoxDataProviderParams, callback: ComboBoxDataProviderCallback) => void;
+export type ComboBoxDataProvider<TItem> = (
+  params: ComboBoxDataProviderParams,
+  callback: ComboBoxDataProviderCallback<TItem>
+) => void;
 
 /**
  * Fired when the user sets a custom value.
@@ -47,9 +54,9 @@ export type ComboBoxFilterChangedEvent = CustomEvent<{ value: string }>;
 /**
  * Fired when the `selectedItem` property changes.
  */
-export type ComboBoxSelectedItemChangedEvent<T> = CustomEvent<{ value: T }>;
+export type ComboBoxSelectedItemChangedEvent<TItem> = CustomEvent<{ value: TItem }>;
 
-export interface ComboBoxElementEventMap {
+export interface ComboBoxEventMap<TItem> extends HTMLElementEventMap {
   'custom-value-set': ComboBoxCustomValueSetEvent;
 
   'opened-changed': ComboBoxOpenedChangedEvent;
@@ -60,7 +67,5 @@ export interface ComboBoxElementEventMap {
 
   'value-changed': ComboBoxValueChangedEvent;
 
-  'selected-item-changed': ComboBoxSelectedItemChangedEvent<any>;
+  'selected-item-changed': ComboBoxSelectedItemChangedEvent<TItem>;
 }
-
-export interface ComboBoxEventMap extends HTMLElementEventMap, ComboBoxElementEventMap {}

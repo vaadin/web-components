@@ -1,81 +1,100 @@
-import '../../vaadin-combo-box.js';
+import { ControlStateMixin } from '@vaadin/vaadin-control-state-mixin';
+import { ElementMixin } from '@vaadin/vaadin-element-mixin';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin';
+import { ComboBoxDataProviderMixin } from '../../src/vaadin-combo-box-data-provider-mixin';
+import { ComboBoxMixin } from '../../src/vaadin-combo-box-mixin';
 import {
   ComboBoxFilterChangedEvent,
   ComboBoxInvalidChangedEvent,
   ComboBoxOpenedChangedEvent,
   ComboBoxValueChangedEvent,
   ComboBoxCustomValueSetEvent,
-  ComboBoxSelectedItemChangedEvent
-} from '../../vaadin-combo-box.js';
+  ComboBoxSelectedItemChangedEvent,
+  ComboBoxElement
+} from '../../vaadin-combo-box';
+import { ComboBoxLightElement } from '../../vaadin-combo-box-light';
 
-import '../../vaadin-combo-box-light.js';
+interface TestComboBoxItem {
+  testProperty: string;
+}
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 
-const comboBox = document.createElement('vaadin-combo-box');
+/* ComboBoxElement */
+const genericComboBox = document.createElement('vaadin-combo-box');
 
-comboBox.addEventListener('custom-value-set', (event) => {
+const narrowedComboBox = genericComboBox as ComboBoxElement<TestComboBoxItem>;
+assertType<ComboBoxElement>(narrowedComboBox);
+assertType<ElementMixin>(narrowedComboBox);
+assertType<ControlStateMixin>(narrowedComboBox);
+assertType<ComboBoxDataProviderMixin<TestComboBoxItem>>(narrowedComboBox);
+assertType<ThemableMixin>(narrowedComboBox);
+
+narrowedComboBox.addEventListener('custom-value-set', (event) => {
   assertType<ComboBoxCustomValueSetEvent>(event);
   assertType<string>(event.detail);
 });
 
-comboBox.addEventListener('opened-changed', (event) => {
+narrowedComboBox.addEventListener('opened-changed', (event) => {
   assertType<ComboBoxOpenedChangedEvent>(event);
   assertType<boolean>(event.detail.value);
 });
 
-comboBox.addEventListener('invalid-changed', (event) => {
+narrowedComboBox.addEventListener('invalid-changed', (event) => {
   assertType<ComboBoxInvalidChangedEvent>(event);
   assertType<boolean>(event.detail.value);
 });
 
-comboBox.addEventListener('value-changed', (event) => {
+narrowedComboBox.addEventListener('value-changed', (event) => {
   assertType<ComboBoxValueChangedEvent>(event);
   assertType<string>(event.detail.value);
 });
 
-comboBox.addEventListener('filter-changed', (event) => {
+narrowedComboBox.addEventListener('filter-changed', (event) => {
   assertType<ComboBoxFilterChangedEvent>(event);
   assertType<string>(event.detail.value);
 });
 
-comboBox.addEventListener(
-  'selected-item-changed',
-  (event: ComboBoxSelectedItemChangedEvent<{ label: string; value: string }>) => {
-    assertType<{ label: string; value: string }>(event.detail.value);
-  }
-);
+narrowedComboBox.addEventListener('selected-item-changed', (event) => {
+  assertType<ComboBoxSelectedItemChangedEvent<TestComboBoxItem>>(event);
+  assertType<TestComboBoxItem>(event.detail.value);
+});
 
-const light = document.createElement('vaadin-combo-box-light');
+/* ComboBoxLightElement */
+const genericComboBoxLightElement = document.createElement('vaadin-combo-box-light');
+assertType<ComboBoxLightElement>(genericComboBoxLightElement);
 
-light.addEventListener('custom-value-set', (event) => {
+const narrowedComboBoxLightElement = genericComboBoxLightElement as ComboBoxLightElement<TestComboBoxItem>;
+assertType<ComboBoxDataProviderMixin<TestComboBoxItem>>(narrowedComboBoxLightElement);
+assertType<ComboBoxMixin<TestComboBoxItem>>(narrowedComboBoxLightElement);
+assertType<ThemableMixin>(narrowedComboBoxLightElement);
+
+narrowedComboBoxLightElement.addEventListener('custom-value-set', (event) => {
   assertType<ComboBoxCustomValueSetEvent>(event);
   assertType<string>(event.detail);
 });
 
-light.addEventListener('opened-changed', (event) => {
+narrowedComboBoxLightElement.addEventListener('opened-changed', (event) => {
   assertType<ComboBoxOpenedChangedEvent>(event);
   assertType<boolean>(event.detail.value);
 });
 
-light.addEventListener('invalid-changed', (event) => {
+narrowedComboBoxLightElement.addEventListener('invalid-changed', (event) => {
   assertType<ComboBoxInvalidChangedEvent>(event);
   assertType<boolean>(event.detail.value);
 });
 
-light.addEventListener('value-changed', (event) => {
+narrowedComboBoxLightElement.addEventListener('value-changed', (event) => {
   assertType<ComboBoxValueChangedEvent>(event);
   assertType<string>(event.detail.value);
 });
 
-light.addEventListener('filter-changed', (event) => {
+narrowedComboBoxLightElement.addEventListener('filter-changed', (event) => {
   assertType<ComboBoxFilterChangedEvent>(event);
   assertType<string>(event.detail.value);
 });
 
-light.addEventListener(
-  'selected-item-changed',
-  (event: ComboBoxSelectedItemChangedEvent<{ label: string; value: string }>) => {
-    assertType<{ label: string; value: string }>(event.detail.value);
-  }
-);
+narrowedComboBoxLightElement.addEventListener('selected-item-changed', (event) => {
+  assertType<ComboBoxSelectedItemChangedEvent<TestComboBoxItem>>(event);
+  assertType<TestComboBoxItem>(event.detail.value);
+});
