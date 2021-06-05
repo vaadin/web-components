@@ -40,7 +40,7 @@ export const ArrayDataProviderMixin = (superClass) =>
     __unsetArrayDataProvider() {
       this.setProperties({
         _arrayDataProvider: undefined,
-        items: undefined // TODO: selection column just checks for grid.items in some logic. Add a test which adds items and then a custom dp.
+        items: undefined
       });
     }
 

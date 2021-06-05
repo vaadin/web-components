@@ -1,3 +1,5 @@
+import { GridDataProviderCallback, GridDataProviderParams } from './interfaces';
+
 declare function ArrayDataProviderMixin<TItem, T extends new (...args: any[]) => {}>(
   base: T
 ): T & ArrayDataProviderMixinConstructor<TItem>;
