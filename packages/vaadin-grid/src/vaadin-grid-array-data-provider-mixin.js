@@ -25,6 +25,7 @@ export const ArrayDataProviderMixin = (superClass) =>
       return ['__dataProviderOrItemsChanged(dataProvider, items, isAttached, items.*, _filters, _sorters)'];
     }
 
+    /** @private */
     __setArrayDataProvider(items) {
       const arrayDataProvider = createArrayDataProvider(this.items, {});
       arrayDataProvider.__items = items;
@@ -35,6 +36,7 @@ export const ArrayDataProviderMixin = (superClass) =>
       });
     }
 
+    /** @private */
     __unsetArrayDataProvider() {
       this.setProperties({
         _arrayDataProvider: undefined,
@@ -42,6 +44,7 @@ export const ArrayDataProviderMixin = (superClass) =>
       });
     }
 
+    /** @private */
     __dataProviderOrItemsChanged(dataProvider, items, isAttached) {
       if (!isAttached) {
         return;
