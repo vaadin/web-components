@@ -105,6 +105,7 @@ declare class GridColumnElement<TItem = GridDefaultItem> extends HTMLElement {
    *   - `model.expanded` Sublevel toggle state.
    *   - `model.level` Level of the tree represented with a horizontal offset of the toggle button.
    *   - `model.selected` Selected state.
+   *   - `model.detailsOpened` Details opened state.
    */
   renderer: GridBodyRenderer<TItem> | null | undefined;
 
