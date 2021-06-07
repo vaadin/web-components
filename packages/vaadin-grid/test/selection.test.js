@@ -399,7 +399,7 @@ describe('multi selection column', () => {
         <vaadin-grid-column path="value"></vaadin-grid-column>
       </vaadin-grid>
     `);
-    expect(grid.selectedItems).to.eql([{ value: 'foo' }]);
+    expect(grid.selectedItems).to.have.length(1);
   });
 
   it('should have selectAll after selecting all manually', () => {
