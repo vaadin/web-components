@@ -14,22 +14,27 @@ import { ColumnBaseMixin } from './vaadin-grid-column.js';
  *
  * Groups can be nested to create complex header and footer configurations.
  *
- * The `class` attribute is used to differentiate header and footer templates.
- *
  * #### Example:
  * ```html
- * <vaadin-grid-column-group resizable>
- *  <template class="header">Name</template>
- *
- *  <vaadin-grid-column>
- *    <template class="header">First</template>
- *    <template>[[item.name.first]]</template>
- *  </vaadin-grid-column>
- *  <vaadin-grid-column>
- *    <template class="header">Last</template>
- *    <template>[[item.name.last]]</template>
- *  </vaadin-grid-column>
+ * <vaadin-grid-column-group resizable id="columnGroup">
+ *  <vaadin-grid-column id="column1"></vaadin-grid-column>
+ *  <vaadin-grid-column id="column2"></vaadin-grid-column>
  * </vaadin-grid-column-group>
+ * ```
+ *
+ * ```js
+ * const columnGroup = document.querySelector('#columnGroup');
+ * columnGroup.headerRenderer = (root, columnGroup) => {
+ *   root.textContent = 'header';
+ * }
+ *
+ * const column1 = document.querySelector('#column1');
+ * column1.headerRenderer = (root, column) => { ... };
+ * column1.renderer = (root, column, model) => { ... };
+ *
+ * const column2 = document.querySelector('#column2');
+ * column2.headerRenderer = (root, column) => { ... };
+ * column2.renderer = (root, column, model) => { ... };
  * ```
  *
  * @extends HTMLElement

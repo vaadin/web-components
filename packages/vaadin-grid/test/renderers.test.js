@@ -69,10 +69,6 @@ describe('renderers', () => {
       expect(getCell(grid, 1)._content.textContent).to.be.empty;
     });
 
-    it('should throw an error when setting a template if there is already a renderer', () => {
-      expect(() => (column._bodyTemplate = {})).to.throw(Error);
-    });
-
     it('should initialize with instance properties', () => {
       column.renderer = function (root, owner, model) {
         expect(model.selected).to.be.false;
@@ -127,10 +123,6 @@ describe('renderers', () => {
         flushGrid(grid);
         expect(getBodyCellContent(grid, 0, 1).innerHTML).to.eql('0 test');
         expect(getBodyCellContent(grid, 1, 1).innerHTML).to.eql('1 test');
-      });
-
-      it('should throw an error when setting a template if there is already a renderer', () => {
-        expect(() => (grid._rowDetailsTemplate = {})).to.throw(Error);
       });
 
       it('should not invoke body cell renderer on assign', () => {
@@ -210,10 +202,6 @@ describe('renderers', () => {
       expect(headerCell._content.textContent).to.eql('header');
     });
 
-    it('should throw an error when setting a template if there is already a renderer', () => {
-      expect(() => (column._headerTemplate = {})).to.throw(Error);
-    });
-
     it('should have a visible header with headerRenderer', () => {
       column.headerRenderer = (root) => (root.textContent = 'foo');
       const newColumn = document.createElement('vaadin-grid-column');
@@ -258,10 +246,6 @@ describe('renderers', () => {
 
     it('should have valid content when renderer is set', () => {
       expect(footerCell._content.textContent).to.eql('footer');
-    });
-
-    it('should throw an error when setting a template if there is already a renderer', () => {
-      expect(() => (column._footerTemplate = {})).to.throw(Error);
     });
 
     it('should clear the content when changing the renderer', () => {

@@ -4,9 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { DirMixin } from '@vaadin/vaadin-element-mixin/vaadin-dir-mixin.js';
-import { Templatizer } from './vaadin-grid-templatizer.js';
 import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
 import { animationFrame } from '@polymer/polymer/lib/utils/async.js';
 
@@ -35,22 +33,6 @@ export const ColumnBaseMixin = (superClass) =>
               return false;
             }
           }
-        },
-
-        /**
-         * @type {HTMLTemplateElement}
-         * @protected
-         */
-        _headerTemplate: {
-          type: Object
-        },
-
-        /**
-         * @type {HTMLTemplateElement}
-         * @protected
-         */
-        _footerTemplate: {
-          type: Object
         },
 
         /**
@@ -187,38 +169,18 @@ export const ColumnBaseMixin = (superClass) =>
         '_textAlignChanged(textAlign, _cells.*, _headerCell, _footerCell)',
         '_orderChanged(_order, _headerCell, _footerCell, _cells.*)',
         '_lastFrozenChanged(_lastFrozen)',
-        '_onBodyTemplateOrRendererOrBindingChanged(_bodyTemplate, _renderer, _cells, _cells.*, path)',
-        '_onHeaderTemplateOrRendererOrBindingChanged(_headerTemplate, _headerRenderer, _headerCell, path, header)',
-        '_onFooterTemplateOrRendererOrBindingChanged(_footerTemplate, _footerRenderer, _footerCell)',
+        '_onRendererOrBindingChanged(_renderer, _cells, _cells.*, path)',
+        '_onHeaderRendererOrBindingChanged(_headerRenderer, _headerCell, path, header)',
+        '_onFooterRendererOrBindingChanged(_footerRenderer, _footerCell)',
         '_resizableChanged(resizable, _headerCell)',
         '_reorderStatusChanged(_reorderStatus, _headerCell, _footerCell, _cells.*)',
         '_hiddenChanged(hidden, _headerCell, _footerCell, _cells.*)'
       ];
     }
 
-    constructor() {
-      super();
-
-      // this._templateObserver = new FlattenedNodesObserver(this, () => {
-      //   this._headerTemplate = this._prepareHeaderTemplate();
-      //   this._footerTemplate = this._prepareFooterTemplate();
-      //   this._bodyTemplate = this._prepareBodyTemplate();
-      // });
-    }
-
     /** @protected */
     connectedCallback() {
       super.connectedCallback();
-
-      // this._bodyTemplate && (this._bodyTemplate.templatizer._grid = this._grid);
-      // this._headerTemplate && (this._headerTemplate.templatizer._grid = this._grid);
-      // this._footerTemplate && (this._footerTemplate.templatizer._grid = this._grid);
-
-      // this._templateObserver.flush();
-      // if (!this._bodyTemplate) {
-      //   // The observer might not have triggered if the tag is empty. Run manually.
-      //   this._templateObserver.callback();
-      // }
 
       // Adds the column cells to the grid after the column is attached
       requestAnimationFrame(() => {
@@ -301,83 +263,8 @@ export const ColumnBaseMixin = (superClass) =>
 
     /** @protected */
     _renderHeaderAndFooter() {
-      this._renderHeaderCellContent(this._headerTemplate, this._headerRenderer, this._headerCell);
-      this._renderFooterCellContent(this._footerTemplate, this._footerRenderer, this._footerCell);
-    }
-
-    /**
-     * @return {HTMLTemplateElement}
-     * @protected
-     */
-    _prepareHeaderTemplate() {
-      return this._prepareTemplatizer(this._findTemplate(true) || null, {});
-    }
-
-    /**
-     * @return {HTMLTemplateElement}
-     * @protected
-     */
-    _prepareFooterTemplate() {
-      return this._prepareTemplatizer(this._findTemplate(false, true) || null, {});
-    }
-
-    /**
-     * @return {HTMLTemplateElement}
-     * @protected
-     */
-    _prepareBodyTemplate() {
-      return this._prepareTemplatizer(this._findTemplate() || null);
-    }
-
-    /**
-     * @param {HTMLTemplateElement} template
-     * @param {object} instanceProps
-     * @return {HTMLTemplateElement}
-     * @protected
-     */
-    _prepareTemplatizer(template, instanceProps) {
-      if (template && !template.templatizer) {
-        const templatizer = new Templatizer();
-        templatizer._grid = this._grid;
-        templatizer.dataHost = this.dataHost;
-        templatizer._instanceProps = instanceProps || templatizer._instanceProps;
-        templatizer.template = template;
-        template.templatizer = templatizer;
-      }
-
-      return template;
-    }
-
-    /**
-     * @param {boolean} header
-     * @param {boolean} footer
-     * @return {HTMLTemplateElement}
-     * @protected
-     */
-    _selectFirstTemplate(header = false, footer = false) {
-      return FlattenedNodesObserver.getFlattenedNodes(this).filter(
-        (node) =>
-          node.localName === 'template' &&
-          node.classList.contains('header') === header &&
-          node.classList.contains('footer') === footer
-      )[0];
-    }
-
-    /**
-     * @param {boolean} header
-     * @param {boolean} footer
-     * @return {HTMLTemplateElement}
-     * @protected
-     */
-    _findTemplate(header, footer) {
-      const template = this._selectFirstTemplate(header, footer);
-      if (template) {
-        if (this.dataHost) {
-          // set dataHost to the context where template has been defined
-          template._rootDataHost = this.dataHost._rootDataHost || this.dataHost;
-        }
-      }
-      return template;
+      this._renderHeaderCellContent(this._headerRenderer, this._headerCell);
+      this._renderFooterCellContent(this._footerRenderer, this._footerCell);
     }
 
     /** @private */
@@ -563,107 +450,91 @@ export const ColumnBaseMixin = (superClass) =>
     }
 
     /**
-     * Renders either a template or a renderer to the given cells.
-     * Throws an error if both are passed, the template and the renderer.
+     * Renders the content to the given cells using a renderer.
      *
      * @private
      */
-    __renderCellsContent(template, renderer, cells) {
+    __renderCellsContent(renderer, cells) {
       // Skip if the column is hidden or not attached to a grid.
       if (this.hidden || !this._grid) {
         return;
       }
 
-      if (template && renderer) {
-        throw new Error('You should only use either a renderer or a template');
-      }
-
       cells.forEach((cell) => {
         const model = this._grid.__getRowModel(cell.parentElement);
 
-        if (renderer) {
-          if (cell._renderer !== renderer) {
-            cell._content.innerHTML = '';
-          }
+        if (!renderer) return;
 
-          cell._renderer = renderer;
-
-          if (model.item || renderer === this._headerRenderer || renderer === this._footerRenderer) {
-            this.__runRenderer(renderer, cell, model);
-          }
-        } else if (cell._template !== template) {
-          cell._template = template;
-
+        if (cell._renderer !== renderer) {
           cell._content.innerHTML = '';
-          template.templatizer._grid = template.templatizer._grid || this._grid;
-          const inst = template.templatizer.createInstance();
-          cell._content.appendChild(inst.root);
-          cell._instance = inst;
-          if (model.item) {
-            cell._instance.setProperties(model);
-          }
+        }
+
+        cell._renderer = renderer;
+
+        if (model.item || renderer === this._headerRenderer || renderer === this._footerRenderer) {
+          this.__runRenderer(renderer, cell, model);
         }
       });
     }
 
     /**
-     * Renders the header cell content using either a template or a renderer
+     * Renders the header cell content using a renderer,
      * and then updates the visibility of the parent row depending on
      * whether all its children cells are empty or not.
      *
      * @protected
      */
-    _renderHeaderCellContent(headerTemplate, headerRenderer, headerCell) {
-      if (!headerCell || (!headerTemplate && !headerRenderer)) {
+    _renderHeaderCellContent(headerRenderer, headerCell) {
+      if (!headerCell || !headerRenderer) {
         return;
       }
 
-      this.__renderCellsContent(headerTemplate, headerRenderer, [headerCell]);
+      this.__renderCellsContent(headerRenderer, [headerCell]);
       this._grid.__updateHeaderFooterRowVisibility(headerCell.parentElement);
     }
 
     /** @protected */
-    _onHeaderTemplateOrRendererOrBindingChanged(headerTemplate, headerRenderer, headerCell, ..._bindings) {
-      this._renderHeaderCellContent(headerTemplate, headerRenderer, headerCell);
+    _onHeaderRendererOrBindingChanged(headerRenderer, headerCell, ..._bindings) {
+      this._renderHeaderCellContent(headerRenderer, headerCell);
     }
 
     /**
-     * Renders the content of body cells using either a template or a renderer.
+     * Renders the content of body cells using a renderer.
      *
      * @protected
      */
-    _renderBodyCellsContent(template, renderer, cells) {
-      if (!cells || (!template && !renderer)) {
+    _renderBodyCellsContent(renderer, cells) {
+      if (!cells || !renderer) {
         return;
       }
 
-      this.__renderCellsContent(template, renderer, cells);
+      this.__renderCellsContent(renderer, cells);
     }
 
     /** @protected */
-    _onBodyTemplateOrRendererOrBindingChanged(template, renderer, cells, ..._bindings) {
-      this._renderBodyCellsContent(template, renderer, cells);
+    _onRendererOrBindingChanged(renderer, cells, ..._bindings) {
+      this._renderBodyCellsContent(renderer, cells);
     }
 
     /**
-     * Renders the footer cell content using either a template or a renderer
+     * Renders the footer cell content using a renderer
      * and then updates the visibility of the parent row depending on
      * whether all its children cells are empty or not.
      *
      * @protected
      */
-    _renderFooterCellContent(footerTemplate, footerRenderer, footerCell) {
-      if (!footerCell || (!footerTemplate && !footerRenderer)) {
+    _renderFooterCellContent(footerRenderer, footerCell) {
+      if (!footerCell || !footerRenderer) {
         return;
       }
 
-      this.__renderCellsContent(footerTemplate, footerRenderer, [footerCell]);
+      this.__renderCellsContent(footerRenderer, [footerCell]);
       this._grid.__updateHeaderFooterRowVisibility(footerCell.parentElement);
     }
 
     /** @protected */
-    _onFooterTemplateOrRendererOrBindingChanged(footerTemplate, footerRenderer, footerCell) {
-      this._renderFooterCellContent(footerTemplate, footerRenderer, footerCell);
+    _onFooterRendererOrBindingChanged(footerRenderer, footerCell) {
+      this._renderFooterCellContent(footerRenderer, footerCell);
     }
 
     /** @private */
@@ -857,14 +728,6 @@ class GridColumnElement extends ColumnBaseMixin(DirMixin(PolymerElement)) {
       autoWidth: {
         type: Boolean,
         value: false
-      },
-
-      /**
-       * @type {HTMLTemplateElement}
-       * @protected
-       */
-      _bodyTemplate: {
-        type: Object
       },
 
       /**

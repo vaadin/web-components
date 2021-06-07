@@ -19,10 +19,6 @@ interface ColumnBaseMixin<TItem> {
    */
   resizable: boolean | null | undefined;
 
-  _headerTemplate: HTMLTemplateElement | null;
-
-  _footerTemplate: HTMLTemplateElement | null;
-
   /**
    * When true, the column is frozen. When a column inside of a column group is frozen,
    * all of the sibling columns inside the group will get frozen also.
@@ -71,18 +67,6 @@ interface ColumnBaseMixin<TItem> {
   footerRenderer: GridHeaderFooterRenderer<TItem> | null | undefined;
 
   _findHostGrid(): GridElement<TItem> | undefined;
-
-  _prepareHeaderTemplate(): HTMLTemplateElement | null;
-
-  _prepareFooterTemplate(): HTMLTemplateElement | null;
-
-  _prepareBodyTemplate(): HTMLTemplateElement | null;
-
-  _prepareTemplatizer(template: HTMLTemplateElement | null, instanceProps: object | null): HTMLTemplateElement | null;
-
-  _selectFirstTemplate(header?: boolean, footer?: boolean): HTMLTemplateElement | null;
-
-  _findTemplate(header: boolean, footer: boolean): HTMLTemplateElement | null;
 
   _generateHeader(path: string): string;
 
@@ -147,8 +131,6 @@ declare class GridColumnElement<TItem = GridDefaultItem> extends HTMLElement {
    * @attr {boolean} auto-width
    */
   autoWidth: boolean;
-
-  _bodyTemplate: HTMLTemplateElement | null;
 
   _cells: HTMLElement[] | null;
 }
