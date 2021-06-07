@@ -103,7 +103,7 @@ export const RowDetailsMixin = (superClass) =>
           return;
         }
 
-        // Re-renders the row to open the details when either a renderer or a template is provided.
+        // Re-renders the row to open the details when a row details renderer is provided.
         if (rowDetailsRenderer && this._isDetailsOpened(row._item)) {
           this._updateItem(row, row._item);
           return;

@@ -34,7 +34,7 @@ interface RowDetailsMixin<TItem> {
 
   _configureDetailsCell(cell: HTMLElement): void;
 
-  _toggleDetailsCell(row: HTMLElement, item: TItem): void;
+  _toggleDetailsCell(row: HTMLElement, detailsOpened: boolean): void;
 
   _updateDetailsCellHeights(): void;
 

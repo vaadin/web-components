@@ -29,17 +29,21 @@ document.head.appendChild($_documentContainer.content);
  *
  * #### Example:
  * ```html
- * <vaadin-grid-column>
- *   <template class="header">Package name</template>
- *   <template>
- *     <vaadin-grid-tree-toggle
- *         leaf="[[!item.hasChildren]]"
- *         expanded="{{expanded}}"
- *         level="[[level]]">
- *       [[item.name]]
- *     </vaadin-grid-tree-toggle>
- *   </template>
- * </vaadin-grid-column>
+ * <vaadin-grid-column id="column"></vaadin-grid-column>
+ * ```
+ * ```js
+ * const column = document.querySelector('#column');
+ * column.renderer = (root, column, model) => {
+ *   let treeToggle = root.firstElementChild;
+ *   if (!treeToggle) {
+ *     treeToggle = document.createElement('vaadin-grid-tree-toggle');
+ *     treeToggle.addEventListener('expanded-changed', () => { ... });
+ *   }
+ *   treeToggle.leaf = !model.item.hasChildren;
+ *   treeToggle.level = level;
+ *   treeToggle.expanded = expanded;
+ *   treeToggle.textContent = model.item.name;
+ * };
  * ```
  *
  * ### Styling
