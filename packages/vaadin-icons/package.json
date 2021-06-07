@@ -20,7 +20,8 @@
   "homepage": "https://vaadin.com/icons",
   "files": [
     "iconset.js",
-    "vaadin-icons.js"
+    "vaadin-icons.js",
+    "vaadin-iconset.js"
   ],
   "scripts": {
     "icons": "gulp icons"
