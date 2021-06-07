@@ -404,12 +404,6 @@ export const DataProviderMixin = (superClass) =>
      */
     clearCache() {
       this._cache = new ItemCache(this);
-      // Array.from(this.$.items.children).forEach((row) => {
-      //   Array.from(row.children).forEach((cell) => {
-      //     // Force data system to pick up subproperty changes
-      //     cell._instance && cell._instance._setPendingProperty('item', {}, false);
-      //   });
-      // });
       this._cache.size = this.size || 0;
       this._cache.updateSize();
       this._hasData = false;

@@ -13,8 +13,7 @@ export const ArrayDataProviderMixin = (superClass) =>
     static get properties() {
       return {
         /**
-         * An array containing the items which will be stamped to the column template
-         * instances.
+         * An array containing the items which will be passed to renderer functions.
          *
          * @type {Array<!GridItem> | undefined}
          */
