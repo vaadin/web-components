@@ -28,12 +28,17 @@ document.head.appendChild($_documentContainer.content);
  *
  * #### Example:
  * ```html
- * <vaadin-grid-column>
- *   <template class="header">
- *     <vaadin-grid-sorter path="name.first">First name</vaadin-grid-sorter>
- *   </template>
- *   <template>[[item.name.first]]</template>
- * </vaadin-grid-column>
+ * <vaadin-grid-column id="column"></vaadin-grid-column>
+ * ```
+ * ```js
+ * const column = document.querySelector('#column');
+ * column.renderer = (root, column, model) => {
+ *   let sorter = root.firstElementChild;
+ *   if (!sorter) {
+ *     sorter = document.createElement('vaadin-grid-sorter');
+ *   }
+ *   sorter.path = 'name.first';
+ * };
  * ```
  *
  * ### Styling
