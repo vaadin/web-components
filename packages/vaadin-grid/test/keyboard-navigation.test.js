@@ -1641,24 +1641,20 @@ describe('keyboard navigation', () => {
       expect(document.activeElement).to.equal(nextInput);
     });
 
-    /**
-     * This test is a workaround for the fact that the sendKeys command does not support shift+tabbing ATM
-     * Ideally the test would try to shift tab to the previous input and check that the input in a previous cell
-     * was focused, despite the focus target cell being in the tab order between current and previous input
-     */
     it('should skip the grid focus target when tabbing in interaction mode', async () => {
-      // Focus first input
+      // Focus last input
+      right();
       right();
       enter();
 
-      const nextInput = getCellInput(0, 2);
+      const previousInput = getCellInput(0, 1);
 
-      // Modify grid state to get the focus target cell in the tab order between current and next input
-      grid._itemsFocusable = getRowCell(0, 2);
-
+      // Shift+Tab to previous input
+      await sendKeys({ down: 'Shift' });
       await sendKeys({ press: 'Tab' });
+      await sendKeys({ up: 'Shift' });
 
-      expect(document.activeElement).to.equal(nextInput);
+      expect(document.activeElement).to.equal(previousInput);
     });
 
     it('should move cell focus target when focusing the next input element in interaction mode', async () => {

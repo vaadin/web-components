@@ -2307,10 +2307,18 @@
     chrome-launcher "^0.13.4"
     puppeteer-core "^8.0.0"
 
-"@web/test-runner-commands@^0.4.4", "@web/test-runner-commands@^0.4.5":
+"@web/test-runner-commands@^0.4.4":
   version "0.4.5"
   resolved "https://registry.yarnpkg.com/@web/test-runner-commands/-/test-runner-commands-0.4.5.tgz#b2a39e64177cafbd7f4fbe7d2b28816ef2c86501"
   integrity sha512-jbhsS+nZmnbZPj/XL/g4se1c9TRtIgwrlYpaIIcWkHhCu5mKbdipgZ/nlFIhFS9UaVY52NiulmVj6dhAx7w4SA==
+  dependencies:
+    "@web/test-runner-core" "^0.10.14"
+    mkdirp "^1.0.4"
+
+"@web/test-runner-commands@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@web/test-runner-commands/-/test-runner-commands-0.5.0.tgz#8692855054321b876ff5f1a53a656cc38796fdb1"
+  integrity sha512-yVYJ869/csbDgCNrN2cEwFoX8ZfdAeCXC72CgddKO3jBut2OsFaEy4RWe1uP9Pz9vffiAlV3st3IsnWwTHMLYQ==
   dependencies:
     "@web/test-runner-core" "^0.10.14"
     mkdirp "^1.0.4"
@@ -2409,16 +2417,16 @@
     "@web/test-runner-core" "^0.10.8"
     webdriverio "^7.0.3"
 
-"@web/test-runner@^0.13.4":
-  version "0.13.4"
-  resolved "https://registry.yarnpkg.com/@web/test-runner/-/test-runner-0.13.4.tgz#e0cd1dcf24b4aa53284b5fa8c099a6b00108f447"
-  integrity sha512-TuS8UnW+bdY0K2RoqldyORJime4R1cnARvUtxsXJDbHq78Dcfud2xCgrOepQbbxbniF77OShuEEwCXNULftobw==
+"@web/test-runner@^0.13.5":
+  version "0.13.5"
+  resolved "https://registry.yarnpkg.com/@web/test-runner/-/test-runner-0.13.5.tgz#87c225f7b7b3c9c4eb95442bd909e9dfe6c9bc74"
+  integrity sha512-S1/fAE1aIJEbKSptinP/m8jvl4PA+RCF2tt7EAyvvucpSzeKo05prht2NLgoJhZJGhSvgdw1BCayOVNXMFfB9A==
   dependencies:
     "@web/browser-logs" "^0.2.2"
     "@web/config-loader" "^0.1.3"
     "@web/dev-server" "^0.1.17"
     "@web/test-runner-chrome" "^0.10.0"
-    "@web/test-runner-commands" "^0.4.5"
+    "@web/test-runner-commands" "^0.5.0"
     "@web/test-runner-core" "^0.10.17"
     "@web/test-runner-mocha" "^0.7.2"
     camelcase "^6.2.0"
