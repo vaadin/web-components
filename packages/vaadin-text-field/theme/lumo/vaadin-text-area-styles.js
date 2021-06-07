@@ -30,12 +30,12 @@ registerStyles(
       border: none;
     }
 
-    :host(:hover:not([readonly]):not([focused])) [part='input-field'] {
+    :host(:hover:not([readonly]):not([focused]):not([invalid])) [part='input-field'] {
       background-color: var(--lumo-contrast-20pct);
     }
 
     @media (pointer: coarse) {
-      :host(:hover:not([readonly]):not([focused])) [part='input-field'] {
+      :host(:hover:not([readonly]):not([focused]):not([invalid])) [part='input-field'] {
         background-color: var(--lumo-contrast-10pct);
       }
 
