@@ -1,6 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import '@vaadin/vaadin-template-renderer';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import '@polymer/polymer/lib/elements/dom-bind.js';
 import '@polymer/polymer/lib/elements/dom-repeat.js';
@@ -366,40 +367,34 @@ describe('light dom observing', () => {
         await nextFrame();
       });
 
-      it('should support adding late', () => {
+      it('should support adding late', async () => {
         const column = createColumn();
         grid.insertBefore(column, grid.firstChild);
+        await nextRender();
         flushGrid(grid);
         expectFirstColumn('some');
       });
 
-      it('should support adding selection column late', () => {
+      it('should support adding selection column late', async () => {
         const column = document.createElement('vaadin-grid-selection-column');
         column.innerHTML = `
           <template class="header">some header</template>
           <template>some body [[item.value]]</template>
           <template class="footer">some footer</template>
         `;
+
         grid.insertBefore(column, grid.firstChild);
+        await nextRender();
         flushGrid(grid);
         expectFirstColumn('some');
       });
 
-      it('should support removing late', () => {
+      it('should support removing late', async () => {
         const column = grid.querySelector('vaadin-grid-column');
         grid.removeChild(column);
+        await nextRender();
         flushGrid(grid);
         expectFirstColumn('second');
-      });
-
-      it('should invoke node observer twice when removing columns', async () => {
-        const column = grid.querySelector('vaadin-grid-column');
-        const spy = sinon.spy(grid._observer, 'callback');
-        grid.removeChild(column);
-        flushGrid(grid);
-        await nextFrame();
-        // Once for the column and in effect of that, once for the removed cell content elements
-        expect(spy.callCount).to.gte(2);
       });
 
       it('should invoke node observer twice when adding columns', async () => {
@@ -407,9 +402,29 @@ describe('light dom observing', () => {
         const spy = sinon.spy(grid._observer, 'callback');
         grid.insertBefore(column, grid.firstChild);
         flushGrid(grid);
+
+        // Once the column is added
+        expect(spy.callCount).to.equal(1);
+
         await nextFrame();
-        // Once for the column and in effect of that, once for the added cell content elements
-        expect(spy.callCount).to.gte(2);
+
+        // Once the column cells are added
+        expect(spy.callCount).to.equal(2);
+      });
+
+      it('should invoke node observer twice when removing columns', async () => {
+        const column = grid.querySelector('vaadin-grid-column');
+        const spy = sinon.spy(grid._observer, 'callback');
+        grid.removeChild(column);
+        flushGrid(grid);
+
+        // Once the column is removed
+        expect(spy.callCount).to.equal(1);
+
+        await nextFrame();
+
+        // Once the column cells are removed
+        expect(spy.callCount).to.equal(2);
       });
 
       it('should not invoke on row reorder', (done) => {
@@ -471,8 +486,10 @@ describe('light dom observing', () => {
       it('should support adding late', async () => {
         const group = createGroup();
         grid.insertBefore(group, grid.firstChild);
+
+        await nextRender();
         flushGrid(grid);
-        await nextFrame();
+
         expectFirstColumnHeader('some group', 0);
         expectFirstColumnFooter('some group', 0);
         expectFirstColumn('some foo', 1);
@@ -481,8 +498,10 @@ describe('light dom observing', () => {
       it('should support removing late', async () => {
         const group = grid.querySelector('vaadin-grid-column-group');
         grid.removeChild(group);
+
+        await nextRender();
         flushGrid(grid);
-        await nextFrame();
+
         expectFirstColumnHeader('second group', 0);
         expectFirstColumnFooter('second group', 0);
         expectFirstColumn('second foo', 1);
@@ -501,8 +520,8 @@ describe('light dom observing', () => {
         const group = createGroup();
         firstGroup.insertBefore(group, firstGroup.firstChild);
 
+        await nextRender();
         flushGrid(grid);
-        await nextFrame();
 
         expectFirstColumnHeader('some group', 1);
         expectFirstColumnFooter('some group', 1);
@@ -512,7 +531,9 @@ describe('light dom observing', () => {
       it('should support removing late', async () => {
         const group = firstGroup.querySelector('vaadin-grid-column-group');
         firstGroup.removeChild(group);
-        await nextFrame();
+
+        await nextRender();
+
         expectFirstColumnHeader('second nested group', 1);
         expectFirstColumnFooter('second nested group', 1);
         expectFirstColumn('second foo', 2);

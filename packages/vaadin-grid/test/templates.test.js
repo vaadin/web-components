@@ -1,8 +1,9 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import '@polymer/polymer/lib/elements/dom-bind.js';
+import '@vaadin/vaadin-template-renderer';
 import '@vaadin/vaadin-text-field/vaadin-text-field.js';
 import {
   flushGrid,
@@ -119,35 +120,6 @@ class SlottedTemplates extends PolymerElement {
 }
 
 customElements.define('slotted-templates', SlottedTemplates);
-
-class ObservedGrid extends PolymerElement {
-  static get template() {
-    return html`
-      <vaadin-grid items='["foo"]' id="grid">
-        <template class="row-details"> [[index]] </template>
-        <vaadin-grid-column>
-          <template class="header">
-            <vaadin-grid-filter path="index"></vaadin-grid-filter>
-          </template>
-          <template>[[index]] [[_count(item, index)]]</template>
-        </vaadin-grid-column>
-      </vaadin-grid>
-    `;
-  }
-
-  static get properties() {
-    return {
-      count: Number
-    };
-  }
-
-  _count() {
-    this.count = this.count || 0;
-    this.count++;
-  }
-}
-
-customElements.define('observed-grid', ObservedGrid);
 
 function getHeaderCell(grid, index) {
   return grid.$.header.querySelectorAll('[part~="cell"]')[index];
@@ -351,20 +323,31 @@ describe('templates', () => {
     beforeEach(() => {
       container = fixtureSync('<grid-with-slots></grid-with-slots>');
       grid = container.$.grid;
+
+      // The infinite data provider doesn't support 2-way binding of the item property
+      // so that the array data provider should be used instead:
+      grid.dataProvider = null;
+      grid.items = [{ value: 'item0' }, { value: 'item1' }];
+
       flushGrid(grid);
+
       input = getCellContent(getCell(grid, 3)).querySelector('vaadin-text-field');
     });
 
     it('should two-way bind instance path inside cell templates', () => {
+      const cell = getCell(grid, 3);
+
       input.value = 'bar0';
 
-      expect(getCell(grid, 3)._instance.item.value).to.eql('bar0');
+      expect(getCellContent(cell).__templateInstance.item.value).to.eql('bar0');
     });
 
     it('should notify other cell templates for instance path changes', () => {
+      const cell = getCell(grid, 4);
+
       input.value = 'bar0';
 
-      expect(getCellContent(getCell(grid, 4)).textContent).to.contain('bar0');
+      expect(getCellContent(cell).textContent).to.contain('bar0');
     });
   });
 });
@@ -442,7 +425,7 @@ describe('slotted templates', () => {
   });
 
   ['header', 'footer'].forEach((container) => {
-    it(`should change the ${container} template`, () => {
+    it(`should change the ${container} template`, async () => {
       const newTemplate = document.createElement('template');
       newTemplate.classList.add(container);
       newTemplate.setAttribute('slot', `grid-column-${container}-template`);
@@ -450,39 +433,66 @@ describe('slotted templates', () => {
 
       wrapper.removeChild(wrapper.querySelector(`template.${container}`));
       wrapper.appendChild(newTemplate);
+      await nextRender();
       flushGrid(grid);
-      const column = newTemplate.assignedSlot.parentElement;
-      column._templateObserver.flush();
 
       expect(getContainerCellContent(grid.$[container], 0, 5).textContent).to.equal(`${container}-bar`);
     });
   });
 
-  it(`should change the body template`, () => {
+  it(`should change the body template`, async () => {
     const newTemplate = document.createElement('template');
     newTemplate.setAttribute('slot', `grid-column-template`);
     newTemplate.innerHTML = `bar-[[index]]`;
 
     slotted.removeChild(slotted.querySelector(`template`));
     slotted.appendChild(newTemplate);
+    await nextRender();
     flushGrid(grid);
-    const column = newTemplate.assignedSlot.assignedSlot.parentElement;
-    column._templateObserver.flush();
 
     expect(getContainerCellContent(grid.$.items, 0, 5).textContent).to.equal('bar-0');
   });
 });
 
-describe('observed', () => {
-  let observed;
+// class ObservedGrid extends PolymerElement {
+//   static get template() {
+//     return html`
+//       <vaadin-grid items='["foo"]' id="grid">
+//         <template class="row-details"> [[index]] </template>
+//         <vaadin-grid-column>
+//           <template class="header">
+//             <vaadin-grid-filter path="index"></vaadin-grid-filter>
+//           </template>
+//           <template>[[index]] [[_count(item, index)]]</template>
+//         </vaadin-grid-column>
+//       </vaadin-grid>
+//     `;
+//   }
 
-  beforeEach(() => {
-    observed = fixtureSync('<observed-grid></observed-grid>');
-    flushGrid(observed.$.grid);
-  });
+//   static get properties() {
+//     return {
+//       count: Number
+//     };
+//   }
 
-  it('should invoke once', async () => {
-    await aTimeout(300); // Filter's debounce time is 200ms
-    expect(observed.count).to.equal(1);
-  });
-});
+//   _count() {
+//     this.count = this.count || 0;
+//     this.count++;
+//   }
+// }
+//
+// customElements.define('observed-grid', ObservedGrid);
+//
+// describe('observed', () => {
+//   let observed;
+
+//   beforeEach(() => {
+//     observed = fixtureSync('<observed-grid></observed-grid>');
+//     flushGrid(observed.$.grid);
+//   });
+
+//   it('should invoke once', async () => {
+//     await aTimeout(300); // Filter's debounce time is 200ms
+//     expect(observed.count).to.equal(1);
+//   });
+// });

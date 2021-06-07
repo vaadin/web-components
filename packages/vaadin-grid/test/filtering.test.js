@@ -3,6 +3,7 @@ import sinon from 'sinon';
 import { fixtureSync, listenOnce } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { flush } from '@polymer/polymer/lib/utils/flush.js';
+import '@vaadin/vaadin-template-renderer';
 import { flushGrid, getBodyCellContent, getHeaderCellContent, scrollToEnd, getVisibleItems } from './helpers.js';
 import '../vaadin-grid.js';
 import '../vaadin-grid-filter.js';

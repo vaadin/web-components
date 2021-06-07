@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, listenOnce } from '@vaadin/testing-helpers';
+import '@vaadin/vaadin-template-renderer';
 import { flushGrid, getRows, getRowCells, infiniteDataProvider, isWithinParentConstraints, wheel } from './helpers.js';
 import '../vaadin-grid.js';
 
