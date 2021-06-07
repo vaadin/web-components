@@ -534,14 +534,15 @@ class CrudElement extends ElementMixin(ThemableMixin(PolymerElement)) {
 
   /** @private */
   __onI18Change(i18n, grid) {
-    if (grid) {
-      afterNextRender(grid, () => {
-        Array.from(grid.querySelectorAll('vaadin-crud-edit-column')).forEach((e) => (e.ariaLabel = i18n.editLabel));
-        Array.from(grid.querySelectorAll('vaadin-crud-edit')).forEach((e) =>
-          e.setAttribute('aria-label', i18n.editLabel)
-        );
-      });
+    if (!grid) {
+      return;
     }
+
+    afterNextRender(grid, () => {
+      Array.from(grid.querySelectorAll('vaadin-crud-edit-column')).forEach((column) => {
+        column.ariaLabel = i18n.editLabel;
+      });
+    });
   }
 
   /** @private */

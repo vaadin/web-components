@@ -4,7 +4,6 @@
  * This program is available under Commercial Vaadin Developer License 4.0, available at https://vaadin.com/license/cvdl-4.0.
  */
 import { GridColumnElement } from '@vaadin/vaadin-grid/src/vaadin-grid-column.js';
-import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 import './vaadin-crud-edit.js';
 
 /**
@@ -25,15 +24,6 @@ import './vaadin-crud-edit.js';
  * @extends GridColumnElement
  */
 class CrudEditColumnElement extends GridColumnElement {
-  static get template() {
-    return html`
-      <template class="header" id="defaultHeaderTemplate" aria-label="Edit"> </template>
-      <template id="defaultBodyTemplate">
-        <div id="edit">Edit</div>
-      </template>
-    `;
-  }
-
   static get is() {
     return 'vaadin-crud-edit-column';
   }
@@ -63,17 +53,30 @@ class CrudEditColumnElement extends GridColumnElement {
     };
   }
 
-  /** @private */
-  ready() {
-    super.ready();
-    this.renderer = (root) => {
-      if (!root.firstElementChild) {
-        const elm = document.createElement('vaadin-crud-edit');
-        this.hasAttribute('theme') && elm.setAttribute('theme', this.getAttribute('theme'));
-        this.editLabel && elm.setAttribute('aria-label', this.ariaLabel);
-        root.appendChild(elm);
+  static get observers() {
+    return ['_onBodyTemplateOrRendererOrBindingChanged(_bodyTemplate, _renderer, _cells, _cells.*, path, ariaLabel)'];
+  }
+
+  /**
+   * Renders the crud edit element to the body cell.
+   *
+   * @override
+   */
+  _defaultRenderer(root, _column) {
+    let edit = root.firstElementChild;
+    if (!edit) {
+      edit = document.createElement('vaadin-crud-edit');
+      if (this.hasAttribute('theme')) {
+        edit.setAttribute('theme', this.getAttribute('theme'));
       }
-    };
+      root.appendChild(edit);
+    }
+
+    if (this.ariaLabel) {
+      edit.setAttribute('aria-label', this.ariaLabel);
+    } else {
+      edit.removeAttribute('aria-label');
+    }
   }
 }
 
