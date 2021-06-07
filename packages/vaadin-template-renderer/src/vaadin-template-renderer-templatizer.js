@@ -2,9 +2,10 @@ import { PolymerElement } from '@polymer/polymer';
 import { templatize } from '@polymer/polymer/lib/utils/templatize';
 
 export class Templatizer extends PolymerElement {
-  static create(template) {
-    const templatizer = new Templatizer();
+  static create(component, template) {
+    const templatizer = new this();
     templatizer.__template = template;
+    templatizer.__component = component;
     return templatizer;
   }
 
@@ -16,6 +17,7 @@ export class Templatizer extends PolymerElement {
     super();
 
     this.__template = null;
+    this.__component = null;
     this.__TemplateClass = null;
     this.__templateInstances = new Set();
   }
@@ -44,6 +46,7 @@ export class Templatizer extends PolymerElement {
     element.appendChild(instance.root);
   }
 
+  /** @private */
   __updateProperties(instance, properties) {
     // The Polymer uses `===` to check whether a property is changed and should be re-rendered.
     // This means, object properties won't be re-rendered when mutated inside.
@@ -53,27 +56,35 @@ export class Templatizer extends PolymerElement {
       instance._setPendingProperty('item');
     }
 
+    instance.__properties = properties;
     instance.setProperties(properties);
   }
 
+  /** @private */
   __createTemplateInstance(properties) {
     this.__createTemplateClass(properties);
 
     const instance = new this.__TemplateClass(properties);
+    instance.__properties = properties;
+
     this.__templateInstances.add(instance);
+
     return instance;
   }
 
+  /** @private */
   __disposeOfTemplateInstance(instance) {
     this.__templateInstances.delete(instance);
   }
 
+  /** @private */
   __hasTemplateInstance(instance) {
     return this.__templateInstances.has(instance);
   }
 
+  /** @private */
   __isTemplateInstanceAttachedToDOM(instance) {
-    // A workaround for the edge-case case when the template is empty
+    // The edge-case case when the template is empty
     if (instance.children.length === 0) {
       return false;
     }
@@ -81,6 +92,7 @@ export class Templatizer extends PolymerElement {
     return !!instance.children[0].parentElement;
   }
 
+  /** @private */
   __createTemplateClass(properties) {
     if (this.__TemplateClass) return;
 
@@ -99,9 +111,27 @@ export class Templatizer extends PolymerElement {
         this.__templateInstances.forEach((instance) => {
           instance.forwardHostProp(prop, value);
         });
+      },
+
+      notifyInstanceProp(instance, path, value) {
+        let rootProperty;
+
+        // Extracts the root property name from the path
+        rootProperty = path.split('.')[0];
+        // Capitalizes the property name
+        rootProperty = rootProperty[0].toUpperCase() + rootProperty.slice(1);
+
+        const callback = `__on${rootProperty}PropertyChanged`;
+
+        if (this[callback]) {
+          this[callback](instance, path, value);
+        }
       }
     });
   }
+
+  /** @private */
+  __templateInstancePropertyChanged() {}
 }
 
 customElements.define(Templatizer.is, Templatizer);

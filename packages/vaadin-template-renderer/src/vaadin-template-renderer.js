@@ -1,19 +1,55 @@
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 
 import './vaadin-template-renderer-templatizer.js';
+import './vaadin-template-renderer-grid-templatizer.js';
+
 import { Templatizer } from './vaadin-template-renderer-templatizer.js';
+import { GridTemplatizer } from './vaadin-template-renderer-grid-templatizer.js';
 
-function createRenderer(template) {
-  const templatizer = Templatizer.create(template);
+function createRenderer(component, template, TemplatizerClass = Templatizer) {
+  const templatizer = TemplatizerClass.create(component, template);
 
-  return (root, _owner, model) => {
-    template.__templatizer = templatizer;
-    template.__templatizer.render(root, model);
+  const renderer = (root, _owner, model) => {
+    templatizer.render(root, model);
   };
+
+  template.__templatizer = templatizer;
+  renderer.__templatizer = templatizer;
+
+  return renderer;
+}
+
+function processGridTemplate(component, template) {
+  if (template.matches('.row-details')) {
+    component.rowDetailsRenderer = createRenderer(component, template, GridTemplatizer);
+    return;
+  }
+
+  if (template.matches('.header')) {
+    component.headerRenderer = createRenderer(component, template);
+    return;
+  }
+
+  if (template.matches('.footer')) {
+    component.footerRenderer = createRenderer(component, template);
+    return;
+  }
+
+  if (template.matches('.editor')) {
+    component.editModeRenderer = createRenderer(component, template, GridTemplatizer);
+    return;
+  }
+
+  component.renderer = createRenderer(component, template, GridTemplatizer);
 }
 
 function processTemplate(component, template) {
-  component.renderer = createRenderer(template);
+  if (/^vaadin-grid/.test(component.constructor.is)) {
+    processGridTemplate(component, template);
+    return;
+  }
+
+  component.renderer = createRenderer(component, template);
 }
 
 function processTemplates(component) {
@@ -26,7 +62,6 @@ function processTemplates(component) {
       if (template.__templatizer) {
         return;
       }
-
       processTemplate(component, template);
     });
 }
