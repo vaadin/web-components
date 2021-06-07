@@ -392,6 +392,16 @@ describe('multi selection column', () => {
     expect(selectionColumn.selectAll).to.be.false;
   });
 
+  it('should not clear pre-selected items', () => {
+    const grid = fixtureSync(`
+      <vaadin-grid selected-items='[{"value": "foo"}]'>
+        <vaadin-grid-selection-column></vaadin-grid-selection-column>
+        <vaadin-grid-column path="value"></vaadin-grid-column>
+      </vaadin-grid>
+    `);
+    expect(grid.selectedItems).to.have.length(1);
+  });
+
   it('should have selectAll after selecting all manually', () => {
     selectAllCheckbox.click();
     firstBodyCheckbox.checked = true;
