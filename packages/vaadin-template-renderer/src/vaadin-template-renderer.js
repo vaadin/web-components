@@ -1,5 +1,9 @@
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 
+import { GridElement } from '@vaadin/vaadin-grid/src/vaadin-grid.js';
+import { GridColumnElement } from '@vaadin/vaadin-grid/src/vaadin-grid-column.js';
+import { GridColumnGroupElement } from '@vaadin/vaadin-grid/src/vaadin-grid-column-group.js';
+
 import './vaadin-template-renderer-templatizer.js';
 import './vaadin-template-renderer-grid-templatizer.js';
 
@@ -19,33 +23,44 @@ function createRenderer(component, template, TemplatizerClass = Templatizer) {
   return renderer;
 }
 
-function processGridTemplate(component, template) {
+function processGridTemplate(grid, template) {
   if (template.matches('.row-details')) {
-    component.rowDetailsRenderer = createRenderer(component, template, GridTemplatizer);
+    grid.rowDetailsRenderer = createRenderer(grid, template, GridTemplatizer);
     return;
   }
+}
 
+function processGridColumnTemplate(column, template) {
   if (template.matches('.header')) {
-    component.headerRenderer = createRenderer(component, template);
+    column.headerRenderer = createRenderer(column, template);
     return;
   }
 
   if (template.matches('.footer')) {
-    component.footerRenderer = createRenderer(component, template);
+    column.footerRenderer = createRenderer(column, template);
     return;
   }
 
   if (template.matches('.editor')) {
-    component.editModeRenderer = createRenderer(component, template, GridTemplatizer);
+    column.editModeRenderer = createRenderer(column, template, GridTemplatizer);
     return;
   }
 
-  component.renderer = createRenderer(component, template, GridTemplatizer);
+  column.renderer = createRenderer(column, template, GridTemplatizer);
 }
 
 function processTemplate(component, template) {
-  if (/^vaadin-grid/.test(component.constructor.is)) {
+  if (component instanceof GridElement) {
     processGridTemplate(component, template);
+    return;
+  }
+
+  if (
+    // eslint-disable-next-line prettier/prettier
+    component instanceof GridColumnElement ||
+    component instanceof GridColumnGroupElement
+  ) {
+    processGridColumnTemplate(component, template);
     return;
   }
 

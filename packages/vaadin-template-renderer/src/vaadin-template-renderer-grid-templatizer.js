@@ -1,3 +1,5 @@
+import { GridElement } from '@vaadin/vaadin-grid/src/vaadin-grid.js';
+
 import { Templatizer } from './vaadin-template-renderer-templatizer.js';
 
 export class GridTemplatizer extends Templatizer {
@@ -100,7 +102,7 @@ export class GridTemplatizer extends Templatizer {
    * @private
    */
   get __grid() {
-    if (this.__component.constructor.is === 'vaadin-grid') {
+    if (this.__component instanceof GridElement) {
       return this.__component;
     }
 
