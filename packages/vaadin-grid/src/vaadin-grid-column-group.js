@@ -17,8 +17,8 @@ import { ColumnBaseMixin } from './vaadin-grid-column.js';
  * #### Example:
  * ```html
  * <vaadin-grid-column-group resizable id="columnGroup">
- *  <vaadin-grid-column id="column1"></vaadin-grid-column>
- *  <vaadin-grid-column id="column2"></vaadin-grid-column>
+ *   <vaadin-grid-column id="column1"></vaadin-grid-column>
+ *   <vaadin-grid-column id="column2"></vaadin-grid-column>
  * </vaadin-grid-column-group>
  * ```
  *
