@@ -227,14 +227,6 @@ describe('edit column renderer', () => {
       expect(column.editorType).to.be.equal('text');
     });
 
-    it('should throw an error and remove template when added after renderer', () => {
-      column.editModeRenderer = function (root) {
-        root.innerHTML = '<input>';
-      };
-      expect(() => (column._editModeTemplate = {})).to.throw(Error);
-      expect(column._editModeTemplate).to.be.not.ok;
-    });
-
     it('should close editor and update value when scrolling edited cell out of view', () => {
       grid.items = null;
       grid.items = Array.apply(null, { length: 30 }).map(() => Object.assign({}, createItems()[0]));
