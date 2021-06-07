@@ -244,18 +244,6 @@ export const DataProviderMixin = (superClass) =>
       }
     }
 
-    /** @private */
-    _expandedInstanceChangedCallback(inst, value) {
-      if (inst.item === undefined) {
-        return;
-      }
-      if (value) {
-        this.expandItem(inst.item);
-      } else {
-        this.collapseItem(inst.item);
-      }
-    }
-
     /**
      * Returns a value that identifies the item. Uses `itemIdPath` if available.
      * Can be customized by overriding.
@@ -416,12 +404,12 @@ export const DataProviderMixin = (superClass) =>
      */
     clearCache() {
       this._cache = new ItemCache(this);
-      Array.from(this.$.items.children).forEach((row) => {
-        Array.from(row.children).forEach((cell) => {
-          // Force data system to pick up subproperty changes
-          cell._instance && cell._instance._setPendingProperty('item', {}, false);
-        });
-      });
+      // Array.from(this.$.items.children).forEach((row) => {
+      //   Array.from(row.children).forEach((cell) => {
+      //     // Force data system to pick up subproperty changes
+      //     cell._instance && cell._instance._setPendingProperty('item', {}, false);
+      //   });
+      // });
       this._cache.size = this.size || 0;
       this._cache.updateSize();
       this._hasData = false;

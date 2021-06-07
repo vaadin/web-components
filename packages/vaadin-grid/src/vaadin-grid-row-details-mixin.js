@@ -3,7 +3,7 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { Templatizer } from './vaadin-grid-templatizer.js';
+// import { Templatizer } from './vaadin-grid-templatizer.js';
 
 /**
  * @polymerMixin
@@ -82,13 +82,13 @@ export const RowDetailsMixin = (superClass) =>
         throw new Error('You should only use either a renderer or a template for row details');
       }
       if (rowDetailsTemplate || rowDetailsRenderer) {
-        if (rowDetailsTemplate && !rowDetailsTemplate.templatizer) {
-          const templatizer = new Templatizer();
-          templatizer._grid = this;
-          templatizer.dataHost = this.dataHost;
-          templatizer.template = rowDetailsTemplate;
-          rowDetailsTemplate.templatizer = templatizer;
-        }
+        // if (rowDetailsTemplate && !rowDetailsTemplate.templatizer) {
+        //   const templatizer = new Templatizer();
+        //   templatizer._grid = this;
+        //   templatizer.dataHost = this.dataHost;
+        //   templatizer.template = rowDetailsTemplate;
+        //   rowDetailsTemplate.templatizer = templatizer;
+        // }
 
         if (this._columnTree) {
           // Only update the rows if the column tree has already been initialized
@@ -98,7 +98,7 @@ export const RowDetailsMixin = (superClass) =>
               this._a11yUpdateRowDetailsOpened(row, false);
             }
             // Clear any old template instances
-            delete row.querySelector('[part~=details-cell]')._instance;
+            // delete row.querySelector('[part~=details-cell]')._instance;
           });
         }
       }
@@ -160,11 +160,12 @@ export const RowDetailsMixin = (superClass) =>
       // The content of the details cell is rendered later in the `_updateItem` method.
       if (this.rowDetailsRenderer) {
         cell._renderer = this.rowDetailsRenderer;
-      } else if (this._rowDetailsTemplate && !cell._instance) {
-        cell._instance = this._rowDetailsTemplate.templatizer.createInstance();
-        cell._content.innerHTML = '';
-        cell._content.appendChild(cell._instance.root);
       }
+      //  else if (this._rowDetailsTemplate && !cell._instance) {
+      //   cell._instance = this._rowDetailsTemplate.templatizer.createInstance();
+      //   cell._content.innerHTML = '';
+      //   cell._content.appendChild(cell._instance.root);
+      // }
     }
 
     /** @protected */
@@ -214,15 +215,6 @@ export const RowDetailsMixin = (superClass) =>
     closeItemDetails(item) {
       if (this._isDetailsOpened(item)) {
         this.detailsOpenedItems = this.detailsOpenedItems.filter((i) => !this._itemsEqual(i, item));
-      }
-    }
-
-    /** @private */
-    _detailsOpenedInstanceChangedCallback(instance, value) {
-      if (value) {
-        this.openItemDetails(instance.item);
-      } else {
-        this.closeItemDetails(instance.item);
       }
     }
   };

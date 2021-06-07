@@ -151,7 +151,7 @@ export const ColumnBaseMixin = (superClass) =>
          */
         _headerRenderer: {
           type: Function,
-          computed: '_computeHeaderRenderer(headerRenderer, _headerTemplate, header, __initialized)'
+          computed: '_computeHeaderRenderer(headerRenderer, header, __initialized)'
         },
 
         /**
@@ -174,7 +174,7 @@ export const ColumnBaseMixin = (superClass) =>
          */
         _footerRenderer: {
           type: Function,
-          computed: '_computeFooterRenderer(footerRenderer, _footerTemplate, __initialized)'
+          computed: '_computeFooterRenderer(footerRenderer, __initialized)'
         }
       };
     }
@@ -196,24 +196,38 @@ export const ColumnBaseMixin = (superClass) =>
       ];
     }
 
+    constructor() {
+      super();
+
+      // this._templateObserver = new FlattenedNodesObserver(this, () => {
+      //   this._headerTemplate = this._prepareHeaderTemplate();
+      //   this._footerTemplate = this._prepareFooterTemplate();
+      //   this._bodyTemplate = this._prepareBodyTemplate();
+      // });
+    }
+
     /** @protected */
     connectedCallback() {
       super.connectedCallback();
 
-      this._bodyTemplate && (this._bodyTemplate.templatizer._grid = this._grid);
-      this._headerTemplate && (this._headerTemplate.templatizer._grid = this._grid);
-      this._footerTemplate && (this._footerTemplate.templatizer._grid = this._grid);
+      // this._bodyTemplate && (this._bodyTemplate.templatizer._grid = this._grid);
+      // this._headerTemplate && (this._headerTemplate.templatizer._grid = this._grid);
+      // this._footerTemplate && (this._footerTemplate.templatizer._grid = this._grid);
 
-      this._templateObserver.flush();
-      if (!this._bodyTemplate) {
-        // The observer might not have triggered if the tag is empty. Run manually.
-        this._templateObserver.callback();
-      }
+      // this._templateObserver.flush();
+      // if (!this._bodyTemplate) {
+      //   // The observer might not have triggered if the tag is empty. Run manually.
+      //   this._templateObserver.callback();
+      // }
 
+      // Adds the column cells to the grid after the column is attached
       requestAnimationFrame(() => {
+        // Skip if the column has been detached
+        if (!this._grid) return;
+
         this._allCells.forEach((cell) => {
           if (!cell._content.parentNode) {
-            this._grid && this._grid.appendChild(cell._content);
+            this._grid.appendChild(cell._content);
           }
         });
       });
@@ -223,17 +237,28 @@ export const ColumnBaseMixin = (superClass) =>
     disconnectedCallback() {
       super.disconnectedCallback();
 
+      // Removes the column cells from the grid after the column is detached
       requestAnimationFrame(() => {
-        if (!this._findHostGrid()) {
-          this._allCells.forEach((cell) => {
-            if (cell._content.parentNode) {
-              cell._content.parentNode.removeChild(cell._content);
-            }
-          });
-        }
+        // Skip if the column has been attached again
+        if (this._grid) return;
+
+        this._allCells.forEach((cell) => {
+          if (cell._content.parentNode) {
+            cell._content.parentNode.removeChild(cell._content);
+          }
+        });
       });
 
       this._gridValue = undefined;
+    }
+
+    /** @protected */
+    ready() {
+      super.ready();
+
+      if (window.Vaadin && window.Vaadin.templateRendererCallback) {
+        window.Vaadin.templateRendererCallback(this);
+      }
     }
 
     /**
@@ -272,16 +297,6 @@ export const ColumnBaseMixin = (superClass) =>
         .concat(this._headerCell)
         .concat(this._footerCell)
         .filter((cell) => cell);
-    }
-
-    constructor() {
-      super();
-
-      this._templateObserver = new FlattenedNodesObserver(this, () => {
-        this._headerTemplate = this._prepareHeaderTemplate();
-        this._footerTemplate = this._prepareFooterTemplate();
-        this._bodyTemplate = this._prepareBodyTemplate();
-      });
     }
 
     /** @protected */
@@ -704,12 +719,10 @@ export const ColumnBaseMixin = (superClass) =>
      * @protected
      * @return {GridHeaderFooterRenderer | undefined}
      */
-    _computeHeaderRenderer(headerRenderer, headerTemplate, header) {
+    _computeHeaderRenderer(headerRenderer, header) {
       if (headerRenderer) {
         return headerRenderer;
       }
-
-      if (headerTemplate) return;
 
       if (header !== undefined && header !== null) {
         return this.__textHeaderRenderer;
@@ -726,12 +739,10 @@ export const ColumnBaseMixin = (superClass) =>
      * @protected
      * @return {GridBodyRenderer | undefined}
      */
-    _computeRenderer(renderer, template) {
+    _computeRenderer(renderer) {
       if (renderer) {
         return renderer;
       }
-
-      if (template) return;
 
       return this._defaultRenderer;
     }
@@ -744,12 +755,10 @@ export const ColumnBaseMixin = (superClass) =>
      * @protected
      * @return {GridHeaderFooterRenderer | undefined}
      */
-    _computeFooterRenderer(footerRenderer, footerTemplate) {
+    _computeFooterRenderer(footerRenderer) {
       if (footerRenderer) {
         return footerRenderer;
       }
-
-      if (footerTemplate) return;
 
       return this._defaultFooterRenderer;
     }
@@ -817,7 +826,7 @@ class GridColumnElement extends ColumnBaseMixin(DirMixin(PolymerElement)) {
        */
       _renderer: {
         type: Function,
-        computed: '_computeRenderer(renderer, _bodyTemplate, __initialized)'
+        computed: '_computeRenderer(renderer, __initialized)'
       },
 
       /**
