@@ -106,15 +106,18 @@ class GridProEditColumnElement extends GridColumnElement {
   }
 
   static get observers() {
-    return ['_editModeTemplateOrRendererChanged(_editModeTemplate, editModeRenderer)', '_cellsChanged(_cells.*)'];
+    return [
+      '_editModeTemplateOrRendererChanged(_editModeTemplate, editModeRenderer, __initialized)',
+      '_cellsChanged(_cells.*)'
+    ];
   }
 
   constructor() {
     super();
 
-    this._editTemplateObserver = new FlattenedNodesObserver(this, () => {
-      this._editModeTemplate = this._prepareEditModeTemplate();
-    });
+    // this._editTemplateObserver = new FlattenedNodesObserver(this, () => {
+    //   this._editModeTemplate = this._prepareEditModeTemplate();
+    // });
 
     this.__editModeRenderer = function (root, column) {
       const cell = root.assignedSlot.parentNode;
@@ -132,7 +135,7 @@ class GridProEditColumnElement extends GridColumnElement {
   ready() {
     super.ready();
 
-    this._editTemplateObserver.flush();
+    // this._editTemplateObserver.flush();
   }
 
   /** @private */
@@ -292,31 +295,39 @@ class GridProEditColumnElement extends GridColumnElement {
 
   /** @private */
   _renderEditor(cell, model) {
-    if (cell._template) {
-      cell.__savedTemplate = cell._template;
-      cell._template = undefined;
-    } else {
-      // fallback to the path renderer stored on the cell
-      cell.__savedRenderer = this.renderer || cell._renderer;
-      cell._renderer = undefined;
-    }
+    // if (cell._template) {
+    //   cell.__savedTemplate = cell._template;
+    //   cell._template = undefined;
+    // } else {
+    // fallback to the path renderer stored on the cell
+    cell.__savedRenderer = this._renderer || cell._renderer;
+    cell._renderer = undefined;
 
-    if (this._editModeTemplate) {
-      this._stampTemplateToCell(cell, this._editModeTemplate, model);
-    } else {
-      this._stampRendererToCell(cell, this.editModeRenderer || this.__editModeRenderer, model);
-    }
+    this._stampRendererToCell(cell, this.editModeRenderer || this.__editModeRenderer, model);
+    // if (this._editModeTemplate) {
+    //   this._stampTemplateToCell(cell, this._editModeTemplate, model);
+    // } else {
+    // }
   }
 
   /** @private */
-  _removeEditor(cell, model) {
-    if (cell.__savedTemplate) {
-      this._stampTemplateToCell(cell, cell.__savedTemplate, model);
-      cell._renderer = undefined;
-      cell.__savedTemplate = undefined;
-    } else if (cell.__savedRenderer) {
-      this._stampRendererToCell(cell, cell.__savedRenderer, model);
-      cell._template = undefined;
+  _removeEditor(cell, _model) {
+    const row = cell.parentElement;
+
+    // if (cell.__savedTemplate) {
+    //   this._stampTemplateToCell(cell, cell.__savedTemplate, model);
+    //   cell._renderer = undefined;
+    //   cell.__savedTemplate = undefined;
+    // } else
+    if (cell.__savedRenderer) {
+      // this._stampRendererToCell(cell, cell.__savedRenderer, model);
+      // cell._template = undefined;
+
+      cell._content.innerHTML = '';
+      cell._renderer = cell.__savedRenderer;
+
+      this._grid._updateItem(row, row._item);
+
       cell.__savedRenderer = undefined;
     }
   }
