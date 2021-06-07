@@ -31,17 +31,17 @@ What happened instead.
 
 <!-- Example: Grid content occasionally gets scrolled. -->
 
-### Live Demo
+### Live Demo (optional)
 
 A screenshot or video with issue reproduced.
 
 ### Minimal reproducible example
 
-**Please** provide a demo project or code snippet that reproduces the issue, this makes your issue _much_ easier to diagnose.
+**Please** provide a demo project or code snippet that reproduces the issue, this _greatly_ increases the chance that we will be able to identify and fix the issue.
 
 <!--
 ```
-<vaadin-grid</vaadin-grid>
+<vaadin-grid></vaadin-grid>
 ```
 ```
 const grid = document.querySelector('vaadin-grid');
@@ -62,7 +62,7 @@ Clear steps describing how to reproduce the issue.
 
 ### Environment
 
-- Version of the webcomponent / platform.
+- Version of the webcomponent / Vaadin platform.
 - OS.
 
 <!-- Example:
