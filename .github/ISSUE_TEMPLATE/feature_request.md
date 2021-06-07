@@ -7,9 +7,9 @@ assignees: ''
 
 ---
 
-### Describe a problem you proposal is addressing
+### Describe your motivation
 
-A concise description of what the problem or reason is. For example, I'm always frustrated when [...]
+A concise description of why you are proposing a change. For example, you would like a new feature to solve a use-case, or you want an existing feature changed because it is difficult to use.
 
 ### Describe the solution you'd like
 

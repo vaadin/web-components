@@ -21,13 +21,13 @@ Describe the issue that you're seeing.
 
 ### Expected outcome
 
-What should happen?
+What did you expect to happen?
 
 <!-- Example: No scrolling should happen. -->
 
 ### Actual outcome
 
-What happened.
+What happened instead.
 
 <!-- Example: Grid content occasionally gets scrolled. -->
 
@@ -37,7 +37,7 @@ A screenshot or video with issue reproduced.
 
 ### Minimal reproducible example
 
-**Please** provide a code snippet with issue reproduction, this makes your issue _much_ easier to diagnose.
+**Please** provide a demo project or code snippet that reproduces the issue, this makes your issue _much_ easier to diagnose.
 
 <!--
 ```
