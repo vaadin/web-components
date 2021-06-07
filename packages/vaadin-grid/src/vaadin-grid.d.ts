@@ -124,8 +124,7 @@ export interface GridEventMap<TItem> extends HTMLElementEventMap, GridElementEve
 
 /**
  * `<vaadin-grid>` is a free, high quality data grid / data table Web Component. The content of the
- * the grid can be populated in two ways: imperatively by using renderer callback function and
- * declaratively by using Polymer's Templates.
+ * the grid can be populated by using renderer callback function.
  *
  * ### Quick Start
  *
@@ -193,26 +192,16 @@ export interface GridEventMap<TItem> extends HTMLElementEventMap, GridElementEve
  * };
  * ```
  *
- * Alternatively, the content can be provided with Polymer's Templates:
+ * The following properties are available in the `model` argument:
  *
- * #### Example:
- * ```html
- * <vaadin-grid items='[{"name": "John", "surname": "Lennon", "role": "singer"},
- * {"name": "Ringo", "surname": "Starr", "role": "drums"}]'>
- *   <vaadin-grid-column>
- *     <template class="header">Name</template>
- *     <template>[[item.name]]</template>
- *   </vaadin-grid-column>
- *   <vaadin-grid-column>
- *     <template class="header">Surname</template>
- *     <template>[[item.surname]]</template>
- *   </vaadin-grid-column>
- *   <vaadin-grid-column>
- *     <template class="header">Role</template>
- *     <template>[[item.role]]</template>
- *   </vaadin-grid-column>
- * </vaadin-grid>
- * ```
+ * Property name | Type | Description
+ * --------------|------|------------
+ * `index`| Number | The index of the item.
+ * `item` | String or Object | The item.
+ * `level` | Number | Number of the item's tree sublevel, starts from 0.
+ * `expanded` | Boolean | True if the item's tree sublevel is expanded.
+ * `selected` | Boolean | True if the item is selected.
+ * `detailsOpened` | Boolean | True if the item's row details are open.
  *
  * The following helper elements can be used for further customization:
  * - [`<vaadin-grid-column-group>`](#/elements/vaadin-grid-column-group)
@@ -223,19 +212,6 @@ export interface GridEventMap<TItem> extends HTMLElementEventMap, GridElementEve
  *
  * __Note that the helper elements must be explicitly imported.__
  * If you want to import everything at once you can use the `all-imports.html` bundle.
- *
- * A column template can be decorated with one the following class names to specify its purpose
- * - `header`: Marks a header template
- * - `footer`: Marks a footer template
- * - `row-details`: Marks a row details template
- *
- * The following built-in template variables can be bound to inside the column templates:
- * - `[[index]]`: Number representing the row index
- * - `[[item]]` and it's sub-properties: Data object (provided by a data provider / items array)
- * - `{{selected}}`: True if the item is selected (can be two-way bound)
- * - `{{detailsOpened}}`: True if the item has row details opened (can be two-way bound)
- * - `{{expanded}}`: True if the item has tree sublevel expanded (can be two-way bound)
- * - `[[level]]`: Number of the tree sublevel of the item, first level-items have 0
  *
  * ### Lazy Loading with Function Data Provider
  *

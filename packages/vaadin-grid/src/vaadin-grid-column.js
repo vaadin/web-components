@@ -683,6 +683,7 @@ class GridColumnElement extends ColumnBaseMixin(DirMixin(PolymerElement)) {
        *   - `model.expanded` Sublevel toggle state.
        *   - `model.level` Level of the tree represented with a horizontal offset of the toggle button.
        *   - `model.selected` Selected state.
+       *   - `model.detailsOpened` Details opened state.
        *
        * @type {GridBodyRenderer | null | undefined}
        */
