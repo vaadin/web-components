@@ -14,12 +14,20 @@ import '@vaadin/vaadin-text-field/src/vaadin-text-field.js';
  *
  * #### Example:
  * ```html
- * <vaadin-grid-column>
- *   <template class="header">
- *     <vaadin-grid-filter path="name.first"></vaadin-grid-filter>
- *   </template>
- *   <template>[[item.name.first]]</template>
- * </vaadin-grid-column>
+ * <vaadin-grid-column id="column"></vaadin-grid-column>
+ * ```
+ * ```js
+ * const column = document.querySelector('#column');
+ * column.headerRenderer = (root, column) => {
+ *   let filter = root.firstElementChild;
+ *   if (!filter) {
+ *      filter = document.createElement('vaadin-grid-filter');
+ *   }
+ *   filter.path = 'name.first';
+ * };
+ * column.renderer = (root, column, model) => {
+ *   root.textContent = model.item.name.first;
+ * };
  * ```
  *
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
