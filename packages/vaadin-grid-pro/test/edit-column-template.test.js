@@ -1,6 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { enter, esc, fixtureSync, space } from '@vaadin/testing-helpers';
+import '@vaadin/vaadin-template-renderer';
 import { createItems, dblclick, flushGrid, getCellEditor, getContainerCell } from './helpers.js';
 import '../vaadin-grid-pro.js';
 import '../vaadin-grid-pro-edit-column.js';
@@ -71,8 +72,8 @@ describe('edit column template', () => {
       input = getCellEditor(cell);
       input.value = 'new';
       enter(input);
-      expect(cell._renderer).to.be.not.ok;
-      expect(cell._template).to.equal(column._bodyTemplate);
+      expect(cell._renderer).to.equal(column.renderer);
+      // expect(cell._template).to.equal(column._bodyTemplate);
       expect(getCellEditor(cell)).to.be.not.ok;
       expect(cell._content.textContent).to.equal('0 new');
     });
@@ -83,8 +84,8 @@ describe('edit column template', () => {
       input = getCellEditor(cell);
       input.value = 'new';
       esc(input);
-      expect(cell._renderer).to.be.not.ok;
-      expect(cell._template).to.equal(column._bodyTemplate);
+      expect(cell._renderer).to.equal(column.renderer);
+      // expect(cell._template).to.equal(column._bodyTemplate);
       expect(getCellEditor(cell)).to.be.not.ok;
       expect(cell._content.textContent).to.equal(old);
     });
@@ -133,7 +134,8 @@ describe('edit column template', () => {
       input = cell._content.querySelector('input');
       input.value = 'New';
       enter(input);
-      expect(cell._template).to.equal(column._bodyTemplate);
+      expect(cell._renderer).to.equal(column.renderer);
+      // expect(cell._template).to.equal(column._bodyTemplate);
       expect(cell._content.textContent).to.equal('New');
       expect(cell._content.querySelector('input')).to.not.be.ok;
     });
@@ -156,15 +158,16 @@ describe('edit column template', () => {
       expect(column.editorType).to.be.equal('custom');
     });
 
-    it('should reset the column `editorType` to text when template is removed', () => {
-      column._editModeTemplate = null;
-      expect(column.editorType).to.be.equal('text');
-    });
+    // it('should reset the column `editorType` to text when template is removed', () => {
+    //   column._editModeTemplate = null;
 
-    it('should throw an error and remove renderer when added after template', () => {
-      column = grid.querySelector('#custom');
-      expect(() => (column.editModeRenderer = {})).to.throw(Error);
-      expect(column.editModeRenderer).to.be.not.ok;
-    });
+    //   expect(column.editorType).to.be.equal('text');
+    // });
+
+    // it('should throw an error and remove renderer when added after template', () => {
+    //   column = grid.querySelector('#custom');
+    //   expect(() => (column.editModeRenderer = {})).to.throw(Error);
+    //   expect(column.editModeRenderer).to.be.not.ok;
+    // });
   });
 });

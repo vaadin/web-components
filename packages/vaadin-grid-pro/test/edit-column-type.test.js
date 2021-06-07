@@ -4,6 +4,7 @@ import { arrowDown, arrowUp, enter, fixtureSync, keyDownChar, nextRender, space 
 import { TextFieldElement } from '@vaadin/vaadin-text-field/src/vaadin-text-field.js';
 import { SelectElement } from '@vaadin/vaadin-select/src/vaadin-select.js';
 import { CheckboxElement } from '@vaadin/vaadin-checkbox/src/vaadin-checkbox.js';
+import '@vaadin/vaadin-template-renderer';
 import { createItems, dblclick, flushGrid, getCellEditor, getContainerCell, onceOpened } from './helpers.js';
 import './not-animated-styles.js';
 import '../vaadin-grid-pro.js';
