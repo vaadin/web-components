@@ -35,7 +35,7 @@ class VirtualListElement extends ElementMixin(ThemableMixin(PolymerElement)) {
       <style>
         :host {
           display: block;
-          height: 200px;
+          height: 400px;
           overflow: auto;
           flex: auto;
           align-self: stretch;

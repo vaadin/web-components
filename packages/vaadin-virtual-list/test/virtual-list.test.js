@@ -10,7 +10,7 @@ describe('virtual-list', () => {
   });
 
   it('should have a default height', () => {
-    expect(list.offsetHeight).to.equal(200);
+    expect(list.offsetHeight).to.equal(400);
   });
 
   it('should override default height', () => {
