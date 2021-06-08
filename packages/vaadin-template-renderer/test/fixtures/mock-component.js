@@ -6,7 +6,9 @@ export class MockComponent extends HTMLElement {
   }
 
   connectedCallback() {
-    window.Vaadin.templateRendererCallback?.(this);
+    if (this.getAttribute('disable-template-renderer-callback') === null) {
+      window.Vaadin.templateRendererCallback(this);
+    }
   }
 
   get $() {
@@ -18,6 +20,10 @@ export class MockComponent extends HTMLElement {
   set renderer(renderer) {
     this.__renderer = renderer;
     this.render();
+  }
+
+  get renderer() {
+    return this.__renderer;
   }
 
   render() {
