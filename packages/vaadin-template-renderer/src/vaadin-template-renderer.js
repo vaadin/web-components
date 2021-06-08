@@ -1,9 +1,5 @@
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 
-import { GridElement } from '@vaadin/vaadin-grid/src/vaadin-grid.js';
-import { GridColumnElement } from '@vaadin/vaadin-grid/src/vaadin-grid-column.js';
-import { GridColumnGroupElement } from '@vaadin/vaadin-grid/src/vaadin-grid-column-group.js';
-
 import './vaadin-template-renderer-templatizer.js';
 import './vaadin-template-renderer-grid-templatizer.js';
 
@@ -49,16 +45,12 @@ function processGridColumnTemplate(column, template) {
 }
 
 function processTemplate(component, template) {
-  if (component instanceof GridElement) {
+  if (component.__gridElement) {
     processGridTemplate(component, template);
     return;
   }
 
-  if (
-    // eslint-disable-next-line prettier/prettier
-    component instanceof GridColumnElement ||
-    component instanceof GridColumnGroupElement
-  ) {
+  if (component.__gridColumnElement) {
     processGridColumnTemplate(component, template);
     return;
   }

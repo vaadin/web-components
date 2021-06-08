@@ -157,6 +157,17 @@ export const ColumnBaseMixin = (superClass) =>
         _footerRenderer: {
           type: Function,
           computed: '_computeFooterRenderer(footerRenderer, __initialized)'
+        },
+
+        /**
+         * An internal property that is mainly used by `vaadin-template-renderer`
+         * to identify grid column elements.
+         *
+         * @private
+         */
+        __gridColumnElement: {
+          type: Boolean,
+          value: true
         }
       };
     }

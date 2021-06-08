@@ -384,6 +384,17 @@ class GridElement extends ElementMixin(
       /** @private */
       isAttached: {
         value: false
+      },
+
+      /**
+       * An internal property that is mainly used by `vaadin-template-renderer`
+       * to identify grid elements.
+       *
+       * @private
+       */
+      __gridElement: {
+        type: Boolean,
+        value: true
       }
     };
   }
