@@ -93,7 +93,7 @@ interface ComboBoxLightElement<TItem = ComboBoxDefaultItem>
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-combo-box-light': ComboBoxLightElement<ComboBoxDefaultItem>;
+    'vaadin-combo-box-light': ComboBoxLightElement;
   }
 }
 

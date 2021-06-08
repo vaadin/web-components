@@ -242,7 +242,7 @@ interface ComboBoxElement<TItem = ComboBoxDefaultItem>
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-combo-box': ComboBoxElement<ComboBoxDefaultItem>;
+    'vaadin-combo-box': ComboBoxElement;
   }
 }
 
