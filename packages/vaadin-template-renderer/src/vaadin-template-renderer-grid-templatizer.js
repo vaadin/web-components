@@ -18,9 +18,9 @@ export class GridTemplatizer extends Templatizer {
    * <div>{{item}}</div> - not allowed.
    * <div>{{item.title}}</div> - allowed.
    *
-   * @private
+   * @protected
    */
-  __onItemPropertyChanged(instance, path, value) {
+  _onItemPropertyChanged(instance, path, value) {
     // Supports 2-way binding only for nested `item` properties.
     if (path === 'item') {
       return;
@@ -43,9 +43,9 @@ export class GridTemplatizer extends Templatizer {
    * Expands or collapses the item once the `expanded` property is changed.
    * The listener handles only user-fired changes.
    *
-   * @private
+   * @protected
    */
-  __onExpandedPropertyChanged(instance, _path, value) {
+  _onExpandedPropertyChanged(instance, _path, value) {
     // Skip if the value is changed by the templatizer.
     if (instance.__properties.expanded === value) {
       return;
@@ -62,9 +62,9 @@ export class GridTemplatizer extends Templatizer {
    * Selects or deselects the item once the `selected` property is changed.
    * The listener handles only user-fired changes.
    *
-   * @private
+   * @protected
    */
-  __onSelectedPropertyChanged(instance, _path, value) {
+  _onSelectedPropertyChanged(instance, _path, value) {
     // Skip if the value is changed by the templatizer.
     if (instance.__properties.selected === value) {
       return;
@@ -81,9 +81,9 @@ export class GridTemplatizer extends Templatizer {
    * Opens or closes the details for the item once the `detailsOpened` property is changed.
    * The listener handles only user-fired changes.
    *
-   * @private
+   * @protected
    */
-  __onDetailsOpenedPropertyChanged(instance, _path, value) {
+  _onDetailsOpenedPropertyChanged(instance, _path, value) {
     // Skip if the value is changed by the templatizer.
     if (instance.__properties.detailsOpened === value) {
       return;

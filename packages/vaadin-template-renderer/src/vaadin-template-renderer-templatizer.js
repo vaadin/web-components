@@ -121,7 +121,7 @@ export class Templatizer extends PolymerElement {
         // Capitalizes the property name
         rootProperty = rootProperty[0].toUpperCase() + rootProperty.slice(1);
 
-        const callback = `__on${rootProperty}PropertyChanged`;
+        const callback = `_on${rootProperty}PropertyChanged`;
 
         if (this[callback]) {
           this[callback](instance, path, value);
@@ -129,9 +129,6 @@ export class Templatizer extends PolymerElement {
       }
     });
   }
-
-  /** @private */
-  __templateInstancePropertyChanged() {}
 }
 
 customElements.define(Templatizer.is, Templatizer);
