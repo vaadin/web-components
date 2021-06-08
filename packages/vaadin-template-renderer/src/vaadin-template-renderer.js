@@ -18,7 +18,6 @@ function createRenderer(component, template, TemplatizerClass = Templatizer) {
   };
 
   template.__templatizer = templatizer;
-  renderer.__templatizer = templatizer;
 
   return renderer;
 }
