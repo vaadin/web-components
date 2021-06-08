@@ -110,6 +110,7 @@ The components below are licensed under the Apache License 2.0.
 | [`<vaadin-text-field>`](https://github.com/vaadin/web-components/tree/master/packages/vaadin-text-field) | [![npm version](https://badgen.net/npm/v/@vaadin/vaadin-text-field/next)](https://www.npmjs.com/package/@vaadin/vaadin-text-field) | [Issues](https://github.com/vaadin/web-components/labels/vaadin-text-field)
 | [`<vaadin-time-picker>`](https://github.com/vaadin/web-components/tree/master/packages/vaadin-time-picker) | [![npm version](https://badgen.net/npm/v/@vaadin/vaadin-time-picker/next)](https://www.npmjs.com/package/@vaadin/vaadin-time-picker) | [Issues](https://github.com/vaadin/web-components/labels/vaadin-time-picker)
 | [`<vaadin-upload>`](https://github.com/vaadin/web-components/tree/master/packages/vaadin-upload) | [![npm version](https://badgen.net/npm/v/@vaadin/vaadin-upload/next)](https://www.npmjs.com/package/@vaadin/vaadin-upload) | [Issues](https://github.com/vaadin/web-components/labels/vaadin-upload)
+| [`<vaadin-virtual-list>`](https://github.com/vaadin/web-components/tree/master/packages/vaadin-virtual-list) | [![npm version](https://badgen.net/npm/v/@vaadin/vaadin-virtual-list/next)](https://www.npmjs.com/package/@vaadin/vaadin-virtual-list) | [Issues](https://github.com/vaadin/web-components/labels/vaadin-virtual-list)
 
 ### Pro Components
 
