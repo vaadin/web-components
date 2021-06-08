@@ -1,14 +1,14 @@
 import { ComboBoxDataProvider } from './interfaces';
 
-declare function ComboBoxDataProviderMixin<T extends new (...args: any[]) => {}>(
+declare function ComboBoxDataProviderMixin<TItem, T extends new (...args: any[]) => {}>(
   base: T
-): T & ComboBoxDataProviderMixinConstructor;
+): T & ComboBoxDataProviderMixinConstructor<TItem>;
 
-interface ComboBoxDataProviderMixinConstructor {
-  new (...args: any[]): ComboBoxDataProviderMixin;
+interface ComboBoxDataProviderMixinConstructor<TItem> {
+  new (...args: any[]): ComboBoxDataProviderMixin<TItem>;
 }
 
-interface ComboBoxDataProviderMixin {
+interface ComboBoxDataProviderMixin<TItem> {
   /**
    * Number of items fetched at a time from the dataprovider.
    * @attr {number} page-size
@@ -33,7 +33,7 @@ interface ComboBoxDataProviderMixin {
    *   - `items` Current page of items
    *   - `size` Total number of items.
    */
-  dataProvider: ComboBoxDataProvider | null | undefined;
+  dataProvider: ComboBoxDataProvider<TItem> | null | undefined;
 
   /**
    * Clears the cached pages and reloads data from dataprovider when needed.

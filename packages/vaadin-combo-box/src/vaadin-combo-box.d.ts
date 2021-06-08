@@ -1,16 +1,16 @@
 import { TextFieldElement } from '@vaadin/vaadin-text-field/vaadin-text-field';
 
-import { ControlStateMixin } from '@vaadin/vaadin-control-state-mixin/vaadin-control-state-mixin.js';
+import { ControlStateMixin } from '@vaadin/vaadin-control-state-mixin/vaadin-control-state-mixin';
 
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin';
 
-import { ComboBoxMixin } from './vaadin-combo-box-mixin.js';
+import { ComboBoxMixin } from './vaadin-combo-box-mixin';
 
-import { ComboBoxDataProviderMixin } from './vaadin-combo-box-data-provider-mixin.js';
+import { ComboBoxDataProviderMixin } from './vaadin-combo-box-data-provider-mixin';
 
-import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
+import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin';
 
-import { ComboBoxEventMap } from './interfaces';
+import { ComboBoxDefaultItem, ComboBoxEventMap } from './interfaces';
 
 /**
  * `<vaadin-combo-box>` is a combo box element combining a dropdown list with an
@@ -156,9 +156,7 @@ import { ComboBoxEventMap } from './interfaces';
  * @fires {CustomEvent} selected-item-changed - Fired when the `selectedItem` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  */
-declare class ComboBoxElement extends ElementMixin(
-  ControlStateMixin(ComboBoxDataProviderMixin(ComboBoxMixin(ThemableMixin(HTMLElement))))
-) {
+declare class ComboBoxElement<TItem = ComboBoxDefaultItem> extends HTMLElement {
   /**
    * Focusable element used by vaadin-control-state-mixin
    */
@@ -222,18 +220,25 @@ declare class ComboBoxElement extends ElementMixin(
    */
   clearButtonVisible: boolean;
 
-  addEventListener<K extends keyof ComboBoxEventMap>(
+  addEventListener<K extends keyof ComboBoxEventMap<TItem>>(
     type: K,
-    listener: (this: ComboBoxElement, ev: ComboBoxEventMap[K]) => void,
+    listener: (this: ComboBoxElement<TItem>, ev: ComboBoxEventMap<TItem>[K]) => void,
     options?: boolean | AddEventListenerOptions
   ): void;
 
-  removeEventListener<K extends keyof ComboBoxEventMap>(
+  removeEventListener<K extends keyof ComboBoxEventMap<TItem>>(
     type: K,
-    listener: (this: ComboBoxElement, ev: ComboBoxEventMap[K]) => void,
+    listener: (this: ComboBoxElement<TItem>, ev: ComboBoxEventMap<TItem>[K]) => void,
     options?: boolean | EventListenerOptions
   ): void;
 }
+
+interface ComboBoxElement<TItem = ComboBoxDefaultItem>
+  extends ElementMixin,
+    ControlStateMixin,
+    ComboBoxDataProviderMixin<TItem>,
+    ComboBoxMixin<TItem>,
+    ThemableMixin {}
 
 declare global {
   interface HTMLElementTagNameMap {
