@@ -3,8 +3,8 @@ import { GridElement } from './vaadin-grid.js';
 
 export type GridBodyRenderer<TItem> = (
   root: HTMLElement,
-  column?: GridColumnElement<TItem>,
-  model?: GridItemModel<TItem>
+  column: GridColumnElement<TItem>,
+  model: GridItemModel<TItem>
 ) => void;
 
 export type GridCellClassNameGenerator<TItem> = (
@@ -51,7 +51,7 @@ export interface GridEventContext<TItem> {
   level?: number;
 }
 
-export type GridHeaderFooterRenderer<TItem> = (root: HTMLElement, column?: GridColumnElement<TItem>) => void;
+export type GridHeaderFooterRenderer<TItem> = (root: HTMLElement, column: GridColumnElement<TItem>) => void;
 
 export type GridDefaultItem = any;
 
