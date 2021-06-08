@@ -5,7 +5,7 @@ import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import '@vaadin/vaadin-template-renderer';
 import '../vaadin-grid.js';
 import '../vaadin-grid-column-group.js';
-import { flushGrid, getCellContent } from './helpers.js';
+import { flushGrid, getContainerCell } from './helpers.js';
 
 describe('column group', () => {
   let group, columns;
@@ -187,10 +187,10 @@ describe('column group', () => {
 
       beforeEach(() => {
         if (templateName === 'header') {
-          cell = grid.$.header.children[0];
+          cell = getContainerCell(grid.$.header, 0, 0);
         }
         if (templateName === 'footer') {
-          cell = grid.$.footer.children[1];
+          cell = getContainerCell(grid.$.footer, 1, 0);
         }
       });
 
@@ -202,7 +202,7 @@ describe('column group', () => {
         column.appendChild(template);
         await nextRender();
 
-        expect(getCellContent(cell).textContent).to.equal('content');
+        expect(cell._content.textContent).to.equal('content');
       });
 
       it(`should observe for replacing ${templateName} templates`, async () => {
@@ -216,13 +216,13 @@ describe('column group', () => {
         column.appendChild(template1);
         await nextRender();
 
-        expect(getCellContent(cell).textContent).to.equal('content1');
+        expect(cell._content.textContent).to.equal('content1');
 
         column.removeChild(template1);
         column.appendChild(template2);
         await nextRender();
 
-        expect(getCellContent(cell).textContent).to.equal('content2');
+        expect(cell._content.textContent).to.equal('content2');
       });
     });
   });

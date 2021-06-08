@@ -505,13 +505,13 @@ describe('column', () => {
 
       beforeEach(() => {
         if (templateName === 'header') {
-          cell = grid.$.header.children[0];
+          cell = getContainerCell(grid.$.header, 0, 0);
         }
         if (templateName === 'footer') {
-          cell = grid.$.footer.children[0];
+          cell = getContainerCell(grid.$.footer, 0, 0);
         }
         if (templateName === 'body') {
-          cell = grid.$.items.children[0];
+          cell = getContainerCell(grid.$.items, 0, 0);
         }
       });
 
@@ -523,7 +523,7 @@ describe('column', () => {
         column.appendChild(template);
         await nextRender();
 
-        expect(getCellContent(cell).textContent).to.equal('content');
+        expect(cell._content.textContent).to.equal('content');
       });
 
       it(`should observe for replacing ${templateName} templates`, async () => {
@@ -537,13 +537,13 @@ describe('column', () => {
         column.appendChild(template1);
         await nextRender();
 
-        expect(getCellContent(cell).textContent).to.equal('content1');
+        expect(cell._content.textContent).to.equal('content1');
 
         column.removeChild(template1);
         column.appendChild(template2);
         await nextRender();
 
-        expect(getCellContent(cell).textContent).to.equal('content2');
+        expect(cell._content.textContent).to.equal('content2');
       });
     });
   });
