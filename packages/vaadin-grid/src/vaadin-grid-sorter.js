@@ -36,6 +36,7 @@ document.head.appendChild($_documentContainer.content);
  *   let sorter = root.firstElementChild;
  *   if (!sorter) {
  *     sorter = document.createElement('vaadin-grid-sorter');
+ *     root.appendChild(sorter);
  *   }
  *   sorter.path = 'name.first';
  * };

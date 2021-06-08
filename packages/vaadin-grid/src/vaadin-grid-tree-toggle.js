@@ -38,6 +38,7 @@ document.head.appendChild($_documentContainer.content);
  *   if (!treeToggle) {
  *     treeToggle = document.createElement('vaadin-grid-tree-toggle');
  *     treeToggle.addEventListener('expanded-changed', () => { ... });
+ *     root.appendChild(treeToggle);
  *   }
  *   treeToggle.leaf = !model.item.hasChildren;
  *   treeToggle.level = level;

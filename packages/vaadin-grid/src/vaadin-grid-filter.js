@@ -22,6 +22,7 @@ import '@vaadin/vaadin-text-field/src/vaadin-text-field.js';
  *   let filter = root.firstElementChild;
  *   if (!filter) {
  *     filter = document.createElement('vaadin-grid-filter');
+ *     root.appendChild(filter);
  *   }
  *   filter.path = 'name.first';
  * };
