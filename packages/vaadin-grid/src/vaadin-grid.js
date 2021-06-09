@@ -902,7 +902,7 @@ class GridElement extends ElementMixin(
       // Sticky (or translated) footer in a flexbox host doesn't get included in
       // the scroll height calculation on FF. This is a workaround for the issue.
       this.$.items.style.paddingBottom = 0;
-      if (!this.heightByRows || !this.allRowsVisible) {
+      if (!this.heightByRows && !this.allRowsVisible) {
         this.$.items.style.paddingBottom = `${this.$.footer.offsetHeight}px`;
       }
     }
