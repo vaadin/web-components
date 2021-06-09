@@ -72,11 +72,13 @@ describe('vaadin-template-renderer', () => {
   });
 
   it('should throw when using both a template and a renderer', () => {
+    const stub = sinon.stub(window.Vaadin, 'templateRendererCallback');
     const component = fixtureSync(`
-      <mock-component disable-template-renderer-callback>
+      <mock-component>
         <template>foo</template>
       </mock-component>
     `);
+    stub.restore();
 
     component.renderer = () => {};
 

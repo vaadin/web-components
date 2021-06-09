@@ -6,9 +6,7 @@ export class MockComponent extends HTMLElement {
   }
 
   connectedCallback() {
-    if (this.getAttribute('disable-template-renderer-callback') === null) {
-      window.Vaadin.templateRendererCallback(this);
-    }
+    window.Vaadin.templateRendererCallback(this);
   }
 
   get $() {
