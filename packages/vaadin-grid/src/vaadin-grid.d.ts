@@ -349,13 +349,29 @@ export interface GridEventMap<TItem> extends HTMLElementEventMap, GridElementEve
  */
 declare class GridElement<TItem = GridDefaultItem> extends HTMLElement {
   /**
+   * **Deprecated**
+   *
+   * See [`allRowsVisible`](#/elements/vaadin-grid#property-allRowsVisible)
+   *
    * If true, the grid's height is defined by its rows.
    *
    * Effectively, this disables the grid's virtual scrolling so that all the rows are rendered in the DOM at once.
    * If the grid has a large number of items, using the feature is discouraged to avoid performance issues.
+   *
    * @attr {boolean} height-by-rows
+   * @deprecated since version 14.7
    */
   heightByRows: boolean;
+
+  /**
+   * If true, the grid's height is defined by its rows.
+   *
+   * Effectively, this disables the grid's virtual scrolling so that all the rows are rendered in the DOM at once.
+   * If the grid has a large number of items, using the feature is discouraged to avoid performance issues.
+   * @attr {boolean} all-rows-visible
+   * @since 14.7
+   */
+  allRowsVisible: boolean;
 
   __itemsReceived(): void;
 

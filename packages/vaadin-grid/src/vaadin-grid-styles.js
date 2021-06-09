@@ -39,20 +39,23 @@ registerStyles(
       left: 0;
     }
 
-    :host([height-by-rows]) {
+    :host([height-by-rows]),
+    :host([all-rows-visible]) {
       height: auto;
       align-self: flex-start;
       flex-grow: 0;
       width: 100%;
     }
 
-    :host([height-by-rows]) #scroller {
+    :host([height-by-rows]) #scroller,
+    :host([all-rows-visible]) #scroller {
       width: 100%;
       height: 100%;
       position: relative;
     }
 
-    :host([height-by-rows]) #items {
+    :host([height-by-rows]) #items,
+    :host([all-rows-visible]) #items {
       min-height: 1px;
     }
 
