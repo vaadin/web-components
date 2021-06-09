@@ -1,5 +1,6 @@
 import { ElementMixin } from '@vaadin/vaadin-element-mixin';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin';
+import { GridBodyRenderer } from '../../src/interfaces';
 import { A11yMixin } from '../../src/vaadin-grid-a11y-mixin';
 import { ActiveItemMixin } from '../../src/vaadin-grid-active-item-mixin';
 import { ArrayDataProviderMixin } from '../../src/vaadin-grid-array-data-provider-mixin';
@@ -129,6 +130,18 @@ narrowedGrid.addEventListener('grid-drop', (event) => {
 /* GridColumnElement */
 const genericColumn = document.createElement('vaadin-grid-column');
 assertType<GridColumnElement>(genericColumn);
+
+const bodyRenderer: GridBodyRenderer<TestGridItem> = (root, column, model) => {
+  assertType<HTMLElement>(root);
+  assertType<GridColumnElement>(column);
+  assertType<TestGridItem>(model.item);
+};
+genericColumn.renderer = bodyRenderer;
+
+genericColumn.headerRenderer = (root, column) => {
+  assertType<HTMLElement>(root);
+  assertType<GridColumnElement>(column);
+};
 
 const narrowedColumn = genericColumn as GridColumnElement<TestGridItem>;
 assertType<HTMLElement>(narrowedColumn);
