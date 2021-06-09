@@ -194,7 +194,7 @@ class DatePickerElement extends ElementMixin(
   }
 
   static get version() {
-    return '21.0.0-alpha5';
+    return '21.0.0-alpha6';
   }
 
   static get properties() {
