@@ -226,7 +226,7 @@ describe('making all rows visible using heightByRows', () => {
       </vaadin-grid>
     `);
     const rows = 100;
-    grid.items = grid.items = Array(...new Array(rows)).map(() => {});
+    grid.items = Array.from({ length: rows });
     flushGrid(grid);
 
     grid.heightByRows = true;
@@ -276,7 +276,7 @@ describe('making all rows visible using allRowsVisible', () => {
       </vaadin-grid>
     `);
     const rows = 100;
-    grid.items = grid.items = Array(...new Array(rows)).map(() => {});
+    grid.items = Array.from({ length: rows });
     flushGrid(grid);
 
     grid.allRowsVisible = true;
