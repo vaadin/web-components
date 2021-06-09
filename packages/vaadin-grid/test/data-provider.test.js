@@ -3,6 +3,7 @@ import sinon from 'sinon';
 import { aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+import '@vaadin/vaadin-template-renderer';
 import {
   flushGrid,
   getCellContent,
@@ -353,10 +354,10 @@ describe('data provider', () => {
 
           it('should assign expanded property', () => {
             const cell = getContainerCell(grid.$.items, 0, 0);
-            let model = cell._instance ? cell._instance : grid.__getRowModel(cell.parentElement);
+            let model = cell._content.__templateInstance ?? grid.__getRowModel(cell.parentElement);
             expect(model.expanded).to.be.false;
             expandIndex(grid, 0);
-            model = cell._instance ? cell._instance : grid.__getRowModel(cell.parentElement);
+            model = cell._content.__templateInstance ?? grid.__getRowModel(cell.parentElement);
             expect(model.expanded).to.be.true;
           });
 
@@ -365,15 +366,15 @@ describe('data provider', () => {
             expandIndex(grid, 1);
 
             let cell = getContainerCell(grid.$.items, 0, 0);
-            let model = cell._instance ? cell._instance : grid.__getRowModel(cell.parentElement);
+            let model = cell._content.__templateInstance ?? grid.__getRowModel(cell.parentElement);
             expect(model.level).to.equal(0);
 
             cell = getContainerCell(grid.$.items, 1, 0);
-            model = cell._instance ? cell._instance : grid.__getRowModel(cell.parentElement);
+            model = cell._content.__templateInstance ?? grid.__getRowModel(cell.parentElement);
             expect(model.level).to.equal(1);
 
             cell = getContainerCell(grid.$.items, 2, 0);
-            model = cell._instance ? cell._instance : grid.__getRowModel(cell.parentElement);
+            model = cell._content.__templateInstance ?? grid.__getRowModel(cell.parentElement);
             expect(model.level).to.equal(2);
           });
 
@@ -382,7 +383,7 @@ describe('data provider', () => {
             flushGrid(grid);
 
             const cell = getContainerCell(grid.$.items, 10, 0);
-            const model = cell._instance ? cell._instance : grid.__getRowModel(cell.parentElement);
+            const model = cell._content.__templateInstance ?? grid.__getRowModel(cell.parentElement);
             expect(model.level).to.equal(1);
           });
 
@@ -393,12 +394,12 @@ describe('data provider', () => {
             expandIndex(grid, 0);
 
             let cell = getContainerCell(grid.$.items, 1, 0);
-            let model = cell._instance ? cell._instance : grid.__getRowModel(cell.parentElement);
+            let model = cell._content.__templateInstance ?? grid.__getRowModel(cell.parentElement);
             expect(model.level).to.equal(1);
 
             grid.clearCache();
             cell = getContainerCell(grid.$.items, 1, 0);
-            model = cell._instance ? cell._instance : grid.__getRowModel(cell.parentElement);
+            model = cell._content.__templateInstance ?? grid.__getRowModel(cell.parentElement);
             expect(model.level).to.equal(1);
           });
         });

@@ -69,10 +69,6 @@ describe('renderers', () => {
       expect(getCell(grid, 1)._content.textContent).to.be.empty;
     });
 
-    it('should throw an error when setting a template if there is already a renderer', () => {
-      expect(() => (column._bodyTemplate = {})).to.throw(Error);
-    });
-
     it('should initialize with instance properties', () => {
       column.renderer = function (root, owner, model) {
         expect(model.selected).to.be.false;
@@ -127,10 +123,6 @@ describe('renderers', () => {
         flushGrid(grid);
         expect(getBodyCellContent(grid, 0, 1).innerHTML).to.eql('0 test');
         expect(getBodyCellContent(grid, 1, 1).innerHTML).to.eql('1 test');
-      });
-
-      it('should throw an error when setting a template if there is already a renderer', () => {
-        expect(() => (grid._rowDetailsTemplate = {})).to.throw(Error);
       });
 
       it('should not invoke body cell renderer on assign', () => {
@@ -210,10 +202,6 @@ describe('renderers', () => {
       expect(headerCell._content.textContent).to.eql('header');
     });
 
-    it('should throw an error when setting a template if there is already a renderer', () => {
-      expect(() => (column._headerTemplate = {})).to.throw(Error);
-    });
-
     it('should have a visible header with headerRenderer', () => {
       column.headerRenderer = (root) => (root.textContent = 'foo');
       const newColumn = document.createElement('vaadin-grid-column');
@@ -260,10 +248,6 @@ describe('renderers', () => {
       expect(footerCell._content.textContent).to.eql('footer');
     });
 
-    it('should throw an error when setting a template if there is already a renderer', () => {
-      expect(() => (column._footerTemplate = {})).to.throw(Error);
-    });
-
     it('should clear the content when changing the renderer', () => {
       column.footerRenderer = (_root, _column) => {};
 
@@ -285,50 +269,6 @@ describe('renderers', () => {
       renderers.forEach((renderer) => {
         expect(renderer.called).to.be.true;
       });
-    });
-  });
-});
-
-describe('templates', () => {
-  let grid, column;
-
-  beforeEach(() => {
-    grid = fixtureSync(`
-      <vaadin-grid>
-        <template class="row-details"></template>
-        <vaadin-grid-column>
-          <template class="header"></template>
-          <template></template>
-          <template class="footer"></template>
-        </vaadin-grid-column>
-      </vaadin-grid>
-    `);
-    column = grid.querySelector('vaadin-grid-column');
-    grid.items = [{ foo: 'bar' }, { foo: 'baz' }];
-    flushGrid(grid);
-  });
-
-  describe('column cells', () => {
-    it('should throw an error when setting a renderer if there is already a template', () => {
-      expect(() => (column.renderer = () => {})).to.throw(Error);
-    });
-  });
-
-  describe('row details', () => {
-    it('should throw an error when setting a renderer if there is already a template', () => {
-      expect(() => (grid.rowDetailsRenderer = () => {})).to.throw(Error);
-    });
-  });
-
-  describe('header cell', () => {
-    it('should throw an error when setting a renderer if there is already a template', () => {
-      expect(() => (column.headerRenderer = () => {})).to.throw(Error);
-    });
-  });
-
-  describe('footer cell', () => {
-    it('should throw an error when setting a renderer if there is already a template', () => {
-      expect(() => (column.footerRenderer = () => {})).to.throw(Error);
     });
   });
 });

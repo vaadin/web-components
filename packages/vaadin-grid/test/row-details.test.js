@@ -1,6 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { aTimeout, click, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { aTimeout, click, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import '@vaadin/vaadin-template-renderer';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import '@polymer/polymer/lib/elements/dom-repeat.js';
 import {
@@ -269,7 +270,7 @@ describe('row details', () => {
       expect(getBodyCellContent(grid, 0, 1).textContent.trim()).to.equal('0-details');
     });
 
-    it('should change the details template', () => {
+    it('should change the details template', async () => {
       grid.openItemDetails('foo');
 
       const newTemplate = document.createElement('template');
@@ -278,7 +279,10 @@ describe('row details', () => {
 
       container.innerHTML = '';
       container.appendChild(newTemplate);
+
+      await nextRender();
       flushGrid(grid);
+
       expect(getBodyCellContent(grid, 0, 1).textContent.trim()).to.equal('foo-bar');
     });
   });

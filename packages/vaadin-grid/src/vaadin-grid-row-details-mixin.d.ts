@@ -14,8 +14,6 @@ interface RowDetailsMixin<TItem> {
    */
   detailsOpenedItems: Array<TItem | null> | null | undefined;
 
-  _rowDetailsTemplate: HTMLTemplateElement | null;
-
   /**
    * Custom function for rendering the content of the row details.
    * Receives three arguments:
@@ -26,6 +24,9 @@ interface RowDetailsMixin<TItem> {
    *   the rendered item, contains:
    *   - `model.index` The index of the item.
    *   - `model.item` The item.
+   *   - `model.level` The number of the item's tree sublevel, starts from 0.
+   *   - `model.expanded` True if the item's tree sublevel is expanded.
+   *   - `model.selected` True if the item is selected.
    */
   rowDetailsRenderer: GridRowDetailsRenderer<TItem> | null | undefined;
 
@@ -33,7 +34,7 @@ interface RowDetailsMixin<TItem> {
 
   _configureDetailsCell(cell: HTMLElement): void;
 
-  _toggleDetailsCell(row: HTMLElement, item: TItem): void;
+  _toggleDetailsCell(row: HTMLElement, detailsOpened: boolean): void;
 
   _updateDetailsCellHeights(): void;
 

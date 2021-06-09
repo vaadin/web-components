@@ -8,7 +8,7 @@ import './vaadin-grid-tree-toggle.js';
 
 /**
  * `<vaadin-grid-tree-column>` is a helper element for the `<vaadin-grid>`
- * that provides default template and functionality for toggling tree/hierarchical items.
+ * that provides default renderer and functionality for toggling tree/hierarchical items.
  *
  * #### Example:
  * ```html
@@ -43,9 +43,7 @@ class GridTreeColumnElement extends GridColumnElement {
   }
 
   static get observers() {
-    return [
-      '_onBodyTemplateOrRendererOrBindingChanged(_bodyTemplate, _renderer, _cells, _cells.*, path, itemHasChildrenPath)'
-    ];
+    return ['_onRendererOrBindingChanged(_renderer, _cells, _cells.*, path, itemHasChildrenPath)'];
   }
 
   constructor() {

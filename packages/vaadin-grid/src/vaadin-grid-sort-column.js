@@ -47,9 +47,7 @@ class GridSortColumnElement extends GridColumnElement {
   }
 
   static get observers() {
-    return [
-      '_onHeaderTemplateOrRendererOrBindingChanged(_headerTemplate, _headerRenderer, _headerCell, path, header, direction)'
-    ];
+    return ['_onHeaderRendererOrBindingChanged(_headerRenderer, _headerCell, path, header, direction)'];
   }
 
   constructor() {

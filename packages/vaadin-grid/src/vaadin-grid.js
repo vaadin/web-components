@@ -40,8 +40,7 @@ const TOUCH_DEVICE = (() => {
 
 /**
  * `<vaadin-grid>` is a free, high quality data grid / data table Web Component. The content of the
- * the grid can be populated in two ways: imperatively by using renderer callback function and
- * declaratively by using Polymer's Templates.
+ * the grid can be populated by using renderer callback function.
  *
  * ### Quick Start
  *
@@ -109,26 +108,16 @@ const TOUCH_DEVICE = (() => {
  * };
  * ```
  *
- * Alternatively, the content can be provided with Polymer's Templates:
+ * The following properties are available in the `model` argument:
  *
- * #### Example:
- * ```html
- * <vaadin-grid items='[{"name": "John", "surname": "Lennon", "role": "singer"},
- * {"name": "Ringo", "surname": "Starr", "role": "drums"}]'>
- *   <vaadin-grid-column>
- *     <template class="header">Name</template>
- *     <template>[[item.name]]</template>
- *   </vaadin-grid-column>
- *   <vaadin-grid-column>
- *     <template class="header">Surname</template>
- *     <template>[[item.surname]]</template>
- *   </vaadin-grid-column>
- *   <vaadin-grid-column>
- *     <template class="header">Role</template>
- *     <template>[[item.role]]</template>
- *   </vaadin-grid-column>
- * </vaadin-grid>
- * ```
+ * Property name | Type | Description
+ * --------------|------|------------
+ * `index`| Number | The index of the item.
+ * `item` | String or Object | The item.
+ * `level` | Number | Number of the item's tree sublevel, starts from 0.
+ * `expanded` | Boolean | True if the item's tree sublevel is expanded.
+ * `selected` | Boolean | True if the item is selected.
+ * `detailsOpened` | Boolean | True if the item's row details are open.
  *
  * The following helper elements can be used for further customization:
  * - [`<vaadin-grid-column-group>`](#/elements/vaadin-grid-column-group)
@@ -139,19 +128,6 @@ const TOUCH_DEVICE = (() => {
  *
  * __Note that the helper elements must be explicitly imported.__
  * If you want to import everything at once you can use the `all-imports.html` bundle.
- *
- * A column template can be decorated with one the following class names to specify its purpose
- * - `header`: Marks a header template
- * - `footer`: Marks a footer template
- * - `row-details`: Marks a row details template
- *
- * The following built-in template variables can be bound to inside the column templates:
- * - `[[index]]`: Number representing the row index
- * - `[[item]]` and it's sub-properties: Data object (provided by a data provider / items array)
- * - `{{selected}}`: True if the item is selected (can be two-way bound)
- * - `{{detailsOpened}}`: True if the item has row details opened (can be two-way bound)
- * - `{{expanded}}`: True if the item has tree sublevel expanded (can be two-way bound)
- * - `[[level]]`: Number of the tree sublevel of the item, first level-items have 0
  *
  * ### Lazy Loading with Function Data Provider
  *
@@ -408,6 +384,17 @@ class GridElement extends ElementMixin(
       /** @private */
       isAttached: {
         value: false
+      },
+
+      /**
+       * An internal property that is mainly used by `vaadin-template-renderer`
+       * to identify grid elements.
+       *
+       * @private
+       */
+      __gridElement: {
+        type: Boolean,
+        value: true
       }
     };
   }
@@ -485,6 +472,10 @@ class GridElement extends ElementMixin(
     });
 
     new ResizeObserver(() => setTimeout(() => this.__updateFooterPositioning())).observe(this.$.footer);
+
+    if (window.Vaadin && window.Vaadin.templateRendererCallback) {
+      window.Vaadin.templateRendererCallback(this);
+    }
   }
 
   /**
@@ -711,7 +702,7 @@ class GridElement extends ElementMixin(
           cell.setAttribute('part', 'cell body-cell');
           row.appendChild(cell);
 
-          if (index === cols.length - 1 && (this._rowDetailsTemplate || this.rowDetailsRenderer)) {
+          if (index === cols.length - 1 && this.rowDetailsRenderer) {
             // Add details cell as last cell to body rows
             this._detailsCells = this._detailsCells || [];
             const detailsCell = this._detailsCells.filter((cell) => cell._vacant)[0] || this._createCell('td');
@@ -781,9 +772,9 @@ class GridElement extends ElementMixin(
         return false;
       }
       if (row.parentElement === this.$.header) {
-        if (column.headerRenderer || column._headerTemplate) {
+        if (column.headerRenderer) {
           // The cell is the header cell of a column that has a header renderer
-          // or a header template -> row should be visible
+          // -> row should be visible
           return true;
         }
         if (column.header === null) {
@@ -796,9 +787,9 @@ class GridElement extends ElementMixin(
           return true;
         }
       } else {
-        if (column.footerRenderer || column._footerTemplate) {
+        if (column.footerRenderer) {
           // The cell is the footer cell of a column that has a footer renderer
-          // or a footer template -> row should be visible
+          // -> row should be visible
           return true;
         }
       }
@@ -912,12 +903,6 @@ class GridElement extends ElementMixin(
       if (cell._renderer) {
         const owner = cell._column || this;
         cell._renderer.call(owner, cell._content, owner, model);
-      } else if (cell._instance) {
-        cell._instance.__detailsOpened__ = model.detailsOpened;
-        cell._instance.__selected__ = model.selected;
-        cell._instance.__level__ = model.level;
-        cell._instance.__expanded__ = model.expanded;
-        cell._instance.setProperties(model);
       }
     });
 
@@ -975,7 +960,7 @@ class GridElement extends ElementMixin(
       level: this._getIndexLevel(row.index),
       expanded: this._isExpanded(row._item),
       selected: this._isSelected(row._item),
-      detailsOpened: !!(this._rowDetailsTemplate || this.rowDetailsRenderer) && this._isDetailsOpened(row._item)
+      detailsOpened: !!this.rowDetailsRenderer && this._isDetailsOpened(row._item)
     };
   }
 

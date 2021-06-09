@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import '@vaadin/vaadin-template-renderer';
 import {
-  flushColumns,
   flushGrid,
   getCellContent,
   getContainerCellContent,
@@ -178,14 +178,14 @@ describe('column groups', () => {
     it('should have empty header', () => {
       const cells = header.querySelectorAll('[part~="cell"]');
       expect(cells).not.to.be.empty;
-      cells.forEach((cell) => expect(cell._instance).to.be.not.ok);
+      cells.forEach((cell) => expect(cell._content.__templateInstance).to.be.not.ok);
     });
 
     it('should have empty footer', () => {
       const cells = footer.querySelectorAll('[part~="cell"]');
       expect(cells).not.to.be.empty;
 
-      cells.forEach((cell) => expect(cell._instance).to.be.not.ok);
+      cells.forEach((cell) => expect(cell._content.__templateInstance).to.be.not.ok);
     });
 
     it('should have no visible header rows', () => {
@@ -212,12 +212,12 @@ describe('column groups', () => {
         expect(getHeaderCellContent(0, 1).trim()).to.equal('foo');
       });
 
-      it('should not override header template content', () => {
+      it('should not override header template content', async () => {
         const template = document.createElement('template');
         template.innerHTML = 'foo';
         template.classList.add('header');
         emptyGroup.appendChild(template);
-        flushColumns(grid);
+        await nextRender();
         emptyGroup.header = 'Bar';
         expect(getHeaderCellContent(0, 1).trim()).to.equal('foo');
       });

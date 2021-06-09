@@ -1,5 +1,6 @@
 import { click, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers/dist/index-no-side-effects.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
+import '@vaadin/vaadin-template-renderer';
 import { flushGrid, nextResize } from '../../helpers.js';
 import { users } from '../users.js';
 import '../../../theme/lumo/vaadin-grid.js';

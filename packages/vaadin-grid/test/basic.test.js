@@ -1,6 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { aTimeout, fixtureSync, oneEvent } from '@vaadin/testing-helpers';
+import '@vaadin/vaadin-template-renderer';
 import {
   flushGrid,
   getBodyCellContent,

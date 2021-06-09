@@ -31,13 +31,14 @@ declare class GridProEditColumnElement<TItem = GridDefaultItem> extends GridColu
    *
    * - `root` The cell content DOM element. Append your editor component to it.
    * - `column` The `<vaadin-grid-pro-edit-column>` element.
-   * - `rowData` The object with the properties related with
+   * - `model` The object with the properties related with
    *   the rendered item, contains:
-   *   - `rowData.index` The index of the item.
-   *   - `rowData.item` The item.
-   *   - `rowData.expanded` Sublevel toggle state.
-   *   - `rowData.level` Level of the tree represented with a horizontal offset of the toggle button.
-   *   - `rowData.selected` Selected state.
+   *   - `model.index` The index of the item.
+   *   - `model.item` The item.
+   *   - `model.expanded` Sublevel toggle state.
+   *   - `model.level` Level of the tree represented with a horizontal offset of the toggle button.
+   *   - `model.selected` Selected state.
+   *   - `model.detailsOpened` Details opened state.
    */
   editModeRenderer: GridBodyRenderer<TItem> | null | undefined;
 
@@ -53,8 +54,7 @@ declare class GridProEditColumnElement<TItem = GridDefaultItem> extends GridColu
    * - `checkbox` - renders a checkbox
    * - `select` - renders a select with a list of items passed as `editorOptions`
    *
-   * Editor type is set to `custom` when either `editModeRenderer` is set,
-   * or editor template provided for the column.
+   * Editor type is set to `custom` when `editModeRenderer` is set.
    * @attr {text|checkbox|select|custom} editor-type
    */
   editorType: GridProEditorType;
@@ -64,21 +64,6 @@ declare class GridProEditColumnElement<TItem = GridDefaultItem> extends GridColu
    * @attr {string} editor-value-path
    */
   editorValuePath: string;
-
-  /**
-   * Override body template preparation to take editor into account.
-   */
-  _prepareBodyTemplate(): HTMLTemplateElement | null;
-
-  /**
-   * Override template filtering to take editor into account.
-   */
-  _selectFirstTemplate(header?: boolean, footer?: boolean, editor?: boolean): HTMLTemplateElement | null;
-
-  /**
-   * Override template search to take editor into account.
-   */
-  _findTemplate(header: boolean, footer: boolean, editor?: boolean): HTMLTemplateElement | null;
 
   _getEditorTagName(cell: HTMLElement): string;
 

@@ -94,7 +94,7 @@ class GridSelectionColumnElement extends GridColumnElement {
   static get observers() {
     return [
       '__onSelectAllChanged(selectAll)',
-      '_onHeaderTemplateOrRendererOrBindingChanged(_headerTemplate, _headerRenderer, _headerCell, path, header, selectAll, __indeterminate, __selectAllHidden)'
+      '_onHeaderRendererOrBindingChanged(_headerRenderer, _headerCell, path, header, selectAll, __indeterminate, __selectAllHidden)'
     ];
   }
 

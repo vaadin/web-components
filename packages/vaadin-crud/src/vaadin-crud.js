@@ -63,17 +63,15 @@ import './vaadin-crud-form.js';
  *
  * #### Example:
  * ```html
- * <vaadin-crud items='[{"name": "John", "surname": "Lennon", "role": "singer"},
- *                      {"name": "Ringo", "surname": "Starr", "role": "drums"}]'>
- *
+ * <vaadin-crud
+ *   id="crud"
+ *   items='[{"name": "John", "surname": "Lennon", "role": "singer"},
+ *           {"name": "Ringo", "surname": "Starr", "role": "drums"}]'
+ * >
  *  <vaadin-grid slot="grid">
  *   <vaadin-crud-edit-column></vaadin-crud-edit-column>
- *   <vaadin-grid-column>
- *    <template class="header">Name</template><template>[[item.name]]</template>
- *   </vaadin-grid-column>
- *   <vaadin-grid-column>
- *    <template class="header">Surname</template><template>[[item.surname]]</template>
- *   </vaadin-grid-column>
+ *   <vaadin-grid-column id="column1"></vaadin-grid-column>
+ *   <vaadin-grid-column id="column2"></vaadin-grid-column>
  *  </vaadin-grid>
  *
  *  <vaadin-form-layout slot="form">
@@ -86,6 +84,24 @@ import './vaadin-crud-form.js';
  *  <button slot="new">New singer</button>
  * </vaadin-crud>
  * ```
+ * ```js
+ * const crud = document.querySelector('#crud');
+ *
+ * const column1 = document.querySelector('#column1');
+ * column1.headerRenderer = (root, column) => {
+ *   root.textContent = 'Name';
+ * };
+ * column1.renderer = (root, column, model) => {
+ *   root.textContent = model.item.name;
+ * };
+ *
+ * const column2 = document.querySelector('#column2');
+ * column2.headerRenderer = (root, column) => {
+ *   root.textContent = 'Surname';
+ * };
+ * column2.renderer = (root, column, model) => {
+ *   root.textContent = model.item.surname;
+ * };
  *
  * ### Helpers
  *

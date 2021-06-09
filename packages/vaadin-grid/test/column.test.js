@@ -1,9 +1,9 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import '@vaadin/vaadin-template-renderer';
 import {
-  flushColumns,
   flushGrid,
   getBodyCellContent,
   getCellContent,
@@ -246,12 +246,12 @@ describe('column', () => {
         expect(getHeaderCellContent(grid, 1, 2).textContent.trim()).to.equal('foo');
       });
 
-      it('should not override header template content', () => {
+      it('should not override header template content', async () => {
         const template = document.createElement('template');
         template.innerHTML = 'foo';
         template.classList.add('header');
         emptyColumn.appendChild(template);
-        flushColumns(grid);
+        await nextRender();
         emptyColumn.path = 'bar';
         expect(getHeaderCellContent(grid, 1, 2).textContent.trim()).to.equal('foo');
       });
@@ -276,12 +276,12 @@ describe('column', () => {
         expect(getBodyCellContent(grid, 0, 2).textContent.trim()).to.equal('foo');
       });
 
-      it('should not override template content', () => {
+      it('should not override template content', async () => {
         const template = document.createElement('template');
         template.innerHTML = 'foo';
         emptyColumn.path = 'foo';
         emptyColumn.appendChild(template);
-        flushColumns(grid);
+        await nextRender();
         expect(getBodyCellContent(grid, 0, 2).textContent.trim()).to.equal('foo');
       });
 
@@ -348,12 +348,12 @@ describe('column', () => {
         expect(getHeaderCellContent(grid, 1, 2).textContent.trim()).to.equal('foo');
       });
 
-      it('should not override header template text content', () => {
+      it('should not override header template text content', async () => {
         const template = document.createElement('template');
         template.innerHTML = 'foo';
         template.classList.add('header');
         emptyColumn.appendChild(template);
-        flushColumns(grid);
+        await nextRender();
         emptyColumn.header = 'Bar';
         expect(getHeaderCellContent(grid, 1, 2).textContent.trim()).to.equal('foo');
       });
@@ -485,98 +485,66 @@ describe('column', () => {
   });
 
   describe('dom observing', () => {
-    it('should pickup header template', () => {
-      const column = document.createElement('vaadin-grid-column');
-      const template = document.createElement('template');
-      template.classList.add('header');
+    let grid, column;
 
-      column.appendChild(template);
-      column._templateObserver.flush();
+    beforeEach(() => {
+      grid = fixtureSync(`
+        <vaadin-grid>
+          <vaadin-grid-column></vaadin-grid-column>
+        </vaadin-grid>
+      `);
 
-      expect(column._headerTemplate).to.eql(template);
+      grid.items = ['item1', 'item2'];
+      column = grid.firstElementChild;
+
+      flushGrid(grid);
     });
 
-    it('should pickup footer template', () => {
-      const column = document.createElement('vaadin-grid-column');
-      const template = document.createElement('template');
-      template.classList.add('footer');
+    ['header', 'body', 'footer'].forEach((templateName) => {
+      let cell;
 
-      column.appendChild(template);
-      column._templateObserver.flush();
+      beforeEach(() => {
+        if (templateName === 'header') {
+          cell = getContainerCell(grid.$.header, 0, 0);
+        }
+        if (templateName === 'footer') {
+          cell = getContainerCell(grid.$.footer, 0, 0);
+        }
+        if (templateName === 'body') {
+          cell = getContainerCell(grid.$.items, 0, 0);
+        }
+      });
 
-      expect(column._footerTemplate).to.eql(template);
-    });
+      it(`should observe for adding ${templateName} templates`, async () => {
+        const template = fixtureSync(`
+          <template class="${templateName}">content</template>
+        `);
 
-    it('should pickup body template', () => {
-      const column = document.createElement('vaadin-grid-column');
-      const template = document.createElement('template');
+        column.appendChild(template);
+        await nextRender();
 
-      column.appendChild(template);
-      column._templateObserver.flush();
+        expect(cell._content.textContent).to.equal('content');
+      });
 
-      expect(column._bodyTemplate).to.eql(template);
-    });
+      it(`should observe for replacing ${templateName} templates`, async () => {
+        const template1 = fixtureSync(`
+          <template class="${templateName}">content1</template>
+        `);
+        const template2 = fixtureSync(`
+          <template class="${templateName}">content2</template>
+        `);
 
-    it('should re-pickup header template', () => {
-      const column = document.createElement('vaadin-grid-column');
-      const template = document.createElement('template');
-      template.classList.add('header');
-      const template2 = document.createElement('template');
-      template2.classList.add('header');
+        column.appendChild(template1);
+        await nextRender();
 
-      column.appendChild(template);
-      column._templateObserver.flush();
-      column.removeChild(template);
-      column.appendChild(template2);
-      column._templateObserver.flush();
-      expect(column._headerTemplate).to.eql(template2);
-    });
+        expect(cell._content.textContent).to.equal('content1');
 
-    it('should pickup new body template', () => {
-      const column = document.createElement('vaadin-grid-column');
-      const template = document.createElement('template');
-      const template2 = document.createElement('template');
+        column.removeChild(template1);
+        column.appendChild(template2);
+        await nextRender();
 
-      column.appendChild(template);
-      column._templateObserver.flush();
-      column.removeChild(template);
-      column.appendChild(template2);
-      column._templateObserver.flush();
-
-      expect(column._bodyTemplate).to.eql(template2);
-    });
-
-    it('should prepare template when added lazily', () => {
-      const column = document.createElement('vaadin-grid-column');
-      const template = document.createElement('template');
-
-      column.appendChild(template);
-      column._templateObserver.flush();
-
-      grid.appendChild(column);
-      grid._observer.flush();
-
-      expect(template.templatizer.template).to.eql(template);
-      expect(column._bodyTemplate).to.eql(template);
-    });
-
-    it('should prepare a new template when added lazily', () => {
-      const column = document.createElement('vaadin-grid-column');
-      const template = document.createElement('template');
-      const template2 = document.createElement('template');
-
-      column.appendChild(template);
-      column._templateObserver.flush();
-
-      grid.appendChild(column);
-      grid._observer.flush();
-
-      column.removeChild(template);
-      column.appendChild(template2);
-      column._templateObserver.flush();
-
-      expect(template2.templatizer.template).to.eql(template2);
-      expect(column._bodyTemplate).to.eql(template2);
+        expect(cell._content.textContent).to.equal('content2');
+      });
     });
   });
 

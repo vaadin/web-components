@@ -85,15 +85,6 @@ export const SelectionMixin = (superClass) =>
       }
     }
 
-    /** @private */
-    _selectedInstanceChangedCallback(instance, value) {
-      if (value) {
-        this.selectItem(instance.item);
-      } else {
-        this.deselectItem(instance.item);
-      }
-    }
-
     /**
      * Fired when the `selectedItems` property changes.
      *

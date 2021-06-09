@@ -10,8 +10,7 @@ interface ArrayDataProviderMixinConstructor<TItem> {
 
 declare interface ArrayDataProviderMixin<TItem> {
   /**
-   * An array containing the items which will be stamped to the column template
-   * instances.
+   * An array containing the items which will be passed to renderer functions.
    */
   items: TItem[] | null | undefined;
 

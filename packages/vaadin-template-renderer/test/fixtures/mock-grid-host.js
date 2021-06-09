@@ -1,0 +1,75 @@
+import { PolymerElement, html } from '@polymer/polymer';
+
+import '@vaadin/vaadin-grid';
+import '@vaadin/vaadin-checkbox';
+import '@vaadin/vaadin-grid/vaadin-grid-column';
+import '@vaadin/vaadin-grid/vaadin-grid-tree-column';
+
+export class MockGridHost extends PolymerElement {
+  static get template() {
+    return html`
+      <vaadin-grid id="grid" items="[[items]]">
+        <vaadin-grid-column>
+          <template class="header">header</template>
+          <template class="footer">footer</template>
+          <template class="body">[[item.title]]</template>
+        </vaadin-grid-column>
+
+        <vaadin-grid-column>
+          <template>
+            <input class="parent-property" value="{{parentProperty::input}}" />
+            <input class="title" value="{{item.title::input}}" />
+            <vaadin-checkbox class="selected" checked="{{selected}}" />
+            <vaadin-checkbox class="expanded" checked="{{expanded}}" />
+            <vaadin-checkbox class="details-opened" checked="{{detailsOpened}}" />
+          </template>
+        </vaadin-grid-column>
+
+        <vaadin-grid-column>
+          <template>
+            <div class="index">[[index]]</div>
+            <div class="parent-property">[[parentProperty]]</div>
+            <div class="title">[[item.title]]</div>
+            <div class="selected">[[selected]]</div>
+            <div class="expanded">[[expanded]]</div>
+            <div class="details-opened">[[detailsOpened]]</div>
+          </template>
+        </vaadin-grid-column>
+
+        <vaadin-grid-tree-column></vaadin-grid-tree-column>
+
+        <template class="row-details">
+          row-details
+
+          <div class="index">[[index]]</div>
+          <input class="title" value="{{item.title::input}}" />
+          <vaadin-checkbox class="selected" checked="{{selected}}" />
+          <vaadin-checkbox class="expanded" checked="{{expanded}}" />
+          <vaadin-checkbox class="details-opened" checked="{{detailsOpened}}" />
+        </template>
+      </vaadin-grid>
+    `;
+  }
+
+  static get properties() {
+    return {
+      parentProperty: {
+        type: String,
+        value() {
+          return 'parentValue';
+        }
+      },
+
+      items: {
+        type: Array,
+        value() {
+          return [{ title: 'item0' }, { title: 'item1' }];
+        }
+      }
+    };
+  }
+
+  onClick() {}
+}
+
+customElements.define('mock-grid-host', MockGridHost);

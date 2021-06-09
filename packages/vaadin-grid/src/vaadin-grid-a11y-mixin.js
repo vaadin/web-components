@@ -15,14 +15,12 @@ export const A11yMixin = (superClass) =>
 
     /** @private */
     _a11yGetHeaderRowCount(_columnTree) {
-      return _columnTree.filter((level) =>
-        level.some((col) => col._headerTemplate || col.headerRenderer || col.path || col.header)
-      ).length;
+      return _columnTree.filter((level) => level.some((col) => col.headerRenderer || col.path || col.header)).length;
     }
 
     /** @private */
     _a11yGetFooterRowCount(_columnTree) {
-      return _columnTree.filter((level) => level.some((col) => col._headerTemplate || col.headerRenderer)).length;
+      return _columnTree.filter((level) => level.some((col) => col.headerRenderer)).length;
     }
 
     /** @private */

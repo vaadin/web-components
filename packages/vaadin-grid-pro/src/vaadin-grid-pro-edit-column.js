@@ -4,7 +4,6 @@
  * This program is available under Commercial Vaadin Developer License 4.0 (CVDLv4).
  * See <a href="https://vaadin.com/license/cvdl-4.0">the website</a> for the complete license.
  */
-import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { get, set } from '@polymer/polymer/lib/utils/path.js';
 import { GridColumnElement } from '@vaadin/vaadin-grid/src/vaadin-grid-column.js';
 import './vaadin-grid-pro-edit-checkbox.js';
@@ -41,13 +40,14 @@ class GridProEditColumnElement extends GridColumnElement {
        *
        * - `root` The cell content DOM element. Append your editor component to it.
        * - `column` The `<vaadin-grid-pro-edit-column>` element.
-       * - `rowData` The object with the properties related with
+       * - `model` The object with the properties related with
        *   the rendered item, contains:
-       *   - `rowData.index` The index of the item.
-       *   - `rowData.item` The item.
-       *   - `rowData.expanded` Sublevel toggle state.
-       *   - `rowData.level` Level of the tree represented with a horizontal offset of the toggle button.
-       *   - `rowData.selected` Selected state.
+       *   - `model.index` The index of the item.
+       *   - `model.item` The item.
+       *   - `model.expanded` Sublevel toggle state.
+       *   - `model.level` Level of the tree represented with a horizontal offset of the toggle button.
+       *   - `model.selected` Selected state.
+       *   - `model.detailsOpened` Details opened state.
        * @type {!GridBodyRenderer | null | undefined}
        */
       editModeRenderer: Function,
@@ -68,8 +68,7 @@ class GridProEditColumnElement extends GridColumnElement {
        * - `checkbox` - renders a checkbox
        * - `select` - renders a select with a list of items passed as `editorOptions`
        *
-       * Editor type is set to `custom` when either `editModeRenderer` is set,
-       * or editor template provided for the column.
+       * Editor type is set to `custom` when `editModeRenderer` is set.
        * @attr {text|checkbox|select|custom} editor-type
        * @type {!GridProEditorType}
        */
@@ -98,23 +97,16 @@ class GridProEditColumnElement extends GridColumnElement {
       },
 
       /** @private */
-      _oldTemplate: Object,
-
-      /** @private */
       _oldRenderer: Function
     };
   }
 
   static get observers() {
-    return ['_editModeTemplateOrRendererChanged(_editModeTemplate, editModeRenderer)', '_cellsChanged(_cells.*)'];
+    return ['_editModeRendererChanged(editModeRenderer, __initialized)', '_cellsChanged(_cells.*)'];
   }
 
   constructor() {
     super();
-
-    this._editTemplateObserver = new FlattenedNodesObserver(this, () => {
-      this._editModeTemplate = this._prepareEditModeTemplate();
-    });
 
     this.__editModeRenderer = function (root, column) {
       const cell = root.assignedSlot.parentNode;
@@ -126,13 +118,6 @@ class GridProEditColumnElement extends GridColumnElement {
         `;
       }
     };
-  }
-
-  /** @protected */
-  ready() {
-    super.ready();
-
-    this._editTemplateObserver.flush();
   }
 
   /** @private */
@@ -153,81 +138,14 @@ class GridProEditColumnElement extends GridColumnElement {
   }
 
   /** @private */
-  _removeNewRendererOrTemplate(template, oldTemplate, renderer, oldRenderer) {
-    if (template !== oldTemplate) {
-      this._editModeTemplate = undefined;
-    } else if (renderer !== oldRenderer) {
-      this.editModeRenderer = undefined;
-    }
-  }
-
-  /** @private */
-  _editModeTemplateOrRendererChanged(template, renderer) {
-    if (template === undefined && renderer === undefined && !this._oldTemplate && !this._oldRenderer) {
-      return;
-    }
-    if (template && renderer) {
-      this._removeNewRendererOrTemplate(template, this._oldTemplate, renderer, this._oldRenderer);
-      throw new Error('You should only use either a renderer or a template');
-    }
-    if (template || renderer) {
+  _editModeRendererChanged(renderer) {
+    if (renderer) {
       this.editorType = 'custom';
-    } else if (this._oldRenderer || this._oldTemplate) {
+    } else if (this._oldRenderer) {
       this.editorType = 'text';
     }
-    this._oldTemplate = template;
+
     this._oldRenderer = renderer;
-  }
-
-  /**
-   * Override body template preparation to take editor into account.
-   * @return {HTMLTemplateElement}
-   * @protected
-   */
-  _prepareBodyTemplate() {
-    return this._prepareTemplatizer(this._findTemplate(false, false, false) || null);
-  }
-
-  /**
-   * Override template filtering to take editor into account.
-   * @param {boolean} header
-   * @param {boolean} footer
-   * @param {boolean} editor
-   * @return {HTMLTemplateElement}
-   * @protected
-   */
-  _selectFirstTemplate(header = false, footer = false, editor = false) {
-    return FlattenedNodesObserver.getFlattenedNodes(this).filter(
-      (node) =>
-        node.localName === 'template' &&
-        node.classList.contains('header') === header &&
-        node.classList.contains('footer') === footer &&
-        node.classList.contains('editor') === editor
-    )[0];
-  }
-
-  /**
-   * Override template search to take editor into account.
-   * @param {boolean} header
-   * @param {boolean} footer
-   * @param {boolean=} editor
-   * @return {HTMLTemplateElement}
-   * @protected
-   */
-  _findTemplate(header, footer, editor) {
-    const template = this._selectFirstTemplate(header, footer, editor);
-    if (template) {
-      if (this.dataHost) {
-        // set dataHost to the context where template has been defined
-        template._rootDataHost = this.dataHost._rootDataHost || this.dataHost;
-      }
-    }
-    return template;
-  }
-
-  /** @private */
-  _prepareEditModeTemplate() {
-    return this._prepareTemplatizer(this._findTemplate(false, false, true) || null, {});
   }
 
   /**
@@ -292,33 +210,22 @@ class GridProEditColumnElement extends GridColumnElement {
 
   /** @private */
   _renderEditor(cell, model) {
-    if (cell._template) {
-      cell.__savedTemplate = cell._template;
-      cell._template = undefined;
-    } else {
-      // fallback to the path renderer stored on the cell
-      cell.__savedRenderer = this.renderer || cell._renderer;
-      cell._renderer = undefined;
-    }
-
-    if (this._editModeTemplate) {
-      this._stampTemplateToCell(cell, this._editModeTemplate, model);
-    } else {
-      this._stampRendererToCell(cell, this.editModeRenderer || this.__editModeRenderer, model);
-    }
+    cell.__savedRenderer = this._renderer || cell._renderer;
+    cell._content.innerHTML = '';
+    cell._renderer = this.editModeRenderer || this.__editModeRenderer;
+    this.__runRenderer(cell._renderer, cell, model);
   }
 
   /** @private */
-  _removeEditor(cell, model) {
-    if (cell.__savedTemplate) {
-      this._stampTemplateToCell(cell, cell.__savedTemplate, model);
-      cell._renderer = undefined;
-      cell.__savedTemplate = undefined;
-    } else if (cell.__savedRenderer) {
-      this._stampRendererToCell(cell, cell.__savedRenderer, model);
-      cell._template = undefined;
-      cell.__savedRenderer = undefined;
-    }
+  _removeEditor(cell, _model) {
+    if (!cell.__savedRenderer) return;
+
+    cell._content.innerHTML = '';
+    cell._renderer = cell.__savedRenderer;
+    cell.__savedRenderer = undefined;
+
+    const row = cell.parentElement;
+    this._grid._updateItem(row, row._item);
   }
 
   /** @private */
@@ -354,25 +261,6 @@ class GridProEditColumnElement extends GridColumnElement {
     this._setEditorValue(editor, get(model.item, this.path));
     editor._grid = this._grid;
     this._focusEditor(editor);
-  }
-
-  /** @private */
-  _stampTemplateToCell(cell, template, model) {
-    cell._template = template;
-    cell._content.innerHTML = '';
-    template.templatizer._grid = this._grid;
-
-    const inst = template.templatizer.createInstance();
-    cell._content.appendChild(inst.root);
-    cell._instance = inst;
-    cell._instance.setProperties(model);
-  }
-
-  /** @private */
-  _stampRendererToCell(cell, renderer, model) {
-    cell._content.innerHTML = '';
-    cell._renderer = renderer;
-    this.__runRenderer(renderer, cell, model);
   }
 
   /**

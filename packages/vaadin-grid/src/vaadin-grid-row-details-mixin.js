@@ -3,7 +3,6 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { Templatizer } from './vaadin-grid-templatizer.js';
 
 /**
  * @polymerMixin
@@ -24,12 +23,6 @@ export const RowDetailsMixin = (superClass) =>
         },
 
         /**
-         * @type {HTMLTemplateElement}
-         * @protected
-         */
-        _rowDetailsTemplate: Object,
-
-        /**
          * Custom function for rendering the content of the row details.
          * Receives three arguments:
          *
@@ -39,6 +32,9 @@ export const RowDetailsMixin = (superClass) =>
          *   the rendered item, contains:
          *   - `model.index` The index of the item.
          *   - `model.item` The item.
+         *   - `model.level` The number of the item's tree sublevel, starts from 0.
+         *   - `model.expanded` True if the item's tree sublevel is expanded.
+         *   - `model.selected` True if the item is selected.
          *
          * @type {GridRowDetailsRenderer | null | undefined}
          */
@@ -56,8 +52,8 @@ export const RowDetailsMixin = (superClass) =>
 
     static get observers() {
       return [
-        '_detailsOpenedItemsChanged(detailsOpenedItems.*, _rowDetailsTemplate, rowDetailsRenderer)',
-        '_rowDetailsTemplateOrRendererChanged(_rowDetailsTemplate, rowDetailsRenderer)'
+        '_detailsOpenedItemsChanged(detailsOpenedItems.*, rowDetailsRenderer)',
+        '_rowDetailsRendererChanged(rowDetailsRenderer)'
       ];
     }
 
@@ -77,35 +73,24 @@ export const RowDetailsMixin = (superClass) =>
     }
 
     /** @private */
-    _rowDetailsTemplateOrRendererChanged(rowDetailsTemplate, rowDetailsRenderer) {
-      if (rowDetailsTemplate && rowDetailsRenderer) {
-        throw new Error('You should only use either a renderer or a template for row details');
+    _rowDetailsRendererChanged(rowDetailsRenderer) {
+      if (!rowDetailsRenderer) {
+        return;
       }
-      if (rowDetailsTemplate || rowDetailsRenderer) {
-        if (rowDetailsTemplate && !rowDetailsTemplate.templatizer) {
-          const templatizer = new Templatizer();
-          templatizer._grid = this;
-          templatizer.dataHost = this.dataHost;
-          templatizer.template = rowDetailsTemplate;
-          rowDetailsTemplate.templatizer = templatizer;
-        }
 
-        if (this._columnTree) {
-          // Only update the rows if the column tree has already been initialized
-          Array.from(this.$.items.children).forEach((row) => {
-            if (!row.querySelector('[part~=details-cell]')) {
-              this._updateRow(row, this._columnTree[this._columnTree.length - 1]);
-              this._a11yUpdateRowDetailsOpened(row, false);
-            }
-            // Clear any old template instances
-            delete row.querySelector('[part~=details-cell]')._instance;
-          });
-        }
+      if (this._columnTree) {
+        // Only update the rows if the column tree has already been initialized
+        Array.from(this.$.items.children).forEach((row) => {
+          if (!row.querySelector('[part~=details-cell]')) {
+            this._updateRow(row, this._columnTree[this._columnTree.length - 1]);
+            this._a11yUpdateRowDetailsOpened(row, false);
+          }
+        });
       }
     }
 
     /** @private */
-    _detailsOpenedItemsChanged(changeRecord, rowDetailsTemplate, rowDetailsRenderer) {
+    _detailsOpenedItemsChanged(changeRecord, rowDetailsRenderer) {
       // Skip to avoid duplicate work of both “.splices” and “.length” updates.
       if (changeRecord.path === 'detailsOpenedItems.length' || !changeRecord.value) {
         return;
@@ -118,8 +103,8 @@ export const RowDetailsMixin = (superClass) =>
           return;
         }
 
-        // Re-renders the row to open the details when either a renderer or a template is provided.
-        if ((rowDetailsTemplate || rowDetailsRenderer) && this._isDetailsOpened(row._item)) {
+        // Re-renders the row to open the details when a row details renderer is provided.
+        if (rowDetailsRenderer && this._isDetailsOpened(row._item)) {
           this._updateItem(row, row._item);
           return;
         }
@@ -156,14 +141,10 @@ export const RowDetailsMixin = (superClass) =>
         return;
       }
 
-      // Assigns either a renderer or a template when the details cell is opened.
-      // The content of the details cell is rendered later in the `_updateItem` method.
+      // Assigns a renderer when the details cell is opened.
+      // The details cell content is rendered later in the `_updateItem` method.
       if (this.rowDetailsRenderer) {
         cell._renderer = this.rowDetailsRenderer;
-      } else if (this._rowDetailsTemplate && !cell._instance) {
-        cell._instance = this._rowDetailsTemplate.templatizer.createInstance();
-        cell._content.innerHTML = '';
-        cell._content.appendChild(cell._instance.root);
       }
     }
 
@@ -214,15 +195,6 @@ export const RowDetailsMixin = (superClass) =>
     closeItemDetails(item) {
       if (this._isDetailsOpened(item)) {
         this.detailsOpenedItems = this.detailsOpenedItems.filter((i) => !this._itemsEqual(i, item));
-      }
-    }
-
-    /** @private */
-    _detailsOpenedInstanceChangedCallback(instance, value) {
-      if (value) {
-        this.openItemDetails(instance.item);
-      } else {
-        this.closeItemDetails(instance.item);
       }
     }
   };

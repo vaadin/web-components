@@ -2,6 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { enter, esc, fixtureSync, space } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import '@vaadin/vaadin-template-renderer';
 import {
   createItems,
   dblclick,
@@ -224,14 +225,6 @@ describe('edit column renderer', () => {
       };
       column.editModeRenderer = null;
       expect(column.editorType).to.be.equal('text');
-    });
-
-    it('should throw an error and remove template when added after renderer', () => {
-      column.editModeRenderer = function (root) {
-        root.innerHTML = '<input>';
-      };
-      expect(() => (column._editModeTemplate = {})).to.throw(Error);
-      expect(column._editModeTemplate).to.be.not.ok;
     });
 
     it('should close editor and update value when scrolling edited cell out of view', () => {

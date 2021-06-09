@@ -39,9 +39,7 @@ class GridFilterColumnElement extends GridColumnElement {
   }
 
   static get observers() {
-    return [
-      '_onHeaderTemplateOrRendererOrBindingChanged(_headerTemplate, _headerRenderer, _headerCell, path, header, _filterValue)'
-    ];
+    return ['_onHeaderRendererOrBindingChanged(_headerRenderer, _headerCell, path, header, _filterValue)'];
   }
 
   constructor() {

@@ -90,12 +90,6 @@ export const DynamicColumnsMixin = (superClass) =>
     /** @private */
     _addNodeObserver() {
       this._observer = new FlattenedNodesObserver(this, (info) => {
-        const rowDetailsTemplate = info.addedNodes.filter(
-          (n) => n.localName === 'template' && n.classList.contains('row-details')
-        )[0];
-        if (rowDetailsTemplate && this._rowDetailsTemplate !== rowDetailsTemplate) {
-          this._rowDetailsTemplate = rowDetailsTemplate;
-        }
         const hasColumnElements = (nodeCollection) => nodeCollection.filter(this._isColumnElement).length > 0;
         if (hasColumnElements(info.addedNodes) || hasColumnElements(info.removedNodes)) {
           const allRemovedCells = info.removedNodes.flatMap((c) => c._allCells);
