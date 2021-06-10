@@ -1,10 +1,41 @@
+import sinon from 'sinon';
 import { expect } from '@esm-bundle/chai';
+import '@vaadin/vaadin-grid';
 import { fire, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { GridTemplatizer } from '../src/vaadin-template-renderer-grid-templatizer.js';
 
 import '../vaadin-template-renderer.js';
 
 import './fixtures/mock-grid-host.js';
+
+describe('row details template', () => {
+  function fixtureGrid() {
+    return fixtureSync(`
+      <vaadin-grid>
+        <template class="row-details"></template>
+      </vaadin-grid>
+    `);
+  }
+
+  it('should process the template', () => {
+    const grid = fixtureGrid();
+    const template = grid.querySelector('template.row-details');
+
+    expect(template.__templatizer).to.be.an.instanceof(GridTemplatizer);
+  });
+
+  it('should throw when using both a template and a renderer', () => {
+    const stub = sinon.stub(window.Vaadin, 'templateRendererCallback');
+    const grid = fixtureGrid();
+    stub.restore();
+
+    grid.rowDetailsRenderer = () => {};
+
+    expect(() => window.Vaadin.templateRendererCallback(grid)).to.throw(
+      /^Cannot use both a template and a renderer for <vaadin-grid \/>\.$/
+    );
+  });
+});
 
 describe('row details template', () => {
   let host, grid;
@@ -16,7 +47,7 @@ describe('row details template', () => {
   }
 
   function queryDetailsCellContent(selector) {
-    return getCell({ row: 0, col: 4 })._content.querySelector(selector);
+    return getCell({ row: 0, col: 3 })._content.querySelector(selector);
   }
 
   beforeEach(async () => {
@@ -26,12 +57,6 @@ describe('row details template', () => {
     await nextRender(grid);
 
     grid.openItemDetails(grid.items[0]);
-  });
-
-  it('should process the template', () => {
-    const template = grid.querySelector('template.row-details');
-
-    expect(template.__templatizer).to.be.an.instanceof(GridTemplatizer);
   });
 
   it('should render model.index', () => {

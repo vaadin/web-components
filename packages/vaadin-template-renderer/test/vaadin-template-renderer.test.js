@@ -71,6 +71,22 @@ describe('vaadin-template-renderer', () => {
     });
   });
 
+  it('should throw when using both a template and a renderer', () => {
+    const stub = sinon.stub(window.Vaadin, 'templateRendererCallback');
+    const component = fixtureSync(`
+      <mock-component>
+        <template>foo</template>
+      </mock-component>
+    `);
+    stub.restore();
+
+    component.renderer = () => {};
+
+    expect(() => window.Vaadin.templateRendererCallback(component)).to.throw(
+      /^Cannot use both a template and a renderer for <mock-component \/>\.$/
+    );
+  });
+
   it('should not process non-child templates', () => {
     const component = fixtureSync(`
       <mock-component>

@@ -10,12 +10,6 @@ export class MockGridHost extends PolymerElement {
     return html`
       <vaadin-grid id="grid" items="[[items]]">
         <vaadin-grid-column>
-          <template class="header">header</template>
-          <template class="footer">footer</template>
-          <template class="body">[[item.title]]</template>
-        </vaadin-grid-column>
-
-        <vaadin-grid-column>
           <template>
             <input class="parent-property" value="{{parentProperty::input}}" />
             <input class="title" value="{{item.title::input}}" />
@@ -39,8 +33,6 @@ export class MockGridHost extends PolymerElement {
         <vaadin-grid-tree-column></vaadin-grid-tree-column>
 
         <template class="row-details">
-          row-details
-
           <div class="index">[[index]]</div>
           <input class="title" value="{{item.title::input}}" />
           <vaadin-checkbox class="selected" checked="{{selected}}" />
@@ -68,8 +60,6 @@ export class MockGridHost extends PolymerElement {
       }
     };
   }
-
-  onClick() {}
 }
 
 customElements.define('mock-grid-host', MockGridHost);

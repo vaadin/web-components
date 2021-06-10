@@ -14,34 +14,52 @@ function createRenderer(component, template, TemplatizerClass = Templatizer) {
   };
 
   template.__templatizer = templatizer;
+  renderer.__templatized = true;
 
   return renderer;
 }
 
+function assignRenderer(component, rendererName, renderer) {
+  const oldRenderer = component[rendererName];
+
+  if (oldRenderer && !oldRenderer.__templatized) {
+    const tag = component.localName;
+
+    throw new Error(`Cannot use both a template and a renderer for <${tag} />.`);
+  }
+
+  component[rendererName] = renderer;
+}
+
 function processGridTemplate(grid, template) {
   if (template.matches('.row-details')) {
-    grid.rowDetailsRenderer = createRenderer(grid, template, GridTemplatizer);
+    const renderer = createRenderer(grid, template, GridTemplatizer);
+    assignRenderer(grid, 'rowDetailsRenderer', renderer);
     return;
   }
 }
 
 function processGridColumnTemplate(column, template) {
   if (template.matches('.header')) {
-    column.headerRenderer = createRenderer(column, template);
+    const renderer = createRenderer(column, template);
+    assignRenderer(column, 'headerRenderer', renderer);
     return;
   }
 
   if (template.matches('.footer')) {
-    column.footerRenderer = createRenderer(column, template);
+    const renderer = createRenderer(column, template);
+    assignRenderer(column, 'footerRenderer', renderer);
     return;
   }
 
   if (template.matches('.editor')) {
-    column.editModeRenderer = createRenderer(column, template, GridTemplatizer);
+    const renderer = createRenderer(column, template, GridTemplatizer);
+    assignRenderer(column, 'editModeRenderer', renderer);
     return;
   }
 
-  column.renderer = createRenderer(column, template, GridTemplatizer);
+  const renderer = createRenderer(column, template, GridTemplatizer);
+  assignRenderer(column, 'renderer', renderer);
 }
 
 function processTemplate(component, template) {
@@ -55,7 +73,8 @@ function processTemplate(component, template) {
     return;
   }
 
-  component.renderer = createRenderer(component, template);
+  const renderer = createRenderer(component, template);
+  assignRenderer(component, 'renderer', renderer);
 }
 
 function processTemplates(component) {
