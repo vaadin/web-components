@@ -10,6 +10,7 @@ import { ControlStateMixin } from '@vaadin/vaadin-control-state-mixin/vaadin-con
 import { IronResizableBehavior } from '@polymer/iron-resizable-behavior/iron-resizable-behavior.js';
 import '@polymer/iron-media-query/iron-media-query.js';
 import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
+import { processTemplates } from '@vaadin/vaadin-element-mixin/templates.js';
 import './vaadin-select-overlay.js';
 import './vaadin-select-text-field.js';
 const $_documentContainer = document.createElement('template');
@@ -360,9 +361,7 @@ class SelectElement extends ElementMixin(
     this.focusElement.addEventListener('click', () => (this.opened = !this.readonly));
     this.focusElement.addEventListener('keydown', (e) => this._onKeyDown(e));
 
-    if (window.Vaadin && window.Vaadin.templateRendererCallback) {
-      window.Vaadin.templateRendererCallback(this);
-    }
+    processTemplates(this);
   }
 
   /**
