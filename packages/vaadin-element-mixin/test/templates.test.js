@@ -9,6 +9,12 @@ class ComponentElement extends PolymerElement {
   static get is() {
     return 'component-element';
   }
+
+  ready() {
+    super.ready();
+
+    processTemplates(this);
+  }
 }
 
 customElements.define(ComponentElement.is, ComponentElement);
@@ -39,8 +45,6 @@ describe('process templates', () => {
         </component-element>
       `);
 
-      processTemplates(component);
-
       expect(window.Vaadin.templateRendererCallback.calledOnce).to.be.true;
       expect(window.Vaadin.templateRendererCallback.args[0][0]).to.equal(component);
     });
@@ -52,13 +56,11 @@ describe('process templates', () => {
 
   describe('without template renderer', () => {
     it('should show the deprecation warning', () => {
-      const component = fixtureSync(`
+      fixtureSync(`
         <component-element>
           <template></template>
         </component-element>
       `);
-
-      processTemplates(component);
 
       expect(console.warn.calledOnce).to.be.true;
       expect(console.warn.args[0][0]).to.equal(
