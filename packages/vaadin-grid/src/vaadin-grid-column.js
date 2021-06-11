@@ -5,6 +5,7 @@
  */
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { DirMixin } from '@vaadin/vaadin-element-mixin/vaadin-dir-mixin.js';
+import { processTemplates } from '@vaadin/vaadin-element-mixin/templates.js';
 import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
 import { animationFrame } from '@polymer/polymer/lib/utils/async.js';
 
@@ -229,9 +230,7 @@ export const ColumnBaseMixin = (superClass) =>
     ready() {
       super.ready();
 
-      if (window.Vaadin && window.Vaadin.templateRendererCallback) {
-        window.Vaadin.templateRendererCallback(this);
-      }
+      processTemplates(this);
     }
 
     /**
