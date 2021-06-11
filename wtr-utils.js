@@ -3,13 +3,30 @@ const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 
-const ALLOWED_WARNINGS = [
+const HIDDEN_WARNINGS = [
   '<vaadin-crud> Unable to autoconfigure form because the data structure is unknown. Either specify `include` or ensure at least one item is available beforehand.',
   'The <vaadin-grid> needs the total number of items in order to display rows. Set the total number of items to the `size` property, or provide the total number of items in the second argument of the `dataProvider`’s `callback` call.',
-  'PositionMixin is not considered stable and might change any time'
+  'PositionMixin is not considered stable and might change any time',
+  /^WARNING: <template> inside <[^>]+> is deprecated. Use a renderer function instead/
 ];
 
-const filterBrowserLogs = (log) => ALLOWED_WARNINGS.includes(log.args[0]) === false;
+const filterBrowserLogs = (log) => {
+  const message = log.args[0];
+
+  const isHidden = HIDDEN_WARNINGS.some((warning) => {
+    if (warning instanceof RegExp && warning.test(message)) {
+      return true;
+    }
+
+    if (warning === message) {
+      return true;
+    }
+
+    return false;
+  });
+
+  return !isHidden;
+};
 
 const group = process.argv.indexOf('--group') !== -1;
 
