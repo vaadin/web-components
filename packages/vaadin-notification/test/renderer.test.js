@@ -47,16 +47,6 @@ describe('renderer', () => {
       };
     });
 
-    it('should remove template when added after renderer', () => {
-      notification.renderer = () => {};
-      const template = document.createElement('template');
-      expect(() => {
-        notification.appendChild(template);
-        notification._observer.flush();
-      }).to.throw(Error);
-      expect(notification._notificationTemplate).to.be.not.ok;
-    });
-
     it('should be possible to manually invoke renderer', () => {
       notification.renderer = sinon.spy();
       notification.opened = true;
