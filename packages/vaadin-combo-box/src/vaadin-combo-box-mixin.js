@@ -7,6 +7,7 @@ import { timeOut } from '@polymer/polymer/lib/utils/async.js';
 import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
 import { flush } from '@polymer/polymer/lib/utils/flush.js';
 import { IronA11yAnnouncer } from '@polymer/iron-a11y-announcer/iron-a11y-announcer.js';
+import { processTemplates } from '@vaadin/vaadin-element-mixin/templates.js';
 import { ComboBoxPlaceholder } from './vaadin-combo-box-placeholder.js';
 
 /**
@@ -300,9 +301,7 @@ export const ComboBoxMixin = (subclass) =>
       this.addEventListener('mousedown', bringToFrontListener);
       this.addEventListener('touchstart', bringToFrontListener);
 
-      if (window.Vaadin && window.Vaadin.templateRendererCallback) {
-        window.Vaadin.templateRendererCallback(this);
-      }
+      processTemplates(this);
     }
 
     /**
