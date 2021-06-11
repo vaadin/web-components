@@ -2,6 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { GridElement } from '@vaadin/vaadin-grid/src/vaadin-grid.js';
 import { GridColumnElement } from '@vaadin/vaadin-grid/src/vaadin-grid-column.js';
+import '@vaadin/vaadin-template-renderer';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { flushGrid, infiniteDataProvider } from './helpers.js';
 import '../vaadin-grid-pro.js';
