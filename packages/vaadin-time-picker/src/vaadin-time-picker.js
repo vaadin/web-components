@@ -85,7 +85,6 @@ class TimePickerElement extends ElementMixin(ControlStateMixin(ThemableMixin(Pol
       </style>
       <vaadin-combo-box-light
         allow-custom-value=""
-        item-label-path="value"
         filtered-items="[[__dropdownItems]]"
         disabled="[[disabled]]"
         readonly="[[readonly]]"
@@ -93,7 +92,6 @@ class TimePickerElement extends ElementMixin(ControlStateMixin(ThemableMixin(Pol
         dir="ltr"
         theme$="[[theme]]"
       >
-        <template> [[item.label]] </template>
         <vaadin-time-picker-text-field
           class="input"
           name="[[name]]"
