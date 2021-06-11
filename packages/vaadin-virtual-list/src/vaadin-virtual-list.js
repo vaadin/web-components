@@ -6,6 +6,7 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
+import { processTemplates } from '@vaadin/vaadin-element-mixin/templates.js';
 import { Virtualizer } from './virtualizer.js';
 
 /**
@@ -107,9 +108,7 @@ class VirtualListElement extends ElementMixin(ThemableMixin(PolymerElement)) {
       scrollContainer: this.shadowRoot.querySelector('#items')
     });
 
-    if (window.Vaadin && window.Vaadin.templateRendererCallback) {
-      window.Vaadin.templateRendererCallback(this);
-    }
+    processTemplates(this);
   }
 
   /**

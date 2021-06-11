@@ -8,6 +8,7 @@ import { IronResizableBehavior } from '@polymer/iron-resizable-behavior/iron-res
 import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
 import { OverlayElement } from '@vaadin/vaadin-overlay/src/vaadin-overlay.js';
 import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
+import { processTemplates } from '@vaadin/vaadin-element-mixin/templates.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import { DialogDraggableMixin } from './vaadin-dialog-draggable-mixin.js';
@@ -278,9 +279,7 @@ class DialogElement extends ThemePropertyMixin(
     this.$.overlay.addEventListener('vaadin-overlay-outside-click', this._handleOutsideClick.bind(this));
     this.$.overlay.addEventListener('vaadin-overlay-escape-press', this._handleEscPress.bind(this));
 
-    if (window.Vaadin && window.Vaadin.templateRendererCallback) {
-      window.Vaadin.templateRendererCallback(this);
-    }
+    processTemplates(this);
   }
 
   /**
