@@ -31,6 +31,22 @@ function assignRenderer(component, rendererName, renderer) {
   component[rendererName] = renderer;
 }
 
+function showTemplateWarning(component) {
+  if (component.__suppressTemplateWarning) {
+    return;
+  }
+
+  if (component.hasAttribute('suppress-template-warning')) {
+    return;
+  }
+
+  console.warn(
+    `WARNING: <template> inside <${component.localName}> is deprecated. Use a renderer function instead (see https://vaad.in/template-renderer)`
+  );
+
+  component.__suppressTemplateWarning = true;
+}
+
 function processGridTemplate(grid, template) {
   if (template.matches('.row-details')) {
     const renderer = createRenderer(grid, template, GridTemplatizer);
@@ -63,6 +79,8 @@ function processGridColumnTemplate(column, template) {
 }
 
 function processTemplate(component, template) {
+  showTemplateWarning(component);
+
   if (component.__gridElement) {
     processGridTemplate(component, template);
     return;
@@ -87,6 +105,7 @@ function processTemplates(component) {
       if (template.__templatizer) {
         return;
       }
+
       processTemplate(component, template);
     });
 }
@@ -99,6 +118,9 @@ function observeTemplates(component) {
   });
 }
 
+/**
+ * Public API
+ */
 window.Vaadin = window.Vaadin || {};
 window.Vaadin.templateRendererCallback = (component) => {
   processTemplates(component);
