@@ -11,10 +11,10 @@ registerStyles(
     :host {
       cursor: default;
       -webkit-tap-highlight-color: var(--lumo-primary-color-10pct);
-      padding-left: calc(var(--lumo-border-radius) / 4);
-      padding-right: calc(var(--lumo-space-l) + var(--lumo-border-radius) / 4);
+      padding-left: calc(var(--lumo-border-radius-m) / 4);
+      padding-right: calc(var(--lumo-space-l) + var(--lumo-border-radius-m) / 4);
       transition: background-color 100ms;
-      border-radius: var(--lumo-border-radius);
+      border-radius: var(--lumo-border-radius-m);
       overflow: hidden;
       --_lumo-item-selected-icon-display: block;
     }
@@ -39,8 +39,8 @@ registerStyles(
 
     /* RTL specific styles */
     :host([dir='rtl']) {
-      padding-right: calc(var(--lumo-border-radius) / 4);
-      padding-left: calc(var(--lumo-space-l) + var(--lumo-border-radius) / 4);
+      padding-right: calc(var(--lumo-border-radius-m) / 4);
+      padding-left: calc(var(--lumo-space-l) + var(--lumo-border-radius-m) / 4);
     }
   `,
   { moduleId: 'lumo-combo-box-item', include: ['lumo-item'] }

@@ -18,7 +18,7 @@ registerStyles(
       font-size: var(--lumo-font-size-s);
       font-weight: 500;
       margin-top: var(--lumo-space-m);
-      margin-left: calc(var(--lumo-border-radius) / 4);
+      margin-left: calc(var(--lumo-border-radius-m) / 4);
       margin-bottom: var(--lumo-space-xs);
       transition: color 0.4s;
       line-height: 1.333;

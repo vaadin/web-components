@@ -51,7 +51,7 @@ registerStyles(
   css`
     :host {
       --_lumo-list-box-item-selected-icon-display: none;
-      --_lumo-list-box-item-padding-left: calc(var(--lumo-space-m) + var(--lumo-border-radius) / 4);
+      --_lumo-list-box-item-padding-left: calc(var(--lumo-space-m) + var(--lumo-border-radius-m) / 4);
     }
 
     [part='overlay'] {

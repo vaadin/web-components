@@ -75,9 +75,9 @@ registerStyles(
     }
 
     [part='input-field'] {
-      border-radius: var(--lumo-border-radius);
+      border-radius: var(--lumo-border-radius-m);
       background-color: var(--lumo-contrast-10pct);
-      padding: 0 calc(0.375em + var(--lumo-border-radius) / 4 - 1px);
+      padding: 0 calc(0.375em + var(--lumo-border-radius-m) / 4 - 1px);
       font-weight: 500;
       line-height: 1;
       position: relative;

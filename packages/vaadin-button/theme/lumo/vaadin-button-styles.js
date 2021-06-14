@@ -13,7 +13,7 @@ registerStyles(
       --lumo-button-size: var(--lumo-size-m);
       min-width: calc(var(--lumo-button-size) * 2);
       height: var(--lumo-button-size);
-      padding: 0 calc(var(--lumo-button-size) / 3 + var(--lumo-border-radius) / 2);
+      padding: 0 calc(var(--lumo-button-size) / 3 + var(--lumo-border-radius-m) / 2);
       margin: var(--lumo-space-xs) 0;
       box-sizing: border-box;
       /* Style */
@@ -22,7 +22,7 @@ registerStyles(
       font-weight: 500;
       color: var(--_lumo-button-color, var(--lumo-primary-text-color));
       background-color: var(--_lumo-button-background-color, var(--lumo-contrast-5pct));
-      border-radius: var(--lumo-border-radius);
+      border-radius: var(--lumo-border-radius-m);
       cursor: default;
       -webkit-tap-highlight-color: transparent;
       -webkit-font-smoothing: antialiased;

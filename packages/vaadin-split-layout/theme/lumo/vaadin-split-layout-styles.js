@@ -29,7 +29,7 @@ registerStyles(
       height: 100%;
       max-width: 100%;
       max-height: 100%;
-      border-radius: var(--lumo-border-radius);
+      border-radius: var(--lumo-border-radius-s);
       background-color: var(--lumo-contrast-30pct);
       transition: 0.1s opacity, 0.1s background-color;
     }
