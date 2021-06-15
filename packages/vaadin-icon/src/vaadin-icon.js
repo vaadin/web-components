@@ -110,8 +110,7 @@ class IconElement extends ThemableMixin(ElementMixin(PolymerElement)) {
        * See also [`name`](#/elements/vaadin-iconset#property-name) property of `vaadin-iconset`.
        */
       icon: {
-        type: String,
-        observer: '__iconChanged'
+        type: String
       },
 
       /**
@@ -130,18 +129,26 @@ class IconElement extends ThemableMixin(ElementMixin(PolymerElement)) {
       },
 
       /** @private */
-      __svgElement: Object
+      __svgElement: Object,
+
+      /** @private */
+      __vaadinIconsetDefined: {
+        value: false
+      }
     };
   }
 
   static get observers() {
-    return ['__svgChanged(svg, __svgElement)'];
+    return ['__svgChanged(svg, __svgElement)', '__iconChanged(icon, __vaadinIconsetDefined)'];
   }
 
   /** @protected */
   ready() {
     super.ready();
     this.__svgElement = this.shadowRoot.querySelector('svg');
+    customElements.whenDefined('vaadin-iconset').then(() => {
+      this.__vaadinIconsetDefined = true;
+    });
   }
 
   /** @private */
