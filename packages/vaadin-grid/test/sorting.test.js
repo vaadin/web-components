@@ -194,11 +194,6 @@ describe('sorting', () => {
       flushGrid(grid);
     });
 
-    it('should be clickable', () => {
-      const title = sorterFirst.querySelector('.title');
-      expect(window.getComputedStyle(title).cursor).to.equal('pointer');
-    });
-
     it('should ignore sorter', () => {
       sorterFirst.direction = '';
       const sortOrders = grid._mapSorters();
