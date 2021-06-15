@@ -20,13 +20,13 @@
   <vaadin-tabs orientation="vertical" slot="drawer">
     <vaadin-tab>
       <a href="/profile">
-        <iron-icon icon="lumo:user"></iron-icon>
+        <vaadin-icon icon="lumo:user"></vaadin-icon>
         Profile
       </a>
     </vaadin-tab>
     <vaadin-tab>
       <a href="/contact">
-        <iron-icon icon="lumo:phone"></iron-icon>
+        <vaadin-icon icon="lumo:phone"></vaadin-icon>
         Contact
       </a>
     </vaadin-tab>

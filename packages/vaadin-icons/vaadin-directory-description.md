@@ -10,6 +10,6 @@
 
 ## Example Usage
 ```html
-<iron-icon icon="vaadin:check-square"></iron-icon>
+<vaadin-icon icon="vaadin:check-square"></vaadin-icon>
 ```
 

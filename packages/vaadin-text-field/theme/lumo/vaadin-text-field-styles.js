@@ -272,13 +272,13 @@ registerStyles(
 
     /* Slotted content */
 
-    [part='input-field'] ::slotted(:not([part]):not(iron-icon):not(input):not(textarea)) {
+    [part='input-field'] ::slotted(:not([part]):not(iron-icon):not(vaadin-icon):not(input):not(textarea)) {
       color: var(--lumo-secondary-text-color);
       font-weight: 400;
     }
 
     /* Slotted icons */
-
+    [part='input-field'] ::slotted(vaadin-icon),
     [part='input-field'] ::slotted(iron-icon) {
       color: var(--lumo-contrast-60pct);
       width: var(--lumo-icon-size-m);
@@ -286,6 +286,7 @@ registerStyles(
     }
 
     /* Vaadin icons are based on a 16x16 grid (unlike Lumo and Material icons with 24x24), so they look too big by default */
+    [part='input-field'] ::slotted(vaadin-icon[icon^='vaadin:']),
     [part='input-field'] ::slotted(iron-icon[icon^='vaadin:']) {
       padding: 0.25em;
       box-sizing: border-box !important;

@@ -233,6 +233,7 @@ registerStyles(
 
     /* Icons */
 
+    [part] ::slotted(vaadin-icon),
     [part] ::slotted(iron-icon) {
       display: inline-block;
       width: var(--lumo-icon-size-m);
@@ -240,6 +241,7 @@ registerStyles(
     }
 
     /* Vaadin icons are based on a 16x16 grid (unlike Lumo and Material icons with 24x24), so they look too big by default */
+    [part] ::slotted(vaadin-icon[icon^='vaadin:']),
     [part] ::slotted(iron-icon[icon^='vaadin:']) {
       padding: 0.25em;
       box-sizing: border-box !important;

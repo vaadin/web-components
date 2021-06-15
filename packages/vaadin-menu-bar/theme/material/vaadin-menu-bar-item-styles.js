@@ -12,6 +12,7 @@ registerStyles(
       font-size: var(--material-button-font-size);
     }
 
+    :host([theme='menu-bar-item']) [part='content'] ::slotted(vaadin-icon[icon^='vaadin:']),
     :host([theme='menu-bar-item']) [part='content'] ::slotted(iron-icon[icon^='vaadin:']) {
       display: inline-block;
       width: 18px;
