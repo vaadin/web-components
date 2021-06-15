@@ -8,3 +8,4 @@ export * from './sizing.js';
 export * from './spacing.js';
 export * from './style.js';
 export * from './typography.js';
+export * from './utilities/index.js';
