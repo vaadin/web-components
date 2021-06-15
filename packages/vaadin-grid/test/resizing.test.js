@@ -167,7 +167,7 @@ describe('all rows visible', () => {
       </vaadin-grid>
     `);
     const rows = 100;
-    grid.items = grid.items = Array.from({ length: rows });
+    grid.items = Array.from({ length: rows });
     flushGrid(grid);
 
     grid.allRowsVisible = true;
