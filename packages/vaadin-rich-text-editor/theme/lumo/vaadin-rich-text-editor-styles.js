@@ -30,6 +30,7 @@ registerStyles(
       margin: 2px 1px;
       cursor: default;
       transition: background-color 100ms, color 100ms;
+      cursor: var(--lumo-clickable-cursor);
     }
 
     [part~='toolbar-button']:focus {

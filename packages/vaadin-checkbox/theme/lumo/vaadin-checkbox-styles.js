@@ -28,6 +28,7 @@ registerStyles(
       transition: transform 0.2s cubic-bezier(0.12, 0.32, 0.54, 2), background-color 0.15s;
       pointer-events: none;
       line-height: 1.2;
+      cursor: var(--lumo-clickable-cursor);
     }
 
     :host([indeterminate]) [part='checkbox'],

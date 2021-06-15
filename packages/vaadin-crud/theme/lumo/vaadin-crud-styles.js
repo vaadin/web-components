@@ -2,6 +2,7 @@ import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styl
 import '@vaadin/vaadin-lumo-styles/typography.js';
 import '@vaadin/vaadin-lumo-styles/color.js';
 import '@vaadin/vaadin-lumo-styles/font-icons.js';
+import '@vaadin/vaadin-lumo-styles/style.js';
 import '../vaadin-dialog-layout-overlay-styles.js';
 
 registerStyles(
@@ -17,6 +18,7 @@ registerStyles(
       border-radius: var(--lumo-border-radius);
       width: var(--lumo-size-s);
       height: var(--lumo-size-s);
+      cursor: var(--lumo-clickable-cursor);
     }
 
     :host::before {

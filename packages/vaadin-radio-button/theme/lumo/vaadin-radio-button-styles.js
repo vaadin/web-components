@@ -29,6 +29,7 @@ registerStyles(
       pointer-events: none;
       will-change: transform;
       line-height: 1.2;
+      cursor: var(--lumo-clickable-cursor);
     }
 
     /* Used for activation "halo" */

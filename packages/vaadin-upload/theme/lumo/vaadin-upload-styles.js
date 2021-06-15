@@ -131,6 +131,7 @@ registerStyles(
     [part='clear-button'] {
       flex: none;
       margin-left: var(--lumo-space-xs);
+      cursor: var(--lumo-clickable-cursor);
     }
 
     [part='done-icon']::before,
