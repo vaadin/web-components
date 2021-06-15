@@ -138,6 +138,21 @@ class IconElement extends ThemableMixin(ElementMixin(PolymerElement)) {
     return ['__svgChanged(svg, __svgElement)'];
   }
 
+  /** @private */
+  __getIconSetName(icon) {
+    if (!icon) {
+      return;
+    }
+
+    const parts = icon.split(':');
+    return parts[0] || DEFAULT_ICONSET;
+  }
+
+  constructor() {
+    super();
+    this.__iconsetDefinedListener = this.__iconsetDefinedListener.bind(this);
+  }
+
   /** @protected */
   ready() {
     super.ready();
@@ -145,10 +160,26 @@ class IconElement extends ThemableMixin(ElementMixin(PolymerElement)) {
   }
 
   /** @private */
+  __iconsetDefinedListener(e) {
+    if (e.detail === this.__getIconSetName(this.icon)) {
+      this.__iconChanged(this.icon);
+    }
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    document.addEventListener('vaadin-iconset-defined', this.__iconsetDefinedListener);
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    document.removeEventListener('vaadin-iconset-defined', this.__iconsetDefinedListener);
+  }
+
+  /** @private */
   __iconChanged(icon) {
     if (icon) {
-      const parts = icon.split(':');
-      const iconsetName = parts[0] || DEFAULT_ICONSET;
+      const iconsetName = this.__getIconSetName(icon);
       const iconset = IconsetElement.getIconset(iconsetName);
       const { svg, size } = iconset.applyIcon(icon);
       if (size !== this.size) {
