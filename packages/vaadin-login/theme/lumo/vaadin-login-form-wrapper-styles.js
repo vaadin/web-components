@@ -26,7 +26,7 @@ registerStyles(
     [part='error-message'] {
       background-color: var(--lumo-error-color-10pct);
       padding: var(--lumo-space-m);
-      border-radius: var(--lumo-border-radius);
+      border-radius: var(--lumo-border-radius-m);
       margin-top: var(--lumo-space-m);
       margin-bottom: var(--lumo-space-s);
       color: var(--lumo-error-text-color);

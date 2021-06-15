@@ -13,7 +13,7 @@ registerStyles(
 
     /* RTL specific styles */
     :host([dir='rtl']) [part~='input-field'] {
-      border-radius: var(--lumo-border-radius);
+      border-radius: var(--lumo-border-radius-m);
       border-top-left-radius: 0;
       border-bottom-left-radius: 0;
     }
@@ -31,7 +31,7 @@ registerStyles(
 
     /* RTL specific styles */
     :host([dir='rtl']) [part~='input-field'] {
-      border-radius: var(--lumo-border-radius);
+      border-radius: var(--lumo-border-radius-m);
       border-top-right-radius: 0;
       border-bottom-right-radius: 0;
     }

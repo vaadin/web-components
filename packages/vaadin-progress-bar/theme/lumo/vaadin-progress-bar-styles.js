@@ -13,12 +13,12 @@ registerStyles(
     }
 
     [part='bar'] {
-      border-radius: var(--lumo-border-radius);
+      border-radius: var(--lumo-border-radius-m);
       background-color: var(--lumo-contrast-10pct);
     }
 
     [part='value'] {
-      border-radius: var(--lumo-border-radius);
+      border-radius: var(--lumo-border-radius-m);
       background-color: var(--lumo-primary-color);
       /* Use width instead of transform to preserve border radius */
       transform: none;

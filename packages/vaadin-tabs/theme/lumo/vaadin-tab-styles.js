@@ -69,7 +69,7 @@ registerStyles(
       width: var(--lumo-size-s);
       height: 2px;
       background-color: var(--lumo-contrast-60pct);
-      border-radius: var(--lumo-border-radius) var(--lumo-border-radius) 0 0;
+      border-radius: var(--lumo-border-radius-s) var(--lumo-border-radius-s) 0 0;
       transform: translateX(-50%) scale(0);
       transform-origin: 50% 100%;
       transition: 0.14s transform cubic-bezier(0.12, 0.32, 0.54, 1);
@@ -88,7 +88,7 @@ registerStyles(
       transform: translateY(50%) scale(0);
       width: 2px;
       height: var(--lumo-size-xs);
-      border-radius: 0 var(--lumo-border-radius) var(--lumo-border-radius) 0;
+      border-radius: 0 var(--lumo-border-radius-s) var(--lumo-border-radius-s) 0;
       transform-origin: 100% 50%;
     }
 
@@ -187,7 +187,7 @@ registerStyles(
 
     :host([focus-ring]) {
       box-shadow: inset 0 0 0 2px var(--lumo-primary-color-50pct);
-      border-radius: var(--lumo-border-radius);
+      border-radius: var(--lumo-border-radius-m);
     }
 
     /* RTL specific styles */
@@ -220,7 +220,7 @@ registerStyles(
     :host([dir='rtl'][orientation='vertical'])::after {
       left: auto;
       right: 0;
-      border-radius: var(--lumo-border-radius) 0 0 var(--lumo-border-radius);
+      border-radius: var(--lumo-border-radius-s) 0 0 var(--lumo-border-radius-s);
       transform-origin: 0% 50%;
     }
   `,

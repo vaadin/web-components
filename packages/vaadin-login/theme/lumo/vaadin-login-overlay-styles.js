@@ -56,7 +56,7 @@ registerStyles(
     }
 
     [part='card'] {
-      border-radius: var(--lumo-border-radius);
+      border-radius: var(--lumo-border-radius-l);
       box-shadow: var(--lumo-box-shadow-s);
       margin: var(--lumo-space-s);
       height: auto;

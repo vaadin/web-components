@@ -18,16 +18,16 @@ registerStyles(
     [part='label'] ::slotted(vaadin-context-menu-item) {
       justify-content: center;
       height: var(--lumo-button-size);
-      margin: 0 calc((var(--lumo-size-m) / 3 + var(--lumo-border-radius) / 2) * -1);
-      padding-left: calc(var(--lumo-size-m) / 3 + var(--lumo-border-radius) / 2);
-      padding-right: calc(var(--lumo-size-m) / 3 + var(--lumo-border-radius) / 2);
+      margin: 0 calc((var(--lumo-size-m) / 3 + var(--lumo-border-radius-m) / 2) * -1);
+      padding-left: calc(var(--lumo-size-m) / 3 + var(--lumo-border-radius-m) / 2);
+      padding-right: calc(var(--lumo-size-m) / 3 + var(--lumo-border-radius-m) / 2);
     }
 
     :host([theme~='small']) [part='label'] ::slotted(vaadin-context-menu-item) {
       min-height: var(--lumo-size-s);
-      margin: 0 calc((var(--lumo-size-s) / 3 + var(--lumo-border-radius) / 2) * -1);
-      padding-left: calc(var(--lumo-size-s) / 3 + var(--lumo-border-radius) / 2);
-      padding-right: calc(var(--lumo-size-s) / 3 + var(--lumo-border-radius) / 2);
+      margin: 0 calc((var(--lumo-size-s) / 3 + var(--lumo-border-radius-m) / 2) * -1);
+      padding-left: calc(var(--lumo-size-s) / 3 + var(--lumo-border-radius-m) / 2);
+      padding-right: calc(var(--lumo-size-s) / 3 + var(--lumo-border-radius-m) / 2);
     }
 
     :host([theme~='tertiary']) [part='label'] ::slotted(vaadin-context-menu-item) {
