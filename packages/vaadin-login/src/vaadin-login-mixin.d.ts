@@ -28,6 +28,7 @@ interface LoginMixin {
 
   /**
    * Whether to hide the forgot password button. The button is visible by default.
+   * @attr {boolean} no-forgot-password
    */
   noForgotPassword: boolean;
 
