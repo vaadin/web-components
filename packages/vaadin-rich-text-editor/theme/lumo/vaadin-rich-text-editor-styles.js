@@ -25,7 +25,7 @@ registerStyles(
     [part~='toolbar-button'] {
       width: var(--lumo-size-m);
       height: var(--lumo-size-m);
-      border-radius: var(--lumo-border-radius);
+      border-radius: var(--lumo-border-radius-m);
       color: var(--lumo-contrast-60pct);
       margin: 2px 1px;
       cursor: var(--lumo-clickable-cursor);

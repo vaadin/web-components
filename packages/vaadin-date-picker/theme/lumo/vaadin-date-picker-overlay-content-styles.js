@@ -90,7 +90,7 @@ registerStyles(
       background-color: var(--lumo-base-color);
       background-image: linear-gradient(var(--lumo-tint-5pct), var(--lumo-tint-5pct));
       transform: translate(-75%, -50%) rotate(45deg);
-      border-top-right-radius: calc(var(--lumo-border-radius) / 2);
+      border-top-right-radius: var(--lumo-border-radius-s);
       box-shadow: 2px -2px 6px 0 var(--lumo-shade-5pct);
       z-index: 1;
     }
@@ -120,7 +120,7 @@ registerStyles(
     [part='toolbar'] {
       padding: var(--lumo-space-s);
       box-shadow: 0 -1px 0 0 var(--lumo-contrast-10pct);
-      border-bottom-left-radius: var(--lumo-border-radius);
+      border-bottom-left-radius: var(--lumo-border-radius-l);
       margin-right: 57px;
     }
 
@@ -168,7 +168,7 @@ registerStyles(
       align-items: center;
       height: var(--lumo-size-s);
       padding: 0 0.5em;
-      border-radius: var(--lumo-border-radius);
+      border-radius: var(--lumo-border-radius-m);
       z-index: 3;
       color: var(--lumo-primary-text-color);
       font-weight: 500;

@@ -15,7 +15,7 @@ registerStyles(
       color: var(--lumo-primary-text-color);
       position: relative;
       background-color: var(--lumo-contrast-5pct);
-      border-radius: var(--lumo-border-radius);
+      border-radius: var(--lumo-border-radius-m);
       width: var(--lumo-size-s);
       height: var(--lumo-size-s);
       cursor: var(--lumo-clickable-cursor);

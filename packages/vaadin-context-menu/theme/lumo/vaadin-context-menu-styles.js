@@ -24,7 +24,7 @@ registerStyles(
 
     :host {
       --_lumo-list-box-item-selected-icon-display: none;
-      --_lumo-list-box-item-padding-left: calc(var(--lumo-space-m) + var(--lumo-border-radius) / 4);
+      --_lumo-list-box-item-padding-left: calc(var(--lumo-space-m) + var(--lumo-border-radius-m) / 4);
     }
 
     [part='overlay'] {
@@ -49,14 +49,14 @@ registerStyles(
 
     [part='items'] ::slotted(.vaadin-menu-item) {
       outline: none;
-      border-radius: var(--lumo-border-radius);
-      padding-left: var(--_lumo-list-box-item-padding-left, calc(var(--lumo-border-radius) / 4));
-      padding-right: calc(var(--lumo-space-l) + var(--lumo-border-radius) / 4);
+      border-radius: var(--lumo-border-radius-m);
+      padding-left: var(--_lumo-list-box-item-padding-left, calc(var(--lumo-border-radius-m) / 4));
+      padding-right: calc(var(--lumo-space-l) + var(--lumo-border-radius-m) / 4);
     }
 
     :host(.vaadin-menu-list-box) [part='items'] ::slotted(.vaadin-menu-item) {
-      padding-left: calc(var(--lumo-border-radius) / 4);
-      padding-right: calc(var(--lumo-space-l) + var(--lumo-border-radius) / 4);
+      padding-left: calc(var(--lumo-border-radius-m) / 4);
+      padding-right: calc(var(--lumo-space-l) + var(--lumo-border-radius-m) / 4);
     }
 
     /* Hovered item */
@@ -68,13 +68,13 @@ registerStyles(
 
     /* RTL styles */
     :host([dir='rtl'])[part='items'] ::slotted(.vaadin-menu-item) {
-      padding-left: calc(var(--lumo-space-l) + var(--lumo-border-radius) / 4);
-      padding-right: var(--_lumo-list-box-item-padding-left, calc(var(--lumo-border-radius) / 4));
+      padding-left: calc(var(--lumo-space-l) + var(--lumo-border-radius-m) / 4);
+      padding-right: var(--_lumo-list-box-item-padding-left, calc(var(--lumo-border-radius-m) / 4));
     }
 
     :host([dir='rtl'].vaadin-menu-list-box) [part='items'] ::slotted(.vaadin-menu-item) {
-      padding-left: calc(var(--lumo-space-l) + var(--lumo-border-radius) / 4);
-      padding-right: calc(var(--lumo-border-radius) / 4);
+      padding-left: calc(var(--lumo-space-l) + var(--lumo-border-radius-m) / 4);
+      padding-right: calc(var(--lumo-border-radius-m) / 4);
     }
 
     /* Focused item */

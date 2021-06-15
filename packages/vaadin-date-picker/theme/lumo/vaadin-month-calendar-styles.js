@@ -90,7 +90,7 @@ registerStyles(
       height: 80%;
       max-height: 100%;
       max-width: 100%;
-      border-radius: var(--lumo-border-radius);
+      border-radius: var(--lumo-border-radius-m);
     }
 
     [part='date'][focused]::before {

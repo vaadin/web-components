@@ -16,9 +16,9 @@ registerStyles(
       -webkit-tap-highlight-color: var(--lumo-primary-color-10pct);
       cursor: var(--lumo-clickable-cursor);
       outline: none;
-      border-radius: var(--lumo-border-radius);
-      padding-left: var(--_lumo-list-box-item-padding-left, calc(var(--lumo-border-radius) / 4));
-      padding-right: calc(var(--lumo-space-l) + var(--lumo-border-radius) / 4);
+      border-radius: var(--lumo-border-radius-m);
+      padding-left: var(--_lumo-list-box-item-padding-left, calc(var(--lumo-border-radius-m) / 4));
+      padding-right: calc(var(--lumo-space-l) + var(--lumo-border-radius-m) / 4);
     }
 
     [part='items'] ::slotted(vaadin-item[disabled]) {
@@ -56,14 +56,14 @@ registerStyles(
       height: 1px;
       border: 0;
       padding: 0;
-      margin: var(--lumo-space-s) var(--lumo-border-radius);
+      margin: var(--lumo-space-s) var(--lumo-border-radius-m);
       background-color: var(--lumo-contrast-10pct);
     }
 
     /* RTL specific styles */
     :host([dir='rtl']) [part='items'] ::slotted(vaadin-item) {
-      padding-left: calc(var(--lumo-space-l) + var(--lumo-border-radius) / 4);
-      padding-right: var(--_lumo-list-box-item-padding-left, calc(var(--lumo-border-radius) / 4));
+      padding-left: calc(var(--lumo-space-l) + var(--lumo-border-radius-m) / 4);
+      padding-right: var(--_lumo-list-box-item-padding-left, calc(var(--lumo-border-radius-m) / 4));
     }
   `,
   { moduleId: 'lumo-list-box' }
