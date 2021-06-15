@@ -63,6 +63,7 @@ export const LoginMixin = (superClass) =>
         /**
          * Whether to hide the forgot password button. The button is visible by default.
          * @type {boolean}
+         * @attr {boolean} no-forgot-password
          */
         noForgotPassword: {
           type: Boolean,
