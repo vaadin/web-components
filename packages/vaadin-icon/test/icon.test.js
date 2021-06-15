@@ -142,6 +142,17 @@ describe('vaadin-icon', () => {
         icon.icon = undefined;
         expectIcon('');
       });
+
+      it('should inherit currentColor as fill color', () => {
+        icon.style.color = 'rgb(0, 0, 255)';
+        expect(getComputedStyle(icon).fill).to.equal('rgb(0, 0, 255)');
+      });
+
+      it('should override fill color', () => {
+        icon.style.color = 'rgb(0, 0, 255)';
+        icon.style.fill = 'rgb(0, 255, 0)';
+        expect(getComputedStyle(icon).fill).to.equal('rgb(0, 255, 0)');
+      });
     });
 
     describe('set before attach', () => {

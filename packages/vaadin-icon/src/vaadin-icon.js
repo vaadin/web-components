@@ -66,6 +66,7 @@ class IconElement extends ThemableMixin(ElementMixin(PolymerElement)) {
           vertical-align: middle;
           width: 24px;
           height: 24px;
+          fill: currentColor;
         }
 
         :host([hidden]) {
