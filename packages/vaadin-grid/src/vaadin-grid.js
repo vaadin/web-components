@@ -385,34 +385,12 @@ class GridElement extends ElementMixin(
       },
 
       /**
-       * **Deprecated**
-       *
-       * See [`allRowsVisible`](#/elements/vaadin-grid#property-allRowsVisible)
-       *
-       * If true, the grid's height is defined by its rows.
-       *
-       * Effectively, this disables the grid's virtual scrolling so that all the rows are rendered in the DOM at once.
-       * If the grid has a large number of items, using the feature is discouraged to avoid performance issues.
-       *
-       * @attr {boolean} height-by-rows
-       * @type {boolean}
-       * @deprecated since version 14.7
-       */
-      heightByRows: {
-        type: Boolean,
-        value: false,
-        reflectToAttribute: true,
-        observer: '_allRowsVisibleChanged'
-      },
-
-      /**
        * If true, the grid's height is defined by its rows.
        *
        * Effectively, this disables the grid's virtual scrolling so that all the rows are rendered in the DOM at once.
        * If the grid has a large number of items, using the feature is discouraged to avoid performance issues.
        * @attr {boolean} all-rows-visible
        * @type {boolean}
-       * @since 14.7
        */
       allRowsVisible: {
         type: Boolean,
@@ -902,7 +880,7 @@ class GridElement extends ElementMixin(
       // Sticky (or translated) footer in a flexbox host doesn't get included in
       // the scroll height calculation on FF. This is a workaround for the issue.
       this.$.items.style.paddingBottom = 0;
-      if (!this.heightByRows && !this.allRowsVisible) {
+      if (!this.allRowsVisible) {
         this.$.items.style.paddingBottom = `${this.$.footer.offsetHeight}px`;
       }
     }

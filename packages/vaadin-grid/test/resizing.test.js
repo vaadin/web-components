@@ -98,123 +98,64 @@ describe('resizing', () => {
     expect(detailsCell.getBoundingClientRect().bottom).to.be.closeTo(bodyRows[1].getBoundingClientRect().top, 2);
   });
 
-  describe('align height with number of rows', () => {
-    it('should work with heightByRows', async () => {
-      grid.style.height = '';
-      grid.heightByRows = true;
-      await nextFrame();
-      const headerHeight = grid.$.header.clientHeight;
-      const bodyHeight = grid.$.items.clientHeight;
-      const footerHeight = grid.$.footer.clientHeight;
-      expect(grid.clientHeight).to.equal(headerHeight + bodyHeight + footerHeight);
-    });
-
-    it('should work with allRowsVisible', async () => {
-      grid.style.height = '';
-      grid.allRowsVisible = true;
-      await nextFrame();
-      const headerHeight = grid.$.header.clientHeight;
-      const bodyHeight = grid.$.items.clientHeight;
-      const footerHeight = grid.$.footer.clientHeight;
-      expect(grid.clientHeight).to.equal(headerHeight + bodyHeight + footerHeight);
-    });
+  it('should align height with number of rows', async () => {
+    grid.style.height = '';
+    grid.allRowsVisible = true;
+    await nextFrame();
+    const headerHeight = grid.$.header.clientHeight;
+    const bodyHeight = grid.$.items.clientHeight;
+    const footerHeight = grid.$.footer.clientHeight;
+    expect(grid.clientHeight).to.equal(headerHeight + bodyHeight + footerHeight);
   });
 
   // NOTE: This issue only manifests with scrollbars that affect the layout
   // (On mac: Show scroll bars: Always) and Chrome / Safari browser
-  describe('correct layout after column width change', () => {
-    it('should work with heightByRows', async () => {
-      grid.style.height = '';
-      grid.heightByRows = true;
-      grid.querySelector('vaadin-grid-column').width = '300px';
-      // Before next render
-      await nextFrame();
-      // After next render
-      await aTimeout(0);
-      expect(grid.$.scroller.getBoundingClientRect().bottom).to.equal(grid.$.table.getBoundingClientRect().bottom);
-    });
-
-    it('should work with allRowsVisible', async () => {
-      grid.style.height = '';
-      grid.allRowsVisible = true;
-      grid.querySelector('vaadin-grid-column').width = '300px';
-      // Before next render
-      await nextFrame();
-      // After next render
-      await aTimeout(0);
-      expect(grid.$.scroller.getBoundingClientRect().bottom).to.equal(grid.$.table.getBoundingClientRect().bottom);
-    });
+  it('should have correct layout after column width change', async () => {
+    grid.style.height = '';
+    grid.allRowsVisible = true;
+    grid.querySelector('vaadin-grid-column').width = '300px';
+    // Before next render
+    await nextFrame();
+    // After next render
+    await aTimeout(0);
+    expect(grid.$.scroller.getBoundingClientRect().bottom).to.equal(grid.$.table.getBoundingClientRect().bottom);
   });
 
   describe('flexbox parent', () => {
-    describe('using heightByRows', () => {
-      beforeEach(() => {
-        grid.style.height = grid.style.width = '';
-        grid.size = 1;
-        component.style.display = 'flex';
-        component.style.flexDirection = 'column';
-        grid.heightByRows = true;
-      });
-
-      it('should have the default height inside a column flexbox', () => {
-        grid.heightByRows = false;
-        expect(grid.getBoundingClientRect().height).to.equal(400);
-      });
-
-      it('should auto-grow inside a fixed height column flexbox', async () => {
-        component.style.height = '500px';
-        await nextResize(grid);
-        expect(grid.getBoundingClientRect().height).to.equal(129);
-      });
-
-      it('should auto-grow inside a fixed height row flexbox', async () => {
-        component.style.flexDirection = 'row';
-        component.style.height = '500px';
-        await nextResize(grid);
-        expect(grid.getBoundingClientRect().height).to.equal(129);
-      });
-
-      it('should not shrink horizontally inside a row flexbox', () => {
-        component.style.flexDirection = 'row';
-        expect(grid.getBoundingClientRect().width).to.be.above(780);
-      });
+    beforeEach(() => {
+      grid.style.height = grid.style.width = '';
+      grid.size = 1;
+      component.style.display = 'flex';
+      component.style.flexDirection = 'column';
+      grid.allRowsVisible = true;
     });
-    describe('using allRowsVisible', () => {
-      beforeEach(() => {
-        grid.style.height = grid.style.width = '';
-        grid.size = 1;
-        component.style.display = 'flex';
-        component.style.flexDirection = 'column';
-        grid.allRowsVisible = true;
-      });
 
-      it('should have the default height inside a column flexbox', () => {
-        grid.allRowsVisible = false;
-        expect(grid.getBoundingClientRect().height).to.equal(400);
-      });
+    it('should have the default height inside a column flexbox', () => {
+      grid.allRowsVisible = false;
+      expect(grid.getBoundingClientRect().height).to.equal(400);
+    });
 
-      it('should auto-grow inside a fixed height column flexbox', async () => {
-        component.style.height = '500px';
-        await nextResize(grid);
-        expect(grid.getBoundingClientRect().height).to.equal(129);
-      });
+    it('should auto-grow inside a fixed height column flexbox', async () => {
+      component.style.height = '500px';
+      await nextResize(grid);
+      expect(grid.getBoundingClientRect().height).to.equal(129);
+    });
 
-      it('should auto-grow inside a fixed height row flexbox', async () => {
-        component.style.flexDirection = 'row';
-        component.style.height = '500px';
-        await nextResize(grid);
-        expect(grid.getBoundingClientRect().height).to.equal(129);
-      });
+    it('should auto-grow inside a fixed height row flexbox', async () => {
+      component.style.flexDirection = 'row';
+      component.style.height = '500px';
+      await nextResize(grid);
+      expect(grid.getBoundingClientRect().height).to.equal(129);
+    });
 
-      it('should not shrink horizontally inside a row flexbox', () => {
-        component.style.flexDirection = 'row';
-        expect(grid.getBoundingClientRect().width).to.be.above(780);
-      });
+    it('should not shrink horizontally inside a row flexbox', () => {
+      component.style.flexDirection = 'row';
+      expect(grid.getBoundingClientRect().width).to.be.above(780);
     });
   });
 });
 
-describe('making all rows visible using heightByRows', () => {
+describe('all rows visible', () => {
   let grid;
 
   it('should align height with number of rows after first render', () => {
@@ -226,57 +167,7 @@ describe('making all rows visible using heightByRows', () => {
       </vaadin-grid>
     `);
     const rows = 100;
-    grid.items = Array.from({ length: rows });
-    flushGrid(grid);
-
-    grid.heightByRows = true;
-    flushGrid(grid);
-
-    expect(grid.$.items.children.length).to.equal(rows);
-  });
-
-  it('should have body rows if header is not visible', () => {
-    grid = fixtureSync(`
-      <vaadin-grid>
-        <vaadin-grid-column path="value"></vaadin-grid-column>
-      </vaadin-grid>`);
-    grid.firstElementChild.header = null;
-    grid.heightByRows = true;
-    grid.items = [{ value: 1 }];
-    flushGrid(grid);
-    expect(getPhysicalItems(grid).length).to.be.above(0);
-  });
-
-  it('should have body rows after items reset and repopulated', () => {
-    grid = fixtureSync(`
-      <vaadin-grid>
-        <vaadin-grid-column path="value"></vaadin-grid-column>
-      </vaadin-grid>`);
-    grid.firstElementChild.header = null;
-    grid.heightByRows = true;
-    grid.items = [{ value: 1 }];
-    flushGrid(grid);
-    grid.items = [];
-    flushGrid(grid);
-    grid.items = [{ value: 1 }];
-    flushGrid(grid);
-    expect(getPhysicalItems(grid).length).to.be.above(0);
-  });
-});
-
-describe('making all rows visible using allRowsVisible', () => {
-  let grid;
-
-  it('should align height with number of rows after first render', () => {
-    grid = fixtureSync(`
-      <vaadin-grid>
-        <vaadin-grid-column>
-          <template>[[index]]</template>
-        </vaadin-grid-column>
-      </vaadin-grid>
-    `);
-    const rows = 100;
-    grid.items = Array.from({ length: rows });
+    grid.items = grid.items = Array.from({ length: rows });
     flushGrid(grid);
 
     grid.allRowsVisible = true;
