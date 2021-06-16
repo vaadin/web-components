@@ -140,7 +140,7 @@ class IconElement extends ThemableMixin(ElementMixin(PolymerElement)) {
 
   constructor() {
     super();
-    this.__onIconsetDefined = this.__onIconsetDefined.bind(this);
+    this.__onIconsetRegistered = this.__onIconsetRegistered.bind(this);
   }
 
   /** @protected */
@@ -160,7 +160,7 @@ class IconElement extends ThemableMixin(ElementMixin(PolymerElement)) {
   }
 
   /** @private */
-  __onIconsetDefined(e) {
+  __onIconsetRegistered(e) {
     if (e.detail === this.__getIconsetName(this.icon)) {
       this.__iconChanged(this.icon);
     }
@@ -168,12 +168,12 @@ class IconElement extends ThemableMixin(ElementMixin(PolymerElement)) {
 
   connectedCallback() {
     super.connectedCallback();
-    document.addEventListener('vaadin-iconset-defined', this.__onIconsetDefined);
+    document.addEventListener('vaadin-iconset-registered', this.__onIconsetRegistered);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    document.removeEventListener('vaadin-iconset-defined', this.__onIconsetDefined);
+    document.removeEventListener('vaadin-iconset-registered', this.__onIconsetRegistered);
   }
 
   /** @private */

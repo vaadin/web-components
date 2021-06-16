@@ -115,7 +115,7 @@ class IconsetElement extends ElementMixin(PolymerElement) {
     }
     if (name) {
       iconRegistry[name] = this;
-      document.dispatchEvent(new CustomEvent('vaadin-iconset-defined', { detail: name }));
+      document.dispatchEvent(new CustomEvent('vaadin-iconset-registered', { detail: name }));
     }
   }
 }

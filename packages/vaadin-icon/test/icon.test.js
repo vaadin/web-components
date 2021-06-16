@@ -154,7 +154,7 @@ describe('vaadin-icon', () => {
         expect(getComputedStyle(icon).fill).to.equal('rgb(0, 255, 0)');
       });
 
-      it('should apply an icon once the set is defined', () => {
+      it('should apply the icon once the set is registered', () => {
         icon.icon = 'custom:angle-up';
 
         fixtureSync(`
