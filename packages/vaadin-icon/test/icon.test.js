@@ -153,6 +153,21 @@ describe('vaadin-icon', () => {
         icon.style.fill = 'rgb(0, 255, 0)';
         expect(getComputedStyle(icon).fill).to.equal('rgb(0, 255, 0)');
       });
+
+      it('should apply the icon once the set is registered', () => {
+        icon.icon = 'custom:angle-up';
+
+        fixtureSync(`
+          <vaadin-iconset name="custom">
+            <svg xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <g id="custom:angle-up">${ANGLE_UP}</g>
+              </defs>
+            </svg>
+          </vaadin-iconset>
+        `);
+        expectIcon(ANGLE_UP);
+      });
     });
 
     describe('set before attach', () => {
