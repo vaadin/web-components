@@ -109,7 +109,6 @@ class AvatarElement extends ElementMixin(ThemableMixin(PolymerElement)) {
 
         :host([has-color-index])::before {
           position: absolute;
-          z-index: 1;
           content: '';
           top: 0;
           left: 0;
