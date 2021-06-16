@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-button",
-  "version": "21.0.0-alpha6",
+  "version": "21.0.0-alpha7",
   "description": "vaadin-button",
   "main": "vaadin-button.js",
   "module": "vaadin-button.js",
@@ -26,16 +26,16 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/vaadin-control-state-mixin": "^21.0.0-alpha6",
-    "@vaadin/vaadin-element-mixin": "^21.0.0-alpha6",
-    "@vaadin/vaadin-lumo-styles": "^21.0.0-alpha6",
-    "@vaadin/vaadin-material-styles": "^21.0.0-alpha6",
-    "@vaadin/vaadin-themable-mixin": "^21.0.0-alpha6"
+    "@vaadin/vaadin-control-state-mixin": "^21.0.0-alpha7",
+    "@vaadin/vaadin-element-mixin": "^21.0.0-alpha7",
+    "@vaadin/vaadin-lumo-styles": "^21.0.0-alpha7",
+    "@vaadin/vaadin-material-styles": "^21.0.0-alpha7",
+    "@vaadin/vaadin-themable-mixin": "^21.0.0-alpha7"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.1.5",
-    "@vaadin/vaadin-icon": "^21.0.0-alpha6",
     "@vaadin/testing-helpers": "^0.2.1",
+    "@vaadin/vaadin-icon": "^21.0.0-alpha7",
     "sinon": "^9.2.4"
   },
   "publishConfig": {

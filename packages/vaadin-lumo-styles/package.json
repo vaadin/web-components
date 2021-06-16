@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-lumo-styles",
-  "version": "21.0.0-alpha6",
+  "version": "21.0.0-alpha7",
   "description": "Lumo is a design system foundation for modern web applications, used by Vaadin components",
   "main": "all-imports.js",
   "module": "all-imports.js",
@@ -33,8 +33,8 @@
     "@polymer/iron-icon": "^3.0.0",
     "@polymer/iron-iconset-svg": "^3.0.0",
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/vaadin-icon": "^21.0.0-alpha6",
-    "@vaadin/vaadin-themable-mixin": "^21.0.0-alpha6"
+    "@vaadin/vaadin-icon": "^21.0.0-alpha7",
+    "@vaadin/vaadin-themable-mixin": "^21.0.0-alpha7"
   },
   "devDependencies": {
     "gulp": "^4.0.0",

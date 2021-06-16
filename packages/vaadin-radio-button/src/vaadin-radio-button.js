@@ -108,7 +108,7 @@ class RadioButtonElement extends ElementMixin(ControlStateMixin(ThemableMixin(Ge
   }
 
   static get version() {
-    return '21.0.0-alpha6';
+    return '21.0.0-alpha7';
   }
 
   static get properties() {
