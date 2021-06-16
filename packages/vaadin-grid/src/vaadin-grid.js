@@ -366,14 +366,14 @@ class GridElement extends ElementMixin(
        *
        * Effectively, this disables the grid's virtual scrolling so that all the rows are rendered in the DOM at once.
        * If the grid has a large number of items, using the feature is discouraged to avoid performance issues.
-       * @attr {boolean} height-by-rows
+       * @attr {boolean} all-rows-visible
        * @type {boolean}
        */
-      heightByRows: {
+      allRowsVisible: {
         type: Boolean,
         value: false,
         reflectToAttribute: true,
-        observer: '_heightByRowsChanged'
+        observer: '_allRowsVisibleChanged'
       },
 
       /** @private */
@@ -870,7 +870,7 @@ class GridElement extends ElementMixin(
       // Sticky (or translated) footer in a flexbox host doesn't get included in
       // the scroll height calculation on FF. This is a workaround for the issue.
       this.$.items.style.paddingBottom = 0;
-      if (!this.heightByRows) {
+      if (!this.allRowsVisible) {
         this.$.items.style.paddingBottom = `${this.$.footer.offsetHeight}px`;
       }
     }
@@ -997,7 +997,7 @@ class GridElement extends ElementMixin(
   }
 
   /** @private */
-  _heightByRowsChanged(value, oldValue) {
+  _allRowsVisibleChanged(value, oldValue) {
     if (value || oldValue) {
       this.notifyResize();
     }

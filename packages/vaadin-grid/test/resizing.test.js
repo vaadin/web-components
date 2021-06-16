@@ -101,7 +101,7 @@ describe('resizing', () => {
 
   it('should align height with number of rows', async () => {
     grid.style.height = '';
-    grid.heightByRows = true;
+    grid.allRowsVisible = true;
     await nextFrame();
     const headerHeight = grid.$.header.clientHeight;
     const bodyHeight = grid.$.items.clientHeight;
@@ -113,7 +113,7 @@ describe('resizing', () => {
   // (On mac: Show scroll bars: Always) and Chrome / Safari browser
   it('should have correct layout after column width change', async () => {
     grid.style.height = '';
-    grid.heightByRows = true;
+    grid.allRowsVisible = true;
     grid.querySelector('vaadin-grid-column').width = '300px';
     // Before next render
     await nextFrame();
@@ -128,11 +128,11 @@ describe('resizing', () => {
       grid.size = 1;
       component.style.display = 'flex';
       component.style.flexDirection = 'column';
-      grid.heightByRows = true;
+      grid.allRowsVisible = true;
     });
 
     it('should have the default height inside a column flexbox', () => {
-      grid.heightByRows = false;
+      grid.allRowsVisible = false;
       expect(grid.getBoundingClientRect().height).to.equal(400);
     });
 
@@ -156,7 +156,7 @@ describe('resizing', () => {
   });
 });
 
-describe('height by rows', () => {
+describe('all rows visible', () => {
   let grid;
 
   it('should align height with number of rows after first render', () => {
@@ -168,10 +168,10 @@ describe('height by rows', () => {
       </vaadin-grid>
     `);
     const rows = 100;
-    grid.items = grid.items = Array(...new Array(rows)).map(() => {});
+    grid.items = Array.from({ length: rows });
     flushGrid(grid);
 
-    grid.heightByRows = true;
+    grid.allRowsVisible = true;
     flushGrid(grid);
 
     expect(grid.$.items.children.length).to.equal(rows);
@@ -183,7 +183,7 @@ describe('height by rows', () => {
         <vaadin-grid-column path="value"></vaadin-grid-column>
       </vaadin-grid>`);
     grid.firstElementChild.header = null;
-    grid.heightByRows = true;
+    grid.allRowsVisible = true;
     grid.items = [{ value: 1 }];
     flushGrid(grid);
     expect(getPhysicalItems(grid).length).to.be.above(0);
@@ -195,7 +195,7 @@ describe('height by rows', () => {
         <vaadin-grid-column path="value"></vaadin-grid-column>
       </vaadin-grid>`);
     grid.firstElementChild.header = null;
-    grid.heightByRows = true;
+    grid.allRowsVisible = true;
     grid.items = [{ value: 1 }];
     flushGrid(grid);
     grid.items = [];

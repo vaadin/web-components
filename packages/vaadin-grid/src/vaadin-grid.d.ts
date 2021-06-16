@@ -329,9 +329,9 @@ declare class GridElement<TItem = GridDefaultItem> extends HTMLElement {
    *
    * Effectively, this disables the grid's virtual scrolling so that all the rows are rendered in the DOM at once.
    * If the grid has a large number of items, using the feature is discouraged to avoid performance issues.
-   * @attr {boolean} height-by-rows
+   * @attr {boolean} all-rows-visible
    */
-  heightByRows: boolean;
+  allRowsVisible: boolean;
 
   __itemsReceived(): void;
 
