@@ -1,7 +1,7 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '@polymer/iron-icon/iron-icon.js';
-import '@vaadin/vaadin-lumo-styles/icons.js';
+import '@vaadin/vaadin-icon/theme/material/vaadin-icon.js';
+import '@vaadin/vaadin-lumo-styles/vaadin-iconset.js';
 import '../../../theme/material/vaadin-button.js';
 
 describe('button', () => {
@@ -49,7 +49,7 @@ describe('button', () => {
     let icon;
 
     beforeEach(() => {
-      icon = document.createElement('iron-icon');
+      icon = document.createElement('vaadin-icon');
       icon.setAttribute('icon', 'lumo:plus');
     });
 

@@ -1,7 +1,7 @@
 import { arrowDown, fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '@vaadin/vaadin-lumo-styles/icons.js';
-import '@polymer/iron-icon/iron-icon.js';
+import '@vaadin/vaadin-icon/theme/lumo/vaadin-icon.js';
+import '@vaadin/vaadin-lumo-styles/vaadin-iconset.js';
 import '../../../theme/lumo/vaadin-menu-bar.js';
 import '../../not-animated-styles.js';
 
@@ -49,7 +49,7 @@ describe('menu-bar', () => {
       describe('theme', () => {
         function makeIcon(img) {
           const item = document.createElement('vaadin-context-menu-item');
-          const icon = document.createElement('iron-icon');
+          const icon = document.createElement('vaadin-icon');
           icon.setAttribute('icon', img);
           item.appendChild(icon);
           item.setAttribute('theme', 'menu-bar-item');

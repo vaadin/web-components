@@ -61,6 +61,7 @@ registerStyles(
     }
 
     /* Slotted icons */
+    :host ::slotted(vaadin-icon),
     :host ::slotted(iron-icon) {
       width: var(--lumo-icon-size-m);
       height: var(--lumo-icon-size-m);

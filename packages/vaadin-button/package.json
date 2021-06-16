@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.1.5",
-    "@polymer/iron-icon": "^3.0.0",
+    "@vaadin/vaadin-icon": "^21.0.0-alpha6",
     "@vaadin/testing-helpers": "^0.2.1",
     "sinon": "^9.2.4"
   },
