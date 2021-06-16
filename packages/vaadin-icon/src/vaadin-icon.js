@@ -138,19 +138,9 @@ class IconElement extends ThemableMixin(ElementMixin(PolymerElement)) {
     return ['__svgChanged(svg, __svgElement)'];
   }
 
-  /** @private */
-  __getIconSetName(icon) {
-    if (!icon) {
-      return;
-    }
-
-    const parts = icon.split(':');
-    return parts[0] || DEFAULT_ICONSET;
-  }
-
   constructor() {
     super();
-    this.__iconsetDefinedListener = this.__iconsetDefinedListener.bind(this);
+    this.__onIconsetDefined = this.__onIconsetDefined.bind(this);
   }
 
   /** @protected */
@@ -160,26 +150,36 @@ class IconElement extends ThemableMixin(ElementMixin(PolymerElement)) {
   }
 
   /** @private */
-  __iconsetDefinedListener(e) {
-    if (e.detail === this.__getIconSetName(this.icon)) {
+  __getIconsetName(icon) {
+    if (!icon) {
+      return;
+    }
+
+    const parts = icon.split(':');
+    return parts[0] || DEFAULT_ICONSET;
+  }
+
+  /** @private */
+  __onIconsetDefined(e) {
+    if (e.detail === this.__getIconsetName(this.icon)) {
       this.__iconChanged(this.icon);
     }
   }
 
   connectedCallback() {
     super.connectedCallback();
-    document.addEventListener('vaadin-iconset-defined', this.__iconsetDefinedListener);
+    document.addEventListener('vaadin-iconset-defined', this.__onIconsetDefined);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    document.removeEventListener('vaadin-iconset-defined', this.__iconsetDefinedListener);
+    document.removeEventListener('vaadin-iconset-defined', this.__onIconsetDefined);
   }
 
   /** @private */
   __iconChanged(icon) {
     if (icon) {
-      const iconsetName = this.__getIconSetName(icon);
+      const iconsetName = this.__getIconsetName(icon);
       const iconset = IconsetElement.getIconset(iconsetName);
       const { svg, size } = iconset.applyIcon(icon);
       if (size !== this.size) {
