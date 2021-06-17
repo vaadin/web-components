@@ -27,7 +27,7 @@ class IconsetElement extends ElementMixin(PolymerElement) {
   }
 
   static get version() {
-    return '21.0.0-alpha7';
+    return '21.0.0-alpha8';
   }
 
   static get properties() {
