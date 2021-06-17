@@ -27,3 +27,5 @@ import './style.js';
 export * from './style.js';
 import './typography.js';
 export * from './typography.js';
+import './utilities/index.js';
+export * from './utilities/index.js';
