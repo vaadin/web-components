@@ -20,7 +20,8 @@
   "files": [
     "custom_typings",
     "vaadin-*.d.ts",
-    "vaadin-*.js"
+    "vaadin-*.js",
+    "templates.js"
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
