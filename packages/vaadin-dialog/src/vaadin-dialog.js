@@ -286,7 +286,7 @@ class DialogElement extends ThemePropertyMixin(
    * Manually invoke existing renderer.
    */
   render() {
-    this.$.overlay.render();
+    this.$.overlay.runRenderers();
   }
 
   /** @private */

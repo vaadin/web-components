@@ -368,7 +368,7 @@ class SelectElement extends ElementMixin(
    * Manually invoke existing renderer.
    */
   render() {
-    this._overlayElement.render();
+    this._overlayElement.runRenderers();
     if (this._menuElement && this._menuElement.items) {
       this._updateSelectedItem(this.value, this._menuElement.items);
     }

@@ -110,10 +110,30 @@ describe('renderer', () => {
       expect(overlay.template).to.be.not.ok;
     });
 
-    it('should be possible to manually invoke renderer', () => {
+    it('should run renderers when calling runRenderers()', () => {
       overlay.renderer = sinon.spy();
-      overlay.render();
+      overlay.runRenderers();
+
       expect(overlay.renderer.calledOnce).to.be.true;
+    });
+
+    it('should run renderers when calling deprecated render()', () => {
+      const stub = sinon.stub(overlay, 'runRenderers');
+      overlay.render();
+      stub.restore();
+
+      expect(stub.calledOnce).to.be.true;
+    });
+
+    it('should warn when calling deprecated render()', () => {
+      const stub = sinon.stub(console, 'warn');
+      overlay.render();
+      stub.restore();
+
+      expect(stub.calledOnce).to.be.true;
+      expect(stub.args[0][0]).to.equal(
+        'WARNING: Since Vaadin 21, render() is deprecated. Please use runRenderers() instead.'
+      );
     });
 
     it('should not render if overlay is not open', () => {

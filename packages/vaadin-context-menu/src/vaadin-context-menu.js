@@ -455,7 +455,7 @@ class ContextMenuElement extends ElementMixin(ThemePropertyMixin(ItemsMixin(Gest
    * Manually invoke existing renderer.
    */
   render() {
-    this.$.overlay.render();
+    this.$.overlay.runRenderers();
   }
 
   /** @private */
