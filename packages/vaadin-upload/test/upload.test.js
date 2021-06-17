@@ -119,7 +119,7 @@ describe('upload', () => {
         const errorEvt = errorSpy.firstCall.args[0];
 
         expect(errorEvt.detail.file.uploading).not.to.be.ok;
-        expect(errorEvt.detail.file.error).to.be.equal('Server Unavailable');
+        expect(errorEvt.detail.file.error).to.be.equal("File couldn't be uploaded, please try again later");
         expect(errorEvt.detail.xhr.status).not.to.be.equal(200);
       });
 
@@ -307,16 +307,28 @@ describe('upload', () => {
         expect(e.detail.file.error).to.be.equal(error);
       }
 
-      [400, 401, 403, 404, 451].forEach((status) => {
-        it('should fail with forbidden error for status code ' + status, async () => {
-          await expectResponseErrorForStatus(upload.i18n.uploading.error.forbidden, status);
+      [400, 404, 451].forEach((status) => {
+        it('should fail with bad request error for status code ' + status, async () => {
+          await expectResponseErrorForStatus(upload.i18n.uploading.error.clientError.badRequest, status);
         });
       });
 
-      [500, 501, 502, 503, 504].forEach((status) => {
-        it('should fail with unexpected error for status code ' + status, async () => {
-          await expectResponseErrorForStatus(upload.i18n.uploading.error.unexpectedServerError, status);
+      it('should fail with unauthorized message for status code 401', async () => {
+        await expectResponseErrorForStatus(upload.i18n.uploading.error.clientError.unauthorized, 401);
+      });
+
+      it('should fail with forbidden message for status code 403', async () => {
+        await expectResponseErrorForStatus(upload.i18n.uploading.error.clientError.forbidden, 403);
+      });
+
+      [500, 501, 502, 504].forEach((status) => {
+        it('should fail with internal server error for status code ' + status, async () => {
+          await expectResponseErrorForStatus(upload.i18n.uploading.error.serverError.internalServerError, status);
         });
+      });
+
+      it('should fail with service unavailble mesage for status code 503', async () => {
+        await expectResponseErrorForStatus(upload.i18n.uploading.error.serverError.serviceNotAvailable, 503);
       });
     });
   });

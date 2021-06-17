@@ -408,9 +408,16 @@ class UploadElement extends ElementMixin(ThemableMixin(PolymerElement)) {
                 unknown: 'unknown remaining time'
               },
               error: {
-                serverUnavailable: 'Server Unavailable',
-                unexpectedServerError: 'Unexpected Server Error',
-                forbidden: 'Forbidden'
+                serverError: {
+                  internalServerError: "File couldn't be uploaded becase there is an issue with server.",
+                  serviceNotAvailable: "File couldn't be uploaded becase service is not availble."
+                },
+                clientError: {
+                  unauthorized: 'You are not authorized to upload file',
+                  forbidden: "You don't have sufficient right to upload file",
+                  badRequest: "Server couldn't not process your request"
+                },
+                networkError: "File couldn't be uploaded, please try again later"
               }
             },
             units: {
@@ -639,12 +646,23 @@ class UploadElement extends ElementMixin(ThemableMixin(PolymerElement)) {
         if (!evt) {
           return;
         }
+
         if (xhr.status === 0) {
-          file.error = this.i18n.uploading.error.serverUnavailable;
+          file.error = this.i18n.uploading.error.networkError;
         } else if (xhr.status >= 500) {
-          file.error = this.i18n.uploading.error.unexpectedServerError;
+          if (xhr.status === 503) {
+            file.error = this.i18n.uploading.error.serverError.serviceNotAvailable;
+          } else {
+            file.error = this.i18n.uploading.error.serverError.internalServerError;
+          }
         } else if (xhr.status >= 400) {
-          file.error = this.i18n.uploading.error.forbidden;
+          if (xhr.status === 401) {
+            file.error = this.i18n.uploading.error.clientError.unauthorized;
+          } else if (xhr.status === 403) {
+            file.error = this.i18n.uploading.error.clientError.forbidden;
+          } else {
+            file.error = this.i18n.uploading.error.clientError.badRequest;
+          }
         }
 
         file.complete = !file.error;
