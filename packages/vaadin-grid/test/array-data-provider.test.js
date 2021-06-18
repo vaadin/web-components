@@ -80,6 +80,7 @@ describe('array data provider', () => {
     it('should handle null', () => {
       grid.items = null;
       expect(grid.size).to.equal(0);
+      expect(grid.items).to.be.null;
     });
 
     it('should set array data provider', () => {

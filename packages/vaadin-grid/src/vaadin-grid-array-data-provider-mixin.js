@@ -37,14 +37,6 @@ export const ArrayDataProviderMixin = (superClass) =>
     }
 
     /** @private */
-    __unsetArrayDataProvider() {
-      this.setProperties({
-        _arrayDataProvider: undefined,
-        items: undefined
-      });
-    }
-
-    /** @private */
     __dataProviderOrItemsChanged(dataProvider, items, isAttached) {
       if (!isAttached) {
         return;
@@ -55,12 +47,17 @@ export const ArrayDataProviderMixin = (superClass) =>
 
         if (dataProvider !== this._arrayDataProvider) {
           // A custom data provider was set externally
-          this.__unsetArrayDataProvider();
+          this.setProperties({
+            _arrayDataProvider: undefined,
+            items: undefined
+          });
         } else if (!items) {
           // The items array was unset
-          this.__unsetArrayDataProvider();
-          this.dataProvider = undefined;
-          this.size = 0;
+          this.setProperties({
+            _arrayDataProvider: undefined,
+            dataProvider: undefined,
+            size: 0
+          });
           this.clearCache();
         } else if (this._arrayDataProvider.__items === items) {
           // The items array was modified
