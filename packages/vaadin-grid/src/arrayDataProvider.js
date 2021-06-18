@@ -40,6 +40,13 @@ function checkPaths(arrayToCheck, action, items) {
   return result;
 }
 
+/**
+ * Sorts the given array of items based on the sorting rules and returns the result.
+ *
+ * @param {Array<any>} items
+ * @param {Array<GridSorter>} items
+ * @return {Array<any>}
+ */
 function multiSort(items, sortOrders) {
   return items.sort((a, b) => {
     return sortOrders
@@ -105,9 +112,19 @@ function filter(items, filters) {
   });
 }
 
+/**
+ * WARNING: This API is still intended for internal purposes only and
+ * may change any time.
+ *
+ * Creates a new grid compatible data provider that serves the items
+ * from the given array as data when requested by the grid.
+ *
+ * @param {Array<any>} items
+ * @return {GridDataProvider<any>}
+ */
 export const createArrayDataProvider = (allItems) => {
   return (params, callback) => {
-    let items = allItems || [];
+    let items = allItems ? [...allItems] : [];
     if (params.filters && checkPaths(params.filters, 'filtering', items)) {
       items = filter(items, params.filters);
     }
