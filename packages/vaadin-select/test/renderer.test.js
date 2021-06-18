@@ -49,12 +49,36 @@ describe('renderer', () => {
     };
   });
 
-  it('should be possible to manually invoke renderer', () => {
-    const spy = (select.renderer = sinon.spy());
+  it('should run renderers when calling runRenderers()', () => {
+    select.renderer = sinon.spy();
     select.opened = true;
-    spy.resetHistory();
+
+    select.renderer.resetHistory();
+
+    select.runRenderers();
+
+    expect(select.renderer.calledOnce).to.be.true;
+  });
+
+  it('should run renderers when calling deprecated render()', () => {
+    const stub = sinon.stub(select, 'runRenderers');
+    select.opened = true;
     select.render();
-    expect(spy.callCount).to.equal(1);
+    stub.restore();
+
+    expect(stub.calledOnce).to.be.true;
+  });
+
+  it('should warn when calling deprecated render()', () => {
+    const stub = sinon.stub(console, 'warn');
+    select.opened = true;
+    select.render();
+    stub.restore();
+
+    expect(stub.calledOnce).to.be.true;
+    expect(stub.args[0][0]).to.equal(
+      'WARNING: Since Vaadin 21, render() is deprecated. Please use runRenderers() instead.'
+    );
   });
 
   it('should update selected value after renderer is called', async () => {
@@ -62,7 +86,7 @@ describe('renderer', () => {
     await nextFrame();
     select.value = 'bar';
     select.__testVar = 'baz';
-    select.render();
+    select.runRenderers();
     await nextFrame();
     expect(select._menuElement.selected).to.be.equal(1);
     expect(select._valueElement.textContent.trim()).to.be.equal('barbaz');
