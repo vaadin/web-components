@@ -283,10 +283,21 @@ class DialogElement extends ThemePropertyMixin(
   }
 
   /**
+   * Runs all the renderers to possibly update the content.
+   */
+  runRenderers() {
+    this.$.overlay.runRenderers();
+  }
+
+  /**
    * Manually invoke existing renderer.
+   *
+   * @deprecated Since Vaadin 21, `render()` is deprecated. Please use `runRenderers()` instead.
    */
   render() {
-    this.$.overlay.runRenderers();
+    console.warn('WARNING: Since Vaadin 21, render() is deprecated. Please use runRenderers() instead.');
+
+    this.runRenderers();
   }
 
   /** @private */
