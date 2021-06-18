@@ -66,7 +66,7 @@ export class Virtualizer {
   /**
    * Gets the index of the first visible item in the viewport.
    *
-   * @type {number}
+   * @return {number}
    */
   get firstVisibleIndex() {
     return this.__adapter.adjustedFirstVisibleIndex;
@@ -75,7 +75,7 @@ export class Virtualizer {
   /**
    * Gets the index of the last visible item in the viewport.
    *
-   * @type {number}
+   * @return {number}
    */
   get lastVisibleIndex() {
     return this.__adapter.adjustedLastVisibleIndex;
