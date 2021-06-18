@@ -4,9 +4,9 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import '@polymer/iron-list/iron-list.js';
 import './vaadin-combo-box-item.js';
 import './vaadin-combo-box-dropdown.js';
+import { Virtualizer } from '@vaadin/vaadin-virtual-list/src/virtualizer.js';
 import { ComboBoxPlaceholder } from './vaadin-combo-box-placeholder.js';
 
 const TOUCH_DEVICE = (() => {
@@ -50,24 +50,9 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
               box-shadow: 0 0 0 white;
             }
           </style>
-          <div id="scroller" on-click="_stopPropagation">
-            <iron-list id="selector" role="listbox" items="[[_getItems(opened, _items)]]" scroll-target="[[_scroller]]">
-              <template>
-                <vaadin-combo-box-item
-                  on-click="_onItemClick"
-                  index="[[__requestItemByIndex(item, index, _resetScrolling)]]"
-                  item="[[item]]"
-                  label="[[getItemLabel(item, _itemLabelPath)]]"
-                  selected="[[_isItemSelected(item, _selectedItem, _itemIdPath)]]"
-                  renderer="[[renderer]]"
-                  role$="[[_getAriaRole(index)]]"
-                  aria-selected$="[[_getAriaSelected(_focusedIndex,index)]]"
-                  focused="[[_isItemFocused(_focusedIndex,index)]]"
-                  tabindex="-1"
-                  theme$="[[theme]]"
-                ></vaadin-combo-box-item>
-              </template>
-            </iron-list>
+
+          <div id="scroller" on-click="_stopPropagation" style="min-height: 1px">
+            <div id="selector" role="listbox"></div>
           </div>
         </template>
       </vaadin-combo-box-dropdown>
@@ -177,12 +162,52 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
       _oldScrollerPosition: {
         type: Number,
         value: 0
+      },
+
+      __effectiveItems: {
+        computed: '_getItems(opened, _items)',
+        observer: '__effectiveItemsChanged'
       }
     };
   }
 
   static get observers() {
     return ['_loadingChanged(loading)', '_openedChanged(opened, _items, loading)', '_restoreScrollerPosition(_items)'];
+  }
+
+  __effectiveItemsChanged(effectiveItems) {
+    if (this.__virtualizer && effectiveItems) {
+      requestAnimationFrame(() => {
+        this.__virtualizer.size = effectiveItems.length;
+      });
+    }
+  }
+
+  __createElements(count) {
+    return [...Array(count)].map(() => {
+      const item = document.createElement('vaadin-combo-box-item');
+      item.addEventListener('click', this._onItemClick.bind(this));
+      item.tabIndex = '-1';
+      item.style.width = '100%';
+      return item;
+    });
+  }
+
+  __updateElement(el, index) {
+    const item = this.__effectiveItems[index];
+
+    el.setProperties({
+      item: this.__effectiveItems[index],
+      index: this.__requestItemByIndex(item, index, this._resetScrolling), // Should rerender on _resetScrolling change
+      label: this.getItemLabel(item, this._itemLabelPath),
+      selected: this._isItemSelected(item, this._selectedItem, this._itemIdPath), // These should also invoke rerender
+      renderer: this.renderer,
+      focused: this._isItemFocused(this._focusedIndex, index)
+    });
+
+    el.setAttribute('role', this._getAriaRole(index));
+    el.setAttribute('aria-selected', this._getAriaSelected(this._focusedIndex, index));
+    el.setAttribute('theme', this.theme);
   }
 
   _fireTouchAction(sourceEvent) {
@@ -265,6 +290,13 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
 
     // Prevent blurring the input when clicking inside the overlay.
     this.$.dropdown.$.overlay.addEventListener('mousedown', (e) => e.preventDefault());
+
+    this.__virtualizer = new Virtualizer({
+      createElements: this.__createElements.bind(this),
+      updateElement: this.__updateElement.bind(this),
+      scrollTarget: this._scroller,
+      scrollContainer: this._selector
+    });
   }
 
   _loadingChanged(loading) {
@@ -297,7 +329,7 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
     // we need to set height for iron-list to make its `firstVisibleIndex` work correctly.
     this._selector.style.maxHeight = maxHeight;
 
-    this.updateViewportBoundaries();
+    // this.updateViewportBoundaries();
   }
 
   _maxOverlayHeight(targetRect) {
@@ -327,7 +359,7 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
   }
 
   _onItemClick(e) {
-    this.dispatchEvent(new CustomEvent('selection-changed', { detail: { item: e.model.item } }));
+    this.dispatchEvent(new CustomEvent('selection-changed', { detail: { item: e.currentTarget.item } }));
   }
 
   /**
@@ -401,35 +433,35 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
 
     let targetIndex = index;
 
-    if (index > this._selector.lastVisibleIndex - 1) {
+    if (index > this.__virtualizer.lastVisibleIndex - 1) {
       // Index is below the bottom, scrolling down. Make the item appear at the bottom.
       // First scroll to target (will be at the top of the scroller) to make sure it's rendered.
-      this._selector.scrollToIndex(index);
+      this.__virtualizer.scrollToIndex(index);
       // Then calculate the index for the following scroll (to get the target to bottom of the scroller).
       targetIndex = index - visibleItemsCount + 1;
-    } else if (index > this._selector.firstVisibleIndex) {
+    } else if (index > this.__virtualizer.firstVisibleIndex) {
       // The item is already visible, scrolling is unnecessary per se. But we need to trigger iron-list to set
       // the correct scrollTop on the scrollTarget. Scrolling to firstVisibleIndex.
-      targetIndex = this._selector.firstVisibleIndex;
+      targetIndex = this.__virtualizer.firstVisibleIndex;
     }
-    this._selector.scrollToIndex(Math.max(0, targetIndex));
+    this.__virtualizer.scrollToIndex(Math.max(0, targetIndex));
 
     // Sometimes the item is partly below the bottom edge, detect and adjust.
-    const pidx = this._selector._getPhysicalIndex(index),
-      physicalItem = this._selector._physicalItems[pidx];
-    if (!physicalItem) {
-      return;
-    }
-    const physicalItemRect = physicalItem.getBoundingClientRect(),
-      scrollerRect = this._scroller.getBoundingClientRect(),
-      scrollTopAdjust = physicalItemRect.bottom - scrollerRect.bottom + this._viewportTotalPaddingBottom;
-    if (scrollTopAdjust > 0) {
-      this._scroller.scrollTop += scrollTopAdjust;
-    }
+    // const pidx = this._selector._getPhysicalIndex(index),
+    //   physicalItem = this._selector._physicalItems[pidx];
+    // if (!physicalItem) {
+    //   return;
+    // }
+    // const physicalItemRect = physicalItem.getBoundingClientRect(),
+    //   scrollerRect = this._scroller.getBoundingClientRect(),
+    //   scrollTopAdjust = physicalItemRect.bottom - scrollerRect.bottom + this._viewportTotalPaddingBottom;
+    // if (scrollTopAdjust > 0) {
+    //   this._scroller.scrollTop += scrollTopAdjust;
+    // }
   }
 
   ensureItemsRendered() {
-    this._selector._render();
+    this.__virtualizer.update();
   }
 
   adjustScrollPosition() {
@@ -444,24 +476,24 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
    * scrolling the parent similarly to touch scrolling.
    */
   _patchWheelOverScrolling() {
-    const selector = this._selector;
-    selector.addEventListener('wheel', (e) => {
-      const scroller = selector._scroller || selector.scrollTarget;
-      const scrolledToTop = scroller.scrollTop === 0;
-      const scrolledToBottom = scroller.scrollHeight - scroller.scrollTop - scroller.clientHeight <= 1;
+    // const selector = this._selector;
+    // selector.addEventListener('wheel', (e) => {
+    //   const scroller = selector._scroller || selector.scrollTarget;
+    //   const scrolledToTop = scroller.scrollTop === 0;
+    //   const scrolledToBottom = scroller.scrollHeight - scroller.scrollTop - scroller.clientHeight <= 1;
 
-      if (scrolledToTop && e.deltaY < 0) {
-        e.preventDefault();
-      } else if (scrolledToBottom && e.deltaY > 0) {
-        e.preventDefault();
-      }
-    });
+    //   if (scrolledToTop && e.deltaY < 0) {
+    //     e.preventDefault();
+    //   } else if (scrolledToBottom && e.deltaY > 0) {
+    //     e.preventDefault();
+    //   }
+    // });
   }
 
-  updateViewportBoundaries() {
-    this._cachedViewportTotalPaddingBottom = undefined;
-    this._selector.updateViewportBoundaries();
-  }
+  // updateViewportBoundaries() {
+  //   this._cachedViewportTotalPaddingBottom = undefined;
+  //   this._selector.updateViewportBoundaries();
+  // }
 
   get _viewportTotalPaddingBottom() {
     if (this._cachedViewportTotalPaddingBottom === undefined) {
@@ -480,10 +512,10 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
 
   _visibleItemsCount() {
     // Ensure items are positioned
-    this._selector.scrollToIndex(this._selector.firstVisibleIndex);
+    this.__virtualizer.scrollToIndex(this.__virtualizer.firstVisibleIndex);
     // Ensure viewport boundaries are up-to-date
-    this.updateViewportBoundaries();
-    return this._selector.lastVisibleIndex - this._selector.firstVisibleIndex + 1;
+    // this.updateViewportBoundaries();
+    return this.__virtualizer.lastVisibleIndex - this.__virtualizer.firstVisibleIndex + 1;
   }
 
   _stopPropagation(e) {
