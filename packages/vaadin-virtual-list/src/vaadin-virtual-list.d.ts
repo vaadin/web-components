@@ -2,17 +2,17 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 
 import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
 
-export type VirtualListItem = unknown;
+export type VirtualListDefaultItem = any;
 
-export interface VirtualListItemModel {
+export interface VirtualListItemModel<TItem> {
   index: number;
-  item: VirtualListItem;
+  item: TItem;
 }
 
-export type VirtualListRenderer = (
+export type VirtualListRenderer<TItem> = (
   root: HTMLElement,
-  virtualList: VirtualListElement,
-  model: VirtualListItemModel
+  virtualList: VirtualListElement<TItem>,
+  model: VirtualListItemModel<TItem>
 ) => void;
 
 /**
@@ -36,7 +36,7 @@ export type VirtualListRenderer = (
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-declare class VirtualListElement extends ElementMixin(ThemableMixin(HTMLElement)) {
+declare class VirtualListElement<TItem = VirtualListDefaultItem> extends ElementMixin(ThemableMixin(HTMLElement)) {
   /**
    * Custom function for rendering the content of every item.
    * Receives three arguments:
@@ -48,12 +48,12 @@ declare class VirtualListElement extends ElementMixin(ThemableMixin(HTMLElement)
    *   - `model.index` The index of the rendered item.
    *   - `model.item` The item.
    */
-  renderer: VirtualListRenderer | undefined;
+  renderer: VirtualListRenderer<TItem> | undefined;
 
   /**
    * An array containing items determining how many instances to render.
    */
-  items: Array<VirtualListItem> | undefined;
+  items: Array<TItem> | undefined;
 
   /**
    * Scroll to a specific index in the virtual list.
