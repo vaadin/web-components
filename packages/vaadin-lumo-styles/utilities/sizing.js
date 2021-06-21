@@ -95,12 +95,6 @@ export const sizing = css`
   .max-w-full {
     max-width: 100%;
   }
-  .max-w-max {
-    max-width: max-content;
-  }
-  .max-w-min {
-    max-width: min-content;
-  }
   .max-w-screen-sm {
     max-width: 640px;
   }
@@ -123,11 +117,5 @@ export const sizing = css`
   }
   .min-w-full {
     min-width: 100%;
-  }
-  .min-w-max {
-    min-width: max-content;
-  }
-  .min-w-min {
-    min-width: min-content;
   }
 `;
