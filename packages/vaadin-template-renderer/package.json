@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-template-renderer",
-  "version": "21.0.0-alpha8",
+  "version": "21.0.0-alpha9",
   "description": "vaadin-template-renderer",
   "main": "vaadin-template-renderer.js",
   "module": "vaadin-template-renderer.js",
@@ -26,9 +26,9 @@
   "devDependencies": {
     "@esm-bundle/chai": "^4.1.5",
     "@vaadin/testing-helpers": "^0.2.1",
-    "@vaadin/vaadin-checkbox": "^21.0.0-alpha8",
-    "@vaadin/vaadin-grid": "^21.0.0-alpha8",
-    "@vaadin/vaadin-grid-pro": "^21.0.0-alpha8"
+    "@vaadin/vaadin-checkbox": "^21.0.0-alpha9",
+    "@vaadin/vaadin-grid": "^21.0.0-alpha9",
+    "@vaadin/vaadin-grid-pro": "^21.0.0-alpha9"
   },
   "publishConfig": {
     "access": "public"

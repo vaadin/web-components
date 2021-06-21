@@ -50,7 +50,7 @@ class GridProElement extends InlineEditingMixin(GridElement) {
   }
 
   static get version() {
-    return '21.0.0-alpha8';
+    return '21.0.0-alpha9';
   }
 
   /**

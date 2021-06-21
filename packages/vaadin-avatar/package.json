@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-avatar",
-  "version": "21.0.0-alpha8",
+  "version": "21.0.0-alpha9",
   "description": "vaadin-avatar",
   "main": "vaadin-avatar-group.js",
   "module": "vaadin-avatar-group.js",
@@ -28,13 +28,13 @@
     "@polymer/iron-a11y-announcer": "^3.0.0",
     "@polymer/iron-resizable-behavior": "^3.0.0",
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/vaadin-element-mixin": "^21.0.0-alpha8",
-    "@vaadin/vaadin-item": "^21.0.0-alpha8",
-    "@vaadin/vaadin-list-box": "^21.0.0-alpha8",
-    "@vaadin/vaadin-lumo-styles": "^21.0.0-alpha8",
-    "@vaadin/vaadin-material-styles": "^21.0.0-alpha8",
-    "@vaadin/vaadin-overlay": "^21.0.0-alpha8",
-    "@vaadin/vaadin-themable-mixin": "^21.0.0-alpha8"
+    "@vaadin/vaadin-element-mixin": "^21.0.0-alpha9",
+    "@vaadin/vaadin-item": "^21.0.0-alpha9",
+    "@vaadin/vaadin-list-box": "^21.0.0-alpha9",
+    "@vaadin/vaadin-lumo-styles": "^21.0.0-alpha9",
+    "@vaadin/vaadin-material-styles": "^21.0.0-alpha9",
+    "@vaadin/vaadin-overlay": "^21.0.0-alpha9",
+    "@vaadin/vaadin-themable-mixin": "^21.0.0-alpha9"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.1.5",
