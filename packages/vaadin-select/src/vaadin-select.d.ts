@@ -169,7 +169,7 @@ declare class SelectElement extends ElementMixin(ControlStateMixin(ThemableMixin
   ready(): void;
 
   /**
-   * Runs all the renderers to possibly update the content.
+   * Runs the renderer passed in the `renderer` property to update the content of the select.
    */
   runRenderers(): void;
 

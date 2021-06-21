@@ -283,7 +283,7 @@ class DialogElement extends ThemePropertyMixin(
   }
 
   /**
-   * Runs all the renderers to possibly update the content.
+   * Runs the renderer passed in the `renderer` property to update the content of the dialog.
    */
   runRenderers() {
     this.$.overlay.runRenderers();

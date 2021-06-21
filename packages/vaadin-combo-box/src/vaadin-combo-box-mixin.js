@@ -305,7 +305,7 @@ export const ComboBoxMixin = (subclass) =>
     }
 
     /**
-     * Runs all the renderers to possibly update the content.
+     * Runs the renderer passed in the `renderer` property for each item to update its content.
      */
     runRenderers() {
       if (!this.$.overlay._selector) {

@@ -452,7 +452,7 @@ class ContextMenuElement extends ElementMixin(ThemePropertyMixin(ItemsMixin(Gest
   }
 
   /**
-   * Runs all the renderers to possibly update the content.
+   * Runs the renderer passed in the `renderer` property to update the content of the menu overlay.
    */
   runRenderers() {
     this.$.overlay.runRenderers();

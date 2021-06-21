@@ -142,7 +142,7 @@ interface ComboBoxMixin<TItem> {
   _inputElementValue: string | null | undefined;
 
   /**
-   * Runs all the renderers to possibly update the content.
+   * Runs the renderer passed in the `renderer` property for each item to update its content.
    */
   runRenderers(): void;
 

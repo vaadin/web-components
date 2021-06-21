@@ -365,7 +365,7 @@ class SelectElement extends ElementMixin(
   }
 
   /**
-   * Runs all the renderers to possibly update the content.
+   * Runs the renderer passed in the `renderer` property to update the content of the select.
    */
   runRenderers() {
     this._overlayElement.runRenderers();

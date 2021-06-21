@@ -965,13 +965,13 @@ class GridElement extends ElementMixin(
   }
 
   /**
-   * Runs all the columns' renderers to possibly update the content of the cells.
+   * Runs all the renderers to update the content of the cells.
    *
-   * The following column renderers are invoked:
-   * - `renderer`
-   * - `headerRenderer`
-   * - `footerRenderer`
-   * - `rowDetailsRenderer`
+   * This method invokes the following renderers:
+   * - `GridElement.rowDetailsRenderer`
+   * - `GridColumnElement.renderer`
+   * - `GridColumnElement.headerRenderer`
+   * - `GridColumnElement.footerRenderer`
    */
   runRenderers() {
     if (this._columnTree) {

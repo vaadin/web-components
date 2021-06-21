@@ -446,7 +446,7 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
   }
 
   /**
-   * Runs all the renderers to possibly update the content.
+   * Runs the renderer passed in the `renderer` property to update the content of the overlay.
    */
   runRenderers() {
     if (this.renderer) {

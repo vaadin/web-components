@@ -202,7 +202,7 @@ declare class OverlayElement extends ThemableMixin(DirMixin(HTMLElement)) {
   _stampOverlayTemplate(template: HTMLTemplateElement, instanceProps: object | null): void;
 
   /**
-   * Runs all the renderers to possibly update the content.
+   * Runs the renderer passed in the `renderer` property to update the content of the overlay.
    */
   runRenderers(): void;
 
