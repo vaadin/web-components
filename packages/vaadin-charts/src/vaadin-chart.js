@@ -226,7 +226,7 @@ export const deepMerge = function deepMerge(target, source) {
  * @fires {CustomEvent} point-remove - Fired when the point is removed from the series.
  * @fires {CustomEvent} point-select -Fired when the point is selected either programmatically or by clicking on the point.
  * @fires {CustomEvent} point-unselect - Fired when the point is unselected either programmatically or by clicking on the point.
- * @fires {CustomEvent} point-update - Fired when the point is updated programmatically through `.update()` method.
+ * @fires {CustomEvent} point-update - Fired when the point is updated programmatically through `.updateConfiguration()` method.
  * @fires {CustomEvent} xaxes-extremes-set - Fired when when the minimum and maximum is set for the X axis.
  * @fires {CustomEvent} yaxes-extremes-set - Fired when when the minimum and maximum is set for the Y axis.
  *
@@ -885,7 +885,7 @@ class ChartElement extends ElementMixin(ThemableMixin(PolymerElement)) {
       unselect: 'point-unselect',
 
       /**
-       * Fired when the point is updated programmatically through `.update()` method.
+       * Fired when the point is updated programmatically through `.updateConfiguration()` method.
        * @event point-update
        * @param {Object} detail.originalEvent object with details about the event sent
        * @param {Object} point Point object where the event was sent from
@@ -1133,7 +1133,7 @@ class ChartElement extends ElementMixin(ThemableMixin(PolymerElement)) {
    * @param {boolean=} resetConfiguration Optional boolean that should be set to true if no other chart configuration was set before or
    *    if existing configuration should be discarded.
    */
-  update(jsonConfiguration, resetConfiguration) {
+  updateConfiguration(jsonConfiguration, resetConfiguration) {
     if (resetConfiguration || !this._jsonConfigurationBuffer) {
       this._jsonConfigurationBuffer = {};
     }
@@ -1171,6 +1171,49 @@ class ChartElement extends ElementMixin(ThemableMixin(PolymerElement)) {
       }
       this._jsonConfigurationBuffer = null;
     });
+  }
+
+  /**
+   * Update the chart configuration.
+   * This JSON API provides a simple single-argument alternative to the configuration property.
+   *
+   * Styling properties specified in this configuration will be ignored. To learn about chart styling
+   * please see the CSS Styling section above.
+   *
+   * @param {!Options} jsonConfiguration Object chart configuration. Most important properties are:
+   *
+   * - chart `Object` with options regarding the chart area and plot area as well as general chart options.
+   *    Detailed API for chart object is available in [API Site](http://api.highcharts.com/highcharts/chart)
+   * - credits `Object` with options regarding the chart area and plot area as well as general chart options.
+   *    Detailed API for credits object is available in [API Site](http://api.highcharts.com/highcharts/credits)
+   * - labels `Object[]` with HTML labels that can be positioned anywhere in the chart area
+   *    Detailed API for labels object is available in [API Site](http://api.highcharts.com/highcharts/labels)
+   * - plotOptions `Object` wrapper for config objects for each series type.
+   *    Detailed API for plotOptions object is available in [API Site](http://api.highcharts.com/highcharts/plotOptions)
+   * - series `Object[]` the actual series to append to the chart.
+   *    Detailed API for series object is available in [API Site](http://api.highcharts.com/highcharts/series)
+   * - subtitle `Object` the chart's subtitle.
+   *    Detailed API for subtitle object is available in [API Site](http://api.highcharts.com/highcharts/subtitle)
+   * - title `Object` the chart's main title.
+   *    Detailed API for title object is available in [API Site](http://api.highcharts.com/highcharts/title)
+   * - tooltip `Object` Options for the tooltip that appears when the user hovers over a series or point.
+   *    Detailed API for tooltip object is available in [API Site](http://api.highcharts.com/highcharts/tooltip)
+   * - xAxis `Object[]` The X axis or category axis. Normally this is the horizontal axis.
+   *    Detailed API for xAxis object is available in [API Site](http://api.highcharts.com/highcharts/xAxis)
+   * - yAxis `Object[]` The Y axis or value axis. Normally this is the vertical axis.
+   *    Detailed API for yAxis object is available in [API Site](http://api.highcharts.com/highcharts/yAxis)
+   * - zAxis `Object[]` The Z axis or depth axis for 3D plots.
+   *    Detailed API for zAxis object is available in [API Site](http://api.highcharts.com/highcharts/zAxis)
+   *
+   * @param {boolean=} resetConfiguration Optional boolean that should be set to true if no other chart configuration was set before or
+   *    if existing configuration should be discarded.
+   *
+   * @deprecated Since Vaadin 21, `update()` is deprecated. Please use `updateConfiguration()` instead.
+   */
+  update(jsonConfiguration, resetConfiguration) {
+    console.warn('WARNING: Since Vaadin 21, update() is deprecated. Please use updateConfiguration() instead.');
+
+    this.updateConfiguration(jsonConfiguration, resetConfiguration);
   }
 
   /** @private */
@@ -1568,7 +1611,7 @@ class ChartElement extends ElementMixin(ThemableMixin(PolymerElement)) {
   /** @private */
   __updateAdditionalOptions(options) {
     if (this.configuration && options.base) {
-      this.update(options.base);
+      this.updateConfiguration(options.base);
     }
   }
 

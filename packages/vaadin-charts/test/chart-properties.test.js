@@ -21,7 +21,7 @@ describe('vaadin-chart properties', () => {
     });
 
     it('should not reset subtitle on update', async () => {
-      chart.update({ title: { text: 'Awesome chart' } });
+      chart.updateConfiguration({ title: { text: 'Awesome chart' } });
       await oneEvent(chart, 'chart-redraw');
       expect(chartContainer.querySelector('.highcharts-title > tspan').textContent).to.equal('Awesome chart');
       expect(chartContainer.querySelector('.highcharts-subtitle > tspan').textContent).to.equal('My subtitle');
@@ -195,7 +195,7 @@ describe('vaadin-chart properties', () => {
     });
 
     it('should have tooltips when tooltip is set using update', async () => {
-      chart.update({ tooltip: { enabled: true, pointFormat: 'custom' } });
+      chart.updateConfiguration({ tooltip: { enabled: true, pointFormat: 'custom' } });
       await aTimeout(50);
       expect(chart.configuration.tooltip.options.enabled).to.be.true;
     });
@@ -364,7 +364,7 @@ describe('vaadin-chart properties', () => {
       });
 
       it('should react to category position changes with multiple x-axes', async () => {
-        chart.update({
+        chart.updateConfiguration({
           xAxis: [
             {
               name: 'First',

@@ -168,7 +168,7 @@ export type ChartPointSelectEvent = CustomEvent<{ point: Point; originalEvent: C
 export type ChartPointUnselectEvent = CustomEvent<{ point: Point; originalEvent: ChartPointEvent }>;
 
 /**
- * Fired when the point is updated programmatically through `.update()` method.
+ * Fired when the point is updated programmatically through `.updateConfiguration()` method.
  */
 export type ChartPointUpdateEvent = CustomEvent<{ point: Point; originalEvent: ChartPointEvent }>;
 

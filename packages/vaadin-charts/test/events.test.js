@@ -26,7 +26,7 @@ describe('vaadin-chart events', () => {
     it('should trigger chart-redraw event on update', async () => {
       const spy = sinon.spy();
       chart.addEventListener('chart-redraw', spy);
-      chart.update({
+      chart.updateConfiguration({
         chart: {
           type: 'column'
         }
