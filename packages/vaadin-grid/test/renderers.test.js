@@ -255,20 +255,39 @@ describe('renderers', () => {
     });
   });
 
-  describe('manual invocation', () => {
-    it('should support `render()` method to invoke all the renderers', () => {
-      column.renderer = sinon.spy();
-      column.headerRenderer = sinon.spy();
-      column.footerRenderer = sinon.spy();
-      grid.rowDetailsRenderer = sinon.spy();
-      grid.detailsOpenedItems = grid.items;
-      const renderers = [column.renderer, column.headerRenderer, column.footerRenderer, grid.rowDetailsRenderer];
-      flushGrid(grid);
-      renderers.forEach((renderer) => renderer.resetHistory());
-      grid.render();
-      renderers.forEach((renderer) => {
-        expect(renderer.called).to.be.true;
-      });
+  it('should run renderers manually', () => {
+    column.renderer = sinon.spy();
+    column.headerRenderer = sinon.spy();
+    column.footerRenderer = sinon.spy();
+    grid.rowDetailsRenderer = sinon.spy();
+    grid.detailsOpenedItems = grid.items;
+    const renderers = [column.renderer, column.headerRenderer, column.footerRenderer, grid.rowDetailsRenderer];
+    flushGrid(grid);
+
+    renderers.forEach((renderer) => renderer.resetHistory());
+    grid.runRenderers();
+
+    renderers.forEach((renderer) => {
+      expect(renderer.called).to.be.true;
     });
+  });
+
+  it('should run renderers when calling deprecated render()', () => {
+    const stub = sinon.stub(grid, 'runRenderers');
+    grid.render();
+    stub.restore();
+
+    expect(stub.calledOnce).to.be.true;
+  });
+
+  it('should warn when calling deprecated render()', () => {
+    const stub = sinon.stub(console, 'warn');
+    grid.render();
+    stub.restore();
+
+    expect(stub.calledOnce).to.be.true;
+    expect(stub.args[0][0]).to.equal(
+      'WARNING: Since Vaadin 21, render() is deprecated. Please use runRenderers() instead.'
+    );
   });
 });

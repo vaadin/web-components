@@ -965,10 +965,15 @@ class GridElement extends ElementMixin(
   }
 
   /**
-   * Manually invoke existing renderers for all the columns
-   * (header, footer and body cells) and opened row details.
+   * Runs all the columns' renderers to possibly update the content of the cells.
+   *
+   * The following column renderers are invoked:
+   * - `renderer`
+   * - `headerRenderer`
+   * - `footerRenderer`
+   * - `rowDetailsRenderer`
    */
-  render() {
+  runRenderers() {
     if (this._columnTree) {
       // header and footer renderers
       this._columnTree.forEach((level) => {
@@ -980,6 +985,18 @@ class GridElement extends ElementMixin(
       // body and row details renderers
       this.__updateVisibleRows();
     }
+  }
+
+  /**
+   * Manually invoke existing renderers for all the columns
+   * (header, footer and body cells) and opened row details.
+   *
+   * @deprecated Since Vaadin 21, `render()` is deprecated. Please use `runRenderers()` instead.
+   */
+  render() {
+    console.warn('WARNING: Since Vaadin 21, render() is deprecated. Please use runRenderers() instead.');
+
+    this.runRenderers();
   }
 
   /** @protected */
