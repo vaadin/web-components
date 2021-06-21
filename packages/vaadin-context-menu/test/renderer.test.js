@@ -86,7 +86,7 @@ describe('renderer', () => {
     expect(menu.renderer.getCall(1).args[2].detail).to.deep.equal({ foo: 'two' });
   });
 
-  it('should run renderers when calling runRenderers()', () => {
+  it('should run renderers manually', () => {
     fire(target, 'vaadin-contextmenu');
 
     expect(menu.renderer.calledOnce).to.be.true;

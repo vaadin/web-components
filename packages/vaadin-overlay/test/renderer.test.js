@@ -110,7 +110,7 @@ describe('renderer', () => {
       expect(overlay.template).to.be.not.ok;
     });
 
-    it('should run renderers when calling runRenderers()', () => {
+    it('should run renderers manually', () => {
       overlay.renderer = sinon.spy();
       overlay.runRenderers();
 

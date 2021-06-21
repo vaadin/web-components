@@ -47,7 +47,7 @@ describe('renderer', () => {
       };
     });
 
-    it('should run renderers when calling runRenderers()', () => {
+    it('should run renderers manually', () => {
       notification.renderer = sinon.spy();
       notification.opened = true;
 

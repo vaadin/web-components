@@ -24,7 +24,7 @@ describe('vaadin-dialog renderer', () => {
       expect(overlay.textContent).to.include('The content of the dialog');
     });
 
-    it('should run renderers when calling runRenderers()', () => {
+    it('should run renderers manually', () => {
       dialog.renderer = sinon.spy();
       dialog.opened = true;
 

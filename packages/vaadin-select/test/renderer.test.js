@@ -49,7 +49,7 @@ describe('renderer', () => {
     };
   });
 
-  it('should run renderers when calling runRenderers()', () => {
+  it('should run renderers manually', () => {
     select.renderer = sinon.spy();
     select.opened = true;
 
