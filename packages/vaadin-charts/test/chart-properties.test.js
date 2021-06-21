@@ -1,3 +1,4 @@
+import sinon from 'sinon';
 import { expect } from '@esm-bundle/chai';
 import { aTimeout, fixtureSync, oneEvent } from '@vaadin/testing-helpers';
 import '../vaadin-chart.js';
@@ -261,6 +262,15 @@ describe('vaadin-chart properties', () => {
       chart.addEventListener('xaxes-extremes-set', extremesListener);
       chart.setAttribute('category-min', newCategoryMin);
     });
+
+    it('should warn when setting a not valid minimum value', () => {
+      const stub = sinon.stub(console, 'warn');
+      chart.categoryMin = 'invalid';
+      stub.restore();
+
+      expect(stub.calledOnce).to.be.true;
+      expect(stub.args[0][0]).to.equal('<vaadin-chart> Acceptable value for "category-min" are Numbers or null');
+    });
   });
 
   describe('category-max', () => {
@@ -289,6 +299,15 @@ describe('vaadin-chart properties', () => {
       }
       chart.addEventListener('xaxes-extremes-set', extremesListener);
       chart.setAttribute('category-max', newCategoryMax);
+    });
+
+    it('should warn when setting a not valid maximum value', () => {
+      const stub = sinon.stub(console, 'warn');
+      chart.categoryMax = 'invalid';
+      stub.restore();
+
+      expect(stub.calledOnce).to.be.true;
+      expect(stub.args[0][0]).to.equal('<vaadin-chart> Acceptable value for "category-max" are Numbers or null');
     });
   });
 
