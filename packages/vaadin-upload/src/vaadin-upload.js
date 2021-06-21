@@ -408,16 +408,9 @@ class UploadElement extends ElementMixin(ThemableMixin(PolymerElement)) {
                 unknown: 'unknown remaining time'
               },
               error: {
-                serverError: {
-                  internalServerError: "File couldn't be uploaded becase there is an issue with server.",
-                  serviceNotAvailable: "File couldn't be uploaded becase service is not availble."
-                },
-                clientError: {
-                  unauthorized: 'You are not authorized to upload file',
-                  forbidden: "You don't have sufficient right to upload file",
-                  badRequest: "Server couldn't not process your request"
-                },
-                networkError: "File couldn't be uploaded, please try again later"
+                serverUnavailable: 'Server Unavailable',
+                unexpectedServerError: 'Unexpected Server Error',
+                forbidden: 'Forbidden'
               }
             },
             units: {
@@ -646,23 +639,12 @@ class UploadElement extends ElementMixin(ThemableMixin(PolymerElement)) {
         if (!evt) {
           return;
         }
-
         if (xhr.status === 0) {
-          file.error = this.i18n.uploading.error.networkError;
+          file.error = this.i18n.uploading.error.serverUnavailable;
         } else if (xhr.status >= 500) {
-          if (xhr.status === 503) {
-            file.error = this.i18n.uploading.error.serverError.serviceNotAvailable;
-          } else {
-            file.error = this.i18n.uploading.error.serverError.internalServerError;
-          }
+          file.error = this.i18n.uploading.error.unexpectedServerError;
         } else if (xhr.status >= 400) {
-          if (xhr.status === 401) {
-            file.error = this.i18n.uploading.error.clientError.unauthorized;
-          } else if (xhr.status === 403) {
-            file.error = this.i18n.uploading.error.clientError.forbidden;
-          } else {
-            file.error = this.i18n.uploading.error.clientError.badRequest;
-          }
+          file.error = this.i18n.uploading.error.forbidden;
         }
 
         file.complete = !file.error;
