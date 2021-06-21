@@ -305,12 +305,27 @@ export const ComboBoxMixin = (subclass) =>
     }
 
     /**
+     * Runs all the renderers to possibly update the content.
+     */
+    runRenderers() {
+      if (!this.$.overlay._selector) {
+        return;
+      }
+
+      this.$.overlay._selector.querySelectorAll('vaadin-combo-box-item').forEach((item) => {
+        item.runRenderers();
+      });
+    }
+
+    /**
      * Manually invoke existing renderer.
+     *
+     * @deprecated Since Vaadin 21, `render()` is deprecated. Please use `runRenderers()` instead.
      */
     render() {
-      if (this.$.overlay._selector) {
-        this.$.overlay._selector.querySelectorAll('vaadin-combo-box-item').forEach((item) => item._render());
-      }
+      console.warn('WARNING: Since Vaadin 21, render() is deprecated. Please use runRenderers() instead.');
+
+      this.runRenderers();
     }
 
     /**

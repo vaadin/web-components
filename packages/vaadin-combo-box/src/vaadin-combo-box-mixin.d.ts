@@ -142,7 +142,14 @@ interface ComboBoxMixin<TItem> {
   _inputElementValue: string | null | undefined;
 
   /**
+   * Runs all the renderers to possibly update the content.
+   */
+  runRenderers(): void;
+
+  /**
    * Manually invoke existing renderer.
+   *
+   * @deprecated Since Vaadin 21, `render()` is deprecated. Please use `runRenderers()` instead.
    */
   render(): void;
 

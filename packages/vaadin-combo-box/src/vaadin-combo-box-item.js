@@ -99,7 +99,7 @@ class ComboBoxItemElement extends ThemableMixin(DirMixin(PolymerElement)) {
   }
 
   static get observers() {
-    return ['_rendererOrItemChanged(renderer, index, item.*, selected, focused)', '_updateLabel(label, renderer)'];
+    return ['__rendererOrItemChanged(renderer, index, item.*, selected, focused)', '__updateLabel(label, renderer)'];
   }
 
   connectedCallback() {
@@ -116,7 +116,10 @@ class ComboBoxItemElement extends ThemableMixin(DirMixin(PolymerElement)) {
     }
   }
 
-  _render() {
+  /**
+   * Runs all the renderers to possibly update the content.
+   */
+  runRenderers() {
     if (!this.renderer) {
       return;
     }
@@ -131,7 +134,8 @@ class ComboBoxItemElement extends ThemableMixin(DirMixin(PolymerElement)) {
     this.renderer(this.$.content, this._comboBox, model);
   }
 
-  _rendererOrItemChanged(renderer, index, item, _selected, _focused) {
+  /** @private */
+  __rendererOrItemChanged(renderer, index, item, _selected, _focused) {
     if (item === undefined || index === undefined) {
       return;
     }
@@ -142,11 +146,12 @@ class ComboBoxItemElement extends ThemableMixin(DirMixin(PolymerElement)) {
 
     if (renderer) {
       this._oldRenderer = renderer;
-      this._render();
+      this.runRenderers();
     }
   }
 
-  _updateLabel(label, renderer) {
+  /** @private */
+  __updateLabel(label, renderer) {
     if (renderer) return;
 
     if (this.$.content) {

@@ -75,18 +75,40 @@ describe('item renderer', () => {
     expect(getFirstItem().$.content.textContent.trim()).to.equal('foo 0');
   });
 
-  it('should be possible to manually invoke renderer', () => {
+  it('should run renderers manually', () => {
     comboBox.renderer = sinon.spy();
     comboBox.opened = true;
 
-    // Number of items rendered on opening
-    const renderedCount = comboBox.renderer.callCount;
+    expect(comboBox.renderer.callCount).to.be.equal(comboBox.items.length);
+
+    comboBox.runRenderers();
+
+    expect(comboBox.renderer.callCount).to.be.equal(comboBox.items.length * 2);
+  });
+
+  it('should run renderers when calling deprecated render()', () => {
+    const stub = sinon.stub(comboBox, 'runRenderers');
+    comboBox.opened = true;
     comboBox.render();
-    expect(comboBox.renderer.callCount).to.be.equal(renderedCount * 2);
+    stub.restore();
+
+    expect(stub.calledOnce).to.be.true;
+  });
+
+  it('should warn when calling deprecated render()', () => {
+    const stub = sinon.stub(console, 'warn');
+    comboBox.opened = true;
+    comboBox.render();
+    stub.restore();
+
+    expect(stub.calledOnce).to.be.true;
+    expect(stub.args[0][0]).to.equal(
+      'WARNING: Since Vaadin 21, render() is deprecated. Please use runRenderers() instead.'
+    );
   });
 
   it('should not throw if render() called before opening', () => {
-    expect(() => comboBox.render()).not.to.throw(Error);
+    expect(() => comboBox.runRenderers()).not.to.throw(Error);
   });
 
   it('should render the item label when removing the renderer', () => {
