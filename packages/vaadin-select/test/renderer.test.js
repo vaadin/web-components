@@ -54,7 +54,6 @@ describe('renderer', () => {
     select.opened = true;
 
     select.renderer.resetHistory();
-
     select.runRenderers();
 
     expect(select.renderer.calledOnce).to.be.true;
