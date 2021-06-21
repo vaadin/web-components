@@ -316,12 +316,23 @@ class NotificationElement extends ThemePropertyMixin(ElementMixin(PolymerElement
   }
 
   /**
-   * Manually invoke existing renderer.
+   * Runs all the renderers to possibly update the content.
    */
-  render() {
+  runRenderers() {
     if (!this.renderer) return;
 
     this.renderer(this._card, this);
+  }
+
+  /**
+   * Manually invoke existing renderer.
+   *
+   * @deprecated Since Vaadin 21, `render()` is deprecated. Please use `runRenderers()` instead.
+   */
+  render() {
+    console.warn('WARNING: Since Vaadin 21, render() is deprecated. Please use runRenderers() instead.');
+
+    this.runRenderers();
   }
 
   /** @private */
@@ -341,7 +352,7 @@ class NotificationElement extends ThemePropertyMixin(ElementMixin(PolymerElement
       if (!this._didAnimateNotificationAppend) {
         this._animatedAppendNotificationCard();
       }
-      this.render();
+      this.runRenderers();
     }
   }
 

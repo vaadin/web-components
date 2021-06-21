@@ -96,7 +96,14 @@ declare class NotificationElement extends ThemePropertyMixin(ElementMixin(HTMLEl
   renderer: NotificationRenderer | undefined;
 
   /**
+   * Runs all the renderers to possibly update the content.
+   */
+  runRenderers(): void;
+
+  /**
    * Manually invoke existing renderer.
+   *
+   * @deprecated Since Vaadin 21, `render()` is deprecated. Please use `runRenderers()` instead.
    */
   render(): void;
 
