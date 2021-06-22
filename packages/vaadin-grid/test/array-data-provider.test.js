@@ -273,7 +273,7 @@ describe('items with a custom data provider', () => {
     expect(grid.dataProvider).not.to.equal(dataProvider);
   });
 
-  it('should use the data provider', () => {
+  it('should use the custom data provider', () => {
     grid.items = items;
     grid.dataProvider = dataProvider;
     flushGrid(grid);
