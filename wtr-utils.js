@@ -7,6 +7,7 @@ const HIDDEN_WARNINGS = [
   '<vaadin-crud> Unable to autoconfigure form because the data structure is unknown. Either specify `include` or ensure at least one item is available beforehand.',
   'The <vaadin-grid> needs the total number of items in order to display rows. Set the total number of items to the `size` property, or provide the total number of items in the second argument of the `dataProvider`’s `callback` call.',
   'PositionMixin is not considered stable and might change any time',
+  'WARNING: Since Vaadin 21, update() is deprecated. Please use updateConfiguration() instead.',
   /^WARNING: <template> inside <[^>]+> is deprecated. Use a renderer function instead/
 ];
 

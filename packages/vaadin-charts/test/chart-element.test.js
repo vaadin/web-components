@@ -1,3 +1,4 @@
+import sinon from 'sinon';
 import { expect } from '@esm-bundle/chai';
 import { aTimeout, fixtureSync, oneEvent } from '@vaadin/testing-helpers';
 import '../vaadin-chart.js';
@@ -53,7 +54,7 @@ describe('vaadin-chart', () => {
     });
 
     it('should set a chart title using update', async () => {
-      chart.update({ title: { text: 'Awesome chart' } });
+      chart.updateConfiguration({ title: { text: 'Awesome chart' } });
       document.body.appendChild(chart);
       await oneEvent(chart, 'chart-load');
       expect(chart.$.chart.querySelector('.highcharts-title > tspan').textContent).to.equal('Awesome chart');
@@ -120,7 +121,7 @@ describe('vaadin-chart', () => {
     });
 
     it('should set chart title using update', async () => {
-      chart.update({ title: { text: 'Custom title' } });
+      chart.updateConfiguration({ title: { text: 'Custom title' } });
       await oneEvent(chart, 'chart-redraw');
       const title = chart.$.chart.querySelector('.highcharts-title > tspan');
       expect(title).to.be.ok;
@@ -128,7 +129,7 @@ describe('vaadin-chart', () => {
     });
 
     it('should create chart series using update', async () => {
-      chart.update({
+      chart.updateConfiguration({
         series: [
           {
             type: 'column',
@@ -144,7 +145,7 @@ describe('vaadin-chart', () => {
     });
 
     it('should set chart categories using update', async () => {
-      chart.update({
+      chart.updateConfiguration({
         xAxis: {
           categories: MONTHS
         },
@@ -162,12 +163,33 @@ describe('vaadin-chart', () => {
     });
 
     it('should clear chart title using reset flag', async () => {
-      chart.update({ title: { text: 'Custom title' } });
-      chart.update({}, true);
+      chart.updateConfiguration({ title: { text: 'Custom title' } });
+      chart.updateConfiguration({}, true);
       await oneEvent(chart, 'chart-redraw');
       const title = chart.$.chart.querySelector('.highcharts-title');
       expect(title).to.be.ok;
       expect(title.textContent).to.be.empty;
+    });
+
+    it('should call updateConfiguration() when calling deprecated update()', () => {
+      const stub = sinon.stub(chart, 'updateConfiguration');
+      chart.update({}, true);
+      stub.restore();
+
+      expect(stub.calledOnce).to.be.true;
+      expect(stub.args[0][0]).to.be.an('object');
+      expect(stub.args[0][1]).to.be.true;
+    });
+
+    it('should warn when calling deprecated update()', () => {
+      const stub = sinon.stub(console, 'warn');
+      chart.update({}, true);
+      stub.restore();
+
+      expect(stub.calledOnce).to.be.true;
+      expect(stub.args[0][0]).to.equal(
+        'WARNING: Since Vaadin 21, update() is deprecated. Please use updateConfiguration() instead.'
+      );
     });
   });
 
@@ -200,7 +222,7 @@ describe('vaadin-chart', () => {
     });
 
     it('should apply options passed using update', async () => {
-      chart.update({
+      chart.updateConfiguration({
         series: [
           {
             name: 'series-name'
@@ -213,14 +235,14 @@ describe('vaadin-chart', () => {
     });
 
     it('should preserve configuration on multiple update calls', async () => {
-      chart.update({
+      chart.updateConfiguration({
         series: [
           {
             innerSize: 40
           }
         ]
       });
-      chart.update({
+      chart.updateConfiguration({
         series: [
           {
             name: 'name of the series',
@@ -236,10 +258,10 @@ describe('vaadin-chart', () => {
     });
 
     it('should handle merging multiple series', async () => {
-      chart.update({
+      chart.updateConfiguration({
         series: [{ name: 'series 1' }, { name: 'series 2' }]
       });
-      chart.update({
+      chart.updateConfiguration({
         series: [null, { innerSize: 100 }]
       });
       await oneEvent(chart, 'chart-redraw');
@@ -332,13 +354,13 @@ describe('vaadin-chart', () => {
     });
 
     it('should apply configuration update when attached to a new parent', async () => {
-      chart.update({ title: { text: 'Awesome title' }, credits: { enabled: false } });
+      chart.updateConfiguration({ title: { text: 'Awesome title' }, credits: { enabled: false } });
       await oneEvent(chart, 'chart-redraw');
       expect(chart.$.chart.querySelector('.highcharts-title > tspan').textContent).to.equal('Awesome title');
       expect(chart.$.chart.querySelector('.highcharts-credits')).to.be.null;
 
       wrapper.removeChild(chart);
-      chart.update({ subtitle: { text: 'Awesome subtitle' }, credits: { enabled: true, text: 'Vaadin' } });
+      chart.updateConfiguration({ subtitle: { text: 'Awesome subtitle' }, credits: { enabled: true, text: 'Vaadin' } });
 
       inner.appendChild(chart);
       await oneEvent(chart, 'chart-redraw');

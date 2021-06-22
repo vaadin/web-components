@@ -1,3 +1,4 @@
+import sinon from 'sinon';
 import { expect } from '@esm-bundle/chai';
 import { aTimeout, fixtureSync, oneEvent } from '@vaadin/testing-helpers';
 import '../vaadin-chart.js';
@@ -21,7 +22,7 @@ describe('vaadin-chart properties', () => {
     });
 
     it('should not reset subtitle on update', async () => {
-      chart.update({ title: { text: 'Awesome chart' } });
+      chart.updateConfiguration({ title: { text: 'Awesome chart' } });
       await oneEvent(chart, 'chart-redraw');
       expect(chartContainer.querySelector('.highcharts-title > tspan').textContent).to.equal('Awesome chart');
       expect(chartContainer.querySelector('.highcharts-subtitle > tspan').textContent).to.equal('My subtitle');
@@ -195,7 +196,7 @@ describe('vaadin-chart properties', () => {
     });
 
     it('should have tooltips when tooltip is set using update', async () => {
-      chart.update({ tooltip: { enabled: true, pointFormat: 'custom' } });
+      chart.updateConfiguration({ tooltip: { enabled: true, pointFormat: 'custom' } });
       await aTimeout(50);
       expect(chart.configuration.tooltip.options.enabled).to.be.true;
     });
@@ -261,6 +262,15 @@ describe('vaadin-chart properties', () => {
       chart.addEventListener('xaxes-extremes-set', extremesListener);
       chart.setAttribute('category-min', newCategoryMin);
     });
+
+    it('should warn when setting a not valid minimum value', () => {
+      const stub = sinon.stub(console, 'warn');
+      chart.categoryMin = 'invalid';
+      stub.restore();
+
+      expect(stub.calledOnce).to.be.true;
+      expect(stub.args[0][0]).to.equal('<vaadin-chart> Acceptable value for "category-min" are Numbers or null');
+    });
   });
 
   describe('category-max', () => {
@@ -289,6 +299,15 @@ describe('vaadin-chart properties', () => {
       }
       chart.addEventListener('xaxes-extremes-set', extremesListener);
       chart.setAttribute('category-max', newCategoryMax);
+    });
+
+    it('should warn when setting a not valid maximum value', () => {
+      const stub = sinon.stub(console, 'warn');
+      chart.categoryMax = 'invalid';
+      stub.restore();
+
+      expect(stub.calledOnce).to.be.true;
+      expect(stub.args[0][0]).to.equal('<vaadin-chart> Acceptable value for "category-max" are Numbers or null');
     });
   });
 
@@ -364,7 +383,7 @@ describe('vaadin-chart properties', () => {
       });
 
       it('should react to category position changes with multiple x-axes', async () => {
-        chart.update({
+        chart.updateConfiguration({
           xAxis: [
             {
               name: 'First',
