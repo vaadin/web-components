@@ -16,7 +16,7 @@ function get(path, object) {
  * @param {!Array<!GridItem>} items
  */
 function checkPaths(arrayToCheck, action, items) {
-  if (!items.length) {
+  if (items.length === 0) {
     return false;
   }
 
