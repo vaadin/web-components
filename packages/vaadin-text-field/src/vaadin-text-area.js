@@ -89,8 +89,33 @@ class TextAreaElement extends ElementMixin(TextFieldMixin(ControlStateMixin(Them
           -webkit-overflow-scrolling: touch;
         }
 
-        [part='value'] {
+        .textarea-wrapper {
+          display: grid;
+          flex-grow: 1;
+          align-self: stretch;
+        }
+
+        .textarea-wrapper::after {
+          content: attr(data-replicated-value) ' ';
+          white-space: pre-wrap;
+          visibility: hidden;
+        }
+
+        [part='value'],
+        [part='input-field'] ::slotted(textarea) {
           resize: none;
+          overflow: hidden;
+        }
+
+        [part='value'],
+        [part='input-field'] ::slotted(textarea),
+        .textarea-wrapper::after {
+          grid-area: 1 / 1 / 2 / 2;
+          box-sizing: border-box;
+          padding: 0 0.25em;
+          overflow-wrap: break-word;
+          word-wrap: break-word;
+          word-break: break-word;
         }
 
         [part='value'],
@@ -115,9 +140,11 @@ class TextAreaElement extends ElementMixin(TextFieldMixin(ControlStateMixin(Them
         <div part="input-field" id="[[_inputId]]">
           <slot name="prefix"></slot>
 
-          <slot name="textarea">
-            <textarea part="value"></textarea>
-          </slot>
+          <div class="textarea-wrapper">
+            <slot name="textarea">
+              <textarea part="value"></textarea>
+            </slot>
+          </div>
 
           <div part="clear-button" id="clearButton" role="button" aria-label$="[[i18n.clear]]"></div>
           <slot name="suffix"></slot>
@@ -182,36 +209,11 @@ class TextAreaElement extends ElementMixin(TextFieldMixin(ControlStateMixin(Them
 
   /** @private */
   _updateHeight() {
-    const inputField = this.root.querySelector('[part=input-field]');
-    const scrollTop = inputField.scrollTop;
-    const input = this.inputElement;
-
-    const inputWidth = getComputedStyle(input).width;
-
-    const valueLength = this.value ? this.value.length : 0;
-    // Only clear the height when the content shortens to minimize scrollbar flickering.
-    if (this._oldValueLength >= valueLength) {
-      // Fix the input element width so its scroll height isn't affected by host's disappearing scrollbars
-      input.style.maxWidth = inputWidth;
-      input.style.height = 'auto';
-      // Avoid a jumpy Safari rendering issue
-      if (this.__safari) {
-        inputField.style.display = 'block';
-      }
-    }
-    this._oldValueLength = valueLength;
-
-    const inputHeight = input.scrollHeight;
-    if (inputHeight > input.clientHeight) {
-      input.style.height = inputHeight + 'px';
-    }
-
-    // Restore
-    input.style.removeProperty('max-width');
-    inputField.style.removeProperty('display');
-    inputField.scrollTop = scrollTop;
-
-    this._dispatchIronResizeEventIfNeeded('InputHeight', inputHeight);
+    /* https://css-tricks.com/the-cleanest-trick-for-autogrowing-textareas/ */
+    this._textAreaWrapper = this._textAreaWrapper || this.shadowRoot.querySelector('.textarea-wrapper');
+    this._textAreaWrapper.dataset.replicatedValue = this.inputElement.value;
+    // getComputedStyle is expensive, maybe we can use ResizeObserver in the future
+    this._dispatchIronResizeEventIfNeeded('InputHeight', getComputedStyle(this._textAreaWrapper).height);
   }
 
   /**
