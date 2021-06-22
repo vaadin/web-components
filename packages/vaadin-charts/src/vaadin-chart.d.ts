@@ -68,10 +68,10 @@ import { ChartCategories, ChartCategoryPosition, ChartEventMap, ChartStacking } 
  * ```html
  *     <vaadin-chart id="mychart"></vaadin-chart>
  * ```
- * 1. Add a function that uses `update` method (JS JSON Api) to set chart title, categories and data
+ * 1. Add a function that uses `updateConfiguration` method (JS JSON Api) to set chart title, categories and data
  * ```js
  * initChartWithJSJSONApi() {
- *     this.$.mychart.update({
+ *     this.$.mychart.updateConfiguration({
  *       title: {
  *         text: 'The chart title'
  *       },
