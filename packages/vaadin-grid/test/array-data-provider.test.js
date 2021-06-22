@@ -265,7 +265,7 @@ describe('items with a custom data provider', () => {
     `);
   });
 
-  it('use the items array', () => {
+  it('should use the items array', () => {
     grid.dataProvider = dataProvider;
     grid.items = items;
     flushGrid(grid);
