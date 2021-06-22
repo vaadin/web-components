@@ -203,6 +203,14 @@ export const DataProviderMixin = (superClass) =>
           type: Object,
           notify: true,
           value: () => []
+        },
+
+        /**
+         * @private
+         */
+        __expandedKeys: {
+          type: Object,
+          value: () => new Set()
         }
       };
     }

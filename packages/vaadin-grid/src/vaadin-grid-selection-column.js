@@ -184,7 +184,7 @@ class GridSelectionColumnElement extends GridColumnElement {
       return;
     }
 
-    this._grid.selectedItems = selectAll && Array.isArray(this._grid.items) ? this._grid._filter(this._grid.items) : [];
+    this._grid.selectedItems = selectAll && Array.isArray(this._grid.items) ? this.__getRootLevelItems() : [];
   }
 
   /**
@@ -252,13 +252,19 @@ class GridSelectionColumnElement extends GridColumnElement {
   }
 
   /** @private */
+  __getRootLevelItems() {
+    const rootCache = this._grid._cache;
+    return [...Array(rootCache.size)].map((_, idx) => rootCache.items[idx]);
+  }
+
+  /** @private */
   __onSelectedItemsChanged() {
     this._selectAllChangeLock = true;
     if (Array.isArray(this._grid.items)) {
       if (!this._grid.selectedItems.length) {
         this.selectAll = false;
         this.__indeterminate = false;
-      } else if (this.__arrayContains(this._grid.selectedItems, this._grid._filter(this._grid.items))) {
+      } else if (this.__arrayContains(this._grid.selectedItems, this.__getRootLevelItems())) {
         this.selectAll = true;
         this.__indeterminate = false;
       } else {

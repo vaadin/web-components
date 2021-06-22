@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { click, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import '@vaadin/vaadin-template-renderer';
-import { flushGrid, getCellContent, getRows, getRowCells } from './helpers.js';
+import { flushGrid, getCellContent, getRows, getRowCells, getBodyCellContent } from './helpers.js';
 import '../vaadin-grid.js';
 import '../vaadin-grid-filter.js';
 import '../vaadin-grid-sorter.js';
@@ -80,16 +80,23 @@ describe('array data provider', () => {
     it('should handle null', () => {
       grid.items = null;
       expect(grid.size).to.equal(0);
+      expect(grid.items).to.be.null;
+    });
+
+    it('should unset the data provider', () => {
+      grid.items = null;
+      flushGrid(grid);
+      expect(grid.dataProvider).to.be.undefined;
     });
 
     it('should set array data provider', () => {
       expect(grid.dataProvider).to.equal(grid._arrayDataProvider);
     });
 
-    it('should not override custom data provider', () => {
+    it('should override custom data provider', () => {
       const ds = (grid.dataProvider = () => {});
       grid.items = [1, 2, 3];
-      expect(grid.dataProvider).to.equal(ds);
+      expect(grid.dataProvider).not.to.equal(ds);
     });
 
     it('should handle new array of same length', () => {
@@ -248,5 +255,34 @@ describe('invalid paths', () => {
       filter._debouncerFilterChanged.flush();
       expect(console.warn.called).to.be.false;
     });
+  });
+});
+
+describe('items with a custom data provider', () => {
+  let grid;
+  const dataProvider = (params, callback) => callback([{ value: 'foo' }], 1);
+  const items = [{ value: 'bar' }];
+
+  beforeEach(() => {
+    grid = fixtureSync(`
+      <vaadin-grid>
+        <vaadin-grid-column path="value"></vaadin-grid-column>
+      </vaadin-grid>
+    `);
+  });
+
+  it('should use the items array', () => {
+    grid.dataProvider = dataProvider;
+    grid.items = items;
+    flushGrid(grid);
+    expect(getBodyCellContent(grid, 0, 0).textContent).to.equal('bar');
+  });
+
+  it('should use the custom data provider', () => {
+    grid.items = items;
+    grid.dataProvider = dataProvider;
+    flushGrid(grid);
+    expect(getBodyCellContent(grid, 0, 0).textContent).to.equal('foo');
+    expect(grid.items).to.be.undefined;
   });
 });
