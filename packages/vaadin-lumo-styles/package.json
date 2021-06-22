@@ -24,7 +24,8 @@
     "*.d.ts",
     "mixins/*.js",
     "mixins/*.d.ts",
-    "presets/*.js"
+    "presets/*.js",
+    "utilities/*.js"
   ],
   "scripts": {
     "icons": "gulp icons"
