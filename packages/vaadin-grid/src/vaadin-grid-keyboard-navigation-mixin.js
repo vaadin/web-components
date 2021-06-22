@@ -346,9 +346,9 @@ export const KeyboardNavigationMixin = (superClass) =>
     _parseEventPath(path) {
       const tableIndex = path.indexOf(this.$.table);
       return {
-        rowGroup: path[tableIndex - 1],
-        row: path[tableIndex - 2],
-        cell: path[tableIndex - 3]
+        rowGroup: tableIndex >= 3 ? path[tableIndex - 1] : null,
+        row: tableIndex >= 3 ? path[tableIndex - 2] : null,
+        cell: tableIndex >= 3 ? path[tableIndex - 3] : null
       };
     }
 
@@ -374,7 +374,7 @@ export const KeyboardNavigationMixin = (superClass) =>
 
       const { cell } = this._parseEventPath(e.composedPath());
 
-      if (this.interacting !== wantInteracting) {
+      if (this.interacting !== wantInteracting && cell !== null) {
         if (wantInteracting) {
           const focusTarget = cell._content.querySelector('[focus-target]') || cell._content.firstElementChild;
           if (focusTarget) {

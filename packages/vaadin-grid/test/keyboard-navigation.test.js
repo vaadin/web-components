@@ -1882,6 +1882,13 @@ describe('keyboard navigation', () => {
 
       expect(grid.hasAttribute('interacting')).to.be.true;
     });
+
+    it('should not throw error when hit enter after focus on table body', () => {
+      expect(() => {
+        grid.$.items.focus();
+        enter(grid);
+      }).not.to.throw(Error);
+    });
   });
 
   describe('focus events on cell content', () => {
