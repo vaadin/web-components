@@ -103,11 +103,11 @@ function compare(a, b) {
 function filter(items, filters) {
   return items.filter((item) => {
     return (
-      filters.filter((filter) => {
+      filters.every((filter) => {
         const value = normalizeEmptyValue(get(filter.path, item));
         const filterValueLowercase = normalizeEmptyValue(filter.value).toString().toLowerCase();
-        return value.toString().toLowerCase().indexOf(filterValueLowercase) === -1;
-      }).length === 0
+        return value.toString().toLowerCase().includes(filterValueLowercase);
+      })
     );
   });
 }
