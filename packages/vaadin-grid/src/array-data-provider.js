@@ -59,7 +59,7 @@ function multiSort(items, sortOrders) {
         return 0;
       })
       .reduce((p, n) => {
-        return p ? p : n;
+        return p !== 0 ? p : n;
       }, 0);
   });
 }
@@ -102,13 +102,11 @@ function compare(a, b) {
  */
 function filter(items, filters) {
   return items.filter((item) => {
-    return (
-      filters.every((filter) => {
-        const value = normalizeEmptyValue(get(filter.path, item));
-        const filterValueLowercase = normalizeEmptyValue(filter.value).toString().toLowerCase();
-        return value.toString().toLowerCase().includes(filterValueLowercase);
-      })
-    );
+    return filters.every((filter) => {
+      const value = normalizeEmptyValue(get(filter.path, item));
+      const filterValueLowercase = normalizeEmptyValue(filter.value).toString().toLowerCase();
+      return value.toString().toLowerCase().includes(filterValueLowercase);
+    });
   });
 }
 
@@ -125,11 +123,16 @@ function filter(items, filters) {
 export const createArrayDataProvider = (allItems) => {
   return (params, callback) => {
     let items = allItems ? [...allItems] : [];
+
     if (params.filters && checkPaths(params.filters, 'filtering', items)) {
       items = filter(items, params.filters);
     }
 
-    if (params.sortOrders.length && checkPaths(params.sortOrders, 'sorting', items)) {
+    if (
+      Array.isArray(params.sortOrders) &&
+      params.sortOrders.length &&
+      checkPaths(params.sortOrders, 'sorting', items)
+    ) {
       items = multiSort(items, params.sortOrders);
     }
 

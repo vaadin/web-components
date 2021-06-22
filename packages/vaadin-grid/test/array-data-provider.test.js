@@ -83,6 +83,12 @@ describe('array data provider', () => {
       expect(grid.items).to.be.null;
     });
 
+    it('should unset the data provider', () => {
+      grid.items = null;
+      flushGrid(grid);
+      expect(grid.dataProvider).to.be.undefined;
+    });
+
     it('should set array data provider', () => {
       expect(grid.dataProvider).to.equal(grid._arrayDataProvider);
     });
@@ -270,7 +276,6 @@ describe('items with a custom data provider', () => {
     grid.items = items;
     flushGrid(grid);
     expect(getBodyCellContent(grid, 0, 0).textContent).to.equal('bar');
-    expect(grid.dataProvider).not.to.equal(dataProvider);
   });
 
   it('should use the custom data provider', () => {
@@ -279,12 +284,5 @@ describe('items with a custom data provider', () => {
     flushGrid(grid);
     expect(getBodyCellContent(grid, 0, 0).textContent).to.equal('foo');
     expect(grid.items).to.be.undefined;
-  });
-
-  it('should unset the data provider', () => {
-    grid.items = items;
-    grid.items = null;
-    flushGrid(grid);
-    expect(grid.dataProvider).to.be.undefined;
   });
 });
