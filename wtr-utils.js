@@ -9,6 +9,7 @@ const HIDDEN_WARNINGS = [
   'PositionMixin is not considered stable and might change any time',
   'WARNING: Since Vaadin 21, update() is deprecated. Please use updateConfiguration() instead.',
   'WARNING: Since Vaadin 21, render() is deprecated. The items value is immutable. Please replace it with a new value instead of mutating in place.',
+  'WARNING: Since Vaadin 21, render() is deprecated. Please use requestContentUpdate() instead.',
   /^WARNING: <template> inside <[^>]+> is deprecated. Use a renderer function instead/
 ];
 

@@ -47,12 +47,36 @@ describe('renderer', () => {
       };
     });
 
-    it('should be possible to manually invoke renderer', () => {
+    it('should run renderers when requesting content update', () => {
       notification.renderer = sinon.spy();
       notification.opened = true;
+
       expect(notification.renderer.calledOnce).to.be.true;
-      notification.render();
+
+      notification.requestContentUpdate();
+
       expect(notification.renderer.calledTwice).to.be.true;
+    });
+
+    it('should request content update when calling deprecated render()', () => {
+      const stub = sinon.stub(notification, 'requestContentUpdate');
+      notification.opened = true;
+      notification.render();
+      stub.restore();
+
+      expect(stub.calledOnce).to.be.true;
+    });
+
+    it('should warn when calling deprecated render()', () => {
+      const stub = sinon.stub(console, 'warn');
+      notification.opened = true;
+      notification.render();
+      stub.restore();
+
+      expect(stub.calledOnce).to.be.true;
+      expect(stub.args[0][0]).to.equal(
+        'WARNING: Since Vaadin 21, render() is deprecated. Please use requestContentUpdate() instead.'
+      );
     });
 
     it('should provide root from the previous renderer call', () => {

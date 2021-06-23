@@ -445,6 +445,29 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
     }
   }
 
+  /**
+   * Requests an update for the content of the overlay.
+   * While performing the update, it invokes the renderer passed in the `renderer` property.
+   *
+   * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
+   */
+  requestContentUpdate() {
+    if (this.renderer) {
+      this.renderer.call(this.owner, this.content, this.owner, this.model);
+    }
+  }
+
+  /**
+   * Manually invoke existing renderer.
+   *
+   * @deprecated Since Vaadin 21, `render()` is deprecated. Please use `requestContentUpdate()` instead.
+   */
+  render() {
+    console.warn('WARNING: Since Vaadin 21, render() is deprecated. Please use requestContentUpdate() instead.');
+
+    this.requestContentUpdate();
+  }
+
   /** @private */
   _ironOverlayCanceled(event) {
     event.preventDefault();
@@ -872,15 +895,6 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
     }
   }
 
-  /**
-   * Manually invoke existing renderer.
-   */
-  render() {
-    if (this.renderer) {
-      this.renderer.call(this.owner, this.content, this.owner, this.model);
-    }
-  }
-
   /** @private */
   _templateOrRendererChanged(template, renderer, owner, model, instanceProps, opened) {
     if (template && renderer) {
@@ -911,7 +925,7 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
       this._stampOverlayTemplate(template, instanceProps);
     } else if (renderer && (rendererChanged || openedChanged || ownerOrModelChanged)) {
       if (opened) {
-        this.render();
+        this.requestContentUpdate();
       }
     }
   }

@@ -305,12 +305,30 @@ export const ComboBoxMixin = (subclass) =>
     }
 
     /**
+     * Requests an update for the content of items.
+     * While performing the update, it invokes the renderer (passed in the `renderer` property) once an item.
+     *
+     * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
+     */
+    requestContentUpdate() {
+      if (!this.$.overlay._selector) {
+        return;
+      }
+
+      this.$.overlay._selector.querySelectorAll('vaadin-combo-box-item').forEach((item) => {
+        item.requestContentUpdate();
+      });
+    }
+
+    /**
      * Manually invoke existing renderer.
+     *
+     * @deprecated Since Vaadin 21, `render()` is deprecated. Please use `requestContentUpdate()` instead.
      */
     render() {
-      if (this.$.overlay._selector) {
-        this.$.overlay._selector.querySelectorAll('vaadin-combo-box-item').forEach((item) => item._render());
-      }
+      console.warn('WARNING: Since Vaadin 21, render() is deprecated. Please use requestContentUpdate() instead.');
+
+      this.requestContentUpdate();
     }
 
     /**

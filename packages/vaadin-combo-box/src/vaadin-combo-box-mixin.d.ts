@@ -142,7 +142,17 @@ interface ComboBoxMixin<TItem> {
   _inputElementValue: string | null | undefined;
 
   /**
+   * Requests an update for the content of items.
+   * While performing the update, it invokes the renderer (passed in the `renderer` property) once an item.
+   *
+   * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
+   */
+  requestContentUpdate(): void;
+
+  /**
    * Manually invoke existing renderer.
+   *
+   * @deprecated Since Vaadin 21, `render()` is deprecated. Please use `requestContentUpdate()` instead.
    */
   render(): void;
 

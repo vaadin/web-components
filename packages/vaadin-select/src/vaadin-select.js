@@ -365,13 +365,28 @@ class SelectElement extends ElementMixin(
   }
 
   /**
-   * Manually invoke existing renderer.
+   * Requests an update for the content of the select.
+   * While performing the update, it invokes the renderer passed in the `renderer` property.
+   *
+   * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
    */
-  render() {
-    this._overlayElement.render();
+  requestContentUpdate() {
+    this._overlayElement.requestContentUpdate();
+
     if (this._menuElement && this._menuElement.items) {
       this._updateSelectedItem(this.value, this._menuElement.items);
     }
+  }
+
+  /**
+   * Manually invoke existing renderer.
+   *
+   * @deprecated Since Vaadin 21, `render()` is deprecated. Please use `requestContentUpdate()` instead.
+   */
+  render() {
+    console.warn('WARNING: Since Vaadin 21, render() is deprecated. Please use requestContentUpdate() instead.');
+
+    this.requestContentUpdate();
   }
 
   /** @private */
@@ -382,7 +397,7 @@ class SelectElement extends ElementMixin(
 
     overlay.setProperties({ owner: this, renderer });
 
-    this.render();
+    this.requestContentUpdate();
 
     if (renderer) {
       this._assignMenuElement();

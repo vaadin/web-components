@@ -94,7 +94,17 @@ declare class DialogElement extends ThemePropertyMixin(
   modeless: boolean;
 
   /**
+   * Requests an update for the content of the dialog.
+   * While performing the update, it invokes the renderer passed in the `renderer` property.
+   *
+   * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
+   */
+  requestContentUpdate(): void;
+
+  /**
    * Manually invoke existing renderer.
+   *
+   * @deprecated Since Vaadin 21, `render()` is deprecated. Please use `requestContentUpdate()` instead.
    */
   render(): void;
 

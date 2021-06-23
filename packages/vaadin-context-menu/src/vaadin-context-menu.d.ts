@@ -235,7 +235,17 @@ declare class ContextMenuElement extends ElementMixin(
   renderer: ContextMenuRenderer | null | undefined;
 
   /**
+   * Requests an update for the content of the menu overlay.
+   * While performing the update, it invokes the renderer passed in the `renderer` property.
+   *
+   * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
+   */
+  requestContentUpdate(): void;
+
+  /**
    * Manually invoke existing renderer.
+   *
+   * @deprecated Since Vaadin 21, `render()` is deprecated. Please use `requestContentUpdate()` instead.
    */
   render(): void;
 

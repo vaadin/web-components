@@ -359,8 +359,23 @@ declare class GridElement<TItem = GridDefaultItem> extends HTMLElement {
   __getRowModel(row: HTMLTableRowElement): GridItemModel<TItem>;
 
   /**
+   * Requests an update for the content of cells.
+   *
+   * While performing the update, the following renderers are invoked:
+   * - `GridElement.rowDetailsRenderer`
+   * - `GridColumnElement.renderer`
+   * - `GridColumnElement.headerRenderer`
+   * - `GridColumnElement.footerRenderer`
+   *
+   * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
+   */
+  requestContentUpdate(): void;
+
+  /**
    * Manually invoke existing renderers for all the columns
    * (header, footer and body cells) and opened row details.
+   *
+   * @deprecated Since Vaadin 21, `render()` is deprecated. Please use `requestContentUpdate()` instead.
    */
   render(): void;
 
