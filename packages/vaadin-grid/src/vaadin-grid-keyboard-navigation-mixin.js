@@ -343,18 +343,6 @@ export const KeyboardNavigationMixin = (superClass) =>
     }
 
     /** @private */
-    _parseEventPath(path) {
-      const tableIndex = path.indexOf(this.$.table);
-      const inRange = tableIndex >= 3;
-
-      return {
-        rowGroup: inRange ? path[tableIndex - 1] : null,
-        row: inRange ? path[tableIndex - 2] : null,
-        cell: inRange ? path[tableIndex - 3] : null
-      };
-    }
-
-    /** @private */
     _onInteractionKeyDown(e, key) {
       const localTarget = e.composedPath()[0];
       const localTargetIsTextInput =
@@ -374,7 +362,7 @@ export const KeyboardNavigationMixin = (superClass) =>
           break;
       }
 
-      const { cell } = this._parseEventPath(e.composedPath());
+      const { cell } = this._getGridEventLocation(e);
 
       if (this.interacting !== wantInteracting && cell !== null) {
         if (wantInteracting) {
@@ -516,11 +504,10 @@ export const KeyboardNavigationMixin = (superClass) =>
 
     /** @private */
     _onCellFocusIn(e) {
-      const location = this._getCellFocusEventLocation(e);
+      const { section, cell } = this._getGridEventLocation(e);
       this._detectInteracting(e);
 
-      if (location) {
-        const { section, cell } = location;
+      if (section && cell) {
         this._activeRowGroup = section;
         if (this.$.header === section) {
           this._headerFocusable = cell;
@@ -560,8 +547,8 @@ export const KeyboardNavigationMixin = (superClass) =>
 
     /** @private */
     _detectFocusedItemIndex(e) {
-      const { rowGroup, row } = this._parseEventPath(e.composedPath());
-      if (rowGroup === this.$.items) {
+      const { section, row } = this._getGridEventLocation(e);
+      if (section === this.$.items) {
         this._focusedItemIndex = row.index;
       }
     }
@@ -688,31 +675,30 @@ export const KeyboardNavigationMixin = (superClass) =>
     }
 
     /**
-     * @typedef {Object} CellFocusEventLocation
-     * @property {HTMLTableSectionElement} section - The grid section element that contains the focused cell (header, body, or footer)
-     * @property {HTMLElement} cell - The cell element that received focus or is ancestor of the element that received focus
+     * @typedef {Object} GridEventLocation
+     * @property {HTMLTableSectionElement | null} section - The table section element that the event occurred in (header, body, or footer), or null if the event did not occur in a section
+     * @property {HTMLTableRowElement | null} row - The row element that the event occurred in, or null if the event did not occur in a row
+     * @property {HTMLTableCellElement | null} cell - The cell element that the event occurred in, or null if the event did not occur in a cell
      * @private
      */
     /**
-     * Takes a focus event and returns a location object describing in which
-     * section of the grid and in or on which cell the focus event occurred.
-     * The focus event may either target the cell itself or contents of the cell.
-     * If the event does not target a cell then null is returned.
-     * @param {FocusEvent} e
-     * @returns {CellFocusEventLocation | null}
+     * Takes an event and returns a location object describing in which part of the grid the event occurred.
+     * The event may either target table section, a row, a cell or contents of a cell.
+     * @param {Event} e
+     * @returns {GridEventLocation}
      * @private
      */
-    _getCellFocusEventLocation(e) {
+    _getGridEventLocation(e) {
       const path = e.composedPath();
       const tableIndex = path.indexOf(this.$.table);
       // Assuming ascending path to table is: [...,] th|td, tr, thead|tbody, table [,...]
-      const section = tableIndex >= 2 ? path[tableIndex - 1] : null;
+      const section = tableIndex >= 1 ? path[tableIndex - 1] : null;
+      const row = tableIndex >= 2 ? path[tableIndex - 2] : null;
       const cell = tableIndex >= 3 ? path[tableIndex - 3] : null;
-
-      if (!section || !cell) return null;
 
       return {
         section,
+        row,
         cell
       };
     }
