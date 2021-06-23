@@ -110,15 +110,15 @@ describe('renderer', () => {
       expect(overlay.template).to.be.not.ok;
     });
 
-    it('should run renderers manually', () => {
+    it('should run renderers when requesting content update', () => {
       overlay.renderer = sinon.spy();
-      overlay.runRenderers();
+      overlay.requestContentUpdate();
 
       expect(overlay.renderer.calledOnce).to.be.true;
     });
 
-    it('should run renderers when calling deprecated render()', () => {
-      const stub = sinon.stub(overlay, 'runRenderers');
+    it('should request content update when calling deprecated render()', () => {
+      const stub = sinon.stub(overlay, 'requestContentUpdate');
       overlay.render();
       stub.restore();
 
@@ -132,7 +132,7 @@ describe('renderer', () => {
 
       expect(stub.calledOnce).to.be.true;
       expect(stub.args[0][0]).to.equal(
-        'WARNING: Since Vaadin 21, render() is deprecated. Please use runRenderers() instead.'
+        'WARNING: Since Vaadin 21, render() is deprecated. Please use requestContentUpdate() instead.'
       );
     });
 

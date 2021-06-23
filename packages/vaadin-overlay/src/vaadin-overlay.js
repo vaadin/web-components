@@ -446,9 +446,12 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
   }
 
   /**
-   * Runs the renderer passed in the `renderer` property to update the content of the overlay.
+   * Requests an update for the content of the overlay.
+   * While performing the update, it invokes the renderer passed in the `renderer` property.
+   *
+   * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
    */
-  runRenderers() {
+  requestContentUpdate() {
     if (this.renderer) {
       this.renderer.call(this.owner, this.content, this.owner, this.model);
     }
@@ -457,12 +460,12 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
   /**
    * Manually invoke existing renderer.
    *
-   * @deprecated Since Vaadin 21, `render()` is deprecated. Please use `runRenderers()` instead.
+   * @deprecated Since Vaadin 21, `render()` is deprecated. Please use `requestContentUpdate()` instead.
    */
   render() {
-    console.warn('WARNING: Since Vaadin 21, render() is deprecated. Please use runRenderers() instead.');
+    console.warn('WARNING: Since Vaadin 21, render() is deprecated. Please use requestContentUpdate() instead.');
 
-    this.runRenderers();
+    this.requestContentUpdate();
   }
 
   /** @private */
@@ -922,7 +925,7 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
       this._stampOverlayTemplate(template, instanceProps);
     } else if (renderer && (rendererChanged || openedChanged || ownerOrModelChanged)) {
       if (opened) {
-        this.runRenderers();
+        this.requestContentUpdate();
       }
     }
   }

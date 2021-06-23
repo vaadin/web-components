@@ -202,7 +202,7 @@ describe('column', () => {
         newColumn.footerRenderer = () => {};
         grid.appendChild(newColumn);
         flushGrid(grid);
-        expect(() => grid.runRenderers()).not.to.throw(Error);
+        expect(() => grid.requestContentUpdate()).not.to.throw(Error);
       });
 
       it('should not remove details row when a column is hidden', () => {

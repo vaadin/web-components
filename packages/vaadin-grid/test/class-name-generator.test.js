@@ -90,7 +90,7 @@ describe('class name generator', () => {
     assertClassList(firstCell, []);
   });
 
-  ['generateCellClassNames', 'clearCache', 'runRenderers'].forEach((funcName) => {
+  ['generateCellClassNames', 'clearCache', 'requestContentUpdate'].forEach((funcName) => {
     it(`should update classes on ${funcName}`, () => {
       let condition = false;
       grid.cellClassNameGenerator = () => condition && 'foo';

@@ -452,21 +452,24 @@ class ContextMenuElement extends ElementMixin(ThemePropertyMixin(ItemsMixin(Gest
   }
 
   /**
-   * Runs the renderer passed in the `renderer` property to update the content of the menu overlay.
+   * Requests an update for the content of the menu overlay.
+   * While performing the update, it invokes the renderer passed in the `renderer` property.
+   *
+   * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
    */
-  runRenderers() {
-    this.$.overlay.runRenderers();
+  requestContentUpdate() {
+    this.$.overlay.requestContentUpdate();
   }
 
   /**
    * Manually invoke existing renderer.
    *
-   * @deprecated Since Vaadin 21, `render()` is deprecated. Please use `runRenderers()` instead.
+   * @deprecated Since Vaadin 21, `render()` is deprecated. Please use `requestContentUpdate()` instead.
    */
   render() {
-    console.warn('WARNING: Since Vaadin 21, render() is deprecated. Please use runRenderers() instead.');
+    console.warn('WARNING: Since Vaadin 21, render() is deprecated. Please use requestContentUpdate() instead.');
 
-    this.runRenderers();
+    this.requestContentUpdate();
   }
 
   /** @private */

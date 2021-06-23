@@ -117,9 +117,12 @@ class ComboBoxItemElement extends ThemableMixin(DirMixin(PolymerElement)) {
   }
 
   /**
-   * Runs the renderer passed in the `renderer` property to update the content of the item.
+   * Requests an update for the content of the item.
+   * While performing the update, it invokes the renderer passed in the `renderer` property.
+   *
+   * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
    */
-  runRenderers() {
+  requestContentUpdate() {
     if (!this.renderer) {
       return;
     }
@@ -146,7 +149,7 @@ class ComboBoxItemElement extends ThemableMixin(DirMixin(PolymerElement)) {
 
     if (renderer) {
       this._oldRenderer = renderer;
-      this.runRenderers();
+      this.requestContentUpdate();
     }
   }
 

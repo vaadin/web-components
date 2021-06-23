@@ -255,7 +255,7 @@ describe('renderers', () => {
     });
   });
 
-  it('should run renderers manually', () => {
+  it('should run renderers when requesting content update', () => {
     column.renderer = sinon.spy();
     column.headerRenderer = sinon.spy();
     column.footerRenderer = sinon.spy();
@@ -265,15 +265,15 @@ describe('renderers', () => {
     flushGrid(grid);
 
     renderers.forEach((renderer) => renderer.resetHistory());
-    grid.runRenderers();
+    grid.requestContentUpdate();
 
     renderers.forEach((renderer) => {
       expect(renderer.called).to.be.true;
     });
   });
 
-  it('should run renderers when calling deprecated render()', () => {
-    const stub = sinon.stub(grid, 'runRenderers');
+  it('should request content update when calling deprecated render()', () => {
+    const stub = sinon.stub(grid, 'requestContentUpdate');
     grid.render();
     stub.restore();
 
@@ -287,7 +287,7 @@ describe('renderers', () => {
 
     expect(stub.calledOnce).to.be.true;
     expect(stub.args[0][0]).to.equal(
-      'WARNING: Since Vaadin 21, render() is deprecated. Please use runRenderers() instead.'
+      'WARNING: Since Vaadin 21, render() is deprecated. Please use requestContentUpdate() instead.'
     );
   });
 });

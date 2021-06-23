@@ -49,18 +49,18 @@ describe('renderer', () => {
     };
   });
 
-  it('should run renderers manually', () => {
+  it('should run renderers when requesting content update', () => {
     select.renderer = sinon.spy();
     select.opened = true;
 
     select.renderer.resetHistory();
-    select.runRenderers();
+    select.requestContentUpdate();
 
     expect(select.renderer.calledOnce).to.be.true;
   });
 
-  it('should run renderers when calling deprecated render()', () => {
-    const stub = sinon.stub(select, 'runRenderers');
+  it('should request content update when calling deprecated render()', () => {
+    const stub = sinon.stub(select, 'requestContentUpdate');
     select.opened = true;
     select.render();
     stub.restore();
@@ -76,7 +76,7 @@ describe('renderer', () => {
 
     expect(stub.calledOnce).to.be.true;
     expect(stub.args[0][0]).to.equal(
-      'WARNING: Since Vaadin 21, render() is deprecated. Please use runRenderers() instead.'
+      'WARNING: Since Vaadin 21, render() is deprecated. Please use requestContentUpdate() instead.'
     );
   });
 
@@ -85,7 +85,7 @@ describe('renderer', () => {
     await nextFrame();
     select.value = 'bar';
     select.__testVar = 'baz';
-    select.runRenderers();
+    select.requestContentUpdate();
     await nextFrame();
     expect(select._menuElement.selected).to.be.equal(1);
     expect(select._valueElement.textContent.trim()).to.be.equal('barbaz');

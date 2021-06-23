@@ -47,19 +47,19 @@ describe('renderer', () => {
       };
     });
 
-    it('should run renderers manually', () => {
+    it('should run renderers when requesting content update', () => {
       notification.renderer = sinon.spy();
       notification.opened = true;
 
       expect(notification.renderer.calledOnce).to.be.true;
 
-      notification.runRenderers();
+      notification.requestContentUpdate();
 
       expect(notification.renderer.calledTwice).to.be.true;
     });
 
-    it('should run renderers when calling deprecated render()', () => {
-      const stub = sinon.stub(notification, 'runRenderers');
+    it('should request content update when calling deprecated render()', () => {
+      const stub = sinon.stub(notification, 'requestContentUpdate');
       notification.opened = true;
       notification.render();
       stub.restore();
@@ -75,7 +75,7 @@ describe('renderer', () => {
 
       expect(stub.calledOnce).to.be.true;
       expect(stub.args[0][0]).to.equal(
-        'WARNING: Since Vaadin 21, render() is deprecated. Please use runRenderers() instead.'
+        'WARNING: Since Vaadin 21, render() is deprecated. Please use requestContentUpdate() instead.'
       );
     });
 

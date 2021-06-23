@@ -24,19 +24,19 @@ describe('vaadin-dialog renderer', () => {
       expect(overlay.textContent).to.include('The content of the dialog');
     });
 
-    it('should run renderers manually', () => {
+    it('should run renderers when requesting content update', () => {
       dialog.renderer = sinon.spy();
       dialog.opened = true;
 
       expect(dialog.renderer.calledOnce).to.be.true;
 
-      dialog.runRenderers();
+      dialog.requestContentUpdate();
 
       expect(dialog.renderer.calledTwice).to.be.true;
     });
 
-    it('should run renderers when calling deprecated render()', () => {
-      const stub = sinon.stub(dialog, 'runRenderers');
+    it('should request content update when calling deprecated render()', () => {
+      const stub = sinon.stub(dialog, 'requestContentUpdate');
       dialog.render();
       stub.restore();
 
@@ -50,7 +50,7 @@ describe('vaadin-dialog renderer', () => {
 
       expect(stub.calledOnce).to.be.true;
       expect(stub.args[0][0]).to.equal(
-        'WARNING: Since Vaadin 21, render() is deprecated. Please use runRenderers() instead.'
+        'WARNING: Since Vaadin 21, render() is deprecated. Please use requestContentUpdate() instead.'
       );
     });
 

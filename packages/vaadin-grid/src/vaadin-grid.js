@@ -965,15 +965,17 @@ class GridElement extends ElementMixin(
   }
 
   /**
-   * Runs all the renderers to update the content of the cells.
+   * Requests an update for the content of cells.
    *
-   * This method invokes the following renderers:
+   * While performing the update, the following renderers are invoked:
    * - `GridElement.rowDetailsRenderer`
    * - `GridColumnElement.renderer`
    * - `GridColumnElement.headerRenderer`
    * - `GridColumnElement.footerRenderer`
+   *
+   * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
    */
-  runRenderers() {
+  requestContentUpdate() {
     if (this._columnTree) {
       // header and footer renderers
       this._columnTree.forEach((level) => {
@@ -991,12 +993,12 @@ class GridElement extends ElementMixin(
    * Manually invoke existing renderers for all the columns
    * (header, footer and body cells) and opened row details.
    *
-   * @deprecated Since Vaadin 21, `render()` is deprecated. Please use `runRenderers()` instead.
+   * @deprecated Since Vaadin 21, `render()` is deprecated. Please use `requestContentUpdate()` instead.
    */
   render() {
-    console.warn('WARNING: Since Vaadin 21, render() is deprecated. Please use runRenderers() instead.');
+    console.warn('WARNING: Since Vaadin 21, render() is deprecated. Please use requestContentUpdate() instead.');
 
-    this.runRenderers();
+    this.requestContentUpdate();
   }
 
   /** @protected */

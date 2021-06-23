@@ -332,7 +332,7 @@ describe('data provider', () => {
         expandIndex(grid, 0);
         expect(isIndexExpanded(grid, 0)).to.be.true;
         grid.itemIdPath = 'id';
-        grid.runRenderers();
+        grid.requestContentUpdate();
         expect(isIndexExpanded(grid, 0)).to.be.true;
       });
 

@@ -202,14 +202,17 @@ declare class OverlayElement extends ThemableMixin(DirMixin(HTMLElement)) {
   _stampOverlayTemplate(template: HTMLTemplateElement, instanceProps: object | null): void;
 
   /**
-   * Runs the renderer passed in the `renderer` property to update the content of the overlay.
+   * Requests an update for the content of the overlay.
+   * While performing the update, it invokes the renderer passed in the `renderer` property.
+   *
+   * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
    */
-  runRenderers(): void;
+  requestContentUpdate(): void;
 
   /**
    * Manually invoke existing renderer.
    *
-   * @deprecated Since Vaadin 21, `render()` is deprecated. Please use `runRenderers()` instead.
+   * @deprecated Since Vaadin 21, `render()` is deprecated. Please use `requestContentUpdate()` instead.
    */
   render(): void;
 

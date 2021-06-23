@@ -86,18 +86,18 @@ describe('renderer', () => {
     expect(menu.renderer.getCall(1).args[2].detail).to.deep.equal({ foo: 'two' });
   });
 
-  it('should run renderers manually', () => {
+  it('should run renderers when requesting content update', () => {
     fire(target, 'vaadin-contextmenu');
 
     expect(menu.renderer.calledOnce).to.be.true;
 
-    menu.runRenderers();
+    menu.requestContentUpdate();
 
     expect(menu.renderer.calledTwice).to.be.true;
   });
 
-  it('should run renderers when calling deprecated render()', () => {
-    const stub = sinon.stub(menu, 'runRenderers');
+  it('should request content update when calling deprecated render()', () => {
+    const stub = sinon.stub(menu, 'requestContentUpdate');
     fire(target, 'vaadin-contextmenu');
     menu.render();
     stub.restore();
@@ -113,7 +113,7 @@ describe('renderer', () => {
 
     expect(stub.calledOnce).to.be.true;
     expect(stub.args[0][0]).to.equal(
-      'WARNING: Since Vaadin 21, render() is deprecated. Please use runRenderers() instead.'
+      'WARNING: Since Vaadin 21, render() is deprecated. Please use requestContentUpdate() instead.'
     );
   });
 
