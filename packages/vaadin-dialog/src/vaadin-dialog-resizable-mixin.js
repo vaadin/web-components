@@ -213,8 +213,6 @@ export const DialogResizableMixin = (superClass) =>
             }
           }
         });
-
-        this.$.overlay.notifyResize();
       }
     }
 

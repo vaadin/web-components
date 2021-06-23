@@ -4,8 +4,6 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { IronResizableBehavior } from '@polymer/iron-resizable-behavior/iron-resizable-behavior.js';
-import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
 import { OverlayElement } from '@vaadin/vaadin-overlay/src/vaadin-overlay.js';
 import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
 import { processTemplates } from '@vaadin/vaadin-element-mixin/templates.js';
@@ -40,7 +38,7 @@ let memoizedTemplate;
  * @extends OverlayElement
  * @private
  */
-class DialogOverlayElement extends mixinBehaviors(IronResizableBehavior, OverlayElement) {
+class DialogOverlayElement extends OverlayElement {
   static get is() {
     return 'vaadin-dialog-overlay';
   }

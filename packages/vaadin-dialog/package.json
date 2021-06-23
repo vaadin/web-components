@@ -25,7 +25,6 @@
     "theme"
   ],
   "dependencies": {
-    "@polymer/iron-resizable-behavior": "^3.0.0",
     "@polymer/polymer": "^3.0.0",
     "@vaadin/vaadin-element-mixin": "^21.0.0-alpha9",
     "@vaadin/vaadin-lumo-styles": "^21.0.0-alpha9",
