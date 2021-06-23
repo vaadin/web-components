@@ -136,11 +136,18 @@ export const ButtonsMixin = (superClass) =>
     /**
      * Call this method after updating menu bar `items` dynamically, including changing
      * any property on the item object corresponding to one of the menu bar buttons.
+     *
+     * @deprecated Since Vaadin 21, `render()` is deprecated. The `items` value is immutable. Please replace it with a new value instead of mutating in place.
      */
     render() {
+      console.warn(
+        'WARNING: Since Vaadin 21, render() is deprecated. The items value is immutable. Please replace it with a new value instead of mutating in place.'
+      );
+
       if (!this.shadowRoot) {
         return;
       }
+
       this.__renderButtons(this.items);
     }
 

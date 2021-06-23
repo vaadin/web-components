@@ -8,6 +8,7 @@ const HIDDEN_WARNINGS = [
   'The <vaadin-grid> needs the total number of items in order to display rows. Set the total number of items to the `size` property, or provide the total number of items in the second argument of the `dataProvider`’s `callback` call.',
   'PositionMixin is not considered stable and might change any time',
   'WARNING: Since Vaadin 21, update() is deprecated. Please use updateConfiguration() instead.',
+  'WARNING: Since Vaadin 21, render() is deprecated. The items value is immutable. Please replace it with a new value instead of mutating in place.',
   /^WARNING: <template> inside <[^>]+> is deprecated. Use a renderer function instead/
 ];
 
