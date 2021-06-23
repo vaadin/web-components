@@ -119,7 +119,7 @@ describe('upload', () => {
         const errorEvt = errorSpy.firstCall.args[0];
 
         expect(errorEvt.detail.file.uploading).not.to.be.ok;
-        expect(errorEvt.detail.file.error).to.be.equal('Server Unavailable');
+        expect(errorEvt.detail.file.error).to.be.equal('Upload failed, please try again later');
         expect(errorEvt.detail.xhr.status).not.to.be.equal(200);
       });
 
