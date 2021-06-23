@@ -345,10 +345,12 @@ export const KeyboardNavigationMixin = (superClass) =>
     /** @private */
     _parseEventPath(path) {
       const tableIndex = path.indexOf(this.$.table);
+      const inRange = tableIndex >= 3;
+
       return {
-        rowGroup: tableIndex >= 3 ? path[tableIndex - 1] : null,
-        row: tableIndex >= 3 ? path[tableIndex - 2] : null,
-        cell: tableIndex >= 3 ? path[tableIndex - 3] : null
+        rowGroup: inRange ? path[tableIndex - 1] : null,
+        row: inRange ? path[tableIndex - 2] : null,
+        cell: inRange ? path[tableIndex - 3] : null
       };
     }
 
