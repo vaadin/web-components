@@ -236,7 +236,7 @@ class ContextMenuElement extends ElementMixin(ThemePropertyMixin(ItemsMixin(Gest
   }
 
   static get version() {
-    return '21.0.0-alpha9';
+    return '21.0.0-alpha10';
   }
 
   static get properties() {

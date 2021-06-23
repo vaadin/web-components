@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-date-picker",
-  "version": "21.0.0-alpha9",
+  "version": "21.0.0-alpha10",
   "description": "Web component providing a date selection field with scrollable month calendar",
   "main": "vaadin-date-picker.js",
   "module": "vaadin-date-picker.js",
@@ -29,20 +29,20 @@
     "@polymer/iron-media-query": "^3.0.0",
     "@polymer/iron-resizable-behavior": "^3.0.0",
     "@polymer/polymer": "^3.2.0",
-    "@vaadin/vaadin-button": "^21.0.0-alpha9",
-    "@vaadin/vaadin-control-state-mixin": "^21.0.0-alpha9",
-    "@vaadin/vaadin-element-mixin": "^21.0.0-alpha9",
-    "@vaadin/vaadin-lumo-styles": "^21.0.0-alpha9",
-    "@vaadin/vaadin-material-styles": "^21.0.0-alpha9",
-    "@vaadin/vaadin-overlay": "^21.0.0-alpha9",
-    "@vaadin/vaadin-text-field": "^21.0.0-alpha9",
-    "@vaadin/vaadin-themable-mixin": "^21.0.0-alpha9"
+    "@vaadin/vaadin-button": "^21.0.0-alpha10",
+    "@vaadin/vaadin-control-state-mixin": "^21.0.0-alpha10",
+    "@vaadin/vaadin-element-mixin": "^21.0.0-alpha10",
+    "@vaadin/vaadin-lumo-styles": "^21.0.0-alpha10",
+    "@vaadin/vaadin-material-styles": "^21.0.0-alpha10",
+    "@vaadin/vaadin-overlay": "^21.0.0-alpha10",
+    "@vaadin/vaadin-text-field": "^21.0.0-alpha10",
+    "@vaadin/vaadin-themable-mixin": "^21.0.0-alpha10"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.1.5",
     "@vaadin/testing-helpers": "^0.2.1",
-    "@vaadin/vaadin-dialog": "^21.0.0-alpha9",
-    "@vaadin/vaadin-template-renderer": "^21.0.0-alpha9",
+    "@vaadin/vaadin-dialog": "^21.0.0-alpha10",
+    "@vaadin/vaadin-template-renderer": "^21.0.0-alpha10",
     "sinon": "^9.2.0"
   },
   "publishConfig": {
