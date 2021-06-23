@@ -80,6 +80,25 @@ describe('root menu layout', () => {
     expect(() => document.createElement('vaadin-menu-bar').render()).to.not.throw(Error);
   });
 
+  it('should render buttons when calling deprecated render()', () => {
+    const stub = sinon.stub(menu, '__renderButtons');
+    menu.render();
+    stub.restore();
+
+    expect(stub.calledOnce).to.be.true;
+  });
+
+  it('should warn when calling deprecated render()', () => {
+    const stub = sinon.stub(console, 'warn');
+    menu.render();
+    stub.restore();
+
+    expect(stub.calledOnce).to.be.true;
+    expect(stub.args[0][0]).to.equal(
+      'WARNING: Since Vaadin 21, render() is deprecated. The items value is immutable. Please replace it with a new value instead of mutating in place.'
+    );
+  });
+
   describe('keyboard navigation', () => {
     describe('default mode', () => {
       it('should move focus to next button on "arrow-right" keydown', () => {
@@ -107,8 +126,8 @@ describe('root menu layout', () => {
       });
 
       it('should move focus to second button if first is disabled on "home" keydown', () => {
-        menu.set('items.0.disabled', true);
-        menu.render();
+        menu.items[0].disabled = true;
+        menu.items = [...menu.items];
         buttons = menu._buttons;
         buttons[3].focus();
         const spy = sinon.spy(buttons[1], 'focus');
@@ -126,8 +145,8 @@ describe('root menu layout', () => {
       });
 
       it('should move focus to the closest enabled button if last is disabled on "end" keydown', () => {
-        menu.set('items.3.disabled', true);
-        menu.render();
+        menu.items[3].disabled = true;
+        menu.items = [...menu.items];
         buttons = menu._buttons;
         buttons[0].focus();
         const spy = sinon.spy(buttons[1], 'focus');
