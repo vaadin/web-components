@@ -221,6 +221,13 @@ class ComboBoxDropdownElement extends DisableUpgradeMixin(mixinBehaviors(IronRes
     return this.alignedAbove ? -overlayRect.height : targetRect.height;
   }
 
+  _shouldAlignLeft(targetRect) {
+    const spaceRight =
+      (window.innerWidth - targetRect.right - Math.min(document.body.scrollLeft, 0)) / window.innerWidth;
+
+    return spaceRight < 0.3;
+  }
+
   _shouldAlignAbove(targetRect) {
     const spaceBelow =
       (window.innerHeight - targetRect.bottom - Math.min(document.body.scrollTop, 0)) / window.innerHeight;
@@ -254,10 +261,13 @@ class ComboBoxDropdownElement extends DisableUpgradeMixin(mixinBehaviors(IronRes
     }
 
     const targetRect = this.positionTarget.getBoundingClientRect();
+    const alignedLeft = this._shouldAlignLeft(targetRect);
     this.alignedAbove = this._shouldAlignAbove(targetRect);
 
     const overlayRect = this.$.overlay.getBoundingClientRect();
-    this._translateX = targetRect.left - overlayRect.left + (this._translateX || 0);
+    this._translateX = alignedLeft
+      ? targetRect.right - overlayRect.right + (this._translateX || 0)
+      : targetRect.left - overlayRect.left + (this._translateX || 0);
     this._translateY =
       targetRect.top - overlayRect.top + (this._translateY || 0) + this._verticalOffset(overlayRect, targetRect);
 
