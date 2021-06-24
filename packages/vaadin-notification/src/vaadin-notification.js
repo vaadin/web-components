@@ -252,7 +252,7 @@ class NotificationElement extends ThemePropertyMixin(ElementMixin(PolymerElement
   }
 
   static get version() {
-    return '21.0.0-alpha11';
+    return '21.0.0-alpha12';
   }
 
   static get properties() {
