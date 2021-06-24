@@ -305,7 +305,7 @@ class AppLayoutElement extends ElementMixin(ThemableMixin(mixinBehaviors([IronRe
   }
 
   static get version() {
-    return '21.0.0-alpha11';
+    return '21.0.0-alpha12';
   }
 
   static get properties() {

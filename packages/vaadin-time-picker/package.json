@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-time-picker",
-  "version": "21.0.0-alpha11",
+  "version": "21.0.0-alpha12",
   "description": "vaadin-time-picker",
   "main": "vaadin-time-picker.js",
   "module": "vaadin-time-picker.js",
@@ -26,13 +26,13 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/vaadin-combo-box": "21.0.0-alpha11",
-    "@vaadin/vaadin-control-state-mixin": "21.0.0-alpha11",
-    "@vaadin/vaadin-element-mixin": "21.0.0-alpha11",
-    "@vaadin/vaadin-lumo-styles": "21.0.0-alpha11",
-    "@vaadin/vaadin-material-styles": "21.0.0-alpha11",
-    "@vaadin/vaadin-text-field": "21.0.0-alpha11",
-    "@vaadin/vaadin-themable-mixin": "21.0.0-alpha11"
+    "@vaadin/vaadin-combo-box": "^21.0.0-alpha12",
+    "@vaadin/vaadin-control-state-mixin": "^21.0.0-alpha12",
+    "@vaadin/vaadin-element-mixin": "^21.0.0-alpha12",
+    "@vaadin/vaadin-lumo-styles": "^21.0.0-alpha12",
+    "@vaadin/vaadin-material-styles": "^21.0.0-alpha12",
+    "@vaadin/vaadin-text-field": "^21.0.0-alpha12",
+    "@vaadin/vaadin-themable-mixin": "^21.0.0-alpha12"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.1.5",
