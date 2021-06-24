@@ -29,7 +29,7 @@ class MessageInputTextAreaElement extends TextAreaElement {
   }
 
   static get version() {
-    return '21.0.0-alpha10';
+    return '21.0.0-alpha11';
   }
 
   static get properties() {

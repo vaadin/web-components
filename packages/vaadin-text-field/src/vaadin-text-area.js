@@ -143,7 +143,7 @@ class TextAreaElement extends ElementMixin(TextFieldMixin(ControlStateMixin(Them
   }
 
   static get version() {
-    return '21.0.0-alpha10';
+    return '21.0.0-alpha11';
   }
 
   /** @protected */

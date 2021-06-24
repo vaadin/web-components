@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-split-layout",
-  "version": "21.0.0-alpha10",
+  "version": "21.0.0-alpha11",
   "description": "Web component for partitioning a layout into resizeable areas",
   "main": "vaadin-split-layout.js",
   "module": "vaadin-split-layout.js",
@@ -27,10 +27,10 @@
   "dependencies": {
     "@polymer/iron-resizable-behavior": "^3.0.0",
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/vaadin-element-mixin": "^21.0.0-alpha10",
-    "@vaadin/vaadin-lumo-styles": "^21.0.0-alpha10",
-    "@vaadin/vaadin-material-styles": "^21.0.0-alpha10",
-    "@vaadin/vaadin-themable-mixin": "^21.0.0-alpha10"
+    "@vaadin/vaadin-element-mixin": "^21.0.0-alpha11",
+    "@vaadin/vaadin-lumo-styles": "^21.0.0-alpha11",
+    "@vaadin/vaadin-material-styles": "^21.0.0-alpha11",
+    "@vaadin/vaadin-themable-mixin": "^21.0.0-alpha11"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.1.5",
