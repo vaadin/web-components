@@ -27,10 +27,10 @@
   "dependencies": {
     "@polymer/iron-resizable-behavior": "^3.0.0",
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/vaadin-element-mixin": "^21.0.0-alpha11",
-    "@vaadin/vaadin-lumo-styles": "^21.0.0-alpha11",
-    "@vaadin/vaadin-material-styles": "^21.0.0-alpha11",
-    "@vaadin/vaadin-themable-mixin": "^21.0.0-alpha11"
+    "@vaadin/vaadin-element-mixin": "21.0.0-alpha11",
+    "@vaadin/vaadin-lumo-styles": "21.0.0-alpha11",
+    "@vaadin/vaadin-material-styles": "21.0.0-alpha11",
+    "@vaadin/vaadin-themable-mixin": "21.0.0-alpha11"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.1.5",

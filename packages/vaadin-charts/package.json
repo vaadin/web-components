@@ -26,9 +26,9 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/vaadin-element-mixin": "^21.0.0-alpha11",
+    "@vaadin/vaadin-element-mixin": "21.0.0-alpha11",
     "@vaadin/vaadin-license-checker": "^2.1.0",
-    "@vaadin/vaadin-themable-mixin": "^21.0.0-alpha11",
+    "@vaadin/vaadin-themable-mixin": "21.0.0-alpha11",
     "highcharts": "8.1.2"
   },
   "devDependencies": {
