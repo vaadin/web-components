@@ -79,27 +79,20 @@ class IconsetElement extends ElementMixin(PolymerElement) {
   }
 
   /**
+   * An array of icon ids defined in the iconset.
+   */
+  get icons() {
+    return Object.keys(this.__iconMap);
+  }
+
+  /**
    * Produce SVGTemplateResult for the element matching `name` in this
    * iconset, or `undefined` if there is no matching element.
    *
    * @param {string} name
    */
   applyIcon(name) {
-    // create the icon map on-demand, since the iconset itself has no discrete
-    // signal to know when it's children are fully parsed
-    this._icons = this._icons || this.__createIconMap();
-    return { svg: cloneSvgNode(this._icons[this.__getIconId(name)]), size: this.size };
-  }
-
-  /**
-   * Create a map of child SVG elements by id.
-   */
-  __createIconMap() {
-    const icons = {};
-    this.querySelectorAll('[id]').forEach((icon) => {
-      icons[this.__getIconId(icon.id)] = icon;
-    });
-    return icons;
+    return { svg: cloneSvgNode(this.__iconMap[this.__getIconId(name)]), size: this.size };
   }
 
   /** @private */
@@ -117,6 +110,32 @@ class IconsetElement extends ElementMixin(PolymerElement) {
       iconRegistry[name] = this;
       document.dispatchEvent(new CustomEvent('vaadin-iconset-registered', { detail: name }));
     }
+  }
+
+  /**
+   * Create a map of child SVG elements by id.
+   *
+   * @private
+   */
+  __createIconMap() {
+    const icons = {};
+    this.querySelectorAll('[id]').forEach((icon) => {
+      icons[this.__getIconId(icon.id)] = icon;
+    });
+    return icons;
+  }
+
+  /**
+   * The icon map created on-demand, since the iconset itself has no discrete
+   * signal to know when it's children are fully parsed.
+   * The getter caches the resulting map once it is created.
+   *
+   * @private
+   */
+  get __iconMap() {
+    this.__cachedIconMap = this.__cachedIconMap || this.__createIconMap();
+
+    return this.__cachedIconMap;
   }
 }
 

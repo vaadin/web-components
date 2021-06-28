@@ -19,6 +19,12 @@ describe('vaadin-iconset', () => {
     `);
   });
 
+  describe('icons', () => {
+    it('should return the array of icon ids', () => {
+      expect(iconset.icons).to.deep.equal(['caret-down', 'caret-up']);
+    });
+  });
+
   describe('applyIcon', () => {
     it('should return svg literal when called with correct id', () => {
       const { svg } = iconset.applyIcon('caret-down');
