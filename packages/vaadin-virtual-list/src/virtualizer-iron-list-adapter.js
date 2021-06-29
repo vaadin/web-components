@@ -107,7 +107,7 @@ export class IronListAdapter {
     if (this.scrollTarget.offsetHeight === 0) {
       return;
     }
-    
+
     this._resizeHandler();
     flush();
     this._scrollHandler();
