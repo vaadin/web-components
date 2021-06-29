@@ -88,7 +88,7 @@ narrowedGrid.addEventListener('cell-activate', (event) => {
 });
 
 narrowedGrid.addEventListener('cell-focus', (event) => {
-  assertType<GridCellFocusEvent>(event);
+  assertType<GridCellFocusEvent<TestGridItem>>(event);
 });
 
 narrowedGrid.addEventListener('column-reorder', (event) => {

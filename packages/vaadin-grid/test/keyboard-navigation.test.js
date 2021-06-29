@@ -1956,17 +1956,42 @@ describe('keyboard navigation', () => {
 
       const spy = sinon.spy();
 
-      grid.addEventListener('cell-focus', (e) => {
+      const eventHandler = (e) => {
         spy();
 
         const context = e.target.getEventContext(e);
         expect(context).to.deep.equal(expectedContext);
         done();
-      });
+      };
+
+      grid.addEventListener('cell-focus', eventHandler);
 
       left();
 
       expect(spy.calledOnce).to.be.true;
+      grid.removeEventListener('cell-focus', eventHandler);
+    });
+
+    it('should contain event context in event detail', (done) => {
+      tabToBody();
+      right();
+
+      const spy = sinon.spy();
+
+      const eventHandler = (e) => {
+        spy();
+
+        expect(e.detail).not.to.be.empty;
+        done();
+      };
+
+      grid.addEventListener('cell-focus', eventHandler);
+
+      left();
+
+      expect(spy.calledOnce).to.be.true;
+
+      grid.removeEventListener('cell-focus', eventHandler);
     });
   });
 });
