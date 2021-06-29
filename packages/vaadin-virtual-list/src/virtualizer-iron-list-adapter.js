@@ -103,6 +103,11 @@ export class IronListAdapter {
   }
 
   flush() {
+    // The scroll target is hidden.
+    if (this.scrollTarget.offsetHeight === 0) {
+      return;
+    }
+
     this._resizeHandler();
     flush();
     this._scrollHandler();
