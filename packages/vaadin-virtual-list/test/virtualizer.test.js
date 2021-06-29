@@ -90,6 +90,15 @@ describe('virtualizer', () => {
     expect(item.getBoundingClientRect().top).to.equal(scrollTarget.getBoundingClientRect().top);
   });
 
+  it('should not flush when hidden', () => {
+    virtualizer.scrollToIndex(50);
+    scrollTarget.hidden = true;
+    virtualizer.flush();
+    scrollTarget.hidden = false;
+    const item = elementsContainer.querySelector('#item-50');
+    expect(item).to.be.ok;
+  });
+
   it('should scroll to start with an index smaller than the first index', () => {
     virtualizer.scrollToIndex(50);
     virtualizer.scrollToIndex(-1);

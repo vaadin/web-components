@@ -103,11 +103,13 @@ export class IronListAdapter {
   }
 
   flush() {
-    this._resizeHandler();
-    flush();
-    this._scrollHandler();
-    this.__scrollReorderDebouncer && this.__scrollReorderDebouncer.flush();
-    this.__debouncerWheelAnimationFrame && this.__debouncerWheelAnimationFrame.flush();
+    if (this.scrollTarget.offsetHeight) {
+      this._resizeHandler();
+      flush();
+      this._scrollHandler();
+      this.__scrollReorderDebouncer && this.__scrollReorderDebouncer.flush();
+      this.__debouncerWheelAnimationFrame && this.__debouncerWheelAnimationFrame.flush();
+    }
   }
 
   update(startIndex = 0, endIndex = this.size - 1) {
