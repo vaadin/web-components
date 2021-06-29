@@ -52,4 +52,25 @@ describe('vertical-layout', () => {
     element.setAttribute('theme', 'margin padding spacing');
     await visualDiff(div, `${import.meta.url}_theme-margin-padding-spacing`);
   });
+
+  it('theme-spacing-with-justify-content-space-between', async () => {
+    element.setAttribute('theme', 'spacing');
+    element.style['height'] = '300px';
+    element.style['justify-content'] = 'space-between';
+    await visualDiff(div, `${import.meta.url}_theme-spacing-with-justify-content-space-between`);
+  });
+
+  it('theme-spacing-with-justify-content-space-around', async () => {
+    element.setAttribute('theme', 'spacing');
+    element.style['height'] = '300px';
+    element.style['justify-content'] = 'space-around';
+    await visualDiff(div, `${import.meta.url}_theme-spacing-with-justify-content-space-around`);
+  });
+
+  it('theme-spacing-with-justify-content-space-evenly', async () => {
+    element.setAttribute('theme', 'spacing');
+    element.style['height'] = '300px';
+    element.style['justify-content'] = 'space-evenly';
+    await visualDiff(div, `${import.meta.url}_theme-spacing-with-justify-content-space-evenly`);
+  });
 });

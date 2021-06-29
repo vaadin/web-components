@@ -34,18 +34,20 @@ describe('vaadin-horizontal-layout', () => {
   });
 
   describe('theme variations', () => {
-    let layout, c1, c2, space;
+    const itemSize = 50;
+    let layout, c1, c2, space, numericSpaceValue;
 
     beforeEach(() => {
       layout = fixtureSync(`
         <vaadin-horizontal-layout style="width: 300px; height: 200px;">
-          <div id="c1">c1</div>
-          <div id="c2">c2</div>
+          <div id="c1" style="width: ${itemSize}px;">c1</div>
+          <div id="c2" style="width: ${itemSize}px;">c2</div>
         </vaadin-horizontal-layout>
       `);
       c1 = layout.querySelector('#c1');
       c2 = layout.querySelector('#c2');
       space = getComputedCSSPropertyValue(layout, '--lumo-space-m');
+      numericSpaceValue = parseInt(space, 10);
     });
 
     it('should place items next to each other', () => {
@@ -53,12 +55,9 @@ describe('vaadin-horizontal-layout', () => {
 
       const c1Rect = c1.getBoundingClientRect();
       expect(c1Rect).to.include({ top: 0, bottom: 200, left: 0 });
-      expect(c1Rect.right).to.be.closeTo(18, 3);
 
       const c2Rect = c2.getBoundingClientRect();
-      expect(c2Rect).to.include({ top: 0, bottom: 200 });
-      expect(c2Rect.left).to.be.closeTo(18, 3);
-      expect(c2Rect.right).to.be.closeTo(36, 6);
+      expect(c2Rect).to.include({ top: 0, bottom: 200, left: itemSize });
     });
 
     it('should not have margin or padding by default', () => {
@@ -93,14 +92,11 @@ describe('vaadin-horizontal-layout', () => {
 
     it('should support theme="spacing"', () => {
       layout.setAttribute('theme', 'spacing');
-      expect(getComputedStyle(c1).getPropertyValue('margin-left')).to.equal(space);
-      expect(getComputedStyle(c2).getPropertyValue('margin-left')).to.equal(space);
-    });
+      const c1Rect = c1.getBoundingClientRect();
+      expect(c1Rect).to.include({ top: 0, bottom: 200, left: 0 });
 
-    it('should compensate first item margin for theme="spacing"', () => {
-      layout.setAttribute('theme', 'spacing');
-      const margin = getComputedStyle(layout, '::before').getPropertyValue('margin-left');
-      expect(margin).to.equal('-' + space);
+      const c2Rect = c2.getBoundingClientRect();
+      expect(c2Rect).to.include({ top: 0, bottom: 200, left: itemSize + numericSpaceValue });
     });
   });
 

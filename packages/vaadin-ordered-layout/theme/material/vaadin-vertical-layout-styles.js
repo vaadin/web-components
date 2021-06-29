@@ -4,50 +4,24 @@ import './vaadin-ordered-layout.js';
 registerStyles(
   'vaadin-vertical-layout',
   css`
-    :host([theme~='spacing-xs']) ::slotted(*) {
+    :host([theme~='spacing-xs']) ::slotted(*:not(:first-child)) {
       margin-top: 4px;
     }
 
-    :host([theme~='spacing-s']) ::slotted(*) {
+    :host([theme~='spacing-s']) ::slotted(*:not(:first-child)) {
       margin-top: 8px;
     }
 
-    :host([theme~='spacing']) ::slotted(*) {
+    :host([theme~='spacing']) ::slotted(*:not(:first-child)) {
       margin-top: 16px;
     }
 
-    :host([theme~='spacing-l']) ::slotted(*) {
+    :host([theme~='spacing-l']) ::slotted(*:not(:first-child)) {
       margin-top: 32px;
     }
 
-    :host([theme~='spacing-xl']) ::slotted(*) {
+    :host([theme~='spacing-xl']) ::slotted(*:not(:first-child)) {
       margin-top: 64px;
-    }
-
-    /* Compensate for the first item margin, so that there is no gap around the layout itself. */
-    :host([theme~='spacing-xs'])::before {
-      content: '';
-      margin-top: -4px;
-    }
-
-    :host([theme~='spacing-s'])::before {
-      content: '';
-      margin-top: -8px;
-    }
-
-    :host([theme~='spacing'])::before {
-      content: '';
-      margin-top: -16px;
-    }
-
-    :host([theme~='spacing-l'])::before {
-      content: '';
-      margin-top: -32px;
-    }
-
-    :host([theme~='spacing-xl'])::before {
-      content: '';
-      margin-top: -64px;
     }
   `,
   { include: ['material-ordered-layout'], moduleId: 'material-vertical-layout' }

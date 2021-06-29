@@ -53,25 +53,12 @@ class HorizontalLayoutElement extends ElementMixin(ThemableMixin(PolymerElement)
           padding: 1em;
         }
 
-        :host([theme~='spacing']:not([dir='rtl'])) ::slotted(*) {
+        :host([theme~='spacing']:not([dir='rtl'])) ::slotted(*:not(:first-child)) {
           margin-left: 1em;
         }
 
-        :host([theme~='spacing'][dir='rtl']) ::slotted(*) {
+        :host([theme~='spacing'][dir='rtl']) ::slotted(*:not(:first-child)) {
           margin-right: 1em;
-        }
-
-        /* Compensate for the first item margin, so that there is no gap around the layout itself. */
-        :host([theme~='spacing'])::before {
-          content: '';
-        }
-
-        :host([theme~='spacing']:not([dir='rtl']))::before {
-          margin-left: -1em;
-        }
-
-        :host([theme~='spacing'][dir='rtl'])::before {
-          margin-right: -1em;
         }
       </style>
 

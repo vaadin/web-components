@@ -34,32 +34,30 @@ describe('vaadin-vertical-layout', () => {
   });
 
   describe('theme variations', () => {
-    let layout, c1, c2, space;
+    const itemSize = 50;
+    let layout, c1, c2, space, numericSpaceValue;
 
     beforeEach(() => {
       layout = fixtureSync(`
         <vaadin-vertical-layout style="width: 300px; height: 200px;">
-          <div id="c1">c1</div>
-          <div id="c2">c2</div>
+          <div id="c1" style="width: ${itemSize}px; height: ${itemSize}px;">c1</div>
+          <div id="c2" style="width: ${itemSize}px; height: ${itemSize}px;">c2</div>
         </vaadin-vertical-layout>
       `);
       c1 = layout.querySelector('#c1');
       c2 = layout.querySelector('#c2');
       space = getComputedCSSPropertyValue(layout, '--lumo-space-m');
+      numericSpaceValue = parseInt(space, 10);
     });
 
     it('should place items next to each other', () => {
       expect(layout.getBoundingClientRect()).to.include({ top: 0, right: 300, bottom: 200, left: 0 });
 
       const c1Rect = c1.getBoundingClientRect();
-      expect(c1Rect).to.include({ top: 0, left: 0 });
-      expect(c1Rect.bottom).to.be.closeTo(19, 1);
-      expect(c1Rect.right).to.be.closeTo(18, 3);
+      expect(c1Rect).to.include({ top: 0, left: 0, bottom: itemSize, right: itemSize });
 
       const c2Rect = c2.getBoundingClientRect();
-      expect(c2Rect.top).to.be.closeTo(19, 1);
-      expect(c2Rect.bottom).to.be.closeTo(37, 3);
-      expect(c2Rect.right).to.be.closeTo(18, 3);
+      expect(c2Rect).to.include({ top: itemSize, left: 0, bottom: itemSize * 2, right: itemSize });
     });
 
     it('should not have margin or padding by default', () => {
@@ -94,14 +92,12 @@ describe('vaadin-vertical-layout', () => {
 
     it('should support theme="spacing"', () => {
       layout.setAttribute('theme', 'spacing');
-      expect(getComputedStyle(c1).getPropertyValue('margin-top')).to.equal(space);
-      expect(getComputedStyle(c2).getPropertyValue('margin-top')).to.equal(space);
-    });
 
-    it('should compensate first item margin for theme="spacing"', () => {
-      layout.setAttribute('theme', 'spacing');
-      const margin = getComputedStyle(layout, '::before').getPropertyValue('margin-top');
-      expect(margin).to.equal('-' + space);
+      const c1Rect = c1.getBoundingClientRect();
+      expect(c1Rect).to.include({ top: 0, left: 0 });
+
+      const c2Rect = c2.getBoundingClientRect();
+      expect(c2Rect).to.include({ top: itemSize + numericSpaceValue, left: 0 });
     });
   });
 

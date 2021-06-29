@@ -72,4 +72,25 @@ describe('horizontal-layout', () => {
     element.setAttribute('theme', 'spacing-xl');
     await visualDiff(div, `${import.meta.url}_theme-spacing-xl`);
   });
+
+  it('theme-spacing-with-justify-content-space-between', async () => {
+    element.setAttribute('theme', 'spacing');
+    element.style['width'] = '300px';
+    element.style['justify-content'] = 'space-between';
+    await visualDiff(div, `${import.meta.url}_theme-spacing-with-justify-content-space-between`);
+  });
+
+  it('theme-spacing-with-justify-content-space-around', async () => {
+    element.setAttribute('theme', 'spacing');
+    element.style['width'] = '300px';
+    element.style['justify-content'] = 'space-around';
+    await visualDiff(div, `${import.meta.url}_theme-spacing-with-justify-content-space-around`);
+  });
+
+  it('theme-spacing-with-justify-content-space-evenly', async () => {
+    element.setAttribute('theme', 'spacing');
+    element.style['width'] = '300px';
+    element.style['justify-content'] = 'space-evenly';
+    await visualDiff(div, `${import.meta.url}_theme-spacing-with-justify-content-space-evenly`);
+  });
 });
