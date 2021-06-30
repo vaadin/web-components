@@ -279,13 +279,13 @@ import '../vaadin-text-area.js';
         );
       });
 
-      it('should have matching scrollHeight', () => {
+      it('should have matching height', () => {
         inputField.style.padding = '0';
         textArea.style.maxHeight = '100px';
 
         textArea.value = Array(400).join('400');
         textArea.value = textArea.value.slice(0, -1);
-        expect(input.scrollHeight).to.equal(inputField.scrollHeight);
+        expect(input.clientHeight).to.equal(inputField.scrollHeight);
       });
 
       it('should cover input field', () => {
