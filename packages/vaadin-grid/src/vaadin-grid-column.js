@@ -449,8 +449,8 @@ export const ColumnBaseMixin = (superClass) =>
       this._previousHidden = hidden;
     }
 
-    /** @private */
-    __runRenderer(renderer, cell, model) {
+    /** @protected */
+    _runRenderer(renderer, cell, model) {
       const args = [cell._content, this];
       if (model && model.item) {
         args.push(model);
@@ -476,19 +476,28 @@ export const ColumnBaseMixin = (superClass) =>
         if (!renderer) return;
 
         if (cell._renderer !== renderer) {
-          cell._content.innerHTML = '';
-          // Whenever a Lit-based renderer is used, it assigns a Lit part to the node it was rendered into.
-          // When clearing the rendered content, this part needs to be manually disposed of.
-          // Otherwise, using a Lit-based renderer on the same node will throw an exception or render nothing afterward.
-          delete cell._content._$litPart$;
+          this._clearCellContent(cell);
         }
 
         cell._renderer = renderer;
 
         if (model.item || renderer === this._headerRenderer || renderer === this._footerRenderer) {
-          this.__runRenderer(renderer, cell, model);
+          this._runRenderer(renderer, cell, model);
         }
       });
+    }
+
+    /**
+     * Clears the content of a cell.
+     *
+     * @protected
+     */
+    _clearCellContent(cell) {
+      cell._content.innerHTML = '';
+      // Whenever a Lit-based renderer is used, it assigns a Lit part to the node it was rendered into.
+      // When clearing the rendered content, this part needs to be manually disposed of.
+      // Otherwise, using a Lit-based renderer on the same node will throw an exception or render nothing afterward.
+      delete cell._content._$litPart$;
     }
 
     /**

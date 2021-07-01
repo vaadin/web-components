@@ -211,18 +211,20 @@ class GridProEditColumnElement extends GridColumnElement {
   /** @private */
   _renderEditor(cell, model) {
     cell.__savedRenderer = this._renderer || cell._renderer;
-    cell._content.innerHTML = '';
     cell._renderer = this.editModeRenderer || this.__editModeRenderer;
-    this.__runRenderer(cell._renderer, cell, model);
+
+    this._clearCellContent(cell);
+    this._runRenderer(cell._renderer, cell, model);
   }
 
   /** @private */
   _removeEditor(cell, _model) {
     if (!cell.__savedRenderer) return;
 
-    cell._content.innerHTML = '';
     cell._renderer = cell.__savedRenderer;
     cell.__savedRenderer = undefined;
+
+    this._clearCellContent(cell);
 
     const row = cell.parentElement;
     this._grid._updateItem(row, row._item);
@@ -251,7 +253,7 @@ class GridProEditColumnElement extends GridColumnElement {
    */
   _startCellEdit(cell, model) {
     this._renderEditor(cell, model);
-    this._grid.notifyResize();
+
     const editor = this._getEditorComponent(cell);
     editor.addEventListener('focusout', this._grid.__boundEditorFocusOut);
     editor.addEventListener('focusin', this._grid.__boundEditorFocusIn);
@@ -269,19 +271,9 @@ class GridProEditColumnElement extends GridColumnElement {
    * @protected
    */
   _stopCellEdit(cell, model) {
-    const editor = this._getEditorComponent(cell);
-    let shouldResize = true;
-    if (editor) {
-      editor.removeEventListener('focusout', this._grid.__boundEditorFocusOut);
-      editor.removeEventListener('focusin', this._grid.__boundEditorFocusIn);
-      editor.removeEventListener('internal-tab', this._grid.__boundCancelCellSwitch);
-    } else {
-      // avoid notify resize of editor removed due to scroll
-      shouldResize = false;
-    }
     document.body.removeEventListener('focusin', this._grid.__boundGlobalFocusIn);
+
     this._removeEditor(cell, model);
-    shouldResize && this._grid.notifyResize();
   }
 }
 
