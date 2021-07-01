@@ -2,7 +2,7 @@ import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.
 
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-import { GridDefaultItem, GridDropLocation, GridItemModel } from './interfaces';
+import { GridDefaultItem, GridDropLocation, GridEventContext, GridItemModel } from './interfaces';
 
 import { A11yMixin } from './vaadin-grid-a11y-mixin.js';
 
@@ -51,7 +51,7 @@ export type GridCellActivateEvent<TItem> = CustomEvent<{ model: GridItemModel<TI
 /**
  * Fired when a cell is focused with click or keyboard navigation.
  */
-export type GridCellFocusEvent = CustomEvent;
+export type GridCellFocusEvent<TItem> = CustomEvent<{ context: GridEventContext<TItem> }>;
 
 /**
  * Fired when the columns in the grid are reordered.
@@ -101,7 +101,7 @@ export interface GridElementEventMap<TItem> {
 
   'cell-activate': GridCellActivateEvent<TItem>;
 
-  'cell-focus': GridCellFocusEvent;
+  'cell-focus': GridCellFocusEvent<TItem>;
 
   'column-reorder': GridColumnReorderEvent<TItem>;
 

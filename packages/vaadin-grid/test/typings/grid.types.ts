@@ -1,6 +1,6 @@
 import { ElementMixin } from '@vaadin/vaadin-element-mixin';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin';
-import { GridBodyRenderer } from '../../src/interfaces';
+import { GridBodyRenderer, GridEventContext } from '../../src/interfaces';
 import { A11yMixin } from '../../src/vaadin-grid-a11y-mixin';
 import { ActiveItemMixin } from '../../src/vaadin-grid-active-item-mixin';
 import { ArrayDataProviderMixin } from '../../src/vaadin-grid-array-data-provider-mixin';
@@ -88,7 +88,8 @@ narrowedGrid.addEventListener('cell-activate', (event) => {
 });
 
 narrowedGrid.addEventListener('cell-focus', (event) => {
-  assertType<GridCellFocusEvent>(event);
+  assertType<GridCellFocusEvent<TestGridItem>>(event);
+  assertType<GridEventContext<TestGridItem>>(event.detail.context);
 });
 
 narrowedGrid.addEventListener('column-reorder', (event) => {

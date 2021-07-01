@@ -1939,7 +1939,7 @@ describe('keyboard navigation', () => {
       expect(spy.callCount).to.equal(1);
     });
 
-    it('should dispatch cell-focus on keyboard navigation', (done) => {
+    it('should dispatch cell-focus on keyboard navigation', () => {
       const expectedContext = {
         column: grid.querySelector('vaadin-grid-column'),
         detailsOpened: false,
@@ -1956,17 +1956,17 @@ describe('keyboard navigation', () => {
 
       const spy = sinon.spy();
 
-      grid.addEventListener('cell-focus', (e) => {
-        spy();
-
-        const context = e.target.getEventContext(e);
-        expect(context).to.deep.equal(expectedContext);
-        done();
-      });
+      grid.addEventListener('cell-focus', spy);
 
       left();
 
       expect(spy.calledOnce).to.be.true;
+
+      const e = spy.firstCall.args[0];
+
+      expect(e.detail.context).to.be.deep.equal(expectedContext);
+
+      grid.removeEventListener('cell-focus', spy);
     });
   });
 });
