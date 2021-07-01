@@ -1972,34 +1972,31 @@ describe('keyboard navigation', () => {
       grid.removeEventListener('cell-focus', eventHandler);
     });
 
-    it('should contain event context in event detail', (done) => {
+    it('should contain event context in event detail', () => {
       tabToBody();
       right();
 
-      let detail = null;
-      const eventHandler = (e) => {
-        detail = e.detail;
+      const spy = sinon.spy();
 
-        expect(e.detail.context).not.to.be.undefined;
-        expect(e.detail.context).to.be.deep.equal({
-          column: grid.querySelector('vaadin-grid-column'),
-          detailsOpened: false,
-          expanded: false,
-          index: 0,
-          item: 'foo',
-          level: 0,
-          section: 'body',
-          selected: false
-        });
-        done();
-      };
-      grid.addEventListener('cell-focus', eventHandler);
+      grid.addEventListener('cell-focus', spy);
 
       left();
 
-      expect(detail).not.to.be.null;
+      const e = spy.firstCall.args[0];
 
-      grid.removeEventListener('cell-focus', eventHandler);
+      expect(e.detail.context).to.be.deep.equal({
+        column: grid.querySelector('vaadin-grid-column'),
+        detailsOpened: false,
+        expanded: false,
+        index: 0,
+        item: 'foo',
+        level: 0,
+        section: 'body',
+        selected: false
+      });
+      expect(spy.callCount).to.be.equal(1);
+
+      grid.removeEventListener('cell-focus', spy);
     });
   });
 });
