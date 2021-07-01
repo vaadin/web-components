@@ -1984,6 +1984,7 @@ describe('keyboard navigation', () => {
 
       const e = spy.firstCall.args[0];
 
+      expect(spy.calledOnce).to.be.true;
       expect(e.detail.context).to.be.deep.equal({
         column: grid.querySelector('vaadin-grid-column'),
         detailsOpened: false,
@@ -1994,7 +1995,6 @@ describe('keyboard navigation', () => {
         section: 'body',
         selected: false
       });
-      expect(spy.callCount).to.be.equal(1);
 
       grid.removeEventListener('cell-focus', spy);
     });
