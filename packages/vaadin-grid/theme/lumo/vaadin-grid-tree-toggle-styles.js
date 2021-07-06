@@ -1,6 +1,7 @@
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import '@vaadin/vaadin-lumo-styles/color.js';
 import '@vaadin/vaadin-lumo-styles/spacing.js';
+import '@vaadin/vaadin-lumo-styles/style.js';
 
 registerStyles(
   'vaadin-grid-tree-toggle',
@@ -25,6 +26,7 @@ registerStyles(
       height: 1em;
       text-align: center;
       color: var(--lumo-contrast-50pct);
+      cursor: var(--lumo-clickable-cursor);
       /* Increase touch target area */
       padding: calc(1em / 3);
       margin: calc(1em / -3);

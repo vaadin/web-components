@@ -65,6 +65,10 @@ registerStyles(
       transition: color 0.1s;
     }
 
+    [part='date']:not(:empty) {
+      cursor: var(--lumo-clickable-cursor);
+    }
+
     /* Today date */
 
     [part='date'][today] {

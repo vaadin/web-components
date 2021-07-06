@@ -21,7 +21,7 @@ registerStyles(
       display: flex;
       align-items: center;
       position: relative;
-      cursor: pointer;
+      cursor: var(--lumo-clickable-cursor);
       transform-origin: 50% 100%;
       outline: none;
       -webkit-font-smoothing: antialiased;

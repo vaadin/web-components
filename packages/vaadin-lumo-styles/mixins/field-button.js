@@ -22,13 +22,14 @@ const fieldButton = css`
     cursor: var(--lumo-clickable-cursor);
   }
 
-  :host(:not([readonly])) [part$='button']:hover {
+  [part$='button']:hover {
     color: var(--lumo-contrast-90pct);
   }
 
   :host([disabled]) [part$='button'],
   :host([readonly]) [part$='button'] {
     color: var(--lumo-contrast-20pct);
+    cursor: default;
   }
 
   [part$='button']::before {

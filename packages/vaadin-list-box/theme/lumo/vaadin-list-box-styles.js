@@ -14,14 +14,15 @@ registerStyles(
     /* Normal item */
     [part='items'] ::slotted(vaadin-item) {
       -webkit-tap-highlight-color: var(--lumo-primary-color-10pct);
-      cursor: default;
-    }
-
-    [part='items'] ::slotted(vaadin-item) {
+      cursor: var(--lumo-clickable-cursor);
       outline: none;
       border-radius: var(--lumo-border-radius-m);
       padding-left: var(--_lumo-list-box-item-padding-left, calc(var(--lumo-border-radius-m) / 4));
       padding-right: calc(var(--lumo-space-l) + var(--lumo-border-radius-m) / 4);
+    }
+
+    [part='items'] ::slotted(vaadin-item[disabled]) {
+      cursor: default;
     }
 
     /* Workaround to display checkmark in IE11 when list-box is not used in dropdown-menu */

@@ -28,7 +28,7 @@ registerStyles(
       border-radius: var(--lumo-border-radius-m);
       color: var(--lumo-contrast-60pct);
       margin: 2px 1px;
-      cursor: default;
+      cursor: var(--lumo-clickable-cursor);
       transition: background-color 100ms, color 100ms;
     }
 

@@ -23,7 +23,7 @@ registerStyles(
       color: var(--_lumo-button-color, var(--lumo-primary-text-color));
       background-color: var(--_lumo-button-background-color, var(--lumo-contrast-5pct));
       border-radius: var(--lumo-border-radius-m);
-      cursor: default;
+      cursor: var(--lumo-clickable-cursor);
       -webkit-tap-highlight-color: transparent;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;

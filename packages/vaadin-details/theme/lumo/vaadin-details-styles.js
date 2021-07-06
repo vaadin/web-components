@@ -48,11 +48,13 @@ registerStyles(
       line-height: 1;
       color: var(--lumo-contrast-60pct);
       font-family: 'lumo-icons';
+      cursor: var(--lumo-clickable-cursor);
     }
 
     :host([disabled]) [part='summary'],
     :host([disabled]) [part='toggle'] {
       color: var(--lumo-disabled-text-color);
+      cursor: default;
     }
 
     @media (hover: hover) {

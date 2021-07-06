@@ -56,6 +56,7 @@ registerStyles(
       box-shadow: inset 2px 0 4px 0 var(--lumo-shade-5pct);
       -webkit-mask-image: linear-gradient(transparent, #000 35%, #000 65%, transparent);
       mask-image: linear-gradient(transparent, #000 35%, #000 65%, transparent);
+      cursor: var(--lumo-clickable-cursor);
     }
 
     [part='year-number'],
