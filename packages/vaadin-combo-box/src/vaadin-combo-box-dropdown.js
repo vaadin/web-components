@@ -20,6 +20,8 @@ registerStyles(
   { moduleId: 'vaadin-combo-box-overlay-styles' }
 );
 
+const ONE_THIRD = 0.3;
+
 /**
  * An element used internally by `<vaadin-combo-box>`. Not intended to be used separately.
  *
@@ -222,17 +224,16 @@ class ComboBoxDropdownElement extends DisableUpgradeMixin(mixinBehaviors(IronRes
   }
 
   _shouldAlignLeft(targetRect) {
-    const spaceRight =
-      (window.innerWidth - targetRect.right - Math.min(document.body.scrollLeft, 0)) / window.innerWidth;
+    const spaceRight = (window.innerWidth - targetRect.right) / window.innerWidth;
 
-    return spaceRight < 0.3;
+    return spaceRight < ONE_THIRD;
   }
 
   _shouldAlignAbove(targetRect) {
     const spaceBelow =
       (window.innerHeight - targetRect.bottom - Math.min(document.body.scrollTop, 0)) / window.innerHeight;
 
-    return spaceBelow < 0.3;
+    return spaceBelow < ONE_THIRD;
   }
 
   _setOverlayWidth() {
