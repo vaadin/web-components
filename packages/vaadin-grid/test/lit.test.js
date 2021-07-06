@@ -4,14 +4,10 @@ import { render, html } from 'lit';
 import '../vaadin-grid.js';
 import { getPhysicalItems } from './helpers.js';
 
-describe('rendering with lit', () => {
-  let wrapper;
-
-  beforeEach(() => {
-    wrapper = fixtureSync(`<div></div>`);
-  });
-
+describe('lit', () => {
   it('should render items after dynamically adding more columns', async () => {
+    const wrapper = fixtureSync(`<div></div>`);
+
     function renderGrid(columnPaths, items) {
       render(
         html`

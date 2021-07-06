@@ -33,6 +33,7 @@
     "@vaadin/vaadin-themable-mixin": "21.0.0-alpha13"
   },
   "devDependencies": {
+    "lit": "^2.0.0-rc.1",
     "@esm-bundle/chai": "^4.1.5",
     "@polymer/iron-overlay-behavior": "^3.0.0",
     "@vaadin/testing-helpers": "^0.2.1",
