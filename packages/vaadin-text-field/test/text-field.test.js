@@ -622,4 +622,21 @@ describe('helper slot', () => {
       expect(textField.getAttribute('has-helper')).to.be.equal('slotted');
     });
   });
+
+  describe('nested helper', () => {
+    it('should get focus when clicked', () => {
+      let textField = fixtureSync(`
+      <vaadin-text-field> 
+        <span slot="helper"> span helper text </span>            
+      </vaadin-text-field>
+    `);
+
+      let helper = textField.root.querySelector('[part="helper-text"]');
+
+      helper.click();
+
+      expect(textField.getAttribute('focused')).to.be.null;
+      //expect(helper).to.be.equal(document.activeElement);
+    });
+  });
 });
