@@ -95,7 +95,7 @@ class RadioGroupElement extends ThemableMixin(DirMixin(PolymerElement)) {
 
         <div
           part="helper-text"
-          on-click="focus"
+          on-click="_handleClick"
           id="[[_helperTextId]]"
           aria-live="assertive"
           aria-hidden$="[[_getHelperTextAriaHidden(helperText, _helperTextId, _hasSlottedHelper)]]"
@@ -552,6 +552,12 @@ class RadioGroupElement extends ThemableMixin(DirMixin(PolymerElement)) {
 
   _getHelperTextAriaHidden(helperText, helperTextId, hasSlottedHelper) {
     return (!(helperText || hasSlottedHelper)).toString();
+  }
+
+  _handleClick(e) {
+    console.log(e.defaultPrevented);
+    if (e.defaultPrevented) return;
+    this.focus();
   }
 }
 

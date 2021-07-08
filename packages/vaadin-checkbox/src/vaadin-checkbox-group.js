@@ -90,7 +90,7 @@ class CheckboxGroupElement extends ThemableMixin(DirMixin(PolymerElement)) {
 
         <div
           part="helper-text"
-          on-click="focus"
+          on-click="_handleClick"
           aria-live="assertive"
           aria-hidden$="[[_getHelperTextAriaHidden(helperText, _hasSlottedHelper)]]"
         >
@@ -402,6 +402,12 @@ class CheckboxGroupElement extends ThemableMixin(DirMixin(PolymerElement)) {
   /** @private */
   _getHelperTextAriaHidden(helperText, hasSlottedHelper) {
     return (!(helperText || hasSlottedHelper)).toString();
+  }
+
+  _handleClick(e) {
+    console.log(e.defaultPrevented);
+    if (e.defaultPrevented) return;
+    this.focus();
   }
 }
 

@@ -88,7 +88,7 @@ class CustomFieldElement extends ElementMixin(CustomFieldMixin(ThemableMixin(Pol
         <div class="inputs-wrapper" on-change="__updateValue">
           <slot id="slot"></slot>
         </div>
-        <div part="helper-text" on-click="focus" id="[[__helperTextId]]">
+        <div part="helper-text" on-click="_handleClick" id="[[__helperTextId]]">
           <slot name="helper" id="helperSlot">[[helperText]]</slot>
         </div>
         <div
@@ -287,6 +287,12 @@ class CustomFieldElement extends ElementMixin(CustomFieldMixin(ThemableMixin(Pol
   /** @private */
   __getErrorMessageAriaHidden(invalid, errorMessage, errorId) {
     return (!(errorMessage && invalid ? errorId : undefined)).toString();
+  }
+
+  _handleClick(e) {
+    console.log(e.defaultPrevented);
+    if (e.defaultPrevented) return;
+    this.focus();
   }
 }
 

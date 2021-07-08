@@ -658,6 +658,9 @@ export const TextFieldMixin = (subclass) =>
         this._addInputListeners(this._slottedInput);
       }
 
+      this._boundOnClick = this._onClick.bind(this);
+      this.addEventListener('click', this._boundOnClick);
+
       this.shadowRoot
         .querySelector('[name="input"], [name="textarea"]')
         .addEventListener('slotchange', this._onSlotChange.bind(this));
@@ -789,6 +792,23 @@ export const TextFieldMixin = (subclass) =>
       if (this._enabledCharPattern && e.data && !this.__enabledTextRegExp.test(e.data)) {
         e.preventDefault();
       }
+    }
+
+    /** private */
+    _onClick(e) {
+      // if the event is prevented in inner text field, the outer text-fields shouldn't care aboute it.
+      if (e.defaultPrevented) {
+        console.log('_onClick ' + e.defaultPrevented);
+        return;
+      }
+
+      let textFieldCount = 0;
+      let composedPath = e.composedPath();
+
+      // if there are more than one text field in the path, click default action should be prevented.
+      for (let item of composedPath) if (item.nodeName === 'VAADIN-TEXT-FIELD') textFieldCount += 1;
+
+      if (textFieldCount > 1) e.preventDefault();
     }
 
     /** @private */

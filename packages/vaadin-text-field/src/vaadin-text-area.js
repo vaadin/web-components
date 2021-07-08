@@ -150,7 +150,7 @@ class TextAreaElement extends ElementMixin(TextFieldMixin(ControlStateMixin(Them
           <slot name="suffix"></slot>
         </div>
 
-        <div part="helper-text" on-click="focus" id="[[_helperTextId]]">
+        <div part="helper-text" on-click="_handleClick" id="[[_helperTextId]]">
           <slot name="helper">[[helperText]]</slot>
         </div>
 
@@ -214,6 +214,12 @@ class TextAreaElement extends ElementMixin(TextFieldMixin(ControlStateMixin(Them
     this._textAreaWrapper.dataset.replicatedValue = this.inputElement.value;
     // getComputedStyle is expensive, maybe we can use ResizeObserver in the future
     this._dispatchIronResizeEventIfNeeded('InputHeight', getComputedStyle(this._textAreaWrapper).height);
+  }
+
+  _handleClick(e) {
+    console.log(e.defaultPrevented);
+    if (e.defaultPrevented) return;
+    this.focus();
   }
 
   /**
