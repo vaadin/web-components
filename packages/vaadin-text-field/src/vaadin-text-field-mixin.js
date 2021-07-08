@@ -796,7 +796,7 @@ export const TextFieldMixin = (subclass) =>
 
     /** private */
     _onClick(e) {
-      // if the event is prevented in inner text field, the outer text-fields shouldn't care aboute it.
+      // if the event is prevented in inner text field, the outer text-fields shouldn't care about it.
       if (e.defaultPrevented) {
         console.log('_onClick ' + e.defaultPrevented);
         return;
