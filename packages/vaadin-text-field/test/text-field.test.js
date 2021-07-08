@@ -641,17 +641,20 @@ describe('helper slot', () => {
       expect(field.hasAttribute('focused')).to.be.false;
       expect(helper.hasAttribute('focused')).to.be.true;
     });
+  });
 
-    it('should get focus when helper text is only text', () => {
+  describe('text helper', () => {
+    let field, helper;
+    beforeEach(() => {
       field = fixtureSync(`
-        <vaadin-text-field label='text-field' helper-text='helper-text'>
-        </vaadin-text-field>
-      `);
+      <vaadin-text-field label='text-field' helper-text='helper-text'>
+      </vaadin-text-field>
+    `);
 
       helper = field.root.querySelector('[part="helper-text"]');
-
+    });
+    it('should get focus when helper text is only text', () => {
       helper.click();
-
       expect(field.hasAttribute('focused')).to.be.true;
     });
   });
