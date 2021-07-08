@@ -405,7 +405,6 @@ class CheckboxGroupElement extends ThemableMixin(DirMixin(PolymerElement)) {
   }
 
   _handleClick(e) {
-    console.log(e.defaultPrevented);
     if (e.defaultPrevented) return;
     this.focus();
   }

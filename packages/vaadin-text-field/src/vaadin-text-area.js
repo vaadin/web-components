@@ -217,7 +217,6 @@ class TextAreaElement extends ElementMixin(TextFieldMixin(ControlStateMixin(Them
   }
 
   _handleClick(e) {
-    console.log(e.defaultPrevented);
     if (e.defaultPrevented) return;
     this.focus();
   }
