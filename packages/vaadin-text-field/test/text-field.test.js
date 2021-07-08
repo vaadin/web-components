@@ -623,28 +623,23 @@ describe('helper slot', () => {
     });
   });
 
-  describe.only('nested helper', () => {
+  describe('nested helper', () => {
+    let field, helper;
+    beforeEach(() => {
+      field = fixtureSync(`
+        <vaadin-text-field label="outer">
+          <vaadin-text-field label="inner" slot="helper"></vaadin-text-field>
+        </vaadin-text-field>
+      `);
+      helper = field.querySelector('[slot="helper"]');
+    });
     it('should get focus when clicked', () => {
-      //   let textField = fixtureSync(`
-      //     <vaadin-text-field label="outer">
-      //       <vaadin-text-field label="inner" slot="helper">
-      //         <vaadin-text-field label="inner" slot="helper"></vaadin-text-field>
-      //       </vaadin-text-field>
-      //     </vaadin-text-field>
+      field.focus();
+      expect(field.hasAttribute('focused')).to.be.true;
 
-      //     <vaadin-text-field label="standalone input">
-
-      //     </vaadin-text-field>
-
-      //     <vaadin-text-field label="only helper text" helper-text="helper text">
-
-      //     </vaadin-text-field>
-      // `);
-      // let helper = textField.root.querySelector('[part="helper-text"]');
-
-      // helper.click();
-      expect(true).to.be.true;
-      //expect(helper).to.be.equal(document.activeElement);
-    }).timeout(100000);
+      helper.inputElement.focus();
+      expect(field.hasAttribute('focused')).to.be.false;
+      expect(helper.hasAttribute('focused')).to.be.true;
+    });
   });
 });
