@@ -632,11 +632,14 @@ describe('helper slot', () => {
         </vaadin-text-field>
       `);
       helper = field.querySelector('[slot="helper"]');
-    });
-    it('should get focus when clicked', () => {
       field.focus();
-      expect(field.hasAttribute('focused')).to.be.true;
+    });
 
+    it('should get focus when clicked', () => {
+      expect(field.hasAttribute('focused')).to.be.true;
+    });
+
+    it('helper should get focus when clicked', () => {
       helper.inputElement.focus();
       expect(field.hasAttribute('focused')).to.be.false;
       expect(helper.hasAttribute('focused')).to.be.true;
