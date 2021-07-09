@@ -659,7 +659,7 @@ export const TextFieldMixin = (subclass) =>
       }
 
       this._boundOnClick = this._onClick.bind(this);
-      this.addEventListener('click', this._boundOnClick);
+      this.addEventListener('click', this._boundOnClick, true);
 
       this.shadowRoot
         .querySelector('[name="input"], [name="textarea"]')

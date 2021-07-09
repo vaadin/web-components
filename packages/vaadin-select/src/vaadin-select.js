@@ -358,7 +358,7 @@ class SelectElement extends ElementMixin(
     this._nativeInput.setAttribute('tabindex', -1);
     this._nativeInput.style.pointerEvents = 'none';
 
-    this.focusElement.addEventListener('click', () => (this.opened = !this.readonly));
+    this.focusElement.addEventListener('click', (e) => (this.opened = !this.readonly && !e.defaultPrevented));
     this.focusElement.addEventListener('keydown', (e) => this._onKeyDown(e));
 
     processTemplates(this);
