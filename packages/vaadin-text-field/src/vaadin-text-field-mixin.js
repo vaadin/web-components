@@ -796,18 +796,9 @@ export const TextFieldMixin = (subclass) =>
 
     /** private */
     _onClick(e) {
-      // if the event is prevented in inner text field, the outer text-fields shouldn't care about it.
-      if (e.defaultPrevented) {
-        return;
-      }
-
-      let textFieldCount = 0;
-      let composedPath = e.composedPath();
-
-      // if there are more than one text field in the path, click default action should be prevented.
-      for (let item of composedPath) if (item.nodeName === 'VAADIN-TEXT-FIELD') textFieldCount += 1;
-
-      if (textFieldCount > 1) e.preventDefault();
+      // click on slotted helper input shouldn't set the focus to `inputElement` so we prevent deafult behaviour
+      // and in the wrapper components we don't focus to `inputElement` if default is prevented.
+      if (e.target && e.target.getAttribute('slot') === 'helper') e.preventDefault();
     }
 
     /** @private */
