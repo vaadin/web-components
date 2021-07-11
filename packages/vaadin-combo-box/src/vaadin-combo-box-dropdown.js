@@ -20,6 +20,8 @@ registerStyles(
   { moduleId: 'vaadin-combo-box-overlay-styles' }
 );
 
+const ONE_THIRD = 0.3;
+
 /**
  * An element used internally by `<vaadin-combo-box>`. Not intended to be used separately.
  *
@@ -221,11 +223,17 @@ class ComboBoxDropdownElement extends DisableUpgradeMixin(mixinBehaviors(IronRes
     return this.alignedAbove ? -overlayRect.height : targetRect.height;
   }
 
+  _shouldAlignLeft(targetRect) {
+    const spaceRight = (window.innerWidth - targetRect.right) / window.innerWidth;
+
+    return spaceRight < ONE_THIRD;
+  }
+
   _shouldAlignAbove(targetRect) {
     const spaceBelow =
       (window.innerHeight - targetRect.bottom - Math.min(document.body.scrollTop, 0)) / window.innerHeight;
 
-    return spaceBelow < 0.3;
+    return spaceBelow < ONE_THIRD;
   }
 
   _setOverlayWidth() {
@@ -254,10 +262,13 @@ class ComboBoxDropdownElement extends DisableUpgradeMixin(mixinBehaviors(IronRes
     }
 
     const targetRect = this.positionTarget.getBoundingClientRect();
+    const alignedLeft = this._shouldAlignLeft(targetRect);
     this.alignedAbove = this._shouldAlignAbove(targetRect);
 
     const overlayRect = this.$.overlay.getBoundingClientRect();
-    this._translateX = targetRect.left - overlayRect.left + (this._translateX || 0);
+    this._translateX = alignedLeft
+      ? targetRect.right - overlayRect.right + (this._translateX || 0)
+      : targetRect.left - overlayRect.left + (this._translateX || 0);
     this._translateY =
       targetRect.top - overlayRect.top + (this._translateY || 0) + this._verticalOffset(overlayRect, targetRect);
 

@@ -21,7 +21,7 @@ customElements.define('x-fixed', XFixed);
 describe('overlay', () => {
   let comboBox;
 
-  let wh, ww, xCenter, yTop, yBottom;
+  let wh, ww, xCenter, xStart, xEnd, yCenter, yTop, yBottom;
 
   // The ideal test would be to resize the window, but testing system disallows
   // resizing the iframe, but moving the combo-box using styles and firing
@@ -57,6 +57,9 @@ describe('overlay', () => {
     wh = window.innerHeight - comboBoxRect.height;
     ww = window.innerWidth - comboBoxRect.width;
     xCenter = ww * 0.5;
+    yCenter = wh * 0.5;
+    xEnd = ww;
+    xStart = 0;
     yTop = 0;
     yBottom = wh;
 
@@ -171,6 +174,28 @@ describe('overlay', () => {
   });
 
   (isIOS ? describe.skip : describe)('overlay alignment', () => {
+    describe('horizontal alignment', () => {
+      const inputWidth = 150;
+
+      beforeEach(() => comboBox.$.overlay.style.setProperty('--vaadin-combo-box-overlay-width', inputWidth * 2 + 'px'));
+
+      it('should be on the left side of the input', async () => {
+        moveComboBox(xEnd, yCenter, inputWidth);
+
+        comboBox.open();
+        await aTimeout(1);
+        expect(dropContentRect().right).to.closeTo(inputContentRect().right, 1);
+      });
+
+      it('should be on the right side of the input', async () => {
+        moveComboBox(xStart, yCenter, inputWidth);
+
+        comboBox.open();
+        await aTimeout(1);
+        expect(dropContentRect().left).to.closeTo(inputContentRect().left, 1);
+      });
+    });
+
     it('should be above input', async () => {
       moveComboBox(xCenter, yBottom, 300);
 
