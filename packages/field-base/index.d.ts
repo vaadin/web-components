@@ -1,3 +1,4 @@
+export { DelegateFocusMixin } from './src/delegate-focus-mixin.js';
 export { DisabledMixin } from './src/disabled-mixin.js';
 export { FieldAriaMixin } from './src/field-aria-mixin.js';
 export { FocusMixin } from './src/focus-mixin.js';
