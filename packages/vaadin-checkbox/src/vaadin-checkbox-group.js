@@ -210,6 +210,10 @@ class CheckboxGroupElement extends ThemableMixin(DirMixin(PolymerElement)) {
       }
     });
 
+    this.addEventListener('click', (e) => {
+      if (e.target.getAttribute('slot') === 'helper') e.preventDefault();
+    });
+
     const checkedChangedListener = (e) => {
       this._changeSelectedCheckbox(e.target);
     };
