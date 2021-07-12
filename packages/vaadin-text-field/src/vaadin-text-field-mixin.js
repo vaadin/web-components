@@ -796,9 +796,9 @@ export const TextFieldMixin = (subclass) =>
 
     /** private */
     _onClick(e) {
-      // click on slotted helper input shouldn't set the focus to `inputElement` so we prevent deafult behaviour
-      // and in the wrapper components we don't focus to `inputElement` if default is prevented.
-      if (e.target && e.target.getAttribute('slot') === 'helper') e.preventDefault();
+      let isSlot = e.target.getAttribute('slot');
+      // if clicked on the text do nothing, otherwise prevent defualt.
+      if (isSlot === 'helper') e.preventDefault();
     }
 
     /** @private */
