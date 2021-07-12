@@ -1,3 +1,4 @@
+export { DisabledMixin } from './src/disabled-mixin.js';
 export { FieldAriaMixin } from './src/field-aria-mixin.js';
 export { FocusMixin } from './src/focus-mixin.js';
 export { HelperTextMixin } from './src/helper-text-mixin.js';
