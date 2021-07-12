@@ -628,7 +628,9 @@ describe('helper slot', () => {
     beforeEach(() => {
       field = fixtureSync(`
         <vaadin-text-field label="outer">
-          <vaadin-text-field label="inner" slot="helper"></vaadin-text-field>
+          <vaadin-text-field label="inner" slot="helper">
+            <vaadin-text-field label="inner" slot="helper"></vaadin-text-field>
+          </vaadin-text-field>
         </vaadin-text-field>
       `);
       helper = field.querySelector('[slot="helper"]');
