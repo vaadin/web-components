@@ -493,7 +493,7 @@ describe('helper slot', () => {
   });
 });
 
-describe('slot focus', () => {
+describe.skip('slot focus', () => {
   let group, helper;
 
   beforeEach(() => {
