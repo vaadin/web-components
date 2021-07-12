@@ -290,7 +290,6 @@ class CustomFieldElement extends ElementMixin(CustomFieldMixin(ThemableMixin(Pol
   }
 
   _handleClick(e) {
-    console.log(e.defaultPrevented);
     if (e.defaultPrevented) return;
     this.focus();
   }
