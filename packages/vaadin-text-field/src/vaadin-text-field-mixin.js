@@ -869,6 +869,7 @@ export const TextFieldMixin = (subclass) =>
     /**
      * Fired when the size of the element changes.
      *
+     * DEPRECATED: This event will be dropped in one of the future Vaadin versions. Use a ResizeObserver instead.
      * @event iron-resize
      */
   };
