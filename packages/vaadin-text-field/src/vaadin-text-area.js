@@ -219,6 +219,7 @@ class TextAreaElement extends ElementMixin(TextFieldMixin(ControlStateMixin(Them
   /**
    * Fired when the text-area height changes.
    *
+   * DEPRECATED: This event will be dropped in one of the future Vaadin versions. Use a ResizeObserver instead.
    * @event iron-resize
    */
 }

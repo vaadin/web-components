@@ -348,6 +348,7 @@ class SplitLayoutElement extends ElementMixin(
    * Fired when the splitter is dragged. Non-bubbling. Fired for the splitter
    * element and any nested elements with `IronResizableBehavior`.
    *
+   * DEPRECATED: This event will be dropped in one of the future Vaadin versions. Use a ResizeObserver instead.
    * @event iron-resize
    */
 
