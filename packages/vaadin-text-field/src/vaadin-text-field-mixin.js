@@ -658,9 +658,6 @@ export const TextFieldMixin = (subclass) =>
         this._addInputListeners(this._slottedInput);
       }
 
-      this._boundOnClick = this._onClick.bind(this);
-      this.addEventListener('click', this._boundOnClick, true);
-
       this.shadowRoot
         .querySelector('[name="input"], [name="textarea"]')
         .addEventListener('slotchange', this._onSlotChange.bind(this));
@@ -792,13 +789,6 @@ export const TextFieldMixin = (subclass) =>
       if (this._enabledCharPattern && e.data && !this.__enabledTextRegExp.test(e.data)) {
         e.preventDefault();
       }
-    }
-
-    /** private */
-    _onClick(e) {
-      let isSlot = e.target.getAttribute('slot');
-      // if clicked on the text do nothing, otherwise prevent defualt.
-      if (isSlot === 'helper') e.preventDefault();
     }
 
     /** @private */

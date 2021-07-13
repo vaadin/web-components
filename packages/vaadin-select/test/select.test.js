@@ -702,7 +702,7 @@ describe('vaadin-select', () => {
       await nextFrame();
     });
 
-    it.only('should not open select when clicked on button', () => {
+    it('should not open select when clicked on button', () => {
       let helper = select.querySelector('[slot="helper"]');
 
       helper.click();

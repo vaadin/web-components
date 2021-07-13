@@ -377,9 +377,9 @@ describe('helper text', () => {
 
       helper = field.root.querySelector('[part="helper-text"]');
     });
-    it('should get focus when helper text is only text', () => {
+    it('should not get focus when helper text is clicked', () => {
       helper.click();
-      expect(field.hasAttribute('focused')).to.be.true;
+      expect(field.hasAttribute('focused')).to.be.false;
     });
   });
 });

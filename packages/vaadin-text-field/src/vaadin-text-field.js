@@ -95,7 +95,7 @@ class TextFieldElement extends ElementMixin(TextFieldMixin(ControlStateMixin(The
           <slot name="suffix"></slot>
         </div>
 
-        <div part="helper-text" on-click="_handleClick" id="[[_helperTextId]]">
+        <div part="helper-text" id="[[_helperTextId]]">
           <slot name="helper">[[helperText]]</slot>
         </div>
 
@@ -136,11 +136,6 @@ class TextFieldElement extends ElementMixin(TextFieldMixin(ControlStateMixin(The
         type: String
       }
     };
-  }
-
-  _handleClick(e) {
-    if (e.defaultPrevented) return;
-    this.focus();
   }
 }
 

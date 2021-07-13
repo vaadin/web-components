@@ -493,7 +493,7 @@ describe('helper slot', () => {
   });
 });
 
-describe.skip('slot focus', () => {
+describe('slot focus', () => {
   let group, helper;
 
   beforeEach(() => {
@@ -512,9 +512,9 @@ describe.skip('slot focus', () => {
     helper = group.querySelector('[slot="helper"]');
   });
 
-  it('should get focus after click', () => {
+  it('should not get focus after click', () => {
     helper.click();
 
-    expect(document.activeElement).to.be.equal(helper);
+    expect(group.hasAttribute('focused')).to.be.false;
   });
 });
