@@ -625,6 +625,7 @@ describe('helper slot', () => {
 
   describe('nested helper', () => {
     let field, helper;
+
     beforeEach(() => {
       field = fixtureSync(`
         <vaadin-text-field label="outer">
@@ -650,11 +651,12 @@ describe('helper slot', () => {
 
   describe('text helper', () => {
     let field, helper;
+
     beforeEach(() => {
       field = fixtureSync(`
-      <vaadin-text-field label='text-field' helper-text='helper-text'>
-      </vaadin-text-field>
-    `);
+        <vaadin-text-field label='text-field' helper-text='helper-text'>
+        </vaadin-text-field>
+      `);
 
       helper = field.root.querySelector('[part="helper-text"]');
     });

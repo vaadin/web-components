@@ -344,6 +344,7 @@ import '../vaadin-text-area.js';
 describe('helper text', () => {
   describe('slotted', () => {
     let field, helper;
+
     beforeEach(() => {
       field = fixtureSync(`
         <vaadin-text-area label="outer">
@@ -367,16 +368,18 @@ describe('helper text', () => {
     });
   });
 
-  describe.only('text', () => {
+  describe('text', () => {
     let field, helper;
+
     beforeEach(() => {
       field = fixtureSync(`
-      <vaadin-text-area label='text-field' helper-text='helper-text'>
-      </vaadin-text-area>
-    `);
+        <vaadin-text-area label='text-field' helper-text='helper-text'>
+        </vaadin-text-area>
+      `);
 
       helper = field.root.querySelector('[part="helper-text"]');
     });
+
     it('should not get focus when helper text is clicked', () => {
       helper.click();
       expect(field.hasAttribute('focused')).to.be.false;
