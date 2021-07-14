@@ -123,7 +123,7 @@ describe('helper text', () => {
       const spy = sinon.spy(field, 'focus');
       helper.click();
 
-      expect(spy.called).to.be;
+      expect(spy.called).to.be.false;
     });
   });
 });
