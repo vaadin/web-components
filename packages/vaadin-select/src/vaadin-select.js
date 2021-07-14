@@ -153,7 +153,7 @@ class SelectElement extends ElementMixin(
         theme$="[[theme]]"
       >
         <slot name="prefix" slot="prefix"></slot>
-        <slot name="helper" on-click="_onClick" slot="helper">[[helperText]]</slot>
+        <slot name="helper" slot="helper">[[helperText]]</slot>
         <div part="value"></div>
         <div part="toggle-button" slot="suffix" role="button" aria-haspopup="listbox" aria-label="Toggle"></div>
       </vaadin-select-text-field>
@@ -358,7 +358,12 @@ class SelectElement extends ElementMixin(
     this._nativeInput.setAttribute('tabindex', -1);
     this._nativeInput.style.pointerEvents = 'none';
 
-    this.focusElement.addEventListener('click', (e) => (this.opened = !this.readonly && !e.defaultPrevented));
+    this.focusElement.addEventListener('click', (e) => {
+      const isHelperClick = Array.from(e.composedPath()).some((node) => {
+        return node.nodeType === Node.ELEMENT_NODE && node.getAttribute('slot') === 'helper';
+      });
+      this.opened = !this.readonly && !isHelperClick;
+    });
     this.focusElement.addEventListener('keydown', (e) => this._onKeyDown(e));
 
     processTemplates(this);
@@ -640,11 +645,6 @@ class SelectElement extends ElementMixin(
     }
 
     this._overlayElement.updateStyles({ '--vaadin-select-text-field-width': inputRect.width + 'px' });
-  }
-
-  /** @private */
-  _onClick(e) {
-    e.preventDefault();
   }
 
   /**
