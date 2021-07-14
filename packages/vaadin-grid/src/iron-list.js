@@ -588,6 +588,15 @@ export const PolymerIronList = Class({
    * @param {!Array<number>=} itemSet
    */
   _updateMetrics: function (itemSet) {
+    // Sometimes the call for this method is schedule before Grid is hidden
+    // but it happens when Grid is already hidden.
+    // When this happens, there might be some issues as described
+    // here https://github.com/vaadin/web-components/issues/2127.
+    // Skipping any calculation for a hidden Grid.
+    if (this.hidden) {
+      return;
+    }
+
     // Make sure we distributed all the physical items
     // so we can measure them.
     flush();

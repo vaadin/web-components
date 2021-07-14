@@ -264,6 +264,18 @@ describe('basic features', () => {
     expect(parseInt(window.getComputedStyle(grid).getPropertyValue('flex-grow'))).to.equal(1);
     expect(window.getComputedStyle(grid).getPropertyValue('flex-basis')).to.equal('auto');
   });
+
+  it('should keep row position after hiding/unhiding Grid', () => {
+    grid._scrollToIndex(100);
+
+    grid.notifyResize();
+    grid.setAttribute('hidden', 'hidden');
+    flushGrid(grid);
+
+    grid.removeAttribute('hidden');
+    flushGrid(grid);
+    expect(grid.firstVisibleIndex).to.equal(100);
+  });
 });
 
 describe('flex child', () => {
