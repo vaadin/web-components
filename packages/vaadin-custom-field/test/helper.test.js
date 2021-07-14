@@ -1,6 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import sinon from 'sinon';
 import '../vaadin-custom-field.js';
 
 class XHelper extends PolymerElement {
@@ -118,10 +119,11 @@ describe('helper text', () => {
       field.focus();
     });
 
-    it('should get focus when clicked', () => {
-      helper.focus();
+    it('should not focus the field on helper click', () => {
+      const spy = sinon.spy(field, 'focus');
+      helper.click();
 
-      expect(document.activeElement).to.be.equal(helper);
+      expect(spy.called).to.be;
     });
   });
 });
