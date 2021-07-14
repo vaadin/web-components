@@ -658,6 +658,7 @@ describe('helper slot', () => {
 
       helper = field.root.querySelector('[part="helper-text"]');
     });
+
     it('should not get focus when helper text is only text', () => {
       helper.click();
       expect(field.hasAttribute('focused')).to.be.false;
