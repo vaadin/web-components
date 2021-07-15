@@ -662,8 +662,10 @@ describe('helper slot', () => {
     });
 
     it('should not get focus when helper text is only text', () => {
+      const spy = sinon.spy(field, 'focus');
       helper.click();
-      expect(field.hasAttribute('focused')).to.be.false;
+
+      expect(spy.called).to.be.false;
     });
   });
 });

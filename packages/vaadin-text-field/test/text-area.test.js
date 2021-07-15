@@ -357,14 +357,11 @@ describe('helper text', () => {
       field.focus();
     });
 
-    it('should get focus when clicked', () => {
-      expect(field.hasAttribute('focused')).to.be.true;
-    });
-
     it('helper should get focus when clicked', () => {
-      helper.inputElement.focus();
-      expect(field.hasAttribute('focused')).to.be.false;
-      expect(helper.hasAttribute('focused')).to.be.true;
+      const spy = sinon.spy(field, 'focus');
+
+      helper.click();
+      expect(spy.called).to.be.false;
     });
   });
 
