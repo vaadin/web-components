@@ -1,6 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import sinon from 'sinon';
 import '../vaadin-custom-field.js';
 
 class XHelper extends PolymerElement {
@@ -100,6 +101,29 @@ describe('helper text', () => {
       await nextFrame();
       expect(customField.hasAttribute('has-helper')).to.be.true;
       expect(customField.getAttribute('has-helper')).to.be.equal('slotted');
+    });
+  });
+
+  describe('slotted component', () => {
+    let field, helper;
+
+    beforeEach(() => {
+      field = fixtureSync(`
+        <vaadin-custom-field>
+            <input type="text" />
+
+            <input type="text" slot="helper" />
+        </vaadin-custom-field>
+      `);
+      helper = field.querySelector('[slot="helper"]');
+      field.focus();
+    });
+
+    it('should not focus the field on helper click', () => {
+      const spy = sinon.spy(field, 'focus');
+      helper.click();
+
+      expect(spy.called).to.be.false;
     });
   });
 });

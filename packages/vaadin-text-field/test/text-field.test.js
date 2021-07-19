@@ -622,4 +622,46 @@ describe('helper slot', () => {
       expect(textField.getAttribute('has-helper')).to.be.equal('slotted');
     });
   });
+
+  describe('nested helper', () => {
+    let field, helper;
+
+    beforeEach(() => {
+      field = fixtureSync(`
+        <vaadin-text-field label="outer">
+          <vaadin-text-field label="inner" slot="helper">
+            <vaadin-text-field label="inner" slot="helper"></vaadin-text-field>
+          </vaadin-text-field>
+        </vaadin-text-field>
+      `);
+      helper = field.querySelector('[slot="helper"]');
+    });
+
+    it('helper should get focus when clicked', () => {
+      const spy = sinon.spy(field, 'focus');
+      helper.click();
+
+      expect(spy.called).to.be.false;
+    });
+  });
+
+  describe('text helper', () => {
+    let field, helper;
+
+    beforeEach(() => {
+      field = fixtureSync(`
+        <vaadin-text-field label='text-field' helper-text='helper-text'>
+        </vaadin-text-field>
+      `);
+
+      helper = field.root.querySelector('[part="helper-text"]');
+    });
+
+    it('should not get focus when helper text is only text', () => {
+      const spy = sinon.spy(field, 'focus');
+      helper.click();
+
+      expect(spy.called).to.be.false;
+    });
+  });
 });
