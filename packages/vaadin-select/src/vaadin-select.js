@@ -386,7 +386,12 @@ class SelectElement extends ElementMixin(
     this._nativeInput.setAttribute('tabindex', -1);
     this._nativeInput.style.pointerEvents = 'none';
 
-    this.focusElement.addEventListener('click', () => (this.opened = !this.readonly));
+    this.focusElement.addEventListener('click', (e) => {
+      const isHelperClick = Array.from(e.composedPath()).some((node) => {
+        return node.nodeType === Node.ELEMENT_NODE && node.getAttribute('slot') === 'helper';
+      });
+      this.opened = !this.readonly && !isHelperClick;
+    });
     this.focusElement.addEventListener('keydown', (e) => this._onKeyDown(e));
 
     this._observer = new FlattenedNodesObserver(this, (info) => this._setTemplateFromNodes(info.addedNodes));
