@@ -374,7 +374,7 @@ describe('helper text', () => {
         </vaadin-text-area>
       `);
 
-      helper = field.root.querySelector('[part="helper-text"]');
+      helper = field.shadowRoot.querySelector('[part="helper-text"]');
     });
 
     it('should not get focus when helper text is clicked', () => {

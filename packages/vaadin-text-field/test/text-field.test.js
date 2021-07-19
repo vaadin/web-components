@@ -305,17 +305,8 @@ customElements.define('field-wrapper', FieldWrapper);
       describe(`label ${condition}`, () => {
         it('should not update focused property on click if disabled', () => {
           textField.disabled = true;
-          const label = textField.root.querySelector('[part="label"]');
+          const label = textField.shadowRoot.querySelector('[part="label"]');
           label.click();
-          expect(textField.getAttribute('focused')).to.be.null;
-        });
-      });
-
-      describe(`helper ${condition}`, () => {
-        it('should not update focused property on click if disabled', () => {
-          textField.disabled = true;
-          const helper = textField.root.querySelector('[part="helper-text"]');
-          helper.click();
           expect(textField.getAttribute('focused')).to.be.null;
         });
       });
@@ -654,7 +645,7 @@ describe('helper slot', () => {
         </vaadin-text-field>
       `);
 
-      helper = field.root.querySelector('[part="helper-text"]');
+      helper = field.shadowRoot.querySelector('[part="helper-text"]');
     });
 
     it('should not get focus when helper text is only text', () => {
