@@ -125,6 +125,9 @@ class DialogLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
       /** Disable closing when user presses escape */
       noCloseOnEsc: Boolean,
 
+      /** Reference to the edit form */
+      form: Object,
+
       mobile: {
         type: Boolean,
         observer: '__mobileChanged',
@@ -139,6 +142,8 @@ class DialogLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
     super.ready();
     this._dialogOpenedChangedListener = this._dialogOpenedChangedListener.bind(this);
     this.$.dialog.addEventListener('opened-changed', this._dialogOpenedChangedListener);
+    this.__header = this.querySelector('[slot=header]');
+    this.__footer = Array.from(this.querySelectorAll('[slot="footer"]'));
   }
 
   _dialogOpenedChangedListener() {
@@ -161,33 +166,42 @@ class DialogLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
     this._ensureChildren();
   }
 
+  __moveChildNodes(target) {
+    // Teleport header node
+    target.appendChild(this.__header);
+
+    // For custom form, remove slot attribute
+    // so that it is properly moved to dialog.
+    if (this.form.hasAttribute('slot')) {
+      this.form.removeAttribute('slot');
+    }
+
+    // Teleport edit form
+    target.appendChild(this.form);
+
+    // Teleport footer nodes
+    this.__footer.forEach((node) => target.appendChild(node));
+
+    // Wait to set label until slotted element has been moved.
+    setTimeout(() => {
+      this.__ariaLabel = this.__header.textContent.trim();
+    });
+  }
+
   _ensureChildren() {
-    if (!this.$.dialog.$.overlay.$.content.shadowRoot) {
+    const content = this.$.dialog.$.overlay.$.content;
+    if (!this.form || !content.shadowRoot) {
       return;
     }
 
     if (this.editorPosition === '' || this.mobile) {
       // Move children from editor to dialog
-      Array.from(this.$.editor.childNodes).forEach((c) => this.$.dialog.$.overlay.$.content.shadowRoot.appendChild(c));
-      Array.from(this.childNodes).forEach((c) => this.$.dialog.$.overlay.$.content.appendChild(c));
-
-      // Wait to set label until slotted element have been moved.
-      setTimeout(() => {
-        this.__ariaLabel = Array.from(this.$.dialog.$.overlay.$.content.querySelectorAll('[slot=header]'))
-          .reduce((prev, ele) => prev + ' ' + ele.textContent, '')
-          .trim();
-      });
+      Array.from(this.$.editor.childNodes).forEach((node) => content.shadowRoot.appendChild(node));
+      this.__moveChildNodes(content);
     } else {
       // Move children from dialog to editor
-      Array.from(this.$.dialog.$.overlay.$.content.shadowRoot.childNodes).forEach((c) => this.$.editor.appendChild(c));
-      Array.from(this.$.dialog.$.overlay.$.content.childNodes).forEach((c) => this.appendChild(c));
-
-      // Wait to set label until slotted element have been moved.
-      setTimeout(() => {
-        this.__ariaLabel = Array.from(this.querySelectorAll('[slot=header]'))
-          .reduce((prev, ele) => prev + ' ' + ele.textContent, '')
-          .trim();
-      });
+      Array.from(content.shadowRoot.childNodes).forEach((c) => this.$.editor.appendChild(c));
+      this.__moveChildNodes(this);
     }
   }
 
