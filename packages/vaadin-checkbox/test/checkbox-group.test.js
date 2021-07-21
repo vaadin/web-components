@@ -508,13 +508,12 @@ describe('slot focus', () => {
       </vaadin-checkbox-group>
     `);
     group._observer.flush();
-    group.focus();
     helper = group.querySelector('[slot="helper"]');
   });
 
   it('should not get focus after click', () => {
+    const spy = sinon.spy(group, 'focus');
     helper.click();
-
-    expect(group.hasAttribute('focused')).to.be.false;
+    expect(spy.called).to.be.false;
   });
 });
