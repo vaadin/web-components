@@ -5,6 +5,7 @@
     "moduleResolution": "node",
     "lib": [ "esnext", "es2018", "dom" ],
     "noEmit": true,
+    "skipLibCheck": true,
     "strict": true
   },
   "include": [
