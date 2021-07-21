@@ -110,19 +110,16 @@ describe('helper text', () => {
     beforeEach(() => {
       field = fixtureSync(`
         <vaadin-custom-field>
-            <input type="text" />
-
-            <input type="text" slot="helper" />
+          <input type="text" />
+          <input type="text" slot="helper" />
         </vaadin-custom-field>
       `);
       helper = field.querySelector('[slot="helper"]');
-      field.focus();
     });
 
     it('should not focus the field on helper click', () => {
       const spy = sinon.spy(field, 'focus');
       helper.click();
-
       expect(spy.called).to.be.false;
     });
   });
