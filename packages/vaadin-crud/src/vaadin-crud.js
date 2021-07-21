@@ -193,6 +193,7 @@ class CrudElement extends ElementMixin(ThemableMixin(PolymerElement)) {
         </div>
         <vaadin-dialog-layout
           theme$="[[theme]]"
+          form="[[_form]]"
           id="dialog"
           no-close-on-outside-click="[[__isDirty]]"
           no-close-on-esc="[[__isDirty]]"
@@ -645,10 +646,6 @@ class CrudElement extends ElementMixin(ThemableMixin(PolymerElement)) {
     }
     if (this.editedItem) {
       this.__onItemChange(this.editedItem);
-    }
-    if (this.$.form != form) {
-      // move slotted from this to the slot parent
-      this.$.editor.appendChild(form);
     }
     form.addEventListener('change', this.__changeListener);
     form.addEventListener('input', this.__changeListener);
