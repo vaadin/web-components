@@ -1,3 +1,4 @@
+export { ClearButtonMixin } from './src/clear-button-mixin.js';
 export { DelegateFocusMixin } from './src/delegate-focus-mixin.js';
 export { DisabledMixin } from './src/disabled-mixin.js';
 export { FieldAriaMixin } from './src/field-aria-mixin.js';
