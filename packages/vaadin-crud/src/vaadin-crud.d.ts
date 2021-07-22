@@ -49,26 +49,28 @@ import { CrudDataProvider, CrudEditorPosition, CrudEventMap, CrudI18n } from './
  * `toolbar` | To replace the toolbar content. Add an element with the attribute `new-button` for the new item action.
  *
  * #### Example:
+ *
  * ```html
  * <vaadin-crud
  *   id="crud"
  *   items='[{"name": "John", "surname": "Lennon", "role": "singer"},
  *           {"name": "Ringo", "surname": "Starr", "role": "drums"}]'
  * >
- *  <vaadin-grid slot="grid">
- *   <vaadin-crud-edit-column></vaadin-crud-edit-column>
- *   <vaadin-grid-column id="column1"></vaadin-grid-column>
- *   <vaadin-grid-column id="column2"></vaadin-grid-column>
- *  </vaadin-grid>
+ *   <vaadin-grid slot="grid">
+ *     <vaadin-crud-edit-column></vaadin-crud-edit-column>
+ *     <vaadin-grid-column id="column1"></vaadin-grid-column>
+ *     <vaadin-grid-column id="column2"></vaadin-grid-column>
+ *   </vaadin-grid>
  *
- *  <vaadin-form-layout slot="form">
- *   <vaadin-text-field label="First" path="name"></vaadin-text-field>
- *   <vaadin-text-field label="Surname" path="surname"></vaadin-text-field>
- *  </vaadin-form-layout>
+ *   <vaadin-form-layout slot="form">
+ *     <vaadin-text-field label="First" path="name"></vaadin-text-field>
+ *     <vaadin-text-field label="Surname" path="surname"></vaadin-text-field>
+ *   </vaadin-form-layout>
  *
- *  <div slot="footer">Total singers: [[size]]</div>
- *
- *  <button slot="new">New singer</button>
+ *   <div slot="toolbar">
+ *     Total singers: [[size]]
+ *     <button new-button>New singer</button>
+ *   </div>
  * </vaadin-crud>
  * ```
  * ```js
