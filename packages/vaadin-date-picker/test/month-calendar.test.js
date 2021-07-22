@@ -154,9 +154,10 @@ describe('vaadin-month-calendar', () => {
   describe('i18n', () => {
     beforeEach(async () => {
       monthCalendar.i18n = {
-        monthNames: 'tammikuu_helmikuu_maaliskuu_huhtikuu_toukokuu_kesäkuu_heinäkuu_elokuu_syyskuu_lokakuu_marraskuu_joulukuu'.split(
-          '_'
-        ),
+        monthNames:
+          'tammikuu_helmikuu_maaliskuu_huhtikuu_toukokuu_kesäkuu_heinäkuu_elokuu_syyskuu_lokakuu_marraskuu_joulukuu'.split(
+            '_'
+          ),
         weekdays: 'sunnuntai_maanantai_tiistai_keskiviikko_torstai_perjantai_lauantai'.split('_'),
         weekdaysShort: 'su_ma_ti_ke_to_pe_la'.split('_'),
         firstDayOfWeek: 1,
