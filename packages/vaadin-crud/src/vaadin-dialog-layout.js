@@ -6,7 +6,7 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
-import '@vaadin/vaadin-dialog/src/vaadin-dialog.js';
+import './vaadin-crud-dialog.js';
 
 /**
  * An element used internally by `<vaadin-crud>`. Not intended to be used separately.
@@ -81,20 +81,20 @@ class DialogLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
         </div>
 
         <div part="footer" role="toolbar">
-          <slot name="footer"></slot>
+          <slot name="save"></slot>
+          <slot name="cancel"></slot>
+          <slot name="delete"></slot>
         </div>
       </div>
 
-      <vaadin-dialog
+      <vaadin-crud-dialog
         id="dialog"
         opened="[[_computeEditorOpened(opened, mobile, '')]]"
         aria-label="[[__ariaLabel]]"
         no-close-on-outside-click="[[noCloseOnOutsideClick]]"
         no-close-on-esc="[[noCloseOnEsc]]"
         theme$="[[theme]] layout"
-      ></vaadin-dialog>
-
-      <template id="dialogTemplate"></template>
+      ></vaadin-crud-dialog>
     `;
   }
 
@@ -143,7 +143,7 @@ class DialogLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
     this._dialogOpenedChangedListener = this._dialogOpenedChangedListener.bind(this);
     this.$.dialog.addEventListener('opened-changed', this._dialogOpenedChangedListener);
     this.__header = this.querySelector('[slot=header]');
-    this.__footer = Array.from(this.querySelectorAll('[slot="footer"]'));
+    this.__footer = Array.from(this.querySelectorAll('[slot=save],[slot=cancel],[slot=delete]'));
   }
 
   _dialogOpenedChangedListener() {
@@ -154,9 +154,6 @@ class DialogLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
     if (opened) {
       this._ensureChildren();
     }
-
-    // TODO: A temporary hack as far as `vaadin-dialog` doesn't support the Polymer Template API anymore.
-    this.$.dialog.$.overlay.template = this.$.dialogTemplate;
 
     // Make sure to reset scroll position
     this.$.scroller.scrollTop = 0;
@@ -170,14 +167,15 @@ class DialogLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
     // Teleport header node
     target.appendChild(this.__header);
 
-    // For custom form, remove slot attribute
-    // so that it is properly moved to dialog.
-    if (this.form.hasAttribute('slot')) {
-      this.form.removeAttribute('slot');
+    // For default form, set slot attribute so
+    // that it is properly moved to the dialog.
+    if (!this.form.hasAttribute('slot')) {
+      this.form.setAttribute('slot', 'form');
     }
 
     // Teleport edit form
-    target.appendChild(this.form);
+    const formTarget = target === this ? this.getRootNode().host : target;
+    formTarget.appendChild(this.form);
 
     // Teleport footer nodes
     this.__footer.forEach((node) => target.appendChild(node));
@@ -189,18 +187,16 @@ class DialogLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
   }
 
   _ensureChildren() {
-    const content = this.$.dialog.$.overlay.$.content;
-    if (!this.form || !content.shadowRoot) {
+    const overlay = this.$.dialog.$.overlay;
+    if (!this.form || !overlay) {
       return;
     }
 
     if (this.editorPosition === '' || this.mobile) {
-      // Move children from editor to dialog
-      Array.from(this.$.editor.childNodes).forEach((node) => content.shadowRoot.appendChild(node));
-      this.__moveChildNodes(content);
+      // Move form to dialog
+      this.__moveChildNodes(overlay);
     } else {
-      // Move children from dialog to editor
-      Array.from(content.shadowRoot.childNodes).forEach((c) => this.$.editor.appendChild(c));
+      // Move form to crud
       this.__moveChildNodes(this);
     }
   }

@@ -222,7 +222,7 @@ class CrudElement extends ElementMixin(ThemableMixin(PolymerElement)) {
           theme="crud"
         >
           <h3 slot="header">[[__computeEditorHeader(__isNew, i18n.newItem, i18n.editItem)]]</h3>
-          <div id="editor">
+          <div id="editor" slot="form">
             <slot name="form">
               <vaadin-crud-form
                 theme$="[[theme]]"
@@ -233,12 +233,11 @@ class CrudElement extends ElementMixin(ThemableMixin(PolymerElement)) {
             </slot>
           </div>
 
-          <vaadin-button slot="footer" on-click="__save" theme="primary" disabled="[[!__isDirty]]"
+          <vaadin-button slot="save" on-click="__save" theme="primary" disabled="[[!__isDirty]]"
             >[[i18n.saveItem]]</vaadin-button
           >
-          <vaadin-button slot="footer" on-click="__cancel" theme="tertiary">[[i18n.cancel]]</vaadin-button>
-          <div slot="footer" style="flex: auto;"></div>
-          <vaadin-button slot="footer" on-click="__delete" theme="tertiary error" hidden="[[__isNew]]"
+          <vaadin-button slot="cancel" on-click="__cancel" theme="tertiary">[[i18n.cancel]]</vaadin-button>
+          <vaadin-button slot="delete" on-click="__delete" theme="tertiary error" hidden="[[__isNew]]"
             >[[i18n.deleteItem]]</vaadin-button
           >
         </vaadin-dialog-layout>
