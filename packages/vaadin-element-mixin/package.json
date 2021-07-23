@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-element-mixin",
-  "version": "20.0.0",
+  "version": "20.0.1",
   "description": "vaadin-element-mixin",
   "main": "vaadin-element-mixin.js",
   "module": "vaadin-element-mixin.js",

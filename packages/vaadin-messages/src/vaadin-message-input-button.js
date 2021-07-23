@@ -28,7 +28,7 @@ class MessageInputButtonElement extends ButtonElement {
   }
 
   static get version() {
-    return '20.0.0';
+    return '20.0.1';
   }
 }
 
