@@ -29,6 +29,11 @@ export class InputContainer extends ThemableMixin(DirMixin(PolymerElement)) {
         ::slotted(input) {
           -webkit-appearance: none;
           -moz-appearance: none;
+          flex: auto;
+          white-space: nowrap;
+          overflow: hidden;
+          width: 100%;
+          height: 100%;
           outline: none;
           flex: auto;
           white-space: nowrap;
