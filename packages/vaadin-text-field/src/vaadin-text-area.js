@@ -178,7 +178,6 @@ class TextAreaElement extends ElementMixin(TextFieldMixin(ControlStateMixin(Them
     super.ready();
     this._updateHeight();
     this.addEventListener('animationend', this._onAnimationEnd);
-    this.__safari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
   }
 
   /** @private */
