@@ -40,7 +40,7 @@
     "@typescript-eslint/eslint-plugin": "^4.28.4",
     "@typescript-eslint/parser": "^4.28.4",
     "@vaadin/testing-helpers": "^0.2.1",
-    "@web/dev-server": "^0.1.18",
+    "@web/dev-server": "^0.1.19",
     "@web/rollup-plugin-html": "^1.9.0",
     "@web/test-runner": "^0.13.15",
     "@web/test-runner-commands": "^0.5.6",
