@@ -28,10 +28,6 @@ const font = css`
   }
 `;
 
-const $tpl = document.createElement('template');
-$tpl.innerHTML = `<style>${font.toString().replace(':host', 'html')}</style>`;
-document.head.appendChild($tpl.content);
-
 const typography = css`
   body {
     font-family: var(--material-font-family);
@@ -114,7 +110,12 @@ const typography = css`
   strong {
     font-weight: 500;
   }
+`;
 
+registerStyles('', typography, { moduleId: 'material-typography' });
+
+const inputs = css`
+  /* Slotted input styles */
   input[slot='input']::placeholder,
   textarea[slot='textarea']::placeholder {
     color: var(--material-disabled-text-color);
@@ -127,10 +128,20 @@ const typography = css`
     opacity: 0;
     transition-delay: 0;
   }
-`;
-registerStyles('', typography, { moduleId: 'material-typography' });
 
-export { font, typography };
+  /* Hide the native arrow icons */
+  input[slot='input']::-webkit-outer-spin-button,
+  input[slot='input']::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+`;
+
+const $tpl = document.createElement('template');
+$tpl.innerHTML = `<style>${font.toString().replace(':host', 'html')}${inputs.toString()}</style>`;
+document.head.appendChild($tpl.content);
+
+export { font, inputs, typography };
 
 /* Import Roboto from Google Fonts */
 if (!window.polymerSkipLoadingFontRoboto) {
