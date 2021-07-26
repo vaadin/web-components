@@ -1,7 +1,10 @@
 /* eslint-env node */
+require('dotenv').config();
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
+const { createSauceLabsLauncher } = require('@web/test-runner-saucelabs');
+const { visualRegressionPlugin } = require('@web/test-runner-visual-regression/plugin');
 
 const HIDDEN_WARNINGS = [
   '<vaadin-crud> Unable to autoconfigure form because the data structure is unknown. Either specify `include` or ensure at least one item is available beforehand.',
@@ -235,28 +238,79 @@ const getDiffScreenshotName = (args) => getScreenshotFileName(args, 'failed', tr
 
 const getFailedScreenshotName = (args) => getScreenshotFileName(args, 'failed');
 
-exports.getTestGroups = (theme) => {
-  const dir = `./test/visual/${theme}/`;
+const createUnitTestsConfig = (config) => {
+  const packages = getUnitTestPackages();
+  const groups = getUnitTestGroups(packages);
 
-  return fs
-    .readdirSync(dir)
-    .filter((file) => file.includes('test.js'))
-    .map((file) => {
-      return {
-        name: file.replace('.test.js', ''),
-        files: `${dir}${file}`
-      };
-    });
+  return {
+    ...config,
+    nodeResolve: true,
+    browserStartTimeout: 60000, // default 30000
+    testsStartTimeout: 60000, // default 10000
+    testsFinishTimeout: 120000, // default 20000
+    testFramework: {
+      config: {
+        ui: 'bdd',
+        timeout: '10000'
+      }
+    },
+    groups,
+    testRunnerHtml,
+    filterBrowserLogs
+  };
+};
+
+const createVisualTestsConfig = (theme) => {
+  const packages = getVisualTestPackages();
+  const groups = getVisualTestGroups(packages, theme);
+
+  const sauceLabsLauncher = createSauceLabsLauncher(
+    {
+      user: process.env.SAUCE_USERNAME,
+      key: process.env.SAUCE_ACCESS_KEY
+    },
+    {
+      name: `${theme[0].toUpperCase()}${theme.slice(1)} visual tests`,
+      build: `${process.env.GITHUB_REF || 'local'} build ${process.env.GITHUB_RUN_NUMBER || ''}`,
+      recordScreenshots: false,
+      recordVideo: false
+    }
+  );
+
+  return {
+    concurrency: 1,
+    nodeResolve: true,
+    testFramework: {
+      config: {
+        timeout: '20000' // default 2000
+      }
+    },
+    browsers: [
+      sauceLabsLauncher({
+        browserName: 'chrome',
+        platformName: 'Windows 10',
+        browserVersion: '88'
+      })
+    ],
+    plugins: [
+      visualRegressionPlugin({
+        baseDir: 'packages',
+        getBaselineName: getBaselineScreenshotName,
+        getDiffName: getDiffScreenshotName,
+        getFailedName: getFailedScreenshotName,
+        diffOptions: {
+          threshold: 0.2
+        },
+        update: process.env.TEST_ENV === 'update'
+      })
+    ],
+    groups,
+    testRunnerHtml,
+    filterBrowserLogs
+  };
 };
 
 module.exports = {
-  filterBrowserLogs,
-  getBaselineScreenshotName,
-  getDiffScreenshotName,
-  getFailedScreenshotName,
-  getUnitTestGroups,
-  getUnitTestPackages,
-  getVisualTestGroups,
-  getVisualTestPackages,
-  testRunnerHtml
+  createUnitTestsConfig,
+  createVisualTestsConfig
 };
