@@ -245,16 +245,22 @@ yarn icons
 
 #### Create a branch for the current major
 
+Checkout master and pull latest changes:
+
+```sh
+git checkout master && git pull
+```
+
 Create a new branch from master:
 
 ```sh
-git checkout -b 21.0
+git checkout -b 22.0
 ```
 
 Push a newly created branch:
 
 ```sh
-git push origin 21.0
+git push origin 22.0
 ```
 
 The newly created branch for the current major is protected by default.
@@ -263,7 +269,7 @@ The rest of the changes to that branch should happen the usual way, through a PR
 Create another branch:
 
 ```sh
-git checkout -b update-v21
+git checkout -b update-v22
 ```
 
 Update [`wtr-utils.js`](https://github.com/vaadin/web-components/blob/master/wtr-utils.js) as follows:
@@ -271,7 +277,7 @@ Update [`wtr-utils.js`](https://github.com/vaadin/web-components/blob/master/wtr
 ```diff
 const getChangedPackages = () => {
 -  const output = execSync('./node_modules/.bin/lerna ls --since origin/master --json --loglevel silent');
-+  const output = execSync('./node_modules/.bin/lerna ls --since origin/21.0 --json --loglevel silent');
++  const output = execSync('./node_modules/.bin/lerna ls --since origin/22.0 --json --loglevel silent');
   return JSON.parse(output.toString());
 };
 ```
@@ -280,10 +286,16 @@ Create a PR to the version branch ([example](https://github.com/vaadin/web-compo
 
 #### Update the version in `master`
 
-Prepare a new version for the `updateVersion` script:
+Create a new branch from master:
 
 ```sh
-export npm_config_bump=22.0.0-alpha0
+git checkout master && git checkout -b bump-v23
+```
+
+Prepare a new version for the `updateVersion` script by running the following command:
+
+```sh
+export npm_config_bump=23.0.0-alpha0
 ```
 
 Run the script to bump static version getters in every component:
@@ -295,13 +307,13 @@ node scripts/updateVersion.js
 Mark the new version with Lerna:
 
 ```sh
-lerna version 22.0.0-alpha0 --no-push --no-git-tag-version --yes
+lerna version 23.0.0-alpha0 --no-push --no-git-tag-version --yes
 ```
 
 Commit all the changes:
 
 ```sh
-git commit -a -m "chore: update master to Vaadin 22 [skip ci]"
+git commit -a -m "chore: update master to Vaadin 23 [skip ci]"
 ```
 
 Create a PR to the `master` branch ([example](https://github.com/vaadin/web-components/pull/261)).
