@@ -173,7 +173,7 @@ class SelectElement extends ElementMixin(
   }
 
   static get version() {
-    return '21.0.0-alpha13';
+    return '22.0.0-alpha0';
   }
 
   static get properties() {

@@ -68,7 +68,7 @@ class ScrollerElement extends ElementMixin(ThemableMixin(PolymerElement)) {
   }
 
   static get version() {
-    return '21.0.0-alpha13';
+    return '22.0.0-alpha0';
   }
 }
 
