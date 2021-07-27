@@ -33,7 +33,7 @@ registerStyles(
       transform-origin: 100% 0;
     }
 
-    ::slotted([slot='input']) {
+    ::slotted(:not([slot])) {
       cursor: inherit;
       min-height: var(--lumo-text-field-size, var(--lumo-size-m));
       padding: 0 0.25em;

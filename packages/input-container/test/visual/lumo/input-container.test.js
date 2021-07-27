@@ -11,7 +11,7 @@ describe('input-container', () => {
     div = document.createElement('div');
     div.style.display = 'inline-block';
     div.style.padding = '10px';
-    element = fixtureSync('<vaadin-input-container><input slot="input"></vaadin-input-container>', div);
+    element = fixtureSync('<vaadin-input-container><input></vaadin-input-container>', div);
   });
 
   it('basic', async () => {

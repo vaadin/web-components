@@ -53,7 +53,7 @@ export class InputContainer extends ThemableMixin(PolymerElement) {
         }
       </style>
       <slot name="prefix"></slot>
-      <slot name="input"></slot>
+      <slot></slot>
       <slot name="suffix"></slot>
     `;
   }

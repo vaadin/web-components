@@ -36,11 +36,11 @@ registerStyles(
       transition: opacity 0.175s;
     }
 
-    ::slotted([slot='input']) {
+    ::slotted(:not([slot])) {
       padding: 8px 0;
     }
 
-    ::slotted(:not([slot='input'])) {
+    ::slotted([slot]) {
       color: var(--material-secondary-text-color);
     }
 
@@ -61,7 +61,7 @@ registerStyles(
       background-repeat: repeat-x;
     }
 
-    :host([disabled]) ::slotted([slot='input']) {
+    :host([disabled]) ::slotted(:not([slot])) {
       color: var(--material-disabled-text-color);
       -webkit-text-fill-color: var(--material-disabled-text-color);
     }

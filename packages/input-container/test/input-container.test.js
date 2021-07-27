@@ -8,7 +8,7 @@ describe('vaadin-input-container', () => {
   beforeEach(() => {
     container = fixtureSync(`
       <vaadin-input-container>
-        <input slot="input">
+        <input>
       </vaadin-input-container>
     `);
   });
