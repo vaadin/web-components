@@ -28,10 +28,6 @@ const font = css`
   }
 `;
 
-const $tpl = document.createElement('template');
-$tpl.innerHTML = `<style>${font.toString().replace(':host', 'html')}</style>`;
-document.head.appendChild($tpl.content);
-
 const typography = css`
   body {
     font-family: var(--material-font-family);
@@ -115,9 +111,37 @@ const typography = css`
     font-weight: 500;
   }
 `;
+
 registerStyles('', typography, { moduleId: 'material-typography' });
 
-export { font, typography };
+const inputs = css`
+  /* Slotted input styles */
+  input[slot='input']::placeholder,
+  textarea[slot='textarea']::placeholder {
+    color: var(--material-disabled-text-color);
+    transition: opacity 0.175s 0.1s;
+    opacity: 1;
+  }
+
+  [has-label]:not([focused]):not([invalid]):not([theme~='always-float-label']) > input[slot='input']::placeholder,
+  [has-label]:not([focused]):not([invalid]):not([theme~='always-float-label']) > input[slot='textarea']::placeholder {
+    opacity: 0;
+    transition-delay: 0;
+  }
+
+  /* Hide the native arrow icons */
+  input[slot='input']::-webkit-outer-spin-button,
+  input[slot='input']::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+`;
+
+const $tpl = document.createElement('template');
+$tpl.innerHTML = `<style>${font.toString().replace(':host', 'html')}${inputs.toString()}</style>`;
+document.head.appendChild($tpl.content);
+
+export { font, inputs, typography };
 
 /* Import Roboto from Google Fonts */
 if (!window.polymerSkipLoadingFontRoboto) {
