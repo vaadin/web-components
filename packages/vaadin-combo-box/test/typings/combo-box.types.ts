@@ -2,7 +2,7 @@ import { ControlStateMixin } from '@vaadin/vaadin-control-state-mixin';
 import { ElementMixin } from '@vaadin/vaadin-element-mixin';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin';
 import { ComboBoxDataProviderMixin } from '../../src/vaadin-combo-box-data-provider-mixin';
-import { ComboBoxMixin } from '../../src/vaadin-combo-box-mixin';
+import { ComboBoxMixin, ComboBoxSelectedItem } from '../../src/vaadin-combo-box-mixin';
 import {
   ComboBoxFilterChangedEvent,
   ComboBoxInvalidChangedEvent,
@@ -57,7 +57,9 @@ narrowedComboBox.addEventListener('filter-changed', (event) => {
 
 narrowedComboBox.addEventListener('selected-item-changed', (event) => {
   assertType<ComboBoxSelectedItemChangedEvent<TestComboBoxItem>>(event);
-  assertType<TestComboBoxItem>(event.detail.value);
+  assertType<ComboBoxSelectedItem<TestComboBoxItem>>(event.detail.value);
+  assertType<ComboBoxSelectedItem<TestComboBoxItem>>(null);
+  assertType<ComboBoxSelectedItem<TestComboBoxItem>>(undefined);
 });
 
 /* ComboBoxLightElement */
@@ -96,5 +98,7 @@ narrowedComboBoxLightElement.addEventListener('filter-changed', (event) => {
 
 narrowedComboBoxLightElement.addEventListener('selected-item-changed', (event) => {
   assertType<ComboBoxSelectedItemChangedEvent<TestComboBoxItem>>(event);
-  assertType<TestComboBoxItem>(event.detail.value);
+  assertType<ComboBoxSelectedItem<TestComboBoxItem>>(event.detail.value);
+  assertType<ComboBoxSelectedItem<TestComboBoxItem>>(null);
+  assertType<ComboBoxSelectedItem<TestComboBoxItem>>(undefined);
 });
