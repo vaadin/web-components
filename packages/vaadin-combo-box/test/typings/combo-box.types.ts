@@ -20,6 +20,13 @@ interface TestComboBoxItem {
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 
+const selectItemChangeEventListenerTypeAssertion = (event: ComboBoxSelectedItemChangedEvent<TestComboBoxItem>) => {
+  assertType<ComboBoxSelectedItemChangedEvent<TestComboBoxItem>>(event);
+  assertType<ComboBoxSelectedItem<TestComboBoxItem>>(event.detail.value);
+  assertType<ComboBoxSelectedItem<TestComboBoxItem>>(null);
+  assertType<ComboBoxSelectedItem<TestComboBoxItem>>(undefined);
+};
+
 /* ComboBoxElement */
 const genericComboBox = document.createElement('vaadin-combo-box');
 
@@ -56,10 +63,7 @@ narrowedComboBox.addEventListener('filter-changed', (event) => {
 });
 
 narrowedComboBox.addEventListener('selected-item-changed', (event) => {
-  assertType<ComboBoxSelectedItemChangedEvent<TestComboBoxItem>>(event);
-  assertType<ComboBoxSelectedItem<TestComboBoxItem>>(event.detail.value);
-  assertType<ComboBoxSelectedItem<TestComboBoxItem>>(null);
-  assertType<ComboBoxSelectedItem<TestComboBoxItem>>(undefined);
+  selectItemChangeEventListenerTypeAssertion(event);
 });
 
 /* ComboBoxLightElement */
@@ -97,8 +101,5 @@ narrowedComboBoxLightElement.addEventListener('filter-changed', (event) => {
 });
 
 narrowedComboBoxLightElement.addEventListener('selected-item-changed', (event) => {
-  assertType<ComboBoxSelectedItemChangedEvent<TestComboBoxItem>>(event);
-  assertType<ComboBoxSelectedItem<TestComboBoxItem>>(event.detail.value);
-  assertType<ComboBoxSelectedItem<TestComboBoxItem>>(null);
-  assertType<ComboBoxSelectedItem<TestComboBoxItem>>(undefined);
+  selectItemChangeEventListenerTypeAssertion(event);
 });
