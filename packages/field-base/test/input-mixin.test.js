@@ -51,9 +51,9 @@ describe('input-mixin', () => {
     });
 
     it('should have a read-only type property', () => {
-      expect(element.type).to.be.not.ok;
+      expect(element.type).to.be.undefined;
       element.type = 'number';
-      expect(element.type).to.be.not.ok;
+      expect(element.type).to.be.undefined;
     });
 
     it('should have an empty name by default', () => {
