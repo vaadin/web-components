@@ -2,6 +2,7 @@ import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styl
 import '@vaadin/vaadin-lumo-styles/color.js';
 import '@vaadin/vaadin-lumo-styles/sizing.js';
 import '@vaadin/vaadin-lumo-styles/style.js';
+import '@vaadin/vaadin-lumo-styles/typography.js';
 
 registerStyles(
   'vaadin-input-container',
@@ -10,6 +11,9 @@ registerStyles(
       border-radius: var(--lumo-border-radius-m);
       background-color: var(--lumo-contrast-10pct);
       padding: 0 calc(0.375em + var(--lumo-border-radius-m) / 4 - 1px);
+      color: var(--lumo-body-text-color);
+      font-size: var(--lumo-font-size-m);
+      font-family: var(--lumo-font-family);
       font-weight: 500;
       line-height: 1;
       position: relative;
@@ -33,10 +37,12 @@ registerStyles(
       transform-origin: 100% 0;
     }
 
-    ::slotted(:not([slot])) {
+    ::slotted(:not([slot$='fix'])) {
       cursor: inherit;
       min-height: var(--lumo-text-field-size, var(--lumo-size-m));
       padding: 0 0.25em;
+      --_lumo-text-field-overflow-mask-image: linear-gradient(to left, transparent, #000 1.25em);
+      mask-image: var(--_lumo-text-field-overflow-mask-image);
     }
 
     /* Read-only */
@@ -82,6 +88,73 @@ registerStyles(
     ::slotted(vaadin-icon[icon^='vaadin:']) {
       padding: 0.25em;
       box-sizing: border-box !important;
+    }
+
+    /* Text align */
+    :host([dir='rtl']) ::slotted(:not([slot$='fix'])) {
+      --_lumo-text-field-overflow-mask-image: linear-gradient(to right, transparent, #000 1.25em);
+    }
+
+    @-moz-document url-prefix() {
+      :host([dir='rtl']) ::slotted(:not([slot$='fix'])) {
+        mask-image: var(--_lumo-text-field-overflow-mask-image);
+      }
+    }
+
+    :host([theme~='align-left']) ::slotted(:not([slot$='fix'])) {
+      text-align: start;
+      --_lumo-text-field-overflow-mask-image: none;
+    }
+
+    :host([theme~='align-center']) ::slotted(:not([slot$='fix'])) {
+      text-align: center;
+      --_lumo-text-field-overflow-mask-image: none;
+    }
+
+    :host([theme~='align-right']) ::slotted(:not([slot$='fix'])) {
+      text-align: end;
+      --_lumo-text-field-overflow-mask-image: none;
+    }
+
+    @-moz-document url-prefix() {
+      /* Firefox is smart enough to align overflowing text to right */
+      :host([theme~='align-right']) ::slotted(:not([slot$='fix'])) {
+        --_lumo-text-field-overflow-mask-image: linear-gradient(to right, transparent 0.25em, #000 1.5em);
+      }
+    }
+
+    @-moz-document url-prefix() {
+      /* Firefox is smart enough to align overflowing text to right */
+      :host([theme~='align-left']) ::slotted(:not([slot$='fix'])) {
+        --_lumo-text-field-overflow-mask-image: linear-gradient(to left, transparent 0.25em, #000 1.5em);
+      }
+    }
+
+    /* RTL specific styles */
+    :host([theme~='align-left'][dir='rtl']) ::slotted(:not([slot$='fix'])) {
+      --_lumo-text-field-overflow-mask-image: none;
+    }
+
+    :host([theme~='align-center'][dir='rtl']) ::slotted(:not([slot$='fix'])) {
+      --_lumo-text-field-overflow-mask-image: none;
+    }
+
+    :host([theme~='align-right'][dir='rtl']) ::slotted(:not([slot$='fix'])) {
+      --_lumo-text-field-overflow-mask-image: none;
+    }
+
+    @-moz-document url-prefix() {
+      /* Firefox is smart enough to align overflowing text to right */
+      :host([theme~='align-right'][dir='rtl']) ::slotted(:not([slot$='fix'])) {
+        --_lumo-text-field-overflow-mask-image: linear-gradient(to right, transparent 0.25em, #000 1.5em);
+      }
+    }
+
+    @-moz-document url-prefix() {
+      /* Firefox is smart enough to align overflowing text to right */
+      :host([theme~='align-left'][dir='rtl']) ::slotted(:not([slot$='fix'])) {
+        --_lumo-text-field-overflow-mask-image: linear-gradient(to left, transparent 0.25em, #000 1.5em);
+      }
     }
   `,
   { moduleId: 'lumo-input-container' }
