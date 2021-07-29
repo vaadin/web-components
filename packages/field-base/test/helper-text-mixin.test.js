@@ -110,7 +110,7 @@ describe('helper-text-mixin', () => {
       helper = document.createElement('div');
       helper.setAttribute('slot', 'helper');
       helper.textContent = 'Lazy';
-      element.appendChild(helper);
+      element.replaceChild(helper, element._helperNode);
     });
 
     it('should return lazy helper content as a helperText', () => {

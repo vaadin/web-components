@@ -50,6 +50,7 @@ const HelperTextMixinImplementation = (superclass) =>
       super.connectedCallback();
 
       if (this._helperNode) {
+        this._initialHelper = this._helperNode;
         this._helperNode.id = this._helperId;
 
         this._applyCustomHelper();
@@ -71,11 +72,15 @@ const HelperTextMixinImplementation = (superclass) =>
         .assignedNodes({ flatten: true })
         .filter((node) => node.nodeType === Node.ELEMENT_NODE);
 
-      const customHelper = helperNodes.find((node) => node !== this._helperNode);
+      const customHelper = helperNodes.find((node) => node !== this._initialHelper);
+
       if (customHelper) {
         customHelper.id = this._helperId;
-        this._helperNode.remove();
         this._applyCustomHelper();
+
+        if (this._initialHelper.isConnected) {
+          this._initialHelper.remove();
+        }
       }
     }
 
