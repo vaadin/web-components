@@ -74,11 +74,12 @@ const HelperTextMixinImplementation = (superclass) =>
 
       if (customHelper) {
         customHelper.id = this._helperId;
-        this._applyCustomHelper();
 
         if (this._currentHelper.isConnected) {
           this._currentHelper.remove();
         }
+
+        this._applyCustomHelper();
 
         this._currentHelper = customHelper;
       }
