@@ -38,11 +38,16 @@ describe('input-mixin', () => {
     });
 
     it('should create an input element', () => {
-      expect(input instanceof HTMLInputElement).to.be.true;
+      expect(input).to.be.an.instanceof(HTMLInputElement);
     });
 
     it('should store a reference to the input', () => {
       expect(element._inputNode).to.equal(input);
+    });
+
+    it('should set id attribute on the input', () => {
+      const idRegex = /^input-mixin-element-\d$/;
+      expect(input.getAttribute('id')).to.match(idRegex);
     });
 
     it('should have a read-only type property', () => {
@@ -52,11 +57,11 @@ describe('input-mixin', () => {
     });
 
     it('should have an empty name by default', () => {
-      expect(input.name).to.be.not.ok;
+      expect(input.name).to.equal('');
     });
 
     it('should have an empty value by default', () => {
-      expect(input.value).to.be.not.ok;
+      expect(input.value).to.equal('');
     });
   });
 

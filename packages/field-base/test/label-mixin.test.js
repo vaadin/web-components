@@ -22,7 +22,7 @@ describe('label-mixin', () => {
     });
 
     it('should create a label element', () => {
-      expect(label instanceof HTMLLabelElement).to.be.true;
+      expect(label).to.be.an.instanceof(HTMLLabelElement);
     });
 
     it('should set slot on the label', () => {
@@ -31,7 +31,7 @@ describe('label-mixin', () => {
 
     it('should set id on the label element', () => {
       const idRegex = /^label-label-mixin-element-\d$/;
-      expect(idRegex.test(label.getAttribute('id'))).to.be.true;
+      expect(label.getAttribute('id')).to.match(idRegex);
     });
 
     it('should update label content on attribute change', () => {
@@ -75,7 +75,7 @@ describe('label-mixin', () => {
 
     it('should set id on the slotted label element', () => {
       const idRegex = /^label-label-mixin-element-\d$/;
-      expect(idRegex.test(label.getAttribute('id'))).to.be.true;
+      expect(label.getAttribute('id')).to.match(idRegex);
     });
 
     it('should set has-label attribute with slotted label', () => {

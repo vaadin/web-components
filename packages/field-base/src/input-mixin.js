@@ -45,6 +45,23 @@ const InputMixinImplementation = (superclass) =>
     get _inputNode() {
       return this._getDirectSlotChild('input');
     }
+
+    constructor() {
+      super();
+
+      // Ensure every instance has unique ID
+      const uniqueId = (InputMixinClass._uniqueId = 1 + InputMixinClass._uniqueId || 0);
+      this._inputId = `${this.localName}-${uniqueId}`;
+    }
+
+    /** @protected */
+    connectedCallback() {
+      super.connectedCallback();
+
+      if (this._inputNode) {
+        this._inputNode.id = this._inputId;
+      }
+    }
   };
 
 /**

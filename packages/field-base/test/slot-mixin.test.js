@@ -60,7 +60,7 @@ describe('slot-mixin', () => {
       expect(child.textContent).to.equal('bar');
     });
 
-    it('should store a reference a custom slot child', () => {
+    it('should store a reference to the custom slot child', () => {
       expect(element.fooChild).to.equal(child);
     });
   });

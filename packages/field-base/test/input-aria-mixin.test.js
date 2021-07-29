@@ -22,11 +22,6 @@ describe('input-aria-mixin', () => {
     label = element.querySelector('[slot=label]');
   });
 
-  it('should set id attribute on the input', () => {
-    const idRegex = /^input-aria-mixin-element-\d$/;
-    expect(idRegex.test(input.getAttribute('id'))).to.be.true;
-  });
-
   it('should set for attribute on the label', () => {
     expect(label.getAttribute('for')).to.equal(input.id);
   });

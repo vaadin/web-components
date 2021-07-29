@@ -22,22 +22,25 @@ const SlotMixinImplementation = (superclass) =>
 
     /** @private */
     _connectSlotMixin() {
-      if (!this.__isConnectedSlotMixin) {
-        Object.keys(this.slots).forEach((slotName) => {
-          // Ignore labels of nested components, if any
-          const hasContent = Array.from(this.children).some((child) => child.matches(`[slot=${slotName}]`));
-
-          if (!hasContent) {
-            const slotFactory = this.slots[slotName];
-            const slotContent = slotFactory();
-            if (slotContent instanceof Element) {
-              slotContent.setAttribute('slot', slotName);
-              this.appendChild(slotContent);
-            }
-          }
-        });
-        this.__isConnectedSlotMixin = true;
+      if (this.__isConnectedSlotMixin) {
+        return;
       }
+
+      Object.keys(this.slots).forEach((slotName) => {
+        // Ignore labels of nested components, if any
+        const hasContent = this._getDirectSlotChild(slotName) != null;
+
+        if (!hasContent) {
+          const slotFactory = this.slots[slotName];
+          const slotContent = slotFactory();
+          if (slotContent instanceof Element) {
+            slotContent.setAttribute('slot', slotName);
+            this.appendChild(slotContent);
+          }
+        }
+      });
+
+      this.__isConnectedSlotMixin = true;
     }
 
     /** @protected */

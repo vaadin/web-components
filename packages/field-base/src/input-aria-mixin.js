@@ -12,10 +12,6 @@ const InputAriaMixinImplementation = (superclass) =>
     constructor() {
       super();
 
-      // Ensure every instance has unique ID
-      const uniqueId = (InputAriaMixinClass._uniqueId = 1 + InputAriaMixinClass._uniqueId || 0);
-      this._inputId = `${this.localName}-${uniqueId}`;
-
       this.__preventDuplicateLabelClick = this.__preventDuplicateLabelClick.bind(this);
     }
 
@@ -42,7 +38,6 @@ const InputAriaMixinImplementation = (superclass) =>
     /** @protected */
     _enhanceLightDomA11y() {
       if (this._inputNode) {
-        this._inputNode.id = this._inputId;
         this._inputNode.setAttribute('aria-labelledby', this._labelId);
       }
 
