@@ -3,16 +3,22 @@ import { fixtureSync } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { FieldAriaMixin } from '../src/field-aria-mixin.js';
 import { LabelMixin } from '../src/label-mixin.js';
+import { InputMixin } from '../src/input-mixin.js';
 
 customElements.define(
   'field-aria-mixin-element',
-  class extends FieldAriaMixin(LabelMixin(PolymerElement)) {
+  class extends FieldAriaMixin(LabelMixin(InputMixin(PolymerElement))) {
     static get template() {
       return html`
         <slot name="label"></slot>
+        <slot name="input"></slot>
         <slot name="error-message"></slot>
         <slot name="helper"></slot>
       `;
+    }
+
+    get _ariaTarget() {
+      return this._inputNode;
     }
   }
 );
@@ -35,7 +41,7 @@ customElements.define(
 );
 
 describe('field-aria-mixin', () => {
-  let element, label, error, helper;
+  let element, label, error, helper, input;
 
   describe('aria-describedby', () => {
     beforeEach(() => {
@@ -43,10 +49,11 @@ describe('field-aria-mixin', () => {
       label = element.querySelector('[slot=label]');
       error = element.querySelector('[slot=error-message]');
       helper = element.querySelector('[slot=helper]');
+      input = element.querySelector('[slot=input]');
     });
 
     it('should only add helper text to aria-describedby when field is valid', () => {
-      const aria = element.getAttribute('aria-describedby');
+      const aria = input.getAttribute('aria-describedby');
       expect(aria).to.include(helper.id);
       expect(aria).to.not.include(error.id);
       expect(aria).to.not.include(label.id);
@@ -54,7 +61,7 @@ describe('field-aria-mixin', () => {
 
     it('should add error message to aria-describedby when field is invalid', () => {
       element.invalid = true;
-      const aria = element.getAttribute('aria-describedby');
+      const aria = input.getAttribute('aria-describedby');
       expect(aria).to.include(helper.id);
       expect(aria).to.include(error.id);
       expect(aria).to.not.include(label.id);
