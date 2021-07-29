@@ -22,7 +22,7 @@ describe('helper-text-mixin', () => {
     });
 
     it('should create a helper element', () => {
-      expect(helper instanceof HTMLDivElement).to.be.true;
+      expect(helper).to.be.an.instanceof(HTMLDivElement);
     });
 
     it('should set slot on the helper', () => {
@@ -31,7 +31,7 @@ describe('helper-text-mixin', () => {
 
     it('should set id on the helper element', () => {
       const idRegex = /^helper-helper-text-mixin-element-\d+$/;
-      expect(idRegex.test(helper.getAttribute('id'))).to.be.true;
+      expect(helper.getAttribute('id')).to.match(idRegex);
     });
 
     it('should update helper content on attribute change', () => {
@@ -90,7 +90,7 @@ describe('helper-text-mixin', () => {
 
     it('should set id on the slotted helper element', () => {
       const idRegex = /^helper-helper-text-mixin-element-\d+$/;
-      expect(idRegex.test(helper.getAttribute('id'))).to.be.true;
+      expect(helper.getAttribute('id')).to.match(idRegex);
     });
 
     it('should set has-helper attribute with slotted helper', () => {
@@ -104,13 +104,16 @@ describe('helper-text-mixin', () => {
   });
 
   describe('lazy', () => {
+    let defaultHelper;
+
     beforeEach(async () => {
       element = fixtureSync('<helper-text-mixin-element></helper-text-mixin-element>');
       await nextFrame();
       helper = document.createElement('div');
       helper.setAttribute('slot', 'helper');
       helper.textContent = 'Lazy';
-      element.replaceChild(helper, element._helperNode);
+      defaultHelper = element._helperNode;
+      element.insertBefore(helper, defaultHelper);
     });
 
     it('should return lazy helper content as a helperText', () => {
@@ -121,9 +124,13 @@ describe('helper-text-mixin', () => {
       expect(element._helperNode).to.equal(helper);
     });
 
+    it('should remove the default helper from the element', () => {
+      expect(defaultHelper.parentNode).to.be.null;
+    });
+
     it('should set id on the lazily added helper element', () => {
       const idRegex = /^helper-helper-text-mixin-element-\d+$/;
-      expect(idRegex.test(helper.getAttribute('id'))).to.be.true;
+      expect(helper.getAttribute('id')).to.match(idRegex);
     });
 
     it('should set has-helper attribute with lazy helper', () => {
@@ -133,6 +140,15 @@ describe('helper-text-mixin', () => {
     it('should update lazy helper content on property change', () => {
       element.helperText = '3 digits';
       expect(helper.textContent).to.equal('3 digits');
+    });
+
+    it('should support replacing lazy helper with a new one', async () => {
+      const div = document.createElement('div');
+      div.setAttribute('slot', 'helper');
+      div.textContent = 'New';
+      element.replaceChild(div, helper);
+      await nextFrame();
+      expect(element.helperText).to.equal('New');
     });
   });
 });

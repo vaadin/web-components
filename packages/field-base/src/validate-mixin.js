@@ -80,7 +80,7 @@ const ValidateMixinImplementation = (superclass) =>
     }
 
     /**
-     * Returns true if field is valid, and sets `invalid` to true otherwise.
+     * Returns true if field is valid, and sets `invalid` based on the field validity.
      *
      * @return {boolean} True if the value is valid.
      */
@@ -111,15 +111,17 @@ const ValidateMixinImplementation = (superclass) =>
      * @protected
      */
     _updateErrorMessage(invalid, errorMessage) {
-      if (this._errorNode) {
-        // save the custom error message content
-        if (this._errorNode.textContent && !errorMessage) {
-          this.__errorMessage = this._errorNode.textContent.trim();
-        }
-        const hasError = Boolean(invalid && errorMessage);
-        this._errorNode.textContent = hasError ? errorMessage : '';
-        this.toggleAttribute('has-error-message', hasError);
+      if (!this._errorNode) {
+        return;
       }
+
+      // save the custom error message content
+      if (this._errorNode.textContent && !errorMessage) {
+        this.__errorMessage = this._errorNode.textContent.trim();
+      }
+      const hasError = Boolean(invalid && errorMessage);
+      this._errorNode.textContent = hasError ? errorMessage : '';
+      this.toggleAttribute('has-error-message', hasError);
     }
   };
 

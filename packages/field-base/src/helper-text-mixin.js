@@ -50,7 +50,7 @@ const HelperTextMixinImplementation = (superclass) =>
       super.connectedCallback();
 
       if (this._helperNode) {
-        this._initialHelper = this._helperNode;
+        this._currentHelper = this._helperNode;
         this._helperNode.id = this._helperId;
 
         this._applyCustomHelper();
@@ -62,25 +62,25 @@ const HelperTextMixinImplementation = (superclass) =>
       super.ready();
 
       this.__helperSlot = this.shadowRoot.querySelector('[name="helper"]');
-      this.__helperSlot.addEventListener('slotchange', this._onHelperSlotChange.bind(this));
+      this.__helperSlot.addEventListener('slotchange', this.__onHelperSlotChange.bind(this));
     }
 
     /** @private */
-    _onHelperSlotChange() {
+    __onHelperSlotChange() {
       // Check fot slotted element node that is not the one created by this mixin.
-      const helperNodes = this.__helperSlot
-        .assignedNodes({ flatten: true })
-        .filter((node) => node.nodeType === Node.ELEMENT_NODE);
-
-      const customHelper = helperNodes.find((node) => node !== this._initialHelper);
+      const customHelper = this.__helperSlot
+        .assignedElements({ flatten: true })
+        .find((node) => node !== this._currentHelper);
 
       if (customHelper) {
         customHelper.id = this._helperId;
         this._applyCustomHelper();
 
-        if (this._initialHelper.isConnected) {
-          this._initialHelper.remove();
+        if (this._currentHelper.isConnected) {
+          this._currentHelper.remove();
         }
+
+        this._currentHelper = customHelper;
       }
     }
 

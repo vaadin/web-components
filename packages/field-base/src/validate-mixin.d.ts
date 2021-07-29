@@ -33,7 +33,7 @@ interface ValidateMixin extends SlotMixin {
   errorMessage: string;
 
   /**
-   * Returns true if field is valid, and sets `invalid` to true otherwise.
+   * Returns true if field is valid, and sets `invalid` based on the field validity.
    */
   validate(): boolean;
 

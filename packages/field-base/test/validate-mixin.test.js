@@ -23,7 +23,7 @@ describe('validate-mixin', () => {
     });
 
     it('should create an error message element', () => {
-      expect(error instanceof HTMLDivElement).to.be.true;
+      expect(error).to.be.an.instanceof(HTMLDivElement);
     });
 
     it('should set aria-live attribute on the error message', () => {
@@ -32,7 +32,7 @@ describe('validate-mixin', () => {
 
     it('should set id on the error message element', () => {
       const idRegex = /^error-validate-mixin-element-\d+$/;
-      expect(idRegex.test(error.getAttribute('id'))).to.be.true;
+      expect(error.getAttribute('id')).to.match(idRegex);
     });
 
     it('should update error message content on attribute change', () => {
@@ -105,7 +105,7 @@ describe('validate-mixin', () => {
 
     it('should set id on the slotted error message element', () => {
       const idRegex = /^error-validate-mixin-element-\d+$/;
-      expect(idRegex.test(error.getAttribute('id'))).to.be.true;
+      expect(error.getAttribute('id')).to.match(idRegex);
     });
 
     it('should set has-error-message attribute with slotted error message', () => {
