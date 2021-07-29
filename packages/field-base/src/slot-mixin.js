@@ -28,7 +28,7 @@ const SlotMixinImplementation = (superclass) =>
 
       Object.keys(this.slots).forEach((slotName) => {
         // Ignore labels of nested components, if any
-        const hasContent = this._getDirectSlotChild(slotName) != null;
+        const hasContent = this._getDirectSlotChild(slotName) !== undefined;
 
         if (!hasContent) {
           const slotFactory = this.slots[slotName];
