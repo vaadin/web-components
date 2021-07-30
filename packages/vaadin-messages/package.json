@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-messages",
-  "version": "21.0.0-alpha13",
+  "version": "21.0.0-beta1",
   "description": "vaadin-messages",
   "main": "all-imports.js",
   "module": "all-imports.js",
@@ -30,13 +30,13 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/vaadin-avatar": "^21.0.0-alpha13",
-    "@vaadin/vaadin-button": "^21.0.0-alpha13",
-    "@vaadin/vaadin-element-mixin": "^21.0.0-alpha13",
-    "@vaadin/vaadin-lumo-styles": "^21.0.0-alpha13",
-    "@vaadin/vaadin-material-styles": "^21.0.0-alpha13",
-    "@vaadin/vaadin-text-field": "^21.0.0-alpha13",
-    "@vaadin/vaadin-themable-mixin": "^21.0.0-alpha13"
+    "@vaadin/vaadin-avatar": "21.0.0-beta1",
+    "@vaadin/vaadin-button": "21.0.0-beta1",
+    "@vaadin/vaadin-element-mixin": "21.0.0-beta1",
+    "@vaadin/vaadin-lumo-styles": "21.0.0-beta1",
+    "@vaadin/vaadin-material-styles": "21.0.0-beta1",
+    "@vaadin/vaadin-text-field": "21.0.0-beta1",
+    "@vaadin/vaadin-themable-mixin": "21.0.0-beta1"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.1.5",

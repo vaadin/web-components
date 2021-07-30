@@ -94,7 +94,7 @@ class IconElement extends ThemableMixin(ElementMixin(PolymerElement)) {
   }
 
   static get version() {
-    return '21.0.0-alpha13';
+    return '21.0.0-beta1';
   }
 
   static get properties() {
