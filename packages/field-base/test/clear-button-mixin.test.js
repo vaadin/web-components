@@ -62,6 +62,9 @@ describe('clear-button-mixin', () => {
     input.addEventListener('input', spy);
     button.click();
     expect(spy.calledOnce).to.be.true;
+    const event = spy.firstCall.args[0];
+    expect(event.bubbles).to.be.true;
+    expect(event.composed).to.be.true;
   });
 
   it('should dispatch change event on clear button click', () => {
@@ -69,6 +72,9 @@ describe('clear-button-mixin', () => {
     element.addEventListener('change', spy);
     button.click();
     expect(spy.calledOnce).to.be.true;
+    const event = spy.firstCall.args[0];
+    expect(event.bubbles).to.be.true;
+    expect(event.composed).to.be.false;
   });
 
   it('should call preventDefault on the button click event', () => {
@@ -102,5 +108,8 @@ describe('clear-button-mixin', () => {
     element.clearButtonVisible = true;
     escKeyDown(button);
     expect(spy.calledOnce).to.be.true;
+    const event = spy.firstCall.args[0];
+    expect(event.bubbles).to.be.true;
+    expect(event.composed).to.be.false;
   });
 });

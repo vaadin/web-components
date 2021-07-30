@@ -31,7 +31,7 @@ const ClearButtonMixinImplementation = (superclass) =>
     ready() {
       super.ready();
 
-      this.addEventListener('keydown', (e) => this._handleKeyDown(e));
+      this.addEventListener('keydown', (e) => this._onKeyDown(e));
 
       this._clearElement = this.$.clearButton;
       this._clearElement.addEventListener('click', this._onClearButtonClick.bind(this));
@@ -45,16 +45,12 @@ const ClearButtonMixinImplementation = (superclass) =>
     }
 
     /** @private */
-    _onClearButtonClick(e) {
-      e.preventDefault();
+    _onClearButtonClick(event) {
+      event.preventDefault();
       this._inputNode.focus();
       this.clear();
       const inputEvent = new Event('input', { bubbles: true, composed: true });
-      inputEvent.__fromClearButton = true;
-
       const changeEvent = new Event('change', { bubbles: true });
-      changeEvent.__fromClearButton = true;
-
       this._inputNode.dispatchEvent(inputEvent);
       this._inputNode.dispatchEvent(changeEvent);
     }
@@ -63,11 +59,11 @@ const ClearButtonMixinImplementation = (superclass) =>
      * @param {Event} event
      * @protected
      */
-    _handleKeyDown(event) {
+    _onKeyDown(event) {
       if (event.key === 'Escape' && this.clearButtonVisible && this._clearOnEsc) {
         const dispatchChange = !!this.value;
         this.clear();
-        dispatchChange && this._inputNode.dispatchEvent(new Event('change'));
+        dispatchChange && this._inputNode.dispatchEvent(new Event('change', { bubbles: true }));
       }
     }
   };

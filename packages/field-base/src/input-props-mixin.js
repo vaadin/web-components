@@ -76,10 +76,12 @@ const InputPropsMixinImplementation = (superclass) =>
       const attributeNames = this.constructor.hostProps;
 
       attributeNames.forEach((attr, index) => {
+        const value = attributesValues[index];
         if (attr === 'invalid') {
-          this._setOrToggleAttribute('aria-invalid', this.invalid ? 'true' : false, input);
+          this._setOrToggleAttribute(attr, value, input);
+          this._setOrToggleAttribute('aria-invalid', value ? 'true' : false, input);
         } else {
-          this._setOrToggleAttribute(attr, attributesValues[index], input);
+          this._setOrToggleAttribute(attr, value, input);
         }
       });
     }

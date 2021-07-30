@@ -101,8 +101,17 @@ describe('input-props-mixin', () => {
       input = element.querySelector('[slot=input]');
     });
 
+    it('should set invalid attribute on the input', () => {
+      expect(input.hasAttribute('invalid')).to.be.true;
+    });
+
     it('should set aria-invalid attribute on the input', () => {
       expect(input.getAttribute('aria-invalid')).to.equal('true');
+    });
+
+    it('should remove invalid attribute when valid', () => {
+      element.invalid = false;
+      expect(input.hasAttribute('invalid')).to.be.false;
     });
 
     it('should remove aria-invalid attribute when valid', () => {
