@@ -7,7 +7,7 @@ import { InputAriaMixin } from './input-aria-mixin.js';
 import { ValidateMixin } from './validate-mixin.js';
 
 /**
- * A mixin to add `<input>` element to the corresponding named slot.
+ * A mixin to forward properties to the native <input> element.
  */
 declare function InputPropsMixin<T extends new (...args: any[]) => {}>(base: T): T & InputPropsMixinConstructor;
 

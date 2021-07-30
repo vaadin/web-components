@@ -100,4 +100,7 @@ const InputPropsMixinImplementation = (superclass) =>
     }
   };
 
+/**
+ * A mixin to forward properties to the native <input> element.
+ */
 export const InputPropsMixin = dedupingMixin(InputPropsMixinImplementation);
