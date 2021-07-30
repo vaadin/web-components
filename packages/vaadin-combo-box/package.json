@@ -28,22 +28,22 @@
     "@polymer/iron-list": "^3.0.0",
     "@polymer/iron-resizable-behavior": "^3.0.0",
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/vaadin-control-state-mixin": "21.0.0-alpha13",
-    "@vaadin/vaadin-element-mixin": "21.0.0-alpha13",
-    "@vaadin/vaadin-item": "21.0.0-alpha13",
-    "@vaadin/vaadin-lumo-styles": "21.0.0-alpha13",
-    "@vaadin/vaadin-material-styles": "21.0.0-alpha13",
-    "@vaadin/vaadin-overlay": "21.0.0-alpha13",
-    "@vaadin/vaadin-text-field": "21.0.0-alpha13",
-    "@vaadin/vaadin-themable-mixin": "21.0.0-alpha13"
+    "@vaadin/vaadin-control-state-mixin": "^21.0.0-alpha13",
+    "@vaadin/vaadin-element-mixin": "^21.0.0-alpha13",
+    "@vaadin/vaadin-item": "^21.0.0-alpha13",
+    "@vaadin/vaadin-lumo-styles": "^21.0.0-alpha13",
+    "@vaadin/vaadin-material-styles": "^21.0.0-alpha13",
+    "@vaadin/vaadin-overlay": "^21.0.0-alpha13",
+    "@vaadin/vaadin-text-field": "^21.0.0-alpha13",
+    "@vaadin/vaadin-themable-mixin": "^21.0.0-alpha13"
   },
   "devDependencies": {
     "@esm-bundle/chai": "4.3.0",
     "@polymer/iron-input": "^3.0.1",
     "@polymer/paper-input": "^3.0.0",
     "@vaadin/testing-helpers": "^0.2.1",
-    "@vaadin/vaadin-dialog": "21.0.0-alpha13",
-    "@vaadin/vaadin-template-renderer": "21.0.0-alpha13",
+    "@vaadin/vaadin-dialog": "^21.0.0-alpha13",
+    "@vaadin/vaadin-template-renderer": "^21.0.0-alpha13",
     "sinon": "^9.2.0"
   },
   "publishConfig": {

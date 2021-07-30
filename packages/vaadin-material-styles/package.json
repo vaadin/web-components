@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/vaadin-themable-mixin": "21.0.0-alpha13"
+    "@vaadin/vaadin-themable-mixin": "^21.0.0-alpha13"
   },
   "devDependencies": {
     "gulp": "^4.0.0",

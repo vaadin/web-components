@@ -30,7 +30,7 @@
   "dependencies": {
     "@polymer/iron-resizable-behavior": "^3.0.0",
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/vaadin-element-mixin": "21.0.0-alpha13",
+    "@vaadin/vaadin-element-mixin": "^21.0.0-alpha13",
     "@vaadin/vaadin-license-checker": "^2.1.0"
   },
   "devDependencies": {
