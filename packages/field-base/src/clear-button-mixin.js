@@ -64,10 +64,8 @@ const ClearButtonMixinImplementation = (superclass) =>
       event.preventDefault();
       this._inputNode.focus();
       this.clear();
-      const inputEvent = new Event('input', { bubbles: true, composed: true });
-      const changeEvent = new Event('change', { bubbles: true });
-      this._inputNode.dispatchEvent(inputEvent);
-      this._inputNode.dispatchEvent(changeEvent);
+      this._inputNode.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
+      this._inputNode.dispatchEvent(new Event('change', { bubbles: true }));
     }
 
     /**
