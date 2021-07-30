@@ -20,11 +20,6 @@ interface TestComboBoxItem {
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 
-const selectItemChangeEventListenerTypeAssertion = (event: ComboBoxSelectedItemChangedEvent<TestComboBoxItem>) => {
-  assertType<ComboBoxSelectedItemChangedEvent<TestComboBoxItem>>(event);
-  assertType<TestComboBoxItem | null | undefined>(event.detail.value);
-};
-
 /* ComboBoxElement */
 const genericComboBox = document.createElement('vaadin-combo-box');
 
@@ -61,7 +56,8 @@ narrowedComboBox.addEventListener('filter-changed', (event) => {
 });
 
 narrowedComboBox.addEventListener('selected-item-changed', (event) => {
-  selectItemChangeEventListenerTypeAssertion(event);
+  assertType<ComboBoxSelectedItemChangedEvent<TestComboBoxItem>>(event);
+  assertType<TestComboBoxItem | null | undefined>(event.detail.value);
 });
 
 /* ComboBoxLightElement */
@@ -99,5 +95,6 @@ narrowedComboBoxLightElement.addEventListener('filter-changed', (event) => {
 });
 
 narrowedComboBoxLightElement.addEventListener('selected-item-changed', (event) => {
-  selectItemChangeEventListenerTypeAssertion(event);
+  assertType<ComboBoxSelectedItemChangedEvent<TestComboBoxItem>>(event);
+  assertType<TestComboBoxItem | null | undefined>(event.detail.value);
 });
