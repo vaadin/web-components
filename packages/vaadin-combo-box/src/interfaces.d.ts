@@ -54,7 +54,7 @@ export type ComboBoxFilterChangedEvent = CustomEvent<{ value: string }>;
 /**
  * Fired when the `selectedItem` property changes.
  */
-export type ComboBoxSelectedItemChangedEvent<TItem> = CustomEvent<{ value: TItem }>;
+export type ComboBoxSelectedItemChangedEvent<TItem> = CustomEvent<{ value: TItem | null | undefined }>;
 
 export interface ComboBoxEventMap<TItem> extends HTMLElementEventMap {
   'custom-value-set': ComboBoxCustomValueSetEvent;
