@@ -17,10 +17,11 @@ jobs:
           node-version: '14'
           cache: 'yarn'
 
-      - uses: microsoft/playwright-github-action@v1
-
       - name: Install Dependencies
         run: yarn --frozen-lockfile --no-progress --non-interactive
+
+      - name: Install Playwright
+        run: npx playwright install-deps firefox
 
       - name: Test
         run: yarn test:firefox
