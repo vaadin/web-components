@@ -52,7 +52,7 @@ describe('focus-mixin', () => {
     expect(element.hasAttribute('focused')).to.be.false;
   });
 
-  it('should not the focus-ring attribute on mousedown after keydown', () => {
+  it('should not set the focus-ring attribute on mousedown after keydown', () => {
     keyDownOn(document.body, 9);
     mousedown(input);
     focusin(input);
