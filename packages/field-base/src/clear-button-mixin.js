@@ -22,6 +22,17 @@ const ClearButtonMixinImplementation = (superclass) =>
       };
     }
 
+    /**
+     * Any element extending this mixin is required to implement this getter.
+     * It returns the reference to the clear button element.
+     * @protected
+     * @return {Element | null | undefined}
+     */
+    get clearElement() {
+      console.warn(`Please implement the 'clearElement' property in <${this.localName}>`);
+      return null;
+    }
+
     /** @protected */
     get _clearOnEsc() {
       return true;
@@ -33,8 +44,9 @@ const ClearButtonMixinImplementation = (superclass) =>
 
       this.addEventListener('keydown', (e) => this._onKeyDown(e));
 
-      this._clearElement = this.$.clearButton;
-      this._clearElement.addEventListener('click', this._onClearButtonClick.bind(this));
+      if (this.clearElement) {
+        this.clearElement.addEventListener('click', this._onClearButtonClick.bind(this));
+      }
     }
 
     /**

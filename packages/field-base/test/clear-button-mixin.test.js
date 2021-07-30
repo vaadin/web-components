@@ -19,6 +19,10 @@ customElements.define(
         value: String
       };
     }
+
+    get clearElement() {
+      return this.$.clearButton;
+    }
   }
 );
 
