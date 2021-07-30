@@ -56,7 +56,10 @@ const ClearButtonMixinImplementation = (superclass) =>
       this.value = this._inputNode.value = '';
     }
 
-    /** @private */
+    /**
+     * @param {Event} event
+     * @protected
+     */
     _onClearButtonClick(event) {
       event.preventDefault();
       this._inputNode.focus();
