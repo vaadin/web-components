@@ -57,7 +57,7 @@ narrowedComboBox.addEventListener('filter-changed', (event) => {
 
 narrowedComboBox.addEventListener('selected-item-changed', (event) => {
   assertType<ComboBoxSelectedItemChangedEvent<TestComboBoxItem>>(event);
-  assertType<TestComboBoxItem>(event.detail.value);
+  assertType<TestComboBoxItem | null | undefined>(event.detail.value);
 });
 
 /* ComboBoxLightElement */
@@ -96,5 +96,5 @@ narrowedComboBoxLightElement.addEventListener('filter-changed', (event) => {
 
 narrowedComboBoxLightElement.addEventListener('selected-item-changed', (event) => {
   assertType<ComboBoxSelectedItemChangedEvent<TestComboBoxItem>>(event);
-  assertType<TestComboBoxItem>(event.detail.value);
+  assertType<TestComboBoxItem | null | undefined>(event.detail.value);
 });
