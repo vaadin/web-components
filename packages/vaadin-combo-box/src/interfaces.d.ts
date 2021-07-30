@@ -1,5 +1,4 @@
 import { ComboBoxElement } from './vaadin-combo-box';
-import { ComboBoxSelectedItem } from './vaadin-combo-box-mixin';
 
 export type ComboBoxDefaultItem = any;
 
@@ -55,7 +54,7 @@ export type ComboBoxFilterChangedEvent = CustomEvent<{ value: string }>;
 /**
  * Fired when the `selectedItem` property changes.
  */
-export type ComboBoxSelectedItemChangedEvent<TItem> = CustomEvent<{ value: ComboBoxSelectedItem<TItem> }>;
+export type ComboBoxSelectedItemChangedEvent<TItem> = CustomEvent<{ value: TItem | null | undefined }>;
 
 export interface ComboBoxEventMap<TItem> extends HTMLElementEventMap {
   'custom-value-set': ComboBoxCustomValueSetEvent;

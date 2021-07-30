@@ -8,8 +8,6 @@ interface ComboBoxMixinConstructor<TItem> {
   new (...args: any[]): ComboBoxMixin<TItem>;
 }
 
-type ComboBoxSelectedItem<TItem> = TItem | null | undefined;
-
 interface ComboBoxMixin<TItem> {
   readonly _propertyForValue: string;
 
@@ -94,7 +92,7 @@ interface ComboBoxMixin<TItem> {
   /**
    * The selected item from the `items` array.
    */
-  selectedItem: ComboBoxSelectedItem<TItem>;
+  selectedItem: TItem | null | undefined;
 
   /**
    * Path for label of the item. If `items` is an array of objects, the
@@ -208,4 +206,4 @@ interface ComboBoxMixin<TItem> {
   _stopPropagation(e: Event): void;
 }
 
-export { ComboBoxMixin, ComboBoxMixinConstructor, ComboBoxSelectedItem };
+export { ComboBoxMixin, ComboBoxMixinConstructor };
