@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, focusin, focusout, keyDownOn } from '@vaadin/testing-helpers';
+import { fixtureSync, focusin, focusout, keyDownOn, mousedown } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { FocusMixin } from '../src/focus-mixin.js';
 
@@ -50,5 +50,12 @@ describe('focus-mixin', () => {
     focusin(input);
     element.parentNode.removeChild(element);
     expect(element.hasAttribute('focused')).to.be.false;
+  });
+
+  it('should not the focus-ring attribute on mousedown after keydown', () => {
+    keyDownOn(document.body, 9);
+    mousedown(input);
+    focusin(input);
+    expect(element.hasAttribute('focus-ring')).to.be.false;
   });
 });

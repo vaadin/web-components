@@ -129,11 +129,18 @@ describe('delegate-focus-mixin', () => {
       expect(spy.called).to.be.false;
     });
 
-    it('should not set focused attribute when autofocus is set', async () => {
+    it('should not set focused attribute when disabled is set', async () => {
       element.disabled = true;
       document.body.appendChild(element);
       await nextFrame();
       expect(element.hasAttribute('focused')).to.be.false;
+    });
+
+    it('should not set focus-ring attribute when disabled is set', async () => {
+      element.disabled = true;
+      document.body.appendChild(element);
+      await nextFrame();
+      expect(element.hasAttribute('focus-ring')).to.be.false;
     });
   });
 });

@@ -68,19 +68,11 @@ const FocusMixinImplementation = (superclass) =>
      * @protected
      */
     _setFocused(focused) {
-      if (focused) {
-        this.setAttribute('focused', '');
-      } else {
-        this.removeAttribute('focused');
-      }
+      this.toggleAttribute('focused', focused);
 
       // focus-ring is true when the element was focused from the keyboard.
       // Focus Ring [A11ycasts]: https://youtu.be/ilj2P5-5CjI
-      if (focused && keyboardActive) {
-        this.setAttribute('focus-ring', '');
-      } else {
-        this.removeAttribute('focus-ring');
-      }
+      this.toggleAttribute('focus-ring', focused && keyboardActive);
     }
 
     /**

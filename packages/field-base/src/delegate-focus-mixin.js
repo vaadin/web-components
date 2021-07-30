@@ -36,8 +36,7 @@ const DelegateFocusMixinImplementation = (superclass) =>
 
       if (this.autofocus && !this.disabled) {
         requestAnimationFrame(() => {
-          this.focusElement.focus();
-          this._setFocused(true);
+          this.focus();
           this.setAttribute('focus-ring', '');
         });
       }
@@ -72,7 +71,7 @@ const DelegateFocusMixinImplementation = (superclass) =>
      * @protected
      */
     _shouldSetFocus(event) {
-      return event.composedPath()[0] === this.focusElement;
+      return event.target === this.focusElement;
     }
 
     /**
