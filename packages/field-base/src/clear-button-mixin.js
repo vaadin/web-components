@@ -45,7 +45,7 @@ const ClearButtonMixinImplementation = (superclass) =>
       this.addEventListener('keydown', (e) => this._onKeyDown(e));
 
       if (this.clearElement) {
-        this.clearElement.addEventListener('click', this._onClearButtonClick.bind(this));
+        this.clearElement.addEventListener('click', (e) => this._onClearButtonClick(e));
       }
     }
 
