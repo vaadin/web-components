@@ -36,11 +36,11 @@ registerStyles(
       transition: opacity 0.175s;
     }
 
-    ::slotted(:not([slot])) {
+    ::slotted(:not([slot$='fix'])) {
       padding: 8px 0;
     }
 
-    ::slotted([slot]) {
+    ::slotted([slot$='fix']) {
       color: var(--material-secondary-text-color);
     }
 
@@ -61,7 +61,7 @@ registerStyles(
       background-repeat: repeat-x;
     }
 
-    :host([disabled]) ::slotted(:not([slot])) {
+    :host([disabled]) ::slotted(:not([slot$='fix'])) {
       color: var(--material-disabled-text-color);
       -webkit-text-fill-color: var(--material-disabled-text-color);
     }
