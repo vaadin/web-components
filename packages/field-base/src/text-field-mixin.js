@@ -58,10 +58,9 @@ const TextFieldMixinImplementation = (superclass) =>
 
     /** @protected */
     _createConstraintsObserver() {
-      // This complex observer needs to be added dynamically here (instead of defining it above in the `get observers()`)
-      // so that it runs after complex observers of inheriting classes. Otherwise e.g. `_stepOrMinChanged()` observer of
-      // vaadin-number-field would run after this and the `min` and `step` properties would not yet be propagated to
-      // the `inputElement` when this runs.
+      // This complex observer needs to be added dynamically instead of using `static get observers()`
+      // to make it possible to tweak this behavior in classes that apply this mixin.
+      // An example is `vaadin-email-field` where the pattern is set before defining the observer.
       this._createMethodObserver('_constraintsChanged(required, minlength, maxlength, pattern)');
     }
 
@@ -90,8 +89,8 @@ const TextFieldMixinImplementation = (superclass) =>
      */
     _onInput(e) {
       if (this.preventInvalidInput) {
-        const input = this.inputElement;
-        if (input.value.length > 0 && !this.checkValidity()) {
+        const input = this._inputNode;
+        if (input && input.value.length > 0 && !this.checkValidity()) {
           input.value = this.value || '';
           // add input-prevented attribute for 200ms
           this.setAttribute('input-prevented', '');
@@ -111,7 +110,7 @@ const TextFieldMixinImplementation = (superclass) =>
      */
     checkValidity() {
       if (this.required || this.pattern || this.maxlength || this.minlength) {
-        return this.inputElement.checkValidity();
+        return this._inputNode ? this._inputNode.checkValidity() : undefined;
       } else {
         return !this.invalid;
       }

@@ -76,19 +76,18 @@ const InputFieldMixinImplementation = (superclass) =>
       return ['__observeOffsetHeight(errorMessage, invalid, label, helperText)'];
     }
 
-    /** @protected */
+    /**
+     * Element used by `FieldAriaMixin` to set ARIA attributes.
+     * @protected
+     */
     get _ariaTarget() {
       return this._inputNode;
     }
 
     /**
-     * @return {HTMLElement | undefined}}
-     * @protected
+     * Element used by `DelegatesFocusMixin` to handle focus.
+     * @return {!HTMLInputElement}
      */
-    get inputElement() {
-      return this._inputNode;
-    }
-
     get focusElement() {
       return this._inputNode;
     }
@@ -107,7 +106,12 @@ const InputFieldMixinImplementation = (superclass) =>
 
       if (this._inputNode) {
         this._addInputListeners(this._inputNode);
-        this._validateInputValue(this._inputNode);
+
+        // Discard value set on the custom slotted input.
+        if (this._inputNode.value !== this.value) {
+          console.warn(`Please define value on the <${this.localName}> component!`);
+          this._inputNode.value = '';
+        }
 
         if (this.value) {
           this._inputNode.value = this.value;
@@ -131,9 +135,12 @@ const InputFieldMixinImplementation = (superclass) =>
 
       // Lumo theme defines a max-height transition for the "error-message"
       // part on invalid state change.
-      this.shadowRoot.querySelector('[part="error-message"]').addEventListener('transitionend', () => {
-        this.__observeOffsetHeight();
-      });
+      const errorPart = this.shadowRoot.querySelector('[part="error-message"]');
+      if (errorPart) {
+        errorPart.addEventListener('transitionend', () => {
+          this.__observeOffsetHeight();
+        });
+      }
     }
 
     /**
@@ -142,7 +149,7 @@ const InputFieldMixinImplementation = (superclass) =>
      */
     checkValidity() {
       if (this.required) {
-        return this.inputElement.checkValidity();
+        return this._inputNode ? this._inputNode.checkValidity() : undefined;
       } else {
         return !this.invalid;
       }
@@ -179,7 +186,7 @@ const InputFieldMixinImplementation = (superclass) =>
 
     /** @private */
     _onFocus() {
-      if (this.autoselect) {
+      if (this.autoselect && this._inputNode) {
         this._inputNode.select();
       }
     }
@@ -190,21 +197,23 @@ const InputFieldMixinImplementation = (superclass) =>
     }
 
     /**
-     * @param {Event} e
+     * @param {Event} event
      * @protected
      */
-    _onInput(e) {
-      if (!e.__fromClearButton) {
-        this.__userInput = true;
-      }
-
-      this.value = e.target.value;
+    _onInput(event) {
+      // Ignore manual clear button events
+      this.__userInput = event.isTrusted;
+      this.value = event.target.value;
       this.__userInput = false;
     }
 
-    /** @private */
-    __dispatchIronResizeEventIfNeeded(prop, value) {
-      const oldSize = '__previous' + prop;
+    /**
+     * Dispatch an event if a specific size measurement property has changed.
+     * Supporting multiple properties here is needed for `vaadin-text-area`.
+     * @protected
+     */
+    _dispatchIronResizeEventIfNeeded(prop, value) {
+      const oldSize = '__old' + prop;
       if (this[oldSize] !== undefined && this[oldSize] !== value) {
         this.dispatchEvent(new CustomEvent('iron-resize', { bubbles: true, composed: true }));
       }
@@ -218,17 +227,9 @@ const InputFieldMixinImplementation = (superclass) =>
         this.__observeOffsetHeightDebouncer,
         animationFrame,
         () => {
-          this.__dispatchIronResizeEventIfNeeded('Height', this.offsetHeight);
+          this._dispatchIronResizeEventIfNeeded('Height', this.offsetHeight);
         }
       );
-    }
-
-    /** @private */
-    _validateInputValue(input) {
-      if (input.value !== this.value) {
-        console.warn(`Please define value on the <${this.localName}> component!`);
-        input.value = '';
-      }
     }
 
     /**
@@ -237,7 +238,7 @@ const InputFieldMixinImplementation = (superclass) =>
      * @protected
      */
     _valueChanged(newVal, oldVal) {
-      // setting initial value to empty string, skip validation
+      // Setting initial value to empty string, skip validation
       if (newVal === '' && oldVal === undefined) {
         return;
       }
@@ -248,14 +249,26 @@ const InputFieldMixinImplementation = (superclass) =>
         this.removeAttribute('has-value');
       }
 
-      if (this.__userInput || !this.inputElement) {
+      // Value is set before an element is connected to the DOM:
+      // this case is handled separately in `connectedCallback`.
+      if (!this._inputNode) {
         return;
-      } else if (newVal != undefined) {
-        this.inputElement.value = newVal;
-      } else {
-        this.value = this.inputElement.value = '';
       }
 
+      // Value is set by the user, no need to sync it back to input.
+      // Also no need to validate, as we call `validate` on blur.
+      if (this.__userInput) {
+        return;
+      }
+
+      // Setting a value programmatically, sync it to input element.
+      if (newVal != undefined) {
+        this._inputNode.value = newVal;
+      } else {
+        this.clear();
+      }
+
+      // Validate the field after a new value is set programmatically.
       if (this.invalid) {
         this.validate();
       }
