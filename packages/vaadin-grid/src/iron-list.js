@@ -593,7 +593,7 @@ export const PolymerIronList = Class({
     // When this happens, there might be some issues as described
     // here https://github.com/vaadin/web-components/issues/2127.
     // Skipping any calculation for a hidden Grid.
-    if (this.hidden) {
+    if (!this._isVisible) {
       return;
     }
 
