@@ -276,6 +276,18 @@ describe('basic features', () => {
     flushGrid(grid);
     expect(grid.firstVisibleIndex).to.equal(100);
   });
+
+  it('should keep row position after hiding/unhiding a parent of Grid', () => {
+    grid._scrollToIndex(100);
+
+    grid.notifyResize();
+    grid.parentNode.setAttribute('hidden', 'hidden');
+    flushGrid(grid);
+
+    grid.parentNode.removeAttribute('hidden');
+    flushGrid(grid);
+    expect(grid.firstVisibleIndex).to.equal(100);
+  });
 });
 
 describe('flex child', () => {
