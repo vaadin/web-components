@@ -37,6 +37,7 @@ export class TextField extends TextFieldMixin(ThemableMixin(ElementMixin(Polymer
           readonly="[[readonly]]"
           disabled="[[disabled]]"
           invalid="[[invalid]]"
+          theme$="[[theme]]"
         >
           <slot name="prefix" slot="prefix"></slot>
           <slot name="input"></slot>

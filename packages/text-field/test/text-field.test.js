@@ -428,4 +428,12 @@ describe('text-field', () => {
       expect(spy.calledOnce).to.be.true;
     });
   });
+
+  describe('theme attribute', () => {
+    it('should propagate theme attribute to input container', () => {
+      const container = textField.shadowRoot.querySelector('[part="input-field"]');
+      textField.setAttribute('theme', 'align-center');
+      expect(container.getAttribute('theme')).to.equal('align-center');
+    });
+  });
 });
