@@ -72,6 +72,12 @@ const TextFieldMixinImplementation = (superclass) =>
      * @protected
      */
     _constraintsChanged(required, minlength, maxlength, pattern) {
+      // Prevent marking field as invalid when setting required state
+      // or any other constraint before a user has entered the value.
+      if (!this.invalid) {
+        return;
+      }
+
       if (!required && !minlength && !maxlength && !pattern) {
         this.invalid = false;
       } else {

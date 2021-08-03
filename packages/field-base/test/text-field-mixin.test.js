@@ -59,6 +59,11 @@ describe('text-field-mixin', () => {
       expect(element.invalid).to.be.true;
     });
 
+    it('should not validate the field when required is set', () => {
+      element.required = true;
+      expect(element.invalid).to.be.false;
+    });
+
     it('should validate the field when invalid and required is set', () => {
       element.invalid = true;
       const spy = sinon.spy(element, 'validate');
