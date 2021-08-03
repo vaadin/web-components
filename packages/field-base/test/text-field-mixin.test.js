@@ -64,6 +64,21 @@ describe('text-field-mixin', () => {
       expect(element.invalid).to.be.false;
     });
 
+    it('should not validate the field when minlength is set', () => {
+      element.minlength = 2;
+      expect(element.invalid).to.be.false;
+    });
+
+    it('should not validate the field when maxlength is set', () => {
+      element.maxlength = 6;
+      expect(element.invalid).to.be.false;
+    });
+
+    it('should not validate the field when pattern is set', () => {
+      element.pattern = '[-+\\d]';
+      expect(element.invalid).to.be.false;
+    });
+
     it('should validate the field when invalid and required is set', () => {
       element.invalid = true;
       const spy = sinon.spy(element, 'validate');
