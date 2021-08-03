@@ -72,10 +72,6 @@ const TextFieldMixinImplementation = (superclass) =>
      * @protected
      */
     _constraintsChanged(required, minlength, maxlength, pattern) {
-      if (!this.invalid) {
-        return;
-      }
-
       if (!required && !minlength && !maxlength && !pattern) {
         this.invalid = false;
       } else {

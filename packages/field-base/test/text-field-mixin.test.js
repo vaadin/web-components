@@ -144,6 +144,15 @@ describe('text-field-mixin', () => {
         expect(element.hasAttribute('input-prevented')).to.be.false;
       });
 
+      it('should remove input-prevented attribute after 200ms timeout', () => {
+        const clock = sinon.useFakeTimers();
+        element.pattern = '[0-9]*';
+        inputText('f');
+        clock.tick(200);
+        expect(element.hasAttribute('input-prevented')).to.be.false;
+        clock.restore();
+      });
+
       it('should have empty value', () => {
         element.value = undefined;
         element.pattern = '[0-9]*';
