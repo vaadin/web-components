@@ -440,4 +440,76 @@ describe('column groups', () => {
       expect(columns[1].hidden).not.to.be.true;
     });
   });
+
+  describe('Large nested groups', () => {
+    let grid;
+    beforeEach(() => {
+      grid = fixtureSync(`
+      <vaadin-grid>
+        <vaadin-grid-column-group header="groupA">
+          <vaadin-grid-column-group header="group1">
+            <vaadin-grid-column><template class="header">Col 0</template></vaadin-grid-column>
+            <vaadin-grid-column><template class="header">Col 1</template></vaadin-grid-column>
+          </vaadin-grid-column-group>
+          <vaadin-grid-column-group header="group2">
+            <vaadin-grid-column><template class="header">Col 2</template></vaadin-grid-column>
+            <vaadin-grid-column><template class="header">Col 3</template></vaadin-grid-column>
+          </vaadin-grid-column-group>
+    
+          <vaadin-grid-column-group header="group3">
+            <vaadin-grid-column><template class="header">Col 4</template></vaadin-grid-column>
+            <vaadin-grid-column><template class="header">Col 5</template></vaadin-grid-column>
+          </vaadin-grid-column-group>
+          <vaadin-grid-column-group header="group4">
+            <vaadin-grid-column><template class="header">Col 6</template></vaadin-grid-column>
+            <vaadin-grid-column><template class="header">Col 7</template></vaadin-grid-column>
+          </vaadin-grid-column-group>
+    
+          <vaadin-grid-column-group header="group5">
+            <vaadin-grid-column><template class="header">Col 8</template></vaadin-grid-column>
+            <vaadin-grid-column><template class="header">Col 9</template></vaadin-grid-column>
+          </vaadin-grid-column-group>
+          <vaadin-grid-column-group header="group6">
+            <vaadin-grid-column><template class="header">Col 10</template></vaadin-grid-column>
+            <vaadin-grid-column><template class="header">Col 11</template></vaadin-grid-column>
+          </vaadin-grid-column-group>
+    
+          <vaadin-grid-column-group header="group7">
+            <vaadin-grid-column><template class="header">Col 12</template></vaadin-grid-column>
+            <vaadin-grid-column><template class="header">Col 13</template></vaadin-grid-column>
+          </vaadin-grid-column-group>
+          <vaadin-grid-column-group header="group8">
+            <vaadin-grid-column><template class="header">Col 14</template></vaadin-grid-column>
+            <vaadin-grid-column><template class="header">Col 15</template></vaadin-grid-column>
+          </vaadin-grid-column-group>
+    
+          <vaadin-grid-column-group header="group9">
+            <vaadin-grid-column><template class="header">Col 16</template></vaadin-grid-column>
+            <vaadin-grid-column><template class="header">Col 17</template></vaadin-grid-column>
+          </vaadin-grid-column-group>
+          <vaadin-grid-column-group header="group10">
+            <vaadin-grid-column><template class="header">Col 18</template></vaadin-grid-column>
+            <vaadin-grid-column id="col19"><template class="header">Col 19</template></vaadin-grid-column>
+          </vaadin-grid-column-group>
+    
+          <vaadin-grid-column-group header="group11">
+            <vaadin-grid-column id="col20"><template class="header">Col 20</template></vaadin-grid-column>
+            <vaadin-grid-column id="col21"><template class="header">Col 21</template></vaadin-grid-column>
+          </vaadin-grid-column-group>
+          <vaadin-grid-column-group header="group12">
+            <vaadin-grid-column id="col22"><template class="header">Col 22</template></vaadin-grid-column>
+            <vaadin-grid-column id="col23"><template class="header">Col 23</template></vaadin-grid-column>
+          </vaadin-grid-column-group>
+        </vaadin-grid-column-group>
+      </vaadin-grid>
+      `);
+    });
+
+    it('should correctley set column order', async () => {
+      let col19 = grid.querySelector('#col19');
+      let col20 = grid.querySelector('#col20');
+      await nextFrame();
+      expect(col19._order).to.be.lessThan(col20._order);
+    });
+  });
 });

@@ -156,7 +156,9 @@ class GridColumnGroupElement extends ColumnBaseMixin(PolymerElement) {
 
       // In an unlikely situation where a group has more than 9 child columns,
       // the child scope must have 1 digit less...
-      const childCountDigits = ~~(Math.log(rootColumns.length) / Math.log(Math.LN10)) + 1;
+      // Log^a_b = Ln(a)/Ln(b)
+      // Number of digits of a number is equal to floor(Log(number)_10) + 1
+      const childCountDigits = ~~(Math.log(rootColumns.length) / Math.LN10) + 1;
 
       // Final scope for the child columns needs to mind both factors.
       const scope = Math.pow(10, trailingZeros - childCountDigits);
@@ -165,7 +167,17 @@ class GridColumnGroupElement extends ColumnBaseMixin(PolymerElement) {
         _rootColumns.sort((a, b) => a._order - b._order);
       }
 
-      _rootColumns.forEach((column, index) => (column._order = order + (index + 1) * scope));
+      let c = 0;
+      _rootColumns.forEach((column, _) => {
+        // avoid multiples of 10 because they introduce and extra zero and
+        // causes the underlying calculations for child order goes wrong
+
+        if (c !== 0 && c % 9 === 0) {
+          c++;
+        }
+        column._order = order + (c + 1) * scope;
+        c++;
+      });
     }
   }
 

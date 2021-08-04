@@ -275,7 +275,17 @@ export const ColumnReorderingMixin = (superClass) =>
       // Reset all column orders
       columnTree[0].forEach((column) => (column._order = 0));
       // Set order numbers to top-level columns
-      columnTree[0].forEach((column, index) => (column._order = (index + 1) * this._orderBaseScope));
+      let c = 0;
+      columnTree[0].forEach((column, _) => {
+        // avoid multiples of 10 because they introduce and extra zero and
+        // causes the underlying calculations for child order goes wrong
+
+        if (c > 0 && c % 9 === 0) {
+          c++;
+        }
+        column._order = (c + 1) * this._orderBaseScope;
+        c++;
+      });
     }
 
     /**
