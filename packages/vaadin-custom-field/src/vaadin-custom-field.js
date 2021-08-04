@@ -107,7 +107,7 @@ class CustomFieldElement extends ElementMixin(CustomFieldMixin(ThemableMixin(Pol
     return 'vaadin-custom-field';
   }
   static get version() {
-    return '22.0.0-alpha0';
+    return '22.0.0-alpha1';
   }
 
   static get properties() {

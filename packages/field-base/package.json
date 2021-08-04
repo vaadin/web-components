@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/field-base",
-  "version": "22.0.0-alpha0",
+  "version": "22.0.0-alpha1",
   "description": "Vaadin field base mixins",
   "main": "index.js",
   "module": "index.js",
