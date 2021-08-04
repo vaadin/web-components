@@ -7,6 +7,7 @@ import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { microTask } from '@polymer/polymer/lib/utils/async.js';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { ColumnBaseMixin } from './vaadin-grid-column.js';
+import { updateColumnOrders } from './vaadin-grid-helper.js';
 
 /**
  * A `<vaadin-grid-column-group>` is used to make groups of columns in `<vaadin-grid>` and
@@ -166,18 +167,7 @@ class GridColumnGroupElement extends ColumnBaseMixin(PolymerElement) {
       if (_rootColumns[0] && _rootColumns[0]._order) {
         _rootColumns.sort((a, b) => a._order - b._order);
       }
-
-      let c = 0;
-      _rootColumns.forEach((column, _) => {
-        // avoid multiples of 10 because they introduce and extra zero and
-        // causes the underlying calculations for child order goes wrong
-
-        if (c !== 0 && c % 9 === 0) {
-          c++;
-        }
-        column._order = order + (c + 1) * scope;
-        c++;
-      });
+      updateColumnOrders(_rootColumns, scope, order);
     }
   }
 
