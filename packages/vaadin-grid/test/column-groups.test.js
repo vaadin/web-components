@@ -440,4 +440,63 @@ describe('column groups', () => {
       expect(columns[1].hidden).not.to.be.true;
     });
   });
+
+  describe('Large nested groups', () => {
+    let grid;
+
+    beforeEach(() => {
+      grid = fixtureSync(`
+        <vaadin-grid>
+          <vaadin-grid-column-group header="groupA">
+            ${Array.from(Array(13).keys())
+              .slice(1)
+              .map((group) => {
+                const col = (group - 1) * 2;
+                return `
+                  <vaadin-grid-column-group header="group${group - 1}">
+                    <vaadin-grid-column id="col${col}" header="Col ${col}"></vaadin-grid-column>
+                    <vaadin-grid-column id="col${col + 1}" header="Col ${col + 1}"></vaadin-grid-column>
+                  </vaadin-grid-column-group>
+                `;
+              })
+              .join('')}
+          </vaadin-grid-column-group>
+        </vaadin-grid>
+      `);
+    });
+
+    it('should correctly set column order', async () => {
+      let col19 = grid.querySelector('#col19');
+      let col20 = grid.querySelector('#col20');
+      await nextFrame();
+      expect(col19._order).to.be.lessThan(col20._order);
+    });
+  });
+
+  describe('More than 100 columns', () => {
+    let grid;
+
+    beforeEach(() => {
+      grid = fixtureSync(`
+        <vaadin-grid>
+          ${Array.from(Array(101).keys())
+            .map(
+              (col) => `
+              <vaadin-grid-column-group>
+                <vaadin-grid-column id="col${col}" header="Col ${col}"></vaadin-grid-column>
+              </vaadin-grid-column-group>
+              `
+            )
+            .join('')}
+        </vaadin-grid>
+      `);
+    });
+
+    it('should correctly set column order when we have more than 100 columns', async () => {
+      let col99 = grid.querySelector('#col99');
+      let col100 = grid.querySelector('#col100');
+      await nextFrame();
+      expect(col99._order).to.be.lessThan(col100._order);
+    });
+  });
 });
