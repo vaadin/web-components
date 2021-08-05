@@ -5,7 +5,7 @@
  */
 import { GestureEventListeners } from '@polymer/polymer/lib/mixins/gesture-event-listeners.js';
 import { addListener } from '@polymer/polymer/lib/utils/gestures.js';
-import { updateColumnOrders } from './vaadin-grid-helper.js';
+import { updateColumnOrders } from './vaadin-grid-helpers.js';
 
 /**
  * @polymerMixin

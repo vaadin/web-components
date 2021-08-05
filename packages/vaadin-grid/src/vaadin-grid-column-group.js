@@ -7,7 +7,7 @@ import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { microTask } from '@polymer/polymer/lib/utils/async.js';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { ColumnBaseMixin } from './vaadin-grid-column.js';
-import { updateColumnOrders } from './vaadin-grid-helper.js';
+import { updateColumnOrders } from './vaadin-grid-helpers.js';
 
 /**
  * A `<vaadin-grid-column-group>` is used to make groups of columns in `<vaadin-grid>` and
