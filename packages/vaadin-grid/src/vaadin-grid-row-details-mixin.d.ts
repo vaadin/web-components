@@ -12,7 +12,7 @@ interface RowDetailsMixin<TItem> {
   /**
    * An array containing references to items with open row details.
    */
-  detailsOpenedItems: Array<TItem | null> | null | undefined;
+  detailsOpenedItems: Array<TItem>;
 
   /**
    * Custom function for rendering the content of the row details.

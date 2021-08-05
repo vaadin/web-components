@@ -13,7 +13,7 @@ export const SelectionMixin = (superClass) =>
       return {
         /**
          * An array that contains the selected items.
-         * @type {Array<GridItem>}
+         * @type {!Array<!GridItem>}
          */
         selectedItems: {
           type: Object,
