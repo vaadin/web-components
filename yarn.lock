@@ -231,7 +231,7 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@esm-bundle/chai@^4.3.4":
+"@esm-bundle/chai@^4.1.5", "@esm-bundle/chai@^4.3.4":
   version "4.3.4"
   resolved "https://registry.yarnpkg.com/@esm-bundle/chai/-/chai-4.3.4.tgz#74ed4a0794b3a9f9517ff235744ac6f4be0d34dc"
   integrity sha512-6Tx35wWiNw7X0nLY9RMx8v3EL8SacCFW+eEZOE9Hc+XxmU5HFE2AFEg+GehUZpiyDGwVvPH75ckGlqC7coIPnA==
