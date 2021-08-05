@@ -84,4 +84,43 @@ describe('text-field', () => {
     element.appendChild(span);
     await visualDiff(div, `${import.meta.url}_suffix`);
   });
+
+  describe('RTL', () => {
+    before(() => {
+      document.documentElement.setAttribute('dir', 'rtl');
+    });
+
+    after(() => {
+      document.documentElement.removeAttribute('dir');
+    });
+
+    it('RTL label', async () => {
+      element.label = 'نام کالا';
+      await visualDiff(div, `${import.meta.url}_rtl-label`);
+    });
+
+    it('RTL prefix', async () => {
+      const span = document.createElement('span');
+      span.setAttribute('slot', 'prefix');
+      span.textContent = 'قیمت';
+      element.appendChild(span);
+      await visualDiff(div, `${import.meta.url}_rtl-prefix`);
+    });
+
+    it('RTL suffix', async () => {
+      const span = document.createElement('span');
+      span.setAttribute('slot', 'suffix');
+      span.textContent = 'تومان';
+      element.appendChild(span);
+      await visualDiff(div, `${import.meta.url}_rtl-suffix`);
+    });
+
+    it('RTL error message', async () => {
+      element.label = 'نام کالا';
+      element.errorMessage = 'خطا';
+      element.required = true;
+      element.validate();
+      await visualDiff(div, `${import.meta.url}_rtl-error-message`);
+    });
+  });
 });
