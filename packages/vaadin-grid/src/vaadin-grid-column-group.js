@@ -7,6 +7,7 @@ import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { microTask } from '@polymer/polymer/lib/utils/async.js';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { ColumnBaseMixin } from './vaadin-grid-column.js';
+import { updateColumnOrders } from './vaadin-grid-helpers.js';
 
 /**
  * A `<vaadin-grid-column-group>` is used to make groups of columns in `<vaadin-grid>` and
@@ -151,7 +152,9 @@ class GridColumnGroupElement extends ColumnBaseMixin(PolymerElement) {
 
       // In an unlikely situation where a group has more than 9 child columns,
       // the child scope must have 1 digit less...
-      const childCountDigits = ~~(Math.log(rootColumns.length) / Math.log(Math.LN10)) + 1;
+      // Log^a_b = Ln(a)/Ln(b)
+      // Number of digits of a number is equal to floor(Log(number)_10) + 1
+      const childCountDigits = ~~(Math.log(rootColumns.length) / Math.LN10) + 1;
 
       // Final scope for the child columns needs to mind both factors.
       const scope = Math.pow(10, trailingZeros - childCountDigits);
@@ -159,8 +162,7 @@ class GridColumnGroupElement extends ColumnBaseMixin(PolymerElement) {
       if (_rootColumns[0] && _rootColumns[0]._order) {
         _rootColumns.sort((a, b) => a._order - b._order);
       }
-
-      _rootColumns.forEach((column, index) => (column._order = order + (index + 1) * scope));
+      updateColumnOrders(_rootColumns, scope, order);
     }
   }
 
