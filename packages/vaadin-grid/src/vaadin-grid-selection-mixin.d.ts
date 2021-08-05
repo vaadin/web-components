@@ -10,7 +10,7 @@ interface SelectionMixin<TItem> {
   /**
    * An array that contains the selected items.
    */
-  selectedItems: Array<TItem | null> | null;
+  selectedItems: Array<TItem>;
 
   _isSelected(item: TItem): boolean;
 
