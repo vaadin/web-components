@@ -62,11 +62,6 @@ declare class CustomField extends FieldAriaMixin(LabelMixin(FocusMixin(ThemableM
   value: string | null | undefined;
 
   /**
-   * * Returns true if field is valid, and sets `invalid` based on the field validity.
-   */
-  validate(): boolean;
-
-  /**
    * Returns true if the current inputs values satisfy all constraints (if any).
    */
   checkValidity(): boolean;
