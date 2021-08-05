@@ -5,6 +5,7 @@
  */
 import { GestureEventListeners } from '@polymer/polymer/lib/mixins/gesture-event-listeners.js';
 import { addListener } from '@polymer/polymer/lib/utils/gestures.js';
+import { updateColumnOrders } from './vaadin-grid-helpers.js';
 
 /**
  * @polymerMixin
@@ -275,7 +276,7 @@ export const ColumnReorderingMixin = (superClass) =>
       // Reset all column orders
       columnTree[0].forEach((column) => (column._order = 0));
       // Set order numbers to top-level columns
-      columnTree[0].forEach((column, index) => (column._order = (index + 1) * this._orderBaseScope));
+      updateColumnOrders(columnTree[0], this._orderBaseScope, 0);
     }
 
     /**
