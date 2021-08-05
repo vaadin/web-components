@@ -128,6 +128,9 @@ narrowedGrid.addEventListener('grid-drop', (event) => {
   assertType<GridDropLocation>(event.detail.dropLocation);
 });
 
+assertType<TestGridItem[]>(narrowedGrid.selectedItems);
+assertType<TestGridItem[]>(narrowedGrid.detailsOpenedItems);
+
 /* GridColumnElement */
 const genericColumn = document.createElement('vaadin-grid-column');
 assertType<GridColumnElement>(genericColumn);
