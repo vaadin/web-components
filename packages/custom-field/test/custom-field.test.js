@@ -31,9 +31,8 @@ describe('custom field', () => {
     });
 
     it('should focus the first input on focus()', () => {
-      const spy = sinon.spy(customField.inputs[0], 'focus');
       customField.focus();
-      expect(spy.calledOnce).to.be.true;
+      expect(document.activeElement).to.equal(customField.inputs[0]);
     });
   });
 
@@ -128,12 +127,12 @@ describe('custom field', () => {
     });
   });
 
-  describe('invalid', () => {
+  describe('required', () => {
     beforeEach(() => {
       customField.required = true;
     });
 
-    it('should be false by default', () => {
+    it('should set invalid to false by default', () => {
       expect(customField.invalid).to.be.false;
     });
 
@@ -236,13 +235,21 @@ describe('custom field', () => {
       expect(customField.value).to.be.equal('2 2');
     });
 
-    it('should warn if custom parser has not returned array of values', () => {
-      customField.set('i18n.parseValue', () => {
-        return;
+    describe('incorrect parser', () => {
+      beforeEach(() => {
+        sinon.stub(console, 'warn');
       });
-      sinon.stub(console, 'warn');
-      customField.value = 'foo';
-      expect(console.warn.callCount).to.equal(1);
+
+      afterEach(() => {
+        console.warn.restore();
+      });
+
+      it('should warn if custom parser has not returned array of values', () => {
+        customField.set('i18n.parseValue', () => '');
+
+        customField.value = 'foo';
+        expect(console.warn.callCount).to.equal(1);
+      });
     });
   });
 });

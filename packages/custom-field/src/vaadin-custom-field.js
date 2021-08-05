@@ -146,7 +146,10 @@ class CustomField extends FieldAriaMixin(LabelMixin(FocusMixin(ThemableMixin(Ele
     };
   }
 
-  /** @protected */
+  /**
+   * Attribute used by `FieldAriaMixin` to set accessible name.
+   * @protected
+   */
   get _ariaAttr() {
     return 'aria-labelledby';
   }
@@ -190,6 +193,7 @@ class CustomField extends FieldAriaMixin(LabelMixin(FocusMixin(ThemableMixin(Ele
   }
 
   /**
+   * Override method inherited from `FocusMixin` to validate on blur.
    * @param {boolean} focused
    * @protected
    */
@@ -202,13 +206,15 @@ class CustomField extends FieldAriaMixin(LabelMixin(FocusMixin(ThemableMixin(Ele
   }
 
   /**
+   * Override method inherited from `FocusMixin` to not remove focused
+   * state when focus moves to another input in the custom field.
    * @param {FocusEvent} event
    * @return {boolean}
    * @protected
    */
   _shouldRemoveFocus(event) {
     const { relatedTarget } = event;
-    return !this.inputs.some((el) => (el.focusElement ? relatedTarget === el.focusElement : relatedTarget === el));
+    return !this.inputs.some((el) => relatedTarget === (el.focusElement || el));
   }
 
   /**
