@@ -314,11 +314,7 @@ class CustomField extends FieldAriaMixin(LabelMixin(FocusMixin(ThemableMixin(Ele
 
   /** @private */
   __toggleHasValue(value) {
-    if (value !== null && value.trim() !== '') {
-      this.setAttribute('has-value', '');
-    } else {
-      this.removeAttribute('has-value');
-    }
+    this.toggleAttribute('has-value', value !== null && value.trim() !== '');
   }
 
   /** @private */
