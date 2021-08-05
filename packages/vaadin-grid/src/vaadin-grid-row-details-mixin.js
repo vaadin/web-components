@@ -13,7 +13,7 @@ export const RowDetailsMixin = (superClass) =>
       return {
         /**
          * An array containing references to items with open row details.
-         * @type {Array<GridItem> | null | undefined}
+         * @type {!Array<!GridItem>}
          */
         detailsOpenedItems: {
           type: Array,
