@@ -53,15 +53,6 @@ registerStyles(
       transition: color 0.2s;
     }
 
-    [part='input-field'] ::slotted(:is(input, textarea)) {
-      cursor: inherit;
-      min-height: var(--lumo-text-field-size);
-      padding: 0 0.25em;
-      --_lumo-text-field-overflow-mask-image: linear-gradient(to left, transparent, #000 1.25em);
-      -webkit-mask-image: var(--_lumo-text-field-overflow-mask-image);
-      mask-image: var(--_lumo-text-field-overflow-mask-image);
-    }
-
     :host([focused]) [part='input-field'] ::slotted(:is(input, textarea)) {
       -webkit-mask-image: none;
       mask-image: none;
@@ -71,33 +62,6 @@ registerStyles(
       color: inherit;
       transition: opacity 0.175s 0.1s;
       opacity: 0.5;
-    }
-
-    [part='input-field'] {
-      border-radius: var(--lumo-border-radius-m);
-      background-color: var(--lumo-contrast-10pct);
-      padding: 0 calc(0.375em + var(--lumo-border-radius-m) / 4 - 1px);
-      font-weight: 500;
-      line-height: 1;
-      position: relative;
-      cursor: text;
-      box-sizing: border-box;
-    }
-
-    /* Used for hover and activation effects */
-    [part='input-field']::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      border-radius: inherit;
-      pointer-events: none;
-      background-color: var(--lumo-contrast-50pct);
-      opacity: 0;
-      transition: transform 0.15s, opacity 0.2s;
-      transform-origin: 100% 0;
     }
 
     /* Hover */
@@ -142,26 +106,9 @@ registerStyles(
       opacity: 0;
     }
 
-    /* Read-only */
-    :host([readonly]) [part='input-field'] {
-      color: var(--lumo-secondary-text-color);
-      background-color: transparent;
-      cursor: default;
-    }
-
-    :host([readonly]) [part='input-field']::after {
-      background-color: transparent;
-      opacity: 1;
-      border: 1px dashed var(--lumo-contrast-30pct);
-    }
-
     /* Disabled style */
     :host([disabled]) {
       pointer-events: none;
-    }
-
-    :host([disabled]) [part='input-field'] {
-      background-color: var(--lumo-contrast-5pct);
     }
 
     :host([disabled]) [part='label'],
@@ -172,14 +119,6 @@ registerStyles(
     }
 
     /* Invalid style */
-    :host([invalid]) [part='input-field'] {
-      background-color: var(--lumo-error-color-10pct);
-    }
-
-    :host([invalid]) [part='input-field']::after {
-      background-color: var(--lumo-error-color-50pct);
-    }
-
     :host([invalid][focus-ring]) [part='input-field'] {
       box-shadow: 0 0 0 2px var(--lumo-error-color-50pct);
     }
@@ -234,19 +173,6 @@ registerStyles(
     [part='input-field'] ::slotted(:not(vaadin-icon):not(input):not(textarea)) {
       color: var(--lumo-secondary-text-color);
       font-weight: 400;
-    }
-
-    /* Slotted icons */
-    [part='input-field'] ::slotted(vaadin-icon) {
-      color: var(--lumo-contrast-60pct);
-      width: var(--lumo-icon-size-m);
-      height: var(--lumo-icon-size-m);
-    }
-
-    /* Vaadin icons are based on a 16x16 grid (unlike Lumo and Material icons with 24x24), so they look too big by default */
-    [part='input-field'] ::slotted(vaadin-icon[icon^='vaadin:']) {
-      padding: 0.25em;
-      box-sizing: border-box !important;
     }
 
     [part='clear-button']::before {
