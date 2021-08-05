@@ -446,22 +446,22 @@ describe('column groups', () => {
 
     beforeEach(() => {
       grid = fixtureSync(`
-      <vaadin-grid>
-        <vaadin-grid-column-group header="groupA">
-          ${Array.from(Array(13).keys())
-            .slice(1)
-            .map((group) => {
-              const col = (group - 1) * 2;
-              return `
-                <vaadin-grid-column-group header="group${group - 1}">
-                  <vaadin-grid-column id="col${col}" header="Col ${col}"></vaadin-grid-column>
-                  <vaadin-grid-column id="col${col + 1}" header="Col ${col + 1}"></vaadin-grid-column>
-                </vaadin-grid-column-group>
-              `;
-            })
-            .join('')}
-        </vaadin-grid-column-group>
-      </vaadin-grid>
+        <vaadin-grid>
+          <vaadin-grid-column-group header="groupA">
+            ${Array.from(Array(13).keys())
+              .slice(1)
+              .map((group) => {
+                const col = (group - 1) * 2;
+                return `
+                  <vaadin-grid-column-group header="group${group - 1}">
+                    <vaadin-grid-column id="col${col}" header="Col ${col}"></vaadin-grid-column>
+                    <vaadin-grid-column id="col${col + 1}" header="Col ${col + 1}"></vaadin-grid-column>
+                  </vaadin-grid-column-group>
+                `;
+              })
+              .join('')}
+          </vaadin-grid-column-group>
+        </vaadin-grid>
       `);
     });
 
@@ -478,17 +478,17 @@ describe('column groups', () => {
 
     beforeEach(() => {
       grid = fixtureSync(`
-      <vaadin-grid>
-        ${Array.from(Array(101).keys())
-          .map(
-            (col) => `
-            <vaadin-grid-column-group>
-              <vaadin-grid-column id="col${col}" header="Col ${col}"></vaadin-grid-column>
-            </vaadin-grid-column-group>
-            `
-          )
-          .join('')}
-      </vaadin-grid>
+        <vaadin-grid>
+          ${Array.from(Array(101).keys())
+            .map(
+              (col) => `
+              <vaadin-grid-column-group>
+                <vaadin-grid-column id="col${col}" header="Col ${col}"></vaadin-grid-column>
+              </vaadin-grid-column-group>
+              `
+            )
+            .join('')}
+        </vaadin-grid>
       `);
     });
 
