@@ -17,7 +17,7 @@ class CustomField extends FieldAriaMixin(LabelMixin(FocusMixin(ThemableMixin(Ele
   }
 
   static get version() {
-    return '22.0.0-alpha0';
+    return '22.0.0-alpha1';
   }
 
   static get template() {
