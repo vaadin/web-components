@@ -448,54 +448,18 @@ describe('column groups', () => {
       grid = fixtureSync(`
       <vaadin-grid>
         <vaadin-grid-column-group header="groupA">
-          <vaadin-grid-column-group header="group1">
-            <vaadin-grid-column header="Col 0"></vaadin-grid-column>
-            <vaadin-grid-column header="Col 1"></vaadin-grid-column>
-          </vaadin-grid-column-group>
-          <vaadin-grid-column-group header="group2">
-            <vaadin-grid-column header="Col 2"></vaadin-grid-column>
-            <vaadin-grid-column header="Col 3"></vaadin-grid-column>
-          </vaadin-grid-column-group>
-          <vaadin-grid-column-group header="group3">
-            <vaadin-grid-column header="Col 4"></vaadin-grid-column>
-            <vaadin-grid-column header="Col 5"></vaadin-grid-column>
-          </vaadin-grid-column-group>
-          <vaadin-grid-column-group header="group4">
-            <vaadin-grid-column header="Col 6"></vaadin-grid-column>
-            <vaadin-grid-column header="Col 7"></vaadin-grid-column>
-          </vaadin-grid-column-group>
-          <vaadin-grid-column-group header="group5">
-            <vaadin-grid-column header="Col 8"></vaadin-grid-column>
-            <vaadin-grid-column header="Col 9"></vaadin-grid-column>
-          </vaadin-grid-column-group>
-          <vaadin-grid-column-group header="group6">
-            <vaadin-grid-column header="Col 10"></vaadin-grid-column>
-            <vaadin-grid-column header="Col 11"></vaadin-grid-column>
-          </vaadin-grid-column-group>
-          <vaadin-grid-column-group header="group7">
-            <vaadin-grid-column header="Col 12"></vaadin-grid-column>
-            <vaadin-grid-column header="Col 13"></vaadin-grid-column>
-          </vaadin-grid-column-group>
-          <vaadin-grid-column-group header="group8">
-            <vaadin-grid-column header="Col 14"></vaadin-grid-column>
-            <vaadin-grid-column header="Col 15"></vaadin-grid-column>
-          </vaadin-grid-column-group>
-          <vaadin-grid-column-group header="group9">
-            <vaadin-grid-column header="Col 16"></vaadin-grid-column>
-            <vaadin-grid-column header="Col 17"></vaadin-grid-column>
-          </vaadin-grid-column-group>
-          <vaadin-grid-column-group header="group10">
-            <vaadin-grid-column header="Col 18"></vaadin-grid-column>
-            <vaadin-grid-column id="col19" header="Col 19"></vaadin-grid-column>
-          </vaadin-grid-column-group>
-          <vaadin-grid-column-group header="group11">
-            <vaadin-grid-column id="col20" header="Col 20"></vaadin-grid-column>
-            <vaadin-grid-column id="col21" header="Col 21"></vaadin-grid-column>
-          </vaadin-grid-column-group>
-          <vaadin-grid-column-group header="group12">
-            <vaadin-grid-column id="col22" header="Col 22"></vaadin-grid-column>
-            <vaadin-grid-column id="col23" header="Col 23"></vaadin-grid-column>
-          </vaadin-grid-column-group>
+          ${Array.from(Array(13).keys())
+            .slice(1)
+            .map((group) => {
+              const col = (group - 1) * 2;
+              return `
+                <vaadin-grid-column-group header="group${group - 1}">
+                  <vaadin-grid-column id="col${col}" header="Col ${col}"></vaadin-grid-column>
+                  <vaadin-grid-column id="col${col + 1}" header="Col ${col + 1}"></vaadin-grid-column>
+                </vaadin-grid-column-group>
+              `;
+            })
+            .join('')}
         </vaadin-grid-column-group>
       </vaadin-grid>
       `);
@@ -507,315 +471,28 @@ describe('column groups', () => {
       await nextFrame();
       expect(col19._order).to.be.lessThan(col20._order);
     });
+  });
 
-    it('should correctly set column order when we have more than 100 columns', async () => {
-      let grid = fixtureSync(`
+  describe('More than 100 columns', () => {
+    let grid;
+
+    beforeEach(() => {
+      grid = fixtureSync(`
       <vaadin-grid>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 0"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 1"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 2"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 3"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 4"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 5"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 6"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 7"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 8"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 9"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 10"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 11"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 12"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 13"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 14"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 15"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 16"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 17"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 18"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 19"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 20"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column header="Col 21"></vaadin-grid-column>
-          </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 22"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 23"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 24"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 25"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 26"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 27"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 28"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 29"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 30"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 31"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 32"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 33"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 34"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 35"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 36"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 37"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 38"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 39"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 40"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 41"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 42"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 43"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 44"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 45"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 46"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 47"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 48"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 49"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 50"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 51"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 52"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 53"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 54"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 55"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 56"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 57"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 58"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 59"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 60"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 61"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 62"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 63"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 64"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 65"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 66"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 67"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 68"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 69"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 70"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 71"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 72"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 73"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 74"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 75"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 76"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 77"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 78"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 79"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 80"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 81"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 82"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 83"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 84"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 85"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 86"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 87"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 88"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 89"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 90"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 91"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 92"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 93"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 94"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 95"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 96"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 97"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 98"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column id="col99" header="Col 99"></vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column id="col100" header="Col 100"></vaadin-grid-column>
-        </vaadin-grid-column-group>        
-        <vaadin-grid-column-group>
-          <vaadin-grid-column header="Col 101"></vaadin-grid-column>
-        </vaadin-grid-column-group>
+        ${Array.from(Array(101).keys())
+          .map(
+            (col) => `
+            <vaadin-grid-column-group>
+              <vaadin-grid-column id="col${col}" header="Col ${col}"></vaadin-grid-column>
+            </vaadin-grid-column-group>
+            `
+          )
+          .join('')}
       </vaadin-grid>
       `);
+    });
 
+    it('should correctly set column order when we have more than 100 columns', async () => {
       let col99 = grid.querySelector('#col99');
       let col100 = grid.querySelector('#col100');
       await nextFrame();
