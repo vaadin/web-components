@@ -118,49 +118,40 @@ describe('text-area', () => {
     });
 
     describe('binding', () => {
-      it('default value should be empty string', () => {
+      it('should set default value to empty string', () => {
         expect(textArea.value).to.be.equal('');
       });
 
-      it('setting textarea value updates value', () => {
+      it('should update value on native textarea input', () => {
         native.value = 'foo';
         native.dispatchEvent(new Event('input', { bubbles: true, cancelable: true, composed: true }));
         expect(textArea.value).to.be.equal('foo');
       });
 
-      it('setting native value updates has-value attribute', () => {
+      it('should update has-value attribute when value is set', () => {
         textArea.value = 'foo';
         expect(textArea.hasAttribute('has-value')).to.be.true;
       });
 
-      it('setting value to undefined should not update has-value attribute', () => {
+      it('should not update has-value attribute when value is set to undefined', () => {
         textArea.value = undefined;
         expect(textArea.hasAttribute('has-value')).to.be.false;
       });
 
-      it('setting empty value does not update has-value attribute', () => {
+      it('should not update has-value attribute when value is set to empty string', () => {
         textArea.value = '';
         expect(textArea.hasAttribute('has-value')).to.be.false;
       });
 
       // User could accidentally set a 0 or false value
-      it('setting number value updates has-value attribute', () => {
+      it('should update has-value attribute when numeric value is set', () => {
         textArea.value = 0;
         expect(textArea.hasAttribute('has-value')).to.be.true;
       });
 
-      it('setting boolean value updates has-value attribute', () => {
+      it('should update has-value attribute when boolean value is set', () => {
         textArea.value = false;
         expect(textArea.hasAttribute('has-value')).to.be.true;
-      });
-    });
-
-    describe('label', () => {
-      it('should not update focused property on click if disabled', () => {
-        textArea.disabled = true;
-        const label = textArea.shadowRoot.querySelector('[part="label"]');
-        label.click();
-        expect(textArea.getAttribute('focused')).to.be.null;
       });
     });
   });

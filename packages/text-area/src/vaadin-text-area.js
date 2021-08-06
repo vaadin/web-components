@@ -152,12 +152,18 @@ export class TextArea extends TextFieldMixin(ThemableMixin(ElementMixin(PolymerE
     };
   }
 
-  /** @protected */
+  /**
+   * Used by `ClearButtonMixin` as a reference to the clear button element.
+   * @protected
+   */
   get clearElement() {
     return this.$.clearButton;
   }
 
-  /** @protected */
+  /**
+   * Override getter provided by `InputMixin` to use a different slot.
+   * @protected
+   */
   get _inputNode() {
     return this._getDirectSlotChild('textarea');
   }
