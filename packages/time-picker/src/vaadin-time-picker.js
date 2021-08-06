@@ -32,6 +32,16 @@ class TimePicker extends PatternMixin(
   static get template() {
     return html`
       <style include="vaadin-input-field-shared-styles">
+        /* See https://github.com/vaadin/vaadin-time-picker/issues/145 */
+        :host([dir='rtl']) [part='input-field'] {
+          direction: ltr;
+        }
+
+        :host([dir='rtl']) [part='input-field'] ::slotted(input)::placeholder {
+          direction: rtl;
+          text-align: left;
+        }
+
         [part~='toggle-button'] {
           cursor: pointer;
         }
