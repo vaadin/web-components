@@ -406,10 +406,10 @@ export class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(Poly
    * @protected
    */
   _onKeyDown(event) {
-    if (event.keyCode == 38) {
+    if (event.key === 'ArrowUp') {
       event.preventDefault();
       this._increaseValue();
-    } else if (event.keyCode == 40) {
+    } else if (event.key === 'ArrowDown') {
       event.preventDefault();
       this._decreaseValue();
     }
