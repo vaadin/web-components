@@ -133,7 +133,7 @@ that are natively supported by modern browsers.
 
 ## Documentation
 
-Check out our [design system documentation](https://vaadin.com/docs-beta/latest/ds/overview/).
+Check out our [design system documentation](https://vaadin.com/docs/latest/ds/overview).
 
 ## Examples
 
@@ -145,7 +145,7 @@ For help and support questions, please use our [community chat](https://vaad.in/
 
 ## Contributing
 
-Read the [contributing guide](https://vaadin.com/docs-beta/latest/guide/contributing/overview/) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
+Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
 
 ## Development
 
