@@ -178,6 +178,9 @@ export class PasswordField extends TextField {
     // Cancel the following click event
     e.preventDefault();
     this._togglePasswordVisibility();
+    // Focus the input to avoid problem with password still visible
+    // when user clicks the reveal button and then clicks outside.
+    this._inputNode.focus();
   }
 
   /** @private */

@@ -1,4 +1,5 @@
 import { expect } from '@esm-bundle/chai';
+import sinon from 'sinon';
 import { fixtureSync, focusin, focusout, tabKeyDown } from '@vaadin/testing-helpers';
 import { PasswordField } from '../src/vaadin-password-field.js';
 
@@ -78,6 +79,15 @@ describe('password-field', () => {
     revealButton.dispatchEvent(e);
     expect(e.defaultPrevented).to.be.true;
     expect(input.type).to.equal('password');
+  });
+
+  it('should focus the input on reveal button touchend', () => {
+    const spy = sinon.spy(input, 'focus');
+
+    const e = new CustomEvent('touchend', { cancelable: true });
+    revealButton.dispatchEvent(e);
+
+    expect(spy.calledOnce).to.be.true;
   });
 
   it('should set aria-pressed attribute on reveal button to false', () => {
