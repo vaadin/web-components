@@ -87,7 +87,7 @@ describe('number-field', () => {
       expect(increaseButton.hidden).to.be.false;
     });
 
-    it('should increase value by 1 when increaseButton is clicked', () => {
+    it('should increase value by 1 on plus button click', () => {
       numberField.value = 0;
 
       increaseButton.click();
@@ -95,24 +95,36 @@ describe('number-field', () => {
       expect(numberField.value).to.be.equal('1');
     });
 
-    it('should dispatch change event when a button is clicked', () => {
+    it('should dispatch change event on minus button click', () => {
+      const changeSpy = sinon.spy();
+      numberField.addEventListener('change', changeSpy);
+
+      decreaseButton.click();
+      expect(changeSpy.callCount).to.equal(1);
+    });
+
+    it('should dispatch change event on plus button click', () => {
       const changeSpy = sinon.spy();
       numberField.addEventListener('change', changeSpy);
 
       increaseButton.click();
       expect(changeSpy.callCount).to.equal(1);
-      decreaseButton.click();
-      expect(changeSpy.callCount).to.equal(2);
     });
 
-    it('should dispatch single value-changed event when button is clicked', () => {
+    it('should dispatch single value-changed event on minus button click', () => {
+      const spy = sinon.spy();
+      numberField.addEventListener('value-changed', spy);
+
+      decreaseButton.click();
+      expect(spy.callCount).to.equal(1);
+    });
+
+    it('should dispatch single value-changed event on plus button click', () => {
       const spy = sinon.spy();
       numberField.addEventListener('value-changed', spy);
 
       increaseButton.click();
       expect(spy.callCount).to.equal(1);
-      decreaseButton.click();
-      expect(spy.callCount).to.equal(2);
     });
 
     it('should not focus input when a button is clicked', () => {
@@ -121,7 +133,7 @@ describe('number-field', () => {
       expect(spy.called).to.be.false;
     });
 
-    it('should increase value by 0.2 when step is 0.2 and increaseButton is clicked', () => {
+    it('should increase value by 0.2 when step is 0.2 on plus button click', () => {
       numberField.step = 0.2;
       numberField.value = 0.6;
 
@@ -130,7 +142,7 @@ describe('number-field', () => {
       expect(numberField.value).to.be.equal('0.8');
     });
 
-    it('should adjust value to exact step when increaseButton is clicked', () => {
+    it('should adjust value to exact step on plus button click', () => {
       numberField.step = 0.2;
       numberField.value = 0.5;
 
@@ -139,7 +151,7 @@ describe('number-field', () => {
       expect(numberField.value).to.be.equal('0.6');
     });
 
-    it('should decrease value by 1 when minus button is clicked', () => {
+    it('should decrease value by 1 on minus button click', () => {
       numberField.value = 0;
 
       decreaseButton.click();
@@ -147,7 +159,7 @@ describe('number-field', () => {
       expect(numberField.value).to.be.equal('-1');
     });
 
-    it('should decrease value by 0.2 when minus button is clicked', () => {
+    it('should decrease value by 0.2 on minus button click', () => {
       numberField.value = 0;
       numberField.step = 0.2;
 
@@ -156,7 +168,7 @@ describe('number-field', () => {
       expect(numberField.value).to.be.equal('-0.2');
     });
 
-    it('should adjust value to exact step when minus button is clicked', () => {
+    it('should adjust value to exact step on minus button click', () => {
       numberField.value = 7;
       numberField.step = 2;
 
@@ -182,7 +194,7 @@ describe('number-field', () => {
       expect(numberField.value).to.be.equal('1.0001');
     });
 
-    it('should not increase value when increaseButton is clicked and max value is reached', () => {
+    it('should not increase value on plus button click when max value is reached', () => {
       numberField.value = 0;
       numberField.max = 0;
 
@@ -191,7 +203,7 @@ describe('number-field', () => {
       expect(numberField.value).to.be.equal('0');
     });
 
-    it('should not decrease value when minus button is clicked and min value is reached', () => {
+    it('should not decrease value on minus button click when min value is reached', () => {
       numberField.value = 0;
       numberField.min = 0;
 
@@ -230,7 +242,7 @@ describe('number-field', () => {
       expect(numberField.value).to.be.equal('0');
     });
 
-    it('should not change value when min limit is reached and minus button is clicked', () => {
+    it('should not change value on minus button click when min limit is reached', () => {
       numberField.min = -1;
       numberField.value = 0;
 
@@ -241,7 +253,7 @@ describe('number-field', () => {
       }
     });
 
-    it('should not change value when max limit is reached and plus button is clicked', () => {
+    it('should not change value on plus button click when max limit is reached', () => {
       numberField.max = 1;
       numberField.value = 0;
 
@@ -252,7 +264,7 @@ describe('number-field', () => {
       }
     });
 
-    it('should not change value when max limit will be reached with the next step and plus button is clicked', () => {
+    it('should not change value on plus button click when max limit will be reached with the next step', () => {
       numberField.min = -10;
       numberField.max = 10;
       numberField.step = 6;
@@ -278,7 +290,7 @@ describe('number-field', () => {
       expect(numberField.value).to.equal('0');
     });
 
-    it('should decrease value to max value when value is over max and minus button is clicked', () => {
+    it('should decrease value to max value on minus button click when value is over max', () => {
       numberField.value = 50;
       numberField.max = 10;
 
@@ -287,7 +299,7 @@ describe('number-field', () => {
       expect(numberField.value).to.be.equal(String(numberField.max));
     });
 
-    it('should decrease value to the closest step value when minus button is clicked', () => {
+    it('should decrease value to the closest step value on minus button click', () => {
       numberField.min = -17;
       numberField.value = -8;
       numberField.step = 4;
@@ -297,7 +309,7 @@ describe('number-field', () => {
       expect(numberField.value).to.be.equal('-9');
     });
 
-    it('should correctly decrease value when minus button is clicked', () => {
+    it('should correctly decrease value on minus button click', () => {
       numberField.min = -20;
       numberField.value = -1;
       numberField.step = 4;
@@ -309,7 +321,7 @@ describe('number-field', () => {
       }
     });
 
-    it('should increase value to min value when value is under min and plus button is clicked', () => {
+    it('should increase value to min value on plus button click when value is under min', () => {
       numberField.value = -40;
       numberField.min = -10;
 
@@ -318,7 +330,7 @@ describe('number-field', () => {
       expect(numberField.value).to.be.equal(String(numberField.min));
     });
 
-    it('should increase value to the closest step value when plus button is clicked', () => {
+    it('should increase value to the closest step value on plus button click', () => {
       numberField.min = -17;
       numberField.value = -8;
       numberField.step = 4;
@@ -328,7 +340,7 @@ describe('number-field', () => {
       expect(numberField.value).to.be.equal('-5');
     });
 
-    it('should correctly increase value when plus button is clicked', () => {
+    it('should correctly increase value on plus button click', () => {
       numberField.min = -3;
       numberField.max = 18;
       numberField.value = -1;
@@ -341,7 +353,7 @@ describe('number-field', () => {
       }
     });
 
-    it('should correctly increase value when step is a decimal number and plus button is clicked', () => {
+    it('should correctly increase value on plus button click when step is a decimal number', () => {
       numberField.min = -0.02;
       numberField.max = 0.02;
       numberField.value = -0.03;
