@@ -203,21 +203,21 @@ describe('number-field', () => {
       expect(increaseButton.hasAttribute('disabled')).to.be.false;
     });
 
-    it('should disable plus button if max value is reached', () => {
+    it('should disable minus button if min limit is reached', () => {
       numberField.value = 0;
       numberField.min = 0;
       expect(decreaseButton.hasAttribute('disabled')).to.be.true;
       expect(increaseButton.hasAttribute('disabled')).to.be.false;
     });
 
-    it('should disable minus button if min value is reached', () => {
+    it('should disable plus button if max limit is reached', () => {
       numberField.value = 1;
       numberField.max = 1;
       expect(decreaseButton.hasAttribute('disabled')).to.be.false;
       expect(increaseButton.hasAttribute('disabled')).to.be.true;
     });
 
-    it('should not change value when number field is disabled and controls are clicked', () => {
+    it('should not change value when the field is disabled and controls are clicked', () => {
       numberField.disabled = true;
       numberField.value = 0;
 
