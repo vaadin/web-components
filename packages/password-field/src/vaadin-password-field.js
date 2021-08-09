@@ -125,12 +125,28 @@ export class PasswordField extends TextField {
   }
 
   /**
-   * @param {Event} e
+   * Override method inherited from `FocusMixin` to mark field as focused
+   * when focus moves to the reveal button using Shift Tab.
+   * @param {Event} event
    * @return {boolean}
    * @protected
    */
-  _shouldRemoveFocus(e) {
-    return e.relatedTarget !== this._revealNode;
+  _shouldSetFocus(event) {
+    return event.target === this._inputNode || event.target === this._revealNode;
+  }
+
+  /**
+   * Override method inherited from `FocusMixin` to not hide password
+   * when focus moves to the reveal button or back to the input.
+   * @param {Event} event
+   * @return {boolean}
+   * @protected
+   */
+  _shouldRemoveFocus(event) {
+    return !(
+      event.relatedTarget === this._revealNode ||
+      (event.relatedTarget === this._inputNode && event.target === this._revealNode)
+    );
   }
 
   /** @protected */

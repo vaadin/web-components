@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, focusout } from '@vaadin/testing-helpers';
+import { fixtureSync, focusin, focusout, tabKeyDown } from '@vaadin/testing-helpers';
 import { PasswordField } from '../src/vaadin-password-field.js';
 
 customElements.define('vaadin-password-field', PasswordField);
@@ -44,6 +44,28 @@ describe('password-field', () => {
 
     focusout(passwordField, revealButton);
     expect(input.type).to.equal('text');
+  });
+
+  it('should not hide the password when focus moves back to the input', () => {
+    revealButton.focus();
+    revealButton.click();
+
+    focusout(revealButton, input);
+    expect(input.type).to.equal('text');
+  });
+
+  it('should set focus-ring attribute when focusing the input with Tab', () => {
+    tabKeyDown(document.body);
+    focusin(input);
+
+    expect(passwordField.hasAttribute('focus-ring')).to.be.true;
+  });
+
+  it('should set focus-ring attribute when focusing reveal button with Shift Tab', () => {
+    tabKeyDown(document.body, ['shift']);
+    focusin(revealButton);
+
+    expect(passwordField.hasAttribute('focus-ring')).to.be.true;
   });
 
   it('should prevent touchend event on reveal button', () => {
