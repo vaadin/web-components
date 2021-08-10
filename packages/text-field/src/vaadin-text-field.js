@@ -30,6 +30,7 @@ export class TextField extends TextFieldMixin(ThemableMixin(ElementMixin(Polymer
       <div part="container">
         <div part="label" on-click="focus">
           <slot name="label"></slot>
+          <span part="indicator" aria-hidden="true"></span>
         </div>
 
         <vaadin-input-container

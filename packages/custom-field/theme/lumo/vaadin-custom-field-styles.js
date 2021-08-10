@@ -34,6 +34,11 @@ registerStyles(
       align-items: center;
     }
 
+    /* TODO: remove when all components use new indicator */
+    [part='label']::after {
+      display: none;
+    }
+
     /* align with text-field label */
     :host([has-label]) [part='label'] {
       padding-bottom: calc(0.5em - var(--lumo-space-xs));

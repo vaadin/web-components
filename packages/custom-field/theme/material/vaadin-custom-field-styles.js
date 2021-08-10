@@ -24,6 +24,11 @@ registerStyles(
       -moz-osx-font-smoothing: grayscale;
     }
 
+    /* TODO: remove when all components use new indicator */
+    [part='label']::after {
+      display: none;
+    }
+
     /* align with text-field label */
     :host([has-label]) {
       padding-top: 16px;

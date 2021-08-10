@@ -23,7 +23,8 @@ const requiredField = css`
     transform: scale(0.75);
   }
 
-  :host([required]) [part='label']::after {
+  :host([required]) [part='label']::after,
+  :host([required]) [part='indicator']::after {
     content: ' *';
     color: inherit;
   }

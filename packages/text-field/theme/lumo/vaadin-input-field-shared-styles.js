@@ -38,6 +38,11 @@ registerStyles(
       color: var(--lumo-primary-text-color);
     }
 
+    /* TODO: remove when all components use new indicator */
+    [part='label']::after {
+      display: none;
+    }
+
     :host([has-helper]) [part='helper-text']::before {
       content: '';
       display: block;

@@ -31,6 +31,11 @@ registerStyles(
       line-height: 32px;
     }
 
+    /* TODO: remove when all components use new indicator */
+    [part='label']::after {
+      display: none;
+    }
+
     /* Strange gymnastics to make fields vertically align nicely in most cases
          (no label, with label, without prefix, with prefix, etc.) */
 
