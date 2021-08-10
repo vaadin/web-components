@@ -38,7 +38,8 @@ registerStyles(
       color: var(--lumo-primary-text-color);
     }
 
-    /* TODO: remove when all components use new indicator */
+    /* TODO: remove when the following components are updated to use new indicator:
+      combo-box, date-picker, time-picker, date-time-picker, select. */
     [part='label']::after {
       display: none;
     }

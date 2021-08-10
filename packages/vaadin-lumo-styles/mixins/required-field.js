@@ -36,7 +36,8 @@ const requiredField = css`
     padding-top: var(--lumo-space-m);
   }
 
-  /* TODO: remove old required indicator pseudo element */
+  /* TODO: remove old pseudo element when the following components are updated to use new indicator:
+    combo-box, date-picker, time-picker, date-time-picker, select. */
   [part='label']::after,
   [part='indicator']::after {
     content: var(--lumo-required-field-indicator, '•');
