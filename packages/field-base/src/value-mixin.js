@@ -23,11 +23,11 @@ const ValueMixinImplementation = (superclass) =>
 
     /**
      * Toggle the has-value attribute based on the value property.
-     * @param {string} value
+     * @param {boolean} hasValue
      * @protected
      */
-    _toggleHasValue(value) {
-      this.toggleAttribute('has-value', value !== '' && value != null);
+    _toggleHasValue(hasValue) {
+      this.toggleAttribute('has-value', hasValue);
     }
 
     /**
@@ -37,7 +37,7 @@ const ValueMixinImplementation = (superclass) =>
      * @protected
      */
     _valueChanged(newVal, _oldVal) {
-      this._toggleHasValue(newVal);
+      this._toggleHasValue(newVal !== '' && newVal != null);
     }
   };
 
