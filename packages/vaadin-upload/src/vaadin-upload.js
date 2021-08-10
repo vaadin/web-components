@@ -96,7 +96,7 @@ class UploadElement extends ElementMixin(ThemableMixin(PolymerElement)) {
       <slot name="file-list">
         <ul id="fileList" part="file-list">
           <template is="dom-repeat" items="[[files]]" as="file">
-            <vaadin-upload-file file="[[file]]"></vaadin-upload-file>
+            <vaadin-upload-file file="[[file]]" i18n="[[i18n]]"></vaadin-upload-file>
           </template>
         </ul>
       </slot>
@@ -333,45 +333,50 @@ class UploadElement extends ElementMixin(ThemableMixin(PolymerElement)) {
 
       {
         dropFiles: {
-        one: 'Drop file here',
-        many: 'Drop files here'
+          one: 'Drop file here',
+          many: 'Drop files here'
         },
         addFiles: {
-        one: 'Select File...',
-        many: 'Upload Files...'
+          one: 'Select File...',
+          many: 'Upload Files...'
         },
         cancel: 'Cancel',
         error: {
-        tooManyFiles: 'Too Many Files.',
-        fileIsTooBig: 'File is Too Big.',
-        incorrectFileType: 'Incorrect File Type.'
+          tooManyFiles: 'Too Many Files.',
+          fileIsTooBig: 'File is Too Big.',
+          incorrectFileType: 'Incorrect File Type.'
         },
         uploading: {
-        status: {
-          connecting: 'Connecting...',
-          stalled: 'Stalled',
-          processing: 'Processing File...',
-          held: 'Queued'
+          status: {
+            connecting: 'Connecting...',
+            stalled: 'Stalled',
+            processing: 'Processing File...',
+            held: 'Queued'
+          },
+          remainingTime: {
+            prefix: 'remaining time: ',
+            unknown: 'unknown remaining time'
+          },
+          error: {
+            serverUnavailable: 'Server Unavailable',
+            unexpectedServerError: 'Unexpected Server Error',
+            forbidden: 'Forbidden'
+          }
         },
-        remainingTime: {
-          prefix: 'remaining time: ',
-          unknown: 'unknown remaining time'
-        },
-        error: {
-          serverUnavailable: 'Server Unavailable',
-          unexpectedServerError: 'Unexpected Server Error',
-          forbidden: 'Forbidden'
-        }
+        file: {
+          retry: 'Retry',
+          start: 'Start',
+          remove: 'Remove'
         },
         units: {
-        size: ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
-        sizeBase: 1000
+          size: ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
+          sizeBase: 1000
         },
         formatSize: function(bytes) {
-        // returns the size followed by the best suitable unit
+          // returns the size followed by the best suitable unit
         },
         formatTime: function(seconds, [secs, mins, hours]) {
-        // returns a 'HH:MM:SS' string
+          // returns a 'HH:MM:SS' string
         }
       }
 
@@ -412,6 +417,11 @@ class UploadElement extends ElementMixin(ThemableMixin(PolymerElement)) {
                 unexpectedServerError: 'Upload failed due to server error',
                 forbidden: 'Upload forbidden'
               }
+            },
+            file: {
+              retry: 'Retry',
+              start: 'Start',
+              remove: 'Remove'
             },
             units: {
               size: ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']

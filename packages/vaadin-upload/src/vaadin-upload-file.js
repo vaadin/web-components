@@ -28,7 +28,7 @@ import './vaadin-upload-icons.js';
  * `commands` | Container for file command icons
  * `start-button` | Start file upload button
  * `retry-button` | Retry file upload button
- * `clear-button` | Clear file button
+ * `remove-button` | Remove file button
  * `progress`| Progress bar
  *
  * The following state attributes are available for styling:
@@ -59,6 +59,13 @@ class UploadFileElement extends ThemableMixin(PolymerElement) {
         li[part='row'] {
           list-style-type: none;
         }
+
+        button {
+          background: transparent;
+          padding: 0;
+          border: none;
+          box-shadow: none;
+        }
       </style>
 
       <li part="row" tabindex="0">
@@ -73,9 +80,32 @@ class UploadFileElement extends ThemableMixin(PolymerElement) {
           </div>
         </div>
         <div part="commands">
-          <div part="start-button" file-event="file-start" on-click="_fireFileEvent" hidden$="[[!file.held]]"></div>
-          <div part="retry-button" file-event="file-retry" on-click="_fireFileEvent" hidden$="[[!file.error]]"></div>
-          <div part="clear-button" file-event="file-abort" on-click="_fireFileEvent"></div>
+          <button
+            type="button"
+            part="start-button"
+            file-event="file-start"
+            on-click="_fireFileEvent"
+            hidden$="[[!file.held]]"
+            aria-label="[[i18n.file.start]]"
+            aria-describedby="name"
+          ></button>
+          <button
+            type="button"
+            part="retry-button"
+            file-event="file-retry"
+            on-click="_fireFileEvent"
+            hidden$="[[!file.error]]"
+            aria-label="[[i18n.file.retry]]"
+            aria-describedby="name"
+          ></button>
+          <button
+            type="button"
+            part="remove-button"
+            file-event="file-abort"
+            on-click="_fireFileEvent"
+            aria-label="[[i18n.file.remove]]"
+            aria-describedby="name"
+          ></button>
         </div>
       </li>
 
@@ -97,7 +127,9 @@ class UploadFileElement extends ThemableMixin(PolymerElement) {
 
   static get properties() {
     return {
-      file: Object
+      file: Object,
+
+      i18n: Object
     };
   }
 

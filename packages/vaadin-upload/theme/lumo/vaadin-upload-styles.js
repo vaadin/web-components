@@ -75,7 +75,7 @@ registerStyles(
 
     [part='row'] {
       display: flex;
-      align-items: baseline;
+      align-items: center;
       justify-content: space-between;
     }
 
@@ -128,7 +128,7 @@ registerStyles(
 
     [part='start-button'],
     [part='retry-button'],
-    [part='clear-button'] {
+    [part='remove-button'] {
       flex: none;
       margin-left: var(--lumo-space-xs);
       cursor: var(--lumo-clickable-cursor);
@@ -138,7 +138,7 @@ registerStyles(
     [part='warning-icon']::before,
     [part='start-button']::before,
     [part='retry-button']::before,
-    [part='clear-button']::before {
+    [part='remove-button']::before {
       vertical-align: -0.25em;
     }
 
@@ -160,7 +160,7 @@ registerStyles(
       content: var(--lumo-icons-reload);
     }
 
-    [part='clear-button']::before {
+    [part='remove-button']::before {
       content: var(--lumo-icons-cross);
     }
 

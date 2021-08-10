@@ -101,7 +101,7 @@ registerStyles(
 
     [part='row'] {
       display: flex;
-      align-items: flex-start;
+      align-items: center;
       justify-content: space-between;
     }
 
@@ -132,8 +132,6 @@ registerStyles(
     [part='commands'] {
       display: flex;
       flex: none;
-      font-family: material-icons;
-      font-size: var(--material-icon-font-size);
     }
 
     [part='done-icon'],
@@ -158,21 +156,23 @@ registerStyles(
 
     [part='start-button'],
     [part='retry-button'],
-    [part='clear-button'] {
+    [part='remove-button'] {
       flex: none;
+      font-family: material-icons;
+      font-size: var(--material-icon-font-size);
       color: var(--material-secondary-text-color);
       line-height: 1;
       padding: 8px;
       margin: -8px 0;
     }
 
-    [part='clear-button'] {
+    [part='remove-button'] {
       margin-right: -8px;
     }
 
     [part='start-button']:hover,
     [part='retry-button']:hover,
-    [part='clear-button']:hover {
+    [part='remove-button']:hover {
       color: inherit;
     }
 
@@ -180,7 +180,7 @@ registerStyles(
     [part='warning-icon']::before,
     [part='start-button']::before,
     [part='retry-button']::before,
-    [part='clear-button']::before {
+    [part='remove-button']::before {
       vertical-align: -0.05em;
     }
 
@@ -202,7 +202,7 @@ registerStyles(
       content: var(--material-icons-reload);
     }
 
-    [part='clear-button']::before {
+    [part='remove-button']::before {
       content: var(--material-icons-clear);
     }
 
