@@ -4,11 +4,11 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
-import { InputAriaMixin } from './input-aria-mixin.js';
+import { InputListenersMixin } from './input-listeners-mixin.js';
 import { ValidateMixin } from './validate-mixin.js';
 
 const InputPropsMixinImplementation = (superclass) =>
-  class InputPropsMixinClass extends ValidateMixin(InputAriaMixin(superclass)) {
+  class InputPropsMixinClass extends ValidateMixin(InputListenersMixin(superclass)) {
     static get properties() {
       return {
         /**
@@ -48,21 +48,21 @@ const InputPropsMixinImplementation = (superclass) =>
     }
 
     /** @protected */
-    connectedCallback() {
-      super.connectedCallback();
-
-      if (this._inputNode) {
-        // Propagate initially defined properties to the slotted input
-        this._propagateHostAttributes(this.constructor.hostProps.map((attr) => this[attr] || this.getAttribute(attr)));
-      }
-    }
-
-    /** @protected */
     ready() {
       super.ready();
 
       // create observer dynamically to allow subclasses to override hostProps
       this._createMethodObserver(`_hostPropsChanged(${this.constructor.hostProps.join(', ')})`);
+    }
+
+    /** @protected */
+    _inputElementChanged(input) {
+      super._inputElementChanged(input);
+
+      if (input) {
+        // Propagate initially defined properties to the slotted input
+        this._propagateHostAttributes(this.constructor.hostProps.map((attr) => this[attr] || this.getAttribute(attr)));
+      }
     }
 
     /** @private */
@@ -72,7 +72,7 @@ const InputPropsMixinImplementation = (superclass) =>
 
     /** @private */
     _propagateHostAttributes(attributesValues) {
-      const input = this._inputNode;
+      const input = this.inputElement;
       const attributeNames = this.constructor.hostProps;
 
       attributeNames.forEach((attr, index) => {

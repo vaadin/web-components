@@ -4,10 +4,10 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
-import { InputMixin } from './input-mixin.js';
+import { InputListenersMixin } from './input-listeners-mixin.js';
 
 const ClearButtonMixinImplementation = (superclass) =>
-  class ClearButtonMixinClass extends InputMixin(superclass) {
+  class ClearButtonMixinClass extends InputListenersMixin(superclass) {
     static get properties() {
       return {
         /**
@@ -53,7 +53,7 @@ const ClearButtonMixinImplementation = (superclass) =>
      * Clear the value of this field.
      */
     clear() {
-      this.value = this._inputNode.value = '';
+      this.value = this.inputElement.value = '';
     }
 
     /**
@@ -62,10 +62,10 @@ const ClearButtonMixinImplementation = (superclass) =>
      */
     _onClearButtonClick(event) {
       event.preventDefault();
-      this._inputNode.focus();
+      this.inputElement.focus();
       this.clear();
-      this._inputNode.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
-      this._inputNode.dispatchEvent(new Event('change', { bubbles: true }));
+      this.inputElement.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
+      this.inputElement.dispatchEvent(new Event('change', { bubbles: true }));
     }
 
     /**
@@ -76,7 +76,7 @@ const ClearButtonMixinImplementation = (superclass) =>
       if (event.key === 'Escape' && this.clearButtonVisible && this._clearOnEsc) {
         const dispatchChange = !!this.value;
         this.clear();
-        dispatchChange && this._inputNode.dispatchEvent(new Event('change', { bubbles: true }));
+        dispatchChange && this.inputElement.dispatchEvent(new Event('change', { bubbles: true }));
       }
     }
   };

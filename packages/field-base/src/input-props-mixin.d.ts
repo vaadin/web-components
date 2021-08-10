@@ -3,7 +3,7 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { InputAriaMixin } from './input-aria-mixin.js';
+import { InputListenersMixin } from './input-listeners-mixin.js';
 import { ValidateMixin } from './validate-mixin.js';
 
 /**
@@ -15,7 +15,7 @@ interface InputPropsMixinConstructor {
   new (...args: any[]): InputPropsMixin;
 }
 
-interface InputPropsMixin extends InputAriaMixin, ValidateMixin {
+interface InputPropsMixin extends InputListenersMixin, ValidateMixin {
   /**
    * The name of this field.
    */

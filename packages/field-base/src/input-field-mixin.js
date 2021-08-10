@@ -9,10 +9,14 @@ import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
 import { ClearButtonMixin } from './clear-button-mixin.js';
 import { DelegateFocusMixin } from './delegate-focus-mixin.js';
 import { FieldAriaMixin } from './field-aria-mixin.js';
+import { InputAriaMixin } from './input-aria-mixin.js';
 import { InputPropsMixin } from './input-props-mixin.js';
+import { ValueMixin } from './value-mixin.js';
 
 const InputFieldMixinImplementation = (superclass) =>
-  class InputFieldMixinClass extends ClearButtonMixin(FieldAriaMixin(InputPropsMixin(DelegateFocusMixin(superclass)))) {
+  class InputFieldMixinClass extends ClearButtonMixin(
+    ValueMixin(FieldAriaMixin(InputPropsMixin(InputAriaMixin(DelegateFocusMixin(superclass)))))
+  ) {
     static get properties() {
       return {
         /**
@@ -54,16 +58,6 @@ const InputFieldMixinImplementation = (superclass) =>
         autoselect: {
           type: Boolean,
           value: false
-        },
-
-        /**
-         * The value of the field.
-         */
-        value: {
-          type: String,
-          value: '',
-          observer: '_valueChanged',
-          notify: true
         }
       };
     }
@@ -95,7 +89,6 @@ const InputFieldMixinImplementation = (superclass) =>
     constructor() {
       super();
 
-      this._boundOnInput = this._onInput.bind(this);
       this._boundOnBlur = this._onBlur.bind(this);
       this._boundOnFocus = this._onFocus.bind(this);
     }
@@ -105,7 +98,8 @@ const InputFieldMixinImplementation = (superclass) =>
       super.connectedCallback();
 
       if (this._inputNode) {
-        this._addInputListeners(this._inputNode);
+        // Initialize `InputListenersMixin`
+        this._setInputElement(this._inputNode);
 
         // Discard value set on the custom slotted input.
         if (this._inputNode.value !== this.value) {
@@ -116,15 +110,6 @@ const InputFieldMixinImplementation = (superclass) =>
         if (this.value) {
           this._inputNode.value = this.value;
         }
-      }
-    }
-
-    /** @protected */
-    disconnectedCallback() {
-      super.disconnectedCallback();
-
-      if (this._inputNode) {
-        this._removeInputListeners(this._inputNode);
       }
     }
 
@@ -164,23 +149,14 @@ const InputFieldMixinImplementation = (superclass) =>
     }
 
     /**
-     * @param {HTMLElement} node
+     * @param {HTMLInputElement} input
      * @protected
      */
-    _addInputListeners(node) {
-      node.addEventListener('input', this._boundOnInput);
-      node.addEventListener('blur', this._boundOnBlur);
-      node.addEventListener('focus', this._boundOnFocus);
-    }
+    _addInputListeners(input) {
+      super._addInputListeners(input);
 
-    /**
-     * @param {HTMLElement} node
-     * @protected
-     */
-    _removeInputListeners(node) {
-      node.removeEventListener('input', this._boundOnInput);
-      node.removeEventListener('blur', this._boundOnBlur);
-      node.removeEventListener('focus', this._boundOnFocus);
+      input.addEventListener('blur', this._boundOnBlur);
+      input.addEventListener('focus', this._boundOnFocus);
     }
 
     /** @private */
@@ -200,6 +176,8 @@ const InputFieldMixinImplementation = (superclass) =>
      * @protected
      */
     _onInput(event) {
+      super._onInput(event);
+
       // Ignore manual clear button events
       this.__userInput = event.isTrusted;
       this.value = event.target.value;
@@ -232,20 +210,17 @@ const InputFieldMixinImplementation = (superclass) =>
     }
 
     /**
+     * Override observer inherited from `ValueMixin`.
      * @param {unknown} newVal
      * @param {unknown} oldVal
      * @protected
      */
     _valueChanged(newVal, oldVal) {
+      super._valueChanged(newVal, oldVal);
+
       // Setting initial value to empty string, skip validation
       if (newVal === '' && oldVal === undefined) {
         return;
-      }
-
-      if (newVal !== '' && newVal != null) {
-        this.setAttribute('has-value', '');
-      } else {
-        this.removeAttribute('has-value');
       }
 
       // Value is set before an element is connected to the DOM:
