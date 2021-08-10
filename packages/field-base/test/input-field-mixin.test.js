@@ -220,4 +220,14 @@ describe('input-field-mixin', () => {
       expect(console.warn.called).to.be.true;
     });
   });
+
+  describe('invalid', () => {
+    beforeEach(() => {
+      element = fixtureSync('<input-field-mixin-element value="foo" invalid></input-field-mixin-element>');
+    });
+
+    it('should not reset invalid state set with attribute', () => {
+      expect(element.invalid).to.be.true;
+    });
+  });
 });
