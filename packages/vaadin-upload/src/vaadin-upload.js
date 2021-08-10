@@ -94,11 +94,11 @@ class UploadElement extends ElementMixin(ThemableMixin(PolymerElement)) {
         </div>
       </div>
       <slot name="file-list">
-        <div id="fileList" part="file-list">
+        <ul id="fileList" part="file-list">
           <template is="dom-repeat" items="[[files]]" as="file">
             <vaadin-upload-file file="[[file]]"></vaadin-upload-file>
           </template>
-        </div>
+        </ul>
       </slot>
       <slot></slot>
       <input

@@ -55,9 +55,13 @@ class UploadFileElement extends ThemableMixin(PolymerElement) {
         [hidden] {
           display: none;
         }
+
+        li[part='row'] {
+          list-style-type: none;
+        }
       </style>
 
-      <div part="row">
+      <li part="row" tabindex="0">
         <div part="info">
           <div part="done-icon" hidden$="[[!file.complete]]"></div>
           <div part="warning-icon" hidden$="[[!file.error]]"></div>
@@ -73,7 +77,7 @@ class UploadFileElement extends ThemableMixin(PolymerElement) {
           <div part="retry-button" file-event="file-retry" on-click="_fireFileEvent" hidden$="[[!file.error]]"></div>
           <div part="clear-button" file-event="file-abort" on-click="_fireFileEvent"></div>
         </div>
-      </div>
+      </li>
 
       <vaadin-progress-bar
         part="progress"
