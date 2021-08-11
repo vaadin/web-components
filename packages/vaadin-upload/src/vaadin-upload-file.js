@@ -86,7 +86,7 @@ class UploadFileElement extends ThemableMixin(PolymerElement) {
             file-event="file-start"
             on-click="_fireFileEvent"
             hidden$="[[!file.held]]"
-            aria-label="[[i18n.file.start]]"
+            aria-label$="[[i18n.file.start]]"
             aria-describedby="name"
           ></button>
           <button
@@ -95,7 +95,7 @@ class UploadFileElement extends ThemableMixin(PolymerElement) {
             file-event="file-retry"
             on-click="_fireFileEvent"
             hidden$="[[!file.error]]"
-            aria-label="[[i18n.file.retry]]"
+            aria-label$="[[i18n.file.retry]]"
             aria-describedby="name"
           ></button>
           <button
@@ -103,7 +103,7 @@ class UploadFileElement extends ThemableMixin(PolymerElement) {
             part="remove-button"
             file-event="file-abort"
             on-click="_fireFileEvent"
-            aria-label="[[i18n.file.remove]]"
+            aria-label$="[[i18n.file.remove]]"
             aria-describedby="name"
           ></button>
         </div>
