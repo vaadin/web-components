@@ -76,6 +76,11 @@ class UploadElement extends ElementMixin(ThemableMixin(PolymerElement)) {
         [hidden] {
           display: none !important;
         }
+
+        ul[part='file-list'] {
+          padding: 0;
+          margin: 0;
+        }
       </style>
 
       <div part="primary-buttons">
