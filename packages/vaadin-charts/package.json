@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-charts",
-  "version": "21.0.0-beta1",
+  "version": "21.0.0-beta2",
   "description": "vaadin-charts",
   "main": "vaadin-chart.js",
   "module": "vaadin-chart.js",
@@ -26,9 +26,9 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/vaadin-element-mixin": "21.0.0-beta1",
+    "@vaadin/vaadin-element-mixin": "^21.0.0-beta2",
     "@vaadin/vaadin-license-checker": "^2.1.0",
-    "@vaadin/vaadin-themable-mixin": "21.0.0-beta1",
+    "@vaadin/vaadin-themable-mixin": "^21.0.0-beta2",
     "highcharts": "8.1.2"
   },
   "devDependencies": {
