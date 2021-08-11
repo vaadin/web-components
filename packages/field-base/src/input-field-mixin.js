@@ -115,7 +115,6 @@ const InputFieldMixinImplementation = (superclass) =>
 
         if (this.value) {
           this._inputNode.value = this.value;
-          this.validate();
         }
       }
     }
