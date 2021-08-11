@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { sendKeys } from '@web/test-runner-commands';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, isFirefox } from '@vaadin/testing-helpers';
 import { createFile } from './common.js';
 import '../vaadin-upload.js';
 
@@ -38,7 +38,10 @@ describe('keyboard navigation', () => {
     expect(uploadElement.shadowRoot.activeElement).to.equal(fileElement);
   });
 
-  describe('file', () => {
+  // Skips the following bunch of tests in Firefox as there is a bug
+  // that causes the focus to stuck on the body element.
+  // No possible workarounds were found at the time of writing this note.
+  (isFirefox ? describe.skip : describe)('file', () => {
     beforeEach(() => {
       // To show the start button
       uploadElement.files[0].held = true;
