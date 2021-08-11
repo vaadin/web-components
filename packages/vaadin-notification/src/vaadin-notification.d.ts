@@ -131,6 +131,21 @@ declare class NotificationElement extends ThemePropertyMixin(ElementMixin(HTMLEl
     listener: (this: NotificationElement, ev: NotificationEventMap[K]) => void,
     options?: boolean | EventListenerOptions
   ): void;
+
+  /**
+   * Shows the given notification using the given duration and position.
+   *
+   * Uses `bottom-start` and a 5 second duration by default.
+   *
+   * @param contents the contents to show, either as a string or a Lit template.
+   * @param duration the duration in milliseconds to show the notification. Use `0` or a negative number to disable auto-closing.
+   * @param position alignment of the notification in the viewport
+   */
+  static show(
+    contents: string | TemplateResult,
+    duration?: number,
+    position?: NotificationPosition
+  ): NotificationElement;
 }
 
 declare global {

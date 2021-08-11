@@ -8,6 +8,8 @@ import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.
 import { processTemplates } from '@vaadin/vaadin-element-mixin/templates.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
+import { isTemplateResult } from 'lit/directive-helpers.js';
+import { render } from 'lit';
 
 /**
  * An element used internally by `<vaadin-notification>`. Not intended to be used separately.
@@ -474,6 +476,36 @@ class NotificationElement extends ThemePropertyMixin(ElementMixin(PolymerElement
         this._durationTimeoutId = setTimeout(() => this.close(), duration);
       }
     }
+  }
+
+  static show(contents, duration, position) {
+    if (isTemplateResult(contents)) {
+      return NotificationElement._createAndShowNotification(duration, position, (root) => {
+        render(contents, root);
+      });
+    } else {
+      return NotificationElement._createAndShowNotification(duration, position, (root) => {
+        root.innerText = contents;
+      });
+    }
+  }
+
+  /** @private */
+  static _createAndShowNotification(duration, position, renderer) {
+    const notification = document.createElement(NotificationElement.is);
+    notification.duration = duration || 5000;
+    notification.position = position || 'bottom-start';
+    notification.renderer = renderer;
+    document.body.appendChild(notification);
+    notification.opened = true;
+
+    notification.addEventListener('opened-changed', (e) => {
+      if (!e.detail.value) {
+        notification.remove();
+      }
+    });
+
+    return notification;
   }
 }
 
