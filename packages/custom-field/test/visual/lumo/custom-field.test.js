@@ -12,7 +12,7 @@ import '@vaadin/email-field/theme/lumo/vaadin-email-field.js';
 import '@vaadin/vaadin-text-field/theme/lumo/vaadin-number-field.js';
 import '@vaadin/text-area/theme/lumo/vaadin-text-area.js';
 import '@vaadin/vaadin-text-field/theme/lumo/vaadin-text-field.js';
-import '@vaadin/vaadin-text-field/theme/lumo/vaadin-password-field.js';
+import '@vaadin/password-field/theme/lumo/vaadin-password-field.js';
 import '@vaadin/vaadin-time-picker/theme/lumo/vaadin-time-picker.js';
 import '../../../theme/lumo/vaadin-custom-field.js';
 import { CustomField } from '../../../src/vaadin-custom-field.js';
