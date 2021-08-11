@@ -493,8 +493,12 @@ class NotificationElement extends ThemePropertyMixin(ElementMixin(PolymerElement
   /** @private */
   static _createAndShowNotification(duration, position, renderer) {
     const notification = document.createElement(NotificationElement.is);
-    notification.duration = duration || 5000;
-    notification.position = position || 'bottom-start';
+    if (duration) {
+      notification.duration = duration;
+    }
+    if (position) {
+      notification.position = position;
+    }
     notification.renderer = renderer;
     document.body.appendChild(notification);
     notification.opened = true;
