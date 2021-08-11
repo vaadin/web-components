@@ -101,7 +101,7 @@ registerStyles(
 
     [part='row'] {
       display: flex;
-      align-items: center;
+      align-items: baseline;
       justify-content: space-between;
     }
 
