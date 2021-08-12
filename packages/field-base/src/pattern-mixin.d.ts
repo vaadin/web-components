@@ -19,7 +19,7 @@ interface PatternMixin extends ForwardInputPropsMixin {
    * A regular expression that the value is checked against.
    * The pattern must match the entire value, not just some subset.
    */
-  pattern: string | null | undefined;
+  pattern: string;
 
   /**
    * When set to true, user is prevented from typing a value that
