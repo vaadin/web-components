@@ -123,4 +123,10 @@ describe('item renderer', () => {
 
     expect(getFirstItem().$.content.textContent).to.equal('foo');
   });
+
+  it('should clear the old content after assigning a new renderer', () => {
+    comboBox.opened = true;
+    comboBox.renderer = () => {};
+    expect(getFirstItem().$.content.textContent).to.equal('');
+  });
 });
