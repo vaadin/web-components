@@ -128,8 +128,24 @@ class VirtualListElement extends ElementMixin(ThemableMixin(PolymerElement)) {
   /** @private */
   __updateElement(el, index) {
     if (this.renderer) {
+      if (el.__currentRenderer !== this.renderer) {
+        this._clearRenderTargetContent(el);
+        el.__currentRenderer = this.renderer;
+      }
+
       this.renderer(el, this, { item: this.items[index], index });
     }
+  }
+
+  /**
+   * Clears the content of a render target.
+   */
+  _clearRenderTargetContent(element) {
+    element.innerHTML = '';
+    // Whenever a Lit-based renderer is used, it assigns a Lit part to the node it was rendered into.
+    // When clearing the rendered content, this part needs to be manually disposed of.
+    // Otherwise, using a Lit-based renderer on the same node will throw an exception or render nothing afterward.
+    delete element._$litPart$;
   }
 
   /** @private */
