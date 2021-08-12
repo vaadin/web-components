@@ -14,7 +14,7 @@ export type GridCellClassNameGenerator<TItem> = (
 
 export type GridColumnTextAlign = 'start' | 'center' | 'end' | null;
 
-export type GridDataProviderCallback<TItem> = (items: Array<TItem>, size?: number) => void;
+export type GridDataProviderCallback<TItem> = (items: ReadonlyArray<TItem>, size?: number) => void;
 
 export type GridDataProviderParams<TItem> = {
   page: number;

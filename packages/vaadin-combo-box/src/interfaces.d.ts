@@ -13,7 +13,7 @@ export type ComboBoxRenderer<TItem> = (
   model: ComboBoxItemModel<TItem>
 ) => void;
 
-export type ComboBoxDataProviderCallback<TItem> = (items: Array<TItem>, size: number) => void;
+export type ComboBoxDataProviderCallback<TItem> = (items: ReadonlyArray<TItem>, size: number) => void;
 
 export interface ComboBoxDataProviderParams {
   page: number;
