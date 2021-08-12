@@ -59,7 +59,14 @@ describe('input-mixin', () => {
     });
 
     it('should clear input value when value is set to null', () => {
+      element.value = 'foo';
       element.value = null;
+      expect(input.value).to.equal('');
+    });
+
+    it('should clear input value when value is set to undefined', () => {
+      element.value = 'foo';
+      element.value = undefined;
       expect(input.value).to.equal('');
     });
 
@@ -67,11 +74,6 @@ describe('input-mixin', () => {
       input.value = 'foo';
       input.dispatchEvent(new Event('input'));
       expect(element.value).to.equal('foo');
-    });
-
-    it('should clear input value when value is set to undefined', () => {
-      element.value = undefined;
-      expect(input.value).to.equal('');
     });
 
     it('should clear the field value on clear method call', () => {

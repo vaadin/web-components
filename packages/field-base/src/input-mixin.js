@@ -92,7 +92,7 @@ const InputMixinImplementation = (superclass) =>
       if (value != undefined) {
         this.inputElement.value = value;
       } else {
-        this.clear();
+        this.inputElement.value = '';
       }
     }
 
