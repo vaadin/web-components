@@ -22,25 +22,29 @@ Once installed, import the component in your application:
 import '@vaadin/email-field';
 ```
 
-## Getting started
+## Themes
 
-Vaadin components use the Lumo theme by default.
+Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/ds/customization/using-themes),
+Lumo and Material. The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/email-field/vaadin-email-field.js)
+of the package uses Lumo theme.
 
-To use the Material theme, import the component from the `theme/material` folder.
+To use the Material theme, import the component from the `theme/material` folder:
 
-## Entry points
+```js
+import '@vaadin/email-field/theme/material/vaadin-email-field.js';
+```
 
-- The component with the Lumo theme:
+You can also import the Lumo version of the component explicitly:
 
-  `theme/lumo/vaadin-email-field.js`
+```js
+import '@vaadin/email-field/theme/lumo/vaadin-email-field.js';
+```
 
-- The component with the Material theme:
+Finally, you can import the un-themed component from the `src` folder to get a minimal starting point:
 
-  `theme/material/vaadin-email-field.js`
-
-- Alias for `theme/lumo/vaadin-email-field.js`:
-
-  `vaadin-email-field.js`
+```js
+import '@vaadin/email-field/src/vaadin-email-field.js';
+```
 
 ## License
 
