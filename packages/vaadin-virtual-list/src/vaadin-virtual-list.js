@@ -127,12 +127,12 @@ class VirtualListElement extends ElementMixin(ThemableMixin(PolymerElement)) {
 
   /** @private */
   __updateElement(el, index) {
-    if (this.renderer) {
-      if (el.__renderer !== this.renderer) {
-        el.__renderer = this.renderer;
-        this.__clearRenderTargetContent(el);
-      }
+    if (el.__renderer !== this.renderer) {
+      el.__renderer = this.renderer;
+      this.__clearRenderTargetContent(el);
+    }
 
+    if (this.renderer) {
       this.renderer(el, this, { item: this.items[index], index });
     }
   }
@@ -151,7 +151,8 @@ class VirtualListElement extends ElementMixin(ThemableMixin(PolymerElement)) {
 
   /** @private */
   __itemsOrRendererChanged(items = [], renderer, virtualizer) {
-    if (renderer && virtualizer) {
+    const hasRenderedItems = this.childElementCount > 0;
+    if ((renderer || hasRenderedItems) && virtualizer) {
       if (items.length === virtualizer.size) {
         virtualizer.update();
       } else {
