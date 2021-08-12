@@ -3,11 +3,11 @@ import sinon from 'sinon';
 import { fixtureSync, escKeyDown } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { ClearButtonMixin } from '../src/clear-button-mixin.js';
-import { InputMixin } from '../src/input-mixin.js';
+import { InputSlotMixin } from '../src/input-slot-mixin.js';
 
 customElements.define(
   'clear-button-mixin-element',
-  class extends ClearButtonMixin(InputMixin(PolymerElement)) {
+  class extends ClearButtonMixin(InputSlotMixin(PolymerElement)) {
     static get template() {
       return html`
         <slot name="input"></slot>

@@ -3,11 +3,11 @@ import { fixtureSync } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { FieldAriaMixin } from '../src/field-aria-mixin.js';
 import { LabelMixin } from '../src/label-mixin.js';
-import { InputMixin } from '../src/input-mixin.js';
+import { InputSlotMixin } from '../src/input-slot-mixin.js';
 
 customElements.define(
   'field-aria-mixin-element',
-  class extends FieldAriaMixin(LabelMixin(InputMixin(PolymerElement))) {
+  class extends FieldAriaMixin(LabelMixin(InputSlotMixin(PolymerElement))) {
     static get template() {
       return html`
         <slot name="label"></slot>

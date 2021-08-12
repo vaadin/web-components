@@ -3,7 +3,7 @@ import sinon from 'sinon';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { InputListenersMixin } from '../src/input-listeners-mixin.js';
-import { InputMixin } from '../src/input-mixin.js';
+import { InputSlotMixin } from '../src/input-slot-mixin.js';
 
 describe('input-listeners-mixin', () => {
   let element, input, inputSpy, changeSpy;
@@ -14,7 +14,7 @@ describe('input-listeners-mixin', () => {
 
     customElements.define(
       'input-listeners-mixin-element',
-      class extends InputListenersMixin(InputMixin(PolymerElement)) {
+      class extends InputListenersMixin(InputSlotMixin(PolymerElement)) {
         static get template() {
           return html`<slot name="input"></slot>`;
         }

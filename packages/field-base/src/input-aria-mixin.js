@@ -5,10 +5,10 @@
  */
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
 import { LabelMixin } from './label-mixin.js';
-import { InputMixin } from './input-mixin.js';
+import { InputSlotMixin } from './input-slot-mixin.js';
 
 const InputAriaMixinImplementation = (superclass) =>
-  class InputAriaMixinClass extends InputMixin(LabelMixin(superclass)) {
+  class InputAriaMixinClass extends InputSlotMixin(LabelMixin(superclass)) {
     constructor() {
       super();
 

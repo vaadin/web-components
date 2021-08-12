@@ -8,17 +8,17 @@ import { SlotMixin } from './slot-mixin.js';
 /**
  * A mixin to add `<input>` element to the corresponding named slot.
  */
-declare function InputMixin<T extends new (...args: any[]) => {}>(base: T): T & InputMixinConstructor;
+declare function InputSlotMixin<T extends new (...args: any[]) => {}>(base: T): T & InputSlotMixinConstructor;
 
-interface InputMixinConstructor {
-  new (...args: any[]): InputMixin;
+interface InputSlotMixinConstructor {
+  new (...args: any[]): InputSlotMixin;
 }
 
-interface InputMixin extends SlotMixin {
+interface InputSlotMixin extends SlotMixin {
   /**
    * String used to define input type.
    */
   readonly type: string;
 }
 
-export { InputMixinConstructor, InputMixin };
+export { InputSlotMixinConstructor, InputSlotMixin };

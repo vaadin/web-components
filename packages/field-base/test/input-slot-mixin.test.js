@@ -1,11 +1,11 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { InputMixin } from '../src/input-mixin.js';
+import { InputSlotMixin } from '../src/input-slot-mixin.js';
 
 customElements.define(
-  'input-mixin-element',
-  class extends InputMixin(PolymerElement) {
+  'input-slot-mixin-element',
+  class extends InputSlotMixin(PolymerElement) {
     static get template() {
       return html`<slot name="input"></slot>`;
     }
@@ -13,8 +13,8 @@ customElements.define(
 );
 
 customElements.define(
-  'input-mixin-number-element',
-  class extends InputMixin(PolymerElement) {
+  'input-slot-mixin-number-element',
+  class extends InputSlotMixin(PolymerElement) {
     static get template() {
       return html`<slot name="input"></slot>`;
     }
@@ -33,7 +33,7 @@ describe('input-mixin', () => {
 
   describe('default', () => {
     beforeEach(() => {
-      element = fixtureSync(`<input-mixin-element></input-mixin-element>`);
+      element = fixtureSync('<input-slot-mixin-element></input-slot-mixin-element>');
       input = element.querySelector('[slot=input]');
     });
 
@@ -46,7 +46,7 @@ describe('input-mixin', () => {
     });
 
     it('should set id attribute on the input', () => {
-      const idRegex = /^input-mixin-element-\d$/;
+      const idRegex = /^input-slot-mixin-element-\d$/;
       expect(input.getAttribute('id')).to.match(idRegex);
     });
 
@@ -67,7 +67,7 @@ describe('input-mixin', () => {
 
   describe('name', () => {
     beforeEach(() => {
-      element = fixtureSync(`<input-mixin-element name="foo"></input-mixin-element>`);
+      element = fixtureSync('<input-slot-mixin-element name="foo"></input-slot-mixin-element>');
       input = element.querySelector('[slot=input]');
     });
 
@@ -78,7 +78,7 @@ describe('input-mixin', () => {
 
   describe('value', () => {
     beforeEach(() => {
-      element = fixtureSync(`<input-mixin-element value="foo"></input-mixin-element>`);
+      element = fixtureSync('<input-slot-mixin-element value="foo"></input-slot-mixin-element>');
       input = element.querySelector('[slot=input]');
     });
 
@@ -89,7 +89,7 @@ describe('input-mixin', () => {
 
   describe('type', () => {
     beforeEach(() => {
-      element = fixtureSync(`<input-mixin-number-element value="foo"></input-mixin-number-element>`);
+      element = fixtureSync('<input-slot-mixin-number-element value="foo"></input-slot-mixin-number-element>');
       input = element.querySelector('[slot=input]');
     });
 

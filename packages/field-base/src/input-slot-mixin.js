@@ -6,8 +6,8 @@
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
 import { SlotMixin } from './slot-mixin.js';
 
-const InputMixinImplementation = (superclass) =>
-  class InputMixinClass extends SlotMixin(superclass) {
+const InputSlotMixinImplementation = (superclass) =>
+  class InputSlotMixinClass extends SlotMixin(superclass) {
     static get properties() {
       /**
        * String used to define input type.
@@ -50,7 +50,7 @@ const InputMixinImplementation = (superclass) =>
       super();
 
       // Ensure every instance has unique ID
-      const uniqueId = (InputMixinClass._uniqueId = 1 + InputMixinClass._uniqueId || 0);
+      const uniqueId = (InputSlotMixinClass._uniqueId = 1 + InputSlotMixinClass._uniqueId || 0);
       this._inputId = `${this.localName}-${uniqueId}`;
     }
 
@@ -67,4 +67,4 @@ const InputMixinImplementation = (superclass) =>
 /**
  * A mixin to add `<input>` element to the corresponding named slot.
  */
-export const InputMixin = dedupingMixin(InputMixinImplementation);
+export const InputSlotMixin = dedupingMixin(InputSlotMixinImplementation);

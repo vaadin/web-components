@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { LabelMixin } from './label-mixin.js';
-import { InputMixin } from './input-mixin.js';
+import { InputSlotMixin } from './input-slot-mixin.js';
 
 /**
  * A mixin to link slotted `<input>` and `<label>` elements.
@@ -15,6 +15,6 @@ interface InputAriaMixinConstructor {
   new (...args: any[]): InputAriaMixin;
 }
 
-interface InputAriaMixin extends InputMixin, LabelMixin {}
+interface InputAriaMixin extends InputSlotMixin, LabelMixin {}
 
 export { InputAriaMixin, InputAriaMixinConstructor };

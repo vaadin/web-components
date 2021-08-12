@@ -3,11 +3,11 @@ import sinon from 'sinon';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { DelegateFocusMixin } from '../src/delegate-focus-mixin.js';
-import { InputMixin } from '../src/input-mixin.js';
+import { InputSlotMixin } from '../src/input-slot-mixin.js';
 
 customElements.define(
   'delegate-focus-mixin-element',
-  class extends DelegateFocusMixin(InputMixin(PolymerElement)) {
+  class extends DelegateFocusMixin(InputSlotMixin(PolymerElement)) {
     static get template() {
       return html`<slot name="input"></slot>`;
     }
