@@ -7,10 +7,9 @@ import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
 import { timeOut } from '@polymer/polymer/lib/utils/async.js';
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
 import { InputPropsMixin } from './input-props-mixin.js';
-import { ValueMixin } from './value-mixin.js';
 
 const PatternMixinImplementation = (superclass) =>
-  class PatternMixinClass extends InputPropsMixin(ValueMixin(superclass)) {
+  class PatternMixinClass extends InputPropsMixin(superclass) {
     static get properties() {
       return {
         /**
@@ -91,9 +90,9 @@ const PatternMixinImplementation = (superclass) =>
      * @protected
      */
     _onInput(event) {
-      super._onInput(event);
-
       this._checkInputValue();
+
+      super._onInput(event);
     }
 
     /**

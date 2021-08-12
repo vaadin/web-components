@@ -8,7 +8,6 @@ import { ClearButtonMixin } from './clear-button-mixin.js';
 import { DelegateFocusMixin } from './delegate-focus-mixin.js';
 import { FieldAriaMixin } from './field-aria-mixin.js';
 import { InputPropsMixin } from './input-props-mixin.js';
-import { ValueMixin } from './value-mixin.js';
 
 /**
  * A mixin to provide logic for vaadin-text-field and related components.
@@ -24,8 +23,7 @@ interface InputFieldMixin
     ClearButtonMixin,
     DelegateFocusMixin,
     FieldAriaMixin,
-    InputPropsMixin,
-    ValueMixin {
+    InputPropsMixin {
   /**
    * Whether the value of the control can be automatically completed by the browser.
    * List of available options at:

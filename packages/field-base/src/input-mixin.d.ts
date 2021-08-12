@@ -25,6 +25,16 @@ interface InputMixin {
    * As an example, <vaadin-combo-box-light> accepts other components.
    */
   readonly inputElement: HTMLInputElement;
+
+  /**
+   * The value of the field.
+   */
+  value: string;
+
+  /**
+   * Clear the value of the field.
+   */
+  clear(): void;
 }
 
 export { InputMixin, InputMixinConstructor };

@@ -14,4 +14,3 @@ export { PatternMixin } from './src/pattern-mixin.js';
 export { SlotMixin } from './src/slot-mixin.js';
 export { TextFieldMixin } from './src/text-field-mixin.js';
 export { ValidateMixin } from './src/validate-mixin.js';
-export { ValueMixin } from './src/value-mixin.js';

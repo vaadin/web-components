@@ -42,16 +42,6 @@ describe('clear-button-mixin', () => {
     button = element.$.clearButton;
   });
 
-  it('should clear the field value on clear method call', () => {
-    element.clear();
-    expect(element.value).to.equal('');
-  });
-
-  it('should clear the input value on clear method call', () => {
-    element.clear();
-    expect(input.value).to.equal('');
-  });
-
   it('should clear the field value on clear button click', () => {
     button.click();
     expect(element.value).to.equal('');

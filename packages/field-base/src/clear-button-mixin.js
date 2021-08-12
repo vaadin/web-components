@@ -50,13 +50,6 @@ const ClearButtonMixinImplementation = (superclass) =>
     }
 
     /**
-     * Clear the value of this field.
-     */
-    clear() {
-      this.value = this.inputElement.value = '';
-    }
-
-    /**
      * @param {Event} event
      * @protected
      */

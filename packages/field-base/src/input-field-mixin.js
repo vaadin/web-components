@@ -11,11 +11,10 @@ import { ClearButtonMixin } from './clear-button-mixin.js';
 import { DelegateFocusMixin } from './delegate-focus-mixin.js';
 import { FieldAriaMixin } from './field-aria-mixin.js';
 import { InputPropsMixin } from './input-props-mixin.js';
-import { ValueMixin } from './value-mixin.js';
 
 const InputFieldMixinImplementation = (superclass) =>
   class InputFieldMixinClass extends ClearButtonMixin(
-    ValueMixin(FieldAriaMixin(InputPropsMixin(AriaLabelMixin(DelegateFocusMixin(superclass)))))
+    FieldAriaMixin(InputPropsMixin(AriaLabelMixin(DelegateFocusMixin(superclass))))
   ) {
     static get properties() {
       return {
@@ -210,39 +209,15 @@ const InputFieldMixinImplementation = (superclass) =>
     }
 
     /**
-     * Override observer inherited from `ValueMixin`.
-     * @param {unknown} newVal
-     * @param {unknown} oldVal
+     * Override a method from `InputMixin` to validate the field
+     * when a new value is set programmatically.
+     * @param {string} value
      * @protected
+     * @override
      */
-    _valueChanged(newVal, oldVal) {
-      super._valueChanged(newVal, oldVal);
+    _forwardInputValue(value) {
+      super._forwardInputValue(value);
 
-      // Setting initial value to empty string, skip validation
-      if (newVal === '' && oldVal === undefined) {
-        return;
-      }
-
-      // Value is set before an element is connected to the DOM:
-      // this case is handled separately in `connectedCallback`.
-      if (!this._inputNode) {
-        return;
-      }
-
-      // Value is set by the user, no need to sync it back to input.
-      // Also no need to validate, as we call `validate` on blur.
-      if (this.__userInput) {
-        return;
-      }
-
-      // Setting a value programmatically, sync it to input element.
-      if (newVal != undefined) {
-        this._inputNode.value = newVal;
-      } else {
-        this.clear();
-      }
-
-      // Validate the field after a new value is set programmatically.
       if (this.invalid) {
         this.validate();
       }

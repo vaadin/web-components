@@ -5,68 +5,147 @@ import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { InputMixin } from '../src/input-mixin.js';
 import { InputSlotMixin } from '../src/input-slot-mixin.js';
 
+customElements.define(
+  'input-mixin-element',
+  class extends InputMixin(InputSlotMixin(PolymerElement)) {
+    static get template() {
+      return html`<slot name="input"></slot>`;
+    }
+
+    connectedCallback() {
+      super.connectedCallback();
+
+      this._setInputElement(this._inputNode);
+    }
+  }
+);
+
 describe('input-mixin', () => {
   let element, input, inputSpy, changeSpy;
 
-  before(() => {
-    inputSpy = sinon.spy();
-    changeSpy = sinon.spy();
+  describe('value', () => {
+    beforeEach(() => {
+      element = fixtureSync('<input-mixin-element></input-mixin-element>');
+      input = element.querySelector('[slot=input]');
+    });
 
-    customElements.define(
-      'input-mixin-element',
-      class extends InputMixin(InputSlotMixin(PolymerElement)) {
-        static get template() {
-          return html`<slot name="input"></slot>`;
+    it('should set property to empty string by default', () => {
+      expect(element.value).to.be.equal('');
+    });
+
+    it('should not set has-value attribute by default', () => {
+      expect(element.hasAttribute('has-value')).to.be.false;
+    });
+
+    it('should set has-value attribute when value attribute is set', () => {
+      element.setAttribute('value', 'test');
+      expect(element.hasAttribute('has-value')).to.be.true;
+    });
+
+    it('should set has-value attribute when value property is set', () => {
+      element.value = 'test';
+      expect(element.hasAttribute('has-value')).to.be.true;
+    });
+
+    it('should remove has-value attribute when value is removed', () => {
+      element.value = 'foo';
+      element.value = '';
+      expect(element.hasAttribute('has-value')).to.be.false;
+    });
+
+    it('should propagate value to the input element', () => {
+      element.value = 'foo';
+      expect(input.value).to.equal('foo');
+    });
+
+    it('should clear input value when value is set to null', () => {
+      element.value = null;
+      expect(input.value).to.equal('');
+    });
+
+    it('should update field value on the input event', () => {
+      input.value = 'foo';
+      input.dispatchEvent(new Event('input'));
+      expect(element.value).to.equal('foo');
+    });
+
+    it('should clear input value when value is set to undefined', () => {
+      element.value = undefined;
+      expect(input.value).to.equal('');
+    });
+
+    it('should clear the field value on clear method call', () => {
+      element.clear();
+      expect(element.value).to.equal('');
+    });
+
+    it('should clear the input value on clear method call', () => {
+      element.clear();
+      expect(input.value).to.equal('');
+    });
+  });
+
+  describe('events', () => {
+    before(() => {
+      inputSpy = sinon.spy();
+      changeSpy = sinon.spy();
+
+      customElements.define(
+        'input-mixin-events-element',
+        class extends InputMixin(InputSlotMixin(PolymerElement)) {
+          static get template() {
+            return html`<slot name="input"></slot>`;
+          }
+
+          connectedCallback() {
+            super.connectedCallback();
+
+            this._setInputElement(this._inputNode);
+          }
+
+          _onInput() {
+            inputSpy();
+          }
+
+          _onChange() {
+            changeSpy();
+          }
         }
+      );
+    });
 
-        connectedCallback() {
-          super.connectedCallback();
+    beforeEach(() => {
+      element = fixtureSync('<input-mixin-events-element></input-mixin-events-element>');
+      input = element.querySelector('[slot=input]');
+    });
 
-          this._setInputElement(this._inputNode);
-        }
+    afterEach(() => {
+      inputSpy.resetHistory();
+      changeSpy.resetHistory();
+    });
 
-        _onInput() {
-          inputSpy();
-        }
+    it('should call an input event listener', () => {
+      input.dispatchEvent(new CustomEvent('input'));
+      expect(inputSpy.calledOnce).to.be.true;
+    });
 
-        _onChange() {
-          changeSpy();
-        }
-      }
-    );
-  });
+    it('should call a change event listener', () => {
+      input.dispatchEvent(new CustomEvent('change'));
+      expect(changeSpy.calledOnce).to.be.true;
+    });
 
-  beforeEach(() => {
-    element = fixtureSync('<input-mixin-element></input-mixin-element>');
-    input = element.querySelector('[slot=input]');
-  });
+    it('should not call an input event listener when input is unset', () => {
+      element.removeChild(input);
+      element._setInputElement(undefined);
+      input.dispatchEvent(new CustomEvent('input'));
+      expect(inputSpy.called).to.be.false;
+    });
 
-  afterEach(() => {
-    inputSpy.resetHistory();
-    changeSpy.resetHistory();
-  });
-
-  it('should call an input event listener', () => {
-    input.dispatchEvent(new CustomEvent('input'));
-    expect(inputSpy.calledOnce).to.be.true;
-  });
-
-  it('should call a change event listener', () => {
-    input.dispatchEvent(new CustomEvent('change'));
-    expect(changeSpy.calledOnce).to.be.true;
-  });
-
-  it('should not call an input event listener when input is unset', () => {
-    element.removeChild(input);
-    element._setInputElement(undefined);
-    input.dispatchEvent(new CustomEvent('input'));
-    expect(inputSpy.called).to.be.false;
-  });
-
-  it('should not call a change event listener when input is unset', () => {
-    element.removeChild(input);
-    element._setInputElement(undefined);
-    input.dispatchEvent(new CustomEvent('change'));
-    expect(changeSpy.called).to.be.false;
+    it('should not call a change event listener when input is unset', () => {
+      element.removeChild(input);
+      element._setInputElement(undefined);
+      input.dispatchEvent(new CustomEvent('change'));
+      expect(changeSpy.called).to.be.false;
+    });
   });
 });

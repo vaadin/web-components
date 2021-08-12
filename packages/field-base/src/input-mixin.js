@@ -25,6 +25,16 @@ const InputMixinImplementation = (superclass) =>
           type: Object,
           readOnly: true,
           observer: '_inputElementChanged'
+        },
+
+        /**
+         * The value of the field.
+         */
+        value: {
+          type: String,
+          value: '',
+          observer: '_valueChanged',
+          notify: true
         }
       };
     }
@@ -34,6 +44,13 @@ const InputMixinImplementation = (superclass) =>
 
       this._boundOnInput = this._onInput.bind(this);
       this._boundOnChange = this._onChange.bind(this);
+    }
+
+    /**
+     * Clear the value of the field.
+     */
+    clear() {
+      this.value = '';
     }
 
     /**
@@ -55,6 +72,30 @@ const InputMixinImplementation = (superclass) =>
       input.removeEventListener('change', this._boundOnChange);
     }
 
+    /**
+     * A method to forward the value property set on the field
+     * programmatically back to the input element value.
+     * Override this method to perform additional checks,
+     * for example to skip this in certain conditions.
+     * @param {string} value
+     * @protected
+     * @override
+     */
+    _forwardInputValue(value) {
+      // Value might be set before an input element is initialized.
+      // This case should be handled separately by a component that
+      // implements this mixin, for example in `connectedCallback`.
+      if (!this.inputElement) {
+        return;
+      }
+
+      if (value != undefined) {
+        this.inputElement.value = value;
+      } else {
+        this.clear();
+      }
+    }
+
     /** @protected */
     _inputElementChanged(input, oldInput) {
       if (input) {
@@ -65,13 +106,18 @@ const InputMixinImplementation = (superclass) =>
     }
 
     /**
-     * An input event listener.
+     * An input event listener used to update the field value.
      * Override this method with an actual implementation.
      * @param {Event} _event
      * @protected
      * @override
      */
-    _onInput(_event) {}
+    _onInput(event) {
+      // Ignore fake input events e.g. used by clear button.
+      this.__userInput = event.isTrusted;
+      this.value = event.target.value;
+      this.__userInput = false;
+    }
 
     /**
      * A change event listener.
@@ -81,6 +127,39 @@ const InputMixinImplementation = (superclass) =>
      * @override
      */
     _onChange(_event) {}
+
+    /**
+     * Toggle the has-value attribute based on the value property.
+     * @param {boolean} hasValue
+     * @protected
+     */
+    _toggleHasValue(hasValue) {
+      this.toggleAttribute('has-value', hasValue);
+    }
+
+    /**
+     * Observer called when a value property changes.
+     * @param {unknown} newVal
+     * @param {unknown} _oldVal
+     * @protected
+     * @override
+     */
+    _valueChanged(newVal, oldVal) {
+      this._toggleHasValue(newVal !== '' && newVal != null);
+
+      // Setting initial value to empty string, do nothing.
+      if (newVal === '' && oldVal === undefined) {
+        return;
+      }
+
+      // Value is set by the user, no need to sync it back to input.
+      if (this.__userInput) {
+        return;
+      }
+
+      // Setting a value programmatically, sync it to input element.
+      this._forwardInputValue(newVal);
+    }
   };
 
 /**
