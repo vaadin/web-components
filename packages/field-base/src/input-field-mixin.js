@@ -10,11 +10,11 @@ import { AriaLabelMixin } from './aria-label-mixin.js';
 import { ClearButtonMixin } from './clear-button-mixin.js';
 import { DelegateFocusMixin } from './delegate-focus-mixin.js';
 import { FieldAriaMixin } from './field-aria-mixin.js';
-import { InputPropsMixin } from './input-props-mixin.js';
+import { ForwardInputPropsMixin } from './forward-input-props-mixin.js';
 
 const InputFieldMixinImplementation = (superclass) =>
   class InputFieldMixinClass extends ClearButtonMixin(
-    FieldAriaMixin(InputPropsMixin(AriaLabelMixin(DelegateFocusMixin(superclass))))
+    FieldAriaMixin(ForwardInputPropsMixin(AriaLabelMixin(DelegateFocusMixin(superclass))))
   ) {
     static get properties() {
       return {
@@ -61,8 +61,8 @@ const InputFieldMixinImplementation = (superclass) =>
       };
     }
 
-    static get hostProps() {
-      return [...super.hostProps, 'autocapitalize', 'autocomplete', 'autocorrect'];
+    static get forwardProps() {
+      return [...super.forwardProps, 'autocapitalize', 'autocomplete', 'autocorrect'];
     }
 
     static get observers() {

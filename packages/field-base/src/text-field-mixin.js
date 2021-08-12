@@ -27,8 +27,8 @@ const TextFieldMixinImplementation = (superclass) =>
       };
     }
 
-    static get hostProps() {
-      return [...super.hostProps, 'maxlength', 'minlength'];
+    static get forwardProps() {
+      return [...super.forwardProps, 'maxlength', 'minlength'];
     }
 
     /**

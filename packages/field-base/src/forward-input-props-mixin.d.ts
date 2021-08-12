@@ -7,15 +7,17 @@ import { InputMixin } from './input-mixin.js';
 import { ValidateMixin } from './validate-mixin.js';
 
 /**
- * A mixin to forward properties to the native <input> element.
+ * A mixin to forward properties to the input element.
  */
-declare function InputPropsMixin<T extends new (...args: any[]) => {}>(base: T): T & InputPropsMixinConstructor;
+declare function ForwardInputPropsMixin<T extends new (...args: any[]) => {}>(
+  base: T
+): T & ForwardInputPropsMixinConstructor;
 
-interface InputPropsMixinConstructor {
-  new (...args: any[]): InputPropsMixin;
+interface ForwardInputPropsMixinConstructor {
+  new (...args: any[]): ForwardInputPropsMixin;
 }
 
-interface InputPropsMixin extends InputMixin, ValidateMixin {
+interface ForwardInputPropsMixin extends InputMixin, ValidateMixin {
   /**
    * The name of this field.
    */
@@ -37,4 +39,4 @@ interface InputPropsMixin extends InputMixin, ValidateMixin {
   title: string;
 }
 
-export { InputPropsMixinConstructor, InputPropsMixin };
+export { ForwardInputPropsMixinConstructor, ForwardInputPropsMixin };

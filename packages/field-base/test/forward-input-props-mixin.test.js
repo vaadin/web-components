@@ -1,12 +1,12 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { InputPropsMixin } from '../src/input-props-mixin.js';
+import { ForwardInputPropsMixin } from '../src/forward-input-props-mixin.js';
 import { AriaLabelMixin } from '../src/aria-label-mixin.js';
 
 customElements.define(
-  'input-props-mixin-element',
-  class extends InputPropsMixin(AriaLabelMixin(PolymerElement)) {
+  'forward-input-props-mixin-element',
+  class extends ForwardInputPropsMixin(AriaLabelMixin(PolymerElement)) {
     static get template() {
       return html`<slot name="label"></slot><slot name="input"></slot>`;
     }
@@ -19,12 +19,12 @@ customElements.define(
   }
 );
 
-describe('input-props-mixin', () => {
+describe('forward-input-props-mixin', () => {
   let element, input;
 
   describe('name', () => {
     beforeEach(() => {
-      element = fixtureSync('<input-props-mixin-element name="foo"></input-props-mixin-element>');
+      element = fixtureSync('<forward-input-props-mixin-element name="foo"></forward-input-props-mixin-element>');
       input = element.querySelector('[slot=input]');
     });
 
@@ -40,7 +40,7 @@ describe('input-props-mixin', () => {
 
   describe('title', () => {
     beforeEach(() => {
-      element = fixtureSync('<input-props-mixin-element title="foo"></input-props-mixin-element>');
+      element = fixtureSync('<forward-input-props-mixin-element title="foo"></forward-input-props-mixin-element>');
       input = element.querySelector('[slot=input]');
     });
 
@@ -56,7 +56,9 @@ describe('input-props-mixin', () => {
 
   describe('placeholder', () => {
     beforeEach(() => {
-      element = fixtureSync('<input-props-mixin-element placeholder="foo"></input-props-mixin-element>');
+      element = fixtureSync(
+        '<forward-input-props-mixin-element placeholder="foo"></forward-input-props-mixin-element>'
+      );
       input = element.querySelector('[slot=input]');
     });
 
@@ -72,7 +74,7 @@ describe('input-props-mixin', () => {
 
   describe('readonly', () => {
     beforeEach(() => {
-      element = fixtureSync('<input-props-mixin-element readonly></input-props-mixin-element>');
+      element = fixtureSync('<forward-input-props-mixin-element readonly></forward-input-props-mixin-element>');
       input = element.querySelector('[slot=input]');
     });
 
@@ -88,7 +90,7 @@ describe('input-props-mixin', () => {
 
   describe('required', () => {
     beforeEach(() => {
-      element = fixtureSync('<input-props-mixin-element required></input-props-mixin-element>');
+      element = fixtureSync('<forward-input-props-mixin-element required></forward-input-props-mixin-element>');
       input = element.querySelector('[slot=input]');
     });
 
@@ -104,7 +106,7 @@ describe('input-props-mixin', () => {
 
   describe('invalid', () => {
     beforeEach(() => {
-      element = fixtureSync('<input-props-mixin-element invalid></input-props-mixin-element>');
+      element = fixtureSync('<forward-input-props-mixin-element invalid></forward-input-props-mixin-element>');
       input = element.querySelector('[slot=input]');
     });
 

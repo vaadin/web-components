@@ -7,8 +7,8 @@ import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
 import { InputMixin } from './input-mixin.js';
 import { ValidateMixin } from './validate-mixin.js';
 
-const InputPropsMixinImplementation = (superclass) =>
-  class InputPropsMixinClass extends ValidateMixin(InputMixin(superclass)) {
+const ForwardInputPropsMixinImplementation = (superclass) =>
+  class ForwardInputPropsMixinClass extends ValidateMixin(InputMixin(superclass)) {
     static get properties() {
       return {
         /**
@@ -43,7 +43,7 @@ const InputPropsMixinImplementation = (superclass) =>
       };
     }
 
-    static get hostProps() {
+    static get forwardProps() {
       return ['name', 'type', 'placeholder', 'readonly', 'required', 'invalid', 'title'];
     }
 
@@ -51,8 +51,8 @@ const InputPropsMixinImplementation = (superclass) =>
     ready() {
       super.ready();
 
-      // create observer dynamically to allow subclasses to override hostProps
-      this._createMethodObserver(`_hostPropsChanged(${this.constructor.hostProps.join(', ')})`);
+      // create observer dynamically to allow subclasses to override forwardProps
+      this._createMethodObserver(`_forwardPropsChanged(${this.constructor.forwardProps.join(', ')})`);
     }
 
     /** @protected */
@@ -61,19 +61,21 @@ const InputPropsMixinImplementation = (superclass) =>
 
       if (input) {
         // Propagate initially defined properties to the slotted input
-        this._propagateHostAttributes(this.constructor.hostProps.map((attr) => this[attr] || this.getAttribute(attr)));
+        this._propagateHostAttributes(
+          this.constructor.forwardProps.map((attr) => this[attr] || this.getAttribute(attr))
+        );
       }
     }
 
     /** @private */
-    _hostPropsChanged(...attributesValues) {
+    _forwardPropsChanged(...attributesValues) {
       this._propagateHostAttributes(attributesValues);
     }
 
     /** @private */
     _propagateHostAttributes(attributesValues) {
       const input = this.inputElement;
-      const attributeNames = this.constructor.hostProps;
+      const attributeNames = this.constructor.forwardProps;
 
       attributeNames.forEach((attr, index) => {
         const value = attributesValues[index];
@@ -101,6 +103,6 @@ const InputPropsMixinImplementation = (superclass) =>
   };
 
 /**
- * A mixin to forward properties to the native <input> element.
+ * A mixin to forward properties to the input element.
  */
-export const InputPropsMixin = dedupingMixin(InputPropsMixinImplementation);
+export const ForwardInputPropsMixin = dedupingMixin(ForwardInputPropsMixinImplementation);

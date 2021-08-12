@@ -3,7 +3,7 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { InputPropsMixin } from './input-props-mixin.js';
+import { ForwardInputPropsMixin } from './forward-input-props-mixin.js';
 
 /**
  * A mixin to provide `pattern` and `preventInvalidInput` properties.
@@ -14,7 +14,7 @@ interface PatternMixinConstructor {
   new (...args: any[]): PatternMixin;
 }
 
-interface PatternMixin extends InputPropsMixin {
+interface PatternMixin extends ForwardInputPropsMixin {
   /**
    * A regular expression that the value is checked against.
    * The pattern must match the entire value, not just some subset.

@@ -6,10 +6,10 @@
 import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
 import { timeOut } from '@polymer/polymer/lib/utils/async.js';
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
-import { InputPropsMixin } from './input-props-mixin.js';
+import { ForwardInputPropsMixin } from './forward-input-props-mixin.js';
 
 const PatternMixinImplementation = (superclass) =>
-  class PatternMixinClass extends InputPropsMixin(superclass) {
+  class PatternMixinClass extends ForwardInputPropsMixin(superclass) {
     static get properties() {
       return {
         /**
@@ -31,8 +31,8 @@ const PatternMixinImplementation = (superclass) =>
       };
     }
 
-    static get hostProps() {
-      return [...super.hostProps, 'pattern'];
+    static get forwardProps() {
+      return [...super.forwardProps, 'pattern'];
     }
 
     /** @protected */
