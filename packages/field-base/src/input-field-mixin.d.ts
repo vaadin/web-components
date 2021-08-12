@@ -3,10 +3,10 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { AriaLabelMixin } from './aria-label-mixin.js';
 import { ClearButtonMixin } from './clear-button-mixin.js';
 import { DelegateFocusMixin } from './delegate-focus-mixin.js';
 import { FieldAriaMixin } from './field-aria-mixin.js';
-import { InputAriaMixin } from './input-aria-mixin.js';
 import { InputPropsMixin } from './input-props-mixin.js';
 import { ValueMixin } from './value-mixin.js';
 
@@ -20,10 +20,10 @@ interface InputFieldMixinConstructor {
 }
 
 interface InputFieldMixin
-  extends ClearButtonMixin,
+  extends AriaLabelMixin,
+    ClearButtonMixin,
     DelegateFocusMixin,
     FieldAriaMixin,
-    InputAriaMixin,
     InputPropsMixin,
     ValueMixin {
   /**

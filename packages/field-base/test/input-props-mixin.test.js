@@ -2,11 +2,11 @@ import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { InputPropsMixin } from '../src/input-props-mixin.js';
-import { InputAriaMixin } from '../src/input-aria-mixin.js';
+import { AriaLabelMixin } from '../src/aria-label-mixin.js';
 
 customElements.define(
   'input-props-mixin-element',
-  class extends InputPropsMixin(InputAriaMixin(PolymerElement)) {
+  class extends InputPropsMixin(AriaLabelMixin(PolymerElement)) {
     static get template() {
       return html`<slot name="label"></slot><slot name="input"></slot>`;
     }

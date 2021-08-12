@@ -7,8 +7,8 @@ import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
 import { LabelMixin } from './label-mixin.js';
 import { InputSlotMixin } from './input-slot-mixin.js';
 
-const InputAriaMixinImplementation = (superclass) =>
-  class InputAriaMixinClass extends InputSlotMixin(LabelMixin(superclass)) {
+const AriaLabelMixinImplementation = (superclass) =>
+  class AriaLabelMixinClass extends InputSlotMixin(LabelMixin(superclass)) {
     constructor() {
       super();
 
@@ -66,4 +66,4 @@ const InputAriaMixinImplementation = (superclass) =>
 /**
  * A mixin to link slotted `<input>` and `<label>` elements.
  */
-export const InputAriaMixin = dedupingMixin(InputAriaMixinImplementation);
+export const AriaLabelMixin = dedupingMixin(AriaLabelMixinImplementation);

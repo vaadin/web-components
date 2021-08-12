@@ -6,16 +6,16 @@
 import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
 import { animationFrame } from '@polymer/polymer/lib/utils/async.js';
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
+import { AriaLabelMixin } from './aria-label-mixin.js';
 import { ClearButtonMixin } from './clear-button-mixin.js';
 import { DelegateFocusMixin } from './delegate-focus-mixin.js';
 import { FieldAriaMixin } from './field-aria-mixin.js';
-import { InputAriaMixin } from './input-aria-mixin.js';
 import { InputPropsMixin } from './input-props-mixin.js';
 import { ValueMixin } from './value-mixin.js';
 
 const InputFieldMixinImplementation = (superclass) =>
   class InputFieldMixinClass extends ClearButtonMixin(
-    ValueMixin(FieldAriaMixin(InputPropsMixin(InputAriaMixin(DelegateFocusMixin(superclass)))))
+    ValueMixin(FieldAriaMixin(InputPropsMixin(AriaLabelMixin(DelegateFocusMixin(superclass)))))
   ) {
     static get properties() {
       return {

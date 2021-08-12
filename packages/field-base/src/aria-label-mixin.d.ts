@@ -9,12 +9,12 @@ import { InputSlotMixin } from './input-slot-mixin.js';
 /**
  * A mixin to link slotted `<input>` and `<label>` elements.
  */
-declare function InputAriaMixin<T extends new (...args: any[]) => {}>(base: T): T & InputAriaMixinConstructor;
+declare function AriaLabelMixin<T extends new (...args: any[]) => {}>(base: T): T & AriaLabelMixinConstructor;
 
-interface InputAriaMixinConstructor {
-  new (...args: any[]): InputAriaMixin;
+interface AriaLabelMixinConstructor {
+  new (...args: any[]): AriaLabelMixin;
 }
 
-interface InputAriaMixin extends InputSlotMixin, LabelMixin {}
+interface AriaLabelMixin extends InputSlotMixin, LabelMixin {}
 
-export { InputAriaMixin, InputAriaMixinConstructor };
+export { AriaLabelMixin, AriaLabelMixinConstructor };

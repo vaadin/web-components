@@ -2,12 +2,12 @@ import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { InputAriaMixin } from '../src/input-aria-mixin.js';
+import { AriaLabelMixin } from '../src/aria-label-mixin.js';
 import { PatternMixin } from '../src/pattern-mixin.js';
 
 customElements.define(
   'pattern-mixin-element',
-  class extends PatternMixin(InputAriaMixin(PolymerElement)) {
+  class extends PatternMixin(AriaLabelMixin(PolymerElement)) {
     static get template() {
       return html`<slot name="label"></slot><slot name="input"></slot>`;
     }
