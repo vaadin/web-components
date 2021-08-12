@@ -6,6 +6,7 @@
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import '@vaadin/vaadin-lumo-styles/font-icons.js';
 import '@vaadin/vaadin-lumo-styles/sizing.js';
+import '@vaadin/text-field/theme/lumo/vaadin-input-field-shared-styles.js';
 
 registerStyles(
   'vaadin-password-field',
@@ -39,5 +40,5 @@ registerStyles(
       border: none;
     }
   `,
-  { moduleId: 'lumo-password-field' }
+  { moduleId: 'lumo-password-field', include: ['lumo-input-field-shared-styles'] }
 );

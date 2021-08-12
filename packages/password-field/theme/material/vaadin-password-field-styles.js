@@ -5,6 +5,7 @@
  */
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import '@vaadin/vaadin-material-styles/font-icons.js';
+import '@vaadin/text-field/theme/material/vaadin-input-field-shared-styles.js';
 
 registerStyles(
   'vaadin-password-field',
@@ -46,5 +47,5 @@ registerStyles(
       border: none;
     }
   `,
-  { moduleId: 'material-password-field' }
+  { moduleId: 'material-password-field', include: ['material-input-field-shared-styles'] }
 );
