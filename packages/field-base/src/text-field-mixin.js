@@ -70,7 +70,7 @@ const TextFieldMixinImplementation = (superclass) =>
      */
     checkValidity() {
       if (this.required || this.pattern || this.maxlength || this.minlength) {
-        return this._inputNode ? this._inputNode.checkValidity() : undefined;
+        return this.inputElement ? this.inputElement.checkValidity() : undefined;
       } else {
         return !this.invalid;
       }

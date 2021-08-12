@@ -74,7 +74,7 @@ const InputFieldMixinImplementation = (superclass) =>
      * @protected
      */
     get _ariaTarget() {
-      return this._inputNode;
+      return this.inputElement;
     }
 
     /**
@@ -82,7 +82,7 @@ const InputFieldMixinImplementation = (superclass) =>
      * @return {!HTMLInputElement}
      */
     get focusElement() {
-      return this._inputNode;
+      return this.inputElement;
     }
 
     constructor() {
@@ -101,13 +101,13 @@ const InputFieldMixinImplementation = (superclass) =>
         this._setInputElement(this._inputNode);
 
         // Discard value set on the custom slotted input.
-        if (this._inputNode.value !== this.value) {
+        if (this.inputElement.value !== this.value) {
           console.warn(`Please define value on the <${this.localName}> component!`);
-          this._inputNode.value = '';
+          this.inputElement.value = '';
         }
 
         if (this.value) {
-          this._inputNode.value = this.value;
+          this.inputElement.value = this.value;
         }
       }
     }
@@ -132,7 +132,7 @@ const InputFieldMixinImplementation = (superclass) =>
      */
     checkValidity() {
       if (this.required) {
-        return this._inputNode ? this._inputNode.checkValidity() : undefined;
+        return this.inputElement ? this.inputElement.checkValidity() : undefined;
       } else {
         return !this.invalid;
       }
@@ -160,8 +160,8 @@ const InputFieldMixinImplementation = (superclass) =>
 
     /** @private */
     _onFocus() {
-      if (this.autoselect && this._inputNode) {
-        this._inputNode.select();
+      if (this.autoselect && this.inputElement) {
+        this.inputElement.select();
       }
     }
 

@@ -104,7 +104,7 @@ describe('delegate-focus-mixin', () => {
 
     it('should focus the input when autofocus is set', async () => {
       document.body.appendChild(element);
-      const spy = sinon.spy(element._inputNode, 'focus');
+      const spy = sinon.spy(element.focusElement, 'focus');
       await nextFrame();
       expect(spy.calledOnce).to.be.true;
     });
