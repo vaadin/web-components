@@ -171,19 +171,6 @@ const InputFieldMixinImplementation = (superclass) =>
     }
 
     /**
-     * @param {Event} event
-     * @protected
-     */
-    _onInput(event) {
-      super._onInput(event);
-
-      // Ignore manual clear button events
-      this.__userInput = event.isTrusted;
-      this.value = event.target.value;
-      this.__userInput = false;
-    }
-
-    /**
      * Dispatch an event if a specific size measurement property has changed.
      * Supporting multiple properties here is needed for `vaadin-text-area`.
      * @protected
