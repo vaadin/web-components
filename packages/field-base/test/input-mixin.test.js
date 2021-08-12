@@ -2,10 +2,10 @@ import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { InputListenersMixin } from '../src/input-listeners-mixin.js';
+import { InputMixin } from '../src/input-mixin.js';
 import { InputSlotMixin } from '../src/input-slot-mixin.js';
 
-describe('input-listeners-mixin', () => {
+describe('input-mixin', () => {
   let element, input, inputSpy, changeSpy;
 
   before(() => {
@@ -13,8 +13,8 @@ describe('input-listeners-mixin', () => {
     changeSpy = sinon.spy();
 
     customElements.define(
-      'input-listeners-mixin-element',
-      class extends InputListenersMixin(InputSlotMixin(PolymerElement)) {
+      'input-mixin-element',
+      class extends InputMixin(InputSlotMixin(PolymerElement)) {
         static get template() {
           return html`<slot name="input"></slot>`;
         }
@@ -37,8 +37,13 @@ describe('input-listeners-mixin', () => {
   });
 
   beforeEach(() => {
-    element = fixtureSync('<input-listeners-mixin-element></input-listeners-mixin-element>');
+    element = fixtureSync('<input-mixin-element></input-mixin-element>');
     input = element.querySelector('[slot=input]');
+  });
+
+  afterEach(() => {
+    inputSpy.resetHistory();
+    changeSpy.resetHistory();
   });
 
   it('should call an input event listener', () => {
@@ -49,5 +54,19 @@ describe('input-listeners-mixin', () => {
   it('should call a change event listener', () => {
     input.dispatchEvent(new CustomEvent('change'));
     expect(changeSpy.calledOnce).to.be.true;
+  });
+
+  it('should not call an input event listener when input is unset', () => {
+    element.removeChild(input);
+    element._setInputElement(undefined);
+    input.dispatchEvent(new CustomEvent('input'));
+    expect(inputSpy.called).to.be.false;
+  });
+
+  it('should not call a change event listener when input is unset', () => {
+    element.removeChild(input);
+    element._setInputElement(undefined);
+    input.dispatchEvent(new CustomEvent('change'));
+    expect(changeSpy.called).to.be.false;
   });
 });

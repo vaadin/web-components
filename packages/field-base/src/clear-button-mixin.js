@@ -4,10 +4,10 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
-import { InputListenersMixin } from './input-listeners-mixin.js';
+import { InputMixin } from './input-mixin.js';
 
 const ClearButtonMixinImplementation = (superclass) =>
-  class ClearButtonMixinClass extends InputListenersMixin(superclass) {
+  class ClearButtonMixinClass extends InputMixin(superclass) {
     static get properties() {
       return {
         /**

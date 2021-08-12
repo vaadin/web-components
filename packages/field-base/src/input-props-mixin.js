@@ -4,11 +4,11 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
-import { InputListenersMixin } from './input-listeners-mixin.js';
+import { InputMixin } from './input-mixin.js';
 import { ValidateMixin } from './validate-mixin.js';
 
 const InputPropsMixinImplementation = (superclass) =>
-  class InputPropsMixinClass extends ValidateMixin(InputListenersMixin(superclass)) {
+  class InputPropsMixinClass extends ValidateMixin(InputMixin(superclass)) {
     static get properties() {
       return {
         /**

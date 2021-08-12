@@ -6,7 +6,7 @@ export { FieldAriaMixin } from './src/field-aria-mixin.js';
 export { FocusMixin } from './src/focus-mixin.js';
 export { HelperTextMixin } from './src/helper-text-mixin.js';
 export { InputFieldMixin } from './src/input-field-mixin.js';
-export { InputListenersMixin } from './src/input-listeners-mixin.js';
+export { InputMixin } from './src/input-mixin.js';
 export { InputPropsMixin } from './src/input-props-mixin.js';
 export { InputSlotMixin } from './src/input-slot-mixin.js';
 export { LabelMixin } from './src/label-mixin.js';

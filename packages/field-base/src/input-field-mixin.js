@@ -98,7 +98,7 @@ const InputFieldMixinImplementation = (superclass) =>
       super.connectedCallback();
 
       if (this._inputNode) {
-        // Initialize `InputListenersMixin`
+        // Initialize `InputMixin`
         this._setInputElement(this._inputNode);
 
         // Discard value set on the custom slotted input.
