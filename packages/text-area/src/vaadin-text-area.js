@@ -102,6 +102,7 @@ export class TextArea extends TextFieldMixin(ThemableMixin(ElementMixin(PolymerE
       <div part="container">
         <div part="label">
           <slot name="label"></slot>
+          <span part="indicator" aria-hidden="true"></span>
         </div>
 
         <vaadin-input-container

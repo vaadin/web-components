@@ -31,6 +31,12 @@ registerStyles(
       line-height: 32px;
     }
 
+    /* TODO: remove when the following components are updated to use new indicator:
+      combo-box, date-picker, time-picker, date-time-picker, select. */
+    [part='label']::after {
+      display: none;
+    }
+
     /* Strange gymnastics to make fields vertically align nicely in most cases
          (no label, with label, without prefix, with prefix, etc.) */
 

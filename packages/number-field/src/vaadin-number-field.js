@@ -58,6 +58,7 @@ export class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(Poly
       <div part="container">
         <div part="label" on-click="focus">
           <slot name="label"></slot>
+          <span part="indicator" aria-hidden="true"></span>
         </div>
 
         <vaadin-input-container
