@@ -139,8 +139,8 @@ const InputMixinImplementation = (superclass) =>
 
     /**
      * Observer called when a value property changes.
-     * @param {unknown} newVal
-     * @param {unknown} _oldVal
+     * @param {string | undefined} newVal
+     * @param {string | undefined} oldVal
      * @protected
      * @override
      */
