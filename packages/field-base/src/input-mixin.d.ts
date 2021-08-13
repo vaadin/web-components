@@ -20,9 +20,9 @@ interface InputMixin {
    * Any component implementing this mixin is expected to provide it
    * by using `this._setInputElement(input)` Polymer API.
    *
-   * A typical case is using this mixin in combination with `InputSlotMixin`,
-   * although the input element does not have to always be native <input>.
-   * As an example, <vaadin-combo-box-light> accepts other components.
+   * A typical case is using `InputSlotMixin` that does this automatically.
+   * However, the input element does not have to always be native <input>:
+   * as an example, <vaadin-combo-box-light> accepts other components.
    */
   readonly inputElement: HTMLInputElement;
 

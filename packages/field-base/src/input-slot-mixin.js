@@ -4,10 +4,11 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
+import { InputMixin } from './input-mixin.js';
 import { SlotMixin } from './slot-mixin.js';
 
 const InputSlotMixinImplementation = (superclass) =>
-  class InputSlotMixinClass extends SlotMixin(superclass) {
+  class InputSlotMixinClass extends InputMixin(SlotMixin(superclass)) {
     static get properties() {
       /**
        * String used to define input type.
@@ -60,6 +61,8 @@ const InputSlotMixinImplementation = (superclass) =>
 
       if (this._inputNode) {
         this._inputNode.id = this._inputId;
+
+        this._setInputElement(this._inputNode);
       }
     }
   };

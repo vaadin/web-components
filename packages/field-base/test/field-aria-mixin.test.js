@@ -18,7 +18,7 @@ customElements.define(
     }
 
     get _ariaTarget() {
-      return this._inputNode;
+      return this.inputElement;
     }
   }
 );

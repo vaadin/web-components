@@ -13,7 +13,7 @@ customElements.define(
     }
 
     get focusElement() {
-      return this._inputNode;
+      return this.inputElement;
     }
   }
 );

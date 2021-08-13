@@ -24,12 +24,6 @@ customElements.define(
     get clearElement() {
       return this.$.clearButton;
     }
-
-    connectedCallback() {
-      super.connectedCallback();
-
-      this._setInputElement(this._inputNode);
-    }
   }
 );
 

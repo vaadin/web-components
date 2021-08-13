@@ -96,10 +96,7 @@ const InputFieldMixinImplementation = (superclass) =>
     connectedCallback() {
       super.connectedCallback();
 
-      if (this._inputNode) {
-        // Initialize `InputMixin`
-        this._setInputElement(this._inputNode);
-
+      if (this.inputElement) {
         // Discard value set on the custom slotted input.
         if (this.inputElement.value !== this.value) {
           console.warn(`Please define value on the <${this.localName}> component!`);

@@ -11,12 +11,6 @@ customElements.define(
     static get template() {
       return html`<slot name="input"></slot>`;
     }
-
-    connectedCallback() {
-      super.connectedCallback();
-
-      this._setInputElement(this._inputNode);
-    }
   }
 );
 
@@ -97,12 +91,6 @@ describe('input-mixin', () => {
         class extends InputMixin(InputSlotMixin(PolymerElement)) {
           static get template() {
             return html`<slot name="input"></slot>`;
-          }
-
-          connectedCallback() {
-            super.connectedCallback();
-
-            this._setInputElement(this._inputNode);
           }
 
           _onInput() {

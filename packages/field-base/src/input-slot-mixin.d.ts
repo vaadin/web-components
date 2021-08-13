@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { SlotMixin } from './slot-mixin.js';
+import { InputMixin } from './input-mixin.js';
 
 /**
  * A mixin to add `<input>` element to the corresponding named slot.
@@ -14,7 +15,7 @@ interface InputSlotMixinConstructor {
   new (...args: any[]): InputSlotMixin;
 }
 
-interface InputSlotMixin extends SlotMixin {
+interface InputSlotMixin extends InputMixin, SlotMixin {
   /**
    * String used to define input type.
    */

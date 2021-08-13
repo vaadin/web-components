@@ -45,6 +45,10 @@ describe('input-slot-mixin', () => {
       expect(element._inputNode).to.equal(input);
     });
 
+    it('should sore a reference as inputElement', () => {
+      expect(element.inputElement).to.equal(input);
+    });
+
     it('should set id attribute on the input', () => {
       const idRegex = /^input-slot-mixin-element-\d$/;
       expect(input.getAttribute('id')).to.match(idRegex);

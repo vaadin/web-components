@@ -11,12 +11,6 @@ customElements.define(
     static get template() {
       return html`<slot name="label"></slot><slot name="input"></slot>`;
     }
-
-    connectedCallback() {
-      super.connectedCallback();
-
-      this._setInputElement(this._inputNode);
-    }
   }
 );
 
