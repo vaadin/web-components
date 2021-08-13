@@ -107,20 +107,20 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
        * scrolling restore. If true, then scroll to 0 position. Restore
        * the previous position otherwise.
        */
-      filterChanged: {
-        type: Boolean,
-        value: false
-      },
+      // filterChanged: {
+      //   type: Boolean,
+      //   value: false
+      // },
 
       /**
        * Used to recognize scroller reset after new items have been set
        * to iron-list and to ignore unwanted pages load. If 'true', then
        * skip loading of the pages until it becomes 'false'.
        */
-      _resetScrolling: {
-        type: Boolean,
-        value: false
-      },
+      // _resetScrolling: {
+      //   type: Boolean,
+      //   value: false
+      // },
 
       _selectedItem: {
         type: Object
@@ -159,10 +159,10 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
        * Stores the scroller position before updating the 'items', in
        * order to restore it immediately after 'items' have been updated
        */
-      _oldScrollerPosition: {
-        type: Number,
-        value: 0
-      },
+      // _oldScrollerPosition: {
+      //   type: Number,
+      //   value: 0
+      // },
 
       __effectiveItems: {
         computed: '_getItems(opened, _items)',
@@ -172,14 +172,19 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
   }
 
   static get observers() {
-    return ['_loadingChanged(loading)', '_openedChanged(opened, _items, loading)', '_restoreScrollerPosition(_items)'];
+    return [
+      '_loadingChanged(loading)',
+      '_openedChanged(opened, _items, loading)',
+      '__updateAllItems(_selectedItem, renderer)'
+    ];
   }
 
   __effectiveItemsChanged(effectiveItems) {
     if (this.__virtualizer && effectiveItems) {
-      requestAnimationFrame(() => {
-        this.__virtualizer.size = effectiveItems.length;
-      });
+      // requestAnimationFrame(() => {
+      this.__virtualizer.size = effectiveItems.length;
+      this.__virtualizer.flush();
+      // });
     }
   }
 
@@ -198,9 +203,9 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
 
     el.setProperties({
       item: this.__effectiveItems[index],
-      index: this.__requestItemByIndex(item, index, this._resetScrolling), // Should rerender on _resetScrolling change
+      index: this.__requestItemByIndex(item, index),
       label: this.getItemLabel(item, this._itemLabelPath),
-      selected: this._isItemSelected(item, this._selectedItem, this._itemIdPath), // These should also invoke rerender
+      selected: this._isItemSelected(item, this._selectedItem, this._itemIdPath), // TODO: _itemIdPath should also invoke rerender
       renderer: this.renderer,
       focused: this._isItemFocused(this._focusedIndex, index)
     });
@@ -220,36 +225,36 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
 
   _getItems(opened, items) {
     if (opened) {
-      if (this._isNotEmpty(items) && this._selector && !this.filterChanged) {
-        // iron-list triggers the scroller's reset after items update, and
-        // this is not appropriate for undefined size lazy loading.
-        // see https://github.com/vaadin/vaadin-combo-box-flow/issues/386
-        // We store iron-list scrolling position in order to restore
-        // it later on after the items have been updated.
-        const currentScrollerPosition = this._selector.firstVisibleIndex;
-        if (currentScrollerPosition !== 0) {
-          this._oldScrollerPosition = currentScrollerPosition;
-          this._resetScrolling = true;
-        }
-      }
+      // if (this._isNotEmpty(items) && this._selector && !this.filterChanged) {
+      // iron-list triggers the scroller's reset after items update, and
+      // this is not appropriate for undefined size lazy loading.
+      // see https://github.com/vaadin/vaadin-combo-box-flow/issues/386
+      // We store iron-list scrolling position in order to restore
+      // it later on after the items have been updated.
+      // const currentScrollerPosition = this._selector.firstVisibleIndex;
+      // if (currentScrollerPosition !== 0) {
+      //   this._oldScrollerPosition = currentScrollerPosition;
+      //   this._resetScrolling = true;
+      // }
+      // }
       // Let the position to be restored in the future calls unless it's not
       // caused by filtering
-      this.filterChanged = false;
+      // this.filterChanged = false;
       return items;
     }
     return [];
   }
 
-  _restoreScrollerPosition(items) {
-    if (this._isNotEmpty(items) && this._selector && this._oldScrollerPosition !== 0) {
-      // new items size might be less than old scrolling position
-      this._scrollIntoView(Math.min(items.length - 1, this._oldScrollerPosition));
-      this._resetScrolling = false;
-      // reset position to 0 again in order to properly handle the filter
-      // cases (scroll to 0 after typing the filter)
-      this._oldScrollerPosition = 0;
-    }
-  }
+  // _restoreScrollerPosition(items) {
+  //   if (this._isNotEmpty(items) && this._selector && this._oldScrollerPosition !== 0) {
+  //     // new items size might be less than old scrolling position
+  //     this._scrollIntoView(Math.min(items.length - 1, this._oldScrollerPosition));
+  //     // this._resetScrolling = false;
+  //     // reset position to 0 again in order to properly handle the filter
+  //     // cases (scroll to 0 after typing the filter)
+  //     this._oldScrollerPosition = 0;
+  //   }
+  // }
 
   _isNotEmpty(items) {
     return !this._isEmpty(items);
@@ -327,7 +332,7 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
     this.$.dropdown.$.overlay.style.maxHeight = maxHeight;
 
     // we need to set height for iron-list to make its `firstVisibleIndex` work correctly.
-    this._selector.style.maxHeight = maxHeight;
+    // this._selector.style.maxHeight = maxHeight;
 
     // this.updateViewportBoundaries();
   }
@@ -384,8 +389,8 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
    *
    * @return {number}
    */
-  __requestItemByIndex(item, index, resetScrolling) {
-    if (item instanceof ComboBoxPlaceholder && index !== undefined && !resetScrolling) {
+  __requestItemByIndex(item, index) {
+    if (item instanceof ComboBoxPlaceholder && index !== undefined) {
       this.dispatchEvent(
         new CustomEvent('index-requested', { detail: { index, currentScrollerPos: this._oldScrollerPosition } })
       );
@@ -460,8 +465,15 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
     // }
   }
 
+  __updateAllItems() {
+    if (this.__virtualizer) {
+      // TODO: Check if this causes excess renderer invocations
+      this.__virtualizer.update();
+    }
+  }
+
   ensureItemsRendered() {
-    this.__virtualizer.update();
+    this.__updateAllItems();
   }
 
   adjustScrollPosition() {
@@ -481,7 +493,6 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
     //   const scroller = selector._scroller || selector.scrollTarget;
     //   const scrolledToTop = scroller.scrollTop === 0;
     //   const scrolledToBottom = scroller.scrollHeight - scroller.scrollTop - scroller.clientHeight <= 1;
-
     //   if (scrolledToTop && e.deltaY < 0) {
     //     e.preventDefault();
     //   } else if (scrolledToBottom && e.deltaY > 0) {
@@ -513,9 +524,8 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
   _visibleItemsCount() {
     // Ensure items are positioned
     this.__virtualizer.scrollToIndex(this.__virtualizer.firstVisibleIndex);
-    // Ensure viewport boundaries are up-to-date
-    // this.updateViewportBoundaries();
-    return this.__virtualizer.lastVisibleIndex - this.__virtualizer.firstVisibleIndex + 1;
+    const hasItems = this.__virtualizer.size > 0;
+    return hasItems ? this.__virtualizer.lastVisibleIndex - this.__virtualizer.firstVisibleIndex + 1 : 0;
   }
 
   _stopPropagation(e) {

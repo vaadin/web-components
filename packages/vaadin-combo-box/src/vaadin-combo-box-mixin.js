@@ -3,8 +3,6 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { timeOut } from '@polymer/polymer/lib/utils/async.js';
-import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
 import { flush } from '@polymer/polymer/lib/utils/flush.js';
 import { IronA11yAnnouncer } from '@polymer/iron-a11y-announcer/iron-a11y-announcer.js';
 import { processTemplates } from '@vaadin/vaadin-element-mixin/templates.js';
@@ -744,7 +742,8 @@ export const ComboBoxMixin = (subclass) =>
 
       // Notify the dropdown about filter changing, so to let it skip the
       // scrolling restore
-      this.$.overlay.filterChanged = true;
+      // this.$.overlay.filterChanged = true;
+      this.$.overlay._scrollIntoView(0);
 
       if (this.items) {
         this.filteredItems = this._filterItems(this.items, filter);

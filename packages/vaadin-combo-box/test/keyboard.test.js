@@ -12,7 +12,7 @@ import {
   fire,
   isDesktopSafari
 } from '@vaadin/testing-helpers';
-import { onceScrolled } from './helpers.js';
+import { getViewportItems, onceScrolled, scrollToIndex } from './helpers.js';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
 
@@ -340,8 +340,6 @@ describe('keyboard', () => {
   });
 
   describe('scrolling items', () => {
-    let selector;
-
     beforeEach(async () => {
       const items = [];
 
@@ -350,88 +348,89 @@ describe('keyboard', () => {
       }
 
       comboBox.open();
-      selector = comboBox.$.overlay._selector;
       comboBox.items = items;
 
       await aTimeout(1);
     });
 
     it('should scroll down after reaching the last visible item', () => {
-      selector.scrollToIndex(0);
+      scrollToIndex(comboBox, 0);
       comboBox._focusedIndex = comboBox.$.overlay._visibleItemsCount() - 1;
-      expect(selector.firstVisibleIndex).to.eql(0);
+      expect(getViewportItems(comboBox)[0].index).to.eql(0);
 
       arrowDownKeyDown(comboBox.inputElement);
 
-      expect(selector.firstVisibleIndex).to.eql(1);
+      expect(getViewportItems(comboBox)[0].index).to.eql(1);
     });
 
     it('should scroll up after reaching the first visible item', () => {
       comboBox._focusedIndex = 1;
-      selector.scrollToIndex(1);
-      expect(selector.firstVisibleIndex).to.eql(1);
+      scrollToIndex(comboBox, 1);
+      expect(getViewportItems(comboBox)[0].index).to.eql(1);
 
       arrowUpKeyDown(comboBox.inputElement);
 
-      expect(selector.firstVisibleIndex).to.eql(0);
+      expect(getViewportItems(comboBox)[0].index).to.eql(0);
     });
 
     it('should scroll to first visible when navigating down above viewport', () => {
       comboBox._focusedIndex = 5;
-      selector.scrollToIndex(50);
+      scrollToIndex(comboBox, 50);
 
       arrowDownKeyDown(comboBox.inputElement);
 
-      expect(selector.firstVisibleIndex).to.eql(6);
+      expect(getViewportItems(comboBox)[0].index).to.eql(6);
     });
 
     it('should scroll to first visible when navigating up above viewport', () => {
       comboBox._focusedIndex = 5;
-      selector.scrollToIndex(50);
+      scrollToIndex(comboBox, 50);
 
       arrowUpKeyDown(comboBox.inputElement);
 
-      expect(selector.firstVisibleIndex).to.eql(4);
+      expect(getViewportItems(comboBox)[0].index).to.eql(4);
     });
 
     it('should scroll to last visible when navigating up below viewport', () => {
       comboBox._focusedIndex = 50;
-      selector.scrollToIndex(0);
-      expect(selector.firstVisibleIndex).to.eql(0);
+      scrollToIndex(comboBox, 0);
+      expect(getViewportItems(comboBox)[0].index).to.eql(0);
 
       arrowUpKeyDown(comboBox.inputElement);
 
-      expect(selector.firstVisibleIndex).to.eql(49 - comboBox.$.overlay._visibleItemsCount() + 1);
+      expect(getViewportItems(comboBox)[0].index).to.eql(49 - comboBox.$.overlay._visibleItemsCount() + 1);
     });
 
     it('should scroll to last visible when navigating down below viewport', () => {
       comboBox._focusedIndex = 50;
-      selector.scrollToIndex(0);
-      expect(selector.firstVisibleIndex).to.eql(0);
+      scrollToIndex(comboBox, 0);
+      expect(getViewportItems(comboBox)[0].index).to.eql(0);
 
       arrowDownKeyDown(comboBox.inputElement);
 
-      expect(selector.firstVisibleIndex).to.eql(51 - comboBox.$.overlay._visibleItemsCount() + 1);
+      expect(getViewportItems(comboBox)[0].index).to.eql(51 - comboBox.$.overlay._visibleItemsCount() + 1);
     });
 
     it('should scroll to start if no items focused when opening overlay', async () => {
-      selector.scrollToIndex(50);
+      scrollToIndex(comboBox, 50);
       comboBox.close();
 
       comboBox.open();
       await aTimeout(0);
-      expect(selector.firstVisibleIndex).to.eql(0);
+      console.log(getViewportItems(comboBox)[0]);
+
+      expect(getViewportItems(comboBox)[0].index).to.eql(0);
     });
 
     it('should scroll to focused item when opening overlay', async () => {
-      selector.scrollToIndex(0);
+      scrollToIndex(comboBox, 0);
       comboBox.close();
       comboBox.value = '50';
 
       comboBox.open();
 
       await onceScrolled(comboBox.$.overlay._scroller);
-      expect(selector.firstVisibleIndex).to.be.within(50 - comboBox.$.overlay._visibleItemsCount(), 50);
+      expect(getViewportItems(comboBox)[0].index).to.be.within(50 - comboBox.$.overlay._visibleItemsCount(), 50);
     });
   });
 

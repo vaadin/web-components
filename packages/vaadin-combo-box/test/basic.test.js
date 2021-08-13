@@ -1,8 +1,9 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
+import { getViewportItems } from './helpers.js';
 
 describe('Properties', () => {
   let comboBox;
@@ -27,17 +28,11 @@ describe('Properties', () => {
       expect(comboBox.items).to.be.undefined;
     });
 
-    it('should be bound to items list', () => {
-      comboBox.opened = true;
-      comboBox.items = ['qux'];
-      expect(comboBox.$.overlay._selector.items).to.eql(['qux']);
-    });
-
-    it('should update items list on mutation', () => {
+    it('should update items list on update', () => {
       comboBox.opened = true;
       comboBox.items = [];
-      comboBox.push('items', 'foo');
-      expect(comboBox.$.overlay._selector._virtualCount).to.eql(1);
+      comboBox.items = ['foo'];
+      expect(getViewportItems(comboBox).length).to.eql(1);
     });
 
     it('should set focused index on items set', () => {
@@ -61,32 +56,16 @@ describe('Properties', () => {
       comboBox.items = ['foo', 'bar'];
       comboBox.items = undefined;
       comboBox.opened = true;
-      expect(comboBox.$.overlay._selector._virtualCount).to.eql(0);
+      expect(getViewportItems(comboBox).length).to.eql(0);
     });
   });
 
-  // TODO: these tests are here to prevent possible regressions with using
-  // the internal properties of iron-list. These can be removed after this
-  // logic no longer is implemented in vaadin-combo-box.
   describe('visible item count', () => {
-    it('should calculate items correctly when all items are visible', async () => {
+    it('should calculate items correctly when all items are visible', () => {
       comboBox.items = ['foo', 'bar', 'baz', 'qux'];
       comboBox.open();
-      await aTimeout(0);
-      expect(comboBox.$.overlay._visibleItemsCount()).to.eql(4);
-      expect(comboBox.$.overlay._selector.lastVisibleIndex).to.eql(3);
-    });
-
-    it('should calculate items correctly when some items are hidden', async () => {
-      const items = [];
-      for (let i = 0; i < 100; i++) {
-        items.push(i.toString());
-      }
-
-      comboBox.items = items;
-      comboBox.open();
-      await aTimeout(0);
-      expect(comboBox.$.overlay._visibleItemsCount()).to.eql(comboBox.$.overlay._selector.lastVisibleIndex + 1);
+      expect(getViewportItems(comboBox).length).to.equal(4);
+      expect(getViewportItems(comboBox).pop().index).to.equal(3);
     });
   });
 

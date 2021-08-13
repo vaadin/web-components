@@ -1,6 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { aTimeout, fixtureSync, fire } from '@vaadin/testing-helpers';
+import { getViewportItems } from './helpers';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
 
@@ -83,9 +84,10 @@ describe('object values', () => {
       selectItem(0);
 
       comboBox.itemLabelPath = 'custom';
+      comboBox.opened = true;
 
       expect(comboBox.inputElement.value).to.eql('bazs');
-      expect(comboBox.$.overlay._selector.querySelector('vaadin-combo-box-item').label).to.eql('bazs');
+      expect(getViewportItems(comboBox)[0].label).to.eql('bazs');
     });
 
     it('should use toString if default label and value paths are not found', () => {

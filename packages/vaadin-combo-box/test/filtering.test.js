@@ -135,7 +135,7 @@ describe('filtering items', () => {
         setInputValue('b');
 
         requestAnimationFrame(() => {
-          expect(spy.callCount).to.eql(0);
+          expect(spy.firstCall.firstArg).to.eql(0);
           done();
         });
       });
@@ -301,7 +301,6 @@ describe('filtering items', () => {
       comboBox.close();
 
       setInputValue('bar');
-      comboBox.__repositionOverlayDebouncer.flush();
 
       expect(comboBox.opened).to.be.true;
       expect(comboBox._focusedIndex).to.equal(1);
@@ -313,7 +312,6 @@ describe('filtering items', () => {
       comboBox.close();
 
       setInputValue('');
-      comboBox.__repositionOverlayDebouncer.flush();
 
       expect(comboBox.opened).to.be.true;
       expect(comboBox._focusedIndex).to.equal(-1);

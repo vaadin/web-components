@@ -4,10 +4,20 @@ import { fixtureSync, nextFrame, enterKeyDown, fire } from '@vaadin/testing-help
 import { flush } from '@polymer/polymer/lib/utils/flush.js';
 import '@polymer/iron-input/iron-input.js';
 import { ComboBoxPlaceholder } from '../src/vaadin-combo-box-placeholder.js';
-import { makeItems } from './helpers.js';
+import { getViewportItems, makeItems } from './helpers.js';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
 import '../vaadin-combo-box-light.js';
+import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+
+registerStyles(
+  'vaadin-combo-box*',
+  css`
+    :host {
+      --vaadin-combo-box-overlay-max-height: 400px;
+    }
+  `
+);
 
 describe('lazy loading', () => {
   const DEFAULT_PAGE_SIZE = 50;
@@ -566,7 +576,7 @@ describe('lazy loading', () => {
 
       it('should set selectedItem matching value when items are loaded', () => {
         comboBox.opened = true; // loads first page of dataProvider items
-        comboBox.$.overlay.updateViewportBoundaries();
+        // comboBox.$.overlay.updateViewportBoundaries();
         comboBox.$.overlay.ensureItemsRendered();
         comboBox.value = 'item 0';
         expect(comboBox.selectedItem).to.equal('item 0');
@@ -634,7 +644,7 @@ describe('lazy loading', () => {
 
       it('should set matching selectedItem when items are loaded', () => {
         comboBox.opened = true; // loads first page of dataProvider items
-        comboBox.$.overlay.updateViewportBoundaries();
+        // comboBox.$.overlay.updateViewportBoundaries();
         comboBox.$.overlay.ensureItemsRendered();
         comboBox.value = 'value 0';
         expect(comboBox.selectedItem).to.eql({ id: 0, value: 'value 0', label: 'label 0' });
@@ -657,7 +667,7 @@ describe('lazy loading', () => {
       it('should select value matching selectedItem when items are loading', () => {
         comboBox.selectedItem = 'item 0';
         comboBox.opened = true;
-        comboBox.$.overlay.updateViewportBoundaries();
+        // comboBox.$.overlay.updateViewportBoundaries();
         comboBox.$.overlay.ensureItemsRendered();
         expect(comboBox.value).to.equal('item 0');
         const selectedRenderedItemElements = Array.from(
@@ -669,7 +679,7 @@ describe('lazy loading', () => {
 
       it('should select value matching selectedItem when items are loaded', async () => {
         comboBox.opened = true;
-        comboBox.$.overlay.updateViewportBoundaries();
+        // comboBox.$.overlay.updateViewportBoundaries();
         comboBox.$.overlay.ensureItemsRendered();
         comboBox.selectedItem = 'item 0';
         expect(comboBox.value).to.equal('item 0');
@@ -703,7 +713,7 @@ describe('lazy loading', () => {
       it('should select value matching selectedItem when items are loading', () => {
         comboBox.selectedItem = { id: 0, value: 'value 0', label: 'label 0' };
         comboBox.opened = true;
-        comboBox.$.overlay.updateViewportBoundaries();
+        // comboBox.$.overlay.updateViewportBoundaries();
         comboBox.$.overlay.ensureItemsRendered();
         expect(comboBox.value).to.equal('value 0');
         const selectedRenderedItemElements = Array.from(
@@ -715,7 +725,7 @@ describe('lazy loading', () => {
 
       it('should select value matching selectedItem when items are loaded', async () => {
         comboBox.opened = true;
-        comboBox.$.overlay.updateViewportBoundaries();
+        // comboBox.$.overlay.updateViewportBoundaries();
         comboBox.$.overlay.ensureItemsRendered();
         comboBox.selectedItem = { id: 0, value: 'value 0', label: 'label 0' };
         expect(comboBox.value).to.equal('value 0');
@@ -740,7 +750,7 @@ describe('lazy loading', () => {
         comboBox.selectedItem = { id: 0 };
         comboBox.dataProvider = objectDataProvider;
         comboBox.opened = true;
-        comboBox.$.overlay.updateViewportBoundaries();
+        // comboBox.$.overlay.updateViewportBoundaries();
         comboBox.$.overlay.ensureItemsRendered();
         await nextFrame();
         flush();
@@ -767,7 +777,7 @@ describe('lazy loading', () => {
           );
         };
         comboBox.opened = true;
-        comboBox.$.overlay.updateViewportBoundaries();
+        // comboBox.$.overlay.updateViewportBoundaries();
         comboBox.$.overlay.ensureItemsRendered();
         await nextFrame();
         flush();
@@ -1019,8 +1029,8 @@ describe('lazy loading', () => {
         // precisely to the given index, so use some margin
         const scrollMargin = 5;
         const expectedFirstVisibleIndex = targetItemIndex - comboBox.$.overlay._visibleItemsCount() - scrollMargin;
-        expect(comboBox.$.overlay._selector.firstVisibleIndex).to.be.greaterThan(expectedFirstVisibleIndex);
-        expect(comboBox.$.overlay._selector.lastVisibleIndex).to.be.lessThan(targetItemIndex + 1);
+        expect(getViewportItems(comboBox)[0].index).to.be.greaterThan(expectedFirstVisibleIndex);
+        expect(getViewportItems(comboBox).pop().index).to.be.lessThan(targetItemIndex + 1);
       });
 
       it('should reset to 0 when filter applied and filtered items size more than page size', () => {
@@ -1028,7 +1038,7 @@ describe('lazy loading', () => {
         comboBox.opened = true;
         comboBox.$.overlay._scrollIntoView(500);
         comboBox.filter = '1';
-        expect(comboBox.$.overlay._selector.firstVisibleIndex).to.be.equal(0);
+        expect(getViewportItems(comboBox)[0].index).to.be.equal(0);
       });
 
       // Verifies https://github.com/vaadin/vaadin-combo-box/issues/957
@@ -1068,7 +1078,7 @@ describe('lazy loading', () => {
         await nextFrame();
         flush();
 
-        const lastVisibleIndex = comboBox.$.overlay._selector.lastVisibleIndex;
+        const lastVisibleIndex = getViewportItems(comboBox).pop().index;
         // Check if the next few items after the last visible item are not empty
         for (let nextIndexIncrement = 0; nextIndexIncrement < 5; nextIndexIncrement++) {
           const lastItem = comboBox.filteredItems[lastVisibleIndex + nextIndexIncrement];

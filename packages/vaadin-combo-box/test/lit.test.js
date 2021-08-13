@@ -2,14 +2,11 @@ import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { html, render } from 'lit';
 import '../vaadin-combo-box.js';
+import { getViewportItems } from './helpers.js';
 
 describe('lit', () => {
   describe('renderer', () => {
     let comboBox;
-
-    function getFirstItem() {
-      return comboBox.$.overlay._selector.querySelector('vaadin-combo-box-item');
-    }
 
     beforeEach(() => {
       comboBox = fixtureSync(`<vaadin-combo-box></vaadin-combo-box>`);
@@ -27,7 +24,7 @@ describe('lit', () => {
 
     it('should render the content', () => {
       comboBox.opened = true;
-      expect(getFirstItem().$.content.textContent).to.equal('value-0');
+      expect(getViewportItems(comboBox)[0].$.content.textContent).to.equal('value-0');
     });
 
     it('should render new content after assigning a new renderer', () => {
@@ -35,7 +32,7 @@ describe('lit', () => {
       comboBox.renderer = (root, _, { index }) => {
         render(html`new-${index}`, root);
       };
-      expect(getFirstItem().$.content.textContent).to.equal('new-0');
+      expect(getViewportItems(comboBox)[0].$.content.textContent).to.equal('new-0');
     });
   });
 });
