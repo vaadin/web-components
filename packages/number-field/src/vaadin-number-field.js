@@ -144,7 +144,6 @@ export class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(Poly
   constructor() {
     super();
     this._setType('number');
-    this._boundOnChange = this.__onInputChange.bind(this);
   }
 
   /**
@@ -171,26 +170,6 @@ export class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(Poly
     super.ready();
 
     this._createConstraintsObserver();
-  }
-
-  /**
-   * @param {HTMLElement} node
-   * @protected
-   */
-  _addInputListeners(node) {
-    super._addInputListeners(node);
-
-    node.addEventListener('change', this._boundOnChange);
-  }
-
-  /**
-   * @param {HTMLElement} node
-   * @protected
-   */
-  _removeInputListeners(node) {
-    super._removeInputListeners(node);
-
-    node.removeEventListener('change', this._boundOnChange);
   }
 
   /** @private */
@@ -417,9 +396,12 @@ export class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(Poly
 
     super._onKeyDown(event);
   }
-
-  /** @private */
-  __onInputChange() {
+  /**
+   * Override an event listener inherited from `InputMixin`.
+   * @param {Event} _event
+   * @protected
+   */
+  _onChange(_event) {
     this.validate();
   }
 
