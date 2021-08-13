@@ -1,10 +1,8 @@
 # Vaadin Icons
 
 [![npm version](https://badgen.net/npm/v/@vaadin/vaadin-icons)](https://www.npmjs.com/package/@vaadin/vaadin-icons)
-[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/vaadin/vaadin-icons)
-[![Build status](https://travis-ci.org/vaadin/vaadin-icons.svg?branch=master)](https://travis-ci.org/vaadin/vaadin-icons)
 [![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-icons)
-[![Stars on vaadin.com/directory](https://img.shields.io/vaadin-directory/star/vaadinvaadin-icons.svg)](https://vaadin.com/directory/component/vaadinvaadin-icons)
+[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 [<img src="https://raw.github.com/vaadin/vaadin-icons/master/screenshot.png" width="611" alt="Screenshot of some icons in the Vaadin Icons collection" />](https://vaadin.com/icons)
 
@@ -25,18 +23,6 @@ Once installed, import it in your application:
 ```js
 import '@vaadin/vaadin-icons/vaadin-icons.js';
 ```
-
-## Running API docs in a browser
-
-1. Fork the `vaadin-icons` repository and clone it locally.
-
-1. Make sure you have [node.js](https://nodejs.org/) 12.x installed.
-
-1. Make sure you have [npm](https://www.npmjs.com/) installed.
-
-1. When in the `vaadin-icons` directory, run `npm install` to install dependencies.
-
-1. Run `npm start`, browser will automatically open the component API documentation.
 
 ## License
 

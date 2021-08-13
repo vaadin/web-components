@@ -2,17 +2,13 @@
 
 [&lt;vaadin-time-picker&gt;](https://vaadin.com/components/vaadin-time-picker) is a [Web Component](http://webcomponents.org) providing a time-selection field, part of the [Vaadin components](https://vaadin.com/components).
 
-[Live Demo ↗](https://cdn.vaadin.com/vaadin-time-picker/1.0.0/demo/)
+[Live Demo ↗](https://vaadin.com/components/vaadin-time-picker/html-examples)
 |
-[API documentation ↗](https://cdn.vaadin.com/vaadin-time-picker/1.0.0)
+[API documentation ↗](https://vaadin.com/components/vaadin-time-picker/html-api)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/vaadin-time-picker)](https://www.npmjs.com/package/@vaadin/vaadin-time-picker)
-[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/vaadin/vaadin-time-picker)
-[![Build Status](https://travis-ci.org/vaadin/vaadin-time-picker.svg?branch=master)](https://travis-ci.org/vaadin/vaadin-time-picker)
-[![Coverage Status](https://coveralls.io/repos/github/vaadin/vaadin-time-picker/badge.svg?branch=master)](https://coveralls.io/github/vaadin/vaadin-time-picker?branch=master)
-[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/vaadin/web-components?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 [![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-time-picker)
-[![Stars on vaadin.com/directory](https://img.shields.io/vaadin-directory/star/vaadin-time-picker-directory-urlidentifier.svg)](https://vaadin.com/directory/component/vaadinvaadin-time-picker)
+[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
 <vaadin-time-picker label="Delivery Time"></vaadin-time-picker>
@@ -54,42 +50,9 @@ To use the Material theme, import the correspondent file from the `theme/materia
 
   `vaadin-time-picker.js`
 
-## Running API docs and tests in a browser
-
-1. Fork the `vaadin-time-picker` repository and clone it locally.
-
-1. Make sure you have [node.js](https://nodejs.org/) 12.x installed.
-
-1. Make sure you have [npm](https://www.npmjs.com/) installed.
-
-1. When in the `vaadin-time-picker` directory, run `npm install` to install dependencies.
-
-1. Make sure you have [polymer-cli](https://www.npmjs.com/package/polymer-cli) installed globally: `npm i -g polymer-cli`.
-
-1. Run `npm start`, browser will automatically open the component API documentation.
-
-1. You can also open visual tests, for example:
-
-  - http://127.0.0.1:3000/test/visual/default.html
-
-
-## Running tests from the command line
-
-1. When in the `vaadin-time-picker` directory, run `npm test`
-
-
-## Following the coding style
-
-We are using [ESLint](http://eslint.org/) for linting JavaScript code. You can check if your code is following our standards by running `npm run lint`, which will automatically lint all `.js` files.
-
-## Big Thanks
-
-Cross-browser Testing Platform and Open Source <3 Provided by [Sauce Labs](https://saucelabs.com).
-
 ## Contributing
 
-  To contribute to the component, please read [the guideline](https://github.com/vaadin/vaadin-core/blob/master/CONTRIBUTING.md) first.
-
+Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
 
 ## License
 
