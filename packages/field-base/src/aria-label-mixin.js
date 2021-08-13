@@ -37,8 +37,8 @@ const AriaLabelMixinImplementation = (superclass) =>
 
     /** @protected */
     _enhanceLightDomA11y() {
-      if (this._inputNode) {
-        this._inputNode.setAttribute('aria-labelledby', this._labelId);
+      if (this.inputElement) {
+        this.inputElement.setAttribute('aria-labelledby', this._labelId);
       }
 
       if (this._labelNode) {
@@ -57,9 +57,9 @@ const AriaLabelMixinImplementation = (superclass) =>
     __preventDuplicateLabelClick() {
       const inputClickHandler = (e) => {
         e.stopImmediatePropagation();
-        this._inputNode.removeEventListener('click', inputClickHandler);
+        this.inputElement.removeEventListener('click', inputClickHandler);
       };
-      this._inputNode.addEventListener('click', inputClickHandler);
+      this.inputElement.addEventListener('click', inputClickHandler);
     }
   };
 

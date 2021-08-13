@@ -10,7 +10,7 @@ describe('number-field', () => {
 
   beforeEach(() => {
     numberField = fixtureSync('<vaadin-number-field></vaadin-number-field>');
-    input = numberField._inputNode;
+    input = numberField.inputElement;
     decreaseButton = numberField.shadowRoot.querySelector('[part=decrease-button]');
     increaseButton = numberField.shadowRoot.querySelector('[part=increase-button]');
   });

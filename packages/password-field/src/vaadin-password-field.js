@@ -106,8 +106,8 @@ export class PasswordField extends TextField {
       this._revealNode.addEventListener('touchend', this.__boundRevealButtonTouchend);
     }
 
-    if (this._inputNode) {
-      this._inputNode.autocapitalize = 'off';
+    if (this.inputElement) {
+      this.inputElement.autocapitalize = 'off';
     }
 
     this._toggleRevealHidden(this.revealButtonHidden);
@@ -132,7 +132,7 @@ export class PasswordField extends TextField {
    * @protected
    */
   _shouldSetFocus(event) {
-    return event.target === this._inputNode || event.target === this._revealNode;
+    return event.target === this.inputElement || event.target === this._revealNode;
   }
 
   /**
@@ -145,7 +145,7 @@ export class PasswordField extends TextField {
   _shouldRemoveFocus(event) {
     return !(
       event.relatedTarget === this._revealNode ||
-      (event.relatedTarget === this._inputNode && event.target === this._revealNode)
+      (event.relatedTarget === this.inputElement && event.target === this._revealNode)
     );
   }
 
@@ -180,7 +180,7 @@ export class PasswordField extends TextField {
     this._togglePasswordVisibility();
     // Focus the input to avoid problem with password still visible
     // when user clicks the reveal button and then clicks outside.
-    this._inputNode.focus();
+    this.inputElement.focus();
   }
 
   /** @private */

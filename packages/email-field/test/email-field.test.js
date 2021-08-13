@@ -38,7 +38,7 @@ describe('email-field', () => {
 
     beforeEach(() => {
       emailField = fixtureSync('<vaadin-email-field></vaadin-email-field>');
-      input = emailField._inputNode;
+      input = emailField.inputElement;
     });
 
     it('should have [type=email]', () => {

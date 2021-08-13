@@ -158,9 +158,9 @@ export class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(Poly
   connectedCallback() {
     super.connectedCallback();
 
-    if (this._inputNode) {
-      this._inputNode.min = this.min;
-      this._inputNode.max = this.max;
+    if (this.inputElement) {
+      this.inputElement.min = this.min;
+      this.inputElement.max = this.max;
       this.__applyStep(this.step);
     }
   }
@@ -265,7 +265,7 @@ export class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(Poly
 
   /** @private */
   _setValue(value) {
-    this.value = this._inputNode.value = String(parseFloat(value));
+    this.value = this.inputElement.value = String(parseFloat(value));
     this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
   }
 
@@ -326,8 +326,8 @@ export class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(Poly
 
   /** @private */
   __applyStep(step) {
-    if (this._inputNode) {
-      this._inputNode.step = this.__validateByStep ? step : 'any';
+    if (this.inputElement) {
+      this.inputElement.step = this.__validateByStep ? step : 'any';
     }
   }
 
@@ -351,15 +351,15 @@ export class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(Poly
 
   /** @private */
   _minChanged(min) {
-    if (this._inputNode) {
-      this._inputNode.min = min;
+    if (this.inputElement) {
+      this.inputElement.min = min;
     }
   }
 
   /** @private */
   _maxChanged(max) {
-    if (this._inputNode) {
-      this._inputNode.max = max;
+    if (this.inputElement) {
+      this.inputElement.max = max;
     }
   }
 
@@ -410,7 +410,7 @@ export class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(Poly
    */
   checkValidity() {
     if (this.min !== undefined || this.max !== undefined || this.__validateByStep) {
-      return this._inputNode.checkValidity();
+      return this.inputElement.checkValidity();
     }
 
     return super.checkValidity();

@@ -42,11 +42,6 @@ const InputSlotMixinImplementation = (superclass) =>
       };
     }
 
-    /** @protected */
-    get _inputNode() {
-      return this._getDirectSlotChild('input');
-    }
-
     constructor() {
       super();
 
@@ -59,10 +54,11 @@ const InputSlotMixinImplementation = (superclass) =>
     connectedCallback() {
       super.connectedCallback();
 
-      if (this._inputNode) {
-        this._inputNode.id = this._inputId;
+      const inputNode = this._getDirectSlotChild('input');
+      if (inputNode) {
+        inputNode.id = this._inputId;
 
-        this._setInputElement(this._inputNode);
+        this._setInputElement(inputNode);
       }
     }
   };
