@@ -35,7 +35,7 @@ Vaadin Board key feature is how it effectively reorders the widgets on different
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-board/master/screenshot.png" alt="Screenshot of vaadin-board">](https://vaadin.com/components/vaadin-board)
 
-### Installation
+## Installation
 
 Install `vaadin-board`:
 

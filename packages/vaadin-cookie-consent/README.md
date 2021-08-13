@@ -16,7 +16,7 @@
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-cookie-consent/master/screenshot.png" alt="Screenshot of vaadin-details" width="847">](https://vaadin.com/components/vaadin-cookie-consent)
 
-### Installation
+## Installation
 
 Install `vaadin-cookie-consent`:
 
