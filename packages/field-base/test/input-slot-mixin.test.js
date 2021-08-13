@@ -41,7 +41,7 @@ describe('input-slot-mixin', () => {
       expect(input).to.be.an.instanceof(HTMLInputElement);
     });
 
-    it('should sore a reference as inputElement', () => {
+    it('should store a reference as inputElement', () => {
       expect(element.inputElement).to.equal(input);
     });
 
