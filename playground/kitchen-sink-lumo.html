@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html theme="">
+<html>
 <head>
   <meta charset="utf-8">
   <title>Lumo components kitchen sink</title>
@@ -71,8 +71,19 @@
       responsive-steps='[{"minWidth": "0", "columns": 1, "labelsPosition": "top"}, {"minWidth": "400px", "columns": 2, "labelsPosition": "top"}]'>
       <vaadin-text-field label="Text field" placeholder="Placeholder" error-message="Error message"
                          required></vaadin-text-field>
-      <vaadin-select label="Select" placeholder="Placeholder" required error-message="Select an option">
-        <vaadin-icon icon="lumo:bar-chart" slot="prefix"></vaadin-icon>
+      <vaadin-number-field label="Number field" placeholder="Placeholder" error-message="Error message">
+        <span slot="suffix" style="margin: var(--lumo-space-s)">€</span>
+      </vaadin-number-field>
+      <vaadin-email-field label="Email field" placeholder="Placeholder" error-message="Error message">
+        <vaadin-icon icon="lumo:user" slot="prefix"></vaadin-icon>
+      </vaadin-email-field>
+      <vaadin-password-field label="Password"></vaadin-password-field>
+      <vaadin-date-picker label="Date picker" placeholder="Placeholder"></vaadin-date-picker>
+      <vaadin-time-picker label="Time picker" placeholder="Placeholder"></vaadin-time-picker>
+      <vaadin-text-area label="Text area" placeholder="Placeholder" colspan="2">
+        <vaadin-icon icon="lumo:search" slot="prefix"></vaadin-icon>
+      </vaadin-text-area>
+      <vaadin-select label="Select" placeholder="Placeholder">
         <template>
           <vaadin-list-box>
             <vaadin-item>Option one</vaadin-item>
@@ -82,49 +93,29 @@
             <vaadin-item>Option five</vaadin-item>
             <vaadin-item>Option six</vaadin-item>
             <hr>
-            <vaadin-item>Option seven</vaadin-item>
-            <vaadin-item>Option eight</vaadin-item>
-            <vaadin-item>Option nine</vaadin-item>
-            <vaadin-item>Option ten</vaadin-item>
-            <hr>
-            <vaadin-item>Option eleven</vaadin-item>
-            <vaadin-item disabled>Option twelve</vaadin-item>
-            <vaadin-item disabled>Option thirteen</vaadin-item>
-            <vaadin-item disabled>Option fourteen</vaadin-item>
-          </vaadin-list-box>
-        </template>
-      </vaadin-select>
-      <vaadin-date-picker label="Date picker" placeholder="Placeholder"></vaadin-date-picker>
-      <vaadin-select label="Select" placeholder="Placeholder">
-        <template>
-          <vaadin-list-box>
             <vaadin-item>
               <vaadin-icon icon="lumo:user"></vaadin-icon>
-              Option one
+              Option seven
             </vaadin-item>
             <vaadin-item>
               <vaadin-icon icon="lumo:phone"></vaadin-icon>
-              Option two
+              Option eight
             </vaadin-item>
             <hr>
             <vaadin-item>
               <vaadin-icon icon="lumo:cog"></vaadin-icon>
-              Option three
+              Option nine
             </vaadin-item>
             <vaadin-item disabled>
               <vaadin-icon icon="lumo:upload"></vaadin-icon>
-              Option four
+              Option ten
             </vaadin-item>
           </vaadin-list-box>
         </template>
       </vaadin-select>
-      <vaadin-text-area label="Text area" placeholder="Placeholder" colspan="2">
-        <vaadin-icon icon="lumo:search" slot="prefix"></vaadin-icon>
-      </vaadin-text-area>
-      <vaadin-password-field label="Password"></vaadin-password-field>
       <vaadin-combo-box label="Combo box" placeholder="Placeholder" items='["Option one", "Option two", "Option three"]'
                         allow-custom-value>
-        <vaadin-icon icon="vaadin:clock" slot="prefix"></vaadin-icon>
+        <vaadin-icon icon="lumo:bell" slot="prefix"></vaadin-icon>
       </vaadin-combo-box>
       <vaadin-form-item>
         <label slot="label">Checkboxes</label>
@@ -229,14 +220,6 @@
             Option four
           </vaadin-item>
         </vaadin-list-box>
-        <!-- <h6>Lumo icons</h6>
-        <vaadin-icon icon="lumo:calendar" class="large-icon"></vaadin-icon>
-        <vaadin-icon icon="lumo:calendar"></vaadin-icon>
-        <vaadin-icon icon="lumo:calendar" class="small-icon"></vaadin-icon>
-        <h6>Vaadin icons</h6>
-        <vaadin-icon icon="vaadin:calendar" class="large-icon"></vaadin-icon>
-        <vaadin-icon icon="vaadin:calendar"></vaadin-icon>
-        <vaadin-icon icon="vaadin:calendar" class="small-icon"></vaadin-icon> -->
       </div>
     </vaadin-horizontal-layout>
     <vaadin-context-menu>
@@ -323,7 +306,7 @@
   notification.addEventListener("opened-changed", e => {
     if (!e.detail.value) return;
     const notificationCard = document.querySelector("vaadin-notification-card");
-    const closeButton = notificationCard.querySelector('vaadin-button');
+    const closeButton = notificationCard.querySelector("vaadin-button");
     closeButton.addEventListener("click", () => {
       notification.opened = false;
     });
@@ -355,8 +338,8 @@
   });
 
   const treeData = Array(100).fill().map((_, index) => {
-    if(index % 3 === 0) return threeLevelItem(index);
-    if(index % 2 === 0) return twoLevelItem(index);
+    if (index % 3 === 0) return threeLevelItem(index);
+    if (index % 2 === 0) return twoLevelItem(index);
     return oneLevelItem(index);
   });
 

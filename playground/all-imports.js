@@ -45,6 +45,8 @@ import '@vaadin/vaadin-select';
 import '@vaadin/vaadin-split-layout';
 import '@vaadin/vaadin-tabs';
 import '@vaadin/vaadin-text-field';
+import '@vaadin/vaadin-text-field/vaadin-email-field';
+import '@vaadin/vaadin-text-field/vaadin-number-field';
 import '@vaadin/vaadin-time-picker';
 import '@vaadin/vaadin-upload';
 import '@vaadin/vaadin-virtual-list';
