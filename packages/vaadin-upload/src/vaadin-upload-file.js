@@ -56,7 +56,7 @@ class UploadFileElement extends ThemableMixin(PolymerElement) {
           display: none;
         }
 
-        li[part='row'] {
+        [part='row'] {
           list-style-type: none;
         }
 
