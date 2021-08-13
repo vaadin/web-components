@@ -602,12 +602,6 @@ export const ComboBoxMixin = (subclass) =>
       // because that will cause problems to say the least.
       flush();
 
-      // With iron-list v1.3.9, calling `notifyResize()` no longer renders
-      // the items synchronously. It is required to have the items rendered
-      // before we update the overlay and the list positions and sizes.
-      this.$.overlay.ensureItemsRendered();
-      // this.$.overlay._selector.toggleScrollListener(true);
-
       // Ensure metrics are up-to-date
       // this.$.overlay.updateViewportBoundaries();
       // Force iron-list to create reusable nodes. Otherwise it will only start

@@ -417,7 +417,6 @@ describe('keyboard', () => {
 
       comboBox.open();
       await aTimeout(0);
-      console.log(getViewportItems(comboBox)[0]);
 
       expect(getViewportItems(comboBox)[0].index).to.eql(0);
     });
