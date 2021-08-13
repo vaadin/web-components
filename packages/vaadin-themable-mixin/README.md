@@ -7,11 +7,10 @@
 1. [Theme Attribute and Subcomponents](#theme-attribute-and-subcomponents)
 1. [External resources](#external-resources)
 
-
-
 # Style Scopes
 
 With the addition of Shadow DOM, styles on a webpage can be divided into two groups:
+
 1. Styles affecting elements in the [global scope](#global-style-scope), i.e. traditional styles
 2. Styles affecting elements inside a [local scope](#local-style-scope-shadow-dom), i.e. styles inside a shadow DOM
 
@@ -20,9 +19,10 @@ With the addition of Shadow DOM, styles on a webpage can be divided into two gro
 On a regular website, all elements are inside the same global style scope, and can be styled with global stylesheets (either `<link rel="stylesheet">` or `<style>` elements), using regular CSS selectors.
 
 #### Example: Global stylesheet
+
 ![vaadin-text-field light DOM](docs-images/vaadin-text-field-light-dom.png)
 
-The only thing we can style using global styles is the whole `<vaadin-text-field>` element, but nothing inside it, like the *label* or the *input field*.
+The only thing we can style using global styles is the whole `<vaadin-text-field>` element, but nothing inside it, like the _label_ or the _input field_.
 
 For example, we could have the following styles in an imported stylesheet:
 
@@ -54,11 +54,11 @@ For example, if we move the same styles from the previous example inside the `<s
 
 ```html
 #shadow-root (open)
-  <style>
-    vaadin-text-field {
-      border: 1px solid gray;
-    }
-  </style>
+<style>
+  vaadin-text-field {
+    border: 1px solid gray;
+  }
+</style>
 ```
 
 ![vaadin-text-field with default styles](docs-images/vaadin-text-field.png)
@@ -67,11 +67,11 @@ That is because there are no `<vaadin-text-field>` elements inside the shadow DO
 
 ```html
 #shadow-root (open)
-  <style>
-    :host {
-      border: 1px solid gray;
-    }
-  </style>
+<style>
+  :host {
+    border: 1px solid gray;
+  }
+</style>
 ```
 
 Then we get the same result as with the global stylesheet:
@@ -82,26 +82,25 @@ If we wanted to move the border to the actual text input element, we would need 
 
 ```html
 #shadow-root
-  <style>
-    [part="input-field"] {
-      border: 1px solid gray;
-    }
-  </style>
+<style>
+  [part='input-field'] {
+    border: 1px solid gray;
+  }
+</style>
 ```
-![vaadin-text-field with a border around the input only](docs-images/vaadin-text-field-input-border.png)
 
+![vaadin-text-field with a border around the input only](docs-images/vaadin-text-field-input-border.png)
 
 # Adding Styles to Local Scope
 
-*Read the documentation about [Style Scopes](#style-scopes) before continuing.*
-
+_Read the documentation about [Style Scopes](#style-scopes) before continuing._
 
 ## Property inheritance
 
 Currently, the only global CSS that can affect styles inside a shadow DOM’s local scope are properties that are inherited. Properties can be inherited by default, like `font-family` or all [CSS Custom Properties](https://www.w3.org/TR/css-variables/), or explicitly by the custom element, using the `inherit` property value.
 
-
 #### Example: using a custom property to affect the styles in a local scope
+
 ```html
 <custom-style>
   <style>
@@ -116,22 +115,20 @@ Currently, the only global CSS that can affect styles inside a shadow DOM’s lo
 
 > Note: check the API documentation of each element for the custom properties they expose. See the [API documentation for vaadin-combo-box](https://vaadin.com/elements/vaadin-combo-box/html-api/elements/Vaadin.ComboBoxElement#styling) for example.
 
-
 #### Example: explicitly inheriting a property value from the global scope into local scope
+
 ```html
 #shadow-root
-  <style>
-    :host {
-      background-color: inherit;
-    }
-  </style>
+<style>
+  :host {
+    background-color: inherit;
+  }
+</style>
 ```
-
 
 ## Selector matching
 
 The web platform doesn’t currently provide a way to write selectors in the global scope that would match elements in a local scope (Oct 2017). There’s a [CSS spec proposal](http://tabatkins.github.io/specs/css-shadow-parts/) that will add that, but for now, we need to work around this limitation using proprietary solutions, like Vaadin’s [`ThemableMixin`](https://github.com/vaadin/vaadin-themable-mixin).
-
 
 ## Theme modules
 
@@ -163,8 +160,9 @@ The value of the `theme-for` attribute can be a space-separated list of element 
 When working with ES modules/JavaScript generally, constructing theme modules programmatically might end up producing boilerplate code to the application. Where possible, prefer the `registerStyles` utility which provides a convenient abstraction over the declarative API.
 
 Importing the helper as an HTMLImport
+
 ```html
-<link rel="import" href="/bower_components/vaadin-themable-mixin/register-styles.html">
+<link rel="import" href="/bower_components/vaadin-themable-mixin/register-styles.html" />
 ...
 <script>
   const { registerStyles, css, unsafeCSS } = Vaadin;
@@ -172,6 +170,7 @@ Importing the helper as an HTMLImport
 ```
 
 Importing the helper as an ES module
+
 ```js
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 ```
@@ -183,9 +182,12 @@ The `themeFor` parameter is of type string and is used to identify the component
 The `styles` accepts an object or an array of objects built as template literals tagged with `css`, containing CSS style rules to be included in the targeted component's local style.
 
 ```js
-registerStyles('my-element', css`
-  /* Styles which will be included in my-element local scope */
-`);
+registerStyles(
+  'my-element',
+  css`
+    /* Styles which will be included in my-element local scope */
+  `
+);
 ```
 
 Including untrusted CSS can also be a security issue. Whenever you're dealing with predefined CSS text, you can use `unsafeCSS` function to wrap the value as an object that can be passed to the `registerStyles` function.
@@ -201,6 +203,7 @@ registerStyles('my-element', unsafeCSS(trustedCSSValue));
 The second parameter for `registerStyles` also accepts an array, so you can include multiple styles to an element at the same time.
 
 Using registerStyles imported as an ES module
+
 ```js
 const myStyles = css`
   /* Styles which will be included in my-element local scope */
@@ -214,37 +217,41 @@ If you need to include styles defined as Polymer style modules with id, you can 
 
 ```js
 // Use of "include" is deprecated!
-registerStyles('my-element', css`
-  /* Optional styles to be included in my-element local scope */
-`, {include: ['my-style-module']});
+registerStyles(
+  'my-element',
+  css`
+    /* Optional styles to be included in my-element local scope */
+  `,
+  { include: ['my-style-module'] }
+);
 ```
 
 If you need to get styles defined with `registerStyles` registered as a Polymer style module with a pre-defined id, you can still do so by passing an object with `moduleId` as the third parameter for the function. Consider this API deprecated.
 
 ```js
 // Use of "moduleId" is deprecated!
-registerStyles(undefined, css`
-  /* Styles which will be included in the style module */
-`, {moduleId: 'my-extended-style-module'});
+registerStyles(
+  undefined,
+  css`
+    /* Styles which will be included in the style module */
+  `,
+  { moduleId: 'my-extended-style-module' }
+);
 ```
 
-
 #### Examples of valid `theme-for` values:
- - `"vaadin-button"`
- - `"vaadin-overlay vaadin-date-picker-overlay"`
- - `"vaadin-*"`
 
+- `"vaadin-button"`
+- `"vaadin-overlay vaadin-date-picker-overlay"`
+- `"vaadin-*"`
 
 ### Theme modules are global
 
 When creating a theme module for an element, the styles in that theme module will apply to all instances of that element. The styles are always “global” in that sense and can’t be scoped by default with anything.
 
-
-
 # Stylable Shadow Parts
 
-*Read the documentation about [Style Scopes](#style-scopes) and [Adding Styles to Local Scope](#adding-styles-to-local-scope) before continuing.*
-
+_Read the documentation about [Style Scopes](#style-scopes) and [Adding Styles to Local Scope](#adding-styles-to-local-scope) before continuing._
 
 ## Stylable elements
 
@@ -261,15 +268,14 @@ Other elements should be **considered as internal implementation details**, and 
 The stylable elements have the `part` attribute, which gives the elements a descriptive name.
 
 #### Example: stylable parts of vaadin-text-field
+
 ![vaadin-text-field with stylable parts highlighted in the UI and in shadow DOM markup](docs-images/vaadin-text-field-parts.png)
 
 You can expect these part names to remain constant and rely on the hierarchy of these parts (i.e. the `value` part will always be contained within `input-field`).
 
-
 ## How do I know what parts are available?
 
 The stylable parts of each Vaadin component are listed in their API documentation. See the [API documentation for vaadin-text-field](https://vaadin.com/components/vaadin-text-field/html-api/elements/Vaadin.TextFieldElement#styling) for example.
-
 
 ## Supported selectors
 
@@ -289,7 +295,6 @@ The host element can be targeted using the `:host` selector.
 </dom-module>
 ```
 
-
 ### [part="..."]
 
 The stylable elements (marked with a `part` attribute) should only be targeted using the `[part="..."]` attribute selector.
@@ -298,7 +303,7 @@ The stylable elements (marked with a `part` attribute) should only be targeted u
 <dom-module id="my-text-field" theme-for="vaadin-text-field">
   <template>
     <style>
-      [part="input-field"] {
+      [part='input-field'] {
         /* Styles for vaadin-text-field's input-field part */
       }
     </style>
@@ -316,11 +321,11 @@ You can use this kind of attribute selector in all cases, if you want to be safe
 <dom-module id="my-grid" theme-for="vaadin-grid">
   <template>
     <style>
-      [part~="cell"] {
+      [part~='cell'] {
         /* Styles that affect all grid cells, including header, body and footer cells */
       }
 
-      [part~="body-cell"] {
+      [part~='body-cell'] {
         /* Styles that only affect all body cells */
       }
     </style>
@@ -354,15 +359,13 @@ You can also target any named parts in a specific state of the host. For example
 <dom-module id="my-text-field" theme-for="vaadin-text-field">
   <template>
     <style>
-      :host([invalid]) [part="input-field"] {
+      :host([invalid]) [part='input-field'] {
         border: 1px solid red;
       }
     </style>
   </template>
 </dom-module>
 ```
-
-
 
 Similarly to the host element, the named parts can also expose state attributes for themselves, which can be used for styling. These are also listed in the element’s API documentation.
 
@@ -372,15 +375,13 @@ For example, you can target a selected date in a `<vaadin-date-picker>`:
 <dom-module id="my-month-calendar-styles" theme-for="vaadin-month-calendar">
   <template>
     <style>
-     [part~="date"][selected] {
-       /* Styles for a selected date */
-     }
-   </style>
+      [part~='date'][selected] {
+        /* Styles for a selected date */
+      }
+    </style>
   </template>
 </dom-module>
 ```
-
-
 
 # Scoping Styles in a Theme Module
 
@@ -388,18 +389,19 @@ The styles defined in a “theme module” affect all the instances of the eleme
 
 There are two ways to scope the styles that you write in a theme module.
 
- 1. **Expose new custom properties**
-This is the recommended first option for simple situations. If you end up exposing more than a handful of properties, you should consider the second option.
- 2. **Use scoping selectors**
-This approach is used by the built-in variations in Vaadin themes (Lumo and Material), i.e. `theme` attribute. The downside of this approach is that you end up adding the selectors and properties to all instances, even though only some instances will need those styles (they won’t apply unless the scoping selector is used on the host element).
+1.  **Expose new custom properties**
+    This is the recommended first option for simple situations. If you end up exposing more than a handful of properties, you should consider the second option.
+2.  **Use scoping selectors**
+    This approach is used by the built-in variations in Vaadin themes (Lumo and Material), i.e. `theme` attribute. The downside of this approach is that you end up adding the selectors and properties to all instances, even though only some instances will need those styles (they won’t apply unless the scoping selector is used on the host element).
 
 #### Example: expose new custom properties
+
 ```html
 <!-- Define the theme module (in index.html or in a separate HTML import) -->
 <dom-module id="my-text-field-theme" theme-for="vaadin-text-field">
   <template>
     <style>
-      [part="input-field"] {
+      [part='input-field'] {
         background-color: var(--input-field-background-color, #fff);
       }
     </style>
@@ -410,7 +412,7 @@ This approach is used by the built-in variations in Vaadin themes (Lumo and Mate
 <custom-style>
   <style>
     .some-part-of-my-app vaadin-text-field {
-     --input-field-background-color: #eee;
+      --input-field-background-color: #eee;
     }
   </style>
 </custom-style>
@@ -427,7 +429,7 @@ This approach is used by the built-in variations in Vaadin themes (Lumo and Mate
 <dom-module id="my-text-field-theme" theme-for="vaadin-text-field">
   <template>
     <style>
-      :host(.special-field) [part="input-field"] {
+      :host(.special-field) [part='input-field'] {
         background-color: #000;
         color: #fff;
         border: 2px solid #fff;
@@ -452,7 +454,7 @@ You can also use a `theme` attribute as a scoping selector for your style overri
 <dom-module id="special-field-theme" theme-for="vaadin-text-field">
   <template>
     <style>
-      :host([theme~="special-field"]) [part="input-field"] {
+      :host([theme~='special-field']) [part='input-field'] {
         background-color: #000;
         color: #fff;
         border: 2px solid #fff;
@@ -467,7 +469,6 @@ You can also use a `theme` attribute as a scoping selector for your style overri
   <vaadin-text-field theme="special-field"></vaadin-text-field>
 </div>
 ```
-
 
 # Theme Attribute and Subcomponents
 
@@ -490,7 +491,7 @@ If you can define a custom theme variant for `<vaadin-text-field>`, you can use 
 <dom-module id="special-field-theme" theme-for="vaadin-text-field">
   <template>
     <style>
-      :host([theme~="special-field"]) [part="input-field"] {
+      :host([theme~='special-field']) [part='input-field'] {
         background-color: #000;
         color: #fff;
         border: 2px solid #fff;
@@ -512,7 +513,9 @@ With your Polymer-based web components you can use `VaadinThemePropertyMixin` to
 
 ```js
 class MyFieldElement extends Vaadin.ThemePropertyMixin(Polymer.Element) {
-  static get is() { return 'my-field'; }
+  static get is() {
+    return 'my-field';
+  }
 
   static get template() {
     return html`<vaadin-text-field theme$="[[theme]]"></vaadin-text-field>`;
@@ -568,7 +571,6 @@ CustomElements.define(MyFieldElement.is, MyFieldElement);
 - `<vaadin-login-form>`:
   - `<vaadin-login-form-wrapper>`
 
-
-
 # External resources
+
 - [Polymer styling documentation](https://polymer-library.polymer-project.org/2.0/docs/devguide/style-shadow-dom)

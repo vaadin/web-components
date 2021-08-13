@@ -32,7 +32,7 @@ import '@vaadin/vaadin-board/vaadin-cookie-consent.js';
 
 ## Contributing
 
-  To contribute to the component, please read [the guideline](https://github.com/vaadin/vaadin-core/blob/master/CONTRIBUTING.md) first.
+To contribute to the component, please read [the guideline](https://github.com/vaadin/vaadin-core/blob/master/CONTRIBUTING.md) first.
 
 ## License
 

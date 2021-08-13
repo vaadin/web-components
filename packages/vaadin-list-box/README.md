@@ -11,14 +11,14 @@
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
-  <vaadin-list-box selected="2">
-    <b>Select an Item</b>
-    <vaadin-item>Item one</vaadin-item>
-    <vaadin-item>Item two</vaadin-item>
-    <hr>
-    <vaadin-item>Item three</vaadin-item>
-    <vaadin-item>Item four</vaadin-item>
-  </vaadin-list-box>
+<vaadin-list-box selected="2">
+  <b>Select an Item</b>
+  <vaadin-item>Item one</vaadin-item>
+  <vaadin-item>Item two</vaadin-item>
+  <hr />
+  <vaadin-item>Item three</vaadin-item>
+  <vaadin-item>Item four</vaadin-item>
+</vaadin-list-box>
 ```
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-list-box/master/screenshot.png" width="150" alt="Screenshot of vaadin-list-box">](https://vaadin.com/components/vaadin-list-box)
@@ -59,7 +59,7 @@ To use the Material theme, import the correspondent file from the `theme/materia
 
 ## Contributing
 
-  To contribute to the component, please read [the guideline](https://github.com/vaadin/vaadin-core/blob/master/CONTRIBUTING.md) first.
+To contribute to the component, please read [the guideline](https://github.com/vaadin/vaadin-core/blob/master/CONTRIBUTING.md) first.
 
 ## License
 

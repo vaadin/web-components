@@ -7,7 +7,7 @@ A mixin which adds `focused` and `focus-ring` states to an element.
 
 ## Creating a pull request
 
-  To contribute to the component, please read [the guideline](https://github.com/vaadin/vaadin-core/blob/master/CONTRIBUTING.md) first.
+To contribute to the component, please read [the guideline](https://github.com/vaadin/vaadin-core/blob/master/CONTRIBUTING.md) first.
 
 ## License
 

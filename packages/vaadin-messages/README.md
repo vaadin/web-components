@@ -11,8 +11,7 @@
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
-<vaadin-message></vaadin-message>
-<vaadin-message foo="bar"></vaadin-message>
+<vaadin-message></vaadin-message> <vaadin-message foo="bar"></vaadin-message>
 ```
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-messages/master/screenshot.png" width="418" alt="Screenshot of vaadin-message">](https://vaadin.com/components/vaadin-messages)
@@ -53,7 +52,7 @@ To use the Material theme, import the correspondent file from the `theme/materia
 
 ## Contributing
 
-  To contribute to the component, please read [the guideline](https://github.com/vaadin/vaadin-core/blob/master/CONTRIBUTING.md) first.
+To contribute to the component, please read [the guideline](https://github.com/vaadin/vaadin-core/blob/master/CONTRIBUTING.md) first.
 
 ## License
 

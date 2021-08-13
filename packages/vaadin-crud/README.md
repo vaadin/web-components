@@ -13,8 +13,7 @@ It is part of the [Vaadin components](https://vaadin.com/components).
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
-<vaadin-crud items='[{"name": "Juan", "surname": "Garcia"}]'>
-</vaadin-crud>
+<vaadin-crud items='[{"name": "Juan", "surname": "Garcia"}]'></vaadin-crud>
 ```
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-crud/master/screenshot.gif" width="700" alt="Screenshot of vaadin-crud">](https://vaadin.com/components/vaadin-crud)
@@ -55,7 +54,7 @@ To use the Material theme, import the correspondent file from the `theme/materia
 
 ## Contributing
 
-  To contribute to the component, please read [the guideline](https://github.com/vaadin/vaadin-core/blob/master/CONTRIBUTING.md) first.
+To contribute to the component, please read [the guideline](https://github.com/vaadin/vaadin-core/blob/master/CONTRIBUTING.md) first.
 
 ## License
 

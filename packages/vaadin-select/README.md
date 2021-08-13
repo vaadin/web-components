@@ -13,7 +13,7 @@
 ```html
 <vaadin-select></vaadin-select>
 <script>
-  document.querySelector('vaadin-select').renderer = root => {
+  document.querySelector('vaadin-select').renderer = (root) => {
     if (root.firstElementChild) {
       return;
     }
@@ -71,7 +71,7 @@ To use the Material theme, import the correspondent file from the `theme/materia
 
 ## Contributing
 
-  To contribute to the component, please read [the guideline](https://github.com/vaadin/vaadin-core/blob/master/CONTRIBUTING.md) first.
+To contribute to the component, please read [the guideline](https://github.com/vaadin/vaadin-core/blob/master/CONTRIBUTING.md) first.
 
 ## License
 

@@ -20,8 +20,8 @@
   // Populate the grid with data
   const grid = document.querySelector('vaadin-grid-pro');
   fetch('https://demo.vaadin.com/demo-data/1.0/people?count=200')
-    .then(res => res.json())
-    .then(json => grid.items = json.result);
+    .then((res) => res.json())
+    .then((json) => (grid.items = json.result));
 </script>
 ```
 
@@ -63,7 +63,7 @@ To use the Material theme, import the correspondent file from the `theme/materia
 
 ## Contributing
 
-  To contribute to the component, please read [the guideline](https://github.com/vaadin/vaadin-core/blob/master/CONTRIBUTING.md) first.
+To contribute to the component, please read [the guideline](https://github.com/vaadin/vaadin-core/blob/master/CONTRIBUTING.md) first.
 
 ## License
 

@@ -11,8 +11,7 @@
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
-<vaadin-item>Simple Item</vaadin-item>
-<vaadin-item disabled>Disabled Item</vaadin-item>
+<vaadin-item>Simple Item</vaadin-item> <vaadin-item disabled>Disabled Item</vaadin-item>
 ```
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-item/master/screenshot.png" width="169" alt="Screenshot of vaadin-item">](https://vaadin.com/components/vaadin-item)
@@ -53,7 +52,7 @@ To use the Material theme, import the correspondent file from the `theme/materia
 
 ## Contributing
 
-  To contribute to the component, please read [the guideline](https://github.com/vaadin/vaadin-core/blob/master/CONTRIBUTING.md) first.
+To contribute to the component, please read [the guideline](https://github.com/vaadin/vaadin-core/blob/master/CONTRIBUTING.md) first.
 
 ## License
 

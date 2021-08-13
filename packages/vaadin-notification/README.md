@@ -16,7 +16,7 @@
 <script>
   const notification = document.querySelector('vaadin-notification');
 
-  notification.renderer = function(root) {
+  notification.renderer = function (root) {
     root.textContent = 'Your work has been saved';
   };
 </script>
@@ -60,7 +60,7 @@ To use the Material theme, import the correspondent file from the `theme/materia
 
 ## Contributing
 
-  To contribute to the component, please read [the guideline](https://github.com/vaadin/vaadin-core/blob/master/CONTRIBUTING.md) first.
+To contribute to the component, please read [the guideline](https://github.com/vaadin/vaadin-core/blob/master/CONTRIBUTING.md) first.
 
 ## License
 

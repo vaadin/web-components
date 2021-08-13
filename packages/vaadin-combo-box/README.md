@@ -11,14 +11,19 @@
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
-<vaadin-combo-box label="User" placeholder="Please select" item-value-path="email" item-label-path="email"></vaadin-combo-box>
+<vaadin-combo-box
+  label="User"
+  placeholder="Please select"
+  item-value-path="email"
+  item-label-path="email"
+></vaadin-combo-box>
 
 <script>
   const comboBox = document.querySelector('vaadin-combo-box');
 
   fetch('https://randomuser.me/api?results=100&inc=name,email')
-    .then(res => res.json())
-    .then(json => comboBox.items = json.results);
+    .then((res) => res.json())
+    .then((json) => (comboBox.items = json.results));
 </script>
 ```
 
@@ -64,7 +69,7 @@ To use the Material theme, import the correspondent file from the `theme/materia
 
 ## Contributing
 
-  To contribute to the component, please read [the guideline](https://github.com/vaadin/vaadin-core/blob/master/CONTRIBUTING.md) first.
+To contribute to the component, please read [the guideline](https://github.com/vaadin/vaadin-core/blob/master/CONTRIBUTING.md) first.
 
 ## License
 

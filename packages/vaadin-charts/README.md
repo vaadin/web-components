@@ -12,13 +12,15 @@
 
 ```html
 <vaadin-chart type="pie">
-  <vaadin-chart-series values='[
+  <vaadin-chart-series
+    values='[
       ["Firefox", 45.0],
       ["IE", 26.8],
       ["Chrome", 12.8],
       ["Safari", 8.5],
       ["Opera", 6.2],
-      ["Others", 0.7]]'>
+      ["Others", 0.7]]'
+  >
   </vaadin-chart-series>
 </vaadin-chart>
 ```
@@ -52,11 +54,11 @@ If the license is valid, it will be saved to the local storage of the browser an
 
 ## Contributing
 
-  To contribute to the component, please read [the guideline](https://github.com/vaadin/vaadin-core/blob/master/CONTRIBUTING.md) first.
+To contribute to the component, please read [the guideline](https://github.com/vaadin/vaadin-core/blob/master/CONTRIBUTING.md) first.
 
 ## License
 
 _Vaadin Charts_ is distributed under the terms of
-[Commercial Vaadin Developer License 4.0](https://vaadin.com/license/cvdl-4.0) ("CVDLv4"). A copy of the license is included as ```LICENSE.txt``` in this software package.
+[Commercial Vaadin Developer License 4.0](https://vaadin.com/license/cvdl-4.0) ("CVDLv4"). A copy of the license is included as `LICENSE.txt` in this software package.
 
 Vaadin collects development time usage statistics to improve this product. For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.

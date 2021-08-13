@@ -12,12 +12,12 @@
 
 ```html
 <vaadin-context-menu>
-  Open a context menu with <b>right click</b> or with <b>long touch.</b>
+  <span>Open a context menu with <b>right click</b> or with <b>long touch.</b></span>
 </vaadin-context-menu>
 
 <script>
   const contextMenu = document.querySelector('vaadin-context-menu');
-  contextMenu.renderer = function(root) {
+  contextMenu.renderer = function (root) {
     let listBox = root.firstElementChild;
     // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
     if (listBox) {
@@ -27,7 +27,7 @@
       root.appendChild(listBox);
     }
 
-    ['First', 'Second', 'Third'].forEach(function(name) {
+    ['First', 'Second', 'Third'].forEach(function (name) {
       const item = document.createElement('vaadin-item');
       item.textContent = name + ' menu item';
       listBox.appendChild(item);
@@ -76,7 +76,7 @@ To use the Material theme, import the correspondent file from the `theme/materia
 
 ## Contributing
 
-  To contribute to the component, please read [the guideline](https://github.com/vaadin/vaadin-core/blob/master/CONTRIBUTING.md) first.
+To contribute to the component, please read [the guideline](https://github.com/vaadin/vaadin-core/blob/master/CONTRIBUTING.md) first.
 
 ## License
 
