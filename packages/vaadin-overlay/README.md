@@ -1,10 +1,9 @@
-[![Build Status](https://travis-ci.org/vaadin/vaadin-overlay.svg?branch=master)](https://travis-ci.org/vaadin/vaadin-overlay)
-[![Coverage Status](https://coveralls.io/repos/github/vaadin/vaadin-overlay/badge.svg?branch=master)](https://coveralls.io/github/vaadin/vaadin-overlay?branch=master)
-
 # &lt;vaadin-overlay&gt;
 
 &lt;vaadin-overlay&gt; is a Web Component meant for internal use in Vaadin components.
 
+[![npm version](https://badgen.net/npm/v/@vaadin/vaadin-overlay)](https://www.npmjs.com/package/@vaadin/vaadin-overlay)
+[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ## License
 

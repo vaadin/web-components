@@ -3,6 +3,7 @@
 [&lt;vaadin-icon&gt;](https://vaadin.com/docs/latest/ds/components/icon) is a Web Component for creating SVG icons, part of the [Vaadin components](https://vaadin.com/docs/latest/ds/components).
 
 [![npm version](https://badgen.net/npm/v/@vaadin/vaadin-icon)](https://www.npmjs.com/package/@vaadin/vaadin-icon)
+[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
 <vaadin-icon name="vaadin:user"></vaadin-icon>
@@ -42,13 +43,9 @@ To use the Material theme, import the corresponding file from the `theme/materia
 
   `vaadin-icon.js`
 
-## Big Thanks
-
-Cross-browser Testing Platform and Open Source <3 Provided by [Sauce Labs](https://saucelabs.com).
-
 ## Contributing
 
-To contribute to the component, please read [the guideline](https://github.com/vaadin/vaadin-core/blob/master/CONTRIBUTING.md) first.
+Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
 
 ## License
 
