@@ -43,6 +43,10 @@ To use the Material theme, import the corresponding file from the `theme/materia
 
   `vaadin-icon.js`
 
+## Contributing
+
+Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
+
 ## License
 
 Apache License 2.0
