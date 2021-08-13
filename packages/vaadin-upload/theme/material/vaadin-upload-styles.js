@@ -132,8 +132,6 @@ registerStyles(
     [part='commands'] {
       display: flex;
       flex: none;
-      font-family: material-icons;
-      font-size: var(--material-icon-font-size);
     }
 
     [part='done-icon'],
@@ -160,6 +158,8 @@ registerStyles(
     [part='retry-button'],
     [part='clear-button'] {
       flex: none;
+      font-family: material-icons;
+      font-size: var(--material-icon-font-size);
       color: var(--material-secondary-text-color);
       line-height: 1;
       padding: 8px;

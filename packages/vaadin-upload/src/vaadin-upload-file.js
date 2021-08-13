@@ -55,9 +55,20 @@ class UploadFileElement extends ThemableMixin(PolymerElement) {
         [hidden] {
           display: none;
         }
+
+        li[part='row'] {
+          list-style-type: none;
+        }
+
+        button {
+          background: transparent;
+          padding: 0;
+          border: none;
+          box-shadow: none;
+        }
       </style>
 
-      <div part="row">
+      <li part="row" tabindex="0">
         <div part="info">
           <div part="done-icon" hidden$="[[!file.complete]]"></div>
           <div part="warning-icon" hidden$="[[!file.error]]"></div>
@@ -69,11 +80,34 @@ class UploadFileElement extends ThemableMixin(PolymerElement) {
           </div>
         </div>
         <div part="commands">
-          <div part="start-button" file-event="file-start" on-click="_fireFileEvent" hidden$="[[!file.held]]"></div>
-          <div part="retry-button" file-event="file-retry" on-click="_fireFileEvent" hidden$="[[!file.error]]"></div>
-          <div part="clear-button" file-event="file-abort" on-click="_fireFileEvent"></div>
+          <button
+            type="button"
+            part="start-button"
+            file-event="file-start"
+            on-click="_fireFileEvent"
+            hidden$="[[!file.held]]"
+            aria-label$="[[i18n.file.start]]"
+            aria-describedby="name"
+          ></button>
+          <button
+            type="button"
+            part="retry-button"
+            file-event="file-retry"
+            on-click="_fireFileEvent"
+            hidden$="[[!file.error]]"
+            aria-label$="[[i18n.file.retry]]"
+            aria-describedby="name"
+          ></button>
+          <button
+            type="button"
+            part="clear-button"
+            file-event="file-abort"
+            on-click="_fireFileEvent"
+            aria-label$="[[i18n.file.clear]]"
+            aria-describedby="name"
+          ></button>
         </div>
-      </div>
+      </li>
 
       <vaadin-progress-bar
         part="progress"
@@ -93,7 +127,9 @@ class UploadFileElement extends ThemableMixin(PolymerElement) {
 
   static get properties() {
     return {
-      file: Object
+      file: Object,
+
+      i18n: Object
     };
   }
 
