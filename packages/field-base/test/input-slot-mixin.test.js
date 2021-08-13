@@ -28,7 +28,7 @@ customElements.define(
   }
 );
 
-describe('input-mixin', () => {
+describe('input-slot-mixin', () => {
   let element, input;
 
   describe('default', () => {
