@@ -2,9 +2,9 @@
 
 [&lt;vaadin-time-picker&gt;](https://vaadin.com/components/vaadin-time-picker) is a [Web Component](http://webcomponents.org) providing a time-selection field, part of the [Vaadin components](https://vaadin.com/components).
 
-[Live Demo ↗](https://cdn.vaadin.com/vaadin-time-picker/1.0.0/demo/)
+[Live Demo ↗](https://vaadin.com/components/vaadin-time-picker/html-examples)
 |
-[API documentation ↗](https://cdn.vaadin.com/vaadin-time-picker/1.0.0)
+[API documentation ↗](https://vaadin.com/components/vaadin-time-picker/html-api)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/vaadin-time-picker)](https://www.npmjs.com/package/@vaadin/vaadin-time-picker)
 [![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-time-picker)
