@@ -3,10 +3,11 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { AriaLabelMixin } from './aria-label-mixin.js';
 import { ClearButtonMixin } from './clear-button-mixin.js';
 import { DelegateFocusMixin } from './delegate-focus-mixin.js';
 import { FieldAriaMixin } from './field-aria-mixin.js';
-import { InputPropsMixin } from './input-props-mixin.js';
+import { ForwardInputPropsMixin } from './forward-input-props-mixin.js';
 
 /**
  * A mixin to provide logic for vaadin-text-field and related components.
@@ -17,9 +18,12 @@ interface InputFieldMixinConstructor {
   new (...args: any[]): InputFieldMixin;
 }
 
-interface InputFieldMixin extends ClearButtonMixin, DelegateFocusMixin, FieldAriaMixin, InputPropsMixin {
-  readonly inputElement: HTMLElement | undefined;
-
+interface InputFieldMixin
+  extends AriaLabelMixin,
+    ClearButtonMixin,
+    DelegateFocusMixin,
+    FieldAriaMixin,
+    ForwardInputPropsMixin {
   /**
    * Whether the value of the control can be automatically completed by the browser.
    * List of available options at:
@@ -51,11 +55,6 @@ interface InputFieldMixin extends ClearButtonMixin, DelegateFocusMixin, FieldAri
    * Specify that the value should be automatically selected when the field gains focus.
    */
   autoselect: boolean;
-
-  /**
-   * The value of the field.
-   */
-  value: string;
 
   /**
    * Returns true if the current input value satisfies all constraints (if any).

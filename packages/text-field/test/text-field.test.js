@@ -10,7 +10,7 @@ describe('text-field', () => {
 
   beforeEach(() => {
     textField = fixtureSync('<vaadin-text-field></vaadin-text-field>');
-    input = textField._inputNode;
+    input = textField.inputElement;
   });
 
   describe('properties', () => {

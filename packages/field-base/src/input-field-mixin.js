@@ -6,13 +6,16 @@
 import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
 import { animationFrame } from '@polymer/polymer/lib/utils/async.js';
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
+import { AriaLabelMixin } from './aria-label-mixin.js';
 import { ClearButtonMixin } from './clear-button-mixin.js';
 import { DelegateFocusMixin } from './delegate-focus-mixin.js';
 import { FieldAriaMixin } from './field-aria-mixin.js';
-import { InputPropsMixin } from './input-props-mixin.js';
+import { ForwardInputPropsMixin } from './forward-input-props-mixin.js';
 
 const InputFieldMixinImplementation = (superclass) =>
-  class InputFieldMixinClass extends ClearButtonMixin(FieldAriaMixin(InputPropsMixin(DelegateFocusMixin(superclass)))) {
+  class InputFieldMixinClass extends ClearButtonMixin(
+    FieldAriaMixin(ForwardInputPropsMixin(AriaLabelMixin(DelegateFocusMixin(superclass))))
+  ) {
     static get properties() {
       return {
         /**
@@ -54,22 +57,12 @@ const InputFieldMixinImplementation = (superclass) =>
         autoselect: {
           type: Boolean,
           value: false
-        },
-
-        /**
-         * The value of the field.
-         */
-        value: {
-          type: String,
-          value: '',
-          observer: '_valueChanged',
-          notify: true
         }
       };
     }
 
-    static get hostProps() {
-      return [...super.hostProps, 'autocapitalize', 'autocomplete', 'autocorrect'];
+    static get forwardProps() {
+      return [...super.forwardProps, 'autocapitalize', 'autocomplete', 'autocorrect'];
     }
 
     static get observers() {
@@ -81,7 +74,7 @@ const InputFieldMixinImplementation = (superclass) =>
      * @protected
      */
     get _ariaTarget() {
-      return this._inputNode;
+      return this.inputElement;
     }
 
     /**
@@ -89,13 +82,12 @@ const InputFieldMixinImplementation = (superclass) =>
      * @return {!HTMLInputElement}
      */
     get focusElement() {
-      return this._inputNode;
+      return this.inputElement;
     }
 
     constructor() {
       super();
 
-      this._boundOnInput = this._onInput.bind(this);
       this._boundOnBlur = this._onBlur.bind(this);
       this._boundOnFocus = this._onFocus.bind(this);
     }
@@ -104,27 +96,16 @@ const InputFieldMixinImplementation = (superclass) =>
     connectedCallback() {
       super.connectedCallback();
 
-      if (this._inputNode) {
-        this._addInputListeners(this._inputNode);
-
+      if (this.inputElement) {
         // Discard value set on the custom slotted input.
-        if (this._inputNode.value !== this.value) {
+        if (this.inputElement.value !== this.value) {
           console.warn(`Please define value on the <${this.localName}> component!`);
-          this._inputNode.value = '';
+          this.inputElement.value = '';
         }
 
         if (this.value) {
-          this._inputNode.value = this.value;
+          this.inputElement.value = this.value;
         }
-      }
-    }
-
-    /** @protected */
-    disconnectedCallback() {
-      super.disconnectedCallback();
-
-      if (this._inputNode) {
-        this._removeInputListeners(this._inputNode);
       }
     }
 
@@ -148,7 +129,7 @@ const InputFieldMixinImplementation = (superclass) =>
      */
     checkValidity() {
       if (this.required) {
-        return this._inputNode ? this._inputNode.checkValidity() : undefined;
+        return this.inputElement ? this.inputElement.checkValidity() : undefined;
       } else {
         return !this.invalid;
       }
@@ -164,46 +145,37 @@ const InputFieldMixinImplementation = (superclass) =>
     }
 
     /**
-     * @param {HTMLElement} node
+     * @param {HTMLInputElement} input
      * @protected
      */
-    _addInputListeners(node) {
-      node.addEventListener('input', this._boundOnInput);
-      node.addEventListener('blur', this._boundOnBlur);
-      node.addEventListener('focus', this._boundOnFocus);
+    _addInputListeners(input) {
+      super._addInputListeners(input);
+
+      input.addEventListener('blur', this._boundOnBlur);
+      input.addEventListener('focus', this._boundOnFocus);
     }
 
     /**
-     * @param {HTMLElement} node
+     * @param {HTMLInputElement} input
      * @protected
      */
-    _removeInputListeners(node) {
-      node.removeEventListener('input', this._boundOnInput);
-      node.removeEventListener('blur', this._boundOnBlur);
-      node.removeEventListener('focus', this._boundOnFocus);
+    _removeInputListeners(input) {
+      super._addInputListeners(input);
+
+      input.removeEventListener('blur', this._boundOnBlur);
+      input.removeEventListener('focus', this._boundOnFocus);
     }
 
     /** @private */
     _onFocus() {
-      if (this.autoselect && this._inputNode) {
-        this._inputNode.select();
+      if (this.autoselect && this.inputElement) {
+        this.inputElement.select();
       }
     }
 
     /** @private */
     _onBlur() {
       this.validate();
-    }
-
-    /**
-     * @param {Event} event
-     * @protected
-     */
-    _onInput(event) {
-      // Ignore manual clear button events
-      this.__userInput = event.isTrusted;
-      this.value = event.target.value;
-      this.__userInput = false;
     }
 
     /**
@@ -232,42 +204,15 @@ const InputFieldMixinImplementation = (superclass) =>
     }
 
     /**
-     * @param {unknown} newVal
-     * @param {unknown} oldVal
+     * Override a method from `InputMixin` to validate the field
+     * when a new value is set programmatically.
+     * @param {string} value
      * @protected
+     * @override
      */
-    _valueChanged(newVal, oldVal) {
-      // Setting initial value to empty string, skip validation
-      if (newVal === '' && oldVal === undefined) {
-        return;
-      }
+    _forwardInputValue(value) {
+      super._forwardInputValue(value);
 
-      if (newVal !== '' && newVal != null) {
-        this.setAttribute('has-value', '');
-      } else {
-        this.removeAttribute('has-value');
-      }
-
-      // Value is set before an element is connected to the DOM:
-      // this case is handled separately in `connectedCallback`.
-      if (!this._inputNode) {
-        return;
-      }
-
-      // Value is set by the user, no need to sync it back to input.
-      // Also no need to validate, as we call `validate` on blur.
-      if (this.__userInput) {
-        return;
-      }
-
-      // Setting a value programmatically, sync it to input element.
-      if (newVal != undefined) {
-        this._inputNode.value = newVal;
-      } else {
-        this.clear();
-      }
-
-      // Validate the field after a new value is set programmatically.
       if (this.invalid) {
         this.validate();
       }

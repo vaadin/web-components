@@ -21,11 +21,6 @@ interface ClearButtonMixin extends InputMixin {
    */
   clearButtonVisible: boolean;
 
-  /**
-   * Clear the value of this field.
-   */
-  clear(): void;
-
   readonly _clearOnEsc: boolean;
 }
 

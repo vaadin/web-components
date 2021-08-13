@@ -10,7 +10,7 @@ describe('password-field', () => {
 
   beforeEach(() => {
     passwordField = fixtureSync('<vaadin-password-field></vaadin-password-field>');
-    input = passwordField._inputNode;
+    input = passwordField.inputElement;
     revealButton = passwordField.querySelector('[slot=reveal]');
   });
 

@@ -161,17 +161,12 @@ export class TextArea extends TextFieldMixin(ThemableMixin(ElementMixin(PolymerE
     return this.$.clearButton;
   }
 
-  /**
-   * Override getter provided by `InputMixin` to use a different slot.
-   * @protected
-   */
-  get _inputNode() {
-    return this._getDirectSlotChild('textarea');
-  }
-
   /** @protected */
   connectedCallback() {
     super.connectedCallback();
+
+    const textarea = this._getDirectSlotChild('textarea');
+    this._setInputElement(textarea);
 
     this._updateHeight();
   }
@@ -202,10 +197,10 @@ export class TextArea extends TextFieldMixin(ThemableMixin(ElementMixin(PolymerE
 
   /** @private */
   _updateHeight() {
-    if (this._inputNode) {
+    if (this.inputElement) {
       /* https://css-tricks.com/the-cleanest-trick-for-autogrowing-textareas/ */
       this.__textAreaWrapper = this.__textAreaWrapper || this.shadowRoot.querySelector('.textarea-wrapper');
-      this.__textAreaWrapper.dataset.replicatedValue = this._inputNode.value;
+      this.__textAreaWrapper.dataset.replicatedValue = this.inputElement.value;
       // getComputedStyle is expensive, maybe we can use ResizeObserver in the future
       this._dispatchIronResizeEventIfNeeded('InputHeight', getComputedStyle(this.__textAreaWrapper).height);
     }

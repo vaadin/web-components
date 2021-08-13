@@ -2,22 +2,22 @@ import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { InputAriaMixin } from '../src/input-aria-mixin.js';
+import { AriaLabelMixin } from '../src/aria-label-mixin.js';
 
 customElements.define(
-  'input-aria-mixin-element',
-  class extends InputAriaMixin(PolymerElement) {
+  'aria-label-mixin-element',
+  class extends AriaLabelMixin(PolymerElement) {
     static get template() {
       return html`<slot name="label"></slot><slot name="input"></slot>`;
     }
   }
 );
 
-describe('input-aria-mixin', () => {
+describe('aria-label-mixin', () => {
   let element, input, label;
 
   beforeEach(() => {
-    element = fixtureSync(`<input-aria-mixin-element></input-aria-mixin-element>`);
+    element = fixtureSync('<aria-label-mixin-element></aria-label-mixin-element>');
     input = element.querySelector('[slot=input]');
     label = element.querySelector('[slot=label]');
   });

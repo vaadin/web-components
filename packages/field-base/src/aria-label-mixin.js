@@ -5,10 +5,10 @@
  */
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
 import { LabelMixin } from './label-mixin.js';
-import { InputMixin } from './input-mixin.js';
+import { InputSlotMixin } from './input-slot-mixin.js';
 
-const InputAriaMixinImplementation = (superclass) =>
-  class InputAriaMixinClass extends InputMixin(LabelMixin(superclass)) {
+const AriaLabelMixinImplementation = (superclass) =>
+  class AriaLabelMixinClass extends InputSlotMixin(LabelMixin(superclass)) {
     constructor() {
       super();
 
@@ -37,8 +37,8 @@ const InputAriaMixinImplementation = (superclass) =>
 
     /** @protected */
     _enhanceLightDomA11y() {
-      if (this._inputNode) {
-        this._inputNode.setAttribute('aria-labelledby', this._labelId);
+      if (this.inputElement) {
+        this.inputElement.setAttribute('aria-labelledby', this._labelId);
       }
 
       if (this._labelNode) {
@@ -57,13 +57,13 @@ const InputAriaMixinImplementation = (superclass) =>
     __preventDuplicateLabelClick() {
       const inputClickHandler = (e) => {
         e.stopImmediatePropagation();
-        this._inputNode.removeEventListener('click', inputClickHandler);
+        this.inputElement.removeEventListener('click', inputClickHandler);
       };
-      this._inputNode.addEventListener('click', inputClickHandler);
+      this.inputElement.addEventListener('click', inputClickHandler);
     }
   };
 
 /**
  * A mixin to link slotted `<input>` and `<label>` elements.
  */
-export const InputAriaMixin = dedupingMixin(InputAriaMixinImplementation);
+export const AriaLabelMixin = dedupingMixin(AriaLabelMixinImplementation);
