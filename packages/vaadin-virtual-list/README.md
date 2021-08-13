@@ -7,6 +7,7 @@
 [&lt;vaadin-virtual-list&gt;](https://vaadin.com/docs/latest/ds/components/virtual-list) is a Web Component providing an accessible and customizable virtual-list, part of the [Vaadin components](https://vaadin.com/docs/latest/ds/components).
 
 [![npm version](https://badgen.net/npm/v/@vaadin/vaadin-virtual-list)](https://www.npmjs.com/package/@vaadin/vaadin-virtual-list)
+[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
 <vaadin-virtual-list></vaadin-virtual-list>
@@ -56,15 +57,9 @@ To use the Material theme, import the correspondent file from the `theme/materia
 
   `vaadin-virtual-list.js`
 
-## Big Thanks
-
-Cross-browser Testing Platform and Open Source <3 Provided by [Sauce Labs](https://saucelabs.com).
-
-
 ## Contributing
 
 To contribute to the component, please read [the guideline](https://github.com/vaadin/vaadin-core/blob/master/CONTRIBUTING.md) first.
-
 
 ## License
 
