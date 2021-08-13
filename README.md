@@ -233,6 +233,12 @@ Update screenshots for single package:
 yarn update:lumo --group vaadin-upload
 ```
 
+### Local Playground
+
+To check out a components behaviour or test changes to the components visually you can use the local playground. Run `yarn dev` and start editing the `playground/index.html` file.
+
+Please ensure that you omit changes to the file from your commits.
+
 ### Generating icons
 
 Re-generate SVG icon sets and icon fonts from individual SVG files for the packages that have them (e.g. `vaadin-icons`):

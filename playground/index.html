@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Vaadin web components - development playground</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+<body>
+<!--
+This file is a simple development playground for testing Vaadin components using their current source code.
+It can be used to quickly check out a component's behaviour or test some changes visually.
+Run `yarn dev` or `npm run dev` in the terminal to get started.
+Then modify this file to add the component you want to test.
+-->
+
+<!-- Import components -->
+<script type="module">
+  import '@vaadin/vaadin-button';
+  import '@vaadin/vaadin-text-field';
+</script>
+<!-- Or import all components -->
+<!--
+<script type="module">
+  import './playground/all-imports';
+</script>
+-->
+
+<!-- Add some components -->
+<vaadin-text-field placeholder="Enter name"></vaadin-text-field>
+<vaadin-button>Say hello</vaadin-button>
+
+<!-- Use components -->
+<script type="module">
+  const textField = document.querySelector("vaadin-text-field");
+  const button = document.querySelector("vaadin-button");
+
+  button.addEventListener("click", () => {
+    const name = textField.value;
+    alert(`Hello ${name}!`);
+  });
+</script>
+</body>
+</html>

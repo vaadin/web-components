@@ -19,6 +19,7 @@
   "scripts": {
     "analyze": "polymer analyze packages/**/vaadin-*.js > analysis.json && node scripts/prepareDocs.js",
     "debug": "web-test-runner --watch",
+    "dev": "web-dev-server --node-resolve --open --watch --app-index playground/index.html",
     "dist": "rimraf dist && yarn analyze && rollup -c rollup.config.js && cp analysis.json dist",
     "docs": "yarn analyze && web-dev-server --node-resolve --open",
     "icons": "lerna run icons",
