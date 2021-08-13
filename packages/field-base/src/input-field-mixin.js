@@ -155,6 +155,17 @@ const InputFieldMixinImplementation = (superclass) =>
       input.addEventListener('focus', this._boundOnFocus);
     }
 
+    /**
+     * @param {HTMLInputElement} input
+     * @protected
+     */
+    _removeInputListeners(input) {
+      super._addInputListeners(input);
+
+      input.removeEventListener('blur', this._boundOnBlur);
+      input.removeEventListener('focus', this._boundOnFocus);
+    }
+
     /** @private */
     _onFocus() {
       if (this.autoselect && this.inputElement) {
