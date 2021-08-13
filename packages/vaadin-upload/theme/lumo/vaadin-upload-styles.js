@@ -128,7 +128,7 @@ registerStyles(
 
     [part='start-button'],
     [part='retry-button'],
-    [part='remove-button'] {
+    [part='clear-button'] {
       flex: none;
       margin-left: var(--lumo-space-xs);
       cursor: var(--lumo-clickable-cursor);
@@ -138,7 +138,7 @@ registerStyles(
     [part='warning-icon']::before,
     [part='start-button']::before,
     [part='retry-button']::before,
-    [part='remove-button']::before {
+    [part='clear-button']::before {
       vertical-align: -0.25em;
     }
 
@@ -160,7 +160,7 @@ registerStyles(
       content: var(--lumo-icons-reload);
     }
 
-    [part='remove-button']::before {
+    [part='clear-button']::before {
       content: var(--lumo-icons-cross);
     }
 

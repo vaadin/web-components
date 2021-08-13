@@ -34,7 +34,7 @@ describe('a11y', () => {
         file: {
           start: 'Start',
           retry: 'Retry',
-          remove: 'Remove'
+          clear: 'clear'
         }
       };
       uploadFileElement.i18n = i18n;
@@ -86,9 +86,9 @@ describe('a11y', () => {
       });
     });
 
-    describe('remove button', () => {
+    describe('clear button', () => {
       beforeEach(() => {
-        button = uploadFileElement.shadowRoot.querySelector('[part=remove-button]');
+        button = uploadFileElement.shadowRoot.querySelector('[part=clear-button]');
       });
 
       it('should be a <button> element', () => {
@@ -100,7 +100,7 @@ describe('a11y', () => {
       });
 
       it('should have aria-label attribute', () => {
-        expect(button.getAttribute('aria-label')).to.equal(i18n.file.remove);
+        expect(button.getAttribute('aria-label')).to.equal(i18n.file.clear);
       });
     });
   });

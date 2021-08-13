@@ -28,7 +28,7 @@ import './vaadin-upload-icons.js';
  * `commands` | Container for file command icons
  * `start-button` | Start file upload button
  * `retry-button` | Retry file upload button
- * `remove-button` | Remove file button
+ * `clear-button` | Clear file button
  * `progress`| Progress bar
  *
  * The following state attributes are available for styling:
@@ -100,10 +100,10 @@ class UploadFileElement extends ThemableMixin(PolymerElement) {
           ></button>
           <button
             type="button"
-            part="remove-button"
+            part="clear-button"
             file-event="file-abort"
             on-click="_fireFileEvent"
-            aria-label$="[[i18n.file.remove]]"
+            aria-label$="[[i18n.file.clear]]"
             aria-describedby="name"
           ></button>
         </div>

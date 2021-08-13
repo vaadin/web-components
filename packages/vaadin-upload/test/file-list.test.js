@@ -35,12 +35,12 @@ describe('file list', () => {
     files.forEach((file) => upload._addFile(file));
     await nextFrame();
 
-    const clearButton1 = getFileListItems(upload)[0].shadowRoot.querySelector('[part="remove-button"]');
+    const clearButton1 = getFileListItems(upload)[0].shadowRoot.querySelector('[part="clear-button"]');
     clearButton1.click();
     await nextFrame();
     expect(getFileListItems(upload).length).to.equal(1);
 
-    const clearButton2 = getFileListItems(upload)[0].shadowRoot.querySelector('[part="remove-button"]');
+    const clearButton2 = getFileListItems(upload)[0].shadowRoot.querySelector('[part="clear-button"]');
     clearButton2.click();
     await nextFrame();
     expect(getFileListItems(upload).length).to.equal(0);

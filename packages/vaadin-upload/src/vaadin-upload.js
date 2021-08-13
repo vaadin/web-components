@@ -77,7 +77,7 @@ class UploadElement extends ElementMixin(ThemableMixin(PolymerElement)) {
           display: none !important;
         }
 
-        ul[part='file-list'] {
+        [part='file-list'] {
           padding: 0;
           margin: 0;
         }
@@ -335,59 +335,61 @@ class UploadElement extends ElementMixin(ThemableMixin(PolymerElement)) {
        * _i18n_ object or just the property you want to modify.
        *
        * The object has the following JSON structure and default values:
-
-      {
-        dropFiles: {
-          one: 'Drop file here',
-          many: 'Drop files here'
-        },
-        addFiles: {
-          one: 'Select File...',
-          many: 'Upload Files...'
-        },
-        cancel: 'Cancel',
-        error: {
-          tooManyFiles: 'Too Many Files.',
-          fileIsTooBig: 'File is Too Big.',
-          incorrectFileType: 'Incorrect File Type.'
-        },
-        uploading: {
-          status: {
-            connecting: 'Connecting...',
-            stalled: 'Stalled',
-            processing: 'Processing File...',
-            held: 'Queued'
-          },
-          remainingTime: {
-            prefix: 'remaining time: ',
-            unknown: 'unknown remaining time'
-          },
-          error: {
-            serverUnavailable: 'Server Unavailable',
-            unexpectedServerError: 'Unexpected Server Error',
-            forbidden: 'Forbidden'
-          }
-        },
-        file: {
-          retry: 'Retry',
-          start: 'Start',
-          remove: 'Remove'
-        },
-        units: {
-          size: ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
-          sizeBase: 1000
-        },
-        formatSize: function(bytes) {
-          // returns the size followed by the best suitable unit
-        },
-        formatTime: function(seconds, [secs, mins, hours]) {
-          // returns a 'HH:MM:SS' string
-        }
-      }
-
-      * @type {!UploadI18n}
-      * @default {English}
-      */
+       *
+       * ```
+       * {
+       *   dropFiles: {
+       *     one: 'Drop file here',
+       *     many: 'Drop files here'
+       *   },
+       *   addFiles: {
+       *     one: 'Select File...',
+       *     many: 'Upload Files...'
+       *   },
+       *   cancel: 'Cancel',
+       *   error: {
+       *     tooManyFiles: 'Too Many Files.',
+       *     fileIsTooBig: 'File is Too Big.',
+       *     incorrectFileType: 'Incorrect File Type.'
+       *   },
+       *   uploading: {
+       *     status: {
+       *       connecting: 'Connecting...',
+       *       stalled: 'Stalled',
+       *       processing: 'Processing File...',
+       *       held: 'Queued'
+       *     },
+       *     remainingTime: {
+       *       prefix: 'remaining time: ',
+       *       unknown: 'unknown remaining time'
+       *     },
+       *     error: {
+       *       serverUnavailable: 'Server Unavailable',
+       *       unexpectedServerError: 'Unexpected Server Error',
+       *       forbidden: 'Forbidden'
+       *     }
+       *   },
+       *   file: {
+       *     retry: 'Retry',
+       *     start: 'Start',
+       *     clear: 'Clear'
+       *   },
+       *   units: {
+       *     size: ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
+       *     sizeBase: 1000
+       *   },
+       *   formatSize: function(bytes) {
+       *     // returns the size followed by the best suitable unit
+       *   },
+       *   formatTime: function(seconds, [secs, mins, hours]) {
+       *     // returns a 'HH:MM:SS' string
+       *   }
+       * }
+       * ```
+       *
+       * @type {!UploadI18n}
+       * @default {English}
+       */
       i18n: {
         type: Object,
         value: function () {
@@ -426,7 +428,7 @@ class UploadElement extends ElementMixin(ThemableMixin(PolymerElement)) {
             file: {
               retry: 'Retry',
               start: 'Start',
-              remove: 'Remove'
+              clear: 'Clear'
             },
             units: {
               size: ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']

@@ -66,8 +66,8 @@ describe('keyboard navigation', () => {
       expect(fileElement.shadowRoot.activeElement).to.equal(retryButton);
     });
 
-    it('should focus on the remove button', async () => {
-      const removeButton = fileElement.shadowRoot.querySelector('[part=remove-button]');
+    it('should focus on the clear button', async () => {
+      const removeButton = fileElement.shadowRoot.querySelector('[part=clear-button]');
 
       await repeatTab(5);
 

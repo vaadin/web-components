@@ -156,7 +156,7 @@ registerStyles(
 
     [part='start-button'],
     [part='retry-button'],
-    [part='remove-button'] {
+    [part='clear-button'] {
       flex: none;
       font-family: material-icons;
       font-size: var(--material-icon-font-size);
@@ -166,13 +166,13 @@ registerStyles(
       margin: -8px 0;
     }
 
-    [part='remove-button'] {
+    [part='clear-button'] {
       margin-right: -8px;
     }
 
     [part='start-button']:hover,
     [part='retry-button']:hover,
-    [part='remove-button']:hover {
+    [part='clear-button']:hover {
       color: inherit;
     }
 
@@ -180,7 +180,7 @@ registerStyles(
     [part='warning-icon']::before,
     [part='start-button']::before,
     [part='retry-button']::before,
-    [part='remove-button']::before {
+    [part='clear-button']::before {
       vertical-align: -0.05em;
     }
 
@@ -202,7 +202,7 @@ registerStyles(
       content: var(--material-icons-reload);
     }
 
-    [part='remove-button']::before {
+    [part='clear-button']::before {
       content: var(--material-icons-clear);
     }
 
