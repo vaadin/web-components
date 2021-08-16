@@ -6,6 +6,7 @@
 import { timeOut } from '@polymer/polymer/lib/utils/async.js';
 import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
 import { flush } from '@polymer/polymer/lib/utils/flush.js';
+import { processTemplates } from '@vaadin/vaadin-element-mixin/templates.js';
 import { ComboBoxPlaceholder } from '@vaadin/vaadin-combo-box/src/vaadin-combo-box-placeholder.js';
 import { ClearButtonMixin } from '@vaadin/field-base/src/clear-button-mixin.js';
 import { DisabledMixin } from '@vaadin/field-base/src/disabled-mixin.js';
@@ -279,6 +280,8 @@ export const ComboBoxMixin = (subclass) =>
 
       this.addEventListener('mousedown', () => this.__bringToFront());
       this.addEventListener('touchstart', () => this.__bringToFront());
+
+      processTemplates(this);
     }
 
     /**
