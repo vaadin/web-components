@@ -10,7 +10,7 @@ describe('integer-field', () => {
 
   beforeEach(() => {
     integerField = fixtureSync('<vaadin-integer-field></vaadin-integer-field>');
-    input = integerField._inputNode;
+    input = integerField.inputElement;
   });
 
   describe('keyboard input', () => {
