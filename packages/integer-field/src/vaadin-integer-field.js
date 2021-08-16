@@ -116,7 +116,8 @@ class IntegerField extends NumberField {
   _onBeforeInput(e) {
     // The `beforeinput` event covers all the cases for `_enabledCharPattern`: keyboard, pasting and dropping,
     // but it is still experimental technology so we can't rely on it. It's used here just as an additional check,
-    // because it seems to be the only way to detect and prevent specific keys on mobile devices. See issue #429.
+    // because it seems to be the only way to detect and prevent specific keys on mobile devices.
+    // See https://github.com/vaadin/vaadin-text-field/issues/429
     if (this._enabledCharPattern && e.data && !this.__enabledTextRegExp.test(e.data)) {
       e.preventDefault();
     }
@@ -131,9 +132,12 @@ class IntegerField extends NumberField {
   }
 
   /**
-   * @param {unknown} newVal
-   * @param {unknown} oldVal
+   * Override an observer from `InputMixin` to clear the value
+   * when trying to type invalid characters.
+   * @param {string | undefined} newVal
+   * @param {string | undefined} oldVal
    * @protected
+   * @override
    */
   _valueChanged(newVal, oldVal) {
     if (newVal !== '' && !this.__isInteger(newVal)) {
@@ -145,9 +149,12 @@ class IntegerField extends NumberField {
   }
 
   /**
+   * Override an observer from `NumberField` to reset the step
+   * property when an invalid step is set.
    * @param {number} newVal
    * @param {number | undefined} oldVal
    * @protected
+   * @override
    */
   _stepChanged(newVal, oldVal) {
     if (!this.__hasOnlyDigits(newVal)) {
