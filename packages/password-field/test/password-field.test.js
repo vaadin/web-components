@@ -22,6 +22,15 @@ describe('password-field', () => {
     expect(revealButton.hidden).to.be.false;
   });
 
+  it('should set default accessible label to reveal button', () => {
+    expect(revealButton.getAttribute('aria-label')).to.equal('Show password');
+  });
+
+  it('should translate accessible label when setting new i18n object', () => {
+    passwordField.i18n = { reveal: 'Näytä salasana' };
+    expect(revealButton.getAttribute('aria-label')).to.equal('Näytä salasana');
+  });
+
   it('should reveal the password on reveal button click', () => {
     revealButton.click();
     expect(input.type).to.equal('text');
