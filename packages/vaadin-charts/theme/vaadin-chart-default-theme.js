@@ -27,7 +27,7 @@ registerStyles(
       z-index: 0;
       /* #1072 */
       -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-      font-family: 'Lucida Grande', 'Lucida Sans Unicode', Arial, Helvetica, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Roboto', 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
       font-size: 12px;
     }
 
@@ -40,7 +40,7 @@ registerStyles(
     }
 
     .highcharts-strong {
-      font-weight: bold;
+      font-weight: 600;
     }
 
     .highcharts-emphasized {
@@ -52,7 +52,7 @@ registerStyles(
     }
 
     .highcharts-background {
-      fill: #fff;
+      fill: var(--vaadin-charts-background);
     }
 
     .highcharts-plot-border,
@@ -82,18 +82,19 @@ registerStyles(
 
     /* Titles */
     .highcharts-title {
-      fill: #333;
+      fill: var(--vaadin-charts-title-label);
       font-size: 1.5em;
+      font-weight: 600;
     }
 
     .highcharts-subtitle {
-      fill: #666;
+      fill: var(--vaadin-charts-secondary-label);
     }
 
     /* Axes */
     .highcharts-axis-line {
       fill: none;
-      stroke: #ccd6eb;
+      stroke: var(--vaadin-charts-axis-line);
     }
 
     .highcharts-yaxis .highcharts-axis-line {
@@ -101,26 +102,26 @@ registerStyles(
     }
 
     .highcharts-axis-title {
-      fill: #666;
+      fill: var(--vaadin-charts-axis-title);
     }
 
     .highcharts-axis-labels {
-      fill: #666;
+      fill: var(--vaadin-charts-axis-label);
       cursor: default;
       font-size: 0.9em;
     }
 
     .highcharts-grid-line {
       fill: none;
-      stroke: #e6e6e6;
+      stroke: var(--vaadin-charts-grid-line);
     }
 
     .highcharts-xaxis-grid .highcharts-grid-line {
-      stroke-width: 0;
+      stroke-width: var(--vaadin-charts-xaxis-line-width);
     }
 
     .highcharts-tick {
-      stroke: #ccd6eb;
+      stroke: var(--vaadin-charts-grid-line);
     }
 
     .highcharts-yaxis .highcharts-tick {
@@ -128,23 +129,23 @@ registerStyles(
     }
 
     .highcharts-minor-grid-line {
-      stroke: #f2f2f2;
+      stroke: var(--vaadin-charts-contrast-5pct);
     }
 
     .highcharts-crosshair-thin {
       stroke-width: 1px;
-      stroke: #ccc;
+      stroke: var(--vaadin-charts-grid-line);
     }
 
     .highcharts-crosshair-category {
-      stroke: #ccd6eb;
+      stroke: var(--vaadin-charts-color-0);
       stroke-opacity: 0.25;
     }
 
     /* Credits */
     .highcharts-credits {
       cursor: pointer;
-      fill: #999;
+      fill: var(--vaadin-charts-disabled-label);
       font-size: 0.7em;
       transition: fill 250ms, font-size 250ms;
     }
@@ -162,23 +163,34 @@ registerStyles(
       transition: stroke 150ms;
     }
 
+    .highcharts-tooltip {
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.05)) !important;
+    }
+    
     .highcharts-tooltip text {
-      fill: #333;
+      fill: var(--vaadin-charts-data-label);
     }
 
     .highcharts-tooltip .highcharts-header {
       font-size: 0.85em;
+      color: var(--vaadin-charts-secondary-label);
     }
 
     .highcharts-tooltip-box {
       stroke-width: 1px;
-      fill: #f7f7f7;
-      fill-opacity: 0.85;
+      stroke: var(--vaadin-charts-tooltip-border);
+      fill: var(--vaadin-charts-tooltip-background);
+      fill-opacity: var(--vaadin-charts-tooltip-background-opacity);
     }
 
     .highcharts-tooltip-box .highcharts-label-box {
-      fill: #f7f7f7;
-      fill-opacity: 0.85;
+      fill: var(--vaadin-charts-tooltip-background);
+      fill-opacity: var(--vaadin-charts-tooltip-background-opacity);
+    }
+    
+    .highcharts-tooltip-header {
+      stroke-width: 1px;
+      stroke: var(--vaadin-charts-contrast-20pct);
     }
 
     div.highcharts-tooltip {
@@ -186,7 +198,7 @@ registerStyles(
     }
 
     .highcharts-selection-marker {
-      fill: #335cad;
+      fill: var(--vaadin-charts-color-0);
       fill-opacity: 0.25;
     }
 
@@ -242,519 +254,528 @@ registerStyles(
     /* Default colors */
     /* vaadin-charts custom properties */
     .highcharts-color-0 {
-      fill: var(--vaadin-charts-color-0, #7cb5ec);
-      stroke: var(--vaadin-charts-color-0, #7cb5ec);
+      fill: var(--vaadin-charts-color-0, #5AC2F7);
+      stroke: var(--vaadin-charts-color-0, #5AC2F7);
     }
 
     .highcharts-color-1 {
-      fill: var(--vaadin-charts-color-1, #434348);
-      stroke: var(--vaadin-charts-color-1, #434348);
+      fill: var(--vaadin-charts-color-1, #1676F3);
+      stroke: var(--vaadin-charts-color-1, #1676F3);
     }
 
     .highcharts-color-2 {
-      fill: var(--vaadin-charts-color-2, #90ed7d);
-      stroke: var(--vaadin-charts-color-2, #90ed7d);
+      fill: var(--vaadin-charts-color-2, #FF7D94);
+      stroke: var(--vaadin-charts-color-2, #FF7D94);
     }
 
     .highcharts-color-3 {
-      fill: var(--vaadin-charts-color-3, #f7a35c);
-      stroke: var(--vaadin-charts-color-3, #f7a35c);
+      fill: var(--vaadin-charts-color-3, #C5164E);
+      stroke: var(--vaadin-charts-color-3, #C5164E);
     }
 
     .highcharts-color-4 {
-      fill: var(--vaadin-charts-color-4, #8085e9);
-      stroke: var(--vaadin-charts-color-4, #8085e9);
+      fill: var(--vaadin-charts-color-4, #15C15D);
+      stroke: var(--vaadin-charts-color-4, #15C15D);
     }
 
     .highcharts-color-5 {
-      fill: var(--vaadin-charts-color-5, #f15c80);
-      stroke: var(--vaadin-charts-color-5, #f15c80);
+      fill: var(--vaadin-charts-color-5, #0E8151);
+      stroke: var(--vaadin-charts-color-5, #0E8151);
     }
-
+    
     .highcharts-color-6 {
-      fill: var(--vaadin-charts-color-6, #e4d354);
-      stroke: var(--vaadin-charts-color-6, #e4d354);
+      fill: var(--vaadin-charts-color-6, #C18ED2);
+      stroke: var(--vaadin-charts-color-6, #C18ED2);
     }
 
     .highcharts-color-7 {
-      fill: var(--vaadin-charts-color-7, #2b908f);
-      stroke: var(--vaadin-charts-color-7, #2b908f);
+      fill: var(--vaadin-charts-color-7, #9233B3);
+      stroke: var(--vaadin-charts-color-7, #9233B3);
     }
 
     .highcharts-color-8 {
-      fill: var(--vaadin-charts-color-8, #f45b5b);
-      stroke: var(--vaadin-charts-color-8, #f45b5b);
+      fill: var(--vaadin-charts-color-8, #FDA253);
+      stroke: var(--vaadin-charts-color-8, #FDA253);
     }
 
     .highcharts-color-9 {
-      fill: var(--vaadin-charts-color-9, #91e8e1);
-      stroke: var(--vaadin-charts-color-9, #91e8e1);
+      fill: var(--vaadin-charts-color-9, #E24932);
+      stroke: var(--vaadin-charts-color-9, #E24932);
     }
-    /* end of vaadin-charts custom properties */
 
+    /* end of vaadin-charts custom properties */
+    
     .highcharts-area {
-      fill-opacity: 0.75;
+      fill-opacity: 0.5;
       stroke-width: 0;
     }
-
+    
     .highcharts-markers {
       stroke-width: 1px;
-      stroke: #fff;
+      stroke: var(--vaadin-charts-background);
     }
-
+    
     .highcharts-a11y-markers-hidden .highcharts-point:not(.highcharts-point-hover):not(.highcharts-a11y-marker-visible),
     .highcharts-a11y-marker-hidden {
       opacity: 0;
     }
-
+    
     .highcharts-point {
       stroke-width: 1px;
     }
-
+    
     .highcharts-dense-data .highcharts-point {
       stroke-width: 0;
     }
-
+    
     .highcharts-data-label {
       font-size: 0.9em;
-      font-weight: bold;
+      font-weight: normal;
     }
-
+    
     .highcharts-data-label-box {
       fill: none;
       stroke-width: 0;
     }
-
+    
     .highcharts-data-label text,
     text.highcharts-data-label {
-      fill: #333;
+      fill: var(--vaadin-charts-data-label);
     }
-
+    
     .highcharts-data-label-connector {
       fill: none;
     }
-
+    
     .highcharts-data-label-hidden {
       pointer-events: none;
     }
-
+    
     .highcharts-halo {
       fill-opacity: 0.25;
       stroke-width: 0;
     }
-
+    
     .highcharts-series:not(.highcharts-pie-series) .highcharts-point-select,
     .highcharts-markers .highcharts-point-select {
-      fill: #ccc;
-      stroke: #000;
+      fill: var(--vaadin-charts-grid-line);
+      stroke: var(--vaadin-charts-contrast);
     }
-
+    
     .highcharts-column-series rect.highcharts-point {
-      stroke: #fff;
+      stroke: var(--vaadin-charts-background);
     }
-
+    
     .highcharts-column-series .highcharts-point {
       transition: fill-opacity 250ms;
     }
-
+    
     .highcharts-column-series .highcharts-point-hover {
       fill-opacity: 0.75;
       transition: fill-opacity 50ms;
     }
-
+    
     .highcharts-pie-series .highcharts-point {
       stroke-linejoin: round;
-      stroke: #fff;
+      stroke: var(--vaadin-charts-background);
     }
-
+    
     .highcharts-pie-series .highcharts-point-hover {
       fill-opacity: 0.75;
       transition: fill-opacity 50ms;
     }
-
+    
     .highcharts-funnel-series .highcharts-point {
       stroke-linejoin: round;
-      stroke: #fff;
+      stroke: var(--vaadin-charts-background);
+      stroke-width: 2px;
     }
-
+    
     .highcharts-funnel-series .highcharts-point-hover {
       fill-opacity: 0.75;
       transition: fill-opacity 50ms;
     }
-
+    
     .highcharts-funnel-series .highcharts-point-select {
       fill: inherit;
       stroke: inherit;
     }
-
+    
     .highcharts-pyramid-series .highcharts-point {
       stroke-linejoin: round;
-      stroke: #fff;
+      stroke: var(--vaadin-charts-background);
+      stroke-width: 2px;
     }
-
+    
     .highcharts-pyramid-series .highcharts-point-hover {
       fill-opacity: 0.75;
       transition: fill-opacity 50ms;
     }
-
+    
     .highcharts-pyramid-series .highcharts-point-select {
       fill: inherit;
       stroke: inherit;
     }
-
+    
     .highcharts-solidgauge-series .highcharts-point {
       stroke-width: 0;
     }
-
+    
     .highcharts-treemap-series .highcharts-point {
-      stroke-width: 1px;
-      stroke: #e6e6e6;
+      stroke-width: 2px;
+      stroke: var(--vaadin-charts-background);
       transition: stroke 250ms, fill 250ms, fill-opacity 250ms;
     }
-
+    
     .highcharts-treemap-series .highcharts-point-hover {
-      stroke: #999;
+      stroke-width: 0px;
+      stroke: var(--vaadin-charts-background);
+      fill-opacity: 0.75;
       transition: stroke 25ms, fill 25ms, fill-opacity 25ms;
     }
-
+    
     .highcharts-treemap-series .highcharts-above-level {
       display: none;
     }
-
+    
     .highcharts-treemap-series .highcharts-internal-node {
       fill: none;
     }
-
+    
     .highcharts-treemap-series .highcharts-internal-node-interactive {
       fill-opacity: 0.15;
       cursor: pointer;
     }
-
+    
     .highcharts-treemap-series .highcharts-internal-node-interactive:hover {
       fill-opacity: 0.75;
     }
-
+    
     .highcharts-vector-series .highcharts-point {
       fill: none;
       stroke-width: 2px;
     }
-
+    
     .highcharts-windbarb-series .highcharts-point {
       fill: none;
       stroke-width: 2px;
     }
-
+    
     .highcharts-lollipop-stem {
-      stroke: #000;
+      stroke: var(--vaadin-charts-contrast);
     }
-
+    
     .highcharts-focus-border {
       fill: none;
       stroke-width: 2px;
     }
-
+    
     .highcharts-legend-item-hidden .highcharts-focus-border {
       fill: none !important;
     }
-
+    
     /* Legend */
     .highcharts-legend-box {
       fill: none;
       stroke-width: 0;
     }
-
+    
     .highcharts-legend-item > text {
-      fill: #333;
-      font-weight: bold;
+      fill: var(--vaadin-charts-data-label);
+      font-weight: normal;
       font-size: 1em;
       cursor: pointer;
       stroke-width: 0;
     }
-
-    .highcharts-legend-item:hover text {
-      fill: #000;
+    
+    .highcharts-legend-item > .highcharts-point {
+      stroke-width: 0px;
     }
-
+    
+    .highcharts-legend-item:hover text {
+      fill: var(--vaadin-charts-title-label);
+    }
+    
     .highcharts-legend-item-hidden * {
-      fill: #ccc !important;
-      stroke: #ccc !important;
+      fill: var(--vaadin-charts-disabled-label) !important;
+      stroke: var(--vaadin-charts-disabled-label) !important;
       transition: fill 250ms;
     }
-
+    
     .highcharts-legend-nav-active {
-      fill: #039;
+      fill: var(--vaadin-charts-button-label);
       cursor: pointer;
     }
-
+    
     .highcharts-legend-nav-inactive {
-      fill: #ccc;
+      fill: var(--vaadin-charts-disabled-label);
     }
-
+    
     circle.highcharts-legend-nav-active,
     circle.highcharts-legend-nav-inactive {
       /* tracker */
       fill: rgba(192, 192, 192, 0.0001);
     }
-
+    
     .highcharts-legend-title-box {
       fill: none;
       stroke-width: 0;
     }
-
+    
     /* Bubble legend */
     .highcharts-bubble-legend-symbol {
       stroke-width: 2;
       fill-opacity: 0.5;
     }
-
+    
     .highcharts-bubble-legend-connectors {
       stroke-width: 1;
     }
-
+    
     .highcharts-bubble-legend-labels {
-      fill: #333;
+      fill: var(--vaadin-charts-data-label);
     }
-
+    
     /* Loading */
     .highcharts-loading {
       position: absolute;
-      background-color: #fff;
+      background-color: var(--vaadin-charts-background);
       opacity: 0.5;
       text-align: center;
       z-index: 10;
       transition: opacity 250ms;
     }
-
+    
     .highcharts-loading-hidden {
       height: 0 !important;
       opacity: 0;
       overflow: hidden;
       transition: opacity 250ms, height 250ms step-end;
     }
-
+    
     .highcharts-loading-inner {
-      font-weight: bold;
+      font-weight: normal;
       position: relative;
       top: 45%;
     }
-
+    
     /* Plot bands and polar pane backgrounds */
     .highcharts-plot-band,
     .highcharts-pane {
-      fill: #000;
+      fill: var(--vaadin-charts-contrast);
       fill-opacity: 0.05;
     }
-
+    
     .highcharts-plot-line {
       fill: none;
-      stroke: #999;
+      stroke: var(--vaadin-charts-contrast-60pct);
       stroke-width: 1px;
     }
-
-    /* Highcharts More and modules */
-    .highcharts-boxplot-box {
-      fill: #fff;
+    
+    .highcharts-plot-line-label {
+      fill: var(--vaadin-charts-data-label);
     }
-
+    
+      /* Highcharts More and modules */
+    .highcharts-boxplot-box {
+      fill: var(--vaadin-charts-background);
+    }
+    
     .highcharts-boxplot-median {
       stroke-width: 2px;
     }
-
+    
     .highcharts-bubble-series .highcharts-point {
       fill-opacity: 0.5;
     }
-
+    
     .highcharts-errorbar-series .highcharts-point {
-      stroke: #000;
+      stroke: var(--vaadin-charts-contrast);
     }
-
+    
     .highcharts-gauge-series .highcharts-data-label-box {
-      stroke: #ccc;
+      stroke: var(--vaadin-charts-grid-line);
       stroke-width: 1px;
     }
-
+    
     .highcharts-gauge-series .highcharts-dial {
-      fill: #000;
+      fill: var(--vaadin-charts-contrast);
       stroke-width: 0;
     }
-
+    
     .highcharts-polygon-series .highcharts-graph {
       fill: inherit;
       stroke-width: 0;
     }
-
+    
     .highcharts-waterfall-series .highcharts-graph {
-      stroke: #333;
+      stroke: var(--vaadin-charts-contrast-60pct);
       stroke-dasharray: 1, 3;
     }
-
+    
     .highcharts-sankey-series .highcharts-point {
       stroke-width: 0;
     }
-
+    
     .highcharts-sankey-series .highcharts-link {
       transition: fill 250ms, fill-opacity 250ms;
       fill-opacity: 0.5;
     }
-
+    
     .highcharts-sankey-series .highcharts-point-hover.highcharts-link {
       transition: fill 50ms, fill-opacity 50ms;
       fill-opacity: 1;
     }
-
+    
     .highcharts-venn-series .highcharts-point {
       fill-opacity: 0.75;
-      stroke: #ccc;
+      stroke: var(--vaadin-charts-background);
       transition: stroke 250ms, fill-opacity 250ms;
     }
-
+    
     .highcharts-venn-series .highcharts-point-hover {
       fill-opacity: 1;
-      stroke: #ccc;
+      stroke: var(--vaadin-charts-background);
     }
-
+    
     /* Highstock */
     .highcharts-navigator-mask-outside {
       fill-opacity: 0;
     }
-
+    
     .highcharts-navigator-mask-inside {
-      fill: #6685c2;
+      fill: var(--vaadin-charts-color-0);
       /* navigator.maskFill option */
-      fill-opacity: 0.25;
+      fill-opacity: 0.2;
       cursor: ew-resize;
     }
-
+    
     .highcharts-navigator-outline {
-      stroke: #ccc;
+      stroke: var(--vaadin-charts-grid-line);
       fill: none;
     }
-
+    
     .highcharts-navigator-handle {
-      stroke: #ccc;
-      fill: #f2f2f2;
+      stroke: var(--vaadin-charts-contrast-20pct);
+      fill: var(--vaadin-charts-background);
       cursor: ew-resize;
     }
-
+    
     .highcharts-navigator-series {
-      fill: #335cad;
-      stroke: #335cad;
+      fill: var(--vaadin-charts-color-1);
+      stroke: var(--vaadin-charts-color-1);
     }
-
+    
     .highcharts-navigator-series .highcharts-graph {
       stroke-width: 1px;
     }
-
+    
     .highcharts-navigator-series .highcharts-area {
       fill-opacity: 0.05;
     }
-
+    
     .highcharts-navigator-xaxis .highcharts-axis-line {
       stroke-width: 0;
     }
-
+    
     .highcharts-navigator-xaxis .highcharts-grid-line {
       stroke-width: 1px;
-      stroke: #e6e6e6;
+      stroke: var(--vaadin-charts-grid-line);
     }
-
+    
     .highcharts-navigator-xaxis.highcharts-axis-labels {
-      fill: #999;
+      fill: var(--vaadin-charts-secondary-label);
     }
-
+    
     .highcharts-navigator-yaxis .highcharts-grid-line {
       stroke-width: 0;
     }
-
+    
     .highcharts-scrollbar-thumb {
-      fill: #ccc;
-      stroke: #ccc;
-      stroke-width: 1px;
+      fill: var(--vaadin-charts-contrast-20pct);
     }
-
+    
     .highcharts-scrollbar-button {
-      fill: #e6e6e6;
-      stroke: #ccc;
-      stroke-width: 1px;
+      fill: var(--vaadin-charts-background);
     }
-
+    
     .highcharts-scrollbar-arrow {
-      fill: #666;
+      fill: var(--vaadin-charts-data-label);
     }
-
+    
     .highcharts-scrollbar-rifles {
-      stroke: #666;
+      stroke: var(--vaadin-charts-data-label);
       stroke-width: 1px;
     }
-
+    
     .highcharts-scrollbar-track {
-      fill: #f2f2f2;
-      stroke: #f2f2f2;
-      stroke-width: 1px;
+      fill: var(--vaadin-charts-contrast-5pct);
     }
-
+    
     .highcharts-button {
-      fill: #f7f7f7;
-      stroke: #ccc;
+      fill: var(--vaadin-charts-button-background);
       cursor: default;
-      stroke-width: 1px;
       transition: fill 250ms;
     }
-
+    
     .highcharts-button text {
-      fill: #333;
+      fill: var(--vaadin-charts-button-label);
+      font-weight: 600;
     }
-
+    
     .highcharts-button-hover {
       transition: fill 0ms;
-      fill: #e6e6e6;
-      stroke: #ccc;
+      fill: var(--vaadin-charts-button-hover-background);
+      stroke-width: 0px;
     }
-
+    
     .highcharts-button-hover text {
-      fill: #333;
+      fill: var(--vaadin-charts-button-label);
     }
-
+    
     .highcharts-button-pressed {
-      font-weight: bold;
-      fill: #e6ebf5;
-      stroke: #ccc;
+      fill: var(--vaadin-charts-button-active-background);
     }
-
+    
     .highcharts-button-pressed text {
-      fill: #333;
-      font-weight: bold;
+      fill: var(--vaadin-charts-button-active-label);
     }
-
+    
     .highcharts-button-disabled text {
-      fill: #333;
+      fill: var(--vaadin-charts-button-label);
     }
-
+    
+    .highcharts-range-selector-buttons > text {
+      fill: var(--vaadin-charts-secondary-label);
+    }
+    
     .highcharts-range-selector-buttons .highcharts-button {
       stroke-width: 0;
     }
-
+    
     .highcharts-range-label rect {
       fill: none;
     }
-
+    
     .highcharts-range-label text {
-      fill: #666;
+      fill: var(--vaadin-charts-secondary-label);
     }
-
+    
     .highcharts-range-input rect {
-      fill: none;
+      fill: var(--vaadin-charts-contrast-10pct);
+      rx: 2;
+      ry: 2;
     }
-
+    
+    .highcharts-range-input:hover rect {
+      fill: var(--vaadin-charts-contrast-20pct);
+      transition: fill 250ms;
+    }
+    
     .highcharts-range-input text {
-      fill: #333;
+      fill: var(--vaadin-charts-data-label);
     }
-
-    .highcharts-range-input {
-      stroke-width: 1px;
-      stroke: #ccc;
-    }
-
+    
     input.highcharts-range-selector {
       position: absolute;
       border: 0;
@@ -766,89 +787,102 @@ registerStyles(
       left: -9em;
       /* #4798 */
     }
-
+    
     .highcharts-crosshair-label text {
-      fill: #fff;
+      fill: var(--vaadin-charts-background);
       font-size: 1.1em;
     }
-
+    
     .highcharts-crosshair-label .highcharts-label-box {
       fill: inherit;
     }
-
+    
     .highcharts-candlestick-series .highcharts-point {
-      stroke: #000;
+      stroke: var(--vaadin-charts-contrast-60pct);
       stroke-width: 1px;
     }
-
+    
     .highcharts-candlestick-series .highcharts-point-up {
-      fill: #fff;
+      fill: var(--vaadin-charts-color-positive);
     }
-
+    
+    .highcharts-candlestick-series .highcharts-point-down {
+      fill: var(--vaadin-charts-color-negative);
+    }
+    
     .highcharts-ohlc-series .highcharts-point-hover {
       stroke-width: 3px;
     }
-
+    
     .highcharts-flags-series .highcharts-point .highcharts-label-box {
-      stroke: #999;
-      fill: #fff;
+      stroke: var(--vaadin-charts-grid-line);
+      fill: var(--vaadin-charts-background);
       transition: fill 250ms;
     }
-
+    
     .highcharts-flags-series .highcharts-point-hover .highcharts-label-box {
-      stroke: #000;
-      fill: #ccd6eb;
+      stroke: var(--vaadin-charts-contrast-60pct);
+      fill: var(--vaadin-charts-background);
     }
-
+    
     .highcharts-flags-series .highcharts-point text {
-      fill: #000;
+      fill: var(--vaadin-charts-data-label);
       font-size: 0.9em;
-      font-weight: bold;
+      font-weight: normal;
     }
-
+    
+    .highcharts-flags-series .highcharts-point-hover text {
+      fill: var(--vaadin-charts-title-label);
+    }
+    
     /* Highmaps */
     .highcharts-map-series .highcharts-point {
       transition: fill 500ms, fill-opacity 500ms, stroke-width 250ms;
-      stroke: #ccc;
+      stroke: var(--vaadin-charts-contrast-20pct);
     }
-
+    
     .highcharts-map-series .highcharts-point-hover {
       transition: fill 0ms, fill-opacity 0ms;
       fill-opacity: 0.5;
       stroke-width: 2px;
     }
-
+    
     .highcharts-mapline-series .highcharts-point {
       fill: none;
     }
-
+    
     .highcharts-heatmap-series .highcharts-point {
       stroke-width: 0;
     }
-
+    
     .highcharts-map-navigation {
       font-size: 1.3em;
-      font-weight: bold;
+      font-weight: normal;
       text-align: center;
     }
-
+    
     .highcharts-coloraxis {
       stroke-width: 0;
     }
-
+    
+    .highcharts-coloraxis-grid .highcharts-grid-line {
+      stroke: var(--vaadin-charts-background);
+    }
+    
     .highcharts-coloraxis-marker {
-      fill: #999;
+      fill: var(--vaadin-charts-axis-label);
+      stroke-width: 0px;
     }
-
+    
     .highcharts-null-point {
-      fill: #f7f7f7;
+      fill: var(--vaadin-charts-contrast-5pct);
     }
-
+    
     /* 3d charts */
     .highcharts-3d-frame {
       fill: transparent;
     }
-
+    
     /* Exporting module */
     .highcharts-contextbutton {
       fill: #fff;
@@ -856,121 +890,121 @@ registerStyles(
       stroke: none;
       stroke-linecap: round;
     }
-
+    
     .highcharts-contextbutton:hover {
       fill: #e6e6e6;
       stroke: #e6e6e6;
     }
-
+    
     .highcharts-button-symbol {
-      stroke: #666;
+      stroke: var(--vaadin-charts-secondary-label);
       stroke-width: 3px;
     }
-
+    
     .highcharts-menu {
       border: 1px solid #999;
       background: #fff;
       padding: 5px 0;
       box-shadow: 3px 3px 10px #888;
     }
-
+    
     .highcharts-menu-item {
       padding: 0.5em 1em;
       background: none;
-      color: #333;
+      color: var(--vaadin-charts-button-label);
       cursor: pointer;
       transition: background 250ms, color 250ms;
     }
-
+    
     .highcharts-menu-item:hover {
       background: #335cad;
       color: #fff;
     }
-
+    
     /* Drilldown module */
     .highcharts-drilldown-point {
       cursor: pointer;
     }
-
+    
     .highcharts-drilldown-data-label text,
     text.highcharts-drilldown-data-label,
     .highcharts-drilldown-axis-label {
       cursor: pointer;
-      fill: #039;
-      font-weight: bold;
+      fill: var(--vaadin-charts-button-label);
+      font-weight: normal;
       text-decoration: underline;
     }
-
+    
     /* No-data module */
     .highcharts-no-data text {
-      font-weight: bold;
-      font-size: 12px;
-      fill: #666;
+      font-weight: normal;
+      font-size: 1rem;
+      fill: var(--vaadin-charts-secondary-label);
     }
-
+    
     /* Drag-panes module */
     .highcharts-axis-resizer {
       cursor: ns-resize;
       stroke: black;
       stroke-width: 2px;
     }
-
+    
     /* Bullet type series */
     .highcharts-bullet-target {
       stroke-width: 0;
     }
-
+    
     /* Lineargauge type series */
     .highcharts-lineargauge-target {
       stroke-width: 1px;
-      stroke: #333;
+      stroke: var(--vaadin-charts-contrast-60pct);
     }
-
+    
     .highcharts-lineargauge-target-line {
       stroke-width: 1px;
-      stroke: #333;
+      stroke: var(--vaadin-charts-contrast-60pct);
     }
-
+    
     /* Annotations module */
     .highcharts-annotation-label-box {
       stroke-width: 1px;
-      stroke: #000;
-      fill: #000;
+      stroke: var(--vaadin-charts-contrast);
+      fill: var(--vaadin-charts-contrast);
       fill-opacity: 0.75;
     }
-
+    
     .highcharts-annotation-label text {
-      fill: #e6e6e6;
+      fill: var(--vaadin-charts-disabled-label);
     }
-
+    
     /* Gantt */
     .highcharts-treegrid-node-collapsed,
     .highcharts-treegrid-node-expanded {
       cursor: pointer;
     }
-
+    
     .highcharts-point-connecting-path {
       fill: none;
     }
-
+    
     .highcharts-grid-axis .highcharts-tick {
       stroke-width: 1px;
     }
-
+    
     .highcharts-grid-axis .highcharts-axis-line {
       stroke-width: 1px;
     }
-
+    
     /* RTL styles */
     :host([dir='rtl']) .highcharts-container {
       text-align: right;
     }
-
+    
     :host([dir='rtl']) input.highcharts-range-selector {
       left: auto;
       right: -9em;
     }
-
+    
     :host([dir='rtl']) .highcharts-menu {
       box-shadow: -3px 3px 10px #888;
     }
