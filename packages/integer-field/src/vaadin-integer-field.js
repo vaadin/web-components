@@ -44,27 +44,31 @@ class IntegerField extends NumberField {
   }
 
   /**
-   * @param {HTMLElement} node
+   * Override a method from `InputMixin`.
+   * @param {!HTMLElement} input
    * @protected
+   * @override
    */
-  _addInputListeners(node) {
-    super._addInputListeners(node);
+  _addInputListeners(input) {
+    super._addInputListeners(input);
 
-    node.addEventListener('paste', this._boundOnPaste);
-    node.addEventListener('drop', this._boundOnDrop);
-    node.addEventListener('beforeinput', this._boundOnBeforeInput);
+    input.addEventListener('paste', this._boundOnPaste);
+    input.addEventListener('drop', this._boundOnDrop);
+    input.addEventListener('beforeinput', this._boundOnBeforeInput);
   }
 
   /**
-   * @param {HTMLElement} node
+   * Override a method from `InputMixin`.
+   * @param {!HTMLElement} input
    * @protected
+   * @override
    */
-  _removeInputListeners(node) {
-    super._removeInputListeners(node);
+  _removeInputListeners(input) {
+    super._removeInputListeners(input);
 
-    node.removeEventListener('paste', this._boundOnPaste);
-    node.removeEventListener('drop', this._boundOnDrop);
-    node.removeEventListener('beforeinput', this._boundOnBeforeInput);
+    input.removeEventListener('paste', this._boundOnPaste);
+    input.removeEventListener('drop', this._boundOnDrop);
+    input.removeEventListener('beforeinput', this._boundOnBeforeInput);
   }
 
   /**
@@ -72,6 +76,7 @@ class IntegerField extends NumberField {
    * to avoid adding a separate listener.
    * @param {!KeyboardEvent} event
    * @protected
+   * @override
    */
   _onKeyDown(event) {
     if (this._enabledCharPattern && !this.__shouldAcceptKey(event)) {
