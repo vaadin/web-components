@@ -12,5 +12,6 @@ export { InputSlotMixin } from './src/input-slot-mixin.js';
 export { LabelMixin } from './src/label-mixin.js';
 export { PatternMixin } from './src/pattern-mixin.js';
 export { SlotMixin } from './src/slot-mixin.js';
+export { TextAreaSlotMixin } from './src/text-area-slot-mixin.js';
 export { TextFieldMixin } from './src/text-field-mixin.js';
 export { ValidateMixin } from './src/validate-mixin.js';
