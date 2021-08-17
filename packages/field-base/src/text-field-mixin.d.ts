@@ -3,6 +3,7 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { CharLengthMixin } from './char-length-mixin.js';
 import { InputFieldMixin } from './input-field-mixin.js';
 import { PatternMixin } from './pattern-mixin.js';
 
@@ -15,17 +16,7 @@ interface TextFieldMixinConstructor {
   new (...args: any[]): TextFieldMixin;
 }
 
-interface TextFieldMixin extends InputFieldMixin, PatternMixin {
-  /**
-   * Maximum number of characters (in Unicode code points) that the user can enter.
-   */
-  maxlength: number | null | undefined;
-
-  /**
-   * Minimum number of characters (in Unicode code points) that the user can enter.
-   */
-  minlength: number | null | undefined;
-
+interface TextFieldMixin extends CharLengthMixin, InputFieldMixin, PatternMixin {
   /**
    * Returns true if the current input value satisfies all constraints (if any).
    */

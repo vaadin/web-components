@@ -35,25 +35,16 @@ const PatternMixinImplementation = (superclass) =>
       return [...super.forwardProps, 'pattern'];
     }
 
-    /** @protected */
-    ready() {
-      super.ready();
-
-      this._createConstraintsObserver();
-    }
-
-    /** @protected */
-    _createConstraintsObserver() {
-      // This complex observer needs to be added dynamically instead of using `static get observers()`
-      // to make it possible to tweak this behavior in classes that apply this mixin.
-      // An example is `vaadin-email-field` where the pattern is set before defining the observer.
-      this._createMethodObserver('_constraintsChanged(required, pattern)');
+    static get constraints() {
+      return [...super.constraints, 'pattern'];
     }
 
     /**
+     * Override an observer from `ValidateMixin` to add `pattern` constraint.
      * @param {boolean | undefined} required
      * @param {string | undefined} pattern
      * @protected
+     * @override
      */
     _constraintsChanged(required, pattern) {
       // Prevent marking field as invalid when setting required state
