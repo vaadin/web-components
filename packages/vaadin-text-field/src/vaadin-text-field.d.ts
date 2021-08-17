@@ -27,7 +27,7 @@ import { TextFieldEventMap } from './interfaces';
  * <vaadin-text-field label="Email address">
  *   <div slot="prefix">Sent to:</div>
  *   <div slot="suffix">@vaadin.com</div>
- * </vaadin-text-area>
+ * </vaadin-text-field>
  * ```
  *
  * ### Styling

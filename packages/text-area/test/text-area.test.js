@@ -1,9 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
-import { TextArea } from '../src/vaadin-text-area.js';
-
-customElements.define('vaadin-text-area', TextArea);
+import '../src/vaadin-text-area.js';
 
 describe('text-area', () => {
   let textArea;

@@ -28,7 +28,7 @@ import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.
  * <vaadin-text-field label="Email address">
  *   <div slot="prefix">Sent to:</div>
  *   <div slot="suffix">@vaadin.com</div>
- * </vaadin-text-area>
+ * </vaadin-text-field>
  * ```
  *
  * ### Styling
