@@ -17,6 +17,19 @@ declare class PasswordField extends TextField {
    * @attr {boolean} password-visible
    */
   readonly passwordVisible: boolean;
+
+  /**
+   * An object with translated strings used for localization.
+   * It has the following structure and default values:
+   *
+   * ```
+   * {
+   *   // Translation of the reveal icon button accessible label
+   *   reveal: 'Show password'
+   * }
+   * ```
+   */
+  i18n: { reveal: string };
 }
 
 export { PasswordField };

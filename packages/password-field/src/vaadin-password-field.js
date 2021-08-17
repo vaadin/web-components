@@ -61,8 +61,32 @@ export class PasswordField extends TextField {
         reflectToAttribute: true,
         observer: '_passwordVisibleChanged',
         readOnly: true
+      },
+
+      /**
+       * An object with translated strings used for localization.
+       * It has the following structure and default values:
+       *
+       * ```
+       * {
+       *   // Translation of the reveal icon button accessible label
+       *   reveal: 'Show password'
+       * }
+       * ```
+       */
+      i18n: {
+        type: Object,
+        value: () => {
+          return {
+            reveal: 'Show password'
+          };
+        }
       }
     };
+  }
+
+  static get observers() {
+    return ['__i18nChanged(i18n.*)'];
   }
 
   get slots() {
@@ -101,6 +125,7 @@ export class PasswordField extends TextField {
     super.connectedCallback();
 
     if (this._revealNode) {
+      this.__updateAriaLabel(this.i18n);
       this._revealNode.setAttribute('aria-label', 'Show password');
       this._revealNode.addEventListener('click', this.__boundRevealButtonClick);
       this._revealNode.addEventListener('touchend', this.__boundRevealButtonTouchend);
@@ -159,6 +184,18 @@ export class PasswordField extends TextField {
       // Remove focus-ring from the field when the reveal button gets focused
       this.toggleAttribute('focus-ring', !this._revealNode.matches(':focus'));
     }
+  }
+
+  /** @private */
+  __updateAriaLabel(i18n) {
+    if (i18n.reveal && this._revealNode) {
+      this._revealNode.setAttribute('aria-label', i18n.reveal);
+    }
+  }
+
+  /** @private */
+  __i18nChanged(i18n) {
+    this.__updateAriaLabel(i18n.base);
   }
 
   /** @private */
