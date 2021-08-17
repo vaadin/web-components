@@ -2,9 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import { fixtureSync, focusout } from '@vaadin/testing-helpers';
-import { PasswordField } from '../src/vaadin-password-field.js';
-
-customElements.define('vaadin-password-field', PasswordField);
+import '../src/vaadin-password-field.js';
 
 describe('password-field', () => {
   let passwordField, input, revealButton;
