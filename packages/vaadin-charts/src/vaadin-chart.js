@@ -985,7 +985,6 @@ class ChartElement extends ElementMixin(ThemableMixin(PolymerElement)) {
 
       seriesElement.setSeries(seriesConfiguration);
     }
-
     this.__removeAxisIfEmpty();
   }
 
