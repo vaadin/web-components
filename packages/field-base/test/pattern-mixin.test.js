@@ -4,10 +4,11 @@ import { fixtureSync } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { AriaLabelMixin } from '../src/aria-label-mixin.js';
 import { PatternMixin } from '../src/pattern-mixin.js';
+import { InputSlotMixin } from '../src/input-slot-mixin.js';
 
 customElements.define(
   'pattern-mixin-element',
-  class extends PatternMixin(AriaLabelMixin(PolymerElement)) {
+  class extends PatternMixin(AriaLabelMixin(InputSlotMixin(PolymerElement))) {
     static get template() {
       return html`<slot name="label"></slot><slot name="input"></slot>`;
     }

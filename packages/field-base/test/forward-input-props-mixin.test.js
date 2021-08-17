@@ -3,10 +3,11 @@ import { fixtureSync } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { ForwardInputPropsMixin } from '../src/forward-input-props-mixin.js';
 import { AriaLabelMixin } from '../src/aria-label-mixin.js';
+import { InputSlotMixin } from '../src/input-slot-mixin.js';
 
 customElements.define(
   'forward-input-props-mixin-element',
-  class extends ForwardInputPropsMixin(AriaLabelMixin(PolymerElement)) {
+  class extends ForwardInputPropsMixin(AriaLabelMixin(InputSlotMixin(PolymerElement))) {
     static get template() {
       return html`<slot name="label"></slot><slot name="input"></slot>`;
     }

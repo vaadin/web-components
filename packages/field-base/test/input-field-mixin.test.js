@@ -3,10 +3,11 @@ import sinon from 'sinon';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { InputFieldMixin } from '../src/input-field-mixin.js';
+import { InputSlotMixin } from '../src/input-slot-mixin.js';
 
 customElements.define(
   'input-field-mixin-element',
-  class extends InputFieldMixin(PolymerElement) {
+  class extends InputFieldMixin(InputSlotMixin(PolymerElement)) {
     static get template() {
       return html`
         <style>
