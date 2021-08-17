@@ -404,13 +404,33 @@ describe('vaadin-chart', () => {
     });
 
     describe('adding a series', () => {
-      it.only('should redraw the chart only once', async () => {
+      it('should redraw the chart only once', async () => {
         const series = fixtureSync(`<vaadin-chart-series values="[1, 2, 3, 4]"></vaadin-chart-series>`);
 
         chart.appendChild(series);
         await nextFrame();
 
         expect(redrawSpy.calledOnce).to.be.true;
+      });
+    });
+
+    describe('replacing a series', () => {
+      beforeEach(async () => {
+        const series = fixtureSync(`<vaadin-chart-series values="[1, 2]"></vaadin-chart-series>`);
+
+        chart.appendChild(series);
+        await nextFrame();
+
+        redrawSpy.resetHistory();
+      });
+
+      it('should redraw the chart 3 times', async () => {
+        const series = fixtureSync(`<vaadin-chart-series values="[1, 2, 3, 4]"></vaadin-chart-series>`);
+
+        chart.replaceChild(series, chart.firstElementChild);
+        await nextFrame();
+
+        expect(redrawSpy.callCount).to.equal(3);
       });
     });
   });
