@@ -122,7 +122,7 @@ describe('password-field', () => {
       });
     });
 
-    describe('Shit Tab', () => {
+    describe('Shift Tab', () => {
       let button;
 
       beforeEach(() => {
