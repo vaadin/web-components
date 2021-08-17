@@ -155,6 +155,9 @@ export class PasswordField extends TextField {
 
     if (!focused) {
       this._setPasswordVisible(false);
+    } else {
+      // Remove focus-ring from the field when the reveal button gets focused
+      this.toggleAttribute('focus-ring', !this._revealNode.matches(':focus'));
     }
   }
 

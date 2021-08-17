@@ -6,6 +6,7 @@
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import '@vaadin/vaadin-lumo-styles/font-icons.js';
 import '@vaadin/vaadin-lumo-styles/sizing.js';
+import '@vaadin/vaadin-lumo-styles/style.js';
 import '@vaadin/text-field/theme/lumo/vaadin-input-field-shared-styles.js';
 
 registerStyles(
@@ -38,6 +39,12 @@ registerStyles(
       width: 100%;
       background: transparent;
       border: none;
+    }
+
+    ::slotted([slot='reveal']:focus) {
+      border-radius: var(--lumo-border-radius-s);
+      box-shadow: 0 0 0 2px var(--lumo-primary-color-50pct);
+      outline: none;
     }
   `,
   { moduleId: 'lumo-password-field', include: ['lumo-input-field-shared-styles'] }
