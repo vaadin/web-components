@@ -55,10 +55,6 @@ const ValidateMixinImplementation = (superclass) =>
       return ['_updateErrorMessage(invalid, errorMessage)'];
     }
 
-    static get constraints() {
-      return ['required'];
-    }
-
     /** @protected */
     get _errorNode() {
       return this._getDirectSlotChild('error-message');
@@ -81,13 +77,6 @@ const ValidateMixinImplementation = (superclass) =>
 
         this._applyCustomError();
       }
-    }
-
-    /** @protected */
-    ready() {
-      super.ready();
-
-      this._createConstraintsObserver();
     }
 
     /**
@@ -114,35 +103,6 @@ const ValidateMixinImplementation = (superclass) =>
       if (error && error !== this.errorMessage) {
         this.errorMessage = error;
         delete this.__errorMessage;
-      }
-    }
-
-    /**
-     * Override this observer to customize setting up constraints observer.
-     * @protected
-     */
-    _createConstraintsObserver() {
-      // This complex observer needs to be added dynamically instead of using `static get observers()`
-      // to make it possible to tweak this behavior in classes that apply this mixin.
-      this._createMethodObserver(`_constraintsChanged(${this.constructor.constraints.join(', ')})`);
-    }
-
-    /**
-     * Override this method to add other validation constraints.
-     * @param {boolean | undefined} required
-     * @protected
-     */
-    _constraintsChanged(required) {
-      // Prevent marking field as invalid when setting required state
-      // or any other constraint before a user has entered the value.
-      if (!this.invalid) {
-        return;
-      }
-
-      if (required) {
-        this.validate();
-      } else {
-        this.invalid = false;
       }
     }
 

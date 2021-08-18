@@ -185,21 +185,5 @@ describe('validate-mixin', () => {
       element.validate();
       expect(element.invalid).to.be.false;
     });
-
-    it('should override explicitly set invalid when required is set', () => {
-      element.invalid = true;
-      element.value = 'foo';
-      element.required = true;
-      expect(element.invalid).to.be.false;
-    });
-
-    it('should update invalid state when required is removed', () => {
-      element.required = true;
-      element.validate();
-      expect(element.invalid).to.be.true;
-
-      element.required = false;
-      expect(element.invalid).to.be.false;
-    });
   });
 });

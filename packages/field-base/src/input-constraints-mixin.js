@@ -9,6 +9,17 @@ import { ValidateMixin } from './validate-mixin.js';
 
 const InputConstraintsMixinImplementation = (superclass) =>
   class InputConstraintsMixinClass extends ValidateMixin(InputMixin(superclass)) {
+    static get constraints() {
+      return ['required'];
+    }
+
+    /** @protected */
+    ready() {
+      super.ready();
+
+      this._createConstraintsObserver();
+    }
+
     /**
      * Returns true if the current input value satisfies all constraints (if any).
      * @return {boolean}
@@ -22,10 +33,19 @@ const InputConstraintsMixinImplementation = (superclass) =>
     }
 
     /**
-     * Override an observer from `ValidateMixin` to add support for multiple constraints.
+     * Override this method to customize setting up constraints observer.
+     * @protected
+     */
+    _createConstraintsObserver() {
+      // This complex observer needs to be added dynamically instead of using `static get observers()`
+      // to make it possible to tweak this behavior in classes that apply this mixin.
+      this._createMethodObserver(`_constraintsChanged(${this.constructor.constraints.join(', ')})`);
+    }
+
+    /**
+     * Override this method to implement custom validation constraints.
      * @param {unknown[]} constraints
      * @protected
-     * @override
      */
     _constraintsChanged(...constraints) {
       // Prevent marking field as invalid when setting required state
