@@ -123,18 +123,6 @@ const InputFieldMixinImplementation = (superclass) =>
       }
     }
 
-    /**
-     * Returns true if the current input value satisfies all constraints (if any).
-     * @return {boolean}
-     */
-    checkValidity() {
-      if (this.required) {
-        return this.inputElement ? this.inputElement.checkValidity() : undefined;
-      } else {
-        return !this.invalid;
-      }
-    }
-
     // Workaround for https://github.com/Polymer/polymer/issues/5259
     get __data() {
       return this.__dataValue || {};

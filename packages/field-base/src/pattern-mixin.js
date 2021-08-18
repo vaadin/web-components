@@ -35,38 +35,8 @@ const PatternMixinImplementation = (superclass) =>
       return [...super.forwardProps, 'pattern'];
     }
 
-    /** @protected */
-    ready() {
-      super.ready();
-
-      this._createConstraintsObserver();
-    }
-
-    /** @protected */
-    _createConstraintsObserver() {
-      // This complex observer needs to be added dynamically instead of using `static get observers()`
-      // to make it possible to tweak this behavior in classes that apply this mixin.
-      // An example is `vaadin-email-field` where the pattern is set before defining the observer.
-      this._createMethodObserver('_constraintsChanged(required, pattern)');
-    }
-
-    /**
-     * @param {boolean | undefined} required
-     * @param {string | undefined} pattern
-     * @protected
-     */
-    _constraintsChanged(required, pattern) {
-      // Prevent marking field as invalid when setting required state
-      // or any other constraint before a user has entered the value.
-      if (!this.invalid) {
-        return;
-      }
-
-      if (!required && !pattern) {
-        this.invalid = false;
-      } else {
-        this.validate();
-      }
+    static get constraints() {
+      return [...super.constraints, 'pattern'];
     }
 
     /** @private */
@@ -93,18 +63,6 @@ const PatternMixinImplementation = (superclass) =>
       this._checkInputValue();
 
       super._onInput(event);
-    }
-
-    /**
-     * Returns true if the current input value satisfies all constraints (if any).
-     * @return {boolean}
-     */
-    checkValidity() {
-      if (this.required || this.pattern) {
-        return this.inputElement ? this.inputElement.checkValidity() : undefined;
-      } else {
-        return !this.invalid;
-      }
     }
   };
 

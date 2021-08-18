@@ -4,11 +4,10 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
-import { InputMixin } from './input-mixin.js';
-import { ValidateMixin } from './validate-mixin.js';
+import { InputConstraintsMixin } from './input-constraints-mixin.js';
 
 const ForwardInputPropsMixinImplementation = (superclass) =>
-  class ForwardInputPropsMixinClass extends ValidateMixin(InputMixin(superclass)) {
+  class ForwardInputPropsMixinClass extends InputConstraintsMixin(superclass) {
     static get properties() {
       return {
         /**
@@ -49,10 +48,13 @@ const ForwardInputPropsMixinImplementation = (superclass) =>
 
     /** @protected */
     ready() {
-      super.ready();
-
-      // create observer dynamically to allow subclasses to override forwardProps
+      // Create observer dynamically to allow subclasses to override forwardProps
+      // Note, this needs to be done before calling `super.ready()` to propagate changes
+      // to the validation constraints, e.g. when setting `required` property to `false`,
+      // before the observer created by `InputConstraintsMixin` to validate properly.
       this._createMethodObserver(`_forwardPropsChanged(${this.constructor.forwardProps.join(', ')})`);
+
+      super.ready();
     }
 
     /** @protected */

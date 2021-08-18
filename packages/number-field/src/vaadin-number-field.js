@@ -7,10 +7,11 @@ import { PolymerElement, html } from '@polymer/polymer';
 import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { InputFieldMixin } from '@vaadin/field-base/src/input-field-mixin.js';
+import { InputSlotMixin } from '@vaadin/field-base/src/input-slot-mixin.js';
 import '@vaadin/input-container/src/vaadin-input-container.js';
 import '@vaadin/text-field/src/vaadin-input-field-shared-styles.js';
 
-export class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(PolymerElement))) {
+export class NumberField extends InputFieldMixin(InputSlotMixin(ThemableMixin(ElementMixin(PolymerElement)))) {
   static get is() {
     return 'vaadin-number-field';
   }

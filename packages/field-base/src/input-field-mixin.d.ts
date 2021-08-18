@@ -55,11 +55,6 @@ interface InputFieldMixin
    * Specify that the value should be automatically selected when the field gains focus.
    */
   autoselect: boolean;
-
-  /**
-   * Returns true if the current input value satisfies all constraints (if any).
-   */
-  checkValidity(): boolean;
 }
 
 export { InputFieldMixin, InputFieldMixinConstructor };

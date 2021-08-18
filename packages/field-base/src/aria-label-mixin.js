@@ -5,10 +5,10 @@
  */
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
 import { LabelMixin } from './label-mixin.js';
-import { InputSlotMixin } from './input-slot-mixin.js';
+import { InputMixin } from './input-mixin.js';
 
 const AriaLabelMixinImplementation = (superclass) =>
-  class AriaLabelMixinClass extends InputSlotMixin(LabelMixin(superclass)) {
+  class AriaLabelMixinClass extends InputMixin(LabelMixin(superclass)) {
     constructor() {
       super();
 
@@ -18,8 +18,6 @@ const AriaLabelMixinImplementation = (superclass) =>
     /** @protected */
     connectedCallback() {
       super.connectedCallback();
-
-      this._enhanceLightDomA11y();
 
       if (this._labelNode) {
         this._labelNode.addEventListener('click', this.__preventDuplicateLabelClick);
@@ -35,14 +33,18 @@ const AriaLabelMixinImplementation = (superclass) =>
       }
     }
 
-    /** @protected */
-    _enhanceLightDomA11y() {
-      if (this.inputElement) {
-        this.inputElement.setAttribute('aria-labelledby', this._labelId);
-      }
+    /**
+     * Override an observer from `InputMixin`.
+     * @protected
+     * @override
+     */
+    _inputElementChanged(input) {
+      super._inputElementChanged(input);
 
-      if (this._labelNode) {
-        this._labelNode.setAttribute('for', this._inputId);
+      if (input) {
+        input.setAttribute('aria-labelledby', this._labelId);
+
+        this._labelNode.setAttribute('for', input.id);
       }
     }
 
@@ -64,6 +66,6 @@ const AriaLabelMixinImplementation = (superclass) =>
   };
 
 /**
- * A mixin to link slotted `<input>` and `<label>` elements.
+ * A mixin to link an input element with a slotted `<label>` element.
  */
 export const AriaLabelMixin = dedupingMixin(AriaLabelMixinImplementation);

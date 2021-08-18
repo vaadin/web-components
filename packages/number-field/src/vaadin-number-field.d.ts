@@ -5,9 +5,10 @@
  */
 import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
 import { InputFieldMixin } from '@vaadin/field-base/src/input-field-mixin.js';
+import { InputSlotMixin } from '@vaadin/field-base/src/input-slot-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-declare class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(HTMLElement))) {
+declare class NumberField extends InputFieldMixin(InputSlotMixin(ThemableMixin(ElementMixin(HTMLElement)))) {
   /**
    * Set to true to display value increase/decrease controls.
    * @attr {boolean} has-controls
