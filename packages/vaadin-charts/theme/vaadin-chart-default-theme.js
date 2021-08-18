@@ -17,6 +17,36 @@ import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styl
 registerStyles(
   'vaadin-chart',
   css`
+    :host([theme~="gradient"]) {
+      --vaadin-charts-color-0: #1676F3;
+      --vaadin-charts-color-1: #13BBF0;
+      --vaadin-charts-color-2: #11EEEE;
+      --vaadin-charts-color-3: #0CD9BF;
+      --vaadin-charts-color-4: #06BE81;
+      --vaadin-charts-color-5: #00A344;
+      --vaadin-charts-color-6: #41C639;
+      --vaadin-charts-color-7: #8AED2C;
+      --vaadin-charts-color-8: #C0E632;
+      --vaadin-charts-color-9: #F6DB3A;
+      --vaadin-charts-color-positive: var(--vaadin-charts-color-6);
+      --vaadin-charts-color-negative: var(--vaadin-charts-color-1);
+    }
+    
+    :host([theme~="monotone"]) {
+        --vaadin-charts-color-0: #1676F3;
+        --vaadin-charts-color-1: #4795F5;
+        --vaadin-charts-color-2: #71B0F7;
+        --vaadin-charts-color-3: #A0CEF9;
+        --vaadin-charts-color-4: #BCE0FA;
+        --vaadin-charts-color-5: #A8D8ED;
+        --vaadin-charts-color-6: #7FC3DD;
+        --vaadin-charts-color-7: #54ADCC;
+        --vaadin-charts-color-8: #2B99BC;
+        --vaadin-charts-color-9: #0284AC;
+        --vaadin-charts-color-positive: var(--vaadin-charts-color-3);
+        --vaadin-charts-color-negative: var(--vaadin-charts-color-9);
+      }
+  
     .highcharts-container {
       position: relative;
       overflow: hidden;
@@ -52,7 +82,7 @@ registerStyles(
     }
 
     .highcharts-background {
-      fill: var(--vaadin-charts-background);
+      fill: var(--vaadin-charts-background, #fff);
     }
 
     .highcharts-plot-border,
@@ -82,19 +112,19 @@ registerStyles(
 
     /* Titles */
     .highcharts-title {
-      fill: var(--vaadin-charts-title-label);
+      fill: var(--vaadin-charts-title-label, hsl(214, 35%, 15%));
       font-size: 1.5em;
       font-weight: 600;
     }
 
     .highcharts-subtitle {
-      fill: var(--vaadin-charts-secondary-label);
+      fill: var(--vaadin-charts-secondary-label, hsla(214, 42%, 18%, 0.72));
     }
 
     /* Axes */
     .highcharts-axis-line {
       fill: none;
-      stroke: var(--vaadin-charts-axis-line);
+      stroke: var(--vaadin-charts-axis-line, hsla(214, 61%, 25%, 0.05));
     }
 
     .highcharts-yaxis .highcharts-axis-line {
@@ -102,26 +132,26 @@ registerStyles(
     }
 
     .highcharts-axis-title {
-      fill: var(--vaadin-charts-axis-title);
+      fill: var(--vaadin-charts-axis-title, hsla(214, 42%, 18%, 0.72));
     }
 
     .highcharts-axis-labels {
-      fill: var(--vaadin-charts-axis-label);
+      fill: var(--vaadin-charts-axis-label, hsla(214, 42%, 18%, 0.72));
       cursor: default;
       font-size: 0.9em;
     }
 
     .highcharts-grid-line {
       fill: none;
-      stroke: var(--vaadin-charts-grid-line);
+      stroke: var(--vaadin-charts-grid-line, hsla(214, 53%, 23%, 0.16));
     }
 
     .highcharts-xaxis-grid .highcharts-grid-line {
-      stroke-width: var(--vaadin-charts-xaxis-line-width);
+      stroke-width: var(--vaadin-charts-xaxis-line-width, 0px);
     }
 
     .highcharts-tick {
-      stroke: var(--vaadin-charts-grid-line);
+      stroke: var(--vaadin-charts-grid-line, hsla(214, 53%, 23%, 0.16));
     }
 
     .highcharts-yaxis .highcharts-tick {
@@ -129,23 +159,23 @@ registerStyles(
     }
 
     .highcharts-minor-grid-line {
-      stroke: var(--vaadin-charts-contrast-5pct);
+      stroke: var(--vaadin-charts-contrast-5pct, hsla(214, 61%, 25%, 0.05));
     }
 
     .highcharts-crosshair-thin {
       stroke-width: 1px;
-      stroke: var(--vaadin-charts-grid-line);
+      stroke: var(--vaadin-charts-grid-line, hsla(214, 53%, 23%, 0.16));
     }
 
     .highcharts-crosshair-category {
-      stroke: var(--vaadin-charts-color-0);
+      stroke: var(--vaadin-charts-color-0, #5AC2F7);
       stroke-opacity: 0.25;
     }
 
     /* Credits */
     .highcharts-credits {
       cursor: pointer;
-      fill: var(--vaadin-charts-disabled-label);
+      fill: var(--vaadin-charts-disabled-label, hsla(214, 50%, 22%, 0.26));
       font-size: 0.7em;
       transition: fill 250ms, font-size 250ms;
     }
@@ -168,29 +198,29 @@ registerStyles(
     }
     
     .highcharts-tooltip text {
-      fill: var(--vaadin-charts-data-label);
+      fill: var(--vaadin-charts-data-label, hsla(214, 40%, 16%, 0.94));
     }
 
     .highcharts-tooltip .highcharts-header {
       font-size: 0.85em;
-      color: var(--vaadin-charts-secondary-label);
+      color: var(--vaadin-charts-secondary-label, hsla(214, 42%, 18%, 0.72));
     }
 
     .highcharts-tooltip-box {
       stroke-width: 1px;
-      stroke: var(--vaadin-charts-tooltip-border);
-      fill: var(--vaadin-charts-tooltip-background);
-      fill-opacity: var(--vaadin-charts-tooltip-background-opacity);
+      stroke: var(--vaadin-charts-tooltip-border, inherit);
+      fill: var(--vaadin-charts-tooltip-background, #fff);
+      fill-opacity: var(--vaadin-charts-tooltip-background-opacity, 1);
     }
 
     .highcharts-tooltip-box .highcharts-label-box {
-      fill: var(--vaadin-charts-tooltip-background);
-      fill-opacity: var(--vaadin-charts-tooltip-background-opacity);
+      fill: var(--vaadin-charts-tooltip-background, #fff);
+      fill-opacity: var(--vaadin-charts-tooltip-background-opacity, 1);
     }
     
     .highcharts-tooltip-header {
       stroke-width: 1px;
-      stroke: var(--vaadin-charts-contrast-20pct);
+      stroke: var(--vaadin-charts-contrast-20pct, hsla(214, 53%, 23%, 0.16));
     }
 
     div.highcharts-tooltip {
@@ -198,7 +228,7 @@ registerStyles(
     }
 
     .highcharts-selection-marker {
-      fill: var(--vaadin-charts-color-0);
+      fill: var(--vaadin-charts-color-0, #5AC2F7);
       fill-opacity: 0.25;
     }
 
@@ -312,7 +342,7 @@ registerStyles(
     
     .highcharts-markers {
       stroke-width: 1px;
-      stroke: var(--vaadin-charts-background);
+      stroke: var(--vaadin-charts-background, #fff);
     }
     
     .highcharts-a11y-markers-hidden .highcharts-point:not(.highcharts-point-hover):not(.highcharts-a11y-marker-visible),
@@ -340,7 +370,7 @@ registerStyles(
     
     .highcharts-data-label text,
     text.highcharts-data-label {
-      fill: var(--vaadin-charts-data-label);
+      fill: var(--vaadin-charts-data-label, hsla(214, 40%, 16%, 0.94));
     }
     
     .highcharts-data-label-connector {
@@ -358,12 +388,12 @@ registerStyles(
     
     .highcharts-series:not(.highcharts-pie-series) .highcharts-point-select,
     .highcharts-markers .highcharts-point-select {
-      fill: var(--vaadin-charts-grid-line);
-      stroke: var(--vaadin-charts-contrast);
+      fill: var(--vaadin-charts-grid-line, hsla(214, 53%, 23%, 0.16));
+      stroke: var(--vaadin-charts-contrast, hsl(214, 35%, 15%));
     }
     
     .highcharts-column-series rect.highcharts-point {
-      stroke: var(--vaadin-charts-background);
+      stroke: var(--vaadin-charts-background, #fff);
     }
     
     .highcharts-column-series .highcharts-point {
@@ -377,7 +407,7 @@ registerStyles(
     
     .highcharts-pie-series .highcharts-point {
       stroke-linejoin: round;
-      stroke: var(--vaadin-charts-background);
+      stroke: var(--vaadin-charts-background, #fff);
     }
     
     .highcharts-pie-series .highcharts-point-hover {
@@ -387,7 +417,7 @@ registerStyles(
     
     .highcharts-funnel-series .highcharts-point {
       stroke-linejoin: round;
-      stroke: var(--vaadin-charts-background);
+      stroke: var(--vaadin-charts-background, #fff);
       stroke-width: 2px;
     }
     
@@ -403,7 +433,7 @@ registerStyles(
     
     .highcharts-pyramid-series .highcharts-point {
       stroke-linejoin: round;
-      stroke: var(--vaadin-charts-background);
+      stroke: var(--vaadin-charts-background, #fff);
       stroke-width: 2px;
     }
     
@@ -423,13 +453,13 @@ registerStyles(
     
     .highcharts-treemap-series .highcharts-point {
       stroke-width: 2px;
-      stroke: var(--vaadin-charts-background);
+      stroke: var(--vaadin-charts-background, #fff);
       transition: stroke 250ms, fill 250ms, fill-opacity 250ms;
     }
     
     .highcharts-treemap-series .highcharts-point-hover {
       stroke-width: 0px;
-      stroke: var(--vaadin-charts-background);
+      stroke: var(--vaadin-charts-background, #fff);
       fill-opacity: 0.75;
       transition: stroke 25ms, fill 25ms, fill-opacity 25ms;
     }
@@ -462,7 +492,7 @@ registerStyles(
     }
     
     .highcharts-lollipop-stem {
-      stroke: var(--vaadin-charts-contrast);
+      stroke: var(--vaadin-charts-contrast, hsl(214, 35%, 15%));
     }
     
     .highcharts-focus-border {
@@ -481,7 +511,7 @@ registerStyles(
     }
     
     .highcharts-legend-item > text {
-      fill: var(--vaadin-charts-data-label);
+      fill: var(--vaadin-charts-data-label, hsla(214, 40%, 16%, 0.94));
       font-weight: normal;
       font-size: 1em;
       cursor: pointer;
@@ -493,22 +523,22 @@ registerStyles(
     }
     
     .highcharts-legend-item:hover text {
-      fill: var(--vaadin-charts-title-label);
+      fill: var(--vaadin-charts-title-label, hsl(214, 35%, 15%));
     }
     
     .highcharts-legend-item-hidden * {
-      fill: var(--vaadin-charts-disabled-label) !important;
-      stroke: var(--vaadin-charts-disabled-label) !important;
+      fill: var(--vaadin-charts-disabled-label, hsla(214, 50%, 22%, 0.26)) !important;
+      stroke: var(--vaadin-charts-disabled-label, hsla(214, 50%, 22%, 0.26)) !important;
       transition: fill 250ms;
     }
     
     .highcharts-legend-nav-active {
-      fill: var(--vaadin-charts-button-label);
+      fill: var(--vaadin-charts-button-label, hsl(214, 90%, 52%));
       cursor: pointer;
     }
     
     .highcharts-legend-nav-inactive {
-      fill: var(--vaadin-charts-disabled-label);
+      fill: var(--vaadin-charts-disabled-label, hsla(214, 50%, 22%, 0.26));
     }
     
     circle.highcharts-legend-nav-active,
@@ -533,13 +563,13 @@ registerStyles(
     }
     
     .highcharts-bubble-legend-labels {
-      fill: var(--vaadin-charts-data-label);
+      fill: var(--vaadin-charts-data-label, hsla(214, 40%, 16%, 0.94));
     }
     
     /* Loading */
     .highcharts-loading {
       position: absolute;
-      background-color: var(--vaadin-charts-background);
+      background-color: var(--vaadin-charts-background, #fff);
       opacity: 0.5;
       text-align: center;
       z-index: 10;
@@ -562,23 +592,23 @@ registerStyles(
     /* Plot bands and polar pane backgrounds */
     .highcharts-plot-band,
     .highcharts-pane {
-      fill: var(--vaadin-charts-contrast);
+      fill: var(--vaadin-charts-contrast, hsl(214, 35%, 15%));
       fill-opacity: 0.05;
     }
     
     .highcharts-plot-line {
       fill: none;
-      stroke: var(--vaadin-charts-contrast-60pct);
+      stroke: var(--vaadin-charts-contrast-60pct, hsla(214, 43%, 19%, 0.61));
       stroke-width: 1px;
     }
     
     .highcharts-plot-line-label {
-      fill: var(--vaadin-charts-data-label);
+      fill: var(--vaadin-charts-data-label, hsla(214, 40%, 16%, 0.94));
     }
     
       /* Highcharts More and modules */
     .highcharts-boxplot-box {
-      fill: var(--vaadin-charts-background);
+      fill: var(--vaadin-charts-background, #fff);
     }
     
     .highcharts-boxplot-median {
@@ -590,16 +620,16 @@ registerStyles(
     }
     
     .highcharts-errorbar-series .highcharts-point {
-      stroke: var(--vaadin-charts-contrast);
+      stroke: var(--vaadin-charts-contrast, hsl(214, 35%, 15%));
     }
     
     .highcharts-gauge-series .highcharts-data-label-box {
-      stroke: var(--vaadin-charts-grid-line);
+      stroke: var(--vaadin-charts-grid-line, hsla(214, 53%, 23%, 0.16));
       stroke-width: 1px;
     }
     
     .highcharts-gauge-series .highcharts-dial {
-      fill: var(--vaadin-charts-contrast);
+      fill: var(--vaadin-charts-contrast, hsl(214, 35%, 15%));
       stroke-width: 0;
     }
     
@@ -609,7 +639,7 @@ registerStyles(
     }
     
     .highcharts-waterfall-series .highcharts-graph {
-      stroke: var(--vaadin-charts-contrast-60pct);
+      stroke: var(--vaadin-charts-contrast-60pct, hsla(214, 43%, 19%, 0.61));
       stroke-dasharray: 1, 3;
     }
     
@@ -629,13 +659,13 @@ registerStyles(
     
     .highcharts-venn-series .highcharts-point {
       fill-opacity: 0.75;
-      stroke: var(--vaadin-charts-background);
+      stroke: var(--vaadin-charts-background, #fff);
       transition: stroke 250ms, fill-opacity 250ms;
     }
     
     .highcharts-venn-series .highcharts-point-hover {
       fill-opacity: 1;
-      stroke: var(--vaadin-charts-background);
+      stroke: var(--vaadin-charts-background, #fff);
     }
     
     /* Highstock */
@@ -644,26 +674,26 @@ registerStyles(
     }
     
     .highcharts-navigator-mask-inside {
-      fill: var(--vaadin-charts-color-0);
+      fill: var(--vaadin-charts-color-0, #5AC2F7);
       /* navigator.maskFill option */
       fill-opacity: 0.2;
       cursor: ew-resize;
     }
     
     .highcharts-navigator-outline {
-      stroke: var(--vaadin-charts-grid-line);
+      stroke: var(--vaadin-charts-grid-line, hsla(214, 53%, 23%, 0.16));
       fill: none;
     }
     
     .highcharts-navigator-handle {
-      stroke: var(--vaadin-charts-contrast-20pct);
-      fill: var(--vaadin-charts-background);
+      stroke: var(--vaadin-charts-contrast-20pct, hsla(214, 53%, 23%, 0.16));
+      fill: var(--vaadin-charts-background, #fff);
       cursor: ew-resize;
     }
     
     .highcharts-navigator-series {
-      fill: var(--vaadin-charts-color-1);
-      stroke: var(--vaadin-charts-color-1);
+      fill: var(--vaadin-charts-color-1, #1676F3);
+      stroke: var(--vaadin-charts-color-1, #1676F3);
     }
     
     .highcharts-navigator-series .highcharts-graph {
@@ -680,11 +710,11 @@ registerStyles(
     
     .highcharts-navigator-xaxis .highcharts-grid-line {
       stroke-width: 1px;
-      stroke: var(--vaadin-charts-grid-line);
+      stroke: var(--vaadin-charts-grid-line, hsla(214, 53%, 23%, 0.16));
     }
     
     .highcharts-navigator-xaxis.highcharts-axis-labels {
-      fill: var(--vaadin-charts-secondary-label);
+      fill: var(--vaadin-charts-secondary-label, hsla(214, 42%, 18%, 0.72));
     }
     
     .highcharts-navigator-yaxis .highcharts-grid-line {
@@ -692,61 +722,61 @@ registerStyles(
     }
     
     .highcharts-scrollbar-thumb {
-      fill: var(--vaadin-charts-contrast-20pct);
+      fill: var(--vaadin-charts-contrast-20pct, hsla(214, 53%, 23%, 0.16));
     }
     
     .highcharts-scrollbar-button {
-      fill: var(--vaadin-charts-background);
+      fill: var(--vaadin-charts-background, #fff);
     }
     
     .highcharts-scrollbar-arrow {
-      fill: var(--vaadin-charts-data-label);
+      fill: var(--vaadin-charts-data-label, hsla(214, 40%, 16%, 0.94));
     }
     
     .highcharts-scrollbar-rifles {
-      stroke: var(--vaadin-charts-data-label);
+      stroke: var(--vaadin-charts-data-label, hsla(214, 40%, 16%, 0.94));
       stroke-width: 1px;
     }
     
     .highcharts-scrollbar-track {
-      fill: var(--vaadin-charts-contrast-5pct);
+      fill: var(--vaadin-charts-contrast-5pct, hsla(214, 61%, 25%, 0.05));
     }
     
     .highcharts-button {
-      fill: var(--vaadin-charts-button-background);
+      fill: var(--vaadin-charts-button-background, hsla(214, 61%, 25%, 0.05));
       cursor: default;
       transition: fill 250ms;
     }
     
     .highcharts-button text {
-      fill: var(--vaadin-charts-button-label);
+      fill: var(--vaadin-charts-button-label, hsl(214, 90%, 52%));
       font-weight: 600;
     }
     
     .highcharts-button-hover {
       transition: fill 0ms;
-      fill: var(--vaadin-charts-button-hover-background);
+      fill: var(--vaadin-charts-button-hover-background, hsla(214, 90%, 52%, 0.1));
       stroke-width: 0px;
     }
     
     .highcharts-button-hover text {
-      fill: var(--vaadin-charts-button-label);
+      fill: var(--vaadin-charts-button-label, hsl(214, 90%, 52%));
     }
     
     .highcharts-button-pressed {
-      fill: var(--vaadin-charts-button-active-background);
+      fill: var(--vaadin-charts-button-active-background, hsl(214, 90%, 52%));
     }
     
     .highcharts-button-pressed text {
-      fill: var(--vaadin-charts-button-active-label);
+      fill: var(--vaadin-charts-button-active-label, #fff);
     }
     
     .highcharts-button-disabled text {
-      fill: var(--vaadin-charts-button-label);
+      fill: var(--vaadin-charts-button-label, hsl(214, 90%, 52%));
     }
     
     .highcharts-range-selector-buttons > text {
-      fill: var(--vaadin-charts-secondary-label);
+      fill: var(--vaadin-charts-secondary-label, hsla(214, 42%, 18%, 0.72));
     }
     
     .highcharts-range-selector-buttons .highcharts-button {
@@ -758,22 +788,22 @@ registerStyles(
     }
     
     .highcharts-range-label text {
-      fill: var(--vaadin-charts-secondary-label);
+      fill: var(--vaadin-charts-secondary-label, hsla(214, 42%, 18%, 0.72));
     }
     
     .highcharts-range-input rect {
-      fill: var(--vaadin-charts-contrast-10pct);
+      fill: var(--vaadin-charts-contrast-10pct, hsla(214, 57%, 24%, 0.1));
       rx: 2;
       ry: 2;
     }
     
     .highcharts-range-input:hover rect {
-      fill: var(--vaadin-charts-contrast-20pct);
+      fill: var(--vaadin-charts-contrast-20pct, hsla(214, 53%, 23%, 0.16));
       transition: fill 250ms;
     }
     
     .highcharts-range-input text {
-      fill: var(--vaadin-charts-data-label);
+      fill: var(--vaadin-charts-data-label, hsla(214, 40%, 16%, 0.94));
     }
     
     input.highcharts-range-selector {
@@ -789,7 +819,7 @@ registerStyles(
     }
     
     .highcharts-crosshair-label text {
-      fill: var(--vaadin-charts-background);
+      fill: var(--vaadin-charts-background, #fff);
       font-size: 1.1em;
     }
     
@@ -798,16 +828,16 @@ registerStyles(
     }
     
     .highcharts-candlestick-series .highcharts-point {
-      stroke: var(--vaadin-charts-contrast-60pct);
+      stroke: var(--vaadin-charts-contrast-60pct, hsla(214, 43%, 19%, 0.61));
       stroke-width: 1px;
     }
     
     .highcharts-candlestick-series .highcharts-point-up {
-      fill: var(--vaadin-charts-color-positive);
+      fill: var(--vaadin-charts-color-positive, #15C15D);
     }
     
     .highcharts-candlestick-series .highcharts-point-down {
-      fill: var(--vaadin-charts-color-negative);
+      fill: var(--vaadin-charts-color-negative, #E24932);
     }
     
     .highcharts-ohlc-series .highcharts-point-hover {
@@ -815,30 +845,30 @@ registerStyles(
     }
     
     .highcharts-flags-series .highcharts-point .highcharts-label-box {
-      stroke: var(--vaadin-charts-grid-line);
-      fill: var(--vaadin-charts-background);
+      stroke: var(--vaadin-charts-grid-line, hsla(214, 53%, 23%, 0.16));
+      fill: var(--vaadin-charts-background, #fff);
       transition: fill 250ms;
     }
     
     .highcharts-flags-series .highcharts-point-hover .highcharts-label-box {
-      stroke: var(--vaadin-charts-contrast-60pct);
-      fill: var(--vaadin-charts-background);
+      stroke: var(--vaadin-charts-contrast-60pct, hsla(214, 43%, 19%, 0.61));
+      fill: var(--vaadin-charts-background, #fff);
     }
     
     .highcharts-flags-series .highcharts-point text {
-      fill: var(--vaadin-charts-data-label);
+      fill: var(--vaadin-charts-data-label, hsla(214, 40%, 16%, 0.94));
       font-size: 0.9em;
       font-weight: normal;
     }
     
     .highcharts-flags-series .highcharts-point-hover text {
-      fill: var(--vaadin-charts-title-label);
+      fill: var(--vaadin-charts-title-label, hsl(214, 35%, 15%));
     }
     
     /* Highmaps */
     .highcharts-map-series .highcharts-point {
       transition: fill 500ms, fill-opacity 500ms, stroke-width 250ms;
-      stroke: var(--vaadin-charts-contrast-20pct);
+      stroke: var(--vaadin-charts-contrast-20pct, hsla(214, 53%, 23%, 0.16));
     }
     
     .highcharts-map-series .highcharts-point-hover {
@@ -866,16 +896,17 @@ registerStyles(
     }
     
     .highcharts-coloraxis-grid .highcharts-grid-line {
-      stroke: var(--vaadin-charts-background);
+      stroke: var(--vaadin-charts-background, #fff);
     }
     
     .highcharts-coloraxis-marker {
-      fill: var(--vaadin-charts-axis-label);
+      fill: var(--vaadin-charts-axis-label, hsla(214, 42%, 18%, 0.72));
       stroke-width: 0px;
     }
     
     .highcharts-null-point {
-      fill: var(--vaadin-charts-contrast-5pct);
+      fill: var(--vaadin-charts-contrast-5pct, hsla(214, 61%, 25%, 0.05));
+      stroke: var(--vaadin-charts-contrast-60pct, hsla(214, 43%, 19%, 0.61));
     }
     
     /* 3d charts */
@@ -897,7 +928,7 @@ registerStyles(
     }
     
     .highcharts-button-symbol {
-      stroke: var(--vaadin-charts-secondary-label);
+      stroke: var(--vaadin-charts-secondary-label, hsla(214, 42%, 18%, 0.72));
       stroke-width: 3px;
     }
     
@@ -911,7 +942,7 @@ registerStyles(
     .highcharts-menu-item {
       padding: 0.5em 1em;
       background: none;
-      color: var(--vaadin-charts-button-label);
+      color: var(--vaadin-charts-button-label, hsl(214, 90%, 52%));
       cursor: pointer;
       transition: background 250ms, color 250ms;
     }
@@ -930,7 +961,7 @@ registerStyles(
     text.highcharts-drilldown-data-label,
     .highcharts-drilldown-axis-label {
       cursor: pointer;
-      fill: var(--vaadin-charts-button-label);
+      fill: var(--vaadin-charts-button-label, hsl(214, 90%, 52%));
       font-weight: normal;
       text-decoration: underline;
     }
@@ -939,7 +970,7 @@ registerStyles(
     .highcharts-no-data text {
       font-weight: normal;
       font-size: 1rem;
-      fill: var(--vaadin-charts-secondary-label);
+      fill: var(--vaadin-charts-secondary-label, hsla(214, 42%, 18%, 0.72));
     }
     
     /* Drag-panes module */
@@ -957,24 +988,24 @@ registerStyles(
     /* Lineargauge type series */
     .highcharts-lineargauge-target {
       stroke-width: 1px;
-      stroke: var(--vaadin-charts-contrast-60pct);
+      stroke: var(--vaadin-charts-contrast-60pct, hsla(214, 43%, 19%, 0.61));
     }
     
     .highcharts-lineargauge-target-line {
       stroke-width: 1px;
-      stroke: var(--vaadin-charts-contrast-60pct);
+      stroke: var(--vaadin-charts-contrast-60pct, hsla(214, 43%, 19%, 0.61));
     }
     
     /* Annotations module */
     .highcharts-annotation-label-box {
       stroke-width: 1px;
-      stroke: var(--vaadin-charts-contrast);
-      fill: var(--vaadin-charts-contrast);
+      stroke: var(--vaadin-charts-contrast, hsl(214, 35%, 15%));
+      fill: var(--vaadin-charts-contrast, hsl(214, 35%, 15%));
       fill-opacity: 0.75;
     }
     
     .highcharts-annotation-label text {
-      fill: var(--vaadin-charts-disabled-label);
+      fill: var(--vaadin-charts-disabled-label, hsla(214, 50%, 22%, 0.26));
     }
     
     /* Gantt */
