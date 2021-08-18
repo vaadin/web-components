@@ -3,7 +3,7 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { TextAreaElement } from '@vaadin/vaadin-text-field/src/vaadin-text-area.js';
+import { TextArea } from '@vaadin/text-area/src/vaadin-text-area.js';
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 
 registerStyles(
@@ -13,6 +13,10 @@ registerStyles(
       align-self: stretch;
       flex-grow: 1;
     }
+
+    .textarea-wrapper {
+      min-height: 0;
+    }
   `,
   { moduleId: 'vaadin-message-input-text-area-styles' }
 );
@@ -20,10 +24,10 @@ registerStyles(
 /**
  * An element used internally by `<vaadin-message-input>`. Not intended to be used separately.
  *
- * @extends TextAreaElement
+ * @extends TextArea
  * @protected
  */
-class MessageInputTextAreaElement extends TextAreaElement {
+class MessageInputTextArea extends TextArea {
   static get is() {
     return 'vaadin-message-input-text-area';
   }
@@ -41,34 +45,53 @@ class MessageInputTextAreaElement extends TextAreaElement {
     };
   }
 
-  ready() {
-    super.ready();
+  /** @protected */
+  connectedCallback() {
+    super.connectedCallback();
 
-    const textarea = this.inputElement;
-    textarea.removeAttribute('aria-labelledby');
+    if (this.inputElement) {
+      this.inputElement.removeAttribute('aria-labelledby');
+      this.__updateAriaLabel(this.ariaLabel);
 
-    // Set initial height to one row
-    textarea.setAttribute('rows', 1);
-    textarea.style.minHeight = '0';
-
-    // Add enter handling for text area.
-    textarea.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        e.stopPropagation();
-        this.dispatchEvent(new CustomEvent('enter'));
-      }
-    });
+      // Set initial height to one row
+      this.inputElement.setAttribute('rows', 1);
+    }
   }
 
-  __ariaLabelChanged(ariaLabel) {
-    // Set aria-label to provide an accessible name for the labelless input
+  /**
+   * Override an event listener from `ClearButtonMixin`
+   * to dispatch a custom event on Enter key.
+   * @param {!KeyboardEvent} event
+   * @protected
+   * @override
+   */
+  _onKeyDown(event) {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      event.stopPropagation();
+      this.dispatchEvent(new CustomEvent('enter'));
+    }
+
+    super._onKeyDown(event);
+  }
+
+  /** @private */
+  __updateAriaLabel(ariaLabel) {
     if (ariaLabel) {
       this.inputElement.setAttribute('aria-label', ariaLabel);
     } else {
       this.inputElement.removeAttribute('aria-label');
     }
   }
+
+  /** @private */
+  __ariaLabelChanged(ariaLabel) {
+    if (!this.inputElement) {
+      return;
+    }
+
+    this.__updateAriaLabel(ariaLabel);
+  }
 }
 
-customElements.define(MessageInputTextAreaElement.is, MessageInputTextAreaElement);
+customElements.define(MessageInputTextArea.is, MessageInputTextArea);

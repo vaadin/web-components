@@ -30,6 +30,7 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
+    "@vaadin/text-area": "^22.0.0-alpha1",
     "@vaadin/vaadin-avatar": "^22.0.0-alpha1",
     "@vaadin/vaadin-button": "^22.0.0-alpha1",
     "@vaadin/vaadin-element-mixin": "^22.0.0-alpha1",
