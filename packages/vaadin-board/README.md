@@ -8,9 +8,7 @@
 Vaadin Board key feature is how it effectively reorders the widgets on different screen sizes, maximizing the use of space and looking stunning.
 
 [![npm version](https://badgen.net/npm/v/@vaadin/vaadin-board)](https://www.npmjs.com/package/@vaadin/vaadin-board)
-[![Build Status](https://travis-ci.org/vaadin/vaadin-board.svg?branch=master)](https://travis-ci.org/vaadin/vaadin-board)
 [![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-board)
-[![Stars on vaadin.com/directory](https://img.shields.io/vaadin-directory/star/vaadinvaadin-board.svg)](https://vaadin.com/directory/component/vaadinvaadin-board)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
@@ -37,8 +35,7 @@ Vaadin Board key feature is how it effectively reorders the widgets on different
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-board/master/screenshot.png" alt="Screenshot of vaadin-board">](https://vaadin.com/components/vaadin-board)
 
-
-### Installation
+## Installation
 
 Install `vaadin-board`:
 
@@ -52,35 +49,9 @@ Once installed, import it in your application:
 import '@vaadin/vaadin-board/vaadin-board.js';
 ```
 
-## Running API docs in a browser
-
-1. Fork the `vaadin-board` repository and clone it locally.
-
-1. Make sure you have [node.js](https://nodejs.org/) 12.x installed.
-
-1. Make sure you have [npm](https://www.npmjs.com/) installed.
-
-1. When in the `vaadin-board` directory, run `npm install` to install dependencies.
-
-1. Run `npm start`, browser will automatically open the component API documentation.
-
-## Running tests from the command line
-
-1. When in the `vaadin-board` directory, run `npm test`
-
-## Debugging tests in the browser
-
-1. Run `npm run debug`, then choose manual mode (M) and open the link in browser.
-
-## Following the coding style
-
-We are using [ESLint](http://eslint.org/) for linting JavaScript code. You can check if your code is following our standards by running `npm run lint`, which will automatically lint all `.js` files.
-
-
 ## Contributing
 
-  To contribute to the component, please read [the guideline](https://github.com/vaadin/vaadin-core/blob/master/CONTRIBUTING.md) first.
-
+Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
 
 ## License
 
