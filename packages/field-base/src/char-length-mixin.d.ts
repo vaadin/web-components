@@ -25,11 +25,6 @@ interface CharLengthMixin extends ForwardInputPropsMixin {
    * Minimum number of characters (in Unicode code points) that the user can enter.
    */
   minlength: number | null | undefined;
-
-  /**
-   * Returns true if the current input value satisfies all constraints (if any).
-   */
-  checkValidity(): boolean;
 }
 
 export { CharLengthMixin, CharLengthMixinConstructor };

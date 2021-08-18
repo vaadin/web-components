@@ -3,8 +3,7 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { InputMixin } from './input-mixin.js';
-import { ValidateMixin } from './validate-mixin.js';
+import { InputConstraintsMixin } from './input-constraints-mixin.js';
 
 /**
  * A mixin to forward properties to the input element.
@@ -17,7 +16,7 @@ interface ForwardInputPropsMixinConstructor {
   new (...args: any[]): ForwardInputPropsMixin;
 }
 
-interface ForwardInputPropsMixin extends InputMixin, ValidateMixin {
+interface ForwardInputPropsMixin extends InputConstraintsMixin {
   /**
    * The name of this field.
    */

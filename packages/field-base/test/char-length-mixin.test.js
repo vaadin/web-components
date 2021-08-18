@@ -65,17 +65,4 @@ describe('char-length-mixin', () => {
       expect(spy.calledOnce).to.be.true;
     });
   });
-
-  describe('checkValidity', () => {
-    it('should return true when called before connected to the DOM', () => {
-      const field = document.createElement('char-length-mixin-element');
-      expect(field.checkValidity()).to.be.true;
-    });
-
-    it('should return false when called before connected to the DOM and invalid', () => {
-      const field = document.createElement('char-length-mixin-element');
-      field.invalid = true;
-      expect(field.checkValidity()).to.be.false;
-    });
-  });
 });

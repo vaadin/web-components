@@ -135,19 +135,6 @@ describe('text-field-mixin', () => {
     });
   });
 
-  describe('checkValidity', () => {
-    it('should return true when called before connected to the DOM', () => {
-      const field = document.createElement('text-field-mixin-element');
-      expect(field.checkValidity()).to.be.true;
-    });
-
-    it('should return false when called before connected to the DOM and invalid', () => {
-      const field = document.createElement('text-field-mixin-element');
-      field.invalid = true;
-      expect(field.checkValidity()).to.be.false;
-    });
-  });
-
   describe('prevent invalid input', () => {
     beforeEach(() => {
       element.preventInvalidInput = true;

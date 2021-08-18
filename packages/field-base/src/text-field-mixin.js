@@ -9,42 +9,7 @@ import { InputFieldMixin } from './input-field-mixin.js';
 import { PatternMixin } from './pattern-mixin.js';
 
 const TextFieldMixinImplementation = (superclass) =>
-  class TextFieldMixinClass extends InputFieldMixin(CharLengthMixin(PatternMixin(superclass))) {
-    /**
-     * Override an observer from `ValidateMixin` to combine `pattern`, `minlength` and `maxlength`.
-     * @param {boolean | undefined} required
-     * @param {string | undefined} pattern
-     * @param {number | undefined} minlength
-     * @param {number | undefined} maxlength
-     * @protected
-     * @override
-     */
-    _constraintsChanged(required, pattern, minlength, maxlength) {
-      // Prevent marking field as invalid when setting required state
-      // or any other constraint before a user has entered the value.
-      if (!this.invalid) {
-        return;
-      }
-
-      if (required || pattern || minlength || maxlength) {
-        this.validate();
-      } else {
-        this.invalid = false;
-      }
-    }
-
-    /**
-     * Returns true if the current input value satisfies all constraints (if any).
-     * @return {boolean}
-     */
-    checkValidity() {
-      if (this.inputElement && (this.required || this.pattern || this.maxlength || this.minlength)) {
-        return this.inputElement.checkValidity();
-      } else {
-        return !this.invalid;
-      }
-    }
-  };
+  class TextFieldMixinClass extends InputFieldMixin(CharLengthMixin(PatternMixin(superclass))) {};
 
 /**
  * A mixin to provide validation constraints for vaadin-text-field and related components.

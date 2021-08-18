@@ -16,11 +16,6 @@ interface TextFieldMixinConstructor {
   new (...args: any[]): TextFieldMixin;
 }
 
-interface TextFieldMixin extends CharLengthMixin, InputFieldMixin, PatternMixin {
-  /**
-   * Returns true if the current input value satisfies all constraints (if any).
-   */
-  checkValidity(): boolean;
-}
+interface TextFieldMixin extends CharLengthMixin, InputFieldMixin, PatternMixin {}
 
 export { TextFieldMixin, TextFieldMixinConstructor };

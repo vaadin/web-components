@@ -33,40 +33,6 @@ const CharLengthMixinImplementation = (superclass) =>
     static get constraints() {
       return [...super.constraints, 'maxlength', 'minlength'];
     }
-
-    /**
-     * Override an observer from `ValidateMixin` to add `minlength` and `maxlength` constraints.
-     * @param {boolean | undefined} required
-     * @param {number | undefined} minlength
-     * @param {number | undefined} maxlength
-     * @protected
-     * @override
-     */
-    _constraintsChanged(required, minlength, maxlength) {
-      // Prevent marking field as invalid when setting required state
-      // or any other constraint before a user has entered the value.
-      if (!this.invalid) {
-        return;
-      }
-
-      if (required || minlength || maxlength) {
-        this.validate();
-      } else {
-        this.invalid = false;
-      }
-    }
-
-    /**
-     * Returns true if the current input value satisfies all constraints (if any).
-     * @return {boolean}
-     */
-    checkValidity() {
-      if (this.inputElement && (this.required || this.maxlength || this.minlength)) {
-        return this.inputElement.checkValidity();
-      } else {
-        return !this.invalid;
-      }
-    }
   };
 
 /**

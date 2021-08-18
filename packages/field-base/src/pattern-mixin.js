@@ -39,27 +39,6 @@ const PatternMixinImplementation = (superclass) =>
       return [...super.constraints, 'pattern'];
     }
 
-    /**
-     * Override an observer from `ValidateMixin` to add `pattern` constraint.
-     * @param {boolean | undefined} required
-     * @param {string | undefined} pattern
-     * @protected
-     * @override
-     */
-    _constraintsChanged(required, pattern) {
-      // Prevent marking field as invalid when setting required state
-      // or any other constraint before a user has entered the value.
-      if (!this.invalid) {
-        return;
-      }
-
-      if (required || pattern) {
-        this.validate();
-      } else {
-        this.invalid = false;
-      }
-    }
-
     /** @private */
     _checkInputValue() {
       if (this.preventInvalidInput) {
@@ -84,18 +63,6 @@ const PatternMixinImplementation = (superclass) =>
       this._checkInputValue();
 
       super._onInput(event);
-    }
-
-    /**
-     * Returns true if the current input value satisfies all constraints (if any).
-     * @return {boolean}
-     */
-    checkValidity() {
-      if (this.inputElement && (this.required || this.pattern)) {
-        return this.inputElement.checkValidity();
-      } else {
-        return !this.invalid;
-      }
     }
   };
 
