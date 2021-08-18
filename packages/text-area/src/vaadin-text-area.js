@@ -110,6 +110,7 @@ export class TextArea extends CharLengthMixin(
           display: grid;
           flex: 1 1 auto;
           align-self: stretch;
+          padding: 0;
         }
 
         .textarea-wrapper::after {
