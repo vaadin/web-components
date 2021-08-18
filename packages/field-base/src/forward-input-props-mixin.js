@@ -49,8 +49,9 @@ const ForwardInputPropsMixinImplementation = (superclass) =>
     /** @protected */
     ready() {
       // Create observer dynamically to allow subclasses to override forwardProps
-      // Note, this needs to be done before calling `super.ready()` to allow constraints
-      // observer created by `InputConstraintsMixin` to run first and update `invalid`.
+      // Note, this needs to be done before calling `super.ready()` to propagate changes
+      // to the validation constraints, e.g. when setting `required` property to `false`,
+      // before the observer created by `InputConstraintsMixin` to validate properly.
       this._createMethodObserver(`_forwardPropsChanged(${this.constructor.forwardProps.join(', ')})`);
 
       super.ready();

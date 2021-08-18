@@ -143,6 +143,16 @@ describe('input-constraints-mixin', () => {
       expect(element.invalid).to.be.false;
     });
 
+    it('should update invalid state when a constraint is removed even if other constraints are active', () => {
+      element.required = true;
+      element.pattern = '\\d*';
+      element.validate();
+      expect(element.invalid).to.be.true;
+
+      element.required = false;
+      expect(element.invalid).to.be.false;
+    });
+
     it('should override explicitly set invalid when required is set', () => {
       element.invalid = true;
       element.value = 'foo';
