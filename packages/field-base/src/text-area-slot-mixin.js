@@ -32,7 +32,7 @@ const TextAreaSlotMixinImplementation = (superclass) =>
 
       // Ensure every instance has unique ID
       const uniqueId = (TextAreaSlotMixinClass._uniqueId = 1 + TextAreaSlotMixinClass._uniqueId || 0);
-      this._inputId = `${this.localName}-${uniqueId}`;
+      this._textareaId = `${this.localName}-${uniqueId}`;
     }
 
     /** @protected */
@@ -41,7 +41,7 @@ const TextAreaSlotMixinImplementation = (superclass) =>
 
       const textArea = this._getDirectSlotChild('textarea');
       if (textArea) {
-        textArea.id = this._inputId;
+        textArea.id = this._textareaId;
 
         this._setInputElement(textArea);
       }

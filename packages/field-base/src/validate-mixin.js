@@ -139,10 +139,10 @@ const ValidateMixinImplementation = (superclass) =>
         return;
       }
 
-      if (!required) {
-        this.invalid = false;
-      } else {
+      if (required) {
         this.validate();
+      } else {
+        this.invalid = false;
       }
     }
 

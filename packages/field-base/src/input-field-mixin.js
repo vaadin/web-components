@@ -128,8 +128,8 @@ const InputFieldMixinImplementation = (superclass) =>
      * @return {boolean}
      */
     checkValidity() {
-      if (this.required) {
-        return this.inputElement ? this.inputElement.checkValidity() : undefined;
+      if (this.inputElement && this.required) {
+        return this.inputElement.checkValidity();
       } else {
         return !this.invalid;
       }

@@ -53,10 +53,10 @@ const PatternMixinImplementation = (superclass) =>
         return;
       }
 
-      if (!required && !pattern) {
-        this.invalid = false;
-      } else {
+      if (required || pattern) {
         this.validate();
+      } else {
+        this.invalid = false;
       }
     }
 
@@ -91,8 +91,8 @@ const PatternMixinImplementation = (superclass) =>
      * @return {boolean}
      */
     checkValidity() {
-      if (this.required || this.pattern) {
-        return this.inputElement ? this.inputElement.checkValidity() : undefined;
+      if (this.inputElement && (this.required || this.pattern)) {
+        return this.inputElement.checkValidity();
       } else {
         return !this.invalid;
       }

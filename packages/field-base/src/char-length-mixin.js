@@ -49,10 +49,10 @@ const CharLengthMixinImplementation = (superclass) =>
         return;
       }
 
-      if (!required && !minlength && !maxlength) {
-        this.invalid = false;
-      } else {
+      if (required || minlength || maxlength) {
         this.validate();
+      } else {
+        this.invalid = false;
       }
     }
 
@@ -61,8 +61,8 @@ const CharLengthMixinImplementation = (superclass) =>
      * @return {boolean}
      */
     checkValidity() {
-      if (this.required || this.maxlength || this.minlength) {
-        return this.inputElement ? this.inputElement.checkValidity() : undefined;
+      if (this.inputElement && (this.required || this.maxlength || this.minlength)) {
+        return this.inputElement.checkValidity();
       } else {
         return !this.invalid;
       }
