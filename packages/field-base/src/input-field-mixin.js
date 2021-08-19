@@ -98,7 +98,7 @@ const InputFieldMixinImplementation = (superclass) =>
 
       if (this.inputElement) {
         // Discard value set on the custom slotted input.
-        if (this.inputElement.value !== this.value) {
+        if (this.inputElement.value && this.inputElement.value !== this.value) {
           console.warn(`Please define value on the <${this.localName}> component!`);
           this.inputElement.value = '';
         }
