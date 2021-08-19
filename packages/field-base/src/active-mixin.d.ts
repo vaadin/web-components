@@ -11,7 +11,7 @@ import { DisabledMixin } from './disabled-mixin.js';
  * The attribute is set whenever the user activates the element by a pointer
  * or presses an activation key on the element from the keyboard.
  *
- * The attribute is unset as soon as the element is deactivated
+ * The attribute is removed as soon as the element is deactivated
  * by the pointer or by releasing the activation key.
  */
 declare function ActiveMixin<T extends new (...args: any[]) => {}>(base: T): T & ActiveMixinConstructor;
