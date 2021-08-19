@@ -1,9 +1,6 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../../theme/material/vaadin-integer-field.js';
-import { IntegerField } from '../../../src/vaadin-integer-field.js';
-
-customElements.define('vaadin-integer-field', IntegerField);
 
 describe('integer-field', () => {
   let div, element;

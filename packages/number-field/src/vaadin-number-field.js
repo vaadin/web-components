@@ -11,6 +11,50 @@ import { InputSlotMixin } from '@vaadin/field-base/src/input-slot-mixin.js';
 import '@vaadin/input-container/src/vaadin-input-container.js';
 import '@vaadin/text-field/src/vaadin-input-field-shared-styles.js';
 
+/**
+ * `<vaadin-number-field>` is an input field web component that only accepts numeric input.
+ *
+ * ```html
+ * <vaadin-number-field label="Balance"></vaadin-number-field>
+ * ```
+ *
+ * ### Styling
+ *
+ * The following shadow DOM parts are available for styling:
+ *
+ * Part name       | Description
+ * ----------------|----------------
+ * `label`         | The label element wrapper
+ * `input-field`   | The element that wraps prefix, textarea and suffix
+ * `error-message` | The error message element wrapper
+ * `helper-text`   | The helper text element wrapper
+ *
+ * The following state attributes are available for styling:
+ *
+ * Attribute           | Description                               | Part name
+ * --------------------|-------------------------------------------|----------
+ * `disabled`          | Set when the element is disabled          | :host
+ * `has-value`         | Set when the element has a value          | :host
+ * `has-label`         | Set when the element has a label          | :host
+ * `has-helper`        | Set when the element has helper text      | :host
+ * `has-error-message` | Set when the element has an error message | :host
+ * `invalid`           | Set when the element is invalid           | :host
+ * `focused`           | Set when the element is focused           | :host
+ * `focus-ring`        | Set when the element is keyboard focused  | :host
+ * `readonly`          | Set when the element is readonly          | :host
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
+ *
+ * @fires {Event} input - Fired when the value is changed by the user: on every typing keystroke, and the value is cleared using the clear button.
+ * @fires {Event} change - Fired when the user commits a value change.
+ * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
+ * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
+ *
+ * @extends HTMLElement
+ * @mixes InputFieldMixin
+ * @mixes ElementMixin
+ * @mixes ThemableMixin
+ */
 export class NumberField extends InputFieldMixin(InputSlotMixin(ThemableMixin(ElementMixin(PolymerElement)))) {
   static get is() {
     return 'vaadin-number-field';
@@ -166,13 +210,6 @@ export class NumberField extends InputFieldMixin(InputSlotMixin(ThemableMixin(El
     }
   }
 
-  /** @protected */
-  ready() {
-    super.ready();
-
-    this._createConstraintsObserver();
-  }
-
   /** @private */
   _decreaseButtonTouchend(e) {
     // Cancel the following click and focus events
@@ -187,13 +224,19 @@ export class NumberField extends InputFieldMixin(InputSlotMixin(ThemableMixin(El
     this._increaseValue();
   }
 
-  /** @protected */
+  /**
+   * @protected
+   * @override
+   */
   _createConstraintsObserver() {
     // NOTE: do not call "super" but instead override the method to add extra arguments
     this._createMethodObserver('_constraintsChanged(required, min, max, step)');
   }
 
-  /** @private */
+  /**
+   * @protected
+   * @override
+   */
   _constraintsChanged(required, min, max) {
     if (!this.invalid) {
       return;
@@ -368,6 +411,7 @@ export class NumberField extends InputFieldMixin(InputSlotMixin(ThemableMixin(El
    * @param {unknown} newVal
    * @param {unknown} oldVal
    * @protected
+   * @override
    */
   _valueChanged(newVal, oldVal) {
     // Validate value to be numeric
@@ -385,6 +429,7 @@ export class NumberField extends InputFieldMixin(InputSlotMixin(ThemableMixin(El
    * to avoid adding a separate listener.
    * @param {!KeyboardEvent} event
    * @protected
+   * @override
    */
   _onKeyDown(event) {
     if (event.key === 'ArrowUp') {
@@ -397,10 +442,12 @@ export class NumberField extends InputFieldMixin(InputSlotMixin(ThemableMixin(El
 
     super._onKeyDown(event);
   }
+
   /**
    * Override an event listener inherited from `InputMixin`.
    * @param {Event} _event
    * @protected
+   * @override
    */
   _onChange(_event) {
     this.validate();
@@ -417,3 +464,5 @@ export class NumberField extends InputFieldMixin(InputSlotMixin(ThemableMixin(El
     return super.checkValidity();
   }
 }
+
+customElements.define(NumberField.is, NumberField);
