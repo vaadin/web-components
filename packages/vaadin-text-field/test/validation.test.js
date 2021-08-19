@@ -2,7 +2,6 @@ import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { makeFixture } from './helpers.js';
-import '../vaadin-email-field.js';
 import '../vaadin-number-field.js';
 import '../vaadin-password-field.js';
 import '../vaadin-text-area.js';
@@ -169,8 +168,6 @@ import '../vaadin-text-field.js';
 });
 
 const fixtures = [
-  { name: 'email field', tpl: '<vaadin-email-field invalid></vaadin-email-field>' },
-  { name: 'email field with value', tpl: '<vaadin-email-field invalid value="foo@example.com"></vaadin-email-field>' },
   { name: 'number field', tpl: '<vaadin-number-field invalid></vaadin-number-field>' },
   { name: 'number field with value', tpl: '<vaadin-number-field invalid value="42"></vaadin-number-field>' },
   { name: 'password field', tpl: '<vaadin-password-field invalid></vaadin-password-field>' },

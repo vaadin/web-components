@@ -1,3 +1,6 @@
-import './vaadin-email-field-styles.js';
-import './vaadin-text-field.js';
-import '../../src/vaadin-email-field.js';
+/**
+ * @license
+ * Copyright (c) 2021 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+import '@vaadin/email-field/theme/lumo/vaadin-email-field.js';

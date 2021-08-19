@@ -1,8 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
-import { EmailField } from '../src/vaadin-email-field.js';
-
-customElements.define('vaadin-email-field', EmailField);
+import '../src/vaadin-email-field.js';
 
 const validAddresses = [
   'email@example.com',
@@ -77,6 +75,30 @@ describe('email-field', () => {
 
     it('should not override custom pattern', () => {
       expect(emailField.pattern).to.equal('.+@example.com');
+    });
+  });
+
+  describe('invalid', () => {
+    let field;
+
+    beforeEach(() => {
+      field = fixtureSync('<vaadin-email-field invalid></vaadin-email-field>');
+    });
+
+    it('should not remove "invalid" state when ready', () => {
+      expect(field.invalid).to.be.true;
+    });
+  });
+
+  describe('invalid with value', () => {
+    let field;
+
+    beforeEach(() => {
+      field = fixtureSync('<vaadin-email-field invalid value="foo@example.com"></vaadin-email-field>');
+    });
+
+    it('should not remove "invalid" state when ready', () => {
+      expect(field.invalid).to.be.true;
     });
   });
 });
