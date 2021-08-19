@@ -3,10 +3,11 @@ import sinon from 'sinon';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { InputFieldMixin } from '../src/input-field-mixin.js';
+import { InputSlotMixin } from '../src/input-slot-mixin.js';
 
 customElements.define(
   'input-field-mixin-element',
-  class extends InputFieldMixin(PolymerElement) {
+  class extends InputFieldMixin(InputSlotMixin(PolymerElement)) {
     static get template() {
       return html`
         <style>
@@ -71,45 +72,6 @@ describe('input-field-mixin', () => {
       element.autoselect = true;
       input.focus();
       expect(spy.calledOnce).to.be.true;
-    });
-  });
-
-  describe('value', () => {
-    beforeEach(() => {
-      element = fixtureSync('<input-field-mixin-element></input-field-mixin-element>');
-      input = element.querySelector('[slot=input]');
-    });
-
-    it('should propagate value to the input element', () => {
-      element.value = 'foo';
-      expect(input.value).to.equal('foo');
-    });
-
-    it('should clear input value when value is set to null', () => {
-      element.value = null;
-      expect(input.value).to.equal('');
-    });
-
-    it('should update field value on the input event', () => {
-      input.value = 'foo';
-      input.dispatchEvent(new Event('input'));
-      expect(element.value).to.equal('foo');
-    });
-
-    it('should clear input value when value is set to undefined', () => {
-      element.value = undefined;
-      expect(input.value).to.equal('');
-    });
-
-    it('should set has-value attribute when value is set', () => {
-      element.value = 'foo';
-      expect(element.hasAttribute('has-value')).to.be.true;
-    });
-
-    it('should remove has-value attribute when value is removed', () => {
-      element.value = 'foo';
-      element.value = '';
-      expect(element.hasAttribute('has-value')).to.be.false;
     });
   });
 

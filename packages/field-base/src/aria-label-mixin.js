@@ -7,8 +7,8 @@ import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
 import { LabelMixin } from './label-mixin.js';
 import { InputMixin } from './input-mixin.js';
 
-const InputAriaMixinImplementation = (superclass) =>
-  class InputAriaMixinClass extends InputMixin(LabelMixin(superclass)) {
+const AriaLabelMixinImplementation = (superclass) =>
+  class AriaLabelMixinClass extends InputMixin(LabelMixin(superclass)) {
     constructor() {
       super();
 
@@ -18,8 +18,6 @@ const InputAriaMixinImplementation = (superclass) =>
     /** @protected */
     connectedCallback() {
       super.connectedCallback();
-
-      this._enhanceLightDomA11y();
 
       if (this._labelNode) {
         this._labelNode.addEventListener('click', this.__preventDuplicateLabelClick);
@@ -35,14 +33,18 @@ const InputAriaMixinImplementation = (superclass) =>
       }
     }
 
-    /** @protected */
-    _enhanceLightDomA11y() {
-      if (this._inputNode) {
-        this._inputNode.setAttribute('aria-labelledby', this._labelId);
-      }
+    /**
+     * Override an observer from `InputMixin`.
+     * @protected
+     * @override
+     */
+    _inputElementChanged(input) {
+      super._inputElementChanged(input);
 
-      if (this._labelNode) {
-        this._labelNode.setAttribute('for', this._inputId);
+      if (input) {
+        input.setAttribute('aria-labelledby', this._labelId);
+
+        this._labelNode.setAttribute('for', input.id);
       }
     }
 
@@ -57,13 +59,13 @@ const InputAriaMixinImplementation = (superclass) =>
     __preventDuplicateLabelClick() {
       const inputClickHandler = (e) => {
         e.stopImmediatePropagation();
-        this._inputNode.removeEventListener('click', inputClickHandler);
+        this.inputElement.removeEventListener('click', inputClickHandler);
       };
-      this._inputNode.addEventListener('click', inputClickHandler);
+      this.inputElement.addEventListener('click', inputClickHandler);
     }
   };
 
 /**
- * A mixin to link slotted `<input>` and `<label>` elements.
+ * A mixin to link an input element with a slotted `<label>` element.
  */
-export const InputAriaMixin = dedupingMixin(InputAriaMixinImplementation);
+export const AriaLabelMixin = dedupingMixin(AriaLabelMixinImplementation);

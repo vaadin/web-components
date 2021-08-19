@@ -61,8 +61,32 @@ export class PasswordField extends TextField {
         reflectToAttribute: true,
         observer: '_passwordVisibleChanged',
         readOnly: true
+      },
+
+      /**
+       * An object with translated strings used for localization.
+       * It has the following structure and default values:
+       *
+       * ```
+       * {
+       *   // Translation of the reveal icon button accessible label
+       *   reveal: 'Show password'
+       * }
+       * ```
+       */
+      i18n: {
+        type: Object,
+        value: () => {
+          return {
+            reveal: 'Show password'
+          };
+        }
       }
     };
+  }
+
+  static get observers() {
+    return ['__i18nChanged(i18n.*)'];
   }
 
   get slots() {
@@ -101,13 +125,14 @@ export class PasswordField extends TextField {
     super.connectedCallback();
 
     if (this._revealNode) {
+      this.__updateAriaLabel(this.i18n);
       this._revealNode.setAttribute('aria-label', 'Show password');
       this._revealNode.addEventListener('click', this.__boundRevealButtonClick);
       this._revealNode.addEventListener('touchend', this.__boundRevealButtonTouchend);
     }
 
-    if (this._inputNode) {
-      this._inputNode.autocapitalize = 'off';
+    if (this.inputElement) {
+      this.inputElement.autocapitalize = 'off';
     }
 
     this._toggleRevealHidden(this.revealButtonHidden);
@@ -132,7 +157,7 @@ export class PasswordField extends TextField {
    * @protected
    */
   _shouldSetFocus(event) {
-    return event.target === this._inputNode || event.target === this._revealNode;
+    return event.target === this.inputElement || event.target === this._revealNode;
   }
 
   /**
@@ -145,7 +170,7 @@ export class PasswordField extends TextField {
   _shouldRemoveFocus(event) {
     return !(
       event.relatedTarget === this._revealNode ||
-      (event.relatedTarget === this._inputNode && event.target === this._revealNode)
+      (event.relatedTarget === this.inputElement && event.target === this._revealNode)
     );
   }
 
@@ -155,7 +180,22 @@ export class PasswordField extends TextField {
 
     if (!focused) {
       this._setPasswordVisible(false);
+    } else {
+      // Remove focus-ring from the field when the reveal button gets focused
+      this.toggleAttribute('focus-ring', !this._revealNode.matches(':focus'));
     }
+  }
+
+  /** @private */
+  __updateAriaLabel(i18n) {
+    if (i18n.reveal && this._revealNode) {
+      this._revealNode.setAttribute('aria-label', i18n.reveal);
+    }
+  }
+
+  /** @private */
+  __i18nChanged(i18n) {
+    this.__updateAriaLabel(i18n.base);
   }
 
   /** @private */
@@ -180,7 +220,7 @@ export class PasswordField extends TextField {
     this._togglePasswordVisibility();
     // Focus the input to avoid problem with password still visible
     // when user clicks the reveal button and then clicks outside.
-    this._inputNode.focus();
+    this.inputElement.focus();
   }
 
   /** @private */

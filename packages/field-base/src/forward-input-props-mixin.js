@@ -4,11 +4,10 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
-import { InputAriaMixin } from './input-aria-mixin.js';
-import { ValidateMixin } from './validate-mixin.js';
+import { InputConstraintsMixin } from './input-constraints-mixin.js';
 
-const InputPropsMixinImplementation = (superclass) =>
-  class InputPropsMixinClass extends ValidateMixin(InputAriaMixin(superclass)) {
+const ForwardInputPropsMixinImplementation = (superclass) =>
+  class ForwardInputPropsMixinClass extends InputConstraintsMixin(superclass) {
     static get properties() {
       return {
         /**
@@ -43,37 +42,42 @@ const InputPropsMixinImplementation = (superclass) =>
       };
     }
 
-    static get hostProps() {
+    static get forwardProps() {
       return ['name', 'type', 'placeholder', 'readonly', 'required', 'invalid', 'title'];
     }
 
     /** @protected */
-    connectedCallback() {
-      super.connectedCallback();
+    ready() {
+      // Create observer dynamically to allow subclasses to override forwardProps
+      // Note, this needs to be done before calling `super.ready()` to propagate changes
+      // to the validation constraints, e.g. when setting `required` property to `false`,
+      // before the observer created by `InputConstraintsMixin` to validate properly.
+      this._createMethodObserver(`_forwardPropsChanged(${this.constructor.forwardProps.join(', ')})`);
 
-      if (this._inputNode) {
-        // Propagate initially defined properties to the slotted input
-        this._propagateHostAttributes(this.constructor.hostProps.map((attr) => this[attr] || this.getAttribute(attr)));
-      }
+      super.ready();
     }
 
     /** @protected */
-    ready() {
-      super.ready();
+    _inputElementChanged(input) {
+      super._inputElementChanged(input);
 
-      // create observer dynamically to allow subclasses to override hostProps
-      this._createMethodObserver(`_hostPropsChanged(${this.constructor.hostProps.join(', ')})`);
+      if (input) {
+        // Propagate initially defined properties to the slotted input
+        this._propagateHostAttributes(
+          this.constructor.forwardProps.map((attr) => this[attr] || this.getAttribute(attr))
+        );
+      }
     }
 
     /** @private */
-    _hostPropsChanged(...attributesValues) {
+    _forwardPropsChanged(...attributesValues) {
       this._propagateHostAttributes(attributesValues);
     }
 
     /** @private */
     _propagateHostAttributes(attributesValues) {
-      const input = this._inputNode;
-      const attributeNames = this.constructor.hostProps;
+      const input = this.inputElement;
+      const attributeNames = this.constructor.forwardProps;
 
       attributeNames.forEach((attr, index) => {
         const value = attributesValues[index];
@@ -101,6 +105,6 @@ const InputPropsMixinImplementation = (superclass) =>
   };
 
 /**
- * A mixin to forward properties to the native <input> element.
+ * A mixin to forward properties to the input element.
  */
-export const InputPropsMixin = dedupingMixin(InputPropsMixinImplementation);
+export const ForwardInputPropsMixin = dedupingMixin(ForwardInputPropsMixinImplementation);

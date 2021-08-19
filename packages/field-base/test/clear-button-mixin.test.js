@@ -3,10 +3,11 @@ import sinon from 'sinon';
 import { fixtureSync, escKeyDown } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { ClearButtonMixin } from '../src/clear-button-mixin.js';
+import { InputSlotMixin } from '../src/input-slot-mixin.js';
 
 customElements.define(
   'clear-button-mixin-element',
-  class extends ClearButtonMixin(PolymerElement) {
+  class extends ClearButtonMixin(InputSlotMixin(PolymerElement)) {
     static get template() {
       return html`
         <slot name="input"></slot>
@@ -33,16 +34,6 @@ describe('clear-button-mixin', () => {
     element = fixtureSync('<clear-button-mixin-element value="foo"></clear-button-mixin-element>');
     input = element.querySelector('[slot=input]');
     button = element.$.clearButton;
-  });
-
-  it('should clear the field value on clear method call', () => {
-    element.clear();
-    expect(element.value).to.equal('');
-  });
-
-  it('should clear the input value on clear method call', () => {
-    element.clear();
-    expect(input.value).to.equal('');
   });
 
   it('should clear the field value on clear button click', () => {

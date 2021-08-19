@@ -3,19 +3,20 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { InputAriaMixin } from './input-aria-mixin.js';
-import { ValidateMixin } from './validate-mixin.js';
+import { InputConstraintsMixin } from './input-constraints-mixin.js';
 
 /**
- * A mixin to forward properties to the native <input> element.
+ * A mixin to forward properties to the input element.
  */
-declare function InputPropsMixin<T extends new (...args: any[]) => {}>(base: T): T & InputPropsMixinConstructor;
+declare function ForwardInputPropsMixin<T extends new (...args: any[]) => {}>(
+  base: T
+): T & ForwardInputPropsMixinConstructor;
 
-interface InputPropsMixinConstructor {
-  new (...args: any[]): InputPropsMixin;
+interface ForwardInputPropsMixinConstructor {
+  new (...args: any[]): ForwardInputPropsMixin;
 }
 
-interface InputPropsMixin extends InputAriaMixin, ValidateMixin {
+interface ForwardInputPropsMixin extends InputConstraintsMixin {
   /**
    * The name of this field.
    */
@@ -37,4 +38,4 @@ interface InputPropsMixin extends InputAriaMixin, ValidateMixin {
   title: string;
 }
 
-export { InputPropsMixinConstructor, InputPropsMixin };
+export { ForwardInputPropsMixinConstructor, ForwardInputPropsMixin };

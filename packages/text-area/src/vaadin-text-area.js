@@ -5,12 +5,16 @@
  */
 import { PolymerElement, html } from '@polymer/polymer';
 import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
-import { TextFieldMixin } from '@vaadin/field-base/src/text-field-mixin.js';
+import { CharLengthMixin } from '@vaadin/field-base/src/char-length-mixin.js';
+import { InputFieldMixin } from '@vaadin/field-base/src/input-field-mixin.js';
+import { TextAreaSlotMixin } from '@vaadin/field-base/src/text-area-slot-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import '@vaadin/input-container/src/vaadin-input-container.js';
 import '@vaadin/text-field/src/vaadin-input-field-shared-styles.js';
 
-export class TextArea extends TextFieldMixin(ThemableMixin(ElementMixin(PolymerElement))) {
+export class TextArea extends CharLengthMixin(
+  InputFieldMixin(TextAreaSlotMixin(ThemableMixin(ElementMixin(PolymerElement))))
+) {
   static get is() {
     return 'vaadin-text-area';
   }
@@ -131,42 +135,12 @@ export class TextArea extends TextFieldMixin(ThemableMixin(ElementMixin(PolymerE
     `;
   }
 
-  get slots() {
-    const slots = super.slots;
-
-    delete slots.input;
-
-    return {
-      ...slots,
-      textarea: () => {
-        const native = document.createElement('textarea');
-        const value = this.getAttribute('value');
-        if (value) {
-          native.setAttribute('value', value);
-        }
-        const name = this.getAttribute('name');
-        if (name) {
-          native.setAttribute('name', name);
-        }
-        return native;
-      }
-    };
-  }
-
   /**
    * Used by `ClearButtonMixin` as a reference to the clear button element.
    * @protected
    */
   get clearElement() {
     return this.$.clearButton;
-  }
-
-  /**
-   * Override getter provided by `InputMixin` to use a different slot.
-   * @protected
-   */
-  get _inputNode() {
-    return this._getDirectSlotChild('textarea');
   }
 
   /** @protected */
@@ -202,10 +176,10 @@ export class TextArea extends TextFieldMixin(ThemableMixin(ElementMixin(PolymerE
 
   /** @private */
   _updateHeight() {
-    if (this._inputNode) {
+    if (this.inputElement) {
       /* https://css-tricks.com/the-cleanest-trick-for-autogrowing-textareas/ */
       this.__textAreaWrapper = this.__textAreaWrapper || this.shadowRoot.querySelector('.textarea-wrapper');
-      this.__textAreaWrapper.dataset.replicatedValue = this._inputNode.value;
+      this.__textAreaWrapper.dataset.replicatedValue = this.inputElement.value;
       // getComputedStyle is expensive, maybe we can use ResizeObserver in the future
       this._dispatchIronResizeEventIfNeeded('InputHeight', getComputedStyle(this.__textAreaWrapper).height);
     }

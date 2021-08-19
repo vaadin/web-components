@@ -7,10 +7,11 @@ import { PolymerElement, html } from '@polymer/polymer';
 import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { InputFieldMixin } from '@vaadin/field-base/src/input-field-mixin.js';
+import { InputSlotMixin } from '@vaadin/field-base/src/input-slot-mixin.js';
 import '@vaadin/input-container/src/vaadin-input-container.js';
 import '@vaadin/text-field/src/vaadin-input-field-shared-styles.js';
 
-export class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(PolymerElement))) {
+export class NumberField extends InputFieldMixin(InputSlotMixin(ThemableMixin(ElementMixin(PolymerElement)))) {
   static get is() {
     return 'vaadin-number-field';
   }
@@ -144,7 +145,6 @@ export class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(Poly
   constructor() {
     super();
     this._setType('number');
-    this._boundOnChange = this.__onInputChange.bind(this);
   }
 
   /**
@@ -159,9 +159,9 @@ export class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(Poly
   connectedCallback() {
     super.connectedCallback();
 
-    if (this._inputNode) {
-      this._inputNode.min = this.min;
-      this._inputNode.max = this.max;
+    if (this.inputElement) {
+      this.inputElement.min = this.min;
+      this.inputElement.max = this.max;
       this.__applyStep(this.step);
     }
   }
@@ -171,26 +171,6 @@ export class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(Poly
     super.ready();
 
     this._createConstraintsObserver();
-  }
-
-  /**
-   * @param {HTMLElement} node
-   * @protected
-   */
-  _addInputListeners(node) {
-    super._addInputListeners(node);
-
-    node.addEventListener('change', this._boundOnChange);
-  }
-
-  /**
-   * @param {HTMLElement} node
-   * @protected
-   */
-  _removeInputListeners(node) {
-    super._removeInputListeners(node);
-
-    node.removeEventListener('change', this._boundOnChange);
   }
 
   /** @private */
@@ -286,7 +266,7 @@ export class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(Poly
 
   /** @private */
   _setValue(value) {
-    this.value = this._inputNode.value = String(parseFloat(value));
+    this.value = this.inputElement.value = String(parseFloat(value));
     this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
   }
 
@@ -347,8 +327,8 @@ export class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(Poly
 
   /** @private */
   __applyStep(step) {
-    if (this._inputNode) {
-      this._inputNode.step = this.__validateByStep ? step : 'any';
+    if (this.inputElement) {
+      this.inputElement.step = this.__validateByStep ? step : 'any';
     }
   }
 
@@ -372,15 +352,15 @@ export class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(Poly
 
   /** @private */
   _minChanged(min) {
-    if (this._inputNode) {
-      this._inputNode.min = min;
+    if (this.inputElement) {
+      this.inputElement.min = min;
     }
   }
 
   /** @private */
   _maxChanged(max) {
-    if (this._inputNode) {
-      this._inputNode.max = max;
+    if (this.inputElement) {
+      this.inputElement.max = max;
     }
   }
 
@@ -417,9 +397,12 @@ export class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(Poly
 
     super._onKeyDown(event);
   }
-
-  /** @private */
-  __onInputChange() {
+  /**
+   * Override an event listener inherited from `InputMixin`.
+   * @param {Event} _event
+   * @protected
+   */
+  _onChange(_event) {
     this.validate();
   }
 
@@ -428,7 +411,7 @@ export class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(Poly
    */
   checkValidity() {
     if (this.min !== undefined || this.max !== undefined || this.__validateByStep) {
-      return this._inputNode.checkValidity();
+      return this.inputElement.checkValidity();
     }
 
     return super.checkValidity();

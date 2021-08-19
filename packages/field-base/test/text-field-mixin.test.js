@@ -3,10 +3,11 @@ import sinon from 'sinon';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { TextFieldMixin } from '../src/text-field-mixin.js';
+import { InputSlotMixin } from '../src/input-slot-mixin.js';
 
 customElements.define(
   'text-field-mixin-element',
-  class extends TextFieldMixin(PolymerElement) {
+  class extends TextFieldMixin(InputSlotMixin(PolymerElement)) {
     static get template() {
       return html`
         <slot name="label"></slot>
@@ -152,42 +153,6 @@ describe('text-field-mixin', () => {
         expect(element.value).to.equal('1');
       });
 
-      it('should temporarily set input-prevented attribute on invalid input', () => {
-        element.pattern = '[0-9]*';
-        inputText('f');
-        expect(element.hasAttribute('input-prevented')).to.be.true;
-      });
-
-      it('should not set input-prevented attribute on valid input', () => {
-        element.pattern = '[0-9]*';
-        inputText('1');
-        expect(element.hasAttribute('input-prevented')).to.be.false;
-      });
-
-      it('should remove input-prevented attribute after 200ms timeout', () => {
-        const clock = sinon.useFakeTimers();
-        element.pattern = '[0-9]*';
-        inputText('f');
-        clock.tick(200);
-        expect(element.hasAttribute('input-prevented')).to.be.false;
-        clock.restore();
-      });
-
-      it('should have empty value', () => {
-        element.value = undefined;
-        element.pattern = '[0-9]*';
-        inputText('f');
-        expect(element.value).to.equal('');
-      });
-
-      it('should not fire value change', () => {
-        const spy = sinon.spy();
-        element.addEventListener('value-changed', spy);
-        element.pattern = '[0-9]*';
-        inputText('f');
-        expect(spy.called).to.be.false;
-      });
-
       it('should not prevent valid pattern', () => {
         element.pattern = '[0-9]*';
         inputText('2');
@@ -212,6 +177,12 @@ describe('text-field-mixin', () => {
         element.pattern = '[0-9]*';
         element.value = 'foo';
         expect(element.value).to.equal('foo');
+      });
+
+      it('should not prevent valid pattern', () => {
+        element.pattern = '[0-9]*';
+        element.value = '2';
+        expect(element.value).to.equal('2');
       });
 
       it('should not prevent too short value', () => {

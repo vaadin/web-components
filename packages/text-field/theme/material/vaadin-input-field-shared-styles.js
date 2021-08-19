@@ -106,6 +106,9 @@ registerStyles(
       background-color: transparent;
       /* Disable default invalid style in Firefox */
       box-shadow: none;
+      /* Slotted input does not inherit these from the host */
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
     /* TODO: the text opacity should be 42%, but the disabled style is 38%.

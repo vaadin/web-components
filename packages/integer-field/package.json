@@ -1,0 +1,40 @@
+{
+  "name": "@vaadin/integer-field",
+  "version": "22.0.0-alpha1",
+  "description": "vaadin-integer-field",
+  "main": "vaadin-integer-field.js",
+  "module": "vaadin-integer-field.js",
+  "repository": "vaadin/web-components",
+  "keywords": [
+    "Vaadin",
+    "input",
+    "web-components",
+    "web-component"
+  ],
+  "author": "Vaadin Ltd",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/vaadin/web-components/issues"
+  },
+  "homepage": "https://vaadin.com/components",
+  "files": [
+    "vaadin-*.d.ts",
+    "vaadin-*.js",
+    "src",
+    "theme"
+  ],
+  "dependencies": {
+    "@polymer/polymer": "^3.0.0",
+    "@vaadin/number-field": "^22.0.0-alpha1",
+    "@vaadin/vaadin-lumo-styles": "^22.0.0-alpha1",
+    "@vaadin/vaadin-material-styles": "^22.0.0-alpha1"
+  },
+  "devDependencies": {
+    "@esm-bundle/chai": "^4.3.4",
+    "@vaadin/testing-helpers": "^0.2.1",
+    "sinon": "^9.2.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

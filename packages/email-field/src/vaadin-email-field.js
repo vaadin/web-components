@@ -60,8 +60,8 @@ export class EmailField extends TextField {
   connectedCallback() {
     super.connectedCallback();
 
-    if (this._inputNode) {
-      this._inputNode.autocapitalize = 'off';
+    if (this.inputElement) {
+      this.inputElement.autocapitalize = 'off';
     }
   }
 
