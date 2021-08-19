@@ -4,6 +4,7 @@ import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import '@vaadin/vaadin-template-renderer';
+import '@vaadin/text-area/vaadin-text-area.js';
 import '../src/vaadin-dialog.js';
 
 registerStyles(
