@@ -11,32 +11,35 @@ describe('chart', () => {
   it('should update when container width changes', (done) => {
     const element = fixtureSync(`
       <div>
-           <style>
-               .root {
-                   display: flex;
-                   width: 100%;
-               }
-               .box {
-                   min-width: 50%;
-               }
-               .chart-container {
-                   flex-grow: 1;
-               }
-               .hidden {
-                   display: none !important;
-               }
-           </style>
-           <div class="root">
-               <div class="box hidden"></div>
-               <div class="chart-container">
-                   <vaadin-chart type="line"
-                                 categories="[1750, 1800]"
-                                 stacking="normal" no-legend no-tooltip>
-                       <vaadin-chart-series title="Asia" values="[502, 635]">
-                       </vaadin-chart-series>
-                   </vaadin-chart>
-               </div>
-           </div>
+        <style>
+          .root {
+            display: flex;
+            width: 100%;
+          }
+          .box {
+            min-width: 50%;
+          }
+          .chart-container {
+            flex-grow: 1;
+          }
+          .hidden {
+            display: none !important;
+          }
+        </style>
+        <div class="root">
+          <div class="box hidden"></div>
+          <div class="chart-container">
+            <vaadin-chart
+              type="line"
+              categories="[1750, 1800]"
+              stacking="normal"
+              no-legend
+              no-tooltip
+            >
+              <vaadin-chart-series title="Asia" values="[502, 635]"></vaadin-chart-series>
+            </vaadin-chart>
+          </div>
+        </div>
       </div>
     `);
 
