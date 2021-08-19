@@ -1,5 +1,4 @@
 import '../../vaadin-text-field.js';
-import '../../vaadin-text-area.js';
 import '../../vaadin-password-field.js';
 
 import { TextFieldInvalidChangedEvent, TextFieldValueChangedEvent } from '../../vaadin-text-field.js';
@@ -14,18 +13,6 @@ field.addEventListener('invalid-changed', (event) => {
 });
 
 field.addEventListener('value-changed', (event) => {
-  assertType<TextFieldValueChangedEvent>(event);
-  assertType<string>(event.detail.value);
-});
-
-const area = document.createElement('vaadin-text-area');
-
-area.addEventListener('invalid-changed', (event) => {
-  assertType<TextFieldInvalidChangedEvent>(event);
-  assertType<boolean>(event.detail.value);
-});
-
-area.addEventListener('value-changed', (event) => {
   assertType<TextFieldValueChangedEvent>(event);
   assertType<string>(event.detail.value);
 });

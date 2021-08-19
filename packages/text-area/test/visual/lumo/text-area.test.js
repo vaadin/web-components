@@ -1,9 +1,6 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../../theme/lumo/vaadin-text-area.js';
-import { TextArea } from '../../../src/vaadin-text-area.js';
-
-customElements.define('vaadin-text-area', TextArea);
 
 describe('text-area', () => {
   let div, element;

@@ -26,6 +26,7 @@
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
     "@vaadin/field-base": "^22.0.0-alpha1",
+    "@vaadin/text-area": "^22.0.0-alpha1",
     "@vaadin/vaadin-element-mixin": "^22.0.0-alpha1",
     "@vaadin/vaadin-lumo-styles": "^22.0.0-alpha1",
     "@vaadin/vaadin-material-styles": "^22.0.0-alpha1",
