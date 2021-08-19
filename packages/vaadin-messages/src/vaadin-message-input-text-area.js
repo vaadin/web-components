@@ -45,16 +45,21 @@ class MessageInputTextArea extends TextArea {
     };
   }
 
-  /** @protected */
-  connectedCallback() {
-    super.connectedCallback();
+  /**
+   * Override an observer from `InputMixin`.
+   * @protected
+   * @override
+   */
+  _inputElementChanged(input) {
+    super._inputElementChanged(input);
 
-    if (this.inputElement) {
-      this.inputElement.removeAttribute('aria-labelledby');
-      this.__updateAriaLabel(this.ariaLabel);
+    if (input) {
+      input.removeAttribute('aria-labelledby');
 
       // Set initial height to one row
-      this.inputElement.setAttribute('rows', 1);
+      input.setAttribute('rows', 1);
+
+      this.__updateAriaLabel(this.ariaLabel);
     }
   }
 
