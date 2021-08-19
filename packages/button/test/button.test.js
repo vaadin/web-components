@@ -61,13 +61,6 @@ describe('vaadin-button', () => {
       expect(children[2].outerHTML).to.be.equal('<i>Button</i>');
     });
 
-    it('should fire the click event', () => {
-      const spy = sinon.spy();
-      element.addEventListener('click', spy);
-      element.click();
-      expect(spy.calledOnce).to.be.true;
-    });
-
     describe('disabled', () => {
       beforeEach(() => {
         element.disabled = true;

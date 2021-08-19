@@ -11,6 +11,14 @@ import { DisabledMixin } from '@vaadin/field-base/src/disabled-mixin.js';
 import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
 
 class Button extends ActiveMixin(DelegateFocusMixin(DisabledMixin(ElementMixin(ThemableMixin(PolymerElement))))) {
+  static get is() {
+    return 'vaadin-button';
+  }
+
+  static get version() {
+    return '22.0.0-alpha1';
+  }
+
   static get template() {
     return html`
       <style>
@@ -72,20 +80,12 @@ class Button extends ActiveMixin(DelegateFocusMixin(DisabledMixin(ElementMixin(T
     `;
   }
 
-  static get is() {
-    return 'vaadin-button';
-  }
-
-  static get version() {
-    return '22.0.0-alpha1';
-  }
-
   /**
    * A getter that returns the native button as a focusable element for DelegateFocusMixin.
    *
    * @protected
    * @override
-   * @return {ButtonElement}
+   * @return {HTMLButtonElement}
    */
   get focusElement() {
     return this.$.button;

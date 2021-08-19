@@ -32,19 +32,19 @@ describe('active-mixin', () => {
     element = fixtureSync(`<active-mixin-element></active-mixin-element>`);
   });
 
-  describe('mouse', () => {
-    (isIOS ? it.skip : it)('should set active attribute on mousedown', () => {
+  (isIOS ? describe.skip : describe)('mouse', () => {
+    it('should set active attribute on mousedown', () => {
       mousedown(element);
       expect(element.hasAttribute('active')).to.be.true;
     });
 
-    (isIOS ? it.skip : it)('should remove active attribute on mouseup', () => {
+    it('should remove active attribute on mouseup', () => {
       mousedown(element);
       mouseup(element);
       expect(element.hasAttribute('active')).to.be.false;
     });
 
-    (isIOS ? it.skip : it)('should not set active attribute on mousedown when disabled', () => {
+    it('should not set active attribute on mousedown when disabled', () => {
       element.disabled = true;
       mousedown(element);
       expect(element.hasAttribute('active')).to.be.false;

@@ -1,3 +1,8 @@
+/**
+ * @license
+ * Copyright (c) 2021 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
 import { GestureEventListeners } from '@polymer/polymer/lib/mixins/gesture-event-listeners.js';
 import { DisabledMixin } from './disabled-mixin.js';
@@ -9,8 +14,11 @@ const ActiveMixinImplementation = (superclass) =>
      *
      * See possible values here:
      * https://developer.mozilla.org/ru/docs/Web/API/KeyboardEvent/key/Key_Values
+     *
+     * @protected
+     * @return {!Array<!string>}
      */
-    get activeKeys() {
+    get _activeKeys() {
       return ['Enter', ' '];
     }
 
@@ -34,14 +42,14 @@ const ActiveMixinImplementation = (superclass) =>
       this.addEventListener('keydown', (event) => {
         if (this.disabled) return;
 
-        if (this.activeKeys.includes(event.key)) {
+        if (this._activeKeys.includes(event.key)) {
           this.setAttribute('active', '');
         }
       });
 
       // KEYUP
       this.addEventListener('keyup', (event) => {
-        if (this.activeKeys.includes(event.key)) {
+        if (this._activeKeys.includes(event.key)) {
           this.removeAttribute('active');
         }
       });
