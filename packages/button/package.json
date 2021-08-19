@@ -1,20 +1,20 @@
 {
-  "name": "@vaadin/custom-field",
+  "name": "@vaadin/button",
   "version": "22.0.0-alpha1",
-  "description": "vaadin-custom-field",
-  "main": "vaadin-custom-field.js",
-  "module": "vaadin-custom-field.js",
+  "description": "vaadin-button",
+  "main": "vaadin-button.js",
+  "module": "vaadin-button.js",
   "repository": "vaadin/web-components",
   "keywords": [
     "Vaadin",
-    "field",
+    "button",
     "web-components",
     "web-component"
   ],
   "author": "Vaadin Ltd",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/vaadin/web-components/issues"
+    "url": "https://github.com/vaadin/vaadin-button/issues"
   },
   "homepage": "https://vaadin.com/components",
   "files": [
@@ -26,17 +26,15 @@
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
     "@vaadin/field-base": "^22.0.0-alpha1",
-    "@vaadin/text-area": "^22.0.0-alpha1",
-    "@vaadin/vaadin-element-mixin": "^22.0.0-alpha1",
     "@vaadin/vaadin-lumo-styles": "^22.0.0-alpha1",
+    "@vaadin/vaadin-element-mixin": "^22.0.0-alpha1",
     "@vaadin/vaadin-material-styles": "^22.0.0-alpha1",
     "@vaadin/vaadin-themable-mixin": "^22.0.0-alpha1"
   },
   "devDependencies": {
-    "@esm-bundle/chai": "^4.3.4",
-    "@vaadin/email-field": "^22.0.0-alpha1",
+    "@esm-bundle/chai": "^4.1.5",
     "@vaadin/testing-helpers": "^0.2.1",
-    "sinon": "^9.2.1"
+    "sinon": "^9.2.4"
   },
   "publishConfig": {
     "access": "public"
