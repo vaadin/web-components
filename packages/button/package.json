@@ -1,0 +1,41 @@
+{
+  "name": "@vaadin/button",
+  "version": "22.0.0-alpha1",
+  "description": "vaadin-button",
+  "main": "vaadin-button.js",
+  "module": "vaadin-button.js",
+  "repository": "vaadin/web-components",
+  "keywords": [
+    "Vaadin",
+    "button",
+    "web-components",
+    "web-component"
+  ],
+  "author": "Vaadin Ltd",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/vaadin/vaadin-button/issues"
+  },
+  "homepage": "https://vaadin.com/components",
+  "files": [
+    "vaadin-*.d.ts",
+    "vaadin-*.js",
+    "src",
+    "theme"
+  ],
+  "dependencies": {
+    "@polymer/polymer": "^3.0.0",
+    "@vaadin/field-base": "^22.0.0-alpha1",
+    "@vaadin/vaadin-lumo-styles": "^22.0.0-alpha1",
+    "@vaadin/vaadin-material-styles": "^22.0.0-alpha1",
+    "@vaadin/vaadin-themable-mixin": "^22.0.0-alpha1"
+  },
+  "devDependencies": {
+    "@esm-bundle/chai": "^4.1.5",
+    "@vaadin/testing-helpers": "^0.2.1",
+    "sinon": "^9.2.4"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
