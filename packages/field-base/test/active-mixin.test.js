@@ -112,7 +112,7 @@ describe('active-mixin', () => {
 
     describe('custom activation keys', () => {
       beforeEach(() => {
-        Object.defineProperty(element, 'activeKeys', {
+        Object.defineProperty(element, '_activeKeys', {
           get() {
             return ['ArrowDown'];
           }
