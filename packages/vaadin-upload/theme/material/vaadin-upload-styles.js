@@ -136,12 +136,12 @@ registerStyles(
       flex: none;
     }
 
-    [part='done-icon'],
-    [part='warning-icon'] {
+    [part$='icon'] {
       padding: 8px;
       margin: -8px 0 -8px -8px;
       font-family: material-icons;
       font-size: var(--material-icon-font-size);
+      line-height: 1;
     }
 
     /* When both icons are hidden, let us keep space for one */
@@ -150,15 +150,7 @@ registerStyles(
       visibility: hidden;
     }
 
-    [part='done-icon'],
-    [part='warning-icon'] {
-      font-size: var(--material-icon-font-size);
-      line-height: 1;
-    }
-
-    [part='start-button'],
-    [part='retry-button'],
-    [part='clear-button'] {
+    [part$='button'] {
       position: relative;
       width: 40px;
       height: 40px;
@@ -176,9 +168,7 @@ registerStyles(
       margin-right: -8px;
     }
 
-    [part='start-button']:hover,
-    [part='retry-button']:hover,
-    [part='clear-button']:hover {
+    [part$='button']:hover {
       color: inherit;
     }
 
