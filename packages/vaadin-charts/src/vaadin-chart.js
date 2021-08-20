@@ -247,36 +247,6 @@ class ChartElement extends ElementMixin(ThemableMixin(PolymerElement)) {
         :host([hidden]) {
           display: none !important;
         }
-        
-        :host([theme~="gradient"]) {
-          --vaadin-charts-color-0: #1676F3;
-          --vaadin-charts-color-1: #13BBF0;
-          --vaadin-charts-color-2: #11EEEE;
-          --vaadin-charts-color-3: #0CD9BF;
-          --vaadin-charts-color-4: #06BE81;
-          --vaadin-charts-color-5: #00A344;
-          --vaadin-charts-color-6: #41C639;
-          --vaadin-charts-color-7: #8AED2C;
-          --vaadin-charts-color-8: #C0E632;
-          --vaadin-charts-color-9: #F6DB3A;
-          --vaadin-charts-color-positive: var(--vaadin-charts-color-6);
-          --vaadin-charts-color-negative: var(--vaadin-charts-color-1);
-        }
-        
-        :host([theme~="monotone"]) {
-          --vaadin-charts-color-0: #1676F3;
-          --vaadin-charts-color-1: #4795F5;
-          --vaadin-charts-color-2: #71B0F7;
-          --vaadin-charts-color-3: #A0CEF9;
-          --vaadin-charts-color-4: #BCE0FA;
-          --vaadin-charts-color-5: #A8D8ED;
-          --vaadin-charts-color-6: #7FC3DD;
-          --vaadin-charts-color-7: #54ADCC;
-          --vaadin-charts-color-8: #2B99BC;
-          --vaadin-charts-color-9: #0284AC;
-          --vaadin-charts-color-positive: var(--vaadin-charts-color-3);
-          --vaadin-charts-color-negative: var(--vaadin-charts-color-9);
-          }
       
         .highcharts-container {
           position: relative;
@@ -439,7 +409,7 @@ class ChartElement extends ElementMixin(ThemableMixin(PolymerElement)) {
     
         .highcharts-tooltip-box {
           stroke-width: 1px;
-          stroke: var(--vaadin-charts-tooltip-border, inherit);
+          stroke: var(--vaadin-charts-tooltip-border-color, inherit);
           fill: var(--vaadin-charts-tooltip-background, #fff);
           fill-opacity: var(--vaadin-charts-tooltip-background-opacity, 1);
         }
@@ -950,6 +920,10 @@ class ChartElement extends ElementMixin(ThemableMixin(PolymerElement)) {
         
         .highcharts-navigator-yaxis .highcharts-grid-line {
           stroke-width: 0;
+        }
+        
+        .highcharts-navigator + .highcharts-tooltip > .highcharts-tooltip-box {
+          stroke: var(--vaadin-charts-tooltip-border-color, inherit);
         }
         
         .highcharts-scrollbar-thumb {
