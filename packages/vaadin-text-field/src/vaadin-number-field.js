@@ -105,7 +105,7 @@ class NumberFieldElement extends TextFieldElement {
   }
 
   static get version() {
-    return '21.0.0-beta2';
+    return '21.0.0-rc1';
   }
 
   static get properties() {

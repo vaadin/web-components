@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-confirm-dialog",
-  "version": "21.0.0-beta2",
+  "version": "21.0.0-rc1",
   "description": "vaadin-confirm-dialog",
   "main": "vaadin-confirm-dialog.js",
   "module": "vaadin-confirm-dialog.js",
@@ -26,14 +26,14 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/vaadin-button": "^21.0.0-beta2",
-    "@vaadin/vaadin-dialog": "^21.0.0-beta2",
-    "@vaadin/vaadin-element-mixin": "^21.0.0-beta2",
+    "@vaadin/vaadin-button": "^21.0.0-rc1",
+    "@vaadin/vaadin-dialog": "^21.0.0-rc1",
+    "@vaadin/vaadin-element-mixin": "^21.0.0-rc1",
     "@vaadin/vaadin-license-checker": "^2.1.0",
-    "@vaadin/vaadin-lumo-styles": "^21.0.0-beta2",
-    "@vaadin/vaadin-material-styles": "^21.0.0-beta2",
-    "@vaadin/vaadin-overlay": "^21.0.0-beta2",
-    "@vaadin/vaadin-themable-mixin": "^21.0.0-beta2"
+    "@vaadin/vaadin-lumo-styles": "^21.0.0-rc1",
+    "@vaadin/vaadin-material-styles": "^21.0.0-rc1",
+    "@vaadin/vaadin-overlay": "^21.0.0-rc1",
+    "@vaadin/vaadin-themable-mixin": "^21.0.0-rc1"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.1.5",
