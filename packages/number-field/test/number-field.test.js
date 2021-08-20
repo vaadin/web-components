@@ -1,9 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { arrowDown, arrowUp, fixtureSync } from '@vaadin/testing-helpers';
-import { NumberField } from '../src/vaadin-number-field.js';
-
-customElements.define('vaadin-number-field', NumberField);
+import '../src/vaadin-number-field.js';
 
 describe('number-field', () => {
   var numberField, input, decreaseButton, increaseButton;
@@ -904,5 +902,42 @@ describe('default step attribute', () => {
     expect(numberField.validate()).to.be.false;
     numberField.value = 1;
     expect(numberField.validate()).to.be.true;
+  });
+});
+
+describe('checkValidity', () => {
+  it('should return true when called before connected to the DOM', () => {
+    const numberField = document.createElement('vaadin-number-field');
+    expect(numberField.checkValidity()).to.be.true;
+  });
+
+  it('should return false when called before connected to the DOM and invalid', () => {
+    const numberField = document.createElement('vaadin-number-field');
+    numberField.invalid = true;
+    expect(numberField.checkValidity()).to.be.false;
+  });
+});
+
+describe('invalid', () => {
+  let numberField;
+
+  beforeEach(() => {
+    numberField = fixtureSync('<vaadin-number-field invalid></vaadin-number-field>');
+  });
+
+  it('should not remove "invalid" state when ready', () => {
+    expect(numberField.invalid).to.be.true;
+  });
+});
+
+describe('invalid with value', () => {
+  let numberField;
+
+  beforeEach(() => {
+    numberField = fixtureSync('<vaadin-number-field invalid value="123456"></vaadin-number-field>');
+  });
+
+  it('should not remove "invalid" state when ready', () => {
+    expect(numberField.invalid).to.be.true;
   });
 });

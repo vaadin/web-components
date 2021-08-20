@@ -2,7 +2,6 @@ import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { makeFixture } from './helpers.js';
-import '../vaadin-number-field.js';
 import '../vaadin-text-field.js';
 
 ['default', 'slotted'].forEach((condition) => {
@@ -160,8 +159,6 @@ import '../vaadin-text-field.js';
 });
 
 const fixtures = [
-  { name: 'number field', tpl: '<vaadin-number-field invalid></vaadin-number-field>' },
-  { name: 'number field with value', tpl: '<vaadin-number-field invalid value="42"></vaadin-number-field>' },
   { name: 'text field', tpl: '<vaadin-text-field invalid></vaadin-text-field>' },
   { name: 'text field with value', tpl: '<vaadin-text-field invalid value="foo"></vaadin-text-field>' }
 ];
