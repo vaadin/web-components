@@ -285,4 +285,4 @@ export class PasswordField extends TextField {
   }
 }
 
-customElements.define('vaadin-password-field', PasswordField);
+customElements.define(PasswordField.is, PasswordField);

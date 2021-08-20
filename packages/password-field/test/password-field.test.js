@@ -204,3 +204,27 @@ describe('password-field', () => {
     });
   });
 });
+
+describe('invalid', () => {
+  let field;
+
+  beforeEach(() => {
+    field = fixtureSync('<vaadin-password-field invalid></vaadin-password-field>');
+  });
+
+  it('should not remove "invalid" state when ready', () => {
+    expect(field.invalid).to.be.true;
+  });
+});
+
+describe('invalid with value', () => {
+  let field;
+
+  beforeEach(() => {
+    field = fixtureSync('<vaadin-password-field invalid value="123456"></vaadin-password-field>');
+  });
+
+  it('should not remove "invalid" state when ready', () => {
+    expect(field.invalid).to.be.true;
+  });
+});
