@@ -67,6 +67,13 @@ class DialogOverlayElement extends mixinBehaviors(IronResizableBehavior, Overlay
     };
   }
 
+  /** @protected */
+  ready() {
+    super.ready();
+
+    this.restoreFocusOnClose = true;
+  }
+
   /**
    * Updates the coordinates of the overlay.
    * @param {!DialogOverlayBoundsParam} bounds

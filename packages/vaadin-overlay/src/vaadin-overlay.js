@@ -677,7 +677,9 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
     if (this._placeholder) {
       this._exitModalState();
 
-      if (this.restoreFocusOnClose && this.__restoreFocusNode) {
+      const focusTarget = this.__restoreFocusNode;
+
+      if (this.restoreFocusOnClose && focusTarget) {
         // If the activeElement is `<body>` or inside the overlay,
         // we are allowed to restore the focus. In all the other
         // cases focus might have been moved elsewhere by another
@@ -686,7 +688,18 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
         const activeElement = this._getActiveElement();
 
         if (activeElement === document.body || this._deepContains(activeElement)) {
-          this.__restoreFocusNode.focus();
+          focusTarget.focus();
+
+          const host = focusTarget.getRootNode().host;
+
+          // Set focus-ring on vaadin-text-field etc
+          if (host && host.focusElement === focusTarget) {
+            host.setAttribute('focus-ring', '');
+          } else {
+            // TODO: only set focus-ring attribute on Vaadin components that use it for styling:
+            // vaadin-item, vaadin-context-menu-item, vaadin-tab, vaadin-avatar, vaadin-message.
+            focusTarget.setAttribute('focus-ring', '');
+          }
         }
         this.__restoreFocusNode = null;
       }
