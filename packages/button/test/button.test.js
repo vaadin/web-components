@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
+import { sendKeys } from '@web/test-runner-commands';
 import {
   arrowDownKeyDown,
   enterKeyDown,
@@ -47,7 +47,7 @@ describe('vaadin-button', () => {
 
     beforeEach(() => {
       element = fixtureSync('<vaadin-button>Vaadin <i>Button</i></vaadin-button>');
-      button = element.shadowRoot.querySelector('button');
+      button = element.$.button;
       label = element.shadowRoot.querySelector('[part=label]');
     });
 
@@ -61,21 +61,9 @@ describe('vaadin-button', () => {
       expect(children[2].outerHTML).to.be.equal('<i>Button</i>');
     });
 
-    describe('disabled', () => {
-      beforeEach(() => {
-        element.disabled = true;
-      });
-
-      it('should disable the native button', () => {
-        expect(button.hasAttribute('disabled')).to.be.eql(true);
-      });
-
-      it('should not fire the click event', () => {
-        const spy = sinon.spy();
-        element.addEventListener('click', spy);
-        element.click();
-        expect(spy.called).to.be.false;
-      });
+    it('should disable the native button', () => {
+      element.disabled = true;
+      expect(button.hasAttribute('disabled')).to.be.true;
     });
 
     // TODO: Remove when it will be possible to detect whether the button element inherits ActiveMixin.
@@ -148,6 +136,26 @@ describe('vaadin-button', () => {
         spaceKeyDown(element);
         element.dispatchEvent(new CustomEvent('blur'));
         expect(element.hasAttribute('active')).to.be.false;
+      });
+    });
+
+    describe('focus-ring', () => {
+      beforeEach(async () => {
+        // Focus on the button
+        await sendKeys({ press: 'Tab' });
+      });
+
+      it('should set focus-ring attribute when focusing with Tab', () => {
+        expect(element.hasAttribute('focus-ring')).to.be.true;
+      });
+
+      it('should remove focus-ring attribute when loosing focus with Shift+Tab', async () => {
+        // Focus out of the button
+        await sendKeys({ down: 'Shift' });
+        await sendKeys({ press: 'Tab' });
+        await sendKeys({ up: 'Shift' });
+
+        expect(element.hasAttribute('focus-ring')).to.be.false;
       });
     });
   });
