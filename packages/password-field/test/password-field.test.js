@@ -2,9 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import { fixtureSync, focusout } from '@vaadin/testing-helpers';
-import { PasswordField } from '../src/vaadin-password-field.js';
-
-customElements.define('vaadin-password-field', PasswordField);
+import '../src/vaadin-password-field.js';
 
 describe('password-field', () => {
   let passwordField, input, revealButton;
@@ -204,5 +202,29 @@ describe('password-field', () => {
       passwordField.revealButtonHidden = false;
       expect(revealButton.hasAttribute('aria-hidden')).to.be.false;
     });
+  });
+});
+
+describe('invalid', () => {
+  let field;
+
+  beforeEach(() => {
+    field = fixtureSync('<vaadin-password-field invalid></vaadin-password-field>');
+  });
+
+  it('should not remove "invalid" state when ready', () => {
+    expect(field.invalid).to.be.true;
+  });
+});
+
+describe('invalid with value', () => {
+  let field;
+
+  beforeEach(() => {
+    field = fixtureSync('<vaadin-password-field invalid value="123456"></vaadin-password-field>');
+  });
+
+  it('should not remove "invalid" state when ready', () => {
+    expect(field.invalid).to.be.true;
   });
 });
