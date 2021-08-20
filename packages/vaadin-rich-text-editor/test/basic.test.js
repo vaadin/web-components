@@ -24,7 +24,7 @@ describe('rich text editor', () => {
     });
 
     it('should have a valid version number', () => {
-      expect(rte.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\*|\d+)(-(alpha|beta)\d+)?$/);
+      expect(rte.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\*|\d+)(-(alpha|beta|rc)\d+)?$/);
     });
   });
 
