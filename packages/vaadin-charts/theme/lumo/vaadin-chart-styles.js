@@ -37,7 +37,7 @@ registerStyles(
 
       --vaadin-charts-tooltip-background: var(--lumo-base-color);
       --vaadin-charts-tooltip-background-opacity: 1;
-      --vaadin-charts-tooltip-border: inherit;
+      --vaadin-charts-tooltip-border-color: inherit;
 
       --vaadin-charts-button-label: var(--lumo-primary-text-color);
       --vaadin-charts-button-background: var(--lumo-contrast-5pct);
@@ -45,6 +45,40 @@ registerStyles(
       --vaadin-charts-button-active-label: var(--lumo-primary-contrast-color);
       --vaadin-charts-button-active-background: var(--lumo-primary-color);
     }
+    
+    :host([theme~="gradient"]) {
+      --vaadin-charts-color-0: #1676F3;
+      --vaadin-charts-color-1: #13BBF0;
+      --vaadin-charts-color-2: #11EEEE;
+      --vaadin-charts-color-3: #0CD9BF;
+      --vaadin-charts-color-4: #06BE81;
+      --vaadin-charts-color-5: #00A344;
+      --vaadin-charts-color-6: #41C639;
+      --vaadin-charts-color-7: #8AED2C;
+      --vaadin-charts-color-8: #C0E632;
+      --vaadin-charts-color-9: #F6DB3A;
+      --vaadin-charts-color-positive: var(--vaadin-charts-color-6);
+      --vaadin-charts-color-negative: var(--vaadin-charts-color-1);
+    }
+    
+    :host([theme~="monotone"]) {
+      --vaadin-charts-color-0: #1676F3;
+      --vaadin-charts-color-1: #4795F5;
+      --vaadin-charts-color-2: #71B0F7;
+      --vaadin-charts-color-3: #A0CEF9;
+      --vaadin-charts-color-4: #BCE0FA;
+      --vaadin-charts-color-5: #A8D8ED;
+      --vaadin-charts-color-6: #7FC3DD;
+      --vaadin-charts-color-7: #54ADCC;
+      --vaadin-charts-color-8: #2B99BC;
+      --vaadin-charts-color-9: #0284AC;
+      --vaadin-charts-color-positive: var(--vaadin-charts-color-3);
+      --vaadin-charts-color-negative: var(--vaadin-charts-color-9);
+    }
+    
+    .highcharts-container {
+      font-family: var(--lumo-font-family, -apple-system, BlinkMacSystemFont, 'Roboto', 'Segoe UI', Helvetica, Arial, sans-serif);
+    }
   `,
-    { moduleId: 'vaadin-chart-default-theme' }
+    { moduleId: 'lumo-chart' }
 );
