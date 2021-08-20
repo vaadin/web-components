@@ -95,14 +95,16 @@ registerStyles(
 registerStyles(
   'vaadin-upload-file',
   css`
-    :host {
-      padding: 8px 0;
-    }
-
     [part='row'] {
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
+      padding: 8px;
+    }
+
+    [part='row']:focus {
+      outline: none;
+      background-color: var(--material-divider-color);
     }
 
     [part='status'],
@@ -157,6 +159,9 @@ registerStyles(
     [part='start-button'],
     [part='retry-button'],
     [part='clear-button'] {
+      position: relative;
+      width: 40px;
+      height: 40px;
       flex: none;
       font-family: material-icons;
       font-size: var(--material-icon-font-size);
@@ -164,6 +169,7 @@ registerStyles(
       line-height: 1;
       padding: 8px;
       margin: -8px 0;
+      outline: none;
     }
 
     [part='clear-button'] {
@@ -174,14 +180,6 @@ registerStyles(
     [part='retry-button']:hover,
     [part='clear-button']:hover {
       color: inherit;
-    }
-
-    [part='done-icon']::before,
-    [part='warning-icon']::before,
-    [part='start-button']::before,
-    [part='retry-button']::before,
-    [part='clear-button']::before {
-      vertical-align: -0.05em;
     }
 
     [part='done-icon']::before {
@@ -204,6 +202,38 @@ registerStyles(
 
     [part='clear-button']::before {
       content: var(--material-icons-clear);
+    }
+
+    [part$='button']::after {
+      position: absolute;
+      content: '';
+      top: 0;
+      left: 0;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: var(--material-body-text-color);
+      transform: scale(0);
+      opacity: 0;
+      transition: transform 0.08s, opacity 0.01s;
+      will-change: transform, opacity;
+    }
+
+    [part$='button']:hover::after {
+      opacity: 0.08;
+    }
+
+    [part$='button']:focus::after {
+      opacity: 0.12;
+    }
+
+    [part$='button']:active::after {
+      opacity: 0.16;
+    }
+
+    [part$='button']:focus::after,
+    [part$='button']:active::after {
+      transform: scale(1.2);
     }
 
     [part='error'] {

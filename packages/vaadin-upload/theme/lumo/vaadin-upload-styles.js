@@ -134,6 +134,13 @@ registerStyles(
       cursor: var(--lumo-clickable-cursor);
     }
 
+    [part='row']:focus,
+    [part$='button']:focus {
+      outline: none;
+      border-radius: var(--lumo-border-radius-s);
+      box-shadow: 0 0 0 2px var(--lumo-primary-color-50pct);
+    }
+
     [part='done-icon']::before,
     [part='warning-icon']::before,
     [part='start-button']::before,
