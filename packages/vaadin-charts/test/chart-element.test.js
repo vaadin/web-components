@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, oneEvent } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import '../vaadin-chart.js';
 
 describe('vaadin-chart', () => {
@@ -368,6 +368,50 @@ describe('vaadin-chart', () => {
       const scrollWidth = document.documentElement.scrollWidth;
       document.dir = 'rtl';
       expect(scrollWidth).to.be.equal(document.documentElement.scrollWidth);
+    });
+  });
+
+  describe('performance', () => {
+    let chart, redrawSpy;
+
+    beforeEach(async () => {
+      chart = fixtureSync(`<vaadin-chart></vaadin-chart>`);
+      await oneEvent(chart, 'chart-load');
+
+      redrawSpy = sinon.spy(chart.configuration, 'redraw');
+    });
+
+    describe('adding a series', () => {
+      it('should redraw the chart only 2 times', async () => {
+        const series = fixtureSync(`<vaadin-chart-series values="[1, 2, 3, 4]"></vaadin-chart-series>`);
+
+        chart.appendChild(series);
+        await nextFrame();
+
+        // The number of times the chart is redrawn may be optimized later.
+        expect(redrawSpy.callCount).to.be.equal(2);
+      });
+    });
+
+    describe('replacing a series', () => {
+      beforeEach(async () => {
+        const series = fixtureSync(`<vaadin-chart-series values="[1, 2]"></vaadin-chart-series>`);
+
+        chart.appendChild(series);
+        await nextFrame();
+
+        redrawSpy.resetHistory();
+      });
+
+      it('should redraw the chart only 4 times', async () => {
+        const series = fixtureSync(`<vaadin-chart-series values="[1, 2, 3, 4]"></vaadin-chart-series>`);
+
+        chart.replaceChild(series, chart.firstElementChild);
+        await nextFrame();
+
+        // The number of times the chart is redrawn may be optimized later.
+        expect(redrawSpy.callCount).to.equal(4);
+      });
     });
   });
 });
