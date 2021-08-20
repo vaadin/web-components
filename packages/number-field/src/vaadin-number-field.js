@@ -188,7 +188,7 @@ export class NumberField extends InputFieldMixin(InputSlotMixin(ThemableMixin(El
   }
 
   static get constraints() {
-    return ['required', 'min', 'max', 'step'];
+    return [...super.constraints, 'min', 'max', 'step'];
   }
 
   constructor() {
