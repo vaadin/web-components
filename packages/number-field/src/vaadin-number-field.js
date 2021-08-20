@@ -52,6 +52,7 @@ import '@vaadin/text-field/src/vaadin-input-field-shared-styles.js';
  *
  * @extends HTMLElement
  * @mixes InputFieldMixin
+ * @mixes InputSlotMixin
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
@@ -186,6 +187,10 @@ export class NumberField extends InputFieldMixin(InputSlotMixin(ThemableMixin(El
     };
   }
 
+  static get constraints() {
+    return ['required', 'min', 'max', 'step'];
+  }
+
   constructor() {
     super();
     this._setType('number');
@@ -228,16 +233,7 @@ export class NumberField extends InputFieldMixin(InputSlotMixin(ThemableMixin(El
    * @protected
    * @override
    */
-  _createConstraintsObserver() {
-    // NOTE: do not call "super" but instead override the method to add extra arguments
-    this._createMethodObserver('_constraintsChanged(required, min, max, step)');
-  }
-
-  /**
-   * @protected
-   * @override
-   */
-  _constraintsChanged(required, min, max) {
+  _constraintsChanged(required, min, max, _step) {
     if (!this.invalid) {
       return;
     }
@@ -454,14 +450,18 @@ export class NumberField extends InputFieldMixin(InputSlotMixin(ThemableMixin(El
   }
 
   /**
+   * Returns true if the current input value satisfies all constraints (if any).
    * @return {boolean}
    */
   checkValidity() {
-    if (this.min !== undefined || this.max !== undefined || this.__validateByStep) {
+    if (
+      this.inputElement &&
+      (this.required || this.min !== undefined || this.max !== undefined || this.__validateByStep)
+    ) {
       return this.inputElement.checkValidity();
+    } else {
+      return !this.invalid;
     }
-
-    return super.checkValidity();
   }
 }
 

@@ -905,6 +905,19 @@ describe('default step attribute', () => {
   });
 });
 
+describe('checkValidity', () => {
+  it('should return true when called before connected to the DOM', () => {
+    const numberField = document.createElement('vaadin-number-field');
+    expect(numberField.checkValidity()).to.be.true;
+  });
+
+  it('should return false when called before connected to the DOM and invalid', () => {
+    const numberField = document.createElement('vaadin-number-field');
+    numberField.invalid = true;
+    expect(numberField.checkValidity()).to.be.false;
+  });
+});
+
 describe('invalid', () => {
   let numberField;
 
