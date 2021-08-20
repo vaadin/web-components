@@ -167,19 +167,27 @@ describe('input-field-mixin', () => {
   describe('slotted input value', () => {
     beforeEach(() => {
       sinon.stub(console, 'warn');
+      element = document.createElement('input-field-mixin-element');
     });
 
     afterEach(() => {
+      document.body.removeChild(element);
       console.warn.restore();
     });
 
     it('should warn when value is set on the slotted input', () => {
-      element = fixtureSync(`
-        <input-field-mixin-element>
-          <input slot="input" value="foo">
-        </input-field-mixin-element>
-      `);
+      input = document.createElement('input');
+      input.setAttribute('slot', 'input');
+      input.value = 'foo';
+      element.appendChild(input);
+      document.body.appendChild(element);
       expect(console.warn.called).to.be.true;
+    });
+
+    it('should not warn when value is set on the element itself', () => {
+      element.value = 'foo';
+      document.body.appendChild(element);
+      expect(console.warn.called).to.be.false;
     });
   });
 
