@@ -65,18 +65,34 @@ export const InteractionsMixin = (superClass) =>
       }
     }
 
+    /** @protected */
+    _setExpanded(button, expanded) {
+      button.toggleAttribute('expanded', expanded);
+      button.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+    }
+
+    /** @protected */
+    _setTabindex(button, focused) {
+      button.setAttribute('tabindex', focused ? '0' : '-1');
+    }
+
     /** @private */
     _focusButton(button) {
       button.focus();
       button.setAttribute('focus-ring', '');
       this._buttons.forEach((btn) => {
-        btn.setAttribute('tabindex', btn === button ? '0' : '-1');
+        this._setTabindex(btn, btn === button);
       });
     }
 
     /** @private */
     _getButtonFromEvent(e) {
       return Array.from(e.composedPath()).filter((el) => el.localName === 'vaadin-menu-bar-button')[0];
+    }
+
+    /** @private */
+    _getCurrentButton() {
+      return this.shadowRoot.activeElement || this._expandedButton;
     }
 
     /**
@@ -87,7 +103,7 @@ export const InteractionsMixin = (superClass) =>
       const target = this.shadowRoot.querySelector('[part$="button"][tabindex="0"]');
       if (target) {
         this._buttons.forEach((btn) => {
-          btn.setAttribute('tabindex', btn === target ? '0' : '-1');
+          this._setTabindex(btn, btn === target);
         });
       }
     }
@@ -130,7 +146,7 @@ export const InteractionsMixin = (superClass) =>
       // IE names for arrows do not include the Arrow prefix
       const key = event.key.replace(/^Arrow/, '');
       const buttons = this._buttons;
-      const currentBtn = this.shadowRoot.activeElement || this._expandedButton;
+      const currentBtn = this._getCurrentButton();
       const currentIdx = buttons.indexOf(currentBtn);
       let idx;
       let increment;
@@ -314,8 +330,7 @@ export const InteractionsMixin = (superClass) =>
           })
         );
 
-        button.setAttribute('expanded', '');
-        button.setAttribute('aria-expanded', 'true');
+        this._setExpanded(button, true);
       });
 
       if (options.focusLast) {
@@ -376,8 +391,7 @@ export const InteractionsMixin = (superClass) =>
     __deactivateButton(restoreFocus) {
       const button = this._expandedButton;
       if (button && button.hasAttribute('expanded')) {
-        button.removeAttribute('expanded');
-        button.setAttribute('aria-expanded', 'false');
+        this._setExpanded(button, false);
         if (restoreFocus) {
           this._focusButton(button);
         }
