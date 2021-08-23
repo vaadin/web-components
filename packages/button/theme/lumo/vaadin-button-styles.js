@@ -11,9 +11,9 @@ registerStyles(
     :host {
       /* Sizing */
       --lumo-button-size: var(--lumo-size-m);
-      margin: var(--lumo-space-xs) 0;
       min-width: calc(var(--lumo-button-size) * 2);
       height: var(--lumo-button-size);
+      margin: var(--lumo-space-xs) 0;
       box-sizing: border-box;
       /* Style */
       font-family: var(--lumo-font-family);
