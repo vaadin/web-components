@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { arrowLeft, arrowRight, end, fixtureSync, home, nextRender } from '@vaadin/testing-helpers';
+import { arrowLeft, arrowRight, end, fixtureSync, focusin, home, nextRender } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
 import '../vaadin-menu-bar.js';
 
@@ -66,7 +66,7 @@ describe('root menu layout', () => {
   });
 
   it('should set tabindex to -1 to all the buttons except first one', () => {
-    menu.dispatchEvent(new CustomEvent('focusin', { bubbles: true, composed: true }));
+    focusin(menu);
     expect(buttons[0].getAttribute('tabindex')).to.equal('0');
     buttons.slice(1).forEach((btn) => {
       expect(btn.focusElement.getAttribute('tabindex')).to.equal('-1');
