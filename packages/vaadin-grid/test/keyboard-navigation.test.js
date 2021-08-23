@@ -4,6 +4,7 @@ import {
   aTimeout,
   down as mouseDown,
   fixtureSync,
+  focusin,
   keyDownOn,
   keyUpOn,
   keyboardEventFor,
@@ -578,9 +579,7 @@ describe('keyboard navigation', () => {
       const tabbableElements = getTabbableElements(grid.shadowRoot);
 
       // focusin on table element — same as tab from above the grid
-      const event = new CustomEvent('focusin', { bubbles: true, composed: true });
-      event.relatedTarget = focusable;
-      tabbableElements[0].dispatchEvent(event);
+      focusin(tabbableElements[0], focusable);
 
       // Expect programmatic focus on header cell
       expect(grid.shadowRoot.activeElement).to.equal(tabbableElements[1]);
@@ -590,9 +589,7 @@ describe('keyboard navigation', () => {
       const tabbableElements = getTabbableElements(grid.shadowRoot);
 
       // focusin on focusexit element — same as shift+tab from below the grid
-      const event = new CustomEvent('focusin', { bubbles: true, composed: true });
-      event.relatedTarget = focusable;
-      tabbableElements[4].dispatchEvent(event);
+      focusin(tabbableElements[4], focusable);
 
       // Expect programmatic focus on footer cell
       expect(grid.shadowRoot.activeElement).to.equal(tabbableElements[3]);
