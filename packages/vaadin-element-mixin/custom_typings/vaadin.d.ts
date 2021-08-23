@@ -3,7 +3,7 @@ interface Vaadin {
     'usage-statistics'?: () => void;
     'vaadin-license-checker'?: () => void;
   };
-  registrations?: Array<{ is: string }>;
+  registrations?: Array<{ is: string; version: string }>;
   usageStatsChecker?: {
     maybeGatherAndSend: () => void;
   };
