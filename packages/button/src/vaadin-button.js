@@ -58,6 +58,8 @@ class Button extends ControlStateMixin(ActiveMixin(ElementMixin(ThemableMixin(Po
           color: inherit;
           text-shadow: inherit;
           text-align: center;
+          text-transform: inherit;
+          letter-spacing: inherit;
         }
 
         [part='prefix'],
