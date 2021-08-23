@@ -84,10 +84,6 @@ class ProgressBarElement extends ElementMixin(ThemableMixin(ProgressMixin(Polyme
   static get is() {
     return 'vaadin-progress-bar';
   }
-
-  static get version() {
-    return '22.0.0-alpha1';
-  }
 }
 
 customElements.define(ProgressBarElement.is, ProgressBarElement);

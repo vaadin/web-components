@@ -107,10 +107,6 @@ class MenuBarElement extends ButtonsMixin(InteractionsMixin(ElementMixin(Themabl
     return 'vaadin-menu-bar';
   }
 
-  static get version() {
-    return '22.0.0-alpha1';
-  }
-
   static get properties() {
     return {
       /**

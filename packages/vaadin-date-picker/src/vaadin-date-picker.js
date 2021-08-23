@@ -193,10 +193,6 @@ class DatePickerElement extends ElementMixin(
     return 'vaadin-date-picker';
   }
 
-  static get version() {
-    return '22.0.0-alpha1';
-  }
-
   static get properties() {
     return {
       /**

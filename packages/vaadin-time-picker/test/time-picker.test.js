@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { arrowDown, arrowUp, enter, esc, fixtureSync, keyDownOn } from '@vaadin/testing-helpers';
-import { TimePickerElement } from '../vaadin-time-picker.js';
+import '../vaadin-time-picker.js';
 
 describe('time-picker', () => {
   let timePicker, dropdown, inputElement;
@@ -17,17 +17,19 @@ describe('time-picker', () => {
     inputElement = timePicker.__inputElement;
   });
 
-  describe('custom element', () => {
-    it('should have a valid localName', () => {
-      expect(timePicker.localName).to.be.equal('vaadin-time-picker');
+  describe('custom element definition', () => {
+    let tagName;
+
+    beforeEach(() => {
+      tagName = timePicker.tagName.toLowerCase();
     });
 
-    it('should be registered in Vaadin namespace', () => {
-      expect(TimePickerElement.is).to.be.equal('vaadin-time-picker');
+    it('should be defined in custom element registry', () => {
+      expect(customElements.get(tagName)).to.be.ok;
     });
 
-    it('should have a valid version', () => {
-      expect(TimePickerElement.version).to.be.ok;
+    it('should have a valid static "is" getter', () => {
+      expect(customElements.get(tagName).is).to.equal(tagName);
     });
   });
 

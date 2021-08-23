@@ -93,10 +93,6 @@ class IconElement extends ThemableMixin(ElementMixin(PolymerElement)) {
     return 'vaadin-icon';
   }
 
-  static get version() {
-    return '22.0.0-alpha1';
-  }
-
   static get properties() {
     return {
       /**

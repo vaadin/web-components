@@ -49,10 +49,6 @@ class GridProElement extends InlineEditingMixin(GridElement) {
     return 'vaadin-grid-pro';
   }
 
-  static get version() {
-    return '22.0.0-alpha1';
-  }
-
   /**
    * @protected
    */

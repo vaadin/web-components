@@ -304,10 +304,6 @@ class AppLayoutElement extends ElementMixin(ThemableMixin(mixinBehaviors([IronRe
     return 'vaadin-app-layout';
   }
 
-  static get version() {
-    return '22.0.0-alpha1';
-  }
-
   static get properties() {
     return {
       /**

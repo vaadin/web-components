@@ -32,10 +32,6 @@ class MessageInputTextArea extends TextArea {
     return 'vaadin-message-input-text-area';
   }
 
-  static get version() {
-    return '22.0.0-alpha1';
-  }
-
   static get properties() {
     return {
       ariaLabel: {

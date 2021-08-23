@@ -7,6 +7,23 @@ import { fixtureSync } from '@vaadin/testing-helpers';
 import { flushGrid, infiniteDataProvider } from './helpers.js';
 import '../vaadin-grid-pro.js';
 
+describe('custom element definition', () => {
+  let grid, tagName;
+
+  beforeEach(() => {
+    grid = fixtureSync('<vaadin-grid-pro></vaadin-grid-pro>');
+    tagName = grid.tagName.toLowerCase();
+  });
+
+  it('should be defined in custom element registry', () => {
+    expect(customElements.get(tagName)).to.be.ok;
+  });
+
+  it('should have a valid static "is" getter', () => {
+    expect(customElements.get(tagName).is).to.equal(tagName);
+  });
+});
+
 describe('basic features', () => {
   let grid, column;
 
@@ -21,10 +38,6 @@ describe('basic features', () => {
     column = grid.querySelector('vaadin-grid-column');
     grid.dataProvider = infiniteDataProvider;
     flushGrid(grid);
-  });
-
-  it('should not expose class name globally', function () {
-    expect(window.GridProElement).not.to.be.ok;
   });
 
   it('should extend GridElement', () => {

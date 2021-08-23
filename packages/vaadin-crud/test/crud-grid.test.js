@@ -18,13 +18,26 @@ describe('crud grid', () => {
     }
   ];
 
+  describe('custom element definition', () => {
+    let tagName;
+
+    beforeEach(() => {
+      grid = fixtureSync('<vaadin-crud-grid></vaadin-crud-grid>');
+      tagName = grid.tagName.toLowerCase();
+    });
+
+    it('should be defined in custom element registry', () => {
+      expect(customElements.get(tagName)).to.be.ok;
+    });
+
+    it('should have a valid static "is" getter', () => {
+      expect(customElements.get(tagName).is).to.equal(tagName);
+    });
+  });
+
   describe('basic', () => {
     beforeEach(() => {
       grid = fixtureSync('<vaadin-crud-grid style="width: 500px;" exclude="_id,password"></vaadin-crud-grid>');
-    });
-
-    it('should have a version number', () => {
-      expect(customElements.get('vaadin-crud-grid').version).to.be.ok;
     });
 
     it('should not generate any column when providing an empty item list', () => {

@@ -51,10 +51,6 @@ export class PasswordField extends TextField {
     return 'vaadin-password-field';
   }
 
-  static get version() {
-    return '22.0.0-alpha1';
-  }
-
   static get template() {
     if (!memoizedTemplate) {
       // Clone the superclass template

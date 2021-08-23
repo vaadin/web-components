@@ -9,6 +9,7 @@ import '@polymer/polymer/lib/elements/dom-repeat.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
 import './vaadin-message.js';
+
 /**
  * `<vaadin-message-list>` is a Web Component for showing an ordered list of messages. The messages are rendered as <vaadin-message>
  *
@@ -41,6 +42,10 @@ import './vaadin-message.js';
  * @mixes ElementMixin
  */
 class MessageListElement extends ElementMixin(ThemableMixin(PolymerElement)) {
+  static get is() {
+    return 'vaadin-message-list';
+  }
+
   static get properties() {
     return {
       /**
@@ -204,14 +209,6 @@ class MessageListElement extends ElementMixin(ThemableMixin(PolymerElement)) {
   _getIndexOfFocusableElement() {
     const index = this._messages.findIndex((e) => e.tabIndex == 0);
     return index != -1 ? index : 0;
-  }
-
-  static get is() {
-    return 'vaadin-message-list';
-  }
-
-  static get version() {
-    return '22.0.0-alpha1';
   }
 }
 

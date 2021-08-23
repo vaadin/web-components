@@ -44,10 +44,7 @@ class TabElement extends ElementMixin(ThemableMixin(ItemMixin(PolymerElement))) 
     return 'vaadin-tab';
   }
 
-  static get version() {
-    return '22.0.0-alpha1';
-  }
-
+  /** @protected */
   ready() {
     super.ready();
     this.setAttribute('role', 'tab');

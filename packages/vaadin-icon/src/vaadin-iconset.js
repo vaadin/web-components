@@ -12,8 +12,6 @@ const iconRegistry = {};
 /**
  * `<vaadin-iconset>` is a Web Component for creating SVG icon collections.
  *
- *
- *
  * @extends HTMLElement
  * @mixes ElementMixin
  */
@@ -24,10 +22,6 @@ class IconsetElement extends ElementMixin(PolymerElement) {
 
   static get is() {
     return 'vaadin-iconset';
-  }
-
-  static get version() {
-    return '22.0.0-alpha1';
   }
 
   static get properties() {

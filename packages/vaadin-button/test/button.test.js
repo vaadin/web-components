@@ -25,10 +25,6 @@ describe('vaadin-button', () => {
     label = vaadinButton.shadowRoot.querySelector('[part=label]');
   });
 
-  it('should have a valid version number', () => {
-    expect(vaadinButton.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta|rc)\d+)?$/);
-  });
-
   it('should define button label using light DOM', () => {
     const children = FlattenedNodesObserver.getFlattenedNodes(label);
     expect(children[1].textContent).to.be.equal('Vaadin ');

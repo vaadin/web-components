@@ -257,10 +257,6 @@ class ChartElement extends ElementMixin(ThemableMixin(PolymerElement)) {
     return 'vaadin-chart';
   }
 
-  static get version() {
-    return '22.0.0-alpha1';
-  }
-
   /** @private */
   static __callHighchartsFunction(functionName, redrawCharts) {
     const functionToCall = Highcharts[functionName];

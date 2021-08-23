@@ -7,18 +7,19 @@ import '../vaadin-confirm-dialog.js';
 
 describe('vaadin-confirm-dialog', () => {
   describe('custom element definition', () => {
-    let confirm;
+    let confirm, tagName;
 
     beforeEach(() => {
       confirm = fixtureSync('<vaadin-confirm-dialog></vaadin-confirm-dialog>');
+      tagName = confirm.tagName.toLowerCase();
     });
 
-    it('should be defined with correct tag name', () => {
-      expect(customElements.get('vaadin-confirm-dialog')).to.be.ok;
+    it('should be defined in custom element registry', () => {
+      expect(customElements.get(tagName)).to.be.ok;
     });
 
-    it('should have a valid version number', () => {
-      expect(confirm.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta|rc)\d+)?$/);
+    it('should have a valid static "is" getter', () => {
+      expect(customElements.get(tagName).is).to.equal(tagName);
     });
   });
 

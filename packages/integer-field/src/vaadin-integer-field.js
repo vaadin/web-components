@@ -51,10 +51,6 @@ export class IntegerField extends NumberField {
     return 'vaadin-integer-field';
   }
 
-  static get version() {
-    return '22.0.0-alpha1';
-  }
-
   static get properties() {
     return {
       /**

@@ -27,10 +27,6 @@ class MessageAvatarElement extends AvatarElement {
   static get is() {
     return 'vaadin-message-avatar';
   }
-
-  static get version() {
-    return '22.0.0-alpha1';
-  }
 }
 
 customElements.define(MessageAvatarElement.is, MessageAvatarElement);

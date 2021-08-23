@@ -201,10 +201,6 @@ class DialogElement extends ThemePropertyMixin(
     return 'vaadin-dialog';
   }
 
-  static get version() {
-    return '22.0.0-alpha1';
-  }
-
   static get properties() {
     return {
       /**

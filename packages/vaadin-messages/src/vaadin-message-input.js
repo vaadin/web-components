@@ -111,10 +111,6 @@ class MessageInputElement extends ElementMixin(ThemableMixin(PolymerElement)) {
     return 'vaadin-message-input';
   }
 
-  static get version() {
-    return '22.0.0-alpha1';
-  }
-
   /**
    * Submits the current value as an custom event named 'submit'.
    * It also clears the text input and refocuses it for sending another message.

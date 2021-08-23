@@ -77,10 +77,6 @@ class AccordionElement extends ThemableMixin(ElementMixin(PolymerElement)) {
     return 'vaadin-accordion';
   }
 
-  static get version() {
-    return '22.0.0-alpha1';
-  }
-
   static get properties() {
     return {
       /**

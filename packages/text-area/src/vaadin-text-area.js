@@ -79,10 +79,6 @@ export class TextArea extends CharLengthMixin(
     return 'vaadin-text-area';
   }
 
-  static get version() {
-    return '22.0.0-alpha1';
-  }
-
   static get template() {
     return html`
       <style include="vaadin-input-field-shared-styles">

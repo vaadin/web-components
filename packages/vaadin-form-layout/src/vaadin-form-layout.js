@@ -160,10 +160,6 @@ class FormLayoutElement extends ElementMixin(ThemableMixin(mixinBehaviors([IronR
     return 'vaadin-form-layout';
   }
 
-  static get version() {
-    return '22.0.0-alpha1';
-  }
-
   static get properties() {
     return {
       /**

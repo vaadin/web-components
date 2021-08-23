@@ -20,6 +20,19 @@ describe('ElementMixin', () => {
     });
   });
 
+  describe('version', () => {
+    class XElement extends ElementMixin(PolymerElement) {
+      static get is() {
+        return 'x-element';
+      }
+    }
+    customElements.define(XElement.is, XElement);
+
+    it('should have a valid version number', () => {
+      expect(XElement.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta|rc)\d+)?$/);
+    });
+  });
+
   describe('registrations', () => {
     it('should store the class entry in registrations once instance created', () => {
       class ElementFoo extends ElementMixin(PolymerElement) {

@@ -61,10 +61,6 @@ class VirtualListElement extends ElementMixin(ThemableMixin(PolymerElement)) {
     return 'vaadin-virtual-list';
   }
 
-  static get version() {
-    return '22.0.0-alpha1';
-  }
-
   static get properties() {
     return {
       /**

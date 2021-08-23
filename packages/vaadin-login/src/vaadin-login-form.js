@@ -107,10 +107,6 @@ class LoginFormElement extends LoginMixin(ElementMixin(ThemableMixin(PolymerElem
     return 'vaadin-login-form';
   }
 
-  static get version() {
-    return '22.0.0-alpha1';
-  }
-
   /** @protected */
   connectedCallback() {
     super.connectedCallback();

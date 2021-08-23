@@ -48,10 +48,6 @@ class BoardElement extends ElementMixin(mixinBehaviors([IronResizableBehavior], 
     return 'vaadin-board';
   }
 
-  static get version() {
-    return '22.0.0-alpha1';
-  }
-
   /**
    * @protected
    */
