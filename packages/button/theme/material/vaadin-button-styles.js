@@ -4,7 +4,7 @@ import '@vaadin/vaadin-material-styles/shadow.js';
 import '@vaadin/vaadin-material-styles/typography.js';
 
 registerStyles(
-  'vaadin-button',
+  '',
   css`
     :host {
       min-width: 64px;
@@ -179,5 +179,5 @@ registerStyles(
       margin-right: 8px;
     }
   `,
-  { moduleId: 'material-button' }
+  { moduleId: 'material-button-styles' }
 );

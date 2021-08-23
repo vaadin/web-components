@@ -43,21 +43,21 @@ class Button extends ControlStateMixin(ActiveMixin(ElementMixin(ThemableMixin(Po
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          padding: 0;
+          text-align: center;
           width: 100%;
           height: 100%;
           min-height: inherit;
+          text-shadow: inherit;
           background: transparent;
-          box-shadow: none;
+          padding: 0;
           border: none;
+          box-shadow: none;
           outline: none;
           font-family: inherit;
           font-size: inherit;
           font-weight: inherit;
           line-height: inherit;
           color: inherit;
-          text-shadow: inherit;
-          text-align: center;
           text-transform: inherit;
           letter-spacing: inherit;
         }
