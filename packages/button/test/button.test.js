@@ -14,9 +14,7 @@ import {
   touchstart
 } from '@vaadin/testing-helpers';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
-import { Button } from '../vaadin-button.js';
-
-customElements.define(Button.is, Button);
+import '../vaadin-button.js';
 
 describe('vaadin-button', () => {
   let element;

@@ -3,13 +3,8 @@ import { visualDiff } from '@web/test-runner-visual-regression';
 import { sendKeys } from '@web/test-runner-commands';
 import '@vaadin/vaadin-icon/theme/lumo/vaadin-icon.js';
 import '@vaadin/vaadin-lumo-styles/vaadin-iconset.js';
-// TODO: Remove in https://github.com/vaadin/web-components/issues/2224.
-import './vaadin-button-styles.js';
-// TODO: Remove in https://github.com/vaadin/web-components/issues/2224.
-import { Button } from '../../../src/vaadin-button.js';
-
-// TODO: Remove in https://github.com/vaadin/web-components/issues/2224.
-customElements.define(Button.is, Button);
+import '../../../theme/lumo/vaadin-button.js';
+import '../../../src/vaadin-button.js';
 
 describe('button', () => {
   let div, element;
