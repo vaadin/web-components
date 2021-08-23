@@ -7,7 +7,8 @@ import {
   arrowUpKeyDown,
   keyboardEventFor,
   homeKeyDown,
-  endKeyDown
+  endKeyDown,
+  nextFrame
 } from '@vaadin/testing-helpers';
 
 import '../vaadin-accordion.js';
@@ -19,7 +20,7 @@ describe('vaadin-accordion', () => {
     return accordion.items[idx].focusElement;
   }
 
-  beforeEach(() => {
+  beforeEach(async () => {
     accordion = fixtureSync(`
       <vaadin-accordion>
         <vaadin-accordion-panel>
@@ -36,7 +37,7 @@ describe('vaadin-accordion', () => {
         </vaadin-accordion-panel>
       </vaadin-accordion>
     `);
-    accordion._observer.flush();
+    await nextFrame();
   });
 
   describe('custom element definition', () => {
