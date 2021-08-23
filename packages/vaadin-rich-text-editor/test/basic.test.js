@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync, isDesktopSafari, isFirefox, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, focusout, isDesktopSafari, isFirefox, nextRender } from '@vaadin/testing-helpers';
 import { createImage } from './helpers.js';
 import '../vaadin-rich-text-editor.js';
 
@@ -45,7 +45,7 @@ describe('rich text editor', () => {
         (isFirefox || isSafari ? it.skip : it)(`should apply ${fmt} formatting to the selected text on click`, () => {
           btn = getButton(fmt);
           btn.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
-          editor.root.dispatchEvent(new CustomEvent('focusout', { bubbles: true }));
+          focusout(editor.root);
           document.body.focus();
           btn.dispatchEvent(new MouseEvent('mouseup', { bubbles: true }));
           btn.click();
@@ -463,7 +463,7 @@ describe('rich text editor', () => {
       // Setting selection range to null in Quill
       // Needed for proper hasFocus() check
       content.blur();
-      content.dispatchEvent(new CustomEvent('focusout'));
+      focusout(content);
 
       expect(spy.calledOnce).to.be.true;
     });
@@ -475,7 +475,7 @@ describe('rich text editor', () => {
       rte.value = JSON.stringify([{ insert: 'Foo\n' }]);
       editor.focus();
       content.blur();
-      content.dispatchEvent(new CustomEvent('focusout'));
+      focusout(content);
 
       expect(spy.called).to.be.false;
     });
@@ -494,10 +494,8 @@ describe('rich text editor', () => {
 
       const btn = getButton('bold');
       btn.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
-      const evt = new CustomEvent('focusout');
-      evt.relatedTarget = btn;
       content.blur();
-      content.dispatchEvent(evt);
+      focusout(content, btn);
       btn.click();
 
       flushValueDebouncer();
@@ -556,7 +554,7 @@ describe('rich text editor', () => {
       btn.click();
 
       content.blur();
-      content.dispatchEvent(new CustomEvent('focusout'));
+      focusout(content);
 
       expect(spy.called).to.be.false;
     });

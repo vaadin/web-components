@@ -1,6 +1,16 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { arrowDown, arrowUp, enter, fixtureSync, keyDownChar, nextRender, space } from '@vaadin/testing-helpers';
+import {
+  arrowDown,
+  arrowUp,
+  enter,
+  fixtureSync,
+  focusin,
+  focusout,
+  keyDownChar,
+  nextRender,
+  space
+} from '@vaadin/testing-helpers';
 import { TextFieldElement } from '@vaadin/vaadin-text-field/src/vaadin-text-field.js';
 import { SelectElement } from '@vaadin/vaadin-select/src/vaadin-select.js';
 import { CheckboxElement } from '@vaadin/vaadin-checkbox/src/vaadin-checkbox.js';
@@ -141,10 +151,8 @@ describe('edit column editor type', () => {
       it('should open the select and stop focusout on editor click', async () => {
         editor.opened = false;
         editor.focusElement.click();
-        const focusout = new CustomEvent('focusout', { bubbles: true, composed: true });
-        editor.dispatchEvent(focusout);
-        const focusin = new CustomEvent('focusin', { bubbles: true, composed: true });
-        editor._overlayElement.querySelector('vaadin-item').dispatchEvent(focusin);
+        focusout(editor);
+        focusin(editor._overlayElement.querySelector('vaadin-item'));
         grid._flushStopEdit();
         await nextRender(editor._menuElement);
         expect(editor.opened).to.equal(true);
@@ -235,8 +243,7 @@ describe('edit column editor type', () => {
       });
 
       it('should not throw when moving focus out of the select', () => {
-        const evt = new CustomEvent('focusout', { bubbles: true, composed: true });
-        editor.dispatchEvent(evt);
+        focusout(editor);
         grid._debouncerStopEdit && grid._debouncerStopEdit.flush();
         expect(column._getEditorComponent(cell)).to.not.be.ok;
       });

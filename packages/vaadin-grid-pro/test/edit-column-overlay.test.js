@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, enter, nextFrame } from '@vaadin/testing-helpers';
+import { fixtureSync, focusin, focusout, enter, nextFrame } from '@vaadin/testing-helpers';
 import '@vaadin/vaadin-date-picker/vaadin-date-picker.js';
 import '@vaadin/vaadin-dialog/vaadin-dialog.js';
 import '@vaadin/vaadin-template-renderer';
@@ -8,14 +8,12 @@ import '../vaadin-grid-pro.js';
 import '../vaadin-grid-pro-edit-column.js';
 
 async function clickOverlay(element) {
-  const focusout = new CustomEvent('focusout', { bubbles: true, composed: true });
-  element.dispatchEvent(focusout);
+  focusout(element);
 
   // add a microTask in between
   await Promise.resolve();
 
-  const focusin = new CustomEvent('focusin', { bubbles: true, composed: true });
-  element.$.overlay.dispatchEvent(focusin);
+  focusin(element.$.overlay);
 }
 
 const fixtures = {
@@ -102,11 +100,8 @@ const fixtures = {
       const datePicker = getCellEditor(dateCell).querySelector('vaadin-date-picker');
 
       // Mimic clicking the dialog overlay
-      const evt = new CustomEvent('focusout', { bubbles: true, composed: true });
-      datePicker.dispatchEvent(evt);
-
-      const focusin = new CustomEvent('focusin', { bubbles: true, composed: true });
-      dialog.$.overlay.dispatchEvent(focusin);
+      focusout(datePicker);
+      focusin(dialog.$.overlay);
       grid._debouncerStopEdit && grid._debouncerStopEdit.flush();
 
       expect(getCellEditor(dateCell)).to.be.not.ok;

@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { enter, esc, fixtureSync, space } from '@vaadin/testing-helpers';
+import { enter, esc, fixtureSync, focusout, space } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import '@vaadin/vaadin-template-renderer';
 import {
@@ -206,7 +206,7 @@ describe('edit column renderer', () => {
       dblclick(cell._content);
       editor = getCellEditor(cell);
       editor.value = 'Foo';
-      editor.dispatchEvent(new CustomEvent('focusout', { bubbles: true, composed: true }));
+      focusout(editor);
       grid._flushStopEdit();
       expect(getCellEditor(cell)).to.not.be.ok;
       expect(cell._content.textContent).to.equal('Foo');

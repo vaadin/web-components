@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, focusin, focusout } from '@vaadin/testing-helpers';
 import { dispatchChange } from './common.js';
 import '../vaadin-custom-field.js';
 
@@ -91,13 +91,13 @@ describe('custom field', () => {
 
   describe('focused', () => {
     it('should set focused attribute on input focusin', () => {
-      customField.inputs[0].dispatchEvent(new CustomEvent('focusin', { composed: true, bubbles: true }));
+      focusin(customField.inputs[0]);
       expect(customField.hasAttribute('focused')).to.be.true;
     });
 
     it('should remove focused attribute on input focusout', () => {
-      customField.inputs[0].dispatchEvent(new CustomEvent('focusin', { composed: true, bubbles: true }));
-      customField.inputs[0].dispatchEvent(new CustomEvent('focusout', { composed: true, bubbles: true }));
+      focusin(customField.inputs[0]);
+      focusout(customField.inputs[0]);
       expect(customField.hasAttribute('focused')).to.be.false;
     });
   });

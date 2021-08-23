@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, focusout } from '@vaadin/testing-helpers';
 import { TimePickerElement } from '../src/vaadin-time-picker.js';
 
 class TimePicker20Element extends TimePickerElement {
@@ -11,7 +11,7 @@ class TimePicker20Element extends TimePickerElement {
 customElements.define('vaadin-time-picker-20', TimePicker20Element);
 
 describe('form input', () => {
-  let timePicker, inputElement;
+  let timePicker, dropdown, inputElement;
 
   function inputValue(value) {
     const input = inputElement.inputElement;
@@ -19,13 +19,10 @@ describe('form input', () => {
     input.dispatchEvent(new CustomEvent('input', { bubbles: true, composed: true }));
   }
 
-  function blurInput() {
-    timePicker.__dropdownElement.dispatchEvent(new CustomEvent('focusout', { bubbles: true, composed: true }));
-  }
-
   describe('default validator', () => {
     beforeEach(() => {
       timePicker = fixtureSync(`<vaadin-time-picker></vaadin-time-picker>`);
+      dropdown = timePicker.__dropdownElement;
       inputElement = timePicker.__inputElement;
     });
 
@@ -160,20 +157,20 @@ describe('form input', () => {
     it('should validate keyboard input (invalid)', () => {
       inputValue('foo');
       expect(timePicker.invalid).to.be.equal(false);
-      blurInput();
+      focusout(dropdown);
       expect(timePicker.invalid).to.be.equal(true);
     });
 
     it('should validate keyboard input (valid)', () => {
       inputValue('12:00');
-      blurInput();
+      focusout(dropdown);
       expect(timePicker.invalid).to.be.equal(false);
     });
 
     it('should validate keyboard input (disallowed value)', () => {
       inputValue('99:00');
       expect(timePicker.invalid).to.be.equal(false);
-      blurInput();
+      focusout(dropdown);
       expect(timePicker.invalid).to.be.equal(true);
     });
   });
