@@ -16,10 +16,6 @@ describe('message', () => {
     time = message.shadowRoot.querySelector('[part="time"]');
   });
 
-  it('should have a valid version number', () => {
-    expect(message.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta|rc)\d+)?$/);
-  });
-
   it('avatar should be initially visible but without data', () => {
     expect(avatar.getAttribute('name')).to.be.null;
     expect(avatar.getAttribute('abbr')).to.be.null;

@@ -28,6 +28,23 @@ customElements.define(
 );
 
 describe('vaadin-dialog', () => {
+  describe('custom element definition', () => {
+    let dialog, tagName;
+
+    beforeEach(() => {
+      dialog = fixtureSync('<vaadin-dialog></vaadin-dialog>');
+      tagName = dialog.tagName.toLowerCase();
+    });
+
+    it('should be defined in custom element registry', () => {
+      expect(customElements.get(tagName)).to.be.ok;
+    });
+
+    it('should have a valid static "is" getter', () => {
+      expect(customElements.get(tagName).is).to.equal(tagName);
+    });
+  });
+
   describe('opened', () => {
     let dialog, backdrop, overlay;
 
@@ -41,10 +58,6 @@ describe('vaadin-dialog', () => {
       `);
       overlay = dialog.$.overlay;
       backdrop = overlay.$.backdrop;
-    });
-
-    it('should have a valid version number', () => {
-      expect(dialog.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta|rc)\d+)?$/);
     });
 
     describe('attributes', () => {
@@ -121,7 +134,7 @@ describe('vaadin-dialog', () => {
   });
 
   describe('without template', () => {
-    var dialog;
+    let dialog;
 
     beforeEach(() => {
       dialog = fixtureSync('<vaadin-dialog></vaadin-dialog>');

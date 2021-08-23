@@ -251,10 +251,6 @@ class NotificationElement extends ThemePropertyMixin(ElementMixin(PolymerElement
     return 'vaadin-notification';
   }
 
-  static get version() {
-    return '22.0.0-alpha1';
-  }
-
   static get properties() {
     return {
       /**

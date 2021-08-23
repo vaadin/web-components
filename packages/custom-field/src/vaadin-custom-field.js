@@ -16,10 +16,6 @@ class CustomField extends FieldAriaMixin(LabelMixin(FocusMixin(ThemableMixin(Ele
     return 'vaadin-custom-field';
   }
 
-  static get version() {
-    return '22.0.0-alpha1';
-  }
-
   static get template() {
     return html`
       <style>

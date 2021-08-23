@@ -16,10 +16,6 @@ export class TextField extends TextFieldMixin(InputSlotMixin(ThemableMixin(Eleme
     return 'vaadin-text-field';
   }
 
-  static get version() {
-    return '22.0.0-alpha1';
-  }
-
   static get template() {
     return html`
       <style include="vaadin-input-field-shared-styles">

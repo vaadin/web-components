@@ -127,10 +127,6 @@ class ButtonElement extends ElementMixin(ControlStateMixin(ThemableMixin(Gesture
     return 'vaadin-button';
   }
 
-  static get version() {
-    return '22.0.0-alpha1';
-  }
-
   ready() {
     super.ready();
 

@@ -9,12 +9,20 @@ describe('crud form', () => {
     crudForm = fixtureSync('<vaadin-crud-form style="width: 500px;"></vaadin-crud-form>');
   });
 
-  it('should not expose class name globally', function () {
-    expect(window.CrudFormElement).not.to.be.ok;
-  });
+  describe('custom element definition', () => {
+    let tagName;
 
-  it('should have a version number', () => {
-    expect(customElements.get('vaadin-crud-form').version).to.be.ok;
+    beforeEach(() => {
+      tagName = crudForm.tagName.toLowerCase();
+    });
+
+    it('should be defined in custom element registry', () => {
+      expect(customElements.get(tagName)).to.be.ok;
+    });
+
+    it('should have a valid static "is" getter', () => {
+      expect(customElements.get(tagName).is).to.equal(tagName);
+    });
   });
 
   describe('without valid item', () => {

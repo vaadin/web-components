@@ -20,10 +20,6 @@ describe('vaadin-horizontal-layout', () => {
       expect(customElements.get(tagName).is).to.equal(tagName);
     });
 
-    it('should have a valid version number', () => {
-      expect(customElements.get(tagName).version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta|rc)\d+)?$/);
-    });
-
     it('should have a box-sizing set to border-box', () => {
       expect(getComputedStyle(layout).boxSizing).to.equal('border-box');
     });

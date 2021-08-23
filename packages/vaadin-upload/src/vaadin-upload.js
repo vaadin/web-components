@@ -122,10 +122,6 @@ class UploadElement extends ElementMixin(ThemableMixin(PolymerElement)) {
     return 'vaadin-upload';
   }
 
-  static get version() {
-    return '22.0.0-alpha1';
-  }
-
   static get properties() {
     return {
       /**

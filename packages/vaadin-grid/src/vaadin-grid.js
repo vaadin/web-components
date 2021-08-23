@@ -316,10 +316,6 @@ class GridElement extends ElementMixin(
     return 'vaadin-grid';
   }
 
-  static get version() {
-    return '22.0.0-alpha1';
-  }
-
   static get observers() {
     return [
       '_columnTreeChanged(_columnTree, _columnTree.*)',

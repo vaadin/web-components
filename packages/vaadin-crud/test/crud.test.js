@@ -23,17 +23,20 @@ describe('crud', () => {
 
   const edit = (item) => crud._grid.dispatchEvent(new CustomEvent('edit', { detail: { item } }));
 
-  describe('basic', () => {
+  describe('custom element definition', () => {
+    let tagName;
+
     beforeEach(() => {
       crud = fixtureSync('<vaadin-crud style="width: 300px;"></vaadin-crud>');
+      tagName = crud.tagName.toLowerCase();
     });
 
-    it('should not expose class name globally', () => {
-      expect(window.CrudElement).not.to.be.ok;
+    it('should be defined in custom element registry', () => {
+      expect(customElements.get(tagName)).to.be.ok;
     });
 
-    it('should have a valid version number', () => {
-      expect(customElements.get('vaadin-crud').version).to.be.ok;
+    it('should have a valid static "is" getter', () => {
+      expect(customElements.get(tagName).is).to.equal(tagName);
     });
   });
 

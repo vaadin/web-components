@@ -40,12 +40,18 @@ describe('vaadin-accordion', () => {
   });
 
   describe('custom element definition', () => {
-    it('should define a custom element with proper tag name', () => {
-      expect(customElements.get('vaadin-accordion')).to.be.ok;
+    let tagName;
+
+    beforeEach(() => {
+      tagName = accordion.tagName.toLowerCase();
     });
 
-    it('should have a valid version number', () => {
-      expect(accordion.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta|rc)\d+)?$/);
+    it('should be defined in custom element registry', () => {
+      expect(customElements.get(tagName)).to.be.ok;
+    });
+
+    it('should have a valid static "is" getter', () => {
+      expect(customElements.get(tagName).is).to.equal(tagName);
     });
   });
 

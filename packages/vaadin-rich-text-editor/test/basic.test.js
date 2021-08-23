@@ -19,12 +19,18 @@ describe('rich text editor', () => {
   });
 
   describe('custom element definition', () => {
-    it('should not expose class name globally', () => {
-      expect(window.RichTextEditorElement).not.to.be.ok;
+    let tagName;
+
+    beforeEach(() => {
+      tagName = rte.tagName.toLowerCase();
     });
 
-    it('should have a valid version number', () => {
-      expect(rte.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\*|\d+)(-(alpha|beta|rc)\d+)?$/);
+    it('should be defined in custom element registry', () => {
+      expect(customElements.get(tagName)).to.be.ok;
+    });
+
+    it('should have a valid static "is" getter', () => {
+      expect(customElements.get(tagName).is).to.equal(tagName);
     });
   });
 

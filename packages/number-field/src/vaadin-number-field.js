@@ -61,10 +61,6 @@ export class NumberField extends InputFieldMixin(InputSlotMixin(ThemableMixin(El
     return 'vaadin-number-field';
   }
 
-  static get version() {
-    return '22.0.0-alpha1';
-  }
-
   static get template() {
     return html`
       <style include="vaadin-input-field-shared-styles">

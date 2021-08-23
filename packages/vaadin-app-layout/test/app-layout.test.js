@@ -25,10 +25,6 @@ describe('vaadin-app-layout', () => {
     it('should have a valid static "is" getter', () => {
       expect(customElements.get(tagName).is).to.equal(tagName);
     });
-
-    it('should have a valid version number', () => {
-      expect(customElements.get(tagName).version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta|rc)\d+)?$/);
-    });
   });
 
   describe('primarySection', () => {

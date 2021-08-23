@@ -235,10 +235,6 @@ class ContextMenuElement extends ElementMixin(ThemePropertyMixin(ItemsMixin(Gest
     return 'vaadin-context-menu';
   }
 
-  static get version() {
-    return '22.0.0-alpha1';
-  }
-
   static get properties() {
     return {
       /**

@@ -47,10 +47,6 @@ export class EmailField extends TextField {
     return 'vaadin-email-field';
   }
 
-  static get version() {
-    return '22.0.0-alpha1';
-  }
-
   constructor() {
     super();
     this._setType('email');

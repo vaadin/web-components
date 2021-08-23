@@ -25,10 +25,6 @@ describe('radio-button', () => {
     it('should have a valid static "is" getter', () => {
       expect(customElements.get(tagName).is).to.equal(tagName);
     });
-
-    it('should have a valid version number', () => {
-      expect(customElements.get(tagName).version).to.be.ok;
-    });
   });
 
   describe('native input', () => {

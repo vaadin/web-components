@@ -163,10 +163,6 @@ class AvatarGroupElement extends ElementMixin(ThemableMixin(mixinBehaviors([Iron
     return 'vaadin-avatar-group';
   }
 
-  static get version() {
-    return '22.0.0-alpha1';
-  }
-
   static get properties() {
     return {
       /**

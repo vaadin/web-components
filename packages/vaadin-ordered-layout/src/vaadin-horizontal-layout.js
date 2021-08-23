@@ -82,10 +82,6 @@ class HorizontalLayoutElement extends ElementMixin(ThemableMixin(PolymerElement)
   static get is() {
     return 'vaadin-horizontal-layout';
   }
-
-  static get version() {
-    return '22.0.0-alpha1';
-  }
 }
 
 customElements.define(HorizontalLayoutElement.is, HorizontalLayoutElement);

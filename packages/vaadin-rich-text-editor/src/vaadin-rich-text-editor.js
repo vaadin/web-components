@@ -360,10 +360,6 @@ class RichTextEditorElement extends ElementMixin(ThemableMixin(PolymerElement)) 
     return 'vaadin-rich-text-editor';
   }
 
-  static get version() {
-    return '22.0.0-alpha1';
-  }
-
   static get properties() {
     return {
       /**

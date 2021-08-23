@@ -302,7 +302,7 @@ Prepare a new version for the `updateVersion` script by running the following co
 export npm_config_bump=23.0.0-alpha0
 ```
 
-Run the script to bump static version getters in every component:
+Run the script to bump static version getters in `ElementMixin`, `Lumo` and `Material`:
 
 ```sh
 node scripts/updateVersion.js

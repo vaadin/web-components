@@ -163,10 +163,7 @@ class MessageElement extends ElementMixin(ThemableMixin(PolymerElement)) {
     return 'vaadin-message';
   }
 
-  static get version() {
-    return '22.0.0-alpha1';
-  }
-
+  /** @protected */
   ready() {
     super.ready();
 

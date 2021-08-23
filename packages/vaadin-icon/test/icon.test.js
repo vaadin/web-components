@@ -15,16 +15,19 @@ describe('vaadin-icon', () => {
   }
 
   describe('custom element definition', () => {
+    let tagName;
+
     beforeEach(() => {
       icon = fixtureSync('<vaadin-icon></vaadin-icon>');
+      tagName = icon.tagName.toLowerCase();
     });
 
-    it('should define a custom element with proper tag name', () => {
-      expect(customElements.get('vaadin-icon')).to.be.ok;
+    it('should be defined in custom element registry', () => {
+      expect(customElements.get(tagName)).to.be.ok;
     });
 
-    it('should have a valid version number', () => {
-      expect(icon.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta|rc)\d+)?$/);
+    it('should have a valid static "is" getter', () => {
+      expect(customElements.get(tagName).is).to.equal(tagName);
     });
   });
 

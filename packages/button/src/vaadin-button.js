@@ -14,10 +14,6 @@ class Button extends ControlStateMixin(ActiveMixin(ElementMixin(ThemableMixin(Po
     return 'vaadin-button';
   }
 
-  static get version() {
-    return '22.0.0-alpha1';
-  }
-
   static get template() {
     return html`
       <style>
