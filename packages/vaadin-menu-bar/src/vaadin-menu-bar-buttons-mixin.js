@@ -47,7 +47,7 @@ export const ButtonsMixin = (superClass) =>
     connectedCallback() {
       super.connectedCallback();
 
-      this._setButtonAttrs(this._overflow);
+      this._initButtonAttrs(this._overflow);
       this.addEventListener('iron-resize', this.__boundOnResize);
     }
 
@@ -193,7 +193,7 @@ export const ButtonsMixin = (superClass) =>
         button.textContent = item.text;
       }
 
-      if (this.theme && this.theme !== '') {
+      if (this.theme) {
         button.setAttribute('theme', this.theme);
       }
 
@@ -201,23 +201,19 @@ export const ButtonsMixin = (superClass) =>
     }
 
     /** @protected */
-    _setButtonDisabled(button, disabled) {
-      if (disabled) {
-        button.disabled = true;
-        button.setAttribute('tabindex', '-1');
-      } else {
-        button.setAttribute('tabindex', '0');
-      }
-    }
-
-    /** @protected */
-    _setButtonAttrs(button) {
+    _initButtonAttrs(button) {
       button.setAttribute('role', 'menuitem');
 
       if (button === this._overflow || (button.item && button.item.children)) {
         button.setAttribute('aria-haspopup', 'true');
         button.setAttribute('aria-expanded', 'false');
       }
+    }
+
+    /** @protected */
+    _setButtonDisabled(button, disabled) {
+      button.disabled = true;
+      button.setAttribute('tabindex', disabled ? '-1' : '0');
     }
 
     /** @protected */
@@ -259,7 +255,7 @@ export const ButtonsMixin = (superClass) =>
         const button = this._initButton(item);
         this._appendButton(button);
         this._setButtonDisabled(button, item.disabled);
-        this._setButtonAttrs(button);
+        this._initButtonAttrs(button);
       });
 
       this.__detectOverflow();
