@@ -212,7 +212,7 @@ export const ButtonsMixin = (superClass) =>
 
     /** @protected */
     _setButtonDisabled(button, disabled) {
-      button.disabled = true;
+      button.disabled = disabled;
       button.setAttribute('tabindex', disabled ? '-1' : '0');
     }
 
