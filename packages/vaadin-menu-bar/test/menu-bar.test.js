@@ -361,7 +361,7 @@ describe('overflow button', () => {
     expect(overflow.item.children.length).to.equal(0);
   });
 
-  it('should set the aria-label of the overflow button according to the i18n of the menu bar', async () => {
+  it('should set the aria-label of the overflow button according to the i18n of the menu bar', () => {
     const moreOptionsSv = 'Fler alternativ';
     expect(overflow.getAttribute('aria-label')).to.equal('More options');
     menu.i18n = { ...menu.i18n, moreOptions: moreOptionsSv };
