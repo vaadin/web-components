@@ -30,17 +30,32 @@ export const ButtonsMixin = (superClass) =>
       return ['_menuItemsChanged(items, items.splices)'];
     }
 
+    constructor() {
+      super();
+
+      this.__boundOnResize = this.__onResize.bind(this);
+    }
+
     /** @protected */
     ready() {
       super.ready();
 
       this.setAttribute('role', 'menubar');
+    }
 
-      this.addEventListener('iron-resize', () => this.__onResize());
+    /** @protected */
+    connectedCallback() {
+      super.connectedCallback();
 
-      this._overflow.setAttribute('role', 'menuitem');
-      this._overflow.setAttribute('aria-haspopup', 'true');
-      this._overflow.setAttribute('aria-expanded', 'false');
+      this._initButtonAttrs(this._overflow);
+      this.addEventListener('iron-resize', this.__boundOnResize);
+    }
+
+    /** @protected */
+    disconnectedCallback() {
+      super.disconnectedCallback();
+
+      this.removeEventListener('iron-resize', this.__boundOnResize);
     }
 
     /**
@@ -85,7 +100,7 @@ export const ButtonsMixin = (superClass) =>
       // reset all buttons in the menu bar and the overflow button
       for (let i = 0; i < buttons.length; i++) {
         const btn = buttons[i];
-        btn.disabled = btn.item.disabled;
+        btn.disabled = btn.item && btn.item.disabled;
         btn.style.visibility = '';
         btn.style.position = '';
 
@@ -151,59 +166,96 @@ export const ButtonsMixin = (superClass) =>
       this.__renderButtons(this.items);
     }
 
-    /** @private */
-    __renderButtons(items = []) {
+    /** @protected */
+    _removeButtons() {
       const container = this._container;
-      const overflow = this._overflow;
 
       while (container.children.length > 1) {
         container.removeChild(container.firstElementChild);
       }
+    }
+
+    /** @protected */
+    _initButton(item) {
+      const button = document.createElement('vaadin-menu-bar-button');
+      button.setAttribute('part', 'menu-bar-button');
+
+      const itemCopy = Object.assign({}, item);
+      button.item = itemCopy;
+
+      if (item.component) {
+        const component = this.__getComponent(itemCopy);
+        itemCopy.component = component;
+        // save item for overflow menu
+        component.item = itemCopy;
+        button.appendChild(component);
+      } else if (item.text) {
+        button.textContent = item.text;
+      }
+
+      if (this.theme) {
+        button.setAttribute('theme', this.theme);
+      }
+
+      return button;
+    }
+
+    /** @protected */
+    _initButtonAttrs(button) {
+      button.setAttribute('role', 'menuitem');
+
+      if (button === this._overflow || (button.item && button.item.children)) {
+        button.setAttribute('aria-haspopup', 'true');
+        button.setAttribute('aria-expanded', 'false');
+      }
+    }
+
+    /** @protected */
+    _setButtonDisabled(button, disabled) {
+      button.disabled = true;
+      button.setAttribute('tabindex', disabled ? '-1' : '0');
+    }
+
+    /** @protected */
+    _appendButton(button) {
+      this._container.insertBefore(button, this._overflow);
+    }
+
+    /** @private */
+    __getComponent(item) {
+      const itemComponent = item.component;
+      let component;
+
+      const isElement = itemComponent instanceof HTMLElement;
+      // use existing item component, if any
+      if (isElement && itemComponent.localName === 'vaadin-context-menu-item') {
+        component = itemComponent;
+      } else {
+        component = document.createElement('vaadin-context-menu-item');
+        component.appendChild(isElement ? itemComponent : document.createElement(itemComponent));
+      }
+      if (item.text) {
+        const node = component.firstChild || component;
+        node.textContent = item.text;
+      }
+      component.setAttribute('theme', 'menu-bar-item');
+      return component;
+    }
+
+    /** @private */
+    __renderButtons(items = []) {
+      this._removeButtons();
+
+      /* Empty array, do nothing */
+      if (items.length === 0) {
+        return;
+      }
 
       items.forEach((item) => {
-        const button = document.createElement('vaadin-menu-bar-button');
-        const itemCopy = Object.assign({}, item);
-        button.item = itemCopy;
-
-        const itemComponent = item.component;
-        if (itemComponent) {
-          let component;
-          const isElement = itemComponent instanceof HTMLElement;
-          // use existing item component, if any
-          if (isElement && itemComponent.localName === 'vaadin-context-menu-item') {
-            component = itemComponent;
-          } else {
-            component = document.createElement('vaadin-context-menu-item');
-            component.appendChild(isElement ? itemComponent : document.createElement(itemComponent));
-          }
-          if (item.text) {
-            const node = component.firstChild || component;
-            node.textContent = item.text;
-          }
-          itemCopy.component = component;
-          // save item for overflow menu
-          component.item = itemCopy;
-          component.setAttribute('theme', 'menu-bar-item');
-          button.appendChild(component);
-        } else if (item.text) {
-          button.textContent = item.text;
-        }
-        if (item.disabled) {
-          button.disabled = true;
-          button.setAttribute('tabindex', '-1');
-        } else {
-          button.setAttribute('tabindex', '0');
-        }
-        if (button.item.children) {
-          button.setAttribute('aria-haspopup', 'true');
-          button.setAttribute('aria-expanded', 'false');
-        }
-        button.setAttribute('part', 'menu-bar-button');
-        if (this.theme && this.theme !== '') {
-          button.setAttribute('theme', this.theme);
-        }
-        container.insertBefore(button, overflow);
-        button.setAttribute('role', 'menuitem');
+        const button = this._initButton(item);
+        this._appendButton(button);
+        this._setButtonDisabled(button, item.disabled);
+        this._initButtonAttrs(button);
       });
 
       this.__detectOverflow();
