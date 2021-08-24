@@ -13,6 +13,10 @@ export interface SubMenuItem {
   children?: SubMenuItem[];
 }
 
+export interface MenuBarI18n {
+  moreOptions: string;
+}
+
 /**
  * Fired when a submenu item or menu bar button without children is clicked.
  */
