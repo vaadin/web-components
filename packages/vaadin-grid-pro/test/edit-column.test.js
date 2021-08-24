@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { enter, esc, fixtureSync, isIOS, tab } from '@vaadin/testing-helpers';
+import { enter, esc, fixtureSync, focusin, focusout, isIOS, tab } from '@vaadin/testing-helpers';
 import '@vaadin/vaadin-template-renderer';
 import {
   createItems,
@@ -400,8 +400,8 @@ describe('edit column', () => {
 
       expect(inputWrapper).to.be.ok;
 
-      inputs[0].dispatchEvent(new CustomEvent('focusout', { bubbles: true, composed: true }));
-      inputs[1].dispatchEvent(new CustomEvent('focusin', { bubbles: true, composed: true }));
+      focusout(inputs[0]);
+      focusin(inputs[1]);
       grid._debouncerStopEdit && grid._debouncerStopEdit.flush();
 
       expect(getCellEditor(customCell)).to.be.ok;
@@ -607,10 +607,10 @@ describe('edit column', () => {
       expect(grid.hasAttribute('navigating')).to.be.true;
 
       cell.focus();
-      cell.dispatchEvent(new CustomEvent('focusout', { bubbles: true, composed: true }));
+      focusout(cell);
       expect(grid.hasAttribute('navigating')).to.be.true;
 
-      cell.dispatchEvent(new CustomEvent('focusin', { bubbles: true, composed: true }));
+      focusin(cell);
       expect(grid.hasAttribute('navigating')).to.be.true;
     });
 
@@ -621,10 +621,10 @@ describe('edit column', () => {
       expect(grid.hasAttribute('navigating')).to.be.false;
 
       cell.focus();
-      cell.dispatchEvent(new CustomEvent('focusout', { bubbles: true, composed: true }));
+      focusout(cell);
       expect(grid.hasAttribute('navigating')).to.be.false;
 
-      cell.dispatchEvent(new CustomEvent('focusin', { bubbles: true, composed: true }));
+      focusin(cell);
       expect(grid.hasAttribute('navigating')).to.be.false;
     });
   });

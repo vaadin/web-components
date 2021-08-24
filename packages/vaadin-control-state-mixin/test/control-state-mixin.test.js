@@ -1,6 +1,14 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { aTimeout, fixtureSync, keyboardEventFor, keyDownOn, nextFrame } from '@vaadin/testing-helpers';
+import {
+  aTimeout,
+  fixtureSync,
+  focusin,
+  focusout,
+  keyboardEventFor,
+  keyDownOn,
+  nextFrame
+} from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { ControlStateMixin } from '../vaadin-control-state-mixin.js';
 
@@ -95,14 +103,6 @@ describe('control-state-mixin', () => {
   });
 
   describe('focus-ring', () => {
-    const focusin = () => {
-      focusElement.dispatchEvent(new CustomEvent('focusin', { composed: true, bubbles: true }));
-    };
-
-    const focusout = () => {
-      focusElement.dispatchEvent(new CustomEvent('focusout', { composed: true, bubbles: true }));
-    };
-
     it('should set _isShiftTabbing when pressing shift-tab', () => {
       const event = keyboardEventFor('keydown', 9, 'shift');
       customElement.dispatchEvent(event);
@@ -118,35 +118,35 @@ describe('control-state-mixin', () => {
 
     it('should set the focus-ring attribute when TAB is pressed and focus is received', () => {
       keyDownOn(document.body, 9);
-      focusin();
+      focusin(focusElement);
       expect(customElement.hasAttribute('focus-ring')).to.be.true;
-      focusout();
+      focusout(focusElement);
       expect(customElement.hasAttribute('focus-ring')).to.be.false;
     });
 
     it('should set the focus-ring attribute when SHIFT+TAB is pressed and focus is received', () => {
       keyDownOn(document.body, 9, 'shift');
-      focusin();
+      focusin(focusElement);
       expect(customElement.hasAttribute('focus-ring')).to.be.true;
-      focusout();
+      focusout(focusElement);
       expect(customElement.hasAttribute('focus-ring')).to.be.false;
     });
 
     it('should not set the focus-ring attribute when mousedown happens after keydown', () => {
       keyDownOn(document.body, 9);
       document.body.dispatchEvent(new MouseEvent('mousedown'));
-      focusin();
+      focusin(focusElement);
       expect(customElement.hasAttribute('focus-ring')).to.be.false;
     });
 
     it('should refocus the field', async () => {
-      customElement.dispatchEvent(new CustomEvent('focusin'));
+      focusin(customElement);
       keyDownOn(customElement, 9, 'shift');
 
       // Shift + Tab disables refocusing temporarily, normal behaviour is restored asynchronously.
       await aTimeout(0);
-      var spy = sinon.spy(focusElement, 'focus');
-      customElement.dispatchEvent(new CustomEvent('focusin'));
+      const spy = sinon.spy(focusElement, 'focus');
+      focusin(customElement);
       expect(spy.called).to.be.true;
     });
   });
@@ -218,7 +218,7 @@ describe('control-state-mixin', () => {
     });
 
     it('should set focused attribute on focusin event', () => {
-      focusElement.dispatchEvent(new CustomEvent('focusin', { composed: true, bubbles: true }));
+      focusin(focusElement);
       expect(customElement.hasAttribute('focused')).to.be.true;
     });
 
@@ -226,25 +226,20 @@ describe('control-state-mixin', () => {
       const child = document.createElement('div');
       customElement.appendChild(child);
 
-      const event = new CustomEvent('focusin', {
-        composed: true,
-        bubbles: true
-      });
-      event.relatedTarget = child;
-      customElement.dispatchEvent(event);
+      focusin(customElement, child);
 
       expect(customElement.hasAttribute('focused')).to.be.false;
     });
 
     it('should not set focused attribute on focusin event when disabled', () => {
       customElement.disabled = true;
-      focusElement.dispatchEvent(new CustomEvent('focusin', { composed: true, bubbles: true }));
+      focusin(focusElement);
       expect(customElement.hasAttribute('focused')).to.be.false;
     });
 
     it('should not set focused attribute on focusin event from other focusable element', () => {
       const secondFocusable = focusElement.nextElementSibling;
-      secondFocusable.dispatchEvent(new CustomEvent('focusin', { composed: true, bubbles: true }));
+      focusin(secondFocusable);
       expect(customElement.hasAttribute('focused')).to.be.false;
     });
 
@@ -259,7 +254,7 @@ describe('control-state-mixin', () => {
     });
 
     it('should remove focused attribute when disconnected from the DOM', () => {
-      focusElement.dispatchEvent(new CustomEvent('focusin', { composed: true, bubbles: true }));
+      focusin(focusElement);
       customElement.parentNode.removeChild(customElement);
       expect(customElement.hasAttribute('focused')).to.be.false;
     });
@@ -310,14 +305,14 @@ describe('control-state-mixin', () => {
     });
 
     it('should set focused attribute on focusin event dispatched from an element inside focusElement', () => {
-      focusElement.dispatchEvent(new CustomEvent('focusin', { composed: true, bubbles: true }));
+      focusin(focusElement);
       expect(wrapper.hasAttribute('focused')).to.be.true;
     });
 
     it('should remove focused attribute on focusout event dispatched from an element inside focusElement', () => {
-      focusElement.dispatchEvent(new CustomEvent('focusin', { composed: true, bubbles: true }));
+      focusin(focusElement);
       expect(wrapper.hasAttribute('focused')).to.be.true;
-      focusElement.dispatchEvent(new CustomEvent('focusout', { composed: true, bubbles: true }));
+      focusout(focusElement);
       expect(wrapper.hasAttribute('focused')).to.be.false;
     });
   });

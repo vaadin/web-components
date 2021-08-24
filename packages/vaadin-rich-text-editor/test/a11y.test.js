@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { down, fixtureSync, isFirefox, keyboardEventFor } from '@vaadin/testing-helpers';
+import { down, fixtureSync, focusin, isFirefox, keyboardEventFor } from '@vaadin/testing-helpers';
 import '../vaadin-rich-text-editor.js';
 
 describe('accessibility', () => {
@@ -179,8 +179,7 @@ describe('accessibility', () => {
         expect(style.top).to.equal(document.documentElement.scrollTop + 'px');
         done();
       });
-      const e = new CustomEvent('focusin', { bubbles: true });
-      content.dispatchEvent(e);
+      focusin(content);
     });
 
     (isFirefox ? it : it.skip)('should focus the fake target on mousedown when content is not focused', (done) => {

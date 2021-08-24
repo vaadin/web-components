@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync, mousedown, oneEvent, tabKeyDown } from '@vaadin/testing-helpers';
+import { fixtureSync, focusin, focusout, mousedown, oneEvent, tabKeyDown } from '@vaadin/testing-helpers';
 
 import '../vaadin-avatar.js';
 
@@ -243,15 +243,6 @@ describe('vaadin-avatar', () => {
   });
 
   describe('focus', () => {
-    function focusin(node) {
-      node.dispatchEvent(new CustomEvent('focusin', { bubbles: true, composed: true }));
-    }
-
-    function focusout(node) {
-      const event = new CustomEvent('focusout', { bubbles: true, composed: true });
-      node.dispatchEvent(event);
-    }
-
     it('should set tabindex="0" on the avatar', () => {
       expect(avatar.getAttribute('tabindex')).to.equal('0');
     });
