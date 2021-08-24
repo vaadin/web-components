@@ -95,7 +95,7 @@ class MenuBarElement extends ButtonsMixin(InteractionsMixin(ElementMixin(Themabl
       </style>
 
       <div part="container">
-        <vaadin-menu-bar-button part="overflow-button" hidden$="[[!_hasOverflow]]" aria-label="[[i18n.moreOptions]]">
+        <vaadin-menu-bar-button part="overflow-button" hidden$="[[!_hasOverflow]]" aria-label$="[[i18n.moreOptions]]">
           <div class="dots"></div>
         </vaadin-menu-bar-button>
       </div>
