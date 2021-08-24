@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-cookie-consent",
-  "version": "22.0.0-alpha1",
+  "version": "22.0.0-alpha2",
   "description": "vaadin-cookie-consent",
   "main": "vaadin-cookie-consent.js",
   "module": "vaadin-cookie-consent.js",
@@ -26,10 +26,10 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/vaadin-element-mixin": "^22.0.0-alpha1",
+    "@vaadin/vaadin-element-mixin": "^22.0.0-alpha2",
     "@vaadin/vaadin-license-checker": "^2.1.0",
-    "@vaadin/vaadin-lumo-styles": "^22.0.0-alpha1",
-    "@vaadin/vaadin-material-styles": "^22.0.0-alpha1",
+    "@vaadin/vaadin-lumo-styles": "^22.0.0-alpha2",
+    "@vaadin/vaadin-material-styles": "^22.0.0-alpha2",
     "cookieconsent": "^3.0.6"
   },
   "devDependencies": {
