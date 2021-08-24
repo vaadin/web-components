@@ -360,6 +360,13 @@ describe('overflow button', () => {
     expect(overflow.hasAttribute('hidden')).to.be.true;
     expect(overflow.item.children.length).to.equal(0);
   });
+
+  it('should set the aria-label of the overflow button according to the i18n of the menu bar', () => {
+    const moreOptionsSv = 'Fler alternativ';
+    expect(overflow.getAttribute('aria-label')).to.equal('More options');
+    menu.i18n = { ...menu.i18n, moreOptions: moreOptionsSv };
+    expect(overflow.getAttribute('aria-label')).to.equal(moreOptionsSv);
+  });
 });
 
 describe('responsive behaviour in container', () => {
