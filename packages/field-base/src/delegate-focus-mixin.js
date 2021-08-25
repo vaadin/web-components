@@ -30,9 +30,17 @@ const DelegateFocusMixinImplementation = (superclass) =>
          */
         focusElement: {
           type: Object,
-          readOnly: true
+          readOnly: true,
+          observer: '_focusElementChanged'
         }
       };
+    }
+
+    constructor() {
+      super();
+
+      this._boundOnBlur = this._onBlur.bind(this);
+      this._boundOnFocus = this._onFocus.bind(this);
     }
 
     /** @protected */
@@ -70,10 +78,62 @@ const DelegateFocusMixinImplementation = (superclass) =>
       }
     }
 
+    /** @protected */
+    _focusElementChanged(element, oldElement) {
+      if (element) {
+        this._addFocusListeners(element);
+      } else if (oldElement) {
+        this._removeFocusListeners(oldElement);
+      }
+    }
+
+    /**
+     * @param {HTMLElement} element
+     * @protected
+     */
+    _addFocusListeners(element) {
+      element.addEventListener('blur', this._boundOnBlur);
+      element.addEventListener('focus', this._boundOnFocus);
+    }
+
+    /**
+     * @param {HTMLElement} element
+     * @protected
+     */
+    _removeFocusListeners(element) {
+      element.removeEventListener('blur', this._boundOnBlur);
+      element.removeEventListener('focus', this._boundOnFocus);
+    }
+
+    /**
+     * Focus event does not bubble, so we dispatch it manually
+     * on the host element to support adding focus listeners
+     * when the focusable element is placed in light DOM.
+     * @param {FocusEvent} event
+     * @protected
+     */
+    _onFocus(event) {
+      event.stopPropagation();
+      this.dispatchEvent(new Event('focus'));
+    }
+
+    /**
+     * Blur event does not bubble, so we dispatch it manually
+     * on the host element to support adding blur listeners
+     * when the focusable element is placed in light DOM.
+     * @param {FocusEvent} event
+     * @protected
+     */
+    _onBlur(event) {
+      event.stopPropagation();
+      this.dispatchEvent(new Event('blur'));
+    }
+
     /**
      * @param {Event} event
      * @return {boolean}
      * @protected
+     * @override
      */
     _shouldSetFocus(event) {
       return event.target === this.focusElement;

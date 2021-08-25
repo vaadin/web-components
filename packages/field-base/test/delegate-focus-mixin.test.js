@@ -88,6 +88,50 @@ describe('delegate-focus-mixin', () => {
     });
   });
 
+  describe('events', () => {
+    let spy;
+
+    beforeEach(() => {
+      element = fixtureSync(`<delegate-focus-mixin-element></delegate-focus-mixin-element>`);
+      input = element.querySelector('input');
+      spy = sinon.spy();
+    });
+
+    describe('focus', () => {
+      beforeEach(() => {
+        element.addEventListener('focus', spy);
+      });
+
+      it('should re-dispatch focus event on the host element', () => {
+        input.dispatchEvent(new Event('focus'));
+        expect(spy.calledOnce).to.be.true;
+      });
+
+      it('should not re-dispatch focus when focusElement is removed', () => {
+        element._setFocusElement(null);
+        input.dispatchEvent(new Event('focus'));
+        expect(spy.calledOnce).to.be.false;
+      });
+    });
+
+    describe('blur', () => {
+      beforeEach(() => {
+        element.addEventListener('blur', spy);
+      });
+
+      it('should re-dispatch blur event on the host element', () => {
+        input.dispatchEvent(new Event('blur'));
+        expect(spy.calledOnce).to.be.true;
+      });
+
+      it('should not re-dispatch blur when focusElement is removed', () => {
+        element._setFocusElement(null);
+        input.dispatchEvent(new Event('blur'));
+        expect(spy.calledOnce).to.be.false;
+      });
+    });
+  });
+
   describe('autofocus', () => {
     beforeEach(() => {
       element = document.createElement('delegate-focus-mixin-element');
