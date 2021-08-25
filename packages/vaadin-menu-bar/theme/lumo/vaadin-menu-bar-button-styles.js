@@ -73,7 +73,7 @@ registerStyles(
     }
 
     :host(:nth-last-of-type(2)),
-    :host([part='overflow-button']) {
+    :host([slot='overflow']) {
       border-radius: 0 var(--lumo-border-radius-m) var(--lumo-border-radius-m) 0;
     }
 
@@ -82,18 +82,19 @@ registerStyles(
       border-radius: var(--lumo-border-radius-m);
     }
 
-    :host([part='overflow-button']) {
+    :host([slot='overflow']) {
       min-width: var(--lumo-button-size);
       padding-left: calc(var(--lumo-button-size) / 4);
       padding-right: calc(var(--lumo-button-size) / 4);
-    }
-
-    :host([part='overflow-button']) ::slotted(*) {
       font-size: var(--lumo-font-size-xl);
     }
 
-    :host([part='overflow-button']) [part='prefix'],
-    :host([part='overflow-button']) [part='suffix'] {
+    :host([slot='overflow']) ::slotted(*) {
+      font-size: var(--lumo-font-size-xl);
+    }
+
+    :host([slot='overflow']) [part='prefix'],
+    :host([slot='overflow']) [part='suffix'] {
       margin-left: 0;
       margin-right: 0;
     }
@@ -111,7 +112,7 @@ registerStyles(
     }
 
     :host([dir='rtl']:nth-last-of-type(2)),
-    :host([dir='rtl'][part='overflow-button']) {
+    :host([dir='rtl'][slot='overflow']) {
       border-radius: var(--lumo-border-radius-m) 0 0 var(--lumo-border-radius-m);
     }
   `,

@@ -6,7 +6,7 @@ import { ButtonsMixin } from './vaadin-menu-bar-buttons-mixin.js';
 
 import { InteractionsMixin } from './vaadin-menu-bar-interactions-mixin.js';
 
-import { MenuBarEventMap, MenuBarI18n, MenuBarItem } from './interfaces';
+import { MenuBarEventMap, MenuBarItem } from './interfaces';
 
 /**
  * `<vaadin-menu-bar>` is a Web Component providing a set of horizontally stacked buttons offering
@@ -79,28 +79,6 @@ declare class MenuBarElement extends ButtonsMixin(InteractionsMixin(ElementMixin
    * ```
    */
   items: MenuBarItem[];
-
-  /**
-   * The object used to localize this component.
-   * To change the default localization, replace the entire
-   * `i18n` object with a custom one.
-   *
-   * To update individual properties, extend the existing i18n object like so:
-   * ```
-   * menuBar.i18n = {
-   *   ...menuBar.i18n,
-   *   moreOptions: 'More options'
-   * }
-   * ```
-   *
-   * The object has the following JSON structure and default values:
-   * ```
-   * {
-   *   moreOptions: 'More options'
-   * }
-   * ```
-   */
-  i18n: MenuBarI18n;
 
   addEventListener<K extends keyof MenuBarEventMap>(
     type: K,

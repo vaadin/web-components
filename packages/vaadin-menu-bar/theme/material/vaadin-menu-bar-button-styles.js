@@ -51,21 +51,21 @@ registerStyles(
     }
 
     :host(:first-of-type) {
-      border-radius: 0.25em 0 0 0.25em;
+      border-radius: 4px 0 0 4px;
     }
 
     :host(:nth-last-of-type(2)),
-    :host([part~='overflow-button']) {
-      border-radius: 0 0.25em 0.25em 0;
+    :host([slot='overflow']) {
+      border-radius: 0 4px 4px 0;
     }
 
-    :host([part='overflow-button']) {
+    :host([slot='overflow']) {
       padding-right: 8px;
       padding-left: 8px;
       min-width: 36px;
     }
 
-    :host([part='overflow-button']) ::slotted(*) {
+    :host([slot='overflow']) ::slotted(*) {
       font-size: 24px;
     }
 
@@ -74,7 +74,7 @@ registerStyles(
     }
 
     :host([theme='outlined']:not([dir='rtl']):nth-last-of-type(2)),
-    :host([theme='outlined']:not([dir='rtl'])[part~='overflow-button']) {
+    :host([theme='outlined']:not([dir='rtl'])[slot='overflow']) {
       margin-right: 0;
     }
 
@@ -85,12 +85,12 @@ registerStyles(
 
     /* RTL styles */
     :host([dir='rtl']:first-of-type) {
-      border-radius: 0 0.25em 0.25em 0;
+      border-radius: 0 4px 4px 0;
     }
 
     :host([dir='rtl']:nth-last-of-type(2)),
-    :host([dir='rtl'][part='overflow-button']) {
-      border-radius: 0.25em 0 0 0.25em;
+    :host([dir='rtl'][slot='overflow']) {
+      border-radius: 4px 0 0 4px;
     }
 
     :host([dir='rtl'][theme='contained']) {
@@ -102,7 +102,7 @@ registerStyles(
     }
 
     :host([theme='outlined'][dir='rtl']:nth-last-of-type(2)),
-    :host([theme='outlined'][dir='rtl'][part~='overflow-button']) {
+    :host([theme='outlined'][dir='rtl'][slot='overflow']) {
       margin-left: 0;
     }
   `,

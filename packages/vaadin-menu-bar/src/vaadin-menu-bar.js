@@ -77,27 +77,11 @@ class MenuBarElement extends ButtonsMixin(InteractionsMixin(ElementMixin(Themabl
           flex-wrap: nowrap;
           overflow: hidden;
         }
-
-        [part$='button'] {
-          flex-shrink: 0;
-        }
-
-        [part='overflow-button'] {
-          margin-right: 0;
-        }
-
-        .dots::before {
-          display: block;
-          content: '\\00B7\\00B7\\00B7';
-          font-size: inherit;
-          line-height: inherit;
-        }
       </style>
 
       <div part="container">
-        <vaadin-menu-bar-button part="overflow-button" hidden$="[[!_hasOverflow]]" aria-label$="[[i18n.moreOptions]]">
-          <div class="dots"></div>
-        </vaadin-menu-bar-button>
+        <slot></slot>
+        <slot name="overflow"></slot>
       </div>
       <vaadin-menu-bar-submenu is-root=""></vaadin-menu-bar-submenu>
     `;
@@ -163,38 +147,6 @@ class MenuBarElement extends ButtonsMixin(InteractionsMixin(ElementMixin(Themabl
       items: {
         type: Array,
         value: () => []
-      },
-
-      /**
-       * The object used to localize this component.
-       * To change the default localization, replace the entire
-       * `i18n` object with a custom one.
-       *
-       * To update individual properties, extend the existing i18n object like so:
-       * ```
-       * menuBar.i18n = {
-       *   ...menuBar.i18n,
-       *   moreOptions: 'More options'
-       * }
-       * ```
-       *
-       * The object has the following JSON structure and default values:
-       * ```
-       * {
-       *   moreOptions: 'More options'
-       * }
-       * ```
-       *
-       * @type {!MenuBarI18n}
-       * @default {English/US}
-       */
-      i18n: {
-        type: Object,
-        value: () => {
-          return {
-            moreOptions: 'More options'
-          };
-        }
       }
     };
   }

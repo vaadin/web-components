@@ -51,7 +51,6 @@ describe('root menu layout', () => {
 
   it('should make the overflow button hidden by default', () => {
     const overflow = buttons[menu.items.length];
-    expect(overflow.getAttribute('part')).to.equal('overflow-button');
     expect(overflow.hasAttribute('hidden')).to.be.true;
   });
 
