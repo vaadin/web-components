@@ -32,6 +32,10 @@ const requiredField = css`
     margin-top: calc(var(--lumo-font-size-s) * 1.5);
   }
 
+  :host([has-label][theme~='small'])::before {
+    margin-top: calc(var(--lumo-font-size-xs) * 1.5);
+  }
+
   :host([has-label]) {
     padding-top: var(--lumo-space-m);
   }
