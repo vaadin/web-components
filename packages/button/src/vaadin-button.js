@@ -22,65 +22,50 @@ class Button extends ControlStateMixin(ActiveMixin(ElementMixin(ThemableMixin(Po
     return html`
       <style>
         :host {
-          display: inline-block;
+          /* The host forwards all the properties to the [part=button] part */
+          display: contents;
           position: relative;
           outline: none;
           white-space: nowrap;
+          text-align: center;
         }
 
         :host([hidden]) {
           display: none !important;
         }
 
-        /* Ensure the button is always aligned on the baseline */
-        [part='button']::before {
+        [part='button'] {
+          all: inherit;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        [part='button-inner'] {
+          display: contents;
+        }
+
+        /* Ensure the button is always aligned on with other components */
+        [part='button-inner']::before {
           content: '\\2003';
           display: inline-block;
           width: 0;
         }
 
-        [part='button'] {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          text-align: center;
-          width: 100%;
-          height: 100%;
-          min-height: inherit;
-          text-shadow: inherit;
-          background: transparent;
-          padding: 0;
-          border: none;
-          box-shadow: none;
-          outline: none;
-          font-family: inherit;
-          font-size: inherit;
-          font-weight: inherit;
-          line-height: inherit;
-          color: inherit;
-          text-transform: inherit;
-          letter-spacing: inherit;
-        }
-
-        [part='prefix'],
-        [part='suffix'] {
+        slot[name]::slotted(*) {
           flex: none;
         }
 
-        [part='label'] {
+        slot:not([name])::slotted(*) {
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
         }
       </style>
       <button id="button" type="button" part="button">
-        <span part="prefix">
+        <span part="button-inner">
           <slot name="prefix"></slot>
-        </span>
-        <span part="label">
           <slot></slot>
-        </span>
-        <span part="suffix">
           <slot name="suffix"></slot>
         </span>
       </button>

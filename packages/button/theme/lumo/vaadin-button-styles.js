@@ -14,11 +14,21 @@ registerStyles(
       min-width: calc(var(--lumo-button-size) * 2);
       height: var(--lumo-button-size);
       margin: var(--lumo-space-xs) 0;
+      padding: 0 calc(var(--lumo-button-size) / 3 + var(--lumo-border-radius-m) / 2);
       box-sizing: border-box;
       /* Style */
       font-family: var(--lumo-font-family);
       font-size: var(--lumo-font-size-m);
       font-weight: 500;
+      /*
+        By default, "line-height" is set to "normal", but it means that the real value may vary
+        depending on the environment (platform, browser and etc).
+        So it was considered to give line-height a fixed value here in order to avoid
+        "1px alignment difference" issues in different browsers.
+
+        See more: https://developer.mozilla.org/en-US/docs/Web/CSS/line-height#values.
+      */
+      line-height: var(--lumo-line-height-xs);
       color: var(--_lumo-button-color, var(--lumo-primary-text-color));
       background-color: var(--_lumo-button-background-color, var(--lumo-contrast-5pct));
       border-radius: var(--lumo-border-radius-m);
@@ -26,21 +36,6 @@ registerStyles(
       -webkit-tap-highlight-color: transparent;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
-    }
-
-    [part='button'] {
-      padding: 0 calc(var(--lumo-button-size) / 3 + var(--lumo-border-radius-m) / 2);
-    }
-
-    /* Set only for the internal parts so we don’t affect the host vertical alignment */
-    [part='label'],
-    [part='prefix'],
-    [part='suffix'] {
-      line-height: var(--lumo-line-height-xs);
-    }
-
-    [part='label'] {
-      padding: calc(var(--lumo-button-size) / 6) 0;
     }
 
     :host([theme~='small']) {
@@ -61,8 +56,8 @@ registerStyles(
     }
 
     /* For interaction states */
-    :host::before,
-    :host::after {
+    :host [part='button']::before,
+    :host [part='button']::after {
       content: '';
       /* We rely on the host always being relative */
       position: absolute;
@@ -80,30 +75,30 @@ registerStyles(
 
     /* Hover */
 
-    :host(:hover)::before {
+    :host(:hover) [part='button']::before {
       opacity: 0.05;
     }
 
     /* Disable hover for touch devices */
     @media (pointer: coarse) {
-      :host(:not([active]):hover)::before {
+      :host(:not([active]):hover) [part='button']::before {
         opacity: 0;
       }
     }
 
     /* Active */
 
-    :host::after {
+    :host [part='button']::after {
       transition: opacity 1.4s, transform 0.1s;
       filter: blur(8px);
     }
 
-    :host([active])::before {
+    :host([active]) [part='button']::before {
       opacity: 0.1;
       transition-duration: 0s;
     }
 
-    :host([active])::after {
+    :host([active]) [part='button']::after {
       opacity: 0.1;
       transition-duration: 0s, 0s;
       transform: scale(0);
@@ -124,12 +119,12 @@ registerStyles(
       min-width: 0;
     }
 
-    :host([theme~='tertiary'])::before,
-    :host([theme~='tertiary-inline'])::before {
+    :host([theme~='tertiary']) [part='button']::before,
+    :host([theme~='tertiary-inline']) [part='button']::before {
       display: none;
     }
 
-    :host([theme~='tertiary']) [part='button'] {
+    :host([theme~='tertiary']) {
       padding: 0 calc(var(--lumo-button-size) / 6);
     }
 
@@ -152,11 +147,11 @@ registerStyles(
       font-size: inherit;
     }
 
-    :host([theme~='tertiary-inline']) [part='button'] {
+    :host([theme~='tertiary-inline']) {
       padding: 0;
     }
 
-    :host([theme~='tertiary-inline']) [part='label'] {
+    :host([theme~='tertiary-inline']) slot:not([name]) {
       padding: 0;
       overflow: visible;
       line-height: inherit;
@@ -174,25 +169,25 @@ registerStyles(
       color: var(--lumo-primary-contrast-color);
     }
 
-    :host([theme~='primary']:hover)::before {
+    :host([theme~='primary']:hover) [part='button']::before {
       opacity: 0.1;
     }
 
-    :host([theme~='primary'][active])::before {
+    :host([theme~='primary'][active]) [part='button']::before {
       background-color: var(--lumo-shade-20pct);
     }
 
     @media (pointer: coarse) {
-      :host([theme~='primary'][active])::before {
+      :host([theme~='primary'][active]) [part='button']::before {
         background-color: var(--lumo-shade-60pct);
       }
 
-      :host([theme~='primary']:not([active]):hover)::before {
+      :host([theme~='primary']:not([active]):hover) [part='button']::before {
         opacity: 0;
       }
     }
 
-    :host([theme~='primary'][active])::after {
+    :host([theme~='primary'][active]) [part='button']::after {
       opacity: 0.2;
     }
 
@@ -239,26 +234,26 @@ registerStyles(
 
     /* Icons */
 
-    [part] ::slotted(vaadin-icon),
-    [part] ::slotted(iron-icon) {
+    ::slotted(vaadin-icon),
+    ::slotted(iron-icon) {
       display: inline-block;
       width: var(--lumo-icon-size-m);
       height: var(--lumo-icon-size-m);
     }
 
     /* Vaadin icons are based on a 16x16 grid (unlike Lumo and Material icons with 24x24), so they look too big by default */
-    [part] ::slotted(vaadin-icon[icon^='vaadin:']),
-    [part] ::slotted(iron-icon[icon^='vaadin:']) {
+    ::slotted(vaadin-icon[icon^='vaadin:']),
+    ::slotted(iron-icon[icon^='vaadin:']) {
       padding: 0.25em;
       box-sizing: border-box !important;
     }
 
-    [part='prefix'] {
+    slot[name='prefix']::slotted(*) {
       margin-left: -0.25em;
       margin-right: 0.25em;
     }
 
-    [part='suffix'] {
+    slot[name='suffix']::slotted(*) {
       margin-left: 0.25em;
       margin-right: -0.25em;
     }
@@ -267,33 +262,30 @@ registerStyles(
 
     :host([theme~='icon']:not([theme~='tertiary-inline'])) {
       min-width: var(--lumo-button-size);
-    }
-
-    :host([theme~='icon']:not([theme~='tertiary-inline'])) [part='button'] {
       padding-left: calc(var(--lumo-button-size) / 4);
       padding-right: calc(var(--lumo-button-size) / 4);
     }
 
-    :host([theme~='icon']) [part='prefix'],
-    :host([theme~='icon']) [part='suffix'] {
+    :host([theme~='icon']) slot[name='prefix']::slotted(*),
+    :host([theme~='icon']) slot[name='suffix']::slotted(*) {
       margin-left: 0;
       margin-right: 0;
     }
 
     /* RTL specific styles */
 
-    :host([dir='rtl']) [part='prefix'] {
+    :host([dir='rtl']) slot[name='prefix']::slotted(*) {
       margin-left: 0.25em;
       margin-right: -0.25em;
     }
 
-    :host([dir='rtl']) [part='suffix'] {
+    :host([dir='rtl']) slot[name='suffix']::slotted(*) {
       margin-left: -0.25em;
       margin-right: 0.25em;
     }
 
-    :host([dir='rtl'][theme~='icon']) [part='prefix'],
-    :host([dir='rtl'][theme~='icon']) [part='suffix'] {
+    :host([dir='rtl'][theme~='icon']) slot[name='prefix']::slotted(*),
+    :host([dir='rtl'][theme~='icon']) slot[name='suffix']::slotted(*) {
       margin-left: 0;
       margin-right: 0;
     }
