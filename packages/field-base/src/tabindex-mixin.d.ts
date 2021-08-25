@@ -1,0 +1,24 @@
+/**
+ * @license
+ * Copyright (c) 2021 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+import { DisabledMixin } from './disabled-mixin.js';
+
+/**
+ * A mixin to provide the `tabindex` attribute.
+ *
+ * By default, the attribute is set to 0 that makes the element focusable.
+ *
+ * The attribute is removed whenever the user disables the element
+ * and restored with the last known value once the element is enabled again.
+ */
+declare function TabindexMixin<T extends new (...args: any[]) => {}>(base: T): T & TabindexMixinConstructor;
+
+interface TabindexMixinConstructor {
+  new (...args: any[]): TabindexMixin;
+}
+
+interface TabindexMixin extends DisabledMixin {}
+
+export { TabindexMixinConstructor, TabindexMixin };
