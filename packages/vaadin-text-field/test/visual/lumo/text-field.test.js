@@ -81,4 +81,29 @@ describe('text-field', () => {
     element.appendChild(span);
     await visualDiff(div, `${import.meta.url}_suffix`);
   });
+
+  describe('alignment', () => {
+    let field;
+
+    beforeEach(() => {
+      field = document.createElement('vaadin-text-field');
+      field.label = 'Label';
+      field.style.marginLeft = '10px';
+      element.parentNode.appendChild(field);
+    });
+
+    afterEach(() => {
+      field.remove();
+    });
+
+    it('default', async () => {
+      await visualDiff(div, `${import.meta.url}_alignment-default`);
+    });
+
+    it('small', async () => {
+      element.setAttribute('theme', 'small');
+      field.setAttribute('theme', 'small');
+      await visualDiff(div, `${import.meta.url}_alignment-small`);
+    });
+  });
 });
