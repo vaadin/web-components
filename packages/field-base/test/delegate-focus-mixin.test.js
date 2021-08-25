@@ -7,13 +7,9 @@ import { InputSlotMixin } from '../src/input-slot-mixin.js';
 
 customElements.define(
   'delegate-focus-mixin-element',
-  class extends DelegateFocusMixin(InputSlotMixin(PolymerElement)) {
+  class extends InputSlotMixin(DelegateFocusMixin(PolymerElement)) {
     static get template() {
       return html`<slot name="input"></slot>`;
-    }
-
-    get focusElement() {
-      return this.inputElement;
     }
   }
 );
@@ -89,6 +85,50 @@ describe('delegate-focus-mixin', () => {
       element.disabled = true;
       element.click();
       expect(spy.calledOnce).to.be.false;
+    });
+  });
+
+  describe('events', () => {
+    let spy;
+
+    beforeEach(() => {
+      element = fixtureSync(`<delegate-focus-mixin-element></delegate-focus-mixin-element>`);
+      input = element.querySelector('input');
+      spy = sinon.spy();
+    });
+
+    describe('focus', () => {
+      beforeEach(() => {
+        element.addEventListener('focus', spy);
+      });
+
+      it('should re-dispatch focus event on the host element', () => {
+        input.dispatchEvent(new Event('focus'));
+        expect(spy.calledOnce).to.be.true;
+      });
+
+      it('should not re-dispatch focus when focusElement is removed', () => {
+        element._setFocusElement(null);
+        input.dispatchEvent(new Event('focus'));
+        expect(spy.calledOnce).to.be.false;
+      });
+    });
+
+    describe('blur', () => {
+      beforeEach(() => {
+        element.addEventListener('blur', spy);
+      });
+
+      it('should re-dispatch blur event on the host element', () => {
+        input.dispatchEvent(new Event('blur'));
+        expect(spy.calledOnce).to.be.true;
+      });
+
+      it('should not re-dispatch blur when focusElement is removed', () => {
+        element._setFocusElement(null);
+        input.dispatchEvent(new Event('blur'));
+        expect(spy.calledOnce).to.be.false;
+      });
     });
   });
 

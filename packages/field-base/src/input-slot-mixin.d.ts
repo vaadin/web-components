@@ -3,6 +3,7 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { DelegatesFocusMixin } from './delegate-focus-mixin.js';
 import { SlotMixin } from './slot-mixin.js';
 import { InputMixin } from './input-mixin.js';
 
@@ -15,7 +16,7 @@ interface InputSlotMixinConstructor {
   new (...args: any[]): InputSlotMixin;
 }
 
-interface InputSlotMixin extends InputMixin, SlotMixin {
+interface InputSlotMixin extends DelegatesFocusMixin, InputMixin, SlotMixin {
   /**
    * String used to define input type.
    */

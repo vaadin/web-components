@@ -77,21 +77,6 @@ const InputFieldMixinImplementation = (superclass) =>
       return this.inputElement;
     }
 
-    /**
-     * Element used by `DelegatesFocusMixin` to handle focus.
-     * @return {!HTMLInputElement}
-     */
-    get focusElement() {
-      return this.inputElement;
-    }
-
-    constructor() {
-      super();
-
-      this._boundOnBlur = this._onBlur.bind(this);
-      this._boundOnFocus = this._onFocus.bind(this);
-    }
-
     /** @protected */
     connectedCallback() {
       super.connectedCallback();
@@ -133,36 +118,28 @@ const InputFieldMixinImplementation = (superclass) =>
     }
 
     /**
-     * @param {HTMLInputElement} input
+     * Override an event listener from `DelegatesFocusMixin`.
+     * @param {FocusEvent} event
      * @protected
+     * @override
      */
-    _addInputListeners(input) {
-      super._addInputListeners(input);
+    _onFocus(event) {
+      super._onFocus(event);
 
-      input.addEventListener('blur', this._boundOnBlur);
-      input.addEventListener('focus', this._boundOnFocus);
-    }
-
-    /**
-     * @param {HTMLInputElement} input
-     * @protected
-     */
-    _removeInputListeners(input) {
-      super._addInputListeners(input);
-
-      input.removeEventListener('blur', this._boundOnBlur);
-      input.removeEventListener('focus', this._boundOnFocus);
-    }
-
-    /** @private */
-    _onFocus() {
       if (this.autoselect && this.inputElement) {
         this.inputElement.select();
       }
     }
 
-    /** @private */
-    _onBlur() {
+    /**
+     * Override an event listener from `DelegatesFocusMixin`.
+     * @param {FocusEvent} event
+     * @protected
+     * @override
+     */
+    _onBlur(event) {
+      super._onBlur(event);
+
       this.validate();
     }
 

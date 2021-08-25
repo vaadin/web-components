@@ -4,11 +4,12 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
+import { DelegateFocusMixin } from './delegate-focus-mixin.js';
 import { InputMixin } from './input-mixin.js';
 import { SlotMixin } from './slot-mixin.js';
 
 const TextAreaSlotMixinImplementation = (superclass) =>
-  class TextAreaSlotMixinClass extends InputMixin(SlotMixin(superclass)) {
+  class TextAreaSlotMixinClass extends DelegateFocusMixin(InputMixin(SlotMixin(superclass))) {
     get slots() {
       return {
         ...super.slots,
@@ -44,6 +45,7 @@ const TextAreaSlotMixinImplementation = (superclass) =>
         textArea.id = this._textareaId;
 
         this._setInputElement(textArea);
+        this._setFocusElement(textArea);
       }
     }
   };
