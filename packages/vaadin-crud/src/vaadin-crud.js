@@ -178,6 +178,10 @@ class CrudElement extends ElementMixin(ThemableMixin(PolymerElement)) {
           display: none !important;
         }
 
+        :host([hide-toolbar]) [part='toolbar'] {
+          display: none;
+        }
+
         [part='toolbar'] {
           display: flex;
           flex-shrink: 0;
@@ -546,6 +550,13 @@ class CrudElement extends ElementMixin(ThemableMixin(PolymerElement)) {
       __mobile: {
         type: Boolean,
         observer: '__mobileChanged'
+      },
+
+      /** @private */
+      hideToolbar: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
       }
     };
   }
