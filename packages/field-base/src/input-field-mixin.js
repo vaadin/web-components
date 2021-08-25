@@ -77,14 +77,6 @@ const InputFieldMixinImplementation = (superclass) =>
       return this.inputElement;
     }
 
-    /**
-     * Element used by `DelegatesFocusMixin` to handle focus.
-     * @return {!HTMLInputElement}
-     */
-    get focusElement() {
-      return this.inputElement;
-    }
-
     constructor() {
       super();
 

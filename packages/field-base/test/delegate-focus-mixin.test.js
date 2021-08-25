@@ -7,13 +7,9 @@ import { InputSlotMixin } from '../src/input-slot-mixin.js';
 
 customElements.define(
   'delegate-focus-mixin-element',
-  class extends DelegateFocusMixin(InputSlotMixin(PolymerElement)) {
+  class extends InputSlotMixin(DelegateFocusMixin(PolymerElement)) {
     static get template() {
       return html`<slot name="input"></slot>`;
-    }
-
-    get focusElement() {
-      return this.inputElement;
     }
   }
 );

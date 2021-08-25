@@ -22,8 +22,11 @@ interface DelegateFocusMixin extends DisabledMixin, FocusMixin {
   autofocus: boolean;
 
   /**
-   * Any element extending this mixin is required to implement this getter.
-   * It returns the actual focusable element in the component.
+   * A reference to the focusable element controlled by the mixin.
+   * It can be an input, textarea, button or any element with tabindex > -1.
+   *
+   * Any component implementing this mixin is expected to provide it
+   * by using `this._setFocusElement(input)` Polymer API.
    */
   readonly focusElement: Element | null | undefined;
 }

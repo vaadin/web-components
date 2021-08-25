@@ -16,18 +16,23 @@ const DelegateFocusMixinImplementation = (superclass) =>
          */
         autofocus: {
           type: Boolean
+        },
+
+        /**
+         * A reference to the focusable element controlled by the mixin.
+         * It can be an input, textarea, button or any element with tabindex > -1.
+         *
+         * Any component implementing this mixin is expected to provide it
+         * by using `this._setFocusElement(input)` Polymer API.
+         *
+         * @protected
+         * @type {!HTMLElement}
+         */
+        focusElement: {
+          type: Object,
+          readOnly: true
         }
       };
-    }
-
-    /**
-     * Any element extending this mixin is required to implement this getter.
-     * It returns the actual focusable element in the component.
-     * @return {Element | null | undefined}
-     */
-    get focusElement() {
-      console.warn(`Please implement the 'focusElement' property in <${this.localName}>`);
-      return null;
     }
 
     /** @protected */
