@@ -24,16 +24,16 @@ registerStyles(
       --vaadin-charts-axis-label: var(--material-secondary-text-color);
       --vaadin-charts-data-label: var(--material-body-text-color);
       --vaadin-charts-secondary-label: var(--material-secondary-text-color);
-      --vaadin-charts-axis-line: #CFD8DC;
+      --vaadin-charts-axis-line: var(--vaadin-charts-contrast-5pct);
       --vaadin-charts-xaxis-line-width: 0;
-      --vaadin-charts-grid-line: #ECEFF1;
+      --vaadin-charts-grid-line: var(--vaadin-charts-contrast-10pct);
       --vaadin-charts-disabled-label: var(--material-disabled-text-color);
 
       --vaadin-charts-contrast: var(--material-body-text-color);
-      --vaadin-charts-contrast-5pct: #ECEFF1;
-      --vaadin-charts-contrast-10pct: #ECEFF1;
-      --vaadin-charts-contrast-20pct: #CFD8DC;
-      --vaadin-charts-contrast-60pct: #607D8B;
+      --vaadin-charts-contrast-5pct: var(--material-secondary-background-color);
+      --vaadin-charts-contrast-10pct: var(--material-divider-color);
+      --vaadin-charts-contrast-20pct: var(--material-disabled-color);
+      --vaadin-charts-contrast-60pct: var(--material-secondary-text-color);
 
       --vaadin-charts-tooltip-background: var(--material-background-color);
       --vaadin-charts-tooltip-background-opacity: 1;
