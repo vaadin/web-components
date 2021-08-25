@@ -7,6 +7,9 @@
   </head>
   <body>
     <style>
+      body {
+        background: var(--lumo-base-color, #fff);
+      }
       .theme-switcher {
         display: flex;
         padding: 1rem;
@@ -799,7 +802,7 @@
       "dataLabels": {
       "color": "black"
       },
-      "borderColor": "white",
+      "borderColor": "var(--vaadin-charts-background, #fff)",
       "nodeWidth": 65
       }'></vaadin-chart-series>
     </vaadin-chart>
@@ -1053,7 +1056,7 @@
     }'>
       <vaadin-chart-series title="Speed" values='[{"y": 80, "colorIndex": 1}]' additional-options='{
       "dataLabels": {
-        "format": "<div style=\"text-align:center\"><span style=\"font-size:25px;color:black\">{y}</span><br/><span style=\"font-size:12px;color:silver\">km/h</span></div>"
+        "format": "<div style=\"text-align:center\"><span style=\"font-size:25px\">{y}</span><br/><span style=\"font-size:12px;color:silver\">km/h</span></div>"
       }
     }'>
       </vaadin-chart-series>
