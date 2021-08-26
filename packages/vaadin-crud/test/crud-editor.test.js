@@ -1,8 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { flushGrid } from './helpers.js';
-import '@vaadin/vaadin-template-renderer';
-import '../vaadin-crud.js';
+import '../src/vaadin-crud.js';
 
 describe('vaadin-crud editor', () => {
   ['default', 'custom'].forEach((type) => {
@@ -16,10 +15,7 @@ describe('vaadin-crud editor', () => {
       </vaadin-crud>`;
 
     describe(`${type} form`, () => {
-      let crud, dialogLayout, dialog, form;
-
-      const buttons = () => form.parentElement.querySelectorAll('vaadin-button');
-      const btnCancel = () => buttons()[1];
+      let crud, dialog, form, overlay;
 
       beforeEach(async () => {
         crud = fixtureSync(tpl);
@@ -29,37 +25,38 @@ describe('vaadin-crud editor', () => {
         flushGrid(crud._grid);
 
         crud.set('items', [{ foo: 'bar' }, { foo: 'baz' }]);
-        dialogLayout = crud.$.dialog;
-        form = dialogLayout.form;
-        dialog = dialogLayout.$.dialog;
+        form = crud.$.dialog.form;
+        dialog = crud.$.dialog.$.dialog;
+        overlay = dialog.$.overlay;
       });
 
       it(`should move ${type} form to dialog content with default editorPosition`, () => {
         crud._grid.activeItem = crud.items[0];
-        expect(form.parentElement).to.equal(dialog.$.overlay.$.content);
+        expect(form.parentElement).to.equal(overlay);
       });
 
       it(`should move ${type} form to layout when editorPosition set to bottom`, () => {
         crud.editorPosition = 'bottom';
         crud._grid.activeItem = crud.items[0];
-        expect(form.parentElement).to.equal(dialogLayout);
+        expect(form.parentElement).to.equal(crud);
       });
 
       it(`should move ${type} form to layout when editorPosition set to aside`, () => {
         crud.editorPosition = 'aside';
         crud._grid.activeItem = crud.items[0];
-        expect(form.parentElement).to.equal(dialogLayout);
+        expect(form.parentElement).to.equal(crud);
       });
 
       it(`should move ${type} form when editorPosition changes from default to bottom`, async () => {
         crud._grid.activeItem = crud.items[0];
-        btnCancel().click();
+        const cancel = overlay.querySelector('[slot=cancel]');
+        cancel.click();
 
         crud.editorPosition = 'bottom';
         await nextRender(crud);
 
         crud._grid.activeItem = crud.items[1];
-        expect(form.parentElement).to.equal(dialogLayout);
+        expect(form.parentElement).to.equal(crud);
       });
 
       it(`should move ${type} form when editorPosition changes from bottom to default`, async () => {
@@ -67,13 +64,14 @@ describe('vaadin-crud editor', () => {
         await nextRender(crud);
 
         crud._grid.activeItem = crud.items[0];
-        btnCancel().click();
+        const cancel = crud.$.dialog.querySelector('[slot=cancel]');
+        cancel.click();
 
         crud.editorPosition = '';
         await nextRender(crud);
 
         crud._grid.activeItem = crud.items[1];
-        expect(form.parentElement).to.equal(dialog.$.overlay.$.content);
+        expect(form.parentElement).to.equal(overlay);
       });
     });
   });

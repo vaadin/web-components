@@ -139,3 +139,32 @@ registerStyles(
   `,
   { moduleId: 'lumo-dialog-layout' }
 );
+
+registerStyles(
+  'vaadin-dialog-overlay',
+  css`
+    [part='header'] ::slotted(*) {
+      margin-top: var(--lumo-space-s);
+      margin-bottom: var(--lumo-space-s);
+    }
+
+    [part='scroller'] {
+      padding: var(--lumo-space-l);
+    }
+
+    [part='footer'] {
+      background-color: var(--lumo-contrast-5pct);
+      padding: var(--lumo-space-s) var(--lumo-space-s);
+    }
+
+    [part='footer'] ::slotted(*) {
+      margin-left: var(--lumo-space-s);
+      margin-right: var(--lumo-space-s);
+    }
+
+    [part='footer'] ::slotted([slot='delete']) {
+      margin-right: auto;
+    }
+  `,
+  { moduleId: 'lumo-dialog-layout-overlay' }
+);
