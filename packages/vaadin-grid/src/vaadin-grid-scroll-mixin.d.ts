@@ -16,8 +16,6 @@ interface ScrollMixin {
 
   _frozenCellsChanged(): void;
 
-  _updateScrollerMeasurements(): void;
-
   _updateLastFrozen(): void;
 }
 

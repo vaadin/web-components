@@ -483,7 +483,6 @@ class GridElement extends ElementMixin(
     super.attributeChangedCallback(name, oldValue, newValue);
     if (name === 'dir') {
       this.__isRTL = newValue === 'rtl';
-      this._updateScrollerMeasurements();
     }
   }
 
@@ -908,7 +907,6 @@ class GridElement extends ElementMixin(
   /** @private */
   _resizeHandler() {
     this._updateDetailsCellHeights();
-    this._updateScrollerMeasurements();
     this.__updateFooterPositioning();
   }
 
