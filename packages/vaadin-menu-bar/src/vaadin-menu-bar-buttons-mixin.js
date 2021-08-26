@@ -314,7 +314,7 @@ export const ButtonsMixin = (superClass) =>
 
     /** @protected */
     _appendButton(button) {
-      this.insertBefore(button, this.lastChild);
+      this.insertBefore(button, this._overflow);
     }
 
     /** @private */
