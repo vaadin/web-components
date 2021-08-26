@@ -4,6 +4,18 @@ import '@vaadin/vaadin-template-renderer';
 import { flushGrid, getRows, getRowCells, infiniteDataProvider, isWithinParentConstraints, wheel } from './helpers.js';
 import '../vaadin-grid.js';
 
+// Returns true if the element's computed transform style matches with the
+// computed transform style of a div element with the given transform applied
+const transformsEqual = (element, transform) => {
+  const div = document.createElement('div');
+  div.style.transform = transform;
+  const computedTransform = getComputedStyle(element).transform;
+  document.body.appendChild(div);
+  const computedTransformDiv = getComputedStyle(div).transform;
+  div.remove();
+  return computedTransform === computedTransformDiv;
+};
+
 ['ltr', 'rtl'].forEach((direction) => {
   describe(`frozen columns ${direction}`, () => {
     let grid;
@@ -99,37 +111,33 @@ import '../vaadin-grid.js';
           grid.__setNormalizedScrollLeft(grid.$.table, isRTL ? scrollbarWidth : defaultCellWidth);
         });
 
-        // Test passes locally but fails in Travis
-        const isChrome = !!/Chrome/.test(navigator.userAgent);
-        (isChrome ? it.skip : it)('should update transforms when frozen columns decrease', (done) => {
+        it('should update transforms when frozen columns decrease', (done) => {
           let cells = getRowCells(containerRows[0]);
 
           listenOnce(grid.$.table, 'scroll', () => {
-            const expected = ['translate(' + translateValue + 'px, 0px)', 'translate(' + translateValue + 'px)'];
-            expect(expected).to.include(cells[0].style.transform);
+            expect(transformsEqual(cells[0], 'translate(' + translateValue + 'px, 0px)')).to.be.true;
 
             grid._columnTree[0][0].frozen = false;
             cells = getRowCells(getRows(containerElement)[0]);
             grid._debouncerCacheElements.flush();
 
-            expect(cells[0].style.transform).to.be.empty;
+            expect(transformsEqual(cells[0], '')).to.be.true;
             done();
           });
           grid.__setNormalizedScrollLeft(grid.$.table, isRTL ? scrollbarWidth : defaultCellWidth);
         });
 
-        (isChrome ? it.skip : it)('should update transforms when frozen columns increase', (done) => {
+        it('should update transforms when frozen columns increase', (done) => {
           let cells = getRowCells(containerRows[0]);
 
           listenOnce(grid.$.table, 'scroll', () => {
-            expect(cells[1].style.transform).to.eql('');
+            expect(transformsEqual(cells[1], '')).to.be.true;
 
             grid._columnTree[0][1].frozen = true;
             cells = getRowCells(getRows(containerElement)[0]);
             grid._debouncerCacheElements.flush();
 
-            const expected = ['translate(' + translateValue + 'px, 0px)', 'translate(' + translateValue + 'px)'];
-            expect(expected).to.include(cells[1].style.transform);
+            expect(transformsEqual(cells[1], 'translate(' + translateValue + 'px, 0px)')).to.be.true;
             done();
           });
           grid.__setNormalizedScrollLeft(grid.$.table, isRTL ? scrollbarWidth : defaultCellWidth);
