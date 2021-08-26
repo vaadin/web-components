@@ -17,3 +17,4 @@ export { TextAreaSlotMixin } from './src/text-area-slot-mixin.js';
 export { TextFieldMixin } from './src/text-field-mixin.js';
 export { ValidateMixin } from './src/validate-mixin.js';
 export { TabindexMixin } from './src/tabindex-mixin.js';
+export { ActiveMixin } from './src/active-mixin.js';
