@@ -65,6 +65,15 @@ const getAllUnitPackages = () => {
 };
 
 /**
+ * Get all available packages with snapshot tests.
+ */
+const getAllSnapshotPackages = () => {
+  return fs
+    .readdirSync('packages')
+    .filter((dir) => fs.statSync(`packages/${dir}`).isDirectory() && fs.existsSync(`packages/${dir}/test/dom`));
+};
+
+/**
  * Get all available packages with visual tests.
  */
 const getAllVisualPackages = () => {
@@ -107,6 +116,14 @@ const getTestPackages = (allPackages) => {
 };
 
 /**
+ * Get packages for running snapshot tests.
+ */
+const getSnapshotTestPackages = () => {
+  let snapshotPackages = getAllSnapshotPackages();
+  return getTestPackages(snapshotPackages);
+};
+
+/**
  * Get packages for running unit tests.
  */
 const getUnitTestPackages = () => {
@@ -120,6 +137,18 @@ const getUnitTestPackages = () => {
 const getVisualTestPackages = () => {
   const visualPackages = getAllVisualPackages();
   return getTestPackages(visualPackages);
+};
+
+/**
+ * Get unit test groups based on packages.
+ */
+const getSnapshotTestGroups = (packages) => {
+  return packages.map((pkg) => {
+    return {
+      name: pkg,
+      files: `packages/${pkg}/test/dom/*.test.js`
+    };
+  });
 };
 
 /**
@@ -227,6 +256,19 @@ const getDiffScreenshotName = (args) => getScreenshotFileName(args, 'failed', tr
 
 const getFailedScreenshotName = (args) => getScreenshotFileName(args, 'failed');
 
+const createSnapshotTestsConfig = (config) => {
+  const packages = getSnapshotTestPackages();
+  const groups = getSnapshotTestGroups(packages);
+
+  return {
+    ...config,
+    nodeResolve: true,
+    groups,
+    testRunnerHtml,
+    filterBrowserLogs
+  };
+};
+
 const createUnitTestsConfig = (config) => {
   const packages = getUnitTestPackages();
   const groups = getUnitTestGroups(packages);
@@ -300,6 +342,7 @@ const createVisualTestsConfig = (theme) => {
 };
 
 module.exports = {
+  createSnapshotTestsConfig,
   createUnitTestsConfig,
   createVisualTestsConfig
 };
