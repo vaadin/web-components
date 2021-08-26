@@ -737,18 +737,22 @@ class CrudElement extends ElementMixin(ThemableMixin(PolymerElement)) {
     form.addEventListener('input', this.__changeListener);
   }
 
+  /** @private */
   __onSaveButtonChange(save, old) {
     this.__setupSlottedButton(save, old, this.__saveBound);
   }
 
+  /** @private */
   __onDeleteButtonChange(deleteButton, old) {
     this.__setupSlottedButton(deleteButton, old, this.__deleteBound);
   }
 
+  /** @private */
   __onCancelButtonChange(cancel, old) {
     this.__setupSlottedButton(cancel, old, this.__cancelBound);
   }
 
+  /** @private */
   __setupSlottedButton(slottedButton, currentButton, clickListener) {
     if (currentButton && currentButton.parentElement) {
       currentButton.parentElement.removeChild(currentButton);
@@ -759,16 +763,19 @@ class CrudElement extends ElementMixin(ThemableMixin(PolymerElement)) {
     }
   }
 
+  /** @private */
   __hostPropsChanged() {
     this.__propagateHostAttributes();
   }
 
+  /** @private */
   __propagateHostAttributes() {
     this.__propagateHostAttributesToButton(this._saveButton, HOST_PROPS.save);
     this.__propagateHostAttributesToButton(this._cancelButton, HOST_PROPS.cancel);
     this.__propagateHostAttributesToButton(this._deleteButton, HOST_PROPS.delete);
   }
 
+  /** @private */
   __propagateHostAttributesToButton(button, props) {
     if (button) {
       props.forEach(({ attr, prop, parseProp }) => {
@@ -781,6 +788,7 @@ class CrudElement extends ElementMixin(ThemableMixin(PolymerElement)) {
     }
   }
 
+  /** @private */
   _setOrToggleAttribute(name, value, node) {
     if (!name || !node) {
       return;
