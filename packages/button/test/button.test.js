@@ -42,7 +42,29 @@ describe('vaadin-button', () => {
     });
   });
 
-  describe('default', () => {
+  describe('role', () => {
+    describe('default', () => {
+      beforeEach(() => {
+        element = fixtureSync('<vaadin-button>Press me</vaadin-button>');
+      });
+
+      it('should set role attribute to button by default', () => {
+        expect(element.getAttribute('role')).to.equal('button');
+      });
+    });
+
+    describe('custom', () => {
+      beforeEach(() => {
+        element = fixtureSync('<vaadin-button role="menuitem">Press me</vaadin-button>');
+      });
+
+      it('should not override custom role attribute', () => {
+        expect(element.getAttribute('role')).to.equal('menuitem');
+      });
+    });
+  });
+
+  describe('label', () => {
     let label;
 
     beforeEach(() => {
@@ -50,19 +72,15 @@ describe('vaadin-button', () => {
       label = element.shadowRoot.querySelector('[part=label]');
     });
 
-    it('should set role attribute to button by default', () => {
-      expect(element.getAttribute('role')).to.equal('button');
-    });
-
-    it('should not override a custom role attribute', () => {
-      element = fixtureSync('<vaadin-button role="menuitem"></vaadin-button');
-
-      expect(element.getAttribute('role')).to.equal('menuitem');
-    });
-
     it('should define the button label using light DOM', () => {
       const children = FlattenedNodesObserver.getFlattenedNodes(label);
       expect(children[1].textContent).to.be.equal('Press me');
+    });
+  });
+
+  describe('mixins', () => {
+    beforeEach(() => {
+      element = fixtureSync('<vaadin-button>Press me</vaadin-button>');
     });
 
     // TODO: Remove when it would be possible for an element:
