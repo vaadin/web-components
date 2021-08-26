@@ -84,6 +84,8 @@ class Button extends ActiveMixin(TabindexMixin(FocusMixin(ElementMixin(ThemableM
   ready() {
     super.ready();
 
+    // By default, if the user hasn't provided a custom role,
+    // the role attribute is set to "button".
     if (!this.hasAttribute('role')) {
       this.setAttribute('role', 'button');
     }
