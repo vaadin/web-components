@@ -31,9 +31,11 @@
     "test:firefox": "web-test-runner --config web-test-runner-firefox.config.js",
     "test:lumo": "web-test-runner --config web-test-runner-lumo.config.js",
     "test:material": "web-test-runner --config web-test-runner-material.config.js",
+    "test:snapshots": "web-test-runner --config web-test-runner-snapshots.config.js",
     "test:webkit": "web-test-runner --config web-test-runner-webkit.config.js",
     "update:lumo": "TEST_ENV=update web-test-runner --config web-test-runner-lumo.config.js",
-    "update:material": "TEST_ENV=update web-test-runner --config web-test-runner-material.config.js"
+    "update:material": "TEST_ENV=update web-test-runner --config web-test-runner-material.config.js",
+    "update:snapshots": "web-test-runner --config web-test-runner-snapshots.config.js --update-snapshots"
   },
   "devDependencies": {
     "@polymer/iron-component-page": "^4.0.0",
