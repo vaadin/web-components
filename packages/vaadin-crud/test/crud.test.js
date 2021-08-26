@@ -133,6 +133,7 @@ describe('crud', () => {
       expect(crud._form._fields).to.be.not.ok;
     });
   });
+
   ['default', 'slotted buttons'].forEach((mode) => {
     describe(`[${mode}] items`, () => {
       beforeEach(async () => {
@@ -654,6 +655,7 @@ describe('crud', () => {
       });
     });
   }
+
   describe('objects', () => {
     beforeEach(() => {
       crud = fixtureSync('<vaadin-crud style="width: 300px;"></vaadin-crud>');
