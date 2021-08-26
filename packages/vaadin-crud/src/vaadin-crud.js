@@ -17,6 +17,12 @@ import './vaadin-dialog-layout.js';
 import './vaadin-crud-grid.js';
 import './vaadin-crud-form.js';
 
+const HOST_PROPS = {
+  save: [{ attr: 'disabled', prop: '__isDirty', parseProp: (prop) => !prop }, { prop: 'i18n.saveItem' }],
+  cancel: [{ prop: 'i18n.cancel' }],
+  delete: [{ attr: 'hidden', prop: '__isNew', parseProp: (prop) => prop }, { prop: 'i18n.deleteItem' }]
+};
+
 /**
  * `<vaadin-crud>` is a Web Component for [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) operations.
  *
@@ -213,6 +219,9 @@ class CrudElement extends ElementMixin(ThemableMixin(PolymerElement)) {
         <vaadin-dialog-layout
           theme$="[[theme]]"
           form="[[_form]]"
+          save-button="[[_saveButton]]"
+          cancel-button="[[_cancelButton]]"
+          delete-button="[[_deleteButton]]"
           id="dialog"
           no-close-on-outside-click="[[__isDirty]]"
           no-close-on-esc="[[__isDirty]]"
@@ -233,14 +242,20 @@ class CrudElement extends ElementMixin(ThemableMixin(PolymerElement)) {
             </slot>
           </div>
 
-          <vaadin-button slot="footer" on-click="__save" theme="primary" disabled="[[!__isDirty]]"
-            >[[i18n.saveItem]]</vaadin-button
-          >
-          <vaadin-button slot="footer" on-click="__cancel" theme="tertiary">[[i18n.cancel]]</vaadin-button>
+          <slot name="save-button">
+            <vaadin-button id="save" on-click="__save" theme="primary" disabled$="[[!__isDirty]]"
+              >[[i18n.saveItem]]</vaadin-button
+            >
+          </slot>
+          <slot name="cancel-button">
+            <vaadin-button id="cancel" on-click="__cancelBound" theme="tertiary">[[i18n.cancel]]</vaadin-button>
+          </slot>
           <div slot="footer" style="flex: auto;"></div>
-          <vaadin-button slot="footer" on-click="__delete" theme="tertiary error" hidden="[[__isNew]]"
-            >[[i18n.deleteItem]]</vaadin-button
-          >
+          <slot name="delete-button">
+            <vaadin-button id="delete" on-click="__delete" theme="tertiary error" hidden$="[[__isNew]]"
+              >[[i18n.deleteItem]]</vaadin-button
+            >
+          </slot>
         </vaadin-dialog-layout>
       </div>
 
@@ -293,6 +308,33 @@ class CrudElement extends ElementMixin(ThemableMixin(PolymerElement)) {
       _form: {
         type: HTMLElement,
         observer: '__onFormChange'
+      },
+
+      /**
+       * A reference to the save button which will be teleported to the dialog
+       * @private
+       */
+      _saveButton: {
+        type: HTMLElement,
+        observer: '__onSaveButtonChange'
+      },
+
+      /**
+       * A reference to the save button which will be teleported to the dialog
+       * @private
+       */
+      _deleteButton: {
+        type: HTMLElement,
+        observer: '__onDeleteButtonChange'
+      },
+
+      /**
+       * A reference to the save button which will be teleported to the dialog
+       * @private
+       */
+      _cancelButton: {
+        type: HTMLElement,
+        observer: '__onCancelButtonChange'
       },
 
       /**
@@ -509,7 +551,17 @@ class CrudElement extends ElementMixin(ThemableMixin(PolymerElement)) {
   }
 
   static get observers() {
-    return ['__onI18Change(i18n, _grid)', '__onEditOnClickChange(editOnClick, _grid)'];
+    return [
+      '__onI18Change(i18n, _grid)',
+      '__onEditOnClickChange(editOnClick, _grid)',
+      '__hostPropsChanged(' +
+        HOST_PROPS.save.map(({ prop }) => prop).join(',') +
+        ',' +
+        HOST_PROPS.cancel.map(({ prop }) => prop).join(',') +
+        ',' +
+        HOST_PROPS.delete.map(({ prop }) => prop).join(',') +
+        ')'
+    ];
   }
 
   /** @protected */
@@ -535,12 +587,18 @@ class CrudElement extends ElementMixin(ThemableMixin(PolymerElement)) {
     super.ready();
     this.__editListener = (e) => this.__onCrudGridEdit(e);
     this.__changeListener = (e) => this.__onFormChanges(e);
+    this.__saveBound = this.__save.bind(this);
+    this.__cancelBound = this.__cancel.bind(this);
+    this.__deleteBound = this.__delete.bind(this);
     this.__gridSizeListener = this.__onGridSizeChanges.bind(this);
     this.__boundEditOnClickListener = this.__editOnClickListener.bind(this);
     this._grid = this.$.grid;
     this._form = this.$.form;
-    this.$.dialog.$.dialog.$.overlay.addEventListener('vaadin-overlay-outside-click', this.__cancel.bind(this));
-    this.$.dialog.$.dialog.$.overlay.addEventListener('vaadin-overlay-escape-press', this.__cancel.bind(this));
+    this._saveButton = this.$.save;
+    this._deleteButton = this.$.delete;
+    this._cancelButton = this.$.cancel;
+    this.$.dialog.$.dialog.$.overlay.addEventListener('vaadin-overlay-outside-click', this.__cancelBound);
+    this.$.dialog.$.dialog.$.overlay.addEventListener('vaadin-overlay-escape-press', this.__cancelBound);
   }
 
   /** @private */
@@ -602,13 +660,21 @@ class CrudElement extends ElementMixin(ThemableMixin(PolymerElement)) {
   __onDomChange(nodes) {
     nodes.forEach((node) => {
       if (node.getAttribute) {
-        if (node.getAttribute('slot') == 'grid') {
+        const slotAttributeValue = node.getAttribute('slot');
+        if (!slotAttributeValue) {
+          return;
+        }
+
+        if (slotAttributeValue == 'grid') {
           // Force to remove listener on previous grid first
           this.__onEditOnClickChange(false, this._grid);
           this._grid = node;
           this.__onEditOnClickChange(this.editOnClick, this._grid);
-        } else if (node.getAttribute('slot') == 'form') {
+        } else if (slotAttributeValue == 'form') {
           this._form = node;
+        } else if (slotAttributeValue.indexOf('button') >= 0) {
+          const [button] = slotAttributeValue.split('-');
+          this[`_${button}Button`] = node;
         }
       }
     });
@@ -665,6 +731,70 @@ class CrudElement extends ElementMixin(ThemableMixin(PolymerElement)) {
     }
     form.addEventListener('change', this.__changeListener);
     form.addEventListener('input', this.__changeListener);
+  }
+
+  /** @private */
+  __onSaveButtonChange(save, old) {
+    this.__setupSlottedButton(save, old, this.__saveBound);
+  }
+
+  /** @private */
+  __onDeleteButtonChange(deleteButton, old) {
+    this.__setupSlottedButton(deleteButton, old, this.__deleteBound);
+  }
+
+  /** @private */
+  __onCancelButtonChange(cancel, old) {
+    this.__setupSlottedButton(cancel, old, this.__cancelBound);
+  }
+
+  /** @private */
+  __setupSlottedButton(slottedButton, currentButton, clickListener) {
+    if (currentButton && currentButton.parentElement) {
+      currentButton.parentElement.removeChild(currentButton);
+    }
+
+    if (slottedButton.parentElement === this) {
+      slottedButton.addEventListener('click', clickListener);
+    }
+  }
+
+  /** @private */
+  __hostPropsChanged() {
+    this.__propagateHostAttributes();
+  }
+
+  /** @private */
+  __propagateHostAttributes() {
+    this.__propagateHostAttributesToButton(this._saveButton, HOST_PROPS.save);
+    this.__propagateHostAttributesToButton(this._cancelButton, HOST_PROPS.cancel);
+    this.__propagateHostAttributesToButton(this._deleteButton, HOST_PROPS.delete);
+  }
+
+  /** @private */
+  __propagateHostAttributesToButton(button, props) {
+    if (button) {
+      props.forEach(({ attr, prop, parseProp }) => {
+        if (prop.indexOf('i18n') >= 0) {
+          button.textContent = this.i18n[prop.split('.')[1]];
+        } else {
+          this._setOrToggleAttribute(attr, parseProp(this[prop]), button);
+        }
+      });
+    }
+  }
+
+  /** @private */
+  _setOrToggleAttribute(name, value, node) {
+    if (!name || !node) {
+      return;
+    }
+
+    if (value) {
+      node.setAttribute(name, typeof value === 'boolean' ? '' : value);
+    } else {
+      node.removeAttribute(name);
+    }
   }
 
   /** @private */

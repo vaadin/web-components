@@ -137,13 +137,29 @@ describe('crud', () => {
     });
   });
 
-  describe('items', () => {
-    beforeEach(async () => {
-      crud = fixtureSync('<vaadin-crud style="width: 300px;"></vaadin-crud>');
-      crud.items = [{ foo: 'bar' }];
-      await nextRender(crud._grid);
-    });
+  ['default', 'slotted buttons'].forEach((mode) => {
+    describe(`[${mode}] items`, () => {
+      beforeEach(async () => {
+        if (mode === 'default') {
+          crud = fixtureSync('<vaadin-crud style="width: 300px;"></vaadin-crud>');
+        } else {
+          crud = fixtureSync(
+            `<vaadin-crud style="width: 300px;">
+              <vaadin-button slot="save-button"></vaadin-button>
+              <vaadin-button slot="cancel-button"></vaadin-button>
+              <vaadin-button slot="delete-button"></vaadin-button>
+            </vaadin-crud>`
+          );
+        }
+        crud.items = [{ foo: 'bar' }];
+        await nextRender(crud._grid);
+      });
 
+      describeItems();
+    });
+  });
+
+  function describeItems() {
     describe('editor header', () => {
       it('should have new item title', () => {
         crud.$.new.click();
@@ -641,7 +657,7 @@ describe('crud', () => {
         });
       });
     });
-  });
+  }
 
   describe('objects', () => {
     beforeEach(() => {

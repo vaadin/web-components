@@ -128,6 +128,15 @@ class DialogLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
       /** Reference to the edit form */
       form: Object,
 
+      /** Reference to the edit save button */
+      saveButton: Object,
+
+      /** Reference to the edit delete button */
+      deleteButton: Object,
+
+      /** Reference to the edit cancel button */
+      cancelButton: Object,
+
       mobile: {
         type: Boolean,
         observer: '__mobileChanged',
@@ -179,8 +188,24 @@ class DialogLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
     // Teleport edit form
     target.appendChild(this.form);
 
+    // This order is important so the spacing (coming from this.__footer) is correctly placed
+    if (this.saveButton) {
+      this.saveButton.setAttribute('slot', 'footer');
+      target.appendChild(this.saveButton);
+    }
+
+    if (this.cancelButton) {
+      this.cancelButton.setAttribute('slot', 'footer');
+      target.appendChild(this.cancelButton);
+    }
+
     // Teleport footer nodes
     this.__footer.forEach((node) => target.appendChild(node));
+
+    if (this.deleteButton) {
+      this.deleteButton.setAttribute('slot', 'footer');
+      target.appendChild(this.deleteButton);
+    }
 
     // Wait to set label until slotted element has been moved.
     setTimeout(() => {
