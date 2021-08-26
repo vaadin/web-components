@@ -19,6 +19,11 @@ interface TabindexMixinConstructor {
   new (...args: any[]): TabindexMixin;
 }
 
-interface TabindexMixin extends DisabledMixin {}
+interface TabindexMixin extends DisabledMixin {
+  /**
+   * Indicates whether the element can be focused and where it participates in sequential keyboard navigation.
+   */
+  tabindex: number | undefined | null;
+}
 
 export { TabindexMixinConstructor, TabindexMixin };
