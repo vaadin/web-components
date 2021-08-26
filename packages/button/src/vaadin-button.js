@@ -81,8 +81,8 @@ class Button extends ActiveMixin(TabindexMixin(FocusMixin(ElementMixin(ThemableM
   }
 
   /** @protected */
-  connectedCallback() {
-    super.connectedCallback();
+  ready() {
+    super.ready();
 
     if (!this.hasAttribute('role')) {
       this.setAttribute('role', 'button');
