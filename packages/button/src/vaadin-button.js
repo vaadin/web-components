@@ -6,10 +6,11 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
+import { TabindexMixin } from '@vaadin/field-base/src/tabindex-mixin.js';
 import { ActiveMixin } from '@vaadin/field-base/src/active-mixin.js';
-import { ControlStateMixin } from '@vaadin/vaadin-control-state-mixin/vaadin-control-state-mixin.js';
+import { FocusMixin } from '@vaadin/field-base/src/focus-mixin.js';
 
-class Button extends ControlStateMixin(ActiveMixin(ElementMixin(ThemableMixin(PolymerElement)))) {
+class Button extends ActiveMixin(TabindexMixin(FocusMixin(ElementMixin(ThemableMixin(PolymerElement))))) {
   static get is() {
     return 'vaadin-button';
   }
@@ -61,7 +62,7 @@ class Button extends ControlStateMixin(ActiveMixin(ElementMixin(ThemableMixin(Po
           text-overflow: ellipsis;
         }
       </style>
-      <button id="button" type="button" part="button">
+      <div part="button">
         <span part="prefix">
           <slot name="prefix"></slot>
         </span>
@@ -71,19 +72,19 @@ class Button extends ControlStateMixin(ActiveMixin(ElementMixin(ThemableMixin(Po
         <span part="suffix">
           <slot name="suffix"></slot>
         </span>
-      </button>
+      </div>
     `;
   }
 
-  /**
-   * A getter that returns the native button as a focusable element for ControlStateMixin.
-   *
-   * @protected
-   * @override
-   * @return {HTMLButtonElement}
-   */
-  get focusElement() {
-    return this.$.button;
+  /** @protected */
+  ready() {
+    super.ready();
+
+    // By default, if the user hasn't provided a custom role,
+    // the role attribute is set to "button".
+    if (!this.hasAttribute('role')) {
+      this.setAttribute('role', 'button');
+    }
   }
 }
 
