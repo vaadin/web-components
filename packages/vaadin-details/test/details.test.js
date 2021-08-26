@@ -33,19 +33,6 @@ describe('vaadin-details', () => {
     });
   });
 
-  describe('toggle button', () => {
-    it('should have summary slot inside toggle button', () => {
-      const slot = toggle.querySelector('slot[name="summary"]');
-      expect(slot).to.be.ok;
-      expect(slot.assignedNodes()[0].textContent).to.equal('Summary');
-    });
-
-    it('should have disabled attribute when disabled is true', () => {
-      details.disabled = true;
-      expect(toggle.hasAttribute('disabled')).to.equal(true);
-    });
-  });
-
   describe('opened', () => {
     it('should set opened to false by default', () => {
       expect(details.opened).to.be.false;
@@ -108,42 +95,9 @@ describe('vaadin-details', () => {
     });
   });
 
-  describe('ARIA roles', () => {
-    it('should set role="button" on the toggle button', () => {
-      expect(toggle.getAttribute('role')).to.equal('button');
-    });
-
-    it('should set role="heading" on the toggle button wrapper', () => {
-      expect(toggle.parentElement.getAttribute('role')).to.equal('heading');
-    });
-
-    it('should set aria-expanded on toggle button to false by default', () => {
-      expect(toggle.getAttribute('aria-expanded')).to.equal('false');
-    });
-
-    it('should set aria-expanded on toggle button to true when opened', () => {
-      details.opened = true;
-      expect(toggle.getAttribute('aria-expanded')).to.equal('true');
-    });
-
-    it('should set aria-hidden on the content to true by default', () => {
-      expect(content.getAttribute('aria-hidden')).to.equal('true');
-    });
-
-    it('should set aria-hidden on the content to false when opened', () => {
-      details.opened = true;
-      expect(content.getAttribute('aria-hidden')).to.equal('false');
-    });
-
-    it('should set aria-controls on toggle button', () => {
-      const idRegex = /^vaadin-details-content-\d+$/;
-      expect(idRegex.test(toggle.getAttribute('aria-controls'))).to.be.true;
-    });
-  });
-
   describe('unique IDs', () => {
     const idRegex = /^vaadin-details-content-\d+$/;
-    let container, details;
+    let container, details, contents, buttons;
 
     beforeEach(() => {
       container = fixtureSync(`
@@ -158,15 +112,25 @@ describe('vaadin-details', () => {
           </vaadin-details>
         </div>
       `);
-      details = container.querySelectorAll('vaadin-details');
+      details = Array.from(container.querySelectorAll('vaadin-details'));
+      contents = details.map((el) => el._collapsible);
+      buttons = details.map((el) => el.focusElement);
     });
 
     it('should set unique id on the content', () => {
-      const detailsId1 = details[0]._collapsible.id;
-      const detailsId2 = details[1]._collapsible.id;
+      const detailsId1 = contents[0].id;
+      const detailsId2 = contents[1].id;
       expect(idRegex.test(detailsId1)).to.be.true;
       expect(idRegex.test(detailsId2)).to.be.true;
       expect(detailsId1).to.not.equal(detailsId2);
+    });
+
+    it('should set aria-controls on toggle button', () => {
+      const aria1 = buttons[0].getAttribute('aria-controls');
+      const aria2 = buttons[1].getAttribute('aria-controls');
+      expect(idRegex.test(aria1)).to.be.true;
+      expect(idRegex.test(aria2)).to.be.true;
+      expect(aria1).to.not.equal(aria2);
     });
   });
 
