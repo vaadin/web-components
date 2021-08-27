@@ -307,6 +307,32 @@ describe('lazy loading', () => {
           };
           comboBox.open();
         });
+
+        it('should rerender once loaded updated items', (done) => {
+          comboBox.dataProvider = (_, callback) => {
+            if (!comboBox.filteredItems.length) {
+              // First batch of items for page 0
+              callback(['foo'], 1);
+              // Asynchronously clear the cache which leads to another request for page 0
+              setTimeout(() => comboBox.clearCache());
+            } else {
+              // Second batch of items for page 0
+              callback(['bar'], 1);
+
+              setTimeout(() => {
+                // Expect the renderer to have run for the updated items.
+                expect(getViewportItems(comboBox)[0].$.content.textContent).to.equal('bar');
+
+                // Avoid getting done called multiple times
+                if (!done._called) {
+                  done._called = true;
+                  done();
+                }
+              });
+            }
+          };
+          comboBox.open();
+        });
       });
 
       describe('when selecting item', () => {

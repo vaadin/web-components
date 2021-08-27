@@ -257,10 +257,10 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
       return;
     }
 
-    if (loading) {
-      this.$.dropdown.$.overlay.setAttribute('loading', '');
-    } else {
-      this.$.dropdown.$.overlay.removeAttribute('loading');
+    this.$.dropdown.$.overlay.toggleAttribute('loading', loading);
+
+    if (!loading && this.__virtualizer) {
+      setTimeout(() => this.__virtualizer.update());
     }
   }
 
