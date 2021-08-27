@@ -492,7 +492,10 @@ describe('items', () => {
       rootMenu.openOn = 'mouseover';
       target = rootMenu.firstElementChild;
       rootMenu.items = [
-        { text: 'foo-0', children: [{ text: 'foo-0-0' }, { text: 'foo-0-1', children: [{ text: 'foo-0-1-0' }] }] },
+        {
+          text: 'foo-0',
+          children: [{ text: 'foo-0-0' }, { text: 'foo-0-1', children: [{ text: 'foo-0-1-0' }] }]
+        },
         { text: 'foo-1' }
       ];
       open();
@@ -547,6 +550,32 @@ describe('items', () => {
         const itemsDoNotHaveTheme = items.filter((item) => item.hasAttribute('theme')).length === 0;
         expect(itemsDoNotHaveTheme).to.be.true;
       });
+    });
+
+    it('should merge component theme with item theme', async () => {
+      rootMenu.items[1].theme = 'bar-1';
+      rootMenu.items[0].children[0].theme = 'bar-0-0';
+      rootMenu.items = [...rootMenu.items];
+      rootMenu.close();
+      open();
+      await nextFrame();
+      open(menuComponents()[0]);
+      subMenu = getSubMenu();
+      await nextFrame();
+
+      let overlay = rootMenu.$.overlay;
+      let listBox = overlay.querySelector('vaadin-context-menu-list-box');
+      const rootItems = Array.from(listBox.querySelectorAll('vaadin-context-menu-item'));
+
+      overlay = subMenu.$.overlay;
+      listBox = overlay.querySelector('vaadin-context-menu-list-box');
+      const subItems = Array.from(listBox.querySelectorAll('vaadin-context-menu-item'));
+
+      expect(rootItems[0].getAttribute('theme')).to.equal('foo');
+      ['foo', 'bar-1'].forEach((str) => expect(rootItems[1].getAttribute('theme')).to.contain(str));
+
+      ['foo', 'bar-0-0'].forEach((str) => expect(subItems[0].getAttribute('theme')).to.contain(str));
+      expect(subItems[1].getAttribute('theme')).to.equal('foo');
     });
   });
 });
