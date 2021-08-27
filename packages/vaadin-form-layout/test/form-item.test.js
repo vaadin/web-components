@@ -18,28 +18,6 @@ describe('form-item', () => {
     input = item.querySelector('input');
   });
 
-  describe('basic features', () => {
-    let labelSlot, inputSlot;
-
-    beforeEach(() => {
-      labelSlot = item.shadowRoot.querySelector('slot[name="label"]');
-      inputSlot = item.shadowRoot.querySelector('slot:not([name])');
-    });
-
-    it('should have slots', () => {
-      expect(labelSlot).to.be.ok;
-      expect(inputSlot).to.be.ok;
-    });
-
-    it('should distribute label', () => {
-      expect(labelSlot.assignedNodes()).to.contain(label);
-    });
-
-    it('should distribute input', () => {
-      expect(inputSlot.assignedNodes()).to.contain(input);
-    });
-  });
-
   describe('label positioning', () => {
     it('should be aside by default', () => {
       const labelRect = label.getBoundingClientRect();

@@ -61,22 +61,11 @@ describe('form layout', () => {
       `);
     });
 
-    it('should have slot', () => {
-      expect(layout.shadowRoot.querySelector('slot')).to.be.ok;
-    });
-
     it('should have max-width set to 100%', () => {
       expect(getComputedStyle(layout).getPropertyValue('max-width')).to.be.oneOf([
         '900px', // some browsers (IE, Safari) return px computed style
         '100%'
       ]);
-    });
-
-    it('should distribute vaadin-text-field', () => {
-      const textField = layout.querySelector('vaadin-text-field');
-      const slot = layout.shadowRoot.querySelector('slot');
-      expect(textField).to.be.ok;
-      expect(slot.assignedNodes()).to.contain(textField);
     });
   });
 
@@ -155,7 +144,7 @@ describe('form layout', () => {
 
     beforeEach(() => {
       container = fixtureSync(`
-      <div style="width: 300px; overflow: auto;">
+        <div style="width: 300px; overflow: auto;">
           <vaadin-form-layout responsive-steps='[{"columns": 3}]'>
             <div at-start>1 start</div>
             <div>2 mid</div>
