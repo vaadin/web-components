@@ -168,8 +168,6 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
   }
 
   __updateElement(el, index) {
-    // TODO: This is called too many times for a single item initially
-
     const item = this.__effectiveItems[index];
 
     el.setProperties({
@@ -396,10 +394,6 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
     if (this.__virtualizer) {
       this.__virtualizer.update();
     }
-  }
-
-  ensureItemsRendered() {
-    this.__updateAllItems();
   }
 
   adjustScrollPosition() {
