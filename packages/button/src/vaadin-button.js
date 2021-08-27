@@ -30,13 +30,13 @@ class Button extends ActiveMixin(TabindexMixin(FocusMixin(ElementMixin(ThemableM
         }
 
         /* Ensure the button is always aligned on the baseline */
-        [part='button']::before {
+        .vaadin-button-container::before {
           content: '\\2003';
           display: inline-block;
           width: 0;
         }
 
-        [part='button'] {
+        .vaadin-button-container {
           display: inline-flex;
           align-items: center;
           justify-content: center;
@@ -62,7 +62,7 @@ class Button extends ActiveMixin(TabindexMixin(FocusMixin(ElementMixin(ThemableM
           text-overflow: ellipsis;
         }
       </style>
-      <div part="button">
+      <div class="vaadin-button-container">
         <span part="prefix">
           <slot name="prefix"></slot>
         </span>
