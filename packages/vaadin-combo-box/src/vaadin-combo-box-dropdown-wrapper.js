@@ -4,9 +4,9 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import { Virtualizer } from '@vaadin/vaadin-virtual-list/src/virtualizer.js';
 import './vaadin-combo-box-item.js';
 import './vaadin-combo-box-dropdown.js';
-import { Virtualizer } from '@vaadin/vaadin-virtual-list/src/virtualizer.js';
 import { ComboBoxPlaceholder } from './vaadin-combo-box-placeholder.js';
 
 const TOUCH_DEVICE = (() => {
@@ -150,6 +150,11 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
     ];
   }
 
+  constructor() {
+    super();
+    this.__boundOnItemClick = this._onItemClick.bind(this);
+  }
+
   __effectiveItemsChanged(effectiveItems) {
     if (this.__virtualizer && effectiveItems) {
       this.__virtualizer.size = effectiveItems.length;
@@ -160,7 +165,7 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
   __createElements(count) {
     return [...Array(count)].map(() => {
       const item = document.createElement('vaadin-combo-box-item');
-      item.addEventListener('click', this._onItemClick.bind(this));
+      item.addEventListener('click', this.__boundOnItemClick);
       item.tabIndex = '-1';
       item.style.width = '100%';
       return item;
