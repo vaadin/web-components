@@ -193,7 +193,7 @@ export const ButtonsMixin = (superClass) =>
         button.textContent = item.text;
       }
 
-      const mergedTheme = [this.theme, item.theme].filter((theme) => theme).join(' ');
+      const mergedTheme = [this.theme, item.theme].filter((t) => t).join(' ');
       if (mergedTheme) {
         button.setAttribute('theme', mergedTheme);
       }

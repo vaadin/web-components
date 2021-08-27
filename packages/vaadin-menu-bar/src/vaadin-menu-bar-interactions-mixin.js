@@ -57,7 +57,7 @@ export const InteractionsMixin = (superClass) =>
     /** @private */
     _themeChanged(theme) {
       this._buttons.forEach((button) => {
-        const mergedTheme = [theme, button.item && button.item.theme].filter((theme) => theme).join(' ');
+        const mergedTheme = [theme, button.item && button.item.theme].filter((t) => t).join(' ');
         if (mergedTheme) {
           button.setAttribute('theme', mergedTheme);
         } else {
