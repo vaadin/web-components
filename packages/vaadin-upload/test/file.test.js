@@ -49,4 +49,49 @@ describe('<vaadin-upload-file> element', () => {
       expect(fileElement.hasAttribute('error')).to.be.true;
     });
   });
+
+  describe('a11y', () => {
+    let i18n, button;
+
+    beforeEach(() => {
+      i18n = {
+        file: {
+          start: 'Start',
+          retry: 'Retry',
+          clear: 'Clear'
+        }
+      };
+      fileElement.i18n = i18n;
+    });
+
+    describe('start button', () => {
+      beforeEach(() => {
+        button = fileElement.shadowRoot.querySelector('[part=start-button]');
+      });
+
+      it('should have aria-label attribute', () => {
+        expect(button.getAttribute('aria-label')).to.equal(i18n.file.start);
+      });
+    });
+
+    describe('retry button', () => {
+      beforeEach(() => {
+        button = fileElement.shadowRoot.querySelector('[part=retry-button]');
+      });
+
+      it('should have aria-label attribute', () => {
+        expect(button.getAttribute('aria-label')).to.equal(i18n.file.retry);
+      });
+    });
+
+    describe('clear button', () => {
+      beforeEach(() => {
+        button = fileElement.shadowRoot.querySelector('[part=clear-button]');
+      });
+
+      it('should have aria-label attribute', () => {
+        expect(button.getAttribute('aria-label')).to.equal(i18n.file.clear);
+      });
+    });
+  });
 });
