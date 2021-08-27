@@ -115,7 +115,7 @@ describe('vaadin-app-layout', () => {
     beforeEach(async () => {
       layout = fixtureSync(`
         <vaadin-app-layout>
-          <vaadin-drawer-toggle slot="navbar"></vaadin-drawer-toggle>
+          <vaadin-drawer-toggle id="toggle" slot="navbar"></vaadin-drawer-toggle>
           <h2 slot="navbar">App name</h2>
           <section slot="drawer">
             <p>Item 1</p>
@@ -231,6 +231,120 @@ describe('vaadin-app-layout', () => {
         window.dispatchEvent(new CustomEvent('foo-bar'));
         expect(layout.drawerOpened).to.be.false;
       });
+
+      it('should not make the backdrop inert', () => {
+        layout.drawerOpened = true;
+
+        const content = layout.$.content;
+        const backdrop = layout.shadowRoot.querySelector('[part="backdrop"]');
+
+        expect(content.inert).to.be.true;
+
+        expect(drawer.inert).to.be.false;
+        expect(backdrop.inert).to.be.false;
+      });
+
+      it('should remove content inert when leaving overlay mode', () => {
+        layout.drawerOpened = true;
+
+        const content = layout.$.content;
+        expect(content.inert).to.be.true;
+
+        layout.style.setProperty('--vaadin-app-layout-drawer-overlay', 'false');
+        layout._updateOverlayMode();
+
+        expect(content.inert).to.be.false;
+      });
+
+      it('should focus the toggle when closing the drawer in overlay mode', () => {
+        const toggle = document.getElementById('toggle');
+        layout.drawerOpened = true;
+
+        layout.style.setProperty('--vaadin-app-layout-drawer-overlay', 'true');
+        layout._updateOverlayMode();
+
+        expect(document.activeElement === toggle).to.be.false;
+
+        layout.drawerOpened = false;
+
+        expect(document.activeElement === toggle).to.be.true;
+      });
+    });
+  });
+
+  describe('drawer accessibility', () => {
+    let drawerButton, contentButton;
+
+    beforeEach(async () => {
+      layout = fixtureSync(`
+        <vaadin-app-layout>
+          <vaadin-drawer-toggle slot="navbar"></vaadin-drawer-toggle>
+          <h2 slot="navbar">App Name</h2>
+          <section slot="drawer">
+            <button id="drawerButton">Drawer button</button>
+          </section>
+          <main>
+            Page content
+            <button id="contentButton">Content button</button>
+          </main>
+        </vaadin-app-layout>
+      `);
+      await nextFrame();
+
+      drawerButton = document.getElementById('drawerButton');
+      contentButton = document.getElementById('contentButton');
+
+      // Not in overlay mode by default
+      layout.style.setProperty('--vaadin-app-layout-drawer-overlay', 'false');
+      layout._updateOverlayMode();
+    });
+
+    const assertFocused = (elem, focused = true) => {
+      expect(elem === document.activeElement).to.equal(focused);
+    };
+
+    const setOverlay = (overlay) => {
+      layout.style.setProperty('--vaadin-app-layout-drawer-overlay', overlay);
+      layout._updateOverlayMode();
+    };
+
+    it('should allow focusing elements inside and outside the drawer when opened and not overlay', () => {
+      layout.drawerOpened = true;
+      expect(layout.overlay).to.be.false;
+
+      contentButton.focus();
+      assertFocused(contentButton);
+
+      drawerButton.focus();
+      assertFocused(drawerButton);
+    });
+
+    it('should only allow focusing elements inside the drawer when opened and overlay', () => {
+      setOverlay(true);
+      layout.drawerOpened = true;
+      expect(layout.overlay).to.be.true;
+
+      contentButton.focus();
+      assertFocused(contentButton, false);
+
+      drawerButton.focus();
+      assertFocused(drawerButton);
+    });
+
+    it('should not allow focusing elements inside the drawer when closed', () => {
+      layout.drawerOpened = false;
+      expect(layout.overlay).to.be.false;
+
+      contentButton.focus();
+      assertFocused(contentButton);
+
+      drawerButton.focus();
+      assertFocused(drawerButton, false);
+
+      setOverlay(true);
+
+      drawerButton.focus();
+      assertFocused(drawerButton, false);
     });
   });
 

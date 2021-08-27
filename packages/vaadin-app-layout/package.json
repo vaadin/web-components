@@ -31,7 +31,9 @@
     "@vaadin/vaadin-element-mixin": "^22.0.0-alpha2",
     "@vaadin/vaadin-lumo-styles": "^22.0.0-alpha2",
     "@vaadin/vaadin-material-styles": "^22.0.0-alpha2",
-    "@vaadin/vaadin-themable-mixin": "^22.0.0-alpha2"
+    "@vaadin/vaadin-themable-mixin": "^22.0.0-alpha2",
+    "blocking-elements": "^0.1.0",
+    "wicg-inert": "^3.0.0"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
