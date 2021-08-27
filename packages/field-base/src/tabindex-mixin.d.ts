@@ -10,8 +10,8 @@ import { DisabledMixin } from './disabled-mixin.js';
  *
  * By default, the attribute is set to 0 that makes the element focusable.
  *
- * The attribute is removed whenever the user disables the element
- * and restored with the last known value once the element is enabled again.
+ * The attribute is set to -1 whenever the user disables the element
+ * and restored with the last known value once the element is enabled.
  */
 declare function TabindexMixin<T extends new (...args: any[]) => {}>(base: T): T & TabindexMixinConstructor;
 
