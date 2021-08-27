@@ -365,13 +365,6 @@ describe('filtering items', () => {
       expect(resizeSpy.called).to.be.false;
     });
 
-    it('should not re-position the overlay if not opened', () => {
-      const repositionSpy = sinon.spy(comboBox, '_repositionOverlay');
-      comboBox.filteredItems = ['foo', 'bar', 'baz'];
-
-      expect(repositionSpy.called).to.be.false;
-    });
-
     it('should not perform measurements when loading changes if not opened', () => {
       const measureSpy = sinon.spy(comboBox.inputElement, 'getBoundingClientRect');
       comboBox.loading = true;

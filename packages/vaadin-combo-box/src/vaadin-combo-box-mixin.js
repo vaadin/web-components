@@ -889,10 +889,6 @@ export const ComboBoxMixin = (subclass) =>
           this.opened || this.autoOpenDisabled
             ? this.$.overlay.indexOfLabel(this.filter)
             : this._indexOfValue(this.value, this.filteredItems);
-
-        if (this.opened) {
-          this._repositionOverlay();
-        }
       }
     }
 
@@ -931,37 +927,6 @@ export const ComboBoxMixin = (subclass) =>
     /** @private */
     _setOverlayItems(items) {
       this.$.overlay.set('_items', items);
-    }
-
-    /** @private */
-    _repositionOverlay() {
-      // async needed to reposition correctly after filtering
-      // (especially when aligned on top of input)
-      // this.__repositionOverlayDebouncer = Debouncer.debounce(
-      //   this.__repositionOverlayDebouncer,
-      //   // Long debounce: sizing updates invoke multiple styling rounds,
-      //   // which might affect performance, especially in old browsers.
-      //   // See https://github.com/vaadin/vaadin-combo-box/pull/800
-      //   timeOut.after(500),
-      //   () => {
-      //     const selector = this.$.overlay._selector;
-      //     if (!selector._isClientFull()) {
-      //       // Due to the mismatch of the Y position of the item rendered
-      //       // at the top of the scrolling list with some specific scroll
-      //       // position values (2324, 3486, 6972, 60972, 95757 etc.)
-      //       // iron-list loops the increasing of the pool and adds
-      //       // too many items to the DOM.
-      //       // Adjusting scroll position to equal the current scrollTop value
-      //       // to avoid looping.
-      //       selector._resetScrollPosition(selector._physicalTop);
-      //     }
-      //     this._resizeDropdown();
-      //     this.$.overlay.updateViewportBoundaries();
-      //     this.$.overlay.ensureItemsRendered();
-      //     selector.notifyResize();
-      //     flush();
-      //   }
-      // );
     }
 
     /** @private */

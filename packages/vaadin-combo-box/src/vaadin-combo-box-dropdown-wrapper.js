@@ -415,17 +415,16 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
    * scrolling the parent similarly to touch scrolling.
    */
   _patchWheelOverScrolling() {
-    // const selector = this._selector;
-    // selector.addEventListener('wheel', (e) => {
-    //   const scroller = selector._scroller || selector.scrollTarget;
-    //   const scrolledToTop = scroller.scrollTop === 0;
-    //   const scrolledToBottom = scroller.scrollHeight - scroller.scrollTop - scroller.clientHeight <= 1;
-    //   if (scrolledToTop && e.deltaY < 0) {
-    //     e.preventDefault();
-    //   } else if (scrolledToBottom && e.deltaY > 0) {
-    //     e.preventDefault();
-    //   }
-    // });
+    this._selector.addEventListener('wheel', (e) => {
+      const scroller = this._scroller;
+      const scrolledToTop = scroller.scrollTop === 0;
+      const scrolledToBottom = scroller.scrollHeight - scroller.scrollTop - scroller.clientHeight <= 1;
+      if (scrolledToTop && e.deltaY < 0) {
+        e.preventDefault();
+      } else if (scrolledToBottom && e.deltaY > 0) {
+        e.preventDefault();
+      }
+    });
   }
 
   get _viewportTotalPaddingBottom() {
