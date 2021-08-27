@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
+import { sendKeys } from '@web/test-runner-commands';
 import {
   arrowDownKeyDown,
   enterKeyDown,
@@ -10,125 +10,248 @@ import {
   mouseup,
   spaceKeyDown,
   spaceKeyUp,
-  touchstart,
-  touchend
+  touchend,
+  touchstart
 } from '@vaadin/testing-helpers';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
-import '../vaadin-button.js';
+import { Button } from '../vaadin-button.js';
+
+customElements.define(Button.is, Button);
 
 describe('vaadin-button', () => {
-  let vaadinButton, nativeButton, label;
+  let element;
 
-  beforeEach(() => {
-    vaadinButton = fixtureSync('<vaadin-button>Vaadin <i>Button</i></vaadin-button>');
-    nativeButton = vaadinButton.shadowRoot.querySelector('button');
-    label = vaadinButton.shadowRoot.querySelector('[part=label]');
+  describe('custom element definition', () => {
+    let tagName;
+
+    beforeEach(() => {
+      element = fixtureSync('<vaadin-button></vaadin-button>');
+      tagName = element.tagName.toLowerCase();
+    });
+
+    it('should be defined in custom element registry', () => {
+      expect(customElements.get(tagName)).to.be.ok;
+    });
+
+    it('should have a valid static "is" getter', () => {
+      expect(customElements.get(tagName).is).to.equal(tagName);
+    });
   });
 
-  it('should define button label using light DOM', () => {
-    const children = FlattenedNodesObserver.getFlattenedNodes(label);
-    expect(children[1].textContent).to.be.equal('Vaadin ');
-    expect(children[2].outerHTML).to.be.equal('<i>Button</i>');
+  describe('role', () => {
+    describe('default', () => {
+      beforeEach(() => {
+        element = fixtureSync('<vaadin-button>Press me</vaadin-button>');
+      });
+
+      it('should set role attribute to button by default', () => {
+        expect(element.getAttribute('role')).to.equal('button');
+      });
+    });
+
+    describe('custom', () => {
+      beforeEach(() => {
+        element = fixtureSync('<vaadin-button role="menuitem">Press me</vaadin-button>');
+      });
+
+      it('should not override custom role attribute', () => {
+        expect(element.getAttribute('role')).to.equal('menuitem');
+      });
+    });
   });
 
-  it('can be disabled imperatively', () => {
-    vaadinButton.disabled = true;
-    expect(nativeButton.hasAttribute('disabled')).to.be.eql(true);
+  describe('label', () => {
+    let label;
+
+    beforeEach(() => {
+      element = fixtureSync('<vaadin-button>Press me</vaadin-button>');
+      label = element.shadowRoot.querySelector('[part=label]');
+    });
+
+    it('should define the button label using light DOM', () => {
+      const children = FlattenedNodesObserver.getFlattenedNodes(label);
+      expect(children[1].textContent).to.be.equal('Press me');
+    });
   });
 
-  it('should fire click event', () => {
-    const spy = sinon.spy();
-    vaadinButton.addEventListener('click', spy);
-    vaadinButton.click();
-    expect(spy.calledOnce).to.be.true;
-  });
+  describe('mixins', () => {
+    beforeEach(() => {
+      element = fixtureSync('<vaadin-button>Press me</vaadin-button>');
+    });
 
-  it('should not fire click event when disabled', () => {
-    const spy = sinon.spy();
-    vaadinButton.addEventListener('click', spy);
-    vaadinButton.disabled = true;
-    vaadinButton.click();
-    expect(spy.called).to.be.false;
-  });
+    // TODO: Remove when it would be possible for an element:
+    // – to detect if it inherits DisabledMixin.
+    // – or to run a suit of the tests defined in DisabledMixin.
+    describe('DisabledMixin', () => {
+      it('should set disabled property to false by default', () => {
+        expect(element.disabled).to.be.false;
+      });
 
-  it('host should have the `button` role', () => {
-    expect(vaadinButton.getAttribute('role')).to.be.eql('button');
-  });
+      it('should reflect disabled property to attribute', () => {
+        element.disabled = true;
+        expect(element.hasAttribute('disabled')).to.be.true;
+      });
 
-  it('native button should have type="button"', () => {
-    expect(nativeButton.getAttribute('type')).to.be.eql('button');
-  });
+      it('should set the aria-disabled attribute when disabled', () => {
+        element.disabled = true;
+        expect(element.getAttribute('aria-disabled')).to.equal('true');
+      });
+    });
 
-  it('native button should have the `presentation` role', () => {
-    expect(nativeButton.getAttribute('role')).to.be.eql('presentation');
-  });
+    // TODO: Remove when it would be possible for an element:
+    // – to detect if it inherits ActiveMixin.
+    // – or to run a suit of the tests defined in ActiveMixin.
+    describe('ActiveMixin', () => {
+      (isIOS ? it.skip : it)('should have active attribute on mousedown', () => {
+        mousedown(element);
+        expect(element.hasAttribute('active')).to.be.true;
+      });
 
-  (isIOS ? it.skip : it)('should have active attribute on mousedown', () => {
-    mousedown(vaadinButton);
-    expect(vaadinButton.hasAttribute('active')).to.be.true;
-  });
+      (isIOS ? it.skip : it)('should not have active attribute after mouseup', () => {
+        mousedown(element);
+        mouseup(element);
+        expect(element.hasAttribute('active')).to.be.false;
+      });
 
-  (isIOS ? it.skip : it)('should not have active attribute after mouseup', () => {
-    mousedown(vaadinButton);
-    mouseup(vaadinButton);
-    expect(vaadinButton.hasAttribute('active')).to.be.false;
-  });
+      it('should have active attribute on touchstart', () => {
+        touchstart(element);
+        expect(element.hasAttribute('active')).to.be.true;
+      });
 
-  it('should have active attribute on touchstart', () => {
-    touchstart(vaadinButton);
-    expect(vaadinButton.hasAttribute('active')).to.be.true;
-  });
+      it('should not have active attribute after touchend', () => {
+        touchstart(element);
+        touchend(element);
+        expect(element.hasAttribute('active')).to.be.false;
+      });
 
-  it('should not have active attribute after touchend', () => {
-    touchstart(vaadinButton);
-    touchend(vaadinButton);
-    expect(vaadinButton.hasAttribute('active')).to.be.false;
-  });
+      it('should have active attribute on enter', () => {
+        enterKeyDown(element);
+        expect(element.hasAttribute('active')).to.be.true;
+      });
 
-  it('should have active attribute on enter', () => {
-    enterKeyDown(vaadinButton);
-    expect(vaadinButton.hasAttribute('active')).to.be.true;
-  });
+      it('should not have active attribute after enter', () => {
+        enterKeyDown(element);
+        enterKeyUp(element);
+        expect(element.hasAttribute('active')).to.be.false;
+      });
 
-  it('should not have active attribute after enter', () => {
-    enterKeyDown(vaadinButton);
-    enterKeyUp(vaadinButton);
-    expect(vaadinButton.hasAttribute('active')).to.be.false;
-  });
+      it('should have active attribute on space', () => {
+        spaceKeyDown(element);
+        expect(element.hasAttribute('active')).to.be.true;
+      });
 
-  it('should have active attribute on space', () => {
-    spaceKeyDown(vaadinButton);
-    expect(vaadinButton.hasAttribute('active')).to.be.true;
-  });
+      it('should not have active attribute after space', () => {
+        spaceKeyDown(element);
+        spaceKeyUp(element);
+        expect(element.hasAttribute('active')).to.be.false;
+      });
 
-  it('should not have active attribute after space', () => {
-    spaceKeyDown(vaadinButton);
-    spaceKeyUp(vaadinButton);
-    expect(vaadinButton.hasAttribute('active')).to.be.false;
-  });
+      it('should not have active attribute on arrow key', () => {
+        arrowDownKeyDown(element);
+        expect(element.hasAttribute('active')).to.be.false;
+      });
 
-  it('should not have active attribute on arrow key', () => {
-    arrowDownKeyDown(vaadinButton);
-    expect(vaadinButton.hasAttribute('active')).to.be.false;
-  });
+      it('should not have active attribute when disabled', () => {
+        element.disabled = true;
+        mousedown(element);
+        enterKeyDown(element);
+        spaceKeyDown(element);
+        expect(element.hasAttribute('active')).to.be.false;
+      });
 
-  it('should not have active attribute when disabled', () => {
-    vaadinButton.disabled = true;
-    mousedown(vaadinButton);
-    enterKeyDown(vaadinButton);
-    spaceKeyDown(vaadinButton);
-    expect(vaadinButton.hasAttribute('active')).to.be.false;
-  });
+      it('should not have active attribute when disconnected from the DOM', () => {
+        spaceKeyDown(element);
+        element.parentNode.removeChild(element);
+        expect(element.hasAttribute('active')).to.be.false;
+      });
 
-  it('should not have active attribute when disconnected from the DOM', () => {
-    spaceKeyDown(vaadinButton);
-    vaadinButton.parentNode.removeChild(vaadinButton);
-    expect(vaadinButton.hasAttribute('active')).to.be.false;
-  });
+      it('should not have active attribute after blur', () => {
+        spaceKeyDown(element);
+        element.dispatchEvent(new CustomEvent('blur'));
+        expect(element.hasAttribute('active')).to.be.false;
+      });
+    });
 
-  it('should not have active attribute after blur', () => {
-    spaceKeyDown(vaadinButton);
-    vaadinButton.dispatchEvent(new CustomEvent('blur'));
-    expect(vaadinButton.hasAttribute('active')).to.be.false;
+    // TODO: Remove when it would be possible for an element:
+    // – to detect if it inherits TabindexMixin.
+    // – or to run a suit of the tests defined in TabindexMixin.
+    describe('TabindexMixin', () => {
+      it('should set tabindex attribute to 0 by default', () => {
+        expect(element.getAttribute('tabindex')).to.be.equal('0');
+      });
+
+      it('should reflect tabindex property to the attribute', () => {
+        element.tabindex = 1;
+        expect(element.getAttribute('tabindex')).to.be.equal('1');
+      });
+
+      it('should reflect native tabIndex property to the attribute', () => {
+        element.tabIndex = 1;
+        expect(element.getAttribute('tabindex')).to.be.equal('1');
+      });
+
+      it('should set tabindex attribute to -1 when disabled', () => {
+        element.tabIndex = 1;
+        element.disabled = true;
+        expect(element.getAttribute('tabindex')).to.be.equal('-1');
+      });
+
+      it('should restore tabindex attribute when enabled', () => {
+        element.tabIndex = 1;
+        element.disabled = true;
+        element.disabled = false;
+        expect(element.getAttribute('tabindex')).to.be.equal('1');
+      });
+
+      it('should restore tabindex attribute with the last known value when enabled', () => {
+        element.tabIndex = 1;
+        element.disabled = true;
+        element.tabIndex = 2;
+        expect(element.getAttribute('tabindex')).to.be.equal('-1');
+
+        element.disabled = false;
+        expect(element.getAttribute('tabindex')).to.be.equal('2');
+      });
+    });
+
+    // TODO: Remove when it would be possible for an element:
+    // – to detect if it inherits FocusMixin.
+    // – or to run a suit of the tests defined in FocusMixin.
+    describe('FocusMixin', () => {
+      describe('focusing with Tab', () => {
+        beforeEach(async () => {
+          // Focus on the button
+          await sendKeys({ press: 'Tab' });
+        });
+
+        it('should set focused attribute', () => {
+          expect(element.hasAttribute('focused')).to.be.true;
+        });
+
+        it('should set focus-ring attribute', () => {
+          expect(element.hasAttribute('focus-ring')).to.be.true;
+        });
+      });
+
+      describe('loosing focus with Shift+Tab', () => {
+        beforeEach(async () => {
+          // Focus on the button
+          await sendKeys({ press: 'Tab' });
+
+          // Focus out of the button
+          await sendKeys({ down: 'Shift' });
+          await sendKeys({ press: 'Tab' });
+          await sendKeys({ up: 'Shift' });
+        });
+
+        it('should remove focused attribute', () => {
+          expect(element.hasAttribute('focused')).to.be.false;
+        });
+
+        it('should remove focus-ring attribute', () => {
+          expect(element.hasAttribute('focus-ring')).to.be.false;
+        });
+      });
+    });
   });
 });
