@@ -152,10 +152,8 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
 
   __effectiveItemsChanged(effectiveItems) {
     if (this.__virtualizer && effectiveItems) {
-      // requestAnimationFrame(() => {
       this.__virtualizer.size = effectiveItems.length;
       this.__virtualizer.flush();
-      // });
     }
   }
 
@@ -170,13 +168,15 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
   }
 
   __updateElement(el, index) {
+    // TODO: This is called too many times for a single item initially
+
     const item = this.__effectiveItems[index];
 
     el.setProperties({
       item: this.__effectiveItems[index],
       index: this.__requestItemByIndex(item, index),
-      label: this.getItemLabel(item, this._itemLabelPath), // TODO: _itemLabelPath should also invoke rerender
-      selected: this._isItemSelected(item, this._selectedItem, this._itemIdPath), // TODO: _itemIdPath should also invoke rerender
+      label: this.getItemLabel(item, this._itemLabelPath),
+      selected: this._isItemSelected(item, this._selectedItem, this._itemIdPath),
       renderer: this.renderer,
       focused: this._isItemFocused(this._focusedIndex, index)
     });
@@ -394,7 +394,6 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
 
   __updateAllItems() {
     if (this.__virtualizer) {
-      // TODO: Check if this causes excess renderer invocations
       this.__virtualizer.update();
     }
   }
