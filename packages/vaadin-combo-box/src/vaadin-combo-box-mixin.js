@@ -601,13 +601,6 @@ export const ComboBoxMixin = (subclass) =>
       // we need to flush the DOM to make sure it doesn't get flushed in the middle of _render call
       // because that will cause problems to say the least.
       flush();
-
-      // Ensure metrics are up-to-date
-      // this.$.overlay.updateViewportBoundaries();
-      // Force iron-list to create reusable nodes. Otherwise it will only start
-      // doing that in scroll listener, which might affect performance.
-      // See https://github.com/vaadin/vaadin-combo-box/pull/776
-      // this.$.overlay._selector._increasePoolIfNeeded();
       setTimeout(() => this._resizeDropdown(), 1);
       // Defer scroll position adjustment to improve performance.
       window.requestAnimationFrame(() => this.$.overlay.adjustScrollPosition());
@@ -734,9 +727,7 @@ export const ComboBoxMixin = (subclass) =>
         return;
       }
 
-      // Notify the dropdown about filter changing, so to let it skip the
-      // scrolling restore
-      // this.$.overlay.filterChanged = true;
+      // Scroll to the top of the list whenever the filter changes.
       this.$.overlay._scrollIntoView(0);
 
       if (this.items) {
