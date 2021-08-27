@@ -576,7 +576,6 @@ describe('lazy loading', () => {
 
       it('should set selectedItem matching value when items are loaded', () => {
         comboBox.opened = true; // loads first page of dataProvider items
-        // comboBox.$.overlay.updateViewportBoundaries();
         comboBox.$.overlay.ensureItemsRendered();
         comboBox.value = 'item 0';
         expect(comboBox.selectedItem).to.equal('item 0');
@@ -644,7 +643,6 @@ describe('lazy loading', () => {
 
       it('should set matching selectedItem when items are loaded', () => {
         comboBox.opened = true; // loads first page of dataProvider items
-        // comboBox.$.overlay.updateViewportBoundaries();
         comboBox.$.overlay.ensureItemsRendered();
         comboBox.value = 'value 0';
         expect(comboBox.selectedItem).to.eql({ id: 0, value: 'value 0', label: 'label 0' });
@@ -667,7 +665,6 @@ describe('lazy loading', () => {
       it('should select value matching selectedItem when items are loading', () => {
         comboBox.selectedItem = 'item 0';
         comboBox.opened = true;
-        // comboBox.$.overlay.updateViewportBoundaries();
         comboBox.$.overlay.ensureItemsRendered();
         expect(comboBox.value).to.equal('item 0');
         const selectedRenderedItemElements = Array.from(
@@ -679,7 +676,6 @@ describe('lazy loading', () => {
 
       it('should select value matching selectedItem when items are loaded', async () => {
         comboBox.opened = true;
-        // comboBox.$.overlay.updateViewportBoundaries();
         comboBox.$.overlay.ensureItemsRendered();
         comboBox.selectedItem = 'item 0';
         expect(comboBox.value).to.equal('item 0');
@@ -713,7 +709,6 @@ describe('lazy loading', () => {
       it('should select value matching selectedItem when items are loading', () => {
         comboBox.selectedItem = { id: 0, value: 'value 0', label: 'label 0' };
         comboBox.opened = true;
-        // comboBox.$.overlay.updateViewportBoundaries();
         comboBox.$.overlay.ensureItemsRendered();
         expect(comboBox.value).to.equal('value 0');
         const selectedRenderedItemElements = Array.from(
@@ -725,7 +720,6 @@ describe('lazy loading', () => {
 
       it('should select value matching selectedItem when items are loaded', async () => {
         comboBox.opened = true;
-        // comboBox.$.overlay.updateViewportBoundaries();
         comboBox.$.overlay.ensureItemsRendered();
         comboBox.selectedItem = { id: 0, value: 'value 0', label: 'label 0' };
         expect(comboBox.value).to.equal('value 0');
@@ -750,7 +744,6 @@ describe('lazy loading', () => {
         comboBox.selectedItem = { id: 0 };
         comboBox.dataProvider = objectDataProvider;
         comboBox.opened = true;
-        // comboBox.$.overlay.updateViewportBoundaries();
         comboBox.$.overlay.ensureItemsRendered();
         await nextFrame();
         flush();
@@ -777,7 +770,6 @@ describe('lazy loading', () => {
           );
         };
         comboBox.opened = true;
-        // comboBox.$.overlay.updateViewportBoundaries();
         comboBox.$.overlay.ensureItemsRendered();
         await nextFrame();
         flush();

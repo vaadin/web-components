@@ -92,15 +92,6 @@ describe('overlay', () => {
       expect(dropContentRect().top).to.be.closeTo(inputContentRect().bottom, 1);
     });
 
-    it('should reposition on scroll', () => {
-      comboBox.opened = true;
-      // comboBox.$.overlay.updateViewportBoundaries = sinon.spy();
-
-      fire(document, 'scroll');
-
-      // expect(comboBox.$.overlay.updateViewportBoundaries.callCount).to.eql(1);
-    });
-
     it('should be aligned with input container', () => {
       comboBox.open();
 
