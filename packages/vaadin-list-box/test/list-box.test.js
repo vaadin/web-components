@@ -19,11 +19,6 @@ describe('vaadin-list-box', () => {
     expect(listBox._hasVaadinListMixin).to.be.true;
   });
 
-  it('should have an unnamed slot for content', () => {
-    const slot = listBox.shadowRoot.querySelector('slot:not([name])');
-    expect(slot.assignedNodes().length).to.be.equal(5);
-  });
-
   it('should have role attribute', () => {
     expect(listBox.getAttribute('role')).to.equal('list');
   });
