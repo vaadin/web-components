@@ -67,7 +67,8 @@ class Button extends ActiveMixin(TabindexMixin(FocusMixin(ElementMixin(ThemableM
           display: none !important;
         }
 
-        /* Ensure the button is always aligned on the baseline */
+        /* Aligns the button with form fields when placed on the same line.
+          Note, to make it work, the form fields should have the same "::before" pseudo-element. */
         .vaadin-button-container::before {
           content: '\\2003';
           display: inline-block;
