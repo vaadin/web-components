@@ -1,16 +1,15 @@
 {
-  "name": "@vaadin/vaadin-button",
+  "name": "@vaadin/button",
   "version": "22.0.0-alpha3",
   "description": "vaadin-button",
   "main": "vaadin-button.js",
   "module": "vaadin-button.js",
-  "repository": "vaadin/vaadin-button",
+  "repository": "vaadin/web-components",
   "keywords": [
     "Vaadin",
     "button",
     "web-components",
-    "web-component",
-    "polymer"
+    "web-component"
   ],
   "author": "Vaadin Ltd",
   "license": "Apache-2.0",
@@ -26,6 +25,7 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
+    "@vaadin/field-base": "^22.0.0-alpha3",
     "@vaadin/vaadin-control-state-mixin": "^22.0.0-alpha3",
     "@vaadin/vaadin-element-mixin": "^22.0.0-alpha3",
     "@vaadin/vaadin-lumo-styles": "^22.0.0-alpha3",
@@ -35,7 +35,6 @@
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
     "@vaadin/testing-helpers": "^0.2.1",
-    "@vaadin/vaadin-icon": "^22.0.0-alpha3",
     "sinon": "^9.2.4"
   },
   "publishConfig": {

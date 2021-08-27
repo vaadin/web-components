@@ -1,8 +1,15 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
+import { sendKeys } from '@web/test-runner-commands';
 import '@vaadin/vaadin-icon/theme/lumo/vaadin-icon.js';
 import '@vaadin/vaadin-lumo-styles/vaadin-iconset.js';
-import '../../../theme/lumo/vaadin-button.js';
+// TODO: Remove in https://github.com/vaadin/web-components/issues/2224.
+import './vaadin-button-styles.js';
+// TODO: Remove in https://github.com/vaadin/web-components/issues/2224.
+import { Button } from '../../../src/vaadin-button.js';
+
+// TODO: Remove in https://github.com/vaadin/web-components/issues/2224.
+customElements.define(Button.is, Button);
 
 describe('button', () => {
   let div, element;
@@ -20,7 +27,9 @@ describe('button', () => {
     });
 
     it('focus-ring', async () => {
-      element.setAttribute('focus-ring', '');
+      // Focus on the button
+      await sendKeys({ press: 'Tab' });
+
       await visualDiff(div, `${import.meta.url}_focus-ring`);
     });
 
