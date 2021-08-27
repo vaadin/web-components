@@ -56,11 +56,18 @@ export const InteractionsMixin = (superClass) =>
 
     /** @private */
     _themeChanged(theme) {
+      this._buttons.forEach((button) => {
+        const mergedTheme = [theme, button.item && button.item.theme].filter((theme) => theme).join(' ');
+        if (mergedTheme) {
+          button.setAttribute('theme', mergedTheme);
+        } else {
+          button.removeAttribute('theme');
+        }
+      });
+
       if (theme) {
-        this._buttons.forEach((button) => button.setAttribute('theme', theme));
         this._subMenu.setAttribute('theme', theme);
       } else {
-        this._buttons.forEach((button) => button.removeAttribute('theme'));
         this._subMenu.removeAttribute('theme');
       }
     }

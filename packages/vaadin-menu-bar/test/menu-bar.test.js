@@ -238,6 +238,23 @@ describe('root menu layout', () => {
       menu.removeAttribute('theme');
       buttons.forEach((btn) => expect(btn.hasAttribute('theme')).to.be.false);
     });
+
+    it('should merge the theme attribute with the item.theme property', async () => {
+      menu.setAttribute('theme', 'contained');
+      menu.items[1].theme = 'item-theme';
+      menu.items = [...menu.items];
+      await nextRender(menu);
+      buttons = menu._buttons;
+
+      expect(buttons[0].getAttribute('theme')).to.equal('contained');
+      expect(buttons[1].getAttribute('theme')).to.contain('contained');
+      expect(buttons[1].getAttribute('theme')).to.contain('item-theme');
+
+      menu.removeAttribute('theme');
+
+      expect(buttons[0].hasAttribute('theme')).to.be.false;
+      expect(buttons[1].getAttribute('theme')).to.equal('item-theme');
+    });
   });
 });
 
