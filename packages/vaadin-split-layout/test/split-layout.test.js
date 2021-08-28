@@ -39,13 +39,6 @@ describe('split layout', () => {
       splitter = splitLayout.$.splitter;
     });
 
-    it('should be distributed', () => {
-      expect(first.id).to.equal('first');
-      expect(second.id).to.equal('second');
-      expect(first.parentNode).to.equal(splitLayout);
-      expect(second.parentNode).to.equal(splitLayout);
-    });
-
     it('should have flex auto', () => {
       function getComputedFlexStyle(el) {
         const style = getComputedStyle(el);
@@ -53,13 +46,6 @@ describe('split layout', () => {
       }
       expect(getComputedFlexStyle(first)).to.equal('1 1 auto');
       expect(getComputedFlexStyle(second)).to.equal('1 1 auto');
-    });
-
-    it('should have a splitter in between', () => {
-      const previous = splitter.previousElementSibling;
-      const next = splitter.nextElementSibling;
-      expect(previous.assignedNodes({ flatten: true })[0]).to.equal(first);
-      expect(next.assignedNodes({ flatten: true })[0]).to.equal(second);
     });
 
     it('should set pointer-events: none on down event and restore on up event', () => {
