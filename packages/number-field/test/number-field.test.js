@@ -18,11 +18,6 @@ describe('number-field', () => {
       expect(input.type).to.equal('number');
     });
 
-    it('should have hidden controls', () => {
-      expect(decreaseButton.hidden).to.be.true;
-      expect(increaseButton.hidden).to.be.true;
-    });
-
     ['min', 'max'].forEach(function (attr) {
       it('should set numeric attribute ' + attr, () => {
         const value = 5;
@@ -73,18 +68,6 @@ describe('number-field', () => {
   });
 
   describe('value control buttons', () => {
-    it('should not have value controls by default', () => {
-      expect(decreaseButton.hidden).to.be.true;
-      expect(increaseButton.hidden).to.be.true;
-    });
-
-    it('should have value controls when hasControls is set to true', () => {
-      numberField.hasControls = true;
-
-      expect(decreaseButton.hidden).to.be.false;
-      expect(increaseButton.hidden).to.be.false;
-    });
-
     it('should increase value by 1 on plus button click', () => {
       numberField.value = 0;
 
@@ -834,43 +817,6 @@ describe('number-field', () => {
         numberField.max = 0;
         expect(numberField.invalid).to.be.true;
       });
-    });
-  });
-
-  describe('input field', () => {
-    let inputField;
-
-    beforeEach(() => {
-      inputField = numberField.shadowRoot.querySelector('[part="input-field"]');
-    });
-
-    it('should propagate invalid property to the input container', () => {
-      numberField.invalid = true;
-      expect(inputField.invalid).to.be.true;
-
-      numberField.invalid = false;
-      expect(inputField.invalid).to.be.false;
-    });
-
-    it('should propagate readonly property to the input container', () => {
-      numberField.readonly = true;
-      expect(inputField.readonly).to.be.true;
-
-      numberField.readonly = false;
-      expect(inputField.readonly).to.be.false;
-    });
-
-    it('should propagate disabled property to the input container', () => {
-      numberField.disabled = true;
-      expect(inputField.disabled).to.be.true;
-
-      numberField.disabled = false;
-      expect(inputField.disabled).to.be.false;
-    });
-
-    it('should propagate theme attribute to the input container', () => {
-      numberField.setAttribute('theme', 'align-center');
-      expect(inputField.getAttribute('theme')).to.equal('align-center');
     });
   });
 });
