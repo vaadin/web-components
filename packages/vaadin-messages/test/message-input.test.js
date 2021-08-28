@@ -12,9 +12,20 @@ describe('message-input', () => {
     button = messageInput.shadowRoot.querySelector('vaadin-message-input-button');
   });
 
-  it('message should be initialized', () => {
-    expect(messageInput.shadowRoot.querySelector('vaadin-text-area')).to.be.not.undefined;
-    expect(messageInput.shadowRoot.querySelector('vaadin-button')).to.be.not.undefined;
+  describe('custom element definition', () => {
+    let tagName;
+
+    beforeEach(() => {
+      tagName = messageInput.tagName.toLowerCase();
+    });
+
+    it('should be defined in custom element registry', () => {
+      expect(customElements.get(tagName)).to.be.ok;
+    });
+
+    it('should have a valid static "is" getter', () => {
+      expect(customElements.get(tagName).is).to.equal(tagName);
+    });
   });
 
   describe('submit functionality', () => {
@@ -74,18 +85,6 @@ describe('message-input', () => {
   });
 
   describe('i18n', () => {
-    it('should have default button text', () => {
-      expect(button.innerText).to.be.equal('Send');
-    });
-
-    it('should have default placeholder', () => {
-      expect(textArea.placeholder).to.be.equal('Message');
-    });
-
-    it('should have default aria-label', () => {
-      expect(textArea.inputElement.getAttribute('aria-label')).to.be.equal('Message');
-    });
-
     it('should translate button text', () => {
       messageInput.i18n = { ...messageInput.i18n, send: 'Lähetä' };
       expect(button.innerText).to.be.equal('Lähetä');
@@ -115,16 +114,6 @@ describe('message-input', () => {
     it('should be reflected to the attribute', () => {
       messageInput.disabled = true;
       expect(messageInput.getAttribute('disabled')).to.exist;
-    });
-
-    it('should be propagated to text-area', () => {
-      messageInput.disabled = true;
-      expect(textArea.disabled).to.be.true;
-    });
-
-    it('should be propagated to button', () => {
-      messageInput.disabled = true;
-      expect(button.disabled).to.be.true;
     });
   });
 });
