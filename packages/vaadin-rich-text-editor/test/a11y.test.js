@@ -48,14 +48,6 @@ describe('accessibility', () => {
       expect(clip).to.equal('rect(0px, 0px, 0px, 0px)');
     });
 
-    it('should have textbox role', () => {
-      expect(content.getAttribute('role')).to.equal('textbox');
-    });
-
-    it('should be decorated with aria-multiline', () => {
-      expect(content.getAttribute('aria-multiline')).to.equal('true');
-    });
-
     it('should announce the default formatting', () => {
       rte.value = '[{"insert": "foo "}, {"attributes": {"bold": true}, "insert": "bar"}, {"insert": "\\n"}]';
       editor.setSelection(1, 1);
