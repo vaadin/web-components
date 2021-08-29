@@ -33,7 +33,7 @@ describe('opened overlay', () => {
   });
 
   beforeEach(() => {
-    overlay = fixtureSync('<vaadin-login-overlay opened theme="some-theme"></vaadin-login-overlay>');
+    overlay = fixtureSync('<vaadin-login-overlay opened></vaadin-login-overlay>');
   });
 
   afterEach(() => {
@@ -49,11 +49,6 @@ describe('opened overlay', () => {
   it('should remove form wrapper when closed', () => {
     overlay.opened = false;
     expect(document.querySelector('vaadin-login-form-wrapper')).to.be.not.ok;
-  });
-
-  it('should propagate theme to a wrapper', () => {
-    const wrapper = document.querySelector('vaadin-login-overlay-wrapper');
-    expect(wrapper.getAttribute('theme')).to.be.equal('some-theme');
   });
 
   it('should not close on ESC key', () => {
@@ -127,23 +122,13 @@ describe('title and description', () => {
   let overlay, headerElement, descriptionElement;
 
   beforeEach(() => {
-    overlay = fixtureSync(`
-      <vaadin-login-overlay title="New title" description="New description" opened></vaadin-login-overlay>
-    `);
+    overlay = fixtureSync('<vaadin-login-overlay opened></vaadin-login-overlay>');
     headerElement = overlay.$.vaadinLoginOverlayWrapper.shadowRoot.querySelector('[part="brand"] h1');
     descriptionElement = overlay.$.vaadinLoginOverlayWrapper.shadowRoot.querySelector('[part="brand"] p');
   });
 
   afterEach(() => {
     overlay.opened = false;
-  });
-
-  it('should display title and description set via attributes or properties', () => {
-    expect(overlay.title).to.be.equal('New title');
-    expect(overlay.description).to.be.equal('New description');
-
-    expect(headerElement.textContent).to.be.equal(overlay.title);
-    expect(descriptionElement.textContent).to.be.equal(overlay.description);
   });
 
   it('should update title and description when property updated', () => {

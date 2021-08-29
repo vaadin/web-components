@@ -93,10 +93,6 @@ describe('login form', () => {
     expect(login.i18n.additionalInformation).to.be.undefined;
   });
 
-  it('should show forgot password button', () => {
-    expect(formWrapper.$.forgotPasswordButton.hidden).to.be.false;
-  });
-
   it('should emit forgot password event', () => {
     var eventWasCaught = false;
     login.addEventListener('forgot-password', () => {
@@ -212,12 +208,6 @@ describe('login form', () => {
 
     expect(event.detail.username).to.equal(vaadinLoginUsername.value);
     expect(event.detail.password).to.equal(vaadinLoginPassword.value);
-  });
-
-  it('error should be hidden by default', () => {
-    const errorPart = formWrapper.shadowRoot.querySelectorAll('div[part="error-message"]')[0];
-    expect(errorPart.offsetWidth).to.equal(0);
-    expect(errorPart.offsetHeight).to.equal(0);
   });
 
   it('should be possible to set error attribute', () => {
