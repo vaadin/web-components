@@ -23,6 +23,9 @@ class Button extends ActiveMixin(TabindexMixin(FocusMixin(ElementMixin(ThemableM
           position: relative;
           outline: none;
           white-space: nowrap;
+          -webkit-user-select: none;
+          -moz-user-select: none;
+          user-select: none;
         }
 
         :host([hidden]) {
