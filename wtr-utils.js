@@ -36,7 +36,7 @@ const filterBrowserLogs = (log) => {
 
 const group = process.argv.indexOf('--group') !== -1;
 
-const NO_UNIT_TESTS = ['vaadin-icons', 'vaadin-lumo-styles', 'vaadin-material-styles'];
+const NO_UNIT_TESTS = ['vaadin-icons', 'vaadin-lumo-styles', 'vaadin-material-styles', 'vaadin-button'];
 
 const NO_VISUAL_TESTS = [
   'field-base',
