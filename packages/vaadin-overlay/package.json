@@ -36,7 +36,7 @@
     "@esm-bundle/chai": "^4.3.4",
     "@polymer/iron-overlay-behavior": "^3.0.0",
     "@vaadin/testing-helpers": "^0.2.1",
-    "@vaadin/vaadin-button": "^22.0.0-alpha3",
+    "@vaadin/button": "^22.0.0-alpha3",
     "@vaadin/vaadin-radio-button": "^22.0.0-alpha3",
     "@vaadin/vaadin-text-field": "^22.0.0-alpha3",
     "lit": "^2.0.0-rc.1",
