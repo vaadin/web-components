@@ -1,0 +1,212 @@
+/* @web/test-runner snapshot v1 */
+export const snapshots = {};
+
+snapshots["vaadin-login-overlay default"] = 
+`<vaadin-login-overlay-wrapper
+  focus-trap=""
+  id="vaadinLoginOverlayWrapper"
+  with-backdrop=""
+>
+  <vaadin-login-form
+    id="vaadinLoginForm"
+    theme="with-overlay"
+  >
+    <vaadin-login-form-wrapper
+      part="vaadin-login-native-form-wrapper"
+      theme="with-overlay"
+    >
+      <form
+        method="POST"
+        part="vaadin-login-native-form"
+        slot="form"
+      >
+        <input
+          id="csrf"
+          type="hidden"
+        >
+        <vaadin-text-field
+          autocapitalize="none"
+          autocorrect="off"
+          focused=""
+          has-label=""
+          id="vaadinLoginUsername"
+          name="username"
+          required=""
+          spellcheck="false"
+          tabindex="0"
+        >
+          <input
+            aria-labelledby="vaadin-text-field-label-0 vaadin-text-field-input-0"
+            autocapitalize="none"
+            autocorrect="off"
+            name="username"
+            required=""
+            slot="input"
+            tabindex="0"
+            type="text"
+          >
+        </vaadin-text-field>
+        <vaadin-password-field
+          has-label=""
+          id="vaadinLoginPassword"
+          name="password"
+          required=""
+          spellcheck="false"
+        >
+          <input
+            aria-describedby="helper-vaadin-password-field-3"
+            aria-labelledby="label-vaadin-password-field-2"
+            autocapitalize="off"
+            id="vaadin-password-field-0"
+            name="password"
+            required=""
+            slot="input"
+            type="password"
+          >
+          <div
+            aria-live="assertive"
+            id="error-vaadin-password-field-1"
+            slot="error-message"
+          >
+          </div>
+          <label
+            for="vaadin-password-field-0"
+            id="label-vaadin-password-field-2"
+            slot="label"
+          >
+            Password
+          </label>
+          <div
+            id="helper-vaadin-password-field-3"
+            slot="helper"
+          >
+          </div>
+          <button
+            aria-label="Show password"
+            aria-pressed="false"
+            slot="reveal"
+            tabindex="0"
+            type="button"
+          >
+          </button>
+        </vaadin-password-field>
+        <vaadin-button
+          part="vaadin-login-submit"
+          role="button"
+          tabindex="0"
+          theme="primary contained"
+        >
+          Log in
+        </vaadin-button>
+      </form>
+    </vaadin-login-form-wrapper>
+  </vaadin-login-form>
+</vaadin-login-overlay-wrapper>
+`;
+/* end snapshot vaadin-login-overlay default */
+
+snapshots["vaadin-login-overlay theme"] = 
+`<vaadin-login-overlay-wrapper
+  focus-trap=""
+  id="vaadinLoginOverlayWrapper"
+  theme="small"
+  with-backdrop=""
+>
+  <vaadin-login-form
+    id="vaadinLoginForm"
+    theme="with-overlay"
+  >
+    <vaadin-login-form-wrapper
+      part="vaadin-login-native-form-wrapper"
+      theme="with-overlay"
+    >
+      <form
+        method="POST"
+        part="vaadin-login-native-form"
+        slot="form"
+      >
+        <input
+          id="csrf"
+          type="hidden"
+        >
+        <vaadin-text-field
+          autocapitalize="none"
+          autocorrect="off"
+          focused=""
+          has-label=""
+          id="vaadinLoginUsername"
+          name="username"
+          required=""
+          spellcheck="false"
+          tabindex="0"
+        >
+          <input
+            aria-labelledby="vaadin-text-field-label-1 vaadin-text-field-input-1"
+            autocapitalize="none"
+            autocorrect="off"
+            name="username"
+            required=""
+            slot="input"
+            tabindex="0"
+            type="text"
+          >
+        </vaadin-text-field>
+        <vaadin-password-field
+          has-label=""
+          id="vaadinLoginPassword"
+          name="password"
+          required=""
+          spellcheck="false"
+        >
+          <input
+            aria-describedby="helper-vaadin-password-field-5"
+            aria-labelledby="label-vaadin-password-field-4"
+            autocapitalize="off"
+            id="vaadin-password-field-2"
+            name="password"
+            required=""
+            slot="input"
+            type="password"
+          >
+          <div
+            aria-live="assertive"
+            id="error-vaadin-password-field-3"
+            slot="error-message"
+          >
+          </div>
+          <label
+            for="vaadin-password-field-2"
+            id="label-vaadin-password-field-4"
+            slot="label"
+          >
+            Password
+          </label>
+          <div
+            id="helper-vaadin-password-field-5"
+            slot="helper"
+          >
+          </div>
+          <button
+            aria-label="Show password"
+            aria-pressed="false"
+            slot="reveal"
+            tabindex="0"
+            type="button"
+          >
+          </button>
+        </vaadin-password-field>
+        <vaadin-button
+          part="vaadin-login-submit"
+          role="button"
+          tabindex="0"
+          theme="primary contained"
+        >
+          Log in
+        </vaadin-button>
+      </form>
+    </vaadin-login-form-wrapper>
+  </vaadin-login-form>
+</vaadin-login-overlay-wrapper>
+`;
+/* end snapshot vaadin-login-overlay theme */
+
