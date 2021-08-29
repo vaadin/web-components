@@ -30,10 +30,6 @@ describe('vaadin-notification', () => {
     delete notification.constructor._container;
   });
 
-  it('should not set an ID attribute for the card', () => {
-    expect(notification._card.getAttribute('id')).to.be.null;
-  });
-
   describe('vaadin-notification-container', () => {
     it('should be in the body when notification opens', () => {
       expect(document.body.querySelectorAll('vaadin-notification-container').length).to.be.equal(1);
@@ -98,16 +94,6 @@ describe('vaadin-notification', () => {
     });
   });
 
-  describe('a11y', () => {
-    it('notification card should have the `alert` role', () => {
-      expect(notification._card.getAttribute('role')).to.be.equal('alert');
-    });
-
-    it('notification card should have `aria-live="polite"`', () => {
-      expect(notification._card.getAttribute('aria-live')).to.be.equal('polite');
-    });
-  });
-
   describe('methods', () => {
     it('should close the notification when close() is executed', () => {
       expect(notification.opened).to.be.true;
@@ -140,14 +126,6 @@ describe('vaadin-notification', () => {
         await aTimeout(1);
         expect(notification.opened).to.be.true;
       });
-    });
-  });
-
-  describe('theme', () => {
-    it('should propagate theme attribute to card', () => {
-      notification.setAttribute('theme', 'foo');
-
-      expect(notification._card.getAttribute('theme')).to.equal('foo');
     });
   });
 });
