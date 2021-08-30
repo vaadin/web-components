@@ -51,5 +51,5 @@ registerStyles(
       min-width: var(--vaadin-select-text-field-width);
     }
   `,
-  { moduleId: 'material-select-overlay-styles', include: ['material-menu-overlay'] }
+  { include: ['material-menu-overlay'], moduleId: 'material-select-overlay' }
 );

@@ -83,5 +83,5 @@ registerStyles(
       text-align: center;
     }
   `,
-  { moduleId: 'lumo-select-overlay-styles', include: ['lumo-menu-overlay'] }
+  { include: ['lumo-menu-overlay'], moduleId: 'lumo-select-overlay' }
 );
