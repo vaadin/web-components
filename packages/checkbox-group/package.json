@@ -1,9 +1,9 @@
 {
-  "name": "@vaadin/checkbox",
+  "name": "@vaadin/checkbox-group",
   "version": "22.0.0-alpha3",
-  "description": "vaadin-checkbox",
-  "main": "vaadin-checkbox.js",
-  "module": "vaadin-checkbox.js",
+  "description": "vaadin-checkbox-group",
+  "main": "vaadin-checkbox-group.js",
+  "module": "vaadin-checkbox-group.js",
   "repository": "vaadin/web-components",
   "keywords": [
     "Vaadin",
@@ -26,7 +26,7 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/vaadin-control-state-mixin": "^22.0.0-alpha3",
+    "@vaadin/checkbox": "^22.0.0-alpha3",
     "@vaadin/vaadin-element-mixin": "^22.0.0-alpha3",
     "@vaadin/vaadin-lumo-styles": "^22.0.0-alpha3",
     "@vaadin/vaadin-material-styles": "^22.0.0-alpha3",

@@ -1,5 +1,6 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
+import '@vaadin/checkbox/theme/material/vaadin-checkbox.js';
 import '../../../theme/material/vaadin-checkbox-group.js';
 
 describe('checkbox-group', () => {

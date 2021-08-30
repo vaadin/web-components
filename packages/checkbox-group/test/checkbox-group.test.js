@@ -2,6 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { fixtureSync, focusin, focusout } from '@vaadin/testing-helpers';
 import '@polymer/polymer/lib/elements/dom-bind.js';
+import '@vaadin/checkbox/src/vaadin-checkbox.js';
 import '../vaadin-checkbox-group.js';
 
 describe('vaadin-checkbox-group', () => {

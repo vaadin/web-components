@@ -2,7 +2,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 
 import { DirMixin } from '@vaadin/vaadin-element-mixin/vaadin-dir-mixin.js';
 
-import { CheckboxElement } from './vaadin-checkbox.js';
+import { CheckboxElement } from '@vaadin/checkbox/src/vaadin-checkbox.js';
 
 /**
  * Fired when the `invalid` property changes.
