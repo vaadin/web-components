@@ -589,7 +589,6 @@ class CrudElement extends ElementMixin(ThemableMixin(PolymerElement)) {
 
   constructor() {
     super();
-    console.log('*****************************************************************');
     this._observer = new FlattenedNodesObserver(this, (info) => {
       this.__onDomChange(info.addedNodes);
     });
