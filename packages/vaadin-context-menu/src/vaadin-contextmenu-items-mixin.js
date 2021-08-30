@@ -232,7 +232,12 @@ export const ItemsMixin = (superClass) =>
           component.setAttribute('role', 'separator');
         }
         const mergedTheme = [this.theme, item.theme].filter((t) => t).join(' ');
-        mergedTheme && component.setAttribute('theme', mergedTheme);
+
+        if (mergedTheme) {
+          component.setAttribute('theme', mergedTheme);
+        } else {
+          component.removeAttribute('theme');
+        }
 
         component._item = item;
 
