@@ -7,7 +7,7 @@ import '@vaadin/vaadin-item/theme/material/vaadin-item.js';
 import '@vaadin/vaadin-form-layout/theme/material/vaadin-form-item.js';
 import '@vaadin/vaadin-form-layout/theme/material/vaadin-form-layout.js';
 import '@vaadin/vaadin-list-box/theme/material/vaadin-list-box.js';
-import '@vaadin/vaadin-select/theme/material/vaadin-select.js';
+import '@vaadin/select/theme/material/vaadin-select.js';
 import '@vaadin/vaadin-text-field/theme/material/vaadin-email-field.js';
 import '@vaadin/vaadin-text-field/theme/material/vaadin-number-field.js';
 import '@vaadin/vaadin-text-field/theme/material/vaadin-text-area.js';

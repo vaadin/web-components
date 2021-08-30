@@ -34,10 +34,10 @@
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
     "@vaadin/testing-helpers": "^0.2.1",
+    "@vaadin/select": "^22.0.0-alpha3",
     "@vaadin/vaadin-date-picker": "^22.0.0-alpha3",
     "@vaadin/vaadin-form-layout": "^22.0.0-alpha3",
     "@vaadin/vaadin-list-box": "^22.0.0-alpha3",
-    "@vaadin/vaadin-select": "^22.0.0-alpha3",
     "@vaadin/vaadin-template-renderer": "^22.0.0-alpha3",
     "@vaadin/vaadin-text-field": "^22.0.0-alpha3",
     "@vaadin/vaadin-time-picker": "^22.0.0-alpha3",
