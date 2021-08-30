@@ -11,8 +11,12 @@ import {
   focusout,
   nextFrame
 } from '@vaadin/testing-helpers';
-import { visible } from './helpers.js';
 import '../vaadin-radio-group.js';
+
+function visible(e) {
+  const rect = e.getBoundingClientRect();
+  return !!(rect.width && rect.height);
+}
 
 describe('radio-group', () => {
   let group;

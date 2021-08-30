@@ -1,12 +1,13 @@
 {
-  "name": "@vaadin/vaadin-radio-button",
+  "name": "@vaadin/radio-group",
   "version": "22.0.0-alpha3",
-  "description": "vaadin-radio-button",
-  "main": "vaadin-radio-button.js",
-  "module": "vaadin-radio-button.js",
-  "repository": "vaadin/vaadin-radio-button",
+  "description": "vaadin-radio-group",
+  "main": "vaadin-radio-group.js",
+  "module": "vaadin-radio-group.js",
+  "repository": "vaadin/web-components",
   "keywords": [
     "Vaadin",
+    "vaadin-radio-group",
     "vaadin-radio-button",
     "web-components",
     "web-component",
@@ -16,7 +17,7 @@
   "author": "Vaadin Ltd",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/vaadin/vaadin-radio-button/issues"
+    "url": "https://github.com/vaadin/web-components/issues"
   },
   "homepage": "https://vaadin.com/components",
   "files": [
