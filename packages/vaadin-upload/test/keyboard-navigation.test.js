@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { sendKeys } from '@web/test-runner-commands';
-import { fixtureSync, nextRender, isFirefox } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { createFile } from './common.js';
 import '../vaadin-upload.js';
 
@@ -13,7 +13,19 @@ async function repeatTab(times) {
 }
 
 describe('keyboard navigation', () => {
-  let uploadElement, fileElement;
+  let uploadElement, fileElement, button;
+
+  before(() => {
+    // Firefox has an issue with focus stuck when an upload element
+    // is removed from the DOM, so we use a button to prevent that.
+    button = document.createElement('button');
+    document.body.appendChild(button);
+    button.focus();
+  });
+
+  after(() => {
+    document.body.removeChild(button);
+  });
 
   beforeEach(async () => {
     uploadElement = fixtureSync(`<vaadin-upload></vaadin-upload>`);
@@ -22,6 +34,10 @@ describe('keyboard navigation', () => {
     await nextRender();
 
     fileElement = uploadElement.shadowRoot.querySelector('vaadin-upload-file');
+  });
+
+  afterEach(() => {
+    button.focus();
   });
 
   it('should focus on the upload button', async () => {
@@ -38,10 +54,7 @@ describe('keyboard navigation', () => {
     expect(uploadElement.shadowRoot.activeElement).to.equal(fileElement);
   });
 
-  // Skips the following bunch of tests in Firefox as there is a bug
-  // that causes the focus to stuck on the body element.
-  // No possible workarounds were found at the time of writing this note.
-  (isFirefox ? describe.skip : describe)('file', () => {
+  describe('file', () => {
     beforeEach(() => {
       // To show the start button
       uploadElement.files[0].held = true;

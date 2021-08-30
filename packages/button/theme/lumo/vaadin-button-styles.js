@@ -6,7 +6,7 @@ import '@vaadin/vaadin-lumo-styles/style.js';
 import '@vaadin/vaadin-lumo-styles/typography.js';
 
 registerStyles(
-  '',
+  'vaadin-button',
   css`
     :host {
       /* Sizing */
@@ -289,5 +289,5 @@ registerStyles(
       margin-right: 0;
     }
   `,
-  { moduleId: 'lumo-button-styles' }
+  { moduleId: 'lumo-button' }
 );

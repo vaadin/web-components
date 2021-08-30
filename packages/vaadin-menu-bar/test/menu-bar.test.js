@@ -69,7 +69,7 @@ describe('root menu layout', () => {
     focusin(menu);
     expect(buttons[0].getAttribute('tabindex')).to.equal('0');
     buttons.slice(1).forEach((btn) => {
-      expect(btn.focusElement.getAttribute('tabindex')).to.equal('-1');
+      expect(btn.getAttribute('tabindex')).to.equal('-1');
     });
   });
 

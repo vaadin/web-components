@@ -26,7 +26,7 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/vaadin-button": "^22.0.0-alpha3",
+    "@vaadin/button": "^22.0.0-alpha3",
     "@vaadin/vaadin-dialog": "^22.0.0-alpha3",
     "@vaadin/vaadin-element-mixin": "^22.0.0-alpha3",
     "@vaadin/vaadin-license-checker": "^2.1.0",

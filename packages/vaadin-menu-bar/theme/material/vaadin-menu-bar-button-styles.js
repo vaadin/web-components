@@ -1,5 +1,5 @@
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
-import '@vaadin/vaadin-button/theme/material/vaadin-button-styles.js';
+import '@vaadin/button/theme/material/vaadin-button.js';
 
 registerStyles(
   'vaadin-menu-bar-button',

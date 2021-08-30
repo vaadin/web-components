@@ -1,5 +1,5 @@
 import '@vaadin/vaadin-grid/theme/lumo/vaadin-grid.js';
-import '@vaadin/vaadin-button/theme/lumo/vaadin-button.js';
+import '@vaadin/button/theme/lumo/vaadin-button.js';
 import '@vaadin/vaadin-form-layout/theme/lumo/vaadin-form-layout.js';
 import '@vaadin/vaadin-text-field/theme/lumo/vaadin-text-field.js';
 import '@vaadin/vaadin-dialog/theme/lumo/vaadin-dialog.js';

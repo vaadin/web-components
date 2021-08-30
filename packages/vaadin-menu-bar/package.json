@@ -27,7 +27,7 @@
   "dependencies": {
     "@polymer/iron-resizable-behavior": "^3.0.0",
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/vaadin-button": "^22.0.0-alpha3",
+    "@vaadin/button": "^22.0.0-alpha3",
     "@vaadin/vaadin-context-menu": "^22.0.0-alpha3",
     "@vaadin/vaadin-element-mixin": "^22.0.0-alpha3",
     "@vaadin/vaadin-lumo-styles": "^22.0.0-alpha3",

@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
-import { ButtonElement } from '@vaadin/vaadin-button/src/vaadin-button.js';
+import { Button } from '@vaadin/button/src/vaadin-button.js';
 
 /**
  * The Drawer Toggle component controls the drawer in App Layout component.
@@ -15,7 +15,7 @@ import { ButtonElement } from '@vaadin/vaadin-button/src/vaadin-button.js';
  * </vaadin-app-layout>
  * ```
  */
-class DrawerToggleElement extends ButtonElement {
+class DrawerToggleElement extends Button {
   static get template() {
     return html`
       <style>
