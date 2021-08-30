@@ -133,19 +133,14 @@ declare class NotificationElement extends ThemePropertyMixin(ElementMixin(HTMLEl
   ): void;
 
   /**
-   * Shows the given notification using the given duration and position.
+   * Shows the given notification.
    *
-   * Uses `bottom-start` and a 5 second duration by default.
+   * Positions the notification at `bottom-start` and uses a 5 second duration by default.
    *
    * @param contents the contents to show, either as a string or a Lit template.
-   * @param duration the duration in milliseconds to show the notification. Use `0` or a negative number to disable auto-closing.
-   * @param position alignment of the notification in the viewport
+   * @param options optional options for customizing the notification.
    */
-  static show(
-    contents: string | TemplateResult,
-    duration?: number,
-    position?: NotificationPosition
-  ): NotificationElement;
+  static show(contents: string | TemplateResult, options?: ShowOptions): NotificationElement;
 }
 
 declare global {

@@ -23,3 +23,8 @@ export interface NotificationElementEventMap {
 }
 
 export interface NotificationEventMap extends HTMLElementEventMap, NotificationElementEventMap {}
+
+export interface ShowOptions {
+  duration?: number;
+  position?: NotificationPosition;
+}

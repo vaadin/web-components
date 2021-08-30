@@ -474,26 +474,34 @@ class NotificationElement extends ThemePropertyMixin(ElementMixin(PolymerElement
     }
   }
 
-  static show(contents, duration, position) {
+  /**
+   * Shows the given notification.
+   *
+   * Positions the notification at `bottom-start` and uses a 5 second duration by default.
+   *
+   * @param contents the contents to show, either as a string or a Lit template.
+   * @param options optional options for customizing the notification.
+   */
+  static show(contents, options) {
     if (isTemplateResult(contents)) {
-      return NotificationElement._createAndShowNotification(duration, position, (root) => {
+      return NotificationElement._createAndShowNotification((root) => {
         render(contents, root);
-      });
+      }, options);
     } else {
-      return NotificationElement._createAndShowNotification(duration, position, (root) => {
+      return NotificationElement._createAndShowNotification((root) => {
         root.innerText = contents;
-      });
+      }, options);
     }
   }
 
   /** @private */
-  static _createAndShowNotification(duration, position, renderer) {
+  static _createAndShowNotification(renderer, options) {
     const notification = document.createElement(NotificationElement.is);
-    if (duration) {
-      notification.duration = duration;
+    if (options && options.duration) {
+      notification.duration = options.duration;
     }
-    if (position) {
-      notification.position = position;
+    if (options && options.position) {
+      notification.position = options.position;
     }
     notification.renderer = renderer;
     document.body.appendChild(notification);

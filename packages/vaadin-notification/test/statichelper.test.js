@@ -30,13 +30,13 @@ describe('static helpers', () => {
   });
 
   it('show should use the given duration and position', () => {
-    const notification = NotificationElement.show('Hello world', 123, 'top-center');
+    const notification = NotificationElement.show('Hello world', { duration: 123, position: 'top-center' });
     expect(notification.duration).to.equal(123);
     expect(notification.position).to.equal('top-center');
   });
 
-  it('show remove the element from the documnt after closing', async () => {
-    const notification = NotificationElement.show('Hello world', 1);
+  it('show remove the element from the document after closing', async () => {
+    const notification = NotificationElement.show('Hello world', { duration: 1 });
     expect(notification.parentElement).to.equal(document.body);
     await aTimeout(10);
     expect(notification.parentElement).to.be.null;
