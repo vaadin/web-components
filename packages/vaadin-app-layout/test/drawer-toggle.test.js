@@ -79,18 +79,13 @@ describe('drawer-toggle', () => {
   });
 
   describe('aria-label', () => {
-    it('should have ariaLabel property set to "Toggle"', () => {
-      expect(toggle.ariaLabel).to.equal('Toggle');
+    it('should set aria-label attribute to "Toggle" by default', () => {
+      expect(toggle.getAttribute('aria-label')).to.equal('Toggle');
     });
 
-    it('should sync ariaLabel property with aria-label attribute', () => {
-      toggle.setAttribute('aria-label', 'Label');
-      expect(toggle.ariaLabel).to.equal('Label');
-    });
-
-    it('should set "aria-label" on the native button', () => {
-      const button = toggle.shadowRoot.querySelector('button');
-      expect(button.getAttribute('aria-label')).to.equal('Toggle');
+    it('should reflect ariaLabel property to the attribute', () => {
+      toggle.ariaLabel = 'Label';
+      expect(toggle.getAttribute('aria-label')).to.equal('Label');
     });
   });
 });

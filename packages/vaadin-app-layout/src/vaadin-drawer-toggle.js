@@ -14,6 +14,8 @@ import { Button } from '@vaadin/button/src/vaadin-button.js';
  *   <vaadin-drawer-toggle slot="navbar">Toggle drawer</vaadin-drawer-toggle>
  * </vaadin-app-layout>
  * ```
+ *
+ * @extends Button
  */
 class DrawerToggleElement extends Button {
   static get template() {
@@ -29,16 +31,6 @@ class DrawerToggleElement extends Button {
           height: 24px;
           width: 24px;
           padding: 4px;
-        }
-
-        #button {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          opacity: 0;
-          cursor: inherit;
         }
 
         [part='icon'],
@@ -67,7 +59,6 @@ class DrawerToggleElement extends Button {
       <slot>
         <div part="icon"></div>
       </slot>
-      <button id="button" type="button" aria-label$="[[ariaLabel]]"></button>
     `;
   }
 
@@ -79,7 +70,8 @@ class DrawerToggleElement extends Button {
     return {
       ariaLabel: {
         type: String,
-        value: 'Toggle'
+        value: 'Toggle',
+        reflectToAttribute: true
       }
     };
   }
@@ -89,18 +81,19 @@ class DrawerToggleElement extends Button {
 
     this.addEventListener('click', () => {
       if (!this.disabled) {
-        this._fireClick();
+        this.__fireClick();
       }
     });
 
     this.addEventListener('keyup', (event) => {
       if (/^( |SpaceBar|Enter)$/.test(event.key) && !this.disabled) {
-        this._fireClick();
+        this.__fireClick();
       }
     });
   }
 
-  _fireClick() {
+  /** @private */
+  __fireClick() {
     this.dispatchEvent(new CustomEvent('drawer-toggle-click', { bubbles: true, composed: true }));
   }
 }
