@@ -49,7 +49,7 @@ class BoardElement extends ElementMixin(mixinBehaviors([IronResizableBehavior], 
   }
 
   static get version() {
-    return '20.0.3';
+    return '20.0.4';
   }
 
   /**

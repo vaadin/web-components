@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-material-styles",
-  "version": "20.0.3",
+  "version": "20.0.4",
   "description": "Vaadin Material is a complete theme for Vaadin components, inspired by Google’s Material Design guidelines.",
   "main": "all-imports.js",
   "module": "all-imports.js",
@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/vaadin-themable-mixin": "^20.0.3"
+    "@vaadin/vaadin-themable-mixin": "^20.0.4"
   },
   "devDependencies": {
     "gulp": "^4.0.0",
