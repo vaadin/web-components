@@ -7,7 +7,7 @@ import '@vaadin/vaadin-item/theme/lumo/vaadin-item.js';
 import '@vaadin/vaadin-form-layout/theme/lumo/vaadin-form-item.js';
 import '@vaadin/vaadin-form-layout/theme/lumo/vaadin-form-layout.js';
 import '@vaadin/vaadin-list-box/theme/lumo/vaadin-list-box.js';
-import '@vaadin/vaadin-select/theme/lumo/vaadin-select.js';
+import '@vaadin/select/theme/lumo/vaadin-select.js';
 import '@vaadin/vaadin-text-field/theme/lumo/vaadin-email-field.js';
 import '@vaadin/vaadin-text-field/theme/lumo/vaadin-number-field.js';
 import '@vaadin/vaadin-text-field/theme/lumo/vaadin-text-area.js';

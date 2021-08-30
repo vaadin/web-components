@@ -1,5 +1,5 @@
 {
-  "name": "@vaadin/vaadin-select",
+  "name": "@vaadin/select",
   "version": "22.0.0-alpha3",
   "description": "vaadin-select",
   "main": "vaadin-select.js",

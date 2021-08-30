@@ -26,6 +26,7 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
+    "@vaadin/select": "^22.0.0-alpha3",
     "@vaadin/vaadin-checkbox": "^22.0.0-alpha3",
     "@vaadin/vaadin-element-mixin": "^22.0.0-alpha3",
     "@vaadin/vaadin-grid": "^22.0.0-alpha3",
@@ -34,7 +35,6 @@
     "@vaadin/vaadin-list-box": "^22.0.0-alpha3",
     "@vaadin/vaadin-lumo-styles": "^22.0.0-alpha3",
     "@vaadin/vaadin-material-styles": "^22.0.0-alpha3",
-    "@vaadin/vaadin-select": "^22.0.0-alpha3",
     "@vaadin/vaadin-text-field": "^22.0.0-alpha3",
     "@vaadin/vaadin-themable-mixin": "^22.0.0-alpha3"
   },
