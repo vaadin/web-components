@@ -580,15 +580,6 @@ export const KeyboardNavigationMixin = (superClass) =>
     }
 
     /** @private */
-    __setFocusableOfSameType(focusableName, cell, row) {
-      if (this[focusableName] instanceof HTMLTableCellElement) {
-        this[focusableName] = cell;
-      } else if (this[focusableName] instanceof HTMLTableRowElement) {
-        this[focusableName] = row;
-      }
-    }
-
-    /** @private */
     _onCellFocusIn(e) {
       const { section, cell, row } = this._getGridEventLocation(e);
       this._detectInteracting(e);
@@ -596,11 +587,11 @@ export const KeyboardNavigationMixin = (superClass) =>
       if (section && (cell || row)) {
         this._activeRowGroup = section;
         if (this.$.header === section) {
-          this.__setFocusableOfSameType('_headerFocusable', cell, row);
+          this._headerFocusable = this._headerFocusable instanceof HTMLTableCellElement ? cell : row;
         } else if (this.$.items === section) {
-          this.__setFocusableOfSameType('_itemsFocusable', cell, row);
+          this._itemsFocusable = this._itemsFocusable instanceof HTMLTableCellElement ? cell : row;
         } else if (this.$.footer === section) {
-          this.__setFocusableOfSameType('_footerFocusable', cell, row);
+          this._footerFocusable = this._footerFocusable instanceof HTMLTableCellElement ? cell : row;
         }
 
         if (cell) {
@@ -649,7 +640,7 @@ export const KeyboardNavigationMixin = (superClass) =>
      * Enables or disables the focus target of the containing section of the
      * grid from receiving focus, based on whether the user is interacting with
      * that section of the grid.
-     * @param {HTMLTableCellElement} focusTargetCell
+     * @param {HTMLElement} focusTarget
      */
     _updateGridSectionFocusTarget(focusTarget) {
       if (!focusTarget) return;
@@ -797,14 +788,14 @@ export const KeyboardNavigationMixin = (superClass) =>
 
     /**
      * Helper method that maps a focus target cell to the containing grid section
-     * @param {HTMLTableCellElement} focusTargetCell
+     * @param {HTMLElement} focusTarget
      * @returns {HTMLTableSectionElement | null}
      * @private
      */
-    _getGridSectionFromFocusTarget(focusTargetCell) {
-      if (focusTargetCell === this._headerFocusable) return this.$.header;
-      if (focusTargetCell === this._itemsFocusable) return this.$.items;
-      if (focusTargetCell === this._footerFocusable) return this.$.footer;
+    _getGridSectionFromFocusTarget(focusTarget) {
+      if (focusTarget === this._headerFocusable) return this.$.header;
+      if (focusTarget === this._itemsFocusable) return this.$.items;
+      if (focusTarget === this._footerFocusable) return this.$.footer;
       return null;
     }
 
