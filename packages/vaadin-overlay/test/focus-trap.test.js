@@ -3,8 +3,8 @@ import { fixtureSync, oneEvent, tabKeyDown } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import '@vaadin/button/vaadin-button.js';
 import '@vaadin/vaadin-text-field/vaadin-text-field.js';
-import '@vaadin/vaadin-radio-button/vaadin-radio-button.js';
-import '@vaadin/vaadin-radio-button/vaadin-radio-group.js';
+import '@vaadin/radio-group/vaadin-radio-group.js';
+import '@vaadin/radio-group/vaadin-radio-button.js';
 import '../vaadin-overlay.js';
 
 const shadowTemplate = document.createElement('template');
