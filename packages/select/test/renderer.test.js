@@ -18,9 +18,9 @@ describe('renderer', () => {
         return;
       }
 
-      const listBox = window.document.createElement('vaadin-list-box');
+      const listBox = document.createElement('vaadin-list-box');
       items.forEach((text) => {
-        const item = window.document.createElement('vaadin-item');
+        const item = document.createElement('vaadin-item');
         item.textContent = text + (select.__testVar || '');
         item.value = text;
         listBox.appendChild(item);
@@ -44,7 +44,7 @@ describe('renderer', () => {
   });
 
   it('should pass vaadin-select as owner to vaadin-overlay', () => {
-    select.renderer = (root, owner) => {
+    select.renderer = (_, owner) => {
       expect(owner).to.eql(select);
     };
   });

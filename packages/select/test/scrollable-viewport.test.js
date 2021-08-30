@@ -14,7 +14,7 @@ function scrollContainer(container, value, scrollLeft) {
 }
 
 describe('scrollable viewport', () => {
-  let scrollableContainer, container, select, overlay, input, inputFieldBlock;
+  let scrollableContainer, container, select, overlay, button, inputFieldBlock;
 
   beforeEach(() => {
     scrollableContainer = fixtureSync(`
@@ -47,8 +47,8 @@ describe('scrollable viewport', () => {
     overlay = select._overlayElement;
 
     // Input without label and indents
-    input = select._inputElement;
-    inputFieldBlock = input.shadowRoot.querySelector('[part~="input-field"]');
+    button = select.focusElement;
+    inputFieldBlock = select.shadowRoot.querySelector('[part~="input-field"]');
 
     const viewportHeight = Math.min(window.innerHeight, document.documentElement.clientHeight);
 
@@ -74,14 +74,15 @@ describe('scrollable viewport', () => {
   });
 
   it('should toggle bottom-aligned attribute depending on the part of the viewport', () => {
-    enterKeyDown(input);
-    expect(select._overlayElement.hasAttribute('bottom-aligned')).to.be.true;
+    enterKeyDown(button);
+    expect(overlay.hasAttribute('bottom-aligned')).to.be.true;
+
     scrollContainer(scrollableContainer, 150);
-    expect(select._overlayElement.hasAttribute('bottom-aligned')).to.be.false;
+    expect(overlay.hasAttribute('bottom-aligned')).to.be.false;
   });
 
   it('should update the position on scrolling', () => {
-    enterKeyDown(input);
+    enterKeyDown(button);
 
     expect(overlay.getBoundingClientRect().bottom).to.be.closeTo(inputFieldBlock.getBoundingClientRect().bottom, 1);
     expect(overlay.getBoundingClientRect().left).to.be.closeTo(inputFieldBlock.getBoundingClientRect().left, 1);
@@ -93,7 +94,7 @@ describe('scrollable viewport', () => {
   });
 
   it('should update the position on iron-resize event', () => {
-    enterKeyDown(input);
+    enterKeyDown(button);
     expect(overlay.getBoundingClientRect().bottom).to.be.closeTo(inputFieldBlock.getBoundingClientRect().bottom, 1);
     expect(overlay.getBoundingClientRect().left).to.be.closeTo(inputFieldBlock.getBoundingClientRect().left, 1);
 

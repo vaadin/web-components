@@ -12,8 +12,8 @@ import {
   space
 } from '@vaadin/testing-helpers';
 import { TextFieldElement } from '@vaadin/vaadin-text-field/src/vaadin-text-field.js';
-import { SelectElement } from '@vaadin/select/src/vaadin-select.js';
 import { CheckboxElement } from '@vaadin/checkbox/src/vaadin-checkbox.js';
+import { Select } from '@vaadin/select/src/vaadin-select.js';
 import '@vaadin/vaadin-template-renderer';
 import { createItems, dblclick, flushGrid, getCellEditor, getContainerCell, onceOpened } from './helpers.js';
 import './not-animated-styles.js';
@@ -58,7 +58,7 @@ describe('edit column editor type', () => {
       cell = getContainerCell(grid.$.items, 0, 1);
       dblclick(cell._content);
       editor = column._getEditorComponent(cell);
-      expect(editor instanceof SelectElement).to.equal(true);
+      expect(editor instanceof Select).to.equal(true);
     });
 
     it('should render the checkbox to cell with text checkbox type specified', () => {
@@ -143,7 +143,7 @@ describe('edit column editor type', () => {
       });
 
       it('should render the opened select to cell in edit mode', () => {
-        expect(editor instanceof SelectElement).to.equal(true);
+        expect(editor instanceof Select).to.equal(true);
         expect(editor.value).to.be.equal('mrs');
         expect(editor.opened).to.equal(true);
       });
@@ -237,7 +237,7 @@ describe('edit column editor type', () => {
       });
 
       it('should render the closed select to cell in edit mode', () => {
-        expect(editor instanceof SelectElement).to.equal(true);
+        expect(editor instanceof Select).to.equal(true);
         expect(editor.value).to.be.equal('mrs');
         expect(editor.opened).to.equal(false);
       });

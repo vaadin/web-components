@@ -87,4 +87,16 @@ describe('select', () => {
     await nextFrame();
     await visualDiff(div, `${import.meta.url}_opened`);
   });
+
+  it('align-center', async () => {
+    element.value = 'item 1';
+    element.setAttribute('theme', 'align-center');
+    await visualDiff(div, `${import.meta.url}_align-center`);
+  });
+
+  it('align-right', async () => {
+    element.value = 'item 1';
+    element.setAttribute('theme', 'align-right');
+    await visualDiff(div, `${import.meta.url}_align-right`);
+  });
 });

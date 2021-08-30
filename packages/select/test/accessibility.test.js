@@ -6,7 +6,7 @@ import '@vaadin/vaadin-item/vaadin-item.js';
 import '../vaadin-select.js';
 
 describe('vaadin-select accessibility', () => {
-  let select;
+  let select, button;
 
   beforeEach(async () => {
     select = fixtureSync(`<vaadin-select label="Label"></vaadin-select>`);
@@ -25,38 +25,27 @@ describe('vaadin-select accessibility', () => {
       );
     };
     await nextFrame();
+    button = select.focusElement;
   });
 
   it('should have aria-required attribute set to true when required', () => {
-    select.setAttribute('required', '');
-    expect(select.getAttribute('aria-required')).to.be.equal('true');
+    select.required = true;
+    expect(button.getAttribute('aria-required')).to.be.equal('true');
   });
 
   it('should have aria-disabled attribute set to true when disabled', () => {
-    select.setAttribute('disabled', '');
+    select.disabled = true;
     expect(select.getAttribute('aria-disabled')).to.be.equal('true');
   });
 
-  it('should have aria-hidden attribute to the native input', () => {
-    expect(select._nativeInput.getAttribute('aria-hidden')).to.be.equal('true');
-  });
-
-  it('should have role button on the toggle button', () => {
-    expect(select._toggleElement.getAttribute('role')).to.be.equal('button');
-  });
-
   it('should have aria-haspopup="listbox" the toggle button', () => {
-    expect(select._toggleElement.getAttribute('aria-haspopup')).to.be.equal('listbox');
-  });
-
-  it('should have aria-label attribute on the toggle button', () => {
-    expect(select._toggleElement.getAttribute('aria-label')).to.equal('Toggle');
+    expect(button.getAttribute('aria-haspopup')).to.be.equal('listbox');
   });
 
   it('should set aria-expanded attribute on the toggle button', () => {
-    expect(select._toggleElement.getAttribute('aria-expanded')).to.be.equal('false');
+    expect(button.getAttribute('aria-expanded')).to.be.equal('false');
     select.opened = true;
-    expect(select._toggleElement.getAttribute('aria-expanded')).to.be.equal('true');
+    expect(button.getAttribute('aria-expanded')).to.be.equal('true');
   });
 
   it('should have role listbox on menu element', () => {
@@ -71,12 +60,12 @@ describe('vaadin-select accessibility', () => {
   });
 
   it('should have aria-labelledby on focus element', () => {
-    expect(select._inputElement.focusElement.getAttribute('aria-labelledby')).to.not.be.empty;
+    expect(button.getAttribute('aria-labelledby')).to.not.be.empty;
   });
 
   it('should have aria-describedby on focus element when invalid', () => {
     select.errorMessage = 'invalid';
     select.invalid = true;
-    expect(select._inputElement.focusElement.getAttribute('aria-describedby')).to.not.be.empty;
+    expect(button.getAttribute('aria-describedby')).to.not.be.empty;
   });
 });
