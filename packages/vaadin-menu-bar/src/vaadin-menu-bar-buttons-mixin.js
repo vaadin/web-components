@@ -165,11 +165,19 @@ export const ButtonsMixin = (superClass) =>
     }
 
     /** @private */
+    __getOverflowCount(overflow) {
+      // We can't use optional chaining due to webpack 4
+      return (overflow.item && overflow.item.children && overflow.item.children.length) || 0;
+    }
+
+    /** @private */
     __detectOverflow() {
       const container = this._container;
       const buttons = this._buttons.slice(0);
       const overflow = buttons.pop();
       const isRTL = this.getAttribute('dir') === 'rtl';
+
+      const oldOverflowCount = this.__getOverflowCount(overflow);
 
       // reset all buttons in the menu bar and the overflow button
       for (let i = 0; i < buttons.length; i++) {
@@ -187,10 +195,6 @@ export const ButtonsMixin = (superClass) =>
       }
       overflow.item = { children: [] };
       this._hasOverflow = false;
-
-      if (this._subMenu.opened) {
-        this._subMenu.close();
-      }
 
       // hide any overflowing buttons and put them in the 'overflow' button
       if (container.offsetWidth < container.scrollWidth) {
@@ -219,6 +223,11 @@ export const ButtonsMixin = (superClass) =>
         overflow.item = {
           children: buttons.filter((b, idx) => idx >= i).map((b) => b.item)
         };
+      }
+      // optional chaining is not supported in IE
+      const newOverflowCount = this.__getOverflowCount(overflow);
+      if (oldOverflowCount !== newOverflowCount && this._subMenu.opened) {
+        this._subMenu.close();
       }
     }
 
