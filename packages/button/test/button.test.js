@@ -13,7 +13,6 @@ import {
   touchend,
   touchstart
 } from '@vaadin/testing-helpers';
-import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import '../vaadin-button.js';
 
 describe('vaadin-button', () => {
@@ -55,20 +54,6 @@ describe('vaadin-button', () => {
       it('should not override custom role attribute', () => {
         expect(element.getAttribute('role')).to.equal('menuitem');
       });
-    });
-  });
-
-  describe('label', () => {
-    let label;
-
-    beforeEach(() => {
-      element = fixtureSync('<vaadin-button>Press me</vaadin-button>');
-      label = element.shadowRoot.querySelector('[part=label]');
-    });
-
-    it('should define the button label using light DOM', () => {
-      const children = FlattenedNodesObserver.getFlattenedNodes(label);
-      expect(children[1].textContent).to.be.equal('Press me');
     });
   });
 
