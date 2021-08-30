@@ -60,10 +60,12 @@ registerStyles(
 
     /* Focus-ring */
 
+    [part~='row']:focus,
     [part~='cell']:focus {
       outline: none;
     }
 
+    :host([navigating]) [part~='row']:focus::before,
     :host([navigating]) [part~='cell']:focus::before {
       content: '';
       position: absolute;
@@ -73,6 +75,11 @@ registerStyles(
       left: 0;
       pointer-events: none;
       box-shadow: inset 0 0 0 2px var(--lumo-primary-color-50pct);
+    }
+
+    :host([navigating]) [part~='row']:focus::before {
+      transform: translateX(calc(-1 * var(--_grid-horizontal-scroll-position)));
+      z-index: 100;
     }
 
     /* Drag and Drop styles */

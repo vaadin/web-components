@@ -97,6 +97,17 @@ export const KeyboardNavigationMixin = (superClass) =>
     }
 
     /** @private */
+    __setFocusMode(mode) {
+      ['_itemsFocusable', '_footerFocusable', '_headerFocusable'].forEach((focusable) => {
+        if (mode === 'row' && this[focusable] instanceof HTMLTableCellElement) {
+          this[focusable] = this[focusable].parentElement;
+        } else if (mode === 'cell' && this[focusable] instanceof HTMLTableRowElement) {
+          this[focusable] = this[focusable].firstElementChild;
+        }
+      });
+    }
+
+    /** @private */
     _focusableChanged(focusable, oldFocusable) {
       if (oldFocusable) {
         oldFocusable.setAttribute('tabindex', '-1');
@@ -162,16 +173,19 @@ export const KeyboardNavigationMixin = (superClass) =>
       const targetRowInDom = Array.from(this.$.items.children).filter((child) => child.index === index)[0];
       if (!targetRowInDom) {
         this.scrollToIndex(index);
+      } else {
+        this.__scrollIntoViewport(index);
       }
+    }
+
+    /** @private */
+    __indexOfChildElement(el) {
+      return Array.prototype.indexOf.call(el.parentNode.children, el);
     }
 
     /** @private */
     _onNavigationKeyDown(e, key) {
       e.preventDefault();
-
-      function indexOfChildElement(el) {
-        return Array.prototype.indexOf.call(el.parentNode.children, el);
-      }
 
       const visibleItemsCount = this._lastVisibleIndex - this._firstVisibleIndex - 1;
 
@@ -206,11 +220,85 @@ export const KeyboardNavigationMixin = (superClass) =>
           break;
       }
 
-      const activeCell = e.composedPath()[0];
-      const columnIndex = indexOfChildElement(activeCell);
-      const isRowDetails = this._elementMatches(activeCell, '[part~="details-cell"]');
+      const activeRow = e.composedPath().find((el) => el instanceof HTMLTableRowElement);
+      const activeCell = e.composedPath().find((el) => el instanceof HTMLTableCellElement);
 
+      const cellFocusMode = activeCell && activeCell.tabIndex === 0;
+
+      if (cellFocusMode) {
+        this._onCellNavigation(activeCell, dx, dy);
+      } else {
+        this._onRowNavigation(activeRow, dy);
+      }
+    }
+
+    /** @private */
+    _onRowNavigation(activeRow, dy) {
+      const activeRowGroup = activeRow.parentNode;
+      const maxRowIndex = (activeRowGroup === this.$.items ? this._effectiveSize : activeRowGroup.children.length) - 1;
+
+      // TODO: DRY with _onCellNavigation
+
+      // Body rows have index property, otherwise DOM child index of the row is used.
+      const rowIndex =
+        activeRowGroup === this.$.items
+          ? this._focusedItemIndex !== undefined
+            ? this._focusedItemIndex
+            : activeRow.index
+          : this.__indexOfChildElement(activeRow);
+
+      // Index of the destination row
+      let dstRowIndex = Math.max(0, Math.min(rowIndex + dy, maxRowIndex));
+
+      // Header and footer could have hidden rows, e. g., if none of the columns
+      // or groups on the given column tree level define template. Skip them
+      // in vertical keyboard navigation.
+      if (activeRowGroup !== this.$.items) {
+        if (dstRowIndex > rowIndex) {
+          while (dstRowIndex < maxRowIndex && activeRowGroup.children[dstRowIndex].hidden) {
+            dstRowIndex++;
+          }
+        } else if (dstRowIndex < rowIndex) {
+          while (dstRowIndex > 0 && activeRowGroup.children[dstRowIndex].hidden) {
+            dstRowIndex--;
+          }
+        }
+      }
+
+      // Ensure correct vertical scroll position, destination row is visible
+      if (activeRowGroup === this.$.items) {
+        this._ensureScrolledToIndex(dstRowIndex);
+      }
+
+      // This has to be set after scrolling, otherwise it can be removed by
+      // `_preventScrollerRotatingCellFocus(row, index)` during scrolling.
+      this._toggleAttribute('navigating', true, this);
+
+      // For body rows, use index property to find destination row, otherwise use DOM child index
+      const dstRow =
+        activeRowGroup === this.$.items
+          ? Array.from(activeRowGroup.children).filter((el) => !el.hidden && el.index === dstRowIndex)[0]
+          : activeRowGroup.children[dstRowIndex];
+      if (!dstRow) {
+        return;
+      }
+
+      // Here we go!
+      if (activeRowGroup === this.$.items) {
+        // When scrolling with repeated keydown, sometimes FocusEvent listeners
+        // are too late to update _focusedItemIndex. Ensure next keydown
+        // listener invocation gets updated _focusedItemIndex value.
+        this._focusedItemIndex = dstRowIndex;
+      }
+
+      dstRow.focus();
+    }
+
+    /** @private */
+    _onCellNavigation(activeCell, dx, dy) {
+      const columnIndex = this.__indexOfChildElement(activeCell);
       const activeRow = activeCell.parentNode;
+      const isRowDetails = this._elementMatches(activeCell, '[part~="details-cell"]');
 
       const activeRowGroup = activeRow.parentNode;
       const maxRowIndex = (activeRowGroup === this.$.items ? this._effectiveSize : activeRowGroup.children.length) - 1;
@@ -221,7 +309,7 @@ export const KeyboardNavigationMixin = (superClass) =>
           ? this._focusedItemIndex !== undefined
             ? this._focusedItemIndex
             : activeRow.index
-          : indexOfChildElement(activeRow);
+          : this.__indexOfChildElement(activeRow);
 
       // Index of the destination row
       let dstRowIndex = Math.max(0, Math.min(rowIndex + dy, maxRowIndex));
@@ -328,17 +416,6 @@ export const KeyboardNavigationMixin = (superClass) =>
         this._focusedItemIndex = dstRowIndex;
       }
 
-      if (activeRowGroup === this.$.items) {
-        const dstRect = dstCell.getBoundingClientRect();
-        const footerTop = this.$.footer.getBoundingClientRect().top;
-        const headerBottom = this.$.header.getBoundingClientRect().bottom;
-        if (dstRect.bottom > footerTop) {
-          this.$.table.scrollTop += dstRect.bottom - footerTop;
-        } else if (dstRect.top < headerBottom) {
-          this.$.table.scrollTop -= headerBottom - dstRect.top;
-        }
-      }
-
       dstCell.focus();
     }
 
@@ -415,9 +492,9 @@ export const KeyboardNavigationMixin = (superClass) =>
         this.$.focusexit.focus();
       } else if (focusTarget === this._itemsFocusable) {
         let itemsFocusTarget = focusTarget;
-        const targetRow = this._itemsFocusable.parentNode;
+        const targetRow = focusTarget instanceof HTMLTableRowElement ? focusTarget : focusTarget.parentNode;
         this._ensureScrolledToIndex(this._focusedItemIndex);
-        if (targetRow.index !== this._focusedItemIndex) {
+        if (targetRow.index !== this._focusedItemIndex && focusTarget instanceof HTMLTableCellElement) {
           // The target row, which is about to be focused next, has been
           // assigned with a new index since last focus, probably because of
           // scrolling. Focus the row for the stored focused item index instead.
@@ -503,27 +580,39 @@ export const KeyboardNavigationMixin = (superClass) =>
     }
 
     /** @private */
+    __setFocusableOfSameType(focusableName, cell, row) {
+      if (this[focusableName] instanceof HTMLTableCellElement) {
+        this[focusableName] = cell;
+      } else if (this[focusableName] instanceof HTMLTableRowElement) {
+        this[focusableName] = row;
+      }
+    }
+
+    /** @private */
     _onCellFocusIn(e) {
-      const { section, cell } = this._getGridEventLocation(e);
+      const { section, cell, row } = this._getGridEventLocation(e);
       this._detectInteracting(e);
 
-      if (section && cell) {
+      if (section && (cell || row)) {
         this._activeRowGroup = section;
         if (this.$.header === section) {
-          this._headerFocusable = cell;
+          this.__setFocusableOfSameType('_headerFocusable', cell, row);
         } else if (this.$.items === section) {
-          this._itemsFocusable = cell;
+          this.__setFocusableOfSameType('_itemsFocusable', cell, row);
         } else if (this.$.footer === section) {
-          this._footerFocusable = cell;
+          this.__setFocusableOfSameType('_footerFocusable', cell, row);
         }
-        // Inform cell content of the focus (used in <vaadin-grid-sorter>)
-        cell._content.dispatchEvent(new CustomEvent('cell-focusin', { bubbles: false }));
 
-        // Fire a public event for cell.
-        const context = this.getEventContext(e);
-        cell.dispatchEvent(
-          new CustomEvent('cell-focus', { bubbles: true, composed: true, detail: { context: context } })
-        );
+        if (cell) {
+          // Inform cell content of the focus (used in <vaadin-grid-sorter>)
+          cell._content.dispatchEvent(new CustomEvent('cell-focusin', { bubbles: false }));
+
+          // Fire a public event for cell.
+          const context = this.getEventContext(e);
+          cell.dispatchEvent(
+            new CustomEvent('cell-focus', { bubbles: true, composed: true, detail: { context: context } })
+          );
+        }
       }
 
       this._detectFocusedItemIndex(e);
@@ -557,18 +646,18 @@ export const KeyboardNavigationMixin = (superClass) =>
     }
 
     /** @private
-     * Enables or disables the focus target cell of the containing section of the
+     * Enables or disables the focus target of the containing section of the
      * grid from receiving focus, based on whether the user is interacting with
      * that section of the grid.
      * @param {HTMLTableCellElement} focusTargetCell
      */
-    _updateGridSectionFocusTarget(focusTargetCell) {
-      if (!focusTargetCell) return;
+    _updateGridSectionFocusTarget(focusTarget) {
+      if (!focusTarget) return;
 
-      const section = this._getGridSectionFromFocusTarget(focusTargetCell);
+      const section = this._getGridSectionFromFocusTarget(focusTarget);
       const isInteractingWithinActiveSection = this.interacting && section === this._activeRowGroup;
 
-      focusTargetCell.tabIndex = isInteractingWithinActiveSection ? -1 : 0;
+      focusTarget.tabIndex = isInteractingWithinActiveSection ? -1 : 0;
     }
 
     /**

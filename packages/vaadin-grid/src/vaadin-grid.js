@@ -596,6 +596,7 @@ class GridElement extends ElementMixin(
       const row = document.createElement('tr');
       row.setAttribute('part', 'row');
       row.setAttribute('role', 'row');
+      row.setAttribute('tabindex', '-1');
       if (this._columnTree) {
         this._updateRow(row, this._columnTree[this._columnTree.length - 1], 'body', false, true);
       }
@@ -829,11 +830,13 @@ class GridElement extends ElementMixin(
       const headerRow = document.createElement('tr');
       headerRow.setAttribute('part', 'row');
       headerRow.setAttribute('role', 'row');
+      headerRow.setAttribute('tabindex', '-1');
       this.$.header.appendChild(headerRow);
 
       const footerRow = document.createElement('tr');
       footerRow.setAttribute('part', 'row');
       footerRow.setAttribute('role', 'row');
+      footerRow.setAttribute('tabindex', '-1');
       this.$.footer.appendChild(footerRow);
     }
     while (this.$.header.children.length > columnTree.length) {
