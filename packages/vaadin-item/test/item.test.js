@@ -3,14 +3,19 @@ import { fixtureSync } from '@vaadin/testing-helpers';
 import '../vaadin-item.js';
 
 describe('vaadin-item', () => {
-  let item;
+  let item, tagName;
 
   beforeEach(() => {
     item = fixtureSync('<vaadin-item>label</vaadin-item>');
+    tagName = item.tagName.toLowerCase();
   });
 
-  it('should have a valid version number', () => {
-    expect(item.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta|rc)\d+)?$/);
+  it('should be defined in custom element registry', () => {
+    expect(customElements.get(tagName)).to.be.ok;
+  });
+
+  it('should have a valid static "is" getter', () => {
+    expect(customElements.get(tagName).is).to.equal(tagName);
   });
 
   it('should extend item-mixin', () => {

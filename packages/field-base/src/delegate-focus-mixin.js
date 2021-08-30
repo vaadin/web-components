@@ -16,18 +16,31 @@ const DelegateFocusMixinImplementation = (superclass) =>
          */
         autofocus: {
           type: Boolean
+        },
+
+        /**
+         * A reference to the focusable element controlled by the mixin.
+         * It can be an input, textarea, button or any element with tabindex > -1.
+         *
+         * Any component implementing this mixin is expected to provide it
+         * by using `this._setFocusElement(input)` Polymer API.
+         *
+         * @protected
+         * @type {!HTMLElement}
+         */
+        focusElement: {
+          type: Object,
+          readOnly: true,
+          observer: '_focusElementChanged'
         }
       };
     }
 
-    /**
-     * Any element extending this mixin is required to implement this getter.
-     * It returns the actual focusable element in the component.
-     * @return {Element | null | undefined}
-     */
-    get focusElement() {
-      console.warn(`Please implement the 'focusElement' property in <${this.localName}>`);
-      return null;
+    constructor() {
+      super();
+
+      this._boundOnBlur = this._onBlur.bind(this);
+      this._boundOnFocus = this._onFocus.bind(this);
     }
 
     /** @protected */
@@ -65,10 +78,62 @@ const DelegateFocusMixinImplementation = (superclass) =>
       }
     }
 
+    /** @protected */
+    _focusElementChanged(element, oldElement) {
+      if (element) {
+        this._addFocusListeners(element);
+      } else if (oldElement) {
+        this._removeFocusListeners(oldElement);
+      }
+    }
+
+    /**
+     * @param {HTMLElement} element
+     * @protected
+     */
+    _addFocusListeners(element) {
+      element.addEventListener('blur', this._boundOnBlur);
+      element.addEventListener('focus', this._boundOnFocus);
+    }
+
+    /**
+     * @param {HTMLElement} element
+     * @protected
+     */
+    _removeFocusListeners(element) {
+      element.removeEventListener('blur', this._boundOnBlur);
+      element.removeEventListener('focus', this._boundOnFocus);
+    }
+
+    /**
+     * Focus event does not bubble, so we dispatch it manually
+     * on the host element to support adding focus listeners
+     * when the focusable element is placed in light DOM.
+     * @param {FocusEvent} event
+     * @protected
+     */
+    _onFocus(event) {
+      event.stopPropagation();
+      this.dispatchEvent(new Event('focus'));
+    }
+
+    /**
+     * Blur event does not bubble, so we dispatch it manually
+     * on the host element to support adding blur listeners
+     * when the focusable element is placed in light DOM.
+     * @param {FocusEvent} event
+     * @protected
+     */
+    _onBlur(event) {
+      event.stopPropagation();
+      this.dispatchEvent(new Event('blur'));
+    }
+
     /**
      * @param {Event} event
      * @return {boolean}
      * @protected
+     * @override
      */
     _shouldSetFocus(event) {
       return event.target === this.focusElement;

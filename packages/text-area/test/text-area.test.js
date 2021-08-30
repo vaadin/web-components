@@ -1,9 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
-import { TextArea } from '../src/vaadin-text-area.js';
-
-customElements.define('vaadin-text-area', TextArea);
+import '../src/vaadin-text-area.js';
 
 describe('text-area', () => {
   let textArea;
@@ -16,7 +14,7 @@ describe('text-area', () => {
     let native;
 
     beforeEach(() => {
-      native = textArea._inputNode;
+      native = textArea.inputElement;
     });
 
     describe('native', () => {
@@ -180,7 +178,7 @@ describe('text-area', () => {
     let native, container, inputField;
 
     beforeEach(() => {
-      native = textArea._inputNode;
+      native = textArea.inputElement;
       inputField = textArea.shadowRoot.querySelector('[part=input-field]');
       container = textArea.shadowRoot.querySelector('[part=container]');
     });

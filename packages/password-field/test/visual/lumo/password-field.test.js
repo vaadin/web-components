@@ -1,9 +1,7 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
+import { sendKeys } from '@web/test-runner-commands';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../../theme/lumo/vaadin-password-field.js';
-import { PasswordField } from '../../../src/vaadin-password-field.js';
-
-customElements.define('vaadin-password-field', PasswordField);
 
 describe('password-field', () => {
   let div, element;
@@ -44,6 +42,13 @@ describe('password-field', () => {
         element.value = 'value';
         element.revealButtonHidden = true;
         await visualDiff(div, `${import.meta.url}_${dir}-reveal-button-hidden`);
+      });
+
+      it('reveal button focus', async () => {
+        element.label = 'Password';
+        element.focus();
+        await sendKeys({ press: 'Tab' });
+        await visualDiff(div, `${import.meta.url}_${dir}-reveal-button-focus`);
       });
     });
   });

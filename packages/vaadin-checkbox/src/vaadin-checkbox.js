@@ -115,10 +115,6 @@ class CheckboxElement extends ElementMixin(ControlStateMixin(ThemableMixin(Gestu
     return 'vaadin-checkbox';
   }
 
-  static get version() {
-    return '22.0.0-alpha1';
-  }
-
   static get properties() {
     return {
       /**

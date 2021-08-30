@@ -8,7 +8,7 @@ import { timeOut } from '@polymer/polymer/lib/utils/async.js';
 import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
 import { resetMouseCanceller } from '@polymer/polymer/lib/utils/gestures.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import '@vaadin/vaadin-button/src/vaadin-button.js';
+import '@vaadin/button/src/vaadin-button.js';
 import '@vaadin/vaadin-confirm-dialog/src/vaadin-confirm-dialog.js';
 import '@vaadin/vaadin-text-field/src/vaadin-text-field.js';
 import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
@@ -358,10 +358,6 @@ class RichTextEditorElement extends ElementMixin(ThemableMixin(PolymerElement)) 
 
   static get is() {
     return 'vaadin-rich-text-editor';
-  }
-
-  static get version() {
-    return '22.0.0-alpha1';
   }
 
   static get properties() {

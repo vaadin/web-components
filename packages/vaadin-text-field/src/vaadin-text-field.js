@@ -28,7 +28,7 @@ import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.
  * <vaadin-text-field label="Email address">
  *   <div slot="prefix">Sent to:</div>
  *   <div slot="suffix">@vaadin.com</div>
- * </vaadin-text-area>
+ * </vaadin-text-field>
  * ```
  *
  * ### Styling
@@ -112,10 +112,6 @@ class TextFieldElement extends ElementMixin(TextFieldMixin(ControlStateMixin(The
 
   static get is() {
     return 'vaadin-text-field';
-  }
-
-  static get version() {
-    return '22.0.0-alpha1';
   }
 
   static get properties() {

@@ -2,22 +2,23 @@ import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import '../vaadin-board.js';
 
-describe('vaadin-details', () => {
-  let board;
+describe('vaadin-board', () => {
+  let board, tagName;
 
   beforeEach(() => {
     board = fixtureSync('<vaadin-board></vaadin-board>');
+    tagName = board.tagName.toLowerCase();
   });
 
   it('should define a vaadin-board custom element', () => {
-    expect(customElements.get('vaadin-board')).to.be.ok;
+    expect(customElements.get(tagName)).to.be.ok;
+  });
+
+  it('should have a valid static "is" getter', () => {
+    expect(customElements.get(tagName).is).to.equal(tagName);
   });
 
   it('should define a vaadin-board-row custom element', () => {
     expect(customElements.get('vaadin-board-row')).to.be.ok;
-  });
-
-  it('should have a valid version number', () => {
-    expect(board.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta|rc)\d+)?$/);
   });
 });

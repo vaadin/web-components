@@ -1,16 +1,15 @@
 import { expect } from '@esm-bundle/chai';
+import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import { fixtureSync, focusin, focusout, tabKeyDown } from '@vaadin/testing-helpers';
-import { PasswordField } from '../src/vaadin-password-field.js';
-
-customElements.define('vaadin-password-field', PasswordField);
+import { fixtureSync, focusout } from '@vaadin/testing-helpers';
+import '../src/vaadin-password-field.js';
 
 describe('password-field', () => {
   let passwordField, input, revealButton;
 
   beforeEach(() => {
     passwordField = fixtureSync('<vaadin-password-field></vaadin-password-field>');
-    input = passwordField._inputNode;
+    input = passwordField.inputElement;
     revealButton = passwordField.querySelector('[slot=reveal]');
   });
 
@@ -20,6 +19,15 @@ describe('password-field', () => {
 
   it('should show reveal button by default', () => {
     expect(revealButton.hidden).to.be.false;
+  });
+
+  it('should set default accessible label to reveal button', () => {
+    expect(revealButton.getAttribute('aria-label')).to.equal('Show password');
+  });
+
+  it('should translate accessible label when setting new i18n object', () => {
+    passwordField.i18n = { reveal: 'Näytä salasana' };
+    expect(revealButton.getAttribute('aria-label')).to.equal('Näytä salasana');
   });
 
   it('should reveal the password on reveal button click', () => {
@@ -55,20 +63,6 @@ describe('password-field', () => {
     expect(input.type).to.equal('text');
   });
 
-  it('should set focus-ring attribute when focusing the input with Tab', () => {
-    tabKeyDown(document.body);
-    focusin(input);
-
-    expect(passwordField.hasAttribute('focus-ring')).to.be.true;
-  });
-
-  it('should set focus-ring attribute when focusing reveal button with Shift Tab', () => {
-    tabKeyDown(document.body, ['shift']);
-    focusin(revealButton);
-
-    expect(passwordField.hasAttribute('focus-ring')).to.be.true;
-  });
-
   it('should prevent touchend event on reveal button', () => {
     const e = new CustomEvent('touchend', { cancelable: true });
 
@@ -100,6 +94,78 @@ describe('password-field', () => {
 
     revealButton.click();
     expect(revealButton.getAttribute('aria-pressed')).to.equal('false');
+  });
+
+  describe('focus-ring', () => {
+    describe('Tab', () => {
+      let button;
+
+      beforeEach(() => {
+        button = document.createElement('button');
+        button.textContent = 'Button';
+        passwordField.parentNode.insertBefore(button, passwordField);
+        button.focus();
+      });
+
+      afterEach(() => {
+        document.body.focus();
+        button.remove();
+      });
+
+      it('should set focus-ring attribute when focusing the input with Tab', async () => {
+        await sendKeys({ press: 'Tab' });
+
+        expect(passwordField.hasAttribute('focus-ring')).to.be.true;
+      });
+
+      it('should remove focus-ring attribute when focusing reveal button', async () => {
+        // Tab to the input element
+        await sendKeys({ press: 'Tab' });
+
+        // Tab to the reveal button
+        await sendKeys({ press: 'Tab' });
+
+        expect(passwordField.hasAttribute('focus-ring')).to.be.false;
+      });
+    });
+
+    describe('Shift Tab', () => {
+      let button;
+
+      beforeEach(() => {
+        button = document.createElement('button');
+        button.textContent = 'Button';
+        passwordField.parentNode.appendChild(button);
+        button.focus();
+      });
+
+      afterEach(() => {
+        document.body.focus();
+        button.remove();
+      });
+
+      it('should not set focus-ring attribute when focusing reveal button with Shift Tab', async () => {
+        await sendKeys({ down: 'Shift' });
+        await sendKeys({ press: 'Tab' });
+        await sendKeys({ up: 'Shift' });
+
+        expect(passwordField.hasAttribute('focus-ring')).to.be.false;
+      });
+
+      it('should set focus-ring attribute when focusing the input with Shift Tab', async () => {
+        // Shift+Tab to the reveal button
+        await sendKeys({ down: 'Shift' });
+        await sendKeys({ press: 'Tab' });
+        await sendKeys({ up: 'Shift' });
+
+        // Shift+Tab to the input element
+        await sendKeys({ down: 'Shift' });
+        await sendKeys({ press: 'Tab' });
+        await sendKeys({ up: 'Shift' });
+
+        expect(passwordField.hasAttribute('focus-ring')).to.be.true;
+      });
+    });
   });
 
   describe('revealButtonHidden', () => {
@@ -136,5 +202,29 @@ describe('password-field', () => {
       passwordField.revealButtonHidden = false;
       expect(revealButton.hasAttribute('aria-hidden')).to.be.false;
     });
+  });
+});
+
+describe('invalid', () => {
+  let field;
+
+  beforeEach(() => {
+    field = fixtureSync('<vaadin-password-field invalid></vaadin-password-field>');
+  });
+
+  it('should not remove "invalid" state when ready', () => {
+    expect(field.invalid).to.be.true;
+  });
+});
+
+describe('invalid with value', () => {
+  let field;
+
+  beforeEach(() => {
+    field = fixtureSync('<vaadin-password-field invalid value="123456"></vaadin-password-field>');
+  });
+
+  it('should not remove "invalid" state when ready', () => {
+    expect(field.invalid).to.be.true;
   });
 });

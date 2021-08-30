@@ -9,7 +9,7 @@ import { LoginMixin } from './vaadin-login-mixin.js';
 import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import '@vaadin/vaadin-text-field/src/vaadin-text-field.js';
-import '@vaadin/vaadin-text-field/src/vaadin-password-field.js';
+import '@vaadin/password-field/src/vaadin-password-field.js';
 import './vaadin-login-form-wrapper.js';
 
 /**
@@ -105,10 +105,6 @@ class LoginFormElement extends LoginMixin(ElementMixin(ThemableMixin(PolymerElem
 
   static get is() {
     return 'vaadin-login-form';
-  }
-
-  static get version() {
-    return '22.0.0-alpha1';
   }
 
   /** @protected */

@@ -73,10 +73,6 @@ class VerticalLayoutElement extends ElementMixin(ThemableMixin(PolymerElement)) 
   static get is() {
     return 'vaadin-vertical-layout';
   }
-
-  static get version() {
-    return '22.0.0-alpha1';
-  }
 }
 
 customElements.define(VerticalLayoutElement.is, VerticalLayoutElement);

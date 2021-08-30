@@ -5,18 +5,78 @@
  */
 import { PolymerElement, html } from '@polymer/polymer';
 import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
-import { TextFieldMixin } from '@vaadin/field-base/src/text-field-mixin.js';
+import { CharLengthMixin } from '@vaadin/field-base/src/char-length-mixin.js';
+import { InputFieldMixin } from '@vaadin/field-base/src/input-field-mixin.js';
+import { TextAreaSlotMixin } from '@vaadin/field-base/src/text-area-slot-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import '@vaadin/input-container/src/vaadin-input-container.js';
 import '@vaadin/text-field/src/vaadin-input-field-shared-styles.js';
 
-export class TextArea extends TextFieldMixin(ThemableMixin(ElementMixin(PolymerElement))) {
+/**
+ * `<vaadin-text-area>` is a web component for multi-line text input.
+ *
+ * ```html
+ * <vaadin-text-area label="Comment"></vaadin-text-area>
+ * ```
+ *
+ * ### Prefixes and suffixes
+ *
+ * These are child elements of a `<vaadin-text-area>` that are displayed
+ * inline with the input, before or after.
+ * In order for an element to be considered as a prefix, it must have the slot
+ * attribute set to `prefix` (and similarly for `suffix`).
+ *
+ * ```html
+ * <vaadin-text-area label="Description">
+ *   <div slot="prefix">Details:</div>
+ *   <div slot="suffix">The end!</div>
+ * </vaadin-text-area>
+ * ```
+ *
+ * ### Styling
+ *
+ * The following shadow DOM parts are available for styling:
+ *
+ * Part name       | Description
+ * ----------------|----------------
+ * `label`         | The label element wrapper
+ * `input-field`   | The element that wraps prefix, textarea and suffix
+ * `error-message` | The error message element wrapper
+ * `helper-text`   | The helper text element wrapper
+ *
+ * The following state attributes are available for styling:
+ *
+ * Attribute           | Description                               | Part name
+ * --------------------|-------------------------------------------|----------
+ * `disabled`          | Set when the element is disabled          | :host
+ * `has-value`         | Set when the element has a value          | :host
+ * `has-label`         | Set when the element has a label          | :host
+ * `has-helper`        | Set when the element has helper text      | :host
+ * `has-error-message` | Set when the element has an error message | :host
+ * `invalid`           | Set when the element is invalid           | :host
+ * `focused`           | Set when the element is focused           | :host
+ * `focus-ring`        | Set when the element is keyboard focused  | :host
+ * `readonly`          | Set when the element is readonly          | :host
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
+ *
+ * @fires {Event} input - Fired when the value is changed by the user: on every typing keystroke, and the value is cleared using the clear button.
+ * @fires {Event} change - Fired when the user commits a value change.
+ * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
+ * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
+ *
+ * @extends HTMLElement
+ * @mixes CharLengthMixin
+ * @mixes InputFieldMixin
+ * @mixes TextAreaSlotMixin
+ * @mixes ElementMixin
+ * @mixes ThemableMixin
+ */
+export class TextArea extends CharLengthMixin(
+  InputFieldMixin(TextAreaSlotMixin(ThemableMixin(ElementMixin(PolymerElement))))
+) {
   static get is() {
     return 'vaadin-text-area';
-  }
-
-  static get version() {
-    return '22.0.0-alpha1';
   }
 
   static get template() {
@@ -46,6 +106,7 @@ export class TextArea extends TextFieldMixin(ThemableMixin(ElementMixin(PolymerE
           display: grid;
           flex: 1 1 auto;
           align-self: stretch;
+          padding: 0;
         }
 
         .textarea-wrapper::after {
@@ -102,6 +163,7 @@ export class TextArea extends TextFieldMixin(ThemableMixin(ElementMixin(PolymerE
       <div part="container">
         <div part="label">
           <slot name="label"></slot>
+          <span part="indicator" aria-hidden="true"></span>
         </div>
 
         <vaadin-input-container
@@ -130,42 +192,12 @@ export class TextArea extends TextFieldMixin(ThemableMixin(ElementMixin(PolymerE
     `;
   }
 
-  get slots() {
-    const slots = super.slots;
-
-    delete slots.input;
-
-    return {
-      ...slots,
-      textarea: () => {
-        const native = document.createElement('textarea');
-        const value = this.getAttribute('value');
-        if (value) {
-          native.setAttribute('value', value);
-        }
-        const name = this.getAttribute('name');
-        if (name) {
-          native.setAttribute('name', name);
-        }
-        return native;
-      }
-    };
-  }
-
   /**
    * Used by `ClearButtonMixin` as a reference to the clear button element.
    * @protected
    */
   get clearElement() {
     return this.$.clearButton;
-  }
-
-  /**
-   * Override getter provided by `InputMixin` to use a different slot.
-   * @protected
-   */
-  get _inputNode() {
-    return this._getDirectSlotChild('textarea');
   }
 
   /** @protected */
@@ -192,6 +224,7 @@ export class TextArea extends TextFieldMixin(ThemableMixin(ElementMixin(PolymerE
    * @param {unknown} newVal
    * @param {unknown} oldVal
    * @protected
+   * @override
    */
   _valueChanged(newVal, oldVal) {
     super._valueChanged(newVal, oldVal);
@@ -201,12 +234,14 @@ export class TextArea extends TextFieldMixin(ThemableMixin(ElementMixin(PolymerE
 
   /** @private */
   _updateHeight() {
-    if (this._inputNode) {
+    if (this.inputElement) {
       /* https://css-tricks.com/the-cleanest-trick-for-autogrowing-textareas/ */
       this.__textAreaWrapper = this.__textAreaWrapper || this.shadowRoot.querySelector('.textarea-wrapper');
-      this.__textAreaWrapper.dataset.replicatedValue = this._inputNode.value;
+      this.__textAreaWrapper.dataset.replicatedValue = this.inputElement.value;
       // getComputedStyle is expensive, maybe we can use ResizeObserver in the future
       this._dispatchIronResizeEventIfNeeded('InputHeight', getComputedStyle(this.__textAreaWrapper).height);
     }
   }
 }
+
+customElements.define(TextArea.is, TextArea);

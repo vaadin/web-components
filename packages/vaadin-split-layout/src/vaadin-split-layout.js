@@ -224,10 +224,6 @@ class SplitLayoutElement extends ElementMixin(
     return 'vaadin-split-layout';
   }
 
-  static get version() {
-    return '22.0.0-alpha1';
-  }
-
   static get properties() {
     return {
       /**

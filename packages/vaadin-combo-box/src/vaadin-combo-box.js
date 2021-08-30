@@ -242,10 +242,6 @@ class ComboBoxElement extends ElementMixin(
     return 'vaadin-combo-box';
   }
 
-  static get version() {
-    return '22.0.0-alpha1';
-  }
-
   static get properties() {
     return {
       /**

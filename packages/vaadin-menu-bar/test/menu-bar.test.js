@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { arrowLeft, arrowRight, end, fixtureSync, home, nextRender } from '@vaadin/testing-helpers';
+import { arrowLeft, arrowRight, end, fixtureSync, focusin, home, nextRender } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
 import '../vaadin-menu-bar.js';
 
@@ -19,22 +19,19 @@ const assertVisible = (elem) => {
 };
 
 describe('custom element definition', () => {
-  let menu;
+  let menu, tagName;
 
   beforeEach(() => {
     menu = fixtureSync('<vaadin-menu-bar></vaadin-menu-bar>');
+    tagName = menu.tagName.toLowerCase();
   });
 
-  it('should be defined with correct tag name', () => {
-    expect(customElements.get('vaadin-menu-bar')).to.be.ok;
+  it('should be defined in custom element registry', () => {
+    expect(customElements.get(tagName)).to.be.ok;
   });
 
-  it('should not expose class name globally', () => {
-    expect(window.MenuBarElement).not.to.be.ok;
-  });
-
-  it('should have a valid version number', () => {
-    expect(menu.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta|rc)\d+)?$/);
+  it('should have a valid static "is" getter', () => {
+    expect(customElements.get(tagName).is).to.equal(tagName);
   });
 });
 
@@ -69,10 +66,10 @@ describe('root menu layout', () => {
   });
 
   it('should set tabindex to -1 to all the buttons except first one', () => {
-    menu.dispatchEvent(new CustomEvent('focusin', { bubbles: true, composed: true }));
+    focusin(menu);
     expect(buttons[0].getAttribute('tabindex')).to.equal('0');
     buttons.slice(1).forEach((btn) => {
-      expect(btn.focusElement.getAttribute('tabindex')).to.equal('-1');
+      expect(btn.getAttribute('tabindex')).to.equal('-1');
     });
   });
 
@@ -362,6 +359,13 @@ describe('overflow button', () => {
 
     expect(overflow.hasAttribute('hidden')).to.be.true;
     expect(overflow.item.children.length).to.equal(0);
+  });
+
+  it('should set the aria-label of the overflow button according to the i18n of the menu bar', () => {
+    const moreOptionsSv = 'Fler alternativ';
+    expect(overflow.getAttribute('aria-label')).to.equal('More options');
+    menu.i18n = { ...menu.i18n, moreOptions: moreOptionsSv };
+    expect(overflow.getAttribute('aria-label')).to.equal(moreOptionsSv);
   });
 });
 

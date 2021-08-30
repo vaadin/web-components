@@ -7,7 +7,7 @@ import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
 import '@vaadin/vaadin-license-checker/vaadin-license-checker.js';
-import '@vaadin/vaadin-button/src/vaadin-button.js';
+import '@vaadin/button/src/vaadin-button.js';
 import '@vaadin/vaadin-dialog/src/vaadin-dialog.js';
 
 /**
@@ -128,10 +128,6 @@ class ConfirmDialogElement extends ElementMixin(ThemableMixin(PolymerElement)) {
 
   static get is() {
     return 'vaadin-confirm-dialog';
-  }
-
-  static get version() {
-    return '22.0.0-alpha1';
   }
 
   static get properties() {

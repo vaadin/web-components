@@ -3,17 +3,13 @@ import sinon from 'sinon';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { DelegateFocusMixin } from '../src/delegate-focus-mixin.js';
-import { InputMixin } from '../src/input-mixin.js';
+import { InputSlotMixin } from '../src/input-slot-mixin.js';
 
 customElements.define(
   'delegate-focus-mixin-element',
-  class extends DelegateFocusMixin(InputMixin(PolymerElement)) {
+  class extends InputSlotMixin(DelegateFocusMixin(PolymerElement)) {
     static get template() {
       return html`<slot name="input"></slot>`;
-    }
-
-    get focusElement() {
-      return this._inputNode;
     }
   }
 );
@@ -92,6 +88,50 @@ describe('delegate-focus-mixin', () => {
     });
   });
 
+  describe('events', () => {
+    let spy;
+
+    beforeEach(() => {
+      element = fixtureSync(`<delegate-focus-mixin-element></delegate-focus-mixin-element>`);
+      input = element.querySelector('input');
+      spy = sinon.spy();
+    });
+
+    describe('focus', () => {
+      beforeEach(() => {
+        element.addEventListener('focus', spy);
+      });
+
+      it('should re-dispatch focus event on the host element', () => {
+        input.dispatchEvent(new Event('focus'));
+        expect(spy.calledOnce).to.be.true;
+      });
+
+      it('should not re-dispatch focus when focusElement is removed', () => {
+        element._setFocusElement(null);
+        input.dispatchEvent(new Event('focus'));
+        expect(spy.calledOnce).to.be.false;
+      });
+    });
+
+    describe('blur', () => {
+      beforeEach(() => {
+        element.addEventListener('blur', spy);
+      });
+
+      it('should re-dispatch blur event on the host element', () => {
+        input.dispatchEvent(new Event('blur'));
+        expect(spy.calledOnce).to.be.true;
+      });
+
+      it('should not re-dispatch blur when focusElement is removed', () => {
+        element._setFocusElement(null);
+        input.dispatchEvent(new Event('blur'));
+        expect(spy.calledOnce).to.be.false;
+      });
+    });
+  });
+
   describe('autofocus', () => {
     beforeEach(() => {
       element = document.createElement('delegate-focus-mixin-element');
@@ -104,7 +144,7 @@ describe('delegate-focus-mixin', () => {
 
     it('should focus the input when autofocus is set', async () => {
       document.body.appendChild(element);
-      const spy = sinon.spy(element._inputNode, 'focus');
+      const spy = sinon.spy(element.focusElement, 'focus');
       await nextFrame();
       expect(spy.calledOnce).to.be.true;
     });

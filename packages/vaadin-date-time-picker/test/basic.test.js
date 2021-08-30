@@ -44,14 +44,6 @@ describe('Basic features', () => {
     timePicker = customField.inputs[1];
   });
 
-  it('should not expose class name globally', () => {
-    expect(window.DateTimePickerElement).not.to.be.ok;
-  });
-
-  it('should have a valid version number', () => {
-    expect(dateTimePicker.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta|rc)\d+)?$/);
-  });
-
   it('should have default value', () => {
     expect(dateTimePicker.value).to.equal('');
   });

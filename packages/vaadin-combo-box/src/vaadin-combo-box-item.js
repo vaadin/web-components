@@ -145,6 +145,10 @@ class ComboBoxItemElement extends ThemableMixin(DirMixin(PolymerElement)) {
 
     if (this._oldRenderer !== renderer) {
       this.$.content.innerHTML = '';
+      // Whenever a Lit-based renderer is used, it assigns a Lit part to the node it was rendered into.
+      // When clearing the rendered content, this part needs to be manually disposed of.
+      // Otherwise, using a Lit-based renderer on the same node will throw an exception or render nothing afterward.
+      delete this.$.content._$litPart$;
     }
 
     if (renderer) {

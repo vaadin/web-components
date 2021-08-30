@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync, mousedown, oneEvent, tabKeyDown } from '@vaadin/testing-helpers';
+import { fixtureSync, focusin, focusout, mousedown, oneEvent, tabKeyDown } from '@vaadin/testing-helpers';
 
 import '../vaadin-avatar.js';
 
@@ -9,26 +9,31 @@ describe('vaadin-avatar', () => {
 
   beforeEach(() => {
     avatar = fixtureSync('<vaadin-avatar></vaadin-avatar>');
-    imgElement = avatar.shadowRoot.querySelector('img');
-    iconElement = avatar.shadowRoot.querySelector('#avatar-icon');
-    abbrElement = avatar.shadowRoot.querySelector('#avatar-abbr');
   });
 
   describe('custom element definition', () => {
-    it('should be defined with correct tag name', () => {
-      expect(customElements.get('vaadin-avatar')).to.be.ok;
+    let tagName;
+
+    beforeEach(() => {
+      tagName = avatar.tagName.toLowerCase();
     });
 
-    it('should not expose class name globally', () => {
-      expect(window.AvatarElement).not.to.be.ok;
+    it('should be defined in custom element registry', () => {
+      expect(customElements.get(tagName)).to.be.ok;
     });
 
-    it('should have a valid version number', () => {
-      expect(avatar.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta|rc)\d+)?$/);
+    it('should have a valid static "is" getter', () => {
+      expect(customElements.get(tagName).is).to.equal(tagName);
     });
   });
 
   describe('properties', () => {
+    beforeEach(() => {
+      imgElement = avatar.shadowRoot.querySelector('img');
+      iconElement = avatar.shadowRoot.querySelector('#avatar-icon');
+      abbrElement = avatar.shadowRoot.querySelector('#avatar-abbr');
+    });
+
     const validImageSrc =
       'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz48IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4iICJodHRwOi8vd3d3LnczLm9yZy9HcmFwaGljcy9TVkcvMS4xL0RURC9zdmcxMS5kdGQiPjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiI+PHBhdGggZmlsbD0iIzAyMDIwMSIgZD0iTTQ1NC40MjYgMzkyLjU4MmMtNS40MzktMTYuMzItMTUuMjk4LTMyLjc4Mi0yOS44MzktNDIuMzYyLTI3Ljk3OS0xOC41NzItNjAuNTc4LTI4LjQ3OS05Mi4wOTktMzkuMDg1LTcuNjA0LTIuNjY0LTE1LjMzLTUuNTY4LTIyLjI3OS05LjctNi4yMDQtMy42ODYtOC41MzMtMTEuMjQ2LTkuOTc0LTE3Ljg4Ni0uNjM2LTMuNTEyLTEuMDI2LTcuMTE2LTEuMjI4LTEwLjY2MSAyMi44NTctMzEuMjY3IDM4LjAxOS04Mi4yOTUgMzguMDE5LTEyNC4xMzYgMC02NS4yOTgtMzYuODk2LTgzLjQ5NS04Mi40MDItODMuNDk1LTQ1LjUxNSAwLTgyLjQwMyAxOC4xNy04Mi40MDMgODMuNDY4IDAgNDMuMzM4IDE2LjI1NSA5Ni41IDQwLjQ4OSAxMjcuMzgzLS4yMjEgMi40MzgtLjUxMSA0Ljg3Ni0uOTUgNy4zMDMtMS40NDQgNi42MzktMy43NyAxNC4wNTgtOS45NyAxNy43NDMtNi45NTcgNC4xMzMtMTQuNjgyIDYuNzU2LTIyLjI4NyA5LjQyLTMxLjUyMSAxMC42MDUtNjQuMTE5IDE5Ljk1Ny05Mi4wOTEgMzguNTI5LTE0LjU0OSA5LjU4LTI0LjQwMyAyNy4xNTktMjkuODM4IDQzLjQ3OS01LjU5NyAxNi45MzgtNy44ODYgMzcuOTE3LTcuNTQxIDU0LjkxN2g0MTEuOTMyYy4zNDgtMTYuOTk5LTEuOTQ2LTM3Ljk3OC03LjUzOS01NC45MTd6Ii8+PC9zdmc+Cg==';
     const invalidImageSrc = 'thisisnotavalidimagesource';
@@ -196,6 +201,7 @@ describe('vaadin-avatar', () => {
       beforeEach(() => {
         sinon.stub(console, 'warn');
       });
+
       afterEach(() => {
         console.warn.restore();
       });
@@ -243,15 +249,6 @@ describe('vaadin-avatar', () => {
   });
 
   describe('focus', () => {
-    function focusin(node) {
-      node.dispatchEvent(new CustomEvent('focusin', { bubbles: true, composed: true }));
-    }
-
-    function focusout(node) {
-      const event = new CustomEvent('focusout', { bubbles: true, composed: true });
-      node.dispatchEvent(event);
-    }
-
     it('should set tabindex="0" on the avatar', () => {
       expect(avatar.getAttribute('tabindex')).to.equal('0');
     });
@@ -330,14 +327,17 @@ describe('vaadin-avatar', () => {
     });
 
     it('should set aria-hidden="true" on the img element', () => {
+      const imgElement = avatar.shadowRoot.querySelector('img');
       expect(imgElement.getAttribute('aria-hidden')).to.equal('true');
     });
 
     it('should set aria-hidden="true" on the icon element', () => {
+      const iconElement = avatar.shadowRoot.querySelector('#avatar-icon');
       expect(iconElement.getAttribute('aria-hidden')).to.equal('true');
     });
 
     it('should set aria-hidden="true" on the abbr element', () => {
+      const abbrElement = avatar.shadowRoot.querySelector('#avatar-abbr');
       expect(abbrElement.getAttribute('aria-hidden')).to.equal('true');
     });
   });

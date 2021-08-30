@@ -3,11 +3,12 @@
 Adds declarative `<template>` APIs with Polymer binding support to Vaadin components.
 
 ## Installation
-```
+
+```sh
 npm i @vaadin/vaadin-template-renderer
 ```
 
-## Example:
+## Example
 
 ```html
 <script type="module">

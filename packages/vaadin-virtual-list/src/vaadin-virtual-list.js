@@ -61,10 +61,6 @@ class VirtualListElement extends ElementMixin(ThemableMixin(PolymerElement)) {
     return 'vaadin-virtual-list';
   }
 
-  static get version() {
-    return '22.0.0-alpha1';
-  }
-
   static get properties() {
     return {
       /**
@@ -127,14 +123,36 @@ class VirtualListElement extends ElementMixin(ThemableMixin(PolymerElement)) {
 
   /** @private */
   __updateElement(el, index) {
+    if (el.__renderer !== this.renderer) {
+      el.__renderer = this.renderer;
+      this.__clearRenderTargetContent(el);
+    }
+
     if (this.renderer) {
       this.renderer(el, this, { item: this.items[index], index });
     }
   }
 
+  /**
+   * Clears the content of a render target.
+   * @private
+   */
+  __clearRenderTargetContent(element) {
+    element.innerHTML = '';
+    // Whenever a Lit-based renderer is used, it assigns a Lit part to the node it was rendered into.
+    // When clearing the rendered content, this part needs to be manually disposed of.
+    // Otherwise, using a Lit-based renderer on the same node will throw an exception or render nothing afterward.
+    delete element._$litPart$;
+  }
+
   /** @private */
   __itemsOrRendererChanged(items = [], renderer, virtualizer) {
-    if (renderer && virtualizer) {
+    // If the renderer is removed but there are elements created by
+    // a previous renderer, we need to request an update from the virtualizer
+    // to get the already existing elements properly cleared.
+    const hasRenderedItems = this.childElementCount > 0;
+
+    if ((renderer || hasRenderedItems) && virtualizer) {
       if (items.length === virtualizer.size) {
         virtualizer.update();
       } else {

@@ -257,10 +257,6 @@ class ChartElement extends ElementMixin(ThemableMixin(PolymerElement)) {
     return 'vaadin-chart';
   }
 
-  static get version() {
-    return '22.0.0-alpha1';
-  }
-
   /** @private */
   static __callHighchartsFunction(functionName, redrawCharts) {
     const functionToCall = Highcharts[functionName];
@@ -981,11 +977,13 @@ class ChartElement extends ElementMixin(ThemableMixin(PolymerElement)) {
         this.__setYAxisProps(yAxes, unit, { max: valueMax });
       }
 
-      const seriesConfiguration = this.__updateOrAddSeriesInstance(seriesElement.options, idxOnChildList);
+      const seriesConfiguration = this.__updateOrAddSeriesInstance(seriesElement.options, idxOnChildList, false);
 
       seriesElement.setSeries(seriesConfiguration);
     }
     this.__removeAxisIfEmpty();
+
+    this.configuration.redraw();
   }
 
   /** @private */
@@ -1454,11 +1452,11 @@ class ChartElement extends ElementMixin(ThemableMixin(PolymerElement)) {
   }
 
   /** @private */
-  __updateOrAddSeriesInstance(seriesOptions, position) {
+  __updateOrAddSeriesInstance(seriesOptions, position, redraw) {
     if (this.configuration.series[position]) {
-      this.configuration.series[position].update(seriesOptions);
+      this.configuration.series[position].update(seriesOptions, redraw);
     } else {
-      this.configuration.addSeries(seriesOptions);
+      this.configuration.addSeries(seriesOptions, redraw);
     }
     return this.configuration.series[position];
   }

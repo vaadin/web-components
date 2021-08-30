@@ -27,8 +27,7 @@ registerStyles(
       display: none !important;
     }
 
-    .vaadin-text-field-container,
-    .vaadin-text-area-container {
+    .vaadin-text-field-container {
       display: flex;
       flex-direction: column;
       min-width: 100%;

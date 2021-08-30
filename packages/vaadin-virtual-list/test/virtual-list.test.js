@@ -100,5 +100,15 @@ describe('virtual-list', () => {
       const itemRect = item.getBoundingClientRect();
       expect(list.getBoundingClientRect().bottom).to.be.within(itemRect.top, itemRect.bottom);
     });
+
+    it('should clear the old content after assigning a new renderer', () => {
+      list.renderer = () => {};
+      expect(list.children[0].textContent.trim()).to.equal('');
+    });
+
+    it('should clear the old content after removing the renderer', () => {
+      list.renderer = null;
+      expect(list.children[0].textContent.trim()).to.equal('');
+    });
   });
 });

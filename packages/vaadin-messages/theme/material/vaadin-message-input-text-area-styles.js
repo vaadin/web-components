@@ -1,6 +1,4 @@
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
-import '@vaadin/vaadin-text-field/theme/material/vaadin-text-area-styles.js';
-import '@vaadin/vaadin-text-field/theme/material/vaadin-text-field-styles.js';
 
 registerStyles(
   'vaadin-message-input-text-area',

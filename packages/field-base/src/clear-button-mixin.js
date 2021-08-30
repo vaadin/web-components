@@ -50,22 +50,15 @@ const ClearButtonMixinImplementation = (superclass) =>
     }
 
     /**
-     * Clear the value of this field.
-     */
-    clear() {
-      this.value = this._inputNode.value = '';
-    }
-
-    /**
      * @param {Event} event
      * @protected
      */
     _onClearButtonClick(event) {
       event.preventDefault();
-      this._inputNode.focus();
+      this.inputElement.focus();
       this.clear();
-      this._inputNode.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
-      this._inputNode.dispatchEvent(new Event('change', { bubbles: true }));
+      this.inputElement.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
+      this.inputElement.dispatchEvent(new Event('change', { bubbles: true }));
     }
 
     /**
@@ -76,7 +69,7 @@ const ClearButtonMixinImplementation = (superclass) =>
       if (event.key === 'Escape' && this.clearButtonVisible && this._clearOnEsc) {
         const dispatchChange = !!this.value;
         this.clear();
-        dispatchChange && this._inputNode.dispatchEvent(new Event('change', { bubbles: true }));
+        dispatchChange && this.inputElement.dispatchEvent(new Event('change', { bubbles: true }));
       }
     }
   };

@@ -10,10 +10,6 @@ describe('progress bar', () => {
     value = progress.shadowRoot.querySelector('[part="value"]');
   });
 
-  it('should have a valid version number', () => {
-    expect(progress.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta|rc)\d+)?$/);
-  });
-
   it('should have proper scale', () => {
     progress.value = 0.1;
     expect(value.getBoundingClientRect().width / progress.offsetWidth).to.be.closeTo(0.1, 0.002);

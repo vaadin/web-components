@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-themable-mixin",
-  "version": "22.0.0-alpha1",
+  "version": "22.0.0-alpha3",
   "description": "vaadin-themable-mixin",
   "main": "vaadin-themable-mixin.js",
   "module": "vaadin-themable-mixin.js",
@@ -27,7 +27,7 @@
     "lit": "^2.0.0-rc.1"
   },
   "devDependencies": {
-    "@esm-bundle/chai": "^4.1.5",
+    "@esm-bundle/chai": "^4.3.4",
     "@vaadin/testing-helpers": "^0.2.1",
     "sinon": "^9.2.4"
   },

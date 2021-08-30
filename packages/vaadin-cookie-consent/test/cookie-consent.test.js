@@ -4,18 +4,19 @@ import '../vaadin-cookie-consent.js';
 
 describe('vaadin-cookie-consent', () => {
   describe('custom element definition', () => {
-    let consent;
+    let consent, tagName;
 
     beforeEach(() => {
       consent = fixtureSync('<vaadin-cookie-consent></vaadin-cookie-consent>');
+      tagName = consent.tagName.toLowerCase();
     });
 
-    it('should define a custom element with a correct tag name', () => {
-      expect(customElements.get('vaadin-cookie-consent')).to.be.ok;
+    it('should be defined in custom element registry', () => {
+      expect(customElements.get(tagName)).to.be.ok;
     });
 
-    it('should have a valid version number', () => {
-      expect(consent.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta|rc)\d+)?$/);
+    it('should have a valid static "is" getter', () => {
+      expect(customElements.get(tagName).is).to.equal(tagName);
     });
   });
 

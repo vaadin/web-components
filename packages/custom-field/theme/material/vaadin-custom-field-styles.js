@@ -24,6 +24,12 @@ registerStyles(
       -moz-osx-font-smoothing: grayscale;
     }
 
+    /* TODO: remove when the following components are updated to use new indicator:
+      combo-box, date-picker, time-picker, date-time-picker, select. */
+    [part='label']::after {
+      display: none;
+    }
+
     /* align with text-field label */
     :host([has-label]) {
       padding-top: 16px;

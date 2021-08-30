@@ -38,6 +38,12 @@ registerStyles(
       color: var(--lumo-primary-text-color);
     }
 
+    /* TODO: remove when the following components are updated to use new indicator:
+      combo-box, date-picker, time-picker, date-time-picker, select. */
+    [part='label']::after {
+      display: none;
+    }
+
     :host([has-helper]) [part='helper-text']::before {
       content: '';
       display: block;
@@ -51,6 +57,12 @@ registerStyles(
       line-height: var(--lumo-line-height-xs);
       margin-left: calc(var(--lumo-border-radius-m) / 4);
       transition: color 0.2s;
+    }
+
+    [part='input-field'] ::slotted(:is(input, textarea)) {
+      /* Slotted input does not inherit these from the host */
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
     :host([focused]) [part='input-field'] ::slotted(:is(input, textarea)) {
@@ -170,7 +182,7 @@ registerStyles(
     }
 
     /* Slotted content */
-    [part='input-field'] ::slotted(:not(vaadin-icon):not(input):not(textarea)) {
+    [part='input-field'] ::slotted(:not(iron-icon):not(vaadin-icon):not(input):not(textarea)) {
       color: var(--lumo-secondary-text-color);
       font-weight: 400;
     }

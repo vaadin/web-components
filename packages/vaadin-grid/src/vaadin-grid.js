@@ -316,10 +316,6 @@ class GridElement extends ElementMixin(
     return 'vaadin-grid';
   }
 
-  static get version() {
-    return '22.0.0-alpha1';
-  }
-
   static get observers() {
     return [
       '_columnTreeChanged(_columnTree, _columnTree.*)',
@@ -487,7 +483,6 @@ class GridElement extends ElementMixin(
     super.attributeChangedCallback(name, oldValue, newValue);
     if (name === 'dir') {
       this.__isRTL = newValue === 'rtl';
-      this._updateScrollerMeasurements();
     }
   }
 
@@ -912,7 +907,6 @@ class GridElement extends ElementMixin(
   /** @private */
   _resizeHandler() {
     this._updateDetailsCellHeights();
-    this._updateScrollerMeasurements();
     this.__updateFooterPositioning();
   }
 

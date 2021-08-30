@@ -16,10 +16,6 @@ class CustomField extends FieldAriaMixin(LabelMixin(FocusMixin(ThemableMixin(Ele
     return 'vaadin-custom-field';
   }
 
-  static get version() {
-    return '22.0.0-alpha1';
-  }
-
   static get template() {
     return html`
       <style>
@@ -53,6 +49,7 @@ class CustomField extends FieldAriaMixin(LabelMixin(FocusMixin(ThemableMixin(Ele
       <div part="container">
         <div part="label" on-click="focus">
           <slot name="label"></slot>
+          <span part="indicator" aria-hidden="true"></span>
         </div>
 
         <div class="inputs-wrapper" on-change="__onInputChange">

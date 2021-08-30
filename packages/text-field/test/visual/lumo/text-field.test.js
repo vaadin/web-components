@@ -1,6 +1,7 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '../../../theme/lumo/vaadin-text-field.js';
+// TODO: remove in https://github.com/vaadin/web-components/issues/2220
+import './vaadin-text-field.js';
 import { TextField } from '../../../src/vaadin-text-field.js';
 
 customElements.define('vaadin-text-field', TextField);
@@ -83,6 +84,31 @@ describe('text-field', () => {
     span.textContent = '$';
     element.appendChild(span);
     await visualDiff(div, `${import.meta.url}_suffix`);
+  });
+
+  describe('alignment', () => {
+    let field;
+
+    beforeEach(() => {
+      field = document.createElement('vaadin-text-field');
+      field.label = 'Label';
+      field.style.marginLeft = '10px';
+      element.parentNode.appendChild(field);
+    });
+
+    afterEach(() => {
+      field.remove();
+    });
+
+    it('default', async () => {
+      await visualDiff(div, `${import.meta.url}_alignment-default`);
+    });
+
+    it('small', async () => {
+      element.setAttribute('theme', 'small');
+      field.setAttribute('theme', 'small');
+      await visualDiff(div, `${import.meta.url}_alignment-small`);
+    });
   });
 
   describe('RTL', () => {

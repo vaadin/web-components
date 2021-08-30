@@ -1,3 +1,6 @@
-import './vaadin-text-area-styles.js';
-import './vaadin-text-field.js';
-import '../../src/vaadin-text-area.js';
+/**
+ * @license
+ * Copyright (c) 2021 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+import '@vaadin/text-area/theme/lumo/vaadin-text-area.js';

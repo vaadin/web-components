@@ -12,10 +12,6 @@ describe('message-input', () => {
     button = messageInput.shadowRoot.querySelector('vaadin-message-input-button');
   });
 
-  it('should have a valid version number', () => {
-    expect(messageInput.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta|rc)\d+)?$/);
-  });
-
   it('message should be initialized', () => {
     expect(messageInput.shadowRoot.querySelector('vaadin-text-area')).to.be.not.undefined;
     expect(messageInput.shadowRoot.querySelector('vaadin-button')).to.be.not.undefined;

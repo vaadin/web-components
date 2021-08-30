@@ -18,6 +18,7 @@ const requiredField = css`
     margin-left: calc(var(--lumo-border-radius-m) / 4);
     transition: color 0.2s;
     line-height: 1;
+    padding-right: 1em;
     padding-bottom: 0.5em;
     overflow: hidden;
     white-space: nowrap;
@@ -31,15 +32,18 @@ const requiredField = css`
     margin-top: calc(var(--lumo-font-size-s) * 1.5);
   }
 
+  :host([has-label][theme~='small'])::before {
+    margin-top: calc(var(--lumo-font-size-xs) * 1.5);
+  }
+
   :host([has-label]) {
     padding-top: var(--lumo-space-m);
   }
 
-  :host([required]) [part='label'] {
-    padding-right: 1em;
-  }
-
-  [part='label']::after {
+  /* TODO: remove old pseudo element when the following components are updated to use new indicator:
+    combo-box, date-picker, time-picker, date-time-picker, select. */
+  [part='label']::after,
+  [part='indicator']::after {
     content: var(--lumo-required-field-indicator, '•');
     transition: opacity 0.2s;
     opacity: 0;
@@ -50,11 +54,13 @@ const requiredField = css`
     text-align: center;
   }
 
-  :host([required]:not([has-value])) [part='label']::after {
+  :host([required]:not([has-value])) [part='label']::after,
+  :host([required]:not([has-value])) [part='indicator']::after {
     opacity: 1;
   }
 
-  :host([invalid]) [part='label']::after {
+  :host([invalid]) [part='label']::after,
+  :host([invalid]) [part='indicator']::after {
     color: var(--lumo-error-text-color);
   }
 
@@ -88,12 +94,13 @@ const requiredField = css`
     margin-right: calc(var(--lumo-border-radius-m) / 4);
   }
 
-  :host([required][dir='rtl']) [part='label'] {
+  :host([dir='rtl']) [part='label'] {
     padding-left: 1em;
     padding-right: 0;
   }
 
-  :host([dir='rtl']) [part='label']::after {
+  :host([dir='rtl']) [part='label']::after,
+  :host([dir='rtl']) [part='indicator']::after {
     right: auto;
     left: 0;
   }

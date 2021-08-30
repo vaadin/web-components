@@ -146,10 +146,6 @@ class AvatarElement extends ElementMixin(ThemableMixin(PolymerElement)) {
     return 'vaadin-avatar';
   }
 
-  static get version() {
-    return '22.0.0-alpha1';
-  }
-
   static get properties() {
     return {
       /**

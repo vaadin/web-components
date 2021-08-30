@@ -98,10 +98,6 @@ class DetailsElement extends ControlStateMixin(ElementMixin(ThemableMixin(Polyme
     return 'vaadin-details';
   }
 
-  static get version() {
-    return '22.0.0-alpha1';
-  }
-
   static get properties() {
     return {
       /**

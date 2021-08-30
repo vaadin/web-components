@@ -7,16 +7,13 @@ import { PolymerElement, html } from '@polymer/polymer';
 import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { TextFieldMixin } from '@vaadin/field-base/src/text-field-mixin.js';
+import { InputSlotMixin } from '@vaadin/field-base/src/input-slot-mixin.js';
 import '@vaadin/input-container/src/vaadin-input-container.js';
 import './vaadin-input-field-shared-styles.js';
 
-export class TextField extends TextFieldMixin(ThemableMixin(ElementMixin(PolymerElement))) {
+export class TextField extends TextFieldMixin(InputSlotMixin(ThemableMixin(ElementMixin(PolymerElement)))) {
   static get is() {
     return 'vaadin-text-field';
-  }
-
-  static get version() {
-    return '22.0.0-alpha1';
   }
 
   static get template() {
@@ -30,6 +27,7 @@ export class TextField extends TextFieldMixin(ThemableMixin(ElementMixin(Polymer
       <div part="container">
         <div part="label" on-click="focus">
           <slot name="label"></slot>
+          <span part="indicator" aria-hidden="true"></span>
         </div>
 
         <vaadin-input-container

@@ -1,6 +1,7 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '../../../theme/material/vaadin-text-field.js';
+// TODO: remove in https://github.com/vaadin/web-components/issues/2220
+import './vaadin-text-field.js';
 import { TextField } from '../../../src/vaadin-text-field.js';
 
 customElements.define('vaadin-text-field', TextField);

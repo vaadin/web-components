@@ -68,10 +68,6 @@ describe('login form', () => {
     submitStub.resetHistory();
   });
 
-  it('should have a valid version number', () => {
-    expect(login.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta|rc)\d+)?$/);
-  });
-
   it('should display default strings', () => {
     const formTitleElement = formWrapper.shadowRoot.querySelector('[part="form"] h2');
     const errorTitleElement = formWrapper.shadowRoot.querySelector('[part="error-message"] h5');

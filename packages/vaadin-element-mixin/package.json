@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-element-mixin",
-  "version": "22.0.0-alpha1",
+  "version": "22.0.0-alpha3",
   "description": "vaadin-element-mixin",
   "main": "vaadin-element-mixin.js",
   "module": "vaadin-element-mixin.js",
@@ -29,7 +29,7 @@
     "@vaadin/vaadin-usage-statistics": "^2.1.0"
   },
   "devDependencies": {
-    "@esm-bundle/chai": "^4.1.5",
+    "@esm-bundle/chai": "^4.3.4",
     "@vaadin/testing-helpers": "0.2.1",
     "sinon": "^9.2.4"
   },

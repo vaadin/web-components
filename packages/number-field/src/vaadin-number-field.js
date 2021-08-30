@@ -7,16 +7,58 @@ import { PolymerElement, html } from '@polymer/polymer';
 import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { InputFieldMixin } from '@vaadin/field-base/src/input-field-mixin.js';
+import { InputSlotMixin } from '@vaadin/field-base/src/input-slot-mixin.js';
 import '@vaadin/input-container/src/vaadin-input-container.js';
 import '@vaadin/text-field/src/vaadin-input-field-shared-styles.js';
 
-export class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(PolymerElement))) {
+/**
+ * `<vaadin-number-field>` is an input field web component that only accepts numeric input.
+ *
+ * ```html
+ * <vaadin-number-field label="Balance"></vaadin-number-field>
+ * ```
+ *
+ * ### Styling
+ *
+ * The following shadow DOM parts are available for styling:
+ *
+ * Part name       | Description
+ * ----------------|----------------
+ * `label`         | The label element wrapper
+ * `input-field`   | The element that wraps prefix, textarea and suffix
+ * `error-message` | The error message element wrapper
+ * `helper-text`   | The helper text element wrapper
+ *
+ * The following state attributes are available for styling:
+ *
+ * Attribute           | Description                               | Part name
+ * --------------------|-------------------------------------------|----------
+ * `disabled`          | Set when the element is disabled          | :host
+ * `has-value`         | Set when the element has a value          | :host
+ * `has-label`         | Set when the element has a label          | :host
+ * `has-helper`        | Set when the element has helper text      | :host
+ * `has-error-message` | Set when the element has an error message | :host
+ * `invalid`           | Set when the element is invalid           | :host
+ * `focused`           | Set when the element is focused           | :host
+ * `focus-ring`        | Set when the element is keyboard focused  | :host
+ * `readonly`          | Set when the element is readonly          | :host
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
+ *
+ * @fires {Event} input - Fired when the value is changed by the user: on every typing keystroke, and the value is cleared using the clear button.
+ * @fires {Event} change - Fired when the user commits a value change.
+ * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
+ * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
+ *
+ * @extends HTMLElement
+ * @mixes InputFieldMixin
+ * @mixes InputSlotMixin
+ * @mixes ElementMixin
+ * @mixes ThemableMixin
+ */
+export class NumberField extends InputFieldMixin(InputSlotMixin(ThemableMixin(ElementMixin(PolymerElement)))) {
   static get is() {
     return 'vaadin-number-field';
-  }
-
-  static get version() {
-    return '22.0.0-alpha1';
   }
 
   static get template() {
@@ -58,6 +100,7 @@ export class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(Poly
       <div part="container">
         <div part="label" on-click="focus">
           <slot name="label"></slot>
+          <span part="indicator" aria-hidden="true"></span>
         </div>
 
         <vaadin-input-container
@@ -140,10 +183,13 @@ export class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(Poly
     };
   }
 
+  static get constraints() {
+    return [...super.constraints, 'min', 'max', 'step'];
+  }
+
   constructor() {
     super();
     this._setType('number');
-    this._boundOnChange = this.__onInputChange.bind(this);
   }
 
   /**
@@ -158,38 +204,11 @@ export class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(Poly
   connectedCallback() {
     super.connectedCallback();
 
-    if (this._inputNode) {
-      this._inputNode.min = this.min;
-      this._inputNode.max = this.max;
+    if (this.inputElement) {
+      this.inputElement.min = this.min;
+      this.inputElement.max = this.max;
       this.__applyStep(this.step);
     }
-  }
-
-  /** @protected */
-  ready() {
-    super.ready();
-
-    this._createConstraintsObserver();
-  }
-
-  /**
-   * @param {HTMLElement} node
-   * @protected
-   */
-  _addInputListeners(node) {
-    super._addInputListeners(node);
-
-    node.addEventListener('change', this._boundOnChange);
-  }
-
-  /**
-   * @param {HTMLElement} node
-   * @protected
-   */
-  _removeInputListeners(node) {
-    super._removeInputListeners(node);
-
-    node.removeEventListener('change', this._boundOnChange);
   }
 
   /** @private */
@@ -206,14 +225,11 @@ export class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(Poly
     this._increaseValue();
   }
 
-  /** @protected */
-  _createConstraintsObserver() {
-    // NOTE: do not call "super" but instead override the method to add extra arguments
-    this._createMethodObserver('_constraintsChanged(required, min, max, step)');
-  }
-
-  /** @private */
-  _constraintsChanged(required, min, max) {
+  /**
+   * @protected
+   * @override
+   */
+  _constraintsChanged(required, min, max, _step) {
     if (!this.invalid) {
       return;
     }
@@ -285,7 +301,7 @@ export class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(Poly
 
   /** @private */
   _setValue(value) {
-    this.value = this._inputNode.value = String(parseFloat(value));
+    this.value = this.inputElement.value = String(parseFloat(value));
     this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
   }
 
@@ -346,8 +362,8 @@ export class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(Poly
 
   /** @private */
   __applyStep(step) {
-    if (this._inputNode) {
-      this._inputNode.step = this.__validateByStep ? step : 'any';
+    if (this.inputElement) {
+      this.inputElement.step = this.__validateByStep ? step : 'any';
     }
   }
 
@@ -371,15 +387,15 @@ export class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(Poly
 
   /** @private */
   _minChanged(min) {
-    if (this._inputNode) {
-      this._inputNode.min = min;
+    if (this.inputElement) {
+      this.inputElement.min = min;
     }
   }
 
   /** @private */
   _maxChanged(max) {
-    if (this._inputNode) {
-      this._inputNode.max = max;
+    if (this.inputElement) {
+      this.inputElement.max = max;
     }
   }
 
@@ -387,6 +403,7 @@ export class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(Poly
    * @param {unknown} newVal
    * @param {unknown} oldVal
    * @protected
+   * @override
    */
   _valueChanged(newVal, oldVal) {
     // Validate value to be numeric
@@ -404,6 +421,7 @@ export class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(Poly
    * to avoid adding a separate listener.
    * @param {!KeyboardEvent} event
    * @protected
+   * @override
    */
   _onKeyDown(event) {
     if (event.key === 'ArrowUp') {
@@ -417,19 +435,30 @@ export class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(Poly
     super._onKeyDown(event);
   }
 
-  /** @private */
-  __onInputChange() {
+  /**
+   * Override an event listener inherited from `InputMixin`.
+   * @param {Event} _event
+   * @protected
+   * @override
+   */
+  _onChange(_event) {
     this.validate();
   }
 
   /**
+   * Returns true if the current input value satisfies all constraints (if any).
    * @return {boolean}
    */
   checkValidity() {
-    if (this.min !== undefined || this.max !== undefined || this.__validateByStep) {
-      return this._inputNode.checkValidity();
+    if (
+      this.inputElement &&
+      (this.required || this.min !== undefined || this.max !== undefined || this.__validateByStep)
+    ) {
+      return this.inputElement.checkValidity();
+    } else {
+      return !this.invalid;
     }
-
-    return super.checkValidity();
   }
 }
+
+customElements.define(NumberField.is, NumberField);

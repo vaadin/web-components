@@ -1,9 +1,6 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../../theme/lumo/vaadin-number-field.js';
-import { NumberField } from '../../../src/vaadin-number-field.js';
-
-customElements.define('vaadin-number-field', NumberField);
 
 describe('number-field', () => {
   let div, element;

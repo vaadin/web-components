@@ -23,17 +23,20 @@ describe('crud', () => {
 
   const edit = (item) => crud._grid.dispatchEvent(new CustomEvent('edit', { detail: { item } }));
 
-  describe('basic', () => {
+  describe('custom element definition', () => {
+    let tagName;
+
     beforeEach(() => {
       crud = fixtureSync('<vaadin-crud style="width: 300px;"></vaadin-crud>');
+      tagName = crud.tagName.toLowerCase();
     });
 
-    it('should not expose class name globally', () => {
-      expect(window.CrudElement).not.to.be.ok;
+    it('should be defined in custom element registry', () => {
+      expect(customElements.get(tagName)).to.be.ok;
     });
 
-    it('should have a valid version number', () => {
-      expect(customElements.get('vaadin-crud').version).to.be.ok;
+    it('should have a valid static "is" getter', () => {
+      expect(customElements.get(tagName).is).to.equal(tagName);
     });
   });
 
@@ -134,13 +137,29 @@ describe('crud', () => {
     });
   });
 
-  describe('items', () => {
-    beforeEach(async () => {
-      crud = fixtureSync('<vaadin-crud style="width: 300px;"></vaadin-crud>');
-      crud.items = [{ foo: 'bar' }];
-      await nextRender(crud._grid);
-    });
+  ['default', 'slotted buttons'].forEach((mode) => {
+    describe(`[${mode}] items`, () => {
+      beforeEach(async () => {
+        if (mode === 'default') {
+          crud = fixtureSync('<vaadin-crud style="width: 300px;"></vaadin-crud>');
+        } else {
+          crud = fixtureSync(
+            `<vaadin-crud style="width: 300px;">
+              <vaadin-button slot="save-button"></vaadin-button>
+              <vaadin-button slot="cancel-button"></vaadin-button>
+              <vaadin-button slot="delete-button"></vaadin-button>
+            </vaadin-crud>`
+          );
+        }
+        crud.items = [{ foo: 'bar' }];
+        await nextRender(crud._grid);
+      });
 
+      describeItems();
+    });
+  });
+
+  function describeItems() {
     describe('editor header', () => {
       it('should have new item title', () => {
         crud.$.new.click();
@@ -638,7 +657,7 @@ describe('crud', () => {
         });
       });
     });
-  });
+  }
 
   describe('objects', () => {
     beforeEach(() => {

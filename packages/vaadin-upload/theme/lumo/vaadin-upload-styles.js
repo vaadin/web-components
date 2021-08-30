@@ -5,7 +5,7 @@ import '@vaadin/vaadin-lumo-styles/spacing.js';
 import '@vaadin/vaadin-lumo-styles/style.js';
 import '@vaadin/vaadin-lumo-styles/typography.js';
 import '@vaadin/vaadin-lumo-styles/mixins/field-button.js';
-import '@vaadin/vaadin-button/theme/lumo/vaadin-button.js';
+import '@vaadin/button/theme/lumo/vaadin-button.js';
 import '@vaadin/vaadin-progress-bar/theme/lumo/vaadin-progress-bar.js';
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 
@@ -108,9 +108,11 @@ registerStyles(
       flex: none;
     }
 
-    [part='done-icon'],
-    [part='warning-icon'] {
+    [part$='icon'] {
       margin-right: var(--lumo-space-xs);
+      font-size: var(--lumo-icon-size-m);
+      font-family: 'lumo-icons';
+      line-height: 1;
     }
 
     /* When both icons are hidden, let us keep space for one */
@@ -119,26 +121,21 @@ registerStyles(
       visibility: hidden;
     }
 
-    [part='done-icon'],
-    [part='warning-icon'] {
-      font-size: var(--lumo-icon-size-m);
-      font-family: 'lumo-icons';
-      line-height: 1;
-    }
-
-    [part='start-button'],
-    [part='retry-button'],
-    [part='clear-button'] {
+    [part$='button'] {
       flex: none;
       margin-left: var(--lumo-space-xs);
       cursor: var(--lumo-clickable-cursor);
     }
 
-    [part='done-icon']::before,
-    [part='warning-icon']::before,
-    [part='start-button']::before,
-    [part='retry-button']::before,
-    [part='clear-button']::before {
+    [part='row']:focus,
+    [part$='button']:focus {
+      outline: none;
+      border-radius: var(--lumo-border-radius-s);
+      box-shadow: 0 0 0 2px var(--lumo-primary-color-50pct);
+    }
+
+    [part$='icon']::before,
+    [part$='button']::before {
       vertical-align: -0.25em;
     }
 

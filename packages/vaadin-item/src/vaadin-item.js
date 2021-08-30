@@ -70,10 +70,6 @@ class ItemElement extends ItemMixin(ThemableMixin(DirMixin(PolymerElement))) {
     return 'vaadin-item';
   }
 
-  static get version() {
-    return '22.0.0-alpha1';
-  }
-
   constructor() {
     super();
 

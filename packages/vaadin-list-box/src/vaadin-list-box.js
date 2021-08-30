@@ -68,10 +68,6 @@ class ListBoxElement extends ElementMixin(MultiSelectListMixin(ThemableMixin(Pol
     return 'vaadin-list-box';
   }
 
-  static get version() {
-    return '22.0.0-alpha1';
-  }
-
   static get properties() {
     return {
       // We don't need to define this property since super default is vertical,

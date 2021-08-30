@@ -8,7 +8,7 @@ import { resetMouseCanceller } from '@polymer/polymer/lib/utils/gestures.js';
 import '@polymer/polymer/lib/elements/dom-repeat.js';
 import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import '@vaadin/vaadin-button/src/vaadin-button.js';
+import '@vaadin/button/src/vaadin-button.js';
 import './vaadin-upload-icons.js';
 import './vaadin-upload-file.js';
 
@@ -76,6 +76,11 @@ class UploadElement extends ElementMixin(ThemableMixin(PolymerElement)) {
         [hidden] {
           display: none !important;
         }
+
+        [part='file-list'] {
+          padding: 0;
+          margin: 0;
+        }
       </style>
 
       <div part="primary-buttons">
@@ -94,11 +99,11 @@ class UploadElement extends ElementMixin(ThemableMixin(PolymerElement)) {
         </div>
       </div>
       <slot name="file-list">
-        <div id="fileList" part="file-list">
+        <ul id="fileList" part="file-list">
           <template is="dom-repeat" items="[[files]]" as="file">
-            <vaadin-upload-file file="[[file]]"></vaadin-upload-file>
+            <vaadin-upload-file file="[[file]]" i18n="[[i18n]]"></vaadin-upload-file>
           </template>
-        </div>
+        </ul>
       </slot>
       <slot></slot>
       <input
@@ -115,10 +120,6 @@ class UploadElement extends ElementMixin(ThemableMixin(PolymerElement)) {
 
   static get is() {
     return 'vaadin-upload';
-  }
-
-  static get version() {
-    return '22.0.0-alpha1';
   }
 
   static get properties() {
@@ -330,54 +331,61 @@ class UploadElement extends ElementMixin(ThemableMixin(PolymerElement)) {
        * _i18n_ object or just the property you want to modify.
        *
        * The object has the following JSON structure and default values:
-
-      {
-        dropFiles: {
-        one: 'Drop file here',
-        many: 'Drop files here'
-        },
-        addFiles: {
-        one: 'Select File...',
-        many: 'Upload Files...'
-        },
-        cancel: 'Cancel',
-        error: {
-        tooManyFiles: 'Too Many Files.',
-        fileIsTooBig: 'File is Too Big.',
-        incorrectFileType: 'Incorrect File Type.'
-        },
-        uploading: {
-        status: {
-          connecting: 'Connecting...',
-          stalled: 'Stalled',
-          processing: 'Processing File...',
-          held: 'Queued'
-        },
-        remainingTime: {
-          prefix: 'remaining time: ',
-          unknown: 'unknown remaining time'
-        },
-        error: {
-          serverUnavailable: 'Server Unavailable',
-          unexpectedServerError: 'Unexpected Server Error',
-          forbidden: 'Forbidden'
-        }
-        },
-        units: {
-        size: ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
-        sizeBase: 1000
-        },
-        formatSize: function(bytes) {
-        // returns the size followed by the best suitable unit
-        },
-        formatTime: function(seconds, [secs, mins, hours]) {
-        // returns a 'HH:MM:SS' string
-        }
-      }
-
-      * @type {!UploadI18n}
-      * @default {English}
-      */
+       *
+       * ```
+       * {
+       *   dropFiles: {
+       *     one: 'Drop file here',
+       *     many: 'Drop files here'
+       *   },
+       *   addFiles: {
+       *     one: 'Select File...',
+       *     many: 'Upload Files...'
+       *   },
+       *   cancel: 'Cancel',
+       *   error: {
+       *     tooManyFiles: 'Too Many Files.',
+       *     fileIsTooBig: 'File is Too Big.',
+       *     incorrectFileType: 'Incorrect File Type.'
+       *   },
+       *   uploading: {
+       *     status: {
+       *       connecting: 'Connecting...',
+       *       stalled: 'Stalled',
+       *       processing: 'Processing File...',
+       *       held: 'Queued'
+       *     },
+       *     remainingTime: {
+       *       prefix: 'remaining time: ',
+       *       unknown: 'unknown remaining time'
+       *     },
+       *     error: {
+       *       serverUnavailable: 'Server Unavailable',
+       *       unexpectedServerError: 'Unexpected Server Error',
+       *       forbidden: 'Forbidden'
+       *     }
+       *   },
+       *   file: {
+       *     retry: 'Retry',
+       *     start: 'Start',
+       *     clear: 'Clear'
+       *   },
+       *   units: {
+       *     size: ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
+       *     sizeBase: 1000
+       *   },
+       *   formatSize: function(bytes) {
+       *     // returns the size followed by the best suitable unit
+       *   },
+       *   formatTime: function(seconds, [secs, mins, hours]) {
+       *     // returns a 'HH:MM:SS' string
+       *   }
+       * }
+       * ```
+       *
+       * @type {!UploadI18n}
+       * @default {English}
+       */
       i18n: {
         type: Object,
         value: function () {
@@ -412,6 +420,11 @@ class UploadElement extends ElementMixin(ThemableMixin(PolymerElement)) {
                 unexpectedServerError: 'Upload failed due to server error',
                 forbidden: 'Upload forbidden'
               }
+            },
+            file: {
+              retry: 'Retry',
+              start: 'Start',
+              clear: 'Clear'
             },
             units: {
               size: ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']

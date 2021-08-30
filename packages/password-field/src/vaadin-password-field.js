@@ -14,13 +14,41 @@ const ownTemplate = html`
 
 let memoizedTemplate;
 
+/**
+ * `<vaadin-password-field>` is an extension of `<vaadin-text-field>` component for entering passwords.
+ *
+ * ```html
+ * <vaadin-password-field label="Password"></vaadin-password-field>
+ * ```
+ *
+ * ### Styling
+ *
+ * See [`<vaadin-text-field>`](#/elements/vaadin-text-field) for the styling documentation.
+ *
+ * In addition to `<vaadin-text-field>` parts, here's the list of `<vaadin-password-field>` specific parts:
+ *
+ * Part name       | Description
+ * ----------------|----------------------------------------------------
+ * `reveal-button` | The eye icon which toggles the password visibility
+ *
+ * In addition to `<vaadin-text-field>` state attributes, here's the list of `<vaadin-password-field>` specific attributes:
+ *
+ * Attribute          | Description | Part name
+ * -------------------|-------------|------------
+ * `password-visible` | Set when the password is visible | :host
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
+ *
+ * @fires {Event} input - Fired when the value is changed by the user: on every typing keystroke, and the value is cleared using the clear button.
+ * @fires {Event} change - Fired when the user commits a value change.
+ * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
+ * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
+ *
+ * @extends TextField
+ */
 export class PasswordField extends TextField {
   static get is() {
     return 'vaadin-password-field';
-  }
-
-  static get version() {
-    return '22.0.0-alpha1';
   }
 
   static get template() {
@@ -61,8 +89,32 @@ export class PasswordField extends TextField {
         reflectToAttribute: true,
         observer: '_passwordVisibleChanged',
         readOnly: true
+      },
+
+      /**
+       * An object with translated strings used for localization.
+       * It has the following structure and default values:
+       *
+       * ```
+       * {
+       *   // Translation of the reveal icon button accessible label
+       *   reveal: 'Show password'
+       * }
+       * ```
+       */
+      i18n: {
+        type: Object,
+        value: () => {
+          return {
+            reveal: 'Show password'
+          };
+        }
       }
     };
+  }
+
+  static get observers() {
+    return ['__i18nChanged(i18n.*)'];
   }
 
   get slots() {
@@ -101,13 +153,14 @@ export class PasswordField extends TextField {
     super.connectedCallback();
 
     if (this._revealNode) {
+      this.__updateAriaLabel(this.i18n);
       this._revealNode.setAttribute('aria-label', 'Show password');
       this._revealNode.addEventListener('click', this.__boundRevealButtonClick);
       this._revealNode.addEventListener('touchend', this.__boundRevealButtonTouchend);
     }
 
-    if (this._inputNode) {
-      this._inputNode.autocapitalize = 'off';
+    if (this.inputElement) {
+      this.inputElement.autocapitalize = 'off';
     }
 
     this._toggleRevealHidden(this.revealButtonHidden);
@@ -132,7 +185,7 @@ export class PasswordField extends TextField {
    * @protected
    */
   _shouldSetFocus(event) {
-    return event.target === this._inputNode || event.target === this._revealNode;
+    return event.target === this.inputElement || event.target === this._revealNode;
   }
 
   /**
@@ -145,7 +198,7 @@ export class PasswordField extends TextField {
   _shouldRemoveFocus(event) {
     return !(
       event.relatedTarget === this._revealNode ||
-      (event.relatedTarget === this._inputNode && event.target === this._revealNode)
+      (event.relatedTarget === this.inputElement && event.target === this._revealNode)
     );
   }
 
@@ -155,7 +208,22 @@ export class PasswordField extends TextField {
 
     if (!focused) {
       this._setPasswordVisible(false);
+    } else {
+      // Remove focus-ring from the field when the reveal button gets focused
+      this.toggleAttribute('focus-ring', !this._revealNode.matches(':focus'));
     }
+  }
+
+  /** @private */
+  __updateAriaLabel(i18n) {
+    if (i18n.reveal && this._revealNode) {
+      this._revealNode.setAttribute('aria-label', i18n.reveal);
+    }
+  }
+
+  /** @private */
+  __i18nChanged(i18n) {
+    this.__updateAriaLabel(i18n.base);
   }
 
   /** @private */
@@ -180,7 +248,7 @@ export class PasswordField extends TextField {
     this._togglePasswordVisibility();
     // Focus the input to avoid problem with password still visible
     // when user clicks the reveal button and then clicks outside.
-    this._inputNode.focus();
+    this.inputElement.focus();
   }
 
   /** @private */
@@ -212,3 +280,5 @@ export class PasswordField extends TextField {
     this._updateToggleState(passwordVisible);
   }
 }
+
+customElements.define(PasswordField.is, PasswordField);

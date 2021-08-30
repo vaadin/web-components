@@ -13,16 +13,18 @@ describe('avatar-group', () => {
   });
 
   describe('custom element definition', () => {
-    it('should be defined with correct tag name', () => {
-      expect(customElements.get('vaadin-avatar-group')).to.be.ok;
+    let tagName;
+
+    beforeEach(() => {
+      tagName = group.tagName.toLowerCase();
     });
 
-    it('should not expose class name globally', () => {
-      expect(window.AvatarGroupElement).not.to.be.ok;
+    it('should be defined in custom element registry', () => {
+      expect(customElements.get(tagName)).to.be.ok;
     });
 
-    it('should have a valid version number', () => {
-      expect(group.constructor.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta|rc)\d+)?$/);
+    it('should have a valid static "is" getter', () => {
+      expect(customElements.get(tagName).is).to.equal(tagName);
     });
   });
 
