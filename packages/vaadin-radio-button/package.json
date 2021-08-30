@@ -1,0 +1,34 @@
+{
+  "name": "@vaadin/vaadin-radio-button",
+  "version": "22.0.0-alpha3",
+  "description": "vaadin-radio-button",
+  "main": "vaadin-radio-button.js",
+  "module": "vaadin-radio-button.js",
+  "repository": "vaadin/web-components",
+  "keywords": [
+    "Vaadin",
+    "vaadin-radio-button",
+    "web-components",
+    "web-component",
+    "radio button",
+    "polymer"
+  ],
+  "author": "Vaadin Ltd",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/vaadin/vaadin-radio-button/issues"
+  },
+  "homepage": "https://vaadin.com/components",
+  "files": [
+    "vaadin-*.d.ts",
+    "vaadin-*.js",
+    "src",
+    "theme"
+  ],
+  "dependencies": {
+    "@vaadin/radio-group": "^22.0.0-alpha3"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
