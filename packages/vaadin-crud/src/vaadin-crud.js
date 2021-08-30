@@ -556,7 +556,8 @@ class CrudElement extends ElementMixin(ThemableMixin(PolymerElement)) {
       hideToolbar: {
         type: Boolean,
         value: false,
-        reflectToAttribute: true
+        reflectToAttribute: true,
+        observer: '__hideToolbarChanged'
       }
     };
   }
@@ -588,6 +589,7 @@ class CrudElement extends ElementMixin(ThemableMixin(PolymerElement)) {
 
   constructor() {
     super();
+    console.log('*****************************************************************');
     this._observer = new FlattenedNodesObserver(this, (info) => {
       this.__onDomChange(info.addedNodes);
     });
@@ -657,6 +659,15 @@ class CrudElement extends ElementMixin(ThemableMixin(PolymerElement)) {
   /** @private */
   __mobileChanged() {
     this.__toggleToolbar();
+  }
+
+  /** @private */
+  __hideToolbarChanged() {
+    if (this.hideToolbar) {
+      this.setAttribute('hide-toolbar', '');
+    } else {
+      this.removeAttribute('hide_toolbar');
+    }
   }
 
   /** @private */
