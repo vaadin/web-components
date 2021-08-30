@@ -36,12 +36,7 @@ import { ControlStateMixin } from '@vaadin/vaadin-control-state-mixin/vaadin-con
  *
  * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  */
-declare class Button extends ControlStateMixin(ActiveMixin(ElementMixin(ThemableMixin(HTMLElement)))) {
-  /**
-   * A getter that returns the native button as a focusable element for ControlStateMixin.
-   */
-  readonly focusElement: HTMLButtonElement | null;
-}
+declare class Button extends ControlStateMixin(ActiveMixin(ElementMixin(ThemableMixin(HTMLElement)))) {}
 
 declare global {
   interface HTMLElementTagNameMap {

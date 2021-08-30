@@ -4,7 +4,7 @@ import '@vaadin/vaadin-lumo-styles/sizing.js';
 import '@vaadin/vaadin-lumo-styles/spacing.js';
 import '@vaadin/vaadin-lumo-styles/style.js';
 import './vaadin-message-input-text-area-styles.js';
-import '@vaadin/button/theme/lumo/vaadin-button.js';
+import '@vaadin/button/theme/lumo/vaadin-button-styles.js';
 
 registerStyles(
   'vaadin-message-input',

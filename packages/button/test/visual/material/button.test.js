@@ -4,7 +4,6 @@ import { sendKeys } from '@web/test-runner-commands';
 import '@vaadin/vaadin-icon/theme/material/vaadin-icon.js';
 import '@vaadin/vaadin-lumo-styles/vaadin-iconset.js';
 import '../../../theme/material/vaadin-button.js';
-import '../../../src/vaadin-button.js';
 
 describe('button', () => {
   let div, element;
