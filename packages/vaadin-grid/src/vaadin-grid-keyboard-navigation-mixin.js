@@ -86,8 +86,8 @@ export const KeyboardNavigationMixin = (superClass) =>
 
       // When focus goes from cell to another cell, focusin/focusout events do
       // not escape the grid’s shadowRoot, thus listening inside the shadowRoot.
-      this.$.table.addEventListener('focusin', this._onCellFocusIn.bind(this));
-      this.$.table.addEventListener('focusout', this._onCellFocusOut.bind(this));
+      this.$.table.addEventListener('focusin', this._onContentFocusIn.bind(this));
+      this.$.table.addEventListener('focusout', this._onContentFocusOut.bind(this));
 
       this.addEventListener('mousedown', () => {
         this._toggleAttribute('navigating', false, this);
@@ -226,9 +226,21 @@ export const KeyboardNavigationMixin = (superClass) =>
       const cellFocusMode = activeCell && activeCell.tabIndex === 0;
 
       if (cellFocusMode) {
-        this._onCellNavigation(activeCell, dx, dy);
+        if (dx === -1 && [...activeRow.children].sort((a, b) => a._order - b._order)[0] === activeCell) {
+          // Switch to row focus mode
+          activeRow.focus();
+        } else {
+          // Navigate the cells
+          this._onCellNavigation(activeCell, dx, dy);
+        }
       } else {
-        this._onRowNavigation(activeRow, dy);
+        if (dx === 1) {
+          // Switch to cell focus mode
+          activeRow.firstElementChild.focus();
+        } else {
+          // Navigate the rows
+          this._onRowNavigation(activeRow, dy);
+        }
       }
     }
 
@@ -580,18 +592,24 @@ export const KeyboardNavigationMixin = (superClass) =>
     }
 
     /** @private */
-    _onCellFocusIn(e) {
+    _onContentFocusIn(e) {
       const { section, cell, row } = this._getGridEventLocation(e);
       this._detectInteracting(e);
 
       if (section && (cell || row)) {
+        if (!(this._itemsFocusable instanceof HTMLTableCellElement) && cell) {
+          this.__setFocusMode('cell');
+        } else if (!(this._itemsFocusable instanceof HTMLTableRowElement) && !cell) {
+          this.__setFocusMode('row');
+        }
+
         this._activeRowGroup = section;
         if (this.$.header === section) {
-          this._headerFocusable = this._headerFocusable instanceof HTMLTableCellElement ? cell : row;
+          this._headerFocusable = cell || row;
         } else if (this.$.items === section) {
-          this._itemsFocusable = this._itemsFocusable instanceof HTMLTableCellElement ? cell : row;
+          this._itemsFocusable = cell || row;
         } else if (this.$.footer === section) {
-          this._footerFocusable = this._footerFocusable instanceof HTMLTableCellElement ? cell : row;
+          this._footerFocusable = cell || row;
         }
 
         if (cell) {
@@ -610,9 +628,9 @@ export const KeyboardNavigationMixin = (superClass) =>
     }
 
     /** @private */
-    _onCellFocusOut(e) {
-      if (e.composedPath().indexOf(this.$.table) === 3) {
-        const cell = e.composedPath()[0];
+    _onContentFocusOut(e) {
+      const { cell } = this._getGridEventLocation(e);
+      if (cell) {
         // Inform cell content of the focus (used in <vaadin-grid-sorter>)
         cell._content.dispatchEvent(new CustomEvent('cell-focusout', { bubbles: false }));
       }
