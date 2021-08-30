@@ -1,0 +1,33 @@
+{
+  "name": "@vaadin/vaadin-select",
+  "version": "22.0.0-alpha3",
+  "description": "vaadin-select",
+  "main": "vaadin-select.js",
+  "module": "vaadin-select.js",
+  "repository": "vaadin/vaadin-select",
+  "keywords": [
+    "Vaadin",
+    "vaadin-select",
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
+  "author": "Vaadin Ltd",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/vaadin/vaadin-select/issues"
+  },
+  "homepage": "https://vaadin.com/components",
+  "files": [
+    "vaadin-*.d.ts",
+    "vaadin-*.js",
+    "src",
+    "theme"
+  ],
+  "dependencies": {
+    "@vaadin/select": "^22.0.0-alpha3"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
