@@ -94,12 +94,14 @@ const getAllVisualPackages = () => {
  * Get packages for running unit tests.
  */
 const getUnitTestPackages = () => {
+  let unitPackages = getAllPackages().filter(hasUnitTests);
+
   // If --group flag is passed, return all packages.
   if (group || isLockfileChanged()) {
-    return getAllPackages().filter(hasUnitTests);
+    return unitPackages;
   }
 
-  let packages = getChangedPackages();
+  let packages = getChangedPackages().filter(hasUnitTests);
 
   if (packages.length === 0) {
     // When running in GitHub Actions, do nothing.
@@ -108,13 +110,13 @@ const getUnitTestPackages = () => {
       process.exit(0);
     } else {
       console.log(`No local packages have changed, testing all packages.`);
-      packages = getAllPackages();
+      packages = unitPackages;
     }
   } else {
     console.log(`Running tests for changed packages:\n${packages.join('\n')}`);
   }
 
-  return packages.filter(hasUnitTests);
+  return packages;
 };
 
 /**
