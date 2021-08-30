@@ -2,14 +2,14 @@ import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styl
 import './vaadin-grid-pro-editor-styles.js';
 
 registerStyles(
-  'vaadin-select-text-field',
+  'vaadin-grid-pro-edit-select',
   css`
-    :host([theme~='grid-pro-editor']) [part='input-field'] ::slotted([part='value']) {
+    :host([theme~='grid-pro-editor']) [part='input-field'] ::slotted(button) {
       /* prevent selection on editor focus */
       -webkit-user-select: none;
       -moz-user-select: none;
       user-select: none;
     }
   `,
-  { include: ['material-grid-pro-editor'], moduleId: 'material-grid-pro-edit-select-text-field' }
+  { include: ['material-grid-pro-editor'], moduleId: 'material-grid-pro-edit-select' }
 );

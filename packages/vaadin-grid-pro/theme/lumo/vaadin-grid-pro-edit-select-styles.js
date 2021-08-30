@@ -9,14 +9,8 @@ registerStyles(
     :host([theme~='grid-pro-editor']) [part='toggle-button'] {
       margin-right: var(--lumo-space-xs);
     }
-  `,
-  { moduleId: 'lumo-grid-pro-edit-select' }
-);
 
-registerStyles(
-  'vaadin-select-text-field',
-  css`
-    :host([theme~='grid-pro-editor']) [part='input-field'] ::slotted([part='value']) {
+    :host([theme~='grid-pro-editor']) [part='input-field'] ::slotted(button) {
       padding: 0 var(--lumo-space-m);
       font-size: var(--lumo-font-size-m);
 
@@ -27,5 +21,5 @@ registerStyles(
       user-select: none;
     }
   `,
-  { include: ['lumo-grid-pro-editor'], moduleId: 'lumo-grid-pro-edit-select-text-field' }
+  { include: ['lumo-grid-pro-editor'], moduleId: 'lumo-grid-pro-edit-select' }
 );
