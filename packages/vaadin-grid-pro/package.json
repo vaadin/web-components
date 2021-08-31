@@ -27,7 +27,7 @@
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
     "@vaadin/select": "^22.0.0-alpha3",
-    "@vaadin/vaadin-checkbox": "^22.0.0-alpha3",
+    "@vaadin/checkbox": "^22.0.0-alpha3",
     "@vaadin/vaadin-element-mixin": "^22.0.0-alpha3",
     "@vaadin/vaadin-grid": "^22.0.0-alpha3",
     "@vaadin/vaadin-item": "^22.0.0-alpha3",

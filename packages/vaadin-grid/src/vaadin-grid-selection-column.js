@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { GridColumnElement } from './vaadin-grid-column.js';
-import '@vaadin/vaadin-checkbox/src/vaadin-checkbox.js';
+import '@vaadin/checkbox/src/vaadin-checkbox.js';
 
 /**
  * `<vaadin-grid-selection-column>` is a helper element for the `<vaadin-grid>`

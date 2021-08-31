@@ -1,32 +1,26 @@
 {
-  "name": "@vaadin/vaadin-grid",
+  "name": "@vaadin/checkbox-group",
   "version": "22.0.0-alpha3",
-  "description": "A free, flexible and high-quality Web Component for showing large amounts of tabular data",
-  "main": "vaadin-grid.js",
-  "module": "vaadin-grid.js",
-  "repository": "vaadin/vaadin-grid",
+  "description": "vaadin-checkbox-group",
+  "main": "vaadin-checkbox-group.js",
+  "module": "vaadin-checkbox-group.js",
+  "repository": "vaadin/web-components",
   "keywords": [
-    "vaadin",
-    "elements",
-    "components",
-    "webcomponents",
+    "Vaadin",
+    "checkbox",
     "web-components",
-    "grid",
-    "datagrid",
-    "datatable",
-    "data-grid",
-    "data-table"
+    "web-component",
+    "polymer"
   ],
   "author": "Vaadin Ltd",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/vaadin/vaadin-grid/issues"
+    "url": "https://github.com/vaadin/web-components/issues"
   },
   "homepage": "https://vaadin.com/components",
   "files": [
     "vaadin-*.d.ts",
     "vaadin-*.js",
-    "all-imports.js",
     "src",
     "theme"
   ],
@@ -36,15 +30,11 @@
     "@vaadin/vaadin-element-mixin": "^22.0.0-alpha3",
     "@vaadin/vaadin-lumo-styles": "^22.0.0-alpha3",
     "@vaadin/vaadin-material-styles": "^22.0.0-alpha3",
-    "@vaadin/vaadin-text-field": "^22.0.0-alpha3",
-    "@vaadin/vaadin-themable-mixin": "^22.0.0-alpha3",
-    "@vaadin/vaadin-virtual-list": "^22.0.0-alpha3"
+    "@vaadin/vaadin-themable-mixin": "^22.0.0-alpha3"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
     "@vaadin/testing-helpers": "^0.2.1",
-    "@vaadin/vaadin-template-renderer": "^22.0.0-alpha3",
-    "lit": "^2.0.0-rc.1",
     "sinon": "^9.2.0"
   },
   "publishConfig": {

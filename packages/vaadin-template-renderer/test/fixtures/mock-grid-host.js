@@ -1,7 +1,7 @@
 import { PolymerElement, html } from '@polymer/polymer';
 
 import '@vaadin/vaadin-grid';
-import '@vaadin/vaadin-checkbox';
+import '@vaadin/checkbox';
 import '@vaadin/vaadin-grid/vaadin-grid-column';
 import '@vaadin/vaadin-grid/vaadin-grid-tree-column';
 

@@ -13,7 +13,7 @@ import {
 } from '@vaadin/testing-helpers';
 import { TextFieldElement } from '@vaadin/vaadin-text-field/src/vaadin-text-field.js';
 import { SelectElement } from '@vaadin/select/src/vaadin-select.js';
-import { CheckboxElement } from '@vaadin/vaadin-checkbox/src/vaadin-checkbox.js';
+import { CheckboxElement } from '@vaadin/checkbox/src/vaadin-checkbox.js';
 import '@vaadin/vaadin-template-renderer';
 import { createItems, dblclick, flushGrid, getCellEditor, getContainerCell, onceOpened } from './helpers.js';
 import './not-animated-styles.js';

@@ -1,10 +1,10 @@
 {
-  "name": "@vaadin/vaadin-checkbox",
+  "name": "@vaadin/checkbox",
   "version": "22.0.0-alpha3",
   "description": "vaadin-checkbox",
   "main": "vaadin-checkbox.js",
   "module": "vaadin-checkbox.js",
-  "repository": "vaadin/vaadin-checkbox",
+  "repository": "vaadin/web-components",
   "keywords": [
     "Vaadin",
     "checkbox",
@@ -15,7 +15,7 @@
   "author": "Vaadin Ltd",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/vaadin/vaadin-checkbox/issues"
+    "url": "https://github.com/vaadin/web-components/issues"
   },
   "homepage": "https://vaadin.com/components",
   "files": [
