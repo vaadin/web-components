@@ -105,7 +105,7 @@ describe('vaadin-select', () => {
       it('should update selection slot with a clone of the selected item', () => {
         menu.selected = 2;
         const itemElement = select._items[menu.selected];
-        const valueElement = select._valueElement.firstChild;
+        const valueElement = select._valueNode.firstChild;
         expect(valueElement).not.to.be.equal(itemElement);
         expect(valueElement.localName).to.be.equal(itemElement.localName);
         expect(valueElement.textContent).to.be.equal(itemElement.textContent);
@@ -113,7 +113,7 @@ describe('vaadin-select', () => {
 
       it('should preserve the selected attribute when selecting the disabled item', () => {
         menu.selected = 5;
-        const valueElement = select._valueElement.firstChild;
+        const valueElement = select._valueNode.firstChild;
         expect(valueElement.selected).to.be.true;
         expect(valueElement.disabled).to.be.true;
       });
@@ -137,7 +137,7 @@ describe('vaadin-select', () => {
       it('should remove tabindex when cloning the selected element', () => {
         menu.selected = 2;
         const itemElement = select._items[menu.selected];
-        const valueElement = select._valueElement.firstChild;
+        const valueElement = select._valueNode.firstChild;
         expect(itemElement.tabIndex).to.be.equal(0);
         expect(valueElement.hasAttribute('tabindex')).to.be.false;
       });
@@ -145,19 +145,19 @@ describe('vaadin-select', () => {
       it('should remove role when cloning the selected element', () => {
         menu.selected = 2;
         const itemElement = select._items[menu.selected];
-        const valueElement = select._valueElement.firstChild;
+        const valueElement = select._valueNode.firstChild;
         expect(itemElement.tabIndex).to.be.equal(0);
         expect(valueElement.hasAttribute('role')).to.be.false;
       });
 
       it('should update selection slot textContent with the selected item `label` string', () => {
         menu.selected = 1;
-        expect(select._valueElement.textContent.trim()).to.be.equal('o2');
+        expect(select._valueNode.textContent.trim()).to.be.equal('o2');
       });
 
       it('should wrap the selected item `label` string in selected vaadin item', () => {
         menu.selected = 1;
-        const item = select._valueElement.firstElementChild;
+        const item = select._valueNode.firstElementChild;
         expect(item.localName).to.equal('vaadin-item');
         expect(item.textContent).to.equal('o2');
         expect(item.selected).to.be.true;
@@ -166,7 +166,7 @@ describe('vaadin-select', () => {
 
       it('should update selection slot when value is provided', () => {
         select.value = 'v2';
-        expect(select._valueElement.textContent.trim()).to.be.equal('o2');
+        expect(select._valueNode.textContent.trim()).to.be.equal('o2');
       });
 
       it('should update overlay selected item when value is provided', () => {
@@ -580,7 +580,7 @@ describe('vaadin-select', () => {
 
     it('should be possible to set value declaratively', () => {
       expect(menu.selected).to.be.equal(1);
-      expect(select._valueElement.textContent.trim()).to.be.equal('o2');
+      expect(select._valueNode.textContent.trim()).to.be.equal('o2');
     });
   });
 

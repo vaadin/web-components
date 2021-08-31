@@ -278,6 +278,7 @@ class Select extends DelegateFocusMixin(
 
   static get observers() {
     return [
+      '_updateAriaExpanded(opened)',
       '_updateAriaRequired(required)',
       '_updateSelectedItem(value, _items, placeholder)',
       '_rendererChanged(renderer, _overlayElement)'
@@ -298,17 +299,12 @@ class Select extends DelegateFocusMixin(
 
   /** @protected */
   get _ariaTarget() {
-    return this._buttonNode;
+    return this._valueNode;
   }
 
   /** @protected */
-  get _buttonNode() {
+  get _valueNode() {
     return this._getDirectSlotChild('value');
-  }
-
-  /** @protected */
-  get _valueElement() {
-    return this._buttonNode;
   }
 
   constructor() {
@@ -327,15 +323,15 @@ class Select extends DelegateFocusMixin(
     super.connectedCallback();
     this.addEventListener('iron-resize', this._boundSetPosition);
 
-    if (this._buttonNode) {
-      this._buttonNode.setAttribute('aria-labelledby', `${this._labelId} ${this._fieldId}`);
+    if (this._valueNode) {
+      this._valueNode.setAttribute('aria-labelledby', `${this._labelId} ${this._fieldId}`);
 
       this._updateAriaRequired(this.required);
       this._updateAriaExpanded(this.opened);
 
-      this._setFocusElement(this._buttonNode);
+      this._setFocusElement(this._valueNode);
 
-      this._buttonNode.addEventListener('keydown', this._boundOnKeyDown);
+      this._valueNode.addEventListener('keydown', this._boundOnKeyDown);
     }
   }
 
@@ -343,8 +339,8 @@ class Select extends DelegateFocusMixin(
   disconnectedCallback() {
     super.disconnectedCallback();
     this.removeEventListener('iron-resize', this._boundSetPosition);
-    if (this._buttonNode) {
-      this._buttonNode.removeEventListener('keydown', this._boundOnKeyDown);
+    if (this._valueNode) {
+      this._valueNode.removeEventListener('keydown', this._boundOnKeyDown);
     }
     // Making sure the select is closed and removed from DOM after detaching the select.
     this.opened = false;
@@ -504,21 +500,19 @@ class Select extends DelegateFocusMixin(
       this.validate();
       window.removeEventListener('scroll', this._boundSetPosition, true);
     }
-
-    this._updateAriaExpanded(opened);
   }
 
   /** @private */
   _updateAriaExpanded(opened) {
-    if (this._buttonNode) {
-      this._buttonNode.setAttribute('aria-expanded', opened ? 'true' : 'false');
+    if (this._valueNode) {
+      this._valueNode.setAttribute('aria-expanded', opened ? 'true' : 'false');
     }
   }
 
   /** @private */
   _updateAriaRequired(required) {
-    if (this._buttonNode) {
-      this._buttonNode.setAttribute('aria-required', Boolean(required));
+    if (this._valueNode) {
+      this._valueNode.setAttribute('aria-required', required ? 'true' : 'false');
     }
   }
 
@@ -540,24 +534,24 @@ class Select extends DelegateFocusMixin(
     labelItem.setAttribute('id', this._fieldId);
     labelItem.style.padding = '0';
 
-    this._valueElement.appendChild(labelItem);
+    this._valueNode.appendChild(labelItem);
 
     labelItem.selected = true;
   }
 
   /** @private */
   _updateValueSlot() {
-    if (!this._valueElement) {
+    if (!this._valueNode) {
       return;
     }
 
-    this._valueElement.innerHTML = '';
+    this._valueNode.innerHTML = '';
 
     const selected = this._items[this._menuElement.selected];
 
     if (!selected) {
       if (this.placeholder) {
-        this._valueElement.textContent = this.placeholder;
+        this._valueNode.textContent = this.placeholder;
       }
     } else {
       this._attachSelectedItem(selected);
@@ -589,14 +583,22 @@ class Select extends DelegateFocusMixin(
     }
   }
 
-  /** @protected */
+  /**
+   * Override method inherited from `FocusMixin` to not remove focused
+   * state when select is opened and focus moves to list-box.
+   * @return {boolean}
+   * @protected
+   * @override
+   */
   _shouldRemoveFocus() {
     return !this.opened;
   }
 
   /**
+   * Override method inherited from `FocusMixin` to validate on blur.
    * @param {boolean} focused
    * @protected
+   * @override
    */
   _setFocused(focused) {
     super._setFocused(focused);
