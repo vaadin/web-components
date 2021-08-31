@@ -153,13 +153,6 @@ export const ButtonsMixin = (superClass) =>
     /** @private */
     __detectOverflow() {
       const overflow = this._overflow;
-
-      // Overflow button is not yet initialized during first observer run.
-      // Call the method again in `connectedCallback` to handle this case.
-      if (!overflow) {
-        return;
-      }
-
       const buttons = this._buttons.filter((btn) => btn !== overflow);
       const oldOverflowCount = this.__getOverflowCount(overflow);
 
