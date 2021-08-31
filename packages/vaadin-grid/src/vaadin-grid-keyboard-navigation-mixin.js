@@ -181,7 +181,10 @@ export const KeyboardNavigationMixin = (superClass) =>
     // TODO: A tree toggle component should not be the way to determine if the a is expandable
     /** @private */
     __isRowExpandable(row) {
-      const treeToggle = [...row.children].map((cell) => cell._content.querySelector('vaadin-grid-tree-toggle'))[0];
+      const treeToggle = [...row.children].reduce(
+        (value, cell) => value || cell._content.querySelector('vaadin-grid-tree-toggle'),
+        null
+      );
       return treeToggle && !treeToggle.expanded && !treeToggle.leaf;
     }
 
@@ -572,12 +575,20 @@ export const KeyboardNavigationMixin = (superClass) =>
     _onSpaceKeyDown(e) {
       e.preventDefault();
 
-      const cell = e.composedPath()[0];
-      if (!cell._content || !cell._content.firstElementChild) {
+      const element = e.composedPath()[0];
+      if (element instanceof HTMLTableRowElement) {
+        this.dispatchEvent(
+          new CustomEvent('row-activate', {
+            detail: {
+              model: this.__getRowModel(element)
+            }
+          })
+        );
+      } else if (!element._content || !element._content.firstElementChild) {
         this.dispatchEvent(
           new CustomEvent('cell-activate', {
             detail: {
-              model: this.__getRowModel(cell.parentElement)
+              model: this.__getRowModel(element.parentElement)
             }
           })
         );

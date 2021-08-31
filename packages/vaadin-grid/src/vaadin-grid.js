@@ -888,6 +888,7 @@ class GridElement extends ElementMixin(
 
     this._a11yUpdateRowLevel(row, model.level);
     this._a11yUpdateRowSelected(row, model.selected);
+    this._a11yUpdateRowExpanded(row, model.expanded);
     this._a11yUpdateRowDetailsOpened(row, model.detailsOpened);
 
     this._toggleAttribute('expanded', model.expanded, row);
