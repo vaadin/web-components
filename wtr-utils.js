@@ -120,7 +120,7 @@ const getVisualTestPackages = () => {
     return visualPackages;
   }
 
-  let packages = getChangedPackages();
+  let packages = getChangedPackages().filter((pkg) => visualPackages.includes(pkg));
 
   if (packages.length === 0) {
     // When running in GitHub Actions, do nothing.
@@ -137,7 +137,7 @@ const getVisualTestPackages = () => {
     console.log(`Running tests for changed packages:\n${packages.join('\n')}`);
   }
 
-  return packages.filter((pkg) => visualPackages.includes(pkg));
+  return packages;
 };
 
 /**
