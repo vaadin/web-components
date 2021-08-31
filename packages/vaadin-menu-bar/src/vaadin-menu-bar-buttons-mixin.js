@@ -48,7 +48,6 @@ export const ButtonsMixin = (superClass) =>
       super.connectedCallback();
 
       this._initButtonAttrs(this._overflow);
-      this.__detectOverflow();
       this.addEventListener('iron-resize', this.__boundOnResize);
     }
 
