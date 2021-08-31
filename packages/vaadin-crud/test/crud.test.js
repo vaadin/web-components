@@ -869,11 +869,9 @@ describe('crud', () => {
       expect(crud.hasAttribute('hide-toolbar')).to.be.equal(true);
     });
 
-    it('should remove hide-toolbar attribute when set to false on propery', async () => {
+    it('should remove hide-toolbar attribute when set to false on propery', () => {
       crud.hideToolbar = true;
-      await nextRender(crud);
       crud.hideToolbar = false;
-      await aTimeout(0);
       expect(crud.hasAttribute('hide-toolbar')).to.be.equal(false);
     });
 
