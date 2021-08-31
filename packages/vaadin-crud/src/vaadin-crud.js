@@ -464,6 +464,12 @@ class CrudElement extends ElementMixin(ThemableMixin(PolymerElement)) {
         notify: true
       },
 
+      hideToolbar: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
+      },
+
       /**
        * The object used to localize this component.
        * For changing the default localization, change the entire
@@ -533,12 +539,6 @@ class CrudElement extends ElementMixin(ThemableMixin(PolymerElement)) {
             }
           };
         }
-      },
-
-      hideToolbar: {
-        type: Boolean,
-        value: false,
-        reflectToAttribute: true
       },
 
       /** @private */
