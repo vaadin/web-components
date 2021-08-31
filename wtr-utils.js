@@ -60,10 +60,7 @@ const getAllUnitPackages = () => {
   return fs
     .readdirSync('packages')
     .filter(
-      (dir) =>
-        fs.statSync(`packages/${dir}`).isDirectory() &&
-        fs.existsSync(`packages/${dir}/test`) &&
-        glob.sync(`packages/${dir}/test/*.test.js`).length > 0
+      (dir) => fs.statSync(`packages/${dir}`).isDirectory() && glob.sync(`packages/${dir}/test/*.test.js`).length > 0
     );
 };
 
