@@ -102,6 +102,7 @@ export const ButtonsMixin = (superClass) =>
 
       this._initButtonAttrs(this._overflow);
       this._setAriaLabel(this.i18n);
+      this.__detectOverflow();
       this.addEventListener('iron-resize', this.__boundOnResize);
     }
 
@@ -226,6 +227,13 @@ export const ButtonsMixin = (superClass) =>
     /** @private */
     __detectOverflow() {
       const overflow = this._overflow;
+
+      // Overflow button is not yet initialized during first observer run.
+      // Call the method again in `connectedCallback` to handle this case.
+      if (!overflow) {
+        return;
+      }
+
       const buttons = this._buttons.filter((btn) => btn !== overflow);
       const oldOverflowCount = this.__getOverflowCount(overflow);
 
