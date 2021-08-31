@@ -55,7 +55,7 @@ registerStyles(
     }
 
     :host(:nth-last-of-type(2)),
-    :host([part='overflow-button']) {
+    :host([part~='overflow-button']) {
       border-radius: 0 4px 4px 0;
     }
 
