@@ -131,6 +131,28 @@ declare class NotificationElement extends ThemePropertyMixin(ElementMixin(HTMLEl
     listener: (this: NotificationElement, ev: NotificationEventMap[K]) => void,
     options?: boolean | EventListenerOptions
   ): void;
+
+  /**
+   * Shows a notification with the given content.
+   * By default, positions the notification at `bottom-start` and uses a 5 second duration.
+   * An options object can be passed to configure the notification.
+   * The options object has the following structure:
+   *
+   * ```
+   * {
+   *   position?: string
+   *   duration?: number
+   * }
+   * ```
+   *
+   * See the individual documentation for:
+   * - [`position`](#/elements/vaadin-notification#property-position)
+   * - [`duration`](#/elements/vaadin-notification#property-duration)
+   *
+   * @param contents the contents to show, either as a string or a Lit template.
+   * @param options optional options for customizing the notification.
+   */
+  static show(contents: string | TemplateResult, options?: ShowOptions): NotificationElement;
 }
 
 declare global {

@@ -8,6 +8,8 @@ import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.
 import { processTemplates } from '@vaadin/vaadin-element-mixin/templates.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
+import { isTemplateResult } from 'lit/directive-helpers.js';
+import { render } from 'lit';
 
 /**
  * An element used internally by `<vaadin-notification>`. Not intended to be used separately.
@@ -470,6 +472,60 @@ class NotificationElement extends ThemePropertyMixin(ElementMixin(PolymerElement
         this._durationTimeoutId = setTimeout(() => this.close(), duration);
       }
     }
+  }
+
+  /**
+   * Shows a notification with the given content.
+   * By default, positions the notification at `bottom-start` and uses a 5 second duration.
+   * An options object can be passed to configure the notification.
+   * The options object has the following structure:
+   *
+   * ```
+   * {
+   *   position?: string
+   *   duration?: number
+   * }
+   * ```
+   *
+   * See the individual documentation for:
+   * - [`position`](#/elements/vaadin-notification#property-position)
+   * - [`duration`](#/elements/vaadin-notification#property-duration)
+   *
+   * @param contents the contents to show, either as a string or a Lit template.
+   * @param options optional options for customizing the notification.
+   */
+  static show(contents, options) {
+    if (isTemplateResult(contents)) {
+      return NotificationElement._createAndShowNotification((root) => {
+        render(contents, root);
+      }, options);
+    } else {
+      return NotificationElement._createAndShowNotification((root) => {
+        root.innerText = contents;
+      }, options);
+    }
+  }
+
+  /** @private */
+  static _createAndShowNotification(renderer, options) {
+    const notification = document.createElement(NotificationElement.is);
+    if (options && options.duration) {
+      notification.duration = options.duration;
+    }
+    if (options && options.position) {
+      notification.position = options.position;
+    }
+    notification.renderer = renderer;
+    document.body.appendChild(notification);
+    notification.opened = true;
+
+    notification.addEventListener('opened-changed', (e) => {
+      if (!e.detail.value) {
+        notification.remove();
+      }
+    });
+
+    return notification;
   }
 }
 
