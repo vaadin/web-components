@@ -55,17 +55,17 @@ registerStyles(
     }
 
     :host(:nth-last-of-type(2)),
-    :host([slot='overflow']) {
+    :host([part='overflow-button']) {
       border-radius: 0 4px 4px 0;
     }
 
-    :host([slot='overflow']) {
+    :host([part='overflow-button']) {
       padding-right: 8px;
       padding-left: 8px;
       min-width: 36px;
     }
 
-    :host([slot='overflow']) ::slotted(*) {
+    :host([part='overflow-button']) ::slotted(*) {
       font-size: 24px;
     }
 
@@ -74,7 +74,7 @@ registerStyles(
     }
 
     :host([theme='outlined']:not([dir='rtl']):nth-last-of-type(2)),
-    :host([theme='outlined']:not([dir='rtl'])[slot='overflow']) {
+    :host([theme='outlined']:not([dir='rtl'])[part~='overflow-button']) {
       margin-right: 0;
     }
 
@@ -89,7 +89,7 @@ registerStyles(
     }
 
     :host([dir='rtl']:nth-last-of-type(2)),
-    :host([dir='rtl'][slot='overflow']) {
+    :host([dir='rtl'][part='overflow-button']) {
       border-radius: 4px 0 0 4px;
     }
 
@@ -102,7 +102,7 @@ registerStyles(
     }
 
     :host([theme='outlined'][dir='rtl']:nth-last-of-type(2)),
-    :host([theme='outlined'][dir='rtl'][slot='overflow']) {
+    :host([theme='outlined'][dir='rtl'][part~='overflow-button']) {
       margin-left: 0;
     }
   `,

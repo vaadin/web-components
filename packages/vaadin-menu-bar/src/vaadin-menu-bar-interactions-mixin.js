@@ -91,8 +91,8 @@ export const InteractionsMixin = (superClass) =>
     }
 
     /** @protected */
-    _getFocusableButton() {
-      return this.querySelector('vaadin-menu-bar-button[tabindex="0"]');
+    _getCurrentButton() {
+      return this.shadowRoot.activeElement || this._expandedButton;
     }
 
     /**
@@ -100,7 +100,7 @@ export const InteractionsMixin = (superClass) =>
      * @protected
      */
     _onFocusin() {
-      const target = this._getFocusableButton();
+      const target = this.shadowRoot.querySelector('[part$="button"][tabindex="0"]');
       if (target) {
         this._buttons.forEach((btn) => {
           this._setTabindex(btn, btn === target);
@@ -146,7 +146,7 @@ export const InteractionsMixin = (superClass) =>
       // IE names for arrows do not include the Arrow prefix
       const key = event.key.replace(/^Arrow/, '');
       const buttons = this._buttons;
-      const currentBtn = this._getButtonFromEvent(event) || this._expandedButton;
+      const currentBtn = this._getCurrentButton();
       const currentIdx = buttons.indexOf(currentBtn);
       let idx;
       let increment;
@@ -273,7 +273,7 @@ export const InteractionsMixin = (superClass) =>
           // Prevent ArrowLeft from being handled in context-menu
           e.stopImmediatePropagation();
           this._navigateByKey(e);
-          const button = this._getFocusableButton();
+          const button = this.shadowRoot.activeElement;
           if (button && button.item && button.item.children) {
             this.__openSubMenu(button, e, { keepFocus: true });
           }

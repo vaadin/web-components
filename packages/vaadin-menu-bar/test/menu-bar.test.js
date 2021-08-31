@@ -8,7 +8,7 @@ import '../vaadin-menu-bar.js';
 registerStyles(
   'vaadin-menu-bar',
   css`
-    :host([theme='big']) ::slotted(vaadin-menu-bar-button) {
+    :host([theme='big']) [part$='button'] {
       width: 100px;
     }
   `,
@@ -62,6 +62,7 @@ describe('root menu layout', () => {
 
   it('should make the overflow button hidden by default', () => {
     const overflow = buttons[menu.items.length];
+    expect(overflow.getAttribute('part')).to.equal('overflow-button');
     expect(overflow.hasAttribute('hidden')).to.be.true;
   });
 

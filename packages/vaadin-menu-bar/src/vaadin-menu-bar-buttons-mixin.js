@@ -7,80 +7,27 @@ import { animationFrame } from '@polymer/polymer/lib/utils/async.js';
 import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
 import { IronResizableBehavior } from '@polymer/iron-resizable-behavior/iron-resizable-behavior.js';
 import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
-import { SlotMixin } from '@vaadin/field-base/src/slot-mixin.js';
 
 /**
  * @polymerMixin
  */
 export const ButtonsMixin = (superClass) =>
-  class extends SlotMixin(mixinBehaviors(IronResizableBehavior, superClass)) {
+  class extends mixinBehaviors(IronResizableBehavior, superClass) {
     static get properties() {
       return {
-        /**
-         * The object used to localize this component.
-         * To change the default localization, replace the entire
-         * `i18n` object with a custom one.
-         *
-         * To update individual properties, extend the existing i18n object like so:
-         * ```
-         * menuBar.i18n = {
-         *   ...menuBar.i18n,
-         *   moreOptions: 'More options'
-         * }
-         * ```
-         *
-         * The object has the following JSON structure and default values:
-         * ```
-         * {
-         *   moreOptions: 'More options'
-         * }
-         * ```
-         *
-         * @type {!MenuBarI18n}
-         * @default {English/US}
-         */
-        i18n: {
-          type: Object,
-          value: () => {
-            return {
-              moreOptions: 'More options'
-            };
-          }
-        },
-
         /**
          * @type {boolean}
          * @protected
          */
         _hasOverflow: {
           type: Boolean,
-          value: false,
-          observer: '__hasOverflowChanged'
+          value: false
         }
       };
     }
 
     static get observers() {
-      return ['_menuItemsChanged(items, items.splices)', '__i18nChanged(i18n.*)'];
-    }
-
-    /**
-     * @protected
-     * @override
-     */
-    get slots() {
-      return {
-        ...super.slots,
-        overflow: () => {
-          const overflow = document.createElement('vaadin-menu-bar-button');
-          overflow.setAttribute('hidden', '');
-          const dots = document.createElement('div');
-          dots.setAttribute('aria-hidden', 'true');
-          dots.textContent = '···';
-          overflow.appendChild(dots);
-          return overflow;
-        }
-      };
+      return ['_menuItemsChanged(items, items.splices)'];
     }
 
     constructor() {
@@ -101,7 +48,6 @@ export const ButtonsMixin = (superClass) =>
       super.connectedCallback();
 
       this._initButtonAttrs(this._overflow);
-      this._setAriaLabel(this.i18n);
       this.__detectOverflow();
       this.addEventListener('iron-resize', this.__boundOnResize);
     }
@@ -118,7 +64,7 @@ export const ButtonsMixin = (superClass) =>
      * @protected
      */
     get _buttons() {
-      return Array.from(this.querySelectorAll('vaadin-menu-bar-button'));
+      return Array.from(this.shadowRoot.querySelectorAll('[part$="button"]'));
     }
 
     /**
@@ -134,15 +80,7 @@ export const ButtonsMixin = (superClass) =>
      * @protected
      */
     get _overflow() {
-      return this._getDirectSlotChild('overflow');
-    }
-
-    /** @private */
-    __hasOverflowChanged(hasOverflow) {
-      if (!this._overflow) {
-        return;
-      }
-      this._overflow.toggleAttribute('hidden', !hasOverflow);
+      return this.shadowRoot.querySelector('[part="overflow-button"]');
     }
 
     /** @private */
@@ -150,18 +88,6 @@ export const ButtonsMixin = (superClass) =>
       if (items !== this._oldItems) {
         this._oldItems = items;
         this.__renderButtons(items);
-      }
-    }
-
-    /** @private */
-    __i18nChanged() {
-      this._setAriaLabel(this.i18n);
-    }
-
-    /** @protected */
-    _setAriaLabel(i18n) {
-      if (this._overflow && i18n && i18n.moreOptions) {
-        this._overflow.setAttribute('aria-label', i18n.moreOptions);
       }
     }
 
@@ -269,14 +195,17 @@ export const ButtonsMixin = (superClass) =>
 
     /** @protected */
     _removeButtons() {
-      while (this.children.length > 1) {
-        this.removeChild(this.firstElementChild);
+      const container = this._container;
+
+      while (container.children.length > 1) {
+        container.removeChild(container.firstElementChild);
       }
     }
 
     /** @protected */
     _initButton(item) {
       const button = document.createElement('vaadin-menu-bar-button');
+      button.setAttribute('part', 'menu-bar-button');
 
       const itemCopy = Object.assign({}, item);
       button.item = itemCopy;
@@ -341,7 +270,7 @@ export const ButtonsMixin = (superClass) =>
 
     /** @protected */
     _appendButton(button) {
-      this.insertBefore(button, this._overflow);
+      this._container.insertBefore(button, this._overflow);
     }
 
     /** @private */
