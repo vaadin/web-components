@@ -132,8 +132,6 @@ const getVisualTestPackages = () => {
       packages = visualPackages;
     }
   } else {
-    // Filter out possible duplicates from packages list
-    packages = packages.filter((v, i, a) => a.indexOf(v) === i);
     console.log(`Running tests for changed packages:\n${packages.join('\n')}`);
   }
 
