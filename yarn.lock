@@ -2139,17 +2139,17 @@
   dependencies:
     semver "^7.3.4"
 
-"@web/dev-server-core@^0.3.12", "@web/dev-server-core@^0.3.3":
-  version "0.3.13"
-  resolved "https://registry.yarnpkg.com/@web/dev-server-core/-/dev-server-core-0.3.13.tgz#ae54e38c0e27212d44a48776c0439230e7d04bef"
-  integrity sha512-bGJHPeFRWATNfuL9Pp2LfqhnmqhBCc5eOO5AWQa0X+WQAwHiFo6xZNfsvsnJ1gvxXgsE4jKBAGu9lQRisvFRFA==
+"@web/dev-server-core@^0.3.12", "@web/dev-server-core@^0.3.14", "@web/dev-server-core@^0.3.3":
+  version "0.3.14"
+  resolved "https://registry.yarnpkg.com/@web/dev-server-core/-/dev-server-core-0.3.14.tgz#3ccaa2d883f5e8a70d5f995227aa35294cbb76fc"
+  integrity sha512-QHWGbkLI7qZVkELd6a7R4llRF9zydwbZagAeiJRvOIIiDhG5Uu9DfAWAQL+RSCb2hqBlEnaVAK4keNffKol4rQ==
   dependencies:
     "@types/koa" "^2.11.6"
     "@types/ws" "^7.4.0"
     "@web/parse5-utils" "^1.2.0"
     chokidar "^3.4.3"
     clone "^2.1.2"
-    es-module-lexer "^0.4.0"
+    es-module-lexer "^0.7.1"
     get-stream "^6.0.0"
     is-stream "^2.0.0"
     isbinaryfile "^4.0.6"
@@ -2174,16 +2174,16 @@
     rollup "^2.56.2"
     whatwg-url "^9.0.0"
 
-"@web/dev-server@^0.1.17", "@web/dev-server@^0.1.21":
-  version "0.1.21"
-  resolved "https://registry.yarnpkg.com/@web/dev-server/-/dev-server-0.1.21.tgz#2e0f83a0b6456623bb3e406bc6eceb59e023f07d"
-  integrity sha512-au4ALDpojQj16seFYufSlFJCARkHZvC/L2sHsphqsY1lMEB/zLLg4XDpCcyF5t49SfB9glI1c8jgOnyHuofhnw==
+"@web/dev-server@^0.1.17", "@web/dev-server@^0.1.22":
+  version "0.1.22"
+  resolved "https://registry.yarnpkg.com/@web/dev-server/-/dev-server-0.1.22.tgz#5f5bd054750c0f5ce439e8c21d73228591f2ffa7"
+  integrity sha512-8PZxz2PGK9Ndr0C2LtWHrTzPKkDYTP/IvEMs9nrIebQWxvVjxI/HpvNfli3ivvCtvvcJFI26FvfWaAWDq14GgQ==
   dependencies:
     "@babel/code-frame" "^7.12.11"
     "@rollup/plugin-node-resolve" "^11.0.1"
     "@types/command-line-args" "^5.0.0"
     "@web/config-loader" "^0.1.3"
-    "@web/dev-server-core" "^0.3.12"
+    "@web/dev-server-core" "^0.3.14"
     "@web/dev-server-rollup" "^0.3.9"
     camelcase "^6.2.0"
     chalk "^4.1.0"
@@ -2223,10 +2223,10 @@
     chrome-launcher "^0.14.0"
     puppeteer-core "^9.1.0"
 
-"@web/test-runner-commands@^0.5.10", "@web/test-runner-commands@^0.5.11":
-  version "0.5.11"
-  resolved "https://registry.yarnpkg.com/@web/test-runner-commands/-/test-runner-commands-0.5.11.tgz#5f3305f46b2242e522b4661e37e6ee11f6fac93f"
-  integrity sha512-2b4XnqwiTG/ZeXMiqtoKUCa7pggrTNiq6vI2y8sIDVtqoZ4JpTs3NAdwrsKfop+JhdeE7lSQohyrT/HF5H7tqQ==
+"@web/test-runner-commands@^0.5.10", "@web/test-runner-commands@^0.5.12":
+  version "0.5.12"
+  resolved "https://registry.yarnpkg.com/@web/test-runner-commands/-/test-runner-commands-0.5.12.tgz#1a5940505994acfa05585ad7ecd8ad8f6e91c725"
+  integrity sha512-W5ajWzO7+d3u1R0/FPBU8q3d4y5faOQVIWnOruFNvXu3Qjfg2VCWFOtARegA7ATNCE18H0dGRuF4KGxHDmMe3g==
   dependencies:
     "@web/test-runner-core" "^0.10.20"
     mkdirp "^1.0.4"
@@ -4645,10 +4645,10 @@ es-abstract@^1.17.2, es-abstract@^1.18.0-next.1, es-abstract@^1.18.0-next.2, es-
     string.prototype.trimstart "^1.0.4"
     unbox-primitive "^1.0.1"
 
-es-module-lexer@^0.4.0:
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/es-module-lexer/-/es-module-lexer-0.4.1.tgz#dda8c6a14d8f340a24e34331e0fab0cb50438e0e"
-  integrity sha512-ooYciCUtfw6/d2w56UVeqHPcoCFAiJdz5XOkYpv/Txl1HMUozpXjz/2RIQgqwKdXNDPSF1W7mJCFse3G+HDyAA==
+es-module-lexer@^0.7.1:
+  version "0.7.1"
+  resolved "https://registry.yarnpkg.com/es-module-lexer/-/es-module-lexer-0.7.1.tgz#c2c8e0f46f2df06274cdaf0dd3f3b33e0a0b267d"
+  integrity sha512-MgtWFl5No+4S3TmhDmCz2ObFGm6lEpTnzbQi+Dd+pw4mlTIZTmM2iAs5gRlmx5zS9luzobCSBSI90JM/1/JgOw==
 
 es-to-primitive@^1.2.1:
   version "1.2.1"
@@ -5644,7 +5644,7 @@ glob-watcher@^5.0.3:
     normalize-path "^3.0.0"
     object.defaults "^1.1.0"
 
-glob@^7.1.1, glob@^7.1.2, glob@^7.1.3, glob@^7.1.4, glob@^7.1.6:
+glob@^7.1.1, glob@^7.1.2, glob@^7.1.3, glob@^7.1.4, glob@^7.1.6, glob@^7.1.7:
   version "7.1.7"
   resolved "https://registry.yarnpkg.com/glob/-/glob-7.1.7.tgz#3b193e9233f01d42d0b3f78294bbeeb418f94a90"
   integrity sha512-OvD9ENzPLbegENnYP5UUfJIirTg4+XwMWGaQfQTY0JenxNvvIKP3U3/tAQSPIu/lHxXYSZmpXlUHeqAIdKzBLQ==

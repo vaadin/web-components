@@ -2,6 +2,7 @@
 require('dotenv').config();
 const fs = require('fs');
 const path = require('path');
+const glob = require('glob');
 const { execSync } = require('child_process');
 const { createSauceLabsLauncher } = require('@web/test-runner-saucelabs');
 const { visualRegressionPlugin } = require('@web/test-runner-visual-regression/plugin');
@@ -36,26 +37,6 @@ const filterBrowserLogs = (log) => {
 
 const group = process.argv.indexOf('--group') !== -1;
 
-const NO_UNIT_TESTS = [
-  'vaadin-icons',
-  'vaadin-lumo-styles',
-  'vaadin-material-styles',
-  'vaadin-button',
-  'vaadin-select'
-];
-
-const NO_VISUAL_TESTS = [
-  'field-base',
-  'vaadin-icon',
-  'vaadin-template-renderer',
-  'vaadin-virtual-list',
-  'vaadin-button',
-  'vaadin-select'
-];
-
-const hasUnitTests = (pkg) => !NO_UNIT_TESTS.includes(pkg);
-const hasVisualTests = (pkg) => !NO_VISUAL_TESTS.includes(pkg) && pkg.indexOf('mixin') === -1;
-
 /**
  * Check if lockfile has changed.
  */
@@ -73,12 +54,14 @@ const getChangedPackages = () => {
 };
 
 /**
- * Get all available packages.
+ * Get all available packages with unit tests.
  */
-const getAllPackages = () => {
+const getAllUnitPackages = () => {
   return fs
     .readdirSync('packages')
-    .filter((dir) => fs.statSync(`packages/${dir}`).isDirectory() && fs.existsSync(`packages/${dir}/test`));
+    .filter(
+      (dir) => fs.statSync(`packages/${dir}`).isDirectory() && glob.sync(`packages/${dir}/test/*.test.js`).length > 0
+    );
 };
 
 /**
@@ -91,26 +74,30 @@ const getAllVisualPackages = () => {
 };
 
 /**
- * Get packages for running unit tests.
+ * Get packages for running tests.
  */
-const getUnitTestPackages = () => {
-  let unitPackages = getAllPackages().filter(hasUnitTests);
-
+const getTestPackages = (allPackages) => {
   // If --group flag is passed, return all packages.
-  if (group || isLockfileChanged()) {
-    return unitPackages;
+  if (group) {
+    return allPackages;
   }
 
-  let packages = getChangedPackages().filter(hasUnitTests);
+  // If yarn.lock has changed, return all packages.
+  if (isLockfileChanged()) {
+    console.log('yarn.lock has changed, testing all packages');
+    return allPackages;
+  }
+
+  let packages = getChangedPackages().filter((pkg) => allPackages.includes(pkg));
 
   if (packages.length === 0) {
     // When running in GitHub Actions, do nothing.
     if (process.env.GITHUB_REF) {
-      console.log(`No local packages have changed, exiting.`);
+      console.log('No local packages have changed, exiting.');
       process.exit(0);
     } else {
-      console.log(`No local packages have changed, testing all packages.`);
-      packages = unitPackages;
+      console.log('No local packages have changed, testing all packages.');
+      packages = allPackages;
     }
   } else {
     console.log(`Running tests for changed packages:\n${packages.join('\n')}`);
@@ -120,32 +107,19 @@ const getUnitTestPackages = () => {
 };
 
 /**
+ * Get packages for running unit tests.
+ */
+const getUnitTestPackages = () => {
+  const unitPackages = getAllUnitPackages();
+  return getTestPackages(unitPackages);
+};
+
+/**
  * Get packages for running visual tests.
  */
 const getVisualTestPackages = () => {
-  // If --group flag is passed, return all packages.
-  if (group || isLockfileChanged()) {
-    return getAllVisualPackages().filter(hasVisualTests);
-  }
-
-  let packages = getChangedPackages();
-
-  if (packages.length === 0) {
-    // When running in GitHub Actions, do nothing.
-    if (process.env.GITHUB_REF) {
-      console.log(`No local packages have changed, exiting.`);
-      process.exit(0);
-    } else {
-      console.log(`No local packages have changed, testing all packages.`);
-      packages = getAllVisualPackages();
-    }
-  } else {
-    // Filter out possible duplicates from packages list
-    packages = packages.filter((v, i, a) => a.indexOf(v) === i);
-    console.log(`Running tests for changed packages:\n${packages.join('\n')}`);
-  }
-
-  return packages.filter(hasVisualTests);
+  const visualPackages = getAllVisualPackages();
+  return getTestPackages(visualPackages);
 };
 
 /**
