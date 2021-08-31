@@ -90,7 +90,7 @@ export const InteractionsMixin = (superClass) =>
       return Array.from(e.composedPath()).filter((el) => el.localName === 'vaadin-menu-bar-button')[0];
     }
 
-    /** @protected */
+    /** @private */
     _getCurrentButton() {
       return this.shadowRoot.activeElement || this._expandedButton;
     }
