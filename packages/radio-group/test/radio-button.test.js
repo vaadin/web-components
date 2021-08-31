@@ -1,7 +1,15 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync, nextFrame, space, spaceKeyDown, spaceKeyUp, touchstart, touchend } from '@vaadin/testing-helpers';
-import { down, up } from './helpers.js';
+import {
+  fixtureSync,
+  nextFrame,
+  space,
+  touchstart,
+  touchend,
+  spaceKeyUp,
+  spaceKeyDown,
+  fire
+} from '@vaadin/testing-helpers';
 import '../vaadin-radio-button.js';
 
 describe('radio-button', () => {
@@ -86,8 +94,8 @@ describe('radio-button', () => {
     });
 
     it('should set checked on mouseup', () => {
-      down(radio);
-      up(radio);
+      fire(radio, 'down');
+      fire(radio, 'up');
       expect(radio.checked).to.be.true;
     });
 
@@ -115,8 +123,8 @@ describe('radio-button', () => {
     });
 
     it('should not set checked on mouseup when disabled', () => {
-      down(radio);
-      up(radio);
+      fire(radio, 'down');
+      fire(radio, 'up');
       expect(radio.checked).to.be.false;
     });
 
@@ -153,22 +161,22 @@ describe('radio-button', () => {
     });
 
     it('should be called on mouseup', () => {
-      down(radio);
-      up(radio);
+      fire(radio, 'down');
+      fire(radio, 'up');
       expect(spy.calledOnce).to.be.true;
     });
 
     it('should not be called on mouseup when checked', () => {
       radio.checked = true;
-      down(radio);
-      up(radio);
+      fire(radio, 'down');
+      fire(radio, 'up');
       expect(spy.called).to.be.false;
     });
 
     it('should not be called on mouseup when disabled', () => {
       radio.disabled = true;
-      down(radio);
-      up(radio);
+      fire(radio, 'down');
+      fire(radio, 'up');
       expect(spy.called).to.be.false;
     });
 
@@ -198,8 +206,8 @@ describe('radio-button', () => {
     });
 
     it('should fire on mouseup', () => {
-      down(radio);
-      up(radio);
+      fire(radio, 'down');
+      fire(radio, 'up');
       expect(spy.calledOnce).to.be.true;
     });
 
