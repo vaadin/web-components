@@ -533,3 +533,23 @@ describe('item components', () => {
     expect(Number(style.zIndex)).to.equal(1);
   });
 });
+
+describe('initialization', () => {
+  let menu;
+
+  beforeEach(() => {
+    menu = document.createElement('vaadin-menu-bar');
+  });
+
+  afterEach(() => {
+    menu.remove();
+  });
+
+  it('should not throw when setting items before connected', () => {
+    const initMenu = () => {
+      menu.items = [{ text: 'View' }, { text: 'Edit' }];
+      document.body.appendChild(menu);
+    };
+    expect(initMenu).to.not.throw(TypeError);
+  });
+});
