@@ -44,17 +44,7 @@ const NO_UNIT_TESTS = [
   'vaadin-select'
 ];
 
-const NO_VISUAL_TESTS = [
-  'field-base',
-  'vaadin-icon',
-  'vaadin-template-renderer',
-  'vaadin-virtual-list',
-  'vaadin-button',
-  'vaadin-select'
-];
-
 const hasUnitTests = (pkg) => !NO_UNIT_TESTS.includes(pkg);
-const hasVisualTests = (pkg) => !NO_VISUAL_TESTS.includes(pkg) && pkg.indexOf('mixin') === -1;
 
 /**
  * Check if lockfile has changed.
@@ -123,9 +113,11 @@ const getUnitTestPackages = () => {
  * Get packages for running visual tests.
  */
 const getVisualTestPackages = () => {
+  const visualPackages = getAllVisualPackages();
+
   // If --group flag is passed, return all packages.
   if (group || isLockfileChanged()) {
-    return getAllVisualPackages().filter(hasVisualTests);
+    return visualPackages;
   }
 
   let packages = getChangedPackages();
@@ -137,7 +129,7 @@ const getVisualTestPackages = () => {
       process.exit(0);
     } else {
       console.log(`No local packages have changed, testing all packages.`);
-      packages = getAllVisualPackages();
+      packages = visualPackages;
     }
   } else {
     // Filter out possible duplicates from packages list
@@ -145,7 +137,7 @@ const getVisualTestPackages = () => {
     console.log(`Running tests for changed packages:\n${packages.join('\n')}`);
   }
 
-  return packages.filter(hasVisualTests);
+  return packages.filter((pkg) => visualPackages.includes(pkg));
 };
 
 /**
