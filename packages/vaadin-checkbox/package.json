@@ -1,0 +1,34 @@
+{
+  "name": "@vaadin/vaadin-checkbox",
+  "version": "22.0.0-alpha3",
+  "description": "vaadin-checkbox",
+  "main": "vaadin-checkbox.js",
+  "module": "vaadin-checkbox.js",
+  "repository": "vaadin/web-components",
+  "keywords": [
+    "Vaadin",
+    "checkbox",
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
+  "author": "Vaadin Ltd",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/vaadin/vaadin-checkbox/issues"
+  },
+  "homepage": "https://vaadin.com/components",
+  "files": [
+    "vaadin-*.d.ts",
+    "vaadin-*.js",
+    "src",
+    "theme"
+  ],
+  "dependencies": {
+    "@vaadin/checkbox": "^22.0.0-alpha3",
+    "@vaadin/checkbox-group": "^22.0.0-alpha3"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
