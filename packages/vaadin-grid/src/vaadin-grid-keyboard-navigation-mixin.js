@@ -178,6 +178,18 @@ export const KeyboardNavigationMixin = (superClass) =>
       }
     }
 
+    // TODO: A tree toggle component should not be the way to determine if the a is expandable
+    /** @private */
+    __isRowExpandable(row) {
+      const treeToggle = [...row.children].map((cell) => cell._content.querySelector('vaadin-grid-tree-toggle'))[0];
+      return treeToggle && !treeToggle.expanded && !treeToggle.leaf;
+    }
+
+    /** @private */
+    __isRowCollapsible(row) {
+      return this._isExpanded(row._item);
+    }
+
     /** @private */
     __indexOfChildElement(el) {
       return Array.prototype.indexOf.call(el.parentNode.children, el);
@@ -225,22 +237,50 @@ export const KeyboardNavigationMixin = (superClass) =>
 
       const cellFocusMode = activeCell && activeCell.tabIndex === 0;
 
+      // Handle keyboard interaction as defined in:
+      // https://w3c.github.io/aria-practices/#keyboard-interaction-24
+      if (key === 'ArrowRight') {
+        // "Right Arrow:"
+        if (!cellFocusMode) {
+          // In row focus mode
+          if (this.__isRowExpandable(activeRow)) {
+            // "If focus is on a collapsed row, expands the row."
+            this.expandItem(activeRow._item);
+            return;
+          } else {
+            // "If focus is on an expanded row or is on a row that does not have child rows,
+            // moves focus to the first cell in the row."
+            activeRow.firstElementChild.focus();
+            return;
+          }
+        }
+      } else if (key === 'ArrowLeft') {
+        // "Left Arrow:"
+        if (!cellFocusMode) {
+          // In row focus mode
+          if (this.__isRowCollapsible(activeRow)) {
+            // "If focus is on an expanded row, collapses the row."
+            this.collapseItem(activeRow._item);
+            return;
+          }
+        } else {
+          // In cell focus mode
+          const activeRowCells = [...activeRow.children].sort((a, b) => a._order - b._order);
+          if (activeCell === activeRowCells[0]) {
+            // "If focus is on the first cell in a row and row focus is supported, moves focus to the row."
+            activeRow.focus();
+            return;
+          }
+        }
+      }
+
+      // Navigate
       if (cellFocusMode) {
-        if (dx === -1 && [...activeRow.children].sort((a, b) => a._order - b._order)[0] === activeCell) {
-          // Switch to row focus mode
-          activeRow.focus();
-        } else {
-          // Navigate the cells
-          this._onCellNavigation(activeCell, dx, dy);
-        }
+        // Navigate the cells
+        this._onCellNavigation(activeCell, dx, dy);
       } else {
-        if (dx === 1) {
-          // Switch to cell focus mode
-          activeRow.firstElementChild.focus();
-        } else {
-          // Navigate the rows
-          this._onRowNavigation(activeRow, dy);
-        }
+        // Navigate the rows
+        this._onRowNavigation(activeRow, dy);
       }
     }
 
