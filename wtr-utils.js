@@ -2,6 +2,7 @@
 require('dotenv').config();
 const fs = require('fs');
 const path = require('path');
+const glob = require('glob');
 const { execSync } = require('child_process');
 const { createSauceLabsLauncher } = require('@web/test-runner-saucelabs');
 const { visualRegressionPlugin } = require('@web/test-runner-visual-regression/plugin');
@@ -36,16 +37,6 @@ const filterBrowserLogs = (log) => {
 
 const group = process.argv.indexOf('--group') !== -1;
 
-const NO_UNIT_TESTS = [
-  'vaadin-icons',
-  'vaadin-lumo-styles',
-  'vaadin-material-styles',
-  'vaadin-button',
-  'vaadin-select'
-];
-
-const hasUnitTests = (pkg) => !NO_UNIT_TESTS.includes(pkg);
-
 /**
  * Check if lockfile has changed.
  */
@@ -63,12 +54,17 @@ const getChangedPackages = () => {
 };
 
 /**
- * Get all available packages.
+ * Get all available packages with unit tests.
  */
-const getAllPackages = () => {
+const getAllUnitPackages = () => {
   return fs
     .readdirSync('packages')
-    .filter((dir) => fs.statSync(`packages/${dir}`).isDirectory() && fs.existsSync(`packages/${dir}/test`));
+    .filter(
+      (dir) =>
+        fs.statSync(`packages/${dir}`).isDirectory() &&
+        fs.existsSync(`packages/${dir}/test`) &&
+        glob.sync(`packages/${dir}/test/*.test.js`).length > 0
+    );
 };
 
 /**
@@ -84,14 +80,14 @@ const getAllVisualPackages = () => {
  * Get packages for running unit tests.
  */
 const getUnitTestPackages = () => {
-  let unitPackages = getAllPackages().filter(hasUnitTests);
+  let unitPackages = getAllUnitPackages();
 
   // If --group flag is passed, return all packages.
   if (group || isLockfileChanged()) {
     return unitPackages;
   }
 
-  let packages = getChangedPackages().filter(hasUnitTests);
+  let packages = getChangedPackages().filter((pkg) => unitPackages.includes(pkg));
 
   if (packages.length === 0) {
     // When running in GitHub Actions, do nothing.
