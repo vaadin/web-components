@@ -875,9 +875,8 @@ describe('crud', () => {
       expect(crud.hasAttribute('hide-toolbar')).to.be.equal(false);
     });
 
-    it('should hide toolbar when hide-toolbar attribute is set', async () => {
+    it('should hide toolbar when hide-toolbar attribute is set', () => {
       crud.hideToolbar = true;
-      await nextRender(crud);
       expect(getComputedStyle(crud.$.toolbar).display).to.be.equal('none');
     });
 
