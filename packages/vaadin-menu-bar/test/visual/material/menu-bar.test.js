@@ -40,7 +40,7 @@ describe('menu-bar', () => {
         });
 
         it('opened', async () => {
-          element.shadowRoot.querySelectorAll('vaadin-menu-bar-button')[1].click();
+          element._buttons[1].click();
           await nextRender(element);
           await visualDiff(document.body, `${import.meta.url}_${dir}-opened`);
         });
@@ -80,7 +80,7 @@ describe('menu-bar', () => {
           div.style.width = '320px';
           element.setAttribute('theme', 'outlined');
           element.notifyResize();
-          arrowDown(element.shadowRoot.querySelectorAll('vaadin-menu-bar-button')[1]);
+          arrowDown(element._buttons[1]);
           await oneEvent(element._subMenu.$.overlay, 'vaadin-overlay-open');
           await visualDiff(document.body, `${import.meta.url}_${dir}-outlined`);
         });
@@ -89,7 +89,7 @@ describe('menu-bar', () => {
           div.style.width = '320px';
           element.setAttribute('theme', 'contained');
           element.notifyResize();
-          arrowDown(element.shadowRoot.querySelectorAll('vaadin-menu-bar-button')[1]);
+          arrowDown(element._buttons[1]);
           await oneEvent(element._subMenu.$.overlay, 'vaadin-overlay-open');
           await visualDiff(document.body, `${import.meta.url}_${dir}-contained`);
         });
@@ -98,7 +98,7 @@ describe('menu-bar', () => {
           div.style.width = '320px';
           element.setAttribute('theme', 'text');
           element.notifyResize();
-          arrowDown(element.shadowRoot.querySelectorAll('vaadin-menu-bar-button')[1]);
+          arrowDown(element._buttons[1]);
           await oneEvent(element._subMenu.$.overlay, 'vaadin-overlay-open');
           await visualDiff(document.body, `${import.meta.url}_${dir}-text`);
         });

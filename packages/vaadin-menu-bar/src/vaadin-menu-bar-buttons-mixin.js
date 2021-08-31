@@ -91,13 +91,13 @@ export const ButtonsMixin = (superClass) =>
     }
 
     /** @private */
-    __detectOverflow() {
-      const container = this._container;
-      const buttons = this._buttons.slice(0);
-      const overflow = buttons.pop();
-      const isRTL = this.getAttribute('dir') === 'rtl';
+    __getOverflowCount(overflow) {
+      // We can't use optional chaining due to webpack 4
+      return (overflow.item && overflow.item.children && overflow.item.children.length) || 0;
+    }
 
-      // reset all buttons in the menu bar and the overflow button
+    /** @private */
+    __restoreButtons(buttons) {
       for (let i = 0; i < buttons.length; i++) {
         const btn = buttons[i];
         btn.disabled = btn.item && btn.item.disabled;
@@ -111,26 +111,27 @@ export const ButtonsMixin = (superClass) =>
           item.classList.remove('vaadin-menu-item');
         }
       }
-      overflow.item = { children: [] };
+      this._overflow.item = { children: [] };
       this._hasOverflow = false;
+    }
 
-      if (this._subMenu.opened) {
-        this._subMenu.close();
-      }
+    /** @private */
+    __setOverflowItems(buttons, overflow) {
+      const container = this._container;
 
-      // hide any overflowing buttons and put them in the 'overflow' button
       if (container.offsetWidth < container.scrollWidth) {
         this._hasOverflow = true;
+
+        const isRTL = this.getAttribute('dir') === 'rtl';
 
         let i;
         for (i = buttons.length; i > 0; i--) {
           const btn = buttons[i - 1];
           const btnStyle = getComputedStyle(btn);
 
-          const btnWidth = btn.offsetWidth;
           // if this button isn't overflowing, then the rest aren't either
           if (
-            (!isRTL && btn.offsetLeft + btnWidth < container.offsetWidth - overflow.offsetWidth) ||
+            (!isRTL && btn.offsetLeft + btn.offsetWidth < container.offsetWidth - overflow.offsetWidth) ||
             (isRTL && btn.offsetLeft >= overflow.offsetWidth)
           ) {
             break;
@@ -145,6 +146,24 @@ export const ButtonsMixin = (superClass) =>
         overflow.item = {
           children: buttons.filter((b, idx) => idx >= i).map((b) => b.item)
         };
+      }
+    }
+
+    /** @private */
+    __detectOverflow() {
+      const overflow = this._overflow;
+      const buttons = this._buttons.filter((btn) => btn !== overflow);
+      const oldOverflowCount = this.__getOverflowCount(overflow);
+
+      // reset all buttons in the menu bar and the overflow button
+      this.__restoreButtons(buttons);
+
+      // hide any overflowing buttons and put them in the 'overflow' button
+      this.__setOverflowItems(buttons, overflow);
+
+      const newOverflowCount = this.__getOverflowCount(overflow);
+      if (oldOverflowCount !== newOverflowCount && this._subMenu.opened) {
+        this._subMenu.close();
       }
     }
 
@@ -193,10 +212,6 @@ export const ButtonsMixin = (superClass) =>
         button.textContent = item.text;
       }
 
-      if (this.theme) {
-        button.setAttribute('theme', this.theme);
-      }
-
       return button;
     }
 
@@ -214,6 +229,35 @@ export const ButtonsMixin = (superClass) =>
     _setButtonDisabled(button, disabled) {
       button.disabled = disabled;
       button.setAttribute('tabindex', disabled ? '-1' : '0');
+    }
+
+    /**
+     * @param {string | null} theme
+     * @protected
+     * @override
+     */
+    _setTheme(theme) {
+      super._setTheme(theme);
+
+      // Initializing, do nothing
+      if (!this.shadowRoot) {
+        return;
+      }
+
+      this.__applyTheme(theme);
+    }
+
+    /** @private */
+    __applyTheme(theme) {
+      this._buttons.forEach((btn) => {
+        if (theme) {
+          btn.setAttribute('theme', theme);
+        } else {
+          btn.removeAttribute('theme');
+        }
+      });
+
+      this.__detectOverflow();
     }
 
     /** @protected */
@@ -258,7 +302,7 @@ export const ButtonsMixin = (superClass) =>
         this._initButtonAttrs(button);
       });
 
-      this.__detectOverflow();
+      this.__applyTheme(this.theme);
     }
 
     /** @private */

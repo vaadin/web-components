@@ -1,8 +1,19 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { arrowLeft, arrowRight, end, fixtureSync, focusin, home, nextRender } from '@vaadin/testing-helpers';
+import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import './not-animated-styles.js';
 import '../vaadin-menu-bar.js';
+
+registerStyles(
+  'vaadin-menu-bar',
+  css`
+    :host([theme='big']) [part$='button'] {
+      width: 100px;
+    }
+  `,
+  { moduleId: 'vaadin-menu-bar-test-styles' }
+);
 
 // utility function to assert a menu item is not visible
 const assertHidden = (elem) => {
@@ -359,6 +370,17 @@ describe('overflow button', () => {
 
     expect(overflow.hasAttribute('hidden')).to.be.true;
     expect(overflow.item.children.length).to.equal(0);
+  });
+
+  it('should show overflow button when theme makes buttons do not fit', async () => {
+    menu.style.width = '400px';
+    menu.notifyResize();
+    await nextRender(menu);
+    expect(overflow.hasAttribute('hidden')).to.be.true;
+    menu.setAttribute('theme', 'big');
+    assertHidden(buttons[3]);
+    assertHidden(buttons[4]);
+    expect(overflow.hasAttribute('hidden')).to.be.false;
   });
 
   it('should set the aria-label of the overflow button according to the i18n of the menu bar', () => {
