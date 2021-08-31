@@ -535,6 +535,12 @@ class CrudElement extends ElementMixin(ThemableMixin(PolymerElement)) {
         }
       },
 
+      hideToolbar: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
+      },
+
       /** @private */
       __isDirty: Boolean,
 
@@ -550,12 +556,6 @@ class CrudElement extends ElementMixin(ThemableMixin(PolymerElement)) {
       __mobile: {
         type: Boolean,
         observer: '__mobileChanged'
-      },
-
-      hideToolbar: {
-        type: Boolean,
-        value: false,
-        reflectToAttribute: true
       }
     };
   }
