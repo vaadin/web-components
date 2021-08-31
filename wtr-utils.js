@@ -77,26 +77,30 @@ const getAllVisualPackages = () => {
 };
 
 /**
- * Get packages for running unit tests.
+ * Get packages for running tests.
  */
-const getUnitTestPackages = () => {
-  let unitPackages = getAllUnitPackages();
-
+const getTestPackages = (allPackages) => {
   // If --group flag is passed, return all packages.
-  if (group || isLockfileChanged()) {
-    return unitPackages;
+  if (group) {
+    return allPackages;
   }
 
-  let packages = getChangedPackages().filter((pkg) => unitPackages.includes(pkg));
+  // If yarn.lock has changed, return all packages.
+  if (isLockfileChanged()) {
+    console.log('yarn.lock has changed, testing all packages');
+    return allPackages;
+  }
+
+  let packages = getChangedPackages().filter((pkg) => allPackages.includes(pkg));
 
   if (packages.length === 0) {
     // When running in GitHub Actions, do nothing.
     if (process.env.GITHUB_REF) {
-      console.log(`No local packages have changed, exiting.`);
+      console.log('No local packages have changed, exiting.');
       process.exit(0);
     } else {
-      console.log(`No local packages have changed, testing all packages.`);
-      packages = unitPackages;
+      console.log('No local packages have changed, testing all packages.');
+      packages = allPackages;
     }
   } else {
     console.log(`Running tests for changed packages:\n${packages.join('\n')}`);
@@ -106,32 +110,19 @@ const getUnitTestPackages = () => {
 };
 
 /**
+ * Get packages for running unit tests.
+ */
+const getUnitTestPackages = () => {
+  const unitPackages = getAllUnitPackages();
+  return getTestPackages(unitPackages);
+};
+
+/**
  * Get packages for running visual tests.
  */
 const getVisualTestPackages = () => {
   const visualPackages = getAllVisualPackages();
-
-  // If --group flag is passed, return all packages.
-  if (group || isLockfileChanged()) {
-    return visualPackages;
-  }
-
-  let packages = getChangedPackages().filter((pkg) => visualPackages.includes(pkg));
-
-  if (packages.length === 0) {
-    // When running in GitHub Actions, do nothing.
-    if (process.env.GITHUB_REF) {
-      console.log(`No local packages have changed, exiting.`);
-      process.exit(0);
-    } else {
-      console.log(`No local packages have changed, testing all packages.`);
-      packages = visualPackages;
-    }
-  } else {
-    console.log(`Running tests for changed packages:\n${packages.join('\n')}`);
-  }
-
-  return packages;
+  return getTestPackages(visualPackages);
 };
 
 /**
