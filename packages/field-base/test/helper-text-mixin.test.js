@@ -183,6 +183,40 @@ describe('helper-text-mixin', () => {
       });
     });
 
+    describe('ID attribute', () => {
+      const idRegex = /^helper-helper-text-mixin-element-\d+$/;
+
+      beforeEach(async () => {
+        element = fixtureSync('<helper-text-mixin-element></helper-text-mixin-element>');
+        await nextFrame();
+        helper = document.createElement('div');
+        helper.setAttribute('slot', 'helper');
+        helper.textContent = 'Lazy';
+      });
+
+      it('should set id on the lazily added helper element', async () => {
+        element.appendChild(helper);
+        await nextFrame();
+        expect(helper.getAttribute('id')).to.match(idRegex);
+      });
+
+      it('should not override custom id on the lazily added helper', async () => {
+        helper.id = 'helper-component';
+        element.appendChild(helper);
+        await nextFrame();
+        expect(helper.getAttribute('id')).to.equal('helper-component');
+      });
+
+      it('should restore default id if the custom helper id is removed', async () => {
+        helper.id = 'helper-component';
+        element.appendChild(helper);
+        await nextFrame();
+        helper.removeAttribute('id');
+        await nextFrame();
+        expect(helper.getAttribute('id')).to.match(idRegex);
+      });
+    });
+
     describe('attributes', () => {
       beforeEach(async () => {
         element = fixtureSync('<helper-text-mixin-element></helper-text-mixin-element>');
@@ -196,11 +230,6 @@ describe('helper-text-mixin', () => {
 
       it('should store a reference to the lazily added helper', () => {
         expect(element._helperNode).to.equal(helper);
-      });
-
-      it('should set id on the lazily added helper element', () => {
-        const idRegex = /^helper-helper-text-mixin-element-\d+$/;
-        expect(helper.getAttribute('id')).to.match(idRegex);
       });
 
       it('should set has-helper attribute with lazy helper', () => {

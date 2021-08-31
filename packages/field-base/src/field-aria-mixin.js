@@ -20,24 +20,24 @@ const FieldAriaMixinImplementation = (superclass) =>
     }
 
     static get observers() {
-      return ['_invalidChanged(invalid)'];
+      return ['__ariaChanged(invalid, _helperId)'];
     }
 
     /** @protected */
     connectedCallback() {
       super.connectedCallback();
 
-      this._updateAriaAttribute(this.invalid);
+      this._updateAriaAttribute(this.invalid, this._helperId);
     }
 
     /** @protected */
-    _updateAriaAttribute(invalid) {
+    _updateAriaAttribute(invalid, helperId) {
       const attr = this._ariaAttr;
 
       if (this._ariaTarget && attr) {
         // For groups, add all IDs to aria-labelledby rather than aria-describedby -
         // that should guarantee that it's announced when the group is entered.
-        const ariaIds = attr === 'aria-describedby' ? [this._helperId] : [this._labelId, this._helperId];
+        const ariaIds = attr === 'aria-describedby' ? [helperId] : [this._labelId, helperId];
 
         // Error message ID needs to be dynamically added / removed based on the validity
         // Otherwise assistive technologies would announce the error, even if we hide it.
@@ -49,9 +49,9 @@ const FieldAriaMixinImplementation = (superclass) =>
       }
     }
 
-    /** @protected */
-    _invalidChanged(invalid) {
-      this._updateAriaAttribute(invalid);
+    /** @private */
+    __ariaChanged(invalid, helperId) {
+      this._updateAriaAttribute(invalid, helperId);
     }
   };
 

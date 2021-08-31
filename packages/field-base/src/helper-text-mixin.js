@@ -17,7 +17,10 @@ const HelperTextMixinImplementation = (superclass) =>
         helperText: {
           type: String,
           observer: '_helperTextChanged'
-        }
+        },
+
+        /** @protected */
+        _helperId: String
       };
     }
 
@@ -43,6 +46,9 @@ const HelperTextMixinImplementation = (superclass) =>
       // Ensure every instance has unique ID
       const uniqueId = (HelperTextMixinClass._uniqueId = 1 + HelperTextMixinClass._uniqueId || 0);
       this._helperId = `helper-${this.localName}-${uniqueId}`;
+
+      // Save generated ID to restore later
+      this.__savedHelperId = this._helperId;
     }
 
     /** @protected */
@@ -66,6 +72,33 @@ const HelperTextMixinImplementation = (superclass) =>
     }
 
     /** @private */
+    __observeCustomHelperId(helper) {
+      this.__helperIdObserver = new MutationObserver((mutationRecord) => {
+        mutationRecord.forEach((mutation) => {
+          if (mutation.type === 'attributes' && mutation.attributeName === 'id') {
+            this.__updateHelperId(helper);
+          }
+        });
+      });
+
+      this.__helperIdObserver.observe(helper, { attributes: true });
+    }
+
+    /** @private */
+    __updateHelperId(customHelper) {
+      let newId;
+
+      if (customHelper.id) {
+        newId = customHelper.id;
+      } else {
+        newId = this.__savedHelperId;
+        customHelper.id = newId;
+      }
+
+      this._helperId = newId;
+    }
+
+    /** @private */
     __onHelperSlotChange() {
       // Check fot slotted element node that is not the one created by this mixin.
       const customHelper = this.__helperSlot
@@ -73,7 +106,8 @@ const HelperTextMixinImplementation = (superclass) =>
         .find((node) => node !== this._currentHelper);
 
       if (customHelper) {
-        customHelper.id = this._helperId;
+        this.__updateHelperId(customHelper);
+        this.__observeCustomHelperId(customHelper);
 
         if (this._currentHelper.isConnected) {
           this._currentHelper.remove();

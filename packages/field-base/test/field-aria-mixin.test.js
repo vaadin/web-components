@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { FieldAriaMixin } from '../src/field-aria-mixin.js';
 import { LabelMixin } from '../src/label-mixin.js';
@@ -89,6 +89,34 @@ describe('field-aria-mixin', () => {
       expect(aria).to.include(helper.id);
       expect(aria).to.include(error.id);
       expect(aria).to.include(label.id);
+    });
+  });
+
+  describe('custom helper', () => {
+    beforeEach(() => {
+      element = fixtureSync(`<field-aria-mixin-element></field-aria-mixin-element>`);
+      label = element.querySelector('[slot=label]');
+      error = element.querySelector('[slot=error-message]');
+      input = element.querySelector('[slot=input]');
+    });
+
+    it('should handle custom id of a lazily added helper', async () => {
+      helper = document.createElement('div');
+      helper.setAttribute('slot', 'helper');
+      helper.id = 'helper-component';
+      element.appendChild(helper);
+      await nextFrame();
+      expect(input.getAttribute('aria-describedby')).to.include('helper-component');
+    });
+
+    it('should handle restored id of a lazily added helper', async () => {
+      helper = document.createElement('div');
+      helper.setAttribute('slot', 'helper');
+      helper.id = 'helper-component';
+      element.appendChild(helper);
+      await nextFrame();
+      helper.removeAttribute('id');
+      expect(input.getAttribute('aria-describedby')).to.include(helper.id);
     });
   });
 });
