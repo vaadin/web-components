@@ -475,9 +475,21 @@ class NotificationElement extends ThemePropertyMixin(ElementMixin(PolymerElement
   }
 
   /**
-   * Shows the given notification.
+   * Shows a notification with the given content.
+   * By default, positions the notification at `bottom-start` and uses a 5 second duration.
+   * An options object can be passed to configure the notification.
+   * The options object has the following structure:
    *
-   * Positions the notification at `bottom-start` and uses a 5 second duration by default.
+   * ```
+   * {
+   *   position?: string
+   *   duration?: number
+   * }
+   * ```
+   *
+   * See the individual documentation for:
+   * - [`position`](#/elements/vaadin-notification#property-position)
+   * - [`duration`](#/elements/vaadin-notification#property-duration)
    *
    * @param contents the contents to show, either as a string or a Lit template.
    * @param options optional options for customizing the notification.
