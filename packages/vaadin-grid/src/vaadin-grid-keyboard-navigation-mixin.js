@@ -303,10 +303,14 @@ export const KeyboardNavigationMixin = (superClass) =>
 
     /** @private */
     _onRowNavigation(activeRow, dy) {
+      const { dstRow } = this.__navigateRows(activeRow, dy, true);
+
+      dstRow.focus();
+    }
+
+    __navigateRows(activeRow, dy, skipRowDetails) {
       const activeRowGroup = activeRow.parentNode;
       const maxRowIndex = (activeRowGroup === this.$.items ? this._effectiveSize : activeRowGroup.children.length) - 1;
-
-      // TODO: DRY with _onCellNavigation
 
       // Body rows have index property, otherwise DOM child index of the row is used.
       const rowIndex =
@@ -318,6 +322,25 @@ export const KeyboardNavigationMixin = (superClass) =>
 
       // Index of the destination row
       let dstRowIndex = Math.max(0, Math.min(rowIndex + dy, maxRowIndex));
+
+      // Row details navigation logic
+      let dstIsRowDetails = false;
+      if (activeRowGroup === this.$.items) {
+        const item = activeRow._item;
+        const dstItem = this._cache.getItemForIndex(dstRowIndex);
+        // Should we navigate to row details?
+        if (!skipRowDetails) {
+          dstIsRowDetails = dy === 0;
+        } else {
+          dstIsRowDetails =
+            (dy === 1 && this._isDetailsOpened(item)) ||
+            (dy === -1 && dstRowIndex !== rowIndex && this._isDetailsOpened(dstItem));
+        }
+        // Should we navigate between details and regular cells of the same row?
+        if (dstIsRowDetails !== !skipRowDetails && ((dy === 1 && dstIsRowDetails) || (dy === -1 && !dstIsRowDetails))) {
+          dstRowIndex = rowIndex;
+        }
+      }
 
       // Header and footer could have hidden rows, e. g., if none of the columns
       // or groups on the given column tree level define template. Skip them
@@ -352,7 +375,6 @@ export const KeyboardNavigationMixin = (superClass) =>
         return;
       }
 
-      // Here we go!
       if (activeRowGroup === this.$.items) {
         // When scrolling with repeated keydown, sometimes FocusEvent listeners
         // are too late to update _focusedItemIndex. Ensure next keydown
@@ -360,7 +382,7 @@ export const KeyboardNavigationMixin = (superClass) =>
         this._focusedItemIndex = dstRowIndex;
       }
 
-      dstRow.focus();
+      return { rowIndex, dstRowIndex, dstIsRowDetails, dstRow };
     }
 
     /** @private */
@@ -370,52 +392,9 @@ export const KeyboardNavigationMixin = (superClass) =>
       const isRowDetails = this._elementMatches(activeCell, '[part~="details-cell"]');
 
       const activeRowGroup = activeRow.parentNode;
-      const maxRowIndex = (activeRowGroup === this.$.items ? this._effectiveSize : activeRowGroup.children.length) - 1;
 
-      // Body rows have index property, otherwise DOM child index of the row is used.
-      const rowIndex =
-        activeRowGroup === this.$.items
-          ? this._focusedItemIndex !== undefined
-            ? this._focusedItemIndex
-            : activeRow.index
-          : this.__indexOfChildElement(activeRow);
-
-      // Index of the destination row
-      let dstRowIndex = Math.max(0, Math.min(rowIndex + dy, maxRowIndex));
-
-      // Row details navigation logic
-      let dstIsRowDetails = false;
-      if (activeRowGroup === this.$.items) {
-        const item = activeRow._item;
-        const dstItem = this._cache.getItemForIndex(dstRowIndex);
-        // Should we navigate to row details?
-        if (isRowDetails) {
-          dstIsRowDetails = dy === 0;
-        } else {
-          dstIsRowDetails =
-            (dy === 1 && this._isDetailsOpened(item)) ||
-            (dy === -1 && dstRowIndex !== rowIndex && this._isDetailsOpened(dstItem));
-        }
-        // Should we navigate between details and regular cells of the same row?
-        if (dstIsRowDetails !== isRowDetails && ((dy === 1 && dstIsRowDetails) || (dy === -1 && !dstIsRowDetails))) {
-          dstRowIndex = rowIndex;
-        }
-      }
-
-      // Header and footer could have hidden rows, e. g., if none of the columns
-      // or groups on the given column tree level define template. Skip them
-      // in vertical keyboard navigation.
-      if (activeRowGroup !== this.$.items) {
-        if (dstRowIndex > rowIndex) {
-          while (dstRowIndex < maxRowIndex && activeRowGroup.children[dstRowIndex].hidden) {
-            dstRowIndex++;
-          }
-        } else if (dstRowIndex < rowIndex) {
-          while (dstRowIndex > 0 && activeRowGroup.children[dstRowIndex].hidden) {
-            dstRowIndex--;
-          }
-        }
-      }
+      // TODO: rowIndex to a separate function, dstIsRowDetails we can determine, maybe? maybe make it also a separate func?
+      const { rowIndex, dstRowIndex, dstIsRowDetails, dstRow } = this.__navigateRows(activeRow, dy, !isRowDetails);
 
       // _focusedColumnOrder is memoized — this is to ensure predictable
       // navigation when entering and leaving detail and column group cells.
@@ -452,38 +431,14 @@ export const KeyboardNavigationMixin = (superClass) =>
         this._focusedColumnOrder = undefined;
       }
 
-      // Ensure correct vertical scroll position, destination row is visible
-      if (activeRowGroup === this.$.items) {
-        this._ensureScrolledToIndex(dstRowIndex);
-      }
-
-      // This has to be set after scrolling, otherwise it can be removed by
-      // `_preventScrollerRotatingCellFocus(row, index)` during scrolling.
-      this._toggleAttribute('navigating', true, this);
-
       const columnIndexByOrder = dstColumns.reduce((acc, col, i) => ((acc[col._order] = i), acc), {});
       const dstColumnIndex = columnIndexByOrder[dstSortedColumnOrders[dstOrderedColumnIndex]];
-
-      // For body rows, use index property to find destination row, otherwise use DOM child index
-      const dstRow =
-        activeRowGroup === this.$.items
-          ? Array.from(activeRowGroup.children).filter((el) => !el.hidden && el.index === dstRowIndex)[0]
-          : activeRowGroup.children[dstRowIndex];
-      if (!dstRow) {
-        return;
-      }
 
       // Here we go!
       const dstCell = dstIsRowDetails
         ? Array.from(dstRow.children).filter((el) => this._elementMatches(el, '[part~="details-cell"]'))[0]
         : dstRow.children[dstColumnIndex];
       this._scrollHorizontallyToCell(dstCell);
-      if (activeRowGroup === this.$.items) {
-        // When scrolling with repeated keydown, sometimes FocusEvent listeners
-        // are too late to update _focusedItemIndex. Ensure next keydown
-        // listener invocation gets updated _focusedItemIndex value.
-        this._focusedItemIndex = dstRowIndex;
-      }
 
       dstCell.focus();
     }
@@ -754,20 +709,25 @@ export const KeyboardNavigationMixin = (superClass) =>
       return this._columnTree[columnTreeLevel];
     }
 
+    /** @private */
+    __isValidFocusable(element) {
+      return this.$.table.contains(element) && element.offsetHeight;
+    }
+
     /** @protected */
     _resetKeyboardNavigation() {
-      if (this.$.header.firstElementChild) {
+      if (!this.__isValidFocusable(this._headerFocusable) && this.$.header.firstElementChild) {
         this._headerFocusable = Array.from(this.$.header.firstElementChild.children).filter((el) => !el.hidden)[0];
       }
 
-      if (this.$.items.firstElementChild) {
+      if (!this.__isValidFocusable(this._itemsFocusable) && this.$.items.firstElementChild) {
         const firstVisibleIndexRow = this.__getFirstVisibleItem();
         if (firstVisibleIndexRow) {
           this._itemsFocusable = Array.from(firstVisibleIndexRow.children).filter((el) => !el.hidden)[0];
         }
       }
 
-      if (this.$.footer.firstElementChild) {
+      if (!this.__isValidFocusable(this._footerFocusable) && this.$.footer.firstElementChild) {
         this._footerFocusable = Array.from(this.$.footer.firstElementChild.children).filter((el) => !el.hidden)[0];
       }
     }
