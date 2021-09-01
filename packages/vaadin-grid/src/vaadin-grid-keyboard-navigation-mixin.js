@@ -106,14 +106,14 @@ export const KeyboardNavigationMixin = (superClass) =>
 
     /** @private */
     get __rowFocusMode() {
-      return this._itemsFocusable instanceof HTMLTableRowElement;
+      return this.__isRow(this._itemsFocusable);
     }
 
     set __rowFocusMode(value) {
       ['_itemsFocusable', '_footerFocusable', '_headerFocusable'].forEach((focusable) => {
-        if (value && this[focusable] instanceof HTMLTableCellElement) {
+        if (value && this.__isCell(this[focusable])) {
           this[focusable] = this[focusable].parentElement;
-        } else if (!value && this[focusable] instanceof HTMLTableRowElement) {
+        } else if (!value && this.__isRow(this[focusable])) {
           this[focusable] = this[focusable].firstElementChild;
         }
       });
@@ -182,7 +182,7 @@ export const KeyboardNavigationMixin = (superClass) =>
 
     /** @private */
     _ensureScrolledToIndex(index) {
-      const targetRowInDom = Array.from(this.$.items.children).filter((child) => child.index === index)[0];
+      const targetRowInDom = [...this.$.items.children].find((child) => child.index === index);
       if (!targetRowInDom) {
         this.scrollToIndex(index);
       } else {
@@ -203,6 +203,21 @@ export const KeyboardNavigationMixin = (superClass) =>
     /** @private */
     __isRowCollapsible(row) {
       return this._isExpanded(row._item);
+    }
+
+    /** @private */
+    __isDetailsCell(element) {
+      return element.matches('[part~="details-cell"]');
+    }
+
+    /** @private */
+    __isCell(element) {
+      return element instanceof HTMLTableCellElement;
+    }
+
+    /** @private */
+    __isRow(element) {
+      return element instanceof HTMLTableRowElement;
     }
 
     /** @private */
@@ -247,8 +262,8 @@ export const KeyboardNavigationMixin = (superClass) =>
           break;
       }
 
-      const activeRow = e.composedPath().find((el) => el instanceof HTMLTableRowElement);
-      const activeCell = e.composedPath().find((el) => el instanceof HTMLTableCellElement);
+      const activeRow = e.composedPath().find((el) => this.__isRow(el));
+      const activeCell = e.composedPath().find((el) => this.__isCell(el));
 
       // Handle keyboard interaction as defined in:
       // https://w3c.github.io/aria-practices/#keyboard-interaction-24
@@ -360,7 +375,7 @@ export const KeyboardNavigationMixin = (superClass) =>
 
         let dstIsRowDetails = false;
         if (activeCell) {
-          const isRowDetails = this._elementMatches(activeCell, '[part~="details-cell"]');
+          const isRowDetails = this.__isDetailsCell(activeCell);
           // Row details navigation logic
           if (activeRowGroup === this.$.items) {
             const item = activeRow._item;
@@ -415,7 +430,7 @@ export const KeyboardNavigationMixin = (superClass) =>
       }
 
       const columnIndex = this.__indexOfChildElement(activeCell);
-      const isRowDetails = this._elementMatches(activeCell, '[part~="details-cell"]');
+      const isRowDetails = this.__isDetailsCell(activeCell);
       const activeRowGroup = activeRow.parentNode;
       const rowIndex = this.__getIndexInGroup(activeCell.parentNode, this._focusedItemIndex);
 
@@ -456,7 +471,7 @@ export const KeyboardNavigationMixin = (superClass) =>
       }
 
       if (dstIsRowDetails) {
-        const dstCell = [...dstRow.children].find((el) => this._elementMatches(el, '[part~="details-cell"]'));
+        const dstCell = [...dstRow.children].find((el) => this.__isDetailsCell(el));
         dstCell.focus();
       } else {
         const columnIndexByOrder = dstColumns.reduce((acc, col, i) => ((acc[col._order] = i), acc), {});
@@ -541,9 +556,9 @@ export const KeyboardNavigationMixin = (superClass) =>
         this.$.focusexit.focus();
       } else if (focusTarget === this._itemsFocusable) {
         let itemsFocusTarget = focusTarget;
-        const targetRow = focusTarget instanceof HTMLTableRowElement ? focusTarget : focusTarget.parentNode;
+        const targetRow = this.__isRow(focusTarget) ? focusTarget : focusTarget.parentNode;
         this._ensureScrolledToIndex(this._focusedItemIndex);
-        if (targetRow.index !== this._focusedItemIndex && focusTarget instanceof HTMLTableCellElement) {
+        if (targetRow.index !== this._focusedItemIndex && this.__isCell(focusTarget)) {
           // The target row, which is about to be focused next, has been
           // assigned with a new index since last focus, probably because of
           // scrolling. Focus the row for the stored focused item index instead.
@@ -570,7 +585,7 @@ export const KeyboardNavigationMixin = (superClass) =>
       e.preventDefault();
 
       const element = e.composedPath()[0];
-      const isRow = element.localName === 'tr';
+      const isRow = this.__isRow(element);
       this.dispatchEvent(
         new CustomEvent(isRow ? 'row-activate' : 'cell-activate', {
           detail: {
@@ -753,7 +768,7 @@ export const KeyboardNavigationMixin = (superClass) =>
      * @protected
      */
     _scrollHorizontallyToCell(dstCell) {
-      if (dstCell.hasAttribute('frozen') || this._elementMatches(dstCell, '[part~="details-cell"]')) {
+      if (dstCell.hasAttribute('frozen') || this.__isDetailsCell(dstCell)) {
         // These cells are, by design, always visible, no need to scroll.
         return;
       }
@@ -766,7 +781,7 @@ export const KeyboardNavigationMixin = (superClass) =>
         rightBoundary = tableRect.right;
       for (let i = dstCellIndex - 1; i >= 0; i--) {
         const cell = dstRow.children[i];
-        if (cell.hasAttribute('hidden') || this._elementMatches(cell, '[part~="details-cell"]')) {
+        if (cell.hasAttribute('hidden') || this.__isDetailsCell(cell)) {
           continue;
         }
         if (cell.hasAttribute('frozen')) {
@@ -776,7 +791,7 @@ export const KeyboardNavigationMixin = (superClass) =>
       }
       for (let i = dstCellIndex + 1; i < dstRow.children.length; i++) {
         const cell = dstRow.children[i];
-        if (cell.hasAttribute('hidden') || this._elementMatches(cell, '[part~="details-cell"]')) {
+        if (cell.hasAttribute('hidden') || this.__isDetailsCell(cell)) {
           continue;
         }
         if (cell.hasAttribute('frozen')) {
@@ -791,11 +806,6 @@ export const KeyboardNavigationMixin = (superClass) =>
       if (dstCellRect.right > rightBoundary) {
         this.$.table.scrollLeft += Math.round(dstCellRect.right - rightBoundary);
       }
-    }
-
-    /** @private */
-    _elementMatches(el, query) {
-      return el.matches ? el.matches(query) : Array.from(el.parentNode.querySelectorAll(query)).indexOf(el) !== -1;
     }
 
     /**
