@@ -303,42 +303,53 @@ export const KeyboardNavigationMixin = (superClass) =>
 
     /** @private */
     _onRowNavigation(activeRow, dy) {
-      const { dstRow } = this.__navigateRows(activeRow, dy, true);
-
-      dstRow.focus();
+      this.__navigateRows(dy, activeRow).dstRow.focus();
     }
 
-    __navigateRows(activeRow, dy, skipRowDetails) {
+    /** @private */
+    __getIndexInGroup(row, focusedItemIndex) {
+      const rowGroup = row.parentNode;
+      // Body rows have index property, otherwise DOM child index of the row is used.
+      if (rowGroup === this.$.items) {
+        return focusedItemIndex !== undefined ? focusedItemIndex : row.index;
+      } else {
+        return this.__indexOfChildElement(row);
+      }
+    }
+
+    /**
+     * Returns the target row after navigating by the given dy offset.
+     * If the row is not in the viewport, it is first scrolled into view.
+     * @private
+     **/
+    __navigateRows(dy, activeRow, activeCell) {
       const activeRowGroup = activeRow.parentNode;
       const maxRowIndex = (activeRowGroup === this.$.items ? this._effectiveSize : activeRowGroup.children.length) - 1;
 
-      // Body rows have index property, otherwise DOM child index of the row is used.
-      const rowIndex =
-        activeRowGroup === this.$.items
-          ? this._focusedItemIndex !== undefined
-            ? this._focusedItemIndex
-            : activeRow.index
-          : this.__indexOfChildElement(activeRow);
+      const rowIndex = this.__getIndexInGroup(activeRow, this._focusedItemIndex);
 
       // Index of the destination row
       let dstRowIndex = Math.max(0, Math.min(rowIndex + dy, maxRowIndex));
 
-      // Row details navigation logic
       let dstIsRowDetails = false;
-      if (activeRowGroup === this.$.items) {
-        const item = activeRow._item;
-        const dstItem = this._cache.getItemForIndex(dstRowIndex);
-        // Should we navigate to row details?
-        if (!skipRowDetails) {
-          dstIsRowDetails = dy === 0;
-        } else {
-          dstIsRowDetails =
-            (dy === 1 && this._isDetailsOpened(item)) ||
-            (dy === -1 && dstRowIndex !== rowIndex && this._isDetailsOpened(dstItem));
-        }
-        // Should we navigate between details and regular cells of the same row?
-        if (dstIsRowDetails !== !skipRowDetails && ((dy === 1 && dstIsRowDetails) || (dy === -1 && !dstIsRowDetails))) {
-          dstRowIndex = rowIndex;
+      if (activeCell) {
+        const isRowDetails = this._elementMatches(activeCell, '[part~="details-cell"]');
+        // Row details navigation logic
+        if (activeRowGroup === this.$.items) {
+          const item = activeRow._item;
+          const dstItem = this._cache.getItemForIndex(dstRowIndex);
+          // Should we navigate to row details?
+          if (isRowDetails) {
+            dstIsRowDetails = dy === 0;
+          } else {
+            dstIsRowDetails =
+              (dy === 1 && this._isDetailsOpened(item)) ||
+              (dy === -1 && dstRowIndex !== rowIndex && this._isDetailsOpened(dstItem));
+          }
+          // Should we navigate between details and regular cells of the same row?
+          if (dstIsRowDetails !== isRowDetails && ((dy === 1 && dstIsRowDetails) || (dy === -1 && !dstIsRowDetails))) {
+            dstRowIndex = rowIndex;
+          }
         }
       }
 
@@ -369,7 +380,7 @@ export const KeyboardNavigationMixin = (superClass) =>
       // For body rows, use index property to find destination row, otherwise use DOM child index
       const dstRow =
         activeRowGroup === this.$.items
-          ? Array.from(activeRowGroup.children).filter((el) => !el.hidden && el.index === dstRowIndex)[0]
+          ? [...activeRowGroup.children].find((el) => !el.hidden && el.index === dstRowIndex)
           : activeRowGroup.children[dstRowIndex];
       if (!dstRow) {
         return;
@@ -382,19 +393,18 @@ export const KeyboardNavigationMixin = (superClass) =>
         this._focusedItemIndex = dstRowIndex;
       }
 
-      return { rowIndex, dstRowIndex, dstIsRowDetails, dstRow };
+      return { dstRow, dstIsRowDetails };
     }
 
     /** @private */
     _onCellNavigation(activeCell, dx, dy) {
-      const columnIndex = this.__indexOfChildElement(activeCell);
       const activeRow = activeCell.parentNode;
+      const { dstRow, dstIsRowDetails } = this.__navigateRows(dy, activeRow, activeCell);
+
+      const columnIndex = this.__indexOfChildElement(activeCell);
       const isRowDetails = this._elementMatches(activeCell, '[part~="details-cell"]');
-
       const activeRowGroup = activeRow.parentNode;
-
-      // TODO: rowIndex to a separate function, dstIsRowDetails we can determine, maybe? maybe make it also a separate func?
-      const { rowIndex, dstRowIndex, dstIsRowDetails, dstRow } = this.__navigateRows(activeRow, dy, !isRowDetails);
+      const rowIndex = this.__getIndexInGroup(activeCell.parentNode, this._focusedItemIndex);
 
       // _focusedColumnOrder is memoized — this is to ensure predictable
       // navigation when entering and leaving detail and column group cells.
@@ -411,6 +421,7 @@ export const KeyboardNavigationMixin = (superClass) =>
       // Find orderedColumnIndex — the index of order closest matching the
       // original _focusedColumnOrder in the sorted array of orders
       // of the visible columns on the destination row.
+      const dstRowIndex = this.__getIndexInGroup(dstRow, this._focusedItemIndex);
       const dstColumns = this._getColumns(activeRowGroup, dstRowIndex).filter((c) => !c.hidden);
       const dstSortedColumnOrders = dstColumns.map((c) => c._order).sort((b, a) => b - a);
       const maxOrderedColumnIndex = dstSortedColumnOrders.length - 1;
@@ -431,16 +442,17 @@ export const KeyboardNavigationMixin = (superClass) =>
         this._focusedColumnOrder = undefined;
       }
 
-      const columnIndexByOrder = dstColumns.reduce((acc, col, i) => ((acc[col._order] = i), acc), {});
-      const dstColumnIndex = columnIndexByOrder[dstSortedColumnOrders[dstOrderedColumnIndex]];
+      if (dstIsRowDetails) {
+        const dstCell = [...dstRow.children].find((el) => this._elementMatches(el, '[part~="details-cell"]'));
+        dstCell.focus();
+      } else {
+        const columnIndexByOrder = dstColumns.reduce((acc, col, i) => ((acc[col._order] = i), acc), {});
+        const dstColumnIndex = columnIndexByOrder[dstSortedColumnOrders[dstOrderedColumnIndex]];
+        const dstCell = dstRow.children[dstColumnIndex];
 
-      // Here we go!
-      const dstCell = dstIsRowDetails
-        ? Array.from(dstRow.children).filter((el) => this._elementMatches(el, '[part~="details-cell"]'))[0]
-        : dstRow.children[dstColumnIndex];
-      this._scrollHorizontallyToCell(dstCell);
-
-      dstCell.focus();
+        this._scrollHorizontallyToCell(dstCell);
+        dstCell.focus();
+      }
     }
 
     /** @private */
