@@ -301,17 +301,25 @@ export const KeyboardNavigationMixin = (superClass) =>
       }
     }
 
-    /** @private */
+    /**
+     * Focuses the target row after navigating by the given dy offset.
+     * If the row is not in the viewport, it is first scrolled to.
+     * @private
+     **/
     _onRowNavigation(activeRow, dy) {
-      this.__navigateRows(dy, activeRow).dstRow.focus();
+      const { dstRow } = this.__navigateRows(dy, activeRow);
+
+      if (dstRow) {
+        dstRow.focus();
+      }
     }
 
     /** @private */
-    __getIndexInGroup(row, focusedItemIndex) {
+    __getIndexInGroup(row, bodyFallbackIndex) {
       const rowGroup = row.parentNode;
       // Body rows have index property, otherwise DOM child index of the row is used.
       if (rowGroup === this.$.items) {
-        return focusedItemIndex !== undefined ? focusedItemIndex : row.index;
+        return bodyFallbackIndex !== undefined ? bodyFallbackIndex : row.index;
       } else {
         return this.__indexOfChildElement(row);
       }
@@ -319,87 +327,92 @@ export const KeyboardNavigationMixin = (superClass) =>
 
     /**
      * Returns the target row after navigating by the given dy offset.
-     * If the row is not in the viewport, it is first scrolled into view.
+     * If the row is not in the viewport, it is first scrolled to.
      * @private
      **/
     __navigateRows(dy, activeRow, activeCell) {
+      const currentRowIndex = this.__getIndexInGroup(activeRow, this._focusedItemIndex);
       const activeRowGroup = activeRow.parentNode;
       const maxRowIndex = (activeRowGroup === this.$.items ? this._effectiveSize : activeRowGroup.children.length) - 1;
 
-      const rowIndex = this.__getIndexInGroup(activeRow, this._focusedItemIndex);
-
       // Index of the destination row
-      let dstRowIndex = Math.max(0, Math.min(rowIndex + dy, maxRowIndex));
+      let dstRowIndex = Math.max(0, Math.min(currentRowIndex + dy, maxRowIndex));
 
-      let dstIsRowDetails = false;
-      if (activeCell) {
-        const isRowDetails = this._elementMatches(activeCell, '[part~="details-cell"]');
-        // Row details navigation logic
-        if (activeRowGroup === this.$.items) {
-          const item = activeRow._item;
-          const dstItem = this._cache.getItemForIndex(dstRowIndex);
-          // Should we navigate to row details?
-          if (isRowDetails) {
-            dstIsRowDetails = dy === 0;
-          } else {
-            dstIsRowDetails =
-              (dy === 1 && this._isDetailsOpened(item)) ||
-              (dy === -1 && dstRowIndex !== rowIndex && this._isDetailsOpened(dstItem));
-          }
-          // Should we navigate between details and regular cells of the same row?
-          if (dstIsRowDetails !== isRowDetails && ((dy === 1 && dstIsRowDetails) || (dy === -1 && !dstIsRowDetails))) {
-            dstRowIndex = rowIndex;
-          }
-        }
-      }
-
-      // Header and footer could have hidden rows, e. g., if none of the columns
-      // or groups on the given column tree level define template. Skip them
-      // in vertical keyboard navigation.
       if (activeRowGroup !== this.$.items) {
-        if (dstRowIndex > rowIndex) {
+        // Navigating header/footer rows
+
+        // Header and footer could have hidden rows, e. g., if none of the columns
+        // or groups on the given column tree level define template. Skip them
+        // in vertical keyboard navigation.
+        if (dstRowIndex > currentRowIndex) {
           while (dstRowIndex < maxRowIndex && activeRowGroup.children[dstRowIndex].hidden) {
             dstRowIndex++;
           }
-        } else if (dstRowIndex < rowIndex) {
+        } else if (dstRowIndex < currentRowIndex) {
           while (dstRowIndex > 0 && activeRowGroup.children[dstRowIndex].hidden) {
             dstRowIndex--;
           }
         }
-      }
 
-      // Ensure correct vertical scroll position, destination row is visible
-      if (activeRowGroup === this.$.items) {
+        return { dstRow: activeRowGroup.children[dstRowIndex] };
+      } else {
+        // Navigating body rows
+
+        let dstIsRowDetails = false;
+        if (activeCell) {
+          const isRowDetails = this._elementMatches(activeCell, '[part~="details-cell"]');
+          // Row details navigation logic
+          if (activeRowGroup === this.$.items) {
+            const item = activeRow._item;
+            const dstItem = this._cache.getItemForIndex(dstRowIndex);
+            // Should we navigate to row details?
+            if (isRowDetails) {
+              dstIsRowDetails = dy === 0;
+            } else {
+              dstIsRowDetails =
+                (dy === 1 && this._isDetailsOpened(item)) ||
+                (dy === -1 && dstRowIndex !== currentRowIndex && this._isDetailsOpened(dstItem));
+            }
+            // Should we navigate between details and regular cells of the same row?
+            if (
+              dstIsRowDetails !== isRowDetails &&
+              ((dy === 1 && dstIsRowDetails) || (dy === -1 && !dstIsRowDetails))
+            ) {
+              dstRowIndex = currentRowIndex;
+            }
+          }
+        }
+
+        // Ensure correct vertical scroll position, destination row is visible
         this._ensureScrolledToIndex(dstRowIndex);
-      }
 
-      // This has to be set after scrolling, otherwise it can be removed by
-      // `_preventScrollerRotatingCellFocus(row, index)` during scrolling.
-      this._toggleAttribute('navigating', true, this);
-
-      // For body rows, use index property to find destination row, otherwise use DOM child index
-      const dstRow =
-        activeRowGroup === this.$.items
-          ? [...activeRowGroup.children].find((el) => !el.hidden && el.index === dstRowIndex)
-          : activeRowGroup.children[dstRowIndex];
-      if (!dstRow) {
-        return;
-      }
-
-      if (activeRowGroup === this.$.items) {
         // When scrolling with repeated keydown, sometimes FocusEvent listeners
         // are too late to update _focusedItemIndex. Ensure next keydown
         // listener invocation gets updated _focusedItemIndex value.
         this._focusedItemIndex = dstRowIndex;
-      }
 
-      return { dstRow, dstIsRowDetails };
+        // This has to be set after scrolling, otherwise it can be removed by
+        // `_preventScrollerRotatingCellFocus(row, index)` during scrolling.
+        this._toggleAttribute('navigating', true, this);
+
+        return {
+          dstRow: [...activeRowGroup.children].find((el) => !el.hidden && el.index === dstRowIndex),
+          dstIsRowDetails
+        };
+      }
     }
 
-    /** @private */
+    /**
+     * Focuses the target cell after navigating by the given dx and dy offset.
+     * If the cell is not in the viewport, it is first scrolled to.
+     * @private
+     **/
     _onCellNavigation(activeCell, dx, dy) {
       const activeRow = activeCell.parentNode;
       const { dstRow, dstIsRowDetails } = this.__navigateRows(dy, activeRow, activeCell);
+      if (!dstRow) {
+        return;
+      }
 
       const columnIndex = this.__indexOfChildElement(activeCell);
       const isRowDetails = this._elementMatches(activeCell, '[part~="details-cell"]');
@@ -557,23 +570,14 @@ export const KeyboardNavigationMixin = (superClass) =>
       e.preventDefault();
 
       const element = e.composedPath()[0];
-      if (element instanceof HTMLTableRowElement) {
-        this.dispatchEvent(
-          new CustomEvent('row-activate', {
-            detail: {
-              model: this.__getRowModel(element)
-            }
-          })
-        );
-      } else if (!element._content || !element._content.firstElementChild) {
-        this.dispatchEvent(
-          new CustomEvent('cell-activate', {
-            detail: {
-              model: this.__getRowModel(element.parentElement)
-            }
-          })
-        );
-      }
+      const isRow = element.localName === 'tr';
+      this.dispatchEvent(
+        new CustomEvent(isRow ? 'row-activate' : 'cell-activate', {
+          detail: {
+            model: this.__getRowModel(isRow ? element : element.parentElement)
+          }
+        })
+      );
     }
 
     /** @private */
