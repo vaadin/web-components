@@ -251,13 +251,11 @@ export const KeyboardNavigationMixin = (superClass) =>
       const activeRow = e.composedPath().find((el) => el instanceof HTMLTableRowElement);
       const activeCell = e.composedPath().find((el) => el instanceof HTMLTableCellElement);
 
-      const cellFocusMode = activeCell && activeCell.tabIndex === 0;
-
       // Handle keyboard interaction as defined in:
       // https://w3c.github.io/aria-practices/#keyboard-interaction-24
       if (key === 'ArrowRight') {
         // "Right Arrow:"
-        if (!cellFocusMode) {
+        if (this.__rowFocusMode) {
           // In row focus mode
           if (this.__isRowExpandable(activeRow)) {
             // "If focus is on a collapsed row, expands the row."
@@ -267,13 +265,13 @@ export const KeyboardNavigationMixin = (superClass) =>
             // "If focus is on an expanded row or is on a row that does not have child rows,
             // moves focus to the first cell in the row."
             this.__rowFocusMode = false;
-            activeRow.firstElementChild.focus();
+            this._onCellNavigation(activeRow.firstElementChild, 0, 0);
             return;
           }
         }
       } else if (key === 'ArrowLeft') {
         // "Left Arrow:"
-        if (!cellFocusMode) {
+        if (this.__rowFocusMode) {
           // In row focus mode
           if (this.__isRowCollapsible(activeRow)) {
             // "If focus is on an expanded row, collapses the row."
@@ -287,7 +285,7 @@ export const KeyboardNavigationMixin = (superClass) =>
             // "If focus is on the first cell in a row and row focus is supported, moves focus to the row."
             if (this.rowsFocusable) {
               this.__rowFocusMode = true;
-              activeRow.focus();
+              this._onRowNavigation(activeRow, 0);
               return;
             }
           }
@@ -295,12 +293,12 @@ export const KeyboardNavigationMixin = (superClass) =>
       }
 
       // Navigate
-      if (cellFocusMode) {
-        // Navigate the cells
-        this._onCellNavigation(activeCell, dx, dy);
-      } else {
+      if (this.__rowFocusMode) {
         // Navigate the rows
         this._onRowNavigation(activeRow, dy);
+      } else {
+        // Navigate the cells
+        this._onCellNavigation(activeCell, dx, dy);
       }
     }
 
