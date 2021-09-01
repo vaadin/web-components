@@ -96,7 +96,6 @@ export const KeyboardNavigationMixin = (superClass) =>
       // When focus goes from cell to another cell, focusin/focusout events do
       // not escape the grid’s shadowRoot, thus listening inside the shadowRoot.
       this.$.table.addEventListener('focusin', this._onContentFocusIn.bind(this));
-      this.$.table.addEventListener('focusout', this._onContentFocusOut.bind(this));
 
       this.addEventListener('mousedown', () => {
         this._toggleAttribute('navigating', false, this);
@@ -673,9 +672,6 @@ export const KeyboardNavigationMixin = (superClass) =>
         }
 
         if (cell) {
-          // Inform cell content of the focus (used in <vaadin-grid-sorter>)
-          cell._content.dispatchEvent(new CustomEvent('cell-focusin', { bubbles: false }));
-
           // Fire a public event for cell.
           const context = this.getEventContext(e);
           cell.dispatchEvent(
@@ -685,15 +681,6 @@ export const KeyboardNavigationMixin = (superClass) =>
       }
 
       this._detectFocusedItemIndex(e);
-    }
-
-    /** @private */
-    _onContentFocusOut(e) {
-      const { cell } = this._getGridEventLocation(e);
-      if (cell) {
-        // Inform cell content of the focus (used in <vaadin-grid-sorter>)
-        cell._content.dispatchEvent(new CustomEvent('cell-focusout', { bubbles: false }));
-      }
     }
 
     /** @private

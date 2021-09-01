@@ -1889,53 +1889,6 @@ describe('keyboard navigation', () => {
   });
 
   describe('focus events on cell content', () => {
-    let cell;
-
-    beforeEach(() => (cell = getRowCell(0, 0)));
-
-    it('should dispatch cell-focusin after cell focus', () => {
-      const spy = sinon.spy();
-      cell._content.addEventListener('cell-focusin', spy);
-
-      tabToBody();
-
-      expect(spy.callCount).to.equal(1);
-    });
-
-    it('should dispatch cell-focusout after cell blur', () => {
-      tabToBody();
-
-      const spy = sinon.spy();
-      cell._content.addEventListener('cell-focusout', spy);
-
-      right();
-
-      expect(spy.callCount).to.equal(1);
-    });
-
-    it('should dispatch cell-focusin on keyboard navigation', () => {
-      tabToBody();
-      right();
-
-      const spy = sinon.spy();
-      cell._content.addEventListener('cell-focusin', spy);
-
-      left();
-
-      expect(spy.callCount).to.equal(1);
-    });
-
-    it('should dispatch cell-focusout on keyboard navigation', () => {
-      tabToBody();
-
-      const spy = sinon.spy();
-      cell._content.addEventListener('cell-focusout', spy);
-
-      right();
-
-      expect(spy.callCount).to.equal(1);
-    });
-
     it('should dispatch cell-focus on keyboard navigation', () => {
       const expectedContext = {
         column: grid.querySelector('vaadin-grid-column'),
