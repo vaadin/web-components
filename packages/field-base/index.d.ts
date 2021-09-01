@@ -18,3 +18,4 @@ export { TextFieldMixin } from './src/text-field-mixin.js';
 export { ValidateMixin } from './src/validate-mixin.js';
 export { TabindexMixin } from './src/tabindex-mixin.js';
 export { ActiveMixin } from './src/active-mixin.js';
+export { KeyboardMixin } from './src/keyboard-mixin.js';
