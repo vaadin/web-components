@@ -72,7 +72,7 @@ const TabindexMixinImplementation = (superclass) =>
  *
  * By default, the attribute is set to 0 that makes the element focusable.
  *
- * The attribute is removed whenever the user disables the element
+ * The attribute is set to -1 whenever the user disables the element
  * and restored with the last known value once the element is enabled.
  */
 export const TabindexMixin = dedupingMixin(TabindexMixinImplementation);

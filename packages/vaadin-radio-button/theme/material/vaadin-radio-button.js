@@ -1,2 +1,6 @@
-import './vaadin-radio-button-styles.js';
-import '../../src/vaadin-radio-button.js';
+/**
+ * @license
+ * Copyright (c) 2021 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+import '@vaadin/radio-group/theme/material/vaadin-radio-button.js';

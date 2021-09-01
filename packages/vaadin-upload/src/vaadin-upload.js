@@ -8,7 +8,7 @@ import { resetMouseCanceller } from '@polymer/polymer/lib/utils/gestures.js';
 import '@polymer/polymer/lib/elements/dom-repeat.js';
 import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import '@vaadin/vaadin-button/src/vaadin-button.js';
+import '@vaadin/button/src/vaadin-button.js';
 import './vaadin-upload-icons.js';
 import './vaadin-upload-file.js';
 

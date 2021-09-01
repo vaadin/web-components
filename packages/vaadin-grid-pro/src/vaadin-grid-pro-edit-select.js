@@ -4,7 +4,7 @@
  * This program is available under Commercial Vaadin Developer License 4.0 (CVDLv4).
  * See <a href="https://vaadin.com/license/cvdl-4.0">the website</a> for the complete license.
  */
-import { SelectElement } from '@vaadin/vaadin-select/src/vaadin-select.js';
+import { SelectElement } from '@vaadin/select/src/vaadin-select.js';
 import '@vaadin/vaadin-list-box/src/vaadin-list-box.js';
 import '@vaadin/vaadin-item/src/vaadin-item.js';
 

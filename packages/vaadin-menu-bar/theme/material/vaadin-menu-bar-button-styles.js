@@ -1,5 +1,5 @@
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
-import '@vaadin/vaadin-button/theme/material/vaadin-button-styles.js';
+import '@vaadin/button/theme/material/vaadin-button.js';
 
 registerStyles(
   'vaadin-menu-bar-button',
@@ -51,12 +51,12 @@ registerStyles(
     }
 
     :host(:first-of-type) {
-      border-radius: 0.25em 0 0 0.25em;
+      border-radius: 4px 0 0 4px;
     }
 
     :host(:nth-last-of-type(2)),
     :host([part~='overflow-button']) {
-      border-radius: 0 0.25em 0.25em 0;
+      border-radius: 0 4px 4px 0;
     }
 
     :host([part='overflow-button']) {
@@ -85,12 +85,12 @@ registerStyles(
 
     /* RTL styles */
     :host([dir='rtl']:first-of-type) {
-      border-radius: 0 0.25em 0.25em 0;
+      border-radius: 0 4px 4px 0;
     }
 
     :host([dir='rtl']:nth-last-of-type(2)),
     :host([dir='rtl'][part='overflow-button']) {
-      border-radius: 0.25em 0 0 0.25em;
+      border-radius: 4px 0 0 4px;
     }
 
     :host([dir='rtl'][theme='contained']) {

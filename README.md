@@ -323,12 +323,54 @@ git commit -a -m "chore: update master to Vaadin 23 [skip ci]"
 
 Create a PR to the `master` branch ([example](https://github.com/vaadin/web-components/pull/261)).
 
-### CI build updates
+#### CI build updates
 
 Add the new version branch to the `CheckoutBranch` parameter:
 
 - [Release build](https://bender.vaadin.com/admin/editBuildParams.html?id=buildType:VaadinWebComponents_ReleaseVaadinWebComponents)
 - [API docs build](https://bender.vaadin.com/admin/editBuildParams.html?id=buildType:VaadinWebComponents_PublishWebComponentsApiDocs)
+
+### Using a local clone of the repo in Vaadin app
+
+As long as your application uses webpack, you can modify the webpack config to resolve the web components modules from your local clone /instead of the versions downloaded from npm registry. This is possible for:
+
+- Vaadin Starter apps created through https://start.vaadin.com
+  - modify the `webpack.config.js` in the root folder
+- running Jetty integration tests from the [Flow components repository](https://github.com/vaadin/flow-components)
+  - running the tests will create a `webpack.config.js` in the root of the Maven module, which you can modify
+
+In order to do this, modify the `webpack.config.js` in the root folder as follows:
+
+```js
+flowDefaults.resolve.modules = [
+  '/Users/serhii/vaadin/web-components/node_modules',
+  ...flowDefaults.resolve.modules,
+],
+
+module.exports = flowDefaults;
+```
+
+If you are merging into an existing config object, as is done in the Vaadin Starter apps:
+
+```js
+module.exports = merge({
+  resolve:{
+    modules: ['/Users/serhii/vaadin/web-components/node_modules', 'node_modules']
+  }
+}, flowDefaults);
+```
+
+**NOTE:** Make sure that the path is an absolute one and that it points to the `node_modules` directory in the web components monorepo.
+
+Then run the following command in the web components monorepo:
+
+```
+yarn
+```
+
+This will symlink the individual component packages into the `node_modules` folder.
+
+After that you can start / restart your application and it should use the source code from the monorepo.
 
 ## LICENSE
 

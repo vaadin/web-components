@@ -1,10 +1,10 @@
 {
   "name": "@vaadin/vaadin-radio-button",
-  "version": "22.0.0-alpha2",
+  "version": "22.0.0-alpha3",
   "description": "vaadin-radio-button",
   "main": "vaadin-radio-button.js",
   "module": "vaadin-radio-button.js",
-  "repository": "vaadin/vaadin-radio-button",
+  "repository": "vaadin/web-components",
   "keywords": [
     "Vaadin",
     "vaadin-radio-button",
@@ -26,17 +26,7 @@
     "theme"
   ],
   "dependencies": {
-    "@polymer/polymer": "^3.0.0",
-    "@vaadin/vaadin-control-state-mixin": "^22.0.0-alpha2",
-    "@vaadin/vaadin-element-mixin": "^22.0.0-alpha2",
-    "@vaadin/vaadin-lumo-styles": "^22.0.0-alpha2",
-    "@vaadin/vaadin-material-styles": "^22.0.0-alpha2",
-    "@vaadin/vaadin-themable-mixin": "^22.0.0-alpha2"
-  },
-  "devDependencies": {
-    "@esm-bundle/chai": "^4.3.4",
-    "@vaadin/testing-helpers": "^0.2.1",
-    "sinon": "^9.2.1"
+    "@vaadin/radio-group": "^22.0.0-alpha3"
   },
   "publishConfig": {
     "access": "public"

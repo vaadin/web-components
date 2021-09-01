@@ -10,6 +10,41 @@ import { TabindexMixin } from '@vaadin/field-base/src/tabindex-mixin.js';
 import { ActiveMixin } from '@vaadin/field-base/src/active-mixin.js';
 import { FocusMixin } from '@vaadin/field-base/src/focus-mixin.js';
 
+/**
+ * `<vaadin-button>` is an accessible and customizable button that allows users to perform actions.
+ *
+ * ```html
+ * <vaadin-button>Press me</vaadin-button>
+ * ```
+ *
+ * ### Styling
+ *
+ * The following shadow DOM parts are available for styling:
+ *
+ * Part name | Description
+ * ----------|-------------
+ * `label`   | The label (text) inside the button.
+ * `prefix`  | A slot for content before the label (e.g. an icon).
+ * `suffix`  | A slot for content after the label (e.g. an icon).
+ *
+ * The following attributes are available for styling:
+ *
+ * Attribute    | Description
+ * -------------|-------------
+ * `active`     | Set when the button is pressed down, either with mouse, touch or the keyboard.
+ * `disabled`   | Set when the button is disabled.
+ * `focus-ring` | Set when the button is focused using the keyboard.
+ * `focused`    | Set when the button is focused.
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
+ *
+ * @extends HTMLElement
+ * @mixes ActiveMixin
+ * @mixes TabindexMixin
+ * @mixes FocusMixin
+ * @mixes ElementMixin
+ * @mixes ThemableMixin
+ */
 class Button extends ActiveMixin(TabindexMixin(FocusMixin(ElementMixin(ThemableMixin(PolymerElement))))) {
   static get is() {
     return 'vaadin-button';
@@ -23,20 +58,24 @@ class Button extends ActiveMixin(TabindexMixin(FocusMixin(ElementMixin(ThemableM
           position: relative;
           outline: none;
           white-space: nowrap;
+          -webkit-user-select: none;
+          -moz-user-select: none;
+          user-select: none;
         }
 
         :host([hidden]) {
           display: none !important;
         }
 
-        /* Ensure the button is always aligned on the baseline */
-        [part='button']::before {
+        /* Aligns the button with form fields when placed on the same line.
+          Note, to make it work, the form fields should have the same "::before" pseudo-element. */
+        .vaadin-button-container::before {
           content: '\\2003';
           display: inline-block;
           width: 0;
         }
 
-        [part='button'] {
+        .vaadin-button-container {
           display: inline-flex;
           align-items: center;
           justify-content: center;
@@ -62,7 +101,7 @@ class Button extends ActiveMixin(TabindexMixin(FocusMixin(ElementMixin(ThemableM
           text-overflow: ellipsis;
         }
       </style>
-      <div part="button">
+      <div class="vaadin-button-container">
         <span part="prefix">
           <slot name="prefix"></slot>
         </span>
@@ -87,5 +126,7 @@ class Button extends ActiveMixin(TabindexMixin(FocusMixin(ElementMixin(ThemableM
     }
   }
 }
+
+customElements.define(Button.is, Button);
 
 export { Button };
