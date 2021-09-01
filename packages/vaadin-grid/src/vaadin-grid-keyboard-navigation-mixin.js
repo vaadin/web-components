@@ -97,11 +97,15 @@ export const KeyboardNavigationMixin = (superClass) =>
     }
 
     /** @private */
-    __setFocusMode(mode) {
+    get __rowFocusMode() {
+      return this._itemsFocusable instanceof HTMLTableRowElement;
+    }
+
+    set __rowFocusMode(value) {
       ['_itemsFocusable', '_footerFocusable', '_headerFocusable'].forEach((focusable) => {
-        if (mode === 'row' && this[focusable] instanceof HTMLTableCellElement) {
+        if (value && this[focusable] instanceof HTMLTableCellElement) {
           this[focusable] = this[focusable].parentElement;
-        } else if (mode === 'cell' && this[focusable] instanceof HTMLTableRowElement) {
+        } else if (!value && this[focusable] instanceof HTMLTableRowElement) {
           this[focusable] = this[focusable].firstElementChild;
         }
       });
@@ -253,6 +257,7 @@ export const KeyboardNavigationMixin = (superClass) =>
           } else {
             // "If focus is on an expanded row or is on a row that does not have child rows,
             // moves focus to the first cell in the row."
+            this.__rowFocusMode = false;
             activeRow.firstElementChild.focus();
             return;
           }
@@ -271,6 +276,7 @@ export const KeyboardNavigationMixin = (superClass) =>
           const activeRowCells = [...activeRow.children].sort((a, b) => a._order - b._order);
           if (activeCell === activeRowCells[0]) {
             // "If focus is on the first cell in a row and row focus is supported, moves focus to the row."
+            this.__rowFocusMode = true;
             activeRow.focus();
             return;
           }
@@ -648,19 +654,13 @@ export const KeyboardNavigationMixin = (superClass) =>
       this._detectInteracting(e);
 
       if (section && (cell || row)) {
-        if (!(this._itemsFocusable instanceof HTMLTableCellElement) && cell) {
-          this.__setFocusMode('cell');
-        } else if (!(this._itemsFocusable instanceof HTMLTableRowElement) && !cell) {
-          this.__setFocusMode('row');
-        }
-
         this._activeRowGroup = section;
         if (this.$.header === section) {
-          this._headerFocusable = cell || row;
+          this._headerFocusable = this.__rowFocusMode ? row : cell;
         } else if (this.$.items === section) {
-          this._itemsFocusable = cell || row;
+          this._itemsFocusable = this.__rowFocusMode ? row : cell;
         } else if (this.$.footer === section) {
-          this._footerFocusable = cell || row;
+          this._footerFocusable = this.__rowFocusMode ? row : cell;
         }
 
         if (cell) {
