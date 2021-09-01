@@ -26,6 +26,12 @@ interface KeyboardNavigationMixin<TItem> {
   _resetKeyboardNavigation(): void;
 
   _scrollHorizontallyToCell(dstCell: HTMLElement): void;
+
+  /**
+   * When `true`, row focus is supported in keyboard interaction.
+   * @type {boolean}
+   */
+  rowsFocusable: boolean;
 }
 
 export { KeyboardNavigationMixin, KeyboardNavigationMixinConstructor };
