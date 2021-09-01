@@ -18,14 +18,14 @@ describe('vaadin-chart properties', () => {
     });
 
     it('should have custom subtitle', () => {
-      expect(chartContainer.querySelector('.highcharts-subtitle > tspan').textContent).to.be.equal('My subtitle');
+      expect(chartContainer.querySelector('.highcharts-subtitle').textContent).to.be.equal('My subtitle');
     });
 
     it('should not reset subtitle on update', async () => {
       chart.updateConfiguration({ title: { text: 'Awesome chart' } });
       await oneEvent(chart, 'chart-redraw');
-      expect(chartContainer.querySelector('.highcharts-title > tspan').textContent).to.equal('Awesome chart');
-      expect(chartContainer.querySelector('.highcharts-subtitle > tspan').textContent).to.equal('My subtitle');
+      expect(chartContainer.querySelector('.highcharts-title').textContent).to.equal('Awesome chart');
+      expect(chartContainer.querySelector('.highcharts-subtitle').textContent).to.equal('My subtitle');
     });
   });
 
@@ -75,19 +75,21 @@ describe('vaadin-chart properties', () => {
     });
 
     it('should not overwrite top-level element properties', () => {
-      expect(chartContainer.querySelector('.highcharts-title > tspan').textContent).to.be.equal('My title');
+      expect(chartContainer.querySelector('.highcharts-title').textContent).to.be.equal('My title');
     });
 
     it('should react to additionalOptions object change', async () => {
       chart.additionalOptions = { title: { text: 'Updated title' } };
       await oneEvent(chart, 'chart-redraw');
-      expect(chartContainer.querySelector('.highcharts-title > tspan').textContent).to.be.equal('Updated title');
+      // await oneEvent(chart, 'chart-redraw');
+      expect(chartContainer.querySelector('.highcharts-title').textContent).to.be.equal('Updated title');
     });
 
     it('should react to additionalOptions sub property change', async () => {
       chart.set('additionalOptions.title.text', 'Reindeer statistics');
       await oneEvent(chart, 'chart-redraw');
-      expect(chartContainer.querySelector('.highcharts-title > tspan').textContent).to.be.equal('Reindeer statistics');
+      // await oneEvent(chart, 'chart-redraw');
+      expect(chartContainer.querySelector('.highcharts-title').textContent).to.be.equal('Reindeer statistics');
     });
   });
 
@@ -497,7 +499,7 @@ describe('vaadin-chart properties', () => {
 
       it('should show a message when emptyText property is set', () => {
         chart.emptyText = 'Empty Vaadin Chart';
-        const message = chart.$.chart.querySelector('.highcharts-no-data > text > tspan');
+        const message = chart.$.chart.querySelector('.highcharts-no-data > text');
         expect(message.textContent).to.be.equal(chart.emptyText);
       });
     });
@@ -520,7 +522,7 @@ describe('vaadin-chart properties', () => {
         const series = chart.querySelectorAll('vaadin-chart-series');
         series.forEach((element) => chart.removeChild(element));
         await oneEvent(chart, 'chart-redraw');
-        const message = chart.$.chart.querySelector('.highcharts-no-data > text > tspan');
+        const message = chart.$.chart.querySelector('.highcharts-no-data > text');
         expect(message.textContent).to.be.equal('Empty Vaadin Chart');
       });
 
@@ -529,7 +531,7 @@ describe('vaadin-chart properties', () => {
         chart.removeChild(series[0]);
         chart.removeChild(series[1]);
         await oneEvent(chart, 'chart-redraw');
-        const message = chart.$.chart.querySelector('.highcharts-no-data > text > tspan');
+        const message = chart.$.chart.querySelector('.highcharts-no-data > text');
         expect(message.textContent).to.be.equal('Empty Vaadin Chart');
       });
     });

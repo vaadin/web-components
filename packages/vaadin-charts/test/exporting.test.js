@@ -90,7 +90,7 @@ describe('vaadin-chart exporting', () => {
     observer.observe(document.body, { childList: true });
 
     // Reveal exporting menu items
-    chartContainer.querySelector('.highcharts-contextbutton').onclick();
+    chartContainer.querySelector('button.highcharts-a11y-proxy-button.highcharts-no-tooltip').click();
 
     // Simulate a PNG export
     const pngExportButton = chartContainer.querySelectorAll('.highcharts-menu-item')[2];
@@ -119,7 +119,7 @@ describe('vaadin-chart exporting', () => {
     observer.observe(document.body, { childList: true });
 
     // Reveal exporting menu items
-    chartContainer.querySelector('.highcharts-contextbutton').onclick();
+    chartContainer.querySelector('button.highcharts-a11y-proxy-button.highcharts-no-tooltip').click();
 
     // Simulate a PNG export
     const pngExportButton = chartContainer.querySelectorAll('.highcharts-menu-item')[2];
