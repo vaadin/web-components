@@ -1,5 +1,6 @@
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
+import { sendKeys } from '@web/test-runner-commands';
 import '@vaadin/vaadin-list-box/theme/lumo/vaadin-list-box.js';
 import '@vaadin/vaadin-item/theme/lumo/vaadin-item.js';
 import '../../../theme/lumo/vaadin-select.js';
@@ -26,6 +27,12 @@ describe('select', () => {
 
   it('basic', async () => {
     await visualDiff(div, `${import.meta.url}_basic`);
+  });
+
+  it('focus-ring', async () => {
+    await sendKeys({ press: 'Tab' });
+
+    await visualDiff(div, `${import.meta.url}_focus-ring`);
   });
 
   it('disabled', async () => {
@@ -83,6 +90,7 @@ describe('select', () => {
   it('opened', async () => {
     div.style.height = '200px';
     div.style.width = '200px';
+    await sendKeys({ press: 'Tab' });
     element.opened = true;
     await nextFrame();
     await visualDiff(div, `${import.meta.url}_opened`);

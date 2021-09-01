@@ -11,7 +11,6 @@ registerStyles(
   css`
     :host {
       margin: 0;
-      background-color: transparent;
     }
 
     ::slotted(vaadin-item) {

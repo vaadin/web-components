@@ -121,6 +121,7 @@ class Select extends DelegateFocusMixin(
       <style include="vaadin-input-field-shared-styles">
         ::slotted([slot='value']) {
           flex-grow: 1;
+          background-color: transparent;
         }
       </style>
 
@@ -390,7 +391,7 @@ class Select extends DelegateFocusMixin(
         this._items = this._menuElement.items;
         this._items.forEach((item) => item.setAttribute('role', 'option'));
       });
-      this._menuElement.addEventListener('selected-changed', () => this._updateValueButton());
+      this._menuElement.addEventListener('selected-changed', () => this.__updateValueButton());
       this._menuElement.addEventListener('keydown', (e) => this._onKeyDownInside(e));
       this._menuElement.addEventListener(
         'click',
@@ -407,11 +408,7 @@ class Select extends DelegateFocusMixin(
 
   /** @private */
   _valueChanged(value, oldValue) {
-    if (value === '') {
-      this.removeAttribute('has-value');
-    } else {
-      this.setAttribute('has-value', '');
-    }
+    this.toggleAttribute('has-value', Boolean(value));
 
     // Skip validation for the initial empty string value
     if (value === '' && oldValue === undefined) {
@@ -467,7 +464,15 @@ class Select extends DelegateFocusMixin(
         return;
       }
 
-      this._openedWithFocusRing = this.hasAttribute('focus-ring');
+      // Preserve focus-ring to restore it later
+      const hasFocusRing = this.hasAttribute('focus-ring');
+      this._openedWithFocusRing = hasFocusRing;
+
+      // Opened select should not keep focus-ring
+      if (hasFocusRing) {
+        this.removeAttribute('focus-ring');
+      }
+
       this._menuElement.focus();
       this._setPosition();
       window.addEventListener('scroll', this._boundSetPosition, true);
@@ -475,7 +480,7 @@ class Select extends DelegateFocusMixin(
       if (this._phone) {
         this._setFocused(false);
       } else {
-        this.focusElement.focus();
+        this.focus();
         if (this._openedWithFocusRing) {
           this.setAttribute('focus-ring', '');
         }
@@ -536,7 +541,7 @@ class Select extends DelegateFocusMixin(
   }
 
   /** @private */
-  _updateValueButton() {
+  __updateValueButton() {
     if (!this._valueButton) {
       return;
     }
@@ -574,7 +579,7 @@ class Select extends DelegateFocusMixin(
       }, undefined);
       if (!this._selectedChanging) {
         this._valueChanging = true;
-        this._updateValueButton();
+        this.__updateValueButton();
         delete this._valueChanging;
       }
     }
