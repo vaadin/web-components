@@ -57,7 +57,7 @@ class GridTreeColumnElement extends GridColumnElement {
    *
    * @private
    */
-  __defaultRenderer(root, _column, { item, expanded }) {
+  __defaultRenderer(root, _column, { item, expanded, level }) {
     let toggle = root.firstElementChild;
     if (!toggle) {
       toggle = document.createElement('vaadin-grid-tree-toggle');
@@ -70,6 +70,7 @@ class GridTreeColumnElement extends GridColumnElement {
     toggle.expanded = expanded;
     toggle.leaf = this.__isLeafItem(item, this.itemHasChildrenPath);
     toggle.textContent = this.__getToggleContent(this.path, item);
+    toggle.level = level;
   }
 
   /**

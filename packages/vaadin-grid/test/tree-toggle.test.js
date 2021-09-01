@@ -140,6 +140,17 @@ describe('tree toggle', () => {
       expect(toggle.leaf).to.be.true;
     });
 
+    it('should have the default level', () => {
+      expect(toggle.level).to.equal(0);
+    });
+
+    it('should have a higher level', () => {
+      column.itemHasChildrenPath = 'hasChildren';
+      toggle.expanded = true;
+      const childToggle = getBodyCellContent(grid, 1, 0).firstElementChild;
+      expect(childToggle.level).to.equal(1);
+    });
+
     it('should not be a leaf', () => {
       column.itemHasChildrenPath = 'hasChildren';
       expect(toggle.leaf).to.be.false;
