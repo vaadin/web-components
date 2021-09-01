@@ -40,6 +40,19 @@ describe('items', () => {
     return menu.$.overlay.content.querySelector('vaadin-context-menu');
   };
 
+  const updateItemsAndReopen = async () => {
+    rootMenu.items = [...rootMenu.items];
+    rootMenu.close();
+    open();
+    await nextFrame();
+  };
+
+  const getMenuItems = (menu = rootMenu) => {
+    const overlay = menu.$.overlay;
+    const listBox = overlay.querySelector('vaadin-context-menu-list-box');
+    return Array.from(listBox.querySelectorAll('vaadin-context-menu-item'));
+  };
+
   afterEach(() => {
     rootMenu.close();
   });
@@ -552,30 +565,52 @@ describe('items', () => {
       });
     });
 
-    it('should merge component theme with item theme', async () => {
+    it('should override the component theme with the item theme', async () => {
       rootMenu.items[1].theme = 'bar-1';
       rootMenu.items[0].children[0].theme = 'bar-0-0';
-      rootMenu.items = [...rootMenu.items];
-      rootMenu.close();
-      open();
-      await nextFrame();
+      await updateItemsAndReopen();
+
       open(menuComponents()[0]);
       subMenu = getSubMenu();
       await nextFrame();
 
-      let overlay = rootMenu.$.overlay;
-      let listBox = overlay.querySelector('vaadin-context-menu-list-box');
-      const rootItems = Array.from(listBox.querySelectorAll('vaadin-context-menu-item'));
-
-      overlay = subMenu.$.overlay;
-      listBox = overlay.querySelector('vaadin-context-menu-list-box');
-      const subItems = Array.from(listBox.querySelectorAll('vaadin-context-menu-item'));
+      const rootItems = getMenuItems();
+      const subItems = getMenuItems(subMenu);
 
       expect(rootItems[0].getAttribute('theme')).to.equal('foo');
-      ['foo', 'bar-1'].forEach((str) => expect(rootItems[1].getAttribute('theme')).to.contain(str));
+      expect(rootItems[1].getAttribute('theme')).to.equal('bar-1');
 
-      ['foo', 'bar-0-0'].forEach((str) => expect(subItems[0].getAttribute('theme')).to.contain(str));
+      expect(subItems[0].getAttribute('theme')).to.equal('bar-0-0');
       expect(subItems[1].getAttribute('theme')).to.equal('foo');
+    });
+
+    it('should use the component theme if the item theme is removed', async () => {
+      rootMenu.items[1].theme = 'bar-1';
+      await updateItemsAndReopen();
+
+      let rootItems = getMenuItems();
+      expect(rootItems[1].getAttribute('theme')).to.equal('bar-1');
+
+      delete rootMenu.items[1].theme;
+      await updateItemsAndReopen();
+
+      rootItems = getMenuItems();
+      expect(rootItems[1].getAttribute('theme')).to.equal('foo');
+
+      // An empty array should also count as no value
+      rootMenu.items[1].theme = [];
+      await updateItemsAndReopen();
+
+      rootItems = getMenuItems();
+      expect(rootItems[1].getAttribute('theme')).to.equal('foo');
+    });
+
+    it('should support multiple item themes in an array', async () => {
+      rootMenu.items[1].theme = ['bar-1', 'bar-2', 'bar-3'];
+      await updateItemsAndReopen();
+
+      let rootItems = getMenuItems();
+      expect(rootItems[1].getAttribute('theme')).to.equal('bar-1 bar-2 bar-3');
     });
   });
 });

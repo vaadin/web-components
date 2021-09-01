@@ -50,7 +50,7 @@ export const ItemsMixin = (superClass) =>
          * Either a tagName or an element instance. Defaults to "vaadin-context-menu-item".
          * @property {boolean} disabled - If true, the item is disabled and cannot be selected
          * @property {boolean} checked - If true, the item shows a checkmark next to it
-         * @property {string} theme - If set, adds the given theme as an attribute to the menu item component
+         * @property {union: string | string[]} theme - If set, sets the given theme(s) as an attribute to the menu item component, overriding any theme set on the context menu.
          * @property {MenuItem[]} children - Array of child menu items
          */
 
@@ -231,10 +231,12 @@ export const ItemsMixin = (superClass) =>
         } else if (component.localName === 'hr') {
           component.setAttribute('role', 'separator');
         }
-        const mergedTheme = [this.theme, item.theme].filter((t) => t).join(' ');
 
-        if (mergedTheme) {
-          component.setAttribute('theme', mergedTheme);
+        const itemTheme = this.__stringOrArrayToString(item.theme);
+        if (itemTheme) {
+          component.setAttribute('theme', itemTheme);
+        } else if (this.theme) {
+          component.setAttribute('theme', this.theme);
         } else {
           component.removeAttribute('theme');
         }
@@ -382,5 +384,10 @@ export const ItemsMixin = (superClass) =>
           listBox.removeAttribute('theme');
         }
       }
+    }
+
+    /** @private */
+    __stringOrArrayToString(stringOrArray) {
+      return Array.isArray(stringOrArray) ? stringOrArray.join(' ') : stringOrArray;
     }
   };

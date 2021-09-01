@@ -619,11 +619,10 @@ describe('theme attribute', () => {
     expect(subMenu.hasAttribute('theme')).to.be.false;
   });
 
-  it('should merge the theme attribute with the item.theme property', async () => {
+  it('should override the component theme attribute with the item.theme property', async () => {
     let items = subMenu.$.overlay.querySelectorAll('vaadin-context-menu-item');
 
-    expect(items[0].getAttribute('theme')).to.contain('foo');
-    expect(items[0].getAttribute('theme')).to.contain('sub-item-theme');
+    expect(items[0].getAttribute('theme')).to.equal('sub-item-theme');
     expect(items[1].getAttribute('theme')).to.equal('foo');
 
     subMenu.close();

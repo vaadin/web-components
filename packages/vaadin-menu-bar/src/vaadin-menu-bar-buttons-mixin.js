@@ -193,9 +193,11 @@ export const ButtonsMixin = (superClass) =>
         button.textContent = item.text;
       }
 
-      const mergedTheme = [this.theme, item.theme].filter((t) => t).join(' ');
-      if (mergedTheme) {
-        button.setAttribute('theme', mergedTheme);
+      const itemTheme = this.__stringOrArrayToString(item.theme);
+      if (itemTheme) {
+        button.setAttribute('theme', itemTheme);
+      } else if (this.theme) {
+        button.setAttribute('theme', this.theme);
       }
 
       return button;
@@ -269,5 +271,10 @@ export const ButtonsMixin = (superClass) =>
         animationFrame,
         this.__detectOverflow.bind(this)
       );
+    }
+
+    /** @private */
+    __stringOrArrayToString(stringOrArray) {
+      return Array.isArray(stringOrArray) ? stringOrArray.join(' ') : stringOrArray;
     }
   };
