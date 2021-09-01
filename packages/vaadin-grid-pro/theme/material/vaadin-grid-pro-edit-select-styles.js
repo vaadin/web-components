@@ -4,7 +4,9 @@ import './vaadin-grid-pro-editor-styles.js';
 registerStyles(
   'vaadin-grid-pro-edit-select',
   css`
-    :host([theme~='grid-pro-editor']) [part='input-field'] ::slotted(button) {
+    :host([theme~='grid-pro-editor']) [part='input-field'] ::slotted([slot='value']) {
+      box-sizing: border-box;
+      font-size: inherit;
       /* prevent selection on editor focus */
       -webkit-user-select: none;
       -moz-user-select: none;

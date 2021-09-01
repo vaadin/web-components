@@ -10,14 +10,13 @@ registerStyles(
       margin-right: var(--lumo-space-xs);
     }
 
-    :host([theme~='grid-pro-editor']) [part='input-field'] ::slotted(button) {
+    :host([theme~='grid-pro-editor']) [part='input-field'] ::slotted([slot='value']) {
+      box-sizing: border-box;
       padding: 0 var(--lumo-space-m);
       font-size: var(--lumo-font-size-m);
-
       /* prevent selection on editor focus */
       -webkit-user-select: none;
       -moz-user-select: none;
-      -ms-user-select: none;
       user-select: none;
     }
   `,
