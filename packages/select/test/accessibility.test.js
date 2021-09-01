@@ -7,7 +7,7 @@ import './not-animated-styles.js';
 import '../vaadin-select.js';
 
 describe('accessibility', () => {
-  let select, button;
+  let select, valueButton;
 
   beforeEach(async () => {
     select = fixtureSync(`<vaadin-select label="Label"></vaadin-select>`);
@@ -26,12 +26,12 @@ describe('accessibility', () => {
       );
     };
     await nextFrame();
-    button = select._valueButton;
+    valueButton = select._valueButton;
   });
 
   it('should have aria-required attribute set to true when required', () => {
     select.required = true;
-    expect(button.getAttribute('aria-required')).to.be.equal('true');
+    expect(valueButton.getAttribute('aria-required')).to.be.equal('true');
   });
 
   it('should have aria-disabled attribute set to true when disabled', () => {
@@ -39,14 +39,24 @@ describe('accessibility', () => {
     expect(select.getAttribute('aria-disabled')).to.be.equal('true');
   });
 
-  it('should have aria-haspopup="listbox" the toggle button', () => {
-    expect(button.getAttribute('aria-haspopup')).to.be.equal('listbox');
+  it('should set aria-haspopup="listbox" on the value button', () => {
+    expect(valueButton.getAttribute('aria-haspopup')).to.be.equal('listbox');
   });
 
-  it('should set aria-expanded attribute on the toggle button', () => {
-    expect(button.getAttribute('aria-expanded')).to.be.equal('false');
+  it('should set aria-expanded attribute on the value button', () => {
+    expect(valueButton.getAttribute('aria-expanded')).to.be.equal('false');
     select.opened = true;
-    expect(button.getAttribute('aria-expanded')).to.be.equal('true');
+    expect(valueButton.getAttribute('aria-expanded')).to.be.equal('true');
+  });
+
+  it('should set aria-labelledby on the value button', () => {
+    expect(valueButton.getAttribute('aria-labelledby')).to.not.be.empty;
+  });
+
+  it('should set aria-describedby on the value button when invalid', () => {
+    select.errorMessage = 'invalid';
+    select.invalid = true;
+    expect(valueButton.getAttribute('aria-describedby')).to.not.be.empty;
   });
 
   it('should have role listbox on menu element', () => {
@@ -58,15 +68,5 @@ describe('accessibility', () => {
     await nextFrame();
     expect(select._items[0].getAttribute('role')).to.equal('option');
     expect(select._items[1].getAttribute('role')).to.equal('option');
-  });
-
-  it('should have aria-labelledby on focus element', () => {
-    expect(button.getAttribute('aria-labelledby')).to.not.be.empty;
-  });
-
-  it('should have aria-describedby on focus element when invalid', () => {
-    select.errorMessage = 'invalid';
-    select.invalid = true;
-    expect(button.getAttribute('aria-describedby')).to.not.be.empty;
   });
 });
