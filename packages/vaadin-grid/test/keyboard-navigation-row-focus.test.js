@@ -213,6 +213,20 @@ describe('keyboard navigation - row focus', () => {
       expect(getFocusedRowIndex()).to.equal(1);
     });
 
+    it('should return to row focus mode on left from details cell', () => {
+      openRowDetails(1);
+      tabToBody();
+      // Focus the second row
+      down();
+      // Go to cell navigation mode
+      right();
+      // Focus the details cell
+      down();
+      // Go to row navigation mode
+      left();
+      expect(getFocusedCellIndex()).to.equal(-1);
+    });
+
     it('should navigate rows after a cell gets click focused', () => {
       focusItem(0);
       clickItem(0);

@@ -295,7 +295,7 @@ export const KeyboardNavigationMixin = (superClass) =>
         } else {
           // In cell focus mode
           const activeRowCells = [...activeRow.children].sort((a, b) => a._order - b._order);
-          if (activeCell === activeRowCells[0]) {
+          if (activeCell === activeRowCells[0] || this.__isDetailsCell(activeCell)) {
             // "If focus is on the first cell in a row and row focus is supported, moves focus to the row."
             if (this.rowsFocusable) {
               this.__rowFocusMode = true;
