@@ -178,7 +178,7 @@ class CrudElement extends ElementMixin(ThemableMixin(PolymerElement)) {
           display: none !important;
         }
 
-        :host([hide-toolbar]) [part='toolbar'] {
+        :host([no-toolbar]) [part='toolbar'] {
           display: none;
         }
 
@@ -464,7 +464,12 @@ class CrudElement extends ElementMixin(ThemableMixin(PolymerElement)) {
         notify: true
       },
 
-      hideToolbar: {
+      /**
+       * Controls visiblity state of toolbar.
+       * When set to false toolbar is hidden and shown when set to true.
+       * @attr {boolean} no-toolbar
+       */
+      noToolbar: {
         type: Boolean,
         value: false,
         reflectToAttribute: true
