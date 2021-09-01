@@ -28,6 +28,9 @@ const chartDefaultTheme = css`
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     font-family: 'Lucida Grande', 'Lucida Sans Unicode', Arial, Helvetica, sans-serif;
     font-size: 12px;
+    user-select: none;
+    touch-action: manipulation;
+    outline: none;
   }
 
   .highcharts-container svg {
@@ -200,6 +203,12 @@ const chartDefaultTheme = css`
     stroke-width: 2px;
     stroke-linecap: round;
     stroke-linejoin: round;
+  }
+
+  .highcharts-empty-series {
+    stroke-width: 1px;
+    fill: none;
+    stroke: #cccccc;
   }
 
   .highcharts-state-hover .highcharts-graph {
@@ -790,6 +799,21 @@ const chartDefaultTheme = css`
     fill: #fff;
   }
 
+  .highcharts-hollowcandlestick-series .highcharts-point-down {
+    fill: #f21313;
+    stroke: #f21313;
+  }
+
+  .highcharts-hollowcandlestick-series .highcharts-point-down-bearish-up {
+    fill: #06b535;
+    stroke: #06b535;
+  }
+
+  .highcharts-hollowcandlestick-series .highcharts-point-up {
+    fill: transparent;
+    stroke: #06b535;
+  }
+
   .highcharts-ohlc-series .highcharts-point-hover {
     stroke-width: 3px;
   }
@@ -978,6 +1002,12 @@ const chartDefaultTheme = css`
 
   :host([dir='rtl']) .highcharts-menu {
     box-shadow: -3px 3px 10px #888;
+  }
+
+  /* https://github.com/highcharts/highcharts/issues/16282 */
+  /* without this __mutationCallback always calls __reflow */
+  ul[aria-hidden='false'] {
+    margin: 0px;
   }
 `;
 
