@@ -20,7 +20,7 @@ import '@vaadin/vaadin-item/vaadin-item.js';
 import '../vaadin-select.js';
 
 describe('vaadin-select', () => {
-  let select, button;
+  let select, valueButton;
 
   describe('empty', () => {
     let select;
@@ -80,7 +80,7 @@ describe('vaadin-select', () => {
           root
         );
       };
-      button = select.focusElement;
+      valueButton = select._valueButton;
       await nextFrame();
     });
 
@@ -105,7 +105,7 @@ describe('vaadin-select', () => {
       it('should update selection slot with a clone of the selected item', () => {
         menu.selected = 2;
         const itemElement = select._items[menu.selected];
-        const valueElement = select._valueNode.firstChild;
+        const valueElement = valueButton.firstChild;
         expect(valueElement).not.to.be.equal(itemElement);
         expect(valueElement.localName).to.be.equal(itemElement.localName);
         expect(valueElement.textContent).to.be.equal(itemElement.textContent);
@@ -113,7 +113,7 @@ describe('vaadin-select', () => {
 
       it('should preserve the selected attribute when selecting the disabled item', () => {
         menu.selected = 5;
-        const valueElement = select._valueNode.firstChild;
+        const valueElement = valueButton.firstChild;
         expect(valueElement.selected).to.be.true;
         expect(valueElement.disabled).to.be.true;
       });
@@ -137,7 +137,7 @@ describe('vaadin-select', () => {
       it('should remove tabindex when cloning the selected element', () => {
         menu.selected = 2;
         const itemElement = select._items[menu.selected];
-        const valueElement = select._valueNode.firstChild;
+        const valueElement = valueButton.firstChild;
         expect(itemElement.tabIndex).to.be.equal(0);
         expect(valueElement.hasAttribute('tabindex')).to.be.false;
       });
@@ -145,19 +145,19 @@ describe('vaadin-select', () => {
       it('should remove role when cloning the selected element', () => {
         menu.selected = 2;
         const itemElement = select._items[menu.selected];
-        const valueElement = select._valueNode.firstChild;
+        const valueElement = valueButton.firstChild;
         expect(itemElement.tabIndex).to.be.equal(0);
         expect(valueElement.hasAttribute('role')).to.be.false;
       });
 
       it('should update selection slot textContent with the selected item `label` string', () => {
         menu.selected = 1;
-        expect(select._valueNode.textContent.trim()).to.be.equal('o2');
+        expect(valueButton.textContent.trim()).to.be.equal('o2');
       });
 
       it('should wrap the selected item `label` string in selected vaadin item', () => {
         menu.selected = 1;
-        const item = select._valueNode.firstElementChild;
+        const item = valueButton.firstElementChild;
         expect(item.localName).to.equal('vaadin-item');
         expect(item.textContent).to.equal('o2');
         expect(item.selected).to.be.true;
@@ -166,7 +166,7 @@ describe('vaadin-select', () => {
 
       it('should update selection slot when value is provided', () => {
         select.value = 'v2';
-        expect(select._valueNode.textContent.trim()).to.be.equal('o2');
+        expect(valueButton.textContent.trim()).to.be.equal('o2');
       });
 
       it('should update overlay selected item when value is provided', () => {
@@ -185,14 +185,14 @@ describe('vaadin-select', () => {
       it('should select items when alphanumeric keys are pressed', () => {
         select.opened = false;
         expect(select._menuElement.selected).to.be.equal(2);
-        keyDownChar(button, 'o');
-        keyDownChar(button, 'p');
-        keyDownChar(button, 't');
+        keyDownChar(valueButton, 'o');
+        keyDownChar(valueButton, 'p');
+        keyDownChar(valueButton, 't');
         expect(select._menuElement.selected).to.be.equal(0);
-        keyDownChar(button, 'i');
-        keyDownChar(button, 'o');
-        keyDownChar(button, 'n');
-        keyDownChar(button, '2');
+        keyDownChar(valueButton, 'i');
+        keyDownChar(valueButton, 'o');
+        keyDownChar(valueButton, 'n');
+        keyDownChar(valueButton, '2');
         expect(select._menuElement.selected).to.be.equal(1);
       });
     });
@@ -215,51 +215,51 @@ describe('vaadin-select', () => {
         expect(select.hasAttribute('focus-ring')).to.be.true;
       });
 
-      it('should open overlay on click event on input field', () => {
+      it('should open overlay on click event on value button', () => {
         expect(select._overlayElement.opened).to.be.false;
-        click(button);
+        click(valueButton);
         expect(select._overlayElement.opened).to.be.true;
       });
 
-      it('should open overlay on click event on toggle button', () => {
+      it('should open overlay on input container click event', () => {
         expect(select._overlayElement.opened).to.be.false;
-        select._toggleElement.click();
+        select._inputContainer.click();
         expect(select._overlayElement.opened).to.be.true;
       });
 
       it('should open overlay on ArrowUp', () => {
-        arrowUp(button);
+        arrowUp(valueButton);
         expect(select._overlayElement.opened).to.be.true;
       });
 
       it('should open overlay on Down', () => {
-        arrowDown(button);
+        arrowDown(valueButton);
         expect(select._overlayElement.opened).to.be.true;
       });
 
       it('should open overlay on Space', () => {
-        spaceKeyDown(button);
+        spaceKeyDown(valueButton);
         expect(select._overlayElement.opened).to.be.true;
       });
 
       it('should open overlay on Enter', () => {
-        enterKeyDown(button);
+        enterKeyDown(valueButton);
         expect(select._overlayElement.opened).to.be.true;
       });
 
       it('should close overlay on Escape', () => {
         select.opened = true;
-        escKeyDown(button);
+        escKeyDown(valueButton);
         expect(select._overlayElement.opened).to.be.false;
       });
 
       it('should align the overlay on top left corner by default', async () => {
         // NOTE: avoid setting bottom-aligned because of web-test-runner window size
         select.setAttribute('style', 'position: absolute; top: 10px');
-        enterKeyDown(button);
+        enterKeyDown(valueButton);
         await nextFrame();
         const overlayRect = select._overlayElement.getBoundingClientRect();
-        const inputRect = select.shadowRoot.querySelector('[part~="input-field"]').getBoundingClientRect();
+        const inputRect = select._inputContainer.getBoundingClientRect();
         expect(overlayRect.top).to.be.equal(inputRect.top);
         expect(inputRect.left).to.be.equal(inputRect.left);
       });
@@ -268,19 +268,19 @@ describe('vaadin-select', () => {
         select.setAttribute('dir', 'rtl');
         // NOTE: avoid setting bottom-aligned because of web-test-runner window size
         select.setAttribute('style', 'position: absolute; top: 10px');
-        enterKeyDown(button);
+        enterKeyDown(valueButton);
         await nextFrame();
         const overlayRect = select._overlayElement.getBoundingClientRect();
-        const inputRect = select.shadowRoot.querySelector('[part~="input-field"]').getBoundingClientRect();
+        const inputRect = select._inputContainer.getBoundingClientRect();
         expect(overlayRect.top).to.be.equal(inputRect.top);
         expect(inputRect.right).to.be.equal(inputRect.right);
       });
 
       it('should store the text-field width in the custom CSS property on overlay opening', () => {
-        button.style.width = '200px';
+        valueButton.style.width = '200px';
         select.opened = true;
         const prop = '--vaadin-select-text-field-width';
-        const inputRect = select.shadowRoot.querySelector('[part~="input-field"]').getBoundingClientRect();
+        const inputRect = select._inputContainer.getBoundingClientRect();
         const value = getComputedStyle(select._overlayElement).getPropertyValue(prop);
         expect(value).to.be.equal(inputRect.width + 'px');
       });
@@ -293,11 +293,11 @@ describe('vaadin-select', () => {
         menu = select._menuElement;
         await nextFrame();
         select.focus();
-        enterKeyDown(button);
+        enterKeyDown(valueButton);
       });
 
       it('should close the select on selecting the same value', () => {
-        enterKeyDown(button);
+        enterKeyDown(valueButton);
         expect(select._overlayElement.opened).to.be.true;
         click(select._items[0]);
         expect(select._overlayElement.opened).to.be.false;
@@ -354,10 +354,10 @@ describe('vaadin-select', () => {
     });
 
     describe('placeholder', () => {
-      it('should set placeholder as a button text content', () => {
+      it('should set placeholder as a value node text content', () => {
         select.value = null;
         select.placeholder = 'Select an item';
-        expect(button.textContent).to.equal('Select an item');
+        expect(valueButton.textContent).to.equal('Select an item');
       });
     });
 
@@ -381,12 +381,12 @@ describe('vaadin-select', () => {
     describe('disabled', () => {
       it('should disable the button and disable opening if select is disabled', () => {
         select.disabled = true;
-        expect(button.disabled).to.be.true;
+        expect(valueButton.disabled).to.be.true;
 
-        enterKeyDown(button);
+        enterKeyDown(valueButton);
         expect(select._overlayElement.opened).to.be.false;
 
-        click(button);
+        click(valueButton);
         expect(select._overlayElement.opened).to.be.false;
       });
     });
@@ -394,10 +394,10 @@ describe('vaadin-select', () => {
     describe('readonly', () => {
       it('should disable opening if select is readonly', () => {
         select.readonly = true;
-        enterKeyDown(button);
+        enterKeyDown(valueButton);
         expect(select._overlayElement.opened).to.be.false;
 
-        click(button);
+        click(valueButton);
         expect(select._overlayElement.opened).to.be.false;
       });
     });
@@ -413,7 +413,7 @@ describe('vaadin-select', () => {
 
         // Tabbing does not natively move the focus, hence we only can check that the event is not prevented
         const ev = keyboardEventFor(9, [], 'Tab');
-        button.dispatchEvent(ev);
+        valueButton.dispatchEvent(ev);
         expect(ev.defaultPrevented).to.be.false;
       });
 
@@ -422,7 +422,7 @@ describe('vaadin-select', () => {
 
         // Tabbing does not natively move the focus, hence we only can check that the event is not prevented
         const ev = keyboardEventFor(9, ['shift'], 'Tab');
-        button.dispatchEvent(ev);
+        valueButton.dispatchEvent(ev);
         expect(ev.defaultPrevented).to.be.false;
       });
     });
@@ -445,8 +445,8 @@ describe('vaadin-select', () => {
         expect(select.invalid).to.be.false;
         select.setAttribute('required', '');
 
-        enterKeyDown(button);
-        escKeyDown(button);
+        enterKeyDown(valueButton);
+        escKeyDown(valueButton);
         expect(select.invalid).to.be.true;
       });
 
@@ -531,9 +531,9 @@ describe('vaadin-select', () => {
       });
 
       it('should fire `change` event when value changes when alphanumeric keys are pressed', () => {
-        keyDownChar(button, 'o');
-        keyDownChar(button, 'p');
-        keyDownChar(button, 't');
+        keyDownChar(valueButton, 'o');
+        keyDownChar(valueButton, 'p');
+        keyDownChar(valueButton, 't');
         expect(changeSpy.callCount).to.equal(1);
       });
 
@@ -580,7 +580,7 @@ describe('vaadin-select', () => {
 
     it('should be possible to set value declaratively', () => {
       expect(menu.selected).to.be.equal(1);
-      expect(select._valueNode.textContent.trim()).to.be.equal('o2');
+      expect(select._valueButton.textContent.trim()).to.be.equal('o2');
     });
   });
 
@@ -589,7 +589,7 @@ describe('vaadin-select', () => {
 
     beforeEach(() => {
       select = fixtureSync('<vaadin-select></vaadin-select>');
-      inputField = select.shadowRoot.querySelector('[part="input-field"]');
+      inputField = select._inputContainer;
     });
 
     it('should propagate invalid property to the input container', () => {
@@ -618,11 +618,8 @@ describe('vaadin-select', () => {
   });
 
   describe('theme attribute', () => {
-    let inputField;
-
     beforeEach(() => {
       select = fixtureSync('<vaadin-select theme="foo"></vaadin-select>');
-      inputField = select.shadowRoot.querySelector('[part="input-field"]');
     });
 
     it('should propagate theme attribute to overlay', () => {
@@ -630,7 +627,7 @@ describe('vaadin-select', () => {
     });
 
     it('should propagate theme attribute to the input container', () => {
-      expect(inputField.getAttribute('theme')).to.equal('foo');
+      expect(select._inputContainer.getAttribute('theme')).to.equal('foo');
     });
   });
 

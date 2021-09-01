@@ -95,8 +95,6 @@ import { SelectEventMap, SelectRenderer } from './interfaces';
 declare class Select extends DelegateFocusMixin(
   FieldAriaMixin(LabelMixin(SlotMixin(ElementMixin(ThemableMixin(HTMLElement)))))
 ) {
-  readonly focusElement: HTMLElement;
-
   /**
    * Set when the select is open
    */

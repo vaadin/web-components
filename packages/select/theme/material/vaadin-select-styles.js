@@ -16,12 +16,14 @@ registerStyles(
       -webkit-tap-highlight-color: transparent;
     }
 
-    [part='input-field'] ::slotted(button) {
-      color: inherit;
-      text-align: inherit;
+    /* placeholder styles */
+    :host(:not([has-value])) [part='input-field'] ::slotted([slot='value']) {
+      color: var(--material-disabled-text-color);
+      transition: opacity 0.175s 0.1s;
+      opacity: 1;
     }
 
-    :host([has-value]) [part='input-field'] ::slotted(button) {
+    :host([has-value]) [part='input-field'] ::slotted([slot='value']) {
       color: var(--material-body-text-color);
     }
 
@@ -38,6 +40,23 @@ registerStyles(
     }
   `,
   { moduleId: 'material-select', include: ['material-input-field-shared-styles'] }
+);
+
+registerStyles(
+  'vaadin-select-value-button',
+  css`
+    :host {
+      font: inherit;
+      letter-spacing: normal;
+      text-transform: none;
+    }
+
+    :host::before,
+    :host::after {
+      display: none;
+    }
+  `,
+  { moduleId: 'material-select-value-button' }
 );
 
 registerStyles(

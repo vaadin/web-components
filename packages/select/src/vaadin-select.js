@@ -17,6 +17,7 @@ import { SlotMixin } from '@vaadin/field-base/src/slot-mixin.js';
 import '@vaadin/text-field/src/vaadin-input-field-shared-styles.js';
 import '@vaadin/input-container/src/vaadin-input-container.js';
 import './vaadin-select-overlay.js';
+import './vaadin-select-value-button.js';
 
 /**
  * `<vaadin-select>` is a Web Component for selecting values from a list of items.
@@ -118,26 +119,8 @@ class Select extends DelegateFocusMixin(
   static get template() {
     return html`
       <style include="vaadin-input-field-shared-styles">
-        /* Reset the native button styles */
-        ::slotted(button) {
-          -webkit-appearance: none;
-          -moz-appearance: none;
-          outline: none;
-          flex: auto;
-          white-space: nowrap;
-          overflow: hidden;
-          width: 100%;
-          height: 100%;
-          margin: 0;
-          padding: 0;
-          border: 0;
-          border-radius: 0;
-          min-width: 0;
-          font: inherit;
-          font-size: 1em;
-          line-height: normal;
-          color: inherit;
-          background-color: transparent;
+        ::slotted([slot='value']) {
+          flex-grow: 1;
         }
       </style>
 
@@ -269,7 +252,7 @@ class Select extends DelegateFocusMixin(
       _inputElement: Object,
 
       /** @private */
-      _toggleElement: Object,
+      _inputContainer: Object,
 
       /** @private */
       _items: Object
@@ -290,20 +273,20 @@ class Select extends DelegateFocusMixin(
     return {
       ...super.slots,
       value: () => {
-        const native = document.createElement('button');
-        native.setAttribute('aria-haspopup', 'listbox');
-        return native;
+        const button = document.createElement('vaadin-select-value-button');
+        button.setAttribute('aria-haspopup', 'listbox');
+        return button;
       }
     };
   }
 
   /** @protected */
   get _ariaTarget() {
-    return this._valueNode;
+    return this._valueButton;
   }
 
   /** @protected */
-  get _valueNode() {
+  get _valueButton() {
     return this._getDirectSlotChild('value');
   }
 
@@ -323,15 +306,15 @@ class Select extends DelegateFocusMixin(
     super.connectedCallback();
     this.addEventListener('iron-resize', this._boundSetPosition);
 
-    if (this._valueNode) {
-      this._valueNode.setAttribute('aria-labelledby', `${this._labelId} ${this._fieldId}`);
+    if (this._valueButton) {
+      this._valueButton.setAttribute('aria-labelledby', `${this._labelId} ${this._fieldId}`);
 
       this._updateAriaRequired(this.required);
       this._updateAriaExpanded(this.opened);
 
-      this._setFocusElement(this._valueNode);
+      this._setFocusElement(this._valueButton);
 
-      this._valueNode.addEventListener('keydown', this._boundOnKeyDown);
+      this._valueButton.addEventListener('keydown', this._boundOnKeyDown);
     }
   }
 
@@ -339,8 +322,8 @@ class Select extends DelegateFocusMixin(
   disconnectedCallback() {
     super.disconnectedCallback();
     this.removeEventListener('iron-resize', this._boundSetPosition);
-    if (this._valueNode) {
-      this._valueNode.removeEventListener('keydown', this._boundOnKeyDown);
+    if (this._valueButton) {
+      this._valueButton.removeEventListener('keydown', this._boundOnKeyDown);
     }
     // Making sure the select is closed and removed from DOM after detaching the select.
     this.opened = false;
@@ -351,7 +334,7 @@ class Select extends DelegateFocusMixin(
     super.ready();
 
     this._overlayElement = this.shadowRoot.querySelector('vaadin-select-overlay');
-    this._toggleElement = this.shadowRoot.querySelector('[part~="input-field"]');
+    this._inputContainer = this.shadowRoot.querySelector('[part~="input-field"]');
 
     processTemplates(this);
   }
@@ -407,7 +390,7 @@ class Select extends DelegateFocusMixin(
         this._items = this._menuElement.items;
         this._items.forEach((item) => item.setAttribute('role', 'option'));
       });
-      this._menuElement.addEventListener('selected-changed', () => this._updateValueSlot());
+      this._menuElement.addEventListener('selected-changed', () => this._updateValueButton());
       this._menuElement.addEventListener('keydown', (e) => this._onKeyDownInside(e));
       this._menuElement.addEventListener(
         'click',
@@ -504,24 +487,25 @@ class Select extends DelegateFocusMixin(
 
   /** @private */
   _updateAriaExpanded(opened) {
-    if (this._valueNode) {
-      this._valueNode.setAttribute('aria-expanded', opened ? 'true' : 'false');
+    if (this._valueButton) {
+      this._valueButton.setAttribute('aria-expanded', opened ? 'true' : 'false');
     }
   }
 
   /** @private */
   _updateAriaRequired(required) {
-    if (this._valueNode) {
-      this._valueNode.setAttribute('aria-required', required ? 'true' : 'false');
+    if (this._valueButton) {
+      this._valueButton.setAttribute('aria-required', required ? 'true' : 'false');
     }
   }
 
   /** @private */
-  _attachSelectedItem(selected) {
+  __attachSelectedItem(selected) {
     let labelItem;
-    if (selected.hasAttribute('label')) {
-      labelItem = document.createElement('vaadin-item');
-      labelItem.textContent = selected.getAttribute('label');
+
+    const label = selected.getAttribute('label');
+    if (label) {
+      labelItem = this.__createItem(label);
     } else {
       labelItem = selected.cloneNode(true);
     }
@@ -529,32 +513,45 @@ class Select extends DelegateFocusMixin(
     // store reference to the original item
     labelItem._sourceItem = selected;
 
-    labelItem.removeAttribute('tabindex');
-    labelItem.removeAttribute('role');
-    labelItem.setAttribute('id', this._fieldId);
-    labelItem.style.padding = '0';
+    this.__appendItem(labelItem);
 
-    this._valueNode.appendChild(labelItem);
-
+    // ensure the item gets proper styles
     labelItem.selected = true;
   }
 
   /** @private */
-  _updateValueSlot() {
-    if (!this._valueNode) {
+  __createItem(text) {
+    const item = document.createElement('vaadin-item');
+    item.textContent = text;
+    return item;
+  }
+
+  /** @private */
+  __appendItem(item) {
+    item.removeAttribute('tabindex');
+    item.removeAttribute('role');
+    item.setAttribute('id', this._fieldId);
+
+    this._valueButton.appendChild(item);
+  }
+
+  /** @private */
+  _updateValueButton() {
+    if (!this._valueButton) {
       return;
     }
 
-    this._valueNode.innerHTML = '';
+    this._valueButton.innerHTML = '';
 
     const selected = this._items[this._menuElement.selected];
 
     if (!selected) {
       if (this.placeholder) {
-        this._valueNode.textContent = this.placeholder;
+        const item = this.__createItem(this.placeholder);
+        this.__appendItem(item);
       }
     } else {
-      this._attachSelectedItem(selected);
+      this.__attachSelectedItem(selected);
 
       if (!this._valueChanging) {
         this._selectedChanging = true;
@@ -577,7 +574,7 @@ class Select extends DelegateFocusMixin(
       }, undefined);
       if (!this._selectedChanging) {
         this._valueChanging = true;
-        this._updateValueSlot();
+        this._updateValueButton();
         delete this._valueChanging;
       }
     }
@@ -610,7 +607,7 @@ class Select extends DelegateFocusMixin(
 
   /** @private */
   _setPosition() {
-    const inputRect = this._toggleElement.getBoundingClientRect();
+    const inputRect = this._inputContainer.getBoundingClientRect();
     const viewportHeight = Math.min(window.innerHeight, document.documentElement.clientHeight);
     const bottomAlign = inputRect.top > (viewportHeight - inputRect.height) / 2;
 

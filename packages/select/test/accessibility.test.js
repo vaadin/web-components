@@ -5,7 +5,7 @@ import '@vaadin/vaadin-list-box/vaadin-list-box.js';
 import '@vaadin/vaadin-item/vaadin-item.js';
 import '../vaadin-select.js';
 
-describe('vaadin-select accessibility', () => {
+describe('accessibility', () => {
   let select, button;
 
   beforeEach(async () => {
@@ -25,7 +25,7 @@ describe('vaadin-select accessibility', () => {
       );
     };
     await nextFrame();
-    button = select.focusElement;
+    button = select._valueButton;
   });
 
   it('should have aria-required attribute set to true when required', () => {

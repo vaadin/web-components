@@ -14,7 +14,7 @@ function scrollContainer(container, value, scrollLeft) {
 }
 
 describe('scrollable viewport', () => {
-  let scrollableContainer, container, select, overlay, button, inputFieldBlock;
+  let scrollableContainer, container, select, overlay, valueButton, inputFieldBlock;
 
   beforeEach(() => {
     scrollableContainer = fixtureSync(`
@@ -47,8 +47,8 @@ describe('scrollable viewport', () => {
     overlay = select._overlayElement;
 
     // Input without label and indents
-    button = select.focusElement;
-    inputFieldBlock = select.shadowRoot.querySelector('[part~="input-field"]');
+    valueButton = select._valueButton;
+    inputFieldBlock = select._inputContainer;
 
     const viewportHeight = Math.min(window.innerHeight, document.documentElement.clientHeight);
 
@@ -74,7 +74,7 @@ describe('scrollable viewport', () => {
   });
 
   it('should toggle bottom-aligned attribute depending on the part of the viewport', () => {
-    enterKeyDown(button);
+    enterKeyDown(valueButton);
     expect(overlay.hasAttribute('bottom-aligned')).to.be.true;
 
     scrollContainer(scrollableContainer, 150);
@@ -82,7 +82,7 @@ describe('scrollable viewport', () => {
   });
 
   it('should update the position on scrolling', () => {
-    enterKeyDown(button);
+    enterKeyDown(valueButton);
 
     expect(overlay.getBoundingClientRect().bottom).to.be.closeTo(inputFieldBlock.getBoundingClientRect().bottom, 1);
     expect(overlay.getBoundingClientRect().left).to.be.closeTo(inputFieldBlock.getBoundingClientRect().left, 1);
@@ -94,7 +94,7 @@ describe('scrollable viewport', () => {
   });
 
   it('should update the position on iron-resize event', () => {
-    enterKeyDown(button);
+    enterKeyDown(valueButton);
     expect(overlay.getBoundingClientRect().bottom).to.be.closeTo(inputFieldBlock.getBoundingClientRect().bottom, 1);
     expect(overlay.getBoundingClientRect().left).to.be.closeTo(inputFieldBlock.getBoundingClientRect().left, 1);
 

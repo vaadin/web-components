@@ -88,7 +88,7 @@ describe('renderer', () => {
     select.requestContentUpdate();
     await nextFrame();
     expect(select._menuElement.selected).to.be.equal(1);
-    expect(select._valueNode.textContent.trim()).to.be.equal('barbaz');
+    expect(select._valueButton.textContent.trim()).to.be.equal('barbaz');
   });
 
   it('should update selected value after renderer is reassigned based on the value', async () => {
