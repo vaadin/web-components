@@ -227,6 +227,7 @@ declare class CrudElement<Item> extends ElementMixin(ThemableMixin(HTMLElement))
   /**
    * Controls visiblity state of toolbar.
    * When set to false toolbar is hidden and shown when set to true.
+   * @attr {boolean} no-toolbar
    */
   noToolbar: boolean;
 

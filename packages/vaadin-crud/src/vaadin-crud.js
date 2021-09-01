@@ -178,15 +178,15 @@ class CrudElement extends ElementMixin(ThemableMixin(PolymerElement)) {
           display: none !important;
         }
 
-        :host([no-toolbar]) [part='toolbar'] {
-          display: none;
-        }
-
         [part='toolbar'] {
           display: flex;
           flex-shrink: 0;
           align-items: baseline;
           justify-content: flex-end;
+        }
+
+        :host([no-toolbar]) [part='toolbar'] {
+          display: none;
         }
 
         #container {
