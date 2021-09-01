@@ -5,9 +5,10 @@
  */
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
 import { InputMixin } from './input-mixin.js';
+import { KeyboardMixin } from './keyboard-mixin.js';
 
 const ClearButtonMixinImplementation = (superclass) =>
-  class ClearButtonMixinClass extends InputMixin(superclass) {
+  class ClearButtonMixinClass extends InputMixin(KeyboardMixin(superclass)) {
     static get properties() {
       return {
         /**
@@ -42,8 +43,6 @@ const ClearButtonMixinImplementation = (superclass) =>
     ready() {
       super.ready();
 
-      this.addEventListener('keydown', (e) => this._onKeyDown(e));
-
       if (this.clearElement) {
         this.clearElement.addEventListener('click', (e) => this._onClearButtonClick(e));
       }
@@ -62,10 +61,13 @@ const ClearButtonMixinImplementation = (superclass) =>
     }
 
     /**
-     * @param {Event} event
+     * @param {KeyboardEvent} event
      * @protected
+     * @override
      */
     _onKeyDown(event) {
+      super._onKeyDown(event);
+
       if (event.key === 'Escape' && this.clearButtonVisible && this._clearOnEsc) {
         const dispatchChange = !!this.value;
         this.clear();
