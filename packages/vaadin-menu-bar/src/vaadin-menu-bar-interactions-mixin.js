@@ -56,17 +56,6 @@ export const InteractionsMixin = (superClass) =>
 
     /** @private */
     _themeChanged(theme) {
-      this._buttons.forEach((button) => {
-        const itemTheme = this.__stringOrArrayToString(button.item && button.item.theme);
-        if (itemTheme) {
-          button.setAttribute('theme', itemTheme);
-        } else if (theme) {
-          button.setAttribute('theme', theme);
-        } else {
-          button.removeAttribute('theme');
-        }
-      });
-
       if (theme) {
         this._subMenu.setAttribute('theme', theme);
       } else {
