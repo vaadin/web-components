@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { DisabledMixin } from './disabled-mixin.js';
+import { KeyboardMixin } from './keyboard-mixin.js';
 
 /**
  * A mixin to toggle the `active` attribute.
@@ -20,6 +21,6 @@ interface ActiveMixinConstructor {
   new (...args: any[]): ActiveMixin;
 }
 
-interface ActiveMixin extends DisabledMixin {}
+interface ActiveMixin extends DisabledMixin, KeyboardMixin {}
 
 export { ActiveMixinConstructor, ActiveMixin };

@@ -1,18 +1,6 @@
 import { expect } from '@esm-bundle/chai';
-import {
-  arrowDownKeyDown,
-  enterKeyDown,
-  enterKeyUp,
-  fire,
-  fixtureSync,
-  isIOS,
-  mousedown,
-  mouseup,
-  spaceKeyDown,
-  spaceKeyUp,
-  touchend,
-  touchstart
-} from '@vaadin/testing-helpers';
+import { sendKeys } from '@web/test-runner-commands';
+import { fire, fixtureSync, isIOS, mousedown, mouseup, touchend, touchstart } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { ActiveMixin } from '../src/active-mixin.js';
 
@@ -29,7 +17,9 @@ describe('active-mixin', () => {
   let element;
 
   beforeEach(() => {
-    element = fixtureSync(`<active-mixin-element></active-mixin-element>`);
+    // Sets tabindex to 0 in order to make the element focusable for the time of testing.
+    element = fixtureSync(`<active-mixin-element tabindex="0"></active-mixin-element>`);
+    element.focus();
   });
 
   (isIOS ? describe.skip : describe)('mouse', () => {
@@ -71,42 +61,25 @@ describe('active-mixin', () => {
   });
 
   describe('keyboard', () => {
-    it('should set active attribute when Enter is pressed', async () => {
-      enterKeyDown(element);
+    it('should set active attribute when Space is pressed', async () => {
+      await sendKeys({ down: 'Space' });
       expect(element.hasAttribute('active')).to.be.true;
     });
 
-    it('should remove active attribute when Enter is released', () => {
-      enterKeyDown(element);
-      enterKeyUp(element);
+    it('should remove active attribute when Space is released', async () => {
+      await sendKeys({ down: 'Space' });
+      await sendKeys({ up: 'Space' });
       expect(element.hasAttribute('active')).to.be.false;
     });
 
-    it('should not set active attribute when disabled and Enter is pressed', () => {
+    it('should not set active attribute when disabled and Space is pressed', async () => {
       element.disabled = true;
-      enterKeyDown(element);
+      await sendKeys({ down: 'Space' });
       expect(element.hasAttribute('active')).to.be.false;
     });
 
-    it('should set active attribute when Space is pressed', () => {
-      spaceKeyDown(element);
-      expect(element.hasAttribute('active')).to.be.true;
-    });
-
-    it('should remove active attribute when Space is released', () => {
-      spaceKeyDown(element);
-      spaceKeyUp(element);
-      expect(element.hasAttribute('active')).to.be.false;
-    });
-
-    it('should not set active attribute when disabled and Space is pressed', () => {
-      element.disabled = true;
-      spaceKeyDown(element);
-      expect(element.hasAttribute('active')).to.be.false;
-    });
-
-    it('should not set active attribute when ArrowDown is pressed', () => {
-      arrowDownKeyDown(element);
+    it('should not set active attribute when a non-activation key is pressed', async () => {
+      await sendKeys({ down: 'ArrowDown' });
       expect(element.hasAttribute('active')).to.be.false;
     });
 
@@ -114,26 +87,26 @@ describe('active-mixin', () => {
       beforeEach(() => {
         Object.defineProperty(element, '_activeKeys', {
           get() {
-            return ['ArrowDown'];
+            return ['Enter'];
           }
         });
       });
 
-      it('should set active attribute when ArrowDown is pressed', () => {
-        arrowDownKeyDown(element);
+      it('should set active attribute when Enter is pressed', async () => {
+        await sendKeys({ down: 'Enter' });
         expect(element.hasAttribute('active')).to.be.true;
       });
     });
   });
 
-  it('should not preserve active attribute when disconnecting from the DOM', () => {
-    spaceKeyDown(element);
+  it('should not preserve active attribute when disconnecting from the DOM', async () => {
+    await sendKeys({ down: 'Space' });
     element.parentNode.removeChild(element);
     expect(element.hasAttribute('active')).to.be.false;
   });
 
-  it('should remove active attribute on blur', () => {
-    spaceKeyDown(element);
+  it('should remove active attribute on blur', async () => {
+    await sendKeys({ down: 'Space' });
     fire(element, 'blur');
     expect(element.hasAttribute('active')).to.be.false;
   });
