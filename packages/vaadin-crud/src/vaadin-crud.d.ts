@@ -225,6 +225,13 @@ declare class CrudElement<Item> extends ElementMixin(ThemableMixin(HTMLElement))
   readonly size: number | null | undefined;
 
   /**
+   * Controls visiblity state of toolbar.
+   * When set to false toolbar is hidden and shown when set to true.
+   * @attr {boolean} no-toolbar
+   */
+  noToolbar: boolean;
+
+  /**
    * The object used to localize this component.
    * For changing the default localization, change the entire
    * _i18n_ object or just the property you want to modify.

@@ -864,6 +864,22 @@ describe('crud', () => {
       expect(crud.$.toolbar.style.display).to.be.not.equal('none');
     });
 
+    it('should have no-toolbar attribute when property set to true', () => {
+      crud.noToolbar = true;
+      expect(crud.hasAttribute('no-toolbar')).to.be.equal(true);
+    });
+
+    it('should remove no-toolbar attribute when set to false on propery', () => {
+      crud.noToolbar = true;
+      crud.noToolbar = false;
+      expect(crud.hasAttribute('no-toolbar')).to.be.equal(false);
+    });
+
+    it('should hide toolbar when no-toolbar attribute is set', () => {
+      crud.noToolbar = true;
+      expect(getComputedStyle(crud.$.toolbar).display).to.be.equal('none');
+    });
+
     it('should always show the editor in dialog on mobile', () => {
       if (isIOS) {
         // Only setting crud.__mobile = true is not working on iOS test

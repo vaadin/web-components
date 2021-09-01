@@ -25,6 +25,15 @@ describe('crud', () => {
     await visualDiff(div, `${import.meta.url}_editor-position-bottom`);
   });
 
+  it('toolbar-visible-by-defualt', async () => {
+    await visualDiff(div, `${import.meta.url}_toolbar-visible`);
+  });
+
+  it('no-toolbar', async () => {
+    element.noToolbar = true;
+    await visualDiff(div, `${import.meta.url}_toolbar-hidden`);
+  });
+
   ['ltr', 'rtl'].forEach((dir) => {
     describe(dir, () => {
       before(() => {
