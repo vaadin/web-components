@@ -187,9 +187,9 @@ export const ScrollMixin = (superClass) =>
 
     /** @private */
     __updateHorizontalScrollPosition() {
-      if (!this.__isRTL) {
-        this.$.table.style.setProperty('--_grid-horizontal-scroll-position', -this._scrollLeft + 'px');
-      } else {
+      this.$.table.style.setProperty('--_grid-horizontal-scroll-position', -this._scrollLeft + 'px');
+
+      if (this.__isRTL) {
         // Translating the sticky sections using a CSS variable works nicely on LTR.
         // On RTL, it causes jumpy behavior (on Desktop Safari) so we need to translate manually.
         const x = this.__getNormalizedScrollLeft(this.$.table) + this.$.table.clientWidth - this.$.table.scrollWidth;

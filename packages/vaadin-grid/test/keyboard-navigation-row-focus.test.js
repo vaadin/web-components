@@ -144,114 +144,121 @@ describe('keyboard navigation - row focus', () => {
     });
   });
 
-  describe('interacting with keys', () => {
-    it('should remain in row focus mode on left', () => {
-      left();
+  [
+    { direction: 'ltr', forwards: right, backwards: left },
+    { direction: 'rtl', forwards: left, backwards: right }
+  ].forEach(({ direction, forwards, backwards }) => {
+    describe('interacting with keys - ' + direction, () => {
+      beforeEach(() => grid.setAttribute('dir', direction));
 
-      expect(getFocusedCellIndex()).to.equal(-1);
-    });
+      it('should remain in row focus mode on backwards', () => {
+        backwards();
 
-    it('should enter cell focus mode on right', () => {
-      right();
+        expect(getFocusedCellIndex()).to.equal(-1);
+      });
 
-      expect(getFocusedCellIndex()).to.equal(0);
-    });
+      it('should enter cell focus mode on forwards', () => {
+        forwards();
 
-    it('should return to row focus mode on left', () => {
-      right();
-      left();
+        expect(getFocusedCellIndex()).to.equal(0);
+      });
 
-      expect(getFocusedCellIndex()).to.equal(-1);
-    });
+      it('should return to row focus mode on backwards', () => {
+        forwards();
+        backwards();
 
-    it('should not enter row focus mode if rowsFocusable is false', () => {
-      right();
-      grid.rowsFocusable = false;
-      left();
+        expect(getFocusedCellIndex()).to.equal(-1);
+      });
 
-      expect(getFocusedCellIndex()).to.equal(0);
-    });
+      it('should not enter row focus mode if rowsFocusable is false', () => {
+        forwards();
+        grid.rowsFocusable = false;
+        backwards();
 
-    it('should expand an expandable row on right', () => {
-      tabToBody();
-      expect(isRowExpanded(0)).to.be.false;
-      right();
-      expect(isRowExpanded(0)).to.be.true;
-    });
+        expect(getFocusedCellIndex()).to.equal(0);
+      });
 
-    it('should remain in row focus mode on right over an expandable row', () => {
-      tabToBody();
-      right();
-      expect(getFocusedCellIndex()).to.equal(-1);
-    });
+      it('should expand an expandable row on forwards', () => {
+        tabToBody();
+        expect(isRowExpanded(0)).to.be.false;
+        forwards();
+        expect(isRowExpanded(0)).to.be.true;
+      });
 
-    it('should enter cell focus mode on an expanded row on right', () => {
-      tabToBody();
-      right();
-      right();
-      expect(getFocusedCellIndex()).to.equal(0);
-    });
+      it('should remain in row focus mode on forwards over an expandable row', () => {
+        tabToBody();
+        forwards();
+        expect(getFocusedCellIndex()).to.equal(-1);
+      });
 
-    it('should enter cell focus mode on a leaf row on right', () => {
-      tabToBody();
-      down();
-      right();
-      expect(getFocusedCellIndex()).to.equal(0);
-    });
+      it('should enter cell focus mode on an expanded row on forwards', () => {
+        tabToBody();
+        forwards();
+        forwards();
+        expect(getFocusedCellIndex()).to.equal(0);
+      });
 
-    it('should collapse an expanded row on left', () => {
-      tabToBody();
-      right();
-      left();
-      expect(isRowExpanded(0)).to.be.false;
-    });
+      it('should enter cell focus mode on a leaf row on forwards', () => {
+        tabToBody();
+        down();
+        forwards();
+        expect(getFocusedCellIndex()).to.equal(0);
+      });
 
-    it('should skip row details on row navigation', () => {
-      tabToBody();
-      openRowDetails(0);
-      down();
-      expect(getFocusedRowIndex()).to.equal(1);
-    });
+      it('should collapse an expanded row on backwards', () => {
+        tabToBody();
+        forwards();
+        backwards();
+        expect(isRowExpanded(0)).to.be.false;
+      });
 
-    it('should return to row focus mode on left from details cell', () => {
-      openRowDetails(1);
-      tabToBody();
-      // Focus the second row
-      down();
-      // Go to cell navigation mode
-      right();
-      // Focus the details cell
-      down();
-      // Go to row navigation mode
-      left();
-      expect(getFocusedCellIndex()).to.equal(-1);
-    });
+      it('should skip row details on row navigation', () => {
+        tabToBody();
+        openRowDetails(0);
+        down();
+        expect(getFocusedRowIndex()).to.equal(1);
+      });
 
-    it('should navigate rows after a cell gets click focused', () => {
-      focusItem(0);
-      clickItem(0);
-      down();
+      it('should return to row focus mode on backwards from details cell', () => {
+        openRowDetails(1);
+        tabToBody();
+        // Focus the second row
+        down();
+        // Go to cell navigation mode
+        forwards();
+        // Focus the details cell
+        down();
+        // Go to row navigation mode
+        backwards();
+        expect(getFocusedCellIndex()).to.equal(-1);
+      });
 
-      expect(getFocusedRowIndex()).to.equal(1);
-      expect(getFocusedCellIndex()).to.equal(-1);
-    });
+      it('should navigate rows after a cell gets click focused', () => {
+        focusItem(0);
+        clickItem(0);
+        down();
 
-    it('should navigate cells after a cell gets click focused', () => {
-      right();
-      focusItem(0);
-      clickItem(0);
-      down();
+        expect(getFocusedRowIndex()).to.equal(1);
+        expect(getFocusedCellIndex()).to.equal(-1);
+      });
 
-      expect(getFocusedRowIndex()).to.equal(1);
-      expect(getFocusedCellIndex()).to.equal(0);
-    });
+      it('should navigate cells after a cell gets click focused', () => {
+        forwards();
+        focusItem(0);
+        clickItem(0);
+        down();
 
-    it('should enable navigation mode on down', () => {
-      focusItem(0);
+        expect(getFocusedRowIndex()).to.equal(1);
+        expect(getFocusedCellIndex()).to.equal(0);
+      });
 
-      down();
+      it('should enable navigation mode on down', () => {
+        focusItem(0);
 
-      expect(grid.hasAttribute('navigating')).to.be.true;
+        down();
+
+        expect(grid.hasAttribute('navigating')).to.be.true;
+      });
     });
   });
 

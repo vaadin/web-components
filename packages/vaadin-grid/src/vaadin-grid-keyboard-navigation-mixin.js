@@ -265,9 +265,11 @@ export const KeyboardNavigationMixin = (superClass) =>
       const activeRow = e.composedPath().find((el) => this.__isRow(el));
       const activeCell = e.composedPath().find((el) => this.__isCell(el));
 
+      const forwards = this.__isRTL ? 'ArrowLeft' : 'ArrowRight';
+      const backwards = this.__isRTL ? 'ArrowRight' : 'ArrowLeft';
       // Handle keyboard interaction as defined in:
       // https://w3c.github.io/aria-practices/#keyboard-interaction-24
-      if (key === 'ArrowRight') {
+      if (key === forwards) {
         // "Right Arrow:"
         if (this.__rowFocusMode) {
           // In row focus mode
@@ -283,7 +285,7 @@ export const KeyboardNavigationMixin = (superClass) =>
             return;
           }
         }
-      } else if (key === 'ArrowLeft') {
+      } else if (key === backwards) {
         // "Left Arrow:"
         if (this.__rowFocusMode) {
           // In row focus mode
