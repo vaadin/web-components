@@ -1084,6 +1084,15 @@ describe('keyboard navigation', () => {
         expect(grid.$.table.scrollTop).to.equal(0);
       });
 
+      it('should scroll half visible rows fully visible with up arrow', () => {
+        focusItem(0);
+        grid.$.table.scrollTop = 20;
+
+        up();
+
+        expect(grid.$.table.scrollTop).to.equal(0);
+      });
+
       it('should scroll rows visible with down arrow', () => {
         focusItem(getLastVisibleItem(grid).index);
 

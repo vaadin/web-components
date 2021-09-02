@@ -86,7 +86,7 @@ export const ScrollMixin = (superClass) =>
      * @private
      */
     __scrollIntoViewport(index) {
-      const rowElement = Array.from(this.$.items.children).find((child) => child.index === index);
+      const rowElement = [...this.$.items.children].find((child) => child.index === index);
       if (rowElement) {
         const dstRect = rowElement.getBoundingClientRect();
         const footerTop = this.$.footer.getBoundingClientRect().top;

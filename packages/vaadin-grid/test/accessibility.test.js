@@ -223,6 +223,17 @@ describe('accessibility', () => {
     it('should not have aria-expanded on non expandable rows', () => {
       expect(grid.$.items.children[1].getAttribute('aria-expanded')).to.be.null;
     });
+
+    it('should remove add aria-expanded to a row that becomes expandable', () => {
+      grid.expandItem({ name: '0' });
+      expect(grid.$.items.children[1].getAttribute('aria-expanded')).to.equal('false');
+    });
+
+    it('should remove aria-expanded from a row that becomes non expandable', () => {
+      grid.expandItem({ name: '0' });
+      grid.collapseItem({ name: '0' });
+      expect(grid.$.items.children[1].getAttribute('aria-expanded')).to.be.null;
+    });
   });
 
   describe('details', () => {
