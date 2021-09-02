@@ -63,9 +63,7 @@ const ActiveMixinImplementation = (superclass) =>
     _onKeyDown(event) {
       super._onKeyDown(event);
 
-      if (this.disabled) return;
-
-      if (this._activeKeys.includes(event.key)) {
+      if (!this.disabled && this._activeKeys.includes(event.key)) {
         this._setActive(true);
       }
     }
