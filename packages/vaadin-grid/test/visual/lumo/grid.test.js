@@ -219,6 +219,36 @@ describe('grid', () => {
           await visualDiff(element, `${import.meta.url}_${dir}-sorting-single-desc`);
         });
       });
+
+      describe('row focus', () => {
+        before(async () => {
+          element = fixtureSync(`
+            <vaadin-grid rows-focusable style="width: 550px">
+              <vaadin-grid-column path="name.first" width="200px" flex-shrink="0" frozen></vaadin-grid-column>
+              <vaadin-grid-column path="name.last" width="200px" flex-shrink="0"></vaadin-grid-column>
+              <vaadin-grid-column path="location.city" width="200px" flex-shrink="0"></vaadin-grid-column>
+            </vaadin-grid>
+          `);
+          element.items = users;
+          flushGrid(element);
+
+          // Scroll all the way to end
+          element.$.table.scrollLeft = element.__isRTL ? -1000 : 1000;
+          // // Focus a row
+          element.setAttribute('navigating', '');
+          element.$.items.children[0].focus();
+
+          await nextRender(element);
+        });
+
+        after(() => {
+          element.remove();
+        });
+
+        it('row focus', async () => {
+          await visualDiff(element, `${import.meta.url}_${dir}-row-focus`);
+        });
+      });
     });
   });
 

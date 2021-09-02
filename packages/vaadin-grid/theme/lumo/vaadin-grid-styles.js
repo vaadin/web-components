@@ -79,7 +79,7 @@ registerStyles(
 
     :host([navigating]) [part~='row']:focus::before {
       transform: translateX(calc(-1 * var(--_grid-horizontal-scroll-position)));
-      z-index: 100;
+      z-index: 3;
     }
 
     /* Drag and Drop styles */
