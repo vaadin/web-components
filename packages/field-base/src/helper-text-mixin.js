@@ -69,19 +69,13 @@ const HelperTextMixinImplementation = (superclass) =>
 
       this.__helperSlot = this.shadowRoot.querySelector('[name="helper"]');
       this.__helperSlot.addEventListener('slotchange', this.__onHelperSlotChange.bind(this));
-    }
-
-    /** @private */
-    __observeCustomHelperId(helper) {
       this.__helperIdObserver = new MutationObserver((mutationRecord) => {
         mutationRecord.forEach((mutation) => {
           if (mutation.type === 'attributes' && mutation.attributeName === 'id') {
-            this.__updateHelperId(helper);
+            this.__updateHelperId(mutation.target);
           }
         });
       });
-
-      this.__helperIdObserver.observe(helper, { attributes: true });
     }
 
     /** @private */
@@ -107,7 +101,7 @@ const HelperTextMixinImplementation = (superclass) =>
 
       if (customHelper) {
         this.__updateHelperId(customHelper);
-        this.__observeCustomHelperId(customHelper);
+        this.__helperIdObserver.observe(customHelper, { attributes: true });
 
         if (this._currentHelper.isConnected) {
           this._currentHelper.remove();
