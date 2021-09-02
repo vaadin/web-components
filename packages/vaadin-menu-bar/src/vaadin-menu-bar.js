@@ -116,6 +116,7 @@ class MenuBarElement extends ButtonsMixin(InteractionsMixin(ElementMixin(Themabl
        * @property {union: string | object} component - The component to represent the button content.
        * Either a tagName or an element instance. Defaults to "vaadin-context-menu-item".
        * @property {boolean} disabled - If true, the button is disabled and cannot be activated.
+       * @property {union: string | string[]} theme - Theme(s) to be set as the theme attribute of the button, overriding any theme set on the menu bar.
        * @property {SubMenuItem[]} children - Array of submenu items.
        */
 

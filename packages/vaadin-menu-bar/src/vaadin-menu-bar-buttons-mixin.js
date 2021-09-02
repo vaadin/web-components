@@ -249,15 +249,26 @@ export const ButtonsMixin = (superClass) =>
 
     /** @private */
     __applyTheme(theme) {
-      this._buttons.forEach((btn) => {
-        if (theme) {
-          btn.setAttribute('theme', theme);
-        } else {
-          btn.removeAttribute('theme');
-        }
-      });
+      this._buttons.forEach((btn) => this._setButtonTheme(btn, theme));
 
       this.__detectOverflow();
+    }
+
+    /** @protected */
+    _setButtonTheme(btn, hostTheme) {
+      let theme = hostTheme;
+
+      // item theme takes precedence over host theme even if it's empty, as long as it's not undefined or null
+      const itemTheme = btn.item && btn.item.theme;
+      if (itemTheme != null) {
+        theme = Array.isArray(itemTheme) ? itemTheme.join(' ') : itemTheme;
+      }
+
+      if (theme) {
+        btn.setAttribute('theme', theme);
+      } else {
+        btn.removeAttribute('theme');
+      }
     }
 
     /** @protected */

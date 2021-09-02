@@ -28,7 +28,7 @@ import './vaadin-context-menu-overlay.js';
  *
  * ```javascript
  * contextMenu.items = [
- *   {text: 'Menu Item 1', children:
+ *   {text: 'Menu Item 1', theme: 'primary', children:
  *     [
  *       {text: 'Menu Item 1-1', checked: true},
  *       {text: 'Menu Item 1-2'}

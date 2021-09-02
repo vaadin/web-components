@@ -49,6 +49,11 @@ describe('custom element definition', () => {
 describe('root menu layout', () => {
   let menu, buttons;
 
+  function updateItemsAndButtons() {
+    menu.items = [...menu.items];
+    buttons = menu._buttons;
+  }
+
   beforeEach(async () => {
     menu = fixtureSync('<vaadin-menu-bar></vaadin-menu-bar>');
     menu.items = [{ text: 'Item 1' }, { text: 'Item 2' }, { text: 'Item 3', disabled: true }, { text: 'Item 4' }];
@@ -135,8 +140,7 @@ describe('root menu layout', () => {
 
       it('should move focus to second button if first is disabled on "home" keydown', () => {
         menu.items[0].disabled = true;
-        menu.items = [...menu.items];
-        buttons = menu._buttons;
+        updateItemsAndButtons();
         buttons[3].focus();
         const spy = sinon.spy(buttons[1], 'focus');
         home(buttons[3]);
@@ -154,8 +158,7 @@ describe('root menu layout', () => {
 
       it('should move focus to the closest enabled button if last is disabled on "end" keydown', () => {
         menu.items[3].disabled = true;
-        menu.items = [...menu.items];
-        buttons = menu._buttons;
+        updateItemsAndButtons();
         buttons[0].focus();
         const spy = sinon.spy(buttons[1], 'focus');
         end(buttons[0]);
@@ -248,6 +251,55 @@ describe('root menu layout', () => {
       menu.setAttribute('theme', 'contained');
       menu.removeAttribute('theme');
       buttons.forEach((btn) => expect(btn.hasAttribute('theme')).to.be.false);
+    });
+
+    it('should override the theme attribute of the component with the item.theme property', () => {
+      menu.setAttribute('theme', 'contained');
+      menu.items[1].theme = 'item-theme';
+      updateItemsAndButtons();
+
+      expect(buttons[0].getAttribute('theme')).to.equal('contained');
+      expect(buttons[1].getAttribute('theme')).to.equal('item-theme');
+
+      menu.removeAttribute('theme');
+
+      expect(buttons[0].hasAttribute('theme')).to.be.false;
+      expect(buttons[1].getAttribute('theme')).to.equal('item-theme');
+    });
+
+    it('should support setting multiple themes with an array', () => {
+      menu.items[1].theme = ['theme-1', 'theme-2'];
+      updateItemsAndButtons();
+
+      expect(buttons[1].getAttribute('theme')).to.equal('theme-1 theme-2');
+
+      menu.items[1].theme = [];
+      updateItemsAndButtons();
+
+      expect(buttons[1].hasAttribute('theme')).to.be.false;
+    });
+
+    it('should override the theme attribute of the component with an empty item.theme property', () => {
+      menu.setAttribute('theme', 'contained');
+      menu.items[0].theme = '';
+      updateItemsAndButtons();
+
+      expect(buttons[0].hasAttribute('theme')).to.be.false;
+
+      menu.items[0].theme = [];
+      updateItemsAndButtons();
+
+      expect(buttons[0].hasAttribute('theme')).to.be.false;
+
+      menu.items[0].theme = [''];
+      updateItemsAndButtons();
+
+      expect(buttons[0].hasAttribute('theme')).to.be.false;
+
+      menu.items[0].theme = null;
+      updateItemsAndButtons();
+
+      expect(buttons[0].getAttribute('theme')).to.equal('contained');
     });
   });
 });

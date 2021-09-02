@@ -585,7 +585,7 @@ describe('theme attribute', () => {
       {
         text: 'Menu Item 1',
         children: [
-          { text: 'Menu Item 1 1' },
+          { text: 'Menu Item 1 1', theme: 'sub-item-theme' },
           {
             text: 'Menu Item 1 2'
           }
@@ -617,6 +617,23 @@ describe('theme attribute', () => {
   it('should remove theme attribute from the submenu', () => {
     menu.removeAttribute('theme');
     expect(subMenu.hasAttribute('theme')).to.be.false;
+  });
+
+  it('should override the component theme attribute with the item.theme property', async () => {
+    let items = subMenu.$.overlay.querySelectorAll('vaadin-context-menu-item');
+
+    expect(items[0].getAttribute('theme')).to.equal('sub-item-theme');
+    expect(items[1].getAttribute('theme')).to.equal('foo');
+
+    subMenu.close();
+    menu.removeAttribute('theme');
+    buttons[0].dispatchEvent(new CustomEvent('mouseover', { bubbles: true, composed: true }));
+    await nextRender(subMenu);
+
+    items = subMenu.$.overlay.querySelectorAll('vaadin-context-menu-item');
+
+    expect(items[0].getAttribute('theme')).to.equal('sub-item-theme');
+    expect(items[1].hasAttribute('theme')).to.be.false;
   });
 });
 

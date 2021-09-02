@@ -2,6 +2,7 @@ export interface MenuBarItem {
   text?: string;
   component?: string | HTMLElement;
   disabled?: boolean;
+  theme?: string | string[];
   children?: SubMenuItem[];
 }
 

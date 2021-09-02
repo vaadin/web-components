@@ -5,6 +5,7 @@ export interface ContextMenuItem {
   component?: string | HTMLElement;
   disabled?: boolean;
   checked?: boolean;
+  theme?: string | string[];
   children?: ContextMenuItem[];
 }
 
