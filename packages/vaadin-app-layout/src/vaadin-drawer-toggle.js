@@ -80,15 +80,7 @@ class DrawerToggleElement extends Button {
     super();
 
     this.addEventListener('click', () => {
-      if (!this.disabled) {
-        this.__fireClick();
-      }
-    });
-
-    this.addEventListener('keyup', (event) => {
-      if (/^( |SpaceBar|Enter)$/.test(event.key) && !this.disabled) {
-        this.__fireClick();
-      }
+      this.__fireClick();
     });
   }
 
