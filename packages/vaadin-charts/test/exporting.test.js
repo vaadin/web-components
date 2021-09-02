@@ -5,6 +5,8 @@ import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styl
 import { fixtureSync, oneEvent, nextRender } from '@vaadin/testing-helpers';
 import { chartDefaultTheme } from '../theme/vaadin-chart-default-theme.js';
 import Highcharts from 'highcharts/es-modules/masters/highstock.src.js';
+import HttpUtilities from 'highcharts/es-modules/Core/HttpUtilities.js';
+
 import '../vaadin-chart.js';
 
 const chart = css`
@@ -55,7 +57,7 @@ describe('vaadin-chart exporting', () => {
 
   before(() => {
     // Prevent form submit
-    sinon.stub(Highcharts, 'post');
+    sinon.stub(HttpUtilities, 'post');
     // Hook into Highcharts events
     fireEventSpy = sinon.spy(Highcharts, 'fireEvent');
   });
