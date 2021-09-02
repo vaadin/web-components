@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/checkbox",
-  "version": "22.0.0-alpha3",
+  "version": "22.0.0-alpha4",
   "description": "vaadin-checkbox",
   "main": "vaadin-checkbox.js",
   "module": "vaadin-checkbox.js",
@@ -26,11 +26,11 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/vaadin-control-state-mixin": "^22.0.0-alpha3",
-    "@vaadin/vaadin-element-mixin": "^22.0.0-alpha3",
-    "@vaadin/vaadin-lumo-styles": "^22.0.0-alpha3",
-    "@vaadin/vaadin-material-styles": "^22.0.0-alpha3",
-    "@vaadin/vaadin-themable-mixin": "^22.0.0-alpha3"
+    "@vaadin/vaadin-control-state-mixin": "^22.0.0-alpha4",
+    "@vaadin/vaadin-element-mixin": "^22.0.0-alpha4",
+    "@vaadin/vaadin-lumo-styles": "^22.0.0-alpha4",
+    "@vaadin/vaadin-material-styles": "^22.0.0-alpha4",
+    "@vaadin/vaadin-themable-mixin": "^22.0.0-alpha4"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",

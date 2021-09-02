@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-themable-mixin",
-  "version": "22.0.0-alpha3",
+  "version": "22.0.0-alpha4",
   "description": "vaadin-themable-mixin",
   "main": "vaadin-themable-mixin.js",
   "module": "vaadin-themable-mixin.js",

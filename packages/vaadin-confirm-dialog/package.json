@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-confirm-dialog",
-  "version": "22.0.0-alpha3",
+  "version": "22.0.0-alpha4",
   "description": "vaadin-confirm-dialog",
   "main": "vaadin-confirm-dialog.js",
   "module": "vaadin-confirm-dialog.js",
@@ -26,14 +26,14 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/button": "^22.0.0-alpha3",
-    "@vaadin/vaadin-dialog": "^22.0.0-alpha3",
-    "@vaadin/vaadin-element-mixin": "^22.0.0-alpha3",
+    "@vaadin/button": "^22.0.0-alpha4",
+    "@vaadin/vaadin-dialog": "^22.0.0-alpha4",
+    "@vaadin/vaadin-element-mixin": "^22.0.0-alpha4",
     "@vaadin/vaadin-license-checker": "^2.1.0",
-    "@vaadin/vaadin-lumo-styles": "^22.0.0-alpha3",
-    "@vaadin/vaadin-material-styles": "^22.0.0-alpha3",
-    "@vaadin/vaadin-overlay": "^22.0.0-alpha3",
-    "@vaadin/vaadin-themable-mixin": "^22.0.0-alpha3"
+    "@vaadin/vaadin-lumo-styles": "^22.0.0-alpha4",
+    "@vaadin/vaadin-material-styles": "^22.0.0-alpha4",
+    "@vaadin/vaadin-overlay": "^22.0.0-alpha4",
+    "@vaadin/vaadin-themable-mixin": "^22.0.0-alpha4"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",

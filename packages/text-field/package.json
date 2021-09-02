@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/text-field",
-  "version": "22.0.0-alpha3",
+  "version": "22.0.0-alpha4",
   "description": "vaadin-text-field",
   "main": "vaadin-text-field.js",
   "module": "vaadin-text-field.js",
@@ -25,12 +25,12 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/field-base": "^22.0.0-alpha3",
-    "@vaadin/input-container": "^22.0.0-alpha3",
-    "@vaadin/vaadin-element-mixin": "^22.0.0-alpha3",
-    "@vaadin/vaadin-lumo-styles": "^22.0.0-alpha3",
-    "@vaadin/vaadin-material-styles": "^22.0.0-alpha3",
-    "@vaadin/vaadin-themable-mixin": "^22.0.0-alpha3"
+    "@vaadin/field-base": "^22.0.0-alpha4",
+    "@vaadin/input-container": "^22.0.0-alpha4",
+    "@vaadin/vaadin-element-mixin": "^22.0.0-alpha4",
+    "@vaadin/vaadin-lumo-styles": "^22.0.0-alpha4",
+    "@vaadin/vaadin-material-styles": "^22.0.0-alpha4",
+    "@vaadin/vaadin-themable-mixin": "^22.0.0-alpha4"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",

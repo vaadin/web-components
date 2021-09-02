@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-context-menu",
-  "version": "22.0.0-alpha3",
+  "version": "22.0.0-alpha4",
   "description": "Web Component for showing context dependent items for any element on the page",
   "main": "vaadin-context-menu.js",
   "module": "vaadin-context-menu.js",
@@ -27,18 +27,18 @@
   "dependencies": {
     "@polymer/iron-media-query": "^3.0.0",
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/vaadin-element-mixin": "^22.0.0-alpha3",
-    "@vaadin/vaadin-item": "^22.0.0-alpha3",
-    "@vaadin/vaadin-list-box": "^22.0.0-alpha3",
-    "@vaadin/vaadin-lumo-styles": "^22.0.0-alpha3",
-    "@vaadin/vaadin-material-styles": "^22.0.0-alpha3",
-    "@vaadin/vaadin-overlay": "^22.0.0-alpha3",
-    "@vaadin/vaadin-themable-mixin": "^22.0.0-alpha3"
+    "@vaadin/vaadin-element-mixin": "^22.0.0-alpha4",
+    "@vaadin/vaadin-item": "^22.0.0-alpha4",
+    "@vaadin/vaadin-list-box": "^22.0.0-alpha4",
+    "@vaadin/vaadin-lumo-styles": "^22.0.0-alpha4",
+    "@vaadin/vaadin-material-styles": "^22.0.0-alpha4",
+    "@vaadin/vaadin-overlay": "^22.0.0-alpha4",
+    "@vaadin/vaadin-themable-mixin": "^22.0.0-alpha4"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
     "@vaadin/testing-helpers": "^0.2.1",
-    "@vaadin/vaadin-template-renderer": "^22.0.0-alpha3",
+    "@vaadin/vaadin-template-renderer": "^22.0.0-alpha4",
     "sinon": "^9.2.1"
   },
   "publishConfig": {

@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-notification",
-  "version": "22.0.0-alpha3",
+  "version": "22.0.0-alpha4",
   "description": "vaadin-notification",
   "main": "vaadin-notification.js",
   "module": "vaadin-notification.js",
@@ -26,16 +26,16 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/vaadin-element-mixin": "^22.0.0-alpha3",
-    "@vaadin/vaadin-lumo-styles": "^22.0.0-alpha3",
-    "@vaadin/vaadin-material-styles": "^22.0.0-alpha3",
-    "@vaadin/vaadin-themable-mixin": "^22.0.0-alpha3"
+    "@vaadin/vaadin-element-mixin": "^22.0.0-alpha4",
+    "@vaadin/vaadin-lumo-styles": "^22.0.0-alpha4",
+    "@vaadin/vaadin-material-styles": "^22.0.0-alpha4",
+    "@vaadin/vaadin-themable-mixin": "^22.0.0-alpha4"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
+    "@vaadin/button": "^22.0.0-alpha4",
     "@vaadin/testing-helpers": "^0.2.1",
-    "@vaadin/button": "^22.0.0-alpha3",
-    "@vaadin/vaadin-template-renderer": "^22.0.0-alpha3",
+    "@vaadin/vaadin-template-renderer": "^22.0.0-alpha4",
     "lit": "^2.0.0-rc.1",
     "sinon": "^9.2.1"
   },

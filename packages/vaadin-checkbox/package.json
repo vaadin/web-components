@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-checkbox",
-  "version": "22.0.0-alpha3",
+  "version": "22.0.0-alpha4",
   "description": "vaadin-checkbox",
   "main": "vaadin-checkbox.js",
   "module": "vaadin-checkbox.js",
@@ -25,8 +25,8 @@
     "theme"
   ],
   "dependencies": {
-    "@vaadin/checkbox": "^22.0.0-alpha3",
-    "@vaadin/checkbox-group": "^22.0.0-alpha3"
+    "@vaadin/checkbox": "^22.0.0-alpha4",
+    "@vaadin/checkbox-group": "^22.0.0-alpha4"
   },
   "publishConfig": {
     "access": "public"

@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-rich-text-editor",
-  "version": "22.0.0-alpha3",
+  "version": "22.0.0-alpha4",
   "description": "vaadin-rich-text-editor",
   "main": "vaadin-rich-text-editor.js",
   "module": "vaadin-rich-text-editor.js",
@@ -30,14 +30,14 @@
   },
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/button": "^22.0.0-alpha3",
-    "@vaadin/vaadin-confirm-dialog": "^22.0.0-alpha3",
-    "@vaadin/vaadin-element-mixin": "^22.0.0-alpha3",
+    "@vaadin/button": "^22.0.0-alpha4",
+    "@vaadin/vaadin-confirm-dialog": "^22.0.0-alpha4",
+    "@vaadin/vaadin-element-mixin": "^22.0.0-alpha4",
     "@vaadin/vaadin-license-checker": "^2.1.0",
-    "@vaadin/vaadin-lumo-styles": "^22.0.0-alpha3",
-    "@vaadin/vaadin-material-styles": "^22.0.0-alpha3",
-    "@vaadin/vaadin-text-field": "^22.0.0-alpha3",
-    "@vaadin/vaadin-themable-mixin": "^22.0.0-alpha3"
+    "@vaadin/vaadin-lumo-styles": "^22.0.0-alpha4",
+    "@vaadin/vaadin-material-styles": "^22.0.0-alpha4",
+    "@vaadin/vaadin-text-field": "^22.0.0-alpha4",
+    "@vaadin/vaadin-themable-mixin": "^22.0.0-alpha4"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",

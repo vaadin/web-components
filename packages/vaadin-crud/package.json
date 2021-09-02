@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-crud",
-  "version": "22.0.0-alpha3",
+  "version": "22.0.0-alpha4",
   "description": "vaadin-crud",
   "main": "vaadin-crud.js",
   "module": "vaadin-crud.js",
@@ -27,22 +27,22 @@
   "dependencies": {
     "@polymer/iron-media-query": "^3.0.0",
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/button": "^22.0.0-alpha3",
-    "@vaadin/vaadin-confirm-dialog": "^22.0.0-alpha3",
-    "@vaadin/vaadin-dialog": "^22.0.0-alpha3",
-    "@vaadin/vaadin-element-mixin": "^22.0.0-alpha3",
-    "@vaadin/vaadin-form-layout": "^22.0.0-alpha3",
-    "@vaadin/vaadin-grid": "^22.0.0-alpha3",
+    "@vaadin/button": "^22.0.0-alpha4",
+    "@vaadin/vaadin-confirm-dialog": "^22.0.0-alpha4",
+    "@vaadin/vaadin-dialog": "^22.0.0-alpha4",
+    "@vaadin/vaadin-element-mixin": "^22.0.0-alpha4",
+    "@vaadin/vaadin-form-layout": "^22.0.0-alpha4",
+    "@vaadin/vaadin-grid": "^22.0.0-alpha4",
     "@vaadin/vaadin-license-checker": "^2.1.0",
-    "@vaadin/vaadin-lumo-styles": "^22.0.0-alpha3",
-    "@vaadin/vaadin-material-styles": "^22.0.0-alpha3",
-    "@vaadin/vaadin-text-field": "^22.0.0-alpha3",
-    "@vaadin/vaadin-themable-mixin": "^22.0.0-alpha3"
+    "@vaadin/vaadin-lumo-styles": "^22.0.0-alpha4",
+    "@vaadin/vaadin-material-styles": "^22.0.0-alpha4",
+    "@vaadin/vaadin-text-field": "^22.0.0-alpha4",
+    "@vaadin/vaadin-themable-mixin": "^22.0.0-alpha4"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
     "@vaadin/testing-helpers": "^0.2.1",
-    "@vaadin/vaadin-template-renderer": "^22.0.0-alpha3",
+    "@vaadin/vaadin-template-renderer": "^22.0.0-alpha4",
     "sinon": "^9.2.1"
   },
   "publishConfig": {

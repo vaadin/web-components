@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-radio-button",
-  "version": "22.0.0-alpha3",
+  "version": "22.0.0-alpha4",
   "description": "vaadin-radio-button",
   "main": "vaadin-radio-button.js",
   "module": "vaadin-radio-button.js",
@@ -26,7 +26,7 @@
     "theme"
   ],
   "dependencies": {
-    "@vaadin/radio-group": "^22.0.0-alpha3"
+    "@vaadin/radio-group": "^22.0.0-alpha4"
   },
   "publishConfig": {
     "access": "public"

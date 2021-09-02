@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-control-state-mixin",
-  "version": "22.0.0-alpha3",
+  "version": "22.0.0-alpha4",
   "description": "vaadin-control-state-mixin",
   "main": "vaadin-control-state-mixin.js",
   "module": "vaadin-control-state-mixin.js",

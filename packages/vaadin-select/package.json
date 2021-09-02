@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-select",
-  "version": "22.0.0-alpha3",
+  "version": "22.0.0-alpha4",
   "description": "vaadin-select",
   "main": "vaadin-select.js",
   "module": "vaadin-select.js",
@@ -25,7 +25,7 @@
     "theme"
   ],
   "dependencies": {
-    "@vaadin/select": "^22.0.0-alpha3"
+    "@vaadin/select": "^22.0.0-alpha4"
   },
   "publishConfig": {
     "access": "public"
