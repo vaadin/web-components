@@ -63,11 +63,6 @@ export const InteractionsMixin = (superClass) =>
       }
     }
 
-    /** @private */
-    __stringOrArrayToString(stringOrArray) {
-      return Array.isArray(stringOrArray) ? stringOrArray.join(' ') : stringOrArray;
-    }
-
     /** @protected */
     _setExpanded(button, expanded) {
       button.toggleAttribute('expanded', expanded);

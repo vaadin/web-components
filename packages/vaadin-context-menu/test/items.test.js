@@ -591,14 +591,22 @@ describe('items', () => {
       let rootItems = getMenuItems();
       expect(rootItems[1].getAttribute('theme')).to.equal('bar-1');
 
-      delete rootMenu.items[1].theme;
+      // An empty array should also override the component theme
+      rootMenu.items[1].theme = [];
       await updateItemsAndReopen();
 
       rootItems = getMenuItems();
-      expect(rootItems[1].getAttribute('theme')).to.equal('foo');
+      expect(rootItems[1].hasAttribute('theme')).to.be.false;
 
-      // An empty array should also count as no value
-      rootMenu.items[1].theme = [];
+      // An empty string should also override the component theme
+      rootMenu.items[1].theme = '';
+      await updateItemsAndReopen();
+
+      rootItems = getMenuItems();
+      expect(rootItems[1].hasAttribute('theme')).to.be.false;
+
+      // If null or undefined, the parent component theme should be used
+      delete rootMenu.items[1].theme;
       await updateItemsAndReopen();
 
       rootItems = getMenuItems();

@@ -258,9 +258,9 @@ export const ButtonsMixin = (superClass) =>
     _setButtonTheme(btn, hostTheme) {
       let theme = hostTheme;
 
-      // item theme takes precedence over host theme
+      // item theme takes precedence over host theme even if it's empty, as long as it's not undefined or null
       const itemTheme = btn.item && btn.item.theme;
-      if (itemTheme) {
+      if (itemTheme != null) {
         theme = Array.isArray(itemTheme) ? itemTheme.join(' ') : itemTheme;
       }
 
@@ -323,10 +323,5 @@ export const ButtonsMixin = (superClass) =>
         animationFrame,
         this.__detectOverflow.bind(this)
       );
-    }
-
-    /** @private */
-    __stringOrArrayToString(stringOrArray) {
-      return Array.isArray(stringOrArray) ? stringOrArray.join(' ') : stringOrArray;
     }
   };

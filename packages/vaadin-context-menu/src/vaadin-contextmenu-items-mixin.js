@@ -232,14 +232,7 @@ export const ItemsMixin = (superClass) =>
           component.setAttribute('role', 'separator');
         }
 
-        const itemTheme = this.__stringOrArrayToString(item.theme);
-        if (itemTheme) {
-          component.setAttribute('theme', itemTheme);
-        } else if (this.theme) {
-          component.setAttribute('theme', this.theme);
-        } else {
-          component.removeAttribute('theme');
-        }
+        this._setMenuItemTheme(component, item, this.theme);
 
         component._item = item;
 
@@ -261,6 +254,22 @@ export const ItemsMixin = (superClass) =>
 
         listBox.appendChild(component);
       });
+    }
+
+    /** @protected */
+    _setMenuItemTheme(component, item, hostTheme) {
+      let theme = hostTheme;
+
+      // item theme takes precedence over host theme even if it's empty, as long as it's not undefined or null
+      if (item.theme != null) {
+        theme = Array.isArray(item.theme) ? item.theme.join(' ') : item.theme;
+      }
+
+      if (theme) {
+        component.setAttribute('theme', theme);
+      } else {
+        component.removeAttribute('theme');
+      }
     }
 
     /** @private */
@@ -384,10 +393,5 @@ export const ItemsMixin = (superClass) =>
           listBox.removeAttribute('theme');
         }
       }
-    }
-
-    /** @private */
-    __stringOrArrayToString(stringOrArray) {
-      return Array.isArray(stringOrArray) ? stringOrArray.join(' ') : stringOrArray;
     }
   };
