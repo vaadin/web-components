@@ -17,7 +17,10 @@ const HelperTextMixinImplementation = (superclass) =>
         helperText: {
           type: String,
           observer: '_helperTextChanged'
-        }
+        },
+
+        /** @protected */
+        _helperId: String
       };
     }
 
@@ -43,6 +46,9 @@ const HelperTextMixinImplementation = (superclass) =>
       // Ensure every instance has unique ID
       const uniqueId = (HelperTextMixinClass._uniqueId = 1 + HelperTextMixinClass._uniqueId || 0);
       this._helperId = `helper-${this.localName}-${uniqueId}`;
+
+      // Save generated ID to restore later
+      this.__savedHelperId = this._helperId;
     }
 
     /** @protected */
@@ -63,6 +69,35 @@ const HelperTextMixinImplementation = (superclass) =>
 
       this.__helperSlot = this.shadowRoot.querySelector('[name="helper"]');
       this.__helperSlot.addEventListener('slotchange', this.__onHelperSlotChange.bind(this));
+      this.__helperIdObserver = new MutationObserver((mutationRecord) => {
+        mutationRecord.forEach((mutation) => {
+          // only handle helper nodes
+          if (
+            mutation.type === 'attributes' &&
+            mutation.attributeName === 'id' &&
+            mutation.target === this._currentHelper &&
+            mutation.target.id !== this.__savedHelperId
+          ) {
+            this.__updateHelperId(mutation.target);
+          }
+        });
+      });
+
+      this.__helperIdObserver.observe(this, { attributes: true, subtree: true });
+    }
+
+    /** @private */
+    __updateHelperId(customHelper) {
+      let newId;
+
+      if (customHelper.id) {
+        newId = customHelper.id;
+      } else {
+        newId = this.__savedHelperId;
+        customHelper.id = newId;
+      }
+
+      this._helperId = newId;
     }
 
     /** @private */
@@ -73,7 +108,7 @@ const HelperTextMixinImplementation = (superclass) =>
         .find((node) => node !== this._currentHelper);
 
       if (customHelper) {
-        customHelper.id = this._helperId;
+        this.__updateHelperId(customHelper);
 
         if (this._currentHelper.isConnected) {
           this._currentHelper.remove();
