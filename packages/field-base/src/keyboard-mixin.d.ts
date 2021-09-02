@@ -4,7 +4,9 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 /**
- * A mixin to listen to keyboard events, such as `keydown`, `keyup`.
+ * A mixin that manages keyboard handling.
+ * It subscribes to the keyboard events while providing an actual implementation
+ * for the event handlers is left for the client (a component or another mixin).
  */
 declare function KeyboardMixin<T extends new (...args: any[]) => {}>(base: T): T & KeyboardMixinConstructor;
 

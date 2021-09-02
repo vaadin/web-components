@@ -41,6 +41,8 @@ const KeyboardMixinImplementation = (superclass) =>
   };
 
 /**
- * A mixin to listen to keyboard events, such as `keydown`, `keyup`.
+ * A mixin that manages keyboard handling.
+ * It subscribes to the keyboard events while providing an actual implementation
+ * for the event handlers is left for the client (a component or another mixin).
  */
 export const KeyboardMixin = dedupingMixin(KeyboardMixinImplementation);
