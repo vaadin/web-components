@@ -41,13 +41,13 @@ const TabindexMixinImplementation = (superclass) =>
      * @protected
      * @override
      */
-    _disabledChanged(disabled) {
-      super._disabledChanged(disabled);
+    _disabledChanged(disabled, oldDisabled) {
+      super._disabledChanged(disabled, oldDisabled);
 
       if (disabled) {
         this.__lastTabIndex = this.tabindex;
         this.tabindex = -1;
-      } else {
+      } else if (oldDisabled) {
         this.tabindex = this.__lastTabIndex;
       }
     }

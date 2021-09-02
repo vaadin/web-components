@@ -15,44 +15,61 @@ customElements.define(
 describe('tabindex-mixin', () => {
   let element;
 
-  beforeEach(() => {
-    element = fixtureSync(`<tabindex-mixin-element></tabindex-mixin-element>`);
+  describe('default', () => {
+    beforeEach(() => {
+      element = fixtureSync(`<tabindex-mixin-element></tabindex-mixin-element>`);
+    });
+
+    it('should set tabindex attribute to 0 by default', () => {
+      expect(element.getAttribute('tabindex')).to.be.equal('0');
+    });
+
+    it('should reflect tabindex property to the attribute', () => {
+      element.tabindex = 1;
+      expect(element.getAttribute('tabindex')).to.be.equal('1');
+    });
+
+    it('should reflect native tabIndex property to the attribute', () => {
+      element.tabIndex = 1;
+      expect(element.getAttribute('tabindex')).to.be.equal('1');
+    });
+
+    it('should reflect tabindex attribute to the property', () => {
+      element.setAttribute('tabindex', '1');
+      expect(element.tabindex).to.be.equal(1);
+    });
+
+    it('should set tabindex attribute to -1 when disabled', () => {
+      element.tabIndex = 1;
+      element.disabled = true;
+      expect(element.getAttribute('tabindex')).to.be.equal('-1');
+    });
+
+    it('should restore tabindex attribute when enabled', () => {
+      element.tabIndex = 1;
+      element.disabled = true;
+      element.disabled = false;
+      expect(element.getAttribute('tabindex')).to.be.equal('1');
+    });
+
+    it('should restore tabindex attribute with the last known value when enabled', () => {
+      element.tabIndex = 1;
+      element.disabled = true;
+      element.tabIndex = 2;
+      expect(element.getAttribute('tabindex')).to.be.equal('-1');
+
+      element.disabled = false;
+      expect(element.getAttribute('tabindex')).to.be.equal('2');
+    });
   });
 
-  it('should set tabindex attribute to 0 by default', () => {
-    expect(element.getAttribute('tabindex')).to.be.equal('0');
-  });
+  describe('custom', () => {
+    beforeEach(() => {
+      element = fixtureSync(`<tabindex-mixin-element tabindex="1"></tabindex-mixin-element>`);
+    });
 
-  it('should reflect tabindex property to the attribute', () => {
-    element.tabindex = 1;
-    expect(element.getAttribute('tabindex')).to.be.equal('1');
-  });
-
-  it('should reflect native tabIndex property to the attribute', () => {
-    element.tabIndex = 1;
-    expect(element.getAttribute('tabindex')).to.be.equal('1');
-  });
-
-  it('should set tabindex attribute to -1 when disabled', () => {
-    element.tabIndex = 1;
-    element.disabled = true;
-    expect(element.getAttribute('tabindex')).to.be.equal('-1');
-  });
-
-  it('should restore tabindex attribute when enabled', () => {
-    element.tabIndex = 1;
-    element.disabled = true;
-    element.disabled = false;
-    expect(element.getAttribute('tabindex')).to.be.equal('1');
-  });
-
-  it('should restore tabindex attribute with the last known value when enabled', () => {
-    element.tabIndex = 1;
-    element.disabled = true;
-    element.tabIndex = 2;
-    expect(element.getAttribute('tabindex')).to.be.equal('-1');
-
-    element.disabled = false;
-    expect(element.getAttribute('tabindex')).to.be.equal('2');
+    it('should set tabindex property to the custom value', () => {
+      expect(element.tabindex).to.equal(1);
+    });
   });
 });
