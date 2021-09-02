@@ -3,6 +3,7 @@ import sinon from 'sinon';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import '@vaadin/vaadin-list-box/vaadin-list-box.js';
 import '@vaadin/vaadin-item/vaadin-item.js';
+import './not-animated-styles.js';
 import '../vaadin-select.js';
 
 describe('renderer', () => {
@@ -18,9 +19,9 @@ describe('renderer', () => {
         return;
       }
 
-      const listBox = window.document.createElement('vaadin-list-box');
+      const listBox = document.createElement('vaadin-list-box');
       items.forEach((text) => {
-        const item = window.document.createElement('vaadin-item');
+        const item = document.createElement('vaadin-item');
         item.textContent = text + (select.__testVar || '');
         item.value = text;
         listBox.appendChild(item);
@@ -44,7 +45,7 @@ describe('renderer', () => {
   });
 
   it('should pass vaadin-select as owner to vaadin-overlay', () => {
-    select.renderer = (root, owner) => {
+    select.renderer = (_, owner) => {
       expect(owner).to.eql(select);
     };
   });
@@ -88,7 +89,7 @@ describe('renderer', () => {
     select.requestContentUpdate();
     await nextFrame();
     expect(select._menuElement.selected).to.be.equal(1);
-    expect(select._valueElement.textContent.trim()).to.be.equal('barbaz');
+    expect(select._valueButton.textContent.trim()).to.be.equal('barbaz');
   });
 
   it('should update selected value after renderer is reassigned based on the value', async () => {

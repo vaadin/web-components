@@ -1,43 +1,35 @@
+/**
+ * @license
+ * Copyright (c) 2021 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import '@vaadin/vaadin-lumo-styles/sizing.js';
-import '@vaadin/vaadin-lumo-styles/spacing.js';
 import '@vaadin/vaadin-lumo-styles/style.js';
 import '@vaadin/vaadin-lumo-styles/font-icons.js';
 import '@vaadin/vaadin-lumo-styles/mixins/menu-overlay.js';
-import '@vaadin/vaadin-lumo-styles/mixins/field-button.js';
-import '@vaadin/vaadin-text-field/theme/lumo/vaadin-text-field.js';
-import '@vaadin/vaadin-item/theme/lumo/vaadin-item.js';
-import '@vaadin/vaadin-list-box/theme/lumo/vaadin-list-box.js';
+import '@vaadin/text-field/theme/lumo/vaadin-input-field-shared-styles.js';
 
 registerStyles(
   'vaadin-select',
   css`
-    :host {
-      outline: none;
-      -webkit-tap-highlight-color: transparent;
+    :host(:not([theme*='align'])) ::slotted([slot='value']) {
+      text-align: start;
     }
 
-    [selected] {
-      padding-left: 0;
-      padding-right: 0;
-      flex: auto;
+    [part='input-field'] ::slotted([slot='value']) {
+      font-weight: 500;
     }
 
-    :host([theme~='small']) [selected] {
-      padding: 0;
-      min-height: var(--lumo-size-s);
+    /* placeholder styles */
+    :host(:not([has-value])) [part='input-field'] ::slotted([slot='value']) {
+      color: inherit;
+      transition: opacity 0.175s 0.1s;
+      opacity: 0.5;
     }
 
-    :host([theme~='align-left']) [selected] {
-      text-align: left;
-    }
-
-    :host([theme~='align-right']) [selected] {
-      text-align: right;
-    }
-
-    :host([theme~='align-center']) [selected] {
-      text-align: center;
+    :host([has-value]) [part='input-field'] ::slotted([slot='value']) {
+      color: var(--lumo-body-text-color);
     }
 
     [part='toggle-button']::before {
@@ -49,51 +41,27 @@ registerStyles(
       color: var(--lumo-contrast-80pct);
     }
   `,
-  { include: ['lumo-field-button'], moduleId: 'lumo-select' }
+  { moduleId: 'lumo-select', include: ['lumo-input-field-shared-styles'] }
 );
 
 registerStyles(
-  'vaadin-select-text-field',
+  'vaadin-select-value-button',
   css`
-    :host([theme~='align-center']) ::slotted([part~='value']) {
-      --_lumo-text-field-overflow-mask-image: linear-gradient(to left, transparent 0.25em, #000 1.5em);
+    :host {
+      min-height: var(--lumo-size-m);
+      padding: 0 0.25em;
     }
 
-    :host([theme~='align-center']) ::slotted([part~='value']) {
-      --_lumo-text-field-overflow-mask-image: none;
+    :host::before,
+    :host::after {
+      display: none;
     }
 
-    :host([theme~='align-right']) ::slotted([part~='value']) {
-      --_lumo-text-field-overflow-mask-image: linear-gradient(to right, transparent 0.25em, #000 1.5em);
-    }
-
-    [part='input-field'] {
-      cursor: default;
-    }
-
-    [part='input-field'] ::slotted([part='value']) {
-      display: flex;
-    }
-
-    [part='input-field']:focus {
-      outline: none;
-    }
-
-    /* RTL specific styles */
-    :host([theme~='align-left'][dir='rtl']) ::slotted([part~='value']) {
-      --_lumo-text-field-overflow-mask-image: linear-gradient(to left, transparent 0.25em, #000 1.5em);
-    }
-
-    :host([theme~='align-center'][dir='rtl']) ::slotted([part~='value']) {
-      --_lumo-text-field-overflow-mask-image: none;
-    }
-
-    :host([dir='rtl']) ::slotted([part~='value']),
-    :host([theme~='align-right'][dir='rtl']) ::slotted([part~='value']) {
-      --_lumo-text-field-overflow-mask-image: linear-gradient(to right, transparent 0.25em, #000 1.5em);
+    :host([focus-ring]) {
+      box-shadow: none;
     }
   `,
-  { moduleId: 'lumo-select-text-field' }
+  { moduleId: 'lumo-select-value-button' }
 );
 
 registerStyles(

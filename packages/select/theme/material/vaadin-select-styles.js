@@ -1,11 +1,12 @@
+/**
+ * @license
+ * Copyright (c) 2021 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
-import '@vaadin/vaadin-item/theme/material/vaadin-item.js';
-import '@vaadin/vaadin-list-box/theme/material/vaadin-list-box.js';
-import '@vaadin/vaadin-text-field/theme/material/vaadin-text-field.js';
-import '@vaadin/vaadin-material-styles/color.js';
 import '@vaadin/vaadin-material-styles/font-icons.js';
 import '@vaadin/vaadin-material-styles/mixins/menu-overlay.js';
-import '@vaadin/vaadin-material-styles/mixins/field-button.js';
+import '@vaadin/text-field/theme/material/vaadin-input-field-shared-styles.js';
 
 registerStyles(
   'vaadin-select',
@@ -13,6 +14,17 @@ registerStyles(
     :host {
       display: inline-flex;
       -webkit-tap-highlight-color: transparent;
+    }
+
+    /* placeholder styles */
+    :host(:not([has-value])) [part='input-field'] ::slotted([slot='value']) {
+      color: var(--material-disabled-text-color);
+      transition: opacity 0.175s 0.1s;
+      opacity: 1;
+    }
+
+    :host([has-value]) [part='input-field'] ::slotted([slot='value']) {
+      color: var(--material-body-text-color);
     }
 
     [part='toggle-button']::before {
@@ -27,31 +39,24 @@ registerStyles(
       pointer-events: none;
     }
   `,
-  { include: ['material-field-button'], moduleId: 'material-select' }
+  { moduleId: 'material-select', include: ['material-input-field-shared-styles'] }
 );
 
 registerStyles(
-  'vaadin-select-text-field',
+  'vaadin-select-value-button',
   css`
     :host {
-      width: 100%;
+      font: inherit;
+      letter-spacing: normal;
+      text-transform: none;
     }
 
-    :host([disabled]) [part='input-field'],
-    [part='input-field'],
-    [part='value'] {
-      cursor: default;
-    }
-
-    [part='input-field']:focus {
-      outline: none;
-    }
-
-    ::slotted([part='value']) {
-      display: flex;
+    :host::before,
+    :host::after {
+      display: none;
     }
   `,
-  { moduleId: 'material-select-text-field' }
+  { moduleId: 'material-select-value-button' }
 );
 
 registerStyles(

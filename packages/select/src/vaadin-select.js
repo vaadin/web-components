@@ -6,27 +6,18 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { ControlStateMixin } from '@vaadin/vaadin-control-state-mixin/vaadin-control-state-mixin.js';
 import { IronResizableBehavior } from '@polymer/iron-resizable-behavior/iron-resizable-behavior.js';
 import '@polymer/iron-media-query/iron-media-query.js';
 import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
 import { processTemplates } from '@vaadin/vaadin-element-mixin/templates.js';
+import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
+import { FieldAriaMixin } from '@vaadin/field-base/src/field-aria-mixin.js';
+import { LabelMixin } from '@vaadin/field-base/src/label-mixin.js';
+import { SlotMixin } from '@vaadin/field-base/src/slot-mixin.js';
+import '@vaadin/text-field/src/vaadin-input-field-shared-styles.js';
+import '@vaadin/input-container/src/vaadin-input-container.js';
 import './vaadin-select-overlay.js';
-import './vaadin-select-text-field.js';
-const $_documentContainer = document.createElement('template');
-
-$_documentContainer.innerHTML = `
-  <style>
-    @font-face {
-      font-family: "vaadin-select-icons";
-      src: url(data:application/font-woff;charset=utf-8;base64,d09GRgABAAAAAASEAAsAAAAABDgAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAABPUy8yAAABCAAAAGAAAABgDxIGKmNtYXAAAAFoAAAAVAAAAFQXVtKHZ2FzcAAAAbwAAAAIAAAACAAAABBnbHlmAAABxAAAAHwAAAB8CohkJ2hlYWQAAAJAAAAANgAAADYOavgEaGhlYQAAAngAAAAkAAAAJAarA8ZobXR4AAACnAAAABQAAAAUCAABP2xvY2EAAAKwAAAADAAAAAwAKABSbWF4cAAAArwAAAAgAAAAIAAHABduYW1lAAAC3AAAAYYAAAGGmUoJ+3Bvc3QAAARkAAAAIAAAACAAAwAAAAMEAAGQAAUAAAKZAswAAACPApkCzAAAAesAMwEJAAAAAAAAAAAAAAAAAAAAARAAAAAAAAAAAAAAAAAAAAAAQAAA6QADwP/AAEADwABAAAAAAQAAAAAAAAAAAAAAIAAAAAAAAwAAAAMAAAAcAAEAAwAAABwAAwABAAAAHAAEADgAAAAKAAgAAgACAAEAIOkA//3//wAAAAAAIOkA//3//wAB/+MXBAADAAEAAAAAAAAAAAAAAAEAAf//AA8AAQAAAAAAAAAAAAIAADc5AQAAAAABAAAAAAAAAAAAAgAANzkBAAAAAAEAAAAAAAAAAAACAAA3OQEAAAAAAQE/AUAC6QIVABQAAAEwFx4BFxYxMDc+ATc2MTAjKgEjIgE/ISJPIiEhIk8iIUNCoEJDAhUhIk8iISEiTyIhAAEAAAABAABvL5bdXw889QALBAAAAAAA1jHaeQAAAADWMdp5AAAAAALpAhUAAAAIAAIAAAAAAAAAAQAAA8D/wAAABAAAAAAAAukAAQAAAAAAAAAAAAAAAAAAAAUEAAAAAAAAAAAAAAAAAAAABAABPwAAAAAACgAUAB4APgABAAAABQAVAAEAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAADgCuAAEAAAAAAAEABwAAAAEAAAAAAAIABwBgAAEAAAAAAAMABwA2AAEAAAAAAAQABwB1AAEAAAAAAAUACwAVAAEAAAAAAAYABwBLAAEAAAAAAAoAGgCKAAMAAQQJAAEADgAHAAMAAQQJAAIADgBnAAMAAQQJAAMADgA9AAMAAQQJAAQADgB8AAMAAQQJAAUAFgAgAAMAAQQJAAYADgBSAAMAAQQJAAoANACkaWNvbW9vbgBpAGMAbwBtAG8AbwBuVmVyc2lvbiAxLjAAVgBlAHIAcwBpAG8AbgAgADEALgAwaWNvbW9vbgBpAGMAbwBtAG8AbwBuaWNvbW9vbgBpAGMAbwBtAG8AbwBuUmVndWxhcgBSAGUAZwB1AGwAYQByaWNvbW9vbgBpAGMAbwBtAG8AbwBuRm9udCBnZW5lcmF0ZWQgYnkgSWNvTW9vbi4ARgBvAG4AdAAgAGcAZQBuAGUAcgBhAHQAZQBkACAAYgB5ACAASQBjAG8ATQBvAG8AbgAuAAAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==) format('woff');
-      font-weight: normal;
-      font-style: normal;
-    }
-  </style>
-`;
-
-document.head.appendChild($_documentContainer.content);
+import './vaadin-select-value-button.js';
 
 /**
  * `<vaadin-select>` is a Web Component for selecting values from a list of items.
@@ -79,11 +70,11 @@ document.head.appendChild($_documentContainer.content);
  *
  * Attribute    | Description | Part name
  * -------------|-------------|------------
- * `opened` | Set when the select is open | :host
- * `invalid` | Set when the element is invalid | :host
- * `focused` | Set when the element is focused | :host
+ * `opened`     | Set when the select is open | :host
+ * `invalid`    | Set when the element is invalid | :host
+ * `focused`    | Set when the element is focused | :host
  * `focus-ring` | Set when the element is keyboard focused | :host
- * `readonly` | Set when the select is read only | :host
+ * `readonly`   | Set when the select is read only | :host
  *
  * `<vaadin-select>` element sets these custom CSS properties:
  *
@@ -98,7 +89,6 @@ document.head.appendChild($_documentContainer.content);
  * In addition to `<vaadin-select>` itself, the following internal
  * components are themable:
  *
- * - `<vaadin-select-text-field>` - has the same API as [`<vaadin-text-field>`](#/elements/vaadin-text-field).
  * - `<vaadin-select-overlay>` - has the same API as [`<vaadin-overlay>`](#/elements/vaadin-overlay).
  *
  * Note: the `theme` attribute value set on `<vaadin-select>` is
@@ -111,52 +101,58 @@ document.head.appendChild($_documentContainer.content);
  *
  * @extends HTMLElement
  * @mixes ElementMixin
- * @mixes ControlStateMixin
  * @mixes ThemableMixin
+ * @mixes SlotMixin
+ * @mixes LabelMixin
+ * @mixes FieldAriaMixin
+ * @mixes DelegateFocusMixin
  */
-class SelectElement extends ElementMixin(
-  ControlStateMixin(ThemableMixin(mixinBehaviors(IronResizableBehavior, PolymerElement)))
+class Select extends DelegateFocusMixin(
+  FieldAriaMixin(
+    LabelMixin(SlotMixin(ElementMixin(ThemableMixin(mixinBehaviors(IronResizableBehavior, PolymerElement)))))
+  )
 ) {
+  static get is() {
+    return 'vaadin-select';
+  }
+
   static get template() {
     return html`
-      <style>
-        :host {
-          display: inline-block;
-        }
-
-        vaadin-select-text-field {
-          width: 100%;
-          min-width: 0;
-        }
-
-        :host([hidden]) {
-          display: none !important;
-        }
-
-        [part='toggle-button'] {
-          font-family: 'vaadin-select-icons';
-        }
-
-        [part='toggle-button']::before {
-          content: '\\e900';
+      <style include="vaadin-input-field-shared-styles">
+        ::slotted([slot='value']) {
+          flex-grow: 1;
+          background-color: transparent;
         }
       </style>
 
-      <vaadin-select-text-field
-        placeholder="[[placeholder]]"
-        label="[[label]]"
-        required="[[required]]"
-        invalid="[[invalid]]"
-        error-message="[[errorMessage]]"
-        readonly$="[[readonly]]"
-        helper-text="[[helperText]]"
-        theme$="[[theme]]"
-      >
-        <slot name="prefix" slot="prefix"></slot>
-        <slot name="helper" slot="helper">[[helperText]]</slot>
-        <div part="value"></div>
-        <div part="toggle-button" slot="suffix" role="button" aria-haspopup="listbox" aria-label="Toggle"></div>
-      </vaadin-select-text-field>
+      <div part="container">
+        <div part="label" on-click="focus">
+          <slot name="label"></slot>
+          <span part="indicator" aria-hidden="true"></span>
+        </div>
+
+        <vaadin-input-container
+          part="input-field"
+          readonly="[[readonly]]"
+          disabled="[[disabled]]"
+          invalid="[[invalid]]"
+          theme$="[[theme]]"
+          on-click="_onClick"
+        >
+          <slot name="prefix" slot="prefix"></slot>
+          <slot name="value"></slot>
+          <div part="toggle-button" slot="suffix"></div>
+        </vaadin-input-container>
+
+        <div part="helper-text">
+          <slot name="helper"></slot>
+        </div>
+
+        <div part="error-message">
+          <slot name="error-message"></slot>
+        </div>
+      </div>
+
       <vaadin-select-overlay
         opened="{{opened}}"
         with-backdrop="[[_phone]]"
@@ -166,10 +162,6 @@ class SelectElement extends ElementMixin(
 
       <iron-media-query query="[[_phoneMediaQuery]]" query-matches="{{_phone}}"></iron-media-query>
     `;
-  }
-
-  static get is() {
-    return 'vaadin-select';
   }
 
   static get properties() {
@@ -198,23 +190,6 @@ class SelectElement extends ElementMixin(
       renderer: Function,
 
       /**
-       * The error message to display when the select value is invalid
-       * @attr {string} error-message
-       * @type {string}
-       */
-      errorMessage: {
-        type: String,
-        value: ''
-      },
-
-      /**
-       * String used for the label element.
-       */
-      label: {
-        type: String
-      },
-
-      /**
        * It stores the the `value` property of the selected item, providing the
        * value for iron-form.
        * When there’s an item selected, it's the value of that item, otherwise
@@ -236,31 +211,10 @@ class SelectElement extends ElementMixin(
       },
 
       /**
-       * The current required state of the select. True if required.
-       */
-      required: {
-        type: Boolean,
-        reflectToAttribute: true,
-        observer: '_requiredChanged'
-      },
-
-      /**
-       * Set to true if the value is invalid.
-       * @type {boolean}
-       */
-      invalid: {
-        type: Boolean,
-        reflectToAttribute: true,
-        notify: true,
-        value: false
-      },
-
-      /**
        * The name of this element.
        */
       name: {
-        type: String,
-        reflectToAttribute: true
+        type: String
       },
 
       /**
@@ -272,15 +226,6 @@ class SelectElement extends ElementMixin(
        */
       placeholder: {
         type: String
-      },
-
-      /**
-       * String used for the helper text.
-       * @attr {string} helper-text
-       */
-      helperText: {
-        type: String,
-        value: ''
       },
 
       /**
@@ -308,7 +253,7 @@ class SelectElement extends ElementMixin(
       _inputElement: Object,
 
       /** @private */
-      _toggleElement: Object,
+      _inputContainer: Object,
 
       /** @private */
       _items: Object
@@ -317,27 +262,70 @@ class SelectElement extends ElementMixin(
 
   static get observers() {
     return [
-      '_updateSelectedItem(value, _items)',
-      '_updateAriaExpanded(opened, _toggleElement, _inputElement)',
+      '_updateAriaExpanded(opened)',
+      '_updateAriaRequired(required)',
+      '_updateSelectedItem(value, _items, placeholder)',
       '_rendererChanged(renderer, _overlayElement)'
     ];
   }
 
+  /** @protected */
+  get slots() {
+    return {
+      ...super.slots,
+      value: () => {
+        const button = document.createElement('vaadin-select-value-button');
+        button.setAttribute('aria-haspopup', 'listbox');
+        return button;
+      }
+    };
+  }
+
+  /** @protected */
+  get _ariaTarget() {
+    return this._valueButton;
+  }
+
+  /** @protected */
+  get _valueButton() {
+    return this._getDirectSlotChild('value');
+  }
+
   constructor() {
     super();
+
+    // Ensure every instance has unique ID
+    const uniqueId = (Select._uniqueId = 1 + Select._uniqueId || 0);
+    this._fieldId = `${this.localName}-${uniqueId}`;
+
     this._boundSetPosition = this._setPosition.bind(this);
+    this._boundOnKeyDown = this._onKeyDown.bind(this);
   }
 
   /** @protected */
   connectedCallback() {
     super.connectedCallback();
     this.addEventListener('iron-resize', this._boundSetPosition);
+
+    if (this._valueButton) {
+      this._valueButton.setAttribute('aria-labelledby', `${this._labelId} ${this._fieldId}`);
+
+      this._updateAriaRequired(this.required);
+      this._updateAriaExpanded(this.opened);
+
+      this._setFocusElement(this._valueButton);
+
+      this._valueButton.addEventListener('keydown', this._boundOnKeyDown);
+    }
   }
 
   /** @protected */
   disconnectedCallback() {
     super.disconnectedCallback();
     this.removeEventListener('iron-resize', this._boundSetPosition);
+    if (this._valueButton) {
+      this._valueButton.removeEventListener('keydown', this._boundOnKeyDown);
+    }
     // Making sure the select is closed and removed from DOM after detaching the select.
     this.opened = false;
   }
@@ -347,20 +335,7 @@ class SelectElement extends ElementMixin(
     super.ready();
 
     this._overlayElement = this.shadowRoot.querySelector('vaadin-select-overlay');
-    this._valueElement = this.shadowRoot.querySelector('[part="value"]');
-    this._toggleElement = this.shadowRoot.querySelector('[part="toggle-button"]');
-    this._nativeInput = this.focusElement.shadowRoot.querySelector('input');
-    this._nativeInput.setAttribute('aria-hidden', true);
-    this._nativeInput.setAttribute('tabindex', -1);
-    this._nativeInput.style.pointerEvents = 'none';
-
-    this.focusElement.addEventListener('click', (e) => {
-      const isHelperClick = Array.from(e.composedPath()).some((node) => {
-        return node.nodeType === Node.ELEMENT_NODE && node.getAttribute('slot') === 'helper';
-      });
-      this.opened = !this.readonly && !isHelperClick;
-    });
-    this.focusElement.addEventListener('keydown', (e) => this._onKeyDown(e));
+    this._inputContainer = this.shadowRoot.querySelector('[part~="input-field"]');
 
     processTemplates(this);
   }
@@ -416,7 +391,7 @@ class SelectElement extends ElementMixin(
         this._items = this._menuElement.items;
         this._items.forEach((item) => item.setAttribute('role', 'option'));
       });
-      this._menuElement.addEventListener('selected-changed', () => this._updateValueSlot());
+      this._menuElement.addEventListener('selected-changed', () => this.__updateValueButton());
       this._menuElement.addEventListener('keydown', (e) => this._onKeyDownInside(e));
       this._menuElement.addEventListener(
         'click',
@@ -431,32 +406,23 @@ class SelectElement extends ElementMixin(
     }
   }
 
-  /**
-   * @return {!HTMLElement}
-   * @protected
-   */
-  get focusElement() {
-    return this._inputElement || (this._inputElement = this.shadowRoot.querySelector('vaadin-select-text-field'));
-  }
-
-  /** @private */
-  _requiredChanged(required) {
-    this.setAttribute('aria-required', required);
-  }
-
   /** @private */
   _valueChanged(value, oldValue) {
-    if (value === '') {
-      this.focusElement.removeAttribute('has-value');
-    } else {
-      this.focusElement.setAttribute('has-value', '');
-    }
+    this.toggleAttribute('has-value', Boolean(value));
 
     // Skip validation for the initial empty string value
     if (value === '' && oldValue === undefined) {
       return;
     }
     this.validate();
+  }
+
+  /** @private */
+  _onClick(e) {
+    const isHelperClick = Array.from(e.composedPath()).some((node) => {
+      return node.nodeType === Node.ELEMENT_NODE && node.getAttribute('slot') === 'helper';
+    });
+    this.opened = !this.readonly && !isHelperClick;
   }
 
   /**
@@ -493,19 +459,20 @@ class SelectElement extends ElementMixin(
   /** @private */
   _openedChanged(opened, wasOpened) {
     if (opened) {
-      if (
-        !this._overlayElement ||
-        !this._menuElement ||
-        !this._toggleElement ||
-        !this.focusElement ||
-        this.disabled ||
-        this.readonly
-      ) {
+      if (!this._overlayElement || !this._menuElement || !this.focusElement || this.disabled || this.readonly) {
         this.opened = false;
         return;
       }
 
-      this._openedWithFocusRing = this.hasAttribute('focus-ring') || this.focusElement.hasAttribute('focus-ring');
+      // Preserve focus-ring to restore it later
+      const hasFocusRing = this.hasAttribute('focus-ring');
+      this._openedWithFocusRing = hasFocusRing;
+
+      // Opened select should not keep focus-ring
+      if (hasFocusRing) {
+        this.removeAttribute('focus-ring');
+      }
+
       this._menuElement.focus();
       this._setPosition();
       window.addEventListener('scroll', this._boundSetPosition, true);
@@ -513,9 +480,9 @@ class SelectElement extends ElementMixin(
       if (this._phone) {
         this._setFocused(false);
       } else {
-        this.focusElement.focus();
+        this.focus();
         if (this._openedWithFocusRing) {
-          this.focusElement.setAttribute('focus-ring', '');
+          this.setAttribute('focus-ring', '');
         }
       }
       this.validate();
@@ -524,26 +491,26 @@ class SelectElement extends ElementMixin(
   }
 
   /** @private */
-  _hasContent(selected) {
-    if (!selected) {
-      return false;
+  _updateAriaExpanded(opened) {
+    if (this._valueButton) {
+      this._valueButton.setAttribute('aria-expanded', opened ? 'true' : 'false');
     }
-    return Boolean(
-      selected.hasAttribute('label')
-        ? selected.getAttribute('label')
-        : selected.textContent.trim() || selected.children.length
-    );
   }
 
   /** @private */
-  _attachSelectedItem(selected) {
-    if (!selected) {
-      return;
+  _updateAriaRequired(required) {
+    if (this._valueButton) {
+      this._valueButton.setAttribute('aria-required', required ? 'true' : 'false');
     }
+  }
+
+  /** @private */
+  __attachSelectedItem(selected) {
     let labelItem;
-    if (selected.hasAttribute('label')) {
-      labelItem = document.createElement('vaadin-item');
-      labelItem.textContent = selected.getAttribute('label');
+
+    const label = selected.getAttribute('label');
+    if (label) {
+      labelItem = this.__createItem(label);
     } else {
       labelItem = selected.cloneNode(true);
     }
@@ -551,44 +518,56 @@ class SelectElement extends ElementMixin(
     // store reference to the original item
     labelItem._sourceItem = selected;
 
-    labelItem.removeAttribute('tabindex');
-    labelItem.removeAttribute('role');
+    this.__appendItem(labelItem);
 
-    this._valueElement.appendChild(labelItem);
-
+    // ensure the item gets proper styles
     labelItem.selected = true;
   }
 
   /** @private */
-  _updateAriaExpanded(opened, toggleElement, inputElement) {
-    toggleElement && toggleElement.setAttribute('aria-expanded', opened);
-    if (inputElement && inputElement.focusElement) {
-      inputElement.focusElement.setAttribute('aria-expanded', opened);
-    }
+  __createItem(text) {
+    const item = document.createElement('vaadin-item');
+    item.textContent = text;
+    return item;
   }
 
   /** @private */
-  _updateValueSlot() {
-    this.opened = false;
-    this._valueElement.innerHTML = '';
+  __appendItem(item) {
+    item.removeAttribute('tabindex');
+    item.removeAttribute('role');
+    item.setAttribute('id', this._fieldId);
+
+    this._valueButton.appendChild(item);
+  }
+
+  /** @private */
+  __updateValueButton() {
+    if (!this._valueButton) {
+      return;
+    }
+
+    this._valueButton.innerHTML = '';
 
     const selected = this._items[this._menuElement.selected];
 
-    const hasContent = this._hasContent(selected);
-
-    // Toggle visibility of _valueElement vs fallback input with placeholder
-    this._valueElement.slot = hasContent ? 'input' : '';
-
-    this._attachSelectedItem(selected);
-
-    if (!this._valueChanging && selected) {
-      this._selectedChanging = true;
-      this.value = selected.value || '';
-      if (this.__userInteraction) {
-        this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
-        this.__userInteraction = false;
+    if (!selected) {
+      if (this.placeholder) {
+        const item = this.__createItem(this.placeholder);
+        this.__appendItem(item);
       }
-      delete this._selectedChanging;
+    } else {
+      this.__attachSelectedItem(selected);
+
+      if (!this._valueChanging) {
+        this._selectedChanging = true;
+        this.value = selected.value || '';
+        if (this.__userInteraction) {
+          this.opened = false;
+          this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
+          this.__userInteraction = false;
+        }
+        delete this._selectedChanging;
+      }
     }
   }
 
@@ -600,26 +579,40 @@ class SelectElement extends ElementMixin(
       }, undefined);
       if (!this._selectedChanging) {
         this._valueChanging = true;
-        this._updateValueSlot();
+        this.__updateValueButton();
         delete this._valueChanging;
       }
     }
   }
 
   /**
+   * Override method inherited from `FocusMixin` to not remove focused
+   * state when select is opened and focus moves to list-box.
+   * @return {boolean}
+   * @protected
+   * @override
+   */
+  _shouldRemoveFocus() {
+    return !this.opened;
+  }
+
+  /**
+   * Override method inherited from `FocusMixin` to validate on blur.
    * @param {boolean} focused
    * @protected
+   * @override
    */
   _setFocused(focused) {
-    // Keep `focused` state when opening the overlay for styling purpose.
-    super._setFocused(this.opened || focused);
-    this.focusElement._setFocused(this.hasAttribute('focused'));
-    !this.hasAttribute('focused') && this.validate();
+    super._setFocused(focused);
+
+    if (!focused) {
+      this.validate();
+    }
   }
 
   /** @private */
   _setPosition() {
-    const inputRect = this._inputElement.shadowRoot.querySelector('[part~="input-field"]').getBoundingClientRect();
+    const inputRect = this._inputContainer.getBoundingClientRect();
     const viewportHeight = Math.min(window.innerHeight, document.documentElement.clientHeight);
     const bottomAlign = inputRect.top > (viewportHeight - inputRect.height) / 2;
 
@@ -659,6 +652,6 @@ class SelectElement extends ElementMixin(
    */
 }
 
-customElements.define(SelectElement.is, SelectElement);
+customElements.define(Select.is, Select);
 
-export { SelectElement };
+export { Select };

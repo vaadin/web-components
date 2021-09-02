@@ -1,9 +1,14 @@
+/**
+ * @license
+ * Copyright (c) 2021 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-
-import { ControlStateMixin } from '@vaadin/vaadin-control-state-mixin/vaadin-control-state-mixin.js';
-
 import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
-
+import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
+import { FieldAriaMixin } from '@vaadin/field-base/src/field-aria-mixin.js';
+import { LabelMixin } from '@vaadin/field-base/src/label-mixin.js';
+import { SlotMixin } from '@vaadin/field-base/src/slot-mixin.js';
 import { SelectEventMap, SelectRenderer } from './interfaces';
 
 /**
@@ -87,9 +92,9 @@ import { SelectEventMap, SelectRenderer } from './interfaces';
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  */
-declare class SelectElement extends ElementMixin(ControlStateMixin(ThemableMixin(HTMLElement))) {
-  readonly focusElement: HTMLElement;
-
+declare class Select extends DelegateFocusMixin(
+  FieldAriaMixin(LabelMixin(SlotMixin(ElementMixin(ThemableMixin(HTMLElement)))))
+) {
   /**
    * Set when the select is open
    */
@@ -106,16 +111,6 @@ declare class SelectElement extends ElementMixin(ControlStateMixin(ThemableMixin
   renderer: SelectRenderer | undefined;
 
   /**
-   * The error message to display when the select value is invalid
-   */
-  errorMessage: string;
-
-  /**
-   * String used for the label element.
-   */
-  label: string | null | undefined;
-
-  /**
    * It stores the the `value` property of the selected item, providing the
    * value for iron-form.
    * When there’s an item selected, it's the value of that item, otherwise
@@ -129,16 +124,6 @@ declare class SelectElement extends ElementMixin(ControlStateMixin(ThemableMixin
    * an inexistent value in the items list.
    */
   value: string;
-
-  /**
-   * The current required state of the select. True if required.
-   */
-  required: boolean | null | undefined;
-
-  /**
-   * Set to true if the value is invalid.
-   */
-  invalid: boolean;
 
   /**
    * The name of this element.
@@ -164,10 +149,6 @@ declare class SelectElement extends ElementMixin(ControlStateMixin(ThemableMixin
    */
   readonly: boolean;
 
-  _setFocused(focused: boolean): void;
-
-  ready(): void;
-
   /**
    * Requests an update for the content of the select.
    * While performing the update, it invokes the renderer passed in the `renderer` property.
@@ -183,10 +164,6 @@ declare class SelectElement extends ElementMixin(ControlStateMixin(ThemableMixin
    */
   render(): void;
 
-  _onKeyDown(e: KeyboardEvent): void;
-
-  _onKeyDownInside(e: KeyboardEvent): void;
-
   /**
    * Returns true if `value` is valid, and sets the `invalid` flag appropriately.
    *
@@ -196,20 +173,20 @@ declare class SelectElement extends ElementMixin(ControlStateMixin(ThemableMixin
 
   addEventListener<K extends keyof SelectEventMap>(
     type: K,
-    listener: (this: SelectElement, ev: SelectEventMap[K]) => void,
+    listener: (this: Select, ev: SelectEventMap[K]) => void,
     options?: boolean | AddEventListenerOptions
   ): void;
 
   removeEventListener<K extends keyof SelectEventMap>(
     type: K,
-    listener: (this: SelectElement, ev: SelectEventMap[K]) => void,
+    listener: (this: Select, ev: SelectEventMap[K]) => void,
     options?: boolean | EventListenerOptions
   ): void;
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-select': SelectElement;
+    'vaadin-select': Select;
   }
 }
 
