@@ -588,13 +588,15 @@ export const KeyboardNavigationMixin = (superClass) =>
 
       const element = e.composedPath()[0];
       const isRow = this.__isRow(element);
-      this.dispatchEvent(
-        new CustomEvent(isRow ? 'row-activate' : 'cell-activate', {
-          detail: {
-            model: this.__getRowModel(isRow ? element : element.parentElement)
-          }
-        })
-      );
+      if (isRow || !element._content || !element._content.firstElementChild) {
+        this.dispatchEvent(
+          new CustomEvent(isRow ? 'row-activate' : 'cell-activate', {
+            detail: {
+              model: this.__getRowModel(isRow ? element : element.parentElement)
+            }
+          })
+        );
+      }
     }
 
     /** @private */

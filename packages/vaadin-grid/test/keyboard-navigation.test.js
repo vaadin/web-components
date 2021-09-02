@@ -11,7 +11,7 @@ import {
   listenOnce,
   nextFrame,
   up as mouseUp
-} from '@vaadin/testing-helpers/dist/index-no-side-effects.js';
+} from '@vaadin/testing-helpers';
 import '@vaadin/vaadin-template-renderer';
 import { sendKeys } from '@web/test-runner-commands';
 import {
@@ -23,69 +23,18 @@ import {
   getRowCells,
   infiniteDataProvider,
   scrollToEnd,
-  getLastVisibleItem,
-  nextResize
+  getLastVisibleItem
 } from './helpers.js';
 import '../vaadin-grid.js';
 import '../vaadin-grid-column-group.js';
 
-window.top.focus && window.top.focus();
-window.focus();
-
-if (
-  (window.chrome ||
-    /HeadlessChrome/.test(window.navigator.userAgent) ||
-    window.navigator.userAgent.toLowerCase().indexOf('firefox') > -1) &&
-  !window.document.hasFocus()
-) {
-  // Oh no! Focus kinda works, but no native events are dispatched. Let’s fake them.
-  const nativeFocus = HTMLElement.prototype.focus;
-  let fakeFocusCurrentTarget, recursiveFocusInterrupt;
-  HTMLElement.prototype.focus = function () {
-    const dispatchMockFocusEvent = function (type, bubbles, composed, target, relatedTarget) {
-      if (!target) {
-        return;
-      }
-      const e = new CustomEvent(type, { bubbles, composed: composed });
-      e.relatedTarget = relatedTarget;
-      target.dispatchEvent(e);
-    };
-
-    let activeElement,
-      recursiveFocusInvoke = false;
-    if (fakeFocusCurrentTarget) {
-      // When focus is called from a focusin/focusout listener (e. g.,
-      // recursive .focus()), activeElement might not be shifted yet.
-      // The true activeElement is a target of the previous .focus call.
-      activeElement = fakeFocusCurrentTarget;
-      recursiveFocusInvoke = true;
-    } else {
-      activeElement = document.activeElement;
-      if (activeElement) {
-        while (activeElement.shadowRoot && activeElement.shadowRoot.activeElement) {
-          activeElement = activeElement.shadowRoot.activeElement;
-        }
-      }
-    }
-
-    if (activeElement === this) {
-      // Prevent duplicate events when focus stays on the same element
-      nativeFocus.apply(this, arguments);
-    } else {
-      fakeFocusCurrentTarget = this;
-      // If shadow roots match, the events are shadow-internal, not composed
-      const composed = this.getRootNode() !== activeElement.getRootNode();
-      dispatchMockFocusEvent('focusout', true, composed, activeElement, this);
-      !recursiveFocusInterrupt && dispatchMockFocusEvent('focusin', true, composed, this, activeElement);
-      !recursiveFocusInterrupt && nativeFocus.apply(this, arguments);
-      !recursiveFocusInterrupt && dispatchMockFocusEvent('blur', false, composed, activeElement, this);
-      !recursiveFocusInterrupt && dispatchMockFocusEvent('focus', false, composed, this, activeElement);
-      fakeFocusCurrentTarget = undefined;
-    }
-
-    // Recursive focus invoke should interrupt the parent
-    recursiveFocusInterrupt = recursiveFocusInvoke;
-  };
+async function isTestRunnerControlledBrowser() {
+  try {
+    await sendKeys({ type: '' });
+    return true;
+  } catch (e) {
+    return false;
+  }
 }
 
 let grid, focusable, scroller, header, footer, body;
@@ -237,7 +186,7 @@ function getTabbableElements(root) {
 }
 
 describe('keyboard navigation', () => {
-  before(async () => {
+  beforeEach(async () => {
     grid = fixtureSync(`
       <vaadin-grid theme="no-border">
         <template class="row-details">
@@ -279,6 +228,8 @@ describe('keyboard navigation', () => {
     body = grid.$.items;
     footer = grid.$.footer;
 
+    grid.items = ['foo', 'bar'];
+
     grid._observer.flush();
     flushGrid(grid);
 
@@ -287,40 +238,6 @@ describe('keyboard navigation', () => {
     grid.parentNode.appendChild(focusable);
 
     await aTimeout(0);
-  });
-
-  after(() => {
-    focusable.remove();
-    grid.remove();
-  });
-
-  beforeEach(async () => {
-    // Reset side effects from tests
-    grid.style.width = '';
-    grid.style.border = '';
-
-    if (!grid.items || grid.items[0] !== 'foo' || grid.items[1] !== 'bar') {
-      grid.size = undefined;
-      grid.dataProvider = undefined;
-      grid.items = ['foo', 'bar'];
-      flushGrid(grid);
-    }
-    grid.activeItem = null;
-    grid.detailsOpenedItems = [];
-    grid._columnTree[0].forEach((column) => {
-      column.hidden = false;
-      column.frozen = false;
-    });
-
-    grid._focusedItemIndex = 0;
-    grid._focusedColumnOrder = undefined;
-    grid._resetKeyboardNavigation();
-    grid.removeAttribute('navigating');
-
-    focusable.focus();
-    flushGrid(grid);
-
-    await nextResize(grid);
   });
 
   describe('navigation mode', () => {
@@ -1279,7 +1196,7 @@ describe('keyboard navigation', () => {
         });
 
         it('should not hide navigation mode if a header cell is focused', () => {
-          focusFirstHeaderCell();
+          tabToHeader();
           right();
 
           expect(grid.hasAttribute('navigating')).to.be.true;
@@ -1492,7 +1409,7 @@ describe('keyboard navigation', () => {
   });
 
   describe('interaction mode', () => {
-    before(async () => {
+    beforeEach(async () => {
       grid = fixtureSync(`
       <vaadin-grid theme="no-border">
         <template class="row-details">
@@ -1537,9 +1454,9 @@ describe('keyboard navigation', () => {
       flushGrid(grid);
 
       await aTimeout(0);
-    });
 
-    beforeEach(() => {
+      grid.items = ['foo', 'bar'];
+
       focusItem(0);
       clickItem(0);
     });
@@ -1628,6 +1545,11 @@ describe('keyboard navigation', () => {
     });
 
     it('should focus the next input element when tabbing in interaction mode', async () => {
+      if (!(await isTestRunnerControlledBrowser())) {
+        // Skipping the test since the browser isn't controlled by the test runner (required by sendKeys).
+        return;
+      }
+
       // Focus first input
       right();
       enter();
@@ -1640,6 +1562,11 @@ describe('keyboard navigation', () => {
     });
 
     it('should skip the grid focus target when tabbing in interaction mode', async () => {
+      if (!(await isTestRunnerControlledBrowser())) {
+        // Skipping the test since the browser isn't controlled by the test runner (required by sendKeys).
+        return;
+      }
+
       // Focus last input
       right();
       right();
@@ -1656,6 +1583,11 @@ describe('keyboard navigation', () => {
     });
 
     it('should move cell focus target when focusing the next input element in interaction mode', async () => {
+      if (!(await isTestRunnerControlledBrowser())) {
+        // Skipping the test since the browser isn't controlled by the test runner (required by sendKeys).
+        return;
+      }
+
       // Focus first input
       right();
       enter();
