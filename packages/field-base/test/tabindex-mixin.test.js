@@ -24,11 +24,6 @@ describe('tabindex-mixin', () => {
       expect(element.getAttribute('tabindex')).to.be.equal('0');
     });
 
-    it('should reflect tabindex attribute to the property', () => {
-      element.tabindex = 1;
-      expect(element.getAttribute('tabindex')).to.be.equal('1');
-    });
-
     it('should reflect tabindex property to the attribute', () => {
       element.tabindex = 1;
       expect(element.getAttribute('tabindex')).to.be.equal('1');
@@ -37,6 +32,11 @@ describe('tabindex-mixin', () => {
     it('should reflect native tabIndex property to the attribute', () => {
       element.tabIndex = 1;
       expect(element.getAttribute('tabindex')).to.be.equal('1');
+    });
+
+    it('should reflect tabindex attribute to the property', () => {
+      element.setAttribute('tabindex', '1');
+      expect(element.tabindex).to.be.equal(1);
     });
 
     it('should set tabindex attribute to -1 when disabled', () => {
