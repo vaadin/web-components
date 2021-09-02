@@ -137,6 +137,31 @@ class Button extends ActiveMixin(TabindexMixin(FocusMixin(ElementMixin(ThemableM
       this.setAttribute('role', 'button');
     }
   }
+
+  /**
+   * Since the button component is designed on the base of the `[role=button]` attribute,
+   * and doesn't have a native <button> inside, in order to be fully accessible from the keyboard,
+   * it should manually fire the `click` event once an activation key is pressed,
+   * as it follows from the WAI-ARIA specifications:
+   * https://www.w3.org/TR/wai-aria-practices-1.1/#button
+   *
+   * According to the UI Events specifications,
+   * the `click` event should be fired exactly on `keydown`:
+   * https://www.w3.org/TR/uievents/#event-type-keydown
+   *
+   * Note, the `click` event should not be fired when the button is disabled.
+   *
+   * @param {KeyboardEvent} event
+   * @protected
+   * @override
+   */
+  _onKeyDown(event) {
+    super._onKeyDown(event);
+
+    if (!this.disabled && this._activeKeys.includes(event.key)) {
+      this.click();
+    }
+  }
 }
 
 customElements.define(Button.is, Button);
