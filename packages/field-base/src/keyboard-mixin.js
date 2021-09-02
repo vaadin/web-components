@@ -7,6 +7,7 @@ import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
 
 const KeyboardMixinImplementation = (superclass) =>
   class KeyboardMixinClass extends superclass {
+    /** @protected */
     ready() {
       super.ready();
 
@@ -23,6 +24,7 @@ const KeyboardMixinImplementation = (superclass) =>
      * A handler for the `keydown` event. By default, it does nothing.
      * Override the method to implement your own behavior.
      *
+     * @param {KeyboardEvent} _event
      * @protected
      */
     _onKeyDown(_event) {
@@ -33,6 +35,7 @@ const KeyboardMixinImplementation = (superclass) =>
      * A handler for the `keyup` event. By default, it does nothing.
      * Override the method to implement your own behavior.
      *
+     * @param {KeyboardEvent} _event
      * @protected
      */
     _onKeyUp(_event) {

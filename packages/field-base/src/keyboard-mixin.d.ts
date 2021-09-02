@@ -3,6 +3,7 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+
 /**
  * A mixin that manages keyboard handling.
  * It subscribes to the keyboard events while providing an actual implementation
@@ -19,13 +20,13 @@ interface KeyboardMixin {
    * A handler for the `keydown` event. By default, it does nothing.
    * Override the method to implement your own behavior.
    */
-  _onKeyDown(_event: KeyboardEvent): void;
+  _onKeyDown(event: KeyboardEvent): void;
 
   /**
    * A handler for the `keyup` event. By default, it does nothing.
    * Override the method to implement your own behavior.
    */
-  _onKeyUp(_event: KeyboardEvent): void;
+  _onKeyUp(event: KeyboardEvent): void;
 }
 
 export { KeyboardMixinConstructor, KeyboardMixin };

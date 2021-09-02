@@ -5,39 +5,55 @@ import { fixtureSync } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { KeyboardMixin } from '../src/keyboard-mixin.js';
 
-customElements.define(
-  'keyboard-mixin-element',
-  class extends KeyboardMixin(PolymerElement) {
-    static get template() {
-      return html`<div></div>`;
-    }
-  }
-);
-
 describe('keyboard-mixin', () => {
-  let element;
+  let element, keyDownSpy, keyUpSpy;
+
+  before(() => {
+    keyDownSpy = sinon.spy();
+    keyUpSpy = sinon.spy();
+
+    customElements.define(
+      'keyboard-mixin-element',
+      class extends KeyboardMixin(PolymerElement) {
+        static get template() {
+          return html`<div></div>`;
+        }
+
+        _onKeyDown(event) {
+          keyDownSpy(event);
+        }
+
+        _onKeyUp(event) {
+          keyUpSpy(event);
+        }
+      }
+    );
+  });
 
   beforeEach(() => {
     // Sets tabindex to 0 in order to make the element focusable for the time of testing.
     element = fixtureSync(`<keyboard-mixin-element tabindex="0"></keyboard-mixin-element>`);
-    element._onKeyDown = sinon.spy();
-    element._onKeyUp = sinon.spy();
     element.focus();
+  });
+
+  afterEach(() => {
+    keyDownSpy.resetHistory();
+    keyUpSpy.resetHistory();
   });
 
   it('should handle keydown event', async () => {
     await sendKeys({ down: 'A' });
 
-    expect(element._onKeyDown.calledOnce).to.be.true;
-    expect(element._onKeyDown.args[0][0]).to.be.an.instanceOf(KeyboardEvent);
-    expect(element._onKeyDown.args[0][0].type).to.equal('keydown');
+    expect(keyDownSpy.calledOnce).to.be.true;
+    expect(keyDownSpy.args[0][0]).to.be.an.instanceOf(KeyboardEvent);
+    expect(keyDownSpy.args[0][0].type).to.equal('keydown');
   });
 
   it('should handle keyup event', async () => {
     await sendKeys({ up: 'A' });
 
-    expect(element._onKeyUp.calledOnce).to.be.true;
-    expect(element._onKeyUp.args[0][0]).to.be.an.instanceOf(KeyboardEvent);
-    expect(element._onKeyUp.args[0][0].type).to.equal('keyup');
+    expect(keyUpSpy.calledOnce).to.be.true;
+    expect(keyUpSpy.args[0][0]).to.be.an.instanceOf(KeyboardEvent);
+    expect(keyUpSpy.args[0][0].type).to.equal('keyup');
   });
 });
