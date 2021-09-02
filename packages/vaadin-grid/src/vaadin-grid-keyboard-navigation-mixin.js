@@ -344,6 +344,7 @@ export const KeyboardNavigationMixin = (superClass) =>
 
     /**
      * Returns the target row after navigating by the given dy offset.
+     * Also returns infromation whether the details cell should be the target on the target row.
      * If the row is not in the viewport, it is first scrolled to.
      * @private
      **/
@@ -432,50 +433,53 @@ export const KeyboardNavigationMixin = (superClass) =>
       }
 
       const columnIndex = this.__indexOfChildElement(activeCell);
-      const isRowDetails = this.__isDetailsCell(activeCell);
+      const isCurrentCellRowDetails = this.__isDetailsCell(activeCell);
       const activeRowGroup = activeRow.parentNode;
-      const rowIndex = this.__getIndexInGroup(activeCell.parentNode, this._focusedItemIndex);
+      const currentRowIndex = this.__getIndexInGroup(activeRow, this._focusedItemIndex);
 
       // _focusedColumnOrder is memoized — this is to ensure predictable
       // navigation when entering and leaving detail and column group cells.
       if (this._focusedColumnOrder === undefined) {
-        if (isRowDetails) {
+        if (isCurrentCellRowDetails) {
           this._focusedColumnOrder = 0;
         } else {
-          this._focusedColumnOrder = this._getColumns(activeRowGroup, rowIndex).filter((c) => !c.hidden)[
+          this._focusedColumnOrder = this._getColumns(activeRowGroup, currentRowIndex).filter((c) => !c.hidden)[
             columnIndex
           ]._order;
         }
       }
 
-      // Find orderedColumnIndex — the index of order closest matching the
-      // original _focusedColumnOrder in the sorted array of orders
-      // of the visible columns on the destination row.
-      const dstRowIndex = this.__getIndexInGroup(dstRow, this._focusedItemIndex);
-      const dstColumns = this._getColumns(activeRowGroup, dstRowIndex).filter((c) => !c.hidden);
-      const dstSortedColumnOrders = dstColumns.map((c) => c._order).sort((b, a) => b - a);
-      const maxOrderedColumnIndex = dstSortedColumnOrders.length - 1;
-      const orderedColumnIndex = dstSortedColumnOrders.indexOf(
-        dstSortedColumnOrders
-          .slice(0)
-          .sort((b, a) => Math.abs(b - this._focusedColumnOrder) - Math.abs(a - this._focusedColumnOrder))[0]
-      );
-
-      // Index of the destination column order
-      const dstOrderedColumnIndex =
-        dy === 0 && isRowDetails
-          ? orderedColumnIndex
-          : Math.max(0, Math.min(orderedColumnIndex + dx, maxOrderedColumnIndex));
-
-      if (dstOrderedColumnIndex !== orderedColumnIndex) {
-        // Horizontal movement invalidates stored _focusedColumnOrder
-        this._focusedColumnOrder = undefined;
-      }
-
       if (dstIsRowDetails) {
+        // Focusing a row details cell on the destination row
         const dstCell = [...dstRow.children].find((el) => this.__isDetailsCell(el));
         dstCell.focus();
       } else {
+        // Focusing a regular cell on the destination row
+
+        // Find orderedColumnIndex — the index of order closest matching the
+        // original _focusedColumnOrder in the sorted array of orders
+        // of the visible columns on the destination row.
+        const dstRowIndex = this.__getIndexInGroup(dstRow, this._focusedItemIndex);
+        const dstColumns = this._getColumns(activeRowGroup, dstRowIndex).filter((c) => !c.hidden);
+        const dstSortedColumnOrders = dstColumns.map((c) => c._order).sort((b, a) => b - a);
+        const maxOrderedColumnIndex = dstSortedColumnOrders.length - 1;
+        const orderedColumnIndex = dstSortedColumnOrders.indexOf(
+          dstSortedColumnOrders
+            .slice(0)
+            .sort((b, a) => Math.abs(b - this._focusedColumnOrder) - Math.abs(a - this._focusedColumnOrder))[0]
+        );
+
+        // Index of the destination column order
+        const dstOrderedColumnIndex =
+          dy === 0 && isCurrentCellRowDetails
+            ? orderedColumnIndex
+            : Math.max(0, Math.min(orderedColumnIndex + dx, maxOrderedColumnIndex));
+
+        if (dstOrderedColumnIndex !== orderedColumnIndex) {
+          // Horizontal movement invalidates stored _focusedColumnOrder
+          this._focusedColumnOrder = undefined;
+        }
+
         const columnIndexByOrder = dstColumns.reduce((acc, col, i) => ((acc[col._order] = i), acc), {});
         const dstColumnIndex = columnIndexByOrder[dstSortedColumnOrders[dstOrderedColumnIndex]];
         const dstCell = dstRow.children[dstColumnIndex];
