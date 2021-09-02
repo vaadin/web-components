@@ -2,8 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import '@vaadin/vaadin-template-renderer';
 import { flushGrid } from './helpers.js';
-import '../vaadin-grid.js';
-import '../vaadin-grid-column-group.js';
+import '../all-imports';
 
 const fixtures = {
   default: `
@@ -181,6 +180,48 @@ describe('accessibility', () => {
       it('should not have aria-controls on body cells', () => {
         expect(uniqueAttrValues(grid.$.items.querySelectorAll('td'), 'aria-controls')).to.eql([null]);
       });
+    });
+  });
+
+  describe('treegrid', () => {
+    function hierarchicalDataProvider({ parentItem }, callback) {
+      // Let's use a count lower than pageSize so we can ignore page + pageSize for now
+      const itemsOnEachLevel = 5;
+
+      const items = [...Array(itemsOnEachLevel)].map((_, i) => {
+        return {
+          name: `${parentItem ? parentItem.name + '-' : ''}${i}`,
+          // Let's only have child items on every second item
+          children: i % 2 === 0
+        };
+      });
+
+      callback(items, itemsOnEachLevel);
+    }
+
+    beforeEach(() => {
+      grid = fixtureSync(`
+      <vaadin-grid rows-focusable item-id-path="name">
+        <vaadin-grid-tree-column path="name" header="" width="100px" flex-shrink="0"></vaadin-grid-tree-column>
+        <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
+      </vaadin-grid>
+      `);
+
+      grid.dataProvider = hierarchicalDataProvider;
+      flushGrid(grid);
+    });
+
+    it('should have aria-expanded false on expandable rows', () => {
+      expect(grid.$.items.children[0].getAttribute('aria-expanded')).to.equal('false');
+    });
+
+    it('should have aria-expanded true on expanded rows', () => {
+      grid.expandItem({ name: '0' });
+      expect(grid.$.items.children[0].getAttribute('aria-expanded')).to.equal('true');
+    });
+
+    it('should not have aria-expanded on non expandable rows', () => {
+      expect(grid.$.items.children[1].getAttribute('aria-expanded')).to.be.null;
     });
   });
 
