@@ -158,66 +158,66 @@ describe('grid', () => {
           await visualDiff(element, `${import.meta.url}_${dir}-row-details`);
         });
       });
-    });
 
-    describe('sorting', () => {
-      let firstSorter, secondSorter;
+      describe('sorting', () => {
+        let firstSorter, secondSorter;
 
-      before(async () => {
-        element = fixtureSync(`
-          <vaadin-grid style="height: 250px" multi-sort>
-            <vaadin-grid-column width="50px">
-              <template class="header">#</template>
-              <template>[[index]]</template>
-            </vaadin-grid-column>
-            <vaadin-grid-column>
-              <template class="header">
-                <vaadin-grid-sorter id="first-name-sorter" path="name.first">First name</vaadin-grid-sorter>
-              </template>
-              <template>[[item.name.first]]</template>
-            </vaadin-grid-column>
-            <vaadin-grid-column>
-              <template class="header">
-                <vaadin-grid-sorter id="last-name-sorter" path="name.last">Last name</vaadin-grid-sorter>
-              </template>
-              <template>[[item.name.last]]</template>
-            </vaadin-grid-column>
-          </vaadin-grid>
-        `);
-        element.items = users;
-        flushGrid(element);
-        await nextRender(element);
-        firstSorter = document.querySelector('#first-name-sorter');
-        secondSorter = document.querySelector('#last-name-sorter');
-      });
+        before(async () => {
+          element = fixtureSync(`
+            <vaadin-grid style="height: 250px" multi-sort>
+              <vaadin-grid-column width="50px">
+                <template class="header">#</template>
+                <template>[[index]]</template>
+              </vaadin-grid-column>
+              <vaadin-grid-column>
+                <template class="header">
+                  <vaadin-grid-sorter id="first-name-sorter" path="name.first">First name</vaadin-grid-sorter>
+                </template>
+                <template>[[item.name.first]]</template>
+              </vaadin-grid-column>
+              <vaadin-grid-column>
+                <template class="header">
+                  <vaadin-grid-sorter id="last-name-sorter" path="name.last">Last name</vaadin-grid-sorter>
+                </template>
+                <template>[[item.name.last]]</template>
+              </vaadin-grid-column>
+            </vaadin-grid>
+          `);
+          element.items = users;
+          flushGrid(element);
+          await nextRender(element);
+          firstSorter = document.querySelector('#first-name-sorter');
+          secondSorter = document.querySelector('#last-name-sorter');
+        });
 
-      after(() => {
-        element.remove();
-      });
+        after(() => {
+          element.remove();
+        });
 
-      it('initial', async () => {
-        await visualDiff(element, `${import.meta.url}_${dir}-sorting-initial`);
-      });
+        it('initial', async () => {
+          await visualDiff(element, `${import.meta.url}_${dir}-sorting-initial`);
+        });
 
-      it('single asc', async () => {
-        click(firstSorter);
-        await visualDiff(element, `${import.meta.url}_${dir}-sorting-single-asc`);
-      });
+        it('single asc', async () => {
+          click(firstSorter);
+          await visualDiff(element, `${import.meta.url}_${dir}-sorting-single-asc`);
+        });
 
-      it('multi asc asc', async () => {
-        click(secondSorter);
-        await visualDiff(element, `${import.meta.url}_${dir}-sorting-multi-asc-asc`);
-      });
+        it('multi asc asc', async () => {
+          click(secondSorter);
+          await visualDiff(element, `${import.meta.url}_${dir}-sorting-multi-asc-asc`);
+        });
 
-      it('multi asc desc', async () => {
-        click(secondSorter);
-        await visualDiff(element, `${import.meta.url}_${dir}-sorting-multi-asc-desc`);
-      });
+        it('multi asc desc', async () => {
+          click(secondSorter);
+          await visualDiff(element, `${import.meta.url}_${dir}-sorting-multi-asc-desc`);
+        });
 
-      it('single desc', async () => {
-        click(secondSorter);
-        click(firstSorter);
-        await visualDiff(element, `${import.meta.url}_${dir}-sorting-single-desc`);
+        it('single desc', async () => {
+          click(secondSorter);
+          click(firstSorter);
+          await visualDiff(element, `${import.meta.url}_${dir}-sorting-single-desc`);
+        });
       });
     });
   });
