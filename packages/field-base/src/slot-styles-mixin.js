@@ -9,20 +9,10 @@ const stylesMap = new WeakMap();
  */
 function getRootStyles(root) {
   if (!stylesMap.has(root)) {
-    stylesMap.set(root, []);
+    stylesMap.set(root, {});
   }
 
   return stylesMap.get(root);
-}
-
-/**
- * Detect if styles have been already inserted to root.
- * @param {string} styles
- * @param {DocumentOrShadowRoot} root
- * @return {boolean}
- */
-function hasStyles(styles, root) {
-  return getRootStyles(root).includes(styles);
 }
 
 /**
@@ -31,14 +21,10 @@ function hasStyles(styles, root) {
  * @param {DocumentOrShadowRoot} root
  */
 function insertStyles(styles, root) {
-  if (!styles || (styles && hasStyles(styles, root))) {
-    return;
-  }
-
   const rootNode = root === document ? document.head : root;
   const style = document.createElement('style');
-  style.appendChild(document.createTextNode(styles));
-  rootNode.appendChild(style);
+  style.textContent = styles;
+  rootNode.insertBefore(style, rootNode.firstChild);
 }
 
 const SlotStylesMixinImplementation = (superclass) =>
@@ -61,13 +47,7 @@ const SlotStylesMixinImplementation = (superclass) =>
     /** @private */
     __gatherSlotStyles() {
       if (!this.__slotStyles) {
-        let styles = '';
-
-        Object.keys(this.slotStyles).forEach((styleName) => {
-          styles += this.slotStyles[styleName];
-        });
-
-        this.__slotStyles = styles;
+        this.__slotStyles = Object.entries(this.slotStyles);
       }
 
       return this.__slotStyles;
@@ -75,9 +55,16 @@ const SlotStylesMixinImplementation = (superclass) =>
 
     /** @private */
     __applySlotStyles() {
-      const styles = this.__gatherSlotStyles();
+      const root = this.getRootNode();
+      const rootStyles = getRootStyles(root);
+      const slotStyles = this.__gatherSlotStyles();
 
-      insertStyles(styles, this.getRootNode());
+      slotStyles.forEach(([id, styles]) => {
+        if (!rootStyles[id]) {
+          insertStyles(styles, root);
+          rootStyles[id] = styles;
+        }
+      });
     }
   };
 

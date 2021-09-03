@@ -27,11 +27,13 @@ describe('slot-styles-mixin', () => {
         }
 
         get slotStyles() {
-          return `
-            button[slot='button'] {
-              color: ${COLOR};
-            }
-          `;
+          return {
+            button: `
+              button[slot='button'] {
+                color: ${COLOR};
+              }
+            `
+          };
         }
       }
     );
@@ -51,6 +53,12 @@ describe('slot-styles-mixin', () => {
 
   it('should append styles to wrapper shadow root', () => {
     expect(getComputedStyle(button).color).to.equal(COLOR);
+  });
+
+  it('should only append styles with same ID once', () => {
+    const sibling = document.createElement('slot-styles-mixin-element');
+    element.parentNode.appendChild(sibling);
+    expect(wrapper.shadowRoot.querySelectorAll('style').length).to.equal(1);
   });
 
   it('should append styles when moved to other shadow root', () => {
