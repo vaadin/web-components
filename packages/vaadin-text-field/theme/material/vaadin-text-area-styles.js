@@ -9,7 +9,8 @@ registerStyles(
       box-sizing: border-box;
     }
 
-    [part='input-field'] [part='value'] {
+    [part='input-field'] [part='value'],
+    [part='input-field'] ::slotted(textarea) {
       padding-top: 0;
       margin-top: 4px;
     }
