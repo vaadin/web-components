@@ -265,6 +265,11 @@ export const KeyboardNavigationMixin = (superClass) =>
       const activeRow = e.composedPath().find((el) => this.__isRow(el));
       const activeCell = e.composedPath().find((el) => this.__isCell(el));
 
+      if ((this.__rowFocusMode && !activeRow) || (!this.__rowFocusMode && !activeCell)) {
+        // When using a screen reader, it's possible that neither a cell nor a row is focused.
+        return;
+      }
+
       const forwards = this.__isRTL ? 'ArrowLeft' : 'ArrowRight';
       const backwards = this.__isRTL ? 'ArrowRight' : 'ArrowLeft';
       // Handle keyboard interaction as defined in:
