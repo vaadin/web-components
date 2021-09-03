@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { down as mouseDown, fixtureSync, keyDownOn, nextRender, up as mouseUp } from '@vaadin/testing-helpers';
 import { getCellContent } from './helpers.js';
-import '../all-imports.js';
+import '../src/all-imports.js';
 
 let grid, header, footer, body;
 
@@ -119,11 +119,13 @@ describe('keyboard navigation - row focus', () => {
     body = grid.$.items;
     footer = grid.$.footer;
 
-    await nextRender();
+    await nextRender(grid);
 
     // Make the grid enter row focus mode initially
     focusFirstHeaderCell();
     left();
+
+    await nextRender(grid);
   });
 
   describe('navigating with tab', () => {
@@ -149,7 +151,15 @@ describe('keyboard navigation - row focus', () => {
     { direction: 'rtl', forwards: left, backwards: right }
   ].forEach(({ direction, forwards, backwards }) => {
     describe('interacting with keys - ' + direction, () => {
-      beforeEach(() => grid.setAttribute('dir', direction));
+      beforeEach(async () => {
+        document.dir = direction;
+        await nextRender(grid);
+      });
+
+      afterEach(async () => {
+        document.dir = undefined;
+        await nextRender(grid);
+      });
 
       it('should remain in row focus mode on backwards', () => {
         backwards();
@@ -180,6 +190,8 @@ describe('keyboard navigation - row focus', () => {
 
       it('should expand an expandable row on forwards', () => {
         tabToBody();
+        // Ensure we're still in row focus mode
+        backwards();
         expect(isRowExpanded(0)).to.be.false;
         forwards();
         expect(isRowExpanded(0)).to.be.true;
@@ -187,12 +199,16 @@ describe('keyboard navigation - row focus', () => {
 
       it('should remain in row focus mode on forwards over an expandable row', () => {
         tabToBody();
+        // Ensure we're still in row focus mode
+        backwards();
         forwards();
         expect(getFocusedCellIndex()).to.equal(-1);
       });
 
       it('should enter cell focus mode on an expanded row on forwards', () => {
         tabToBody();
+        // Ensure we're still in row focus mode
+        backwards();
         forwards();
         forwards();
         expect(getFocusedCellIndex()).to.equal(0);
@@ -200,6 +216,8 @@ describe('keyboard navigation - row focus', () => {
 
       it('should enter cell focus mode on a leaf row on forwards', () => {
         tabToBody();
+        // Ensure we're still in row focus mode
+        backwards();
         down();
         forwards();
         expect(getFocusedCellIndex()).to.equal(0);
@@ -207,6 +225,8 @@ describe('keyboard navigation - row focus', () => {
 
       it('should collapse an expanded row on backwards', () => {
         tabToBody();
+        // Ensure we're still in row focus mode
+        backwards();
         forwards();
         backwards();
         expect(isRowExpanded(0)).to.be.false;
@@ -214,6 +234,8 @@ describe('keyboard navigation - row focus', () => {
 
       it('should skip row details on row navigation', () => {
         tabToBody();
+        // Ensure we're still in row focus mode
+        backwards();
         openRowDetails(0);
         down();
         expect(getFocusedRowIndex()).to.equal(1);
@@ -222,6 +244,8 @@ describe('keyboard navigation - row focus', () => {
       it('should return to row focus mode on backwards from details cell', () => {
         openRowDetails(1);
         tabToBody();
+        // Ensure we're still in row focus mode
+        backwards();
         // Focus the second row
         down();
         // Go to cell navigation mode
