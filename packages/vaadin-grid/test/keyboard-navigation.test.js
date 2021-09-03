@@ -344,6 +344,14 @@ describe('keyboard navigation', () => {
 
       expect(grid.hasAttribute('navigating')).to.be.false;
     });
+
+    it('should enable navigation mode on header navigation', () => {
+      focusFirstHeaderCell();
+
+      right();
+
+      expect(grid.hasAttribute('navigating')).to.be.true;
+    });
   });
 
   describe('navigating with tab', () => {

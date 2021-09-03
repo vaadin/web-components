@@ -372,6 +372,8 @@ export const KeyboardNavigationMixin = (superClass) =>
           }
         }
 
+        this._toggleAttribute('navigating', true, this);
+
         return { dstRow: activeRowGroup.children[dstRowIndex] };
       } else {
         // Navigating body rows
