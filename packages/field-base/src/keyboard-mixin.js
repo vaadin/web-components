@@ -45,7 +45,7 @@ const KeyboardMixinImplementation = (superclass) =>
 
 /**
  * A mixin that manages keyboard handling.
- * It subscribes to the keyboard events while providing an actual implementation
- * for the event handlers is left for the client (a component or another mixin).
+ * The mixin subscribes to the keyboard events while an actual implementation
+ * for the event handlers is left to the client (a component or another mixin).
  */
 export const KeyboardMixin = dedupingMixin(KeyboardMixinImplementation);
