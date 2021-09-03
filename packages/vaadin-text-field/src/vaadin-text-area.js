@@ -149,6 +149,7 @@ class TextAreaElement extends ElementMixin(TextFieldMixin(ControlStateMixin(Them
   /** @protected */
   ready() {
     super.ready();
+    this._inputField = this.shadowRoot.querySelector('[part=input-field]');
     this._updateHeight();
     this.addEventListener('animationend', this._onAnimationEnd);
   }
@@ -181,9 +182,14 @@ class TextAreaElement extends ElementMixin(TextFieldMixin(ControlStateMixin(Them
 
   /** @private */
   _updateHeight() {
-    const inputField = this.root.querySelector('[part=input-field]');
-    const scrollTop = inputField.scrollTop;
     const input = this.inputElement;
+    const inputField = this._inputField;
+
+    if (!input || !inputField) {
+      return;
+    }
+
+    const scrollTop = inputField.scrollTop;
 
     // Only clear the height when the content shortens to minimize scrollbar flickering.
     const valueLength = this.value ? this.value.length : 0;
