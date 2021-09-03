@@ -115,6 +115,18 @@ class Button extends ActiveMixin(TabindexMixin(FocusMixin(ElementMixin(ThemableM
     `;
   }
 
+  /**
+   * By default, `Space` is the only possible activation key for a focusable HTML element.
+   * Nonetheless, the button is an exception as it can be also activated by pressing `Enter`.
+   * See the "Keyboard Support" section in https://www.w3.org/TR/wai-aria-practices/examples/button/button.html.
+   *
+   * @protected
+   * @override
+   */
+  get _activeKeys() {
+    return ['Enter', ' '];
+  }
+
   /** @protected */
   ready() {
     super.ready();
