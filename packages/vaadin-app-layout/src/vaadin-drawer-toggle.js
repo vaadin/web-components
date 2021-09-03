@@ -80,13 +80,8 @@ class DrawerToggleElement extends Button {
     super();
 
     this.addEventListener('click', () => {
-      this.__fireClick();
+      this.dispatchEvent(new CustomEvent('drawer-toggle-click', { bubbles: true, composed: true }));
     });
-  }
-
-  /** @private */
-  __fireClick() {
-    this.dispatchEvent(new CustomEvent('drawer-toggle-click', { bubbles: true, composed: true }));
   }
 }
 
