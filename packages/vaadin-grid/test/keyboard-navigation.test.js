@@ -747,7 +747,7 @@ describe('keyboard navigation', () => {
         expect(getFocusedCellIndex()).to.equal(1);
       });
 
-      it('should not navigate to hidden column with end', () => {
+      it('should not navigate to hidden column with home', () => {
         grid._columnTree[0][0].hidden = true;
         flushGrid(grid);
 
@@ -760,7 +760,7 @@ describe('keyboard navigation', () => {
         expect(columnFocusedCell.hidden).to.be.false;
       });
 
-      it('should not navigate to hidden column with home', () => {
+      it('should not navigate to hidden column with end', () => {
         grid._columnTree[0][2].hidden = true;
         flushGrid(grid);
 
@@ -931,13 +931,13 @@ describe('keyboard navigation', () => {
       expect(getFocusedCellIndex()).to.equal(0);
     });
 
-    it('should focus first cell on first row with ctrl+home', () => {
+    it('should focus first cell in the column with ctrl+home', () => {
       focusItem(0);
       right();
 
       ctrlHome();
 
-      expect(getFocusedCellIndex()).to.equal(0);
+      expect(getFocusedCellIndex()).to.equal(1);
       expect(getFocusedRowIndex()).to.equal(0);
     });
 
@@ -949,12 +949,12 @@ describe('keyboard navigation', () => {
       expect(getFocusedCellIndex()).to.equal(2);
     });
 
-    it('should focus last cell on last row with ctrl+end', () => {
+    it('should focus last cell in the column with ctrl+end', () => {
       focusItem(0);
 
       ctrlEnd();
 
-      expect(getFocusedCellIndex()).to.equal(2);
+      expect(getFocusedCellIndex()).to.equal(0);
       expect(getFocusedRowIndex()).to.equal(1);
     });
 

@@ -231,6 +231,9 @@ export const KeyboardNavigationMixin = (superClass) =>
 
       const visibleItemsCount = this._lastVisibleIndex - this._firstVisibleIndex - 1;
 
+      // Handle keyboard interaction as defined in:
+      // https://w3c.github.io/aria-practices/#keyboard-interaction-24
+
       let dx = 0,
         dy = 0;
       switch (key) {
@@ -241,12 +244,32 @@ export const KeyboardNavigationMixin = (superClass) =>
           dx = this.__isRTL ? 1 : -1;
           break;
         case 'Home':
-          dx = -Infinity;
-          e.ctrlKey && (dy = -Infinity);
+          if (this.__rowFocusMode) {
+            // "If focus is on a row, moves focus to the first row. If focus is in the first row, focus does not move."
+            dy = -Infinity;
+          } else {
+            if (e.ctrlKey) {
+              // "If focus is on a cell, moves focus to the first cell in the column. If focus is in the first row, focus does not move."
+              dy = -Infinity;
+            } else {
+              // "If focus is on a cell, moves focus to the first cell in the row. If focus is in the first cell of the row, focus does not move."
+              dx = -Infinity;
+            }
+          }
           break;
         case 'End':
-          dx = Infinity;
-          e.ctrlKey && (dy = Infinity);
+          if (this.__rowFocusMode) {
+            // "If focus is on a row, moves focus to the last row. If focus is in the last row, focus does not move."
+            dy = Infinity;
+          } else {
+            if (e.ctrlKey) {
+              // "If focus is on a cell, moves focus to the last cell in the column. If focus is in the last row, focus does not move."
+              dy = Infinity;
+            } else {
+              // "If focus is on a cell, moves focus to the last cell in the row. If focus is in the last cell of the row, focus does not move."
+              dx = Infinity;
+            }
+          }
           break;
         case 'ArrowDown':
           dy = 1;
@@ -272,8 +295,6 @@ export const KeyboardNavigationMixin = (superClass) =>
 
       const forwards = this.__isRTL ? 'ArrowLeft' : 'ArrowRight';
       const backwards = this.__isRTL ? 'ArrowRight' : 'ArrowLeft';
-      // Handle keyboard interaction as defined in:
-      // https://w3c.github.io/aria-practices/#keyboard-interaction-24
       if (key === forwards) {
         // "Right Arrow:"
         if (this.__rowFocusMode) {

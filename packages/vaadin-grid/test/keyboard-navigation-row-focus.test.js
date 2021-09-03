@@ -41,6 +41,14 @@ function down(target) {
   keyDownOn(target || grid.shadowRoot.activeElement, 40, [], 'ArrowDown');
 }
 
+function end(target) {
+  keyDownOn(target || grid.shadowRoot.activeElement, 35, [], 'End');
+}
+
+function home(target) {
+  keyDownOn(target || grid.shadowRoot.activeElement, 36, [], 'Home');
+}
+
 function spaceDown(target) {
   keyDownOn(target || grid.shadowRoot.activeElement, 32, [], ' ');
 }
@@ -282,6 +290,23 @@ describe('keyboard navigation - row focus', () => {
         down();
 
         expect(grid.hasAttribute('navigating')).to.be.true;
+      });
+
+      it('should focus first row with home', () => {
+        focusItem(0);
+        down();
+
+        home();
+
+        expect(getFocusedRowIndex()).to.equal(0);
+      });
+
+      it('should focus last row with end', () => {
+        focusItem(0);
+
+        end();
+
+        expect(getFocusedRowIndex()).to.equal(4);
       });
     });
   });
