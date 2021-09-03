@@ -9,14 +9,10 @@ registerStyles(
       box-sizing: border-box;
     }
 
-    .textarea-wrapper {
+    [part='input-field'] [part='value'],
+    [part='input-field'] ::slotted(textarea) {
+      padding-top: 0;
       margin-top: 4px;
-    }
-
-    [part='value'],
-    [part='input-field'] ::slotted(textarea),
-    .textarea-wrapper::after {
-      padding: 0 0 8px;
     }
 
     [part='input-field'] [part='value'],
