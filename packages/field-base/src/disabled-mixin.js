@@ -40,6 +40,18 @@ const DisabledMixinImplementation = (superclass) =>
         this.removeAttribute('aria-disabled');
       }
     }
+
+    /**
+     * Overrides the default element `click` method in order to prevent
+     * firing the `click` event when the element is disabled.
+     *
+     * @override
+     */
+    click() {
+      if (!this.disabled) {
+        super.click();
+      }
+    }
   };
 
 /**
