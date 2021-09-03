@@ -21,10 +21,14 @@ function getRootStyles(root) {
  * @param {DocumentOrShadowRoot} root
  */
 function insertStyles(styles, root) {
-  const rootNode = root === document ? document.head : root;
   const style = document.createElement('style');
   style.textContent = styles;
-  rootNode.insertBefore(style, rootNode.firstChild);
+
+  if (root === document) {
+    document.head.appendChild(style);
+  } else {
+    root.insertBefore(style, root.firstChild);
+  }
 }
 
 const SlotStylesMixinImplementation = (superclass) =>
