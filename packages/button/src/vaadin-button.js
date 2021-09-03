@@ -149,8 +149,6 @@ class Button extends ActiveMixin(TabindexMixin(FocusMixin(ElementMixin(ThemableM
    * the `click` event should be fired exactly on `keydown`:
    * https://www.w3.org/TR/uievents/#event-type-keydown
    *
-   * Note, the `click` event should not be fired when the button is disabled.
-   *
    * @param {KeyboardEvent} event
    * @protected
    * @override
@@ -158,7 +156,9 @@ class Button extends ActiveMixin(TabindexMixin(FocusMixin(ElementMixin(ThemableM
   _onKeyDown(event) {
     super._onKeyDown(event);
 
-    if (!this.disabled && this._activeKeys.includes(event.key)) {
+    if (this._activeKeys.includes(event.key)) {
+      // `DisabledMixin` overrides the standard `click()` method
+      // so that it doesn't fire the `click` event when the element is disabled.
       this.click();
     }
   }

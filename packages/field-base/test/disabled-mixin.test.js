@@ -1,3 +1,4 @@
+import sinon from 'sinon';
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
@@ -37,5 +38,13 @@ describe('disabled-mixin', () => {
 
     element.disabled = false;
     expect(element.hasAttribute('aria-disabled')).to.be.false;
+  });
+
+  it('should prevent firing click event when disabled', () => {
+    const spy = sinon.spy();
+    element.addEventListener('click', spy);
+    element.disabled = true;
+    element.click();
+    expect(spy.called).to.be.false;
   });
 });
