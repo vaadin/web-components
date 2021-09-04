@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync, nextFrame, enterKeyDown, fire } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, aTimeout, enterKeyDown, fire } from '@vaadin/testing-helpers';
 import { flush } from '@polymer/polymer/lib/utils/flush.js';
 import '@polymer/iron-input/iron-input.js';
 import { ComboBoxPlaceholder } from '../src/vaadin-combo-box-placeholder.js';
@@ -825,6 +825,21 @@ describe('lazy loading', () => {
       describe('when open', () => {
         beforeEach(() => {
           comboBox.opened = true;
+        });
+
+        it('should be scrolled to start on reopen', async () => {
+          comboBox.dataProvider = spyAsyncDataProvider;
+          comboBox.size = SIZE;
+          comboBox.opened = false;
+
+          // Wait for the async data provider to respond
+          await aTimeout(0);
+
+          // Reopen
+          comboBox.open();
+          await nextFrame();
+
+          expect(getViewportItems(comboBox)[0].index).to.eql(0);
         });
 
         it('should replace filteredItems with placeholders', () => {

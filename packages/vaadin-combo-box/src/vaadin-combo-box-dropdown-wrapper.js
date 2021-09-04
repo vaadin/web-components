@@ -265,7 +265,7 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
   }
 
   _setOverlayHeight() {
-    if (!this.opened || !this.positionTarget) {
+    if (!this.__virtualizer || !this.opened || !this.positionTarget) {
       return;
     }
 
@@ -374,7 +374,7 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
   }
 
   _scrollIntoView(index) {
-    if (!(this.opened && index >= 0)) {
+    if (!this.__virtualizer || !(this.opened && index >= 0)) {
       return;
     }
     const visibleItemsCount = this._visibleItemsCount();

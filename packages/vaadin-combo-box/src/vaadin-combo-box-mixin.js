@@ -933,7 +933,7 @@ export const ComboBoxMixin = (subclass) =>
     _indexOfValue(value, items) {
       if (items && this._isValidValue(value)) {
         for (let i = 0; i < items.length; i++) {
-          if (this._getItemValue(items[i]) === value) {
+          if (items[i] !== this.__placeHolder && this._getItemValue(items[i]) === value) {
             return i;
           }
         }
