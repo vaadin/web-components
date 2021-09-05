@@ -3,40 +3,39 @@ import sinon from 'sinon';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import { fixtureSync, oneEvent, nextRender } from '@vaadin/testing-helpers';
+import { chartDefaultTheme } from '../theme/vaadin-chart-default-theme.js';
 import Highcharts from 'highcharts/es-modules/masters/highstock.src.js';
 import '../vaadin-chart.js';
 
-registerStyles(
-  'vaadin-chart',
-  css`
-    /* Ensure exporting works with complex selectors */
-    .highcharts-color-0 {
-      stroke: red;
-      fill: red;
-    }
+const chart = css`
+  /* Ensure exporting works with complex selectors */
+  .highcharts-color-0 {
+    stroke: red;
+    fill: red;
+  }
 
-    :host(#chart) .highcharts-color-0 {
-      stroke: blue;
-      fill: blue;
-    }
+  :host(#chart) .highcharts-color-0 {
+    stroke: blue;
+    fill: blue;
+  }
 
-    :host(.my-class .dummy-class) .highcharts-color-0 {
-      stroke: blue;
-      fill: blue;
-    }
+  :host(.my-class .dummy-class) .highcharts-color-0 {
+    stroke: blue;
+    fill: blue;
+  }
 
-    :host(.ColumnLineAndPie) g.highcharts-markers > .highcharts-point {
-      fill: white;
-    }
+  :host(.ColumnLineAndPie) g.highcharts-markers > .highcharts-point {
+    fill: white;
+  }
 
-    :host(.GaugeWithDualAxes) .kmh .highcharts-tick,
-    :host(.GaugeWithDualAxes) .kmh .highcharts-axis-line {
-      stroke: #339;
-      stroke-width: 2;
-    }
-  `,
-  { include: ['vaadin-chart-default-theme'] }
-);
+  :host(.GaugeWithDualAxes) .kmh .highcharts-tick,
+  :host(.GaugeWithDualAxes) .kmh .highcharts-axis-line {
+    stroke: #339;
+    stroke-width: 2;
+  }
+`;
+
+registerStyles('vaadin-chart', [chartDefaultTheme, chart]);
 
 customElements.define(
   'chart-exporting',

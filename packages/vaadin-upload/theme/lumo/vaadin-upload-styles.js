@@ -4,7 +4,7 @@ import '@vaadin/vaadin-lumo-styles/sizing.js';
 import '@vaadin/vaadin-lumo-styles/spacing.js';
 import '@vaadin/vaadin-lumo-styles/style.js';
 import '@vaadin/vaadin-lumo-styles/typography.js';
-import '@vaadin/vaadin-lumo-styles/mixins/field-button.js';
+import { fieldButton } from '@vaadin/vaadin-lumo-styles/mixins/field-button.js';
 import '@vaadin/button/theme/lumo/vaadin-button.js';
 import '@vaadin/vaadin-progress-bar/theme/lumo/vaadin-progress-bar.js';
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
@@ -62,119 +62,117 @@ registerStyles(
   { moduleId: 'lumo-upload' }
 );
 
-registerStyles(
-  'vaadin-upload-file',
-  css`
-    :host {
-      padding: var(--lumo-space-s) 0;
-    }
+const uploadFile = css`
+  :host {
+    padding: var(--lumo-space-s) 0;
+  }
 
-    :host(:not(:first-child)) {
-      border-top: 1px solid var(--lumo-contrast-10pct);
-    }
+  :host(:not(:first-child)) {
+    border-top: 1px solid var(--lumo-contrast-10pct);
+  }
 
-    [part='row'] {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-    }
+  [part='row'] {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+  }
 
-    [part='status'],
-    [part='error'] {
-      color: var(--lumo-secondary-text-color);
-      font-size: var(--lumo-font-size-s);
-    }
+  [part='status'],
+  [part='error'] {
+    color: var(--lumo-secondary-text-color);
+    font-size: var(--lumo-font-size-s);
+  }
 
-    [part='info'] {
-      display: flex;
-      align-items: baseline;
-      flex: auto;
-    }
+  [part='info'] {
+    display: flex;
+    align-items: baseline;
+    flex: auto;
+  }
 
-    [part='meta'] {
-      width: 0.001px;
-      flex: 1 1 auto;
-    }
+  [part='meta'] {
+    width: 0.001px;
+    flex: 1 1 auto;
+  }
 
-    [part='name'] {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
+  [part='name'] {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 
-    [part='commands'] {
-      display: flex;
-      align-items: baseline;
-      flex: none;
-    }
+  [part='commands'] {
+    display: flex;
+    align-items: baseline;
+    flex: none;
+  }
 
-    [part$='icon'] {
-      margin-right: var(--lumo-space-xs);
-      font-size: var(--lumo-icon-size-m);
-      font-family: 'lumo-icons';
-      line-height: 1;
-    }
+  [part$='icon'] {
+    margin-right: var(--lumo-space-xs);
+    font-size: var(--lumo-icon-size-m);
+    font-family: 'lumo-icons';
+    line-height: 1;
+  }
 
-    /* When both icons are hidden, let us keep space for one */
-    [part='done-icon'][hidden] + [part='warning-icon'][hidden] {
-      display: block !important;
-      visibility: hidden;
-    }
+  /* When both icons are hidden, let us keep space for one */
+  [part='done-icon'][hidden] + [part='warning-icon'][hidden] {
+    display: block !important;
+    visibility: hidden;
+  }
 
-    [part$='button'] {
-      flex: none;
-      margin-left: var(--lumo-space-xs);
-      cursor: var(--lumo-clickable-cursor);
-    }
+  [part$='button'] {
+    flex: none;
+    margin-left: var(--lumo-space-xs);
+    cursor: var(--lumo-clickable-cursor);
+  }
 
-    [part='row']:focus,
-    [part$='button']:focus {
-      outline: none;
-      border-radius: var(--lumo-border-radius-s);
-      box-shadow: 0 0 0 2px var(--lumo-primary-color-50pct);
-    }
+  [part='row']:focus,
+  [part$='button']:focus {
+    outline: none;
+    border-radius: var(--lumo-border-radius-s);
+    box-shadow: 0 0 0 2px var(--lumo-primary-color-50pct);
+  }
 
-    [part$='icon']::before,
-    [part$='button']::before {
-      vertical-align: -0.25em;
-    }
+  [part$='icon']::before,
+  [part$='button']::before {
+    vertical-align: -0.25em;
+  }
 
-    [part='done-icon']::before {
-      content: var(--lumo-icons-checkmark);
-      color: var(--lumo-primary-text-color);
-    }
+  [part='done-icon']::before {
+    content: var(--lumo-icons-checkmark);
+    color: var(--lumo-primary-text-color);
+  }
 
-    [part='warning-icon']::before {
-      content: var(--lumo-icons-error);
-      color: var(--lumo-error-text-color);
-    }
+  [part='warning-icon']::before {
+    content: var(--lumo-icons-error);
+    color: var(--lumo-error-text-color);
+  }
 
-    [part='start-button']::before {
-      content: var(--lumo-icons-play);
-    }
+  [part='start-button']::before {
+    content: var(--lumo-icons-play);
+  }
 
-    [part='retry-button']::before {
-      content: var(--lumo-icons-reload);
-    }
+  [part='retry-button']::before {
+    content: var(--lumo-icons-reload);
+  }
 
-    [part='clear-button']::before {
-      content: var(--lumo-icons-cross);
-    }
+  [part='clear-button']::before {
+    content: var(--lumo-icons-cross);
+  }
 
-    [part='error'] {
-      color: var(--lumo-error-text-color);
-    }
+  [part='error'] {
+    color: var(--lumo-error-text-color);
+  }
 
-    [part='progress'] {
-      width: auto;
-      margin-left: calc(var(--lumo-icon-size-m) + var(--lumo-space-xs));
-      margin-right: calc(var(--lumo-icon-size-m) + var(--lumo-space-xs));
-    }
+  [part='progress'] {
+    width: auto;
+    margin-left: calc(var(--lumo-icon-size-m) + var(--lumo-space-xs));
+    margin-right: calc(var(--lumo-icon-size-m) + var(--lumo-space-xs));
+  }
 
-    [part='progress'][complete],
-    [part='progress'][error] {
-      display: none;
-    }
-  `,
-  { include: ['lumo-field-button'], moduleId: 'lumo-upload-file' }
-);
+  [part='progress'][complete],
+  [part='progress'][error] {
+    display: none;
+  }
+`;
+
+registerStyles('vaadin-upload-file', [fieldButton, uploadFile], { moduleId: 'lumo-upload-file' });

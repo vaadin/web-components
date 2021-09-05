@@ -1,17 +1,17 @@
 import { expect } from '@esm-bundle/chai';
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
+import { chartDefaultTheme } from '../theme/vaadin-chart-default-theme.js';
 import '../vaadin-chart.js';
 
-registerStyles(
-  'vaadin-chart',
+registerStyles('vaadin-chart', [
+  chartDefaultTheme,
   css`
     :host([theme='custom']) .highcharts-column-series rect.highcharts-point {
       stroke: rgb(255, 0, 0);
     }
-  `,
-  { include: ['vaadin-chart-default-theme'] }
-);
+  `
+]);
 
 describe('vaadin-chart styling', () => {
   describe('default theme', () => {

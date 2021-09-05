@@ -18,6 +18,12 @@ const styleMap = {};
  * @return {void}
  */
 export const registerStyles = (themeFor, styles, options) => {
+  if (options && options.include && !options.suppressDeprecationWarning) {
+    console.warn(
+      `The "include" option in registerStyles is deprecated. Instead, include an imported CSSResult in the styles array.`
+    );
+  }
+
   const themeId = (options && options.moduleId) || `custom-style-module-${moduleIdIndex++}`;
 
   if (!Array.isArray(styles)) {

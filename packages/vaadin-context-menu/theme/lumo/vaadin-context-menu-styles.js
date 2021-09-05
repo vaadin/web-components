@@ -1,38 +1,38 @@
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import '@vaadin/vaadin-lumo-styles/spacing.js';
 import '@vaadin/vaadin-lumo-styles/style.js';
-import '@vaadin/vaadin-lumo-styles/mixins/menu-overlay.js';
+import { menuOverlay } from '@vaadin/vaadin-lumo-styles/mixins/menu-overlay.js';
 import '@vaadin/vaadin-lumo-styles/font-icons.js';
 import '@vaadin/vaadin-lumo-styles/color.js';
 import '@vaadin/vaadin-lumo-styles/sizing.js';
 import '@vaadin/vaadin-lumo-styles/typography.js';
 
-registerStyles(
-  'vaadin-context-menu-overlay',
-  css`
-    :host([phone]) {
-      top: 0 !important;
-      right: 0 !important;
-      bottom: var(--vaadin-overlay-viewport-bottom) !important;
-      left: 0 !important;
-      align-items: stretch;
-      justify-content: flex-end;
-    }
+const contextMenuOverlay = css`
+  :host([phone]) {
+    top: 0 !important;
+    right: 0 !important;
+    bottom: var(--vaadin-overlay-viewport-bottom) !important;
+    left: 0 !important;
+    align-items: stretch;
+    justify-content: flex-end;
+  }
 
-    /* TODO These style overrides should not be needed.
-       We should instead offer a way to have non-selectable items inside the context menu. */
+  /* TODO These style overrides should not be needed.
+   We should instead offer a way to have non-selectable items inside the context menu. */
 
-    :host {
-      --_lumo-list-box-item-selected-icon-display: none;
-      --_lumo-list-box-item-padding-left: calc(var(--lumo-space-m) + var(--lumo-border-radius-m) / 4);
-    }
+  :host {
+    --_lumo-list-box-item-selected-icon-display: none;
+    --_lumo-list-box-item-padding-left: calc(var(--lumo-space-m) + var(--lumo-border-radius-m) / 4);
+  }
 
-    [part='overlay'] {
-      outline: none;
-    }
-  `,
-  { include: ['lumo-menu-overlay'], moduleId: 'lumo-context-menu-overlay' }
-);
+  [part='overlay'] {
+    outline: none;
+  }
+`;
+
+registerStyles('vaadin-context-menu-overlay', [...menuOverlay, contextMenuOverlay], {
+  moduleId: 'lumo-context-menu-overlay'
+});
 
 registerStyles(
   'vaadin-context-menu-list-box',

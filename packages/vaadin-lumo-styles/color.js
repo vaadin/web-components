@@ -198,6 +198,6 @@ const colorLegacy = css`
   }
 `;
 
-registerStyles('', colorLegacy, { moduleId: 'lumo-color-legacy', include: ['lumo-color'] });
+registerStyles('', [color, colorLegacy], { moduleId: 'lumo-color-legacy' });
 
 export { colorBase, color, colorLegacy };

@@ -7,45 +7,45 @@ import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styl
 import '@vaadin/vaadin-lumo-styles/font-icons.js';
 import '@vaadin/vaadin-lumo-styles/sizing.js';
 import '@vaadin/vaadin-lumo-styles/style.js';
-import '@vaadin/text-field/theme/lumo/vaadin-input-field-shared-styles.js';
+import { inputFieldShared } from '@vaadin/text-field/theme/lumo/vaadin-input-field-shared-styles.js';
 
-registerStyles(
-  'vaadin-password-field',
-  css`
-    [part='reveal-button']::before {
-      content: var(--lumo-icons-eye);
-    }
+const passwordField = css`
+  [part='reveal-button']::before {
+    content: var(--lumo-icons-eye);
+  }
 
-    :host([password-visible]) [part='reveal-button']::before {
-      content: var(--lumo-icons-eye-disabled);
-    }
+  :host([password-visible]) [part='reveal-button']::before {
+    content: var(--lumo-icons-eye-disabled);
+  }
 
-    /* Make it easy to hide the button across the whole app */
-    [part='reveal-button'] {
-      position: relative;
-      display: var(--lumo-password-field-reveal-button-display, block);
-    }
+  /* Make it easy to hide the button across the whole app */
+  [part='reveal-button'] {
+    position: relative;
+    display: var(--lumo-password-field-reveal-button-display, block);
+  }
 
-    [part='reveal-button'][hidden] {
-      display: none !important;
-    }
+  [part='reveal-button'][hidden] {
+    display: none !important;
+  }
 
-    ::slotted([slot='reveal']) {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      width: 100%;
-      background: transparent;
-      border: none;
-    }
+  ::slotted([slot='reveal']) {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    background: transparent;
+    border: none;
+  }
 
-    ::slotted([slot='reveal']:focus) {
-      border-radius: var(--lumo-border-radius-s);
-      box-shadow: 0 0 0 2px var(--lumo-primary-color-50pct);
-      outline: none;
-    }
-  `,
-  { moduleId: 'lumo-password-field', include: ['lumo-input-field-shared-styles'] }
-);
+  ::slotted([slot='reveal']:focus) {
+    border-radius: var(--lumo-border-radius-s);
+    box-shadow: 0 0 0 2px var(--lumo-primary-color-50pct);
+    outline: none;
+  }
+`;
+
+registerStyles('vaadin-password-field', [...inputFieldShared, passwordField], {
+  moduleId: 'lumo-password-field'
+});
