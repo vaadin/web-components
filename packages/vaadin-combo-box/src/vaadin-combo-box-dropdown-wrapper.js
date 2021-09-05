@@ -176,7 +176,7 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
     const item = this.__effectiveItems[index];
 
     el.setProperties({
-      item: this.__effectiveItems[index],
+      item,
       index: this.__requestItemByIndex(item, index),
       label: this.getItemLabel(item, this._itemLabelPath),
       selected: this._isItemSelected(item, this._selectedItem, this._itemIdPath),

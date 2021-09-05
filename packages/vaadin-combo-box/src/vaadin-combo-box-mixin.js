@@ -3,7 +3,6 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { flush } from '@polymer/polymer/lib/utils/flush.js';
 import { IronA11yAnnouncer } from '@polymer/iron-a11y-announcer/iron-a11y-announcer.js';
 import { processTemplates } from '@vaadin/vaadin-element-mixin/templates.js';
 import { ComboBoxPlaceholder } from './vaadin-combo-box-placeholder.js';
@@ -597,10 +596,6 @@ export const ComboBoxMixin = (subclass) =>
 
     /** @private */
     _onOpened() {
-      // Pre P2 iron-list used a debouncer to render. Now that we synchronously render items,
-      // we need to flush the DOM to make sure it doesn't get flushed in the middle of _render call
-      // because that will cause problems to say the least.
-      flush();
       setTimeout(() => this._resizeDropdown(), 1);
       // Defer scroll position adjustment to improve performance.
       window.requestAnimationFrame(() => this.$.overlay.adjustScrollPosition());
