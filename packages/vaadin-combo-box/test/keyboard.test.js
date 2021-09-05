@@ -10,7 +10,8 @@ import {
   enterKeyDown,
   escKeyDown,
   fire,
-  isDesktopSafari
+  isDesktopSafari,
+  nextFrame
 } from '@vaadin/testing-helpers';
 import { getViewportItems, onceScrolled, scrollToIndex } from './helpers.js';
 import './not-animated-styles.js';
@@ -363,9 +364,11 @@ describe('keyboard', () => {
       expect(getViewportItems(comboBox)[0].index).to.eql(1);
     });
 
-    it('should scroll up after reaching the first visible item', () => {
-      comboBox._focusedIndex = 1;
-      scrollToIndex(comboBox, 1);
+    it('should scroll up after reaching the first visible item', async () => {
+      comboBox._focusedIndex = 2;
+      scrollToIndex(comboBox, 2);
+      await nextFrame();
+
       expect(getViewportItems(comboBox)[0].index).to.eql(1);
 
       arrowUpKeyDown(comboBox.inputElement);
@@ -379,7 +382,7 @@ describe('keyboard', () => {
 
       arrowDownKeyDown(comboBox.inputElement);
 
-      expect(getViewportItems(comboBox)[0].index).to.eql(6);
+      expect(getViewportItems(comboBox)[0].index).to.eql(5);
     });
 
     it('should scroll to first visible when navigating up above viewport', () => {
@@ -388,7 +391,7 @@ describe('keyboard', () => {
 
       arrowUpKeyDown(comboBox.inputElement);
 
-      expect(getViewportItems(comboBox)[0].index).to.eql(4);
+      expect(getViewportItems(comboBox)[0].index).to.eql(3);
     });
 
     it('should scroll to last visible when navigating up below viewport', () => {

@@ -395,6 +395,20 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
       targetIndex = this.__virtualizer.firstVisibleIndex;
     }
     this.__virtualizer.scrollToIndex(Math.max(0, targetIndex));
+
+    // Sometimes the item is partly below the bottom edge, detect and adjust.
+    const lastPhysicalItem = [...this._selector.children].find(
+      (el) => !el.hidden && el.index === this.__virtualizer.lastVisibleIndex
+    );
+    if (!lastPhysicalItem || index !== lastPhysicalItem.index) {
+      return;
+    }
+    const lastPhysicalItemRect = lastPhysicalItem.getBoundingClientRect();
+    const scrollerRect = this._scroller.getBoundingClientRect();
+    const scrollTopAdjust = lastPhysicalItemRect.bottom - scrollerRect.bottom + this._viewportTotalPaddingBottom;
+    if (scrollTopAdjust > 0) {
+      this._scroller.scrollTop += scrollTopAdjust;
+    }
   }
 
   __updateAllItems() {
@@ -425,6 +439,21 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
         e.preventDefault();
       }
     });
+  }
+
+  get _viewportTotalPaddingBottom() {
+    if (this._cachedViewportTotalPaddingBottom === undefined) {
+      const itemsStyle = window.getComputedStyle(this._selector);
+      this._cachedViewportTotalPaddingBottom = [itemsStyle.paddingBottom, itemsStyle.borderBottomWidth]
+        .map((v) => {
+          return parseInt(v, 10);
+        })
+        .reduce((sum, v) => {
+          return sum + v;
+        });
+    }
+
+    return this._cachedViewportTotalPaddingBottom;
   }
 
   _visibleItemsCount() {
