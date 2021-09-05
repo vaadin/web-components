@@ -52,8 +52,8 @@ const InputSlotMixinImplementation = (superclass) =>
     }
 
     /** @protected */
-    connectedCallback() {
-      super.connectedCallback();
+    ready() {
+      super.ready();
 
       const inputNode = this._getDirectSlotChild('input');
       if (inputNode) {

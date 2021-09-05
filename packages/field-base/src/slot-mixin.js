@@ -15,17 +15,13 @@ const SlotMixinImplementation = (superclass) =>
     }
 
     /** @protected */
-    connectedCallback() {
-      super.connectedCallback();
+    ready() {
+      super.ready();
       this._connectSlotMixin();
     }
 
     /** @private */
     _connectSlotMixin() {
-      if (this.__isConnectedSlotMixin) {
-        return;
-      }
-
       Object.keys(this.slots).forEach((slotName) => {
         // Ignore labels of nested components, if any
         const hasContent = this._getDirectSlotChild(slotName) !== undefined;
@@ -39,8 +35,6 @@ const SlotMixinImplementation = (superclass) =>
           }
         }
       });
-
-      this.__isConnectedSlotMixin = true;
     }
 
     /** @protected */

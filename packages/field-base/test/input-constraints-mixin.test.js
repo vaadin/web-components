@@ -2,13 +2,12 @@ import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { ForwardInputPropsMixin } from '../src/forward-input-props-mixin.js';
 import { InputConstraintsMixin } from '../src/input-constraints-mixin.js';
 import { InputSlotMixin } from '../src/input-slot-mixin.js';
 
 customElements.define(
   'input-constraints-mixin-element',
-  class extends ForwardInputPropsMixin(InputConstraintsMixin(InputSlotMixin(PolymerElement))) {
+  class extends InputConstraintsMixin(InputSlotMixin(PolymerElement)) {
     static get template() {
       return html`
         <slot name="input"></slot>
@@ -33,8 +32,8 @@ customElements.define(
       };
     }
 
-    static get forwardProps() {
-      return ['required', 'minlength', 'maxlength', 'pattern'];
+    static get delegateAttrs() {
+      return [...super.delegateAttrs, 'minlength', 'maxlength', 'pattern'];
     }
 
     static get constraints() {
