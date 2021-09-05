@@ -15,7 +15,7 @@ import {
 } from '@vaadin/testing-helpers';
 import { getViewportItems, onceScrolled, scrollToIndex } from './helpers.js';
 import './not-animated-styles.js';
-import '../vaadin-combo-box.js';
+import '../src/vaadin-combo-box.js';
 
 describe('keyboard', () => {
   let comboBox;
@@ -369,11 +369,11 @@ describe('keyboard', () => {
       scrollToIndex(comboBox, 2);
       await nextFrame();
 
-      expect(getViewportItems(comboBox)[0].index).to.eql(1);
+      expect(getViewportItems(comboBox)[0].index).to.eql(2);
 
       arrowUpKeyDown(comboBox.inputElement);
 
-      expect(getViewportItems(comboBox)[0].index).to.eql(0);
+      expect(getViewportItems(comboBox)[0].index).to.eql(1);
     });
 
     it('should scroll to first visible when navigating down above viewport', () => {
@@ -382,7 +382,7 @@ describe('keyboard', () => {
 
       arrowDownKeyDown(comboBox.inputElement);
 
-      expect(getViewportItems(comboBox)[0].index).to.eql(5);
+      expect(getViewportItems(comboBox)[0].index).to.eql(6);
     });
 
     it('should scroll to first visible when navigating up above viewport', () => {
@@ -391,7 +391,7 @@ describe('keyboard', () => {
 
       arrowUpKeyDown(comboBox.inputElement);
 
-      expect(getViewportItems(comboBox)[0].index).to.eql(3);
+      expect(getViewportItems(comboBox)[0].index).to.eql(4);
     });
 
     it('should scroll to last visible when navigating up below viewport', () => {
