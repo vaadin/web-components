@@ -49,6 +49,12 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
               /* Fixes scrollbar disappearing when 'Show scroll bars: Always' enabled in Safari */
               box-shadow: 0 0 0 white;
             }
+
+            #selector {
+              border-width: var(--_vaadin-combo-box-items-container-border-width);
+              border-style: var(--_vaadin-combo-box-items-container-border-style);
+              border-color: var(--_vaadin-combo-box-items-container-border-color);
+            }
           </style>
 
           <div id="scroller" on-click="_stopPropagation" style="min-height: 1px">
@@ -204,10 +210,6 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
     return [];
   }
 
-  _isNotEmpty(items) {
-    return !this._isEmpty(items);
-  }
-
   _isEmpty(items) {
     return !items || !items.length;
   }
@@ -224,7 +226,7 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
     if (this._isEmpty(items)) {
       this.$.dropdown.__emptyItems = true;
     }
-    this.$.dropdown.opened = !!(opened && (loading || this._isNotEmpty(items)));
+    this.$.dropdown.opened = !!(opened && (loading || !this._isEmpty(items)));
     this.$.dropdown.__emptyItems = false;
   }
 
@@ -423,21 +425,6 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
         e.preventDefault();
       }
     });
-  }
-
-  get _viewportTotalPaddingBottom() {
-    if (this._cachedViewportTotalPaddingBottom === undefined) {
-      const itemsStyle = window.getComputedStyle(this._selector.$.items);
-      this._cachedViewportTotalPaddingBottom = [itemsStyle.paddingBottom, itemsStyle.borderBottomWidth]
-        .map((v) => {
-          return parseInt(v, 10);
-        })
-        .reduce((sum, v) => {
-          return sum + v;
-        });
-    }
-
-    return this._cachedViewportTotalPaddingBottom;
   }
 
   _visibleItemsCount() {

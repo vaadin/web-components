@@ -6,12 +6,9 @@ registerStyles(
   'vaadin-combo-box-overlay',
   css`
     :host {
-      /* TODO using a legacy mixin (unsupported) */
-      --iron-list-items-container: {
-        border-width: 8px 0;
-        border-style: solid;
-        border-color: transparent;
-      }
+      --_vaadin-combo-box-items-container-border-width: 8px 0;
+      --_vaadin-combo-box-items-container-border-style: solid;
+      --_vaadin-combo-box-items-container-border-color: transparent;
     }
 
     [part='overlay'] {
