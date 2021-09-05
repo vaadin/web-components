@@ -17,7 +17,7 @@ function getRootStyles(root) {
 
 /**
  * Insert styles into the root.
- * @param {string} css
+ * @param {string} styles
  * @param {DocumentOrShadowRoot} root
  */
 function insertStyles(styles, root) {

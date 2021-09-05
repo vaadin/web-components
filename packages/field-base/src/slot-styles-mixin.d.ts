@@ -16,7 +16,7 @@ interface SlotStylesMixinConstructor {
 
 interface SlotStylesMixin {
   /**
-   * List of named slots to initialize.
+   * List of styles to insert into root.
    */
   readonly slotStyles: string;
 }
