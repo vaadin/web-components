@@ -18,7 +18,7 @@ import './vaadin-crud-grid.js';
 import './vaadin-crud-form.js';
 
 const HOST_PROPS = {
-  save: [{ attr: 'disabled', prop: '__isDirty', parseProp: (prop) => !prop }, { prop: 'i18n.saveItem' }],
+  save: [{ attr: 'disabled', prop: '__isDirty', parseProp: '__isSaveBtnDisabled' }, { prop: 'i18n.saveItem' }],
   cancel: [{ prop: 'i18n.cancel' }],
   delete: [{ attr: 'hidden', prop: '__isNew', parseProp: (prop) => prop }, { prop: 'i18n.deleteItem' }]
 };
@@ -247,9 +247,9 @@ class CrudElement extends ElementMixin(ThemableMixin(PolymerElement)) {
           </div>
 
           <slot name="save-button">
-            <vaadin-button id="save" on-click="__save" theme="primary" disabled$="[[!__isDirty]]"
-              >[[i18n.saveItem]]</vaadin-button
-            >
+            <vaadin-button id="save" on-click="__save" theme="primary" disabled$="[[__isSaveBtnDisabled(__isDirty)]]">
+              [[i18n.saveItem]]
+            </vaadin-button>
           </slot>
           <slot name="cancel-button">
             <vaadin-button id="cancel" on-click="__cancelBound" theme="tertiary">[[i18n.cancel]]</vaadin-button>
@@ -617,6 +617,11 @@ class CrudElement extends ElementMixin(ThemableMixin(PolymerElement)) {
   }
 
   /** @private */
+  __isSaveBtnDisabled(isDirty) {
+    return !isDirty;
+  }
+
+  /** @private */
   __computeEditorHeader(isNew, newItem, editItem) {
     return isNew ? newItem : editItem;
   }
@@ -793,6 +798,11 @@ class CrudElement extends ElementMixin(ThemableMixin(PolymerElement)) {
         if (prop.indexOf('i18n') >= 0) {
           button.textContent = this.i18n[prop.split('.')[1]];
         } else {
+          if (typeof parseProp === 'string') {
+            this._setOrToggleAttribute(attr, this[parseProp](this[prop]), button);
+            return;
+          }
+
           this._setOrToggleAttribute(attr, parseProp(this[prop]), button);
         }
       });
