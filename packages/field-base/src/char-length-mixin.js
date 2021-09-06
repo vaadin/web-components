@@ -4,10 +4,10 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
-import { ForwardInputPropsMixin } from './forward-input-props-mixin.js';
+import { InputConstraintsMixin } from './input-constraints-mixin.js';
 
 const CharLengthMixinImplementation = (superclass) =>
-  class CharLengthMixinClass extends ForwardInputPropsMixin(superclass) {
+  class CharLengthMixinClass extends InputConstraintsMixin(superclass) {
     static get properties() {
       return {
         /**
@@ -26,8 +26,8 @@ const CharLengthMixinImplementation = (superclass) =>
       };
     }
 
-    static get forwardProps() {
-      return [...super.forwardProps, 'maxlength', 'minlength'];
+    static get delegateAttrs() {
+      return [...super.delegateAttrs, 'maxlength', 'minlength'];
     }
 
     static get constraints() {

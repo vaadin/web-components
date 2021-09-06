@@ -24,8 +24,8 @@ const FieldAriaMixinImplementation = (superclass) =>
     }
 
     /** @protected */
-    connectedCallback() {
-      super.connectedCallback();
+    ready() {
+      super.ready();
 
       this._updateAriaAttribute(this.invalid, this._helperId);
     }

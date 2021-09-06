@@ -1,58 +1,57 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { ForwardInputPropsMixin } from '../src/forward-input-props-mixin.js';
-import { AriaLabelMixin } from '../src/aria-label-mixin.js';
 import { InputSlotMixin } from '../src/input-slot-mixin.js';
+import { DelegateInputStateMixin } from '../src/delegate-input-state-mixin.js';
 
 customElements.define(
-  'forward-input-props-mixin-element',
-  class extends ForwardInputPropsMixin(AriaLabelMixin(InputSlotMixin(PolymerElement))) {
+  'delegate-input-state-mixin-element',
+  class extends DelegateInputStateMixin(InputSlotMixin(PolymerElement)) {
     static get template() {
-      return html`<slot name="label"></slot><slot name="input"></slot>`;
+      return html`<slot name="input"></slot>`;
     }
   }
 );
 
-describe('forward-input-props-mixin', () => {
+describe('delegate-input-state-mixin', () => {
   let element, input;
 
   describe('name', () => {
     beforeEach(() => {
-      element = fixtureSync('<forward-input-props-mixin-element name="foo"></forward-input-props-mixin-element>');
+      element = fixtureSync('<delegate-input-state-mixin-element name="foo"></delegate-input-state-mixin-element>');
       input = element.querySelector('[slot=input]');
     });
 
     it('should propagate name attribute to the input', () => {
-      expect(input.name).to.equal('foo');
+      expect(input.getAttribute('name')).to.equal('foo');
     });
 
     it('should propagate name property to the input', () => {
       element.name = 'bar';
-      expect(input.name).to.equal('bar');
+      expect(input.getAttribute('name')).to.equal('bar');
     });
   });
 
   describe('title', () => {
     beforeEach(() => {
-      element = fixtureSync('<forward-input-props-mixin-element title="foo"></forward-input-props-mixin-element>');
+      element = fixtureSync('<delegate-input-state-mixin-element title="foo"></delegate-input-state-mixin-element>');
       input = element.querySelector('[slot=input]');
     });
 
     it('should propagate title attribute to the input', () => {
-      expect(input.title).to.equal('foo');
+      expect(input.getAttribute('title')).to.equal('foo');
     });
 
     it('should propagate title property to the input', () => {
       element.title = 'bar';
-      expect(input.title).to.equal('bar');
+      expect(input.getAttribute('title')).to.equal('bar');
     });
   });
 
   describe('placeholder', () => {
     beforeEach(() => {
       element = fixtureSync(
-        '<forward-input-props-mixin-element placeholder="foo"></forward-input-props-mixin-element>'
+        '<delegate-input-state-mixin-element placeholder="foo"></delegate-input-state-mixin-element>'
       );
       input = element.querySelector('[slot=input]');
     });
@@ -69,7 +68,7 @@ describe('forward-input-props-mixin', () => {
 
   describe('readonly', () => {
     beforeEach(() => {
-      element = fixtureSync('<forward-input-props-mixin-element readonly></forward-input-props-mixin-element>');
+      element = fixtureSync('<delegate-input-state-mixin-element readonly></delegate-input-state-mixin-element>');
       input = element.querySelector('[slot=input]');
     });
 
@@ -85,7 +84,7 @@ describe('forward-input-props-mixin', () => {
 
   describe('required', () => {
     beforeEach(() => {
-      element = fixtureSync('<forward-input-props-mixin-element required></forward-input-props-mixin-element>');
+      element = fixtureSync('<delegate-input-state-mixin-element required></delegate-input-state-mixin-element>');
       input = element.querySelector('[slot=input]');
     });
 
@@ -101,7 +100,7 @@ describe('forward-input-props-mixin', () => {
 
   describe('invalid', () => {
     beforeEach(() => {
-      element = fixtureSync('<forward-input-props-mixin-element invalid></forward-input-props-mixin-element>');
+      element = fixtureSync('<delegate-input-state-mixin-element invalid></delegate-input-state-mixin-element>');
       input = element.querySelector('[slot=input]');
     });
 

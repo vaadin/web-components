@@ -3,7 +3,7 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { ForwardInputPropsMixin } from './forward-input-props-mixin.js';
+import { InputConstraintsMixin } from './input-constraints-mixin.js';
 
 /**
  * A mixin to provide `minlength` and `maxlength` properties
@@ -15,7 +15,7 @@ interface CharLengthMixinConstructor {
   new (...args: any[]): CharLengthMixin;
 }
 
-interface CharLengthMixin extends ForwardInputPropsMixin {
+interface CharLengthMixin extends InputConstraintsMixin {
   /**
    * Maximum number of characters (in Unicode code points) that the user can enter.
    */
