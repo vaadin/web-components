@@ -7,7 +7,7 @@ import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
 
 describe('toggling dropdown', () => {
-  let comboBox, input;
+  let comboBox, overlay, input;
 
   function setInputValue(value) {
     input.value = value;
@@ -21,6 +21,7 @@ describe('toggling dropdown', () => {
   beforeEach(() => {
     comboBox = fixtureSync('<vaadin-combo-box label="Label" items="[1, 2]"></vaadin-combo-box>');
     input = comboBox.inputElement;
+    overlay = comboBox.$.dropdown.$.overlay;
   });
 
   describe('opening', () => {
@@ -87,7 +88,7 @@ describe('toggling dropdown', () => {
       expect(getComputedStyle(comboBox).pointerEvents).to.be.equal('auto');
 
       // The actual overlay part of the overlay moved to body should dispatch pointer events
-      expect(getComputedStyle(comboBox.$.overlay.$.dropdown.$.overlay.$.overlay).pointerEvents).to.be.equal('auto');
+      expect(getComputedStyle(overlay.$.overlay).pointerEvents).to.be.equal('auto');
 
       comboBox.close();
       expect(getComputedStyle(document.body).pointerEvents).to.be.equal('painted');
@@ -107,7 +108,7 @@ describe('toggling dropdown', () => {
       comboBox.open();
 
       expect(comboBox.opened);
-      expect(comboBox.$.overlay.$.dropdown.$.overlay.hidden).to.be.true;
+      expect(overlay.hidden).to.be.true;
     });
 
     it('should be hidden with no items', () => {
@@ -116,7 +117,7 @@ describe('toggling dropdown', () => {
       comboBox.open();
 
       expect(comboBox.opened);
-      expect(comboBox.$.overlay.$.dropdown.$.overlay.hidden).to.be.true;
+      expect(overlay.hidden).to.be.true;
     });
 
     describe('after opening', () => {
@@ -147,7 +148,7 @@ describe('toggling dropdown', () => {
       (TOUCH_DEVICE ? it.skip : it)('should prevent default on overlay mousedown', () => {
         const preventDefaultSpy = sinon.spy();
         const event = createEventSpy('mousedown', preventDefaultSpy);
-        comboBox.$.overlay.$.dropdown.$.overlay.dispatchEvent(event);
+        overlay.dispatchEvent(event);
 
         expect(preventDefaultSpy.calledOnce).to.be.true;
       });
@@ -174,7 +175,7 @@ describe('toggling dropdown', () => {
     it('should not close when clicking on the overlay', () => {
       comboBox.open();
 
-      click(comboBox.$.overlay.$.dropdown.$.overlay);
+      click(overlay);
 
       expect(comboBox.opened).to.be.true;
     });
@@ -182,7 +183,7 @@ describe('toggling dropdown', () => {
     it('should not close popup when clicking on any overlay children', () => {
       comboBox.open();
 
-      comboBox.$.overlay._scroller.click();
+      comboBox.$.dropdown._scroller.click();
 
       expect(comboBox.opened).to.be.true;
     });
@@ -209,12 +210,12 @@ describe('toggling dropdown', () => {
 
         // Existent value
         setInputValue('1');
-        expect(comboBox.$.overlay.$.dropdown.$.overlay.opened).to.be.true;
+        expect(overlay.opened).to.be.true;
         expect(comboBox.opened).to.be.true;
 
         // Non-existent value
         setInputValue('3');
-        expect(comboBox.$.overlay.$.dropdown.$.overlay.opened).to.be.false;
+        expect(overlay.opened).to.be.false;
         expect(comboBox.opened).to.be.true;
       });
 
@@ -276,25 +277,6 @@ describe('toggling dropdown', () => {
       expect(document.querySelector('vaadin-combo-box-overlay')).not.to.be.ok;
       comboBox.close();
       expect(comboBox.opened).to.be.false;
-    });
-  });
-
-  describe('lazy upgrade dropdown', () => {
-    const getDropdown = () => {
-      return comboBox.$.overlay.shadowRoot.querySelector('vaadin-combo-box-dropdown');
-    };
-
-    it('should have disable-upgrade attribute initially', () => {
-      const dropdown = getDropdown();
-      expect(dropdown.hasAttribute('disable-upgrade')).to.be.true;
-      expect(dropdown.$).to.be.not.ok;
-    });
-
-    it('should remove disable-upgrade attribute on open', () => {
-      comboBox.open();
-      const dropdown = getDropdown();
-      expect(dropdown.hasAttribute('disable-upgrade')).to.be.false;
-      expect(dropdown.$).to.be.ok;
     });
   });
 

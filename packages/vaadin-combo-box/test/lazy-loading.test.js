@@ -189,7 +189,7 @@ describe('lazy loading', () => {
         (window.innerHeight > 900 ? it.skip : it)('should request page 1 on scroll', () => {
           comboBox.dataProvider = spyDataProvider;
           spyDataProvider.resetHistory();
-          comboBox.$.overlay._scrollIntoView(75);
+          comboBox.$.dropdown._scrollIntoView(75);
           expect(spyDataProvider.called).to.be.true;
           const pages = spyDataProvider.getCalls().map((call) => call.args[0].page);
           expect(pages).to.contain(1);
@@ -198,7 +198,7 @@ describe('lazy loading', () => {
         (window.innerHeight > 900 ? it.skip : it)('should request page 2 on scroll', () => {
           comboBox.dataProvider = spyDataProvider;
           spyDataProvider.resetHistory();
-          comboBox.$.overlay._scrollIntoView(125);
+          comboBox.$.dropdown._scrollIntoView(125);
           expect(spyDataProvider.called).to.be.true;
           const pages = spyDataProvider.getCalls().map((call) => call.args[0].page);
           expect(pages).to.contain(2);
@@ -390,7 +390,7 @@ describe('lazy loading', () => {
           comboBox.dataProvider = spyAsyncDataProvider;
           comboBox.opened = true;
           spyAsyncDataProvider.resetHistory();
-          comboBox.$.overlay._scrollIntoView(75);
+          comboBox.$.dropdown._scrollIntoView(75);
           expect(spyAsyncDataProvider.called).to.be.true;
           const pages = spyAsyncDataProvider.getCalls().map((call) => call.args[0].page);
           expect(pages).to.contain(1);
@@ -401,7 +401,7 @@ describe('lazy loading', () => {
           comboBox.dataProvider = spyAsyncDataProvider;
           comboBox.opened = true;
           spyAsyncDataProvider.resetHistory();
-          comboBox.$.overlay._scrollIntoView(125);
+          comboBox.$.dropdown._scrollIntoView(125);
           expect(spyAsyncDataProvider.called).to.be.true;
           const pages = spyAsyncDataProvider.getCalls().map((call) => call.args[0].page);
           expect(pages).to.contain(2);
@@ -528,9 +528,9 @@ describe('lazy loading', () => {
         };
         comboBox.open();
         expect(comboBox.loading).to.be.false;
-        comboBox.$.overlay._scrollIntoView(45);
+        comboBox.$.dropdown._scrollIntoView(45);
         expect(comboBox.loading).to.be.false;
-        comboBox.$.overlay._scrollIntoView(150);
+        comboBox.$.dropdown._scrollIntoView(150);
         // Fetching the page = 2 and stucking
         expect(comboBox.loading).to.be.true;
         // Updating the size means we don't need pending requests anymore,
@@ -556,7 +556,7 @@ describe('lazy loading', () => {
         };
         comboBox.open();
         // Scroll fast to a large page
-        comboBox.$.overlay._scrollIntoView(400);
+        comboBox.$.dropdown._scrollIntoView(400);
         expect(comboBox.loading).to.be.true;
         // Reduce the size and trigger pending queue cleanup
         comboBox.size = 50;
@@ -888,7 +888,7 @@ describe('lazy loading', () => {
         it('should request page 1 on scroll after reopen', () => {
           comboBox.clearCache();
           comboBox.opened = true;
-          comboBox.$.overlay._scrollIntoView(75);
+          comboBox.$.dropdown._scrollIntoView(75);
           expect(spyDataProvider.called).to.be.true;
           const pages = spyDataProvider.getCalls().map((call) => call.args[0].page);
           expect(pages).to.contain(1);
@@ -1035,7 +1035,7 @@ describe('lazy loading', () => {
         const targetItemIndex = 75;
         comboBox.dataProvider = getDataProvider(allItems);
         comboBox.opened = true;
-        comboBox.$.overlay._scrollIntoView(targetItemIndex);
+        comboBox.$.dropdown._scrollIntoView(targetItemIndex);
         comboBox.size = 300;
         // verify whether the scroller not jumped to 0 pos and restored properly,
         // having the item with 'targetItemIndex' in the bottom
@@ -1051,7 +1051,7 @@ describe('lazy loading', () => {
       it('should reset to 0 when filter applied and filtered items size more than page size', () => {
         comboBox.items = allItems;
         comboBox.opened = true;
-        comboBox.$.overlay._scrollIntoView(500);
+        comboBox.$.dropdown._scrollIntoView(500);
         comboBox.filter = '1';
         expect(getViewportItems(comboBox)[0].index).to.be.equal(0);
       });
@@ -1086,8 +1086,8 @@ describe('lazy loading', () => {
 
         // Scroll to the end, as though if we drag the scrollbar and move it
         // to the bottom
-        const scrollHeight = comboBox.$.overlay._selector._scrollHeight;
-        comboBox.$.overlay._scroller.scrollTop += scrollHeight;
+        const scrollHeight = comboBox.$.dropdown._scroller._scrollHeight;
+        comboBox.$.dropdown._scroller.scrollTop += scrollHeight;
 
         // Flush the pending changes after the scrolling
         await nextFrame();
@@ -1133,7 +1133,7 @@ describe('lazy loading', () => {
         comboBox.open();
         // Scroll to last page and verify there is no loading indicator and
         // the last page has been fetched and rendered
-        comboBox.$.overlay._scrollIntoView(274);
+        comboBox.$.dropdown._scrollIntoView(274);
         expect(comboBox.loading).to.be.false;
         expect(comboBox.filteredItems).to.contain('item 293');
       });

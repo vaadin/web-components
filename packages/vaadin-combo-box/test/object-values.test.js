@@ -250,7 +250,7 @@ describe('object values', () => {
     });
 
     it('should open the dropdown if provided label and value paths are undefined', () => {
-      const overlay = comboBox.$.overlay.$.dropdown.$.overlay;
+      const overlay = comboBox.$.dropdown.$.overlay;
       expect(window.getComputedStyle(overlay).display).not.to.eql('none');
     });
   });

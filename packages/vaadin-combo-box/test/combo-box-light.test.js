@@ -80,12 +80,9 @@ describe('vaadin-combo-box-light', () => {
   });
 
   it('should prevent default on overlay down', () => {
-    comboBox.open();
-    comboBox.close();
-
     const e = new CustomEvent('mousedown', { bubbles: true });
     const spy = sinon.spy(e, 'preventDefault');
-    comboBox.$.overlay.$.dropdown.$.overlay.dispatchEvent(e);
+    comboBox.$.dropdown.$.overlay.dispatchEvent(e);
     expect(spy.calledOnce).to.be.true;
   });
 
@@ -147,7 +144,7 @@ describe('vaadin-combo-box-light', () => {
       const preventDefaultSpy = sinon.spy();
       comboBox.open();
       const event = createEventSpy('mousedown', preventDefaultSpy);
-      comboBox.$.overlay.$.dropdown.$.overlay.dispatchEvent(event);
+      comboBox.$.dropdown.$.overlay.dispatchEvent(event);
       expect(preventDefaultSpy.called).to.be.true;
     });
   });
@@ -336,7 +333,7 @@ describe('paper-input', () => {
       click(clearButton);
 
       expect(comboBox.value).to.eql('');
-      expect(comboBox.$.overlay._selectedItem).to.be.null;
+      expect(comboBox.$.dropdown._selectedItem).to.be.null;
       expect(comboBox.selectedItem).to.be.null;
     });
 
@@ -378,10 +375,7 @@ describe('theme attribute', () => {
   });
 
   it('should propagate theme attribute to overlay', () => {
-    comboBox.open();
-    comboBox.close();
-
-    expect(comboBox.$.overlay.$.dropdown.$.overlay.getAttribute('theme')).to.equal('foo');
+    expect(comboBox.$.dropdown.$.overlay.getAttribute('theme')).to.equal('foo');
   });
 
   it('should propagate theme attribute to item', () => {

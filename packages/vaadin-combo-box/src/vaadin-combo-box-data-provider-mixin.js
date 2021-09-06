@@ -90,7 +90,7 @@ export const ComboBoxDataProviderMixin = (superClass) =>
     ready() {
       super.ready();
       this.clearCache();
-      this.$.overlay.addEventListener('index-requested', (e) => {
+      this.$.dropdown.addEventListener('index-requested', (e) => {
         const index = e.detail.index;
         const currentScrollerPos = e.detail.currentScrollerPos;
         const allowedIndexRange = Math.floor(this.pageSize * 1.5);

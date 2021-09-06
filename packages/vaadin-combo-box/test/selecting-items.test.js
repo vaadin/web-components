@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { aTimeout, click, fixtureSync, fire } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, fire } from '@vaadin/testing-helpers';
 import { flush } from '@polymer/polymer/lib/utils/flush.js';
 import { getAllItems, getFirstItem, onceScrolled, scrollToIndex, selectItem } from './helpers.js';
 import './not-animated-styles.js';
@@ -21,19 +21,16 @@ describe('selecting items', () => {
     comboBox.addEventListener('selected-item-changed', selectedItemChangedSpy);
 
     selectionChangedSpy = sinon.spy();
-    comboBox.$.overlay.addEventListener('selection-changed', selectionChangedSpy);
+    comboBox.$.dropdown.addEventListener('selection-changed', selectionChangedSpy);
 
     changeSpy = sinon.spy();
     comboBox.addEventListener('change', changeSpy);
   });
 
   it('should stop click events from bubbling outside the overlay', () => {
-    comboBox.open();
-    comboBox.close();
-
     const clickSpy = sinon.spy();
     document.addEventListener('click', clickSpy);
-    click(comboBox.$.overlay._selector);
+    comboBox.$.dropdown._scroller.click();
     document.removeEventListener('click', clickSpy);
     expect(clickSpy.calledOnce).not.to.be.true;
   });
@@ -47,9 +44,6 @@ describe('selecting items', () => {
   });
 
   it('should fire `selection-changed` after the scrolling grace period', async () => {
-    comboBox.open();
-    comboBox.close();
-
     const items = [];
     for (let i = 1; i < 50; i++) {
       items.push(i);
@@ -71,7 +65,7 @@ describe('selecting items', () => {
     comboBox.open();
 
     expect(comboBox.selectedItem).to.equal('foo');
-    expect(comboBox.$.overlay._selectedItem).to.equal('foo');
+    expect(comboBox.$.dropdown._selectedItem).to.equal('foo');
     expect(comboBox.inputElement.value).to.equal('foo');
   });
 
@@ -278,7 +272,7 @@ describe('clearing a selection', () => {
     clearIcon.click();
 
     expect(comboBox.value).to.eql('');
-    expect(comboBox.$.overlay._selectedItem).to.be.null;
+    expect(comboBox.$.dropdown._selectedItem).to.be.null;
     expect(comboBox.selectedItem).to.be.null;
   });
 
@@ -299,7 +293,8 @@ describe('clearing a selection', () => {
   it('should cancel click event to avoid input blur', () => {
     comboBox.open();
 
-    const event = click(clearIcon);
+    const event = new CustomEvent('click', { composed: true, cancelable: true });
+    clearIcon.dispatchEvent(event);
 
     expect(event.defaultPrevented).to.eql(true);
   });
