@@ -40,9 +40,7 @@ const select = css`
   }
 `;
 
-registerStyles('vaadin-select', [inputFieldShared, select], {
-  moduleId: 'lumo-select'
-});
+registerStyles('vaadin-select', [inputFieldShared, select], { moduleId: 'lumo-select' });
 
 registerStyles(
   'vaadin-select-value-button',

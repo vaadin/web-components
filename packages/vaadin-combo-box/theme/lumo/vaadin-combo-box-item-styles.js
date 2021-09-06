@@ -3,7 +3,6 @@ import { item } from '@vaadin/vaadin-item/theme/lumo/vaadin-item-styles.js';
 import '@vaadin/vaadin-lumo-styles/color.js';
 import '@vaadin/vaadin-lumo-styles/spacing.js';
 import '@vaadin/vaadin-lumo-styles/style.js';
-import '@vaadin/vaadin-item/theme/lumo/vaadin-item.js';
 
 /* TODO partly duplicated from vaadin-list-box styles. Should find a way to make it DRY */
 const comboBoxItem = css`

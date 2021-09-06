@@ -9,8 +9,8 @@ import '@vaadin/vaadin-lumo-styles/sizing.js';
 import '@vaadin/vaadin-lumo-styles/spacing.js';
 import '@vaadin/vaadin-lumo-styles/style.js';
 import '@vaadin/vaadin-lumo-styles/typography.js';
-import { requiredField } from '@vaadin/vaadin-lumo-styles/mixins/required-field.js';
 import '@vaadin/vaadin-lumo-styles/font-icons.js';
+import { requiredField } from '@vaadin/vaadin-lumo-styles/mixins/required-field.js';
 import { fieldButton } from '@vaadin/vaadin-lumo-styles/mixins/field-button.js';
 
 const inputField = css`

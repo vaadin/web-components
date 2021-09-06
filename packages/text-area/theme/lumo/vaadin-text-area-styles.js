@@ -9,7 +9,7 @@ import '@vaadin/vaadin-lumo-styles/sizing.js';
 import '@vaadin/vaadin-lumo-styles/typography.js';
 import { inputFieldShared } from '@vaadin/text-field/theme/lumo/vaadin-input-field-shared-styles.js';
 
-const testArea = css`
+const textArea = css`
   [part='input-field'],
   [part='input-field'] ::slotted(textarea) {
     height: auto;
@@ -64,6 +64,6 @@ const testArea = css`
   }
 `;
 
-registerStyles('vaadin-text-area', [inputFieldShared, testArea], {
+registerStyles('vaadin-text-area', [inputFieldShared, textArea], {
   moduleId: 'lumo-text-area'
 });
