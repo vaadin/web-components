@@ -3,20 +3,22 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { InputConstraintsMixin } from './input-constraints-mixin.js';
+import { DelegateStateMixin } from './delegate-state-mixin.js';
+import { InputMixin } from './input-mixin.js';
+import { ValidateMixin } from './validate-mixin.js';
 
 /**
  * A mixin to forward properties to the input element.
  */
-declare function ForwardInputPropsMixin<T extends new (...args: any[]) => {}>(
+declare function DelegateInputStateMixin<T extends new (...args: any[]) => {}>(
   base: T
-): T & ForwardInputPropsMixinConstructor;
+): T & DelegateInputStateMixinConstructor;
 
-interface ForwardInputPropsMixinConstructor {
-  new (...args: any[]): ForwardInputPropsMixin;
+interface DelegateInputStateMixinConstructor {
+  new (...args: any[]): DelegateInputStateMixin;
 }
 
-interface ForwardInputPropsMixin extends InputConstraintsMixin {
+interface DelegateInputStateMixin extends DelegateStateMixin, ValidateMixin, InputMixin {
   /**
    * The name of this field.
    */
@@ -38,4 +40,4 @@ interface ForwardInputPropsMixin extends InputConstraintsMixin {
   title: string;
 }
 
-export { ForwardInputPropsMixinConstructor, ForwardInputPropsMixin };
+export { DelegateInputStateMixinConstructor, DelegateInputStateMixin };

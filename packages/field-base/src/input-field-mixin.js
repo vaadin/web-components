@@ -10,11 +10,11 @@ import { AriaLabelMixin } from './aria-label-mixin.js';
 import { ClearButtonMixin } from './clear-button-mixin.js';
 import { DelegateFocusMixin } from './delegate-focus-mixin.js';
 import { FieldAriaMixin } from './field-aria-mixin.js';
-import { ForwardInputPropsMixin } from './forward-input-props-mixin.js';
+import { InputConstraintsMixin } from './input-constraints-mixin.js';
 
 const InputFieldMixinImplementation = (superclass) =>
   class InputFieldMixinClass extends ClearButtonMixin(
-    FieldAriaMixin(ForwardInputPropsMixin(AriaLabelMixin(DelegateFocusMixin(superclass))))
+    FieldAriaMixin(InputConstraintsMixin(AriaLabelMixin(DelegateFocusMixin(superclass))))
   ) {
     static get properties() {
       return {
@@ -61,8 +61,8 @@ const InputFieldMixinImplementation = (superclass) =>
       };
     }
 
-    static get forwardProps() {
-      return [...super.forwardProps, 'autocapitalize', 'autocomplete', 'autocorrect'];
+    static get delegateAttrs() {
+      return [...super.delegateAttrs, 'autocapitalize', 'autocomplete', 'autocorrect'];
     }
 
     static get observers() {
@@ -78,8 +78,17 @@ const InputFieldMixinImplementation = (superclass) =>
     }
 
     /** @protected */
-    connectedCallback() {
-      super.connectedCallback();
+    ready() {
+      super.ready();
+
+      // Lumo theme defines a max-height transition for the "error-message"
+      // part on invalid state change.
+      const errorPart = this.shadowRoot.querySelector('[part="error-message"]');
+      if (errorPart) {
+        errorPart.addEventListener('transitionend', () => {
+          this.__observeOffsetHeight();
+        });
+      }
 
       if (this.inputElement) {
         // Discard value set on the custom slotted input.
@@ -91,20 +100,6 @@ const InputFieldMixinImplementation = (superclass) =>
         if (this.value) {
           this.inputElement.value = this.value;
         }
-      }
-    }
-
-    /** @protected */
-    ready() {
-      super.ready();
-
-      // Lumo theme defines a max-height transition for the "error-message"
-      // part on invalid state change.
-      const errorPart = this.shadowRoot.querySelector('[part="error-message"]');
-      if (errorPart) {
-        errorPart.addEventListener('transitionend', () => {
-          this.__observeOffsetHeight();
-        });
       }
     }
 
