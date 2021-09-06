@@ -157,11 +157,24 @@ describe('WAI-ARIA', () => {
       expect(monthCalendar.shadowRoot.querySelector('[part="month-header"]').getAttribute('role')).to.equal('heading');
     });
 
+    it('should have an aria-level on the title', () => {
+      // Consistency and convenience. Announces title as a header.
+      expect(monthCalendar.shadowRoot.querySelector('[part="month-header"]').getAttribute('aria-level')).to.equal('2');
+    });
+
     it('should have heading roles on the weekdays', () => {
       // iOS VoiceOver bug: visible text is spoken instead of aria-label otherwise.
       const weekdays = monthCalendar.shadowRoot.querySelectorAll('[part="weekday"]:not(:empty)');
       Array.from(weekdays).forEach((weekday) => {
         expect(weekday.getAttribute('role')).to.equal('heading');
+      });
+    });
+
+    it('should have an aria-level on the weekdays', () => {
+      // iOS VoiceOver bug: visible text is spoken instead of aria-label otherwise.
+      const weekdays = monthCalendar.shadowRoot.querySelectorAll('[part="weekday"]:not(:empty)');
+      Array.from(weekdays).forEach((weekday) => {
+        expect(weekday.getAttribute('aria-level')).to.equal('2');
       });
     });
 
@@ -236,6 +249,15 @@ describe('WAI-ARIA', () => {
 
         Array.from(weekNumberElements).forEach((weekNumberElement) => {
           expect(weekNumberElement.getAttribute('role')).to.equal('heading');
+        });
+      });
+
+      it('should have an aria-level on week numbers', () => {
+        // iOS VoiceOver bug: visible text is spoken instead of aria-label otherwise.
+        const weekNumberElements = monthCalendar.shadowRoot.querySelectorAll('[part="week-number"]');
+
+        Array.from(weekNumberElements).forEach((weekNumberElement) => {
+          expect(weekNumberElement.getAttribute('aria-level')).to.equal('2');
         });
       });
 

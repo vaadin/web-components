@@ -40,7 +40,7 @@ describe('vaadin-month-calendar', () => {
 
   it('should render days in correct order by default', () => {
     const weekdays = monthCalendar.shadowRoot.querySelectorAll('[part="weekday"]:not(:empty)');
-    const weekdayTitles = Array.from(weekdays).map((weekday) => weekday.textContent);
+    const weekdayTitles = Array.from(weekdays).map((weekday) => weekday.textContent.replaceAll(/(\r?\n|\r)|( )/g, ''));
     expect(weekdayTitles).to.eql(['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']);
   });
 
