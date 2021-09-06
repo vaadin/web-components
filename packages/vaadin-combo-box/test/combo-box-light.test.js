@@ -9,7 +9,8 @@ import {
   mouseup,
   touchend,
   touchstart,
-  isDesktopSafari
+  isDesktopSafari,
+  nextFrame
 } from '@vaadin/testing-helpers';
 import { resetMouseCanceller } from '@polymer/polymer/lib/utils/gestures.js';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
@@ -415,9 +416,10 @@ describe('nested template', () => {
     expect(() => comboBox.open()).not.to.throw(Error);
   });
 
-  it('should not use nested template as the item template', () => {
+  it('should not use nested template as the item template', async () => {
     comboBox.open();
     const firstItem = comboBox.$.overlay._selector.querySelector('vaadin-combo-box-item');
+    await nextFrame();
     expect(comboBox.querySelector('[slot="prefix"]').innerHTML).to.contain('1 foo');
     expect(firstItem.shadowRoot.querySelector('#content').innerHTML).to.equal('bar');
   });

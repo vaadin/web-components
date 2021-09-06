@@ -62,3 +62,25 @@ export const onceScrolled = (scroller) => {
 export const makeItems = (length) => {
   return Array(...new Array(length)).map((_, i) => `item ${i}`);
 };
+
+/**
+ * Returns the items that are inside the bounds of the given combo box's dropdown viewport.
+ */
+export const getViewportItems = (comboBox) => {
+  const overlayRect = comboBox.$.overlay.$.dropdown.$.overlay.$.content.getBoundingClientRect();
+
+  return Array.from(comboBox.$.overlay._selector.querySelectorAll('vaadin-combo-box-item'))
+    .sort((a, b) => a.index - b.index)
+    .filter((item) => !item.hidden)
+    .filter((item) => {
+      const itemRect = item.getBoundingClientRect();
+      return itemRect.bottom > overlayRect.top && itemRect.top < overlayRect.bottom;
+    });
+};
+
+/**
+ * Scrolls the combo box dropdown to the given index.
+ */
+export const scrollToIndex = (comboBox, index) => {
+  comboBox.$.overlay.__virtualizer.scrollToIndex(index);
+};

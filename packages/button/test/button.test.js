@@ -1,3 +1,4 @@
+import sinon from 'sinon';
 import { expect } from '@esm-bundle/chai';
 import { sendKeys } from '@web/test-runner-commands';
 import {
@@ -69,6 +70,34 @@ describe('vaadin-button', () => {
     it('should define the button label using light DOM', () => {
       const children = FlattenedNodesObserver.getFlattenedNodes(label);
       expect(children[1].textContent).to.be.equal('Press me');
+    });
+  });
+
+  describe('keyboard', () => {
+    beforeEach(() => {
+      element = fixtureSync('<vaadin-button>Press me</vaadin-button>');
+      element.focus();
+    });
+
+    ['Enter', 'Space'].forEach((key) => {
+      it(`should fire click event on ${key}`, async () => {
+        const spy = sinon.spy();
+        element.addEventListener('click', spy);
+
+        await sendKeys({ down: key });
+
+        expect(spy.calledOnce).to.be.true;
+      });
+
+      it(`should not fire click event on ${key} when disabled`, async () => {
+        const spy = sinon.spy();
+        element.addEventListener('click', spy);
+        element.disabled = true;
+
+        await sendKeys({ down: key });
+
+        expect(spy.called).to.be.false;
+      });
     });
   });
 

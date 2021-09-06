@@ -198,10 +198,6 @@ export const ComboBoxDataProviderMixin = (superClass) =>
             if (Object.keys(this._pendingRequests).length === 0) {
               this.loading = false;
             }
-            if (page === 0 && this.__repositionOverlayDebouncer && items.length > (this.__maxRenderedItems || 0)) {
-              setTimeout(() => this.__repositionOverlayDebouncer.flush());
-              this.__maxRenderedItems = items.length;
-            }
           }
         };
 

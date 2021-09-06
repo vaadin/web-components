@@ -3,9 +3,6 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { timeOut } from '@polymer/polymer/lib/utils/async.js';
-import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
-import { flush } from '@polymer/polymer/lib/utils/flush.js';
 import { IronA11yAnnouncer } from '@polymer/iron-a11y-announcer/iron-a11y-announcer.js';
 import { processTemplates } from '@vaadin/vaadin-element-mixin/templates.js';
 import { ComboBoxPlaceholder } from './vaadin-combo-box-placeholder.js';
@@ -599,23 +596,6 @@ export const ComboBoxMixin = (subclass) =>
 
     /** @private */
     _onOpened() {
-      // Pre P2 iron-list used a debouncer to render. Now that we synchronously render items,
-      // we need to flush the DOM to make sure it doesn't get flushed in the middle of _render call
-      // because that will cause problems to say the least.
-      flush();
-
-      // With iron-list v1.3.9, calling `notifyResize()` no longer renders
-      // the items synchronously. It is required to have the items rendered
-      // before we update the overlay and the list positions and sizes.
-      this.$.overlay.ensureItemsRendered();
-      this.$.overlay._selector.toggleScrollListener(true);
-
-      // Ensure metrics are up-to-date
-      this.$.overlay.updateViewportBoundaries();
-      // Force iron-list to create reusable nodes. Otherwise it will only start
-      // doing that in scroll listener, which might affect performance.
-      // See https://github.com/vaadin/vaadin-combo-box/pull/776
-      this.$.overlay._selector._increasePoolIfNeeded();
       setTimeout(() => this._resizeDropdown(), 1);
       // Defer scroll position adjustment to improve performance.
       window.requestAnimationFrame(() => this.$.overlay.adjustScrollPosition());
@@ -742,9 +722,8 @@ export const ComboBoxMixin = (subclass) =>
         return;
       }
 
-      // Notify the dropdown about filter changing, so to let it skip the
-      // scrolling restore
-      this.$.overlay.filterChanged = true;
+      // Scroll to the top of the list whenever the filter changes.
+      this.$.overlay._scrollIntoView(0);
 
       if (this.items) {
         this.filteredItems = this._filterItems(this.items, filter);
@@ -905,10 +884,6 @@ export const ComboBoxMixin = (subclass) =>
           this.opened || this.autoOpenDisabled
             ? this.$.overlay.indexOfLabel(this.filter)
             : this._indexOfValue(this.value, this.filteredItems);
-
-        if (this.opened) {
-          this._repositionOverlay();
-        }
       }
     }
 
@@ -950,41 +925,10 @@ export const ComboBoxMixin = (subclass) =>
     }
 
     /** @private */
-    _repositionOverlay() {
-      // async needed to reposition correctly after filtering
-      // (especially when aligned on top of input)
-      this.__repositionOverlayDebouncer = Debouncer.debounce(
-        this.__repositionOverlayDebouncer,
-        // Long debounce: sizing updates invoke multiple styling rounds,
-        // which might affect performance, especially in old browsers.
-        // See https://github.com/vaadin/vaadin-combo-box/pull/800
-        timeOut.after(500),
-        () => {
-          const selector = this.$.overlay._selector;
-          if (!selector._isClientFull()) {
-            // Due to the mismatch of the Y position of the item rendered
-            // at the top of the scrolling list with some specific scroll
-            // position values (2324, 3486, 6972, 60972, 95757 etc.)
-            // iron-list loops the increasing of the pool and adds
-            // too many items to the DOM.
-            // Adjusting scroll position to equal the current scrollTop value
-            // to avoid looping.
-            selector._resetScrollPosition(selector._physicalTop);
-          }
-          this._resizeDropdown();
-          this.$.overlay.updateViewportBoundaries();
-          this.$.overlay.ensureItemsRendered();
-          selector.notifyResize();
-          flush();
-        }
-      );
-    }
-
-    /** @private */
     _indexOfValue(value, items) {
       if (items && this._isValidValue(value)) {
         for (let i = 0; i < items.length; i++) {
-          if (this._getItemValue(items[i]) === value) {
+          if (items[i] !== this.__placeHolder && this._getItemValue(items[i]) === value) {
             return i;
           }
         }
