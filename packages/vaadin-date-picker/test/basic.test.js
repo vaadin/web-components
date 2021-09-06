@@ -326,7 +326,9 @@ describe('basic features', () => {
       const monthCalendar = overlayContent.$.monthScroller.querySelector('vaadin-month-calendar');
       const weekdays = monthCalendar.$.monthGrid.querySelectorAll('[part="weekday"]:not(:empty)');
       const weekdayLabels = Array.prototype.map.call(weekdays, (weekday) => weekday.getAttribute('aria-label'));
-      const weekdayTitles = Array.prototype.map.call(weekdays, (weekday) => weekday.textContent);
+      const weekdayTitles = Array.prototype.map.call(weekdays, (weekday) =>
+        weekday.textContent.replaceAll(/(\r?\n|\r)|( )/g, '')
+      );
       expect(weekdayLabels).to.eql([
         'maanantai',
         'tiistai',
