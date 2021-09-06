@@ -102,25 +102,11 @@ export class TextArea extends CharLengthMixin(
           -webkit-overflow-scrolling: touch;
         }
 
-        .textarea-wrapper {
-          display: grid;
-          flex: 1 1 auto;
-          align-self: stretch;
-          padding: 0;
-        }
-
-        .textarea-wrapper::after {
-          content: attr(data-replicated-value) ' ';
-          white-space: pre-wrap;
-          visibility: hidden;
-        }
-
         ::slotted(textarea) {
           -webkit-appearance: none;
           -moz-appearance: none;
           flex: auto;
           white-space: nowrap;
-          overflow: hidden;
           width: 100%;
           height: 100%;
           outline: none;
@@ -137,16 +123,6 @@ export class TextArea extends CharLengthMixin(
           background-color: transparent;
           /* Disable default invalid style in Firefox */
           box-shadow: none;
-        }
-
-        ::slotted(textarea),
-        .textarea-wrapper::after {
-          grid-area: 1 / 1 / 2 / 2;
-          box-sizing: border-box;
-          padding: 0 0.25em;
-          overflow-wrap: break-word;
-          word-wrap: break-word;
-          word-break: break-word;
         }
 
         [part='input-field'] ::slotted(*) {
@@ -174,9 +150,7 @@ export class TextArea extends CharLengthMixin(
           theme$="[[theme]]"
         >
           <slot name="prefix" slot="prefix"></slot>
-          <div class="textarea-wrapper">
-            <slot name="textarea"></slot>
-          </div>
+          <slot name="textarea"></slot>
           <slot name="suffix" slot="suffix"></slot>
           <div id="clearButton" part="clear-button" slot="suffix"></div>
         </vaadin-input-container>
@@ -204,6 +178,7 @@ export class TextArea extends CharLengthMixin(
   connectedCallback() {
     super.connectedCallback();
 
+    this._inputField = this.shadowRoot.querySelector('[part=input-field]');
     this._updateHeight();
   }
 
@@ -234,13 +209,49 @@ export class TextArea extends CharLengthMixin(
 
   /** @private */
   _updateHeight() {
-    if (this.inputElement) {
-      /* https://css-tricks.com/the-cleanest-trick-for-autogrowing-textareas/ */
-      this.__textAreaWrapper = this.__textAreaWrapper || this.shadowRoot.querySelector('.textarea-wrapper');
-      this.__textAreaWrapper.dataset.replicatedValue = this.inputElement.value;
-      // getComputedStyle is expensive, maybe we can use ResizeObserver in the future
-      this._dispatchIronResizeEventIfNeeded('InputHeight', getComputedStyle(this.__textAreaWrapper).height);
+    const input = this.inputElement;
+    const inputField = this._inputField;
+
+    if (!input || !inputField) {
+      return;
     }
+
+    const scrollTop = inputField.scrollTop;
+
+    // Only clear the height when the content shortens to minimize scrollbar flickering.
+    const valueLength = this.value ? this.value.length : 0;
+
+    if (this._oldValueLength >= valueLength) {
+      const inputFieldHeight = getComputedStyle(inputField).height;
+      const inputWidth = getComputedStyle(input).width;
+
+      // Temporarily fix the height of the wrapping input field container to prevent changing the browsers scroll
+      // position while resetting the textareas height. If the textarea had a large height, then removing its height
+      // will reset its height to the default of two rows. That might reduce the height of the page, and the
+      // browser might adjust the scroll position before we can restore the measured height of the textarea.
+      inputField.style.display = 'block';
+      inputField.style.height = inputFieldHeight;
+
+      // Fix the input element width so its scroll height isn't affected by host's disappearing scrollbars
+      input.style.maxWidth = inputWidth;
+
+      // Clear the height of the textarea to allow measuring a reduced scroll height
+      input.style.height = 'auto';
+    }
+    this._oldValueLength = valueLength;
+
+    const inputHeight = input.scrollHeight;
+    if (inputHeight > input.clientHeight) {
+      input.style.height = inputHeight + 'px';
+    }
+
+    // Restore
+    input.style.removeProperty('max-width');
+    inputField.style.removeProperty('display');
+    inputField.style.removeProperty('height');
+    inputField.scrollTop = scrollTop;
+
+    this._dispatchIronResizeEventIfNeeded('InputHeight', inputHeight);
   }
 }
 
