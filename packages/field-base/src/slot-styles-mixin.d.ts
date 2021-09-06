@@ -18,7 +18,7 @@ interface SlotStylesMixin {
   /**
    * List of styles to insert into root.
    */
-  readonly slotStyles: string;
+  readonly slotStyles: string[];
 }
 
 export { SlotStylesMixinConstructor, SlotStylesMixin };

@@ -27,13 +27,13 @@ describe('slot-styles-mixin', () => {
         }
 
         get slotStyles() {
-          return {
-            button: `
+          return [
+            `
               button[slot='button'] {
                 color: ${COLOR};
               }
             `
-          };
+          ];
         }
       }
     );

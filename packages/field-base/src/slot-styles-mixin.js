@@ -5,11 +5,11 @@ const stylesMap = new WeakMap();
 /**
  * Get all the styles inserted into root.
  * @param {DocumentOrShadowRoot} root
- * @return {Array<string>}
+ * @return {Set<string>}
  */
 function getRootStyles(root) {
   if (!stylesMap.has(root)) {
-    stylesMap.set(root, {});
+    stylesMap.set(root, new Set());
   }
 
   return stylesMap.get(root);
@@ -49,24 +49,14 @@ const SlotStylesMixinImplementation = (superclass) =>
     }
 
     /** @private */
-    __gatherSlotStyles() {
-      if (!this.__slotStyles) {
-        this.__slotStyles = Object.entries(this.slotStyles);
-      }
-
-      return this.__slotStyles;
-    }
-
-    /** @private */
     __applySlotStyles() {
       const root = this.getRootNode();
       const rootStyles = getRootStyles(root);
-      const slotStyles = this.__gatherSlotStyles();
 
-      slotStyles.forEach(([id, styles]) => {
-        if (!rootStyles[id]) {
+      this.slotStyles.forEach((styles) => {
+        if (!rootStyles.has(styles)) {
           insertStyles(styles, root);
-          rootStyles[id] = styles;
+          rootStyles.add(styles);
         }
       });
     }
