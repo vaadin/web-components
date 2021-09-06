@@ -12,14 +12,9 @@ const textArea = css`
     box-sizing: border-box;
   }
 
-  .textarea-wrapper {
+  [part='input-field'] ::slotted(textarea) {
+    padding-top: 0;
     margin-top: 4px;
-    padding: 0;
-  }
-
-  [part='input-field'] ::slotted(textarea),
-  .textarea-wrapper::after {
-    padding: 0 0 8px;
   }
 
   [part='input-field'] ::slotted(textarea) {
