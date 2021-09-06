@@ -1,5 +1,7 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
+import { sendKeys } from '@web/test-runner-commands';
 import { visualDiff } from '@web/test-runner-visual-regression';
+import '../common.js';
 import '../../../theme/material/vaadin-number-field.js';
 
 describe('number-field', () => {
@@ -26,58 +28,75 @@ describe('number-field', () => {
     await visualDiff(div, `${import.meta.url}_readonly`);
   });
 
-  it('label', async () => {
-    element.label = 'Label';
-    await visualDiff(div, `${import.meta.url}_label`);
+  it('focus-ring', async () => {
+    await sendKeys({ press: 'Tab' });
+    await visualDiff(div, `${import.meta.url}_focus-ring`);
   });
 
-  it('placeholder', async () => {
-    element.placeholder = 'Number';
-    await visualDiff(div, `${import.meta.url}_placeholder`);
-  });
+  ['ltr', 'rtl'].forEach((dir) => {
+    describe(dir, () => {
+      before(() => {
+        document.documentElement.setAttribute('dir', dir);
+      });
 
-  it('value', async () => {
-    element.value = 10;
-    await visualDiff(div, `${import.meta.url}_value`);
-  });
+      after(() => {
+        document.documentElement.removeAttribute('dir');
+      });
 
-  it('required', async () => {
-    element.label = 'Label';
-    element.required = true;
-    await visualDiff(div, `${import.meta.url}_required`);
-  });
+      it('label', async () => {
+        element.label = 'Label';
+        await visualDiff(div, `${import.meta.url}_${dir}-label`);
+      });
 
-  it('error message', async () => {
-    element.label = 'Label';
-    element.errorMessage = 'This field is required';
-    element.required = true;
-    element.validate();
-    await visualDiff(div, `${import.meta.url}_error-message`);
-  });
+      it('placeholder', async () => {
+        element.placeholder = 'Number';
+        await visualDiff(div, `${import.meta.url}_${dir}-placeholder`);
+      });
 
-  it('helper text', async () => {
-    element.helperText = 'Helper text';
-    await visualDiff(div, `${import.meta.url}_helper-text`);
-  });
+      it('value', async () => {
+        element.value = 10;
+        await visualDiff(div, `${import.meta.url}_${dir}-value`);
+      });
 
-  it('prefix slot', async () => {
-    const span = document.createElement('span');
-    span.setAttribute('slot', 'prefix');
-    span.textContent = '$';
-    element.appendChild(span);
-    await visualDiff(div, `${import.meta.url}_prefix`);
-  });
+      it('required', async () => {
+        element.label = 'Label';
+        element.required = true;
+        await visualDiff(div, `${import.meta.url}_${dir}-required`);
+      });
 
-  it('suffix slot', async () => {
-    const span = document.createElement('span');
-    span.setAttribute('slot', 'suffix');
-    span.textContent = '$';
-    element.appendChild(span);
-    await visualDiff(div, `${import.meta.url}_suffix`);
-  });
+      it('error message', async () => {
+        element.label = 'Label';
+        element.errorMessage = 'This field is required';
+        element.required = true;
+        element.validate();
+        await visualDiff(div, `${import.meta.url}_${dir}-error-message`);
+      });
 
-  it('controls', async () => {
-    element.hasControls = true;
-    await visualDiff(div, `${import.meta.url}_controls`);
+      it('helper text', async () => {
+        element.helperText = 'Helper text';
+        await visualDiff(div, `${import.meta.url}_${dir}-helper-text`);
+      });
+
+      it('prefix slot', async () => {
+        const span = document.createElement('span');
+        span.setAttribute('slot', 'prefix');
+        span.textContent = '$';
+        element.appendChild(span);
+        await visualDiff(div, `${import.meta.url}_${dir}-prefix`);
+      });
+
+      it('suffix slot', async () => {
+        const span = document.createElement('span');
+        span.setAttribute('slot', 'suffix');
+        span.textContent = '$';
+        element.appendChild(span);
+        await visualDiff(div, `${import.meta.url}_${dir}-suffix`);
+      });
+
+      it('controls', async () => {
+        element.hasControls = true;
+        await visualDiff(div, `${import.meta.url}_${dir}-controls`);
+      });
+    });
   });
 });

@@ -8,6 +8,7 @@ import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { InputFieldMixin } from '@vaadin/field-base/src/input-field-mixin.js';
 import { InputSlotMixin } from '@vaadin/field-base/src/input-slot-mixin.js';
+import { SlotStylesMixin } from '@vaadin/field-base/src/slot-styles-mixin.js';
 import '@vaadin/input-container/src/vaadin-input-container.js';
 import '@vaadin/text-field/src/vaadin-input-field-shared-styles.js';
 
@@ -56,7 +57,9 @@ import '@vaadin/text-field/src/vaadin-input-field-shared-styles.js';
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-export class NumberField extends InputFieldMixin(InputSlotMixin(ThemableMixin(ElementMixin(PolymerElement)))) {
+export class NumberField extends InputFieldMixin(
+  SlotStylesMixin(InputSlotMixin(ThemableMixin(ElementMixin(PolymerElement))))
+) {
   static get is() {
     return 'vaadin-number-field';
   }
@@ -85,15 +88,6 @@ export class NumberField extends InputFieldMixin(InputSlotMixin(ThemableMixin(El
 
         :host([dir='rtl']) [part='input-field'] {
           direction: ltr;
-        }
-
-        /* TODO: provide alternatives for Safari */
-        :host([dir='rtl']) [part='input-field'] ::slotted(input)::placeholder {
-          direction: rtl;
-        }
-
-        :host([dir='rtl']:not([has-controls])) [part='input-field'] ::slotted(input)::placeholder {
-          text-align: left;
         }
       </style>
 
@@ -190,6 +184,32 @@ export class NumberField extends InputFieldMixin(InputSlotMixin(ThemableMixin(El
   constructor() {
     super();
     this._setType('number');
+  }
+
+  /** @protected */
+  get slotStyles() {
+    const tag = this.localName;
+    return [
+      `
+        ${tag} input[type="number"]::-webkit-outer-spin-button,
+        ${tag} input[type="number"]::-webkit-inner-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
+
+        ${tag} input[type="number"] {
+          -moz-appearance: textfield;
+        }
+
+        ${tag}[dir='rtl'] input[type="number"]::placeholder {
+          direction: rtl;
+        }
+
+        ${tag}[dir='rtl']:not([has-controls]) input[type="number"]::placeholder {
+          text-align: left;
+        }
+      `
+    ];
   }
 
   /**
