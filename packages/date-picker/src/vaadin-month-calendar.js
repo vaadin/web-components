@@ -59,10 +59,16 @@ class MonthCalendar extends ThemableMixin(GestureEventListeners(PolymerElement))
       </style>
 
       <div part="month-header" role="heading">[[_getTitle(month, i18n.monthNames)]]</div>
-      <div id="monthGrid" on-tap="_handleTap" on-touchend="_preventDefault" on-touchstart="_onMonthGridTouchStart">
+      <div
+        id="monthGrid"
+        on-tap="_handleTap"
+        on-touchend="_preventDefault"
+        on-touchstart="_onMonthGridTouchStart"
+        role="grid"
+      >
         <div id="weekdays-container">
           <div hidden$="[[!_showWeekSeparator(showWeekNumbers, i18n.firstDayOfWeek)]]" part="weekday"></div>
-          <div part="weekdays">
+          <div part="weekdays" role="rowheader">
             <template
               is="dom-repeat"
               items="[[_getWeekDayNames(i18n.weekdays, i18n.weekdaysShort, showWeekNumbers, i18n.firstDayOfWeek)]]"
@@ -77,7 +83,7 @@ class MonthCalendar extends ThemableMixin(GestureEventListeners(PolymerElement))
               <div part="week-number" role="heading" aria-label$="[[i18n.week]] [[item]]">[[item]]</div>
             </template>
           </div>
-          <div id="days">
+          <div id="days" role="rowgroup">
             <template is="dom-repeat" items="[[_days]]">
               <!-- prettier-ignore -->
               <div

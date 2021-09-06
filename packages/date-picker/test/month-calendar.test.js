@@ -151,6 +151,17 @@ describe('vaadin-month-calendar', () => {
     expect(monthCalendar.selectedDate).to.be.undefined;
   });
 
+  it('should have the appropriate roles set ', () => {
+    const monthRole = monthCalendar.$.monthGrid.getAttribute('role');
+    expect(monthRole).to.be.equal('grid');
+
+    const weekdaysRole = monthCalendar.shadowRoot.querySelector('[part="weekdays"]').getAttribute('role');
+    expect(weekdaysRole).to.be.equal('rowheader');
+
+    const daysRole = monthCalendar.$.days.getAttribute('role');
+    expect(daysRole).to.be.equal('rowgroup');
+  });
+
   describe('i18n', () => {
     beforeEach(async () => {
       monthCalendar.i18n = {
