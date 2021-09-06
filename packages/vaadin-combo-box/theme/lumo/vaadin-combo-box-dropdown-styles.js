@@ -13,12 +13,9 @@ registerStyles(
     }
 
     :host {
-      /* TODO: using a legacy mixin (unsupported) */
-      --iron-list-items-container: {
-        border-width: var(--lumo-space-xs);
-        border-style: solid;
-        border-color: transparent;
-      }
+      --_vaadin-combo-box-items-container-border-width: var(--lumo-space-xs);
+      --_vaadin-combo-box-items-container-border-style: solid;
+      --_vaadin-combo-box-items-container-border-color: transparent;
     }
 
     /* Loading state */

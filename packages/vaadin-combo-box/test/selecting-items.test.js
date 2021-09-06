@@ -4,6 +4,7 @@ import { aTimeout, click, fixtureSync, fire } from '@vaadin/testing-helpers';
 import { flush } from '@polymer/polymer/lib/utils/flush.js';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
+import { scrollToIndex } from './helpers.js';
 
 describe('selecting items', () => {
   let comboBox;
@@ -74,7 +75,7 @@ describe('selecting items', () => {
     // Scroll start could delay, for example, with full SD polyfill
     comboBox.$.overlay._scroller.addEventListener('scroll', listener);
 
-    comboBox.$.overlay._selector.scrollToIndex(20);
+    scrollToIndex(comboBox, 20);
   });
 
   it('should select by using JS api', () => {
@@ -150,6 +151,7 @@ describe('selecting items', () => {
       if (comboBox.value === 'foo') {
         comboBox.value = 'bar';
         setTimeout(() => {
+          comboBox.open();
           expect(comboBox.value).to.eql('bar');
           expect(comboBox.selectedItem).to.eql('bar');
           expect(items[0].selected).to.be.false;

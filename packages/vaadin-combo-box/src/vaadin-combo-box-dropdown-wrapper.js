@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import '@polymer/iron-list/iron-list.js';
+import { Virtualizer } from '@vaadin/vaadin-virtual-list/src/virtualizer.js';
 import './vaadin-combo-box-item.js';
 import './vaadin-combo-box-dropdown.js';
 import { ComboBoxPlaceholder } from './vaadin-combo-box-placeholder.js';
@@ -49,25 +49,16 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
               /* Fixes scrollbar disappearing when 'Show scroll bars: Always' enabled in Safari */
               box-shadow: 0 0 0 white;
             }
+
+            #selector {
+              border-width: var(--_vaadin-combo-box-items-container-border-width);
+              border-style: var(--_vaadin-combo-box-items-container-border-style);
+              border-color: var(--_vaadin-combo-box-items-container-border-color);
+            }
           </style>
-          <div id="scroller" on-click="_stopPropagation">
-            <iron-list id="selector" role="listbox" items="[[_getItems(opened, _items)]]" scroll-target="[[_scroller]]">
-              <template>
-                <vaadin-combo-box-item
-                  on-click="_onItemClick"
-                  index="[[__requestItemByIndex(item, index, _resetScrolling)]]"
-                  item="[[item]]"
-                  label="[[getItemLabel(item, _itemLabelPath)]]"
-                  selected="[[_isItemSelected(item, _selectedItem, _itemIdPath)]]"
-                  renderer="[[renderer]]"
-                  role$="[[_getAriaRole(index)]]"
-                  aria-selected$="[[_getAriaSelected(_focusedIndex,index)]]"
-                  focused="[[_isItemFocused(_focusedIndex,index)]]"
-                  tabindex="-1"
-                  theme$="[[theme]]"
-                ></vaadin-combo-box-item>
-              </template>
-            </iron-list>
+
+          <div id="scroller" on-click="_stopPropagation" style="min-height: 1px">
+            <div id="selector" role="listbox"></div>
           </div>
         </template>
       </vaadin-combo-box-dropdown>
@@ -117,26 +108,6 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
        */
       theme: String,
 
-      /**
-       * Used to recognize if the filter changed, so to skip the
-       * scrolling restore. If true, then scroll to 0 position. Restore
-       * the previous position otherwise.
-       */
-      filterChanged: {
-        type: Boolean,
-        value: false
-      },
-
-      /**
-       * Used to recognize scroller reset after new items have been set
-       * to iron-list and to ignore unwanted pages load. If 'true', then
-       * skip loading of the pages until it becomes 'false'.
-       */
-      _resetScrolling: {
-        type: Boolean,
-        value: false
-      },
-
       _selectedItem: {
         type: Object
       },
@@ -170,19 +141,58 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
 
       _itemIdPath: String,
 
-      /**
-       * Stores the scroller position before updating the 'items', in
-       * order to restore it immediately after 'items' have been updated
-       */
-      _oldScrollerPosition: {
-        type: Number,
-        value: 0
+      __effectiveItems: {
+        computed: '_getItems(opened, _items)',
+        observer: '__effectiveItemsChanged'
       }
     };
   }
 
   static get observers() {
-    return ['_loadingChanged(loading)', '_openedChanged(opened, _items, loading)', '_restoreScrollerPosition(_items)'];
+    return [
+      '_loadingChanged(loading)',
+      '_openedChanged(opened, _items, loading)',
+      '__updateAllItems(_selectedItem, renderer)'
+    ];
+  }
+
+  constructor() {
+    super();
+    this.__boundOnItemClick = this._onItemClick.bind(this);
+  }
+
+  __effectiveItemsChanged(effectiveItems) {
+    if (this.__virtualizer && effectiveItems) {
+      this.__virtualizer.size = effectiveItems.length;
+      this.__virtualizer.flush();
+    }
+  }
+
+  __createElements(count) {
+    return [...Array(count)].map(() => {
+      const item = document.createElement('vaadin-combo-box-item');
+      item.addEventListener('click', this.__boundOnItemClick);
+      item.tabIndex = '-1';
+      item.style.width = '100%';
+      return item;
+    });
+  }
+
+  __updateElement(el, index) {
+    const item = this.__effectiveItems[index];
+
+    el.setProperties({
+      item,
+      index: this.__requestItemByIndex(item, index),
+      label: this.getItemLabel(item, this._itemLabelPath),
+      selected: this._isItemSelected(item, this._selectedItem, this._itemIdPath),
+      renderer: this.renderer,
+      focused: this._isItemFocused(this._focusedIndex, index)
+    });
+
+    el.setAttribute('role', this._getAriaRole(index));
+    el.setAttribute('aria-selected', this._getAriaSelected(this._focusedIndex, index));
+    el.setAttribute('theme', this.theme);
   }
 
   _fireTouchAction(sourceEvent) {
@@ -195,39 +205,9 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
 
   _getItems(opened, items) {
     if (opened) {
-      if (this._isNotEmpty(items) && this._selector && !this.filterChanged) {
-        // iron-list triggers the scroller's reset after items update, and
-        // this is not appropriate for undefined size lazy loading.
-        // see https://github.com/vaadin/vaadin-combo-box-flow/issues/386
-        // We store iron-list scrolling position in order to restore
-        // it later on after the items have been updated.
-        const currentScrollerPosition = this._selector.firstVisibleIndex;
-        if (currentScrollerPosition !== 0) {
-          this._oldScrollerPosition = currentScrollerPosition;
-          this._resetScrolling = true;
-        }
-      }
-      // Let the position to be restored in the future calls unless it's not
-      // caused by filtering
-      this.filterChanged = false;
       return items;
     }
     return [];
-  }
-
-  _restoreScrollerPosition(items) {
-    if (this._isNotEmpty(items) && this._selector && this._oldScrollerPosition !== 0) {
-      // new items size might be less than old scrolling position
-      this._scrollIntoView(Math.min(items.length - 1, this._oldScrollerPosition));
-      this._resetScrolling = false;
-      // reset position to 0 again in order to properly handle the filter
-      // cases (scroll to 0 after typing the filter)
-      this._oldScrollerPosition = 0;
-    }
-  }
-
-  _isNotEmpty(items) {
-    return !this._isEmpty(items);
   }
 
   _isEmpty(items) {
@@ -246,7 +226,7 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
     if (this._isEmpty(items)) {
       this.$.dropdown.__emptyItems = true;
     }
-    this.$.dropdown.opened = !!(opened && (loading || this._isNotEmpty(items)));
+    this.$.dropdown.opened = !!(opened && (loading || !this._isEmpty(items)));
     this.$.dropdown.__emptyItems = false;
   }
 
@@ -265,6 +245,13 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
 
     // Prevent blurring the input when clicking inside the overlay.
     this.$.dropdown.$.overlay.addEventListener('mousedown', (e) => e.preventDefault());
+
+    this.__virtualizer = new Virtualizer({
+      createElements: this.__createElements.bind(this),
+      updateElement: this.__updateElement.bind(this),
+      scrollTarget: this._scroller,
+      scrollContainer: this._selector
+    });
   }
 
   _loadingChanged(loading) {
@@ -272,15 +259,15 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
       return;
     }
 
-    if (loading) {
-      this.$.dropdown.$.overlay.setAttribute('loading', '');
-    } else {
-      this.$.dropdown.$.overlay.removeAttribute('loading');
+    this.$.dropdown.$.overlay.toggleAttribute('loading', loading);
+
+    if (!loading && this.__virtualizer) {
+      setTimeout(() => this.__virtualizer.update());
     }
   }
 
   _setOverlayHeight() {
-    if (!this.opened || !this.positionTarget) {
+    if (!this.__virtualizer || !this.opened || !this.positionTarget) {
       return;
     }
 
@@ -293,11 +280,6 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
 
     // overlay max height is restrained by the #scroller max height which is set to 65vh in CSS.
     this.$.dropdown.$.overlay.style.maxHeight = maxHeight;
-
-    // we need to set height for iron-list to make its `firstVisibleIndex` work correctly.
-    this._selector.style.maxHeight = maxHeight;
-
-    this.updateViewportBoundaries();
   }
 
   _maxOverlayHeight(targetRect) {
@@ -327,7 +309,7 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
   }
 
   _onItemClick(e) {
-    this.dispatchEvent(new CustomEvent('selection-changed', { detail: { item: e.model.item } }));
+    this.dispatchEvent(new CustomEvent('selection-changed', { detail: { item: e.currentTarget.item } }));
   }
 
   /**
@@ -352,8 +334,8 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
    *
    * @return {number}
    */
-  __requestItemByIndex(item, index, resetScrolling) {
-    if (item instanceof ComboBoxPlaceholder && index !== undefined && !resetScrolling) {
+  __requestItemByIndex(item, index) {
+    if (item instanceof ComboBoxPlaceholder && index !== undefined) {
       this.dispatchEvent(
         new CustomEvent('index-requested', { detail: { index, currentScrollerPos: this._oldScrollerPosition } })
       );
@@ -394,42 +376,45 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
   }
 
   _scrollIntoView(index) {
-    if (!(this.opened && index >= 0)) {
+    if (!this.__virtualizer || !(this.opened && index >= 0)) {
       return;
     }
     const visibleItemsCount = this._visibleItemsCount();
 
     let targetIndex = index;
 
-    if (index > this._selector.lastVisibleIndex - 1) {
+    if (index > this.__virtualizer.lastVisibleIndex - 1) {
       // Index is below the bottom, scrolling down. Make the item appear at the bottom.
       // First scroll to target (will be at the top of the scroller) to make sure it's rendered.
-      this._selector.scrollToIndex(index);
+      this.__virtualizer.scrollToIndex(index);
       // Then calculate the index for the following scroll (to get the target to bottom of the scroller).
       targetIndex = index - visibleItemsCount + 1;
-    } else if (index > this._selector.firstVisibleIndex) {
+    } else if (index > this.__virtualizer.firstVisibleIndex) {
       // The item is already visible, scrolling is unnecessary per se. But we need to trigger iron-list to set
       // the correct scrollTop on the scrollTarget. Scrolling to firstVisibleIndex.
-      targetIndex = this._selector.firstVisibleIndex;
+      targetIndex = this.__virtualizer.firstVisibleIndex;
     }
-    this._selector.scrollToIndex(Math.max(0, targetIndex));
+    this.__virtualizer.scrollToIndex(Math.max(0, targetIndex));
 
     // Sometimes the item is partly below the bottom edge, detect and adjust.
-    const pidx = this._selector._getPhysicalIndex(index),
-      physicalItem = this._selector._physicalItems[pidx];
-    if (!physicalItem) {
+    const lastPhysicalItem = [...this._selector.children].find(
+      (el) => !el.hidden && el.index === this.__virtualizer.lastVisibleIndex
+    );
+    if (!lastPhysicalItem || index !== lastPhysicalItem.index) {
       return;
     }
-    const physicalItemRect = physicalItem.getBoundingClientRect(),
-      scrollerRect = this._scroller.getBoundingClientRect(),
-      scrollTopAdjust = physicalItemRect.bottom - scrollerRect.bottom + this._viewportTotalPaddingBottom;
+    const lastPhysicalItemRect = lastPhysicalItem.getBoundingClientRect();
+    const scrollerRect = this._scroller.getBoundingClientRect();
+    const scrollTopAdjust = lastPhysicalItemRect.bottom - scrollerRect.bottom + this._viewportTotalPaddingBottom;
     if (scrollTopAdjust > 0) {
       this._scroller.scrollTop += scrollTopAdjust;
     }
   }
 
-  ensureItemsRendered() {
-    this._selector._render();
+  __updateAllItems() {
+    if (this.__virtualizer) {
+      this.__virtualizer.update();
+    }
   }
 
   adjustScrollPosition() {
@@ -444,12 +429,10 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
    * scrolling the parent similarly to touch scrolling.
    */
   _patchWheelOverScrolling() {
-    const selector = this._selector;
-    selector.addEventListener('wheel', (e) => {
-      const scroller = selector._scroller || selector.scrollTarget;
+    this._selector.addEventListener('wheel', (e) => {
+      const scroller = this._scroller;
       const scrolledToTop = scroller.scrollTop === 0;
       const scrolledToBottom = scroller.scrollHeight - scroller.scrollTop - scroller.clientHeight <= 1;
-
       if (scrolledToTop && e.deltaY < 0) {
         e.preventDefault();
       } else if (scrolledToBottom && e.deltaY > 0) {
@@ -458,14 +441,9 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
     });
   }
 
-  updateViewportBoundaries() {
-    this._cachedViewportTotalPaddingBottom = undefined;
-    this._selector.updateViewportBoundaries();
-  }
-
   get _viewportTotalPaddingBottom() {
     if (this._cachedViewportTotalPaddingBottom === undefined) {
-      const itemsStyle = window.getComputedStyle(this._selector.$.items);
+      const itemsStyle = window.getComputedStyle(this._selector);
       this._cachedViewportTotalPaddingBottom = [itemsStyle.paddingBottom, itemsStyle.borderBottomWidth]
         .map((v) => {
           return parseInt(v, 10);
@@ -480,10 +458,9 @@ class ComboBoxDropdownWrapperElement extends PolymerElement {
 
   _visibleItemsCount() {
     // Ensure items are positioned
-    this._selector.scrollToIndex(this._selector.firstVisibleIndex);
-    // Ensure viewport boundaries are up-to-date
-    this.updateViewportBoundaries();
-    return this._selector.lastVisibleIndex - this._selector.firstVisibleIndex + 1;
+    this.__virtualizer.scrollToIndex(this.__virtualizer.firstVisibleIndex);
+    const hasItems = this.__virtualizer.size > 0;
+    return hasItems ? this.__virtualizer.lastVisibleIndex - this.__virtualizer.firstVisibleIndex + 1 : 0;
   }
 
   _stopPropagation(e) {
