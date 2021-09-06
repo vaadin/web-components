@@ -46,6 +46,6 @@ const passwordField = css`
   }
 `;
 
-registerStyles('vaadin-password-field', [...inputFieldShared, passwordField], {
+registerStyles('vaadin-password-field', [inputFieldShared, passwordField], {
   moduleId: 'lumo-password-field'
 });

@@ -40,7 +40,7 @@ const select = css`
   }
 `;
 
-registerStyles('vaadin-select', [...inputFieldShared, select], {
+registerStyles('vaadin-select', [inputFieldShared, select], {
   moduleId: 'lumo-select'
 });
 
@@ -100,4 +100,4 @@ const selectOverlay = css`
   }
 `;
 
-registerStyles('vaadin-select-overlay', [...menuOverlay, selectOverlay], { moduleId: 'lumo-select-overlay' });
+registerStyles('vaadin-select-overlay', [menuOverlay, selectOverlay], { moduleId: 'lumo-select-overlay' });

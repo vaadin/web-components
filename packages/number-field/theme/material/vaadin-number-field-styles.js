@@ -27,6 +27,6 @@ const numberField = css`
   }
 `;
 
-registerStyles('vaadin-number-field', [...inputFieldShared, fieldButton, numberField], {
+registerStyles('vaadin-number-field', [inputFieldShared, fieldButton, numberField], {
   moduleId: 'material-number-field'
 });

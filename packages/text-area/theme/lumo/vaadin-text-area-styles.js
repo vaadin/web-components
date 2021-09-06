@@ -64,6 +64,6 @@ const testArea = css`
   }
 `;
 
-registerStyles('vaadin-text-area', [...inputFieldShared, testArea], {
+registerStyles('vaadin-text-area', [inputFieldShared, testArea], {
   moduleId: 'lumo-text-area'
 });

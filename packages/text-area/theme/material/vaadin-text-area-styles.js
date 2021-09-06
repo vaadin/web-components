@@ -28,4 +28,4 @@ const textArea = css`
   }
 `;
 
-registerStyles('vaadin-text-area', [...inputFieldShared, textArea], { moduleId: 'material-text-area' });
+registerStyles('vaadin-text-area', [inputFieldShared, textArea], { moduleId: 'material-text-area' });

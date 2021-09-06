@@ -38,7 +38,7 @@ const select = css`
   }
 `;
 
-registerStyles('vaadin-select', [...inputFieldShared, select], { moduleId: 'material-select' });
+registerStyles('vaadin-select', [inputFieldShared, select], { moduleId: 'material-select' });
 
 registerStyles(
   'vaadin-select-value-button',
