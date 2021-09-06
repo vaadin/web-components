@@ -106,7 +106,7 @@ export class TextArea extends CharLengthMixin(
           -webkit-appearance: none;
           -moz-appearance: none;
           flex: auto;
-          white-space: nowrap;
+          white-space: pre-wrap;
           width: 100%;
           height: 100%;
           outline: none;
