@@ -212,7 +212,7 @@ export const KeyboardNavigationMixin = (superClass) =>
     }
 
     /** @private */
-    __indexOfChildElement(el) {
+    __getIndexOfChildElement(el) {
       return Array.prototype.indexOf.call(el.parentNode.children, el);
     }
 
@@ -284,9 +284,9 @@ export const KeyboardNavigationMixin = (superClass) =>
         return;
       }
 
-      const forwards = this.__isRTL ? 'ArrowLeft' : 'ArrowRight';
-      const backwards = this.__isRTL ? 'ArrowRight' : 'ArrowLeft';
-      if (key === forwards) {
+      const forwardsKey = this.__isRTL ? 'ArrowLeft' : 'ArrowRight';
+      const backwardsKey = this.__isRTL ? 'ArrowRight' : 'ArrowLeft';
+      if (key === forwardsKey) {
         // "Right Arrow:"
         if (this.__rowFocusMode) {
           // In row focus mode
@@ -302,7 +302,7 @@ export const KeyboardNavigationMixin = (superClass) =>
             return;
           }
         }
-      } else if (key === backwards) {
+      } else if (key === backwardsKey) {
         // "Left Arrow:"
         if (this.__rowFocusMode) {
           // In row focus mode
@@ -353,7 +353,7 @@ export const KeyboardNavigationMixin = (superClass) =>
       if (rowGroup === this.$.items) {
         return bodyFallbackIndex !== undefined ? bodyFallbackIndex : row.index;
       } else {
-        return this.__indexOfChildElement(row);
+        return this.__getIndexOfChildElement(row);
       }
     }
 
@@ -449,7 +449,7 @@ export const KeyboardNavigationMixin = (superClass) =>
         return;
       }
 
-      const columnIndex = this.__indexOfChildElement(activeCell);
+      const columnIndex = this.__getIndexOfChildElement(activeCell);
       const isCurrentCellRowDetails = this.__isDetailsCell(activeCell);
       const activeRowGroup = activeRow.parentNode;
       const currentRowIndex = this.__getIndexInGroup(activeRow, this._focusedItemIndex);
