@@ -855,17 +855,6 @@ describe('keyboard navigation', () => {
         expect(getFocusedCellIndex()).to.equal(0);
       });
 
-      it('should not navigate left while in details', () => {
-        right();
-        down();
-
-        left();
-        down();
-
-        expect(getFocusedRowIndex()).to.equal(1);
-        expect(getFocusedCellIndex()).to.equal(1);
-      });
-
       it('should not navigate to home while in details', () => {
         right();
         down();

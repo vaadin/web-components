@@ -65,15 +65,6 @@ export const KeyboardNavigationMixin = (superClass) =>
           reflectToAttribute: true,
           readOnly: true,
           observer: '_interactingChanged'
-        },
-
-        /**
-         * When `true`, row focus is supported in keyboard interaction.
-         * @type {boolean}
-         */
-        rowsFocusable: {
-          type: Boolean,
-          value: false
         }
       };
     }
@@ -325,11 +316,9 @@ export const KeyboardNavigationMixin = (superClass) =>
           const activeRowCells = [...activeRow.children].sort((a, b) => a._order - b._order);
           if (activeCell === activeRowCells[0] || this.__isDetailsCell(activeCell)) {
             // "If focus is on the first cell in a row and row focus is supported, moves focus to the row."
-            if (this.rowsFocusable) {
-              this.__rowFocusMode = true;
-              this._onRowNavigation(activeRow, 0);
-              return;
-            }
+            this.__rowFocusMode = true;
+            this._onRowNavigation(activeRow, 0);
+            return;
           }
         }
       }

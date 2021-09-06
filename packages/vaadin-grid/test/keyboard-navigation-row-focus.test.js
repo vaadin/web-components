@@ -113,7 +113,7 @@ function hierarchicalDataProvider({ parentItem }, callback) {
 describe('keyboard navigation - row focus', () => {
   beforeEach(async () => {
     grid = fixtureSync(`
-    <vaadin-grid rows-focusable>
+    <vaadin-grid>
       <vaadin-grid-tree-column path="name" header="" width="100px" flex-shrink="0"></vaadin-grid-tree-column>
       <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
     </vaadin-grid>
@@ -186,14 +186,6 @@ describe('keyboard navigation - row focus', () => {
         backwards();
 
         expect(getFocusedCellIndex()).to.equal(-1);
-      });
-
-      it('should not enter row focus mode if rowsFocusable is false', () => {
-        forwards();
-        grid.rowsFocusable = false;
-        backwards();
-
-        expect(getFocusedCellIndex()).to.equal(0);
       });
 
       it('should expand an expandable row on forwards', () => {

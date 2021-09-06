@@ -201,7 +201,7 @@ describe('accessibility', () => {
 
     beforeEach(() => {
       grid = fixtureSync(`
-      <vaadin-grid rows-focusable item-id-path="name">
+      <vaadin-grid item-id-path="name">
         <vaadin-grid-tree-column path="name" header="" width="100px" flex-shrink="0"></vaadin-grid-tree-column>
         <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
       </vaadin-grid>

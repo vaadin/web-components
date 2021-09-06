@@ -223,7 +223,7 @@ describe('grid', () => {
       describe('row focus', () => {
         before(async () => {
           element = fixtureSync(`
-            <vaadin-grid rows-focusable style="width: 550px">
+            <vaadin-grid style="width: 550px">
               <vaadin-grid-column path="name.first" width="200px" flex-shrink="0" frozen></vaadin-grid-column>
               <vaadin-grid-column path="name.last" width="200px" flex-shrink="0"></vaadin-grid-column>
               <vaadin-grid-column path="location.city" width="200px" flex-shrink="0"></vaadin-grid-column>
