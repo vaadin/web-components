@@ -1,18 +1,18 @@
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import '@vaadin/vaadin-material-styles/font-icons.js';
 import '@vaadin/vaadin-material-styles/color.js';
-import '@vaadin/vaadin-material-styles/mixins/menu-overlay.js';
+import { menuOverlay } from '@vaadin/vaadin-material-styles/mixins/menu-overlay.js';
 import '@vaadin/vaadin-material-styles/typography.js';
 
-registerStyles(
-  'vaadin-context-menu-overlay',
-  css`
-    [part='overlay'] {
-      outline: none;
-    }
-  `,
-  { include: ['material-menu-overlay'], moduleId: 'material-context-menu-overlay' }
-);
+const contextMenuOverlay = css`
+  [part='overlay'] {
+    outline: none;
+  }
+`;
+
+registerStyles('vaadin-context-menu-overlay', [menuOverlay, contextMenuOverlay], {
+  moduleId: 'material-context-menu-overlay'
+});
 
 registerStyles(
   'vaadin-context-menu-list-box',

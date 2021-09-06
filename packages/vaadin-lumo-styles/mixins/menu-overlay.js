@@ -6,7 +6,7 @@
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import '../spacing.js';
 import '../style.js';
-import './overlay.js';
+import { overlay } from './overlay.js';
 
 const menuOverlayCore = css`
   :host([opening]),
@@ -42,7 +42,7 @@ const menuOverlayCore = css`
 
 registerStyles('', menuOverlayCore, { moduleId: 'lumo-menu-overlay-core' });
 
-const menuOverlay = css`
+const menuOverlayExt = css`
   /* Small viewport (bottom sheet) styles */
   /* Use direct media queries instead of the state attributes ([phone] and [fullscreen]) provided by the elements */
   @media (max-width: 420px), (max-height: 420px) {
@@ -105,6 +105,9 @@ const menuOverlay = css`
     }
   }
 `;
-registerStyles('', menuOverlay, { moduleId: 'lumo-menu-overlay', include: ['lumo-overlay', 'lumo-menu-overlay-core'] });
+
+const menuOverlay = [overlay, menuOverlayCore, menuOverlayExt];
+
+registerStyles('', menuOverlay, { moduleId: 'lumo-menu-overlay' });
 
 export { menuOverlayCore, menuOverlay };

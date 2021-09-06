@@ -2,7 +2,8 @@ import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styl
 import '@vaadin/vaadin-lumo-styles/color.js';
 import '@vaadin/vaadin-lumo-styles/sizing.js';
 import '@vaadin/vaadin-lumo-styles/spacing.js';
-import '@vaadin/vaadin-lumo-styles/mixins/menu-overlay.js';
+import { overlay } from '@vaadin/vaadin-lumo-styles/mixins/overlay.js';
+import { menuOverlayCore } from '@vaadin/vaadin-lumo-styles/mixins/menu-overlay.js';
 
 registerStyles(
   'vaadin-avatar-group',
@@ -46,20 +47,20 @@ registerStyles(
   { moduleId: 'lumo-avatar-group' }
 );
 
-registerStyles(
-  'vaadin-avatar-group-overlay',
-  css`
-    :host {
-      --_lumo-list-box-item-selected-icon-display: none;
-      --_lumo-list-box-item-padding-left: calc(var(--lumo-space-m) + var(--lumo-border-radius-m) / 4);
-    }
+const avatarGroupOverlay = css`
+  :host {
+    --_lumo-list-box-item-selected-icon-display: none;
+    --_lumo-list-box-item-padding-left: calc(var(--lumo-space-m) + var(--lumo-border-radius-m) / 4);
+  }
 
-    [part='overlay'] {
-      outline: none;
-    }
-  `,
-  { include: ['lumo-overlay', 'lumo-menu-overlay-core'], moduleId: 'lumo-avatar-group-overlay' }
-);
+  [part='overlay'] {
+    outline: none;
+  }
+`;
+
+registerStyles('vaadin-avatar-group-overlay', [overlay, menuOverlayCore, avatarGroupOverlay], {
+  moduleId: 'lumo-avatar-group-overlay'
+});
 
 registerStyles(
   'vaadin-avatar-group-list-box',

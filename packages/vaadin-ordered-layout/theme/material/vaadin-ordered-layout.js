@@ -1,15 +1,15 @@
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 
-registerStyles(
-  '',
-  css`
-    [theme~='margin'] {
-      margin: 16px;
-    }
+const orderedLayout = css`
+  [theme~='margin'] {
+    margin: 16px;
+  }
 
-    [theme~='padding'] {
-      padding: 16px;
-    }
-  `,
-  { moduleId: 'material-ordered-layout' }
-);
+  [theme~='padding'] {
+    padding: 16px;
+  }
+`;
+
+registerStyles('', orderedLayout, { moduleId: 'material-ordered-layout' });
+
+export { orderedLayout };

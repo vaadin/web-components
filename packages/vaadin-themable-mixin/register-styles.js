@@ -7,6 +7,15 @@ let moduleIdIndex = 0;
 // Map of <CSSResult, Polymer.DomModule> pairs.
 const styleMap = {};
 
+function recursiveFlattenStyles(styles, result = []) {
+  if (styles instanceof CSSResult) {
+    result.push(styles);
+  } else if (Array.isArray(styles)) {
+    styles.forEach((style) => recursiveFlattenStyles(style, result));
+  }
+  return result;
+}
+
 /**
  * Registers CSS styles for a component type. Make sure to register the styles before
  * the first instance of a component of the type is attached to DOM.
@@ -18,11 +27,19 @@ const styleMap = {};
  * @return {void}
  */
 export const registerStyles = (themeFor, styles, options) => {
+  if (options && options.include && !options.suppressDeprecationWarning) {
+    console.warn(
+      `The "include" option in registerStyles is deprecated. Instead, include an imported CSSResult in the styles array.`
+    );
+  }
+
   const themeId = (options && options.moduleId) || `custom-style-module-${moduleIdIndex++}`;
 
   if (!Array.isArray(styles)) {
     styles = styles ? [styles] : [];
   }
+
+  styles = recursiveFlattenStyles(styles);
 
   const processedStyles = styles.map((cssResult) => {
     if (!(cssResult instanceof CSSResult)) {
