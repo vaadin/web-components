@@ -150,7 +150,7 @@ class DateTimePickerElement extends ElementMixin(ThemableMixin(PolymerElement)) 
   }
 
   static get version() {
-    return '21.0.0-rc1';
+    return '21.0.0';
   }
 
   static get properties() {
