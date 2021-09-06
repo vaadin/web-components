@@ -58,7 +58,7 @@ class MonthCalendarElement extends ThemableMixin(GestureEventListeners(PolymerEl
         }
       </style>
 
-      <div part="month-header" role="heading">[[_getTitle(month, i18n.monthNames)]]</div>
+      <div part="month-header" role="heading" aria-level="2">[[_getTitle(month, i18n.monthNames)]]</div>
       <div id="monthGrid" on-tap="_handleTap" on-touchend="_preventDefault" on-touchstart="_onMonthGridTouchStart">
         <div id="weekdays-container">
           <div hidden$="[[!_showWeekSeparator(showWeekNumbers, i18n.firstDayOfWeek)]]" part="weekday"></div>
@@ -67,14 +67,16 @@ class MonthCalendarElement extends ThemableMixin(GestureEventListeners(PolymerEl
               is="dom-repeat"
               items="[[_getWeekDayNames(i18n.weekdays, i18n.weekdaysShort, showWeekNumbers, i18n.firstDayOfWeek)]]"
             >
-              <div part="weekday" role="heading" aria-label$="[[item.weekDay]]">[[item.weekDayShort]]</div>
+              <div part="weekday" role="heading" aria-level="2" aria-label$="[[item.weekDay]]">
+                [[item.weekDayShort]]
+              </div>
             </template>
           </div>
         </div>
         <div id="days-container">
           <div part="week-numbers" hidden$="[[!_showWeekSeparator(showWeekNumbers, i18n.firstDayOfWeek)]]">
             <template is="dom-repeat" items="[[_getWeekNumbers(_days)]]">
-              <div part="week-number" role="heading" aria-label$="[[i18n.week]] [[item]]">[[item]]</div>
+              <div part="week-number" role="heading" aria-level="2" aria-label$="[[i18n.week]] [[item]]">[[item]]</div>
             </template>
           </div>
           <div id="days">
