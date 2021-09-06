@@ -138,7 +138,7 @@ describe('registerStyles', () => {
         { moduleId: unique('id') }
       );
 
-      registerStyles(unique('component'), undefined, { include: [unique('id')] });
+      registerStyles(unique('component'), undefined, { include: [unique('id')], suppressDeprecationWarning: true });
 
       const instance = defineAndInstantiate(unique('component'));
       expect(getComputedStyle(instance).color).to.equal('rgb(255, 0, 0)');
@@ -162,7 +162,7 @@ describe('registerStyles', () => {
             color: rgb(0, 0, 255);
           }
         `,
-        { include: [unique('id')] }
+        { include: [unique('id')], suppressDeprecationWarning: true }
       );
 
       const instance = defineAndInstantiate(unique('component'));
@@ -211,6 +211,18 @@ describe('registerStyles', () => {
       it('should not warn about registering the style too late 2', () => {
         define(unique());
         registerStyles(unique(), styles);
+
+        expect(console.warn.called).to.be.false;
+      });
+
+      it('should warn about using the deprecated include option', () => {
+        registerStyles(unique('component'), css``, { include: [unique('id')] });
+
+        expect(console.warn.called).to.be.true;
+      });
+
+      it('should not warn about using the deprecated include option', () => {
+        registerStyles(unique('component'), css``, { include: [unique('id')], suppressDeprecationWarning: true });
 
         expect(console.warn.called).to.be.false;
       });

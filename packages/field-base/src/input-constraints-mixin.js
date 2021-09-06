@@ -4,11 +4,20 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
-import { InputMixin } from './input-mixin.js';
-import { ValidateMixin } from './validate-mixin.js';
+import { DelegateInputStateMixin } from './delegate-input-state-mixin.js';
 
 const InputConstraintsMixinImplementation = (superclass) =>
-  class InputConstraintsMixinClass extends ValidateMixin(InputMixin(superclass)) {
+  class InputConstraintsMixinClass extends DelegateInputStateMixin(superclass) {
+    /**
+     * An array of attributes which participate in the input validation.
+     * Changing these attributes will cause the input to re-validate.
+     *
+     * IMPORTANT: The attributes should be properly delegated to the input element from the host
+     * which can be achieved by listing them in the list of delegated attributes (see `DelegateStateMixin.delegateAttrs`).
+     * Otherwise, the input validation will not work correctly.
+     *
+     * Note, the `required` attribute is already delegated in the parent `DelegateInputStateMixin`.
+     */
     static get constraints() {
       return ['required'];
     }

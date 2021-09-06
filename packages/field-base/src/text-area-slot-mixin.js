@@ -37,8 +37,8 @@ const TextAreaSlotMixinImplementation = (superclass) =>
     }
 
     /** @protected */
-    connectedCallback() {
-      super.connectedCallback();
+    ready() {
+      super.ready();
 
       const textArea = this._getDirectSlotChild('textarea');
       if (textArea) {

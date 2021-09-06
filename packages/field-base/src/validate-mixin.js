@@ -69,8 +69,8 @@ const ValidateMixinImplementation = (superclass) =>
     }
 
     /** @protected */
-    connectedCallback() {
-      super.connectedCallback();
+    ready() {
+      super.ready();
 
       if (this._errorNode) {
         this._errorNode.id = this._errorId;

@@ -159,13 +159,6 @@ const inputs = css`
   [disabled] > textarea[slot='textarea']::placeholder {
     opacity: 0;
   }
-
-  /* Hide the native arrow icons */
-  input[slot='input']::-webkit-outer-spin-button,
-  input[slot='input']::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
 `;
 
 const $tpl = document.createElement('template');

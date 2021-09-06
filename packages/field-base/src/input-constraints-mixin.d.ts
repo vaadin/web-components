@@ -3,8 +3,7 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { InputMixin } from './input-mixin.js';
-import { ValidateMixin } from './validate-mixin.js';
+import { DelegateInputStateMixin } from './delegate-input-state-mixin.js';
 
 /**
  * A mixin to combine multiple input validation constraints.
@@ -17,7 +16,7 @@ interface InputConstraintsMixinConstructor {
   new (...args: any[]): InputConstraintsMixin;
 }
 
-interface InputConstraintsMixin extends InputMixin, ValidateMixin {
+interface InputConstraintsMixin extends DelegateInputStateMixin {
   /**
    * Returns true if the current input value satisfies all constraints (if any).
    */

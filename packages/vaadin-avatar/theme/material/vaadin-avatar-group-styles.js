@@ -1,16 +1,16 @@
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import '@vaadin/vaadin-material-styles/color.js';
-import '@vaadin/vaadin-material-styles/mixins/menu-overlay.js';
+import { menuOverlay } from '@vaadin/vaadin-material-styles/mixins/menu-overlay.js';
 
-registerStyles(
-  'vaadin-avatar-group-overlay',
-  css`
-    [part='overlay'] {
-      outline: none;
-    }
-  `,
-  { include: ['material-menu-overlay'], moduleId: 'material-avatar-group-overlay' }
-);
+const avatarGroupOverlay = css`
+  [part='overlay'] {
+    outline: none;
+  }
+`;
+
+registerStyles('vaadin-avatar-group-overlay', [menuOverlay, avatarGroupOverlay], {
+  moduleId: 'material-avatar-group-overlay'
+});
 
 registerStyles(
   'vaadin-avatar-group-list-box',
