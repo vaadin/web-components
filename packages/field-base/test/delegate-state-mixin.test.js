@@ -122,7 +122,7 @@ describe('delegate-state-mixin', () => {
         input = element.shadowRoot.querySelector('input');
       });
 
-      it.only('should delegate invalid attribute to the input', () => {
+      it('should delegate invalid attribute to the input', () => {
         expect(input.hasAttribute('invalid')).to.be.true;
       });
 

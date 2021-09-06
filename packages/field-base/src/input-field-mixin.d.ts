@@ -6,8 +6,8 @@
 import { AriaLabelMixin } from './aria-label-mixin.js';
 import { ClearButtonMixin } from './clear-button-mixin.js';
 import { DelegateFocusMixin } from './delegate-focus-mixin.js';
+import { InputConstraintsMixin } from './input-constraints-mixin.js';
 import { FieldAriaMixin } from './field-aria-mixin.js';
-import { DelegateInputStateMixin } from './forward-input-props-mixin.js';
 
 /**
  * A mixin to provide logic for vaadin-text-field and related components.
@@ -23,7 +23,7 @@ interface InputFieldMixin
     ClearButtonMixin,
     DelegateFocusMixin,
     FieldAriaMixin,
-    DelegateInputStateMixin {
+    InputConstraintsMixin {
   /**
    * Whether the value of the control can be automatically completed by the browser.
    * List of available options at:

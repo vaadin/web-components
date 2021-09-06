@@ -3,9 +3,9 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { DelegateStateMixin } from './delegate-state-mixin.js';
 import { InputMixin } from './input-mixin.js';
 import { ValidateMixin } from './validate-mixin.js';
-import { DelegateStateMixin } from './delegate-state-mixin.js';
 
 /**
  * A mixin to forward properties to the input element.

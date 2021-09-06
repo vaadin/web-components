@@ -4,11 +4,10 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
-import { InputMixin } from './input-mixin.js';
 import { DelegateInputStateMixin } from './delegate-input-state-mixin.js';
 
 const InputConstraintsMixinImplementation = (superclass) =>
-  class InputConstraintsMixinClass extends DelegateInputStateMixin(InputMixin(superclass)) {
+  class InputConstraintsMixinClass extends DelegateInputStateMixin(superclass) {
     /**
      * An array of attributes which participate in the input validation.
      * Changing these attributes will cause the input to re-validate.
