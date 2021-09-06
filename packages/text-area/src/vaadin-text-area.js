@@ -112,7 +112,7 @@ export class TextArea extends CharLengthMixin(
           outline: none;
           resize: none;
           margin: 0;
-          padding: 0;
+          padding: 0 0.25em;
           border: 0;
           border-radius: 0;
           min-width: 0;
