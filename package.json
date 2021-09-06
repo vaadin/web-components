@@ -27,6 +27,7 @@
     "lint:js": "eslint --ext .js,.ts *.js scripts packages",
     "lint:types": "tsc",
     "serve:dist": "web-dev-server --app-index dist/index.html --open",
+    "start": "web-dev-server --node-resolve --open /dev/button.html",
     "test": "web-test-runner --coverage",
     "test:firefox": "web-test-runner --config web-test-runner-firefox.config.js",
     "test:lumo": "web-test-runner --config web-test-runner-lumo.config.js",
