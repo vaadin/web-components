@@ -29,6 +29,7 @@ export const ActiveItemMixin = (superClass) =>
 
       this.$.scroller.addEventListener('click', this._onClick.bind(this));
       this.addEventListener('cell-activate', this._activateItem.bind(this));
+      this.addEventListener('row-activate', this._activateItem.bind(this));
     }
 
     /** @private */

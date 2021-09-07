@@ -77,13 +77,24 @@ export const ScrollMixin = (superClass) =>
     scrollToIndex(index) {
       index = Math.min(this._effectiveSize - 1, Math.max(0, index));
       this.__virtualizer.scrollToIndex(index);
+      this.__scrollIntoViewport(index);
+    }
 
-      // Fine tune the scroll position taking header/footer into account
-      const row = Array.from(this.$.items.children).find((child) => child.index === index);
-      if (row) {
-        const headerOffset = row.getBoundingClientRect().top - this.$.header.getBoundingClientRect().bottom;
-        if (Math.abs(headerOffset) >= 1) {
-          this.$.table.scrollTop += headerOffset;
+    /**
+     * Makes sure the row with the given index (if found in the DOM) is fully
+     * inside the visible viewport, taking header/footer into account.
+     * @private
+     */
+    __scrollIntoViewport(index) {
+      const rowElement = [...this.$.items.children].find((child) => child.index === index);
+      if (rowElement) {
+        const dstRect = rowElement.getBoundingClientRect();
+        const footerTop = this.$.footer.getBoundingClientRect().top;
+        const headerBottom = this.$.header.getBoundingClientRect().bottom;
+        if (dstRect.bottom > footerTop) {
+          this.$.table.scrollTop += dstRect.bottom - footerTop;
+        } else if (dstRect.top < headerBottom) {
+          this.$.table.scrollTop -= headerBottom - dstRect.top;
         }
       }
     }
@@ -176,9 +187,9 @@ export const ScrollMixin = (superClass) =>
 
     /** @private */
     __updateHorizontalScrollPosition() {
-      if (!this.__isRTL) {
-        this.$.table.style.setProperty('--_grid-horizontal-scroll-position', -this._scrollLeft + 'px');
-      } else {
+      this.$.table.style.setProperty('--_grid-horizontal-scroll-position', -this._scrollLeft + 'px');
+
+      if (this.__isRTL) {
         // Translating the sticky sections using a CSS variable works nicely on LTR.
         // On RTL, it causes jumpy behavior (on Desktop Safari) so we need to translate manually.
         const x = this.__getNormalizedScrollLeft(this.$.table) + this.$.table.clientWidth - this.$.table.scrollWidth;

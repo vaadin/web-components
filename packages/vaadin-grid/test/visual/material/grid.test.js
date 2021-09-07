@@ -1,5 +1,6 @@
 import { click, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers/dist/index-no-side-effects.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
+import { sendKeys } from '@web/test-runner-commands';
 import '@vaadin/vaadin-template-renderer';
 import { flushGrid, nextResize } from '../../helpers.js';
 import { users } from '../users.js';
@@ -217,6 +218,40 @@ describe('grid', () => {
           click(secondSorter);
           click(firstSorter);
           await visualDiff(element, `${import.meta.url}_${dir}-sorting-single-desc`);
+        });
+      });
+
+      describe('row focus', () => {
+        before(async () => {
+          element = fixtureSync(`
+            <vaadin-grid style="width: 550px">
+              <vaadin-grid-column path="name.first" width="200px" flex-shrink="0" frozen></vaadin-grid-column>
+              <vaadin-grid-column path="name.last" width="200px" flex-shrink="0"></vaadin-grid-column>
+              <vaadin-grid-column path="location.city" width="200px" flex-shrink="0"></vaadin-grid-column>
+            </vaadin-grid>
+          `);
+          element.items = users;
+          flushGrid(element);
+
+          // Scroll all the way to end
+          element.$.table.scrollLeft = element.__isRTL ? -1000 : 1000;
+
+          // Focus a header row
+          await sendKeys({ press: 'Tab' });
+          // Switch to row focus mode
+          await sendKeys({ press: element.__isRTL ? 'ArrowRight' : 'ArrowLeft' });
+          // Tab to body row
+          await sendKeys({ press: 'Tab' });
+
+          await nextRender(element);
+        });
+
+        after(() => {
+          element.remove();
+        });
+
+        it('row focus', async () => {
+          await visualDiff(element, `${import.meta.url}_${dir}-row-focus`);
         });
       });
     });

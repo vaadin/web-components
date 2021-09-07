@@ -76,6 +76,20 @@ export const A11yMixin = (superClass) =>
 
     /**
      * @param {!HTMLElement} row
+     * @protected
+     */
+    _a11yUpdateRowExpanded(row) {
+      if (this.__isRowExpandable(row)) {
+        row.setAttribute('aria-expanded', 'false');
+      } else if (this.__isRowCollapsible(row)) {
+        row.setAttribute('aria-expanded', 'true');
+      } else {
+        row.removeAttribute('aria-expanded');
+      }
+    }
+
+    /**
+     * @param {!HTMLElement} row
      * @param {number} level
      * @protected
      */
