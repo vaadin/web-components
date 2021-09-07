@@ -187,6 +187,15 @@ describe('virtualizer', () => {
     expect(elementsContainer.childElementCount).to.be.above(0);
   });
 
+  it('should not create unnecessary elements on size change', () => {
+    const initialCount = elementsContainer.childElementCount;
+    virtualizer.size = 1;
+    virtualizer.scrollToIndex(0);
+    virtualizer.size = 1000;
+
+    expect(elementsContainer.childElementCount).to.equal(initialCount);
+  });
+
   describe('lazy rendering', () => {
     let render = false;
 
