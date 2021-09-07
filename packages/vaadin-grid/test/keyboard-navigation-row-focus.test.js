@@ -113,10 +113,10 @@ function hierarchicalDataProvider({ parentItem }, callback) {
 describe('keyboard navigation - row focus', () => {
   beforeEach(async () => {
     grid = fixtureSync(`
-    <vaadin-grid>
-      <vaadin-grid-tree-column path="name" header="" width="100px" flex-shrink="0"></vaadin-grid-tree-column>
-      <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
-    </vaadin-grid>
+      <vaadin-grid>
+        <vaadin-grid-tree-column path="name" header="" width="100px" flex-shrink="0"></vaadin-grid-tree-column>
+        <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
+      </vaadin-grid>
     `);
 
     grid.dataProvider = hierarchicalDataProvider;
