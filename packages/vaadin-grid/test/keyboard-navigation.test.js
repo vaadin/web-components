@@ -28,15 +28,6 @@ import {
 import '../vaadin-grid.js';
 import '../vaadin-grid-column-group.js';
 
-async function isTestRunnerControlledBrowser() {
-  try {
-    await sendKeys({ type: '' });
-    return true;
-  } catch (e) {
-    return false;
-  }
-}
-
 let grid, focusable, scroller, header, footer, body;
 
 function clickItem(rowIndex) {
@@ -1551,11 +1542,6 @@ describe('keyboard navigation', () => {
     });
 
     it('should focus the next input element when tabbing in interaction mode', async () => {
-      if (!(await isTestRunnerControlledBrowser())) {
-        // Skipping the test since the browser isn't controlled by the test runner (required by sendKeys).
-        return;
-      }
-
       // Focus first input
       right();
       enter();
@@ -1568,11 +1554,6 @@ describe('keyboard navigation', () => {
     });
 
     it('should skip the grid focus target when tabbing in interaction mode', async () => {
-      if (!(await isTestRunnerControlledBrowser())) {
-        // Skipping the test since the browser isn't controlled by the test runner (required by sendKeys).
-        return;
-      }
-
       // Focus last input
       right();
       right();
@@ -1589,11 +1570,6 @@ describe('keyboard navigation', () => {
     });
 
     it('should move cell focus target when focusing the next input element in interaction mode', async () => {
-      if (!(await isTestRunnerControlledBrowser())) {
-        // Skipping the test since the browser isn't controlled by the test runner (required by sendKeys).
-        return;
-      }
-
       // Focus first input
       right();
       enter();
