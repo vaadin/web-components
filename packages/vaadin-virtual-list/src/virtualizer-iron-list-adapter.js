@@ -160,6 +160,11 @@ export class IronListAdapter {
 
     // Change the size
     this.__size = size;
+
+    // Flush before invoking items change to avoid
+    // creating excess elements on the following flush()
+    flush();
+
     this._itemsChanged({
       path: 'items'
     });
