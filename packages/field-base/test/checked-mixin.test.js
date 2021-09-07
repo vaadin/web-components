@@ -34,10 +34,8 @@ describe('checked-mixin', () => {
 
       it('should delegate checked attribute to the input', () => {
         expect(input.hasAttribute('checked')).to.be.true;
-      });
 
-      it('should update checked attribute on the input', () => {
-        element.checked = false;
+        element.removeAttribute('checked');
         expect(input.hasAttribute('checked')).to.be.false;
       });
     });
@@ -55,8 +53,20 @@ describe('checked-mixin', () => {
       input = element.querySelector('[slot=input]');
     });
 
-    it('should not be checked by default', () => {
+    it('should set checked property to false by default', () => {
       expect(element.checked).to.be.false;
+    });
+
+    it('should not have checked attribute by default', () => {
+      expect(element.hasAttribute('checked')).to.be.false;
+    });
+
+    it('should reflect checked property to the attribute', () => {
+      element.checked = true;
+      expect(element.hasAttribute('checked')).to.be.true;
+
+      element.checked = false;
+      expect(element.hasAttribute('checked')).to.be.false;
     });
 
     it('should toggle checked state on click', () => {
