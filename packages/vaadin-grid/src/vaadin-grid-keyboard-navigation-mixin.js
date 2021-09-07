@@ -181,7 +181,7 @@ export const KeyboardNavigationMixin = (superClass) =>
       }
     }
 
-    // TODO: A tree toggle component should not be the way to determine if the a is expandable
+    // TODO: A tree toggle component should not be the way to determine if the row is expandable
     /** @private */
     __isRowExpandable(row) {
       const treeToggle = [...row.children].reduce(
