@@ -1,5 +1,6 @@
 import { click, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers/dist/index-no-side-effects.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
+import { sendKeys } from '@web/test-runner-commands';
 import '@vaadin/vaadin-template-renderer';
 import { flushGrid, nextResize } from '../../helpers.js';
 import { users } from '../users.js';
@@ -234,9 +235,22 @@ describe('grid', () => {
 
           // Scroll all the way to end
           element.$.table.scrollLeft = element.__isRTL ? -1000 : 1000;
-          // // Focus a row
-          element.setAttribute('navigating', '');
-          element.$.items.children[0].focus();
+
+          // If supported, use tab keypress to focus the body row
+          try {
+            // Test if sendKeys is supported
+            await sendKeys({ press: 'Tab' });
+            // Switch to row focus mode
+            element.__rowFocusMode = true;
+            // Focus a header row
+            element.$.header.children[0].focus();
+            // Tab to body row
+            await sendKeys({ press: 'Tab' });
+          } catch (e) {
+            // Focus a row programmatically
+            element.setAttribute('navigating', '');
+            element.$.items.children[0].focus();
+          }
 
           await nextRender(element);
         });

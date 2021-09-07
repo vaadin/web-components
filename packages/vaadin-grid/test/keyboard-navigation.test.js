@@ -913,6 +913,7 @@ describe('keyboard navigation', () => {
 
     it('should focus first cell in the column with ctrl+home', () => {
       focusItem(0);
+      // Move the focus to the second column
       right();
 
       ctrlHome();
