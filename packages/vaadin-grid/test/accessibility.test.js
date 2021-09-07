@@ -224,7 +224,7 @@ describe('accessibility', () => {
       expect(grid.$.items.children[1].getAttribute('aria-expanded')).to.be.null;
     });
 
-    it('should remove add aria-expanded to a row that becomes expandable', () => {
+    it('should add aria-expanded to a row that becomes expandable', () => {
       grid.expandItem({ name: '0' });
       expect(grid.$.items.children[1].getAttribute('aria-expanded')).to.equal('false');
     });
