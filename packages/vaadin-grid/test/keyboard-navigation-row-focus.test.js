@@ -1,5 +1,12 @@
 import { expect } from '@esm-bundle/chai';
-import { down as mouseDown, fixtureSync, keyDownOn, nextRender, up as mouseUp } from '@vaadin/testing-helpers';
+import {
+  down as mouseDown,
+  fixtureSync,
+  keyDownOn,
+  nextRender,
+  listenOnce,
+  up as mouseUp
+} from '@vaadin/testing-helpers';
 import { getCellContent } from './helpers.js';
 import '../src/all-imports.js';
 
@@ -27,6 +34,14 @@ function getRowCell(rowIndex, cellIndex) {
 
 function getRowFirstCell(rowIndex) {
   return getRowCell(rowIndex, 0);
+}
+
+function tab(target) {
+  keyDownOn(target || grid.shadowRoot.activeElement, 9, [], 'Tab');
+}
+
+function shiftTab(target) {
+  keyDownOn(target || grid.shadowRoot.activeElement, 9, 'shift', 'Tab');
 }
 
 function left(target) {
@@ -151,6 +166,34 @@ describe('keyboard navigation - row focus', () => {
       const tabbableElements = getTabbableElements(grid.shadowRoot);
       const tabIndexes = Array.from(tabbableElements).map((el) => el.tabIndex);
       expect(tabIndexes).to.eql([0, 0, 0, 0, 0]);
+    });
+
+    it('should be possible to exit grid with tab', () => {
+      const tabbableElements = getTabbableElements(grid.shadowRoot);
+      tabbableElements[3].focus(); // focus footer row
+
+      let keydownEvent;
+      listenOnce(grid.shadowRoot.activeElement, 'keydown', (e) => (keydownEvent = e));
+      tab();
+
+      // Expect programmatic focus on focus exit element
+      expect(grid.shadowRoot.activeElement).to.equal(grid.$.focusexit);
+      // Ensure native focus jump is allowed
+      expect(keydownEvent.defaultPrevented).to.be.false;
+    });
+
+    it('should be possible to exit grid with shift+tab', () => {
+      const tabbableElements = getTabbableElements(grid.shadowRoot);
+      tabbableElements[1].focus(); // focus header row
+
+      let keydownEvent;
+      listenOnce(grid.shadowRoot.activeElement, 'keydown', (e) => (keydownEvent = e));
+      shiftTab();
+
+      // Expect programmatic focus on focus exit element
+      expect(grid.shadowRoot.activeElement).to.equal(grid.$.table);
+      // Ensure native focus jump is allowed
+      expect(keydownEvent.defaultPrevented).to.be.false;
     });
   });
 

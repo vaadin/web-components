@@ -560,8 +560,14 @@ export const KeyboardNavigationMixin = (superClass) =>
       let index = tabOrder.indexOf(srcElement);
 
       index += step;
-      while (index >= 0 && index <= tabOrder.length - 1 && (!tabOrder[index] || tabOrder[index].parentNode.hidden)) {
-        index += step;
+      while (index >= 0 && index <= tabOrder.length - 1) {
+        const rowElement = this.__rowFocusMode ? tabOrder[index] : tabOrder[index].parentNode;
+
+        if (!rowElement || rowElement.hidden) {
+          index += step;
+        } else {
+          break;
+        }
       }
 
       return tabOrder[index];
