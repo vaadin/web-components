@@ -236,21 +236,12 @@ describe('grid', () => {
           // Scroll all the way to end
           element.$.table.scrollLeft = element.__isRTL ? -1000 : 1000;
 
-          // If supported, use tab keypress to focus the body row
-          try {
-            // Test if sendKeys is supported
-            await sendKeys({ press: 'Tab' });
-            // Switch to row focus mode
-            element.__rowFocusMode = true;
-            // Focus a header row
-            element.$.header.children[0].focus();
-            // Tab to body row
-            await sendKeys({ press: 'Tab' });
-          } catch (e) {
-            // Focus a row programmatically
-            element.setAttribute('navigating', '');
-            element.$.items.children[0].focus();
-          }
+          // Focus a header row
+          await sendKeys({ press: 'Tab' });
+          // Switch to row focus mode
+          await sendKeys({ press: element.__isRTL ? 'ArrowRight' : 'ArrowLeft' });
+          // Tab to body row
+          await sendKeys({ press: 'Tab' });
 
           await nextRender(element);
         });
