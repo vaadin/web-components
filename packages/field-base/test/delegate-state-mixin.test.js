@@ -76,7 +76,7 @@ customElements.define(
 );
 
 describe('delegate-state-mixin', () => {
-  let element, input;
+  let element, target;
 
   describe('without target', () => {
     beforeEach(() => {
@@ -99,64 +99,91 @@ describe('delegate-state-mixin', () => {
     });
   });
 
-  describe('attributes', () => {
-    describe('title', () => {
+  describe('title attribute', () => {
+    describe('default', () => {
       beforeEach(() => {
-        element = fixtureSync('<delegate-state-mixin-element title="foo"></delegate-state-mixin-element>');
-        input = element.shadowRoot.querySelector('input');
+        element = fixtureSync('<delegate-state-mixin-element></delegate-state-mixin-element>');
+        target = element._delegateStateTarget;
       });
 
-      it('should delegate title attribute to the input', () => {
-        expect(input.getAttribute('title')).to.equal('foo');
-      });
+      it('should delegate title attribute to the target', () => {
+        expect(target.hasAttribute('title')).to.be.false;
 
-      it('should update title attribute on the input', () => {
-        element.setAttribute('title', 'bar');
-        expect(input.getAttribute('title')).to.equal('bar');
+        element.setAttribute('title', 'foo');
+        expect(target.getAttribute('title')).to.equal('foo');
       });
     });
 
-    describe('invalid', () => {
+    describe('initially set', () => {
       beforeEach(() => {
-        element = fixtureSync('<delegate-state-mixin-element invalid></delegate-state-mixin-element>');
-        input = element.shadowRoot.querySelector('input');
+        element = fixtureSync('<delegate-state-mixin-element title="foo"></delegate-state-mixin-element>');
+        target = element._delegateStateTarget;
       });
 
-      it('should delegate invalid attribute to the input', () => {
-        expect(input.hasAttribute('invalid')).to.be.true;
-      });
+      it('should delegate title attribute to the target', () => {
+        expect(target.getAttribute('title')).to.equal('foo');
 
-      it('should delegate aria-invalid attribute to the input', () => {
-        expect(input.getAttribute('aria-invalid')).to.equal('true');
-      });
-
-      it('should remove invalid attribute when valid', () => {
-        element.removeAttribute('invalid');
-        expect(input.hasAttribute('invalid')).to.be.false;
-      });
-
-      it('should remove aria-invalid attribute when valid', () => {
-        element.removeAttribute('invalid');
-        expect(input.hasAttribute('aria-invalid')).to.be.false;
+        element.removeAttribute('title');
+        expect(target.hasAttribute('title')).to.be.false;
       });
     });
   });
 
-  describe('properties', () => {
-    beforeEach(() => {
-      element = fixtureSync('<delegate-state-mixin-element></delegate-state-mixin-element>');
-      input = element.shadowRoot.querySelector('input');
+  describe('invalid attribute', () => {
+    describe('default', () => {
+      beforeEach(() => {
+        element = fixtureSync('<delegate-state-mixin-element></delegate-state-mixin-element>');
+        target = element._delegateStateTarget;
+      });
+
+      it('should delegate invalid attribute to the target', () => {
+        expect(target.hasAttribute('invalid')).to.be.false;
+
+        element.toggleAttribute('invalid', true);
+        expect(target.hasAttribute('invalid')).to.be.true;
+      });
+
+      it('should delegate aria-invalid attribute to the target', () => {
+        expect(target.hasAttribute('aria-invalid')).to.be.false;
+
+        element.toggleAttribute('invalid', true);
+        expect(target.hasAttribute('aria-invalid')).to.be.true;
+      });
     });
 
-    describe('indeterminate', () => {
-      it('should delegate indeterminate property to the input', () => {
-        expect(input.indeterminate).to.be.true;
+    describe('initially set', () => {
+      beforeEach(() => {
+        element = fixtureSync('<delegate-state-mixin-element invalid></delegate-state-mixin-element>');
+        target = element._delegateStateTarget;
       });
 
-      it('should update indeterminate property on the input', () => {
-        input.indeterminate = false;
-        expect(input.indeterminate).to.be.false;
+      it('should delegate invalid attribute to the target', () => {
+        expect(target.hasAttribute('invalid')).to.be.true;
+
+        element.removeAttribute('invalid');
+        expect(target.hasAttribute('invalid')).to.be.false;
       });
+
+      it('should delegate aria-invalid attribute to the target', () => {
+        expect(target.hasAttribute('aria-invalid')).to.be.true;
+
+        element.removeAttribute('invalid');
+        expect(target.hasAttribute('aria-invalid')).to.be.false;
+      });
+    });
+  });
+
+  describe('indeterminate property', () => {
+    beforeEach(() => {
+      element = fixtureSync('<delegate-state-mixin-element></delegate-state-mixin-element>');
+      target = element._delegateStateTarget;
+    });
+
+    it('should delegate indeterminate property to the target', () => {
+      expect(target.indeterminate).to.be.true;
+
+      target.indeterminate = false;
+      expect(target.indeterminate).to.be.false;
     });
   });
 });
