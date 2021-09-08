@@ -1,6 +1,7 @@
 export { ActiveMixin } from './src/active-mixin.js';
 export { AriaLabelMixin } from './src/aria-label-mixin.js';
 export { CharLengthMixin } from './src/char-length-mixin.js';
+export { CheckedMixin } from './src/checked-mixin.js';
 export { ClearButtonMixin } from './src/clear-button-mixin.js';
 export { DelegateFocusMixin } from './src/delegate-focus-mixin.js';
 export { DelegateInputStateMixin } from './src/delegate-input-state-mixin.js';
