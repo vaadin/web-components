@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, click } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { CheckedMixin } from '../src/checked-mixin.js';
 import { InputSlotMixin } from '../src/input-slot-mixin.js';
@@ -24,22 +24,6 @@ customElements.define(
 
 describe('checked-mixin', () => {
   let element, input, link;
-
-  describe('delegation', () => {
-    describe('checked attribute', () => {
-      beforeEach(() => {
-        element = fixtureSync(`<checked-mixin-element checked></checked-mixin-element>`);
-        input = element.querySelector('[slot=input]');
-      });
-
-      it('should delegate checked attribute to the input', () => {
-        expect(input.hasAttribute('checked')).to.be.true;
-
-        element.removeAttribute('checked');
-        expect(input.hasAttribute('checked')).to.be.false;
-      });
-    });
-  });
 
   describe('default', () => {
     beforeEach(() => {
@@ -69,7 +53,7 @@ describe('checked-mixin', () => {
       expect(element.hasAttribute('checked')).to.be.false;
     });
 
-    it('should toggle checked state on click', () => {
+    it('should toggle checked property on click', () => {
       input.click();
       expect(element.checked).to.be.true;
 
@@ -77,12 +61,12 @@ describe('checked-mixin', () => {
       expect(element.checked).to.be.false;
     });
 
-    it('should not toggle checked state when clicked a link', () => {
+    it('should not toggle checked property when clicked a link', () => {
       link.click();
       expect(element.checked).to.be.false;
     });
 
-    it('should not toggle checked state when disabled', () => {
+    it('should not toggle checked property when disabled', () => {
       element.disabled = true;
       input.click();
       expect(element.checked).to.be.false;
@@ -90,8 +74,26 @@ describe('checked-mixin', () => {
 
     it('should prevent default behaviour for click event when disabled', () => {
       element.disabled = true;
-      input.click();
-      expect(input.checked).to.be.false;
+
+      const event = click(input);
+
+      expect(event.defaultPrevented).to.be.true;
+    });
+  });
+
+  describe('delegation', () => {
+    describe('checked attribute', () => {
+      beforeEach(() => {
+        element = fixtureSync(`<checked-mixin-element checked></checked-mixin-element>`);
+        input = element.querySelector('[slot=input]');
+      });
+
+      it('should delegate checked attribute to the input', () => {
+        expect(input.hasAttribute('checked')).to.be.true;
+
+        element.removeAttribute('checked');
+        expect(input.hasAttribute('checked')).to.be.false;
+      });
     });
   });
 });
