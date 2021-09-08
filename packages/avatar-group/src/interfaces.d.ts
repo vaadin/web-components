@@ -1,4 +1,4 @@
-import { AvatarI18n } from '@vaadin/avatar';
+import { AvatarI18n } from '@vaadin/avatar/src/interfaces';
 
 export interface AvatarGroupI18n extends AvatarI18n {
   activeUsers: {
