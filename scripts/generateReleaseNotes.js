@@ -132,9 +132,9 @@ function parseLog(log) {
           pos = 'head';
         } else {
           if (line.startsWith(' ')) {
-            commit.body += `${line}\n`;
-          } else if (/^packages\/vaadin-.*/.test(line)) {
-            const wc = line.split('/')[1];
+            commit.body += '';
+          } else if (/^packages\/.*/.test(line)) {
+            const wc = line.split('/')[1].replace('vaadin-', '');
             if (!commit.components.includes(wc)) {
               commit.components.push(wc);
             }
