@@ -214,6 +214,7 @@ function logCommitsByType(commits) {
     const type = commit.bfp ? 'bfp' : commit.breaking ? 'break' : commit.type;
     byType[type] = [...(byType[type] || []), commit];
   });
+
   Object.keys(keyName).forEach((k) => {
     if (byType[k]) {
       console.log(`\n#### ${keyName[k]}`);
@@ -221,7 +222,7 @@ function logCommitsByType(commits) {
       if (compact) {
         byType[k].forEach((c) => logCommit(c));
       } else {
-        byType[k].filter((c) => c.components.length).forEach((c) => logCommit(c));
+        logCommitsByComponent(byType[k].filter((c) => c.components.length));
 
         const other = byType[k].filter((c) => !c.components.length);
         if (other.length) {
@@ -231,6 +232,35 @@ function logCommitsByType(commits) {
       }
     }
   });
+}
+
+function logCommitsByComponent(commits) {
+  const byComponent = {};
+  commits.forEach((commit) => {
+    byComponent[commit.components] = [...(byComponent[commit.components] || []), commit];
+  });
+  Object.keys(byComponent)
+    .sort()
+    .forEach((k) => {
+      let log = '';
+      let indent = '';
+
+      let search = ',';
+      let replacement = '`,`';
+      let componentsTitle = k.split(search).join(replacement);
+      let components = `\`${componentsTitle}\``;
+
+      log += `- ${components}\n`;
+      indent = '  ';
+
+      byComponent[k].forEach((c) => {
+        log += `${indent}- ` + parseLinks(c.commit.substring(0, 7) + ' ' + c.title[0].toUpperCase() + c.title.slice(1));
+        const tickets = getTickets(c);
+        tickets && (log += `. ${tickets}`);
+        log += `\n`;
+      });
+      console.log(log);
+    });
 }
 
 // Output the release notes for the set of commits
