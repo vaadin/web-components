@@ -1,13 +1,13 @@
 {
-  "name": "@vaadin/vaadin-ordered-layout",
+  "name": "@vaadin/horizontal-layout",
   "version": "22.0.0-alpha5",
-  "description": "vaadin-ordered-layout",
-  "main": "imports.js",
-  "module": "imports.js",
-  "repository": "vaadin/vaadin-ordered-layout",
+  "description": "vaadin-horizontal-layout",
+  "main": "vaadin-horizontal-layout.js",
+  "module": "vaadin-horizontal-layout.js",
+  "repository": "vaadin/web-components",
   "keywords": [
     "Vaadin",
-    "vaadin-ordered-layout",
+    "vaadin-horizontal-layout",
     "web-components",
     "web-component",
     "polymer"
@@ -15,14 +15,12 @@
   "author": "Vaadin Ltd",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/vaadin/vaadin-ordered-layout/issues"
+    "url": "https://github.com/vaadin/web-components/issues"
   },
   "homepage": "https://vaadin.com/components",
   "files": [
     "vaadin-*.d.ts",
     "vaadin-*.js",
-    "imports.js",
-    "imports.d.ts",
     "src",
     "theme"
   ],
