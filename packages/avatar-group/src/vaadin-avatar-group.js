@@ -16,7 +16,7 @@ import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.
 import '@vaadin/vaadin-item/src/vaadin-item.js';
 import './vaadin-avatar-group-list-box.js';
 import './vaadin-avatar-group-overlay.js';
-import './vaadin-avatar.js';
+import '@vaadin/avatar/src/vaadin-avatar.js';
 
 const MINIMUM_DISPLAYED_AVATARS = 2;
 

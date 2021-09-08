@@ -1,4 +1,4 @@
-import './vaadin-avatar.js';
+import '@vaadin/avatar/theme/material/vaadin-avatar.js';
 import './vaadin-avatar-group-styles.js';
 import '@vaadin/vaadin-item/theme/material/vaadin-item.js';
 import '@vaadin/vaadin-list-box/theme/material/vaadin-list-box.js';
