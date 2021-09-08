@@ -1,10 +1,15 @@
 import '../../vaadin-select.js';
 
-import { SelectInvalidChangedEvent, SelectOpenedChangedEvent, SelectValueChangedEvent } from '../../vaadin-select.js';
+import {
+  Select,
+  SelectInvalidChangedEvent,
+  SelectOpenedChangedEvent,
+  SelectValueChangedEvent
+} from '../../vaadin-select.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 
-const select = document.createElement('vaadin-select');
+const select: Select = document.createElement('vaadin-select');
 
 select.addEventListener('opened-changed', (event) => {
   assertType<SelectOpenedChangedEvent>(event);
