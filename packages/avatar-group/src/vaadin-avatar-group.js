@@ -14,9 +14,9 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 import { IronResizableBehavior } from '@polymer/iron-resizable-behavior/iron-resizable-behavior.js';
 import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
 import '@vaadin/vaadin-item/src/vaadin-item.js';
+import '@vaadin/avatar/src/vaadin-avatar.js';
 import './vaadin-avatar-group-list-box.js';
 import './vaadin-avatar-group-overlay.js';
-import './vaadin-avatar.js';
 
 const MINIMUM_DISPLAYED_AVATARS = 2;
 

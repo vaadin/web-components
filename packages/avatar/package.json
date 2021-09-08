@@ -1,12 +1,13 @@
 {
-  "name": "@vaadin/vaadin-avatar",
+  "name": "@vaadin/avatar",
   "version": "22.0.0-alpha5",
   "description": "vaadin-avatar",
-  "main": "vaadin-avatar-group.js",
-  "module": "vaadin-avatar-group.js",
-  "repository": "vaadin/vaadin-avatar",
+  "main": "vaadin-avatar.js",
+  "module": "vaadin-avatar.js",
+  "repository": "vaadin/web-components",
   "keywords": [
     "Vaadin",
+    "Avatar",
     "vaadin-avatar",
     "web-components",
     "web-component",
@@ -15,7 +16,7 @@
   "author": "Vaadin Ltd",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/vaadin/vaadin-avatar/issues"
+    "url": "https://github.com/vaadin/web-components/issues"
   },
   "homepage": "https://vaadin.com/components",
   "files": [
