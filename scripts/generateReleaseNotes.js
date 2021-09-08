@@ -134,7 +134,7 @@ function parseLog(log) {
           if (line.startsWith(' ')) {
             commit.body += '';
           } else if (/^packages\/.*/.test(line)) {
-            const wc = line.split('/')[1].replace('vaadin-', '');
+            const wc = line.split('/')[1];
             if (!commit.components.includes(wc)) {
               commit.components.push(wc);
             }
