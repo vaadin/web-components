@@ -252,14 +252,15 @@ function logCommitsByComponent(commits) {
 
       log += `- ${components}\n`;
       indent = '  ';
-
+      let lineBrake = 0;
       byComponent[k].forEach((c) => {
+        lineBrake += 1;
+        lineBrake > 1 ? (log += `\n`) : log;
         log += `${indent}- ` + parseLinks(c.commit.substring(0, 7) + ' ' + c.title[0].toUpperCase() + c.title.slice(1));
         const tickets = getTickets(c);
         tickets && (log += `. ${tickets}`);
-        log += `\n`;
       });
-      console.log(log);
+      console.log(log.replace(/^\s*[\r\n]/gm, ''));
     });
 }
 
