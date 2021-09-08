@@ -1,5 +1,5 @@
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
-import '@vaadin/vaadin-avatar/theme/lumo/vaadin-avatar-styles.js';
+import '@vaadin/avatar/theme/lumo/vaadin-avatar-styles.js';
 
 registerStyles(
   'vaadin-message-avatar',

@@ -1,4 +1,4 @@
-import { AvatarElement } from '@vaadin/vaadin-avatar/src/vaadin-avatar.js';
+import { AvatarElement } from '@vaadin/avatar/src/vaadin-avatar.js';
 
 /**
  * An element used internally by `<vaadin-message>`. Not intended to be used separately.

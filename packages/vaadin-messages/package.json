@@ -32,7 +32,7 @@
     "@polymer/polymer": "^3.0.0",
     "@vaadin/button": "^22.0.0-alpha5",
     "@vaadin/text-area": "^22.0.0-alpha5",
-    "@vaadin/vaadin-avatar": "^22.0.0-alpha5",
+    "@vaadin/avatar": "^22.0.0-alpha5",
     "@vaadin/vaadin-element-mixin": "^22.0.0-alpha5",
     "@vaadin/vaadin-lumo-styles": "^22.0.0-alpha5",
     "@vaadin/vaadin-material-styles": "^22.0.0-alpha5",
