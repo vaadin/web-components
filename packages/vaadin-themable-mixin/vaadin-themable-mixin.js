@@ -1,5 +1,15 @@
-import { DomModule } from '@polymer/polymer/lib/elements/dom-module.js';
 import { ThemePropertyMixin } from './vaadin-theme-property-mixin.js';
+import './vaadin-template-styling.js';
+
+/**
+ * {
+ *  includePriority: number,
+ *  themeFor: string,
+ *  style: string,
+ *  styleAttributes: object // Used only by the lagacy theming system (<style include="some-style">)
+ * }[]
+ **/
+export const themes = [];
 
 /**
  * @polymerMixin
@@ -12,12 +22,15 @@ export const ThemableMixin = (superClass) =>
       super.finalize();
 
       const template = this.prototype._template;
+      if (!template) {
+        return;
+      }
 
       const inheritedTemplate = Object.getPrototypeOf(this.prototype)._template;
       if (inheritedTemplate) {
-        // Include the theme modules from the inherited template
-        Array.from(inheritedTemplate.content.querySelectorAll('style[include]')).forEach((s) => {
-          this._includeStyle(s.getAttribute('include'), template);
+        inheritedTemplate.__includedThemes = inheritedTemplate.__includedThemes || [];
+        Array.from(inheritedTemplate.__includedThemes).forEach((theme) => {
+          this._includeStyle(theme, template);
         });
       }
 
@@ -26,58 +39,39 @@ export const ThemableMixin = (superClass) =>
 
     /** @private */
     static _includeMatchingThemes(template) {
-      const domModule = DomModule;
-      const modules = domModule.prototype.modules;
+      // Get styles defined with the deprecated `<dom-module>` based theming system
+      let legacyThemes = [];
+      if (window.Vaadin && window.Vaadin.getTemplateStyles) {
+        legacyThemes = window.Vaadin.getTemplateStyles();
+      }
 
-      let hasThemes = false;
-      const defaultModuleName = this.is + '-default-theme';
-
-      Object.keys(modules)
-        .sort((moduleNameA, moduleNameB) => {
-          const vaadinA = moduleNameA.indexOf('vaadin-') === 0;
-          const vaadinB = moduleNameB.indexOf('vaadin-') === 0;
-
-          const vaadinThemePrefixes = ['lumo-', 'material-'];
-          const vaadinThemeA = vaadinThemePrefixes.filter((prefix) => moduleNameA.indexOf(prefix) === 0).length > 0;
-          const vaadinThemeB = vaadinThemePrefixes.filter((prefix) => moduleNameB.indexOf(prefix) === 0).length > 0;
-
-          if (vaadinA !== vaadinB) {
-            // Include vaadin core styles first
-            return vaadinA ? -1 : 1;
-          } else if (vaadinThemeA !== vaadinThemeB) {
-            // Include vaadin theme styles after that
-            return vaadinThemeA ? -1 : 1;
-          } else {
-            // Lastly include custom styles so they override all vaadin styles
-            return 0;
-          }
-        })
-        .forEach((moduleName) => {
-          if (moduleName !== defaultModuleName) {
-            const themeFor = modules[moduleName].getAttribute('theme-for');
-            if (themeFor) {
-              themeFor.split(' ').forEach((themeForToken) => {
-                if (new RegExp('^' + themeForToken.split('*').join('.*') + '$').test(this.is)) {
-                  hasThemes = true;
-                  this._includeStyle(moduleName, template);
-                }
-              });
-            }
+      [...themes, ...legacyThemes]
+        .sort((styleA, styleB) => styleB.includePriority - styleA.includePriority)
+        .forEach((style) => {
+          const themeFor = style.themeFor;
+          if (themeFor) {
+            themeFor.split(' ').forEach((themeForToken) => {
+              if (new RegExp('^' + themeForToken.split('*').join('.*') + '$').test(this.is)) {
+                this._includeStyle(style, template);
+              }
+            });
           }
         });
-
-      if (!hasThemes && modules[defaultModuleName]) {
-        // No theme modules found, include the default module if it exists
-        this._includeStyle(defaultModuleName, template);
-      }
     }
 
     /** @private */
-    static _includeStyle(moduleName, template) {
-      if (template && !template.content.querySelector(`style[include="${moduleName}"]`)) {
+    static _includeStyle(theme, template) {
+      template.__includedThemes = template.__includedThemes || [];
+      if (template && !template.__includedThemes.includes(theme)) {
         const styleEl = document.createElement('style');
-        styleEl.setAttribute('include', moduleName);
+        styleEl.innerHTML = theme.style.toString();
+        if (theme.styleAttributes) {
+          Object.keys(theme.styleAttributes).forEach((attribute) => {
+            styleEl.setAttribute(attribute, theme.styleAttributes[attribute]);
+          });
+        }
         template.content.appendChild(styleEl);
+        template.__includedThemes.push(theme);
       }
     }
   };

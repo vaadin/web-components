@@ -1,11 +1,7 @@
-import '@polymer/polymer/lib/elements/dom-module.js';
 import { CSSResult } from 'lit';
-import { stylesFromTemplate } from '@polymer/polymer/lib/utils/style-gather.js';
 export { css, unsafeCSS } from 'lit';
-
-let moduleIdIndex = 0;
-// Map of <CSSResult, Polymer.DomModule> pairs.
-const styleMap = {};
+import { themes } from './vaadin-themable-mixin.js';
+import './vaadin-template-styling.js';
 
 function recursiveFlattenStyles(styles, result = []) {
   if (styles instanceof CSSResult) {
@@ -27,35 +23,8 @@ function recursiveFlattenStyles(styles, result = []) {
  * @return {void}
  */
 export const registerStyles = (themeFor, styles, options) => {
-  if (options && options.include && !options.suppressDeprecationWarning) {
-    console.warn(
-      `The "include" option in registerStyles is deprecated. Instead, include an imported CSSResult in the styles array.`
-    );
-  }
-
-  const themeId = (options && options.moduleId) || `custom-style-module-${moduleIdIndex++}`;
-
-  if (!Array.isArray(styles)) {
-    styles = styles ? [styles] : [];
-  }
-
   styles = recursiveFlattenStyles(styles);
 
-  const processedStyles = styles.map((cssResult) => {
-    if (!(cssResult instanceof CSSResult)) {
-      throw new Error('An item in styles is not of type CSSResult. Use `unsafeCSS` or `css`.');
-    }
-    if (!styleMap[cssResult]) {
-      const template = document.createElement('template');
-      template.innerHTML = `<style>${cssResult.toString()}</style>`;
-
-      styleMap[cssResult] = stylesFromTemplate(template)[0];
-    }
-
-    return styleMap[cssResult].textContent;
-  });
-
-  const themeModuleElement = document.createElement('dom-module');
   if (themeFor) {
     const elementClass = customElements.get(themeFor);
     if (elementClass && Object.prototype.hasOwnProperty.call(elementClass, '__finalized')) {
@@ -64,17 +33,35 @@ export const registerStyles = (themeFor, styles, options) => {
       Make sure to add component specific style modules before
       importing the corresponding custom element.`);
     }
-    themeModuleElement.setAttribute('theme-for', themeFor);
   }
 
-  const moduleIncludes = (options && options.include) || [];
+  if (options && (options.include || options.moduleId)) {
+    // Handle the deprecated "include" and "moduleId" options using the dom-module-based approach.
+    handleDeprecatedTemplateStyles(themeFor, styles, options);
+    return;
+  }
 
-  themeModuleElement.innerHTML = `
-    <template>
-      ${moduleIncludes.map((include) => `<style include=${include}></style>`)}
-      ${processedStyles.length ? `<style>${processedStyles.join('\n')}</style>` : ''}
-    </template>
-  `;
+  styles.forEach((style) => {
+    themes.push({
+      includePriority: (options && options.includePriority) || 0,
+      themeFor,
+      style
+    });
+  });
+};
 
-  themeModuleElement.register(themeId);
+const handleDeprecatedTemplateStyles = (themeFor, styles, options) => {
+  if (options && options.include && !options.suppressDeprecationWarning) {
+    console.warn(
+      `The "include" option in registerStyles is deprecated. Instead, include an imported CSSResult in the styles array.`
+    );
+  }
+
+  if (window.Vaadin && window.Vaadin.registerTemplateStyles) {
+    // Fallback to the deprecated Polymer dom-module-based approach.
+    window.Vaadin.registerTemplateStyles(themeFor, styles, options);
+  } else {
+    console.warn(`In order to continue using the deprecated "include" or "moduleId" options,
+please import the required adapter '@vaadin/vaadin-template-styling' `);
+  }
 };

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script type="module">
+      import {registerStyles, css} from '@vaadin/vaadin-themable-mixin/register-styles.js';
+
+      // Lumo styles still use moduleId which makes themable mixin fall back to using `<dom-module>`
+      // Style registrations that don't use the deprecated APIs, such as this one, don't depend on
+      // <dom-module> / Polymer.
+      registerStyles('vaadin-text-field', css`
+        :host {
+          outline: 10px solid blue;
+        }
+      `);
+    </script>
+
+    <script type="module">
+      import '@vaadin/vaadin-combo-box';
+    </script>
+  </head>
+  <body>
+    <vaadin-combo-box></vaadin-combo-box>
+
+    <script>
+      const comboBox = document.querySelector('vaadin-combo-box');
+      comboBox.items = new Array(100).fill().map((e, i) => `value-${i}`);
+      comboBox.value = comboBox.items[50];
+    </script>
+  </body>
+</html>
