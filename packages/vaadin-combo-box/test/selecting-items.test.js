@@ -2,9 +2,9 @@ import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { aTimeout, click, fixtureSync, fire } from '@vaadin/testing-helpers';
 import { flush } from '@polymer/polymer/lib/utils/flush.js';
+import { getAllItems, getFirstItem, onceScrolled, scrollToIndex, selectItem } from './helpers.js';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
-import { scrollToIndex } from './helpers.js';
 
 describe('selecting items', () => {
   let comboBox;
@@ -41,12 +41,12 @@ describe('selecting items', () => {
   it('should fire `selection-changed` when clicked on an item', () => {
     comboBox.opened = true;
     flush();
-    click(comboBox.$.overlay._selector.querySelector('vaadin-combo-box-item'));
+    getFirstItem(comboBox).click();
     expect(selectionChangedSpy.calledOnce).to.be.true;
     expect(selectionChangedSpy.args[0][0].detail.item).to.eql(comboBox.items[0]);
   });
 
-  it('should fire `selection-changed` after the scrolling grace period', (done) => {
+  it('should fire `selection-changed` after the scrolling grace period', async () => {
     comboBox.open();
     comboBox.close();
 
@@ -57,25 +57,12 @@ describe('selecting items', () => {
     comboBox.items = items;
 
     comboBox.opened = true;
-
-    function listener() {
-      // Ensure the listener is invoked only once. Otherwise, `done()` might
-      // be called multiple times, which produces error for the test.
-      comboBox.$.overlay._scroller.removeEventListener('scroll', listener);
-
-      setTimeout(() => {
-        const firstItem = comboBox.$.overlay._selector.querySelector('vaadin-combo-box-item');
-        click(firstItem);
-
-        expect(selectionChangedSpy.calledOnce).to.be.true;
-        done();
-      }, 500);
-    }
-
-    // Scroll start could delay, for example, with full SD polyfill
-    comboBox.$.overlay._scroller.addEventListener('scroll', listener);
-
     scrollToIndex(comboBox, 20);
+
+    await onceScrolled(comboBox);
+
+    getFirstItem(comboBox).click();
+    expect(selectionChangedSpy.calledOnce).to.be.true;
   });
 
   it('should select by using JS api', () => {
@@ -92,7 +79,7 @@ describe('selecting items', () => {
     comboBox.open();
     flush();
 
-    comboBox.$.overlay._selector.querySelector('vaadin-combo-box-item').click();
+    getFirstItem(comboBox).click();
 
     expect(comboBox.opened).to.equal(false);
   });
@@ -105,14 +92,14 @@ describe('selecting items', () => {
   it('should close the dropdown when reselecting the current value', () => {
     comboBox.value = 'foo';
     comboBox.open();
-    fire(comboBox.$.overlay, 'selection-changed', { item: comboBox.items[0] });
+    selectItem(comboBox, 0);
     expect(comboBox.opened).to.be.false;
   });
 
   it('should not fire an event when reselecting the current value', () => {
     comboBox.value = 'foo';
     valueChangedSpy.resetHistory();
-    fire(comboBox.$.overlay, 'selection-changed', { item: comboBox.items[0] });
+    selectItem(comboBox, 0);
     expect(valueChangedSpy.callCount).to.equal(0);
   });
 
@@ -145,7 +132,7 @@ describe('selecting items', () => {
 
   it('should allow changing the value in value-changed listener', (done) => {
     comboBox.open();
-    const items = comboBox.$.overlay._selector.querySelectorAll('vaadin-combo-box-item');
+    const items = getAllItems(comboBox);
 
     comboBox.addEventListener('value-changed', () => {
       if (comboBox.value === 'foo') {
@@ -165,7 +152,7 @@ describe('selecting items', () => {
 
   it('should allow clearing the value in value-changed listener', (done) => {
     comboBox.open();
-    const item = comboBox.$.overlay._selector.querySelector('vaadin-combo-box-item');
+    const item = getFirstItem(comboBox);
 
     comboBox.addEventListener('value-changed', () => {
       if (comboBox.value) {
@@ -203,7 +190,7 @@ describe('selecting items', () => {
       expect(changeSpy.callCount).to.equal(1);
     });
 
-    it('should not fire `change` event when not commiting a value by closing', () => {
+    it('should not fire `change` event when not committing a value by closing', () => {
       comboBox.value = 'foo';
 
       expect(changeSpy.callCount).to.equal(0);
@@ -211,7 +198,7 @@ describe('selecting items', () => {
 
     it('should fire on clear', () => {
       comboBox.value = 'foo';
-      click(comboBox.$.input.$.clearButton);
+      comboBox.inputElement.$.clearButton.click();
 
       expect(changeSpy.callCount).to.equal(1);
     });
@@ -260,9 +247,7 @@ describe('selecting items', () => {
 
     it('should fire when selecting an item via click', () => {
       comboBox.open();
-      const firstItem = comboBox.$.overlay._selector.querySelector('vaadin-combo-box-item');
-      click(firstItem);
-
+      getFirstItem(comboBox).click();
       expect(changeSpy.callCount).to.equal(1);
     });
   });
@@ -290,7 +275,7 @@ describe('clearing a selection', () => {
   it('should clear the selection when clicking on the icon', () => {
     comboBox.open();
 
-    click(clearIcon);
+    clearIcon.click();
 
     expect(comboBox.value).to.eql('');
     expect(comboBox.$.overlay._selectedItem).to.be.null;
@@ -300,13 +285,13 @@ describe('clearing a selection', () => {
   it('should not close the dropdown after clearing a selection', () => {
     comboBox.open();
 
-    click(clearIcon);
+    clearIcon.click();
 
     expect(comboBox.opened).to.eql(true);
   });
 
   it('should not open the dropdown after clearing a selection', () => {
-    click(clearIcon);
+    clearIcon.click();
 
     expect(comboBox.opened).to.eql(false);
   });

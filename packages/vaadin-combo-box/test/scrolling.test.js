@@ -1,14 +1,15 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, focusout, isIOS } from '@vaadin/testing-helpers';
-import { onceOpened, onceScrolled } from './helpers.js';
+import { fixtureSync, focusout, isIOS, aTimeout } from '@vaadin/testing-helpers';
+import { getSelectedItem, onceScrolled } from './helpers.js';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
 
 describe('scrolling', () => {
-  let comboBox;
+  let comboBox, input;
 
   beforeEach(() => {
     comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
+    input = comboBox.inputElement;
   });
 
   (isIOS ? describe : describe.skip)('iOS', () => {
@@ -70,7 +71,7 @@ describe('scrolling', () => {
     });
 
     function expectSelectedItemPositionToBeVisible() {
-      const selectedItem = comboBox.$.overlay._selector.querySelector('[selected]');
+      const selectedItem = getSelectedItem(comboBox);
       expect(selectedItem).to.be.ok;
 
       const selectedItemRect = selectedItem.getBoundingClientRect();
@@ -81,40 +82,36 @@ describe('scrolling', () => {
       expect(selectedItemRect.bottom).to.be.at.most(overlayRect.bottom + 1);
     }
 
-    it('should make selected item visible after open', (done) => {
+    it('should make selected item visible after open', async () => {
       comboBox.value = comboBox.items[50];
       comboBox.open();
-
-      onceScrolled(comboBox.$.overlay._scroller).then(() => {
-        expectSelectedItemPositionToBeVisible();
-        done();
-      });
+      await onceScrolled(comboBox);
+      expectSelectedItemPositionToBeVisible();
     });
 
-    it('should make selected item visible after reopen', (done) => {
+    it('should make selected item visible after reopen', async () => {
       comboBox.open();
+      await aTimeout(0);
 
       comboBox.value = comboBox.items[50];
       comboBox.close();
 
-      onceOpened(comboBox).then(() => {
-        expectSelectedItemPositionToBeVisible();
-        done();
-      });
-
       comboBox.open();
+      await aTimeout(0);
+
+      expectSelectedItemPositionToBeVisible();
     });
 
     it('should not close the items when touching scroll bar', () => {
       comboBox.open();
-      focusout(comboBox.inputElement, comboBox.$.overlay.$.dropdown.$.overlay);
+      focusout(input, comboBox.$.overlay.$.dropdown.$.overlay);
       expect(comboBox.opened).to.be.true;
     });
 
     it('should keep the input focused while scrolling', () => {
       comboBox.open();
-      focusout(comboBox.inputElement, comboBox.$.overlay.$.dropdown.$.overlay);
-      expect(comboBox.inputElement.hasAttribute('focused')).to.be.true;
+      focusout(input, comboBox.$.overlay.$.dropdown.$.overlay);
+      expect(input.hasAttribute('focused')).to.be.true;
     });
   });
 });

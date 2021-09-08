@@ -1,8 +1,9 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { html, render } from 'lit';
-import '../vaadin-combo-box.js';
 import { getViewportItems } from './helpers.js';
+import './not-animated-styles.js';
+import '../vaadin-combo-box.js';
 
 describe('lit', () => {
   describe('renderer', () => {

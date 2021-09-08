@@ -1,15 +1,16 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { getFirstItem, getViewportItems } from './helpers.js';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
-import { getViewportItems } from './helpers.js';
 
 describe('Properties', () => {
-  let comboBox;
+  let comboBox, input;
 
   beforeEach(() => {
     comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
+    input = comboBox.inputElement;
   });
 
   describe('direction attribute', () => {
@@ -80,7 +81,7 @@ describe('Properties', () => {
       comboBox.items = ['foo', 'bar'];
 
       expect(comboBox.selectedItem).to.eql('foo');
-      expect(comboBox.inputElement.value).to.eql('foo');
+      expect(input.value).to.eql('foo');
     });
 
     it('should be able to be set before object items', () => {
@@ -90,7 +91,7 @@ describe('Properties', () => {
       comboBox.items = [item];
 
       expect(comboBox.selectedItem).to.eql(item);
-      expect(comboBox.inputElement.value).to.eql('foo');
+      expect(input.value).to.eql('foo');
     });
 
     it('should be empty string when setting invalid value multiple times', () => {
@@ -138,13 +139,13 @@ describe('Properties', () => {
     it('should set bind value after setting value property', () => {
       comboBox.value = 'foo';
 
-      expect(comboBox.inputElement.value).to.eql('foo');
+      expect(input.value).to.eql('foo');
     });
 
     it('should set value after setting a custom input value', () => {
       comboBox.open();
-      comboBox.inputElement.value = 'foo';
-      comboBox.inputElement.dispatchEvent(new CustomEvent('input'));
+      input.value = 'foo';
+      input.dispatchEvent(new CustomEvent('input'));
       comboBox.close();
 
       expect(comboBox.value).to.eql('foo');
@@ -154,18 +155,18 @@ describe('Properties', () => {
       comboBox.items = ['a', 'b'];
 
       comboBox.open();
-      comboBox.inputElement.value = 'foo';
-      comboBox.inputElement.dispatchEvent(new CustomEvent('input'));
+      input.value = 'foo';
+      input.dispatchEvent(new CustomEvent('input'));
       comboBox.close();
 
       comboBox.open();
-      comboBox.inputElement.value = 'a';
-      comboBox.inputElement.dispatchEvent(new CustomEvent('input'));
+      input.value = 'a';
+      input.dispatchEvent(new CustomEvent('input'));
       comboBox._focusedIndex = -1;
       comboBox.close();
 
       expect(comboBox.value).to.eql('foo');
-      expect(comboBox.inputElement.value).to.eql('foo');
+      expect(input.value).to.eql('foo');
     });
 
     describe('`custom-value-set` event', () => {
@@ -176,8 +177,8 @@ describe('Properties', () => {
         comboBox.addEventListener('custom-value-set', spy);
 
         comboBox.open();
-        comboBox.inputElement.value = 'foo';
-        comboBox.inputElement.dispatchEvent(new CustomEvent('input'));
+        input.value = 'foo';
+        input.dispatchEvent(new CustomEvent('input'));
         comboBox.close();
 
         expect(spy.callCount).to.eql(1);
@@ -190,8 +191,8 @@ describe('Properties', () => {
         comboBox.addEventListener('custom-value-set', spy);
 
         comboBox.open();
-        comboBox.inputElement.value = 'foo';
-        comboBox.inputElement.dispatchEvent(new CustomEvent('input'));
+        input.value = 'foo';
+        input.dispatchEvent(new CustomEvent('input'));
         comboBox.close();
 
         expect(spy.callCount).to.eql(0);
@@ -201,8 +202,8 @@ describe('Properties', () => {
         comboBox.addEventListener('custom-value-set', (e) => e.preventDefault());
 
         comboBox.open();
-        comboBox.inputElement.value = 'foo';
-        comboBox.inputElement.dispatchEvent(new CustomEvent('input'));
+        input.value = 'foo';
+        input.dispatchEvent(new CustomEvent('input'));
         comboBox.close();
         expect(comboBox.value).to.be.empty;
       });
@@ -212,8 +213,8 @@ describe('Properties', () => {
         comboBox.addEventListener('custom-value-set', spy);
 
         comboBox.open();
-        comboBox.inputElement.value = 'a';
-        comboBox.$.overlay._selector.querySelector('vaadin-combo-box-item').click();
+        input.value = 'a';
+        getFirstItem(comboBox).click();
         expect(spy.called).to.be.false;
       });
 
@@ -222,9 +223,9 @@ describe('Properties', () => {
         comboBox.addEventListener('custom-value-set', spy);
 
         comboBox.open();
-        comboBox.inputElement.value = 'a';
+        input.value = 'a';
         comboBox.close();
-        comboBox.inputElement.blur();
+        input.blur();
         expect(spy.called).to.be.false;
       });
     });
@@ -237,12 +238,14 @@ describe('Properties', () => {
 
     it('should be bound to label element', () => {
       comboBox.label = 'This is LABEL';
-      expect(comboBox.$.input.root.querySelector('label').innerHTML).to.eql('This is LABEL');
+      expect(input.shadowRoot.querySelector('label').innerHTML).to.eql('This is LABEL');
     });
   });
 
   describe('selectedItem property', () => {
-    beforeEach(() => (comboBox.items = ['foo']));
+    beforeEach(() => {
+      comboBox.items = ['foo'];
+    });
 
     it('should have null by default', () => {
       expect(comboBox.selectedItem).to.be.undefined;
@@ -252,7 +255,7 @@ describe('Properties', () => {
       comboBox.selectedItem = 'foo';
 
       expect(comboBox.value).to.eql('foo');
-      expect(comboBox.inputElement.value).to.eql('foo');
+      expect(input.value).to.eql('foo');
     });
 
     it('should default back to null when value set to undefined', () => {
@@ -321,7 +324,7 @@ describe('Properties', () => {
       it('should blur the input on touchend', () => {
         comboBox.focus();
 
-        const spy = sinon.spy(comboBox.inputElement, 'blur');
+        const spy = sinon.spy(input, 'blur');
         comboBox.$.overlay.$.dropdown.$.overlay.dispatchEvent(new CustomEvent('touchend'));
         expect(spy.callCount).to.eql(1);
       });
@@ -329,7 +332,7 @@ describe('Properties', () => {
       it('should blur the input on touchmove', () => {
         comboBox.focus();
 
-        const spy = sinon.spy(comboBox.inputElement, 'blur');
+        const spy = sinon.spy(input, 'blur');
         comboBox.$.overlay.$.dropdown.$.overlay.dispatchEvent(new CustomEvent('touchmove'));
         expect(spy.callCount).to.eql(1);
       });
@@ -337,7 +340,7 @@ describe('Properties', () => {
       it('should not blur the input on touchstart', () => {
         comboBox.focus();
 
-        const spy = sinon.spy(comboBox.inputElement, 'blur');
+        const spy = sinon.spy(input, 'blur');
         comboBox.$.overlay.$.dropdown.$.overlay.dispatchEvent(new CustomEvent('touchstart'));
         expect(spy.callCount).to.eql(0);
       });
@@ -347,14 +350,14 @@ describe('Properties', () => {
   describe('clear button', () => {
     it('should not have clear-button-visible by default', () => {
       expect(comboBox.clearButtonVisible).to.equal(false);
-      expect(comboBox.inputElement.clearButtonVisible).to.equal(false);
+      expect(input.clearButtonVisible).to.equal(false);
     });
   });
 
   describe('helper text', () => {
     it('should display the helper text when provided', () => {
       comboBox.helperText = 'Foo';
-      expect(comboBox.inputElement.helperText).to.equal(comboBox.helperText);
+      expect(input.helperText).to.equal(comboBox.helperText);
     });
   });
 });
@@ -422,7 +425,7 @@ describe('theme attribute', () => {
   it('should propagate theme attribute to item', () => {
     comboBox.items = ['bar', 'baz'];
     comboBox.open();
-    expect(comboBox.$.overlay._selector.querySelector('vaadin-combo-box-item').getAttribute('theme')).to.equal('foo');
+    expect(getFirstItem(comboBox).getAttribute('theme')).to.equal('foo');
   });
 });
 

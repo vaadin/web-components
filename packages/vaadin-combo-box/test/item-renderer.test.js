@@ -2,6 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import '@vaadin/vaadin-template-renderer';
+import { getFirstItem } from './helpers.js';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
 
@@ -9,10 +10,6 @@ describe('item renderer', () => {
   let comboBox;
 
   let items;
-
-  function getFirstItem() {
-    return comboBox.$.overlay._selector.querySelector('vaadin-combo-box-item');
-  }
 
   beforeEach(() => {
     comboBox = fixtureSync(`
@@ -72,7 +69,7 @@ describe('item renderer', () => {
     };
     comboBox.opened = true;
 
-    expect(getFirstItem().$.content.textContent.trim()).to.equal('foo 0');
+    expect(getFirstItem(comboBox).$.content.textContent.trim()).to.equal('foo 0');
   });
 
   it('should run renderers when requesting content update', () => {
@@ -117,16 +114,16 @@ describe('item renderer', () => {
     };
     comboBox.opened = true;
 
-    expect(getFirstItem().$.content.textContent).to.equal('bar');
+    expect(getFirstItem(comboBox).$.content.textContent).to.equal('bar');
 
     comboBox.renderer = null;
 
-    expect(getFirstItem().$.content.textContent).to.equal('foo');
+    expect(getFirstItem(comboBox).$.content.textContent).to.equal('foo');
   });
 
   it('should clear the old content after assigning a new renderer', () => {
     comboBox.opened = true;
     comboBox.renderer = () => {};
-    expect(getFirstItem().$.content.textContent).to.equal('');
+    expect(getFirstItem(comboBox).$.content.textContent).to.equal('');
   });
 });

@@ -13,16 +13,16 @@ import {
   isDesktopSafari,
   nextFrame
 } from '@vaadin/testing-helpers';
-import { getViewportItems, onceScrolled, scrollToIndex } from './helpers.js';
+import { getViewportItems, getVisibleItemsCount, onceScrolled, scrollToIndex } from './helpers.js';
 import './not-animated-styles.js';
 import '../src/vaadin-combo-box.js';
 
 describe('keyboard', () => {
-  let comboBox;
+  let comboBox, input;
 
   function filter(value) {
-    comboBox.inputElement.value = value;
-    fire(comboBox.inputElement, 'input');
+    input.value = value;
+    fire(input, 'input');
   }
 
   function getFocusedIndex() {
@@ -30,7 +30,7 @@ describe('keyboard', () => {
   }
 
   function inputChar(char) {
-    const target = comboBox.inputElement;
+    const target = input;
     target.value += char;
     keyDownOn(target, char.charCodeAt(0));
     fire(target, 'input');
@@ -45,18 +45,19 @@ describe('keyboard', () => {
   beforeEach(() => {
     comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
     comboBox.items = ['foo', 'bar', 'baz'];
+    input = comboBox.inputElement;
   });
 
   describe('opening the overlay', () => {
     it('should open the overlay with arrow down and not focus any item', () => {
-      arrowDownKeyDown(comboBox.inputElement);
+      arrowDownKeyDown(input);
 
       expect(comboBox.opened).to.equal(true);
       expect(getFocusedIndex()).to.equal(-1);
     });
 
     it('should open the overlay with arrow up and not focus any item', () => {
-      arrowUpKeyDown(comboBox.inputElement);
+      arrowUpKeyDown(input);
 
       expect(comboBox.opened).to.equal(true);
       expect(getFocusedIndex()).to.equal(-1);
@@ -65,68 +66,66 @@ describe('keyboard', () => {
     it('should have focus on the selected item after opened', () => {
       comboBox.value = 'foo';
 
-      arrowDownKeyDown(comboBox.inputElement);
+      arrowDownKeyDown(input);
 
       expect(getFocusedIndex()).to.equal(0);
     });
   });
 
   describe('navigating the items after overlay opened', () => {
-    beforeEach((done) =>
-      setTimeout(() => {
-        arrowDownKeyDown(comboBox.inputElement);
-        done();
-      })
-    );
+    beforeEach(async () => {
+      await aTimeout(0);
+      arrowDownKeyDown(input);
+    });
 
     it('should focus on the first item with arrow down', () => {
-      arrowDownKeyDown(comboBox.inputElement);
+      arrowDownKeyDown(input);
 
       expect(getFocusedIndex()).to.equal(0);
     });
 
     it('should focus on the last item with up arrow', () => {
-      arrowUpKeyDown(comboBox.inputElement);
+      arrowUpKeyDown(input);
 
       expect(getFocusedIndex()).to.equal(2);
     });
 
     it('should focus on the previous item with arrow up', () => {
-      arrowDownKeyDown(comboBox.inputElement);
-      arrowDownKeyDown(comboBox.inputElement);
+      arrowDownKeyDown(input);
+      arrowDownKeyDown(input);
 
-      arrowUpKeyDown(comboBox.inputElement);
+      arrowUpKeyDown(input);
 
       expect(getFocusedIndex()).to.equal(0);
     });
 
     it('should not go below the last item', () => {
-      arrowDownKeyDown(comboBox.inputElement);
-      arrowDownKeyDown(comboBox.inputElement);
-      arrowDownKeyDown(comboBox.inputElement);
+      arrowDownKeyDown(input);
+      arrowDownKeyDown(input);
+      arrowDownKeyDown(input);
 
       expect(getFocusedIndex()).to.equal(2);
 
-      arrowDownKeyDown(comboBox.inputElement);
+      arrowDownKeyDown(input);
 
       expect(getFocusedIndex()).to.equal(2);
     });
 
     it('should not remove focus', () => {
-      arrowDownKeyDown(comboBox.inputElement);
+      arrowDownKeyDown(input);
 
-      arrowUpKeyDown(comboBox.inputElement);
+      arrowUpKeyDown(input);
 
       expect(getFocusedIndex()).to.equal(0);
     });
 
     it('should focus only on filtered items', () => {
       filter('foo');
-      arrowDownKeyDown(comboBox.inputElement);
+      arrowDownKeyDown(input);
 
       expect(getFocusedIndex()).to.equal(0);
 
-      arrowDownKeyDown(comboBox.inputElement);
+      arrowDownKeyDown(input);
 
       expect(getFocusedIndex()).to.equal(0);
     });
@@ -141,16 +140,16 @@ describe('keyboard', () => {
     });
 
     it('should select focused item with enter', async () => {
-      arrowDownKeyDown(comboBox.inputElement);
+      arrowDownKeyDown(input);
       await aTimeout(1);
-      enterKeyDown(comboBox.inputElement);
+      enterKeyDown(input);
       await aTimeout(1);
       expect(comboBox.value).to.equal('baz');
     });
 
     it('should clear the selection with enter when input is cleared', () => {
       filter('');
-      enterKeyDown(comboBox.inputElement);
+      enterKeyDown(input);
 
       expect(comboBox.value).to.eql('');
     });
@@ -159,7 +158,7 @@ describe('keyboard', () => {
       comboBox.allowCustomValue = true;
       filter('foobar');
 
-      enterKeyDown(comboBox.inputElement);
+      enterKeyDown(input);
 
       expect(comboBox.value).to.equal('foobar');
       expect(comboBox.opened).to.equal(false);
@@ -168,14 +167,14 @@ describe('keyboard', () => {
     it('should stop propagation of the keyboard enter event', () => {
       const keydownSpy = sinon.spy();
       document.addEventListener('keydown', keydownSpy);
-      enterKeyDown(comboBox.inputElement);
+      enterKeyDown(input);
       expect(keydownSpy.called).to.be.false;
     });
 
     it('should not close the overlay with enter when custom values are not allowed', () => {
       filter('foobar');
 
-      enterKeyDown(comboBox.inputElement);
+      enterKeyDown(input);
 
       expect(comboBox.value).to.equal('bar');
       expect(comboBox.opened).to.equal(true);
@@ -185,32 +184,32 @@ describe('keyboard', () => {
       comboBox.allowCustomValue = true;
       comboBox.value = 'foobar';
       filter('bar');
-      escKeyDown(comboBox.inputElement);
-      expect(comboBox.inputElement.value).to.eql('bar');
-      escKeyDown(comboBox.inputElement);
-      expect(comboBox.inputElement.value).to.equal('foobar');
+      escKeyDown(input);
+      expect(input.value).to.eql('bar');
+      escKeyDown(input);
+      expect(input.value).to.equal('foobar');
     });
 
     it('should revert a non-listed value to the custom value after filtering', () => {
       comboBox.allowCustomValue = true;
       comboBox.value = 'foobar';
       filter('barbaz');
-      escKeyDown(comboBox.inputElement);
-      expect(comboBox.inputElement.value).to.equal('foobar');
+      escKeyDown(input);
+      expect(input.value).to.equal('foobar');
     });
 
     it('should revert to the custom value after keyboar navigation', () => {
       comboBox.allowCustomValue = true;
       comboBox.value = 'foobar';
-      arrowDownKeyDown(comboBox.inputElement);
-      escKeyDown(comboBox.inputElement);
-      expect(comboBox.inputElement.value).to.eql('foobar');
-      escKeyDown(comboBox.inputElement);
-      expect(comboBox.inputElement.value).to.equal('foobar');
+      arrowDownKeyDown(input);
+      escKeyDown(input);
+      expect(input.value).to.eql('foobar');
+      escKeyDown(input);
+      expect(input.value).to.equal('foobar');
     });
 
     it('should close the overlay with enter', () => {
-      enterKeyDown(comboBox.inputElement);
+      enterKeyDown(input);
 
       expect(comboBox.opened).to.equal(false);
     });
@@ -218,7 +217,7 @@ describe('keyboard', () => {
     it('should remove focus with escape', () => {
       comboBox._focusedIndex = 0;
 
-      escKeyDown(comboBox.inputElement);
+      escKeyDown(input);
 
       expect(comboBox.opened).to.equal(true);
       expect(comboBox._focusedIndex).to.eql(-1);
@@ -227,7 +226,7 @@ describe('keyboard', () => {
     it('should close the overlay with escape if there is no focus', () => {
       comboBox._focusedIndex = -1;
 
-      escKeyDown(comboBox.inputElement);
+      escKeyDown(input);
 
       expect(comboBox.opened).to.equal(false);
     });
@@ -236,7 +235,7 @@ describe('keyboard', () => {
       const spy = sinon.spy();
 
       document.body.addEventListener('keydown', spy);
-      escKeyDown(comboBox.inputElement);
+      escKeyDown(input);
       document.body.removeEventListener('keydown', spy);
 
       expect(spy.called).to.be.false;
@@ -245,7 +244,7 @@ describe('keyboard', () => {
     it('should cancel typing with escape', () => {
       filter('baz');
 
-      escKeyDown(comboBox.inputElement);
+      escKeyDown(input);
 
       expect(comboBox.value).to.equal('bar');
     });
@@ -253,45 +252,45 @@ describe('keyboard', () => {
     it('should select typed item', () => {
       filter('baz');
 
-      enterKeyDown(comboBox.inputElement);
+      enterKeyDown(input);
 
       expect(comboBox.value).to.equal('baz');
     });
 
     it('should reset the input value synchronously when keyboard navigating', () => {
-      arrowDownKeyDown(comboBox.inputElement);
-      expect(comboBox.inputElement.value).to.eql('');
+      arrowDownKeyDown(input);
+      expect(input.value).to.eql('');
     });
 
     it('should prefill the input field when navigating down', async () => {
-      arrowDownKeyDown(comboBox.inputElement);
+      arrowDownKeyDown(input);
       await aTimeout(1);
-      expect(comboBox.inputElement.value).to.eql('baz');
+      expect(input.value).to.eql('baz');
     });
 
     (isDesktopSafari ? it.skip : it)('should select the input field text when navigating down', async () => {
-      arrowDownKeyDown(comboBox.inputElement);
+      arrowDownKeyDown(input);
       await aTimeout(1);
       expect(comboBox._nativeInput.selectionStart).to.eql(0);
       expect(comboBox._nativeInput.selectionEnd).to.eql(3);
     });
 
     it('should prefill the input field when navigating up', async () => {
-      arrowUpKeyDown(comboBox.inputElement);
+      arrowUpKeyDown(input);
       await aTimeout(1);
-      expect(comboBox.inputElement.value).to.eql('foo');
+      expect(input.value).to.eql('foo');
     });
 
     it('should not prefill the input when there are no items to navigate', async () => {
       filter('invalid filter');
 
-      arrowDownKeyDown(comboBox.inputElement);
+      arrowDownKeyDown(input);
       await aTimeout(1);
-      expect(comboBox.inputElement.value).to.eql('invalid filter');
+      expect(input.value).to.eql('invalid filter');
     });
 
     (isDesktopSafari ? it.skip : it)('should select the input field text when navigating up', async () => {
-      arrowUpKeyDown(comboBox.inputElement);
+      arrowUpKeyDown(input);
       await aTimeout(1);
       expect(comboBox._nativeInput.selectionStart).to.eql(0);
       expect(comboBox._nativeInput.selectionEnd).to.eql(3);
@@ -300,40 +299,40 @@ describe('keyboard', () => {
     it('should revert back to filter with escape', async () => {
       filter('b');
 
-      arrowDownKeyDown(comboBox.inputElement);
+      arrowDownKeyDown(input);
       await aTimeout(1);
-      expect(comboBox.inputElement.value).to.eql('bar');
-      escKeyDown(comboBox.inputElement);
-      expect(comboBox.inputElement.value).to.eql('b');
+      expect(input.value).to.eql('bar');
+      escKeyDown(input);
+      expect(input.value).to.eql('b');
     });
 
     it('should remove selection from the input value when reverting', () => {
       filter('b');
-      arrowDownKeyDown(comboBox.inputElement);
-      escKeyDown(comboBox.inputElement);
+      arrowDownKeyDown(input);
+      escKeyDown(input);
 
-      expect(comboBox.inputElement.selectionStart).to.eql(comboBox.inputElement.selectionEnd);
+      expect(input.selectionStart).to.eql(input.selectionEnd);
     });
 
     it('should revert back to value if there is no filter', () => {
-      arrowDownKeyDown(comboBox.inputElement);
+      arrowDownKeyDown(input);
 
-      escKeyDown(comboBox.inputElement);
+      escKeyDown(input);
 
-      expect(comboBox.inputElement.value).to.eql('bar');
+      expect(input.value).to.eql('bar');
     });
 
     it('should keep selected item on escape when custom value allowed', () => {
       comboBox.allowCustomValue = true;
-      escKeyDown(comboBox.inputElement);
-      escKeyDown(comboBox.inputElement);
+      escKeyDown(input);
+      escKeyDown(input);
       expect(comboBox.selectedItem).to.eql('bar');
     });
 
     it('should remove selection from the input value selecting value', async () => {
-      arrowDownKeyDown(comboBox.inputElement);
+      arrowDownKeyDown(input);
       await aTimeout(1);
-      enterKeyDown(comboBox.inputElement);
+      enterKeyDown(input);
 
       expect(comboBox._nativeInput.selectionStart).to.eql(3);
       expect(comboBox._nativeInput.selectionEnd).to.eql(3);
@@ -356,10 +355,10 @@ describe('keyboard', () => {
 
     it('should scroll down after reaching the last visible item', () => {
       scrollToIndex(comboBox, 0);
-      comboBox._focusedIndex = comboBox.$.overlay._visibleItemsCount() - 1;
+      comboBox._focusedIndex = getVisibleItemsCount(comboBox) - 1;
       expect(getViewportItems(comboBox)[0].index).to.eql(0);
 
-      arrowDownKeyDown(comboBox.inputElement);
+      arrowDownKeyDown(input);
 
       expect(getViewportItems(comboBox)[0].index).to.eql(1);
     });
@@ -371,7 +370,7 @@ describe('keyboard', () => {
 
       expect(getViewportItems(comboBox)[0].index).to.eql(2);
 
-      arrowUpKeyDown(comboBox.inputElement);
+      arrowUpKeyDown(input);
 
       expect(getViewportItems(comboBox)[0].index).to.eql(1);
     });
@@ -380,7 +379,7 @@ describe('keyboard', () => {
       comboBox._focusedIndex = 5;
       scrollToIndex(comboBox, 50);
 
-      arrowDownKeyDown(comboBox.inputElement);
+      arrowDownKeyDown(input);
 
       expect(getViewportItems(comboBox)[0].index).to.eql(6);
     });
@@ -389,7 +388,7 @@ describe('keyboard', () => {
       comboBox._focusedIndex = 5;
       scrollToIndex(comboBox, 50);
 
-      arrowUpKeyDown(comboBox.inputElement);
+      arrowUpKeyDown(input);
 
       expect(getViewportItems(comboBox)[0].index).to.eql(4);
     });
@@ -399,9 +398,9 @@ describe('keyboard', () => {
       scrollToIndex(comboBox, 0);
       expect(getViewportItems(comboBox)[0].index).to.eql(0);
 
-      arrowUpKeyDown(comboBox.inputElement);
+      arrowUpKeyDown(input);
 
-      expect(getViewportItems(comboBox)[0].index).to.eql(49 - comboBox.$.overlay._visibleItemsCount() + 1);
+      expect(getViewportItems(comboBox)[0].index).to.eql(49 - getVisibleItemsCount(comboBox) + 1);
     });
 
     it('should scroll to last visible when navigating down below viewport', () => {
@@ -409,9 +408,9 @@ describe('keyboard', () => {
       scrollToIndex(comboBox, 0);
       expect(getViewportItems(comboBox)[0].index).to.eql(0);
 
-      arrowDownKeyDown(comboBox.inputElement);
+      arrowDownKeyDown(input);
 
-      expect(getViewportItems(comboBox)[0].index).to.eql(51 - comboBox.$.overlay._visibleItemsCount() + 1);
+      expect(getViewportItems(comboBox)[0].index).to.eql(51 - getVisibleItemsCount(comboBox) + 1);
     });
 
     it('should scroll to start if no items focused when opening overlay', async () => {
@@ -431,8 +430,8 @@ describe('keyboard', () => {
 
       comboBox.open();
 
-      await onceScrolled(comboBox.$.overlay._scroller);
-      expect(getViewportItems(comboBox)[0].index).to.be.within(50 - comboBox.$.overlay._visibleItemsCount(), 50);
+      await onceScrolled(comboBox);
+      expect(getViewportItems(comboBox)[0].index).to.be.within(50 - getVisibleItemsCount(comboBox), 50);
     });
   });
 
@@ -442,54 +441,54 @@ describe('keyboard', () => {
     });
 
     it('should open the overlay with arrow down', () => {
-      arrowDownKeyDown(comboBox.inputElement);
+      arrowDownKeyDown(input);
       expect(comboBox.opened).to.equal(true);
     });
 
     it('should open the overlay with arrow up', () => {
-      arrowUpKeyDown(comboBox.inputElement);
+      arrowUpKeyDown(input);
       expect(comboBox.opened).to.equal(true);
     });
 
     it('should apply input value on focusout if input valid', () => {
       inputText('FOO');
       focusout(comboBox);
-      expect(comboBox._inputElementValue).to.equal('foo');
+      expect(input.value).to.equal('foo');
       expect(comboBox.value).to.equal('foo');
     });
 
     it('should apply input value on enter if input valid', () => {
       inputText('FOO');
-      enterKeyDown(comboBox.inputElement);
-      expect(comboBox._inputElementValue).to.equal('foo');
+      enterKeyDown(input);
+      expect(input.value).to.equal('foo');
       expect(comboBox.value).to.equal('foo');
     });
 
     it('should not apply input value on enter if input invalid', () => {
       inputText('quux');
-      enterKeyDown(comboBox.inputElement);
-      expect(comboBox._inputElementValue).to.equal('quux');
+      enterKeyDown(input);
+      expect(input.value).to.equal('quux');
       expect(comboBox.value).to.equal('');
     });
 
     it('should revert input value on focusout if input invalid', () => {
       inputText('quux');
       focusout(comboBox);
-      expect(comboBox._inputElementValue).to.equal('');
+      expect(input.value).to.equal('');
       expect(comboBox.value).to.equal('');
     });
 
     it('should revert input value on esc if input valid', () => {
       inputText('foo');
-      escKeyDown(comboBox.inputElement);
-      expect(comboBox._inputElementValue).to.equal('');
+      escKeyDown(input);
+      expect(input.value).to.equal('');
       expect(comboBox.value).to.equal('');
     });
 
     it('should revert input value on esc if input invalid', () => {
       inputText('quux');
-      escKeyDown(comboBox.inputElement);
-      expect(comboBox._inputElementValue).to.equal('');
+      escKeyDown(input);
+      expect(input.value).to.equal('');
       expect(comboBox.value).to.equal('');
     });
   });

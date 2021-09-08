@@ -4,7 +4,7 @@ import { fixtureSync, keyDownOn } from '@vaadin/testing-helpers';
 import { flush } from '@polymer/polymer/lib/utils/flush.js';
 import '@vaadin/vaadin-template-renderer';
 import './not-animated-styles.js';
-
+import { getFirstItem } from './helpers.js';
 import './fixtures/mock-combo-box-template-wrapper.js';
 import './fixtures/mock-combo-box-light-template-wrapper.js';
 
@@ -20,7 +20,7 @@ describe('item template', () => {
         comboBox.open();
 
         flush();
-        firstItem = comboBox.$.overlay._selector.querySelector('vaadin-combo-box-item');
+        firstItem = getFirstItem(comboBox);
       });
 
       it('should render items using template', () => {
