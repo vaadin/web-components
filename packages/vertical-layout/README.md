@@ -4,17 +4,13 @@
 |
 [API documentation ↗](https://vaadin.com/components/vaadin-ordered-layout/html-api)
 
-[&lt;vaadin-ordered-layout&gt;](https://vaadin.com/components/vaadin-ordered-layout) consist of two Web Components providing a simple way to horizontally or vertically align your HTML elements, part of the [Vaadin components](https://vaadin.com/components).
+[&lt;vaadin-vertical-layout&gt;](https://vaadin.com/components/vaadin-ordered-layout) consist of one of two Web Components providing a simple way to vertically align your HTML elements, part of the [Vaadin components](https://vaadin.com/components).
 
-[![npm version](https://badgen.net/npm/v/@vaadin/vaadin-ordered-layout)](https://www.npmjs.com/package/@vaadin/vaadin-ordered-layout)
-[![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-ordered-layout)
+[![npm version](https://badgen.net/npm/v/@vaadin/veritcal-layout)](https://www.npmjs.com/package/@vaadin/vertical-layout)
+[![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvertical-layout)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
-<vaadin-horizontal-layout>
-  <div>Horizontally</div>
-  <div>Aligned</div>
-</vaadin-horizontal-layout>
 <vaadin-vertical-layout>
   <div>Vertically</div>
   <div>Aligned</div>
@@ -25,16 +21,16 @@
 
 ## Installation
 
-Install `vaadin-ordered-layout`:
+Install `vaadin-vertical-layout`:
 
 ```sh
-npm i @vaadin/vaadin-ordered-layout --save
+npm i @vaadin/vertical-layout --save
 ```
 
 Once installed, import it in your application:
 
 ```js
-import '@vaadin/vaadin-ordered-layout/vaadin-vertical-layout.js';
+import '@vaadin/vertical-layout/vaadin-vertical-layout.js';
 ```
 
 ## Getting started
@@ -47,18 +43,14 @@ To use the Material theme, import the correspondent file from the `theme/materia
 
 - The components with the Lumo theme:
 
-  `theme/lumo/vaadin-horizontal-layout.js`
   `theme/lumo/vaadin-vertical-layout.js`
 
 - The components with the Material theme:
 
-  `theme/material/vaadin-horizontal-layout.js`
   `theme/material/vaadin-vertical-layout.js`
 
-- Alias for `theme/lumo/vaadin-horizontal-layout.js`
-  `theme/lumo/vaadin-vertical-layout.js`:
+- Alias for `theme/lumo/vaadin-vertical-layout.js`:
 
-  `vaadin-horizontal-layout.js`
   `vaadin-vertical-layout.js`
 
 ## Contributing
