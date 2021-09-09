@@ -28,8 +28,8 @@
   ],
   "dependencies": {
     "@vaadin/horizontal-layout": "^22.0.0-alpha5",
-    "@vaadin/vertical-layout": "^22.0.0-alpha5",
-    "@vaadin/scroller": "^22.0.0-alpha5"
+    "@vaadin/scroller": "^22.0.0-alpha5",
+    "@vaadin/vertical-layout": "^22.0.0-alpha5"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
