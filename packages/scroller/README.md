@@ -1,70 +1,66 @@
-# &lt;vaadin-ordered-layout&gt;
+# @vaadin/scroller
 
-[Live Demo ↗](https://vaadin.com/components/vaadin-ordered-layout/html-examples)
-|
-[API documentation ↗](https://vaadin.com/components/vaadin-ordered-layout/html-api)
+A component container for creating scrollable areas in the UI.
 
-[&lt;vaadin-ordered-layout&gt;](https://vaadin.com/components/vaadin-ordered-layout) consist of two Web Components providing a simple way to horizontally or vertically align your HTML elements, part of the [Vaadin components](https://vaadin.com/components).
-
-[![npm version](https://badgen.net/npm/v/@vaadin/vaadin-ordered-layout)](https://www.npmjs.com/package/@vaadin/vaadin-ordered-layout)
-[![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-ordered-layout)
-[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
+[Live Demo ↗](https://vaadin.com/docs/latest/ds/components/scroller)
 
 ```html
-<vaadin-horizontal-layout>
-  <div>Horizontally</div>
-  <div>Aligned</div>
-</vaadin-horizontal-layout>
-<vaadin-vertical-layout>
-  <div>Vertically</div>
-  <div>Aligned</div>
-</vaadin-vertical-layout>
+<vaadin-scroller scroll-direction="vertical">
+  <section>
+    <h3>Personal information</h3>
+    <vaadin-text-field label="First name"></vaadin-text-field>
+    <vaadin-text-field label="Last name"></vaadin-text-field>
+    <vaadin-date-picker label="Birth date"></vaadin-date-picker>
+  </section>
+  <section>
+    <h3>Employment information</h3>
+    <vaadin-text-field label="Position"></vaadin-text-field>
+    <vaadin-text-area label="Additional information"></vaadin-text-area>
+  </section>
+</vaadin-scroller>
 ```
-
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-ordered-layout/master/screenshot.png" width="200" alt="Screenshot of vaadin-ordered-layout">](https://vaadin.com/components/vaadin-ordered-layout)
 
 ## Installation
 
-Install `vaadin-ordered-layout`:
+Install the component:
 
 ```sh
-npm i @vaadin/vaadin-ordered-layout --save
+npm i @vaadin/scroller --save
 ```
 
-Once installed, import it in your application:
+Once installed, import the component in your application:
 
 ```js
-import '@vaadin/vaadin-ordered-layout/vaadin-vertical-layout.js';
+import '@vaadin/scroller';
 ```
 
-## Getting started
+## Themes
 
-Vaadin components use the Lumo theme by default.
+Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/ds/customization/using-themes),
+Lumo and Material. The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/scroller/vaadin-scroller.js)
+of the package uses the Lumo theme.
 
-To use the Material theme, import the correspondent file from the `theme/material` folder.
+To use the Material theme, import the component from the `theme/material` folder:
 
-## Entry points
+```js
+import '@vaadin/scroller/theme/material/vaadin-scroller.js';
+```
 
-- The components with the Lumo theme:
+You can also import the Lumo version of the component explicitly:
 
-  `theme/lumo/vaadin-horizontal-layout.js`
-  `theme/lumo/vaadin-vertical-layout.js`
+```js
+import '@vaadin/scroller/theme/lumo/vaadin-scroller.js';
+```
 
-- The components with the Material theme:
+Finally, you can import the un-themed component from the `src` folder to get a minimal starting point:
 
-  `theme/material/vaadin-horizontal-layout.js`
-  `theme/material/vaadin-vertical-layout.js`
-
-- Alias for `theme/lumo/vaadin-horizontal-layout.js`
-  `theme/lumo/vaadin-vertical-layout.js`:
-
-  `vaadin-horizontal-layout.js`
-  `vaadin-vertical-layout.js`
-
-## Contributing
-
-Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
+```js
+import '@vaadin/scroller/src/vaadin-scroller.js';
+```
 
 ## License
 
 Apache License 2.0
+
+Vaadin collects development time usage statistics to improve this product.
+For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.

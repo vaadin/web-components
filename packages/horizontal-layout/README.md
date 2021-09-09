@@ -1,62 +1,59 @@
-# &lt;vaadin-ordered-layout&gt;
+# @vaadin/horizontal-layout
 
-[Live Demo ↗](https://vaadin.com/components/vaadin-ordered-layout/html-examples)
-|
-[API documentation ↗](https://vaadin.com/components/vaadin-ordered-layout/html-api)
+A web component that places its content side-by-side in a row.
 
-[&lt;vaadin-vertical-layout&gt;](https://vaadin.com/components/vaadin-ordered-layout) consist of one of two Web Components providing a simple way to horizontally align your HTML elements, part of the [Vaadin components](https://vaadin.com/components).
-
-[![npm version](https://badgen.net/npm/v/@vaadin/horizontal-layout)](https://www.npmjs.com/package/@vaadin/horizontal-layout)
-[![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinhorizontal-layout)
-[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
+[Live Demo ↗](https://vaadin.com/docs/latest/ds/components/basic-layouts/#horizontal-layout)
 
 ```html
-<vaadin-horizontal-layout>
-  <div>Horizontally</div>
-  <div>Aligned</div>
+<vaadin-horizontal-layout theme="spacing padding">
+  <div>Item 1</div>
+  <div>Item 2</div>
+  <div>Item 3</div>
+  <div>Item 4</div>
 </vaadin-horizontal-layout>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-ordered-layout/master/screenshot.png" width="200" alt="Screenshot of vaadin-ordered-layout">](https://vaadin.com/components/vaadin-ordered-layout)
-
 ## Installation
 
-Install `vaadin-horizontal-layout`:
+Install the component:
 
 ```sh
 npm i @vaadin/horizontal-layout --save
 ```
 
-Once installed, import it in your application:
+Once installed, import the component in your application:
 
 ```js
-import '@vaadin/horizontal-layout/vaadin-horizontal-layout.js';
+import '@vaadin/horizontal-layout';
 ```
 
-## Getting started
+## Themes
 
-Vaadin components use the Lumo theme by default.
+Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/ds/customization/using-themes),
+Lumo and Material. The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/horizontal-layout/vaadin-horizontal-layout.js)
+of the package uses the Lumo theme.
 
-To use the Material theme, import the correspondent file from the `theme/material` folder.
+To use the Material theme, import the component from the `theme/material` folder:
 
-## Entry points
+```js
+import '@vaadin/horizontal-layout/theme/material/vaadin-horizontal-layout.js';
+```
 
-- The components with the Lumo theme:
+You can also import the Lumo version of the component explicitly:
 
-  `theme/lumo/vaadin-horizontal-layout.js`
+```js
+import '@vaadin/horizontal-layout/theme/lumo/vaadin-horizontal-layout.js';
+```
 
-- The components with the Material theme:
+Finally, you can import the un-themed component from the `src` folder to get a minimal starting point:
 
-  `theme/material/vaadin-horizontal-layout.js`
-
-- Alias for `theme/lumo/vaadin-horizontal-layout.js`
-
-  `vaadin-horizontal-layout.js`
-
-## Contributing
-
-Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
+```js
+import '@vaadin/horizontal-layout/src/vaadin-horizontal-layout.js';
+```
 
 ## License
 
 Apache License 2.0
+
+Vaadin collects development time usage statistics to improve this product.
+For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.
