@@ -36,7 +36,9 @@ const SlotTargetMixinImplementation = (superclass) =>
     }
 
     /**
-     * @type {HTMLSlotElement}
+     * A reference to the source slot from which the content is forwarded to the target element.
+     *
+     * @type {HTMLSlotElement | null}
      * @protected
      */
     get _sourceSlot() {
@@ -45,7 +47,9 @@ const SlotTargetMixinImplementation = (superclass) =>
     }
 
     /**
-     * @type {HTMLElement}
+     * A reference to the target element to which the content is forwarded from the source slot.
+     *
+     * @type {HTMLElement | null}
      * @protected
      */
     get _slotTarget() {
@@ -53,10 +57,21 @@ const SlotTargetMixinImplementation = (superclass) =>
       return null;
     }
 
-    /** @protected */
+    /**
+     * A callback method that is called once the target element's content is changed.
+     *
+     * By default, it does nothing. Override the method to implement your own behavior.
+     *
+     * @protected
+     */
     _onSlotTargetContentChange() {}
 
-    /** @private */
+    /**
+     * Forwards every node from the source slot to the target element
+     * once the source slot' content is changed.
+     *
+     * @private
+     */
     __onSourceSlotContentChange() {
       if (!this._slotTarget) {
         return;
@@ -67,47 +82,9 @@ const SlotTargetMixinImplementation = (superclass) =>
         this._slotTarget.replaceChildren(...nodes);
       }
     }
-
-    /** @override */
-    set textContent(text) {
-      if (this._slotTarget) {
-        this._slotTarget.textContent = text;
-        return;
-      }
-
-      super.textContent = text;
-    }
-
-    /** @override */
-    get textContent() {
-      if (this._slotTarget) {
-        return this._slotTarget.textContent;
-      }
-
-      return super.textContent;
-    }
-
-    /** @override */
-    set innerHTML(html) {
-      if (this._slotTarget) {
-        this._slotTarget.innerHTML = html;
-        return;
-      }
-
-      super.innerHTML = html;
-    }
-
-    /** @override */
-    get innerHTML() {
-      if (this._slotTarget) {
-        return this._slotTarget.innerHTML;
-      }
-
-      return super.innerHTML;
-    }
   };
 
 /**
- * Mixin that moves any nodes added to a source slot to a target element.
+ * A mixin to forward the content from a source slot to a target element.
  */
 export const SlotTargetMixin = dedupingMixin(SlotTargetMixinImplementation);
