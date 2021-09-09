@@ -1,15 +1,13 @@
 {
-  "name": "@vaadin/message-list",
+  "name": "@vaadin/message-input",
   "version": "22.0.0-alpha5",
-  "description": "vaadin-messages",
-  "main": "all-imports.js",
-  "module": "all-imports.js",
+  "description": "vaadin-message-input",
+  "main": "vaadin-message-input.js",
+  "module": "vaadin-message-input.js",
   "repository": "vaadin/web-components",
   "keywords": [
     "Vaadin",
-    "vaadin-messages",
-    "vaadin-message",
-    "vaadin-message-list",
+    "message-input",
     "web-components",
     "web-component",
     "polymer"
@@ -23,8 +21,6 @@
   "files": [
     "vaadin-*.d.ts",
     "vaadin-*.js",
-    "all-imports.d.ts",
-    "all-imports.js",
     "src",
     "theme"
   ],
