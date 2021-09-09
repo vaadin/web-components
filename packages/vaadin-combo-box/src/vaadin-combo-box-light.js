@@ -8,7 +8,7 @@ import { dashToCamelCase } from '@polymer/polymer/lib/utils/case-map.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ComboBoxMixin } from './vaadin-combo-box-mixin.js';
 import { ComboBoxDataProviderMixin } from './vaadin-combo-box-data-provider-mixin.js';
-import './vaadin-combo-box-dropdown-wrapper.js';
+import './vaadin-combo-box-dropdown.js';
 
 /**
  * `<vaadin-combo-box-light>` is a customizable version of the `<vaadin-combo-box>` providing
@@ -77,8 +77,8 @@ class ComboBoxLightElement extends ThemableMixin(ComboBoxDataProviderMixin(Combo
 
       <slot></slot>
 
-      <vaadin-combo-box-dropdown-wrapper
-        id="overlay"
+      <vaadin-combo-box-dropdown
+        id="dropdown"
         opened="[[opened]]"
         position-target="[[inputElement]]"
         renderer="[[renderer]]"
@@ -87,7 +87,7 @@ class ComboBoxLightElement extends ThemableMixin(ComboBoxDataProviderMixin(Combo
         _item-label-path="[[itemLabelPath]]"
         loading="[[loading]]"
         theme="[[theme]]"
-      ></vaadin-combo-box-dropdown-wrapper>
+      ></vaadin-combo-box-dropdown>
     `;
   }
 

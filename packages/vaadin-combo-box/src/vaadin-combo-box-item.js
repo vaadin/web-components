@@ -105,10 +105,7 @@ class ComboBoxItemElement extends ThemableMixin(DirMixin(PolymerElement)) {
   connectedCallback() {
     super.connectedCallback();
 
-    const overlay = this.getRootNode().host.getRootNode().host;
-    const dropdown = overlay.__dataHost;
-    const comboBoxOverlay = dropdown.getRootNode().host;
-    this._comboBox = comboBoxOverlay.getRootNode().host;
+    this._comboBox = this.parentNode.comboBox;
 
     const hostDir = this._comboBox.getAttribute('dir');
     if (hostDir) {

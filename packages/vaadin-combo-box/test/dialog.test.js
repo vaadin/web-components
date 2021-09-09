@@ -24,7 +24,7 @@ describe('dialog', () => {
     comboBox.open();
     mousedown(comboBox);
     await nextFrame();
-    expect(comboBox.$.overlay.$.dropdown.$.overlay._last).to.be.true;
+    expect(comboBox.$.dropdown.$.overlay._last).to.be.true;
   });
 
   it('should not end up behind the dialog overlay on touchstart', async () => {
@@ -34,6 +34,6 @@ describe('dialog', () => {
     touchstart(comboBox, { x, y });
 
     await nextFrame();
-    expect(comboBox.$.overlay.$.dropdown.$.overlay._last).to.be.true;
+    expect(comboBox.$.dropdown.$.overlay._last).to.be.true;
   });
 });

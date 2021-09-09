@@ -1,13 +1,12 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
-import '../src/vaadin-combo-box-dropdown.js';
+import '../src/vaadin-combo-box-overlay.js';
 
-describe('dropdown', () => {
-  let dropdown, overlay;
+describe('overlay', () => {
+  let overlay;
 
   beforeEach(() => {
-    dropdown = fixtureSync(`<vaadin-combo-box-dropdown></vaadin-combo-box-dropdown>`);
-    overlay = dropdown.$.overlay;
+    overlay = fixtureSync(`<vaadin-combo-box-overlay></vaadin-combo-box-overlay>`);
   });
 
   it('should not show the overlay when closed', () => {

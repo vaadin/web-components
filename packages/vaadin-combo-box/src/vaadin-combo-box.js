@@ -9,7 +9,7 @@ import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ComboBoxMixin } from './vaadin-combo-box-mixin.js';
 import '@vaadin/vaadin-text-field/src/vaadin-text-field.js';
-import './vaadin-combo-box-dropdown-wrapper.js';
+import './vaadin-combo-box-dropdown.js';
 import { ComboBoxDataProviderMixin } from './vaadin-combo-box-data-provider-mixin.js';
 
 /**
@@ -216,8 +216,8 @@ class ComboBoxElement extends ElementMixin(
         <div part="toggle-button" id="toggleButton" slot="suffix" role="button" aria-label="Toggle"></div>
       </vaadin-text-field>
 
-      <vaadin-combo-box-dropdown-wrapper
-        id="overlay"
+      <vaadin-combo-box-dropdown
+        id="dropdown"
         opened="[[opened]]"
         renderer="[[renderer]]"
         position-target="[[_getPositionTarget()]]"
@@ -226,7 +226,7 @@ class ComboBoxElement extends ElementMixin(
         _item-label-path="[[itemLabelPath]]"
         loading="[[loading]]"
         theme="[[theme]]"
-      ></vaadin-combo-box-dropdown-wrapper>
+      ></vaadin-combo-box-dropdown>
     `;
   }
 

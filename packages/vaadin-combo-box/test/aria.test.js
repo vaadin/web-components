@@ -34,7 +34,7 @@ describe('ARIA', () => {
     });
 
     it('should set role listbox on the scroller', () => {
-      const scroller = comboBox.$.overlay._selector;
+      const scroller = comboBox.$.dropdown._scroller;
       expect(scroller.getAttribute('role')).to.equal('listbox');
     });
 

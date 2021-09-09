@@ -7,11 +7,7 @@ import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
 
 describe('filtering items', () => {
-  let comboBox;
-
-  function getFilteredItems() {
-    return comboBox.$.overlay._items;
-  }
+  let comboBox, overlay;
 
   function setInputValue(value) {
     comboBox.inputElement.value = value;
@@ -25,6 +21,7 @@ describe('filtering items', () => {
   beforeEach(() => {
     comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
     comboBox.items = ['foo', 'bar', 'baz'];
+    overlay = comboBox.$.dropdown.$.overlay;
   });
 
   describe('setting the input field value', () => {
@@ -53,7 +50,7 @@ describe('filtering items', () => {
       comboBox.open();
       setInputValue('foo ');
 
-      expect(getFilteredItems()).to.be.empty;
+      expect(comboBox._getOverlayItems()).to.be.empty;
     });
 
     it('should open the popup when the value of the input field is set to none', () => {
@@ -131,7 +128,7 @@ describe('filtering items', () => {
       comboBox.value = 'baz';
 
       onceOpened(comboBox).then(() => {
-        const spy = sinon.spy(comboBox.$.overlay, '_scrollIntoView');
+        const spy = sinon.spy(comboBox.$.dropdown, '_scrollIntoView');
         setInputValue('b');
 
         requestAnimationFrame(() => {
@@ -167,13 +164,13 @@ describe('filtering items', () => {
     it('should filter items using contains', () => {
       setInputValue('a');
 
-      expect(getFilteredItems()).to.eql(['bar', 'baz']);
+      expect(comboBox._getOverlayItems()).to.eql(['bar', 'baz']);
     });
 
     it('should filter out all items with a invalid filter', () => {
       setInputValue('qux');
 
-      expect(getFilteredItems()).to.be.empty;
+      expect(comboBox._getOverlayItems()).to.be.empty;
     });
 
     it('should be reset after closing the dropdown', () => {
@@ -189,27 +186,27 @@ describe('filtering items', () => {
 
       setInputValue('t');
 
-      expect(getFilteredItems()).to.eql([true]);
+      expect(comboBox._getOverlayItems()).to.eql([true]);
     });
 
     it('should show initial selection', () => {
       comboBox.value = 'foo';
       comboBox.open();
 
-      expect(comboBox.$.overlay._selectedItem).to.eql('foo');
+      expect(comboBox.$.dropdown._selectedItem).to.eql('foo');
     });
 
     it('should not lose the selected value', () => {
       comboBox.value = 'foo';
       setInputValue('bar');
 
-      expect(comboBox.$.overlay._selectedItem).to.eql('foo');
+      expect(comboBox.$.dropdown._selectedItem).to.eql('foo');
     });
 
     it('should ignore case', () => {
       setInputValue('FOO');
 
-      expect(getFilteredItems()).to.eql(['foo']);
+      expect(comboBox._getOverlayItems()).to.eql(['foo']);
     });
 
     it('should focus filtered items on match case insensitively', () => {
@@ -232,7 +229,7 @@ describe('filtering items', () => {
     it('should not filter with a null filter', () => {
       setInputValue(null);
 
-      expect(getFilteredItems()).to.eql(['foo', 'bar', 'baz']);
+      expect(comboBox._getOverlayItems()).to.eql(['foo', 'bar', 'baz']);
     });
 
     it('should not throw an error when items arent set', () => {
@@ -240,13 +237,13 @@ describe('filtering items', () => {
 
       setInputValue('foo');
 
-      expect(getFilteredItems()).to.be.null;
+      expect(comboBox._getOverlayItems()).to.be.null;
     });
 
     it('should hide overlay when filtered items length is 0', () => {
       setInputValue('THIS IS NOT FOUND');
 
-      expect(comboBox.opened && comboBox.$.overlay.$.dropdown.$.overlay.hidden).to.be.true;
+      expect(comboBox.opened && overlay.hidden).to.be.true;
     });
   });
 
@@ -265,7 +262,7 @@ describe('filtering items', () => {
     it('should not filter items', () => {
       setInputValue('foo');
 
-      expect(getFilteredItems()).to.eql(['foo', 'bar', 'baz']);
+      expect(comboBox._getOverlayItems()).to.eql(['foo', 'bar', 'baz']);
     });
 
     it('should remove focus while loading', () => {
@@ -323,7 +320,7 @@ describe('filtering items', () => {
       comboBox.loading = true;
 
       expect(comboBox.opened).to.be.true;
-      expect(comboBox.$.overlay.hidden).to.be.false;
+      expect(comboBox.$.dropdown.hidden).to.be.false;
     });
 
     // FIXME(@platosha): Hiding does not play nice with lazy loading.
@@ -334,32 +331,27 @@ describe('filtering items', () => {
       comboBox.loading = true;
 
       expect(comboBox.opened).to.be.true;
-      expect(comboBox.$.overlay._scroller.hidden).to.be.true;
+      expect(comboBox.$.dropdown._scroller.hidden).to.be.true;
     });
 
     it('should refresh items after reassignment', () => {
       comboBox.filteredItems = ['foo'];
 
-      expect(getFilteredItems()).to.eql(['foo']);
+      expect(comboBox._getOverlayItems()).to.eql(['foo']);
     });
 
     it('should toggle loading attributes to host and overlay', () => {
       comboBox.loading = true;
       expect(comboBox.hasAttribute('loading')).to.be.true;
-
-      comboBox.open();
-      expect(comboBox.$.overlay.$.dropdown.$.overlay.hasAttribute('loading')).to.be.true;
+      expect(overlay.hasAttribute('loading')).to.be.true;
 
       comboBox.loading = false;
       expect(comboBox.hasAttribute('loading')).to.be.false;
-      expect(comboBox.$.overlay.$.dropdown.$.overlay.hasAttribute('loading')).to.be.false;
+      expect(overlay.hasAttribute('loading')).to.be.false;
     });
 
     it('should not notify resize the dropdown if not opened', () => {
-      comboBox.open();
-      comboBox.close();
-
-      const resizeSpy = sinon.spy(comboBox.$.overlay.$.dropdown, 'notifyResize');
+      const resizeSpy = sinon.spy(comboBox.$.dropdown, 'notifyResize');
       comboBox.filteredItems = ['foo', 'bar', 'baz'];
 
       expect(resizeSpy.called).to.be.false;

@@ -272,27 +272,21 @@ export const ComboBoxMixin = (subclass) =>
       this._lastCommittedValue = this.value;
       IronA11yAnnouncer.requestAvailability();
 
-      // 2.0 does not support 'overlay.selection-changed' syntax in listeners
-      this.$.overlay.addEventListener('selection-changed', this._boundOverlaySelectedItemChanged);
+      this.$.dropdown.addEventListener('selection-changed', this._boundOverlaySelectedItemChanged);
 
       this.addEventListener('vaadin-combo-box-dropdown-closed', this._boundClose);
       this.addEventListener('vaadin-combo-box-dropdown-opened', this._boundOnOpened);
       this.addEventListener('keydown', this._boundOnKeyDown);
       this.addEventListener('click', this._boundOnClick);
 
-      this.$.overlay.addEventListener('vaadin-overlay-touch-action', this._boundOnOverlayTouchAction);
+      this.$.dropdown.addEventListener('vaadin-overlay-touch-action', this._boundOnOverlayTouchAction);
 
       this.addEventListener('touchend', this._boundOnTouchend);
 
       const bringToFrontListener = () => {
-        const overlay = this.$.overlay;
-        const dropdown = overlay && overlay.$.dropdown;
-        // Check dropdown.$ because overlay is lazily instantiated
-        if (dropdown && dropdown.$) {
-          requestAnimationFrame(() => {
-            dropdown.$.overlay.bringToFront();
-          });
-        }
+        requestAnimationFrame(() => {
+          this.$.dropdown.$.overlay.bringToFront();
+        });
       };
 
       this.addEventListener('mousedown', bringToFrontListener);
@@ -308,11 +302,11 @@ export const ComboBoxMixin = (subclass) =>
      * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
      */
     requestContentUpdate() {
-      if (!this.$.overlay._selector) {
+      if (!this.$.dropdown._scroller) {
         return;
       }
 
-      this.$.overlay._selector.querySelectorAll('vaadin-combo-box-item').forEach((item) => {
+      this.$.dropdown._scroller.querySelectorAll('vaadin-combo-box-item').forEach((item) => {
         item.requestContentUpdate();
       });
     }
@@ -356,7 +350,7 @@ export const ComboBoxMixin = (subclass) =>
         this._openedWithFocusRing =
           this.hasAttribute('focus-ring') || (this.focusElement && this.focusElement.hasAttribute('focus-ring'));
         // For touch devices, we don't want to popup virtual keyboard unless input is explicitly focused by the user.
-        if (!this.hasAttribute('focused') && !this.$.overlay.touchDevice) {
+        if (!this.hasAttribute('focused') && !this.$.dropdown.touchDevice) {
           this.focus();
         }
       } else {
@@ -424,7 +418,7 @@ export const ComboBoxMixin = (subclass) =>
 
     /** @private */
     _getItemLabel(item) {
-      return this.$.overlay.getItemLabel(item);
+      return this.$.dropdown.getItemLabel(item);
     }
 
     /** @private */
@@ -439,8 +433,9 @@ export const ComboBoxMixin = (subclass) =>
     /** @private */
     _onArrowDown() {
       if (this.opened) {
-        if (this.$.overlay._items) {
-          this._focusedIndex = Math.min(this.$.overlay._items.length - 1, this._focusedIndex + 1);
+        const items = this._getOverlayItems();
+        if (items) {
+          this._focusedIndex = Math.min(items.length - 1, this._focusedIndex + 1);
           this._prefillFocusedItemLabel();
         }
       } else {
@@ -454,8 +449,9 @@ export const ComboBoxMixin = (subclass) =>
         if (this._focusedIndex > -1) {
           this._focusedIndex = Math.max(0, this._focusedIndex - 1);
         } else {
-          if (this.$.overlay._items) {
-            this._focusedIndex = this.$.overlay._items.length - 1;
+          const items = this._getOverlayItems();
+          if (items) {
+            this._focusedIndex = items.length - 1;
           }
         }
 
@@ -473,7 +469,7 @@ export const ComboBoxMixin = (subclass) =>
         this._inputElementValue = '';
         // 1ms delay needed for OSX VoiceOver to realise input value was reset
         setTimeout(() => {
-          this._inputElementValue = this._getItemLabel(this.$.overlay._focusedItem);
+          this._inputElementValue = this._getItemLabel(this.$.dropdown.focusedItem);
           this._markAllSelectionRange();
         }, 1);
       }
@@ -563,7 +559,7 @@ export const ComboBoxMixin = (subclass) =>
         toggleElement.addEventListener('mousedown', (e) => e.preventDefault());
         // Unfocus previously focused element if focus is not inside combo box (on touch devices)
         toggleElement.addEventListener('click', () => {
-          if (this.$.overlay.touchDevice && !this.hasAttribute('focused')) {
+          if (this.$.dropdown.touchDevice && !this.hasAttribute('focused')) {
             document.activeElement.blur();
           }
         });
@@ -598,7 +594,7 @@ export const ComboBoxMixin = (subclass) =>
     _onOpened() {
       setTimeout(() => this._resizeDropdown(), 1);
       // Defer scroll position adjustment to improve performance.
-      window.requestAnimationFrame(() => this.$.overlay.adjustScrollPosition());
+      window.requestAnimationFrame(() => this.$.dropdown.adjustScrollPosition());
 
       // _detectAndDispatchChange() should not consider value changes done before opening
       this._lastCommittedValue = this.value;
@@ -618,8 +614,9 @@ export const ComboBoxMixin = (subclass) =>
 
     /** @private */
     _commitValue() {
-      if (this.$.overlay._items && this._focusedIndex > -1) {
-        const focusedItem = this.$.overlay._items[this._focusedIndex];
+      const items = this._getOverlayItems();
+      if (items && this._focusedIndex > -1) {
+        const focusedItem = items[this._focusedIndex];
         if (this.selectedItem !== focusedItem) {
           this.selectedItem = focusedItem;
         }
@@ -723,7 +720,7 @@ export const ComboBoxMixin = (subclass) =>
       }
 
       // Scroll to the top of the list whenever the filter changes.
-      this.$.overlay._scrollIntoView(0);
+      this.$.dropdown._scrollIntoView(0);
 
       if (this.items) {
         this.filteredItems = this._filterItems(this.items, filter);
@@ -763,7 +760,7 @@ export const ComboBoxMixin = (subclass) =>
 
     /** @private */
     _resizeDropdown() {
-      this.$.overlay.$.dropdown.notifyResize();
+      this.$.dropdown.notifyResize();
     }
 
     /** @private */
@@ -806,8 +803,9 @@ export const ComboBoxMixin = (subclass) =>
         }
       }
 
-      this.$.overlay._selectedItem = selectedItem;
-      if (this.filteredItems && this.$.overlay._items) {
+      this.$.dropdown._selectedItem = selectedItem;
+      const items = this._getOverlayItems();
+      if (this.filteredItems && items) {
         this._focusedIndex = this.filteredItems.indexOf(selectedItem);
       }
     }
@@ -882,7 +880,7 @@ export const ComboBoxMixin = (subclass) =>
 
         this._focusedIndex =
           this.opened || this.autoOpenDisabled
-            ? this.$.overlay.indexOfLabel(this.filter)
+            ? this.$.dropdown.indexOfLabel(this.filter)
             : this._indexOfValue(this.value, this.filteredItems);
       }
     }
@@ -920,8 +918,13 @@ export const ComboBoxMixin = (subclass) =>
     }
 
     /** @private */
+    _getOverlayItems() {
+      return this.$.dropdown._items;
+    }
+
+    /** @private */
     _setOverlayItems(items) {
-      this.$.overlay.set('_items', items);
+      this.$.dropdown.set('_items', items);
     }
 
     /** @private */
@@ -967,8 +970,7 @@ export const ComboBoxMixin = (subclass) =>
     /** @private */
     _onFocusout(event) {
       // Fixes the problem with `focusout` happening when clicking on the scroll bar on Edge
-      const dropdown = this.$.overlay.$.dropdown;
-      if (dropdown && dropdown.$ && event.relatedTarget === dropdown.$.overlay) {
+      if (event.relatedTarget === this.$.dropdown.$.overlay) {
         event.composedPath()[0].focus();
         return;
       }

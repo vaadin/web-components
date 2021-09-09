@@ -5,18 +5,24 @@ import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
 
 describe('scrolling', () => {
-  let comboBox, input;
+  let comboBox, overlay, scroller, input;
 
   beforeEach(() => {
     comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
+    comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
+    overlay = comboBox.$.dropdown.$.overlay;
     input = comboBox.inputElement;
+    scroller = comboBox.$.dropdown._scroller;
+  });
+
+  afterEach(() => {
+    comboBox.close();
   });
 
   (isIOS ? describe : describe.skip)('iOS', () => {
     it('should have momentum scrolling enabled', () => {
       comboBox.open();
 
-      const scroller = comboBox.$.overlay._scroller;
       expect(getComputedStyle(scroller).WebkitOverflowScrolling).to.equal('touch');
     });
   });
@@ -40,7 +46,6 @@ describe('scrolling', () => {
     it('should the height of scroller extends taller than mins-height for many items', () => {
       comboBox.open();
 
-      const scroller = comboBox.$.overlay._scroller;
       const height = parseFloat(getComputedStyle(scroller).height.split('p')[0]);
       expect(height).to.above(116);
     });
@@ -60,14 +65,14 @@ describe('scrolling', () => {
     it('should be zero when no items are selected', () => {
       comboBox.open();
 
-      expect(comboBox.$.overlay._scroller.scrollTop).to.equal(0);
+      expect(scroller.scrollTop).to.equal(0);
     });
 
     it('should be zero when the first item is selected', () => {
       comboBox.value = comboBox.items[0];
       comboBox.open();
 
-      expect(comboBox.$.overlay._scroller.scrollTop).to.equal(0);
+      expect(scroller.scrollTop).to.equal(0);
     });
 
     function expectSelectedItemPositionToBeVisible() {
@@ -75,7 +80,7 @@ describe('scrolling', () => {
       expect(selectedItem).to.be.ok;
 
       const selectedItemRect = selectedItem.getBoundingClientRect();
-      const overlayRect = comboBox.$.overlay.$.dropdown.$.overlay.getBoundingClientRect();
+      const overlayRect = overlay.getBoundingClientRect();
       expect(selectedItemRect.left).to.be.at.least(overlayRect.left - 1);
       expect(selectedItemRect.top).to.be.at.least(overlayRect.top - 1);
       expect(selectedItemRect.right).to.be.at.most(overlayRect.right + 1);
@@ -104,13 +109,13 @@ describe('scrolling', () => {
 
     it('should not close the items when touching scroll bar', () => {
       comboBox.open();
-      focusout(input, comboBox.$.overlay.$.dropdown.$.overlay);
+      focusout(input, overlay);
       expect(comboBox.opened).to.be.true;
     });
 
     it('should keep the input focused while scrolling', () => {
       comboBox.open();
-      focusout(input, comboBox.$.overlay.$.dropdown.$.overlay);
+      focusout(input, overlay);
       expect(input.hasAttribute('focused')).to.be.true;
     });
   });

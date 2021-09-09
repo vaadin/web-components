@@ -5,56 +5,21 @@
  */
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
-import { DisableUpgradeMixin } from '@polymer/polymer/lib/mixins/disable-upgrade-mixin.js';
-import { OverlayElement } from '@vaadin/vaadin-overlay/src/vaadin-overlay.js';
 import { IronResizableBehavior } from '@polymer/iron-resizable-behavior/iron-resizable-behavior.js';
-import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
-
-registerStyles(
-  'vaadin-combo-box-overlay',
-  css`
-    :host {
-      width: var(--vaadin-combo-box-overlay-width, var(--_vaadin-combo-box-overlay-default-width, auto));
-    }
-  `,
-  { moduleId: 'vaadin-combo-box-overlay-styles' }
-);
+import './vaadin-combo-box-item.js';
+import './vaadin-combo-box-overlay.js';
+import './vaadin-combo-box-scroller.js';
 
 const ONE_THIRD = 0.3;
 
-/**
- * An element used internally by `<vaadin-combo-box>`. Not intended to be used separately.
- *
- * @extends OverlayElement
- * @private
- */
-class ComboBoxOverlayElement extends OverlayElement {
-  static get is() {
-    return 'vaadin-combo-box-overlay';
+const TOUCH_DEVICE = (() => {
+  try {
+    document.createEvent('TouchEvent');
+    return true;
+  } catch (e) {
+    return false;
   }
-
-  connectedCallback() {
-    super.connectedCallback();
-
-    const dropdown = this.__dataHost;
-    const comboBoxOverlay = dropdown.getRootNode().host;
-    const comboBox = comboBoxOverlay && comboBoxOverlay.getRootNode().host;
-    const hostDir = comboBox && comboBox.getAttribute('dir');
-    if (hostDir) {
-      this.setAttribute('dir', hostDir);
-    }
-  }
-
-  ready() {
-    super.ready();
-    const loader = document.createElement('div');
-    loader.setAttribute('part', 'loader');
-    const content = this.shadowRoot.querySelector('[part~="content"]');
-    content.parentNode.insertBefore(loader, content);
-  }
-}
-
-customElements.define(ComboBoxOverlayElement.is, ComboBoxOverlayElement);
+})();
 
 /**
  * Element for internal use only.
@@ -62,40 +27,39 @@ customElements.define(ComboBoxOverlayElement.is, ComboBoxOverlayElement);
  * @extends HTMLElement
  * @private
  */
-class ComboBoxDropdownElement extends DisableUpgradeMixin(mixinBehaviors(IronResizableBehavior, PolymerElement)) {
+class ComboBoxDropdown extends mixinBehaviors(IronResizableBehavior, PolymerElement) {
+  static get is() {
+    return 'vaadin-combo-box-dropdown';
+  }
+
   static get template() {
     return html`
       <style>
         :host {
           display: block;
         }
-
-        :host > #overlay {
-          display: none;
-        }
       </style>
       <vaadin-combo-box-overlay
         id="overlay"
-        hidden$="[[hidden]]"
-        opened="[[opened]]"
-        style="align-items: stretch; margin: 0;"
+        hidden$="[[_isOverlayHidden(_items.*, loading)]]"
+        loading$="[[loading]]"
+        opened="[[_overlayOpened]]"
         theme$="[[theme]]"
-      >
-        <slot></slot>
-      </vaadin-combo-box-overlay>
+      ></vaadin-combo-box-overlay>
     `;
-  }
-
-  static get is() {
-    return 'vaadin-combo-box-dropdown';
   }
 
   static get properties() {
     return {
-      opened: {
+      /**
+       * True if the device supports touch events.
+       */
+      touchDevice: {
         type: Boolean,
-        observer: '_openedChanged'
+        value: TOUCH_DEVICE
       },
+
+      opened: Boolean,
 
       /**
        * The element to position/align the dropdown by.
@@ -113,10 +77,69 @@ class ComboBoxDropdownElement extends DisableUpgradeMixin(mixinBehaviors(IronRes
       },
 
       /**
+       * Custom function for rendering the content of the `<vaadin-combo-box-item>` propagated from the combo box element.
+       */
+      renderer: Function,
+
+      /**
+       * `true` when new items are being loaded.
+       */
+      loading: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true,
+        observer: '_loadingChanged'
+      },
+
+      /**
        * Used to propagate the `theme` attribute from the host element.
        */
-      theme: String
+      theme: String,
+
+      _selectedItem: {
+        type: Object
+      },
+
+      _items: {
+        type: Array
+      },
+
+      _focusedIndex: {
+        type: Number,
+        value: -1
+      },
+
+      focusedItem: {
+        type: String,
+        computed: '_getFocusedItem(_focusedIndex)'
+      },
+
+      _itemLabelPath: {
+        type: String,
+        value: 'label'
+      },
+
+      _itemValuePath: {
+        type: String,
+        value: 'value'
+      },
+
+      _scroller: Object,
+
+      _itemIdPath: String,
+
+      _overlayOpened: {
+        type: Boolean,
+        observer: '_openedChanged'
+      }
     };
+  }
+
+  static get observers() {
+    return [
+      '_openedOrItemsChanged(opened, _items, loading)',
+      '__updateScroller(_scroller, _items, opened, loading, _selectedItem, _itemIdPath, _focusedIndex, renderer, theme)'
+    ];
   }
 
   constructor() {
@@ -133,8 +156,34 @@ class ComboBoxDropdownElement extends DisableUpgradeMixin(mixinBehaviors(IronRes
   ready() {
     super.ready();
 
+    const overlay = this.$.overlay;
+
+    overlay.renderer = (root) => {
+      if (!root.firstChild) {
+        const scroller = document.createElement('vaadin-combo-box-scroller');
+        root.appendChild(scroller);
+      }
+    };
+
+    // Ensure the scroller is rendered
+    overlay.requestContentUpdate();
+
+    this._scroller = overlay.content.querySelector('vaadin-combo-box-scroller');
+
+    this._scroller.getItemLabel = this.getItemLabel.bind(this);
+    this._scroller.comboBox = this.getRootNode().host;
+
+    this._scroller.addEventListener('selection-changed', (e) => this._forwardScrollerEvent(e));
+    this._scroller.addEventListener('index-requested', (e) => this._forwardScrollerEvent(e));
+
+    overlay.addEventListener('touchend', (e) => this._fireTouchAction(e));
+    overlay.addEventListener('touchmove', (e) => this._fireTouchAction(e));
+
+    // Prevent blurring the input when clicking inside the overlay.
+    overlay.addEventListener('mousedown', (e) => e.preventDefault());
+
     // Preventing the default modal behaviour of the overlay on input clicking
-    this.$.overlay.addEventListener('vaadin-overlay-outside-click', (e) => {
+    overlay.addEventListener('vaadin-overlay-outside-click', (e) => {
       e.preventDefault();
     });
   }
@@ -144,7 +193,7 @@ class ComboBoxDropdownElement extends DisableUpgradeMixin(mixinBehaviors(IronRes
     this.removeEventListener('iron-resize', this._boundSetPosition);
 
     // Making sure the overlay is closed and removed from DOM after detaching the dropdown.
-    this.opened = false;
+    this._overlayOpened = false;
   }
 
   notifyResize() {
@@ -153,20 +202,23 @@ class ComboBoxDropdownElement extends DisableUpgradeMixin(mixinBehaviors(IronRes
     if (this.positionTarget && this.opened) {
       this._setPosition();
       // Schedule another position update (to cover virtual keyboard opening for example)
-      requestAnimationFrame(this._setPosition.bind(this));
+      requestAnimationFrame(() => {
+        this._setPosition();
+      });
     }
   }
 
-  /**
-   * Fired after the `vaadin-combo-box-dropdown` opens.
-   *
-   * @event vaadin-combo-box-dropdown-opened
-   */
-  /**
-   * Fired after the `vaadin-combo-box-dropdown` closes.
-   *
-   * @event vaadin-combo-box-dropdown-closed
-   */
+  _fireTouchAction(sourceEvent) {
+    this.dispatchEvent(
+      new CustomEvent('vaadin-overlay-touch-action', {
+        detail: { sourceEvent: sourceEvent }
+      })
+    );
+  }
+
+  _forwardScrollerEvent(event) {
+    this.dispatchEvent(new CustomEvent(event.type, { detail: event.detail }));
+  }
 
   _openedChanged(opened, oldValue) {
     if (!!opened === !!oldValue) {
@@ -185,6 +237,113 @@ class ComboBoxDropdownElement extends DisableUpgradeMixin(mixinBehaviors(IronRes
       document.removeEventListener('click', this._boundOutsideClickListener, true);
       this.dispatchEvent(new CustomEvent('vaadin-combo-box-dropdown-closed', { bubbles: true, composed: true }));
     }
+  }
+
+  _openedOrItemsChanged(opened, items, loading) {
+    // See https://github.com/vaadin/vaadin-combo-box/pull/964
+    const hasItems = items && items.length;
+    if (!hasItems) {
+      this.__emptyItems = true;
+    }
+    this._overlayOpened = !!(opened && (loading || hasItems));
+    this.__emptyItems = false;
+  }
+
+  _loadingChanged() {
+    this._setOverlayHeight();
+  }
+
+  _setOverlayHeight() {
+    if (!this._scroller || !this.opened || !this.positionTarget) {
+      return;
+    }
+
+    const targetRect = this.positionTarget.getBoundingClientRect();
+
+    this._scroller.style.maxHeight =
+      getComputedStyle(this).getPropertyValue('--vaadin-combo-box-overlay-max-height') || '65vh';
+
+    const maxHeight = this._maxOverlayHeight(targetRect);
+
+    // overlay max height is restrained by the #scroller max height which is set to 65vh in CSS.
+    this.$.overlay.style.maxHeight = maxHeight;
+  }
+
+  _maxOverlayHeight(targetRect) {
+    const margin = 8;
+    const minHeight = 116; // Height of two items in combo-box
+    if (this.alignedAbove) {
+      return Math.max(targetRect.top - margin + Math.min(document.body.scrollTop, 0), minHeight) + 'px';
+    } else {
+      return Math.max(document.documentElement.clientHeight - targetRect.bottom - margin, minHeight) + 'px';
+    }
+  }
+
+  _getFocusedItem(focusedIndex) {
+    if (focusedIndex >= 0) {
+      return this._items[focusedIndex];
+    }
+  }
+
+  /**
+   * Gets the index of the item with the provided label.
+   * @return {number}
+   */
+  indexOfLabel(label) {
+    if (this._items && label) {
+      for (let i = 0; i < this._items.length; i++) {
+        if (this.getItemLabel(this._items[i]).toString().toLowerCase() === label.toString().toLowerCase()) {
+          return i;
+        }
+      }
+    }
+
+    return -1;
+  }
+
+  /**
+   * Gets the label string for the item based on the `_itemLabelPath`.
+   * @return {string}
+   */
+  getItemLabel(item, itemLabelPath) {
+    itemLabelPath = itemLabelPath || this._itemLabelPath;
+    let label = item && itemLabelPath ? this.get(itemLabelPath, item) : undefined;
+    if (label === undefined || label === null) {
+      label = item ? item.toString() : '';
+    }
+    return label;
+  }
+
+  _scrollIntoView(index) {
+    if (!this._scroller) {
+      return;
+    }
+    this._scroller.scrollIntoView(index);
+  }
+
+  adjustScrollPosition() {
+    if (this.opened && this._items) {
+      this._scrollIntoView(this._focusedIndex);
+    }
+  }
+
+  __updateScroller(scroller, items, opened, loading, selectedItem, itemIdPath, focusedIndex, renderer, theme) {
+    if (scroller) {
+      scroller.setProperties({
+        items: opened ? items : [],
+        opened,
+        loading,
+        selectedItem,
+        itemIdPath,
+        focusedIndex,
+        renderer,
+        theme
+      });
+    }
+  }
+
+  _isOverlayHidden() {
+    return !this.loading && !(this._items && this._items.length);
   }
 
   // We need to listen on 'click' event and capture it and close the overlay before
@@ -250,7 +409,7 @@ class ComboBoxDropdownElement extends DisableUpgradeMixin(mixinBehaviors(IronRes
   }
 
   _setPosition(e) {
-    if (this.hidden) {
+    if (this._isOverlayHidden()) {
       return;
     }
     if (e && e.target) {
@@ -280,10 +439,20 @@ class ComboBoxDropdownElement extends DisableUpgradeMixin(mixinBehaviors(IronRes
     this.$.overlay.style.justifyContent = this.alignedAbove ? 'flex-end' : 'flex-start';
 
     this._setOverlayWidth();
-
-    // TODO: fire only when position actually changes changes
-    this.dispatchEvent(new CustomEvent('position-changed'));
+    this._setOverlayHeight();
   }
+
+  /**
+   * Fired after the `vaadin-combo-box-dropdown` opens.
+   *
+   * @event vaadin-combo-box-dropdown-opened
+   */
+
+  /**
+   * Fired after the `vaadin-combo-box-dropdown` closes.
+   *
+   * @event vaadin-combo-box-dropdown-closed
+   */
 }
 
-customElements.define(ComboBoxDropdownElement.is, ComboBoxDropdownElement);
+customElements.define(ComboBoxDropdown.is, ComboBoxDropdown);

@@ -6,10 +6,11 @@ import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
 
 describe('Properties', () => {
-  let comboBox, input;
+  let comboBox, overlay, input;
 
   beforeEach(() => {
     comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
+    overlay = comboBox.$.dropdown.$.overlay;
     input = comboBox.inputElement;
   });
 
@@ -19,7 +20,7 @@ describe('Properties', () => {
       document.documentElement.setAttribute('dir', 'rtl');
       comboBox.items = ['foo', 'bar'];
       comboBox.open();
-      expect(comboBox.$.overlay.$.dropdown.$.overlay.getAttribute('dir')).to.eql('ltr');
+      expect(overlay.getAttribute('dir')).to.eql('ltr');
       document.documentElement.removeAttribute('dir');
     });
   });
@@ -281,15 +282,11 @@ describe('Properties', () => {
     });
 
     it('should not open the overlay after clearing the value', () => {
-      comboBox.open();
-      comboBox.close();
-
-      const overlayElement = comboBox.$.overlay.$.dropdown.$.overlay;
       comboBox.value = 'foo';
 
       comboBox._clear();
 
-      expect(overlayElement.opened).not.to.be.true;
+      expect(overlay.opened).not.to.be.true;
     });
   });
 
@@ -316,16 +313,11 @@ describe('Properties', () => {
     });
 
     describe('touch devices', () => {
-      beforeEach(() => {
-        comboBox.open();
-        comboBox.close();
-      });
-
       it('should blur the input on touchend', () => {
         comboBox.focus();
 
         const spy = sinon.spy(input, 'blur');
-        comboBox.$.overlay.$.dropdown.$.overlay.dispatchEvent(new CustomEvent('touchend'));
+        overlay.dispatchEvent(new CustomEvent('touchend'));
         expect(spy.callCount).to.eql(1);
       });
 
@@ -333,7 +325,7 @@ describe('Properties', () => {
         comboBox.focus();
 
         const spy = sinon.spy(input, 'blur');
-        comboBox.$.overlay.$.dropdown.$.overlay.dispatchEvent(new CustomEvent('touchmove'));
+        overlay.dispatchEvent(new CustomEvent('touchmove'));
         expect(spy.callCount).to.eql(1);
       });
 
@@ -341,7 +333,7 @@ describe('Properties', () => {
         comboBox.focus();
 
         const spy = sinon.spy(input, 'blur');
-        comboBox.$.overlay.$.dropdown.$.overlay.dispatchEvent(new CustomEvent('touchstart'));
+        overlay.dispatchEvent(new CustomEvent('touchstart'));
         expect(spy.callCount).to.eql(0);
       });
     });
@@ -416,10 +408,7 @@ describe('theme attribute', () => {
   });
 
   it('should propagate theme attribute to overlay', () => {
-    comboBox.open();
-    comboBox.close();
-
-    expect(comboBox.$.overlay.$.dropdown.$.overlay.getAttribute('theme')).to.equal('foo');
+    expect(comboBox.$.dropdown.$.overlay.getAttribute('theme')).to.equal('foo');
   });
 
   it('should propagate theme attribute to item', () => {

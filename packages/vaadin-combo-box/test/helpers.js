@@ -41,7 +41,7 @@ export const onceOpened = (element) => {
 };
 
 export const onceScrolled = (comboBox) => {
-  const scroller = comboBox.$.overlay._scroller;
+  const scroller = comboBox.$.dropdown._scroller;
   return new Promise((resolve) => {
     const listener = () => {
       scroller.removeEventListener('scroll', listener);
@@ -61,21 +61,21 @@ export const makeItems = (length) => {
  * Returns first item of the combo box dropdown.
  */
 export const getFirstItem = (comboBox) => {
-  return comboBox.$.overlay._scroller.querySelector('vaadin-combo-box-item');
+  return comboBox.$.dropdown._scroller.querySelector('vaadin-combo-box-item');
 };
 
 /**
  * Returns selected item in the combo box dropdown.
  */
 export const getSelectedItem = (comboBox) => {
-  return comboBox.$.overlay._scroller.querySelector('[selected]');
+  return comboBox.$.dropdown._scroller.querySelector('[selected]');
 };
 
 /**
  * Returns all the items of the combo box dropdown.
  */
 export const getAllItems = (comboBox) => {
-  return Array.from(comboBox.$.overlay._scroller.querySelectorAll('vaadin-combo-box-item'))
+  return Array.from(comboBox.$.dropdown._scroller.querySelectorAll('vaadin-combo-box-item'))
     .filter((item) => !item.hidden)
     .sort((a, b) => a.index - b.index);
 };
@@ -84,7 +84,7 @@ export const getAllItems = (comboBox) => {
  * Returns the items that are inside the bounds of the given combo box's dropdown viewport.
  */
 export const getViewportItems = (comboBox) => {
-  const overlayRect = comboBox.$.overlay.$.dropdown.$.overlay.$.content.getBoundingClientRect();
+  const overlayRect = comboBox.$.dropdown.$.overlay.$.content.getBoundingClientRect();
 
   return getAllItems(comboBox).filter((item) => {
     const itemRect = item.getBoundingClientRect();
@@ -93,21 +93,21 @@ export const getViewportItems = (comboBox) => {
 };
 
 export const getVisibleItemsCount = (comboBox) => {
-  return comboBox.$.overlay._visibleItemsCount();
+  return comboBox.$.dropdown._scroller._visibleItemsCount();
 };
 
 /**
  * Scrolls the combo box dropdown to the given index.
  */
 export const scrollToIndex = (comboBox, index) => {
-  comboBox.$.overlay.__virtualizer.scrollToIndex(index);
+  comboBox.$.dropdown._scroller.__virtualizer.scrollToIndex(index);
 };
 
 /**
  * Flush the combo box scroller to mitigate timing issues.
  */
 export const flushComboBox = (comboBox) => {
-  comboBox.$.overlay.__virtualizer.flush();
+  comboBox.$.dropdown._scroller.__virtualizer.flush();
 };
 
 /**
@@ -115,7 +115,7 @@ export const flushComboBox = (comboBox) => {
  */
 export const selectItem = (comboBox, index) => {
   // simulates clicking on the overlay items, but it more reliable in tests.
-  fire(comboBox.$.overlay, 'selection-changed', {
+  fire(comboBox.$.dropdown, 'selection-changed', {
     item: comboBox.items[index]
   });
 };
