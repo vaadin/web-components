@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { LabelMixin } from '../src/label-mixin.js';
 
@@ -48,14 +48,20 @@ describe('label-mixin', () => {
       expect(element.hasAttribute('has-label')).to.be.false;
     });
 
-    it('should set has-label attribute when attribute is set', () => {
+    it('should toggle has-label attribute on attribute change', () => {
       element.setAttribute('label', 'Email');
       expect(element.hasAttribute('has-label')).to.be.true;
+
+      element.removeAttribute('label');
+      expect(element.hasAttribute('has-label')).to.be.false;
     });
 
-    it('should set has-label attribute when property is set', () => {
+    it('should toggle has-label attribute on property change', () => {
       element.label = 'Email';
       expect(element.hasAttribute('has-label')).to.be.true;
+
+      element.label = '';
+      expect(element.hasAttribute('has-label')).to.be.false;
     });
   });
 
@@ -78,7 +84,17 @@ describe('label-mixin', () => {
       expect(label.getAttribute('id')).to.match(idRegex);
     });
 
-    it('should set has-label attribute with slotted label', () => {
+    it('should set has-label attribute', () => {
+      expect(element.hasAttribute('has-label')).to.be.true;
+    });
+
+    it('should toggle has-label attribute on label content change', async () => {
+      label.textContent = '';
+      await nextFrame();
+      expect(element.hasAttribute('has-label')).to.be.false;
+
+      label.textContent = 'New Label';
+      await nextFrame();
       expect(element.hasAttribute('has-label')).to.be.true;
     });
 

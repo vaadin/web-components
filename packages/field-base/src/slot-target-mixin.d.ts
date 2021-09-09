@@ -29,15 +29,6 @@ interface SlotTargetMixinMixin {
    * @protected
    */
   _slotTarget: HTMLElement;
-
-  /**
-   * A callback method that is called once the target element's content is changed.
-   *
-   * By default, it does nothing. Override the method to implement your own behavior.
-   *
-   * @protected
-   */
-  _onSlotTargetContentChange(): void;
 }
 
 export { SlotTargetMixinMixinConstructor, SlotTargetMixinMixin };
