@@ -171,6 +171,9 @@ class ComboBoxDropdown extends mixinBehaviors(IronResizableBehavior, PolymerElem
 
     this._scroller = overlay.content.querySelector('vaadin-combo-box-scroller');
 
+    this._scroller.addEventListener('selection-changed', (e) => this._forwardScrollerEvent(e));
+    this._scroller.addEventListener('index-requested', (e) => this._forwardScrollerEvent(e));
+
     overlay.addEventListener('touchend', (e) => this._fireTouchAction(e));
     overlay.addEventListener('touchmove', (e) => this._fireTouchAction(e));
 
@@ -209,6 +212,10 @@ class ComboBoxDropdown extends mixinBehaviors(IronResizableBehavior, PolymerElem
         detail: { sourceEvent: sourceEvent }
       })
     );
+  }
+
+  _forwardScrollerEvent(event) {
+    this.dispatchEvent(new CustomEvent(event.type, { detail: event.detail }));
   }
 
   _openedChanged(opened, oldValue) {

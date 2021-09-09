@@ -239,8 +239,7 @@ class ComboBoxScrollerElement extends PolymerElement {
 
   /** @private */
   __onItemClick(e) {
-    // TODO: find a better approach than using the wrapper
-    this.wrapper.dispatchEvent(new CustomEvent('selection-changed', { detail: { item: e.currentTarget.item } }));
+    this.dispatchEvent(new CustomEvent('selection-changed', { detail: { item: e.currentTarget.item } }));
   }
 
   /**
@@ -283,8 +282,7 @@ class ComboBoxScrollerElement extends PolymerElement {
    */
   __requestItemByIndex(item, index) {
     if (item instanceof ComboBoxPlaceholder && index !== undefined) {
-      // TODO: find a better approach than using the wrapper
-      this.wrapper.dispatchEvent(
+      this.dispatchEvent(
         new CustomEvent('index-requested', { detail: { index, currentScrollerPos: this._oldScrollerPosition } })
       );
     }
