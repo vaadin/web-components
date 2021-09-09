@@ -1,4 +1,4 @@
-# &lt;vaadin-messages&gt;
+# &lt;vaadin-message-list&gt;
 
 [Live demo and examples ↗ ](https://vaadin.com/docs/latest/ds/components/messages)
 |
@@ -6,28 +6,42 @@
 
 [&lt;vaadin-message-list&gt;](https://vaadin.com/components/vaadin-messages) is a Web Component for showing a list of messages, part of the [Vaadin components](https://vaadin.com/components).
 
-[![npm version](https://badgen.net/npm/v/@vaadin/vaadin-messages)](https://www.npmjs.com/package/@vaadin/vaadin-messages)
-[![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-messages)
+[![npm version](https://badgen.net/npm/v/@vaadin/message-list)](https://www.npmjs.com/package/@vaadin/message-list)
+[![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinmessage-list)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
-<vaadin-message></vaadin-message> <vaadin-message foo="bar"></vaadin-message>
+<!-- Example of single messages -->
+<vaadin-message></vaadin-message>
+<vaadin-message foo="bar"></vaadin-message>
+
+<!-- Example of a list of messages -->
+<vaadin-message-list></vaadin-message-list>
+<script>
+  document.querySelector('vaadin-message-list').items = [
+    { userName: 'Alice', time: '8 Minutes ago', text: 'Lunch at the usual place?' },
+    { userName: 'Bob', time: '6 Minutes ago', text: `Yeah, let's go together.` },
+    { userName: 'Alice', time: '2 Minutes ago', text: 'Great! What about you, Charlie?' },
+    { userName: 'Charlie', time: 'A few seconds ago', text: 'I will meet you there.' }
+  ];
+</script>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-messages/master/screenshot.png" width="418" alt="Screenshot of vaadin-message">](https://vaadin.com/components/vaadin-messages)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-messages/master/screenshot.png" width="418" alt="Screenshot of vaadin-message">](https://vaadin.com/components/message-list)
 
 ## Installation
 
-Install `vaadin-messages`:
+Install `vaadin-message-list`:
 
 ```sh
-npm i @vaadin/vaadin-messages --save
+npm i @vaadin/message-list --save
 ```
 
 Once installed, import it in your application:
 
 ```js
-import '@vaadin/vaadin-messages/vaadin-message.js';
+import '@vaadin/message-list/vaadin-message-list.js'; // for a list of messages
+import '@vaadin/message-list/vaadin-message.js'; // for a single message
 ```
 
 ## Getting started
@@ -38,17 +52,23 @@ To use the Material theme, import the correspondent file from the `theme/materia
 
 ## Entry points
 
-- The component with the Lumo theme:
+- The components with the Lumo theme:
 
   `theme/lumo/vaadin-message.js`
 
-- The component with the Material theme:
+  `theme/lumo/vaadin-message-list.js`
+
+- The components with the Material theme:
 
   `theme/material/vaadin-message.js`
 
-- Alias for `theme/lumo/vaadin-message.js`:
+  `theme/material/vaadin-message.-list.js`
 
-- `vaadin-message.js`
+- Alias for `theme/lumo/vaadin-message.js` and `theme/lumo/vaadin-message-list.js`:
+
+  `vaadin-message.js`
+
+  `vaadin-message-list.js`
 
 ## Contributing
 
