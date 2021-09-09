@@ -5,6 +5,8 @@ import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styl
 import { fixtureSync, oneEvent, nextRender } from '@vaadin/testing-helpers';
 import { chartDefaultTheme } from '../theme/vaadin-chart-default-theme.js';
 import Highcharts from 'highcharts/es-modules/masters/highstock.src.js';
+import HttpUtilities from 'highcharts/es-modules/Core/HttpUtilities.js';
+
 import '../vaadin-chart.js';
 
 const chart = css`
@@ -55,7 +57,7 @@ describe('vaadin-chart exporting', () => {
 
   before(() => {
     // Prevent form submit
-    sinon.stub(Highcharts, 'post');
+    sinon.stub(HttpUtilities, 'post');
     // Hook into Highcharts events
     fireEventSpy = sinon.spy(Highcharts, 'fireEvent');
   });
@@ -90,7 +92,7 @@ describe('vaadin-chart exporting', () => {
     observer.observe(document.body, { childList: true });
 
     // Reveal exporting menu items
-    chartContainer.querySelector('.highcharts-contextbutton').onclick();
+    chartContainer.querySelector('button.highcharts-a11y-proxy-button.highcharts-no-tooltip').click();
 
     // Simulate a PNG export
     const pngExportButton = chartContainer.querySelectorAll('.highcharts-menu-item')[2];
@@ -119,7 +121,7 @@ describe('vaadin-chart exporting', () => {
     observer.observe(document.body, { childList: true });
 
     // Reveal exporting menu items
-    chartContainer.querySelector('.highcharts-contextbutton').onclick();
+    chartContainer.querySelector('button.highcharts-a11y-proxy-button.highcharts-no-tooltip').click();
 
     // Simulate a PNG export
     const pngExportButton = chartContainer.querySelectorAll('.highcharts-menu-item')[2];

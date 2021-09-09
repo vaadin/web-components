@@ -29,7 +29,7 @@
     "@vaadin/vaadin-element-mixin": "^22.0.0-alpha5",
     "@vaadin/vaadin-license-checker": "^2.1.0",
     "@vaadin/vaadin-themable-mixin": "^22.0.0-alpha5",
-    "highcharts": "8.1.2"
+    "highcharts": "9.2.2"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",

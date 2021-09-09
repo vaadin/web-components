@@ -44,7 +44,7 @@ describe('vaadin-chart', () => {
       chart.setAttribute('title', 'Custom title');
       document.body.appendChild(chart);
       await oneEvent(chart, 'chart-load');
-      const title = chart.$.chart.querySelector('.highcharts-title > tspan');
+      const title = chart.$.chart.querySelector('.highcharts-title');
       expect(title).to.be.ok;
       expect(title.textContent).to.equal('Custom title');
     });
@@ -53,7 +53,7 @@ describe('vaadin-chart', () => {
       chart.updateConfiguration({ title: { text: 'Awesome chart' } });
       document.body.appendChild(chart);
       await oneEvent(chart, 'chart-load');
-      expect(chart.$.chart.querySelector('.highcharts-title > tspan').textContent).to.equal('Awesome chart');
+      expect(chart.$.chart.querySelector('.highcharts-title').textContent).to.equal('Awesome chart');
     });
 
     it('should support adding chart series', async () => {
@@ -81,7 +81,7 @@ describe('vaadin-chart', () => {
     it('should set chart title using configuration', () => {
       config.setTitle({ text: 'Custom title' });
 
-      const title = chart.$.chart.querySelector('.highcharts-title > tspan');
+      const title = chart.$.chart.querySelector('.highcharts-title');
       expect(title).to.be.ok;
       expect(title.textContent).to.equal('Custom title');
     });
@@ -119,7 +119,7 @@ describe('vaadin-chart', () => {
     it('should set chart title using update', async () => {
       chart.updateConfiguration({ title: { text: 'Custom title' } });
       await oneEvent(chart, 'chart-redraw');
-      const title = chart.$.chart.querySelector('.highcharts-title > tspan');
+      const title = chart.$.chart.querySelector('.highcharts-title');
       expect(title).to.be.ok;
       expect(title.textContent).to.equal('Custom title');
     });
@@ -352,7 +352,7 @@ describe('vaadin-chart', () => {
     it('should apply configuration update when attached to a new parent', async () => {
       chart.updateConfiguration({ title: { text: 'Awesome title' }, credits: { enabled: false } });
       await oneEvent(chart, 'chart-redraw');
-      expect(chart.$.chart.querySelector('.highcharts-title > tspan').textContent).to.equal('Awesome title');
+      expect(chart.$.chart.querySelector('.highcharts-title').textContent).to.equal('Awesome title');
       expect(chart.$.chart.querySelector('.highcharts-credits')).to.be.null;
 
       wrapper.removeChild(chart);
@@ -360,8 +360,8 @@ describe('vaadin-chart', () => {
 
       inner.appendChild(chart);
       await oneEvent(chart, 'chart-redraw');
-      expect(chart.$.chart.querySelector('.highcharts-title > tspan').textContent).to.equal('Awesome title');
-      expect(chart.$.chart.querySelector('.highcharts-subtitle > tspan').textContent).to.equal('Awesome subtitle');
+      expect(chart.$.chart.querySelector('.highcharts-title').textContent).to.equal('Awesome title');
+      expect(chart.$.chart.querySelector('.highcharts-subtitle').textContent).to.equal('Awesome subtitle');
       expect(chart.$.chart.querySelector('.highcharts-credits').textContent).to.equal('Vaadin');
     });
   });
