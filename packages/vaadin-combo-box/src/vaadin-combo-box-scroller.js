@@ -50,46 +50,79 @@ class ComboBoxScrollerElement extends PolymerElement {
 
   static get properties() {
     return {
+      /**
+       * A full set of items to filter the visible options from.
+       * Set to an empty array when combo-box is not opened.
+       */
       items: {
         type: Array,
         observer: '__itemsChanged'
       },
 
+      /**
+       * Index of an item that has focus outline and is scrolled into view.
+       * The actual focus still remains in the input field.
+       */
       focusedIndex: {
         type: Number,
         observer: '__focusedIndexChanged'
       },
 
+      /**
+       * Set to true while combo-box fetches new page from the data provider.
+       */
       loading: {
         type: Boolean,
         observer: '__loadingChanged'
       },
 
+      /**
+       * Whether the combo-box is currently opened or not. If set to false,
+       * calling `scrollIntoView` does not have any effect.
+       */
       opened: {
         type: Boolean
       },
 
+      /**
+       * The selected item from the `items` array.
+       */
       selectedItem: {
         type: Object
       },
 
+      /**
+       * Path for the id of the item, used to detect whether the item is selected.
+       */
       itemIdPath: {
         type: String
       },
 
+      /**
+       * Reference to the combo-box, used by the item elements.
+       */
       comboBox: {
         type: Object
       },
 
+      /**
+       * Function used to set a label for every combo-box item.
+       */
       getItemLabel: {
         type: Object
       },
 
+      /**
+       * Function used to render the content of every combo-box item.
+       */
       renderer: {
         type: Object,
         observer: '__rendererChanged'
       },
 
+      /**
+       * Used to propagate the `theme` attribute from the host element.
+       */
       theme: {
         type: String
       }
