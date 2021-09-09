@@ -77,6 +77,14 @@ class ComboBoxScrollerElement extends PolymerElement {
         type: String
       },
 
+      comboBox: {
+        type: Object
+      },
+
+      getItemLabel: {
+        type: Object
+      },
+
       renderer: {
         type: Object,
         observer: '__rendererChanged'
@@ -217,16 +225,13 @@ class ComboBoxScrollerElement extends PolymerElement {
 
   /** @private */
   __updateElement(el, index) {
-    const wrapper = this.wrapper;
-
     const item = this.items[index];
-
     const focusedIndex = this.focusedIndex;
 
     el.setProperties({
       item,
       index: this.__requestItemByIndex(item, index),
-      label: wrapper.getItemLabel(item),
+      label: this.getItemLabel(item),
       selected: this.__isItemSelected(item, this.selectedItem, this.itemIdPath),
       renderer: this.renderer,
       focused: this.__isItemFocused(focusedIndex, index)

@@ -161,7 +161,6 @@ class ComboBoxDropdown extends mixinBehaviors(IronResizableBehavior, PolymerElem
     overlay.renderer = (root) => {
       if (!root.firstChild) {
         const scroller = document.createElement('vaadin-combo-box-scroller');
-        scroller.wrapper = this;
         root.appendChild(scroller);
       }
     };
@@ -170,6 +169,9 @@ class ComboBoxDropdown extends mixinBehaviors(IronResizableBehavior, PolymerElem
     overlay.requestContentUpdate();
 
     this._scroller = overlay.content.querySelector('vaadin-combo-box-scroller');
+
+    this._scroller.getItemLabel = this.getItemLabel.bind(this);
+    this._scroller.comboBox = this.getRootNode().host;
 
     this._scroller.addEventListener('selection-changed', (e) => this._forwardScrollerEvent(e));
     this._scroller.addEventListener('index-requested', (e) => this._forwardScrollerEvent(e));
