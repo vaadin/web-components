@@ -1,13 +1,13 @@
 {
-  "name": "@vaadin/vaadin-form-layout",
+  "name": "@vaadin/horizontal-layout",
   "version": "22.0.0-alpha5",
-  "description": "Web component providing configurable responsive layout for form elements",
-  "main": "vaadin-form-layout.js",
-  "module": "vaadin-form-layout.js",
-  "repository": "vaadin/vaadin-form-layout",
+  "description": "vaadin-horizontal-layout",
+  "main": "vaadin-horizontal-layout.js",
+  "module": "vaadin-horizontal-layout.js",
+  "repository": "vaadin/web-components",
   "keywords": [
     "Vaadin",
-    "form-layout",
+    "vaadin-horizontal-layout",
     "web-components",
     "web-component",
     "polymer"
@@ -15,7 +15,7 @@
   "author": "Vaadin Ltd",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/vaadin/vaadin-form-layout/issues"
+    "url": "https://github.com/vaadin/web-components/issues"
   },
   "homepage": "https://vaadin.com/components",
   "files": [
@@ -25,7 +25,6 @@
     "theme"
   ],
   "dependencies": {
-    "@polymer/iron-resizable-behavior": "^3.0.0",
     "@polymer/polymer": "^3.0.0",
     "@vaadin/vaadin-element-mixin": "^22.0.0-alpha5",
     "@vaadin/vaadin-lumo-styles": "^22.0.0-alpha5",
@@ -34,9 +33,7 @@
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
-    "@vaadin/testing-helpers": "^0.2.1",
-    "@vaadin/vaadin-text-field": "^22.0.0-alpha5",
-    "sinon": "^9.2.1"
+    "@vaadin/testing-helpers": "^0.2.1"
   },
   "publishConfig": {
     "access": "public"
