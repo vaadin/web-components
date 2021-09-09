@@ -29,7 +29,7 @@ class ComboBoxScrollerElement extends PolymerElement {
           /* Fixes item background from getting on top of scrollbars on Safari */
           transform: translate3d(0, 0, 0);
 
-          /* Enable momentum scrolling on iOS (iron-list v1.2+ no longer does it for us) */
+          /* Enable momentum scrolling on iOS */
           -webkit-overflow-scrolling: touch;
 
           /* Fixes scrollbar disappearing when 'Show scroll bars: Always' enabled in Safari */
