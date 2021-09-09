@@ -1,8 +1,15 @@
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import '@vaadin/vaadin-lumo-styles/spacing.js';
-import { orderedLayout } from './vaadin-ordered-layout.js';
 
 const verticalLayout = css`
+  :host([theme~='margin']) {
+    margin: var(--lumo-space-m);
+  }
+
+  :host([theme~='padding']) {
+    padding: var(--lumo-space-m);
+  }
+
   :host([theme~='spacing-xs']) ::slotted(*) {
     margin-top: var(--lumo-space-xs);
   }
@@ -50,6 +57,4 @@ const verticalLayout = css`
   }
 `;
 
-registerStyles('vaadin-vertical-layout', [orderedLayout, verticalLayout], {
-  moduleId: 'lumo-vertical-layout'
-});
+registerStyles('vaadin-vertical-layout', verticalLayout, { moduleId: 'lumo-vertical-layout' });

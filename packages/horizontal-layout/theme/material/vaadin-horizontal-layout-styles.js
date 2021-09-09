@@ -1,7 +1,14 @@
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
-import { orderedLayout } from './vaadin-ordered-layout.js';
 
 const horizontalLayout = css`
+  [theme~='margin'] {
+    margin: 16px;
+  }
+
+  [theme~='padding'] {
+    padding: 16px;
+  }
+
   :host([theme~='spacing-xs']:not([dir='rtl'])) ::slotted(*) {
     margin-left: 4px;
   }
@@ -94,6 +101,4 @@ const horizontalLayout = css`
   }
 `;
 
-registerStyles('vaadin-horizontal-layout', [orderedLayout, horizontalLayout], {
-  moduleId: 'material-horizontal-layout'
-});
+registerStyles('vaadin-horizontal-layout', horizontalLayout, { moduleId: 'material-horizontal-layout' });

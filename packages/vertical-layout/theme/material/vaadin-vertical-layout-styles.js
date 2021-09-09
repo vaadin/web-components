@@ -1,7 +1,14 @@
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
-import { orderedLayout } from './vaadin-ordered-layout.js';
 
 const verticalLayout = css`
+  [theme~='margin'] {
+    margin: 16px;
+  }
+
+  [theme~='padding'] {
+    padding: 16px;
+  }
+
   :host([theme~='spacing-xs']) ::slotted(*) {
     margin-top: 4px;
   }
@@ -49,6 +56,4 @@ const verticalLayout = css`
   }
 `;
 
-registerStyles('vaadin-vertical-layout', [orderedLayout, verticalLayout], {
-  moduleId: 'material-vertical-layout'
-});
+registerStyles('vaadin-vertical-layout', verticalLayout, { moduleId: 'material-vertical-layout' });

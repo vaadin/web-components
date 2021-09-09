@@ -1,8 +1,15 @@
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import '@vaadin/vaadin-lumo-styles/spacing.js';
-import { orderedLayout } from './vaadin-ordered-layout.js';
 
 const horizontalLayout = css`
+  :host([theme~='margin']) {
+    margin: var(--lumo-space-m);
+  }
+
+  :host([theme~='padding']) {
+    padding: var(--lumo-space-m);
+  }
+
   :host([theme~='spacing-xs']:not([dir='rtl'])) ::slotted(*) {
     margin-left: var(--lumo-space-xs);
   }
@@ -95,6 +102,4 @@ const horizontalLayout = css`
   }
 `;
 
-registerStyles('vaadin-horizontal-layout', [orderedLayout, horizontalLayout], {
-  moduleId: 'lumo-horizontal-layout'
-});
+registerStyles('vaadin-horizontal-layout', horizontalLayout, { moduleId: 'lumo-horizontal-layout' });
