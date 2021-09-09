@@ -49,7 +49,7 @@ class MyInput extends PolymerElement {
 customElements.define('my-input', MyInput);
 
 describe('vaadin-combo-box-light', () => {
-  let comboBox, ironInput;
+  let comboBox, overlay, ironInput;
 
   beforeEach(() => {
     comboBox = fixtureSync(`
@@ -60,6 +60,7 @@ describe('vaadin-combo-box-light', () => {
       </vaadin-combo-box-light>
     `);
     comboBox.items = ['foo', 'bar', 'baz'];
+    overlay = comboBox.$.dropdown.$.overlay;
     ironInput = comboBox.querySelector('iron-input');
   });
 
@@ -82,7 +83,7 @@ describe('vaadin-combo-box-light', () => {
   it('should prevent default on overlay down', () => {
     const e = new CustomEvent('mousedown', { bubbles: true });
     const spy = sinon.spy(e, 'preventDefault');
-    comboBox.$.dropdown.$.overlay.dispatchEvent(e);
+    overlay.dispatchEvent(e);
     expect(spy.calledOnce).to.be.true;
   });
 
@@ -144,7 +145,7 @@ describe('vaadin-combo-box-light', () => {
       const preventDefaultSpy = sinon.spy();
       comboBox.open();
       const event = createEventSpy('mousedown', preventDefaultSpy);
-      comboBox.$.dropdown.$.overlay.dispatchEvent(event);
+      overlay.dispatchEvent(event);
       expect(preventDefaultSpy.called).to.be.true;
     });
   });
