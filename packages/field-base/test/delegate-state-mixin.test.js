@@ -91,7 +91,7 @@ describe('delegate-state-mixin', () => {
       console.warn.restore();
     });
 
-    it('should show a warning', () => {
+    it('should warn about no implementation for _delegateStateTarget', () => {
       expect(console.warn.calledTwice).to.be.true;
       expect(console.warn.args[0][0]).to.equal(
         `Please implement the '_delegateStateTarget' property in <delegate-state-mixin-element-without-target>`
