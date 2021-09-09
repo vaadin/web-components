@@ -1,0 +1,41 @@
+{
+  "name": "@vaadin/vaadin-ordered-layout",
+  "version": "22.0.0-alpha5",
+  "description": "vaadin-ordered-layout",
+  "main": "imports.js",
+  "module": "imports.js",
+  "repository": "vaadin/vaadin-ordered-layout",
+  "keywords": [
+    "Vaadin",
+    "vaadin-ordered-layout",
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
+  "author": "Vaadin Ltd",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/vaadin/vaadin-ordered-layout/issues"
+  },
+  "homepage": "https://vaadin.com/components",
+  "files": [
+    "vaadin-*.d.ts",
+    "vaadin-*.js",
+    "imports.js",
+    "imports.d.ts",
+    "src",
+    "theme"
+  ],
+  "dependencies": {
+    "@vaadin/horizontal-layout": "^22.0.0-alpha5",
+    "@vaadin/vertical-layout": "^22.0.0-alpha5",
+    "@vaadin/scroller": "^22.0.0-alpha5"
+  },
+  "devDependencies": {
+    "@esm-bundle/chai": "^4.3.4",
+    "@vaadin/testing-helpers": "^0.2.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
