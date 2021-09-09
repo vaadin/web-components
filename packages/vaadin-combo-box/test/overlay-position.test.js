@@ -17,8 +17,8 @@ class XFixed extends PolymerElement {
 
 customElements.define('x-fixed', XFixed);
 
-describe('overlay', () => {
-  let comboBox;
+describe('overlay position', () => {
+  let comboBox, dropdown, input;
 
   let wh, ww, xCenter, xStart, xEnd, yCenter, yTop, yBottom;
 
@@ -34,7 +34,7 @@ describe('overlay', () => {
   }
 
   function dropContent() {
-    return comboBox.$.overlay.$.dropdown.$.overlay;
+    return dropdown.$.dropdown.$.overlay;
   }
 
   function dropContentRect() {
@@ -42,13 +42,15 @@ describe('overlay', () => {
   }
 
   function inputContentRect() {
-    return comboBox.$.input.getBoundingClientRect();
+    return input.getBoundingClientRect();
   }
 
   beforeEach(async () => {
     comboBox = fixtureSync(`<vaadin-combo-box label='comboBox' style='width: 300px;' items='[1]'></vaadin-combo-box>`);
     const comboBoxRect = comboBox.getBoundingClientRect();
     comboBox.items = makeItems(20);
+    dropdown = comboBox.$.overlay;
+    input = comboBox.inputElement;
 
     // Subtract the combo-box size from the coordinates range in order not to
     // move it outside the viewport boundaries when changing top and left.
@@ -148,7 +150,9 @@ describe('overlay', () => {
     describe('horizontal alignment', () => {
       const inputWidth = 150;
 
-      beforeEach(() => comboBox.$.overlay.style.setProperty('--vaadin-combo-box-overlay-width', inputWidth * 2 + 'px'));
+      beforeEach(() => {
+        dropdown.style.setProperty('--vaadin-combo-box-overlay-width', inputWidth * 2 + 'px');
+      });
 
       it('should be on the left side of the input', async () => {
         moveComboBox(xEnd, yCenter, inputWidth);
@@ -179,8 +183,8 @@ describe('overlay', () => {
     it('should reposition after filtering', async () => {
       moveComboBox(xCenter, yBottom, 300);
 
-      comboBox.inputElement.value = 'item 1';
-      fire(comboBox.inputElement, 'input');
+      input.value = 'item 1';
+      fire(input, 'input');
 
       comboBox.open();
       await aTimeout(0);

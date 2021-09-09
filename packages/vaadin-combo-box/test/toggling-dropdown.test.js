@@ -1,38 +1,39 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { aTimeout, click, fixtureSync, focusout } from '@vaadin/testing-helpers';
+import { aTimeout, click, fixtureSync, focusout, tap } from '@vaadin/testing-helpers';
 import '@vaadin/vaadin-template-renderer';
-import { createEventSpy, fireDownUpClick, TOUCH_DEVICE } from './helpers.js';
+import { createEventSpy, TOUCH_DEVICE } from './helpers.js';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
 
 describe('toggling dropdown', () => {
-  let comboBox;
+  let comboBox, input;
 
   function setInputValue(value) {
-    comboBox.inputElement.value = value;
-    comboBox.inputElement.dispatchEvent(new CustomEvent('input'));
+    input.value = value;
+    input.dispatchEvent(new CustomEvent('input'));
   }
 
   function clickToggleIcon() {
-    fireDownUpClick(comboBox._toggleElement);
+    tap(comboBox._toggleElement);
   }
 
   beforeEach(() => {
     comboBox = fixtureSync('<vaadin-combo-box label="Label" items="[1, 2]"></vaadin-combo-box>');
+    input = comboBox.inputElement;
   });
 
   describe('opening', () => {
     it('should open synchronously by clicking label', () => {
       expect(comboBox.opened).to.be.false;
-      fireDownUpClick(comboBox.inputElement.root.querySelector('label'));
+      tap(input.shadowRoot.querySelector('label'));
       expect(comboBox.opened).to.be.true;
     });
 
     it('should not open synchronously by clicking label when autoOpenDisabled is true', () => {
       comboBox.autoOpenDisabled = true;
       expect(comboBox.opened).to.be.false;
-      fireDownUpClick(comboBox.inputElement.root.querySelector('label'));
+      tap(input.shadowRoot.querySelector('label'));
       expect(comboBox.opened).to.be.false;
     });
 
@@ -45,14 +46,14 @@ describe('toggling dropdown', () => {
 
     it('should open synchronously by clicking input', () => {
       expect(comboBox.opened).to.be.false;
-      fireDownUpClick(comboBox.inputElement);
+      tap(input);
       expect(comboBox.opened).to.be.true;
     });
 
     it('should not open synchronously by clicking input when autoOpenDisabled is true', () => {
       comboBox.autoOpenDisabled = true;
       expect(comboBox.opened).to.be.false;
-      fireDownUpClick(comboBox.inputElement);
+      tap(input);
       expect(comboBox.opened).to.be.false;
     });
 
@@ -64,8 +65,8 @@ describe('toggling dropdown', () => {
 
     it('should open by clicking icon when autoOpenDisabled is true and input is invalid', () => {
       comboBox.autoOpenDisabled = true;
-      comboBox.inputElement.value = 3;
-      comboBox.inputElement.dispatchEvent(new CustomEvent('input'));
+      input.value = 3;
+      input.dispatchEvent(new CustomEvent('input'));
 
       clickToggleIcon();
 
@@ -124,23 +125,23 @@ describe('toggling dropdown', () => {
       });
 
       (TOUCH_DEVICE ? it : it.skip)('should not focus input on dropdown open', () => {
-        expect(comboBox.inputElement.hasAttribute('focused')).to.equal(false);
+        expect(input.hasAttribute('focused')).to.be.false;
       });
 
       (TOUCH_DEVICE ? it : it.skip)('should not refocus the input field when closed from icon', () => {
         clickToggleIcon();
-        expect(comboBox.inputElement.hasAttribute('focused')).to.equal(false);
+        expect(input.hasAttribute('focused')).to.be.false;
       });
 
       (TOUCH_DEVICE ? it.skip : it)('should focus input on dropdown open', async () => {
         await aTimeout(1);
-        expect(comboBox.inputElement.hasAttribute('focused')).to.be.true;
+        expect(input.hasAttribute('focused')).to.be.true;
       });
 
       (TOUCH_DEVICE ? it.skip : it)('should refocus the input field when closed from icon', async () => {
         clickToggleIcon();
         await aTimeout(1);
-        expect(comboBox.inputElement.hasAttribute('focused')).to.be.true;
+        expect(input.hasAttribute('focused')).to.be.true;
       });
 
       (TOUCH_DEVICE ? it.skip : it)('should prevent default on overlay mousedown', () => {
@@ -197,7 +198,7 @@ describe('toggling dropdown', () => {
     it('should close the overlay when focus is lost', () => {
       comboBox.open();
 
-      focusout(comboBox.inputElement);
+      focusout(input);
 
       expect(comboBox.opened).to.equal(false);
     });
@@ -221,11 +222,11 @@ describe('toggling dropdown', () => {
         comboBox.open();
 
         setInputValue('3');
-        expect(comboBox.inputElement.value).to.equal('3');
+        expect(input.value).to.equal('3');
         expect(comboBox.value).to.be.empty;
 
-        focusout(comboBox.inputElement);
-        expect(comboBox.inputElement.value).to.be.empty;
+        focusout(input);
+        expect(input.value).to.be.empty;
       });
     });
   });
@@ -240,7 +241,7 @@ describe('toggling dropdown', () => {
     });
 
     it('dropdown should not be shown when disabled', () => {
-      click(comboBox.inputElement);
+      click(input);
       expect(comboBox.opened).to.be.false;
     });
   });
@@ -255,7 +256,7 @@ describe('toggling dropdown', () => {
     });
 
     it('dropdown should not be shown when read-only', () => {
-      click(comboBox.inputElement);
+      click(input);
       expect(comboBox.opened).to.be.false;
     });
   });

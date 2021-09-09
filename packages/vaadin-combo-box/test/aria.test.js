@@ -1,14 +1,11 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, arrowDownKeyDown, escKeyDown } from '@vaadin/testing-helpers';
+import { getAllItems } from './helpers.js';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
 
 describe('ARIA', () => {
   let comboBox, input, toggle;
-
-  function getItemElement(i) {
-    return comboBox.$.overlay._selector.querySelectorAll('vaadin-combo-box-item')[i];
-  }
 
   beforeEach(() => {
     comboBox = fixtureSync('<vaadin-combo-box label="my label"></vaadin-combo-box>');
@@ -21,7 +18,7 @@ describe('ARIA', () => {
     comboBox.opened = false;
   });
 
-  describe('when combo-box is attached', () => {
+  describe('default', () => {
     it('should contain appropriate aria attributes', () => {
       expect(input.getAttribute('role')).to.equal('combobox');
       expect(input.getAttribute('aria-autocomplete')).to.equal('list');
@@ -31,13 +28,14 @@ describe('ARIA', () => {
     });
   });
 
-  describe('when overlay opens or close', () => {
+  describe('opened', () => {
     beforeEach(() => {
-      arrowDownKeyDown(comboBox.inputElement);
+      arrowDownKeyDown(input);
     });
 
-    it('should set role listbox on the iron-list', () => {
-      expect(comboBox.$.overlay._selector.getAttribute('role')).to.equal('listbox');
+    it('should set role listbox on the scroller', () => {
+      const scroller = comboBox.$.overlay._selector;
+      expect(scroller.getAttribute('role')).to.equal('listbox');
     });
 
     it('should set aria-expanded attribute when opened', () => {
@@ -46,7 +44,7 @@ describe('ARIA', () => {
     });
 
     it('should unset aria-expanded attribute when closed', () => {
-      escKeyDown(comboBox.inputElement);
+      escKeyDown(input);
 
       expect(input.getAttribute('aria-expanded')).to.equal('false');
       expect(toggle.getAttribute('aria-expanded')).to.equal('false');
@@ -55,16 +53,17 @@ describe('ARIA', () => {
 
   describe('navigating the items', () => {
     beforeEach(() => {
-      arrowDownKeyDown(comboBox.inputElement);
+      arrowDownKeyDown(input);
     });
 
     it('should set selection aria attributes when focusing an item', () => {
       comboBox.value = 'foo';
-      arrowDownKeyDown(comboBox.inputElement); // 'focus moves to 2nd item'
+      arrowDownKeyDown(input); // 'focus moves to 2nd item'
 
-      expect(getItemElement(0).getAttribute('role')).to.equal('option');
-      expect(getItemElement(0).getAttribute('aria-selected')).to.equal('false');
-      expect(getItemElement(1).getAttribute('aria-selected')).to.equal('true');
+      const items = getAllItems(comboBox);
+      expect(items[0].getAttribute('role')).to.equal('option');
+      expect(items[0].getAttribute('aria-selected')).to.equal('false');
+      expect(items[1].getAttribute('aria-selected')).to.equal('true');
     });
   });
 });

@@ -6,29 +6,30 @@ import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
 
 describe('form field', () => {
-  let comboBox;
+  let comboBox, input;
 
   beforeEach(() => {
     comboBox = fixtureSync('<vaadin-combo-box allow-custom-value></vaadin-combo-box>');
+    input = comboBox.inputElement;
   });
 
-  it('should be required', () => {
+  it('should not be required by default', () => {
+    expect(input.required).to.be.false;
+  });
+
+  it('should set required property to input', () => {
     comboBox.required = true;
-    expect(comboBox.$.input.required).to.equal(true);
+    expect(input.required).to.be.true;
   });
 
-  it('should not be required', () => {
-    expect(comboBox.$.input.required).to.equal(false);
-  });
-
-  it('should be disabled', () => {
+  it('should set disabled property to input', () => {
     comboBox.disabled = true;
-    expect(comboBox.$.input.hasAttribute('disabled')).to.be.true;
+    expect(input.disabled).to.be.true;
   });
 
-  it('should be read-only', () => {
+  it('should set readonly property to input', () => {
     comboBox.readonly = true;
-    expect(comboBox.$.input.readonly).to.be.true;
+    expect(input.readonly).to.be.true;
   });
 
   it('should validate correctly when input value is invalid', () => {

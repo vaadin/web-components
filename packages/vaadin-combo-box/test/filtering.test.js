@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { flush } from '@polymer/polymer/lib/utils/flush.js';
 import { fixtureSync } from '@vaadin/testing-helpers';
-import { onceOpened } from './helpers.js';
+import { getAllItems, onceOpened } from './helpers.js';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
 
@@ -382,7 +382,7 @@ describe('filtering items', () => {
       comboBox.open();
       comboBox.filteredItems = Array.apply(null, Array(20)).map((_, i) => `item${i}`);
       flush();
-      expect(comboBox.$.overlay._selector.querySelectorAll('vaadin-combo-box-item').length).to.equal(20);
+      expect(getAllItems(comboBox).length).to.equal(20);
     });
   });
 });

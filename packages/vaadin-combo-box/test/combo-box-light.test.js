@@ -18,7 +18,7 @@ import '@polymer/iron-input/iron-input.js';
 import '@polymer/paper-input/paper-input.js';
 import '@vaadin/vaadin-text-field/vaadin-text-field.js';
 import '@vaadin/vaadin-template-renderer';
-import { createEventSpy, TOUCH_DEVICE } from './helpers.js';
+import { createEventSpy, getFirstItem, TOUCH_DEVICE } from './helpers.js';
 import './not-animated-styles.js';
 import '../vaadin-combo-box-light.js';
 
@@ -233,7 +233,7 @@ describe('paper-input', () => {
   });
 
   it('should prevent default on toggle element down', () => {
-    const e = new CustomEvent('click', { bubbles: true });
+    const e = new CustomEvent('mousedown', { bubbles: true });
     const spy = sinon.spy(e, 'preventDefault');
     comboBox._toggleElement.dispatchEvent(e);
     expect(spy.calledOnce).to.be.true;
@@ -387,8 +387,7 @@ describe('theme attribute', () => {
   it('should propagate theme attribute to item', () => {
     comboBox.items = ['bar', 'baz'];
     comboBox.open();
-    const item = comboBox.$.overlay._selector.querySelector('vaadin-combo-box-item');
-    expect(item.getAttribute('theme')).to.equal('foo');
+    expect(getFirstItem(comboBox).getAttribute('theme')).to.equal('foo');
   });
 });
 
@@ -418,10 +417,9 @@ describe('nested template', () => {
 
   it('should not use nested template as the item template', async () => {
     comboBox.open();
-    const firstItem = comboBox.$.overlay._selector.querySelector('vaadin-combo-box-item');
     await nextFrame();
     expect(comboBox.querySelector('[slot="prefix"]').innerHTML).to.contain('1 foo');
-    expect(firstItem.shadowRoot.querySelector('#content').innerHTML).to.equal('bar');
+    expect(getFirstItem(comboBox).shadowRoot.querySelector('#content').innerHTML).to.equal('bar');
   });
 });
 
@@ -457,13 +455,13 @@ describe('vaadin-text-field', () => {
 
       click(clearButton);
 
-      expect(comboBox.opened).to.eql(true);
+      expect(comboBox.opened).to.be.true;
     });
 
     it('should not open the dropdown after clearing a selection', () => {
       click(clearButton);
 
-      expect(comboBox.opened).to.eql(false);
+      expect(comboBox.opened).to.be.false;
     });
   });
 });
