@@ -13,7 +13,7 @@ import { ComboBoxPlaceholder } from './vaadin-combo-box-placeholder.js';
  * @extends HTMLElement
  * @private
  */
-class ComboBoxScrollerElement extends PolymerElement {
+class ComboBoxScroller extends PolymerElement {
   static get is() {
     return 'vaadin-combo-box-scroller';
   }
@@ -337,4 +337,4 @@ class ComboBoxScrollerElement extends PolymerElement {
   }
 }
 
-customElements.define(ComboBoxScrollerElement.is, ComboBoxScrollerElement);
+customElements.define(ComboBoxScroller.is, ComboBoxScroller);
