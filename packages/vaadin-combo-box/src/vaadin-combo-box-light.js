@@ -66,7 +66,11 @@ import './vaadin-combo-box-dropdown.js';
  * @mixes ComboBoxMixin
  * @mixes ThemableMixin
  */
-class ComboBoxLightElement extends ThemableMixin(ComboBoxDataProviderMixin(ComboBoxMixin(PolymerElement))) {
+class ComboBoxLight extends ComboBoxDataProviderMixin(ComboBoxMixin(ThemableMixin(PolymerElement))) {
+  static get is() {
+    return 'vaadin-combo-box-light';
+  }
+
   static get template() {
     return html`
       <style>
@@ -91,10 +95,6 @@ class ComboBoxLightElement extends ThemableMixin(ComboBoxDataProviderMixin(Combo
     `;
   }
 
-  static get is() {
-    return 'vaadin-combo-box-light';
-  }
-
   static get properties() {
     return {
       /**
@@ -106,32 +106,27 @@ class ComboBoxLightElement extends ThemableMixin(ComboBoxDataProviderMixin(Combo
       attrForValue: {
         type: String,
         value: 'value'
-      },
-
-      /**
-       * @type {!Element | undefined}
-       */
-      inputElement: {
-        type: Element,
-        readOnly: true
       }
     };
   }
 
-  constructor() {
-    super();
-    this._boundInputValueChanged = this._inputValueChanged.bind(this);
-    this.__boundInputValueCommitted = this.__inputValueCommitted.bind(this);
+  /**
+   * Used by `ClearButtonMixin` as a reference to the clear button element.
+   * @protected
+   * @return {!HTMLElement}
+   */
+  get clearElement() {
+    return this.querySelector('.clear-button');
   }
 
   /** @protected */
   ready() {
     super.ready();
-    this._toggleElement = this.querySelector('.toggle-button');
-    this._clearElement = this.querySelector('.clear-button');
 
-    if (this._clearElement) {
-      this._clearElement.addEventListener('mousedown', (e) => {
+    this._toggleElement = this.querySelector('.toggle-button');
+
+    if (this.clearElement) {
+      this.clearElement.addEventListener('mousedown', (e) => {
         e.preventDefault(); // Prevent native focus changes
         // _focusableElement is needed for paper-input
         (this.inputElement._focusableElement || this.inputElement).focus();
@@ -139,38 +134,32 @@ class ComboBoxLightElement extends ThemableMixin(ComboBoxDataProviderMixin(Combo
     }
   }
 
-  /**
-   * @return {boolean}
-   */
-  get focused() {
-    return this.getRootNode().activeElement === this.inputElement;
-  }
-
   /** @protected */
   connectedCallback() {
     super.connectedCallback();
+
     const cssSelector = 'vaadin-text-field,iron-input,paper-input,.paper-input-input,.input';
     this._setInputElement(this.querySelector(cssSelector));
     this._revertInputValue();
-    this.inputElement.addEventListener('input', this._boundInputValueChanged);
-    this.inputElement.addEventListener('change', this.__boundInputValueCommitted);
     this._preventInputBlur();
   }
 
   /** @protected */
   disconnectedCallback() {
     super.disconnectedCallback();
-    this.inputElement.removeEventListener('input', this._boundInputValueChanged);
-    this.inputElement.removeEventListener('change', this.__boundInputValueCommitted);
+
     this._restoreInputBlur();
   }
 
-  /** @private */
-  __inputValueCommitted(e) {
-    // Detect if the input was cleared (by clicking the clear button on a vaadin-text-field)
-    // and propagate the value change to combo box value immediately.
-    if (e.__fromClearButton) {
-      this._clear();
+  /**
+   * Returns true if the current input value satisfies all constraints (if any).
+   * @return {boolean}
+   */
+  checkValidity() {
+    if (this.inputElement.validate) {
+      return this.inputElement.validate();
+    } else {
+      return super.checkValidity();
     }
   }
 
@@ -182,25 +171,29 @@ class ComboBoxLightElement extends ThemableMixin(ComboBoxDataProviderMixin(Combo
     return dashToCamelCase(this.attrForValue);
   }
 
-  /**
-   * @return {string}
-   * @protected
-   */
-  get _inputElementValue() {
-    return this.inputElement && this.inputElement[this._propertyForValue];
+  /** @protected */
+  _isClearButton(event) {
+    return (
+      super._isClearButton(event) ||
+      event.__fromClearButton ||
+      (event.detail && event.detail.sourceEvent && event.detail.sourceEvent.__fromClearButton) ||
+      event.composedPath()[0].getAttribute('part') === 'clear-button'
+    );
   }
 
   /**
-   * @param {string} value
+   * @param {!Event} event
    * @protected
    */
-  set _inputElementValue(value) {
-    if (this.inputElement) {
-      this.inputElement[this._propertyForValue] = value;
+  _onChange(event) {
+    super._onChange(event);
+
+    if (this._isClearButton(event)) {
+      this._clear();
     }
   }
 }
 
-customElements.define(ComboBoxLightElement.is, ComboBoxLightElement);
+customElements.define(ComboBoxLight.is, ComboBoxLight);
 
-export { ComboBoxLightElement };
+export { ComboBoxLight };

@@ -1,4 +1,3 @@
-import { ControlStateMixin } from '@vaadin/vaadin-control-state-mixin';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin';
 import { ComboBoxDataProviderMixin } from '../../src/vaadin-combo-box-data-provider-mixin';
@@ -10,9 +9,9 @@ import {
   ComboBoxValueChangedEvent,
   ComboBoxCustomValueSetEvent,
   ComboBoxSelectedItemChangedEvent,
-  ComboBoxElement
+  ComboBox
 } from '../../vaadin-combo-box';
-import { ComboBoxLightElement } from '../../vaadin-combo-box-light';
+import { ComboBoxLight } from '../../vaadin-combo-box-light';
 
 interface TestComboBoxItem {
   testProperty: string;
@@ -23,10 +22,9 @@ const assertType = <TExpected>(actual: TExpected) => actual;
 /* ComboBoxElement */
 const genericComboBox = document.createElement('vaadin-combo-box');
 
-const narrowedComboBox = genericComboBox as ComboBoxElement<TestComboBoxItem>;
-assertType<ComboBoxElement>(narrowedComboBox);
+const narrowedComboBox = genericComboBox as ComboBox<TestComboBoxItem>;
+assertType<ComboBox>(narrowedComboBox);
 assertType<ElementMixin>(narrowedComboBox);
-assertType<ControlStateMixin>(narrowedComboBox);
 assertType<ComboBoxDataProviderMixin<TestComboBoxItem>>(narrowedComboBox);
 assertType<ThemableMixin>(narrowedComboBox);
 
@@ -62,9 +60,9 @@ narrowedComboBox.addEventListener('selected-item-changed', (event) => {
 
 /* ComboBoxLightElement */
 const genericComboBoxLightElement = document.createElement('vaadin-combo-box-light');
-assertType<ComboBoxLightElement>(genericComboBoxLightElement);
+assertType<ComboBoxLight>(genericComboBoxLightElement);
 
-const narrowedComboBoxLightElement = genericComboBoxLightElement as ComboBoxLightElement<TestComboBoxItem>;
+const narrowedComboBoxLightElement = genericComboBoxLightElement as ComboBoxLight<TestComboBoxItem>;
 assertType<ComboBoxDataProviderMixin<TestComboBoxItem>>(narrowedComboBoxLightElement);
 assertType<ComboBoxMixin<TestComboBoxItem>>(narrowedComboBoxLightElement);
 assertType<ThemableMixin>(narrowedComboBoxLightElement);

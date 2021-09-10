@@ -18,7 +18,7 @@ class XFixed extends PolymerElement {
 customElements.define('x-fixed', XFixed);
 
 describe('overlay position', () => {
-  let comboBox, dropdown, overlay, input;
+  let comboBox, dropdown, overlayPart, inputField, input;
 
   let wh, ww, xCenter, xStart, xEnd, yCenter, yTop, yBottom;
 
@@ -37,8 +37,9 @@ describe('overlay position', () => {
     comboBox = fixtureSync(`<vaadin-combo-box label='comboBox' style='width: 300px;' items='[1]'></vaadin-combo-box>`);
     const comboBoxRect = comboBox.getBoundingClientRect();
     comboBox.items = makeItems(20);
+    inputField = comboBox.shadowRoot.querySelector('[part="input-field"]');
     dropdown = comboBox.$.dropdown;
-    overlay = dropdown.$.overlay;
+    overlayPart = dropdown.$.overlay.$.overlay;
     input = comboBox.inputElement;
 
     // Subtract the combo-box size from the coordinates range in order not to
@@ -65,13 +66,13 @@ describe('overlay position', () => {
     it('should match the input container width', () => {
       comboBox.open();
 
-      expect(overlay.$.overlay.getBoundingClientRect().width).to.be.closeTo(input.getBoundingClientRect().width, 1);
+      expect(overlayPart.getBoundingClientRect().width).to.be.closeTo(inputField.getBoundingClientRect().width, 1);
     });
 
     it('should be below the input box', () => {
       comboBox.open();
 
-      expect(overlay.getBoundingClientRect().top).to.be.closeTo(input.getBoundingClientRect().bottom, 1);
+      expect(overlayPart.getBoundingClientRect().top).to.be.closeTo(inputField.getBoundingClientRect().bottom, 1);
     });
 
     it('should position correctly if items are populated after opening', async () => {
@@ -80,13 +81,13 @@ describe('overlay position', () => {
       await aTimeout(1);
       comboBox.items = [1, 2, 3];
       await aTimeout(1);
-      expect(overlay.getBoundingClientRect().top).to.be.closeTo(input.getBoundingClientRect().bottom, 1);
+      expect(overlayPart.getBoundingClientRect().top).to.be.closeTo(inputField.getBoundingClientRect().bottom, 1);
     });
 
     it('should be aligned with input container', () => {
       comboBox.open();
 
-      expect(overlay.getBoundingClientRect().left).to.equal(input.getBoundingClientRect().left);
+      expect(overlayPart.getBoundingClientRect().left).to.equal(inputField.getBoundingClientRect().left);
     });
 
     it('when the input position moves in the view port the overlay position should change', () => {
@@ -94,12 +95,12 @@ describe('overlay position', () => {
 
       comboBox.open();
 
-      expect(Math.round(overlay.getBoundingClientRect().left)).to.be.closeTo(
-        Math.round(input.getBoundingClientRect().left),
+      expect(Math.round(overlayPart.getBoundingClientRect().left)).to.be.closeTo(
+        Math.round(inputField.getBoundingClientRect().left),
         1
       );
 
-      expect(overlay.getBoundingClientRect().top).to.be.closeTo(input.getBoundingClientRect().bottom, 1);
+      expect(overlayPart.getBoundingClientRect().top).to.be.closeTo(inputField.getBoundingClientRect().bottom, 1);
     });
 
     it('when the input position width changes overlay width should change', () => {
@@ -107,15 +108,15 @@ describe('overlay position', () => {
 
       comboBox.open();
 
-      expect(overlay.$.overlay.getBoundingClientRect().width).to.equal(input.getBoundingClientRect().width);
+      expect(overlayPart.getBoundingClientRect().width).to.equal(inputField.getBoundingClientRect().width);
     });
 
     it('should have custom width bigger than input', () => {
       comboBox.style.setProperty('--vaadin-combo-box-overlay-width', '400px');
 
       comboBox.open();
-      expect(overlay.$.overlay.getBoundingClientRect().width).to.equal(400);
-      expect(overlay.$.overlay.getBoundingClientRect().width).to.be.above(input.getBoundingClientRect().width);
+      expect(overlayPart.getBoundingClientRect().width).to.equal(400);
+      expect(overlayPart.getBoundingClientRect().width).to.be.above(inputField.getBoundingClientRect().width);
     });
 
     it('should have custom width smaller than input', () => {
@@ -123,8 +124,8 @@ describe('overlay position', () => {
 
       comboBox.open();
 
-      expect(overlay.$.overlay.getBoundingClientRect().width).to.equal(130);
-      expect(overlay.$.overlay.getBoundingClientRect().width).to.be.below(input.getBoundingClientRect().width);
+      expect(overlayPart.getBoundingClientRect().width).to.equal(130);
+      expect(overlayPart.getBoundingClientRect().width).to.be.below(inputField.getBoundingClientRect().width);
     });
   });
 
@@ -141,7 +142,7 @@ describe('overlay position', () => {
 
         comboBox.open();
         await aTimeout(1);
-        expect(overlay.$.overlay.getBoundingClientRect().right).to.closeTo(input.getBoundingClientRect().right, 1);
+        expect(overlayPart.getBoundingClientRect().right).to.closeTo(inputField.getBoundingClientRect().right, 1);
       });
 
       it('should be on the right side of the input', async () => {
@@ -149,7 +150,7 @@ describe('overlay position', () => {
 
         comboBox.open();
         await aTimeout(1);
-        expect(overlay.$.overlay.getBoundingClientRect().left).to.closeTo(input.getBoundingClientRect().left, 1);
+        expect(overlayPart.getBoundingClientRect().left).to.closeTo(inputField.getBoundingClientRect().left, 1);
       });
     });
 
@@ -158,7 +159,7 @@ describe('overlay position', () => {
 
       comboBox.open();
       await aTimeout(1);
-      expect(overlay.$.overlay.getBoundingClientRect().bottom).to.closeTo(input.getBoundingClientRect().top, 1);
+      expect(overlayPart.getBoundingClientRect().bottom).to.closeTo(inputField.getBoundingClientRect().top, 1);
     });
 
     it('should reposition after filtering', async () => {
@@ -169,7 +170,7 @@ describe('overlay position', () => {
 
       comboBox.open();
       await aTimeout(0);
-      expect(overlay.$.overlay.getBoundingClientRect().bottom).to.closeTo(input.getBoundingClientRect().top, 1);
+      expect(overlayPart.getBoundingClientRect().bottom).to.closeTo(inputField.getBoundingClientRect().top, 1);
     });
   });
 
@@ -180,9 +181,9 @@ describe('overlay position', () => {
     it('should resize to bottom of the screen', () => {
       comboBox.open();
 
-      moveComboBox(xCenter, yBottom - minHeight - input.getBoundingClientRect().height - inputUnderline, 300);
+      moveComboBox(xCenter, yBottom - minHeight - inputField.getBoundingClientRect().height - inputUnderline, 300);
 
-      expect(overlay.$.overlay.getBoundingClientRect().bottom).to.be.at.most(window.innerHeight);
+      expect(overlayPart.getBoundingClientRect().bottom).to.be.at.most(window.innerHeight);
     });
 
     it('should resize to top of the screen', () => {
@@ -191,7 +192,7 @@ describe('overlay position', () => {
 
       moveComboBox(xCenter, minHeight + inputUnderline, 300);
 
-      expect(overlay.$.overlay.getBoundingClientRect().top).to.be.at.least(0);
+      expect(overlayPart.getBoundingClientRect().top).to.be.at.least(0);
     });
   });
 });

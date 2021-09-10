@@ -9,7 +9,6 @@ describe('scrolling', () => {
 
   beforeEach(() => {
     comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
-    comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
     overlay = comboBox.$.dropdown.$.overlay;
     input = comboBox.inputElement;
     scroller = comboBox.$.dropdown._scroller;
@@ -113,10 +112,10 @@ describe('scrolling', () => {
       expect(comboBox.opened).to.be.true;
     });
 
-    it('should keep the input focused while scrolling', () => {
+    it('should keep the focused attribute while scrolling', () => {
       comboBox.open();
       focusout(input, overlay);
-      expect(input.hasAttribute('focused')).to.be.true;
+      expect(comboBox.hasAttribute('focused')).to.be.true;
     });
   });
 });

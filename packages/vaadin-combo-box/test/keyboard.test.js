@@ -271,8 +271,8 @@ describe('keyboard', () => {
     (isDesktopSafari ? it.skip : it)('should select the input field text when navigating down', async () => {
       arrowDownKeyDown(input);
       await aTimeout(1);
-      expect(comboBox._nativeInput.selectionStart).to.eql(0);
-      expect(comboBox._nativeInput.selectionEnd).to.eql(3);
+      expect(input.selectionStart).to.eql(0);
+      expect(input.selectionEnd).to.eql(3);
     });
 
     it('should prefill the input field when navigating up', async () => {
@@ -292,8 +292,8 @@ describe('keyboard', () => {
     (isDesktopSafari ? it.skip : it)('should select the input field text when navigating up', async () => {
       arrowUpKeyDown(input);
       await aTimeout(1);
-      expect(comboBox._nativeInput.selectionStart).to.eql(0);
-      expect(comboBox._nativeInput.selectionEnd).to.eql(3);
+      expect(input.selectionStart).to.eql(0);
+      expect(input.selectionEnd).to.eql(3);
     });
 
     it('should revert back to filter with escape', async () => {
@@ -334,8 +334,8 @@ describe('keyboard', () => {
       await aTimeout(1);
       enterKeyDown(input);
 
-      expect(comboBox._nativeInput.selectionStart).to.eql(3);
-      expect(comboBox._nativeInput.selectionEnd).to.eql(3);
+      expect(input.selectionStart).to.eql(3);
+      expect(input.selectionEnd).to.eql(3);
     });
   });
 

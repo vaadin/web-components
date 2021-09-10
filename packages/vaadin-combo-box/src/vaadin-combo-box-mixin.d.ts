@@ -1,4 +1,12 @@
-import { ComboBoxRenderer } from './interfaces';
+/**
+ * @license
+ * Copyright (c) 2021 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+import { ComboBoxRenderer } from '@vaadin/vaadin-combo-box/src/interfaces';
+import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
+import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
+import { InputMixin } from '@vaadin/field-base/src/input-mixin.js';
 
 declare function ComboBoxMixin<TItem, T extends new (...args: any[]) => {}>(
   base: T
@@ -8,7 +16,7 @@ interface ComboBoxMixinConstructor<TItem> {
   new (...args: any[]): ComboBoxMixin<TItem>;
 }
 
-interface ComboBoxMixin<TItem> {
+interface ComboBoxMixin<TItem> extends DisabledMixin, InputMixin, KeyboardMixin {
   readonly _propertyForValue: string;
 
   /**
@@ -23,12 +31,7 @@ interface ComboBoxMixin<TItem> {
   autoOpenDisabled: boolean | null | undefined;
 
   /**
-   * Set to true to disable this element.
-   */
-  disabled: boolean;
-
-  /**
-   * When present, it specifies that the element field is read-only.
+   * When present, it specifies that the field is read-only.
    */
   readonly: boolean;
 
@@ -82,8 +85,6 @@ interface ComboBoxMixin<TItem> {
    */
   loading: boolean;
 
-  _focusedIndex: number;
-
   /**
    * Filtering string the user has typed into the input field.
    */
@@ -135,12 +136,6 @@ interface ComboBoxMixin<TItem> {
    */
   invalid: boolean;
 
-  _toggleElement: HTMLElement | undefined;
-
-  _clearElement: HTMLElement | undefined;
-
-  _inputElementValue: string | null | undefined;
-
   /**
    * Requests an update for the content of items.
    * While performing the update, it invokes the renderer (passed in the `renderer` property) once an item.
@@ -148,13 +143,6 @@ interface ComboBoxMixin<TItem> {
    * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
    */
   requestContentUpdate(): void;
-
-  /**
-   * Manually invoke existing renderer.
-   *
-   * @deprecated Since Vaadin 21, `render()` is deprecated. Please use `requestContentUpdate()` instead.
-   */
-  render(): void;
 
   /**
    * Opens the dropdown list.
@@ -166,44 +154,16 @@ interface ComboBoxMixin<TItem> {
    */
   close(): void;
 
-  _onEscape(e: KeyboardEvent): void;
-
-  /**
-   * Clears the current value.
-   */
-  _clear(): void;
-
-  /**
-   * Reverts back to original value.
-   */
-  cancel(): void;
-
-  /**
-   * Filtering and items handling
-   */
-  _inputValueChanged(e: Event): void;
-
-  _revertInputValue(): void;
-
   /**
    * Returns true if `value` is valid, and sets the `invalid` flag appropriately.
-   *
-   * @returns True if the value is valid and sets the `invalid` flag appropriately
    */
   validate(): boolean;
 
   /**
-   * Returns true if the current input value satisfies all constraints (if any)
-   *
-   * You can override the `checkValidity` method for custom validations.
+   * Returns true if the current input value satisfies all constraints (if any).
+   * You can override this method for custom validations.
    */
   checkValidity(): boolean | undefined;
-
-  _preventInputBlur(): void;
-
-  _restoreInputBlur(): void;
-
-  _stopPropagation(e: Event): void;
 }
 
 export { ComboBoxMixin, ComboBoxMixinConstructor };

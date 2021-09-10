@@ -24,12 +24,12 @@ describe('form field', () => {
 
   it('should set disabled property to input', () => {
     comboBox.disabled = true;
-    expect(input.disabled).to.be.true;
+    expect(input.hasAttribute('disabled')).to.be.true;
   });
 
   it('should set readonly property to input', () => {
     comboBox.readonly = true;
-    expect(input.readonly).to.be.true;
+    expect(input.readOnly).to.be.true;
   });
 
   it('should validate correctly when input value is invalid', () => {
