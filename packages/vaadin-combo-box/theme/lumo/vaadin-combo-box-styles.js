@@ -1,7 +1,6 @@
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import '@vaadin/vaadin-lumo-styles/font-icons.js';
-import { fieldButton } from '@vaadin/vaadin-lumo-styles/mixins/field-button.js';
-import '@vaadin/vaadin-text-field/theme/lumo/vaadin-text-field.js';
+import { inputFieldShared } from '@vaadin/text-field/theme/lumo/vaadin-input-field-shared-styles.js';
 
 const comboBox = css`
   :host {
@@ -13,4 +12,4 @@ const comboBox = css`
   }
 `;
 
-registerStyles('vaadin-combo-box', [fieldButton, comboBox], { moduleId: 'lumo-combo-box' });
+registerStyles('vaadin-combo-box', [inputFieldShared, comboBox], { moduleId: 'lumo-combo-box' });

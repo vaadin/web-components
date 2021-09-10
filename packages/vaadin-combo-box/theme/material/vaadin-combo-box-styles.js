@@ -1,8 +1,7 @@
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
-import '@vaadin/vaadin-text-field/theme/material/vaadin-text-field.js';
 import '@vaadin/vaadin-material-styles/color.js';
 import '@vaadin/vaadin-material-styles/font-icons.js';
-import { fieldButton } from '@vaadin/vaadin-material-styles/mixins/field-button.js';
+import { inputFieldShared } from '@vaadin/text-field/theme/material/vaadin-input-field-shared-styles.js';
 
 const comboBox = css`
   :host {
@@ -20,4 +19,4 @@ const comboBox = css`
   }
 `;
 
-registerStyles('vaadin-combo-box', [fieldButton, comboBox], { moduleId: 'material-combo-box' });
+registerStyles('vaadin-combo-box', [inputFieldShared, comboBox], { moduleId: 'material-combo-box' });
