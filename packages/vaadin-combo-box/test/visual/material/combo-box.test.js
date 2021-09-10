@@ -1,5 +1,7 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
+import { sendKeys } from '@web/test-runner-commands';
+import '../common.js';
 import '../../../theme/material/vaadin-combo-box.js';
 import '../../not-animated-styles.js';
 
@@ -15,6 +17,12 @@ describe('combo-box', () => {
 
   it('basic', async () => {
     await visualDiff(div, 'basic');
+  });
+
+  it('focus-ring', async () => {
+    await sendKeys({ press: 'Tab' });
+
+    await visualDiff(div, 'focus-ring');
   });
 
   it('disabled', async () => {
