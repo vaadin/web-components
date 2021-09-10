@@ -22,10 +22,10 @@ registerStyles(
  * @extends Button
  * @protected
  */
-class MessageInputButtonElement extends Button {
+class MessageInputButton extends Button {
   static get is() {
     return 'vaadin-message-input-button';
   }
 }
 
-customElements.define(MessageInputButtonElement.is, MessageInputButtonElement);
+customElements.define(MessageInputButton.is, MessageInputButton);

@@ -1,0 +1,48 @@
+{
+  "name": "@vaadin/message-list",
+  "version": "22.0.0-alpha5",
+  "description": "vaadin-messages",
+  "main": "vaadin-message-list.js",
+  "module": "vaadin-message-list.js",
+  "repository": "vaadin/web-components",
+  "keywords": [
+    "Vaadin",
+    "vaadin-messages",
+    "vaadin-message",
+    "vaadin-message-list",
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
+  "author": "Vaadin Ltd",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/vaadin/web-components/issues"
+  },
+  "homepage": "https://vaadin.com/components",
+  "files": [
+    "vaadin-*.d.ts",
+    "vaadin-*.js",
+    "src",
+    "theme"
+  ],
+  "dependencies": {
+    "@polymer/polymer": "^3.0.0",
+    "@vaadin/avatar": "^22.0.0-alpha5",
+    "@vaadin/button": "^22.0.0-alpha5",
+    "@vaadin/text-area": "^22.0.0-alpha5",
+    "@vaadin/vaadin-element-mixin": "^22.0.0-alpha5",
+    "@vaadin/vaadin-lumo-styles": "^22.0.0-alpha5",
+    "@vaadin/vaadin-material-styles": "^22.0.0-alpha5",
+    "@vaadin/vaadin-text-field": "^22.0.0-alpha5",
+    "@vaadin/vaadin-themable-mixin": "^22.0.0-alpha5"
+  },
+  "devDependencies": {
+    "@esm-bundle/chai": "^4.3.4",
+    "@vaadin/testing-helpers": "^0.2.1",
+    "sinon": "^9.2.4"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
