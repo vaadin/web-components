@@ -5,8 +5,11 @@
     "moduleResolution": "node",
     "lib": [ "esnext", "es2018", "dom" ],
     "noEmit": true,
-    "skipLibCheck": true,
-    "strict": true
+    "strict": true,
+    // WARNING: Avoid enabling the `skipLibCheck` option as it disables type checking
+    // for the components' type declarations (e.g packages/button/src/vaadin-button.d.ts).
+    "skipLibCheck": false,
+    "skipDefaultLibCheck": true
   },
   "include": [
     "packages/**/test/typings"

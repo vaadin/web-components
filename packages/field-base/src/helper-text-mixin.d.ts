@@ -18,7 +18,7 @@ interface HelperTextMixin extends SlotMixin {
   /**
    * String used for the helper text.
    */
-  helperText: string;
+  helperText: string | null | undefined;
 }
 
 export { HelperTextMixinConstructor, HelperTextMixin };

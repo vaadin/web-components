@@ -140,11 +140,6 @@ declare class Select extends DelegateFocusMixin(
   placeholder: string | null | undefined;
 
   /**
-   * String used for the helper text.
-   */
-  helperText: string | null | undefined;
-
-  /**
    * When present, it specifies that the element is read-only.
    */
   readonly: boolean;

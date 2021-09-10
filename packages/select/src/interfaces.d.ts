@@ -1,4 +1,4 @@
-import { SelectElement } from './vaadin-select';
+import { Select } from './vaadin-select';
 
 /**
  * Function for rendering the content of the `<vaadin-select>`.
@@ -8,7 +8,7 @@ import { SelectElement } from './vaadin-select';
  *   DOM element. Append your content to it.
  * - `select` The reference to the `<vaadin-select>` element.
  */
-export type SelectRenderer = (root: HTMLElement, select?: SelectElement) => void;
+export type SelectRenderer = (root: HTMLElement, select?: Select) => void;
 
 /**
  * Fired when the `opened` property changes.

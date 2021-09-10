@@ -113,7 +113,7 @@ const InputFieldMixinImplementation = (superclass) =>
     }
 
     /**
-     * Override an event listener from `DelegatesFocusMixin`.
+     * Override an event listener from `DelegateFocusMixin`.
      * @param {FocusEvent} event
      * @protected
      * @override
@@ -127,7 +127,7 @@ const InputFieldMixinImplementation = (superclass) =>
     }
 
     /**
-     * Override an event listener from `DelegatesFocusMixin`.
+     * Override an event listener from `DelegateFocusMixin`.
      * @param {FocusEvent} event
      * @protected
      * @override
