@@ -1,11 +1,11 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { fixtureSync } from '@vaadin/testing-helpers';
-import { _PositionMixin } from '../src/vaadin-overlay-position-mixin.js';
+import { PositionMixin } from '../src/vaadin-overlay-position-mixin.js';
 import { OverlayElement } from '../src/vaadin-overlay.js';
 import '../vaadin-overlay.js';
 
-class PositionedOverlay extends _PositionMixin(OverlayElement) {
+class PositionedOverlay extends PositionMixin(OverlayElement) {
   static get is() {
     return 'vaadin-positioned-overlay';
   }
@@ -36,10 +36,6 @@ describe('position target', () => {
       target.getBoundingClientRect()[targetEdge],
       1
     );
-  }
-
-  function setRTL() {
-    overlay.setAttribute('dir', 'rtl');
   }
 
   beforeEach(() => {
@@ -277,6 +273,7 @@ describe('position target', () => {
 
   describe('horizontal align start', () => {
     beforeEach(() => {
+      document.dir = '';
       overlay.horizontalAlign = START;
       margin = parseInt(getComputedStyle(overlay).right, 10);
       targetPositionToFlipOverlay = document.documentElement.clientWidth - overlayContent.clientWidth - margin;
@@ -288,8 +285,9 @@ describe('position target', () => {
     });
 
     it('should align right edges with right-to-left', () => {
-      overlay.setAttribute('dir', 'rtl');
-      updatePosition();
+      overlay.opened = false;
+      document.dir = 'rtl';
+      overlay.opened = true;
       expectEdgesAligned(RIGHT, RIGHT);
     });
 
@@ -370,6 +368,7 @@ describe('position target', () => {
 
   describe('horizontal align end', () => {
     beforeEach(() => {
+      document.dir = '';
       overlay.horizontalAlign = END;
       margin = parseInt(getComputedStyle(overlay).left, 10);
       targetPositionToFlipOverlay = margin + overlayContent.clientWidth - target.clientWidth;
@@ -381,8 +380,9 @@ describe('position target', () => {
     });
 
     it('should align left edges with right-to-left', () => {
-      setRTL();
-      updatePosition();
+      overlay.opened = false;
+      document.dir = 'rtl';
+      overlay.opened = true;
       expectEdgesAligned(LEFT, LEFT);
     });
 

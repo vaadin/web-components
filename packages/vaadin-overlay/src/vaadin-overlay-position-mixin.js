@@ -80,12 +80,28 @@ export const PositionMixin = (superClass) =>
     }
 
     __overlayOpenedChanged(opened) {
-      const func = opened ? 'addEventListener' : 'removeEventListener';
-      window[func]('scroll', this.__boundUpdatePosition);
-      window[func]('resize', this.__boundUpdatePosition);
+      if (opened) {
+        window.addEventListener('scroll', this.__boundUpdatePosition);
+        window.addEventListener('resize', this.__boundUpdatePosition);
+      } else {
+        window.removeEventListener('scroll', this.__boundUpdatePosition);
+        window.removeEventListener('resize', this.__boundUpdatePosition);
+      }
 
       if (opened) {
+        const computedStyle = getComputedStyle(this);
+        if (!this.__margins) {
+          this.__margins = {};
+          ['top', 'bottom', 'left', 'right'].forEach((propName) => {
+            this.__margins[propName] = parseInt(computedStyle[propName], 10);
+          });
+        }
+        this.__isRTL = computedStyle.direction === 'rtl';
+
         this._updatePosition();
+        requestAnimationFrame(() => {
+          this._updatePosition();
+        });
       }
     }
 
@@ -94,28 +110,30 @@ export const PositionMixin = (superClass) =>
     }
 
     _updatePosition() {
-      if (!this.positionTarget) {
+      if (!this.positionTarget || !this.opened) {
         return;
       }
-      const computedStyle = getComputedStyle(this);
-      if (!this.__margins) {
-        this.__margins = {};
-        ['top', 'bottom', 'left', 'right'].forEach((propName) => {
-          this.__margins[propName] = parseInt(computedStyle[propName], 10);
-        });
-      }
-      const rtl = computedStyle.direction === 'rtl';
 
+      const overlayRect = this.$.overlay.getBoundingClientRect();
       const targetRect = this.positionTarget.getBoundingClientRect();
 
-      const horizontalProps = this.__calculateHorizontalPosition(targetRect, rtl);
-      const verticalProps = this.__calculateVerticalPosition(targetRect);
+      const horizontalProps = this.__calculateHorizontalPosition(overlayRect, targetRect, this.__isRTL);
+      const verticalProps = this.__calculateVerticalPosition(overlayRect, targetRect);
 
-      const positionProps = Object.assign({}, horizontalProps, verticalProps);
-      this.__doSetPosition(positionProps, rtl);
+      const positionProps = Object.assign({}, verticalProps, horizontalProps);
+
+      const alignItemsBefore = this.style.alignItems;
+      const justifyContentBefore = this.style.justifyContent;
+
+      this.__doSetPosition(positionProps, this.__isRTL);
+
+      if (alignItemsBefore !== this.style.alignItems || justifyContentBefore !== this.style.justifyContent) {
+        // TODO: Unclean. Preferably 1. detect and apply the desired align/justify 2. calculate the position for overlay
+        this._updatePosition();
+      }
     }
 
-    __calculateHorizontalPosition(targetRect, rtl) {
+    __calculateHorizontalPosition(overlayRect, targetRect, rtl) {
       const propNames = {
         start: 'left',
         end: 'right'
@@ -123,25 +141,27 @@ export const PositionMixin = (superClass) =>
 
       // Using previous size to fix a case where window resize may cause the overlay to be squeezed
       // smaller than its current space before the fit-calculations.
-      const contentWidth = Math.max(this.__oldContentWidth || 0, this.$.overlay.offsetWidth);
-      this.__oldContentWidth = this.$.overlay.offsetWidth;
+      const contentWidth = Math.max(this.__oldContentWidth || 0, overlayRect.width);
+      this.__oldContentWidth = overlayRect.width;
 
       const viewportWidth = Math.min(window.innerWidth, document.documentElement.clientWidth);
       const defaultAlignLeft = (!rtl && this.horizontalAlign === 'start') || (rtl && this.horizontalAlign === 'end');
       const currentAlignLeft = !!this.style.left;
       return PositionMixin.__calculatePositionInOneDimension(
         targetRect,
+        overlayRect,
         contentWidth,
         viewportWidth,
         this.__margins,
         defaultAlignLeft,
         currentAlignLeft,
         this.noHorizontalOverlap,
-        propNames
+        propNames,
+        this
       );
     }
 
-    __calculateVerticalPosition(targetRect) {
+    __calculateVerticalPosition(overlayRect, targetRect) {
       const propNames = {
         start: 'top',
         end: 'bottom'
@@ -149,21 +169,23 @@ export const PositionMixin = (superClass) =>
 
       // Using previous size to fix a case where window resize may cause the overlay to be squeezed
       // smaller than its current space before the fit-calculations.
-      const contentHeight = Math.max(this.__oldContentHeight || 0, this.$.overlay.offsetHeight);
-      this.__oldContentHeight = this.$.overlay.offsetHeight;
+      const contentHeight = Math.max(this.__oldContentHeight || 0, overlayRect.height);
+      this.__oldContentHeight = overlayRect.height;
 
       const viewportHeight = Math.min(window.innerHeight, document.documentElement.clientHeight);
       const defaultAlignTop = this.verticalAlign === 'top';
       const currentAlignTop = !!this.style.top;
       return PositionMixin.__calculatePositionInOneDimension(
         targetRect,
+        overlayRect,
         contentHeight,
         viewportHeight,
         this.__margins,
         defaultAlignTop,
         currentAlignTop,
         this.noVerticalOverlap,
-        propNames
+        propNames,
+        this
       );
     }
 
@@ -173,13 +195,15 @@ export const PositionMixin = (superClass) =>
      */
     static __calculatePositionInOneDimension(
       targetRect,
+      overlayRect,
       contentSize,
       viewportSize,
       margins,
       defaultAlignStart,
       currentAlignStart,
       noOverlap,
-      propNames
+      propNames,
+      overlay
     ) {
       const spaceForStartAlignment =
         viewportSize - targetRect[noOverlap ? propNames.end : propNames.start] - margins[propNames.end];
@@ -196,13 +220,14 @@ export const PositionMixin = (superClass) =>
       const cssPropNameToSet = shouldAlignStart ? propNames.start : propNames.end;
       const cssPropNameToClear = shouldAlignStart ? propNames.end : propNames.start;
 
-      const cssPropValueToSet =
-        (shouldAlignStart
-          ? targetRect[noOverlap ? propNames.end : propNames.start]
-          : viewportSize - targetRect[noOverlap ? propNames.start : propNames.end]) + 'px';
+      const currentValue = parseFloat(overlay.style[cssPropNameToSet] || getComputedStyle(overlay)[cssPropNameToSet]);
+
+      const diff =
+        overlayRect[shouldAlignStart ? propNames.start : propNames.end] -
+        targetRect[noOverlap === shouldAlignStart ? propNames.end : propNames.start];
 
       const props = {};
-      props[cssPropNameToSet] = cssPropValueToSet;
+      props[cssPropNameToSet] = currentValue + diff * (shouldAlignStart ? -1 : 1) + 'px';
       props[cssPropNameToClear] = '';
       return props;
     }
