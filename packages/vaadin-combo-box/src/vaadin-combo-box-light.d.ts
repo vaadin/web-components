@@ -6,8 +6,6 @@
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ComboBoxMixin } from './vaadin-combo-box-mixin.js';
 import { ComboBoxDataProviderMixin } from './vaadin-combo-box-data-provider-mixin.js';
-import { ComboBoxDefaultItem } from './interfaces';
-import { ComboBoxMixin } from './vaadin-combo-box-mixin.js';
 import { ComboBoxDefaultItem, ComboBoxEventMap } from './interfaces';
 
 /**
