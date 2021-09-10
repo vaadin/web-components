@@ -278,7 +278,6 @@ export const ComboBoxDataProviderMixin = (superClass) =>
       if (dataProvider && value !== '' && (this.selectedItem === undefined || this.selectedItem === null)) {
         const valueIndex = this._indexOfValue(value, this.filteredItems);
         if (valueIndex < 0 || !this._getItemLabel(this.filteredItems[valueIndex])) {
-          /* eslint-disable no-console */
           console.warn(
             'Warning: unable to determine the label for the provided `value`. ' +
               'Nothing to display in the text field. This usually happens when ' +
@@ -286,7 +285,6 @@ export const ComboBoxDataProviderMixin = (superClass) =>
               'the `dataProvider` callback. Consider setting `selectedItem` ' +
               'instead of `value`'
           );
-          /* eslint-enable no-console */
         }
       }
     }

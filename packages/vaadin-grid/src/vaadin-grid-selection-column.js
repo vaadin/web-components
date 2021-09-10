@@ -193,8 +193,7 @@ class GridSelectionColumnElement extends GridColumnElement {
    * @private
    */
   __arrayContains(a, b) {
-    for (var i = 0; a && b && b[i] && a.indexOf(b[i]) >= 0; i++); // eslint-disable-line
-    return i == b.length;
+    return Array.isArray(a) && Array.isArray(b) && b.every((i) => a.includes(i));
   }
 
   /**

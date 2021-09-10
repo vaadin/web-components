@@ -255,7 +255,9 @@ function logCommitsByComponent(commits) {
       let lineBrake = 0;
       byComponent[k].forEach((c) => {
         lineBrake += 1;
-        lineBrake > 1 ? (log += `\n`) : log;
+        if (lineBrake > 1) {
+          log += `\n`;
+        }
         log += `${indent}- ` + parseLinks(c.commit.substring(0, 7) + ' ' + c.title[0].toUpperCase() + c.title.slice(1));
         const tickets = getTickets(c);
         tickets && (log += `. ${tickets}`);

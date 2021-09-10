@@ -105,7 +105,9 @@ describe('rows', () => {
 
     const parentNode = grid.parentNode;
     parentNode.removeChild(grid);
-    parentNode.offsetHeight;
+    // Force layout / reflow
+    // https://gist.github.com/paulirish/5d52fb081b3570c81e3a#setting-focus
+    parentNode.focus();
     parentNode.appendChild(grid);
 
     await aTimeout(0);
