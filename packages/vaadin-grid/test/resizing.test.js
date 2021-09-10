@@ -171,7 +171,7 @@ describe('all rows visible', () => {
     });
 
     it('should align height with number of rows after first render', () => {
-      grid.items = new Array(100).fill({});
+      grid.items = new Array(100).fill().map((_, idx) => ({ value: idx }));
       flushGrid(grid);
 
       grid.allRowsVisible = true;
