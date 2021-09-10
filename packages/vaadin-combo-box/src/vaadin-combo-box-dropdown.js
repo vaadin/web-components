@@ -185,10 +185,6 @@ class ComboBoxDropdown extends mixinBehaviors(IronResizableBehavior, PolymerElem
 
     if (this.positionTarget && this.opened) {
       this._setOverlayWidth();
-      // Schedule another position update (to cover virtual keyboard opening for example)
-      // requestAnimationFrame(() => {
-      //   this._setPosition();
-      // });
     }
   }
 
