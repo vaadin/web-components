@@ -209,6 +209,9 @@ class ComboBoxDropdown extends mixinBehaviors(IronResizableBehavior, PolymerElem
       return;
     }
 
+    this._scroller.style.maxHeight =
+      getComputedStyle(this).getPropertyValue('--vaadin-combo-box-overlay-max-height') || '65vh';
+
     if (opened) {
       document.addEventListener('click', this._boundOutsideClickListener, true);
       this.dispatchEvent(new CustomEvent('vaadin-combo-box-dropdown-opened', { bubbles: true, composed: true }));

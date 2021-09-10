@@ -19,11 +19,6 @@ registerStyles(
       flex-direction: column;
       height: 100%;
     }
-
-    [part='overlay'] {
-      /* TODO: What would be a good default for the overlay max-height? */
-      max-height: 600px;
-    }
   `,
   { moduleId: 'vaadin-combo-box-overlay-styles' }
 );
