@@ -1,21 +1,10 @@
-# &lt;vaadin-message-list&gt;
+# @vaadin/message-list
 
-[Live demo and examples ↗ ](https://vaadin.com/docs/latest/ds/components/messages)
-|
-[API documentation ↗](https://cdn.vaadin.com/vaadin-messages/1.0.1/)
+A web component that allows you to show a list of messages, for example, a chat log.
 
-[&lt;vaadin-message-list&gt;](https://vaadin.com/components/vaadin-messages) is a Web Component for showing a list of messages, part of the [Vaadin components](https://vaadin.com/components).
-
-[![npm version](https://badgen.net/npm/v/@vaadin/message-list)](https://www.npmjs.com/package/@vaadin/message-list)
-[![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinmessage-list)
-[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
+[Live Demo ↗](https://vaadin.com/docs/latest/ds/components/message-list)
 
 ```html
-<!-- Example of single messages -->
-<vaadin-message></vaadin-message>
-<vaadin-message foo="bar"></vaadin-message>
-
-<!-- Example of a list of messages -->
 <vaadin-message-list></vaadin-message-list>
 <script>
   document.querySelector('vaadin-message-list').items = [
@@ -27,55 +16,49 @@
 </script>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-messages/master/screenshot.png" width="418" alt="Screenshot of vaadin-message">](https://vaadin.com/components/message-list)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/message-list/screenshot.png" width="504" alt="Screenshot of vaadin-message-list">](https://vaadin.com/components/message-list)
 
 ## Installation
 
-Install `vaadin-message-list`:
+Install the component:
 
 ```sh
 npm i @vaadin/message-list --save
 ```
 
-Once installed, import it in your application:
+Once installed, import the component in your application:
 
 ```js
-import '@vaadin/message-list/vaadin-message-list.js'; // for a list of messages
-import '@vaadin/message-list/vaadin-message.js'; // for a single message
+import '@vaadin/message-list';
 ```
 
-## Getting started
+## Themes
 
-Vaadin components use the Lumo theme by default.
+Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/ds/customization/using-themes),
+Lumo and Material. The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/message-list/vaadin-message-list.js)
+of the package uses the Lumo theme.
 
-To use the Material theme, import the correspondent file from the `theme/material` folder.
+To use the Material theme, import the component from the `theme/material` folder:
 
-## Entry points
+```js
+import '@vaadin/message-list/theme/material/vaadin-message-list.js';
+```
 
-- The components with the Lumo theme:
+You can also import the Lumo version of the component explicitly:
 
-  `theme/lumo/vaadin-message.js`
+```js
+import '@vaadin/message-list/theme/lumo/vaadin-message-list.js';
+```
 
-  `theme/lumo/vaadin-message-list.js`
+Finally, you can import the un-themed component from the `src` folder to get a minimal starting point:
 
-- The components with the Material theme:
-
-  `theme/material/vaadin-message.js`
-
-  `theme/material/vaadin-message.-list.js`
-
-- Alias for `theme/lumo/vaadin-message.js` and `theme/lumo/vaadin-message-list.js`:
-
-  `vaadin-message.js`
-
-  `vaadin-message-list.js`
-
-## Contributing
-
-Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
+```js
+import '@vaadin/message-list/src/vaadin-message-list.js';
+```
 
 ## License
 
 Apache License 2.0
 
-Vaadin collects development time usage statistics to improve this product. For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.
+Vaadin collects development time usage statistics to improve this product.
+For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.
