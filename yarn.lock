@@ -238,7 +238,7 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@esm-bundle/chai@^4.3.4":
+"@esm-bundle/chai@^4.3.1", "@esm-bundle/chai@^4.3.4":
   version "4.3.4"
   resolved "https://registry.yarnpkg.com/@esm-bundle/chai/-/chai-4.3.4.tgz#74ed4a0794b3a9f9517ff235744ac6f4be0d34dc"
   integrity sha512-6Tx35wWiNw7X0nLY9RMx8v3EL8SacCFW+eEZOE9Hc+XxmU5HFE2AFEg+GehUZpiyDGwVvPH75ckGlqC7coIPnA==
@@ -1262,6 +1262,14 @@
     "@octokit/webhooks-types" "4.3.0"
     aggregate-error "^3.1.0"
 
+"@open-wc/semantic-dom-diff@^0.19.5-next.1":
+  version "0.19.5-next.2"
+  resolved "https://registry.yarnpkg.com/@open-wc/semantic-dom-diff/-/semantic-dom-diff-0.19.5-next.2.tgz#272acd6935a75e8fc5a287aff50c3b588b17004e"
+  integrity sha512-T7GPbhcXwbT+FriO/7aa3Kp5iIGqf8l7SL7rSNVa0mqzBUmZ1Gfyxy965ZS/kRtGc6ytnbJ1Gqnr2GHN/brftA==
+  dependencies:
+    "@types/chai" "^4.2.11"
+    "@web/test-runner-commands" "^0.5.7"
+
 "@polymer/app-layout@^3.0.0-pre.26":
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/@polymer/app-layout/-/app-layout-3.1.0.tgz#b146cd2ce202e079ac51059a4fcaef03f5b2f3c4"
@@ -1669,7 +1677,7 @@
     "@types/node" "*"
     "@types/responselike" "*"
 
-"@types/chai@^4.2.12":
+"@types/chai@^4.2.11", "@types/chai@^4.2.12":
   version "4.2.21"
   resolved "https://registry.yarnpkg.com/@types/chai/-/chai-4.2.21.tgz#9f35a5643129df132cf3b5c1ec64046ea1af0650"
   integrity sha512-yd+9qKmJxm496BOV9CMNaey8TWsikaZOwMRwPHQIjcOJM9oV+fi9ZMNw3JsVnbEEbo2gRTDnGEBv8pjyn67hNg==
@@ -2040,11 +2048,13 @@
     "@typescript-eslint/types" "4.29.2"
     eslint-visitor-keys "^2.0.0"
 
-"@vaadin/testing-helpers@0.2.1", "@vaadin/testing-helpers@^0.2.1":
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/@vaadin/testing-helpers/-/testing-helpers-0.2.1.tgz#b71c1905974a8f2fab836df5d6d0323d71d193ff"
-  integrity sha512-hN/OC/r31CciBeoWGJhB7/1i8gfB106fG7/KUii5S8G27EvzmiBBRIyWsJKW8M0uAJatC843DnQ+hDhpnRqDcQ==
+"@vaadin/testing-helpers@^0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@vaadin/testing-helpers/-/testing-helpers-0.3.0.tgz#b8f98c72aa389985c9d6071bfd2049374b323461"
+  integrity sha512-y6oWPo5NvDXXKyZd6sC4P3lVmEcCCfq5+wvVSy46gIq31rb2VRoJl+BOtTfyof05QMJkjXb5vklDZcTfQ0zlfQ==
   dependencies:
+    "@esm-bundle/chai" "^4.3.1"
+    "@open-wc/semantic-dom-diff" "^0.19.5-next.1"
     "@polymer/polymer" "^3.4.1"
 
 "@vaadin/vaadin-development-mode-detector@^2.0.0":
@@ -2213,7 +2223,7 @@
     chrome-launcher "^0.14.0"
     puppeteer-core "^9.1.0"
 
-"@web/test-runner-commands@^0.5.10", "@web/test-runner-commands@^0.5.12":
+"@web/test-runner-commands@^0.5.10", "@web/test-runner-commands@^0.5.12", "@web/test-runner-commands@^0.5.7":
   version "0.5.12"
   resolved "https://registry.yarnpkg.com/@web/test-runner-commands/-/test-runner-commands-0.5.12.tgz#1a5940505994acfa05585ad7ecd8ad8f6e91c725"
   integrity sha512-W5ajWzO7+d3u1R0/FPBU8q3d4y5faOQVIWnOruFNvXu3Qjfg2VCWFOtARegA7ATNCE18H0dGRuF4KGxHDmMe3g==

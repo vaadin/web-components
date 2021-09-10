@@ -26,7 +26,7 @@
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
     "@vaadin/checkbox": "^22.0.0-alpha5",
-    "@vaadin/testing-helpers": "^0.2.1",
+    "@vaadin/testing-helpers": "^0.3.0",
     "@vaadin/vaadin-grid": "^22.0.0-alpha5",
     "@vaadin/vaadin-grid-pro": "^22.0.0-alpha5"
   },
