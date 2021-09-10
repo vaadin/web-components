@@ -5,14 +5,21 @@
  */
 import { OverlayElement } from '@vaadin/vaadin-overlay/src/vaadin-overlay.js';
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+import { PositionMixin } from '@vaadin/vaadin-overlay/src/vaadin-overlay-position-mixin.js';
 
 registerStyles(
   'vaadin-combo-box-overlay',
   css`
-    :host {
-      margin: 0;
-      align-items: stretch;
+    #overlay {
       width: var(--vaadin-combo-box-overlay-width, var(--_vaadin-combo-box-overlay-default-width, auto));
+    }
+
+    [part='content'] {
+      /* What's a good default? */
+      max-height: 600px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
     }
   `,
   { moduleId: 'vaadin-combo-box-overlay-styles' }
@@ -24,7 +31,7 @@ registerStyles(
  * @extends OverlayElement
  * @private
  */
-class ComboBoxOverlayElement extends OverlayElement {
+class ComboBoxOverlayElement extends PositionMixin(OverlayElement) {
   static get is() {
     return 'vaadin-combo-box-overlay';
   }

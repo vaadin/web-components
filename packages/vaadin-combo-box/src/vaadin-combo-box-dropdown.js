@@ -10,8 +10,6 @@ import './vaadin-combo-box-item.js';
 import './vaadin-combo-box-overlay.js';
 import './vaadin-combo-box-scroller.js';
 
-const ONE_THIRD = 0.3;
-
 const TOUCH_DEVICE = (() => {
   try {
     document.createEvent('TouchEvent');
@@ -45,6 +43,8 @@ class ComboBoxDropdown extends mixinBehaviors(IronResizableBehavior, PolymerElem
         loading$="[[loading]]"
         opened="[[_overlayOpened]]"
         theme$="[[theme]]"
+        position-target="[[positionTarget]]"
+        no-vertical-overlap
       ></vaadin-combo-box-overlay>
     `;
   }
@@ -69,14 +69,6 @@ class ComboBoxDropdown extends mixinBehaviors(IronResizableBehavior, PolymerElem
       },
 
       /**
-       * If `true`, overlay is aligned above the `positionTarget`
-       */
-      alignedAbove: {
-        type: Boolean,
-        value: false
-      },
-
-      /**
        * Custom function for rendering the content of the `<vaadin-combo-box-item>` propagated from the combo box element.
        */
       renderer: Function,
@@ -87,8 +79,7 @@ class ComboBoxDropdown extends mixinBehaviors(IronResizableBehavior, PolymerElem
       loading: {
         type: Boolean,
         value: false,
-        reflectToAttribute: true,
-        observer: '_loadingChanged'
+        reflectToAttribute: true
       },
 
       /**
@@ -144,13 +135,7 @@ class ComboBoxDropdown extends mixinBehaviors(IronResizableBehavior, PolymerElem
 
   constructor() {
     super();
-    this._boundSetPosition = this._setPosition.bind(this);
     this._boundOutsideClickListener = this._outsideClickListener.bind(this);
-  }
-
-  connectedCallback() {
-    super.connectedCallback();
-    this.addEventListener('iron-resize', this._boundSetPosition);
   }
 
   ready() {
@@ -190,7 +175,6 @@ class ComboBoxDropdown extends mixinBehaviors(IronResizableBehavior, PolymerElem
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    this.removeEventListener('iron-resize', this._boundSetPosition);
 
     // Making sure the overlay is closed and removed from DOM after detaching the dropdown.
     this._overlayOpened = false;
@@ -200,11 +184,11 @@ class ComboBoxDropdown extends mixinBehaviors(IronResizableBehavior, PolymerElem
     super.notifyResize();
 
     if (this.positionTarget && this.opened) {
-      this._setPosition();
+      this._setOverlayWidth();
       // Schedule another position update (to cover virtual keyboard opening for example)
-      requestAnimationFrame(() => {
-        this._setPosition();
-      });
+      // requestAnimationFrame(() => {
+      //   this._setPosition();
+      // });
     }
   }
 
@@ -226,14 +210,9 @@ class ComboBoxDropdown extends mixinBehaviors(IronResizableBehavior, PolymerElem
     }
 
     if (opened) {
-      this.$.overlay.style.position = this._isPositionFixed(this.positionTarget) ? 'fixed' : 'absolute';
-      this._setPosition();
-
-      window.addEventListener('scroll', this._boundSetPosition, true);
       document.addEventListener('click', this._boundOutsideClickListener, true);
       this.dispatchEvent(new CustomEvent('vaadin-combo-box-dropdown-opened', { bubbles: true, composed: true }));
     } else if (!this.__emptyItems) {
-      window.removeEventListener('scroll', this._boundSetPosition, true);
       document.removeEventListener('click', this._boundOutsideClickListener, true);
       this.dispatchEvent(new CustomEvent('vaadin-combo-box-dropdown-closed', { bubbles: true, composed: true }));
     }
@@ -247,36 +226,6 @@ class ComboBoxDropdown extends mixinBehaviors(IronResizableBehavior, PolymerElem
     }
     this._overlayOpened = !!(opened && (loading || hasItems));
     this.__emptyItems = false;
-  }
-
-  _loadingChanged() {
-    this._setOverlayHeight();
-  }
-
-  _setOverlayHeight() {
-    if (!this._scroller || !this.opened || !this.positionTarget) {
-      return;
-    }
-
-    const targetRect = this.positionTarget.getBoundingClientRect();
-
-    this._scroller.style.maxHeight =
-      getComputedStyle(this).getPropertyValue('--vaadin-combo-box-overlay-max-height') || '65vh';
-
-    const maxHeight = this._maxOverlayHeight(targetRect);
-
-    // overlay max height is restrained by the #scroller max height which is set to 65vh in CSS.
-    this.$.overlay.style.maxHeight = maxHeight;
-  }
-
-  _maxOverlayHeight(targetRect) {
-    const margin = 8;
-    const minHeight = 116; // Height of two items in combo-box
-    if (this.alignedAbove) {
-      return Math.max(targetRect.top - margin + Math.min(document.body.scrollTop, 0), minHeight) + 'px';
-    } else {
-      return Math.max(document.documentElement.clientHeight - targetRect.bottom - margin, minHeight) + 'px';
-    }
   }
 
   _getFocusedItem(focusedIndex) {
@@ -356,45 +305,6 @@ class ComboBoxDropdown extends mixinBehaviors(IronResizableBehavior, PolymerElem
     }
   }
 
-  _isPositionFixed(element) {
-    const offsetParent = this._getOffsetParent(element);
-
-    return (
-      window.getComputedStyle(element).position === 'fixed' || (offsetParent && this._isPositionFixed(offsetParent))
-    );
-  }
-
-  _getOffsetParent(element) {
-    if (element.assignedSlot) {
-      return element.assignedSlot.parentElement;
-    } else if (element.parentElement) {
-      return element.offsetParent;
-    }
-
-    const parent = element.parentNode;
-
-    if (parent && parent.nodeType === 11 && parent.host) {
-      return parent.host; // parent is #shadowRoot
-    }
-  }
-
-  _verticalOffset(overlayRect, targetRect) {
-    return this.alignedAbove ? -overlayRect.height : targetRect.height;
-  }
-
-  _shouldAlignLeft(targetRect) {
-    const spaceRight = (window.innerWidth - targetRect.right) / window.innerWidth;
-
-    return spaceRight < ONE_THIRD;
-  }
-
-  _shouldAlignAbove(targetRect) {
-    const spaceBelow =
-      (window.innerHeight - targetRect.bottom - Math.min(document.body.scrollTop, 0)) / window.innerHeight;
-
-    return spaceBelow < ONE_THIRD;
-  }
-
   _setOverlayWidth() {
     const inputWidth = this.positionTarget.clientWidth + 'px';
     const customWidth = getComputedStyle(this).getPropertyValue('--vaadin-combo-box-overlay-width');
@@ -406,40 +316,8 @@ class ComboBoxDropdown extends mixinBehaviors(IronResizableBehavior, PolymerElem
     } else {
       this.$.overlay.style.setProperty('--vaadin-combo-box-overlay-width', customWidth);
     }
-  }
 
-  _setPosition(e) {
-    if (this._isOverlayHidden()) {
-      return;
-    }
-    if (e && e.target) {
-      const target = e.target === document ? document.body : e.target;
-      const parent = this.$.overlay.parentElement;
-      if (!(target.contains(this.$.overlay) || target.contains(this.positionTarget)) || parent !== document.body) {
-        return;
-      }
-    }
-
-    const targetRect = this.positionTarget.getBoundingClientRect();
-    const alignedLeft = this._shouldAlignLeft(targetRect);
-    this.alignedAbove = this._shouldAlignAbove(targetRect);
-
-    const overlayRect = this.$.overlay.getBoundingClientRect();
-    this._translateX = alignedLeft
-      ? targetRect.right - overlayRect.right + (this._translateX || 0)
-      : targetRect.left - overlayRect.left + (this._translateX || 0);
-    this._translateY =
-      targetRect.top - overlayRect.top + (this._translateY || 0) + this._verticalOffset(overlayRect, targetRect);
-
-    const _devicePixelRatio = window.devicePixelRatio || 1;
-    this._translateX = Math.round(this._translateX * _devicePixelRatio) / _devicePixelRatio;
-    this._translateY = Math.round(this._translateY * _devicePixelRatio) / _devicePixelRatio;
-    this.$.overlay.style.transform = `translate3d(${this._translateX}px, ${this._translateY}px, 0)`;
-
-    this.$.overlay.style.justifyContent = this.alignedAbove ? 'flex-end' : 'flex-start';
-
-    this._setOverlayWidth();
-    this._setOverlayHeight();
+    this.$.overlay._updatePosition();
   }
 
   /**

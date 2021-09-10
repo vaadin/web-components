@@ -6,7 +6,7 @@
 /**
  * @polymerMixin
  */
-export const _PositionMixin = (superClass) =>
+export const PositionMixin = (superClass) =>
   class PositionMixin extends superClass {
     static get properties() {
       return {
@@ -68,30 +68,25 @@ export const _PositionMixin = (superClass) =>
     static get observers() {
       return [
         `__positionSettingsChanged(positionTarget, horizontalAlign, verticalAlign,
-      noHorizontalOverlap, noVerticalOverlap)`
+      noHorizontalOverlap, noVerticalOverlap)`,
+        `__overlayOpenedChanged(opened)`
       ];
     }
 
     constructor() {
       super();
 
-      const boundUpdatePosition = this._updatePosition.bind(this);
-
-      this.addEventListener('opened-changed', (e) => {
-        const func = e.detail.value ? 'addEventListener' : 'removeEventListener';
-        window[func]('scroll', boundUpdatePosition);
-        window[func]('resize', boundUpdatePosition);
-
-        if (e.detail.value) {
-          this._updatePosition();
-        }
-      });
+      this.__boundUpdatePosition = this._updatePosition.bind(this);
     }
 
-    ready() {
-      super.ready();
+    __overlayOpenedChanged(opened) {
+      const func = opened ? 'addEventListener' : 'removeEventListener';
+      window[func]('scroll', this.__boundUpdatePosition);
+      window[func]('resize', this.__boundUpdatePosition);
 
-      console.warn('PositionMixin is not considered stable and might change any time');
+      if (opened) {
+        this._updatePosition();
+      }
     }
 
     __positionSettingsChanged() {
