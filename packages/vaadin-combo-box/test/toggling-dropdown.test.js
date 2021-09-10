@@ -1,8 +1,8 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { aTimeout, click, fixtureSync, focusout, tap } from '@vaadin/testing-helpers';
+import { aTimeout, click, fixtureSync, focusout, isIOS, tap } from '@vaadin/testing-helpers';
 import '@vaadin/vaadin-template-renderer';
-import { createEventSpy, TOUCH_DEVICE } from './helpers.js';
+import { createEventSpy } from './helpers.js';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
 
@@ -120,7 +120,7 @@ describe('toggling dropdown', () => {
       expect(overlay.hidden).to.be.true;
     });
 
-    (TOUCH_DEVICE ? describe : describe.skip)('after opening', () => {
+    (isIOS ? describe : describe.skip)('after opening', () => {
       beforeEach(() => {
         comboBox.open();
       });
@@ -156,7 +156,7 @@ describe('toggling dropdown', () => {
   });
 
   describe('closing', () => {
-    (TOUCH_DEVICE ? it : it.skip)('should close popup when clicking outside overlay', () => {
+    (isIOS ? it : it.skip)('should close popup when clicking outside overlay', () => {
       comboBox.open();
 
       click(document.body);
@@ -164,7 +164,7 @@ describe('toggling dropdown', () => {
       expect(comboBox.opened).to.be.false;
     });
 
-    (TOUCH_DEVICE ? it.skip : it)('should close popup when clicking outside overlay', () => {
+    (isIOS ? it.skip : it)('should close popup when clicking outside overlay', () => {
       comboBox.open();
 
       document.body.click();
@@ -280,7 +280,7 @@ describe('toggling dropdown', () => {
     });
   });
 
-  (TOUCH_DEVICE ? describe : describe.skip)('external focus (initially)', () => {
+  (isIOS ? describe : describe.skip)('external focus (initially)', () => {
     let input, blurSpy;
 
     beforeEach(() => {

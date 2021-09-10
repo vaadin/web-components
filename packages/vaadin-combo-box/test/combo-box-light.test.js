@@ -5,6 +5,7 @@ import {
   click,
   enter,
   fixtureSync,
+  isIOS,
   mousedown,
   mouseup,
   touchend,
@@ -18,7 +19,7 @@ import '@polymer/iron-input/iron-input.js';
 import '@polymer/paper-input/paper-input.js';
 import '@vaadin/vaadin-text-field/vaadin-text-field.js';
 import '@vaadin/vaadin-template-renderer';
-import { createEventSpy, getFirstItem, TOUCH_DEVICE } from './helpers.js';
+import { createEventSpy, getFirstItem } from './helpers.js';
 import './not-animated-styles.js';
 import '../vaadin-combo-box-light.js';
 
@@ -136,7 +137,7 @@ describe('vaadin-combo-box-light', () => {
     });
   });
 
-  (TOUCH_DEVICE ? describe.skip : describe)('after opening', () => {
+  (isIOS ? describe.skip : describe)('after opening', () => {
     beforeEach(() => {
       comboBox.open();
     });
