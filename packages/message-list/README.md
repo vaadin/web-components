@@ -16,7 +16,7 @@ A web component that allows you to show a list of messages, for example, a chat 
 </script>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/message-list/screenshot.png" width="504" alt="Screenshot of vaadin-message-list">](https://vaadin.com/components/message-list)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/message-list/screenshot.png" width="504" alt="Screenshot of vaadin-message-list">](https://vaadin.com/docs/latest/ds/components/message-list)
 
 ## Installation
 
