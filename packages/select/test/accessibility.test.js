@@ -39,10 +39,6 @@ describe('accessibility', () => {
     expect(select.getAttribute('aria-disabled')).to.be.equal('true');
   });
 
-  it('should set aria-haspopup="listbox" on the value button', () => {
-    expect(valueButton.getAttribute('aria-haspopup')).to.be.equal('listbox');
-  });
-
   it('should set aria-expanded attribute on the value button', () => {
     expect(valueButton.getAttribute('aria-expanded')).to.be.equal('false');
     select.opened = true;

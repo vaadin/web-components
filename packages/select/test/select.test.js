@@ -585,53 +585,6 @@ describe('vaadin-select', () => {
     });
   });
 
-  describe('input field', () => {
-    let inputField;
-
-    beforeEach(() => {
-      select = fixtureSync('<vaadin-select></vaadin-select>');
-      inputField = select._inputContainer;
-    });
-
-    it('should propagate invalid property to the input container', () => {
-      select.invalid = true;
-      expect(inputField.invalid).to.be.true;
-
-      select.invalid = false;
-      expect(inputField.invalid).to.be.false;
-    });
-
-    it('should propagate readonly property to the input container', () => {
-      select.readonly = true;
-      expect(inputField.readonly).to.be.true;
-
-      select.readonly = false;
-      expect(inputField.readonly).to.be.false;
-    });
-
-    it('should propagate disabled property to the input container', () => {
-      select.disabled = true;
-      expect(inputField.disabled).to.be.true;
-
-      select.disabled = false;
-      expect(inputField.disabled).to.be.false;
-    });
-  });
-
-  describe('theme attribute', () => {
-    beforeEach(() => {
-      select = fixtureSync('<vaadin-select theme="foo"></vaadin-select>');
-    });
-
-    it('should propagate theme attribute to overlay', () => {
-      expect(select._overlayElement.getAttribute('theme')).to.equal('foo');
-    });
-
-    it('should propagate theme attribute to the input container', () => {
-      expect(select._inputContainer.getAttribute('theme')).to.equal('foo');
-    });
-  });
-
   describe('inside flexbox', () => {
     let container;
 
