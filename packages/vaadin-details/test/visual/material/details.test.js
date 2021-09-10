@@ -22,28 +22,28 @@ describe('details', () => {
 
   describe('default', () => {
     it('basic', async () => {
-      await visualDiff(div, `${import.meta.url}_basic`);
+      await visualDiff(div, 'basic');
     });
 
     it('opened', async () => {
       element.opened = true;
-      await visualDiff(div, `${import.meta.url}_opened`);
+      await visualDiff(div, 'opened');
     });
 
     it('focus-ring', async () => {
       element.setAttribute('focus-ring', '');
-      await visualDiff(div, `${import.meta.url}_focus-ring`);
+      await visualDiff(div, 'focus-ring');
     });
 
     it('disabled', async () => {
       element.disabled = true;
-      await visualDiff(div, `${import.meta.url}_disabled`);
+      await visualDiff(div, 'disabled');
     });
 
     it('disabled opened', async () => {
       element.opened = true;
       element.disabled = true;
-      await visualDiff(div, `${import.meta.url}_disabled-opened`);
+      await visualDiff(div, 'disabled-opened');
     });
   });
 
@@ -57,12 +57,12 @@ describe('details', () => {
     });
 
     it('RTL basic', async () => {
-      await visualDiff(div, `${import.meta.url}_rtl-basic`);
+      await visualDiff(div, 'rtl-basic');
     });
 
     it('RTL opened', async () => {
       element.opened = true;
-      await visualDiff(div, `${import.meta.url}_rtl-opened`);
+      await visualDiff(div, 'rtl-opened');
     });
   });
 });

@@ -15,23 +15,23 @@ describe('crud', () => {
 
   it('basic', async () => {
     element.editedItem = {};
-    await visualDiff(div, `${import.meta.url}_basic`);
+    await visualDiff(div, 'basic');
   });
 
   it('editor-position-bottom', async () => {
     element.editorPosition = 'bottom';
     await nextRender(element);
     element.editedItem = {};
-    await visualDiff(div, `${import.meta.url}_editor-position-bottom`);
+    await visualDiff(div, 'editor-position-bottom');
   });
 
   it('toolbar-visible-by-defualt', async () => {
-    await visualDiff(div, `${import.meta.url}_toolbar-visible`);
+    await visualDiff(div, 'toolbar-visible');
   });
 
   it('no-toolbar', async () => {
     element.noToolbar = true;
-    await visualDiff(div, `${import.meta.url}_toolbar-hidden`);
+    await visualDiff(div, 'toolbar-hidden');
   });
 
   ['ltr', 'rtl'].forEach((dir) => {
@@ -48,7 +48,7 @@ describe('crud', () => {
         element.editorPosition = 'aside';
         await nextRender(element);
         element.editedItem = {};
-        await visualDiff(div, `${import.meta.url}_${dir}-editor-position-aside`);
+        await visualDiff(div, `${dir}-editor-position-aside`);
       });
     });
   });

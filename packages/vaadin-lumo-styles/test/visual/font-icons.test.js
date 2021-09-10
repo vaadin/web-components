@@ -36,6 +36,6 @@ describe('font-icons', () => {
   });
 
   it('basic', async () => {
-    await visualDiff(wrapper, `${import.meta.url}_font-icons`);
+    await visualDiff(wrapper, 'font-icons');
   });
 });

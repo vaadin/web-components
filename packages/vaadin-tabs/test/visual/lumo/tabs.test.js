@@ -35,17 +35,17 @@ describe('tabs', () => {
         });
 
         it('start', async () => {
-          await visualDiff(div, `${import.meta.url}_${dir}-horizontal-start`);
+          await visualDiff(div, `${dir}-horizontal-start`);
         });
 
         it('middle', async () => {
           element.selected = 1;
-          await visualDiff(div, `${import.meta.url}_${dir}-horizontal-middle`);
+          await visualDiff(div, `${dir}-horizontal-middle`);
         });
 
         it('end', async () => {
           element.selected = 2;
-          await visualDiff(div, `${import.meta.url}_${dir}-horizontal-end`);
+          await visualDiff(div, `${dir}-horizontal-end`);
         });
       });
 
@@ -64,17 +64,17 @@ describe('tabs', () => {
         });
 
         it('start', async () => {
-          await visualDiff(div, `${import.meta.url}_${dir}-vertical-start`);
+          await visualDiff(div, `${dir}-vertical-start`);
         });
 
         it('middle', async () => {
           element.selected = 1;
-          await visualDiff(div, `${import.meta.url}_${dir}-vertical-middle`);
+          await visualDiff(div, `${dir}-vertical-middle`);
         });
 
         it('end', async () => {
           element.selected = 2;
-          await visualDiff(div, `${import.meta.url}_${dir}-vertical-end`);
+          await visualDiff(div, `${dir}-vertical-end`);
         });
       });
     });
@@ -95,12 +95,12 @@ describe('tabs', () => {
     });
 
     it('horizontal', async () => {
-      await visualDiff(div, `${import.meta.url}_anchors-horizontal`);
+      await visualDiff(div, 'anchors-horizontal');
     });
 
     it('vertical', async () => {
       element.orientation = 'vertical';
-      await visualDiff(div, `${import.meta.url}_anchors-vertical`);
+      await visualDiff(div, 'anchors-vertical');
     });
   });
 
@@ -153,7 +153,7 @@ describe('tabs', () => {
             it('selected', async () => {
               element.orientation = orientation;
               element.selected = 8;
-              await visualDiff(div, `${import.meta.url}_${dir}-${orientation}-scroll`);
+              await visualDiff(div, `${dir}-${orientation}-scroll`);
             });
           });
         });

@@ -23,25 +23,25 @@ describe('item', () => {
       });
 
       it('basic', async () => {
-        await visualDiff(div, `${import.meta.url}_${dir}-basic`);
+        await visualDiff(div, `${dir}-basic`);
       });
 
       it('focusable', async () => {
         element.setAttribute('tabindex', '0');
-        await visualDiff(div, `${import.meta.url}_${dir}-focusable`);
+        await visualDiff(div, `${dir}-focusable`);
       });
 
       it('selected', async () => {
         element.setAttribute('tabindex', '0');
         element.setAttribute('selected', '');
-        await visualDiff(div, `${import.meta.url}_${dir}-selected`);
+        await visualDiff(div, `${dir}-selected`);
       });
 
       it('multi line', async () => {
         const second = document.createElement('div');
         second.textContent = 'Second line';
         element.appendChild(second);
-        await visualDiff(div, `${import.meta.url}_${dir}-multi-line`);
+        await visualDiff(div, `${dir}-multi-line`);
       });
     });
   });

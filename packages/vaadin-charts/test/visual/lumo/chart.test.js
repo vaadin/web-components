@@ -5,7 +5,7 @@ import '../../../vaadin-chart.js';
 describe('chart', () => {
   it('empty with title', async () => {
     const element = fixtureSync('<vaadin-chart title="The chart title"></vaadin-chart>');
-    await visualDiff(element, `${import.meta.url}_empty-title`);
+    await visualDiff(element, 'empty-title');
   });
 
   it('should update when container width changes', (done) => {
@@ -55,7 +55,7 @@ describe('chart', () => {
               box.classList.toggle('hidden');
               chart.__reflow();
               setTimeout(async () => {
-                await visualDiff(element, `${import.meta.url}_responsive`);
+                await visualDiff(element, 'responsive');
                 done();
               });
             });

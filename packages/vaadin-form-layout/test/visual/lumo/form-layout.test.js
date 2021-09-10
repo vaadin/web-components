@@ -46,7 +46,7 @@ describe('form-layout', () => {
     });
 
     it('basic', async () => {
-      await visualDiff(element, `${import.meta.url}_basic`);
+      await visualDiff(element, 'basic');
     });
   });
 
@@ -68,7 +68,7 @@ describe('form-layout', () => {
     });
 
     it('new line', async () => {
-      await visualDiff(element, `${import.meta.url}_br`);
+      await visualDiff(element, 'br');
     });
   });
 
@@ -95,7 +95,7 @@ describe('form-layout', () => {
     });
 
     it('colspan', async () => {
-      await visualDiff(element, `${import.meta.url}_colspan`);
+      await visualDiff(element, 'colspan');
     });
   });
 
@@ -138,7 +138,7 @@ describe('form-layout', () => {
     });
 
     it('CSS properties', async () => {
-      await visualDiff(element, `${import.meta.url}_css-properties`);
+      await visualDiff(element, 'css-properties');
     });
   });
 
@@ -170,7 +170,7 @@ describe('form-layout', () => {
     });
 
     it('responsiveSteps', async () => {
-      await visualDiff(element, `${import.meta.url}_responsive-steps`);
+      await visualDiff(element, 'responsive-steps');
     });
   });
 
@@ -202,7 +202,7 @@ describe('form-layout', () => {
     });
 
     it('single column', async () => {
-      await visualDiff(element, `${import.meta.url}_single-column`);
+      await visualDiff(element, 'single-column');
     });
   });
 });

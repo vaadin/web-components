@@ -23,12 +23,12 @@ describe('overlay', () => {
 
   it('basic', async () => {
     element.opened = true;
-    await visualDiff(div, `${import.meta.url}_basic`);
+    await visualDiff(div, 'basic');
   });
 
   it('with-backdrop', async () => {
     element.withBackdrop = true;
     element.opened = true;
-    await visualDiff(div, `${import.meta.url}_with-backdrop`);
+    await visualDiff(div, 'with-backdrop');
   });
 });

@@ -16,22 +16,22 @@ describe('input-container', () => {
   });
 
   it('basic', async () => {
-    await visualDiff(div, `${import.meta.url}_basic`);
+    await visualDiff(div, 'basic');
   });
 
   it('disabled', async () => {
     element.disabled = true;
-    await visualDiff(div, `${import.meta.url}_disabled`);
+    await visualDiff(div, 'disabled');
   });
 
   it('readonly', async () => {
     element.readonly = true;
-    await visualDiff(div, `${import.meta.url}_readonly`);
+    await visualDiff(div, 'readonly');
   });
 
   it('invalid', async () => {
     element.invalid = true;
-    await visualDiff(div, `${import.meta.url}_invalid`);
+    await visualDiff(div, 'invalid');
   });
 
   it('prefix icon', async () => {
@@ -39,7 +39,7 @@ describe('input-container', () => {
     icon.setAttribute('slot', 'prefix');
     icon.icon = 'lumo:user';
     element.appendChild(icon);
-    await visualDiff(div, `${import.meta.url}_prefix-icon`);
+    await visualDiff(div, 'prefix-icon');
   });
 
   it('suffix icon', async () => {
@@ -47,7 +47,7 @@ describe('input-container', () => {
     icon.setAttribute('slot', 'suffix');
     icon.icon = 'lumo:user';
     element.appendChild(icon);
-    await visualDiff(div, `${import.meta.url}_suffix-icon`);
+    await visualDiff(div, 'suffix-icon');
   });
 
   ['ltr', 'rtl'].forEach((dir) => {
@@ -63,19 +63,19 @@ describe('input-container', () => {
       it('align-left', async () => {
         input.value = 'Some text';
         element.setAttribute('theme', 'align-left');
-        await visualDiff(div, `${import.meta.url}_${dir}-align-left`);
+        await visualDiff(div, `${dir}-align-left`);
       });
 
       it('align-center', async () => {
         input.value = 'Some text';
         element.setAttribute('theme', 'align-center');
-        await visualDiff(div, `${import.meta.url}_${dir}-align-center`);
+        await visualDiff(div, `${dir}-align-center`);
       });
 
       it('align-right', async () => {
         input.value = 'Some text';
         element.setAttribute('theme', 'align-right');
-        await visualDiff(div, `${import.meta.url}_${dir}-align-right`);
+        await visualDiff(div, `${dir}-align-right`);
       });
     });
   });

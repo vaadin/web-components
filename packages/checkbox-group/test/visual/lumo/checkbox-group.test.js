@@ -24,33 +24,33 @@ describe('checkbox-group', () => {
 
   describe('default', () => {
     it('basic', async () => {
-      await visualDiff(div, `${import.meta.url}_basic`);
+      await visualDiff(div, 'basic');
     });
 
     it('disabled', async () => {
       element.disabled = true;
-      await visualDiff(div, `${import.meta.url}_disabled`);
+      await visualDiff(div, 'disabled');
     });
 
     it('vertical', async () => {
       element.setAttribute('theme', 'vertical');
-      await visualDiff(div, `${import.meta.url}_vertical`);
+      await visualDiff(div, 'vertical');
     });
 
     it('label', async () => {
       element.label = 'Label';
-      await visualDiff(div, `${import.meta.url}_label`);
+      await visualDiff(div, 'label');
     });
 
     it('value', async () => {
       element.value = ['a', 'c'];
-      await visualDiff(div, `${import.meta.url}_value`);
+      await visualDiff(div, 'value');
     });
 
     it('required', async () => {
       element.label = 'Label';
       element.required = true;
-      await visualDiff(div, `${import.meta.url}_required`);
+      await visualDiff(div, 'required');
     });
 
     it('error message', async () => {
@@ -58,17 +58,17 @@ describe('checkbox-group', () => {
       element.errorMessage = 'This field is required';
       element.required = true;
       element.validate();
-      await visualDiff(div, `${import.meta.url}_error-message`);
+      await visualDiff(div, 'error-message');
     });
 
     it('helper text', async () => {
       element.helperText = 'Helper text';
-      await visualDiff(div, `${import.meta.url}_helper-text`);
+      await visualDiff(div, 'helper-text');
     });
 
     it('wrapped', async () => {
       element.style.width = '150px';
-      await visualDiff(div, `${import.meta.url}_wrapped`);
+      await visualDiff(div, 'wrapped');
     });
   });
 
@@ -82,7 +82,7 @@ describe('checkbox-group', () => {
     });
 
     it('RTL basic', async () => {
-      await visualDiff(div, `${import.meta.url}_rtl-basic`);
+      await visualDiff(div, 'rtl-basic');
     });
 
     it('RTL error message', async () => {
@@ -90,12 +90,12 @@ describe('checkbox-group', () => {
       element.errorMessage = 'This field is required';
       element.required = true;
       element.validate();
-      await visualDiff(div, `${import.meta.url}_rtl-error-message`);
+      await visualDiff(div, 'rtl-error-message');
     });
 
     it('RTL wrapped', async () => {
       element.style.width = '150px';
-      await visualDiff(div, `${import.meta.url}_rtl-wrapped`);
+      await visualDiff(div, 'rtl-wrapped');
     });
   });
 });

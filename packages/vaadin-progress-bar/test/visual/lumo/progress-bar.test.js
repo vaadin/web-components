@@ -13,26 +13,26 @@ describe('progress-bar', () => {
   });
 
   it('basic', async () => {
-    await visualDiff(div, `${import.meta.url}_basic`);
+    await visualDiff(div, 'basic');
   });
 
   it('RTL', async () => {
     element.setAttribute('dir', 'rtl');
-    await visualDiff(div, `${import.meta.url}_rtl-basic`);
+    await visualDiff(div, 'rtl-basic');
   });
 
   it('contrast', async () => {
     element.setAttribute('theme', 'contrast');
-    await visualDiff(div, `${import.meta.url}_theme-contrast`);
+    await visualDiff(div, 'theme-contrast');
   });
 
   it('success', async () => {
     element.setAttribute('theme', 'success');
-    await visualDiff(div, `${import.meta.url}_theme-success`);
+    await visualDiff(div, 'theme-success');
   });
 
   it('error', async () => {
     element.setAttribute('theme', 'error');
-    await visualDiff(div, `${import.meta.url}_theme-error`);
+    await visualDiff(div, 'theme-error');
   });
 });

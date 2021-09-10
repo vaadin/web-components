@@ -12,22 +12,22 @@ describe('rich-text-editor', () => {
   });
 
   it('basic', async () => {
-    await visualDiff(div, `${import.meta.url}_basic`);
+    await visualDiff(div, 'basic');
   });
 
   it('disabled', async () => {
     element.disabled = true;
-    await visualDiff(div, `${import.meta.url}_disabled`);
+    await visualDiff(div, 'disabled');
   });
 
   it('readonly', async () => {
     element.readonly = true;
-    await visualDiff(div, `${import.meta.url}_readonly`);
+    await visualDiff(div, 'readonly');
   });
 
   it('min-height', async () => {
     element.style.minHeight = '400px';
-    await visualDiff(div, `${import.meta.url}_min-height`);
+    await visualDiff(div, 'min-height');
   });
 
   it('min-height', async () => {
@@ -64,6 +64,6 @@ describe('rich-text-editor', () => {
       {"attributes":{"code-block":true},"insert":"\\n"},
       {"insert":"\\n"}
     ]`;
-    await visualDiff(div, `${import.meta.url}_max-height`);
+    await visualDiff(div, 'max-height');
   });
 });

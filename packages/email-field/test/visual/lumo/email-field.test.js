@@ -14,12 +14,12 @@ describe('email-field', () => {
 
   it('placeholder', async () => {
     element.placeholder = 'Placeholder';
-    await visualDiff(div, `${import.meta.url}_placeholder`);
+    await visualDiff(div, 'placeholder');
   });
 
   it('value', async () => {
     element.value = 'serguey.kulikov@gmail.com';
-    await visualDiff(div, `${import.meta.url}_value`);
+    await visualDiff(div, 'value');
   });
 
   describe('RTL', () => {
@@ -33,12 +33,12 @@ describe('email-field', () => {
 
     it('RTL value', async () => {
       element.value = 'serguey.kulikov@gmail.com';
-      await visualDiff(div, `${import.meta.url}_rtl-value`);
+      await visualDiff(div, 'rtl-value');
     });
 
     it('RTL placeholder', async () => {
       element.placeholder = 'Placeholder';
-      await visualDiff(div, `${import.meta.url}_rtl-placeholder`);
+      await visualDiff(div, 'rtl-placeholder');
     });
   });
 });

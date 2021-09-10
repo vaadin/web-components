@@ -17,19 +17,19 @@ describe('button', () => {
 
   describe('basic', () => {
     it('basic', async () => {
-      await visualDiff(div, `${import.meta.url}_basic`);
+      await visualDiff(div, 'basic');
     });
 
     it('focus-ring', async () => {
       // Focus on the button
       await sendKeys({ press: 'Tab' });
 
-      await visualDiff(div, `${import.meta.url}_focus-ring`);
+      await visualDiff(div, 'focus-ring');
     });
 
     it('disabled', async () => {
       element.disabled = true;
-      await visualDiff(div, `${import.meta.url}_disabled`);
+      await visualDiff(div, 'disabled');
     });
   });
 
@@ -37,13 +37,13 @@ describe('button', () => {
     describe(variant, () => {
       it(variant, async () => {
         element.setAttribute('theme', `${variant}`);
-        await visualDiff(div, `${import.meta.url}_theme-${variant}`);
+        await visualDiff(div, `theme-${variant}`);
       });
 
       it(`${variant} disabled`, async () => {
         element.setAttribute('theme', `${variant}`);
         element.disabled = true;
-        await visualDiff(div, `${import.meta.url}_theme-${variant}-disabled`);
+        await visualDiff(div, `theme-${variant}-disabled`);
       });
     });
   });
@@ -59,20 +59,20 @@ describe('button', () => {
     it('prefix', async () => {
       icon.setAttribute('slot', 'prefix');
       element.appendChild(icon);
-      await visualDiff(div, `${import.meta.url}_icon-prefix`);
+      await visualDiff(div, 'icon-prefix');
     });
 
     it('suffix', async () => {
       icon.setAttribute('slot', 'suffix');
       element.appendChild(icon);
-      await visualDiff(div, `${import.meta.url}_icon-suffix`);
+      await visualDiff(div, 'icon-suffix');
     });
 
     it('icon only', async () => {
       element.textContent = '';
       icon.setAttribute('slot', 'prefix');
       element.appendChild(icon);
-      await visualDiff(div, `${import.meta.url}_icon-only`);
+      await visualDiff(div, 'icon-only');
     });
   });
 });

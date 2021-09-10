@@ -34,39 +34,39 @@ describe('custom-field', () => {
     });
 
     it('basic', async () => {
-      await visualDiff(element, `${import.meta.url}_basic-default`);
+      await visualDiff(element, 'basic-default');
     });
 
     it('label', async () => {
       element.label = 'Home address';
-      await visualDiff(element, `${import.meta.url}_basic-label`);
+      await visualDiff(element, 'basic-label');
     });
 
     it('value', async () => {
       element.label = 'Home address';
       inputs[0].value = 'Foo street';
       inputs[1].value = 42;
-      await visualDiff(element, `${import.meta.url}_basic-value`);
+      await visualDiff(element, 'basic-value');
     });
 
     it('disabled', async () => {
       element.disabled = true;
       inputs[0].disabled = true;
       inputs[1].disabled = true;
-      await visualDiff(element, `${import.meta.url}_basic-disabled`);
+      await visualDiff(element, 'basic-disabled');
     });
 
     it('required', async () => {
       element.label = 'Home address';
       element.required = true;
-      await visualDiff(element, `${import.meta.url}_basic-required`);
+      await visualDiff(element, 'basic-required');
     });
 
     it('invalid', async () => {
       element.label = 'Home address';
       element.required = true;
       element.invalid = true;
-      await visualDiff(element, `${import.meta.url}_basic-invalid`);
+      await visualDiff(element, 'basic-invalid');
     });
 
     it('error message', async () => {
@@ -74,7 +74,7 @@ describe('custom-field', () => {
       element.required = true;
       element.errorMessage = 'foo';
       element.invalid = true;
-      await visualDiff(element, `${import.meta.url}_basic-error-message`);
+      await visualDiff(element, 'basic-error-message');
     });
 
     it('disabled required', async () => {
@@ -83,12 +83,12 @@ describe('custom-field', () => {
       element.disabled = true;
       inputs[0].disabled = true;
       inputs[1].disabled = true;
-      await visualDiff(element, `${import.meta.url}_basic-disabled-required`);
+      await visualDiff(element, 'basic-disabled-required');
     });
 
     it('helper text', async () => {
       element.helperText = 'Helper text';
-      await visualDiff(element, `${import.meta.url}_basic-helper-text`);
+      await visualDiff(element, 'basic-helper-text');
     });
   });
 
@@ -110,7 +110,7 @@ describe('custom-field', () => {
       });
 
       it('error message alignment', async () => {
-        await visualDiff(wrapper, `${import.meta.url}_alignment-error-message`);
+        await visualDiff(wrapper, 'alignment-error-message');
       });
     });
 
@@ -144,7 +144,7 @@ describe('custom-field', () => {
       });
 
       it('label alignment', async () => {
-        await visualDiff(wrapper, `${import.meta.url}_alignment-label`);
+        await visualDiff(wrapper, 'alignment-label');
       });
     });
 
@@ -163,7 +163,7 @@ describe('custom-field', () => {
       });
 
       it('label + error message alignment', async () => {
-        await visualDiff(wrapper, `${import.meta.url}_alignment-label-error-message`);
+        await visualDiff(wrapper, 'alignment-label-error-message');
       });
     });
 
@@ -182,7 +182,7 @@ describe('custom-field', () => {
       });
 
       it('label + helper text alignment', async () => {
-        await visualDiff(wrapper, `${import.meta.url}_alignment-label-helper-text`);
+        await visualDiff(wrapper, 'alignment-label-helper-text');
       });
     });
   });
@@ -203,7 +203,7 @@ describe('custom-field', () => {
       });
 
       it('label in form layout', async () => {
-        await visualDiff(layout, `${import.meta.url}_form-layout-label-error-message`);
+        await visualDiff(layout, 'form-layout-label-error-message');
       });
     });
 
@@ -228,7 +228,7 @@ describe('custom-field', () => {
       });
 
       it('label in form layout', async () => {
-        await visualDiff(layout, `${import.meta.url}_form-layout-item-text-area`);
+        await visualDiff(layout, 'form-layout-item-text-area');
       });
     });
   });

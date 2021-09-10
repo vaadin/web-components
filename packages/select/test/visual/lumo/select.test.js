@@ -27,44 +27,44 @@ describe('select', () => {
   });
 
   it('basic', async () => {
-    await visualDiff(div, `${import.meta.url}_basic`);
+    await visualDiff(div, 'basic');
   });
 
   it('focus-ring', async () => {
     await sendKeys({ press: 'Tab' });
 
-    await visualDiff(div, `${import.meta.url}_focus-ring`);
+    await visualDiff(div, 'focus-ring');
   });
 
   it('disabled', async () => {
     element.disabled = true;
-    await visualDiff(div, `${import.meta.url}_disabled`);
+    await visualDiff(div, 'disabled');
   });
 
   it('readonly', async () => {
     element.readonly = true;
-    await visualDiff(div, `${import.meta.url}_readonly`);
+    await visualDiff(div, 'readonly');
   });
 
   it('label', async () => {
     element.label = 'Label';
-    await visualDiff(div, `${import.meta.url}_label`);
+    await visualDiff(div, 'label');
   });
 
   it('placeholder', async () => {
     element.placeholder = 'Placeholder';
-    await visualDiff(div, `${import.meta.url}_placeholder`);
+    await visualDiff(div, 'placeholder');
   });
 
   it('value', async () => {
     element.value = 'item 1';
-    await visualDiff(div, `${import.meta.url}_value`);
+    await visualDiff(div, 'value');
   });
 
   it('required', async () => {
     element.label = 'Label';
     element.required = true;
-    await visualDiff(div, `${import.meta.url}_required`);
+    await visualDiff(div, 'required');
   });
 
   it('error message', async () => {
@@ -72,12 +72,12 @@ describe('select', () => {
     element.errorMessage = 'This field is required';
     element.required = true;
     element.validate();
-    await visualDiff(div, `${import.meta.url}_error-message`);
+    await visualDiff(div, 'error-message');
   });
 
   it('helper text', async () => {
     element.helperText = 'Helper text';
-    await visualDiff(div, `${import.meta.url}_helper-text`);
+    await visualDiff(div, 'helper-text');
   });
 
   it('prefix slot', async () => {
@@ -85,7 +85,7 @@ describe('select', () => {
     span.setAttribute('slot', 'prefix');
     span.textContent = '$';
     element.appendChild(span);
-    await visualDiff(div, `${import.meta.url}_prefix`);
+    await visualDiff(div, 'prefix');
   });
 
   it('opened', async () => {
@@ -94,18 +94,18 @@ describe('select', () => {
     await sendKeys({ press: 'Tab' });
     element.opened = true;
     await nextFrame();
-    await visualDiff(div, `${import.meta.url}_opened`);
+    await visualDiff(div, 'opened');
   });
 
   it('align-center', async () => {
     element.value = 'item 1';
     element.setAttribute('theme', 'align-center');
-    await visualDiff(div, `${import.meta.url}_align-center`);
+    await visualDiff(div, 'align-center');
   });
 
   it('align-right', async () => {
     element.value = 'item 1';
     element.setAttribute('theme', 'align-right');
-    await visualDiff(div, `${import.meta.url}_align-right`);
+    await visualDiff(div, 'align-right');
   });
 });

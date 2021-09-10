@@ -23,17 +23,17 @@ describe('message-input', () => {
         });
 
         it('basic', async () => {
-          await visualDiff(div, `${import.meta.url}_${dir}-basic`);
+          await visualDiff(div, `${dir}-basic`);
         });
 
         it('value', async () => {
           element.value = 'Hello';
-          await visualDiff(div, `${import.meta.url}_${dir}-value`);
+          await visualDiff(div, `${dir}-value`);
         });
 
         it('disabled', async () => {
           element.disabled = true;
-          await visualDiff(div, `${import.meta.url}_${dir}-disabled`);
+          await visualDiff(div, `${dir}-disabled`);
         });
       });
     });

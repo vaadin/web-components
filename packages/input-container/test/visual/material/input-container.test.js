@@ -15,17 +15,17 @@ describe('input-container', () => {
   });
 
   it('basic', async () => {
-    await visualDiff(div, `${import.meta.url}_basic`);
+    await visualDiff(div, 'basic');
   });
 
   it('disabled', async () => {
     element.disabled = true;
-    await visualDiff(div, `${import.meta.url}_disabled`);
+    await visualDiff(div, 'disabled');
   });
 
   it('invalid', async () => {
     element.invalid = true;
-    await visualDiff(div, `${import.meta.url}_invalid`);
+    await visualDiff(div, 'invalid');
   });
 
   it('prefix icon', async () => {
@@ -33,7 +33,7 @@ describe('input-container', () => {
     icon.setAttribute('slot', 'prefix');
     icon.icon = 'lumo:user';
     element.appendChild(icon);
-    await visualDiff(div, `${import.meta.url}_prefix-icon`);
+    await visualDiff(div, 'prefix-icon');
   });
 
   it('suffix icon', async () => {
@@ -41,6 +41,6 @@ describe('input-container', () => {
     icon.setAttribute('slot', 'suffix');
     icon.icon = 'lumo:user';
     element.appendChild(icon);
-    await visualDiff(div, `${import.meta.url}_suffix-icon`);
+    await visualDiff(div, 'suffix-icon');
   });
 });

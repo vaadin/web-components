@@ -31,21 +31,21 @@ describe('accordion', () => {
   });
 
   it('opened-start', async () => {
-    await visualDiff(div, `${import.meta.url}_opened-start`);
+    await visualDiff(div, 'opened-start');
   });
 
   it('opened-middle', async () => {
     element.opened = 1;
-    await visualDiff(div, `${import.meta.url}_opened-middle`);
+    await visualDiff(div, 'opened-middle');
   });
 
   it('opened-end', async () => {
     element.opened = 2;
-    await visualDiff(div, `${import.meta.url}_opened-end`);
+    await visualDiff(div, 'opened-end');
   });
 
   it('closed', async () => {
     element.opened = null;
-    await visualDiff(div, `${import.meta.url}_closed`);
+    await visualDiff(div, 'closed');
   });
 });

@@ -13,48 +13,48 @@ describe('checkbox', () => {
   });
 
   it('basic', async () => {
-    await visualDiff(div, `${import.meta.url}_basic`);
+    await visualDiff(div, 'basic');
   });
 
   it('focus-ring', async () => {
     element.setAttribute('focus-ring', '');
-    await visualDiff(div, `${import.meta.url}_focus-ring`);
+    await visualDiff(div, 'focus-ring');
   });
 
   it('disabled', async () => {
     element.disabled = true;
-    await visualDiff(div, `${import.meta.url}_disabled`);
+    await visualDiff(div, 'disabled');
   });
 
   it('checked', async () => {
     element.checked = true;
-    await visualDiff(div, `${import.meta.url}_checked`);
+    await visualDiff(div, 'checked');
   });
 
   it('indeterminate', async () => {
     element.indeterminate = true;
-    await visualDiff(div, `${import.meta.url}_indeterminate`);
+    await visualDiff(div, 'indeterminate');
   });
 
   it('disabled checked', async () => {
     element.disabled = true;
     element.checked = true;
-    await visualDiff(div, `${import.meta.url}_disabled-checked`);
+    await visualDiff(div, 'disabled-checked');
   });
 
   it('disabled indeterminate', async () => {
     element.disabled = true;
     element.indeterminate = true;
-    await visualDiff(div, `${import.meta.url}_disabled-indeterminate`);
+    await visualDiff(div, 'disabled-indeterminate');
   });
 
   it('empty', async () => {
     element.textContent = '';
-    await visualDiff(div, `${import.meta.url}_empty`);
+    await visualDiff(div, 'empty');
   });
 
   it('RTL', async () => {
     document.documentElement.setAttribute('dir', 'rtl');
-    await visualDiff(div, `${import.meta.url}_rtl`);
+    await visualDiff(div, 'rtl');
   });
 });
