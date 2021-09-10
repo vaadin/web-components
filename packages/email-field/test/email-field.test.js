@@ -32,35 +32,28 @@ const invalidAddresses = [
 
 describe('email-field', () => {
   describe('default', () => {
-    let emailField, input;
+    let emailField;
 
     beforeEach(() => {
       emailField = fixtureSync('<vaadin-email-field></vaadin-email-field>');
-      input = emailField.inputElement;
     });
 
-    it('should have [type=email]', () => {
-      expect(input.type).to.equal('email');
-    });
-
-    describe('validation', () => {
-      describe('valid email addresses', () => {
-        validAddresses.forEach((address) => {
-          it(`should treat ${address} as valid`, () => {
-            emailField.value = address;
-            emailField.validate();
-            expect(emailField.invalid).to.be.false;
-          });
+    describe('valid email addresses', () => {
+      validAddresses.forEach((address) => {
+        it(`should treat ${address} as valid`, () => {
+          emailField.value = address;
+          emailField.validate();
+          expect(emailField.invalid).to.be.false;
         });
       });
+    });
 
-      describe('invalid email addresses', () => {
-        invalidAddresses.forEach((address) => {
-          it(`should treat ${address} as invalid`, () => {
-            emailField.value = address;
-            emailField.validate();
-            expect(emailField.invalid).to.be.true;
-          });
+    describe('invalid email addresses', () => {
+      invalidAddresses.forEach((address) => {
+        it(`should treat ${address} as invalid`, () => {
+          emailField.value = address;
+          emailField.validate();
+          expect(emailField.invalid).to.be.true;
         });
       });
     });

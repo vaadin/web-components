@@ -51,6 +51,22 @@ describe('message-list', () => {
     ];
   });
 
+  describe('custom element definition', () => {
+    let tagName;
+
+    beforeEach(() => {
+      tagName = messageList.tagName.toLowerCase();
+    });
+
+    it('should be defined in custom element registry', () => {
+      expect(customElements.get(tagName)).to.be.ok;
+    });
+
+    it('should have a valid static "is" getter', () => {
+      expect(customElements.get(tagName).is).to.equal(tagName);
+    });
+  });
+
   it('message list should be initially empty', () => {
     expect(messageList.items).to.be.empty;
   });
@@ -79,11 +95,6 @@ describe('message-list', () => {
       expect(firstMessage.userColorIndex).to.be.equal(messages[0].userColorIndex);
       expect(firstMessage.textContent).to.be.equal(messages[0].text);
       expect(firstMessage.theme).to.be.equal(messages[0].theme);
-    });
-
-    it('should propagate theme to attribute', () => {
-      const firstMessage = messageList.shadowRoot.querySelector('vaadin-message');
-      expect(firstMessage.getAttribute('theme')).to.be.equal(messages[0].theme);
     });
 
     it('message list should scroll when height is less than content', () => {

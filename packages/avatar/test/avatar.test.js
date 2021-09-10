@@ -48,18 +48,6 @@ describe('vaadin-avatar', () => {
         expect(avatar.getAttribute('img')).to.equal(validImageSrc);
       });
 
-      it('should propagate "img" to the internal img', () => {
-        avatar.img = validImageSrc;
-        expect(imgElement.src).to.equal(validImageSrc);
-      });
-
-      it('img should be visible when "img" property is provided', () => {
-        expect(imgElement.hasAttribute('hidden')).to.be.true;
-
-        avatar.img = validImageSrc;
-        expect(imgElement.hasAttribute('hidden')).to.be.false;
-      });
-
       it('icon should be hidden when "img" property is provided', () => {
         expect(iconElement.hasAttribute('hidden')).to.be.false;
 

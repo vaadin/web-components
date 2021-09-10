@@ -1,2 +1,3 @@
 packages/**/vendor/*.js
 packages/**/dist/*.js
+packages/**/test/dom/__snapshots__/*.snap.js

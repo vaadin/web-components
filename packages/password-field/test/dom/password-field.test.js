@@ -1,0 +1,45 @@
+import { expect } from '@esm-bundle/chai';
+import { fixtureSync } from '@vaadin/testing-helpers';
+import '../../src/vaadin-password-field.js';
+
+describe('vaadin-password-field', () => {
+  let field;
+
+  // Ignore generated attributes to prevent failures
+  // when running snapshot tests in a different order
+  const SNAPSHOT_CONFIG = {
+    ignoreAttributes: ['id', 'aria-describedby', 'aria-labelledby', 'for']
+  };
+
+  beforeEach(() => {
+    field = fixtureSync('<vaadin-password-field></vaadin-password-field>');
+  });
+
+  it('default', async () => {
+    await expect(field).shadowDom.to.equalSnapshot();
+  });
+
+  it('disabled', async () => {
+    field.disabled = true;
+    await expect(field).shadowDom.to.equalSnapshot();
+  });
+
+  it('readonly', async () => {
+    field.readonly = true;
+    await expect(field).shadowDom.to.equalSnapshot();
+  });
+
+  it('invalid', async () => {
+    field.invalid = true;
+    await expect(field).shadowDom.to.equalSnapshot();
+  });
+
+  it('theme', async () => {
+    field.setAttribute('theme', 'align-right');
+    await expect(field).shadowDom.to.equalSnapshot();
+  });
+
+  it('slots', async () => {
+    await expect(field).lightDom.to.equalSnapshot(SNAPSHOT_CONFIG);
+  });
+});

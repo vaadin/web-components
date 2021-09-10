@@ -13,14 +13,6 @@ describe('password-field', () => {
     revealButton = passwordField.querySelector('[slot=reveal]');
   });
 
-  it('should have [type=password]', () => {
-    expect(input.type).to.equal('password');
-  });
-
-  it('should show reveal button by default', () => {
-    expect(revealButton.hidden).to.be.false;
-  });
-
   it('should set default accessible label to reveal button', () => {
     expect(revealButton.getAttribute('aria-label')).to.equal('Show password');
   });
@@ -82,10 +74,6 @@ describe('password-field', () => {
     revealButton.dispatchEvent(e);
 
     expect(spy.calledOnce).to.be.true;
-  });
-
-  it('should set aria-pressed attribute on reveal button to false', () => {
-    expect(revealButton.getAttribute('aria-pressed')).to.equal('false');
   });
 
   it('should toggle aria-pressed attribute on reveal button click', () => {

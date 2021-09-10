@@ -76,43 +76,6 @@ describe('text-area', () => {
           assertAttrCanBeSet(prop, false);
         });
       });
-
-      describe('input field', () => {
-        let inputField;
-
-        beforeEach(() => {
-          inputField = textArea.shadowRoot.querySelector('[part="input-field"]');
-        });
-
-        it('should propagate invalid property to the input container', () => {
-          textArea.invalid = true;
-          expect(inputField.invalid).to.be.true;
-
-          textArea.invalid = false;
-          expect(inputField.invalid).to.be.false;
-        });
-
-        it('should propagate readonly property to the input container', () => {
-          textArea.readonly = true;
-          expect(inputField.readonly).to.be.true;
-
-          textArea.readonly = false;
-          expect(inputField.readonly).to.be.false;
-        });
-
-        it('should propagate disabled property to the input container', () => {
-          textArea.disabled = true;
-          expect(inputField.disabled).to.be.true;
-
-          textArea.disabled = false;
-          expect(inputField.disabled).to.be.false;
-        });
-
-        it('should propagate theme attribute to the input container', () => {
-          textArea.setAttribute('theme', 'align-center');
-          expect(inputField.getAttribute('theme')).to.equal('align-center');
-        });
-      });
     });
 
     describe('binding', () => {
