@@ -39,12 +39,6 @@ describe('avatar-group', () => {
       expect(items.length).to.equal(group.items.length + 1);
     });
 
-    it('should make the overflow avatar hidden by default', () => {
-      const items = group.shadowRoot.querySelectorAll('vaadin-avatar');
-      const overflow = items[group.items.length];
-      expect(overflow.hasAttribute('hidden')).to.be.true;
-    });
-
     it('should propagate theme attribute to all avatars', () => {
       group.setAttribute('theme', 'small');
       const items = group.shadowRoot.querySelectorAll('vaadin-avatar');
@@ -538,10 +532,6 @@ describe('avatar-group', () => {
 
     afterEach(() => {
       overlay.close();
-    });
-
-    it('should set aria-haspopup="listbox" on the overflow avatar', () => {
-      expect(overflow.getAttribute('aria-haspopup')).to.equal('listbox');
     });
 
     it('should set aria-expanded="false" on the overflow avatar', () => {
