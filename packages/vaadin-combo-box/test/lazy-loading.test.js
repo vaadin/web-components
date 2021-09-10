@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync, nextFrame, aTimeout, enterKeyDown, fire } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, aTimeout, enterKeyDown, fire, nextRender } from '@vaadin/testing-helpers';
 import { flush } from '@polymer/polymer/lib/utils/flush.js';
 import '@polymer/iron-input/iron-input.js';
 import { ComboBoxPlaceholder } from '../src/vaadin-combo-box-placeholder.js';
@@ -432,7 +432,7 @@ describe('lazy loading', () => {
       });
 
       describe('changing dataProvider', () => {
-        it('should have correct items after changing dataProvider to return less items', () => {
+        it('should have correct items after changing dataProvider to return less items', async () => {
           comboBox.dataProvider = (params, callback) => callback(['foo', 'bar'], 2);
           comboBox.open();
           comboBox.close();
@@ -440,6 +440,8 @@ describe('lazy loading', () => {
           comboBox.clearCache();
           comboBox.dataProvider = (params, callback) => callback(['baz'], 1);
           comboBox.open();
+
+          await nextRender(comboBox.$.overlay);
 
           expect(comboBox.filteredItems).to.eql(['baz']);
           // The helper already excludes hidden items

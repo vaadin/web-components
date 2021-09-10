@@ -273,11 +273,14 @@ describe('position target', () => {
 
   describe('horizontal align start', () => {
     beforeEach(() => {
-      document.dir = '';
       overlay.horizontalAlign = START;
       margin = parseInt(getComputedStyle(overlay).right, 10);
       targetPositionToFlipOverlay = document.documentElement.clientWidth - overlayContent.clientWidth - margin;
       targetPositionForCentering = document.documentElement.clientWidth / 2 - target.clientWidth / 2;
+    });
+
+    afterEach(() => {
+      document.dir = 'ltr';
     });
 
     it('should align left edges', () => {
@@ -368,11 +371,14 @@ describe('position target', () => {
 
   describe('horizontal align end', () => {
     beforeEach(() => {
-      document.dir = '';
       overlay.horizontalAlign = END;
       margin = parseInt(getComputedStyle(overlay).left, 10);
       targetPositionToFlipOverlay = margin + overlayContent.clientWidth - target.clientWidth;
       targetPositionForCentering = document.documentElement.clientWidth / 2 - target.clientWidth / 2;
+    });
+
+    afterEach(() => {
+      document.dir = 'ltr';
     });
 
     it('should align right edges', () => {
