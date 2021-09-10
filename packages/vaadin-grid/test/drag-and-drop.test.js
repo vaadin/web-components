@@ -753,7 +753,7 @@ describe('drag and drop', () => {
   describe('auto scroll', () => {
     beforeEach(async () => {
       grid.dropMode = 'between';
-      grid.items = new Array(100).fill({});
+      grid.items = new Array(100).fill().map((_, idx) => ({ value: idx }));
 
       grid.$.table.scrollTop = 0;
       flushGrid(grid);
