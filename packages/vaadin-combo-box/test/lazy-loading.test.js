@@ -14,8 +14,8 @@ import {
   makeItems
 } from './helpers.js';
 import './not-animated-styles.js';
-import '../vaadin-combo-box.js';
-import '../vaadin-combo-box-light.js';
+import '../src/vaadin-combo-box.js';
+import '../src/vaadin-combo-box-light.js';
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 
 registerStyles(
@@ -1033,10 +1033,13 @@ describe('lazy loading', () => {
       const ESTIMATED_SIZE = 1234;
       const allItems = makeItems(ESTIMATED_SIZE);
 
-      it('should restore the scroll position after size update', () => {
+      it('should restore the scroll position after size update', async () => {
+        await nextRender(comboBox);
         const targetItemIndex = 75;
         comboBox.dataProvider = getDataProvider(allItems);
+        await nextRender(comboBox);
         comboBox.opened = true;
+        await nextRender(comboBox.$.overlay);
         comboBox.$.dropdown._scrollIntoView(targetItemIndex);
         comboBox.size = 300;
         // verify whether the scroller not jumped to 0 pos and restored properly,
