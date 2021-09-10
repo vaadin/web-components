@@ -247,7 +247,7 @@ class SplitLayoutElement extends ElementMixin(
   /** @protected */
   ready() {
     super.ready();
-    new FlattenedNodesObserver(this, this._processChildren);
+    this.__observer = new FlattenedNodesObserver(this, this._processChildren);
   }
 
   /** @private */

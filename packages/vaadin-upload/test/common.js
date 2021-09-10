@@ -48,7 +48,6 @@ export function createFiles(arraySize, fileSize, contentType) {
  *     serverType: the contentType of the serverResponse.
  *     serverValidation: a function run once the file has been sent.
  */
-// eslint-disable-next-line
 export function xhrCreator(c) {
   c = c || {};
   var cfg = {
