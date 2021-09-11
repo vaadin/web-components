@@ -135,7 +135,7 @@ export const PositionMixin = (superClass) =>
       this.style.alignItems = flexStart ? 'flex-start' : 'flex-end';
 
       // Get the overlay rect after possible overlay alignment changes
-      const overlayRect = this.$.overlay.getBoundingClientRect();
+      const overlayRect = this.getBoundingClientRect();
 
       // Obtain vertical positioning properties
       const verticalProps = this.__calculatePositionInOneDimension(
