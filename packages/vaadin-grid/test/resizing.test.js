@@ -159,49 +159,51 @@ describe('resizing', () => {
 describe('all rows visible', () => {
   let grid;
 
-  it('should align height with number of rows after first render', () => {
-    grid = fixtureSync(`
-      <vaadin-grid>
-        <vaadin-grid-column>
-          <template>[[index]]</template>
-        </vaadin-grid-column>
-      </vaadin-grid>
-    `);
-    const rows = 100;
-    grid.items = Array.from({ length: rows });
-    flushGrid(grid);
+  describe('template', () => {
+    beforeEach(() => {
+      grid = fixtureSync(`
+        <vaadin-grid>
+          <vaadin-grid-column>
+            <template>[[index]]</template>
+          </vaadin-grid-column>
+        </vaadin-grid>
+      `);
+    });
 
-    grid.allRowsVisible = true;
-    flushGrid(grid);
+    it('should align height with number of rows after first render', () => {
+      grid.items = new Array(100).fill().map((_, idx) => ({ value: idx }));
+      flushGrid(grid);
 
-    expect(grid.$.items.children.length).to.equal(rows);
+      grid.allRowsVisible = true;
+      flushGrid(grid);
+
+      expect(grid.$.items.children.length).to.equal(100);
+    });
   });
 
-  it('should have body rows if header is not visible', () => {
-    grid = fixtureSync(`
-      <vaadin-grid>
-        <vaadin-grid-column path="value"></vaadin-grid-column>
-      </vaadin-grid>`);
-    grid.firstElementChild.header = null;
-    grid.allRowsVisible = true;
-    grid.items = [{ value: 1 }];
-    flushGrid(grid);
-    expect(getPhysicalItems(grid).length).to.be.above(0);
-  });
+  describe('path', () => {
+    beforeEach(() => {
+      grid = fixtureSync(`
+        <vaadin-grid>
+          <vaadin-grid-column path="value"></vaadin-grid-column>
+        </vaadin-grid>
+      `);
+      grid.firstElementChild.header = null;
+      grid.allRowsVisible = true;
+      grid.items = [{ value: 1 }];
+      flushGrid(grid);
+    });
 
-  it('should have body rows after items reset and repopulated', () => {
-    grid = fixtureSync(`
-      <vaadin-grid>
-        <vaadin-grid-column path="value"></vaadin-grid-column>
-      </vaadin-grid>`);
-    grid.firstElementChild.header = null;
-    grid.allRowsVisible = true;
-    grid.items = [{ value: 1 }];
-    flushGrid(grid);
-    grid.items = [];
-    flushGrid(grid);
-    grid.items = [{ value: 1 }];
-    flushGrid(grid);
-    expect(getPhysicalItems(grid).length).to.be.above(0);
+    it('should have body rows if header is not visible', () => {
+      expect(getPhysicalItems(grid).length).to.be.above(0);
+    });
+
+    it('should have body rows after items reset and repopulated', () => {
+      grid.items = [];
+      flushGrid(grid);
+      grid.items = [{ value: 1 }];
+      flushGrid(grid);
+      expect(getPhysicalItems(grid).length).to.be.above(0);
+    });
   });
 });
