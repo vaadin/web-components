@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, enterKeyDown } from '@vaadin/testing-helpers';
+import { fixtureSync, enterKeyDown, nextFrame } from '@vaadin/testing-helpers';
 import { html, render } from 'lit';
 import '@vaadin/vaadin-list-box/vaadin-list-box.js';
 import '@vaadin/vaadin-item/vaadin-item.js';
@@ -74,35 +74,42 @@ describe('scrollable viewport', () => {
     };
   });
 
-  it('should toggle bottom-aligned attribute depending on the part of the viewport', () => {
-    enterKeyDown(valueButton);
-    expect(overlay.hasAttribute('bottom-aligned')).to.be.true;
-
-    scrollContainer(scrollableContainer, 150);
-    expect(overlay.hasAttribute('bottom-aligned')).to.be.false;
-  });
-
   it('should update the position on scrolling', () => {
     enterKeyDown(valueButton);
 
-    expect(overlay.getBoundingClientRect().bottom).to.be.closeTo(inputFieldBlock.getBoundingClientRect().bottom, 1);
-    expect(overlay.getBoundingClientRect().left).to.be.closeTo(inputFieldBlock.getBoundingClientRect().left, 1);
+    expect(overlay.$.overlay.getBoundingClientRect().top).to.be.closeTo(inputFieldBlock.getBoundingClientRect().top, 1);
+    expect(overlay.$.overlay.getBoundingClientRect().left).to.be.closeTo(
+      inputFieldBlock.getBoundingClientRect().left,
+      1
+    );
 
     scrollContainer(scrollableContainer, 40, 40);
 
-    expect(overlay.getBoundingClientRect().bottom).to.be.closeTo(inputFieldBlock.getBoundingClientRect().bottom, 1);
-    expect(overlay.getBoundingClientRect().left).to.be.closeTo(inputFieldBlock.getBoundingClientRect().left, 1);
+    expect(overlay.$.overlay.getBoundingClientRect().top).to.be.closeTo(inputFieldBlock.getBoundingClientRect().top, 1);
+    expect(overlay.$.overlay.getBoundingClientRect().left).to.be.closeTo(
+      inputFieldBlock.getBoundingClientRect().left,
+      1
+    );
   });
 
-  it('should update the position on iron-resize event', () => {
+  it('should update the position on iron-resize event', async () => {
     enterKeyDown(valueButton);
-    expect(overlay.getBoundingClientRect().bottom).to.be.closeTo(inputFieldBlock.getBoundingClientRect().bottom, 1);
-    expect(overlay.getBoundingClientRect().left).to.be.closeTo(inputFieldBlock.getBoundingClientRect().left, 1);
+    expect(overlay.$.overlay.getBoundingClientRect().top).to.be.closeTo(inputFieldBlock.getBoundingClientRect().top, 1);
+    expect(overlay.$.overlay.getBoundingClientRect().left).to.be.closeTo(
+      inputFieldBlock.getBoundingClientRect().left,
+      1
+    );
+
+    // vaadin-overlay-position-mixin does a second position update on the next frame, wait until it's done
+    await nextFrame();
 
     container.style.paddingTop = '200px';
     select.dispatchEvent(new CustomEvent('iron-resize', { bubbles: true }));
 
-    expect(overlay.getBoundingClientRect().top).to.be.closeTo(inputFieldBlock.getBoundingClientRect().top, 1);
-    expect(overlay.getBoundingClientRect().left).to.be.closeTo(inputFieldBlock.getBoundingClientRect().left, 1);
+    expect(overlay.$.overlay.getBoundingClientRect().top).to.be.closeTo(inputFieldBlock.getBoundingClientRect().top, 1);
+    expect(overlay.$.overlay.getBoundingClientRect().left).to.be.closeTo(
+      inputFieldBlock.getBoundingClientRect().left,
+      1
+    );
   });
 });

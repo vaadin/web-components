@@ -67,10 +67,6 @@ const selectOverlay = css`
     --_lumo-item-selected-icon-display: block;
   }
 
-  :host([bottom-aligned]) {
-    justify-content: flex-end;
-  }
-
   [part~='overlay'] {
     min-width: var(--vaadin-select-text-field-width);
   }
