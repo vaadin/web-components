@@ -127,11 +127,6 @@ interface ComboBoxMixin<TItem> extends DisabledMixin, InputMixin, KeyboardMixin 
   itemIdPath: string | null | undefined;
 
   /**
-   * The name of this element.
-   */
-  name: string | null | undefined;
-
-  /**
    * Set to true if the value is invalid.
    */
   invalid: boolean;
@@ -163,7 +158,7 @@ interface ComboBoxMixin<TItem> extends DisabledMixin, InputMixin, KeyboardMixin 
    * Returns true if the current input value satisfies all constraints (if any).
    * You can override this method for custom validations.
    */
-  checkValidity(): boolean | undefined;
+  checkValidity(): boolean;
 }
 
 export { ComboBoxMixin, ComboBoxMixinConstructor };
