@@ -52,6 +52,13 @@ class ComboBoxOverlayElement extends PositionMixin(OverlayElement) {
     const content = this.shadowRoot.querySelector('[part~="content"]');
     content.parentNode.insertBefore(loader, content);
   }
+
+  _outsideClickListener(event) {
+    const eventPath = event.composedPath();
+    if (!eventPath.includes(this.positionTarget) && !eventPath.includes(this)) {
+      this.close();
+    }
+  }
 }
 
 customElements.define(ComboBoxOverlayElement.is, ComboBoxOverlayElement);

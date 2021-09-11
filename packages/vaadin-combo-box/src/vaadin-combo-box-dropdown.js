@@ -41,7 +41,7 @@ class ComboBoxDropdown extends mixinBehaviors(IronResizableBehavior, PolymerElem
         id="overlay"
         hidden$="[[_isOverlayHidden(_items.*, loading)]]"
         loading$="[[loading]]"
-        opened="[[_overlayOpened]]"
+        opened="{{_overlayOpened}}"
         theme$="[[theme]]"
         position-target="[[positionTarget]]"
         no-vertical-overlap
@@ -133,11 +133,6 @@ class ComboBoxDropdown extends mixinBehaviors(IronResizableBehavior, PolymerElem
     ];
   }
 
-  constructor() {
-    super();
-    this._boundOutsideClickListener = this._outsideClickListener.bind(this);
-  }
-
   ready() {
     super.ready();
 
@@ -209,10 +204,8 @@ class ComboBoxDropdown extends mixinBehaviors(IronResizableBehavior, PolymerElem
       getComputedStyle(this).getPropertyValue('--vaadin-combo-box-overlay-max-height') || '65vh';
 
     if (opened) {
-      document.addEventListener('click', this._boundOutsideClickListener, true);
       this.dispatchEvent(new CustomEvent('vaadin-combo-box-dropdown-opened', { bubbles: true, composed: true }));
     } else if (!this.__emptyItems) {
-      document.removeEventListener('click', this._boundOutsideClickListener, true);
       this.dispatchEvent(new CustomEvent('vaadin-combo-box-dropdown-closed', { bubbles: true, composed: true }));
     }
   }
@@ -292,16 +285,6 @@ class ComboBoxDropdown extends mixinBehaviors(IronResizableBehavior, PolymerElem
 
   _isOverlayHidden() {
     return !this.loading && !(this._items && this._items.length);
-  }
-
-  // We need to listen on 'click' event and capture it and close the overlay before
-  // propagating the event to the listener in the button. Otherwise, if the clicked button would call
-  // open(), this would happen: https://www.youtube.com/watch?v=Z86V_ICUCD4
-  _outsideClickListener(event) {
-    const eventPath = event.composedPath();
-    if (eventPath.indexOf(this.positionTarget) < 0 && eventPath.indexOf(this.$.overlay) < 0) {
-      this.opened = false;
-    }
   }
 
   _setOverlayWidth() {
