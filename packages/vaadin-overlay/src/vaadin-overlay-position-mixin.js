@@ -78,8 +78,8 @@ export const PositionMixin = (superClass) =>
     }
     static get observers() {
       return [
-        `__positionSettingsChanged(positionTarget, horizontalAlign, verticalAlign, noHorizontalOverlap, noVerticalOverlap)`,
-        `__overlayOpenedChanged(opened)`
+        '__positionSettingsChanged(positionTarget, horizontalAlign, verticalAlign, noHorizontalOverlap, noVerticalOverlap)',
+        '__overlayOpenedChanged(opened)'
       ];
     }
 
