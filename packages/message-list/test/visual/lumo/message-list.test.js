@@ -50,12 +50,12 @@ describe('message-list', () => {
         });
 
         it('basic', async () => {
-          await visualDiff(div, `${import.meta.url}_${dir}-basic`);
+          await visualDiff(div, `${dir}-basic`);
         });
 
         it('focused', async () => {
           element.shadowRoot.querySelectorAll('vaadin-message')[1].focus();
-          await visualDiff(div, `${import.meta.url}_${dir}-focused`);
+          await visualDiff(div, `${dir}-focused`);
         });
       });
     });

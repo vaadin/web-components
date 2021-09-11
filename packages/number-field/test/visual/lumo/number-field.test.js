@@ -15,22 +15,22 @@ describe('number-field', () => {
   });
 
   it('basic', async () => {
-    await visualDiff(div, `${import.meta.url}_basic`);
+    await visualDiff(div, 'basic');
   });
 
   it('disabled', async () => {
     element.disabled = true;
-    await visualDiff(div, `${import.meta.url}_disabled`);
+    await visualDiff(div, 'disabled');
   });
 
   it('readonly', async () => {
     element.readonly = true;
-    await visualDiff(div, `${import.meta.url}_readonly`);
+    await visualDiff(div, 'readonly');
   });
 
   it('focus-ring', async () => {
     await sendKeys({ press: 'Tab' });
-    await visualDiff(div, `${import.meta.url}_focus-ring`);
+    await visualDiff(div, 'focus-ring');
   });
 
   ['ltr', 'rtl'].forEach((dir) => {
@@ -45,23 +45,23 @@ describe('number-field', () => {
 
       it('label', async () => {
         element.label = 'Label';
-        await visualDiff(div, `${import.meta.url}_${dir}-label`);
+        await visualDiff(div, `${dir}-label`);
       });
 
       it('placeholder', async () => {
         element.placeholder = 'Number';
-        await visualDiff(div, `${import.meta.url}_${dir}-placeholder`);
+        await visualDiff(div, `${dir}-placeholder`);
       });
 
       it('value', async () => {
         element.value = 10;
-        await visualDiff(div, `${import.meta.url}_${dir}-value`);
+        await visualDiff(div, `${dir}-value`);
       });
 
       it('required', async () => {
         element.label = 'Label';
         element.required = true;
-        await visualDiff(div, `${import.meta.url}_${dir}-required`);
+        await visualDiff(div, `${dir}-required`);
       });
 
       it('error message', async () => {
@@ -69,12 +69,12 @@ describe('number-field', () => {
         element.errorMessage = 'This field is required';
         element.required = true;
         element.validate();
-        await visualDiff(div, `${import.meta.url}_${dir}-error-message`);
+        await visualDiff(div, `${dir}-error-message`);
       });
 
       it('helper text', async () => {
         element.helperText = 'Helper text';
-        await visualDiff(div, `${import.meta.url}_${dir}-helper-text`);
+        await visualDiff(div, `${dir}-helper-text`);
       });
 
       it('prefix slot', async () => {
@@ -82,7 +82,7 @@ describe('number-field', () => {
         span.setAttribute('slot', 'prefix');
         span.textContent = '$';
         element.appendChild(span);
-        await visualDiff(div, `${import.meta.url}_${dir}-prefix`);
+        await visualDiff(div, `${dir}-prefix`);
       });
 
       it('suffix slot', async () => {
@@ -90,18 +90,18 @@ describe('number-field', () => {
         span.setAttribute('slot', 'suffix');
         span.textContent = '$';
         element.appendChild(span);
-        await visualDiff(div, `${import.meta.url}_${dir}-suffix`);
+        await visualDiff(div, `${dir}-suffix`);
       });
 
       it('controls', async () => {
         element.hasControls = true;
-        await visualDiff(div, `${import.meta.url}_${dir}-controls`);
+        await visualDiff(div, `${dir}-controls`);
       });
 
       it('align-right', async () => {
         element.value = 10;
         element.setAttribute('theme', 'align-right');
-        await visualDiff(div, `${import.meta.url}_${dir}-theme-align-right`);
+        await visualDiff(div, `${dir}-theme-align-right`);
       });
     });
   });

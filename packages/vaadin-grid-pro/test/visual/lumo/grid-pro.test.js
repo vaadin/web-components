@@ -32,7 +32,7 @@ describe('grid-pro', () => {
     it('select', async () => {
       const cell = getContainerCell(element.$.items, 0, 0);
       cell._content.dispatchEvent(new CustomEvent('dblclick', { bubbles: true }));
-      await visualDiff(div, `${import.meta.url}_edit-column-text`);
+      await visualDiff(div, 'edit-column-text');
     });
   });
 
@@ -53,7 +53,7 @@ describe('grid-pro', () => {
     it('checkbox', async () => {
       const cell = getContainerCell(element.$.items, 0, 0);
       cell._content.dispatchEvent(new CustomEvent('dblclick', { bubbles: true }));
-      await visualDiff(div, `${import.meta.url}_edit-column-checkbox`);
+      await visualDiff(div, 'edit-column-checkbox');
     });
   });
 
@@ -76,7 +76,7 @@ describe('grid-pro', () => {
     it('select', async () => {
       const cell = getContainerCell(element.$.items, 0, 0);
       cell._content.dispatchEvent(new CustomEvent('dblclick', { bubbles: true }));
-      await visualDiff(div, `${import.meta.url}_edit-column-select`);
+      await visualDiff(div, 'edit-column-select');
     });
   });
 });

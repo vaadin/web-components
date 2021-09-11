@@ -13,16 +13,16 @@ describe('integer-field', () => {
   });
 
   it('basic', async () => {
-    await visualDiff(div, `${import.meta.url}_basic`);
+    await visualDiff(div, 'basic');
   });
 
   it('value', async () => {
     element.value = 10;
-    await visualDiff(div, `${import.meta.url}_value`);
+    await visualDiff(div, 'value');
   });
 
   it('controls', async () => {
     element.hasControls = true;
-    await visualDiff(div, `${import.meta.url}_controls`);
+    await visualDiff(div, 'controls');
   });
 });

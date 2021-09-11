@@ -23,11 +23,11 @@ describe('dialog', () => {
   });
 
   it('basic', async () => {
-    await visualDiff(div, `${import.meta.url}_basic`);
+    await visualDiff(div, 'basic');
   });
 
   it('modeless', async () => {
     element.modeless = true;
-    await visualDiff(div, `${import.meta.url}_modeless`);
+    await visualDiff(div, 'modeless');
   });
 });

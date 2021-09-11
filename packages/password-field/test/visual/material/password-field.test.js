@@ -24,31 +24,31 @@ describe('password-field', () => {
       });
 
       it('basic', async () => {
-        await visualDiff(div, `${import.meta.url}_${dir}-basic`);
+        await visualDiff(div, `${dir}-basic`);
       });
 
       it('value', async () => {
         element.value = 'value';
-        await visualDiff(div, `${import.meta.url}_${dir}-value`);
+        await visualDiff(div, `${dir}-value`);
       });
 
       it('clear button', async () => {
         element.value = 'value';
         element.clearButtonVisible = true;
-        await visualDiff(div, `${import.meta.url}_${dir}-clear-button`);
+        await visualDiff(div, `${dir}-clear-button`);
       });
 
       it('reveal button hidden', async () => {
         element.value = 'value';
         element.revealButtonHidden = true;
-        await visualDiff(div, `${import.meta.url}_${dir}-reveal-button-hidden`);
+        await visualDiff(div, `${dir}-reveal-button-hidden`);
       });
 
       it('reveal button focus', async () => {
         element.label = 'Password';
         element.focus();
         await sendKeys({ press: 'Tab' });
-        await visualDiff(div, `${import.meta.url}_${dir}-reveal-button-focus`);
+        await visualDiff(div, `${dir}-reveal-button-focus`);
       });
     });
   });

@@ -38,13 +38,13 @@ describe('list-box', () => {
 
       it('basic', async () => {
         element.selected = 2;
-        await visualDiff(div, `${import.meta.url}_${dir}-basic`);
+        await visualDiff(div, `${dir}-basic`);
       });
 
       it('multiple', async () => {
         element.multiple = true;
         element.selectedValues = [1, 2];
-        await visualDiff(div, `${import.meta.url}_${dir}-multiple`);
+        await visualDiff(div, `${dir}-multiple`);
       });
     });
   });

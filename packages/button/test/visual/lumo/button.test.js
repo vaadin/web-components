@@ -17,65 +17,65 @@ describe('button', () => {
 
   describe('basic', () => {
     it('basic', async () => {
-      await visualDiff(div, `${import.meta.url}_basic`);
+      await visualDiff(div, 'basic');
     });
 
     it('focus-ring', async () => {
       // Focus on the button
       await sendKeys({ press: 'Tab' });
 
-      await visualDiff(div, `${import.meta.url}_focus-ring`);
+      await visualDiff(div, 'focus-ring');
     });
 
     it('disabled', async () => {
       element.disabled = true;
-      await visualDiff(div, `${import.meta.url}_disabled`);
+      await visualDiff(div, 'disabled');
     });
   });
 
   describe('theme', () => {
     it('primary', async () => {
       element.setAttribute('theme', 'primary');
-      await visualDiff(div, `${import.meta.url}_theme-primary`);
+      await visualDiff(div, 'theme-primary');
     });
 
     it('primary disabled', async () => {
       element.setAttribute('theme', 'primary');
       element.disabled = true;
-      await visualDiff(div, `${import.meta.url}_theme-primary-disabled`);
+      await visualDiff(div, 'theme-primary-disabled');
     });
 
     it('secondary', async () => {
       element.setAttribute('theme', 'secondary');
-      await visualDiff(div, `${import.meta.url}_theme-secondary`);
+      await visualDiff(div, 'theme-secondary');
     });
 
     it('secondary disabled', async () => {
       element.setAttribute('theme', 'secondary');
       element.disabled = true;
-      await visualDiff(div, `${import.meta.url}_theme-secondary-disabled`);
+      await visualDiff(div, 'theme-secondary-disabled');
     });
 
     it('tertiary', async () => {
       element.setAttribute('theme', 'tertiary');
-      await visualDiff(div, `${import.meta.url}_theme-tertiary`);
+      await visualDiff(div, 'theme-tertiary');
     });
 
     it('tertiary disabled', async () => {
       element.setAttribute('theme', 'tertiary');
       element.disabled = true;
-      await visualDiff(div, `${import.meta.url}_theme-tertiary-disabled`);
+      await visualDiff(div, 'theme-tertiary-disabled');
     });
 
     it('tertiary-inline', async () => {
       element.setAttribute('theme', 'tertiary-inline');
-      await visualDiff(div, `${import.meta.url}_theme-tertiary-inline`);
+      await visualDiff(div, 'theme-tertiary-inline');
     });
 
     it('tertiary-inline disabled', async () => {
       element.setAttribute('theme', 'tertiary-inline');
       element.disabled = true;
-      await visualDiff(div, `${import.meta.url}_theme-tertiary-inline-disabled`);
+      await visualDiff(div, 'theme-tertiary-inline-disabled');
     });
   });
 
@@ -83,35 +83,35 @@ describe('button', () => {
     describe(variant, () => {
       it('primary', async () => {
         element.setAttribute('theme', `primary ${variant}`);
-        await visualDiff(div, `${import.meta.url}_theme-primary-${variant}`);
+        await visualDiff(div, `theme-primary-${variant}`);
       });
 
       it('secondary', async () => {
         element.setAttribute('theme', `${variant}`);
-        await visualDiff(div, `${import.meta.url}_theme-secondary-${variant}`);
+        await visualDiff(div, `theme-secondary-${variant}`);
       });
 
       it('tertiary', async () => {
         element.setAttribute('theme', `tertiary ${variant}`);
-        await visualDiff(div, `${import.meta.url}_theme-tertiary-${variant}`);
+        await visualDiff(div, `theme-tertiary-${variant}`);
       });
 
       it('primary disabled', async () => {
         element.setAttribute('theme', `primary ${variant}`);
         element.disabled = true;
-        await visualDiff(div, `${import.meta.url}_theme-primary-${variant}-disabled`);
+        await visualDiff(div, `theme-primary-${variant}-disabled`);
       });
 
       it('secondary disabled', async () => {
         element.setAttribute('theme', `${variant}`);
         element.disabled = true;
-        await visualDiff(div, `${import.meta.url}_theme-secondary-${variant}-disabled`);
+        await visualDiff(div, `theme-secondary-${variant}-disabled`);
       });
 
       it('tertiary disabled', async () => {
         element.setAttribute('theme', `tertiary ${variant}`);
         element.disabled = true;
-        await visualDiff(div, `${import.meta.url}_theme-tertiary-${variant}-disabled`);
+        await visualDiff(div, `theme-tertiary-${variant}-disabled`);
       });
     });
   });
@@ -128,17 +128,17 @@ describe('button', () => {
       });
 
       it('default', async () => {
-        await visualDiff(div, `${import.meta.url}_icon-prefix-default`);
+        await visualDiff(div, 'icon-prefix-default');
       });
 
       it('default', async () => {
         element.setAttribute('theme', 'small');
-        await visualDiff(div, `${import.meta.url}_icon-prefix-small`);
+        await visualDiff(div, 'icon-prefix-small');
       });
 
       it('default', async () => {
         element.setAttribute('theme', 'large');
-        await visualDiff(div, `${import.meta.url}_icon-prefix-large`);
+        await visualDiff(div, 'icon-prefix-large');
       });
     });
 
@@ -153,17 +153,17 @@ describe('button', () => {
       });
 
       it('default', async () => {
-        await visualDiff(div, `${import.meta.url}_icon-suffix-default`);
+        await visualDiff(div, 'icon-suffix-default');
       });
 
       it('default', async () => {
         element.setAttribute('theme', 'small');
-        await visualDiff(div, `${import.meta.url}_icon-suffix-small`);
+        await visualDiff(div, 'icon-suffix-small');
       });
 
       it('default', async () => {
         element.setAttribute('theme', 'large');
-        await visualDiff(div, `${import.meta.url}_icon-suffix-large`);
+        await visualDiff(div, 'icon-suffix-large');
       });
     });
 
@@ -180,17 +180,17 @@ describe('button', () => {
 
       it('default', async () => {
         element.setAttribute('theme', 'icon');
-        await visualDiff(div, `${import.meta.url}_icon-only-default`);
+        await visualDiff(div, 'icon-only-default');
       });
 
       it('default', async () => {
         element.setAttribute('theme', 'icon small');
-        await visualDiff(div, `${import.meta.url}_icon-only-small`);
+        await visualDiff(div, 'icon-only-small');
       });
 
       it('default', async () => {
         element.setAttribute('theme', 'icon large');
-        await visualDiff(div, `${import.meta.url}_icon-only-large`);
+        await visualDiff(div, 'icon-only-large');
       });
     });
   });

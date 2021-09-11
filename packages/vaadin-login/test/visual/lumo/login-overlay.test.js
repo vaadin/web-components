@@ -13,11 +13,11 @@ describe('login-overlay', () => {
   });
 
   it('basic', async () => {
-    await visualDiff(div, `${import.meta.url}_basic`);
+    await visualDiff(div, 'basic');
   });
 
   it('error', async () => {
     element.error = true;
-    await visualDiff(div, `${import.meta.url}_error`);
+    await visualDiff(div, 'error');
   });
 });

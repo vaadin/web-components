@@ -234,20 +234,18 @@ const testRunnerHtml = (testFramework) => `
   </html>
 `;
 
-const getScreenshotFileName = ({ name }, type, diff) => {
-  const [meta, test] = name.split('_');
-  const { pathname } = new URL(meta);
+const getScreenshotFileName = ({ name, testFile }, type, diff) => {
   let folder;
-  if (name.includes('-styles')) {
-    const match = pathname.match(/\/packages\/(vaadin-(lumo|material)-styles\/test\/visual\/)(.+)/);
+  if (testFile.includes('-styles')) {
+    const match = testFile.match(/\/packages\/(vaadin-(lumo|material)-styles\/test\/visual\/)(.+)/);
     folder = match[1] + 'screenshots';
-  } else if (name.includes('vaadin-icons')) {
+  } else if (testFile.includes('vaadin-icons')) {
     folder = 'vaadin-icons/test/visual/screenshots';
   } else {
-    const match = pathname.match(/\/packages\/(.+)\.test\.js/);
+    const match = testFile.match(/\/packages\/(.+)\.test\.js/);
     folder = match[1].replace(/(lumo|material)/, '$1/screenshots');
   }
-  return path.join(folder, type, diff ? `${test}-diff` : test);
+  return path.join(folder, type, diff ? `${name}-diff` : name);
 };
 
 const getBaselineScreenshotName = (args) => getScreenshotFileName(args, 'baseline');

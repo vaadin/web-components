@@ -23,12 +23,12 @@ describe('upload', () => {
       });
 
       it('basic', async () => {
-        await visualDiff(div, `${import.meta.url}_${dir}-basic`);
+        await visualDiff(div, `${dir}-basic`);
       });
 
       it('nodrop', async () => {
         element.nodrop = true;
-        await visualDiff(div, `${import.meta.url}_${dir}-nodrop`);
+        await visualDiff(div, `${dir}-nodrop`);
       });
 
       it('files', async () => {
@@ -36,7 +36,7 @@ describe('upload', () => {
           { name: 'Don Quixote.pdf', progress: 100, complete: true },
           { name: 'Hamlet.pdf', progress: 100, complete: true }
         ];
-        await visualDiff(div, `${import.meta.url}_${dir}-files`);
+        await visualDiff(div, `${dir}-files`);
       });
     });
   });
@@ -54,7 +54,7 @@ describe('upload', () => {
     it('file', async () => {
       // Focus the file
       await sendKeys({ press: 'Tab' });
-      await visualDiff(div, `${import.meta.url}_focus-file`);
+      await visualDiff(div, 'focus-file');
     });
 
     it('start', async () => {
@@ -63,7 +63,7 @@ describe('upload', () => {
 
       // Focus the start button
       await sendKeys({ press: 'Tab' });
-      await visualDiff(div, `${import.meta.url}_focus-start`);
+      await visualDiff(div, 'focus-start');
     });
 
     it('retry', async () => {
@@ -76,7 +76,7 @@ describe('upload', () => {
       // Focus the retry button
       await sendKeys({ press: 'Tab' });
 
-      await visualDiff(div, `${import.meta.url}_focus-retry`);
+      await visualDiff(div, 'focus-retry');
     });
 
     it('clear', async () => {
@@ -92,7 +92,7 @@ describe('upload', () => {
       // Focus the clear button
       await sendKeys({ press: 'Tab' });
 
-      await visualDiff(div, `${import.meta.url}_focus-clear`);
+      await visualDiff(div, 'focus-clear');
     });
   });
 });

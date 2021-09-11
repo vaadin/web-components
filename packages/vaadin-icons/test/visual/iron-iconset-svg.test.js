@@ -19,6 +19,6 @@ describe('iron-iconset-svg', () => {
   });
 
   it('basic', async () => {
-    await visualDiff(wrapper, `${import.meta.url}_iron-iconset-svg`);
+    await visualDiff(wrapper, 'iron-iconset-svg');
   });
 });

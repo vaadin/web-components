@@ -20,6 +20,6 @@ describe('vaadin-iconset', () => {
   });
 
   it('basic', async () => {
-    await visualDiff(wrapper, `${import.meta.url}_vaadin-iconset`);
+    await visualDiff(wrapper, 'vaadin-iconset');
   });
 });
