@@ -122,7 +122,6 @@ class ComboBoxLight extends ComboBoxDataProviderMixin(ComboBoxMixin(ThemableMixi
   /** @protected */
   ready() {
     super.ready();
-
     this._toggleElement = this.querySelector('.toggle-button');
 
     if (this.clearElement) {
@@ -137,7 +136,6 @@ class ComboBoxLight extends ComboBoxDataProviderMixin(ComboBoxMixin(ThemableMixi
   /** @protected */
   connectedCallback() {
     super.connectedCallback();
-
     const cssSelector = 'vaadin-text-field,iron-input,paper-input,.paper-input-input,.input';
     this._setInputElement(this.querySelector(cssSelector));
     this._revertInputValue();
@@ -147,7 +145,6 @@ class ComboBoxLight extends ComboBoxDataProviderMixin(ComboBoxMixin(ThemableMixi
   /** @protected */
   disconnectedCallback() {
     super.disconnectedCallback();
-
     this._restoreInputBlur();
   }
 
