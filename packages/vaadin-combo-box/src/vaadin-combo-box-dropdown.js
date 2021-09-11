@@ -195,19 +195,15 @@ class ComboBoxDropdown extends mixinBehaviors(IronResizableBehavior, PolymerElem
     this.dispatchEvent(new CustomEvent(event.type, { detail: event.detail }));
   }
 
-  _openedChanged(opened, oldValue) {
-    if (!!opened === !!oldValue) {
-      return;
-    }
-
-    this._setOverlayWidth();
-
-    this._scroller.style.maxHeight =
-      getComputedStyle(this).getPropertyValue('--vaadin-combo-box-overlay-max-height') || '65vh';
-
+  _openedChanged(opened, wasOpened) {
     if (opened) {
+      this._setOverlayWidth();
+
+      this._scroller.style.maxHeight =
+        getComputedStyle(this).getPropertyValue('--vaadin-combo-box-overlay-max-height') || '65vh';
+
       this.dispatchEvent(new CustomEvent('vaadin-combo-box-dropdown-opened', { bubbles: true, composed: true }));
-    } else if (!this.__emptyItems) {
+    } else if (wasOpened && !this.__emptyItems) {
       this.dispatchEvent(new CustomEvent('vaadin-combo-box-dropdown-closed', { bubbles: true, composed: true }));
     }
   }
