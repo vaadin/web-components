@@ -8,6 +8,7 @@ const PROP_NAMES_VERTICAL = {
   start: 'top',
   end: 'bottom'
 };
+
 const PROP_NAMES_HORIZONTAL = {
   start: 'left',
   end: 'right'
