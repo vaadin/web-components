@@ -5,14 +5,19 @@
  */
 import { OverlayElement } from '@vaadin/vaadin-overlay/src/vaadin-overlay.js';
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+import { PositionMixin } from '@vaadin/vaadin-overlay/src/vaadin-overlay-position-mixin.js';
 
 registerStyles(
   'vaadin-combo-box-overlay',
   css`
-    :host {
-      margin: 0;
-      align-items: stretch;
+    #overlay {
       width: var(--vaadin-combo-box-overlay-width, var(--_vaadin-combo-box-overlay-default-width, auto));
+    }
+
+    [part='content'] {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
     }
   `,
   { moduleId: 'vaadin-combo-box-overlay-styles' }
@@ -24,7 +29,7 @@ registerStyles(
  * @extends OverlayElement
  * @private
  */
-class ComboBoxOverlayElement extends OverlayElement {
+class ComboBoxOverlayElement extends PositionMixin(OverlayElement) {
   static get is() {
     return 'vaadin-combo-box-overlay';
   }
@@ -46,6 +51,13 @@ class ComboBoxOverlayElement extends OverlayElement {
     loader.setAttribute('part', 'loader');
     const content = this.shadowRoot.querySelector('[part~="content"]');
     content.parentNode.insertBefore(loader, content);
+  }
+
+  _outsideClickListener(event) {
+    const eventPath = event.composedPath();
+    if (!eventPath.includes(this.positionTarget) && !eventPath.includes(this)) {
+      this.close();
+    }
   }
 }
 

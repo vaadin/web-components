@@ -1,11 +1,11 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { fixtureSync } from '@vaadin/testing-helpers';
-import { _PositionMixin } from '../src/vaadin-overlay-position-mixin.js';
+import { PositionMixin } from '../src/vaadin-overlay-position-mixin.js';
 import { OverlayElement } from '../src/vaadin-overlay.js';
 import '../vaadin-overlay.js';
 
-class PositionedOverlay extends _PositionMixin(OverlayElement) {
+class PositionedOverlay extends PositionMixin(OverlayElement) {
   static get is() {
     return 'vaadin-positioned-overlay';
   }
@@ -36,10 +36,6 @@ describe('position target', () => {
       target.getBoundingClientRect()[targetEdge],
       1
     );
-  }
-
-  function setRTL() {
-    overlay.setAttribute('dir', 'rtl');
   }
 
   beforeEach(() => {
@@ -283,13 +279,18 @@ describe('position target', () => {
       targetPositionForCentering = document.documentElement.clientWidth / 2 - target.clientWidth / 2;
     });
 
+    afterEach(() => {
+      document.dir = 'ltr';
+    });
+
     it('should align left edges', () => {
       expectEdgesAligned(LEFT, LEFT);
     });
 
     it('should align right edges with right-to-left', () => {
-      overlay.setAttribute('dir', 'rtl');
-      updatePosition();
+      overlay.opened = false;
+      document.dir = 'rtl';
+      overlay.opened = true;
       expectEdgesAligned(RIGHT, RIGHT);
     });
 
@@ -376,13 +377,18 @@ describe('position target', () => {
       targetPositionForCentering = document.documentElement.clientWidth / 2 - target.clientWidth / 2;
     });
 
+    afterEach(() => {
+      document.dir = 'ltr';
+    });
+
     it('should align right edges', () => {
       expectEdgesAligned(RIGHT, RIGHT);
     });
 
     it('should align left edges with right-to-left', () => {
-      setRTL();
-      updatePosition();
+      overlay.opened = false;
+      document.dir = 'rtl';
+      overlay.opened = true;
       expectEdgesAligned(LEFT, LEFT);
     });
 
