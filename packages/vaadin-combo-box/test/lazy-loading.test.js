@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync, nextFrame, aTimeout, enterKeyDown, fire, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, aTimeout, enterKeyDown, fire } from '@vaadin/testing-helpers';
 import { flush } from '@polymer/polymer/lib/utils/flush.js';
 import '@polymer/iron-input/iron-input.js';
 import { ComboBoxPlaceholder } from '../src/vaadin-combo-box-placeholder.js';
@@ -14,8 +14,8 @@ import {
   makeItems
 } from './helpers.js';
 import './not-animated-styles.js';
-import '../src/vaadin-combo-box.js';
-import '../src/vaadin-combo-box-light.js';
+import '../vaadin-combo-box.js';
+import '../vaadin-combo-box-light.js';
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 
 registerStyles(
@@ -432,7 +432,7 @@ describe('lazy loading', () => {
       });
 
       describe('changing dataProvider', () => {
-        it('should have correct items after changing dataProvider to return less items', async () => {
+        it('should have correct items after changing dataProvider to return less items', () => {
           comboBox.dataProvider = (params, callback) => callback(['foo', 'bar'], 2);
           comboBox.open();
           comboBox.close();
@@ -440,8 +440,6 @@ describe('lazy loading', () => {
           comboBox.clearCache();
           comboBox.dataProvider = (params, callback) => callback(['baz'], 1);
           comboBox.open();
-
-          await nextRender(comboBox.$.overlay);
 
           expect(comboBox.filteredItems).to.eql(['baz']);
           // The helper already excludes hidden items
@@ -1033,13 +1031,10 @@ describe('lazy loading', () => {
       const ESTIMATED_SIZE = 1234;
       const allItems = makeItems(ESTIMATED_SIZE);
 
-      it('should restore the scroll position after size update', async () => {
-        await nextRender(comboBox);
+      it('should restore the scroll position after size update', () => {
         const targetItemIndex = 75;
         comboBox.dataProvider = getDataProvider(allItems);
-        await nextRender(comboBox);
         comboBox.opened = true;
-        await nextRender(comboBox.$.overlay);
         comboBox.$.dropdown._scrollIntoView(targetItemIndex);
         comboBox.size = 300;
         // verify whether the scroller not jumped to 0 pos and restored properly,

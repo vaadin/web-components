@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, isIOS, fire, nextRender } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, isIOS, fire } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { makeItems } from './helpers.js';
 import './not-animated-styles.js';
@@ -62,9 +62,8 @@ describe('overlay position', () => {
   });
 
   describe('overlay position', () => {
-    it('should match the input container width', async () => {
+    it('should match the input container width', () => {
       comboBox.open();
-      await nextRender(comboBox.$.overlay);
 
       expect(overlay.$.overlay.getBoundingClientRect().width).to.be.closeTo(input.getBoundingClientRect().width, 1);
     });
@@ -80,7 +79,7 @@ describe('overlay position', () => {
       comboBox.open();
       await aTimeout(1);
       comboBox.items = [1, 2, 3];
-      await nextRender(comboBox.$.overlay);
+      await aTimeout(1);
       expect(overlay.getBoundingClientRect().top).to.be.closeTo(input.getBoundingClientRect().bottom, 1);
     });
 
@@ -103,42 +102,27 @@ describe('overlay position', () => {
       expect(overlay.getBoundingClientRect().top).to.be.closeTo(input.getBoundingClientRect().bottom, 1);
     });
 
-    it('when the input position width changes overlay width should change', async () => {
+    it('when the input position width changes overlay width should change', () => {
       moveComboBox(xCenter, yBottom, 150);
 
       comboBox.open();
 
-      await nextRender(comboBox.$.overlay);
-
       expect(overlay.$.overlay.getBoundingClientRect().width).to.equal(input.getBoundingClientRect().width);
     });
 
-    // Skipped, the overlay is no longer translated
-    it.skip('should not translate in sub-pixels', () => {
-      comboBox.style.paddingTop = '0.75px';
-      comboBox.open();
-
-      const pixelRatio = window.devicePixelRatio || 1;
-      expect((dropdown._translateY * pixelRatio) % 1).to.be.closeTo(0, 0.1);
-      expect((dropdown._translateX * pixelRatio) % 1).to.be.closeTo(0, 0.1);
-    });
-
-    it('should have custom width bigger than input', async () => {
+    it('should have custom width bigger than input', () => {
       comboBox.style.setProperty('--vaadin-combo-box-overlay-width', '400px');
 
       comboBox.open();
-
-      await nextRender(comboBox.$.overlay);
       expect(overlay.$.overlay.getBoundingClientRect().width).to.equal(400);
       expect(overlay.$.overlay.getBoundingClientRect().width).to.be.above(input.getBoundingClientRect().width);
     });
 
-    it('should have custom width smaller than input', async () => {
+    it('should have custom width smaller than input', () => {
       comboBox.style.setProperty('--vaadin-combo-box-overlay-width', '130px');
 
       comboBox.open();
 
-      await nextRender(comboBox.$.overlay);
       expect(overlay.$.overlay.getBoundingClientRect().width).to.equal(130);
       expect(overlay.$.overlay.getBoundingClientRect().width).to.be.below(input.getBoundingClientRect().width);
     });
@@ -153,8 +137,7 @@ describe('overlay position', () => {
       });
 
       it('should be on the left side of the input', async () => {
-        const currentWidth = input.getBoundingClientRect().width;
-        moveComboBox(xEnd + (currentWidth - inputWidth), yCenter, inputWidth);
+        moveComboBox(xEnd, yCenter, inputWidth);
 
         comboBox.open();
         await aTimeout(1);
