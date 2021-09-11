@@ -109,6 +109,7 @@ export const PositionMixin = (superClass) =>
         this.__isRTL = computedStyle.direction === 'rtl';
 
         this._updatePosition();
+        // Schedule another position update (to cover virtual keyboard opening for example)
         requestAnimationFrame(() => this._updatePosition());
       }
     }
@@ -137,7 +138,7 @@ export const PositionMixin = (superClass) =>
       const overlayRect = this.$.overlay.getBoundingClientRect();
 
       // Obtain vertical positioning properties
-      const verticalProps = PositionMixin.__calculatePositionInOneDimension(
+      const verticalProps = this.__calculatePositionInOneDimension(
         targetRect,
         overlayRect,
         this.noVerticalOverlap,
@@ -147,7 +148,7 @@ export const PositionMixin = (superClass) =>
       );
 
       // Obtain horizontal positioning properties
-      const horizontalProps = PositionMixin.__calculatePositionInOneDimension(
+      const horizontalProps = this.__calculatePositionInOneDimension(
         targetRect,
         overlayRect,
         this.noHorizontalOverlap,
@@ -169,7 +170,7 @@ export const PositionMixin = (superClass) =>
       const viewportWidth = Math.min(window.innerWidth, document.documentElement.clientWidth);
       const defaultAlignLeft = (!rtl && this.horizontalAlign === 'start') || (rtl && this.horizontalAlign === 'end');
 
-      return PositionMixin.__shouldAlignStart(
+      return this.__shouldAlignStart(
         targetRect,
         contentWidth,
         viewportWidth,
@@ -189,7 +190,7 @@ export const PositionMixin = (superClass) =>
       const viewportHeight = Math.min(window.innerHeight, document.documentElement.clientHeight);
       const defaultAlignTop = this.verticalAlign === 'top';
 
-      return PositionMixin.__shouldAlignStart(
+      return this.__shouldAlignStart(
         targetRect,
         contentHeight,
         viewportHeight,
@@ -200,7 +201,7 @@ export const PositionMixin = (superClass) =>
       );
     }
 
-    static __shouldAlignStart(targetRect, contentSize, viewportSize, margins, defaultAlignStart, noOverlap, propNames) {
+    __shouldAlignStart(targetRect, contentSize, viewportSize, margins, defaultAlignStart, noOverlap, propNames) {
       const spaceForStartAlignment =
         viewportSize - targetRect[noOverlap ? propNames.end : propNames.start] - margins[propNames.end];
       const spaceForEndAlignment = targetRect[noOverlap ? propNames.start : propNames.end] - margins[propNames.start];
@@ -218,7 +219,7 @@ export const PositionMixin = (superClass) =>
      * Returns an object with CSS position properties to set,
      * e.g. { top: "100px", bottom: "" }
      */
-    static __calculatePositionInOneDimension(targetRect, overlayRect, noOverlap, propNames, overlay, shouldAlignStart) {
+    __calculatePositionInOneDimension(targetRect, overlayRect, noOverlap, propNames, overlay, shouldAlignStart) {
       const cssPropNameToSet = shouldAlignStart ? propNames.start : propNames.end;
       const cssPropNameToClear = shouldAlignStart ? propNames.end : propNames.start;
 
