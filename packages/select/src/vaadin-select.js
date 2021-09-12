@@ -4,9 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { IronResizableBehavior } from '@polymer/iron-resizable-behavior/iron-resizable-behavior.js';
 import '@polymer/iron-media-query/iron-media-query.js';
 import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
 import { processTemplates } from '@vaadin/vaadin-element-mixin/templates.js';
@@ -108,9 +106,7 @@ import './vaadin-select-value-button.js';
  * @mixes DelegateFocusMixin
  */
 class Select extends DelegateFocusMixin(
-  FieldAriaMixin(
-    LabelMixin(SlotMixin(ElementMixin(ThemableMixin(mixinBehaviors(IronResizableBehavior, PolymerElement)))))
-  )
+  FieldAriaMixin(LabelMixin(SlotMixin(ElementMixin(ThemableMixin(PolymerElement)))))
 ) {
   static get is() {
     return 'vaadin-select';
@@ -300,7 +296,6 @@ class Select extends DelegateFocusMixin(
     this._fieldId = `${this.localName}-${uniqueId}`;
 
     this._boundOnKeyDown = this._onKeyDown.bind(this);
-    this.addEventListener('iron-resize', () => this._overlayElement._updatePosition());
   }
 
   /** @protected */
