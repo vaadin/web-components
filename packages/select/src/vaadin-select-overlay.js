@@ -5,6 +5,7 @@
  */
 import { OverlayElement } from '@vaadin/vaadin-overlay/src/vaadin-overlay.js';
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+import { PositionMixin } from '@vaadin/vaadin-overlay/src/vaadin-overlay-position-mixin.js';
 
 registerStyles(
   'vaadin-select-overlay',
@@ -23,7 +24,7 @@ registerStyles(
  * @extends OverlayElement
  * @protected
  */
-class SelectOverlayElement extends OverlayElement {
+class SelectOverlayElement extends PositionMixin(OverlayElement) {
   static get is() {
     return 'vaadin-select-overlay';
   }

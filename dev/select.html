@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script type="module">
+      import '@vaadin/select';
+    </script>
+  </head>
+  <body>
+    <vaadin-select></vaadin-select>
+
+    <script>
+      const select = document.querySelector('vaadin-select');
+      select.renderer = function(root, _, model) {
+        if (!root.firstElementChild) {
+          root.innerHTML = `
+          <vaadin-list-box>
+            <vaadin-item value="xs" disabled>XS (out of stock)</vaadin-item>
+            <vaadin-item value="s">S</vaadin-item>
+            <vaadin-item value="m">M</vaadin-item>
+            <vaadin-item value="l">L</vaadin-item>
+            <vaadin-item value="xl">XL</vaadin-item>
+          </vaadin-list-box>
+          `;
+        }
+      };
+    </script>
+  </body>
+</html>

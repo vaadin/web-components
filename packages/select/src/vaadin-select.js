@@ -4,9 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { IronResizableBehavior } from '@polymer/iron-resizable-behavior/iron-resizable-behavior.js';
 import '@polymer/iron-media-query/iron-media-query.js';
 import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
 import { processTemplates } from '@vaadin/vaadin-element-mixin/templates.js';
@@ -108,9 +106,7 @@ import './vaadin-select-value-button.js';
  * @mixes DelegateFocusMixin
  */
 class Select extends DelegateFocusMixin(
-  FieldAriaMixin(
-    LabelMixin(SlotMixin(ElementMixin(ThemableMixin(mixinBehaviors(IronResizableBehavior, PolymerElement)))))
-  )
+  FieldAriaMixin(LabelMixin(SlotMixin(ElementMixin(ThemableMixin(PolymerElement)))))
 ) {
   static get is() {
     return 'vaadin-select';
@@ -154,6 +150,7 @@ class Select extends DelegateFocusMixin(
       </div>
 
       <vaadin-select-overlay
+        position-target="[[_inputContainer]]"
         opened="{{opened}}"
         with-backdrop="[[_phone]]"
         phone$="[[_phone]]"
@@ -298,14 +295,12 @@ class Select extends DelegateFocusMixin(
     const uniqueId = (Select._uniqueId = 1 + Select._uniqueId || 0);
     this._fieldId = `${this.localName}-${uniqueId}`;
 
-    this._boundSetPosition = this._setPosition.bind(this);
     this._boundOnKeyDown = this._onKeyDown.bind(this);
   }
 
   /** @protected */
   connectedCallback() {
     super.connectedCallback();
-    this.addEventListener('iron-resize', this._boundSetPosition);
 
     if (this._valueButton) {
       this._valueButton.setAttribute('aria-labelledby', `${this._labelId} ${this._fieldId}`);
@@ -322,7 +317,6 @@ class Select extends DelegateFocusMixin(
   /** @protected */
   disconnectedCallback() {
     super.disconnectedCallback();
-    this.removeEventListener('iron-resize', this._boundSetPosition);
     if (this._valueButton) {
       this._valueButton.removeEventListener('keydown', this._boundOnKeyDown);
     }
@@ -464,6 +458,11 @@ class Select extends DelegateFocusMixin(
         return;
       }
 
+      this._overlayElement.style.setProperty(
+        '--vaadin-select-text-field-width',
+        this._inputContainer.offsetWidth + 'px'
+      );
+
       // Preserve focus-ring to restore it later
       const hasFocusRing = this.hasAttribute('focus-ring');
       this._openedWithFocusRing = hasFocusRing;
@@ -474,8 +473,6 @@ class Select extends DelegateFocusMixin(
       }
 
       this._menuElement.focus();
-      this._setPosition();
-      window.addEventListener('scroll', this._boundSetPosition, true);
     } else if (wasOpened) {
       if (this._phone) {
         this._setFocused(false);
@@ -486,7 +483,6 @@ class Select extends DelegateFocusMixin(
         }
       }
       this.validate();
-      window.removeEventListener('scroll', this._boundSetPosition, true);
     }
   }
 
@@ -608,32 +604,6 @@ class Select extends DelegateFocusMixin(
     if (!focused) {
       this.validate();
     }
-  }
-
-  /** @private */
-  _setPosition() {
-    const inputRect = this._inputContainer.getBoundingClientRect();
-    const viewportHeight = Math.min(window.innerHeight, document.documentElement.clientHeight);
-    const bottomAlign = inputRect.top > (viewportHeight - inputRect.height) / 2;
-
-    const isRtl = this.getAttribute('dir') === 'rtl';
-    if (isRtl) {
-      this._overlayElement.style.right = document.documentElement.clientWidth - inputRect.right + 'px';
-    } else {
-      this._overlayElement.style.left = inputRect.left + 'px';
-    }
-
-    if (bottomAlign) {
-      this._overlayElement.setAttribute('bottom-aligned', '');
-      this._overlayElement.style.removeProperty('top');
-      this._overlayElement.style.bottom = viewportHeight - inputRect.bottom + 'px';
-    } else {
-      this._overlayElement.removeAttribute('bottom-aligned');
-      this._overlayElement.style.removeProperty('bottom');
-      this._overlayElement.style.top = inputRect.top + 'px';
-    }
-
-    this._overlayElement.updateStyles({ '--vaadin-select-text-field-width': inputRect.width + 'px' });
   }
 
   /**
