@@ -458,9 +458,10 @@ class Select extends DelegateFocusMixin(
         return;
       }
 
-      this._overlayElement.updateStyles({
-        '--vaadin-select-text-field-width': this._inputContainer.offsetWidth + 'px'
-      });
+      this._overlayElement.style.setProperty(
+        '--vaadin-select-text-field-width',
+        this._inputContainer.offsetWidth + 'px'
+      );
 
       // Preserve focus-ring to restore it later
       const hasFocusRing = this.hasAttribute('focus-ring');
