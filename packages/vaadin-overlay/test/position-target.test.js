@@ -1,8 +1,10 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
 import { PositionMixin } from '../src/vaadin-overlay-position-mixin.js';
 import { OverlayElement } from '../src/vaadin-overlay.js';
+import { registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles';
+import { css } from 'lit';
 import '../vaadin-overlay.js';
 
 class PositionedOverlay extends PositionMixin(OverlayElement) {
@@ -12,6 +14,21 @@ class PositionedOverlay extends PositionMixin(OverlayElement) {
 }
 
 customElements.define(PositionedOverlay.is, PositionedOverlay);
+
+registerStyles(
+  'vaadin-positioned-overlay',
+  css`
+    @keyframes slidein {
+      0% {
+        transform: translateY(10px);
+      }
+    }
+
+    :host(.animated) [part='overlay'] {
+      animation: slidein 0.2s;
+    }
+  `
+);
 
 describe('position target', () => {
   const TOP = 'top';
@@ -106,6 +123,12 @@ describe('position target', () => {
     });
 
     it('should align top edges', () => {
+      expectEdgesAligned(TOP, TOP);
+    });
+
+    it('should align top edges when overlay part is animated', async () => {
+      overlay.classList.add('animated');
+      await oneEvent(overlay.$.overlay, 'animationend');
       expectEdgesAligned(TOP, TOP);
     });
 
