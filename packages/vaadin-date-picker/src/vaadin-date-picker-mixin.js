@@ -411,6 +411,17 @@ export const DatePickerMixin = (subclass) =>
         }
       });
 
+      // TODO: Remove once https://github.com/vaadin/web-components/issues/2517 is fixed
+      this.shadowRoot.addEventListener('change', (e) => {
+        // For change event on input blur, after the field is cleared,
+        // we schedule change event to be dispatched on date-picker blur.
+        if (this.inputElement.value === '' && !e.__fromClearButton) {
+          this.__dispatchChange = true;
+          // Stop the change event from the input from reaching date-picker.
+          e.stopPropagation();
+        }
+      });
+
       this.addEventListener('input', this._boundOnInput);
       this.addEventListener('focus', (e) => this._noInput && e.target.blur());
       this.addEventListener('blur', () => {
