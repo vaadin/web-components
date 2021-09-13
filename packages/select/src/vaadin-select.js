@@ -11,7 +11,7 @@ import { processTemplates } from '@vaadin/vaadin-element-mixin/templates.js';
 import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
 import { FieldAriaMixin } from '@vaadin/field-base/src/field-aria-mixin.js';
 import { LabelMixin } from '@vaadin/field-base/src/label-mixin.js';
-import { SlotMixin } from '@vaadin/field-base/src/slot-mixin.js';
+import { SlotMixin } from '@vaadin/component-base/src/slot-mixin.js';
 import '@vaadin/text-field/src/vaadin-input-field-shared-styles.js';
 import '@vaadin/input-container/src/vaadin-input-container.js';
 import './vaadin-select-overlay.js';

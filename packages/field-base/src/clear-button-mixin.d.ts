@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { InputMixin } from './input-mixin.js';
-import { KeyboardMixin } from './keyboard-mixin.js';
+import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
 
 /**
  * A mixin to add clear button support to field components.

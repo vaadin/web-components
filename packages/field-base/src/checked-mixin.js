@@ -5,7 +5,7 @@
  */
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
 import { DelegateStateMixin } from './delegate-state-mixin.js';
-import { DisabledMixin } from './disabled-mixin.js';
+import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
 import { InputMixin } from './input-mixin.js';
 
 const CheckedMixinImplementation = (superclass) =>

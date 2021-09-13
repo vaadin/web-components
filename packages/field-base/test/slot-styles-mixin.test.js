@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { SlotMixin } from '../src/slot-mixin.js';
+import { SlotMixin } from '@vaadin/component-base/src/slot-mixin.js';
 import { SlotStylesMixin } from '../src/slot-styles-mixin.js';
 
 describe('slot-styles-mixin', () => {

@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { DelegateStateMixin } from './delegate-state-mixin.js';
-import { DisabledMixin } from './disabled-mixin.js';
+import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
 import { InputMixin } from './input-mixin.js';
 
 /**

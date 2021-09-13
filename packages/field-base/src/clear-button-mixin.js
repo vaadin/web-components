@@ -5,7 +5,7 @@
  */
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
 import { InputMixin } from './input-mixin.js';
-import { KeyboardMixin } from './keyboard-mixin.js';
+import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
 
 const ClearButtonMixinImplementation = (superclass) =>
   class ClearButtonMixinClass extends InputMixin(KeyboardMixin(superclass)) {

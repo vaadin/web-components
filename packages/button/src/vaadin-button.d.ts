@@ -5,7 +5,7 @@
  */
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
-import { ActiveMixin } from '@vaadin/field-base/src/active-mixin.js';
+import { ActiveMixin } from '@vaadin/component-base/src/active-mixin.js';
 import { ControlStateMixin } from '@vaadin/vaadin-control-state-mixin/vaadin-control-state-mixin.js';
 
 /**
