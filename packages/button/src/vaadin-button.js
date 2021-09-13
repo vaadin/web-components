@@ -157,6 +157,8 @@ class Button extends ActiveMixin(TabindexMixin(FocusMixin(ElementMixin(ThemableM
     super._onKeyDown(event);
 
     if (this._activeKeys.includes(event.key)) {
+      event.preventDefault();
+
       // `DisabledMixin` overrides the standard `click()` method
       // so that it doesn't fire the `click` event when the element is disabled.
       this.click();
