@@ -90,11 +90,6 @@ describe('password-field', () => {
     before(() => {
       button = document.createElement('button');
       button.textContent = 'Button';
-      document.body.insertBefore(button, document.body.firstChild);
-    });
-
-    beforeEach(() => {
-      button.focus();
     });
 
     after(() => {
@@ -104,6 +99,7 @@ describe('password-field', () => {
     describe('Tab', () => {
       before(() => {
         document.body.insertBefore(button, document.body.firstChild);
+        button.focus();
       });
 
       it('should set focus-ring attribute when focusing the input with Tab', async () => {
@@ -126,6 +122,7 @@ describe('password-field', () => {
     describe('Shift Tab', () => {
       before(() => {
         document.body.appendChild(button);
+        button.focus();
       });
 
       it('should not set focus-ring attribute when focusing reveal button with Shift Tab', async () => {
