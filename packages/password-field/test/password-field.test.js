@@ -85,19 +85,21 @@ describe('password-field', () => {
   });
 
   describe('focus-ring', () => {
+    let button;
+
+    before(() => {
+      button = document.createElement('button');
+      button.textContent = 'Button';
+    });
+
+    after(() => {
+      button.remove();
+    });
+
     describe('Tab', () => {
-      let button;
-
-      beforeEach(() => {
-        button = document.createElement('button');
-        button.textContent = 'Button';
-        passwordField.parentNode.insertBefore(button, passwordField);
+      before(() => {
+        document.body.insertBefore(button, document.body.firstChild);
         button.focus();
-      });
-
-      afterEach(() => {
-        document.body.focus();
-        button.remove();
       });
 
       it('should set focus-ring attribute when focusing the input with Tab', async () => {
@@ -107,8 +109,8 @@ describe('password-field', () => {
       });
 
       it('should remove focus-ring attribute when focusing reveal button', async () => {
-        // Tab to the input element
-        await sendKeys({ press: 'Tab' });
+        // Focus the input element
+        input.focus();
 
         // Tab to the reveal button
         await sendKeys({ press: 'Tab' });
@@ -118,18 +120,9 @@ describe('password-field', () => {
     });
 
     describe('Shift Tab', () => {
-      let button;
-
-      beforeEach(() => {
-        button = document.createElement('button');
-        button.textContent = 'Button';
-        passwordField.parentNode.appendChild(button);
+      before(() => {
+        document.body.appendChild(button);
         button.focus();
-      });
-
-      afterEach(() => {
-        document.body.focus();
-        button.remove();
       });
 
       it('should not set focus-ring attribute when focusing reveal button with Shift Tab', async () => {
@@ -141,10 +134,8 @@ describe('password-field', () => {
       });
 
       it('should set focus-ring attribute when focusing the input with Shift Tab', async () => {
-        // Shift+Tab to the reveal button
-        await sendKeys({ down: 'Shift' });
-        await sendKeys({ press: 'Tab' });
-        await sendKeys({ up: 'Shift' });
+        // Focus the reveal button
+        revealButton.focus();
 
         // Shift+Tab to the input element
         await sendKeys({ down: 'Shift' });
