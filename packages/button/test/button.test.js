@@ -83,6 +83,28 @@ describe('vaadin-button', () => {
 
         expect(spy.called).to.be.false;
       });
+
+      it(`should prevent default behaviour for keydown event on ${key}`, async () => {
+        const spy = sinon.spy();
+        element.addEventListener('keydown', spy);
+
+        await sendKeys({ down: key });
+
+        const event = spy.args[0][0];
+        expect(event).to.be.an.instanceOf(KeyboardEvent);
+        expect(event.defaultPrevented).to.be.true;
+      });
+    });
+
+    it('should not prevent default behaviour for keydown event on non-activation key', async () => {
+      const spy = sinon.spy();
+      element.addEventListener('keydown', spy);
+
+      await sendKeys({ down: 'ArrowDown' });
+
+      const event = spy.args[0][0];
+      expect(event).to.be.an.instanceOf(KeyboardEvent);
+      expect(event.defaultPrevented).to.be.false;
     });
   });
 
