@@ -3,15 +3,15 @@ import sinon from 'sinon';
 import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
 import { close, open } from './common.js';
-import { DatePickerElement } from '../vaadin-date-picker.js';
+import { DatePicker } from '../vaadin-date-picker.js';
 
-class DatePicker2016Element extends DatePickerElement {
+class DatePicker2016 extends DatePicker {
   checkValidity(value) {
     return new Date(value).getFullYear() === 2016;
   }
 }
 
-customElements.define('vaadin-date-picker-2016', DatePicker2016Element);
+customElements.define('vaadin-date-picker-2016', DatePicker2016);
 
 describe('form input', () => {
   let datepicker;

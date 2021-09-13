@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import '@vaadin/vaadin-dialog/vaadin-dialog.js';
 import '@vaadin/vaadin-template-renderer';
-import './vaadin-date-picker.js';
+import '../src/vaadin-date-picker.js';
 
 describe('modeless dialog', () => {
   let dialog, datepicker;

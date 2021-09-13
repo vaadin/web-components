@@ -455,25 +455,25 @@ import '../src/vaadin-date-picker.js';
 
     it('should be tabbable', () => {
       expect(parseInt(overlayContent.getAttribute('tabindex'), 10)).to.equal(0);
-      expect(datepicker.inputElement.hasAttribute('focused')).to.equal(false);
+      expect(datepicker.inputElement.matches(':focus')).to.equal(false);
     });
 
     it('should focus the input on esc', () => {
       arrowDown(target);
       esc(target);
-      expect(datepicker.inputElement.hasAttribute('focused')).to.be.true;
+      expect(datepicker.inputElement.matches(':focus')).to.be.true;
     });
 
     it('should focus the input on date tap', () => {
       arrowDown(target);
       overlayContent.dispatchEvent(new CustomEvent('date-tap', { bubbles: true, composed: true }));
-      expect(datepicker.inputElement.hasAttribute('focused')).to.be.true;
+      expect(datepicker.inputElement.matches(':focus')).to.be.true;
     });
 
     it('should focus the input on date cancel', () => {
       arrowDown(target);
       tap(overlayContent.$.cancelButton);
-      expect(datepicker.inputElement.hasAttribute('focused')).to.be.true;
+      expect(datepicker.inputElement.matches(':focus')).to.be.true;
     });
 
     it('should focus cancel on input shift tab', async () => {
