@@ -1,17 +1,15 @@
 import { expect } from '@esm-bundle/chai';
 import { click, down, fixtureSync, isIOS } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import './not-animated-styles.js';
-import '../vaadin-date-picker.js';
 import { isFullscreen } from './common.js';
+import './vaadin-date-picker.js';
 
 describe('dropdown', () => {
-  let datepicker;
-  let input;
+  let datepicker, input;
 
   beforeEach(() => {
     datepicker = fixtureSync(`<vaadin-date-picker></vaadin-date-picker>`);
-    input = datepicker.$.input;
+    input = datepicker.inputElement;
   });
 
   it('should update position of the overlay after changing opened property', () => {
@@ -138,7 +136,7 @@ describe('wrapped', () => {
   beforeEach(() => {
     datepicker = fixtureSync(`<vaadin-date-picker-wrapper></vaadin-date-picker-wrapper>`).$.datepicker;
     toggleButton = datepicker.shadowRoot.querySelector('[part="toggle-button"]');
-    clearButton = datepicker._inputElement.shadowRoot.querySelector('[part="clear-button"]');
+    clearButton = datepicker.shadowRoot.querySelector('[part="clear-button"]');
   });
 
   it('should not close on calendar icon down', (done) => {

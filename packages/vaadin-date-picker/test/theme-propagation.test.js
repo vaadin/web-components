@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
-import '../vaadin-date-picker.js';
 import { open } from './common.js';
+import './vaadin-date-picker.js';
 
 describe('theme attribute', () => {
   let datepicker;
@@ -10,12 +10,9 @@ describe('theme attribute', () => {
     datepicker = fixtureSync(`<vaadin-date-picker theme="foo"></vaadin-date-picker>`);
   });
 
-  it('should not throw if set programmatically before overlay init', () => {
-    expect(() => datepicker.setAttribute('theme', 'foo')).not.to.throw(Error);
-  });
-
-  it('should propagate theme attribute to text-field', () => {
-    expect(datepicker._inputElement.getAttribute('theme')).to.equal('foo');
+  it('should propagate theme attribute to the input container', () => {
+    const inputField = datepicker.shadowRoot.querySelector('[part="input-field"]');
+    expect(inputField.getAttribute('theme')).to.equal('foo');
   });
 
   it('should propagate theme attribute to overlay', () => {
