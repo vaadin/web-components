@@ -1,6 +1,6 @@
 import sinon from 'sinon';
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextRender, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import '../vaadin-chart.js';
 
 describe('vaadin-chart', () => {
@@ -122,6 +122,14 @@ describe('vaadin-chart', () => {
       const title = chart.$.chart.querySelector('.highcharts-title');
       expect(title).to.be.ok;
       expect(title.textContent).to.equal('Custom title');
+    });
+
+    it('should set chart credits using update', async () => {
+      chart.updateConfiguration({ credits: { enabled: true, text: 'Vaadin' } });
+      await oneEvent(chart, 'chart-redraw');
+      const credits = chart.$.chart.querySelector('.highcharts-credits');
+      expect(credits).to.be.ok;
+      expect(credits.textContent).to.equal('Vaadin');
     });
 
     it('should create chart series using update', async () => {
@@ -394,9 +402,39 @@ describe('vaadin-chart', () => {
 
     beforeEach(async () => {
       chart = fixtureSync(`<vaadin-chart></vaadin-chart>`);
-      await oneEvent(chart, 'chart-load');
+      await nextRender();
 
       redrawSpy = sinon.spy(chart.configuration, 'redraw');
+    });
+
+    it('should redraw the chart only 1 time when using update', async () => {
+      chart.updateConfiguration({
+        title: 'Title',
+        xAxis: {
+          categories: ['2021', '2022', '2023', '2024']
+        },
+        yAxis: {
+          title: 'Values'
+        },
+        credits: {
+          enabled: true,
+          title: 'Vaadin'
+        },
+        series: [
+          {
+            name: 'Series 1',
+            data: [0, 100, 200, 300]
+          },
+          {
+            name: 'Series 2',
+            data: [0, 100, 200, 300]
+          }
+        ]
+      });
+
+      await nextRender();
+
+      expect(redrawSpy.calledOnce).to.be.true;
     });
 
     describe('adding a series', () => {

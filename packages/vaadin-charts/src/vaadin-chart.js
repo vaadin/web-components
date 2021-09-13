@@ -1154,20 +1154,22 @@ class ChartElement extends ElementMixin(ThemableMixin(PolymerElement)) {
         return;
       }
 
-      this.configuration.update(this._jsonConfigurationBuffer);
+      this.configuration.update(this._jsonConfigurationBuffer, false);
       if (this._jsonConfigurationBuffer.credits) {
         this.__updateOrAddCredits(this._jsonConfigurationBuffer.credits);
       }
       if (this._jsonConfigurationBuffer.xAxis) {
-        this.__updateOrAddAxes(this._jsonConfigurationBuffer.xAxis, true);
+        this.__updateOrAddAxes(this._jsonConfigurationBuffer.xAxis, true, false);
       }
       if (this._jsonConfigurationBuffer.yAxis) {
-        this.__updateOrAddAxes(this._jsonConfigurationBuffer.yAxis, false);
+        this.__updateOrAddAxes(this._jsonConfigurationBuffer.yAxis, false, false);
       }
       if (this._jsonConfigurationBuffer.series) {
-        this.__updateOrAddSeries(this._jsonConfigurationBuffer.series);
+        this.__updateOrAddSeries(this._jsonConfigurationBuffer.series, false);
       }
       this._jsonConfigurationBuffer = null;
+
+      this.configuration.redraw();
     });
   }
 
@@ -1425,7 +1427,7 @@ class ChartElement extends ElementMixin(ThemableMixin(PolymerElement)) {
   }
 
   /** @private */
-  __updateOrAddAxes(axes, isX) {
+  __updateOrAddAxes(axes, isX, redraw) {
     if (!Array.isArray(axes)) {
       axes = [axes];
     }
@@ -1433,21 +1435,21 @@ class ChartElement extends ElementMixin(ThemableMixin(PolymerElement)) {
     for (let i = 0; i < axes.length; i++) {
       const axis = axes[i];
       if (confAxes[i]) {
-        confAxes[i].update(axis);
+        confAxes[i].update(axis, redraw);
       } else {
-        this.configuration.addAxis(axis, isX);
+        this.configuration.addAxis(axis, isX, redraw);
       }
     }
   }
 
   /** @private */
-  __updateOrAddSeries(series) {
+  __updateOrAddSeries(series, redraw) {
     if (!Array.isArray(series)) {
       throw new Error('The type of jsonConfiguration.series should be Object[]');
     }
     for (let i = 0; i < series.length; i++) {
       const currentSeries = series[i];
-      this.__updateOrAddSeriesInstance(currentSeries, i);
+      this.__updateOrAddSeriesInstance(currentSeries, i, redraw);
     }
   }
 
