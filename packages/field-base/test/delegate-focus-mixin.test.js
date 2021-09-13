@@ -86,6 +86,14 @@ describe('delegate-focus-mixin', () => {
       element.click();
       expect(spy.calledOnce).to.be.false;
     });
+
+    it('should propagate disabled property to the newly added input', () => {
+      element.disabled = true;
+      element._setFocusElement(null);
+      const target = document.createElement('input');
+      element._setFocusElement(target);
+      expect(target.disabled).to.be.true;
+    });
   });
 
   describe('events', () => {
