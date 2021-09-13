@@ -19,7 +19,7 @@ import '@vaadin/input-container/src/vaadin-input-container.js';
 import '@vaadin/text-field/src/vaadin-input-field-shared-styles.js';
 import { DatePickerMixin } from './vaadin-date-picker-mixin.js';
 
-export class DatePicker extends DatePickerMixin(
+class DatePicker extends DatePickerMixin(
   FieldAriaMixin(
     ClearButtonMixin(
       InputConstraintsMixin(
@@ -148,3 +148,7 @@ export class DatePicker extends DatePickerMixin(
     this[this._overlayInitialized && this.$.overlay.opened ? 'close' : 'open']();
   }
 }
+
+customElements.define(DatePicker.is, DatePicker);
+
+export { DatePicker };
