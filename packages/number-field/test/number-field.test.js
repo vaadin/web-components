@@ -730,6 +730,17 @@ describe('number-field', () => {
       expect(numberField.validate(), 'value should not be greater than max').to.be.false;
     });
 
+    it('should dispatch change event after validation', () => {
+      const validateSpy = sinon.spy(numberField, 'validate');
+      const changeSpy = sinon.spy();
+      numberField.required = true;
+      numberField.addEventListener('change', changeSpy);
+      numberField.value = '123';
+      input.dispatchEvent(new CustomEvent('change'));
+      expect(validateSpy.calledOnce).to.be.true;
+      expect(changeSpy.calledAfter(validateSpy)).to.be.true;
+    });
+
     it('should validate by step when defined by user', () => {
       numberField.step = 1.5;
 
