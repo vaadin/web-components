@@ -113,8 +113,8 @@ describe('password-field', () => {
       });
 
       it('should remove focus-ring attribute when focusing reveal button', async () => {
-        // Tab to the input element
-        await sendKeys({ press: 'Tab' });
+        // Focus the input element
+        input.focus();
 
         // Tab to the reveal button
         await sendKeys({ press: 'Tab' });
@@ -137,10 +137,8 @@ describe('password-field', () => {
       });
 
       it('should set focus-ring attribute when focusing the input with Shift Tab', async () => {
-        // Shift+Tab to the reveal button
-        await sendKeys({ down: 'Shift' });
-        await sendKeys({ press: 'Tab' });
-        await sendKeys({ up: 'Shift' });
+        // Focus the reveal button
+        revealButton.focus();
 
         // Shift+Tab to the input element
         await sendKeys({ down: 'Shift' });
