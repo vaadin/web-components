@@ -9224,10 +9224,10 @@ pkg-dir@^5.0.0:
   dependencies:
     find-up "^5.0.0"
 
-playwright@^1.14.0, playwright@^1.14.1:
-  version "1.14.1"
-  resolved "https://registry.yarnpkg.com/playwright/-/playwright-1.14.1.tgz#73913d3044a85a58edf13148245279231072532e"
-  integrity sha512-JYNjhwWcfsBkg0FMGLbFO9e58FVdmICE4k97/glIQV7cBULL7oxNjRQC7Ffe+Y70XVNnP0HSJLaA0W5SukyftQ==
+playwright@1.15.0-next-alpha-sep-13-2021, playwright@^1.14.0, playwright@^1.15.0-next-alpha-sep-13-2021:
+  version "1.15.0-next-alpha-sep-13-2021"
+  resolved "https://registry.yarnpkg.com/playwright/-/playwright-1.15.0-next-alpha-sep-13-2021.tgz#c70e2f712f43a28b3100c8ca6f2f26ee7d38b5e9"
+  integrity sha512-cmE++f3yyc0lVAhCZQfauAz7YT2x8E6KsfqL6p8v08akNLselpG/NFL7cyabmgSl3D0Yfjt45rO9JharcLlJVw==
   dependencies:
     commander "^6.1.0"
     debug "^4.1.1"
