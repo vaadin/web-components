@@ -25,29 +25,29 @@ customElements.define(
 describe('slot-label-mixin', () => {
   let element;
 
-  describe('default', () => {
+  describe('slot label', () => {
     beforeEach(() => {
-      element = fixtureSync(`<slot-label-mixin-element>Label</slot-label-mixin-element>`);
+      element = fixtureSync(`<slot-label-mixin-element>Slot Label</slot-label-mixin-element>`);
     });
 
-    it('should render the label', () => {
-      expect(element._labelNode.textContent).to.equal('Label');
+    it('should display the slot label', () => {
+      expect(element._labelNode.textContent).to.equal('Slot Label');
     });
 
-    it('should set has-label attribute on the element', () => {
+    it('should set has-label attribute', () => {
       expect(element.hasAttribute('has-label')).to.be.true;
     });
 
-    describe('label property change', () => {
+    describe('overriden with label property', () => {
       beforeEach(() => {
-        element.label = 'New Label';
+        element.label = 'Label Property';
       });
 
-      it('should render the new label from the property', () => {
-        expect(element._labelNode.textContent).to.equal('New Label');
+      it('should display the label property', () => {
+        expect(element._labelNode.textContent).to.equal('Label Property');
       });
 
-      it('should set has-label attribute on the element', () => {
+      it('should keep has-label attribute', () => {
         expect(element.hasAttribute('has-label')).to.be.true;
       });
     });
@@ -55,27 +55,41 @@ describe('slot-label-mixin', () => {
 
   describe('label property', () => {
     beforeEach(() => {
-      element = fixtureSync(`<slot-label-mixin-element label="Label"></slot-label-mixin-element>`);
+      element = fixtureSync(`<slot-label-mixin-element label="Label Property"></slot-label-mixin-element>`);
     });
 
-    it('should render the label', () => {
-      expect(element._labelNode.textContent).to.equal('Label');
+    it('should display the label property', () => {
+      expect(element._labelNode.textContent).to.equal('Label Property');
     });
 
-    describe('slot change', () => {
+    describe('overriden with slot label', () => {
       beforeEach(async () => {
-        const label = document.createTextNode('New Label');
+        const label = document.createTextNode('Slot Label');
         element.appendChild(label);
         await nextFrame();
       });
 
-      it('should render the new label from the slot', () => {
-        expect(element._labelNode.textContent).to.equal('New Label');
+      it('should display the slot label', () => {
+        expect(element._labelNode.textContent).to.equal('Slot Label');
       });
 
-      it('should set has-label attribute on the element', () => {
+      it('should keep has-label attribute', () => {
         expect(element.hasAttribute('has-label')).to.be.true;
       });
+    });
+  });
+
+  describe('label property and slot label', () => {
+    beforeEach(() => {
+      element = fixtureSync(`<slot-label-mixin-element label="Label Property">Slot Label</slot-label-mixin-element>`);
+    });
+
+    it('should display the slot label', () => {
+      expect(element._labelNode.textContent).to.equal('Slot Label');
+    });
+
+    it('should set has-label attribute', () => {
+      expect(element.hasAttribute('has-label')).to.be.true;
     });
   });
 });

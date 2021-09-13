@@ -6,7 +6,7 @@ const SlotTargetMixinImplementation = (superclass) =>
     ready() {
       super.ready();
 
-      if (this._sourceSlot && this._slotTarget) {
+      if (this._sourceSlot) {
         this.__forwardNodesToSlotTarget();
 
         this._sourceSlot.addEventListener('slotchange', () => {
