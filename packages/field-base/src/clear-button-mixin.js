@@ -4,8 +4,8 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
-import { InputMixin } from './input-mixin.js';
 import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
+import { InputMixin } from './input-mixin.js';
 
 const ClearButtonMixinImplementation = (superclass) =>
   class ClearButtonMixinClass extends InputMixin(KeyboardMixin(superclass)) {
