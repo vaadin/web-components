@@ -94,6 +94,14 @@ describe('delegate-focus-mixin', () => {
       element._setFocusElement(target);
       expect(target.disabled).to.be.true;
     });
+
+    it('should override disabled property on the newly added input', () => {
+      element._setFocusElement(null);
+      const target = document.createElement('input');
+      target.setAttribute('disabled', '');
+      element._setFocusElement(target);
+      expect(target.disabled).to.be.false;
+    });
   });
 
   describe('events', () => {
