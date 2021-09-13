@@ -81,6 +81,7 @@ const DelegateFocusMixinImplementation = (superclass) =>
     /** @protected */
     _focusElementChanged(element, oldElement) {
       if (element) {
+        element.disabled = this.disabled;
         this._addFocusListeners(element);
       } else if (oldElement) {
         this._removeFocusListeners(oldElement);
