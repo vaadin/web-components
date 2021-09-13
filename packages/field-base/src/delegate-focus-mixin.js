@@ -4,8 +4,8 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
-import { FocusMixin } from './focus-mixin.js';
-import { DisabledMixin } from './disabled-mixin.js';
+import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
+import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
 
 const DelegateFocusMixinImplementation = (superclass) =>
   class DelegateFocusMixinClass extends FocusMixin(DisabledMixin(superclass)) {

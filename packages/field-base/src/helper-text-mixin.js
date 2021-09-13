@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
-import { SlotMixin } from './slot-mixin.js';
+import { SlotMixin } from '@vaadin/component-base/src/slot-mixin.js';
 
 const HelperTextMixinImplementation = (superclass) =>
   class HelperTextMixinClass extends SlotMixin(superclass) {

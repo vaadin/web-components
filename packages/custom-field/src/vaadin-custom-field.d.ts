@@ -6,7 +6,7 @@
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
 import { FieldAriaMixin } from '@vaadin/field-base/src/field-aria-mixin.js';
-import { FocusMixin } from '@vaadin/field-base/src/focus-mixin.js';
+import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
 import { LabelMixin } from '@vaadin/field-base/src/label-mixin.js';
 import { CustomFieldI18n } from './interfaces';
 

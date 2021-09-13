@@ -5,8 +5,8 @@
  */
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
 import { GestureEventListeners } from '@polymer/polymer/lib/mixins/gesture-event-listeners.js';
-import { KeyboardMixin } from './keyboard-mixin.js';
 import { DisabledMixin } from './disabled-mixin.js';
+import { KeyboardMixin } from './keyboard-mixin.js';
 
 const ActiveMixinImplementation = (superclass) =>
   class ActiveMixinClass extends DisabledMixin(GestureEventListeners(KeyboardMixin(superclass))) {

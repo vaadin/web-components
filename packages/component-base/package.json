@@ -1,7 +1,7 @@
 {
-  "name": "@vaadin/field-base",
+  "name": "@vaadin/component-base",
   "version": "22.0.0-alpha5",
-  "description": "Vaadin field base mixins",
+  "description": "Vaadin component base mixins",
   "main": "index.js",
   "module": "index.js",
   "repository": "vaadin/web-components",
@@ -22,8 +22,7 @@
     "src"
   ],
   "dependencies": {
-    "@polymer/polymer": "^3.0.0",
-    "@vaadin/component-base": "^22.0.0-alpha5"
+    "@polymer/polymer": "^3.0.0"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",

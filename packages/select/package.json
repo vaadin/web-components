@@ -28,6 +28,7 @@
     "@polymer/iron-media-query": "^3.0.0",
     "@polymer/polymer": "^3.2.0",
     "@vaadin/button": "^22.0.0-alpha5",
+    "@vaadin/component-base": "^22.0.0-alpha5",
     "@vaadin/field-base": "^22.0.0-alpha5",
     "@vaadin/input-container": "^22.0.0-alpha5",
     "@vaadin/text-field": "^22.0.0-alpha5",
