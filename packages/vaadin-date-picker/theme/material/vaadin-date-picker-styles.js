@@ -1,7 +1,7 @@
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import '@vaadin/vaadin-material-styles/color.js';
 import '@vaadin/vaadin-material-styles/font-icons.js';
-import { fieldButton } from '@vaadin/vaadin-material-styles/mixins/field-button.js';
+import { inputFieldShared } from '@vaadin/text-field/theme/material/vaadin-input-field-shared-styles.js';
 
 const datePicker = css`
   :host {
@@ -18,4 +18,4 @@ const datePicker = css`
   }
 `;
 
-registerStyles('vaadin-date-picker', [fieldButton, datePicker], { moduleId: 'material-date-picker' });
+registerStyles('vaadin-date-picker', [inputFieldShared, datePicker], { moduleId: 'material-date-picker' });

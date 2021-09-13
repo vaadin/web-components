@@ -1,6 +1,6 @@
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import '@vaadin/vaadin-lumo-styles/font-icons.js';
-import { fieldButton } from '@vaadin/vaadin-lumo-styles/mixins/field-button.js';
+import { inputFieldShared } from '@vaadin/text-field/theme/lumo/vaadin-input-field-shared-styles.js';
 
 const datePicker = css`
   :host {
@@ -22,4 +22,4 @@ const datePicker = css`
   }
 `;
 
-registerStyles('vaadin-date-picker', [fieldButton, datePicker], { moduleId: 'lumo-date-picker' });
+registerStyles('vaadin-date-picker', [inputFieldShared, datePicker], { moduleId: 'lumo-date-picker' });

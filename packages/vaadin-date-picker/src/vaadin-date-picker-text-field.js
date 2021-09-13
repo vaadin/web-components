@@ -3,7 +3,7 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { TextFieldElement } from '@vaadin/vaadin-text-field/src/vaadin-text-field.js';
+import { TextField } from '@vaadin/text-field/src/vaadin-text-field.js';
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 
 registerStyles(
@@ -29,10 +29,10 @@ registerStyles(
 /**
  * An element used internally by `<vaadin-date-picker>`. Not intended to be used separately.
  *
- * @extends OverlayElement
+ * @extends TextField
  * @private
  */
-class DatePickerTextFieldElement extends TextFieldElement {
+class DatePickerTextFieldElement extends TextField {
   static get is() {
     return 'vaadin-date-picker-text-field';
   }

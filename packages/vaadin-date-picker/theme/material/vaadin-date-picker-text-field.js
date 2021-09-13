@@ -1,2 +1,2 @@
-import '@vaadin/vaadin-text-field/theme/material/vaadin-text-field.js';
+import '@vaadin/input-container/theme/material/vaadin-input-container.js';
 import '../../src/vaadin-date-picker-text-field.js';

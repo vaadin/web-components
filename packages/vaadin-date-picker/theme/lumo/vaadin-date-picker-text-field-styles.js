@@ -1,5 +1,5 @@
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
-import '@vaadin/vaadin-text-field/theme/lumo/vaadin-text-field.js';
+import '@vaadin/input-container/theme/lumo/vaadin-input-container.js';
 
 registerStyles(
   'vaadin-date-picker-text-field',

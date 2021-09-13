@@ -16,8 +16,11 @@ import { InputSlotMixin } from '@vaadin/field-base/src/input-slot-mixin.js';
 import '@vaadin/vaadin-date-picker/src/vaadin-date-picker-overlay.js';
 import '@vaadin/vaadin-date-picker/src/vaadin-date-picker-overlay-content.js';
 import '@vaadin/input-container/src/vaadin-input-container.js';
-import '@vaadin/text-field/src/vaadin-input-field-shared-styles.js';
+import { inputFieldShared } from '@vaadin/text-field/src/vaadin-input-field-shared-styles.js';
 import { DatePickerMixin } from './vaadin-date-picker-mixin.js';
+import { registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+
+registerStyles('vaadin-date-picker', inputFieldShared);
 
 class DatePicker extends DatePickerMixin(
   FieldAriaMixin(
@@ -34,7 +37,7 @@ class DatePicker extends DatePickerMixin(
 
   static get template() {
     return html`
-      <style include="vaadin-input-field-shared-styles">
+      <style>
         :host([dir='rtl']) [part='input-field'] {
           direction: ltr;
         }
