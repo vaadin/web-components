@@ -129,14 +129,11 @@ class DatePickerLight extends ThemableMixin(DatePickerMixin(PolymerElement)) {
     };
   }
 
-  /**
-   * @return {HTMLElement}
-   * @protected
-   */
-  _input() {
-    // Using the same selector than in combo-box.
-    // TODO: revisit this to decide the selector and document conveniently.
-    return this.querySelector('vaadin-text-field,iron-input,paper-input,.paper-input-input,.input');
+  /** @protected */
+  connectedCallback() {
+    super.connectedCallback();
+    const cssSelector = 'vaadin-text-field,iron-input,paper-input,.paper-input-input,.input';
+    this._setInputElement(this.querySelector(cssSelector));
   }
 
   set _inputValue(value) {
