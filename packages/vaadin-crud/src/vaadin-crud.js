@@ -618,6 +618,8 @@ class CrudElement extends ElementMixin(ThemableMixin(PolymerElement)) {
 
   /** @private */
   __isSaveBtnDisabled(isDirty) {
+    // Used instead of isDirty proprety binding in order to enable overriding of the behaviour
+    // by overriding the method (i.e. from Flow component)
     return !isDirty;
   }
 
