@@ -26,7 +26,6 @@
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
     "@vaadin/component-base": "^22.0.0-alpha5",
-    "@vaadin/vaadin-control-state-mixin": "^22.0.0-alpha5",
     "@vaadin/vaadin-element-mixin": "^22.0.0-alpha5",
     "@vaadin/vaadin-lumo-styles": "^22.0.0-alpha5",
     "@vaadin/vaadin-material-styles": "^22.0.0-alpha5",

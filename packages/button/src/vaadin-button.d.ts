@@ -6,7 +6,8 @@
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
 import { ActiveMixin } from '@vaadin/component-base/src/active-mixin.js';
-import { ControlStateMixin } from '@vaadin/vaadin-control-state-mixin/vaadin-control-state-mixin.js';
+import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
+import { TabindexMixin } from '@vaadin/component-base/src/tabindex-mixin.js';
 
 /**
  * `<vaadin-button>` is an accessible and customizable button that allows users to perform actions.
@@ -36,7 +37,7 @@ import { ControlStateMixin } from '@vaadin/vaadin-control-state-mixin/vaadin-con
  *
  * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  */
-declare class Button extends ControlStateMixin(ActiveMixin(ElementMixin(ThemableMixin(HTMLElement)))) {}
+declare class Button extends ActiveMixin(TabindexMixin(FocusMixin(ElementMixin(ThemableMixin(HTMLElement))))) {}
 
 declare global {
   interface HTMLElementTagNameMap {
