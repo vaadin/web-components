@@ -32,7 +32,6 @@ registerStyles(
       position: relative;
       border-radius: 2px;
       box-shadow: inset 0 0 0 2px var(--material-secondary-text-color);
-      pointer-events: none;
       line-height: 1.275;
       background-color: transparent;
     }

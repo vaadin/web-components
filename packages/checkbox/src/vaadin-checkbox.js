@@ -4,9 +4,12 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { GestureEventListeners } from '@polymer/polymer/lib/mixins/gesture-event-listeners.js';
-import { ControlStateMixin } from '@vaadin/vaadin-control-state-mixin/vaadin-control-state-mixin.js';
+import { ActiveMixin } from '@vaadin/component-base/src/active-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { AriaLabelMixin } from '@vaadin/field-base/src/aria-label-mixin.js';
+import { CheckedMixin } from '@vaadin/field-base/src/checked-mixin.js';
+import { InputSlotMixin } from '@vaadin/field-base/src/input-slot-mixin.js';
+import { SlotLabelMixin } from '@vaadin/field-base/src/slot-label-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
@@ -41,17 +44,26 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *
  * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
- * @fires {Event} change - Fired when the user commits a value change.
+ * @fires {CustomEvent} change - Fired when the user commits a value change.
  * @fires {CustomEvent} checked-changed - Fired when the `checked` property changes.
  * @fires {CustomEvent} indeterminate-changed - Fired when the `indeterminate` property changes.
  *
  * @extends HTMLElement
- * @mixes ElementMixin
- * @mixes ControlStateMixin
  * @mixes ThemableMixin
- * @mixes GestureEventListeners
+ * @mixes ElementMixin
+ * @mixes ActiveMixin
+ * @mixes AriaLabelMixin
+ * @mixes InputSlotMixin
+ * @mixes CheckedMixin
+ * @mixes SlotLabelMixin
  */
-class CheckboxElement extends ElementMixin(ControlStateMixin(ThemableMixin(GestureEventListeners(PolymerElement)))) {
+class Checkbox extends SlotLabelMixin(
+  CheckedMixin(InputSlotMixin(AriaLabelMixin(ActiveMixin(ElementMixin(ThemableMixin(PolymerElement))))))
+) {
+  static get is() {
+    return 'vaadin-checkbox';
+  }
+
   static get template() {
     return html`
       <style>
@@ -63,19 +75,17 @@ class CheckboxElement extends ElementMixin(ControlStateMixin(ThemableMixin(Gestu
           display: none !important;
         }
 
-        label {
+        :host([disabled]) {
+          -webkit-tap-highlight-color: transparent;
+        }
+
+        [part='container'] {
           display: inline-flex;
           align-items: baseline;
-          outline: none;
         }
 
-        [part='checkbox'] {
-          position: relative;
-          display: inline-block;
-          flex: none;
-        }
-
-        input[type='checkbox'] {
+        /* visually hidden */
+        [part='checkbox'] ::slotted(input) {
           position: absolute;
           top: 0;
           left: 0;
@@ -86,238 +96,77 @@ class CheckboxElement extends ElementMixin(ControlStateMixin(ThemableMixin(Gestu
           cursor: inherit;
           margin: 0;
         }
-
-        :host([disabled]) {
-          -webkit-tap-highlight-color: transparent;
-        }
       </style>
-
-      <label>
-        <span part="checkbox">
-          <input
-            type="checkbox"
-            checked="{{checked::change}}"
-            disabled$="[[disabled]]"
-            indeterminate="{{indeterminate::change}}"
-            role="presentation"
-            tabindex="-1"
-          />
-        </span>
-
-        <span part="label">
-          <slot></slot>
-        </span>
-      </label>
+      <div part="container">
+        <div part="checkbox">
+          <slot name="input"></slot>
+        </div>
+        <div part="label">
+          <slot name="label"></slot>
+        </div>
+        <div style="display: none !important">
+          <slot id="noop"></slot>
+        </div>
+      </div>
     `;
-  }
-
-  static get is() {
-    return 'vaadin-checkbox';
   }
 
   static get properties() {
     return {
       /**
-       * True if the checkbox is checked.
-       * @type {boolean}
-       */
-      checked: {
-        type: Boolean,
-        value: false,
-        notify: true,
-        observer: '_checkedChanged',
-        reflectToAttribute: true
-      },
-
-      /**
-       * Indeterminate state of the checkbox when it's neither checked nor unchecked, but undetermined.
+       * True if the checkbox is in the indeterminate state which means
+       * it is not possible to say whether the checkbox is checked or unchecked.
+       * The state resets once the checkbox gets checked or unchecked.
+       *
        * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#Indeterminate_state_checkboxes
+       *
        * @type {boolean}
        */
       indeterminate: {
         type: Boolean,
         notify: true,
-        observer: '_indeterminateChanged',
-        reflectToAttribute: true,
-        value: false
+        value: false,
+        reflectToAttribute: true
       },
 
       /**
-       * The value given to the data submitted with the checkbox's name to the server when the control is inside a form.
+       * The name of the checkbox
+       *
+       * @type {string}
        */
-      value: {
-        type: String,
-        value: 'on'
-      },
-
-      /** @private */
-      _nativeCheckbox: {
-        type: Object
+      name: {
+        type: String
       }
     };
   }
 
+  static get delegateProps() {
+    return [...super.delegateProps, 'indeterminate', 'name'];
+  }
+
   constructor() {
     super();
-    /**
-     * @type {string}
-     * Name of the element.
-     */
-    this.name;
-  }
 
-  get name() {
-    return this.checked ? this._storedName : '';
-  }
-
-  set name(name) {
-    this._storedName = name;
-  }
-
-  ready() {
-    super.ready();
-
-    this.setAttribute('role', 'checkbox');
-
-    this._nativeCheckbox = this.shadowRoot.querySelector('input[type="checkbox"]');
-
-    this.addEventListener('click', this._handleClick.bind(this));
-
-    this._addActiveListeners();
-
-    const attrName = this.getAttribute('name');
-    if (attrName) {
-      this.name = attrName;
-    }
-
-    this.shadowRoot
-      .querySelector('[part~="label"]')
-      .querySelector('slot')
-      .addEventListener('slotchange', this._updateLabelAttribute.bind(this));
-
-    this._updateLabelAttribute();
-  }
-
-  /** @private */
-  _updateLabelAttribute() {
-    const label = this.shadowRoot.querySelector('[part~="label"]');
-    const assignedNodes = label.firstElementChild.assignedNodes();
-    if (this._isAssignedNodesEmpty(assignedNodes)) {
-      label.setAttribute('empty', '');
-    } else {
-      label.removeAttribute('empty');
-    }
-  }
-
-  /** @private */
-  _isAssignedNodesEmpty(nodes) {
-    // The assigned nodes considered to be empty if there is no slotted content or only one empty text node
-    return (
-      nodes.length === 0 ||
-      (nodes.length == 1 && nodes[0].nodeType == Node.TEXT_NODE && nodes[0].textContent.trim() === '')
-    );
-  }
-
-  /** @private */
-  _checkedChanged(checked) {
-    if (this.indeterminate) {
-      this.setAttribute('aria-checked', 'mixed');
-    } else {
-      this.setAttribute('aria-checked', Boolean(checked));
-    }
-  }
-
-  /** @private */
-  _indeterminateChanged(indeterminate) {
-    if (indeterminate) {
-      this.setAttribute('aria-checked', 'mixed');
-    } else {
-      this.setAttribute('aria-checked', this.checked);
-    }
-  }
-
-  /** @private */
-  _addActiveListeners() {
-    // DOWN
-    this._addEventListenerToNode(this, 'down', (e) => {
-      if (this.__interactionsAllowed(e)) {
-        this.setAttribute('active', '');
-      }
-    });
-
-    // UP
-    this._addEventListenerToNode(this, 'up', () => this.removeAttribute('active'));
-
-    // KEYDOWN
-    this.addEventListener('keydown', (e) => {
-      if (this.__interactionsAllowed(e) && e.keyCode === 32) {
-        e.preventDefault();
-        this.setAttribute('active', '');
-      }
-    });
-
-    // KEYUP
-    this.addEventListener('keyup', (e) => {
-      if (this.__interactionsAllowed(e) && e.keyCode === 32) {
-        e.preventDefault();
-        this._toggleChecked();
-        this.removeAttribute('active');
-
-        if (this.indeterminate) {
-          this.indeterminate = false;
-        }
-      }
-    });
+    this._setType('checkbox');
   }
 
   /**
-   * @return {!HTMLInputElement}
+   * @override
    * @protected
    */
-  get focusElement() {
-    return this.shadowRoot.querySelector('input');
+  get _sourceSlot() {
+    return this.$.noop;
   }
 
   /**
-   * True if users' interactions (mouse or keyboard)
-   * should toggle the checkbox
+   * @protected
+   * @override
    */
-  __interactionsAllowed(e) {
-    if (this.disabled) {
-      return false;
-    }
-
-    // https://github.com/vaadin/vaadin-checkbox/issues/63
-    if (e.target.localName === 'a') {
-      return false;
-    }
-
-    return true;
-  }
-
-  /** @private */
-  _handleClick(e) {
-    if (this.__interactionsAllowed(e)) {
-      if (!this.indeterminate) {
-        if (e.composedPath()[0] !== this._nativeCheckbox) {
-          e.preventDefault();
-          this._toggleChecked();
-        }
-      } else {
-        /*
-         * Required for IE 11 and Edge.
-         * See issue here: https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/7344418/
-         */
-        this.indeterminate = false;
-        e.preventDefault();
-        this._toggleChecked();
-      }
-    }
-  }
-
-  /** @protected */
   _toggleChecked() {
-    this.checked = !this.checked;
+    this.indeterminate = false;
+
+    super._toggleChecked();
+
     this.dispatchEvent(new CustomEvent('change', { composed: false, bubbles: true }));
   }
 
@@ -328,6 +177,6 @@ class CheckboxElement extends ElementMixin(ControlStateMixin(ThemableMixin(Gestu
    */
 }
 
-customElements.define(CheckboxElement.is, CheckboxElement);
+customElements.define(Checkbox.is, Checkbox);
 
-export { CheckboxElement };
+export { Checkbox };

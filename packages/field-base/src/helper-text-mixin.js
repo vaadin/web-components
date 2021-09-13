@@ -52,8 +52,8 @@ const HelperTextMixinImplementation = (superclass) =>
     }
 
     /** @protected */
-    connectedCallback() {
-      super.connectedCallback();
+    ready() {
+      super.ready();
 
       if (this._helperNode) {
         this._currentHelper = this._helperNode;
@@ -61,11 +61,6 @@ const HelperTextMixinImplementation = (superclass) =>
 
         this._applyCustomHelper();
       }
-    }
-
-    /** @protected */
-    ready() {
-      super.ready();
 
       this.__helperSlot = this.shadowRoot.querySelector('[name="helper"]');
       this.__helperSlot.addEventListener('slotchange', this.__onHelperSlotChange.bind(this));
