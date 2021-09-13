@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-overlay",
-  "version": "21.0.0",
+  "version": "21.0.1",
   "description": "vaadin-overlay",
   "main": "vaadin-overlay.js",
   "module": "vaadin-overlay.js",
@@ -27,18 +27,18 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/vaadin-element-mixin": "^21.0.0",
-    "@vaadin/vaadin-lumo-styles": "^21.0.0",
-    "@vaadin/vaadin-material-styles": "^21.0.0",
-    "@vaadin/vaadin-themable-mixin": "^21.0.0"
+    "@vaadin/vaadin-element-mixin": "^21.0.1",
+    "@vaadin/vaadin-lumo-styles": "^21.0.1",
+    "@vaadin/vaadin-material-styles": "^21.0.1",
+    "@vaadin/vaadin-themable-mixin": "^21.0.1"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.1.5",
     "@polymer/iron-overlay-behavior": "^3.0.0",
     "@vaadin/testing-helpers": "^0.2.1",
-    "@vaadin/vaadin-button": "^21.0.0",
-    "@vaadin/vaadin-radio-button": "^21.0.0",
-    "@vaadin/vaadin-text-field": "^21.0.0",
+    "@vaadin/vaadin-button": "^21.0.1",
+    "@vaadin/vaadin-radio-button": "^21.0.1",
+    "@vaadin/vaadin-text-field": "^21.0.1",
     "lit": "^2.0.0-rc.1",
     "sinon": "^9.2.1"
   },

@@ -45,7 +45,7 @@ class TabElement extends ElementMixin(ThemableMixin(ItemMixin(PolymerElement))) 
   }
 
   static get version() {
-    return '21.0.0';
+    return '21.0.1';
   }
 
   ready() {

@@ -78,7 +78,7 @@ class AccordionElement extends ThemableMixin(ElementMixin(PolymerElement)) {
   }
 
   static get version() {
-    return '21.0.0';
+    return '21.0.1';
   }
 
   static get properties() {
