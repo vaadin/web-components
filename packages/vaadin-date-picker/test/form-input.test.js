@@ -6,8 +6,8 @@ import { close, open } from './common.js';
 import { DatePicker } from '../vaadin-date-picker.js';
 
 class DatePicker2016 extends DatePicker {
-  checkValidity(value) {
-    return new Date(value).getFullYear() === 2016;
+  checkValidity() {
+    return new Date(this.value).getFullYear() === 2016;
   }
 }
 
@@ -29,20 +29,20 @@ describe('form input', () => {
 
     it('should have the given name', () => {
       datepicker.name = 'foo';
-      expect(datepicker._inputElement.name).to.equal('foo');
+      expect(datepicker.inputElement.name).to.equal('foo');
     });
 
     it('should have no name', () => {
-      expect(datepicker._inputElement.name).to.be.undefined;
+      expect(datepicker.inputElement.name).not.to.be.ok;
     });
 
     it('should be required', () => {
       datepicker.required = true;
-      expect(datepicker._inputElement.required).to.be.true;
+      expect(datepicker.inputElement.required).to.be.true;
     });
 
     it('should not be required', () => {
-      expect(datepicker._inputElement.required).to.be.false;
+      expect(datepicker.inputElement.required).to.be.false;
     });
 
     it('should validate correctly with required flag', async () => {
@@ -74,7 +74,7 @@ describe('form input', () => {
 
     it('should be possible to force invalid status', () => {
       datepicker.invalid = true;
-      expect(datepicker._inputElement.invalid).to.be.true;
+      expect(datepicker.inputElement.hasAttribute('invalid')).to.be.true;
     });
 
     it('should re-validate old input after selecting date', async () => {
@@ -108,13 +108,13 @@ describe('form input', () => {
     it('should display the error-message when invalid', () => {
       datepicker.invalid = true;
       datepicker.errorMessage = 'Not cool';
-      expect(datepicker._inputElement.errorMessage).to.equal(datepicker.errorMessage);
+      expect(datepicker.querySelector('[slot="error-message"]').textContent).to.equal(datepicker.errorMessage);
     });
 
     it('should have disabled vaadin-text-field', () => {
       datepicker.disabled = true;
-      expect(datepicker._inputElement.hasAttribute('disabled')).to.be.true;
-      expect(datepicker._inputElement.disabled).to.equal(true);
+      expect(datepicker.inputElement.hasAttribute('disabled')).to.be.true;
+      expect(datepicker.inputElement.disabled).to.equal(true);
     });
 
     it('should validate keyboard input (invalid)', async () => {
