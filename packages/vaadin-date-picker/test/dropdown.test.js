@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { click, down, fixtureSync, isIOS } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { isFullscreen } from './common.js';
-import './vaadin-date-picker.js';
+import '../src/vaadin-date-picker.js';
 
 describe('dropdown', () => {
   let datepicker, input;

@@ -88,7 +88,7 @@ import { DatePickerEventMap } from './interfaces';
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  */
-declare class DatePickerElement extends ElementMixin(
+declare class DatePicker extends ElementMixin(
   ControlStateMixin(ThemableMixin(DatePickerMixin(GestureEventListeners(HTMLElement))))
 ) {
   /**
@@ -137,21 +137,21 @@ declare class DatePickerElement extends ElementMixin(
 
   addEventListener<K extends keyof DatePickerEventMap>(
     type: K,
-    listener: (this: DatePickerElement, ev: DatePickerEventMap[K]) => void,
+    listener: (this: DatePicker, ev: DatePickerEventMap[K]) => void,
     options?: boolean | AddEventListenerOptions
   ): void;
 
   removeEventListener<K extends keyof DatePickerEventMap>(
     type: K,
-    listener: (this: DatePickerElement, ev: DatePickerEventMap[K]) => void,
+    listener: (this: DatePicker, ev: DatePickerEventMap[K]) => void,
     options?: boolean | EventListenerOptions
   ): void;
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-date-picker': DatePickerElement;
+    'vaadin-date-picker': DatePicker;
   }
 }
 
-export { DatePickerElement };
+export { DatePicker };

@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { aTimeout, click, fixtureSync, isIOS, oneEvent, tap } from '@vaadin/testing-helpers';
 import { close, getOverlayContent, monthsEqual, open } from './common.js';
-import './vaadin-date-picker.js';
+import '../src/vaadin-date-picker.js';
 
 describe('basic features', () => {
   let datepicker, input, toggleButton;

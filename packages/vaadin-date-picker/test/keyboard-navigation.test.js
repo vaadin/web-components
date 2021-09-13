@@ -19,7 +19,7 @@ import {
   space
 } from '@vaadin/testing-helpers';
 import { getDefaultI18n, getOverlayContent, open } from './common.js';
-import './vaadin-date-picker.js';
+import '../src/vaadin-date-picker.js';
 
 (isIOS ? describe.skip : describe)('keyboard navigation', () => {
   let target;

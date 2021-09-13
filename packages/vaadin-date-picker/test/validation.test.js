@@ -3,7 +3,7 @@ import sinon from 'sinon';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { close, open } from './common.js';
 import { DatePicker } from '../src/vaadin-date-picker.js';
-import './vaadin-date-picker.js';
+import '../src/vaadin-date-picker.js';
 
 class DatePicker2016 extends DatePicker {
   checkValidity() {

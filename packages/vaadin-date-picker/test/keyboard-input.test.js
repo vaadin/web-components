@@ -19,7 +19,7 @@ import {
 } from '@vaadin/testing-helpers';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { close, getOverlayContent, open } from './common.js';
-import './vaadin-date-picker.js';
+import '../src/vaadin-date-picker.js';
 
 (isIOS ? describe.skip : describe)('keyboard input', () => {
   let target;
