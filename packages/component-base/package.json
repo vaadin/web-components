@@ -1,0 +1,35 @@
+{
+  "name": "@vaadin/component-base",
+  "version": "22.0.0-alpha5",
+  "description": "Vaadin component base mixins",
+  "main": "index.js",
+  "module": "index.js",
+  "repository": "vaadin/web-components",
+  "keywords": [
+    "Vaadin",
+    "web-components",
+    "web-component"
+  ],
+  "author": "Vaadin Ltd",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/vaadin/web-components"
+  },
+  "homepage": "https://vaadin.com/components",
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "src"
+  ],
+  "dependencies": {
+    "@polymer/polymer": "^3.0.0"
+  },
+  "devDependencies": {
+    "@esm-bundle/chai": "^4.3.4",
+    "@vaadin/testing-helpers": "^0.3.0",
+    "sinon": "^9.2.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
