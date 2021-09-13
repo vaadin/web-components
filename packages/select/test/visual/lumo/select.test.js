@@ -108,4 +108,10 @@ describe('select', () => {
     element.setAttribute('theme', 'align-right');
     await visualDiff(div, 'align-right');
   });
+
+  it('small', async () => {
+    element.value = 'item 1';
+    element.setAttribute('theme', 'small');
+    await visualDiff(div, 'small');
+  });
 });
