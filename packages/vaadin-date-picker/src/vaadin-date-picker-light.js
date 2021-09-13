@@ -54,7 +54,7 @@ import { DatePickerMixin } from './vaadin-date-picker-mixin.js';
  * @mixes ThemableMixin
  * @mixes DatePickerMixin
  */
-class DatePickerLightElement extends ThemableMixin(DatePickerMixin(PolymerElement)) {
+class DatePickerLight extends ThemableMixin(DatePickerMixin(PolymerElement)) {
   static get template() {
     return html`
       <style>
@@ -151,6 +151,6 @@ class DatePickerLightElement extends ThemableMixin(DatePickerMixin(PolymerElemen
   }
 }
 
-customElements.define(DatePickerLightElement.is, DatePickerLightElement);
+customElements.define(DatePickerLight.is, DatePickerLight);
 
-export { DatePickerLightElement };
+export { DatePickerLight };

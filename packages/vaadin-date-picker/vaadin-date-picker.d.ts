@@ -1,1 +1,2 @@
-// export { TextArea } from './src/vaadin-text-area.js';
+export * from './src/vaadin-date-picker.js';
+export * from './src/interfaces';
