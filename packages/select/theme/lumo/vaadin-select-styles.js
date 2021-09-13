@@ -38,6 +38,10 @@ const select = css`
   :host(:hover:not([readonly]):not([disabled])) [part='toggle-button'] {
     color: var(--lumo-contrast-80pct);
   }
+
+  :host([theme~='small']) [part='input-field'] ::slotted([slot='value']) {
+    --lumo-button-size: var(--lumo-size-s);
+  }
 `;
 
 registerStyles('vaadin-select', [inputFieldShared, select], { moduleId: 'lumo-select' });
