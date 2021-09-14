@@ -1,8 +1,11 @@
-import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
-
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-
+/**
+ * @license
+ * Copyright (c) 2021 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
 import { CheckboxElement } from '@vaadin/checkbox/src/vaadin-checkbox.js';
+import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
  * Fired when the `invalid` property changes.
