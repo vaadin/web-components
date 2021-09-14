@@ -16,7 +16,8 @@ const LabelMixinImplementation = (superclass) =>
          */
         label: {
           type: String,
-          observer: '_labelChanged'
+          observer: '_labelChanged',
+          reflectToAttribute: true
         }
       };
     }
@@ -59,8 +60,9 @@ const LabelMixinImplementation = (superclass) =>
 
       if (this._labelNode) {
         this._labelNode.id = this._labelId;
-        this.__labelNodeObserver.observe(this._labelNode, { childList: true });
         this._toggleHasLabelAttribute();
+
+        this.__labelNodeObserver.observe(this._labelNode, { childList: true });
       }
     }
 

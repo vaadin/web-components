@@ -64,8 +64,8 @@ describe('custom field', () => {
       labelElement = customField.querySelector('[slot="label"]');
     });
 
-    it('should be empty by default', () => {
-      expect(customField.label).to.equal('');
+    it('should be undefined by default', () => {
+      expect(customField.label).to.be.undefined;
     });
 
     it('should be displayed when assigned', () => {
