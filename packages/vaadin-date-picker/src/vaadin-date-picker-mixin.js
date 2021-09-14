@@ -427,6 +427,8 @@ export const DatePickerMixin = (subclass) =>
             this.validate();
             this.value = '';
             this.__dispatchChange = false;
+          } else {
+            this.validate();
           }
         }
       });
@@ -738,18 +740,6 @@ export const DatePickerMixin = (subclass) =>
       }
     }
 
-    /**
-     * Override an event listener from `DelegateFocusMixin`.
-     * @param {FocusEvent} event
-     * @protected
-     * @override
-     */
-    _onBlur(event) {
-      super._onBlur(event);
-
-      this.validate();
-    }
-
     /** @protected */
     _onOverlayOpened() {
       this._openedWithFocusRing = this.hasAttribute('focus-ring');
@@ -923,6 +913,15 @@ export const DatePickerMixin = (subclass) =>
      * @protected
      */
     _onChange(event) {
+      // For change event on the native <input> blur, after the input is cleared,
+      // we schedule change event to be dispatched on date-picker blur.
+      if (
+        this.inputElement.value === '' &&
+        !(event.detail && event.detail.sourceEvent && event.detail.sourceEvent.__fromClearButton)
+      ) {
+        this.__dispatchChange = true;
+      }
+
       event.stopPropagation();
     }
 
@@ -932,11 +931,10 @@ export const DatePickerMixin = (subclass) =>
      * @protected
      */
     _onClearButtonClick() {
-      this.__dispatchChange = true;
       this.value = '';
       this._inputValue = '';
       this.validate();
-      this.__dispatchChange = false;
+      this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
     }
 
     /**
@@ -988,6 +986,9 @@ export const DatePickerMixin = (subclass) =>
               const oldValue = this.value;
               this._selectParsedOrFocusedDate();
               if (oldValue === this.value) {
+                // TODO: Instead of checking if the value was changed and then validate,
+                // run validate whenever change-event will get fired. Change event firing logic
+                // already checks if the value was changed. Blur is a separate thing and should be validated.
                 this.validate();
               }
             }
