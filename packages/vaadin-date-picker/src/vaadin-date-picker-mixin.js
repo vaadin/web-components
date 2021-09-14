@@ -13,7 +13,7 @@ import {
 } from '@vaadin/vaadin-date-picker/src/vaadin-date-picker-helper.js';
 import { addListener } from '@polymer/polymer/lib/utils/gestures.js';
 import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
-import { KeyboardMixin } from '@vaadin/field-base/src/keyboard-mixin.js';
+import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
 
 /**
  * @polymerMixin
