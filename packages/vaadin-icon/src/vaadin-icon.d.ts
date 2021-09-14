@@ -1,4 +1,4 @@
-import { ElementMixin } from '@vaadin/component-base';
+import { ElementMixin } from '@vaadin/component-base/src/vaadin-element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { IconSvgLiteral } from './vaadin-icon-svg.js';
 

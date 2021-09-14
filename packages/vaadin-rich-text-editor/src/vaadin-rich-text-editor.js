@@ -9,7 +9,7 @@ import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
 import { resetMouseCanceller } from '@polymer/polymer/lib/utils/gestures.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import '@vaadin/button/src/vaadin-button.js';
-import { ElementMixin } from '@vaadin/component-base';
+import { ElementMixin } from '@vaadin/component-base/src/vaadin-element-mixin.js';
 import '@vaadin/vaadin-confirm-dialog/src/vaadin-confirm-dialog.js';
 import '@vaadin/vaadin-text-field/src/vaadin-text-field.js';
 import '@vaadin/vaadin-license-checker/vaadin-license-checker.js';

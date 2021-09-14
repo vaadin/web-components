@@ -1,4 +1,4 @@
-import { ElementMixin } from '@vaadin/component-base';
+import { ElementMixin } from '@vaadin/component-base/src/vaadin-element-mixin.js';
 
 /**
  * `<vaadin-cookie-consent>` is used to show a cookie consent banner the first

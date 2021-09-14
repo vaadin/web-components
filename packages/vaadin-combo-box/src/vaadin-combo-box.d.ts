@@ -1,4 +1,4 @@
-import { ElementMixin } from '@vaadin/component-base';
+import { ElementMixin } from '@vaadin/component-base/src/vaadin-element-mixin.js';
 
 import { TextFieldElement } from '@vaadin/vaadin-text-field/vaadin-text-field';
 

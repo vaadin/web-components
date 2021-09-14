@@ -1,4 +1,4 @@
-import { ElementMixin } from '@vaadin/component-base';
+import { ElementMixin } from '@vaadin/component-base/src/vaadin-element-mixin.js';
 
 /**
  * `<vaadin-board>` is a web component to create flexible responsive layouts

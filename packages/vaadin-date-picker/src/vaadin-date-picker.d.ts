@@ -6,7 +6,7 @@ import { ControlStateMixin } from '@vaadin/vaadin-control-state-mixin/vaadin-con
 
 import { DatePickerMixin } from './vaadin-date-picker-mixin.js';
 
-import { ElementMixin } from '@vaadin/component-base';
+import { ElementMixin } from '@vaadin/component-base/src/vaadin-element-mixin.js';
 
 import { DatePickerEventMap } from './interfaces';
 
