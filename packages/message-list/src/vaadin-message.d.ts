@@ -1,6 +1,6 @@
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
+import { ElementMixin } from '@vaadin/component-base';
 
 /**
  * `<vaadin-message>` is a Web Component for showing a single message with an author, message and time.

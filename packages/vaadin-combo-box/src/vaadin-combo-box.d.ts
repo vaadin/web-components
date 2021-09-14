@@ -1,3 +1,5 @@
+import { ElementMixin } from '@vaadin/component-base';
+
 import { TextFieldElement } from '@vaadin/vaadin-text-field/vaadin-text-field';
 
 import { ControlStateMixin } from '@vaadin/vaadin-control-state-mixin/vaadin-control-state-mixin';
@@ -7,8 +9,6 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 import { ComboBoxMixin } from './vaadin-combo-box-mixin';
 
 import { ComboBoxDataProviderMixin } from './vaadin-combo-box-data-provider-mixin';
-
-import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin';
 
 import { ComboBoxDefaultItem, ComboBoxEventMap } from './interfaces';
 

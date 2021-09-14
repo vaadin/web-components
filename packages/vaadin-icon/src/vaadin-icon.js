@@ -4,8 +4,8 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import { ElementMixin } from '@vaadin/component-base';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
 import { IconsetElement } from './vaadin-iconset.js';
 import { ensureSvgLiteral, renderSvg } from './vaadin-icon-svg.js';
 

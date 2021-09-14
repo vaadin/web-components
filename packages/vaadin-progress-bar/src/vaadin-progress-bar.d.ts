@@ -1,8 +1,8 @@
 import { ProgressMixin } from './vaadin-progress-mixin.js';
 
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { ElementMixin } from '@vaadin/component-base';
 
-import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
  * `<vaadin-progress-bar>` is a Web Component for progress bars.

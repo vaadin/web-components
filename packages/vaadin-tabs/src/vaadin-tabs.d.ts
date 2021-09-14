@@ -1,8 +1,8 @@
+import { ElementMixin } from '@vaadin/component-base';
+
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 import { ListMixin } from '@vaadin/vaadin-list-mixin/vaadin-list-mixin.js';
-
-import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
 
 import { ListOrientation } from '@vaadin/vaadin-list-mixin/interfaces';
 

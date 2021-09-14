@@ -6,8 +6,8 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { beforeNextRender } from '@polymer/polymer/lib/utils/render-status.js';
+import { ElementMixin } from '@vaadin/component-base';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
 import '@vaadin/vaadin-license-checker/vaadin-license-checker.js';
 import { ChartSeriesElement } from './vaadin-chart-series.js';
 import Highcharts from 'highcharts/es-modules/masters/highstock.src.js';

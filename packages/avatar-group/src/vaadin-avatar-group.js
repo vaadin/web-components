@@ -12,7 +12,7 @@ import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
 import { IronA11yAnnouncer } from '@polymer/iron-a11y-announcer/iron-a11y-announcer.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { IronResizableBehavior } from '@polymer/iron-resizable-behavior/iron-resizable-behavior.js';
-import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
+import { ElementMixin } from '@vaadin/component-base';
 import '@vaadin/vaadin-item/src/vaadin-item.js';
 import '@vaadin/avatar/src/vaadin-avatar.js';
 import './vaadin-avatar-group-list-box.js';

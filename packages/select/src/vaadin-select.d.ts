@@ -4,11 +4,10 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
+import { ElementMixin, SlotMixin } from '@vaadin/component-base';
 import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
 import { FieldAriaMixin } from '@vaadin/field-base/src/field-aria-mixin.js';
 import { LabelMixin } from '@vaadin/field-base/src/label-mixin.js';
-import { SlotMixin } from '@vaadin/component-base/src/slot-mixin.js';
 import { SelectEventMap, SelectRenderer } from './interfaces';
 
 /**

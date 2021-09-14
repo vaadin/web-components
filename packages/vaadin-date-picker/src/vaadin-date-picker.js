@@ -5,15 +5,15 @@
  */
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { GestureEventListeners } from '@polymer/polymer/lib/mixins/gesture-event-listeners.js';
+import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import '@polymer/iron-media-query/iron-media-query.js';
+import { ElementMixin } from '@vaadin/component-base';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ControlStateMixin } from '@vaadin/vaadin-control-state-mixin/vaadin-control-state-mixin.js';
 import './vaadin-date-picker-overlay.js';
 import './vaadin-date-picker-overlay-content.js';
 import { DatePickerMixin } from './vaadin-date-picker-mixin.js';
 import './vaadin-date-picker-text-field.js';
-import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
-import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 
 /**
  * `<vaadin-date-picker>` is a date selection field which includes a scrollable

@@ -1,8 +1,8 @@
+import { ElementMixin } from '@vaadin/component-base';
+
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 import { ItemMixin } from '@vaadin/vaadin-item/src/vaadin-item-mixin.js';
-
-import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
 
 /**
  * `<vaadin-tab>` is a Web Component providing an accessible and customizable tab.

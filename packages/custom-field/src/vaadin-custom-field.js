@@ -5,11 +5,10 @@
  */
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
+import { ElementMixin, FocusMixin } from '@vaadin/component-base';
 import { FieldAriaMixin } from '@vaadin/field-base/src/field-aria-mixin.js';
-import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
 import { LabelMixin } from '@vaadin/field-base/src/label-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 class CustomField extends FieldAriaMixin(LabelMixin(FocusMixin(ThemableMixin(ElementMixin(PolymerElement))))) {
   static get is() {
