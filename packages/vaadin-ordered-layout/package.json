@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-ordered-layout",
-  "version": "22.0.0-alpha5",
+  "version": "22.0.0-alpha6",
   "description": "vaadin-ordered-layout",
   "main": "imports.js",
   "module": "imports.js",
@@ -27,9 +27,9 @@
     "theme"
   ],
   "dependencies": {
-    "@vaadin/horizontal-layout": "^22.0.0-alpha5",
-    "@vaadin/scroller": "^22.0.0-alpha5",
-    "@vaadin/vertical-layout": "^22.0.0-alpha5"
+    "@vaadin/horizontal-layout": "^22.0.0-alpha6",
+    "@vaadin/scroller": "^22.0.0-alpha6",
+    "@vaadin/vertical-layout": "^22.0.0-alpha6"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",

@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-messages",
-  "version": "22.0.0-alpha5",
+  "version": "22.0.0-alpha6",
   "description": "vaadin-messages",
   "main": "all-imports.js",
   "module": "all-imports.js",
@@ -29,8 +29,8 @@
     "theme"
   ],
   "dependencies": {
-    "@vaadin/message-input": "^22.0.0-alpha5",
-    "@vaadin/message-list": "^22.0.0-alpha5"
+    "@vaadin/message-input": "^22.0.0-alpha6",
+    "@vaadin/message-list": "^22.0.0-alpha6"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",

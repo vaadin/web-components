@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/message-list",
-  "version": "22.0.0-alpha5",
+  "version": "22.0.0-alpha6",
   "description": "vaadin-messages",
   "main": "vaadin-message-list.js",
   "module": "vaadin-message-list.js",
@@ -28,14 +28,14 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/avatar": "^22.0.0-alpha5",
-    "@vaadin/button": "^22.0.0-alpha5",
-    "@vaadin/text-area": "^22.0.0-alpha5",
-    "@vaadin/vaadin-element-mixin": "^22.0.0-alpha5",
-    "@vaadin/vaadin-lumo-styles": "^22.0.0-alpha5",
-    "@vaadin/vaadin-material-styles": "^22.0.0-alpha5",
-    "@vaadin/vaadin-text-field": "^22.0.0-alpha5",
-    "@vaadin/vaadin-themable-mixin": "^22.0.0-alpha5"
+    "@vaadin/avatar": "^22.0.0-alpha6",
+    "@vaadin/button": "^22.0.0-alpha6",
+    "@vaadin/text-area": "^22.0.0-alpha6",
+    "@vaadin/vaadin-element-mixin": "^22.0.0-alpha6",
+    "@vaadin/vaadin-lumo-styles": "^22.0.0-alpha6",
+    "@vaadin/vaadin-material-styles": "^22.0.0-alpha6",
+    "@vaadin/vaadin-text-field": "^22.0.0-alpha6",
+    "@vaadin/vaadin-themable-mixin": "^22.0.0-alpha6"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",

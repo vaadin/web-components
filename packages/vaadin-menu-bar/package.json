@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-menu-bar",
-  "version": "22.0.0-alpha5",
+  "version": "22.0.0-alpha6",
   "description": "vaadin-menu-bar",
   "main": "vaadin-menu-bar.js",
   "module": "vaadin-menu-bar.js",
@@ -27,17 +27,17 @@
   "dependencies": {
     "@polymer/iron-resizable-behavior": "^3.0.0",
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/button": "^22.0.0-alpha5",
-    "@vaadin/vaadin-context-menu": "^22.0.0-alpha5",
-    "@vaadin/vaadin-element-mixin": "^22.0.0-alpha5",
-    "@vaadin/vaadin-lumo-styles": "^22.0.0-alpha5",
-    "@vaadin/vaadin-material-styles": "^22.0.0-alpha5",
-    "@vaadin/vaadin-themable-mixin": "^22.0.0-alpha5"
+    "@vaadin/button": "^22.0.0-alpha6",
+    "@vaadin/vaadin-context-menu": "^22.0.0-alpha6",
+    "@vaadin/vaadin-element-mixin": "^22.0.0-alpha6",
+    "@vaadin/vaadin-lumo-styles": "^22.0.0-alpha6",
+    "@vaadin/vaadin-material-styles": "^22.0.0-alpha6",
+    "@vaadin/vaadin-themable-mixin": "^22.0.0-alpha6"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
     "@vaadin/testing-helpers": "^0.3.0",
-    "@vaadin/vaadin-icon": "^22.0.0-alpha5",
+    "@vaadin/vaadin-icon": "^22.0.0-alpha6",
     "sinon": "^9.2.1"
   },
   "publishConfig": {

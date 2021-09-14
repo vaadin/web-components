@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-avatar",
-  "version": "22.0.0-alpha5",
+  "version": "22.0.0-alpha6",
   "description": "vaadin-avatar",
   "main": "vaadin-avatar-group.js",
   "module": "vaadin-avatar-group.js",
@@ -25,8 +25,8 @@
     "theme"
   ],
   "dependencies": {
-    "@vaadin/avatar": "^22.0.0-alpha5",
-    "@vaadin/avatar-group": "^22.0.0-alpha5"
+    "@vaadin/avatar": "^22.0.0-alpha6",
+    "@vaadin/avatar-group": "^22.0.0-alpha6"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",

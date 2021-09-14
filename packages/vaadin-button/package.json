@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-button",
-  "version": "22.0.0-alpha5",
+  "version": "22.0.0-alpha6",
   "description": "vaadin-button",
   "main": "vaadin-button.js",
   "module": "vaadin-button.js",
@@ -25,7 +25,7 @@
     "theme"
   ],
   "dependencies": {
-    "@vaadin/button": "^22.0.0-alpha5"
+    "@vaadin/button": "^22.0.0-alpha6"
   },
   "publishConfig": {
     "access": "public"
