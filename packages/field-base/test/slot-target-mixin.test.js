@@ -5,49 +5,55 @@ import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { SlotTargetMixin } from '../src/slot-target-mixin.js';
 
 customElements.define(
-  'slot-target-mixin-element-warnings',
+  'slot-target-mixin-element-without-source',
   class extends SlotTargetMixin(PolymerElement) {
     static get template() {
-      return html`<div></div>`;
+      return html`
+        <slot id="source"></slot>
+        <div id="target"></div>
+      `;
+    }
+  }
+);
+
+customElements.define(
+  'slot-target-mixin-element-without-target',
+  class extends SlotTargetMixin(PolymerElement) {
+    static get template() {
+      return html`
+        <slot id="source"></slot>
+        <div id="target"></div>
+      `;
+    }
+
+    get _sourceSlot() {
+      return this.$.source;
+    }
+  }
+);
+
+customElements.define(
+  'slot-target-mixin-element',
+  class extends SlotTargetMixin(PolymerElement) {
+    static get template() {
+      return html`
+        <slot id="source"></slot>
+        <div id="target"></div>
+      `;
+    }
+
+    get _sourceSlot() {
+      return this.$.source;
+    }
+
+    get _slotTarget() {
+      return this.$.target;
     }
   }
 );
 
 describe('slot-target-mixin', () => {
-  let element, slotTargetContentChangeSpy;
-
-  before(() => {
-    slotTargetContentChangeSpy = sinon.spy();
-
-    customElements.define(
-      'slot-target-mixin-element',
-      class extends SlotTargetMixin(PolymerElement) {
-        static get template() {
-          return html`
-            <slot id="source"></slot>
-
-            <div id="target"></div>
-          `;
-        }
-
-        get _sourceSlot() {
-          return this.$.source;
-        }
-
-        get _slotTarget() {
-          return this.$.target;
-        }
-
-        _onSlotTargetContentChange() {
-          slotTargetContentChangeSpy();
-        }
-      }
-    );
-  });
-
-  afterEach(() => {
-    slotTargetContentChangeSpy.resetHistory();
-  });
+  let element;
 
   describe('default', () => {
     let node1, node2;
@@ -100,89 +106,30 @@ describe('slot-target-mixin', () => {
     });
   });
 
-  describe('target element observer', () => {
-    it('should notify when the target element is populated at the initialization', async () => {
-      element = fixtureSync(`<slot-target-mixin-element><div>Content<div></slot-target-mixin-element>`);
-      await nextFrame();
-
-      expect(slotTargetContentChangeSpy.calledOnce).to.be.true;
-    });
-
-    it('should notify when the target element is populated lazily', async () => {
-      element = fixtureSync(`<slot-target-mixin-element></slot-target-mixin-element>`);
-
-      const node = document.createElement('div');
-      element.appendChild(node);
-      await nextFrame();
-
-      expect(slotTargetContentChangeSpy.calledOnce).to.be.true;
-    });
-
-    it('should notify when adding new nodes directly to the target element', async () => {
-      element = fixtureSync(`<slot-target-mixin-element><div>Content<div></slot-target-mixin-element>`);
-
-      const node = document.createElement('div');
-      element._slotTarget.appendChild(node);
-      await nextFrame();
-
-      expect(slotTargetContentChangeSpy.calledOnce).to.be.true;
-    });
-
-    it('should notify when replacing nodes directly in the target element', async () => {
-      element = fixtureSync(`<slot-target-mixin-element><div>Content<div></slot-target-mixin-element>`);
-
-      const node = document.createElement('div');
-      element._slotTarget.replaceChildren(node);
-      await nextFrame();
-
-      expect(slotTargetContentChangeSpy.calledOnce).to.be.true;
-    });
-
-    it('should notify when removing nodes directly from the target element', async () => {
-      element = fixtureSync(`<slot-target-mixin-element><div>Content<div></slot-target-mixin-element>`);
-
-      element._slotTarget.removeChild(element._slotTarget.firstChild);
-      await nextFrame();
-
-      expect(slotTargetContentChangeSpy.calledOnce).to.be.true;
-    });
-
-    it('should notify when adding new nodes to the source slot', async () => {
-      element = fixtureSync(`<slot-target-mixin-element><div>Content<div></slot-target-mixin-element>`);
-      await nextFrame();
-
-      slotTargetContentChangeSpy.resetHistory();
-
-      const node = document.createElement('div');
-      element.appendChild(node);
-      await nextFrame();
-
-      expect(slotTargetContentChangeSpy.calledOnce).to.be.true;
-    });
-  });
-
   describe('warnings', () => {
     beforeEach(() => {
       sinon.stub(console, 'warn');
-
-      element = fixtureSync('<slot-target-mixin-element-warnings></slot-target-mixin-element-warnings>');
     });
 
     afterEach(() => {
       console.warn.restore();
     });
 
-    it('should warn about no implementation for _slotTarget', () => {
-      expect(console.warn.calledTwice).to.be.true;
+    it('should warn about no implementation for _sourceSlot', () => {
+      element = fixtureSync('<slot-target-mixin-element-without-source></slot-target-mixin-element-without-source>');
+
+      expect(console.warn.calledOnce).to.be.true;
       expect(console.warn.args[0][0]).to.equal(
-        `Please implement the '_slotTarget' property in <slot-target-mixin-element-warnings>`
+        `Please implement the '_sourceSlot' property in <slot-target-mixin-element-without-source>`
       );
     });
 
-    it('should warn about no implementation for _sourceSlot', () => {
-      expect(console.warn.calledTwice).to.be.true;
-      expect(console.warn.args[1][0]).to.equal(
-        `Please implement the '_sourceSlot' property in <slot-target-mixin-element-warnings>`
+    it('should warn about no implementation for _slotTarget', () => {
+      element = fixtureSync('<slot-target-mixin-element-without-target></slot-target-mixin-element-without-target>');
+
+      expect(console.warn.calledOnce).to.be.true;
+      expect(console.warn.args[0][0]).to.equal(
+        `Please implement the '_slotTarget' property in <slot-target-mixin-element-without-target>`
       );
     });
   });

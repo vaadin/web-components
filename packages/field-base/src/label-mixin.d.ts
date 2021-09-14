@@ -18,7 +18,7 @@ interface LabelMixin extends SlotMixin {
   /**
    * String used for a label element.
    */
-  label: string;
+  label: string | null | undefined;
 }
 
 export { LabelMixinConstructor, LabelMixin };

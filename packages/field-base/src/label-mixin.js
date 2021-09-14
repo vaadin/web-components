@@ -43,24 +43,25 @@ const LabelMixinImplementation = (superclass) =>
       // Ensure every instance has unique ID
       const uniqueId = (LabelMixinClass._uniqueId = 1 + LabelMixinClass._uniqueId || 0);
       this._labelId = `label-${this.localName}-${uniqueId}`;
+
+      /**
+       * @type {MutationObserver}
+       * @private
+       */
+      this.__labelNodeObserver = new MutationObserver(() => {
+        this._toggleHasLabelAttribute();
+      });
     }
 
     /** @protected */
-    connectedCallback() {
-      super.connectedCallback();
+    ready() {
+      super.ready();
 
       if (this._labelNode) {
         this._labelNode.id = this._labelId;
+        this._toggleHasLabelAttribute();
 
-        this._applyCustomLabel();
-      }
-    }
-
-    /** @protected */
-    _applyCustomLabel() {
-      const label = this._labelNode.textContent;
-      if (label !== this.label) {
-        this.label = label;
+        this.__labelNodeObserver.observe(this._labelNode, { childList: true });
       }
     }
 
@@ -68,9 +69,17 @@ const LabelMixinImplementation = (superclass) =>
     _labelChanged(label) {
       if (this._labelNode) {
         this._labelNode.textContent = label;
+        this._toggleHasLabelAttribute();
       }
+    }
 
-      this.toggleAttribute('has-label', Boolean(label));
+    /** @protected */
+    _toggleHasLabelAttribute() {
+      if (this._labelNode) {
+        const hasLabel = this._labelNode.children > 0 || this._labelNode.textContent.trim() !== '';
+
+        this.toggleAttribute('has-label', hasLabel);
+      }
     }
   };
 

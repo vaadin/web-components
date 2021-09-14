@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { LabelMixin } from '../src/label-mixin.js';
 
@@ -30,32 +30,51 @@ describe('label-mixin', () => {
     });
 
     it('should set id on the label element', () => {
-      const idRegex = /^label-label-mixin-element-\d$/;
+      const idRegex = /^label-label-mixin-element-\d+$/;
       expect(label.getAttribute('id')).to.match(idRegex);
     });
 
-    it('should update label content on attribute change', () => {
-      element.setAttribute('label', 'Email');
-      expect(label.textContent).to.equal('Email');
+    describe('label property', () => {
+      it('should be undefined by default', () => {
+        expect(element.label).to.be.undefined;
+      });
+
+      it('should reflect label attribute to the property', () => {
+        element.setAttribute('label', 'Email');
+        expect(element.label).to.equal('Email');
+
+        element.removeAttribute('label');
+        expect(element.label).to.equal(null);
+      });
+
+      it('should update label content on property change', () => {
+        element.label = 'Email';
+        expect(label.textContent).to.equal('Email');
+      });
     });
 
-    it('should update label content on property change', () => {
-      element.label = 'Email';
-      expect(label.textContent).to.equal('Email');
-    });
+    describe('has-label attribute', () => {
+      it('should not set the attribute by default', () => {
+        expect(element.hasAttribute('has-label')).to.be.false;
+      });
 
-    it('should not set has-label attribute with no label', () => {
-      expect(element.hasAttribute('has-label')).to.be.false;
-    });
+      it('should toggle the attribute on label property change', () => {
+        element.label = 'Email';
+        expect(element.hasAttribute('has-label')).to.be.true;
 
-    it('should set has-label attribute when attribute is set', () => {
-      element.setAttribute('label', 'Email');
-      expect(element.hasAttribute('has-label')).to.be.true;
-    });
+        element.label = null;
+        expect(element.hasAttribute('has-label')).to.be.false;
+      });
 
-    it('should set has-label attribute when property is set', () => {
-      element.label = 'Email';
-      expect(element.hasAttribute('has-label')).to.be.true;
+      it('should not set the attribute when label is only whitespaces', () => {
+        element.label = ' ';
+        expect(element.hasAttribute('has-label')).to.be.false;
+      });
+
+      it('should not set the attribute when label is empty', () => {
+        element.label = '';
+        expect(element.hasAttribute('has-label')).to.be.false;
+      });
     });
   });
 
@@ -63,28 +82,44 @@ describe('label-mixin', () => {
     beforeEach(() => {
       element = fixtureSync(`
         <label-mixin-element>
-          <label slot="label">Custom</label>
+          <label slot="label"><div>Custom</div></label>
         </label-mixin-element>
       `);
       label = element.querySelector('label');
     });
 
-    it('should return slotted label content as a label', () => {
-      expect(element.label).to.equal('Custom');
-    });
-
     it('should set id on the slotted label element', () => {
-      const idRegex = /^label-label-mixin-element-\d$/;
+      const idRegex = /^label-label-mixin-element-\d+$/;
       expect(label.getAttribute('id')).to.match(idRegex);
-    });
-
-    it('should set has-label attribute with slotted label', () => {
-      expect(element.hasAttribute('has-label')).to.be.true;
     });
 
     it('should update slotted label content on property change', () => {
       element.label = 'Email';
       expect(label.textContent).to.equal('Email');
+    });
+
+    describe('has-label attribute', () => {
+      it('should set the attribute', () => {
+        expect(element.hasAttribute('has-label')).to.be.true;
+      });
+
+      it('should remove the attribute when label content is only whitespaces', async () => {
+        label.textContent = ' ';
+        await nextFrame();
+        expect(element.hasAttribute('has-label')).to.be.false;
+      });
+
+      it('should remove the attribute when label content is empty', async () => {
+        label.textContent = '';
+        await nextFrame();
+        expect(element.hasAttribute('has-label')).to.be.false;
+      });
+
+      it('should not remove the attribute when label children are empty', async () => {
+        label.firstChild.textContent = '';
+        await nextFrame();
+        expect(element.hasAttribute('has-label')).to.be.true;
+      });
     });
   });
 });
