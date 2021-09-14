@@ -1,4 +1,4 @@
-import { DirMixin } from '@vaadin/component-base/src/vaadin-dir-mixin.js';
+import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 

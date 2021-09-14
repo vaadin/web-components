@@ -1,7 +1,7 @@
 import 'custom_typings/vaadin-usage-statistics.js';
 import 'custom_typings/vaadin.js';
 
-import { DirMixin, DirMixinConstructor } from './vaadin-dir-mixin.js';
+import { DirMixin, DirMixinConstructor } from './dir-mixin.js';
 
 declare function ElementMixin<T extends new (...args: any[]) => {}>(
   base: T
