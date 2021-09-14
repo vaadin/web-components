@@ -19,4 +19,7 @@ const SlotLabelMixinImplementation = (superclass) =>
     }
   };
 
+/**
+ * A mixin to forward any content from the default slot to the label node.
+ */
 export const SlotLabelMixin = dedupingMixin(SlotLabelMixinImplementation);
