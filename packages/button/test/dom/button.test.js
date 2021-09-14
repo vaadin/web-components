@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, mousedown } from '@vaadin/testing-helpers';
+import { sendKeys } from '@web/test-runner-commands';
 import '../../src/vaadin-button.js';
 
 describe('vaadin-button', () => {
@@ -9,7 +10,46 @@ describe('vaadin-button', () => {
     button = fixtureSync('<vaadin-button>Confirm</vaadin-button>');
   });
 
-  it('default', async () => {
-    await expect(button).shadowDom.to.equalSnapshot();
+  describe('host', () => {
+    it('default', async () => {
+      await expect(button).dom.to.equalSnapshot();
+    });
+
+    it('disabled', async () => {
+      button.tabIndex = 1;
+      button.disabled = true;
+      await expect(button).dom.to.equalSnapshot();
+    });
+
+    it('tabIndex', async () => {
+      button.tabIndex = 1;
+      await expect(button).dom.to.equalSnapshot();
+    });
+
+    it('tabindex', async () => {
+      button.tabindex = 1;
+      await expect(button).dom.to.equalSnapshot();
+    });
+
+    it('focused', async () => {
+      button.focus();
+      await expect(button).dom.to.equalSnapshot();
+    });
+
+    it('focus-ring', async () => {
+      await sendKeys({ press: 'Tab' });
+      await expect(button).dom.to.equalSnapshot();
+    });
+
+    it('active', async () => {
+      mousedown(button);
+      await expect(button).dom.to.equalSnapshot();
+    });
+  });
+
+  describe('shadow', () => {
+    it('default', async () => {
+      await expect(button).shadowDom.to.equalSnapshot();
+    });
   });
 });
