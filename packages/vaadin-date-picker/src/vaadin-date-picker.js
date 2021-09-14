@@ -8,6 +8,7 @@ import { GestureEventListeners } from '@polymer/polymer/lib/mixins/gesture-event
 import '@polymer/iron-media-query/iron-media-query.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { AriaLabelMixin } from '@vaadin/field-base/src/aria-label-mixin.js';
 import { ClearButtonMixin } from '@vaadin/field-base/src/clear-button-mixin.js';
 import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
 import { FieldAriaMixin } from '@vaadin/field-base/src/field-aria-mixin.js';
@@ -25,8 +26,10 @@ registerStyles('vaadin-date-picker', inputFieldShared);
 class DatePicker extends DatePickerMixin(
   FieldAriaMixin(
     ClearButtonMixin(
-      InputConstraintsMixin(
-        InputSlotMixin(DelegateFocusMixin(GestureEventListeners(ThemableMixin(ElementMixin(PolymerElement)))))
+      AriaLabelMixin(
+        InputConstraintsMixin(
+          InputSlotMixin(DelegateFocusMixin(GestureEventListeners(ThemableMixin(ElementMixin(PolymerElement)))))
+        )
       )
     )
   )

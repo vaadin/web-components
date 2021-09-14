@@ -12,6 +12,7 @@ import {
   getClosestDate
 } from '@vaadin/vaadin-date-picker/src/vaadin-date-picker-helper.js';
 import { addListener } from '@polymer/polymer/lib/utils/gestures.js';
+import { InputMixin } from '@vaadin/field-base/src/input-mixin.js';
 import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
 import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
 
@@ -19,7 +20,7 @@ import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
  * @polymerMixin
  */
 export const DatePickerMixin = (subclass) =>
-  class VaadinDatePickerMixin extends KeyboardMixin(mixinBehaviors([IronResizableBehavior], subclass)) {
+  class VaadinDatePickerMixin extends InputMixin(KeyboardMixin(mixinBehaviors([IronResizableBehavior], subclass))) {
     static get properties() {
       return {
         /**
@@ -471,6 +472,11 @@ export const DatePickerMixin = (subclass) =>
       this._overlayContent.addEventListener('focus-input', this._focusAndSelect.bind(this));
       this.$.overlay.addEventListener('vaadin-overlay-escape-press', this._boundFocus);
 
+      // Keep focus attribute in focusElement for styling
+      this._overlayContent.addEventListener('focus', () => {
+        this.toggleAttribute('focused', true);
+      });
+
       this.$.overlay.addEventListener('vaadin-overlay-close', this._onVaadinOverlayClose.bind(this));
 
       this.addEventListener('mousedown', () => this.__bringToFront());
@@ -672,6 +678,7 @@ export const DatePickerMixin = (subclass) =>
     _valueChanged(value, oldValue) {
       if (this.__dispatchChange) {
         this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
+        this.__dispatchChange = false;
       }
       this._handleDateChange('_selectedDate', value, oldValue);
     }
@@ -729,6 +736,18 @@ export const DatePickerMixin = (subclass) =>
       if (this._overlayInitialized && this.$.overlay.opened) {
         this._updateAlignmentAndPosition();
       }
+    }
+
+    /**
+     * Override an event listener from `DelegateFocusMixin`.
+     * @param {FocusEvent} event
+     * @protected
+     * @override
+     */
+    _onBlur(event) {
+      super._onBlur(event);
+
+      this.validate();
     }
 
     /** @protected */
@@ -896,6 +915,15 @@ export const DatePickerMixin = (subclass) =>
     /** @private */
     _isValidDate(d) {
       return d && !isNaN(d.getTime());
+    }
+
+    /**
+     * Override an event listener from `InputConstraintsMixin`
+     * to have date-picker fully control when to fire a change event.
+     * @protected
+     */
+    _onChange(event) {
+      event.stopPropagation();
     }
 
     /**

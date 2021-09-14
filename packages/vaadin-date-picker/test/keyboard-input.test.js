@@ -220,7 +220,7 @@ import '../src/vaadin-date-picker.js';
     await nextRender(datepicker);
     target.value = '';
     const spy = sinon.spy(datepicker, 'validate');
-    datepicker.dispatchEvent(new Event('blur'));
+    target.dispatchEvent(new Event('blur'));
     expect(spy.callCount).to.equal(1);
     expect(datepicker.invalid).to.be.false;
   });
@@ -455,25 +455,25 @@ import '../src/vaadin-date-picker.js';
 
     it('should be tabbable', () => {
       expect(parseInt(overlayContent.getAttribute('tabindex'), 10)).to.equal(0);
-      expect(datepicker.inputElement.matches(':focus')).to.equal(false);
+      expect(datepicker.hasAttribute('focused')).to.be.false;
     });
 
     it('should focus the input on esc', () => {
       arrowDown(target);
       esc(target);
-      expect(datepicker.inputElement.matches(':focus')).to.be.true;
+      expect(datepicker.hasAttribute('focused')).to.be.true;
     });
 
     it('should focus the input on date tap', () => {
       arrowDown(target);
       overlayContent.dispatchEvent(new CustomEvent('date-tap', { bubbles: true, composed: true }));
-      expect(datepicker.inputElement.matches(':focus')).to.be.true;
+      expect(datepicker.hasAttribute('focused')).to.be.true;
     });
 
     it('should focus the input on date cancel', () => {
       arrowDown(target);
       tap(overlayContent.$.cancelButton);
-      expect(datepicker.inputElement.matches(':focus')).to.be.true;
+      expect(datepicker.hasAttribute('focused')).to.be.true;
     });
 
     it('should focus cancel on input shift tab', async () => {
@@ -618,20 +618,20 @@ import '../src/vaadin-date-picker.js';
 
     it('should set datepicker value on blur', () => {
       inputText('1/1/2000');
-      datepicker.dispatchEvent(new Event('blur'));
+      target.dispatchEvent(new Event('blur'));
       expect(datepicker.value).to.equal('2000-01-01');
     });
 
     it('should not be invalid on blur if valid date is entered', () => {
       inputText('1/1/2000');
-      datepicker.dispatchEvent(new Event('blur'));
+      target.dispatchEvent(new Event('blur'));
       expect(datepicker.invalid).not.to.be.true;
     });
 
     it('should validate on blur only once', () => {
       inputText('foo');
       const spy = sinon.spy(datepicker, 'validate');
-      datepicker.dispatchEvent(new Event('blur'));
+      target.dispatchEvent(new Event('blur'));
       expect(spy.callCount).to.equal(1);
       expect(datepicker.invalid).to.be.true;
     });
@@ -820,7 +820,7 @@ import '../src/vaadin-date-picker.js';
       });
 
       it('should validate on blur', () => {
-        datepicker.dispatchEvent(new Event('blur'));
+        target.dispatchEvent(new Event('blur'));
         expect(validateSpy.calledOnce).to.be.true;
         expect(changeSpy.called).to.be.false;
       });
@@ -876,7 +876,7 @@ import '../src/vaadin-date-picker.js';
         it('should change after validate on Backspace & blur', () => {
           target.value = '';
           target.dispatchEvent(new CustomEvent('change', { bubbles: true }));
-          datepicker.dispatchEvent(new Event('blur'));
+          target.dispatchEvent(new Event('blur'));
           expect(validateSpy.calledOnce).to.be.true;
           expect(changeSpy.calledOnce).to.be.true;
           expect(changeSpy.calledAfter(validateSpy)).to.be.true;
