@@ -76,6 +76,8 @@ const ValidateMixinImplementation = (superclass) =>
         this._errorNode.id = this._errorId;
 
         this._applyCustomError();
+
+        this._updateErrorMessage(this.invalid, this.errorMessage);
       }
     }
 

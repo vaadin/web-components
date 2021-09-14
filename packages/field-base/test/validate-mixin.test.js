@@ -76,15 +76,19 @@ describe('validate-mixin', () => {
     beforeEach(() => {
       element = fixtureSync(`
         <validate-mixin-element
+          invalid
           error-message="This field is required"
         ></validate-mixin-element>
       `);
       error = element.querySelector('[slot=error-message]');
-      element.invalid = true;
     });
 
     it('should set error-message text content from attribute', () => {
       expect(error.textContent).to.equal('This field is required');
+    });
+
+    it('should set has-error-message attribute on the host', () => {
+      expect(element.hasAttribute('has-error-message')).to.be.true;
     });
   });
 
