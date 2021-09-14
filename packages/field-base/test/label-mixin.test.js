@@ -44,7 +44,7 @@ describe('label-mixin', () => {
       expect(label.textContent).to.equal('Email');
     });
 
-    it('should not set has-label attribute with no label', () => {
+    it('should not set has-label attribute by default', () => {
       expect(element.hasAttribute('has-label')).to.be.false;
     });
 
@@ -69,14 +69,10 @@ describe('label-mixin', () => {
     beforeEach(() => {
       element = fixtureSync(`
         <label-mixin-element>
-          <label slot="label">Custom</label>
+          <label slot="label"><div>Custom</div></label>
         </label-mixin-element>
       `);
       label = element.querySelector('label');
-    });
-
-    it('should return slotted label content as a label', () => {
-      expect(element.label).to.equal('Custom');
     });
 
     it('should set id on the slotted label element', () => {
@@ -88,12 +84,20 @@ describe('label-mixin', () => {
       expect(element.hasAttribute('has-label')).to.be.true;
     });
 
-    it('should toggle has-label attribute on label content change', async () => {
+    it('should remove has-label attribute when label content is only whitespaces', async () => {
+      label.textContent = ' ';
+      await nextFrame();
+      expect(element.hasAttribute('has-label')).to.be.false;
+    });
+
+    it('should remove has-label attribute when label content is empty', async () => {
       label.textContent = '';
       await nextFrame();
       expect(element.hasAttribute('has-label')).to.be.false;
+    });
 
-      label.textContent = 'New Label';
+    it('should not remove has-label attribute when label children are empty', async () => {
+      label.firstChild.textContent = '';
       await nextFrame();
       expect(element.hasAttribute('has-label')).to.be.true;
     });
