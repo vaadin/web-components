@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { DirMixin } from '../vaadin-dir-mixin.js';
+import { DirMixin } from '../src/vaadin-dir-mixin.js';
 import sinon from 'sinon';
 
 class DirMixinElement extends DirMixin(PolymerElement) {

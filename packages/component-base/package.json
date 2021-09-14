@@ -19,15 +19,21 @@
   "files": [
     "index.js",
     "index.d.ts",
+    "custom_typings",
+    "vaadin-*.d.ts",
+    "vaadin-*.js",
+    "templates.js",
     "src"
   ],
   "dependencies": {
-    "@polymer/polymer": "^3.0.0"
+    "@polymer/polymer": "^3.0.0",
+    "@vaadin/vaadin-development-mode-detector": "^2.0.0",
+    "@vaadin/vaadin-usage-statistics": "^2.1.0"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
     "@vaadin/testing-helpers": "^0.3.0",
-    "sinon": "^9.2.1"
+    "sinon": "^9.2.4"
   },
   "publishConfig": {
     "access": "public"
