@@ -4,8 +4,8 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { DirMixin } from '@vaadin/vaadin-element-mixin/vaadin-dir-mixin.js';
-import { processTemplates } from '@vaadin/vaadin-element-mixin/templates.js';
+import { DirMixin } from '@vaadin/component-base/src/vaadin-dir-mixin.js';
+import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
 import { animationFrame } from '@polymer/polymer/lib/utils/async.js';
 

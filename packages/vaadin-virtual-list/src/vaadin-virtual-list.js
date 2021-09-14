@@ -5,8 +5,8 @@
  */
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { processTemplates } from '@vaadin/vaadin-element-mixin/templates.js';
 import { Virtualizer } from './virtualizer.js';
 
 /**

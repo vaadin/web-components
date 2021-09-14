@@ -7,8 +7,8 @@ import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { templatize } from '@polymer/polymer/lib/utils/templatize.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
+import { DirMixin } from '@vaadin/component-base/src/vaadin-dir-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { DirMixin } from '@vaadin/vaadin-element-mixin/vaadin-dir-mixin.js';
 import { FocusablesHelper } from './vaadin-focusables-helper.js';
 
 /**
