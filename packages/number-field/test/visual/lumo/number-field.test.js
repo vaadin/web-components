@@ -28,6 +28,11 @@ describe('number-field', () => {
     await visualDiff(div, 'readonly');
   });
 
+  it('invalid', async () => {
+    element.invalid = true;
+    await visualDiff(div, 'invalid');
+  });
+
   it('focus-ring', async () => {
     await sendKeys({ press: 'Tab' });
     await visualDiff(div, 'focus-ring');

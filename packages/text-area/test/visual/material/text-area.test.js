@@ -47,6 +47,11 @@ describe('text-area', () => {
     await visualDiff(div, 'required');
   });
 
+  it('invalid', async () => {
+    element.invalid = true;
+    await visualDiff(div, 'invalid');
+  });
+
   it('error message', async () => {
     element.label = 'Label';
     element.errorMessage = 'This field is required';

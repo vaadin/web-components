@@ -41,7 +41,8 @@ const requiredField = css`
     color: var(--material-error-text-color);
   }
 
-  /* Margin that doesn’t reserve space when there’s no error message */
+  /* TODO update to check for "has-error-message" when all the field components
+  are updated to use ValidateMixin that only sets that attribute when invalid */
   [part='error-message']:not(:empty)::before {
     content: '';
     display: block;
