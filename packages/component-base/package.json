@@ -20,9 +20,6 @@
     "index.js",
     "index.d.ts",
     "custom_typings",
-    "vaadin-*.d.ts",
-    "vaadin-*.js",
-    "templates.js",
     "src"
   ],
   "dependencies": {

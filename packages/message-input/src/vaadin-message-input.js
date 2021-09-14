@@ -4,10 +4,11 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import './vaadin-message-input-text-area.js';
 import './vaadin-message-input-button.js';
+
 /**
  * `<vaadin-message-input>` is a Web Component for sending messages.
  * It consists of a text area that grows on along with the content, and a send button to send message.
@@ -41,6 +42,7 @@ class MessageInputElement extends ElementMixin(ThemableMixin(PolymerElement)) {
       value: {
         type: String
       },
+
       /**
        *
        * The object used to localize this component.

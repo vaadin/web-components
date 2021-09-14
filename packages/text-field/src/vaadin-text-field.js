@@ -5,9 +5,9 @@
  */
 import { PolymerElement, html } from '@polymer/polymer';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { TextFieldMixin } from '@vaadin/field-base/src/text-field-mixin.js';
 import { InputSlotMixin } from '@vaadin/field-base/src/input-slot-mixin.js';
+import { TextFieldMixin } from '@vaadin/field-base/src/text-field-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import '@vaadin/input-container/src/vaadin-input-container.js';
 import './vaadin-input-field-shared-styles.js';
 

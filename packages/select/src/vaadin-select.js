@@ -4,14 +4,14 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import '@polymer/iron-media-query/iron-media-query.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { SlotMixin } from '@vaadin/component-base/src/slot-mixin.js';
-import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
 import { FieldAriaMixin } from '@vaadin/field-base/src/field-aria-mixin.js';
 import { LabelMixin } from '@vaadin/field-base/src/label-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import '@vaadin/text-field/src/vaadin-input-field-shared-styles.js';
 import '@vaadin/input-container/src/vaadin-input-container.js';
 import './vaadin-select-overlay.js';
