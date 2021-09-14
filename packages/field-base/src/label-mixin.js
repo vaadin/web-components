@@ -16,8 +16,7 @@ const LabelMixinImplementation = (superclass) =>
          */
         label: {
           type: String,
-          observer: '_labelChanged',
-          reflectToAttribute: true
+          observer: '_labelChanged'
         }
       };
     }
