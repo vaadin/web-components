@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { flush } from '@polymer/polymer/lib/utils/flush.js';
-import { ElementMixin } from '../src/vaadin-element-mixin.js';
+import { ElementMixin } from '../src/element-mixin.js';
 
 describe('ElementMixin', () => {
   describe('globals', () => {

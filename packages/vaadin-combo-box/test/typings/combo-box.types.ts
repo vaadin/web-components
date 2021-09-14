@@ -1,5 +1,5 @@
 import { ControlStateMixin } from '@vaadin/vaadin-control-state-mixin';
-import { ElementMixin } from '@vaadin/component-base/src/vaadin-element-mixin.js';
+import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin';
 import { ComboBoxDataProviderMixin } from '../../src/vaadin-combo-box-data-provider-mixin';
 import { ComboBoxMixin } from '../../src/vaadin-combo-box-mixin';

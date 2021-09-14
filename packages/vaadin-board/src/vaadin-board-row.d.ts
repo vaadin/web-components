@@ -1,4 +1,4 @@
-import { ElementMixin } from '@vaadin/component-base/src/vaadin-element-mixin.js';
+import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 
 /**
  * `<vaadin-board-row>` is a web component that together with `<vaadin-board>` component allows
