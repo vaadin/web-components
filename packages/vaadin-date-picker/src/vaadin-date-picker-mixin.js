@@ -411,17 +411,6 @@ export const DatePickerMixin = (subclass) =>
         }
       });
 
-      // TODO: Remove once https://github.com/vaadin/web-components/issues/2517 is fixed
-      this.shadowRoot.addEventListener('change', (e) => {
-        // For change event on input blur, after the field is cleared,
-        // we schedule change event to be dispatched on date-picker blur.
-        if (this.inputElement.value === '' && !e.__fromClearButton) {
-          this.__dispatchChange = true;
-          // Stop the change event from the input from reaching date-picker.
-          e.stopPropagation();
-        }
-      });
-
       this.addEventListener('input', this._boundOnInput);
       this.addEventListener('focus', (e) => this._noInput && e.target.blur());
       this.addEventListener('blur', () => {
@@ -437,8 +426,6 @@ export const DatePickerMixin = (subclass) =>
             this.validate();
             this.value = '';
             this.__dispatchChange = false;
-          } else {
-            this.validate();
           }
         }
       });
@@ -589,6 +576,8 @@ export const DatePickerMixin = (subclass) =>
 
     /** @protected */
     _inputElementChanged(input) {
+      // TODO: Make DPL use the mixins
+      super._inputElementChanged && super._inputElementChanged(input);
       if (input) {
         input.setAttribute('role', 'combobox');
         input.setAttribute('aria-expanded', !!this.opened);
