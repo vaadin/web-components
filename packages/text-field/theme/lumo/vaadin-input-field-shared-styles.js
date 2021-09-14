@@ -42,6 +42,12 @@ const inputField = css`
     display: none;
   }
 
+  /* TODO update when all the field components are updated to use slotted input */
+  :host(:not([has-error-message])) [part='error-message']::before,
+  :host(:not([has-error-message])) [part='error-message']::after {
+    display: none;
+  }
+
   :host([has-helper]) [part='helper-text']::before {
     content: '';
     display: block;
