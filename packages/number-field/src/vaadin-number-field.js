@@ -456,16 +456,6 @@ export class NumberField extends InputFieldMixin(
   }
 
   /**
-   * Override an event listener inherited from `InputMixin`.
-   * @param {Event} _event
-   * @protected
-   * @override
-   */
-  _onChange(_event) {
-    this.validate();
-  }
-
-  /**
    * Returns true if the current input value satisfies all constraints (if any).
    * @return {boolean}
    */

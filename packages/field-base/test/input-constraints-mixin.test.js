@@ -159,6 +159,32 @@ describe('input-constraints-mixin', () => {
       element.required = true;
       expect(element.invalid).to.be.false;
     });
+
+    it('should call validate on change event from the input', () => {
+      const spy = sinon.spy(element, 'validate');
+      input.value = '123foo';
+      input.dispatchEvent(new CustomEvent('change'));
+      expect(spy.calledOnce).to.be.true;
+    });
+
+    it('should dispatch change event after validation', () => {
+      const validateSpy = sinon.spy(element, 'validate');
+      const changeSpy = sinon.spy();
+      element.addEventListener('change', changeSpy);
+      input.value = '123foo';
+      input.dispatchEvent(new CustomEvent('change'));
+      expect(validateSpy.calledOnce).to.be.true;
+      expect(changeSpy.calledAfter(validateSpy)).to.be.true;
+    });
+
+    it('should store reference on the original change event', () => {
+      const changeSpy = sinon.spy();
+      element.addEventListener('change', changeSpy);
+      input.value = '123foo';
+      const event = new CustomEvent('change');
+      input.dispatchEvent(event);
+      expect(changeSpy.firstCall.args[0].detail.sourceEvent).to.equal(event);
+    });
   });
 
   describe('checkValidity', () => {
