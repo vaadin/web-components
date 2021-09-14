@@ -3,7 +3,7 @@ import { fixtureSync } from '@vaadin/testing-helpers';
 import { expect } from '@esm-bundle/chai';
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 
-import { processTemplates } from '../templates.js';
+import { processTemplates } from '../src/templates.js';
 
 class ComponentElement extends PolymerElement {
   static get is() {

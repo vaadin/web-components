@@ -1,15 +1,14 @@
-import { TextFieldElement } from '@vaadin/vaadin-text-field/vaadin-text-field';
-
+/**
+ * @license
+ * Copyright (c) 2021 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
 import { ControlStateMixin } from '@vaadin/vaadin-control-state-mixin/vaadin-control-state-mixin';
-
+import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { TextFieldElement } from '@vaadin/vaadin-text-field/vaadin-text-field';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin';
-
 import { ComboBoxMixin } from './vaadin-combo-box-mixin';
-
 import { ComboBoxDataProviderMixin } from './vaadin-combo-box-data-provider-mixin';
-
-import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin';
-
 import { ComboBoxDefaultItem, ComboBoxEventMap } from './interfaces';
 
 /**

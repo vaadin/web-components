@@ -12,8 +12,8 @@ import { IronA11yKeysBehavior } from '@polymer/iron-a11y-keys-behavior/iron-a11y
 import { IronA11yAnnouncer } from '@polymer/iron-a11y-announcer/iron-a11y-announcer.js';
 import '@polymer/iron-media-query/iron-media-query.js';
 import '@vaadin/button/src/vaadin-button.js';
+import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { DirMixin } from '@vaadin/vaadin-element-mixin/vaadin-dir-mixin.js';
 import './vaadin-month-calendar.js';
 import './vaadin-infinite-scroller.js';
 import { dateEquals, getClosestDate, getISOWeekNumber, extractDateParts } from './vaadin-date-picker-helper.js';

@@ -6,7 +6,7 @@
 import { idlePeriod } from '@polymer/polymer/lib/utils/async.js';
 import { Debouncer, enqueueDebouncer } from '@polymer/polymer/lib/utils/debounce.js';
 import { usageStatistics } from '@vaadin/vaadin-usage-statistics/vaadin-usage-statistics.js';
-import { DirMixin } from './vaadin-dir-mixin.js';
+import { DirMixin } from './dir-mixin.js';
 
 window.Vaadin = window.Vaadin || {};
 

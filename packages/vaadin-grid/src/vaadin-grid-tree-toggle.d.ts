@@ -1,3 +1,9 @@
+/**
+ * @license
+ * Copyright (c) 2021 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
@@ -59,7 +65,7 @@ export interface GridTreeToggleEventMap extends HTMLElementEventMap, GridTreeTog
  *
  * @fires {CustomEvent} expanded-changed - Fired when the `expanded` property changes.
  */
-declare class GridTreeToggleElement extends ThemableMixin(HTMLElement) {
+declare class GridTreeToggleElement extends ThemableMixin(DirMixin(HTMLElement)) {
   /**
    * Current level of the tree represented with a horizontal offset
    * of the toggle button.

@@ -1,4 +1,4 @@
-import { ElementMixin } from '@vaadin/vaadin-element-mixin';
+import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin';
 import { GridBodyRenderer, GridEventContext } from '../../src/interfaces';
 import { A11yMixin } from '../../src/vaadin-grid-a11y-mixin';

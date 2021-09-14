@@ -4,9 +4,9 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { dateEquals } from '@vaadin/vaadin-date-picker/src/vaadin-date-picker-helper.js';
-import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
+import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { dateEquals } from '@vaadin/vaadin-date-picker/src/vaadin-date-picker-helper.js';
 import './vaadin-date-time-picker-custom-field.js';
 import './vaadin-date-time-picker-date-picker.js';
 import './vaadin-date-time-picker-time-picker.js';

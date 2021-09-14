@@ -32,7 +32,6 @@
     "@vaadin/field-base": "^22.0.0-alpha6",
     "@vaadin/input-container": "^22.0.0-alpha6",
     "@vaadin/text-field": "^22.0.0-alpha6",
-    "@vaadin/vaadin-element-mixin": "^22.0.0-alpha6",
     "@vaadin/vaadin-item": "^22.0.0-alpha6",
     "@vaadin/vaadin-list-box": "^22.0.0-alpha6",
     "@vaadin/vaadin-list-mixin": "^22.0.0-alpha6",

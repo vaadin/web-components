@@ -9,7 +9,7 @@ import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
 import { DomRepeat } from '@polymer/polymer/lib/elements/dom-repeat.js';
 import { DomIf } from '@polymer/polymer/lib/elements/dom-if.js';
 import { IronResizableBehavior } from '@polymer/iron-resizable-behavior/iron-resizable-behavior.js';
-import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
+import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 
 const CLASSES = {
   SMALL: 'small',

@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright (c) 2021 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { GridSorterDirection } from './interfaces';
 
 /**
@@ -52,7 +59,7 @@ export interface GridSorterEventMap extends HTMLElementEventMap, GridSorterEleme
  * @fires {CustomEvent} direction-changed - Fired when the `direction` property changes.
  * @fires {CustomEvent} sorter-changed - Fired when the `path` or `direction` property changes.
  */
-declare class GridSorterElement extends HTMLElement {
+declare class GridSorterElement extends ThemableMixin(DirMixin(HTMLElement)) {
   /**
    * JS Path of the property in the item used for sorting the data.
    */

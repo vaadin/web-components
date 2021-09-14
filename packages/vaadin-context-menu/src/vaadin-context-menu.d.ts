@@ -1,12 +1,12 @@
 import { GestureEventListeners } from '@polymer/polymer/lib/mixins/gesture-event-listeners.js';
 
-import { ItemsMixin } from './vaadin-contextmenu-items-mixin.js';
-
-import { ElementMixin } from '@vaadin/vaadin-element-mixin/vaadin-element-mixin.js';
+import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 
 import { ContextMenuEventMap, ContextMenuRenderer } from './interfaces';
+
+import { ItemsMixin } from './vaadin-contextmenu-items-mixin.js';
 
 /**
  * `<vaadin-context-menu>` is a Web Component for creating context menus.
