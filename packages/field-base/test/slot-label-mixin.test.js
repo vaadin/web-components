@@ -38,18 +38,9 @@ describe('slot-label-mixin', () => {
       expect(element.hasAttribute('has-label')).to.be.true;
     });
 
-    describe('overriden with label property', () => {
-      beforeEach(() => {
-        element.label = 'Label Property';
-      });
-
-      it('should display the label property', () => {
-        expect(element._labelNode.textContent).to.equal('Label Property');
-      });
-
-      it('should keep has-label attribute', () => {
-        expect(element.hasAttribute('has-label')).to.be.true;
-      });
+    it('should be overridable with the label property', () => {
+      element.label = 'Label Property';
+      expect(element._labelNode.textContent).to.equal('Label Property');
     });
   });
 
@@ -62,20 +53,11 @@ describe('slot-label-mixin', () => {
       expect(element._labelNode.textContent).to.equal('Label Property');
     });
 
-    describe('overriden with slot label', () => {
-      beforeEach(async () => {
-        const label = document.createTextNode('Slot Label');
-        element.appendChild(label);
-        await nextFrame();
-      });
-
-      it('should display the slot label', () => {
-        expect(element._labelNode.textContent).to.equal('Slot Label');
-      });
-
-      it('should keep has-label attribute', () => {
-        expect(element.hasAttribute('has-label')).to.be.true;
-      });
+    it('should be overridable with the slot label', () => {
+      const label = document.createTextNode('Slot Label');
+      element.appendChild(label);
+      await nextFrame();
+      expect(element._labelNode.textContent).to.equal('Slot Label');
     });
   });
 
