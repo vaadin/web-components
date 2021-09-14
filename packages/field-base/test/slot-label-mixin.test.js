@@ -53,7 +53,7 @@ describe('slot-label-mixin', () => {
       expect(element._labelNode.textContent).to.equal('Label Property');
     });
 
-    it('should be overridable with the slot label', () => {
+    it('should be overridable with the slot label', async () => {
       const label = document.createTextNode('Slot Label');
       element.appendChild(label);
       await nextFrame();
