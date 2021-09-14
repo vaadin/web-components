@@ -999,6 +999,8 @@ export const DatePickerMixin = (subclass) =>
           if (this.opened) {
             this._focusedDate = this._selectedDate;
             this._close();
+          } else if (this.clearButtonVisible) {
+            this._onClearButtonClick();
           } else if (this.autoOpenDisabled) {
             //Do not restore selected date if Esc was pressed after clearing input field
             if (this.inputElement.value === '') {
