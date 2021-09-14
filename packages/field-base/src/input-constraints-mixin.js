@@ -79,7 +79,7 @@ const InputConstraintsMixinImplementation = (superclass) =>
      * @override
      */
     _onChange(event) {
-      event.stopImmediatePropagation();
+      event.stopPropagation();
 
       this.validate();
 
