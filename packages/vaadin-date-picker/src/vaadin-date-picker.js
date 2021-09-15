@@ -21,7 +21,7 @@ import { inputFieldShared } from '@vaadin/text-field/src/vaadin-input-field-shar
 import { DatePickerMixin } from './vaadin-date-picker-mixin.js';
 import { registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 
-registerStyles('vaadin-date-picker', inputFieldShared);
+registerStyles('vaadin-date-picker', inputFieldShared, { moduleId: 'vaadin-date-picker-styles' });
 
 class DatePicker extends DatePickerMixin(
   FieldAriaMixin(
