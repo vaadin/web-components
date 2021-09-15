@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { arrowDown, arrowUp, enter, esc, fixtureSync, keyDownOn } from '@vaadin/testing-helpers';
+import { arrowDown, arrowUp, enter, esc, fixtureSync, keyDownOn, nextFrame } from '@vaadin/testing-helpers';
 import '../vaadin-time-picker.js';
 
 describe('time-picker', () => {
@@ -316,6 +316,227 @@ describe('time-picker', () => {
       esc(inputElement);
       esc(inputElement);
       expect(spy.called).to.be.false;
+    });
+  });
+
+  describe('min and max properties', () => {
+    it('min property should be 00:00:00.000 by default', () => {
+      expect(timePicker.min).to.be.equal('00:00:00.000');
+    });
+
+    it('max property should be 23:59:59.999 by default', () => {
+      expect(timePicker.max).to.be.equal('23:59:59.999');
+    });
+
+    it('should have dropdown items if min nor max is defined', () => {
+      expect(timePicker.__dropdownItems.length).to.be.equal(24);
+    });
+
+    it('should allow setting valid min property value', () => {
+      timePicker.min = '04:00';
+      expect(timePicker.__dropdownItems.length).to.be.equal(20);
+    });
+
+    it('should allow setting valid max property value', () => {
+      timePicker.max = '19:00';
+      expect(timePicker.__dropdownItems.length).to.be.equal(20);
+    });
+
+    it('should allow setting valid min and max property value', () => {
+      timePicker.min = '04:00';
+      timePicker.max = '19:00';
+      expect(timePicker.__dropdownItems.length).to.be.equal(16);
+    });
+
+    it('should allow setting valid min value via attribute', () => {
+      timePicker.setAttribute('min', '04:00');
+      expect(timePicker.min).to.be.equal('04:00');
+    });
+
+    it('should allow setting valid max value via attribute', () => {
+      timePicker.setAttribute('max', '19:00');
+      expect(timePicker.max).to.be.equal('19:00');
+    });
+
+    it('should allow setting valid min and max values via attributes', () => {
+      timePicker.setAttribute('min', '04:00');
+      timePicker.setAttribute('max', '19:00');
+      expect(timePicker.min).to.be.equal('04:00');
+      expect(timePicker.max).to.be.equal('19:00');
+    });
+
+    it('should not allow setting a value lower than min property value', () => {
+      timePicker.value = '02:00';
+      timePicker.min = '10:00';
+      expect(timePicker.value).to.be.equal('10:00');
+    });
+
+    it('should not allow setting a value higher than max property value', () => {
+      timePicker.value = '12:00';
+      timePicker.max = '10:00';
+      expect(timePicker.value).to.be.equal('10:00');
+    });
+
+    it('should not allow setting a value lower than min value via attribute', () => {
+      timePicker.setAttribute('value', '02:00');
+      timePicker.setAttribute('min', '10:00');
+      expect(timePicker.value).to.be.equal('10:00');
+    });
+
+    it('should not allow setting a value higher than max value via attribute', () => {
+      timePicker.setAttribute('value', '19:00');
+      timePicker.setAttribute('max', '16:00');
+      expect(timePicker.value).to.be.equal('16:00');
+    });
+
+    it('setting min should not change an empty value', () => {
+      timePicker.min = '10:00';
+      expect(timePicker.value).to.be.equal('');
+    });
+
+    it('setting max should not change an empty value', () => {
+      timePicker.max = '10:00';
+      expect(timePicker.value).to.be.equal('');
+    });
+  });
+
+  describe('step property', () => {
+    it('step property should be undefined by default', () => {
+      expect(timePicker.step).to.be.equal(undefined);
+    });
+
+    it('should have dropdown items if step is undefined', () => {
+      timePicker.step = undefined;
+      expect(timePicker.__dropdownItems.length).to.be.equal(24);
+    });
+
+    it('should have dropdown items if step is bigger or equal than 15min', () => {
+      timePicker.step = 15 * 60;
+      expect(timePicker.__dropdownItems.length).to.be.equal(96);
+    });
+
+    it('should not have dropdown items if step is lesser than 15min', () => {
+      timePicker.step = 15 * 60 - 1;
+      expect(timePicker.__dropdownItems.length).to.be.equal(0);
+    });
+
+    it('should allow setting valid step property value', () => {
+      timePicker.step = 0.5;
+      expect(timePicker.step).to.be.equal(0.5);
+    });
+
+    it('should allow setting valid step value via attribute', () => {
+      timePicker.setAttribute('step', '0.5');
+      expect(timePicker.step).to.be.equal(0.5);
+    });
+
+    it('should expand the resolution and value on step change to smaller value', () => {
+      timePicker.value = '12:00:00';
+      expect(timePicker.value).to.be.equal('12:00');
+      timePicker.step = 0.5;
+      expect(timePicker.value).to.be.equal('12:00:00.000');
+    });
+
+    it('should shrink the resolution and value on step change to bigger value', () => {
+      timePicker.value = '12:00:00';
+      expect(timePicker.value).to.be.equal('12:00');
+      timePicker.step = 3600;
+      expect(timePicker.value).to.be.equal('12:00');
+    });
+
+    it('should be possible to set hours, minutes, seconds and milliseconds with according step', () => {
+      // Hours
+      timePicker.step = 3600;
+      timePicker.value = '12';
+      expect(timePicker.value).to.be.equal('12:00');
+
+      // Minutes
+      timePicker.step = 60;
+      timePicker.value = '12:12';
+      expect(timePicker.value).to.be.equal('12:12');
+
+      // Seconds
+      timePicker.step = 1;
+      timePicker.value = '12:12:12';
+      expect(timePicker.value).to.be.equal('12:12:12');
+
+      // Milliseconds
+      timePicker.step = 0.5;
+      timePicker.value = '12:12:12.100';
+      expect(timePicker.value).to.be.equal('12:12:12.100');
+    });
+  });
+
+  describe('custom functions', () => {
+    it('should use custom parser if that exists', function () {
+      timePicker.set('i18n.parseTime', sinon.stub().returns({ hours: 12, minutes: 0, seconds: 0 }));
+      timePicker.value = '12';
+      expect(timePicker.i18n.parseTime.args[0][0]).to.be.equal('12:00');
+      expect(timePicker.value).to.be.equal('12:00');
+    });
+
+    it('should align values of dropdown and input when i18n was reassigned', function () {
+      timePicker.value = '12';
+      timePicker.set('i18n', {
+        formatTime: sinon.stub().withArgs({ hours: 12, minutes: 0 }).returns('12:00 AM'),
+        parseTime: sinon.stub().returns({ hours: 12, minutes: 0, seconds: 0 })
+      });
+      expect(comboBox.selectedItem).to.be.deep.equal({ label: '12:00 AM', value: '12:00 AM' });
+      expect(comboBox.value).to.be.equal('12:00 AM');
+      expect(inputElement.value).to.be.equal('12:00 AM');
+      expect(timePicker.value).to.be.equal('12:00');
+    });
+
+    it('should use custom formatter if that exists', function () {
+      timePicker.set('i18n', {
+        formatTime: sinon.stub().withArgs({ hours: 12, minutes: 0 }).returns('12:00 AM'),
+        parseTime: sinon.stub().returns({ hours: 12, minutes: 0, seconds: 0 })
+      });
+      timePicker.value = '12';
+      expect(timePicker.value).to.be.equal('12:00');
+      expect(comboBox.value).to.be.equal('12:00 AM');
+    });
+
+    it('should accept custom time formatter', function () {
+      timePicker.set('i18n.formatTime', sinon.stub().returns('1200'));
+      const parseTime = sinon.stub();
+      parseTime.withArgs('1200').returns({ hours: 12, minutes: 0 });
+      timePicker.set('i18n.parseTime', parseTime);
+      timePicker.value = '12:00';
+      expect(inputElement.value).to.equal('1200');
+      expect(timePicker.value).to.equal('12:00');
+    });
+  });
+
+  describe('helper text', () => {
+    it('should set helper text content using helperText property', async () => {
+      timePicker.helperText = 'foo';
+      await nextFrame();
+      expect(timePicker.querySelector('[slot="helper"]').textContent).to.eql('foo');
+    });
+
+    it('should display the helper text when slotted helper available', async () => {
+      const helper = document.createElement('div');
+      helper.setAttribute('slot', 'helper');
+      helper.textContent = 'foo';
+      timePicker.appendChild(helper);
+      await nextFrame();
+      expect(timePicker.querySelector('[slot="helper"]').textContent).to.eql('foo');
+    });
+  });
+
+  describe('theme attribute', () => {
+    beforeEach(() => {
+      timePicker.setAttribute('theme', 'foo');
+    });
+
+    it('should propagate theme attribute to input container', () => {
+      const inputField = timePicker.shadowRoot.querySelector('[part="input-field"]');
+      expect(inputField.getAttribute('theme')).to.equal('foo');
+    });
+
+    it('should propagate theme attribute to combo-box', () => {
+      expect(timePicker.$.comboBox.getAttribute('theme')).to.equal('foo');
     });
   });
 });
