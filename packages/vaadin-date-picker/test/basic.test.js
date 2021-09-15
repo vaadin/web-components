@@ -203,6 +203,11 @@ describe('basic features', () => {
     expect(datepicker.hasAttribute('has-value')).to.be.true;
   });
 
+  it('should format the input value', () => {
+    const datepicker = fixtureSync('<vaadin-date-picker value="2000-01-01"></vaadin-date-picker>');
+    expect(datepicker.inputElement.value).to.equal('1/1/2000');
+  });
+
   describe('realign', () => {
     beforeEach(async () => {
       await open(datepicker);

@@ -306,15 +306,6 @@ export const DatePickerMixin = (subclass) =>
           value: ''
         },
 
-        /**
-         * @protected
-         */
-        inputElement: {
-          type: Object,
-          readOnly: true,
-          observer: '_inputElementChanged'
-        },
-
         /** @private */
         _noInput: {
           type: Boolean,
@@ -589,6 +580,7 @@ export const DatePickerMixin = (subclass) =>
       if (input) {
         input.setAttribute('role', 'combobox');
         input.setAttribute('aria-expanded', !!this.opened);
+        this._applyInputValue(this._selectedDate);
       }
     }
 
