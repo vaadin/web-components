@@ -14,7 +14,7 @@ registerStyles(
       outline: none;
     }
 
-    [part='label']:not([empty]) {
+    :host([has-label]) [part='label'] {
       margin: 0.1875em 0.875em 0.1875em 0.375em;
     }
 
@@ -105,7 +105,7 @@ registerStyles(
     }
 
     /* RTL specific styles */
-    :host([dir='rtl']) [part='label']:not([empty]) {
+    :host([dir='rtl'][has-label]) [part='label'] {
       margin: 0.1875em 0.375em 0.1875em 0.875em;
     }
 
