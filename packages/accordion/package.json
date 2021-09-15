@@ -1,10 +1,10 @@
 {
-  "name": "@vaadin/vaadin-accordion",
+  "name": "@vaadin/accordion",
   "version": "22.0.0-alpha6",
   "description": "vaadin-accordion",
   "main": "vaadin-accordion.js",
   "module": "vaadin-accordion.js",
-  "repository": "vaadin/vaadin-accordion",
+  "repository": "vaadin/web-components",
   "keywords": [
     "Vaadin",
     "vaadin-accordion",
@@ -15,7 +15,7 @@
   "author": "Vaadin Ltd",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/vaadin/vaadin-accordion/issues"
+    "url": "https://github.com/vaadin/web-components/issues"
   },
   "homepage": "https://vaadin.com/components",
   "files": [
