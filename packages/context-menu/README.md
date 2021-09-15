@@ -6,7 +6,7 @@
 
 [&lt;vaadin-context-menu&gt;](https://vaadin.com/components/vaadin-context-menu) is a Web Component providing a contextual menu, part of the [Vaadin components](https://vaadin.com/components).
 
-[![npm version](https://badgen.net/npm/v/@vaadin/vaadin-context-menu)](https://www.npmjs.com/package/@vaadin/vaadin-context-menu)
+[![npm version](https://badgen.net/npm/v/@vaadin/context-menu)](https://www.npmjs.com/package/@vaadin/context-menu)
 [![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-context-menu)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
@@ -45,13 +45,13 @@
 Install `vaadin-context-menu`:
 
 ```sh
-npm i @vaadin/vaadin-context-menu --save
+npm i @vaadin/context-menu --save
 ```
 
 Once installed, import it in your application:
 
 ```js
-import '@vaadin/vaadin-context-menu/vaadin-context-menu.js';
+import '@vaadin/context-menu/vaadin-context-menu.js';
 ```
 
 ## Getting started

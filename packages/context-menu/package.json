@@ -1,10 +1,10 @@
 {
-  "name": "@vaadin/vaadin-context-menu",
+  "name": "@vaadin/context-menu",
   "version": "22.0.0-alpha6",
   "description": "Web Component for showing context dependent items for any element on the page",
   "main": "vaadin-context-menu.js",
   "module": "vaadin-context-menu.js",
-  "repository": "vaadin/vaadin-context-menu",
+  "repository": "vaadin/web-components",
   "keywords": [
     "Vaadin",
     "context menu",
@@ -15,7 +15,7 @@
   "author": "Vaadin Ltd",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/vaadin/vaadin-context-menu/issues"
+    "url": "https://github.com/vaadin/web-components/issues"
   },
   "homepage": "https://vaadin.com/components",
   "files": [
