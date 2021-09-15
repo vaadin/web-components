@@ -247,6 +247,8 @@ export const ComboBoxMixin = (subclass) =>
         input.setAttribute('role', 'combobox');
         input.setAttribute('aria-autocomplete', 'list');
         input.setAttribute('aria-expanded', this.opened);
+
+        this._revertInputValueToValue();
       }
     }
 

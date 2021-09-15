@@ -449,3 +449,22 @@ describe('clear button', () => {
     });
   });
 });
+
+describe('value set before attach', () => {
+  let comboBox;
+
+  beforeEach(() => {
+    comboBox = document.createElement('vaadin-combo-box');
+  });
+
+  afterEach(() => {
+    comboBox.remove();
+  });
+
+  it('should set value to the input when added to the DOM', () => {
+    comboBox.items = ['a', 'b'];
+    comboBox.value = 'a';
+    document.body.appendChild(comboBox);
+    expect(comboBox.inputElement.value).to.equal('a');
+  });
+});
