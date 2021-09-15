@@ -777,15 +777,6 @@ export const ComboBoxMixin = (subclass) =>
     }
 
     /** @private */
-    _updateHasValue(hasValue) {
-      if (hasValue) {
-        this.setAttribute('has-value', '');
-      } else {
-        this.removeAttribute('has-value');
-      }
-    }
-
-    /** @private */
     _selectedItemChanged(selectedItem) {
       if (selectedItem === null || selectedItem === undefined) {
         if (this.filteredItems) {
@@ -793,7 +784,7 @@ export const ComboBoxMixin = (subclass) =>
             this.value = '';
           }
 
-          this._updateHasValue(this.value !== '');
+          this._toggleHasValue(this.value !== '');
           this._inputElementValue = this.value;
         }
       } else {
@@ -807,7 +798,7 @@ export const ComboBoxMixin = (subclass) =>
           }
         }
 
-        this._updateHasValue(true);
+        this._toggleHasValue(true);
         this._inputElementValue = this._getItemLabel(selectedItem);
       }
 
@@ -842,7 +833,7 @@ export const ComboBoxMixin = (subclass) =>
           this._inputElementValue = value;
         }
 
-        this._updateHasValue(this.value !== '');
+        this._toggleHasValue(this.value !== '');
       } else {
         this.selectedItem = null;
       }
