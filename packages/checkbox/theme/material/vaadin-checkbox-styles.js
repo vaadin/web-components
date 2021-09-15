@@ -14,7 +14,7 @@ registerStyles(
       -webkit-tap-highlight-color: transparent;
     }
 
-    [part='label']:not([empty]) {
+    :host([has-label]) [part='label'] {
       margin: 3px 12px 3px 6px;
     }
 
@@ -126,7 +126,7 @@ registerStyles(
     }
 
     /* RTL specific styles */
-    :host([dir='rtl']) [part='label']:not([empty]) {
+    :host([dir='rtl'][has-label]) [part='label'] {
       margin: 3px 6px 3px 12px;
     }
   `,
