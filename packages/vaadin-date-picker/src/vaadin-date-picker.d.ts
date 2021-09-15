@@ -75,7 +75,7 @@ import { DatePickerEventMap } from './interfaces';
  * In addition to `<vaadin-date-picker>` itself, the following internal
  * components are themable:
  *
- * - `<vaadin-date-picker-text-field>` - has the same API as [`<vaadin-text-field>`](#/elements/vaadin-text-field).
+
  * - `<vaadin-date-picker-overlay>` - has the same API as [`<vaadin-overlay>`](#/elements/vaadin-overlay).
  * - `<vaadin-date-picker-overlay-content>`
  * - `<vaadin-month-calendar>`
