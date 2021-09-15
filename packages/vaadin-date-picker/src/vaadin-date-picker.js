@@ -41,15 +41,6 @@ class DatePicker extends DatePickerMixin(
   static get template() {
     return html`
       <style>
-        :host([dir='rtl']) [part='input-field'] {
-          direction: ltr;
-        }
-
-        :host([dir='rtl']) [part='input-field'] ::slotted(input)::placeholder {
-          direction: rtl;
-          text-align: left;
-        }
-
         :host([opened]) {
           pointer-events: auto;
         }
