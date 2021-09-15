@@ -1,0 +1,38 @@
+{
+  "name": "@vaadin/vaadin-accordion",
+  "version": "22.0.0-alpha6",
+  "description": "vaadin-accordion",
+  "main": "vaadin-accordion.js",
+  "module": "vaadin-accordion.js",
+  "repository": "vaadin/vaadin-accordion",
+  "keywords": [
+    "Vaadin",
+    "vaadin-accordion",
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
+  "author": "Vaadin Ltd",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/vaadin/vaadin-accordion/issues"
+  },
+  "homepage": "https://vaadin.com/components",
+  "files": [
+    "vaadin-*.d.ts",
+    "vaadin-*.js",
+    "src",
+    "theme"
+  ],
+  "dependencies": {
+    "@vaadin/accordion": "^22.0.0-alpha6"
+  },
+  "devDependencies": {
+    "@esm-bundle/chai": "^4.3.4",
+    "@vaadin/testing-helpers": "^0.3.0",
+    "sinon": "^9.2.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
