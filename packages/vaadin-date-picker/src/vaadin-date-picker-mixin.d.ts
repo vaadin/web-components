@@ -14,13 +14,6 @@ interface DatePickerMixin {
   readonly _inputElement: HTMLElement | null;
 
   /**
-   * The current selected date.
-   */
-  _selectedDate: Date | null | undefined;
-
-  _focusedDate: Date | null | undefined;
-
-  /**
    * The value for this element.
    *
    * Supported date formats:
@@ -30,26 +23,11 @@ interface DatePickerMixin {
   value: string;
 
   /**
-   * Set to true to mark the input as required.
-   */
-  required: boolean;
-
-  /**
-   * The name of this element.
-   */
-  name: string | null | undefined;
-
-  /**
    * Date which should be visible when there is no value selected.
    *
    * The same date formats as for the `value` property are supported.
    */
   initialPosition: string | null | undefined;
-
-  /**
-   * The label for this element.
-   */
-  label: string | null | undefined;
 
   /**
    * Set true to open the date selector overlay.
@@ -67,10 +45,6 @@ interface DatePickerMixin {
    * is 1 (Monday).
    */
   showWeekNumbers: boolean | null | undefined;
-
-  _fullscreen: boolean;
-
-  _fullscreenMediaQuery: string;
 
   /**
    * The object used to localize this component.
@@ -176,18 +150,6 @@ interface DatePickerMixin {
   max: string | undefined;
 
   /**
-   * The earliest date that can be selected. All earlier dates will be disabled.
-   */
-  _minDate: Date | string | null;
-
-  /**
-   * The latest date that can be selected. All later dates will be disabled.
-   */
-  _maxDate: Date | string | null;
-
-  _overlayInitialized: boolean | null | undefined;
-
-  /**
    * Opens the dropdown.
    */
   open(): void;
@@ -196,26 +158,4 @@ interface DatePickerMixin {
    * Closes the dropdown.
    */
   close(): void;
-
-  _onOverlayOpened(): void;
-
-  _onOverlayClosed(): void;
-
-  /**
-   * Returns true if `value` is valid, and sets the `invalid` flag appropriately.
-   *
-   * @returns True if the value is valid and sets the `invalid` flag appropriately
-   */
-  validate(): boolean;
-
-  /**
-   * Returns true if the current input value satisfies all constraints (if any)
-   *
-   * Override the `checkValidity` method for custom validations.
-   *
-   * @returns True if the value is valid
-   */
-  checkValidity(): boolean;
-
-  _focus(): void;
 }

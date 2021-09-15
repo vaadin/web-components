@@ -43,36 +43,30 @@ import { DatePickerEventMap } from './interfaces';
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  */
-declare class DatePickerLightElement extends ThemableMixin(DatePickerMixin(HTMLElement)) {
-  _overlayInitialized: boolean;
-
-  _inputValue: string | undefined;
-
+declare class DatePickerLight extends ThemableMixin(DatePickerMixin(HTMLElement)) {
   /**
    * Name of the two-way data-bindable property representing the
    * value of the custom input field.
    */
   attrForValue: string;
 
-  _input(): HTMLElement | null;
-
   addEventListener<K extends keyof DatePickerEventMap>(
     type: K,
-    listener: (this: DatePickerLightElement, ev: DatePickerEventMap[K]) => void,
+    listener: (this: DatePickerLight, ev: DatePickerEventMap[K]) => void,
     options?: boolean | AddEventListenerOptions
   ): void;
 
   removeEventListener<K extends keyof DatePickerEventMap>(
     type: K,
-    listener: (this: DatePickerLightElement, ev: DatePickerEventMap[K]) => void,
+    listener: (this: DatePickerLight, ev: DatePickerEventMap[K]) => void,
     options?: boolean | EventListenerOptions
   ): void;
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-date-picker-light': DatePickerLightElement;
+    'vaadin-date-picker-light': DatePickerLight;
   }
 }
 
-export { DatePickerLightElement };
+export { DatePickerLight };
