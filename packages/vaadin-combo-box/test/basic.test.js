@@ -233,8 +233,8 @@ describe('Properties', () => {
   });
 
   describe('label property', () => {
-    it('should have empty label by default', () => {
-      expect(comboBox.label).to.be.equal('');
+    it('should have undefined by default', () => {
+      expect(comboBox.label).to.be.undefined;
     });
 
     it('should be set label element text content', () => {
