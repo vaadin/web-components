@@ -1,8 +1,8 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, focusout } from '@vaadin/testing-helpers';
-import { TimePickerElement } from '../src/vaadin-time-picker.js';
+import { TimePicker } from '../src/vaadin-time-picker.js';
 
-class TimePicker20Element extends TimePickerElement {
+class TimePicker20Element extends TimePicker {
   checkValidity() {
     return this.value === '20:00';
   }
@@ -11,19 +11,18 @@ class TimePicker20Element extends TimePickerElement {
 customElements.define('vaadin-time-picker-20', TimePicker20Element);
 
 describe('form input', () => {
-  let timePicker, dropdown, inputElement;
+  let timePicker, comboBox, inputElement;
 
   function inputValue(value) {
-    const input = inputElement.inputElement;
-    input.value = value;
-    input.dispatchEvent(new CustomEvent('input', { bubbles: true, composed: true }));
+    inputElement.value = value;
+    inputElement.dispatchEvent(new CustomEvent('input', { bubbles: true, composed: true }));
   }
 
   describe('default validator', () => {
     beforeEach(() => {
       timePicker = fixtureSync(`<vaadin-time-picker></vaadin-time-picker>`);
-      dropdown = timePicker.__dropdownElement;
-      inputElement = timePicker.__inputElement;
+      comboBox = timePicker.$.comboBox;
+      inputElement = timePicker.inputElement;
     });
 
     it('should pass the name to input element', () => {
@@ -31,8 +30,8 @@ describe('form input', () => {
       expect(inputElement.name).to.equal('foo');
     });
 
-    it('should have no name by default', () => {
-      expect(inputElement.name).to.be.undefined;
+    it('should set name to empty string by default', () => {
+      expect(inputElement.name).to.equal('');
     });
 
     it('should pass required tp input element', () => {
@@ -49,12 +48,12 @@ describe('form input', () => {
       timePicker.required = true;
       timePicker.min = '14:00';
       timePicker.value = '13:00';
-      timePicker.__dropdownElement.dispatchEvent(new CustomEvent('change', { bubbles: true }));
+      comboBox.dispatchEvent(new CustomEvent('change', { bubbles: true }));
 
-      expect(inputElement.invalid).to.equal(true);
+      expect(inputElement.hasAttribute('invalid')).to.be.true;
 
       timePicker.value = '12:00';
-      expect(inputElement.invalid).to.equal(true);
+      expect(inputElement.hasAttribute('invalid')).to.be.true;
     });
 
     it('should validate correctly with required flag', () => {
@@ -69,11 +68,11 @@ describe('form input', () => {
       expect(timePicker.invalid).to.be.equal(false);
     });
 
-    it('should validate correctly with required flag on blur', () => {
+    it('should validate correctly with required flag on focusout', () => {
       timePicker.name = 'foo';
       timePicker.required = true;
 
-      inputElement.dispatchEvent(new CustomEvent('blur', { composed: true }));
+      focusout(inputElement);
       expect(timePicker.invalid).to.be.equal(true);
     });
 
@@ -139,38 +138,32 @@ describe('form input', () => {
 
     it('should be possible to force invalid status', () => {
       timePicker.invalid = true;
-      expect(inputElement.invalid).to.be.true;
+      expect(inputElement.hasAttribute('invalid')).to.be.true;
     });
 
     it('should display the error-message when invalid', () => {
       timePicker.invalid = true;
       timePicker.errorMessage = 'Not cool';
-      expect(inputElement.errorMessage).to.equal(timePicker.errorMessage);
-    });
-
-    it('should have disabled vaadin-text-field', () => {
-      timePicker.disabled = true;
-      expect(inputElement.hasAttribute('disabled')).to.be.true;
-      expect(inputElement.disabled).to.equal(true);
+      expect(timePicker.hasAttribute('has-error-message')).to.be.true;
     });
 
     it('should validate keyboard input (invalid)', () => {
       inputValue('foo');
       expect(timePicker.invalid).to.be.equal(false);
-      focusout(dropdown);
+      focusout(comboBox);
       expect(timePicker.invalid).to.be.equal(true);
     });
 
     it('should validate keyboard input (valid)', () => {
       inputValue('12:00');
-      focusout(dropdown);
+      focusout(comboBox);
       expect(timePicker.invalid).to.be.equal(false);
     });
 
     it('should validate keyboard input (disallowed value)', () => {
       inputValue('99:00');
       expect(timePicker.invalid).to.be.equal(false);
-      focusout(dropdown);
+      focusout(comboBox);
       expect(timePicker.invalid).to.be.equal(true);
     });
   });

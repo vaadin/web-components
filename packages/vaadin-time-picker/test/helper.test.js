@@ -1,20 +1,18 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, isDesktopSafari, nextFrame } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import '../vaadin-time-picker.js';
 
 describe('helper text', () => {
-  let timePicker, inputElement;
+  let timePicker;
 
   beforeEach(() => {
     timePicker = fixtureSync(`<vaadin-time-picker></vaadin-time-picker>`);
-    inputElement = timePicker.__inputElement;
   });
 
-  // Skipped because of the issue with slots order occurring in https://failing-container.glitch.me.
-  (isDesktopSafari ? it.skip : it)(`should propagate helperText property to text-field`, () => {
-    expect(inputElement.helperText).to.be.empty;
+  it('should set helper text content using helperText property', async () => {
     timePicker.helperText = 'foo';
-    expect(inputElement.helperText).to.be.equal('foo');
+    await nextFrame();
+    expect(timePicker.querySelector('[slot="helper"]').textContent).to.eql('foo');
   });
 
   it('should display the helper text when slotted helper available', async () => {
@@ -23,6 +21,6 @@ describe('helper text', () => {
     helper.textContent = 'foo';
     timePicker.appendChild(helper);
     await nextFrame();
-    expect(inputElement.querySelector('[slot="helper"]').assignedNodes()[0].textContent).to.eql('foo');
+    expect(timePicker.querySelector('[slot="helper"]').textContent).to.eql('foo');
   });
 });

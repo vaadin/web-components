@@ -4,10 +4,12 @@ import { fixtureSync } from '@vaadin/testing-helpers';
 import '../vaadin-time-picker.js';
 
 describe('custom functions', () => {
-  let timePicker;
+  let timePicker, comboBox, input;
 
   beforeEach(() => {
     timePicker = fixtureSync(`<vaadin-time-picker></vaadin-time-picker>`);
+    comboBox = timePicker.$.comboBox;
+    input = timePicker.inputElement;
   });
 
   it('should use custom parser if that exists', function () {
@@ -23,9 +25,9 @@ describe('custom functions', () => {
       formatTime: sinon.stub().withArgs({ hours: 12, minutes: 0 }).returns('12:00 AM'),
       parseTime: sinon.stub().returns({ hours: 12, minutes: 0, seconds: 0 })
     });
-    expect(timePicker.__dropdownElement.selectedItem).to.be.deep.equal({ label: '12:00 AM', value: '12:00 AM' });
-    expect(timePicker.__dropdownElement.value).to.be.equal('12:00 AM');
-    expect(timePicker.__inputElement.value).to.be.equal('12:00 AM');
+    expect(comboBox.selectedItem).to.be.deep.equal({ label: '12:00 AM', value: '12:00 AM' });
+    expect(comboBox.value).to.be.equal('12:00 AM');
+    expect(input.value).to.be.equal('12:00 AM');
     expect(timePicker.value).to.be.equal('12:00');
   });
 
@@ -36,7 +38,7 @@ describe('custom functions', () => {
     });
     timePicker.value = '12';
     expect(timePicker.value).to.be.equal('12:00');
-    expect(timePicker.__dropdownElement.value).to.be.equal('12:00 AM');
+    expect(comboBox.value).to.be.equal('12:00 AM');
   });
 
   it('should accept custom time formatter', function () {
@@ -45,7 +47,7 @@ describe('custom functions', () => {
     parseTime.withArgs('1200').returns({ hours: 12, minutes: 0 });
     timePicker.set('i18n.parseTime', parseTime);
     timePicker.value = '12:00';
-    expect(timePicker.__inputElement.value).to.equal('1200');
+    expect(input.value).to.equal('1200');
     expect(timePicker.value).to.equal('12:00');
   });
 });
