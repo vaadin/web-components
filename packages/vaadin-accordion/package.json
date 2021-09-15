@@ -27,8 +27,6 @@
   "dependencies": {
     "@vaadin/accordion": "^22.0.0-alpha6"
   },
-  "devDependencies": {
-  },
   "publishConfig": {
     "access": "public"
   }
