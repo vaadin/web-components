@@ -32,7 +32,7 @@ import { InputConstraintsMixin } from '@vaadin/field-base/src/input-constraints-
  *
  * Part name | Description | Theme for Element
  * ----------------|----------------|----------------
- * `text-field` | Input element | vaadin-date-picker
+ * `input-field` | Input element | vaadin-date-picker
  * `clear-button` | Clear button | vaadin-date-picker
  * `toggle-button` | Toggle button | vaadin-date-picker
  * `overlay-content` | The overlay element | vaadin-date-picker
