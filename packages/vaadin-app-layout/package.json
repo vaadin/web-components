@@ -1,0 +1,33 @@
+{
+  "name": "@vaadin/vaadin-app-layout",
+  "version": "22.0.0-alpha6",
+  "description": "vaadin-app-layout",
+  "main": "vaadin-app-layout.js",
+  "module": "vaadin-app-layout.js",
+  "repository": "vaadin/vaadin-app-layout",
+  "keywords": [
+    "Vaadin",
+    "vaadin-app-layout",
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
+  "author": "Vaadin Ltd",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/vaadin/vaadin-app-layout/issues"
+  },
+  "homepage": "https://vaadin.com/components",
+  "files": [
+    "vaadin-*.d.ts",
+    "vaadin-*.js",
+    "src",
+    "theme"
+  ],
+  "dependencies": {
+    "@vaadin/app-layout": "^22.0.0-alpha6"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
