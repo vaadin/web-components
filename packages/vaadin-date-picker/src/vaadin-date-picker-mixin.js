@@ -643,11 +643,7 @@ export const DatePickerMixin = (subclass) =>
 
     /** @private */
     _updateHasValue(value) {
-      if (value) {
-        this.setAttribute('has-value', '');
-      } else {
-        this.removeAttribute('has-value');
-      }
+      this.toggleAttribute('has-value', !!value);
     }
 
     /** @private */
@@ -985,9 +981,6 @@ export const DatePickerMixin = (subclass) =>
               const oldValue = this.value;
               this._selectParsedOrFocusedDate();
               if (oldValue === this.value) {
-                // TODO: Instead of checking if the value was changed and then validate,
-                // run validate whenever change-event will get fired. Change event firing logic
-                // already checks if the value was changed. Blur is a separate thing and should be validated.
                 this.validate();
               }
             }
