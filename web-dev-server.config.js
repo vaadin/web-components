@@ -1,6 +1,7 @@
-import fs from 'fs';
+/* eslint-env node */
+const fs = require('fs');
 
-export default {
+module.exports = {
   plugins: [
     {
       name: 'dev-page-listing',
