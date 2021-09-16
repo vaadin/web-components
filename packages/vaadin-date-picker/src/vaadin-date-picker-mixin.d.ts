@@ -1,6 +1,7 @@
 import { DatePickerI18n } from './interfaces';
-
-export { DatePickerMixin };
+import { InputMixin } from '@vaadin/field-base/src/input-mixin.js';
+import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
+import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
 
 declare function DatePickerMixin<T extends new (...args: any[]) => {}>(base: T): T & DatePickerMixinConstructor;
 
@@ -8,9 +9,7 @@ interface DatePickerMixinConstructor {
   new (...args: any[]): DatePickerMixin;
 }
 
-export { DatePickerMixinConstructor };
-
-interface DatePickerMixin {
+interface DatePickerMixin extends DelegateFocusMixin, InputMixin, KeyboardMixin {
   readonly _inputElement: HTMLElement | null;
 
   /**
@@ -158,4 +157,22 @@ interface DatePickerMixin {
    * Closes the dropdown.
    */
   close(): void;
+
+  /**
+   * Returns true if `value` is valid, and sets the `invalid` flag appropriately.
+   *
+   * @returns True if the value is valid and sets the `invalid` flag appropriately
+   */
+  validate(): boolean;
+
+  /**
+   * Returns true if the current input value satisfies all constraints (if any)
+   *
+   * Override the `checkValidity` method for custom validations.
+   *
+   * @returns True if the value is valid
+   */
+  checkValidity(): boolean;
 }
+
+export { DatePickerMixinConstructor, DatePickerMixin };

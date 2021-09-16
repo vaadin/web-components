@@ -10,7 +10,6 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { AriaLabelMixin } from '@vaadin/field-base/src/aria-label-mixin.js';
 import { ClearButtonMixin } from '@vaadin/field-base/src/clear-button-mixin.js';
-import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
 import { FieldAriaMixin } from '@vaadin/field-base/src/field-aria-mixin.js';
 import { InputConstraintsMixin } from '@vaadin/field-base/src/input-constraints-mixin.js';
 import { InputSlotMixin } from '@vaadin/field-base/src/input-slot-mixin.js';
@@ -27,9 +26,7 @@ class DatePicker extends DatePickerMixin(
   FieldAriaMixin(
     ClearButtonMixin(
       AriaLabelMixin(
-        InputConstraintsMixin(
-          InputSlotMixin(DelegateFocusMixin(GestureEventListeners(ThemableMixin(ElementMixin(PolymerElement)))))
-        )
+        InputConstraintsMixin(InputSlotMixin(GestureEventListeners(ThemableMixin(ElementMixin(PolymerElement)))))
       )
     )
   )

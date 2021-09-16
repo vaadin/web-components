@@ -55,7 +55,7 @@ assertType<boolean>(datePicker.required);
 assertType<string>(datePicker.name);
 assertType<string | null | undefined>(datePicker.initialPosition);
 
-/* ComboBoxLightElement */
+/* DatePickerLight */
 const datePickerLight = document.createElement('vaadin-date-picker-light');
 
 assertType<DatePickerLight>(datePickerLight);
@@ -75,3 +75,17 @@ datePickerLight.addEventListener('value-changed', (event) => {
   assertType<DatePickerValueChangedEvent>(event);
   assertType<string>(event.detail.value);
 });
+
+assertType<() => boolean>(datePickerLight.checkValidity);
+assertType<() => boolean>(datePickerLight.validate);
+assertType<() => void>(datePickerLight.close);
+assertType<() => void>(datePickerLight.open);
+assertType<string | undefined>(datePickerLight.max);
+assertType<string | undefined>(datePickerLight.min);
+assertType<boolean | null | undefined>(datePickerLight.showWeekNumbers);
+assertType<boolean | null | undefined>(datePickerLight.autoOpenDisabled);
+assertType<boolean | null | undefined>(datePickerLight.opened);
+assertType<Element | null | undefined>(datePickerLight.focusElement);
+assertType<boolean>(datePickerLight.disabled);
+assertType<string>(datePickerLight.value);
+assertType<string | null | undefined>(datePickerLight.initialPosition);

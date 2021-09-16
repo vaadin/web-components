@@ -115,7 +115,7 @@ class DatePickerLight extends ThemableMixin(DatePickerMixin(PolymerElement)) {
        */
       attrForValue: {
         type: String,
-        value: 'bind-value'
+        value: 'value'
       },
 
       /**
@@ -134,17 +134,18 @@ class DatePickerLight extends ThemableMixin(DatePickerMixin(PolymerElement)) {
     super.connectedCallback();
     const cssSelector = 'vaadin-text-field,iron-input,paper-input,.paper-input-input,.input';
     this._setInputElement(this.querySelector(cssSelector));
+    this._setFocusElement(this.inputElement);
   }
 
   set _inputValue(value) {
-    if (this._inputElement) {
-      this._inputElement[dashToCamelCase(this.attrForValue)] = value;
+    if (this.inputElement) {
+      this.inputElement[dashToCamelCase(this.attrForValue)] = value;
     }
   }
 
   /** @return {string | undefined} */
   get _inputValue() {
-    return this._inputElement && this._inputElement[dashToCamelCase(this.attrForValue)];
+    return this.inputElement && this.inputElement[dashToCamelCase(this.attrForValue)];
   }
 }
 

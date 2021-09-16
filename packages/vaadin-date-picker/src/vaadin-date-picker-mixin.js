@@ -15,12 +15,15 @@ import { addListener } from '@polymer/polymer/lib/utils/gestures.js';
 import { InputMixin } from '@vaadin/field-base/src/input-mixin.js';
 import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
 import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
+import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
 
 /**
  * @polymerMixin
  */
 export const DatePickerMixin = (subclass) =>
-  class VaadinDatePickerMixin extends InputMixin(KeyboardMixin(mixinBehaviors([IronResizableBehavior], subclass))) {
+  class VaadinDatePickerMixin extends DelegateFocusMixin(
+    InputMixin(KeyboardMixin(mixinBehaviors([IronResizableBehavior], subclass)))
+  ) {
     static get properties() {
       return {
         /**
