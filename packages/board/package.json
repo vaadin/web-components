@@ -4,7 +4,7 @@
   "description": "Polymer element to create flexible responsive layouts and build nice looking dashboard.",
   "main": "vaadin-board.js",
   "module": "vaadin-board.js",
-  "repository": "vaadin/vaadin-board",
+  "repository": "vaadin/board",
   "keywords": [
     "Vaadin",
     "Board",
@@ -16,9 +16,9 @@
     "polymer"
   ],
   "author": "Vaadin Ltd",
-  "license": "https://raw.githubusercontent.com/vaadin/vaadin-board/master/LICENSE.txt",
+  "license": "https://raw.githubusercontent.com/vaadin/web-components/master/packages/board/LICENSE.txt",
   "bugs": {
-    "url": "https://github.com/vaadin/vaadin-board/issues"
+    "url": "https://github.com/vaadin/web-components/issues"
   },
   "homepage": "https://vaadin.com/components",
   "files": [
