@@ -1,4 +1,4 @@
-import { ComboBoxElement } from './vaadin-combo-box';
+import { ComboBox } from './vaadin-combo-box';
 
 export type ComboBoxDefaultItem = any;
 
@@ -9,7 +9,7 @@ export interface ComboBoxItemModel<TItem> {
 
 export type ComboBoxRenderer<TItem> = (
   root: HTMLElement,
-  comboBox: ComboBoxElement<TItem>,
+  comboBox: ComboBox<TItem>,
   model: ComboBoxItemModel<TItem>
 ) => void;
 

@@ -1,8 +1,8 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { aTimeout, click, fixtureSync, focusout, tap } from '@vaadin/testing-helpers';
+import { aTimeout, click, fixtureSync, focusout, isIOS, tap } from '@vaadin/testing-helpers';
 import '@vaadin/vaadin-template-renderer';
-import { createEventSpy, TOUCH_DEVICE } from './helpers.js';
+import { createEventSpy } from './helpers.js';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
 
@@ -27,14 +27,14 @@ describe('toggling dropdown', () => {
   describe('opening', () => {
     it('should open synchronously by clicking label', () => {
       expect(comboBox.opened).to.be.false;
-      tap(input.shadowRoot.querySelector('label'));
+      tap(comboBox.querySelector('[slot="label"]'));
       expect(comboBox.opened).to.be.true;
     });
 
     it('should not open synchronously by clicking label when autoOpenDisabled is true', () => {
       comboBox.autoOpenDisabled = true;
       expect(comboBox.opened).to.be.false;
-      tap(input.shadowRoot.querySelector('label'));
+      tap(comboBox.querySelector('[slot="label"]'));
       expect(comboBox.opened).to.be.false;
     });
 
@@ -42,7 +42,7 @@ describe('toggling dropdown', () => {
       comboBox.setAttribute('focus-ring', '');
       comboBox.opened = true;
       comboBox.opened = false;
-      expect(!comboBox.hasAttribute('focused') || comboBox.focusElement.hasAttribute('focus-ring')).to.be.true;
+      expect(comboBox.hasAttribute('focus-ring')).to.be.true;
     });
 
     it('should open synchronously by clicking input', () => {
@@ -120,32 +120,32 @@ describe('toggling dropdown', () => {
       expect(overlay.hidden).to.be.true;
     });
 
-    describe('after opening', () => {
+    (isIOS ? describe : describe.skip)('after opening', () => {
       beforeEach(() => {
         comboBox.open();
       });
 
-      (TOUCH_DEVICE ? it : it.skip)('should not focus input on dropdown open', () => {
-        expect(input.hasAttribute('focused')).to.be.false;
+      it('should not set focused attribute on dropdown open', () => {
+        expect(comboBox.hasAttribute('focused')).to.be.false;
       });
 
-      (TOUCH_DEVICE ? it : it.skip)('should not refocus the input field when closed from icon', () => {
+      it('should not refocus the input field when closed from icon', () => {
         clickToggleIcon();
-        expect(input.hasAttribute('focused')).to.be.false;
+        expect(comboBox.hasAttribute('focused')).to.be.false;
       });
 
-      (TOUCH_DEVICE ? it.skip : it)('should focus input on dropdown open', async () => {
+      it('should focus input on dropdown open after a timeout', async () => {
         await aTimeout(1);
-        expect(input.hasAttribute('focused')).to.be.true;
+        expect(comboBox.hasAttribute('focused')).to.be.true;
       });
 
-      (TOUCH_DEVICE ? it.skip : it)('should refocus the input field when closed from icon', async () => {
+      it('should refocus the input field when closed from icon', async () => {
         clickToggleIcon();
         await aTimeout(1);
-        expect(input.hasAttribute('focused')).to.be.true;
+        expect(comboBox.hasAttribute('focused')).to.be.true;
       });
 
-      (TOUCH_DEVICE ? it.skip : it)('should prevent default on overlay mousedown', () => {
+      it('should prevent default on overlay mousedown', () => {
         const preventDefaultSpy = sinon.spy();
         const event = createEventSpy('mousedown', preventDefaultSpy);
         overlay.dispatchEvent(event);
@@ -156,7 +156,7 @@ describe('toggling dropdown', () => {
   });
 
   describe('closing', () => {
-    (TOUCH_DEVICE ? it : it.skip)('should close popup when clicking outside overlay', () => {
+    (isIOS ? it : it.skip)('should close popup when clicking outside overlay', () => {
       comboBox.open();
 
       click(document.body);
@@ -164,7 +164,7 @@ describe('toggling dropdown', () => {
       expect(comboBox.opened).to.be.false;
     });
 
-    (TOUCH_DEVICE ? it.skip : it)('should close popup when clicking outside overlay', () => {
+    (isIOS ? it.skip : it)('should close popup when clicking outside overlay', () => {
       comboBox.open();
 
       document.body.click();
@@ -280,7 +280,7 @@ describe('toggling dropdown', () => {
     });
   });
 
-  (TOUCH_DEVICE ? describe : describe.skip)('external focus (initially)', () => {
+  (isIOS ? describe : describe.skip)('external focus (initially)', () => {
     let input, blurSpy;
 
     beforeEach(() => {

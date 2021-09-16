@@ -192,7 +192,7 @@ describe('selecting items', () => {
 
     it('should fire on clear', () => {
       comboBox.value = 'foo';
-      comboBox.inputElement.$.clearButton.click();
+      comboBox.$.clearButton.click();
 
       expect(changeSpy.callCount).to.equal(1);
     });
@@ -248,15 +248,13 @@ describe('selecting items', () => {
 });
 
 describe('clearing a selection', () => {
-  let comboBox;
-
-  let clearIcon;
+  let comboBox, clearIcon;
 
   beforeEach(() => {
     comboBox = fixtureSync('<vaadin-combo-box style="width: 320px" clear-button-visible></vaadin-combo-box>');
     comboBox.items = ['foo', 'bar'];
     comboBox.value = 'foo';
-    clearIcon = comboBox.inputElement.$.clearButton;
+    clearIcon = comboBox.$.clearButton;
   });
 
   it('should show the clearing icon only when comboBox has value', () => {

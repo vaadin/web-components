@@ -1,14 +1,5 @@
 import { click, fire, mousedown, mouseup } from '@vaadin/testing-helpers';
 
-export const TOUCH_DEVICE = (() => {
-  try {
-    document.createEvent('TouchEvent');
-    return true;
-  } catch (e) {
-    return false;
-  }
-})();
-
 export const createEventSpy = (type, preventDefault) => {
   // Fake a keydown event to mimic form submit.
   const event = new CustomEvent(type, {

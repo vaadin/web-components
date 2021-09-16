@@ -4,14 +4,17 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { IronA11yAnnouncer } from '@polymer/iron-a11y-announcer/iron-a11y-announcer.js';
+import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
+import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
+import { InputMixin } from '@vaadin/field-base/src/input-mixin.js';
 import { ComboBoxPlaceholder } from './vaadin-combo-box-placeholder.js';
 
 /**
  * @polymerMixin
  */
 export const ComboBoxMixin = (subclass) =>
-  class VaadinComboBoxMixinElement extends subclass {
+  class VaadinComboBoxMixinElement extends KeyboardMixin(InputMixin(DisabledMixin(subclass))) {
     static get properties() {
       return {
         /**
@@ -30,20 +33,12 @@ export const ComboBoxMixin = (subclass) =>
          * Set true to prevent the overlay from opening automatically.
          * @attr {boolean} auto-open-disabled
          */
-        autoOpenDisabled: Boolean,
-
-        /**
-         * Set to true to disable this element.
-         * @type {boolean}
-         */
-        disabled: {
-          type: Boolean,
-          value: false,
-          reflectToAttribute: true
+        autoOpenDisabled: {
+          type: Boolean
         },
 
         /**
-         * When present, it specifies that the element field is read-only.
+         * When present, it specifies that the field is read-only.
          * @type {boolean}
          */
         readonly: {
@@ -100,22 +95,6 @@ export const ComboBoxMixin = (subclass) =>
         },
 
         /**
-         * The `String` value for the selected item of the combo box.
-         *
-         * When there’s no item selected, the value is an empty string.
-         *
-         * Use `selectedItem` property to get the raw selected item from
-         * the `items` array.
-         * @type {string}
-         */
-        value: {
-          type: String,
-          observer: '_valueChanged',
-          notify: true,
-          value: ''
-        },
-
-        /**
          * Used to detect user value changes and fire `change` events.
          * @private
          */
@@ -128,7 +107,8 @@ export const ComboBoxMixin = (subclass) =>
         loading: {
           type: Boolean,
           value: false,
-          reflectToAttribute: true
+          reflectToAttribute: true,
+          observer: '_loadingChanged'
         },
 
         /**
@@ -200,43 +180,16 @@ export const ComboBoxMixin = (subclass) =>
         itemIdPath: String,
 
         /**
-         * The name of this element.
-         */
-        name: {
-          type: String
-        },
-
-        /**
-         * Set to true if the value is invalid.
-         * @type {boolean}
-         */
-        invalid: {
-          type: Boolean,
-          reflectToAttribute: true,
-          notify: true,
-          value: false
-        },
-
-        /**
          * @type {!HTMLElement | undefined}
          * @protected
          */
-        _toggleElement: Object,
-
-        /**
-         * @type {!HTMLElement | undefined}
-         * @protected
-         */
-        _clearElement: Object,
-
-        /** @protected */
-        _inputElementValue: String,
+        _toggleElement: {
+          type: Object,
+          observer: '_toggleElementChanged'
+        },
 
         /** @private */
-        _closeOnBlurIsPrevented: Boolean,
-
-        /** @private */
-        _previousDocumentPointerEvents: String
+        _closeOnBlurIsPrevented: Boolean
       };
     }
 
@@ -245,9 +198,7 @@ export const ComboBoxMixin = (subclass) =>
         '_filterChanged(filter, itemValuePath, itemLabelPath)',
         '_itemsOrPathsChanged(items.*, itemValuePath, itemLabelPath)',
         '_filteredItemsChanged(filteredItems.*, itemValuePath, itemLabelPath)',
-        '_loadingChanged(loading)',
-        '_selectedItemChanged(selectedItem, itemLabelPath)',
-        '_toggleElementChanged(_toggleElement)'
+        '_selectedItemChanged(selectedItem, itemLabelPath)'
       ];
     }
 
@@ -257,10 +208,48 @@ export const ComboBoxMixin = (subclass) =>
       this._boundOverlaySelectedItemChanged = this._overlaySelectedItemChanged.bind(this);
       this._boundClose = this.close.bind(this);
       this._boundOnOpened = this._onOpened.bind(this);
-      this._boundOnKeyDown = this._onKeyDown.bind(this);
       this._boundOnClick = this._onClick.bind(this);
       this._boundOnOverlayTouchAction = this._onOverlayTouchAction.bind(this);
       this._boundOnTouchend = this._onTouchend.bind(this);
+    }
+
+    /**
+     * @return {string | undefined}
+     * @protected
+     */
+    get _inputElementValue() {
+      return this.inputElement ? this.inputElement[this._propertyForValue] : undefined;
+    }
+
+    /**
+     * @param {string} value
+     * @protected
+     */
+    set _inputElementValue(value) {
+      if (this.inputElement) {
+        this.inputElement[this._propertyForValue] = value;
+      }
+    }
+
+    /**
+     * Override method inherited from `InputMixin`
+     * to customize the input element.
+     * @protected
+     * @override
+     */
+    _inputElementChanged(input) {
+      super._inputElementChanged(input);
+
+      if (input) {
+        input.autocomplete = 'off';
+        input.autocapitalize = 'off';
+
+        input.setAttribute('role', 'combobox');
+        input.setAttribute('aria-autocomplete', 'list');
+        input.setAttribute('aria-expanded', this.opened);
+
+        this._revertInputValueToValue();
+      }
     }
 
     /** @protected */
@@ -276,7 +265,6 @@ export const ComboBoxMixin = (subclass) =>
 
       this.addEventListener('vaadin-combo-box-dropdown-closed', this._boundClose);
       this.addEventListener('vaadin-combo-box-dropdown-opened', this._boundOnOpened);
-      this.addEventListener('keydown', this._boundOnKeyDown);
       this.addEventListener('click', this._boundOnClick);
 
       this.$.dropdown.addEventListener('vaadin-overlay-touch-action', this._boundOnOverlayTouchAction);
@@ -340,24 +328,28 @@ export const ComboBoxMixin = (subclass) =>
     }
 
     /** @private */
-    _openedChanged(value, old) {
+    _openedChanged(opened, wasOpened) {
       // Prevent _close() being called when opened is set to its default value (false).
-      if (old === undefined) {
+      if (wasOpened === undefined) {
         return;
       }
 
-      if (this.opened) {
-        this._openedWithFocusRing =
-          this.hasAttribute('focus-ring') || (this.focusElement && this.focusElement.hasAttribute('focus-ring'));
-        // For touch devices, we don't want to popup virtual keyboard unless input is explicitly focused by the user.
+      if (opened) {
+        this._openedWithFocusRing = this.hasAttribute('focus-ring');
+        // For touch devices, we don't want to popup virtual keyboard
+        // unless input element is explicitly focused by the user.
         if (!this.hasAttribute('focused') && !this.$.dropdown.touchDevice) {
           this.focus();
         }
       } else {
         this._onClosed();
         if (this._openedWithFocusRing && this.hasAttribute('focused')) {
-          this.focusElement.setAttribute('focus-ring', '');
+          this.setAttribute('focus-ring', '');
         }
+      }
+
+      if (this.inputElement) {
+        this.inputElement.setAttribute('aria-expanded', opened);
       }
     }
 
@@ -370,29 +362,48 @@ export const ComboBoxMixin = (subclass) =>
       this._closeOnBlurIsPrevented = false;
     }
 
+    /** @protected */
+    _isClearButton(event) {
+      return event.composedPath()[0] === this.clearElement;
+    }
+
+    /**
+     * @param {Event} event
+     * @protected
+     */
+    _handleClearButtonClick(event) {
+      event.preventDefault();
+      this._clear();
+      this.focus();
+    }
+
     /** @private */
     _onClick(e) {
       this._closeOnBlurIsPrevented = true;
 
       const path = e.composedPath();
-      const isClearElement = path.indexOf(this._clearElement) !== -1 || path[0].getAttribute('part') === 'clear-button';
-      if (isClearElement) {
-        this._clear();
-        this.focus();
-      } else if (path.indexOf(this.inputElement) !== -1) {
-        if (path.indexOf(this._toggleElement) > -1 && this.opened) {
+
+      if (this._isClearButton(e)) {
+        this._handleClearButtonClick(e);
+      } else if (path.indexOf(this._toggleElement) > -1) {
+        if (this.opened) {
           this.close();
-        } else if (path.indexOf(this._toggleElement) > -1 || !this.autoOpenDisabled) {
+        } else {
           this.open();
         }
+      } else if (!this.autoOpenDisabled) {
+        this.open();
       }
 
       this._closeOnBlurIsPrevented = false;
     }
 
     /**
-     * Keyboard navigation
-     * @private
+     * Override an event listener from `KeyboardMixin`.
+     * Do not call `super` to also override a listener
+     * for Esc key defined in `ClearButtonMixin`.
+     * @protected
+     * @override
      */
     _onKeyDown(e) {
       if (e.keyCode === 40) {
@@ -464,7 +475,7 @@ export const ComboBoxMixin = (subclass) =>
     /** @private */
     _prefillFocusedItemLabel() {
       if (this._focusedIndex > -1) {
-        // Reset the input value asyncronously to prevent partial value changes
+        // Reset the input value asynchronously to prevent partial value changes
         // announce. Makes OSX VoiceOver to announce the complete value instead.
         this._inputElementValue = '';
         // 1ms delay needed for OSX VoiceOver to realise input value was reset
@@ -477,16 +488,13 @@ export const ComboBoxMixin = (subclass) =>
 
     /** @private */
     _setSelectionRange(start, end) {
-      // vaadin-text-field does not implement setSelectionRange, hence we need the native input
-      const input = this._nativeInput || this.inputElement;
-
       // Setting selection range focuses and/or moves the caret in some browsers,
       // and there's no need to modify the selection range if the input isn't focused anyway.
-      // This affects Safari. When the overlay is open, and then hiting tab, browser should focus
+      // This affects Safari. When the overlay is open, and then hitting tab, browser should focus
       // the next focusable element instead of the combo-box itself.
       // Checking the focused property here is enough instead of checking the activeElement.
-      if (this.hasAttribute('focused') && input && input.setSelectionRange) {
-        input.setSelectionRange(start, end);
+      if (this.hasAttribute('focused')) {
+        this.inputElement.setSelectionRange(start, end);
       }
     }
 
@@ -541,7 +549,7 @@ export const ComboBoxMixin = (subclass) =>
         this._focusedIndex = -1;
         this.cancel();
       } else if (this.opened) {
-        this._stopPropagation(e);
+        e.stopPropagation();
 
         if (this._focusedIndex > -1) {
           this._focusedIndex = -1;
@@ -678,32 +686,37 @@ export const ComboBoxMixin = (subclass) =>
     }
 
     /**
-     * Filtering and items handling
-     * @param {!Event} e
+     * Override an event listener from `InputMixin`.
+     * @param {!Event} event
      * @protected
+     * @override
      */
-    _inputValueChanged(e) {
-      // Handle only input events from our inputElement.
-      if (e.composedPath().indexOf(this.inputElement) !== -1) {
-        this._inputElementValue = this.inputElement[this._propertyForValue];
-        this._filterFromInput(e);
-      }
-    }
-
-    /** @private */
-    _filterFromInput(e) {
-      if (!this.opened && !e.__fromClearButton && !this.autoOpenDisabled) {
+    _onInput(event) {
+      if (!this.opened && !this._isClearButton(event) && !this.autoOpenDisabled) {
         this.open();
       }
 
-      if (this.filter === this._inputElementValue) {
+      const value = this._inputElementValue;
+      if (this.filter === value) {
         // Filter and input value might get out of sync, while keyboard navigating for example.
         // Afterwards, input value might be changed to the same value as used in filtering.
         // In situation like these, we need to make sure all the filter changes handlers are run.
         this._filterChanged(this.filter, this.itemValuePath, this.itemLabelPath);
       } else {
-        this.filter = this._inputElementValue;
+        this.filter = value;
       }
+    }
+
+    /**
+     * Override an event listener from `InputMixin`.
+     * @param {!Event} event
+     * @protected
+     * @override
+     */
+    _onChange(event) {
+      // Suppress the native change event fired on the native input.
+      // We use `_detectAndDispatchChange` to fire a custom event.
+      event.stopPropagation();
     }
 
     /** @private */
@@ -764,15 +777,6 @@ export const ComboBoxMixin = (subclass) =>
     }
 
     /** @private */
-    _updateHasValue(hasValue) {
-      if (hasValue) {
-        this.setAttribute('has-value', '');
-      } else {
-        this.removeAttribute('has-value');
-      }
-    }
-
-    /** @private */
     _selectedItemChanged(selectedItem) {
       if (selectedItem === null || selectedItem === undefined) {
         if (this.filteredItems) {
@@ -780,7 +784,7 @@ export const ComboBoxMixin = (subclass) =>
             this.value = '';
           }
 
-          this._updateHasValue(this.value !== '');
+          this._toggleHasValue(this.value !== '');
           this._inputElementValue = this.value;
         }
       } else {
@@ -794,13 +798,8 @@ export const ComboBoxMixin = (subclass) =>
           }
         }
 
-        this._updateHasValue(true);
+        this._toggleHasValue(true);
         this._inputElementValue = this._getItemLabel(selectedItem);
-
-        // Could not be defined in 1.x because ready is called after all prop-setters
-        if (this.inputElement) {
-          this.inputElement[this._propertyForValue] = this._inputElementValue;
-        }
       }
 
       this.$.dropdown._selectedItem = selectedItem;
@@ -810,10 +809,15 @@ export const ComboBoxMixin = (subclass) =>
       }
     }
 
-    /** @private */
+    /**
+     * Override an observer from `InputMixin`.
+     * @protected
+     * @override
+     */
     _valueChanged(value, oldVal) {
       if (value === '' && oldVal === undefined) {
-        // initializing, no need to do anything (#554)
+        // Initializing, no need to do anything
+        // See https://github.com/vaadin/vaadin-combo-box/issues/554
         return;
       }
 
@@ -829,7 +833,7 @@ export const ComboBoxMixin = (subclass) =>
           this._inputElementValue = value;
         }
 
-        this._updateHasValue(this.value !== '');
+        this._toggleHasValue(this.value !== '');
       } else {
         this.selectedItem = null;
       }
@@ -981,7 +985,7 @@ export const ComboBoxMixin = (subclass) =>
 
     /** @private */
     _onTouchend(event) {
-      if (!this._clearElement || event.composedPath()[0] !== this._clearElement) {
+      if (!this.clearElement || event.composedPath()[0] !== this.clearElement) {
         return;
       }
 
@@ -999,15 +1003,17 @@ export const ComboBoxMixin = (subclass) =>
     }
 
     /**
-     * Returns true if the current input value satisfies all constraints (if any)
+     * Returns true if the current input value satisfies all constraints (if any).
+     * You can override this method for custom validations.
      *
-     * You can override the `checkValidity` method for custom validations.
-     * @return {boolean | undefined}
+     * @return {boolean}
      */
     checkValidity() {
-      if (this.inputElement.validate) {
-        return this.inputElement.validate();
+      if (super.checkValidity) {
+        return super.checkValidity();
       }
+
+      return !this.required || !!this.value;
     }
 
     /** @protected */
@@ -1033,14 +1039,6 @@ export const ComboBoxMixin = (subclass) =>
     /** @private */
     _preventDefault(e) {
       e.preventDefault();
-    }
-
-    /**
-     * @param {!Event} e
-     * @protected
-     */
-    _stopPropagation(e) {
-      e.stopPropagation();
     }
 
     /**

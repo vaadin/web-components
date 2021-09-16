@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
-import { ComboBoxLightElement } from '@vaadin/vaadin-combo-box/src/vaadin-combo-box-light.js';
+import { ComboBoxLight } from '@vaadin/vaadin-combo-box/src/vaadin-combo-box-light.js';
 import '../vaadin-time-picker.js';
 
 describe('dropdown', () => {
@@ -11,7 +11,7 @@ describe('dropdown', () => {
   });
 
   it('vaadin-combo-box-light should exist', () => {
-    expect(timePicker.__dropdownElement instanceof ComboBoxLightElement).to.be.true;
+    expect(timePicker.__dropdownElement).to.be.instanceOf(ComboBoxLight);
   });
 
   it('vaadin-combo-box-light should have a toggle element', () => {

@@ -4,12 +4,17 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { ControlStateMixin } from '@vaadin/vaadin-control-state-mixin/vaadin-control-state-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import '@vaadin/vaadin-text-field/src/vaadin-text-field.js';
-import { ComboBoxMixin } from './vaadin-combo-box-mixin.js';
+import { AriaLabelMixin } from '@vaadin/field-base/src/aria-label-mixin.js';
+import { ClearButtonMixin } from '@vaadin/field-base/src/clear-button-mixin.js';
+import { FieldAriaMixin } from '@vaadin/field-base/src/field-aria-mixin.js';
+import { InputSlotMixin } from '@vaadin/field-base/src/input-slot-mixin.js';
+import { PatternMixin } from '@vaadin/field-base/src/pattern-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin';
 import { ComboBoxDataProviderMixin } from './vaadin-combo-box-data-provider-mixin.js';
+import { ComboBoxMixin } from './vaadin-combo-box-mixin.js';
+import '@vaadin/input-container/src/vaadin-input-container.js';
+import '@vaadin/text-field/src/vaadin-input-field-shared-styles.js';
 import './vaadin-combo-box-dropdown.js';
 
 /**
@@ -158,69 +163,67 @@ import './vaadin-combo-box-dropdown.js';
  *
  * @extends HTMLElement
  * @mixes ElementMixin
- * @mixes ControlStateMixin
+ * @mixes ThemableMixin
+ * @mixes InputSlotMixin
+ * @mixes AriaLabelMixin
+ * @mixes ClearButtonMixin
+ * @mixes FieldAriaMixin
+ * @mixes PatternMixin
  * @mixes ComboBoxDataProviderMixin
  * @mixes ComboBoxMixin
- * @mixes ThemableMixin
  */
-class ComboBoxElement extends ElementMixin(
-  ControlStateMixin(ThemableMixin(ComboBoxDataProviderMixin(ComboBoxMixin(PolymerElement))))
+class ComboBox extends ComboBoxDataProviderMixin(
+  ComboBoxMixin(
+    PatternMixin(
+      FieldAriaMixin(ClearButtonMixin(AriaLabelMixin(InputSlotMixin(ThemableMixin(ElementMixin(PolymerElement))))))
+    )
+  )
 ) {
+  static get is() {
+    return 'vaadin-combo-box';
+  }
+
   static get template() {
     return html`
-      <style>
-        :host {
-          display: inline-block;
-        }
-
-        :host([hidden]) {
-          display: none !important;
-        }
-
+      <style include="vaadin-input-field-shared-styles">
         :host([opened]) {
           pointer-events: auto;
         }
-
-        [part='text-field'] {
-          width: 100%;
-          min-width: 0;
-        }
       </style>
 
-      <vaadin-text-field
-        part="text-field"
-        id="input"
-        pattern="[[pattern]]"
-        prevent-invalid-input="[[preventInvalidInput]]"
-        value="{{_inputElementValue}}"
-        autocomplete="off"
-        invalid="[[invalid]]"
-        label="[[label]]"
-        name="[[name]]"
-        placeholder="[[placeholder]]"
-        required="[[required]]"
-        disabled="[[disabled]]"
-        readonly="[[readonly]]"
-        helper-text="[[helperText]]"
-        error-message="[[errorMessage]]"
-        autocapitalize="none"
-        autofocus="[[autofocus]]"
-        on-change="_stopPropagation"
-        on-input="_inputValueChanged"
-        clear-button-visible="[[clearButtonVisible]]"
-        theme$="[[theme]]"
-      >
-        <slot name="prefix" slot="prefix"></slot>
-        <slot name="helper" slot="helper">[[helperText]]</slot>
+      <div part="container">
+        <div part="label" on-click="focus">
+          <slot name="label"></slot>
+          <span part="indicator" aria-hidden="true"></span>
+        </div>
 
-        <div part="toggle-button" id="toggleButton" slot="suffix" role="button" aria-label="Toggle"></div>
-      </vaadin-text-field>
+        <vaadin-input-container
+          part="input-field"
+          readonly="[[readonly]]"
+          disabled="[[disabled]]"
+          invalid="[[invalid]]"
+          theme$="[[theme]]"
+        >
+          <slot name="prefix" slot="prefix"></slot>
+          <slot name="input"></slot>
+          <div id="clearButton" part="clear-button" slot="suffix"></div>
+          <div id="toggleButton" part="toggle-button" slot="suffix"></div>
+        </vaadin-input-container>
+
+        <div part="helper-text">
+          <slot name="helper"></slot>
+        </div>
+
+        <div part="error-message">
+          <slot name="error-message"></slot>
+        </div>
+      </div>
 
       <vaadin-combo-box-dropdown
         id="dropdown"
         opened="[[opened]]"
         renderer="[[renderer]]"
-        position-target="[[_getPositionTarget()]]"
+        position-target="[[_positionTarget]]"
         _focused-index="[[_focusedIndex]]"
         _item-id-path="[[itemIdPath]]"
         _item-label-path="[[itemLabelPath]]"
@@ -230,190 +233,89 @@ class ComboBoxElement extends ElementMixin(
     `;
   }
 
-  constructor() {
-    super();
-    /**
-     * @property
-     */
-    this.theme;
-  }
-
-  static get is() {
-    return 'vaadin-combo-box';
-  }
-
   static get properties() {
     return {
       /**
-       * The label for this element.
+       * @protected
        */
-      label: {
-        type: String,
-        reflectToAttribute: true
-      },
-
-      /**
-       * Set to true to mark the input as required.
-       * @type {boolean}
-       */
-      required: {
-        type: Boolean,
-        value: false
-      },
-
-      /**
-       * Set to true to disable this input.
-       * @type {boolean}
-       */
-      disabled: {
-        type: Boolean,
-        value: false
-      },
-
-      /**
-       * Set to true to prevent the user from entering invalid input.
-       * @attr {boolean} prevent-invalid-input
-       */
-      preventInvalidInput: {
-        type: Boolean
-      },
-
-      /**
-       * A pattern to validate the `input` with.
-       */
-      pattern: {
-        type: String
-      },
-
-      /**
-       * The error message to display when the input is invalid.
-       * @attr {string} error-message
-       */
-      errorMessage: {
-        type: String
-      },
-
-      /** @type {boolean} */
-      autofocus: {
-        type: Boolean
-      },
-
-      /**
-       * A placeholder string in addition to the label.
-       * @type {string}
-       */
-      placeholder: {
-        type: String,
-        value: ''
-      },
-
-      /**
-       * String used for the helper text.
-       * @attr {string} helper-text
-       */
-      helperText: {
-        type: String,
-        value: ''
-      },
-
-      /**
-       * Set to true to prevent the user from picking a value or typing in the input.
-       * @type {boolean}
-       */
-      readonly: {
-        type: Boolean,
-        value: false,
-        reflectToAttribute: true
-      },
-
-      /**
-       * Set to true to display the clear icon which clears the input.
-       * @attr {boolean} clear-button-visible
-       * @type {boolean}
-       */
-      clearButtonVisible: {
-        type: Boolean,
-        value: false
+      _positionTarget: {
+        type: Object
       }
     };
   }
 
-  static get observers() {
-    return ['_updateAriaExpanded(opened)'];
+  /**
+   * Used by `ClearButtonMixin` as a reference to the clear button element.
+   * @protected
+   * @return {!HTMLElement}
+   */
+  get clearElement() {
+    return this.$.clearButton;
+  }
+
+  /**
+   * Element used by `DelegatesFocusMixin` to handle focus.
+   * @protected
+   * @return {!HTMLInputElement}
+   */
+  get focusElement() {
+    return this.inputElement;
   }
 
   /** @protected */
   ready() {
     super.ready();
 
-    this._nativeInput = this.inputElement.focusElement;
+    this._positionTarget = this.shadowRoot.querySelector('[part="input-field"]');
     this._toggleElement = this.$.toggleButton;
-    this._clearElement = this.inputElement.shadowRoot.querySelector('[part="clear-button"]');
-
-    // Stop propagation of Esc in capturing phase so that
-    // vaadin-text-field will not handle Esc as a shortcut
-    // to clear the value.
-    // We need to set this listener for "this.inputElement"
-    // instead of just "this", otherwise keyboard navigation behaviour
-    // breaks a bit on Safari and some related tests fail.
-    this.inputElement.addEventListener(
-      'keydown',
-      (e) => {
-        if (e.keyCode === 27) {
-          this._stopPropagation(e);
-          // Trigger _onEscape method of vaadin-combo-box-mixin because
-          // bubbling phase is not reached.
-          this._onEscape(e);
-        }
-      },
-      true
-    );
-
-    this._nativeInput.setAttribute('role', 'combobox');
-    this._nativeInput.setAttribute('aria-autocomplete', 'list');
-    this._updateAriaExpanded();
-  }
-
-  /** @protected */
-  connectedCallback() {
-    super.connectedCallback();
-    this._preventInputBlur();
-  }
-
-  /** @protected */
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    this._restoreInputBlur();
-  }
-
-  /** @private */
-  _getPositionTarget() {
-    return this.$.input;
-  }
-
-  /** @private */
-  _updateAriaExpanded() {
-    if (this._nativeInput) {
-      this._nativeInput.setAttribute('aria-expanded', this.opened);
-      this._toggleElement.setAttribute('aria-expanded', this.opened);
-    }
-  }
-
-  /** @return {!TextFieldElement | undefined} */
-  get inputElement() {
-    return this.$.input;
   }
 
   /**
-   * Focusable element used by vaadin-control-state-mixin
-   * @return {!HTMLElement}
+   * Override method inherited from `FocusMixin` to validate on blur.
+   * @param {boolean} focused
+   * @protected
+   * @override
    */
-  get focusElement() {
-    // inputElement might not be defined on property changes before ready.
-    return this.inputElement || this;
+  _setFocused(focused) {
+    super._setFocused(focused);
+
+    if (!focused) {
+      this.validate();
+    }
+  }
+
+  /**
+   * Override method inherited from `FocusMixin` to not remove focused
+   * state when focus moves to the overlay.
+   * @param {FocusEvent} event
+   * @return {boolean}
+   * @protected
+   * @override
+   */
+  _shouldRemoveFocus(event) {
+    // Do not blur when focus moves to the overlay
+    if (event.relatedTarget === this.$.dropdown.$.overlay) {
+      event.composedPath()[0].focus();
+      return false;
+    }
+
+    return true;
+  }
+
+  /**
+   * Override method inherited from `ClearButtonMixin` to handle clear
+   * button click and stop event from propagating to the host element.
+   * @param {Event} event
+   * @protected
+   * @override
+   */
+  _onClearButtonClick(event) {
+    event.stopPropagation();
+
+    this._handleClearButtonClick(event);
   }
 }
 
-customElements.define(ComboBoxElement.is, ComboBoxElement);
+customElements.define(ComboBox.is, ComboBox);
 
-export { ComboBoxElement };
+export { ComboBox };

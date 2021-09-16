@@ -3,12 +3,15 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { ControlStateMixin } from '@vaadin/vaadin-control-state-mixin/vaadin-control-state-mixin';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { TextFieldElement } from '@vaadin/vaadin-text-field/vaadin-text-field';
+import { AriaLabelMixin } from '@vaadin/field-base/src/aria-label-mixin.js';
+import { ClearButtonMixin } from '@vaadin/field-base/src/clear-button-mixin.js';
+import { FieldAriaMixin } from '@vaadin/field-base/src/field-aria-mixin.js';
+import { InputSlotMixin } from '@vaadin/field-base/src/input-slot-mixin.js';
+import { PatternMixin } from '@vaadin/field-base/src/pattern-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin';
-import { ComboBoxMixin } from './vaadin-combo-box-mixin';
-import { ComboBoxDataProviderMixin } from './vaadin-combo-box-data-provider-mixin';
+import { ComboBoxDataProviderMixin } from './vaadin-combo-box-data-provider-mixin.js';
+import { ComboBoxMixin } from './vaadin-combo-box-mixin.js';
 import { ComboBoxDefaultItem, ComboBoxEventMap } from './interfaces';
 
 /**
@@ -155,94 +158,35 @@ import { ComboBoxDefaultItem, ComboBoxEventMap } from './interfaces';
  * @fires {CustomEvent} selected-item-changed - Fired when the `selectedItem` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  */
-declare class ComboBoxElement<TItem = ComboBoxDefaultItem> extends HTMLElement {
-  /**
-   * Focusable element used by vaadin-control-state-mixin
-   */
-  readonly focusElement: HTMLElement;
-
-  autofocus: boolean;
-
-  /**
-   * Set to true to disable this input.
-   */
-  disabled: boolean;
-
-  /**
-   * Set to true to prevent the user from picking a value or typing in the input.
-   */
-  readonly: boolean;
-
-  readonly inputElement: TextFieldElement | undefined;
-
-  /**
-   * The label for this element.
-   */
-  label: string | null | undefined;
-
-  /**
-   * Set to true to mark the input as required.
-   */
-  required: boolean;
-
-  /**
-   * Set to true to prevent the user from entering invalid input.
-   * @attr {boolean} prevent-invalid-input
-   */
-  preventInvalidInput: boolean | null | undefined;
-
-  /**
-   * A pattern to validate the `input` with.
-   */
-  pattern: string | null | undefined;
-
-  /**
-   * The error message to display when the input is invalid.
-   * @attr {string} error-message
-   */
-  errorMessage: string | null | undefined;
-
-  /**
-   * A placeholder string in addition to the label.
-   */
-  placeholder: string;
-
-  /**
-   * String used for the helper text.
-   * @attr {string} helper-text
-   */
-  helperText: string | null | undefined;
-
-  /**
-   * Set to true to display the clear icon which clears the input.
-   * @attr {boolean} clear-button-visible
-   */
-  clearButtonVisible: boolean;
-
+declare class ComboBox<TItem = ComboBoxDefaultItem> extends HTMLElement {
   addEventListener<K extends keyof ComboBoxEventMap<TItem>>(
     type: K,
-    listener: (this: ComboBoxElement<TItem>, ev: ComboBoxEventMap<TItem>[K]) => void,
+    listener: (this: ComboBox<TItem>, ev: ComboBoxEventMap<TItem>[K]) => void,
     options?: boolean | AddEventListenerOptions
   ): void;
 
   removeEventListener<K extends keyof ComboBoxEventMap<TItem>>(
     type: K,
-    listener: (this: ComboBoxElement<TItem>, ev: ComboBoxEventMap<TItem>[K]) => void,
+    listener: (this: ComboBox<TItem>, ev: ComboBoxEventMap<TItem>[K]) => void,
     options?: boolean | EventListenerOptions
   ): void;
 }
 
-interface ComboBoxElement<TItem = ComboBoxDefaultItem>
-  extends ElementMixin,
-    ControlStateMixin,
-    ComboBoxDataProviderMixin<TItem>,
+interface ComboBox<TItem = ComboBoxDefaultItem>
+  extends ComboBoxDataProviderMixin<TItem>,
     ComboBoxMixin<TItem>,
-    ThemableMixin {}
+    PatternMixin,
+    FieldAriaMixin,
+    ClearButtonMixin,
+    AriaLabelMixin,
+    InputSlotMixin,
+    ThemableMixin,
+    ElementMixin {}
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-combo-box': ComboBoxElement;
+    'vaadin-combo-box': ComboBox;
   }
 }
 
-export { ComboBoxElement };
+export { ComboBox };

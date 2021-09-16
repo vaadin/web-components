@@ -1,3 +1,4 @@
+import '@vaadin/input-container/theme/material/vaadin-input-container.js';
 import './vaadin-combo-box-dropdown-styles.js';
 import './vaadin-combo-box-item-styles.js';
 import './vaadin-combo-box-styles.js';

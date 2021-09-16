@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { fixtureSync, nextFrame, aTimeout, enterKeyDown, fire } from '@vaadin/testing-helpers';
 import { flush } from '@polymer/polymer/lib/utils/flush.js';
-import '@polymer/iron-input/iron-input.js';
+import '@vaadin/vaadin-text-field/vaadin-text-field.js';
 import { ComboBoxPlaceholder } from '../src/vaadin-combo-box-placeholder.js';
 import {
   flushComboBox,
@@ -129,7 +129,7 @@ describe('lazy loading', () => {
         comboBox.dataProvider = dataProvider;
         comboBox.selectedItem = 'item 0';
         comboBox.clearButtonVisible = true;
-        comboBox.inputElement.$.clearButton.click();
+        comboBox.$.clearButton.click();
         comboBox.opened = true;
         flush();
         expect(comboBox.value).to.be.empty;
@@ -1151,10 +1151,8 @@ describe('lazy loading', () => {
   describe('combo-box-light', () => {
     beforeEach(() => {
       comboBox = fixtureSync(`
-        <vaadin-combo-box-light attr-for-value="bind-value">
-          <iron-input>
-            <input>
-          </iron-input>
+        <vaadin-combo-box-light>
+          <vaadin-text-field></vaadin-text-field>
         </vaadin-combo-box-light>
       `);
     });

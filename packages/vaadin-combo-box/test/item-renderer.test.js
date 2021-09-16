@@ -9,8 +9,6 @@ import '../vaadin-combo-box.js';
 describe('item renderer', () => {
   let comboBox;
 
-  let items;
-
   beforeEach(() => {
     comboBox = fixtureSync(`
       <vaadin-combo-box
@@ -18,8 +16,7 @@ describe('item renderer', () => {
         item-value-path="symbol">
       </vaadin-combo-box>
     `);
-    items = ['foo', 'bar', 'baz'];
-    comboBox.items = items;
+    comboBox.items = ['foo', 'bar', 'baz'];
   });
 
   afterEach(() => {

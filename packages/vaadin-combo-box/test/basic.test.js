@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { fixtureSync } from '@vaadin/testing-helpers';
 import { getFirstItem, getViewportItems } from './helpers.js';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
@@ -12,17 +12,6 @@ describe('Properties', () => {
     comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
     overlay = comboBox.$.dropdown.$.overlay;
     input = comboBox.inputElement;
-  });
-
-  describe('direction attribute', () => {
-    it('should preserve and propagate dir to the dropdown overlay', () => {
-      comboBox.setAttribute('dir', 'ltr');
-      document.documentElement.setAttribute('dir', 'rtl');
-      comboBox.items = ['foo', 'bar'];
-      comboBox.open();
-      expect(overlay.getAttribute('dir')).to.eql('ltr');
-      document.documentElement.removeAttribute('dir');
-    });
   });
 
   describe('items property', () => {
@@ -116,11 +105,22 @@ describe('Properties', () => {
   });
 
   describe('pattern property', () => {
+    beforeEach(() => {
+      comboBox.allowCustomValue = true;
+    });
+
     it('should work with the allowed pattern', () => {
       comboBox.pattern = '[0-9]*';
-      comboBox.allowCustomValue = true;
       comboBox.value = 'foo';
       expect(comboBox.validate()).to.be.false;
+    });
+
+    it('should support preventInvalidInput property', () => {
+      comboBox.pattern = '[0-9]*';
+      comboBox.preventInvalidInput = true;
+      input.value = 'foo';
+      input.dispatchEvent(new CustomEvent('input'));
+      expect(comboBox.value).to.equal('');
     });
   });
 
@@ -170,7 +170,7 @@ describe('Properties', () => {
       expect(input.value).to.eql('foo');
     });
 
-    describe('`custom-value-set` event', () => {
+    describe('custom-value-set event', () => {
       beforeEach(() => (comboBox.items = ['a', 'b']));
 
       it('should be fired when custom value is set', () => {
@@ -237,9 +237,9 @@ describe('Properties', () => {
       expect(comboBox.label).to.be.undefined;
     });
 
-    it('should be bound to label element', () => {
-      comboBox.label = 'This is LABEL';
-      expect(input.shadowRoot.querySelector('label').innerHTML).to.eql('This is LABEL');
+    it('should be set label element text content', () => {
+      comboBox.label = 'Label';
+      expect(comboBox.querySelector('[slot="label"]').textContent).to.eql('Label');
     });
   });
 
@@ -339,17 +339,14 @@ describe('Properties', () => {
     });
   });
 
-  describe('clear button', () => {
-    it('should not have clear-button-visible by default', () => {
-      expect(comboBox.clearButtonVisible).to.equal(false);
-      expect(input.clearButtonVisible).to.equal(false);
-    });
-  });
-
-  describe('helper text', () => {
-    it('should display the helper text when provided', () => {
-      comboBox.helperText = 'Foo';
-      expect(input.helperText).to.equal(comboBox.helperText);
+  describe('dir attribute', () => {
+    it('should preserve and propagate dir to the dropdown overlay', () => {
+      comboBox.setAttribute('dir', 'ltr');
+      document.documentElement.setAttribute('dir', 'rtl');
+      comboBox.items = ['foo', 'bar'];
+      comboBox.open();
+      expect(overlay.getAttribute('dir')).to.eql('ltr');
+      document.documentElement.removeAttribute('dir');
     });
   });
 });
@@ -375,23 +372,22 @@ describe('inside flexbox', () => {
 describe('slots', () => {
   let comboBox;
 
-  beforeEach(async () => {
+  beforeEach(() => {
     comboBox = fixtureSync(`
       <vaadin-combo-box>
         <div slot="prefix">foo</div>
         <div slot="helper">bar</div>
       </vaadin-combo-box>
     `);
-    await nextFrame();
   });
 
-  it('should expose the text-field prefix slot', () => {
-    const slot = comboBox.inputElement.querySelector('slot[name=prefix]');
+  it('should expose the prefix slot', () => {
+    const slot = comboBox.shadowRoot.querySelector('slot[name="prefix"]');
     expect(slot.assignedNodes()[0].textContent).to.eql('foo');
   });
 
-  it('should expose the text-field helper slot', () => {
-    const slot = comboBox.inputElement.querySelector('[slot="helper"]');
+  it('should expose the helper slot', () => {
+    const slot = comboBox.shadowRoot.querySelector('slot[name="helper"]');
     expect(slot.assignedNodes()[0].textContent).to.eql('bar');
   });
 });
@@ -403,8 +399,9 @@ describe('theme attribute', () => {
     comboBox = fixtureSync('<vaadin-combo-box theme="foo"></vaadin-combo-box>');
   });
 
-  it('should propagate theme attribute to text-field', () => {
-    expect(comboBox.inputElement.getAttribute('theme')).to.equal('foo');
+  it('should propagate theme attribute to input container', () => {
+    const inputField = comboBox.shadowRoot.querySelector('[part="input-field"]');
+    expect(inputField.getAttribute('theme')).to.equal('foo');
   });
 
   it('should propagate theme attribute to overlay', () => {
@@ -418,26 +415,56 @@ describe('theme attribute', () => {
   });
 });
 
-describe('clear-button-visible', () => {
+describe('clear button', () => {
   let comboBox, clearButton;
 
+  describe('default', () => {
+    beforeEach(() => {
+      comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
+    });
+
+    it('should not have clear button visible by default', () => {
+      expect(comboBox.clearButtonVisible).to.be.false;
+    });
+  });
+
+  describe('visible', () => {
+    beforeEach(() => {
+      comboBox = fixtureSync('<vaadin-combo-box clear-button-visible></vaadin-combo-box>');
+      clearButton = comboBox.$.clearButton;
+    });
+
+    it('should reflect clear-button-visible attribute to property', () => {
+      expect(comboBox.clearButtonVisible).to.be.true;
+    });
+
+    it('should hide clear button should when disabled', () => {
+      comboBox.disabled = true;
+      expect(getComputedStyle(clearButton).display).to.equal('none');
+    });
+
+    it('should hide clear button when readonly', () => {
+      comboBox.readonly = true;
+      expect(getComputedStyle(clearButton).display).to.equal('none');
+    });
+  });
+});
+
+describe('value set before attach', () => {
+  let comboBox;
+
   beforeEach(() => {
-    comboBox = fixtureSync('<vaadin-combo-box clear-button-visible></vaadin-combo-box>');
-    clearButton = comboBox.inputElement.$.clearButton;
+    comboBox = document.createElement('vaadin-combo-box');
   });
 
-  it('should propagate clear-button-visible attribute to text-field', () => {
-    expect(comboBox.clearButtonVisible).to.be.true;
-    expect(comboBox.inputElement.clearButtonVisible).to.nested.true;
+  afterEach(() => {
+    comboBox.remove();
   });
 
-  it('clear button should be hidden when disabled', () => {
-    comboBox.disabled = true;
-    expect(getComputedStyle(clearButton).display).to.equal('none');
-  });
-
-  it('clear button should be hidden when read-only', () => {
-    comboBox.readonly = true;
-    expect(getComputedStyle(clearButton).display).to.equal('none');
+  it('should set value to the input when added to the DOM', () => {
+    comboBox.items = ['a', 'b'];
+    comboBox.value = 'a';
+    document.body.appendChild(comboBox);
+    expect(comboBox.inputElement.value).to.equal('a');
   });
 });
