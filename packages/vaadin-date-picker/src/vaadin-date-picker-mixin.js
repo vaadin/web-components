@@ -585,8 +585,7 @@ export const DatePickerMixin = (subclass) =>
 
     /** @protected */
     _inputElementChanged(input) {
-      // TODO: Make DPL use the mixins
-      super._inputElementChanged && super._inputElementChanged(input);
+      super._inputElementChanged(input);
       if (input) {
         input.setAttribute('role', 'combobox');
         input.setAttribute('aria-expanded', !!this.opened);
