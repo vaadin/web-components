@@ -324,6 +324,11 @@ describe('position target', () => {
       expectEdgesAligned(LEFT, LEFT);
     });
 
+    it('should set start-aligned attribute', () => {
+      expect(overlay.hasAttribute('start-aligned')).to.be.true;
+      expect(overlay.hasAttribute('end-aligned')).to.be.false;
+    });
+
     it('should align right edges with right-to-left', () => {
       overlay.opened = false;
       document.dir = 'rtl';
@@ -361,10 +366,12 @@ describe('position target', () => {
       target.style.left = targetPositionForCentering - 3 + 'px';
       updatePosition();
       expectEdgesAligned(LEFT, LEFT);
+      expect(overlay.hasAttribute('start-aligned')).to.be.true;
 
       target.style.left = targetPositionForCentering + 3 + 'px';
       updatePosition();
       expectEdgesAligned(RIGHT, RIGHT);
+      expect(overlay.hasAttribute('end-aligned')).to.be.true;
     });
 
     describe('no overlap', () => {
@@ -420,6 +427,11 @@ describe('position target', () => {
 
     it('should align right edges', () => {
       expectEdgesAligned(RIGHT, RIGHT);
+    });
+
+    it('should set end-aligned attribute', () => {
+      expect(overlay.hasAttribute('end-aligned')).to.be.true;
+      expect(overlay.hasAttribute('start-aligned')).to.be.false;
     });
 
     it('should align left edges with right-to-left', () => {
