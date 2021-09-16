@@ -160,6 +160,9 @@ export const PositionMixin = (superClass) =>
 
       // Apply the positioning properties to the overlay
       Object.assign(this.style, verticalProps, horizontalProps);
+
+      this.toggleAttribute('bottom-aligned', verticalProps.bottom != '');
+      this.toggleAttribute('top-aligned', verticalProps.top != '');
     }
 
     __shouldAlignStartHorizontally(targetRect, rtl) {

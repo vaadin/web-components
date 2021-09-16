@@ -2,8 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { aTimeout, fixtureSync, isIOS, fire } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { makeItems } from './helpers.js';
-import './not-animated-styles.js';
-import '../vaadin-combo-box.js';
+import '../src/vaadin-combo-box.js';
 
 class XFixed extends PolymerElement {
   static get template() {
