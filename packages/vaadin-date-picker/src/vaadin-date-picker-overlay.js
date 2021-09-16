@@ -5,6 +5,7 @@
  */
 import { OverlayElement } from '@vaadin/vaadin-overlay/src/vaadin-overlay.js';
 import { DisableUpgradeMixin } from '@polymer/polymer/lib/mixins/disable-upgrade-mixin.js';
+import { PositionMixin } from '@vaadin/vaadin-overlay/src/vaadin-overlay-position-mixin.js';
 
 /**
  * An element used internally by `<vaadin-date-picker>`. Not intended to be used separately.
@@ -12,7 +13,7 @@ import { DisableUpgradeMixin } from '@polymer/polymer/lib/mixins/disable-upgrade
  * @extends OverlayElement
  * @private
  */
-class DatePickerOverlayElement extends DisableUpgradeMixin(OverlayElement) {
+class DatePickerOverlayElement extends DisableUpgradeMixin(PositionMixin(OverlayElement)) {
   static get is() {
     return 'vaadin-date-picker-overlay';
   }

@@ -22,7 +22,9 @@ const datePickerOverlay = css`
     border-radius: 0 4px 4px;
   }
 
-  :host(:not([fullscreen])[right-aligned]) [part='overlay'] {
+  /* TODO: add start-aligned / end-aligned to position-mixin */
+  :host([dir='ltr']:not([fullscreen])[end-aligned]) [part='overlay'],
+  :host([dir='rtl']:not([fullscreen])[start-aligned]) [part='overlay'] {
     border-radius: 4px 0 4px 4px;
   }
 

@@ -158,6 +158,7 @@ class DatePicker extends DatePickerMixin(
         id="overlay"
         fullscreen$="[[_fullscreen]]"
         theme$="[[__getOverlayTheme(theme, _overlayInitialized)]]"
+        no-vertical-overlap
         on-vaadin-overlay-open="_onOverlayOpened"
         on-vaadin-overlay-close="_onOverlayClosed"
         disable-upgrade
@@ -193,6 +194,13 @@ class DatePicker extends DatePickerMixin(
    */
   get clearElement() {
     return this.$.clearButton;
+  }
+
+  /** @protected */
+  ready() {
+    super.ready();
+
+    this.$.overlay.positionTarget = this.shadowRoot.querySelector('[part="input-field"]');
   }
 
   /** @private */
