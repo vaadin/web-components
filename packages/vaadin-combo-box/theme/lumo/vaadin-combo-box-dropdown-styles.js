@@ -26,6 +26,7 @@ const comboBoxOverlay = css`
 
   [part~='overlay'] {
     position: relative;
+    margin: var(--lumo-space-xs) 0;
   }
 
   :host([loading]) [part~='loader'] {
