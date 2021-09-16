@@ -40,13 +40,13 @@ Vaadin Board key feature is how it effectively reorders the widgets on different
 Install `vaadin-board`:
 
 ```sh
-npm i @vaadin/vaadin-board --save
+npm i @vaadin/board --save
 ```
 
 Once installed, import it in your application:
 
 ```js
-import '@vaadin/vaadin-board/vaadin-board.js';
+import '@vaadin/board/vaadin-board.js';
 ```
 
 ## Contributing
