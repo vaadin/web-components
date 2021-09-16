@@ -26,7 +26,14 @@ const comboBoxOverlay = css`
 
   [part~='overlay'] {
     position: relative;
-    margin: var(--lumo-space-xs) 0;
+  }
+
+  :host([top-aligned]) [part~='overlay'] {
+    margin-top: var(--lumo-space-xs);
+  }
+
+  :host([bottom-aligned]) [part~='overlay'] {
+    margin-bottom: var(--lumo-space-xs);
   }
 
   :host([loading]) [part~='loader'] {
