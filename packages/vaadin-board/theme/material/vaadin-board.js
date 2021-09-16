@@ -1,1 +1,1 @@
-import '@vaadin/board/theme/material/vaadin-board-row.js';
+import '@vaadin/board/theme/material/vaadin-board.js';
