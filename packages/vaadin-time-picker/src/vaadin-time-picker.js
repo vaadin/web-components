@@ -107,11 +107,12 @@ class TimePicker extends PatternMixin(
         <vaadin-time-picker-combo-box
           id="comboBox"
           filtered-items="[[__dropdownItems]]"
+          value="{{_comboBoxValue}}"
           disabled="[[disabled]]"
           readonly="[[readonly]]"
           auto-open-disabled="[[autoOpenDisabled]]"
+          position-target="[[_inputContainer]]"
           theme$="[[theme]]"
-          on-value-changed="__onValueChange"
           on-change="__onChange"
         >
           <vaadin-input-container
@@ -279,7 +280,16 @@ class TimePicker extends PatternMixin(
             }
           };
         }
-      }
+      },
+
+      /** @private */
+      _comboBoxValue: {
+        type: String,
+        observer: '__comboBoxValueChanged'
+      },
+
+      /** @private */
+      _inputContainer: Object
     };
   }
 
@@ -296,9 +306,15 @@ class TimePicker extends PatternMixin(
     return this.$.clearButton;
   }
 
+  /** @protected */
+  ready() {
+    super.ready();
+
+    this._inputContainer = this.shadowRoot.querySelector('[part~="input-field"]');
+  }
+
   /**
-   * Override method inherited from `InputMixin`
-   * to customize the input element.
+   * Override method inherited from `InputMixin` to forward the input to combo-box.
    * @protected
    * @override
    */
@@ -306,9 +322,6 @@ class TimePicker extends PatternMixin(
     super._inputElementChanged(input);
 
     if (input) {
-      input.autocomplete = 'off';
-      input.autocapitalize = 'off';
-
       this.$.comboBox._setInputElement(input);
     }
   }
@@ -323,7 +336,7 @@ class TimePicker extends PatternMixin(
     return !!(
       this.inputElement.checkValidity() &&
       (!this.value || this._timeAllowed(this.i18n.parseTime(this.value))) &&
-      (!this.$.comboBox.value || this.i18n.parseTime(this.$.comboBox.value))
+      (!this._comboBoxValue || this.i18n.parseTime(this._comboBoxValue))
     );
   }
 
@@ -472,7 +485,7 @@ class TimePicker extends PatternMixin(
     }
 
     if (this.value) {
-      this.$.comboBox.value = this.i18n.formatTime(this.i18n.parseTime(this.value));
+      this._comboBoxValue = this.i18n.formatTime(this.i18n.parseTime(this.value));
     }
   }
 
@@ -535,14 +548,17 @@ class TimePicker extends PatternMixin(
   }
 
   /** @private */
-  __onValueChange(event) {
-    const value = event.detail.value;
+  __comboBoxValueChanged(value, oldValue) {
+    if (value === '' && oldValue === undefined) {
+      return;
+    }
+
     const parsedObj = this.i18n.parseTime(value);
     const newValue = this.i18n.formatTime(parsedObj) || '';
 
     if (parsedObj) {
       if (value !== newValue) {
-        this.$.comboBox.value = newValue;
+        this._comboBoxValue = newValue;
       } else {
         this.__updateValue(parsedObj);
       }
@@ -552,7 +568,9 @@ class TimePicker extends PatternMixin(
   }
 
   /** @private */
-  __onChange() {
+  __onChange(event) {
+    event.stopPropagation();
+
     this.validate();
 
     this.__dispatchChange();
@@ -567,7 +585,7 @@ class TimePicker extends PatternMixin(
   /** @private */
   __updateInputValue(obj) {
     const timeString = this.i18n.formatTime(this.__validateTime(obj)) || '';
-    this.$.comboBox.value = timeString;
+    this._comboBoxValue = timeString;
   }
 
   /** @private */

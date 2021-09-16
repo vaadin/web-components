@@ -3,6 +3,7 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 import { ComboBoxLight } from '@vaadin/vaadin-combo-box/src/vaadin-combo-box-light.js';
 
 /**
@@ -14,6 +15,38 @@ import { ComboBoxLight } from '@vaadin/vaadin-combo-box/src/vaadin-combo-box-lig
 class TimePickerComboBox extends ComboBoxLight {
   static get is() {
     return 'vaadin-time-picker-combo-box';
+  }
+
+  static get template() {
+    return html`
+      <style>
+        :host([opened]) {
+          pointer-events: auto;
+        }
+      </style>
+
+      <slot></slot>
+
+      <vaadin-combo-box-dropdown
+        id="dropdown"
+        opened="[[opened]]"
+        position-target="[[positionTarget]]"
+        renderer="[[renderer]]"
+        _focused-index="[[_focusedIndex]]"
+        _item-id-path="[[itemIdPath]]"
+        _item-label-path="[[itemLabelPath]]"
+        loading="[[loading]]"
+        theme="[[theme]]"
+      ></vaadin-combo-box-dropdown>
+    `;
+  }
+
+  static get properties() {
+    return {
+      positionTarget: {
+        type: Object
+      }
+    };
   }
 
   /**
