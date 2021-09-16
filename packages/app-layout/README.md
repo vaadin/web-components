@@ -6,7 +6,7 @@
 
 [&lt;vaadin-app-layout&gt;](https://vaadin.com/components/vaadin-app-layout) is a Web Component providing a quick and easy way to get a common application layout structure done, part of the [Vaadin components](https://vaadin.com/components).
 
-[![npm version](https://badgen.net/npm/v/@vaadin/vaadin-app-layout)](https://www.npmjs.com/package/@vaadin/vaadin-app-layout)
+[![npm version](https://badgen.net/npm/v/@vaadin/app-layout)](https://www.npmjs.com/package/@vaadin/app-layout)
 [![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-app-layout)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
@@ -41,14 +41,14 @@
 Install `vaadin-app-layout`:
 
 ```sh
-npm i @vaadin/vaadin-app-layout --save
+npm i @vaadin/app-layout --save
 ```
 
 Once installed, import it in your application:
 
 ```js
-import '@vaadin/vaadin-app-layout/vaadin-app-layout.js';
-import '@vaadin/vaadin-app-layout/vaadin-drawer-toggle.js';
+import '@vaadin/app-layout/vaadin-app-layout.js';
+import '@vaadin/app-layout/vaadin-drawer-toggle.js';
 ```
 
 ## Getting Started
