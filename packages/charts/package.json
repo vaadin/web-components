@@ -1,10 +1,10 @@
 {
-  "name": "@vaadin/vaadin-charts",
+  "name": "@vaadin/charts",
   "version": "22.0.0-alpha6",
   "description": "vaadin-charts",
   "main": "vaadin-chart.js",
   "module": "vaadin-chart.js",
-  "repository": "vaadin/vaadin-charts",
+  "repository": "vaadin/web-components",
   "keywords": [
     "Vaadin",
     "vaadin-charts",
@@ -15,7 +15,7 @@
   "author": "Vaadin Ltd",
   "license": "SEE LICENSE IN LICENSE.txt",
   "bugs": {
-    "url": "https://github.com/vaadin/vaadin-charts/issues"
+    "url": "https://github.com/vaadin/web-components/issues"
   },
   "homepage": "https://vaadin.com/charts",
   "files": [
