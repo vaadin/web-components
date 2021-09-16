@@ -382,9 +382,42 @@ export const DatePickerMixin = (subclass) =>
       super();
 
       this._boundOnScroll = this._onScroll.bind(this);
-      this._boundOnInput = this._onUserInput.bind(this);
-      this._boundFocus = this._focus.bind(this);
       this._boundUpdateAlignmentAndPosition = this._updateAlignmentAndPosition.bind(this);
+    }
+
+    /**
+     * Override an event listener from `DelegateFocusMixin`
+     * @protected
+     */
+    _onFocus(event) {
+      super._onFocus(event);
+
+      this._noInput && event.target.blur();
+    }
+
+    /**
+     * Override an event listener from `DelegateFocusMixin`
+     * @protected
+     */
+    _onBlur(event) {
+      super._onBlur(event);
+
+      if (!this.opened) {
+        if (this.autoOpenDisabled) {
+          const parsedDate = this._getParsedDate();
+          if (this._isValidDate(parsedDate)) {
+            this._selectedDate = parsedDate;
+          }
+        }
+
+        if (this.inputElement.value === '' && this.__dispatchChange) {
+          this.validate();
+          this.value = '';
+          this.__dispatchChange = false;
+        } else {
+          this.validate();
+        }
+      }
     }
 
     /** @protected */
@@ -402,36 +435,11 @@ export const DatePickerMixin = (subclass) =>
           e.preventDefault();
         }
       });
-
-      this.addEventListener('input', this._boundOnInput);
-      this.addEventListener('focus', (e) => this._noInput && e.target.blur());
-      this.addEventListener('blur', () => {
-        if (!this.opened) {
-          if (this.autoOpenDisabled) {
-            const parsedDate = this._getParsedDate();
-            if (this._isValidDate(parsedDate)) {
-              this._selectedDate = parsedDate;
-            }
-          }
-
-          if (this.inputElement.value === '' && this.__dispatchChange) {
-            this.validate();
-            this.value = '';
-            this.__dispatchChange = false;
-          } else {
-            this.validate();
-          }
-        }
-      });
     }
 
     /** @protected */
     disconnectedCallback() {
       super.disconnectedCallback();
-
-      if (this._overlayInitialized) {
-        this.$.overlay.removeEventListener('vaadin-overlay-escape-press', this._boundFocus);
-      }
 
       this.opened = false;
     }
@@ -463,7 +471,6 @@ export const DatePickerMixin = (subclass) =>
 
       this._overlayContent.addEventListener('close', this._close.bind(this));
       this._overlayContent.addEventListener('focus-input', this._focusAndSelect.bind(this));
-      this.$.overlay.addEventListener('vaadin-overlay-escape-press', this._boundFocus);
 
       // Keep focus attribute in focusElement for styling
       this._overlayContent.addEventListener('focus', () => {
@@ -1033,8 +1040,11 @@ export const DatePickerMixin = (subclass) =>
       return event.composedPath()[0] === this.clearElement;
     }
 
-    /** @private */
-    _onUserInput() {
+    /**
+     * Override an event listener from `InputMixin`
+     * @protected
+     */
+    _onInput() {
       if (!this.opened && this.inputElement.value && !this.autoOpenDisabled) {
         this.open();
       }
