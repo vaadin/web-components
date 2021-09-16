@@ -173,15 +173,15 @@ declare class ComboBox<TItem = ComboBoxDefaultItem> extends HTMLElement {
 }
 
 interface ComboBox<TItem = ComboBoxDefaultItem>
-  extends ElementMixin,
-    AriaLabelMixin,
-    ClearButtonMixin,
-    FieldAriaMixin,
-    InputSlotMixin,
-    PatternMixin,
-    ComboBoxDataProviderMixin<TItem>,
+  extends ComboBoxDataProviderMixin<TItem>,
     ComboBoxMixin<TItem>,
-    ThemableMixin {}
+    PatternMixin,
+    FieldAriaMixin,
+    ClearButtonMixin,
+    AriaLabelMixin,
+    InputSlotMixin,
+    ThemableMixin,
+    ElementMixin {}
 
 declare global {
   interface HTMLElementTagNameMap {
