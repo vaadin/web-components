@@ -95,6 +95,8 @@ class Checkbox extends SlotLabelMixin(
           opacity: 0;
           cursor: inherit;
           margin: 0;
+          /* A workaround to prevent loosing focus during CSS animations. */
+          z-index: 1;
         }
       </style>
       <div part="container">
@@ -136,6 +138,17 @@ class Checkbox extends SlotLabelMixin(
        */
       name: {
         type: String
+      },
+
+      /**
+       * The value of the checkbox
+       *
+       * @type {string}
+       */
+      value: {
+        type: String,
+        value: 'on',
+        observer: '_valueChanged'
       }
     };
   }
@@ -153,28 +166,37 @@ class Checkbox extends SlotLabelMixin(
   /**
    * @override
    * @protected
+   * @type {HTMLSlotElement}
    */
   get _sourceSlot() {
     return this.$.noop;
   }
 
   /**
+   * @param {Event} event
+   * @return {boolean}
    * @protected
-   * @override
    */
-  _toggleChecked() {
-    this.indeterminate = false;
+  _shouldSetActive(event) {
+    if (event.target.localName === 'a') {
+      return false;
+    }
 
-    super._toggleChecked();
-
-    this.dispatchEvent(new CustomEvent('change', { composed: false, bubbles: true }));
+    return super._shouldSetActive(event);
   }
 
   /**
-   * Fired when the user commits a value change.
-   *
-   * @event change
+   * @param {boolean} checked
+   * @protected
+   * @override
    */
+  _toggleChecked(checked) {
+    if (this.indeterminate) {
+      this.indeterminate = false;
+    }
+
+    super._toggleChecked(checked);
+  }
 }
 
 customElements.define(Checkbox.is, Checkbox);
