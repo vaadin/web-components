@@ -10,7 +10,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 import { Virtualizer } from './virtualizer.js';
 
 /**
- * `<vaadin-virtual-list>` is a Web Component for displaying a virtual/infinite list or items.
+ * `<vaadin-virtual-list>` is a Web Component for displaying a virtual/infinite list of items.
  *
  * ```html
  * <vaadin-virtual-list></vaadin-virtual-list>
@@ -177,6 +177,16 @@ class VirtualListElement extends ElementMixin(ThemableMixin(PolymerElement)) {
    */
   get lastVisibleIndex() {
     return this.__virtualizer.lastVisibleIndex;
+  }
+
+  /**
+   * Requests an update for the content of the rows.
+   * While performing the update, it invokes the renderer passed in the `renderer` property for each visible row.
+   *
+   * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
+   */
+  requestContentUpdate() {
+    this.__virtualizer && this.__virtualizer.update();
   }
 }
 
