@@ -74,7 +74,6 @@ const timePickerI18nProps = Object.keys(timePickerI18nDefaults);
  *
  * - `<vaadin-date-time-picker-date-picker>` - has the same API as [`<vaadin-date-picker>`](#/elements/vaadin-date-picker).
  * - `<vaadin-date-time-picker-time-picker>` - has the same API as [`<vaadin-time-picker>`](#/elements/vaadin-time-picker).
- * - `<vaadin-date-time-picker-date-text-field>` - has the same API as [`<vaadin-text-field>`](#/elements/vaadin-text-field).
  * - `<vaadin-date-time-picker-time-text-field>` - has the same API as [`<vaadin-text-field>`](#/elements/vaadin-text-field).
  * - `<vaadin-date-time-picker-custom-field>` - has the same API as [`<vaadin-custom-field>`](#/elements/vaadin-custom-field).
  *

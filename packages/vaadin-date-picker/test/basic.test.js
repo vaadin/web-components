@@ -562,7 +562,7 @@ describe('wrapped', () => {
   });
 });
 
-describe('Initial value', () => {
+describe('initial value attribute', () => {
   let datepicker, input;
 
   beforeEach(() => {
