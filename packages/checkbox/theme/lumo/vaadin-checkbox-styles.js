@@ -43,6 +43,7 @@ registerStyles(
     /* Checkmark */
     [part='checkbox']::after {
       content: '';
+      pointer-events: none;
       display: inline-block;
       width: 0;
       height: 0;
@@ -116,6 +117,7 @@ registerStyles(
 
     /* Used for activation "halo" */
     [part='checkbox']::before {
+      pointer-events: none;
       color: transparent;
       display: inline-block;
       width: 100%;

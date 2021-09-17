@@ -95,8 +95,6 @@ class Checkbox extends SlotLabelMixin(
           opacity: 0;
           cursor: inherit;
           margin: 0;
-          /* A workaround to prevent loosing focus during CSS animations. */
-          z-index: 1;
         }
       </style>
       <div part="container">

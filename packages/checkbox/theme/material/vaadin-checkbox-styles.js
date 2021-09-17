@@ -40,6 +40,7 @@ registerStyles(
     [part='checkbox']::before {
       /* Needed to align the checkbox nicely on the baseline */
       content: '\\2003';
+      pointer-events: none;
       display: inline-block;
       width: 100%;
       height: 100%;
@@ -54,6 +55,7 @@ registerStyles(
     /* Used for the checkmark */
     [part='checkbox']::after {
       content: '';
+      pointer-events: none;
       display: inline-block;
       width: 10px;
       height: 19px;
