@@ -12,7 +12,7 @@ import {
   space
 } from '@vaadin/testing-helpers';
 import { TextFieldElement } from '@vaadin/vaadin-text-field/src/vaadin-text-field.js';
-import { CheckboxElement } from '@vaadin/checkbox/src/vaadin-checkbox.js';
+import { Checkbox } from '@vaadin/checkbox/src/vaadin-checkbox.js';
 import { Select } from '@vaadin/select/src/vaadin-select.js';
 import '@vaadin/vaadin-template-renderer';
 import { createItems, dblclick, flushGrid, getCellEditor, getContainerCell, onceOpened } from './helpers.js';
@@ -66,7 +66,7 @@ describe('edit column editor type', () => {
       cell = getContainerCell(grid.$.items, 0, 2);
       dblclick(cell._content);
       editor = column._getEditorComponent(cell);
-      expect(editor instanceof CheckboxElement).to.equal(true);
+      expect(editor instanceof Checkbox).to.equal(true);
     });
   });
 
@@ -95,7 +95,7 @@ describe('edit column editor type', () => {
     it('should render the checkbox to cell in edit mode', () => {
       dblclick(cell._content);
       editor = column._getEditorComponent(cell);
-      expect(editor instanceof CheckboxElement).to.equal(true);
+      expect(editor instanceof Checkbox).to.equal(true);
       expect(editor.checked).to.be.equal(grid.items[0].married);
     });
 
