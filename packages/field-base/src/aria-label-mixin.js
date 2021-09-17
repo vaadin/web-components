@@ -9,14 +9,27 @@ import { InputMixin } from './input-mixin.js';
 
 const AriaLabelMixinImplementation = (superclass) =>
   class AriaLabelMixinClass extends InputMixin(LabelMixin(superclass)) {
+    constructor() {
+      super();
+
+      this.__preventDuplicateLabelClick = this.__preventDuplicateLabelClick.bind(this);
+    }
+
     /** @protected */
-    ready() {
-      super.ready();
+    connectedCallback() {
+      super.connectedCallback();
 
       if (this._labelNode) {
-        this._labelNode.addEventListener('click', (event) => {
-          this.__preventDuplicateLabelClick(event);
-        });
+        this._labelNode.addEventListener('click', this.__preventDuplicateLabelClick);
+      }
+    }
+
+    /** @protected */
+    disconnectedCallback() {
+      super.disconnectedCallback();
+
+      if (this._labelNode) {
+        this._labelNode.removeEventListener('click', this.__preventDuplicateLabelClick);
       }
     }
 
