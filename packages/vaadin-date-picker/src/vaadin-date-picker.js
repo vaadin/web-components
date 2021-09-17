@@ -16,11 +16,8 @@ import { InputSlotMixin } from '@vaadin/field-base/src/input-slot-mixin.js';
 import '@vaadin/vaadin-date-picker/src/vaadin-date-picker-overlay.js';
 import '@vaadin/vaadin-date-picker/src/vaadin-date-picker-overlay-content.js';
 import '@vaadin/input-container/src/vaadin-input-container.js';
-import { inputFieldShared } from '@vaadin/text-field/src/vaadin-input-field-shared-styles.js';
+import '@vaadin/text-field/src/vaadin-input-field-shared-styles.js';
 import { DatePickerMixin } from './vaadin-date-picker-mixin.js';
-import { registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
-
-registerStyles('vaadin-date-picker', inputFieldShared, { moduleId: 'vaadin-date-picker-styles' });
 
 /**
  * `<vaadin-date-picker>` is a date selection field which includes a scrollable
@@ -123,7 +120,7 @@ class DatePicker extends DatePickerMixin(
 
   static get template() {
     return html`
-      <style>
+      <style include="vaadin-input-field-shared-styles">
         :host([opened]) {
           pointer-events: auto;
         }
