@@ -29,8 +29,6 @@ customElements.define(
           value: () => {
             return {
               cancel: 'Peruuta', // For date picker
-              selector: 'Ajan valitsin', // For time picker
-              clear: 'Tyhjennä', // For date and time pickers
 
               // formatTime and parseTime are needed so that time picker doesn't throw errors on init
               formatTime,
@@ -61,8 +59,7 @@ customElements.define(
           type: Object,
           value: () => {
             return {
-              cancel: 'Peruuta',
-              clear: 'Tyhjennä'
+              cancel: 'Peruuta'
             };
           }
         },
@@ -70,8 +67,6 @@ customElements.define(
           type: Object,
           value: () => {
             return {
-              selector: 'Ajan valitsin',
-              clear: 'Tyhjennä',
               formatTime,
               parseTime
             };
@@ -87,7 +82,6 @@ customElements.define(
     let dateTimePicker;
     let customField;
     let datePicker;
-    let timePicker;
 
     // No need for "beforeEach" to recreate the fixture before every test since these tests do not
     // modify the state but only check the initial state.
@@ -98,23 +92,14 @@ customElements.define(
 
       if (set === 'default') {
         datePicker = customField.inputs[0];
-        timePicker = customField.inputs[1];
       } else if (set === 'slotted') {
         datePicker = dateTimePicker.querySelector('[slot="date-picker"]');
-        timePicker = dateTimePicker.querySelector('[slot="time-picker"]');
       }
     });
 
     it('should have initial value for i18n', () => {
-      expect(dateTimePicker.i18n).to.have.property('clear', 'Tyhjennä');
-      expect(datePicker.i18n).to.have.property('clear', 'Tyhjennä');
-      expect(timePicker.i18n).to.have.property('clear', 'Tyhjennä');
-
       expect(dateTimePicker.i18n).to.have.property('cancel', 'Peruuta');
       expect(datePicker.i18n).to.have.property('cancel', 'Peruuta');
-
-      expect(dateTimePicker.i18n).to.have.property('selector', 'Ajan valitsin');
-      expect(timePicker.i18n).to.have.property('selector', 'Ajan valitsin');
     });
   });
 });

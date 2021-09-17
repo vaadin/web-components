@@ -32,7 +32,7 @@ registerStyles(
 );
 
 registerStyles(
-  'vaadin-date-time-picker-time-text-field',
+  'vaadin-date-time-picker-time-picker',
   css`
     [part~='input-field'] {
       border-top-left-radius: 0;
@@ -46,5 +46,5 @@ registerStyles(
       border-bottom-right-radius: 0;
     }
   `,
-  { moduleId: 'lumo-date-time-picker-time-text-field' }
+  { moduleId: 'lumo-date-time-picker-time-picker' }
 );

@@ -260,17 +260,11 @@ const fixtures = {
       // From time picker
       expect(dateTimePicker.i18n).to.have.property('formatTime').that.is.a('function');
       expect(dateTimePicker.i18n).to.have.property('parseTime').that.is.a('function');
-      expect(dateTimePicker.i18n).to.have.property('selector').that.is.a('string');
     });
 
     it('should propagate i18n properties observably to date picker', () => {
       dateTimePicker.set('i18n.cancel', 'Peruuta');
       expect(datePicker.i18n.cancel).to.equal('Peruuta');
-    });
-
-    it('should propagate i18n properties observably to time picker', () => {
-      dateTimePicker.set('i18n.selector', 'Ajan valitsin');
-      expect(timePicker.i18n.selector).to.equal('Ajan valitsin');
     });
   });
 
