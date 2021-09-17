@@ -4,15 +4,15 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { AriaLabelMixin } from '@vaadin/field-base/src/aria-label-mixin.js';
+import { ClearButtonMixin } from '@vaadin/field-base/src/clear-button-mixin.js';
+import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
+import { FieldAriaMixin } from '@vaadin/field-base/src/field-aria-mixin.js';
+import { InputConstraintsMixin } from '@vaadin/field-base/src/input-constraints-mixin.js';
 import { InputSlotMixin } from '@vaadin/field-base/src/input-slot-mixin.js';
-import { FieldAriaMixin } from '@vaadin/field-base/src/field-aria-mixin';
-import { AriaLabelMixin } from '@vaadin/field-base/src/aria-label-mixin';
-import { ClearButtonMixin } from '@vaadin/field-base/src/clear-button-mixin';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { DatePickerMixin } from './vaadin-date-picker-mixin.js';
 import { DatePickerEventMap } from './interfaces';
-import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
-import { InputConstraintsMixin } from '@vaadin/field-base/src/input-constraints-mixin';
 
 /**
  * `<vaadin-date-picker>` is a date selection field which includes a scrollable

@@ -5,17 +5,12 @@
  */
 import { IronA11yKeysBehavior } from '@polymer/iron-a11y-keys-behavior/iron-a11y-keys-behavior.js';
 import { IronResizableBehavior } from '@polymer/iron-resizable-behavior/iron-resizable-behavior.js';
-import {
-  dateAllowed,
-  dateEquals,
-  extractDateParts,
-  getClosestDate
-} from '@vaadin/vaadin-date-picker/src/vaadin-date-picker-helper.js';
 import { addListener } from '@polymer/polymer/lib/utils/gestures.js';
-import { InputMixin } from '@vaadin/field-base/src/input-mixin.js';
 import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
 import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
 import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
+import { InputMixin } from '@vaadin/field-base/src/input-mixin.js';
+import { dateAllowed, dateEquals, extractDateParts, getClosestDate } from './vaadin-date-picker-helper.js';
 
 /**
  * @polymerMixin
@@ -342,7 +337,7 @@ export const DatePickerMixin = (subclass) =>
 
     static get observers() {
       return [
-        '_updateHasValue(value)',
+        '_toggleHasValue(value)',
         '_selectedDateChanged(_selectedDate, i18n.formatDate)',
         '_focusedDateChanged(_focusedDate, i18n.formatDate)',
         '_announceFocusedDate(_focusedDate, opened, _ignoreAnnounce)'
@@ -641,11 +636,6 @@ export const DatePickerMixin = (subclass) =>
       if (!this._ignoreFocusedDateChange && !this._noInput) {
         this._applyInputValue(focusedDate);
       }
-    }
-
-    /** @private */
-    _updateHasValue(value) {
-      this.toggleAttribute('has-value', !!value);
     }
 
     /** @private */

@@ -145,21 +145,21 @@ describe('basic features', () => {
 
   it('should lead zeros correctly', () => {
     datepicker.value = '+000300-02-01';
-    expect(datepicker.inputElement.value).to.equal('2/1/0300');
+    expect(input.value).to.equal('2/1/0300');
   });
 
   it('should format display correctly', () => {
     datepicker.value = '2000-02-01';
-    expect(datepicker.inputElement.value).to.equal('2/1/2000');
+    expect(input.value).to.equal('2/1/2000');
     datepicker.value = '1999-12-31';
-    expect(datepicker.inputElement.value).to.equal('12/31/1999');
+    expect(input.value).to.equal('12/31/1999');
   });
 
   it('should format display correctly with sub 100 years', () => {
     datepicker.value = '+000001-02-01';
-    expect(datepicker.inputElement.value).to.equal('2/1/0001');
+    expect(input.value).to.equal('2/1/0001');
     datepicker.value = '+000099-02-01';
-    expect(datepicker.inputElement.value).to.equal('2/1/0099');
+    expect(input.value).to.equal('2/1/0099');
   });
 
   it('should open by tapping the calendar icon', async () => {
@@ -201,11 +201,6 @@ describe('basic features', () => {
   it('should set has-value attribute when value is set', () => {
     datepicker.value = '2000-02-01';
     expect(datepicker.hasAttribute('has-value')).to.be.true;
-  });
-
-  it('should format the input value', () => {
-    const datepicker = fixtureSync('<vaadin-date-picker value="2000-01-01"></vaadin-date-picker>');
-    expect(datepicker.inputElement.value).to.equal('1/1/2000');
   });
 
   describe('realign', () => {
@@ -564,5 +559,18 @@ describe('wrapped', () => {
     container.querySelector('div').style.width = '120px';
     datepicker.style.width = '100%';
     expect(datepicker.inputElement.clientWidth).to.equal(120);
+  });
+});
+
+describe('Initial value', () => {
+  let datepicker, input;
+
+  beforeEach(() => {
+    datepicker = fixtureSync('<vaadin-date-picker value="2000-01-01"></vaadin-date-picker>');
+    input = datepicker.inputElement;
+  });
+
+  it('should format the input value', () => {
+    expect(input.value).to.equal('1/1/2000');
   });
 });

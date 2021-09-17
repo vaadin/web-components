@@ -15,13 +15,6 @@ describe('WAI-ARIA', () => {
       input = datepicker.inputElement;
     });
 
-    // TODO: clarify if this is still needed
-    it.skip('should have application role on input container', () => {
-      // Makes JAWS not to intercept arrow keys but pass them to the browser
-      // instead. Otherwise, the keyboard navigation is broken with JAWS.
-      expect(datepicker.inputElement.getAttribute('role')).to.equal('application');
-    });
-
     it('should have button roles on buttons', () => {
       // Indicate icon buttons as clickable. Especially helpful on touch devices.
       expect(toggleButton.getAttribute('role')).to.equal('button');

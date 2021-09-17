@@ -1,7 +1,12 @@
-import { DatePickerI18n } from './interfaces';
+/**
+ * @license
+ * Copyright (c) 2021 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
 import { InputMixin } from '@vaadin/field-base/src/input-mixin.js';
 import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
 import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
+import { DatePickerI18n } from './interfaces';
 
 declare function DatePickerMixin<T extends new (...args: any[]) => {}>(base: T): T & DatePickerMixinConstructor;
 
@@ -10,8 +15,6 @@ interface DatePickerMixinConstructor {
 }
 
 interface DatePickerMixin extends DelegateFocusMixin, InputMixin, KeyboardMixin {
-  readonly _inputElement: HTMLElement | null;
-
   /**
    * The value for this element.
    *

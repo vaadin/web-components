@@ -186,17 +186,6 @@ class DatePicker extends DatePickerMixin(
     `;
   }
 
-  static get properties() {
-    return {
-      /** @private */
-      _userInputValue: String
-    };
-  }
-
-  static get observers() {
-    return ['_userInputValueChanged(_userInputValue)'];
-  }
-
   /**
    * Used by `ClearButtonMixin` as a reference to the clear button element.
    * @protected
