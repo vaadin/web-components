@@ -4,8 +4,8 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { beforeNextRender } from '@polymer/polymer/lib/utils/render-status.js';
-import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
-import { animationFrame } from '@polymer/polymer/lib/utils/async.js';
+import { Debouncer } from '@vaadin/component-base/src/debounce.js';
+import { animationFrame } from '@vaadin/component-base/src/async.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';

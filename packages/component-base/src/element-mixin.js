@@ -3,8 +3,8 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { idlePeriod } from '@polymer/polymer/lib/utils/async.js';
-import { Debouncer, enqueueDebouncer } from '@polymer/polymer/lib/utils/debounce.js';
+import { idlePeriod } from '@vaadin/component-base/src/async.js';
+import { Debouncer, enqueueDebouncer } from '@vaadin/component-base/src/debounce.js';
 import { usageStatistics } from '@vaadin/vaadin-usage-statistics/vaadin-usage-statistics.js';
 import { DirMixin } from './dir-mixin.js';
 

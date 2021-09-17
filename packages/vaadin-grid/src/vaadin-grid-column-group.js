@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { microTask } from '@polymer/polymer/lib/utils/async.js';
+import { microTask } from '@vaadin/component-base/src/async.js';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { ColumnBaseMixin } from './vaadin-grid-column.js';
 import { updateColumnOrders } from './vaadin-grid-helpers.js';

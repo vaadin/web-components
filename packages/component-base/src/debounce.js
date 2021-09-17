@@ -88,8 +88,8 @@ export class Debouncer {
    * called once. Add this method to a custom element:
    *
    * ```js
-   * import {microTask} from '@polymer/polymer/lib/utils/async.js';
-   * import {Debouncer} from '@polymer/polymer/lib/utils/debounce.js';
+   * import {microTask} from '@vaadin/component-base/src/async.js';
+   * import {Debouncer} from '@vaadin/component-base/src/debounce.js';
    * // ...
    *
    * _debounceWork() {
