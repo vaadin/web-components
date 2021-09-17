@@ -17,7 +17,6 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 import './vaadin-month-calendar.js';
 import './vaadin-infinite-scroller.js';
 import { dateEquals, getClosestDate, getISOWeekNumber, extractDateParts } from './vaadin-date-picker-helper.js';
-import './vaadin-date-picker-styles.js';
 
 /**
  * @extends HTMLElement
