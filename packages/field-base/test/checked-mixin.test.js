@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, click } from '@vaadin/testing-helpers';
+import { fixtureSync, fire } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { CheckedMixin } from '../src/checked-mixin.js';
 import { InputSlotMixin } from '../src/input-slot-mixin.js';
@@ -53,6 +53,16 @@ describe('checked-mixin', () => {
       expect(element.hasAttribute('checked')).to.be.false;
     });
 
+    it('should toggle checked property on change', () => {
+      input.checked = true;
+      fire(input, 'change');
+      expect(element.checked).to.be.true;
+
+      input.checked = false;
+      fire(input, 'change');
+      expect(element.checked).to.be.false;
+    });
+
     it('should toggle checked property on click', () => {
       input.click();
       expect(element.checked).to.be.true;
@@ -70,14 +80,6 @@ describe('checked-mixin', () => {
       element.disabled = true;
       input.click();
       expect(element.checked).to.be.false;
-    });
-
-    it('should prevent default behaviour for click event when disabled', () => {
-      element.disabled = true;
-
-      const event = click(input);
-
-      expect(event.defaultPrevented).to.be.true;
     });
   });
 

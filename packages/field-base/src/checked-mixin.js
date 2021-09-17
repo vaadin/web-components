@@ -33,48 +33,17 @@ const CheckedMixinImplementation = (superclass) =>
       return this.inputElement;
     }
 
-    /** @protected */
-    ready() {
-      super.ready();
-
-      this.addEventListener('click', (event) => {
-        this._onClick(event);
-      });
-    }
-
     /**
-     * @param {!MouseEvent} event
-     * @return {boolean}
      * @protected
+     * @override
      */
-    _interactionsAllowed(event) {
-      if (this.disabled) {
-        return false;
-      }
-
-      if (event.target.localName === 'a') {
-        return false;
-      }
-
-      return true;
-    }
-
-    /**
-     * @param {!MouseEvent} event
-     * @protected
-     */
-    _onClick(event) {
-      if (!this._interactionsAllowed(event)) {
-        event.preventDefault();
-        return;
-      }
-
-      this._toggleChecked();
+    _onChange(event) {
+      this._toggleChecked(event.target.checked);
     }
 
     /** @protected */
-    _toggleChecked() {
-      this.checked = !this.checked;
+    _toggleChecked(checked) {
+      this.checked = checked;
     }
   };
 
