@@ -89,16 +89,6 @@ describe('checkbox', () => {
     expect(checkbox.indeterminate).to.be.false;
   });
 
-  // TODO: Out of the date
-  // it('native checkbox should have the `presentation` role', () => {
-  //   expect(input.getAttribute('role')).to.be.eql('presentation');
-  // });
-
-  // TODO: Out of the date
-  // it('host should have the `checkbox` role', () => {
-  //   expect(checkbox.getAttribute('role')).to.be.eql('checkbox');
-  // });
-
   it('should set active attribute on input click', () => {
     mousedown(input);
     expect(checkbox.hasAttribute('active')).to.be.true;
