@@ -47,6 +47,10 @@ registerStyles(
       color: var(--lumo-primary-text-color);
     }
 
+    :host([max-files-reached]) [part='drop-label'] {
+      color: var(--lumo-disabled-text-color);
+    }
+
     [part='drop-label-icon'] {
       display: inline-block;
     }
