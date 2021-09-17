@@ -3,9 +3,12 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { GestureEventListeners } from '@polymer/polymer/lib/mixins/gesture-event-listeners.js';
-import { ControlStateMixin } from '@vaadin/vaadin-control-state-mixin/vaadin-control-state-mixin.js';
+import { ActiveMixin } from '@vaadin/component-base/src/active-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { AriaLabelMixin } from '@vaadin/field-base/src/aria-label-mixin.js';
+import { CheckedMixin } from '@vaadin/field-base/src/checked-mixin.js';
+import { InputSlotMixin } from '@vaadin/field-base/src/input-slot-mixin.js';
+import { SlotLabelMixin } from '@vaadin/field-base/src/slot-label-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
@@ -18,95 +21,82 @@ export type CheckboxCheckedChangedEvent = CustomEvent<{ value: boolean }>;
  */
 export type CheckboxIndeterminateChangedEvent = CustomEvent<{ value: boolean }>;
 
-export interface CheckboxElementEventMap {
+export interface CheckboxCustomEventMap {
   'checked-changed': CheckboxCheckedChangedEvent;
 
   'indeterminate-changed': CheckboxIndeterminateChangedEvent;
 }
 
-export interface CheckboxEventMap extends HTMLElementEventMap, CheckboxElementEventMap {}
+export interface CheckboxEventMap extends HTMLElementEventMap, CheckboxCustomEventMap {}
 
 /**
- * `<vaadin-checkbox>` is a Web Component for customized checkboxes.
+ * `<vaadin-checkbox>` is an input field representing a binary choice.
  *
  * ```html
- * <vaadin-checkbox>
- *   Make my profile visible
- * </vaadin-checkbox>
+ * <vaadin-checkbox>I accept the terms and conditions</vaadin-checkbox>
  * ```
  *
  * ### Styling
  *
  * The following shadow DOM parts are available for styling:
  *
- * Part name         | Description
- * ------------------|----------------
- * `checkbox`        | The wrapper element for the native <input type="checkbox">
- * `label`           | The wrapper element in which the component's children, namely the label, is slotted
+ * Part name   | Description
+ * ------------|----------------
+ * `container` | The container element
+ * `checkbox`  | The wrapper element which contains slotted <input type="checkbox">
+ * `label`     | The wrapper element which contains slotted <label>
  *
  * The following state attributes are available for styling:
  *
- * Attribute    | Description | Part name
- * -------------|-------------|--------------
- * `active`     | Set when the checkbox is pressed down, either with mouse, touch or the keyboard. | `:host`
- * `disabled`   | Set when the checkbox is disabled. | `:host`
- * `focus-ring` | Set when the checkbox is focused using the keyboard. | `:host`
- * `focused`    | Set when the checkbox is focused. | `:host`
- * `indeterminate` | Set when the checkbox is in indeterminate mode. | `:host`
- * `checked` | Set when the checkbox is checked. | `:host`
- * `empty` | Set when there is no label provided. | `label`
+ * Attribute       | Description | Part name
+ * ----------------|-------------|--------------
+ * `active`        | Set when the checkbox is pressed down, either with mouse, touch or the keyboard. | `:host`
+ * `disabled`      | Set when the checkbox is disabled. | `:host`
+ * `focus-ring`    | Set when the checkbox is focused using the keyboard. | `:host`
+ * `focused`       | Set when the checkbox is focused. | `:host`
+ * `indeterminate` | Set when the checkbox is in the indeterminate state. | `:host`
+ * `checked`       | Set when the checkbox is checked. | `:host`
+ * `has-label`     | Set when the checkbox has a label. | `:host`
  *
  * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
- * @fires {Event} change - Fired when the user commits a value change.
  * @fires {CustomEvent} checked-changed - Fired when the `checked` property changes.
  * @fires {CustomEvent} indeterminate-changed - Fired when the `indeterminate` property changes.
  */
-declare class CheckboxElement extends ElementMixin(
-  ControlStateMixin(ThemableMixin(GestureEventListeners(HTMLElement)))
+declare class Checkbox extends SlotLabelMixin(
+  CheckedMixin(InputSlotMixin(AriaLabelMixin(ActiveMixin(ElementMixin(ThemableMixin(HTMLElement))))))
 ) {
-  readonly focusElement: HTMLInputElement;
-
   /**
-   * Name of the element.
-   */
-  name: string;
-
-  /**
-   * True if the checkbox is checked.
-   */
-  checked: boolean;
-
-  /**
-   * Indeterminate state of the checkbox when it's neither checked nor unchecked, but undetermined.
+   * True if the checkbox is in the indeterminate state which means
+   * it is not possible to say whether it is checked or unchecked.
+   * The state is reset once the user explicitly switches the checkbox.
+   *
    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#Indeterminate_state_checkboxes
    */
   indeterminate: boolean;
 
   /**
-   * The value given to the data submitted with the checkbox's name to the server when the control is inside a form.
+   * The name of the checkbox.
    */
-  value: string | null | undefined;
-
-  _toggleChecked(): void;
+  name: string;
 
   addEventListener<K extends keyof CheckboxEventMap>(
     type: K,
-    listener: (this: CheckboxElement, ev: CheckboxEventMap[K]) => void,
+    listener: (this: Checkbox, ev: CheckboxEventMap[K]) => void,
     options?: boolean | AddEventListenerOptions
   ): void;
 
   removeEventListener<K extends keyof CheckboxEventMap>(
     type: K,
-    listener: (this: CheckboxElement, ev: CheckboxEventMap[K]) => void,
+    listener: (this: Checkbox, ev: CheckboxEventMap[K]) => void,
     options?: boolean | EventListenerOptions
   ): void;
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-checkbox': CheckboxElement;
+    'vaadin-checkbox': Checkbox;
   }
 }
 
-export { CheckboxElement };
+export { Checkbox };

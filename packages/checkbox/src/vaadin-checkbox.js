@@ -13,38 +13,36 @@ import { SlotLabelMixin } from '@vaadin/field-base/src/slot-label-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
- * `<vaadin-checkbox>` is a Web Component for customized checkboxes.
+ * `<vaadin-checkbox>` is an input field representing a binary choice.
  *
  * ```html
- * <vaadin-checkbox>
- *   Make my profile visible
- * </vaadin-checkbox>
+ * <vaadin-checkbox>I accept the terms and conditions</vaadin-checkbox>
  * ```
  *
  * ### Styling
  *
  * The following shadow DOM parts are available for styling:
  *
- * Part name         | Description
- * ------------------|----------------
- * `checkbox`        | The wrapper element for the native <input type="checkbox">
- * `label`           | The wrapper element in which the component's children, namely the label, is slotted
+ * Part name   | Description
+ * ------------|----------------
+ * `container` | The container element
+ * `checkbox`  | The wrapper element which contains slotted <input type="checkbox">
+ * `label`     | The wrapper element which contains slotted <label>
  *
  * The following state attributes are available for styling:
  *
- * Attribute    | Description | Part name
- * -------------|-------------|--------------
- * `active`     | Set when the checkbox is pressed down, either with mouse, touch or the keyboard. | `:host`
- * `disabled`   | Set when the checkbox is disabled. | `:host`
- * `focus-ring` | Set when the checkbox is focused using the keyboard. | `:host`
- * `focused`    | Set when the checkbox is focused. | `:host`
- * `indeterminate` | Set when the checkbox is in indeterminate mode. | `:host`
- * `checked` | Set when the checkbox is checked. | `:host`
- * `empty` | Set when there is no label provided. | `label`
+ * Attribute       | Description | Part name
+ * ----------------|-------------|--------------
+ * `active`        | Set when the checkbox is pressed down, either with mouse, touch or the keyboard. | `:host`
+ * `disabled`      | Set when the checkbox is disabled. | `:host`
+ * `focus-ring`    | Set when the checkbox is focused using the keyboard. | `:host`
+ * `focused`       | Set when the checkbox is focused. | `:host`
+ * `indeterminate` | Set when the checkbox is in the indeterminate state. | `:host`
+ * `checked`       | Set when the checkbox is checked. | `:host`
+ * `has-label`     | Set when the checkbox has a label. | `:host`
  *
  * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
- * @fires {CustomEvent} change - Fired when the user commits a value change.
  * @fires {CustomEvent} checked-changed - Fired when the `checked` property changes.
  * @fires {CustomEvent} indeterminate-changed - Fired when the `indeterminate` property changes.
  *
@@ -115,8 +113,8 @@ class Checkbox extends SlotLabelMixin(
     return {
       /**
        * True if the checkbox is in the indeterminate state which means
-       * it is not possible to say whether the checkbox is checked or unchecked.
-       * The state resets once the checkbox gets checked or unchecked.
+       * it is not possible to say whether it is checked or unchecked.
+       * The state is reset once the user explicitly switches the checkbox.
        *
        * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#Indeterminate_state_checkboxes
        *
@@ -139,7 +137,7 @@ class Checkbox extends SlotLabelMixin(
       },
 
       /**
-       * The value of the checkbox
+       * The value of the checkbox, "on" by default.
        *
        * @type {string}
        */
@@ -171,6 +169,9 @@ class Checkbox extends SlotLabelMixin(
   }
 
   /**
+   * Extends the method from `ActiveMixin` in order to
+   * prevent setting the active attribute when clicking on a link inside the label.
+   *
    * @param {Event} event
    * @return {boolean}
    * @protected
@@ -184,6 +185,9 @@ class Checkbox extends SlotLabelMixin(
   }
 
   /**
+   * Extends the method from `CheckedMixin` in order to
+   * reset the indeterminate state once the user switches the checkbox.
+   *
    * @param {boolean} checked
    * @protected
    * @override
