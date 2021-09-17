@@ -20,6 +20,17 @@ const datePicker = css`
       height: 70vh;
     }
   }
+
+  :host([dir='rtl']) [part='input-field'] ::slotted(input) {
+    /* TODO: fix this in input-container, update all screenshots */
+    -webkit-mask-image: var(--_lumo-text-field-overflow-mask-image);
+    mask-image: var(--_lumo-text-field-overflow-mask-image);
+    --_lumo-text-field-overflow-mask-image: linear-gradient(to left, transparent, #000 1.25em);
+  }
+
+  :host([dir='rtl']) [part='input-field'] ::slotted(input:placeholder-shown) {
+    --_lumo-text-field-overflow-mask-image: none;
+  }
 `;
 
 registerStyles('vaadin-date-picker', [inputFieldShared, datePicker], { moduleId: 'lumo-date-picker' });
