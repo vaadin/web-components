@@ -27,7 +27,6 @@
     "@polymer/iron-a11y-announcer": "^3.0.0",
     "@polymer/iron-a11y-keys-behavior": "^3.0.0",
     "@polymer/iron-media-query": "^3.0.0",
-    "@polymer/iron-resizable-behavior": "^3.0.0",
     "@polymer/polymer": "^3.2.0",
     "@vaadin/button": "^22.0.0-alpha6",
     "@vaadin/component-base": "^22.0.0-alpha6",

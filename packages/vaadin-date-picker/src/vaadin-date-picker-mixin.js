@@ -4,9 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { IronA11yKeysBehavior } from '@polymer/iron-a11y-keys-behavior/iron-a11y-keys-behavior.js';
-import { IronResizableBehavior } from '@polymer/iron-resizable-behavior/iron-resizable-behavior.js';
 import { addListener } from '@polymer/polymer/lib/utils/gestures.js';
-import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
 import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
 import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
 import { InputMixin } from '@vaadin/field-base/src/input-mixin.js';
@@ -16,9 +14,7 @@ import { dateAllowed, dateEquals, extractDateParts, getClosestDate } from './vaa
  * @polymerMixin
  */
 export const DatePickerMixin = (subclass) =>
-  class VaadinDatePickerMixin extends DelegateFocusMixin(
-    InputMixin(KeyboardMixin(mixinBehaviors([IronResizableBehavior], subclass)))
-  ) {
+  class VaadinDatePickerMixin extends DelegateFocusMixin(InputMixin(KeyboardMixin(subclass))) {
     static get properties() {
       return {
         /**
@@ -92,8 +88,7 @@ export const DatePickerMixin = (subclass) =>
          */
         _fullscreen: {
           type: Boolean,
-          value: false,
-          observer: '_fullscreenChanged'
+          value: false
         },
 
         /**
@@ -379,7 +374,6 @@ export const DatePickerMixin = (subclass) =>
       super();
 
       this._boundOnScroll = this._onScroll.bind(this);
-      this._boundUpdateAlignmentAndPosition = this._updateAlignmentAndPosition.bind(this);
     }
 
     /**
@@ -595,9 +589,6 @@ export const DatePickerMixin = (subclass) =>
       if (this._overlayInitialized) {
         this.$.overlay.opened = opened;
       }
-      if (opened) {
-        this._updateAlignmentAndPosition();
-      }
       if (this.inputElement) {
         this.inputElement.setAttribute('aria-expanded', opened);
       }
@@ -683,51 +674,6 @@ export const DatePickerMixin = (subclass) =>
       this._handleDateChange('_maxDate', value, oldValue);
     }
 
-    /** @private */
-    _updateAlignmentAndPosition() {
-      if (!this._overlayInitialized) {
-        return;
-      }
-      if (!this._fullscreen) {
-        const inputRect = this.inputElement.getBoundingClientRect();
-
-        const bottomAlign = inputRect.top > window.innerHeight / 2;
-        const rightAlign = inputRect.left + this.clientWidth / 2 > window.innerWidth / 2;
-
-        if (rightAlign) {
-          const viewportWidth = Math.min(window.innerWidth, document.documentElement.clientWidth);
-          this.$.overlay.setAttribute('right-aligned', '');
-          this.$.overlay.style.removeProperty('left');
-          this.$.overlay.style.right = viewportWidth - inputRect.right + 'px';
-        } else {
-          this.$.overlay.removeAttribute('right-aligned');
-          this.$.overlay.style.removeProperty('right');
-          this.$.overlay.style.left = inputRect.left + 'px';
-        }
-
-        if (bottomAlign) {
-          const viewportHeight = Math.min(window.innerHeight, document.documentElement.clientHeight);
-          this.$.overlay.setAttribute('bottom-aligned', '');
-          this.$.overlay.style.removeProperty('top');
-          this.$.overlay.style.bottom = viewportHeight - inputRect.top + 'px';
-        } else {
-          this.$.overlay.removeAttribute('bottom-aligned');
-          this.$.overlay.style.removeProperty('bottom');
-          this.$.overlay.style.top = inputRect.bottom + 'px';
-        }
-      }
-
-      this.$.overlay.setAttribute('dir', getComputedStyle(this.inputElement).getPropertyValue('direction'));
-      this._overlayContent._repositionYearScroller();
-    }
-
-    /** @private */
-    _fullscreenChanged() {
-      if (this._overlayInitialized && this.$.overlay.opened) {
-        this._updateAlignmentAndPosition();
-      }
-    }
-
     /** @protected */
     _onOverlayOpened() {
       this._openedWithFocusRing = this.hasAttribute('focus-ring');
@@ -750,7 +696,6 @@ export const DatePickerMixin = (subclass) =>
       this._ignoreFocusedDateChange = false;
 
       window.addEventListener('scroll', this._boundOnScroll, true);
-      this.addEventListener('iron-resize', this._boundUpdateAlignmentAndPosition);
 
       if (this._webkitOverflowScroll) {
         this._touchPrevented = this._preventWebkitOverflowScrollingTouch(this.parentElement);
@@ -815,7 +760,6 @@ export const DatePickerMixin = (subclass) =>
       this._ignoreAnnounce = true;
 
       window.removeEventListener('scroll', this._boundOnScroll, true);
-      this.removeEventListener('iron-resize', this._boundUpdateAlignmentAndPosition);
 
       if (this._touchPrevented) {
         this._touchPrevented.forEach(
@@ -839,7 +783,7 @@ export const DatePickerMixin = (subclass) =>
     /** @private */
     _onScroll(e) {
       if (e.target === window || !this._overlayContent.contains(e.target)) {
-        this._updateAlignmentAndPosition();
+        this._overlayContent._repositionYearScroller();
       }
     }
 

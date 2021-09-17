@@ -107,12 +107,16 @@ export const PositionMixin = (superClass) =>
             this.__margins[propName] = parseInt(computedStyle[propName], 10);
           });
         }
-        this.__isRTL = computedStyle.direction === 'rtl';
+        this.setAttribute('dir', computedStyle.direction);
 
         this._updatePosition();
         // Schedule another position update (to cover virtual keyboard opening for example)
         requestAnimationFrame(() => this._updatePosition());
       }
+    }
+
+    get __isRTL() {
+      return this.getAttribute('dir') === 'rtl';
     }
 
     __positionSettingsChanged() {
@@ -161,8 +165,11 @@ export const PositionMixin = (superClass) =>
       // Apply the positioning properties to the overlay
       Object.assign(this.style, verticalProps, horizontalProps);
 
-      this.toggleAttribute('bottom-aligned', verticalProps.bottom != '');
-      this.toggleAttribute('top-aligned', verticalProps.top != '');
+      this.toggleAttribute('bottom-aligned', !shouldAlignStartVertically);
+      this.toggleAttribute('top-aligned', shouldAlignStartVertically);
+
+      this.toggleAttribute('end-aligned', !flexStart);
+      this.toggleAttribute('start-aligned', flexStart);
     }
 
     __shouldAlignStartHorizontally(targetRect, rtl) {

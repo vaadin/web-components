@@ -36,6 +36,14 @@ const datePickerOverlay = css`
     mask-image: none;
   }
 
+  :host([top-aligned]) [part~='overlay'] {
+    margin-top: var(--lumo-space-xs);
+  }
+
+  :host([bottom-aligned]) [part~='overlay'] {
+    margin-bottom: var(--lumo-space-xs);
+  }
+
   @media (max-width: 420px), (max-height: 420px) {
     [part='overlay'] {
       width: 100vw;
