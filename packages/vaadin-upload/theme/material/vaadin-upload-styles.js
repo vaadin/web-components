@@ -52,6 +52,10 @@ registerStyles(
       color: var(--material-primary-text-color);
     }
 
+    :host([max-files-reached]) [part='drop-label'] {
+      color: var(--material-disabled-text-color);
+    }
+
     [part='drop-label-icon'] {
       display: inline-block;
       margin-right: 8px;

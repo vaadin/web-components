@@ -123,6 +123,16 @@ describe('file list', () => {
       upload.$.addFiles.dispatchEvent(new MouseEvent('click'));
       expect(clickSpy.called).to.be.false;
     });
+
+    it('should set max-files-reached style attribute when max files added', () => {
+      upload.maxFiles = 0;
+
+      expect(upload.hasAttribute('max-files-reached')).to.be.true;
+    });
+
+    it('should not set max-files-reached style attribute when less than max files added', () => {
+      expect(upload.hasAttribute('max-files-reached')).to.be.false;
+    });
   });
 
   (touchDevice ? describe.skip : describe)('Dropping file', () => {
