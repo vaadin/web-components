@@ -36,12 +36,6 @@ const ActiveMixinImplementation = (superclass) =>
       this._addEventListenerToNode(this, 'up', () => {
         this._setActive(false);
       });
-
-      // TODO: Why is it needed?
-      // this.addEventListener('blur', (event) => {
-      //   console.log(event);
-      //   this._setActive(false);
-      // });
     }
 
     /** @protected */
