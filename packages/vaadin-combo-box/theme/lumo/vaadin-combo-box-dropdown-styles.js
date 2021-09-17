@@ -28,6 +28,14 @@ const comboBoxOverlay = css`
     position: relative;
   }
 
+  :host([top-aligned]) [part~='overlay'] {
+    margin-top: var(--lumo-space-xs);
+  }
+
+  :host([bottom-aligned]) [part~='overlay'] {
+    margin-bottom: var(--lumo-space-xs);
+  }
+
   :host([loading]) [part~='loader'] {
     box-sizing: border-box;
     width: var(--lumo-icon-size-s);

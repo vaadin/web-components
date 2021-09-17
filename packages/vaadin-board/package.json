@@ -28,15 +28,7 @@
     "theme"
   ],
   "dependencies": {
-    "@polymer/iron-resizable-behavior": "^3.0.0",
-    "@polymer/polymer": "^3.0.0",
-    "@vaadin/component-base": "^22.0.0-alpha6",
-    "@vaadin/vaadin-license-checker": "^2.1.0"
-  },
-  "devDependencies": {
-    "@esm-bundle/chai": "^4.3.4",
-    "@vaadin/testing-helpers": "^0.3.0",
-    "sinon": "^9.2.1"
+    "@vaadin/board": "^22.0.0-alpha6"
   },
   "publishConfig": {
     "access": "public"

@@ -19,6 +19,14 @@ describe('combo-box', () => {
     await visualDiff(div, 'basic');
   });
 
+  it('opened', async () => {
+    div.style.height = '200px';
+    div.style.width = '200px';
+    element.items = ['Foo', 'Bar', 'Baz'];
+    element.click();
+    await visualDiff(div, 'opened');
+  });
+
   it('focus-ring', async () => {
     await sendKeys({ press: 'Tab' });
 

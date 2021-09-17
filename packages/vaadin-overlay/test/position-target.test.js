@@ -126,6 +126,11 @@ describe('position target', () => {
       expectEdgesAligned(TOP, TOP);
     });
 
+    it('should set top-aligned attribute', () => {
+      expect(overlay.hasAttribute('top-aligned')).to.be.true;
+      expect(overlay.hasAttribute('bottom-aligned')).to.be.false;
+    });
+
     it('should align top edges when overlay part is animated', async () => {
       overlay.classList.add('animated');
       await oneEvent(overlay.$.overlay, 'animationend');
@@ -136,6 +141,13 @@ describe('position target', () => {
       target.style.top = targetPositionToFlipOverlay + 3 + 'px';
       updatePosition();
       expectEdgesAligned(BOTTOM, BOTTOM);
+    });
+
+    it('should set bottom-aligned attribute when out of space', () => {
+      target.style.top = targetPositionToFlipOverlay + 3 + 'px';
+      updatePosition();
+      expect(overlay.hasAttribute('top-aligned')).to.be.false;
+      expect(overlay.hasAttribute('bottom-aligned')).to.be.true;
     });
 
     it('should flip when out of space and squeezed smaller than current available space', () => {
@@ -162,10 +174,12 @@ describe('position target', () => {
       target.style.top = targetPositionForCentering - 3 + 'px';
       updatePosition();
       expectEdgesAligned(TOP, TOP);
+      expect(overlay.hasAttribute('top-aligned')).to.be.true;
 
       target.style.top = targetPositionForCentering + 3 + 'px';
       updatePosition();
       expectEdgesAligned(BOTTOM, BOTTOM);
+      expect(overlay.hasAttribute('bottom-aligned')).to.be.true;
     });
 
     describe('no overlap', () => {

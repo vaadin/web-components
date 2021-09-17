@@ -1,1 +1,1 @@
-import '../../src/vaadin-board-row.js';
+import '@vaadin/board/theme/lumo/vaadin-board-row.js';

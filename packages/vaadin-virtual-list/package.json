@@ -1,7 +1,7 @@
 {
   "name": "@vaadin/vaadin-virtual-list",
   "version": "22.0.0-alpha6",
-  "description": "Web Component for displaying a virtual/infinite list or items.",
+  "description": "Web Component for displaying a virtual/infinite list of items.",
   "main": "vaadin-virtual-list.js",
   "module": "vaadin-virtual-list.js",
   "repository": "vaadin/web-components",

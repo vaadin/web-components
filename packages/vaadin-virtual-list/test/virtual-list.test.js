@@ -110,5 +110,15 @@ describe('virtual-list', () => {
       list.renderer = null;
       expect(list.children[0].textContent.trim()).to.equal('');
     });
+
+    it('should update content on request', () => {
+      let name = 'foo';
+      list.renderer = (root) => (root.textContent = name);
+      expect(list.children[0].textContent.trim()).to.equal('foo');
+
+      name = 'bar';
+      list.requestContentUpdate();
+      expect(list.children[0].textContent.trim()).to.equal('bar');
+    });
   });
 });
