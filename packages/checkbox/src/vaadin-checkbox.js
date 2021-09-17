@@ -133,7 +133,8 @@ class Checkbox extends SlotLabelMixin(
        * @type {string}
        */
       name: {
-        type: String
+        type: String,
+        value: ''
       },
 
       /**
@@ -150,7 +151,11 @@ class Checkbox extends SlotLabelMixin(
   }
 
   static get delegateProps() {
-    return [...super.delegateProps, 'indeterminate', 'name'];
+    return [...super.delegateProps, 'indeterminate'];
+  }
+
+  static get delegateAttrs() {
+    return [...super.delegateAttrs, 'name'];
   }
 
   constructor() {
