@@ -6,7 +6,6 @@
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { AriaLabelMixin } from '@vaadin/field-base/src/aria-label-mixin.js';
 import { ClearButtonMixin } from '@vaadin/field-base/src/clear-button-mixin.js';
-import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
 import { FieldAriaMixin } from '@vaadin/field-base/src/field-aria-mixin.js';
 import { InputConstraintsMixin } from '@vaadin/field-base/src/input-constraints-mixin.js';
 import { InputSlotMixin } from '@vaadin/field-base/src/input-slot-mixin.js';
@@ -114,7 +113,6 @@ interface DatePicker
     FieldAriaMixin,
     InputSlotMixin,
     DatePickerMixin,
-    DelegateFocusMixin,
     InputConstraintsMixin,
     ThemableMixin {}
 

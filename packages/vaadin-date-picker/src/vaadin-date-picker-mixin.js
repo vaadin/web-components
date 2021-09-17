@@ -337,7 +337,6 @@ export const DatePickerMixin = (subclass) =>
 
     static get observers() {
       return [
-        '_toggleHasValue(value)',
         '_selectedDateChanged(_selectedDate, i18n.formatDate)',
         '_focusedDateChanged(_focusedDate, i18n.formatDate)',
         '_announceFocusedDate(_focusedDate, opened, _ignoreAnnounce)'
@@ -670,6 +669,8 @@ export const DatePickerMixin = (subclass) =>
         this.__dispatchChange = false;
       }
       this._handleDateChange('_selectedDate', value, oldValue);
+
+      this._toggleHasValue(!!value);
     }
 
     /** @private */
