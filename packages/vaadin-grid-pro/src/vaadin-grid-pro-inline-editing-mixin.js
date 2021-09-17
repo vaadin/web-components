@@ -6,7 +6,6 @@
  */
 import { animationFrame } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
-import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 
 /**
  * @polymerMixin
@@ -147,7 +146,7 @@ export const InlineEditingMixin = (superClass) =>
       super._checkImports();
       ['vaadin-grid-pro-edit-column'].forEach((elementName) => {
         const element = this.querySelector(elementName);
-        if (element && !(element instanceof PolymerElement)) {
+        if (element && !customElements.get(elementName)) {
           console.warn(`Make sure you have imported the required module for <${elementName}> element.`);
         }
       });
