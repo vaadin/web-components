@@ -4,8 +4,18 @@ import '@vaadin/vaadin-date-picker/theme/lumo/vaadin-date-picker.js';
 import '@vaadin/vaadin-time-picker/theme/lumo/vaadin-time-picker.js';
 
 registerStyles(
-  'vaadin-date-time-picker-date-text-field',
+  'vaadin-date-time-picker-date-picker',
   css`
+    :host {
+      margin-right: 2px;
+    }
+
+    /* RTL specific styles */
+    :host([dir='rtl']) {
+      margin-right: auto;
+      margin-left: 2px;
+    }
+
     [part~='input-field'] {
       border-top-right-radius: 0;
       border-bottom-right-radius: 0;
@@ -18,7 +28,7 @@ registerStyles(
       border-bottom-left-radius: 0;
     }
   `,
-  { moduleId: 'lumo-date-time-picker-date-text-field' }
+  { moduleId: 'lumo-date-time-picker-date-picker' }
 );
 
 registerStyles(
@@ -37,20 +47,4 @@ registerStyles(
     }
   `,
   { moduleId: 'lumo-date-time-picker-time-text-field' }
-);
-
-registerStyles(
-  'vaadin-date-time-picker-date-picker',
-  css`
-    :host {
-      margin-right: 2px;
-    }
-
-    /* RTL specific styles */
-    :host([dir='rtl']) {
-      margin-right: auto;
-      margin-left: 2px;
-    }
-  `,
-  { moduleId: 'lumo-date-time-picker-date-picker' }
 );

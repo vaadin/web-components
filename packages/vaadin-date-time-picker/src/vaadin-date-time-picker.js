@@ -74,7 +74,6 @@ const timePickerI18nProps = Object.keys(timePickerI18nDefaults);
  *
  * - `<vaadin-date-time-picker-date-picker>` - has the same API as [`<vaadin-date-picker>`](#/elements/vaadin-date-picker).
  * - `<vaadin-date-time-picker-time-picker>` - has the same API as [`<vaadin-time-picker>`](#/elements/vaadin-time-picker).
- * - `<vaadin-date-time-picker-date-text-field>` - has the same API as [`<vaadin-text-field>`](#/elements/vaadin-text-field).
  * - `<vaadin-date-time-picker-time-text-field>` - has the same API as [`<vaadin-text-field>`](#/elements/vaadin-text-field).
  * - `<vaadin-date-time-picker-custom-field>` - has the same API as [`<vaadin-custom-field>`](#/elements/vaadin-custom-field).
  *
@@ -413,6 +412,8 @@ class DateTimePickerElement extends ElementMixin(ThemableMixin(PolymerElement)) 
     this.__defaultTimeMinValue = '00:00:00.000';
     // Default value for "max" property of vaadin-time-picker (for removing constraint)
     this.__defaultTimeMaxValue = '23:59:59.999';
+
+    this.__changeEventHandler = this.__changeEventHandler.bind(this);
   }
 
   /** @protected */
@@ -425,9 +426,6 @@ class DateTimePickerElement extends ElementMixin(ThemableMixin(PolymerElement)) 
       }
     });
 
-    this.__changeEventHandler = this.__changeEventHandler.bind(this);
-    this.__filterElements = (node) => node.nodeType === Node.ELEMENT_NODE;
-
     this.__datePickerChanged();
     this.__timePickerChanged();
 
@@ -437,6 +435,10 @@ class DateTimePickerElement extends ElementMixin(ThemableMixin(PolymerElement)) 
     if (this.autofocus && !this.disabled) {
       window.requestAnimationFrame(() => this.focus());
     }
+  }
+
+  __filterElements(node) {
+    return node.nodeType === Node.ELEMENT_NODE;
   }
 
   /** @protected */
@@ -596,9 +598,12 @@ class DateTimePickerElement extends ElementMixin(ThemableMixin(PolymerElement)) 
 
   /** @private */
   __i18nChanged(changeRecord) {
+    this.__datePickerChanged();
     if (this.__datePicker) {
       this.__datePicker.set(changeRecord.path, changeRecord.value);
     }
+
+    this.__timePickerChanged();
     if (this.__timePicker) {
       this.__timePicker.set(changeRecord.path, changeRecord.value);
     }

@@ -5,15 +5,19 @@
  */
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { GestureEventListeners } from '@polymer/polymer/lib/mixins/gesture-event-listeners.js';
-import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import '@polymer/iron-media-query/iron-media-query.js';
-import { ControlStateMixin } from '@vaadin/vaadin-control-state-mixin/vaadin-control-state-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { AriaLabelMixin } from '@vaadin/field-base/src/aria-label-mixin.js';
+import { ClearButtonMixin } from '@vaadin/field-base/src/clear-button-mixin.js';
+import { FieldAriaMixin } from '@vaadin/field-base/src/field-aria-mixin.js';
+import { InputConstraintsMixin } from '@vaadin/field-base/src/input-constraints-mixin.js';
+import { InputSlotMixin } from '@vaadin/field-base/src/input-slot-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import '@vaadin/input-container/src/vaadin-input-container.js';
+import '@vaadin/text-field/src/vaadin-input-field-shared-styles.js';
 import { DatePickerMixin } from './vaadin-date-picker-mixin.js';
 import './vaadin-date-picker-overlay.js';
 import './vaadin-date-picker-overlay-content.js';
-import './vaadin-date-picker-text-field.js';
 
 /**
  * `<vaadin-date-picker>` is a date selection field which includes a scrollable
@@ -33,7 +37,7 @@ import './vaadin-date-picker-text-field.js';
  *
  * Part name | Description | Theme for Element
  * ----------------|----------------|----------------
- * `text-field` | Input element | vaadin-date-picker
+ * `input-field` | Input element | vaadin-date-picker
  * `clear-button` | Clear button | vaadin-date-picker
  * `toggle-button` | Toggle button | vaadin-date-picker
  * `overlay-content` | The overlay element | vaadin-date-picker
@@ -80,7 +84,6 @@ import './vaadin-date-picker-text-field.js';
  * In addition to `<vaadin-date-picker>` itself, the following internal
  * components are themable:
  *
- * - `<vaadin-date-picker-text-field>` - has the same API as [`<vaadin-text-field>`](#/elements/vaadin-text-field).
  * - `<vaadin-date-picker-overlay>` - has the same API as [`<vaadin-overlay>`](#/elements/vaadin-overlay).
  * - `<vaadin-date-picker-overlay-content>`
  * - `<vaadin-month-calendar>`
@@ -95,66 +98,61 @@ import './vaadin-date-picker-text-field.js';
  *
  * @extends HTMLElement
  * @mixes ElementMixin
- * @mixes ControlStateMixin
  * @mixes ThemableMixin
+ * @mixes InputSlotMixin
+ * @mixes AriaLabelMixin
+ * @mixes ClearButtonMixin
+ * @mixes FieldAriaMixin
  * @mixes DatePickerMixin
- * @mixes GestureEventListeners
  */
-class DatePickerElement extends ElementMixin(
-  ControlStateMixin(ThemableMixin(DatePickerMixin(GestureEventListeners(PolymerElement))))
+class DatePicker extends DatePickerMixin(
+  FieldAriaMixin(
+    ClearButtonMixin(
+      AriaLabelMixin(
+        InputConstraintsMixin(InputSlotMixin(GestureEventListeners(ThemableMixin(ElementMixin(PolymerElement)))))
+      )
+    )
+  )
 ) {
+  static get is() {
+    return 'vaadin-date-picker';
+  }
+
   static get template() {
     return html`
-      <style>
-        :host {
-          display: inline-block;
-        }
-
-        :host([hidden]) {
-          display: none !important;
-        }
-
+      <style include="vaadin-input-field-shared-styles">
         :host([opened]) {
           pointer-events: auto;
         }
-
-        [part='text-field'] {
-          width: 100%;
-          min-width: 0;
-        }
       </style>
 
-      <vaadin-date-picker-text-field
-        id="input"
-        role="application"
-        autocomplete="off"
-        on-focus="_focus"
-        value="{{_userInputValue}}"
-        invalid="[[invalid]]"
-        label="[[label]]"
-        name="[[name]]"
-        placeholder="[[placeholder]]"
-        required="[[required]]"
-        disabled="[[disabled]]"
-        readonly="[[readonly]]"
-        error-message="[[errorMessage]]"
-        clear-button-visible="[[clearButtonVisible]]"
-        aria-label$="[[label]]"
-        part="text-field"
-        helper-text="[[helperText]]"
-        theme$="[[theme]]"
-      >
-        <slot name="prefix" slot="prefix"></slot>
-        <slot name="helper" slot="helper">[[helperText]]</slot>
-        <div
-          part="toggle-button"
-          slot="suffix"
-          on-tap="_toggle"
-          role="button"
-          aria-label$="[[i18n.calendar]]"
-          aria-expanded$="[[_getAriaExpanded(opened)]]"
-        ></div>
-      </vaadin-date-picker-text-field>
+      <div part="container">
+        <div part="label" on-click="focus">
+          <slot name="label"></slot>
+          <span part="indicator" aria-hidden="true"></span>
+        </div>
+
+        <vaadin-input-container
+          part="input-field"
+          readonly="[[readonly]]"
+          disabled="[[disabled]]"
+          invalid="[[invalid]]"
+          theme$="[[theme]]"
+        >
+          <slot name="prefix" slot="prefix"></slot>
+          <slot name="input"></slot>
+          <div id="clearButton" part="clear-button" slot="suffix"></div>
+          <div part="toggle-button" slot="suffix" on-tap="_toggle" role="button"></div>
+        </vaadin-input-container>
+
+        <div part="helper-text">
+          <slot name="helper"></slot>
+        </div>
+
+        <div part="error-message">
+          <slot name="error-message"></slot>
+        </div>
+      </div>
 
       <vaadin-date-picker-overlay
         id="overlay"
@@ -180,8 +178,7 @@ class DatePickerElement extends ElementMixin(
             on-date-tap="_close"
             part="overlay-content"
             theme$="[[__getOverlayTheme(theme, _overlayInitialized)]]"
-          >
-          </vaadin-date-picker-overlay-content>
+          ></vaadin-date-picker-overlay-content>
         </template>
       </vaadin-date-picker-overlay>
 
@@ -189,106 +186,21 @@ class DatePickerElement extends ElementMixin(
     `;
   }
 
-  static get is() {
-    return 'vaadin-date-picker';
-  }
-
-  static get properties() {
-    return {
-      /**
-       * Set to true to display the clear icon which clears the input.
-       * @attr {boolean} clear-button-visible
-       * @type {boolean}
-       */
-      clearButtonVisible: {
-        type: Boolean,
-        value: false
-      },
-
-      /**
-       * Set to true to disable this element.
-       * @type {boolean}
-       */
-      disabled: {
-        type: Boolean,
-        value: false,
-        reflectToAttribute: true
-      },
-
-      /**
-       * The error message to display when the input is invalid.
-       * @attr {string} error-message
-       */
-      errorMessage: String,
-
-      /**
-       * A placeholder string in addition to the label. If this is set, the label will always float.
-       */
-      placeholder: String,
-
-      /**
-       * String used for the helper text.
-       * @attr {string} helper-text
-       */
-      helperText: {
-        type: String,
-        value: ''
-      },
-
-      /**
-       * Set to true to make this element read-only.
-       * @type {boolean}
-       */
-      readonly: {
-        type: Boolean,
-        value: false,
-        reflectToAttribute: true
-      },
-
-      /**
-       * This property is set to true when the control value invalid.
-       * @type {boolean}
-       */
-      invalid: {
-        type: Boolean,
-        reflectToAttribute: true,
-        notify: true,
-        value: false
-      },
-
-      /** @private */
-      _userInputValue: String
-    };
-  }
-
-  static get observers() {
-    return ['_userInputValueChanged(_userInputValue)', '_setClearButtonLabel(i18n.clear)'];
-  }
-
-  /** @protected */
-  ready() {
-    super.ready();
-
-    // In order to have synchronized invalid property, we need to use the same validate logic.
-    afterNextRender(this, () => {
-      this._inputElement.validate = () => {};
-    });
-
-    this._inputElement.addEventListener('change', (e) => {
-      // For change event on text-field blur, after the field is cleared,
-      // we schedule change event to be dispatched on date-picker blur.
-      if (this._inputElement.value === '' && !e.__fromClearButton) {
-        this.__dispatchChange = true;
-      }
-    });
+  /**
+   * Used by `ClearButtonMixin` as a reference to the clear button element.
+   * @protected
+   * @return {!HTMLElement}
+   */
+  get clearElement() {
+    return this.$.clearButton;
   }
 
   /** @private */
   _onVaadinOverlayClose(e) {
     if (this._openedWithFocusRing && this.hasAttribute('focused')) {
-      this.focusElement.setAttribute('focus-ring', '');
+      this.setAttribute('focus-ring', '');
     } else if (!this.hasAttribute('focused')) {
-      this.focusElement.blur();
+      this.blur();
     }
     if (e.detail.sourceEvent && e.detail.sourceEvent.composedPath().indexOf(this) !== -1) {
       e.preventDefault();
@@ -300,46 +212,8 @@ class DatePickerElement extends ElementMixin(
     e.stopPropagation();
     this[this._overlayInitialized && this.$.overlay.opened ? 'close' : 'open']();
   }
-
-  /**
-   * @return {HTMLElement}
-   * @protected
-   */
-  _input() {
-    return this.$.input;
-  }
-
-  set _inputValue(value) {
-    this._inputElement.value = value;
-  }
-
-  /** @return {string} */
-  get _inputValue() {
-    return this._inputElement.value;
-  }
-
-  /** @private */
-  _getAriaExpanded(opened) {
-    return Boolean(opened).toString();
-  }
-
-  /**
-   * Focusable element used by vaadin-control-state-mixin
-   * @return {!HTMLElement}
-   * @protected
-   */
-  get focusElement() {
-    return this._input() || this;
-  }
-
-  /** @private */
-  _setClearButtonLabel(i18nClear) {
-    // FIXME(platosha): expose i18n API in <vaadin-text-field>
-    // https://github.com/vaadin/vaadin-text-field/issues/348
-    this._inputElement.shadowRoot.querySelector('[part="clear-button"]').setAttribute('aria-label', i18nClear);
-  }
 }
 
-customElements.define(DatePickerElement.is, DatePickerElement);
+customElements.define(DatePicker.is, DatePicker);
 
-export { DatePickerElement };
+export { DatePicker };

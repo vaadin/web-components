@@ -1,16 +1,16 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { aTimeout, click, fixtureSync, isIOS, nextFrame, oneEvent, tap } from '@vaadin/testing-helpers';
-import './not-animated-styles.js';
-import '../vaadin-date-picker.js';
+import { aTimeout, click, fixtureSync, isIOS, oneEvent, tap } from '@vaadin/testing-helpers';
 import { close, getOverlayContent, monthsEqual, open } from './common.js';
+import '../src/vaadin-date-picker.js';
 
 describe('basic features', () => {
-  let datepicker, toggleButton;
+  let datepicker, input, toggleButton;
 
   beforeEach(() => {
     datepicker = fixtureSync(`<vaadin-date-picker></vaadin-date-picker>`);
     toggleButton = datepicker.shadowRoot.querySelector('[part="toggle-button"]');
+    input = datepicker.inputElement;
   });
 
   it('should parse date components with varying number of digits', () => {
@@ -42,15 +42,15 @@ describe('basic features', () => {
   it('should blur when focused on fullscreen', () => {
     datepicker._fullscreen = true;
 
-    const spy = sinon.spy(datepicker, 'blur');
-    datepicker.dispatchEvent(new CustomEvent('focus'));
+    const spy = sinon.spy(input, 'blur');
+    input.dispatchEvent(new CustomEvent('focus'));
 
     expect(spy.called).to.be.true;
   });
 
   it('should blur when datepicker is opened on fullscreen', async () => {
     datepicker._fullscreen = true;
-    const spy = sinon.spy(datepicker.focusElement, 'blur');
+    const spy = sinon.spy(input, 'blur');
     await open(datepicker);
     expect(spy.called).to.be.true;
   });
@@ -71,13 +71,13 @@ describe('basic features', () => {
   });
 
   it('should open on input tap', async () => {
-    tap(datepicker.$.input);
+    tap(input);
     await oneEvent(datepicker.$.overlay, 'vaadin-overlay-open');
   });
 
   it('should not open on input tap when autoOpenDisabled is true and not on mobile', () => {
     datepicker.autoOpenDisabled = true;
-    tap(datepicker.$.input);
+    tap(input);
     if (!datepicker._noInput) {
       expect(datepicker.opened).not.to.be.true;
     } else {
@@ -88,7 +88,7 @@ describe('basic features', () => {
   it('should pass the placeholder attribute to the input tag', () => {
     const placeholder = 'Pick a date';
     datepicker.set('placeholder', placeholder);
-    expect(datepicker.$.input.placeholder).to.be.equal(placeholder);
+    expect(input.placeholder).to.be.equal(placeholder);
   });
 
   it('should scroll to today by default', async () => {
@@ -143,27 +143,23 @@ describe('basic features', () => {
     expect(spy.called).to.be.true;
   });
 
-  it('should not have label defined by default', () => {
-    expect(datepicker.label).to.be.undefined;
-  });
-
   it('should lead zeros correctly', () => {
     datepicker.value = '+000300-02-01';
-    expect(datepicker._inputElement.value).to.equal('2/1/0300');
+    expect(input.value).to.equal('2/1/0300');
   });
 
   it('should format display correctly', () => {
     datepicker.value = '2000-02-01';
-    expect(datepicker._inputElement.value).to.equal('2/1/2000');
+    expect(input.value).to.equal('2/1/2000');
     datepicker.value = '1999-12-31';
-    expect(datepicker._inputElement.value).to.equal('12/31/1999');
+    expect(input.value).to.equal('12/31/1999');
   });
 
   it('should format display correctly with sub 100 years', () => {
     datepicker.value = '+000001-02-01';
-    expect(datepicker._inputElement.value).to.equal('2/1/0001');
+    expect(input.value).to.equal('2/1/0001');
     datepicker.value = '+000099-02-01';
-    expect(datepicker._inputElement.value).to.equal('2/1/0099');
+    expect(input.value).to.equal('2/1/0099');
   });
 
   it('should open by tapping the calendar icon', async () => {
@@ -297,9 +293,9 @@ describe('basic features', () => {
   });
 
   describe('i18n', () => {
-    let overlayContent, clearButton;
+    let overlayContent;
+
     beforeEach(async () => {
-      clearButton = datepicker._inputElement.shadowRoot.querySelector('[part="clear-button"]');
       datepicker.set('i18n.weekdays', 'sunnuntai_maanantai_tiistai_keskiviikko_torstai_perjantai_lauantai'.split('_'));
       datepicker.set('i18n.weekdaysShort', 'su_ma_ti_ke_to_pe_la'.split('_'));
       datepicker.set('i18n.firstDayOfWeek', 1);
@@ -345,8 +341,6 @@ describe('basic features', () => {
     });
 
     it('should display buttons in correct locale', () => {
-      expect(toggleButton.getAttribute('aria-label').trim()).to.equal('Kalenteri');
-      expect(clearButton.getAttribute('aria-label').trim()).to.equal('Tyhjennä');
       expect(overlayContent.$.todayButton.textContent.trim()).to.equal('Tänään');
       expect(overlayContent.$.cancelButton.textContent.trim()).to.equal('Peruuta');
     });
@@ -361,13 +355,13 @@ describe('basic features', () => {
       datepicker.disabled = true;
     });
 
-    it('dropdown should not open', () => {
-      datepicker.open();
-      expect(datepicker.$.overlay.hasAttribute('disable-upgrade')).to.be.true;
+    it('should propagate disabled property to the input', () => {
+      expect(input.disabled).to.be.true;
     });
 
-    it('calendar icon should not be hidden', () => {
-      expect(toggleButton.clientHeight).to.not.equal(0);
+    it('should not open overlay when disabled', () => {
+      datepicker.open();
+      expect(datepicker.$.overlay.hasAttribute('disable-upgrade')).to.be.true;
     });
   });
 
@@ -376,17 +370,17 @@ describe('basic features', () => {
       datepicker.readonly = true;
     });
 
-    it('dropdown should not open', () => {
+    it('should propagate readonly property to the input', () => {
+      expect(input.readOnly).to.be.true;
+    });
+
+    it('should not open overlay when readonly', () => {
       datepicker.open();
       expect(datepicker.$.overlay.hasAttribute('disable-upgrade')).to.be.true;
     });
 
-    it('calendar icon should not be hidden', () => {
-      expect(toggleButton.clientHeight).not.to.equal(0);
-    });
-
-    it('should be focusable', () => {
-      expect(datepicker.$.input.tabIndex).to.equal(0);
+    it('should make input focusable', () => {
+      expect(input.tabIndex).to.equal(0);
     });
   });
 
@@ -486,48 +480,6 @@ describe('basic features', () => {
       datepicker.open();
     });
   });
-
-  describe('clear button', () => {
-    let input;
-
-    beforeEach(() => {
-      input = datepicker._inputElement;
-    });
-
-    it('should not have clear-button-visible by default', () => {
-      expect(datepicker).to.have.property('clearButtonVisible', false);
-      expect(input).to.have.property('clearButtonVisible', false);
-    });
-
-    it('should bind clear-button-visible to text-field', () => {
-      datepicker.clearButtonVisible = true;
-      expect(datepicker).to.have.property('clearButtonVisible', true);
-      expect(input).to.have.property('clearButtonVisible', true);
-    });
-  });
-
-  describe('helper text', () => {
-    it('should display the helper text when provided', () => {
-      datepicker.helperText = 'Foo';
-      expect(datepicker._inputElement.helperText).to.equal(datepicker.helperText);
-    });
-  });
-});
-
-describe('slots', () => {
-  it('should expose the text-field prefix slot', async () => {
-    const datepicker = fixtureSync('<vaadin-date-picker><div slot="prefix">foo</div></vaadin-date-picker>');
-    const input = datepicker._inputElement;
-    await nextFrame();
-    const slot = input.querySelector('slot[name=prefix]');
-    expect(slot.assignedNodes()[0].textContent).to.eql('foo');
-  });
-
-  it('should display the helper text when slotted helper available', async () => {
-    const datepicker = fixtureSync('<vaadin-date-picker><div slot="helper">foo</div></vaadin-date-picker>');
-    await nextFrame();
-    expect(datepicker._inputElement.querySelector('[slot="helper"]').assignedNodes()[0].textContent).to.eql('foo');
-  });
 });
 
 describe('inside flexbox', () => {
@@ -548,7 +500,7 @@ describe('clear-button-visible', () => {
 
   beforeEach(() => {
     datepicker = fixtureSync('<vaadin-date-picker clear-button-visible></vaadin-date-picker>');
-    clearButton = datepicker._inputElement.shadowRoot.querySelector('[part="clear-button"]');
+    clearButton = datepicker.shadowRoot.querySelector('[part="clear-button"]');
   });
 
   it('should have clearButtonVisible property', () => {
@@ -606,6 +558,19 @@ describe('wrapped', () => {
   it('should match the parent width', () => {
     container.querySelector('div').style.width = '120px';
     datepicker.style.width = '100%';
-    expect(datepicker.$.input.clientWidth).to.equal(120);
+    expect(datepicker.inputElement.clientWidth).to.equal(120);
+  });
+});
+
+describe('initial value attribute', () => {
+  let datepicker, input;
+
+  beforeEach(() => {
+    datepicker = fixtureSync('<vaadin-date-picker value="2000-01-01"></vaadin-date-picker>');
+    input = datepicker.inputElement;
+  });
+
+  it('should format the input value', () => {
+    expect(input.value).to.equal('1/1/2000');
   });
 });

@@ -267,7 +267,7 @@ describe('slotted helper', () => {
   });
 
   it('should display the helper text when slotted helper available', () => {
-    expect(customField.querySelector('[slot="helper"]').assignedNodes()[0].textContent).to.eql('foo');
+    expect(customField.querySelector('slot[slot="helper"]').assignedNodes()[0].textContent).to.eql('foo');
   });
 });
 

@@ -18,9 +18,8 @@ import {
   tap
 } from '@vaadin/testing-helpers';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
-import './not-animated-styles.js';
-import '../vaadin-date-picker.js';
 import { close, getOverlayContent, open } from './common.js';
+import '../src/vaadin-date-picker.js';
 
 (isIOS ? describe.skip : describe)('keyboard input', () => {
   let target;
@@ -51,7 +50,7 @@ import { close, getOverlayContent, open } from './common.js';
 
   beforeEach(() => {
     datepicker = fixtureSync('<vaadin-date-picker></vaadin-date-picker>');
-    target = datepicker._inputElement;
+    target = datepicker.inputElement;
   });
 
   it('should open overlay on input', () => {
@@ -221,20 +220,21 @@ import { close, getOverlayContent, open } from './common.js';
     await nextRender(datepicker);
     target.value = '';
     const spy = sinon.spy(datepicker, 'validate');
-    datepicker.dispatchEvent(new Event('blur'));
+    target.dispatchEvent(new Event('blur'));
     expect(spy.callCount).to.equal(1);
     expect(datepicker.invalid).to.be.false;
   });
 
   it('should validate on clear button', async () => {
     datepicker.clearButtonVisible = true;
-    const clearButton = target.shadowRoot.querySelector('[part="clear-button"]');
     inputText('foo');
     await close(datepicker);
     // wait for overlay to finish closing. Without this, clear button click
     // will trigger "close()" again, which will result in infinite loop.
     await nextRender(datepicker);
-    click(clearButton);
+    const spy = sinon.spy(datepicker, 'validate');
+    click(datepicker.$.clearButton);
+    expect(spy.callCount).to.equal(1);
     expect(datepicker.invalid).to.be.false;
   });
 
@@ -455,31 +455,31 @@ import { close, getOverlayContent, open } from './common.js';
 
     it('should be tabbable', () => {
       expect(parseInt(overlayContent.getAttribute('tabindex'), 10)).to.equal(0);
-      expect(datepicker._inputElement.hasAttribute('focused')).to.equal(false);
+      expect(datepicker.hasAttribute('focused')).to.be.false;
     });
 
     it('should focus the input on esc', () => {
       arrowDown(target);
       esc(target);
-      expect(datepicker._inputElement.hasAttribute('focused')).to.be.true;
+      expect(datepicker.hasAttribute('focused')).to.be.true;
     });
 
     it('should focus the input on date tap', () => {
       arrowDown(target);
       overlayContent.dispatchEvent(new CustomEvent('date-tap', { bubbles: true, composed: true }));
-      expect(datepicker._inputElement.hasAttribute('focused')).to.be.true;
+      expect(datepicker.hasAttribute('focused')).to.be.true;
     });
 
     it('should focus the input on date cancel', () => {
       arrowDown(target);
       tap(overlayContent.$.cancelButton);
-      expect(datepicker._inputElement.hasAttribute('focused')).to.be.true;
+      expect(datepicker.hasAttribute('focused')).to.be.true;
     });
 
     it('should focus cancel on input shift tab', async () => {
       await open(datepicker);
-      datepicker._inputElement.focus();
-      tab(datepicker._inputElement, ['shift']);
+      datepicker.inputElement.focus();
+      tab(datepicker.inputElement, ['shift']);
       expect(overlayContent.$.cancelButton.hasAttribute('focused')).to.be.true;
     });
 
@@ -493,14 +493,14 @@ import { close, getOverlayContent, open } from './common.js';
       expect(spy.called).to.be.true;
     });
 
-    it('should keep focused attribute in focusElement when the focus moves to the overlay', async () => {
+    it('should keep focused attribute when the focus moves to the overlay', async () => {
       await open(datepicker);
       tap(overlayContent);
       datepicker.focusElement.blur();
-      expect(datepicker.focusElement.hasAttribute('focused')).to.be.false;
+      expect(datepicker.hasAttribute('focused')).to.be.false;
 
       overlayContent.focus();
-      expect(datepicker.focusElement.hasAttribute('focused')).to.be.true;
+      expect(datepicker.hasAttribute('focused')).to.be.true;
     });
 
     it('should not reveal the focused date on tap', async () => {
@@ -515,7 +515,7 @@ import { close, getOverlayContent, open } from './common.js';
     it('should reveal the focused date on tab focus from input', async () => {
       await open(datepicker);
       const spy = sinon.spy(overlayContent, 'revealDate');
-      tab(datepicker._inputElement);
+      tab(datepicker.inputElement);
       expect(spy.called).to.be.true;
     });
 
@@ -563,9 +563,8 @@ import { close, getOverlayContent, open } from './common.js';
 
     it('should fire change clear button click', () => {
       datepicker.clearButtonVisible = true;
-      const clearButton = datepicker._inputElement.shadowRoot.querySelector('[part="clear-button"]');
       datepicker.value = '2000-01-01';
-      click(clearButton);
+      click(datepicker.$.clearButton);
       expect(spy.calledOnce).to.be.true;
     });
 
@@ -619,20 +618,20 @@ import { close, getOverlayContent, open } from './common.js';
 
     it('should set datepicker value on blur', () => {
       inputText('1/1/2000');
-      datepicker.dispatchEvent(new Event('blur'));
+      target.dispatchEvent(new Event('blur'));
       expect(datepicker.value).to.equal('2000-01-01');
     });
 
     it('should not be invalid on blur if valid date is entered', () => {
       inputText('1/1/2000');
-      datepicker.dispatchEvent(new Event('blur'));
+      target.dispatchEvent(new Event('blur'));
       expect(datepicker.invalid).not.to.be.true;
     });
 
     it('should validate on blur only once', () => {
       inputText('foo');
       const spy = sinon.spy(datepicker, 'validate');
-      datepicker.dispatchEvent(new Event('blur'));
+      target.dispatchEvent(new Event('blur'));
       expect(spy.callCount).to.equal(1);
       expect(datepicker.invalid).to.be.true;
     });
@@ -755,7 +754,7 @@ import { close, getOverlayContent, open } from './common.js';
 
       it('should change after validate on clear button click', () => {
         datepicker.clearButtonVisible = true;
-        click(target.shadowRoot.querySelector('[part="clear-button"]'));
+        click(datepicker.$.clearButton);
         expect(validateSpy.calledOnce).to.be.true;
         expect(changeSpy.calledOnce).to.be.true;
         expect(changeSpy.calledAfter(validateSpy)).to.be.true;
@@ -821,7 +820,7 @@ import { close, getOverlayContent, open } from './common.js';
       });
 
       it('should validate on blur', () => {
-        datepicker.dispatchEvent(new Event('blur'));
+        target.dispatchEvent(new Event('blur'));
         expect(validateSpy.calledOnce).to.be.true;
         expect(changeSpy.called).to.be.false;
       });
@@ -877,7 +876,7 @@ import { close, getOverlayContent, open } from './common.js';
         it('should change after validate on Backspace & blur', () => {
           target.value = '';
           target.dispatchEvent(new CustomEvent('change', { bubbles: true }));
-          datepicker.dispatchEvent(new Event('blur'));
+          target.dispatchEvent(new Event('blur'));
           expect(validateSpy.calledOnce).to.be.true;
           expect(changeSpy.calledOnce).to.be.true;
           expect(changeSpy.calledAfter(validateSpy)).to.be.true;

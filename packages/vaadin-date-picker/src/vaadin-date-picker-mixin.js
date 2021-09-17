@@ -5,15 +5,20 @@
  */
 import { IronA11yKeysBehavior } from '@polymer/iron-a11y-keys-behavior/iron-a11y-keys-behavior.js';
 import { IronResizableBehavior } from '@polymer/iron-resizable-behavior/iron-resizable-behavior.js';
-import { dateAllowed, dateEquals, extractDateParts, getClosestDate } from './vaadin-date-picker-helper.js';
 import { addListener } from '@polymer/polymer/lib/utils/gestures.js';
 import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
+import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
+import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
+import { InputMixin } from '@vaadin/field-base/src/input-mixin.js';
+import { dateAllowed, dateEquals, extractDateParts, getClosestDate } from './vaadin-date-picker-helper.js';
 
 /**
  * @polymerMixin
  */
 export const DatePickerMixin = (subclass) =>
-  class VaadinDatePickerMixin extends mixinBehaviors([IronResizableBehavior], subclass) {
+  class VaadinDatePickerMixin extends DelegateFocusMixin(
+    InputMixin(KeyboardMixin(mixinBehaviors([IronResizableBehavior], subclass)))
+  ) {
     static get properties() {
       return {
         /**
@@ -48,33 +53,12 @@ export const DatePickerMixin = (subclass) =>
         },
 
         /**
-         * Set to true to mark the input as required.
-         * @type {boolean}
-         */
-        required: {
-          type: Boolean,
-          value: false
-        },
-
-        /**
-         * The name of this element.
-         */
-        name: {
-          type: String
-        },
-
-        /**
          * Date which should be visible when there is no value selected.
          *
          * The same date formats as for the `value` property are supported.
          * @attr {string} initial-position
          */
         initialPosition: String,
-
-        /**
-         * The label for this element.
-         */
-        label: String,
 
         /**
          * Set true to open the date selector overlay.
@@ -107,6 +91,7 @@ export const DatePickerMixin = (subclass) =>
          * @protected
          */
         _fullscreen: {
+          type: Boolean,
           value: false,
           observer: '_fullscreenChanged'
         },
@@ -175,9 +160,6 @@ export const DatePickerMixin = (subclass) =>
          *   // Translation of the Calendar icon button title.
          *   calendar: 'Calendar',
          *
-         *   // Translation of the Clear icon button title.
-         *   lear: 'Clear',
-         *
          *   // Translation of the Today shortcut button text.
          *   today: 'Today',
          *
@@ -235,7 +217,6 @@ export const DatePickerMixin = (subclass) =>
               firstDayOfWeek: 0,
               week: 'Week',
               calendar: 'Calendar',
-              clear: 'Clear',
               today: 'Today',
               cancel: 'Cancel',
               formatDate: (d) => {
@@ -326,7 +307,7 @@ export const DatePickerMixin = (subclass) =>
         /** @private */
         _noInput: {
           type: Boolean,
-          computed: '_isNoInput(_fullscreen, _ios, i18n, i18n.*)'
+          computed: '_isNoInput(inputElement, _fullscreen, _ios, i18n, i18n.*)'
         },
 
         /** @private */
@@ -356,100 +337,106 @@ export const DatePickerMixin = (subclass) =>
 
     static get observers() {
       return [
-        '_updateHasValue(value)',
         '_selectedDateChanged(_selectedDate, i18n.formatDate)',
         '_focusedDateChanged(_focusedDate, i18n.formatDate)',
         '_announceFocusedDate(_focusedDate, opened, _ignoreAnnounce)'
       ];
     }
 
+    /**
+     * Override a getter from `ClearButtonMixin` to make it optional
+     * and to prevent warning when a clear button is missing,
+     * for example when using <vaadin-date-picker-light>.
+     * @protected
+     * @return {Element | null | undefined}
+     */
+    get clearElement() {
+      return null;
+    }
+
+    /** @protected */
+    set _inputValue(value) {
+      if (this.inputElement) {
+        this.inputElement.value = value;
+      }
+    }
+
+    /** @protected */
+    get _inputValue() {
+      return this.inputElement ? this.inputElement.value : undefined;
+    }
+
+    /** @private */
+    get _nativeInput() {
+      if (this.inputElement) {
+        // TODO: support focusElement for backwards compatibility
+        return this.inputElement.focusElement || this.inputElement;
+      }
+      return null;
+    }
+
+    constructor() {
+      super();
+
+      this._boundOnScroll = this._onScroll.bind(this);
+      this._boundUpdateAlignmentAndPosition = this._updateAlignmentAndPosition.bind(this);
+    }
+
+    /**
+     * Override an event listener from `DelegateFocusMixin`
+     * @protected
+     */
+    _onFocus(event) {
+      super._onFocus(event);
+
+      this._noInput && event.target.blur();
+    }
+
+    /**
+     * Override an event listener from `DelegateFocusMixin`
+     * @protected
+     */
+    _onBlur(event) {
+      super._onBlur(event);
+
+      if (!this.opened) {
+        if (this.autoOpenDisabled) {
+          const parsedDate = this._getParsedDate();
+          if (this._isValidDate(parsedDate)) {
+            this._selectedDate = parsedDate;
+          }
+        }
+
+        if (this.inputElement.value === '' && this.__dispatchChange) {
+          this.validate();
+          this.value = '';
+          this.__dispatchChange = false;
+        } else {
+          this.validate();
+        }
+      }
+    }
+
     /** @protected */
     ready() {
       super.ready();
-      this._boundOnScroll = this._onScroll.bind(this);
-      this._boundFocus = this._focus.bind(this);
-      this._boundUpdateAlignmentAndPosition = this._updateAlignmentAndPosition.bind(this);
-
-      const isClearButton = (e) => {
-        const path = e.composedPath();
-        const inputIndex = path.indexOf(this._inputElement);
-        return (
-          path.slice(0, inputIndex).filter((el) => el.getAttribute && el.getAttribute('part') === 'clear-button')
-            .length === 1
-        );
-      };
 
       addListener(this, 'tap', (e) => {
-        // FIXME(platosha): use preventDefault in the text field clear button,
-        // then the following composedPath check could be simplified down
-        // to `if (!e.defaultPrevented)`.
-        // https://github.com/vaadin/vaadin-text-field/issues/352
-        if (!isClearButton(e) && (!this.autoOpenDisabled || this._noInput)) {
+        if (!this._isClearButton(e) && (!this.autoOpenDisabled || this._noInput)) {
           this.open();
         }
       });
 
       this.addEventListener('touchend', (e) => {
-        if (!isClearButton(e)) {
+        if (!this._isClearButton(e)) {
           e.preventDefault();
         }
       });
-      this.addEventListener('keydown', this._onKeydown.bind(this));
-      this.addEventListener('input', this._onUserInput.bind(this));
-      this.addEventListener('focus', (e) => this._noInput && e.target.blur());
-      this.addEventListener('blur', () => {
-        if (!this.opened) {
-          if (this.autoOpenDisabled) {
-            const parsedDate = this._getParsedDate();
-            if (this._isValidDate(parsedDate)) {
-              this._selectedDate = parsedDate;
-            }
-          }
-
-          if (this._inputElement.value === '' && this.__dispatchChange) {
-            this.validate();
-            this.value = '';
-            this.__dispatchChange = false;
-          } else {
-            this.validate();
-          }
-        }
-      });
-    }
-
-    /** @private */
-    _initOverlay() {
-      this.$.overlay.removeAttribute('disable-upgrade');
-      this._overlayInitialized = true;
-
-      this.$.overlay.addEventListener('opened-changed', (e) => (this.opened = e.detail.value));
-
-      this._overlayContent.addEventListener('close', this._close.bind(this));
-      this._overlayContent.addEventListener('focus-input', this._focusAndSelect.bind(this));
-      this.$.overlay.addEventListener('vaadin-overlay-escape-press', this._boundFocus);
-
-      // Keep focus attribute in focusElement for styling
-      this._overlayContent.addEventListener('focus', () => this.focusElement._setFocused(true));
-
-      this.$.overlay.addEventListener('vaadin-overlay-close', this._onVaadinOverlayClose.bind(this));
-
-      const bringToFrontListener = () => {
-        requestAnimationFrame(() => {
-          this.$.overlay.bringToFront();
-        });
-      };
-
-      this.addEventListener('mousedown', bringToFrontListener);
-      this.addEventListener('touchstart', bringToFrontListener);
     }
 
     /** @protected */
     disconnectedCallback() {
       super.disconnectedCallback();
-
-      if (this._overlayInitialized) {
-        this.$.overlay.removeEventListener('vaadin-overlay-escape-press', this._boundFocus);
-      }
 
       this.opened = false;
     }
@@ -463,15 +450,6 @@ export const DatePickerMixin = (subclass) =>
       }
     }
 
-    /** @private */
-    _close(e) {
-      if (e) {
-        e.stopPropagation();
-      }
-      this._focus();
-      this.close();
-    }
-
     /**
      * Closes the dropdown.
      */
@@ -481,37 +459,87 @@ export const DatePickerMixin = (subclass) =>
       }
     }
 
+    /** @private */
+    _initOverlay() {
+      this.$.overlay.removeAttribute('disable-upgrade');
+      this._overlayInitialized = true;
+
+      this.$.overlay.addEventListener('opened-changed', (e) => (this.opened = e.detail.value));
+
+      this._overlayContent.addEventListener('close', this._close.bind(this));
+      this._overlayContent.addEventListener('focus-input', this._focusAndSelect.bind(this));
+
+      // Keep focus attribute in focusElement for styling
+      this._overlayContent.addEventListener('focus', () => {
+        this.toggleAttribute('focused', true);
+      });
+
+      this.$.overlay.addEventListener('vaadin-overlay-close', this._onVaadinOverlayClose.bind(this));
+
+      this.addEventListener('mousedown', () => this.__bringToFront());
+      this.addEventListener('touchstart', () => this.__bringToFront());
+    }
+
     /**
-     * @return {HTMLElement}
-     * @protected
+     * Returns true if `value` is valid, and sets the `invalid` flag appropriately.
+     *
+     * @return {boolean} True if the value is valid and sets the `invalid` flag appropriately
      */
-    get _inputElement() {
-      return this._input();
+    validate() {
+      return !(this.invalid = !this.checkValidity());
+    }
+
+    /**
+     * Returns true if the current input value satisfies all constraints (if any)
+     *
+     * Override the `checkValidity` method for custom validations.
+     *
+     * @return {boolean} True if the value is valid
+     */
+    checkValidity() {
+      const inputValid =
+        !this._inputValue ||
+        (this._selectedDate && this._inputValue === this._getFormattedDate(this.i18n.formatDate, this._selectedDate));
+      const minMaxValid = !this._selectedDate || dateAllowed(this._selectedDate, this._minDate, this._maxDate);
+
+      let inputValidity = true;
+      if (this.inputElement) {
+        if (this.inputElement.checkValidity) {
+          inputValidity = this.inputElement.checkValidity();
+        } else if (this.inputElement.validate) {
+          // iron-form-elements have the validate API
+          inputValidity = this.inputElement.validate();
+        }
+      }
+
+      return inputValid && minMaxValid && inputValidity;
     }
 
     /** @private */
-    get _nativeInput() {
-      if (this._inputElement) {
-        // vaadin-text-field's input is focusElement
-        // iron-input's input is inputElement
-        return this._inputElement.focusElement
-          ? this._inputElement.focusElement
-          : this._inputElement.inputElement
-          ? this._inputElement.inputElement
-          : this._inputElement;
+    _close(e) {
+      if (e) {
+        e.stopPropagation();
       }
-      return null;
+      this._focus();
+      this.close();
+    }
+
+    /** @private */
+    __bringToFront() {
+      requestAnimationFrame(() => {
+        this.$.overlay.bringToFront();
+      });
     }
 
     /** @private */
     _parseDate(str) {
       // Parsing with RegExp to ensure correct format
-      var parts = /^([-+]\d{1}|\d{2,4}|[-+]\d{6})-(\d{1,2})-(\d{1,2})$/.exec(str);
+      const parts = /^([-+]\d{1}|\d{2,4}|[-+]\d{6})-(\d{1,2})-(\d{1,2})$/.exec(str);
       if (!parts) {
         return;
       }
 
-      var date = new Date(0, 0); // Wrong date (1900-01-01), but with midnight in local time
+      const date = new Date(0, 0); // Wrong date (1900-01-01), but with midnight in local time
       date.setFullYear(parseInt(parts[1], 10));
       date.setMonth(parseInt(parts[2], 10) - 1);
       date.setDate(parseInt(parts[3], 10));
@@ -519,8 +547,8 @@ export const DatePickerMixin = (subclass) =>
     }
 
     /** @private */
-    _isNoInput(fullscreen, ios, i18n) {
-      return !this._inputElement || fullscreen || ios || !i18n.parseDate;
+    _isNoInput(inputElement, fullscreen, ios, i18n) {
+      return !inputElement || fullscreen || ios || !i18n.parseDate;
     }
 
     /** @private */
@@ -549,6 +577,16 @@ export const DatePickerMixin = (subclass) =>
       return [year, month, day].join('-');
     }
 
+    /** @protected */
+    _inputElementChanged(input) {
+      super._inputElementChanged(input);
+      if (input) {
+        input.setAttribute('role', 'combobox');
+        input.setAttribute('aria-expanded', !!this.opened);
+        this._applyInputValue(this._selectedDate);
+      }
+    }
+
     /** @private */
     _openedChanged(opened) {
       if (opened && !this._overlayInitialized) {
@@ -559,6 +597,9 @@ export const DatePickerMixin = (subclass) =>
       }
       if (opened) {
         this._updateAlignmentAndPosition();
+      }
+      if (this.inputElement) {
+        this.inputElement.setAttribute('aria-expanded', opened);
       }
     }
 
@@ -597,15 +638,6 @@ export const DatePickerMixin = (subclass) =>
     }
 
     /** @private */
-    _updateHasValue(value) {
-      if (value) {
-        this.setAttribute('has-value', '');
-      } else {
-        this.removeAttribute('has-value');
-      }
-    }
-
-    /** @private */
     __getOverlayTheme(theme, overlayInitialized) {
       if (overlayInitialized) {
         return theme;
@@ -619,7 +651,7 @@ export const DatePickerMixin = (subclass) =>
         return;
       }
 
-      var date = this._parseDate(value);
+      const date = this._parseDate(value);
       if (!date) {
         this.value = oldValue;
         return;
@@ -634,8 +666,11 @@ export const DatePickerMixin = (subclass) =>
     _valueChanged(value, oldValue) {
       if (this.__dispatchChange) {
         this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
+        this.__dispatchChange = false;
       }
       this._handleDateChange('_selectedDate', value, oldValue);
+
+      this._toggleHasValue(!!value);
     }
 
     /** @private */
@@ -654,7 +689,7 @@ export const DatePickerMixin = (subclass) =>
         return;
       }
       if (!this._fullscreen) {
-        const inputRect = this._inputElement.getBoundingClientRect();
+        const inputRect = this.inputElement.getBoundingClientRect();
 
         const bottomAlign = inputRect.top > window.innerHeight / 2;
         const rightAlign = inputRect.left + this.clientWidth / 2 > window.innerWidth / 2;
@@ -682,7 +717,7 @@ export const DatePickerMixin = (subclass) =>
         }
       }
 
-      this.$.overlay.setAttribute('dir', getComputedStyle(this._inputElement).getPropertyValue('direction'));
+      this.$.overlay.setAttribute('dir', getComputedStyle(this.inputElement).getPropertyValue('direction'));
       this._overlayContent._repositionYearScroller();
     }
 
@@ -695,12 +730,11 @@ export const DatePickerMixin = (subclass) =>
 
     /** @protected */
     _onOverlayOpened() {
-      this._openedWithFocusRing =
-        this.hasAttribute('focus-ring') || (this.focusElement && this.focusElement.hasAttribute('focus-ring'));
+      this._openedWithFocusRing = this.hasAttribute('focus-ring');
 
-      var parsedInitialPosition = this._parseDate(this.initialPosition);
+      const parsedInitialPosition = this._parseDate(this.initialPosition);
 
-      var initialPosition =
+      const initialPosition =
         this._selectedDate || this._overlayContent.initialPosition || parsedInitialPosition || new Date();
 
       if (parsedInitialPosition || dateAllowed(initialPosition, this._minDate, this._maxDate)) {
@@ -733,8 +767,6 @@ export const DatePickerMixin = (subclass) =>
         this.focusElement.blur();
       }
 
-      this.updateStyles();
-
       this._ignoreAnnounce = false;
     }
 
@@ -742,10 +774,10 @@ export const DatePickerMixin = (subclass) =>
     // ancestor container with -webkit-overflow-scrolling: touch;
     /** @private */
     _preventWebkitOverflowScrollingTouch(element) {
-      var result = [];
+      const result = [];
       while (element) {
         if (window.getComputedStyle(element).webkitOverflowScrolling === 'touch') {
-          var oldInlineValue = element.style.webkitOverflowScrolling;
+          const oldInlineValue = element.style.webkitOverflowScrolling;
           element.style.webkitOverflowScrolling = 'auto';
           result.push({
             element: element,
@@ -792,8 +824,6 @@ export const DatePickerMixin = (subclass) =>
         this._touchPrevented = [];
       }
 
-      this.updateStyles();
-
       this._selectParsedOrFocusedDate();
 
       if (this._nativeInput && this._nativeInput.selectionStart) {
@@ -804,49 +834,6 @@ export const DatePickerMixin = (subclass) =>
       if (!this.value) {
         this.validate();
       }
-    }
-
-    /**
-     * Returns true if `value` is valid, and sets the `invalid` flag appropriately.
-     *
-     * @param {string=} value Value to validate. Optional, defaults to user's input value.
-     * @return {boolean} True if the value is valid and sets the `invalid` flag appropriately
-     */
-    validate() {
-      // Note (Yuriy): Workaround `this._inputValue` is used in order
-      // to avoid breaking change on custom `checkValidity`.
-      // Can be removed with next major.
-      return !(this.invalid = !this.checkValidity(this._inputValue));
-    }
-
-    /**
-     * Returns true if the current input value satisfies all constraints (if any)
-     *
-     * Override the `checkValidity` method for custom validations.
-     *
-     * @param {string=} value Value to validate. Optional, defaults to the selected date.
-     * @return {boolean} True if the value is valid
-     */
-    checkValidity() {
-      const inputValid =
-        !this._inputValue ||
-        (this._selectedDate && this._inputValue === this._getFormattedDate(this.i18n.formatDate, this._selectedDate));
-      const minMaxValid = !this._selectedDate || dateAllowed(this._selectedDate, this._minDate, this._maxDate);
-
-      let inputValidity = true;
-      if (this._inputElement) {
-        if (this._inputElement.checkValidity) {
-          // vaadin native input elements have the checkValidity method
-          this._inputElement.__forceCheckValidity = true;
-          inputValidity = this._inputElement.checkValidity();
-          this._inputElement.__forceCheckValidity = false;
-        } else if (this._inputElement.validate) {
-          // iron-form-elements have the validate API
-          inputValidity = this._inputElement.validate();
-        }
-      }
-
-      return inputValid && minMaxValid && inputValidity;
     }
 
     /** @private */
@@ -861,7 +848,7 @@ export const DatePickerMixin = (subclass) =>
       if (this._noInput) {
         this._overlayInitialized && this._overlayContent.focus();
       } else {
-        this._inputElement.focus();
+        this.inputElement.focus();
       }
     }
 
@@ -893,10 +880,10 @@ export const DatePickerMixin = (subclass) =>
      * @private
      */
     _eventKey(e) {
-      var keys = ['down', 'up', 'enter', 'esc', 'tab'];
+      const keys = ['down', 'up', 'enter', 'esc', 'tab'];
 
-      for (var i = 0; i < keys.length; i++) {
-        var k = keys[i];
+      for (let i = 0; i < keys.length; i++) {
+        const k = keys[i];
         if (IronA11yKeysBehavior.keyboardEventMatchesKeys(e, k)) {
           return k;
         }
@@ -908,8 +895,43 @@ export const DatePickerMixin = (subclass) =>
       return d && !isNaN(d.getTime());
     }
 
-    /** @private */
-    _onKeydown(e) {
+    /**
+     * Override an event listener from `InputConstraintsMixin`
+     * to have date-picker fully control when to fire a change event.
+     * @protected
+     */
+    _onChange(event) {
+      // For change event on the native <input> blur, after the input is cleared,
+      // we schedule change event to be dispatched on date-picker blur.
+      if (
+        this.inputElement.value === '' &&
+        !(event.detail && event.detail.sourceEvent && event.detail.sourceEvent.__fromClearButton)
+      ) {
+        this.__dispatchChange = true;
+      }
+
+      event.stopPropagation();
+    }
+
+    /**
+     * Override an event listener from `ClearButtonMixin`
+     * to validate and dispatch change on clear.
+     * @protected
+     */
+    _onClearButtonClick() {
+      this.value = '';
+      this._inputValue = '';
+      this.validate();
+      this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
+    }
+
+    /**
+     * Override an event listener from `KeyboardMixin`.
+     * Do not call `super` to also override `ClearButtonMixin`.
+     * @protected
+     * @override
+     */
+    _onKeyDown(e) {
       if (this._noInput) {
         // The input element cannot be readonly as it would conflict with
         // the required attribute. Both are not allowed on an input element.
@@ -946,7 +968,7 @@ export const DatePickerMixin = (subclass) =>
             }
             this.close();
           } else {
-            if (!isValidDate && this._inputElement.value !== '') {
+            if (!isValidDate && this.inputElement.value !== '') {
               this.validate();
             } else {
               const oldValue = this.value;
@@ -962,9 +984,11 @@ export const DatePickerMixin = (subclass) =>
           if (this.opened) {
             this._focusedDate = this._selectedDate;
             this._close();
+          } else if (this.clearButtonVisible) {
+            this._onClearButtonClick();
           } else if (this.autoOpenDisabled) {
             //Do not restore selected date if Esc was pressed after clearing input field
-            if (this._inputElement.value === '') {
+            if (this.inputElement.value === '') {
               this._selectedDate = null;
             }
             this._applyInputValue(this._selectedDate);
@@ -997,19 +1021,20 @@ export const DatePickerMixin = (subclass) =>
       return parsedDate;
     }
 
-    /** @private */
-    _onUserInput(e) {
-      if (!this.opened && this._inputElement.value && !this.autoOpenDisabled) {
+    /** @protected */
+    _isClearButton(event) {
+      return event.composedPath()[0] === this.clearElement;
+    }
+
+    /**
+     * Override an event listener from `InputMixin`
+     * @protected
+     */
+    _onInput() {
+      if (!this.opened && this.inputElement.value && !this.autoOpenDisabled) {
         this.open();
       }
       this._userInputValueChanged();
-
-      if (e.__fromClearButton) {
-        this.validate();
-        this.__dispatchChange = true;
-        this.value = '';
-        this.__dispatchChange = false;
-      }
     }
 
     /** @private */

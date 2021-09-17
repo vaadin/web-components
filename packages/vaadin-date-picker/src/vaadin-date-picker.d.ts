@@ -3,9 +3,12 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { GestureEventListeners } from '@polymer/polymer/lib/mixins/gesture-event-listeners.js';
-import { ControlStateMixin } from '@vaadin/vaadin-control-state-mixin/vaadin-control-state-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { AriaLabelMixin } from '@vaadin/field-base/src/aria-label-mixin.js';
+import { ClearButtonMixin } from '@vaadin/field-base/src/clear-button-mixin.js';
+import { FieldAriaMixin } from '@vaadin/field-base/src/field-aria-mixin.js';
+import { InputConstraintsMixin } from '@vaadin/field-base/src/input-constraints-mixin.js';
+import { InputSlotMixin } from '@vaadin/field-base/src/input-slot-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { DatePickerMixin } from './vaadin-date-picker-mixin.js';
 import { DatePickerEventMap } from './interfaces';
@@ -28,7 +31,7 @@ import { DatePickerEventMap } from './interfaces';
  *
  * Part name | Description | Theme for Element
  * ----------------|----------------|----------------
- * `text-field` | Input element | vaadin-date-picker
+ * `input-field` | Input element | vaadin-date-picker
  * `clear-button` | Clear button | vaadin-date-picker
  * `toggle-button` | Toggle button | vaadin-date-picker
  * `overlay-content` | The overlay element | vaadin-date-picker
@@ -75,7 +78,7 @@ import { DatePickerEventMap } from './interfaces';
  * In addition to `<vaadin-date-picker>` itself, the following internal
  * components are themable:
  *
- * - `<vaadin-date-picker-text-field>` - has the same API as [`<vaadin-text-field>`](#/elements/vaadin-text-field).
+
  * - `<vaadin-date-picker-overlay>` - has the same API as [`<vaadin-overlay>`](#/elements/vaadin-overlay).
  * - `<vaadin-date-picker-overlay-content>`
  * - `<vaadin-month-calendar>`
@@ -88,70 +91,35 @@ import { DatePickerEventMap } from './interfaces';
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  */
-declare class DatePickerElement extends ElementMixin(
-  ControlStateMixin(ThemableMixin(DatePickerMixin(GestureEventListeners(HTMLElement))))
-) {
-  /**
-   * Focusable element used by vaadin-control-state-mixin
-   */
-  readonly focusElement: HTMLElement;
-
-  /**
-   * Set to true to disable this element.
-   */
-  disabled: boolean;
-
-  _inputValue: string;
-
-  /**
-   * Set to true to display the clear icon which clears the input.
-   */
-  clearButtonVisible: boolean;
-
-  /**
-   * The error message to display when the input is invalid.
-   */
-  errorMessage: string | null | undefined;
-
-  /**
-   * A placeholder string in addition to the label. If this is set, the label will always float.
-   */
-  placeholder: string | null | undefined;
-
-  /**
-   * String used for the helper text.
-   */
-  helperText: string | null | undefined;
-
-  /**
-   * Set to true to make this element read-only.
-   */
-  readonly: boolean;
-
-  /**
-   * This property is set to true when the control value invalid.
-   */
-  invalid: boolean;
-
-  _input(): HTMLElement | null;
-
+declare class DatePicker extends HTMLElement {
   addEventListener<K extends keyof DatePickerEventMap>(
     type: K,
-    listener: (this: DatePickerElement, ev: DatePickerEventMap[K]) => void,
+    listener: (this: DatePicker, ev: DatePickerEventMap[K]) => void,
     options?: boolean | AddEventListenerOptions
   ): void;
 
   removeEventListener<K extends keyof DatePickerEventMap>(
     type: K,
-    listener: (this: DatePickerElement, ev: DatePickerEventMap[K]) => void,
+    listener: (this: DatePicker, ev: DatePickerEventMap[K]) => void,
     options?: boolean | EventListenerOptions
   ): void;
 }
 
+interface DatePicker
+  extends DatePickerMixin,
+    ElementMixin,
+    AriaLabelMixin,
+    ClearButtonMixin,
+    FieldAriaMixin,
+    InputSlotMixin,
+    DatePickerMixin,
+    InputConstraintsMixin,
+    ThemableMixin {}
+
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-date-picker': DatePickerElement;
+    'vaadin-date-picker': DatePicker;
   }
 }
 
-export { DatePickerElement };
+export { DatePicker };

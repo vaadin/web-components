@@ -1,6 +1,6 @@
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import '@vaadin/vaadin-lumo-styles/font-icons.js';
-import { fieldButton } from '@vaadin/vaadin-lumo-styles/mixins/field-button.js';
+import { inputFieldShared } from '@vaadin/text-field/theme/lumo/vaadin-input-field-shared-styles.js';
 
 const datePicker = css`
   :host {
@@ -20,6 +20,17 @@ const datePicker = css`
       height: 70vh;
     }
   }
+
+  :host([dir='rtl']) [part='input-field'] ::slotted(input) {
+    /* TODO: fix this in input-container, update all screenshots */
+    -webkit-mask-image: var(--_lumo-text-field-overflow-mask-image);
+    mask-image: var(--_lumo-text-field-overflow-mask-image);
+    --_lumo-text-field-overflow-mask-image: linear-gradient(to left, transparent, #000 1.25em);
+  }
+
+  :host([dir='rtl']) [part='input-field'] ::slotted(input:placeholder-shown) {
+    --_lumo-text-field-overflow-mask-image: none;
+  }
 `;
 
-registerStyles('vaadin-date-picker', [fieldButton, datePicker], { moduleId: 'lumo-date-picker' });
+registerStyles('vaadin-date-picker', [inputFieldShared, datePicker], { moduleId: 'lumo-date-picker' });

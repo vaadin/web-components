@@ -5,6 +5,8 @@
  */
 import { CustomFieldElement } from '@vaadin/vaadin-custom-field/src/vaadin-custom-field.js';
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+import { DatePicker } from '@vaadin/vaadin-date-picker/src/vaadin-date-picker.js';
+import { TimePickerElement } from '@vaadin/vaadin-time-picker/src/vaadin-time-picker.js';
 
 registerStyles(
   'vaadin-date-time-picker-custom-field',
@@ -42,6 +44,14 @@ class DateTimePickerCustomFieldElement extends CustomFieldElement {
 
   validate() {
     return;
+  }
+
+  /** @private */
+  // TODO: Remove once custom field works with fields with a slotted input
+  __getInputsFromSlot() {
+    return super.__getInputsFromSlot().filter((input) => {
+      return input instanceof DatePicker || input instanceof TimePickerElement;
+    });
   }
 }
 

@@ -25,7 +25,7 @@ describe('custom input', () => {
   });
 
   it('should open calendar on input', (done) => {
-    const target = datepicker._inputElement;
+    const target = datepicker.inputElement;
     target.value = '1';
 
     listenOnce(document, 'vaadin-overlay-open', () => {
@@ -37,7 +37,7 @@ describe('custom input', () => {
   });
 
   it('should not open calendar on input when autoOpenDisabled is true', () => {
-    const target = datepicker._inputElement;
+    const target = datepicker.inputElement;
     datepicker.autoOpenDisabled = true;
     target.value = '1';
     datepicker._nativeInput.dispatchEvent(new CustomEvent('input', { bubbles: true }));

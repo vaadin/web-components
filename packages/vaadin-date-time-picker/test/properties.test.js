@@ -264,23 +264,13 @@ const fixtures = {
     });
 
     it('should propagate i18n properties observably to date picker', () => {
-      const datePickerSpy = (datePicker.__i18nSpy = sinon.spy());
-      datePicker._createMethodObserver('__i18nSpy(i18n.*)', true);
-      // First change record for a complex observer will contain the whole observed object so let's flush it with a dummy change
-      dateTimePicker.set('i18n._flush', null);
-
       dateTimePicker.set('i18n.cancel', 'Peruuta');
-      expect(datePickerSpy.calledWith(sinon.match({ path: 'i18n.cancel', value: 'Peruuta' }))).to.be.true;
+      expect(datePicker.i18n.cancel).to.equal('Peruuta');
     });
 
     it('should propagate i18n properties observably to time picker', () => {
-      const timePickerSpy = (timePicker.__i18nSpy = sinon.spy());
-      timePicker._createMethodObserver('__i18nSpy(i18n.*)', true);
-      // First change record for a complex observer will contain the whole observed object so let's flush it with a dummy change
-      dateTimePicker.set('i18n._flush', null);
-
       dateTimePicker.set('i18n.selector', 'Ajan valitsin');
-      expect(timePickerSpy.calledWith(sinon.match({ path: 'i18n.selector', value: 'Ajan valitsin' }))).to.be.true;
+      expect(timePicker.i18n.selector).to.equal('Ajan valitsin');
     });
   });
 

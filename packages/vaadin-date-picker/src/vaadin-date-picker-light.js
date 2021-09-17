@@ -54,7 +54,7 @@ import { DatePickerMixin } from './vaadin-date-picker-mixin.js';
  * @mixes ThemableMixin
  * @mixes DatePickerMixin
  */
-class DatePickerLightElement extends ThemableMixin(DatePickerMixin(PolymerElement)) {
+class DatePickerLight extends ThemableMixin(DatePickerMixin(PolymerElement)) {
   static get template() {
     return html`
       <style>
@@ -115,7 +115,7 @@ class DatePickerLightElement extends ThemableMixin(DatePickerMixin(PolymerElemen
        */
       attrForValue: {
         type: String,
-        value: 'bind-value'
+        value: 'value'
       },
 
       /**
@@ -129,28 +129,26 @@ class DatePickerLightElement extends ThemableMixin(DatePickerMixin(PolymerElemen
     };
   }
 
-  /**
-   * @return {HTMLElement}
-   * @protected
-   */
-  _input() {
-    // Using the same selector than in combo-box.
-    // TODO: revisit this to decide the selector and document conveniently.
-    return this.querySelector('vaadin-text-field,iron-input,paper-input,.paper-input-input,.input');
+  /** @protected */
+  connectedCallback() {
+    super.connectedCallback();
+    const cssSelector = 'vaadin-text-field,iron-input,paper-input,.paper-input-input,.input';
+    this._setInputElement(this.querySelector(cssSelector));
+    this._setFocusElement(this.inputElement);
   }
 
   set _inputValue(value) {
-    if (this._inputElement) {
-      this._inputElement[dashToCamelCase(this.attrForValue)] = value;
+    if (this.inputElement) {
+      this.inputElement[dashToCamelCase(this.attrForValue)] = value;
     }
   }
 
   /** @return {string | undefined} */
   get _inputValue() {
-    return this._inputElement && this._inputElement[dashToCamelCase(this.attrForValue)];
+    return this.inputElement && this.inputElement[dashToCamelCase(this.attrForValue)];
   }
 }
 
-customElements.define(DatePickerLightElement.is, DatePickerLightElement);
+customElements.define(DatePickerLight.is, DatePickerLight);
 
-export { DatePickerLightElement };
+export { DatePickerLight };
