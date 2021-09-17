@@ -95,4 +95,13 @@ describe('upload', () => {
       await visualDiff(div, 'focus-clear');
     });
   });
+
+  describe('states', () => {
+    it('max files reached', async () => {
+      element.maxFiles = 1;
+      element.files = [{ name: 'Don Quixote.pdf' }];
+
+      await visualDiff(div, 'state-max-files-reached');
+    });
+  });
 });
