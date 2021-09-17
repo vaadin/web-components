@@ -11,8 +11,8 @@
 const IOS = navigator.userAgent.match(/iP(?:hone|ad;(?: U;)? CPU) OS (\d+)/);
 const IOS_TOUCH_SCROLLING = IOS && IOS[1] >= 8;
 const DEFAULT_PHYSICAL_COUNT = 3;
-import { Debouncer, enqueueDebouncer, flush } from './debounce';
-import { animationFrame, idlePeriod, microTask } from './async';
+import { Debouncer, enqueueDebouncer, flush } from '@vaadin/component-base/src/debounce.js';
+import { animationFrame, idlePeriod, microTask } from '@vaadin/component-base/src/async.js';
 
 /**
  * @private
