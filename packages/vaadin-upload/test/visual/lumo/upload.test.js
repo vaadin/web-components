@@ -39,4 +39,13 @@ describe('upload', () => {
       });
     });
   });
+
+  describe('states', () => {
+    it('max files reached', async () => {
+      element.maxFiles = 1;
+      element.files = [{ name: 'Don Quixote.pdf' }];
+
+      await visualDiff(div, `${import.meta.url}_state-max-files-reached`);
+    });
+  });
 });

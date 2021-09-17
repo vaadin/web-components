@@ -40,6 +40,7 @@ import './vaadin-upload-file.js';
  * `nodrop` | Set when drag and drop is disabled (e. g., on touch devices) | `:host`
  * `dragover` | A file is being dragged over the element | `:host`
  * `dragover-valid` | A dragged file is valid with `maxFiles` and `accept` criteria | `:host`
+ * `max-files-reached` | The maximum number of files that the user is allowed to add to the upload has been reached | `:host`
  *
  * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
@@ -246,6 +247,7 @@ class UploadElement extends ElementMixin(ThemableMixin(PolymerElement)) {
         value: false,
         notify: true,
         readOnly: true,
+        reflectToAttribute: true,
         computed: '_maxFilesAdded(maxFiles, files.length)'
       },
 
