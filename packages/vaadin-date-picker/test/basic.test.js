@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { aTimeout, click, fixtureSync, isIOS, oneEvent, tap } from '@vaadin/testing-helpers';
+import { aTimeout, click, fixtureSync, oneEvent, tap } from '@vaadin/testing-helpers';
 import { close, getOverlayContent, monthsEqual, open } from './common.js';
 import '../src/vaadin-date-picker.js';
 
@@ -201,39 +201,6 @@ describe('basic features', () => {
   it('should set has-value attribute when value is set', () => {
     datepicker.value = '2000-02-01';
     expect(datepicker.hasAttribute('has-value')).to.be.true;
-  });
-
-  describe('realign', () => {
-    beforeEach(async () => {
-      await open(datepicker);
-    });
-
-    it('should realign on iron-resize', async () => {
-      const spy = sinon.spy(datepicker._overlayContent, '_repositionYearScroller');
-      datepicker.dispatchEvent(new CustomEvent('iron-resize', { bubbles: false }));
-      expect(spy.called).to.be.true;
-    });
-
-    it('should realign on window scroll', () => {
-      const spy = sinon.spy(datepicker, '_updateAlignmentAndPosition');
-      window.dispatchEvent(new CustomEvent('scroll'));
-      expect(spy.called).to.be.true;
-    });
-
-    // https://github.com/vaadin/vaadin-date-picker/issues/330
-    (isIOS ? it.skip : it)('should not realign on year/month scroll', async () => {
-      const spy = sinon.spy(datepicker, '_updateAlignmentAndPosition');
-      getOverlayContent(datepicker).$.yearScroller.$.scroller.scrollTop += 100;
-      await aTimeout(1);
-      expect(spy.called).to.be.false;
-    });
-
-    it('should not realign once closed', async () => {
-      const spy = sinon.spy(datepicker, '_updateAlignmentAndPosition');
-      await close(datepicker);
-      window.dispatchEvent(new CustomEvent('scroll'));
-      expect(spy.called).to.be.false;
-    });
   });
 
   describe('value property formats', () => {
@@ -546,13 +513,6 @@ describe('wrapped', () => {
       </div>
     `);
     datepicker = container.querySelector('vaadin-date-picker');
-  });
-
-  it('should realign on container scroll', async () => {
-    const spy = sinon.spy(datepicker, '_updateAlignmentAndPosition');
-    await open(datepicker);
-    container.scrollTop += 100;
-    expect(spy.called).to.be.true;
   });
 
   it('should match the parent width', () => {
