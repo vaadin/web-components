@@ -4,9 +4,8 @@
  * This program is available under Commercial Vaadin Developer License 4.0 (CVDLv4).
  * See <a href="https://vaadin.com/license/cvdl-4.0">the website</a> for the complete license.
  */
-import { animationFrame } from '@polymer/polymer/lib/utils/async.js';
-import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
-import { PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { animationFrame } from '@vaadin/component-base/src/async.js';
+import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 
 /**
  * @polymerMixin
@@ -147,7 +146,7 @@ export const InlineEditingMixin = (superClass) =>
       super._checkImports();
       ['vaadin-grid-pro-edit-column'].forEach((elementName) => {
         const element = this.querySelector(elementName);
-        if (element && !(element instanceof PolymerElement)) {
+        if (element && !customElements.get(elementName)) {
           console.warn(`Make sure you have imported the required module for <${elementName}> element.`);
         }
       });

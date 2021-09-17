@@ -7,12 +7,12 @@
  * Code distributed by Google as part of the polymer project is also
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
+import { Debouncer, enqueueDebouncer, flush } from '@vaadin/component-base/src/debounce.js';
+import { animationFrame, idlePeriod, microTask } from '@vaadin/component-base/src/async.js';
 
 const IOS = navigator.userAgent.match(/iP(?:hone|ad;(?: U;)? CPU) OS (\d+)/);
 const IOS_TOUCH_SCROLLING = IOS && IOS[1] >= 8;
 const DEFAULT_PHYSICAL_COUNT = 3;
-import { Debouncer, enqueueDebouncer, flush } from './debounce';
-import { animationFrame, idlePeriod, microTask } from './async';
 
 /**
  * @private

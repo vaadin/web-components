@@ -3,8 +3,8 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
-import { timeOut, animationFrame } from '@polymer/polymer/lib/utils/async.js';
+import { Debouncer } from '@vaadin/component-base/src/debounce.js';
+import { timeOut, animationFrame } from '@vaadin/component-base/src/async.js';
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 
 registerStyles(

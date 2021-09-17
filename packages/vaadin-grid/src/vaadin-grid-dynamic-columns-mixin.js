@@ -5,8 +5,8 @@
  */
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
-import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
-import { timeOut } from '@polymer/polymer/lib/utils/async.js';
+import { Debouncer } from '@vaadin/component-base/src/debounce.js';
+import { timeOut } from '@vaadin/component-base/src/async.js';
 
 /**
  * @polymerMixin
