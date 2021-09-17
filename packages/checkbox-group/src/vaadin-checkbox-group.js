@@ -198,15 +198,13 @@ class CheckboxGroupElement extends ThemableMixin(DirMixin(PolymerElement)) {
     this.addEventListener('focusin', () => this._setFocused(this._containsFocus()));
 
     this.addEventListener('focusout', (e) => {
-      // validate when stepping out of the checkbox group
-      if (
-        !this._checkboxes.some(
-          (checkbox) => e.relatedTarget === checkbox || checkbox.shadowRoot.contains(e.relatedTarget)
-        )
-      ) {
-        this.validate();
-        this._setFocused(false);
+      // Skip if focus is just moved to another checkbox.
+      if (this._checkboxes.some((checkbox) => checkbox.contains(e.relatedTarget))) {
+        return;
       }
+
+      this.validate();
+      this._setFocused(false);
     });
 
     const checkedChangedListener = (e) => {

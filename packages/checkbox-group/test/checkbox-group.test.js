@@ -1,6 +1,7 @@
-import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync, focusin, focusout } from '@vaadin/testing-helpers';
+import { expect } from '@esm-bundle/chai';
+import { sendKeys } from '@web/test-runner-commands';
+import { fixtureSync } from '@vaadin/testing-helpers';
 import '@polymer/polymer/lib/elements/dom-bind.js';
 import '../vaadin-checkbox-group.js';
 
@@ -139,26 +140,33 @@ describe('vaadin-checkbox-group', () => {
     expect(checkboxes[2].checked).to.be.false;
   });
 
-  it('should set focused attribute on focusin event dispatched', () => {
-    focusin(checkboxes[0]);
+  it('should set focused attribute on Tab', async () => {
+    // Focus on the first checkbox.
+    await sendKeys({ press: 'Tab' });
+
+    expect(checkboxes[0].hasAttribute('focused')).to.be.true;
     expect(group.hasAttribute('focused')).to.be.true;
   });
 
-  it('should not set focused attribute on focusin event dispatched when disabled', () => {
+  it('should remove focused attribute on Shift+Tab', async () => {
+    // Focus on the first checkbox.
+    await sendKeys({ press: 'Tab' });
+
+    // Move focus out of the checkbox group.
+    await sendKeys({ down: 'Shift' });
+    await sendKeys({ press: 'Tab' });
+    await sendKeys({ up: 'Shift' });
+
+    expect(checkboxes[0].hasAttribute('focused')).to.be.false;
+    expect(group.hasAttribute('focused')).to.be.false;
+  });
+
+  it('should not set focused attribute on Tab when disabled', async () => {
     group.disabled = true;
-    focusin(checkboxes[0]);
-    expect(group.hasAttribute('focused')).to.be.false;
-  });
+    // Try to focus on the first checkbox.
+    await sendKeys({ press: 'Tab' });
 
-  it('should remove focused attribute on checkbox focusout', () => {
-    focusin(checkboxes[0]);
-    focusout(checkboxes[0]);
-    expect(group.hasAttribute('focused')).to.be.false;
-  });
-
-  it('should remove focused attribute on checkbox-group focusout', () => {
-    focusin(checkboxes[0]);
-    focusout(group);
+    expect(checkboxes[0].hasAttribute('focused')).to.be.false;
     expect(group.hasAttribute('focused')).to.be.false;
   });
 
@@ -330,23 +338,28 @@ describe('validation', () => {
     expect(group.hasAttribute('invalid')).to.be.false;
   });
 
-  it('should pass validation and set invalid when field is required and user blurs out of the group', () => {
+  it('should run validation and set invalid when field is required and user blurs out of the group', async () => {
     group.required = true;
-    focusout(group, document.body);
+
+    // Focus on the first checkbox.
+    await sendKeys({ press: 'Tab' });
+    // Move focus out of the checkbox group.
+    await sendKeys({ down: 'Shift' });
+    await sendKeys({ press: 'Tab' });
+    await sendKeys({ up: 'Shift' });
+
     expect(group.invalid).to.be.true;
   });
 
-  it('should not run validation while user is tabbing between checkboxes inside of the group', () => {
+  it.only('should not run validation while user is tabbing between checkboxes inside of the group', async () => {
     group.required = true;
     const spy = sinon.spy(group, 'validate');
-    focusout(group, checkboxes[1]);
-    expect(spy.called).to.be.false;
-  });
 
-  it('should not run validation while user is tabbing between checkboxes and focus moves to native checkbox', () => {
-    group.required = true;
-    const spy = sinon.spy(group, 'validate');
-    focusout(group, checkboxes[1].focusElement);
+    // Focus on the first checkbox.
+    await sendKeys({ press: 'Tab' });
+    // Focus on the second checkbox.
+    await sendKeys({ press: 'Tab' });
+
     expect(spy.called).to.be.false;
   });
 
