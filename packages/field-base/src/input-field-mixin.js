@@ -3,9 +3,9 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { animationFrame } from '@vaadin/component-base/src/async.js';
-import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
 import { AriaLabelMixin } from './aria-label-mixin.js';
 import { ClearButtonMixin } from './clear-button-mixin.js';
 import { DelegateFocusMixin } from './delegate-focus-mixin.js';
