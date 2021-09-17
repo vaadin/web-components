@@ -248,8 +248,8 @@ class UploadElement extends ElementMixin(ThemableMixin(PolymerElement)) {
         value: false,
         notify: true,
         readOnly: true,
-        computed: '_maxFilesAdded(maxFiles, files.length)',
-        observer: '_maxFilesReachedChanged'
+        reflectToAttribute: true,
+        computed: '_maxFilesAdded(maxFiles, files.length)'
       },
 
       /**
@@ -512,13 +512,6 @@ class UploadElement extends ElementMixin(ThemableMixin(PolymerElement)) {
   /** @private */
   _maxFilesAdded(maxFiles, numFiles) {
     return maxFiles >= 0 && numFiles >= maxFiles;
-  }
-
-  /** @private */
-  _maxFilesReachedChanged(maxFilesReached) {
-    maxFilesReached
-      ? this.setAttribute('max-files-reached', maxFilesReached)
-      : this.removeAttribute('max-files-reached');
   }
 
   /** @private */
