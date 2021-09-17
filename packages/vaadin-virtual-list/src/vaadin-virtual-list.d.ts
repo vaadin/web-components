@@ -16,7 +16,7 @@ export type VirtualListRenderer<TItem> = (
 ) => void;
 
 /**
- * `<vaadin-virtual-list>` is a Web Component for displaying a virtual/infinite list or items.
+ * `<vaadin-virtual-list>` is a Web Component for displaying a virtual/infinite list of items.
  *
  * ```html
  * <vaadin-virtual-list></vaadin-virtual-list>
@@ -69,6 +69,14 @@ declare class VirtualListElement<TItem = VirtualListDefaultItem> extends Element
    * Gets the index of the last visible item in the viewport.
    */
   readonly lastVisibleIndex: number;
+
+  /**
+   * Requests an update for the content of the rows.
+   * While performing the update, it invokes the renderer passed in the `renderer` property for each visible row.
+   *
+   * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
+   */
+  requestContentUpdate(): void;
 }
 
 declare global {
