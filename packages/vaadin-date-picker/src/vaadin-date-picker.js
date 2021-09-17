@@ -3,7 +3,7 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { PolymerElement, html } from '@polymer/polymer';
+import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { GestureEventListeners } from '@polymer/polymer/lib/mixins/gesture-event-listeners.js';
 import '@polymer/iron-media-query/iron-media-query.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
@@ -13,11 +13,11 @@ import { FieldAriaMixin } from '@vaadin/field-base/src/field-aria-mixin.js';
 import { InputConstraintsMixin } from '@vaadin/field-base/src/input-constraints-mixin.js';
 import { InputSlotMixin } from '@vaadin/field-base/src/input-slot-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import '@vaadin/vaadin-date-picker/src/vaadin-date-picker-overlay.js';
-import '@vaadin/vaadin-date-picker/src/vaadin-date-picker-overlay-content.js';
 import '@vaadin/input-container/src/vaadin-input-container.js';
 import '@vaadin/text-field/src/vaadin-input-field-shared-styles.js';
 import { DatePickerMixin } from './vaadin-date-picker-mixin.js';
+import './vaadin-date-picker-overlay.js';
+import './vaadin-date-picker-overlay-content.js';
 
 /**
  * `<vaadin-date-picker>` is a date selection field which includes a scrollable
