@@ -1,10 +1,25 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { flush } from '@polymer/polymer/lib/utils/flush.js';
 import { ElementMixin } from '../src/element-mixin.js';
+import { flush } from '../src/debounce.js';
 
 describe('ElementMixin', () => {
+  const defineCE = (tagName) => {
+    customElements.define(
+      tagName,
+      class extends ElementMixin(PolymerElement) {
+        static get is() {
+          return tagName;
+        }
+      }
+    );
+
+    flush();
+
+    return customElements.get(tagName);
+  };
+
   describe('globals', () => {
     it('should define window.Vaadin', () => {
       expect(window.Vaadin).to.exist;
@@ -21,12 +36,11 @@ describe('ElementMixin', () => {
   });
 
   describe('version', () => {
-    class XElement extends ElementMixin(PolymerElement) {
-      static get is() {
-        return 'x-element';
-      }
-    }
-    customElements.define(XElement.is, XElement);
+    let XElement;
+
+    before(() => {
+      XElement = defineCE('x-element');
+    });
 
     it('should have a valid version number', () => {
       expect(XElement.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta|rc)\d+)?$/);
@@ -34,61 +48,60 @@ describe('ElementMixin', () => {
   });
 
   describe('registrations', () => {
+    let ElementFoo;
+
+    before(() => {
+      ElementFoo = defineCE('element-foo');
+    });
+
     it('should store the class entry in registrations once instance created', () => {
-      class ElementFoo extends ElementMixin(PolymerElement) {
-        static get is() {
-          return 'element-foo';
-        }
-      }
-      customElements.define(ElementFoo.is, ElementFoo);
-      document.createElement('element-foo');
+      document.createElement(ElementFoo.is);
       flush();
       expect(window.Vaadin.registrations).to.be.instanceOf(Array);
       expect(window.Vaadin.registrations[0].is).to.equal('element-foo');
     });
+  });
+
+  describe('dev mode callback', () => {
+    let ElementBar, stub;
+
+    before(() => {
+      stub = sinon.stub(window.Vaadin, 'developmentModeCallback').returns(undefined);
+    });
+
+    after(() => {
+      stub.restore();
+    });
 
     it('should be possible to exclude development mode detector', () => {
-      const origCallback = window.Vaadin.developmentModeCallback;
-      window.Vaadin.developmentModeCallback = undefined;
-      class ElementBar extends ElementMixin(PolymerElement) {
-        static get is() {
-          return 'element-bar';
-        }
-      }
-      // Everything is ok as long as defining the TestBar class does not fail
+      ElementBar = defineCE('element-bar');
       expect(ElementBar.is).to.equal('element-bar');
+    });
+  });
 
-      window.Vaadin.developmentModeCallback = origCallback;
+  describe('stats checker', () => {
+    let ElementBaz, ElementBaz2, spy;
+
+    before(() => {
+      spy = sinon.spy(window.Vaadin.usageStatsChecker, 'maybeGatherAndSend');
     });
 
     it('should collect usage statistics once per class', () => {
-      const spy = sinon.spy(window.Vaadin.usageStatsChecker, 'maybeGatherAndSend');
+      ElementBaz = defineCE('element-baz');
 
-      class ElementBaz extends ElementMixin(PolymerElement) {
-        static get is() {
-          return 'element-baz';
-        }
-      }
-      customElements.define(ElementBaz.is, ElementBaz);
-
-      const elem1 = document.createElement('element-baz');
+      const elem1 = document.createElement(ElementBaz.is);
       document.body.appendChild(elem1);
       flush();
       expect(spy.calledOnce).to.be.true;
 
-      const elem2 = document.createElement('element-baz');
+      const elem2 = document.createElement(ElementBaz.is);
       document.body.appendChild(elem2);
       flush();
       expect(spy.calledOnce).to.be.true;
 
-      class ElementBaz2 extends ElementMixin(PolymerElement) {
-        static get is() {
-          return 'element-baz2';
-        }
-      }
-      customElements.define(ElementBaz2.is, ElementBaz2);
+      ElementBaz2 = defineCE('element-baz2');
 
-      const elem3 = document.createElement('element-baz2');
+      const elem3 = document.createElement(ElementBaz2.is);
       document.body.appendChild(elem3);
       flush();
       expect(spy.calledTwice).to.be.true;
