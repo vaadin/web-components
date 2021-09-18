@@ -8,6 +8,7 @@ import '../color.js';
 import '../font-icons.js';
 import '../typography.js';
 import { fieldButton } from './field-button.js';
+import { helper } from './helper.js';
 import { requiredField } from './required-field.js';
 
 const inputField = css`
@@ -124,31 +125,14 @@ const inputField = css`
 
   /* prettier-ignore */
   :host([has-label]:not([focused]):not([invalid]):not([theme='always-float-label'])) ::slotted(:is(input, textarea))::placeholder {
-  opacity: 0;
-  transition-delay: 0;
-}
-
-  /* According to material theme guidelines, helper text should be hidden when error message is set and input is invalid */
-  :host([has-helper][invalid][has-error-message]) [part='helper-text'] {
-    display: none;
+    opacity: 0;
+    transition-delay: 0;
   }
 
   [part='label'] {
     width: 133%;
     transition: transform 0.175s, color 0.175s, width 0.175s;
     transition-timing-function: ease, ease, step-end;
-  }
-
-  :host([has-helper]) [part='helper-text']::before {
-    content: '';
-    display: block;
-    height: 6px;
-  }
-
-  [part='helper-text'] {
-    font-size: 0.75rem;
-    line-height: 1;
-    color: var(--material-secondary-text-color);
   }
 
   :host(:hover:not([readonly]):not([invalid])) [part='input-field']::before {
@@ -226,7 +210,7 @@ const inputField = css`
   }
 `;
 
-const inputFieldShared = [requiredField, fieldButton, inputField];
+const inputFieldShared = [requiredField, fieldButton, helper, inputField];
 
 registerStyles('', inputFieldShared, {
   moduleId: 'material-input-field-shared-styles'
