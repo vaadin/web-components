@@ -4,11 +4,11 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
-import '@vaadin/vaadin-material-styles/color.js';
-import '@vaadin/vaadin-material-styles/typography.js';
-import { requiredField } from '@vaadin/vaadin-material-styles/mixins/required-field.js';
-import '@vaadin/vaadin-material-styles/font-icons.js';
-import { fieldButton } from '@vaadin/vaadin-material-styles/mixins/field-button.js';
+import '../color.js';
+import '../font-icons.js';
+import '../typography.js';
+import { fieldButton } from './field-button.js';
+import { requiredField } from './required-field.js';
 
 const inputField = css`
   :host {
@@ -30,7 +30,7 @@ const inputField = css`
   }
 
   /* TODO: remove when the following components are updated to use new indicator:
-  combo-box, date-picker, time-picker, date-time-picker, select. */
+  time-picker, date-time-picker. */
   [part='label']::after {
     display: none;
   }

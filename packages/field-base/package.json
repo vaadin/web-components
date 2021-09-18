@@ -23,7 +23,8 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/component-base": "^22.0.0-alpha6"
+    "@vaadin/component-base": "^22.0.0-alpha6",
+    "lit": "^2.0.0-rc.1"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",

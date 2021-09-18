@@ -6,7 +6,7 @@
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import '@vaadin/vaadin-lumo-styles/sizing.js';
 import { fieldButton } from '@vaadin/vaadin-lumo-styles/mixins/field-button.js';
-import { inputFieldShared } from '@vaadin/text-field/theme/lumo/vaadin-input-field-shared-styles.js';
+import { inputFieldShared } from '@vaadin/vaadin-lumo-styles/mixins/input-field-shared.js';
 
 const numberField = css`
   :host {

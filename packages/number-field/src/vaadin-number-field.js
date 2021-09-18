@@ -8,9 +8,12 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { InputFieldMixin } from '@vaadin/field-base/src/input-field-mixin.js';
 import { InputSlotMixin } from '@vaadin/field-base/src/input-slot-mixin.js';
 import { SlotStylesMixin } from '@vaadin/field-base/src/slot-styles-mixin.js';
+import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import '@vaadin/input-container/src/vaadin-input-container.js';
-import '@vaadin/text-field/src/vaadin-input-field-shared-styles.js';
+
+registerStyles('vaadin-number-field', inputFieldShared, { moduleId: 'vaadin-number-field-styles' });
 
 /**
  * `<vaadin-number-field>` is an input field web component that only accepts numeric input.
@@ -66,7 +69,7 @@ export class NumberField extends InputFieldMixin(
 
   static get template() {
     return html`
-      <style include="vaadin-input-field-shared-styles">
+      <style>
         :host([readonly]) [part$='button'] {
           pointer-events: none;
         }

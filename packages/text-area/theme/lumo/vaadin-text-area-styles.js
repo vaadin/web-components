@@ -7,7 +7,7 @@ import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styl
 import '@vaadin/vaadin-lumo-styles/color.js';
 import '@vaadin/vaadin-lumo-styles/sizing.js';
 import '@vaadin/vaadin-lumo-styles/typography.js';
-import { inputFieldShared } from '@vaadin/text-field/theme/lumo/vaadin-input-field-shared-styles.js';
+import { inputFieldShared } from '@vaadin/vaadin-lumo-styles/mixins/input-field-shared.js';
 
 const textArea = css`
   [part='input-field'],

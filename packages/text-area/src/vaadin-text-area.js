@@ -8,9 +8,12 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { CharLengthMixin } from '@vaadin/field-base/src/char-length-mixin.js';
 import { InputFieldMixin } from '@vaadin/field-base/src/input-field-mixin.js';
 import { TextAreaSlotMixin } from '@vaadin/field-base/src/text-area-slot-mixin.js';
+import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import '@vaadin/input-container/src/vaadin-input-container.js';
-import '@vaadin/text-field/src/vaadin-input-field-shared-styles.js';
+
+registerStyles('vaadin-text-area', inputFieldShared, { moduleId: 'vaadin-text-area-styles' });
 
 /**
  * `<vaadin-text-area>` is a web component for multi-line text input.
@@ -81,7 +84,7 @@ export class TextArea extends CharLengthMixin(
 
   static get template() {
     return html`
-      <style include="vaadin-input-field-shared-styles">
+      <style>
         :host {
           animation: 1ms vaadin-text-area-appear;
         }

@@ -4,14 +4,14 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
-import '@vaadin/vaadin-lumo-styles/color.js';
-import '@vaadin/vaadin-lumo-styles/sizing.js';
-import '@vaadin/vaadin-lumo-styles/spacing.js';
-import '@vaadin/vaadin-lumo-styles/style.js';
-import '@vaadin/vaadin-lumo-styles/typography.js';
-import '@vaadin/vaadin-lumo-styles/font-icons.js';
-import { requiredField } from '@vaadin/vaadin-lumo-styles/mixins/required-field.js';
-import { fieldButton } from '@vaadin/vaadin-lumo-styles/mixins/field-button.js';
+import '../color.js';
+import '../font-icons.js';
+import '../sizing.js';
+import '../spacing.js';
+import '../style.js';
+import '../typography.js';
+import { fieldButton } from './field-button.js';
+import { requiredField } from './required-field.js';
 
 const inputField = css`
   :host {
@@ -37,7 +37,7 @@ const inputField = css`
   }
 
   /* TODO: remove when the following components are updated to use new indicator:
-  combo-box, date-picker, time-picker, date-time-picker, select. */
+  time-picker, date-time-picker */
   [part='label']::after {
     display: none;
   }

@@ -7,15 +7,19 @@ import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-media-query/iron-media-query.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { SlotMixin } from '@vaadin/component-base/src/slot-mixin.js';
+import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
 import { FieldAriaMixin } from '@vaadin/field-base/src/field-aria-mixin.js';
 import { LabelMixin } from '@vaadin/field-base/src/label-mixin.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { processTemplates } from '@vaadin/component-base/src/templates.js';
-import '@vaadin/text-field/src/vaadin-input-field-shared-styles.js';
+import { fieldShared } from '@vaadin/field-base/src/styles/field-shared-styles.js';
+import { inputFieldContainer } from '@vaadin/field-base/src/styles/input-field-container-styles.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin';
+import { registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import '@vaadin/input-container/src/vaadin-input-container.js';
 import './vaadin-select-overlay.js';
 import './vaadin-select-value-button.js';
+
+registerStyles('vaadin-select', [fieldShared, inputFieldContainer], { moduleId: 'vaadin-select-styles' });
 
 /**
  * `<vaadin-select>` is a Web Component for selecting values from a list of items.
@@ -114,7 +118,7 @@ class Select extends DelegateFocusMixin(
 
   static get template() {
     return html`
-      <style include="vaadin-input-field-shared-styles">
+      <style>
         ::slotted([slot='value']) {
           flex-grow: 1;
           background-color: transparent;
