@@ -7,7 +7,7 @@ import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { RadioButtonElement } from './vaadin-radio-button.js';
+import { RadioButton } from './vaadin-radio-button.js';
 
 /**
  * `<vaadin-radio-group>` is a Web Component for grouping vaadin-radio-buttons.
@@ -283,7 +283,7 @@ class RadioGroupElement extends ThemableMixin(DirMixin(PolymerElement)) {
 
   /** @private */
   _filterRadioButtons(nodes) {
-    return Array.from(nodes).filter((child) => child instanceof RadioButtonElement);
+    return Array.from(nodes).filter((child) => child instanceof RadioButton);
   }
 
   /** @private */
@@ -342,7 +342,7 @@ class RadioGroupElement extends ThemableMixin(DirMixin(PolymerElement)) {
 
   /**
    * @param {boolean} next
-   * @param {!RadioButtonElement} checkedRadioButton
+   * @param {!RadioButton} checkedRadioButton
    * @protected
    */
   _selectIncButton(next, checkedRadioButton) {
@@ -354,7 +354,7 @@ class RadioGroupElement extends ThemableMixin(DirMixin(PolymerElement)) {
   }
 
   /**
-   * @param {!RadioButtonElement} element
+   * @param {!RadioButton} element
    * @param {boolean=} setFocusRing
    * @protected
    */
@@ -386,7 +386,7 @@ class RadioGroupElement extends ThemableMixin(DirMixin(PolymerElement)) {
   }
 
   /**
-   * @param {!RadioButtonElement} element
+   * @param {!RadioButton} element
    * @protected
    */
   _selectNextButton(element) {
@@ -404,7 +404,7 @@ class RadioGroupElement extends ThemableMixin(DirMixin(PolymerElement)) {
   }
 
   /**
-   * @param {!RadioButtonElement} element
+   * @param {!RadioButton} element
    * @protected
    */
   _selectPreviousButton(element) {
@@ -422,7 +422,7 @@ class RadioGroupElement extends ThemableMixin(DirMixin(PolymerElement)) {
   }
 
   /**
-   * @param {RadioButtonElement} button
+   * @param {RadioButton} button
    * @param {boolean=} fireChangeEvent
    * @protected
    */

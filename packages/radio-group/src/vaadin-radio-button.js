@@ -4,50 +4,73 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { GestureEventListeners } from '@polymer/polymer/lib/mixins/gesture-event-listeners.js';
+import { ActiveMixin } from '@vaadin/component-base/src/active-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { ControlStateMixin } from '@vaadin/vaadin-control-state-mixin/vaadin-control-state-mixin.js';
+import { AriaLabelMixin } from '@vaadin/field-base/src/aria-label-mixin.js';
+import { CheckedMixin } from '@vaadin/field-base/src/checked-mixin.js';
+import { InputSlotMixin } from '@vaadin/field-base/src/input-slot-mixin.js';
+import { SlotLabelMixin } from '@vaadin/field-base/src/slot-label-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
- * `<vaadin-radio-button>` is a Web Component for radio buttons.
+ * `<vaadin-radio-button>` is a web component representing a choice in a radio group.
+ * Only one radio button in a group can be selected at the same time.
  *
  * ```html
- * <vaadin-radio-button value="foo">Foo</vaadin-radio-button>
+ * <vaadin-radio-group label="Travel class">
+ *  <vaadin-radio-button value="economy">Economy</vaadin-radio-button>
+ *  <vaadin-radio-button value="business">Business</vaadin-radio-button>
+ *  <vaadin-radio-button value="firstClass">First Class</vaadin-radio-button>
+ * </vaadin-radio-group>
  * ```
  *
  * ### Styling
  *
  * The following shadow DOM parts are available for styling:
  *
- * Part name         | Description
- * ------------------|----------------
- * `radio`           | The radio button element
- * `label`           | The label content element
+ * Part name   | Description
+ * ------------|----------------
+ * `container` | The container element.
+ * `radio`     | The wrapper element that contains slotted <input type="radio">.
+ * `label`     | The wrapper element that contains slotted <label>.
  *
  * The following state attributes are available for styling:
  *
- * Attribute  | Description | Part name
- * -----------|-------------|------------
- * `disabled`   | Set when the radio button is disabled. | :host
- * `focus-ring` | Set when the radio button is focused using the keyboard. | :host
- * `focused`    | Set when the radio button is focused. | :host
- * `checked`    | Set when the radio button is checked. | :host
- * `empty`      | Set when there is no label provided. | label
+ * Attribute    | Description | Part name
+ * -------------|-------------|------------
+ * `active`     | Set when the radio button is pressed down, either with a pointer or the keyboard. | `:host`
+ * `disabled`   | Set when the radio button is disabled. | `:host`
+ * `focus-ring` | Set when the radio button is focused using the keyboard. | `:host`
+ * `focused`    | Set when the radio button is focused. | `:host`
+ * `checked`    | Set when the radio button is checked. | `:host`
+ * `has-label`  | Set when the radio button has a label. | `:host`
  *
  * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
- * @fires {Event} change - Fired when the user commits a value change.
  * @fires {CustomEvent} checked-changed - Fired when the `checked` property changes.
  *
  * @extends HTMLElement
- * @mixes ElementMixin
- * @mixes ControlStateMixin
  * @mixes ThemableMixin
- * @mixes GestureEventListeners
- * @element vaadin-radio-button
+ * @mixes ElementMixin
+ * @mixes ActiveMixin
+ * @mixes AriaLabelMixin
+ * @mixes InputSlotMixin
+ * @mixes CheckedMixin
+ * @mixes SlotLabelMixin
+ *
+ * TODO:
+ * // If you change this block, please test manually that radio-button and
+ * // radio-group still works ok on iOS 12/13 and up as it may cause
+ * // an issue that is not possible to test programmatically.
+ * // See: https://github.com/vaadin/vaadin-radio-button/issues/140
  */
-class RadioButtonElement extends ElementMixin(ControlStateMixin(ThemableMixin(GestureEventListeners(PolymerElement)))) {
+class RadioButton extends SlotLabelMixin(
+  CheckedMixin(InputSlotMixin(AriaLabelMixin(ActiveMixin(ElementMixin(ThemableMixin(PolymerElement))))))
+) {
+  static get is() {
+    return 'vaadin-radio-button';
+  }
+
   static get template() {
     return html`
       <style>
@@ -55,19 +78,21 @@ class RadioButtonElement extends ElementMixin(ControlStateMixin(ThemableMixin(Ge
           display: inline-block;
         }
 
-        label {
+        :host([hidden]) {
+          display: none !important;
+        }
+
+        :host([disabled]) {
+          -webkit-tap-highlight-color: transparent;
+        }
+
+        [part='container'] {
           display: inline-flex;
           align-items: baseline;
-          outline: none;
         }
 
-        [part='radio'] {
-          position: relative;
-          display: inline-block;
-          flex: none;
-        }
-
-        input[type='radio'] {
+        /* visually hidden */
+        [part='radio'] ::slotted(input) {
           position: absolute;
           top: 0;
           left: 0;
@@ -78,200 +103,79 @@ class RadioButtonElement extends ElementMixin(ControlStateMixin(ThemableMixin(Ge
           cursor: inherit;
           margin: 0;
         }
-
-        :host([disabled]) {
-          -webkit-tap-highlight-color: transparent;
-        }
       </style>
-
-      <label>
-        <span part="radio">
-          <input
-            type="radio"
-            checked="[[checked]]"
-            disabled$="[[disabled]]"
-            role="presentation"
-            on-change="_onChange"
-            tabindex="-1"
-          />
-        </span>
-
-        <span part="label">
-          <slot></slot>
-        </span>
-      </label>
+      <div part="container">
+        <div part="radio">
+          <slot name="input"></slot>
+        </div>
+        <div part="label">
+          <slot name="label"></slot>
+        </div>
+        <div style="display: none !important">
+          <slot id="noop"></slot>
+        </div>
+      </div>
     `;
-  }
-
-  static get is() {
-    return 'vaadin-radio-button';
   }
 
   static get properties() {
     return {
       /**
-       * True if the radio button is checked.
-       * @type {boolean}
-       */
-      checked: {
-        type: Boolean,
-        value: false,
-        notify: true,
-        observer: '_checkedChanged',
-        reflectToAttribute: true
-      },
-
-      /**
-       * Name of the element.
-       */
-      name: String,
-
-      /**
-       * The value for this element.
+       * The name of the radio button.
+       *
        * @type {string}
        */
-      value: {
+      name: {
         type: String,
-        value: 'on'
+        value: ''
       }
     };
   }
 
-  get name() {
-    return this.checked ? this._storedName : '';
+  /** @override */
+  static get delegateAttrs() {
+    return [...super.delegateAttrs, 'name'];
   }
 
-  set name(name) {
-    this._storedName = name;
-  }
+  constructor() {
+    super();
 
-  /** @protected */
-  ready() {
-    super.ready();
+    this._setType('radio');
 
-    this.setAttribute('role', 'radio');
-
-    this._addListeners();
-
-    const attrName = this.getAttribute('name');
-    if (attrName) {
-      this.name = attrName;
-    }
-
-    this.shadowRoot
-      .querySelector('[part~="label"]')
-      .querySelector('slot')
-      .addEventListener('slotchange', this._updateLabelAttribute.bind(this));
-
-    this._updateLabelAttribute();
-  }
-
-  /** @private */
-  _updateLabelAttribute() {
-    const label = this.shadowRoot.querySelector('[part~="label"]');
-    const assignedNodes = label.firstElementChild.assignedNodes();
-    if (this._isAssignedNodesEmpty(assignedNodes)) {
-      label.setAttribute('empty', '');
-    } else {
-      label.removeAttribute('empty');
-    }
-  }
-
-  /** @private */
-  _isAssignedNodesEmpty(nodes) {
-    // The assigned nodes considered to be empty if there is no slotted content or only one empty text node
-    return (
-      nodes.length === 0 ||
-      (nodes.length == 1 && nodes[0].nodeType == Node.TEXT_NODE && nodes[0].textContent.trim() === '')
-    );
-  }
-
-  /** @private */
-  _checkedChanged(checked) {
-    this.setAttribute('aria-checked', checked);
-  }
-
-  /** @private */
-  _addListeners() {
-    this._addEventListenerToNode(this, 'down', () => {
-      if (!this.disabled) {
-        this.setAttribute('active', '');
-      }
-    });
-
-    this._addEventListenerToNode(this, 'up', () => {
-      this.removeAttribute('active');
-
-      if (!this.checked && !this.disabled) {
-        // If you change this block, please test manually that radio-button and
-        // radio-group still works ok on iOS 12/13 and up as it may cause
-        // an issue that is not possible to test programmatically.
-        // See: https://github.com/vaadin/vaadin-radio-button/issues/140
-        this.click();
-      }
-    });
-
-    this.addEventListener('keydown', (e) => {
-      if (!this.disabled && e.keyCode === 32) {
-        e.preventDefault();
-        this.setAttribute('active', '');
-      }
-    });
-
-    this.addEventListener('keyup', (e) => {
-      if (!this.disabled && e.keyCode === 32) {
-        e.preventDefault();
-        this.click();
-        this.removeAttribute('active');
-      }
-    });
+    // Set the string "on" as the default value for the radio button following the HTML specification:
+    // https://html.spec.whatwg.org/multipage/input.html#dom-input-value-default-on
+    this.value = 'on';
   }
 
   /**
-   * Toggles the radio button, so that the native `change` event
-   * is dispatched. Overrides the standard `HTMLElement.prototype.click`.
-   * @protected
-   */
-  click() {
-    // If you change this block, please test manually that radio-button and
-    // radio-group still works ok on iOS 12/13 and up as it may cause
-    // an issue that is not possible to test programmatically.
-    // See: https://github.com/vaadin/vaadin-radio-button/issues/140
-    if (!this.disabled) {
-      this.shadowRoot.querySelector('input').dispatchEvent(new MouseEvent('click'));
-    }
-  }
-
-  /**
-   * @return {!HTMLInputElement}
-   * @protected
-   */
-  get focusElement() {
-    return this.shadowRoot.querySelector('input');
-  }
-
-  /** @private */
-  _onChange(e) {
-    this.checked = e.target.checked;
-    // In the Shadow DOM, the `change` event is not leaked into the
-    // ancestor tree, so we must do this manually.
-    const changeEvent = new CustomEvent('change', {
-      detail: {
-        sourceEvent: e
-      },
-      bubbles: e.bubbles,
-      cancelable: e.cancelable
-    });
-    this.dispatchEvent(changeEvent);
-  }
-
-  /**
-   * Fired when the user toggles the radio button.
+   * A reference to the default slot from which nodes are forwarded to the label node.
    *
-   * @event change
+   * @override
+   * @protected
+   * @type {HTMLSlotElement}
    */
+  get _sourceSlot() {
+    return this.$.noop;
+  }
+
+  /**
+   * Extends the method of `ActiveMixin` in order to
+   * prevent setting the `active` attribute when clicking on a link inside the label.
+   *
+   * @param {Event} event
+   * @return {boolean}
+   * @protected
+   * @override
+   */
+  _shouldSetActive(event) {
+    if (event.target.localName === 'a') {
+      return false;
+    }
+
+    return super._shouldSetActive(event);
+  }
 }
 
-customElements.define(RadioButtonElement.is, RadioButtonElement);
+customElements.define(RadioButton.is, RadioButton);
 
-export { RadioButtonElement };
+export { RadioButton };
