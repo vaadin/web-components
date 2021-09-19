@@ -150,10 +150,12 @@ class Checkbox extends SlotLabelMixin(
     };
   }
 
+  /** @override */
   static get delegateProps() {
     return [...super.delegateProps, 'indeterminate'];
   }
 
+  /** @override */
   static get delegateAttrs() {
     return [...super.delegateAttrs, 'name'];
   }
@@ -165,6 +167,8 @@ class Checkbox extends SlotLabelMixin(
   }
 
   /**
+   * A reference to the default slot from which nodes are forwarded to the label node.
+   *
    * @override
    * @protected
    * @type {HTMLSlotElement}
@@ -180,6 +184,7 @@ class Checkbox extends SlotLabelMixin(
    * @param {Event} event
    * @return {boolean}
    * @protected
+   * @override
    */
   _shouldSetActive(event) {
     if (event.target.localName === 'a') {
