@@ -73,7 +73,7 @@ registerStyles(
       transform: translate(-50%, -50%) scale(1);
     }
 
-    :host(:not([checked])):not([disabled]):hover) [part='radio'] {
+    :host(:not([checked]):not([disabled]):hover) [part='radio'] {
       background-color: var(--lumo-contrast-30pct);
     }
 
