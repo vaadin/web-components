@@ -316,7 +316,15 @@ class RadioGroupElement extends ThemableMixin(DirMixin(PolymerElement)) {
   _addListeners() {
     this.addEventListener('keydown', (e) => {
       // if e.target is vaadin-radio-group then assign to checkedRadioButton currently checked radio button
-      var checkedRadioButton = e.target == this ? this._checkedButton : e.target;
+      let checkedRadioButton;
+
+      if (e.target === this) {
+        checkedRadioButton = this._checkedButton;
+      } else {
+        checkedRadioButton = e.composedPath().find((element) => {
+          return element instanceof RadioButton;
+        });
+      }
       const horizontalRTL = this.getAttribute('dir') === 'rtl' && this.theme !== 'vertical';
 
       // LEFT, UP - select previous radio button
@@ -496,8 +504,13 @@ class RadioGroupElement extends ThemableMixin(DirMixin(PolymerElement)) {
    * @protected
    */
   _setFocusable(idx) {
-    const items = this._radioButtons;
-    items.forEach((e) => (e.tabindex = e === items[idx] ? 0 : -1));
+    this._radioButtons.forEach((radioButton, radioButtonIdx) => {
+      if (radioButtonIdx === idx) {
+        radioButton.removeAttribute('tabindex');
+      } else {
+        radioButton.setAttribute('tabindex', '-1');
+      }
+    });
   }
 
   /** @private */
