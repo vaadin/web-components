@@ -25,8 +25,8 @@ const CheckedMixinImplementation = (superclass) =>
       };
     }
 
-    static get delegateAttrs() {
-      return [...super.delegateAttrs, 'checked'];
+    static get delegateProps() {
+      return [...super.delegateProps, 'checked'];
     }
 
     get _delegateStateTarget() {

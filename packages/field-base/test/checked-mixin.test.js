@@ -84,17 +84,17 @@ describe('checked-mixin', () => {
   });
 
   describe('delegation', () => {
-    describe('checked attribute', () => {
+    describe('checked property', () => {
       beforeEach(() => {
         element = fixtureSync(`<checked-mixin-element checked></checked-mixin-element>`);
         input = element.querySelector('[slot=input]');
       });
 
-      it('should delegate checked attribute to the input', () => {
-        expect(input.hasAttribute('checked')).to.be.true;
+      it('should delegate checked property to the input', () => {
+        expect(input.checked).to.be.true;
 
-        element.removeAttribute('checked');
-        expect(input.hasAttribute('checked')).to.be.false;
+        element.checked = false;
+        expect(input.checked).to.be.false;
       });
     });
   });
