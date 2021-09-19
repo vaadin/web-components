@@ -152,8 +152,11 @@ class Checkbox extends SlotLabelMixin(
   constructor() {
     super();
 
-    this.value = 'on';
     this._setType('checkbox');
+
+    // Set the string "on" as the default value for the checkbox following the HTML specification:
+    // https://html.spec.whatwg.org/multipage/input.html#dom-input-value-default-on
+    this.value = 'on';
   }
 
   /**
