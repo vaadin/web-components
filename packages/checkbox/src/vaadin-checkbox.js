@@ -26,8 +26,8 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * Part name   | Description
  * ------------|----------------
  * `container` | The container element.
- * `checkbox`  | The wrapper element which contains slotted <input type="checkbox">.
- * `label`     | The wrapper element which contains slotted <label>.
+ * `checkbox`  | The wrapper element that contains slotted <input type="checkbox">.
+ * `label`     | The wrapper element that contains slotted <label>.
  *
  * The following state attributes are available for styling:
  *
@@ -128,24 +128,13 @@ class Checkbox extends SlotLabelMixin(
       },
 
       /**
-       * The name of the checkbox
+       * The name of the checkbox.
        *
        * @type {string}
        */
       name: {
         type: String,
         value: ''
-      },
-
-      /**
-       * The value of the checkbox, which is set to "on" by default.
-       *
-       * @type {string}
-       */
-      value: {
-        type: String,
-        value: 'on',
-        observer: '_valueChanged'
       }
     };
   }
@@ -163,6 +152,7 @@ class Checkbox extends SlotLabelMixin(
   constructor() {
     super();
 
+    this.value = 'on';
     this._setType('checkbox');
   }
 

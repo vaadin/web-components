@@ -27,12 +27,17 @@ describe('checkbox', () => {
     });
 
     // TODO: A legacy test. Replace with snapshot tests when possible.
-    it('should set input value to "on" by default', () => {
+    it('should set value property to "on"', () => {
+      expect(checkbox.value).to.equal('on');
+    });
+
+    // TODO: A legacy test. Replace with snapshot tests when possible.
+    it('should set input value property to "on"', () => {
       expect(input.value).to.equal('on');
     });
 
     // TODO: A legacy test. Replace with snapshot tests when possible.
-    it('should not have name by default', () => {
+    it('should set the name to the empty string', () => {
       expect(checkbox.name).to.equal('');
     });
 
