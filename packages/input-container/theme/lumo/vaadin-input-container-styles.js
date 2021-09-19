@@ -42,6 +42,7 @@ registerStyles(
       min-height: var(--lumo-text-field-size, var(--lumo-size-m));
       padding: 0 0.25em;
       --_lumo-text-field-overflow-mask-image: linear-gradient(to left, transparent, #000 1.25em);
+      -webkit-mask-image: var(--_lumo-text-field-overflow-mask-image);
       mask-image: var(--_lumo-text-field-overflow-mask-image);
     }
 

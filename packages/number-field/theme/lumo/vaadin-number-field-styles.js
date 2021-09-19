@@ -37,7 +37,7 @@ const numberField = css`
   }
 
   /* RTL specific styles */
-  :host([dir='rtl']) [part='input-field'] ::slotted(input) {
+  :host([dir='rtl']:not([theme~='align-right'])) ::slotted(input) {
     --_lumo-text-field-overflow-mask-image: linear-gradient(to left, transparent, #000 1.25em);
   }
 `;
