@@ -9,7 +9,7 @@ import { ClearButtonMixin } from '@vaadin/field-base/src/clear-button-mixin.js';
 import { FieldAriaMixin } from '@vaadin/field-base/src/field-aria-mixin.js';
 import { InputSlotMixin } from '@vaadin/field-base/src/input-slot-mixin.js';
 import { PatternMixin } from '@vaadin/field-base/src/pattern-mixin.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ComboBoxDataProviderMixin } from './vaadin-combo-box-data-provider-mixin.js';
 import { ComboBoxMixin } from './vaadin-combo-box-mixin.js';
 import { ComboBoxDefaultItem, ComboBoxEventMap } from './interfaces';

@@ -10,12 +10,15 @@ import { ClearButtonMixin } from '@vaadin/field-base/src/clear-button-mixin.js';
 import { FieldAriaMixin } from '@vaadin/field-base/src/field-aria-mixin.js';
 import { InputSlotMixin } from '@vaadin/field-base/src/input-slot-mixin.js';
 import { PatternMixin } from '@vaadin/field-base/src/pattern-mixin.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin';
+import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+import '@vaadin/input-container/src/vaadin-input-container.js';
 import { ComboBoxDataProviderMixin } from './vaadin-combo-box-data-provider-mixin.js';
 import { ComboBoxMixin } from './vaadin-combo-box-mixin.js';
-import '@vaadin/input-container/src/vaadin-input-container.js';
-import '@vaadin/text-field/src/vaadin-input-field-shared-styles.js';
 import './vaadin-combo-box-dropdown.js';
+
+registerStyles('vaadin-combo-box', inputFieldShared, { moduleId: 'vaadin-combo-box-styles' });
 
 /**
  * `<vaadin-combo-box>` is a combo box element combining a dropdown list with an
@@ -185,7 +188,7 @@ class ComboBox extends ComboBoxDataProviderMixin(
 
   static get template() {
     return html`
-      <style include="vaadin-input-field-shared-styles">
+      <style>
         :host([opened]) {
           pointer-events: auto;
         }

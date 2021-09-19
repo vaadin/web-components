@@ -4,14 +4,15 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
-import '@vaadin/vaadin-lumo-styles/color.js';
-import '@vaadin/vaadin-lumo-styles/sizing.js';
-import '@vaadin/vaadin-lumo-styles/spacing.js';
-import '@vaadin/vaadin-lumo-styles/style.js';
-import '@vaadin/vaadin-lumo-styles/typography.js';
-import '@vaadin/vaadin-lumo-styles/font-icons.js';
-import { requiredField } from '@vaadin/vaadin-lumo-styles/mixins/required-field.js';
-import { fieldButton } from '@vaadin/vaadin-lumo-styles/mixins/field-button.js';
+import '../color.js';
+import '../font-icons.js';
+import '../sizing.js';
+import '../spacing.js';
+import '../style.js';
+import '../typography.js';
+import { fieldButton } from './field-button.js';
+import { helper } from './helper.js';
+import { requiredField } from './required-field.js';
 
 const inputField = css`
   :host {
@@ -37,7 +38,7 @@ const inputField = css`
   }
 
   /* TODO: remove when the following components are updated to use new indicator:
-  combo-box, date-picker, time-picker, date-time-picker, select. */
+  time-picker, date-time-picker */
   [part='label']::after {
     display: none;
   }
@@ -46,21 +47,6 @@ const inputField = css`
   :host(:not([has-error-message])) [part='error-message']::before,
   :host(:not([has-error-message])) [part='error-message']::after {
     display: none;
-  }
-
-  :host([has-helper]) [part='helper-text']::before {
-    content: '';
-    display: block;
-    height: 0.4em;
-  }
-
-  [part='helper-text'] {
-    display: block;
-    color: var(--lumo-secondary-text-color);
-    font-size: var(--lumo-font-size-xs);
-    line-height: var(--lumo-line-height-xs);
-    margin-left: calc(var(--lumo-border-radius-m) / 4);
-    transition: color 0.2s;
   }
 
   [part='input-field'] ::slotted(:is(input, textarea)) {
@@ -81,8 +67,7 @@ const inputField = css`
   }
 
   /* Hover */
-  :host(:hover:not([readonly]):not([focused])) [part='label'],
-  :host(:hover:not([readonly])) [part='helper-text'] {
+  :host(:hover:not([readonly]):not([focused])) [part='label'] {
     color: var(--lumo-body-text-color);
   }
 
@@ -128,7 +113,6 @@ const inputField = css`
   }
 
   :host([disabled]) [part='label'],
-  :host([disabled]) [part='helper-text'],
   :host([disabled]) [part='input-field'] ::slotted(*) {
     color: var(--lumo-disabled-text-color);
     -webkit-text-fill-color: var(--lumo-disabled-text-color);
@@ -157,34 +141,6 @@ const inputField = css`
     font-size: var(--lumo-font-size-xxs);
   }
 
-  /* helper-text position */
-  :host([has-helper][theme~='helper-above-field']) [part='helper-text']::before {
-    display: none;
-  }
-
-  :host([has-helper][theme~='helper-above-field']) [part='helper-text']::after {
-    content: '';
-    display: block;
-    height: 0.4em;
-  }
-
-  :host([has-helper][theme~='helper-above-field']) [part='label'] {
-    order: 0;
-    padding-bottom: 0.4em;
-  }
-
-  :host([has-helper][theme~='helper-above-field']) [part='helper-text'] {
-    order: 1;
-  }
-
-  :host([has-helper][theme~='helper-above-field']) [part='input-field'] {
-    order: 2;
-  }
-
-  :host([has-helper][theme~='helper-above-field']) [part='error-message'] {
-    order: 3;
-  }
-
   /* Slotted content */
   [part='input-field'] ::slotted(:not(iron-icon):not(vaadin-icon):not(input):not(textarea)) {
     color: var(--lumo-secondary-text-color);
@@ -196,7 +152,7 @@ const inputField = css`
   }
 `;
 
-const inputFieldShared = [requiredField, fieldButton, inputField];
+const inputFieldShared = [requiredField, fieldButton, helper, inputField];
 
 registerStyles('', inputFieldShared, {
   moduleId: 'lumo-input-field-shared-styles'

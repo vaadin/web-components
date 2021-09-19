@@ -1,7 +1,7 @@
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import '@vaadin/vaadin-material-styles/color.js';
 import '@vaadin/vaadin-material-styles/font-icons.js';
-import { inputFieldShared } from '@vaadin/text-field/theme/material/vaadin-input-field-shared-styles.js';
+import { inputFieldShared } from '@vaadin/vaadin-material-styles/mixins/input-field-shared.js';
 
 const comboBox = css`
   :host {
