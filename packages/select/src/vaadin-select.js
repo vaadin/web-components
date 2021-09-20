@@ -296,7 +296,7 @@ class Select extends DelegateFocusMixin(
     super();
 
     // Ensure every instance has unique ID
-    const uniqueId = (Select._uniqueId = 1 + Select._uniqueId || 0);
+    const uniqueId = (Select._uniqueSelectId = 1 + Select._uniqueSelectId || 0);
     this._fieldId = `${this.localName}-${uniqueId}`;
 
     this._boundOnKeyDown = this._onKeyDown.bind(this);

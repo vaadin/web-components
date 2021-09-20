@@ -44,7 +44,7 @@ const HelperTextMixinImplementation = (superclass) =>
       super();
 
       // Ensure every instance has unique ID
-      const uniqueId = (HelperTextMixinClass._uniqueId = 1 + HelperTextMixinClass._uniqueId || 0);
+      const uniqueId = (HelperTextMixinClass._uniqueHelperId = 1 + HelperTextMixinClass._uniqueHelperId || 0);
       this._helperId = `helper-${this.localName}-${uniqueId}`;
 
       // Save generated ID to restore later
