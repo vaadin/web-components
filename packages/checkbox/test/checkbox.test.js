@@ -41,18 +41,6 @@ describe('checkbox', () => {
       expect(checkbox.name).to.equal('');
     });
 
-    // TODO: Seems that this test is no longer necessary
-    // it('fires click event', () => {
-    //   const spy = sinon.spy();
-    //   checkbox.addEventListener('click', spy);
-
-    //   mousedown(checkbox);
-    //   mouseup(checkbox);
-    //   click(checkbox);
-
-    //   expect(spy.calledOnce).to.be.true;
-    // });
-
     it('should have display: none when hidden', () => {
       checkbox.setAttribute('hidden', '');
       expect(getComputedStyle(checkbox).display).to.equal('none');

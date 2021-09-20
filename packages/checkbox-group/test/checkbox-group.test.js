@@ -351,7 +351,7 @@ describe('validation', () => {
     expect(group.invalid).to.be.true;
   });
 
-  it.only('should not run validation while user is tabbing between checkboxes inside of the group', async () => {
+  it('should not run validation while user is tabbing between checkboxes inside of the group', async () => {
     group.required = true;
     const spy = sinon.spy(group, 'validate');
 
