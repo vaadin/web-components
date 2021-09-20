@@ -157,18 +157,27 @@ function includeStyles(theme, template) {
  * @returns {Theme[]}
  */
 function getThemes(tagName) {
-  return (
-    getAllThemes()
-      // Filter by matching themeFor properties
-      .filter((theme) => matchesThemeFor(theme.themeFor, tagName))
-      // Map moduleId to includePriority
-      .map((theme) => ({
-        ...theme,
-        includePriority: getIncludePriority(theme.moduleId)
-      }))
-      // Sort by includePriority
-      .sort((themeA, themeB) => themeB.includePriority - themeA.includePriority)
-  );
+  const defaultModuleName = tagName + '-default-theme';
+
+  const themes = getAllThemes()
+    // Filter out default theme
+    .filter((theme) => theme.moduleId !== defaultModuleName)
+    // Filter by matching themeFor properties
+    .filter((theme) => matchesThemeFor(theme.themeFor, tagName))
+    // Map moduleId to includePriority
+    .map((theme) => ({
+      ...theme,
+      includePriority: getIncludePriority(theme.moduleId)
+    }))
+    // Sort by includePriority
+    .sort((themeA, themeB) => themeB.includePriority - themeA.includePriority);
+
+  if (themes.length > 0) {
+    return themes;
+  } else {
+    // No theme modules found, return the default module if it exists
+    return getAllThemes().filter((theme) => theme.moduleId === defaultModuleName);
+  }
 }
 
 /**

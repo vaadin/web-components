@@ -309,7 +309,7 @@ describe('ThemableMixin', () => {
     expect(getComputedStyle(components[0]).display).to.equal('flex');
   });
 
-  it.skip('should fall back to default styles', () => {
+  it('should fall back to default styles', () => {
     expect(getComputedStyle(components[3].$.text).color).to.equal('rgb(255, 0, 0)');
   });
 
