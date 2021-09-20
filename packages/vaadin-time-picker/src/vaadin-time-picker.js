@@ -32,22 +32,27 @@ registerStyles('vaadin-time-picker', inputFieldShared, { moduleId: 'vaadin-time-
  *
  * ### Styling
  *
- * The following custom properties are available for styling:
+ * The following shadow DOM parts are available for styling:
  *
- * Part name | Description
+ * Part name       | Description
  * ----------------|----------------
+ * `clear-button`  | The clear button
+ * `input-field`   | Input element wrapper
  * `toggle-button` | The toggle button
+ * `label`         | The label element
+ * `error-message` | The error message element
+ * `helper-text`   | The helper text element wrapper
  *
  * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
  * The following state attributes are available for styling:
  *
- * Attribute    | Description | Part name
- * -------------|-------------|------------
- * `disabled` | Set to a disabled time picker | :host
- * `readonly` | Set to a read only time picker | :host
- * `invalid` | Set when the element is invalid | :host
- * `focused` | Set when the element is focused | :host
+ * Attribute    | Description                              | Part name
+ * -------------|------------------------------------------|------------
+ * `disabled`   | Set to a disabled time picker            | :host
+ * `readonly`   | Set to a read only time picker           | :host
+ * `invalid`    | Set when the element is invalid          | :host
+ * `focused`    | Set when the element is focused          | :host
  * `focus-ring` | Set when the element is keyboard focused | :host
  *
  * ### Internal components
@@ -223,22 +228,28 @@ class TimePicker extends PatternMixin(
        *
        * The object has the following JSON structure:
        *
-       *   {
-       *     // A function to format given `Object` as
-       *     // time string. Object is in the format `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`
-       *     formatTime: (time) => {
-       *       // returns a string representation of the given
-       *       // object in `hh` / 'hh:mm' / 'hh:mm:ss' / 'hh:mm:ss.fff' - formats
-       *     },
+       * ```
+       * {
+       *   // A function to format given `Object` as
+       *   // time string. Object is in the format `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`
+       *   formatTime: (time) => {
+       *     // returns a string representation of the given
+       *     // object in `hh` / 'hh:mm' / 'hh:mm:ss' / 'hh:mm:ss.fff' - formats
+       *   },
        *
-       *     // A function to parse the given text to an `Object` in the format
-       *     // `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`.
-       *     // Must properly parse (at least) text
-       *     // formatted by `formatTime`.
-       *     parseTime: text => {
-       *       // Parses a string in object/string that can be formatted by`formatTime`.
-       *     }
+       *   // A function to parse the given text to an `Object` in the format
+       *   // `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`.
+       *   // Must properly parse (at least) text
+       *   // formatted by `formatTime`.
+       *   parseTime: text => {
+       *     // Parses a string in object/string that can be formatted by`formatTime`.
        *   }
+       * }
+       * ```
+       *
+       * Both `formatTime` and `parseTime` need to be implemented
+       * to ensure the component works properly.
+       *
        * @type {!TimePickerI18n}
        */
       i18n: {

@@ -30,7 +30,12 @@ import { TimePickerEventMap, TimePickerI18n } from './interfaces';
  *
  * Part name       | Description
  * ----------------|----------------
+ * `clear-button`  | The clear button
+ * `input-field`   | Input element wrapper
  * `toggle-button` | The toggle button
+ * `label`         | The label element
+ * `error-message` | The error message element
+ * `helper-text`   | The helper text element wrapper
  *
  * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
@@ -122,22 +127,27 @@ declare class TimePicker extends PatternMixin(
    *
    * The object has the following JSON structure:
    *
-   *   {
-   *     // A function to format given `Object` as
-   *     // time string. Object is in the format `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`
-   *     formatTime: (time) => {
-   *       // returns a string representation of the given
-   *       // object in `hh` / 'hh:mm' / 'hh:mm:ss' / 'hh:mm:ss.fff' - formats
-   *     },
+   * ```
+   * {
+   *   // A function to format given `Object` as
+   *   // time string. Object is in the format `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`
+   *   formatTime: (time) => {
+   *     // returns a string representation of the given
+   *     // object in `hh` / 'hh:mm' / 'hh:mm:ss' / 'hh:mm:ss.fff' - formats
+   *   },
    *
-   *     // A function to parse the given text to an `Object` in the format
-   *     // `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`.
-   *     // Must properly parse (at least) text
-   *     // formatted by `formatTime`.
-   *     parseTime: text => {
-   *       // Parses a string in object/string that can be formatted by`formatTime`.
-   *     }
+   *   // A function to parse the given text to an `Object` in the format
+   *   // `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`.
+   *   // Must properly parse (at least) text
+   *   // formatted by `formatTime`.
+   *   parseTime: text => {
+   *     // Parses a string in object/string that can be formatted by`formatTime`.
    *   }
+   * }
+   * ```
+   *
+   * Both `formatTime` and `parseTime` need to be implemented
+   * to ensure the component works properly.
    */
   i18n: TimePickerI18n;
 
