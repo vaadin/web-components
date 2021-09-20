@@ -17,10 +17,11 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 import { registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import '@vaadin/input-container/src/vaadin-input-container.js';
 import { DatePickerMixin } from './vaadin-date-picker-mixin.js';
+import { datePickerStyles } from './vaadin-date-picker-styles.js';
 import './vaadin-date-picker-overlay.js';
 import './vaadin-date-picker-overlay-content.js';
 
-registerStyles('vaadin-date-picker', inputFieldShared, { moduleId: 'vaadin-date-picker-styles' });
+registerStyles('vaadin-date-picker', [inputFieldShared, datePickerStyles], { moduleId: 'vaadin-date-picker-styles' });
 
 /**
  * `<vaadin-date-picker>` is a date selection field which includes a scrollable

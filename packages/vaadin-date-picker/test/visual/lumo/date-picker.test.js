@@ -27,51 +27,63 @@ describe('date-picker', () => {
     await visualDiff(div, 'readonly');
   });
 
-  it('label', async () => {
-    element.label = 'Label';
-    await visualDiff(div, 'label');
-  });
+  ['ltr', 'rtl'].forEach((dir) => {
+    describe(dir, () => {
+      before(() => {
+        document.documentElement.setAttribute('dir', dir);
+      });
 
-  it('placeholder', async () => {
-    element.placeholder = 'Placeholder';
-    await visualDiff(div, 'placeholder');
-  });
+      after(() => {
+        document.documentElement.removeAttribute('dir');
+      });
 
-  it('value', async () => {
-    element.value = '1991-12-20';
-    await visualDiff(div, 'value');
-  });
+      it('label', async () => {
+        element.label = 'Label';
+        await visualDiff(div, `${dir}-label`);
+      });
 
-  it('required', async () => {
-    element.label = 'Label';
-    element.required = true;
-    await visualDiff(div, 'required');
-  });
+      it('placeholder', async () => {
+        element.placeholder = 'Placeholder';
+        await visualDiff(div, `${dir}-placeholder`);
+      });
 
-  it('error message', async () => {
-    element.label = 'Label';
-    element.errorMessage = 'This field is required';
-    element.required = true;
-    element.validate();
-    await visualDiff(div, 'error-message');
-  });
+      it('value', async () => {
+        element.value = '1991-12-20';
+        await visualDiff(div, `${dir}-value`);
+      });
 
-  it('helper text', async () => {
-    element.helperText = 'Helper text';
-    await visualDiff(div, 'helper-text');
-  });
+      it('required', async () => {
+        element.label = 'Label';
+        element.required = true;
+        await visualDiff(div, `${dir}-required`);
+      });
 
-  it('clear button', async () => {
-    element.value = '1991-12-20';
-    element.clearButtonVisible = true;
-    await visualDiff(div, 'clear-button');
-  });
+      it('error message', async () => {
+        element.label = 'Label';
+        element.errorMessage = 'This field is required';
+        element.required = true;
+        element.validate();
+        await visualDiff(div, `${dir}-error-message`);
+      });
 
-  it('prefix slot', async () => {
-    const span = document.createElement('span');
-    span.setAttribute('slot', 'prefix');
-    span.textContent = '$';
-    element.appendChild(span);
-    await visualDiff(div, 'prefix');
+      it('helper text', async () => {
+        element.helperText = 'Helper text';
+        await visualDiff(div, `${dir}-helper-text`);
+      });
+
+      it('clear button', async () => {
+        element.value = '1991-12-20';
+        element.clearButtonVisible = true;
+        await visualDiff(div, `${dir}-clear-button`);
+      });
+
+      it('prefix slot', async () => {
+        const span = document.createElement('span');
+        span.setAttribute('slot', 'prefix');
+        span.textContent = '$';
+        element.appendChild(span);
+        await visualDiff(div, `${dir}-prefix`);
+      });
+    });
   });
 });
