@@ -1,10 +1,10 @@
 {
-  "name": "@vaadin/vaadin-confirm-dialog",
+  "name": "@vaadin/confirm-dialog",
   "version": "22.0.0-alpha6",
   "description": "vaadin-confirm-dialog",
   "main": "vaadin-confirm-dialog.js",
   "module": "vaadin-confirm-dialog.js",
-  "repository": "vaadin/vaadin-confirm-dialog",
+  "repository": "vaadin/web-components",
   "keywords": [
     "Vaadin",
     "vaadin-confirm-dialog",
@@ -13,9 +13,9 @@
     "polymer"
   ],
   "author": "Vaadin Ltd",
-  "license": "https://raw.githubusercontent.com/vaadin/vaadin-confirm-dialog/master/LICENSE",
+  "license": "https://raw.githubusercontent.com/vaadin/web-components/master/packages/confirm-dialog/LICENSE",
   "bugs": {
-    "url": "https://github.com/vaadin/vaadin-confirm-dialog/issues"
+    "url": "https://github.com/vaadin/web-components/issues"
   },
   "homepage": "https://vaadin.com/components",
   "files": [

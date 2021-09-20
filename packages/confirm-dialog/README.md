@@ -6,7 +6,7 @@
 
 [&lt;vaadin-confirm-dialog&gt;](https://vaadin.com/components/vaadin-confirm-dialog) is a Web Component providing an easy way to ask the user to confirm a choice, part of the [Vaadin components](https://vaadin.com/components).
 
-[![npm version](https://badgen.net/npm/v/@vaadin/vaadin-confirm-dialog)](https://www.npmjs.com/package/@vaadin/vaadin-confirm-dialog)
+[![npm version](https://badgen.net/npm/v/@vaadin/confirm-dialog)](https://www.npmjs.com/package/@vaadin/confirm-dialog)
 [![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-confirm-dialog)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
@@ -23,13 +23,13 @@
 Install `vaadin-confirm-dialog`:
 
 ```sh
-npm i @vaadin/vaadin-confirm-dialog --save
+npm i @vaadin/confirm-dialog --save
 ```
 
 Once installed, import it in your application:
 
 ```js
-import '@vaadin/vaadin-confirm-dialog/vaadin-confirm-dialog.js';
+import '@vaadin/confirm-dialog/vaadin-confirm-dialog.js';
 ```
 
 ## Getting started

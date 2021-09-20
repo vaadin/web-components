@@ -11,7 +11,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import '@vaadin/button/src/vaadin-button.js';
 import '@vaadin/vaadin-dialog/src/vaadin-dialog.js';
-import '@vaadin/vaadin-confirm-dialog/src/vaadin-confirm-dialog.js';
+import '@vaadin/confirm-dialog/src/vaadin-confirm-dialog.js';
 import '@vaadin/vaadin-license-checker/vaadin-license-checker.js';
 import './vaadin-dialog-layout.js';
 import './vaadin-crud-grid.js';
