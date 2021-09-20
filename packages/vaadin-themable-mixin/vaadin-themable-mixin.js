@@ -7,7 +7,7 @@ export { css, unsafeCSS };
  * @typedef {Object} Theme
  * @property {string} themeFor
  * @property {CSSResult[]} styles
- * @property {string} [include]
+ * @property {string | string[]} [include]
  * @property {string} [moduleId]
  * @property {object} [styleAttributes]
  *
@@ -114,15 +114,18 @@ function recursiveFlattenStyles(styles, result = []) {
  * @returns {CSSResult[]}
  */
 function getIncludedStyles(theme) {
+  const includedStyles = [];
   if (theme.include) {
-    const includedTheme = getAllThemes().find((s) => s.moduleId === theme.include);
-    if (includedTheme) {
-      return [...getIncludedStyles(includedTheme), ...theme.styles];
-    } else {
-      console.warn(`Included moduleId ${theme.include} not found in style registry`);
-    }
+    [].concat(theme.include).forEach((includeModuleId) => {
+      const includedTheme = getAllThemes().find((s) => s.moduleId === includeModuleId);
+      if (includedTheme) {
+        includedStyles.push(...getIncludedStyles(includedTheme), ...includedTheme.styles);
+      } else {
+        console.warn(`Included moduleId ${includeModuleId} not found in style registry`);
+      }
+    }, theme.styles);
   }
-  return [];
+  return includedStyles;
 }
 
 /**
@@ -164,6 +167,11 @@ function getThemes(tagName) {
     .filter((theme) => theme.moduleId !== defaultModuleName)
     // Filter by matching themeFor properties
     .filter((theme) => matchesThemeFor(theme.themeFor, tagName))
+    // Prepend styles from included themes
+    .map((theme) => ({
+      ...theme,
+      styles: [...getIncludedStyles(theme), ...theme.styles]
+    }))
     // Map moduleId to includePriority
     .map((theme) => ({
       ...theme,
@@ -217,11 +225,6 @@ export const ThemableMixin = (superClass) =>
      */
     static get styles() {
       const matchingStyles = getThemes(this.is)
-        // Prepend styles from included themes
-        .map((theme) => ({
-          ...theme,
-          styles: [...getIncludedStyles(theme), ...theme.styles]
-        }))
         // Obtain the flattened CSSResult array
         .reduce((styles, theme) => [...styles, ...theme.styles], []);
 

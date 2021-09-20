@@ -215,18 +215,6 @@ describe('registerStyles', () => {
 
         expect(console.warn.called).to.be.false;
       });
-
-      it('should warn about using the deprecated include option', () => {
-        registerStyles(unique('component'), css``, { include: [unique('id')] });
-
-        expect(console.warn.called).to.be.true;
-      });
-
-      it('should not warn about using the deprecated include option', () => {
-        registerStyles(unique('component'), css``, { include: [unique('id')], suppressDeprecationWarning: true });
-
-        expect(console.warn.called).to.be.false;
-      });
     });
   });
 });
