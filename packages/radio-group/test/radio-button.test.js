@@ -75,7 +75,7 @@ describe('radio-button', () => {
       expect(radio.checked).to.be.true;
     });
 
-    it('should set checked property when pressing Space on the input', async () => {
+    it('should set checked property on Space press on the input', async () => {
       // Focus on the input
       await sendKeys({ press: 'Tab' });
       // Press Space on the input
@@ -125,7 +125,7 @@ describe('radio-button', () => {
       expect(radio.checked).to.be.false;
     });
 
-    it('should not set checked property when pressing Space on the input', async () => {
+    it('should not set checked property on Space press on the input', async () => {
       // Focus on the input
       await sendKeys({ press: 'Tab' });
       // Press Space on the input
@@ -162,7 +162,7 @@ describe('radio-button', () => {
       expect(radio.hasAttribute('active')).to.be.false;
     });
 
-    it('should set active attribute while pressing Space on the input', async () => {
+    it('should set active attribute during Space press on the input', async () => {
       // Focus on the input
       await sendKeys({ press: 'Tab' });
       // Hold down Space on the input
@@ -197,7 +197,7 @@ describe('radio-button', () => {
       expect(spy.calledOnce).to.be.true;
     });
 
-    it('should fire when pressing Space on the input', async () => {
+    it('should fire on Space press on the input', async () => {
       // Focus on the input
       await sendKeys({ press: 'Tab' });
       // Press Space on the input
