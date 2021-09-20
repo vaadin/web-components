@@ -141,9 +141,7 @@ function includeStyles(theme, template) {
   if (template && !template.__includedThemes.includes(theme)) {
     const styleEl = document.createElement('style');
     if (theme.styles) {
-      styleEl.innerHTML = theme.styles.reduce((styles, style) => {
-        return styles + style.toString();
-      }, '');
+      styleEl.innerHTML = theme.styles.map((style) => style.cssText).join('\n');
     }
     if (theme.styleAttributes) {
       Object.keys(theme.styleAttributes).forEach((attribute) => {
@@ -225,12 +223,13 @@ export const ThemableMixin = (superClass) =>
      * Covers LitElement based component styling
      * @protected
      */
-    static get styles() {
-      const matchingStyles = getThemes(this.is)
-        // Obtain the flattened CSSResult array
-        .reduce((styles, theme) => [...styles, ...theme.styles], []);
-
-      // TODO: The inherited themes should also be included in sorting by includePriority
-      return [...super.styles, ...matchingStyles];
+    static finalizeStyles(styles) {
+      return (
+        getThemes(this.is)
+          // Obtain the flattened CSSResult array
+          .reduce((styles, theme) => [...styles, ...theme.styles], [])
+          // TODO: The inherited themes should also be included in sorting by includePriority
+          .concat(styles)
+      );
     }
   };
