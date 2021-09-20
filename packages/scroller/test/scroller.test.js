@@ -23,10 +23,6 @@ describe('vaadin-scroller', () => {
     it('should have a valid static "is" getter', () => {
       expect(customElements.get(tagName).is).to.equal(tagName);
     });
-
-    it('should extend ThemableMixin', () => {
-      expect(scroller.constructor._includeStyle).to.be.instanceOf(Function);
-    });
   });
 
   describe('scrollDirection', () => {

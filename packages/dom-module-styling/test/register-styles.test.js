@@ -3,8 +3,8 @@ import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { DomModule } from '@polymer/polymer/lib/elements/dom-module.js';
-import { registerStyles, css, unsafeCSS } from '../register-styles.js';
-import { ThemableMixin } from '../vaadin-themable-mixin.js';
+import { registerStyles, css, unsafeCSS } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 let attachedInstances = [];
 

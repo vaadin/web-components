@@ -40,12 +40,14 @@ export function registerStyles(themeFor, styles, options = {}) {
     }
   }
 
+  styles = recursiveFlattenStyles(styles);
+
   if (window.Vaadin && window.Vaadin.domModuleStyling) {
     window.Vaadin.domModuleStyling.registerStyles(themeFor, styles, options);
   } else {
     themeRegistry.push({
       themeFor,
-      styles: recursiveFlattenStyles(styles),
+      styles,
       include: options.include,
       moduleId: options.moduleId
     });

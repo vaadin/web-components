@@ -17,7 +17,7 @@ let moduleIdIndex = 0;
 // Map of <CSSResult, Polymer.DomModule> pairs.
 const styleMap = {};
 
-window.Vaadin.domModuleStyling.registerStyles = (themeFor, styles, options) => {
+window.Vaadin.domModuleStyling.registerStyles = (themeFor, styles = [], options) => {
   const themeId = (options && options.moduleId) || `custom-style-module-${moduleIdIndex++}`;
 
   const processedStyles = styles.map((cssResult) => {
@@ -62,6 +62,7 @@ window.Vaadin.domModuleStyling.getAllThemes = () => {
     return {
       themeFor: module.getAttribute('theme-for'),
       moduleId: moduleName,
+      styles: [],
       styleAttributes: {
         include: moduleName
       }

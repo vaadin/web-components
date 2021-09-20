@@ -23,10 +23,6 @@ describe('vaadin-vertical-layout', () => {
     it('should have a box-sizing set to border-box', () => {
       expect(getComputedStyle(layout).boxSizing).to.equal('border-box');
     });
-
-    it('should extend ThemableMixin', () => {
-      expect(layout.constructor._includeStyle).to.be.instanceOf(Function);
-    });
   });
 
   describe('theme variations', () => {
