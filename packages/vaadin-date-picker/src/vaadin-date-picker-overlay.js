@@ -6,6 +6,12 @@
 import { OverlayElement } from '@vaadin/vaadin-overlay/src/vaadin-overlay.js';
 import { DisableUpgradeMixin } from '@polymer/polymer/lib/mixins/disable-upgrade-mixin.js';
 import { PositionMixin } from '@vaadin/vaadin-overlay/src/vaadin-overlay-position-mixin.js';
+import { registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+import { datePickerOverlayStyles } from './vaadin-date-picker-styles.js';
+
+registerStyles('vaadin-date-picker-overlay', datePickerOverlayStyles, {
+  moduleId: 'vaadin-date-picker-overlay-styles'
+});
 
 /**
  * An element used internally by `<vaadin-date-picker>`. Not intended to be used separately.

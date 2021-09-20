@@ -20,3 +20,14 @@ export const datePickerStyles = css`
     text-align: left;
   }
 `;
+
+export const datePickerOverlayStyles = css`
+  [part='overlay'] {
+    display: flex;
+    flex: auto;
+  }
+
+  [part~='content'] {
+    flex: auto;
+  }
+`;
