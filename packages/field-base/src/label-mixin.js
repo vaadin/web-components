@@ -41,7 +41,7 @@ const LabelMixinImplementation = (superclass) =>
       super();
 
       // Ensure every instance has unique ID
-      const uniqueId = (LabelMixinClass._uniqueId = 1 + LabelMixinClass._uniqueId || 0);
+      const uniqueId = (LabelMixinClass._uniqueLabelId = 1 + LabelMixinClass._uniqueLabelId || 0);
       this._labelId = `label-${this.localName}-${uniqueId}`;
 
       /**

@@ -15,6 +15,8 @@ customElements.define(
 describe('validate-mixin', () => {
   let element, error;
 
+  const ID_REGEX = /^error-validate-mixin-element-\d+$/;
+
   describe('default', () => {
     beforeEach(() => {
       element = fixtureSync(`<validate-mixin-element></validate-mixin-element>`);
@@ -31,8 +33,9 @@ describe('validate-mixin', () => {
     });
 
     it('should set id on the error message element', () => {
-      const idRegex = /^error-validate-mixin-element-\d+$/;
-      expect(error.getAttribute('id')).to.match(idRegex);
+      const id = error.getAttribute('id');
+      expect(id).to.match(ID_REGEX);
+      expect(id.endsWith(element.constructor._uniqueErrorId)).to.be.true;
     });
 
     it('should update error message content on attribute change', () => {
@@ -108,8 +111,9 @@ describe('validate-mixin', () => {
     });
 
     it('should set id on the slotted error message element', () => {
-      const idRegex = /^error-validate-mixin-element-\d+$/;
-      expect(error.getAttribute('id')).to.match(idRegex);
+      const id = error.getAttribute('id');
+      expect(id).to.match(ID_REGEX);
+      expect(id.endsWith(element.constructor._uniqueErrorId)).to.be.true;
     });
 
     it('should set has-error-message attribute with slotted error message', () => {

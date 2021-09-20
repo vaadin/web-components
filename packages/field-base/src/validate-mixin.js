@@ -64,7 +64,7 @@ const ValidateMixinImplementation = (superclass) =>
       super();
 
       // Ensure every instance has unique ID
-      const uniqueId = (ValidateMixinClass._uniqueId = 1 + ValidateMixinClass._uniqueId || 0);
+      const uniqueId = (ValidateMixinClass._uniqueErrorId = 1 + ValidateMixinClass._uniqueErrorId || 0);
       this._errorId = `error-${this.localName}-${uniqueId}`;
     }
 

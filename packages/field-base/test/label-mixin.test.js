@@ -15,6 +15,8 @@ customElements.define(
 describe('label-mixin', () => {
   let element, label;
 
+  const ID_REGEX = /^label-label-mixin-element-\d+$/;
+
   describe('default', () => {
     beforeEach(() => {
       element = fixtureSync(`<label-mixin-element></label-mixin-element>`);
@@ -30,8 +32,9 @@ describe('label-mixin', () => {
     });
 
     it('should set id on the label element', () => {
-      const idRegex = /^label-label-mixin-element-\d+$/;
-      expect(label.getAttribute('id')).to.match(idRegex);
+      const id = label.getAttribute('id');
+      expect(id).to.match(ID_REGEX);
+      expect(id.endsWith(element.constructor._uniqueLabelId)).to.be.true;
     });
 
     describe('label property', () => {
@@ -89,8 +92,9 @@ describe('label-mixin', () => {
     });
 
     it('should set id on the slotted label element', () => {
-      const idRegex = /^label-label-mixin-element-\d+$/;
-      expect(label.getAttribute('id')).to.match(idRegex);
+      const id = label.getAttribute('id');
+      expect(id).to.match(ID_REGEX);
+      expect(id.endsWith(element.constructor._uniqueLabelId)).to.be.true;
     });
 
     it('should update slotted label content on property change', () => {

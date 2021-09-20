@@ -32,7 +32,7 @@ const TextAreaSlotMixinImplementation = (superclass) =>
       super();
 
       // Ensure every instance has unique ID
-      const uniqueId = (TextAreaSlotMixinClass._uniqueId = 1 + TextAreaSlotMixinClass._uniqueId || 0);
+      const uniqueId = (TextAreaSlotMixinClass._uniqueTextAreaId = 1 + TextAreaSlotMixinClass._uniqueTextAreaId || 0);
       this._textareaId = `${this.localName}-${uniqueId}`;
     }
 

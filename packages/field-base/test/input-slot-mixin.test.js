@@ -46,8 +46,10 @@ describe('input-slot-mixin', () => {
     });
 
     it('should set id attribute on the input', () => {
-      const idRegex = /^input-slot-mixin-element-\d$/;
-      expect(input.getAttribute('id')).to.match(idRegex);
+      const ID_REGEX = /^input-slot-mixin-element-\d+$/;
+      const id = input.getAttribute('id');
+      expect(id).to.match(ID_REGEX);
+      expect(id.endsWith(element.constructor._uniqueInputId)).to.be.true;
     });
 
     it('should have a read-only type property', () => {

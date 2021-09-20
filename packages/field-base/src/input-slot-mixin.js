@@ -47,7 +47,7 @@ const InputSlotMixinImplementation = (superclass) =>
       super();
 
       // Ensure every instance has unique ID
-      const uniqueId = (InputSlotMixinClass._uniqueId = 1 + InputSlotMixinClass._uniqueId || 0);
+      const uniqueId = (InputSlotMixinClass._uniqueInputId = 1 + InputSlotMixinClass._uniqueInputId || 0);
       this._inputId = `${this.localName}-${uniqueId}`;
     }
 
