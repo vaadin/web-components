@@ -1,7 +1,9 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
+import { sendKeys } from '@web/test-runner-commands';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../../theme/lumo/vaadin-date-picker.js';
 import '../../not-animated-styles.js';
+import '../common.js';
 
 describe('date-picker', () => {
   let div, element;
@@ -25,6 +27,12 @@ describe('date-picker', () => {
   it('readonly', async () => {
     element.readonly = true;
     await visualDiff(div, 'readonly');
+  });
+
+  it('focus-ring', async () => {
+    await sendKeys({ press: 'Tab' });
+
+    await visualDiff(div, 'focus-ring');
   });
 
   ['ltr', 'rtl'].forEach((dir) => {
