@@ -1,149 +1,177 @@
+import '../dom-module-styling.js';
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { ThemableMixin, registerStyles, css } from '../vaadin-themable-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-function doRegisterStyles(moduleId, themeFor, styles) {
-  registerStyles(themeFor, styles, { moduleId });
+function createDomModule(id, themeFor, tpl) {
+  const domModule = document.createElement('dom-module');
+  domModule.setAttribute('theme-for', themeFor);
+  domModule.appendChild(tpl);
+  domModule.register(id);
 }
 
-doRegisterStyles(
+createDomModule(
   'test-qux-default-theme',
   'test-qux',
-  css`
-    [part='text'] {
-      color: rgb(255, 0, 0);
-    }
+  html`
+    <style>
+      [part='text'] {
+        color: rgb(255, 0, 0);
+      }
+    </style>
   `
 );
 
 /* This default style module should get overridden by test-foo styles.
 Removing this module doesn't make any difference to the test outcome but it's
 here to make a point. */
-doRegisterStyles(
+createDomModule(
   'test-foo-default-theme',
   'test-foo',
-  css`
-    [part='text'] {
-      color: rgb(0, 0, 0) !important;
-      background-color: rgb(255, 0, 0);
-    }
+  html`
+    <style>
+      [part='text'] {
+        color: rgb(0, 0, 0) !important;
+        background-color: rgb(255, 0, 0);
+      }
+    </style>
   `
 );
 
-doRegisterStyles(
+createDomModule(
   'test-styles',
   'test-foo',
-  css`
-    :host {
-      display: flex;
-    }
+  html`
+    <style>
+      :host {
+        display: flex;
+      }
 
-    [part='text'] {
-      color: rgb(255, 255, 255);
-    }
+      [part='text'] {
+        color: rgb(255, 255, 255);
+      }
+    </style>
   `
 );
 
-doRegisterStyles(
+createDomModule(
   'test-styles-multiple',
   'test-foo test-bar',
-  css`
-    [part='text'] {
-      background-color: rgb(255, 0, 0);
-    }
+  html`
+    <style>
+      [part='text'] {
+        background-color: rgb(255, 0, 0);
+      }
+    </style>
   `
 );
 
-doRegisterStyles(
+createDomModule(
   'test-styles-wildcard',
   'test*a*',
-  css`
-    [part='text'] {
-      position: relative;
-    }
+  html`
+    <style>
+      [part='text'] {
+        position: relative;
+      }
+    </style>
   `
 );
 
-doRegisterStyles(
+createDomModule(
   'baz-styles',
   'test-baz',
-  css`
-    [part='text'] {
-      width: 100px;
-    }
+  html`
+    <style>
+      [part='text'] {
+        width: 100px;
+      }
+    </style>
   `
 );
 
-doRegisterStyles(
+createDomModule(
   'custom-test-style-override-styles-first',
   'test-style-override',
-  css`
-    :host {
-      position: absolute;
-    }
+  html`
+    <style>
+      :host {
+        position: absolute;
+      }
 
-    [part='text'] {
-      color: rgb(0, 0, 0);
-    }
+      [part='text'] {
+        color: rgb(0, 0, 0);
+      }
+    </style>
   `
 );
 
-doRegisterStyles(
+createDomModule(
   'custom-test-style-override-styles-second',
   'test-style-override',
-  css`
-    :host {
-      position: relative;
-    }
+  html`
+    <style>
+      :host {
+        position: relative;
+      }
+    </style>
   `
 );
 
-doRegisterStyles(
+createDomModule(
   'vaadin-test-style-override-styles-first',
   'test-style-override',
-  css`
-    :host {
-      display: flex;
-    }
+  html`
+    <style>
+      :host {
+        display: flex;
+      }
+    </style>
   `
 );
 
-doRegisterStyles(
+createDomModule(
   'lumo-test-style-override-styles',
   'test-style-override',
-  css`
-    [part='text'] {
-      color: rgb(255, 0, 0);
-      display: inline;
-    }
+  html`
+    <style>
+      [part='text'] {
+        color: rgb(255, 0, 0);
+        display: inline;
+      }
+    </style>
   `
 );
 
-doRegisterStyles(
+createDomModule(
   'material-test-style-override-styles',
   'test-style-override',
-  css`
-    [part='text'] {
-      color: rgb(0, 255, 0);
-      opacity: 0.5;
-    }
+  html`
+    <style>
+      [part='text'] {
+        color: rgb(0, 255, 0);
+        opacity: 0.5;
+      }
+    </style>
   `
 );
 
-doRegisterStyles(
+createDomModule(
   'vaadin-test-style-override-styles-second',
   'test-style-override',
-  css`
-    :host {
-      display: block;
-    }
+  html`
+    <style>
+      :host {
+        display: block;
+      }
 
-    [part='text'] {
-      color: rgb(255, 255, 255);
-      opacity: 1;
-      display: block;
-    }
+      [part='text'] {
+        color: rgb(255, 255, 255);
+        opacity: 1;
+        display: block;
+      }
+    </style>
   `
 );
 

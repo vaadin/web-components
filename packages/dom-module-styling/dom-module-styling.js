@@ -2,6 +2,9 @@ import { DomModule } from '@polymer/polymer/lib/elements/dom-module.js';
 import { stylesFromTemplate } from '@polymer/polymer/lib/utils/style-gather.js';
 import { CSSResult } from 'lit';
 
+window.Vaadin = window.Vaadin || {};
+window.Vaadin.domModuleStyling = {};
+
 /**
  * Backwards compatibility adapter for the deprecated dom-module -based theming mechanism.
  * Should be moved to a separate package. Naming TBD.
@@ -14,7 +17,7 @@ let moduleIdIndex = 0;
 // Map of <CSSResult, Polymer.DomModule> pairs.
 const styleMap = {};
 
-const registerTemplateStyles = (themeFor, styles, options) => {
+window.Vaadin.domModuleStyling.registerStyles = (themeFor, styles, options) => {
   const themeId = (options && options.moduleId) || `custom-style-module-${moduleIdIndex++}`;
 
   const processedStyles = styles.map((cssResult) => {
@@ -49,36 +52,19 @@ const registerTemplateStyles = (themeFor, styles, options) => {
   themeModuleElement.register(themeId);
 };
 
-const getTemplateStyles = () => {
+window.Vaadin.domModuleStyling.getAllThemes = () => {
   const domModule = DomModule;
   const modules = domModule.prototype.modules;
 
-  return (
-    Object.keys(modules)
-      // TODO: Decide what to do with the default themes
-      .filter((moduleName) => !moduleName.endsWith('-default-theme'))
-      .map((moduleName) => {
-        const module = modules[moduleName];
+  return Object.keys(modules).map((moduleName) => {
+    const module = modules[moduleName];
 
-        let includePriority = 0;
-        if (moduleName.indexOf('lumo-') === 0 || moduleName.indexOf('material-') === 0) {
-          includePriority = 1;
-        } else if (moduleName.indexOf('vaadin-') === 0) {
-          includePriority = 2;
-        }
-
-        return {
-          themeFor: module.getAttribute('theme-for'),
-          includePriority,
-          style: '',
-          styleAttributes: {
-            include: moduleName
-          }
-        };
-      })
-  );
+    return {
+      themeFor: module.getAttribute('theme-for'),
+      moduleId: moduleName,
+      styleAttributes: {
+        include: moduleName
+      }
+    };
+  });
 };
-
-window.Vaadin = window.Vaadin || {};
-window.Vaadin.registerTemplateStyles = registerTemplateStyles;
-window.Vaadin.getTemplateStyles = getTemplateStyles;

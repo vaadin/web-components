@@ -1,10 +1,10 @@
 {
-  "name": "@vaadin/vaadin-themable-mixin",
+  "name": "@vaadin/dom-module-styling",
   "version": "22.0.0-alpha6",
-  "description": "vaadin-themable-mixin",
-  "main": "vaadin-themable-mixin.js",
-  "module": "vaadin-themable-mixin.js",
-  "repository": "vaadin/vaadin-themable-mixin",
+  "description": "dom-module-styling",
+  "main": "dom-module-styling.js",
+  "module": "dom-module-styling.js",
+  "repository": "vaadin/dom-module-styling",
   "keywords": [
     "Vaadin",
     "web-components",
@@ -14,21 +14,21 @@
   "author": "Vaadin Ltd",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/vaadin/vaadin-themable-mixin/issues"
+    "url": "https://github.com/vaadin/web-components/issues"
   },
   "homepage": "https://vaadin.com/elements",
   "files": [
     "*.d.ts",
-    "vaadin-*.js",
-    "register-styles.js"
+    "vaadin-*.js"
   ],
   "dependencies": {
-    "lit": "^2.0.0"
+    "@polymer/polymer": "^3.0.0",
+    "lit": "^2.0.0-rc.1"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
-    "@polymer/polymer": "^3.0.0",
     "@vaadin/testing-helpers": "^0.3.0",
+    "@vaadin/vaadin-themable-mixin": "^22.0.0-alpha6",
     "sinon": "^9.2.4"
   },
   "publishConfig": {
