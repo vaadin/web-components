@@ -15,6 +15,8 @@ customElements.define(
 describe('helper-text-mixin', () => {
   let element, helper;
 
+  const ID_REGEX = /^helper-helper-text-mixin-element-\d+$/;
+
   describe('default', () => {
     beforeEach(() => {
       element = fixtureSync(`<helper-text-mixin-element></helper-text-mixin-element>`);
@@ -30,8 +32,9 @@ describe('helper-text-mixin', () => {
     });
 
     it('should set id on the helper element', () => {
-      const idRegex = /^helper-helper-text-mixin-element-\d+$/;
-      expect(helper.getAttribute('id')).to.match(idRegex);
+      const id = helper.getAttribute('id');
+      expect(id).to.match(ID_REGEX);
+      expect(id.endsWith(element.constructor._uniqueHelperId)).to.be.true;
     });
 
     it('should update helper content on attribute change', () => {
@@ -89,8 +92,9 @@ describe('helper-text-mixin', () => {
     });
 
     it('should set id on the slotted helper element', () => {
-      const idRegex = /^helper-helper-text-mixin-element-\d+$/;
-      expect(helper.getAttribute('id')).to.match(idRegex);
+      const id = helper.getAttribute('id');
+      expect(id).to.match(ID_REGEX);
+      expect(id.endsWith(element.constructor._uniqueHelperId)).to.be.true;
     });
 
     it('should set has-helper attribute with slotted helper', () => {
@@ -184,8 +188,6 @@ describe('helper-text-mixin', () => {
     });
 
     describe('ID attribute', () => {
-      const idRegex = /^helper-helper-text-mixin-element-\d+$/;
-
       beforeEach(async () => {
         element = fixtureSync('<helper-text-mixin-element></helper-text-mixin-element>');
         await nextFrame();
@@ -197,7 +199,7 @@ describe('helper-text-mixin', () => {
       it('should set id on the lazily added helper element', async () => {
         element.appendChild(helper);
         await nextFrame();
-        expect(helper.getAttribute('id')).to.match(idRegex);
+        expect(helper.getAttribute('id')).to.match(ID_REGEX);
       });
 
       it('should not override custom id on the lazily added helper', async () => {
@@ -213,7 +215,7 @@ describe('helper-text-mixin', () => {
         await nextFrame();
         helper.removeAttribute('id');
         await nextFrame();
-        expect(helper.getAttribute('id')).to.match(idRegex);
+        expect(helper.getAttribute('id')).to.match(ID_REGEX);
       });
     });
 
