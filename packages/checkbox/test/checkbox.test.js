@@ -7,6 +7,23 @@ import '../vaadin-checkbox.js';
 describe('checkbox', () => {
   let checkbox, input, label, link;
 
+  describe('custom element definition', () => {
+    let tagName;
+
+    beforeEach(() => {
+      checkbox = fixtureSync('<vaadin-checkbox></vaadin-checkbox>');
+      tagName = checkbox.tagName.toLowerCase();
+    });
+
+    it('should be defined in custom element registry', () => {
+      expect(customElements.get(tagName)).to.be.ok;
+    });
+
+    it('should have a valid static "is" getter', () => {
+      expect(customElements.get(tagName).is).to.equal(tagName);
+    });
+  });
+
   describe('default', () => {
     beforeEach(() => {
       checkbox = fixtureSync('<vaadin-checkbox>I accept <a href="#">the terms and conditions</a></vaadin-checkbox>');
