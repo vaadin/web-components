@@ -1,9 +1,15 @@
 import { DomModule } from '@polymer/polymer/lib/elements/dom-module.js';
 import { stylesFromTemplate } from '@polymer/polymer/lib/utils/style-gather.js';
-import { CSSResult } from 'lit';
+import { CSSResult, unsafeCSS } from 'lit';
 
 window.Vaadin = window.Vaadin || {};
 window.Vaadin.domModuleStyling = {};
+
+function getModuleStyles(module) {
+  return stylesFromTemplate(module.querySelector('template')).map((styleElement) => {
+    return unsafeCSS(styleElement.textContent);
+  });
+}
 
 /**
  * Backwards compatibility adapter for the deprecated dom-module -based theming mechanism.
@@ -40,7 +46,7 @@ window.Vaadin.domModuleStyling.registerStyles = (themeFor, styles = [], options)
     themeModuleElement.setAttribute('theme-for', themeFor);
   }
 
-  const moduleIncludes = (options && options.include) || [];
+  const moduleIncludes = [].concat((options && options.include) || []);
 
   themeModuleElement.innerHTML = `
     <template>
@@ -58,14 +64,12 @@ window.Vaadin.domModuleStyling.getAllThemes = () => {
 
   return Object.keys(modules).map((moduleName) => {
     const module = modules[moduleName];
+    module.__styles = module.__styles || getModuleStyles(module);
 
     return {
       themeFor: module.getAttribute('theme-for'),
       moduleId: moduleName,
-      styles: [],
-      styleAttributes: {
-        include: moduleName
-      }
+      styles: module.__styles
     };
   });
 };

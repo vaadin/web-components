@@ -9,7 +9,6 @@ export { css, unsafeCSS };
  * @property {CSSResult[]} styles
  * @property {string | string[]} [include]
  * @property {string} [moduleId]
- * @property {object} [styleAttributes]
  *
  * @typedef {CSSResult[] | CSSResult} CSSResultGroup
  */
@@ -132,7 +131,6 @@ function getIncludedStyles(theme) {
 
 /**
  * Includes a style tag with styles from the given theme to the template.
- * If the theme has styleAttributes, they are added as attributes to the style tag.
  * @param {Theme} theme
  * @param {HTMLTemplateElement & {__includedThemes: Theme[]}} template
  */
@@ -142,11 +140,6 @@ function includeStyles(theme, template) {
     const styleEl = document.createElement('style');
     if (theme.styles) {
       styleEl.innerHTML = theme.styles.map((style) => style.cssText).join('\n');
-    }
-    if (theme.styleAttributes) {
-      Object.keys(theme.styleAttributes).forEach((attribute) => {
-        styleEl.setAttribute(attribute, theme.styleAttributes[attribute]);
-      });
     }
     template.content.appendChild(styleEl);
     template.__includedThemes.push(theme);
