@@ -98,7 +98,7 @@ describe('checkbox', () => {
       expect(checkbox.indeterminate).to.be.false;
     });
 
-    it('should be checked on Space when initially checked is false and indeterminate is true', async () => {
+    it('should be checked on Space press when initially checked is false and indeterminate is true', async () => {
       checkbox.checked = false;
       checkbox.indeterminate = true;
 
@@ -111,7 +111,7 @@ describe('checkbox', () => {
       expect(checkbox.indeterminate).to.be.false;
     });
 
-    it('should not be checked on Space when initially checked is true and indeterminate is true', async () => {
+    it('should not be checked on Space press when initially checked is true and indeterminate is true', async () => {
       checkbox.checked = true;
       checkbox.indeterminate = true;
 
@@ -163,7 +163,7 @@ describe('checkbox', () => {
         expect(checkbox.hasAttribute('active')).to.be.false;
       });
 
-      it('should set active attribute while pressing Space on the input', async () => {
+      it('should set active attribute during Space press on the input', async () => {
         // Focus on the input
         await sendKeys({ press: 'Tab' });
         // Hold down Space on the input
