@@ -102,11 +102,8 @@ export const InlineEditingMixin = (superClass) =>
       // Prevent click/selection on edit column
       this.$.table.addEventListener('click', (e) => {
         const column = this.getEventContext(e).column;
-        if (column && this._isEditColumn(column)) {
-          e.preventDefault();
-          if (this.editOnClick) {
-            this._enterEditFromEvent(e);
-          }
+        if (column && this._isEditColumn(column) && this.editOnClick) {
+          this._enterEditFromEvent(e);
         }
       });
 
