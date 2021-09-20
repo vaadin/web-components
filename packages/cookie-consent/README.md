@@ -6,7 +6,7 @@
 
 [&lt;vaadin-cookie-consent&gt;](https://vaadin.com/components/vaadin-cookie-consent) is a web component used for showing a cookie consent banner the first time a user visits the application. Cookie Consent is part of the [Vaadin components](https://vaadin.com/components).
 
-[![npm version](https://badgen.net/npm/v/@vaadin/vaadin-cookie-consent)](https://www.npmjs.com/package/@vaadin/vaadin-cookie-consent)
+[![npm version](https://badgen.net/npm/v/@vaadin/cookie-consent)](https://www.npmjs.com/package/@vaadin/cookie-consent)
 [![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-cookie-consent)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
@@ -21,13 +21,13 @@
 Install `vaadin-cookie-consent`:
 
 ```sh
-npm i @vaadin/vaadin-cookie-consent --save
+npm i @vaadin/cookie-consent --save
 ```
 
 Once installed, import it in your application:
 
 ```js
-import '@vaadin/vaadin-board/vaadin-cookie-consent.js';
+import '@vaadin/cookie-consent/vaadin-cookie-consent.js';
 ```
 
 ## Contributing
