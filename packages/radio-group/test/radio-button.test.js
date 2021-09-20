@@ -1,28 +1,17 @@
-import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import {
-  fixtureSync,
-  nextFrame,
-  space,
-  touchstart,
-  touchend,
-  spaceKeyUp,
-  spaceKeyDown,
-  fire
-} from '@vaadin/testing-helpers';
+import { expect } from '@esm-bundle/chai';
+import { sendKeys } from '@web/test-runner-commands';
+import { fixtureSync, nextFrame, fire, mousedown, mouseup } from '@vaadin/testing-helpers';
 import '../vaadin-radio-button.js';
 
 describe('radio-button', () => {
-  let radio;
-
-  beforeEach(() => {
-    radio = fixtureSync('<vaadin-radio-button name="test-radio">Radio button</vaadin-radio-button>');
-  });
+  let radio, input, label;
 
   describe('custom element definition', () => {
     let tagName;
 
     beforeEach(() => {
+      radio = fixtureSync('<vaadin-radio-button></vaadin-radio-button>');
       tagName = radio.tagName.toLowerCase();
     });
 
@@ -35,27 +24,70 @@ describe('radio-button', () => {
     });
   });
 
-  describe('native input', () => {
-    let input;
-
+  // TODO: A legacy suit. Replace with snapshot tests when possible.
+  describe('default', () => {
     beforeEach(() => {
-      input = radio.shadowRoot.querySelector('input');
+      radio = fixtureSync('<vaadin-radio-button>Label</vaadin-radio-button>');
+      label = radio._labelNode;
     });
 
-    it('should propagate checked to the native input', () => {
-      radio.checked = true;
-      expect(input.checked).to.be.true;
+    it('should set checked property to false', () => {
+      expect(radio.checked).to.be.false;
     });
 
-    it('should set checked on native input change', () => {
-      input.checked = true;
-      input.dispatchEvent(new CustomEvent('change'));
+    it('should set name property to the empty string', () => {
+      expect(radio.name).to.equal('');
+    });
+
+    it('should set value property to "on"', () => {
+      expect(radio.value).to.equal('on');
+    });
+
+    it('should display the label', () => {
+      expect(label.textContent).to.equal('Label');
+    });
+  });
+
+  describe('native input', () => {
+    beforeEach(() => {
+      radio = fixtureSync('<vaadin-radio-button></vaadin-radio-button>');
+      input = radio.inputElement;
+      label = radio._labelNode;
+    });
+
+    // TODO: A legacy test. Replace with snapshot tests when possible.
+    it('should set input checked to false by default', () => {
+      expect(input.checked).to.be.false;
+    });
+
+    // TODO: A legacy test. Replace with snapshot tests when possible.
+    it('should set input value to "on" by default', () => {
+      expect(input.value).to.equal('on');
+    });
+
+    it('should set checked property on input click', () => {
+      input.click();
       expect(radio.checked).to.be.true;
     });
 
-    it('should propagate disabled to the native input', () => {
-      radio.disabled = true;
-      expect(input.disabled).to.be.true;
+    it('should set checked property on label click', () => {
+      label.click();
+      expect(radio.checked).to.be.true;
+    });
+
+    it('should set checked property when pressing Space on the input', async () => {
+      // Focus on the input
+      await sendKeys({ press: 'Tab' });
+      // Press Space on the input
+      await sendKeys({ press: 'Space' });
+
+      expect(radio.checked).to.be.true;
+    });
+
+    it('should set checked property on input change', () => {
+      input.checked = true;
+      fire(input, 'change');
+      expect(radio.checked).to.be.true;
     });
 
     it('should dispatch click event on host click', () => {
@@ -63,7 +95,7 @@ describe('radio-button', () => {
       input.addEventListener('click', spy);
       radio.click();
       expect(spy.calledOnce).to.be.true;
-      const event = spy.getCall(0).args[0];
+      const event = spy.firstCall.args[0];
       expect(event).to.be.instanceof(MouseEvent);
     });
 
@@ -76,119 +108,70 @@ describe('radio-button', () => {
     });
   });
 
-  describe('name property', () => {
-    it('should contain empty string when unchecked', () => {
-      expect(radio.name).to.equal('');
-    });
-
-    it('should contain attribute value when checked', () => {
-      radio.checked = true;
-      expect(radio.name).to.equal('test-radio');
-    });
-  });
-
-  describe('checked property', () => {
-    it('should set checked on host click', () => {
-      radio.click();
-      expect(radio.checked).to.be.true;
-    });
-
-    it('should set checked on mouseup', () => {
-      fire(radio, 'down');
-      fire(radio, 'up');
-      expect(radio.checked).to.be.true;
-    });
-
-    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-    (isSafari ? it.skip : it)('should set checked on touchend', () => {
-      touchstart(radio);
-      touchend(radio);
-      expect(radio.checked).to.be.true;
-    });
-
-    it('should set checked on space keyup', () => {
-      space(radio);
-      expect(radio.checked).to.be.true;
-    });
-  });
-
-  describe('disabled property', () => {
+  describe('disabled attribute', () => {
     beforeEach(() => {
-      radio.disabled = true;
+      radio = fixtureSync('<vaadin-radio-button disabled></vaadin-radio-button>');
+      input = radio.inputElement;
+      label = radio._labelNode;
     });
 
-    it('should not set checked on click when disabled', () => {
-      radio.click();
+    it('should not set checked property on input click', () => {
+      input.click();
       expect(radio.checked).to.be.false;
     });
 
-    it('should not set checked on mouseup when disabled', () => {
-      fire(radio, 'down');
-      fire(radio, 'up');
+    it('should not set checked property on label click', () => {
+      label.click();
       expect(radio.checked).to.be.false;
     });
 
-    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-    (isSafari ? it.skip : it)('should not set checked on touchend when disabled', () => {
-      touchstart(radio);
-      touchend(radio);
-      expect(radio.checked).to.be.false;
-    });
+    it('should not set checked property when pressing Space on the input', async () => {
+      // Focus on the input
+      await sendKeys({ press: 'Tab' });
+      // Press Space on the input
+      await sendKeys({ press: 'Space' });
 
-    it('should not set checked on space keyup when disabled', () => {
-      space(radio);
       expect(radio.checked).to.be.false;
     });
   });
 
-  describe('active attribute', () => {
-    it('should have active attribute on space keydown', () => {
-      spaceKeyDown(radio);
-      expect(radio.hasAttribute('active')).to.be.true;
+  // TODO: A legacy suit. Replace with snapshot tests when possible.
+  describe('label attribute', () => {
+    beforeEach(() => {
+      radio = fixtureSync('<vaadin-radio-button label="Label"></vaadin-radio-button>');
+      label = radio._labelNode;
     });
 
-    it('should not have active attribute on space keyup', () => {
-      space(radio);
+    it('should display the label', () => {
+      expect(label.textContent).to.equal('Label');
+    });
+  });
+
+  // TODO: A legacy suit. Replace with snapshot tests when possible.
+  describe('active attribute', () => {
+    beforeEach(() => {
+      radio = fixtureSync('<vaadin-radio-button></vaadin-radio-button>');
+      input = radio.inputElement;
+    });
+
+    it('should set active attribute during input click', () => {
+      mousedown(input);
+      expect(radio.hasAttribute('active')).to.be.true;
+
+      mouseup(input);
       expect(radio.hasAttribute('active')).to.be.false;
     });
-  });
 
-  describe('click method', () => {
-    let spy;
+    it('should set active attribute while pressing Space on the input', async () => {
+      // Focus on the input
+      await sendKeys({ press: 'Tab' });
+      // Hold down Space on the input
+      await sendKeys({ down: 'Space' });
+      expect(radio.hasAttribute('active')).to.be.true;
 
-    beforeEach(() => {
-      spy = sinon.spy(radio, 'click');
-    });
-
-    it('should be called on mouseup', () => {
-      fire(radio, 'down');
-      fire(radio, 'up');
-      expect(spy.calledOnce).to.be.true;
-    });
-
-    it('should not be called on mouseup when checked', () => {
-      radio.checked = true;
-      fire(radio, 'down');
-      fire(radio, 'up');
-      expect(spy.called).to.be.false;
-    });
-
-    it('should not be called on mouseup when disabled', () => {
-      radio.disabled = true;
-      fire(radio, 'down');
-      fire(radio, 'up');
-      expect(spy.called).to.be.false;
-    });
-
-    it('should be called on space keyup', () => {
-      space(radio);
-      expect(spy.calledOnce).to.be.true;
-    });
-
-    it('should not be called on space keyup when disabled', () => {
-      radio.disabled = true;
-      space(radio);
-      expect(spy.called).to.be.false;
+      // Release Space on the input
+      await sendKeys({ up: 'Space' });
+      expect(radio.hasAttribute('active')).to.be.false;
     });
   });
 
@@ -196,33 +179,30 @@ describe('radio-button', () => {
     let spy;
 
     beforeEach(() => {
+      radio = fixtureSync('<vaadin-radio-button></vaadin-radio-button>');
+      label = radio._labelNode;
+      input = radio.inputElement;
+
       spy = sinon.spy();
       radio.addEventListener('change', spy);
     });
 
-    it('should fire on click', () => {
-      radio.click();
+    it('should fire on input click', () => {
+      input.click();
       expect(spy.calledOnce).to.be.true;
     });
 
-    it('should fire on mouseup', () => {
-      fire(radio, 'down');
-      fire(radio, 'up');
+    it('should fire on label click', () => {
+      label.click();
       expect(spy.calledOnce).to.be.true;
     });
 
-    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-    (isSafari ? it.skip : it)('should fire on touchend', () => {
-      touchstart(radio);
-      touchend(radio);
-      expect(spy.calledOnce).to.be.true;
-    });
+    it('should fire when pressing Space on the input', async () => {
+      // Focus on the input
+      await sendKeys({ press: 'Tab' });
+      // Press Space on the input
+      await sendKeys({ press: 'Space' });
 
-    it('should fire on space keyup', () => {
-      spaceKeyDown(radio);
-      expect(spy.called).to.be.false;
-
-      spaceKeyUp(radio);
       expect(spy.calledOnce).to.be.true;
     });
 
@@ -231,76 +211,69 @@ describe('radio-button', () => {
       expect(spy.called).to.be.false;
     });
 
-    it('should not fire when checked', () => {
+    it('should not fire on input click when checked', () => {
       radio.checked = true;
-      radio.click();
+      input.click();
+      expect(spy.called).to.be.false;
+    });
+
+    it('should not fire on label click when checked', () => {
+      radio.checked = true;
+      label.click();
       expect(spy.called).to.be.false;
     });
 
     it('should bubble', () => {
-      radio.click();
-      const event = spy.getCall(0).args[0];
+      input.click();
+      const event = spy.firstCall.args[0];
       expect(event).to.have.property('bubbles', true);
     });
 
     it('should not be composed', () => {
-      radio.click();
-      const event = spy.getCall(0).args[0];
+      input.click();
+      const event = spy.firstCall.args[0];
       expect(event).to.have.property('composed', false);
     });
   });
 
-  describe('ARIA', () => {
-    it('should have proper role', () => {
-      expect(radio.getAttribute('role')).to.eq('radio');
+  describe('delegation', () => {
+    describe('name attribute', () => {
+      beforeEach(() => {
+        radio = fixtureSync(`<vaadin-radio-button name="Name"></vaadin-radio-button>`);
+        input = radio.inputElement;
+      });
+
+      it('should delegate name attribute to the input', () => {
+        expect(input.getAttribute('name')).to.equal('Name');
+
+        radio.removeAttribute('name');
+        expect(input.hasAttribute('name')).to.be.false;
+      });
+    });
+  });
+
+  describe('has-label attribute', () => {
+    beforeEach(() => {
+      radio = fixtureSync('<vaadin-radio-button></vaadin-radio-button>');
     });
 
-    it('should set aria-checked to false by default', () => {
-      expect(radio.getAttribute('aria-checked')).to.equal('false');
+    it('should not set has-label attribute when label content is empty', () => {
+      expect(radio.hasAttribute('has-label')).to.be.false;
     });
 
-    it('should set aria-checked to true when checked', () => {
-      radio.checked = true;
-      expect(radio.getAttribute('aria-checked')).to.equal('true');
+    it('should not set has-label attribute when only one empty text node added', async () => {
+      const textNode = document.createTextNode(' ');
+      radio.appendChild(textNode);
+      await nextFrame();
+      expect(radio.hasAttribute('has-label')).to.be.false;
     });
-  });
-});
 
-describe('label part', () => {
-  let radio, label;
-
-  beforeEach(() => {
-    radio = fixtureSync('<vaadin-radio-button></vaadin-radio-button>');
-    label = radio.shadowRoot.querySelector('[part="label"]');
-  });
-
-  it('should have empty attribute when there is no label', () => {
-    expect(label.hasAttribute('empty')).to.be.true;
-  });
-
-  it('should have empty attribute when there is only one empty text node', async () => {
-    const textNode = document.createTextNode(' ');
-    radio.appendChild(textNode);
-    await nextFrame();
-    expect(label.hasAttribute('empty')).to.be.true;
-  });
-
-  it('should not have empty attribute when the label is added', async () => {
-    const paragraph = document.createElement('p');
-    paragraph.textContent = 'Added label';
-    radio.appendChild(paragraph);
-    await nextFrame();
-    expect(label.hasAttribute('empty')).to.be.false;
-  });
-
-  it('should restore empty attribute when the label is removed', async () => {
-    radio.textContent = 'Radio button';
-    await nextFrame();
-    while (radio.firstChild) {
-      radio.removeChild(radio.firstChild);
-    }
-    await nextFrame();
-    const label = radio.shadowRoot.querySelector('[part="label"]');
-    expect(label.hasAttribute('empty')).to.be.true;
+    it('should set has-label attribute when the label is added', async () => {
+      const paragraph = document.createElement('p');
+      paragraph.textContent = 'Added label';
+      radio.appendChild(paragraph);
+      await nextFrame();
+      expect(radio.hasAttribute('has-label')).to.be.true;
+    });
   });
 });

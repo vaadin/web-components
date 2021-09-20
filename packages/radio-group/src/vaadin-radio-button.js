@@ -157,23 +157,6 @@ class RadioButton extends SlotLabelMixin(
   get _sourceSlot() {
     return this.$.noop;
   }
-
-  /**
-   * Extends the method of `ActiveMixin` in order to
-   * prevent setting the `active` attribute when clicking on a link inside the label.
-   *
-   * @param {Event} event
-   * @return {boolean}
-   * @protected
-   * @override
-   */
-  _shouldSetActive(event) {
-    if (event.target.localName === 'a') {
-      return false;
-    }
-
-    return super._shouldSetActive(event);
-  }
 }
 
 customElements.define(RadioButton.is, RadioButton);
