@@ -27,7 +27,7 @@ npm i @vaadin/cookie-consent --save
 Once installed, import it in your application:
 
 ```js
-import '@vaadin/vaadin-board/vaadin-cookie-consent.js';
+import '@vaadin/cookie-consent/vaadin-cookie-consent.js';
 ```
 
 ## Contributing
