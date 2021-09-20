@@ -171,8 +171,8 @@ class Checkbox extends SlotLabelMixin(
   }
 
   /**
-   * Extends the method of `ActiveMixin` in order to
-   * prevent setting the `active` attribute when clicking on a link inside the label.
+   * Extends the method from `ActiveMixin` in order to
+   * prevent setting the `active` attribute when interacting with a link inside the label.
    *
    * @param {Event} event
    * @return {boolean}
@@ -188,7 +188,7 @@ class Checkbox extends SlotLabelMixin(
   }
 
   /**
-   * Extends the method of `CheckedMixin` in order to
+   * Extends the method from `CheckedMixin` in order to
    * reset the indeterminate state once the user switches the checkbox.
    *
    * @param {boolean} checked
