@@ -65,4 +65,21 @@ describe('accessibility', () => {
     expect(select._items[0].getAttribute('role')).to.equal('option');
     expect(select._items[1].getAttribute('role')).to.equal('option');
   });
+
+  it('should set ID attribute on the selected item', async () => {
+    // Wait for items
+    await nextFrame();
+    select.value = 'Option 1';
+    const ID_REGEX = /^vaadin-select-\d+$/;
+    const id = valueButton.firstChild.getAttribute('id');
+    expect(id).to.match(ID_REGEX);
+  });
+
+  it('should include selected item ID to aria-labelledby', async () => {
+    // Wait for items
+    await nextFrame();
+    select.value = 'Option 1';
+    const id = valueButton.firstChild.getAttribute('id');
+    expect(valueButton.getAttribute('aria-labelledby')).to.include(id);
+  });
 });

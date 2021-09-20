@@ -30,7 +30,7 @@ describe('text-area-slot-mixin', () => {
     });
 
     it('should set id attribute on the textarea', () => {
-      const ID_REGEX = /^textarea-slot-mixin-element-\d$/;
+      const ID_REGEX = /^textarea-slot-mixin-element-\d+$/;
       const id = textarea.getAttribute('id');
       expect(id).to.match(ID_REGEX);
       expect(id.endsWith(element.constructor._uniqueTextAreaId)).to.be.true;

@@ -46,7 +46,7 @@ describe('input-slot-mixin', () => {
     });
 
     it('should set id attribute on the input', () => {
-      const ID_REGEX = /^input-slot-mixin-element-\d$/;
+      const ID_REGEX = /^input-slot-mixin-element-\d+$/;
       const id = input.getAttribute('id');
       expect(id).to.match(ID_REGEX);
       expect(id.endsWith(element.constructor._uniqueInputId)).to.be.true;
