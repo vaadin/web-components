@@ -84,6 +84,14 @@ describe('date-picker', () => {
         element.appendChild(span);
         await visualDiff(div, `${dir}-prefix`);
       });
+
+      it('dropdown', async () => {
+        element.value = '2000-01-01';
+        element.opened = true;
+        div.style.height = element.offsetHeight + element.$.overlay.$.overlay.offsetHeight + 'px';
+        div.style.width = element.$.overlay.$.overlay.offsetWidth + 'px';
+        await visualDiff(div, `${dir}-dropdown`);
+      });
     });
   });
 });
