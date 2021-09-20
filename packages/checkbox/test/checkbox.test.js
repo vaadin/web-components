@@ -1,7 +1,7 @@
 import sinon from 'sinon';
 import { expect } from '@esm-bundle/chai';
 import { sendKeys } from '@web/test-runner-commands';
-import { fixtureSync, mousedown, nextFrame } from '@vaadin/testing-helpers';
+import { fixtureSync, mousedown, mouseup, nextFrame } from '@vaadin/testing-helpers';
 import '../vaadin-checkbox.js';
 
 describe('checkbox', () => {
@@ -98,24 +98,6 @@ describe('checkbox', () => {
       expect(checkbox.indeterminate).to.be.false;
     });
 
-    it('should set active attribute on input click', () => {
-      mousedown(input);
-      expect(checkbox.hasAttribute('active')).to.be.true;
-    });
-
-    it('should set active attribute when pressing Space on input', async () => {
-      // Focus on the input
-      await sendKeys({ press: 'Tab' });
-      // Hold down Space on the input
-      await sendKeys({ down: 'Space' });
-      expect(checkbox.hasAttribute('active')).to.be.true;
-    });
-
-    it('should not set active attribute on label link click', () => {
-      mousedown(link);
-      expect(checkbox.hasAttribute('active')).to.be.false;
-    });
-
     it('should be checked on Space when initially checked is false and indeterminate is true', async () => {
       checkbox.checked = false;
       checkbox.indeterminate = true;
@@ -165,6 +147,33 @@ describe('checkbox', () => {
       await nextFrame();
 
       expect(checkbox.hasAttribute('has-input')).to.be.false;
+    });
+
+    describe('active attribute', () => {
+      it('should set active attribute during input click', () => {
+        mousedown(input);
+        expect(checkbox.hasAttribute('active')).to.be.true;
+
+        mouseup(input);
+        expect(checkbox.hasAttribute('active')).to.be.false;
+      });
+
+      it('should not set active attribute during label link click', () => {
+        mousedown(link);
+        expect(checkbox.hasAttribute('active')).to.be.false;
+      });
+
+      it('should set active attribute while pressing Space on the input', async () => {
+        // Focus on the input
+        await sendKeys({ press: 'Tab' });
+        // Hold down Space on the input
+        await sendKeys({ down: 'Space' });
+        expect(checkbox.hasAttribute('active')).to.be.true;
+
+        // Release Space on the input
+        await sendKeys({ up: 'Space' });
+        expect(checkbox.hasAttribute('active')).to.be.false;
+      });
     });
 
     describe('change event', () => {
