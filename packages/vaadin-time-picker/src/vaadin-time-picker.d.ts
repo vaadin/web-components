@@ -62,11 +62,6 @@ declare class TimePicker extends PatternMixin(
   ClearButtonMixin(FieldAriaMixin(AriaLabelMixin(InputSlotMixin(ThemableMixin(ElementMixin(HTMLElement))))))
 ) {
   /**
-   * Set to true to disable this input.
-   */
-  disabled: boolean;
-
-  /**
    * The time value for this element.
    *
    * Supported time formats are in ISO 8601:
