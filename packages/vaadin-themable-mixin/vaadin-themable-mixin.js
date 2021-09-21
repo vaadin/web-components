@@ -60,6 +60,12 @@ export function registerStyles(themeFor, styles, options = {}) {
  */
 function getAllThemes() {
   if (window.Vaadin && window.Vaadin.domModuleStyling) {
+    if (themeRegistry.length > 0) {
+      console.warn(`Seems that styles have been registered before the
+<dom-module> styling adapter was imported.
+Make sure to import the adapter before registering any styles.`);
+    }
+
     return window.Vaadin.domModuleStyling.getAllThemes();
   } else {
     return themeRegistry;
