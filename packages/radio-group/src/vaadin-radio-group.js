@@ -253,15 +253,22 @@ class RadioGroupElement extends ThemableMixin(DirMixin(PolymerElement)) {
       this._setOrToggleHasHelperAttribute();
     });
 
-    if (this._radioButtons.length) {
-      this._setFocusable(0);
-    }
-
     this.setAttribute('role', 'radiogroup');
 
     const uniqueId = (RadioGroupElement._uniqueId = 1 + RadioGroupElement._uniqueId || 0);
     this._errorId = `${this.constructor.is}-error-${uniqueId}`;
     this._helperTextId = `${this.constructor.is}-helper-${uniqueId}`;
+
+    // Sometimes radio buttons are initialized after the radio group
+    // (the actual order depends on the way they are added to the DOM).
+    // That being so, `_setFocusable` should be called only after
+    // all the radio buttons in the group have been initialized and rendered.
+    // Otherwise, the radio button's focus element may be not available.
+    customElements.whenDefined(RadioButton.is).then(() => {
+      if (this._radioButtons.length) {
+        this._setFocusable(0);
+      }
+    });
   }
 
   /** @private */
@@ -506,9 +513,9 @@ class RadioGroupElement extends ThemableMixin(DirMixin(PolymerElement)) {
   _setFocusable(idx) {
     this._radioButtons.forEach((radioButton, radioButtonIdx) => {
       if (radioButtonIdx === idx) {
-        radioButton.removeAttribute('tabindex');
+        radioButton.focusElement.removeAttribute('tabindex');
       } else {
-        radioButton.setAttribute('tabindex', '-1');
+        radioButton.focusElement.setAttribute('tabindex', '-1');
       }
     });
   }
