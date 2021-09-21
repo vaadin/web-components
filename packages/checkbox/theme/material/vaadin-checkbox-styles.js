@@ -14,7 +14,7 @@ registerStyles(
       -webkit-tap-highlight-color: transparent;
     }
 
-    [part='label']:not([empty]) {
+    :host([has-label]) [part='label'] {
       margin: 3px 12px 3px 6px;
     }
 
@@ -32,7 +32,6 @@ registerStyles(
       position: relative;
       border-radius: 2px;
       box-shadow: inset 0 0 0 2px var(--material-secondary-text-color);
-      pointer-events: none;
       line-height: 1.275;
       background-color: transparent;
     }
@@ -41,6 +40,7 @@ registerStyles(
     [part='checkbox']::before {
       /* Needed to align the checkbox nicely on the baseline */
       content: '\\2003';
+      pointer-events: none;
       display: inline-block;
       width: 100%;
       height: 100%;
@@ -55,6 +55,7 @@ registerStyles(
     /* Used for the checkmark */
     [part='checkbox']::after {
       content: '';
+      pointer-events: none;
       display: inline-block;
       width: 10px;
       height: 19px;
@@ -127,7 +128,7 @@ registerStyles(
     }
 
     /* RTL specific styles */
-    :host([dir='rtl']) [part='label']:not([empty]) {
+    :host([dir='rtl'][has-label]) [part='label'] {
       margin: 3px 6px 3px 12px;
     }
   `,

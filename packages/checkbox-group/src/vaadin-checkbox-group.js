@@ -5,7 +5,7 @@
  */
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
-import { CheckboxElement } from '@vaadin/checkbox/src/vaadin-checkbox.js';
+import { Checkbox } from '@vaadin/checkbox/src/vaadin-checkbox.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -198,15 +198,13 @@ class CheckboxGroupElement extends ThemableMixin(DirMixin(PolymerElement)) {
     this.addEventListener('focusin', () => this._setFocused(this._containsFocus()));
 
     this.addEventListener('focusout', (e) => {
-      // validate when stepping out of the checkbox group
-      if (
-        !this._checkboxes.some(
-          (checkbox) => e.relatedTarget === checkbox || checkbox.shadowRoot.contains(e.relatedTarget)
-        )
-      ) {
-        this.validate();
-        this._setFocused(false);
+      // Skip if focus is just moved to another checkbox.
+      if (this._checkboxes.some((checkbox) => checkbox.contains(e.relatedTarget))) {
+        return;
       }
+
+      this.validate();
+      this._setFocused(false);
     });
 
     const checkedChangedListener = (e) => {
@@ -264,7 +262,7 @@ class CheckboxGroupElement extends ThemableMixin(DirMixin(PolymerElement)) {
 
   /** @private */
   _filterCheckboxes(nodes) {
-    return Array.from(nodes).filter((child) => child instanceof CheckboxElement);
+    return Array.from(nodes).filter((child) => child instanceof Checkbox);
   }
 
   /** @private */
@@ -293,7 +291,7 @@ class CheckboxGroupElement extends ThemableMixin(DirMixin(PolymerElement)) {
   }
 
   /**
-   * @param {CheckboxElement} checkbox
+   * @param {Checkbox} checkbox
    * @protected
    */
   _changeSelectedCheckbox(checkbox) {

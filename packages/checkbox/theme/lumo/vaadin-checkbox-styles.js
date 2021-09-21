@@ -14,7 +14,7 @@ registerStyles(
       outline: none;
     }
 
-    [part='label']:not([empty]) {
+    :host([has-label]) [part='label'] {
       margin: 0.1875em 0.875em 0.1875em 0.375em;
     }
 
@@ -26,7 +26,6 @@ registerStyles(
       border-radius: var(--lumo-border-radius-s);
       background-color: var(--lumo-contrast-20pct);
       transition: transform 0.2s cubic-bezier(0.12, 0.32, 0.54, 2), background-color 0.15s;
-      pointer-events: none;
       line-height: 1.2;
       cursor: var(--lumo-clickable-cursor);
     }
@@ -44,6 +43,7 @@ registerStyles(
     /* Checkmark */
     [part='checkbox']::after {
       content: '';
+      pointer-events: none;
       display: inline-block;
       width: 0;
       height: 0;
@@ -106,7 +106,7 @@ registerStyles(
     }
 
     /* RTL specific styles */
-    :host([dir='rtl']) [part='label']:not([empty]) {
+    :host([dir='rtl'][has-label]) [part='label'] {
       margin: 0.1875em 0.375em 0.1875em 0.875em;
     }
 
@@ -117,6 +117,7 @@ registerStyles(
 
     /* Used for activation "halo" */
     [part='checkbox']::before {
+      pointer-events: none;
       color: transparent;
       display: inline-block;
       width: 100%;

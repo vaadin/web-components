@@ -1,274 +1,284 @@
-import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { click, fixtureSync, mousedown, mouseup, nextFrame, space, spaceKeyDown } from '@vaadin/testing-helpers';
+import { expect } from '@esm-bundle/chai';
+import { sendKeys } from '@web/test-runner-commands';
+import { fixtureSync, mousedown, mouseup, nextFrame } from '@vaadin/testing-helpers';
 import '../vaadin-checkbox.js';
 
 describe('checkbox', () => {
-  let checkbox, nativeCheckbox, label;
+  let checkbox, input, label, link;
 
-  const down = (node) => {
-    node.dispatchEvent(new CustomEvent('down'));
-  };
-
-  const up = (node) => {
-    node.dispatchEvent(new CustomEvent('up'));
-  };
-
-  beforeEach(() => {
-    checkbox = fixtureSync(
-      '<vaadin-checkbox name="test-checkbox">Vaadin <i>Checkbox</i> with <a href="#">Terms &amp; Conditions</a></vaadin-checkbox>'
-    );
-    nativeCheckbox = checkbox._nativeCheckbox;
-    label = checkbox.shadowRoot.querySelector('[part="label"]');
-  });
-
-  it('should define checkbox label using light DOM', () => {
-    const slot = label.querySelector('slot');
-    const nodes = slot.assignedNodes({ flatten: true });
-    expect(nodes[0].textContent).to.be.equal('Vaadin ');
-    expect(nodes[1].outerHTML).to.be.equal('<i>Checkbox</i>');
-  });
-
-  it('should have input as focusElement', () => {
-    expect(checkbox.focusElement).to.be.eql(nativeCheckbox);
-  });
-
-  it('can be disabled imperatively', () => {
-    checkbox.disabled = true;
-    expect(nativeCheckbox.hasAttribute('disabled')).to.be.eql(true);
-  });
-
-  it('has default value "on"', () => {
-    expect(checkbox.value).to.be.eql('on');
-  });
-
-  it('fires click event', () => {
-    const spy = sinon.spy();
-    checkbox.addEventListener('click', spy);
-
-    mousedown(checkbox);
-    mouseup(checkbox);
-    click(checkbox);
-
-    expect(spy.calledOnce).to.be.true;
-  });
-
-  it('should have proper name', () => {
-    expect(checkbox.name).to.eq('');
-    checkbox.checked = true;
-    expect(checkbox.name).to.eq('test-checkbox');
-  });
-
-  it('should have display: none when hidden', () => {
-    checkbox.setAttribute('hidden', '');
-    expect(getComputedStyle(checkbox).display).to.equal('none');
-  });
-
-  it('should toggle on host click', () => {
-    checkbox.click();
-
-    expect(checkbox.checked).to.be.true;
-
-    checkbox.click();
-
-    expect(checkbox.checked).to.be.false;
-  });
-
-  it('should not toggle on link inside host click', () => {
-    const slot = label.querySelector('slot');
-    const link = slot.assignedNodes({ flatten: true })[3];
-    expect(link.outerHTML).to.be.equal('<a href="#">Terms &amp; Conditions</a>');
-    link.click();
-    expect(checkbox.checked).to.be.false;
-  });
-
-  it('should not toggle on click when disabled', () => {
-    checkbox.disabled = true;
-    label.click();
-    expect(checkbox.checked).to.be.false;
-  });
-
-  it('should bind checked to the native checkbox and vice versa', () => {
-    checkbox.checked = true;
-    expect(nativeCheckbox.checked).to.be.eql(true);
-
-    nativeCheckbox.checked = false;
-    nativeCheckbox.dispatchEvent(new CustomEvent('change'));
-    expect(checkbox.checked).to.be.eql(false);
-  });
-
-  it('should bind indeterminate to the native checkbox and vice versa', () => {
-    checkbox.indeterminate = true;
-    expect(nativeCheckbox.indeterminate).to.be.eql(true);
-
-    nativeCheckbox.indeterminate = false;
-    nativeCheckbox.dispatchEvent(new CustomEvent('change'));
-    expect(checkbox.indeterminate).to.be.eql(false);
-  });
-
-  it('should set indeterminate to false when clicked the first time', () => {
-    checkbox.indeterminate = true;
-
-    checkbox.click();
-
-    expect(checkbox.indeterminate).to.be.false;
-  });
-
-  it('native checkbox should have the `presentation` role', () => {
-    expect(nativeCheckbox.getAttribute('role')).to.be.eql('presentation');
-  });
-
-  it('host should have the `checkbox` role', () => {
-    expect(checkbox.getAttribute('role')).to.be.eql('checkbox');
-  });
-
-  it('should have active attribute on down', () => {
-    down(checkbox);
-
-    expect(checkbox.hasAttribute('active')).to.be.true;
-  });
-
-  it('should not have active attribute after up', () => {
-    down(checkbox);
-
-    up(checkbox);
-
-    expect(checkbox.hasAttribute('active')).to.be.false;
-  });
-
-  it('should have active attribute on space', () => {
-    spaceKeyDown(checkbox);
-
-    expect(checkbox.hasAttribute('active')).to.be.true;
-  });
-
-  it('should not have active attribute after space', () => {
-    space(checkbox);
-
-    expect(checkbox.hasAttribute('active')).to.be.false;
-  });
-
-  it('should be checked after space when initially checked is false and indeterminate is true', () => {
-    checkbox.checked = false;
-    checkbox.indeterminate = true;
-
-    space(checkbox);
-
-    expect(checkbox.checked).to.be.true;
-    expect(checkbox.indeterminate).to.be.false;
-    expect(checkbox.getAttribute('aria-checked')).to.be.eql('true');
-  });
-
-  it('should not be checked after space when initially checked is true and indeterminate is true', () => {
-    checkbox.checked = true;
-    checkbox.indeterminate = true;
-
-    space(checkbox);
-
-    expect(checkbox.checked).to.be.false;
-    expect(checkbox.indeterminate).to.be.false;
-    expect(checkbox.getAttribute('aria-checked')).to.be.eql('false');
-  });
-
-  it('should be checked after click when initially checked is false and indeterminate is true', () => {
-    checkbox.checked = false;
-    checkbox.indeterminate = true;
-
-    checkbox.click();
-
-    expect(checkbox.checked).to.be.true;
-    expect(checkbox.indeterminate).to.be.false;
-    expect(checkbox.getAttribute('aria-checked')).to.be.eql('true');
-  });
-
-  it('should not be checked after click when initially checked is true and indeterminate is true', () => {
-    checkbox.checked = true;
-    checkbox.indeterminate = true;
-
-    checkbox.click();
-
-    expect(checkbox.checked).to.be.false;
-    expect(checkbox.indeterminate).to.be.false;
-    expect(checkbox.getAttribute('aria-checked')).to.be.eql('false');
-  });
-
-  it('should set empty attribute on part label when the label was removed', async () => {
-    while (checkbox.firstChild) {
-      checkbox.removeChild(checkbox.firstChild);
-    }
-
-    await nextFrame();
-
-    expect(label.hasAttribute('empty')).to.be.true;
-  });
-
-  describe('change event', () => {
-    let changeSpy;
+  describe('custom element definition', () => {
+    let tagName;
 
     beforeEach(() => {
-      changeSpy = sinon.spy();
-      checkbox.addEventListener('change', changeSpy);
+      checkbox = fixtureSync('<vaadin-checkbox></vaadin-checkbox>');
+      tagName = checkbox.tagName.toLowerCase();
     });
 
-    it('should not fire change-event when changing checked value programmatically', () => {
+    it('should be defined in custom element registry', () => {
+      expect(customElements.get(tagName)).to.be.ok;
+    });
+
+    it('should have a valid static "is" getter', () => {
+      expect(customElements.get(tagName).is).to.equal(tagName);
+    });
+  });
+
+  describe('default', () => {
+    beforeEach(() => {
+      checkbox = fixtureSync('<vaadin-checkbox>I accept <a href="#">the terms and conditions</a></vaadin-checkbox>');
+      input = checkbox.inputElement;
+      label = checkbox._labelNode;
+      link = label.children[0];
+    });
+
+    // TODO: A legacy test. Replace with snapshot tests when possible.
+    it('should display the label', () => {
+      expect(label.textContent).to.equal('I accept the terms and conditions');
+    });
+
+    // TODO: A legacy test. Replace with snapshot tests when possible.
+    it('should be possible to disabled imperatively', () => {
+      checkbox.disabled = true;
+      expect(input.hasAttribute('disabled')).to.be.true;
+    });
+
+    // TODO: A legacy test. Replace with snapshot tests when possible.
+    it('should set value property to "on"', () => {
+      expect(checkbox.value).to.equal('on');
+    });
+
+    // TODO: A legacy test. Replace with snapshot tests when possible.
+    it('should set input value property to "on"', () => {
+      expect(input.value).to.equal('on');
+    });
+
+    // TODO: A legacy test. Replace with snapshot tests when possible.
+    it('should set the name to the empty string', () => {
+      expect(checkbox.name).to.equal('');
+    });
+
+    it('should have display: none when hidden', () => {
+      checkbox.setAttribute('hidden', '');
+      expect(getComputedStyle(checkbox).display).to.equal('none');
+    });
+
+    it('should toggle checked property on input click', () => {
+      input.click();
+      expect(checkbox.checked).to.be.true;
+
+      input.click();
+      expect(checkbox.checked).to.be.false;
+    });
+
+    it('should toggle checked property on label click', () => {
+      label.click();
+      expect(checkbox.checked).to.be.true;
+
+      label.click();
+      expect(checkbox.checked).to.be.false;
+    });
+
+    it('should not toggle checked property on label link click', () => {
+      link.click();
+      expect(checkbox.checked).to.be.false;
+    });
+
+    it('should not toggle checked property on click when disabled', () => {
+      checkbox.disabled = true;
+      checkbox.click();
+      expect(checkbox.checked).to.be.false;
+    });
+
+    it('should reset indeterminate attribute on first click', () => {
+      checkbox.indeterminate = true;
+      expect(checkbox.indeterminate).to.be.true;
+
+      checkbox.click();
+      expect(checkbox.indeterminate).to.be.false;
+    });
+
+    it('should be checked on Space press when initially checked is false and indeterminate is true', async () => {
+      checkbox.checked = false;
+      checkbox.indeterminate = true;
+
+      // Focus on the input
+      await sendKeys({ press: 'Tab' });
+      // Press Space on the input
+      await sendKeys({ press: 'Space' });
+
+      expect(checkbox.checked).to.be.true;
+      expect(checkbox.indeterminate).to.be.false;
+    });
+
+    it('should not be checked on Space press when initially checked is true and indeterminate is true', async () => {
       checkbox.checked = true;
+      checkbox.indeterminate = true;
 
-      expect(changeSpy.called).to.be.false;
+      // Focus on the input
+      await sendKeys({ press: 'Tab' });
+      // Press Space on the input
+      await sendKeys({ press: 'Space' });
+
+      expect(checkbox.checked).to.be.false;
+      expect(checkbox.indeterminate).to.be.false;
     });
 
-    it('should fire change-event when user checks the element', () => {
+    it('should be checked on click when initially checked is false and indeterminate is true', () => {
+      checkbox.checked = false;
+      checkbox.indeterminate = true;
       checkbox.click();
 
-      expect(changeSpy.calledOnce).to.be.true;
+      expect(checkbox.checked).to.be.true;
+      expect(checkbox.indeterminate).to.be.false;
     });
 
-    it('should fire change-event when user unchecks the element', () => {
+    it('should not be checked on click when initially checked is true and indeterminate is true', () => {
       checkbox.checked = true;
+      checkbox.indeterminate = true;
       checkbox.click();
 
-      expect(changeSpy.calledOnce).to.be.true;
+      expect(checkbox.checked).to.be.false;
+      expect(checkbox.indeterminate).to.be.false;
     });
 
-    it('should bubble', () => {
-      checkbox.click();
+    it('should remove has-label attribute when the label was cleared', async () => {
+      label.innerHTML = '';
+      await nextFrame();
 
-      const event = changeSpy.getCall(0).args[0];
-      expect(event).to.have.property('bubbles', true);
+      expect(checkbox.hasAttribute('has-input')).to.be.false;
     });
 
-    it('should not be composed', () => {
-      checkbox.click();
+    describe('active attribute', () => {
+      it('should set active attribute during input click', () => {
+        mousedown(input);
+        expect(checkbox.hasAttribute('active')).to.be.true;
 
-      const event = changeSpy.getCall(0).args[0];
-      expect(event).to.have.property('composed', false);
+        mouseup(input);
+        expect(checkbox.hasAttribute('active')).to.be.false;
+      });
+
+      it('should not set active attribute during label link click', () => {
+        mousedown(link);
+        expect(checkbox.hasAttribute('active')).to.be.false;
+      });
+
+      it('should set active attribute during Space press on the input', async () => {
+        // Focus on the input
+        await sendKeys({ press: 'Tab' });
+        // Hold down Space on the input
+        await sendKeys({ down: 'Space' });
+        expect(checkbox.hasAttribute('active')).to.be.true;
+
+        // Release Space on the input
+        await sendKeys({ up: 'Space' });
+        expect(checkbox.hasAttribute('active')).to.be.false;
+      });
+    });
+
+    describe('change event', () => {
+      let changeSpy;
+
+      beforeEach(() => {
+        changeSpy = sinon.spy();
+        checkbox.addEventListener('change', changeSpy);
+      });
+
+      it('should not fire change event when changing checked state programmatically', () => {
+        checkbox.checked = true;
+
+        expect(changeSpy.called).to.be.false;
+      });
+
+      it('should fire change event on input click', () => {
+        input.click();
+        expect(changeSpy.calledOnce).to.be.true;
+
+        input.click();
+        expect(changeSpy.calledTwice).to.be.true;
+      });
+
+      it('should fire change event on label click', () => {
+        label.click();
+        expect(changeSpy.calledOnce).to.be.true;
+
+        label.click();
+        expect(changeSpy.calledTwice).to.be.true;
+      });
+
+      it('should not fire change event on label link click', () => {
+        link.click();
+        expect(changeSpy.called).to.be.false;
+      });
+
+      it('should bubble', () => {
+        checkbox.click();
+
+        const event = changeSpy.firstCall.args[0];
+        expect(event).to.have.property('bubbles', true);
+      });
+
+      it('should not be composed', () => {
+        checkbox.click();
+
+        const event = changeSpy.firstCall.args[0];
+        expect(event).to.have.property('composed', false);
+      });
     });
   });
-});
 
-describe('empty label', () => {
-  let checkbox, label;
+  describe('has-label attribute', () => {
+    beforeEach(() => {
+      checkbox = fixtureSync('<vaadin-checkbox></vaadin-checkbox>');
+    });
 
-  beforeEach(() => {
-    checkbox = fixtureSync('<vaadin-checkbox></vaadin-checkbox>');
-    label = checkbox.shadowRoot.querySelector('[part="label"]');
+    it('should not set has-label attribute when label content is empty', () => {
+      expect(checkbox.hasAttribute('has-label')).to.be.false;
+    });
+
+    it('should not set has-label attribute when only one empty text node added', async () => {
+      const textNode = document.createTextNode(' ');
+      checkbox.appendChild(textNode);
+      await nextFrame();
+      expect(checkbox.hasAttribute('has-label')).to.be.false;
+    });
+
+    it('should set has-label attribute when the label is added', async () => {
+      const paragraph = document.createElement('p');
+      paragraph.textContent = 'Added label';
+      checkbox.appendChild(paragraph);
+      await nextFrame();
+      expect(checkbox.hasAttribute('has-label')).to.be.true;
+    });
   });
 
-  it('should set empty attribute on part label when there is no label', () => {
-    expect(label.hasAttribute('empty')).to.be.true;
-  });
+  describe('delegation', () => {
+    describe('name attribute', () => {
+      beforeEach(() => {
+        checkbox = fixtureSync(`<vaadin-checkbox name="Name"></vaadin-checkbox>`);
+        input = checkbox.inputElement;
+      });
 
-  it('should set empty attribute on part label when there is only one empty text node added', async () => {
-    const textNode = document.createTextNode(' ');
-    checkbox.appendChild(textNode);
-    await nextFrame();
-    expect(label.hasAttribute('empty')).to.be.true;
-  });
+      it('should delegate name attribute to the input', () => {
+        expect(input.getAttribute('name')).to.equal('Name');
 
-  it('should remove empty attribute from part label when the label is added', async () => {
-    const paragraph = document.createElement('p');
-    paragraph.textContent = 'Added label';
-    checkbox.appendChild(paragraph);
-    await nextFrame();
-    expect(label.hasAttribute('empty')).to.be.false;
+        checkbox.removeAttribute('name');
+        expect(input.hasAttribute('name')).to.be.false;
+      });
+    });
+
+    describe('indeterminate property', () => {
+      beforeEach(() => {
+        checkbox = fixtureSync(`<vaadin-checkbox indeterminate></vaadin-checkbox>`);
+        input = checkbox.inputElement;
+      });
+
+      it('should delegate indeterminate property to the input', () => {
+        expect(input.indeterminate).to.be.true;
+
+        checkbox.indeterminate = false;
+        expect(input.indeterminate).to.be.false;
+      });
+    });
   });
 });
