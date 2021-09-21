@@ -1,10 +1,10 @@
 {
-  "name": "@vaadin/vaadin-crud",
+  "name": "@vaadin/crud",
   "version": "22.0.0-alpha6",
   "description": "vaadin-crud",
   "main": "vaadin-crud.js",
   "module": "vaadin-crud.js",
-  "repository": "vaadin/vaadin-crud",
+  "repository": "vaadin/web-components",
   "keywords": [
     "Vaadin",
     "vaadin-crud",
@@ -13,9 +13,9 @@
     "polymer"
   ],
   "author": "Vaadin Ltd",
-  "license": "https://raw.githubusercontent.com/vaadin/vaadin-crud/master/LICENSE",
+  "license": "https://raw.githubusercontent.com/vaadin/web-components/master/vaadin-crud/LICENSE",
   "bugs": {
-    "url": "https://github.com/vaadin/vaadin-crud/issues"
+    "url": "https://github.com/vaadin/web-components/issues"
   },
   "homepage": "https://vaadin.com/components",
   "files": [
