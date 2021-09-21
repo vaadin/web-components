@@ -114,7 +114,7 @@ class Checkbox extends SlotLabelMixin(
       /**
        * True if the checkbox is in the indeterminate state which means
        * it is not possible to say whether it is checked or unchecked.
-       * The state is reset once the user explicitly switches the checkbox.
+       * The state is reset once the user switches the checkbox by hand.
        *
        * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#Indeterminate_state_checkboxes
        *
