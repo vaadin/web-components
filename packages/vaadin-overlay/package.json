@@ -39,7 +39,7 @@
     "@vaadin/radio-group": "^22.0.0-alpha6",
     "@vaadin/testing-helpers": "^0.3.0",
     "@vaadin/vaadin-text-field": "^22.0.0-alpha6",
-    "lit": "^2.0.0-rc.1",
+    "lit": "^2.0.0",
     "sinon": "^9.2.1"
   },
   "publishConfig": {
