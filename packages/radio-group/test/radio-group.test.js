@@ -1,5 +1,6 @@
-import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
+import { expect } from '@esm-bundle/chai';
+import { sendKeys } from '@web/test-runner-commands';
 import {
   arrowDown,
   arrowLeft,
@@ -7,7 +8,6 @@ import {
   arrowUp,
   aTimeout,
   fixtureSync,
-  focusin,
   focusout,
   nextFrame
 } from '@vaadin/testing-helpers';
@@ -119,9 +119,25 @@ describe('radio-group', () => {
   });
 
   describe('focused state', () => {
-    it('should set focused attribute on focusin event dispatched', () => {
-      focusin(buttons[0]);
+    it('should set focused attribute on Tab', async () => {
+      // Focus on the first radio button.
+      await sendKeys({ press: 'Tab' });
+
+      expect(buttons[0].hasAttribute('focused')).to.be.true;
       expect(group.hasAttribute('focused')).to.be.true;
+    });
+
+    it('should remove focused attribute on Shift+Tab', async () => {
+      // Focus on the first radio button.
+      await sendKeys({ press: 'Tab' });
+
+      // Move focus out of the radio group.
+      await sendKeys({ down: 'Shift' });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ up: 'Shift' });
+
+      expect(buttons[0].hasAttribute('focused')).to.be.false;
+      expect(group.hasAttribute('focused')).to.be.false;
     });
 
     it('should set focused attribute on radio button focus', () => {
@@ -129,21 +145,11 @@ describe('radio-group', () => {
       expect(group.hasAttribute('focused')).to.be.true;
     });
 
-    it('should not set focused attribute on focusin event dispatched when disabled', () => {
+    it('should not set focused attribute on Tab when disabled', async () => {
       group.disabled = true;
-      focusin(buttons[0]);
-      expect(group.hasAttribute('focused')).to.be.false;
-    });
+      // Try to focus on the first radio button.
+      await sendKeys({ press: 'Tab' });
 
-    it('should remove focused attribute on radio button focusout', () => {
-      focusin(buttons[0]);
-      focusout(buttons[0]);
-      expect(group.hasAttribute('focused')).to.be.false;
-    });
-
-    it('should remove focused attribute on radio group focusout', () => {
-      focusin(buttons[0]);
-      focusout(group);
       expect(group.hasAttribute('focused')).to.be.false;
     });
   });
@@ -220,22 +226,34 @@ describe('radio-group', () => {
   });
 
   describe('roving tabindex', () => {
-    it('sets focus to the first element by default', () => {
-      expect(buttons[0].tabIndex).to.eq(0);
-      expect(buttons[1].tabIndex).to.eq(-1);
-      expect(buttons[2].tabIndex).to.eq(-1);
+    it('should leave focusable only the first radio button by default', async () => {
+      // Focus on the first radio button.
+      await sendKeys({ press: 'Tab' });
+      expect(buttons[0].hasAttribute('focused')).to.be.true;
+      expect(buttons[1].hasAttribute('focused')).to.be.false;
+      expect(buttons[2].hasAttribute('focused')).to.be.false;
+
+      // Move focus out of the radio group.
+      await sendKeys({ press: 'Tab' });
+      expect(buttons[0].hasAttribute('focused')).to.be.false;
+      expect(buttons[1].hasAttribute('focused')).to.be.false;
+      expect(buttons[2].hasAttribute('focused')).to.be.false;
     });
 
-    it('should update tabindex when checked button changes', () => {
+    it('should leave focusable only the checked radio button', async () => {
       buttons[1].checked = true;
-      expect(buttons[0].tabIndex).to.eq(-1);
-      expect(buttons[1].tabIndex).to.eq(0);
-      expect(buttons[2].tabIndex).to.eq(-1);
 
-      buttons[2].checked = true;
-      expect(buttons[0].tabIndex).to.eq(-1);
-      expect(buttons[1].tabIndex).to.eq(-1);
-      expect(buttons[2].tabIndex).to.eq(0);
+      // Focus on the checked radio button.
+      await sendKeys({ press: 'Tab' });
+      expect(buttons[0].hasAttribute('focused')).to.be.false;
+      expect(buttons[1].hasAttribute('focused')).to.be.true;
+      expect(buttons[2].hasAttribute('focused')).to.be.false;
+
+      // Move focus out of the radio group.
+      await sendKeys({ press: 'Tab' });
+      expect(buttons[0].hasAttribute('focused')).to.be.false;
+      expect(buttons[1].hasAttribute('focused')).to.be.false;
+      expect(buttons[2].hasAttribute('focused')).to.be.false;
     });
   });
 
@@ -443,33 +461,38 @@ describe('radio-group', () => {
       expect(spy.called).to.be.false;
     });
 
-    it('should fire after radio group value is updated on click', (done) => {
-      group.addEventListener('change', () => {
-        expect(group.value).to.equal(buttons[1].value);
-        done();
-      });
+    it('should fire after radio group value is updated on click', () => {
+      const changeSpy = sinon.spy();
+      group.addEventListener('change', changeSpy);
       buttons[1].click();
+
+      expect(changeSpy.calledOnce).to.be.true;
+      expect(group.value).to.equal(buttons[1].value);
     });
 
-    it('should fire after radio group value is updated on keydown', (done) => {
-      group.addEventListener('change', () => {
-        expect(group.value).to.equal(buttons[2].value);
-        done();
-      });
+    it('should fire after radio group value is updated on keydown', () => {
+      const changeSpy = sinon.spy();
+      group.addEventListener('change', changeSpy);
       buttons[1].focus();
       buttons[1].checked = true;
       arrowDown(buttons[1]);
+
+      expect(changeSpy.calledOnce).to.be.true;
+      expect(group.value).to.equal(buttons[2].value);
     });
 
-    it('should have updated value after radio group value is updated on keydown', (done) => {
+    it('should have updated value after radio group value is updated on keydown', () => {
+      const changeSpy = sinon.spy();
+      group.addEventListener('change', changeSpy);
       buttons[1].focus();
       buttons[1].checked = true;
-      group.addEventListener('change', (e) => {
-        expect(e.target).to.equal(buttons[0]);
-        expect(e.currentTarget.value).to.equal(buttons[0].value);
-        done();
-      });
       arrowLeft(buttons[1]);
+
+      expect(changeSpy.calledOnce).to.be.true;
+
+      const event = changeSpy.firstCall.args[0];
+      expect(event.target).to.equal(buttons[0].inputElement);
+      expect(event.target.value).to.equal(buttons[0].value);
     });
   });
 
