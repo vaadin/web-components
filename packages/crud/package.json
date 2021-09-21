@@ -13,7 +13,7 @@
     "polymer"
   ],
   "author": "Vaadin Ltd",
-  "license": "https://raw.githubusercontent.com/vaadin/web-components/master/vaadin-crud/LICENSE",
+  "license": "https://raw.githubusercontent.com/vaadin/web-components/master/packages/crud/LICENSE",
   "bugs": {
     "url": "https://github.com/vaadin/web-components/issues"
   },
