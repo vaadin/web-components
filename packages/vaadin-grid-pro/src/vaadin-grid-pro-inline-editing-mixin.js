@@ -102,8 +102,14 @@ export const InlineEditingMixin = (superClass) =>
       // Prevent click/selection on edit column
       this.$.table.addEventListener('click', (e) => {
         const column = this.getEventContext(e).column;
-        if (column && this._isEditColumn(column) && this.editOnClick) {
-          this._enterEditFromEvent(e);
+        if (column && this._isEditColumn(column)) {
+          if (e.target.matches(':not([type=checkbox])')) {
+            e.preventDefault();
+          }
+
+          if (this.editOnClick) {
+            this._enterEditFromEvent(e);
+          }
         }
       });
 
@@ -240,7 +246,7 @@ export const InlineEditingMixin = (superClass) =>
           return;
         }
 
-        if (edited && edited.cell === cell && e.target.localName === column._getEditorTagName(cell)) {
+        if (edited && edited.cell === cell && column._getEditorComponent(cell).contains(e.target)) {
           return;
         }
 

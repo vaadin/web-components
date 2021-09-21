@@ -71,7 +71,7 @@ describe('edit column editor type', () => {
   });
 
   describe('checkbox', () => {
-    let grid, cell, column, editor;
+    let grid, cell, column, checkbox;
 
     beforeEach(() => {
       grid = fixtureSync(`
@@ -94,24 +94,39 @@ describe('edit column editor type', () => {
 
     it('should render the checkbox to cell in edit mode', () => {
       dblclick(cell._content);
-      editor = column._getEditorComponent(cell);
-      expect(editor instanceof Checkbox).to.equal(true);
-      expect(editor.checked).to.be.equal(grid.items[0].married);
+      checkbox = column._getEditorComponent(cell);
+      expect(checkbox instanceof Checkbox).to.equal(true);
+      expect(checkbox.checked).to.be.equal(grid.items[0].married);
     });
 
     it('should set focus-ring on the checkbox', () => {
       dblclick(cell._content);
-      editor = column._getEditorComponent(cell);
-      expect(editor.hasAttribute('focus-ring')).to.be.true;
+      checkbox = column._getEditorComponent(cell);
+      expect(checkbox.hasAttribute('focus-ring')).to.be.true;
     });
 
     it('should update value from checkbox checked after edit mode exit', () => {
       dblclick(cell._content);
-      editor = column._getEditorComponent(cell);
-      editor.click();
-      enter(editor);
+      checkbox = column._getEditorComponent(cell);
+      checkbox.click();
+      enter(checkbox);
       expect(cell._content.textContent.trim()).to.equal('false');
       expect(grid.items[0].married).to.equal(false);
+    });
+
+    describe('editOnClick mode', () => {
+      beforeEach(() => {
+        grid.editOnClick = true;
+      });
+
+      it('should update value from checkbox checked after edit mode exit', () => {
+        cell._content.click();
+        checkbox = column._getEditorComponent(cell);
+        checkbox.click();
+        enter(checkbox);
+        expect(cell._content.textContent.trim()).to.equal('false');
+        expect(grid.items[0].married).to.equal(false);
+      });
     });
   });
 
