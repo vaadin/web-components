@@ -45,9 +45,8 @@ describe('rich text editor', () => {
         await nextRender(rte);
       });
 
-      // FIXME: flaky tests in GitHub Actions only in Firefox (passing locally).
       ['bold', 'italic', 'underline', 'strike', 'blockquote', 'code-block'].forEach((fmt) => {
-        (isFirefox ? it.skip : it)(`should apply ${fmt} formatting to the selected text on click`, () => {
+        it(`should apply ${fmt} formatting to the selected text on click`, () => {
           btn = getButton(fmt);
           btn.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
           focusout(editor.root);
