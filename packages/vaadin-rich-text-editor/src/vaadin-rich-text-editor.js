@@ -10,12 +10,12 @@ import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
-import { richTextEditorStyles } from './vaadin-rich-text-editor-styles.js';
 import '@vaadin/button/src/vaadin-button.js';
 import '@vaadin/confirm-dialog/src/vaadin-confirm-dialog.js';
 import '@vaadin/vaadin-text-field/src/vaadin-text-field.js';
 import '@vaadin/vaadin-license-checker/vaadin-license-checker.js';
 import '../vendor/vaadin-quill.js';
+import { richTextEditorStyles } from './vaadin-rich-text-editor-styles.js';
 import './vaadin-rich-text-editor-toolbar-styles.js';
 
 registerStyles('vaadin-rich-text-editor', richTextEditorStyles, { moduleId: 'vaadin-rich-text-editor-styles' });
