@@ -35,7 +35,7 @@ describe('static helpers', () => {
     expect(notification.position).to.equal('top-center');
   });
 
-  it('show work with a duration of zero', () => {
+  it('show should work with a duration of zero', () => {
     const notification = NotificationElement.show('Hello world', { duration: 0 });
     expect(notification.duration).to.equal(0);
   });
