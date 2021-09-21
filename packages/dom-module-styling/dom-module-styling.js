@@ -1,6 +1,6 @@
 import { DomModule } from '@polymer/polymer/lib/elements/dom-module.js';
 import { stylesFromTemplate } from '@polymer/polymer/lib/utils/style-gather.js';
-import { CSSResult, unsafeCSS } from 'lit';
+import { unsafeCSS } from 'lit';
 
 window.Vaadin = window.Vaadin || {};
 window.Vaadin.domModuleStyling = {};
@@ -11,14 +11,6 @@ function getModuleStyles(module) {
   });
 }
 
-/**
- * Backwards compatibility adapter for the deprecated dom-module -based theming mechanism.
- * Should be moved to a separate package. Naming TBD.
- * Consider:
- * - not importing the adapter automatically (like vaadin-template-renderer, as it brings in the Polymer dependency)
- * - chaging vaadin component styles to use "option.includePriority" instead of the deprecated "option.moduleId"
- */
-
 let moduleIdIndex = 0;
 // Map of <CSSResult, Polymer.DomModule> pairs.
 const styleMap = {};
@@ -27,10 +19,6 @@ window.Vaadin.domModuleStyling.registerStyles = (themeFor, styles = [], options)
   const themeId = (options && options.moduleId) || `custom-style-module-${moduleIdIndex++}`;
 
   const processedStyles = styles.map((cssResult) => {
-    if (!(cssResult instanceof CSSResult)) {
-      // TODO: This should be in registerStyles
-      throw new Error('An item in styles is not of type CSSResult. Use `unsafeCSS` or `css`.');
-    }
     if (!styleMap[cssResult]) {
       const template = document.createElement('template');
       template.innerHTML = `<style>${cssResult.toString()}</style>`;

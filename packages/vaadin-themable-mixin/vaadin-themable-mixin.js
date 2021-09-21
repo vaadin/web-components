@@ -105,6 +105,8 @@ function recursiveFlattenStyles(styles, result = []) {
     result.push(styles);
   } else if (Array.isArray(styles)) {
     styles.forEach((style) => recursiveFlattenStyles(style, result));
+  } else {
+    console.warn('An item in styles is not of type CSSResult. Use `unsafeCSS` or `css`.');
   }
   return result;
 }
@@ -199,7 +201,6 @@ export const ThemableMixin = (superClass) =>
         return;
       }
 
-      // TODO: The inherited themes should also be included in sorting by includePriority
       // Include inherited styles to the template
       const inheritedTemplate = Object.getPrototypeOf(this.prototype)._template;
       if (inheritedTemplate && inheritedTemplate.__includedThemes) {
@@ -221,7 +222,6 @@ export const ThemableMixin = (superClass) =>
         getThemes(this.is)
           // Obtain the flattened CSSResult array
           .reduce((styles, theme) => [...styles, ...theme.styles], [])
-          // TODO: The inherited themes should also be included in sorting by includePriority
           .concat(styles)
       );
     }
