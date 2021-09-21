@@ -509,7 +509,7 @@ class NotificationElement extends ThemePropertyMixin(ElementMixin(PolymerElement
   /** @private */
   static _createAndShowNotification(renderer, options) {
     const notification = document.createElement(NotificationElement.is);
-    if (options && options.duration) {
+    if (options && Number.isFinite(options.duration)) {
       notification.duration = options.duration;
     }
     if (options && options.position) {
