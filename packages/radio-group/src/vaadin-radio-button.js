@@ -31,8 +31,8 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * Part name   | Description
  * ------------|----------------
  * `container` | The container element.
- * `radio`     | The wrapper element that contains slotted <input type="radio">.
- * `label`     | The wrapper element that contains slotted <label>.
+ * `radio`     | The wrapper element that contains slotted `<input type="radio">`.
+ * `label`     | The wrapper element that contains slotted `<label>`.
  *
  * The following state attributes are available for styling:
  *
