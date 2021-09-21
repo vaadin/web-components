@@ -1,2 +1,2 @@
 export * from './src/vaadin-crud.js';
-export * from './src/interfaces';
+export * from '@vaadin/crud/src/interfaces';
