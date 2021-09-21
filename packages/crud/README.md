@@ -8,7 +8,7 @@
 [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) operations.
 It is part of the [Vaadin components](https://vaadin.com/components).
 
-[![npm version](https://badgen.net/npm/v/@vaadin/vaadin-crud)](https://www.npmjs.com/package/@vaadin/vaadin-crud)
+[![npm version](https://badgen.net/npm/v/@vaadin/crud)](https://www.npmjs.com/package/@vaadin/crud)
 [![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-crud)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
@@ -23,13 +23,13 @@ It is part of the [Vaadin components](https://vaadin.com/components).
 Install `vaadin-crud`:
 
 ```sh
-npm i @vaadin/vaadin-crud --save
+npm i @vaadin/crud --save
 ```
 
 Once installed, import it in your application:
 
 ```js
-import '@vaadin/vaadin-crud/vaadin-crud.js';
+import '@vaadin/crud/vaadin-crud.js';
 ```
 
 ## Getting started
