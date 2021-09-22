@@ -12,34 +12,26 @@ function getModuleStyles(module) {
 }
 
 let moduleIdIndex = 0;
-// Map of <CSSResult, Polymer.DomModule> pairs.
-const styleMap = {};
 
-window.Vaadin.domModuleStyling.registerStyles = (themeFor, styles = [], options) => {
-  const themeId = (options && options.moduleId) || `custom-style-module-${moduleIdIndex++}`;
-
-  const processedStyles = styles.map((cssResult) => {
-    if (!styleMap[cssResult]) {
-      const template = document.createElement('template');
-      template.innerHTML = `<style>${cssResult.toString()}</style>`;
-
-      styleMap[cssResult] = stylesFromTemplate(template)[0];
-    }
-
-    return styleMap[cssResult].textContent;
-  });
+window.Vaadin.domModuleStyling.registerStyles = (themeFor, styles = [], options = {}) => {
+  const themeId = options.moduleId || `custom-style-module-${moduleIdIndex++}`;
 
   const themeModuleElement = document.createElement('dom-module');
+
   if (themeFor) {
     themeModuleElement.setAttribute('theme-for', themeFor);
   }
 
-  const moduleIncludes = [].concat((options && options.include) || []);
+  const moduleIncludes = [].concat(options.include || []);
+  if (moduleIncludes.length === 0) {
+    // No includes so the styles array can be cached as is
+    themeModuleElement.__styles = styles;
+  }
 
   themeModuleElement.innerHTML = `
     <template>
       ${moduleIncludes.map((include) => `<style include=${include}></style>`)}
-      ${processedStyles.length ? `<style>${processedStyles.join('\n')}</style>` : ''}
+      ${styles.length ? `<style>${styles.map((style) => style.cssText).join('\n')}</style>` : ''}
     </template>
   `;
 
