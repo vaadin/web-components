@@ -125,7 +125,7 @@ describe('select', () => {
     await visualDiff(div, 'width');
   });
 
-  it('width', async () => {
+  it('width with value', async () => {
     element.style.width = '80px';
     element.value = 'item 1';
     await visualDiff(div, 'width-value');
