@@ -69,6 +69,32 @@ describe('radio-group', () => {
     });
   });
 
+  describe('name', () => {
+    let groupName;
+
+    beforeEach(() => {
+      groupName = group._fieldName;
+    });
+
+    it('should generate a group name', () => {
+      expect(groupName).to.match(/^vaadin-radio-group-\d+$/);
+    });
+
+    it('should set the group name as name for each radio button', () => {
+      expect(buttons[0].name).to.equal(groupName);
+      expect(buttons[1].name).to.equal(groupName);
+      expect(buttons[2].name).to.equal(groupName);
+    });
+
+    it('should set the group name as name for dynamically added radio buttons', async () => {
+      const radio = document.createElement('vaadin-radio-button');
+      group.appendChild(radio);
+      await nextFrame();
+
+      expect(radio.name).to.be.equal(groupName);
+    });
+  });
+
   describe('readonly property', () => {
     it('should not be set by default', () => {
       expect(group.readonly).to.be.undefined;

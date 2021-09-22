@@ -223,6 +223,12 @@ class RadioGroupElement extends ThemableMixin(DirMixin(PolymerElement)) {
 
     this._addListeners();
 
+    // Ensure every instance has unique id
+    const uniqueId = (RadioGroupElement._uniqueRadioGroupId = 1 + RadioGroupElement._uniqueRadioGroupId || 0);
+    this._fieldName = `${this.localName}-${uniqueId}`;
+    this._errorId = `${this.localName}-error-${uniqueId}`;
+    this._helperTextId = `${this.localName}-helper-${uniqueId}`;
+
     this._observer = new FlattenedNodesObserver(this, (info) => {
       const checkedChangedListener = (e) => {
         if (e.target.checked) {
@@ -234,6 +240,7 @@ class RadioGroupElement extends ThemableMixin(DirMixin(PolymerElement)) {
       this._filterRadioButtons(info.addedNodes)
         .reverse()
         .forEach((button) => {
+          button.name = this._fieldName;
           button.addEventListener('checked-changed', checkedChangedListener);
           if (this.disabled) {
             button.disabled = true;
@@ -254,10 +261,6 @@ class RadioGroupElement extends ThemableMixin(DirMixin(PolymerElement)) {
     });
 
     this.setAttribute('role', 'radiogroup');
-
-    const uniqueId = (RadioGroupElement._uniqueId = 1 + RadioGroupElement._uniqueId || 0);
-    this._errorId = `${this.constructor.is}-error-${uniqueId}`;
-    this._helperTextId = `${this.constructor.is}-helper-${uniqueId}`;
 
     // Sometimes radio buttons are initialized after the radio group
     // (the actual order depends on the way they are added to the DOM).
