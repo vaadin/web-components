@@ -317,7 +317,7 @@ class DialogElement extends ThemePropertyMixin(
 
   /** @private */
   _ariaLabelChanged(ariaLabel) {
-    if (ariaLabel != null && ariaLabel != '') {
+    if (ariaLabel) {
       this.$.overlay.setAttribute('aria-label', ariaLabel);
     } else {
       this.$.overlay.removeAttribute('aria-label');
