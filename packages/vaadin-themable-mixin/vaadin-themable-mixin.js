@@ -142,7 +142,7 @@ function getIncludedStyles(theme) {
  * @param {Theme} theme
  * @param {HTMLTemplateElement & {__includedThemes: Theme[]}} template
  */
-function includeStyles(theme, template) {
+function addStylesToTemplate(theme, template) {
   template.__includedThemes = template.__includedThemes || [];
   if (template && !template.__includedThemes.includes(theme)) {
     const styleEl = document.createElement('style');
@@ -164,18 +164,13 @@ function getThemes(tagName) {
   const defaultModuleName = tagName + '-default-theme';
 
   const themes = getAllThemes()
-    // Filter out default theme
-    .filter((theme) => theme.moduleId !== defaultModuleName)
     // Filter by matching themeFor properties
-    .filter((theme) => matchesThemeFor(theme.themeFor, tagName))
-    // Prepend styles from included themes
+    .filter((theme) => theme.moduleId !== defaultModuleName && matchesThemeFor(theme.themeFor, tagName))
     .map((theme) => ({
       ...theme,
-      styles: [...getIncludedStyles(theme), ...theme.styles]
-    }))
-    // Map moduleId to includePriority
-    .map((theme) => ({
-      ...theme,
+      // Prepend styles from included themes
+      styles: [...getIncludedStyles(theme), ...theme.styles],
+      // Map moduleId to includePriority
       includePriority: getIncludePriority(theme.moduleId)
     }))
     // Sort by includePriority
@@ -211,12 +206,12 @@ export const ThemableMixin = (superClass) =>
       const inheritedTemplate = Object.getPrototypeOf(this.prototype)._template;
       if (inheritedTemplate && inheritedTemplate.__includedThemes) {
         Array.from(inheritedTemplate.__includedThemes).forEach((theme) => {
-          includeStyles(theme, template);
+          addStylesToTemplate(theme, template);
         });
       }
 
       // Include matching styles to the template
-      getThemes(this.is).forEach((theme) => includeStyles(theme, template));
+      getThemes(this.is).forEach((theme) => addStylesToTemplate(theme, template));
     }
 
     /**
@@ -226,7 +221,7 @@ export const ThemableMixin = (superClass) =>
     static finalizeStyles(styles) {
       return (
         getThemes(this.is)
-          // Obtain the flattened CSSResult array
+          // Flatten the styles array
           .reduce((styles, theme) => [...styles, ...theme.styles], [])
           .concat(styles)
       );
