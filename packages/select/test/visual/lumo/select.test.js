@@ -119,4 +119,15 @@ describe('select', () => {
     element.setAttribute('theme', 'small');
     await visualDiff(div, 'small');
   });
+
+  it('width', async () => {
+    element.style.width = '80px';
+    await visualDiff(div, 'width');
+  });
+
+  it('width with value', async () => {
+    element.style.width = '80px';
+    element.value = 'item 1';
+    await visualDiff(div, 'width-value');
+  });
 });
