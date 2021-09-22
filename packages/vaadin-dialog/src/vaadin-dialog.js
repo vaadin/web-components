@@ -235,12 +235,12 @@ class DialogElement extends ThemePropertyMixin(
 
       /**
        * Set the `aria-label` attribute for assistive technologies like
-       * screen readers. An `undefined` value for this property (the
-       * default) means that the `aria-label` attribute is not present at
-       * all.
+       * screen readers. An empty string value for this property (the
+       * default) means that the `aria-label` attribute is not present.
        */
       ariaLabel: {
-        type: String
+        type: String,
+        value: ''
       },
 
       /**
@@ -317,7 +317,7 @@ class DialogElement extends ThemePropertyMixin(
 
   /** @private */
   _ariaLabelChanged(ariaLabel) {
-    if (ariaLabel !== undefined && ariaLabel !== null) {
+    if (ariaLabel != null && ariaLabel != '') {
       this.$.overlay.setAttribute('aria-label', ariaLabel);
     } else {
       this.$.overlay.removeAttribute('aria-label');
