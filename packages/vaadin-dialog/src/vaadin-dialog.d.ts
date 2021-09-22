@@ -77,7 +77,7 @@ declare class DialogElement extends ThemePropertyMixin(
    * default) means that the `aria-label` attribute is not present at
    * all.
    */
-  ariaLabel: string | null | undefined;
+  ariaLabel: string;
 
   /**
    * Custom function for rendering the content of the dialog.
