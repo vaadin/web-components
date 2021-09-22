@@ -1,8 +1,8 @@
-import '../dom-module-styling.js';
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import '../dom-module-styling.js';
 
 function createDomModule(id, themeFor, tpl) {
   const domModule = document.createElement('dom-module');
