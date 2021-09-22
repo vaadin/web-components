@@ -10,26 +10,38 @@ let moduleIdIndex = 0;
 window.Vaadin.domModuleStyling.registerStyles = (themeFor, styles = [], options = {}) => {
   const themeId = options.moduleId || `custom-style-module-${moduleIdIndex++}`;
 
-  const themeModuleElement = document.createElement('dom-module');
+  const module = document.createElement('dom-module');
 
   if (themeFor) {
-    themeModuleElement.setAttribute('theme-for', themeFor);
+    module.setAttribute('theme-for', themeFor);
   }
 
+  // The styles array only needs to be included in the template in case options.moduleId is used,
+  // so that it's possible to include the styles by moduleId in some other <dom-module>
+  // using <style include="module-id">
+  const includeStylesToTemplate = styles.length && options.moduleId;
+
+  // options.include may be undefined, string or an array of strings. Convert it to an array
   const moduleIncludes = [].concat(options.include || []);
   if (moduleIncludes.length === 0) {
-    // No includes so the styles array can be cached as is
-    themeModuleElement.__styles = styles;
+    // No includes are used so the styles array is considered complete and can be cached as is
+    module.__allStyles = styles;
+  } else if (!includeStylesToTemplate) {
+    // Includes are used so the styles array can be cached,
+    // but the included styles must be later added on top of it.
+    // Don't cache anything in case the styles will get included in the
+    // <dom-module> template anyways to avoid duplicate styles.
+    module.__partialStyles = styles;
   }
 
-  themeModuleElement.innerHTML = `
+  module.innerHTML = `
     <template>
       ${moduleIncludes.map((include) => `<style include=${include}></style>`)}
-      ${styles.length ? `<style>${styles.map((style) => style.cssText).join('\n')}</style>` : ''}
+      ${includeStylesToTemplate ? `<style>${styles.map((style) => style.cssText).join('\n')}</style>` : ''}
     </template>
   `;
 
-  themeModuleElement.register(themeId);
+  module.register(themeId);
 };
 
 function getModuleStyles(module) {
@@ -44,12 +56,12 @@ window.Vaadin.domModuleStyling.getAllThemes = () => {
 
   return Object.keys(modules).map((moduleName) => {
     const module = modules[moduleName];
-    module.__styles = module.__styles || getModuleStyles(module);
+    module.__allStyles = module.__allStyles || getModuleStyles(module).concat(module.__partialStyles || []);
 
     return {
       themeFor: module.getAttribute('theme-for'),
       moduleId: moduleName,
-      styles: module.__styles
+      styles: module.__allStyles
     };
   });
 };
