@@ -322,4 +322,17 @@ describe('ThemableMixin', () => {
   it('should respect custom style module order', () => {
     expect(getComputedStyle(components[6]).position).to.equal('relative');
   });
+
+  it('should not include duplicate styles', () => {
+    // This particular component gets the same style from two different sources
+    const testComponent = [...components].find((component) => component instanceof TestBaz);
+    // Get all the styles from the component as one big string (let's assume it may have multiple style tags)
+    const styles = [...testComponent.shadowRoot.querySelectorAll('style')].map((style) => style.textContent).join('');
+    // This is the style rule we're interested in
+    const style = "\n    [part='text'] {\n      position: relative;\n    }\n  ";
+    // Check the number of occurences of the style rule
+    const occurrences = styles.split(style).length - 1;
+    // There should be only one occurence
+    expect(occurrences).to.equal(1);
+  });
 });

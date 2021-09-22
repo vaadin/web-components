@@ -138,20 +138,18 @@ function getIncludedStyles(theme) {
 }
 
 /**
- * Includes a style tag with styles from the given theme to the template.
- * @param {Theme} theme
- * @param {HTMLTemplateElement & {__includedThemes: Theme[]}} template
+ * Includes the given styles to the template.
+ * @param {CSSResult[]} styles
+ * @param {HTMLTemplateElement} template
  */
-function addStylesToTemplate(theme, template) {
-  template.__includedThemes = template.__includedThemes || [];
-  if (template && !template.__includedThemes.includes(theme)) {
-    const styleEl = document.createElement('style');
-    if (theme.styles) {
-      styleEl.innerHTML = theme.styles.map((style) => style.cssText).join('\n');
-    }
-    template.content.appendChild(styleEl);
-    template.__includedThemes.push(theme);
-  }
+function addStylesToTemplate(styles, template) {
+  const styleEl = document.createElement('style');
+  styleEl.innerHTML = styles
+    // Remove duplicates so that the last occurrence remains
+    .filter((style, index) => index === styles.lastIndexOf(style))
+    .map((style) => style.cssText)
+    .join('\n');
+  template.content.appendChild(styleEl);
 }
 
 /**
@@ -198,20 +196,18 @@ export const ThemableMixin = (superClass) =>
       super.finalize();
 
       const template = this.prototype._template;
-      if (!template) {
+      if (!template || template.__themes) {
         return;
       }
 
-      // Include inherited styles to the template
       const inheritedTemplate = Object.getPrototypeOf(this.prototype)._template;
-      if (inheritedTemplate && inheritedTemplate.__includedThemes) {
-        Array.from(inheritedTemplate.__includedThemes).forEach((theme) => {
-          addStylesToTemplate(theme, template);
-        });
-      }
+      const inheritedThemes = (inheritedTemplate ? inheritedTemplate.__themes : []) || [];
 
-      // Include matching styles to the template
-      getThemes(this.is).forEach((theme) => addStylesToTemplate(theme, template));
+      template.__themes = [...inheritedThemes, ...getThemes(this.is)];
+
+      // Get flattened styles array
+      const styles = template.__themes.reduce((styles, theme) => [...styles, ...theme.styles], []);
+      addStylesToTemplate(styles, template);
     }
 
     /**
@@ -221,7 +217,7 @@ export const ThemableMixin = (superClass) =>
     static finalizeStyles(styles) {
       return (
         getThemes(this.is)
-          // Flatten the styles array
+          // Get flattened styles array
           .reduce((styles, theme) => [...styles, ...theme.styles], [])
           .concat(styles)
       );
