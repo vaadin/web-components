@@ -57,12 +57,6 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @mixes InputSlotMixin
  * @mixes CheckedMixin
  * @mixes SlotLabelMixin
- *
- * TODO:
- * // If you change this block, please test manually that radio-button and
- * // radio-group still works ok on iOS 12/13 and up as it may cause
- * // an issue that is not possible to test programmatically.
- * // See: https://github.com/vaadin/vaadin-radio-button/issues/140
  */
 class RadioButton extends SlotLabelMixin(
   CheckedMixin(InputSlotMixin(AriaLabelMixin(ActiveMixin(ElementMixin(ThemableMixin(PolymerElement))))))
