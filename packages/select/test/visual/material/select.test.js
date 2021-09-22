@@ -101,4 +101,9 @@ describe('select', () => {
     await nextFrame();
     await visualDiff(div, 'opened');
   });
+
+  it('width', async () => {
+    element.style.width = '80px';
+    await visualDiff(div, 'width');
+  });
 });
