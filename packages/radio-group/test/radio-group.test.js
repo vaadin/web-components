@@ -80,13 +80,13 @@ describe('radio-group', () => {
       expect(groupName).to.match(/^vaadin-radio-group-\d+$/);
     });
 
-    it('should set the group name as name for each radio button', () => {
+    it('should delegate the group name to the radio buttons', () => {
       expect(buttons[0].name).to.equal(groupName);
       expect(buttons[1].name).to.equal(groupName);
       expect(buttons[2].name).to.equal(groupName);
     });
 
-    it('should set the group name as name for dynamically added radio buttons', async () => {
+    it('should delegate the group name to the dynamically added radio buttons', async () => {
       const radio = document.createElement('vaadin-radio-button');
       group.appendChild(radio);
       await nextFrame();
