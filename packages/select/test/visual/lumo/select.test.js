@@ -124,4 +124,10 @@ describe('select', () => {
     element.style.width = '80px';
     await visualDiff(div, 'width');
   });
+
+  it('width', async () => {
+    element.style.width = '80px';
+    element.value = 'item 1';
+    await visualDiff(div, 'width-value');
+  });
 });
