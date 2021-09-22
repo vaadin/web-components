@@ -5,12 +5,6 @@ import { unsafeCSS } from 'lit';
 window.Vaadin = window.Vaadin || {};
 window.Vaadin.domModuleStyling = {};
 
-function getModuleStyles(module) {
-  return stylesFromTemplate(module.querySelector('template')).map((styleElement) => {
-    return unsafeCSS(styleElement.textContent);
-  });
-}
-
 let moduleIdIndex = 0;
 
 window.Vaadin.domModuleStyling.registerStyles = (themeFor, styles = [], options = {}) => {
@@ -37,6 +31,12 @@ window.Vaadin.domModuleStyling.registerStyles = (themeFor, styles = [], options 
 
   themeModuleElement.register(themeId);
 };
+
+function getModuleStyles(module) {
+  return stylesFromTemplate(module.querySelector('template')).map((styleElement) => {
+    return unsafeCSS(styleElement.textContent);
+  });
+}
 
 window.Vaadin.domModuleStyling.getAllThemes = () => {
   const domModule = DomModule;

@@ -3,11 +3,13 @@ import { fixtureSync } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { ThemableMixin, registerStyles, css } from '../vaadin-themable-mixin.js';
 
-function doRegisterStyles(moduleId, themeFor, styles) {
-  registerStyles(themeFor, styles, { moduleId });
-}
+let createStyles =
+  window.createStylesFunction ||
+  ((moduleId, themeFor, styles) => {
+    registerStyles(themeFor, styles, { moduleId });
+  });
 
-doRegisterStyles(
+createStyles(
   'test-qux-default-theme',
   'test-qux',
   css`
@@ -20,7 +22,7 @@ doRegisterStyles(
 /* This default style module should get overridden by test-foo styles.
 Removing this module doesn't make any difference to the test outcome but it's
 here to make a point. */
-doRegisterStyles(
+createStyles(
   'test-foo-default-theme',
   'test-foo',
   css`
@@ -31,7 +33,7 @@ doRegisterStyles(
   `
 );
 
-doRegisterStyles(
+createStyles(
   'test-styles',
   'test-foo',
   css`
@@ -45,7 +47,7 @@ doRegisterStyles(
   `
 );
 
-doRegisterStyles(
+createStyles(
   'test-styles-multiple',
   'test-foo test-bar',
   css`
@@ -55,7 +57,7 @@ doRegisterStyles(
   `
 );
 
-doRegisterStyles(
+createStyles(
   'test-styles-wildcard',
   'test*a*',
   css`
@@ -65,7 +67,7 @@ doRegisterStyles(
   `
 );
 
-doRegisterStyles(
+createStyles(
   'baz-styles',
   'test-baz',
   css`
@@ -75,7 +77,7 @@ doRegisterStyles(
   `
 );
 
-doRegisterStyles(
+createStyles(
   'custom-test-style-override-styles-first',
   'test-style-override',
   css`
@@ -89,7 +91,7 @@ doRegisterStyles(
   `
 );
 
-doRegisterStyles(
+createStyles(
   'custom-test-style-override-styles-second',
   'test-style-override',
   css`
@@ -99,7 +101,7 @@ doRegisterStyles(
   `
 );
 
-doRegisterStyles(
+createStyles(
   'vaadin-test-style-override-styles-first',
   'test-style-override',
   css`
@@ -109,7 +111,7 @@ doRegisterStyles(
   `
 );
 
-doRegisterStyles(
+createStyles(
   'lumo-test-style-override-styles',
   'test-style-override',
   css`
@@ -120,7 +122,7 @@ doRegisterStyles(
   `
 );
 
-doRegisterStyles(
+createStyles(
   'material-test-style-override-styles',
   'test-style-override',
   css`
@@ -131,7 +133,7 @@ doRegisterStyles(
   `
 );
 
-doRegisterStyles(
+createStyles(
   'vaadin-test-style-override-styles-second',
   'test-style-override',
   css`
