@@ -10,7 +10,7 @@ import { Button } from '@vaadin/button/src/vaadin-button.js';
  * ```
  */
 declare class DrawerToggleElement extends Button {
-  ariaLabel: string | null | undefined;
+  ariaLabel: string;
 }
 
 declare global {
