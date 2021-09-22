@@ -24,7 +24,7 @@ export interface RadioButtonEventMap extends HTMLElementEventMap, RadioButtonCus
 
 /**
  * `<vaadin-radio-button>` is a web component representing a choice in a radio group.
- * Only one radio button in a group can be selected at the same time.
+ * Only one radio button in the group can be selected at the same time.
  *
  * ```html
  * <vaadin-radio-group label="Travel class">
