@@ -14,7 +14,7 @@ registerStyles(
       outline: none;
     }
 
-    [part='label']:not([empty]) {
+    :host([has-label]) [part='label'] {
       margin: 0.1875em 0.875em 0.1875em 0.375em;
     }
 
@@ -26,7 +26,6 @@ registerStyles(
       border-radius: 50%;
       background-color: var(--lumo-contrast-20pct);
       transition: transform 0.2s cubic-bezier(0.12, 0.32, 0.54, 2), background-color 0.15s;
-      pointer-events: none;
       will-change: transform;
       line-height: 1.2;
       cursor: var(--lumo-clickable-cursor);
@@ -36,6 +35,7 @@ registerStyles(
     [part='radio']::before {
       /* Needed to align the radio-button nicely on the baseline */
       content: '\\2003';
+      pointer-events: none;
       color: transparent;
       display: inline-block;
       width: 100%;
@@ -51,6 +51,7 @@ registerStyles(
     /* Used for the dot */
     [part='radio']::after {
       content: '';
+      pointer-events: none;
       width: 0;
       height: 0;
       border: 3px solid var(--lumo-primary-contrast-color);
@@ -72,7 +73,7 @@ registerStyles(
       transform: translate(-50%, -50%) scale(1);
     }
 
-    :host(:not([checked]):not([indeterminate]):not([disabled]):hover) [part='radio'] {
+    :host(:not([checked]):not([disabled]):hover) [part='radio'] {
       background-color: var(--lumo-contrast-30pct);
     }
 
@@ -100,7 +101,7 @@ registerStyles(
       color: var(--lumo-disabled-text-color);
     }
 
-    :host([disabled]) ::slotted(*) {
+    :host([disabled]) [part='label'] ::slotted(*) {
       color: inherit;
     }
 
@@ -113,7 +114,7 @@ registerStyles(
     }
 
     /* RTL specific styles */
-    :host([dir='rtl']) [part='label']:not([empty]) {
+    :host([dir='rtl'][has-label]) [part='label'] {
       margin: 0.1875em 0.375em 0.1875em 0.875em;
     }
   `,

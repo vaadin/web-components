@@ -3,9 +3,12 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { GestureEventListeners } from '@polymer/polymer/lib/mixins/gesture-event-listeners.js';
+import { ActiveMixin } from '@vaadin/component-base/src/active-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { ControlStateMixin } from '@vaadin/vaadin-control-state-mixin/vaadin-control-state-mixin.js';
+import { AriaLabelMixin } from '@vaadin/field-base/src/aria-label-mixin.js';
+import { CheckedMixin } from '@vaadin/field-base/src/checked-mixin.js';
+import { InputSlotMixin } from '@vaadin/field-base/src/input-slot-mixin.js';
+import { SlotLabelMixin } from '@vaadin/field-base/src/slot-label-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
@@ -13,86 +16,74 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  */
 export type RadioButtonCheckedChangedEvent = CustomEvent<{ value: boolean }>;
 
-export interface RadioButtonElementEventMap {
+export interface RadioButtonCustomEventMap {
   'checked-changed': RadioButtonCheckedChangedEvent;
 }
 
-export interface RadioButtonEventMap extends HTMLElementEventMap, RadioButtonElementEventMap {}
+export interface RadioButtonEventMap extends HTMLElementEventMap, RadioButtonCustomEventMap {}
 
 /**
- * `<vaadin-radio-button>` is a Web Component for radio buttons.
+ * `<vaadin-radio-button>` is a web component representing a choice in a radio group.
+ * Only one radio button in the group can be selected at the same time.
  *
  * ```html
- * <vaadin-radio-button value="foo">Foo</vaadin-radio-button>
+ * <vaadin-radio-group label="Travel class">
+ *  <vaadin-radio-button value="economy">Economy</vaadin-radio-button>
+ *  <vaadin-radio-button value="business">Business</vaadin-radio-button>
+ *  <vaadin-radio-button value="firstClass">First Class</vaadin-radio-button>
+ * </vaadin-radio-group>
  * ```
  *
  * ### Styling
  *
  * The following shadow DOM parts are available for styling:
  *
- * Part name         | Description
- * ------------------|----------------
- * `radio`           | The radio button element
- * `label`           | The label content element
+ * Part name   | Description
+ * ------------|----------------
+ * `container` | The container element.
+ * `radio`     | The wrapper element which contains slotted `<input type="radio">`.
+ * `label`     | The wrapper element which contains slotted `<label>`.
  *
  * The following state attributes are available for styling:
  *
- * Attribute  | Description | Part name
- * -----------|-------------|------------
- * `disabled`   | Set when the radio button is disabled. | :host
- * `focus-ring` | Set when the radio button is focused using the keyboard. | :host
- * `focused`    | Set when the radio button is focused. | :host
- * `checked`    | Set when the radio button is checked. | :host
- * `empty`      | Set when there is no label provided. | label
+ * Attribute    | Description | Part name
+ * -------------|-------------|------------
+ * `active`     | Set when the radio button is pressed down, either with a pointer or the keyboard. | `:host`
+ * `disabled`   | Set when the radio button is disabled. | `:host`
+ * `focus-ring` | Set when the radio button is focused using the keyboard. | `:host`
+ * `focused`    | Set when the radio button is focused. | `:host`
+ * `checked`    | Set when the radio button is checked. | `:host`
+ * `has-label`  | Set when the radio button has a label. | `:host`
  *
  * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
- * @fires {Event} change - Fired when the user commits a value change.
  * @fires {CustomEvent} checked-changed - Fired when the `checked` property changes.
  */
-declare class RadioButtonElement extends ElementMixin(
-  ControlStateMixin(ThemableMixin(GestureEventListeners(HTMLElement)))
+declare class RadioButton extends SlotLabelMixin(
+  CheckedMixin(InputSlotMixin(AriaLabelMixin(ActiveMixin(ElementMixin(ThemableMixin(HTMLElement))))))
 ) {
-  readonly focusElement: HTMLInputElement;
-
   /**
-   * Name of the element.
+   * The name of the radio button.
    */
-  name: string | null | undefined;
-
-  /**
-   * True if the radio button is checked.
-   */
-  checked: boolean;
-
-  /**
-   * The value for this element.
-   */
-  value: string;
-
-  /**
-   * Toggles the radio button, so that the native `change` event
-   * is dispatched. Overrides the standard `HTMLElement.prototype.click`.
-   */
-  click(): void;
+  name: string;
 
   addEventListener<K extends keyof RadioButtonEventMap>(
     type: K,
-    listener: (this: RadioButtonElement, ev: RadioButtonEventMap[K]) => void,
+    listener: (this: RadioButton, ev: RadioButtonEventMap[K]) => void,
     options?: boolean | AddEventListenerOptions
   ): void;
 
   removeEventListener<K extends keyof RadioButtonEventMap>(
     type: K,
-    listener: (this: RadioButtonElement, ev: RadioButtonEventMap[K]) => void,
+    listener: (this: RadioButton, ev: RadioButtonEventMap[K]) => void,
     options?: boolean | EventListenerOptions
   ): void;
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-radio-button': RadioButtonElement;
+    'vaadin-radio-button': RadioButton;
   }
 }
 
-export { RadioButtonElement };
+export { RadioButton };

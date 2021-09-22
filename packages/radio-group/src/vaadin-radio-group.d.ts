@@ -5,7 +5,7 @@
  */
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { RadioButtonElement } from './vaadin-radio-button.js';
+import { RadioButton } from './vaadin-radio-button.js';
 
 /**
  * Fired when the `invalid` property changes.
@@ -108,19 +108,19 @@ declare class RadioGroupElement extends ThemableMixin(DirMixin(HTMLElement)) {
 
   _setFocused(focused: boolean): void;
 
-  _selectIncButton(next: boolean, checkedRadioButton: RadioButtonElement): void;
+  _selectIncButton(next: boolean, checkedRadioButton: RadioButton): void;
 
-  _selectButton(element: RadioButtonElement, setFocusRing?: boolean): void;
+  _selectButton(element: RadioButton, setFocusRing?: boolean): void;
 
   _containsFocus(): boolean;
 
   _hasEnabledButtons(): boolean;
 
-  _selectNextButton(element: RadioButtonElement): void;
+  _selectNextButton(element: RadioButton): void;
 
-  _selectPreviousButton(element: RadioButtonElement): void;
+  _selectPreviousButton(element: RadioButton): void;
 
-  _changeSelectedButton(button: RadioButtonElement | null, fireChangeEvent?: boolean): void;
+  _changeSelectedButton(button: RadioButton | null, fireChangeEvent?: boolean): void;
 
   /**
    * Returns true if `value` is valid.
