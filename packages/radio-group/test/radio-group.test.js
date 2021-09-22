@@ -226,34 +226,24 @@ describe('radio-group', () => {
   });
 
   describe('roving tabindex', () => {
-    it('should leave focusable only the first radio button by default', async () => {
-      // Focus on the first radio button.
-      await sendKeys({ press: 'Tab' });
-      expect(buttons[0].hasAttribute('focused')).to.be.true;
-      expect(buttons[1].hasAttribute('focused')).to.be.false;
-      expect(buttons[2].hasAttribute('focused')).to.be.false;
-
-      // Move focus out of the radio group.
-      await sendKeys({ press: 'Tab' });
-      expect(buttons[0].hasAttribute('focused')).to.be.false;
-      expect(buttons[1].hasAttribute('focused')).to.be.false;
-      expect(buttons[2].hasAttribute('focused')).to.be.false;
+    it('should leave focusable only the 1st button by default', () => {
+      expect(buttons[0].focusElement.hasAttribute('tabindex')).to.be.false;
+      expect(buttons[1].focusElement.getAttribute('tabindex')).to.equal('-1');
+      expect(buttons[2].focusElement.getAttribute('tabindex')).to.equal('-1');
     });
 
-    it('should leave focusable only the checked radio button', async () => {
+    it('should leave focusable only the 2nd button when it is checked', () => {
       buttons[1].checked = true;
+      expect(buttons[0].focusElement.getAttribute('tabindex')).to.equal('-1');
+      expect(buttons[1].focusElement.hasAttribute('tabindex')).to.be.false;
+      expect(buttons[2].focusElement.getAttribute('tabindex')).to.equal('-1');
+    });
 
-      // Focus on the checked radio button.
-      await sendKeys({ press: 'Tab' });
-      expect(buttons[0].hasAttribute('focused')).to.be.false;
-      expect(buttons[1].hasAttribute('focused')).to.be.true;
-      expect(buttons[2].hasAttribute('focused')).to.be.false;
-
-      // Move focus out of the radio group.
-      await sendKeys({ press: 'Tab' });
-      expect(buttons[0].hasAttribute('focused')).to.be.false;
-      expect(buttons[1].hasAttribute('focused')).to.be.false;
-      expect(buttons[2].hasAttribute('focused')).to.be.false;
+    it('should leave focusable only the 3rd button when it is checked', () => {
+      buttons[2].checked = true;
+      expect(buttons[0].focusElement.getAttribute('tabindex')).to.equal('-1');
+      expect(buttons[1].focusElement.getAttribute('tabindex')).to.equal('-1');
+      expect(buttons[2].focusElement.hasAttribute('tabindex')).to.be.false;
     });
   });
 
