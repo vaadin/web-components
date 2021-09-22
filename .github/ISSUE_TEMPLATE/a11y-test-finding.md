@@ -1,0 +1,49 @@
+---
+name: A11y test finding
+about: Create a report to help us improve
+title: ''
+labels: a11y-finding
+assignees: ''
+
+---
+
+name: A11y test finding
+description: Report a problem found in an a11y fix
+labels: [a11y-finding]
+body:
+  - type: input
+    id: a11y fix issuee
+    attributes:
+      label: A11y fix issue
+      description: Which a11y fix was this problem found in?
+      placeholder: ex. https://github.com/vaadin/flow-components/issues/9999
+    validations:
+      required: true
+  - type: textarea
+    id: problem-description
+    attributes:
+      label: What is the problem?
+    validations:
+      required: true
+  - type: checkboxes
+    id: browsers
+    attributes:
+      label: Browsers
+      description: Which browsers did this problem occur in?
+      options:
+        - label: Chrome
+        - label: Firefox
+        - label: Safari
+        - label: Safari on iOS
+        - label: Edge
+  - type: checkboxes
+    id: screen-readers
+    attributes:
+      label: Screeen Readers
+      description: Which screen reader did this problem occur with?
+      options:
+        - label: None
+        - label: NVDA
+        - label: JAWS
+        - label: VoiceOver on MacOS
+        - label: VoiceOver on iOS

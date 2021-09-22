@@ -1,8 +1,8 @@
 ---
 name: "\U0001F680 Feature Request"
-about: "I have a specific suggestion for the TypeScript and HTML API of Vaadin components!"
+about: I have a specific suggestion for the TypeScript and HTML API of Vaadin components!
 title: ''
-labels: 'i: needs triage'
+labels: ''
 assignees: ''
 
 ---
