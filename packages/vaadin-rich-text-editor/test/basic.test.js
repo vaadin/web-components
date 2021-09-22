@@ -40,7 +40,7 @@ describe('rich text editor', () => {
       });
 
       ['bold', 'italic', 'underline', 'strike', 'blockquote', 'code-block'].forEach((fmt) => {
-        it(`should apply ${fmt} formatting to the selected text on click`, () => {
+        (isFirefox ? it.skip : it)(`should apply ${fmt} formatting to the selected text on click`, () => {
           btn = getButton(fmt);
           btn.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
           focusout(editor.root);
