@@ -63,7 +63,7 @@ declare class RadioButton extends SlotLabelMixin(
   CheckedMixin(InputSlotMixin(AriaLabelMixin(ActiveMixin(ElementMixin(ThemableMixin(HTMLElement))))))
 ) {
   /**
-   * The name of the checkbox.
+   * The name of the radio button.
    */
   name: string;
 
