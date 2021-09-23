@@ -65,7 +65,8 @@ class ComboBoxDropdown extends mixinBehaviors(IronResizableBehavior, PolymerElem
        * The element to position/align the dropdown by.
        */
       positionTarget: {
-        type: Object
+        type: Object,
+        observer: '_positionTargetChanged'
       },
 
       /**
@@ -285,7 +286,15 @@ class ComboBoxDropdown extends mixinBehaviors(IronResizableBehavior, PolymerElem
     return !this.loading && !(this._items && this._items.length);
   }
 
+  _positionTargetChanged() {
+    // we must update the overlay width when the positionTarget is set (or changes)
+    this._setOverlayWidth();
+  }
+
   _setOverlayWidth() {
+    if (!this.positionTarget) {
+      return;
+    }
     const inputWidth = this.positionTarget.clientWidth + 'px';
     const customWidth = getComputedStyle(this).getPropertyValue('--vaadin-combo-box-overlay-width');
 
