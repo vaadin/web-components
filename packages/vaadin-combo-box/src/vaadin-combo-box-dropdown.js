@@ -286,9 +286,11 @@ class ComboBoxDropdown extends mixinBehaviors(IronResizableBehavior, PolymerElem
     return !this.loading && !(this._items && this._items.length);
   }
 
-  _positionTargetChanged() {
+  _positionTargetChanged(target) {
     // we must update the overlay width when the positionTarget is set (or changes)
-    this._setOverlayWidth();
+    if (target) {
+      this._setOverlayWidth();
+    }
   }
 
   _setOverlayWidth() {
