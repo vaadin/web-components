@@ -678,6 +678,15 @@ class TimePicker extends PatternMixin(
   _onChange() {}
 
   /**
+   * Override method inherited from `InputMixin`.
+   * @protected
+   */
+  _onInput() {
+    // Need to invoke _checkInputValue from PatternMixin to prevent invalid input
+    this._checkInputValue();
+  }
+
+  /**
    * Fired when the user commits a value change.
    *
    * @event change

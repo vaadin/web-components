@@ -332,6 +332,13 @@ describe('time-picker', () => {
       inputElement.blur();
       expect(spy.callCount).to.equal(1);
     });
+
+    it('should not change value on input', () => {
+      inputText('00:00');
+      expect(timePicker.value).to.equal('');
+      enter(inputElement);
+      expect(timePicker.value).to.equal('00:00');
+    });
   });
 
   describe('min and max properties', () => {
