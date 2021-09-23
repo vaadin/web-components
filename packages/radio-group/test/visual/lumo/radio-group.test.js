@@ -1,3 +1,4 @@
+import { sendKeys } from '@web/test-runner-commands';
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../../theme/lumo/vaadin-radio-group.js';
@@ -37,9 +38,19 @@ describe('radio-group', () => {
       await visualDiff(div, 'vertical');
     });
 
-    it('label', async () => {
-      element.label = 'Label';
-      await visualDiff(div, 'label');
+    describe('label', () => {
+      beforeEach(() => {
+        element.label = 'Label';
+      });
+
+      it('basic', async () => {
+        await visualDiff(div, 'label');
+      });
+
+      it('focused', async () => {
+        await sendKeys({ press: 'Tab' });
+        await visualDiff(div, 'label-focused');
+      });
     });
 
     it('value', async () => {

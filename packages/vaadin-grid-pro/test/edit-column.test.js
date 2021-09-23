@@ -640,6 +640,7 @@ describe('edit column', () => {
             <template>[[index]] [[item.name]]</template>
             <template class="footer"></template>
           </vaadin-grid-pro-edit-column>
+          <vaadin-grid-pro-edit-column path="married" editor-type="checkbox"></vaadin-grid-pro-edit-column>
           <vaadin-grid-pro-edit-column path="age"></vaadin-grid-pro-edit-column>
           <vaadin-grid-column path="name"></vaadin-grid-column>
         </vaadin-grid-pro>
@@ -658,23 +659,32 @@ describe('edit column', () => {
       expect(() => (column.path = '')).to.throw(Error);
     });
 
-    it('should not fire active-item-changed on grid edit column', () => {
-      // Propagation of click should be stopped on edit colunm
-      const spy = sinon.spy();
-      grid.addEventListener('active-item-changed', spy);
+    describe('active-item-changed event', () => {
+      let activeItemChangedSpy;
 
-      cell = getContainerCell(grid.$.items, 0, 1);
-      cell.click();
-      expect(spy.called).to.be.false;
-    });
+      beforeEach(() => {
+        activeItemChangedSpy = sinon.spy();
+        grid.addEventListener('active-item-changed', activeItemChangedSpy);
+      });
 
-    it('should fire active-item-changed on grid column', () => {
-      const spy = sinon.spy();
-      grid.addEventListener('active-item-changed', spy);
+      it('should not fire the event on cell click in the editable column', async () => {
+        cell = getContainerCell(grid.$.items, 0, 1);
+        cell._content.click();
+        expect(activeItemChangedSpy.called).to.be.false;
+      });
 
-      cell = getContainerCell(grid.$.items, 0, 2);
-      cell.click();
-      expect(spy.called).to.be.true;
+      it('should not fire the event on checkbox click in the editable column', () => {
+        cell = getContainerCell(grid.$.items, 0, 1);
+        dblclick(cell._content);
+        cell._content.querySelector('input[type=checkbox]').click();
+        expect(activeItemChangedSpy.called).to.be.false;
+      });
+
+      it('should fire the event on cell click in the not editable column', () => {
+        cell = getContainerCell(grid.$.items, 0, 3);
+        cell._content.click();
+        expect(activeItemChangedSpy.called).to.be.true;
+      });
     });
   });
 

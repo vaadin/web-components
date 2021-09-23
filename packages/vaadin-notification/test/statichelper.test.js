@@ -13,7 +13,7 @@ describe('static helpers', () => {
     expect(notification._card.innerText.trim()).to.equal('Hello world');
   });
 
-  it('show should show a Lit template notificatipn', () => {
+  it('show should show a Lit template notification', () => {
     const notification = NotificationElement.show(html`Hello world`);
 
     //const notificationDom = document.body.querySelector('vaadin-notification');
@@ -33,6 +33,11 @@ describe('static helpers', () => {
     const notification = NotificationElement.show('Hello world', { duration: 123, position: 'top-center' });
     expect(notification.duration).to.equal(123);
     expect(notification.position).to.equal('top-center');
+  });
+
+  it('show should work with a duration of zero', () => {
+    const notification = NotificationElement.show('Hello world', { duration: 0 });
+    expect(notification.duration).to.equal(0);
   });
 
   it('show remove the element from the document after closing', async () => {

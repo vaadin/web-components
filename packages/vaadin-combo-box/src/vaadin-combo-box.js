@@ -248,6 +248,14 @@ class ComboBox extends ComboBoxDataProviderMixin(
   }
 
   /**
+   * Element used by `FieldAriaMixin` to set ARIA attributes.
+   * @protected
+   */
+  get _ariaTarget() {
+    return this.inputElement;
+  }
+
+  /**
    * Used by `ClearButtonMixin` as a reference to the clear button element.
    * @protected
    * @return {!HTMLElement}

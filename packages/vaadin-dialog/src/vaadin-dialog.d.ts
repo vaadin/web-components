@@ -73,11 +73,10 @@ declare class DialogElement extends ThemePropertyMixin(
 
   /**
    * Set the `aria-label` attribute for assistive technologies like
-   * screen readers. An `undefined` value for this property (the
-   * default) means that the `aria-label` attribute is not present at
-   * all.
+   * screen readers. An empty string value for this property (the
+   * default) means that the `aria-label` attribute is not present.
    */
-  ariaLabel: string | null | undefined;
+  ariaLabel: string;
 
   /**
    * Custom function for rendering the content of the dialog.

@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { sendKeys } from '@web/test-runner-commands';
-import { fire, fixtureSync, isIOS, mousedown, mouseup, touchend, touchstart } from '@vaadin/testing-helpers';
+import { fixtureSync, isIOS, mousedown, mouseup, touchend, touchstart } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { ActiveMixin } from '../src/active-mixin.js';
 
@@ -102,12 +102,6 @@ describe('active-mixin', () => {
   it('should not preserve active attribute when disconnecting from the DOM', async () => {
     await sendKeys({ down: 'Space' });
     element.parentNode.removeChild(element);
-    expect(element.hasAttribute('active')).to.be.false;
-  });
-
-  it('should remove active attribute on blur', async () => {
-    await sendKeys({ down: 'Space' });
-    fire(element, 'blur');
     expect(element.hasAttribute('active')).to.be.false;
   });
 });

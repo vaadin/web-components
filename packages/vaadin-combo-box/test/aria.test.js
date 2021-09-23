@@ -5,12 +5,15 @@ import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
 
 describe('ARIA', () => {
-  let comboBox, input;
+  let comboBox, input, label, helper, error;
 
   beforeEach(() => {
     comboBox = fixtureSync('<vaadin-combo-box label="my label"></vaadin-combo-box>');
     comboBox.items = ['foo', 'bar', 'baz'];
     input = comboBox.inputElement;
+    label = comboBox.querySelector('[slot=label]');
+    error = comboBox.querySelector('[slot=error-message]');
+    helper = comboBox.querySelector('[slot=helper]');
   });
 
   afterEach(() => {
@@ -24,6 +27,23 @@ describe('ARIA', () => {
 
     it('should set aria-autocomplete attribute on the native input', () => {
       expect(input.getAttribute('aria-autocomplete')).to.equal('list');
+    });
+
+    it('should set aria-labelledby attribute on the native input', () => {
+      expect(input.getAttribute('aria-labelledby')).to.equal(label.id);
+    });
+
+    it('should set aria-describedby with helper text ID when valid', () => {
+      const aria = input.getAttribute('aria-describedby');
+      expect(aria).to.include(helper.id);
+      expect(aria).to.not.include(error.id);
+    });
+
+    it('should add error message ID to aria-describedby when invalid', () => {
+      comboBox.invalid = true;
+      const aria = input.getAttribute('aria-describedby');
+      expect(aria).to.include(helper.id);
+      expect(aria).to.include(error.id);
     });
   });
 

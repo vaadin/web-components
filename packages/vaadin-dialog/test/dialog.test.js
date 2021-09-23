@@ -74,10 +74,21 @@ describe('vaadin-dialog', () => {
         expect(overlay.getAttribute('aria-label')).to.be.null;
       });
 
-      it('overlay should get an updated `aria-label` attribute (if changed)', () => {
+      it('overlay should not have `aria-label` attribute if set to undefined', () => {
         dialog.ariaLabel = 'accessible';
-        expect(overlay.getAttribute('aria-label')).to.be.eql('accessible');
         dialog.ariaLabel = undefined;
+        expect(overlay.getAttribute('aria-label')).to.be.null;
+      });
+
+      it('overlay should not have `aria-label` attribute if set to null', () => {
+        dialog.ariaLabel = 'accessible';
+        dialog.ariaLabel = null;
+        expect(overlay.getAttribute('aria-label')).to.be.null;
+      });
+
+      it('overlay should not have `aria-label` attribute if set to empty string', () => {
+        dialog.ariaLabel = 'accessible';
+        dialog.ariaLabel = '';
         expect(overlay.getAttribute('aria-label')).to.be.null;
       });
 

@@ -19,7 +19,7 @@ declare class CrudEditColumnElement extends GridColumnElement {
   /**
    * The arial-label for the edit button
    */
-  ariaLabel: string | null | undefined;
+  ariaLabel: string;
 }
 
 declare global {

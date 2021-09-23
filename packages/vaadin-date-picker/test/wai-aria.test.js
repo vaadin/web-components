@@ -7,12 +7,32 @@ import '../src/vaadin-date-picker.js';
 
 describe('WAI-ARIA', () => {
   describe('date picker', () => {
-    let datepicker, toggleButton, input;
+    let datepicker, toggleButton, input, label, helper, error;
 
     beforeEach(() => {
       datepicker = fixtureSync(`<vaadin-date-picker></vaadin-date-picker>`);
       toggleButton = datepicker.shadowRoot.querySelector('[part="toggle-button"]');
       input = datepicker.inputElement;
+      label = datepicker.querySelector('[slot=label]');
+      error = datepicker.querySelector('[slot=error-message]');
+      helper = datepicker.querySelector('[slot=helper]');
+    });
+
+    it('should set aria-labelledby attribute on the native input', () => {
+      expect(input.getAttribute('aria-labelledby')).to.equal(label.id);
+    });
+
+    it('should set aria-describedby with helper text ID when valid', () => {
+      const aria = input.getAttribute('aria-describedby');
+      expect(aria).to.include(helper.id);
+      expect(aria).to.not.include(error.id);
+    });
+
+    it('should add error message ID to aria-describedby when invalid', () => {
+      datepicker.invalid = true;
+      const aria = input.getAttribute('aria-describedby');
+      expect(aria).to.include(helper.id);
+      expect(aria).to.include(error.id);
     });
 
     it('should have button roles on buttons', () => {

@@ -27,17 +27,13 @@ const ActiveMixinImplementation = (superclass) =>
     ready() {
       super.ready();
 
-      this._addEventListenerToNode(this, 'down', () => {
-        if (this.disabled) return;
-
-        this._setActive(true);
+      this._addEventListenerToNode(this, 'down', (event) => {
+        if (this._shouldSetActive(event)) {
+          this._setActive(true);
+        }
       });
 
       this._addEventListenerToNode(this, 'up', () => {
-        this._setActive(false);
-      });
-
-      this.addEventListener('blur', () => {
         this._setActive(false);
       });
     }
@@ -54,6 +50,14 @@ const ActiveMixinImplementation = (superclass) =>
     }
 
     /**
+     * @param {KeyboardEvent | MouseEvent} _event
+     * @protected
+     */
+    _shouldSetActive(_event) {
+      return !this.disabled;
+    }
+
+    /**
      * Sets the `active` attribute on the element if an activation key is pressed.
      *
      * @param {KeyboardEvent} event
@@ -63,7 +67,7 @@ const ActiveMixinImplementation = (superclass) =>
     _onKeyDown(event) {
       super._onKeyDown(event);
 
-      if (!this.disabled && this._activeKeys.includes(event.key)) {
+      if (this._shouldSetActive(event) && this._activeKeys.includes(event.key)) {
         this._setActive(true);
       }
     }

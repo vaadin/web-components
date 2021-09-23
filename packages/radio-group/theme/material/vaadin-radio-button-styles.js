@@ -13,13 +13,8 @@ registerStyles(
       -webkit-tap-highlight-color: transparent;
     }
 
-    [part='label']:not([empty]) {
+    :host([has-label]) [part='label'] {
       margin: 4px 0.875em 4px 0.375em;
-    }
-
-    [part='native-radio'] {
-      opacity: 0;
-      position: absolute;
     }
 
     [part='radio'] {
@@ -33,7 +28,6 @@ registerStyles(
       border-radius: 50%;
       background-color: transparent;
       transition: transform 0.2s cubic-bezier(0.12, 0.32, 0.54, 2), background-color 0.15s;
-      pointer-events: none;
       will-change: transform;
       line-height: 1.2;
     }
@@ -42,6 +36,7 @@ registerStyles(
     [part='radio']::before {
       /* Needed to align the radio-button nicely on the baseline */
       content: '\\2003';
+      pointer-events: none;
       color: transparent;
       display: inline-block;
       width: 100%;
@@ -60,6 +55,7 @@ registerStyles(
     /* Used for the selection dot */
     [part='radio']::after {
       content: '';
+      pointer-events: none;
       width: 10px;
       height: 10px;
       border-radius: 50%;
@@ -97,7 +93,7 @@ registerStyles(
       color: var(--material-disabled-text-color);
     }
 
-    :host([disabled]) ::slotted(*) {
+    :host([disabled]) [part='label'] ::slotted(*) {
       color: inherit;
     }
 
@@ -110,7 +106,7 @@ registerStyles(
     }
 
     /* RTL specific styles */
-    :host([dir='rtl']) [part='label']:not([empty]) {
+    :host([dir='rtl'][has-label]) [part='label'] {
       margin: 4px 0.375em 4px 0.875em;
     }
   `,

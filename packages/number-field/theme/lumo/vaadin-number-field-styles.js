@@ -33,7 +33,15 @@ const numberField = css`
   }
 
   [part\$='button']::before {
-    margin-top: 0.2em;
+    margin-top: 0.3em;
+  }
+
+  [part='decrease-button']::before {
+    content: var(--lumo-icons-minus);
+  }
+
+  [part='increase-button']::before {
+    content: var(--lumo-icons-plus);
   }
 
   /* RTL specific styles */
