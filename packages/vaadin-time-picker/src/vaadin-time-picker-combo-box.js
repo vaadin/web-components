@@ -73,20 +73,6 @@ class TimePickerComboBox extends ComboBoxMixin(ThemableMixin(PolymerElement)) {
   }
 
   /** @protected */
-  connectedCallback() {
-    super.connectedCallback();
-
-    this._revertInputValue();
-    this._preventInputBlur();
-  }
-
-  /** @protected */
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    this._restoreInputBlur();
-  }
-
-  /** @protected */
   _isClearButton(event) {
     return super._isClearButton(event) || event.composedPath()[0].getAttribute('part') === 'clear-button';
   }
