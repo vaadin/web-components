@@ -184,7 +184,7 @@ describe('keyboard navigation', () => {
 
     it('should open the overlay on arrow up', () => {
       arrowUp(inputElement);
-      expect(document.querySelector('vaadin-combo-box-overlay')).to.be.ok;
+      expect(document.querySelector('vaadin-time-picker-overlay')).to.be.ok;
     });
   });
 

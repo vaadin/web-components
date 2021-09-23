@@ -28,9 +28,10 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
  * @mixes ThemableMixin
+ * @mixes DirMixin
  * @private
  */
-class ComboBoxItemElement extends ThemableMixin(DirMixin(PolymerElement)) {
+export class ComboBoxItem extends ThemableMixin(DirMixin(PolymerElement)) {
   static get template() {
     return html`
       <style>
@@ -164,4 +165,4 @@ class ComboBoxItemElement extends ThemableMixin(DirMixin(PolymerElement)) {
   }
 }
 
-customElements.define(ComboBoxItemElement.is, ComboBoxItemElement);
+customElements.define(ComboBoxItem.is, ComboBoxItem);

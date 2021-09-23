@@ -29,7 +29,7 @@ registerStyles(
  * @extends OverlayElement
  * @private
  */
-class ComboBoxOverlayElement extends PositionMixin(OverlayElement) {
+export class ComboBoxOverlay extends PositionMixin(OverlayElement) {
   static get is() {
     return 'vaadin-combo-box-overlay';
   }
@@ -61,4 +61,4 @@ class ComboBoxOverlayElement extends PositionMixin(OverlayElement) {
   }
 }
 
-customElements.define(ComboBoxOverlayElement.is, ComboBoxOverlayElement);
+customElements.define(ComboBoxOverlay.is, ComboBoxOverlay);

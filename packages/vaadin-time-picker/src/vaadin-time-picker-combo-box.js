@@ -3,16 +3,19 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html } from '@polymer/polymer/lib/utils/html-tag.js';
-import { ComboBoxLight } from '@vaadin/vaadin-combo-box/src/vaadin-combo-box-light.js';
+import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { ComboBoxMixin } from '@vaadin/vaadin-combo-box/src/vaadin-combo-box-mixin.js';
+import './vaadin-time-picker-dropdown.js';
 
 /**
  * An element used internally by `<vaadin-time-picker>`. Not intended to be used separately.
  *
- * @extends ComboBoxLight
- * @private
+ * @extends HTMLElement
+ * @mixes ComboBoxMixin
+ * @mixes ThemableMixin
  */
-class TimePickerComboBox extends ComboBoxLight {
+class TimePickerComboBox extends ComboBoxMixin(ThemableMixin(PolymerElement)) {
   static get is() {
     return 'vaadin-time-picker-combo-box';
   }
@@ -27,7 +30,7 @@ class TimePickerComboBox extends ComboBoxLight {
 
       <slot></slot>
 
-      <vaadin-combo-box-dropdown
+      <vaadin-time-picker-dropdown
         id="dropdown"
         opened="[[opened]]"
         position-target="[[positionTarget]]"
@@ -37,7 +40,7 @@ class TimePickerComboBox extends ComboBoxLight {
         _item-label-path="[[itemLabelPath]]"
         loading="[[loading]]"
         theme="[[theme]]"
-      ></vaadin-combo-box-dropdown>
+      ></vaadin-time-picker-dropdown>
     `;
   }
 
@@ -63,9 +66,41 @@ class TimePickerComboBox extends ComboBoxLight {
     super.ready();
 
     this.allowCustomValue = true;
+    this._toggleElement = this.querySelector('.toggle-button');
 
     // See https://github.com/vaadin/vaadin-time-picker/issues/145
     this.setAttribute('dir', 'ltr');
+  }
+
+  /** @protected */
+  connectedCallback() {
+    super.connectedCallback();
+
+    this._revertInputValue();
+    this._preventInputBlur();
+  }
+
+  /** @protected */
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this._restoreInputBlur();
+  }
+
+  /** @protected */
+  _isClearButton(event) {
+    return super._isClearButton(event) || event.composedPath()[0].getAttribute('part') === 'clear-button';
+  }
+
+  /**
+   * @param {!Event} event
+   * @protected
+   */
+  _onChange(event) {
+    super._onChange(event);
+
+    if (this._isClearButton(event)) {
+      this._clear();
+    }
   }
 }
 
