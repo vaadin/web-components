@@ -10,7 +10,7 @@ import { registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { TextFieldMixin, textFieldSharedStyles } from './vaadin-text-field-mixin.js';
 
-registerStyles('vaadin-text-field', textFieldSharedStyles, { include: ['vaadin-text-field-shared-styles'] });
+registerStyles('vaadin-text-field', textFieldSharedStyles, { moduleId: 'vaadin-text-field-shared-styles' });
 
 /**
  * `<vaadin-text-field>` is a Web Component for text field control in forms.
