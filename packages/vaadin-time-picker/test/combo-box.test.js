@@ -1,6 +1,5 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
-import { TimePickerComboBox } from '../src/vaadin-time-picker-combo-box.js';
 import '../vaadin-time-picker.js';
 
 describe('combo-box', () => {
@@ -12,7 +11,7 @@ describe('combo-box', () => {
   });
 
   it('should store a reference to a combo-box instance', () => {
-    expect(comboBox).to.be.instanceOf(TimePickerComboBox);
+    expect(comboBox.localName).to.equal('vaadin-time-picker-combo-box');
   });
 
   it('should define a toggle element on the combo-box', () => {

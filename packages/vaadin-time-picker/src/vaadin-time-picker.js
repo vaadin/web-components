@@ -130,7 +130,7 @@ class TimePicker extends PatternMixin(
             <slot name="prefix" slot="prefix"></slot>
             <slot name="input"></slot>
             <div id="clearButton" part="clear-button" slot="suffix"></div>
-            <div id="toggleButton" part="toggle-button" slot="suffix"></div>
+            <div id="toggleButton" class="toggle-button" part="toggle-button" slot="suffix"></div>
           </vaadin-input-container>
         </vaadin-time-picker-combo-box>
 
