@@ -372,22 +372,6 @@ class TimePicker extends PatternMixin(
     }
   }
 
-  /**
-   * Override method inherited from `FocusMixin` to not remove focused
-   * state when focus moves to the combo-box overlay.
-   * @param {FocusEvent} event
-   * @return {boolean}
-   * @protected
-   */
-  _shouldRemoveFocus(event) {
-    if (event.relatedTarget === this.$.comboBox.$.dropdown.$.overlay) {
-      event.composedPath()[0].focus();
-      return false;
-    }
-
-    return true;
-  }
-
   /** @private */
   __validDayDivisor(step) {
     // valid if undefined, or exact divides a day, or has millisecond resolution
