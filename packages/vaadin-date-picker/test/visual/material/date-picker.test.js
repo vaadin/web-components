@@ -29,6 +29,12 @@ describe('date-picker', () => {
     await visualDiff(div, 'readonly');
   });
 
+  it('flex', async () => {
+    div.style.display = 'inline-flex';
+    div.style.height = '200px';
+    await visualDiff(div, 'flex');
+  });
+
   it('focus-ring', async () => {
     await sendKeys({ press: 'Tab' });
 

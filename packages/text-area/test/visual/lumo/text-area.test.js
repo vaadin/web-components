@@ -26,6 +26,12 @@ describe('text-area', () => {
     await visualDiff(div, 'readonly');
   });
 
+  it('flex', async () => {
+    div.style.display = 'inline-flex';
+    div.style.height = '200px';
+    await visualDiff(div, 'flex');
+  });
+
   it('label', async () => {
     element.label = 'Label';
     await visualDiff(div, 'label');

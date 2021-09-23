@@ -28,6 +28,12 @@ describe('number-field', () => {
     await visualDiff(div, 'readonly');
   });
 
+  it('flex', async () => {
+    div.style.display = 'inline-flex';
+    div.style.height = '200px';
+    await visualDiff(div, 'flex');
+  });
+
   it('invalid', async () => {
     element.invalid = true;
     await visualDiff(div, 'invalid');

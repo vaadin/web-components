@@ -7,9 +7,22 @@
     <title>Date picker</title>
     <script type="module">
       import '@vaadin/vaadin-date-picker';
+      import '@vaadin/horizontal-layout';
+      import '@vaadin/password-field';
+      import '@vaadin/text-area';
     </script>
   </head>
   <body>
-    <vaadin-date-picker label="Start date"></vaadin-date-picker>
+    <div style="display: inline-flex; height: 400px;">
+      <vaadin-date-picker label="Start date"></vaadin-date-picker>
+    </div>
+
+    <div style="display: inline-flex; height: 400px;">
+      <vaadin-password-field label="Password"></vaadin-password-field>
+    </div>
+
+    <div style="display: inline-flex; height: 400px;">
+      <vaadin-text-area></vaadin-text-area>
+    </div>
   </body>
 </html>
