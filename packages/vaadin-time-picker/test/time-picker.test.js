@@ -217,18 +217,23 @@ describe('time-picker', () => {
 
     beforeEach(() => {
       clearButton = timePicker.$.clearButton;
+      timePicker.clearButtonVisible = true;
     });
 
     it('should not show clear button when disabled', () => {
-      timePicker.clearButtonVisible = true;
       timePicker.disabled = true;
       expect(getComputedStyle(clearButton).display).to.equal('none');
     });
 
     it('should not show clear button when readonly', () => {
-      timePicker.clearButtonVisible = true;
       timePicker.readonly = true;
       expect(getComputedStyle(clearButton).display).to.equal('none');
+    });
+
+    it('should not open the dropdown', () => {
+      timePicker.value = '00:00';
+      clearButton.click();
+      expect(comboBox.opened).to.be.false;
     });
   });
 
