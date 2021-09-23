@@ -153,16 +153,12 @@ declare class TimePicker extends PatternMixin(
 
   /**
    * Returns true if `value` is valid, and sets the `invalid` flag appropriately.
-   *
-   * @returns True if the value is valid and sets the `invalid` flag appropriately
    */
   validate(): boolean;
 
   /**
    * Returns true if the current input value satisfies all constraints (if any).
    * You can override this method for custom validations.
-   *
-   * @returns True if the value is valid
    */
   checkValidity(): boolean;
 
