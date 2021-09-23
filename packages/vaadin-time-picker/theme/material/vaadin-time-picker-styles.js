@@ -13,4 +13,4 @@ const timePicker = css`
   }
 `;
 
-registerStyles('vaadin-time-picker', [inputFieldShared, timePicker], { moduleId: 'lumo-time-picker' });
+registerStyles('vaadin-time-picker', [inputFieldShared, timePicker], { moduleId: 'material-time-picker' });
