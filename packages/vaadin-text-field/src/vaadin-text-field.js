@@ -6,8 +6,11 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { ControlStateMixin } from '@vaadin/vaadin-control-state-mixin/vaadin-control-state-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { TextFieldMixin } from './vaadin-text-field-mixin.js';
+import { TextFieldMixin, textFieldSharedStyles } from './vaadin-text-field-mixin.js';
+
+registerStyles('vaadin-text-field', textFieldSharedStyles, { moduleId: 'vaadin-text-field-shared-styles' });
 
 /**
  * `<vaadin-text-field>` is a Web Component for text field control in forms.
@@ -79,8 +82,6 @@ import { TextFieldMixin } from './vaadin-text-field-mixin.js';
 class TextFieldElement extends ElementMixin(TextFieldMixin(ControlStateMixin(ThemableMixin(PolymerElement)))) {
   static get template() {
     return html`
-      <style include="vaadin-text-field-shared-styles"></style>
-
       <div class="vaadin-text-field-container">
         <label part="label" on-click="focus" id="[[_labelId]]">[[label]]</label>
 

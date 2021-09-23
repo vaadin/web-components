@@ -1,3 +1,4 @@
+import { CSSResult } from 'lit';
 import { TextFieldAutoCorrect, TextFieldAutoCapitalize } from './interfaces';
 
 declare function TextFieldMixin<T extends new (...args: any[]) => {}>(base: T): T & TextFieldMixinConstructor;
@@ -171,4 +172,6 @@ interface TextFieldMixin {
   _onKeyDown(e: KeyboardEvent): void;
 }
 
-export { TextFieldMixin, TextFieldMixinConstructor };
+declare const textFieldSharedStyles: CSSResult;
+
+export { TextFieldMixin, TextFieldMixinConstructor, textFieldSharedStyles };
