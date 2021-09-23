@@ -4,11 +4,19 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { ControlStateMixin } from '@vaadin/vaadin-control-state-mixin/vaadin-control-state-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { AriaLabelMixin } from '@vaadin/field-base/src/aria-label-mixin.js';
+import { ClearButtonMixin } from '@vaadin/field-base/src/clear-button-mixin.js';
+import { FieldAriaMixin } from '@vaadin/field-base/src/field-aria-mixin.js';
+import { InputSlotMixin } from '@vaadin/field-base/src/input-slot-mixin.js';
+import { PatternMixin } from '@vaadin/field-base/src/pattern-mixin.js';
+import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import '@vaadin/vaadin-combo-box/src/vaadin-combo-box-light.js';
-import './vaadin-time-picker-text-field.js';
+import { registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+import '@vaadin/input-container/src/vaadin-input-container.js';
+import './vaadin-time-picker-combo-box.js';
+
+registerStyles('vaadin-time-picker', inputFieldShared, { moduleId: 'vaadin-time-picker-styles' });
 
 /**
  * `<vaadin-time-picker>` is a Web Component providing a time-selection field.
@@ -24,31 +32,35 @@ import './vaadin-time-picker-text-field.js';
  *
  * ### Styling
  *
- * The following custom properties are available for styling:
+ * The following shadow DOM parts are available for styling:
  *
- * Part name | Description
+ * Part name       | Description
  * ----------------|----------------
+ * `clear-button`  | The clear button
+ * `input-field`   | Input element wrapper
  * `toggle-button` | The toggle button
+ * `label`         | The label element
+ * `error-message` | The error message element
+ * `helper-text`   | The helper text element wrapper
  *
  * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
  * The following state attributes are available for styling:
  *
- * Attribute    | Description | Part name
- * -------------|-------------|------------
- * `disabled` | Set to a disabled time picker | :host
- * `readonly` | Set to a read only time picker | :host
- * `invalid` | Set when the element is invalid | :host
- * `focused` | Set when the element is focused | :host
+ * Attribute    | Description                              | Part name
+ * -------------|------------------------------------------|------------
+ * `disabled`   | Set to a disabled time picker            | :host
+ * `readonly`   | Set to a read only time picker           | :host
+ * `invalid`    | Set when the element is invalid          | :host
+ * `focused`    | Set when the element is focused          | :host
  * `focus-ring` | Set when the element is keyboard focused | :host
  *
  * ### Internal components
  *
- * In addition to `<vaadin-select>` itself, the following internal
+ * In addition to `<vaadin-time-picker>` itself, the following internal
  * components are themable:
  *
- * - `<vaadin-time-picker-text-field>` - has the same API as [`<vaadin-text-field>`](#/elements/vaadin-text-field).
- * - [`<vaadin-combo-box-light>`](#/elements/vaadin-combo-box-light).
+ * - `<vaadin-time-picker-combo-box>` - has the same API as [`<vaadin-combo-box-light>`](#/elements/vaadin-combo-box-light).
  *
  * Note: the `theme` attribute value set on `<vaadin-time-picker>` is
  * propagated to the internal components listed above.
@@ -59,89 +71,82 @@ import './vaadin-time-picker-text-field.js';
  *
  * @extends HTMLElement
  * @mixes ElementMixin
- * @mixes ControlStateMixin
  * @mixes ThemableMixin
+ * @mixes InputSlotMixin
+ * @mixes AriaLabelMixin
+ * @mixes ClearButtonMixin
+ * @mixes FieldAriaMixin
+ * @mixes PatternMixin
  */
-class TimePickerElement extends ElementMixin(ControlStateMixin(ThemableMixin(PolymerElement))) {
+class TimePicker extends PatternMixin(
+  FieldAriaMixin(ClearButtonMixin(AriaLabelMixin(InputSlotMixin(ThemableMixin(ElementMixin(PolymerElement))))))
+) {
+  static get is() {
+    return 'vaadin-time-picker';
+  }
+
   static get template() {
     return html`
       <style>
-        :host {
-          display: inline-block;
+        /* See https://github.com/vaadin/vaadin-time-picker/issues/145 */
+        :host([dir='rtl']) [part='input-field'] {
+          direction: ltr;
         }
 
-        :host([hidden]) {
-          display: none !important;
+        :host([dir='rtl']) [part='input-field'] ::slotted(input)::placeholder {
+          direction: rtl;
+          text-align: left;
         }
 
         [part~='toggle-button'] {
           cursor: pointer;
         }
-
-        .input {
-          width: 100%;
-          min-width: 0;
-        }
       </style>
-      <vaadin-combo-box-light
-        allow-custom-value=""
-        filtered-items="[[__dropdownItems]]"
-        disabled="[[disabled]]"
-        readonly="[[readonly]]"
-        auto-open-disabled="[[autoOpenDisabled]]"
-        dir="ltr"
-        theme$="[[theme]]"
-      >
-        <vaadin-time-picker-text-field
-          class="input"
-          name="[[name]]"
-          invalid="[[invalid]]"
-          autocomplete="off"
-          label="[[label]]"
-          required="[[required]]"
-          disabled="[[disabled]]"
-          prevent-invalid-input="[[preventInvalidInput]]"
-          pattern="[[pattern]]"
-          error-message="[[errorMessage]]"
-          autofocus="[[autofocus]]"
-          placeholder="[[placeholder]]"
-          readonly="[[readonly]]"
-          role="application"
-          aria-live="assertive"
-          min$="[[min]]"
-          max$="[[max]]"
-          aria-label$="[[label]]"
-          clear-button-visible="[[clearButtonVisible]]"
-          i18n="[[i18n]]"
-          helper-text="[[helperText]]"
-          theme$="[[theme]]"
-        >
-          <slot name="helper" slot="helper">[[helperText]]</slot>
-          <span
-            slot="suffix"
-            part="toggle-button"
-            class="toggle-button"
-            role="button"
-            aria-label$="[[i18n.selector]]"
-          ></span>
-        </vaadin-time-picker-text-field>
-      </vaadin-combo-box-light>
-    `;
-  }
 
-  static get is() {
-    return 'vaadin-time-picker';
+      <div part="container">
+        <div part="label" on-click="focus">
+          <slot name="label"></slot>
+          <span part="indicator" aria-hidden="true"></span>
+        </div>
+
+        <vaadin-time-picker-combo-box
+          id="comboBox"
+          filtered-items="[[__dropdownItems]]"
+          value="{{_comboBoxValue}}"
+          disabled="[[disabled]]"
+          readonly="[[readonly]]"
+          auto-open-disabled="[[autoOpenDisabled]]"
+          position-target="[[_inputContainer]]"
+          theme$="[[theme]]"
+          on-change="__onChange"
+        >
+          <vaadin-input-container
+            part="input-field"
+            readonly="[[readonly]]"
+            disabled="[[disabled]]"
+            invalid="[[invalid]]"
+            theme$="[[theme]]"
+          >
+            <slot name="prefix" slot="prefix"></slot>
+            <slot name="input"></slot>
+            <div id="clearButton" part="clear-button" slot="suffix"></div>
+            <div id="toggleButton" class="toggle-button" part="toggle-button" slot="suffix"></div>
+          </vaadin-input-container>
+        </vaadin-time-picker-combo-box>
+
+        <div part="helper-text">
+          <slot name="helper"></slot>
+        </div>
+
+        <div part="error-message">
+          <slot name="error-message"></slot>
+        </div>
+      </div>
+    `;
   }
 
   static get properties() {
     return {
-      /**
-       * The name of this element.
-       */
-      name: {
-        type: String
-      },
-
       /**
        * The time value for this element.
        *
@@ -153,97 +158,8 @@ class TimePickerElement extends ElementMixin(ControlStateMixin(ThemableMixin(Pol
        */
       value: {
         type: String,
-        observer: '__valueChanged',
         notify: true,
         value: ''
-      },
-
-      /**
-       * The label for this element.
-       */
-      label: {
-        type: String,
-        reflectToAttribute: true
-      },
-
-      /**
-       * Set to true to mark the input as required.
-       * @type {boolean}
-       */
-      required: {
-        type: Boolean,
-        value: false
-      },
-
-      /**
-       * Set to true to disable this input.
-       * @type {boolean}
-       */
-      disabled: {
-        type: Boolean,
-        value: false
-      },
-
-      /**
-       * Set to true to prevent the user from entering invalid input.
-       * @attr {boolean} prevent-invalid-input
-       */
-      preventInvalidInput: {
-        type: Boolean
-      },
-
-      /**
-       * A pattern to validate the `input` with.
-       */
-      pattern: {
-        type: String
-      },
-
-      /**
-       * The error message to display when the input is invalid.
-       * @attr {string} error-message
-       */
-      errorMessage: {
-        type: String
-      },
-
-      /**
-       * String used for the helper text.
-       * @attr {string} helper-text
-       */
-      helperText: {
-        type: String,
-        value: ''
-      },
-
-      /**
-       * A placeholder string in addition to the label.
-       * @type {string}
-       */
-      placeholder: {
-        type: String,
-        value: ''
-      },
-
-      /**
-       * Set to true to prevent user picking a date or typing in the input.
-       * @type {boolean}
-       */
-      readonly: {
-        type: Boolean,
-        value: false,
-        reflectToAttribute: true
-      },
-
-      /**
-       * Set to true if the value is invalid.
-       * @type {boolean}
-       */
-      invalid: {
-        type: Boolean,
-        reflectToAttribute: true,
-        notify: true,
-        value: false
       },
 
       /**
@@ -295,16 +211,6 @@ class TimePickerElement extends ElementMixin(ControlStateMixin(ThemableMixin(Pol
       },
 
       /**
-       * Set to true to display the clear icon which clears the input.
-       * @attr {boolean} clear-button-visible
-       * @type {boolean}
-       */
-      clearButtonVisible: {
-        type: Boolean,
-        value: false
-      },
-
-      /**
        * Set true to prevent the overlay from opening automatically.
        * @attr {boolean} auto-open-disabled
        */
@@ -321,31 +227,31 @@ class TimePickerElement extends ElementMixin(ControlStateMixin(ThemableMixin(Pol
        * _i18n_ object or just the property you want to modify.
        *
        * The object has the following JSON structure:
-
-          {
-            // A function to format given `Object` as
-            // time string. Object is in the format `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`
-            formatTime: (time) => {
-              // returns a string representation of the given
-              // object in `hh` / 'hh:mm' / 'hh:mm:ss' / 'hh:mm:ss.fff' - formats
-            },
-
-            // A function to parse the given text to an `Object` in the format
-            // `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`.
-            // Must properly parse (at least) text
-            // formatted by `formatTime`.
-            parseTime: text => {
-              // Parses a string in object/string that can be formatted by`formatTime`.
-            }
-
-            // Translation of the time selector icon button title.
-            selector: 'Time selector',
-
-            // Translation of the time selector clear button title.
-            clear: 'Clear'
-          }
-        * @type {!TimePickerI18n}
-        */
+       *
+       * ```
+       * {
+       *   // A function to format given `Object` as
+       *   // time string. Object is in the format `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`
+       *   formatTime: (time) => {
+       *     // returns a string representation of the given
+       *     // object in `hh` / 'hh:mm' / 'hh:mm:ss' / 'hh:mm:ss.fff' - formats
+       *   },
+       *
+       *   // A function to parse the given text to an `Object` in the format
+       *   // `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`.
+       *   // Must properly parse (at least) text
+       *   // formatted by `formatTime`.
+       *   parseTime: text => {
+       *     // Parses a string in object/string that can be formatted by`formatTime`.
+       *   }
+       * }
+       * ```
+       *
+       * Both `formatTime` and `parseTime` need to be implemented
+       * to ensure the component works properly.
+       *
+       * @type {!TimePickerI18n}
+       */
       i18n: {
         type: Object,
         value: () => {
@@ -382,12 +288,19 @@ class TimePickerElement extends ElementMixin(ControlStateMixin(ThemableMixin(Pol
                 }
                 return { hours: parts[1], minutes: parts[2], seconds: parts[3], milliseconds: parts[4] };
               }
-            },
-            selector: 'Time selector',
-            clear: 'Clear'
+            }
           };
         }
-      }
+      },
+
+      /** @private */
+      _comboBoxValue: {
+        type: String,
+        observer: '__comboBoxValueChanged'
+      },
+
+      /** @private */
+      _inputContainer: Object
     };
   }
 
@@ -395,29 +308,68 @@ class TimePickerElement extends ElementMixin(ControlStateMixin(ThemableMixin(Pol
     return ['__updateDropdownItems(i18n.*, min, max, step)'];
   }
 
+  /**
+   * Element used by `FieldAriaMixin` to set ARIA attributes.
+   * @protected
+   */
+  get _ariaTarget() {
+    return this.inputElement;
+  }
+
+  /**
+   * Used by `ClearButtonMixin` as a reference to the clear button element.
+   * @protected
+   * @return {!HTMLElement}
+   */
+  get clearElement() {
+    return this.$.clearButton;
+  }
+
   /** @protected */
   ready() {
     super.ready();
 
-    // In order to have synchronized invalid property, we need to use the same validate logic.
-    this.__inputElement.validate = () => {};
+    this._inputContainer = this.shadowRoot.querySelector('[part~="input-field"]');
+  }
 
-    // Not using declarative because we receive an event before text-element shadow is ready,
-    // thus querySelector in textField.focusElement raises an undefined exception on validate
-    this.__dropdownElement.addEventListener('value-changed', (e) => this.__onInputChange(e));
-    this.__inputElement.addEventListener('keydown', this.__onKeyDown.bind(this));
+  /**
+   * Override method inherited from `InputMixin` to forward the input to combo-box.
+   * @protected
+   * @override
+   */
+  _inputElementChanged(input) {
+    super._inputElementChanged(input);
 
-    // Validation listeners
-    this.__dropdownElement.addEventListener('change', () => this.validate());
-    this.__inputElement.addEventListener('blur', () => this.validate());
+    if (input) {
+      this.$.comboBox._setInputElement(input);
+    }
+  }
 
-    this.__dropdownElement.addEventListener('change', (e) => {
-      // `vaadin-combo-box-light` forwards 'change' event from text-field.
-      // So we need to filter out in order to avoid duplicates.
-      if (e.composedPath()[0] !== this.__inputElement) {
-        this.__dispatchChange();
-      }
-    });
+  /**
+   * Returns true if the current input value satisfies all constraints (if any).
+   * You can override this method for custom validations.
+   *
+   * @return {boolean} True if the value is valid
+   */
+  checkValidity() {
+    return !!(
+      this.inputElement.checkValidity() &&
+      (!this.value || this._timeAllowed(this.i18n.parseTime(this.value))) &&
+      (!this._comboBoxValue || this.i18n.parseTime(this._comboBoxValue))
+    );
+  }
+
+  /**
+   * Override method inherited from `FocusMixin` to validate on blur.
+   * @param {boolean} focused
+   * @protected
+   */
+  _setFocused(focused) {
+    super._setFocused(focused);
+
+    if (!focused) {
+      this.validate();
+    }
   }
 
   /** @private */
@@ -426,8 +378,13 @@ class TimePickerElement extends ElementMixin(ControlStateMixin(ThemableMixin(Pol
     return !step || (24 * 3600) % step === 0 || (step < 1 && ((step % 1) * 1000) % 1 === 0);
   }
 
-  /** @private */
-  __onKeyDown(e) {
+  /**
+   * Override an event listener from `ClearButtonMixin`
+   * to prevent clearing the input value on Esc key.
+   * @param {Event} event
+   * @protected
+   */
+  _onKeyDown(e) {
     if (this.readonly || this.disabled || this.__dropdownItems.length) {
       return;
     }
@@ -445,7 +402,7 @@ class TimePickerElement extends ElementMixin(ControlStateMixin(ThemableMixin(Pol
   __onArrowPressWithStep(step) {
     const objWithStep = this.__addStep(this.__getMsec(this.__memoValue), step, true);
     this.__memoValue = objWithStep;
-    this.__inputElement.value = this.i18n.formatTime(this.__validateTime(objWithStep));
+    this.inputElement.value = this.i18n.formatTime(this.__validateTime(objWithStep));
     this.__dispatchChange();
   }
 
@@ -531,7 +488,7 @@ class TimePickerElement extends ElementMixin(ControlStateMixin(ThemableMixin(Pol
     }
 
     if (this.value) {
-      this.__dropdownElement.value = this.i18n.formatTime(this.i18n.parseTime(this.value));
+      this._comboBoxValue = this.i18n.formatTime(this.i18n.parseTime(this.value));
     }
   }
 
@@ -573,8 +530,12 @@ class TimePickerElement extends ElementMixin(ControlStateMixin(ThemableMixin(Pol
     }
   }
 
-  /** @private */
-  __valueChanged(value, oldValue) {
+  /**
+   * Override an observer from `InputMixin`.
+   * @protected
+   * @override
+   */
+  _valueChanged(value, oldValue) {
     const parsedObj = (this.__memoValue = this.__parseISO(value));
     const newValue = this.__formatISO(parsedObj) || '';
 
@@ -585,22 +546,37 @@ class TimePickerElement extends ElementMixin(ControlStateMixin(ThemableMixin(Pol
     } else {
       this.__updateInputValue(parsedObj);
     }
+
+    this._toggleHasValue(!!this.value);
   }
 
   /** @private */
-  __onInputChange() {
-    const parsedObj = this.i18n.parseTime(this.__dropdownElement.value);
+  __comboBoxValueChanged(value, oldValue) {
+    if (value === '' && oldValue === undefined) {
+      return;
+    }
+
+    const parsedObj = this.i18n.parseTime(value);
     const newValue = this.i18n.formatTime(parsedObj) || '';
 
     if (parsedObj) {
-      if (this.__dropdownElement.value !== newValue) {
-        this.__dropdownElement.value = newValue;
+      if (value !== newValue) {
+        this._comboBoxValue = newValue;
       } else {
         this.__updateValue(parsedObj);
       }
     } else {
       this.value = '';
     }
+  }
+
+  /** @private */
+  __onChange(event) {
+    event.stopPropagation();
+
+    this.validate();
+
+    this.__dispatchChange();
   }
 
   /** @private */
@@ -612,7 +588,7 @@ class TimePickerElement extends ElementMixin(ControlStateMixin(ThemableMixin(Pol
   /** @private */
   __updateInputValue(obj) {
     const timeString = this.i18n.formatTime(this.__validateTime(obj)) || '';
-    this.__dropdownElement.value = timeString;
+    this._comboBoxValue = timeString;
   }
 
   /** @private */
@@ -647,46 +623,13 @@ class TimePickerElement extends ElementMixin(ControlStateMixin(ThemableMixin(Pol
   /** @private */
   __formatISO(time) {
     // The default i18n formatter implementation is ISO 8601 compliant
-    return TimePickerElement.properties.i18n.value().formatTime(time);
+    return TimePicker.properties.i18n.value().formatTime(time);
   }
 
   /** @private */
   __parseISO(text) {
     // The default i18n parser implementation is ISO 8601 compliant
-    return TimePickerElement.properties.i18n.value().parseTime(text);
-  }
-
-  /** @protected */
-  _getInputElement() {
-    return this.shadowRoot.querySelector('vaadin-time-picker-text-field');
-  }
-
-  /** @private */
-  get __inputElement() {
-    return this.__memoInput || (this.__memoInput = this._getInputElement());
-  }
-
-  /** @private */
-  get __dropdownElement() {
-    return this.__memoDropdown || (this.__memoDropdown = this.shadowRoot.querySelector('vaadin-combo-box-light'));
-  }
-
-  /**
-   * Focusable element used by vaadin-control-state-mixin
-   * @return {!HTMLElement}
-   * @protected
-   */
-  get focusElement() {
-    return this.__inputElement;
-  }
-
-  /**
-   * Returns true if `value` is valid, and sets the `invalid` flag appropriately.
-   *
-   * @return {boolean} True if the value is valid and sets the `invalid` flag appropriately
-   */
-  validate() {
-    return !(this.invalid = !this.checkValidity());
+    return TimePicker.properties.i18n.value().parseTime(text);
   }
 
   /**
@@ -707,18 +650,24 @@ class TimePickerElement extends ElementMixin(ControlStateMixin(ThemableMixin(Pol
   }
 
   /**
-   * Returns true if the current input value satisfies all constraints (if any)
-   *
-   * You can override the `checkValidity` method for custom validations.
-   *
-   * @return {boolean} True if the value is valid
+   * Override method inherited from `ClearButtonMixin`.
+   * @protected
    */
-  checkValidity() {
-    return !!(
-      this.__inputElement.focusElement.checkValidity() &&
-      (!this.value || this._timeAllowed(this.i18n.parseTime(this.value))) &&
-      (!this.__dropdownElement.value || this.i18n.parseTime(this.__dropdownElement.value))
-    );
+  _onClearButtonClick() {}
+
+  /**
+   * Override method inherited from `InputConstraintsMixin`.
+   * @protected
+   */
+  _onChange() {}
+
+  /**
+   * Override method inherited from `InputMixin`.
+   * @protected
+   */
+  _onInput() {
+    // Need to invoke _checkInputValue from PatternMixin to prevent invalid input
+    this._checkInputValue();
   }
 
   /**
@@ -728,6 +677,6 @@ class TimePickerElement extends ElementMixin(ControlStateMixin(ThemableMixin(Pol
    */
 }
 
-customElements.define(TimePickerElement.is, TimePickerElement);
+customElements.define(TimePicker.is, TimePicker);
 
-export { TimePickerElement };
+export { TimePicker };

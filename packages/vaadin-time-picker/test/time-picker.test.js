@@ -1,10 +1,11 @@
 import { expect } from '@esm-bundle/chai';
+import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import { arrowDown, arrowUp, enter, esc, fixtureSync, keyDownOn } from '@vaadin/testing-helpers';
+import { arrowDown, arrowUp, enter, esc, fixtureSync, keyDownOn, nextFrame } from '@vaadin/testing-helpers';
 import '../vaadin-time-picker.js';
 
 describe('time-picker', () => {
-  let timePicker, dropdown, inputElement;
+  let timePicker, comboBox, inputElement;
 
   function changeInputValue(el, value) {
     el.value = value;
@@ -13,8 +14,8 @@ describe('time-picker', () => {
 
   beforeEach(() => {
     timePicker = fixtureSync(`<vaadin-time-picker></vaadin-time-picker>`);
-    dropdown = timePicker.__dropdownElement;
-    inputElement = timePicker.__inputElement;
+    comboBox = timePicker.$.comboBox;
+    inputElement = timePicker.inputElement;
   });
 
   describe('custom element definition', () => {
@@ -34,29 +35,25 @@ describe('time-picker', () => {
   });
 
   describe('value', () => {
-    it('vaadin-time-picker-text-field should exist', () => {
-      expect(inputElement.localName).to.be.equal('vaadin-time-picker-text-field');
-    });
-
     it('value property should be empty by default', () => {
       expect(timePicker.value).to.be.equal('');
     });
 
     it('should not set value if the format is invalid', () => {
-      changeInputValue(dropdown, 'invalid');
+      changeInputValue(comboBox, 'invalid');
       expect(timePicker.value).to.be.equal('');
-      expect(dropdown.value).to.be.equal('invalid');
+      expect(comboBox.value).to.be.equal('invalid');
     });
 
     it('should not allow setting invalid value programmatically', () => {
       timePicker.value = 'invalid';
       expect(timePicker.value).to.be.equal('');
-      expect(dropdown.value).to.be.equal('');
+      expect(comboBox.value).to.be.equal('');
     });
 
     it('should change value to empty string when setting invalid value', () => {
-      changeInputValue(dropdown, '09:00');
-      changeInputValue(dropdown, 'invalid');
+      changeInputValue(comboBox, '09:00');
+      changeInputValue(comboBox, 'invalid');
       expect(timePicker.value).to.be.equal('');
     });
 
@@ -77,9 +74,9 @@ describe('time-picker', () => {
     });
 
     it('input value should be constantly formatted on same input', () => {
-      dropdown.value = '12';
+      comboBox.value = '12';
       expect(inputElement.value).to.be.equal('12:00');
-      dropdown.value = '12';
+      comboBox.value = '12';
       expect(inputElement.value).to.be.equal('12:00');
     });
 
@@ -87,18 +84,18 @@ describe('time-picker', () => {
       timePicker.value = '12:00';
       timePicker.value = 'invalid';
       expect(timePicker.value).to.be.equal('12:00');
-      changeInputValue(dropdown, 'invalid');
+      changeInputValue(comboBox, 'invalid');
       expect(timePicker.value).to.be.equal('');
-      expect(dropdown.value).to.be.equal('');
+      expect(comboBox.value).to.be.equal('');
     });
 
     it('should restore the previous value in input field if input value is empty', () => {
-      dropdown.value = '12:00';
-      dropdown.value = '';
+      comboBox.value = '12:00';
+      comboBox.value = '';
       expect(timePicker.value).to.be.equal('');
-      changeInputValue(dropdown, '');
+      changeInputValue(comboBox, '');
       expect(timePicker.value).to.be.equal('');
-      expect(dropdown.value).to.be.equal('');
+      expect(comboBox.value).to.be.equal('');
     });
 
     it('should dispatch value-changed when value changes', () => {
@@ -166,98 +163,78 @@ describe('time-picker', () => {
   });
 
   describe('properties and attributes', () => {
-    ['readonly', 'required', 'disabled', 'preventInvalidInput', 'autofocus'].forEach((prop) => {
-      it(`should propagate boolean property to text-field ${prop}`, () => {
-        timePicker[prop] = true;
-        expect(inputElement[prop]).to.be.true;
-        timePicker[prop] = false;
-        expect(inputElement[prop]).to.be.false;
-      });
+    it('should propagate placeholder property to input', () => {
+      expect(inputElement.placeholder).to.be.not.ok;
+      timePicker.placeholder = 'foo';
+      expect(inputElement.placeholder).to.be.equal('foo');
     });
 
-    ['label', 'placeholder', 'pattern', 'errorMessage'].forEach((prop) => {
-      it(`should propagate string property to text-field ${prop}`, () => {
-        expect(inputElement[prop]).to.be.not.ok;
-        timePicker[prop] = 'foo';
-        expect(inputElement[prop]).to.be.equal('foo');
-      });
+    it('should propagate required property to input', () => {
+      timePicker.required = true;
+      expect(inputElement.required).to.be.true;
+
+      timePicker.required = false;
+      expect(inputElement.required).to.be.false;
     });
 
-    // they are used in both combo-box-mixin and text-field
-    ['disabled', 'readonly'].forEach((prop) => {
-      ['__inputElement', '__dropdownElement'].forEach((elem) => {
-        it(`should propagate ${prop} property and attribute to ${elem}`, () => {
-          expect(timePicker[elem][prop]).to.be.false;
-          expect(timePicker[elem].hasAttribute(prop)).to.be.false;
-          timePicker[prop] = true;
-          expect(timePicker[elem][prop]).to.be.true;
-          expect(timePicker[elem].hasAttribute(prop)).to.be.true;
-        });
-      });
+    it('should propagate pattern property to input', () => {
+      expect(inputElement.pattern).to.be.not.ok;
+      timePicker.pattern = '^1\\d:.*';
+      expect(inputElement.pattern).to.be.equal('^1\\d:.*');
     });
 
-    it('should reflect to attribute when readonly property is set', () => {
+    it('should propagate disabled property to combo-box', () => {
+      expect(comboBox.disabled).to.be.false;
+      timePicker.disabled = true;
+      expect(comboBox.disabled).to.be.true;
+    });
+
+    it('should propagate disabled property to input', () => {
+      expect(inputElement.disabled).to.be.false;
+      timePicker.disabled = true;
+      expect(inputElement.disabled).to.be.true;
+    });
+
+    it('should propagate readonly property to combo-box', () => {
+      expect(comboBox.readonly).to.be.false;
+      timePicker.readonly = true;
+      expect(comboBox.readonly).to.be.true;
+    });
+
+    it('should propagate readonly property to input', () => {
+      expect(inputElement.readonly).to.be.not.ok;
+      timePicker.readonly = true;
+      expect(inputElement.readOnly).to.be.true;
+    });
+
+    it('should reflect readonly property to attribute', () => {
       timePicker.readonly = true;
       expect(timePicker.hasAttribute('readonly')).to.be.true;
     });
-
-    describe('aria', () => {
-      it('text-field should have the `aria-label` attribute', () => {
-        expect(inputElement.hasAttribute('aria-label')).to.be.false;
-        timePicker.label = 'foo';
-        expect(inputElement.getAttribute('aria-label')).to.be.equal('foo');
-      });
-
-      it('text-field should have the `aria-live` attribute', () => {
-        expect(inputElement.getAttribute('aria-live')).to.be.equal('assertive');
-      });
-
-      it('clock:icon should have the `aria-label` attribute', () => {
-        const icon = timePicker.shadowRoot.querySelector('[part="toggle-button"]');
-        expect(icon.getAttribute('aria-label')).to.be.equal(timePicker.i18n.selector);
-      });
-    });
   });
 
-  describe('clear-button-visible', () => {
+  describe('clear button', () => {
     let clearButton;
 
     beforeEach(() => {
-      clearButton = inputElement.$.clearButton;
-    });
-
-    it('should propagate clear-button-visible attribute to text-field', () => {
+      clearButton = timePicker.$.clearButton;
       timePicker.clearButtonVisible = true;
-      expect(inputElement).to.have.property('clearButtonVisible', true);
     });
 
     it('should not show clear button when disabled', () => {
-      timePicker.clearButtonVisible = true;
       timePicker.disabled = true;
       expect(getComputedStyle(clearButton).display).to.equal('none');
     });
 
-    it('should not show clear button when read-only', () => {
-      timePicker.clearButtonVisible = true;
+    it('should not show clear button when readonly', () => {
       timePicker.readonly = true;
       expect(getComputedStyle(clearButton).display).to.equal('none');
     });
 
-    it('should have default accessible label', function () {
-      expect(clearButton.getAttribute('aria-label')).to.equal('Clear');
-    });
-
-    it('should translate accessible label with new i18n object', function () {
-      const i18n = {};
-      Object.assign(i18n, timePicker.i18n);
-      i18n.clear = 'tyhjennä';
-      timePicker.i18n = i18n;
-      expect(clearButton.getAttribute('aria-label')).to.equal('tyhjennä');
-    });
-
-    it('should translate accessible label with set API', function () {
-      timePicker.set('i18n.clear', 'tyhjennä');
-      expect(clearButton.getAttribute('aria-label')).to.equal('tyhjennä');
+    it('should not open the dropdown', () => {
+      timePicker.value = '00:00';
+      clearButton.click();
+      expect(comboBox.opened).to.be.false;
     });
   });
 
@@ -296,9 +273,8 @@ describe('time-picker', () => {
 
     it('should fire change on clear button click', () => {
       timePicker.clearButtonVisible = true;
-      const clearButton = inputElement.$.clearButton;
       timePicker.value = '00:00';
-      clearButton.dispatchEvent(new CustomEvent('click', { bubbles: true, composed: true }));
+      timePicker.$.clearButton.click();
       expect(spy.calledOnce).to.be.true;
     });
 
@@ -322,31 +298,267 @@ describe('time-picker', () => {
 
     it('should not fire change on programmatic value change after manual one', () => {
       timePicker.value = '00:00';
-      dropdown.opened = true;
-      inputElement.inputElement.value = '';
+      comboBox.opened = true;
+      inputElement.value = '';
       arrowDown(inputElement);
       enter(inputElement);
       expect(spy.calledOnce).to.be.true;
       // mimic native change happening on text-field blur
       document.body.click();
-      inputElement.inputElement.dispatchEvent(new Event('change', { bubbles: true }));
       timePicker.value = '02:00';
       expect(spy.calledOnce).to.be.true;
     });
 
     it('should not fire change if the value was not changed', () => {
       timePicker.value = '01:00';
-      dropdown.opened = true;
+      comboBox.opened = true;
       enter(inputElement);
       expect(spy.called).to.be.false;
     });
 
     it('should not fire change on revert', () => {
-      dropdown.opened = true;
+      comboBox.opened = true;
       timePicker.value = '01:00';
       esc(inputElement);
       esc(inputElement);
       expect(spy.called).to.be.false;
+    });
+
+    it('should fire just one change event', async () => {
+      timePicker.focus();
+      comboBox.opened = true;
+      await sendKeys({ type: '0' });
+      enter(inputElement);
+      inputElement.blur();
+      expect(spy.callCount).to.equal(1);
+    });
+
+    it('should not change value on input', () => {
+      inputText('00:00');
+      expect(timePicker.value).to.equal('');
+      enter(inputElement);
+      expect(timePicker.value).to.equal('00:00');
+    });
+  });
+
+  describe('min and max properties', () => {
+    it('min property should be 00:00:00.000 by default', () => {
+      expect(timePicker.min).to.be.equal('00:00:00.000');
+    });
+
+    it('max property should be 23:59:59.999 by default', () => {
+      expect(timePicker.max).to.be.equal('23:59:59.999');
+    });
+
+    it('should have dropdown items if min nor max is defined', () => {
+      expect(timePicker.__dropdownItems.length).to.be.equal(24);
+    });
+
+    it('should allow setting valid min property value', () => {
+      timePicker.min = '04:00';
+      expect(timePicker.__dropdownItems.length).to.be.equal(20);
+    });
+
+    it('should allow setting valid max property value', () => {
+      timePicker.max = '19:00';
+      expect(timePicker.__dropdownItems.length).to.be.equal(20);
+    });
+
+    it('should allow setting valid min and max property value', () => {
+      timePicker.min = '04:00';
+      timePicker.max = '19:00';
+      expect(timePicker.__dropdownItems.length).to.be.equal(16);
+    });
+
+    it('should allow setting valid min value via attribute', () => {
+      timePicker.setAttribute('min', '04:00');
+      expect(timePicker.min).to.be.equal('04:00');
+    });
+
+    it('should allow setting valid max value via attribute', () => {
+      timePicker.setAttribute('max', '19:00');
+      expect(timePicker.max).to.be.equal('19:00');
+    });
+
+    it('should allow setting valid min and max values via attributes', () => {
+      timePicker.setAttribute('min', '04:00');
+      timePicker.setAttribute('max', '19:00');
+      expect(timePicker.min).to.be.equal('04:00');
+      expect(timePicker.max).to.be.equal('19:00');
+    });
+
+    it('should not allow setting a value lower than min property value', () => {
+      timePicker.value = '02:00';
+      timePicker.min = '10:00';
+      expect(timePicker.value).to.be.equal('10:00');
+    });
+
+    it('should not allow setting a value higher than max property value', () => {
+      timePicker.value = '12:00';
+      timePicker.max = '10:00';
+      expect(timePicker.value).to.be.equal('10:00');
+    });
+
+    it('should not allow setting a value lower than min value via attribute', () => {
+      timePicker.setAttribute('value', '02:00');
+      timePicker.setAttribute('min', '10:00');
+      expect(timePicker.value).to.be.equal('10:00');
+    });
+
+    it('should not allow setting a value higher than max value via attribute', () => {
+      timePicker.setAttribute('value', '19:00');
+      timePicker.setAttribute('max', '16:00');
+      expect(timePicker.value).to.be.equal('16:00');
+    });
+
+    it('setting min should not change an empty value', () => {
+      timePicker.min = '10:00';
+      expect(timePicker.value).to.be.equal('');
+    });
+
+    it('setting max should not change an empty value', () => {
+      timePicker.max = '10:00';
+      expect(timePicker.value).to.be.equal('');
+    });
+  });
+
+  describe('step property', () => {
+    it('step property should be undefined by default', () => {
+      expect(timePicker.step).to.be.equal(undefined);
+    });
+
+    it('should have dropdown items if step is undefined', () => {
+      timePicker.step = undefined;
+      expect(timePicker.__dropdownItems.length).to.be.equal(24);
+    });
+
+    it('should have dropdown items if step is bigger or equal than 15min', () => {
+      timePicker.step = 15 * 60;
+      expect(timePicker.__dropdownItems.length).to.be.equal(96);
+    });
+
+    it('should not have dropdown items if step is lesser than 15min', () => {
+      timePicker.step = 15 * 60 - 1;
+      expect(timePicker.__dropdownItems.length).to.be.equal(0);
+    });
+
+    it('should allow setting valid step property value', () => {
+      timePicker.step = 0.5;
+      expect(timePicker.step).to.be.equal(0.5);
+    });
+
+    it('should allow setting valid step value via attribute', () => {
+      timePicker.setAttribute('step', '0.5');
+      expect(timePicker.step).to.be.equal(0.5);
+    });
+
+    it('should expand the resolution and value on step change to smaller value', () => {
+      timePicker.value = '12:00:00';
+      expect(timePicker.value).to.be.equal('12:00');
+      timePicker.step = 0.5;
+      expect(timePicker.value).to.be.equal('12:00:00.000');
+    });
+
+    it('should shrink the resolution and value on step change to bigger value', () => {
+      timePicker.value = '12:00:00';
+      expect(timePicker.value).to.be.equal('12:00');
+      timePicker.step = 3600;
+      expect(timePicker.value).to.be.equal('12:00');
+    });
+
+    it('should be possible to set hours, minutes, seconds and milliseconds with according step', () => {
+      // Hours
+      timePicker.step = 3600;
+      timePicker.value = '12';
+      expect(timePicker.value).to.be.equal('12:00');
+
+      // Minutes
+      timePicker.step = 60;
+      timePicker.value = '12:12';
+      expect(timePicker.value).to.be.equal('12:12');
+
+      // Seconds
+      timePicker.step = 1;
+      timePicker.value = '12:12:12';
+      expect(timePicker.value).to.be.equal('12:12:12');
+
+      // Milliseconds
+      timePicker.step = 0.5;
+      timePicker.value = '12:12:12.100';
+      expect(timePicker.value).to.be.equal('12:12:12.100');
+    });
+  });
+
+  describe('custom functions', () => {
+    it('should use custom parser if that exists', function () {
+      timePicker.set('i18n.parseTime', sinon.stub().returns({ hours: 12, minutes: 0, seconds: 0 }));
+      timePicker.value = '12';
+      expect(timePicker.i18n.parseTime.args[0][0]).to.be.equal('12:00');
+      expect(timePicker.value).to.be.equal('12:00');
+    });
+
+    it('should align values of dropdown and input when i18n was reassigned', function () {
+      timePicker.value = '12';
+      timePicker.set('i18n', {
+        formatTime: sinon.stub().withArgs({ hours: 12, minutes: 0 }).returns('12:00 AM'),
+        parseTime: sinon.stub().returns({ hours: 12, minutes: 0, seconds: 0 })
+      });
+      expect(comboBox.selectedItem).to.be.deep.equal({ label: '12:00 AM', value: '12:00 AM' });
+      expect(comboBox.value).to.be.equal('12:00 AM');
+      expect(inputElement.value).to.be.equal('12:00 AM');
+      expect(timePicker.value).to.be.equal('12:00');
+    });
+
+    it('should use custom formatter if that exists', function () {
+      timePicker.set('i18n', {
+        formatTime: sinon.stub().withArgs({ hours: 12, minutes: 0 }).returns('12:00 AM'),
+        parseTime: sinon.stub().returns({ hours: 12, minutes: 0, seconds: 0 })
+      });
+      timePicker.value = '12';
+      expect(timePicker.value).to.be.equal('12:00');
+      expect(comboBox.value).to.be.equal('12:00 AM');
+    });
+
+    it('should accept custom time formatter', function () {
+      timePicker.set('i18n.formatTime', sinon.stub().returns('1200'));
+      const parseTime = sinon.stub();
+      parseTime.withArgs('1200').returns({ hours: 12, minutes: 0 });
+      timePicker.set('i18n.parseTime', parseTime);
+      timePicker.value = '12:00';
+      expect(inputElement.value).to.equal('1200');
+      expect(timePicker.value).to.equal('12:00');
+    });
+  });
+
+  describe('helper text', () => {
+    it('should set helper text content using helperText property', async () => {
+      timePicker.helperText = 'foo';
+      await nextFrame();
+      expect(timePicker.querySelector('[slot="helper"]').textContent).to.eql('foo');
+    });
+
+    it('should display the helper text when slotted helper available', async () => {
+      const helper = document.createElement('div');
+      helper.setAttribute('slot', 'helper');
+      helper.textContent = 'foo';
+      timePicker.appendChild(helper);
+      await nextFrame();
+      expect(timePicker.querySelector('[slot="helper"]').textContent).to.eql('foo');
+    });
+  });
+
+  describe('theme attribute', () => {
+    beforeEach(() => {
+      timePicker.setAttribute('theme', 'foo');
+    });
+
+    it('should propagate theme attribute to input container', () => {
+      const inputField = timePicker.shadowRoot.querySelector('[part="input-field"]');
+      expect(inputField.getAttribute('theme')).to.equal('foo');
+    });
+
+    it('should propagate theme attribute to combo-box', () => {
+      expect(timePicker.$.comboBox.getAttribute('theme')).to.equal('foo');
     });
   });
 });

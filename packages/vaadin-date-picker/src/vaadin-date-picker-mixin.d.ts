@@ -97,9 +97,6 @@ interface DatePickerMixin extends DelegateFocusMixin, InputMixin, KeyboardMixin 
    *   // Translation of the Calendar icon button title.
    *   calendar: 'Calendar',
    *
-   *   // Translation of the Clear icon button title.
-   *   lear: 'Clear',
-   *
    *   // Translation of the Today shortcut button text.
    *   today: 'Today',
    *

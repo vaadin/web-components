@@ -1,5 +1,7 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
+import { sendKeys } from '@web/test-runner-commands';
+import '../common.js';
 import '../../../theme/material/vaadin-time-picker.js';
 
 describe('time-picker', () => {
@@ -14,6 +16,12 @@ describe('time-picker', () => {
 
   it('basic', async () => {
     await visualDiff(div, 'basic');
+  });
+
+  it('focus-ring', async () => {
+    await sendKeys({ press: 'Tab' });
+
+    await visualDiff(div, 'focus-ring');
   });
 
   it('disabled', async () => {
@@ -74,6 +82,13 @@ describe('time-picker', () => {
         element.value = '12:12:12.122';
         element.clearButtonVisible = true;
         await visualDiff(div, `${dir}-clear-button`);
+      });
+
+      it('opened', async () => {
+        div.style.height = '500px';
+        div.style.width = '200px';
+        element.click();
+        await visualDiff(div, `${dir}-opened`);
       });
     });
   });

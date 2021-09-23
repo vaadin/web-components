@@ -4,17 +4,17 @@ import { arrowDown, arrowUp, aTimeout, esc, fixtureSync } from '@vaadin/testing-
 import '../vaadin-time-picker.js';
 
 describe('keyboard navigation', () => {
-  let timePicker, dropdown, inputElement;
+  let timePicker, comboBox, inputElement;
 
   beforeEach(() => {
     timePicker = fixtureSync(`<vaadin-time-picker></vaadin-time-picker>`);
-    dropdown = timePicker.__dropdownElement;
-    inputElement = timePicker.__inputElement;
+    comboBox = timePicker.$.comboBox;
+    inputElement = timePicker.inputElement;
   });
 
   afterEach(async () => {
-    if (dropdown.opened) {
-      dropdown.opened = false;
+    if (comboBox.opened) {
+      comboBox.opened = false;
       await aTimeout(50);
     }
   });
@@ -154,7 +154,7 @@ describe('keyboard navigation', () => {
     it('should not change the value on arrow up, but should open the overlay', () => {
       arrowUp(inputElement);
       expect(inputElement.value).to.be.equal('');
-      expect(dropdown.opened).to.be.true;
+      expect(comboBox.opened).to.be.true;
     });
   });
 
@@ -162,7 +162,7 @@ describe('keyboard navigation', () => {
     beforeEach(() => {
       timePicker.step = 1800;
       timePicker.value = '02:00';
-      dropdown.opened = true;
+      comboBox.opened = true;
     });
 
     it('should not change the value on arrow up', () => {

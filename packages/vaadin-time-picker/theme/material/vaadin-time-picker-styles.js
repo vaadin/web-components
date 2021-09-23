@@ -1,8 +1,11 @@
-import '@vaadin/vaadin-combo-box/theme/material/vaadin-combo-box-light.js';
-import '@vaadin/vaadin-text-field/theme/material/vaadin-text-field.js';
-import { fieldButton } from '@vaadin/vaadin-material-styles/mixins/field-button.js';
-import '@vaadin/vaadin-material-styles/font-icons.js';
+/**
+ * @license
+ * Copyright (c) 2021 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+import '@vaadin/vaadin-material-styles/font-icons.js';
+import { inputFieldShared } from '@vaadin/vaadin-material-styles/mixins/input-field-shared.js';
 
 const timePicker = css`
   [part~='toggle-button']::before {
@@ -10,6 +13,4 @@ const timePicker = css`
   }
 `;
 
-registerStyles('vaadin-time-picker', [fieldButton, timePicker], {
-  moduleId: 'material-time-picker'
-});
+registerStyles('vaadin-time-picker', [inputFieldShared, timePicker], { moduleId: 'material-time-picker' });

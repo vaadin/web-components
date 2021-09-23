@@ -3,10 +3,14 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { ControlStateMixin } from '@vaadin/vaadin-control-state-mixin/vaadin-control-state-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { AriaLabelMixin } from '@vaadin/field-base/src/aria-label-mixin.js';
+import { ClearButtonMixin } from '@vaadin/field-base/src/clear-button-mixin.js';
+import { FieldAriaMixin } from '@vaadin/field-base/src/field-aria-mixin.js';
+import { InputSlotMixin } from '@vaadin/field-base/src/input-slot-mixin.js';
+import { PatternMixin } from '@vaadin/field-base/src/pattern-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { TimePickerEventMap, TimePickerI18n, TimePickerTime } from './interfaces';
+import { TimePickerEventMap, TimePickerI18n } from './interfaces';
 
 /**
  * `<vaadin-time-picker>` is a Web Component providing a time-selection field.
@@ -22,31 +26,35 @@ import { TimePickerEventMap, TimePickerI18n, TimePickerTime } from './interfaces
  *
  * ### Styling
  *
- * The following custom properties are available for styling:
+ * The following shadow DOM parts are available for styling:
  *
- * Part name | Description
+ * Part name       | Description
  * ----------------|----------------
+ * `clear-button`  | The clear button
+ * `input-field`   | Input element wrapper
  * `toggle-button` | The toggle button
+ * `label`         | The label element
+ * `error-message` | The error message element
+ * `helper-text`   | The helper text element wrapper
  *
  * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
  * The following state attributes are available for styling:
  *
- * Attribute    | Description | Part name
- * -------------|-------------|------------
- * `disabled` | Set to a disabled time picker | :host
- * `readonly` | Set to a read only time picker | :host
- * `invalid` | Set when the element is invalid | :host
- * `focused` | Set when the element is focused | :host
+ * Attribute    | Description                              | Part name
+ * -------------|------------------------------------------|------------
+ * `disabled`   | Set to a disabled time picker            | :host
+ * `readonly`   | Set to a read only time picker           | :host
+ * `invalid`    | Set when the element is invalid          | :host
+ * `focused`    | Set when the element is focused          | :host
  * `focus-ring` | Set when the element is keyboard focused | :host
  *
  * ### Internal components
  *
- * In addition to `<vaadin-select>` itself, the following internal
+ * In addition to `<vaadin-time-picker>` itself, the following internal
  * components are themable:
  *
- * - `<vaadin-time-picker-text-field>` - has the same API as [`<vaadin-text-field>`](#/elements/vaadin-text-field).
- * - [`<vaadin-combo-box-light>`](#/elements/vaadin-combo-box-light).
+ * - `<vaadin-time-picker-combo-box>` - has the same API as [`<vaadin-combo-box-light>`](#/elements/vaadin-combo-box-light).
  *
  * Note: the `theme` attribute value set on `<vaadin-time-picker>` is
  * propagated to the internal components listed above.
@@ -55,22 +63,9 @@ import { TimePickerEventMap, TimePickerI18n, TimePickerTime } from './interfaces
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  */
-declare class TimePickerElement extends ElementMixin(ControlStateMixin(ThemableMixin(HTMLElement))) {
-  /**
-   * Focusable element used by vaadin-control-state-mixin
-   */
-  readonly focusElement: HTMLElement;
-
-  /**
-   * Set to true to disable this input.
-   */
-  disabled: boolean;
-
-  /**
-   * The name of this element.
-   */
-  name: string | null | undefined;
-
+declare class TimePicker extends PatternMixin(
+  ClearButtonMixin(FieldAriaMixin(AriaLabelMixin(InputSlotMixin(ThemableMixin(ElementMixin(HTMLElement))))))
+) {
   /**
    * The time value for this element.
    *
@@ -80,54 +75,6 @@ declare class TimePickerElement extends ElementMixin(ControlStateMixin(ThemableM
    * - `hh:mm:ss.fff`
    */
   value: string;
-
-  /**
-   * The label for this element.
-   */
-  label: string | null | undefined;
-
-  /**
-   * Set to true to mark the input as required.
-   */
-  required: boolean;
-
-  /**
-   * Set to true to prevent the user from entering invalid input.
-   * @attr {boolean} prevent-invalid-input
-   */
-  preventInvalidInput: boolean | null | undefined;
-
-  /**
-   * A pattern to validate the `input` with.
-   */
-  pattern: string | null | undefined;
-
-  /**
-   * The error message to display when the input is invalid.
-   * @attr {string} error-message
-   */
-  errorMessage: string | null | undefined;
-
-  /**
-   * String used for the helper text.
-   * @attr {string} helper-text
-   */
-  helperText: string | null | undefined;
-
-  /**
-   * A placeholder string in addition to the label.
-   */
-  placeholder: string;
-
-  /**
-   * Set to true to prevent user picking a date or typing in the input.
-   */
-  readonly: boolean;
-
-  /**
-   * Set to true if the value is invalid.
-   */
-  invalid: boolean;
 
   /**
    * Minimum time allowed.
@@ -168,12 +115,6 @@ declare class TimePickerElement extends ElementMixin(ControlStateMixin(ThemableM
   step: number | null | undefined;
 
   /**
-   * Set to true to display the clear icon which clears the input.
-   * @attr {boolean} clear-button-visible
-   */
-  clearButtonVisible: boolean;
-
-  /**
    * Set true to prevent the overlay from opening automatically.
    * @attr {boolean} auto-open-disabled
    */
@@ -186,74 +127,58 @@ declare class TimePickerElement extends ElementMixin(ControlStateMixin(ThemableM
    *
    * The object has the following JSON structure:
    *
-   *           {
-   *             // A function to format given `Object` as
-   *             // time string. Object is in the format `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`
-   *             formatTime: (time) => {
-   *               // returns a string representation of the given
-   *               // object in `hh` / 'hh:mm' / 'hh:mm:ss' / 'hh:mm:ss.fff' - formats
-   *             },
+   * ```
+   * {
+   *   // A function to format given `Object` as
+   *   // time string. Object is in the format `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`
+   *   formatTime: (time) => {
+   *     // returns a string representation of the given
+   *     // object in `hh` / 'hh:mm' / 'hh:mm:ss' / 'hh:mm:ss.fff' - formats
+   *   },
    *
-   *             // A function to parse the given text to an `Object` in the format
-   *             // `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`.
-   *             // Must properly parse (at least) text
-   *             // formatted by `formatTime`.
-   *             parseTime: text => {
-   *               // Parses a string in object/string that can be formatted by`formatTime`.
-   *             }
+   *   // A function to parse the given text to an `Object` in the format
+   *   // `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`.
+   *   // Must properly parse (at least) text
+   *   // formatted by `formatTime`.
+   *   parseTime: text => {
+   *     // Parses a string in object/string that can be formatted by`formatTime`.
+   *   }
+   * }
+   * ```
    *
-   *             // Translation of the time selector icon button title.
-   *             selector: 'Time selector',
-   *
-   *             // Translation of the time selector clear button title.
-   *             clear: 'Clear'
-   *           }
+   * Both `formatTime` and `parseTime` need to be implemented
+   * to ensure the component works properly.
    */
   i18n: TimePickerI18n;
 
-  _getInputElement(): HTMLElement;
-
   /**
    * Returns true if `value` is valid, and sets the `invalid` flag appropriately.
-   *
-   * @returns True if the value is valid and sets the `invalid` flag appropriately
    */
   validate(): boolean;
 
   /**
-   * Returns true if `time` satisfies the `min` and `max` constraints (if any).
-   *
-   * @param time Value to check against constraints
-   * @returns True if `time` satisfies the constraints
-   */
-  _timeAllowed(time: TimePickerTime): boolean;
-
-  /**
-   * Returns true if the current input value satisfies all constraints (if any)
-   *
-   * You can override the `checkValidity` method for custom validations.
-   *
-   * @returns True if the value is valid
+   * Returns true if the current input value satisfies all constraints (if any).
+   * You can override this method for custom validations.
    */
   checkValidity(): boolean;
 
   addEventListener<K extends keyof TimePickerEventMap>(
     type: K,
-    listener: (this: TimePickerElement, ev: TimePickerEventMap[K]) => void,
+    listener: (this: TimePicker, ev: TimePickerEventMap[K]) => void,
     options?: boolean | AddEventListenerOptions
   ): void;
 
   removeEventListener<K extends keyof TimePickerEventMap>(
     type: K,
-    listener: (this: TimePickerElement, ev: TimePickerEventMap[K]) => void,
+    listener: (this: TimePicker, ev: TimePickerEventMap[K]) => void,
     options?: boolean | EventListenerOptions
   ): void;
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-time-picker': TimePickerElement;
+    'vaadin-time-picker': TimePicker;
   }
 }
 
-export { TimePickerElement };
+export { TimePicker };
