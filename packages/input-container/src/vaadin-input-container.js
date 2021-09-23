@@ -18,7 +18,7 @@ export class InputContainer extends ThemableMixin(DirMixin(PolymerElement)) {
         :host {
           display: flex;
           align-items: center;
-          flex: auto;
+          flex: 0 1 auto;
         }
 
         :host([hidden]) {
