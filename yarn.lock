@@ -8235,6 +8235,11 @@ nanocolors@^0.1.5:
   resolved "https://registry.yarnpkg.com/nanocolors/-/nanocolors-0.1.6.tgz#bc2350d3edfdbfadd7ac018c855ae7c13905a6ad"
   integrity sha512-2pvTw6vYRaBLGir2xR7MxaJtyWkrn+C53EpW8yPotG+pdAwBvt0Xwk4VJ6VHLY0aLthVZPvDfm9TdZvrvAm5UQ==
 
+nanoid@^3.1.25:
+  version "3.1.25"
+  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.1.25.tgz#09ca32747c0e543f0e1814b7d3793477f9c8e152"
+  integrity sha512-rdwtIXaXCLFAQbnfqDRnI6jaRHp9fTcYBjtFKE8eezcZ7LuLjhUaQGNeMXf1HmRoCH32CLz6XwX0TtxEOS/A3Q==
+
 nanomatch@^1.2.9:
   version "1.2.13"
   resolved "https://registry.yarnpkg.com/nanomatch/-/nanomatch-1.2.13.tgz#b87a8aa4fc0de8fe6be88895b38983ff265bd119"
@@ -8721,6 +8726,11 @@ octokit@^1.5.0:
     "@octokit/plugin-retry" "^3.0.9"
     "@octokit/plugin-throttling" "^3.5.1"
     "@octokit/types" "^6.26.0"
+
+odiff-bin@^2.4.2:
+  version "2.4.2"
+  resolved "https://registry.yarnpkg.com/odiff-bin/-/odiff-bin-2.4.2.tgz#daaced9072fbe38812933970f77b04378f931430"
+  integrity sha512-NEekJemHHvQItmJIPzLHxnqVDbHLYNGk4fpdNx5Di3NySR7Dug2d5kwjCmCGFHPxTTM6m/UJbMJlhXSBPD/i0A==
 
 on-finished@^2.3.0:
   version "2.3.0"

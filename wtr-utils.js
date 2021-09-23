@@ -6,6 +6,7 @@ const glob = require('glob');
 const { execSync } = require('child_process');
 const { createSauceLabsLauncher } = require('@web/test-runner-saucelabs');
 const { visualRegressionPlugin } = require('@web/test-runner-visual-regression/plugin');
+const { imageDiff } = require('./wtr-odiff.js');
 
 const HIDDEN_WARNINGS = [
   '<vaadin-crud> Unable to autoconfigure form because the data structure is unknown. Either specify `include` or ensure at least one item is available beforehand.',
@@ -326,6 +327,7 @@ const createVisualTestsConfig = (theme) => {
         getBaselineName: getBaselineScreenshotName,
         getDiffName: getDiffScreenshotName,
         getFailedName: getFailedScreenshotName,
+        getImageDiff: imageDiff,
         diffOptions: {
           threshold: 0.2
         },

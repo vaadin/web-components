@@ -1,6 +1,7 @@
 node_modules
 coverage
 dist
+tmp
 analysis.json
 yarn-error.log
 .env
