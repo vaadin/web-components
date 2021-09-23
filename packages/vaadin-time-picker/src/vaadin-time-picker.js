@@ -672,6 +672,12 @@ class TimePicker extends PatternMixin(
   _onClearButtonClick() {}
 
   /**
+   * Override method inherited from `InputConstraintsMixin`.
+   * @protected
+   */
+  _onChange() {}
+
+  /**
    * Fired when the user commits a value change.
    *
    * @event change

@@ -1,4 +1,5 @@
 import { expect } from '@esm-bundle/chai';
+import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import { arrowDown, arrowUp, enter, esc, fixtureSync, keyDownOn, nextFrame } from '@vaadin/testing-helpers';
 import '../vaadin-time-picker.js';
@@ -321,6 +322,15 @@ describe('time-picker', () => {
       esc(inputElement);
       esc(inputElement);
       expect(spy.called).to.be.false;
+    });
+
+    it('should fire just one change event', async () => {
+      timePicker.focus();
+      comboBox.opened = true;
+      await sendKeys({ type: '0' });
+      enter(inputElement);
+      inputElement.blur();
+      expect(spy.callCount).to.equal(1);
     });
   });
 
