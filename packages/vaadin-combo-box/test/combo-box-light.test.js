@@ -353,10 +353,11 @@ describe('paper-input', () => {
       expect(comboBox.opened).to.be.false;
     });
 
-    it('should cancel click event to avoid input blur', () => {
+    it('should prevent mousedown event to avoid input blur', () => {
       comboBox.open();
 
-      const event = click(clearButton);
+      const event = new CustomEvent('mousedown', { cancelable: true });
+      clearButton.dispatchEvent(event);
 
       expect(event.defaultPrevented).to.be.true;
     });

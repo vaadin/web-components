@@ -288,13 +288,13 @@ describe('clearing a selection', () => {
     expect(comboBox.opened).to.eql(false);
   });
 
-  it('should cancel click event to avoid input blur', () => {
+  it('should prevent mousedown event to avoid input blur', () => {
     comboBox.open();
 
-    const event = new CustomEvent('click', { composed: true, cancelable: true });
+    const event = new CustomEvent('mousedown', { cancelable: true });
     clearIcon.dispatchEvent(event);
 
-    expect(event.defaultPrevented).to.eql(true);
+    expect(event.defaultPrevented).to.be.true;
   });
 });
 

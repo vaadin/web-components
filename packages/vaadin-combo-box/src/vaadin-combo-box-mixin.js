@@ -206,6 +206,7 @@ export const ComboBoxMixin = (subclass) =>
       super();
       this._boundOnFocusout = this._onFocusout.bind(this);
       this._boundOverlaySelectedItemChanged = this._overlaySelectedItemChanged.bind(this);
+      this._boundOnClearButtonMouseDown = this.__onClearButtonMouseDown.bind(this);
       this._boundClose = this.close.bind(this);
       this._boundOnOpened = this._onOpened.bind(this);
       this._boundOnClick = this._onClick.bind(this);
@@ -249,6 +250,10 @@ export const ComboBoxMixin = (subclass) =>
         input.setAttribute('aria-expanded', this.opened);
 
         this._revertInputValueToValue();
+
+        if (this.clearElement) {
+          this.clearElement.addEventListener('mousedown', this._boundOnClearButtonMouseDown);
+        }
       }
     }
 
@@ -374,7 +379,6 @@ export const ComboBoxMixin = (subclass) =>
     _handleClearButtonClick(event) {
       event.preventDefault();
       this._clear();
-      this.focus();
     }
 
     /** @private */
@@ -972,6 +976,12 @@ export const ComboBoxMixin = (subclass) =>
     }
 
     /** @private */
+    __onClearButtonMouseDown(event) {
+      event.preventDefault(); // Prevent native focusout event
+      this.inputElement.focus();
+    }
+
+    /** @private */
     _onFocusout(event) {
       // Fixes the problem with `focusout` happening when clicking on the scroll bar on Edge
       if (event.relatedTarget === this.$.dropdown.$.overlay) {
@@ -1014,31 +1024,6 @@ export const ComboBoxMixin = (subclass) =>
       }
 
       return !this.required || !!this.value;
-    }
-
-    /** @protected */
-    _preventInputBlur() {
-      if (this._toggleElement) {
-        this._toggleElement.addEventListener('click', this._preventDefault);
-      }
-      if (this._clearElement) {
-        this._clearElement.addEventListener('click', this._preventDefault);
-      }
-    }
-
-    /** @protected */
-    _restoreInputBlur() {
-      if (this._toggleElement) {
-        this._toggleElement.removeEventListener('click', this._preventDefault);
-      }
-      if (this._clearElement) {
-        this._clearElement.removeEventListener('click', this._preventDefault);
-      }
-    }
-
-    /** @private */
-    _preventDefault(e) {
-      e.preventDefault();
     }
 
     /**
