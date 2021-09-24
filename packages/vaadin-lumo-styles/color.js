@@ -31,8 +31,8 @@ const colorBase = css`
     --lumo-shade-30pct: hsla(214, 50%, 22%, 0.26);
     --lumo-shade-40pct: hsla(214, 47%, 21%, 0.38);
     --lumo-shade-50pct: hsla(214, 45%, 20%, 0.52);
-    --lumo-shade-60pct: hsla(214, 43%, 19%, 0.61);
-    --lumo-shade-70pct: hsla(214, 42%, 18%, 0.72);
+    --lumo-shade-60pct: hsla(214, 43%, 19%, 0.6);
+    --lumo-shade-70pct: hsla(214, 42%, 18%, 0.69);
     --lumo-shade-80pct: hsla(214, 41%, 17%, 0.83);
     --lumo-shade-90pct: hsla(214, 40%, 16%, 0.94);
     --lumo-shade: hsl(214, 35%, 15%);
@@ -96,8 +96,8 @@ const color = css`
     --lumo-tint-30pct: hsla(214, 69%, 84%, 0.32);
     --lumo-tint-40pct: hsla(214, 73%, 86%, 0.41);
     --lumo-tint-50pct: hsla(214, 78%, 88%, 0.5);
-    --lumo-tint-60pct: hsla(214, 82%, 90%, 0.6);
-    --lumo-tint-70pct: hsla(214, 87%, 92%, 0.7);
+    --lumo-tint-60pct: hsla(214, 82%, 90%, 0.58);
+    --lumo-tint-70pct: hsla(214, 87%, 92%, 0.69);
     --lumo-tint-80pct: hsla(214, 91%, 94%, 0.8);
     --lumo-tint-90pct: hsla(214, 96%, 96%, 0.9);
     --lumo-tint: hsl(214, 100%, 98%);
