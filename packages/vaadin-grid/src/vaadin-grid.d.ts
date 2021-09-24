@@ -387,8 +387,6 @@ declare class GridElement<TItem = GridDefaultItem> extends HTMLElement {
    */
   notifyResize(): void;
 
-  __forceReflow(): void;
-
   addEventListener<K extends keyof GridEventMap<TItem>>(
     type: K,
     listener: (this: GridElement<TItem>, ev: GridEventMap<TItem>[K]) => void,
