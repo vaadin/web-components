@@ -1,14 +1,14 @@
 /* @web/test-runner snapshot v1 */
 export const snapshots = {};
 
-snapshots["vaadin-email-field default"] = 
+snapshots["vaadin-email-field default"] =
 `<div part="container">
   <div part="label">
     <slot name="label">
     </slot>
     <span
       aria-hidden="true"
-      part="indicator"
+      part="required-indicator"
     >
     </span>
   </div>
@@ -44,14 +44,14 @@ snapshots["vaadin-email-field default"] =
 `;
 /* end snapshot vaadin-email-field default */
 
-snapshots["vaadin-email-field disabled"] = 
+snapshots["vaadin-email-field disabled"] =
 `<div part="container">
   <div part="label">
     <slot name="label">
     </slot>
     <span
       aria-hidden="true"
-      part="indicator"
+      part="required-indicator"
     >
     </span>
   </div>
@@ -90,14 +90,14 @@ snapshots["vaadin-email-field disabled"] =
 `;
 /* end snapshot vaadin-email-field disabled */
 
-snapshots["vaadin-email-field readonly"] = 
+snapshots["vaadin-email-field readonly"] =
 `<div part="container">
   <div part="label">
     <slot name="label">
     </slot>
     <span
       aria-hidden="true"
-      part="indicator"
+      part="required-indicator"
     >
     </span>
   </div>
@@ -136,14 +136,14 @@ snapshots["vaadin-email-field readonly"] =
 `;
 /* end snapshot vaadin-email-field readonly */
 
-snapshots["vaadin-email-field invalid"] = 
+snapshots["vaadin-email-field invalid"] =
 `<div part="container">
   <div part="label">
     <slot name="label">
     </slot>
     <span
       aria-hidden="true"
-      part="indicator"
+      part="required-indicator"
     >
     </span>
   </div>
@@ -182,14 +182,14 @@ snapshots["vaadin-email-field invalid"] =
 `;
 /* end snapshot vaadin-email-field invalid */
 
-snapshots["vaadin-email-field theme"] = 
+snapshots["vaadin-email-field theme"] =
 `<div part="container">
   <div part="label">
     <slot name="label">
     </slot>
     <span
       aria-hidden="true"
-      part="indicator"
+      part="required-indicator"
     >
     </span>
   </div>
@@ -228,7 +228,7 @@ snapshots["vaadin-email-field theme"] =
 `;
 /* end snapshot vaadin-email-field theme */
 
-snapshots["vaadin-email-field slots"] = 
+snapshots["vaadin-email-field slots"] =
 `<input
   autocapitalize="off"
   slot="input"

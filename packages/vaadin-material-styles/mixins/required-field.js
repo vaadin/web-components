@@ -26,7 +26,7 @@ const requiredField = css`
   /* TODO: remove old pseudo element when the following components are updated to use new indicator:
     combo-box, date-picker, time-picker, date-time-picker, select. */
   :host([required]) [part='label']::after,
-  :host([required]) [part='indicator']::after {
+  :host([required]) [part='required-indicator']::after {
     content: ' *';
     color: inherit;
   }
