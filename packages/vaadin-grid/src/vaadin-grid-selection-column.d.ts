@@ -38,17 +38,6 @@ export interface GridSelectionColumnEventMap extends HTMLElementEventMap, GridSe
  */
 declare class GridSelectionColumnElement<TItem = GridDefaultItem> extends GridColumnElement<TItem> {
   /**
-   * Width of the cells for this column.
-   */
-  width: string | null | undefined;
-
-  /**
-   * Flex grow ratio for the cell widths. When set to 0, cell width is fixed.
-   * @attr {number} flex-grow
-   */
-  flexGrow: number;
-
-  /**
    * When true, all the items are selected.
    * @attr {boolean} select-all
    */

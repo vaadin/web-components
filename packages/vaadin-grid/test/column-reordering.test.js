@@ -290,16 +290,6 @@ describe('reordering simple grid', () => {
       expect(col._order).to.equal(50000000);
     });
 
-    it('should not toggle last-column for cells on existing rows', () => {
-      const attributeSpy = sinon.spy(grid, '_toggleAttribute');
-      grid.size++;
-      flushGrid(grid);
-
-      const calls = attributeSpy.getCalls().filter((f) => f.args[0] === 'last-column');
-      const columnCount = grid.querySelectorAll('vaadin-grid-column').length;
-      expect(calls.length).to.equal(columnCount);
-    });
-
     it('should fire `column-reorder` event with columns', () => {
       const spy = sinon.spy();
       grid.addEventListener('column-reorder', spy);
