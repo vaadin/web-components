@@ -2,14 +2,32 @@ import { DomModule } from '@polymer/polymer/lib/elements/dom-module.js';
 import { stylesFromTemplate } from '@polymer/polymer/lib/utils/style-gather.js';
 import { unsafeCSS } from 'lit';
 
-window.Vaadin = window.Vaadin || {};
-window.Vaadin.domModuleStyling = {};
+const styleModules = {};
+
+/**
+ * @typedef CSSResult
+ * @type {any}
+ *
+ * @typedef DomModuleWithCachedStyles
+ * @type {DomModule & {__allStyles?: CSSResult[], __partialStyles?: CSSResult[]}}
+ */
 
 let moduleIdIndex = 0;
 
-window.Vaadin.domModuleStyling.registerStyles = (themeFor, styles = [], options = {}) => {
+/**
+ * Registers CSS styles for a component type. Make sure to register the styles before
+ * the first instance of a component of the type is attached to DOM.
+ *
+ * @param {String} themeFor The local/tag name of the component type to register the styles for
+ * @param {CSSResult[]} styles The CSS style rules to be registered for the component type
+ * matching themeFor and included in the local scope of each component instance
+ * @param {{moduleId?: String, include?: String}} options Additional options
+ * @return {void}
+ */
+styleModules.registerStyles = (themeFor, styles = [], options = {}) => {
   const themeId = options.moduleId || `custom-style-module-${moduleIdIndex++}`;
 
+  /** @type {DomModuleWithCachedStyles} */
   const module = document.createElement('dom-module');
 
   if (themeFor) {
@@ -50,11 +68,12 @@ function getModuleStyles(module) {
   });
 }
 
-window.Vaadin.domModuleStyling.getAllThemes = () => {
+styleModules.getAllThemes = () => {
   const domModule = DomModule;
   const modules = domModule.prototype.modules;
 
   return Object.keys(modules).map((moduleName) => {
+    /** @type {DomModuleWithCachedStyles} */
     const module = modules[moduleName];
     module.__allStyles = module.__allStyles || getModuleStyles(module).concat(module.__partialStyles || []);
 
@@ -65,3 +84,6 @@ window.Vaadin.domModuleStyling.getAllThemes = () => {
     };
   });
 };
+
+window.Vaadin = window.Vaadin || {};
+window.Vaadin.styleModules = styleModules;

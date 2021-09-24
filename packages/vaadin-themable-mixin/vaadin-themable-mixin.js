@@ -41,8 +41,8 @@ export function registerStyles(themeFor, styles, options = {}) {
 
   styles = recursiveFlattenStyles(styles);
 
-  if (window.Vaadin && window.Vaadin.domModuleStyling) {
-    window.Vaadin.domModuleStyling.registerStyles(themeFor, styles, options);
+  if (window.Vaadin && window.Vaadin.styleModules) {
+    window.Vaadin.styleModules.registerStyles(themeFor, styles, options);
   } else {
     themeRegistry.push({
       themeFor,
@@ -55,18 +55,18 @@ export function registerStyles(themeFor, styles, options = {}) {
 
 /**
  * Returns all registered themes. By default the themes are obtained from the themeRegistry.
- * In case vaadin-dom-module-styling adapter is imported, the themes are obtained from there instead
+ * In case style-modules adapter is imported, the themes are obtained from there instead
  * @returns {Theme[]}
  */
 function getAllThemes() {
-  if (window.Vaadin && window.Vaadin.domModuleStyling) {
+  if (window.Vaadin && window.Vaadin.styleModules) {
     if (themeRegistry.length > 0) {
       console.warn(`Seems that styles have been registered before the
 <dom-module> styling adapter was imported.
 Make sure to import the adapter before registering any styles.`);
     }
 
-    return window.Vaadin.domModuleStyling.getAllThemes();
+    return window.Vaadin.styleModules.getAllThemes();
   } else {
     return themeRegistry;
   }

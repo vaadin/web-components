@@ -1,10 +1,10 @@
 {
-  "name": "@vaadin/dom-module-styling",
+  "name": "@vaadin/polymer-legacy-adapter",
   "version": "22.0.0-alpha6",
-  "description": "dom-module-styling",
-  "main": "dom-module-styling.js",
-  "module": "dom-module-styling.js",
-  "repository": "vaadin/dom-module-styling",
+  "description": "polymer-legacy-adapter",
+  "main": "index.js",
+  "module": "index.js",
+  "repository": "vaadin/polymer-legacy-adapter",
   "keywords": [
     "Vaadin",
     "web-components",

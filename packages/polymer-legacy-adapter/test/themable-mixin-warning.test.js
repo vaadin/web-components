@@ -36,7 +36,7 @@ describe('warnings', () => {
     registerStyles(customElementName, css``);
 
     // Import the adapter
-    await import('../dom-module-styling.js');
+    await import('../style-modules.js');
 
     // Define the custom element
     fixtureSync('<custom-element>');
