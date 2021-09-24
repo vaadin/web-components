@@ -1,14 +1,14 @@
 /* @web/test-runner snapshot v1 */
 export const snapshots = {};
 
-snapshots["vaadin-text-area default"] = 
+snapshots["vaadin-text-area default"] =
 `<div part="container">
   <div part="label">
     <slot name="label">
     </slot>
     <span
       aria-hidden="true"
-      part="indicator"
+      part="required-indicator"
     >
     </span>
   </div>
@@ -44,14 +44,14 @@ snapshots["vaadin-text-area default"] =
 `;
 /* end snapshot vaadin-text-area default */
 
-snapshots["vaadin-text-area disabled"] = 
+snapshots["vaadin-text-area disabled"] =
 `<div part="container">
   <div part="label">
     <slot name="label">
     </slot>
     <span
       aria-hidden="true"
-      part="indicator"
+      part="required-indicator"
     >
     </span>
   </div>
@@ -90,14 +90,14 @@ snapshots["vaadin-text-area disabled"] =
 `;
 /* end snapshot vaadin-text-area disabled */
 
-snapshots["vaadin-text-area readonly"] = 
+snapshots["vaadin-text-area readonly"] =
 `<div part="container">
   <div part="label">
     <slot name="label">
     </slot>
     <span
       aria-hidden="true"
-      part="indicator"
+      part="required-indicator"
     >
     </span>
   </div>
@@ -136,14 +136,14 @@ snapshots["vaadin-text-area readonly"] =
 `;
 /* end snapshot vaadin-text-area readonly */
 
-snapshots["vaadin-text-area invalid"] = 
+snapshots["vaadin-text-area invalid"] =
 `<div part="container">
   <div part="label">
     <slot name="label">
     </slot>
     <span
       aria-hidden="true"
-      part="indicator"
+      part="required-indicator"
     >
     </span>
   </div>
@@ -182,14 +182,14 @@ snapshots["vaadin-text-area invalid"] =
 `;
 /* end snapshot vaadin-text-area invalid */
 
-snapshots["vaadin-text-area theme"] = 
+snapshots["vaadin-text-area theme"] =
 `<div part="container">
   <div part="label">
     <slot name="label">
     </slot>
     <span
       aria-hidden="true"
-      part="indicator"
+      part="required-indicator"
     >
     </span>
   </div>
@@ -228,7 +228,7 @@ snapshots["vaadin-text-area theme"] =
 `;
 /* end snapshot vaadin-text-area theme */
 
-snapshots["vaadin-text-area slots"] = 
+snapshots["vaadin-text-area slots"] =
 `<textarea slot="textarea">
 </textarea>
 <label slot="label">

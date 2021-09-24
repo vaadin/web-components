@@ -143,7 +143,7 @@ export class TextArea extends CharLengthMixin(
       <div part="container">
         <div part="label">
           <slot name="label"></slot>
-          <span part="indicator" aria-hidden="true"></span>
+          <span part="required-indicator" aria-hidden="true"></span>
         </div>
 
         <vaadin-input-container
