@@ -72,8 +72,6 @@ interface DataProviderMixin<TItem> {
    */
   readonly loading: boolean | null | undefined;
 
-  _cache: ItemCache<TItem>;
-
   /**
    * Path to an item sub-property that identifies the item.
    * @attr {string} item-id-path
@@ -85,15 +83,11 @@ interface DataProviderMixin<TItem> {
    */
   expandedItems: TItem[];
 
-  _getItem(index: number, el: HTMLElement | null): void;
-
   /**
    * Returns a value that identifies the item. Uses `itemIdPath` if available.
    * Can be customized by overriding.
    */
   getItemId(item: TItem): TItem | unknown;
-
-  _isExpanded(item: TItem): boolean;
 
   /**
    * Expands the given item tree.
@@ -105,22 +99,10 @@ interface DataProviderMixin<TItem> {
    */
   collapseItem(item: TItem): void;
 
-  _getIndexLevel(index: number): number;
-
-  _loadPage(page: number, cache: ItemCache<TItem> | null): void;
-
   /**
    * Clears the cached pages and reloads data from dataprovider when needed.
    */
   clearCache(): void;
-
-  _checkSize(): void;
-
-  _ensureFirstPageLoaded(): void;
-
-  _itemsEqual(item1: TItem, item2: TItem): boolean;
-
-  _getItemIndexInArray(item: TItem, array: TItem[]): number;
 }
 
 export { DataProviderMixin, DataProviderMixinConstructor, ItemCache };

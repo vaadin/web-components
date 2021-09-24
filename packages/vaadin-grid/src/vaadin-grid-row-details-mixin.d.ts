@@ -30,16 +30,6 @@ interface RowDetailsMixin<TItem> {
    */
   rowDetailsRenderer: GridRowDetailsRenderer<TItem> | null | undefined;
 
-  _detailsCells: HTMLElement[] | undefined;
-
-  _configureDetailsCell(cell: HTMLElement): void;
-
-  _toggleDetailsCell(row: HTMLElement, detailsOpened: boolean): void;
-
-  _updateDetailsCellHeights(): void;
-
-  _isDetailsOpened(item: TItem): boolean;
-
   /**
    * Open the details row of a given item.
    */

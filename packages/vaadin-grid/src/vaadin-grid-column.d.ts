@@ -42,12 +42,6 @@ interface ColumnBaseMixin<TItem> {
    */
   textAlign: GridColumnTextAlign | null | undefined;
 
-  _lastFrozen: boolean;
-
-  _order: number | null | undefined;
-
-  _emptyCells: HTMLElement[] | null;
-
   /**
    * Custom function for rendering the header content.
    * Receives two arguments:
@@ -65,10 +59,6 @@ interface ColumnBaseMixin<TItem> {
    * - `column` The `<vaadin-grid-column>` element.
    */
   footerRenderer: GridHeaderFooterRenderer<TItem> | null | undefined;
-
-  _findHostGrid(): GridElement<TItem> | undefined;
-
-  _generateHeader(path: string): string;
 }
 
 /**
@@ -130,8 +120,6 @@ declare class GridColumnElement<TItem = GridDefaultItem> extends HTMLElement {
    * @attr {boolean} auto-width
    */
   autoWidth: boolean;
-
-  _cells: HTMLElement[] | null;
 }
 
 interface GridColumnElement<TItem = GridDefaultItem> extends ColumnBaseMixin<TItem> {}
