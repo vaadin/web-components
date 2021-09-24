@@ -1,7 +1,7 @@
 /* @web/test-runner snapshot v1 */
 export const snapshots = {};
 
-snapshots["vaadin-select default"] =
+snapshots["vaadin-select default"] = 
 `<div part="container">
   <div part="label">
     <slot name="label">
@@ -42,7 +42,7 @@ snapshots["vaadin-select default"] =
 `;
 /* end snapshot vaadin-select default */
 
-snapshots["vaadin-select disabled"] =
+snapshots["vaadin-select disabled"] = 
 `<div part="container">
   <div part="label">
     <slot name="label">
@@ -86,7 +86,7 @@ snapshots["vaadin-select disabled"] =
 `;
 /* end snapshot vaadin-select disabled */
 
-snapshots["vaadin-select readonly"] =
+snapshots["vaadin-select readonly"] = 
 `<div part="container">
   <div part="label">
     <slot name="label">
@@ -130,7 +130,7 @@ snapshots["vaadin-select readonly"] =
 `;
 /* end snapshot vaadin-select readonly */
 
-snapshots["vaadin-select invalid"] =
+snapshots["vaadin-select invalid"] = 
 `<div part="container">
   <div part="label">
     <slot name="label">
@@ -174,7 +174,7 @@ snapshots["vaadin-select invalid"] =
 `;
 /* end snapshot vaadin-select invalid */
 
-snapshots["vaadin-select theme"] =
+snapshots["vaadin-select theme"] = 
 `<div part="container">
   <div part="label">
     <slot name="label">
@@ -218,7 +218,7 @@ snapshots["vaadin-select theme"] =
 `;
 /* end snapshot vaadin-select theme */
 
-snapshots["vaadin-select slots"] =
+snapshots["vaadin-select slots"] = 
 `<label slot="label">
 </label>
 <div

@@ -1,7 +1,7 @@
 /* @web/test-runner snapshot v1 */
 export const snapshots = {};
 
-snapshots["vaadin-integer-field default"] =
+snapshots["vaadin-integer-field default"] = 
 `<div part="container">
   <div part="label">
     <slot name="label">
@@ -56,7 +56,7 @@ snapshots["vaadin-integer-field default"] =
 `;
 /* end snapshot vaadin-integer-field default */
 
-snapshots["vaadin-integer-field controls"] =
+snapshots["vaadin-integer-field controls"] = 
 `<div part="container">
   <div part="label">
     <slot name="label">
@@ -109,7 +109,7 @@ snapshots["vaadin-integer-field controls"] =
 `;
 /* end snapshot vaadin-integer-field controls */
 
-snapshots["vaadin-integer-field disabled"] =
+snapshots["vaadin-integer-field disabled"] = 
 `<div part="container">
   <div part="label">
     <slot name="label">
@@ -167,7 +167,7 @@ snapshots["vaadin-integer-field disabled"] =
 `;
 /* end snapshot vaadin-integer-field disabled */
 
-snapshots["vaadin-integer-field readonly"] =
+snapshots["vaadin-integer-field readonly"] = 
 `<div part="container">
   <div part="label">
     <slot name="label">
@@ -225,7 +225,7 @@ snapshots["vaadin-integer-field readonly"] =
 `;
 /* end snapshot vaadin-integer-field readonly */
 
-snapshots["vaadin-integer-field invalid"] =
+snapshots["vaadin-integer-field invalid"] = 
 `<div part="container">
   <div part="label">
     <slot name="label">
@@ -283,7 +283,7 @@ snapshots["vaadin-integer-field invalid"] =
 `;
 /* end snapshot vaadin-integer-field invalid */
 
-snapshots["vaadin-integer-field theme"] =
+snapshots["vaadin-integer-field theme"] = 
 `<div part="container">
   <div part="label">
     <slot name="label">
@@ -341,7 +341,7 @@ snapshots["vaadin-integer-field theme"] =
 `;
 /* end snapshot vaadin-integer-field theme */
 
-snapshots["vaadin-integer-field slots"] =
+snapshots["vaadin-integer-field slots"] = 
 `<input
   max="undefined"
   min="undefined"

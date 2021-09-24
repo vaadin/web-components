@@ -1,7 +1,7 @@
 /* @web/test-runner snapshot v1 */
 export const snapshots = {};
 
-snapshots["vaadin-password-field default"] =
+snapshots["vaadin-password-field default"] = 
 `<div part="container">
   <div part="label">
     <slot name="label">
@@ -51,7 +51,7 @@ snapshots["vaadin-password-field default"] =
 `;
 /* end snapshot vaadin-password-field default */
 
-snapshots["vaadin-password-field disabled"] =
+snapshots["vaadin-password-field disabled"] = 
 `<div part="container">
   <div part="label">
     <slot name="label">
@@ -104,7 +104,7 @@ snapshots["vaadin-password-field disabled"] =
 `;
 /* end snapshot vaadin-password-field disabled */
 
-snapshots["vaadin-password-field readonly"] =
+snapshots["vaadin-password-field readonly"] = 
 `<div part="container">
   <div part="label">
     <slot name="label">
@@ -157,7 +157,7 @@ snapshots["vaadin-password-field readonly"] =
 `;
 /* end snapshot vaadin-password-field readonly */
 
-snapshots["vaadin-password-field invalid"] =
+snapshots["vaadin-password-field invalid"] = 
 `<div part="container">
   <div part="label">
     <slot name="label">
@@ -210,7 +210,7 @@ snapshots["vaadin-password-field invalid"] =
 `;
 /* end snapshot vaadin-password-field invalid */
 
-snapshots["vaadin-password-field theme"] =
+snapshots["vaadin-password-field theme"] = 
 `<div part="container">
   <div part="label">
     <slot name="label">
@@ -263,7 +263,7 @@ snapshots["vaadin-password-field theme"] =
 `;
 /* end snapshot vaadin-password-field theme */
 
-snapshots["vaadin-password-field slots"] =
+snapshots["vaadin-password-field slots"] = 
 `<input
   autocapitalize="off"
   slot="input"
