@@ -25,7 +25,7 @@ const themeRegistry = [];
  * @param {String} themeFor The local/tag name of the component type to register the styles for
  * @param {CSSResultGroup} styles The CSS style rules to be registered for the component type
  * matching themeFor and included in the local scope of each component instance
- * @param {Object=} options Additional options
+ * @param {{moduleId?: String, include?: String | String[]}} options Additional options
  * @return {void}
  */
 export function registerStyles(themeFor, styles, options = {}) {
@@ -212,6 +212,10 @@ export const ThemableMixin = (superClass) =>
 
     /**
      * Covers LitElement based component styling
+     *
+     * NOTE: This is not yet an offically supported API!
+     *
+     * TODO: Add tests (run a variation of themable-mixin.test.js where the components get created as LitElements)
      * @protected
      */
     static finalizeStyles(styles) {
