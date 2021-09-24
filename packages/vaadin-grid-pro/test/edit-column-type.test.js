@@ -11,7 +11,7 @@ import {
   nextRender,
   space
 } from '@vaadin/testing-helpers';
-import { TextFieldElement } from '@vaadin/vaadin-text-field/src/vaadin-text-field.js';
+import { TextField } from '@vaadin/text-field/src/vaadin-text-field.js';
 import { Checkbox } from '@vaadin/checkbox/src/vaadin-checkbox.js';
 import { Select } from '@vaadin/select/src/vaadin-select.js';
 import '@vaadin/vaadin-template-renderer';
@@ -50,7 +50,7 @@ describe('edit column editor type', () => {
       cell = getContainerCell(grid.$.items, 0, 0);
       dblclick(cell._content);
       editor = column._getEditorComponent(cell);
-      expect(editor instanceof TextFieldElement).to.equal(true);
+      expect(editor instanceof TextField).to.equal(true);
     });
 
     it('should render the select to cell with select editor type specified', () => {
