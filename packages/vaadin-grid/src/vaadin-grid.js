@@ -366,8 +366,7 @@ class GridElement extends ElementMixin(
       allRowsVisible: {
         type: Boolean,
         value: false,
-        reflectToAttribute: true,
-        observer: '_allRowsVisibleChanged'
+        reflectToAttribute: true
       },
 
       /** @private */
@@ -791,7 +790,6 @@ class GridElement extends ElementMixin(
 
     if (row.hidden !== !visibleRowCells.length) {
       row.hidden = !visibleRowCells.length;
-      this.notifyResize();
     }
   }
 
@@ -917,7 +915,6 @@ class GridElement extends ElementMixin(
     // ShadyCSS applies scoping suffixes to animation names
     if (e.animationName.indexOf('vaadin-grid-appear') === 0) {
       e.stopPropagation();
-      this.notifyResize();
       this.__itemsReceived();
 
       requestAnimationFrame(() => {
@@ -994,13 +991,6 @@ class GridElement extends ElementMixin(
    */
   notifyResize() {
     // To be removed in https://github.com/vaadin/web-components/issues/331
-  }
-
-  /** @private */
-  _allRowsVisibleChanged(value, oldValue) {
-    if (value || oldValue) {
-      this.notifyResize();
-    }
   }
 }
 

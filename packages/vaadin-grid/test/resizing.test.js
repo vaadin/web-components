@@ -61,7 +61,6 @@ describe('resizing', () => {
     const bottom = grid.$.header.getBoundingClientRect().bottom;
 
     getHeaderCellContent(grid, 0, 0).style.fontSize = '100px';
-    grid.notifyResize();
 
     const newBottom = grid.$.header.getBoundingClientRect().bottom;
     expect(newBottom).to.be.above(bottom);
@@ -92,7 +91,6 @@ describe('resizing', () => {
     const height = detailsCell.getBoundingClientRect().height;
 
     grid.style.fontSize = '100px';
-    grid.notifyResize();
     flushGrid(grid);
 
     expect(detailsCell.getBoundingClientRect().height).to.be.above(height);
