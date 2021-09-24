@@ -150,8 +150,7 @@ class ComboBoxLight extends ComboBoxDataProviderMixin(ComboBoxMixin(ThemableMixi
   _isClearButton(event) {
     return (
       super._isClearButton(event) ||
-      event.__fromClearButton ||
-      (event.detail && event.detail.sourceEvent && event.detail.sourceEvent.__fromClearButton) ||
+      (event.type === 'input' && !event.isTrusted) || // fake input event dispatched by clear button
       event.composedPath()[0].getAttribute('part') === 'clear-button'
     );
   }

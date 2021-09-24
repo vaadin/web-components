@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import { arrowDown, arrowUp, enter, esc, fixtureSync, keyDownOn, nextFrame } from '@vaadin/testing-helpers';
+import { arrowDown, arrowUp, enter, esc, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import '../vaadin-time-picker.js';
 
 describe('time-picker', () => {
@@ -250,26 +250,15 @@ describe('time-picker', () => {
   describe('change event', () => {
     let spy;
 
-    function inputChar(char) {
-      inputElement.value += char;
-      keyDownOn(inputElement, char.charCodeAt(0));
-      inputElement.dispatchEvent(new CustomEvent('input', { bubbles: true, composed: true }));
-    }
-
-    function inputText(text) {
-      for (var i = 0; i < text.length; i++) {
-        inputChar(text[i]);
-      }
-    }
-
     beforeEach(() => {
       spy = sinon.spy();
       timePicker.addEventListener('change', spy);
     });
 
-    it('should fire change on user text input commit', () => {
-      inputText('00:00');
-      enter(inputElement);
+    it('should fire change on user text input commit', async () => {
+      inputElement.focus();
+      await sendKeys({ type: '00:00' });
+      await sendKeys({ press: 'Enter' });
       expect(spy.calledOnce).to.be.true;
     });
 
@@ -295,8 +284,9 @@ describe('time-picker', () => {
       expect(spy.calledTwice).to.be.true;
     });
 
-    it('should not fire change on focused time change', () => {
-      inputText('00:00');
+    it('should not fire change on focused time change', async () => {
+      inputElement.focus();
+      await sendKeys({ type: '00:00' });
       expect(spy.called).to.be.false;
     });
 
@@ -342,10 +332,11 @@ describe('time-picker', () => {
       expect(spy.callCount).to.equal(1);
     });
 
-    it('should not change value on input', () => {
-      inputText('00:00');
+    it('should not change value on input', async () => {
+      inputElement.focus();
+      await sendKeys({ type: '00:00' });
       expect(timePicker.value).to.equal('');
-      enter(inputElement);
+      await sendKeys({ press: 'Enter' });
       expect(timePicker.value).to.equal('00:00');
     });
   });

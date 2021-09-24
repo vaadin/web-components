@@ -1,9 +1,8 @@
 import { expect } from '@esm-bundle/chai';
+import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import {
-  fire,
   click,
-  enter,
   fixtureSync,
   isIOS,
   mousedown,
@@ -198,16 +197,15 @@ describe('attr-for-value', () => {
       expect(customInput.customValue).to.eql('foo');
     });
 
-    it('should bind the input value correctly when getting input', () => {
+    it('should bind the input value correctly when getting input', async () => {
       // Empty string by default.
       expect(customInput.customValue).to.eql('');
       expect(inputElement.value).to.eql('');
 
       // Simulate typing an option with a keyboard and confirming it via Enter
-      inputElement.value = 'foo';
-      fire(inputElement, 'input');
-
-      enter(inputElement);
+      inputElement.focus();
+      await sendKeys({ type: 'foo' });
+      await sendKeys({ press: 'Enter' });
 
       expect(comboBox.value).to.eql('foo');
       expect(customInput.customValue).to.eql('foo');
