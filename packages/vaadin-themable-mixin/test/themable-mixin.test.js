@@ -9,6 +9,22 @@ let createStyles =
     registerStyles(themeFor, styles, { moduleId });
   });
 
+let defineCustomElement = (name, parentName, content = '') => {
+  class CustomElement extends ThemableMixin(parentName ? customElements.get(parentName) : PolymerElement) {
+    static get is() {
+      return name;
+    }
+
+    static get template() {
+      const template = document.createElement('template');
+      template.innerHTML = content;
+      return template;
+    }
+  }
+
+  customElements.define(name, CustomElement);
+};
+
 createStyles(
   'test-qux-default-theme',
   'test-qux',
@@ -324,14 +340,26 @@ describe('ThemableMixin', () => {
   });
 
   it('should not include duplicate styles', () => {
-    // This particular component gets the same style from two different sources
-    const testComponent = [...components].find((component) => component instanceof TestBaz);
+    const name = 'test-duplicate';
+
+    // Create a wildcard style that applies to both the parent and the child
+    const duplicateStyle = css`
+      :host {
+        color: blue;
+      }
+    `;
+    createStyles('vaadin-test-duplicate-styles', 'test-duplicate*', duplicateStyle);
+
+    // Define the test-duplicate-parent and test-duplicate components
+    defineCustomElement(name + '-parent');
+    defineCustomElement(name, name + '-parent');
+
+    // Create an instance of the test-duplicate component
+    const testComponent = fixtureSync(`<${name}></${name}>`);
     // Get all the styles from the component as one big string (let's assume it may have multiple style tags)
     const styles = [...testComponent.shadowRoot.querySelectorAll('style')].map((style) => style.textContent).join('');
-    // This is the style rule we're interested in
-    const style = "\n    [part='text'] {\n      position: relative;\n    }\n  ";
     // Check the number of occurences of the style rule
-    const occurrences = styles.split(style).length - 1;
+    const occurrences = styles.split(duplicateStyle.toString()).length - 1;
     // There should be only one occurence
     expect(occurrences).to.equal(1);
   });
