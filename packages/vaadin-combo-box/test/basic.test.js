@@ -473,4 +473,11 @@ describe('pre-opened', () => {
   it('should not throw error when adding a pre-opened combo-box', () => {
     expect(() => fixtureSync(`<vaadin-combo-box opened items="[0]"></vaadin-combo-box>`)).to.not.throw(Error);
   });
+
+  it('should have overlay with correct width', () => {
+    const comboBox = fixtureSync(`<vaadin-combo-box opened items="[0]"></vaadin-combo-box>`);
+    const expectedOverlayWidth = comboBox.clientWidth;
+    const actualOverlayWidth = comboBox.$.dropdown.$.overlay.$.content.clientWidth;
+    expect(actualOverlayWidth).to.eq(expectedOverlayWidth);
+  });
 });
