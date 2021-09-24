@@ -105,6 +105,10 @@ const button = css`
     box-shadow: 0 0 0 2px var(--lumo-primary-color-50pct);
   }
 
+  :host([theme~='primary'][focus-ring]) {
+    box-shadow: 0 0 0 1px var(--lumo-base-color), 0 0 0 3px var(--lumo-primary-color-50pct);
+  }
+
   /* Types (primary, tertiary, tertiary-inline */
 
   :host([theme~='tertiary']),
