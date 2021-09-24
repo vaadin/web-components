@@ -354,8 +354,6 @@ declare class GridElement<TItem = GridDefaultItem> extends HTMLElement {
 
   _updateItem(row: HTMLElement, item: TItem | null): void;
 
-  _toggleAttribute(name: string, bool: boolean, node: Element): void;
-
   __getRowModel(row: HTMLTableRowElement): GridItemModel<TItem>;
 
   /**

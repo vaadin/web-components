@@ -241,13 +241,13 @@ export const DataProviderMixin = (superClass) =>
       const { cache, scaledIndex } = this._cache.getCacheAndIndex(index);
       const item = cache.items[scaledIndex];
       if (item) {
-        this._toggleAttribute('loading', false, el);
+        el.toggleAttribute('loading', false);
         this._updateItem(el, item);
         if (this._isExpanded(item)) {
           cache.ensureSubCacheForScaledIndex(scaledIndex);
         }
       } else {
-        this._toggleAttribute('loading', true, el);
+        el.toggleAttribute('loading', true);
         this._loadPage(this._getPageForIndex(scaledIndex), cache);
       }
     }

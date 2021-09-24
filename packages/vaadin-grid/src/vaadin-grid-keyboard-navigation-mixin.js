@@ -89,7 +89,7 @@ export const KeyboardNavigationMixin = (superClass) =>
       this.$.table.addEventListener('focusin', this._onContentFocusIn.bind(this));
 
       this.addEventListener('mousedown', () => {
-        this._toggleAttribute('navigating', false, this);
+        this.toggleAttribute('navigating', false);
         this._isMousedown = true;
       });
       this.addEventListener('mouseup', () => (this._isMousedown = false));
@@ -387,7 +387,7 @@ export const KeyboardNavigationMixin = (superClass) =>
           }
         }
 
-        this._toggleAttribute('navigating', true, this);
+        this.toggleAttribute('navigating', true);
 
         return { dstRow: activeRowGroup.children[dstRowIndex] };
       } else {
@@ -428,7 +428,7 @@ export const KeyboardNavigationMixin = (superClass) =>
 
         // This has to be set after scrolling, otherwise it can be removed by
         // `_preventScrollerRotatingCellFocus(row, index)` during scrolling.
-        this._toggleAttribute('navigating', true, this);
+        this.toggleAttribute('navigating', true);
 
         return {
           dstRow: [...activeRowGroup.children].find((el) => !el.hidden && el.index === dstRowIndex),
@@ -535,14 +535,14 @@ export const KeyboardNavigationMixin = (superClass) =>
             e.preventDefault();
             focusTarget.focus();
             this._setInteracting(true);
-            this._toggleAttribute('navigating', false, this);
+            this.toggleAttribute('navigating', false);
           }
         } else {
           e.preventDefault();
           this._focusedColumnOrder = undefined;
           cell.focus();
           this._setInteracting(false);
-          this._toggleAttribute('navigating', true, this);
+          this.toggleAttribute('navigating', true);
         }
       }
     }
@@ -606,7 +606,7 @@ export const KeyboardNavigationMixin = (superClass) =>
         focusTarget.focus();
       }
 
-      this._toggleAttribute('navigating', true, this);
+      this.toggleAttribute('navigating', true);
     }
 
     /** @private */
@@ -638,7 +638,7 @@ export const KeyboardNavigationMixin = (superClass) =>
       if (cell._content && cell._content.firstElementChild) {
         const wasNavigating = this.hasAttribute('navigating');
         cell._content.firstElementChild.click();
-        this._toggleAttribute('navigating', wasNavigating, this);
+        this.toggleAttribute('navigating', wasNavigating);
       }
     }
 
@@ -648,7 +648,7 @@ export const KeyboardNavigationMixin = (superClass) =>
      */
     _onFocusIn(e) {
       if (!this._isMousedown) {
-        this._toggleAttribute('navigating', true, this);
+        this.toggleAttribute('navigating', true);
       }
 
       const rootTarget = e.composedPath()[0];
@@ -669,7 +669,7 @@ export const KeyboardNavigationMixin = (superClass) =>
      * @protected
      */
     _onFocusOut(e) {
-      this._toggleAttribute('navigating', false, this);
+      this.toggleAttribute('navigating', false);
       this._detectInteracting(e);
     }
 
@@ -746,12 +746,12 @@ export const KeyboardNavigationMixin = (superClass) =>
       ) {
         // Focused item has went, hide navigation mode
         this._navigatingIsHidden = true;
-        this._toggleAttribute('navigating', false, this);
+        this.toggleAttribute('navigating', false);
       }
       if (index === this._focusedItemIndex && this._navigatingIsHidden) {
         // Focused item is back, restore navigation mode
         this._navigatingIsHidden = false;
-        this._toggleAttribute('navigating', true, this);
+        this.toggleAttribute('navigating', true);
       }
     }
 
