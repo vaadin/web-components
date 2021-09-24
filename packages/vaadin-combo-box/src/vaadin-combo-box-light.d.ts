@@ -16,38 +16,32 @@ import { ComboBoxDefaultItem, ComboBoxEventMap } from './interfaces';
  *
  * To create a custom input field, you need to add a child element which has a two-way
  * data-bindable property representing the input value. The property name is expected
- * to be `value` by default. See the example below for a simplest possible example
- * using a `<vaadin-text-field>` element.
+ * to be `value` by default. For example, you can use `<vaadin-text-field>` element:
  *
  * ```html
  * <vaadin-combo-box-light>
- *   <vaadin-text-field>
- *   </vaadin-text-field>
+ *   <vaadin-text-field></vaadin-text-field>
  * </vaadin-combo-box-light>
  * ```
  *
- * If you are using other custom input fields like `<iron-input>`, you
- * need to define the name of the bindable property with the `attrForValue` attribute.
+ * If you are using custom input field that has other property for value,
+ * set `class="input"` to enable corresponding logic, and use `attr-for-value`
+ * attribute to specify which property to use:
  *
  * ```html
- * <vaadin-combo-box-light attr-for-value="bind-value">
- *   <iron-input>
- *     <input>
- *   </iron-input>
+ * <vaadin-combo-box-light attr-for-value="input-value">
+ *   <custom-input class="input"></custom-input>
  * </vaadin-combo-box-light>
  * ```
  *
- * In the next example you can see how to create a custom input field based
- * on a `<paper-input>` decorated with a custom `<iron-icon>` and
- * two `<paper-button>`s to act as the clear and toggle controls.
+ * You can also pass custom toggle and clear buttons with corresponding classes:
  *
  * ```html
  * <vaadin-combo-box-light>
- *   <paper-input label="Elements" class="input">
- *     <iron-icon icon="toll" slot="prefix"></iron-icon>
- *     <paper-button slot="suffix" class="clear-button">Clear</paper-button>
- *     <paper-button slot="suffix" class="toggle-button">Toggle</paper-button>
- *   </paper-input>
+ *   <custom-input class="input" attr-for-value="input-value">
+ *     <button slot="suffix" class="clear-button">Clear</button>
+ *     <button slot="suffix" class="toggle-button">Toggle</button>
+ *   </custom-input>
  * </vaadin-combo-box-light>
  * ```
  *
