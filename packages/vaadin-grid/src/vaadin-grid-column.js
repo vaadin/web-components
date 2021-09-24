@@ -306,14 +306,14 @@ export const ColumnBaseMixin = (superClass) =>
         this.parentElement._columnPropChanged('frozen', frozen);
       }
 
-      this._allCells.forEach((cell) => this._toggleAttribute('frozen', frozen, cell));
+      this._allCells.forEach((cell) => cell.toggleAttribute('frozen', frozen));
 
       this._grid && this._grid._frozenCellsChanged && this._grid._frozenCellsChanged();
     }
 
     /** @private */
     _lastFrozenChanged(lastFrozen) {
-      this._allCells.forEach((cell) => this._toggleAttribute('last-frozen', lastFrozen, cell));
+      this._allCells.forEach((cell) => cell.toggleAttribute('last-frozen', lastFrozen));
 
       if (this.parentElement && this.parentElement._columnPropChanged) {
         this.parentElement._lastFrozen = lastFrozen;
@@ -332,22 +332,6 @@ export const ColumnBaseMixin = (superClass) =>
         .toLowerCase()
         .replace(/-/g, ' ')
         .replace(/^./, (match) => match.toUpperCase());
-    }
-
-    /**
-     * @param {string} name
-     * @param {boolean} bool
-     * @param {!Element} node
-     * @protected
-     */
-    _toggleAttribute(name, bool, node) {
-      if (node.hasAttribute(name) === !bool) {
-        if (bool) {
-          node.setAttribute(name, '');
-        } else {
-          node.removeAttribute(name);
-        }
-      }
     }
 
     /** @private */

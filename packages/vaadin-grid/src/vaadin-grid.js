@@ -803,8 +803,8 @@ class GridElement extends ElementMixin(
       return;
     }
 
-    this._toggleAttribute('first', index === 0, row);
-    this._toggleAttribute('odd', index % 2, row);
+    row.toggleAttribute('first', index === 0);
+    row.toggleAttribute('odd', index % 2);
     this._a11yUpdateRowRowindex(row, index);
     this._getItem(index, row);
   }
@@ -889,9 +889,9 @@ class GridElement extends ElementMixin(
     this._a11yUpdateRowExpanded(row, model.expanded);
     this._a11yUpdateRowDetailsOpened(row, model.detailsOpened);
 
-    this._toggleAttribute('expanded', model.expanded, row);
-    this._toggleAttribute('selected', model.selected, row);
-    this._toggleAttribute('details-opened', model.detailsOpened, row);
+    row.toggleAttribute('expanded', model.expanded);
+    row.toggleAttribute('selected', model.selected);
+    row.toggleAttribute('details-opened', model.detailsOpened);
 
     this._generateCellClassNames(row, model);
     this._filterDragAndDrop(row, model);
@@ -925,22 +925,6 @@ class GridElement extends ElementMixin(
         // This needs to be set programmatically in order to avoid an iOS 10 bug (disappearing grid)
         this.$.table.style.webkitOverflowScrolling = 'touch';
       });
-    }
-  }
-
-  /**
-   * @param {string} name
-   * @param {boolean} bool
-   * @param {!Element} node
-   * @protected
-   */
-  _toggleAttribute(name, bool, node) {
-    if (node.hasAttribute(name) === !bool) {
-      if (bool) {
-        node.setAttribute(name, '');
-      } else {
-        node.removeAttribute(name);
-      }
     }
   }
 

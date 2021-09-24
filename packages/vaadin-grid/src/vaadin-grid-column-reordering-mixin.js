@@ -129,7 +129,7 @@ export const ColumnReorderingMixin = (superClass) =>
         return;
       }
 
-      this._toggleAttribute('reordering', true, this);
+      this.toggleAttribute('reordering', true);
       this._draggedColumn = headerCell._column;
       while (this._draggedColumn.parentElement.childElementCount === 1) {
         // This is the only column in the group, drag the whole group instead
@@ -175,7 +175,7 @@ export const ColumnReorderingMixin = (superClass) =>
         return;
       }
 
-      this._toggleAttribute('reordering', false, this);
+      this.toggleAttribute('reordering', false);
       this._draggedColumn._reorderStatus = '';
       this._setSiblingsReorderStatus(this._draggedColumn, '');
       this._draggedColumn = null;
@@ -213,10 +213,10 @@ export const ColumnReorderingMixin = (superClass) =>
       x = x || 0;
       y = y || 0;
       if (!this._draggedColumn) {
-        this._toggleAttribute('no-content-pointer-events', true, this.$.scroller);
+        this.$.scroller.toggleAttribute('no-content-pointer-events', true);
       }
       const cell = this.shadowRoot.elementFromPoint(x, y);
-      this._toggleAttribute('no-content-pointer-events', false, this.$.scroller);
+      this.$.scroller.toggleAttribute('no-content-pointer-events', false);
 
       // Make sure the element is actually a cell
       if (cell && cell._column) {

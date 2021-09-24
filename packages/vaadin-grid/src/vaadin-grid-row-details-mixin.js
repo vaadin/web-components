@@ -119,7 +119,7 @@ export const RowDetailsMixin = (superClass) =>
       cell.setAttribute('part', 'cell details-cell');
       // Freeze the details cell, so that it does not scroll horizontally
       // with the normal cells. This way it looks less weird.
-      this._toggleAttribute('frozen', true, cell);
+      cell.toggleAttribute('frozen', true);
 
       this._detailsCellResizeObserver.observe(cell);
     }
