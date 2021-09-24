@@ -15,7 +15,7 @@ registerStyles(
       line-height: var(--lumo-line-height-xs);
       font-weight: 500;
       opacity: 1;
-      color: var(--lumo-contrast-60pct);
+      color: var(--lumo-secondary-text-color);
       transition: 0.15s color, 0.2s transform;
       flex-shrink: 0;
       display: flex;
