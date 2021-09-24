@@ -132,10 +132,6 @@ export const getCellEditor = (cell) => {
   return cell._column._getEditorComponent(cell);
 };
 
-export const getNativeInput = (editor) => {
-  return editor.shadowRoot.querySelector('input');
-};
-
 export const flatMap = (array, mapper) => [].concat(...array.map(mapper));
 
 export const dblclick = (target) => {
