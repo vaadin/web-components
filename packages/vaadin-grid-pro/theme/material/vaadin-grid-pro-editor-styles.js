@@ -10,7 +10,7 @@ const gridProEditor = css`
     font-size: inherit;
   }
 
-  :host([theme~='grid-pro-editor']) [part='value'] {
+  :host([theme~='grid-pro-editor']) ::slotted(input) {
     box-sizing: border-box;
     font-size: inherit;
   }

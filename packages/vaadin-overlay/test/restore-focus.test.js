@@ -1,9 +1,9 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import '@vaadin/vaadin-text-field/vaadin-text-field.js';
+import '@vaadin/text-field/vaadin-text-field.js';
 import { open, close } from './helpers.js';
-import '../vaadin-overlay.js';
+import '../src/vaadin-overlay.js';
 
 customElements.define(
   'overlay-field-wrapper',
@@ -12,7 +12,7 @@ customElements.define(
       return html`
         <vaadin-overlay id="overlay">
           <template>
-            <vaadin-text-field id="focusable" autofocus></vaadin-text-field>
+            <vaadin-text-field id="focusable"></vaadin-text-field>
           </template>
         </vaadin-overlay>
         <input id="focusable" />
@@ -49,6 +49,9 @@ describe('restore focus', () => {
     overlay.restoreFocusOnClose = false;
     focusInput.focus();
     await open(overlay);
+    // emulate focus leaving the input
+    focusInput.blur();
+    document.body.focus();
     await close(overlay);
     expect(overlay._getActiveElement()).to.not.equal(focusInput);
   });
@@ -57,6 +60,9 @@ describe('restore focus', () => {
     overlay.restoreFocusOnClose = true;
     focusInput.focus();
     await open(overlay);
+    // emulate focus leaving the input
+    focusInput.blur();
+    document.body.focus();
     await close(overlay);
     expect(overlay._getActiveElement()).to.equal(focusInput);
   });
