@@ -13,7 +13,7 @@ import { ComboBoxPlaceholder } from './vaadin-combo-box-placeholder.js';
  * @extends HTMLElement
  * @private
  */
-class ComboBoxScroller extends PolymerElement {
+export class ComboBoxScroller extends PolymerElement {
   static get is() {
     return 'vaadin-combo-box-scroller';
   }
@@ -138,6 +138,9 @@ class ComboBoxScroller extends PolymerElement {
   ready() {
     super.ready();
 
+    // Allow extensions to customize tag name for the items
+    this.__hostTagName = this.constructor.is.replace('-scroller', '');
+
     this.setAttribute('role', 'listbox');
 
     this.addEventListener('click', (e) => e.stopPropagation());
@@ -248,7 +251,7 @@ class ComboBoxScroller extends PolymerElement {
   /** @private */
   __createElements(count) {
     return [...Array(count)].map(() => {
-      const item = document.createElement('vaadin-combo-box-item');
+      const item = document.createElement(`${this.__hostTagName}-item`);
       item.addEventListener('click', this.__boundOnItemClick);
       item.tabIndex = '-1';
       item.style.width = '100%';

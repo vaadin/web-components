@@ -25,18 +25,13 @@ const TOUCH_DEVICE = (() => {
  * @extends HTMLElement
  * @private
  */
-class ComboBoxDropdown extends mixinBehaviors(IronResizableBehavior, PolymerElement) {
+export class ComboBoxDropdown extends mixinBehaviors(IronResizableBehavior, PolymerElement) {
   static get is() {
     return 'vaadin-combo-box-dropdown';
   }
 
   static get template() {
     return html`
-      <style>
-        :host {
-          display: block;
-        }
-      </style>
       <vaadin-combo-box-overlay
         id="overlay"
         hidden$="[[_isOverlayHidden(_items.*, loading)]]"
@@ -137,11 +132,15 @@ class ComboBoxDropdown extends mixinBehaviors(IronResizableBehavior, PolymerElem
   ready() {
     super.ready();
 
+    // Allow extensions to customize tag name for the items
+    this.__hostTagName = this.constructor.is.replace('-dropdown', '');
+
     const overlay = this.$.overlay;
+    const scrollerTag = `${this.__hostTagName}-scroller`;
 
     overlay.renderer = (root) => {
       if (!root.firstChild) {
-        const scroller = document.createElement('vaadin-combo-box-scroller');
+        const scroller = document.createElement(scrollerTag);
         root.appendChild(scroller);
       }
     };
@@ -149,7 +148,7 @@ class ComboBoxDropdown extends mixinBehaviors(IronResizableBehavior, PolymerElem
     // Ensure the scroller is rendered
     overlay.requestContentUpdate();
 
-    this._scroller = overlay.content.querySelector('vaadin-combo-box-scroller');
+    this._scroller = overlay.content.querySelector(scrollerTag);
 
     this._scroller.getItemLabel = this.getItemLabel.bind(this);
     this._scroller.comboBox = this.getRootNode().host;
@@ -201,7 +200,7 @@ class ComboBoxDropdown extends mixinBehaviors(IronResizableBehavior, PolymerElem
       this._setOverlayWidth();
 
       this._scroller.style.maxHeight =
-        getComputedStyle(this).getPropertyValue('--vaadin-combo-box-overlay-max-height') || '65vh';
+        getComputedStyle(this).getPropertyValue(`--${this.__hostTagName}-overlay-max-height`) || '65vh';
 
       this.dispatchEvent(new CustomEvent('vaadin-combo-box-dropdown-opened', { bubbles: true, composed: true }));
     } else if (wasOpened && !this.__emptyItems) {
@@ -298,14 +297,15 @@ class ComboBoxDropdown extends mixinBehaviors(IronResizableBehavior, PolymerElem
       return;
     }
     const inputWidth = this.positionTarget.clientWidth + 'px';
-    const customWidth = getComputedStyle(this).getPropertyValue('--vaadin-combo-box-overlay-width');
+    const propPrefix = `${this.__hostTagName}-overlay`;
+    const customWidth = getComputedStyle(this).getPropertyValue(`--${propPrefix}-width`);
 
-    this.$.overlay.style.setProperty('--_vaadin-combo-box-overlay-default-width', inputWidth);
+    this.$.overlay.style.setProperty(`--_${propPrefix}-default-width`, inputWidth);
 
     if (customWidth === '') {
-      this.$.overlay.style.removeProperty('--vaadin-combo-box-overlay-width');
+      this.$.overlay.style.removeProperty(`--${propPrefix}-width`);
     } else {
-      this.$.overlay.style.setProperty('--vaadin-combo-box-overlay-width', customWidth);
+      this.$.overlay.style.setProperty(`--${propPrefix}-width`, customWidth);
     }
 
     this.$.overlay._updatePosition();

@@ -69,7 +69,7 @@ describe('ARIA', () => {
       timePicker.value = '00:00';
       arrowDownKeyDown(input); // 'focus moves to 2nd item'
 
-      const items = comboBox.$.dropdown._scroller.querySelectorAll('vaadin-combo-box-item');
+      const items = comboBox.$.dropdown._scroller.querySelectorAll('vaadin-time-picker-item');
       expect(items[0].getAttribute('role')).to.equal('option');
       expect(items[0].getAttribute('aria-selected')).to.equal('false');
       expect(items[1].getAttribute('aria-selected')).to.equal('true');
