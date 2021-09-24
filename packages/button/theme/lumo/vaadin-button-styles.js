@@ -75,14 +75,9 @@ const button = css`
 
   /* Hover */
 
-  :host(:hover)::before {
-    opacity: 0.05;
-  }
-
-  /* Disable hover for touch devices */
-  @media (pointer: coarse) {
-    :host(:not([active]):hover)::before {
-      opacity: 0;
+  @media (any-hover: hover) {
+    :host(:hover)::before {
+      opacity: 0.02;
     }
   }
 
@@ -94,7 +89,7 @@ const button = css`
   }
 
   :host([active])::before {
-    opacity: 0.1;
+    opacity: 0.05;
     transition-duration: 0s;
   }
 
@@ -110,6 +105,10 @@ const button = css`
     box-shadow: 0 0 0 2px var(--lumo-primary-color-50pct);
   }
 
+  :host([theme~='primary'][focus-ring]) {
+    box-shadow: 0 0 0 1px var(--lumo-base-color), 0 0 0 3px var(--lumo-primary-color-50pct);
+  }
+
   /* Types (primary, tertiary, tertiary-inline */
 
   :host([theme~='tertiary']),
@@ -119,25 +118,12 @@ const button = css`
     min-width: 0;
   }
 
-  :host([theme~='tertiary'])::before,
-  :host([theme~='tertiary-inline'])::before {
-    display: none;
-  }
-
   :host([theme~='tertiary']) {
     padding: 0 calc(var(--lumo-button-size) / 6);
   }
 
-  @media (hover: hover) {
-    :host([theme*='tertiary']:not([active]):hover) {
-      opacity: 0.8;
-    }
-  }
-
-  :host([theme~='tertiary'][active]),
-  :host([theme~='tertiary-inline'][active]) {
-    opacity: 0.5;
-    transition-duration: 0s;
+  :host([theme~='tertiary-inline'])::before {
+    display: none;
   }
 
   :host([theme~='tertiary-inline']) {
@@ -166,22 +152,18 @@ const button = css`
     color: var(--lumo-primary-contrast-color);
   }
 
-  :host([theme~='primary']:hover)::before {
-    opacity: 0.1;
+  :host([theme~='primary'])::before {
+    background-color: black;
+  }
+
+  @media (any-hover: hover) {
+    :host([theme~='primary']:hover)::before {
+      opacity: 0.05;
+    }
   }
 
   :host([theme~='primary'][active])::before {
-    background-color: var(--lumo-shade-20pct);
-  }
-
-  @media (pointer: coarse) {
-    :host([theme~='primary'][active])::before {
-      background-color: var(--lumo-shade-60pct);
-    }
-
-    :host([theme~='primary']:not([active]):hover)::before {
-      opacity: 0;
-    }
+    opacity: 0.1;
   }
 
   :host([theme~='primary'][active])::after {
