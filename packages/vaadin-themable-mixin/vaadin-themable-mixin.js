@@ -54,8 +54,8 @@ export function registerStyles(themeFor, styles, options = {}) {
 }
 
 /**
- * Returns all registered themes. By default the themes are obtained from the themeRegistry.
- * In case style-modules adapter is imported, the themes are obtained from there instead
+ * Returns all registered themes. By default the themeRegistry is returend as is.
+ * In case the style-modules adapter is imported, the themes are obtained from there instead
  * @returns {Theme[]}
  */
 function getAllThemes() {
@@ -73,7 +73,7 @@ Make sure to import the adapter before registering any styles.`);
 }
 
 /**
- * Returns true if the themeFor applies to the given tag name
+ * Returns true if the themeFor string matches the tag name
  * @param {string} themeFor
  * @param {string} tagName
  * @returns {boolean}
@@ -85,8 +85,8 @@ function matchesThemeFor(themeFor, tagName) {
 }
 
 /**
- * Maps the given moduleName to an include priority number that is used for
- * determining the order in which styles are added.
+ * Maps the moduleName to an include priority number which is used for
+ * determining the order in which styles are applied.
  * @param {string} moduleName
  * @returns {number}
  */
@@ -101,7 +101,7 @@ function getIncludePriority(moduleName = '') {
 }
 
 /**
- * Flattens the given styles into a single array of styles.
+ * Flattens the styles into a single array of styles.
  * @param {CSSResultGroup} styles
  * @param {CSSResult[]} result
  * @returns {CSSResult[]}
@@ -118,7 +118,7 @@ function recursiveFlattenStyles(styles, result = []) {
 }
 
 /**
- * Gets an array of CSSResults matching the include property of the given theme
+ * Gets an array of CSSResults matching the include property of the theme.
  * @param {Theme} theme
  * @returns {CSSResult[]}
  */
@@ -138,7 +138,7 @@ function getIncludedStyles(theme) {
 }
 
 /**
- * Includes the given styles to the template.
+ * Includes the styles to the template.
  * @param {CSSResult[]} styles
  * @param {HTMLTemplateElement} template
  */
@@ -154,7 +154,7 @@ function addStylesToTemplate(styles, template) {
 
 /**
  * Returns an array of themes that should be used for styling a component matching
- * the given tagName. The array is sorted by the include order.
+ * the tag name. The array is sorted by the include order.
  * @param {string} tagName
  * @returns {Theme[]}
  */

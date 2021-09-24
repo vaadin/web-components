@@ -6,7 +6,7 @@ const styleModules = {};
 
 /**
  * @typedef CSSResult
- * @type {any}
+ * @type {import('lit').CSSResult}
  *
  * @typedef DomModuleWithCachedStyles
  * @type {DomModule & {__allStyles?: CSSResult[], __partialStyles?: CSSResult[]}}
@@ -21,7 +21,7 @@ let moduleIdIndex = 0;
  * @param {String} themeFor The local/tag name of the component type to register the styles for
  * @param {CSSResult[]} styles The CSS style rules to be registered for the component type
  * matching themeFor and included in the local scope of each component instance
- * @param {{moduleId?: String, include?: String}} options Additional options
+ * @param {{moduleId?: String, include?: String | String[]}} options Additional options
  * @return {void}
  */
 styleModules.registerStyles = (themeFor, styles = [], options = {}) => {
@@ -36,7 +36,7 @@ styleModules.registerStyles = (themeFor, styles = [], options = {}) => {
 
   // The styles array only needs to be included in the template in case options.moduleId is used,
   // so that it's possible to include the styles by moduleId in some other <dom-module>
-  // using <style include="module-id">
+  // (with <style include="module-id">)
   const includeStylesToTemplate = !!(styles.length && options.moduleId);
 
   // options.include may be undefined, string or an array of strings. Convert it to an array
@@ -62,24 +62,41 @@ styleModules.registerStyles = (themeFor, styles = [], options = {}) => {
   module.register(themeId);
 };
 
+/**
+ * Returns an array of CSS results obtained from the style module
+ * @param {DomModule} module
+ * @returns {CSSResult[]}
+ */
 function getModuleStyles(module) {
   return stylesFromTemplate(module.querySelector('template')).map((styleElement) => {
     return unsafeCSS(styleElement.textContent);
   });
 }
 
+/**
+ * @typedef {Object} Theme
+ * @property {string} themeFor
+ * @property {CSSResult[]} styles
+ * @property {string} [moduleId]
+ */
+
+/**
+ * Returns all the registered dom-modules mapped as themable-mixin -compatible Theme objects
+ * @returns {Theme[]}
+ */
 styleModules.getAllThemes = () => {
   const domModule = DomModule;
   const modules = domModule.prototype.modules;
 
-  return Object.keys(modules).map((moduleName) => {
+  return Object.keys(modules).map((moduleId) => {
     /** @type {DomModuleWithCachedStyles} */
-    const module = modules[moduleName];
+    const module = modules[moduleId];
+    const themeFor = module.getAttribute('theme-for');
     module.__allStyles = module.__allStyles || getModuleStyles(module).concat(module.__partialStyles || []);
 
     return {
-      themeFor: module.getAttribute('theme-for'),
-      moduleId: moduleName,
+      themeFor,
+      moduleId,
       styles: module.__allStyles
     };
   });
