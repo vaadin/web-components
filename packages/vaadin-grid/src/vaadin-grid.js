@@ -4,8 +4,6 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { beforeNextRender } from '@polymer/polymer/lib/utils/render-status.js';
-import { Debouncer } from '@vaadin/component-base/src/debounce.js';
-import { animationFrame } from '@vaadin/component-base/src/async.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -1019,14 +1017,6 @@ class GridElement extends ElementMixin(
     if (value || oldValue) {
       this.notifyResize();
     }
-  }
-
-  /** @protected */
-  __forceReflow() {
-    this._debouncerForceReflow = Debouncer.debounce(this._debouncerForceReflow, animationFrame, () => {
-      this.$.scroller.style.overflow = 'hidden';
-      setTimeout(() => (this.$.scroller.style.overflow = ''));
-    });
   }
 }
 

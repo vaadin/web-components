@@ -12,8 +12,6 @@ interface SelectionMixin<TItem> {
    */
   selectedItems: Array<TItem>;
 
-  _isSelected(item: TItem): boolean;
-
   /**
    * Selects the given item.
    *
@@ -27,13 +25,6 @@ interface SelectionMixin<TItem> {
    * @param item The item object
    */
   deselectItem(item: TItem): void;
-
-  /**
-   * Toggles the selected state of the given item.
-   *
-   * @param item The item object
-   */
-  _toggleItem(item: TItem): void;
 }
 
 export { SelectionMixin, SelectionMixinConstructor };

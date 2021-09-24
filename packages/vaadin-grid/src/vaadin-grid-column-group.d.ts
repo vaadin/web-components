@@ -1,5 +1,5 @@
 import { GridDefaultItem } from './interfaces';
-import { ColumnBaseMixin, GridColumnElement } from './vaadin-grid-column.js';
+import { ColumnBaseMixin } from './vaadin-grid-column.js';
 
 /**
  * A `<vaadin-grid-column-group>` is used to make groups of columns in `<vaadin-grid>` and
@@ -30,7 +30,7 @@ import { ColumnBaseMixin, GridColumnElement } from './vaadin-grid-column.js';
  * column2.renderer = (root, column, model) => { ... };
  * ```
  */
-declare class GridColumnGroupElement<TItem = GridDefaultItem> extends HTMLElement {
+declare class GridColumnGroupElement extends HTMLElement {
   /**
    * Flex grow ratio for the column group as the sum of the ratios of its child columns.
    * @attr {number} flex-grow
@@ -41,14 +41,6 @@ declare class GridColumnGroupElement<TItem = GridDefaultItem> extends HTMLElemen
    * Width of the column group as the sum of the widths of its child columns.
    */
   readonly width: string | null | undefined;
-
-  _columnPropChanged(path: string, value?: unknown | null): void;
-
-  _updateFlexAndWidth(): void;
-
-  _getChildColumns(el: GridColumnGroupElement<TItem>): GridColumnElement<TItem>[];
-
-  _isColumnElement(node: Node): boolean;
 }
 
 interface GridColumnGroupElement<TItem = GridDefaultItem> extends ColumnBaseMixin<TItem> {}

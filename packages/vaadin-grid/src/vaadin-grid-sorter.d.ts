@@ -72,8 +72,6 @@ declare class GridSorterElement extends ThemableMixin(DirMixin(HTMLElement)) {
    */
   direction: GridSorterDirection | null | undefined;
 
-  _order: number | null;
-
   addEventListener<K extends keyof GridSorterEventMap>(
     type: K,
     listener: (this: GridSorterElement, ev: GridSorterEventMap[K]) => void,

@@ -298,12 +298,6 @@ export const ColumnBaseMixin = (superClass) =>
       }
 
       this._allCells.forEach((cell) => (cell.style.width = width));
-
-      // Force a reflow to workaround browser issues causing double scrollbars to grid
-      // https://github.com/vaadin/vaadin-grid/issues/1586
-      if (this._grid && this._grid.__forceReflow) {
-        this._grid.__forceReflow();
-      }
     }
 
     /** @private */

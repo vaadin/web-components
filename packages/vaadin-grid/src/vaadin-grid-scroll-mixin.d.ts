@@ -13,10 +13,6 @@ interface ScrollMixin {
    * @param index Row index to scroll to
    */
   scrollToIndex(index: number): void;
-
-  _frozenCellsChanged(): void;
-
-  _updateLastFrozen(): void;
 }
 
 export { ScrollMixin, ScrollMixinConstructor };
