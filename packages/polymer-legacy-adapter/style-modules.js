@@ -37,7 +37,7 @@ styleModules.registerStyles = (themeFor, styles = [], options = {}) => {
   // The styles array only needs to be included in the template in case options.moduleId is used,
   // so that it's possible to include the styles by moduleId in some other <dom-module>
   // using <style include="module-id">
-  const includeStylesToTemplate = styles.length && options.moduleId;
+  const includeStylesToTemplate = !!(styles.length && options.moduleId);
 
   // options.include may be undefined, string or an array of strings. Convert it to an array
   const moduleIncludes = [].concat(options.include || []);

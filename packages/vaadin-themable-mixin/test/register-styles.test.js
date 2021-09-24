@@ -157,6 +157,26 @@ describe('registerStyles', () => {
       expect(getComputedStyle(instance).color).to.equal('rgb(0, 0, 255)');
     });
 
+    it('should not include duplicate styles', () => {
+      registerStyles(undefined, css``, { moduleId: unique('id') });
+
+      const duplicateStyle = css`
+        :host {
+          color: rgb(255, 0, 0);
+        }
+      `;
+      // Need to use both moduleId and include to verify the fix in style-modules -adapter
+      registerStyles(unique('component'), duplicateStyle, { include: [unique('id')], moduleId: unique('id2') });
+
+      const instance = defineAndInstantiate(unique('component'));
+      // Get all the styles from the component as one big string (let's assume it may have multiple style tags)
+      const styles = [...instance.shadowRoot.querySelectorAll('style')].map((style) => style.textContent).join('');
+      // Check the number of occurences of the style rule
+      const occurrences = styles.split(duplicateStyle.toString()).length - 1;
+      // There should be only one occurence
+      expect(occurrences).to.equal(1);
+    });
+
     describe('warnings', () => {
       beforeEach(() => {
         sinon.stub(console, 'warn');
