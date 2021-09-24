@@ -1,4 +1,4 @@
-import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
+import { fixtureSync, mousedown } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import { sendKeys } from '@web/test-runner-commands';
 import '@vaadin/vaadin-icon/theme/lumo/vaadin-icon.js';
@@ -18,6 +18,11 @@ describe('button', () => {
   describe('basic', () => {
     it('basic', async () => {
       await visualDiff(div, 'basic');
+    });
+
+    it('active', async () => {
+      mousedown(element);
+      await visualDiff(div, 'active');
     });
 
     it('focus-ring', async () => {
@@ -43,6 +48,18 @@ describe('button', () => {
       element.setAttribute('theme', 'primary');
       element.disabled = true;
       await visualDiff(div, 'theme-primary-disabled');
+    });
+
+    it('primary active', async () => {
+      element.setAttribute('theme', 'primary');
+      mousedown(element);
+      await visualDiff(div, 'theme-primary-active');
+    });
+
+    it('primary focus-ring', async () => {
+      element.setAttribute('theme', 'primary');
+      await sendKeys({ press: 'Tab' });
+      await visualDiff(div, 'theme-primary-focus-ring');
     });
 
     it('secondary', async () => {
