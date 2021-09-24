@@ -12,7 +12,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 import { registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import '@vaadin/button/src/vaadin-button.js';
 import '@vaadin/confirm-dialog/src/vaadin-confirm-dialog.js';
-import '@vaadin/vaadin-text-field/src/vaadin-text-field.js';
+import '@vaadin/text-field/src/vaadin-text-field.js';
 import '@vaadin/vaadin-license-checker/vaadin-license-checker.js';
 import '../vendor/vaadin-quill.js';
 import { richTextEditorStyles } from './vaadin-rich-text-editor-styles.js';

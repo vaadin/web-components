@@ -6,7 +6,7 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { timeOut } from '@vaadin/component-base/src/async.js';
-import '@vaadin/vaadin-text-field/src/vaadin-text-field.js';
+import '@vaadin/text-field/src/vaadin-text-field.js';
 
 /**
  * `<vaadin-grid-filter>` is a helper element for the `<vaadin-grid>` that provides out-of-the-box UI controls,

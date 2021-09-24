@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { click, enterKeyDown, escKeyDown, fixtureSync, mousedown, mouseup, oneEvent } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import '@vaadin/vaadin-text-field/vaadin-text-field.js';
+import '@vaadin/text-field/vaadin-text-field.js';
 import '../vaadin-overlay.js';
 
 customElements.define(

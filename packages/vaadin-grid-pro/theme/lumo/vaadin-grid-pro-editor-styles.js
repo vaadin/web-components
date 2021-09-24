@@ -30,7 +30,7 @@ const gridProEditor = css`
     box-shadow: none;
   }
 
-  :host([theme~='grid-pro-editor']) [part='value'] {
+  :host([theme~='grid-pro-editor']) ::slotted(input) {
     padding: 0 var(--lumo-space-m);
     font-size: inherit;
   }
