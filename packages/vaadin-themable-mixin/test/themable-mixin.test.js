@@ -1,176 +1,167 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { ThemableMixin } from '../vaadin-themable-mixin.js';
+import { ThemableMixin, registerStyles, css } from '../vaadin-themable-mixin.js';
 
-function createDomModule(id, themeFor, tpl) {
-  const domModule = document.createElement('dom-module');
-  domModule.setAttribute('theme-for', themeFor);
-  domModule.appendChild(tpl);
-  domModule.register(id);
-}
+let createStyles =
+  window.createStylesFunction ||
+  ((moduleId, themeFor, styles) => {
+    registerStyles(themeFor, styles, { moduleId });
+  });
 
-createDomModule(
+let defineCustomElement = (name, parentName, content = '') => {
+  class CustomElement extends ThemableMixin(parentName ? customElements.get(parentName) : PolymerElement) {
+    static get is() {
+      return name;
+    }
+
+    static get template() {
+      const template = document.createElement('template');
+      template.innerHTML = content;
+      return template;
+    }
+  }
+
+  customElements.define(name, CustomElement);
+};
+
+createStyles(
   'test-qux-default-theme',
   'test-qux',
-  html`
-    <style>
-      [part='text'] {
-        color: rgb(255, 0, 0);
-      }
-    </style>
+  css`
+    [part='text'] {
+      color: rgb(255, 0, 0);
+    }
   `
 );
 
 /* This default style module should get overridden by test-foo styles.
 Removing this module doesn't make any difference to the test outcome but it's
 here to make a point. */
-createDomModule(
+createStyles(
   'test-foo-default-theme',
   'test-foo',
-  html`
-    <style>
-      [part='text'] {
-        color: rgb(0, 0, 0) !important;
-        background-color: rgb(255, 0, 0);
-      }
-    </style>
+  css`
+    [part='text'] {
+      color: rgb(0, 0, 0) !important;
+      background-color: rgb(255, 0, 0);
+    }
   `
 );
 
-createDomModule(
+createStyles(
   'test-styles',
   'test-foo',
-  html`
-    <style>
-      :host {
-        display: flex;
-      }
+  css`
+    :host {
+      display: flex;
+    }
 
-      [part='text'] {
-        color: rgb(255, 255, 255);
-      }
-    </style>
+    [part='text'] {
+      color: rgb(255, 255, 255);
+    }
   `
 );
 
-createDomModule(
+createStyles(
   'test-styles-multiple',
   'test-foo test-bar',
-  html`
-    <style>
-      [part='text'] {
-        background-color: rgb(255, 0, 0);
-      }
-    </style>
+  css`
+    [part='text'] {
+      background-color: rgb(255, 0, 0);
+    }
   `
 );
 
-createDomModule(
+createStyles(
   'test-styles-wildcard',
   'test*a*',
-  html`
-    <style>
-      [part='text'] {
-        position: relative;
-      }
-    </style>
+  css`
+    [part='text'] {
+      position: relative;
+    }
   `
 );
 
-createDomModule(
+createStyles(
   'baz-styles',
   'test-baz',
-  html`
-    <style>
-      [part='text'] {
-        width: 100px;
-      }
-    </style>
+  css`
+    [part='text'] {
+      width: 100px;
+    }
   `
 );
 
-createDomModule(
+createStyles(
   'custom-test-style-override-styles-first',
   'test-style-override',
-  html`
-    <style>
-      :host {
-        position: absolute;
-      }
+  css`
+    :host {
+      position: absolute;
+    }
 
-      [part='text'] {
-        color: rgb(0, 0, 0);
-      }
-    </style>
+    [part='text'] {
+      color: rgb(0, 0, 0);
+    }
   `
 );
 
-createDomModule(
+createStyles(
   'custom-test-style-override-styles-second',
   'test-style-override',
-  html`
-    <style>
-      :host {
-        position: relative;
-      }
-    </style>
+  css`
+    :host {
+      position: relative;
+    }
   `
 );
 
-createDomModule(
+createStyles(
   'vaadin-test-style-override-styles-first',
   'test-style-override',
-  html`
-    <style>
-      :host {
-        display: flex;
-      }
-    </style>
+  css`
+    :host {
+      display: flex;
+    }
   `
 );
 
-createDomModule(
+createStyles(
   'lumo-test-style-override-styles',
   'test-style-override',
-  html`
-    <style>
-      [part='text'] {
-        color: rgb(255, 0, 0);
-        display: inline;
-      }
-    </style>
+  css`
+    [part='text'] {
+      color: rgb(255, 0, 0);
+      display: inline;
+    }
   `
 );
 
-createDomModule(
+createStyles(
   'material-test-style-override-styles',
   'test-style-override',
-  html`
-    <style>
-      [part='text'] {
-        color: rgb(0, 255, 0);
-        opacity: 0.5;
-      }
-    </style>
+  css`
+    [part='text'] {
+      color: rgb(0, 255, 0);
+      opacity: 0.5;
+    }
   `
 );
 
-createDomModule(
+createStyles(
   'vaadin-test-style-override-styles-second',
   'test-style-override',
-  html`
-    <style>
-      :host {
-        display: block;
-      }
+  css`
+    :host {
+      display: block;
+    }
 
-      [part='text'] {
-        color: rgb(255, 255, 255);
-        opacity: 1;
-        display: block;
-      }
-    </style>
+    [part='text'] {
+      color: rgb(255, 255, 255);
+      opacity: 1;
+      display: block;
+    }
   `
 );
 
@@ -346,5 +337,30 @@ describe('ThemableMixin', () => {
 
   it('should respect custom style module order', () => {
     expect(getComputedStyle(components[6]).position).to.equal('relative');
+  });
+
+  it('should not include duplicate styles', () => {
+    const name = 'test-duplicate';
+
+    // Create a wildcard style that applies to both the parent and the child
+    const duplicateStyle = css`
+      :host {
+        color: blue;
+      }
+    `;
+    createStyles('vaadin-test-duplicate-styles', 'test-duplicate*', duplicateStyle);
+
+    // Define the test-duplicate-parent and test-duplicate components
+    defineCustomElement(name + '-parent');
+    defineCustomElement(name, name + '-parent');
+
+    // Create an instance of the test-duplicate component
+    const testComponent = fixtureSync(`<${name}></${name}>`);
+    // Get all the styles from the component as one big string (let's assume it may have multiple style tags)
+    const styles = [...testComponent.shadowRoot.querySelectorAll('style')].map((style) => style.textContent).join('');
+    // Check the number of occurences of the style rule
+    const occurrences = styles.split(duplicateStyle.toString()).length - 1;
+    // There should be only one occurence
+    expect(occurrences).to.equal(1);
   });
 });

@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { DomModule } from '@polymer/polymer/lib/elements/dom-module.js';
 import { registerStyles, css, unsafeCSS } from '../register-styles.js';
 import { ThemableMixin } from '../vaadin-themable-mixin.js';
 
@@ -115,17 +114,6 @@ describe('registerStyles', () => {
     }).to.throw(Error);
   });
 
-  // The following tests exists mainly due to the current techincal limitations
-  // of Polymer style module based themable-mixin implementation.
-  // Once the component theming is based on constructable stylesheets
-  // the import order of a component and its styles should no longer matter.
-  //
-  // Also, while lumo and material themes still use style modules, there
-  // needs to be an API for including style modules by id. The API also
-  // has temporary means to define an explicit style module id.
-  //
-  // These tests and the support for such use-cases should drop once themable
-  // mixin is no longer built on Polymer style modules.
   describe('style module support', () => {
     it('should add theme for a component and register with specified module id', () => {
       registerStyles(
@@ -138,7 +126,7 @@ describe('registerStyles', () => {
         { moduleId: unique('id') }
       );
 
-      registerStyles(unique('component'), undefined, { include: [unique('id')], suppressDeprecationWarning: true });
+      registerStyles(unique('component'), undefined, { include: [unique('id')] });
 
       const instance = defineAndInstantiate(unique('component'));
       expect(getComputedStyle(instance).color).to.equal('rgb(255, 0, 0)');
@@ -162,27 +150,31 @@ describe('registerStyles', () => {
             color: rgb(0, 0, 255);
           }
         `,
-        { include: [unique('id')], suppressDeprecationWarning: true }
+        { include: [unique('id')] }
       );
 
       const instance = defineAndInstantiate(unique('component'));
       expect(getComputedStyle(instance).color).to.equal('rgb(0, 0, 255)');
     });
 
-    it('should not add a theme-for attribute to the module with id', () => {
-      registerStyles(
-        undefined,
-        css`
-          :host {
-            color: rgb(255, 0, 0);
-          }
-        `,
-        { moduleId: unique('id') }
-      );
+    it('should not include duplicate styles', () => {
+      registerStyles(undefined, css``, { moduleId: unique('id') });
 
-      const themeForAttribute = DomModule.prototype.modules[unique('id')].getAttribute('theme-for');
+      const duplicateStyle = css`
+        :host {
+          color: rgb(255, 0, 0);
+        }
+      `;
+      // Need to use both moduleId and include to verify the fix in style-modules -adapter
+      registerStyles(unique('component'), duplicateStyle, { include: [unique('id')], moduleId: unique('id2') });
 
-      expect(themeForAttribute).not.to.be.ok;
+      const instance = defineAndInstantiate(unique('component'));
+      // Get all the styles from the component as one big string (let's assume it may have multiple style tags)
+      const styles = [...instance.shadowRoot.querySelectorAll('style')].map((style) => style.textContent).join('');
+      // Check the number of occurences of the style rule
+      const occurrences = styles.split(duplicateStyle.toString()).length - 1;
+      // There should be only one occurence
+      expect(occurrences).to.equal(1);
     });
 
     describe('warnings', () => {
@@ -211,18 +203,6 @@ describe('registerStyles', () => {
       it('should not warn about registering the style too late 2', () => {
         define(unique());
         registerStyles(unique(), styles);
-
-        expect(console.warn.called).to.be.false;
-      });
-
-      it('should warn about using the deprecated include option', () => {
-        registerStyles(unique('component'), css``, { include: [unique('id')] });
-
-        expect(console.warn.called).to.be.true;
-      });
-
-      it('should not warn about using the deprecated include option', () => {
-        registerStyles(unique('component'), css``, { include: [unique('id')], suppressDeprecationWarning: true });
 
         expect(console.warn.called).to.be.false;
       });
