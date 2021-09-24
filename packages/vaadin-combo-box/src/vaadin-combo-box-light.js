@@ -123,21 +123,12 @@ class ComboBoxLight extends ComboBoxDataProviderMixin(ComboBoxMixin(ThemableMixi
   ready() {
     super.ready();
     this._toggleElement = this.querySelector('.toggle-button');
-
-    if (this.clearElement) {
-      this.clearElement.addEventListener('mousedown', (e) => {
-        e.preventDefault(); // Prevent native focus changes
-        // _focusableElement is needed for paper-input
-        (this.inputElement._focusableElement || this.inputElement).focus();
-      });
-    }
   }
 
   /** @protected */
   connectedCallback() {
     super.connectedCallback();
-    const cssSelector = 'vaadin-text-field,iron-input,paper-input,.paper-input-input,.input';
-    this._setInputElement(this.querySelector(cssSelector));
+    this._setInputElement(this.querySelector('vaadin-text-field,.input'));
     this._revertInputValue();
   }
 
