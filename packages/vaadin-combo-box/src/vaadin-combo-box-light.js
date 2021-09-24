@@ -18,13 +18,11 @@ import './vaadin-combo-box-dropdown.js';
  *
  * To create a custom input field, you need to add a child element which has a two-way
  * data-bindable property representing the input value. The property name is expected
- * to be `value` by default. See the example below for a simplest possible example
- * using a `<vaadin-text-field>` element.
+ * to be `value` by default. For example, you can use `<vaadin-text-field>` element:
  *
  * ```html
  * <vaadin-combo-box-light>
- *   <vaadin-text-field>
- *   </vaadin-text-field>
+ *   <vaadin-text-field></vaadin-text-field>
  * </vaadin-combo-box-light>
  * ```
  *
