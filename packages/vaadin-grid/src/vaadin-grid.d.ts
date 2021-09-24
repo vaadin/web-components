@@ -4,21 +4,13 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 
 import { GridDefaultItem, GridDropLocation, GridEventContext, GridItemModel } from './interfaces';
 
-import { A11yMixin } from './vaadin-grid-a11y-mixin.js';
-
 import { ActiveItemMixin } from './vaadin-grid-active-item-mixin.js';
 
 import { ArrayDataProviderMixin } from './vaadin-grid-array-data-provider-mixin.js';
 
-import { ColumnResizingMixin } from './vaadin-grid-column-resizing-mixin.js';
-
 import { DataProviderMixin } from './vaadin-grid-data-provider-mixin.js';
 
-import { DynamicColumnsMixin } from './vaadin-grid-dynamic-columns-mixin.js';
-
 import { EventContextMixin } from './vaadin-grid-event-context-mixin.js';
-
-import { FilterMixin } from './vaadin-grid-filter-mixin.js';
 
 import { RowDetailsMixin } from './vaadin-grid-row-details-mixin.js';
 
@@ -31,8 +23,6 @@ import { SortMixin } from './vaadin-grid-sort-mixin.js';
 import { StylingMixin } from './vaadin-grid-styling-mixin.js';
 
 import { DragAndDropMixin } from './vaadin-grid-drag-and-drop-mixin.js';
-
-import { KeyboardNavigationMixin } from './vaadin-grid-keyboard-navigation-mixin.js';
 
 import { ColumnReorderingMixin } from './vaadin-grid-column-reordering-mixin.js';
 
@@ -333,30 +323,10 @@ declare class GridElement<TItem = GridDefaultItem> extends HTMLElement {
    */
   allRowsVisible: boolean;
 
-  __itemsReceived(): void;
-
   /**
    * Updates the `width` of all columns which have `autoWidth` set to `true`.
    */
   recalculateColumnWidths(): void;
-
-  _updateRow(
-    row: HTMLTableRowElement,
-    columns: GridColumnElement<TItem>[],
-    section: string | null,
-    isColumnRow: boolean,
-    noNotify: boolean
-  ): void;
-
-  __updateHeaderFooterRowVisibility(row: HTMLTableRowElement | null): void;
-
-  _renderColumnTree(columnTree: GridColumnElement<TItem>[]): void;
-
-  _updateItem(row: HTMLElement, item: TItem | null): void;
-
-  _toggleAttribute(name: string, bool: boolean, node: Element): void;
-
-  __getRowModel(row: HTMLTableRowElement): GridItemModel<TItem>;
 
   /**
    * Requests an update for the content of cells.
@@ -403,19 +373,14 @@ declare class GridElement<TItem = GridDefaultItem> extends HTMLElement {
 interface GridElement<TItem = GridDefaultItem>
   extends ElementMixin,
     ThemableMixin,
-    A11yMixin,
     ActiveItemMixin<TItem>,
     ArrayDataProviderMixin<TItem>,
-    ColumnResizingMixin,
     DataProviderMixin<TItem>,
-    DynamicColumnsMixin<TItem>,
-    FilterMixin,
     RowDetailsMixin<TItem>,
     ScrollMixin,
     SelectionMixin<TItem>,
     SortMixin,
-    KeyboardNavigationMixin<TItem>,
-    ColumnReorderingMixin<TItem>,
+    ColumnReorderingMixin,
     EventContextMixin<TItem>,
     StylingMixin<TItem>,
     DragAndDropMixin<TItem> {}

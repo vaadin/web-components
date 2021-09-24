@@ -1,4 +1,4 @@
-import { GridDragAndDropFilter, GridDropMode, GridItemModel } from './interfaces';
+import { GridDragAndDropFilter, GridDropMode } from './interfaces';
 
 declare function DragAndDropMixin<TItem, T extends new (...args: any[]) => {}>(
   base: T
@@ -57,8 +57,6 @@ interface DragAndDropMixin<TItem> {
    */
   dropFilter: GridDragAndDropFilter<TItem> | null | undefined;
 
-  _clearDragStyles(): void;
-
   /**
    * Runs the `dragFilter` and `dropFilter` hooks for the visible cells.
    * If the filter depends on varying conditions, you may need to
@@ -66,8 +64,6 @@ interface DragAndDropMixin<TItem> {
    * the conditions change.
    */
   filterDragAndDrop(): void;
-
-  _filterDragAndDrop(row: HTMLElement, model: GridItemModel<TItem>): void;
 }
 
 export { DragAndDropMixin, DragAndDropMixinConstructor };
