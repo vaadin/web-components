@@ -139,13 +139,6 @@ class ComboBoxLight extends ComboBoxDataProviderMixin(ComboBoxMixin(ThemableMixi
     const cssSelector = 'vaadin-text-field,iron-input,paper-input,.paper-input-input,.input';
     this._setInputElement(this.querySelector(cssSelector));
     this._revertInputValue();
-    this._preventInputBlur();
-  }
-
-  /** @protected */
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    this._restoreInputBlur();
   }
 
   /**

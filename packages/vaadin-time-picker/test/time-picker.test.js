@@ -236,6 +236,15 @@ describe('time-picker', () => {
       clearButton.click();
       expect(comboBox.opened).to.be.false;
     });
+
+    it('should prevent mousedown event to avoid input blur', () => {
+      timePicker.$.comboBox.open();
+
+      const event = new CustomEvent('mousedown', { cancelable: true });
+      clearButton.dispatchEvent(event);
+
+      expect(event.defaultPrevented).to.be.true;
+    });
   });
 
   describe('change event', () => {
