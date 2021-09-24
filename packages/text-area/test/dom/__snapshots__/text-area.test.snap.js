@@ -8,7 +8,7 @@ snapshots["vaadin-text-area default"] =
     </slot>
     <span
       aria-hidden="true"
-      part="indicator"
+      part="required-indicator"
     >
     </span>
   </div>
@@ -51,7 +51,7 @@ snapshots["vaadin-text-area disabled"] =
     </slot>
     <span
       aria-hidden="true"
-      part="indicator"
+      part="required-indicator"
     >
     </span>
   </div>
@@ -97,7 +97,7 @@ snapshots["vaadin-text-area readonly"] =
     </slot>
     <span
       aria-hidden="true"
-      part="indicator"
+      part="required-indicator"
     >
     </span>
   </div>
@@ -143,7 +143,7 @@ snapshots["vaadin-text-area invalid"] =
     </slot>
     <span
       aria-hidden="true"
-      part="indicator"
+      part="required-indicator"
     >
     </span>
   </div>
@@ -189,7 +189,7 @@ snapshots["vaadin-text-area theme"] =
     </slot>
     <span
       aria-hidden="true"
-      part="indicator"
+      part="required-indicator"
     >
     </span>
   </div>

@@ -8,7 +8,7 @@ snapshots["vaadin-email-field default"] =
     </slot>
     <span
       aria-hidden="true"
-      part="indicator"
+      part="required-indicator"
     >
     </span>
   </div>
@@ -51,7 +51,7 @@ snapshots["vaadin-email-field disabled"] =
     </slot>
     <span
       aria-hidden="true"
-      part="indicator"
+      part="required-indicator"
     >
     </span>
   </div>
@@ -97,7 +97,7 @@ snapshots["vaadin-email-field readonly"] =
     </slot>
     <span
       aria-hidden="true"
-      part="indicator"
+      part="required-indicator"
     >
     </span>
   </div>
@@ -143,7 +143,7 @@ snapshots["vaadin-email-field invalid"] =
     </slot>
     <span
       aria-hidden="true"
-      part="indicator"
+      part="required-indicator"
     >
     </span>
   </div>
@@ -189,7 +189,7 @@ snapshots["vaadin-email-field theme"] =
     </slot>
     <span
       aria-hidden="true"
-      part="indicator"
+      part="required-indicator"
     >
     </span>
   </div>

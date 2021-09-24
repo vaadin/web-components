@@ -133,7 +133,7 @@ class DatePicker extends DatePickerMixin(
       <div part="container">
         <div part="label" on-click="focus">
           <slot name="label"></slot>
-          <span part="indicator" aria-hidden="true"></span>
+          <span part="required-indicator" aria-hidden="true"></span>
         </div>
 
         <vaadin-input-container

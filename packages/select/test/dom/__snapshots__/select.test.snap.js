@@ -8,7 +8,7 @@ snapshots["vaadin-select default"] =
     </slot>
     <span
       aria-hidden="true"
-      part="indicator"
+      part="required-indicator"
     >
     </span>
   </div>
@@ -49,7 +49,7 @@ snapshots["vaadin-select disabled"] =
     </slot>
     <span
       aria-hidden="true"
-      part="indicator"
+      part="required-indicator"
     >
     </span>
   </div>
@@ -93,7 +93,7 @@ snapshots["vaadin-select readonly"] =
     </slot>
     <span
       aria-hidden="true"
-      part="indicator"
+      part="required-indicator"
     >
     </span>
   </div>
@@ -137,7 +137,7 @@ snapshots["vaadin-select invalid"] =
     </slot>
     <span
       aria-hidden="true"
-      part="indicator"
+      part="required-indicator"
     >
     </span>
   </div>
@@ -181,7 +181,7 @@ snapshots["vaadin-select theme"] =
     </slot>
     <span
       aria-hidden="true"
-      part="indicator"
+      part="required-indicator"
     >
     </span>
   </div>
