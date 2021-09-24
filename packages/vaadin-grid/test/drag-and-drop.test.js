@@ -189,7 +189,6 @@ describe('drag and drop', () => {
       it('should only use visible items for the row count state attribute', async () => {
         grid.style.height = '80px';
         flushGrid(grid);
-        grid.notifyResize();
         grid.selectedItems = grid.items;
 
         await aTimeout(0);

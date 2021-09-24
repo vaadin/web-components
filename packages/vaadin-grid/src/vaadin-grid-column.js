@@ -443,7 +443,6 @@ export const ColumnBaseMixin = (superClass) =>
         );
 
         this._grid._updateLastFrozen && this._grid._updateLastFrozen();
-        this._grid.notifyResize && this._grid.notifyResize();
         this._grid._resetKeyboardNavigation && this._grid._resetKeyboardNavigation();
       }
       this._previousHidden = hidden;

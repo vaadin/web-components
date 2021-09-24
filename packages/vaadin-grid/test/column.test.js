@@ -147,21 +147,6 @@ describe('column', () => {
         expect(column._footerCell.parentElement).to.be.not.ok;
       });
 
-      it('should notify resize', () => {
-        const spy = sinon.spy(grid, 'notifyResize');
-        column.hidden = true;
-        expect(spy.callCount).to.equal(1);
-        column.hidden = false;
-        expect(spy.callCount).to.equal(2);
-      });
-
-      it('should not notify resize', () => {
-        const spy = sinon.spy(grid, 'notifyResize');
-        expect(column.hidden).to.be.false;
-        column.hidden = false;
-        expect(spy.called).to.be.false;
-      });
-
       it('should detach cells from a hidden column', () => {
         const childCountBefore = grid.childElementCount;
         column.hidden = true;
