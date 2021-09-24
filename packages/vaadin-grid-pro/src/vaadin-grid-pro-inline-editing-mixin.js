@@ -65,7 +65,7 @@ export const InlineEditingMixin = (superClass) =>
       this._addEditColumnListener('mousedown', (e) => {
         // prevent grid from resetting navigating state
         e.stopImmediatePropagation();
-        this._toggleAttribute('navigating', true, this);
+        this.toggleAttribute('navigating', true);
       });
 
       this._addEditColumnListener('focusout', (e) => {

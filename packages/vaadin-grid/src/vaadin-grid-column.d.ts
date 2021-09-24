@@ -69,8 +69,6 @@ interface ColumnBaseMixin<TItem> {
   _findHostGrid(): GridElement<TItem> | undefined;
 
   _generateHeader(path: string): string;
-
-  _toggleAttribute(name: string, bool: boolean, node: Element): void;
 }
 
 /**
