@@ -57,10 +57,51 @@ export const ElementMixin = (superClass) =>
 
     constructor() {
       super();
+
+      this.__controllers = new Set();
+
       if (document.doctype === null) {
         console.warn(
           'Vaadin components require the "standards mode" declaration. Please add <!DOCTYPE html> to the HTML document.'
         );
       }
+    }
+
+    /** @protected */
+    connectedCallback() {
+      super.connectedCallback();
+
+      this.__controllers.forEach((c) => {
+        c.hostConnected && c.hostConnected();
+      });
+    }
+
+    /** @protected */
+    disconnectedCallback() {
+      super.disconnectedCallback();
+
+      this.__controllers.forEach((c) => {
+        c.hostDisconnected && c.hostDisconnected();
+      });
+    }
+
+    /**
+     * Registers a controller to participate in the element update cycle.
+     * @protected
+     */
+    addController(controller) {
+      this.__controllers.add(controller);
+      // Call hostConnected if a controller is added after the element is attached.
+      if (this.$ !== undefined && this.isConnected && controller.hostConnected) {
+        controller.hostConnected();
+      }
+    }
+
+    /**
+     * Removes a controller from the element.
+     * @protected
+     */
+    removeController(controller) {
+      this.__controllers.delete(controller);
     }
   };
