@@ -13,8 +13,8 @@ import {
   isDesktopSafari,
   nextFrame
 } from '@vaadin/testing-helpers';
-import { resetMouseCanceller } from '@polymer/polymer/lib/utils/gestures.js';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import { resetMouseCanceller } from '@polymer/polymer/lib/utils/gestures.js';
 import '@vaadin/vaadin-text-field/vaadin-text-field.js';
 import '@vaadin/vaadin-template-renderer';
 import { createEventSpy, getFirstItem } from './helpers.js';
