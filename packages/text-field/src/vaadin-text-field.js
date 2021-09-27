@@ -5,6 +5,7 @@
  */
 import { PolymerElement, html } from '@polymer/polymer';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { AriaLabelController } from '@vaadin/field-base/src/aria-label-controller.js';
 import { InputSlotMixin } from '@vaadin/field-base/src/input-slot-mixin.js';
 import { TextFieldMixin } from '@vaadin/field-base/src/text-field-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
@@ -65,5 +66,12 @@ export class TextField extends TextFieldMixin(InputSlotMixin(ThemableMixin(Eleme
   /** @protected */
   get clearElement() {
     return this.$.clearButton;
+  }
+
+  /** @protected */
+  ready() {
+    super.ready();
+
+    this.addController(new AriaLabelController(this));
   }
 }

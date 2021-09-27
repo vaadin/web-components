@@ -7,9 +7,10 @@ import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
 import { SlotMixin } from '@vaadin/component-base/src/slot-mixin.js';
 import { DelegateFocusMixin } from './delegate-focus-mixin.js';
 import { InputMixin } from './input-mixin.js';
+import { LabelMixin } from './label-mixin.js';
 
 const InputSlotMixinImplementation = (superclass) =>
-  class InputSlotMixinClass extends DelegateFocusMixin(InputMixin(SlotMixin(superclass))) {
+  class InputSlotMixinClass extends DelegateFocusMixin(LabelMixin(InputMixin(SlotMixin(superclass)))) {
     static get properties() {
       /**
        * String used to define input type.

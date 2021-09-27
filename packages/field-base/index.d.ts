@@ -1,4 +1,4 @@
-export { AriaLabelMixin } from './src/aria-label-mixin.js';
+export { AriaLabelController } from './src/aria-label-controller.js';
 export { CharLengthMixin } from './src/char-length-mixin.js';
 export { CheckedMixin } from './src/checked-mixin.js';
 export { ClearButtonMixin } from './src/clear-button-mixin.js';

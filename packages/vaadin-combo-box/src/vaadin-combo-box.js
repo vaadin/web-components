@@ -5,7 +5,7 @@
  */
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { AriaLabelMixin } from '@vaadin/field-base/src/aria-label-mixin.js';
+import { AriaLabelController } from '@vaadin/field-base/src/aria-label-controller.js';
 import { ClearButtonMixin } from '@vaadin/field-base/src/clear-button-mixin.js';
 import { FieldAriaMixin } from '@vaadin/field-base/src/field-aria-mixin.js';
 import { InputSlotMixin } from '@vaadin/field-base/src/input-slot-mixin.js';
@@ -168,7 +168,6 @@ registerStyles('vaadin-combo-box', inputFieldShared, { moduleId: 'vaadin-combo-b
  * @mixes ElementMixin
  * @mixes ThemableMixin
  * @mixes InputSlotMixin
- * @mixes AriaLabelMixin
  * @mixes ClearButtonMixin
  * @mixes FieldAriaMixin
  * @mixes PatternMixin
@@ -177,9 +176,7 @@ registerStyles('vaadin-combo-box', inputFieldShared, { moduleId: 'vaadin-combo-b
  */
 class ComboBox extends ComboBoxDataProviderMixin(
   ComboBoxMixin(
-    PatternMixin(
-      FieldAriaMixin(ClearButtonMixin(AriaLabelMixin(InputSlotMixin(ThemableMixin(ElementMixin(PolymerElement))))))
-    )
+    PatternMixin(FieldAriaMixin(ClearButtonMixin(InputSlotMixin(ThemableMixin(ElementMixin(PolymerElement))))))
   )
 ) {
   static get is() {
@@ -277,6 +274,7 @@ class ComboBox extends ComboBoxDataProviderMixin(
   ready() {
     super.ready();
 
+    this.addController(new AriaLabelController(this));
     this._positionTarget = this.shadowRoot.querySelector('[part="input-field"]');
     this._toggleElement = this.$.toggleButton;
   }

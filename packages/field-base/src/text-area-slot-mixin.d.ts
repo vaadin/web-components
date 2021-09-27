@@ -6,6 +6,7 @@
 import { SlotMixin } from '@vaadin/component-base/src/slot-mixin.js';
 import { DelegateFocusMixin } from './delegate-focus-mixin.js';
 import { InputMixin } from './input-mixin.js';
+import { LabelMixin } from './label-mixin.js';
 
 /**
  * A mixin to add `<textarea>` element to the corresponding named slot.
@@ -16,6 +17,6 @@ interface TextAreaSlotMixinConstructor {
   new (...args: any[]): TextAreaSlotMixin;
 }
 
-interface TextAreaSlotMixin extends DelegateFocusMixin, InputMixin, SlotMixin {}
+interface TextAreaSlotMixin extends DelegateFocusMixin, InputMixin, LabelMixin, SlotMixin {}
 
 export { TextAreaSlotMixinConstructor, TextAreaSlotMixin };

@@ -7,7 +7,7 @@ import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { GestureEventListeners } from '@polymer/polymer/lib/mixins/gesture-event-listeners.js';
 import '@polymer/iron-media-query/iron-media-query.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { AriaLabelMixin } from '@vaadin/field-base/src/aria-label-mixin.js';
+import { AriaLabelController } from '@vaadin/field-base/src/aria-label-controller.js';
 import { ClearButtonMixin } from '@vaadin/field-base/src/clear-button-mixin.js';
 import { FieldAriaMixin } from '@vaadin/field-base/src/field-aria-mixin.js';
 import { InputConstraintsMixin } from '@vaadin/field-base/src/input-constraints-mixin.js';
@@ -104,7 +104,6 @@ registerStyles('vaadin-date-picker', [inputFieldShared, datePickerStyles], { mod
  * @mixes ElementMixin
  * @mixes ThemableMixin
  * @mixes InputSlotMixin
- * @mixes AriaLabelMixin
  * @mixes ClearButtonMixin
  * @mixes FieldAriaMixin
  * @mixes DatePickerMixin
@@ -112,9 +111,7 @@ registerStyles('vaadin-date-picker', [inputFieldShared, datePickerStyles], { mod
 class DatePicker extends DatePickerMixin(
   FieldAriaMixin(
     ClearButtonMixin(
-      AriaLabelMixin(
-        InputConstraintsMixin(InputSlotMixin(GestureEventListeners(ThemableMixin(ElementMixin(PolymerElement)))))
-      )
+      InputConstraintsMixin(InputSlotMixin(GestureEventListeners(ThemableMixin(ElementMixin(PolymerElement)))))
     )
   )
 ) {
@@ -212,6 +209,7 @@ class DatePicker extends DatePickerMixin(
   ready() {
     super.ready();
 
+    this.addController(new AriaLabelController(this));
     this.$.overlay.positionTarget = this.shadowRoot.querySelector('[part="input-field"]');
   }
 

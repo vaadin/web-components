@@ -6,7 +6,6 @@
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { animationFrame } from '@vaadin/component-base/src/async.js';
-import { AriaLabelMixin } from './aria-label-mixin.js';
 import { ClearButtonMixin } from './clear-button-mixin.js';
 import { DelegateFocusMixin } from './delegate-focus-mixin.js';
 import { FieldAriaMixin } from './field-aria-mixin.js';
@@ -14,7 +13,7 @@ import { InputConstraintsMixin } from './input-constraints-mixin.js';
 
 const InputFieldMixinImplementation = (superclass) =>
   class InputFieldMixinClass extends ClearButtonMixin(
-    FieldAriaMixin(InputConstraintsMixin(AriaLabelMixin(DelegateFocusMixin(superclass))))
+    FieldAriaMixin(InputConstraintsMixin(DelegateFocusMixin(superclass)))
   ) {
     static get properties() {
       return {
