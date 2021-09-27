@@ -34,6 +34,18 @@ describe('custom field', () => {
       customField.focus();
       expect(document.activeElement).to.equal(customField.inputs[0]);
     });
+
+    it('should ignore slotted inputs', () => {
+      customField = fixtureSync(`
+        <vaadin-custom-field>
+          <div>
+            <input type="text" slot="input" />
+            <textarea slot="textarea" />
+          </div>
+        </vaadin-custom-field>
+      `);
+      expect(customField.inputs).to.be.empty;
+    });
   });
 
   describe('value', () => {
