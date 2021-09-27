@@ -7,7 +7,7 @@ module.exports = createUnitTestsConfig({
     threshold: {
       statements: 75,
       branches: 50,
-      functions: 60,
+      functions: 56,
       lines: 75
     }
   }
