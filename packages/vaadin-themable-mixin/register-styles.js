@@ -1,6 +1,6 @@
 import '@polymer/polymer/lib/elements/dom-module.js';
-import { CSSResult } from 'lit';
 import { stylesFromTemplate } from '@polymer/polymer/lib/utils/style-gather.js';
+import { CSSResult } from 'lit';
 export { css, unsafeCSS } from 'lit';
 
 let moduleIdIndex = 0;

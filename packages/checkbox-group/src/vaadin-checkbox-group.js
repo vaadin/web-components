@@ -5,8 +5,8 @@
  */
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
-import { Checkbox } from '@vaadin/checkbox/src/vaadin-checkbox.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { Checkbox } from '@vaadin/checkbox/src/vaadin-checkbox.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**

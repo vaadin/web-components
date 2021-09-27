@@ -3,10 +3,10 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { ComboBoxRenderer } from '@vaadin/vaadin-combo-box/src/interfaces';
 import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
 import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
 import { InputMixin } from '@vaadin/field-base/src/input-mixin.js';
+import { ComboBoxRenderer } from './interfaces';
 
 declare function ComboBoxMixin<TItem, T extends new (...args: any[]) => {}>(
   base: T
