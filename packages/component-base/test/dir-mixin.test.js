@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
+import sinon from 'sinon';
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { DirMixin } from '../src/dir-mixin.js';
-import sinon from 'sinon';
 
 class DirMixinElement extends DirMixin(PolymerElement) {
   static get is() {

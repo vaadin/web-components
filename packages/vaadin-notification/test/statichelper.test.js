@@ -1,8 +1,8 @@
 import { expect } from '@esm-bundle/chai';
+import { aTimeout } from '@vaadin/testing-helpers';
+import { html } from 'lit';
 import { NotificationElement } from '../src/vaadin-notification.js';
 import '../vaadin-notification.js';
-import { html } from 'lit';
-import { aTimeout } from '@vaadin/testing-helpers';
 
 describe('static helpers', () => {
   it('show should show a text notification', () => {

@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { flush } from '@polymer/polymer/lib/utils/flush.js';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { flush } from '@polymer/polymer/lib/utils/flush.js';
 import '@vaadin/vaadin-template-renderer';
 import '../vaadin-grid.js';
 import '../vaadin-grid-column-group.js';
