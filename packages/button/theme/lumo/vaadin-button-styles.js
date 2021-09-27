@@ -48,13 +48,6 @@ const button = css`
     --lumo-button-size: var(--lumo-size-l);
   }
 
-  /* This needs to be the last selector for it to take priority */
-  :host([disabled][disabled]) {
-    pointer-events: none;
-    color: var(--lumo-disabled-text-color);
-    background-color: var(--lumo-contrast-5pct);
-  }
-
   /* For interaction states */
   :host::before,
   :host::after {
@@ -114,7 +107,6 @@ const button = css`
   :host([theme~='tertiary']),
   :host([theme~='tertiary-inline']) {
     background-color: transparent !important;
-    transition: opacity 0.2s;
     min-width: 0;
   }
 
@@ -147,11 +139,6 @@ const button = css`
     min-width: calc(var(--lumo-button-size) * 2.5);
   }
 
-  :host([theme~='primary'][disabled]) {
-    background-color: var(--lumo-primary-color-50pct);
-    color: var(--lumo-primary-contrast-color);
-  }
-
   :host([theme~='primary'])::before {
     background-color: black;
   }
@@ -181,10 +168,6 @@ const button = css`
     color: var(--lumo-success-contrast-color);
   }
 
-  :host([theme~='success'][theme~='primary'][disabled]) {
-    background-color: var(--lumo-success-color-50pct);
-  }
-
   :host([theme~='error']) {
     color: var(--lumo-error-text-color);
   }
@@ -192,10 +175,6 @@ const button = css`
   :host([theme~='error'][theme~='primary']) {
     background-color: var(--lumo-error-color);
     color: var(--lumo-error-contrast-color);
-  }
-
-  :host([theme~='error'][theme~='primary'][disabled]) {
-    background-color: var(--lumo-error-color-50pct);
   }
 
   :host([theme~='contrast']) {
@@ -207,8 +186,20 @@ const button = css`
     color: var(--lumo-base-color);
   }
 
-  :host([theme~='contrast'][theme~='primary'][disabled]) {
-    background-color: var(--lumo-contrast-50pct);
+  /* Disabled state. Keep selectors after other color variants. */
+
+  :host([disabled]) {
+    pointer-events: none;
+    color: var(--lumo-disabled-text-color);
+  }
+
+  :host([theme~='primary'][disabled]) {
+    background-color: var(--lumo-contrast-30pct);
+    color: var(--lumo-base-color);
+  }
+
+  :host([theme~='primary'][disabled]) [part] {
+    opacity: 0.7;
   }
 
   /* Icons */
