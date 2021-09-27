@@ -5,7 +5,7 @@
  */
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { AriaLabelMixin } from '@vaadin/field-base/src/aria-label-mixin.js';
+import { AriaLabelController } from '@vaadin/field-base/src/aria-label-controller.js';
 import { ClearButtonMixin } from '@vaadin/field-base/src/clear-button-mixin.js';
 import { FieldAriaMixin } from '@vaadin/field-base/src/field-aria-mixin.js';
 import { InputSlotMixin } from '@vaadin/field-base/src/input-slot-mixin.js';
@@ -73,13 +73,12 @@ registerStyles('vaadin-time-picker', inputFieldShared, { moduleId: 'vaadin-time-
  * @mixes ElementMixin
  * @mixes ThemableMixin
  * @mixes InputSlotMixin
- * @mixes AriaLabelMixin
  * @mixes ClearButtonMixin
  * @mixes FieldAriaMixin
  * @mixes PatternMixin
  */
 class TimePicker extends PatternMixin(
-  FieldAriaMixin(ClearButtonMixin(AriaLabelMixin(InputSlotMixin(ThemableMixin(ElementMixin(PolymerElement))))))
+  FieldAriaMixin(ClearButtonMixin(InputSlotMixin(ThemableMixin(ElementMixin(PolymerElement)))))
 ) {
   static get is() {
     return 'vaadin-time-picker';
@@ -329,6 +328,7 @@ class TimePicker extends PatternMixin(
   ready() {
     super.ready();
 
+    this.addController(new AriaLabelController(this));
     this._inputContainer = this.shadowRoot.querySelector('[part~="input-field"]');
   }
 

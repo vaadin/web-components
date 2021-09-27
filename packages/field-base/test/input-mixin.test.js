@@ -3,11 +3,10 @@ import sinon from 'sinon';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { InputMixin } from '../src/input-mixin.js';
-import { InputSlotMixin } from '../src/input-slot-mixin.js';
 
 customElements.define(
   'input-mixin-element',
-  class extends InputMixin(InputSlotMixin(PolymerElement)) {
+  class extends InputMixin(PolymerElement) {
     static get template() {
       return html`<slot name="input"></slot>`;
     }
@@ -20,7 +19,10 @@ describe('input-mixin', () => {
   describe('value', () => {
     beforeEach(() => {
       element = fixtureSync('<input-mixin-element></input-mixin-element>');
-      input = element.querySelector('[slot=input]');
+      input = document.createElement('input');
+      input.setAttribute('slot', 'input');
+      element.appendChild(input);
+      element._setInputElement(input);
     });
 
     it('should set property to empty string by default', () => {
@@ -88,7 +90,7 @@ describe('input-mixin', () => {
 
       customElements.define(
         'input-mixin-events-element',
-        class extends InputMixin(InputSlotMixin(PolymerElement)) {
+        class extends InputMixin(PolymerElement) {
           static get template() {
             return html`<slot name="input"></slot>`;
           }
@@ -106,7 +108,9 @@ describe('input-mixin', () => {
 
     beforeEach(() => {
       element = fixtureSync('<input-mixin-events-element></input-mixin-events-element>');
-      input = element.querySelector('[slot=input]');
+      input = document.createElement('input');
+      element.appendChild(input);
+      element._setInputElement(input);
     });
 
     afterEach(() => {

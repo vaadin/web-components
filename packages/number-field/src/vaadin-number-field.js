@@ -5,6 +5,7 @@
  */
 import { PolymerElement, html } from '@polymer/polymer';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { AriaLabelController } from '@vaadin/field-base/src/aria-label-controller.js';
 import { InputFieldMixin } from '@vaadin/field-base/src/input-field-mixin.js';
 import { InputSlotMixin } from '@vaadin/field-base/src/input-slot-mixin.js';
 import { SlotStylesMixin } from '@vaadin/field-base/src/slot-styles-mixin.js';
@@ -232,6 +233,13 @@ export class NumberField extends InputFieldMixin(
       this.inputElement.max = this.max;
       this.__applyStep(this.step);
     }
+  }
+
+  /** @protected */
+  ready() {
+    super.ready();
+
+    this.addController(new AriaLabelController(this));
   }
 
   /** @private */

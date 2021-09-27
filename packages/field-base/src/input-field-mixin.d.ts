@@ -3,7 +3,6 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { AriaLabelMixin } from './aria-label-mixin.js';
 import { ClearButtonMixin } from './clear-button-mixin.js';
 import { DelegateFocusMixin } from './delegate-focus-mixin.js';
 import { InputConstraintsMixin } from './input-constraints-mixin.js';
@@ -18,12 +17,7 @@ interface InputFieldMixinConstructor {
   new (...args: any[]): InputFieldMixin;
 }
 
-interface InputFieldMixin
-  extends AriaLabelMixin,
-    ClearButtonMixin,
-    DelegateFocusMixin,
-    FieldAriaMixin,
-    InputConstraintsMixin {
+interface InputFieldMixin extends ClearButtonMixin, DelegateFocusMixin, FieldAriaMixin, InputConstraintsMixin {
   /**
    * Whether the value of the control can be automatically completed by the browser.
    * List of available options at:

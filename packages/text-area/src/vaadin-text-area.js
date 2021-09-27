@@ -5,6 +5,7 @@
  */
 import { PolymerElement, html } from '@polymer/polymer';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { AriaLabelController } from '@vaadin/field-base/src/aria-label-controller.js';
 import { CharLengthMixin } from '@vaadin/field-base/src/char-length-mixin.js';
 import { InputFieldMixin } from '@vaadin/field-base/src/input-field-mixin.js';
 import { TextAreaSlotMixin } from '@vaadin/field-base/src/text-area-slot-mixin.js';
@@ -189,6 +190,8 @@ export class TextArea extends CharLengthMixin(
   /** @protected */
   ready() {
     super.ready();
+
+    this.addController(new AriaLabelController(this));
     this.addEventListener('animationend', this._onAnimationEnd);
   }
 

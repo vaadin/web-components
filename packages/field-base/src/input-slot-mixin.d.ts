@@ -6,6 +6,7 @@
 import { SlotMixin } from '@vaadin/component-base/src/slot-mixin.js';
 import { DelegateFocusMixin } from './delegate-focus-mixin.js';
 import { InputMixin } from './input-mixin.js';
+import { LabelMixin } from './label-mixin.js';
 
 /**
  * A mixin to add `<input>` element to the corresponding named slot.
@@ -16,7 +17,7 @@ interface InputSlotMixinConstructor {
   new (...args: any[]): InputSlotMixin;
 }
 
-interface InputSlotMixin extends DelegateFocusMixin, InputMixin, SlotMixin {
+interface InputSlotMixin extends DelegateFocusMixin, InputMixin, LabelMixin, SlotMixin {
   /**
    * String used to define input type.
    */
