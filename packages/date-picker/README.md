@@ -6,28 +6,28 @@
 
 [&lt;vaadin-date-picker&gt;](https://vaadin.com/components/vaadin-date-picker) is a Web Component providing a date selection field which includes a scrollable month calendar view, part of the [Vaadin components](https://vaadin.com/components).
 
-[![npm version](https://badgen.net/npm/v/@vaadin/vaadin-date-picker)](https://www.npmjs.com/package/@vaadin/vaadin-date-picker)
-[![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-date-picker)
+[![npm version](https://badgen.net/npm/v/@vaadin/date-picker)](https://www.npmjs.com/package/@vaadin/date-picker)
+[![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadindate-picker)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
 <vaadin-date-picker label="Label" placeholder="Placeholder"></vaadin-date-picker>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-date-picker/master/screenshot.png" width="439" alt="Screenshot of vaadin-date-picker">](https://vaadin.com/components/vaadin-date-picker)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/date-picker/screenshot.png" width="439" alt="Screenshot of vaadin-date-picker">](https://vaadin.com/components/vaadin-date-picker)
 
 ## Installation
 
 Install `vaadin-date-picker`:
 
 ```sh
-npm i @vaadin/vaadin-date-picker --save
+npm i @vaadin/date-picker --save
 ```
 
 Once installed, import it in your application:
 
 ```js
-import '@vaadin/vaadin-date-picker/vaadin-date-picker.js';
+import '@vaadin/date-picker/vaadin-date-picker.js';
 ```
 
 ## Getting started
