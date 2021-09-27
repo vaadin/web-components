@@ -3,11 +3,12 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { beforeNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import { Virtualizer } from '@vaadin/vaadin-virtual-list/src/virtualizer.js';
 import { A11yMixin } from './vaadin-grid-a11y-mixin.js';
 import { ActiveItemMixin } from './vaadin-grid-active-item-mixin.js';
 import { ArrayDataProviderMixin } from './vaadin-grid-array-data-provider-mixin.js';
@@ -24,7 +25,6 @@ import { StylingMixin } from './vaadin-grid-styling-mixin.js';
 import { DragAndDropMixin } from './vaadin-grid-drag-and-drop-mixin.js';
 import { KeyboardNavigationMixin } from './vaadin-grid-keyboard-navigation-mixin.js';
 import { ColumnReorderingMixin } from './vaadin-grid-column-reordering-mixin.js';
-import { Virtualizer } from '@vaadin/vaadin-virtual-list/src/virtualizer.js';
 import './vaadin-grid-column.js';
 import './vaadin-grid-styles.js';
 

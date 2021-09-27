@@ -1,5 +1,6 @@
 import '../../vaadin-date-picker.js';
 
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin';
 import {
   DatePicker,
   DatePickerInvalidChangedEvent,
@@ -8,7 +9,6 @@ import {
 } from '../../vaadin-date-picker.js';
 
 import { DatePickerLight } from '../../vaadin-date-picker-light.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin';
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 
