@@ -6,7 +6,7 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { dateEquals } from '@vaadin/vaadin-date-picker/src/vaadin-date-picker-helper.js';
+import { dateEquals } from '@vaadin/date-picker/src/vaadin-date-picker-helper.js';
 import './vaadin-date-time-picker-custom-field.js';
 import './vaadin-date-time-picker-date-picker.js';
 import './vaadin-date-time-picker-time-picker.js';

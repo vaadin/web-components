@@ -1,10 +1,10 @@
 {
-  "name": "@vaadin/vaadin-date-picker",
+  "name": "@vaadin/date-picker",
   "version": "22.0.0-alpha6",
   "description": "Web component providing a date selection field with scrollable month calendar",
   "main": "vaadin-date-picker.js",
   "module": "vaadin-date-picker.js",
-  "repository": "vaadin/vaadin-date-picker",
+  "repository": "vaadin/web-components",
   "keywords": [
     "Vaadin",
     "date-picker",
@@ -14,7 +14,7 @@
   "author": "Vaadin Ltd",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/vaadin/vaadin-date-picker/issues"
+    "url": "https://github.com/vaadin/web-components/issues"
   },
   "homepage": "https://vaadin.com/components",
   "files": [

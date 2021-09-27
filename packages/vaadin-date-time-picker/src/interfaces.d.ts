@@ -1,4 +1,4 @@
-import { DatePickerI18n } from '@vaadin/vaadin-date-picker';
+import { DatePickerI18n } from '@vaadin/date-picker';
 import { TimePickerI18n } from '@vaadin/vaadin-time-picker';
 
 export interface DateTimePickerI18n extends DatePickerI18n, TimePickerI18n {}
