@@ -90,14 +90,8 @@ describe('vaadin-vertical-layout', () => {
 
     it('should support theme="spacing"', () => {
       layout.setAttribute('theme', 'spacing');
-      expect(getComputedStyle(c1).getPropertyValue('margin-top')).to.equal(space);
-      expect(getComputedStyle(c2).getPropertyValue('margin-top')).to.equal(space);
-    });
-
-    it('should compensate first item margin for theme="spacing"', () => {
-      layout.setAttribute('theme', 'spacing');
-      const margin = getComputedStyle(layout, '::before').getPropertyValue('margin-top');
-      expect(margin).to.equal('-' + space);
+      const style = getComputedStyle(layout);
+      expect(style.getPropertyValue('gap')).to.equal(space);
     });
   });
 

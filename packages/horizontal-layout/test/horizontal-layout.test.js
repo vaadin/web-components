@@ -89,14 +89,8 @@ describe('vaadin-horizontal-layout', () => {
 
     it('should support theme="spacing"', () => {
       layout.setAttribute('theme', 'spacing');
-      expect(getComputedStyle(c1).getPropertyValue('margin-left')).to.equal(space);
-      expect(getComputedStyle(c2).getPropertyValue('margin-left')).to.equal(space);
-    });
-
-    it('should compensate first item margin for theme="spacing"', () => {
-      layout.setAttribute('theme', 'spacing');
-      const margin = getComputedStyle(layout, '::before').getPropertyValue('margin-left');
-      expect(margin).to.equal('-' + space);
+      const style = getComputedStyle(layout);
+      expect(style.getPropertyValue('gap')).to.equal(space);
     });
   });
 
