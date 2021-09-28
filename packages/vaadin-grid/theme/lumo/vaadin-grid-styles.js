@@ -115,6 +115,10 @@ registerStyles(
       background: var(--lumo-primary-color-50pct);
     }
 
+    [part~='row'][dragover] [part~='cell'][last-frozen]::after {
+      right: -1px;
+    }
+
     :host([theme~='no-row-borders']) [dragover] [part~='cell']::after {
       height: 2px;
     }
@@ -138,13 +142,7 @@ registerStyles(
 
     [part~='row'][dragover][dragover='on-top'] [part~='cell']::after {
       height: 100%;
-    }
-
-    [part~='row'][dragstart] {
-      /* Add bottom-space to the row so the drag number doesn't get clipped. Needed for IE/Edge */
-      border-bottom: 100px solid transparent;
-      z-index: 100 !important;
-      opacity: 0.9;
+      opacity: 0.5;
     }
 
     [part~='row'][dragstart] [part~='cell'] {
