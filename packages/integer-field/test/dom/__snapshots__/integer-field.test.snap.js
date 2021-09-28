@@ -342,14 +342,7 @@ snapshots["vaadin-integer-field theme"] =
 /* end snapshot vaadin-integer-field theme */
 
 snapshots["vaadin-integer-field slots"] = 
-`<input
-  max="undefined"
-  min="undefined"
-  slot="input"
-  step="any"
-  type="number"
->
-<label slot="label">
+`<label slot="label">
 </label>
 <div
   aria-live="assertive"
@@ -358,6 +351,13 @@ snapshots["vaadin-integer-field slots"] =
 </div>
 <div slot="helper">
 </div>
+<input
+  max="undefined"
+  min="undefined"
+  slot="input"
+  step="any"
+  type="number"
+>
 `;
 /* end snapshot vaadin-integer-field slots */
 
