@@ -34,7 +34,7 @@ describe('input-mixin', () => {
       input = document.createElement('input');
       input.setAttribute('slot', 'input');
       element.appendChild(input);
-      element._setInputElement(input);
+      element.inputElement = input;
     });
 
     it('should set property to empty string by default', () => {
@@ -122,7 +122,7 @@ describe('input-mixin', () => {
       element = fixtureSync('<input-mixin-events-element></input-mixin-events-element>');
       input = document.createElement('input');
       element.appendChild(input);
-      element._setInputElement(input);
+      element.inputElement = input;
     });
 
     afterEach(() => {
@@ -142,14 +142,14 @@ describe('input-mixin', () => {
 
     it('should not call an input event listener when input is unset', () => {
       element.removeChild(input);
-      element._setInputElement(undefined);
+      element.inputElement = null;
       input.dispatchEvent(new CustomEvent('input'));
       expect(inputSpy.called).to.be.false;
     });
 
     it('should not call a change event listener when input is unset', () => {
       element.removeChild(input);
-      element._setInputElement(undefined);
+      element.inputElement = null;
       input.dispatchEvent(new CustomEvent('change'));
       expect(changeSpy.called).to.be.false;
     });

@@ -6,11 +6,8 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { AriaLabelController } from '@vaadin/field-base/src/aria-label-controller.js';
-import { ClearButtonMixin } from '@vaadin/field-base/src/clear-button-mixin.js';
-import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
-import { FieldAriaMixin } from '@vaadin/field-base/src/field-aria-mixin.js';
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
-import { LabelMixin } from '@vaadin/field-base/src/label-mixin.js';
+import { InputControlMixin } from '@vaadin/field-base/src/input-control-mixin.js';
 import { PatternMixin } from '@vaadin/field-base/src/pattern-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -169,19 +166,13 @@ registerStyles('vaadin-combo-box', inputFieldShared, { moduleId: 'vaadin-combo-b
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ThemableMixin
- * @mixes LabelMixin
- * @mixes ClearButtonMixin
- * @mixes FieldAriaMixin
+ * @mixes InputControlMixin
  * @mixes PatternMixin
  * @mixes ComboBoxDataProviderMixin
  * @mixes ComboBoxMixin
  */
 class ComboBox extends ComboBoxDataProviderMixin(
-  ComboBoxMixin(
-    PatternMixin(
-      FieldAriaMixin(ClearButtonMixin(DelegateFocusMixin(LabelMixin(ThemableMixin(ElementMixin(PolymerElement))))))
-    )
-  )
+  ComboBoxMixin(PatternMixin(InputControlMixin(ThemableMixin(ElementMixin(PolymerElement)))))
 ) {
   static get is() {
     return 'vaadin-combo-box';

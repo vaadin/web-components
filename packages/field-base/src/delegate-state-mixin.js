@@ -15,7 +15,6 @@ const DelegateStateMixinImplementation = (superclass) =>
          */
         stateTarget: {
           type: Object,
-          readOnly: true,
           observer: '_stateTargetChanged'
         }
       };

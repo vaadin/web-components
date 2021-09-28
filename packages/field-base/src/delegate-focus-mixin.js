@@ -21,16 +21,13 @@ const DelegateFocusMixinImplementation = (superclass) =>
         /**
          * A reference to the focusable element controlled by the mixin.
          * It can be an input, textarea, button or any element with tabindex > -1.
-         *
-         * Any component implementing this mixin is expected to provide it
-         * by using `this._setFocusElement(input)` Polymer API.
+         * Any component implementing this mixin is expected to provide it.
          *
          * @protected
          * @type {!HTMLElement}
          */
         focusElement: {
           type: Object,
-          readOnly: true,
           observer: '_focusElementChanged'
         }
       };

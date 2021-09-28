@@ -122,7 +122,7 @@ class ComboBoxLight extends ComboBoxDataProviderMixin(ComboBoxMixin(ThemableMixi
   /** @protected */
   connectedCallback() {
     super.connectedCallback();
-    this._setInputElement(this.querySelector('vaadin-text-field,.input'));
+    this.inputElement = this.querySelector('vaadin-text-field,.input');
     this._revertInputValue();
   }
 

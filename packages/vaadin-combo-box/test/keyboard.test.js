@@ -14,7 +14,6 @@ import {
   nextFrame
 } from '@vaadin/testing-helpers';
 import { getViewportItems, getVisibleItemsCount, onceScrolled, scrollToIndex } from './helpers.js';
-import './not-animated-styles.js';
 import '../src/vaadin-combo-box.js';
 
 describe('keyboard', () => {

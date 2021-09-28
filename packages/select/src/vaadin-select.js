@@ -9,8 +9,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { SlotMixin } from '@vaadin/component-base/src/slot-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
-import { FieldAriaMixin } from '@vaadin/field-base/src/field-aria-mixin.js';
-import { LabelMixin } from '@vaadin/field-base/src/label-mixin.js';
+import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 import { fieldShared } from '@vaadin/field-base/src/styles/field-shared-styles.js';
 import { inputFieldContainer } from '@vaadin/field-base/src/styles/input-field-container-styles.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -105,13 +104,10 @@ registerStyles('vaadin-select', [fieldShared, inputFieldContainer], { moduleId: 
  * @mixes ElementMixin
  * @mixes ThemableMixin
  * @mixes SlotMixin
- * @mixes LabelMixin
- * @mixes FieldAriaMixin
+ * @mixes FieldMixin
  * @mixes DelegateFocusMixin
  */
-class Select extends DelegateFocusMixin(
-  FieldAriaMixin(LabelMixin(SlotMixin(ElementMixin(ThemableMixin(PolymerElement)))))
-) {
+class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(ThemableMixin(PolymerElement))))) {
   static get is() {
     return 'vaadin-select';
   }
@@ -307,8 +303,8 @@ class Select extends DelegateFocusMixin(
       this._updateAriaRequired(this.required);
       this._updateAriaExpanded(this.opened);
 
-      this._setFocusElement(this._valueButton);
-      this._setAriaTarget(this._valueButton);
+      this.focusElement = this._valueButton;
+      this.ariaTarget = this._valueButton;
 
       this._valueButton.addEventListener('keydown', this._boundOnKeyDown);
     }

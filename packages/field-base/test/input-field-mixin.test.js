@@ -11,21 +11,6 @@ customElements.define(
   class extends InputFieldMixin(ElementMixin(PolymerElement)) {
     static get template() {
       return html`
-        <style>
-          :host {
-            display: block;
-          }
-
-          /* Mimic Lumo styles to test resize */
-          [part='error-message'] {
-            max-height: 5em;
-          }
-
-          :host(:not([invalid])) [part='error-message'] {
-            max-height: 0;
-            overflow: hidden;
-          }
-        </style>
         <div part="label">
           <slot name="label"></slot>
         </div>
@@ -73,13 +58,6 @@ describe('input-field-mixin', () => {
       element.autocapitalize = 'none';
       expect(input.getAttribute('autocapitalize')).to.equal('none');
     });
-
-    it('should select the input content when autoselect is set', () => {
-      const spy = sinon.spy(input, 'select');
-      element.autoselect = true;
-      input.focus();
-      expect(spy.calledOnce).to.be.true;
-    });
   });
 
   describe('validation', () => {
@@ -115,62 +93,6 @@ describe('input-field-mixin', () => {
     });
   });
 
-  describe('iron-resize', () => {
-    let spy;
-
-    function flushTextField(textField) {
-      textField.__observeOffsetHeightDebouncer.flush();
-    }
-
-    beforeEach(() => {
-      element = fixtureSync('<input-field-mixin-element></input-field-mixin-element>');
-      spy = sinon.spy();
-      element.addEventListener('iron-resize', spy);
-    });
-
-    it('should not dispatch `iron-resize` event on init', () => {
-      expect(spy.called).to.be.false;
-    });
-
-    it('should dispatch `iron-resize` event on invalid height change', () => {
-      element.errorMessage = 'Error';
-      flushTextField(element);
-      element.invalid = true;
-      flushTextField(element);
-      expect(spy.called).to.be.true;
-    });
-
-    it('should be a composed event', () => {
-      element.errorMessage = 'Error';
-      flushTextField(element);
-      element.invalid = true;
-      flushTextField(element);
-      const event = spy.lastCall.lastArg;
-      expect(event.composed).to.be.true;
-    });
-
-    it('should dispatch `iron-resize` event on error message height change', () => {
-      element.errorMessage = 'Error';
-      flushTextField(element);
-      element.invalid = true;
-      flushTextField(element);
-      spy.resetHistory();
-
-      // Long message that spans on multiple lines
-      element.errorMessage = [...new Array(42)].map(() => 'bla').join(' ');
-      flushTextField(element);
-
-      expect(spy.calledOnce).to.be.true;
-    });
-
-    it('should dispatch `iron-resize` event on label height change', () => {
-      flushTextField(element);
-      element.label = 'Label';
-      flushTextField(element);
-      expect(spy.calledOnce).to.be.true;
-    });
-  });
-
   describe('slotted input value', () => {
     beforeEach(() => {
       sinon.stub(console, 'warn');
@@ -195,16 +117,6 @@ describe('input-field-mixin', () => {
       element.value = 'foo';
       document.body.appendChild(element);
       expect(console.warn.called).to.be.false;
-    });
-  });
-
-  describe('invalid', () => {
-    beforeEach(() => {
-      element = fixtureSync('<input-field-mixin-element value="foo" invalid></input-field-mixin-element>');
-    });
-
-    it('should not reset invalid state set with attribute', () => {
-      expect(element.invalid).to.be.true;
     });
   });
 });

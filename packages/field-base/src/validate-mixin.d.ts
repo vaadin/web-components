@@ -3,7 +3,6 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { SlotMixin } from '@vaadin/component-base/src/slot-mixin.js';
 
 /**
  * A mixin to provide required state and validation logic.
@@ -14,7 +13,7 @@ interface ValidateMixinConstructor {
   new (...args: any[]): ValidateMixin;
 }
 
-interface ValidateMixin extends SlotMixin {
+interface ValidateMixin {
   /**
    * Set to true when the field is invalid.
    */
@@ -24,13 +23,6 @@ interface ValidateMixin extends SlotMixin {
    * Specifies that the user must fill in a value.
    */
   required: boolean;
-
-  /**
-   * Error to show when the field is invalid.
-   *
-   * @attr {string} error-message
-   */
-  errorMessage: string;
 
   /**
    * Returns true if field is valid, and sets `invalid` based on the field validity.

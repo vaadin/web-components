@@ -5,12 +5,11 @@
  */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
-import { FieldAriaMixin } from '@vaadin/field-base/src/field-aria-mixin.js';
-import { LabelMixin } from '@vaadin/field-base/src/label-mixin.js';
+import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { CustomFieldI18n } from './interfaces';
 
-declare class CustomField extends FieldAriaMixin(LabelMixin(FocusMixin(ThemableMixin(ElementMixin(HTMLElement))))) {
+declare class CustomField extends FieldMixin(FocusMixin(ThemableMixin(ElementMixin(HTMLElement)))) {
   /**
    * Array of available input nodes
    */

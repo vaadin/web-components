@@ -24,11 +24,9 @@ interface DelegateFocusMixin extends DisabledMixin, FocusMixin {
   /**
    * A reference to the focusable element controlled by the mixin.
    * It can be an input, textarea, button or any element with tabindex > -1.
-   *
-   * Any component implementing this mixin is expected to provide it
-   * by using `this._setFocusElement(input)` Polymer API.
+   * Any component implementing this mixin is expected to provide it.
    */
-  readonly focusElement: Element | null | undefined;
+  focusElement: Element | null | undefined;
 }
 
 export { DelegateFocusMixinConstructor, DelegateFocusMixin };

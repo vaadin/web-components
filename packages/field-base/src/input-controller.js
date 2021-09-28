@@ -32,16 +32,16 @@ export class InputController extends SlotController {
         // rely on `ready()` as we add controller after `ready()` for all mixins has been called.
 
         // InputMixin
-        host._setInputElement && host._setInputElement(node);
+        host.inputElement = node;
 
         // DelegateFocusMixin
-        host._setFocusElement && host._setFocusElement(node);
+        host.focusElement = node;
 
         // DelegateStateMixin
-        host._setStateTarget && host._setStateTarget(node);
+        host.stateTarget = node;
 
         // FieldAriaMixin
-        host._setAriaTarget && host._setAriaTarget(node);
+        host.ariaTarget = node;
       }
     ]);
   }
