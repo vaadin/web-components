@@ -29,6 +29,12 @@ const radioGroup = css`
     padding-bottom: 0.7em;
   }
 
+  /* TODO: remove when the following components are updated to use new indicator:
+  combo-box, date-picker, time-picker, date-time-picker, select. */
+  [part='label']::after {
+    display: none;
+  }
+
   :host([focused]:not([readonly])) [part='label'] {
     color: var(--lumo-primary-text-color);
   }

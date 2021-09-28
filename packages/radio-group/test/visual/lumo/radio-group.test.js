@@ -92,11 +92,11 @@ describe('radio-group', () => {
       document.documentElement.removeAttribute('dir');
     });
 
-    it('RTL basic', async () => {
+    it('basic', async () => {
       await visualDiff(div, 'rtl-basic');
     });
 
-    it('RTL error message', async () => {
+    it('error message', async () => {
       element.label = 'Label';
       element.errorMessage = 'This field is required';
       element.required = true;
@@ -104,7 +104,7 @@ describe('radio-group', () => {
       await visualDiff(div, 'rtl-error-message');
     });
 
-    it('RTL wrapped', async () => {
+    it('wrapped', async () => {
       element.style.width = '150px';
       await visualDiff(div, 'rtl-wrapped');
     });
