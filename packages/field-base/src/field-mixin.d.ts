@@ -19,7 +19,7 @@ interface FieldMixin extends LabelMixin, ValidateMixin {
   /**
    * A target element to which ARIA attributes are set.
    */
-  readonly ariaTarget: HTMLElement;
+  ariaTarget: HTMLElement;
 
   /**
    * String used for the helper text.

@@ -21,8 +21,8 @@ export class TextAreaController extends SlotController {
         host._textareaId = `${host.localName}-${uniqueId}`;
         node.id = host._textareaId;
 
-        // TODO: find a better approach to initialize mixins. We do it here because we can no longer
-        // rely on `ready()` as we add controller after `ready()` for all mixins has been called.
+        // TODO: find a better approach to initialize mixins.
+        // Copying this to every component seems redundant.
 
         // InputMixin
         host.inputElement = node;

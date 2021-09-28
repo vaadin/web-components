@@ -28,8 +28,8 @@ export class InputController extends SlotController {
         host._inputId = `${host.localName}-${uniqueId}`;
         node.id = host._inputId;
 
-        // TODO: find a better approach to initialize mixins. We do it here because we can no longer
-        // rely on `ready()` as we add controller after `ready()` for all mixins has been called.
+        // TODO: find a better approach to initialize mixins.
+        // Copying this to every component seems redundant.
 
         // InputMixin
         host.inputElement = node;

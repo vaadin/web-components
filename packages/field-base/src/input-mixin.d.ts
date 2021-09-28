@@ -23,7 +23,7 @@ interface InputMixin {
    * However, the input element does not have to always be native <input>:
    * as an example, <vaadin-combo-box-light> accepts other components.
    */
-  readonly inputElement: HTMLInputElement;
+  inputElement: HTMLInputElement;
 
   /**
    * The value of the field.
