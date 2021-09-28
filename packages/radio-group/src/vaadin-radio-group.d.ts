@@ -4,8 +4,11 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
+import { FieldAriaMixin } from '@vaadin/field-base/src/field-aria-mixin.js';
+import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
+import { LabelMixin } from '@vaadin/field-base/src/label-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { RadioButton } from './vaadin-radio-button.js';
 
 /**
  * Fired when the `invalid` property changes.
@@ -17,22 +20,22 @@ export type RadioGroupInvalidChangedEvent = CustomEvent<{ value: boolean }>;
  */
 export type RadioGroupValueChangedEvent = CustomEvent<{ value: string }>;
 
-export interface RadioGroupElementEventMap {
+export interface RadioGroupCustomEventMap {
   'invalid-changed': RadioGroupInvalidChangedEvent;
 
   'value-changed': RadioGroupValueChangedEvent;
 }
 
-export interface RadioGroupEventMap extends HTMLElementEventMap, RadioGroupElementEventMap {}
+export interface RadioGroupEventMap extends HTMLElementEventMap, RadioGroupCustomEventMap {}
 
 /**
- * `<vaadin-radio-group>` is a Web Component for grouping vaadin-radio-buttons.
+ * `<vaadin-radio-group>` is a web component that allows the user to choose one item from a group of choices.
  *
  * ```html
- * <vaadin-radio-group>
- *   <vaadin-radio-button name="foo">Foo</vaadin-radio-button>
- *   <vaadin-radio-button name="bar">Bar</vaadin-radio-button>
- *   <vaadin-radio-button name="baz">Baz</vaadin-radio-button>
+ * <vaadin-radio-group label="Travel class">
+ *   <vaadin-radio-button value="economy">Economy</vaadin-radio-button>
+ *   <vaadin-radio-button value="business">Business</vaadin-radio-button>
+ *   <vaadin-radio-button value="firstClass">First Class</vaadin-radio-button>
  * </vaadin-radio-group>
  * ```
  *
@@ -40,121 +43,66 @@ export interface RadioGroupEventMap extends HTMLElementEventMap, RadioGroupEleme
  *
  * The following shadow DOM parts are available for styling:
  *
- * Part name | Description
- * ----------------|----------------
- * `label` | The label element
- * `group-field` | The element that wraps radio-buttons
+ * Part name            | Description
+ * ---------------------|----------------
+ * `container`          | The container element
+ * `label`              | The slotted label element wrapper
+ * `group-field`        | The radio button elements wrapper
+ * `helper-text`        | The slotted helper text element wrapper
+ * `error-message`      | The slotted error message element wrapper
+ * `required-indicator` | The `required` state indicator element
  *
  * The following state attributes are available for styling:
  *
- * Attribute  | Description | Part name
- * -----------|-------------|------------
- * `disabled`   | Set when the radio group and its children are disabled. | :host
- * `readonly` | Set to a readonly radio group | :host
- * `invalid` | Set when the element is invalid | :host
- * `has-label` | Set when the element has a label | :host
- * `has-value` | Set when the element has a value | :host
- * `has-helper` | Set when the element has helper text or slot | :host
- * `has-error-message` | Set when the element has an error message, regardless if the field is valid or not | :host
- * `focused` | Set when the element contains focus | :host
+ * Attribute           | Description                               | Part name
+ * --------------------|-------------------------------------------|------------
+ * `disabled`          | Set when the element is disabled          | :host
+ * `readonly`          | Set when the element is readonly          | :host
+ * `invalid`           | Set when the element is invalid           | :host
+ * `focused`           | Set when the element is focused           | :host
+ * `has-label`         | Set when the element has a label          | :host
+ * `has-value`         | Set when the element has a value          | :host
+ * `has-helper`        | Set when the element has helper text      | :host
+ * `has-error-message` | Set when the element has an error message | :host
  *
  * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  */
-declare class RadioGroupElement extends ThemableMixin(DirMixin(HTMLElement)) {
+declare class RadioGroup extends FieldAriaMixin(
+  LabelMixin(FocusMixin(DisabledMixin(DirMixin(ThemableMixin(HTMLElement)))))
+) {
   /**
-   * The current disabled state of the radio group. True if group and all internal radio buttons are disabled.
-   */
-  disabled: boolean | null | undefined;
-
-  /**
-   * This attribute indicates that the user cannot modify the value of the control.
-   */
-  readonly: boolean | null | undefined;
-
-  /**
-   * This property is set to true when the value is invalid.
-   */
-  invalid: boolean;
-
-  /**
-   * Specifies that the user must fill in a value.
-   */
-  required: boolean | null | undefined;
-
-  /**
-   * Error to show when the input value is invalid.
-   * @attr {string} error-message
-   */
-  errorMessage: string;
-
-  /**
-   * String used for the label element.
-   */
-  label: string;
-
-  /**
-   * String used for the helper text.
-   * @attr {string} helper-text
-   */
-  helperText: string | null;
-
-  /**
-   * Value of the radio group.
+   * The value of the radio group.
    */
   value: string | null | undefined;
 
-  _setFocused(focused: boolean): void;
-
-  _selectIncButton(next: boolean, checkedRadioButton: RadioButton): void;
-
-  _selectButton(element: RadioButton, setFocusRing?: boolean): void;
-
-  _containsFocus(): boolean;
-
-  _hasEnabledButtons(): boolean;
-
-  _selectNextButton(element: RadioButton): void;
-
-  _selectPreviousButton(element: RadioButton): void;
-
-  _changeSelectedButton(button: RadioButton | null, fireChangeEvent?: boolean): void;
-
   /**
-   * Returns true if `value` is valid.
-   *
-   * @returns True if the value is valid.
+   * When present, the user cannot modify the value of the radio group.
+   * The property works similarly to the `disabled` property.
+   * While the `disabled` property disables all the radio buttons inside the group,
+   * the `readonly` property disables only unchecked ones.
    */
-  validate(): boolean;
-
-  /**
-   * Returns true if the current input value satisfies all constraints (if any)
-   */
-  checkValidity(): boolean;
-
-  _setFocusable(idx: number): void;
-
-  _getHelperTextAriaHidden(helperText: any, helperTextId: any, hasSlottedHelper: any): any;
+  readonly: boolean;
 
   addEventListener<K extends keyof RadioGroupEventMap>(
     type: K,
-    listener: (this: RadioGroupElement, ev: RadioGroupEventMap[K]) => void,
+    listener: (this: RadioGroup, ev: RadioGroupEventMap[K]) => void,
     options?: boolean | AddEventListenerOptions
   ): void;
 
   removeEventListener<K extends keyof RadioGroupEventMap>(
     type: K,
-    listener: (this: RadioGroupElement, ev: RadioGroupEventMap[K]) => void,
+    listener: (this: RadioGroup, ev: RadioGroupEventMap[K]) => void,
     options?: boolean | EventListenerOptions
   ): void;
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-radio-group': RadioGroupElement;
+    'vaadin-radio-group': RadioGroup;
   }
 }
 
-export { RadioGroupElement };
+export { RadioGroup };

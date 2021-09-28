@@ -7,8 +7,8 @@ import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
-import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
 import { FieldAriaMixin } from '@vaadin/field-base/src/field-aria-mixin.js';
+import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
 import { LabelMixin } from '@vaadin/field-base/src/label-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { RadioButton } from './vaadin-radio-button.js';
@@ -30,12 +30,12 @@ import { RadioButton } from './vaadin-radio-button.js';
  *
  * Part name            | Description
  * ---------------------|----------------
- * `container`          | The container element.
- * `label`              | The slotted label element wrapper.
- * `group-field`        | The radio button elements wrapper.
- * `helper-text`        | The slotted helper text element wrapper.
- * `error-message`      | The slotted error message element wrapper.
- * `required-indicator` | The `required` state indicator element.
+ * `container`          | The container element
+ * `label`              | The slotted label element wrapper
+ * `group-field`        | The radio button elements wrapper
+ * `helper-text`        | The slotted helper text element wrapper
+ * `error-message`      | The slotted error message element wrapper
+ * `required-indicator` | The `required` state indicator element
  *
  * The following state attributes are available for styling:
  *
