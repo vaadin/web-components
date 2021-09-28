@@ -28,7 +28,7 @@
     "lint:types": "tsc",
     "serve:dist": "web-dev-server --app-index dist/index.html --open",
     "start": "web-dev-server --node-resolve --open /dev/index.html",
-    "test": "web-test-runner --coverage",
+    "test": "web-test-runner",
     "test:firefox": "web-test-runner --config web-test-runner-firefox.config.js",
     "test:lumo": "web-test-runner --config web-test-runner-lumo.config.js",
     "test:material": "web-test-runner --config web-test-runner-material.config.js",

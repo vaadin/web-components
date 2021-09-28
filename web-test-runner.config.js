@@ -5,10 +5,10 @@ module.exports = createUnitTestsConfig({
   coverageConfig: {
     include: ['packages/**/src/*', 'packages/**/*.js'],
     threshold: {
-      statements: 75,
-      branches: 50,
-      functions: 56,
-      lines: 75
+      statements: 95,
+      branches: 90,
+      functions: 92,
+      lines: 95
     }
   }
 });
