@@ -6,7 +6,7 @@
 |
 [API documentation ↗](https://vaadin.com/components/vaadin-date-time-picker/html-api)
 
-[![npm version](https://badgen.net/npm/v/@vaadin/vaadin-date-time-picker)](https://www.npmjs.com/package/@vaadin/vaadin-date-time-picker)
+[![npm version](https://badgen.net/npm/v/@vaadin/date-time-picker)](https://www.npmjs.com/package/@vaadin/date-time-picker)
 [![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-date-time-picker)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
@@ -21,13 +21,13 @@
 Install `vaadin-date-time-picker`:
 
 ```sh
-npm i @vaadin/vaadin-date-time-picker --save
+npm i @vaadin/date-time-picker --save
 ```
 
 Once installed, import it in your application:
 
 ```js
-import '@vaadin/vaadin-date-time-picker/vaadin-date-time-picker.js';
+import '@vaadin/date-time-picker/vaadin-date-time-picker.js';
 ```
 
 ## Getting started
