@@ -1,0 +1,237 @@
+import { expect } from '@esm-bundle/chai';
+import { sendKeys } from '@web/test-runner-commands';
+import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import '../vaadin-radio-group.js';
+
+describe('keyboard navigation', () => {
+  let group, buttons;
+
+  beforeEach(async () => {
+    group = fixtureSync(`
+      <vaadin-radio-group>
+        <vaadin-radio-button value="1">Button 1</vaadin-radio-button>
+        <vaadin-radio-button value="2">Button 2</vaadin-radio-button>
+        <vaadin-radio-button value="3">Button 3</vaadin-radio-button>
+      </vaadin-radio-group>
+    `);
+    await nextFrame();
+    buttons = group.__radioButtons;
+  });
+
+  describe('Tab', () => {
+    it('should leave focusable only the 1st button by default', async () => {
+      // Focus on the 1st radio button.
+      await sendKeys({ press: 'Tab' });
+      expect(buttons[0].hasAttribute('focused')).to.be.true;
+      expect(buttons[1].hasAttribute('focused')).to.be.false;
+      expect(buttons[2].hasAttribute('focused')).to.be.false;
+
+      // Move focus out of the group.
+      await sendKeys({ press: 'Tab' });
+      expect(buttons[0].hasAttribute('focused')).to.be.false;
+      expect(buttons[1].hasAttribute('focused')).to.be.false;
+      expect(buttons[2].hasAttribute('focused')).to.be.false;
+    });
+
+    it('should leave focusable only the 2nd button when it is checked', async () => {
+      buttons[1].checked = true;
+
+      // Focus on the 2nd radio button.
+      await sendKeys({ press: 'Tab' });
+      expect(buttons[0].hasAttribute('focused')).to.be.false;
+      expect(buttons[1].hasAttribute('focused')).to.be.true;
+      expect(buttons[2].hasAttribute('focused')).to.be.false;
+
+      // Move focus out of the group.
+      await sendKeys({ press: 'Tab' });
+      expect(buttons[0].hasAttribute('focused')).to.be.false;
+      expect(buttons[1].hasAttribute('focused')).to.be.false;
+      expect(buttons[2].hasAttribute('focused')).to.be.false;
+    });
+  });
+
+  describe('arrows', () => {
+    it('should select next radio button on ArrowDown when unchecked', async () => {
+      buttons[0].focus();
+      await sendKeys({ press: 'ArrowDown' });
+
+      expect(buttons[0].checked).to.be.false;
+      expect(buttons[1].checked).to.be.true;
+      expect(buttons[2].checked).to.be.false;
+    });
+
+    it('should select next radio button on ArrowDown when checked', async () => {
+      buttons[0].checked = true;
+      buttons[0].focus();
+      await sendKeys({ press: 'ArrowDown' });
+
+      expect(buttons[0].checked).to.be.false;
+      expect(buttons[1].checked).to.be.true;
+      expect(buttons[2].checked).to.be.false;
+    });
+
+    it('should select prev radio button on ArrowUp when checked', async () => {
+      buttons[1].checked = true;
+      buttons[1].focus();
+      await sendKeys({ press: 'ArrowUp' });
+
+      expect(buttons[0].checked).to.be.true;
+      expect(buttons[1].checked).to.be.false;
+      expect(buttons[2].checked).to.be.false;
+    });
+
+    it('should skip disabled button and check the next one instead', async () => {
+      buttons[0].checked = true;
+      buttons[0].focus();
+      buttons[1].disabled = true;
+      await sendKeys({ press: 'ArrowDown' });
+
+      expect(buttons[0].checked).to.be.false;
+      expect(buttons[1].checked).to.be.false;
+      expect(buttons[2].checked).to.be.true;
+    });
+
+    it('should set focus-ring attribute when selecting next radio', async () => {
+      buttons[1].checked = true;
+      buttons[1].focus();
+      await sendKeys({ press: 'ArrowDown' });
+
+      expect(buttons[0].hasAttribute('focus-ring')).to.be.false;
+      expect(buttons[1].hasAttribute('focus-ring')).to.be.false;
+      expect(buttons[2].hasAttribute('focus-ring')).to.be.true;
+    });
+
+    it('should set focus-ring attribute when selecting prev radio', async () => {
+      buttons[1].checked = true;
+      buttons[1].focus();
+      await sendKeys({ press: 'ArrowUp' });
+
+      expect(buttons[0].hasAttribute('focus-ring')).to.be.true;
+      expect(buttons[1].hasAttribute('focus-ring')).to.be.false;
+      expect(buttons[2].hasAttribute('focus-ring')).to.be.false;
+    });
+
+    it('should select last radio button on ArrowUp on first button', async () => {
+      buttons[0].checked = true;
+      buttons[0].focus();
+      await sendKeys({ press: 'ArrowUp' });
+
+      expect(buttons[0].checked).to.be.false;
+      expect(buttons[1].checked).to.be.false;
+      expect(buttons[2].checked).to.be.true;
+    });
+
+    it('should select first radio button on ArrowDown on last button', async () => {
+      buttons[2].checked = true;
+      buttons[2].focus();
+      await sendKeys({ press: 'ArrowDown' });
+
+      expect(buttons[0].checked).to.be.true;
+      expect(buttons[1].checked).to.be.false;
+      expect(buttons[2].checked).to.be.false;
+    });
+
+    it('should select next radio button on ArrowRight when checked', async () => {
+      buttons[0].checked = true;
+      buttons[0].focus();
+      await sendKeys({ press: 'ArrowRight' });
+
+      expect(buttons[0].checked).to.be.false;
+      expect(buttons[1].checked).to.be.true;
+      expect(buttons[2].checked).to.be.false;
+    });
+
+    it('should select prev radio button on ArrowLeft when checked', async () => {
+      buttons[1].checked = true;
+      buttons[1].focus();
+      await sendKeys({ press: 'ArrowLeft' });
+
+      expect(buttons[0].checked).to.be.true;
+      expect(buttons[1].checked).to.be.false;
+      expect(buttons[2].checked).to.be.false;
+    });
+
+    it('should skip disabled button and check the next one instead', async () => {
+      buttons[0].checked = true;
+      buttons[0].focus();
+      buttons[1].disabled = true;
+      await sendKeys({ press: 'ArrowRight' });
+
+      expect(buttons[0].checked).to.be.false;
+      expect(buttons[1].checked).to.be.false;
+      expect(buttons[2].checked).to.be.true;
+    });
+
+    it('should select last radio button on ArrowLeft on first button', async () => {
+      buttons[0].checked = true;
+      buttons[0].focus();
+      await sendKeys({ press: 'ArrowLeft' });
+
+      expect(buttons[0].checked).to.be.false;
+      expect(buttons[1].checked).to.be.false;
+      expect(buttons[2].checked).to.be.true;
+    });
+
+    it('should select first radio button on ArrowRight on last button', async () => {
+      buttons[2].checked = true;
+      buttons[2].focus();
+      await sendKeys({ press: 'ArrowRight' });
+
+      expect(buttons[0].checked).to.be.true;
+      expect(buttons[1].checked).to.be.false;
+      expect(buttons[2].checked).to.be.false;
+    });
+
+    it('should not select radio button with keyboard when the group is disabled', async () => {
+      buttons[1].checked = true;
+      buttons[1].focus();
+      group.disabled = true;
+      await sendKeys({ press: 'ArrowDown' });
+
+      expect(buttons[0].checked).to.be.false;
+      expect(buttons[1].checked).to.be.true;
+      expect(buttons[2].checked).to.be.false;
+    });
+
+    it('should not check radio button with keyboard when the group is readonly', async () => {
+      buttons[1].checked = true;
+      buttons[1].focus();
+      group.readonly = true;
+      await sendKeys({ press: 'ArrowDown' });
+
+      expect(buttons[0].checked).to.be.false;
+      expect(buttons[1].checked).to.be.true;
+      expect(buttons[2].checked).to.be.false;
+    });
+
+    describe('RTL mode', () => {
+      beforeEach(() => {
+        document.documentElement.setAttribute('dir', 'rtl');
+      });
+
+      afterEach(() => {
+        document.documentElement.removeAttribute('dir');
+      });
+
+      it('should select prev radio button on ArrowRight when checked', async () => {
+        buttons[2].checked = true;
+        buttons[2].focus();
+        await sendKeys({ press: 'ArrowRight' });
+
+        expect(buttons[0].checked).to.be.false;
+        expect(buttons[1].checked).to.be.true;
+        expect(buttons[2].checked).to.be.false;
+      });
+
+      it('should select next radio button on ArrowLeft when checked', async () => {
+        buttons[0].checked = true;
+        buttons[0].focus();
+        await sendKeys({ press: 'ArrowLeft' });
+
+        expect(buttons[0].checked).to.be.false;
+        expect(buttons[1].checked).to.be.true;
+        expect(buttons[2].checked).to.be.false;
+      });
+    });
+  });
+});
