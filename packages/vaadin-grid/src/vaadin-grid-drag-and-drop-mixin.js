@@ -150,10 +150,8 @@ export const DragAndDropMixin = (superClass) =>
         e.dataTransfer.setData('text', this.__formatDefaultTransferData(rows));
 
         row.setAttribute('dragstart', rows.length > 1 ? rows.length : '');
-        this.updateStyles({
-          '--_grid-drag-start-x': `${e.clientX - rowRect.left + 20}px`,
-          '--_grid-drag-start-y': `${e.clientY - rowRect.top + 10}px`
-        });
+        this.style.setProperty('--_grid-drag-start-x', `${e.clientX - rowRect.left + 20}px`);
+        this.style.setProperty('--_grid-drag-start-y', `${e.clientY - rowRect.top + 10}px`);
 
         requestAnimationFrame(() => {
           row.removeAttribute('dragstart');
