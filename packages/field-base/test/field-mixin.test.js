@@ -18,8 +18,8 @@ customElements.define(
       `;
     }
 
-    ready() {
-      super.ready();
+    constructor() {
+      super();
 
       this.addController(new InputController(this));
     }

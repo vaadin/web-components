@@ -200,6 +200,13 @@ export class TextArea extends InputFieldMixin(ThemableMixin(ElementMixin(Polymer
     return this.$.clearButton;
   }
 
+  constructor() {
+    super();
+
+    this.addController(new TextAreaController(this));
+    this.addController(new AriaLabelController(this));
+  }
+
   /** @protected */
   connectedCallback() {
     super.connectedCallback();
@@ -212,8 +219,6 @@ export class TextArea extends InputFieldMixin(ThemableMixin(ElementMixin(Polymer
   ready() {
     super.ready();
 
-    this.addController(new TextAreaController(this));
-    this.addController(new AriaLabelController(this));
     this.addEventListener('animationend', this._onAnimationEnd);
   }
 

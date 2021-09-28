@@ -188,12 +188,17 @@ class DatePicker extends DatePickerMixin(
     return this.$.clearButton;
   }
 
+  constructor() {
+    super();
+
+    this.addController(new InputController(this));
+    this.addController(new AriaLabelController(this));
+  }
+
   /** @protected */
   ready() {
     super.ready();
 
-    this.addController(new InputController(this));
-    this.addController(new AriaLabelController(this));
     this.$.overlay.positionTarget = this.shadowRoot.querySelector('[part="input-field"]');
   }
 

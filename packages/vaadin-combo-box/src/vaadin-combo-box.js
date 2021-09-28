@@ -248,12 +248,17 @@ class ComboBox extends ComboBoxDataProviderMixin(
     return this.$.clearButton;
   }
 
+  constructor() {
+    super();
+
+    this.addController(new InputController(this));
+    this.addController(new AriaLabelController(this));
+  }
+
   /** @protected */
   ready() {
     super.ready();
 
-    this.addController(new InputController(this));
-    this.addController(new AriaLabelController(this));
     this._positionTarget = this.shadowRoot.querySelector('[part="input-field"]');
     this._toggleElement = this.$.toggleButton;
   }

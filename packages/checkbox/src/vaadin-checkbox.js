@@ -157,6 +157,9 @@ class Checkbox extends SlotLabelMixin(
     // Set the string "on" as the default value for the checkbox following the HTML specification:
     // https://html.spec.whatwg.org/multipage/input.html#dom-input-value-default-on
     this.value = 'on';
+
+    this.addController(new InputController(this));
+    this.addController(new AriaLabelController(this));
   }
 
   /**
@@ -168,14 +171,6 @@ class Checkbox extends SlotLabelMixin(
    */
   get _sourceSlot() {
     return this.$.noop;
-  }
-
-  /** @protected */
-  ready() {
-    super.ready();
-
-    this.addController(new InputController(this));
-    this.addController(new AriaLabelController(this));
   }
 
   /**

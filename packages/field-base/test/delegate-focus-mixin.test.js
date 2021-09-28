@@ -13,8 +13,8 @@ customElements.define(
       return html`<slot name="input"></slot>`;
     }
 
-    ready() {
-      super.ready();
+    constructor() {
+      super();
 
       this.addController(new InputController(this));
     }

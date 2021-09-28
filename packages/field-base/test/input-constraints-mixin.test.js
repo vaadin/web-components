@@ -41,8 +41,8 @@ customElements.define(
       return [...super.constraints, 'minlength', 'maxlength', 'pattern'];
     }
 
-    ready() {
-      super.ready();
+    constructor() {
+      super();
 
       this.addController(new InputController(this));
     }
