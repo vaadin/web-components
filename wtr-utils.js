@@ -115,30 +115,6 @@ const getTestPackages = (allPackages) => {
 };
 
 /**
- * Get packages for running snapshot tests.
- */
-const getSnapshotTestPackages = () => {
-  let snapshotPackages = getAllSnapshotPackages();
-  return getTestPackages(snapshotPackages);
-};
-
-/**
- * Get packages for running unit tests.
- */
-const getUnitTestPackages = () => {
-  const unitPackages = getAllUnitPackages();
-  return getTestPackages(unitPackages);
-};
-
-/**
- * Get packages for running visual tests.
- */
-const getVisualTestPackages = () => {
-  const visualPackages = getAllVisualPackages();
-  return getTestPackages(visualPackages);
-};
-
-/**
  * Get unit test groups based on packages.
  */
 const getSnapshotTestGroups = (packages) => {
@@ -254,7 +230,8 @@ const getDiffScreenshotName = (args) => getScreenshotFileName(args, 'failed', tr
 const getFailedScreenshotName = (args) => getScreenshotFileName(args, 'failed');
 
 const createSnapshotTestsConfig = (config) => {
-  const packages = getSnapshotTestPackages();
+  const snapshotPackages = getAllSnapshotPackages();
+  const packages = getTestPackages(snapshotPackages);
   const groups = getSnapshotTestGroups(packages);
 
   return {
@@ -267,8 +244,13 @@ const createSnapshotTestsConfig = (config) => {
 };
 
 const createUnitTestsConfig = (config) => {
-  const packages = getUnitTestPackages();
-  const groups = getUnitTestGroups(packages);
+  const allPackages = getAllUnitPackages();
+  const testPackages = getTestPackages(allPackages);
+
+  // only collect coverage if all packages changed
+  const coverage = allPackages.length === testPackages.length;
+
+  const groups = getUnitTestGroups(testPackages);
 
   return {
     ...config,
@@ -282,6 +264,7 @@ const createUnitTestsConfig = (config) => {
         timeout: '10000'
       }
     },
+    coverage,
     groups,
     testRunnerHtml,
     filterBrowserLogs
@@ -289,7 +272,8 @@ const createUnitTestsConfig = (config) => {
 };
 
 const createVisualTestsConfig = (theme) => {
-  const packages = getVisualTestPackages();
+  const visualPackages = getAllVisualPackages();
+  const packages = getTestPackages(visualPackages);
   const groups = getVisualTestGroups(packages, theme);
 
   const sauceLabsLauncher = createSauceLabsLauncher(
