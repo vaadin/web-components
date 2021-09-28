@@ -342,15 +342,15 @@ snapshots["vaadin-number-field theme"] =
 /* end snapshot vaadin-number-field theme */
 
 snapshots["vaadin-number-field slots"] = 
-`<input
+`<label slot="label">
+</label>
+<input
   max="undefined"
   min="undefined"
   slot="input"
   step="any"
   type="number"
 >
-<label slot="label">
-</label>
 <div
   aria-live="assertive"
   slot="error-message"

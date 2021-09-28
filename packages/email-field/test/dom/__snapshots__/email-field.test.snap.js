@@ -229,7 +229,9 @@ snapshots["vaadin-email-field theme"] =
 /* end snapshot vaadin-email-field theme */
 
 snapshots["vaadin-email-field slots"] = 
-`<input
+`<label slot="label">
+</label>
+<input
   autocapitalize="off"
   slot="input"
   type="email"
@@ -239,8 +241,6 @@ snapshots["vaadin-email-field slots"] =
   slot="error-message"
 >
 </div>
-<label slot="label">
-</label>
 <div slot="helper">
 </div>
 `;

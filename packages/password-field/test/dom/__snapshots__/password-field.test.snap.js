@@ -264,7 +264,9 @@ snapshots["vaadin-password-field theme"] =
 /* end snapshot vaadin-password-field theme */
 
 snapshots["vaadin-password-field slots"] = 
-`<input
+`<label slot="label">
+</label>
+<input
   autocapitalize="off"
   slot="input"
   type="password"
@@ -274,8 +276,6 @@ snapshots["vaadin-password-field slots"] =
   slot="error-message"
 >
 </div>
-<label slot="label">
-</label>
 <div slot="helper">
 </div>
 <button

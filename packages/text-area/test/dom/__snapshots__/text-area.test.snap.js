@@ -229,10 +229,10 @@ snapshots["vaadin-text-area theme"] =
 /* end snapshot vaadin-text-area theme */
 
 snapshots["vaadin-text-area slots"] = 
-`<textarea slot="textarea">
-</textarea>
-<label slot="label">
+`<label slot="label">
 </label>
+<textarea slot="textarea">
+</textarea>
 <div
   aria-live="assertive"
   slot="error-message"
