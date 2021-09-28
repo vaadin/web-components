@@ -3,12 +3,14 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { InputConstraintsMixin } from './input-constraints-mixin.js';
 
-const PatternMixinImplementation = (superclass) =>
+/**
+ * A mixin to provide `pattern` and `preventInvalidInput` properties.
+ */
+export const PatternMixin = (superclass) =>
   class PatternMixinClass extends InputConstraintsMixin(superclass) {
     static get properties() {
       return {
@@ -65,8 +67,3 @@ const PatternMixinImplementation = (superclass) =>
       super._onInput(event);
     }
   };
-
-/**
- * A mixin to provide `pattern` and `preventInvalidInput` properties.
- */
-export const PatternMixin = dedupingMixin(PatternMixinImplementation);

@@ -3,11 +3,13 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
 import { LabelMixin } from './label-mixin.js';
 import { ValidateMixin } from './validate-mixin.js';
 
-const FieldMixinImplementation = (superclass) =>
+/**
+ * A mixin to provide common field logic: label, error message and helper text.
+ */
+export const FieldMixin = (superclass) =>
   class FieldMixinClass extends ValidateMixin(LabelMixin(superclass)) {
     static get properties() {
       return {
@@ -238,8 +240,3 @@ const FieldMixinImplementation = (superclass) =>
       this._updateAriaAttribute(invalid, helperId);
     }
   };
-
-/**
- * A mixin to provide common field logic: label, error message and helper text.
- */
-export const FieldMixin = dedupingMixin(FieldMixinImplementation);

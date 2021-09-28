@@ -3,10 +3,12 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
 import { InputControlMixin } from './input-control-mixin.js';
 
-const InputFieldMixinImplementation = (superclass) =>
+/**
+ * A mixin to provide logic for vaadin-text-field and related components.
+ */
+export const InputFieldMixin = (superclass) =>
   class InputFieldMixinClass extends InputControlMixin(superclass) {
     static get properties() {
       return {
@@ -106,8 +108,3 @@ const InputFieldMixinImplementation = (superclass) =>
       }
     }
   };
-
-/**
- * A mixin to provide logic for vaadin-text-field and related components.
- */
-export const InputFieldMixin = dedupingMixin(InputFieldMixinImplementation);

@@ -3,7 +3,6 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { animationFrame } from '@vaadin/component-base/src/async.js';
 import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
@@ -11,7 +10,10 @@ import { DelegateFocusMixin } from './delegate-focus-mixin.js';
 import { InputConstraintsMixin } from './input-constraints-mixin.js';
 import { FieldMixin } from './field-mixin.js';
 
-const InputControlMixinImplementation = (superclass) =>
+/**
+ * A mixin to provide shared logic for the editable form input controls.
+ */
+export const InputControlMixin = (superclass) =>
   class InputControlMixinClass extends DelegateFocusMixin(
     InputConstraintsMixin(FieldMixin(KeyboardMixin(superclass)))
   ) {
@@ -191,8 +193,3 @@ const InputControlMixinImplementation = (superclass) =>
       );
     }
   };
-
-/**
- * A mixin to provide shared logic for the editable form input controls.
- */
-export const InputControlMixin = dedupingMixin(InputControlMixinImplementation);
