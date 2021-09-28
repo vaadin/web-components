@@ -6,7 +6,7 @@
 import { ActiveMixin } from '@vaadin/component-base/src/active-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { CheckedMixin } from '@vaadin/field-base/src/checked-mixin.js';
-import { InputSlotMixin } from '@vaadin/field-base/src/input-slot-mixin.js';
+import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
 import { SlotLabelMixin } from '@vaadin/field-base/src/slot-label-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -63,7 +63,7 @@ export interface CheckboxEventMap extends HTMLElementEventMap, CheckboxCustomEve
  * @fires {CustomEvent} indeterminate-changed - Fired when the `indeterminate` property changes.
  */
 declare class Checkbox extends SlotLabelMixin(
-  CheckedMixin(InputSlotMixin(ActiveMixin(ElementMixin(ThemableMixin(HTMLElement)))))
+  CheckedMixin(DelegateFocusMixin(ActiveMixin(ElementMixin(ThemableMixin(HTMLElement)))))
 ) {
   /**
    * True if the checkbox is in the indeterminate state which means

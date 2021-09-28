@@ -1,39 +1,7 @@
-import sinon from 'sinon';
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { DelegateStateMixin } from '../src/delegate-state-mixin.js';
-
-customElements.define(
-  'delegate-state-mixin-element-without-target',
-  class extends DelegateStateMixin(PolymerElement) {
-    static get properties() {
-      return {
-        title: {
-          type: String,
-          reflectToAttribute: true
-        },
-
-        indeterminate: {
-          type: Boolean,
-          default: true
-        }
-      };
-    }
-
-    static get delegateAttrs() {
-      return ['title'];
-    }
-
-    static get delegateProps() {
-      return ['indeterminate'];
-    }
-
-    static get template() {
-      return html`<input id="input" />`;
-    }
-  }
-);
 
 customElements.define(
   'delegate-state-mixin-element',
@@ -65,12 +33,14 @@ customElements.define(
       return ['indeterminate'];
     }
 
-    get _delegateStateTarget() {
-      return this.$.input;
-    }
-
     static get template() {
       return html`<input id="input" />`;
+    }
+
+    ready() {
+      super.ready();
+
+      this._setStateTarget(this.$.input);
     }
   }
 );
@@ -78,32 +48,11 @@ customElements.define(
 describe('delegate-state-mixin', () => {
   let element, target;
 
-  describe('without target', () => {
-    beforeEach(() => {
-      sinon.stub(console, 'warn');
-
-      element = fixtureSync(
-        '<delegate-state-mixin-element-without-target></delegate-state-mixin-element-without-target>'
-      );
-    });
-
-    afterEach(() => {
-      console.warn.restore();
-    });
-
-    it('should warn about no implementation for _delegateStateTarget', () => {
-      expect(console.warn.calledTwice).to.be.true;
-      expect(console.warn.args[0][0]).to.equal(
-        `Please implement the '_delegateStateTarget' property in <delegate-state-mixin-element-without-target>`
-      );
-    });
-  });
-
   describe('title attribute', () => {
     describe('default', () => {
       beforeEach(() => {
         element = fixtureSync('<delegate-state-mixin-element></delegate-state-mixin-element>');
-        target = element._delegateStateTarget;
+        target = element.stateTarget;
       });
 
       it('should delegate title attribute to the target', () => {
@@ -117,7 +66,7 @@ describe('delegate-state-mixin', () => {
     describe('initially set', () => {
       beforeEach(() => {
         element = fixtureSync('<delegate-state-mixin-element title="foo"></delegate-state-mixin-element>');
-        target = element._delegateStateTarget;
+        target = element.stateTarget;
       });
 
       it('should delegate title attribute to the target', () => {
@@ -133,7 +82,7 @@ describe('delegate-state-mixin', () => {
     describe('default', () => {
       beforeEach(() => {
         element = fixtureSync('<delegate-state-mixin-element></delegate-state-mixin-element>');
-        target = element._delegateStateTarget;
+        target = element.stateTarget;
       });
 
       it('should delegate invalid attribute to the target', () => {
@@ -154,7 +103,7 @@ describe('delegate-state-mixin', () => {
     describe('initially set', () => {
       beforeEach(() => {
         element = fixtureSync('<delegate-state-mixin-element invalid></delegate-state-mixin-element>');
-        target = element._delegateStateTarget;
+        target = element.stateTarget;
       });
 
       it('should delegate invalid attribute to the target', () => {
@@ -176,7 +125,7 @@ describe('delegate-state-mixin', () => {
   describe('indeterminate property', () => {
     beforeEach(() => {
       element = fixtureSync('<delegate-state-mixin-element></delegate-state-mixin-element>');
-      target = element._delegateStateTarget;
+      target = element.stateTarget;
     });
 
     it('should delegate indeterminate property to the target', () => {

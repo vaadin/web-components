@@ -8,7 +8,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { AriaLabelController } from '@vaadin/field-base/src/aria-label-controller.js';
 import { CharLengthMixin } from '@vaadin/field-base/src/char-length-mixin.js';
 import { InputFieldMixin } from '@vaadin/field-base/src/input-field-mixin.js';
-import { TextAreaSlotMixin } from '@vaadin/field-base/src/text-area-slot-mixin.js';
+import { TextAreaController } from '@vaadin/field-base/src/text-area-controller.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
@@ -72,13 +72,12 @@ registerStyles('vaadin-text-area', inputFieldShared, { moduleId: 'vaadin-text-ar
  * @extends HTMLElement
  * @mixes CharLengthMixin
  * @mixes InputFieldMixin
- * @mixes TextAreaSlotMixin
+ * @mixes DelegateFocusMixin
+ * @mixes LabelMixin
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-export class TextArea extends CharLengthMixin(
-  InputFieldMixin(TextAreaSlotMixin(ThemableMixin(ElementMixin(PolymerElement))))
-) {
+export class TextArea extends CharLengthMixin(InputFieldMixin(ThemableMixin(ElementMixin(PolymerElement)))) {
   static get is() {
     return 'vaadin-text-area';
   }
@@ -191,6 +190,7 @@ export class TextArea extends CharLengthMixin(
   ready() {
     super.ready();
 
+    this.addController(new TextAreaController(this));
     this.addController(new AriaLabelController(this));
     this.addEventListener('animationend', this._onAnimationEnd);
   }

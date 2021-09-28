@@ -2,12 +2,13 @@ import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { InputController } from '../src/input-controller.js';
 import { TextFieldMixin } from '../src/text-field-mixin.js';
-import { InputSlotMixin } from '../src/input-slot-mixin.js';
 
 customElements.define(
   'text-field-mixin-element',
-  class extends TextFieldMixin(InputSlotMixin(PolymerElement)) {
+  class extends TextFieldMixin(ElementMixin(PolymerElement)) {
     static get template() {
       return html`
         <slot name="label"></slot>
@@ -22,6 +23,12 @@ customElements.define(
 
     get clearElement() {
       return this.$.clearButton;
+    }
+
+    ready() {
+      super.ready();
+
+      this.addController(new InputController(this));
     }
   }
 );

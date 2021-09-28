@@ -8,7 +8,8 @@ import { ActiveMixin } from '@vaadin/component-base/src/active-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { AriaLabelController } from '@vaadin/field-base/src/aria-label-controller.js';
 import { CheckedMixin } from '@vaadin/field-base/src/checked-mixin.js';
-import { InputSlotMixin } from '@vaadin/field-base/src/input-slot-mixin.js';
+import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
+import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { SlotLabelMixin } from '@vaadin/field-base/src/slot-label-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -53,12 +54,11 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @mixes ThemableMixin
  * @mixes ElementMixin
  * @mixes ActiveMixin
- * @mixes InputSlotMixin
  * @mixes CheckedMixin
  * @mixes SlotLabelMixin
  */
 class RadioButton extends SlotLabelMixin(
-  CheckedMixin(InputSlotMixin(ActiveMixin(ElementMixin(ThemableMixin(PolymerElement)))))
+  CheckedMixin(DelegateFocusMixin(ActiveMixin(ElementMixin(ThemableMixin(PolymerElement)))))
 ) {
   static get is() {
     return 'vaadin-radio-button';
@@ -155,6 +155,7 @@ class RadioButton extends SlotLabelMixin(
   ready() {
     super.ready();
 
+    this.addController(new InputController(this));
     this.addController(new AriaLabelController(this));
   }
 }

@@ -2,12 +2,13 @@ import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { InputController } from '../src/input-controller.js';
 import { InputFieldMixin } from '../src/input-field-mixin.js';
-import { InputSlotMixin } from '../src/input-slot-mixin.js';
 
 customElements.define(
   'input-field-mixin-element',
-  class extends InputFieldMixin(InputSlotMixin(PolymerElement)) {
+  class extends InputFieldMixin(ElementMixin(PolymerElement)) {
     static get template() {
       return html`
         <style>
@@ -39,6 +40,12 @@ customElements.define(
 
     get clearElement() {
       return this.$.clearButton;
+    }
+
+    ready() {
+      super.ready();
+
+      this.addController(new InputController(this));
     }
   }
 );

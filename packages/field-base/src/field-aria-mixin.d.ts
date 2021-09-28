@@ -16,7 +16,10 @@ interface FieldAriaMixinConstructor {
 }
 
 interface FieldAriaMixin extends HelperTextMixin, ValidateMixin {
-  readonly _ariaTarget: HTMLElement;
+  /**
+   * A target element to which ARIA attributes are set.
+   */
+  readonly ariaTarget: HTMLElement;
 
   readonly _ariaAttr: string;
 }

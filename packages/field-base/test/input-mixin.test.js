@@ -16,6 +16,18 @@ customElements.define(
 describe('input-mixin', () => {
   let element, input, inputSpy, changeSpy;
 
+  describe('type', () => {
+    beforeEach(() => {
+      element = fixtureSync('<input-mixin-element></input-mixin-element>');
+    });
+
+    it('should have a read-only type property', () => {
+      expect(element.type).to.be.undefined;
+      element.type = 'number';
+      expect(element.type).to.be.undefined;
+    });
+  });
+
   describe('value', () => {
     beforeEach(() => {
       element = fixtureSync('<input-mixin-element></input-mixin-element>');

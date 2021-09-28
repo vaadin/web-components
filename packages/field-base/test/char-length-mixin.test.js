@@ -2,12 +2,13 @@ import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { CharLengthMixin } from '../src/char-length-mixin.js';
-import { InputSlotMixin } from '../src/input-slot-mixin.js';
+import { InputController } from '../src/input-controller.js';
 
 customElements.define(
   'char-length-mixin-element',
-  class extends CharLengthMixin(InputSlotMixin(PolymerElement)) {
+  class extends CharLengthMixin(ElementMixin(PolymerElement)) {
     static get template() {
       return html`
         <slot name="input"></slot>
@@ -16,6 +17,12 @@ customElements.define(
         </div>
         <slot name="helper"></slot>
       `;
+    }
+
+    ready() {
+      super.ready();
+
+      this.addController(new InputController(this));
     }
   }
 );

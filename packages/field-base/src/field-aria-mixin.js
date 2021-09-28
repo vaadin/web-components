@@ -9,9 +9,18 @@ import { ValidateMixin } from './validate-mixin.js';
 
 const FieldAriaMixinImplementation = (superclass) =>
   class FieldAriaMixinClass extends HelperTextMixin(ValidateMixin(superclass)) {
-    /** @protected */
-    get _ariaTarget() {
-      return this;
+    static get properties() {
+      return {
+        /**
+         * A target element to which ARIA attributes are set.
+         * @protected
+         */
+        ariaTarget: {
+          type: Object,
+          readOnly: true,
+          observer: '_ariaTargetChanged'
+        }
+      };
     }
 
     /** @protected */
@@ -24,17 +33,17 @@ const FieldAriaMixinImplementation = (superclass) =>
     }
 
     /** @protected */
-    ready() {
-      super.ready();
-
-      this._updateAriaAttribute(this.invalid, this._helperId);
+    _ariaTargetChanged(target) {
+      if (target) {
+        this._updateAriaAttribute(this.invalid, this._helperId);
+      }
     }
 
     /** @protected */
     _updateAriaAttribute(invalid, helperId) {
       const attr = this._ariaAttr;
 
-      if (this._ariaTarget && attr) {
+      if (this.ariaTarget && attr) {
         // For groups, add all IDs to aria-labelledby rather than aria-describedby -
         // that should guarantee that it's announced when the group is entered.
         const ariaIds = attr === 'aria-describedby' ? [helperId] : [this._labelId, helperId];
@@ -45,7 +54,7 @@ const FieldAriaMixinImplementation = (superclass) =>
           ariaIds.push(this._errorId);
         }
 
-        this._ariaTarget.setAttribute(attr, ariaIds.join(' '));
+        this.ariaTarget.setAttribute(attr, ariaIds.join(' '));
       }
     }
 

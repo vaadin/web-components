@@ -9,11 +9,12 @@ import { animationFrame } from '@vaadin/component-base/src/async.js';
 import { ClearButtonMixin } from './clear-button-mixin.js';
 import { DelegateFocusMixin } from './delegate-focus-mixin.js';
 import { FieldAriaMixin } from './field-aria-mixin.js';
+import { LabelMixin } from '../src/label-mixin.js';
 import { InputConstraintsMixin } from './input-constraints-mixin.js';
 
 const InputFieldMixinImplementation = (superclass) =>
   class InputFieldMixinClass extends ClearButtonMixin(
-    FieldAriaMixin(InputConstraintsMixin(DelegateFocusMixin(superclass)))
+    FieldAriaMixin(LabelMixin(InputConstraintsMixin(DelegateFocusMixin(superclass))))
   ) {
     static get properties() {
       return {
@@ -68,14 +69,6 @@ const InputFieldMixinImplementation = (superclass) =>
       return ['__observeOffsetHeight(errorMessage, invalid, label, helperText)'];
     }
 
-    /**
-     * Element used by `FieldAriaMixin` to set ARIA attributes.
-     * @protected
-     */
-    get _ariaTarget() {
-      return this.inputElement;
-    }
-
     /** @protected */
     ready() {
       super.ready();
@@ -88,16 +81,25 @@ const InputFieldMixinImplementation = (superclass) =>
           this.__observeOffsetHeight();
         });
       }
+    }
 
-      if (this.inputElement) {
+    /**
+     * @param {HTMLElement} input
+     * @protected
+     * @override
+     */
+    _inputElementChanged(input) {
+      super._inputElementChanged(input);
+
+      if (input) {
         // Discard value set on the custom slotted input.
-        if (this.inputElement.value && this.inputElement.value !== this.value) {
+        if (input.value && input.value !== this.value) {
           console.warn(`Please define value on the <${this.localName}> component!`);
-          this.inputElement.value = '';
+          input.value = '';
         }
 
         if (this.value) {
-          this.inputElement.value = this.value;
+          input.value = this.value;
         }
       }
     }

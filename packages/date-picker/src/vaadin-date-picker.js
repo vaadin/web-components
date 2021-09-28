@@ -11,7 +11,8 @@ import { AriaLabelController } from '@vaadin/field-base/src/aria-label-controlle
 import { ClearButtonMixin } from '@vaadin/field-base/src/clear-button-mixin.js';
 import { FieldAriaMixin } from '@vaadin/field-base/src/field-aria-mixin.js';
 import { InputConstraintsMixin } from '@vaadin/field-base/src/input-constraints-mixin.js';
-import { InputSlotMixin } from '@vaadin/field-base/src/input-slot-mixin.js';
+import { InputController } from '@vaadin/field-base/src/input-controller.js';
+import { LabelMixin } from '@vaadin/field-base/src/label-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
@@ -103,7 +104,7 @@ registerStyles('vaadin-date-picker', [inputFieldShared, datePickerStyles], { mod
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ThemableMixin
- * @mixes InputSlotMixin
+ * @mixes LabelMixin
  * @mixes ClearButtonMixin
  * @mixes FieldAriaMixin
  * @mixes DatePickerMixin
@@ -111,7 +112,7 @@ registerStyles('vaadin-date-picker', [inputFieldShared, datePickerStyles], { mod
 class DatePicker extends DatePickerMixin(
   FieldAriaMixin(
     ClearButtonMixin(
-      InputConstraintsMixin(InputSlotMixin(GestureEventListeners(ThemableMixin(ElementMixin(PolymerElement)))))
+      InputConstraintsMixin(LabelMixin(GestureEventListeners(ThemableMixin(ElementMixin(PolymerElement)))))
     )
   )
 ) {
@@ -189,14 +190,6 @@ class DatePicker extends DatePickerMixin(
   }
 
   /**
-   * Element used by `FieldAriaMixin` to set ARIA attributes.
-   * @protected
-   */
-  get _ariaTarget() {
-    return this.inputElement;
-  }
-
-  /**
    * Used by `ClearButtonMixin` as a reference to the clear button element.
    * @protected
    * @return {!HTMLElement}
@@ -209,6 +202,7 @@ class DatePicker extends DatePickerMixin(
   ready() {
     super.ready();
 
+    this.addController(new InputController(this));
     this.addController(new AriaLabelController(this));
     this.$.overlay.positionTarget = this.shadowRoot.querySelector('[part="input-field"]');
   }

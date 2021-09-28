@@ -3,11 +3,11 @@ import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { FieldAriaMixin } from '../src/field-aria-mixin.js';
 import { LabelMixin } from '../src/label-mixin.js';
-import { InputSlotMixin } from '../src/input-slot-mixin.js';
+import { InputMixin } from '../src/input-mixin.js';
 
 customElements.define(
   'field-aria-mixin-element',
-  class extends FieldAriaMixin(LabelMixin(InputSlotMixin(PolymerElement))) {
+  class extends FieldAriaMixin(LabelMixin(InputMixin(PolymerElement))) {
     static get template() {
       return html`
         <slot name="label"></slot>
@@ -17,8 +17,13 @@ customElements.define(
       `;
     }
 
-    get _ariaTarget() {
-      return this.inputElement;
+    ready() {
+      super.ready();
+
+      const input = document.createElement('input');
+      input.setAttribute('slot', 'input');
+      this.appendChild(input);
+      this._setAriaTarget(input);
     }
   }
 );
@@ -36,6 +41,12 @@ customElements.define(
 
     get _ariaAttr() {
       return 'aria-labelledby';
+    }
+
+    ready() {
+      super.ready();
+
+      this._setAriaTarget(this);
     }
   }
 );

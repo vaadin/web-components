@@ -1,14 +1,21 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { InputSlotMixin } from '../src/input-slot-mixin.js';
+import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { DelegateInputStateMixin } from '../src/delegate-input-state-mixin.js';
+import { InputController } from '../src/input-controller.js';
 
 customElements.define(
   'delegate-input-state-mixin-element',
-  class extends DelegateInputStateMixin(InputSlotMixin(PolymerElement)) {
+  class extends DelegateInputStateMixin(ElementMixin(PolymerElement)) {
     static get template() {
       return html`<slot name="input"></slot>`;
+    }
+
+    ready() {
+      super.ready();
+
+      this.addController(new InputController(this));
     }
   }
 );

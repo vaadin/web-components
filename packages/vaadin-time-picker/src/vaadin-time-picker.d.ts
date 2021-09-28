@@ -6,7 +6,8 @@
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ClearButtonMixin } from '@vaadin/field-base/src/clear-button-mixin.js';
 import { FieldAriaMixin } from '@vaadin/field-base/src/field-aria-mixin.js';
-import { InputSlotMixin } from '@vaadin/field-base/src/input-slot-mixin.js';
+import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
+import { LabelMixin } from '@vaadin/field-base/src/label-mixin.js';
 import { PatternMixin } from '@vaadin/field-base/src/pattern-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { TimePickerEventMap, TimePickerI18n } from './interfaces';
@@ -63,7 +64,7 @@ import { TimePickerEventMap, TimePickerI18n } from './interfaces';
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  */
 declare class TimePicker extends PatternMixin(
-  ClearButtonMixin(FieldAriaMixin(InputSlotMixin(ThemableMixin(ElementMixin(HTMLElement)))))
+  ClearButtonMixin(FieldAriaMixin(DelegateFocusMixin(LabelMixin(ThemableMixin(ElementMixin(HTMLElement))))))
 ) {
   /**
    * The time value for this element.

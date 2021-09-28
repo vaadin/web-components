@@ -176,6 +176,8 @@ class CustomField extends FieldAriaMixin(LabelMixin(FocusMixin(ThemableMixin(Ele
     // See https://github.com/vaadin/vaadin-web-components/issues/94
     this.setAttribute('role', 'group');
 
+    this._setAriaTarget(this);
+
     this.__setInputsFromSlot();
     this.__observer = new FlattenedNodesObserver(this.$.slot, () => {
       this.__setInputsFromSlot();

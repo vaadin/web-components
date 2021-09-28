@@ -2,12 +2,13 @@ import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { fixtureSync, escKeyDown } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ClearButtonMixin } from '../src/clear-button-mixin.js';
-import { InputSlotMixin } from '../src/input-slot-mixin.js';
+import { InputController } from '../src/input-controller.js';
 
 customElements.define(
   'clear-button-mixin-element',
-  class extends ClearButtonMixin(InputSlotMixin(PolymerElement)) {
+  class extends ClearButtonMixin(ElementMixin(PolymerElement)) {
     static get template() {
       return html`
         <slot name="input"></slot>
@@ -23,6 +24,12 @@ customElements.define(
 
     get clearElement() {
       return this.$.clearButton;
+    }
+
+    ready() {
+      super.ready();
+
+      this.addController(new InputController(this));
     }
   }
 );

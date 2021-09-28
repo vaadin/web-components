@@ -7,7 +7,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ClearButtonMixin } from '@vaadin/field-base/src/clear-button-mixin.js';
 import { FieldAriaMixin } from '@vaadin/field-base/src/field-aria-mixin.js';
 import { InputConstraintsMixin } from '@vaadin/field-base/src/input-constraints-mixin.js';
-import { InputSlotMixin } from '@vaadin/field-base/src/input-slot-mixin.js';
+import { LabelMixin } from '@vaadin/field-base/src/label-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { DatePickerMixin } from './vaadin-date-picker-mixin.js';
 import { DatePickerEventMap } from './interfaces';
@@ -109,7 +109,7 @@ interface DatePicker
     ElementMixin,
     ClearButtonMixin,
     FieldAriaMixin,
-    InputSlotMixin,
+    LabelMixin,
     DatePickerMixin,
     InputConstraintsMixin,
     ThemableMixin {}

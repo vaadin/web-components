@@ -283,11 +283,6 @@ class Select extends DelegateFocusMixin(
   }
 
   /** @protected */
-  get _ariaTarget() {
-    return this._valueButton;
-  }
-
-  /** @protected */
   get _valueButton() {
     return this._getDirectSlotChild('value');
   }
@@ -313,6 +308,7 @@ class Select extends DelegateFocusMixin(
       this._updateAriaExpanded(this.opened);
 
       this._setFocusElement(this._valueButton);
+      this._setAriaTarget(this._valueButton);
 
       this._valueButton.addEventListener('keydown', this._boundOnKeyDown);
     }

@@ -7,8 +7,10 @@ import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { AriaLabelController } from '@vaadin/field-base/src/aria-label-controller.js';
 import { ClearButtonMixin } from '@vaadin/field-base/src/clear-button-mixin.js';
+import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
 import { FieldAriaMixin } from '@vaadin/field-base/src/field-aria-mixin.js';
-import { InputSlotMixin } from '@vaadin/field-base/src/input-slot-mixin.js';
+import { InputController } from '@vaadin/field-base/src/input-controller.js';
+import { LabelMixin } from '@vaadin/field-base/src/label-mixin.js';
 import { PatternMixin } from '@vaadin/field-base/src/pattern-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -167,7 +169,7 @@ registerStyles('vaadin-combo-box', inputFieldShared, { moduleId: 'vaadin-combo-b
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ThemableMixin
- * @mixes InputSlotMixin
+ * @mixes LabelMixin
  * @mixes ClearButtonMixin
  * @mixes FieldAriaMixin
  * @mixes PatternMixin
@@ -176,7 +178,9 @@ registerStyles('vaadin-combo-box', inputFieldShared, { moduleId: 'vaadin-combo-b
  */
 class ComboBox extends ComboBoxDataProviderMixin(
   ComboBoxMixin(
-    PatternMixin(FieldAriaMixin(ClearButtonMixin(InputSlotMixin(ThemableMixin(ElementMixin(PolymerElement))))))
+    PatternMixin(
+      FieldAriaMixin(ClearButtonMixin(DelegateFocusMixin(LabelMixin(ThemableMixin(ElementMixin(PolymerElement))))))
+    )
   )
 ) {
   static get is() {
@@ -245,14 +249,6 @@ class ComboBox extends ComboBoxDataProviderMixin(
   }
 
   /**
-   * Element used by `FieldAriaMixin` to set ARIA attributes.
-   * @protected
-   */
-  get _ariaTarget() {
-    return this.inputElement;
-  }
-
-  /**
    * Used by `ClearButtonMixin` as a reference to the clear button element.
    * @protected
    * @return {!HTMLElement}
@@ -261,19 +257,11 @@ class ComboBox extends ComboBoxDataProviderMixin(
     return this.$.clearButton;
   }
 
-  /**
-   * Element used by `DelegatesFocusMixin` to handle focus.
-   * @protected
-   * @return {!HTMLInputElement}
-   */
-  get focusElement() {
-    return this.inputElement;
-  }
-
   /** @protected */
   ready() {
     super.ready();
 
+    this.addController(new InputController(this));
     this.addController(new AriaLabelController(this));
     this._positionTarget = this.shadowRoot.querySelector('[part="input-field"]');
     this._toggleElement = this.$.toggleButton;
