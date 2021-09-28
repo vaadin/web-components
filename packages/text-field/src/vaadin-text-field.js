@@ -7,7 +7,6 @@ import { PolymerElement, html } from '@polymer/polymer';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { AriaLabelController } from '@vaadin/field-base/src/aria-label-controller.js';
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
-import { CharLengthMixin } from '@vaadin/field-base/src/char-length-mixin.js';
 import { InputFieldMixin } from '@vaadin/field-base/src/input-field-mixin.js';
 import { PatternMixin } from '@vaadin/field-base/src/pattern-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
@@ -17,9 +16,7 @@ import '@vaadin/input-container/src/vaadin-input-container.js';
 
 registerStyles('vaadin-text-field', inputFieldShared, { moduleId: 'vaadin-text-field-styles' });
 
-export class TextField extends InputFieldMixin(
-  CharLengthMixin(PatternMixin(ThemableMixin(ElementMixin(PolymerElement))))
-) {
+export class TextField extends PatternMixin(InputFieldMixin(ThemableMixin(ElementMixin(PolymerElement)))) {
   static get is() {
     return 'vaadin-text-field';
   }
@@ -60,6 +57,32 @@ export class TextField extends InputFieldMixin(
         </div>
       </div>
     `;
+  }
+
+  static get properties() {
+    return {
+      /**
+       * Maximum number of characters (in Unicode code points) that the user can enter.
+       */
+      maxlength: {
+        type: Number
+      },
+
+      /**
+       * Minimum number of characters (in Unicode code points) that the user can enter.
+       */
+      minlength: {
+        type: Number
+      }
+    };
+  }
+
+  static get delegateAttrs() {
+    return [...super.delegateAttrs, 'maxlength', 'minlength'];
+  }
+
+  static get constraints() {
+    return [...super.constraints, 'maxlength', 'minlength'];
   }
 
   constructor() {

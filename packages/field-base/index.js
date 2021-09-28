@@ -1,5 +1,4 @@
 export { AriaLabelController } from './src/aria-label-controller.js';
-export { CharLengthMixin } from './src/char-length-mixin.js';
 export { CheckedMixin } from './src/checked-mixin.js';
 export { DelegateFocusMixin } from './src/delegate-focus-mixin.js';
 export { DelegateStateMixin } from './src/delegate-state-mixin.js';
