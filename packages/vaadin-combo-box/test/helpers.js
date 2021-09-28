@@ -77,9 +77,13 @@ export const getAllItems = (comboBox) => {
 export const getViewportItems = (comboBox) => {
   const overlayRect = comboBox.$.dropdown.$.overlay.$.content.getBoundingClientRect();
 
+  // Firefox can produce values like 19.199996948242188
+  const top = Math.round(overlayRect.top);
+  const bottom = Math.round(overlayRect.bottom);
+
   return getAllItems(comboBox).filter((item) => {
     const itemRect = item.getBoundingClientRect();
-    return itemRect.bottom > overlayRect.top && itemRect.top < overlayRect.bottom;
+    return Math.round(itemRect.bottom) > top && Math.round(itemRect.top) < bottom;
   });
 };
 
