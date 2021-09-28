@@ -35,7 +35,7 @@ export class InputController extends SlotController {
         host.inputElement = node;
 
         // DelegateFocusMixin
-        host.focusElement = node;
+        host._setFocusElement && host._setFocusElement(node);
 
         // DelegateStateMixin
         host.stateTarget = node;

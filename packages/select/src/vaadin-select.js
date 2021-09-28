@@ -303,7 +303,7 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
       this._updateAriaRequired(this.required);
       this._updateAriaExpanded(this.opened);
 
-      this.focusElement = this._valueButton;
+      this._setFocusElement(this._valueButton);
       this.ariaTarget = this._valueButton;
 
       this._valueButton.addEventListener('keydown', this._boundOnKeyDown);

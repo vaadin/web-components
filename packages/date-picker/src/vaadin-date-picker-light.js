@@ -136,7 +136,7 @@ class DatePickerLight extends ThemableMixin(DatePickerMixin(PolymerElement)) {
     super.connectedCallback();
     const cssSelector = 'vaadin-text-field,iron-input,paper-input,.paper-input-input,.input';
     this.inputElement = this.querySelector(cssSelector);
-    this.focusElement = this.inputElement;
+    this._setFocusElement(this.inputElement);
   }
 
   set _inputValue(value) {

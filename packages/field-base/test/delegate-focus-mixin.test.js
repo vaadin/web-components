@@ -96,17 +96,17 @@ describe('delegate-focus-mixin', () => {
 
     it('should propagate disabled property to the newly added input', () => {
       element.disabled = true;
-      element.focusElement = null;
+      element._setFocusElement(null);
       const target = document.createElement('input');
-      element.focusElement = target;
+      element._setFocusElement(target);
       expect(target.disabled).to.be.true;
     });
 
     it('should override disabled property on the newly added input', () => {
-      element.focusElement = null;
+      element._setFocusElement(null);
       const target = document.createElement('input');
       target.setAttribute('disabled', '');
-      element.focusElement = target;
+      element._setFocusElement(target);
       expect(target.disabled).to.be.false;
     });
   });
@@ -131,7 +131,7 @@ describe('delegate-focus-mixin', () => {
       });
 
       it('should not re-dispatch focus when focusElement is removed', () => {
-        element.focusElement = null;
+        element._setFocusElement(null);
         input.dispatchEvent(new Event('focus'));
         expect(spy.calledOnce).to.be.false;
       });
@@ -148,7 +148,7 @@ describe('delegate-focus-mixin', () => {
       });
 
       it('should not re-dispatch blur when focusElement is removed', () => {
-        element.focusElement = null;
+        element._setFocusElement(null);
         input.dispatchEvent(new Event('blur'));
         expect(spy.calledOnce).to.be.false;
       });
