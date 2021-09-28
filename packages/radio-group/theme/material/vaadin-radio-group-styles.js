@@ -25,6 +25,12 @@ const radioGroup = css`
     padding-top: 24px;
   }
 
+  /* TODO: remove when the following components are updated to use new indicator:
+  combo-box, date-picker, time-picker, date-time-picker, select. */
+  [part='label']::after {
+    display: none;
+  }
+
   [part='label']:empty {
     display: none;
   }
