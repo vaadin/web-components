@@ -17,7 +17,6 @@ const FieldMixinImplementation = (superclass) =>
          */
         ariaTarget: {
           type: Object,
-          readOnly: true,
           observer: '_ariaTargetChanged'
         },
 

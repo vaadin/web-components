@@ -40,7 +40,7 @@ customElements.define(
     ready() {
       super.ready();
 
-      this._setStateTarget(this.$.input);
+      this.stateTarget = this.$.input;
     }
   }
 );

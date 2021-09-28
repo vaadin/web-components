@@ -1,12 +1,14 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { FieldMixin } from '../src/field-mixin.js';
 import { InputMixin } from '../src/input-mixin.js';
+import { InputController } from '../src/input-controller.js';
 
 customElements.define(
   'field-mixin-element',
-  class extends FieldMixin(InputMixin(PolymerElement)) {
+  class extends FieldMixin(InputMixin(ElementMixin(PolymerElement))) {
     static get template() {
       return html`
         <slot name="label"></slot>
@@ -19,10 +21,7 @@ customElements.define(
     ready() {
       super.ready();
 
-      const input = document.createElement('input');
-      input.setAttribute('slot', 'input');
-      this.appendChild(input);
-      this.ariaTarget = input;
+      this.addController(new InputController(this));
     }
   }
 );
