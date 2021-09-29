@@ -206,6 +206,15 @@ class RadioGroup extends FieldAriaMixin(
   }
 
   /**
+   * @type {!boolean}
+   * @private
+   */
+  get isHorizontalRTL() {
+    return this.getAttribute('dir') === 'rtl' && this.theme !== 'vertical';
+  }
+
+  /**
+   * @type {!string}
    * @override
    * @protected
    */
@@ -225,65 +234,51 @@ class RadioGroup extends FieldAriaMixin(
       return element instanceof RadioButton;
     });
 
-    const isHorizontalRTL = this.getAttribute('dir') === 'rtl' && this.theme !== 'vertical';
-
-    // LEFT, UP - select previous radio button
     if (['ArrowLeft', 'ArrowUp'].includes(event.key)) {
       event.preventDefault();
-      this.__selectIncRadioButton(isHorizontalRTL, radioButton);
+      this.__navigateToNextRadioButton(radioButton);
     }
 
-    // RIGHT, DOWN - select next radio button
     if (['ArrowRight', 'ArrowDown'].includes(event.key)) {
       event.preventDefault();
-      this.__selectIncRadioButton(!isHorizontalRTL, radioButton);
+      this.__navigateToPrevRadioButton(radioButton);
     }
   }
 
   /**
-   * @param {!boolean} next
-   * @param {!RadioButton} radioButton
+   * @param {!number} index
    * @private
    */
-  __selectIncRadioButton(next, radioButton) {
+  __navigateToNextRadioButton(radioButton) {
     const index = this.__radioButtons.indexOf(radioButton);
 
-    if (next) {
-      this.__selectNextRadioButton(index);
-    } else {
-      this.__selectPrevRadioButton(index);
-    }
+    this.__navigateToRadioButton(index, this.isHorizontalRTL ? 1 : -1);
   }
 
   /**
    * @param {!number} index
    * @private
    */
-  __selectNextRadioButton(index) {
-    const nextIndex = (this.__radioButtons.length + index + 1) % this.__radioButtons.length;
-    const nextRadioButton = this.__radioButtons[nextIndex];
+  __navigateToPrevRadioButton(radioButton) {
+    const index = this.__radioButtons.indexOf(radioButton);
 
-    if (nextRadioButton.disabled) {
-      this.__selectNextRadioButton(nextIndex);
-    } else {
-      nextRadioButton.focusElement.focus();
-      nextRadioButton.focusElement.click();
-    }
+    this.__navigateToRadioButton(index, this.isHorizontalRTL ? -1 : 1);
   }
 
   /**
    * @param {!number} index
+   * @param {!number} step
    * @private
    */
-  __selectPrevRadioButton(index) {
-    const prevIndex = (this.__radioButtons.length + index - 1) % this.__radioButtons.length;
-    const prevRadioButton = this.__radioButtons[prevIndex];
+  __navigateToRadioButton(index, step) {
+    const newIndex = (this.__radioButtons.length + index + step) % this.__radioButtons.length;
+    const newRadioButton = this.__radioButtons[newIndex];
 
-    if (prevRadioButton.disabled) {
-      this.__selectPrevRadioButton(prevIndex);
+    if (newRadioButton.disabled) {
+      this.__navigateToRadioButton(newIndex, step);
     } else {
-      prevRadioButton.focusElement.focus();
-      prevRadioButton.focusElement.click();
+      newRadioButton.focusElement.focus();
+      newRadioButton.focusElement.click();
     }
   }
 

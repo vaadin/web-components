@@ -19,10 +19,9 @@ describe('keyboard navigation', () => {
   });
 
   describe('Tab', () => {
-    it('should leave focusable only the 1st button by default', async () => {
+    it('should leave focusable only the first button by default', async () => {
       // Focus on the 1st radio button.
       await sendKeys({ press: 'Tab' });
-
       expect(buttons[0].hasAttribute('focused')).to.be.true;
       expect(buttons[1].hasAttribute('focused')).to.be.false;
       expect(buttons[2].hasAttribute('focused')).to.be.false;
@@ -34,7 +33,7 @@ describe('keyboard navigation', () => {
       expect(buttons[2].hasAttribute('focused')).to.be.false;
     });
 
-    it('should leave focusable only the 2nd button when it is checked', async () => {
+    it('should leave focusable only the checked radio button', async () => {
       buttons[1].checked = true;
 
       // Focus on the 2nd radio button.
