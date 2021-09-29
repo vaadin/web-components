@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, focusin, focusout, enter, nextFrame } from '@vaadin/testing-helpers';
 import '@vaadin/date-picker/vaadin-date-picker.js';
-import '@vaadin/vaadin-dialog/vaadin-dialog.js';
+import '@vaadin/dialog/vaadin-dialog.js';
 import '@vaadin/vaadin-template-renderer';
 import { createItems, flushGrid, getCellEditor, getContainerCell } from './helpers.js';
 import '../vaadin-grid-pro.js';

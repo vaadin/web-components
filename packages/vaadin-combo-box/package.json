@@ -40,7 +40,7 @@
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
     "@vaadin/testing-helpers": "^0.3.0",
-    "@vaadin/vaadin-dialog": "^22.0.0-alpha6",
+    "@vaadin/dialog": "^22.0.0-alpha6",
     "@vaadin/vaadin-template-renderer": "^22.0.0-alpha6",
     "@vaadin/vaadin-text-field": "^22.0.0-alpha6",
     "lit": "^2.0.0",
