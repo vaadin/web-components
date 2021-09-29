@@ -25,7 +25,7 @@ export class TextAreaController extends SlotController {
         // Copying this to every component seems redundant.
 
         // InputMixin
-        host.inputElement = node;
+        host._setInputElement && host._setInputElement(node);
 
         // DelegateFocusMixin
         host._setFocusElement && host._setFocusElement(node);

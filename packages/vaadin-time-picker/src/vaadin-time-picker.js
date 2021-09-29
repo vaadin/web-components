@@ -334,7 +334,7 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
     super._inputElementChanged(input);
 
     if (input) {
-      this.$.comboBox.inputElement = input;
+      this.$.comboBox._setInputElement(input);
     }
   }
 

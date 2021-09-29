@@ -11,7 +11,8 @@ const InputMixinImplementation = (superclass) =>
       return {
         /**
          * A reference to the input element controlled by the mixin.
-         * Any component implementing this mixin is expected to provide it.
+         * Any component implementing this mixin is expected to provide it
+         * by using `this._setInputElement(input)` Polymer API.
          *
          * A typical case is using `InputController` that does this automatically.
          * However, the input element does not have to always be native <input>:
@@ -22,6 +23,7 @@ const InputMixinImplementation = (superclass) =>
          */
         inputElement: {
           type: Object,
+          readOnly: true,
           observer: '_inputElementChanged'
         },
 

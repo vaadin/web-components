@@ -35,7 +35,7 @@ describe('aria-label-mixin', () => {
         target = document.createElement(el);
         target.setAttribute('slot', el);
         element.appendChild(target);
-        element.inputElement = target;
+        element._setInputElement(target);
         element.addController(new AriaLabelController(element));
         label = element.querySelector('[slot=label]');
       });
