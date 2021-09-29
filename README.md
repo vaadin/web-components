@@ -193,6 +193,7 @@ yarn test:webkit
 ```
 
 By default, tests will only run for changed packages. To run tests for all packages, use the `--all` flag:
+
 ```sh
 yarn test --all
 ```
@@ -210,6 +211,7 @@ yarn debug --group vaadin-upload
 ```
 
 Run tests with code coverage:
+
 ```sh
 yarn test --coverage
 ```
