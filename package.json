@@ -39,6 +39,7 @@
     "update:snapshots": "web-test-runner --config web-test-runner-snapshots.config.js --update-snapshots"
   },
   "devDependencies": {
+    "@fontsource/roboto": "^4.5.1",
     "@polymer/iron-component-page": "^4.0.0",
     "@typescript-eslint/eslint-plugin": "^4.31.2",
     "@typescript-eslint/parser": "^4.31.2",
