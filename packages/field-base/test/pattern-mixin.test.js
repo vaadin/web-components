@@ -16,7 +16,12 @@ customElements.define(
     constructor() {
       super();
 
-      this.addController(new InputController(this));
+      this.addController(
+        new InputController(this, (input) => {
+          this._setInputElement(input);
+          this.stateTarget = input;
+        })
+      );
     }
   }
 );

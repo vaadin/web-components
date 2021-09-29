@@ -9,7 +9,7 @@ import { SlotController } from './slot-controller.js';
  * A controller to create and initialize slotted `<input>` element.
  */
 export class InputController extends SlotController {
-  constructor(host) {
+  constructor(host, callback) {
     super(host, [
       'input',
       () => document.createElement('input'),
@@ -31,20 +31,9 @@ export class InputController extends SlotController {
         host._inputId = `${host.localName}-${uniqueId}`;
         node.id = host._inputId;
 
-        // TODO: find a better approach to initialize mixins.
-        // Copying this to every component seems redundant.
-
-        // InputMixin
-        host._setInputElement && host._setInputElement(node);
-
-        // DelegateFocusMixin
-        host._setFocusElement && host._setFocusElement(node);
-
-        // DelegateStateMixin
-        host.stateTarget = node;
-
-        // FieldAriaMixin
-        host.ariaTarget = node;
+        if (typeof callback == 'function') {
+          callback(node);
+        }
       }
     ]);
   }

@@ -212,7 +212,14 @@ export class TextArea extends InputFieldMixin(ThemableMixin(ElementMixin(Polymer
   ready() {
     super.ready();
 
-    this.addController(new TextAreaController(this));
+    this.addController(
+      new TextAreaController(this, (input) => {
+        this._setInputElement(input);
+        this._setFocusElement(input);
+        this.stateTarget = input;
+        this.ariaTarget = input;
+      })
+    );
     this.addController(new AriaLabelController(this.inputElement, this._labelNode));
     this.addEventListener('animationend', this._onAnimationEnd);
   }

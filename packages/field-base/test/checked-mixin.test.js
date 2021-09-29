@@ -20,7 +20,13 @@ customElements.define(
       super();
 
       this._setType('checkbox');
-      this.addController(new InputController(this));
+      this.addController(
+        new InputController(this, (input) => {
+          this._setInputElement(input);
+          this._setFocusElement(input);
+          this.stateTarget = input;
+        })
+      );
     }
   }
 );

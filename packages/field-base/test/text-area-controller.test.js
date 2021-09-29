@@ -20,7 +20,9 @@ describe('text-area-controller', () => {
   describe('default', () => {
     beforeEach(() => {
       element = fixtureSync('<textarea-controller-element></textarea-controller-element>');
-      controller = new TextAreaController(element);
+      controller = new TextAreaController(element, (node) => {
+        element._setInputElement(node);
+      });
       element.addController(controller);
       textarea = element.querySelector('[slot=textarea]');
     });

@@ -20,7 +20,9 @@ describe('input-controller', () => {
   describe('default', () => {
     beforeEach(() => {
       element = fixtureSync('<input-controller-element></input-controller-element>');
-      controller = new InputController(element);
+      controller = new InputController(element, (node) => {
+        element._setInputElement(node);
+      });
       element.addController(controller);
       input = element.querySelector('[slot=input]');
     });

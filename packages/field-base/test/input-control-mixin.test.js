@@ -30,7 +30,14 @@ customElements.define(
     constructor() {
       super();
 
-      this.addController(new InputController(this));
+      this.addController(
+        new InputController(this, (input) => {
+          this._setInputElement(input);
+          this._setFocusElement(input);
+          this.stateTarget = input;
+          this.ariaTarget = input;
+        })
+      );
     }
   }
 );
