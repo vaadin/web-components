@@ -5,8 +5,8 @@
  */
 import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
 import { DelegateFocusMixin } from './delegate-focus-mixin.js';
-import { InputConstraintsMixin } from './input-constraints-mixin.js';
 import { FieldMixin } from './field-mixin.js';
+import { InputConstraintsMixin } from './input-constraints-mixin.js';
 
 /**
  * A mixin to provide shared logic for the editable form input controls.

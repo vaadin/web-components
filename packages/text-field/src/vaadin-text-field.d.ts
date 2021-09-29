@@ -8,6 +8,6 @@ import { InputFieldMixin } from '@vaadin/field-base/src/input-field-mixin.js';
 import { PatternMixin } from '@vaadin/field-base/src/pattern-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-declare class TextField extends InputFieldMixin(PatternMixin(ThemableMixin(ElementMixin(HTMLElement)))) {}
+declare class TextField extends PatternMixin(InputFieldMixin(ThemableMixin(ElementMixin(HTMLElement)))) {}
 
 export { TextField };
