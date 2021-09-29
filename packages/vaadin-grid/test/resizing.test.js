@@ -15,6 +15,7 @@ import {
 } from './helpers.js';
 import '../vaadin-grid.js';
 import '../vaadin-grid-column-group.js';
+import sinon from 'sinon';
 
 class TestComponent extends PolymerElement {
   static get template() {
@@ -50,6 +51,15 @@ describe('resizing', () => {
     grid.hidden = false;
     await oneEvent(grid, 'animationend');
     flushGrid(grid);
+  });
+
+  it('should warn when calling deprecated notifyResize()', () => {
+    const stub = sinon.stub(console, 'warn');
+    grid.notifyResize();
+    stub.restore();
+
+    expect(stub.calledOnce).to.be.true;
+    expect(stub.args[0][0]).to.include('WARNING: Since Vaadin 22, notifyResize() is deprecated.');
   });
 
   it('should align rows correctly', () => {
