@@ -372,8 +372,8 @@ class RadioGroup extends FieldAriaMixin(
   }
 
   /**
-   * Updates the `disabled` property for the radio buttons
-   * respecting the `readonly` and `disabled` properties of the group.
+   * If the group is read-only, the method disables the unchecked radio buttons.
+   * Otherwise, the method propagates the group's `disabled` property to the radio buttons.
    *
    * @private
    */
