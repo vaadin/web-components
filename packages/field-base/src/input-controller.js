@@ -5,6 +5,9 @@
  */
 import { SlotController } from './slot-controller.js';
 
+/**
+ * A controller to create and initialize slotted `<input>` element.
+ */
 export class InputController extends SlotController {
   constructor(host) {
     super(host, [

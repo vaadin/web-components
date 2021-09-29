@@ -5,4 +5,7 @@
  */
 import { SlotController } from './slot-controller.js';
 
+/**
+ * A controller to create and initialize slotted `<textarea>` element.
+ */
 export class TextAreaController implements SlotController {}
