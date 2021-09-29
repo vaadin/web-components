@@ -28,7 +28,7 @@
     "@polymer/polymer": "^3.0.0",
     "@vaadin/button": "^22.0.0-alpha6",
     "@vaadin/component-base": "^22.0.0-alpha6",
-    "@vaadin/vaadin-dialog": "^22.0.0-alpha6",
+    "@vaadin/dialog": "^22.0.0-alpha6",
     "@vaadin/vaadin-license-checker": "^2.1.0",
     "@vaadin/vaadin-lumo-styles": "^22.0.0-alpha6",
     "@vaadin/vaadin-material-styles": "^22.0.0-alpha6",

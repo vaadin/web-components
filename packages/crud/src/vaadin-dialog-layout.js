@@ -6,7 +6,7 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import '@vaadin/vaadin-dialog/src/vaadin-dialog.js';
+import '@vaadin/dialog/src/vaadin-dialog.js';
 
 /**
  * An element used internally by `<vaadin-crud>`. Not intended to be used separately.
