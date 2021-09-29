@@ -260,7 +260,7 @@ class RadioGroup extends FieldAriaMixin(
    * the method tries to select the radio button with that value
    * showing a warning if no radio button was found with the given value.
    * If the new value is empty, the method deselects the currently selected radio button.
-   * At last, the method toggles the `has-value` attribute respecting the new value.
+   * At last, the method toggles the `has-value` attribute considering the new value.
    *
    * @param {string | undefined} newValue
    * @param {string | undefined} oldValue
